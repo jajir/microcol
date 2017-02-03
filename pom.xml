@@ -1,0 +1,38 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>org.microcol</groupId>
+	<artifactId>microcol-root</artifactId>
+	<packaging>pom</packaging>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>Root module</name>
+	<url>https://microcol.sourceforge.net/</url>
+	<description>
+		War game in space environment with single target - eliminate enemy.
+	</description>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<log4j.version>1.2.14</log4j.version>
+		<maven.site.version>3.4</maven.site.version>
+	</properties>
+	
+	<modules>
+		<module>microcol-game</module>
+		<module>microcol-dist</module>
+		<module>microcol-site</module>
+	</modules>
+
+	<issueManagement>
+		<system>Github issue tracker</system>
+		<url>https://github.com/jajir/microcol/issues</url>
+	</issueManagement>
+
+	<distributionManagement>
+		<site>
+			<id>microcol.sf.net</id>
+			<url>scp://shell.sourceforge.net/home/project-web/microcol/htdocs</url>
+		</site>
+	</distributionManagement>
+
+</project>

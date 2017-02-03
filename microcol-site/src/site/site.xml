@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project name="Space War">
+	<bannerLeft>
+		<name>Microcol</name>
+		<src>./icon.gif</src>
+		<href>http://microcol.sourceforge.net/</href>
+	</bannerLeft>
+
+	<publishDate format="dd MMM yyyy" position="right" />
+
+	<version position="none" />
+
+	<skin>
+		<groupId>org.apache.tapestry</groupId>
+		<artifactId>maven-skin</artifactId>
+		<version>1.1</version>
+	</skin>
+	
+	<poweredBy>
+   		<logo name="Maven" href="http://maven.apache.org/" img="./maven-feather.png" />
+	</poweredBy>
+	
+	<body>
+				
+		<breadcrumbs>
+			<item name="Documentation" href="http://microcol.sourceforge.net/"/>
+		</breadcrumbs>
+    		
+		<menu name="Microcol">
+			<item name="Index" href="./index.html" />
+		</menu>
+		
+		<menu name="Development guide">
+			<item name="Release methodology" href="./release.html" />
+		</menu>
+		
+		<footer>
+		</footer>
+
+	</body>
+</project>
