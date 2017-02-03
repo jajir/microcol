@@ -6,6 +6,37 @@ About Microcol
 
  ...
   
-Some game description ....
+ Some game description ....
+
+How to start development
+ 
+ * Checkout project
+ 
+ Go to directory where Microcol source code will be stored and execute:
+ 
++----+
+git clone https://github.com/jajir/microcol.git
++----+
+
+ Directory <microcol> should be there.
  
 
+ * Import to Eclipse
+ 
+ From main menu select "File" --> "Import". Select option "Existing maven projects". Importing wizard should appear. In field "Root directory" select previously created <microcol> directory. Click to "Finish". Now all maven modules should be imported. 
+
+[]
+ 
+Project infrastructure
+
+ * Source code repository: {{{https://github.com/jajir/microcol}https://github.com/jajir/microcol}}
+ 
+ * Bug reporting system: {{{https://github.com/jajir/microcol/issues}https://github.com/jajir/microcol/issues}}
+ 
+ * Continuous integration: {{{https://travis-ci.org/jajir/microcol}https://travis-ci.org/jajir/microcol}}
+
+ * Documentation:
+ 
+ * Download: 
+ 
+[]
