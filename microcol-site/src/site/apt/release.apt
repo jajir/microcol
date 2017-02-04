@@ -2,9 +2,23 @@
  Release methodology
  ----
 
-Release methodology
+Release versioning
+ 
+ x.y.z
+ 
+ where:
+ 
+ * x - major change
+ 
+ * y - minor change, should be done few time per year
+ 
+ * z - bug fixing release
 
-How to release application
+[]
+
+How to make a release
+
+ ...
 
 
  

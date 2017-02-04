@@ -1,0 +1,31 @@
+ ----
+ TODO
+ ----
+
+Planned releases
+
+ * 0.1.0 - project setup version
+
+ * 1.0.0 - should be released at the end of first year of development (Jan. 2018), first minimal playable version of game.  
+
+[]
+
+Planned features
+
+ * setup project infrastructure git repository, ci, publishing documentation ...
+ 
+ * keep documentation up to date
+ 
+ * in swing forms use MVP, describe it in doc
+ 
+[]
+
+
+What was done
+
+ * ...
+
+[]
+ 
+ 
+    
