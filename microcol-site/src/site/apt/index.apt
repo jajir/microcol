@@ -35,8 +35,72 @@ Project infrastructure
  
  * Continuous integration: {{{https://travis-ci.org/jajir/microcol}https://travis-ci.org/jajir/microcol}}
 
- * Documentation:
+ * Documentation: {{{https://microcol.sourceforge.io/}microcol.sourceforge.io}}
  
- * Download: 
+ * Sourceforge project: {{{https://sourceforge.net/projects/microcol/}https://sourceforge.net/projects/microcol/}}
+ 
+ * Binaries download: {{{https://sourceforge.net/projects/microcol/files/}https://sourceforge.net/projects/microcol/files/}} 
  
 []
+
+* How to publish this documentation
+ 
+ This documentation is published at {{https://microcol.sourceforge.io}}.
+ 
+ Here is described how to propagate changes in documentation to sourceforge site.
+ procedure required shell account at sourceforge with access to project <microcol>.
+ Replace [user] with correct user name.  
+ 
+ [[1]] Verify settings.xml
+ 
+ In your home directory is file ~/.m2/settings.xml. If file doesn't exist crate new one. Edit server section:
+ 
++----+
+<servers>
+	...
+	<server>
+		<id>microcol.sf.net</id>
+		<username>[user]</username>
+		<password>s!cr!t</password>
+	</server>
+	...
+</servers>
++----+
+ 
+ This setting provide user name and password for ssh account at sourceforge server.
+ New site documentation will be uploaded to this server.
+ 
+ [[1]] Delete previous version of documentation
+
++----+
+ssh -t [user],microcol@shell.sourceforge.net create
+cd /home/project-web/microcol/htdocs/
+rm -rf *
+exit
++----+
+
+ [[1]] Generate new version of documentation
+
+ following command upload documentation to </home/project-web/microcol/htdocs/microcol-site>
+
++----+
+mvn clean site-deploy
++----+
+
+ [[1]] Move documentation
+
+ Documentation was generate to directory <microcol-site>. It have to be moved to root directory.
+
++----+
+ssh -t [user],microcol-2@shell.sourceforge.net
+cd /home/project-web/microcol/htdocs/
+mv microcol-site/* .
+exit
++----+
+
+ [[1]] Verify results
+
+ Verify that new documentation version is at {{{https://microcol.sourceforge.io/}microcol.sourceforge.io}}.
+ 
+[]
+
