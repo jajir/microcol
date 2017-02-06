@@ -101,7 +101,7 @@
 						<configuration>
 							<mainClass>org.microcol.Microcol</mainClass>
 							<bundleName>Microcol</bundleName>
-							<!-- <iconFile>src/data/microcol.icns</iconFile> -->
+							<iconFile>src/icon.icns</iconFile>
 							<buildDirectory>${project.build.directory}</buildDirectory>
 						</configuration>
 					</execution>

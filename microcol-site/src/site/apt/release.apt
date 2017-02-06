@@ -18,6 +18,40 @@ Release versioning
 
 How to make a release
 
+* Release related files
+
+ * <microcol-dist/src/icon_square_64x64.ico> - should be 64 x 64 px square Microsoft icon
+
+* Release pre-requirements
+
+ Installed java 1.8.
+
+* Release steps
+
+ [[0]] Verify that project is clean and all files committed. Command:
+ 
++----+
+git status
++----+
+ 
+ TODO - branch uz muze existovat, name rel-0.1
+
+ [[0]] Set project version.
+ 
+ [[0]] Verify release binaries. Release files could be found at places:
+ 
+  * <microcol-dist/target/microcol.jar> - universal executable JAR file
+ 
+  * <microcol-dist/target/microcol.exe> - Windows executable
+ 
+  * <microcol-game/target/Microcol.app> - Apple distribution
+
+ [[0]] Upload released binaries to sourceforge.
+
+ [[0]] Commit release to separate branch
+
+[] 
+
  ...
 
 

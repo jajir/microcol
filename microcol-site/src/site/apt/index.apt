@@ -29,23 +29,23 @@ git clone https://github.com/jajir/microcol.git
  
 Project infrastructure
 
- * Source code repository: {{{https://github.com/jajir/microcol}https://github.com/jajir/microcol}}
+ * Source code repository: {{{https://github.com/jajir/microcol}github.com/jajir/microcol}}
  
- * Bug reporting system: {{{https://github.com/jajir/microcol/issues}https://github.com/jajir/microcol/issues}}
+ * Bug reporting system: {{{https://github.com/jajir/microcol/issues}github.com/jajir/microcol/issues}}
  
- * Continuous integration: {{{https://travis-ci.org/jajir/microcol}https://travis-ci.org/jajir/microcol}}
+ * Continuous integration: {{{https://travis-ci.org/jajir/microcol}travis-ci.org/jajir/microcol}}
 
  * Documentation: {{{https://microcol.sourceforge.io/}microcol.sourceforge.io}}
  
- * Sourceforge project: {{{https://sourceforge.net/projects/microcol/}https://sourceforge.net/projects/microcol/}}
+ * Sourceforge project: {{{https://sourceforge.net/projects/microcol/}sourceforge.net/projects/microcol/}}
  
- * Binaries download: {{{https://sourceforge.net/projects/microcol/files/}https://sourceforge.net/projects/microcol/files/}} 
+ * Binaries download: {{{https://sourceforge.net/projects/microcol/files/}sourceforge.net/projects/microcol/files/}} 
  
 []
 
-* How to publish this documentation
+How to publish this documentation
  
- This documentation is published at {{https://microcol.sourceforge.io}}.
+ This documentation is published at {{{https://microcol.sourceforge.io/}microcol.sourceforge.io}}.
  
  Here is described how to propagate changes in documentation to sourceforge site.
  procedure required shell account at sourceforge with access to project <microcol>.
