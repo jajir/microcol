@@ -4,4 +4,8 @@ jdk:
 
 sudo: false
 
-script: mvn clean verify -Dtravis-ci=true
+install:
+  - mvn install -DskipTests=true -Dmaven.javadoc.skip=true -Dtravis-ci=true -B -V
+
+script: 
+  - mvn clean verify -Dtravis-ci=true
