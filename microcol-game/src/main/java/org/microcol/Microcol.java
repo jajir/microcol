@@ -9,7 +9,6 @@ import javax.swing.WindowConstants;
  * 
  */
 public class Microcol {
-
 	/**
 	 * @param args
 	 *            the command line arguments
@@ -20,11 +19,11 @@ public class Microcol {
 			@Override
 			public void run() {
 				JFrame frame = new JFrame("Microcol");
-				frame.setVisible(true);
 				frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-				frame.setSize(200, 100);
+				frame.setSize(600, 400);
+				frame.setLocationRelativeTo(null);
+				frame.setVisible(true);
 			}
 		});
 	}
-
 }
