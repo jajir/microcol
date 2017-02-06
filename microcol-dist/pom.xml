@@ -20,6 +20,65 @@
 		<keystore.key.alias>spacewar</keystore.key.alias>
 	</properties>
 
+	<profiles>
+		<profile>
+			<id>travis-ci</id>
+			<activation>
+				<!-- this profile is skipped when system property "travis-ci" is defined. 
+					It allows to skip windows build which not work at Travis CI. -->
+				<property>
+					<name>!travis-ci</name>
+				</property>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>com.akathist.maven.plugins.launch4j</groupId>
+						<artifactId>launch4j-maven-plugin</artifactId>
+						<version>1.7.15</version>
+						<executions>
+							<execution>
+								<id>launch4j</id>
+								<phase>package</phase>
+								<goals>
+									<goal>launch4j</goal>
+								</goals>
+								<configuration>
+									<headerType>gui</headerType>
+									<outfile>target/microcol.exe</outfile>
+									<jar>target/microcol.jar</jar>
+									<errTitle>Microcol</errTitle>
+									<icon>src/icon_square_64x64.ico</icon>
+									<classPath>
+										<mainClass>org.microcol.Microcol</mainClass>
+										<addDependencies>true</addDependencies>
+									</classPath>
+									<jre>
+										<minVersion>1.6.0</minVersion>
+										<jdkPreference>preferJre</jdkPreference>
+									</jre>
+									<!-- <splash> <file>src/icon_square.bmp</file> <timeout>60</timeout> 
+										</splash> -->
+									<versionInfo>
+										<fileVersion>1.0.0.0</fileVersion>
+										<txtFileVersion>1.0</txtFileVersion>
+										<fileDescription>Colonisation remake</fileDescription>
+										<copyright>Apache license</copyright>
+										<productVersion>1.0.0.0</productVersion>
+										<txtProductVersion>${project.version}</txtProductVersion>
+										<productName>Microcol</productName>
+										<internalName>Microcol</internalName>
+										<originalFilename>Microcol.exe</originalFilename>
+									</versionInfo>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+
 	<build>
 		<plugins>
 			<!-- skip installing artifacts -->
@@ -84,51 +143,8 @@
 						</configuration>
 					</execution>
 				</executions>
-			</plugin>			
-			
-			<plugin>
-				<groupId>com.akathist.maven.plugins.launch4j</groupId>
-				<artifactId>launch4j-maven-plugin</artifactId>
-				<version>1.7.15</version>
-				<executions>
-					<execution>
-						<id>launch4j</id>
-						<phase>package</phase>
-						<goals>
-							<goal>launch4j</goal>
-						</goals>
-						<configuration>
-							<headerType>gui</headerType>
-							<outfile>target/microcol.exe</outfile>
-							<jar>target/microcol.jar</jar>
-							<errTitle>Microcol</errTitle>
-							<icon>src/icon_square_64x64.ico</icon>
-							<classPath>
-								<mainClass>org.microcol.Microcol</mainClass>
-								<addDependencies>true</addDependencies>
-							</classPath>
-							<jre>
-								<minVersion>1.6.0</minVersion>
-								<jdkPreference>preferJre</jdkPreference>
-							</jre>
-							<!-- <splash> <file>src/icon_square.bmp</file> <timeout>60</timeout> 
-								</splash> -->
-							<versionInfo>
-								<fileVersion>1.0.0.0</fileVersion>
-								<txtFileVersion>1.0</txtFileVersion>
-								<fileDescription>Colonisation remake</fileDescription>
-								<copyright>Apache license</copyright>
-								<productVersion>1.0.0.0</productVersion>
-								<txtProductVersion>${project.version}</txtProductVersion>
-								<productName>Microcol</productName>
-								<internalName>Microcol</internalName>
-								<originalFilename>Microcol.exe</originalFilename>
-							</versionInfo>
-						</configuration>
-					</execution>
-				</executions>
 			</plugin>
-			
+
 		</plugins>
 	</build>
 

@@ -4,4 +4,4 @@ jdk:
 
 sudo: false
 
-script: mvn clean verify
+script: mvn clean verify -Dtravis-ci=true

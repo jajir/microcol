@@ -28,31 +28,63 @@ How to make a release
 
 * Release steps
 
+ Following guide is useful when new minor or major change should be released. Guide suppose releasing version <x.y.0>. 
+
  [[0]] Verify that project is clean and all files committed. Command:
  
 +----+
 git status
 +----+
  
- TODO - branch uz muze existovat, name rel-0.1
-
- [[0]] Set project version.
+ [[0]] Create new branch and switch to it:
  
- [[0]] Verify release binaries. Release files could be found at places:
++----+
+git checkout -b rel-x.y
++----+
+
+ Now all further operations will be done in <rel-x.y> branch.
+ 
+ [[0]] Set final package version:
+ 
++----+
+mvn versions:set -DnewVersion=x.y.0
++----+
+
+ [[0]] Release binaries:
+ 
++----+
+mvn clean package
++----+
+ 
+ Verify release binaries. Release files could be found at places:
  
   * <microcol-dist/target/microcol.jar> - universal executable JAR file
  
   * <microcol-dist/target/microcol.exe> - Windows executable
  
   * <microcol-game/target/Microcol.app> - Apple distribution
-
+ 
  [[0]] Upload released binaries to sourceforge.
+  In section <Files> at sourceforge create new directory Microcol x.x and upload there all generated files.
+  In detail of each file click on <i> icon and platform. There is list of platform for which is file default. 
 
- [[0]] Commit release to separate branch
+ [[0]] Remove maven backup files <pom.xml.versionsBackup>
+  
++----+
+mvn versions:commit
++----+
+
+ [[0]] Commit all changes in git branch
+
++----+
+git add --all
+git commit -m "rel-x.y.0"
+git push
++----+
 
 [] 
 
- ...
+ TODO add guide when branch x.y.2 already exists and version x.y.3 should be released.
 
 
  
