@@ -88,25 +88,6 @@
 					</execution>
 				</executions>
 			</plugin>
-			<plugin>
-				<groupId>sh.tak.appbundler</groupId>
-				<artifactId>appbundle-maven-plugin</artifactId>
-				<version>1.2.0</version>
-				<executions>
-					<execution>
-						<phase>package</phase>
-						<goals>
-							<goal>bundle</goal>
-						</goals>
-						<configuration>
-							<mainClass>org.microcol.Microcol</mainClass>
-							<bundleName>Microcol</bundleName>
-							<iconFile>src/icon.icns</iconFile>
-							<buildDirectory>${project.build.directory}</buildDirectory>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
 		</plugins>
 	</build>
 

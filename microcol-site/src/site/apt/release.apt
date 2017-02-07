@@ -62,7 +62,7 @@ mvn clean package
  
   * <microcol-dist/target/microcol.exe> - Windows executable
  
-  * <microcol-game/target/Microcol.app> - Apple distribution
+  * <microcol-dist/target/Microcol.app> - Apple distribution
  
  [[0]] Upload released binaries to sourceforge.
   In section <Files> at sourceforge create new directory Microcol x.x and upload there all generated files.
