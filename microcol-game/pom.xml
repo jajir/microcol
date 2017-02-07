@@ -8,7 +8,7 @@
 	</parent>
 	<artifactId>microcol-game</artifactId>
 	<packaging>jar</packaging>
-	<name>Microcol game classes</name>
+	<name>MicroCol game classes</name>
 
 	<dependencies>
 	</dependencies>
@@ -47,7 +47,7 @@
 							<archive>
 								<manifest>
 									<addClasspath>true</addClasspath>
-									<mainClass>org.microcol.Microcol</mainClass>
+									<mainClass>org.microcol.MicroCol</mainClass>
 								</manifest>
 							</archive>
 							<descriptorRefs>

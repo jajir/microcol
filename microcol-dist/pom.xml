@@ -57,10 +57,10 @@
 									<headerType>gui</headerType>
 									<outfile>target/microcol.exe</outfile>
 									<jar>target/microcol.jar</jar>
-									<errTitle>Microcol</errTitle>
+									<errTitle>MicroCol</errTitle>
 									<icon>src/icon_square_64x64.ico</icon>
 									<classPath>
-										<mainClass>org.microcol.Microcol</mainClass>
+										<mainClass>org.microcol.MicroCol</mainClass>
 										<addDependencies>true</addDependencies>
 									</classPath>
 									<jre>
@@ -76,9 +76,9 @@
 										<copyright>Apache license</copyright>
 										<productVersion>1.0.0.0</productVersion>
 										<txtProductVersion>${project.version}</txtProductVersion>
-										<productName>Microcol</productName>
-										<internalName>Microcol</internalName>
-										<originalFilename>Microcol.exe</originalFilename>
+										<productName>MicroCol</productName>
+										<internalName>MicroCol</internalName>
+										<originalFilename>MicroCol.exe</originalFilename>
 									</versionInfo>
 								</configuration>
 							</execution>
@@ -149,8 +149,8 @@
 							<goal>bundle</goal>
 						</goals>
 						<configuration>
-							<mainClass>org.microcol.Microcol</mainClass>
-							<bundleName>Microcol</bundleName>
+							<mainClass>org.microcol.MicroCol</mainClass>
+							<bundleName>MicroCol</bundleName>
 							<iconFile>src/icon.icns</iconFile>
 							<buildDirectory>${project.build.directory}</buildDirectory>
 						</configuration>

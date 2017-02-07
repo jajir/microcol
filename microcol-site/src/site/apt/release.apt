@@ -62,10 +62,10 @@ mvn clean package
  
   * <microcol-dist/target/microcol.exe> - Windows executable
  
-  * <microcol-dist/target/Microcol.app> - Apple distribution
+  * <microcol-dist/target/MicroCol.app> - Apple distribution
  
  [[0]] Upload released binaries to sourceforge.
-  In section <Files> at sourceforge create new directory Microcol x.x and upload there all generated files.
+  In section <Files> at sourceforge create new directory MicroCol x.x and upload there all generated files.
   In detail of each file click on <i> icon and platform. There is list of platform for which is file default. 
 
  [[0]] Remove maven backup files <pom.xml.versionsBackup>

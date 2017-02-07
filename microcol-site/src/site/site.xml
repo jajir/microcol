@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<project name="Microcol">
+<project name="MicroCol">
 	<bannerLeft>
-		<name>Microcol</name>
+		<name>MicroCol</name>
 		<src>./icon.gif</src>
 		<href>http://microcol.sourceforge.net/</href>
 	</bannerLeft>
@@ -26,7 +26,7 @@
 			<item name="Documentation" href="http://microcol.sourceforge.net/"/>
 		</breadcrumbs>
     		
-		<menu name="Microcol">
+		<menu name="MicroCol">
 			<item name="Index" href="./index.html" />
 			<item name="ToDo" href="./todo.html" />
 			<item name="Release methodology" href="./release.html" />

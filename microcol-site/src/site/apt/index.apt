@@ -1,8 +1,8 @@
  ----
- Welcome - Microcol
+ Welcome - MicroCol
  ----
 
-About Microcol
+About MicroCol
 
  ...
   
@@ -12,7 +12,7 @@ How to start development
  
  * Checkout project
  
- Go to directory where Microcol source code will be stored and execute:
+ Go to directory where MicroCol source code will be stored and execute:
  
 +----+
 git clone https://github.com/jajir/microcol.git

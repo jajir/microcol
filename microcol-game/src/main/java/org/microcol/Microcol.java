@@ -5,25 +5,21 @@ import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 
 /**
- * Main Microcol class.
- * 
+ * MicroCol's main class.
  */
-public class Microcol {
+public class MicroCol {
 	/**
-	 * @param args
-	 *            the command line arguments
+	 * Creates and displays the form.
+	 * 
+	 * @param args the command line arguments
 	 */
 	public static void main(final String args[]) {
-		/* Create and display the form */
-		SwingUtilities.invokeLater(new Runnable() {
-			@Override
-			public void run() {
-				JFrame frame = new JFrame("Microcol");
-				frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-				frame.setSize(600, 400);
-				frame.setLocationRelativeTo(null);
-				frame.setVisible(true);
-			}
+		SwingUtilities.invokeLater(() -> {
+			JFrame frame = new JFrame("MicroCol");
+			frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+			frame.setSize(600, 400);
+			frame.setLocationRelativeTo(null);
+			frame.setVisible(true);
 		});
 	}
 }
