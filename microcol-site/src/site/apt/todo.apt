@@ -5,8 +5,38 @@
 Planned releases
 
  * 0.1.0 - project setup version
+  
+  * create project infrastructure
+  
+  * create binary distribution
+  
+  * first empty form
+  
+  * write project "manifest"
  
- * 0.2.0 - first game entity should be implemented 
+ * 0.2.0 - first game entity should be implemented
+ 
+  * first game map - just empty ocean
+  
+  * one ship controlled by user
+  
+  * one NPC ship controlled by AI
+  
+  * both ships will move each turn
+  
+  * code formatting standard
+  
+  * localization Czech/English
+  
+  * user preferences storing
+  
+  * when game is closed window will remember position and size
+  
+  * user's ship control
+  
+  * basic game domain model
+  
+  * enemy ship control
 
  * 1.0.0 - should be released at the end of first year of development (Jan. 2018), first minimal playable version of game.  
 

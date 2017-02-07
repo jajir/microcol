@@ -2,8 +2,10 @@
 <project name="MicroCol">
 	<bannerLeft>
 		<name>MicroCol</name>
+		<!-- 
 		<src>./icon.gif</src>
 		<href>http://microcol.sourceforge.net/</href>
+		 -->
 	</bannerLeft>
 
 	<publishDate format="dd MMM yyyy" position="right" />
