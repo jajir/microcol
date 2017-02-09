@@ -30,8 +30,9 @@
     		
 		<menu name="MicroCol">
 			<item name="Index" href="./index.html" />
+			<item name="Manifest" href="./manifest.html" />
 			<item name="ToDo" href="./todo.html" />
-			<item name="Release methodology" href="./release.html" />
+			<item name="Release" href="./release.html" />
 		</menu>
 		
 		<footer>

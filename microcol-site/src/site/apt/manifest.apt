@@ -1,0 +1,43 @@
+ ----
+ Manifest
+ ----
+
+Manifest
+
+ Following points are ordered by priority
+
+ * Create some useful result
+ 
+ * Make things in a right way
+ 
+ * Have some fun
+ 
+ * Try to build and maintain community
+
+[]
+
+Technology rules
+
+ * Target pplatform is PC
+ 
+ * Target audience should be people looking for smarter game.
+
+ * Java SE 1.8
+
+ * Swing in UI
+
+ * Maven 3.*
+
+ * Documentation in mvn site, will always reflect state of code
+
+ * Git - as source code repositry
+
+ * Gitflow for
+
+ * IDE – User should be always able to import project into IDE
+ 
+ * CI – main branch should be always green
+
+ * Binary distribution in - .jar, Apple application, Windows application
+
+[]
