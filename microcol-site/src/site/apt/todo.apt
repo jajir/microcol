@@ -37,6 +37,39 @@ Planned releases
   * basic game domain model
   
   * enemy ship control
+  
+ * PoC
+ 
+  * myš na hranu monitoru -> pohyb obrazovky
+ 	
+  * u více monitorù ta jedna hrana nereaguje
+
+  * šipky -> pohyb obrazovky
+
+  * levé tlaèítko -> výbìr jednotky
+
+  * pravé tlaèítko -> pohyb vybrané jednotky
+  (až po spuštìní tlaèítka, tzn. lze pøerušit)
+
+  * levé tlaèítko myši na hrací plochu + posouvat -> pohyb obrazovky
+
+  * výbìr jednotky myší nehýbá s obrazovkou
+  
+  * výbìr jednotky klávesnicí vycentruje obrazovku na jednotku
+
+  * ctrl, shift nebo alt nemá žádnou funkcni
+
+  * M pøepíná do režimu pohybu (nemusí se držet pravé tlaèítko)
+
+  * minimapa - pouze klíkání levým tlaèítkem, nelze posouvat (nedostatek)
+
+  * obrazovka neskáèe (centrování jednotky je plynulé)
+
+  * koleèko zoomuje obrazovku
+
+  * obrovské šestiúhelníky
+
+  * ovládání je intuitivní a pøíjemné
 
  * 1.0.0 - should be released at the end of first year of development (Jan. 2018), first minimal playable version of game.  
 
