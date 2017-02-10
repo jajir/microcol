@@ -1,4 +1,4 @@
-package org.microcol;
+package org.microcol.gui;
 
 import com.google.common.base.MoreObjects;
 

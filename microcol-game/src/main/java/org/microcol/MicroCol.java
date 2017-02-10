@@ -1,7 +1,8 @@
 package org.microcol;
 
 import javax.swing.SwingUtilities;
-import javax.swing.WindowConstants;
+
+import org.microcol.gui.MainFrame;
 
 /**
  * MicroCol's main class.
@@ -15,11 +16,8 @@ public class MicroCol {
    */
   public static void main(final String args[]) {
     SwingUtilities.invokeLater(() -> {
-      MicroColFrame frame = new MicroColFrame();
-      frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-      frame.setSize(600, 400);
-      frame.setLocationRelativeTo(null);
-      frame.setVisible(true);
+      MainFrame mainFrame = new MainFrame();
+      mainFrame.setVisible(true);
     });
   }
 }
