@@ -14,96 +14,88 @@ import javax.swing.JScrollPane;
  * MicroCol's main frame.
  */
 public class MainFrame extends JFrame {
-	private static final String PREFERENCES_PATH = "microcol/main-frame";
 
-	private static final String PREFERENCES_STATE = "state";
-	private static final String PREFERENCES_X = "x";
-	private static final String PREFERENCES_Y = "y";
-	private static final String PREFERENCES_WIDTH = "width";
-	private static final String PREFERENCES_HEIGHT = "height";
+  private static final String PREFERENCES_PATH = "microcol/main-frame";
 
-	private Rectangle lastNormalBounds;
+  private static final String PREFERENCES_STATE = "state";
+  private static final String PREFERENCES_X = "x";
+  private static final String PREFERENCES_Y = "y";
+  private static final String PREFERENCES_WIDTH = "width";
+  private static final String PREFERENCES_HEIGHT = "height";
 
-	private JScrollPane scrollPaneGamePanel;
+  private Rectangle lastNormalBounds;
 
-	public MainFrame() {
-		super("MicroCol");
+  public MainFrame() {
+    super("MicroCol");
 
-		init();
-	}
+    init();
+  }
 
-	private void init() {
-		GamePanel gamePanel = new GamePanel(this);
+  private void init() {
+    add(new MainPanelView());
 
-		scrollPaneGamePanel = new JScrollPane(gamePanel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		add(scrollPaneGamePanel);
+    setJMenuBar(new MenuBarView());
+    loadPreferences();
 
-		loadPreferences();
+    addComponentListener(new ComponentAdapter() {
+      @Override
+      public void componentMoved(ComponentEvent event) {
+        if (getExtendedState() == NORMAL) {
+          lastNormalBounds = getBounds();
+        }
+      }
 
-		addComponentListener(new ComponentAdapter() {
-			@Override
-			public void componentMoved(ComponentEvent event) {
-				if (getExtendedState() == NORMAL) {
-					lastNormalBounds = getBounds();
-				}
-			}
+      @Override
+      public void componentResized(ComponentEvent event) {
+        if (getExtendedState() == NORMAL) {
+          lastNormalBounds = getBounds();
+        }
+      }
+    });
 
-			@Override
-			public void componentResized(ComponentEvent event) {
-				if (getExtendedState() == NORMAL) {
-					lastNormalBounds = getBounds();
-				}
-			}
-		});
+    setDefaultCloseOperation(EXIT_ON_CLOSE);
+    addWindowListener(new WindowAdapter() {
+      @Override
+      public void windowClosing(WindowEvent event) {
+        savePreferences();
+      }
+    });
+  }
 
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
-		addWindowListener(new WindowAdapter() {
-			@Override
-			public void windowClosing(WindowEvent event) {
-				savePreferences();
-			}
-		});
-	}
+  private void loadPreferences() {
+    final Preferences prefs = getPreferences();
 
-	public void mouseDragged(final int x, final int y) {
-		scrollPaneGamePanel.getVerticalScrollBar().setValue(scrollPaneGamePanel.getVerticalScrollBar().getValue() - y);
-		scrollPaneGamePanel.getHorizontalScrollBar().setValue(scrollPaneGamePanel.getHorizontalScrollBar().getValue() - x);
-	}
+    final int state = prefs.getInt(PREFERENCES_STATE, Integer.MIN_VALUE);
+    final int x = prefs.getInt(PREFERENCES_X, Integer.MIN_VALUE);
+    final int y = prefs.getInt(PREFERENCES_Y, Integer.MIN_VALUE);
+    final int width = prefs.getInt(PREFERENCES_WIDTH, Integer.MIN_VALUE);
+    final int height = prefs.getInt(PREFERENCES_HEIGHT, Integer.MIN_VALUE);
 
-	private void loadPreferences() {
-		final Preferences prefs = getPreferences();
+    if (state != Integer.MIN_VALUE && x != Integer.MIN_VALUE && y != Integer.MIN_VALUE
+        && width != Integer.MIN_VALUE && height != Integer.MIN_VALUE) {
+      setBounds(x, y, width, height);
+      if ((state & ICONIFIED) != ICONIFIED) {
+        setExtendedState(state);
+      }
+    } else {
+      pack();
+      setLocationRelativeTo(null);
+    }
+  }
 
-		final int state = prefs.getInt(PREFERENCES_STATE, Integer.MIN_VALUE);
-		final int x = prefs.getInt(PREFERENCES_X, Integer.MIN_VALUE);
-		final int y = prefs.getInt(PREFERENCES_Y, Integer.MIN_VALUE);
-		final int width = prefs.getInt(PREFERENCES_WIDTH, Integer.MIN_VALUE);
-		final int height = prefs.getInt(PREFERENCES_HEIGHT, Integer.MIN_VALUE);
+  private void savePreferences() {
+    final Preferences prefs = getPreferences();
 
-		if (state != Integer.MIN_VALUE && x != Integer.MIN_VALUE && y != Integer.MIN_VALUE
-			&& width != Integer.MIN_VALUE && height != Integer.MIN_VALUE) {
-			setBounds(x, y, width, height);
-			if ((state & ICONIFIED) != ICONIFIED) {
-				setExtendedState(state);
-			}
-		} else {
-			pack();
-			setLocationRelativeTo(null);
-		}
-	}
+    final Rectangle normalBounds = getExtendedState() == NORMAL ? getBounds() : lastNormalBounds;
 
-	private void savePreferences() {
-		final Preferences prefs = getPreferences();
+    prefs.putInt(PREFERENCES_STATE, getExtendedState());
+    prefs.putInt(PREFERENCES_X, normalBounds.x);
+    prefs.putInt(PREFERENCES_Y, normalBounds.y);
+    prefs.putInt(PREFERENCES_WIDTH, normalBounds.width);
+    prefs.putInt(PREFERENCES_HEIGHT, normalBounds.height);
+  }
 
-		final Rectangle normalBounds = getExtendedState() == NORMAL ? getBounds() : lastNormalBounds;
-
-		prefs.putInt(PREFERENCES_STATE, getExtendedState());
-		prefs.putInt(PREFERENCES_X, normalBounds.x);
-		prefs.putInt(PREFERENCES_Y, normalBounds.y);
-		prefs.putInt(PREFERENCES_WIDTH, normalBounds.width);
-		prefs.putInt(PREFERENCES_HEIGHT, normalBounds.height);
-	}
-
-	private Preferences getPreferences() {
-		return Preferences.userRoot().node(PREFERENCES_PATH);
-	}
+  private Preferences getPreferences() {
+    return Preferences.userRoot().node(PREFERENCES_PATH);
+  }
 }

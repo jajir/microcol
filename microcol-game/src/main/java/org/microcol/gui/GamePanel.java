@@ -25,6 +25,9 @@ import model.World;
 
 public class GamePanel extends JPanel {
 
+  /**
+   * Default serialVersionUID.
+   */
   private static final long serialVersionUID = 1L;
 
   private final static int TILE_WIDTH_IN_PX = 30;
@@ -34,9 +37,7 @@ public class GamePanel extends JPanel {
   // used for buffer
   private Graphics dbg;
 
-  private Image dbImage = null;
-
-  private final Image background;
+  private Image dbImage;
 
   private final Image tileSee;
 
@@ -44,22 +45,13 @@ public class GamePanel extends JPanel {
 
   private final BufferedImage ship2;
 
-  private final MainFrame microColFrame;
-
-  private int diffX;
-
-  private int diffY;
-
-  private Point point;
-
   private final World world = new World();
-
-  public GamePanel(final MainFrame frame) {
-    this.microColFrame = frame;
-    background = getImage("BirdinPineTree_2560x1600.jpg");
+  
+  public GamePanel() {
     tileSee = getImage("tile-ocean.png");
     ship1 = getImage("tile-ship1.png");
     ship2 = getImage("tile-ship2.png");
+    dbImage = createImage(getGameMapWidth(), getGameMapHeight());
 
     final GamePanel map = this;
 
@@ -122,19 +114,17 @@ public class GamePanel extends JPanel {
    * Call original paint with antialising on.
    */
   @Override
-  public void paint(Graphics g) {
-    ((Graphics2D) g).setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-        RenderingHints.VALUE_ANTIALIAS_ON);
+  public void paint(final Graphics g) {
+    final Graphics2D g2d = (Graphics2D) g;
+    g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
     if (dbImage == null) {
-      dbImage = createImage(2560, 1600);
+      dbImage = createImage(getGameMapWidth(), getGameMapHeight());
       if (dbImage == null) {
         return;
       } else
         dbg = dbImage.getGraphics();
     }
     paintIntoGraphics((Graphics2D) dbg);
-    g.setColor(Color.black);
-    g.fillRect(0, 0, 2560, 1600);
     g.drawImage(dbImage, 0, 0, null);
     // Sync the display on some systems.
     // (on Linux, this fixes event queue problems)
@@ -196,11 +186,11 @@ public class GamePanel extends JPanel {
   }
 
   private int getGameMapWidth() {
-    return World.WIDTH * (TILE_WIDTH_IN_PX + GRID_LINE_WIDTH);
+    return World.WIDTH * (TILE_WIDTH_IN_PX + GRID_LINE_WIDTH) - 1;
   }
 
   private int getGameMapHeight() {
-    return World.HEIGHT * (TILE_WIDTH_IN_PX + GRID_LINE_WIDTH);
+    return World.HEIGHT * (TILE_WIDTH_IN_PX + GRID_LINE_WIDTH) - 1;
   }
 
 }
