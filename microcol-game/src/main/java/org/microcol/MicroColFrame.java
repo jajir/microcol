@@ -14,14 +14,16 @@ public class MicroColFrame extends JFrame {
 
   public MicroColFrame() {
     super("MicroCol");
-    GamePanel gamePanel = new GamePanel(this);
-
+    GamePanel gamePanel = new GamePanel();
     scrollPaneGamePanel = new JScrollPane(gamePanel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
         JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+
     add(scrollPaneGamePanel);
+
   }
 
   public void mouseDragged(final int x, final int y) {
+    System.out.println("diff x=" + x + ", y=" + y);
     scrollPaneGamePanel.getVerticalScrollBar()
         .setValue(scrollPaneGamePanel.getVerticalScrollBar().getValue() - y);
     scrollPaneGamePanel.getHorizontalScrollBar()

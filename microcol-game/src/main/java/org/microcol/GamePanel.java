@@ -5,15 +5,17 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.Toolkit;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
+import javax.swing.JViewport;
+import javax.swing.SwingUtilities;
 
 public class GamePanel extends JPanel {
 
@@ -29,75 +31,43 @@ public class GamePanel extends JPanel {
 
   private final Image background;
 
-  private final MicroColFrame microColFrame;
-
-  private int diffX;
-
-  private int diffY;
-
-  private Point point;
-
-  public GamePanel(final MicroColFrame frame) {
-    this.microColFrame = frame;
+  public GamePanel() {
     background = getImage("BirdinPineTree_2560x1600.jpg");
-    diffX = 0;
-    diffY = 0;
-    addMouseListener(new MouseListener() {
 
-      @Override
-      public void mouseReleased(MouseEvent e) {
-        // TODO Auto-generated method stub
+    final GamePanel map = this;
 
-      }
+    MouseAdapter ma = new MouseAdapter() {
+
+      private Point origin;
 
       @Override
       public void mousePressed(MouseEvent e) {
-        onMousePressed(e.getXOnScreen(), e.getYOnScreen());
+        origin = Point.make(e.getX(), e.getY());
       }
 
       @Override
-      public void mouseExited(MouseEvent e) {
-        // TODO Auto-generated method stub
-
-      }
-
-      @Override
-      public void mouseEntered(MouseEvent e) {
-        // TODO Auto-generated method stub
-
-      }
-
-      @Override
-      public void mouseClicked(MouseEvent e) {
-        // TODO Auto-generated method stub
-
-      }
-    });
-    addMouseMotionListener(new MouseMotionListener() {
-
-      @Override
-      public void mouseMoved(MouseEvent e) {
-        // TODO Auto-generated method stub
-
+      public void mouseReleased(MouseEvent e) {
       }
 
       @Override
       public void mouseDragged(MouseEvent e) {
-        onMouseDragged(e.getX(), e.getY());
+        if (origin != null) {
+          JViewport viewPort = (JViewport) SwingUtilities.getAncestorOfClass(JViewport.class, map);
+          if (viewPort != null) {
+            Point delta = origin.substract(Point.make(e.getX(), e.getY()));
+            Rectangle view = viewPort.getViewRect();
+            view.x += delta.getX();
+            view.y += delta.getY();
+            map.scrollRectToVisible(view);
+          }
+        }
       }
-    });
-  }
+    };
 
-  private final void onMousePressed(final int x, final int y) {
-    point = Point.make(x, y);
-  }
+    map.addMouseListener(ma);
+    map.addMouseMotionListener(ma);
 
-  private final void onMouseDragged(final int x, final int y) {
-    Point to = Point.make(x, y);
-    Point diff = to.substract(point);
-    System.out.println("diff " + diff.toString() + " to: " + to.toString());
-    microColFrame.mouseDragged(diff.getX(), diff.getY());
-    point = Point.make(to.getX() - diff.getX(), to.getY() - diff.getY());
+    setAutoscrolls(true);
   }
 
   /**
