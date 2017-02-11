@@ -1,4 +1,4 @@
-package org.microcol;
+package org.microcol.gui;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -31,7 +31,16 @@ public class GamePanel extends JPanel {
 
   private final Image background;
 
-  public GamePanel() {
+  private final MainFrame microColFrame;
+
+  private int diffX;
+
+  private int diffY;
+
+  private Point point;
+
+  public GamePanel(final MainFrame frame) {
+    this.microColFrame = frame;
     background = getImage("BirdinPineTree_2560x1600.jpg");
 
     final GamePanel map = this;
