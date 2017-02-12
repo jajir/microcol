@@ -8,7 +8,8 @@ import java.awt.event.WindowEvent;
 import java.util.prefs.Preferences;
 
 import javax.swing.JFrame;
-import javax.swing.JScrollPane;
+
+import com.google.inject.Inject;
 
 /**
  * MicroCol's main frame.
@@ -25,16 +26,13 @@ public class MainFrame extends JFrame {
 
   private Rectangle lastNormalBounds;
 
-  public MainFrame() {
+  @Inject
+  public MainFrame(final MainPanelView mainPanel, final MainMenuView mainMenu) {
     super("MicroCol");
 
-    init();
-  }
+    add(mainPanel);
 
-  private void init() {
-    add(new MainPanelView());
-
-    setJMenuBar(new MenuBarView());
+    setJMenuBar(mainMenu);
     loadPreferences();
 
     addComponentListener(new ComponentAdapter() {

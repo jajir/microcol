@@ -3,6 +3,11 @@ package org.microcol;
 import javax.swing.SwingUtilities;
 
 import org.microcol.gui.MainFrame;
+import org.microcol.gui.MicroColModule;
+
+import com.google.inject.Guice;
+import com.google.inject.Injector;
+import com.google.inject.Stage;
 
 /**
  * MicroCol's main class.
@@ -16,7 +21,9 @@ public class MicroCol {
    */
   public static void main(final String args[]) {
     SwingUtilities.invokeLater(() -> {
-      MainFrame mainFrame = new MainFrame();
+      final Injector injector = Guice.createInjector(Stage.PRODUCTION, new MicroColModule());
+
+      final MainFrame mainFrame = injector.getInstance(MainFrame.class);
       mainFrame.setVisible(true);
     });
   }

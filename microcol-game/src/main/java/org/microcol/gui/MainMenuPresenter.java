@@ -5,7 +5,9 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JMenuItem;
 
-public class MenuBarPresenter {
+import com.google.inject.Inject;
+
+public class MainMenuPresenter {
 
   public interface Display {
     JMenuItem getMenuItemNewGame();
@@ -17,7 +19,8 @@ public class MenuBarPresenter {
     JMenuItem getMenuItemQuitGame();
   }
 
-  public MenuBarPresenter(final MenuBarPresenter.Display display) {
+  @Inject
+  public MainMenuPresenter(final MainMenuPresenter.Display display) {
     display.getMenuItemNewGame().addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(final ActionEvent evt) {

@@ -12,7 +12,9 @@ import javax.swing.SwingConstants;
 import javax.swing.border.Border;
 import javax.swing.border.EtchedBorder;
 
-public class StatusBar extends JPanel {
+import com.google.inject.Inject;
+
+public class StatusBarView extends JPanel implements StatusBarPresenter.Display {
 
   /**
    * Default serialVersionUID.
@@ -21,7 +23,8 @@ public class StatusBar extends JPanel {
 
   private final JLabel statusBarDescription;
 
-  public StatusBar() {
+  @Inject
+  public StatusBarView() {
     this.setLayout(new GridBagLayout());
 
     statusBarDescription = new JLabel("Status bar");
@@ -36,5 +39,10 @@ public class StatusBar extends JPanel {
 
     Border border = BorderFactory.createBevelBorder(EtchedBorder.LOWERED);
     setBorder(border);
+  }
+
+  @Override
+  public JLabel getStatusBarDescription() {
+    return statusBarDescription;
   }
 }

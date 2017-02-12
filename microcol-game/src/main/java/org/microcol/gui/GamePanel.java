@@ -19,6 +19,8 @@ import javax.swing.JPanel;
 import javax.swing.JViewport;
 import javax.swing.SwingUtilities;
 
+import com.google.inject.Inject;
+
 import model.Ship;
 import model.Unit;
 import model.World;
@@ -34,8 +36,7 @@ public class GamePanel extends JPanel {
 
   private final static int GRID_LINE_WIDTH = 1;
 
-  // used for buffer
-  private Graphics dbg;
+  private final static int TOTAL_TILE_WIDTH_IN_PX = TILE_WIDTH_IN_PX + GRID_LINE_WIDTH;
 
   private Image dbImage;
 
@@ -46,13 +47,16 @@ public class GamePanel extends JPanel {
   private final BufferedImage ship2;
 
   private final World world = new World();
-  
-  public GamePanel() {
+
+  private Point cursorTile;
+
+  @Inject
+  public GamePanel(final StatusBarMessageController statusBarMessageController) {
     tileSee = getImage("tile-ocean.png");
     ship1 = getImage("tile-ship1.png");
     ship2 = getImage("tile-ship2.png");
     dbImage = createImage(getGameMapWidth(), getGameMapHeight());
-
+    cursorTile = null;
     final GamePanel map = this;
 
     MouseAdapter ma = new MouseAdapter() {
@@ -62,6 +66,9 @@ public class GamePanel extends JPanel {
       @Override
       public void mousePressed(MouseEvent e) {
         origin = Point.make(e.getX(), e.getY());
+        cursorTile = convertToTilesCoordinates(origin);
+        statusBarMessageController.fireStatusMessageWasChangedEvent("clicket at " + origin);
+        repaint();
       }
 
       @Override
@@ -110,6 +117,11 @@ public class GamePanel extends JPanel {
     }
   }
 
+  private Point convertToTilesCoordinates(final Point panelCoordinates) {
+    return Point.make(panelCoordinates.getX() / TOTAL_TILE_WIDTH_IN_PX,
+        panelCoordinates.getY() / TOTAL_TILE_WIDTH_IN_PX);
+  }
+
   /**
    * Call original paint with antialising on.
    */
@@ -121,13 +133,18 @@ public class GamePanel extends JPanel {
       dbImage = createImage(getGameMapWidth(), getGameMapHeight());
       if (dbImage == null) {
         return;
-      } else
-        dbg = dbImage.getGraphics();
+      } else {
+      }
     }
-    paintIntoGraphics((Graphics2D) dbg);
-    g.drawImage(dbImage, 0, 0, null);
-    // Sync the display on some systems.
-    // (on Linux, this fixes event queue problems)
+    if (dbImage != null) {
+      final Graphics2D dbg = (Graphics2D) dbImage.getGraphics();
+      paintIntoGraphics(dbg);
+      paintNet(dbg);
+      paintCursor(dbg);
+      g.drawImage(dbImage, 0, 0, null);
+      // Sync the display on some systems.
+      // (on Linux, this fixes event queue problems)
+    }
     Toolkit.getDefaultToolkit().sync();
   }
 
@@ -157,11 +174,10 @@ public class GamePanel extends JPanel {
 
       }
     }
-    paintNet(graphics);
   }
 
   private void paintNet(final Graphics2D graphics) {
-    graphics.setColor(Color.RED);
+    graphics.setColor(Color.LIGHT_GRAY);
     graphics.setStroke(new BasicStroke(1));
     for (int i = 1; i < World.WIDTH; i++) {
       int x = i * TILE_WIDTH_IN_PX + i * GRID_LINE_WIDTH - 1;
@@ -172,6 +188,19 @@ public class GamePanel extends JPanel {
       int y = j * TILE_WIDTH_IN_PX + j * GRID_LINE_WIDTH - 1;
       graphics.drawLine(0, y, World.HEIGHT * TILE_WIDTH_IN_PX + World.WIDTH * (World.HEIGHT - 1),
           y);
+    }
+  }
+
+  private void paintCursor(final Graphics2D graphics) {
+    if (cursorTile != null) {
+      graphics.setColor(Color.RED);
+      graphics.setStroke(new BasicStroke(1));
+      int x = cursorTile.getX() * TOTAL_TILE_WIDTH_IN_PX - 1;
+      int y = cursorTile.getY() * TOTAL_TILE_WIDTH_IN_PX - 1;
+      graphics.drawLine(x, y, x + TILE_WIDTH_IN_PX, y);
+      graphics.drawLine(x, y, x, y + TILE_WIDTH_IN_PX);
+      graphics.drawLine(x + TILE_WIDTH_IN_PX, y, x + TILE_WIDTH_IN_PX, y + TILE_WIDTH_IN_PX);
+      graphics.drawLine(x, y + TILE_WIDTH_IN_PX, x + TILE_WIDTH_IN_PX, y + TILE_WIDTH_IN_PX);
     }
   }
 
@@ -186,11 +215,11 @@ public class GamePanel extends JPanel {
   }
 
   private int getGameMapWidth() {
-    return World.WIDTH * (TILE_WIDTH_IN_PX + GRID_LINE_WIDTH) - 1;
+    return World.WIDTH * TOTAL_TILE_WIDTH_IN_PX - 1;
   }
 
   private int getGameMapHeight() {
-    return World.HEIGHT * (TILE_WIDTH_IN_PX + GRID_LINE_WIDTH) - 1;
+    return World.HEIGHT * TOTAL_TILE_WIDTH_IN_PX - 1;
   }
 
 }

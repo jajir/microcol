@@ -8,7 +8,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.KeyStroke;
 
-public class MenuBarView extends JMenuBar implements MenuBarPresenter.Display {
+public class MainMenuView extends JMenuBar implements MainMenuPresenter.Display {
 
   /**
    * Default serialVersionUID.
@@ -23,7 +23,7 @@ public class MenuBarView extends JMenuBar implements MenuBarPresenter.Display {
 
   private final JMenuItem menuItemQuitGame;
 
-  public MenuBarView() {
+  public MainMenuView() {
     JMenu menuGame = new JMenu();
     menuGame.setText("Game");
 
