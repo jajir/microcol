@@ -11,4 +11,11 @@ public class Tile {
     return units;
   }
 
+  public Unit getFirstMovableUnit() {
+    if (!units.isEmpty()) {
+      return units.get(0);
+    }
+    return null;
+  }
+
 }

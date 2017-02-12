@@ -1,5 +1,7 @@
 package model;
 
+import org.microcol.gui.Point;
+
 public class World {
 
   public final static int WIDTH = 50;
@@ -21,6 +23,9 @@ public class World {
   public Tile[][] getMap() {
     return map;
   }
-  
-  
+
+  public Tile getAt(final Point point) {
+    return map[point.getX()][point.getY()];
+  }
+
 }

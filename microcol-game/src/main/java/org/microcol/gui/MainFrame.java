@@ -3,6 +3,8 @@ package org.microcol.gui;
 import java.awt.Rectangle;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.prefs.Preferences;
@@ -27,8 +29,16 @@ public class MainFrame extends JFrame {
   private Rectangle lastNormalBounds;
 
   @Inject
-  public MainFrame(final MainPanelView mainPanel, final MainMenuView mainMenu) {
+  public MainFrame(final MainPanelView mainPanel, final MainMenuView mainMenu,
+      final KeyController keyController) {
     super("MicroCol");
+
+    addKeyListener(new KeyAdapter() {
+      @Override
+      public void keyPressed(final KeyEvent e) {
+        keyController.fireKeyWasPressed(e);
+      }
+    });
 
     add(mainPanel);
 

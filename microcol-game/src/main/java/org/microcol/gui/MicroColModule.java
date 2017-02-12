@@ -11,6 +11,7 @@ public class MicroColModule extends AbstractModule {
     bind(StatusBarMessageController.class).to(StatusBarMessageControllerImpl.class)
         .in(Singleton.class);
     
+    bind(KeyController.class).in(Singleton.class);
     
     bind(StatusBarView.class).in(Singleton.class);
     bind(StatusBarPresenter.Display.class).to(StatusBarView.class).in(Singleton.class);

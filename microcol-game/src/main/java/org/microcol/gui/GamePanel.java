@@ -2,6 +2,7 @@ package org.microcol.gui;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -9,6 +10,8 @@ import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.Toolkit;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
@@ -19,9 +22,12 @@ import javax.swing.JPanel;
 import javax.swing.JViewport;
 import javax.swing.SwingUtilities;
 
+import org.apache.log4j.Logger;
+
 import com.google.inject.Inject;
 
 import model.Ship;
+import model.Tile;
 import model.Unit;
 import model.World;
 
@@ -31,6 +37,8 @@ public class GamePanel extends JPanel {
    * Default serialVersionUID.
    */
   private static final long serialVersionUID = 1L;
+
+  private final Logger logger = Logger.getLogger(GamePanel.class);
 
   private final static int TILE_WIDTH_IN_PX = 30;
 
@@ -46,18 +54,48 @@ public class GamePanel extends JPanel {
 
   private final BufferedImage ship2;
 
+  private final Cursor gotoModeCursor;
+
   private final World world = new World();
 
   private Point cursorTile;
 
+  private boolean gotoMode = false;
+
+  private Unit movedUnit;
+
   @Inject
-  public GamePanel(final StatusBarMessageController statusBarMessageController) {
+  public GamePanel(final StatusBarMessageController statusBarMessageController,
+      final KeyController keyController) {
     tileSee = getImage("tile-ocean.png");
     ship1 = getImage("tile-ship1.png");
     ship2 = getImage("tile-ship2.png");
+    Toolkit toolkit = Toolkit.getDefaultToolkit();
+    gotoModeCursor = toolkit.createCustomCursor(getImage("cursor-goto.png"),
+        new java.awt.Point(1, 1), "gotoModeCursor");
     dbImage = createImage(getGameMapWidth(), getGameMapHeight());
     cursorTile = null;
     final GamePanel map = this;
+
+    keyController.addKeyListener(new KeyAdapter() {
+      @Override
+      public void keyPressed(final KeyEvent e) {
+        if ('c' == e.getKeyChar()) {
+          // chci centrovat
+        }
+        if ('g' == e.getKeyChar()) {
+          // chci posunout jednotku
+          if (cursorTile != null) {
+            final Tile tile = world.getAt(cursorTile);
+            final Unit unit = tile.getFirstMovableUnit();
+            // TODO in description panel show unit description
+            if (unit != null) {
+              switchToGoMode(unit);
+            }
+          }
+        }
+      }
+    });
 
     MouseAdapter ma = new MouseAdapter() {
 
@@ -66,13 +104,13 @@ public class GamePanel extends JPanel {
       @Override
       public void mousePressed(MouseEvent e) {
         origin = Point.make(e.getX(), e.getY());
-        cursorTile = convertToTilesCoordinates(origin);
+        if (gotoMode) {
+          switchToNormalMode(convertToTilesCoordinates(origin));
+        } else {
+          cursorTile = convertToTilesCoordinates(origin);
+        }
         statusBarMessageController.fireStatusMessageWasChangedEvent("clicket at " + origin);
         repaint();
-      }
-
-      @Override
-      public void mouseReleased(MouseEvent e) {
       }
 
       @Override
@@ -94,6 +132,25 @@ public class GamePanel extends JPanel {
     map.addMouseMotionListener(ma);
 
     setAutoscrolls(true);
+  }
+
+  private final void switchToGoMode(final Unit unit) {
+    logger.debug("Switching '" + unit + "' to go mode.");
+    movedUnit = unit;
+    gotoMode = true;
+    setCursor(gotoModeCursor);
+  }
+
+  private final void switchToNormalMode(final Point moveTo) {
+    logger.debug("Switching to normalmode.");
+    Tile from = world.getAt(cursorTile);
+    Tile to = world.getAt(moveTo);
+    from.getUnits().remove(movedUnit);
+    to.getUnits().add(movedUnit);
+    movedUnit = null;
+    gotoMode = false;
+    cursorTile = moveTo;
+    setCursor(Cursor.getDefaultCursor());
   }
 
   /**
@@ -156,8 +213,8 @@ public class GamePanel extends JPanel {
   private void paintIntoGraphics(final Graphics2D graphics) {
     for (int i = 0; i < World.WIDTH; i++) {
       for (int j = 0; j < World.HEIGHT; j++) {
-        int x = i * TILE_WIDTH_IN_PX + i * GRID_LINE_WIDTH;
-        int y = j * TILE_WIDTH_IN_PX + j * GRID_LINE_WIDTH;
+        int x = i * TOTAL_TILE_WIDTH_IN_PX;
+        int y = j * TOTAL_TILE_WIDTH_IN_PX;
         graphics.drawImage(tileSee, x, y, this);
 
         if (!world.getMap()[i][j].getUnits().isEmpty()) {
@@ -180,12 +237,12 @@ public class GamePanel extends JPanel {
     graphics.setColor(Color.LIGHT_GRAY);
     graphics.setStroke(new BasicStroke(1));
     for (int i = 1; i < World.WIDTH; i++) {
-      int x = i * TILE_WIDTH_IN_PX + i * GRID_LINE_WIDTH - 1;
+      int x = i * TOTAL_TILE_WIDTH_IN_PX - 1;
       graphics.drawLine(x, 0, x,
           World.HEIGHT * TILE_WIDTH_IN_PX + World.HEIGHT * (World.WIDTH - 1));
     }
     for (int j = 1; j < World.HEIGHT; j++) {
-      int y = j * TILE_WIDTH_IN_PX + j * GRID_LINE_WIDTH - 1;
+      int y = j * TOTAL_TILE_WIDTH_IN_PX - 1;
       graphics.drawLine(0, y, World.HEIGHT * TILE_WIDTH_IN_PX + World.WIDTH * (World.HEIGHT - 1),
           y);
     }
