@@ -29,6 +29,14 @@ public class Point {
     return new Point(x - p.x, y - p.y);
   }
 
+  public Point multiply(final int factor) {
+    return new Point(x * factor, y * factor);
+  }
+
+  public Point add(final int value) {
+    return new Point(x + value, y + value);
+  }
+
   @Override
   public String toString() {
     return MoreObjects.toStringHelper(Point.class).add("x", x).add("y", y).toString();

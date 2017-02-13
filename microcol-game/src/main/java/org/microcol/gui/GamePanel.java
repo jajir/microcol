@@ -24,6 +24,7 @@ import javax.swing.SwingUtilities;
 
 import org.apache.log4j.Logger;
 
+import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
 
 import model.Ship;
@@ -54,9 +55,15 @@ public class GamePanel extends JPanel {
 
   private final BufferedImage ship2;
 
+  private final BufferedImage iconSteps;
+
   private final Cursor gotoModeCursor;
 
-  private final World world = new World();
+  private final World world;
+
+  private final FocusedTileController focusedTileController;
+
+  private Point gotoCursorTitle;
 
   private Point cursorTile;
 
@@ -66,10 +73,14 @@ public class GamePanel extends JPanel {
 
   @Inject
   public GamePanel(final StatusBarMessageController statusBarMessageController,
-      final KeyController keyController) {
+      final KeyController keyController, final World world,
+      final FocusedTileController focusedTileController) {
+    this.focusedTileController = focusedTileController;
+    this.world = Preconditions.checkNotNull(world);
     tileSee = getImage("tile-ocean.png");
     ship1 = getImage("tile-ship1.png");
     ship2 = getImage("tile-ship2.png");
+    iconSteps = getImage("icon-steps-25x25.png");
     Toolkit toolkit = Toolkit.getDefaultToolkit();
     gotoModeCursor = toolkit.createCustomCursor(getImage("cursor-goto.png"),
         new java.awt.Point(1, 1), "gotoModeCursor");
@@ -108,9 +119,18 @@ public class GamePanel extends JPanel {
           switchToNormalMode(convertToTilesCoordinates(origin));
         } else {
           cursorTile = convertToTilesCoordinates(origin);
+          focusedTileController.fireNextTurnEvent(world.getAt(cursorTile));
         }
         statusBarMessageController.fireStatusMessageWasChangedEvent("clicket at " + origin);
         repaint();
+      }
+
+      @Override
+      public void mouseMoved(final MouseEvent e) {
+        if (gotoMode) {
+          gotoCursorTitle = convertToTilesCoordinates(Point.make(e.getX(), e.getY()));
+          repaint();
+        }
       }
 
       @Override
@@ -151,6 +171,7 @@ public class GamePanel extends JPanel {
     gotoMode = false;
     cursorTile = moveTo;
     setCursor(Cursor.getDefaultCursor());
+    focusedTileController.fireNextTurnEvent(world.getAt(cursorTile));
   }
 
   /**
@@ -198,6 +219,7 @@ public class GamePanel extends JPanel {
       paintIntoGraphics(dbg);
       paintNet(dbg);
       paintCursor(dbg);
+      paintGoToPath(dbg);
       g.drawImage(dbImage, 0, 0, null);
       // Sync the display on some systems.
       // (on Linux, this fixes event queue problems)
@@ -252,13 +274,76 @@ public class GamePanel extends JPanel {
     if (cursorTile != null) {
       graphics.setColor(Color.RED);
       graphics.setStroke(new BasicStroke(1));
-      int x = cursorTile.getX() * TOTAL_TILE_WIDTH_IN_PX - 1;
-      int y = cursorTile.getY() * TOTAL_TILE_WIDTH_IN_PX - 1;
-      graphics.drawLine(x, y, x + TILE_WIDTH_IN_PX, y);
-      graphics.drawLine(x, y, x, y + TILE_WIDTH_IN_PX);
-      graphics.drawLine(x + TILE_WIDTH_IN_PX, y, x + TILE_WIDTH_IN_PX, y + TILE_WIDTH_IN_PX);
-      graphics.drawLine(x, y + TILE_WIDTH_IN_PX, x + TILE_WIDTH_IN_PX, y + TILE_WIDTH_IN_PX);
+      paintCursor(graphics, cursorTile);
     }
+  }
+
+  private void paintCursor(final Graphics2D graphics, final Point tile) {
+    int x = tile.getX() * TOTAL_TILE_WIDTH_IN_PX - 1;
+    int y = tile.getY() * TOTAL_TILE_WIDTH_IN_PX - 1;
+    graphics.drawLine(x, y, x + TILE_WIDTH_IN_PX, y);
+    graphics.drawLine(x, y, x, y + TILE_WIDTH_IN_PX);
+    graphics.drawLine(x + TILE_WIDTH_IN_PX, y, x + TILE_WIDTH_IN_PX, y + TILE_WIDTH_IN_PX);
+    graphics.drawLine(x, y + TILE_WIDTH_IN_PX, x + TILE_WIDTH_IN_PX, y + TILE_WIDTH_IN_PX);
+  }
+
+  private void paintGoToPath(final Graphics2D graphics) {
+    if (gotoMode && gotoCursorTitle != null) {
+      graphics.setColor(Color.yellow);
+      graphics.setStroke(new BasicStroke(1));
+      paintCursor(graphics, gotoCursorTitle);
+      paintPath(graphics, cursorTile, gotoCursorTitle);
+    }
+  }
+
+  /**
+   * Draw steps between two map points. It use naive algorithm. <i>y = ax + b</i>
+   * 
+   * @param graphics
+   *          required graphics where will be image drawn
+   * @param tileFrom
+   *          required tile from
+   * @param tileTo
+   *          required tile to
+   */
+  private void paintPath(final Graphics2D graphics, final Point tileFrom, final Point tileTo) {
+    if (Math.abs(tileTo.getY() - tileFrom.getY()) < Math.abs(tileTo.getX() - tileFrom.getX())) {
+      float a = (tileFrom.getY() - tileTo.getY()) / (float) (tileFrom.getX() - tileTo.getX());
+      float b = tileFrom.getY() - tileFrom.getX() * a;
+      if (tileFrom.getX() < tileTo.getX()) {
+        for (int x = tileFrom.getX(); x <= tileTo.getX(); x++) {
+          int y = (int) (a * x + b);
+          paintStepsToTile(graphics, Point.make(x, y));
+        }
+      } else {
+        for (int x = tileTo.getX(); x <= tileFrom.getX(); x++) {
+          int y = (int) (a * x + b);
+          paintStepsToTile(graphics, Point.make(x, y));
+        }
+      }
+    } else {
+      float a = (tileFrom.getX() - tileTo.getX()) / (float) (tileFrom.getY() - tileTo.getY());
+      float b = tileFrom.getX() - tileFrom.getY() * a;
+      if (tileFrom.getY() < tileTo.getY()) {
+        for (int y = tileFrom.getY(); y <= tileTo.getY(); y++) {
+          int x = (int) (a * y + b);
+          paintStepsToTile(graphics, Point.make(x, y));
+        }
+      } else {
+        for (int y = tileTo.getY(); y <= tileFrom.getY(); y++) {
+          int x = (int) (a * y + b);
+          paintStepsToTile(graphics, Point.make(x, y));
+        }
+      }
+
+    }
+//    paintStepsToTile(graphics, tileFrom);
+//    paintStepsToTile(graphics, tileTo);
+  }
+
+  private void paintStepsToTile(final Graphics2D graphics, final Point tile) {
+    Point p = tile.multiply(TOTAL_TILE_WIDTH_IN_PX).add(4);
+    graphics.drawImage(iconSteps, p.getX(), p.getY(), this);
   }
 
   @Override
