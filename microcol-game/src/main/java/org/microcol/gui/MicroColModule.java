@@ -7,29 +7,28 @@ import model.World;
 
 public class MicroColModule extends AbstractModule {
 
-  @Override
-  protected void configure() {
+	@Override
+	protected void configure() {
 
-    bind(StatusBarMessageController.class).to(StatusBarMessageControllerImpl.class)
-        .in(Singleton.class);
+		bind(StatusBarMessageController.class).to(StatusBarMessageControllerImpl.class).in(Singleton.class);
 
-    bind(World.class).in(Singleton.class);
+		bind(World.class).in(Singleton.class);
 
-    bind(KeyController.class).in(Singleton.class);
-    bind(NextTurnController.class).in(Singleton.class);
-    bind(FocusedTileController.class).in(Singleton.class);
-    
-    bind(StatusBarView.class).in(Singleton.class);
-    bind(StatusBarPresenter.Display.class).to(StatusBarView.class).in(Singleton.class);
-    bind(StatusBarPresenter.class).asEagerSingleton();
+		bind(KeyController.class).in(Singleton.class);
+		bind(NextTurnController.class).in(Singleton.class);
+		bind(FocusedTileController.class).in(Singleton.class);
 
-    bind(MainMenuView.class).in(Singleton.class);
-    bind(MainMenuPresenter.Display.class).to(MainMenuView.class).in(Singleton.class);
-    bind(MainMenuPresenter.class).asEagerSingleton();
+		bind(StatusBarView.class).in(Singleton.class);
+		bind(StatusBarPresenter.Display.class).to(StatusBarView.class).in(Singleton.class);
+		bind(StatusBarPresenter.class).asEagerSingleton();
 
-    bind(RightPanelView.class).in(Singleton.class);
-    bind(RightPanelPresenter.Display.class).to(RightPanelView.class).in(Singleton.class);
-    bind(RightPanelPresenter.class).asEagerSingleton();
-  }
+		bind(MainMenuView.class).in(Singleton.class);
+		bind(MainMenuPresenter.Display.class).to(MainMenuView.class).in(Singleton.class);
+		bind(MainMenuPresenter.class).asEagerSingleton();
+
+		bind(RightPanelView.class).in(Singleton.class);
+		bind(RightPanelPresenter.Display.class).to(RightPanelView.class).in(Singleton.class);
+		bind(RightPanelPresenter.class).asEagerSingleton();
+	}
 
 }

@@ -10,64 +10,64 @@ import javax.swing.KeyStroke;
 
 public class MainMenuView extends JMenuBar implements MainMenuPresenter.Display {
 
-  /**
-   * Default serialVersionUID.
-   */
-  private static final long serialVersionUID = 1L;
+	/**
+	 * Default serialVersionUID.
+	 */
+	private static final long serialVersionUID = 1L;
 
-  private final JMenuItem menuItemNewGame;
+	private final JMenuItem menuItemNewGame;
 
-  private final JMenuItem menuItemSameGame;
+	private final JMenuItem menuItemSameGame;
 
-  private final JMenuItem menuItemLoadGame;
+	private final JMenuItem menuItemLoadGame;
 
-  private final JMenuItem menuItemQuitGame;
+	private final JMenuItem menuItemQuitGame;
 
-  public MainMenuView() {
-    JMenu menuGame = new JMenu();
-    menuGame.setText("Game");
+	public MainMenuView() {
+		JMenu menuGame = new JMenu();
+		menuGame.setText("Game");
 
-    menuItemNewGame = new JMenuItem();
-    menuItemNewGame.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_MASK));
-    menuItemNewGame.setText("New game");
-    menuGame.add(menuItemNewGame);
+		menuItemNewGame = new JMenuItem();
+		menuItemNewGame.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_MASK));
+		menuItemNewGame.setText("New game");
+		menuGame.add(menuItemNewGame);
 
-    menuItemSameGame = new JMenuItem();
-    menuItemSameGame.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_MASK));
-    menuItemSameGame.setText("Save game");
-    menuGame.add(menuItemSameGame);
+		menuItemSameGame = new JMenuItem();
+		menuItemSameGame.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_MASK));
+		menuItemSameGame.setText("Save game");
+		menuGame.add(menuItemSameGame);
 
-    menuItemLoadGame = new JMenuItem();
-    menuItemLoadGame.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_L, InputEvent.CTRL_MASK));
-    menuItemLoadGame.setText("Load game");
-    menuGame.add(menuItemLoadGame);
+		menuItemLoadGame = new JMenuItem();
+		menuItemLoadGame.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_L, InputEvent.CTRL_MASK));
+		menuItemLoadGame.setText("Load game");
+		menuGame.add(menuItemLoadGame);
 
-    menuItemQuitGame = new JMenuItem();
-    menuItemQuitGame.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q, InputEvent.CTRL_MASK));
-    menuItemQuitGame.setText("Quit MicroCol");
-    menuGame.add(menuItemQuitGame);
+		menuItemQuitGame = new JMenuItem();
+		menuItemQuitGame.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q, InputEvent.CTRL_MASK));
+		menuItemQuitGame.setText("Quit MicroCol");
+		menuGame.add(menuItemQuitGame);
 
-    add(menuGame);
-  }
+		add(menuGame);
+	}
 
-  @Override
-  public JMenuItem getMenuItemNewGame() {
-    return menuItemNewGame;
-  }
+	@Override
+	public JMenuItem getMenuItemNewGame() {
+		return menuItemNewGame;
+	}
 
-  @Override
-  public JMenuItem getMenuItemQuitGame() {
-    return menuItemQuitGame;
-  }
+	@Override
+	public JMenuItem getMenuItemQuitGame() {
+		return menuItemQuitGame;
+	}
 
-  @Override
-  public JMenuItem getMenuItemSameGame() {
-    return menuItemSameGame;
-  }
+	@Override
+	public JMenuItem getMenuItemSameGame() {
+		return menuItemSameGame;
+	}
 
-  @Override
-  public JMenuItem getMenuItemLoadGame() {
-    return menuItemLoadGame;
-  }
+	@Override
+	public JMenuItem getMenuItemLoadGame() {
+		return menuItemLoadGame;
+	}
 
 }

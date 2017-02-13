@@ -13,18 +13,18 @@ import com.google.inject.Stage;
  * MicroCol's main class.
  */
 public class MicroCol {
-  /**
-   * Creates and displays the form.
-   * 
-   * @param args
-   *          the command line arguments
-   */
-  public static void main(final String args[]) {
-    SwingUtilities.invokeLater(() -> {
-      final Injector injector = Guice.createInjector(Stage.PRODUCTION, new MicroColModule());
+	/**
+	 * Creates and displays the form.
+	 * 
+	 * @param args
+	 *            the command line arguments
+	 */
+	public static void main(final String args[]) {
+		SwingUtilities.invokeLater(() -> {
+			final Injector injector = Guice.createInjector(Stage.PRODUCTION, new MicroColModule());
 
-      final MainFrame mainFrame = injector.getInstance(MainFrame.class);
-      mainFrame.setVisible(true);
-    });
-  }
+			final MainFrame mainFrame = injector.getInstance(MainFrame.class);
+			mainFrame.setVisible(true);
+		});
+	}
 }

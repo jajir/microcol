@@ -17,20 +17,20 @@ import com.google.common.base.Preconditions;
  */
 public class KeyController {
 
-  private final Logger logger = Logger.getLogger(KeyController.class);
+	private final Logger logger = Logger.getLogger(KeyController.class);
 
-  private final List<KeyListener> listeners = new ArrayList<KeyListener>();
+	private final List<KeyListener> listeners = new ArrayList<KeyListener>();
 
-  public void addKeyListener(final KeyListener listener) {
-    Preconditions.checkNotNull(listener);
-    listeners.add(listener);
-  }
+	public void addKeyListener(final KeyListener listener) {
+		Preconditions.checkNotNull(listener);
+		listeners.add(listener);
+	}
 
-  public void fireKeyWasPressed(final KeyEvent keyEvent) {
-    Preconditions.checkNotNull(keyEvent);
-    logger.trace("firing event: " + keyEvent);
-    listeners.forEach(listener -> {
-      listener.keyPressed(keyEvent);
-    });
-  }
+	public void fireKeyWasPressed(final KeyEvent keyEvent) {
+		Preconditions.checkNotNull(keyEvent);
+		logger.trace("firing event: " + keyEvent);
+		listeners.forEach(listener -> {
+			listener.keyPressed(keyEvent);
+		});
+	}
 }

@@ -11,26 +11,26 @@ import com.google.inject.Inject;
 
 public class MainPanelView extends JPanel {
 
-  /**
-   * Default serialVersionUID.
-   */
-  private static final long serialVersionUID = 1L;
+	/**
+	 * Default serialVersionUID.
+	 */
+	private static final long serialVersionUID = 1L;
 
-  @Inject
-  public MainPanelView(final GamePanel gamePanel, final StatusBarView statusBar,
-      final RightPanelView rightPanelView) {
-    this.setLayout(new GridBagLayout());
-    JScrollPane scrollPaneGamePanel = new JScrollPane(gamePanel,
-        JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-    
-    add(scrollPaneGamePanel, new GridBagConstraints(0, 0, 1, 1, 1.0D, 1.0D,
-        GridBagConstraints.NORTH, GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
-    
-    add(rightPanelView, new GridBagConstraints(1, 0, 1, 1, 0.0D, 1.0D,
-        GridBagConstraints.NORTH, GridBagConstraints.VERTICAL, new Insets(0, 0, 0, 0), 0, 0));
+	@Inject
+	public MainPanelView(final GamePanel gamePanel, final StatusBarView statusBar,
+			final RightPanelView rightPanelView) {
+		this.setLayout(new GridBagLayout());
+		JScrollPane scrollPaneGamePanel = new JScrollPane(gamePanel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 
-    add(statusBar, new GridBagConstraints(0, 1, 2, 1, 1.0D, 0.0D, GridBagConstraints.NORTH,
-        GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
-  }
+		add(scrollPaneGamePanel, new GridBagConstraints(0, 0, 1, 1, 1.0D, 1.0D, GridBagConstraints.NORTH,
+				GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
+
+		add(rightPanelView, new GridBagConstraints(1, 0, 1, 1, 0.0D, 1.0D, GridBagConstraints.NORTH,
+				GridBagConstraints.VERTICAL, new Insets(0, 0, 0, 0), 0, 0));
+
+		add(statusBar, new GridBagConstraints(0, 1, 2, 1, 1.0D, 0.0D, GridBagConstraints.NORTH, GridBagConstraints.BOTH,
+				new Insets(0, 0, 0, 0), 0, 0));
+	}
 
 }

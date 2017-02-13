@@ -6,12 +6,12 @@ package org.microcol.gui;
  */
 public interface StatusBarMessageListener {
 
-  /**
-   * When status message is changed this method is invoked.
-   * 
-   * @param statusMessage
-   *          required status message
-   */
-  void onStatusMessageChange(String statusMessage);
+	/**
+	 * When status message is changed this method is invoked.
+	 * 
+	 * @param statusMessage
+	 *            required status message
+	 */
+	void onStatusMessageChange(String statusMessage);
 
 }

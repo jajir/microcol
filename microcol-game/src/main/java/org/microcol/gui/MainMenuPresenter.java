@@ -9,30 +9,30 @@ import com.google.inject.Inject;
 
 public class MainMenuPresenter {
 
-  public interface Display {
-    JMenuItem getMenuItemNewGame();
+	public interface Display {
+		JMenuItem getMenuItemNewGame();
 
-    JMenuItem getMenuItemLoadGame();
+		JMenuItem getMenuItemLoadGame();
 
-    JMenuItem getMenuItemSameGame();
+		JMenuItem getMenuItemSameGame();
 
-    JMenuItem getMenuItemQuitGame();
-  }
+		JMenuItem getMenuItemQuitGame();
+	}
 
-  @Inject
-  public MainMenuPresenter(final MainMenuPresenter.Display display) {
-    display.getMenuItemNewGame().addActionListener(new ActionListener() {
-      @Override
-      public void actionPerformed(final ActionEvent evt) {
+	@Inject
+	public MainMenuPresenter(final MainMenuPresenter.Display display) {
+		display.getMenuItemNewGame().addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(final ActionEvent evt) {
 
-      }
-    });
-    display.getMenuItemQuitGame().addActionListener(new ActionListener() {
-      @Override
-      public void actionPerformed(final ActionEvent evt) {
+			}
+		});
+		display.getMenuItemQuitGame().addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(final ActionEvent evt) {
 
-      }
-    });
-  }
+			}
+		});
+	}
 
 }
