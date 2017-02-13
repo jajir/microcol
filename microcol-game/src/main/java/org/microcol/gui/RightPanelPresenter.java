@@ -37,9 +37,13 @@ public class RightPanelPresenter {
         display.getTextLabel().setText("empty unit");
       } else {
         final StringBuilder buff = new StringBuilder();
+        buff.append("<html>");
         tile.getUnits().forEach(unit -> {
           buff.append(unit.toString());
+          buff.append("<br />");
+          buff.append("<br />");
         });
+        buff.append("</html>");
         display.getTextLabel().setText(buff.toString());
       }
     });

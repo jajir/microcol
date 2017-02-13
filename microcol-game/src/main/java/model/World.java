@@ -1,6 +1,8 @@
 package model;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import org.microcol.gui.NextTurnController;
 import org.microcol.gui.Point;
@@ -19,6 +21,8 @@ public class World {
 
   private final NextTurnController nextTurnController;
 
+  private final List<List<Point>> pathsToFinish;
+
   @Inject
   public World(final NextTurnController nextTurnController) {
     this.nextTurnController = nextTurnController;
@@ -30,6 +34,7 @@ public class World {
     }
     map[5][5].getUnits().add(new Ship(1));
     map[10][10].getUnits().add(new Ship(0));
+    pathsToFinish = new ArrayList<>();
   }
 
   public void nextTurn() {
@@ -38,8 +43,43 @@ public class World {
         resetActionPoints(tile);
       });
     });
+    resolvePathsToFinish();
     currentYear++;
     nextTurnController.fireNextTurnEvent(this);
+  }
+
+  public void addUnresolvedPaths(final List<Point> path) {
+    pathsToFinish.add(path);
+  }
+
+  private void resolvePathsToFinish() {
+    pathsToFinish.removeIf(path -> {
+      moveAlongPath(path);
+      return path.isEmpty();
+    });
+  }
+
+  private void moveAlongPath(final List<Point> path) {
+    Point from = null;
+    List<Point> stepsToRemove = new ArrayList<>();
+    for (final Point to : path) {
+      if (from == null) {
+      } else {
+        // make move from-->to
+        Unit u = getAt(from).getFirstMovableUnit();
+        if (u instanceof Ship) {
+          Ship s = (Ship) u;
+          if (s.getAvailableSteps() > 0) {
+            s.decreaseActionPoint(1);
+            getAt(from).getUnits().remove(u);
+            getAt(to).getUnits().add(u);
+            stepsToRemove.add(from);
+          }
+        }
+      }
+      from = to;
+    }
+    path.removeAll(stepsToRemove);
   }
 
   private final void resetActionPoints(final Tile tile) {

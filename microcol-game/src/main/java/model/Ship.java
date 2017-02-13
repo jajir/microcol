@@ -10,6 +10,7 @@ public class Ship extends Unit {
 
   public Ship(final int type) {
     this.type = type;
+    availableSteps = 5;
   }
 
   @Override
@@ -24,6 +25,14 @@ public class Ship extends Unit {
 
   public void resetActionPoints() {
     availableSteps = 5;
+  }
+
+  public void decreaseActionPoint(int howMuch){
+    availableSteps-=howMuch;
+  }
+
+  public int getAvailableSteps() {
+    return availableSteps;
   }
 
 }

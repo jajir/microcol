@@ -16,6 +16,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
@@ -74,7 +76,8 @@ public class GamePanel extends JPanel {
   @Inject
   public GamePanel(final StatusBarMessageController statusBarMessageController,
       final KeyController keyController, final World world,
-      final FocusedTileController focusedTileController) {
+      final FocusedTileController focusedTileController,
+      final NextTurnController nextTurnController) {
     this.focusedTileController = focusedTileController;
     this.world = Preconditions.checkNotNull(world);
     tileSee = getImage("tile-ocean.png");
@@ -87,6 +90,8 @@ public class GamePanel extends JPanel {
     dbImage = createImage(getGameMapWidth(), getGameMapHeight());
     cursorTile = null;
     final GamePanel map = this;
+
+    nextTurnController.addNextTurnListener(w -> map.repaint());
 
     keyController.addKeyListener(new KeyAdapter() {
       @Override
@@ -163,15 +168,50 @@ public class GamePanel extends JPanel {
 
   private final void switchToNormalMode(final Point moveTo) {
     logger.debug("Switching to normalmode.");
-    Tile from = world.getAt(cursorTile);
-    Tile to = world.getAt(moveTo);
-    from.getUnits().remove(movedUnit);
-    to.getUnits().add(movedUnit);
+
+    final List<Point> path = new ArrayList<Point>();
+    paintPath(cursorTile, moveTo, point -> path.add(point));
+    // make first step
+    walk(path);
+
     movedUnit = null;
     gotoMode = false;
     cursorTile = moveTo;
     setCursor(Cursor.getDefaultCursor());
     focusedTileController.fireNextTurnEvent(world.getAt(cursorTile));
+  }
+
+  private void walk(final List<Point> path) {
+    Point from = null;
+    List<Point> stepsToRemove = new ArrayList<>();
+    for (final Point to : path) {
+      if (from == null) {
+      } else {
+        // make move from-->to
+        Unit u = world.getAt(from).getFirstMovableUnit();
+        if (u instanceof Ship) {
+          Ship s = (Ship) u;
+          if (s.getAvailableSteps() > 0) {
+            s.decreaseActionPoint(1);
+            world.getAt(from).getUnits().remove(u);
+            world.getAt(to).getUnits().add(u);
+            try {
+              Thread.sleep(1);
+            } catch (InterruptedException e) {
+              // TODO Auto-generated catch block
+              e.printStackTrace();
+            }
+            stepsToRemove.add(from);
+            repaint();
+          }
+        }
+      }
+      from = to;
+    }
+    path.removeAll(stepsToRemove);
+    if (!path.isEmpty()) {
+      world.addUnresolvedPaths(path);
+    }
   }
 
   /**
@@ -292,33 +332,36 @@ public class GamePanel extends JPanel {
       graphics.setColor(Color.yellow);
       graphics.setStroke(new BasicStroke(1));
       paintCursor(graphics, gotoCursorTitle);
-      paintPath(graphics, cursorTile, gotoCursorTitle);
+      paintPath(cursorTile, gotoCursorTitle, point -> paintStepsToTile(graphics, point));
     }
+  }
+
+  private interface WhatToDoWithPointInPath {
+    void pathPoint(Point point);
   }
 
   /**
    * Draw steps between two map points. It use naive algorithm. <i>y = ax + b</i>
    * 
-   * @param graphics
-   *          required graphics where will be image drawn
    * @param tileFrom
    *          required tile from
    * @param tileTo
    *          required tile to
    */
-  private void paintPath(final Graphics2D graphics, final Point tileFrom, final Point tileTo) {
+  private void paintPath(final Point tileFrom, final Point tileTo,
+      final WhatToDoWithPointInPath whatToDoWithPointInPath) {
     if (Math.abs(tileTo.getY() - tileFrom.getY()) < Math.abs(tileTo.getX() - tileFrom.getX())) {
       float a = (tileFrom.getY() - tileTo.getY()) / (float) (tileFrom.getX() - tileTo.getX());
       float b = tileFrom.getY() - tileFrom.getX() * a;
       if (tileFrom.getX() < tileTo.getX()) {
         for (int x = tileFrom.getX(); x <= tileTo.getX(); x++) {
           int y = (int) (a * x + b);
-          paintStepsToTile(graphics, Point.make(x, y));
+          whatToDoWithPointInPath.pathPoint(Point.make(x, y));
         }
       } else {
         for (int x = tileTo.getX(); x <= tileFrom.getX(); x++) {
           int y = (int) (a * x + b);
-          paintStepsToTile(graphics, Point.make(x, y));
+          whatToDoWithPointInPath.pathPoint(Point.make(x, y));
         }
       }
     } else {
@@ -327,18 +370,15 @@ public class GamePanel extends JPanel {
       if (tileFrom.getY() < tileTo.getY()) {
         for (int y = tileFrom.getY(); y <= tileTo.getY(); y++) {
           int x = (int) (a * y + b);
-          paintStepsToTile(graphics, Point.make(x, y));
+          whatToDoWithPointInPath.pathPoint(Point.make(x, y));
         }
       } else {
         for (int y = tileTo.getY(); y <= tileFrom.getY(); y++) {
           int x = (int) (a * y + b);
-          paintStepsToTile(graphics, Point.make(x, y));
+          whatToDoWithPointInPath.pathPoint(Point.make(x, y));
         }
       }
-
     }
-//    paintStepsToTile(graphics, tileFrom);
-//    paintStepsToTile(graphics, tileTo);
   }
 
   private void paintStepsToTile(final Graphics2D graphics, final Point tile) {
