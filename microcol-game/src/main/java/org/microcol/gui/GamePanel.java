@@ -65,6 +65,8 @@ public class GamePanel extends JPanel {
 
 	private final FocusedTileController focusedTileController;
 
+	private final PathPlanning pathPlanning;
+
 	private Point gotoCursorTitle;
 
 	private Point cursorTile;
@@ -76,9 +78,10 @@ public class GamePanel extends JPanel {
 	@Inject
 	public GamePanel(final StatusBarMessageController statusBarMessageController, final KeyController keyController,
 			final World world, final FocusedTileController focusedTileController,
-			final NextTurnController nextTurnController) {
+			final NextTurnController nextTurnController, final PathPlanning pathPlanning) {
 		this.focusedTileController = focusedTileController;
 		this.world = Preconditions.checkNotNull(world);
+		this.pathPlanning = Preconditions.checkNotNull(pathPlanning);
 		tileSee = getImage("tile-ocean.png");
 		ship1 = getImage("tile-ship1.png");
 		ship2 = getImage("tile-ship2.png");
@@ -169,7 +172,7 @@ public class GamePanel extends JPanel {
 		logger.debug("Switching to normalmode.");
 
 		final List<Point> path = new ArrayList<Point>();
-		paintPath(cursorTile, moveTo, point -> path.add(point));
+		pathPlanning.paintPath(cursorTile, moveTo, point -> path.add(point));
 		// make first step
 		walk(path);
 
@@ -329,53 +332,7 @@ public class GamePanel extends JPanel {
 			graphics.setColor(Color.yellow);
 			graphics.setStroke(new BasicStroke(1));
 			paintCursor(graphics, gotoCursorTitle);
-			paintPath(cursorTile, gotoCursorTitle, point -> paintStepsToTile(graphics, point));
-		}
-	}
-
-	private interface WhatToDoWithPointInPath {
-		void pathPoint(Point point);
-	}
-
-	/**
-	 * Draw steps between two map points. It use naive algorithm. <i>y = ax +
-	 * b</i>
-	 * 
-	 * @param tileFrom
-	 *            required tile from
-	 * @param tileTo
-	 *            required tile to
-	 */
-	private void paintPath(final Point tileFrom, final Point tileTo,
-			final WhatToDoWithPointInPath whatToDoWithPointInPath) {
-		if (Math.abs(tileTo.getY() - tileFrom.getY()) < Math.abs(tileTo.getX() - tileFrom.getX())) {
-			float a = (tileFrom.getY() - tileTo.getY()) / (float) (tileFrom.getX() - tileTo.getX());
-			float b = tileFrom.getY() - tileFrom.getX() * a;
-			if (tileFrom.getX() < tileTo.getX()) {
-				for (int x = tileFrom.getX(); x <= tileTo.getX(); x++) {
-					int y = (int) (a * x + b);
-					whatToDoWithPointInPath.pathPoint(Point.make(x, y));
-				}
-			} else {
-				for (int x = tileTo.getX(); x <= tileFrom.getX(); x++) {
-					int y = (int) (a * x + b);
-					whatToDoWithPointInPath.pathPoint(Point.make(x, y));
-				}
-			}
-		} else {
-			float a = (tileFrom.getX() - tileTo.getX()) / (float) (tileFrom.getY() - tileTo.getY());
-			float b = tileFrom.getX() - tileFrom.getY() * a;
-			if (tileFrom.getY() < tileTo.getY()) {
-				for (int y = tileFrom.getY(); y <= tileTo.getY(); y++) {
-					int x = (int) (a * y + b);
-					whatToDoWithPointInPath.pathPoint(Point.make(x, y));
-				}
-			} else {
-				for (int y = tileTo.getY(); y <= tileFrom.getY(); y++) {
-					int x = (int) (a * y + b);
-					whatToDoWithPointInPath.pathPoint(Point.make(x, y));
-				}
-			}
+			pathPlanning.paintPath(cursorTile, gotoCursorTitle, point -> paintStepsToTile(graphics, point));
 		}
 	}
 

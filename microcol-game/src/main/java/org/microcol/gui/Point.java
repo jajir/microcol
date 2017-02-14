@@ -1,6 +1,7 @@
 package org.microcol.gui;
 
 import com.google.common.base.MoreObjects;
+import com.google.common.base.Objects;
 
 public class Point {
 
@@ -23,6 +24,27 @@ public class Point {
 
 	public int getY() {
 		return y;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hashCode(x, y);
+
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		Point other = (Point) obj;
+		return Objects.equal(x, other.x) && Objects.equal(y, other.y);
 	}
 
 	public Point substract(final Point p) {
