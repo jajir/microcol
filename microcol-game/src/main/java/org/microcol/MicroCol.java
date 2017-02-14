@@ -22,7 +22,6 @@ public class MicroCol {
 	public static void main(final String args[]) {
 		SwingUtilities.invokeLater(() -> {
 			final Injector injector = Guice.createInjector(Stage.PRODUCTION, new MicroColModule());
-
 			final MainFrame mainFrame = injector.getInstance(MainFrame.class);
 			mainFrame.setVisible(true);
 		});

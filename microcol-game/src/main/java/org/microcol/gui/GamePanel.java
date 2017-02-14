@@ -14,12 +14,9 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 import javax.swing.JViewport;
 import javax.swing.SwingUtilities;
@@ -48,15 +45,9 @@ public class GamePanel extends JPanel {
 
 	private final static int TOTAL_TILE_WIDTH_IN_PX = TILE_WIDTH_IN_PX + GRID_LINE_WIDTH;
 
+	private final ImageProvider imageProvider;
+
 	private Image dbImage;
-
-	private final Image tileSee;
-
-	private final BufferedImage ship1;
-
-	private final BufferedImage ship2;
-
-	private final BufferedImage iconSteps;
 
 	private final Cursor gotoModeCursor;
 
@@ -72,22 +63,18 @@ public class GamePanel extends JPanel {
 
 	private boolean gotoMode = false;
 
-	private Unit movedUnit;
-
 	@Inject
 	public GamePanel(final StatusBarMessageController statusBarMessageController, final KeyController keyController,
 			final World world, final FocusedTileController focusedTileController,
-			final NextTurnController nextTurnController, final PathPlanning pathPlanning) {
+			final NextTurnController nextTurnController, final PathPlanning pathPlanning,
+			final ImageProvider imageProvider) {
 		this.focusedTileController = focusedTileController;
 		this.world = Preconditions.checkNotNull(world);
 		this.pathPlanning = Preconditions.checkNotNull(pathPlanning);
-		tileSee = getImage("tile-ocean.png");
-		ship1 = getImage("tile-ship1.png");
-		ship2 = getImage("tile-ship2.png");
-		iconSteps = getImage("icon-steps-25x25.png");
+		this.imageProvider = Preconditions.checkNotNull(imageProvider);
 		Toolkit toolkit = Toolkit.getDefaultToolkit();
-		gotoModeCursor = toolkit.createCustomCursor(getImage("cursor-goto.png"), new java.awt.Point(1, 1),
-				"gotoModeCursor");
+		gotoModeCursor = toolkit.createCustomCursor(imageProvider.getImage(ImageProvider.IMG_CURSOR_GOTO),
+				new java.awt.Point(1, 1), "gotoModeCursor");
 		dbImage = createImage(getGameMapWidth(), getGameMapHeight());
 		cursorTile = null;
 		final GamePanel map = this;
@@ -162,7 +149,6 @@ public class GamePanel extends JPanel {
 
 	private final void switchToGoMode(final Unit unit) {
 		logger.debug("Switching '" + unit + "' to go mode.");
-		movedUnit = unit;
 		gotoMode = true;
 		setCursor(gotoModeCursor);
 	}
@@ -175,7 +161,6 @@ public class GamePanel extends JPanel {
 		// make first step
 		walk(path);
 
-		movedUnit = null;
 		gotoMode = false;
 		cursorTile = moveTo;
 		setCursor(Cursor.getDefaultCursor());
@@ -212,27 +197,6 @@ public class GamePanel extends JPanel {
 		path.removeAll(stepsToRemove);
 		if (!path.isEmpty()) {
 			world.addUnresolvedPaths(path);
-		}
-	}
-
-	/**
-	 * Simplify loading image from resource. Path should look like: <code>
-	 * org/microcol/images/unit-60x60.gif
-	 * </code>
-	 * 
-	 * @param path
-	 *            path at classpath where is stored image
-	 * @return image object
-	 */
-	public BufferedImage getImage(final String path) {
-		try {
-			ClassLoader cl = this.getClass().getClassLoader();
-			return ImageIO.read(cl.getResourceAsStream(path));
-		} catch (IOException e) {
-			final String msg = "Unable to load file '" + path + "'.";
-			System.out.println(msg);
-			e.printStackTrace();
-			return null;
 		}
 	}
 
@@ -278,16 +242,16 @@ public class GamePanel extends JPanel {
 			for (int j = 0; j < World.HEIGHT; j++) {
 				int x = i * TOTAL_TILE_WIDTH_IN_PX;
 				int y = j * TOTAL_TILE_WIDTH_IN_PX;
-				graphics.drawImage(tileSee, x, y, this);
+				graphics.drawImage(imageProvider.getImage(ImageProvider.IMG_TILE_OCEAN), x, y, this);
 
 				if (!world.getMap()[i][j].getUnits().isEmpty()) {
 					Unit u = world.getMap()[i][j].getUnits().get(0);
 					if (u instanceof Ship) {
 						Ship s = (Ship) u;
 						if (s.getType() == 0) {
-							graphics.drawImage(ship1, x, y, this);
+							graphics.drawImage(imageProvider.getImage(ImageProvider.IMG_TILE_SHIP1), x, y, this);
 						} else {
-							graphics.drawImage(ship2, x, y, this);
+							graphics.drawImage(imageProvider.getImage(ImageProvider.IMG_TILE_SHIP2), x, y, this);
 						}
 					}
 				}
@@ -337,7 +301,7 @@ public class GamePanel extends JPanel {
 
 	private void paintStepsToTile(final Graphics2D graphics, final Point tile) {
 		Point p = tile.multiply(TOTAL_TILE_WIDTH_IN_PX).add(4);
-		graphics.drawImage(iconSteps, p.getX(), p.getY(), this);
+		graphics.drawImage(imageProvider.getImage(ImageProvider.IMG_ICON_STEPS_25x25), p.getX(), p.getY(), this);
 	}
 
 	@Override

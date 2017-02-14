@@ -17,6 +17,11 @@ import com.google.inject.Inject;
  * MicroCol's main frame.
  */
 public class MainFrame extends JFrame {
+	
+	/**
+	 * Default serialVersionUID.
+	 */
+	private static final long serialVersionUID = 1L;
 
 	private static final String PREFERENCES_PATH = "microcol/main-frame";
 
