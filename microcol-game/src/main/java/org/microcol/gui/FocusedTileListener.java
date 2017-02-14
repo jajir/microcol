@@ -1,6 +1,6 @@
 package org.microcol.gui;
 
-import model.Tile;
+import org.microcol.model.Tile;
 
 public interface FocusedTileListener {
 

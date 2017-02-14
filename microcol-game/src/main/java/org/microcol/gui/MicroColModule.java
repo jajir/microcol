@@ -1,9 +1,9 @@
 package org.microcol.gui;
 
+import org.microcol.model.World;
+
 import com.google.inject.AbstractModule;
 import com.google.inject.Singleton;
-
-import model.World;
 
 public class MicroColModule extends AbstractModule {
 

@@ -25,14 +25,13 @@ import javax.swing.JViewport;
 import javax.swing.SwingUtilities;
 
 import org.apache.log4j.Logger;
+import org.microcol.model.Ship;
+import org.microcol.model.Tile;
+import org.microcol.model.Unit;
+import org.microcol.model.World;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
-
-import model.Ship;
-import model.Tile;
-import model.Unit;
-import model.World;
 
 public class GamePanel extends JPanel {
 

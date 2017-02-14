@@ -1,6 +1,6 @@
 package org.microcol.gui;
 
-import model.World;
+import org.microcol.model.World;
 
 public interface NextTurnListener {
 

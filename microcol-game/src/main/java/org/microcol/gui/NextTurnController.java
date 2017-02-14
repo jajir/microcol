@@ -4,10 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.microcol.model.World;
 
 import com.google.common.base.Preconditions;
-
-import model.World;
 
 public class NextTurnController {
 

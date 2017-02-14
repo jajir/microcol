@@ -6,9 +6,9 @@ import java.awt.event.KeyEvent;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 
-import com.google.inject.Inject;
+import org.microcol.model.World;
 
-import model.World;
+import com.google.inject.Inject;
 
 public class RightPanelPresenter {
 

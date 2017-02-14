@@ -1,4 +1,4 @@
-package model;
+package org.microcol.model;
 
 import com.google.common.base.MoreObjects;
 
