@@ -20,6 +20,7 @@ import java.util.List;
 import javax.swing.JPanel;
 import javax.swing.JViewport;
 import javax.swing.SwingUtilities;
+import javax.swing.Timer;
 
 import org.apache.log4j.Logger;
 import org.microcol.model.Ship;
@@ -43,7 +44,7 @@ public class GamePanel extends JPanel {
 
 	private final static int GRID_LINE_WIDTH = 1;
 
-	private final static int TOTAL_TILE_WIDTH_IN_PX = TILE_WIDTH_IN_PX + GRID_LINE_WIDTH;
+	public final static int TOTAL_TILE_WIDTH_IN_PX = TILE_WIDTH_IN_PX + GRID_LINE_WIDTH;
 
 	private final ImageProvider imageProvider;
 
@@ -62,6 +63,25 @@ public class GamePanel extends JPanel {
 	private Point cursorTile;
 
 	private boolean gotoMode = false;
+
+	/**
+	 * In list will be placed elements which are not in map, because there are
+	 * moving.
+	 */
+	private final List<FloatingUnit> floatingParts = new ArrayList<>();
+
+	private class FloatingUnit {
+
+		public Point point;
+
+		public Unit unit;
+
+		FloatingUnit(Point point, Unit unit) {
+			this.point = point;
+			this.unit = unit;
+		}
+
+	}
 
 	@Inject
 	public GamePanel(final StatusBarMessageController statusBarMessageController, final KeyController keyController,
@@ -168,36 +188,18 @@ public class GamePanel extends JPanel {
 	}
 
 	private void walk(final List<Point> path) {
-		Point from = null;
-		List<Point> stepsToRemove = new ArrayList<>();
-		for (final Point to : path) {
-			if (from == null) {
+		final WalkAnimator walkAnimator = new WalkAnimator(pathPlanning, path,
+				world.getAt(path.get(0)).getFirstMovableUnit());
+		floatingParts.add(new FloatingUnit(path.get(0), world.getAt(path.get(0)).getFirstMovableUnit()));
+		new Timer(1, actionEvent -> {
+			final Point point = walkAnimator.getNextStepCoordinates();
+			if (point == null) {
+				((Timer) actionEvent.getSource()).stop();
 			} else {
-				// make move from-->to
-				Unit u = world.getAt(from).getFirstMovableUnit();
-				if (u instanceof Ship) {
-					Ship s = (Ship) u;
-					if (s.getAvailableSteps() > 0) {
-						s.decreaseActionPoint(1);
-						world.getAt(from).getUnits().remove(u);
-						world.getAt(to).getUnits().add(u);
-						try {
-							Thread.sleep(1);
-						} catch (InterruptedException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-						stepsToRemove.add(from);
-						repaint();
-					}
-				}
+				floatingParts.get(0).point = point;
 			}
-			from = to;
-		}
-		path.removeAll(stepsToRemove);
-		if (!path.isEmpty()) {
-			world.addUnresolvedPaths(path);
-		}
+			repaint();
+		}).start();
 	}
 
 	private Point convertToTilesCoordinates(final Point panelCoordinates) {
@@ -225,11 +227,19 @@ public class GamePanel extends JPanel {
 			paintNet(dbg);
 			paintCursor(dbg);
 			paintGoToPath(dbg);
+			paintFloatingGraphics(dbg);
 			g.drawImage(dbImage, 0, 0, null);
 			// Sync the display on some systems.
 			// (on Linux, this fixes event queue problems)
 		}
 		Toolkit.getDefaultToolkit().sync();
+	}
+
+	private void paintFloatingGraphics(final Graphics2D graphics) {
+		floatingParts.forEach(part -> {
+			graphics.drawImage(imageProvider.getImage(ImageProvider.IMG_TILE_SHIP1), part.point.getX(),
+					part.point.getY(), this);
+		});
 	}
 
 	/**
