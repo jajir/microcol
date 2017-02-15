@@ -39,7 +39,7 @@ public class PathPlanning {
 					whatToDoWithPointInPath.pathPoint(Point.make(x, y));
 				}
 			} else {
-				for (int x = tileTo.getX(); x <= tileFrom.getX(); x++) {
+				for (int x = tileFrom.getX(); x >= tileTo.getX(); x--) {
 					int y = Math.round(a * x + b);
 					whatToDoWithPointInPath.pathPoint(Point.make(x, y));
 				}
@@ -53,7 +53,7 @@ public class PathPlanning {
 					whatToDoWithPointInPath.pathPoint(Point.make(x, y));
 				}
 			} else {
-				for (int y = tileTo.getY(); y <= tileFrom.getY(); y++) {
+				for (int y = tileFrom.getY(); y >= tileTo.getY(); y--) {
 					int x = Math.round(a * y + b);
 					whatToDoWithPointInPath.pathPoint(Point.make(x, y));
 				}

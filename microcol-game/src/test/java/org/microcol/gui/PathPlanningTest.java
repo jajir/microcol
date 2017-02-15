@@ -62,6 +62,20 @@ public class PathPlanningTest {
 		EasyMock.verify(whatToDo);
 	}
 
+	@Test
+	public void test_move_to_lover_values() throws Exception {
+		PathPlanning.WhatToDoWithPointInPath whatToDo = EasyMock.createMock(PathPlanning.WhatToDoWithPointInPath.class);
+		whatToDo.pathPoint(Point.make(6, 7));
+		whatToDo.pathPoint(Point.make(6, 6));
+		whatToDo.pathPoint(Point.make(5, 5));
+		whatToDo.pathPoint(Point.make(5, 4));
+		whatToDo.pathPoint(Point.make(4, 3));
+		EasyMock.replay(whatToDo);
+		pathPlanning.paintPath(Point.make(6, 7), Point.make(4, 3), whatToDo);
+
+		EasyMock.verify(whatToDo);
+	}
+
 	@Before
 	public void setUp() {
 		pathPlanning = new PathPlanning();
