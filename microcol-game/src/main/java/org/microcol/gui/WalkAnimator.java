@@ -32,6 +32,9 @@ public class WalkAnimator {
 	}
 
 	private void planNextPartialPath() {
+		if(path.isEmpty()){
+			return;
+		}
 		Point to = path.remove(0);
 		partialPath = new ArrayList<>();
 		pathPlanning.paintPath(from.multiply(GamePanel.TOTAL_TILE_WIDTH_IN_PX),

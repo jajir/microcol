@@ -194,6 +194,7 @@ public class GamePanel extends JPanel {
 		new Timer(1, actionEvent -> {
 			final Point point = walkAnimator.getNextStepCoordinates();
 			if (point == null) {
+				floatingParts.remove(0);
 				((Timer) actionEvent.getSource()).stop();
 			} else {
 				floatingParts.get(0).point = point;
