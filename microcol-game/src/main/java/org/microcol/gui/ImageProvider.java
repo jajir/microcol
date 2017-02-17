@@ -28,7 +28,14 @@ public class ImageProvider {
 	public final static String IMG_TILE_SHIP1 = "tile-ship2.png";
 
 	public final static String IMG_TILE_SHIP2 = "tile-ship2.png";
-	
+
+	public final static String IMG_TILE_MODE_GOTO = "tile-mode-goto.png";
+
+	public final static String IMG_TILE_MODE_FORTIFY = "tile-mode-fortify.png";
+
+	public final static String IMG_TILE_MODE_PLOW = "tile-mode-plow.png";
+
+	public final static String IMG_TILE_MODE_ROAD = "tile-mode-road.png";
 	
 	private final static String BASE_PACKAGE = "images";
 

@@ -110,6 +110,8 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 	private void paintMovingAnimation(final Graphics2D graphics) {
 		floatingParts.forEach(part -> {
 			graphics.drawImage(imageProvider.getImage(ImageProvider.IMG_TILE_SHIP1), part.getX(), part.getY(), this);
+			graphics.drawImage(imageProvider.getImage(ImageProvider.IMG_TILE_MODE_GOTO),
+					part.getX() + TILE_WIDTH_IN_PX - 12, part.getY(), this);
 		});
 	}
 
@@ -133,6 +135,10 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 							graphics.drawImage(imageProvider.getImage(ImageProvider.IMG_TILE_SHIP1), x, y, this);
 						} else {
 							graphics.drawImage(imageProvider.getImage(ImageProvider.IMG_TILE_SHIP2), x, y, this);
+						}
+						if (s.getGoToMode() != null && s.getGoToMode().isActive()) {
+							graphics.drawImage(imageProvider.getImage(ImageProvider.IMG_TILE_MODE_GOTO),
+									x + TILE_WIDTH_IN_PX - 12, y, this);
 						}
 					}
 				}

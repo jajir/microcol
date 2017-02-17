@@ -4,16 +4,32 @@
 
 Planned releases
 
- * 0.1.0 - project setup version
+ * 1.0.0 - should be released at the end of first year of development (Jan. 2018), first minimal playable version of game.  
+
+  * no sound
+
+  * ugly graphics
+
+  * languages en/cz
   
-  * create project infrastructure
-  
-  * create binary distribution
-  
-  * first empty form
-  
-  * write project "manifest"
+ * 0.3.0 - first game entity should be implemented
  
+  * for creating maps consider {{{http://www.mapeditor.org}http://www.mapeditor.org}}
+  
+  * first manually created map containing land including basic terrains:
+  
+   * swamp
+   
+   * hill
+   
+   * mountain
+   
+   * desert
+   
+   * tundra
+   
+  * map should be stored in file
+
  * 0.2.0 - first game entity should be implemented
  
   * first game map - just empty ocean
@@ -38,6 +54,24 @@ Planned releases
   
   * enemy ship control
   
+[]
+
+====================================================
+
+Already done 
+
+====================================================
+
+ * 0.1.0 - project setup version
+  
+  * create project infrastructure
+  
+  * create binary distribution
+  
+  * first empty form
+  
+  * write project "manifest"
+ 
  * PoC
  
   * myš na hranu monitoru -> pohyb obrazovky
@@ -71,14 +105,6 @@ Planned releases
 
   * ovládání je intuitivní a pøíjemné
 
- * 1.0.0 - should be released at the end of first year of development (Jan. 2018), first minimal playable version of game.  
-
-  * no sound
-
-  * ugly graphics
-
-  * languages en/cz
-
 []
 
 Planned features
@@ -91,12 +117,5 @@ Planned features
  
 []
 
-
-What was done
-
- * ...
-
-[]
- 
  
     

@@ -43,6 +43,7 @@ public class World {
 	}
 
 	public void nextTurn() {
+		moveWithOponents();
 		Arrays.stream(map).forEach(tileArray -> {
 			Arrays.stream(tileArray).forEach(tile -> {
 				resetActionPoints(tile);
@@ -52,6 +53,13 @@ public class World {
 		performScheduledMoves();
 		currentYear++;
 		nextTurnController.fireNextTurnEvent(this);
+	}
+
+	private void moveWithOponents() {
+		/**
+		 * Kdyz se ma tahnout lodi. melo by se volat: performMove(Ship). Jak
+		 * vybrat cestu je GamePanel.Presenter.switchToNormalMode.
+		 */
 	}
 
 	public void addUnresolvedPaths(final List<Point> path) {
