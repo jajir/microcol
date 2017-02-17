@@ -171,14 +171,14 @@ public class GamePanelPresenter {
 		final List<Point> path = new ArrayList<Point>();
 		pathPlanning.paintPath(display.getCursorTile(), moveTo, point -> path.add(point));
 		// make first step
-
-		Ship ship = (Ship) world.getAt(display.getCursorTile()).getFirstMovableUnit();
-		ship.setGoToMode(new GoToMode(path));
-		world.performMove(ship);
-
+		if (!path.isEmpty()) {
+			Ship ship = (Ship) world.getAt(display.getCursorTile()).getFirstMovableUnit();
+			ship.setGoToMode(new GoToMode(path));
+			world.performMove(ship);
+			focusedTileController.fireFocusedTileEvent(world.getAt(display.getCursorTile()));
+		}
 		display.setCursorTile(moveTo);
 		display.setCursorNormal();
-		focusedTileController.fireFocusedTileEvent(world.getAt(display.getCursorTile()));
 	}
 
 	private void scheduleWalkAnimation(final List<Point> path) {
