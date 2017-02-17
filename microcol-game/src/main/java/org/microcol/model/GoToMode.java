@@ -24,4 +24,8 @@ public class GoToMode {
 		this.path = path;
 	}
 
+	public boolean isActive() {
+		return !path.isEmpty();
+	}
+
 }

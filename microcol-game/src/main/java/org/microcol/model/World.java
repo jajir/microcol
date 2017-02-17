@@ -70,7 +70,7 @@ public class World {
 			Arrays.stream(tileArray).forEach(tile -> {
 				Ship s = (Ship) tile.getFirstMovableUnit();
 				if (s != null) {
-					if (s.getGoToMode() != null) {
+					if (s.getGoToMode() != null && s.getGoToMode().isActive()) {
 						performMove(s);
 					}
 				}
@@ -106,8 +106,10 @@ public class World {
 		/**
 		 * Add first step to final path.
 		 */
-		stepsToMove.add(ship.getGoToMode().getPath().remove(0));
-		
+		if (ship.getAvailableSteps() > 0) {
+			stepsToMove.add(ship.getGoToMode().getPath().remove(0));
+		}
+
 		/**
 		 * Add resting steps.
 		 */
