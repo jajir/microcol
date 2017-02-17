@@ -27,6 +27,7 @@ public class WalkAnimator {
 
 	public WalkAnimator(final PathPlanning pathPlanning, final List<Point> path, final Unit unit) {
 		this.path = Preconditions.checkNotNull(path);
+		Preconditions.checkArgument(!path.isEmpty());		
 		this.pathPlanning = Preconditions.checkNotNull(pathPlanning);
 		Preconditions.checkNotNull(unit);
 		from = this.path.remove(0);

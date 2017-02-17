@@ -69,22 +69,7 @@ public class GamePanel extends JPanel {
 	 * In list will be placed elements which are not in map, because there are
 	 * moving.
 	 */
-	private final List<FloatingUnit> floatingParts = new ArrayList<>();
-
-	private class FloatingUnit {
-
-		public Point point;
-
-		public Unit unit;
-
-		FloatingUnit(Point point, Unit unit) {
-			this.point = point;
-			this.unit = unit;
-		}
-
-	}
-
-	private final MoveUnitController moveUnitController;
+	private final List<Point> floatingParts = new ArrayList<>();
 
 	@Inject
 	public GamePanel(final StatusBarMessageController statusBarMessageController, final KeyController keyController,
@@ -95,7 +80,7 @@ public class GamePanel extends JPanel {
 		this.world = Preconditions.checkNotNull(world);
 		this.pathPlanning = Preconditions.checkNotNull(pathPlanning);
 		this.imageProvider = Preconditions.checkNotNull(imageProvider);
-		this.moveUnitController = Preconditions.checkNotNull(moveUnitController);
+		Preconditions.checkNotNull(moveUnitController);
 		Toolkit toolkit = Toolkit.getDefaultToolkit();
 		gotoModeCursor = toolkit.createCustomCursor(imageProvider.getImage(ImageProvider.IMG_CURSOR_GOTO),
 				new java.awt.Point(1, 1), "gotoModeCursor");
@@ -131,6 +116,16 @@ public class GamePanel extends JPanel {
 						cancelGoToMode(gotoCursorTitle);
 					}
 				}
+				/**
+				 * Enter
+				 */
+				if (10 == e.getKeyCode()) {
+					if (gotoMode) {
+						switchToNormalMode(gotoCursorTitle);
+					}
+				}
+				logger.debug("Pressed key: '" + e.getKeyChar() + "' has code '" + e.getKeyCode() + "', modifiers '"
+						+ e.getModifiers() + "'");
 			}
 		});
 
@@ -147,7 +142,7 @@ public class GamePanel extends JPanel {
 					cursorTile = convertToTilesCoordinates(origin);
 					focusedTileController.fireFocusedTileEvent(world.getAt(cursorTile));
 				}
-				statusBarMessageController.fireStatusMessageWasChangedEvent("clicket at " + origin);
+				statusBarMessageController.fireStatusMessageWasChangedEvent("clicket at " + cursorTile);
 				repaint();
 			}
 
@@ -203,7 +198,6 @@ public class GamePanel extends JPanel {
 		Ship ship = (Ship) world.getAt(cursorTile).getFirstMovableUnit();
 		ship.setGoToMode(new GoToMode(path));
 		world.performMove(ship);
-		// scheduleWalkAnimation(path);
 
 		gotoMode = false;
 		cursorTile = moveTo;
@@ -217,7 +211,6 @@ public class GamePanel extends JPanel {
 		final Unit u = world.getAt(from).getFirstMovableUnit();
 		world.getAt(from).getUnits().remove(u);
 		final WalkAnimator walkAnimator = new WalkAnimator(pathPlanning, path, u);
-		floatingParts.add(new FloatingUnit(path.get(0), u));
 		new Timer(1, actionEvent -> {
 			final Point point = walkAnimator.getNextStepCoordinates();
 			if (point == null) {
@@ -228,7 +221,11 @@ public class GamePanel extends JPanel {
 					focusedTileController.fireFocusedTileEvent(world.getAt(walkAnimator.getLastAnimateTo()));
 				}
 			} else {
-				floatingParts.get(0).point = point;
+				if (floatingParts.isEmpty()) {
+					floatingParts.add(point);
+				} else {
+					floatingParts.set(0, point);
+				}
 			}
 			repaint();
 		}).start();
@@ -269,8 +266,7 @@ public class GamePanel extends JPanel {
 
 	private void paintMovingAnimation(final Graphics2D graphics) {
 		floatingParts.forEach(part -> {
-			graphics.drawImage(imageProvider.getImage(ImageProvider.IMG_TILE_SHIP1), part.point.getX(),
-					part.point.getY(), this);
+			graphics.drawImage(imageProvider.getImage(ImageProvider.IMG_TILE_SHIP1), part.getX(), part.getY(), this);
 		});
 	}
 
