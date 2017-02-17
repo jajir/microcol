@@ -19,7 +19,7 @@ public class FocusedTileController {
 		listeners.add(listener);
 	}
 
-	public void fireNextTurnEvent(final Tile tile) {
+	public void fireFocusedTileEvent(final Tile tile) {
 		Preconditions.checkNotNull(tile);
 		logger.trace("firing next turn event: " + tile);
 		listeners.forEach(listener -> {

@@ -23,6 +23,8 @@ public class WalkAnimator {
 
 	private Point from;
 
+	private Point lastAnimateTo;
+
 	public WalkAnimator(final PathPlanning pathPlanning, final List<Point> path, final Unit unit) {
 		this.path = Preconditions.checkNotNull(path);
 		this.pathPlanning = Preconditions.checkNotNull(pathPlanning);
@@ -32,16 +34,16 @@ public class WalkAnimator {
 	}
 
 	private void planNextPartialPath() {
-		if(path.isEmpty()){
+		if (path.isEmpty()) {
 			return;
 		}
-		Point to = path.remove(0);
+		lastAnimateTo = path.remove(0);
 		partialPath = new ArrayList<>();
 		pathPlanning.paintPath(from.multiply(GamePanel.TOTAL_TILE_WIDTH_IN_PX),
-				to.multiply(GamePanel.TOTAL_TILE_WIDTH_IN_PX), point -> {
+				lastAnimateTo.multiply(GamePanel.TOTAL_TILE_WIDTH_IN_PX), point -> {
 					partialPath.add(point);
 				});
-		from = to;
+		from = lastAnimateTo;
 	}
 
 	public Point getNextStepCoordinates() {
@@ -52,6 +54,15 @@ public class WalkAnimator {
 			return null;
 		}
 		return partialPath.remove(0);
+	}
+
+	/**
+	 * When animation ends provide information about final target point.
+	 * 
+	 * @return {@link Point}
+	 */
+	public Point getLastAnimateTo() {
+		return lastAnimateTo;
 	}
 
 }

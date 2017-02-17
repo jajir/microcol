@@ -23,6 +23,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 
 import org.apache.log4j.Logger;
+import org.microcol.model.GoToMode;
 import org.microcol.model.Ship;
 import org.microcol.model.Tile;
 import org.microcol.model.Unit;
@@ -83,21 +84,28 @@ public class GamePanel extends JPanel {
 
 	}
 
+	private final MoveUnitController moveUnitController;
+
 	@Inject
 	public GamePanel(final StatusBarMessageController statusBarMessageController, final KeyController keyController,
 			final World world, final FocusedTileController focusedTileController,
 			final NextTurnController nextTurnController, final PathPlanning pathPlanning,
-			final ImageProvider imageProvider) {
+			final ImageProvider imageProvider, final MoveUnitController moveUnitController) {
 		this.focusedTileController = focusedTileController;
 		this.world = Preconditions.checkNotNull(world);
 		this.pathPlanning = Preconditions.checkNotNull(pathPlanning);
 		this.imageProvider = Preconditions.checkNotNull(imageProvider);
+		this.moveUnitController = Preconditions.checkNotNull(moveUnitController);
 		Toolkit toolkit = Toolkit.getDefaultToolkit();
 		gotoModeCursor = toolkit.createCustomCursor(imageProvider.getImage(ImageProvider.IMG_CURSOR_GOTO),
 				new java.awt.Point(1, 1), "gotoModeCursor");
 		dbImage = createImage(getGameMapWidth(), getGameMapHeight());
 		cursorTile = null;
 		final GamePanel map = this;
+
+		moveUnitController.addMoveUnitListener(path -> {
+			scheduleWalkAnimation(path);
+		});
 
 		nextTurnController.addNextTurnListener(w -> map.repaint());
 
@@ -118,6 +126,11 @@ public class GamePanel extends JPanel {
 						}
 					}
 				}
+				if (27 == e.getKeyCode()) {
+					if (gotoMode) {
+						cancelGoToMode(gotoCursorTitle);
+					}
+				}
 			}
 		});
 
@@ -132,7 +145,7 @@ public class GamePanel extends JPanel {
 					switchToNormalMode(convertToTilesCoordinates(origin));
 				} else {
 					cursorTile = convertToTilesCoordinates(origin);
-					focusedTileController.fireNextTurnEvent(world.getAt(cursorTile));
+					focusedTileController.fireFocusedTileEvent(world.getAt(cursorTile));
 				}
 				statusBarMessageController.fireStatusMessageWasChangedEvent("clicket at " + origin);
 				repaint();
@@ -173,29 +186,47 @@ public class GamePanel extends JPanel {
 		setCursor(gotoModeCursor);
 	}
 
+	private void cancelGoToMode(final Point moveTo) {
+		setCursor(Cursor.getDefaultCursor());
+		gotoMode = false;
+		cursorTile = moveTo;
+		focusedTileController.fireFocusedTileEvent(world.getAt(cursorTile));
+	}
+
 	private final void switchToNormalMode(final Point moveTo) {
 		logger.debug("Switching to normalmode.");
 
 		final List<Point> path = new ArrayList<Point>();
 		pathPlanning.paintPath(cursorTile, moveTo, point -> path.add(point));
 		// make first step
-		walk(path);
+
+		Ship ship = (Ship) world.getAt(cursorTile).getFirstMovableUnit();
+		ship.setGoToMode(new GoToMode(path));
+		world.performMove(ship);
+		// scheduleWalkAnimation(path);
 
 		gotoMode = false;
 		cursorTile = moveTo;
 		setCursor(Cursor.getDefaultCursor());
-		focusedTileController.fireNextTurnEvent(world.getAt(cursorTile));
+		focusedTileController.fireFocusedTileEvent(world.getAt(cursorTile));
 	}
 
-	private void walk(final List<Point> path) {
-		final WalkAnimator walkAnimator = new WalkAnimator(pathPlanning, path,
-				world.getAt(path.get(0)).getFirstMovableUnit());
-		floatingParts.add(new FloatingUnit(path.get(0), world.getAt(path.get(0)).getFirstMovableUnit()));
+	private void scheduleWalkAnimation(final List<Point> path) {
+		final Point from = path.get(0);
+		final Point to = path.get(path.size() - 1);
+		final Unit u = world.getAt(from).getFirstMovableUnit();
+		world.getAt(from).getUnits().remove(u);
+		final WalkAnimator walkAnimator = new WalkAnimator(pathPlanning, path, u);
+		floatingParts.add(new FloatingUnit(path.get(0), u));
 		new Timer(1, actionEvent -> {
 			final Point point = walkAnimator.getNextStepCoordinates();
 			if (point == null) {
 				floatingParts.remove(0);
 				((Timer) actionEvent.getSource()).stop();
+				world.getAt(to).getUnits().add(u);
+				if (cursorTile.equals(walkAnimator.getLastAnimateTo())) {
+					focusedTileController.fireFocusedTileEvent(world.getAt(walkAnimator.getLastAnimateTo()));
+				}
 			} else {
 				floatingParts.get(0).point = point;
 			}
@@ -228,7 +259,7 @@ public class GamePanel extends JPanel {
 			paintNet(dbg);
 			paintCursor(dbg);
 			paintGoToPath(dbg);
-			paintFloatingGraphics(dbg);
+			paintMovingAnimation(dbg);
 			g.drawImage(dbImage, 0, 0, null);
 			// Sync the display on some systems.
 			// (on Linux, this fixes event queue problems)
@@ -236,7 +267,7 @@ public class GamePanel extends JPanel {
 		Toolkit.getDefaultToolkit().sync();
 	}
 
-	private void paintFloatingGraphics(final Graphics2D graphics) {
+	private void paintMovingAnimation(final Graphics2D graphics) {
 		floatingParts.forEach(part -> {
 			graphics.drawImage(imageProvider.getImage(ImageProvider.IMG_TILE_SHIP1), part.point.getX(),
 					part.point.getY(), this);
@@ -306,7 +337,10 @@ public class GamePanel extends JPanel {
 			graphics.setColor(Color.yellow);
 			graphics.setStroke(new BasicStroke(1));
 			paintCursor(graphics, gotoCursorTitle);
-			pathPlanning.paintPath(cursorTile, gotoCursorTitle, point -> paintStepsToTile(graphics, point));
+			List<Point> steps = new ArrayList<>();
+			pathPlanning.paintPath(cursorTile, gotoCursorTitle, point -> steps.add(point));
+			steps.remove(0);
+			steps.forEach(point -> paintStepsToTile(graphics, point));
 		}
 	}
 
