@@ -7,39 +7,26 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
-import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.Toolkit;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JPanel;
-import javax.swing.JViewport;
-import javax.swing.SwingUtilities;
-import javax.swing.Timer;
 
-import org.apache.log4j.Logger;
-import org.microcol.model.GoToMode;
 import org.microcol.model.Ship;
-import org.microcol.model.Tile;
 import org.microcol.model.Unit;
 import org.microcol.model.World;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
 
-public class GamePanel extends JPanel {
+public class GamePanelView extends JPanel implements GamePanelPresenter.Display {
 
 	/**
 	 * Default serialVersionUID.
 	 */
 	private static final long serialVersionUID = 1L;
-
-	private final Logger logger = Logger.getLogger(GamePanel.class);
 
 	private final static int TILE_WIDTH_IN_PX = 30;
 
@@ -54,8 +41,6 @@ public class GamePanel extends JPanel {
 	private final Cursor gotoModeCursor;
 
 	private final World world;
-
-	private final FocusedTileController focusedTileController;
 
 	private final PathPlanning pathPlanning;
 
@@ -72,168 +57,26 @@ public class GamePanel extends JPanel {
 	private final List<Point> floatingParts = new ArrayList<>();
 
 	@Inject
-	public GamePanel(final StatusBarMessageController statusBarMessageController, final KeyController keyController,
-			final World world, final FocusedTileController focusedTileController,
+	public GamePanelView(final StatusBarMessageController statusBarMessageController, final World world,
 			final NextTurnController nextTurnController, final PathPlanning pathPlanning,
-			final ImageProvider imageProvider, final MoveUnitController moveUnitController) {
-		this.focusedTileController = focusedTileController;
+			final ImageProvider imageProvider) {
 		this.world = Preconditions.checkNotNull(world);
 		this.pathPlanning = Preconditions.checkNotNull(pathPlanning);
 		this.imageProvider = Preconditions.checkNotNull(imageProvider);
-		Preconditions.checkNotNull(moveUnitController);
 		Toolkit toolkit = Toolkit.getDefaultToolkit();
 		gotoModeCursor = toolkit.createCustomCursor(imageProvider.getImage(ImageProvider.IMG_CURSOR_GOTO),
 				new java.awt.Point(1, 1), "gotoModeCursor");
 		dbImage = createImage(getGameMapWidth(), getGameMapHeight());
-		cursorTile = null;
-		final GamePanel map = this;
-
-		moveUnitController.addMoveUnitListener(path -> {
-			scheduleWalkAnimation(path);
-		});
+		final GamePanelView map = this;
 
 		nextTurnController.addNextTurnListener(w -> map.repaint());
-
-		keyController.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyPressed(final KeyEvent e) {
-				if ('c' == e.getKeyChar()) {
-					// chci centrovat
-				}
-				if ('g' == e.getKeyChar()) {
-					// chci posunout jednotku
-					if (cursorTile != null) {
-						final Tile tile = world.getAt(cursorTile);
-						final Unit unit = tile.getFirstMovableUnit();
-						// TODO in description panel show unit description
-						if (unit != null) {
-							switchToGoMode(unit);
-						}
-					}
-				}
-				if (27 == e.getKeyCode()) {
-					if (gotoMode) {
-						cancelGoToMode(gotoCursorTitle);
-					}
-				}
-				/**
-				 * Enter
-				 */
-				if (10 == e.getKeyCode()) {
-					if (gotoMode) {
-						switchToNormalMode(gotoCursorTitle);
-					}
-				}
-				logger.debug("Pressed key: '" + e.getKeyChar() + "' has code '" + e.getKeyCode() + "', modifiers '"
-						+ e.getModifiers() + "'");
-			}
-		});
-
-		MouseAdapter ma = new MouseAdapter() {
-
-			private Point origin;
-
-			@Override
-			public void mousePressed(MouseEvent e) {
-				origin = Point.make(e.getX(), e.getY());
-				if (gotoMode) {
-					switchToNormalMode(convertToTilesCoordinates(origin));
-				} else {
-					cursorTile = convertToTilesCoordinates(origin);
-					focusedTileController.fireFocusedTileEvent(world.getAt(cursorTile));
-				}
-				statusBarMessageController.fireStatusMessageWasChangedEvent("clicket at " + cursorTile);
-				repaint();
-			}
-
-			@Override
-			public void mouseMoved(final MouseEvent e) {
-				if (gotoMode) {
-					gotoCursorTitle = convertToTilesCoordinates(Point.make(e.getX(), e.getY()));
-					repaint();
-				}
-			}
-
-			@Override
-			public void mouseDragged(MouseEvent e) {
-				if (origin != null) {
-					JViewport viewPort = (JViewport) SwingUtilities.getAncestorOfClass(JViewport.class, map);
-					if (viewPort != null) {
-						Point delta = origin.substract(Point.make(e.getX(), e.getY()));
-						Rectangle view = viewPort.getViewRect();
-						view.x += delta.getX();
-						view.y += delta.getY();
-						map.scrollRectToVisible(view);
-					}
-				}
-			}
-		};
-
-		map.addMouseListener(ma);
-		map.addMouseMotionListener(ma);
 
 		setAutoscrolls(true);
 	}
 
-	private final void switchToGoMode(final Unit unit) {
-		logger.debug("Switching '" + unit + "' to go mode.");
-		gotoMode = true;
-		setCursor(gotoModeCursor);
-	}
-
-	private void cancelGoToMode(final Point moveTo) {
-		setCursor(Cursor.getDefaultCursor());
-		gotoMode = false;
-		cursorTile = moveTo;
-		focusedTileController.fireFocusedTileEvent(world.getAt(cursorTile));
-	}
-
-	private final void switchToNormalMode(final Point moveTo) {
-		logger.debug("Switching to normalmode.");
-
-		final List<Point> path = new ArrayList<Point>();
-		pathPlanning.paintPath(cursorTile, moveTo, point -> path.add(point));
-		// make first step
-
-		Ship ship = (Ship) world.getAt(cursorTile).getFirstMovableUnit();
-		ship.setGoToMode(new GoToMode(path));
-		world.performMove(ship);
-
-		gotoMode = false;
-		cursorTile = moveTo;
-		setCursor(Cursor.getDefaultCursor());
-		focusedTileController.fireFocusedTileEvent(world.getAt(cursorTile));
-	}
-
-	private void scheduleWalkAnimation(final List<Point> path) {
-		final Point from = path.get(0);
-		final Point to = path.get(path.size() - 1);
-		final Unit u = world.getAt(from).getFirstMovableUnit();
-		world.getAt(from).getUnits().remove(u);
-		final WalkAnimator walkAnimator = new WalkAnimator(pathPlanning, path, u);
-		new Timer(1, actionEvent -> {
-			final Point point = walkAnimator.getNextStepCoordinates();
-			if (point == null) {
-				floatingParts.remove(0);
-				((Timer) actionEvent.getSource()).stop();
-				world.getAt(to).getUnits().add(u);
-				if (cursorTile.equals(walkAnimator.getLastAnimateTo())) {
-					focusedTileController.fireFocusedTileEvent(world.getAt(walkAnimator.getLastAnimateTo()));
-				}
-			} else {
-				if (floatingParts.isEmpty()) {
-					floatingParts.add(point);
-				} else {
-					floatingParts.set(0, point);
-				}
-			}
-			repaint();
-		}).start();
-	}
-
-	private Point convertToTilesCoordinates(final Point panelCoordinates) {
-		return Point.make(panelCoordinates.getX() / TOTAL_TILE_WIDTH_IN_PX,
-				panelCoordinates.getY() / TOTAL_TILE_WIDTH_IN_PX);
+	@Override
+	public GamePanelView getGamePanelView() {
+		return this;
 	}
 
 	/**
@@ -333,10 +176,12 @@ public class GamePanel extends JPanel {
 			graphics.setColor(Color.yellow);
 			graphics.setStroke(new BasicStroke(1));
 			paintCursor(graphics, gotoCursorTitle);
-			List<Point> steps = new ArrayList<>();
-			pathPlanning.paintPath(cursorTile, gotoCursorTitle, point -> steps.add(point));
-			steps.remove(0);
-			steps.forEach(point -> paintStepsToTile(graphics, point));
+			if (!cursorTile.equals(gotoCursorTitle)) {
+				List<Point> steps = new ArrayList<>();
+				pathPlanning.paintPath(cursorTile, gotoCursorTitle, point -> steps.add(point));
+				steps.remove(0);
+				steps.forEach(point -> paintStepsToTile(graphics, point));
+			}
 		}
 	}
 
@@ -361,6 +206,48 @@ public class GamePanel extends JPanel {
 
 	private int getGameMapHeight() {
 		return World.HEIGHT * TOTAL_TILE_WIDTH_IN_PX - 1;
+	}
+
+	@Override
+	public Point getCursorTile() {
+		return cursorTile;
+	}
+
+	@Override
+	public void setCursorTile(Point cursorTile) {
+		this.cursorTile = cursorTile;
+	}
+
+	@Override
+	public void setCursorNormal() {
+		setCursor(Cursor.getDefaultCursor());
+		gotoMode = false;
+	}
+
+	@Override
+	public void setCursorGoto() {
+		setCursor(gotoModeCursor);
+		gotoMode = true;
+	}
+
+	@Override
+	public boolean isGotoMode() {
+		return gotoMode;
+	}
+
+	@Override
+	public List<Point> getFloatingParts() {
+		return floatingParts;
+	}
+
+	@Override
+	public Point getGotoCursorTitle() {
+		return gotoCursorTitle;
+	}
+
+	@Override
+	public void setGotoCursorTitle(Point gotoCursorTitle) {
+		this.gotoCursorTitle = gotoCursorTitle;
 	}
 
 }

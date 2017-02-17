@@ -22,6 +22,10 @@ public class MicroColModule extends AbstractModule {
 		bind(NextTurnController.class).in(Singleton.class);
 		bind(FocusedTileController.class).in(Singleton.class);
 
+		bind(GamePanelView.class).in(Singleton.class);
+		bind(GamePanelPresenter.Display.class).to(GamePanelView.class).in(Singleton.class);
+		bind(GamePanelPresenter.class).asEagerSingleton();
+
 		bind(StatusBarView.class).in(Singleton.class);
 		bind(StatusBarPresenter.Display.class).to(StatusBarView.class).in(Singleton.class);
 		bind(StatusBarPresenter.class).asEagerSingleton();

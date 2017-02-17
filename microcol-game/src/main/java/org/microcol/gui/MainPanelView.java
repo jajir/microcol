@@ -17,7 +17,7 @@ public class MainPanelView extends JPanel {
 	private static final long serialVersionUID = 1L;
 
 	@Inject
-	public MainPanelView(final GamePanel gamePanel, final StatusBarView statusBar,
+	public MainPanelView(final GamePanelView gamePanel, final StatusBarView statusBar,
 			final RightPanelView rightPanelView) {
 		this.setLayout(new GridBagLayout());
 		JScrollPane scrollPaneGamePanel = new JScrollPane(gamePanel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,

@@ -103,6 +103,14 @@ public class World {
 
 	public void performMove(final Ship ship) {
 		List<Point> stepsToMove = new ArrayList<>();
+		/**
+		 * Add first step to final path.
+		 */
+		stepsToMove.add(ship.getGoToMode().getPath().remove(0));
+		
+		/**
+		 * Add resting steps.
+		 */
 		while (ship.getAvailableSteps() > 0 && !ship.getGoToMode().getPath().isEmpty()) {
 			ship.decreaseActionPoint(1);
 			if (ship.getAvailableSteps() == 0) {

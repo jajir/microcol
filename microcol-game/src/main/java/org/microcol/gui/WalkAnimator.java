@@ -27,7 +27,8 @@ public class WalkAnimator {
 
 	public WalkAnimator(final PathPlanning pathPlanning, final List<Point> path, final Unit unit) {
 		this.path = Preconditions.checkNotNull(path);
-		Preconditions.checkArgument(!path.isEmpty());		
+		Preconditions.checkArgument(!path.isEmpty());
+		Preconditions.checkArgument(path.size() > 1);
 		this.pathPlanning = Preconditions.checkNotNull(pathPlanning);
 		Preconditions.checkNotNull(unit);
 		from = this.path.remove(0);
@@ -40,8 +41,8 @@ public class WalkAnimator {
 		}
 		lastAnimateTo = path.remove(0);
 		partialPath = new ArrayList<>();
-		pathPlanning.paintPath(from.multiply(GamePanel.TOTAL_TILE_WIDTH_IN_PX),
-				lastAnimateTo.multiply(GamePanel.TOTAL_TILE_WIDTH_IN_PX), point -> {
+		pathPlanning.paintPath(from.multiply(GamePanelView.TOTAL_TILE_WIDTH_IN_PX),
+				lastAnimateTo.multiply(GamePanelView.TOTAL_TILE_WIDTH_IN_PX), point -> {
 					partialPath.add(point);
 				});
 		from = lastAnimateTo;
