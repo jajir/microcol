@@ -50,6 +50,7 @@ public class ImageProvider {
 	 * 
 	 * @param name
 	 *            required image name
+	 * @return loaded image
 	 */
 	public Image getImage(final String name) {
 		BufferedImage img = images.get(name);

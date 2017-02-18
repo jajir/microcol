@@ -26,6 +26,9 @@ public class PathPlanning {
 	 *            required tile from
 	 * @param tileTo
 	 *            required tile to
+	 * @param whatToDoWithPointInPath
+	 *            required function that's executed with each found point to
+	 *            visit
 	 */
 	public void paintPath(final Point tileFrom, final Point tileTo,
 			final WhatToDoWithPointInPath whatToDoWithPointInPath) {

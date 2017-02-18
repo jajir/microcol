@@ -18,17 +18,18 @@ public class AboutDialog extends JDialog {
 	/**
 	 * Constructor when parentFrame is not available.
 	 * 
-	 * @param gameController
+	 * @param viewUtil
+	 *            required tool for centering window on screen
 	 */
 	public AboutDialog(final ViewUtil viewUtil) {
 		super();
 		setTitle("About game");
 		setLayout(new GridBagLayout());
-		
+
 		final JLabel text = new JLabel("<html>Version:<br/>It's funniest game in the world<br/>...</html>");
-		add(text, new GridBagConstraints(0, 0, 1, 1, 1.0D, 1.0D, GridBagConstraints.SOUTHEAST,
-				GridBagConstraints.NONE, new Insets(0, 0, 10, 10), 0, 0));
-		
+		add(text, new GridBagConstraints(0, 0, 1, 1, 1.0D, 1.0D, GridBagConstraints.SOUTHEAST, GridBagConstraints.NONE,
+				new Insets(0, 0, 10, 10), 0, 0));
+
 		final JButton buttonOk = new JButton("OK");
 		buttonOk.addActionListener(e -> {
 			setVisible(false);
@@ -36,7 +37,7 @@ public class AboutDialog extends JDialog {
 		buttonOk.requestFocus();
 		add(buttonOk, new GridBagConstraints(0, 10, 1, 1, 1.0D, 1.0D, GridBagConstraints.SOUTHEAST,
 				GridBagConstraints.NONE, new Insets(0, 0, 10, 10), 0, 0));
-		
+
 		pack();
 		setLocation(viewUtil.centerWindow(this));
 		setModal(true);
