@@ -30,7 +30,7 @@ public class RightPanelView extends JPanel implements RightPanelPresenter.Displa
 		add(textLabel, new GridBagConstraints(0, 0, 1, 1, 0D, 1D, GridBagConstraints.NORTH, GridBagConstraints.VERTICAL,
 				new Insets(0, 0, 0, 0), 0, 0));
 
-		nextTurnButton = new JButton("Next turn");
+		nextTurnButton = new JButton();
 		add(nextTurnButton, new GridBagConstraints(0, 1, 1, 1, 0D, 0D, GridBagConstraints.SOUTH,
 				GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
 		setPreferredSize(new Dimension(150, 200));

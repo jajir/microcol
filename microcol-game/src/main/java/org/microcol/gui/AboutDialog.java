@@ -21,16 +21,16 @@ public class AboutDialog extends JDialog {
 	 * @param viewUtil
 	 *            required tool for centering window on screen
 	 */
-	public AboutDialog(final ViewUtil viewUtil) {
+	public AboutDialog(final ViewUtil viewUtil, final Text text) {
 		super();
-		setTitle("About game");
+		setTitle(text.get("aboutDialog.caption"));
 		setLayout(new GridBagLayout());
 
-		final JLabel text = new JLabel("<html>Version:<br/>It's funniest game in the world<br/>...</html>");
-		add(text, new GridBagConstraints(0, 0, 1, 1, 1.0D, 1.0D, GridBagConstraints.SOUTHEAST, GridBagConstraints.NONE,
+		final JLabel label = new JLabel("<html>Version:<br/>It's funniest game in the world<br/>...</html>");
+		add(label, new GridBagConstraints(0, 0, 1, 1, 1.0D, 1.0D, GridBagConstraints.SOUTHEAST, GridBagConstraints.NONE,
 				new Insets(0, 0, 10, 10), 0, 0));
 
-		final JButton buttonOk = new JButton("OK");
+		final JButton buttonOk = new JButton(text.get("dialog.ok"));
 		buttonOk.addActionListener(e -> {
 			setVisible(false);
 		});

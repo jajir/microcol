@@ -20,7 +20,8 @@ public class RightPanelPresenter {
 
 	@Inject
 	public RightPanelPresenter(final RightPanelPresenter.Display display, final World world,
-			final KeyController keyController, final FocusedTileController focusedTileController) {
+			final KeyController keyController, final FocusedTileController focusedTileController,
+			final LanguangeController languangeController, final Text text) {
 		display.getNextTurnButton().addActionListener(e -> {
 			world.nextTurn();
 		});
@@ -46,6 +47,11 @@ public class RightPanelPresenter {
 				buff.append("</html>");
 				display.getTextLabel().setText(buff.toString());
 			}
+		});
+
+		display.getNextTurnButton().setText(text.get("nextTurnButton"));
+		languangeController.addLanguageListener(() -> {
+			display.getNextTurnButton().setText(text.get("nextTurnButton"));
 		});
 	}
 

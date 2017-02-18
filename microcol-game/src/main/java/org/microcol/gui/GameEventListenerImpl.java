@@ -11,10 +11,14 @@ public class GameEventListenerImpl implements GameEventListener {
 
 	private final ViewUtil viewUtil;
 
+	private final Text text;
+
 	@Inject
-	public GameEventListenerImpl(final GameEventController gameEventController, final ViewUtil viewUtil) {
+	public GameEventListenerImpl(final GameEventController gameEventController, final ViewUtil viewUtil,
+			final Text text) {
 		gameEventController.addGameEventListener(this);
 		this.viewUtil = Preconditions.checkNotNull(viewUtil);
+		this.text = Preconditions.checkNotNull(text);
 	}
 
 	@Override
@@ -25,7 +29,7 @@ public class GameEventListenerImpl implements GameEventListener {
 
 	@Override
 	public void onAboutGame() {
-		new AboutDialog(viewUtil).setVisible(true);
+		new AboutDialog(viewUtil, text).setVisible(true);
 	}
 
 }
