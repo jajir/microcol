@@ -36,7 +36,7 @@ public class ImageProvider {
 	public final static String IMG_TILE_MODE_PLOW = "tile-mode-plow.png";
 
 	public final static String IMG_TILE_MODE_ROAD = "tile-mode-road.png";
-	
+
 	private final static String BASE_PACKAGE = "images";
 
 	private final Map<String, BufferedImage> images;
@@ -54,7 +54,7 @@ public class ImageProvider {
 	public Image getImage(final String name) {
 		BufferedImage img = images.get(name);
 		if (img == null) {
-			img = getRawImage(BASE_PACKAGE + "/" + name);
+			img = ImageProvider.getRawImage(BASE_PACKAGE + "/" + name);
 			if (img == null) {
 				return null;
 			} else {
@@ -73,9 +73,9 @@ public class ImageProvider {
 	 *            path at classpath where is stored image
 	 * @return image object
 	 */
-	private BufferedImage getRawImage(final String path) {
+	public static BufferedImage getRawImage(final String path) {
 		try {
-			ClassLoader cl = this.getClass().getClassLoader();
+			ClassLoader cl = ImageProvider.class.getClassLoader();
 			final InputStream in = cl.getResourceAsStream(path);
 			if (in == null) {
 				throw new MicroColException("Unable to load file '" + path + "'.");

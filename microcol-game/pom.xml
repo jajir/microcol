@@ -22,6 +22,7 @@
 			<artifactId>guice</artifactId>
 			<version>4.1.0</version>
 			<classifier>no_aop</classifier>
+			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>log4j</groupId>
@@ -29,7 +30,13 @@
 			<version>1.2.14</version>
 			<scope>compile</scope>
 		</dependency>
-		
+		<dependency>
+			<groupId>mrj</groupId>
+			<artifactId>MRJToolkitStubs</artifactId>
+			<version>1.0</version>
+			<scope>compile</scope>
+		</dependency>
+
 		<dependency>
 			<groupId>org.easymock</groupId>
 			<artifactId>easymock</artifactId>
@@ -48,7 +55,7 @@
 			<version>4.12</version>
 			<scope>test</scope>
 		</dependency>
-		
+
 	</dependencies>
 
 	<build>

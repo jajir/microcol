@@ -24,4 +24,11 @@ public class GameEventController {
 			listener.onGameExit();
 		});
 	}
+
+	public void fireAboutGameEvent() {
+		logger.trace("firing about game event: ");
+		listeners.forEach(listener -> {
+			listener.onAboutGame();
+		});
+	}
 }
