@@ -32,7 +32,7 @@ public class MicroCol {
 	 *         otherwise return <code>false</code>
 	 */
 	private static boolean isOSX() {
-		String osName = System.getProperty("os.name");
+		final String osName = System.getProperty("os.name");
 		return osName.contains("OS X");
 	}
 

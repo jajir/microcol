@@ -1,5 +1,6 @@
 package org.microcol.gui;
 
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -32,7 +33,8 @@ public class RightPanelView extends JPanel implements RightPanelPresenter.Displa
 		nextTurnButton = new JButton("Next turn");
 		add(nextTurnButton, new GridBagConstraints(0, 1, 1, 1, 0D, 0D, GridBagConstraints.SOUTH,
 				GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
-
+		setPreferredSize(new Dimension(150, 200));
+		setMinimumSize(new Dimension(150, 200));
 	}
 
 	@Override

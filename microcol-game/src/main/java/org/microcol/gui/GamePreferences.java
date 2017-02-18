@@ -19,6 +19,17 @@ public class GamePreferences {
 
 	private final Preferences preferences = Preferences.userNodeForPackage(GamePreferences.class);
 
+	/**
+	 * Determine if application runs on Apple system.
+	 * 
+	 * @return return <code>true</code> when it's Apple system otherwise return
+	 *         <code>false</code>
+	 */
+	public boolean isOSX() {
+		final String osName = System.getProperty("os.name");
+		return osName.contains("OS X");
+	}
+
 	public void setMainFramePosition(final Rectangle bounds) {
 		preferences.putInt(PREFERENCES_X, bounds.x);
 		preferences.putInt(PREFERENCES_Y, bounds.y);

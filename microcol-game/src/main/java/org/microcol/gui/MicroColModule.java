@@ -16,7 +16,11 @@ public class MicroColModule extends AbstractModule {
 
 		bind(PathPlanning.class).in(Singleton.class);
 		bind(ImageProvider.class).in(Singleton.class);
+		bind(ViewUtil.class).in(Singleton.class);
 
+		/**
+		 * Event controllers.
+		 */
 		bind(MoveUnitController.class).in(Singleton.class);
 		bind(KeyController.class).in(Singleton.class);
 		bind(NextTurnController.class).in(Singleton.class);

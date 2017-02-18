@@ -8,6 +8,8 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.KeyStroke;
 
+import com.google.inject.Inject;
+
 public class MainMenuView extends JMenuBar implements MainMenuPresenter.Display {
 
 	/**
@@ -23,7 +25,10 @@ public class MainMenuView extends JMenuBar implements MainMenuPresenter.Display 
 
 	private final JMenuItem menuItemQuitGame;
 
-	public MainMenuView() {
+	private final JMenuItem menuItemAbout;
+
+	@Inject
+	public MainMenuView(final GamePreferences gamePreferences) {
 		JMenu menuGame = new JMenu();
 		menuGame.setText("Game");
 
@@ -48,9 +53,21 @@ public class MainMenuView extends JMenuBar implements MainMenuPresenter.Display 
 		menuItemQuitGame = new JMenuItem();
 		menuItemQuitGame.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q, InputEvent.CTRL_MASK));
 		menuItemQuitGame.setText("Quit MicroCol");
-		menuGame.add(menuItemQuitGame);
-
+		if (!gamePreferences.isOSX()) {
+			menuGame.add(menuItemQuitGame);
+		}
 		add(menuGame);
+
+		JMenu menuHelp = new JMenu();
+		menuHelp.setText("Help");
+
+		menuItemAbout = new JMenuItem();
+		menuItemAbout.setText("About");
+		menuHelp.add(menuItemAbout);
+		
+		if (!gamePreferences.isOSX()) {
+			add(menuHelp);
+		}
 	}
 
 	@Override
@@ -71,6 +88,11 @@ public class MainMenuView extends JMenuBar implements MainMenuPresenter.Display 
 	@Override
 	public JMenuItem getMenuItemLoadGame() {
 		return menuItemLoadGame;
+	}
+
+	@Override
+	public JMenuItem getMenuItemAbout() {
+		return menuItemAbout;
 	}
 
 }

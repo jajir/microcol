@@ -17,22 +17,33 @@ public class MainMenuPresenter {
 		JMenuItem getMenuItemSameGame();
 
 		JMenuItem getMenuItemQuitGame();
+
+		JMenuItem getMenuItemAbout();
 	}
 
 	@Inject
-	public MainMenuPresenter(final MainMenuPresenter.Display display, final GameEventController gameEventController) {
+	public MainMenuPresenter(final MainMenuPresenter.Display display, final GameEventController gameEventController,
+			final GamePreferences gamePreferences) {
 		display.getMenuItemNewGame().addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(final ActionEvent evt) {
 
 			}
 		});
-		display.getMenuItemQuitGame().addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(final ActionEvent evt) {
-				gameEventController.fireGameExit();
-			}
-		});
+		if (!gamePreferences.isOSX()) {
+			display.getMenuItemQuitGame().addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(final ActionEvent evt) {
+					gameEventController.fireGameExit();
+				}
+			});
+			display.getMenuItemAbout().addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(final ActionEvent evt) {
+					gameEventController.fireAboutGameEvent();
+				}
+			});
+		}
 	}
 
 }
