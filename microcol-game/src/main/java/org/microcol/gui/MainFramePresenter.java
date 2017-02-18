@@ -34,9 +34,8 @@ public class MainFramePresenter {
 	private final MainFramePresenter.Display display;
 
 	@Inject
-	public MainFramePresenter(final MainFramePresenter.Display display, final MainPanelView mainPanel,
-			final MainMenuView mainMenu, final KeyController keyController, final GamePreferences gamePreferences,
-			final GameEventController gameEventController) {
+	public MainFramePresenter(final MainFramePresenter.Display display, final KeyController keyController,
+			final GamePreferences gamePreferences, final GameEventController gameEventController) {
 		this.gamePreferences = Preconditions.checkNotNull(gamePreferences);
 		this.display = Preconditions.checkNotNull(display);
 		display.getFrame().addKeyListener(new KeyAdapter() {
