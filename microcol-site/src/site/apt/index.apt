@@ -25,6 +25,15 @@ git clone https://github.com/jajir/microcol.git
  
  From main menu select "File" --> "Import". Select option "Existing maven projects". Importing wizard should appear. In field "Root directory" select previously created <microcol> directory. Click to "Finish". Now all maven modules should be imported. 
 
+ * Run game from command line
+ 
+ To compile whole game and start it go to directory <microcol-game> and execute:
+ 
++----+
+mvn exec:exec
++----+
+ 
+ 
 []
  
 Project infrastructure

@@ -9,6 +9,10 @@
 	<artifactId>microcol-game</artifactId>
 	<packaging>jar</packaging>
 	<name>MicroCol game classes</name>
+	
+	<properties>
+		<splash-creen-image>images/splash-screen.png</splash-creen-image>
+	</properties>
 
 	<dependencies>
 		<dependency>
@@ -94,6 +98,10 @@
 									<addClasspath>true</addClasspath>
 									<mainClass>org.microcol.MicroCol</mainClass>
 								</manifest>
+								<manifestEntries>
+									<Manifest-Version>1.0</Manifest-Version>
+									<SplashScreen-Image>${splash-creen-image}</SplashScreen-Image>
+								</manifestEntries>
 							</archive>
 							<descriptorRefs>
 								<descriptorRef>jar-with-dependencies</descriptorRef>
@@ -101,6 +109,20 @@
 						</configuration>
 					</execution>
 				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>exec-maven-plugin</artifactId>
+				<version>1.5.0</version>
+				<configuration>
+					<executable>java</executable>
+					<arguments>
+						<argument>-splash:src/main/resources/${splash-creen-image}</argument>
+						<argument>-classpath</argument>
+						<classpath />
+						<argument>org.microcol.MicroCol</argument>
+					</arguments>
+				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
