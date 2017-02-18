@@ -1,15 +1,12 @@
 package org.microcol.gui;
 
 import java.awt.Rectangle;
-import java.util.Locale;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 
 public class GamePreferences {
 
-	private final static String LOCALE_LANGUAGE = "locale_language";
-
-	private final static String LOCALE_COUNTRY = "locale_country";
+	private final static String LANGUAGE = "language";
 
 	private static final String PREFERENCES_STATE = "state";
 	private static final String PREFERENCES_X = "x";
@@ -35,6 +32,7 @@ public class GamePreferences {
 		preferences.putInt(PREFERENCES_Y, bounds.y);
 		preferences.putInt(PREFERENCES_WIDTH, bounds.width);
 		preferences.putInt(PREFERENCES_HEIGHT, bounds.height);
+		flush();
 	}
 
 	public Rectangle getMainFramePosition() {
@@ -53,16 +51,14 @@ public class GamePreferences {
 		return preferences.getInt(PREFERENCES_STATE, Integer.MIN_VALUE);
 	}
 
-	public Locale getLocale() {
-		final String language = preferences.get(LOCALE_LANGUAGE, "en");
-		final String country = preferences.get(LOCALE_COUNTRY, "US");
-		return new Locale(language, country);
+	public void setLanguage(final Text.Language language) {
+		preferences.put(LANGUAGE, language.name());
+		flush();
 	}
 
-	public void setLocale(final Locale locale) {
-		preferences.put(LOCALE_LANGUAGE, locale.getLanguage());
-		preferences.put(LOCALE_COUNTRY, locale.getCountry());
-		flush();
+	public Text.Language getLanguage() {
+		final String name = preferences.get(LANGUAGE, Text.Language.en.name());
+		return Text.Language.valueOf(name);
 	}
 
 	private void flush() {

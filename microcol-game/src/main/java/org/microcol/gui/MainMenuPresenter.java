@@ -1,9 +1,7 @@
 package org.microcol.gui;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
 import javax.swing.JMenuItem;
+import javax.swing.JRadioButtonMenuItem;
 
 import com.google.inject.Inject;
 
@@ -19,31 +17,32 @@ public class MainMenuPresenter {
 		JMenuItem getMenuItemQuitGame();
 
 		JMenuItem getMenuItemAbout();
+
+		JRadioButtonMenuItem getRbMenuItemlanguageEn();
+
+		JRadioButtonMenuItem getRbMenuItemlanguageCz();
 	}
 
 	@Inject
 	public MainMenuPresenter(final MainMenuPresenter.Display display, final GameEventController gameEventController,
-			final GamePreferences gamePreferences) {
-		display.getMenuItemNewGame().addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(final ActionEvent evt) {
+			final GamePreferences gamePreferences, final LanguangeController languangeController) {
+		display.getMenuItemNewGame().addActionListener(actionEvent -> {
 
-			}
 		});
 		if (!gamePreferences.isOSX()) {
-			display.getMenuItemQuitGame().addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(final ActionEvent evt) {
-					gameEventController.fireGameExit();
-				}
+			display.getMenuItemQuitGame().addActionListener(actionEvent -> {
+				gameEventController.fireGameExit();
 			});
-			display.getMenuItemAbout().addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(final ActionEvent evt) {
-					gameEventController.fireAboutGameEvent();
-				}
+			display.getMenuItemAbout().addActionListener(actionEvent -> {
+				gameEventController.fireAboutGameEvent();
 			});
 		}
+		display.getRbMenuItemlanguageCz().addActionListener(actionEvent -> {
+			languangeController.fireLanguageWasChangedEvent(Text.Language.cz);
+		});
+		display.getRbMenuItemlanguageEn().addActionListener(actionEvent -> {
+			languangeController.fireLanguageWasChangedEvent(Text.Language.en);
+		});
 	}
 
 }

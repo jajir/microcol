@@ -3,10 +3,14 @@ package org.microcol.gui;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 
+import javax.swing.ButtonGroup;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JRadioButtonMenuItem;
 import javax.swing.KeyStroke;
+
+import org.microcol.gui.Text.Language;
 
 import com.google.inject.Inject;
 
@@ -26,6 +30,10 @@ public class MainMenuView extends JMenuBar implements MainMenuPresenter.Display 
 	private final JMenuItem menuItemQuitGame;
 
 	private final JMenuItem menuItemAbout;
+
+	private final JRadioButtonMenuItem rbMenuItemlanguageEn;
+
+	private final JRadioButtonMenuItem rbMenuItemlanguageCz;
 
 	@Inject
 	public MainMenuView(final GamePreferences gamePreferences) {
@@ -58,13 +66,32 @@ public class MainMenuView extends JMenuBar implements MainMenuPresenter.Display 
 		}
 		add(menuGame);
 
+		/**
+		 * Preferences
+		 * 
+		 */
+		final JMenu menuPrefereces = new JMenu();
+		menuPrefereces.setText("Preferences");
+		rbMenuItemlanguageEn = new JRadioButtonMenuItem("English", gamePreferences.getLanguage().equals(Language.en));
+		rbMenuItemlanguageCz = new JRadioButtonMenuItem("Czech", gamePreferences.getLanguage().equals(Language.cz));
+		final ButtonGroup groupLanguage = new ButtonGroup();
+		groupLanguage.add(rbMenuItemlanguageEn);
+		groupLanguage.add(rbMenuItemlanguageCz);
+		final JMenu menuLanguage = new JMenu("Language");
+		menuLanguage.add(rbMenuItemlanguageEn);
+		menuLanguage.add(rbMenuItemlanguageCz);
+		menuPrefereces.add(menuLanguage);
+		add(menuPrefereces);
+
+		/**
+		 * Help
+		 */
 		JMenu menuHelp = new JMenu();
 		menuHelp.setText("Help");
-
 		menuItemAbout = new JMenuItem();
 		menuItemAbout.setText("About");
 		menuHelp.add(menuItemAbout);
-		
+
 		if (!gamePreferences.isOSX()) {
 			add(menuHelp);
 		}
@@ -93,6 +120,16 @@ public class MainMenuView extends JMenuBar implements MainMenuPresenter.Display 
 	@Override
 	public JMenuItem getMenuItemAbout() {
 		return menuItemAbout;
+	}
+
+	@Override
+	public JRadioButtonMenuItem getRbMenuItemlanguageEn() {
+		return rbMenuItemlanguageEn;
+	}
+
+	@Override
+	public JRadioButtonMenuItem getRbMenuItemlanguageCz() {
+		return rbMenuItemlanguageCz;
 	}
 
 }

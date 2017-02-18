@@ -26,6 +26,7 @@ public class MicroColModule extends AbstractModule {
 		bind(NextTurnController.class).in(Singleton.class);
 		bind(FocusedTileController.class).in(Singleton.class);
 		bind(GameEventController.class).in(Singleton.class);
+		bind(LanguangeController.class).in(Singleton.class);
 
 		/**
 		 * Initialize MVP classes
