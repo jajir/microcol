@@ -21,6 +21,14 @@ public class MicroColModule extends AbstractModule {
 		bind(KeyController.class).in(Singleton.class);
 		bind(NextTurnController.class).in(Singleton.class);
 		bind(FocusedTileController.class).in(Singleton.class);
+		bind(GameEventController.class).in(Singleton.class);
+
+		/**
+		 * Initialize MVP classes
+		 */
+		bind(MainFrameView.class).in(Singleton.class);
+		bind(MainFramePresenter.Display.class).to(MainFrameView.class).in(Singleton.class);
+		bind(MainFramePresenter.class).in(Singleton.class);
 
 		bind(GamePanelView.class).in(Singleton.class);
 		bind(GamePanelPresenter.Display.class).to(GamePanelView.class).in(Singleton.class);
@@ -37,6 +45,12 @@ public class MicroColModule extends AbstractModule {
 		bind(RightPanelView.class).in(Singleton.class);
 		bind(RightPanelPresenter.Display.class).to(RightPanelView.class).in(Singleton.class);
 		bind(RightPanelPresenter.class).asEagerSingleton();
+
+		/**
+		 * Load events manually
+		 */
+		bind(GameEventListenerImpl.class).asEagerSingleton();
+
 	}
 
 }

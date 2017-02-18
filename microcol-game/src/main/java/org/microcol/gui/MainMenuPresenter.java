@@ -20,7 +20,7 @@ public class MainMenuPresenter {
 	}
 
 	@Inject
-	public MainMenuPresenter(final MainMenuPresenter.Display display) {
+	public MainMenuPresenter(final MainMenuPresenter.Display display, final GameEventController gameEventController) {
 		display.getMenuItemNewGame().addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(final ActionEvent evt) {
@@ -30,7 +30,7 @@ public class MainMenuPresenter {
 		display.getMenuItemQuitGame().addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(final ActionEvent evt) {
-
+				gameEventController.fireGameExit();
 			}
 		});
 	}

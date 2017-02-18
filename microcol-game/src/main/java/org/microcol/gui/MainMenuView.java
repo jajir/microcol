@@ -30,16 +30,19 @@ public class MainMenuView extends JMenuBar implements MainMenuPresenter.Display 
 		menuItemNewGame = new JMenuItem();
 		menuItemNewGame.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_MASK));
 		menuItemNewGame.setText("New game");
+		menuItemNewGame.setEnabled(false);
 		menuGame.add(menuItemNewGame);
 
 		menuItemSameGame = new JMenuItem();
 		menuItemSameGame.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_MASK));
 		menuItemSameGame.setText("Save game");
+		menuItemSameGame.setEnabled(false);
 		menuGame.add(menuItemSameGame);
 
 		menuItemLoadGame = new JMenuItem();
 		menuItemLoadGame.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_L, InputEvent.CTRL_MASK));
 		menuItemLoadGame.setText("Load game");
+		menuItemLoadGame.setEnabled(false);
 		menuGame.add(menuItemLoadGame);
 
 		menuItemQuitGame = new JMenuItem();

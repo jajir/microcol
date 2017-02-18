@@ -2,7 +2,7 @@ package org.microcol;
 
 import javax.swing.SwingUtilities;
 
-import org.microcol.gui.MainFrame;
+import org.microcol.gui.MainFrameView;
 import org.microcol.gui.MicroColModule;
 
 import com.google.inject.Guice;
@@ -22,7 +22,7 @@ public class MicroCol {
 	public static void main(final String args[]) {
 		SwingUtilities.invokeLater(() -> {
 			final Injector injector = Guice.createInjector(Stage.PRODUCTION, new MicroColModule());
-			final MainFrame mainFrame = injector.getInstance(MainFrame.class);
+			final MainFrameView mainFrame = injector.getInstance(MainFrameView.class);
 			mainFrame.setVisible(true);
 		});
 	}

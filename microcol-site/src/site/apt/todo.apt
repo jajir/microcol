@@ -12,8 +12,14 @@ Planned releases
 
   * languages en/cz
   
- * 0.3.0 - first game entity should be implemented
- 
+ * 0.?
+  
+  * add speed property to terrain and movable units
+  
+  * adjust path planning with terrain and unit speed
+  
+  * colonist could move to ship
+  
   * for creating maps consider {{{http://www.mapeditor.org}http://www.mapeditor.org}}
   
   * first manually created map containing land including basic terrains:
@@ -29,6 +35,10 @@ Planned releases
    * tundra
    
   * map should be stored in file
+  
+  * on land will be two simple colonist units one owned by user second owned by AI
+  
+   * both unit will be controlled by user and AI 
 
  * 0.2.0 - first game entity should be implemented
  
@@ -56,11 +66,7 @@ Planned releases
   
 []
 
-====================================================
-
 Already done 
-
-====================================================
 
  * 0.1.0 - project setup version
   
