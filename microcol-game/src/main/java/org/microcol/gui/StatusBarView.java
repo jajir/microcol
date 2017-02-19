@@ -36,7 +36,7 @@ public class StatusBarView extends JPanel implements StatusBarPresenter.Display 
 		add(new JSeparator(SwingConstants.VERTICAL), new GridBagConstraints(1, 0, 1, 1, 0D, 1D,
 				GridBagConstraints.CENTER, GridBagConstraints.VERTICAL, new Insets(0, 3, 0, 15), 0, 0));
 
-		labelEra = new JLabel("Year: ...");
+		labelEra = new JLabel();
 		add(labelEra, new GridBagConstraints(2, 0, 1, 1, 0D, 0D, GridBagConstraints.CENTER, GridBagConstraints.NONE,
 				new Insets(0, 3, 0, 15), 0, 0));
 

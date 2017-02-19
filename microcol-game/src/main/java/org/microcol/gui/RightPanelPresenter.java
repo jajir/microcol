@@ -10,7 +10,7 @@ import org.microcol.model.World;
 
 import com.google.inject.Inject;
 
-public class RightPanelPresenter {
+public class RightPanelPresenter implements Localized {
 
 	public interface Display {
 		JButton getNextTurnButton();
@@ -21,7 +21,7 @@ public class RightPanelPresenter {
 	@Inject
 	public RightPanelPresenter(final RightPanelPresenter.Display display, final World world,
 			final KeyController keyController, final FocusedTileController focusedTileController,
-			final LanguangeController languangeController, final Text text) {
+			final LanguangeController languangeController) {
 		display.getNextTurnButton().addActionListener(e -> {
 			world.nextTurn();
 		});
@@ -49,9 +49,9 @@ public class RightPanelPresenter {
 			}
 		});
 
-		display.getNextTurnButton().setText(text.get("nextTurnButton"));
-		languangeController.addLanguageListener(() -> {
-			display.getNextTurnButton().setText(text.get("nextTurnButton"));
+		display.getNextTurnButton().setText(getText().get("nextTurnButton"));
+		languangeController.addLanguageListener(event -> {
+			display.getNextTurnButton().setText(getText().get("nextTurnButton"));
 		});
 	}
 

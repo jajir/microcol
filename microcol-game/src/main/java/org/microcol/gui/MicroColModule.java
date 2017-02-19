@@ -56,7 +56,6 @@ public class MicroColModule extends AbstractModule {
 		 * Load events manually
 		 */
 		bind(GameEventListenerImpl.class).asEagerSingleton();
-
 	}
 
 }

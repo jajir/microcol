@@ -14,6 +14,8 @@ public class Text {
 
 	private final static String RESOURCE_BUNDLE_NAME = "localization";
 
+	public static Text INSTANCE;
+
 	public static enum Language {
 		en(new Locale("en", "US")), cz(new Locale("cs", "CZ"));
 
@@ -34,6 +36,7 @@ public class Text {
 	@Inject
 	public Text(final GamePreferences gamePreferences) {
 		setLanguage(gamePreferences.getLanguage());
+		INSTANCE = this;
 	}
 
 	public void setLanguage(final Language language) {
