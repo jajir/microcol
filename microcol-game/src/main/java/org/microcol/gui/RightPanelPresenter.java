@@ -6,7 +6,7 @@ import java.awt.event.KeyEvent;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 
-import org.microcol.model.World;
+import org.microcol.model.GameController;
 
 import com.google.inject.Inject;
 
@@ -19,11 +19,11 @@ public class RightPanelPresenter implements Localized {
 	}
 
 	@Inject
-	public RightPanelPresenter(final RightPanelPresenter.Display display, final World world,
+	public RightPanelPresenter(final RightPanelPresenter.Display display, final GameController gameController,
 			final KeyController keyController, final FocusedTileController focusedTileController,
 			final LanguangeController languangeController) {
 		display.getNextTurnButton().addActionListener(e -> {
-			world.nextTurn();
+			gameController.getWorld().nextTurn();
 		});
 
 		display.getNextTurnButton().addKeyListener(new KeyAdapter() {

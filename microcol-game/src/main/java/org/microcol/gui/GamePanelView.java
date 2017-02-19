@@ -14,6 +14,7 @@ import java.util.List;
 
 import javax.swing.JPanel;
 
+import org.microcol.model.GameController;
 import org.microcol.model.Ship;
 import org.microcol.model.Unit;
 import org.microcol.model.World;
@@ -40,7 +41,7 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 
 	private final Cursor gotoModeCursor;
 
-	private final World world;
+	private final GameController gameController;
 
 	private final PathPlanning pathPlanning;
 
@@ -57,10 +58,10 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 	private final List<Point> floatingParts = new ArrayList<>();
 
 	@Inject
-	public GamePanelView(final StatusBarMessageController statusBarMessageController, final World world,
-			final NextTurnController nextTurnController, final PathPlanning pathPlanning,
-			final ImageProvider imageProvider) {
-		this.world = Preconditions.checkNotNull(world);
+	public GamePanelView(final StatusBarMessageController statusBarMessageController,
+			final GameController gameController, final NextTurnController nextTurnController,
+			final PathPlanning pathPlanning, final ImageProvider imageProvider) {
+		this.gameController = Preconditions.checkNotNull(gameController);
 		this.pathPlanning = Preconditions.checkNotNull(pathPlanning);
 		this.imageProvider = Preconditions.checkNotNull(imageProvider);
 		Toolkit toolkit = Toolkit.getDefaultToolkit();
@@ -95,7 +96,7 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 		}
 		if (dbImage != null) {
 			final Graphics2D dbg = (Graphics2D) dbImage.getGraphics();
-			paintIntoGraphics(dbg);
+			paintIntoGraphics(dbg, gameController.getWorld());
 			paintNet(dbg);
 			paintCursor(dbg);
 			paintGoToPath(dbg);
@@ -120,7 +121,7 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 	 * 
 	 * @param g
 	 */
-	private void paintIntoGraphics(final Graphics2D graphics) {
+	private void paintIntoGraphics(final Graphics2D graphics, final World world) {
 		for (int i = 0; i < World.WIDTH; i++) {
 			for (int j = 0; j < World.HEIGHT; j++) {
 				int x = i * TOTAL_TILE_WIDTH_IN_PX;

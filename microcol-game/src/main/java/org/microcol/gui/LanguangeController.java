@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.microcol.model.World;
+import org.microcol.model.GameController;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
@@ -19,13 +19,14 @@ public class LanguangeController {
 
 	private final GamePreferences gamePreferences;
 
-	private final World world;
+	private final GameController gameController;
 
 	@Inject
-	public LanguangeController(final Text text, final GamePreferences gamePreferences, final World world) {
+	public LanguangeController(final Text text, final GamePreferences gamePreferences,
+			final GameController gameController) {
 		this.text = Preconditions.checkNotNull(text);
 		this.gamePreferences = Preconditions.checkNotNull(gamePreferences);
-		this.world = Preconditions.checkNotNull(world);
+		this.gameController = Preconditions.checkNotNull(gameController);
 	}
 
 	public void addLanguageListener(final LanguageListener listener) {
@@ -37,7 +38,7 @@ public class LanguangeController {
 		Preconditions.checkNotNull(language);
 		text.setLanguage(language);
 		gamePreferences.setLanguage(language);
-		ChangeLanguageEvent event = new ChangeLanguageEvent(world);
+		ChangeLanguageEvent event = new ChangeLanguageEvent(gameController.getWorld());
 		logger.debug("firing event language was changed: " + language);
 		listeners.forEach(listener -> {
 			listener.onChangeLanguage(event);

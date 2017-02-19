@@ -7,6 +7,7 @@ import java.util.List;
 import org.microcol.gui.MoveUnitController;
 import org.microcol.gui.NextTurnController;
 import org.microcol.gui.Point;
+import org.microcol.gui.Text;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
@@ -28,18 +29,26 @@ public class World {
 	private final MoveUnitController moveUnitController;
 
 	@Inject
-	public World(final NextTurnController nextTurnController, final MoveUnitController moveUnitController) {
+	public World(final NextTurnController nextTurnController, final MoveUnitController moveUnitController,
+			final Text text) {
 		this.nextTurnController = Preconditions.checkNotNull(nextTurnController);
 		this.moveUnitController = Preconditions.checkNotNull(moveUnitController);
 		currentYear = 1590;
 		for (int i = 0; i < WIDTH; i++) {
 			for (int j = 0; j < HEIGHT; j++) {
-				map[i][j] = new Tile();
+				map[i][j] = new Tile(text.get("tile.ocean.name"), "tile.ocean.description", 1);
 			}
 		}
 		map[5][5].getUnits().add(new Ship(1));
 		map[10][10].getUnits().add(new Ship(0));
 		pathsToFinish = new ArrayList<>();
+	}
+
+	/**
+	 * Reset current game and start new
+	 */
+	public void newGame() {
+
 	}
 
 	public void nextTurn() {

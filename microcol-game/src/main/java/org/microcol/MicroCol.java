@@ -14,6 +14,7 @@ import org.microcol.gui.AppleMenuListener;
 import org.microcol.gui.ImageProvider;
 import org.microcol.gui.MainFrameView;
 import org.microcol.gui.MicroColModule;
+import org.microcol.model.GameController;
 
 import com.apple.mrj.MRJApplicationUtils;
 import com.google.inject.Guice;
@@ -122,6 +123,8 @@ public class MicroCol {
 
 		SwingUtilities.invokeLater(() -> {
 			final MainFrameView mainFrame = injector.getInstance(MainFrameView.class);
+			final GameController gameController = injector.getInstance(GameController.class);
+			gameController.newGame();
 			mainFrame.setVisible(true);
 		});
 	}

@@ -13,11 +13,11 @@ import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 
 import org.apache.log4j.Logger;
+import org.microcol.model.GameController;
 import org.microcol.model.GoToMode;
 import org.microcol.model.Ship;
 import org.microcol.model.Tile;
 import org.microcol.model.Unit;
-import org.microcol.model.World;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
@@ -47,7 +47,7 @@ public class GamePanelPresenter {
 		Point getGotoCursorTitle();
 	}
 
-	private final World world;
+	private final GameController gameController;
 
 	private final FocusedTileController focusedTileController;
 
@@ -56,12 +56,12 @@ public class GamePanelPresenter {
 	private final GamePanelPresenter.Display display;
 
 	@Inject
-	public GamePanelPresenter(final GamePanelPresenter.Display display, final World world,
+	public GamePanelPresenter(final GamePanelPresenter.Display display, final GameController gameController,
 			final KeyController keyController, final StatusBarMessageController statusBarMessageController,
 			final FocusedTileController focusedTileController, final PathPlanning pathPlanning,
 			final MoveUnitController moveUnitController) {
 		this.focusedTileController = focusedTileController;
-		this.world = Preconditions.checkNotNull(world);
+		this.gameController = Preconditions.checkNotNull(gameController);
 		this.pathPlanning = Preconditions.checkNotNull(pathPlanning);
 		this.display = Preconditions.checkNotNull(display);
 
@@ -78,7 +78,7 @@ public class GamePanelPresenter {
 				if ('g' == e.getKeyChar()) {
 					// chci posunout jednotku
 					if (display.getCursorTile() != null) {
-						final Tile tile = world.getAt(display.getCursorTile());
+						final Tile tile = gameController.getWorld().getAt(display.getCursorTile());
 						final Unit unit = tile.getFirstMovableUnit();
 						// TODO in description panel show unit description
 						if (unit != null) {
@@ -115,7 +115,8 @@ public class GamePanelPresenter {
 					switchToNormalMode(convertToTilesCoordinates(origin));
 				} else {
 					display.setCursorTile(convertToTilesCoordinates(origin));
-					focusedTileController.fireFocusedTileEvent(world.getAt(display.getCursorTile()));
+					focusedTileController
+							.fireFocusedTileEvent(gameController.getWorld().getAt(display.getCursorTile()));
 				}
 				statusBarMessageController.fireStatusMessageWasChangedEvent("clicket at " + display.getCursorTile());
 				display.getGamePanelView().repaint();
@@ -162,7 +163,7 @@ public class GamePanelPresenter {
 	private void cancelGoToMode(final Point moveTo) {
 		display.setCursorNormal();
 		display.setCursorTile(moveTo);
-		focusedTileController.fireFocusedTileEvent(world.getAt(display.getCursorTile()));
+		focusedTileController.fireFocusedTileEvent(gameController.getWorld().getAt(display.getCursorTile()));
 	}
 
 	private final void switchToNormalMode(final Point moveTo) {
@@ -172,10 +173,10 @@ public class GamePanelPresenter {
 		pathPlanning.paintPath(display.getCursorTile(), moveTo, point -> path.add(point));
 		// make first step
 		if (!path.isEmpty()) {
-			Ship ship = (Ship) world.getAt(display.getCursorTile()).getFirstMovableUnit();
+			Ship ship = (Ship) gameController.getWorld().getAt(display.getCursorTile()).getFirstMovableUnit();
 			ship.setGoToMode(new GoToMode(path));
-			world.performMove(ship);
-			focusedTileController.fireFocusedTileEvent(world.getAt(display.getCursorTile()));
+			gameController.getWorld().performMove(ship);
+			focusedTileController.fireFocusedTileEvent(gameController.getWorld().getAt(display.getCursorTile()));
 		}
 		display.setCursorTile(moveTo);
 		display.setCursorNormal();
@@ -185,17 +186,18 @@ public class GamePanelPresenter {
 		Preconditions.checkArgument(path.size() > 1);
 		final Point from = path.get(0);
 		final Point to = path.get(path.size() - 1);
-		final Unit u = world.getAt(from).getFirstMovableUnit();
-		world.getAt(from).getUnits().remove(u);
+		final Unit u = gameController.getWorld().getAt(from).getFirstMovableUnit();
+		gameController.getWorld().getAt(from).getUnits().remove(u);
 		final WalkAnimator walkAnimator = new WalkAnimator(pathPlanning, path, u);
 		new Timer(1, actionEvent -> {
 			final Point point = walkAnimator.getNextStepCoordinates();
 			if (point == null) {
 				display.getFloatingParts().remove(0);
 				((Timer) actionEvent.getSource()).stop();
-				world.getAt(to).getUnits().add(u);
+				gameController.getWorld().getAt(to).getUnits().add(u);
 				if (display.getCursorTile().equals(walkAnimator.getLastAnimateTo())) {
-					focusedTileController.fireFocusedTileEvent(world.getAt(walkAnimator.getLastAnimateTo()));
+					focusedTileController
+							.fireFocusedTileEvent(gameController.getWorld().getAt(walkAnimator.getLastAnimateTo()));
 				}
 			} else {
 				if (display.getFloatingParts().isEmpty()) {

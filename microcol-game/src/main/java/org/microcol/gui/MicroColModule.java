@@ -1,5 +1,6 @@
 package org.microcol.gui;
 
+import org.microcol.model.GameController;
 import org.microcol.model.World;
 
 import com.google.inject.AbstractModule;
@@ -28,6 +29,7 @@ public class MicroColModule extends AbstractModule {
 		bind(FocusedTileController.class).in(Singleton.class);
 		bind(GameEventController.class).in(Singleton.class);
 		bind(LanguangeController.class).in(Singleton.class);
+		bind(GameController.class).in(Singleton.class);
 
 		/**
 		 * Initialize MVP classes
