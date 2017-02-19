@@ -44,13 +44,6 @@ public class World {
 		pathsToFinish = new ArrayList<>();
 	}
 
-	/**
-	 * Reset current game and start new
-	 */
-	public void newGame() {
-
-	}
-
 	public void nextTurn() {
 		moveWithOponents();
 		Arrays.stream(map).forEach(tileArray -> {

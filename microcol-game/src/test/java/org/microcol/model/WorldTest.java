@@ -10,6 +10,7 @@ import org.junit.Test;
 import org.microcol.gui.MoveUnitController;
 import org.microcol.gui.NextTurnController;
 import org.microcol.gui.Point;
+import org.microcol.gui.Text;
 import org.microcol.model.GoToMode;
 import org.microcol.model.Ship;
 import org.microcol.model.World;
@@ -23,6 +24,8 @@ public class WorldTest {
 	private NextTurnController nextTurnController;
 
 	private MoveUnitController moveUnitController;
+	
+	private Text text;
 
 	@Test
 	public void test_perform_2_steps_move_available_5_point() throws Exception {
@@ -85,7 +88,12 @@ public class WorldTest {
 	public void setup() {
 		nextTurnController = EasyMock.createMock(NextTurnController.class);
 		moveUnitController = EasyMock.createMock(MoveUnitController.class);
-		world = new World(nextTurnController, moveUnitController);
+		text = EasyMock.createMock(Text.class);
+		EasyMock.expect(text.get("tile.ocean.name")).andReturn("Ocean").anyTimes();
+		EasyMock.expect(text.get("tile.ocean.description")).andReturn("Ocean").anyTimes();
+		EasyMock.replay(text);
+		
+		world = new World(nextTurnController, moveUnitController, text);
 	}
 
 	@After
