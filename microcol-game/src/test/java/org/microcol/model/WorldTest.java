@@ -11,9 +11,9 @@ import org.microcol.gui.MoveUnitController;
 import org.microcol.gui.NextTurnController;
 import org.microcol.gui.Point;
 import org.microcol.gui.Text;
-import org.microcol.model.GoToMode;
-import org.microcol.model.Ship;
-import org.microcol.model.World;
+import org.microcol.gui.model.GoToMode;
+import org.microcol.gui.model.Ship;
+import org.microcol.gui.model.World;
 
 import com.google.common.collect.Lists;
 

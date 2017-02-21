@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.microcol.model.GameController;
+import org.microcol.gui.model.GameController;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;

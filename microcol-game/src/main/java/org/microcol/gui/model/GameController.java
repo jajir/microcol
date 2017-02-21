@@ -1,4 +1,4 @@
-package org.microcol.model;
+package org.microcol.gui.model;
 
 import org.microcol.gui.Localized;
 import org.microcol.gui.MoveUnitController;

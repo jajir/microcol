@@ -1,6 +1,6 @@
 package org.microcol.gui;
 
-import org.microcol.model.World;
+import org.microcol.gui.model.World;
 
 public class ChangeLanguageEvent {
 

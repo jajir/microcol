@@ -14,10 +14,10 @@ import java.util.List;
 
 import javax.swing.JPanel;
 
-import org.microcol.model.GameController;
-import org.microcol.model.Ship;
-import org.microcol.model.Unit;
-import org.microcol.model.World;
+import org.microcol.gui.model.GameController;
+import org.microcol.gui.model.Ship;
+import org.microcol.gui.model.Unit;
+import org.microcol.gui.model.World;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;

@@ -3,7 +3,7 @@ package org.microcol.gui;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.microcol.model.Unit;
+import org.microcol.gui.model.Unit;
 
 import com.google.common.base.Preconditions;
 

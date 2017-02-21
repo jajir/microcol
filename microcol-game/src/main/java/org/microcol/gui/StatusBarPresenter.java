@@ -2,7 +2,7 @@ package org.microcol.gui;
 
 import javax.swing.JLabel;
 
-import org.microcol.model.World;
+import org.microcol.gui.model.World;
 
 import com.google.inject.Inject;
 

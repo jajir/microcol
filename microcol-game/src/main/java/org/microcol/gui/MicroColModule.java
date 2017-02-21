@@ -1,7 +1,7 @@
 package org.microcol.gui;
 
-import org.microcol.model.GameController;
-import org.microcol.model.World;
+import org.microcol.gui.model.GameController;
+import org.microcol.gui.model.World;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Singleton;

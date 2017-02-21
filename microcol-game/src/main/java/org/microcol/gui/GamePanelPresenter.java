@@ -13,11 +13,11 @@ import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 
 import org.apache.log4j.Logger;
-import org.microcol.model.GameController;
-import org.microcol.model.GoToMode;
-import org.microcol.model.Ship;
-import org.microcol.model.Tile;
-import org.microcol.model.Unit;
+import org.microcol.gui.model.GameController;
+import org.microcol.gui.model.GoToMode;
+import org.microcol.gui.model.Ship;
+import org.microcol.gui.model.Tile;
+import org.microcol.gui.model.Unit;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;

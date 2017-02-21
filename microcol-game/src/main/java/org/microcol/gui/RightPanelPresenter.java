@@ -6,7 +6,7 @@ import java.awt.event.KeyEvent;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 
-import org.microcol.model.GameController;
+import org.microcol.gui.model.GameController;
 
 import com.google.inject.Inject;
 
