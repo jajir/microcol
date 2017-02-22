@@ -4,6 +4,7 @@ import org.microcol.gui.model.GameController;
 import org.microcol.gui.model.World;
 
 import com.google.inject.AbstractModule;
+import com.google.inject.Provides;
 import com.google.inject.Singleton;
 
 public class MicroColModule extends AbstractModule {
@@ -18,7 +19,6 @@ public class MicroColModule extends AbstractModule {
 		bind(PathPlanning.class).in(Singleton.class);
 		bind(ImageProvider.class).in(Singleton.class);
 		bind(ViewUtil.class).in(Singleton.class);
-		bind(Text.class).in(Singleton.class);
 
 		/**
 		 * Event controllers.
@@ -53,13 +53,21 @@ public class MicroColModule extends AbstractModule {
 		bind(RightPanelView.class).in(Singleton.class);
 		bind(RightPanelPresenter.Display.class).to(RightPanelView.class).in(Singleton.class);
 		bind(RightPanelPresenter.class).asEagerSingleton();
-		
+
 		bind(UnitsPanel.class).asEagerSingleton();
 
 		/**
 		 * Load events manually
 		 */
 		bind(GameEventListenerImpl.class).asEagerSingleton();
+		bind(ChangeLanguageListenerPreferences.class).asEagerSingleton();
+		bind(ChangeLanguageListenerText.class).asEagerSingleton();
+	}
+
+	@Provides
+	@Singleton
+	Text makeText(final GamePreferences gamePreferences) {
+		return new Text(gamePreferences.getLanguage());
 	}
 
 }

@@ -118,7 +118,6 @@ public class GamePanelPresenter implements Localized {
 					focusedTileController
 							.fireFocusedTileEvent(gameController.getWorld().getAt(display.getCursorTile()));
 				}
-				statusBarMessageController.fireStatusMessageWasChangedEvent("clicket at " + display.getCursorTile());
 				display.getGamePanelView().repaint();
 			}
 

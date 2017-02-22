@@ -29,11 +29,18 @@ public class StatusBarPresenter implements Localized {
 		});
 		languangeController.addLanguageListener(event -> {
 			setYearText(display.getLabelEra(), event.getWorld());
+			display.getStatusBarDescription().setText("");
 		});
 		display.getLabelEra().addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
 				statusBarMessageController.fireStatusMessageWasChangedEvent(getText().get("statusBar.era.description"));
+			}
+		});
+		display.getStatusBarDescription().addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				statusBarMessageController.fireStatusMessageWasChangedEvent(getText().get("statusBar.status.description"));
 			}
 		});
 	}

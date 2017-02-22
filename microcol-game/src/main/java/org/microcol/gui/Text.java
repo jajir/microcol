@@ -3,6 +3,8 @@ package org.microcol.gui;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
+import org.apache.log4j.Logger;
+
 import com.google.inject.Inject;
 
 /**
@@ -11,6 +13,8 @@ import com.google.inject.Inject;
  * 
  */
 public class Text {
+
+	private final static Logger logger = Logger.getLogger(Text.class);
 
 	private final static String RESOURCE_BUNDLE_NAME = "localization";
 
@@ -34,13 +38,14 @@ public class Text {
 	private ResourceBundle bundle;
 
 	@Inject
-	public Text(final GamePreferences gamePreferences) {
-		setLanguage(gamePreferences.getLanguage());
+	public Text(final Language language) {
+		setLanguage(language);
 		INSTANCE = this;
 	}
 
 	public void setLanguage(final Language language) {
 		bundle = ResourceBundle.getBundle(RESOURCE_BUNDLE_NAME, language.getLocale());
+		logger.debug("Language " + language + " was set.");
 	}
 
 	public String get(final String key) {

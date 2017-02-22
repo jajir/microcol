@@ -29,7 +29,7 @@ public class StatusBarView extends JPanel implements StatusBarPresenter.Display 
 	public StatusBarView() {
 		this.setLayout(new GridBagLayout());
 
-		statusBarDescription = new JLabel("Status bar");
+		statusBarDescription = new JLabel();
 		add(statusBarDescription, new GridBagConstraints(0, 0, 1, 1, 1D, 0D, GridBagConstraints.CENTER,
 				GridBagConstraints.HORIZONTAL, new Insets(0, 10, 0, 3), 0, 0));
 
