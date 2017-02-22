@@ -14,7 +14,7 @@ public class FocusedTileController {
 
 	private final List<FocusedTileListener> listeners = new ArrayList<FocusedTileListener>();
 
-	public void addNextTurnListener(final FocusedTileListener listener) {
+	public void addFocusedTileListener(final FocusedTileListener listener) {
 		Preconditions.checkNotNull(listener);
 		listeners.add(listener);
 	}

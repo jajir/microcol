@@ -36,7 +36,7 @@ public class World {
 		currentYear = 1590;
 		for (int i = 0; i < WIDTH; i++) {
 			for (int j = 0; j < HEIGHT; j++) {
-				map[i][j] = new Tile(text.get("tile.ocean.name"), "tile.ocean.description", 1);
+				map[i][j] = new Tile(text.get("tile.ocean.name"), text.get("tile.ocean.description"), 1);
 			}
 		}
 		map[5][5].getUnits().add(new Ship(1));
