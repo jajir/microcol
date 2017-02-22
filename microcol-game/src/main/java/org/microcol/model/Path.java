@@ -15,4 +15,15 @@ public class Path {
 	public List<Location> getLocations() {
 		return locations;
 	}
+
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+
+		builder.append("Path [locations = ");
+		builder.append(locations); // TODO JKA Vyzkoušet, jak to vypadá.
+		builder.append("]");
+
+		return builder.toString();
+	}
 }

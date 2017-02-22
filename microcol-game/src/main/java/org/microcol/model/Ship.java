@@ -1,13 +1,20 @@
 package org.microcol.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Ship {
 	private final Player owner;
 	private Location location;
+	private final int maxActionPoints;
+	private int currentActionPoints;
 
-	public Ship(final Player owner, final Location location) {
+	public Ship(final Player owner, final Location location, final int maxActionPoints) {
 		// TODO JKA Add not null tests.
 		this.owner = owner;
 		this.location = location;
+		this.maxActionPoints = maxActionPoints;
+		this.currentActionPoints = maxActionPoints;
 	}
 
 	public Player getOwner() {
@@ -19,7 +26,28 @@ public class Ship {
 	}
 
 	public void moveTo(final Path path) {
-		// FIXME JKA Implement.
+		// TODO JKA Implement tests.
+		// TODO JKA Komplet předělat.
+		final Location startLocation = location;
+		List<Location> moves = new ArrayList<>();
+		for (Location newLocation : path.getLocations()) {
+			if (currentActionPoints <= 0) {
+				break;
+			}
+
+			if (!location.equals(newLocation)) {
+				moves.add(newLocation);
+				location = newLocation;
+				currentActionPoints--;
+			}
+		}
+		if (!moves.isEmpty()) {
+			Game.instance.listenersManager.fireShipMoved(Game.instance, this, startLocation, new Path(moves));
+		}
+	}
+
+	protected void startTurn() {
+		currentActionPoints = maxActionPoints;
 	}
 
 	@Override

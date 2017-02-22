@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.microcol.model.event.GameListener;
+import org.microcol.model.event.RoundStartedEvent;
 import org.microcol.model.event.ShipMovedEvent;
 import org.microcol.model.event.TurnStartedEvent;
 
@@ -24,6 +25,14 @@ class GameListenersManager {
 		listeners.remove(listener);
 	}
 
+	public void fireRoundStarted(final Game game) {
+		final RoundStartedEvent event = new RoundStartedEvent(game);
+
+		listeners.forEach(listener -> {
+			listener.roundStarted(event);
+		});
+	}
+
 	public void fireTurnStarted(final Game game, final Player player) {
 		final TurnStartedEvent event = new TurnStartedEvent(game, player);
 
@@ -32,8 +41,8 @@ class GameListenersManager {
 		});
 	}
 
-	public void fireShipMoved(final Game game, final Ship ship, final Path path) {
-		final ShipMovedEvent event = new ShipMovedEvent(game, ship, path);
+	public void fireShipMoved(final Game game, final Ship ship, final Location startLocation, final Path path) {
+		final ShipMovedEvent event = new ShipMovedEvent(game, ship, startLocation, path);
 
 		listeners.forEach(listener -> {
 			listener.shipMoved(event);

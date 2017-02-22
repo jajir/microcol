@@ -22,9 +22,7 @@ public class Player {
 		return !human;
 	}
 
-	public void endTurn() {
-		// FIXME JKA Implement.
-	}
+	// TODO JKA getShips()
 
 	@Override
 	public String toString() {

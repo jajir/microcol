@@ -5,6 +5,7 @@ import java.util.List;
 
 public class GameBuilder {
 	private Map map;
+	private Calendar calendar;
 	private final List<Player> players;
 	private final List<Ship> ships;
 
@@ -15,6 +16,12 @@ public class GameBuilder {
 
 	public GameBuilder setMap(final int maxX, final int maxY) {
 		map = new Map(maxX, maxY);
+
+		return this;
+	}
+
+	public GameBuilder setCalendar(final int startYear, final int endYear) {
+		calendar = new Calendar(startYear, endYear);
 
 		return this;
 	}
@@ -37,15 +44,15 @@ public class GameBuilder {
 		return null;
 	}
 
-	public GameBuilder addShip(final String ownerName, final int x, final int y) {
+	public GameBuilder addShip(final String ownerName, final int x, final int y, final int maxActionPoints) {
 		final Player owner = getPlayer(ownerName);
-		ships.add(new Ship(owner, new Location(x, y)));
+		ships.add(new Ship(owner, new Location(x, y), maxActionPoints));
 
 		return this;
 	}
 
 	public Game build() {
 		// TODO JKA Implements tests.
-		return new Game(map, players, ships);
+		return new Game(map, calendar, players, ships);
 	}
 }

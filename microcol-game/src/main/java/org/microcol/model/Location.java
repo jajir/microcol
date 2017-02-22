@@ -18,6 +18,22 @@ public class Location {
 		return y;
 	}
 
+	// TODO JKA Zkontrolovat a implementovat hashCode.
+	@Override
+	public boolean equals(Object object) {
+		if (object == null) {
+			return false;
+		}
+
+		if (!(object instanceof Location)) {
+			return false;
+		}
+
+		Location location = (Location) object;
+
+		return x == location.x && y == location.y;
+	}
+
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();

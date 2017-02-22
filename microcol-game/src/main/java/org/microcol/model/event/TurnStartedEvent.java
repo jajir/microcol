@@ -16,4 +16,15 @@ public class TurnStartedEvent extends GameEvent {
 	public Player getPlayer() {
 		return player;
 	}
+
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+
+		builder.append("TurnStartedEvent [player = ");
+		builder.append(player);
+		builder.append("]");
+
+		return builder.toString();
+	}
 }
