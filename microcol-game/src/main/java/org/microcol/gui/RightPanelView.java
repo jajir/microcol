@@ -26,7 +26,7 @@ public class RightPanelView extends JPanel implements RightPanelPresenter.Displa
 	 * Default serialVersionUID.
 	 */
 	private static final long serialVersionUID = 1L;
-	
+
 	private final static int RIGHT_PANEL_WIDTH = 150;
 
 	private final ImageProvider imageProvider;
@@ -39,11 +39,14 @@ public class RightPanelView extends JPanel implements RightPanelPresenter.Displa
 
 	private final JScrollPane scrollPaneGamePanel;
 
+	private final UnitsPanel unitsPanel;
+
 	private final JButton nextTurnButton;
 
 	@Inject
-	public RightPanelView(final ImageProvider imageProvider) {
+	public RightPanelView(final ImageProvider imageProvider, final UnitsPanel unitsPanel) {
 		this.imageProvider = Preconditions.checkNotNull(imageProvider);
+		this.unitsPanel = Preconditions.checkNotNull(unitsPanel);
 		this.setLayout(new GridBagLayout());
 
 		// Y=0
@@ -60,10 +63,8 @@ public class RightPanelView extends JPanel implements RightPanelPresenter.Displa
 				GridBagConstraints.HORIZONTAL, new Insets(0, 0, 0, 0), 0, 0));
 
 		// Y=2
-		scrollPaneGamePanel = new JScrollPane(new JPanel(), JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+		scrollPaneGamePanel = new JScrollPane(unitsPanel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
 				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		scrollPaneGamePanel.getViewport().setView(new JPanel());
-		scrollPaneGamePanel.getViewport().setMaximumSize(new Dimension(RIGHT_PANEL_WIDTH, 10*RIGHT_PANEL_WIDTH));
 		add(scrollPaneGamePanel, new GridBagConstraints(0, 2, 2, 1, 1D, 1D, GridBagConstraints.NORTH,
 				GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
 
@@ -73,6 +74,9 @@ public class RightPanelView extends JPanel implements RightPanelPresenter.Displa
 				GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
 		setPreferredSize(new Dimension(RIGHT_PANEL_WIDTH, 200));
 		setMinimumSize(new Dimension(RIGHT_PANEL_WIDTH, 200));
+		validate();
+		unitsPanel.setMaximumSize(scrollPaneGamePanel.getViewport().getExtentSize());
+		unitsPanel.setPreferredSize(scrollPaneGamePanel.getViewport().getExtentSize());
 	}
 
 	@Override
@@ -82,13 +86,10 @@ public class RightPanelView extends JPanel implements RightPanelPresenter.Displa
 		tileName.setText(tile.getName());
 		tileDescription.setText("<html><div>" + tile.getDescription() + "</div></html>");
 		if (tile.getUnits().isEmpty()) {
-			scrollPaneGamePanel.getViewport().setView(new JPanel());
+			unitsPanel.clear();
+			unitsPanel.repaint();
 		} else {
-			System.out.println(scrollPaneGamePanel.getViewport().getExtentSize());
-			JPanel panel = new UnitsPanel(tile.getUnits(), imageProvider);
-			panel.setMaximumSize(scrollPaneGamePanel.getViewport().getExtentSize());
-			panel.setPreferredSize(scrollPaneGamePanel.getViewport().getExtentSize());
-			scrollPaneGamePanel.getViewport().setView(panel);
+			unitsPanel.setUnits(tile.getUnits());
 		}
 
 	}
@@ -96,6 +97,11 @@ public class RightPanelView extends JPanel implements RightPanelPresenter.Displa
 	@Override
 	public JButton getNextTurnButton() {
 		return nextTurnButton;
+	}
+
+	@Override
+	public JPanel getRightPanel() {
+		return this;
 	}
 
 }

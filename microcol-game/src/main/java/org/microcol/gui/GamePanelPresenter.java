@@ -22,7 +22,7 @@ import org.microcol.gui.model.Unit;
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
 
-public class GamePanelPresenter {
+public class GamePanelPresenter implements Localized {
 
 	private final Logger logger = Logger.getLogger(GamePanelPresenter.class);
 
@@ -128,6 +128,24 @@ public class GamePanelPresenter {
 					display.setGotoCursorTitle(convertToTilesCoordinates(Point.make(e.getX(), e.getY())));
 					display.getGamePanelView().repaint();
 				}
+				/**
+				 * Set staus bar message
+				 */
+				Point where = convertToTilesCoordinates(Point.make(e.getX(), e.getY()));
+				final Tile tile = gameController.getWorld().getAt(where);
+				final StringBuilder buff = new StringBuilder();
+				buff.append(getText().get("statusBar.tile.start"));
+				buff.append(" ");
+				buff.append(tile.getName());
+				if (!tile.getUnits().isEmpty()) {
+					buff.append(" ");
+					buff.append(getText().get("statusBar.tile.withUnit"));
+					tile.getUnits().forEach(unit -> {
+						buff.append("Ship");
+					});
+
+				}
+				statusBarMessageController.fireStatusMessageWasChangedEvent(buff.toString());
 			}
 
 			@Override

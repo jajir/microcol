@@ -1,5 +1,8 @@
 package org.microcol.gui;
 
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+
 import javax.swing.JLabel;
 
 import org.microcol.gui.model.World;
@@ -26,6 +29,12 @@ public class StatusBarPresenter implements Localized {
 		});
 		languangeController.addLanguageListener(event -> {
 			setYearText(display.getLabelEra(), event.getWorld());
+		});
+		display.getLabelEra().addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				statusBarMessageController.fireStatusMessageWasChangedEvent(getText().get("statusBar.era.description"));
+			}
 		});
 	}
 

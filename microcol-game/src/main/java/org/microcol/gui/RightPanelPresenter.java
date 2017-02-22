@@ -2,8 +2,11 @@ package org.microcol.gui;
 
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import javax.swing.JButton;
+import javax.swing.JPanel;
 
 import org.microcol.gui.model.GameController;
 import org.microcol.gui.model.Tile;
@@ -16,12 +19,15 @@ public class RightPanelPresenter implements Localized {
 		JButton getNextTurnButton();
 
 		void showTile(final Tile tile);
+
+		JPanel getRightPanel();
 	}
 
 	@Inject
 	public RightPanelPresenter(final RightPanelPresenter.Display display, final GameController gameController,
 			final KeyController keyController, final FocusedTileController focusedTileController,
-			final LanguangeController languangeController) {
+			final LanguangeController languangeController,
+			final StatusBarMessageController statusBarMessageController) {
 
 		display.getNextTurnButton().addActionListener(e -> {
 			gameController.getWorld().nextTurn();
@@ -42,6 +48,22 @@ public class RightPanelPresenter implements Localized {
 		languangeController.addLanguageListener(event -> {
 			display.getNextTurnButton().setText(getText().get("nextTurnButton"));
 		});
+
+		display.getNextTurnButton().addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(final MouseEvent e) {
+				statusBarMessageController
+						.fireStatusMessageWasChangedEvent(getText().get("nextTurnButton.desctiption"));
+			}
+		});
+
+		display.getRightPanel().addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(final MouseEvent e) {
+				statusBarMessageController.fireStatusMessageWasChangedEvent(getText().get("rightPanel.description"));
+			}
+		});
+
 	}
 
 }
