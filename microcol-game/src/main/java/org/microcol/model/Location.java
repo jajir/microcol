@@ -1,11 +1,18 @@
 package org.microcol.model;
 
+import com.google.common.base.Preconditions;
+
 public class Location {
 	private final int x;
 	private final int y;
 
 	public Location(final int x, final int y) {
-		// TODO JKA Add >= 0 test.
+		Preconditions.checkArgument(x >= 0, "X-axis cannot be negative: %s", x);
+		Preconditions.checkArgument(y >= 0, "Y-axis cannot be negative: %s", y);
+
+		// TODO JKA Check x <= map.getMaxX()
+		// TODO JKA Check y <= map.getMaxY()
+
 		this.x = x;
 		this.y = y;
 	}
@@ -18,7 +25,19 @@ public class Location {
 		return y;
 	}
 
-	// TODO JKA Zkontrolovat a implementovat hashCode.
+	// TODO JKA Rename to AdjacentOrEquals?
+	public boolean isAdjacent(final Location location) {
+		Preconditions.checkNotNull(location);
+
+		return Math.abs(x - location.x) <= 1
+			&& Math.abs(y - location.y) <= 1; 
+	}
+
+	@Override
+	public int hashCode() {
+		return x + (y << 16);
+	}
+
 	@Override
 	public boolean equals(Object object) {
 		if (object == null) {

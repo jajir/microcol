@@ -1,4 +1,4 @@
-package org.microcol.model;
+package org.microcol.gui.model;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
