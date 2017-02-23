@@ -25,7 +25,7 @@ public class MainMenuPresenter {
 
 	@Inject
 	public MainMenuPresenter(final MainMenuPresenter.Display display, final GameEventController gameEventController,
-			final GamePreferences gamePreferences, final LanguangeController languangeController) {
+			final GamePreferences gamePreferences, final ChangeLanguageController languangeController) {
 		display.getMenuItemNewGame().addActionListener(actionEvent -> {
 
 		});

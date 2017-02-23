@@ -9,7 +9,7 @@ public class ChangeLanguageListenerPreferences implements ChangeLanguageListener
 
 	@Inject
 	public ChangeLanguageListenerPreferences(final GamePreferences gamePreferences,
-			final LanguangeController languangeController) {
+			final ChangeLanguageController languangeController) {
 		this.gamePreferences = Preconditions.checkNotNull(gamePreferences);
 		languangeController.addLanguageListener(this);
 	}

@@ -9,22 +9,36 @@ import org.microcol.gui.model.GameController;
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
 
-public class LanguangeController {
+public class ChangeLanguageController {
 
-	private final Logger logger = Logger.getLogger(LanguangeController.class);
+	private final Logger logger = Logger.getLogger(ChangeLanguageController.class);
 
 	private final List<ChangeLanguageListener> listeners = new ArrayList<ChangeLanguageListener>();
 
 	private final GameController gameController;
 
+	public static enum Priority {
+		high, low
+	}
+
 	@Inject
-	public LanguangeController(final GameController gameController) {
+	public ChangeLanguageController(final GameController gameController) {
 		this.gameController = Preconditions.checkNotNull(gameController);
 	}
 
 	public void addLanguageListener(final ChangeLanguageListener listener) {
 		Preconditions.checkNotNull(listener);
 		listeners.add(listener);
+	}
+
+	public void addLanguageListener(final ChangeLanguageListener listener, final Priority priority) {
+		Preconditions.checkNotNull(listener);
+		Preconditions.checkNotNull(priority);
+		if (priority.equals(Priority.high)) {
+			listeners.add(0, listener);
+		} else {
+			listeners.add(listener);
+		}
 	}
 
 	public void fireLanguageWasChangedEvent(final Text.Language language) {

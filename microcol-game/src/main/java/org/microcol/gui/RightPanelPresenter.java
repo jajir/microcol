@@ -26,7 +26,7 @@ public class RightPanelPresenter implements Localized {
 	@Inject
 	public RightPanelPresenter(final RightPanelPresenter.Display display, final GameController gameController,
 			final KeyController keyController, final FocusedTileController focusedTileController,
-			final LanguangeController languangeController,
+			final ChangeLanguageController languangeController,
 			final StatusBarMessageController statusBarMessageController) {
 
 		display.getNextTurnButton().addActionListener(e -> {

@@ -20,7 +20,7 @@ public class StatusBarPresenter implements Localized {
 	@Inject
 	public StatusBarPresenter(final StatusBarPresenter.Display display,
 			final StatusBarMessageController statusBarMessageController, final NextTurnController nextTurnController,
-			final LanguangeController languangeController) {
+			final ChangeLanguageController languangeController) {
 		statusBarMessageController.addStatusMessageListener(message -> {
 			display.getStatusBarDescription().setText(message);
 		});
