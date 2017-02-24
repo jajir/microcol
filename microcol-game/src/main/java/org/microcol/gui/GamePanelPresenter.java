@@ -54,6 +54,8 @@ public class GamePanelPresenter implements Localized {
 	private final PathPlanning pathPlanning;
 
 	private final GamePanelPresenter.Display display;
+	
+	private Point lastMousePosition;
 
 	@Inject
 	public GamePanelPresenter(final GamePanelPresenter.Display display, final GameController gameController,
@@ -75,20 +77,27 @@ public class GamePanelPresenter implements Localized {
 				if ('c' == e.getKeyChar()) {
 					// chci centrovat
 				}
+				/**
+				 * Unit moving
+				 */
 				if ('g' == e.getKeyChar()) {
-					// chci posunout jednotku
 					if (display.getCursorTile() != null) {
 						final Tile tile = gameController.getWorld().getAt(display.getCursorTile());
 						final Unit unit = tile.getFirstMovableUnit();
-						// TODO in description panel show unit description
 						if (unit != null) {
+							display.setGotoCursorTitle(convertToTilesCoordinates(lastMousePosition));
 							switchToGoMode(unit);
+							display.getGamePanelView().repaint();
 						}
 					}
 				}
+				/**
+				 * Escape
+				 */
 				if (27 == e.getKeyCode()) {
 					if (display.isGotoMode()) {
 						cancelGoToMode(display.getGotoCursorTitle());
+						display.getGamePanelView().repaint();
 					}
 				}
 				/**
@@ -97,6 +106,7 @@ public class GamePanelPresenter implements Localized {
 				if (10 == e.getKeyCode()) {
 					if (display.isGotoMode()) {
 						switchToNormalMode(display.getGotoCursorTitle());
+						display.getGamePanelView().repaint();
 					}
 				}
 				logger.debug("Pressed key: '" + e.getKeyChar() + "' has code '" + e.getKeyCode() + "', modifiers '"
@@ -111,7 +121,6 @@ public class GamePanelPresenter implements Localized {
 			@Override
 			public void mousePressed(final MouseEvent e) {
 				origin = Point.make(e.getX(), e.getY());
-				System.out.println("mouse pressed");
 				if (display.isGotoMode()) {
 					switchToNormalMode(convertToTilesCoordinates(origin));
 				} else {
@@ -124,12 +133,15 @@ public class GamePanelPresenter implements Localized {
 
 			@Override
 			public void mouseMoved(final MouseEvent e) {
+				onMouseMoved(e);
 				if (display.isGotoMode()) {
 					display.setGotoCursorTitle(convertToTilesCoordinates(Point.make(e.getX(), e.getY())));
 					display.getGamePanelView().repaint();
+				}else{
+					origin = Point.make(e.getX(), e.getY());					
 				}
 				/**
-				 * Set staus bar message
+				 * Set status bar message
 				 */
 				Point where = convertToTilesCoordinates(Point.make(e.getX(), e.getY()));
 				final Tile tile = gameController.getWorld().getAt(where);
@@ -165,8 +177,12 @@ public class GamePanelPresenter implements Localized {
 		};
 		display.getGamePanelView().addMouseListener(ma);
 		display.getGamePanelView().addMouseMotionListener(ma);
-
 	}
+	
+	private void onMouseMoved(final MouseEvent e){
+		lastMousePosition = Point.make(e.getX(), e.getY());
+	}
+	
 
 	private Point convertToTilesCoordinates(final Point panelCoordinates) {
 		return Point.make(panelCoordinates.getX() / GamePanelView.TOTAL_TILE_WIDTH_IN_PX,
@@ -176,6 +192,7 @@ public class GamePanelPresenter implements Localized {
 	private final void switchToGoMode(final Unit unit) {
 		logger.debug("Switching '" + unit + "' to go mode.");
 		display.setCursorGoto();
+		display.getGamePanelView().repaint();
 	}
 
 	private void cancelGoToMode(final Point moveTo) {
