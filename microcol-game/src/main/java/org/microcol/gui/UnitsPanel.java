@@ -29,7 +29,7 @@ public class UnitsPanel extends JPanel implements Localized {
 	private static final long serialVersionUID = 1L;
 
 	private final ImageProvider imageProvider;
-
+	
 	@Inject
 	public UnitsPanel(final ImageProvider imageProvider, final StatusBarMessageController statusBarMessageController) {
 		this.imageProvider = Preconditions.checkNotNull(imageProvider);
@@ -62,6 +62,7 @@ public class UnitsPanel extends JPanel implements Localized {
 							GridBagConstraints.VERTICAL, new Insets(0, 0, 0, 0), 0, 0));
 			i += 2;
 		}
+		validate();
 	}
 
 }

@@ -81,17 +81,15 @@ public class RightPanelView extends JPanel implements RightPanelPresenter.Displa
 
 	@Override
 	public void showTile(final Tile tile) {
-		System.out.println(tile);
+		System.out.println("showTile - " + tile);
 		tileImage.setImage(imageProvider.getImage(ImageProvider.IMG_TILE_OCEAN));
 		tileName.setText(tile.getName());
 		tileDescription.setText("<html><div>" + tile.getDescription() + "</div></html>");
-		if (tile.getUnits().isEmpty()) {
-			unitsPanel.clear();
-			unitsPanel.repaint();
-		} else {
+		unitsPanel.clear();
+		if (!tile.getUnits().isEmpty()) {
 			unitsPanel.setUnits(tile.getUnits());
 		}
-
+		repaint();
 	}
 
 	@Override

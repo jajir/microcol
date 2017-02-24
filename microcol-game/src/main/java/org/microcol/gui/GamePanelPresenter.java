@@ -109,8 +109,9 @@ public class GamePanelPresenter implements Localized {
 			private Point origin;
 
 			@Override
-			public void mousePressed(MouseEvent e) {
+			public void mousePressed(final MouseEvent e) {
 				origin = Point.make(e.getX(), e.getY());
+				System.out.println("mouse pressed");
 				if (display.isGotoMode()) {
 					switchToNormalMode(convertToTilesCoordinates(origin));
 				} else {
@@ -148,7 +149,7 @@ public class GamePanelPresenter implements Localized {
 			}
 
 			@Override
-			public void mouseDragged(MouseEvent e) {
+			public void mouseDragged(final MouseEvent e) {
 				if (origin != null) {
 					JViewport viewPort = (JViewport) SwingUtilities.getAncestorOfClass(JViewport.class,
 							display.getGamePanelView());

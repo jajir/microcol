@@ -23,6 +23,8 @@ public class RightPanelPresenter implements Localized {
 		JPanel getRightPanel();
 	}
 
+	private Tile focusedTile;
+
 	@Inject
 	public RightPanelPresenter(final RightPanelPresenter.Display display, final GameController gameController,
 			final KeyController keyController, final FocusedTileController focusedTileController,
@@ -41,7 +43,10 @@ public class RightPanelPresenter implements Localized {
 		});
 
 		focusedTileController.addFocusedTileListener(tile -> {
-			display.showTile(tile);
+			if (isItDifferentTile(tile)) {
+				focusedTile = tile;
+				display.showTile(tile);
+			}
 		});
 
 		display.getNextTurnButton().setText(getText().get("nextTurnButton"));
@@ -63,7 +68,10 @@ public class RightPanelPresenter implements Localized {
 				statusBarMessageController.fireStatusMessageWasChangedEvent(getText().get("rightPanel.description"));
 			}
 		});
-
+	}
+	
+	private boolean isItDifferentTile(final Tile tile){
+		return focusedTile == null || (focusedTile != null && !focusedTile.equals(tile));
 	}
 
 }
