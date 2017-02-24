@@ -54,7 +54,9 @@ public class GamePanelPresenter implements Localized {
 	private final PathPlanning pathPlanning;
 
 	private final GamePanelPresenter.Display display;
-	
+
+	private final StatusBarMessageController statusBarMessageController;
+
 	private Point lastMousePosition;
 
 	@Inject
@@ -64,6 +66,7 @@ public class GamePanelPresenter implements Localized {
 			final MoveUnitController moveUnitController) {
 		this.focusedTileController = focusedTileController;
 		this.gameController = Preconditions.checkNotNull(gameController);
+		this.statusBarMessageController = Preconditions.checkNotNull(statusBarMessageController);
 		this.pathPlanning = Preconditions.checkNotNull(pathPlanning);
 		this.display = Preconditions.checkNotNull(display);
 
@@ -75,39 +78,21 @@ public class GamePanelPresenter implements Localized {
 			@Override
 			public void keyPressed(final KeyEvent e) {
 				if ('c' == e.getKeyChar()) {
-					// chci centrovat
 				}
-				/**
-				 * Unit moving
-				 */
 				if ('g' == e.getKeyChar()) {
-					if (display.getCursorTile() != null) {
-						final Tile tile = gameController.getWorld().getAt(display.getCursorTile());
-						final Unit unit = tile.getFirstMovableUnit();
-						if (unit != null) {
-							display.setGotoCursorTitle(convertToTilesCoordinates(lastMousePosition));
-							switchToGoMode(unit);
-							display.getGamePanelView().repaint();
-						}
-					}
+					onKeyPressed_m();
 				}
 				/**
 				 * Escape
 				 */
 				if (27 == e.getKeyCode()) {
-					if (display.isGotoMode()) {
-						cancelGoToMode(display.getGotoCursorTitle());
-						display.getGamePanelView().repaint();
-					}
+					onKeyPressed_escape();
 				}
 				/**
 				 * Enter
 				 */
 				if (10 == e.getKeyCode()) {
-					if (display.isGotoMode()) {
-						switchToNormalMode(display.getGotoCursorTitle());
-						display.getGamePanelView().repaint();
-					}
+					onKeyPressed_enter();
 				}
 				logger.debug("Pressed key: '" + e.getKeyChar() + "' has code '" + e.getKeyCode() + "', modifiers '"
 						+ e.getModifiers() + "'");
@@ -116,73 +101,101 @@ public class GamePanelPresenter implements Localized {
 
 		MouseAdapter ma = new MouseAdapter() {
 
-			private Point origin;
-
 			@Override
 			public void mousePressed(final MouseEvent e) {
-				origin = Point.make(e.getX(), e.getY());
-				if (display.isGotoMode()) {
-					switchToNormalMode(convertToTilesCoordinates(origin));
-				} else {
-					display.setCursorTile(convertToTilesCoordinates(origin));
-					focusedTileController
-							.fireFocusedTileEvent(gameController.getWorld().getAt(display.getCursorTile()));
-				}
-				display.getGamePanelView().repaint();
+				onMousePressed(e);
 			}
 
 			@Override
 			public void mouseMoved(final MouseEvent e) {
 				onMouseMoved(e);
-				if (display.isGotoMode()) {
-					display.setGotoCursorTitle(convertToTilesCoordinates(Point.make(e.getX(), e.getY())));
-					display.getGamePanelView().repaint();
-				}else{
-					origin = Point.make(e.getX(), e.getY());					
-				}
-				/**
-				 * Set status bar message
-				 */
-				Point where = convertToTilesCoordinates(Point.make(e.getX(), e.getY()));
-				final Tile tile = gameController.getWorld().getAt(where);
-				final StringBuilder buff = new StringBuilder();
-				buff.append(getText().get("statusBar.tile.start"));
-				buff.append(" ");
-				buff.append(tile.getName());
-				if (!tile.getUnits().isEmpty()) {
-					buff.append(" ");
-					buff.append(getText().get("statusBar.tile.withUnit"));
-					tile.getUnits().forEach(unit -> {
-						buff.append("Ship");
-					});
-
-				}
-				statusBarMessageController.fireStatusMessageWasChangedEvent(buff.toString());
 			}
 
 			@Override
 			public void mouseDragged(final MouseEvent e) {
-				if (origin != null) {
-					JViewport viewPort = (JViewport) SwingUtilities.getAncestorOfClass(JViewport.class,
-							display.getGamePanelView());
-					if (viewPort != null) {
-						Point delta = origin.substract(Point.make(e.getX(), e.getY()));
-						Rectangle view = viewPort.getViewRect();
-						view.x += delta.getX();
-						view.y += delta.getY();
-						display.getGamePanelView().scrollRectToVisible(view);
-					}
-				}
+				onMouseDragged(e);
 			}
 		};
 		display.getGamePanelView().addMouseListener(ma);
 		display.getGamePanelView().addMouseMotionListener(ma);
 	}
-	
-	private void onMouseMoved(final MouseEvent e){
-		lastMousePosition = Point.make(e.getX(), e.getY());
+
+	private void onKeyPressed_m() {
+		if (display.getCursorTile() != null) {
+			final Tile tile = gameController.getWorld().getAt(display.getCursorTile());
+			final Unit unit = tile.getFirstMovableUnit();
+			if (unit != null) {
+				display.setGotoCursorTitle(convertToTilesCoordinates(lastMousePosition));
+				switchToGoMode(unit);
+				display.getGamePanelView().repaint();
+			}
+		}
 	}
-	
+
+	private void onKeyPressed_escape() {
+		if (display.isGotoMode()) {
+			cancelGoToMode(display.getGotoCursorTitle());
+			display.getGamePanelView().repaint();
+		}
+	}
+
+	private void onKeyPressed_enter() {
+		if (display.isGotoMode()) {
+			switchToNormalMode(display.getGotoCursorTitle());
+			display.getGamePanelView().repaint();
+		}
+	}
+
+	private void onMousePressed(final MouseEvent e) {
+		final Point p = convertToTilesCoordinates(Point.make(e.getX(), e.getY()));
+		if (display.isGotoMode()) {
+			switchToNormalMode(p);
+		} else {
+			display.setCursorTile(p);
+			focusedTileController.fireFocusedTileEvent(gameController.getWorld().getAt(p));
+		}
+		display.getGamePanelView().repaint();
+	}
+
+	private void onMouseDragged(final MouseEvent e) {
+		if (lastMousePosition != null) {
+			JViewport viewPort = (JViewport) SwingUtilities.getAncestorOfClass(JViewport.class,
+					display.getGamePanelView());
+			if (viewPort != null) {
+				Point delta = lastMousePosition.substract(Point.make(e.getX(), e.getY()));
+				Rectangle view = viewPort.getViewRect();
+				view.x += delta.getX();
+				view.y += delta.getY();
+				display.getGamePanelView().scrollRectToVisible(view);
+			}
+		}
+	}
+
+	private void onMouseMoved(final MouseEvent e) {
+		lastMousePosition = Point.make(e.getX(), e.getY());
+		if (display.isGotoMode()) {
+			display.setGotoCursorTitle(convertToTilesCoordinates(Point.make(e.getX(), e.getY())));
+			display.getGamePanelView().repaint();
+		}
+		/**
+		 * Set status bar message
+		 */
+		Point where = convertToTilesCoordinates(Point.make(e.getX(), e.getY()));
+		final Tile tile = gameController.getWorld().getAt(where);
+		final StringBuilder buff = new StringBuilder();
+		buff.append(getText().get("statusBar.tile.start"));
+		buff.append(" ");
+		buff.append(tile.getName());
+		if (!tile.getUnits().isEmpty()) {
+			buff.append(" ");
+			buff.append(getText().get("statusBar.tile.withUnit"));
+			tile.getUnits().forEach(unit -> {
+				buff.append("Ship");
+			});
+
+		}
+		statusBarMessageController.fireStatusMessageWasChangedEvent(buff.toString());
+	}
 
 	private Point convertToTilesCoordinates(final Point panelCoordinates) {
 		return Point.make(panelCoordinates.getX() / GamePanelView.TOTAL_TILE_WIDTH_IN_PX,
