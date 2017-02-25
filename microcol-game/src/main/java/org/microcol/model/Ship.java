@@ -3,42 +3,64 @@ package org.microcol.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.common.base.MoreObjects;
+import com.google.common.base.Preconditions;
+
 public class Ship {
 	private final Player owner;
-	private Location location;
-	private final int maxActionPoints;
-	private int currentActionPoints;
+	private final int maxMoves;
 
-	public Ship(final Player owner, final Location location, final int maxActionPoints) {
-		// TODO JKA Add not null tests.
-		this.owner = owner;
+	private Location location;
+	private int availableMoves;
+
+	protected Ship(final Player owner, final int maxMoves, final Location location) {
+		this.owner = Preconditions.checkNotNull(owner);
+
+		Preconditions.checkArgument(maxMoves > 0, "Number of max moves must be positive: %s", maxMoves);
+		this.maxMoves = maxMoves;
+
 		this.location = location;
-		this.maxActionPoints = maxActionPoints;
-		this.currentActionPoints = maxActionPoints;
+		this.availableMoves = maxMoves;
 	}
 
 	public Player getOwner() {
 		return owner;
 	}
 
+	public int getMaxMoves() {
+		return maxMoves;
+	}
+
 	public Location getLocation() {
 		return location;
 	}
 
+	public int getAvailableMoves() {
+		return availableMoves;
+	}
+
+	protected void startTurn() {
+		availableMoves = maxMoves;
+	}
+
 	public void moveTo(final Path path) {
-		// TODO JKA Implement tests.
+		// TODO JKA Check game state
+		// TODO JKA Check currentPlayer
+		// TODO JKA Check path valid on map
+		// TODO JKA Check current location + path
+
 		// TODO JKA Komplet předělat.
 		final Location startLocation = location;
 		List<Location> moves = new ArrayList<>();
 		for (Location newLocation : path.getLocations()) {
-			if (currentActionPoints <= 0) {
+			if (availableMoves <= 0) {
 				break;
 			}
 
 			if (!location.equals(newLocation)) {
 				moves.add(newLocation);
 				location = newLocation;
-				currentActionPoints--;
+				availableMoves--;
 			}
 		}
 		if (!moves.isEmpty()) {
@@ -46,21 +68,13 @@ public class Ship {
 		}
 	}
 
-	protected void startTurn() {
-		currentActionPoints = maxActionPoints;
-	}
-
 	@Override
 	public String toString() {
-		// TODO JKA Predelat
-		StringBuilder builder = new StringBuilder();
-
-		builder.append("Ship [owner = ");
-		builder.append(owner);
-		builder.append(", location = ");
-		builder.append(location);
-		builder.append("]");
-
-		return builder.toString();
+		return MoreObjects.toStringHelper(this)
+			.add("owner", owner)
+			.add("maxMoves", maxMoves)
+			.add("location", location)
+			.add("availableMoves", availableMoves)
+			.toString();
 	}
 }

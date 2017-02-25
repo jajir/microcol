@@ -35,10 +35,7 @@ public class Calendar {
 	}
 
 	protected void endRound() {
-		if (isFinished()) {
-			throw new IllegalStateException(String.format(
-				"Current year (%s) cannot be greater than end year (%s).", currentYear, endYear));
-		}
+		Preconditions.checkState(!isFinished(), "Current year (%s) cannot be greater than end year (%s).", currentYear, endYear);
 
 		currentYear++;
 	}

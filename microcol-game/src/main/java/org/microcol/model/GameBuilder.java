@@ -3,6 +3,8 @@ package org.microcol.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.common.base.Preconditions;
+
 public class GameBuilder {
 	private final List<Player> players;
 	private final List<Ship> ships;
@@ -28,14 +30,15 @@ public class GameBuilder {
 	}
 
 	public GameBuilder addPlayer(final String name, final boolean human) {
-		// TODO JKA Name must be unique.
+		Preconditions.checkArgument(getPlayer(name) == null, "Player name must be unique: %s", name);
+
 		players.add(new Player(name, human));
 
 		return this;
 	}
 
 	private Player getPlayer(final String name) {
-		// TODO JKA Use streams.
+		// TODO JKA Use streams
 		for (Player player : players) {
 			if (player.getName().equals(name)) {
 				return player;
@@ -45,15 +48,15 @@ public class GameBuilder {
 		return null;
 	}
 
-	public GameBuilder addShip(final String ownerName, final int x, final int y, final int maxActionPoints) {
-		final Player owner = getPlayer(ownerName);
-		ships.add(new Ship(owner, new Location(x, y), maxActionPoints));
+	public GameBuilder addShip(final String ownerName, final int maxMoves, final int x, final int y) {
+		ships.add(new Ship(getPlayer(ownerName), maxMoves, new Location(x, y)));
 
 		return this;
 	}
 
 	public Game build() {
-		// TODO JKA Implements tests.
+		Preconditions.checkState(!players.isEmpty(), "Game must have at least one player.");
+
 		return new Game(map, calendar, players, ships);
 	}
 }

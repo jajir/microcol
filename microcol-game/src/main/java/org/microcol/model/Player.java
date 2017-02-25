@@ -1,12 +1,14 @@
 package org.microcol.model;
 
+import com.google.common.base.MoreObjects;
+import com.google.common.base.Preconditions;
+
 public class Player {
 	private final String name;
 	private final boolean human;
 
-	public Player(final String name, final boolean human) {
-		// TODO JKA Add not null test.
-		this.name = name;
+	protected Player(final String name, final boolean human) {
+		this.name = Preconditions.checkNotNull(name);
 		this.human = human;
 	}
 
@@ -26,15 +28,9 @@ public class Player {
 
 	@Override
 	public String toString() {
-		// TODO JKA Predelat
-		StringBuilder builder = new StringBuilder();
-
-		builder.append("Player [name = ");
-		builder.append(name);
-		builder.append(", human = ");
-		builder.append(human);
-		builder.append("]");
-
-		return builder.toString();
+		return MoreObjects.toStringHelper(this)
+			.add("name", name)
+			.add("human", human)
+			.toString();
 	}
 }

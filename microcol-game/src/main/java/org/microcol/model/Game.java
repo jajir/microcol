@@ -112,7 +112,7 @@ public class Game {
 			.setMap(100, 50)
 			.setCalendar(1, 3)
 			.addPlayer("Player1", true)
-			.addShip("Player1", 50, 20, 5)
+			.addShip("Player1", 5, 50, 20)
 			.build();
 		game.addListener(new GameListener() {
 			@Override
