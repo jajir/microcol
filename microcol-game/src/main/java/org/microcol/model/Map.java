@@ -18,6 +18,27 @@ public class Map {
 		return maxY;
 	}
 
+	public boolean isValid(final Location location) {
+		// TODO JKA Check null
+
+		return location.getX() >= 0
+			&& location.getX() <= maxX
+			&& location.getY() >= 0
+			&& location.getY() <= maxY;
+	}
+
+	public boolean isValid(final Path path) {
+		// TODO JKA Check null
+
+//		path.getLocations().forEach(location -> {
+//			if (!isValid(location)) {
+//				return false;
+//			}
+//		});
+
+		return true; // FIXME JKA Implement
+	}
+
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();

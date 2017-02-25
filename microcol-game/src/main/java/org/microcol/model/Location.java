@@ -1,5 +1,6 @@
 package org.microcol.model;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 
 public class Location {
@@ -7,12 +8,6 @@ public class Location {
 	private final int y;
 
 	public Location(final int x, final int y) {
-		Preconditions.checkArgument(x >= 0, "X-axis cannot be negative: %s", x);
-		Preconditions.checkArgument(y >= 0, "Y-axis cannot be negative: %s", y);
-
-		// TODO JKA Check x <= map.getMaxX()
-		// TODO JKA Check y <= map.getMaxY()
-
 		this.x = x;
 		this.y = y;
 	}
@@ -25,9 +20,12 @@ public class Location {
 		return y;
 	}
 
-	// TODO JKA Rename to AdjacentOrEquals?
 	public boolean isAdjacent(final Location location) {
 		Preconditions.checkNotNull(location);
+
+		if (equals(location)) {
+			return false;
+		}
 
 		return Math.abs(x - location.x) <= 1
 			&& Math.abs(y - location.y) <= 1; 
@@ -50,19 +48,15 @@ public class Location {
 
 		Location location = (Location) object;
 
-		return x == location.x && y == location.y;
+		return x == location.x
+			&& y == location.y;
 	}
 
 	@Override
 	public String toString() {
-		StringBuilder builder = new StringBuilder();
-
-		builder.append("Location [x = ");
-		builder.append(x);
-		builder.append(", y = ");
-		builder.append(y);
-		builder.append("]");
-
-		return builder.toString();
+		return MoreObjects.toStringHelper(this)
+			.add("x", x)
+			.add("y", y)
+			.toString();
 	}
 }
