@@ -29,6 +29,32 @@ public class PathTest {
 		Assert.assertEquals("Test of creation failed:", locations, path.getLocations());
 	}
 
+	@Test
+	public void testCreationCircle() {
+		final List<Location> locations = new ArrayList<>();
+		locations.add(new Location(2, 3));
+		locations.add(new Location(3, 3));
+		locations.add(new Location(3, 4));
+		locations.add(new Location(2, 4));
+		locations.add(new Location(2, 3));
+
+		final Path path = new Path(locations);
+		Assert.assertEquals("Test of creation failed:", locations, path.getLocations());
+	}
+
+	@Test
+	public void testCreationBack() {
+		final List<Location> locations = new ArrayList<>();
+		locations.add(new Location(2, 3));
+		locations.add(new Location(3, 3));
+		locations.add(new Location(4, 3));
+		locations.add(new Location(3, 3));
+		locations.add(new Location(2, 3));
+
+		final Path path = new Path(locations);
+		Assert.assertEquals("Test of creation failed:", locations, path.getLocations());
+	}
+
 	@Test(expected = NullPointerException.class)
 	public void testCreationNull() {
 		new Path(null);

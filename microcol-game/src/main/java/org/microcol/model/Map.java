@@ -1,11 +1,16 @@
 package org.microcol.model;
 
+import com.google.common.base.MoreObjects;
+import com.google.common.base.Preconditions;
+
 public class Map {
 	private final int maxX;
 	private final int maxY;
 
 	public Map(final int maxX, final int maxY) {
-		// TODO JKA Add > 0 test.
+		Preconditions.checkArgument(maxX > 0, "MaxX must be positive: %s", maxX);
+		Preconditions.checkArgument(maxY > 0, "MaxY must be positive: %s", maxY);
+
 		this.maxX = maxX;
 		this.maxY = maxY;
 	}
@@ -19,7 +24,7 @@ public class Map {
 	}
 
 	public boolean isValid(final Location location) {
-		// TODO JKA Check null
+		Preconditions.checkNotNull(location);
 
 		return location.getX() >= 0
 			&& location.getX() <= maxX
@@ -28,28 +33,23 @@ public class Map {
 	}
 
 	public boolean isValid(final Path path) {
-		// TODO JKA Check null
+		Preconditions.checkNotNull(path);
 
-//		path.getLocations().forEach(location -> {
-//			if (!isValid(location)) {
-//				return false;
-//			}
-//		});
+		// TODO JKA Use streams
+		for (Location location : path.getLocations()) {
+			if (!isValid(location)) {
+				return false;
+			}
+		}
 
-		return true; // FIXME JKA Implement
+		return true;
 	}
 
 	@Override
 	public String toString() {
-		// TODO JKA Predelat
-		StringBuilder builder = new StringBuilder();
-
-		builder.append("Map [maxX = ");
-		builder.append(maxX);
-		builder.append(", maxY = ");
-		builder.append(maxY);
-		builder.append("]");
-
-		return builder.toString();
+		return MoreObjects.toStringHelper(this)
+			.add("maxX", maxX)
+			.add("maxY", maxY)
+			.toString();
 	}
 }
