@@ -34,6 +34,8 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 	private final static int GRID_LINE_WIDTH = 1;
 
 	public final static int TOTAL_TILE_WIDTH_IN_PX = TILE_WIDTH_IN_PX + GRID_LINE_WIDTH;
+	
+	private final MoveAutomatization moveAutomatization;
 
 	private final ImageProvider imageProvider;
 
@@ -60,10 +62,11 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 	@Inject
 	public GamePanelView(final StatusBarMessageController statusBarMessageController,
 			final GameController gameController, final NextTurnController nextTurnController,
-			final PathPlanning pathPlanning, final ImageProvider imageProvider) {
+			final PathPlanning pathPlanning, final ImageProvider imageProvider, final MoveAutomatization moveAutomatization) {
 		this.gameController = Preconditions.checkNotNull(gameController);
 		this.pathPlanning = Preconditions.checkNotNull(pathPlanning);
 		this.imageProvider = Preconditions.checkNotNull(imageProvider);
+		this.moveAutomatization = Preconditions.checkNotNull(moveAutomatization);
 		Toolkit toolkit = Toolkit.getDefaultToolkit();
 		gotoModeCursor = toolkit.createCustomCursor(imageProvider.getImage(ImageProvider.IMG_CURSOR_GOTO),
 				new java.awt.Point(1, 1), "gotoModeCursor");
@@ -137,7 +140,7 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 						} else {
 							graphics.drawImage(imageProvider.getImage(ImageProvider.IMG_TILE_SHIP2), x, y, this);
 						}
-						if (s.getGoToMode() != null && s.getGoToMode().isActive()) {
+						if (moveAutomatization.isShipMoving(s)) {
 							graphics.drawImage(imageProvider.getImage(ImageProvider.IMG_TILE_MODE_GOTO),
 									x + TILE_WIDTH_IN_PX - 12, y, this);
 						}

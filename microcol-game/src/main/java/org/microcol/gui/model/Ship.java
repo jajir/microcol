@@ -8,8 +8,6 @@ public class Ship extends Unit {
 
 	private int availableSteps;
 
-	private GoToMode goToMode;
-
 	public Ship(final int type) {
 		this.type = type;
 		availableSteps = 5;
@@ -20,7 +18,7 @@ public class Ship extends Unit {
 		return MoreObjects.toStringHelper(Ship.class).add("type", type).add("availableSteps", availableSteps)
 				.toString();
 	}
-	
+
 	public int getType() {
 		return type;
 	}
@@ -35,14 +33,6 @@ public class Ship extends Unit {
 
 	public int getAvailableSteps() {
 		return availableSteps;
-	}
-
-	public GoToMode getGoToMode() {
-		return goToMode;
-	}
-
-	public void setGoToMode(GoToMode goToMode) {
-		this.goToMode = goToMode;
 	}
 
 }

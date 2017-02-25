@@ -14,7 +14,6 @@ import javax.swing.Timer;
 
 import org.apache.log4j.Logger;
 import org.microcol.gui.model.GameController;
-import org.microcol.gui.model.GoToMode;
 import org.microcol.gui.model.Ship;
 import org.microcol.gui.model.Tile;
 import org.microcol.gui.model.Unit;
@@ -222,8 +221,7 @@ public class GamePanelPresenter implements Localized {
 		// make first step
 		if (!path.isEmpty()) {
 			Ship ship = (Ship) gameController.getWorld().getAt(display.getCursorTile()).getFirstMovableUnit();
-			ship.setGoToMode(new GoToMode(path));
-			gameController.getWorld().performMove(ship);
+			gameController.performMove(ship, path);
 			focusedTileController.fireFocusedTileEvent(gameController.getWorld().getAt(display.getCursorTile()));
 		}
 		display.setCursorTile(moveTo);

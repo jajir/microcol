@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.microcol.gui.MoveUnitController;
 import org.microcol.gui.NextTurnController;
 import org.microcol.gui.Point;
 import org.microcol.gui.Text;
@@ -26,13 +25,9 @@ public class World {
 
 	private final List<List<Point>> pathsToFinish;
 
-	private final MoveUnitController moveUnitController;
-
 	@Inject
-	public World(final NextTurnController nextTurnController, final MoveUnitController moveUnitController,
-			final Text text) {
+	public World(final NextTurnController nextTurnController, final Text text) {
 		this.nextTurnController = Preconditions.checkNotNull(nextTurnController);
-		this.moveUnitController = Preconditions.checkNotNull(moveUnitController);
 		currentYear = 1590;
 		for (int i = 0; i < WIDTH; i++) {
 			for (int j = 0; j < HEIGHT; j++) {
@@ -52,7 +47,7 @@ public class World {
 			});
 		});
 		resolvePathsToFinish();
-		performScheduledMoves();
+		// performScheduledMoves();
 		currentYear++;
 		nextTurnController.fireNextTurnEvent(this);
 	}
@@ -72,19 +67,6 @@ public class World {
 		pathsToFinish.removeIf(path -> {
 			moveAlongPath(path);
 			return path.isEmpty();
-		});
-	}
-
-	private void performScheduledMoves() {
-		Arrays.stream(map).forEach(tileArray -> {
-			Arrays.stream(tileArray).forEach(tile -> {
-				Ship s = (Ship) tile.getFirstMovableUnit();
-				if (s != null) {
-					if (s.getGoToMode() != null && s.getGoToMode().isActive()) {
-						performMove(s);
-					}
-				}
-			});
 		});
 	}
 
@@ -109,31 +91,6 @@ public class World {
 			from = to;
 		}
 		path.removeAll(stepsToRemove);
-	}
-
-	public void performMove(final Ship ship) {
-		List<Point> stepsToMove = new ArrayList<>();
-		/**
-		 * Add first step to final path.
-		 */
-		if (ship.getAvailableSteps() > 0) {
-			stepsToMove.add(ship.getGoToMode().getPath().remove(0));
-		}
-
-		/**
-		 * Add resting steps.
-		 */
-		while (ship.getAvailableSteps() > 0 && !ship.getGoToMode().getPath().isEmpty()) {
-			ship.decreaseActionPoint(1);
-			if (ship.getAvailableSteps() == 0) {
-				stepsToMove.add(ship.getGoToMode().getPath().get(0));
-			} else {
-				stepsToMove.add(ship.getGoToMode().getPath().remove(0));
-			}
-		}
-		if (!stepsToMove.isEmpty()) {
-			moveUnitController.fireMoveUnitEvent(stepsToMove);
-		}
 	}
 
 	private final void resetActionPoints(final Tile tile) {

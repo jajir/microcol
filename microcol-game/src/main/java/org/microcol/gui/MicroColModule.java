@@ -16,6 +16,7 @@ public class MicroColModule extends AbstractModule {
 
 		bind(World.class).in(Singleton.class);
 
+		bind(MoveAutomatization.class).in(Singleton.class);
 		bind(PathPlanning.class).in(Singleton.class);
 		bind(ImageProvider.class).in(Singleton.class);
 		bind(ViewUtil.class).in(Singleton.class);

@@ -32,7 +32,7 @@ public class RightPanelPresenter implements Localized {
 			final StatusBarMessageController statusBarMessageController) {
 
 		display.getNextTurnButton().addActionListener(e -> {
-			gameController.getWorld().nextTurn();
+			gameController.nextTurn();
 		});
 
 		display.getNextTurnButton().addKeyListener(new KeyAdapter() {
@@ -69,8 +69,8 @@ public class RightPanelPresenter implements Localized {
 			}
 		});
 	}
-	
-	private boolean isItDifferentTile(final Tile tile){
+
+	private boolean isItDifferentTile(final Tile tile) {
 		return focusedTile == null || (focusedTile != null && !focusedTile.equals(tile));
 	}
 
