@@ -1,18 +1,28 @@
 package org.microcol.model.event;
 
+import org.microcol.model.Calendar;
 import org.microcol.model.Game;
 
+import com.google.common.base.MoreObjects;
+import com.google.common.base.Preconditions;
+
 public class RoundStartedEvent extends GameEvent {
-	public RoundStartedEvent(final Game game) {
+	private final Calendar calendar;
+
+	public RoundStartedEvent(final Game game, final Calendar calendar) {
 		super(game);
+
+		this.calendar = Preconditions.checkNotNull(calendar);
+	}
+
+	public Calendar getCalendar() {
+		return calendar;
 	}
 
 	@Override
 	public String toString() {
-		StringBuilder builder = new StringBuilder();
-
-		builder.append("RoundStartedEvent []");
-
-		return builder.toString();
+		return MoreObjects.toStringHelper(this)
+			.add("calendar", calendar)
+			.toString();
 	}
 }

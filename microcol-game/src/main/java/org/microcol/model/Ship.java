@@ -52,6 +52,7 @@ public class Ship {
 
 	@Override
 	public String toString() {
+		// TODO JKA Predelat
 		StringBuilder builder = new StringBuilder();
 
 		builder.append("Ship [owner = ");

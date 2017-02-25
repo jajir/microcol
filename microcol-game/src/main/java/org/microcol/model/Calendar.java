@@ -37,6 +37,7 @@ public class Calendar {
 
 	@Override
 	public String toString() {
+		// TODO JKA Predelat
 		StringBuilder builder = new StringBuilder();
 
 		builder.append("Calendar [startYear = ");

@@ -3,14 +3,16 @@ package org.microcol.model.event;
 import org.microcol.model.Game;
 import org.microcol.model.Player;
 
+import com.google.common.base.MoreObjects;
+import com.google.common.base.Preconditions;
+
 public class TurnStartedEvent extends GameEvent {
 	private final Player player;
 
 	public TurnStartedEvent(final Game game, final Player player) {
 		super(game);
 
-		// TODO JKA Add not null test.
-		this.player = player;
+		this.player = Preconditions.checkNotNull(player);
 	}
 
 	public Player getPlayer() {
@@ -19,12 +21,8 @@ public class TurnStartedEvent extends GameEvent {
 
 	@Override
 	public String toString() {
-		StringBuilder builder = new StringBuilder();
-
-		builder.append("TurnStartedEvent [player = ");
-		builder.append(player);
-		builder.append("]");
-
-		return builder.toString();
+		return MoreObjects.toStringHelper(this)
+			.add("player", player)
+			.toString();
 	}
 }

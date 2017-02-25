@@ -41,6 +41,7 @@ public class Map {
 
 	@Override
 	public String toString() {
+		// TODO JKA Predelat
 		StringBuilder builder = new StringBuilder();
 
 		builder.append("Map [maxX = ");

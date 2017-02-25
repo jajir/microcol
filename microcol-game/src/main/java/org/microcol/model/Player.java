@@ -26,6 +26,7 @@ public class Player {
 
 	@Override
 	public String toString() {
+		// TODO JKA Predelat
 		StringBuilder builder = new StringBuilder();
 
 		builder.append("Player [name = ");

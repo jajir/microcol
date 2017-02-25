@@ -3,7 +3,6 @@ package org.microcol.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.microcol.model.event.GameListener;
 import org.microcol.model.event.RoundStartedEvent;
 import org.microcol.model.event.ShipMovedEvent;
 import org.microcol.model.event.TurnStartedEvent;
@@ -25,8 +24,8 @@ class GameListenersManager {
 		listeners.remove(listener);
 	}
 
-	public void fireRoundStarted(final Game game) {
-		final RoundStartedEvent event = new RoundStartedEvent(game);
+	public void fireRoundStarted(final Game game, final Calendar calendar) {
+		final RoundStartedEvent event = new RoundStartedEvent(game, calendar);
 
 		listeners.forEach(listener -> {
 			listener.roundStarted(event);

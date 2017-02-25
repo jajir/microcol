@@ -5,6 +5,9 @@ import org.microcol.model.Location;
 import org.microcol.model.Path;
 import org.microcol.model.Ship;
 
+import com.google.common.base.MoreObjects;
+import com.google.common.base.Preconditions;
+
 public class ShipMovedEvent extends GameEvent {
 	private final Ship ship;
 	private final Location startLocation;
@@ -13,10 +16,9 @@ public class ShipMovedEvent extends GameEvent {
 	public ShipMovedEvent(final Game game, final Ship ship, final Location startLocation, final Path path) {
 		super(game);
 
-		// TODO JKA Add not null tests.
-		this.ship = ship;
-		this.startLocation = startLocation;
-		this.path = path;
+		this.ship = Preconditions.checkNotNull(ship);
+		this.startLocation = Preconditions.checkNotNull(startLocation);
+		this.path = Preconditions.checkNotNull(path);
 	}
 
 	public Ship getShip() {
@@ -33,16 +35,10 @@ public class ShipMovedEvent extends GameEvent {
 
 	@Override
 	public String toString() {
-		StringBuilder builder = new StringBuilder();
-
-		builder.append("ShipMovedEvent [ship = ");
-		builder.append(ship);
-		builder.append(", startLocation = ");
-		builder.append(startLocation);
-		builder.append(", path = ");
-		builder.append(path);
-		builder.append("]");
-
-		return builder.toString();
+		return MoreObjects.toStringHelper(this)
+			.add("ship", ship)
+			.add("startLocation", startLocation)
+			.add("path", path)
+			.toString();
 	}
 }

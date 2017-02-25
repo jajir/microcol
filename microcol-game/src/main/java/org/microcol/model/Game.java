@@ -3,7 +3,6 @@ package org.microcol.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.microcol.model.event.GameListener;
 import org.microcol.model.event.RoundStartedEvent;
 import org.microcol.model.event.ShipMovedEvent;
 import org.microcol.model.event.TurnStartedEvent;
@@ -71,7 +70,7 @@ public class Game {
 	public void start() {
 		// TODO JKA Předělat.
 		started = true;
-		listenersManager.fireRoundStarted(this);
+		listenersManager.fireRoundStarted(this, calendar);
 		currentPlayer = players.get(0);
 		ships.forEach(ship -> {
 			if (ship.getOwner().equals(currentPlayer)) {
@@ -94,7 +93,7 @@ public class Game {
 		} else {
 			calendar.endRound();
 			currentPlayer = players.get(0);
-			listenersManager.fireRoundStarted(this);
+			listenersManager.fireRoundStarted(this, calendar);
 		}
 		ships.forEach(ship -> {
 			if (ship.getOwner().equals(currentPlayer)) {
