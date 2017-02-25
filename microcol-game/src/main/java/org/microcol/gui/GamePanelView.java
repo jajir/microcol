@@ -34,7 +34,7 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 	private final static int GRID_LINE_WIDTH = 1;
 
 	public final static int TOTAL_TILE_WIDTH_IN_PX = TILE_WIDTH_IN_PX + GRID_LINE_WIDTH;
-	
+
 	private final MoveAutomatization moveAutomatization;
 
 	private final ImageProvider imageProvider;
@@ -62,7 +62,8 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 	@Inject
 	public GamePanelView(final StatusBarMessageController statusBarMessageController,
 			final GameController gameController, final NextTurnController nextTurnController,
-			final PathPlanning pathPlanning, final ImageProvider imageProvider, final MoveAutomatization moveAutomatization) {
+			final PathPlanning pathPlanning, final ImageProvider imageProvider,
+			final MoveAutomatization moveAutomatization) {
 		this.gameController = Preconditions.checkNotNull(gameController);
 		this.pathPlanning = Preconditions.checkNotNull(pathPlanning);
 		this.imageProvider = Preconditions.checkNotNull(imageProvider);
@@ -172,6 +173,14 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 		}
 	}
 
+	/**
+	 * Draw highlight of some tile.
+	 * 
+	 * @param graphics
+	 *            required {@link Graphics2D}
+	 * @param tile
+	 *            required tiles where to draw cursor
+	 */
 	private void paintCursor(final Graphics2D graphics, final Point tile) {
 		int x = tile.getX() * TOTAL_TILE_WIDTH_IN_PX - 1;
 		int y = tile.getY() * TOTAL_TILE_WIDTH_IN_PX - 1;
@@ -181,6 +190,12 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 		graphics.drawLine(x, y + TILE_WIDTH_IN_PX, x + TILE_WIDTH_IN_PX, y + TILE_WIDTH_IN_PX);
 	}
 
+	/**
+	 * When move mode is enabled mouse cursor is followed by highlighted path.
+	 * 
+	 * @param graphics
+	 *            required {@link Graphics2D}
+	 */
 	private void paintGoToPath(final Graphics2D graphics) {
 		if (gotoMode && gotoCursorTitle != null) {
 			graphics.setColor(Color.yellow);
@@ -189,15 +204,64 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 			if (!cursorTile.equals(gotoCursorTitle)) {
 				List<Point> steps = new ArrayList<>();
 				pathPlanning.paintPath(cursorTile, gotoCursorTitle, point -> steps.add(point));
+				final StepCounter stepCounter = new StepCounter(5,
+						((Ship) gameController.getWorld().getAt(cursorTile).getFirstMovableUnit()).getAvailableSteps());
 				steps.remove(0);
-				steps.forEach(point -> paintStepsToTile(graphics, point));
+				steps.forEach(point -> paintStepsToTile(graphics, point, stepCounter));
 			}
 		}
 	}
 
-	private void paintStepsToTile(final Graphics2D graphics, final Point tile) {
-		Point p = tile.multiply(TOTAL_TILE_WIDTH_IN_PX).add(4);
-		graphics.drawImage(imageProvider.getImage(ImageProvider.IMG_ICON_STEPS_25x25), p.getX(), p.getY(), this);
+	// TODO JJ move to separate class
+	private class StepCounter {
+
+		private final int maxStepsPerTurn;
+		private int availableStepsPerTurn;
+
+		public StepCounter(final int maxStepsPerTurn, final int availableStepsPerTurn) {
+			this.maxStepsPerTurn = maxStepsPerTurn;
+			this.availableStepsPerTurn = availableStepsPerTurn;
+		}
+
+		/**
+		 * Find it this move can be done is same turn.
+		 * 
+		 * @param howManyActionPointsItRequires
+		 *            number of action points required for movement on this tile
+		 * @return if new turn is required for reaching this step than it return
+		 *         <code>false</code> otherwise return <code>true</code>
+		 */
+		public boolean canBeMoveMakeInSameTurn(final int howManyActionPointsItRequires) {
+			availableStepsPerTurn -= howManyActionPointsItRequires;
+			if (availableStepsPerTurn <= 0) {
+				availableStepsPerTurn = maxStepsPerTurn;
+				return false;
+			} else {
+				return true;
+			}
+		}
+
+	}
+
+	/**
+	 * Draw image on tile. Image is part of highlighted path.
+	 * 
+	 * @param graphics
+	 *            required {@link Graphics2D}
+	 * @param tile
+	 *            required location of tile where to draw image
+	 */
+	private void paintStepsToTile(final Graphics2D graphics, final Point tile, final StepCounter stepCounter) {
+		final Point p = tile.multiply(TOTAL_TILE_WIDTH_IN_PX).add(4);
+		graphics.drawImage(getImageFoStep(stepCounter.canBeMoveMakeInSameTurn(1)), p.getX(), p.getY(), this);
+	}
+
+	private Image getImageFoStep(boolean normalStep) {
+		if (normalStep) {
+			return imageProvider.getImage(ImageProvider.IMG_ICON_STEPS_25x25);
+		} else {
+			return imageProvider.getImage(ImageProvider.IMG_ICON_STEPS_TURN_25x25);
+		}
 	}
 
 	@Override
