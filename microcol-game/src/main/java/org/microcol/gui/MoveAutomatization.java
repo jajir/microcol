@@ -47,7 +47,7 @@ public class MoveAutomatization {
 	}
 
 	public void perforMoves() {
-		//TODO JJ lze to napsat do jedne radky?
+		// TODO JJ lze to napsat do jedne radky?
 		plannedMoves.forEach(move -> performMove(move));
 		List<MovePlanner> toRemove = plannedMoves.stream().filter(move -> move.getPath().isEmpty())
 				.collect(Collectors.toList());
@@ -59,8 +59,10 @@ public class MoveAutomatization {
 	}
 
 	public void addMove(final MovePlanner move) {
-		plannedMoves.add(move);
 		performMove(move);
+		if (!move.getPath().isEmpty()) {
+			plannedMoves.add(move);
+		}
 	}
 
 	private void performMove(final MovePlanner move) {
@@ -82,6 +84,9 @@ public class MoveAutomatization {
 			} else {
 				stepsToMove.add(move.getPath().remove(0));
 			}
+		}
+		if (move.getPath().size() == 1) {
+			move.getPath().remove(0);
 		}
 		if (!stepsToMove.isEmpty()) {
 			moveUnitController.fireMoveUnitEvent(stepsToMove);
