@@ -1,5 +1,16 @@
 package org.microcol.gui;
 
+import org.microcol.gui.event.ChangeLanguageController;
+import org.microcol.gui.event.ChangeLanguageListenerPreferences;
+import org.microcol.gui.event.ChangeLanguageListenerText;
+import org.microcol.gui.event.FocusedTileController;
+import org.microcol.gui.event.GameEventController;
+import org.microcol.gui.event.GameEventListenerImpl;
+import org.microcol.gui.event.KeyController;
+import org.microcol.gui.event.MoveUnitController;
+import org.microcol.gui.event.NextTurnController;
+import org.microcol.gui.event.StatusBarMessageController;
+import org.microcol.gui.event.StatusBarMessageControllerImpl;
 import org.microcol.gui.model.GameController;
 import org.microcol.gui.model.World;
 

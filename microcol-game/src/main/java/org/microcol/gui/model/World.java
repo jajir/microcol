@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.microcol.gui.NextTurnController;
 import org.microcol.gui.Point;
 import org.microcol.gui.Text;
+import org.microcol.gui.event.NextTurnController;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;

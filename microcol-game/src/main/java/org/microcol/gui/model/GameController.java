@@ -4,8 +4,8 @@ import java.util.List;
 
 import org.microcol.gui.Localized;
 import org.microcol.gui.MoveAutomatization;
-import org.microcol.gui.NextTurnController;
 import org.microcol.gui.Point;
+import org.microcol.gui.event.NextTurnController;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;

@@ -1,4 +1,4 @@
-package org.microcol.gui;
+package org.microcol.gui.event;
 
 /**
  * Lister inform about status message change.

@@ -11,6 +11,8 @@ import java.awt.event.WindowEvent;
 import javax.swing.JFrame;
 
 import org.apache.log4j.Logger;
+import org.microcol.gui.event.GameEventController;
+import org.microcol.gui.event.KeyController;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;

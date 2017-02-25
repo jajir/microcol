@@ -1,4 +1,4 @@
-package org.microcol.gui;
+package org.microcol.gui.event;
 
 /**
  * Register status bar message listeners. Allows to fire event that status bar

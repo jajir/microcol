@@ -8,6 +8,10 @@ import java.awt.event.MouseEvent;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
+import org.microcol.gui.event.ChangeLanguageController;
+import org.microcol.gui.event.FocusedTileController;
+import org.microcol.gui.event.KeyController;
+import org.microcol.gui.event.StatusBarMessageController;
 import org.microcol.gui.model.GameController;
 import org.microcol.gui.model.Tile;
 

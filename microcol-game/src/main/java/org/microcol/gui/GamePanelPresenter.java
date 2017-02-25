@@ -13,6 +13,10 @@ import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 
 import org.apache.log4j.Logger;
+import org.microcol.gui.event.FocusedTileController;
+import org.microcol.gui.event.KeyController;
+import org.microcol.gui.event.MoveUnitController;
+import org.microcol.gui.event.StatusBarMessageController;
 import org.microcol.gui.model.GameController;
 import org.microcol.gui.model.Ship;
 import org.microcol.gui.model.Tile;

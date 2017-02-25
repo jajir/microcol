@@ -1,7 +1,9 @@
-package org.microcol.gui;
+package org.microcol.gui.event;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import org.microcol.gui.Point;
 
 import com.google.common.base.Preconditions;
 

@@ -1,4 +1,4 @@
-package org.microcol.gui;
+package org.microcol.gui.event;
 
 /**
  * Listener for change language event.

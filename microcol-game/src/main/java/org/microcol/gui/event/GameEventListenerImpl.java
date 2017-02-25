@@ -1,6 +1,9 @@
-package org.microcol.gui;
+package org.microcol.gui.event;
 
 import org.apache.log4j.Logger;
+import org.microcol.gui.AboutDialog;
+import org.microcol.gui.Text;
+import org.microcol.gui.ViewUtil;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;

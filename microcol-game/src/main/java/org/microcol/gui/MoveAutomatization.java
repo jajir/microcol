@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.microcol.gui.event.MoveUnitController;
 import org.microcol.gui.model.Ship;
 
 import com.google.common.base.Preconditions;

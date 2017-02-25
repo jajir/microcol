@@ -1,5 +1,7 @@
 package org.microcol.gui;
 
+import org.microcol.gui.event.GameEventController;
+
 import com.apple.mrj.MRJAboutHandler;
 import com.apple.mrj.MRJQuitHandler;
 import com.google.common.base.Preconditions;

@@ -1,9 +1,10 @@
-package org.microcol.gui;
+package org.microcol.gui.event;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.microcol.gui.Text;
 import org.microcol.gui.model.GameController;
 
 import com.google.common.base.Preconditions;

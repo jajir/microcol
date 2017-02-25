@@ -3,6 +3,9 @@ package org.microcol.gui;
 import javax.swing.JMenuItem;
 import javax.swing.JRadioButtonMenuItem;
 
+import org.microcol.gui.event.ChangeLanguageController;
+import org.microcol.gui.event.GameEventController;
+
 import com.google.inject.Inject;
 
 public class MainMenuPresenter {

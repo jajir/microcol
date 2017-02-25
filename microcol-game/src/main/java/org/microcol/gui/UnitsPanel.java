@@ -11,6 +11,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import org.microcol.gui.event.StatusBarMessageController;
 import org.microcol.gui.model.Ship;
 import org.microcol.gui.model.Unit;
 

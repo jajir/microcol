@@ -1,4 +1,4 @@
-package org.microcol.gui;
+package org.microcol.gui.event;
 
 import org.microcol.gui.model.World;
 

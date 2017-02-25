@@ -1,6 +1,8 @@
-package org.microcol.gui;
+package org.microcol.gui.event;
 
 import java.util.List;
+
+import org.microcol.gui.Point;
 
 /**
  * Listener is called when user of AI decide to play a move.

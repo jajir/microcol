@@ -14,6 +14,8 @@ import java.util.List;
 
 import javax.swing.JPanel;
 
+import org.microcol.gui.event.NextTurnController;
+import org.microcol.gui.event.StatusBarMessageController;
 import org.microcol.gui.model.GameController;
 import org.microcol.gui.model.Ship;
 import org.microcol.gui.model.Unit;
@@ -212,37 +214,6 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 		}
 	}
 
-	// TODO JJ move to separate class
-	private class StepCounter {
-
-		private final int maxStepsPerTurn;
-		private int availableStepsPerTurn;
-
-		public StepCounter(final int maxStepsPerTurn, final int availableStepsPerTurn) {
-			this.maxStepsPerTurn = maxStepsPerTurn;
-			this.availableStepsPerTurn = availableStepsPerTurn;
-		}
-
-		/**
-		 * Find it this move can be done is same turn.
-		 * 
-		 * @param howManyActionPointsItRequires
-		 *            number of action points required for movement on this tile
-		 * @return if new turn is required for reaching this step than it return
-		 *         <code>false</code> otherwise return <code>true</code>
-		 */
-		public boolean canBeMoveMakeInSameTurn(final int howManyActionPointsItRequires) {
-			availableStepsPerTurn -= howManyActionPointsItRequires;
-			if (availableStepsPerTurn <= 0) {
-				availableStepsPerTurn = maxStepsPerTurn;
-				return false;
-			} else {
-				return true;
-			}
-		}
-
-	}
-
 	/**
 	 * Draw image on tile. Image is part of highlighted path.
 	 * 
@@ -253,7 +224,7 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 	 */
 	private void paintStepsToTile(final Graphics2D graphics, final Point tile, final StepCounter stepCounter) {
 		final Point p = tile.multiply(TOTAL_TILE_WIDTH_IN_PX).add(4);
-		graphics.drawImage(getImageFoStep(stepCounter.canBeMoveMakeInSameTurn(1)), p.getX(), p.getY(), this);
+		graphics.drawImage(getImageFoStep(stepCounter.canMakeMoveInSameTurn(1)), p.getX(), p.getY(), this);
 	}
 
 	private Image getImageFoStep(boolean normalStep) {
