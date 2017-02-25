@@ -4,10 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GameBuilder {
-	private Map map;
-	private Calendar calendar;
 	private final List<Player> players;
 	private final List<Ship> ships;
+
+	private Map map;
+	private Calendar calendar;
 
 	public GameBuilder() {
 		players = new ArrayList<>();

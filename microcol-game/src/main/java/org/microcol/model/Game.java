@@ -3,6 +3,8 @@ package org.microcol.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.microcol.model.event.GameFinishedEvent;
+import org.microcol.model.event.GameStartedEvent;
 import org.microcol.model.event.RoundStartedEvent;
 import org.microcol.model.event.ShipMovedEvent;
 import org.microcol.model.event.TurnStartedEvent;
@@ -114,8 +116,13 @@ public class Game {
 			.build();
 		game.addListener(new GameListener() {
 			@Override
+			public void gameStarted(GameStartedEvent event) {
+				System.out.println("Game started: " + event);
+			}
+
+			@Override
 			public void roundStarted(RoundStartedEvent event) {
-				System.out.println("New round started: " + event + ", " + game.getCalendar());
+				System.out.println("New round started: " + event);
 			}
 
 			@Override
@@ -126,6 +133,11 @@ public class Game {
 			@Override
 			public void shipMoved(ShipMovedEvent event) {
 				System.out.println("Ship moved: " + event);
+			}
+
+			@Override
+			public void gameFinished(GameFinishedEvent event) {
+				System.out.println("Game finished: " + event);
 			}
 		});
 		game.start();

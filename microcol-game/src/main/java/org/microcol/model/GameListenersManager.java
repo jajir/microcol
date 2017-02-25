@@ -3,6 +3,8 @@ package org.microcol.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.microcol.model.event.GameFinishedEvent;
+import org.microcol.model.event.GameStartedEvent;
 import org.microcol.model.event.RoundStartedEvent;
 import org.microcol.model.event.ShipMovedEvent;
 import org.microcol.model.event.TurnStartedEvent;
@@ -14,14 +16,22 @@ class GameListenersManager {
 		this.listeners = new ArrayList<>();
 	}
 
-	public void addListener(GameListener listener) {
+	public void addListener(final GameListener listener) {
 		if (!listeners.contains(listener)) {
 			listeners.add(listener);
 		}
 	}
 
-	public void removeListener(GameListener listener) {
+	public void removeListener(final GameListener listener) {
 		listeners.remove(listener);
+	}
+
+	public void fireGameStarted(final Game game) {
+		final GameStartedEvent event = new GameStartedEvent(game);
+
+		listeners.forEach(listener -> {
+			listener.gameStarted(event);
+		});
 	}
 
 	public void fireRoundStarted(final Game game, final Calendar calendar) {
@@ -45,6 +55,14 @@ class GameListenersManager {
 
 		listeners.forEach(listener -> {
 			listener.shipMoved(event);
+		});
+	}
+
+	public void fireGameFinished(final Game game) {
+		final GameFinishedEvent event = new GameFinishedEvent(game);
+
+		listeners.forEach(listener -> {
+			listener.gameFinished(event);
 		});
 	}
 }

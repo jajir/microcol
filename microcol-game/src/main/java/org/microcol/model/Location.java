@@ -37,7 +37,7 @@ public class Location {
 	}
 
 	@Override
-	public boolean equals(Object object) {
+	public boolean equals(final Object object) {
 		if (object == null) {
 			return false;
 		}
@@ -46,7 +46,7 @@ public class Location {
 			return false;
 		}
 
-		Location location = (Location) object;
+		final Location location = (Location) object;
 
 		return x == location.x
 			&& y == location.y;

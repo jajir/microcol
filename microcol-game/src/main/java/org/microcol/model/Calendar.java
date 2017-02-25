@@ -1,5 +1,8 @@
 package org.microcol.model;
 
+import com.google.common.base.MoreObjects;
+import com.google.common.base.Preconditions;
+
 public class Calendar {
 	private final int startYear;
 	private final int endYear;
@@ -7,7 +10,8 @@ public class Calendar {
 	private int currentYear;
 
 	public Calendar(final int startYear, final int endYear) {
-		// TODO JKA Validace startYear < maxYear
+		Preconditions.checkArgument(startYear < endYear);
+
 		this.startYear = startYear;
 		this.endYear = endYear;
 
@@ -31,23 +35,20 @@ public class Calendar {
 	}
 
 	protected void endRound() {
-		// TODO JKA Implement test currentYear >= endYear.
+		if (isFinished()) {
+			throw new IllegalStateException(String.format(
+				"Current year (%s) cannot be greater than end year (%s).", currentYear, endYear));
+		}
+
 		currentYear++;
 	}
 
 	@Override
 	public String toString() {
-		// TODO JKA Predelat
-		StringBuilder builder = new StringBuilder();
-
-		builder.append("Calendar [startYear = ");
-		builder.append(startYear);
-		builder.append(", endYear = ");
-		builder.append(endYear);
-		builder.append(", currentYear = ");
-		builder.append(currentYear);
-		builder.append("]");
-
-		return builder.toString();
+		return MoreObjects.toStringHelper(this)
+			.add("startYear", startYear)
+			.add("endYear", endYear)
+			.add("currentYear", currentYear)
+			.toString();
 	}
 }
