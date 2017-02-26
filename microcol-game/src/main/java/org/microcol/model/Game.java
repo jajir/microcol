@@ -11,17 +11,16 @@ import org.microcol.model.event.TurnStartedEvent;
 
 public class Game {
 	// FIXME JKA Temporary hack.
-	protected static Game instance;
+	private static Game instance;
 
-	// TODO JKA Change protected.
-	protected final ModelListenersManager listenersManager;
+	private final ModelListenersManager listenersManager;
 	private final Map map;
 	private final Calendar calendar;
 	private final List<Player> players;
+
 	private Player currentPlayer;
 	private final List<Ship> ships;
 	private boolean started;
-	private boolean finished;
 
 	protected Game(final Map map, final Calendar calendar, final List<Player> players, final List<Ship> ships) {
 		// TODO JKA Add not null tests.
@@ -33,6 +32,10 @@ public class Game {
 		this.ships = new ArrayList<>(ships);
 
 		instance = this;
+	}
+
+	protected ModelListenersManager getListenersManager() {
+		return listenersManager;
 	}
 
 	public void addListener(ModelListener listener) {
@@ -94,6 +97,7 @@ public class Game {
 	public void start() {
 		// TODO JKA Předělat.
 		started = true;
+		listenersManager.fireGameStarted(this);
 		listenersManager.fireRoundStarted(this, calendar);
 		currentPlayer = players.get(0);
 		ships.forEach(ship -> {
@@ -105,7 +109,7 @@ public class Game {
 	}
 
 	public boolean isFinished() {
-		return calendar.isFinished() || finished;
+		return calendar.isFinished();
 	}
 
 	public void endTurn() {
@@ -116,6 +120,9 @@ public class Game {
 			currentPlayer = players.get(index + 1);
 		} else {
 			calendar.endRound();
+			if (calendar.isFinished()) {
+				listenersManager.fireGameFinished(this);
+			}
 			currentPlayer = players.get(0);
 			listenersManager.fireRoundStarted(this, calendar);
 		}
@@ -125,6 +132,10 @@ public class Game {
 			}
 		});
 		listenersManager.fireTurnStarted(this, currentPlayer);
+	}
+
+	protected static Game getInstance() {
+		return instance;
 	}
 
 	// TODO JKA Move to unit tests.
