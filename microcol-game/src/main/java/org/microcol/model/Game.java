@@ -65,6 +65,28 @@ public class Game {
 		return ships;
 	}
 
+	// TODO JKA Předělat na immutable.
+	public List<Ship> getShipsAt(final Location location) {
+		List<Ship> xxx = new ArrayList<>();
+		ships.forEach(ship -> {
+			if (ship.getLocation().equals(location)) {
+				xxx.add(ship);
+			}
+		});
+		return xxx;
+	}
+
+	// TODO JKA Předělat na immutable.
+	public List<Ship> getCurrentPlayerShipsAt(final Location location) {
+		List<Ship> xxx = new ArrayList<>();
+		getShipsAt(location).forEach(ship -> {
+			if (ship.getOwner().equals(getCurrentPlayer())) {
+				xxx.add(ship);
+			}
+		});
+		return xxx;
+	}
+
 	public boolean isStarted() {
 		return started;
 	}
