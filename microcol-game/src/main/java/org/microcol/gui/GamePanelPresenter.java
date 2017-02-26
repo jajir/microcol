@@ -100,7 +100,7 @@ public class GamePanelPresenter implements Localized {
 			public void keyPressed(final KeyEvent e) {
 				if ('c' == e.getKeyChar()) {
 				}
-				if ('g' == e.getKeyChar()) {
+				if ('m' == e.getKeyChar()) {
 					onKeyPressed_m();
 				}
 				/**
@@ -160,12 +160,11 @@ public class GamePanelPresenter implements Localized {
 
 	private void onKeyPressed_m() {
 		if (display.getCursorTile() != null) {
-			// final Tile tile =
-			// gameController.getWorld().getAt(display.getCursorTile());
-			// final Unit unit = tile.getFirstMovableUnit();
-			// TODO JJ change ship obtaining
-			final Ship unit = gameController.getWorld().getShips().get(0);
-			if (unit != null) {
+			final List<Ship> units = gameController.getWorld().getCurrentPlayerShipsAt(display.getCursorTile());
+			if (units.isEmpty()) {
+				logger.debug("At " + display.getCursorTile() + " there are no units to move.");
+			} else {
+				final Ship unit = units.get(0);
 				display.setGotoCursorTitle(convertToTilesCoordinates(lastMousePosition));
 				switchToGoMode(unit);
 				display.getGamePanelView().repaint();
@@ -222,20 +221,20 @@ public class GamePanelPresenter implements Localized {
 		 * Set status bar message
 		 */
 		Location where = convertToTilesCoordinates(Location.make(e.getX(), e.getY()));
-		//FIXME JJ je to blby, potrebuju najit til a vsechny lode
-//		final TileOcean tile = gameController.getWorld().getAt(where);
+		// FIXME JJ je to blby, potrebuju najit til a vsechny lode
+		// final TileOcean tile = gameController.getWorld().getAt(where);
 		final StringBuilder buff = new StringBuilder();
 		buff.append(getText().get("statusBar.tile.start"));
 		buff.append(" ");
-//		buff.append(tile.getName());
-//		if (!tile.getUnits().isEmpty()) {
-//			buff.append(" ");
-//			buff.append(getText().get("statusBar.tile.withUnit"));
-//			tile.getUnits().forEach(unit -> {
-//				buff.append("Ship");
-//			});
-//
-//		}
+		// buff.append(tile.getName());
+		// if (!tile.getUnits().isEmpty()) {
+		// buff.append(" ");
+		// buff.append(getText().get("statusBar.tile.withUnit"));
+		// tile.getUnits().forEach(unit -> {
+		// buff.append("Ship");
+		// });
+		//
+		// }
 		statusBarMessageController.fireStatusMessageWasChangedEvent(buff.toString());
 	}
 

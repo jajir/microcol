@@ -27,7 +27,7 @@ public class ImageProvider {
 
 	public final static String IMG_TILE_OCEAN = "tile-ocean.png";
 
-	public final static String IMG_TILE_SHIP1 = "tile-ship2.png";
+	public final static String IMG_TILE_SHIP1 = "tile-ship1.png";
 
 	public final static String IMG_TILE_SHIP2 = "tile-ship2.png";
 

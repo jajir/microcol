@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.microcol.gui.Localized;
 import org.microcol.gui.MoveAutomatization;
+import org.microcol.gui.event.MoveUnitController;
 import org.microcol.gui.event.NextTurnController;
 import org.microcol.model.Game;
 import org.microcol.model.GameBuilder;
@@ -32,31 +33,35 @@ public class GameController implements Localized {
 
 	private final MoveAutomatization moveAutomatization;
 
+	private final MoveUnitController moveUnitController;
+
 	private Game game;
 
 	@Inject
-	public GameController(final NextTurnController nextTurnController, final MoveAutomatization moveAutomatization) {
+	public GameController(final NextTurnController nextTurnController, final MoveAutomatization moveAutomatization,
+			final MoveUnitController moveUnitController) {
 		this.nextTurnController = Preconditions.checkNotNull(nextTurnController);
 		this.moveAutomatization = Preconditions.checkNotNull(moveAutomatization);
+		this.moveUnitController = Preconditions.checkNotNull(moveUnitController);
 	}
 
 	public void newGame() {
 		GameBuilder builder = new GameBuilder();
 		game = builder.setMap(50, 50).setCalendar(1570, 1800).addPlayer("Player1", true).addShip("Player1", 5, 5, 5)
-				.build();
-		// .addPlayer("Pocitac", false).addShip("Pocitac", 5, 10, 10)
+				.addPlayer("Pocitac", false).addShip("Pocitac", 5, 10, 10).build();
 		game.addListener(new ModelListener() {
 
 			@Override
 			public void turnStarted(final TurnStartedEvent event) {
 				// TODO Auto-generated method stub
-
+				logger.debug("Turn started for player '" + event.getPlayer().getName() + "'.");
 			}
 
 			@Override
 			public void shipMoved(final ShipMovedEvent event) {
-				// TODO JJ show move animation
 				logger.debug("Ship moved " + event);
+				// TODO JJ enable move animation by following code
+				// moveUnitController.fireMoveUnitEvent(event.getPath().getLocations());
 			}
 
 			@Override

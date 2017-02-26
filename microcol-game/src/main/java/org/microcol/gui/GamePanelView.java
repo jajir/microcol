@@ -139,11 +139,11 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 					Ship s = world.getShipsAt(loc).get(0);
 					// if (s.getType() == 0) {
 					// TODO rozlisit kresleni lodi podle hrace
-					graphics.drawImage(imageProvider.getImage(ImageProvider.IMG_TILE_SHIP1), x, y, this);
-					// } else {
-					// graphics.drawImage(imageProvider.getImage(ImageProvider.IMG_TILE_SHIP2),
-					// x, y, this);
-					// }
+					if (s.getOwner().isHuman()) {
+						graphics.drawImage(imageProvider.getImage(ImageProvider.IMG_TILE_SHIP1), x, y, this);
+					} else {
+						graphics.drawImage(imageProvider.getImage(ImageProvider.IMG_TILE_SHIP2), x, y, this);
+					}
 					if (moveAutomatization.isShipMoving(s)) {
 						graphics.drawImage(imageProvider.getImage(ImageProvider.IMG_TILE_MODE_GOTO),
 								x + TILE_WIDTH_IN_PX - 12, y, this);
