@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import org.microcol.gui.event.MoveUnitController;
 import org.microcol.model.Location;
+import org.microcol.model.Path;
 import org.microcol.model.Ship;
 
 import com.google.common.base.Preconditions;
@@ -50,7 +51,7 @@ public class MoveAutomatization {
 
 	public void perforMoves() {
 		// TODO JJ lze to napsat do jedne radky?
-		plannedMoves.forEach(move -> performMove(move));
+		plannedMoves.forEach(move -> performMove2(move));
 		List<MovePlanner> toRemove = plannedMoves.stream().filter(move -> move.getPath().isEmpty())
 				.collect(Collectors.toList());
 		plannedMoves.removeAll(toRemove);
@@ -68,6 +69,11 @@ public class MoveAutomatization {
 	}
 
 	private void performMove(final MovePlanner move) {
+//		move.getUnit().moveTo(move.path);
+	}
+
+	
+	private void performMove2(final MovePlanner move) {
 		List<Location> stepsToMove = new ArrayList<>();
 		/**
 		 * Add first step to final path.
