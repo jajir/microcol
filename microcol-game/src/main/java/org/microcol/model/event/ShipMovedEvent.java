@@ -8,7 +8,7 @@ import org.microcol.model.Ship;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 
-public class ShipMovedEvent extends GameEvent {
+public class ShipMovedEvent extends ModelEvent {
 	private final Ship ship;
 	private final Location startLocation;
 	private final Path path;

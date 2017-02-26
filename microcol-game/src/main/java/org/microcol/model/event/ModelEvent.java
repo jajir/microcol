@@ -4,10 +4,10 @@ import org.microcol.model.Game;
 
 import com.google.common.base.Preconditions;
 
-abstract class GameEvent {
+abstract class ModelEvent {
 	private final Game game;
 
-	public GameEvent(final Game game) {
+	public ModelEvent(final Game game) {
 		this.game = Preconditions.checkNotNull(game);
 	}
 

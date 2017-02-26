@@ -9,20 +9,20 @@ import org.microcol.model.event.RoundStartedEvent;
 import org.microcol.model.event.ShipMovedEvent;
 import org.microcol.model.event.TurnStartedEvent;
 
-class GameListenersManager {
-	private final List<GameListener> listeners;
+class ModelListenersManager {
+	private final List<ModelListener> listeners;
 
-	public GameListenersManager() {
+	public ModelListenersManager() {
 		this.listeners = new ArrayList<>();
 	}
 
-	public void addListener(final GameListener listener) {
+	public void addListener(final ModelListener listener) {
 		if (!listeners.contains(listener)) {
 			listeners.add(listener);
 		}
 	}
 
-	public void removeListener(final GameListener listener) {
+	public void removeListener(final ModelListener listener) {
 		listeners.remove(listener);
 	}
 

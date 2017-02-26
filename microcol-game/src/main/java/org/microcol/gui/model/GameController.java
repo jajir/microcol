@@ -7,7 +7,7 @@ import org.microcol.gui.MoveAutomatization;
 import org.microcol.gui.event.NextTurnController;
 import org.microcol.model.Game;
 import org.microcol.model.GameBuilder;
-import org.microcol.model.GameListener;
+import org.microcol.model.ModelListener;
 import org.microcol.model.Location;
 import org.microcol.model.Ship;
 import org.microcol.model.event.GameFinishedEvent;
@@ -40,7 +40,7 @@ public class GameController implements Localized {
 		GameBuilder builder = new GameBuilder();
 		game = builder.setMap(50, 50).setCalendar(1, 3).addPlayer("Player1", true).addShip("Player1", 5, 5, 5)
 				.addPlayer("Pocitac", false).addShip("Pocitac", 5, 10, 10).build();
-		game.addListener(new GameListener() {
+		game.addListener(new ModelListener() {
 			
 			@Override
 			public void turnStarted(TurnStartedEvent event) {

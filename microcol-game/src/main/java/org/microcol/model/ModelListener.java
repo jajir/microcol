@@ -6,7 +6,7 @@ import org.microcol.model.event.RoundStartedEvent;
 import org.microcol.model.event.ShipMovedEvent;
 import org.microcol.model.event.TurnStartedEvent;
 
-public interface GameListener {
+public interface ModelListener {
 	void gameStarted(GameStartedEvent event);
 
 	void roundStarted(RoundStartedEvent event);

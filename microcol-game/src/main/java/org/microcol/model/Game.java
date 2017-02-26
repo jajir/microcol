@@ -14,7 +14,7 @@ public class Game {
 	protected static Game instance;
 
 	// TODO JKA Change protected.
-	protected final GameListenersManager listenersManager;
+	protected final ModelListenersManager listenersManager;
 	private final Map map;
 	private final Calendar calendar;
 	private final List<Player> players;
@@ -25,7 +25,7 @@ public class Game {
 
 	protected Game(final Map map, final Calendar calendar, final List<Player> players, final List<Ship> ships) {
 		// TODO JKA Add not null tests.
-		this.listenersManager = new GameListenersManager();
+		this.listenersManager = new ModelListenersManager();
 		this.map = map;
 		this.calendar = calendar;
 		this.players = new ArrayList<>(players);
@@ -35,11 +35,11 @@ public class Game {
 		instance = this;
 	}
 
-	public void addListener(GameListener listener) {
+	public void addListener(ModelListener listener) {
 		listenersManager.addListener(listener);
 	}
 
-	public void removeListener(GameListener listener) {
+	public void removeListener(ModelListener listener) {
 		listenersManager.removeListener(listener);
 	}
 
@@ -136,7 +136,7 @@ public class Game {
 			.addPlayer("Player1", true)
 			.addShip("Player1", 5, 50, 20)
 			.build();
-		game.addListener(new GameListener() {
+		game.addListener(new ModelListener() {
 			@Override
 			public void gameStarted(GameStartedEvent event) {
 				System.out.println("Game started: " + event);

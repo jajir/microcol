@@ -4,7 +4,7 @@ import org.microcol.model.Game;
 
 import com.google.common.base.MoreObjects;
 
-public class GameStartedEvent extends GameEvent {
+public class GameStartedEvent extends ModelEvent {
 	public GameStartedEvent(final Game game) {
 		super(game);
 	}

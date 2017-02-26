@@ -6,7 +6,7 @@ import org.microcol.model.Player;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 
-public class TurnStartedEvent extends GameEvent {
+public class TurnStartedEvent extends ModelEvent {
 	private final Player player;
 
 	public TurnStartedEvent(final Game game, final Player player) {

@@ -6,7 +6,7 @@ import org.microcol.model.Game;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 
-public class RoundStartedEvent extends GameEvent {
+public class RoundStartedEvent extends ModelEvent {
 	private final Calendar calendar;
 
 	public RoundStartedEvent(final Game game, final Calendar calendar) {
