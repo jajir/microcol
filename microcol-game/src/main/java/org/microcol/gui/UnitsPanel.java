@@ -12,8 +12,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import org.microcol.gui.event.StatusBarMessageController;
-import org.microcol.gui.model.Ship;
-import org.microcol.gui.model.Unit;
+import org.microcol.model.Ship;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
@@ -47,18 +46,18 @@ public class UnitsPanel extends JPanel implements Localized {
 		removeAll();
 	}
 
-	public void setUnits(final List<Unit> units) {
+	public void setUnits(final List<Ship> units) {
 		add(new JLabel(getText().get("unitsPanel.units")), new GridBagConstraints(0, 0, 2, 1, 0D, 0D, GridBagConstraints.NORTHWEST,
 				GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
 		int i = 1;
-		for (final Unit u : units) {
+		for (final Ship u : units) {
 			Ship s = (Ship) u;
 			add(new JLabel(new ImageIcon(imageProvider.getImage(ImageProvider.IMG_TILE_SHIP1))),
 					new GridBagConstraints(0, i, 1, 2, 0D, 0D, GridBagConstraints.NORTH, GridBagConstraints.NONE,
 							new Insets(0, 0, 0, 0), 0, 0));
 			add(new JLabel("Galeon"), new GridBagConstraints(1, i, 1, 1, 0D, 0D, GridBagConstraints.NORTH,
 					GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
-			add(new JLabel("<html><div>" + getText().get("unitsPanel.availableMoved") + s.getAvailableSteps() + "</div></html>"),
+			add(new JLabel("<html><div>" + getText().get("unitsPanel.availableMoved") + s.getAvailableMoves() + "</div></html>"),
 					new GridBagConstraints(1, i + 1, 1, 1, 1D, 0D, GridBagConstraints.NORTH,
 							GridBagConstraints.VERTICAL, new Insets(0, 0, 0, 0), 0, 0));
 			i += 2;

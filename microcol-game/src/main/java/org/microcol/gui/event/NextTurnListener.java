@@ -1,8 +1,8 @@
 package org.microcol.gui.event;
 
-import org.microcol.gui.model.World;
+import org.microcol.model.Game;
 
 public interface NextTurnListener {
 
-	void onNextTurn(World world);
+	void onNextTurn(Game game);
 }

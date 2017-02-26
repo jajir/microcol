@@ -11,7 +11,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-import org.microcol.gui.model.Tile;
+import org.microcol.model.TileOcean;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
@@ -80,15 +80,17 @@ public class RightPanelView extends JPanel implements RightPanelPresenter.Displa
 	}
 
 	@Override
-	public void showTile(final Tile tile) {
+	public void showTile(final TileOcean tile) {
+		//TODO JJ nejak se dostat k popiskum
+		//FIXME na zaklade tile se dostat k jednokam na ni
 		System.out.println("showTile - " + tile);
 		tileImage.setImage(imageProvider.getImage(ImageProvider.IMG_TILE_OCEAN));
-		tileName.setText(tile.getName());
-		tileDescription.setText("<html><div>" + tile.getDescription() + "</div></html>");
+//		tileName.setText(tile.getName());
+//		tileDescription.setText("<html><div>" + tile.getDescription() + "</div></html>");
 		unitsPanel.clear();
-		if (!tile.getUnits().isEmpty()) {
-			unitsPanel.setUnits(tile.getUnits());
-		}
+//		if (!tile.getUnits().isEmpty()) {
+//			unitsPanel.setUnits(tile.getUnits());
+//		}
 		repaint();
 	}
 

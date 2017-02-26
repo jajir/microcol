@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.microcol.gui.event.MoveUnitController;
-import org.microcol.gui.model.Ship;
 import org.microcol.model.Location;
+import org.microcol.model.Ship;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
@@ -72,16 +72,17 @@ public class MoveAutomatization {
 		/**
 		 * Add first step to final path.
 		 */
-		if (move.getUnit().getAvailableSteps() > 0) {
+		if (move.getUnit().getAvailableMoves() > 0) {
 			stepsToMove.add(move.getPath().remove(0));
 		}
 
 		/**
 		 * Add resting steps.
 		 */
-		while (move.getUnit().getAvailableSteps() > 0 && !move.getPath().isEmpty()) {
-			move.getUnit().decreaseActionPoint(1);
-			if (move.getUnit().getAvailableSteps() == 0) {
+		while (move.getUnit().getAvailableMoves() > 0 && !move.getPath().isEmpty()) {
+			//FIXME handle action points
+//			move.getUnit().decreaseActionPoint(1);
+			if (move.getUnit().getAvailableMoves() == 0) {
 				stepsToMove.add(move.getPath().get(0));
 			} else {
 				stepsToMove.add(move.getPath().remove(0));

@@ -12,7 +12,6 @@ import org.microcol.gui.event.NextTurnController;
 import org.microcol.gui.event.StatusBarMessageController;
 import org.microcol.gui.event.StatusBarMessageControllerImpl;
 import org.microcol.gui.model.GameController;
-import org.microcol.gui.model.World;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
@@ -24,8 +23,6 @@ public class MicroColModule extends AbstractModule {
 	protected void configure() {
 
 		bind(StatusBarMessageController.class).to(StatusBarMessageControllerImpl.class).in(Singleton.class);
-
-		bind(World.class).in(Singleton.class);
 
 		bind(MoveAutomatization.class).in(Singleton.class);
 		bind(PathPlanning.class).in(Singleton.class);

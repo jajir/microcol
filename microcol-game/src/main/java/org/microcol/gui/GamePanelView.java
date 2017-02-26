@@ -17,10 +17,10 @@ import javax.swing.JPanel;
 import org.microcol.gui.event.NextTurnController;
 import org.microcol.gui.event.StatusBarMessageController;
 import org.microcol.gui.model.GameController;
-import org.microcol.gui.model.Ship;
-import org.microcol.gui.model.Unit;
-import org.microcol.gui.model.World;
+import org.microcol.model.Game;
 import org.microcol.model.Location;
+import org.microcol.model.Map;
+import org.microcol.model.Ship;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
@@ -104,7 +104,7 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 		if (dbImage != null) {
 			final Graphics2D dbg = (Graphics2D) dbImage.getGraphics();
 			paintIntoGraphics(dbg, gameController.getWorld());
-			paintNet(dbg);
+			paintNet(dbg, gameController.getWorld().getMap());
 			paintCursor(dbg);
 			paintGoToPath(dbg);
 			paintMovingAnimation(dbg);
@@ -128,26 +128,24 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 	 * 
 	 * @param g
 	 */
-	private void paintIntoGraphics(final Graphics2D graphics, final World world) {
-		for (int i = 0; i < World.WIDTH; i++) {
-			for (int j = 0; j < World.HEIGHT; j++) {
+	private void paintIntoGraphics(final Graphics2D graphics, final Game world) {
+		for (int i = 0; i < world.getMap().getMaxX(); i++) {
+			for (int j = 0; j < world.getMap().getMaxY(); j++) {
 				int x = i * TOTAL_TILE_WIDTH_IN_PX;
 				int y = j * TOTAL_TILE_WIDTH_IN_PX;
 				graphics.drawImage(imageProvider.getImage(ImageProvider.IMG_TILE_OCEAN), x, y, this);
-
-				if (!world.getMap()[i][j].getUnits().isEmpty()) {
-					Unit u = world.getMap()[i][j].getUnits().get(0);
-					if (u instanceof Ship) {
-						Ship s = (Ship) u;
-						if (s.getType() == 0) {
-							graphics.drawImage(imageProvider.getImage(ImageProvider.IMG_TILE_SHIP1), x, y, this);
-						} else {
-							graphics.drawImage(imageProvider.getImage(ImageProvider.IMG_TILE_SHIP2), x, y, this);
-						}
-						if (moveAutomatization.isShipMoving(s)) {
-							graphics.drawImage(imageProvider.getImage(ImageProvider.IMG_TILE_MODE_GOTO),
-									x + TILE_WIDTH_IN_PX - 12, y, this);
-						}
+				if (!world.getCurrentPlayerShipsAt(Location.make(x, y)).isEmpty()) {
+					Ship s = world.getCurrentPlayerShipsAt(Location.make(x, y)).get(0);
+					// if (s.getType() == 0) {
+					// TODO rozlisit kresleni lodi podle hrace
+					graphics.drawImage(imageProvider.getImage(ImageProvider.IMG_TILE_SHIP1), x, y, this);
+					// } else {
+					// graphics.drawImage(imageProvider.getImage(ImageProvider.IMG_TILE_SHIP2),
+					// x, y, this);
+					// }
+					if (moveAutomatization.isShipMoving(s)) {
+						graphics.drawImage(imageProvider.getImage(ImageProvider.IMG_TILE_MODE_GOTO),
+								x + TILE_WIDTH_IN_PX - 12, y, this);
 					}
 				}
 
@@ -155,16 +153,16 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 		}
 	}
 
-	private void paintNet(final Graphics2D graphics) {
+	private void paintNet(final Graphics2D graphics, final Map map) {
 		graphics.setColor(Color.LIGHT_GRAY);
 		graphics.setStroke(new BasicStroke(1));
-		for (int i = 1; i < World.WIDTH; i++) {
+		for (int i = 1; i < map.getMaxX(); i++) {
 			int x = i * TOTAL_TILE_WIDTH_IN_PX - 1;
-			graphics.drawLine(x, 0, x, World.HEIGHT * TILE_WIDTH_IN_PX + World.HEIGHT * (World.WIDTH - 1));
+			graphics.drawLine(x, 0, x, map.getMaxY() * TILE_WIDTH_IN_PX + map.getMaxY() * (map.getMaxX() - 1));
 		}
-		for (int j = 1; j < World.HEIGHT; j++) {
+		for (int j = 1; j < map.getMaxY(); j++) {
 			int y = j * TOTAL_TILE_WIDTH_IN_PX - 1;
-			graphics.drawLine(0, y, World.HEIGHT * TILE_WIDTH_IN_PX + World.WIDTH * (World.HEIGHT - 1), y);
+			graphics.drawLine(0, y, map.getMaxY() * TILE_WIDTH_IN_PX + map.getMaxX() * (map.getMaxY() - 1), y);
 		}
 	}
 
@@ -207,8 +205,9 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 			if (!cursorTile.equals(gotoCursorTitle)) {
 				List<Location> steps = new ArrayList<>();
 				pathPlanning.paintPath(cursorTile, gotoCursorTitle, point -> steps.add(point));
-				final StepCounter stepCounter = new StepCounter(5,
-						((Ship) gameController.getWorld().getAt(cursorTile).getFirstMovableUnit()).getAvailableSteps());
+				// TODO get(0) could return different ship that is really moved
+				final Ship unit = gameController.getWorld().getCurrentPlayerShipsAt(cursorTile).get(0);
+				final StepCounter stepCounter = new StepCounter(5, unit.getAvailableMoves());
 				steps.remove(0);
 				steps.forEach(point -> paintStepsToTile(graphics, point, stepCounter));
 			}
@@ -247,11 +246,15 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 	}
 
 	private int getGameMapWidth() {
-		return World.WIDTH * TOTAL_TILE_WIDTH_IN_PX - 1;
+		// return gameController.getWorld().getMap().getMaxX() *
+		// TOTAL_TILE_WIDTH_IN_PX - 1;
+		return 50 * TOTAL_TILE_WIDTH_IN_PX - 1;
 	}
 
 	private int getGameMapHeight() {
-		return World.HEIGHT * TOTAL_TILE_WIDTH_IN_PX - 1;
+		// return gameController.getWorld().getMap().getMaxY() *
+		// TOTAL_TILE_WIDTH_IN_PX - 1;
+		return 50 * TOTAL_TILE_WIDTH_IN_PX - 1;
 	}
 
 	@Override

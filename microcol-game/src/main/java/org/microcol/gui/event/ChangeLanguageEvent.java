@@ -1,21 +1,22 @@
 package org.microcol.gui.event;
 
 import org.microcol.gui.Text;
-import org.microcol.gui.model.World;
+import org.microcol.model.Game;
 
 public class ChangeLanguageEvent {
 
 	private final Text.Language language;
 	
-	private final World world;
+	private final Game game;
 
-	public ChangeLanguageEvent(final Text.Language language, final World world) {
+	public ChangeLanguageEvent(final Text.Language language, final Game game) {
 		this.language = language;
-		this.world = world;
+		this.game = game;
 	}
 
-	public World getWorld() {
-		return world;
+	//TODO JJ rename
+	public Game getWorld() {
+		return game;
 	}
 
 	public Text.Language getLanguage() {

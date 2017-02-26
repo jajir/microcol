@@ -16,14 +16,14 @@ import javax.swing.Timer;
 
 import org.apache.log4j.Logger;
 import org.microcol.gui.event.FocusedTileController;
+import org.microcol.gui.event.FocusedTileEvent;
 import org.microcol.gui.event.KeyController;
 import org.microcol.gui.event.MoveUnitController;
 import org.microcol.gui.event.StatusBarMessageController;
 import org.microcol.gui.model.GameController;
-import org.microcol.gui.model.Ship;
-import org.microcol.gui.model.Tile;
-import org.microcol.gui.model.Unit;
 import org.microcol.model.Location;
+import org.microcol.model.Ship;
+import org.microcol.model.TileOcean;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
@@ -160,8 +160,11 @@ public class GamePanelPresenter implements Localized {
 
 	private void onKeyPressed_m() {
 		if (display.getCursorTile() != null) {
-			final Tile tile = gameController.getWorld().getAt(display.getCursorTile());
-			final Unit unit = tile.getFirstMovableUnit();
+			// final Tile tile =
+			// gameController.getWorld().getAt(display.getCursorTile());
+			// final Unit unit = tile.getFirstMovableUnit();
+			// TODO JJ change ship obtaining
+			final Ship unit = gameController.getWorld().getShips().get(0);
 			if (unit != null) {
 				display.setGotoCursorTitle(convertToTilesCoordinates(lastMousePosition));
 				switchToGoMode(unit);
@@ -190,7 +193,7 @@ public class GamePanelPresenter implements Localized {
 			switchToNormalMode(p);
 		} else {
 			display.setCursorTile(p);
-			focusedTileController.fireFocusedTileEvent(gameController.getWorld().getAt(p));
+			focusedTileController.fireFocusedTileEvent(new FocusedTileEvent(p, new TileOcean()));
 		}
 		display.getGamePanelView().repaint();
 	}
@@ -219,19 +222,20 @@ public class GamePanelPresenter implements Localized {
 		 * Set status bar message
 		 */
 		Location where = convertToTilesCoordinates(Location.make(e.getX(), e.getY()));
-		final Tile tile = gameController.getWorld().getAt(where);
+		//FIXME JJ je to blby, potrebuju najit til a vsechny lode
+//		final TileOcean tile = gameController.getWorld().getAt(where);
 		final StringBuilder buff = new StringBuilder();
 		buff.append(getText().get("statusBar.tile.start"));
 		buff.append(" ");
-		buff.append(tile.getName());
-		if (!tile.getUnits().isEmpty()) {
-			buff.append(" ");
-			buff.append(getText().get("statusBar.tile.withUnit"));
-			tile.getUnits().forEach(unit -> {
-				buff.append("Ship");
-			});
-
-		}
+//		buff.append(tile.getName());
+//		if (!tile.getUnits().isEmpty()) {
+//			buff.append(" ");
+//			buff.append(getText().get("statusBar.tile.withUnit"));
+//			tile.getUnits().forEach(unit -> {
+//				buff.append("Ship");
+//			});
+//
+//		}
 		statusBarMessageController.fireStatusMessageWasChangedEvent(buff.toString());
 	}
 
@@ -240,7 +244,7 @@ public class GamePanelPresenter implements Localized {
 				panelCoordinates.getY() / GamePanelView.TOTAL_TILE_WIDTH_IN_PX);
 	}
 
-	private final void switchToGoMode(final Unit unit) {
+	private final void switchToGoMode(final Ship unit) {
 		logger.debug("Switching '" + unit + "' to go mode.");
 		display.setCursorGoto();
 		display.getGamePanelView().repaint();
@@ -249,7 +253,8 @@ public class GamePanelPresenter implements Localized {
 	private void cancelGoToMode(final Location moveTo) {
 		display.setCursorNormal();
 		display.setCursorTile(moveTo);
-		focusedTileController.fireFocusedTileEvent(gameController.getWorld().getAt(display.getCursorTile()));
+		// TODO read tile ocean from map
+		focusedTileController.fireFocusedTileEvent(new FocusedTileEvent(moveTo, new TileOcean()));
 	}
 
 	private final void switchToNormalMode(final Location moveTo) {
@@ -259,9 +264,9 @@ public class GamePanelPresenter implements Localized {
 		pathPlanning.paintPath(display.getCursorTile(), moveTo, point -> path.add(point));
 		// make first step
 		if (!path.isEmpty()) {
-			Ship ship = (Ship) gameController.getWorld().getAt(display.getCursorTile()).getFirstMovableUnit();
+			Ship ship = gameController.getWorld().getCurrentPlayerShipsAt(display.getCursorTile()).get(0);
 			gameController.performMove(ship, path);
-			focusedTileController.fireFocusedTileEvent(gameController.getWorld().getAt(display.getCursorTile()));
+			focusedTileController.fireFocusedTileEvent(new FocusedTileEvent(display.getCursorTile(), new TileOcean()));
 		}
 		display.setCursorTile(moveTo);
 		display.setCursorNormal();
@@ -271,18 +276,20 @@ public class GamePanelPresenter implements Localized {
 		Preconditions.checkArgument(path.size() > 1);
 		final Location from = path.get(0);
 		final Location to = path.get(path.size() - 1);
-		final Unit u = gameController.getWorld().getAt(from).getFirstMovableUnit();
-		gameController.getWorld().getAt(from).getUnits().remove(u);
+		final Ship u = gameController.getWorld().getCurrentPlayerShipsAt(from).get(0);
+		// TODO JJ jak se sakra hybu?
+		// gameController.getWorld().getAt(from).getUnits().remove(u);
 		final WalkAnimator walkAnimator = new WalkAnimator(pathPlanning, path, u);
 		new Timer(1, actionEvent -> {
 			final Location point = walkAnimator.getNextStepCoordinates();
 			if (point == null) {
 				display.getFloatingParts().remove(0);
 				((Timer) actionEvent.getSource()).stop();
-				gameController.getWorld().getAt(to).getUnits().add(u);
+				// TODO JJ jak se sakra hybu?
+				// gameController.getWorld().getAt(to).getUnits().add(u);
 				if (display.getCursorTile().equals(walkAnimator.getLastAnimateTo())) {
-					focusedTileController
-							.fireFocusedTileEvent(gameController.getWorld().getAt(walkAnimator.getLastAnimateTo()));
+					focusedTileController.fireFocusedTileEvent(
+							new FocusedTileEvent(walkAnimator.getLastAnimateTo(), new TileOcean()));
 				}
 			} else {
 				if (display.getFloatingParts().isEmpty()) {

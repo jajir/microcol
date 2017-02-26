@@ -8,7 +8,7 @@ import javax.swing.JLabel;
 import org.microcol.gui.event.ChangeLanguageController;
 import org.microcol.gui.event.NextTurnController;
 import org.microcol.gui.event.StatusBarMessageController;
-import org.microcol.gui.model.World;
+import org.microcol.model.Game;
 
 import com.google.inject.Inject;
 
@@ -43,13 +43,14 @@ public class StatusBarPresenter implements Localized {
 		display.getStatusBarDescription().addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
-				statusBarMessageController.fireStatusMessageWasChangedEvent(getText().get("statusBar.status.description"));
+				statusBarMessageController
+						.fireStatusMessageWasChangedEvent(getText().get("statusBar.status.description"));
 			}
 		});
 	}
 
-	private final void setYearText(JLabel labelEra, final World world) {
-		labelEra.setText(getText().get("statusBar.year") + " " + world.getCurrentYear() + " AD");
+	private final void setYearText(JLabel labelEra, final Game world) {
+		labelEra.setText(getText().get("statusBar.year") + " " + world.getCalendar().getCurrentYear() + " AD");
 	}
 
 }

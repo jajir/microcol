@@ -3,8 +3,8 @@ package org.microcol.gui;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.microcol.gui.model.Unit;
 import org.microcol.model.Location;
+import org.microcol.model.Ship;
 
 import com.google.common.base.Preconditions;
 
@@ -26,7 +26,7 @@ public class WalkAnimator {
 
 	private Location lastAnimateTo;
 
-	public WalkAnimator(final PathPlanning pathPlanning, final List<Location> path, final Unit unit) {
+	public WalkAnimator(final PathPlanning pathPlanning, final List<Location> path, final Ship unit) {
 		this.path = Preconditions.checkNotNull(path);
 		Preconditions.checkArgument(!path.isEmpty());
 		Preconditions.checkArgument(path.size() > 1);

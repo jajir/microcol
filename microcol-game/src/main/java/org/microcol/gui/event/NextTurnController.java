@@ -4,10 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.microcol.gui.model.World;
+import org.microcol.model.Game;
 
 import com.google.common.base.Preconditions;
 
+/**
+ * It's called when haman user should start play his move.
+ * 
+ */
 public class NextTurnController {
 
 	private final Logger logger = Logger.getLogger(NextTurnController.class);
@@ -19,11 +23,11 @@ public class NextTurnController {
 		listeners.add(listener);
 	}
 
-	public void fireNextTurnEvent(final World world) {
-		Preconditions.checkNotNull(world);
-		logger.trace("firing next turn event: " + world);
+	public void fireNextTurnEvent(final Game game) {
+		Preconditions.checkNotNull(game);
+		logger.trace("firing next turn event: " + game);
 		listeners.forEach(listener -> {
-			listener.onNextTurn(world);
+			listener.onNextTurn(game);
 		});
 	}
 

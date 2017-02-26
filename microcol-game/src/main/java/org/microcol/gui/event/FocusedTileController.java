@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.microcol.gui.model.Tile;
 
 import com.google.common.base.Preconditions;
 
@@ -19,7 +18,7 @@ public class FocusedTileController {
 		listeners.add(listener);
 	}
 
-	public void fireFocusedTileEvent(final Tile tile) {
+	public void fireFocusedTileEvent(final FocusedTileEvent tile) {
 		Preconditions.checkNotNull(tile);
 		logger.trace("firing next turn event: " + tile);
 		listeners.forEach(listener -> {
