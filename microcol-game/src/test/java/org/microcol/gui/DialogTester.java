@@ -13,6 +13,7 @@ public class DialogTester {
 
 		SwingUtilities.invokeLater(() -> {
 			WaitingDialog dialog = new WaitingDialog(new ViewUtil(), new Text(Language.cz));
+			dialog.setResizable(false);
 			dialog.setVisible(true);
 		});
 	}
