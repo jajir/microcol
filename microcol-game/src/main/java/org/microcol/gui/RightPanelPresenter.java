@@ -13,8 +13,8 @@ import org.microcol.gui.event.FocusedTileController;
 import org.microcol.gui.event.KeyController;
 import org.microcol.gui.event.StatusBarMessageController;
 import org.microcol.gui.model.GameController;
+import org.microcol.gui.model.TileOcean;
 import org.microcol.model.Location;
-import org.microcol.model.TileOcean;
 
 import com.google.inject.Inject;
 

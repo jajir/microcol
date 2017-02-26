@@ -64,7 +64,7 @@ public class Ship {
 			}
 		}
 		if (!moves.isEmpty()) {
-			Game.instance.listenersManager.fireShipMoved(Game.instance, this, startLocation, new Path(moves));
+			Game.getInstance().getListenersManager().fireShipMoved(Game.getInstance(), this, startLocation, new Path(moves));
 		}
 	}
 

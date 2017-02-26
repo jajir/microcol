@@ -26,6 +26,8 @@ public class Player {
 
 	// TODO JKA getShips()
 
+	// TODO JKA endTurn()
+
 	@Override
 	public String toString() {
 		return MoreObjects.toStringHelper(this)

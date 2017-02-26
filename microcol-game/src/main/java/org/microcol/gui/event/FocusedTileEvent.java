@@ -1,7 +1,7 @@
 package org.microcol.gui.event;
 
+import org.microcol.gui.model.TileOcean;
 import org.microcol.model.Location;
-import org.microcol.model.TileOcean;
 
 import com.google.common.base.Preconditions;
 
