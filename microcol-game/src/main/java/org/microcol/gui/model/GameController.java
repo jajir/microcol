@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.microcol.gui.Localized;
-import org.microcol.gui.MoveAutomatization;
 import org.microcol.gui.event.MoveUnitController;
 import org.microcol.gui.event.NextTurnController;
 import org.microcol.model.Game;
@@ -31,17 +30,13 @@ public class GameController implements Localized {
 
 	private final NextTurnController nextTurnController;
 
-	private final MoveAutomatization moveAutomatization;
-
 	private final MoveUnitController moveUnitController;
 
 	private Game game;
 
 	@Inject
-	public GameController(final NextTurnController nextTurnController, final MoveAutomatization moveAutomatization,
-			final MoveUnitController moveUnitController) {
+	public GameController(final NextTurnController nextTurnController, final MoveUnitController moveUnitController) {
 		this.nextTurnController = Preconditions.checkNotNull(nextTurnController);
-		this.moveAutomatization = Preconditions.checkNotNull(moveAutomatization);
 		this.moveUnitController = Preconditions.checkNotNull(moveUnitController);
 	}
 
@@ -61,7 +56,7 @@ public class GameController implements Localized {
 			public void shipMoved(final ShipMovedEvent event) {
 				logger.debug("Ship moved " + event);
 				// TODO JJ enable move animation by following code
-				// moveUnitController.fireMoveUnitEvent(event.getPath().getLocations());
+				moveUnitController.fireMoveUnitEvent(event);
 			}
 
 			@Override
@@ -85,7 +80,7 @@ public class GameController implements Localized {
 		game.start();
 	}
 
-	public Game getWorld() {
+	public Game getGame() {
 		return game;
 	}
 

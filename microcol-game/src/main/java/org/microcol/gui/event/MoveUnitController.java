@@ -3,7 +3,7 @@ package org.microcol.gui.event;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.microcol.model.Location;
+import org.microcol.model.event.ShipMovedEvent;
 
 import com.google.common.base.Preconditions;
 
@@ -16,10 +16,10 @@ public class MoveUnitController {
 		listeners.add(listener);
 	}
 
-	public void fireMoveUnitEvent(final List<Location> path) {
-		Preconditions.checkNotNull(path);
+	public void fireMoveUnitEvent(final ShipMovedEvent event) {
+		Preconditions.checkNotNull(event);
 		listeners.forEach(listener -> {
-			listener.onMoveUnit(path);
+			listener.onMoveUnit(event);
 		});
 	}
 }

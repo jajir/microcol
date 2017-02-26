@@ -24,6 +24,7 @@ import org.microcol.gui.model.GameController;
 import org.microcol.model.Location;
 import org.microcol.model.Ship;
 import org.microcol.model.TileOcean;
+import org.microcol.model.event.ShipMovedEvent;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
@@ -91,8 +92,8 @@ public class GamePanelPresenter implements Localized {
 		this.pathPlanning = Preconditions.checkNotNull(pathPlanning);
 		this.display = Preconditions.checkNotNull(display);
 
-		moveUnitController.addMoveUnitListener(path -> {
-			scheduleWalkAnimation(path);
+		moveUnitController.addMoveUnitListener(event -> {
+			scheduleWalkAnimation(event);
 		});
 
 		keyController.addKeyListener(new KeyAdapter() {
@@ -160,7 +161,7 @@ public class GamePanelPresenter implements Localized {
 
 	private void onKeyPressed_m() {
 		if (display.getCursorTile() != null) {
-			final List<Ship> units = gameController.getWorld().getCurrentPlayerShipsAt(display.getCursorTile());
+			final List<Ship> units = gameController.getGame().getCurrentPlayerShipsAt(display.getCursorTile());
 			if (units.isEmpty()) {
 				logger.debug("At " + display.getCursorTile() + " there are no units to move.");
 			} else {
@@ -221,20 +222,19 @@ public class GamePanelPresenter implements Localized {
 		 * Set status bar message
 		 */
 		Location where = convertToTilesCoordinates(Location.make(e.getX(), e.getY()));
-		// FIXME JJ je to blby, potrebuju najit til a vsechny lode
-		// final TileOcean tile = gameController.getWorld().getAt(where);
+		// FIXME JJ je to blby, potrebuju najit tile a vsechny lode
+		final TileOcean tile = new TileOcean();
 		final StringBuilder buff = new StringBuilder();
 		buff.append(getText().get("statusBar.tile.start"));
 		buff.append(" ");
-		// buff.append(tile.getName());
-		// if (!tile.getUnits().isEmpty()) {
-		// buff.append(" ");
-		// buff.append(getText().get("statusBar.tile.withUnit"));
-		// tile.getUnits().forEach(unit -> {
-		// buff.append("Ship");
-		// });
-		//
-		// }
+		buff.append(tile.getClass().getSimpleName());
+		buff.append(" ");
+		buff.append(getText().get("statusBar.tile.withUnit"));
+		buff.append(" ");
+		gameController.getGame().getShipsAt(where).forEach(ship -> {
+			buff.append(ship.getClass().getSimpleName());
+			buff.append(" ");
+		});
 		statusBarMessageController.fireStatusMessageWasChangedEvent(buff.toString());
 	}
 
@@ -263,7 +263,7 @@ public class GamePanelPresenter implements Localized {
 		pathPlanning.paintPath(display.getCursorTile(), moveTo, point -> path.add(point));
 		// make first step
 		if (!path.isEmpty()) {
-			Ship ship = gameController.getWorld().getCurrentPlayerShipsAt(display.getCursorTile()).get(0);
+			Ship ship = gameController.getGame().getCurrentPlayerShipsAt(display.getCursorTile()).get(0);
 			gameController.performMove(ship, path);
 			focusedTileController.fireFocusedTileEvent(new FocusedTileEvent(display.getCursorTile(), new TileOcean()));
 		}
@@ -271,21 +271,18 @@ public class GamePanelPresenter implements Localized {
 		display.setCursorNormal();
 	}
 
-	private void scheduleWalkAnimation(final List<Location> path) {
-		Preconditions.checkArgument(path.size() > 1);
-		final Location from = path.get(0);
-		final Location to = path.get(path.size() - 1);
-		final Ship u = gameController.getWorld().getCurrentPlayerShipsAt(from).get(0);
-		// TODO JJ jak se sakra hybu?
-		// gameController.getWorld().getAt(from).getUnits().remove(u);
+	private void scheduleWalkAnimation(final ShipMovedEvent event) {
+		Preconditions.checkArgument(event.getPath().getLocations().size() >= 1,
+				"Path for moving doesn't contains enought steps to move.");
+		final Ship u = event.getShip();
+		List<Location> path = new ArrayList<>(event.getPath().getLocations());
+		path.add(0, event.getStartLocation());
 		final WalkAnimator walkAnimator = new WalkAnimator(pathPlanning, path, u);
 		new Timer(1, actionEvent -> {
 			final Location point = walkAnimator.getNextStepCoordinates();
 			if (point == null) {
 				display.getFloatingParts().remove(0);
 				((Timer) actionEvent.getSource()).stop();
-				// TODO JJ jak se sakra hybu?
-				// gameController.getWorld().getAt(to).getUnits().add(u);
 				if (display.getCursorTile().equals(walkAnimator.getLastAnimateTo())) {
 					focusedTileController.fireFocusedTileEvent(
 							new FocusedTileEvent(walkAnimator.getLastAnimateTo(), new TileOcean()));

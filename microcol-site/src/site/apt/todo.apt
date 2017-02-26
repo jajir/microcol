@@ -36,9 +36,21 @@ Planned releases
    
   * map should be stored in file
   
+  * code formatting standard
+  
   * on land will be two simple colonist units one owned by user second owned by AI
   
    * both unit will be controlled by user and AI 
+
+ * 0.3.0 - first game entity should be implemented
+ 
+  * Land is added. 
+ 
+  * Simple map containing first land.
+ 
+  * Ships can fight each others.
+  
+  * Simple AI
 
  * 0.2.0 - first game entity should be implemented
  
@@ -49,8 +61,6 @@ Planned releases
   * one NPC ship controlled by AI
   
   * both ships will move each turn
-  
-  * code formatting standard
   
   * localization Czech/English
   

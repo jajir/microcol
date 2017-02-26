@@ -38,8 +38,6 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 
 	public final static int TOTAL_TILE_WIDTH_IN_PX = TILE_WIDTH_IN_PX + GRID_LINE_WIDTH;
 
-	private final MoveAutomatization moveAutomatization;
-
 	private final ImageProvider imageProvider;
 
 	private Image dbImage;
@@ -62,15 +60,15 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 	 */
 	private final List<Location> floatingParts = new ArrayList<>();
 
+	// TODO mode na animovani a hledani cesty dat mimo tuto tridu
+
 	@Inject
 	public GamePanelView(final StatusBarMessageController statusBarMessageController,
 			final GameController gameController, final NextTurnController nextTurnController,
-			final PathPlanning pathPlanning, final ImageProvider imageProvider,
-			final MoveAutomatization moveAutomatization) {
+			final PathPlanning pathPlanning, final ImageProvider imageProvider) {
 		this.gameController = Preconditions.checkNotNull(gameController);
 		this.pathPlanning = Preconditions.checkNotNull(pathPlanning);
 		this.imageProvider = Preconditions.checkNotNull(imageProvider);
-		this.moveAutomatization = Preconditions.checkNotNull(moveAutomatization);
 		Toolkit toolkit = Toolkit.getDefaultToolkit();
 		gotoModeCursor = toolkit.createCustomCursor(imageProvider.getImage(ImageProvider.IMG_CURSOR_GOTO),
 				new java.awt.Point(1, 1), "gotoModeCursor");
@@ -103,8 +101,8 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 		}
 		if (dbImage != null) {
 			final Graphics2D dbg = (Graphics2D) dbImage.getGraphics();
-			paintIntoGraphics(dbg, gameController.getWorld());
-			paintNet(dbg, gameController.getWorld().getMap());
+			paintIntoGraphics(dbg, gameController.getGame());
+			paintNet(dbg, gameController.getGame().getMap());
 			paintCursor(dbg);
 			paintGoToPath(dbg);
 			paintMovingAnimation(dbg);
@@ -137,17 +135,17 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 				graphics.drawImage(imageProvider.getImage(ImageProvider.IMG_TILE_OCEAN), x, y, this);
 				if (!world.getShipsAt(loc).isEmpty()) {
 					Ship s = world.getShipsAt(loc).get(0);
-					// if (s.getType() == 0) {
-					// TODO rozlisit kresleni lodi podle hrace
 					if (s.getOwner().isHuman()) {
 						graphics.drawImage(imageProvider.getImage(ImageProvider.IMG_TILE_SHIP1), x, y, this);
 					} else {
 						graphics.drawImage(imageProvider.getImage(ImageProvider.IMG_TILE_SHIP2), x, y, this);
 					}
-					if (moveAutomatization.isShipMoving(s)) {
-						graphics.drawImage(imageProvider.getImage(ImageProvider.IMG_TILE_MODE_GOTO),
-								x + TILE_WIDTH_IN_PX - 12, y, this);
-					}
+					// TODO JJ kdys se bude kreslit goto mode, nasledujici kod
+					// vykresli ikonu k lodi
+					// if (moveAutomatization.isShipMoving(s)) {
+					// graphics.drawImage(imageProvider.getImage(ImageProvider.IMG_TILE_MODE_GOTO),
+					// x + TILE_WIDTH_IN_PX - 12, y, this);
+					// }
 				}
 
 			}
@@ -207,7 +205,7 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 				List<Location> steps = new ArrayList<>();
 				pathPlanning.paintPath(cursorTile, gotoCursorTitle, point -> steps.add(point));
 				// TODO get(0) could return different ship that is really moved
-				final Ship unit = gameController.getWorld().getCurrentPlayerShipsAt(cursorTile).get(0);
+				final Ship unit = gameController.getGame().getCurrentPlayerShipsAt(cursorTile).get(0);
 				final StepCounter stepCounter = new StepCounter(5, unit.getAvailableMoves());
 				steps.remove(0);
 				steps.forEach(point -> paintStepsToTile(graphics, point, stepCounter));

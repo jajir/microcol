@@ -1,8 +1,6 @@
 package org.microcol.gui.event;
 
-import java.util.List;
-
-import org.microcol.model.Location;
+import org.microcol.model.event.ShipMovedEvent;
 
 /**
  * Listener is called when user of AI decide to play a move.
@@ -10,6 +8,6 @@ import org.microcol.model.Location;
  */
 public interface MoveUnitListener {
 
-	void onMoveUnit(List<Location> path);
+	void onMoveUnit(ShipMovedEvent event);
 
 }

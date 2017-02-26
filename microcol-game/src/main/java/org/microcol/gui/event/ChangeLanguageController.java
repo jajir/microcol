@@ -44,7 +44,7 @@ public class ChangeLanguageController {
 
 	public void fireLanguageWasChangedEvent(final Text.Language language) {
 		Preconditions.checkNotNull(language);
-		ChangeLanguageEvent event = new ChangeLanguageEvent(language, gameController.getWorld());
+		ChangeLanguageEvent event = new ChangeLanguageEvent(language, gameController.getGame());
 		logger.debug("firing event language was changed: " + language);
 		listeners.forEach(listener -> {
 			listener.onChangeLanguage(event);
