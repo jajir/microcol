@@ -47,11 +47,13 @@ public class GamePanelPresenter implements Localized {
 
 		boolean isGotoMode();
 
-		List<Location> getFloatingParts();
-
 		void setGotoCursorTitle(Location gotoCursorTitle);
 
 		Location getGotoCursorTitle();
+
+		void setWalkAnimator(WalkAnimator walkAnimator);
+
+		WalkAnimator getWalkAnimator();
 	}
 
 	private final GameController gameController;
@@ -262,6 +264,7 @@ public class GamePanelPresenter implements Localized {
 		pathPlanning.paintPath(display.getCursorTile(), moveTo, point -> path.add(point));
 		// make first step
 		if (!path.isEmpty()) {
+			//TODO JJ active ship can be different from ship first at list
 			Ship ship = gameController.getGame().getCurrentPlayerShipsAt(display.getCursorTile()).get(0);
 			gameController.performMove(ship, path);
 			focusedTileController.fireFocusedTileEvent(new FocusedTileEvent(display.getCursorTile(), new TileOcean()));
@@ -273,24 +276,18 @@ public class GamePanelPresenter implements Localized {
 	private void scheduleWalkAnimation(final ShipMovedEvent event) {
 		Preconditions.checkArgument(event.getPath().getLocations().size() >= 1,
 				"Path for moving doesn't contains enought steps to move.");
-		final Ship u = event.getShip();
 		List<Location> path = new ArrayList<>(event.getPath().getLocations());
 		path.add(0, event.getStartLocation());
-		final WalkAnimator walkAnimator = new WalkAnimator(pathPlanning, path, u);
+		final WalkAnimator walkAnimator = new WalkAnimator(pathPlanning, path, event.getShip());
+		display.setWalkAnimator(walkAnimator);
 		new Timer(1, actionEvent -> {
-			final Location point = walkAnimator.getNextStepCoordinates();
-			if (point == null) {
-				display.getFloatingParts().remove(0);
+			if (display.getWalkAnimator().isNextAnimationLocationAvailable()) {
+				display.getWalkAnimator().countNextAnimationLocation();
+			}else{
 				((Timer) actionEvent.getSource()).stop();
-				if (display.getCursorTile().equals(walkAnimator.getLastAnimateTo())) {
-					focusedTileController.fireFocusedTileEvent(
-							new FocusedTileEvent(walkAnimator.getLastAnimateTo(), new TileOcean()));
-				}
-			} else {
-				if (display.getFloatingParts().isEmpty()) {
-					display.getFloatingParts().add(point);
-				} else {
-					display.getFloatingParts().set(0, point);
+				if (display.getCursorTile().equals(display.getWalkAnimator().getTo())) {
+					focusedTileController
+							.fireFocusedTileEvent(new FocusedTileEvent(display.getWalkAnimator().getTo(), new TileOcean()));
 				}
 			}
 			display.getGamePanelView().repaint();

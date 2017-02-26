@@ -54,13 +54,7 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 
 	private boolean gotoMode = false;
 
-	/**
-	 * In list will be placed elements which are not in map, because there are
-	 * moving.
-	 */
-	private final List<Location> floatingParts = new ArrayList<>();
-
-	// TODO mode na animovani a hledani cesty dat mimo tuto tridu
+	private WalkAnimator walkAnimator;
 
 	@Inject
 	public GamePanelView(final StatusBarMessageController statusBarMessageController,
@@ -101,7 +95,7 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 		}
 		if (dbImage != null) {
 			final Graphics2D dbg = (Graphics2D) dbImage.getGraphics();
-			paintIntoGraphics(dbg, gameController.getGame());
+			paintTilesAndUnits(dbg, gameController.getGame());
 			paintNet(dbg, gameController.getGame().getMap());
 			paintCursor(dbg);
 			paintGoToPath(dbg);
@@ -114,11 +108,12 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 	}
 
 	private void paintMovingAnimation(final Graphics2D graphics) {
-		floatingParts.forEach(part -> {
+		if (walkAnimator != null && walkAnimator.getNextCoordinates() != null) {
+			Location part = walkAnimator.getNextCoordinates();
 			graphics.drawImage(imageProvider.getImage(ImageProvider.IMG_TILE_SHIP1), part.getX(), part.getY(), this);
 			graphics.drawImage(imageProvider.getImage(ImageProvider.IMG_TILE_MODE_GOTO),
 					part.getX() + TILE_WIDTH_IN_PX - 12, part.getY(), this);
-		});
+		}
 	}
 
 	/**
@@ -126,7 +121,7 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 	 * 
 	 * @param g
 	 */
-	private void paintIntoGraphics(final Graphics2D graphics, final Game world) {
+	private void paintTilesAndUnits(final Graphics2D graphics, final Game world) {
 		for (int i = 0; i < world.getMap().getMaxX(); i++) {
 			for (int j = 0; j < world.getMap().getMaxY(); j++) {
 				int x = i * TOTAL_TILE_WIDTH_IN_PX;
@@ -135,17 +130,22 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 				graphics.drawImage(imageProvider.getImage(ImageProvider.IMG_TILE_OCEAN), x, y, this);
 				if (!world.getShipsAt(loc).isEmpty()) {
 					Ship s = world.getShipsAt(loc).get(0);
-					if (s.getOwner().isHuman()) {
-						graphics.drawImage(imageProvider.getImage(ImageProvider.IMG_TILE_SHIP1), x, y, this);
-					} else {
-						graphics.drawImage(imageProvider.getImage(ImageProvider.IMG_TILE_SHIP2), x, y, this);
+					if (walkAnimator == null || (!walkAnimator.isNextAnimationLocationAvailable()
+							|| !walkAnimator.getTo().equals(loc))) {
+						// TODO JJ ship owner should show by color.
+						if (s.getOwner().isHuman()) {
+							graphics.drawImage(imageProvider.getImage(ImageProvider.IMG_TILE_SHIP1), x, y, this);
+						} else {
+							graphics.drawImage(imageProvider.getImage(ImageProvider.IMG_TILE_SHIP2), x, y, this);
+						}
+						// TODO JJ kdys se bude kreslit goto mode, nasledujici
+						// kod
+						// vykresli ikonu k lodi
+						// if (moveAutomatization.isShipMoving(s)) {
+						// graphics.drawImage(imageProvider.getImage(ImageProvider.IMG_TILE_MODE_GOTO),
+						// x + TILE_WIDTH_IN_PX - 12, y, this);
+						// }
 					}
-					// TODO JJ kdys se bude kreslit goto mode, nasledujici kod
-					// vykresli ikonu k lodi
-					// if (moveAutomatization.isShipMoving(s)) {
-					// graphics.drawImage(imageProvider.getImage(ImageProvider.IMG_TILE_MODE_GOTO),
-					// x + TILE_WIDTH_IN_PX - 12, y, this);
-					// }
 				}
 
 			}
@@ -245,12 +245,14 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 	}
 
 	private int getGameMapWidth() {
+		// TODO JJ read map max width
 		// return gameController.getWorld().getMap().getMaxX() *
 		// TOTAL_TILE_WIDTH_IN_PX - 1;
 		return 50 * TOTAL_TILE_WIDTH_IN_PX - 1;
 	}
 
 	private int getGameMapHeight() {
+		// TODO JJ read map max height
 		// return gameController.getWorld().getMap().getMaxY() *
 		// TOTAL_TILE_WIDTH_IN_PX - 1;
 		return 50 * TOTAL_TILE_WIDTH_IN_PX - 1;
@@ -284,18 +286,23 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 	}
 
 	@Override
-	public List<Location> getFloatingParts() {
-		return floatingParts;
-	}
-
-	@Override
 	public Location getGotoCursorTitle() {
 		return gotoCursorTitle;
 	}
 
 	@Override
-	public void setGotoCursorTitle(Location gotoCursorTitle) {
+	public void setGotoCursorTitle(final Location gotoCursorTitle) {
 		this.gotoCursorTitle = gotoCursorTitle;
+	}
+
+	@Override
+	public void setWalkAnimator(final WalkAnimator walkAnimator) {
+		this.walkAnimator = walkAnimator;
+	}
+
+	@Override
+	public WalkAnimator getWalkAnimator() {
+		return walkAnimator;
 	}
 
 }

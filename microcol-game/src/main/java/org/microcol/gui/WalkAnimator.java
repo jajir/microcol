@@ -16,56 +16,85 @@ import com.google.common.base.Preconditions;
  */
 public class WalkAnimator {
 
+	/**
+	 * Total path that have to animated, it's list of location on map.
+	 */
 	private final List<Location> path;
 
-	private List<Location> partialPath;
+	/**
+	 * Path computing.
+	 */
+	private final PathPlanning pathPlanning;
 
-	final PathPlanning pathPlanning;
+	/**
+	 * Final tile where animation finish.
+	 */
+	private final Location to;
 
-	private Location from;
+	/**
+	 * Contains locations for move between two tiles.
+	 */
+	private final List<Location> partialPath;
 
-	private Location lastAnimateTo;
+	/**
+	 * 
+	 */
+	private Location partialPathFrom;
+
+	private Location nextCoordinates;
 
 	public WalkAnimator(final PathPlanning pathPlanning, final List<Location> path, final Ship unit) {
-		this.path = Preconditions.checkNotNull(path);
-		Preconditions.checkArgument(!path.isEmpty());
-		Preconditions.checkArgument(path.size() > 1);
+		Preconditions.checkNotNull(path);
+		Preconditions.checkArgument(!path.isEmpty(), "Path can't be empty");
+		Preconditions.checkArgument(path.size() > 1, "Path should contains more than one locations");
 		this.pathPlanning = Preconditions.checkNotNull(pathPlanning);
 		Preconditions.checkNotNull(unit);
-		from = this.path.remove(0);
-		planNextPartialPath();
-	}
-
-	private void planNextPartialPath() {
-		if (path.isEmpty()) {
-			return;
-		}
-		lastAnimateTo = path.remove(0);
+		this.path = new ArrayList<>(path);
+		partialPathFrom = this.path.remove(0);
+		to = this.path.get(this.path.size() - 1);
 		partialPath = new ArrayList<>();
-		pathPlanning.paintPath(from.multiply(GamePanelView.TOTAL_TILE_WIDTH_IN_PX),
-				lastAnimateTo.multiply(GamePanelView.TOTAL_TILE_WIDTH_IN_PX), point -> {
-					partialPath.add(point);
-				});
-		from = lastAnimateTo;
+		countNextAnimationLocation();
 	}
 
-	public Location getNextStepCoordinates() {
+	public void countNextAnimationLocation() {
 		if (partialPath.isEmpty()) {
-			planNextPartialPath();
+			nextCoordinates = null;
+			if (!path.isEmpty()) {
+				pathPlanning.paintPath(partialPathFrom.multiply(GamePanelView.TOTAL_TILE_WIDTH_IN_PX),
+						path.get(0).multiply(GamePanelView.TOTAL_TILE_WIDTH_IN_PX), point -> {
+							partialPath.add(point);
+						});
+				partialPathFrom = path.remove(0);
+			}
 		}
 		if (partialPath.isEmpty()) {
-			return null;
+			nextCoordinates = null;
+		} else {
+			nextCoordinates = partialPath.remove(0);
 		}
-		return partialPath.remove(0);
 	}
 
 	/**
-	 * When animation ends provide information about final target point.
+	 * Provide information if animation should continue.
 	 * 
-	 * @return {@link Location}
+	 * @return return <code>true</code> when not all animation was drawn, it
+	 *         return <code>false</code> when all animation is done
 	 */
-	public Location getLastAnimateTo() {
-		return lastAnimateTo;
+	public boolean isNextAnimationLocationAvailable() {
+		return nextCoordinates != null;
+	}
+
+	/**
+	 * Return location tile where animated unit go.
+	 * 
+	 * @return {@link Location} return to tile location
+	 */
+	public Location getTo() {
+		return to;
+	}
+
+	public Location getNextCoordinates() {
+		return nextCoordinates;
 	}
 
 }

@@ -13,6 +13,9 @@ public class StepCounter {
 	public StepCounter(final int maxStepsPerTurn, final int availableStepsPerTurn) {
 		this.maxStepsPerTurn = maxStepsPerTurn;
 		this.availableStepsPerTurn = availableStepsPerTurn;
+		if (this.availableStepsPerTurn <= 0) {
+			this.availableStepsPerTurn = maxStepsPerTurn;
+		}
 	}
 
 	/**

@@ -20,6 +20,8 @@ public class AboutDialog extends JDialog {
 	 * 
 	 * @param viewUtil
 	 *            required tool for centering window on screen
+	 * @param text
+	 *            required localization helper class
 	 */
 	public AboutDialog(final ViewUtil viewUtil, final Text text) {
 		super();
