@@ -11,7 +11,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-import org.microcol.model.TileOcean;
+import org.microcol.gui.model.TileOcean;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;

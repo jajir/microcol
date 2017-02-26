@@ -30,7 +30,7 @@ public class Calendar {
 		return currentYear;
 	}
 
-	boolean isFinished() {
+	protected boolean isFinished() {
 		return currentYear >= endYear;
 	}
 
