@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.microcol.gui.model.Unit;
+import org.microcol.model.Location;
 
 import com.google.common.base.Preconditions;
 
@@ -15,17 +16,17 @@ import com.google.common.base.Preconditions;
  */
 public class WalkAnimator {
 
-	private final List<Point> path;
+	private final List<Location> path;
 
-	private List<Point> partialPath;
+	private List<Location> partialPath;
 
 	final PathPlanning pathPlanning;
 
-	private Point from;
+	private Location from;
 
-	private Point lastAnimateTo;
+	private Location lastAnimateTo;
 
-	public WalkAnimator(final PathPlanning pathPlanning, final List<Point> path, final Unit unit) {
+	public WalkAnimator(final PathPlanning pathPlanning, final List<Location> path, final Unit unit) {
 		this.path = Preconditions.checkNotNull(path);
 		Preconditions.checkArgument(!path.isEmpty());
 		Preconditions.checkArgument(path.size() > 1);
@@ -48,7 +49,7 @@ public class WalkAnimator {
 		from = lastAnimateTo;
 	}
 
-	public Point getNextStepCoordinates() {
+	public Location getNextStepCoordinates() {
 		if (partialPath.isEmpty()) {
 			planNextPartialPath();
 		}
@@ -61,9 +62,9 @@ public class WalkAnimator {
 	/**
 	 * When animation ends provide information about final target point.
 	 * 
-	 * @return {@link Point}
+	 * @return {@link Location}
 	 */
-	public Point getLastAnimateTo() {
+	public Location getLastAnimateTo() {
 		return lastAnimateTo;
 	}
 

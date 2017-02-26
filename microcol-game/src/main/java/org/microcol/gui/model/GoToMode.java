@@ -2,7 +2,7 @@ package org.microcol.gui.model;
 
 import java.util.List;
 
-import org.microcol.gui.Point;
+import org.microcol.model.Location;
 
 /**
  * Class contains planned path to walk in next turn.
@@ -10,17 +10,17 @@ import org.microcol.gui.Point;
  */
 public class GoToMode {
 
-	private List<Point> path;
+	private List<Location> path;
 
-	public GoToMode(List<Point> path) {
+	public GoToMode(List<Location> path) {
 		this.path = path;
 	}
 
-	public List<Point> getPath() {
+	public List<Location> getPath() {
 		return path;
 	}
 
-	public void setPath(List<Point> path) {
+	public void setPath(List<Location> path) {
 		this.path = path;
 	}
 

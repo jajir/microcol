@@ -3,7 +3,7 @@ package org.microcol.gui.event;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.microcol.gui.Point;
+import org.microcol.model.Location;
 
 import com.google.common.base.Preconditions;
 
@@ -16,7 +16,7 @@ public class MoveUnitController {
 		listeners.add(listener);
 	}
 
-	public void fireMoveUnitEvent(final List<Point> path) {
+	public void fireMoveUnitEvent(final List<Location> path) {
 		Preconditions.checkNotNull(path);
 		listeners.forEach(listener -> {
 			listener.onMoveUnit(path);

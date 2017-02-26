@@ -23,6 +23,7 @@ import org.microcol.gui.model.GameController;
 import org.microcol.gui.model.Ship;
 import org.microcol.gui.model.Tile;
 import org.microcol.gui.model.Unit;
+import org.microcol.model.Location;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
@@ -35,9 +36,9 @@ public class GamePanelPresenter implements Localized {
 
 		GamePanelView getGamePanelView();
 
-		Point getCursorTile();
+		Location getCursorTile();
 
-		void setCursorTile(Point cursorTile);
+		void setCursorTile(Location cursorTile);
 
 		void setCursorNormal();
 
@@ -45,11 +46,11 @@ public class GamePanelPresenter implements Localized {
 
 		boolean isGotoMode();
 
-		List<Point> getFloatingParts();
+		List<Location> getFloatingParts();
 
-		void setGotoCursorTitle(Point gotoCursorTitle);
+		void setGotoCursorTitle(Location gotoCursorTitle);
 
-		Point getGotoCursorTitle();
+		Location getGotoCursorTitle();
 	}
 
 	private final GameController gameController;
@@ -62,7 +63,7 @@ public class GamePanelPresenter implements Localized {
 
 	private final StatusBarMessageController statusBarMessageController;
 
-	private Point lastMousePosition;
+	private Location lastMousePosition;
 
 	class PopUpDemo extends JPopupMenu {
 
@@ -184,7 +185,7 @@ public class GamePanelPresenter implements Localized {
 	}
 
 	private void onMousePressed(final MouseEvent e) {
-		final Point p = convertToTilesCoordinates(Point.make(e.getX(), e.getY()));
+		final Location p = convertToTilesCoordinates(Location.make(e.getX(), e.getY()));
 		if (display.isGotoMode()) {
 			switchToNormalMode(p);
 		} else {
@@ -199,7 +200,7 @@ public class GamePanelPresenter implements Localized {
 			JViewport viewPort = (JViewport) SwingUtilities.getAncestorOfClass(JViewport.class,
 					display.getGamePanelView());
 			if (viewPort != null) {
-				Point delta = lastMousePosition.substract(Point.make(e.getX(), e.getY()));
+				Location delta = lastMousePosition.substract(Location.make(e.getX(), e.getY()));
 				Rectangle view = viewPort.getViewRect();
 				view.x += delta.getX();
 				view.y += delta.getY();
@@ -209,15 +210,15 @@ public class GamePanelPresenter implements Localized {
 	}
 
 	private void onMouseMoved(final MouseEvent e) {
-		lastMousePosition = Point.make(e.getX(), e.getY());
+		lastMousePosition = Location.make(e.getX(), e.getY());
 		if (display.isGotoMode()) {
-			display.setGotoCursorTitle(convertToTilesCoordinates(Point.make(e.getX(), e.getY())));
+			display.setGotoCursorTitle(convertToTilesCoordinates(Location.make(e.getX(), e.getY())));
 			display.getGamePanelView().repaint();
 		}
 		/**
 		 * Set status bar message
 		 */
-		Point where = convertToTilesCoordinates(Point.make(e.getX(), e.getY()));
+		Location where = convertToTilesCoordinates(Location.make(e.getX(), e.getY()));
 		final Tile tile = gameController.getWorld().getAt(where);
 		final StringBuilder buff = new StringBuilder();
 		buff.append(getText().get("statusBar.tile.start"));
@@ -234,8 +235,8 @@ public class GamePanelPresenter implements Localized {
 		statusBarMessageController.fireStatusMessageWasChangedEvent(buff.toString());
 	}
 
-	private Point convertToTilesCoordinates(final Point panelCoordinates) {
-		return Point.make(panelCoordinates.getX() / GamePanelView.TOTAL_TILE_WIDTH_IN_PX,
+	private Location convertToTilesCoordinates(final Location panelCoordinates) {
+		return Location.make(panelCoordinates.getX() / GamePanelView.TOTAL_TILE_WIDTH_IN_PX,
 				panelCoordinates.getY() / GamePanelView.TOTAL_TILE_WIDTH_IN_PX);
 	}
 
@@ -245,16 +246,16 @@ public class GamePanelPresenter implements Localized {
 		display.getGamePanelView().repaint();
 	}
 
-	private void cancelGoToMode(final Point moveTo) {
+	private void cancelGoToMode(final Location moveTo) {
 		display.setCursorNormal();
 		display.setCursorTile(moveTo);
 		focusedTileController.fireFocusedTileEvent(gameController.getWorld().getAt(display.getCursorTile()));
 	}
 
-	private final void switchToNormalMode(final Point moveTo) {
+	private final void switchToNormalMode(final Location moveTo) {
 		logger.debug("Switching to normalmode.");
 
-		final List<Point> path = new ArrayList<Point>();
+		final List<Location> path = new ArrayList<Location>();
 		pathPlanning.paintPath(display.getCursorTile(), moveTo, point -> path.add(point));
 		// make first step
 		if (!path.isEmpty()) {
@@ -266,15 +267,15 @@ public class GamePanelPresenter implements Localized {
 		display.setCursorNormal();
 	}
 
-	private void scheduleWalkAnimation(final List<Point> path) {
+	private void scheduleWalkAnimation(final List<Location> path) {
 		Preconditions.checkArgument(path.size() > 1);
-		final Point from = path.get(0);
-		final Point to = path.get(path.size() - 1);
+		final Location from = path.get(0);
+		final Location to = path.get(path.size() - 1);
 		final Unit u = gameController.getWorld().getAt(from).getFirstMovableUnit();
 		gameController.getWorld().getAt(from).getUnits().remove(u);
 		final WalkAnimator walkAnimator = new WalkAnimator(pathPlanning, path, u);
 		new Timer(1, actionEvent -> {
-			final Point point = walkAnimator.getNextStepCoordinates();
+			final Location point = walkAnimator.getNextStepCoordinates();
 			if (point == null) {
 				display.getFloatingParts().remove(0);
 				((Timer) actionEvent.getSource()).stop();

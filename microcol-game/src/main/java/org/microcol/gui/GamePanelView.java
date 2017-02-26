@@ -20,6 +20,7 @@ import org.microcol.gui.model.GameController;
 import org.microcol.gui.model.Ship;
 import org.microcol.gui.model.Unit;
 import org.microcol.gui.model.World;
+import org.microcol.model.Location;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
@@ -49,9 +50,9 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 
 	private final PathPlanning pathPlanning;
 
-	private Point gotoCursorTitle;
+	private Location gotoCursorTitle;
 
-	private Point cursorTile;
+	private Location cursorTile;
 
 	private boolean gotoMode = false;
 
@@ -59,7 +60,7 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 	 * In list will be placed elements which are not in map, because there are
 	 * moving.
 	 */
-	private final List<Point> floatingParts = new ArrayList<>();
+	private final List<Location> floatingParts = new ArrayList<>();
 
 	@Inject
 	public GamePanelView(final StatusBarMessageController statusBarMessageController,
@@ -183,7 +184,7 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 	 * @param tile
 	 *            required tiles where to draw cursor
 	 */
-	private void paintCursor(final Graphics2D graphics, final Point tile) {
+	private void paintCursor(final Graphics2D graphics, final Location tile) {
 		int x = tile.getX() * TOTAL_TILE_WIDTH_IN_PX - 1;
 		int y = tile.getY() * TOTAL_TILE_WIDTH_IN_PX - 1;
 		graphics.drawLine(x, y, x + TILE_WIDTH_IN_PX, y);
@@ -204,7 +205,7 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 			graphics.setStroke(new BasicStroke(1));
 			paintCursor(graphics, gotoCursorTitle);
 			if (!cursorTile.equals(gotoCursorTitle)) {
-				List<Point> steps = new ArrayList<>();
+				List<Location> steps = new ArrayList<>();
 				pathPlanning.paintPath(cursorTile, gotoCursorTitle, point -> steps.add(point));
 				final StepCounter stepCounter = new StepCounter(5,
 						((Ship) gameController.getWorld().getAt(cursorTile).getFirstMovableUnit()).getAvailableSteps());
@@ -222,8 +223,8 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 	 * @param tile
 	 *            required location of tile where to draw image
 	 */
-	private void paintStepsToTile(final Graphics2D graphics, final Point tile, final StepCounter stepCounter) {
-		final Point p = tile.multiply(TOTAL_TILE_WIDTH_IN_PX).add(4);
+	private void paintStepsToTile(final Graphics2D graphics, final Location tile, final StepCounter stepCounter) {
+		final Location p = tile.multiply(TOTAL_TILE_WIDTH_IN_PX).add(4);
 		graphics.drawImage(getImageFoStep(stepCounter.canMakeMoveInSameTurn(1)), p.getX(), p.getY(), this);
 	}
 
@@ -254,12 +255,12 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 	}
 
 	@Override
-	public Point getCursorTile() {
+	public Location getCursorTile() {
 		return cursorTile;
 	}
 
 	@Override
-	public void setCursorTile(Point cursorTile) {
+	public void setCursorTile(Location cursorTile) {
 		this.cursorTile = cursorTile;
 	}
 
@@ -281,17 +282,17 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 	}
 
 	@Override
-	public List<Point> getFloatingParts() {
+	public List<Location> getFloatingParts() {
 		return floatingParts;
 	}
 
 	@Override
-	public Point getGotoCursorTitle() {
+	public Location getGotoCursorTitle() {
 		return gotoCursorTitle;
 	}
 
 	@Override
-	public void setGotoCursorTitle(Point gotoCursorTitle) {
+	public void setGotoCursorTitle(Location gotoCursorTitle) {
 		this.gotoCursorTitle = gotoCursorTitle;
 	}
 

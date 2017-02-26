@@ -1,5 +1,7 @@
 package org.microcol.gui;
 
+import org.microcol.model.Location;
+
 /**
  * Class contains methods for computing path for units.
  * 
@@ -15,7 +17,7 @@ public class PathPlanning {
 	 *
 	 */
 	public interface WhatToDoWithPointInPath {
-		void pathPoint(Point point);
+		void pathPoint(Location point);
 	}
 
 	/**
@@ -30,7 +32,7 @@ public class PathPlanning {
 	 *            required function that's executed with each found point to
 	 *            visit
 	 */
-	public void paintPath(final Point tileFrom, final Point tileTo,
+	public void paintPath(final Location tileFrom, final Location tileTo,
 			final WhatToDoWithPointInPath whatToDoWithPointInPath) {
 		final int diff = Math.abs(tileTo.getY() - tileFrom.getY()) - Math.abs(tileTo.getX() - tileFrom.getX());
 		if (diff < 0) {
@@ -39,12 +41,12 @@ public class PathPlanning {
 			if (tileFrom.getX() < tileTo.getX()) {
 				for (int x = tileFrom.getX(); x <= tileTo.getX(); x++) {
 					int y = Math.round(a * x + b);
-					whatToDoWithPointInPath.pathPoint(Point.make(x, y));
+					whatToDoWithPointInPath.pathPoint(Location.make(x, y));
 				}
 			} else {
 				for (int x = tileFrom.getX(); x >= tileTo.getX(); x--) {
 					int y = Math.round(a * x + b);
-					whatToDoWithPointInPath.pathPoint(Point.make(x, y));
+					whatToDoWithPointInPath.pathPoint(Location.make(x, y));
 				}
 			}
 		} else if (!tileFrom.equals(tileTo)) {
@@ -53,12 +55,12 @@ public class PathPlanning {
 			if (tileFrom.getY() < tileTo.getY()) {
 				for (int y = tileFrom.getY(); y <= tileTo.getY(); y++) {
 					int x = Math.round(a * y + b);
-					whatToDoWithPointInPath.pathPoint(Point.make(x, y));
+					whatToDoWithPointInPath.pathPoint(Location.make(x, y));
 				}
 			} else {
 				for (int y = tileFrom.getY(); y >= tileTo.getY(); y--) {
 					int x = Math.round(a * y + b);
-					whatToDoWithPointInPath.pathPoint(Point.make(x, y));
+					whatToDoWithPointInPath.pathPoint(Location.make(x, y));
 				}
 			}
 		}

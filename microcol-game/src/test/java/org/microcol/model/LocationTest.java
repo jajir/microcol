@@ -1,5 +1,7 @@
 package org.microcol.model;
 
+import static org.junit.Assert.*;
+
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -91,4 +93,57 @@ public class LocationTest {
 		Assert.assertFalse(message + "[2, 3] - 10", new Location(2, 3).equals(10));
 		Assert.assertFalse(message + "[2, 3] - [3, 2]", new Location(2, 3).equals(new Location(3, 2)));
 	}
+	
+	@Test
+	public void testFactoryMethod() throws Exception {
+		final String message = "Test of creation failed: ";
+		
+		Location location = Location.make(2, 9);
+		assertEquals(message + "[2, 9]", 2, location.getX());
+		assertEquals(message + "[2, 9]", 9, location.getY());
+		
+	}
+	
+	@Test
+	public void testSubstract() throws Exception {
+		final String message = "Test of substraction failed: ";
+		
+		Location location = Location.make(2, 9).substract(Location.make(1, 3));
+		assertEquals(message + "[1, 6]", 1, location.getX());
+		assertEquals(message + "[1, 6]", 6, location.getY());
+		
+		location = Location.make(-2, -9).substract(Location.make(-1, -3));
+		assertEquals(message + "[1, 6]", -1, location.getX());
+		assertEquals(message + "[1, 6]", -6, location.getY());
+		
+	}
+	
+	@Test
+	public void testAdd() throws Exception {
+		final String message = "Test of add failed: ";
+		
+		Location location = Location.make(2, 9).add(4);
+		assertEquals(message + "[6, 13]",6, location.getX());
+		assertEquals(message + "[6, 13]", 13, location.getY());
+		
+		location = Location.make(-2, -9).add( -3);
+		assertEquals(message + "[-5, -12]", -5, location.getX());
+		assertEquals(message + "[-5, -12]", -12, location.getY());
+		
+	}
+	
+	@Test
+	public void testMultiply() throws Exception {
+		final String message = "Test of multiply failed: ";
+		
+		Location location = Location.make(2, 9).multiply(3);
+		assertEquals(message + "[6, 27]", 6, location.getX());
+		assertEquals(message + "[6, 27]", 27, location.getY());
+		
+		location = Location.make(2, -9).multiply(-3);
+		assertEquals(message + "[-6, 27]", -6, location.getX());
+		assertEquals(message + "[-6, 27]", 27, location.getY());
+		
+	}
+	
 }

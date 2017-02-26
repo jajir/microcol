@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import org.microcol.gui.event.MoveUnitController;
 import org.microcol.gui.model.Ship;
+import org.microcol.model.Location;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
@@ -30,9 +31,9 @@ public class MoveAutomatization {
 
 		private final Ship unit;
 
-		private final List<Point> path;
+		private final List<Location> path;
 
-		public MovePlanner(final Ship unit, final List<Point> path) {
+		public MovePlanner(final Ship unit, final List<Location> path) {
 			this.unit = Preconditions.checkNotNull(unit);
 			this.path = Preconditions.checkNotNull(path);
 		}
@@ -41,7 +42,7 @@ public class MoveAutomatization {
 			return unit;
 		}
 
-		public List<Point> getPath() {
+		public List<Location> getPath() {
 			return path;
 		}
 
@@ -67,7 +68,7 @@ public class MoveAutomatization {
 	}
 
 	private void performMove(final MovePlanner move) {
-		List<Point> stepsToMove = new ArrayList<>();
+		List<Location> stepsToMove = new ArrayList<>();
 		/**
 		 * Add first step to final path.
 		 */

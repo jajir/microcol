@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.microcol.gui.Point;
 import org.microcol.gui.Text;
 import org.microcol.gui.event.NextTurnController;
+import org.microcol.model.Location;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
@@ -23,7 +23,7 @@ public class World {
 
 	private final NextTurnController nextTurnController;
 
-	private final List<List<Point>> pathsToFinish;
+	private final List<List<Location>> pathsToFinish;
 
 	@Inject
 	public World(final NextTurnController nextTurnController, final Text text) {
@@ -59,7 +59,7 @@ public class World {
 		 */
 	}
 
-	public void addUnresolvedPaths(final List<Point> path) {
+	public void addUnresolvedPaths(final List<Location> path) {
 		pathsToFinish.add(path);
 	}
 
@@ -70,10 +70,10 @@ public class World {
 		});
 	}
 
-	private void moveAlongPath(final List<Point> path) {
-		Point from = null;
-		List<Point> stepsToRemove = new ArrayList<>();
-		for (final Point to : path) {
+	private void moveAlongPath(final List<Location> path) {
+		Location from = null;
+		List<Location> stepsToRemove = new ArrayList<>();
+		for (final Location to : path) {
 			if (from == null) {
 			} else {
 				// make move from-->to
@@ -103,7 +103,7 @@ public class World {
 		return map;
 	}
 
-	public Tile getAt(final Point point) {
+	public Tile getAt(final Location point) {
 		return map[point.getX()][point.getY()];
 	}
 

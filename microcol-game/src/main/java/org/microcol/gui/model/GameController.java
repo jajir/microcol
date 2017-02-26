@@ -4,8 +4,8 @@ import java.util.List;
 
 import org.microcol.gui.Localized;
 import org.microcol.gui.MoveAutomatization;
-import org.microcol.gui.Point;
 import org.microcol.gui.event.NextTurnController;
+import org.microcol.model.Location;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
@@ -33,7 +33,7 @@ public class GameController implements Localized {
 		return world;
 	}
 
-	public void performMove(final Ship ship, final List<Point> path) {
+	public void performMove(final Ship ship, final List<Location> path) {
 		moveAutomatization.addMove(new MoveAutomatization.MovePlanner(ship, path));
 	}
 
