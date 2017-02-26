@@ -29,7 +29,7 @@ public class UnitsPanel extends JPanel implements Localized {
 	private static final long serialVersionUID = 1L;
 
 	private final ImageProvider imageProvider;
-	
+
 	@Inject
 	public UnitsPanel(final ImageProvider imageProvider, final StatusBarMessageController statusBarMessageController) {
 		this.imageProvider = Preconditions.checkNotNull(imageProvider);
@@ -47,21 +47,30 @@ public class UnitsPanel extends JPanel implements Localized {
 	}
 
 	public void setUnits(final List<Ship> units) {
-		add(new JLabel(getText().get("unitsPanel.units")), new GridBagConstraints(0, 0, 2, 1, 0D, 0D, GridBagConstraints.NORTHWEST,
-				GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
-		int i = 1;
+		int i = 0;
 		for (final Ship u : units) {
 			Ship s = (Ship) u;
 			add(new JLabel(new ImageIcon(imageProvider.getImage(ImageProvider.IMG_TILE_SHIP1))),
 					new GridBagConstraints(0, i, 1, 2, 0D, 0D, GridBagConstraints.NORTH, GridBagConstraints.NONE,
 							new Insets(0, 0, 0, 0), 0, 0));
-			add(new JLabel("Galeon"), new GridBagConstraints(1, i, 1, 1, 0D, 0D, GridBagConstraints.NORTH,
-					GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
-			add(new JLabel("<html><div>" + getText().get("unitsPanel.availableMoved") + s.getAvailableMoves() + "</div></html>"),
-					new GridBagConstraints(1, i + 1, 1, 1, 1D, 0D, GridBagConstraints.NORTH,
-							GridBagConstraints.VERTICAL, new Insets(0, 0, 0, 0), 0, 0));
-			i += 2;
+			final StringBuilder sb = new StringBuilder(200);
+			sb.append("<html><div>");
+			sb.append("Galeon");
+			sb.append("</div><div>");
+			sb.append(getText().get("unitsPanel.availableMoved"));
+			sb.append(" ");
+			sb.append(s.getAvailableMoves());
+			sb.append("</div><div>");
+			sb.append(getText().get("unitsPanel.owner"));
+			sb.append(" ");
+			sb.append(s.getOwner().getName());
+			sb.append("</div></html>");
+			add(new JLabel(sb.toString()), new GridBagConstraints(1, i, 1, 1, 1D, 0D, GridBagConstraints.NORTHWEST,
+					GridBagConstraints.VERTICAL, new Insets(0, 0, 0, 0), 0, 0));
+			i += 1;
 		}
+		add(new JLabel(""), new GridBagConstraints(1, i + 1, 2, 1, 1D, 1D, GridBagConstraints.NORTH,
+				GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
 		validate();
 	}
 

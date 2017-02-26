@@ -10,10 +10,11 @@ import javax.swing.JPanel;
 
 import org.microcol.gui.event.ChangeLanguageController;
 import org.microcol.gui.event.FocusedTileController;
+import org.microcol.gui.event.FocusedTileEvent;
 import org.microcol.gui.event.KeyController;
 import org.microcol.gui.event.StatusBarMessageController;
 import org.microcol.gui.model.GameController;
-import org.microcol.gui.model.TileOcean;
+import org.microcol.model.Game;
 import org.microcol.model.Location;
 
 import com.google.inject.Inject;
@@ -23,7 +24,7 @@ public class RightPanelPresenter implements Localized {
 	public interface Display {
 		JButton getNextTurnButton();
 
-		void showTile(final TileOcean tile);
+		void showTile(final FocusedTileEvent event, Game game);
 
 		JPanel getRightPanel();
 	}
@@ -50,7 +51,7 @@ public class RightPanelPresenter implements Localized {
 		focusedTileController.addFocusedTileListener(event -> {
 			if (isItDifferentTile(event.getLocation())) {
 				focusedTile = event.getLocation();
-				display.showTile(event.getTile());
+				display.showTile(event, gameController.getGame());
 			}
 		});
 

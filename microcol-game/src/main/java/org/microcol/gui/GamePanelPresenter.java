@@ -222,7 +222,6 @@ public class GamePanelPresenter implements Localized {
 		 * Set status bar message
 		 */
 		Location where = convertToTilesCoordinates(Location.make(e.getX(), e.getY()));
-		// FIXME JJ je to blby, potrebuju najit tile a vsechny lode
 		final TileOcean tile = new TileOcean();
 		final StringBuilder buff = new StringBuilder();
 		buff.append(getText().get("statusBar.tile.start"));
