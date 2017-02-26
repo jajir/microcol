@@ -20,10 +20,21 @@ public class Location {
 		return y;
 	}
 
-	public static Location make(final int x, final int y) {
-		return new Location(x, y);
+	// TODO JKA What for?
+	public Location add(final int value) {
+		return new Location(x + value, y + value);
 	}
-	
+
+	// TODO JKA What for?
+	public Location substract(final Location p) {
+		return new Location(x - p.x, y - p.y);
+	}
+
+	// TODO JKA What for?
+	public Location multiply(final int factor) {
+		return new Location(x * factor, y * factor);
+	}	
+
 	public boolean isAdjacent(final Location location) {
 		Preconditions.checkNotNull(location);
 
@@ -64,16 +75,8 @@ public class Location {
 			.toString();
 	}
 
-	public Location substract(final Location p) {
-		return new Location(x - p.x, y - p.y);
+	// TODO JKA What for?
+	public static Location make(final int x, final int y) {
+		return new Location(x, y);
 	}
-
-	public Location multiply(final int factor) {
-		return new Location(x * factor, y * factor);
-	}
-
-	public Location add(final int value) {
-		return new Location(x + value, y + value);
-	}
-	
 }

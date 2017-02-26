@@ -17,9 +17,9 @@ public class Game {
 	private final Map map;
 	private final Calendar calendar;
 	private final List<Player> players;
+	private final List<Ship> ships;
 
 	private Player currentPlayer;
-	private final List<Ship> ships;
 	private boolean started;
 
 	protected Game(final Map map, final Calendar calendar, final List<Player> players, final List<Ship> ships) {
@@ -28,7 +28,6 @@ public class Game {
 		this.map = map;
 		this.calendar = calendar;
 		this.players = new ArrayList<>(players);
-		this.currentPlayer = players.get(0);
 		this.ships = new ArrayList<>(ships);
 
 		instance = this;

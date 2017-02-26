@@ -16,7 +16,7 @@ public class Ship {
 	protected Ship(final Player owner, final int maxMoves, final Location location) {
 		this.owner = Preconditions.checkNotNull(owner);
 
-		Preconditions.checkArgument(maxMoves > 0, "Number of max moves must be positive: %s", maxMoves);
+		Preconditions.checkArgument(maxMoves > 0, "Number of maximum moves must be positive: %s", maxMoves);
 		this.maxMoves = maxMoves;
 
 		this.location = location;

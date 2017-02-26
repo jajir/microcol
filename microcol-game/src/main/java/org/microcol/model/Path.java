@@ -11,8 +11,8 @@ public class Path {
 
 	public Path(final List<Location> locations) {
 		Preconditions.checkNotNull(locations);
-		Preconditions.checkArgument(locations.size() > 0);
-		Preconditions.checkArgument(isValid(locations));
+		Preconditions.checkArgument(locations.size() > 0, "Path cannot be empty.");
+		Preconditions.checkArgument(isValid(locations), "Invalid path: %s", locations);
 
 		this.locations = ImmutableList.copyOf(locations);
 	}
