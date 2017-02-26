@@ -51,6 +51,18 @@ Planned releases
   * Ships can fight each others.
   
   * Simple AI
+ 
+  * owner of unit will be distinguish by simple flag near unit
+ 
+  * first game map - just empty ocean
+ 
+  * site report should contains junit test coverage
+ 
+  * site report should contains measurement of javadoc quality
+ 
+  * maven site should be automatically published at github doc site
+ 
+  * maven site should be published after each travis-ci build
 
  * 0.2.0 - first game entity should be implemented
  
