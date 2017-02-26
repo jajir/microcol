@@ -8,6 +8,8 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
 import javax.swing.JViewport;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
@@ -62,6 +64,21 @@ public class GamePanelPresenter implements Localized {
 
 	private Point lastMousePosition;
 
+	class PopUpDemo extends JPopupMenu {
+
+		/**
+		 * Default serialVersionUID.
+		 */
+		private static final long serialVersionUID = 1L;
+
+		public PopUpDemo() {
+			for (int i = 0; i < 10; i++) {
+				JMenuItem anItem = new JMenuItem("Item " + i + " click me!");
+				add(anItem);
+			}
+		}
+	}
+
 	@Inject
 	public GamePanelPresenter(final GamePanelPresenter.Display display, final GameController gameController,
 			final KeyController keyController, final StatusBarMessageController statusBarMessageController,
@@ -106,7 +123,18 @@ public class GamePanelPresenter implements Localized {
 
 			@Override
 			public void mousePressed(final MouseEvent e) {
+				logger.debug("mouse pressed at " + e.getX() + ", " + e.getY() + ", " + e.getButton());
+				if (e.isPopupTrigger()) {
+					doPop(e);
+				}
 				onMousePressed(e);
+			}
+
+			@Override
+			public void mouseReleased(final MouseEvent e) {
+				if (e.isPopupTrigger()) {
+					doPop(e);
+				}
 			}
 
 			@Override
@@ -116,7 +144,13 @@ public class GamePanelPresenter implements Localized {
 
 			@Override
 			public void mouseDragged(final MouseEvent e) {
+				logger.debug("mouse dragged at " + e.getX() + ", " + e.getY() + ", " + e.getButton());
 				onMouseDragged(e);
+			}
+
+			private void doPop(MouseEvent e) {
+				PopUpDemo menu = new PopUpDemo();
+				menu.show(e.getComponent(), e.getX(), e.getY());
 			}
 		};
 		display.getGamePanelView().addMouseListener(ma);

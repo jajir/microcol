@@ -38,7 +38,7 @@ GUI structure
  |                                 |          |
  |                                 |          |
  |                                 |          |
- |          MapPanel               | RighPanel|
+ |          GamePanel              | RighPanel|
  |                                 |          |
  |                                 |          |
  |                                 |          |
