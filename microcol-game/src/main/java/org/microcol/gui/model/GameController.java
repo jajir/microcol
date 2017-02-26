@@ -38,7 +38,7 @@ public class GameController implements Localized {
 
 	public void newGame() {
 		GameBuilder builder = new GameBuilder();
-		game = builder.setMap(50, 50).setCalendar(1, 3).addPlayer("Player1", true).addShip("Player1", 5, 10, 10)
+		game = builder.setMap(50, 50).setCalendar(1, 3).addPlayer("Player1", true).addShip("Player1", 5, 5, 5)
 				.addPlayer("Pocitac", false).addShip("Pocitac", 5, 10, 10).build();
 		game.addListener(new GameListener() {
 			

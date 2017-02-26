@@ -133,9 +133,10 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 			for (int j = 0; j < world.getMap().getMaxY(); j++) {
 				int x = i * TOTAL_TILE_WIDTH_IN_PX;
 				int y = j * TOTAL_TILE_WIDTH_IN_PX;
+				final Location loc = Location.make(i, j);
 				graphics.drawImage(imageProvider.getImage(ImageProvider.IMG_TILE_OCEAN), x, y, this);
-				if (!world.getCurrentPlayerShipsAt(Location.make(x, y)).isEmpty()) {
-					Ship s = world.getCurrentPlayerShipsAt(Location.make(x, y)).get(0);
+				if (!world.getShipsAt(loc).isEmpty()) {
+					Ship s = world.getShipsAt(loc).get(0);
 					// if (s.getType() == 0) {
 					// TODO rozlisit kresleni lodi podle hrace
 					graphics.drawImage(imageProvider.getImage(ImageProvider.IMG_TILE_SHIP1), x, y, this);
