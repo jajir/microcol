@@ -40,7 +40,7 @@ Planned releases
   
   * on land will be two simple colonist units one owned by user second owned by AI
   
-   * both unit will be controlled by user and AI 
+   * both unit will be controlled by user and AI
 
  * 0.3.0 - first game entity should be implemented
  
@@ -50,27 +50,27 @@ Planned releases
  
   * Ships can fight each others.
   
-  * Simple AI
+  * Simple AI, one ship unit controlled by AI
  
-  * owner of unit will be distinguish by simple flag near unit
- 
-  * first game map - just empty ocean
- 
-  * site report should contains junit test coverage
+  * Owner of unit will be distinguish by simple flag near unit
+
+  * Site report should contains junit test coverage
  
   * site report should contains measurement of javadoc quality
  
-  * maven site should be automatically published at github doc site
+  * mMaven site should be automatically published at github doc site
  
-  * maven site should be published after each travis-ci build
+  * Maven site should be published after each travis-ci build
+ 
+  * Grid could be enabled/disabled by 'g' and from preferences menu
+  
+  * Move 'm' could be accessible from menu "unit" -> "move". Menu option will be disabled when focused tile is not movable
 
  * 0.2.0 - first game entity should be implemented
  
   * first game map - just empty ocean
   
   * one ship controlled by user
-  
-  * one NPC ship controlled by AI
   
   * both ships will move each turn
   
