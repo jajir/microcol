@@ -205,10 +205,14 @@ public class GamePanelPresenter implements Localized {
 			JViewport viewPort = (JViewport) SwingUtilities.getAncestorOfClass(JViewport.class,
 					display.getGamePanelView());
 			if (viewPort != null) {
-				Location delta = lastMousePosition.substract(Location.make(e.getX(), e.getY()));
+//				Location delta = lastMousePosition.substract(Location.make(e.getX(), e.getY()));
+				final int deltaX = lastMousePosition.getX() - e.getY();
+				final int deltaY = lastMousePosition.getY() - e.getY();
 				Rectangle view = viewPort.getViewRect();
-				view.x += delta.getX();
-				view.y += delta.getY();
+//				view.x += delta.getX();
+//				view.y += delta.getY();
+				view.x += deltaX;
+				view.y += deltaY;
 				display.getGamePanelView().scrollRectToVisible(view);
 			}
 		}

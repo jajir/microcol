@@ -222,8 +222,10 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 	 *            required location of tile where to draw image
 	 */
 	private void paintStepsToTile(final Graphics2D graphics, final Location tile, final StepCounter stepCounter) {
-		final Location p = tile.multiply(TOTAL_TILE_WIDTH_IN_PX).add(4);
-		graphics.drawImage(getImageFoStep(stepCounter.canMakeMoveInSameTurn(1)), p.getX(), p.getY(), this);
+		//final Location p = tile.multiply(TOTAL_TILE_WIDTH_IN_PX).add(4);
+		final int x = tile.getX() * TOTAL_TILE_WIDTH_IN_PX + 4;
+		final int y = tile.getY() * TOTAL_TILE_WIDTH_IN_PX + 4;
+		graphics.drawImage(getImageFoStep(stepCounter.canMakeMoveInSameTurn(1)), x, y, this);
 	}
 
 	private Image getImageFoStep(boolean normalStep) {
