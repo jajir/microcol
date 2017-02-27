@@ -10,8 +10,18 @@ public class PathBuilder {
 		locations = new ArrayList<>();
 	}
 
+	public boolean isEmpty() {
+		return locations.isEmpty();
+	}
+
 	public PathBuilder add(final int x, final int y) {
 		locations.add(new Location(x, y));
+
+		return this;
+	}
+
+	public PathBuilder add(final Location location) {
+		locations.add(location);
 
 		return this;
 	}

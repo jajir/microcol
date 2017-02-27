@@ -1,8 +1,5 @@
 package org.microcol.model;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 
@@ -21,6 +18,10 @@ public class Ship {
 
 		this.location = location;
 		this.availableMoves = maxMoves;
+	}
+
+	public Game getGame() {
+		return owner.getGame();
 	}
 
 	public Player getOwner() {
@@ -44,27 +45,32 @@ public class Ship {
 	}
 
 	public void moveTo(final Path path) {
-		// TODO JKA Check game state
-		// TODO JKA Check currentPlayer
-		// TODO JKA Check path valid on map
-		// TODO JKA Check current location + path
+		Preconditions.checkNotNull(path);
+		Preconditions.checkArgument(path.getFirstLocation().isAdjacent(location), "Path (%s) must be adjacent to current location (%s).", path.getFirstLocation(), location);
+		Preconditions.checkArgument(getGame().getMap().isValid(path), "Invalid path: %s", path);
+		Preconditions.checkState(getGame().isActive(), "Game must be active.");
+		Preconditions.checkState(owner.equals(getGame().getCurrentPlayer()), "Current player (%s) is not ship owner (%s).", getGame().getCurrentPlayer(), owner);
 
-		// TODO JKA Komplet předělat.
+		// TODO JKA Use streams
+		for (Ship ship : getGame().getShips()) {
+			if (!owner.equals(ship.getOwner()) && path.contains(ship.getLocation())) {
+				Preconditions.checkArgument(false, "Enemy ship (%s) on path (%s).", ship, path);
+			}
+		}
+
 		final Location startLocation = location;
-		List<Location> moves = new ArrayList<>();
+		final PathBuilder newPath = new PathBuilder();
+		// TODO JKA Use streams
 		for (Location newLocation : path.getLocations()) {
 			if (availableMoves <= 0) {
 				break;
 			}
-
-			if (!location.equals(newLocation)) {
-				moves.add(newLocation);
-				location = newLocation;
-				availableMoves--;
-			}
+			newPath.add(newLocation);
+			location = newLocation;
+			availableMoves--;
 		}
-		if (!moves.isEmpty()) {
-			Game.getInstance().getListenersManager().fireShipMoved(Game.getInstance(), this, startLocation, new Path(moves));
+		if (!newPath.isEmpty()) {
+			getGame().getListenersManager().fireShipMoved(getGame(), this, startLocation, newPath.build());
 		}
 	}
 

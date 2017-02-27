@@ -12,6 +12,11 @@ public class Player {
 		this.human = human;
 	}
 
+	// TODO JKA Předělat
+	public Game getGame() {
+		return Game.getInstance();
+	}
+
 	public String getName() {
 		return name;
 	}
@@ -27,6 +32,26 @@ public class Player {
 	// TODO JKA getShips()
 
 	// TODO JKA endTurn()
+
+	@Override
+	public int hashCode() {
+		return name.hashCode();
+	}
+
+	@Override
+	public boolean equals(Object object) {
+		if (object == null) {
+			return false;
+		}
+
+		if (!(object instanceof Player)) {
+			return false;
+		}
+
+		Player player = (Player) object;
+
+		return name.equals(player.name);
+	}
 
 	@Override
 	public String toString() {

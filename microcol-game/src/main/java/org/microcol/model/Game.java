@@ -111,6 +111,10 @@ public class Game {
 		return calendar.isFinished();
 	}
 
+	public boolean isActive() {
+		return started && !isFinished();
+	}
+
 	public void endTurn() {
 		// TODO JKA Předělat.
 		final int index = players.indexOf(currentPlayer);
