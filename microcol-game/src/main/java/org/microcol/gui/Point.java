@@ -52,8 +52,8 @@ public class Point {
 		return new Point(x, y);
 	}
 
-	public Point add(final int value) {
-		return new Point(x + value, y + value);
+	public Point add(final int value, final int addY) {
+		return new Point(x + value, y + addY);
 	}
 
 	public Point substract(final Point p) {

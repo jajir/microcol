@@ -20,6 +20,7 @@ import org.microcol.gui.model.GameController;
 import org.microcol.model.Game;
 import org.microcol.model.Location;
 import org.microcol.model.Map;
+import org.microcol.model.Player;
 import org.microcol.model.Ship;
 
 import com.google.common.base.Preconditions;
@@ -114,7 +115,7 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 	private void paintMovingAnimation(final Graphics2D graphics) {
 		if (walkAnimator != null && walkAnimator.getNextCoordinates() != null) {
 			Location part = walkAnimator.getNextCoordinates();
-			graphics.drawImage(imageProvider.getImage(ImageProvider.IMG_TILE_SHIP1), part.getX(), part.getY(), this);
+			paintShip(graphics, Point.of(part.getX(), part.getY()), walkAnimator.getUnit());
 			graphics.drawImage(imageProvider.getImage(ImageProvider.IMG_TILE_MODE_GOTO),
 					part.getX() + TILE_WIDTH_IN_PX - 12, part.getY(), this);
 		}
@@ -137,11 +138,12 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 					if (walkAnimator == null || (!walkAnimator.isNextAnimationLocationAvailable()
 							|| !walkAnimator.getTo().equals(loc))) {
 						// TODO JJ ship owner should show by color.
-						if (s.getOwner().isHuman()) {
-							graphics.drawImage(imageProvider.getImage(ImageProvider.IMG_TILE_SHIP1), x, y, this);
-						} else {
-							graphics.drawImage(imageProvider.getImage(ImageProvider.IMG_TILE_SHIP2), x, y, this);
-						}
+						paintShip(graphics, Point.of(x, y), s);
+						// if (s.getOwner().isHuman()) {
+						// } else {
+						// graphics.drawImage(imageProvider.getImage(ImageProvider.IMG_TILE_SHIP2),
+						// x, y, this);
+						// }
 						// TODO JJ kdys se bude kreslit goto mode, nasledujici
 						// kod
 						// vykresli ikonu k lodi
@@ -151,9 +153,31 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 						// }
 					}
 				}
-
 			}
 		}
+	}
+
+	private final static int FLAG_WIDTH = 7;
+
+	private final static int FLAG_HEIGHT = 12;
+
+	private void paintShip(final Graphics2D graphics, final Point point, final Ship ship) {
+		graphics.drawImage(imageProvider.getImage(ImageProvider.IMG_TILE_SHIP1), point.getX(), point.getY(), this);
+		paintOwnersFlag(graphics, point.add(1, 5), ship.getOwner());
+	}
+
+	/**
+	 * All units have flag containing color of owner. Method draw this flag.
+	 */
+	private void paintOwnersFlag(final Graphics2D graphics, final Point point, final Player player) {
+		graphics.setColor(Color.BLACK);
+		graphics.drawRect(point.getX(), point.getY(), FLAG_WIDTH, FLAG_HEIGHT);
+		if (player.isHuman()) {
+			graphics.setColor(Color.YELLOW);
+		} else {
+			graphics.setColor(Color.RED);
+		}
+		graphics.fillRect(point.getX() + 1, point.getY() + 1, FLAG_WIDTH - 1, FLAG_HEIGHT - 1);
 	}
 
 	private void paintNet(final Graphics2D graphics, final Map map) {
