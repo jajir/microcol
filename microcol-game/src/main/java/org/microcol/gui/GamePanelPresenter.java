@@ -275,9 +275,7 @@ public class GamePanelPresenter implements Localized {
 		final List<Location> path = new ArrayList<Location>();
 		pathPlanning.paintPath(display.getCursorTile(), moveTo, point -> path.add(point));
 		// make first step
-		if (path.size() > 1) {
-			// TODO JJ remove by mel byt v path planning
-			path.remove(0);
+		if (path.size() > 0) {
 			// TODO JJ active ship can be different from ship first at list
 			Ship ship = gameController.getGame().getCurrentPlayerShipsAt(display.getCursorTile()).get(0);
 			gameController.performMove(ship, path);

@@ -41,12 +41,12 @@ public class PathPlanning {
 			if (tileFrom.getX() < tileTo.getX()) {
 				for (int x = tileFrom.getX(); x <= tileTo.getX(); x++) {
 					int y = Math.round(a * x + b);
-					whatToDoWithPointInPath.pathPoint(Location.make(x, y));
+					addPoint(tileFrom, whatToDoWithPointInPath, Location.make(x, y));
 				}
 			} else {
 				for (int x = tileFrom.getX(); x >= tileTo.getX(); x--) {
 					int y = Math.round(a * x + b);
-					whatToDoWithPointInPath.pathPoint(Location.make(x, y));
+					addPoint(tileFrom, whatToDoWithPointInPath, Location.make(x, y));
 				}
 			}
 		} else if (!tileFrom.equals(tileTo)) {
@@ -55,14 +55,32 @@ public class PathPlanning {
 			if (tileFrom.getY() < tileTo.getY()) {
 				for (int y = tileFrom.getY(); y <= tileTo.getY(); y++) {
 					int x = Math.round(a * y + b);
-					whatToDoWithPointInPath.pathPoint(Location.make(x, y));
+					addPoint(tileFrom, whatToDoWithPointInPath, Location.make(x, y));
 				}
 			} else {
 				for (int y = tileFrom.getY(); y >= tileTo.getY(); y--) {
 					int x = Math.round(a * y + b);
-					whatToDoWithPointInPath.pathPoint(Location.make(x, y));
+					addPoint(tileFrom, whatToDoWithPointInPath, Location.make(x, y));
 				}
 			}
+		}
+	}
+
+	/**
+	 * Pass found location to callBack function. Just when start point is equals
+	 * to found call back function is not called.
+	 * 
+	 * @param tileFrom
+	 *            required from location
+	 * @param whatToDoWithPointInPath
+	 *            required call back function
+	 * @param pointToAdd
+	 *            required to location
+	 */
+	private void addPoint(final Location tileFrom, final WhatToDoWithPointInPath whatToDoWithPointInPath,
+			final Location pointToAdd) {
+		if (!tileFrom.equals(pointToAdd)) {
+			whatToDoWithPointInPath.pathPoint(pointToAdd);
 		}
 	}
 
