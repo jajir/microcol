@@ -72,10 +72,11 @@ public class SkyNet {
 
 	private void move() {
 		game.getShips().forEach(ship -> {
-			if (ship.getOwner().isComputer()) {
+			if (game.getCurrentPlayer().equals(ship.getOwner())) {
 				move(ship);
 			}
 		});
+		game.endTurn();
 	}
 
 	private void move(final Ship ship) {
@@ -89,7 +90,7 @@ public class SkyNet {
 			final Location lastDirection = lastDirections.get(ship);
 			final Location newLocation = new Location(lastLocation.getX() + lastDirection.getX(),
 				lastLocation.getY() + lastDirection.getY());
-			if (game.getMap().isValid(newLocation)) {
+			if (game.getMap().isValid(newLocation) && testEnemyShips(newLocation)) {
 				pathBuilder.add(newLocation);
 				lastLocation = newLocation;
 			} else {
@@ -98,5 +99,15 @@ public class SkyNet {
 		}
 
 		ship.moveTo(pathBuilder.build());
+	}
+
+	private boolean testEnemyShips(final Location location) {
+		for (Ship ship : game.getShipsAt(location)) {
+			if (!game.getCurrentPlayer().equals(ship.getOwner())) {
+				return false;
+			}
+		}
+
+		return true;
 	}
 }
