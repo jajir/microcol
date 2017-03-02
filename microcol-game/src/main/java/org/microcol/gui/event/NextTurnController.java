@@ -4,12 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.microcol.model.Game;
+import org.microcol.model.event.RoundStartedEvent;
 
 import com.google.common.base.Preconditions;
 
 /**
- * It's called when haman user should start play his move.
+ * It's called when human user should start play his move.
  * 
  */
 public class NextTurnController {
@@ -23,11 +23,11 @@ public class NextTurnController {
 		listeners.add(listener);
 	}
 
-	public void fireNextTurnEvent(final Game game) {
-		Preconditions.checkNotNull(game);
-		logger.trace("firing next turn event: " + game);
+	public void fireNextTurnEvent(final RoundStartedEvent event) {
+		Preconditions.checkNotNull(event);
+		logger.trace("firing next turn event: " + event);
 		listeners.forEach(listener -> {
-			listener.onNextTurn(game);
+			listener.onNextTurn(event);
 		});
 	}
 

@@ -19,6 +19,7 @@ import org.microcol.gui.event.FocusedTileController;
 import org.microcol.gui.event.FocusedTileEvent;
 import org.microcol.gui.event.KeyController;
 import org.microcol.gui.event.MoveUnitController;
+import org.microcol.gui.event.NewGameController;
 import org.microcol.gui.event.StatusBarMessageController;
 import org.microcol.gui.model.GameController;
 import org.microcol.gui.model.TileOcean;
@@ -54,6 +55,8 @@ public class GamePanelPresenter implements Localized {
 		void setWalkAnimator(WalkAnimator walkAnimator);
 
 		WalkAnimator getWalkAnimator();
+
+		void initGame();
 	}
 
 	private final GameController gameController;
@@ -87,7 +90,7 @@ public class GamePanelPresenter implements Localized {
 	public GamePanelPresenter(final GamePanelPresenter.Display display, final GameController gameController,
 			final KeyController keyController, final StatusBarMessageController statusBarMessageController,
 			final FocusedTileController focusedTileController, final PathPlanning pathPlanning,
-			final MoveUnitController moveUnitController) {
+			final MoveUnitController moveUnitController, final NewGameController newGameController) {
 		this.focusedTileController = focusedTileController;
 		this.gameController = Preconditions.checkNotNull(gameController);
 		this.statusBarMessageController = Preconditions.checkNotNull(statusBarMessageController);
@@ -157,6 +160,9 @@ public class GamePanelPresenter implements Localized {
 				menu.show(e.getComponent(), e.getX(), e.getY());
 			}
 		};
+
+		newGameController.addNewGameListener(event -> display.initGame());
+
 		display.getGamePanelView().addMouseListener(ma);
 		display.getGamePanelView().addMouseMotionListener(ma);
 	}
@@ -205,12 +211,14 @@ public class GamePanelPresenter implements Localized {
 			JViewport viewPort = (JViewport) SwingUtilities.getAncestorOfClass(JViewport.class,
 					display.getGamePanelView());
 			if (viewPort != null) {
-//				Location delta = lastMousePosition.substract(Location.make(e.getX(), e.getY()));
+				// Location delta =
+				// lastMousePosition.substract(Location.make(e.getX(),
+				// e.getY()));
 				final int deltaX = lastMousePosition.getX() - e.getY();
 				final int deltaY = lastMousePosition.getY() - e.getY();
 				Rectangle view = viewPort.getViewRect();
-//				view.x += delta.getX();
-//				view.y += delta.getY();
+				// view.x += delta.getX();
+				// view.y += delta.getY();
 				view.x += deltaX;
 				view.y += deltaY;
 				display.getGamePanelView().scrollRectToVisible(view);
@@ -267,10 +275,10 @@ public class GamePanelPresenter implements Localized {
 		final List<Location> path = new ArrayList<Location>();
 		pathPlanning.paintPath(display.getCursorTile(), moveTo, point -> path.add(point));
 		// make first step
-		if (path.size()>1) {
-			//TODO JJ remove by mel byt v path planning
+		if (path.size() > 1) {
+			// TODO JJ remove by mel byt v path planning
 			path.remove(0);
-			//TODO JJ active ship can be different from ship first at list
+			// TODO JJ active ship can be different from ship first at list
 			Ship ship = gameController.getGame().getCurrentPlayerShipsAt(display.getCursorTile()).get(0);
 			gameController.performMove(ship, path);
 			focusedTileController.fireFocusedTileEvent(new FocusedTileEvent(display.getCursorTile(), new TileOcean()));
@@ -289,11 +297,11 @@ public class GamePanelPresenter implements Localized {
 		new Timer(1, actionEvent -> {
 			if (display.getWalkAnimator().isNextAnimationLocationAvailable()) {
 				display.getWalkAnimator().countNextAnimationLocation();
-			}else{
+			} else {
 				((Timer) actionEvent.getSource()).stop();
 				if (display.getCursorTile().equals(display.getWalkAnimator().getTo())) {
-					focusedTileController
-							.fireFocusedTileEvent(new FocusedTileEvent(display.getWalkAnimator().getTo(), new TileOcean()));
+					focusedTileController.fireFocusedTileEvent(
+							new FocusedTileEvent(display.getWalkAnimator().getTo(), new TileOcean()));
 				}
 			}
 			display.getGamePanelView().repaint();

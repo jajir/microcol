@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.microcol.gui.Localized;
 import org.microcol.gui.event.MoveUnitController;
+import org.microcol.gui.event.NewGameController;
 import org.microcol.gui.event.NextTurnController;
 import org.microcol.model.Game;
 import org.microcol.model.GameBuilder;
@@ -22,7 +23,7 @@ import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
 
 /**
- * Communicate between model and GUI.
+ * Exchange events between model and GUI.
  */
 public class GameController implements Localized {
 
@@ -32,14 +33,21 @@ public class GameController implements Localized {
 
 	private final MoveUnitController moveUnitController;
 
+	private final NewGameController newGameController;
+
 	private Game game;
 
 	@Inject
-	public GameController(final NextTurnController nextTurnController, final MoveUnitController moveUnitController) {
+	public GameController(final NextTurnController nextTurnController, final MoveUnitController moveUnitController,
+			final NewGameController newGameController) {
 		this.nextTurnController = Preconditions.checkNotNull(nextTurnController);
 		this.moveUnitController = Preconditions.checkNotNull(moveUnitController);
+		this.newGameController = Preconditions.checkNotNull(newGameController);
 	}
 
+	/**
+	 * Start new game and register listener.
+	 */
 	public void newGame() {
 		GameBuilder builder = new GameBuilder();
 		game = builder.setMap(50, 50).setCalendar(1570, 1800).addPlayer("Player1", true).addShip("Player1", 5, 5, 5)
@@ -48,33 +56,30 @@ public class GameController implements Localized {
 
 			@Override
 			public void turnStarted(final TurnStartedEvent event) {
-				// TODO Auto-generated method stub
 				logger.debug("Turn started for player '" + event.getPlayer().getName() + "'.");
 			}
 
 			@Override
 			public void shipMoved(final ShipMovedEvent event) {
 				logger.debug("Ship moved " + event);
-				// TODO JJ enable move animation by following code
 				moveUnitController.fireMoveUnitEvent(event);
 			}
 
 			@Override
 			public void roundStarted(final RoundStartedEvent event) {
-				// TODO JJ pass calendar
-				nextTurnController.fireNextTurnEvent(event.getGame());
+				nextTurnController.fireNextTurnEvent(event);
 			}
 
 			@Override
 			public void gameStarted(final GameStartedEvent event) {
-				// TODO Auto-generated method stub
-
+				logger.debug("Game started " + event);
+				game = event.getGame();
+				newGameController.fireNewGameStartedEvent(event);
 			}
 
 			@Override
 			public void gameFinished(final GameFinishedEvent event) {
-				// TODO Auto-generated method stub
-
+				logger.debug("Game finished " + event);
 			}
 		});
 		game.start();

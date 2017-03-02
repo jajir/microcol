@@ -8,6 +8,7 @@ import org.microcol.gui.event.GameEventController;
 import org.microcol.gui.event.GameEventListenerImpl;
 import org.microcol.gui.event.KeyController;
 import org.microcol.gui.event.MoveUnitController;
+import org.microcol.gui.event.NewGameController;
 import org.microcol.gui.event.NextTurnController;
 import org.microcol.gui.event.StatusBarMessageController;
 import org.microcol.gui.event.StatusBarMessageControllerImpl;
@@ -37,6 +38,7 @@ public class MicroColModule extends AbstractModule {
 		bind(FocusedTileController.class).in(Singleton.class);
 		bind(GameEventController.class).in(Singleton.class);
 		bind(ChangeLanguageController.class).in(Singleton.class);
+		bind(NewGameController.class).in(Singleton.class);
 		bind(GameController.class).in(Singleton.class);
 
 		/**

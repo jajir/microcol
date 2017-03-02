@@ -66,12 +66,16 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 		Toolkit toolkit = Toolkit.getDefaultToolkit();
 		gotoModeCursor = toolkit.createCustomCursor(imageProvider.getImage(ImageProvider.IMG_CURSOR_GOTO),
 				new java.awt.Point(1, 1), "gotoModeCursor");
-		dbImage = createImage(getGameMapWidth(), getGameMapHeight());
 		final GamePanelView map = this;
 
 		nextTurnController.addNextTurnListener(w -> map.repaint());
 
 		setAutoscrolls(true);
+	}
+
+	@Override
+	public void initGame() {
+		dbImage = createImage(getGameMapWidth(), getGameMapHeight());
 	}
 
 	@Override
@@ -222,7 +226,7 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 	 *            required location of tile where to draw image
 	 */
 	private void paintStepsToTile(final Graphics2D graphics, final Location tile, final StepCounter stepCounter) {
-		//final Location p = tile.multiply(TOTAL_TILE_WIDTH_IN_PX).add(4);
+		// final Location p = tile.multiply(TOTAL_TILE_WIDTH_IN_PX).add(4);
 		final int x = tile.getX() * TOTAL_TILE_WIDTH_IN_PX + 4;
 		final int y = tile.getY() * TOTAL_TILE_WIDTH_IN_PX + 4;
 		graphics.drawImage(getImageFoStep(stepCounter.canMakeMoveInSameTurn(1)), x, y, this);
@@ -247,17 +251,11 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 	}
 
 	private int getGameMapWidth() {
-		// TODO JJ read map max width
-		// return gameController.getWorld().getMap().getMaxX() *
-		// TOTAL_TILE_WIDTH_IN_PX - 1;
-		return 50 * TOTAL_TILE_WIDTH_IN_PX - 1;
+		return gameController.getGame().getMap().getMaxX() * TOTAL_TILE_WIDTH_IN_PX - 1;
 	}
 
 	private int getGameMapHeight() {
-		// TODO JJ read map max height
-		// return gameController.getWorld().getMap().getMaxY() *
-		// TOTAL_TILE_WIDTH_IN_PX - 1;
-		return 50 * TOTAL_TILE_WIDTH_IN_PX - 1;
+		return gameController.getGame().getMap().getMaxY() * TOTAL_TILE_WIDTH_IN_PX - 1;
 	}
 
 	@Override

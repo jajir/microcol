@@ -8,8 +8,9 @@ import javax.swing.JLabel;
 import org.microcol.gui.event.ChangeLanguageController;
 import org.microcol.gui.event.NextTurnController;
 import org.microcol.gui.event.StatusBarMessageController;
-import org.microcol.model.Game;
+import org.microcol.model.Calendar;
 
+import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
 
 public class StatusBarPresenter implements Localized {
@@ -27,11 +28,11 @@ public class StatusBarPresenter implements Localized {
 		statusBarMessageController.addStatusMessageListener(message -> {
 			display.getStatusBarDescription().setText(message);
 		});
-		nextTurnController.addNextTurnListener(world -> {
-			setYearText(display.getLabelEra(), world);
+		nextTurnController.addNextTurnListener(event -> {
+			setYearText(display.getLabelEra(), event.getCalendar());
 		});
 		languangeController.addLanguageListener(event -> {
-			setYearText(display.getLabelEra(), event.getWorld());
+			setYearText(display.getLabelEra(), event.getGame().getCalendar());
 			display.getStatusBarDescription().setText("");
 		});
 		display.getLabelEra().addMouseListener(new MouseAdapter() {
@@ -49,8 +50,10 @@ public class StatusBarPresenter implements Localized {
 		});
 	}
 
-	private final void setYearText(JLabel labelEra, final Game world) {
-		labelEra.setText(getText().get("statusBar.year") + " " + world.getCalendar().getCurrentYear() + " AD");
+	private final void setYearText(JLabel labelEra, final Calendar calendar) {
+		Preconditions.checkNotNull(labelEra);
+		Preconditions.checkNotNull(calendar);
+		labelEra.setText(getText().get("statusBar.year") + " " + calendar.getCurrentYear() + " AD");
 	}
 
 }

@@ -43,13 +43,10 @@ public class MicroCol {
 	 * applied.
 	 */
 	private static void initAppleProperties() {
-		if (isOSX()) {
-			System.setProperty("com.apple.mrj.application.apple.menu.about.name", "MicroCol");
-			System.setProperty("apple.laf.useScreenMenuBar", "true");
-			System.setProperty("apple.awt.application.name", "MicroCol");
-			System.setProperty("apple.awt.brushMetalLook", "true");
-		}
-
+		System.setProperty("com.apple.mrj.application.apple.menu.about.name", "MicroCol");
+		System.setProperty("apple.laf.useScreenMenuBar", "true");
+		System.setProperty("apple.awt.application.name", "MicroCol");
+		System.setProperty("apple.awt.brushMetalLook", "true");
 	}
 
 	private static void setSplashScreen() {
@@ -106,9 +103,9 @@ public class MicroCol {
 	public static void main(final String args[]) {
 
 		setSplashScreen();
-		initAppleProperties();
 
 		if (isOSX()) {
+			initAppleProperties();
 			setAppleDockIcon();
 		}
 

@@ -10,6 +10,9 @@ import org.microcol.gui.model.GameController;
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
 
+/**
+ * Allows to trigger change language event and manage event listeners.
+ */
 public class ChangeLanguageController {
 
 	private final Logger logger = Logger.getLogger(ChangeLanguageController.class);
@@ -18,6 +21,9 @@ public class ChangeLanguageController {
 
 	private final GameController gameController;
 
+	/**
+	 * Priority allows to call high priority events as first.
+	 */
 	public static enum Priority {
 		high, low
 	}

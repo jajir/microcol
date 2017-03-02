@@ -6,7 +6,7 @@ import org.microcol.model.Game;
 public class ChangeLanguageEvent {
 
 	private final Text.Language language;
-	
+
 	private final Game game;
 
 	public ChangeLanguageEvent(final Text.Language language, final Game game) {
@@ -14,8 +14,7 @@ public class ChangeLanguageEvent {
 		this.game = game;
 	}
 
-	//TODO JJ rename
-	public Game getWorld() {
+	public Game getGame() {
 		return game;
 	}
 
