@@ -14,6 +14,11 @@ public class PathBuilder {
 		return locations.isEmpty();
 	}
 
+	// TODO JKA Test
+	public int getLength() {
+		return locations.size();
+	}
+
 	public PathBuilder add(final int x, final int y) {
 		locations.add(new Location(x, y));
 

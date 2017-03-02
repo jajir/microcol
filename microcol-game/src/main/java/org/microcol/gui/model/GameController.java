@@ -3,6 +3,7 @@ package org.microcol.gui.model;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.microcol.ai.SkyNet;
 import org.microcol.gui.Localized;
 import org.microcol.gui.event.MoveUnitController;
 import org.microcol.gui.event.NewGameController;
@@ -50,7 +51,7 @@ public class GameController implements Localized {
 	 */
 	public void newGame() {
 		GameBuilder builder = new GameBuilder();
-		game = builder.setMap(50, 50).setCalendar(1570, 1800).addPlayer("Player1", true).addShip("Player1", 5, 5, 5)
+		game = builder.setMap(20, 20).setCalendar(1570, 1800).addPlayer("Player1", true).addShip("Player1", 5, 5, 5)
 				.addPlayer("Pocitac", false).addShip("Pocitac", 5, 10, 10).build();
 		game.addListener(new ModelListener() {
 
@@ -82,6 +83,8 @@ public class GameController implements Localized {
 				logger.debug("Game finished " + event);
 			}
 		});
+		SkyNet skyNet = new SkyNet(game);
+		skyNet.searchAndDestroy();
 		game.start();
 	}
 

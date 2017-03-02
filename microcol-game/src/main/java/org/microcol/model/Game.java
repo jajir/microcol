@@ -3,12 +3,6 @@ package org.microcol.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.microcol.model.event.GameFinishedEvent;
-import org.microcol.model.event.GameStartedEvent;
-import org.microcol.model.event.RoundStartedEvent;
-import org.microcol.model.event.ShipMovedEvent;
-import org.microcol.model.event.TurnStartedEvent;
-
 public class Game {
 	// FIXME JKA Temporary hack.
 	private static Game instance;
@@ -139,54 +133,5 @@ public class Game {
 
 	protected static Game getInstance() {
 		return instance;
-	}
-
-	// TODO JKA Move to unit tests.
-	public static void main(String[] args) {
-		GameBuilder builder = new GameBuilder();
-		Game game = builder
-			.setMap(100, 50)
-			.setCalendar(1, 3)
-			.addPlayer("Player1", true)
-			.addShip("Player1", 5, 50, 20)
-			.build();
-		game.addListener(new ModelListener() {
-			@Override
-			public void gameStarted(GameStartedEvent event) {
-				System.out.println("Game started: " + event);
-			}
-
-			@Override
-			public void roundStarted(RoundStartedEvent event) {
-				System.out.println("New round started: " + event);
-			}
-
-			@Override
-			public void turnStarted(TurnStartedEvent event) {
-				System.out.println("New turn started: " + event);
-			}
-
-			@Override
-			public void shipMoved(ShipMovedEvent event) {
-				System.out.println("Ship moved: " + event);
-			}
-
-			@Override
-			public void gameFinished(GameFinishedEvent event) {
-				System.out.println("Game finished: " + event);
-			}
-		});
-		game.start();
-		Ship ship = game.getShips().get(0);
-		List<Location> locations = new ArrayList<>();
-		locations.add(new Location(51, 21));
-		locations.add(new Location(52, 22));
-		locations.add(new Location(53, 23));
-		Path path = new Path(locations);
-		ship.moveTo(path);
-		game.endTurn();
-		System.out.println("Game finished: " + game.isFinished());
-		game.endTurn();
-		System.out.println("Game finished: " + game.isFinished());
 	}
 }
