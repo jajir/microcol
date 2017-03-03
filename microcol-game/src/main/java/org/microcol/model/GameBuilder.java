@@ -29,10 +29,10 @@ public class GameBuilder {
 		return this;
 	}
 
-	public GameBuilder addPlayer(final String name, final boolean human) {
+	public GameBuilder addPlayer(final String name, final boolean computer) {
 		Preconditions.checkArgument(getPlayer(name) == null, "Player name must be unique: %s", name);
 
-		players.add(new Player(name, human));
+		players.add(new Player(name, computer));
 
 		return this;
 	}

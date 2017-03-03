@@ -9,14 +9,14 @@ import com.google.common.collect.ImmutableList;
 
 public class Player {
 	private final String name;
-	private final boolean human;
+	private final boolean computer;
 
 	private Game game;
 	private ImmutableList<Ship> ships;
 
-	protected Player(final String name, final boolean human) {
+	protected Player(final String name, final boolean computer) {
 		this.name = Preconditions.checkNotNull(name);
-		this.human = human;
+		this.computer = computer;
 	}
 
 	protected Game getGame() {
@@ -27,12 +27,12 @@ public class Player {
 		return name;
 	}
 
-	public boolean isHuman() {
-		return human;
+	public boolean isComputer() {
+		return computer;
 	}
 
-	public boolean isComputer() {
-		return !human;
+	public boolean isHuman() {
+		return !computer;
 	}
 
 	protected void startGame(final Game game) {
@@ -97,7 +97,7 @@ public class Player {
 	public String toString() {
 		return MoreObjects.toStringHelper(this)
 			.add("name", name)
-			.add("human", human)
+			.add("computer", computer)
 			.toString();
 	}
 }

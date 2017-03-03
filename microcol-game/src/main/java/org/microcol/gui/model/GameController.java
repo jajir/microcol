@@ -53,8 +53,8 @@ public class GameController implements Localized {
 		GameBuilder builder = new GameBuilder();
 		game = builder.setMap(10, 10)
 			.setCalendar(1570, 1800)
-			.addPlayer("Player1", true).addShip("Player1", 5, 5, 5)
-			.addPlayer("Pocitac", false).addShip("Pocitac", 5, 6, 6).addShip("Pocitac", 5, 7, 7).addShip("Pocitac", 5, 8, 8)
+			.addPlayer("Player1", false).addShip("Player1", 5, 5, 5)
+			.addPlayer("Pocitac", true).addShip("Pocitac", 5, 6, 6).addShip("Pocitac", 5, 7, 7).addShip("Pocitac", 5, 8, 8)
 			.build();
 		game.addListener(new ModelListener() {
 
