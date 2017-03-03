@@ -7,9 +7,6 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 
 public class Game {
-	// FIXME JKA Temporary hack.
-	private static Game instance;
-
 	private final ModelListenersManager listenersManager;
 	private final Map map;
 	private final Calendar calendar;
@@ -25,8 +22,6 @@ public class Game {
 		this.calendar = Preconditions.checkNotNull(calendar);
 		this.players = ImmutableList.copyOf(players);
 		this.ships = ImmutableList.copyOf(ships);
-
-		instance = this;
 	}
 
 	protected ModelListenersManager getListenersManager() {
@@ -54,7 +49,7 @@ public class Game {
 	}
 
 	public Player getCurrentPlayer() {
-		// TODO JKA Check game state.
+		Preconditions.checkState(isActive(), "Game must be active.");
 
 		return currentPlayer;
 	}
@@ -63,7 +58,6 @@ public class Game {
 		return ships;
 	}
 
-	// TODO JKA Předělat na immutable.
 	public List<Ship> getShipsAt(final Location location) {
 		List<Ship> shipsAt = new ArrayList<>();
 		ships.forEach(ship -> {
@@ -79,36 +73,33 @@ public class Game {
 	public boolean isStarted() {
 		return started;
 	}
- 
-	public void start() {
-		// TODO JKA Předělat.
-		started = true;
-		listenersManager.fireGameStarted(this);
-		listenersManager.fireRoundStarted(this, calendar);
-		currentPlayer = players.get(0);
-		players.forEach(player -> {
-			player.startGame(this);
-		});
-		ships.forEach(ship -> {
-			if (ship.getOwner().equals(currentPlayer)) {
-				ship.startTurn();
-			}
-		});
-		listenersManager.fireTurnStarted(this, currentPlayer);
-	}
 
 	public boolean isFinished() {
 		return calendar.isFinished();
 	}
 
-	public boolean isActive() {
+	protected boolean isActive() {
 		return started && !isFinished();
 	}
 
+	public void start() {
+		Preconditions.checkState(!started, "Game was already started.");
+
+		started = true;
+		currentPlayer = players.get(0);
+		players.forEach(player -> {
+			player.startGame(this);
+		});
+		listenersManager.fireGameStarted(this);
+		listenersManager.fireRoundStarted(this, calendar);
+		currentPlayer.startTurn();
+		listenersManager.fireTurnStarted(this, currentPlayer);
+	}
+
 	public void endTurn() {
-		// TODO JKA Předělat.
+		Preconditions.checkState(isActive(), "Game must be active.");
+
 		final int index = players.indexOf(currentPlayer);
-		// TODO JKA Předělat na modulo.
 		if (index < players.size() - 1) {
 			currentPlayer = players.get(index + 1);
 		} else {
@@ -120,15 +111,7 @@ public class Game {
 				listenersManager.fireRoundStarted(this, calendar);
 			}
 		}
-		ships.forEach(ship -> {
-			if (ship.getOwner().equals(currentPlayer)) {
-				ship.startTurn();
-			}
-		});
+		currentPlayer.startTurn();
 		listenersManager.fireTurnStarted(this, currentPlayer);
-	}
-
-	protected static Game getInstance() {
-		return instance;
 	}
 }

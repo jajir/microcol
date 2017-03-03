@@ -19,10 +19,6 @@ public class Player {
 		this.computer = computer;
 	}
 
-	protected Game getGame() {
-		return Game.getInstance();
-	}
-
 	public String getName() {
 		return name;
 	}
@@ -40,7 +36,7 @@ public class Player {
 
 		// TODO JKA Use streams
 		List<Ship> list = new ArrayList<>();
-		getGame().getShips().forEach(ship -> {
+		game.getShips().forEach(ship -> {
 			if (ship.getOwner().equals(this)) {
 				list.add(ship);
 			}
@@ -68,8 +64,16 @@ public class Player {
 		return ImmutableList.copyOf(shipsAt);
 	}
 
+	protected void startTurn() {
+		ships.forEach(ship -> {
+			ship.startTurn();
+		});
+	}
+
 	public void endTurn() {
-		// TODO JKA preconditions
+		Preconditions.checkState(game.isActive(), "Game must be active.");
+		Preconditions.checkState(game.getCurrentPlayer().equals(this), "This player (%s) is not current player (%s).", this, game.getCurrentPlayer());
+
 		game.endTurn();
 	}
 
