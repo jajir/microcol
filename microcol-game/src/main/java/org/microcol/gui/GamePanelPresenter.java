@@ -297,7 +297,8 @@ public class GamePanelPresenter implements Localized {
 				display.getWalkAnimator().countNextAnimationLocation();
 			} else {
 				((Timer) actionEvent.getSource()).stop();
-				if (display.getCursorTile().equals(display.getWalkAnimator().getTo())) {
+				if (display.getCursorTile() != null
+						&& display.getCursorTile().equals(display.getWalkAnimator().getTo())) {
 					focusedTileController.fireFocusedTileEvent(
 							new FocusedTileEvent(display.getWalkAnimator().getTo(), new TileOcean()));
 				}
