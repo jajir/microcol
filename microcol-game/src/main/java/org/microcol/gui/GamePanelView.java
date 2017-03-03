@@ -127,8 +127,8 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 	 * @param g
 	 */
 	private void paintTilesAndUnits(final Graphics2D graphics, final Game world) {
-		for (int i = 0; i < world.getMap().getMaxX(); i++) {
-			for (int j = 0; j < world.getMap().getMaxY(); j++) {
+		for (int i = 0; i <= world.getMap().getMaxX(); i++) {
+			for (int j = 0; j <= world.getMap().getMaxY(); j++) {
 				int x = i * TOTAL_TILE_WIDTH_IN_PX;
 				int y = j * TOTAL_TILE_WIDTH_IN_PX;
 				final Location loc = Location.make(i, j);
@@ -183,11 +183,11 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 	private void paintNet(final Graphics2D graphics, final Map map) {
 		graphics.setColor(Color.LIGHT_GRAY);
 		graphics.setStroke(new BasicStroke(1));
-		for (int i = 1; i < map.getMaxX(); i++) {
+		for (int i = 1; i <= map.getMaxX(); i++) {
 			int x = i * TOTAL_TILE_WIDTH_IN_PX - 1;
 			graphics.drawLine(x, 0, x, map.getMaxY() * TILE_WIDTH_IN_PX + map.getMaxY() * (map.getMaxX() - 1));
 		}
-		for (int j = 1; j < map.getMaxY(); j++) {
+		for (int j = 1; j <= map.getMaxY(); j++) {
 			int y = j * TOTAL_TILE_WIDTH_IN_PX - 1;
 			graphics.drawLine(0, y, map.getMaxY() * TILE_WIDTH_IN_PX + map.getMaxX() * (map.getMaxY() - 1), y);
 		}
@@ -250,12 +250,13 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 	 */
 	private void paintStepsToTile(final Graphics2D graphics, final Location tile, final StepCounter stepCounter) {
 		// final Location p = tile.multiply(TOTAL_TILE_WIDTH_IN_PX).add(4);
+		// TODO JJ replace with Point
 		final int x = tile.getX() * TOTAL_TILE_WIDTH_IN_PX + 4;
 		final int y = tile.getY() * TOTAL_TILE_WIDTH_IN_PX + 4;
 		graphics.drawImage(getImageFoStep(stepCounter.canMakeMoveInSameTurn(1)), x, y, this);
 	}
 
-	private Image getImageFoStep(boolean normalStep) {
+	private Image getImageFoStep(final boolean normalStep) {
 		if (normalStep) {
 			return imageProvider.getImage(ImageProvider.IMG_ICON_STEPS_25x25);
 		} else {
@@ -274,11 +275,11 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 	}
 
 	private int getGameMapWidth() {
-		return gameController.getGame().getMap().getMaxX() * TOTAL_TILE_WIDTH_IN_PX - 1;
+		return (gameController.getGame().getMap().getMaxX() + 1) * TOTAL_TILE_WIDTH_IN_PX - 1;
 	}
 
 	private int getGameMapHeight() {
-		return gameController.getGame().getMap().getMaxY() * TOTAL_TILE_WIDTH_IN_PX - 1;
+		return (gameController.getGame().getMap().getMaxY() + 1) * TOTAL_TILE_WIDTH_IN_PX - 1;
 	}
 
 	@Override
