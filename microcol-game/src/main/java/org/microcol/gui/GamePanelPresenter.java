@@ -169,7 +169,7 @@ public class GamePanelPresenter implements Localized {
 
 	private void onKeyPressed_m() {
 		if (display.getCursorTile() != null) {
-			final List<Ship> units = gameController.getGame().getCurrentPlayerShipsAt(display.getCursorTile());
+			final List<Ship> units = gameController.getGame().getCurrentPlayer().getShipsAt(display.getCursorTile());
 			if (units.isEmpty()) {
 				logger.debug("At " + display.getCursorTile() + " there are no units to move.");
 			} else {
@@ -277,7 +277,7 @@ public class GamePanelPresenter implements Localized {
 		// make first step
 		if (path.size() > 0) {
 			// TODO JJ active ship can be different from ship first at list
-			Ship ship = gameController.getGame().getCurrentPlayerShipsAt(display.getCursorTile()).get(0);
+			Ship ship = gameController.getGame().getCurrentPlayer().getShipsAt(display.getCursorTile()).get(0);
 			gameController.performMove(ship, path);
 			focusedTileController.fireFocusedTileEvent(new FocusedTileEvent(display.getCursorTile(), new TileOcean()));
 		}

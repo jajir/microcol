@@ -3,6 +3,9 @@ package org.microcol.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.common.base.Preconditions;
+import com.google.common.collect.ImmutableList;
+
 public class Game {
 	// FIXME JKA Temporary hack.
 	private static Game instance;
@@ -10,19 +13,18 @@ public class Game {
 	private final ModelListenersManager listenersManager;
 	private final Map map;
 	private final Calendar calendar;
-	private final List<Player> players;
-	private final List<Ship> ships;
+	private final ImmutableList<Player> players;
+	private final ImmutableList<Ship> ships;
 
 	private Player currentPlayer;
 	private boolean started;
 
 	protected Game(final Map map, final Calendar calendar, final List<Player> players, final List<Ship> ships) {
-		// TODO JKA Add not null tests.
 		this.listenersManager = new ModelListenersManager();
-		this.map = map;
-		this.calendar = calendar;
-		this.players = new ArrayList<>(players);
-		this.ships = new ArrayList<>(ships);
+		this.map = Preconditions.checkNotNull(map);
+		this.calendar = Preconditions.checkNotNull(calendar);
+		this.players = ImmutableList.copyOf(players);
+		this.ships = ImmutableList.copyOf(ships);
 
 		instance = this;
 	}
@@ -47,52 +49,46 @@ public class Game {
 		return calendar;
 	}
 
-	// TODO JKA Předělat na immutable.
 	public List<Player> getPlayers() {
 		return players;
 	}
 
 	public Player getCurrentPlayer() {
+		// TODO JKA Check game state.
+
 		return currentPlayer;
 	}
 
-	// TODO JKA Předělat na immutable.
 	public List<Ship> getShips() {
 		return ships;
 	}
 
 	// TODO JKA Předělat na immutable.
 	public List<Ship> getShipsAt(final Location location) {
-		List<Ship> xxx = new ArrayList<>();
+		List<Ship> shipsAt = new ArrayList<>();
 		ships.forEach(ship -> {
 			if (ship.getLocation().equals(location)) {
-				xxx.add(ship);
+				shipsAt.add(ship);
 			}
 		});
-		return xxx;
-	}
 
-	// TODO JKA Předělat na immutable.
-	public List<Ship> getCurrentPlayerShipsAt(final Location location) {
-		List<Ship> xxx = new ArrayList<>();
-		getShipsAt(location).forEach(ship -> {
-			if (ship.getOwner().equals(getCurrentPlayer())) {
-				xxx.add(ship);
-			}
-		});
-		return xxx;
+		// TODO JKA Optimalizovat
+		return ImmutableList.copyOf(shipsAt);
 	}
 
 	public boolean isStarted() {
 		return started;
 	}
-
+ 
 	public void start() {
 		// TODO JKA Předělat.
 		started = true;
 		listenersManager.fireGameStarted(this);
 		listenersManager.fireRoundStarted(this, calendar);
 		currentPlayer = players.get(0);
+		players.forEach(player -> {
+			player.startGame(this);
+		});
 		ships.forEach(ship -> {
 			if (ship.getOwner().equals(currentPlayer)) {
 				ship.startTurn();
@@ -119,9 +115,10 @@ public class Game {
 			calendar.endRound();
 			if (calendar.isFinished()) {
 				listenersManager.fireGameFinished(this);
+			} else {
+				currentPlayer = players.get(0);
+				listenersManager.fireRoundStarted(this, calendar);
 			}
-			currentPlayer = players.get(0);
-			listenersManager.fireRoundStarted(this, calendar);
 		}
 		ships.forEach(ship -> {
 			if (ship.getOwner().equals(currentPlayer)) {

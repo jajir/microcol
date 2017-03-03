@@ -1,19 +1,25 @@
 package org.microcol.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
+import com.google.common.collect.ImmutableList;
 
 public class Player {
 	private final String name;
 	private final boolean human;
+
+	private Game game;
+	private ImmutableList<Ship> ships;
 
 	protected Player(final String name, final boolean human) {
 		this.name = Preconditions.checkNotNull(name);
 		this.human = human;
 	}
 
-	// TODO JKA Předělat
-	public Game getGame() {
+	protected Game getGame() {
 		return Game.getInstance();
 	}
 
@@ -29,9 +35,43 @@ public class Player {
 		return !human;
 	}
 
-	// TODO JKA getShips()
+	protected void startGame(final Game game) {
+		this.game = game;
 
-	// TODO JKA endTurn()
+		// TODO JKA Use streams
+		List<Ship> list = new ArrayList<>();
+		getGame().getShips().forEach(ship -> {
+			if (ship.getOwner().equals(this)) {
+				list.add(ship);
+			}
+		});
+		ships = ImmutableList.copyOf(list);
+
+		ships.forEach(ship -> {
+			ship.startGame(game);
+		});
+	}
+
+	public List<Ship> getShips() {
+		return ships;
+	}
+
+	public List<Ship> getShipsAt(final Location location) {
+		List<Ship> shipsAt = new ArrayList<>();
+		ships.forEach(ship -> {
+			if (ship.getLocation().equals(location)) {
+				shipsAt.add(ship);
+			}
+		});
+
+		// TODO JKA Optimalizovat
+		return ImmutableList.copyOf(shipsAt);
+	}
+
+	public void endTurn() {
+		// TODO JKA preconditions
+		game.endTurn();
+	}
 
 	@Override
 	public int hashCode() {

@@ -233,7 +233,7 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 				List<Location> steps = new ArrayList<>();
 				pathPlanning.paintPath(cursorTile, gotoCursorTitle, point -> steps.add(point));
 				// TODO get(0) could return different ship that is really moved
-				final Ship unit = gameController.getGame().getCurrentPlayerShipsAt(cursorTile).get(0);
+				final Ship unit = gameController.getGame().getCurrentPlayer().getShipsAt(cursorTile).get(0);
 				final StepCounter stepCounter = new StepCounter(5, unit.getAvailableMoves());
 				steps.forEach(point -> paintStepsToTile(graphics, point, stepCounter));
 			}

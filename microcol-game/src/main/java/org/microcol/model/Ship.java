@@ -7,6 +7,7 @@ public class Ship {
 	private final Player owner;
 	private final int maxMoves;
 
+	private Game game;
 	private Location location;
 	private int availableMoves;
 
@@ -18,10 +19,6 @@ public class Ship {
 
 		this.location = location;
 		this.availableMoves = maxMoves;
-	}
-
-	public Game getGame() {
-		return owner.getGame();
 	}
 
 	public Player getOwner() {
@@ -40,6 +37,10 @@ public class Ship {
 		return availableMoves;
 	}
 
+	protected void startGame(final Game game) {
+		this.game = game;
+	}
+
 	protected void startTurn() {
 		availableMoves = maxMoves;
 	}
@@ -47,12 +48,12 @@ public class Ship {
 	public void moveTo(final Path path) {
 		Preconditions.checkNotNull(path);
 		Preconditions.checkArgument(path.getFirstLocation().isAdjacent(location), "Path (%s) must be adjacent to current location (%s).", path.getFirstLocation(), location);
-		Preconditions.checkArgument(getGame().getMap().isValid(path), "Invalid path: %s", path);
-		Preconditions.checkState(getGame().isActive(), "Game must be active.");
-		Preconditions.checkState(owner.equals(getGame().getCurrentPlayer()), "Current player (%s) is not ship owner (%s).", getGame().getCurrentPlayer(), owner);
+		Preconditions.checkArgument(game.getMap().isValid(path), "Invalid path: %s", path);
+		Preconditions.checkState(game.isActive(), "Game must be active.");
+		Preconditions.checkState(owner.equals(game.getCurrentPlayer()), "Current player (%s) is not ship owner (%s).", game.getCurrentPlayer(), owner);
 
 		// TODO JKA Use streams
-		for (Ship ship : getGame().getShips()) {
+		for (Ship ship : game.getShips()) {
 			if (!owner.equals(ship.getOwner()) && path.contains(ship.getLocation())) {
 				Preconditions.checkArgument(false, "Enemy ship (%s) on path (%s).", ship, path);
 			}
@@ -70,7 +71,7 @@ public class Ship {
 			availableMoves--;
 		}
 		if (!newPath.isEmpty()) {
-			getGame().getListenersManager().fireShipMoved(getGame(), this, startLocation, newPath.build());
+			game.getListenersManager().fireShipMoved(game, this, startLocation, newPath.build());
 		}
 	}
 

@@ -1,6 +1,8 @@
 package org.microcol.ai;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
@@ -8,6 +10,7 @@ import org.microcol.model.Game;
 import org.microcol.model.Location;
 import org.microcol.model.ModelListener;
 import org.microcol.model.PathBuilder;
+import org.microcol.model.Player;
 import org.microcol.model.Ship;
 import org.microcol.model.event.GameFinishedEvent;
 import org.microcol.model.event.GameStartedEvent;
@@ -16,6 +19,7 @@ import org.microcol.model.event.ShipMovedEvent;
 import org.microcol.model.event.TurnStartedEvent;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 
 public class SkyNet {
 	private static final ImmutableList<Location> directions = ImmutableList.of(
@@ -32,6 +36,8 @@ public class SkyNet {
 	private final Game game;
 	private final Random random;
 	private final Map<Ship, Location> lastDirections;
+
+	private Map<Location, List<Ship>> enemyShipsAt;
 
 	public SkyNet(final Game game) {
 		this.game = game;
@@ -54,7 +60,7 @@ public class SkyNet {
 			@Override
 			public void turnStarted(TurnStartedEvent event) {
 				if (event.getPlayer().isComputer()) {
-					move();
+					turn(event.getPlayer());
 				}
 			}
 
@@ -70,13 +76,30 @@ public class SkyNet {
 		});
 	}
 
-	private void move() {
+	private void turn(final Player player) {
+		enemyShipsAt = initEnemyShipsAt(player);
+
+		player.getShips().forEach(ship -> {
+			move(ship);
+		});
+		player.endTurn();
+	}
+
+	private Map<Location, List<Ship>> initEnemyShipsAt(final Player player) {
+		Map<Location, List<Ship>> enemyShipsAt = new HashMap<>();
+
 		game.getShips().forEach(ship -> {
-			if (game.getCurrentPlayer().equals(ship.getOwner())) {
-				move(ship);
+			if (!ship.getOwner().equals(player)) {
+				List<Ship> ships = enemyShipsAt.get(ship.getLocation());
+				if (ships == null) {
+					ships = new ArrayList<>();
+					enemyShipsAt.put(ship.getLocation(), ships);
+				}
+				ships.add(ship);
 			}
 		});
-		game.endTurn();
+
+		return ImmutableMap.copyOf(enemyShipsAt);
 	}
 
 	private void move(final Ship ship) {
@@ -90,10 +113,11 @@ public class SkyNet {
 			final Location lastDirection = lastDirections.get(ship);
 			final Location newLocation = new Location(lastLocation.getX() + lastDirection.getX(),
 				lastLocation.getY() + lastDirection.getY());
-			if (game.getMap().isValid(newLocation) && testEnemyShips(newLocation)) {
+			if (game.getMap().isValid(newLocation) && !isEnemyShipAt(newLocation)) {
 				pathBuilder.add(newLocation);
 				lastLocation = newLocation;
 			} else {
+				// FIXME JKA Pokud neni volny zadny smer, tak se zacykli
 				lastDirections.put(ship, directions.get(random.nextInt(8)));
 			}
 		}
@@ -101,13 +125,9 @@ public class SkyNet {
 		ship.moveTo(pathBuilder.build());
 	}
 
-	private boolean testEnemyShips(final Location location) {
-		for (Ship ship : game.getShipsAt(location)) {
-			if (!game.getCurrentPlayer().equals(ship.getOwner())) {
-				return false;
-			}
-		}
+	private boolean isEnemyShipAt(final Location location) {
+		List<Ship> ships = enemyShipsAt.get(location);
 
-		return true;
+		return ships != null && ships.size() > 0;
 	}
 }
