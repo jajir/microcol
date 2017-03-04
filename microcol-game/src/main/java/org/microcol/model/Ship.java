@@ -71,7 +71,7 @@ public class Ship {
 			availableMoves--;
 		}
 		if (!newPath.isEmpty()) {
-			game.getListenersManager().fireShipMoved(game, this, startLocation, newPath.build());
+			game.fireShipMoved(game, this, startLocation, newPath.build());
 		}
 	}
 

@@ -7,25 +7,23 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 
 public class Game {
-	private final ModelListenersManager listenersManager;
 	private final Map map;
 	private final Calendar calendar;
 	private final ImmutableList<Player> players;
 	private final ImmutableList<Ship> ships;
 
+	private final ModelListenersManager listenersManager;
+
 	private Player currentPlayer;
 	private boolean started;
 
 	protected Game(final Map map, final Calendar calendar, final List<Player> players, final List<Ship> ships) {
-		this.listenersManager = new ModelListenersManager();
 		this.map = Preconditions.checkNotNull(map);
 		this.calendar = Preconditions.checkNotNull(calendar);
 		this.players = ImmutableList.copyOf(players);
 		this.ships = ImmutableList.copyOf(ships);
-	}
 
-	protected ModelListenersManager getListenersManager() {
-		return listenersManager;
+		this.listenersManager = new ModelListenersManager();
 	}
 
 	public void addListener(ModelListener listener) {
@@ -102,16 +100,22 @@ public class Game {
 		final int index = players.indexOf(currentPlayer);
 		if (index < players.size() - 1) {
 			currentPlayer = players.get(index + 1);
+			currentPlayer.startTurn();
+			listenersManager.fireTurnStarted(this, currentPlayer);
 		} else {
 			calendar.endRound();
-			if (calendar.isFinished()) {
-				listenersManager.fireGameFinished(this);
-			} else {
+			if (!calendar.isFinished()) {
 				currentPlayer = players.get(0);
 				listenersManager.fireRoundStarted(this, calendar);
+				currentPlayer.startTurn();
+				listenersManager.fireTurnStarted(this, currentPlayer);
+			} else {
+				listenersManager.fireGameFinished(this);
 			}
 		}
-		currentPlayer.startTurn();
-		listenersManager.fireTurnStarted(this, currentPlayer);
+	}
+
+	protected void fireShipMoved(final Game game, final Ship ship, final Location startLocation, final Path path) {
+		listenersManager.fireShipMoved(game, ship, startLocation, path);
 	}
 }
