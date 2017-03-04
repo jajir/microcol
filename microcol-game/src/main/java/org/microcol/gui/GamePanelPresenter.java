@@ -12,7 +12,6 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.JViewport;
 import javax.swing.SwingUtilities;
-import javax.swing.Timer;
 
 import org.apache.log4j.Logger;
 import org.microcol.gui.event.FocusedTileController;
@@ -302,19 +301,6 @@ public class GamePanelPresenter implements Localized {
 		path.add(0, event.getStartLocation());
 		final WalkAnimator walkAnimator = new WalkAnimator(pathPlanning, path, event.getShip());
 		display.setWalkAnimator(walkAnimator);
-		new Timer(1, actionEvent -> {
-			if (display.getWalkAnimator().isNextAnimationLocationAvailable()) {
-				display.getWalkAnimator().countNextAnimationLocation();
-			} else {
-				((Timer) actionEvent.getSource()).stop();
-				if (display.getCursorTile() != null
-						&& display.getCursorTile().equals(display.getWalkAnimator().getTo())) {
-					focusedTileController.fireFocusedTileEvent(
-							new FocusedTileEvent(display.getWalkAnimator().getTo(), new TileOcean()));
-				}
-			}
-			display.getGamePanelView().repaint();
-		}).start();
 	}
 
 }

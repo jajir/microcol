@@ -108,8 +108,8 @@ public class GameController implements Localized {
 
 	public void nextTurn() {
 		logger.debug("Next Year event was triggered.");
-		//TODO JJ it always starts new thread, is it correct?
-		new Thread(()->game.endTurn()).start();
+		// TODO JJ it always starts new thread, is it correct?
+		new Thread(() -> game.endTurn()).start();
 		// moveAutomatization.perforMoves();
 	}
 

@@ -12,7 +12,9 @@ import java.awt.Toolkit;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JComponent;
 import javax.swing.JPanel;
+import javax.swing.Timer;
 
 import org.microcol.gui.event.NextTurnController;
 import org.microcol.gui.event.StatusBarMessageController;
@@ -57,6 +59,8 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 
 	private WalkAnimator walkAnimator;
 
+	private final FpsCounter fpsCounter;
+
 	@Inject
 	public GamePanelView(final StatusBarMessageController statusBarMessageController,
 			final GameController gameController, final NextTurnController nextTurnController,
@@ -72,11 +76,23 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 		nextTurnController.addNextTurnListener(w -> map.repaint());
 
 		setAutoscrolls(true);
+
+		fpsCounter = new FpsCounter();
+		fpsCounter.start();
 	}
+
+	/**
+	 * Define how many times per second will be screen repainted (FPS). Real FPS
+	 * will be always lover than this value. It's because not all
+	 * {@link JComponent#repaint()} leads to real screen repaint.
+	 */
+	private final static int DEFAULT_FRAME_PER_SECOND = 50;
 
 	@Override
 	public void initGame() {
 		dbImage = createImage(getGameMapWidth(), getGameMapHeight());
+		// TODO JJ new game starts new timer.
+		new Timer(1000 / DEFAULT_FRAME_PER_SECOND, event -> repaint()).start();
 	}
 
 	@Override
@@ -109,15 +125,22 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 		// Sync the display on some systems.
 		// (on Linux, this fixes event queue problems)
 		Toolkit.getDefaultToolkit().sync();
+		fpsCounter.screenWasPainted();
 	}
 
 	private void paintMovingAnimation(final Graphics2D graphics) {
-		if (walkAnimator != null && walkAnimator.getNextCoordinates() != null) {
-			Location part = walkAnimator.getNextCoordinates();
-			paintShip(graphics, Point.of(part.getX(), part.getY()), walkAnimator.getUnit());
-			graphics.drawImage(imageProvider.getImage(ImageProvider.IMG_TILE_MODE_GOTO),
-					part.getX() + TILE_WIDTH_IN_PX - 12, part.getY(), this);
+		if (walkAnimator != null) {
+			if (walkAnimator.getNextCoordinates() != null) {
+				Location part = walkAnimator.getNextCoordinates();
+				paintShip(graphics, Point.of(part.getX(), part.getY()), walkAnimator.getUnit());
+				graphics.drawImage(imageProvider.getImage(ImageProvider.IMG_TILE_MODE_GOTO),
+						part.getX() + TILE_WIDTH_IN_PX - 12, part.getY(), this);
+			}
+			if (walkAnimator.isNextAnimationLocationAvailable()) {
+				walkAnimator.countNextAnimationLocation();
+			}
 		}
+
 	}
 
 	/**
@@ -218,7 +241,8 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 			if (!cursorTile.equals(gotoCursorTitle)) {
 				List<Location> steps = new ArrayList<>();
 				pathPlanning.paintPath(cursorTile, gotoCursorTitle, point -> steps.add(point));
-				// TODO JJ get(0) could return different ship that is really moved
+				// TODO JJ get(0) could return different ship that is really
+				// moved
 				final Ship unit = gameController.getGame().getCurrentPlayer().getShipsAt(cursorTile).get(0);
 				final StepCounter stepCounter = new StepCounter(5, unit.getAvailableMoves());
 				steps.forEach(point -> paintStepsToTile(graphics, point, stepCounter));
