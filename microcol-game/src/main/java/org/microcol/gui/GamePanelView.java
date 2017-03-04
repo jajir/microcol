@@ -9,6 +9,7 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.RenderingHints;
 import java.awt.Toolkit;
+import java.awt.image.VolatileImage;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,7 +44,7 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 
 	private final ImageProvider imageProvider;
 
-	private Image dbImage;
+	private VolatileImage dbImage;
 
 	private final Cursor gotoModeCursor;
 
@@ -90,8 +91,8 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 
 	@Override
 	public void initGame() {
-		dbImage = createImage(getGameMapWidth(), getGameMapHeight());
-		// TODO JJ new game starts new timer.
+		// TODO JJ new game starts new timer. There should not be time for each
+		// new game
 		new Timer(1000 / DEFAULT_FRAME_PER_SECOND, event -> repaint()).start();
 	}
 
@@ -108,19 +109,33 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 		final Graphics2D g2d = (Graphics2D) g;
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		if (dbImage == null) {
-			dbImage = createImage(getGameMapWidth(), getGameMapHeight());
+			dbImage = createVolatileImage(getGameMapWidth(), getGameMapHeight());
 			if (dbImage == null) {
+				/**
+				 * This could happens when Graphics is not ready.
+				 */
 				return;
 			}
 		}
+		if (dbImage.validate(getGraphicsConfiguration()) == VolatileImage.IMAGE_INCOMPATIBLE) {
+			dbImage = createVolatileImage(getGameMapWidth(), getGameMapHeight());
+		}
 		if (dbImage != null) {
 			final Graphics2D dbg = (Graphics2D) dbImage.getGraphics();
+			g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
+			/**
+			 * Following background drawing just verify that there are no
+			 * uncovered pixels.
+			 */
+			dbg.setColor(Color.YELLOW);
+			dbg.fillRect(0, 0, getWidth(), getHeight());
 			paintTilesAndUnits(dbg, gameController.getGame());
 			paintNet(dbg, gameController.getGame().getMap());
 			paintCursor(dbg);
 			paintGoToPath(dbg);
 			paintMovingAnimation(dbg);
 			g.drawImage(dbImage, 0, 0, null);
+			dbg.dispose();
 		}
 		// Sync the display on some systems.
 		// (on Linux, this fixes event queue problems)
@@ -281,7 +296,17 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 
 	@Override
 	public Dimension getMinimumSize() {
-		return new Dimension(getGameMapWidth(), getGameMapHeight());
+		/**
+		 * Code solve state when component have to be painted and game doesn't
+		 * exists. Because than graphics is not initialize and initGame can't
+		 * prepare dbImage.
+		 */
+		// TODO JJ remove if condition
+		if (gameController.getGame() == null) {
+			return new Dimension(100, 100);
+		} else {
+			return new Dimension(getGameMapWidth(), getGameMapHeight());
+		}
 	}
 
 	private int getGameMapWidth() {

@@ -121,8 +121,8 @@ public class MicroCol {
 		SwingUtilities.invokeLater(() -> {
 			final MainFrameView mainFrame = injector.getInstance(MainFrameView.class);
 			final GameController gameController = injector.getInstance(GameController.class);
-			gameController.newGame();
 			mainFrame.setVisible(true);
+			gameController.newGame();
 		});
 	}
 }
