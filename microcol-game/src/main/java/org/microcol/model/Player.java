@@ -1,22 +1,23 @@
 package org.microcol.model;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
-import com.google.common.collect.ImmutableList;
 
 public class Player {
+	private Game game;
+
 	private final String name;
 	private final boolean computer;
-
-	private Game game;
-	private ImmutableList<Ship> ships;
 
 	protected Player(final String name, final boolean computer) {
 		this.name = Preconditions.checkNotNull(name);
 		this.computer = computer;
+	}
+
+	protected void setGame(final Game game) {
+		this.game = Preconditions.checkNotNull(game);
 	}
 
 	public String getName() {
@@ -31,41 +32,20 @@ public class Player {
 		return !computer;
 	}
 
-	protected void startGame(final Game game) {
-		this.game = game;
-
-		// TODO JKA Use streams
-		List<Ship> list = new ArrayList<>();
-		game.getShips().forEach(ship -> {
-			if (ship.getOwner().equals(this)) {
-				list.add(ship);
-			}
-		});
-		ships = ImmutableList.copyOf(list);
-
-		ships.forEach(ship -> {
-			ship.startGame(game);
-		});
-	}
-
 	public List<Ship> getShips() {
-		return ships;
+		return game.getShipsStorage().getShips(this);
 	}
 
 	public List<Ship> getShipsAt(final Location location) {
-		List<Ship> shipsAt = new ArrayList<>();
-		ships.forEach(ship -> {
-			if (ship.getLocation().equals(location)) {
-				shipsAt.add(ship);
-			}
-		});
+		return game.getShipsStorage().getShipsAt(this, location);
+	}
 
-		// TODO JKA Optimalizovat
-		return ImmutableList.copyOf(shipsAt);
+	public List<Ship> getEnemyShips() {
+		return game.getShipsStorage().getEnemyShips(this);
 	}
 
 	protected void startTurn() {
-		ships.forEach(ship -> {
+		getShips().forEach(ship -> {
 			ship.startTurn();
 		});
 	}

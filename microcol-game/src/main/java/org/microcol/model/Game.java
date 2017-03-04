@@ -1,6 +1,5 @@
 package org.microcol.model;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.google.common.base.Preconditions;
@@ -10,9 +9,9 @@ public class Game {
 	private final Map map;
 	private final Calendar calendar;
 	private final ImmutableList<Player> players;
-	private final ImmutableList<Ship> ships;
 
 	private final ModelListenersManager listenersManager;
+	private final ShipsStorage shipsStorage; 
 
 	private Player currentPlayer;
 	private boolean started;
@@ -21,9 +20,15 @@ public class Game {
 		this.map = Preconditions.checkNotNull(map);
 		this.calendar = Preconditions.checkNotNull(calendar);
 		this.players = ImmutableList.copyOf(players);
-		this.ships = ImmutableList.copyOf(ships);
+		this.players.forEach(player -> {
+			player.setGame(this);
+		});
 
-		this.listenersManager = new ModelListenersManager();
+		listenersManager = new ModelListenersManager();
+		shipsStorage = new ShipsStorage(ships);
+		shipsStorage.getShips().forEach(ship -> {
+			ship.setGame(this);
+		});
 	}
 
 	public void addListener(ModelListener listener) {
@@ -52,20 +57,16 @@ public class Game {
 		return currentPlayer;
 	}
 
+	protected ShipsStorage getShipsStorage() {
+		return shipsStorage;
+	}
+
 	public List<Ship> getShips() {
-		return ships;
+		return shipsStorage.getShips();
 	}
 
 	public List<Ship> getShipsAt(final Location location) {
-		List<Ship> shipsAt = new ArrayList<>();
-		ships.forEach(ship -> {
-			if (ship.getLocation().equals(location)) {
-				shipsAt.add(ship);
-			}
-		});
-
-		// TODO JKA Optimalizovat
-		return ImmutableList.copyOf(shipsAt);
+		return shipsStorage.getShipsAt(location);
 	}
 
 	public boolean isStarted() {
@@ -85,9 +86,6 @@ public class Game {
 
 		started = true;
 		currentPlayer = players.get(0);
-		players.forEach(player -> {
-			player.startGame(this);
-		});
 		listenersManager.fireGameStarted(this);
 		listenersManager.fireRoundStarted(this, calendar);
 		currentPlayer.startTurn();

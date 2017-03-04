@@ -30,7 +30,6 @@ public class Path {
 		return true;
 	}
 
-	// TODO JKA Test
 	public boolean contains(final Location location) {
 		Preconditions.checkNotNull(location);
 
@@ -41,7 +40,6 @@ public class Path {
 		return locations;
 	}
 
-	// TODO JKA Test
 	public Location getFirstLocation() {
 		return locations.get(0);
 	}
