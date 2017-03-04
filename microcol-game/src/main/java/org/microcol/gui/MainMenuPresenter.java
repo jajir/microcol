@@ -24,6 +24,8 @@ public class MainMenuPresenter {
 		JRadioButtonMenuItem getRbMenuItemlanguageEn();
 
 		JRadioButtonMenuItem getRbMenuItemlanguageCz();
+		
+		void updateLanguage();
 	}
 
 	@Inject
@@ -45,6 +47,9 @@ public class MainMenuPresenter {
 		});
 		display.getRbMenuItemlanguageEn().addActionListener(actionEvent -> {
 			languangeController.fireLanguageWasChangedEvent(Text.Language.en);
+		});
+		languangeController.addLanguageListener(event -> {
+			display.updateLanguage();
 		});
 	}
 

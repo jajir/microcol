@@ -12,6 +12,7 @@ import javax.swing.KeyStroke;
 
 import org.microcol.gui.Text.Language;
 
+import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
 
 public class MainMenuView extends JMenuBar implements MainMenuPresenter.Display {
@@ -20,6 +21,10 @@ public class MainMenuView extends JMenuBar implements MainMenuPresenter.Display 
 	 * Default serialVersionUID.
 	 */
 	private static final long serialVersionUID = 1L;
+
+	private final Text text;
+
+	private final JMenu menuGame;
 
 	private final JMenuItem menuItemNewGame;
 
@@ -31,36 +36,36 @@ public class MainMenuView extends JMenuBar implements MainMenuPresenter.Display 
 
 	private final JMenuItem menuItemAbout;
 
+	private final JMenu menuPrefereces;
+	
+	private final JMenu menuLanguage;
+
 	private final JRadioButtonMenuItem rbMenuItemlanguageEn;
 
 	private final JRadioButtonMenuItem rbMenuItemlanguageCz;
 
 	@Inject
-	public MainMenuView(final GamePreferences gamePreferences) {
-		JMenu menuGame = new JMenu();
-		menuGame.setText("Game");
+	public MainMenuView(final GamePreferences gamePreferences, final Text text) {
+		this.text = Preconditions.checkNotNull(text);
+		menuGame = new JMenu();
 
 		menuItemNewGame = new JMenuItem();
 		menuItemNewGame.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_MASK));
-		menuItemNewGame.setText("New game");
 		menuItemNewGame.setEnabled(false);
 		menuGame.add(menuItemNewGame);
 
 		menuItemSameGame = new JMenuItem();
 		menuItemSameGame.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_MASK));
-		menuItemSameGame.setText("Save game");
 		menuItemSameGame.setEnabled(false);
 		menuGame.add(menuItemSameGame);
 
 		menuItemLoadGame = new JMenuItem();
 		menuItemLoadGame.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_L, InputEvent.CTRL_MASK));
-		menuItemLoadGame.setText("Load game");
 		menuItemLoadGame.setEnabled(false);
 		menuGame.add(menuItemLoadGame);
 
 		menuItemQuitGame = new JMenuItem();
 		menuItemQuitGame.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q, InputEvent.CTRL_MASK));
-		menuItemQuitGame.setText("Quit MicroCol");
 		if (!gamePreferences.isOSX()) {
 			menuGame.add(menuItemQuitGame);
 		}
@@ -70,14 +75,15 @@ public class MainMenuView extends JMenuBar implements MainMenuPresenter.Display 
 		 * Preferences
 		 * 
 		 */
-		final JMenu menuPrefereces = new JMenu();
-		menuPrefereces.setText("Preferences");
-		rbMenuItemlanguageEn = new JRadioButtonMenuItem("English", gamePreferences.getLanguage().equals(Language.en));
-		rbMenuItemlanguageCz = new JRadioButtonMenuItem("Czech", gamePreferences.getLanguage().equals(Language.cz));
+		menuPrefereces = new JMenu();
+		rbMenuItemlanguageEn = new JRadioButtonMenuItem();
+		rbMenuItemlanguageEn.setSelected(gamePreferences.getLanguage().equals(Language.en));
+		rbMenuItemlanguageCz = new JRadioButtonMenuItem();
+		rbMenuItemlanguageCz.setSelected(gamePreferences.getLanguage().equals(Language.cz));
 		final ButtonGroup groupLanguage = new ButtonGroup();
 		groupLanguage.add(rbMenuItemlanguageEn);
 		groupLanguage.add(rbMenuItemlanguageCz);
-		final JMenu menuLanguage = new JMenu("Language");
+		menuLanguage = new JMenu();
 		menuLanguage.add(rbMenuItemlanguageEn);
 		menuLanguage.add(rbMenuItemlanguageCz);
 		menuPrefereces.add(menuLanguage);
@@ -87,14 +93,28 @@ public class MainMenuView extends JMenuBar implements MainMenuPresenter.Display 
 		 * Help
 		 */
 		JMenu menuHelp = new JMenu();
-		menuHelp.setText("Help");
+		menuHelp.setText(text.get("mainMenu.help"));
 		menuItemAbout = new JMenuItem();
-		menuItemAbout.setText("About");
+		menuItemAbout.setText(text.get("mainMenu.help.about"));
 		menuHelp.add(menuItemAbout);
 
 		if (!gamePreferences.isOSX()) {
 			add(menuHelp);
 		}
+		updateLanguage();
+	}
+
+	@Override
+	public void updateLanguage() {
+		menuGame.setText(text.get("mainMenu.game"));
+		menuItemNewGame.setText(text.get("mainMenu.game.newGame"));
+		menuItemSameGame.setText(text.get("mainMenu.game.saveGame"));
+		menuItemLoadGame.setText(text.get("mainMenu.game.loadGame"));
+		menuItemQuitGame.setText(text.get("mainMenu.game.quitGame"));
+		menuPrefereces.setText(text.get("mainMenu.preferences"));
+		rbMenuItemlanguageEn.setText(text.get("mainMenu.preferences.language.en"));
+		rbMenuItemlanguageCz.setText(text.get("mainMenu.preferences.language.cz"));
+		menuLanguage.setText(text.get("mainMenu.preferences.language"));
 	}
 
 	@Override
