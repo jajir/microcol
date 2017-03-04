@@ -196,10 +196,24 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 	private void paintOwnersFlag(final Graphics2D graphics, final Point point, final Player player) {
 		graphics.setColor(Color.BLACK);
 		graphics.drawRect(point.getX(), point.getY(), FLAG_WIDTH, FLAG_HEIGHT);
+		// TODO JJ playr's color should be property
 		if (player.isHuman()) {
 			graphics.setColor(Color.YELLOW);
 		} else {
-			graphics.setColor(Color.RED);
+			switch (player.getName().hashCode() % 4) {
+			case 0:
+				graphics.setColor(Color.RED);
+				break;
+			case 1:
+				graphics.setColor(Color.GREEN);
+				break;
+			case 2:
+				graphics.setColor(Color.MAGENTA);
+				break;
+			case 3:
+				graphics.setColor(Color.BLUE);
+				break;
+			}
 		}
 		graphics.fillRect(point.getX() + 1, point.getY() + 1, FLAG_WIDTH - 1, FLAG_HEIGHT - 1);
 	}
