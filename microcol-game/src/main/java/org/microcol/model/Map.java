@@ -8,8 +8,8 @@ public class Map {
 	private final int maxY;
 
 	public Map(final int maxX, final int maxY) {
-		Preconditions.checkArgument(maxX > 0, "MaxX must be positive: %s", maxX);
-		Preconditions.checkArgument(maxY > 0, "MaxY must be positive: %s", maxY);
+		Preconditions.checkArgument(maxX > 0, "MaxX (%s) must be positive.", maxX);
+		Preconditions.checkArgument(maxY > 0, "MaxY (%s) must be positive.", maxY);
 
 		this.maxX = maxX;
 		this.maxY = maxY;
