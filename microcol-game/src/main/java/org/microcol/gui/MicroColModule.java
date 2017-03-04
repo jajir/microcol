@@ -12,6 +12,7 @@ import org.microcol.gui.event.NewGameController;
 import org.microcol.gui.event.NextTurnController;
 import org.microcol.gui.event.StatusBarMessageController;
 import org.microcol.gui.event.StatusBarMessageControllerImpl;
+import org.microcol.gui.event.TurnStartedController;
 import org.microcol.gui.model.GameController;
 
 import com.google.inject.AbstractModule;
@@ -40,6 +41,7 @@ public class MicroColModule extends AbstractModule {
 		bind(ChangeLanguageController.class).in(Singleton.class);
 		bind(NewGameController.class).in(Singleton.class);
 		bind(GameController.class).in(Singleton.class);
+		bind(TurnStartedController.class).in(Singleton.class);
 
 		/**
 		 * Initialize MVP classes

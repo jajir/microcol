@@ -13,6 +13,7 @@ import org.microcol.gui.event.FocusedTileController;
 import org.microcol.gui.event.FocusedTileEvent;
 import org.microcol.gui.event.KeyController;
 import org.microcol.gui.event.StatusBarMessageController;
+import org.microcol.gui.event.TurnStartedController;
 import org.microcol.gui.model.GameController;
 import org.microcol.model.Game;
 import org.microcol.model.Location;
@@ -35,9 +36,14 @@ public class RightPanelPresenter implements Localized {
 	public RightPanelPresenter(final RightPanelPresenter.Display display, final GameController gameController,
 			final KeyController keyController, final FocusedTileController focusedTileController,
 			final ChangeLanguageController languangeController,
-			final StatusBarMessageController statusBarMessageController) {
+			final StatusBarMessageController statusBarMessageController,
+			final TurnStartedController turnStartedController) {
+
+		display.getNextTurnButton().setText(getText().get("nextTurnButton"));
+		display.getNextTurnButton().setEnabled(false);
 
 		display.getNextTurnButton().addActionListener(e -> {
+			display.getNextTurnButton().setEnabled(false);
 			gameController.nextTurn();
 		});
 
@@ -46,18 +52,6 @@ public class RightPanelPresenter implements Localized {
 			public void keyPressed(final KeyEvent keyEvent) {
 				keyController.fireKeyWasPressed(keyEvent);
 			}
-		});
-
-		focusedTileController.addFocusedTileListener(event -> {
-			if (isItDifferentTile(event.getLocation())) {
-				focusedTile = event.getLocation();
-				display.showTile(event, gameController.getGame());
-			}
-		});
-
-		display.getNextTurnButton().setText(getText().get("nextTurnButton"));
-		languangeController.addLanguageListener(event -> {
-			display.getNextTurnButton().setText(getText().get("nextTurnButton"));
 		});
 
 		display.getNextTurnButton().addMouseListener(new MouseAdapter() {
@@ -73,6 +67,19 @@ public class RightPanelPresenter implements Localized {
 			public void mouseEntered(final MouseEvent e) {
 				statusBarMessageController.fireStatusMessageWasChangedEvent(getText().get("rightPanel.description"));
 			}
+		});
+
+		languangeController.addLanguageListener(event -> {
+			display.getNextTurnButton().setText(getText().get("nextTurnButton"));
+		});
+		focusedTileController.addFocusedTileListener(event -> {
+			if (isItDifferentTile(event.getLocation())) {
+				focusedTile = event.getLocation();
+				display.showTile(event, gameController.getGame());
+			}
+		});
+		turnStartedController.addTurnStartedListener(event -> {
+			display.getNextTurnButton().setEnabled(true);
 		});
 	}
 

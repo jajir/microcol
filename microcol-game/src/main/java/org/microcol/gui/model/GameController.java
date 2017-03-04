@@ -8,6 +8,7 @@ import org.microcol.gui.Localized;
 import org.microcol.gui.event.MoveUnitController;
 import org.microcol.gui.event.NewGameController;
 import org.microcol.gui.event.NextTurnController;
+import org.microcol.gui.event.TurnStartedController;
 import org.microcol.model.Game;
 import org.microcol.model.GameBuilder;
 import org.microcol.model.Location;
@@ -36,14 +37,17 @@ public class GameController implements Localized {
 
 	private final NewGameController newGameController;
 
+	private final TurnStartedController turnStartedController;
+
 	private Game game;
 
 	@Inject
 	public GameController(final NextTurnController nextTurnController, final MoveUnitController moveUnitController,
-			final NewGameController newGameController) {
+			final NewGameController newGameController, final TurnStartedController turnStartedController) {
 		this.nextTurnController = Preconditions.checkNotNull(nextTurnController);
 		this.moveUnitController = Preconditions.checkNotNull(moveUnitController);
 		this.newGameController = Preconditions.checkNotNull(newGameController);
+		this.turnStartedController = Preconditions.checkNotNull(turnStartedController);
 	}
 
 	/**
@@ -51,16 +55,15 @@ public class GameController implements Localized {
 	 */
 	public void newGame() {
 		GameBuilder builder = new GameBuilder();
-		game = builder.setMap(10, 10)
-			.setCalendar(1570, 1800)
-			.addPlayer("Player1", false).addShip("Player1", 5, 5, 5)
-			.addPlayer("Pocitac", true).addShip("Pocitac", 5, 6, 6).addShip("Pocitac", 5, 7, 7).addShip("Pocitac", 5, 8, 8)
-			.build();
+		game = builder.setMap(10, 10).setCalendar(1570, 1800).addPlayer("Player1", false).addShip("Player1", 5, 5, 5)
+				.addPlayer("Pocitac", true).addShip("Pocitac", 5, 6, 6).addShip("Pocitac", 5, 7, 7)
+				.addShip("Pocitac", 5, 8, 8).build();
 		game.addListener(new ModelListener() {
 
 			@Override
 			public void turnStarted(final TurnStartedEvent event) {
 				logger.debug("Turn started for player '" + event.getPlayer().getName() + "'.");
+				turnStartedController.fireTurnStartedEvent(event);
 			}
 
 			@Override
@@ -71,6 +74,7 @@ public class GameController implements Localized {
 
 			@Override
 			public void roundStarted(final RoundStartedEvent event) {
+				logger.debug("Turn started for year '" + event.getCalendar().getCurrentYear() + "'.");
 				nextTurnController.fireNextTurnEvent(event);
 			}
 
