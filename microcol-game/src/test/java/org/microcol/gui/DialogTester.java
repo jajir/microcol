@@ -1,5 +1,6 @@
 package org.microcol.gui;
 
+import javax.swing.JDialog;
 import javax.swing.SwingUtilities;
 
 import org.microcol.gui.Text.Language;
@@ -12,7 +13,7 @@ public class DialogTester {
 	public static void main(String[] args) {
 
 		SwingUtilities.invokeLater(() -> {
-			WaitingDialog dialog = new WaitingDialog(new ViewUtil(), new Text(Language.cz));
+			JDialog dialog = new WaitingDialog(new ViewUtil(), new Text(Language.cz));
 			dialog.setResizable(false);
 			dialog.setVisible(true);
 		});

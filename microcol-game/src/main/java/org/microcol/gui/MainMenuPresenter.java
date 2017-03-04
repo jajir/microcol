@@ -5,6 +5,7 @@ import javax.swing.JRadioButtonMenuItem;
 
 import org.microcol.gui.event.ChangeLanguageController;
 import org.microcol.gui.event.GameEventController;
+import org.microcol.gui.event.VolumeChangeController;
 
 import com.google.inject.Inject;
 
@@ -24,13 +25,16 @@ public class MainMenuPresenter {
 		JRadioButtonMenuItem getRbMenuItemlanguageEn();
 
 		JRadioButtonMenuItem getRbMenuItemlanguageCz();
-		
+
 		void updateLanguage();
+
+		JMenuItem getMenuItemVolume();
 	}
 
 	@Inject
 	public MainMenuPresenter(final MainMenuPresenter.Display display, final GameEventController gameEventController,
-			final GamePreferences gamePreferences, final ChangeLanguageController languangeController) {
+			final GamePreferences gamePreferences, final ChangeLanguageController languangeController, final Text text,
+			final ViewUtil viewUtil, final VolumeChangeController volumeChangeController) {
 		display.getMenuItemNewGame().addActionListener(actionEvent -> {
 
 		});
@@ -48,6 +52,12 @@ public class MainMenuPresenter {
 		display.getRbMenuItemlanguageEn().addActionListener(actionEvent -> {
 			languangeController.fireLanguageWasChangedEvent(Text.Language.en);
 		});
+		display.getMenuItemVolume().addActionListener(actionEvent -> {
+			PreferencesVolume preferencesVolume = new PreferencesVolume(viewUtil, text, volumeChangeController,
+					gamePreferences.getVolume());
+			preferencesVolume.setVisible(true);
+		});
+
 		languangeController.addLanguageListener(event -> {
 			display.updateLanguage();
 		});

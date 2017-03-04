@@ -2,7 +2,6 @@ package org.microcol.gui;
 
 import org.microcol.gui.event.ChangeLanguageController;
 import org.microcol.gui.event.ChangeLanguageListenerPreferences;
-import org.microcol.gui.event.ChangeLanguageListenerText;
 import org.microcol.gui.event.FocusedTileController;
 import org.microcol.gui.event.GameEventController;
 import org.microcol.gui.event.GameEventListenerImpl;
@@ -13,6 +12,8 @@ import org.microcol.gui.event.NextTurnController;
 import org.microcol.gui.event.StatusBarMessageController;
 import org.microcol.gui.event.StatusBarMessageControllerImpl;
 import org.microcol.gui.event.TurnStartedController;
+import org.microcol.gui.event.VolumeChangeController;
+import org.microcol.gui.event.VolumeChangedListenerPreferences;
 import org.microcol.gui.model.GameController;
 
 import com.google.inject.AbstractModule;
@@ -42,6 +43,7 @@ public class MicroColModule extends AbstractModule {
 		bind(NewGameController.class).in(Singleton.class);
 		bind(GameController.class).in(Singleton.class);
 		bind(TurnStartedController.class).in(Singleton.class);
+		bind(VolumeChangeController.class).in(Singleton.class);
 
 		/**
 		 * Initialize MVP classes
@@ -73,7 +75,10 @@ public class MicroColModule extends AbstractModule {
 		 */
 		bind(GameEventListenerImpl.class).asEagerSingleton();
 		bind(ChangeLanguageListenerPreferences.class).asEagerSingleton();
-		bind(ChangeLanguageListenerText.class).asEagerSingleton();
+		bind(VolumeChangedListenerPreferences.class).asEagerSingleton();
+
+		bind(MusicPlayer.class).in(Singleton.class);
+		bind(MusicController.class).in(Singleton.class);
 	}
 
 	@Provides

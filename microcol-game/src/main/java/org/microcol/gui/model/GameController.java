@@ -4,7 +4,9 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.microcol.ai.SkyNet;
+import org.microcol.gui.GamePreferences;
 import org.microcol.gui.Localized;
+import org.microcol.gui.MusicController;
 import org.microcol.gui.event.MoveUnitController;
 import org.microcol.gui.event.NewGameController;
 import org.microcol.gui.event.NextTurnController;
@@ -39,15 +41,22 @@ public class GameController implements Localized {
 
 	private final TurnStartedController turnStartedController;
 
+	private final MusicController musicController;
+
+	private final GamePreferences gamePreferences;
+
 	private Game game;
 
 	@Inject
 	public GameController(final NextTurnController nextTurnController, final MoveUnitController moveUnitController,
-			final NewGameController newGameController, final TurnStartedController turnStartedController) {
+			final NewGameController newGameController, final TurnStartedController turnStartedController,
+			final MusicController musicController, final GamePreferences gamePreferences) {
 		this.nextTurnController = Preconditions.checkNotNull(nextTurnController);
 		this.moveUnitController = Preconditions.checkNotNull(moveUnitController);
 		this.newGameController = Preconditions.checkNotNull(newGameController);
 		this.turnStartedController = Preconditions.checkNotNull(turnStartedController);
+		this.musicController = Preconditions.checkNotNull(musicController);
+		this.gamePreferences = Preconditions.checkNotNull(gamePreferences);
 	}
 
 	/**
@@ -93,6 +102,7 @@ public class GameController implements Localized {
 		SkyNet skyNet = new SkyNet(game);
 		skyNet.searchAndDestroy();
 		new Thread(() -> game.start()).start();
+		musicController.start(gamePreferences.getVolume());
 	}
 
 	public Game getGame() {

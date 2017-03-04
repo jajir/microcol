@@ -6,13 +6,13 @@ import java.util.prefs.Preferences;
 
 public class GamePreferences {
 
-	private final static String LANGUAGE = "language";
-
+	private final static String PREFERENCES_LANGUAGE = "language";
 	private static final String PREFERENCES_STATE = "state";
 	private static final String PREFERENCES_X = "x";
 	private static final String PREFERENCES_Y = "y";
 	private static final String PREFERENCES_WIDTH = "width";
 	private static final String PREFERENCES_HEIGHT = "height";
+	private static final String PREFERENCES_VOLUME = "volume";
 
 	private final Preferences preferences = Preferences.userNodeForPackage(GamePreferences.class);
 
@@ -52,13 +52,22 @@ public class GamePreferences {
 	}
 
 	public void setLanguage(final Text.Language language) {
-		preferences.put(LANGUAGE, language.name());
+		preferences.put(PREFERENCES_LANGUAGE, language.name());
 		flush();
 	}
 
 	public Text.Language getLanguage() {
-		final String name = preferences.get(LANGUAGE, Text.Language.en.name());
+		final String name = preferences.get(PREFERENCES_LANGUAGE, Text.Language.en.name());
 		return Text.Language.valueOf(name);
+	}
+
+	public void setVolume(final int volume) {
+		preferences.putInt(PREFERENCES_VOLUME, volume);
+		flush();
+	}
+
+	public int getVolume() {
+		return preferences.getInt(PREFERENCES_VOLUME, 75);
 	}
 
 	private void flush() {
