@@ -99,6 +99,16 @@ public class GamePanelPresenter implements Localized {
 
 		moveUnitController.addMoveUnitListener(event -> {
 			scheduleWalkAnimation(event);
+			// TODO JJ it's ugly, should use wait & notify
+			while (display.getWalkAnimator() != null && display.getWalkAnimator().isNextAnimationLocationAvailable()) {
+				try {
+					Thread.sleep(100);
+				} catch (InterruptedException e1) {
+					/**
+					 * Exception is intentionally sink.
+					 */
+				}
+			}
 		});
 
 		keyController.addKeyListener(new KeyAdapter() {
@@ -292,7 +302,7 @@ public class GamePanelPresenter implements Localized {
 		path.add(0, event.getStartLocation());
 		final WalkAnimator walkAnimator = new WalkAnimator(pathPlanning, path, event.getShip());
 		display.setWalkAnimator(walkAnimator);
-		new Timer(111, actionEvent -> {
+		new Timer(1, actionEvent -> {
 			if (display.getWalkAnimator().isNextAnimationLocationAvailable()) {
 				display.getWalkAnimator().countNextAnimationLocation();
 			} else {
