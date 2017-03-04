@@ -95,7 +95,6 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 			dbImage = createImage(getGameMapWidth(), getGameMapHeight());
 			if (dbImage == null) {
 				return;
-			} else {
 			}
 		}
 		if (dbImage != null) {
@@ -106,9 +105,9 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 			paintGoToPath(dbg);
 			paintMovingAnimation(dbg);
 			g.drawImage(dbImage, 0, 0, null);
-			// Sync the display on some systems.
-			// (on Linux, this fixes event queue problems)
 		}
+		// Sync the display on some systems.
+		// (on Linux, this fixes event queue problems)
 		Toolkit.getDefaultToolkit().sync();
 	}
 
@@ -137,20 +136,7 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 					Ship s = world.getShipsAt(loc).get(0);
 					if (walkAnimator == null || (!walkAnimator.isNextAnimationLocationAvailable()
 							|| !walkAnimator.getTo().equals(loc))) {
-						// TODO JJ ship owner should show by color.
 						paintShip(graphics, Point.of(x, y), s);
-						// if (s.getOwner().isHuman()) {
-						// } else {
-						// graphics.drawImage(imageProvider.getImage(ImageProvider.IMG_TILE_SHIP2),
-						// x, y, this);
-						// }
-						// TODO JJ kdys se bude kreslit goto mode, nasledujici
-						// kod
-						// vykresli ikonu k lodi
-						// if (moveAutomatization.isShipMoving(s)) {
-						// graphics.drawImage(imageProvider.getImage(ImageProvider.IMG_TILE_MODE_GOTO),
-						// x + TILE_WIDTH_IN_PX - 12, y, this);
-						// }
 					}
 				}
 			}
@@ -232,7 +218,7 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 			if (!cursorTile.equals(gotoCursorTitle)) {
 				List<Location> steps = new ArrayList<>();
 				pathPlanning.paintPath(cursorTile, gotoCursorTitle, point -> steps.add(point));
-				// TODO get(0) could return different ship that is really moved
+				// TODO JJ get(0) could return different ship that is really moved
 				final Ship unit = gameController.getGame().getCurrentPlayer().getShipsAt(cursorTile).get(0);
 				final StepCounter stepCounter = new StepCounter(5, unit.getAvailableMoves());
 				steps.forEach(point -> paintStepsToTile(graphics, point, stepCounter));

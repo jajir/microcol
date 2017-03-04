@@ -126,7 +126,7 @@ public class GamePanelPresenter implements Localized {
 			}
 		});
 
-		MouseAdapter ma = new MouseAdapter() {
+		final MouseAdapter ma = new MouseAdapter() {
 
 			@Override
 			public void mousePressed(final MouseEvent e) {
@@ -265,7 +265,7 @@ public class GamePanelPresenter implements Localized {
 	private void cancelGoToMode(final Location moveTo) {
 		display.setCursorNormal();
 		display.setCursorTile(moveTo);
-		// TODO read tile ocean from map
+		// TODO JJ read tile ocean from map
 		focusedTileController.fireFocusedTileEvent(new FocusedTileEvent(moveTo, new TileOcean()));
 	}
 
@@ -274,7 +274,7 @@ public class GamePanelPresenter implements Localized {
 
 		final List<Location> path = new ArrayList<Location>();
 		pathPlanning.paintPath(display.getCursorTile(), moveTo, point -> path.add(point));
-		// make first step
+		// TODO JJ - co to znamena? make first step
 		if (path.size() > 0) {
 			// TODO JJ active ship can be different from ship first at list
 			Ship ship = gameController.getGame().getCurrentPlayer().getShipsAt(display.getCursorTile()).get(0);
