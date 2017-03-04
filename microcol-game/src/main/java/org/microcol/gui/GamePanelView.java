@@ -131,7 +131,7 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 			for (int j = 0; j <= world.getMap().getMaxY(); j++) {
 				int x = i * TOTAL_TILE_WIDTH_IN_PX;
 				int y = j * TOTAL_TILE_WIDTH_IN_PX;
-				final Location loc = Location.make(i, j);
+				final Location loc = Location.of(i, j);
 				graphics.drawImage(imageProvider.getImage(ImageProvider.IMG_TILE_OCEAN), x, y, this);
 				if (!world.getShipsAt(loc).isEmpty()) {
 					Ship s = world.getShipsAt(loc).get(0);

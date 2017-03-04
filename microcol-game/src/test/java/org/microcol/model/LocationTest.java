@@ -33,23 +33,23 @@ public class LocationTest {
 	public void testCreationStatic() {
 		final String message = "Test of creation failed: ";
 
-		Location location = Location.make(0, 0);
+		Location location = Location.of(0, 0);
 		Assert.assertEquals(message + "[0, 0]", 0, location.getX());
 		Assert.assertEquals(message + "[0, 0]", 0, location.getY());
 
-		location = Location.make(2, 3);
+		location = Location.of(2, 3);
 		Assert.assertEquals(message + "[2, 3]", 2, location.getX());
 		Assert.assertEquals(message + "[2, 3]", 3, location.getY());
 
-		location = Location.make(-2, 3);
+		location = Location.of(-2, 3);
 		Assert.assertEquals(message + "[-2, 3]", -2, location.getX());
 		Assert.assertEquals(message + "[-2, 3]", 3, location.getY());
 
-		location = Location.make(2, -3);
+		location = Location.of(2, -3);
 		Assert.assertEquals(message + "[2, -3]", 2, location.getX());
 		Assert.assertEquals(message + "[2, -3]", -3, location.getY());
 
-		location = Location.make(-2, -3);
+		location = Location.of(-2, -3);
 		Assert.assertEquals(message + "[-2, -3]", -2, location.getX());
 		Assert.assertEquals(message + "[-2, -3]", -3, location.getY());
 	}

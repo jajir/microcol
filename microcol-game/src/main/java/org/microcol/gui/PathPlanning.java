@@ -41,12 +41,12 @@ public class PathPlanning {
 			if (tileFrom.getX() < tileTo.getX()) {
 				for (int x = tileFrom.getX(); x <= tileTo.getX(); x++) {
 					int y = Math.round(a * x + b);
-					addPoint(tileFrom, whatToDoWithPointInPath, Location.make(x, y));
+					addPoint(tileFrom, whatToDoWithPointInPath, Location.of(x, y));
 				}
 			} else {
 				for (int x = tileFrom.getX(); x >= tileTo.getX(); x--) {
 					int y = Math.round(a * x + b);
-					addPoint(tileFrom, whatToDoWithPointInPath, Location.make(x, y));
+					addPoint(tileFrom, whatToDoWithPointInPath, Location.of(x, y));
 				}
 			}
 		} else if (!tileFrom.equals(tileTo)) {
@@ -55,12 +55,12 @@ public class PathPlanning {
 			if (tileFrom.getY() < tileTo.getY()) {
 				for (int y = tileFrom.getY(); y <= tileTo.getY(); y++) {
 					int x = Math.round(a * y + b);
-					addPoint(tileFrom, whatToDoWithPointInPath, Location.make(x, y));
+					addPoint(tileFrom, whatToDoWithPointInPath, Location.of(x, y));
 				}
 			} else {
 				for (int y = tileFrom.getY(); y >= tileTo.getY(); y--) {
 					int x = Math.round(a * y + b);
-					addPoint(tileFrom, whatToDoWithPointInPath, Location.make(x, y));
+					addPoint(tileFrom, whatToDoWithPointInPath, Location.of(x, y));
 				}
 			}
 		}

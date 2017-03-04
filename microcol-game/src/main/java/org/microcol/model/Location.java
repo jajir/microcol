@@ -60,8 +60,7 @@ public class Location {
 			.toString();
 	}
 
-	// TODO JKA What for?
-	public static Location make(final int x, final int y) {
+	public static Location of(final int x, final int y) {
 		return new Location(x, y);
 	}
 }

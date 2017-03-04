@@ -196,7 +196,7 @@ public class GamePanelPresenter implements Localized {
 	}
 
 	private void onMousePressed(final MouseEvent e) {
-		final Location p = convertToTilesCoordinates(Location.make(e.getX(), e.getY()));
+		final Location p = convertToTilesCoordinates(Location.of(e.getX(), e.getY()));
 		if (display.isGotoMode()) {
 			switchToNormalMode(p);
 		} else {
@@ -227,15 +227,15 @@ public class GamePanelPresenter implements Localized {
 	}
 
 	private void onMouseMoved(final MouseEvent e) {
-		lastMousePosition = Location.make(e.getX(), e.getY());
+		lastMousePosition = Location.of(e.getX(), e.getY());
 		if (display.isGotoMode()) {
-			display.setGotoCursorTitle(convertToTilesCoordinates(Location.make(e.getX(), e.getY())));
+			display.setGotoCursorTitle(convertToTilesCoordinates(Location.of(e.getX(), e.getY())));
 			display.getGamePanelView().repaint();
 		}
 		/**
 		 * Set status bar message
 		 */
-		Location where = convertToTilesCoordinates(Location.make(e.getX(), e.getY()));
+		Location where = convertToTilesCoordinates(Location.of(e.getX(), e.getY()));
 		final TileOcean tile = new TileOcean();
 		final StringBuilder buff = new StringBuilder();
 		buff.append(getText().get("statusBar.tile.start"));
@@ -252,7 +252,7 @@ public class GamePanelPresenter implements Localized {
 	}
 
 	private Location convertToTilesCoordinates(final Location panelCoordinates) {
-		return Location.make(panelCoordinates.getX() / GamePanelView.TOTAL_TILE_WIDTH_IN_PX,
+		return Location.of(panelCoordinates.getX() / GamePanelView.TOTAL_TILE_WIDTH_IN_PX,
 				panelCoordinates.getY() / GamePanelView.TOTAL_TILE_WIDTH_IN_PX);
 	}
 
