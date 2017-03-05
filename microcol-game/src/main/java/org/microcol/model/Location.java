@@ -3,6 +3,7 @@ package org.microcol.model;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 
+// TODO JKA Documentation
 public class Location {
 	private final int x;
 	private final int y;
