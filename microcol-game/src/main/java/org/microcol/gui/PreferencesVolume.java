@@ -27,6 +27,10 @@ public class PreferencesVolume extends JDialog {
 	 *            required tool for centering window on screen
 	 * @param text
 	 *            required localization helper class
+	 * @param volumeChangeController
+	 *            required volume change controller
+	 * @param actualVolume
+	 *            required actual volume value
 	 */
 	public PreferencesVolume(final ViewUtil viewUtil, final Text text,
 			final VolumeChangeController volumeChangeController, final int actualVolume) {

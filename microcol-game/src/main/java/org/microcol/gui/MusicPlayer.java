@@ -23,8 +23,12 @@ public class MusicPlayer {
 	private SourceDataLine sourceLine;
 
 	/**
+	 * Start play background music.
+	 * 
 	 * @param filename
 	 *            the name of the file that is going to be played
+	 * @param defaultVolume
+	 *            required default volume
 	 */
 	public void playSound(final String filename, final int defaultVolume) {
 

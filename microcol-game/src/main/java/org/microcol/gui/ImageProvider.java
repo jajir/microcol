@@ -60,7 +60,7 @@ public class ImageProvider {
 	public Image getImage(final String name) {
 		BufferedImage img = images.get(name);
 		if (img == null) {
-			img = getCompatibleImage(ImageProvider.getRawImage(BASE_PACKAGE + "/" + name));
+			img = ImageProvider.getRawImage(BASE_PACKAGE + "/" + name);
 			if (img == null) {
 				return null;
 			} else {
