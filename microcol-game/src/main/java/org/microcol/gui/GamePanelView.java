@@ -11,7 +11,10 @@ import java.awt.RenderingHints;
 import java.awt.Toolkit;
 import java.awt.image.VolatileImage;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.swing.JComponent;
 import javax.swing.JPanel;
@@ -135,7 +138,8 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 			 */
 			dbg.setColor(Color.YELLOW);
 			dbg.fillRect(0, 0, getWidth(), getHeight());
-			paintTilesAndUnits(dbg, gameController.getGame());
+			paintTiles(dbg, gameController.getGame());
+			paintUnits(dbg, gameController.getGame());
 			paintGrid(dbg, gameController.getGame().getMap());
 			paintCursor(dbg);
 			paintGoToPath(dbg);
@@ -165,26 +169,56 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 	}
 
 	/**
-	 * Draw main game view.
+	 * Draw main game tiles.
 	 * 
-	 * @param g
+	 * @param graphics
+	 *            required {@link Graphics2D}
 	 */
-	private void paintTilesAndUnits(final Graphics2D graphics, final Game world) {
+	private void paintTiles(final Graphics2D graphics, final Game world) {
 		for (int i = 0; i <= world.getMap().getMaxX(); i++) {
 			for (int j = 0; j <= world.getMap().getMaxY(); j++) {
 				final Location loc = Location.of(i, j);
 				final Point point = Point.of(loc);
 				graphics.drawImage(imageProvider.getImage(ImageProvider.IMG_TILE_OCEAN), point.getX(), point.getY(),
 						this);
-				if (!world.getShipsAt(loc).isEmpty()) {
-					Ship s = world.getShipsAt(loc).get(0);
-					if (walkAnimator == null || (!walkAnimator.isNextAnimationLocationAvailable()
-							|| !walkAnimator.getTo().equals(loc))) {
-						paintShip(graphics, point, s);
-					}
-				}
 			}
 		}
+	}
+
+	/**
+	 * Draw units.
+	 * <p>
+	 * Method iterate through all ships and create map containing for each
+	 * location list of ships. Finally methods iterate through all location with
+	 * ships, select first ship and draw it.
+	 * </p>
+	 * 
+	 * @param graphics
+	 *            required {@link Graphics2D}
+	 * @param game
+	 *            required {@link Game}
+	 */
+	private void paintUnits(final Graphics2D graphics, final Game world) {
+		final java.util.Map<Location, Set<Ship>> ships = new HashMap<>();
+		world.getShips().forEach(ship -> {
+			Set<Ship> list = ships.get(ship.getLocation());
+			if (list == null) {
+				list = new HashSet<>();
+				ships.put(ship.getLocation(), list);
+			}
+			if (!list.contains(ship)) {
+				list.add(ship);
+			}
+		});
+		ships.forEach((location, list) -> {
+			//TODO JJ selection of ship should reflect specific order
+			final Ship ship = list.stream().findFirst().get();
+			final Point point = Point.of(location);
+			if (walkAnimator == null
+					|| (!walkAnimator.isNextAnimationLocationAvailable() || !walkAnimator.getTo().equals(location))) {
+				paintShip(graphics, point, ship);
+			}
+		});
 	}
 
 	private final static int FLAG_WIDTH = 7;
