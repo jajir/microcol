@@ -101,6 +101,7 @@ public class MainMenuView extends JMenuBar implements MainMenuPresenter.Display 
 
 		menuItemShowGrid = new JCheckBoxMenuItem();
 		menuItemShowGrid.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_G, 0));
+		menuItemShowGrid.setSelected(gamePreferences.isGridShown());
 		menuPrefereces.add(menuItemShowGrid);
 
 		add(menuPrefereces);
