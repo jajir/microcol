@@ -39,10 +39,7 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 
 	private final static int TILE_WIDTH_IN_PX = 35;
 
-	@Deprecated
-	private final static int GRID_LINE_WIDTH = 0;
-
-	public final static int TOTAL_TILE_WIDTH_IN_PX = TILE_WIDTH_IN_PX + GRID_LINE_WIDTH;
+	public final static int TOTAL_TILE_WIDTH_IN_PX = TILE_WIDTH_IN_PX;
 
 	private final ImageProvider imageProvider;
 
@@ -191,7 +188,7 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 				final Location loc = Location.of(i, j);
 				final Point point = Point.of(loc);
 				graphics.drawImage(imageProvider.getImage(ImageProvider.IMG_TILE_OCEAN), point.getX(), point.getY(),
-						this);
+						point.getX() + 35, point.getY() + 35, 0, 0, 35, 35, this);
 			}
 		}
 	}
