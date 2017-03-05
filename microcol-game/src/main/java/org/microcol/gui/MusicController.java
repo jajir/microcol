@@ -25,7 +25,7 @@ public class MusicController {
 	}
 
 	public void start(int defaultVolume) {
-		new Thread(() -> musicPlayer.playSound("src/main/resources/music/AnnounceMyName_1.wav", defaultVolume)).start();
+		new Thread(() -> musicPlayer.playSound("music/AnnounceMyName_1.wav", defaultVolume)).start();
 	}
 
 	public void stop() {

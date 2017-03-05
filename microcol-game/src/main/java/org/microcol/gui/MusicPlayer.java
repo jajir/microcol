@@ -1,7 +1,8 @@
 package org.microcol.gui;
 
-import java.io.File;
+import java.io.BufferedInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
@@ -17,7 +18,6 @@ import javax.sound.sampled.SourceDataLine;
  */
 public class MusicPlayer {
 	private final int BUFFER_SIZE = 128000;
-	private File soundFile;
 	private AudioInputStream audioStream;
 	private AudioFormat audioFormat;
 	private SourceDataLine sourceLine;
@@ -28,17 +28,10 @@ public class MusicPlayer {
 	 */
 	public void playSound(final String filename, final int defaultVolume) {
 
-		String strFilename = filename;
-
 		try {
-			soundFile = new File(strFilename);
-		} catch (Exception e) {
-			e.printStackTrace();
-			System.exit(1);
-		}
-
-		try {
-			audioStream = AudioSystem.getAudioInputStream(soundFile);
+			final ClassLoader cl = ImageProvider.class.getClassLoader();
+			final InputStream in = cl.getResourceAsStream(filename);
+			audioStream = AudioSystem.getAudioInputStream(new BufferedInputStream(in));
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.exit(1);
