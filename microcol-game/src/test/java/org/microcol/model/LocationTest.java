@@ -86,6 +86,24 @@ public class LocationTest {
 	}
 
 	@Test
+	public void testAdd() {
+		final String message = "Test of add failed: ";
+
+		Assert.assertEquals(message + "[3, 2] + [3, 2]", new Location(6, 4), new Location(3, 2).add(new Location(3, 2)));
+		Assert.assertEquals(message + "[3, 2] + [-3, 2]", new Location(0, 4), new Location(3, 2).add(new Location(-3, 2)));
+		Assert.assertEquals(message + "[3, 2] + [3, -2]", new Location(6, 0), new Location(3, 2).add(new Location(3, -2)));
+		Assert.assertEquals(message + "[3, 2] + [-3, -2]", new Location(0, 0), new Location(3, 2).add(new Location(-3, -2)));
+		Assert.assertEquals(message + "[-3, 2] + [-3, 2]", new Location(-6, 4), new Location(-3, 2).add(new Location(-3, 2)));
+		Assert.assertEquals(message + "[3, -2] + [3, -2]", new Location(6, -4), new Location(3, -2).add(new Location(3, -2)));
+		Assert.assertEquals(message + "[-3, -2] + [-3, -2]", new Location(-6, -4), new Location(-3, -2).add(new Location(-3, -2)));
+	}
+
+	@Test(expected = NullPointerException.class)
+	public void testAddNull() {
+		new Location(5, 5).add(null);
+	}
+
+	@Test
 	public void testHashCode() {
 		final String message = "Test of hasCode failed:";
 

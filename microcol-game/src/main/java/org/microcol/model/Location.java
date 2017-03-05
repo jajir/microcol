@@ -31,6 +31,12 @@ public class Location {
 			&& Math.abs(y - location.y) <= 1; 
 	}
 
+	public Location add(final Location location) {
+		Preconditions.checkNotNull(location);
+
+		return new Location(x + location.x, y + location.y);
+	}
+
 	@Override
 	public int hashCode() {
 		return x + (y << 16);

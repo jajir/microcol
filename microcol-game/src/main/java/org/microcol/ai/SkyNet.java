@@ -94,8 +94,7 @@ public class SkyNet {
 		final PathBuilder pathBuilder = new PathBuilder();
 		while (pathBuilder.getLength() < ship.getAvailableMoves()) {
 			final Location lastDirection = lastDirections.get(ship);
-			final Location newLocation = new Location(lastLocation.getX() + lastDirection.getX(),
-				lastLocation.getY() + lastDirection.getY());
+			final Location newLocation = lastLocation.add(lastDirection);
 			if (game.getMap().isValid(newLocation) && !isEnemyShipAt(newLocation)) {
 				pathBuilder.add(newLocation);
 				lastLocation = newLocation;
