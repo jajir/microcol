@@ -15,6 +15,7 @@ import java.util.List;
 
 import javax.swing.JComponent;
 import javax.swing.JPanel;
+import javax.swing.JViewport;
 import javax.swing.Timer;
 
 import org.microcol.gui.event.NextTurnController;
@@ -133,8 +134,8 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 			 * Following background drawing just verify that there are no
 			 * uncovered pixels.
 			 */
-			dbg.setColor(Color.YELLOW);
-			dbg.fillRect(0, 0, getWidth(), getHeight());
+			// dbg.setColor(Color.YELLOW);
+			// dbg.fillRect(0, 0, getWidth(), getHeight());
 			paintTiles(dbg, gameController.getGame());
 			paintUnits(dbg, gameController.getGame());
 			paintGrid(dbg, gameController.getGame().getMap());
@@ -172,8 +173,21 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 	 *            required {@link Graphics2D}
 	 */
 	private void paintTiles(final Graphics2D graphics, final Game world) {
-		for (int i = 0; i <= world.getMap().getMaxX(); i++) {
-			for (int j = 0; j <= world.getMap().getMaxY(); j++) {
+		final JViewport viewport = (JViewport) this.getParent();
+		final Dimension dim = viewport.getExtentSize();
+		final java.awt.Point pos = viewport.getViewPosition();
+		final Location pos2 = Location.of((int) Math.ceil(pos.getX() / TOTAL_TILE_WIDTH_IN_PX),
+				(int) Math.ceil(pos.getY() / TOTAL_TILE_WIDTH_IN_PX));
+		final Location dim2 = Location.of((int) Math.ceil(dim.getWidth() / TOTAL_TILE_WIDTH_IN_PX),
+				(int) Math.ceil(dim.getHeight() / TOTAL_TILE_WIDTH_IN_PX));
+
+		final int startX = Math.min(0, pos2.getX());
+		final int startY = Math.min(0, pos2.getY());
+		final int endX = Math.min(startX + dim2.getX(), world.getMap().getMaxX());
+		final int endY = Math.min(startY + dim2.getY(), world.getMap().getMaxY());
+
+		for (int i = startX; i <= endX; i++) {
+			for (int j = startY; j <= endY; j++) {
 				final Location loc = Location.of(i, j);
 				final Point point = Point.of(loc);
 				graphics.drawImage(imageProvider.getImage(ImageProvider.IMG_TILE_OCEAN), point.getX(), point.getY(),
