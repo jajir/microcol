@@ -1,5 +1,6 @@
 package org.microcol.ai;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -85,9 +86,10 @@ public class SkyNet {
 
 	private void move(final Ship ship) {
 		if (lastDirections.get(ship) == null) {
-			lastDirections.put(ship, directions.get(random.nextInt(8)));
+			lastDirections.put(ship, directions.get(random.nextInt(directions.size())));
 		}
 
+		final List<Location> directions = new ArrayList<>(SkyNet.directions);
 		Location lastLocation = ship.getLocation();
 		final PathBuilder pathBuilder = new PathBuilder();
 		while (pathBuilder.getLength() < ship.getAvailableMoves()) {
@@ -98,12 +100,17 @@ public class SkyNet {
 				pathBuilder.add(newLocation);
 				lastLocation = newLocation;
 			} else {
-				// FIXME JKA Pokud neni volny zadny smer, tak se zacykli
-				lastDirections.put(ship, directions.get(random.nextInt(8)));
+				directions.remove(lastDirection);
+				if (directions.isEmpty()) {
+					break;
+				}
+				lastDirections.put(ship, directions.get(random.nextInt(directions.size())));
 			}
 		}
 
-		ship.moveTo(pathBuilder.build());
+		if (!pathBuilder.isEmpty()) {
+			ship.moveTo(pathBuilder.build());
+		}
 	}
 
 	private boolean isEnemyShipAt(final Location location) {
