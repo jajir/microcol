@@ -45,6 +45,8 @@ public class MainMenuView extends JMenuBar implements MainMenuPresenter.Display 
 	private final JRadioButtonMenuItem rbMenuItemlanguageCz;
 
 	private final JMenuItem menuItemVolume;
+	
+	private final JMenu menuHelp;
 
 	@Inject
 	public MainMenuView(final GamePreferences gamePreferences, final Text text) {
@@ -90,7 +92,7 @@ public class MainMenuView extends JMenuBar implements MainMenuPresenter.Display 
 		menuLanguage.add(rbMenuItemlanguageCz);
 		menuPrefereces.add(menuLanguage);
 
-		menuItemVolume = new JMenuItem("Volume");
+		menuItemVolume = new JMenuItem();
 		menuItemVolume.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_V, InputEvent.CTRL_MASK));
 		menuPrefereces.add(menuItemVolume);
 		add(menuPrefereces);
@@ -98,10 +100,8 @@ public class MainMenuView extends JMenuBar implements MainMenuPresenter.Display 
 		/**
 		 * Help
 		 */
-		JMenu menuHelp = new JMenu();
-		menuHelp.setText(text.get("mainMenu.help"));
+		menuHelp = new JMenu();
 		menuItemAbout = new JMenuItem();
-		menuItemAbout.setText(text.get("mainMenu.help.about"));
 		menuHelp.add(menuItemAbout);
 
 		if (!gamePreferences.isOSX()) {
@@ -122,6 +122,9 @@ public class MainMenuView extends JMenuBar implements MainMenuPresenter.Display 
 		rbMenuItemlanguageEn.setText(text.get("mainMenu.preferences.language.en"));
 		rbMenuItemlanguageCz.setText(text.get("mainMenu.preferences.language.cz"));
 		menuItemVolume.setText(text.get("mainMenu.preferences.volume"));
+		
+		menuHelp.setText(text.get("mainMenu.help"));
+		menuItemAbout.setText(text.get("mainMenu.help.about"));
 	}
 
 	@Override

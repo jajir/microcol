@@ -2,6 +2,7 @@ package org.microcol.gui;
 
 import org.microcol.gui.event.ChangeLanguageController;
 import org.microcol.gui.event.ChangeLanguageListenerPreferences;
+import org.microcol.gui.event.ChangeLanguageListenerText;
 import org.microcol.gui.event.FocusedTileController;
 import org.microcol.gui.event.GameEventController;
 import org.microcol.gui.event.GameEventListenerImpl;
@@ -75,6 +76,7 @@ public class MicroColModule extends AbstractModule {
 		 */
 		bind(GameEventListenerImpl.class).asEagerSingleton();
 		bind(ChangeLanguageListenerPreferences.class).asEagerSingleton();
+		bind(ChangeLanguageListenerText.class).asEagerSingleton();
 		bind(VolumeChangedListenerPreferences.class).asEagerSingleton();
 
 		bind(MusicPlayer.class).in(Singleton.class);
