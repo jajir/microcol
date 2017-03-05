@@ -19,7 +19,6 @@ import org.microcol.model.event.ShipMovedEvent;
 import org.microcol.model.event.TurnStartedEvent;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
 
 public class SkyNet {
 	private static final ImmutableList<Location> directions = ImmutableList.of(
@@ -77,7 +76,7 @@ public class SkyNet {
 	}
 
 	private void turn(final Player player) {
-		enemyShipsAt = initEnemyShipsAt(player);
+		enemyShipsAt = player.getEnemyShipsAt();
 
 		player.getShips().forEach(ship -> {
 			move(ship);
@@ -85,44 +84,32 @@ public class SkyNet {
 		player.endTurn();
 	}
 
-	private Map<Location, List<Ship>> initEnemyShipsAt(final Player player) {
-		Map<Location, List<Ship>> enemyShipsAt = new HashMap<>();
-
-		game.getShips().forEach(ship -> {
-			if (!ship.getOwner().equals(player)) {
-				List<Ship> ships = enemyShipsAt.get(ship.getLocation());
-				if (ships == null) {
-					ships = new ArrayList<>();
-					enemyShipsAt.put(ship.getLocation(), ships);
-				}
-				ships.add(ship);
-			}
-		});
-
-		return ImmutableMap.copyOf(enemyShipsAt);
-	}
-
 	private void move(final Ship ship) {
 		if (lastDirections.get(ship) == null) {
-			lastDirections.put(ship, directions.get(random.nextInt(8)));
+			lastDirections.put(ship, directions.get(random.nextInt(directions.size())));
 		}
 
+		final List<Location> directions = new ArrayList<>(SkyNet.directions);
 		Location lastLocation = ship.getLocation();
 		final PathBuilder pathBuilder = new PathBuilder();
 		while (pathBuilder.getLength() < ship.getAvailableMoves()) {
 			final Location lastDirection = lastDirections.get(ship);
-			final Location newLocation = new Location(lastLocation.getX() + lastDirection.getX(),
-				lastLocation.getY() + lastDirection.getY());
+			final Location newLocation = lastLocation.add(lastDirection);
 			if (game.getMap().isValid(newLocation) && !isEnemyShipAt(newLocation)) {
 				pathBuilder.add(newLocation);
 				lastLocation = newLocation;
 			} else {
-				// FIXME JKA Pokud neni volny zadny smer, tak se zacykli
-				lastDirections.put(ship, directions.get(random.nextInt(8)));
+				directions.remove(lastDirection);
+				if (directions.isEmpty()) {
+					break;
+				}
+				lastDirections.put(ship, directions.get(random.nextInt(directions.size())));
 			}
 		}
 
-		ship.moveTo(pathBuilder.build());
+		if (!pathBuilder.isEmpty()) {
+			ship.moveTo(pathBuilder.build());
+		}
 	}
 
 	private boolean isEnemyShipAt(final Location location) {

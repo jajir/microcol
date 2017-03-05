@@ -3,6 +3,8 @@ package org.microcol.model;
 import java.util.ArrayList;
 import java.util.List;
 
+// TODO JKA Documentation
+// TODO JKA Tests
 public class PathBuilder {
 	private final List<Location> locations;
 

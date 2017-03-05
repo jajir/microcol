@@ -5,6 +5,8 @@ import java.util.List;
 
 import com.google.common.base.Preconditions;
 
+// TODO JKA Documentation
+// TODO JKA Tests
 public class GameBuilder {
 	private final List<Player> players;
 	private final List<Ship> ships;

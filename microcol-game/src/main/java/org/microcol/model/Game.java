@@ -5,6 +5,8 @@ import java.util.List;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 
+// TODO JKA Documentation
+// TODO JKA Tests
 public class Game {
 	private final Map map;
 	private final Calendar calendar;
@@ -63,6 +65,10 @@ public class Game {
 
 	public List<Ship> getShips() {
 		return shipsStorage.getShips();
+	}
+
+	public java.util.Map<Location, List<Ship>> getShipsAt() {
+		return shipsStorage.getShipsAt();
 	}
 
 	public List<Ship> getShipsAt(final Location location) {

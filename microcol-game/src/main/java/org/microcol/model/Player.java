@@ -1,10 +1,13 @@
 package org.microcol.model;
 
 import java.util.List;
+import java.util.Map;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 
+// TODO JKA Documentation
+// TODO JKA Tests
 public class Player {
 	private Game game;
 
@@ -42,6 +45,10 @@ public class Player {
 
 	public List<Ship> getEnemyShips() {
 		return game.getShipsStorage().getEnemyShips(this);
+	}
+
+	public Map<Location, List<Ship>> getEnemyShipsAt() {
+		return game.getShipsStorage().getEnemyShipsAt(this);
 	}
 
 	protected void startTurn() {

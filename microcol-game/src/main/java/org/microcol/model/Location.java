@@ -3,6 +3,7 @@ package org.microcol.model;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 
+// TODO JKA Documentation
 public class Location {
 	private final int x;
 	private final int y;
@@ -29,6 +30,12 @@ public class Location {
 
 		return Math.abs(x - location.x) <= 1
 			&& Math.abs(y - location.y) <= 1; 
+	}
+
+	public Location add(final Location location) {
+		Preconditions.checkNotNull(location);
+
+		return new Location(x + location.x, y + location.y);
 	}
 
 	@Override

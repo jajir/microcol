@@ -11,10 +11,7 @@ import java.awt.RenderingHints;
 import java.awt.Toolkit;
 import java.awt.image.VolatileImage;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import javax.swing.JComponent;
 import javax.swing.JPanel;
@@ -188,9 +185,8 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 	/**
 	 * Draw units.
 	 * <p>
-	 * Method iterate through all ships and create map containing for each
-	 * location list of ships. Finally methods iterate through all location with
-	 * ships, select first ship and draw it.
+	 * Methods iterate through all location with ships, select first ship and
+	 * draw it.
 	 * </p>
 	 * 
 	 * @param graphics
@@ -199,19 +195,9 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 	 *            required {@link Game}
 	 */
 	private void paintUnits(final Graphics2D graphics, final Game world) {
-		final java.util.Map<Location, Set<Ship>> ships = new HashMap<>();
-		world.getShips().forEach(ship -> {
-			Set<Ship> list = ships.get(ship.getLocation());
-			if (list == null) {
-				list = new HashSet<>();
-				ships.put(ship.getLocation(), list);
-			}
-			if (!list.contains(ship)) {
-				list.add(ship);
-			}
-		});
+		final java.util.Map<Location, List<Ship>> ships = world.getShipsAt();
 		ships.forEach((location, list) -> {
-			//TODO JJ selection of ship should reflect specific order
+			// TODO JJ selection of ship should reflect specific order
 			final Ship ship = list.stream().findFirst().get();
 			final Point point = Point.of(location);
 			if (walkAnimator == null

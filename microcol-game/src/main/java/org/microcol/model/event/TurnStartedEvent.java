@@ -6,6 +6,7 @@ import org.microcol.model.Player;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 
+// TODO JKA Documentation
 public class TurnStartedEvent extends ModelEvent {
 	private final Player player;
 
