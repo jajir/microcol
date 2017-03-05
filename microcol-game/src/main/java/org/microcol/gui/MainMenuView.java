@@ -4,6 +4,7 @@ import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 
 import javax.swing.ButtonGroup;
+import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -45,7 +46,9 @@ public class MainMenuView extends JMenuBar implements MainMenuPresenter.Display 
 	private final JRadioButtonMenuItem rbMenuItemlanguageCz;
 
 	private final JMenuItem menuItemVolume;
-	
+
+	private final JCheckBoxMenuItem menuItemShowGrid;
+
 	private final JMenu menuHelp;
 
 	@Inject
@@ -95,6 +98,11 @@ public class MainMenuView extends JMenuBar implements MainMenuPresenter.Display 
 		menuItemVolume = new JMenuItem();
 		menuItemVolume.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_V, InputEvent.CTRL_MASK));
 		menuPrefereces.add(menuItemVolume);
+
+		menuItemShowGrid = new JCheckBoxMenuItem();
+		menuItemShowGrid.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_G, 0));
+		menuPrefereces.add(menuItemShowGrid);
+
 		add(menuPrefereces);
 
 		/**
@@ -122,7 +130,8 @@ public class MainMenuView extends JMenuBar implements MainMenuPresenter.Display 
 		rbMenuItemlanguageEn.setText(text.get("mainMenu.preferences.language.en"));
 		rbMenuItemlanguageCz.setText(text.get("mainMenu.preferences.language.cz"));
 		menuItemVolume.setText(text.get("mainMenu.preferences.volume"));
-		
+		menuItemShowGrid.setText(text.get("mainMenu.preferences.showGrid"));
+
 		menuHelp.setText(text.get("mainMenu.help"));
 		menuItemAbout.setText(text.get("mainMenu.help.about"));
 	}
@@ -165,6 +174,11 @@ public class MainMenuView extends JMenuBar implements MainMenuPresenter.Display 
 	@Override
 	public JMenuItem getMenuItemVolume() {
 		return menuItemVolume;
+	}
+
+	@Override
+	public JCheckBoxMenuItem getMenuItemShowGrid() {
+		return menuItemShowGrid;
 	}
 
 }

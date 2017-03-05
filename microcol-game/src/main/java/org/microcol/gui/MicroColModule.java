@@ -10,6 +10,8 @@ import org.microcol.gui.event.KeyController;
 import org.microcol.gui.event.MoveUnitController;
 import org.microcol.gui.event.NewGameController;
 import org.microcol.gui.event.NextTurnController;
+import org.microcol.gui.event.ShowGridController;
+import org.microcol.gui.event.ShowGridListenerPreferences;
 import org.microcol.gui.event.StatusBarMessageController;
 import org.microcol.gui.event.StatusBarMessageControllerImpl;
 import org.microcol.gui.event.TurnStartedController;
@@ -45,6 +47,7 @@ public class MicroColModule extends AbstractModule {
 		bind(GameController.class).in(Singleton.class);
 		bind(TurnStartedController.class).in(Singleton.class);
 		bind(VolumeChangeController.class).in(Singleton.class);
+		bind(ShowGridController.class).in(Singleton.class);
 
 		/**
 		 * Initialize MVP classes
@@ -78,6 +81,7 @@ public class MicroColModule extends AbstractModule {
 		bind(ChangeLanguageListenerPreferences.class).asEagerSingleton();
 		bind(ChangeLanguageListenerText.class).asEagerSingleton();
 		bind(VolumeChangedListenerPreferences.class).asEagerSingleton();
+		bind(ShowGridListenerPreferences.class).asEagerSingleton();
 
 		bind(MusicPlayer.class).in(Singleton.class);
 		bind(MusicController.class).in(Singleton.class);

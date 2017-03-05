@@ -1,5 +1,7 @@
 package org.microcol.gui;
 
+import org.microcol.model.Location;
+
 import com.google.common.base.MoreObjects;
 
 /**
@@ -50,6 +52,10 @@ public class Point {
 
 	public static Point of(final int x, final int y) {
 		return new Point(x, y);
+	}
+
+	public static Point of(final Location location) {
+		return Point.of(location.getX(), location.getY()).multiply(GamePanelView.TOTAL_TILE_WIDTH_IN_PX);
 	}
 
 	public Point add(final int value, final int addY) {

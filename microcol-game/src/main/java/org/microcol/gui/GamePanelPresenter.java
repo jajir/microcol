@@ -19,6 +19,7 @@ import org.microcol.gui.event.FocusedTileEvent;
 import org.microcol.gui.event.KeyController;
 import org.microcol.gui.event.MoveUnitController;
 import org.microcol.gui.event.NewGameController;
+import org.microcol.gui.event.ShowGridController;
 import org.microcol.gui.event.StatusBarMessageController;
 import org.microcol.gui.model.GameController;
 import org.microcol.gui.model.TileOcean;
@@ -55,7 +56,9 @@ public class GamePanelPresenter implements Localized {
 
 		WalkAnimator getWalkAnimator();
 
-		void initGame();
+		void initGame(boolean idGridShown);
+
+		void setGridShown(boolean isGridShown);
 	}
 
 	private final GameController gameController;
@@ -89,7 +92,8 @@ public class GamePanelPresenter implements Localized {
 	public GamePanelPresenter(final GamePanelPresenter.Display display, final GameController gameController,
 			final KeyController keyController, final StatusBarMessageController statusBarMessageController,
 			final FocusedTileController focusedTileController, final PathPlanning pathPlanning,
-			final MoveUnitController moveUnitController, final NewGameController newGameController) {
+			final MoveUnitController moveUnitController, final NewGameController newGameController,
+			final GamePreferences gamePreferences, final ShowGridController showGridController) {
 		this.focusedTileController = focusedTileController;
 		this.gameController = Preconditions.checkNotNull(gameController);
 		this.statusBarMessageController = Preconditions.checkNotNull(statusBarMessageController);
@@ -170,7 +174,9 @@ public class GamePanelPresenter implements Localized {
 			}
 		};
 
-		newGameController.addNewGameListener(event -> display.initGame());
+		newGameController.addNewGameListener(event -> display.initGame(gamePreferences.isGridShown()));
+
+		showGridController.addShowGridListener(e -> display.setGridShown(e.isGridShown()));
 
 		display.getGamePanelView().addMouseListener(ma);
 		display.getGamePanelView().addMouseMotionListener(ma);

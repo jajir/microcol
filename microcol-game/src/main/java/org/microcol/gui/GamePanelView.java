@@ -36,9 +36,10 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private final static int TILE_WIDTH_IN_PX = 30;
+	private final static int TILE_WIDTH_IN_PX = 35;
 
-	private final static int GRID_LINE_WIDTH = 1;
+	@Deprecated
+	private final static int GRID_LINE_WIDTH = 0;
 
 	public final static int TOTAL_TILE_WIDTH_IN_PX = TILE_WIDTH_IN_PX + GRID_LINE_WIDTH;
 
@@ -62,6 +63,8 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 
 	private final FpsCounter fpsCounter;
 
+	private boolean isGridShown;
+
 	@Inject
 	public GamePanelView(final StatusBarMessageController statusBarMessageController,
 			final GameController gameController, final NextTurnController nextTurnController,
@@ -80,6 +83,8 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 
 		fpsCounter = new FpsCounter();
 		fpsCounter.start();
+
+		isGridShown = true;
 	}
 
 	/**
@@ -90,9 +95,10 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 	private final static int DEFAULT_FRAME_PER_SECOND = 50;
 
 	@Override
-	public void initGame() {
+	public void initGame(final boolean idGridShown) {
 		// TODO JJ new game starts new timer. There should not be time for each
 		// new game
+		this.isGridShown = idGridShown;
 		new Timer(1000 / DEFAULT_FRAME_PER_SECOND, event -> repaint()).start();
 	}
 
@@ -130,7 +136,7 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 			dbg.setColor(Color.YELLOW);
 			dbg.fillRect(0, 0, getWidth(), getHeight());
 			paintTilesAndUnits(dbg, gameController.getGame());
-			paintNet(dbg, gameController.getGame().getMap());
+			paintGrid(dbg, gameController.getGame().getMap());
 			paintCursor(dbg);
 			paintGoToPath(dbg);
 			paintMovingAnimation(dbg);
@@ -166,15 +172,15 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 	private void paintTilesAndUnits(final Graphics2D graphics, final Game world) {
 		for (int i = 0; i <= world.getMap().getMaxX(); i++) {
 			for (int j = 0; j <= world.getMap().getMaxY(); j++) {
-				int x = i * TOTAL_TILE_WIDTH_IN_PX;
-				int y = j * TOTAL_TILE_WIDTH_IN_PX;
 				final Location loc = Location.of(i, j);
-				graphics.drawImage(imageProvider.getImage(ImageProvider.IMG_TILE_OCEAN), x, y, this);
+				final Point point = Point.of(loc);
+				graphics.drawImage(imageProvider.getImage(ImageProvider.IMG_TILE_OCEAN), point.getX(), point.getY(),
+						this);
 				if (!world.getShipsAt(loc).isEmpty()) {
 					Ship s = world.getShipsAt(loc).get(0);
 					if (walkAnimator == null || (!walkAnimator.isNextAnimationLocationAvailable()
 							|| !walkAnimator.getTo().equals(loc))) {
-						paintShip(graphics, Point.of(x, y), s);
+						paintShip(graphics, point, s);
 					}
 				}
 			}
@@ -186,7 +192,8 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 	private final static int FLAG_HEIGHT = 12;
 
 	private void paintShip(final Graphics2D graphics, final Point point, final Ship ship) {
-		graphics.drawImage(imageProvider.getImage(ImageProvider.IMG_TILE_SHIP1), point.getX(), point.getY(), this);
+		Point p = point.add(2, 4);
+		graphics.drawImage(imageProvider.getImage(ImageProvider.IMG_TILE_SHIP1), p.getX(), p.getY(), this);
 		paintOwnersFlag(graphics, point.add(1, 5), ship.getOwner());
 	}
 
@@ -218,16 +225,18 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 		graphics.fillRect(point.getX() + 1, point.getY() + 1, FLAG_WIDTH - 1, FLAG_HEIGHT - 1);
 	}
 
-	private void paintNet(final Graphics2D graphics, final Map map) {
-		graphics.setColor(Color.LIGHT_GRAY);
-		graphics.setStroke(new BasicStroke(1));
-		for (int i = 1; i <= map.getMaxX(); i++) {
-			int x = i * TOTAL_TILE_WIDTH_IN_PX - 1;
-			graphics.drawLine(x, 0, x, map.getMaxY() * TILE_WIDTH_IN_PX + map.getMaxY() * (map.getMaxX() - 1));
-		}
-		for (int j = 1; j <= map.getMaxY(); j++) {
-			int y = j * TOTAL_TILE_WIDTH_IN_PX - 1;
-			graphics.drawLine(0, y, map.getMaxY() * TILE_WIDTH_IN_PX + map.getMaxX() * (map.getMaxY() - 1), y);
+	private void paintGrid(final Graphics2D graphics, final Map map) {
+		if (isGridShown) {
+			graphics.setColor(Color.LIGHT_GRAY);
+			graphics.setStroke(new BasicStroke(1));
+			for (int i = 1; i <= map.getMaxX(); i++) {
+				int x = i * TOTAL_TILE_WIDTH_IN_PX - 1;
+				graphics.drawLine(x, 0, x, map.getMaxY() * TILE_WIDTH_IN_PX + map.getMaxY() * (map.getMaxX() - 1));
+			}
+			for (int j = 1; j <= map.getMaxY(); j++) {
+				int y = j * TOTAL_TILE_WIDTH_IN_PX - 1;
+				graphics.drawLine(0, y, map.getMaxY() * TILE_WIDTH_IN_PX + map.getMaxX() * (map.getMaxY() - 1), y);
+			}
 		}
 	}
 
@@ -376,6 +385,11 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 	@Override
 	public WalkAnimator getWalkAnimator() {
 		return walkAnimator;
+	}
+
+	@Override
+	public void setGridShown(final boolean isGridShown) {
+		this.isGridShown = isGridShown;
 	}
 
 }

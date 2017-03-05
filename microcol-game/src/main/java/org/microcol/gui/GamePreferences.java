@@ -13,6 +13,7 @@ public class GamePreferences {
 	private static final String PREFERENCES_WIDTH = "width";
 	private static final String PREFERENCES_HEIGHT = "height";
 	private static final String PREFERENCES_VOLUME = "volume";
+	private static final String PREFERENCES_SHOW_GRID = "showGrid";
 
 	private final Preferences preferences = Preferences.userNodeForPackage(GamePreferences.class);
 
@@ -68,6 +69,15 @@ public class GamePreferences {
 
 	public int getVolume() {
 		return preferences.getInt(PREFERENCES_VOLUME, 75);
+	}
+
+	public void setShowGrid(final boolean isGridShown) {
+		preferences.putBoolean(PREFERENCES_SHOW_GRID, isGridShown);
+		flush();
+	}
+
+	public boolean isGridShown() {
+		return preferences.getBoolean(PREFERENCES_SHOW_GRID, false);
 	}
 
 	private void flush() {
