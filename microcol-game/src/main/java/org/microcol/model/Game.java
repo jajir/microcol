@@ -65,6 +65,10 @@ public class Game {
 		return shipsStorage.getShips();
 	}
 
+	public java.util.Map<Location, List<Ship>> getShipsAt() {
+		return shipsStorage.getShipsAt();
+	}
+
 	public List<Ship> getShipsAt(final Location location) {
 		return shipsStorage.getShipsAt(location);
 	}

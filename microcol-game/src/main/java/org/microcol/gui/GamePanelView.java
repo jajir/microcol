@@ -164,14 +164,15 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 	 * @param g
 	 */
 	private void paintTilesAndUnits(final Graphics2D graphics, final Game world) {
+		final java.util.Map<Location, List<Ship>> shipsAt = world.getShipsAt();
 		for (int i = 0; i <= world.getMap().getMaxX(); i++) {
 			for (int j = 0; j <= world.getMap().getMaxY(); j++) {
 				int x = i * TOTAL_TILE_WIDTH_IN_PX;
 				int y = j * TOTAL_TILE_WIDTH_IN_PX;
 				final Location loc = Location.of(i, j);
 				graphics.drawImage(imageProvider.getImage(ImageProvider.IMG_TILE_OCEAN), x, y, this);
-				if (!world.getShipsAt(loc).isEmpty()) {
-					Ship s = world.getShipsAt(loc).get(0);
+				if (shipsAt.get(loc) != null) {
+					Ship s = shipsAt.get(loc).get(0);
 					if (walkAnimator == null || (!walkAnimator.isNextAnimationLocationAvailable()
 							|| !walkAnimator.getTo().equals(loc))) {
 						paintShip(graphics, Point.of(x, y), s);

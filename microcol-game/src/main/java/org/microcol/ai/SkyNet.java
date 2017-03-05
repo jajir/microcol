@@ -1,6 +1,5 @@
 package org.microcol.ai;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,7 +18,6 @@ import org.microcol.model.event.ShipMovedEvent;
 import org.microcol.model.event.TurnStartedEvent;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
 
 public class SkyNet {
 	private static final ImmutableList<Location> directions = ImmutableList.of(
@@ -77,29 +75,12 @@ public class SkyNet {
 	}
 
 	private void turn(final Player player) {
-		enemyShipsAt = initEnemyShipsAt(player);
+		enemyShipsAt = player.getEnemyShipsAt();
 
 		player.getShips().forEach(ship -> {
 			move(ship);
 		});
 		player.endTurn();
-	}
-
-	private Map<Location, List<Ship>> initEnemyShipsAt(final Player player) {
-		Map<Location, List<Ship>> enemyShipsAt = new HashMap<>();
-
-		game.getShips().forEach(ship -> {
-			if (!ship.getOwner().equals(player)) {
-				List<Ship> ships = enemyShipsAt.get(ship.getLocation());
-				if (ships == null) {
-					ships = new ArrayList<>();
-					enemyShipsAt.put(ship.getLocation(), ships);
-				}
-				ships.add(ship);
-			}
-		});
-
-		return ImmutableMap.copyOf(enemyShipsAt);
 	}
 
 	private void move(final Ship ship) {
