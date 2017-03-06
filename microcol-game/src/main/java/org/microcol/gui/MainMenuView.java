@@ -37,6 +37,10 @@ public class MainMenuView extends JMenuBar implements MainMenuPresenter.Display 
 
 	private final JMenuItem menuItemAbout;
 
+	private final JMenu menuUnit;
+
+	private final JMenuItem menuItemMove;
+
 	private final JMenu menuPrefereces;
 
 	private final JMenu menuLanguage;
@@ -77,6 +81,13 @@ public class MainMenuView extends JMenuBar implements MainMenuPresenter.Display 
 			menuGame.add(menuItemQuitGame);
 		}
 		add(menuGame);
+
+		menuUnit = new JMenu();
+		menuItemMove = new JMenuItem();
+		menuItemMove.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_M, 0));
+		menuItemMove.setEnabled(false);
+		menuUnit.add(menuItemMove);
+		add(menuUnit);
 
 		/**
 		 * Preferences
@@ -126,6 +137,10 @@ public class MainMenuView extends JMenuBar implements MainMenuPresenter.Display 
 		menuItemSameGame.setText(text.get("mainMenu.game.saveGame"));
 		menuItemLoadGame.setText(text.get("mainMenu.game.loadGame"));
 		menuItemQuitGame.setText(text.get("mainMenu.game.quitGame"));
+
+		menuUnit.setText(text.get("mainMenu.unit"));
+		menuItemMove.setText(text.get("mainMenu.unit.move"));
+
 		menuPrefereces.setText(text.get("mainMenu.preferences"));
 		menuLanguage.setText(text.get("mainMenu.preferences.language"));
 		rbMenuItemlanguageEn.setText(text.get("mainMenu.preferences.language.en"));
@@ -182,4 +197,8 @@ public class MainMenuView extends JMenuBar implements MainMenuPresenter.Display 
 		return menuItemShowGrid;
 	}
 
+	@Override
+	public JMenuItem getMenuItemMove() {
+		return menuItemMove;
+	}
 }

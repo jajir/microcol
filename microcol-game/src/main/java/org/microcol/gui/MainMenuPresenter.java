@@ -33,6 +33,8 @@ public class MainMenuPresenter {
 		JMenuItem getMenuItemVolume();
 
 		JCheckBoxMenuItem getMenuItemShowGrid();
+
+		JMenuItem getMenuItemMove();
 	}
 
 	@Inject
