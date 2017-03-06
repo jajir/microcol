@@ -12,6 +12,7 @@ import java.awt.Toolkit;
 import java.awt.image.VolatileImage;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.swing.JComponent;
 import javax.swing.JPanel;
@@ -105,6 +106,11 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 		return this;
 	}
 
+	private VolatileImage prepareImage(final Area area) {
+		final Point p = Point.of(area.getWidth(), area.getHeight()).multiply(TILE_WIDTH_IN_PX);
+		return createVolatileImage(p.getX(), p.getY());
+	}
+
 	/**
 	 * Call original paint with antialising on.
 	 */
@@ -112,8 +118,9 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 	public void paint(final Graphics g) {
 		final Graphics2D g2d = (Graphics2D) g;
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		final Area area = new Area((JViewport) this.getParent(), gameController.getGame().getMap());
 		if (dbImage == null) {
-			dbImage = createVolatileImage(getGameMapWidth(), getGameMapHeight());
+			dbImage = prepareImage(area);
 			if (dbImage == null) {
 				/**
 				 * This could happens when Graphics is not ready.
@@ -122,7 +129,7 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 			}
 		}
 		if (dbImage.validate(getGraphicsConfiguration()) == VolatileImage.IMAGE_INCOMPATIBLE) {
-			dbImage = createVolatileImage(getGameMapWidth(), getGameMapHeight());
+			dbImage = prepareImage(area);
 		}
 		if (dbImage != null) {
 			final Graphics2D dbg = (Graphics2D) dbImage.getGraphics();
@@ -133,13 +140,15 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 			 */
 			// dbg.setColor(Color.YELLOW);
 			// dbg.fillRect(0, 0, getWidth(), getHeight());
-			paintTiles(dbg, gameController.getGame());
-			paintUnits(dbg, gameController.getGame());
-			paintGrid(dbg, gameController.getGame().getMap());
+
+			paintTiles(dbg, gameController.getGame(), area);
+			paintUnits(dbg, gameController.getGame(), area);
+			paintGrid(dbg, gameController.getGame().getMap(), area);
 			paintCursor(dbg);
-			paintGoToPath(dbg);
-			paintMovingAnimation(dbg);
-			g.drawImage(dbImage, 0, 0, null);
+			paintGoToPath(dbg, area);
+			paintMovingAnimation(dbg, area);
+			final Point p = Point.of(area.getTopLeft());
+			g.drawImage(dbImage, p.getX(), p.getY(), null);
 			dbg.dispose();
 		}
 		// Sync the display on some systems.
@@ -148,16 +157,18 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 		fpsCounter.screenWasPainted();
 	}
 
-	private void paintMovingAnimation(final Graphics2D graphics) {
+	private void paintMovingAnimation(final Graphics2D graphics, final Area area) {
 		if (walkAnimator != null) {
 			if (walkAnimator.getNextCoordinates() != null) {
-				Location part = walkAnimator.getNextCoordinates();
-				paintShip(graphics, Point.of(part.getX(), part.getY()), walkAnimator.getUnit());
-				graphics.drawImage(imageProvider.getImage(ImageProvider.IMG_TILE_MODE_GOTO),
-						part.getX() + TILE_WIDTH_IN_PX - 12, part.getY(), this);
-			}
-			if (walkAnimator.isNextAnimationLocationAvailable()) {
-				walkAnimator.countNextAnimationLocation();
+				if (area.isInArea(walkAnimator.getNextCoordinates())) {
+					final Point part = area.convert(walkAnimator.getNextCoordinates());
+					paintShip(graphics, part, walkAnimator.getUnit());
+					graphics.drawImage(imageProvider.getImage(ImageProvider.IMG_TILE_MODE_GOTO),
+							part.getX() + TILE_WIDTH_IN_PX - 12, part.getY(), this);
+				}
+				if (walkAnimator.isNextAnimationLocationAvailable()) {
+					walkAnimator.countNextAnimationLocation();
+				}
 			}
 		}
 
@@ -169,24 +180,12 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 	 * @param graphics
 	 *            required {@link Graphics2D}
 	 */
-	private void paintTiles(final Graphics2D graphics, final Game world) {
-		final JViewport viewport = (JViewport) this.getParent();
-		final Dimension dim = viewport.getExtentSize();
-		final java.awt.Point pos = viewport.getViewPosition();
-		final Location pos2 = Location.of((int) Math.ceil(pos.getX() / TOTAL_TILE_WIDTH_IN_PX),
-				(int) Math.ceil(pos.getY() / TOTAL_TILE_WIDTH_IN_PX));
-		final Location dim2 = Location.of((int) Math.ceil(dim.getWidth() / TOTAL_TILE_WIDTH_IN_PX),
-				(int) Math.ceil(dim.getHeight() / TOTAL_TILE_WIDTH_IN_PX));
-
-		final int startX = Math.min(0, pos2.getX());
-		final int startY = Math.min(0, pos2.getY());
-		final int endX = Math.min(startX + dim2.getX(), world.getMap().getMaxX());
-		final int endY = Math.min(startY + dim2.getY(), world.getMap().getMaxY());
-
-		for (int i = startX; i <= endX; i++) {
-			for (int j = startY; j <= endY; j++) {
-				final Location loc = Location.of(i, j);
-				final Point point = Point.of(loc);
+	private void paintTiles(final Graphics2D graphics, final Game world, final Area area) {
+		for (int i = area.getTopLeft().getX(); i <= area.getBottomRight().getX(); i++) {
+			for (int j = area.getTopLeft().getY(); j <= area.getBottomRight().getY(); j++) {
+				final Location location = Location.of(i, j);
+				// TODO location will be used to get correct tile
+				final Point point = area.convert(location);
 				graphics.drawImage(imageProvider.getImage(ImageProvider.IMG_TILE_OCEAN), point.getX(), point.getY(),
 						point.getX() + 35, point.getY() + 35, 0, 0, 35, 35, this);
 			}
@@ -205,10 +204,13 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 	 * @param game
 	 *            required {@link Game}
 	 */
-	private void paintUnits(final Graphics2D graphics, final Game world) {
+	private void paintUnits(final Graphics2D graphics, final Game world, final Area area) {
 		final java.util.Map<Location, List<Ship>> ships = world.getShipsAt();
-		ships.forEach((location, list) -> {
-			// TODO JJ selection of ship should reflect specific order
+
+		final java.util.Map<Location, List<Ship>> ships2 = ships.entrySet().stream()
+				.filter(e -> area.isInArea(e.getKey())).collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue()));
+
+		ships2.forEach((location, list) -> {
 			final Ship ship = list.stream().findFirst().get();
 			final Point point = Point.of(location);
 			if (walkAnimator == null
@@ -256,7 +258,8 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 		graphics.fillRect(point.getX() + 1, point.getY() + 1, FLAG_WIDTH - 1, FLAG_HEIGHT - 1);
 	}
 
-	private void paintGrid(final Graphics2D graphics, final Map map) {
+	private void paintGrid(final Graphics2D graphics, final Map map, final Area area) {
+		// FIXME draw net just on area
 		if (isGridShown) {
 			graphics.setColor(Color.LIGHT_GRAY);
 			graphics.setStroke(new BasicStroke(1));
@@ -302,7 +305,8 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 	 * @param graphics
 	 *            required {@link Graphics2D}
 	 */
-	private void paintGoToPath(final Graphics2D graphics) {
+	private void paintGoToPath(final Graphics2D graphics, final Area area) {
+		// FIXME start using are for drawing ships and coordinates
 		if (gotoMode && gotoCursorTitle != null) {
 			graphics.setColor(Color.yellow);
 			graphics.setStroke(new BasicStroke(1));

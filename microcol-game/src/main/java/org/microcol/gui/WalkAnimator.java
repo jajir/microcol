@@ -39,14 +39,14 @@ public class WalkAnimator {
 	/**
 	 * Contains locations for move between two tiles.
 	 */
-	private final List<Location> partialPath;
+	private final List<Point> partialPath;
 
 	/**
 	 * 
 	 */
 	private Location partialPathFrom;
 
-	private Location nextCoordinates;
+	private Point nextCoordinates;
 
 	public WalkAnimator(final PathPlanning pathPlanning, final List<Location> path, final Ship unit) {
 		Preconditions.checkNotNull(path);
@@ -73,8 +73,8 @@ public class WalkAnimator {
 						partialPathFrom.getY() * GamePanelView.TOTAL_TILE_WIDTH_IN_PX);
 				final Location to = new Location(path.get(0).getX() * GamePanelView.TOTAL_TILE_WIDTH_IN_PX,
 						path.get(0).getY() * GamePanelView.TOTAL_TILE_WIDTH_IN_PX);
-				pathPlanning.paintPath(from, to, point -> {
-					partialPath.add(point);
+				pathPlanning.paintPath(from, to, location -> {
+					partialPath.add(Point.of(location.getX(), location.getY()));
 				});
 				partialPathFrom = path.remove(0);
 			}
@@ -105,8 +105,8 @@ public class WalkAnimator {
 		return to;
 	}
 
-	//TODO JJ switch to Point
-	public Location getNextCoordinates() {
+	// TODO JJ switch to Point
+	public Point getNextCoordinates() {
 		return nextCoordinates;
 	}
 
