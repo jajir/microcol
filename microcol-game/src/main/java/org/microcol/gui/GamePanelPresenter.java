@@ -1,6 +1,8 @@
 package org.microcol.gui;
 
 import java.awt.Rectangle;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
@@ -119,6 +121,7 @@ public class GamePanelPresenter implements Localized {
 			public void keyPressed(final KeyEvent e) {
 				if ('c' == e.getKeyChar()) {
 				}
+				// TODO JJ catch this key at main menu level.
 				if ('m' == e.getKeyChar()) {
 					onKeyPressed_m();
 				}
@@ -139,6 +142,7 @@ public class GamePanelPresenter implements Localized {
 			}
 		});
 
+		// TODO JJ move to separate class
 		final MouseAdapter ma = new MouseAdapter() {
 
 			@Override
@@ -180,6 +184,32 @@ public class GamePanelPresenter implements Localized {
 
 		display.getGamePanelView().addMouseListener(ma);
 		display.getGamePanelView().addMouseMotionListener(ma);
+		// TODO JJ move listener to separate class
+		display.getGamePanelView().getParent().addComponentListener(new ComponentListener() {
+
+			@Override
+			public void componentShown(final ComponentEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void componentResized(final ComponentEvent e) {
+				display.getGamePanelView().onViewPortResize();
+			}
+
+			@Override
+			public void componentMoved(final ComponentEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void componentHidden(final ComponentEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+		});
 	}
 
 	private void onKeyPressed_m() {

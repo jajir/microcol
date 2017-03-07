@@ -162,7 +162,7 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 			if (walkAnimator.getNextCoordinates() != null) {
 				if (area.isInArea(walkAnimator.getNextCoordinates())) {
 					final Point part = area.convert(walkAnimator.getNextCoordinates());
-					paintShip(graphics, part, walkAnimator.getUnit());
+					paintUnit(graphics, part, walkAnimator.getUnit());
 					graphics.drawImage(imageProvider.getImage(ImageProvider.IMG_TILE_MODE_GOTO),
 							part.getX() + TILE_WIDTH_IN_PX - 12, part.getY(), this);
 				}
@@ -212,10 +212,10 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 
 		ships2.forEach((location, list) -> {
 			final Ship ship = list.stream().findFirst().get();
-			final Point point = Point.of(location);
+			final Point point = area.convert(location);
 			if (walkAnimator == null
 					|| (!walkAnimator.isNextAnimationLocationAvailable() || !walkAnimator.getTo().equals(location))) {
-				paintShip(graphics, point, ship);
+				paintUnit(graphics, point, ship);
 			}
 		});
 	}
@@ -224,7 +224,7 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 
 	private final static int FLAG_HEIGHT = 12;
 
-	private void paintShip(final Graphics2D graphics, final Point point, final Ship ship) {
+	private void paintUnit(final Graphics2D graphics, final Point point, final Ship ship) {
 		Point p = point.add(2, 4);
 		graphics.drawImage(imageProvider.getImage(ImageProvider.IMG_TILE_SHIP1), p.getX(), p.getY(), this);
 		paintOwnersFlag(graphics, point.add(1, 5), ship.getOwner());
@@ -425,6 +425,10 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 	@Override
 	public void setGridShown(final boolean isGridShown) {
 		this.isGridShown = isGridShown;
+	}
+
+	public void onViewPortResize() {
+		dbImage = null;
 	}
 
 }

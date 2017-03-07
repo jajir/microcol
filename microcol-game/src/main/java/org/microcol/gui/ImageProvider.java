@@ -77,6 +77,7 @@ public class ImageProvider {
 	 *            required image
 	 * @return improved image
 	 */
+	@SuppressWarnings("unused")
 	private BufferedImage getCompatibleImage(final BufferedImage image) {
 		// obtain the current system graphical settings
 		GraphicsConfiguration gfx_config = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice()
