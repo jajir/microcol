@@ -189,7 +189,7 @@ public class GamePanelPresenter implements Localized {
 
 			@Override
 			public void componentShown(final ComponentEvent e) {
-				// TODO Auto-generated method stub
+				// TODO JJ Auto-generated method stub
 
 			}
 
@@ -200,13 +200,13 @@ public class GamePanelPresenter implements Localized {
 
 			@Override
 			public void componentMoved(final ComponentEvent e) {
-				// TODO Auto-generated method stub
+				// TODO JJ Auto-generated method stub
 
 			}
 
 			@Override
 			public void componentHidden(final ComponentEvent e) {
-				// TODO Auto-generated method stub
+				// TODO JJ Auto-generated method stub
 
 			}
 		});

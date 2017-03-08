@@ -50,6 +50,11 @@ public class Point {
 		return MoreObjects.toStringHelper(this).add("x", x).add("y", y).toString();
 	}
 
+	public Location toLocation() {
+		final Point p = divide(GamePanelView.TOTAL_TILE_WIDTH_IN_PX);
+		return Location.of(p.getX(), p.getY());
+	}
+
 	public static Point of(final int x, final int y) {
 		return new Point(x, y);
 	}
@@ -68,5 +73,9 @@ public class Point {
 
 	public Point multiply(final int factor) {
 		return new Point(x * factor, y * factor);
+	}
+
+	public Point divide(final float factor) {
+		return new Point((int) (x / factor), (int) (y / factor));
 	}
 }

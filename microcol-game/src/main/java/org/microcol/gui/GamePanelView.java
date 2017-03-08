@@ -95,8 +95,7 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 
 	@Override
 	public void initGame(final boolean idGridShown) {
-		// TODO JJ new game starts new timer. There should not be time for each
-		// new game
+		// TODO JJ new game starts new timer. There should not be time for each new game
 		this.isGridShown = idGridShown;
 		new Timer(1000 / DEFAULT_FRAME_PER_SECOND, event -> repaint()).start();
 	}
@@ -259,7 +258,7 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 	}
 
 	private void paintGrid(final Graphics2D graphics, final Map map, final Area area) {
-		// FIXME draw net just on area
+		// FIXME JJ draw net just on area
 		if (isGridShown) {
 			graphics.setColor(Color.LIGHT_GRAY);
 			graphics.setStroke(new BasicStroke(1));
@@ -306,7 +305,7 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 	 *            required {@link Graphics2D}
 	 */
 	private void paintGoToPath(final Graphics2D graphics, final Area area) {
-		// FIXME start using are for drawing ships and coordinates
+		// FIXME JJ start using are for drawing ships and coordinates
 		if (gotoMode && gotoCursorTitle != null) {
 			graphics.setColor(Color.yellow);
 			graphics.setStroke(new BasicStroke(1));

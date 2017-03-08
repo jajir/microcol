@@ -76,6 +76,30 @@ public class Area {
 		return point.add(-topLeftPoint.getX(), -topLeftPoint.getY());
 	}
 
+	/**
+	 * Convert from on-screen area coordinates to map coordinates.
+	 * 
+	 * @param point
+	 *            required on-screen point
+	 * @return return map location
+	 */
+	public Location convertToLocation(final Point point) {
+		// FIXME JJ implement use on GamePanelPresenter
+//		Location loc = point.toLocation();
+//		return loc.subst(location);
+//		Location onScreen =  Location.of(point.getX() / GamePanelView.TOTAL_TILE_WIDTH_IN_PX,
+//				point.getY() / GamePanelView.TOTAL_TILE_WIDTH_IN_PX);
+		return null;
+	}
+
+	/**
+	 * Verify that given point is in area.
+	 * 
+	 * @param point
+	 *            required point
+	 * @return return <code>true</code> when point is inside area otherwise
+	 *         return <code>false</code>
+	 */
 	public boolean isInArea(final Point point) {
 		final Point topLeftPoint = Point.of(topLeft);
 		final Point bottomRightPoint = Point.of(bottomRight);

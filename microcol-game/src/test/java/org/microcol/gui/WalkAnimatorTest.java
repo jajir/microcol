@@ -29,13 +29,13 @@ public class WalkAnimatorTest {
 		/**
 		 * Multiple call should not change result.
 		 */
-		assertEquals(Location.of(36, 70), wa.getNextCoordinates());
-		assertEquals(Location.of(36, 70), wa.getNextCoordinates());
+		assertEquals(Point.of(36, 70), wa.getNextCoordinates());
+		assertEquals(Point.of(36, 70), wa.getNextCoordinates());
 		wa.countNextAnimationLocation();
 
 		assertTrue("first animation step should be available", wa.isNextAnimationLocationAvailable());
-		assertEquals(Location.of(37, 70), wa.getNextCoordinates());
-		assertEquals(Location.of(37, 70), wa.getNextCoordinates());
+		assertEquals(Point.of(37, 70), wa.getNextCoordinates());
+		assertEquals(Point.of(37, 70), wa.getNextCoordinates());
 		wa.countNextAnimationLocation();
 
 		assertEquals("Verify that list size is not changed", 2, path.size());
