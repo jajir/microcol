@@ -61,6 +61,8 @@ public class GamePanelPresenter implements Localized {
 		void initGame(boolean idGridShown);
 
 		void setGridShown(boolean isGridShown);
+		
+		Area getArea();
 	}
 
 	private final GameController gameController;
@@ -241,7 +243,8 @@ public class GamePanelPresenter implements Localized {
 	}
 
 	private void onMousePressed(final MouseEvent e) {
-		final Location p = convertToTilesCoordinates(Location.of(e.getX(), e.getY()));
+		final Location p = display.getArea().convertToLocation(Point.of(e.getX(), e.getY()));
+		System.out.println(p);
 		if (display.isGotoMode()) {
 			switchToNormalMode(p);
 		} else {
@@ -296,6 +299,7 @@ public class GamePanelPresenter implements Localized {
 		statusBarMessageController.fireStatusMessageWasChangedEvent(buff.toString());
 	}
 
+	@Deprecated
 	private Location convertToTilesCoordinates(final Location panelCoordinates) {
 		return Location.of(panelCoordinates.getX() / GamePanelView.TOTAL_TILE_WIDTH_IN_PX,
 				panelCoordinates.getY() / GamePanelView.TOTAL_TILE_WIDTH_IN_PX);

@@ -85,11 +85,11 @@ public class Area {
 	 */
 	public Location convertToLocation(final Point point) {
 		// FIXME JJ implement use on GamePanelPresenter
-//		Location loc = point.toLocation();
+		Location loc = point.toLocation();
 //		return loc.subst(location);
 //		Location onScreen =  Location.of(point.getX() / GamePanelView.TOTAL_TILE_WIDTH_IN_PX,
 //				point.getY() / GamePanelView.TOTAL_TILE_WIDTH_IN_PX);
-		return null;
+		return loc;
 	}
 
 	/**

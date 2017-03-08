@@ -95,7 +95,8 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 
 	@Override
 	public void initGame(final boolean idGridShown) {
-		// TODO JJ new game starts new timer. There should not be time for each new game
+		// TODO JJ new game starts new timer. There should not be time for each
+		// new game
 		this.isGridShown = idGridShown;
 		new Timer(1000 / DEFAULT_FRAME_PER_SECOND, event -> repaint()).start();
 	}
@@ -183,7 +184,7 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 		for (int i = area.getTopLeft().getX(); i <= area.getBottomRight().getX(); i++) {
 			for (int j = area.getTopLeft().getY(); j <= area.getBottomRight().getY(); j++) {
 				final Location location = Location.of(i, j);
-				// TODO location will be used to get correct tile
+				// TODO JJ location will be used to get correct tile
 				final Point point = area.convert(location);
 				graphics.drawImage(imageProvider.getImage(ImageProvider.IMG_TILE_OCEAN), point.getX(), point.getY(),
 						point.getX() + 35, point.getY() + 35, 0, 0, 35, 35, this);
@@ -428,6 +429,11 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 
 	public void onViewPortResize() {
 		dbImage = null;
+	}
+
+	@Override
+	public Area getArea() {
+		return new Area((JViewport) getParent(), gameController.getGame().getMap());
 	}
 
 }
