@@ -54,7 +54,7 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 
 	private Location gotoCursorTitle;
 
-	private Location cursorTile;
+	private Location cursorLocation;
 
 	private boolean gotoMode = false;
 
@@ -144,7 +144,7 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 			paintTiles(dbg, gameController.getGame(), area);
 			paintUnits(dbg, gameController.getGame(), area);
 			paintGrid(dbg, gameController.getGame().getMap(), area);
-			paintCursor(dbg);
+			paintCursor(dbg, area);
 			paintGoToPath(dbg, area);
 			paintMovingAnimation(dbg, area);
 			final Point p = Point.of(area.getTopLeft());
@@ -274,11 +274,11 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 		}
 	}
 
-	private void paintCursor(final Graphics2D graphics) {
-		if (cursorTile != null) {
+	private void paintCursor(final Graphics2D graphics, final Area area) {
+		if (cursorLocation != null) {
 			graphics.setColor(Color.RED);
 			graphics.setStroke(new BasicStroke(1));
-			paintCursor(graphics, cursorTile);
+			paintCursor(graphics, area, cursorLocation);
 		}
 	}
 
@@ -287,16 +287,19 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 	 * 
 	 * @param graphics
 	 *            required {@link Graphics2D}
-	 * @param tile
+	 * @param area
+	 *            required displayed area
+	 * @param location
 	 *            required tiles where to draw cursor
 	 */
-	private void paintCursor(final Graphics2D graphics, final Location tile) {
-		int x = tile.getX() * TOTAL_TILE_WIDTH_IN_PX - 1;
-		int y = tile.getY() * TOTAL_TILE_WIDTH_IN_PX - 1;
-		graphics.drawLine(x, y, x + TILE_WIDTH_IN_PX, y);
-		graphics.drawLine(x, y, x, y + TILE_WIDTH_IN_PX);
-		graphics.drawLine(x + TILE_WIDTH_IN_PX, y, x + TILE_WIDTH_IN_PX, y + TILE_WIDTH_IN_PX);
-		graphics.drawLine(x, y + TILE_WIDTH_IN_PX, x + TILE_WIDTH_IN_PX, y + TILE_WIDTH_IN_PX);
+	private void paintCursor(final Graphics2D graphics, final Area area, final Location location) {
+		final Point p = area.convert(location);
+		graphics.drawLine(p.getX(), p.getY(), p.getX() + TILE_WIDTH_IN_PX, p.getY());
+		graphics.drawLine(p.getX(), p.getY(), p.getX(), p.getY() + TILE_WIDTH_IN_PX);
+		graphics.drawLine(p.getX() + TILE_WIDTH_IN_PX, p.getY(), p.getX() + TILE_WIDTH_IN_PX,
+				p.getY() + TILE_WIDTH_IN_PX);
+		graphics.drawLine(p.getX(), p.getY() + TILE_WIDTH_IN_PX, p.getX() + TILE_WIDTH_IN_PX,
+				p.getY() + TILE_WIDTH_IN_PX);
 	}
 
 	/**
@@ -304,19 +307,21 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 	 * 
 	 * @param graphics
 	 *            required {@link Graphics2D}
+	 * @param area
+	 *            required displayed area
 	 */
 	private void paintGoToPath(final Graphics2D graphics, final Area area) {
 		// FIXME JJ start using are for drawing ships and coordinates
 		if (gotoMode && gotoCursorTitle != null) {
 			graphics.setColor(Color.yellow);
 			graphics.setStroke(new BasicStroke(1));
-			paintCursor(graphics, gotoCursorTitle);
-			if (!cursorTile.equals(gotoCursorTitle)) {
+			paintCursor(graphics, area, gotoCursorTitle);
+			if (!cursorLocation.equals(gotoCursorTitle)) {
 				List<Location> steps = new ArrayList<>();
-				pathPlanning.paintPath(cursorTile, gotoCursorTitle, point -> steps.add(point));
+				pathPlanning.paintPath(cursorLocation, gotoCursorTitle, point -> steps.add(point));
 				// TODO JJ get(0) could return different ship that is really
 				// moved
-				final Ship unit = gameController.getGame().getCurrentPlayer().getShipsAt(cursorTile).get(0);
+				final Ship unit = gameController.getGame().getCurrentPlayer().getShipsAt(cursorLocation).get(0);
 				final StepCounter stepCounter = new StepCounter(5, unit.getAvailableMoves());
 				steps.forEach(point -> paintStepsToTile(graphics, point, stepCounter));
 			}
@@ -377,12 +382,12 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 
 	@Override
 	public Location getCursorTile() {
-		return cursorTile;
+		return cursorLocation;
 	}
 
 	@Override
-	public void setCursorTile(Location cursorTile) {
-		this.cursorTile = cursorTile;
+	public void setCursorLocation(Location cursorTile) {
+		this.cursorLocation = cursorTile;
 	}
 
 	@Override

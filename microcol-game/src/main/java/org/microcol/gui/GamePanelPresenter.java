@@ -13,7 +13,6 @@ import java.util.List;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.JViewport;
-import javax.swing.SwingUtilities;
 
 import org.apache.log4j.Logger;
 import org.microcol.gui.event.FocusedTileController;
@@ -42,7 +41,7 @@ public class GamePanelPresenter implements Localized {
 
 		Location getCursorTile();
 
-		void setCursorTile(Location cursorTile);
+		void setCursorLocation(Location cursorLocation);
 
 		void setCursorNormal();
 
@@ -61,7 +60,7 @@ public class GamePanelPresenter implements Localized {
 		void initGame(boolean idGridShown);
 
 		void setGridShown(boolean isGridShown);
-		
+
 		Area getArea();
 	}
 
@@ -75,7 +74,7 @@ public class GamePanelPresenter implements Localized {
 
 	private final StatusBarMessageController statusBarMessageController;
 
-	private Location lastMousePosition;
+	private Point lastMousePosition;
 
 	class PopUpDemo extends JPopupMenu {
 
@@ -221,9 +220,9 @@ public class GamePanelPresenter implements Localized {
 				logger.debug("At " + display.getCursorTile() + " there are no units to move.");
 			} else {
 				final Ship unit = units.get(0);
-				display.setGotoCursorTitle(convertToTilesCoordinates(lastMousePosition));
+				display.setGotoCursorTitle(lastMousePosition.toLocation());
 				switchToGoMode(unit);
-				display.getGamePanelView().repaint();
+				// display.getGamePanelView().repaint();
 			}
 		}
 	}
@@ -231,14 +230,14 @@ public class GamePanelPresenter implements Localized {
 	private void onKeyPressed_escape() {
 		if (display.isGotoMode()) {
 			cancelGoToMode(display.getGotoCursorTitle());
-			display.getGamePanelView().repaint();
+			// display.getGamePanelView().repaint();
 		}
 	}
 
 	private void onKeyPressed_enter() {
 		if (display.isGotoMode()) {
 			switchToNormalMode(display.getGotoCursorTitle());
-			display.getGamePanelView().repaint();
+			// display.getGamePanelView().repaint();
 		}
 	}
 
@@ -248,21 +247,20 @@ public class GamePanelPresenter implements Localized {
 		if (display.isGotoMode()) {
 			switchToNormalMode(p);
 		} else {
-			display.setCursorTile(p);
+			display.setCursorLocation(p);
 			focusedTileController.fireFocusedTileEvent(new FocusedTileEvent(p, new TileOcean()));
 		}
-		display.getGamePanelView().repaint();
+		// display.getGamePanelView().repaint();
 	}
 
 	private void onMouseDragged(final MouseEvent e) {
 		if (lastMousePosition != null) {
-			JViewport viewPort = (JViewport) SwingUtilities.getAncestorOfClass(JViewport.class,
-					display.getGamePanelView());
+			final JViewport viewPort = (JViewport) display.getGamePanelView().getParent();
 			if (viewPort != null) {
 				// Location delta =
 				// lastMousePosition.substract(Location.make(e.getX(),
 				// e.getY()));
-				final int deltaX = lastMousePosition.getX() - e.getY();
+				final int deltaX = lastMousePosition.getX() - e.getX();
 				final int deltaY = lastMousePosition.getY() - e.getY();
 				Rectangle view = viewPort.getViewRect();
 				// view.x += delta.getX();
@@ -275,10 +273,10 @@ public class GamePanelPresenter implements Localized {
 	}
 
 	private void onMouseMoved(final MouseEvent e) {
-		lastMousePosition = Location.of(e.getX(), e.getY());
+		lastMousePosition = Point.of(e.getX(), e.getY());
 		if (display.isGotoMode()) {
 			display.setGotoCursorTitle(convertToTilesCoordinates(Location.of(e.getX(), e.getY())));
-			display.getGamePanelView().repaint();
+			// display.getGamePanelView().repaint();
 		}
 		/**
 		 * Set status bar message
@@ -308,12 +306,12 @@ public class GamePanelPresenter implements Localized {
 	private final void switchToGoMode(final Ship unit) {
 		logger.debug("Switching '" + unit + "' to go mode.");
 		display.setCursorGoto();
-		display.getGamePanelView().repaint();
+		// display.getGamePanelView().repaint();
 	}
 
 	private void cancelGoToMode(final Location moveTo) {
 		display.setCursorNormal();
-		display.setCursorTile(moveTo);
+		display.setCursorLocation(moveTo);
 		// TODO JJ read tile ocean from map
 		focusedTileController.fireFocusedTileEvent(new FocusedTileEvent(moveTo, new TileOcean()));
 	}
@@ -330,7 +328,7 @@ public class GamePanelPresenter implements Localized {
 			gameController.performMove(ship, path);
 			focusedTileController.fireFocusedTileEvent(new FocusedTileEvent(display.getCursorTile(), new TileOcean()));
 		}
-		display.setCursorTile(moveTo);
+		display.setCursorLocation(moveTo);
 		display.setCursorNormal();
 	}
 
