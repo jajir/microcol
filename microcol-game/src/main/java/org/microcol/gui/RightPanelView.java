@@ -14,6 +14,7 @@ import javax.swing.JScrollPane;
 import org.microcol.gui.event.FocusedTileEvent;
 import org.microcol.gui.model.TileOcean;
 import org.microcol.model.Game;
+import org.microcol.model.Player;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
@@ -35,6 +36,8 @@ public class RightPanelView extends JPanel implements RightPanelPresenter.Displa
 
 	private final ImageIcon tileImage;
 
+	private final JLabel tileOnMove;
+
 	private final JLabel tileName;
 
 	private final JLabel unitsLabel;
@@ -52,23 +55,28 @@ public class RightPanelView extends JPanel implements RightPanelPresenter.Displa
 		this.setLayout(new GridBagLayout());
 
 		// Y=0
+		tileOnMove = new JLabel();
+		add(tileOnMove, new GridBagConstraints(0, 0, 2, 1, 0D, 0D, GridBagConstraints.NORTH, GridBagConstraints.NONE,
+				new Insets(0, 0, 0, 0), 0, 0));
+
+		// Y=1
 		tileImage = new ImageIcon();
-		add(new JLabel(tileImage), new GridBagConstraints(0, 0, 1, 1, 0D, 0D, GridBagConstraints.NORTHWEST,
+		add(new JLabel(tileImage), new GridBagConstraints(0, 1, 1, 1, 0D, 0D, GridBagConstraints.NORTHWEST,
 				GridBagConstraints.VERTICAL, new Insets(0, 0, 0, 0), 0, 0));
 		tileName = new JLabel();
-		add(tileName, new GridBagConstraints(1, 0, 1, 1, 0D, 0D, GridBagConstraints.NORTH, GridBagConstraints.NONE,
+		add(tileName, new GridBagConstraints(1, 1, 1, 1, 0D, 0D, GridBagConstraints.NORTH, GridBagConstraints.NONE,
 				new Insets(0, 0, 0, 0), 0, 0));
 
 
-		// Y=1
+		// Y=2
 		unitsLabel = new JLabel();
-		add(unitsLabel, new GridBagConstraints(0, 1, 2, 1, 1D, 0D, GridBagConstraints.NORTHWEST,
+		add(unitsLabel, new GridBagConstraints(0, 2, 2, 1, 1D, 0D, GridBagConstraints.NORTHWEST,
 				GridBagConstraints.HORIZONTAL, new Insets(10, 0, 5, 0), 0, 0));
 
-		// Y=2
+		// Y=3
 		scrollPaneGamePanel = new JScrollPane(unitsPanel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
 				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		add(scrollPaneGamePanel, new GridBagConstraints(0, 2, 2, 1, 1D, 1D, GridBagConstraints.NORTH,
+		add(scrollPaneGamePanel, new GridBagConstraints(0, 3, 2, 1, 1D, 1D, GridBagConstraints.NORTH,
 				GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
 
 		// Y=10
@@ -84,6 +92,7 @@ public class RightPanelView extends JPanel implements RightPanelPresenter.Displa
 
 	@Override
 	public void showTile(final FocusedTileEvent event, final Game game) {
+		setCurrentPlayer(game.getCurrentPlayer());
 		final TileOcean tile = event.getTile();
 		tileImage.setImage(imageProvider.getImage(ImageProvider.IMG_TILE_OCEAN));
 		StringBuilder sb = new StringBuilder(200);
@@ -102,6 +111,16 @@ public class RightPanelView extends JPanel implements RightPanelPresenter.Displa
 			unitsPanel.setUnits(game.getShipsAt(event.getLocation()));
 		}
 		repaint();
+	}
+	
+	private void setCurrentPlayer(final Player player){
+		StringBuilder sb = new StringBuilder(200);
+		sb.append("<html><div>");
+		sb.append(getText().get("unitsPanel.currentUser"));
+		sb.append(" ");
+		sb.append(player.getName());
+		sb.append("</div></html>");
+		tileOnMove.setText(sb.toString());
 	}
 
 	@Override

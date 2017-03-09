@@ -65,7 +65,7 @@ public class GameController implements Localized {
 	public void newGame() {
 		GameBuilder builder = new GameBuilder();
 		game = builder.setMap(500, 500).setCalendar(1570, 1800)
-				.addPlayer("Player1", true).addShip("Player1", 5, 5, 5)
+				.addPlayer("Player1", false).addShip("Player1", 5, 5, 5).addShip("Player1", 5, 25, 25)
 				.addPlayer("Pocitac", true).addShip("Pocitac", 5, 6, 6).addShip("Pocitac", 5, 7, 7).addShip("Pocitac", 5, 8, 8)
 				.build();
 		game.addListener(new ModelListener() {
@@ -112,7 +112,7 @@ public class GameController implements Localized {
 
 	public void performMove(final Ship ship, final List<Location> path) {
 		logger.debug("Start move ship: " + ship);
-		ship.moveTo(new Path(path));
+		new Thread(() -> ship.moveTo(new Path(path))).start();
 		// moveAutomatization.addMove(new MoveAutomatization.MovePlanner(ship,
 		// path));
 	}

@@ -222,7 +222,6 @@ public class GamePanelPresenter implements Localized {
 				final Ship unit = units.get(0);
 				display.setGotoCursorTitle(lastMousePosition.toLocation());
 				switchToGoMode(unit);
-				// display.getGamePanelView().repaint();
 			}
 		}
 	}
@@ -230,43 +229,36 @@ public class GamePanelPresenter implements Localized {
 	private void onKeyPressed_escape() {
 		if (display.isGotoMode()) {
 			cancelGoToMode(display.getGotoCursorTitle());
-			// display.getGamePanelView().repaint();
 		}
 	}
 
 	private void onKeyPressed_enter() {
 		if (display.isGotoMode()) {
 			switchToNormalMode(display.getGotoCursorTitle());
-			// display.getGamePanelView().repaint();
 		}
 	}
 
 	private void onMousePressed(final MouseEvent e) {
 		final Location p = display.getArea().convertToLocation(Point.of(e.getX(), e.getY()));
-		System.out.println(p);
+		System.out.println("location p: " + p);
 		if (display.isGotoMode()) {
 			switchToNormalMode(p);
 		} else {
 			display.setCursorLocation(p);
-			focusedTileController.fireFocusedTileEvent(new FocusedTileEvent(p, new TileOcean()));
+			focusedTileController
+					.fireFocusedTileEvent(new FocusedTileEvent(gameController.getGame(), p, new TileOcean()));
 		}
-		// display.getGamePanelView().repaint();
 	}
 
 	private void onMouseDragged(final MouseEvent e) {
 		if (lastMousePosition != null) {
 			final JViewport viewPort = (JViewport) display.getGamePanelView().getParent();
 			if (viewPort != null) {
-				// Location delta =
-				// lastMousePosition.substract(Location.make(e.getX(),
-				// e.getY()));
-				final int deltaX = lastMousePosition.getX() - e.getX();
-				final int deltaY = lastMousePosition.getY() - e.getY();
-				Rectangle view = viewPort.getViewRect();
-				// view.x += delta.getX();
-				// view.y += delta.getY();
-				view.x += deltaX;
-				view.y += deltaY;
+				final Point currentPosition = Point.of(e.getX(), e.getY());
+				final Point delta = lastMousePosition.substract(currentPosition);
+				final Rectangle view = viewPort.getViewRect();
+				view.x += delta.getX();
+				view.y += delta.getY();
 				display.getGamePanelView().scrollRectToVisible(view);
 			}
 		}
@@ -275,13 +267,12 @@ public class GamePanelPresenter implements Localized {
 	private void onMouseMoved(final MouseEvent e) {
 		lastMousePosition = Point.of(e.getX(), e.getY());
 		if (display.isGotoMode()) {
-			display.setGotoCursorTitle(convertToTilesCoordinates(Location.of(e.getX(), e.getY())));
-			// display.getGamePanelView().repaint();
+			display.setGotoCursorTitle(lastMousePosition.toLocation());
 		}
 		/**
 		 * Set status bar message
 		 */
-		Location where = convertToTilesCoordinates(Location.of(e.getX(), e.getY()));
+		final Location where = lastMousePosition.toLocation();
 		final TileOcean tile = new TileOcean();
 		final StringBuilder buff = new StringBuilder();
 		buff.append(getText().get("statusBar.tile.start"));
@@ -297,36 +288,30 @@ public class GamePanelPresenter implements Localized {
 		statusBarMessageController.fireStatusMessageWasChangedEvent(buff.toString());
 	}
 
-	@Deprecated
-	private Location convertToTilesCoordinates(final Location panelCoordinates) {
-		return Location.of(panelCoordinates.getX() / GamePanelView.TOTAL_TILE_WIDTH_IN_PX,
-				panelCoordinates.getY() / GamePanelView.TOTAL_TILE_WIDTH_IN_PX);
-	}
-
 	private final void switchToGoMode(final Ship unit) {
 		logger.debug("Switching '" + unit + "' to go mode.");
 		display.setCursorGoto();
-		// display.getGamePanelView().repaint();
 	}
 
 	private void cancelGoToMode(final Location moveTo) {
 		display.setCursorNormal();
 		display.setCursorLocation(moveTo);
 		// TODO JJ read tile ocean from map
-		focusedTileController.fireFocusedTileEvent(new FocusedTileEvent(moveTo, new TileOcean()));
+		focusedTileController
+				.fireFocusedTileEvent(new FocusedTileEvent(gameController.getGame(), moveTo, new TileOcean()));
 	}
 
 	private final void switchToNormalMode(final Location moveTo) {
-		logger.debug("Switching to normalmode.");
-
+		logger.debug("Switching to normal mode, from " + display.getCursorTile() + " to " + moveTo);
 		final List<Location> path = new ArrayList<Location>();
-		pathPlanning.paintPath(display.getCursorTile(), moveTo, point -> path.add(point));
-		// TODO JJ - co to znamena? make first step
+		pathPlanning.paintPath(display.getCursorTile(), moveTo, location -> path.add(location));
 		if (path.size() > 0) {
 			// TODO JJ active ship can be different from ship first at list
 			Ship ship = gameController.getGame().getCurrentPlayer().getShipsAt(display.getCursorTile()).get(0);
 			gameController.performMove(ship, path);
-			focusedTileController.fireFocusedTileEvent(new FocusedTileEvent(display.getCursorTile(), new TileOcean()));
+			// TODO JJ tile ocean should be obtained from map
+			focusedTileController.fireFocusedTileEvent(
+					new FocusedTileEvent(gameController.getGame(), display.getCursorTile(), new TileOcean()));
 		}
 		display.setCursorLocation(moveTo);
 		display.setCursorNormal();

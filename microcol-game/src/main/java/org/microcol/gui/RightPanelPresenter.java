@@ -79,6 +79,7 @@ public class RightPanelPresenter implements Localized {
 			}
 		});
 		turnStartedController.addTurnStartedListener(event -> {
+			//TODO JJ draw jmeno uzivatel, co je na tahu
 			display.getNextTurnButton().setEnabled(true);
 		});
 	}

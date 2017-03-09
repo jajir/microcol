@@ -259,19 +259,26 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 	}
 
 	private void paintGrid(final Graphics2D graphics, final Map map, final Area area) {
-		// FIXME JJ draw net just on area
 		if (isGridShown) {
 			graphics.setColor(Color.LIGHT_GRAY);
 			graphics.setStroke(new BasicStroke(1));
-			for (int i = 1; i <= map.getMaxX(); i++) {
-				int x = i * TOTAL_TILE_WIDTH_IN_PX - 1;
-				graphics.drawLine(x, 0, x, map.getMaxY() * TILE_WIDTH_IN_PX + map.getMaxY() * (map.getMaxX() - 1));
+			for (int i = area.getTopLeft().getX(); i <= area.getBottomRight().getX(); i++) {
+				final Location l_1 = Location.of(i, area.getTopLeft().getY());
+				final Location l_2 = Location.of(i, area.getBottomRight().getY());
+				drawNetLine(graphics, area, l_1, l_2);
 			}
-			for (int j = 1; j <= map.getMaxY(); j++) {
-				int y = j * TOTAL_TILE_WIDTH_IN_PX - 1;
-				graphics.drawLine(0, y, map.getMaxY() * TILE_WIDTH_IN_PX + map.getMaxX() * (map.getMaxY() - 1), y);
+			for (int j = area.getTopLeft().getY(); j <= area.getBottomRight().getY(); j++) {
+				final Location l_1 = Location.of(area.getTopLeft().getX(), j);
+				final Location l_2 = Location.of(area.getBottomRight().getX(), j);
+				drawNetLine(graphics, area, l_1, l_2);
 			}
 		}
+	}
+
+	private void drawNetLine(final Graphics2D graphics, final Area area, final Location l_1, Location l_2) {
+		final Point p_1 = area.convert(l_1).add(-1, -1);
+		final Point p_2 = area.convert(l_2).add(-1, -1);
+		graphics.drawLine(p_1.getX(), p_1.getY(), p_2.getX(), p_2.getY());
 	}
 
 	private void paintCursor(final Graphics2D graphics, final Area area) {
@@ -311,18 +318,18 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 	 *            required displayed area
 	 */
 	private void paintGoToPath(final Graphics2D graphics, final Area area) {
-		// FIXME JJ start using are for drawing ships and coordinates
 		if (gotoMode && gotoCursorTitle != null) {
 			graphics.setColor(Color.yellow);
 			graphics.setStroke(new BasicStroke(1));
 			paintCursor(graphics, area, gotoCursorTitle);
 			if (!cursorLocation.equals(gotoCursorTitle)) {
-				List<Location> steps = new ArrayList<>();
-				pathPlanning.paintPath(cursorLocation, gotoCursorTitle, point -> steps.add(point));
+				List<Point> steps = new ArrayList<>();
+				pathPlanning.paintPath(cursorLocation, gotoCursorTitle, location -> steps.add(area.convert(location)));
 				// TODO JJ get(0) could return different ship that is really
 				// moved
 				final Ship unit = gameController.getGame().getCurrentPlayer().getShipsAt(cursorLocation).get(0);
 				final StepCounter stepCounter = new StepCounter(5, unit.getAvailableMoves());
+				//TODO JJ draw just step on visible area
 				steps.forEach(point -> paintStepsToTile(graphics, point, stepCounter));
 			}
 		}
@@ -333,15 +340,11 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 	 * 
 	 * @param graphics
 	 *            required {@link Graphics2D}
-	 * @param tile
-	 *            required location of tile where to draw image
+	 * @param point
+	 *            required point where to draw image
 	 */
-	private void paintStepsToTile(final Graphics2D graphics, final Location tile, final StepCounter stepCounter) {
-		// final Location p = tile.multiply(TOTAL_TILE_WIDTH_IN_PX).add(4);
-		// TODO JJ replace with Point
-		final int x = tile.getX() * TOTAL_TILE_WIDTH_IN_PX + 4;
-		final int y = tile.getY() * TOTAL_TILE_WIDTH_IN_PX + 4;
-		graphics.drawImage(getImageFoStep(stepCounter.canMakeMoveInSameTurn(1)), x, y, this);
+	private void paintStepsToTile(final Graphics2D graphics, final Point point, final StepCounter stepCounter) {
+		graphics.drawImage(getImageFoStep(stepCounter.canMakeMoveInSameTurn(1)), point.getX(), point.getY(), this);
 	}
 
 	private Image getImageFoStep(final boolean normalStep) {
@@ -414,6 +417,7 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 
 	@Override
 	public void setGotoCursorTitle(final Location gotoCursorTitle) {
+		System.out.println(gotoCursorTitle);
 		this.gotoCursorTitle = gotoCursorTitle;
 	}
 

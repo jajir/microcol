@@ -1,0 +1,97 @@
+#
+# A fatal error has been detected by the Java Runtime Environment:
+#
+#  SIGSEGV (0xb) at pc=0x000000019df6efe2, pid=52877, tid=0x0000000000004f07
+#
+# JRE version: Java(TM) SE Runtime Environment (8.0_111-b14) (build 1.8.0_111-b14)
+# Java VM: Java HotSpot(TM) 64-Bit Server VM (25.111-b14 mixed mode bsd-amd64 compressed oops)
+# Problematic frame:
+# C  [libjprofilerti.jnilib+0xd1fe2]  HashMap<ClassFileInfo, ClassFileInfo>::put(ClassFileInfo*, ClassFileInfo*)+0xa2
+#
+# Failed to write core dump. Core dumps have been disabled. To enable core dumping, try "ulimit -c unlimited" before starting Java again
+#
+# If you would like to submit a bug report, please visit:
+#   http://bugreport.java.com/bugreport/crash.jsp
+# The crash happened outside the Java Virtual Machine in native code.
+# See problematic frame for where to report the bug.
+#
+
+---------------  T H R E A D  ---------------
+
+Current thread (0x00007faa2ae03000):  JavaThread "SIGTERM handler" daemon [_thread_in_native, id=20231, stack(0x00007000068b4000,0x00007000069b4000)]
+
+siginfo: si_signo: 11 (SIGSEGV), si_code: 0 (unknown), si_addr: 0x0000000000000000
+
+Registers:
+RAX=0x00000000000011ff, RBX=0x0000000000000000, RCX=0x00007faa2a0fa5b0, RDX=0x300007faa2a0ee30
+RSP=0x00007000069adfc0, RBP=0x00007000069adff0, RSI=0x0000000000000075, RDI=0x000000000000001d
+R8 =0x00007faa3015b340, R9 =0x00007faa3015b340, R10=0x00000000ffc00000, R11=0xfffffffffffffff8
+R12=0x00007faa2a0e57e0, R13=0x000000019e0ad100, R14=0x0000000000002918, R15=0x00007faa2a0e57e0
+RIP=0x000000019df6efe2, EFLAGS=0x0000000000010206, ERR=0x0000000000000000
+  TRAPNO=0x000000000000000d
+
+Top of Stack: (sp=0x00007000069adfc0)
+0x00007000069adfc0:   000000000000001d 00007faa2a0e57e8
+0x00007000069adfd0:   0000000000000000 00007faa2a0e57e0
+0x00007000069adfe0:   00007000069b236c 00007faa317567f0
+0x00007000069adff0:   00007000069b2210 000000019df2c5df
+0x00007000069ae000:   0000000000000000 0000000000000000
+0x00007000069ae010:   0000000000000000 0000000000000000
+0x00007000069ae020:   0000000000000000 00007000069b00f0
+0x00007000069ae030:   0000000000000000 00007000069b21d8
+0x00007000069ae040:   0000000000000000 0000000000000000
+0x00007000069ae050:   00007000069b236c 00007000069b2248
+0x00007000069ae060:   0000040600000000 00007faa2954f410
+0x00007000069ae070:   00007faa2ae031f8 0000000000000000
+0x00007000069ae080:   00007faa2df7dab0 0000000000000000
+0x00007000069ae090:   0000000000000000 0000000000000000
+0x00007000069ae0a0:   0000000000000000 0000000000000000
+0x00007000069ae0b0:   0000000000000000 0000000000000000
+0x00007000069ae0c0:   0000000000000000 0000000000000000
+0x00007000069ae0d0:   0000000000000000 0000000000000000
+0x00007000069ae0e0:   0000000000000000 0000000000000000
+0x00007000069ae0f0:   0000000000000000 0000000000000000
+0x00007000069ae100:   0000000000000000 0000000000000000
+0x00007000069ae110:   0000000000000000 0000000000000000
+0x00007000069ae120:   0000000000000000 0000000000000000
+0x00007000069ae130:   0000000000000000 0000000000000000
+0x00007000069ae140:   0000000000000000 0000000000000000
+0x00007000069ae150:   0000000000000000 0000000000000000
+0x00007000069ae160:   0000000000000000 0000000000000000
+0x00007000069ae170:   0000000000000000 0000000000000000
+0x00007000069ae180:   0000000000000000 0000000000000000
+0x00007000069ae190:   0000000000000000 0000000000000000
+0x00007000069ae1a0:   0000000000000000 0000000000000000
+0x00007000069ae1b0:   0000000000000000 0000000000000000 
+
+Instructions: (pc=0x000000019df6efe2)
+0x000000019df6efc2:   45 14 85 c0 7e 0a 41 3b 45 10 0f 8e a7 00 00 00
+0x000000019df6efd2:   49 8b 4d 20 48 8b 11 48 85 d2 0f 84 cc 00 00 00
+0x000000019df6efe2:   48 8b 42 18 ff 49 08 48 89 01 49 8b 45 00 4a 8b
+0x000000019df6eff2:   04 30 4c 89 22 4c 89 7a 08 48 89 42 10 49 8b 45 
+
+Register to memory mapping:
+
+RAX=0x00000000000011ff is an unknown value
+RBX=0x0000000000000000 is an unknown value
+RCX=0x00007faa2a0fa5b0 is an unknown value
+RDX=0x300007faa2a0ee30 is an unknown value
+RSP=0x00007000069adfc0 is pointing into the stack for thread: 0x00007faa2ae03000
+RBP=0x00007000069adff0 is pointing into the stack for thread: 0x00007faa2ae03000
+RSI=0x0000000000000075 is an unknown value
+RDI=0x000000000000001d is an unknown value
+R8 =0x00007faa3015b340 is an unknown value
+R9 =0x00007faa3015b340 is an unknown value
+R10=0x00000000ffc00000 is an unknown value
+R11=0xfffffffffffffff8 is an unknown value
+R12=0x00007faa2a0e57e0 is an unknown value
+R13=0x000000019e0ad100: _ZN24LiveClassProfilingHelper14classFileInfosE+0 in /programs/jprofiler8/bin/macos/libjprofilerti.jnilib at 0x000000019de9d000
+R14=0x0000000000002918 is an unknown value
+R15=0x00007faa2a0e57e0 is an unknown value
+
+
+Stack: [0x00007000068b4000,0x00007000069b4000],  sp=0x00007000069adfc0,  free space=999k
+Native frames: (J=compiled Java code, j=interpreted, Vv=VM code, C=native code)
+C  [libjprofilerti.jnilib+0xd1fe2]  HashMap<ClassFileInfo, ClassFileInfo>::put(ClassFileInfo*, ClassFileInfo*)+0xa2
+C  [libjprofilerti.jnilib+0x8f5df]  LiveClassProfilingHelper::doInstrumentation(JNIEnv_*, unsigned char const*, int, unsigned char**, int*, bool, bool)+0x2af
+C  [libjprofilerti.jnilib+0x90b2e]
