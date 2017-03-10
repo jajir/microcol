@@ -107,7 +107,7 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 	}
 
 	private VolatileImage prepareImage(final Area area) {
-		final Point p = Point.of(area.getWidth(), area.getHeight()).multiply(TILE_WIDTH_IN_PX);
+		final Point p = Point.of(area.getWidth() + 1, area.getHeight() + 1).multiply(TILE_WIDTH_IN_PX);
 		return createVolatileImage(p.getX(), p.getY());
 	}
 
@@ -264,12 +264,12 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 			graphics.setStroke(new BasicStroke(1));
 			for (int i = area.getTopLeft().getX(); i <= area.getBottomRight().getX(); i++) {
 				final Location l_1 = Location.of(i, area.getTopLeft().getY());
-				final Location l_2 = Location.of(i, area.getBottomRight().getY());
+				final Location l_2 = Location.of(i, area.getBottomRight().getY() + 1);
 				drawNetLine(graphics, area, l_1, l_2);
 			}
 			for (int j = area.getTopLeft().getY(); j <= area.getBottomRight().getY(); j++) {
 				final Location l_1 = Location.of(area.getTopLeft().getX(), j);
-				final Location l_2 = Location.of(area.getBottomRight().getX(), j);
+				final Location l_2 = Location.of(area.getBottomRight().getX() + 1, j);
 				drawNetLine(graphics, area, l_1, l_2);
 			}
 		}
@@ -329,7 +329,7 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 				// moved
 				final Ship unit = gameController.getGame().getCurrentPlayer().getShipsAt(cursorLocation).get(0);
 				final StepCounter stepCounter = new StepCounter(5, unit.getAvailableMoves());
-				//TODO JJ draw just step on visible area
+				// TODO JJ draw just step on visible area
 				steps.forEach(point -> paintStepsToTile(graphics, point, stepCounter));
 			}
 		}
