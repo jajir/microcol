@@ -79,7 +79,7 @@ public class GameController implements Localized {
 			@Override
 			public void shipMoved(final ShipMovedEvent event) {
 				logger.debug("Ship moved " + event);
-				moveUnitController.fireMoveUnitEvent(event);
+				moveUnitController.fireUnitMovedEvent(event);
 			}
 
 			@Override

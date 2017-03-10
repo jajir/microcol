@@ -113,7 +113,8 @@ public class RightPanelView extends JPanel implements RightPanelPresenter.Displa
 		repaint();
 	}
 	
-	private void setCurrentPlayer(final Player player){
+	@Override
+	public void setCurrentPlayer(final Player player){
 		StringBuilder sb = new StringBuilder(200);
 		sb.append("<html><div>");
 		sb.append(getText().get("unitsPanel.currentUser"));

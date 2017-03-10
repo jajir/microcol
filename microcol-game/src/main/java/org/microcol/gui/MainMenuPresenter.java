@@ -7,6 +7,7 @@ import javax.swing.JRadioButtonMenuItem;
 import org.microcol.gui.event.ChangeLanguageController;
 import org.microcol.gui.event.FocusedTileController;
 import org.microcol.gui.event.GameEventController;
+import org.microcol.gui.event.MoveUnitController;
 import org.microcol.gui.event.ShowGridController;
 import org.microcol.gui.event.VolumeChangeController;
 
@@ -42,7 +43,8 @@ public class MainMenuPresenter {
 	public MainMenuPresenter(final MainMenuPresenter.Display display, final GameEventController gameEventController,
 			final GamePreferences gamePreferences, final ChangeLanguageController languangeController, final Text text,
 			final ViewUtil viewUtil, final VolumeChangeController volumeChangeController,
-			final ShowGridController showGridController, final FocusedTileController focusedTileController) {
+			final ShowGridController showGridController, final FocusedTileController focusedTileController,
+			final MoveUnitController moveUnitController) {
 		display.getMenuItemNewGame().addActionListener(actionEvent -> {
 
 		});
@@ -67,7 +69,10 @@ public class MainMenuPresenter {
 		});
 		display.getMenuItemShowGrid().addActionListener(
 				ectionEvent -> showGridController.fireShowGridEvent(display.getMenuItemShowGrid().isSelected()));
-
+		display.getMenuItemMove().addActionListener(ectionEvent -> {
+			moveUnitController.fireStartMoveEvent();
+			display.getMenuItemMove().setEnabled(false);
+		});
 		languangeController.addLanguageListener(event -> {
 			display.updateLanguage();
 		});

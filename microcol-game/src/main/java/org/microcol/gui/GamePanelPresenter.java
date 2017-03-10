@@ -39,7 +39,7 @@ public class GamePanelPresenter implements Localized {
 
 		GamePanelView getGamePanelView();
 
-		Location getCursorTile();
+		Location getCursorLocation();
 
 		void setCursorLocation(Location cursorLocation);
 
@@ -116,15 +116,12 @@ public class GamePanelPresenter implements Localized {
 				}
 			}
 		});
+		moveUnitController.addStartMovingListener(event -> swithToMoveMode());
 
 		keyController.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(final KeyEvent e) {
 				if ('c' == e.getKeyChar()) {
-				}
-				// TODO JJ catch this key at main menu level.
-				if ('m' == e.getKeyChar()) {
-					onKeyPressed_m();
 				}
 				/**
 				 * Escape
@@ -213,17 +210,15 @@ public class GamePanelPresenter implements Localized {
 		});
 	}
 
-	private void onKeyPressed_m() {
-		if (display.getCursorTile() != null) {
-			final List<Ship> units = gameController.getGame().getCurrentPlayer().getShipsAt(display.getCursorTile());
-			if (units.isEmpty()) {
-				logger.debug("At " + display.getCursorTile() + " there are no units to move.");
-			} else {
-				final Ship unit = units.get(0);
-				display.setGotoCursorTitle(lastMousePosition.toLocation());
-				switchToGoMode(unit);
-			}
-		}
+	private void swithToMoveMode() {
+		Preconditions.checkNotNull(display.getCursorLocation(), "Cursor location is empty");
+		final List<Ship> units = gameController.getGame().getCurrentPlayer().getShipsAt(display.getCursorLocation());
+		// TODO JJ Filter unit that have enough action points
+		Preconditions.checkState(!units.isEmpty(), "there are some moveable units");
+		final Ship unit = units.get(0);
+		display.setGotoCursorTitle(lastMousePosition.toLocation());
+		logger.debug("Switching '" + unit + "' to go mode.");
+		display.setCursorGoto();
 	}
 
 	private void onKeyPressed_escape() {
@@ -288,11 +283,6 @@ public class GamePanelPresenter implements Localized {
 		statusBarMessageController.fireStatusMessageWasChangedEvent(buff.toString());
 	}
 
-	private final void switchToGoMode(final Ship unit) {
-		logger.debug("Switching '" + unit + "' to go mode.");
-		display.setCursorGoto();
-	}
-
 	private void cancelGoToMode(final Location moveTo) {
 		display.setCursorNormal();
 		display.setCursorLocation(moveTo);
@@ -302,16 +292,16 @@ public class GamePanelPresenter implements Localized {
 	}
 
 	private final void switchToNormalMode(final Location moveTo) {
-		logger.debug("Switching to normal mode, from " + display.getCursorTile() + " to " + moveTo);
+		logger.debug("Switching to normal mode, from " + display.getCursorLocation() + " to " + moveTo);
 		final List<Location> path = new ArrayList<Location>();
-		pathPlanning.paintPath(display.getCursorTile(), moveTo, location -> path.add(location));
+		pathPlanning.paintPath(display.getCursorLocation(), moveTo, location -> path.add(location));
 		if (path.size() > 0) {
 			// TODO JJ active ship can be different from ship first at list
-			Ship ship = gameController.getGame().getCurrentPlayer().getShipsAt(display.getCursorTile()).get(0);
+			Ship ship = gameController.getGame().getCurrentPlayer().getShipsAt(display.getCursorLocation()).get(0);
 			gameController.performMove(ship, path);
 			// TODO JJ tile ocean should be obtained from map
 			focusedTileController.fireFocusedTileEvent(
-					new FocusedTileEvent(gameController.getGame(), display.getCursorTile(), new TileOcean()));
+					new FocusedTileEvent(gameController.getGame(), display.getCursorLocation(), new TileOcean()));
 		}
 		display.setCursorLocation(moveTo);
 		display.setCursorNormal();

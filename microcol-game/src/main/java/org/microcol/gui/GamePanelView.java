@@ -384,7 +384,7 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 	}
 
 	@Override
-	public Location getCursorTile() {
+	public Location getCursorLocation() {
 		return cursorLocation;
 	}
 

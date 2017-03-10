@@ -17,6 +17,7 @@ import org.microcol.gui.event.TurnStartedController;
 import org.microcol.gui.model.GameController;
 import org.microcol.model.Game;
 import org.microcol.model.Location;
+import org.microcol.model.Player;
 
 import com.google.inject.Inject;
 
@@ -28,6 +29,8 @@ public class RightPanelPresenter implements Localized {
 		void showTile(final FocusedTileEvent event, Game game);
 
 		JPanel getRightPanel();
+
+		void setCurrentPlayer(Player player);
 	}
 
 	private Location focusedTile;
@@ -79,8 +82,10 @@ public class RightPanelPresenter implements Localized {
 			}
 		});
 		turnStartedController.addTurnStartedListener(event -> {
-			//TODO JJ draw jmeno uzivatel, co je na tahu
-			display.getNextTurnButton().setEnabled(true);
+			display.setCurrentPlayer(event.getPlayer());
+			if (event.getPlayer().isHuman()) {
+				display.getNextTurnButton().setEnabled(true);
+			}
 		});
 	}
 

@@ -31,11 +31,9 @@ public class TurnStartedController {
 	 */
 	public void fireTurnStartedEvent(final TurnStartedEvent event) {
 		Preconditions.checkNotNull(event);
-		if (event.getPlayer().isHuman()) {
-			logger.debug("New turn started: " + event);
-			listeners.forEach(listener -> {
-				listener.onNewTurn(event);
-			});
-		}
+		logger.debug("New turn started: " + event);
+		listeners.forEach(listener -> {
+			listener.onNewTurn(event);
+		});
 	}
 }
