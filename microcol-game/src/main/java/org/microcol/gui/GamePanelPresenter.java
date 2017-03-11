@@ -214,8 +214,11 @@ public class GamePanelPresenter implements Localized {
 	private void onCenterView() {
 		logger.debug("Center view event");
 		Preconditions.checkNotNull(display.getCursorLocation(), "Cursor location is empty");
-		// TODO add scrolling to center point, not top left corner
-		final Point p = Point.of(display.getCursorLocation());
+		/**
+		 * Here could be verification of race conditions like centering to
+		 * bottom right corner of map. Luckily it's done by JViewport.
+		 */
+		final Point p = display.getArea().getCenterAreaTo(Point.of(display.getCursorLocation()));
 		final JViewport viewPort = (JViewport) display.getGamePanelView().getParent();
 		final Rectangle view = viewPort.getViewRect();
 		view.x = p.getX();

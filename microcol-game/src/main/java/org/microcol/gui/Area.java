@@ -19,17 +19,25 @@ public class Area {
 
 	private final Location bottomRight;
 
+	private final Point pointTopLeft;
+
+	private final Point pointBottomRight;
+
 	public Area(final JViewport viewport, final Map map) {
 		final Dimension dim = viewport.getExtentSize();
 		final java.awt.Point pos = viewport.getViewPosition();
 
-		final int posX = (int) Math.round(pos.getX() / GamePanelView.TOTAL_TILE_WIDTH_IN_PX) - 1;
-		final int posY = (int) Math.round(pos.getY() / GamePanelView.TOTAL_TILE_WIDTH_IN_PX) - 1;
-		final int width = (int) Math.ceil(dim.getWidth() / GamePanelView.TOTAL_TILE_WIDTH_IN_PX) + 2;
-		final int height = (int) Math.ceil(dim.getHeight() / GamePanelView.TOTAL_TILE_WIDTH_IN_PX) + 2;
+		pointTopLeft = Point.of((int) pos.getX(), (int) pos.getY());
+		pointBottomRight = pointTopLeft.add((int) dim.getWidth(), (int) dim.getHeight());
 
-		topLeft = Location.of(Math.max(0, posX), Math.max(0, posY));
-		bottomRight = Location.of(Math.min(posX + width, map.getMaxX()), Math.min(posY + height, map.getMaxY()));
+		final Point p1 = pointTopLeft.divide(GamePanelView.TOTAL_TILE_WIDTH_IN_PX).add(Point.of(-1, -1));
+		final Point p2 = Point
+				.of((int) Math.ceil(pointBottomRight.getX() / (float) GamePanelView.TOTAL_TILE_WIDTH_IN_PX),
+						(int) Math.ceil(pointBottomRight.getY() / (float) GamePanelView.TOTAL_TILE_WIDTH_IN_PX))
+				.add(Point.of(1, 1));
+
+		topLeft = Location.of(Math.max(0, p1.getX()), Math.max(0, p1.getY()));
+		bottomRight = Location.of(Math.min(p2.getX(), map.getMaxX()), Math.min(p2.getY(), map.getMaxY()));
 	}
 
 	public Location getTopLeft() {
@@ -106,6 +114,19 @@ public class Area {
 	public String toString() {
 		return MoreObjects.toStringHelper(Area.class).add("topLeft", topLeft).add("bottomRight", bottomRight)
 				.toString();
+	}
+
+	/**
+	 * When user want to see in center of screen method compute top left corner.
+	 * 
+	 * @param point
+	 *            required point that will in center of view
+	 * @return position of top left corner of view
+	 */
+	public Point getCenterAreaTo(final Point point) {
+		final Point p = pointBottomRight.substract(pointTopLeft)
+				.add(-GamePanelView.TOTAL_TILE_WIDTH_IN_PX, -GamePanelView.TOTAL_TILE_WIDTH_IN_PX).divide(2.0);
+		return point.substract(p);
 	}
 
 }

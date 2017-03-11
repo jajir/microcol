@@ -9,7 +9,9 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.RenderingHints;
 import java.awt.Toolkit;
+import java.awt.image.BufferedImage;
 import java.awt.image.VolatileImage;
+import java.awt.image.WritableRaster;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -21,6 +23,7 @@ import javax.swing.Timer;
 
 import org.microcol.gui.event.NextTurnController;
 import org.microcol.gui.event.StatusBarMessageController;
+import org.microcol.gui.gameview.ScreenScrolling;
 import org.microcol.gui.model.GameController;
 import org.microcol.model.Game;
 import org.microcol.model.Location;
@@ -63,6 +66,8 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 	private final FpsCounter fpsCounter;
 
 	private boolean isGridShown;
+	
+	private ScreenScrolling screenScrolling;
 
 	@Inject
 	public GamePanelView(final StatusBarMessageController statusBarMessageController,
@@ -100,7 +105,7 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 		this.isGridShown = idGridShown;
 		new Timer(1000 / DEFAULT_FRAME_PER_SECOND, event -> repaint()).start();
 	}
-
+	
 	@Override
 	public GamePanelView getGamePanelView() {
 		return this;
@@ -148,13 +153,41 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 			paintGoToPath(dbg, area);
 			paintMovingAnimation(dbg, area);
 			final Point p = Point.of(area.getTopLeft());
-			g.drawImage(dbImage, p.getX(), p.getY(), null);
+			if (gameController.getGame().getCurrentPlayer().isHuman()) {
+				g.drawImage(dbImage, p.getX(), p.getY(), null);
+			} else {
+				/**
+				 * If move computer that make game field darker.
+				 */
+				g.drawImage(makeItDarker(dbImage), p.getX(), p.getY(), null);
+			}
 			dbg.dispose();
 		}
 		// Sync the display on some systems.
 		// (on Linux, this fixes event queue problems)
 		Toolkit.getDefaultToolkit().sync();
 		fpsCounter.screenWasPainted();
+	}
+
+	private BufferedImage makeItDarker(final Image img) {
+		BufferedImage shadedImage = new BufferedImage(img.getWidth(this), img.getWidth(this),
+				BufferedImage.TYPE_INT_ARGB);
+		shadedImage.getGraphics().drawImage(img, 0, 0, this);
+		float percentage = 1.01F;
+		WritableRaster wr = shadedImage.getRaster();
+		int[] pixel = new int[4];
+
+		for (int i = 0; i < wr.getWidth(); i++) {
+			for (int j = 0; j < wr.getHeight(); j++) {
+				wr.getPixel(i, j, pixel);
+				pixel[0] = (int) (pixel[0] * percentage);
+				pixel[1] = (int) (pixel[1] * percentage);
+				pixel[2] = (int) (pixel[2] * percentage);
+				System.out.println(pixel[0] + ", " + pixel[1] + ", " + pixel[2] + ", " + pixel[3]);
+				wr.setPixel(i, j, pixel);
+			}
+		}
+		return shadedImage;
 	}
 
 	private void paintMovingAnimation(final Graphics2D graphics, final Area area) {

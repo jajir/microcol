@@ -63,8 +63,12 @@ public class Point {
 		return Point.of(location.getX(), location.getY()).multiply(GamePanelView.TOTAL_TILE_WIDTH_IN_PX);
 	}
 
-	public Point add(final int value, final int addY) {
-		return new Point(x + value, y + addY);
+	public Point add(final int addX, final int addY) {
+		return new Point(x + addX, y + addY);
+	}
+
+	public Point add(final Point point) {
+		return new Point(x + point.getX(), y + point.getY());
 	}
 
 	public Point substract(final Point p) {
@@ -75,7 +79,7 @@ public class Point {
 		return new Point(x * factor, y * factor);
 	}
 
-	public Point divide(final float factor) {
+	public Point divide(final double factor) {
 		return new Point((int) (x / factor), (int) (y / factor));
 	}
 }
