@@ -1,5 +1,6 @@
 package org.microcol.gui;
 
+import org.microcol.gui.panelview.GamePanelView;
 import org.microcol.model.Location;
 
 import com.google.common.base.MoreObjects;

@@ -11,6 +11,7 @@ import org.easymock.classextension.EasyMock;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.microcol.gui.panelview.WalkAnimator;
 import org.microcol.model.Location;
 import org.microcol.model.Ship;
 

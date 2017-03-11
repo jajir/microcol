@@ -1,4 +1,4 @@
-package org.microcol.gui;
+package org.microcol.gui.panelview;
 
 import java.awt.Rectangle;
 import java.awt.event.KeyAdapter;
@@ -13,8 +13,13 @@ import javax.swing.JPopupMenu;
 import javax.swing.JViewport;
 
 import org.apache.log4j.Logger;
+import org.microcol.gui.GamePreferences;
+import org.microcol.gui.Localized;
+import org.microcol.gui.PathPlanning;
+import org.microcol.gui.Point;
 import org.microcol.gui.event.FocusedTileController;
 import org.microcol.gui.event.FocusedTileEvent;
+import org.microcol.gui.event.GameController;
 import org.microcol.gui.event.GameEventController;
 import org.microcol.gui.event.GameEventListener;
 import org.microcol.gui.event.KeyController;
@@ -23,8 +28,6 @@ import org.microcol.gui.event.NewGameController;
 import org.microcol.gui.event.ShowGridController;
 import org.microcol.gui.event.StatusBarMessageController;
 import org.microcol.gui.event.ViewController;
-import org.microcol.gui.gameview.GamePanelListener;
-import org.microcol.gui.model.GameController;
 import org.microcol.gui.model.TileOcean;
 import org.microcol.model.Location;
 import org.microcol.model.Ship;
@@ -112,7 +115,9 @@ public class GamePanelPresenter implements Localized {
 
 		moveUnitController.addMoveUnitListener(event -> {
 			scheduleWalkAnimation(event);
-			// TODO JJ it's ugly, should use wait & notify
+			/**
+			 * Wait until animation is finished.
+			 */
 			while (display.getWalkAnimator() != null && display.getWalkAnimator().isNextAnimationLocationAvailable()) {
 				try {
 					Thread.sleep(100);
@@ -145,7 +150,6 @@ public class GamePanelPresenter implements Localized {
 			}
 		});
 
-		// TODO JJ move to separate class
 		final MouseAdapter ma = new MouseAdapter() {
 
 			@Override
@@ -199,8 +203,9 @@ public class GamePanelPresenter implements Localized {
 
 			@Override
 			public void onAboutGame() {
-				// TODO Auto-generated method stub
-
+				/**
+				 * It's intentionally empty.
+				 */
 			}
 		});
 

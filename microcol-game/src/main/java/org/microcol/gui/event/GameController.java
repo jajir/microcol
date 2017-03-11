@@ -1,4 +1,4 @@
-package org.microcol.gui.model;
+package org.microcol.gui.event;
 
 import java.util.List;
 
@@ -7,10 +7,6 @@ import org.microcol.ai.SkyNet;
 import org.microcol.gui.GamePreferences;
 import org.microcol.gui.Localized;
 import org.microcol.gui.MusicController;
-import org.microcol.gui.event.MoveUnitController;
-import org.microcol.gui.event.NewGameController;
-import org.microcol.gui.event.NextTurnController;
-import org.microcol.gui.event.TurnStartedController;
 import org.microcol.model.Game;
 import org.microcol.model.GameBuilder;
 import org.microcol.model.Location;
@@ -64,10 +60,9 @@ public class GameController implements Localized {
 	 */
 	public void newGame() {
 		GameBuilder builder = new GameBuilder();
-		game = builder.setMap(500, 500).setCalendar(1570, 1800)
-				.addPlayer("Player1", false).addShip("Player1", 5, 5, 5).addShip("Player1", 5, 4, 4)
-				.addPlayer("Pocitac", true).addShip("Pocitac", 5, 6, 6).addShip("Pocitac", 5, 7, 7).addShip("Pocitac", 5, 8, 8)
-				.build();
+		game = builder.setMap(500, 500).setCalendar(1570, 1800).addPlayer("Player1", false).addShip("Player1", 5, 5, 5)
+				.addShip("Player1", 5, 4, 4).addPlayer("Pocitac", true).addShip("Pocitac", 5, 6, 6)
+				.addShip("Pocitac", 5, 7, 7).addShip("Pocitac", 5, 8, 8).build();
 		game.addListener(new ModelListener() {
 
 			@Override
@@ -119,7 +114,6 @@ public class GameController implements Localized {
 
 	public void nextTurn() {
 		logger.debug("Next Year event was triggered.");
-		// TODO JJ it always starts new thread, is it correct?
 		new Thread(() -> game.endTurn()).start();
 		// moveAutomatization.perforMoves();
 	}

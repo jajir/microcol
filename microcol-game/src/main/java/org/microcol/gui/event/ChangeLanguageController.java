@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.microcol.gui.Text;
-import org.microcol.gui.model.GameController;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;

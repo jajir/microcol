@@ -1,9 +1,7 @@
-package org.microcol.gui.gameview;
+package org.microcol.gui.panelview;
 
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
-
-import org.microcol.gui.GamePanelPresenter;
 
 import com.google.common.base.Preconditions;
 

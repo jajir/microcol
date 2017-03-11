@@ -9,6 +9,7 @@ import javax.swing.JViewport;
 
 import org.easymock.classextension.EasyMock;
 import org.junit.Test;
+import org.microcol.gui.panelview.Area;
 import org.microcol.model.Map;
 
 /**

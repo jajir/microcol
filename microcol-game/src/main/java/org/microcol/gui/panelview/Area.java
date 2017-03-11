@@ -1,9 +1,10 @@
-package org.microcol.gui;
+package org.microcol.gui.panelview;
 
 import java.awt.Dimension;
 
 import javax.swing.JViewport;
 
+import org.microcol.gui.Point;
 import org.microcol.model.Location;
 import org.microcol.model.Map;
 

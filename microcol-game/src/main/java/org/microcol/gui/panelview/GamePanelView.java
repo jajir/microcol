@@ -1,4 +1,4 @@
-package org.microcol.gui;
+package org.microcol.gui.panelview;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -20,10 +20,14 @@ import javax.swing.JPanel;
 import javax.swing.JViewport;
 import javax.swing.Timer;
 
+import org.microcol.gui.FpsCounter;
+import org.microcol.gui.ImageProvider;
+import org.microcol.gui.PathPlanning;
+import org.microcol.gui.Point;
+import org.microcol.gui.StepCounter;
+import org.microcol.gui.event.GameController;
 import org.microcol.gui.event.NextTurnController;
 import org.microcol.gui.event.StatusBarMessageController;
-import org.microcol.gui.gameview.ScreenScrolling;
-import org.microcol.gui.model.GameController;
 import org.microcol.model.Game;
 import org.microcol.model.Location;
 import org.microcol.model.Map;
@@ -281,7 +285,7 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 	private void paintOwnersFlag(final Graphics2D graphics, final Point point, final Player player) {
 		graphics.setColor(Color.BLACK);
 		graphics.drawRect(point.getX(), point.getY(), FLAG_WIDTH, FLAG_HEIGHT);
-		// TODO JJ playr's color should be property
+		// TODO JJ player's color should be property
 		if (player.isHuman()) {
 			graphics.setColor(Color.YELLOW);
 		} else {
@@ -415,7 +419,6 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 		 * exists. Because than graphics is not initialize and initGame can't
 		 * prepare dbImage.
 		 */
-		// TODO JJ remove if condition
 		if (gameController.getGame() == null) {
 			return new Dimension(100, 100);
 		} else {

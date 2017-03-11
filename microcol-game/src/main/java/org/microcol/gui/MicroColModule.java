@@ -4,6 +4,7 @@ import org.microcol.gui.event.ChangeLanguageController;
 import org.microcol.gui.event.ChangeLanguageListenerPreferences;
 import org.microcol.gui.event.ChangeLanguageListenerText;
 import org.microcol.gui.event.FocusedTileController;
+import org.microcol.gui.event.GameController;
 import org.microcol.gui.event.GameEventController;
 import org.microcol.gui.event.GameEventListenerImpl;
 import org.microcol.gui.event.KeyController;
@@ -18,7 +19,8 @@ import org.microcol.gui.event.TurnStartedController;
 import org.microcol.gui.event.ViewController;
 import org.microcol.gui.event.VolumeChangeController;
 import org.microcol.gui.event.VolumeChangedListenerPreferences;
-import org.microcol.gui.model.GameController;
+import org.microcol.gui.panelview.GamePanelPresenter;
+import org.microcol.gui.panelview.GamePanelView;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;

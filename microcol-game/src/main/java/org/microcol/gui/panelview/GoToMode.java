@@ -1,4 +1,4 @@
-package org.microcol.gui.model;
+package org.microcol.gui.panelview;
 
 import java.util.List;
 

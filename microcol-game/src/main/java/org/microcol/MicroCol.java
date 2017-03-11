@@ -14,7 +14,7 @@ import org.microcol.gui.AppleMenuListener;
 import org.microcol.gui.ImageProvider;
 import org.microcol.gui.MainFrameView;
 import org.microcol.gui.MicroColModule;
-import org.microcol.gui.model.GameController;
+import org.microcol.gui.event.GameController;
 
 import com.apple.mrj.MRJApplicationUtils;
 import com.google.inject.Guice;
