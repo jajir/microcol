@@ -1,8 +1,6 @@
 package org.microcol.gui;
 
 import java.awt.Rectangle;
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
@@ -17,12 +15,15 @@ import javax.swing.JViewport;
 import org.apache.log4j.Logger;
 import org.microcol.gui.event.FocusedTileController;
 import org.microcol.gui.event.FocusedTileEvent;
+import org.microcol.gui.event.GameEventController;
+import org.microcol.gui.event.GameEventListener;
 import org.microcol.gui.event.KeyController;
 import org.microcol.gui.event.MoveUnitController;
 import org.microcol.gui.event.NewGameController;
 import org.microcol.gui.event.ShowGridController;
 import org.microcol.gui.event.StatusBarMessageController;
 import org.microcol.gui.event.ViewController;
+import org.microcol.gui.gameview.GamePanelListener;
 import org.microcol.gui.model.GameController;
 import org.microcol.gui.model.TileOcean;
 import org.microcol.model.Location;
@@ -65,6 +66,8 @@ public class GamePanelPresenter implements Localized {
 		Area getArea();
 
 		void planScrollingAnimationToPoint(Point targetPoint);
+
+		void stopTimer();
 	}
 
 	private final GameController gameController;
@@ -100,7 +103,7 @@ public class GamePanelPresenter implements Localized {
 			final FocusedTileController focusedTileController, final PathPlanning pathPlanning,
 			final MoveUnitController moveUnitController, final NewGameController newGameController,
 			final GamePreferences gamePreferences, final ShowGridController showGridController,
-			final ViewController viewController) {
+			final ViewController viewController, final GameEventController gameEventController) {
 		this.focusedTileController = focusedTileController;
 		this.gameController = Preconditions.checkNotNull(gameController);
 		this.statusBarMessageController = Preconditions.checkNotNull(statusBarMessageController);
@@ -184,33 +187,23 @@ public class GamePanelPresenter implements Localized {
 
 		display.getGamePanelView().addMouseListener(ma);
 		display.getGamePanelView().addMouseMotionListener(ma);
-		// TODO JJ move listener to separate class
-		display.getGamePanelView().getParent().addComponentListener(new ComponentListener() {
+		display.getGamePanelView().getParent().addComponentListener(new GamePanelListener(display));
+		viewController.addCenterViewListener(() -> onCenterView());
+
+		gameEventController.addGameEventListener(new GameEventListener() {
 
 			@Override
-			public void componentShown(final ComponentEvent e) {
-				// TODO JJ Auto-generated method stub
-
+			public void onGameExit() {
+				display.stopTimer();
 			}
 
 			@Override
-			public void componentResized(final ComponentEvent e) {
-				display.getGamePanelView().onViewPortResize();
-			}
-
-			@Override
-			public void componentMoved(final ComponentEvent e) {
-				// TODO JJ Auto-generated method stub
-
-			}
-
-			@Override
-			public void componentHidden(final ComponentEvent e) {
-				// TODO JJ Auto-generated method stub
+			public void onAboutGame() {
+				// TODO Auto-generated method stub
 
 			}
 		});
-		viewController.addCenterViewListener(() -> onCenterView());
+
 	}
 
 	private void onCenterView() {

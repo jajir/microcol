@@ -10,9 +10,7 @@ import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.Toolkit;
-import java.awt.image.BufferedImage;
 import java.awt.image.VolatileImage;
-import java.awt.image.WritableRaster;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -90,7 +88,10 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 		fpsCounter.start();
 
 		isGridShown = true;
+		timer = new Timer(1000 / DEFAULT_FRAME_PER_SECOND, event -> nextGameTick());
 	}
+
+	private final Timer timer;
 
 	/**
 	 * Define how many times per second will be screen repainted (FPS). Real FPS
@@ -101,10 +102,16 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 
 	@Override
 	public void initGame(final boolean idGridShown) {
-		// TODO JJ new game starts new timer. There should not be time for each
-		// new game
 		this.isGridShown = idGridShown;
-		new Timer(1000 / DEFAULT_FRAME_PER_SECOND, event -> nextGameTick()).start();
+		if (!timer.isRunning()) {
+			timer.start();
+		}
+	}
+
+	@Override
+	public void stopTimer() {
+		fpsCounter.stop();
+		timer.stop();
 	}
 
 	/**
@@ -178,13 +185,14 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 			paintGoToPath(dbg, area);
 			paintMovingAnimation(dbg, area);
 			final Point p = Point.of(area.getTopLeft());
-			if (gameController.getGame().getCurrentPlayer().isHuman()) {
-				g.drawImage(dbImage, p.getX(), p.getY(), null);
-			} else {
+			g.drawImage(dbImage, p.getX(), p.getY(), null);
+			if (gameController.getGame().getCurrentPlayer().isComputer()) {
 				/**
 				 * If move computer that make game field darker.
 				 */
-				g.drawImage(makeItDarker(dbImage), p.getX(), p.getY(), null);
+				g.drawImage(dbImage, p.getX(), p.getY(), null);
+				g.setColor(new Color(0, 0, 0, 64));
+				g.fillRect(p.getX(), p.getY(), dbImage.getWidth(this), dbImage.getHeight(this));
 			}
 			dbg.dispose();
 		}
@@ -192,26 +200,6 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 		// (on Linux, this fixes event queue problems)
 		Toolkit.getDefaultToolkit().sync();
 		fpsCounter.screenWasPainted();
-	}
-
-	private BufferedImage makeItDarker(final Image img) {
-		BufferedImage shadedImage = new BufferedImage(img.getWidth(this), img.getWidth(this),
-				BufferedImage.TYPE_INT_ARGB);
-		shadedImage.getGraphics().drawImage(img, 0, 0, this);
-		float percentage = 1.01F;
-		WritableRaster wr = shadedImage.getRaster();
-		int[] pixel = new int[4];
-
-		for (int i = 0; i < wr.getWidth(); i++) {
-			for (int j = 0; j < wr.getHeight(); j++) {
-				wr.getPixel(i, j, pixel);
-				pixel[0] = (int) (pixel[0] * percentage);
-				pixel[1] = (int) (pixel[1] * percentage);
-				pixel[2] = (int) (pixel[2] * percentage);
-				wr.setPixel(i, j, pixel);
-			}
-		}
-		return shadedImage;
 	}
 
 	private void paintMovingAnimation(final Graphics2D graphics, final Area area) {
@@ -386,7 +374,10 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 				// moved
 				final Ship unit = gameController.getGame().getCurrentPlayer().getShipsAt(cursorLocation).get(0);
 				final StepCounter stepCounter = new StepCounter(5, unit.getAvailableMoves());
-				// TODO JJ draw just step on visible area
+				/**
+				 * Here could be check if particular step in on screen, but draw
+				 * few images outside screen is not big deal.
+				 */
 				steps.forEach(point -> paintStepsToTile(graphics, point, stepCounter));
 			}
 		}

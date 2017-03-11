@@ -61,7 +61,7 @@ public class MusicPlayer {
 
 		int nBytesRead = 0;
 		byte[] abData = new byte[BUFFER_SIZE];
-		while (nBytesRead != -1) {
+		while (nBytesRead != -1 && run) {
 			try {
 				nBytesRead = audioStream.read(abData, 0, abData.length);
 			} catch (IOException e) {
@@ -77,6 +77,8 @@ public class MusicPlayer {
 		sourceLine.close();
 	}
 
+	private boolean run = true;
+
 	public void setVolume(final int volume) {
 		final FloatControl volumeControll = (FloatControl) sourceLine.getControl(FloatControl.Type.MASTER_GAIN);
 		float step = 100F / (volumeControll.getMaximum() - volumeControll.getMinimum());
@@ -84,8 +86,7 @@ public class MusicPlayer {
 	}
 
 	public void stop() {
-		// TODO JJ finish that
-		sourceLine.close();
+		run = false;
 	}
 
 }

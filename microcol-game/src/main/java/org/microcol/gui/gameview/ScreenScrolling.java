@@ -10,7 +10,7 @@ import org.microcol.model.Location;
 import com.google.common.base.Preconditions;
 
 /**
- * Class between each screen repainting move visible window to target area.
+ * Class help to draw animation of moving screen.
  */
 public class ScreenScrolling {
 

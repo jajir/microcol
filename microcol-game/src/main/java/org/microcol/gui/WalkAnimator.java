@@ -11,8 +11,6 @@ import com.google.common.base.Preconditions;
 /**
  * Draw walk animation based on predefined path.
  * 
- * @author jan
- *
  */
 public class WalkAnimator {
 

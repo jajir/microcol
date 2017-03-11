@@ -13,19 +13,29 @@ import org.apache.log4j.Logger;
 public class FpsCounter {
 
 	private final Logger logger = Logger.getLogger(FpsCounter.class);
-	
+
+	private final Timer timer;
+
 	private int fps;
 
 	private int counter;
 
-	public void start() {
-		counter = 0;
-		fps = 0;
-		new Timer(1000, e -> {
+	public FpsCounter() {
+		timer = new Timer(1000, e -> {
 			fps = counter;
 			counter = 0;
 			logger.debug("Fps is: " + fps);
-		}).start();
+		});
+	}
+
+	public void start() {
+		counter = 0;
+		fps = 0;
+		timer.start();
+	}
+
+	public void stop() {
+		timer.stop();
 	}
 
 	public void screenWasPainted() {
