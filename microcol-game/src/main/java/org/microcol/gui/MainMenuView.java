@@ -37,6 +37,10 @@ public class MainMenuView extends JMenuBar implements MainMenuPresenter.Display 
 
 	private final JMenuItem menuItemAbout;
 
+	private final JMenu menuView;
+
+	private final JMenuItem menuItemCenterView;
+
 	private final JMenu menuUnit;
 
 	private final JMenuItem menuItemMove;
@@ -81,7 +85,22 @@ public class MainMenuView extends JMenuBar implements MainMenuPresenter.Display 
 			menuGame.add(menuItemQuitGame);
 		}
 		add(menuGame);
+		
+		/**
+		 * Menu view
+		 * 
+		 */
+		menuView = new JMenu();
+		menuItemCenterView = new JMenuItem();
+		menuItemCenterView.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, 0));
+		menuItemCenterView.setEnabled(false);
+		menuView.add(menuItemCenterView);
+		add(menuView);
 
+		/**
+		 * Menu unit
+		 * 
+		 */
 		menuUnit = new JMenu();
 		menuItemMove = new JMenuItem();
 		menuItemMove.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_M, 0));
@@ -132,15 +151,30 @@ public class MainMenuView extends JMenuBar implements MainMenuPresenter.Display 
 
 	@Override
 	public void updateLanguage() {
+		/**
+		 * Game
+		 */
 		menuGame.setText(text.get("mainMenu.game"));
 		menuItemNewGame.setText(text.get("mainMenu.game.newGame"));
 		menuItemSameGame.setText(text.get("mainMenu.game.saveGame"));
 		menuItemLoadGame.setText(text.get("mainMenu.game.loadGame"));
 		menuItemQuitGame.setText(text.get("mainMenu.game.quitGame"));
 
+		/**
+		 * View
+		 */
+		menuView.setText(text.get("mainMenu.view"));
+		menuItemCenterView.setText(text.get("mainMenu.view.center"));
+
+		/**
+		 * Unit
+		 */
 		menuUnit.setText(text.get("mainMenu.unit"));
 		menuItemMove.setText(text.get("mainMenu.unit.move"));
 
+		/**
+		 * Preferences
+		 */
 		menuPrefereces.setText(text.get("mainMenu.preferences"));
 		menuLanguage.setText(text.get("mainMenu.preferences.language"));
 		rbMenuItemlanguageEn.setText(text.get("mainMenu.preferences.language.en"));
@@ -148,6 +182,9 @@ public class MainMenuView extends JMenuBar implements MainMenuPresenter.Display 
 		menuItemVolume.setText(text.get("mainMenu.preferences.volume"));
 		menuItemShowGrid.setText(text.get("mainMenu.preferences.showGrid"));
 
+		/**
+		 * Help & About
+		 */
 		menuHelp.setText(text.get("mainMenu.help"));
 		menuItemAbout.setText(text.get("mainMenu.help.about"));
 	}
@@ -200,5 +237,10 @@ public class MainMenuView extends JMenuBar implements MainMenuPresenter.Display 
 	@Override
 	public JMenuItem getMenuItemMove() {
 		return menuItemMove;
+	}
+
+	@Override
+	public JMenuItem getMenuItemCenterView() {
+		return menuItemCenterView;
 	}
 }

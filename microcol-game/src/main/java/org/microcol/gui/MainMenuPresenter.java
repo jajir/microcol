@@ -9,6 +9,7 @@ import org.microcol.gui.event.FocusedTileController;
 import org.microcol.gui.event.GameEventController;
 import org.microcol.gui.event.MoveUnitController;
 import org.microcol.gui.event.ShowGridController;
+import org.microcol.gui.event.ViewController;
 import org.microcol.gui.event.VolumeChangeController;
 
 import com.google.inject.Inject;
@@ -37,6 +38,8 @@ public class MainMenuPresenter {
 		JCheckBoxMenuItem getMenuItemShowGrid();
 
 		JMenuItem getMenuItemMove();
+
+		JMenuItem getMenuItemCenterView();
 	}
 
 	@Inject
@@ -44,7 +47,7 @@ public class MainMenuPresenter {
 			final GamePreferences gamePreferences, final ChangeLanguageController languangeController, final Text text,
 			final ViewUtil viewUtil, final VolumeChangeController volumeChangeController,
 			final ShowGridController showGridController, final FocusedTileController focusedTileController,
-			final MoveUnitController moveUnitController) {
+			final MoveUnitController moveUnitController, final ViewController viewController) {
 		display.getMenuItemNewGame().addActionListener(actionEvent -> {
 
 		});
@@ -73,10 +76,12 @@ public class MainMenuPresenter {
 			moveUnitController.fireStartMoveEvent();
 			display.getMenuItemMove().setEnabled(false);
 		});
+		display.getMenuItemCenterView().addActionListener(event -> viewController.fireCenterView());
 		languangeController.addLanguageListener(event -> {
 			display.updateLanguage();
 		});
 		focusedTileController.addFocusedTileListener(event -> {
+			display.getMenuItemCenterView().setEnabled(true);
 			if (event.isTileContainsMovebleUnit()) {
 				display.getMenuItemMove().setEnabled(true);
 			} else {

@@ -15,6 +15,7 @@ import org.microcol.gui.event.ShowGridListenerPreferences;
 import org.microcol.gui.event.StatusBarMessageController;
 import org.microcol.gui.event.StatusBarMessageControllerImpl;
 import org.microcol.gui.event.TurnStartedController;
+import org.microcol.gui.event.ViewController;
 import org.microcol.gui.event.VolumeChangeController;
 import org.microcol.gui.event.VolumeChangedListenerPreferences;
 import org.microcol.gui.model.GameController;
@@ -48,6 +49,7 @@ public class MicroColModule extends AbstractModule {
 		bind(TurnStartedController.class).in(Singleton.class);
 		bind(VolumeChangeController.class).in(Singleton.class);
 		bind(ShowGridController.class).in(Singleton.class);
+		bind(ViewController.class).in(Singleton.class);
 
 		/**
 		 * Initialize MVP classes

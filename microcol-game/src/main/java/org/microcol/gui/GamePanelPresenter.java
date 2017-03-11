@@ -22,6 +22,7 @@ import org.microcol.gui.event.MoveUnitController;
 import org.microcol.gui.event.NewGameController;
 import org.microcol.gui.event.ShowGridController;
 import org.microcol.gui.event.StatusBarMessageController;
+import org.microcol.gui.event.ViewController;
 import org.microcol.gui.model.GameController;
 import org.microcol.gui.model.TileOcean;
 import org.microcol.model.Location;
@@ -96,7 +97,8 @@ public class GamePanelPresenter implements Localized {
 			final KeyController keyController, final StatusBarMessageController statusBarMessageController,
 			final FocusedTileController focusedTileController, final PathPlanning pathPlanning,
 			final MoveUnitController moveUnitController, final NewGameController newGameController,
-			final GamePreferences gamePreferences, final ShowGridController showGridController) {
+			final GamePreferences gamePreferences, final ShowGridController showGridController,
+			final ViewController viewController) {
 		this.focusedTileController = focusedTileController;
 		this.gameController = Preconditions.checkNotNull(gameController);
 		this.statusBarMessageController = Preconditions.checkNotNull(statusBarMessageController);
@@ -121,8 +123,6 @@ public class GamePanelPresenter implements Localized {
 		keyController.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(final KeyEvent e) {
-				if ('c' == e.getKeyChar()) {
-				}
 				/**
 				 * Escape
 				 */
@@ -208,6 +208,19 @@ public class GamePanelPresenter implements Localized {
 
 			}
 		});
+		viewController.addCenterViewListener(() -> onCenterView());
+	}
+
+	private void onCenterView() {
+		logger.debug("Center view event");
+		Preconditions.checkNotNull(display.getCursorLocation(), "Cursor location is empty");
+		// TODO add scrolling to center point, not top left corner
+		final Point p = Point.of(display.getCursorLocation());
+		final JViewport viewPort = (JViewport) display.getGamePanelView().getParent();
+		final Rectangle view = viewPort.getViewRect();
+		view.x = p.getX();
+		view.y = p.getY();
+		display.getGamePanelView().scrollRectToVisible(view);
 	}
 
 	private void swithToMoveMode() {
