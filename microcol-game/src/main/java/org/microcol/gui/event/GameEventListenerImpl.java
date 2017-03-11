@@ -27,7 +27,6 @@ public class GameEventListenerImpl implements GameEventListener {
 	@Override
 	public void onGameExit() {
 		logger.debug("onGameExit was triggered");
-		System.exit(0);
 	}
 
 	@Override

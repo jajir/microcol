@@ -12,6 +12,7 @@ import javax.swing.JFrame;
 
 import org.apache.log4j.Logger;
 import org.microcol.gui.event.GameEventController;
+import org.microcol.gui.event.GameEventListener;
 import org.microcol.gui.event.KeyController;
 
 import com.google.common.base.Preconditions;
@@ -63,11 +64,26 @@ public class MainFramePresenter {
 			}
 		});
 
+		gameEventController.addGameEventListener(new GameEventListener() {
+
+			@Override
+			public void onGameExit() {
+				savePreferences();
+				display.getFrame().dispose();
+			}
+
+			@Override
+			public void onAboutGame() {
+				/**
+				 * Do nothing
+				 */
+			}
+		});
+
 		display.getFrame().addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent event) {
 				logger.debug("Event windowClosing");
-				savePreferences();
 				gameEventController.fireGameExit();
 			}
 		});

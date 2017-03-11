@@ -7,6 +7,7 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
@@ -66,7 +67,7 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 	private final FpsCounter fpsCounter;
 
 	private boolean isGridShown;
-	
+
 	private ScreenScrolling screenScrolling;
 
 	@Inject
@@ -103,9 +104,33 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 		// TODO JJ new game starts new timer. There should not be time for each
 		// new game
 		this.isGridShown = idGridShown;
-		new Timer(1000 / DEFAULT_FRAME_PER_SECOND, event -> repaint()).start();
+		new Timer(1000 / DEFAULT_FRAME_PER_SECOND, event -> nextGameTick()).start();
 	}
-	
+
+	/**
+	 * Smallest game time interval. In ideal case it have time to draw world on
+	 * screen.
+	 */
+	private void nextGameTick() {
+		if (screenScrolling != null && screenScrolling.isNextPointAvailable()) {
+			scrollToPoint(screenScrolling.getNextPoint());
+		}
+		repaint();
+	}
+
+	@Override
+	public void planScrollingAnimationToPoint(final Point targetPoint) {
+		screenScrolling = new ScreenScrolling(pathPlanning, getArea().getPointTopLeft(), targetPoint);
+	}
+
+	private void scrollToPoint(final Point point) {
+		final JViewport viewPort = (JViewport) getParent();
+		final Rectangle view = viewPort.getViewRect();
+		view.x = point.getX();
+		view.y = point.getY();
+		scrollRectToVisible(view);
+	}
+
 	@Override
 	public GamePanelView getGamePanelView() {
 		return this;
@@ -183,7 +208,6 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 				pixel[0] = (int) (pixel[0] * percentage);
 				pixel[1] = (int) (pixel[1] * percentage);
 				pixel[2] = (int) (pixel[2] * percentage);
-				System.out.println(pixel[0] + ", " + pixel[1] + ", " + pixel[2] + ", " + pixel[3]);
 				wr.setPixel(i, j, pixel);
 			}
 		}

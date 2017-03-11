@@ -44,47 +44,47 @@ Planned releases
 
  * 0.3.0 - first game entity should be implemented
  
-  * Land is added. 
+  * \u2717 Land is added. 
  
-  * Simple map containing first land.
+  * \u2717 Simple map containing first land.
  
-  * Ships can fight each others.
+  * \u2717 Ships can fight each others.
   
-  * Simple AI, one ship unit controlled by AI
+  * \u2717 Simple AI, one ship unit controlled by AI
  
-  * Owner of unit will be distinguish by simple flag near unit
+  * \u2713 Owner of unit will be distinguish by simple flag near unit
 
-  * Site report should contains junit test coverage
+  * \u2717 Site report should contains junit test coverage
  
-  * site report should contains measurement of javadoc quality
+  * \u2717 site report should contains measurement of javadoc quality
  
-  * mMaven site should be automatically published at github doc site
+  * \u2717 Maven site should be automatically published at github doc site
  
-  * Maven site should be published after each travis-ci build
+  * \u2717 Maven site should be published after each travis-ci build
  
-  * Grid could be enabled/disabled by 'g' and from preferences menu
+  * \u2713 Grid could be enabled/disabled by 'g' and from preferences menu
   
-  * Move 'm' could be accessible from menu "unit" -> "move". Menu option will be disabled when focused tile is not movable
+  * \u2713 Move 'm' could be accessible from menu "unit" -> "move". Menu option will be disabled when focused tile is not movable
 
  * 0.2.0 - first game entity should be implemented
  
-  * first game map - just empty ocean
+  * \u2713 first game map - just empty ocean
   
-  * one ship controlled by user
+  * \u2713 one ship controlled by user
   
-  * both ships will move each turn
+  * \u2713 both ships will move each turn
   
-  * localization Czech/English
+  * \u2713 localization Czech/English
   
-  * user preferences storing
+  * \u2713 user preferences storing
   
-  * when game is closed window will remember position and size
+  * \u2713 when game is closed window will remember position and size
   
-  * user's ship control
+  * \u2713 user's ship control
   
-  * basic game domain model
+  * \u2713 basic game domain model
   
-  * enemy ship control
+  * \u2713 enemy ship control
   
 []
 

@@ -63,6 +63,8 @@ public class GamePanelPresenter implements Localized {
 		void setGridShown(boolean isGridShown);
 
 		Area getArea();
+
+		void planScrollingAnimationToPoint(Point targetPoint);
 	}
 
 	private final GameController gameController;
@@ -219,11 +221,7 @@ public class GamePanelPresenter implements Localized {
 		 * bottom right corner of map. Luckily it's done by JViewport.
 		 */
 		final Point p = display.getArea().getCenterAreaTo(Point.of(display.getCursorLocation()));
-		final JViewport viewPort = (JViewport) display.getGamePanelView().getParent();
-		final Rectangle view = viewPort.getViewRect();
-		view.x = p.getX();
-		view.y = p.getY();
-		display.getGamePanelView().scrollRectToVisible(view);
+		display.planScrollingAnimationToPoint(p);
 	}
 
 	private void swithToMoveMode() {
@@ -326,6 +324,7 @@ public class GamePanelPresenter implements Localized {
 	private void scheduleWalkAnimation(final ShipMovedEvent event) {
 		Preconditions.checkArgument(event.getPath().getLocations().size() >= 1,
 				"Path for moving doesn't contains enought steps to move.");
+		display.planScrollingAnimationToPoint(display.getArea().getCenterAreaTo(Point.of(event.getStartLocation())));
 		List<Location> path = new ArrayList<>(event.getPath().getLocations());
 		path.add(0, event.getStartLocation());
 		final WalkAnimator walkAnimator = new WalkAnimator(pathPlanning, path, event.getShip());

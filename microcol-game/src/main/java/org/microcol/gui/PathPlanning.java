@@ -94,7 +94,7 @@ public class PathPlanning {
 				}
 			} else {
 				final int increment = getStepSize(tileFrom.getX(), tileTo.getX(), howManyStepsShouldBeDone);
-				for (int x = tileFrom.getX(); x >= tileTo.getX(); x -= increment) {
+				for (int x = tileFrom.getX(); x >= tileTo.getX(); x += increment) {
 					int y = Math.round(a * x + b);
 					addPoint(tileFrom, whatToDoWithPointInPath, Location.of(x, y));
 				}
@@ -110,7 +110,7 @@ public class PathPlanning {
 				}
 			} else {
 				final int increment = getStepSize(tileFrom.getY(), tileTo.getY(), howManyStepsShouldBeDone);
-				for (int y = tileFrom.getY(); y >= tileTo.getY(); y -= increment) {
+				for (int y = tileFrom.getY(); y >= tileTo.getY(); y += increment) {
 					int x = Math.round(a * y + b);
 					addPoint(tileFrom, whatToDoWithPointInPath, Location.of(x, y));
 				}

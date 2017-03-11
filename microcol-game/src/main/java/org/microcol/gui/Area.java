@@ -129,4 +129,8 @@ public class Area {
 		return point.substract(p);
 	}
 
+	public Point getPointTopLeft() {
+		return pointTopLeft;
+	}
+
 }

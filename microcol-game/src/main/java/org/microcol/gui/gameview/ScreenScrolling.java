@@ -3,7 +3,6 @@ package org.microcol.gui.gameview;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.microcol.gui.GamePanelView;
 import org.microcol.gui.PathPlanning;
 import org.microcol.gui.Point;
 import org.microcol.model.Location;
@@ -12,9 +11,6 @@ import com.google.common.base.Preconditions;
 
 /**
  * Class between each screen repainting move visible window to target area.
- * 
- * 
- * TODO JJ user class in {@link GamePanelView}.
  */
 public class ScreenScrolling {
 
@@ -33,7 +29,7 @@ public class ScreenScrolling {
 		return !stepsToDo.isEmpty();
 	}
 
-	public Point netNextPoint() {
+	public Point getNextPoint() {
 		Preconditions.checkArgument(!stepsToDo.isEmpty(), "There are not available points");
 		return stepsToDo.remove(0);
 	}
