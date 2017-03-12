@@ -16,7 +16,7 @@ import org.microcol.model.Location;
 	 * @author jan
 	 *
 	 */
-	public interface WhatToDoWithPointInPath {
+<span class="fc" id="L19">	public interface WhatToDoWithPointInPath {</span>
 		void pathPoint(Location point);
 	}
 
@@ -43,13 +43,13 @@ import org.microcol.model.Location;
 <span class="fc" id="L43">					int y = Math.round(a * x + b);</span>
 <span class="fc" id="L44">					addPoint(tileFrom, whatToDoWithPointInPath, Location.of(x, y));</span>
 				}
-<span class="fc" id="L46">			} else {</span>
+			} else {
 <span class="nc bnc" id="L47" title="All 2 branches missed.">				for (int x = tileFrom.getX(); x &gt;= tileTo.getX(); x--) {</span>
 <span class="nc" id="L48">					int y = Math.round(a * x + b);</span>
 <span class="nc" id="L49">					addPoint(tileFrom, whatToDoWithPointInPath, Location.of(x, y));</span>
 				}
 			}
-<span class="pc bfc" id="L52" title="All 2 branches covered.">		} else if (!tileFrom.equals(tileTo)) {</span>
+<span class="fc bfc" id="L52" title="All 2 branches covered.">		} else if (!tileFrom.equals(tileTo)) {</span>
 <span class="fc" id="L53">			float a = (tileFrom.getX() - tileTo.getX()) / (float) (tileFrom.getY() - tileTo.getY());</span>
 <span class="fc" id="L54">			float b = tileFrom.getX() - tileFrom.getY() * a;</span>
 <span class="fc bfc" id="L55" title="All 2 branches covered.">			if (tileFrom.getY() &lt; tileTo.getY()) {</span>
@@ -57,7 +57,7 @@ import org.microcol.model.Location;
 <span class="fc" id="L57">					int x = Math.round(a * y + b);</span>
 <span class="fc" id="L58">					addPoint(tileFrom, whatToDoWithPointInPath, Location.of(x, y));</span>
 				}
-<span class="fc" id="L60">			} else {</span>
+			} else {
 <span class="fc bfc" id="L61" title="All 2 branches covered.">				for (int y = tileFrom.getY(); y &gt;= tileTo.getY(); y--) {</span>
 <span class="fc" id="L62">					int x = Math.round(a * y + b);</span>
 <span class="fc" id="L63">					addPoint(tileFrom, whatToDoWithPointInPath, Location.of(x, y));</span>

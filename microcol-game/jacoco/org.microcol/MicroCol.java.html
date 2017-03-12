@@ -53,7 +53,7 @@ import com.google.inject.Stage;
 <span class="nc" id="L53">		final SplashScreen splash = SplashScreen.getSplashScreen();</span>
 <span class="nc bnc" id="L54" title="All 2 branches missed.">		if (splash == null) {</span>
 <span class="nc" id="L55">			System.err.println(&quot;Splash screen is null!&quot;);</span>
-<span class="nc" id="L56">		} else {</span>
+		} else {
 <span class="nc" id="L57">			Graphics2D g = splash.createGraphics();</span>
 <span class="nc bnc" id="L58" title="All 2 branches missed.">			if (g == null) {</span>
 <span class="nc" id="L59">				System.out.println(&quot;unable to instantiate graphics for splash screen&quot;);</span>
@@ -66,9 +66,9 @@ import com.google.inject.Stage;
 		try {
 <span class="nc" id="L67">			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());</span>
 <span class="nc" id="L68">		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException</span>
-<span class="nc" id="L69">				| UnsupportedLookAndFeelException ex) {</span>
+				| UnsupportedLookAndFeelException ex) {
 <span class="nc" id="L70">			ex.printStackTrace();</span>
-		}
+<span class="nc" id="L71">		}</span>
 <span class="nc" id="L72">	}</span>
 
 	/**
@@ -86,12 +86,12 @@ import com.google.inject.Stage;
 <span class="nc" id="L86">				m2.invoke(o, ImageProvider.getRawImage(&quot;images/splash-screen.png&quot;));</span>
 			}
 <span class="nc" id="L88">		} catch (ClassNotFoundException | NoSuchMethodException | SecurityException | IllegalAccessException</span>
-<span class="nc" id="L89">				| IllegalArgumentException | InvocationTargetException e) {</span>
+				| IllegalArgumentException | InvocationTargetException e) {
 			/**
 			 * intentionally do nothing.
 			 */
 <span class="nc" id="L93">			e.printStackTrace();</span>
-		}
+<span class="nc" id="L94">		}</span>
 <span class="nc" id="L95">	}</span>
 
 	/**

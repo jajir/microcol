@@ -28,8 +28,8 @@ public class Location {
 <span class="fc" id="L28">			return false;</span>
 		}
 
-<span class="fc bfc" id="L31" title="All 4 branches covered.">		return Math.abs(x - location.x) &lt;= 1</span>
-<span class="fc" id="L32">			&amp;&amp; Math.abs(y - location.y) &lt;= 1; </span>
+<span class="fc bfc" id="L31" title="All 2 branches covered.">		return Math.abs(x - location.x) &lt;= 1</span>
+<span class="fc bfc" id="L32" title="All 2 branches covered.">			&amp;&amp; Math.abs(y - location.y) &lt;= 1; </span>
 	}
 
 	public Location add(final Location location) {
@@ -55,8 +55,8 @@ public class Location {
 
 <span class="fc" id="L56">		final Location location = (Location) object;</span>
 
-<span class="fc bfc" id="L58" title="All 2 branches covered.">		return x == location.x</span>
-<span class="fc bfc" id="L59" title="All 2 branches covered.">			&amp;&amp; y == location.y;</span>
+<span class="fc bfc" id="L58" title="All 4 branches covered.">		return x == location.x</span>
+			&amp;&amp; y == location.y;
 	}
 
 	@Override

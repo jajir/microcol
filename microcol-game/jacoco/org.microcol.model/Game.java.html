@@ -106,14 +106,14 @@ public class Game {
 <span class="nc" id="L106">			currentPlayer = players.get(index + 1);</span>
 <span class="nc" id="L107">			currentPlayer.startTurn();</span>
 <span class="nc" id="L108">			listenersManager.fireTurnStarted(this, currentPlayer);</span>
-<span class="nc" id="L109">		} else {</span>
+		} else {
 <span class="nc" id="L110">			calendar.endRound();</span>
 <span class="nc bnc" id="L111" title="All 2 branches missed.">			if (!calendar.isFinished()) {</span>
 <span class="nc" id="L112">				currentPlayer = players.get(0);</span>
 <span class="nc" id="L113">				listenersManager.fireRoundStarted(this, calendar);</span>
 <span class="nc" id="L114">				currentPlayer.startTurn();</span>
 <span class="nc" id="L115">				listenersManager.fireTurnStarted(this, currentPlayer);</span>
-<span class="nc" id="L116">			} else {</span>
+			} else {
 <span class="nc" id="L117">				listenersManager.fireGameFinished(this);</span>
 			}
 		}

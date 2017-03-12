@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SkyNet.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">MicroCol game classes</a> &gt; <a href="index.source.html" class="el_package">org.microcol.ai</a> &gt; <span class="el_source">SkyNet.java</span></div><h1>SkyNet.java</h1><pre class="source lang-java linenums"><span class="nc" id="L1">package org.microcol.ai;</span>
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SkyNet.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">MicroCol game classes</a> &gt; <a href="index.source.html" class="el_package">org.microcol.ai</a> &gt; <span class="el_source">SkyNet.java</span></div><h1>SkyNet.java</h1><pre class="source lang-java linenums">package org.microcol.ai;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,15 +22,15 @@ import com.google.common.collect.ImmutableList;
 
 public class SkyNet {
 <span class="nc" id="L24">	private static final ImmutableList&lt;Location&gt; directions = ImmutableList.of(</span>
-<span class="nc" id="L25">		new Location(1, 1),</span>
-<span class="nc" id="L26">		new Location(0, 1),</span>
-<span class="nc" id="L27">		new Location(-1, 1),</span>
-<span class="nc" id="L28">		new Location(-1, 0),</span>
-<span class="nc" id="L29">		new Location(-1, -1),</span>
-<span class="nc" id="L30">		new Location(0, -1),</span>
-<span class="nc" id="L31">		new Location(1, -1),</span>
-<span class="nc" id="L32">		new Location(1, 0)</span>
-<span class="nc" id="L33">	);</span>
+		new Location(1, 1),
+		new Location(0, 1),
+		new Location(-1, 1),
+		new Location(-1, 0),
+		new Location(-1, -1),
+		new Location(0, -1),
+		new Location(1, -1),
+		new Location(1, 0)
+	);
 
 	private final Game game;
 	private final Random random;
@@ -98,14 +98,14 @@ public class SkyNet {
 <span class="nc bnc" id="L98" title="All 4 branches missed.">			if (game.getMap().isValid(newLocation) &amp;&amp; !isEnemyShipAt(newLocation)) {</span>
 <span class="nc" id="L99">				pathBuilder.add(newLocation);</span>
 <span class="nc" id="L100">				lastLocation = newLocation;</span>
-<span class="nc" id="L101">			} else {</span>
+			} else {
 <span class="nc" id="L102">				directions.remove(lastDirection);</span>
 <span class="nc bnc" id="L103" title="All 2 branches missed.">				if (directions.isEmpty()) {</span>
 <span class="nc" id="L104">					break;</span>
 				}
 <span class="nc" id="L106">				lastDirections.put(ship, directions.get(random.nextInt(directions.size())));</span>
 			}
-		}
+<span class="nc" id="L108">		}</span>
 
 <span class="nc bnc" id="L110" title="All 2 branches missed.">		if (!pathBuilder.isEmpty()) {</span>
 <span class="nc" id="L111">			ship.moveTo(pathBuilder.build());</span>

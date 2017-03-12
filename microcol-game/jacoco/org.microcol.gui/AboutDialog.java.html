@@ -30,7 +30,7 @@ public class AboutDialog extends JDialog {
 
 <span class="nc" id="L31">		final JLabel label = new JLabel(&quot;&lt;html&gt;Version:&lt;br/&gt;It's funniest game in the world&lt;br/&gt;...&lt;/html&gt;&quot;);</span>
 <span class="nc" id="L32">		add(label, new GridBagConstraints(0, 0, 1, 1, 1.0D, 1.0D, GridBagConstraints.SOUTHEAST, GridBagConstraints.NONE,</span>
-<span class="nc" id="L33">				new Insets(0, 0, 10, 10), 0, 0));</span>
+				new Insets(0, 0, 10, 10), 0, 0));
 
 <span class="nc" id="L35">		final JButton buttonOk = new JButton(text.get(&quot;dialog.ok&quot;));</span>
 <span class="nc" id="L36">		buttonOk.addActionListener(e -&gt; {</span>
@@ -38,7 +38,7 @@ public class AboutDialog extends JDialog {
 <span class="nc" id="L38">		});</span>
 <span class="nc" id="L39">		buttonOk.requestFocus();</span>
 <span class="nc" id="L40">		add(buttonOk, new GridBagConstraints(0, 10, 1, 1, 1.0D, 1.0D, GridBagConstraints.SOUTHEAST,</span>
-<span class="nc" id="L41">				GridBagConstraints.NONE, new Insets(0, 0, 10, 10), 0, 0));</span>
+				GridBagConstraints.NONE, new Insets(0, 0, 10, 10), 0, 0));
 
 <span class="nc" id="L43">		pack();</span>
 <span class="nc" id="L44">		setLocation(viewUtil.centerWindow(this));</span>

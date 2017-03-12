@@ -28,10 +28,10 @@ public class Map {
 	public boolean isValid(final Location location) {
 <span class="fc" id="L29">		Preconditions.checkNotNull(location);</span>
 
-<span class="fc bfc" id="L31" title="All 4 branches covered.">		return location.getX() &gt;= 0</span>
+<span class="fc bfc" id="L31" title="All 2 branches covered.">		return location.getX() &gt;= 0</span>
 <span class="fc bfc" id="L32" title="All 2 branches covered.">			&amp;&amp; location.getX() &lt;= maxX</span>
 <span class="fc bfc" id="L33" title="All 2 branches covered.">			&amp;&amp; location.getY() &gt;= 0</span>
-<span class="fc" id="L34">			&amp;&amp; location.getY() &lt;= maxY;</span>
+<span class="fc bfc" id="L34" title="All 2 branches covered.">			&amp;&amp; location.getY() &lt;= maxY;</span>
 	}
 
 	public boolean isValid(final Path path) {
@@ -42,7 +42,7 @@ public class Map {
 <span class="fc bfc" id="L42" title="All 2 branches covered.">			if (!isValid(location)) {</span>
 <span class="fc" id="L43">				return false;</span>
 			}
-		}
+<span class="fc" id="L45">		}</span>
 
 <span class="fc" id="L47">		return true;</span>
 	}

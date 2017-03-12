@@ -58,8 +58,8 @@ public class Area {
 	}
 
 	public boolean isInArea(final Location location) {
-<span class="nc bnc" id="L61" title="All 6 branches missed.">		return topLeft.getX() &lt;= location.getX() &amp;&amp; bottomRight.getX() &gt;= location.getX()</span>
-<span class="nc bnc" id="L62" title="All 2 branches missed.">				&amp;&amp; topLeft.getY() &lt;= location.getY() &amp;&amp; bottomRight.getY() &gt;= location.getY();</span>
+<span class="nc bnc" id="L61" title="All 4 branches missed.">		return topLeft.getX() &lt;= location.getX() &amp;&amp; bottomRight.getX() &gt;= location.getX()</span>
+<span class="nc bnc" id="L62" title="All 4 branches missed.">				&amp;&amp; topLeft.getY() &lt;= location.getY() &amp;&amp; bottomRight.getY() &gt;= location.getY();</span>
 	}
 
 	/**
@@ -107,8 +107,8 @@ public class Area {
 	public boolean isInArea(final Point point) {
 <span class="nc" id="L108">		final Point topLeftPoint = Point.of(topLeft);</span>
 <span class="nc" id="L109">		final Point bottomRightPoint = Point.of(bottomRight);</span>
-<span class="nc bnc" id="L110" title="All 6 branches missed.">		return topLeftPoint.getX() &lt;= point.getX() &amp;&amp; bottomRightPoint.getX() &gt;= point.getX()</span>
-<span class="nc bnc" id="L111" title="All 2 branches missed.">				&amp;&amp; topLeftPoint.getY() &lt;= point.getY() &amp;&amp; bottomRightPoint.getY() &gt;= point.getY();</span>
+<span class="nc bnc" id="L110" title="All 4 branches missed.">		return topLeftPoint.getX() &lt;= point.getX() &amp;&amp; bottomRightPoint.getX() &gt;= point.getX()</span>
+<span class="nc bnc" id="L111" title="All 4 branches missed.">				&amp;&amp; topLeftPoint.getY() &lt;= point.getY() &amp;&amp; bottomRightPoint.getY() &gt;= point.getY();</span>
 	}
 
 	@Override

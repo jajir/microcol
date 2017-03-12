@@ -39,7 +39,7 @@ import javax.sound.sampled.SourceDataLine;
 <span class="nc" id="L39">		} catch (Exception e) {</span>
 <span class="nc" id="L40">			e.printStackTrace();</span>
 <span class="nc" id="L41">			System.exit(1);</span>
-		}
+<span class="nc" id="L42">		}</span>
 
 <span class="nc" id="L44">		audioFormat = audioStream.getFormat();</span>
 
@@ -53,7 +53,7 @@ import javax.sound.sampled.SourceDataLine;
 <span class="nc" id="L53">		} catch (Exception e) {</span>
 <span class="nc" id="L54">			e.printStackTrace();</span>
 <span class="nc" id="L55">			System.exit(1);</span>
-		}
+<span class="nc" id="L56">		}</span>
 
 <span class="nc" id="L58">		setVolume(defaultVolume);</span>
 
@@ -66,11 +66,11 @@ import javax.sound.sampled.SourceDataLine;
 <span class="nc" id="L66">				nBytesRead = audioStream.read(abData, 0, abData.length);</span>
 <span class="nc" id="L67">			} catch (IOException e) {</span>
 <span class="nc" id="L68">				e.printStackTrace();</span>
-			}
+<span class="nc" id="L69">			}</span>
 <span class="nc bnc" id="L70" title="All 2 branches missed.">			if (nBytesRead &gt;= 0) {</span>
 				@SuppressWarnings(&quot;unused&quot;)
 <span class="nc" id="L72">				int nBytesWritten = sourceLine.write(abData, 0, nBytesRead);</span>
-			}
+<span class="nc" id="L73">			}</span>
 		}
 
 <span class="nc" id="L76">		sourceLine.drain();</span>

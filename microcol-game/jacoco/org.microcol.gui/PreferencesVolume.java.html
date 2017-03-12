@@ -42,7 +42,7 @@ public class PreferencesVolume extends JDialog {
 
 <span class="nc" id="L43">		final JLabel label = new JLabel(text.get(&quot;preferencesVolume.caption&quot;));</span>
 <span class="nc" id="L44">		add(label, new GridBagConstraints(0, 0, 1, 1, 1.0D, 1.0D, GridBagConstraints.SOUTHWEST, GridBagConstraints.NONE,</span>
-<span class="nc" id="L45">				new Insets(10, 10, 0, 0), 0, 0));</span>
+				new Insets(10, 10, 0, 0), 0, 0));
 
 <span class="nc" id="L47">		JSlider slider = new JSlider(SwingConstants.HORIZONTAL, 0, 100, 80);</span>
 <span class="nc" id="L48">		slider.setMinorTickSpacing(10);</span>
@@ -55,7 +55,7 @@ public class PreferencesVolume extends JDialog {
 <span class="nc" id="L55">		});</span>
 
 <span class="nc" id="L57">		add(slider, new GridBagConstraints(0, 1, 1, 1, 1.0D, 1.0D, GridBagConstraints.SOUTHEAST,</span>
-<span class="nc" id="L58">				GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));</span>
+				GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
 
 <span class="nc" id="L60">		final JButton buttonOk = new JButton(text.get(&quot;dialog.ok&quot;));</span>
 <span class="nc" id="L61">		buttonOk.addActionListener(e -&gt; {</span>
@@ -63,7 +63,7 @@ public class PreferencesVolume extends JDialog {
 <span class="nc" id="L63">		});</span>
 <span class="nc" id="L64">		buttonOk.requestFocus();</span>
 <span class="nc" id="L65">		add(buttonOk, new GridBagConstraints(0, 10, 1, 1, 1.0D, 1.0D, GridBagConstraints.SOUTHEAST,</span>
-<span class="nc" id="L66">				GridBagConstraints.NONE, new Insets(0, 0, 10, 10), 0, 0));</span>
+				GridBagConstraints.NONE, new Insets(0, 0, 10, 10), 0, 0));
 
 <span class="nc" id="L68">		setResizable(false);</span>
 <span class="nc" id="L69">		pack();</span>

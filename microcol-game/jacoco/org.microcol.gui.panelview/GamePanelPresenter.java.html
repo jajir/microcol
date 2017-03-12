@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GamePanelPresenter.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">MicroCol game classes</a> &gt; <a href="index.source.html" class="el_package">org.microcol.gui.panelview</a> &gt; <span class="el_source">GamePanelPresenter.java</span></div><h1>GamePanelPresenter.java</h1><pre class="source lang-java linenums"><span class="nc" id="L1">package org.microcol.gui.panelview;</span>
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GamePanelPresenter.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">MicroCol game classes</a> &gt; <a href="index.source.html" class="el_package">org.microcol.gui.panelview</a> &gt; <span class="el_source">GamePanelPresenter.java</span></div><h1>GamePanelPresenter.java</h1><pre class="source lang-java linenums">package org.microcol.gui.panelview;
 
 import java.awt.Rectangle;
 import java.awt.event.KeyAdapter;
@@ -101,12 +101,12 @@ public class GamePanelPresenter implements Localized {
 	}
 
 	@Inject
-<span class="nc" id="L104">	public GamePanelPresenter(final GamePanelPresenter.Display display, final GameController gameController,</span>
+	public GamePanelPresenter(final GamePanelPresenter.Display display, final GameController gameController,
 			final KeyController keyController, final StatusBarMessageController statusBarMessageController,
 			final FocusedTileController focusedTileController, final PathPlanning pathPlanning,
 			final MoveUnitController moveUnitController, final NewGameController newGameController,
 			final GamePreferences gamePreferences, final ShowGridController showGridController,
-			final ViewController viewController, final GameEventController gameEventController) {
+<span class="nc" id="L109">			final ViewController viewController, final GameEventController gameEventController) {</span>
 <span class="nc" id="L110">		this.focusedTileController = focusedTileController;</span>
 <span class="nc" id="L111">		this.gameController = Preconditions.checkNotNull(gameController);</span>
 <span class="nc" id="L112">		this.statusBarMessageController = Preconditions.checkNotNull(statusBarMessageController);</span>
@@ -125,7 +125,7 @@ public class GamePanelPresenter implements Localized {
 					/**
 					 * Exception is intentionally sink.
 					 */
-				}
+<span class="nc" id="L128">				}</span>
 			}
 <span class="nc" id="L130">		});</span>
 <span class="nc" id="L131">		moveUnitController.addStartMovingListener(event -&gt; swithToMoveMode());</span>
@@ -250,7 +250,7 @@ public class GamePanelPresenter implements Localized {
 <span class="nc" id="L250">		System.out.println(&quot;location p: &quot; + p);</span>
 <span class="nc bnc" id="L251" title="All 2 branches missed.">		if (display.isGotoMode()) {</span>
 <span class="nc" id="L252">			switchToNormalMode(p);</span>
-<span class="nc" id="L253">		} else {</span>
+		} else {
 <span class="nc" id="L254">			display.setCursorLocation(p);</span>
 <span class="nc" id="L255">			focusedTileController</span>
 <span class="nc" id="L256">					.fireFocusedTileEvent(new FocusedTileEvent(gameController.getGame(), p, new TileOcean()));</span>
@@ -321,7 +321,7 @@ public class GamePanelPresenter implements Localized {
 
 	private void scheduleWalkAnimation(final ShipMovedEvent event) {
 <span class="nc bnc" id="L323" title="All 2 branches missed.">		Preconditions.checkArgument(event.getPath().getLocations().size() &gt;= 1,</span>
-<span class="nc" id="L324">				&quot;Path for moving doesn't contains enought steps to move.&quot;);</span>
+				&quot;Path for moving doesn't contains enought steps to move.&quot;);
 <span class="nc" id="L325">		display.planScrollingAnimationToPoint(display.getArea().getCenterAreaTo(Point.of(event.getStartLocation())));</span>
 <span class="nc" id="L326">		List&lt;Location&gt; path = new ArrayList&lt;&gt;(event.getPath().getLocations());</span>
 <span class="nc" id="L327">		path.add(0, event.getStartLocation());</span>

@@ -35,7 +35,7 @@ public class WaitingDialog extends JDialog {
 
 <span class="nc" id="L36">		final JLabel label = new JLabel(&quot;&lt;html&gt;Waiting...&lt;/html&gt;&quot;);</span>
 <span class="nc" id="L37">		add(label, new GridBagConstraints(0, 0, 1, 1, 1.0D, 1.0D, GridBagConstraints.SOUTHEAST, GridBagConstraints.NONE,</span>
-<span class="nc" id="L38">				new Insets(0, 0, 10, 10), 0, 0));</span>
+				new Insets(0, 0, 10, 10), 0, 0));
 
 <span class="nc" id="L40">		URL url = WaitingDialog.class.getResource(&quot;/images/waiting-gears2.gif&quot;);</span>
 <span class="nc" id="L41">		System.out.println(url.getPath());</span>
@@ -43,7 +43,7 @@ public class WaitingDialog extends JDialog {
 <span class="nc" id="L43">		JLabel l = new JLabel(imageIcon);</span>
 <span class="nc" id="L44">		l.setDoubleBuffered(true);</span>
 <span class="nc" id="L45">		add(l, new GridBagConstraints(0, 1, 1, 1, 1.0D, 1.0D, GridBagConstraints.SOUTHEAST, GridBagConstraints.NONE,</span>
-<span class="nc" id="L46">				new Insets(0, 0, 10, 10), 0, 0));</span>
+				new Insets(0, 0, 10, 10), 0, 0));
 
 <span class="nc" id="L48">		final JButton buttonOk = new JButton(text.get(&quot;dialog.ok&quot;));</span>
 <span class="nc" id="L49">		buttonOk.addActionListener(e -&gt; {</span>
@@ -51,7 +51,7 @@ public class WaitingDialog extends JDialog {
 <span class="nc" id="L51">		});</span>
 <span class="nc" id="L52">		buttonOk.requestFocus();</span>
 <span class="nc" id="L53">		add(buttonOk, new GridBagConstraints(0, 10, 1, 1, 1.0D, 1.0D, GridBagConstraints.SOUTHEAST,</span>
-<span class="nc" id="L54">				GridBagConstraints.NONE, new Insets(0, 0, 10, 10), 0, 0));</span>
+				GridBagConstraints.NONE, new Insets(0, 0, 10, 10), 0, 0));
 
 <span class="nc" id="L56">		pack();</span>
 <span class="nc" id="L57">		setLocation(viewUtil.centerWindow(this));</span>

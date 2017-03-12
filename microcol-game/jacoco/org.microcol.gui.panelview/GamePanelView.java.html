@@ -73,15 +73,15 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 	private ScreenScrolling screenScrolling;
 
 	@Inject
-<span class="nc" id="L76">	public GamePanelView(final StatusBarMessageController statusBarMessageController,</span>
+	public GamePanelView(final StatusBarMessageController statusBarMessageController,
 			final GameController gameController, final NextTurnController nextTurnController,
-			final PathPlanning pathPlanning, final ImageProvider imageProvider) {
+<span class="nc" id="L78">			final PathPlanning pathPlanning, final ImageProvider imageProvider) {</span>
 <span class="nc" id="L79">		this.gameController = Preconditions.checkNotNull(gameController);</span>
 <span class="nc" id="L80">		this.pathPlanning = Preconditions.checkNotNull(pathPlanning);</span>
 <span class="nc" id="L81">		this.imageProvider = Preconditions.checkNotNull(imageProvider);</span>
 <span class="nc" id="L82">		Toolkit toolkit = Toolkit.getDefaultToolkit();</span>
 <span class="nc" id="L83">		gotoModeCursor = toolkit.createCustomCursor(imageProvider.getImage(ImageProvider.IMG_CURSOR_GOTO),</span>
-<span class="nc" id="L84">				new java.awt.Point(1, 1), &quot;gotoModeCursor&quot;);</span>
+				new java.awt.Point(1, 1), &quot;gotoModeCursor&quot;);
 <span class="nc" id="L85">		final GamePanelView map = this;</span>
 
 <span class="nc" id="L87">		nextTurnController.addNextTurnListener(w -&gt; map.repaint());</span>
@@ -288,7 +288,7 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 		// TODO JJ player's color should be property
 <span class="nc bnc" id="L289" title="All 2 branches missed.">		if (player.isHuman()) {</span>
 <span class="nc" id="L290">			graphics.setColor(Color.YELLOW);</span>
-<span class="nc" id="L291">		} else {</span>
+		} else {
 <span class="nc bnc" id="L292" title="All 5 branches missed.">			switch (player.getName().hashCode() % 4) {</span>
 			case 0:
 <span class="nc" id="L294">				graphics.setColor(Color.RED);</span>

@@ -43,11 +43,11 @@ public class MainMenuPresenter {
 	}
 
 	@Inject
-<span class="nc" id="L46">	public MainMenuPresenter(final MainMenuPresenter.Display display, final GameEventController gameEventController,</span>
+	public MainMenuPresenter(final MainMenuPresenter.Display display, final GameEventController gameEventController,
 			final GamePreferences gamePreferences, final ChangeLanguageController languangeController, final Text text,
 			final ViewUtil viewUtil, final VolumeChangeController volumeChangeController,
 			final ShowGridController showGridController, final FocusedTileController focusedTileController,
-			final MoveUnitController moveUnitController, final ViewController viewController) {
+<span class="nc" id="L50">			final MoveUnitController moveUnitController, final ViewController viewController) {</span>
 <span class="nc" id="L51">		display.getMenuItemNewGame().addActionListener(actionEvent -&gt; {</span>
 
 <span class="nc" id="L53">		});</span>
@@ -84,7 +84,7 @@ public class MainMenuPresenter {
 <span class="nc" id="L84">			display.getMenuItemCenterView().setEnabled(true);</span>
 <span class="nc bnc" id="L85" title="All 2 branches missed.">			if (event.isTileContainsMovebleUnit()) {</span>
 <span class="nc" id="L86">				display.getMenuItemMove().setEnabled(true);</span>
-<span class="nc" id="L87">			} else {</span>
+			} else {
 <span class="nc" id="L88">				display.getMenuItemMove().setEnabled(false);</span>
 			}
 <span class="nc" id="L90">		});</span>
