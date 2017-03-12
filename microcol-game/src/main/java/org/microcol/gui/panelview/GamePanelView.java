@@ -27,10 +27,8 @@ import org.microcol.gui.Point;
 import org.microcol.gui.StepCounter;
 import org.microcol.gui.event.GameController;
 import org.microcol.gui.event.NextTurnController;
-import org.microcol.gui.event.StatusBarMessageController;
 import org.microcol.model.Game;
 import org.microcol.model.Location;
-import org.microcol.model.Map;
 import org.microcol.model.Player;
 import org.microcol.model.Ship;
 
@@ -73,8 +71,7 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 	private ScreenScrolling screenScrolling;
 
 	@Inject
-	public GamePanelView(final StatusBarMessageController statusBarMessageController,
-			final GameController gameController, final NextTurnController nextTurnController,
+	public GamePanelView(final GameController gameController, final NextTurnController nextTurnController,
 			final PathPlanning pathPlanning, final ImageProvider imageProvider) {
 		this.gameController = Preconditions.checkNotNull(gameController);
 		this.pathPlanning = Preconditions.checkNotNull(pathPlanning);
@@ -182,9 +179,9 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 			// dbg.setColor(Color.YELLOW);
 			// dbg.fillRect(0, 0, getWidth(), getHeight());
 
-			paintTiles(dbg, gameController.getGame(), area);
+			paintTiles(dbg, area);
 			paintUnits(dbg, gameController.getGame(), area);
-			paintGrid(dbg, gameController.getGame().getMap(), area);
+			paintGrid(dbg, area);
 			paintCursor(dbg, area);
 			paintGoToPath(dbg, area);
 			paintMovingAnimation(dbg, area);
@@ -207,17 +204,15 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 	}
 
 	private void paintMovingAnimation(final Graphics2D graphics, final Area area) {
-		if (walkAnimator != null) {
-			if (walkAnimator.getNextCoordinates() != null) {
-				if (area.isInArea(walkAnimator.getNextCoordinates())) {
-					final Point part = area.convert(walkAnimator.getNextCoordinates());
-					paintUnit(graphics, part, walkAnimator.getUnit());
-					graphics.drawImage(imageProvider.getImage(ImageProvider.IMG_TILE_MODE_GOTO),
-							part.getX() + TILE_WIDTH_IN_PX - 12, part.getY(), this);
-				}
-				if (walkAnimator.isNextAnimationLocationAvailable()) {
-					walkAnimator.countNextAnimationLocation();
-				}
+		if (walkAnimator != null && walkAnimator.getNextCoordinates() != null) {
+			if (area.isInArea(walkAnimator.getNextCoordinates())) {
+				final Point part = area.convert(walkAnimator.getNextCoordinates());
+				paintUnit(graphics, part, walkAnimator.getUnit());
+				graphics.drawImage(imageProvider.getImage(ImageProvider.IMG_TILE_MODE_GOTO),
+						part.getX() + TILE_WIDTH_IN_PX - 12, part.getY(), this);
+			}
+			if (walkAnimator.isNextAnimationLocationAvailable()) {
+				walkAnimator.countNextAnimationLocation();
 			}
 		}
 
@@ -229,7 +224,7 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 	 * @param graphics
 	 *            required {@link Graphics2D}
 	 */
-	private void paintTiles(final Graphics2D graphics, final Game world, final Area area) {
+	private void paintTiles(final Graphics2D graphics, final Area area) {
 		for (int i = area.getTopLeft().getX(); i <= area.getBottomRight().getX(); i++) {
 			for (int j = area.getTopLeft().getY(); j <= area.getBottomRight().getY(); j++) {
 				final Location location = Location.of(i, j);
@@ -262,8 +257,8 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 		ships2.forEach((location, list) -> {
 			final Ship ship = list.stream().findFirst().get();
 			final Point point = area.convert(location);
-			if (walkAnimator == null
-					|| (!walkAnimator.isNextAnimationLocationAvailable() || !walkAnimator.getTo().equals(location))) {
+			if (walkAnimator == null || !walkAnimator.isNextAnimationLocationAvailable()
+					|| !walkAnimator.getTo().equals(location)) {
 				paintUnit(graphics, point, ship);
 			}
 		});
@@ -302,12 +297,15 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 			case 3:
 				graphics.setColor(Color.BLUE);
 				break;
+			default:
+				graphics.setColor(Color.gray);
+				break;
 			}
 		}
 		graphics.fillRect(point.getX() + 1, point.getY() + 1, FLAG_WIDTH - 1, FLAG_HEIGHT - 1);
 	}
 
-	private void paintGrid(final Graphics2D graphics, final Map map, final Area area) {
+	private void paintGrid(final Graphics2D graphics, final Area area) {
 		if (isGridShown) {
 			graphics.setColor(Color.LIGHT_GRAY);
 			graphics.setStroke(new BasicStroke(1));

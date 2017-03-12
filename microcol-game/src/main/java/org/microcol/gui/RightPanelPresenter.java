@@ -90,7 +90,7 @@ public class RightPanelPresenter implements Localized {
 	}
 
 	private boolean isItDifferentTile(final Location tile) {
-		return focusedTile == null || (focusedTile != null && !focusedTile.equals(tile));
+		return focusedTile == null || !focusedTile.equals(tile);
 	}
 
 }

@@ -13,6 +13,7 @@ public interface MicrocolListener<E> {
 	 * It's called when event occurs.
 	 * 
 	 * @param event
+	 *            required event of defined type
 	 */
 	void onEvent(E event);
 

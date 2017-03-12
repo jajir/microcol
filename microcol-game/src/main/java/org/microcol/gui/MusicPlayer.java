@@ -38,7 +38,6 @@ public class MusicPlayer {
 			audioStream = AudioSystem.getAudioInputStream(new BufferedInputStream(in));
 		} catch (Exception e) {
 			e.printStackTrace();
-			System.exit(1);
 		}
 
 		audioFormat = audioStream.getFormat();
