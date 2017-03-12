@@ -10,10 +10,12 @@
 	<packaging>jar</packaging>
 	<name>MicroCol game classes</name>
 	<url>https://github.com/jajir/microcol</url>
-	
+
 	<properties>
 		<splash-creen-image>images/splash-screen.png</splash-creen-image>
 		<jacoco.version>0.7.9</jacoco.version>
+		<github.global.server>github</github.global.server>
+		<github.global.oauth2Token>${env.GITHUB_OAUTH_TOKEN}</github.global.oauth2Token>
 	</properties>
 
 	<dependencies>
@@ -183,13 +185,15 @@
 				<artifactId>maven-site-plugin</artifactId>
 			</plugin>
 			<!-- Deploy the web site -->
+			<!-- 
 			<plugin>
 				<groupId>com.github.github</groupId>
 				<artifactId>site-maven-plugin</artifactId>
 				<configuration>
-					<path>/microcol-game/</path>
+					<path>microcol-game/</path>
 				</configuration>
 			</plugin>
+			 -->
 		</plugins>
 	</build>
 
