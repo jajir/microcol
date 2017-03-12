@@ -9,9 +9,11 @@
 	<artifactId>microcol-game</artifactId>
 	<packaging>jar</packaging>
 	<name>MicroCol game classes</name>
+	<url>https://github.com/jajir/microcol</url>
 	
 	<properties>
 		<splash-creen-image>images/splash-screen.png</splash-creen-image>
+		<jacoco.version>0.7.9</jacoco.version>
 	</properties>
 
 	<dependencies>
@@ -155,6 +157,39 @@
 					</execution>
 				</executions>
 			</plugin>
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>${jacoco.version}</version>
+				<executions>
+					<execution>
+						<id>jacoco-initialize</id>
+						<goals>
+							<goal>prepare-agent</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>jacoco-site</id>
+						<phase>package</phase>
+						<goals>
+							<goal>report</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<!-- disable maven site default generating -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-site-plugin</artifactId>
+			</plugin>
+			<!-- Deploy the web site -->
+			<plugin>
+				<groupId>com.github.github</groupId>
+				<artifactId>site-maven-plugin</artifactId>
+				<configuration>
+					<path>/microcol-game/</path>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
 
@@ -176,11 +211,9 @@
 						false</dependencyLocationsEnabled>
 				</configuration>
 			</plugin>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>javancss-maven-plugin</artifactId>
-				<version>2.0-beta-2</version>
-			</plugin>
+			<!-- Sadly plugin JavaNCSS doesn't support java 8. -->
+			<!-- <plugin> <groupId>org.codehaus.mojo</groupId> <artifactId>javancss-maven-plugin</artifactId> 
+				<version>2.0-beta-2</version> </plugin> -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
@@ -213,6 +246,18 @@
 				<configuration>
 					<skipEmptyReport>false</skipEmptyReport>
 				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<reportSets>
+					<reportSet>
+						<reports>
+							<!-- select non-aggregate reports -->
+							<report>report</report>
+						</reports>
+					</reportSet>
+				</reportSets>
 			</plugin>
 		</plugins>
 	</reporting>

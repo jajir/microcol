@@ -105,7 +105,6 @@ public class WalkAnimator {
 		return to;
 	}
 
-	// TODO JJ switch to Point
 	public Point getNextCoordinates() {
 		return nextCoordinates;
 	}

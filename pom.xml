@@ -16,7 +16,7 @@
 		<log4j.version>1.2.14</log4j.version>
 		<maven.site.version>3.4</maven.site.version>
 	</properties>
-	
+
 	<modules>
 		<module>microcol-game</module>
 		<module>microcol-dist</module>
@@ -28,11 +28,41 @@
 		<url>https://github.com/jajir/microcol/issues</url>
 	</issueManagement>
 
-	<distributionManagement>
-		<site>
-			<id>microcol.sf.net</id>
-			<url>scp://shell.sourceforge.net/home/project-web/microcol/htdocs</url>
-		</site>
-	</distributionManagement>
+	<build>
+		<pluginManagement>
+			<plugins>
+				<!-- just disable maven side deploy -->
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-site-plugin</artifactId>
+					<version>${maven.site.version}</version>
+					<configuration>
+						<skipDeploy>true</skipDeploy>
+						<generateReports>false</generateReports>
+					</configuration>
+				</plugin>
+				<!-- Deploy the web site to github -->
+				<plugin>
+					<groupId>com.github.github</groupId>
+					<artifactId>site-maven-plugin</artifactId>
+					<version>0.12</version>
+					<executions>
+						<execution>
+							<goals>
+								<goal>site</goal>
+							</goals>
+							<phase>site-deploy</phase>
+						</execution>
+					</executions>
+					<configuration>
+						<server>github</server>
+						<message>Building site for my project</message>
+						<path>${site.path}</path>
+						<merge>true</merge>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
 
 </project>
