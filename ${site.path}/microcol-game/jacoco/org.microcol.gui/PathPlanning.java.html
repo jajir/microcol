@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PathPlanning.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">MicroCol game classes</a> &gt; <a href="index.source.html" class="el_package">org.microcol.gui</a> &gt; <span class="el_source">PathPlanning.java</span></div><h1>PathPlanning.java</h1><pre class="source lang-java linenums">package org.microcol.gui;
+
+import org.microcol.model.Location;
+
+/**
+ * Class contains methods for computing path for units.
+ * 
+ * @author jan
+ *
+ */
+<span class="fc" id="L11">public class PathPlanning {</span>
+
+	/**
+	 * Allows to define step operation.
+	 * 
+	 * @author jan
+	 *
+	 */
+	public interface WhatToDoWithPointInPath {
+		void pathPoint(Location point);
+	}
+
+	/**
+	 * Draw steps between two map points. It use naive algorithm. &lt;i&gt;y = ax +
+	 * b&lt;/i&gt;
+	 * 
+	 * @param tileFrom
+	 *            required tile from
+	 * @param tileTo
+	 *            required tile to
+	 * @param whatToDoWithPointInPath
+	 *            required function that's executed with each found point to
+	 *            visit
+	 */
+	public void paintPath(final Location tileFrom, final Location tileTo,
+			final WhatToDoWithPointInPath whatToDoWithPointInPath) {
+<span class="fc" id="L37">		final int diff = Math.abs(tileTo.getY() - tileFrom.getY()) - Math.abs(tileTo.getX() - tileFrom.getX());</span>
+<span class="fc bfc" id="L38" title="All 2 branches covered.">		if (diff &lt; 0) {</span>
+<span class="fc" id="L39">			float a = (tileFrom.getY() - tileTo.getY()) / (float) (tileFrom.getX() - tileTo.getX());</span>
+<span class="fc" id="L40">			float b = tileFrom.getY() - tileFrom.getX() * a;</span>
+<span class="pc bpc" id="L41" title="1 of 2 branches missed.">			if (tileFrom.getX() &lt; tileTo.getX()) {</span>
+<span class="fc bfc" id="L42" title="All 2 branches covered.">				for (int x = tileFrom.getX(); x &lt;= tileTo.getX(); x++) {</span>
+<span class="fc" id="L43">					int y = Math.round(a * x + b);</span>
+<span class="fc" id="L44">					addPoint(tileFrom, whatToDoWithPointInPath, Location.of(x, y));</span>
+				}
+<span class="fc" id="L46">			} else {</span>
+<span class="nc bnc" id="L47" title="All 2 branches missed.">				for (int x = tileFrom.getX(); x &gt;= tileTo.getX(); x--) {</span>
+<span class="nc" id="L48">					int y = Math.round(a * x + b);</span>
+<span class="nc" id="L49">					addPoint(tileFrom, whatToDoWithPointInPath, Location.of(x, y));</span>
+				}
+			}
+<span class="pc bfc" id="L52" title="All 2 branches covered.">		} else if (!tileFrom.equals(tileTo)) {</span>
+<span class="fc" id="L53">			float a = (tileFrom.getX() - tileTo.getX()) / (float) (tileFrom.getY() - tileTo.getY());</span>
+<span class="fc" id="L54">			float b = tileFrom.getX() - tileFrom.getY() * a;</span>
+<span class="fc bfc" id="L55" title="All 2 branches covered.">			if (tileFrom.getY() &lt; tileTo.getY()) {</span>
+<span class="fc bfc" id="L56" title="All 2 branches covered.">				for (int y = tileFrom.getY(); y &lt;= tileTo.getY(); y++) {</span>
+<span class="fc" id="L57">					int x = Math.round(a * y + b);</span>
+<span class="fc" id="L58">					addPoint(tileFrom, whatToDoWithPointInPath, Location.of(x, y));</span>
+				}
+<span class="fc" id="L60">			} else {</span>
+<span class="fc bfc" id="L61" title="All 2 branches covered.">				for (int y = tileFrom.getY(); y &gt;= tileTo.getY(); y--) {</span>
+<span class="fc" id="L62">					int x = Math.round(a * y + b);</span>
+<span class="fc" id="L63">					addPoint(tileFrom, whatToDoWithPointInPath, Location.of(x, y));</span>
+				}
+			}
+		}
+<span class="fc" id="L67">	}</span>
+
+	/**
+	 * Draw steps between two map points. It use naive algorithm. &lt;i&gt;y = ax +
+	 * b&lt;/i&gt;
+	 * 
+	 * @param tileFrom
+	 *            required tile from
+	 * @param tileTo
+	 *            required tile to
+	 * @param whatToDoWithPointInPath
+	 *            required function that's executed with each found point to
+	 *            visit
+	 * @param howManyStepsShouldBeDone
+	 *            required how many steps should be done to reach target
+	 */
+	public void paintPath(final Location tileFrom, final Location tileTo,
+			final WhatToDoWithPointInPath whatToDoWithPointInPath, final int howManyStepsShouldBeDone) {
+<span class="nc" id="L85">		final int diff = Math.abs(tileTo.getY() - tileFrom.getY()) - Math.abs(tileTo.getX() - tileFrom.getX());</span>
+<span class="nc bnc" id="L86" title="All 2 branches missed.">		if (diff &lt; 0) {</span>
+<span class="nc" id="L87">			float a = (tileFrom.getY() - tileTo.getY()) / (float) (tileFrom.getX() - tileTo.getX());</span>
+<span class="nc" id="L88">			float b = tileFrom.getY() - tileFrom.getX() * a;</span>
+<span class="nc bnc" id="L89" title="All 2 branches missed.">			if (tileFrom.getX() &lt; tileTo.getX()) {</span>
+<span class="nc" id="L90">				final int increment = getStepSize(tileFrom.getX(), tileTo.getX(), howManyStepsShouldBeDone);</span>
+<span class="nc bnc" id="L91" title="All 2 branches missed.">				for (int x = tileFrom.getX(); x &lt;= tileTo.getX(); x += increment) {</span>
+<span class="nc" id="L92">					int y = Math.round(a * x + b);</span>
+<span class="nc" id="L93">					addPoint(tileFrom, whatToDoWithPointInPath, Location.of(x, y));</span>
+				}
+<span class="nc" id="L95">			} else {</span>
+<span class="nc" id="L96">				final int increment = getStepSize(tileFrom.getX(), tileTo.getX(), howManyStepsShouldBeDone);</span>
+<span class="nc bnc" id="L97" title="All 2 branches missed.">				for (int x = tileFrom.getX(); x &gt;= tileTo.getX(); x += increment) {</span>
+<span class="nc" id="L98">					int y = Math.round(a * x + b);</span>
+<span class="nc" id="L99">					addPoint(tileFrom, whatToDoWithPointInPath, Location.of(x, y));</span>
+				}
+			}
+<span class="nc bnc" id="L102" title="All 2 branches missed.">		} else if (!tileFrom.equals(tileTo)) {</span>
+<span class="nc" id="L103">			float a = (tileFrom.getX() - tileTo.getX()) / (float) (tileFrom.getY() - tileTo.getY());</span>
+<span class="nc" id="L104">			float b = tileFrom.getX() - tileFrom.getY() * a;</span>
+<span class="nc bnc" id="L105" title="All 2 branches missed.">			if (tileFrom.getY() &lt; tileTo.getY()) {</span>
+<span class="nc" id="L106">				final int increment = getStepSize(tileFrom.getY(), tileTo.getY(), howManyStepsShouldBeDone);</span>
+<span class="nc bnc" id="L107" title="All 2 branches missed.">				for (int y = tileFrom.getY(); y &lt;= tileTo.getY(); y += increment) {</span>
+<span class="nc" id="L108">					int x = Math.round(a * y + b);</span>
+<span class="nc" id="L109">					addPoint(tileFrom, whatToDoWithPointInPath, Location.of(x, y));</span>
+				}
+<span class="nc" id="L111">			} else {</span>
+<span class="nc" id="L112">				final int increment = getStepSize(tileFrom.getY(), tileTo.getY(), howManyStepsShouldBeDone);</span>
+<span class="nc bnc" id="L113" title="All 2 branches missed.">				for (int y = tileFrom.getY(); y &gt;= tileTo.getY(); y += increment) {</span>
+<span class="nc" id="L114">					int x = Math.round(a * y + b);</span>
+<span class="nc" id="L115">					addPoint(tileFrom, whatToDoWithPointInPath, Location.of(x, y));</span>
+				}
+			}
+		}
+<span class="nc" id="L119">	}</span>
+
+	private int getStepSize(final int from, final int to, final int howManyStepsShouldBeDone) {
+<span class="nc" id="L122">		return (int) ((to - from) / (float) howManyStepsShouldBeDone);</span>
+	}
+
+	/**
+	 * Pass found location to callBack function. Just when start point is equals
+	 * to found call back function is not called.
+	 * 
+	 * @param tileFrom
+	 *            required from location
+	 * @param whatToDoWithPointInPath
+	 *            required call back function
+	 * @param pointToAdd
+	 *            required to location
+	 */
+	private void addPoint(final Location tileFrom, final WhatToDoWithPointInPath whatToDoWithPointInPath,
+			final Location pointToAdd) {
+<span class="fc bfc" id="L138" title="All 2 branches covered.">		if (!tileFrom.equals(pointToAdd)) {</span>
+<span class="fc" id="L139">			whatToDoWithPointInPath.pathPoint(pointToAdd);</span>
+		}
+<span class="fc" id="L141">	}</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

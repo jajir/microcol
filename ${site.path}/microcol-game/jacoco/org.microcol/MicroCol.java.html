@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MicroCol.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">MicroCol game classes</a> &gt; <a href="index.source.html" class="el_package">org.microcol</a> &gt; <span class="el_source">MicroCol.java</span></div><h1>MicroCol.java</h1><pre class="source lang-java linenums">package org.microcol;
+
+import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.SplashScreen;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+
+import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
+
+import org.microcol.gui.AppleMenuListener;
+import org.microcol.gui.ImageProvider;
+import org.microcol.gui.MainFrameView;
+import org.microcol.gui.MicroColModule;
+import org.microcol.gui.event.GameController;
+
+import com.apple.mrj.MRJApplicationUtils;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
+import com.google.inject.Stage;
+
+/**
+ * MicroCol's main class.
+ */
+<span class="nc" id="L27">public class MicroCol {</span>
+
+	/**
+	 * Provide information if it's apple operation system.
+	 * 
+	 * @return return &lt;code&gt;true&lt;/code&gt; when it's apple operation system
+	 *         otherwise return &lt;code&gt;false&lt;/code&gt;
+	 */
+	private static boolean isOSX() {
+<span class="nc" id="L36">		final String osName = System.getProperty(&quot;os.name&quot;);</span>
+<span class="nc" id="L37">		return osName.contains(&quot;OS X&quot;);</span>
+	}
+
+	/**
+	 * It's in separate method, because it works just when it's called as soon
+	 * as possible after application start. When it's called later it's not
+	 * applied.
+	 */
+	private static void initAppleProperties() {
+<span class="nc" id="L46">		System.setProperty(&quot;com.apple.mrj.application.apple.menu.about.name&quot;, &quot;MicroCol&quot;);</span>
+<span class="nc" id="L47">		System.setProperty(&quot;apple.laf.useScreenMenuBar&quot;, &quot;true&quot;);</span>
+<span class="nc" id="L48">		System.setProperty(&quot;apple.awt.application.name&quot;, &quot;MicroCol&quot;);</span>
+<span class="nc" id="L49">		System.setProperty(&quot;apple.awt.brushMetalLook&quot;, &quot;true&quot;);</span>
+<span class="nc" id="L50">	}</span>
+
+	private static void setSplashScreen() {
+<span class="nc" id="L53">		final SplashScreen splash = SplashScreen.getSplashScreen();</span>
+<span class="nc bnc" id="L54" title="All 2 branches missed.">		if (splash == null) {</span>
+<span class="nc" id="L55">			System.err.println(&quot;Splash screen is null!&quot;);</span>
+<span class="nc" id="L56">		} else {</span>
+<span class="nc" id="L57">			Graphics2D g = splash.createGraphics();</span>
+<span class="nc bnc" id="L58" title="All 2 branches missed.">			if (g == null) {</span>
+<span class="nc" id="L59">				System.out.println(&quot;unable to instantiate graphics for splash screen&quot;);</span>
+<span class="nc" id="L60">				return;</span>
+			}
+		}
+<span class="nc" id="L63">	}</span>
+
+	private static void setSystemNativeUi() {
+		try {
+<span class="nc" id="L67">			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());</span>
+<span class="nc" id="L68">		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException</span>
+<span class="nc" id="L69">				| UnsupportedLookAndFeelException ex) {</span>
+<span class="nc" id="L70">			ex.printStackTrace();</span>
+		}
+<span class="nc" id="L72">	}</span>
+
+	/**
+	 * Method try to set application icon. It use apple native classes. Because
+	 * it should be compiled at windows platform apple specific classes are
+	 * access by java reflection. For this reason is also exception sunk.
+	 */
+	private static void setAppleDockIcon() {
+		try {
+<span class="nc" id="L81">			Class&lt;?&gt; clazz = Class.forName(&quot;com.apple.eawt.Application&quot;, false, null);</span>
+<span class="nc bnc" id="L82" title="All 2 branches missed.">			if (clazz != null) {</span>
+<span class="nc" id="L83">				Method m = clazz.getMethod(&quot;getApplication&quot;);</span>
+<span class="nc" id="L84">				Object o = m.invoke(null);</span>
+<span class="nc" id="L85">				Method m2 = clazz.getMethod(&quot;setDockIconImage&quot;, Image.class);</span>
+<span class="nc" id="L86">				m2.invoke(o, ImageProvider.getRawImage(&quot;images/splash-screen.png&quot;));</span>
+			}
+<span class="nc" id="L88">		} catch (ClassNotFoundException | NoSuchMethodException | SecurityException | IllegalAccessException</span>
+<span class="nc" id="L89">				| IllegalArgumentException | InvocationTargetException e) {</span>
+			/**
+			 * intentionally do nothing.
+			 */
+<span class="nc" id="L93">			e.printStackTrace();</span>
+		}
+<span class="nc" id="L95">	}</span>
+
+	/**
+	 * Creates and displays the form.
+	 * 
+	 * @param args
+	 *            the command line arguments
+	 */
+	public static void main(final String... args) {
+
+<span class="nc" id="L105">		setSplashScreen();</span>
+
+<span class="nc bnc" id="L107" title="All 2 branches missed.">		if (isOSX()) {</span>
+<span class="nc" id="L108">			initAppleProperties();</span>
+<span class="nc" id="L109">			setAppleDockIcon();</span>
+		}
+
+<span class="nc" id="L112">		final Injector injector = Guice.createInjector(Stage.PRODUCTION, new MicroColModule());</span>
+
+<span class="nc bnc" id="L114" title="All 2 branches missed.">		if (isOSX()) {</span>
+<span class="nc" id="L115">			AppleMenuListener macController = injector.getInstance(AppleMenuListener.class);</span>
+<span class="nc" id="L116">			MRJApplicationUtils.registerQuitHandler(macController);</span>
+<span class="nc" id="L117">			MRJApplicationUtils.registerAboutHandler(macController);</span>
+<span class="nc" id="L118">			setSystemNativeUi();</span>
+		}
+
+<span class="nc" id="L121">		SwingUtilities.invokeLater(() -&gt; {</span>
+<span class="nc" id="L122">			final MainFrameView mainFrame = injector.getInstance(MainFrameView.class);</span>
+<span class="nc" id="L123">			final GameController gameController = injector.getInstance(GameController.class);</span>
+<span class="nc" id="L124">			mainFrame.setVisible(true);</span>
+<span class="nc" id="L125">			gameController.newGame();</span>
+<span class="nc" id="L126">		});</span>
+<span class="nc" id="L127">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

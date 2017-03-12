@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>RightPanelPresenter.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">MicroCol game classes</a> &gt; <a href="index.source.html" class="el_package">org.microcol.gui</a> &gt; <span class="el_source">RightPanelPresenter.java</span></div><h1>RightPanelPresenter.java</h1><pre class="source lang-java linenums"><span class="nc" id="L1">package org.microcol.gui;</span>
+
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+
+import javax.swing.JButton;
+import javax.swing.JPanel;
+
+import org.microcol.gui.event.ChangeLanguageController;
+import org.microcol.gui.event.FocusedTileController;
+import org.microcol.gui.event.FocusedTileEvent;
+import org.microcol.gui.event.GameController;
+import org.microcol.gui.event.KeyController;
+import org.microcol.gui.event.StatusBarMessageController;
+import org.microcol.gui.event.TurnStartedController;
+import org.microcol.model.Game;
+import org.microcol.model.Location;
+import org.microcol.model.Player;
+
+import com.google.inject.Inject;
+
+public class RightPanelPresenter implements Localized {
+
+	public interface Display {
+		JButton getNextTurnButton();
+
+		void showTile(final FocusedTileEvent event, Game game);
+
+		JPanel getRightPanel();
+
+		void setCurrentPlayer(Player player);
+	}
+
+	private Location focusedTile;
+
+	@Inject
+<span class="nc" id="L39">	public RightPanelPresenter(final RightPanelPresenter.Display display, final GameController gameController,</span>
+			final KeyController keyController, final FocusedTileController focusedTileController,
+			final ChangeLanguageController languangeController,
+			final StatusBarMessageController statusBarMessageController,
+			final TurnStartedController turnStartedController) {
+
+<span class="nc" id="L45">		display.getNextTurnButton().setText(getText().get(&quot;nextTurnButton&quot;));</span>
+<span class="nc" id="L46">		display.getNextTurnButton().setEnabled(false);</span>
+
+<span class="nc" id="L48">		display.getNextTurnButton().addActionListener(e -&gt; {</span>
+<span class="nc" id="L49">			display.getNextTurnButton().setEnabled(false);</span>
+<span class="nc" id="L50">			gameController.nextTurn();</span>
+<span class="nc" id="L51">		});</span>
+
+<span class="nc" id="L53">		display.getNextTurnButton().addKeyListener(new KeyAdapter() {</span>
+			@Override
+			public void keyPressed(final KeyEvent keyEvent) {
+<span class="nc" id="L56">				keyController.fireKeyWasPressed(keyEvent);</span>
+<span class="nc" id="L57">			}</span>
+		});
+
+<span class="nc" id="L60">		display.getNextTurnButton().addMouseListener(new MouseAdapter() {</span>
+			@Override
+			public void mouseEntered(final MouseEvent e) {
+<span class="nc" id="L63">				statusBarMessageController</span>
+<span class="nc" id="L64">						.fireStatusMessageWasChangedEvent(getText().get(&quot;nextTurnButton.desctiption&quot;));</span>
+<span class="nc" id="L65">			}</span>
+		});
+
+<span class="nc" id="L68">		display.getRightPanel().addMouseListener(new MouseAdapter() {</span>
+			@Override
+			public void mouseEntered(final MouseEvent e) {
+<span class="nc" id="L71">				statusBarMessageController.fireStatusMessageWasChangedEvent(getText().get(&quot;rightPanel.description&quot;));</span>
+<span class="nc" id="L72">			}</span>
+		});
+
+<span class="nc" id="L75">		languangeController.addLanguageListener(event -&gt; {</span>
+<span class="nc" id="L76">			display.getNextTurnButton().setText(getText().get(&quot;nextTurnButton&quot;));</span>
+<span class="nc" id="L77">		});</span>
+<span class="nc" id="L78">		focusedTileController.addFocusedTileListener(event -&gt; {</span>
+<span class="nc bnc" id="L79" title="All 2 branches missed.">			if (isItDifferentTile(event.getLocation())) {</span>
+<span class="nc" id="L80">				focusedTile = event.getLocation();</span>
+<span class="nc" id="L81">				display.showTile(event, gameController.getGame());</span>
+			}
+<span class="nc" id="L83">		});</span>
+<span class="nc" id="L84">		turnStartedController.addTurnStartedListener(event -&gt; {</span>
+<span class="nc" id="L85">			display.setCurrentPlayer(event.getPlayer());</span>
+<span class="nc bnc" id="L86" title="All 2 branches missed.">			if (event.getPlayer().isHuman()) {</span>
+<span class="nc" id="L87">				display.getNextTurnButton().setEnabled(true);</span>
+			}
+<span class="nc" id="L89">		});</span>
+<span class="nc" id="L90">	}</span>
+
+	private boolean isItDifferentTile(final Location tile) {
+<span class="nc bnc" id="L93" title="All 6 branches missed.">		return focusedTile == null || (focusedTile != null &amp;&amp; !focusedTile.equals(tile));</span>
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

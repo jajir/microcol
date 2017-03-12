@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GameBuilder.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">MicroCol game classes</a> &gt; <a href="index.source.html" class="el_package">org.microcol.model</a> &gt; <span class="el_source">GameBuilder.java</span></div><h1>GameBuilder.java</h1><pre class="source lang-java linenums">package org.microcol.model;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import com.google.common.base.Preconditions;
+
+// TODO JKA Documentation
+// TODO JKA Tests
+public class GameBuilder {
+	private final List&lt;Player&gt; players;
+	private final List&lt;Ship&gt; ships;
+
+	private Map map;
+	private Calendar calendar;
+
+<span class="nc" id="L17">	public GameBuilder() {</span>
+<span class="nc" id="L18">		players = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L19">		ships = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L20">	}</span>
+
+	public GameBuilder setMap(final int maxX, final int maxY) {
+<span class="nc" id="L23">		map = new Map(maxX, maxY);</span>
+
+<span class="nc" id="L25">		return this;</span>
+	}
+
+	public GameBuilder setCalendar(final int startYear, final int endYear) {
+<span class="nc" id="L29">		calendar = new Calendar(startYear, endYear);</span>
+
+<span class="nc" id="L31">		return this;</span>
+	}
+
+	public GameBuilder addPlayer(final String name, final boolean computer) {
+<span class="nc bnc" id="L35" title="All 2 branches missed.">		Preconditions.checkArgument(getPlayer(name) == null, &quot;Player name must be unique: %s&quot;, name);</span>
+
+<span class="nc" id="L37">		players.add(new Player(name, computer));</span>
+
+<span class="nc" id="L39">		return this;</span>
+	}
+
+	private Player getPlayer(final String name) {
+		// TODO JKA Use streams
+<span class="nc bnc" id="L44" title="All 2 branches missed.">		for (Player player : players) {</span>
+<span class="nc bnc" id="L45" title="All 2 branches missed.">			if (player.getName().equals(name)) {</span>
+<span class="nc" id="L46">				return player;</span>
+			}
+		}
+
+<span class="nc" id="L50">		return null;</span>
+	}
+
+	public GameBuilder addShip(final String ownerName, final int maxMoves, final int x, final int y) {
+<span class="nc" id="L54">		ships.add(new Ship(getPlayer(ownerName), maxMoves, new Location(x, y)));</span>
+
+<span class="nc" id="L56">		return this;</span>
+	}
+
+	public Game build() {
+<span class="nc bnc" id="L60" title="All 2 branches missed.">		Preconditions.checkState(!players.isEmpty(), &quot;Game must have at least one player.&quot;);</span>
+
+<span class="nc" id="L62">		return new Game(map, calendar, players, ships);</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>StatusBarView.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">MicroCol game classes</a> &gt; <a href="index.source.html" class="el_package">org.microcol.gui</a> &gt; <span class="el_source">StatusBarView.java</span></div><h1>StatusBarView.java</h1><pre class="source lang-java linenums">package org.microcol.gui;
+
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+
+import javax.swing.BorderFactory;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JSeparator;
+import javax.swing.SwingConstants;
+import javax.swing.border.Border;
+import javax.swing.border.EtchedBorder;
+
+import com.google.inject.Inject;
+
+public class StatusBarView extends JPanel implements StatusBarPresenter.Display {
+
+	/**
+	 * Default serialVersionUID.
+	 */
+	private static final long serialVersionUID = 1L;
+
+	private final JLabel statusBarDescription;
+
+	private final JLabel labelEra;
+
+	@Inject
+<span class="nc" id="L29">	public StatusBarView() {</span>
+<span class="nc" id="L30">		this.setLayout(new GridBagLayout());</span>
+
+<span class="nc" id="L32">		statusBarDescription = new JLabel();</span>
+<span class="nc" id="L33">		add(statusBarDescription, new GridBagConstraints(0, 0, 1, 1, 1D, 0D, GridBagConstraints.CENTER,</span>
+<span class="nc" id="L34">				GridBagConstraints.HORIZONTAL, new Insets(0, 10, 0, 3), 0, 0));</span>
+
+<span class="nc" id="L36">		add(new JSeparator(SwingConstants.VERTICAL), new GridBagConstraints(1, 0, 1, 1, 0D, 1D,</span>
+<span class="nc" id="L37">				GridBagConstraints.CENTER, GridBagConstraints.VERTICAL, new Insets(0, 3, 0, 15), 0, 0));</span>
+
+<span class="nc" id="L39">		labelEra = new JLabel();</span>
+<span class="nc" id="L40">		add(labelEra, new GridBagConstraints(2, 0, 1, 1, 0D, 0D, GridBagConstraints.CENTER, GridBagConstraints.NONE,</span>
+<span class="nc" id="L41">				new Insets(0, 3, 0, 15), 0, 0));</span>
+
+<span class="nc" id="L43">		Border border = BorderFactory.createBevelBorder(EtchedBorder.LOWERED);</span>
+<span class="nc" id="L44">		setBorder(border);</span>
+<span class="nc" id="L45">	}</span>
+
+	@Override
+	public JLabel getStatusBarDescription() {
+<span class="nc" id="L49">		return statusBarDescription;</span>
+	}
+
+	@Override
+	public JLabel getLabelEra() {
+<span class="nc" id="L54">		return labelEra;</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

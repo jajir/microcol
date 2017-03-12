@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ShipMovedEvent.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">MicroCol game classes</a> &gt; <a href="index.source.html" class="el_package">org.microcol.model.event</a> &gt; <span class="el_source">ShipMovedEvent.java</span></div><h1>ShipMovedEvent.java</h1><pre class="source lang-java linenums">package org.microcol.model.event;
+
+import org.microcol.model.Game;
+import org.microcol.model.Location;
+import org.microcol.model.Path;
+import org.microcol.model.Ship;
+
+import com.google.common.base.MoreObjects;
+import com.google.common.base.Preconditions;
+
+// TODO JKA Documentation
+public class ShipMovedEvent extends ModelEvent {
+	private final Ship ship;
+	private final Location startLocation;
+	private final Path path;
+
+	public ShipMovedEvent(final Game game, final Ship ship, final Location startLocation, final Path path) {
+<span class="nc" id="L18">		super(game);</span>
+
+<span class="nc" id="L20">		this.ship = Preconditions.checkNotNull(ship);</span>
+<span class="nc" id="L21">		this.startLocation = Preconditions.checkNotNull(startLocation);</span>
+<span class="nc" id="L22">		this.path = Preconditions.checkNotNull(path);</span>
+<span class="nc" id="L23">	}</span>
+
+	public Ship getShip() {
+<span class="nc" id="L26">		return ship;</span>
+	}
+
+	public Location getStartLocation() {
+<span class="nc" id="L30">		return startLocation;</span>
+	}
+
+	public Path getPath() {
+<span class="nc" id="L34">		return path;</span>
+	}
+
+	@Override
+	public String toString() {
+<span class="nc" id="L39">		return MoreObjects.toStringHelper(this)</span>
+<span class="nc" id="L40">			.add(&quot;ship&quot;, ship)</span>
+<span class="nc" id="L41">			.add(&quot;startLocation&quot;, startLocation)</span>
+<span class="nc" id="L42">			.add(&quot;path&quot;, path)</span>
+<span class="nc" id="L43">			.toString();</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>
