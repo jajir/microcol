@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MusicPlayer.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">MicroCol game classes</a> &gt; <a href="index.source.html" class="el_package">org.microcol.gui</a> &gt; <span class="el_source">MusicPlayer.java</span></div><h1>MusicPlayer.java</h1><pre class="source lang-java linenums">package org.microcol.gui;
+
+import java.io.BufferedInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+
+import javax.sound.sampled.AudioFormat;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.DataLine;
+import javax.sound.sampled.FloatControl;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.SourceDataLine;
+
+/**
+ * Responsible for playing music.
+ * 
+ */
+<span class="nc" id="L19">public class MusicPlayer {</span>
+<span class="nc" id="L20">	private final int BUFFER_SIZE = 128000;</span>
+	private AudioInputStream audioStream;
+	private AudioFormat audioFormat;
+	private SourceDataLine sourceLine;
+
+	/**
+	 * Start play background music.
+	 * 
+	 * @param filename
+	 *            the name of the file that is going to be played
+	 * @param defaultVolume
+	 *            required default volume
+	 */
+	public void playSound(final String filename, final int defaultVolume) {
+
+		try {
+<span class="nc" id="L36">			final ClassLoader cl = ImageProvider.class.getClassLoader();</span>
+<span class="nc" id="L37">			final InputStream in = cl.getResourceAsStream(filename);</span>
+<span class="nc" id="L38">			audioStream = AudioSystem.getAudioInputStream(new BufferedInputStream(in));</span>
+<span class="nc" id="L39">		} catch (Exception e) {</span>
+<span class="nc" id="L40">			e.printStackTrace();</span>
+<span class="nc" id="L41">			System.exit(1);</span>
+		}
+
+<span class="nc" id="L44">		audioFormat = audioStream.getFormat();</span>
+
+<span class="nc" id="L46">		DataLine.Info info = new DataLine.Info(SourceDataLine.class, audioFormat);</span>
+		try {
+<span class="nc" id="L48">			sourceLine = (SourceDataLine) AudioSystem.getLine(info);</span>
+<span class="nc" id="L49">			sourceLine.open(audioFormat);</span>
+<span class="nc" id="L50">		} catch (LineUnavailableException e) {</span>
+<span class="nc" id="L51">			e.printStackTrace();</span>
+<span class="nc" id="L52">			System.exit(1);</span>
+<span class="nc" id="L53">		} catch (Exception e) {</span>
+<span class="nc" id="L54">			e.printStackTrace();</span>
+<span class="nc" id="L55">			System.exit(1);</span>
+		}
+
+<span class="nc" id="L58">		setVolume(defaultVolume);</span>
+
+<span class="nc" id="L60">		sourceLine.start();</span>
+
+<span class="nc" id="L62">		int nBytesRead = 0;</span>
+<span class="nc" id="L63">		byte[] abData = new byte[BUFFER_SIZE];</span>
+<span class="nc bnc" id="L64" title="All 4 branches missed.">		while (nBytesRead != -1 &amp;&amp; run) {</span>
+			try {
+<span class="nc" id="L66">				nBytesRead = audioStream.read(abData, 0, abData.length);</span>
+<span class="nc" id="L67">			} catch (IOException e) {</span>
+<span class="nc" id="L68">				e.printStackTrace();</span>
+			}
+<span class="nc bnc" id="L70" title="All 2 branches missed.">			if (nBytesRead &gt;= 0) {</span>
+				@SuppressWarnings(&quot;unused&quot;)
+<span class="nc" id="L72">				int nBytesWritten = sourceLine.write(abData, 0, nBytesRead);</span>
+			}
+		}
+
+<span class="nc" id="L76">		sourceLine.drain();</span>
+<span class="nc" id="L77">		sourceLine.close();</span>
+<span class="nc" id="L78">	}</span>
+
+<span class="nc" id="L80">	private boolean run = true;</span>
+
+	public void setVolume(final int volume) {
+<span class="nc" id="L83">		final FloatControl volumeControll = (FloatControl) sourceLine.getControl(FloatControl.Type.MASTER_GAIN);</span>
+<span class="nc" id="L84">		float step = 100F / (volumeControll.getMaximum() - volumeControll.getMinimum());</span>
+<span class="nc" id="L85">		volumeControll.setValue(volumeControll.getMinimum() + volume / step);</span>
+<span class="nc" id="L86">	}</span>
+
+	public void stop() {
+<span class="nc" id="L89">		run = false;</span>
+<span class="nc" id="L90">	}</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

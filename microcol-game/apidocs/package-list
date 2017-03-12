@@ -1,0 +1,8 @@
+org.microcol
+org.microcol.ai
+org.microcol.gui
+org.microcol.gui.event
+org.microcol.gui.model
+org.microcol.gui.panelview
+org.microcol.model
+org.microcol.model.event

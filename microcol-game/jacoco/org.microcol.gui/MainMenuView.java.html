@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MainMenuView.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">MicroCol game classes</a> &gt; <a href="index.source.html" class="el_package">org.microcol.gui</a> &gt; <span class="el_source">MainMenuView.java</span></div><h1>MainMenuView.java</h1><pre class="source lang-java linenums">package org.microcol.gui;
+
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
+
+import javax.swing.ButtonGroup;
+import javax.swing.JCheckBoxMenuItem;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JRadioButtonMenuItem;
+import javax.swing.KeyStroke;
+
+import org.microcol.gui.Text.Language;
+
+import com.google.common.base.Preconditions;
+import com.google.inject.Inject;
+
+public class MainMenuView extends JMenuBar implements MainMenuPresenter.Display {
+
+	/**
+	 * Default serialVersionUID.
+	 */
+	private static final long serialVersionUID = 1L;
+
+	private final Text text;
+
+	private final JMenu menuGame;
+
+	private final JMenuItem menuItemNewGame;
+
+	private final JMenuItem menuItemSameGame;
+
+	private final JMenuItem menuItemLoadGame;
+
+	private final JMenuItem menuItemQuitGame;
+
+	private final JMenuItem menuItemAbout;
+
+	private final JMenu menuView;
+
+	private final JMenuItem menuItemCenterView;
+
+	private final JMenu menuUnit;
+
+	private final JMenuItem menuItemMove;
+
+	private final JMenu menuPrefereces;
+
+	private final JMenu menuLanguage;
+
+	private final JRadioButtonMenuItem rbMenuItemlanguageEn;
+
+	private final JRadioButtonMenuItem rbMenuItemlanguageCz;
+
+	private final JMenuItem menuItemVolume;
+
+	private final JCheckBoxMenuItem menuItemShowGrid;
+
+	private final JMenu menuHelp;
+
+	@Inject
+<span class="nc" id="L63">	public MainMenuView(final GamePreferences gamePreferences, final Text text) {</span>
+<span class="nc" id="L64">		this.text = Preconditions.checkNotNull(text);</span>
+<span class="nc" id="L65">		menuGame = new JMenu();</span>
+
+<span class="nc" id="L67">		menuItemNewGame = new JMenuItem();</span>
+<span class="nc" id="L68">		menuItemNewGame.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_MASK));</span>
+<span class="nc" id="L69">		menuItemNewGame.setEnabled(false);</span>
+<span class="nc" id="L70">		menuGame.add(menuItemNewGame);</span>
+
+<span class="nc" id="L72">		menuItemSameGame = new JMenuItem();</span>
+<span class="nc" id="L73">		menuItemSameGame.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_MASK));</span>
+<span class="nc" id="L74">		menuItemSameGame.setEnabled(false);</span>
+<span class="nc" id="L75">		menuGame.add(menuItemSameGame);</span>
+
+<span class="nc" id="L77">		menuItemLoadGame = new JMenuItem();</span>
+<span class="nc" id="L78">		menuItemLoadGame.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_L, InputEvent.CTRL_MASK));</span>
+<span class="nc" id="L79">		menuItemLoadGame.setEnabled(false);</span>
+<span class="nc" id="L80">		menuGame.add(menuItemLoadGame);</span>
+
+<span class="nc" id="L82">		menuItemQuitGame = new JMenuItem();</span>
+<span class="nc" id="L83">		menuItemQuitGame.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q, InputEvent.CTRL_MASK));</span>
+<span class="nc bnc" id="L84" title="All 2 branches missed.">		if (!gamePreferences.isOSX()) {</span>
+<span class="nc" id="L85">			menuGame.add(menuItemQuitGame);</span>
+		}
+<span class="nc" id="L87">		add(menuGame);</span>
+		
+		/**
+		 * Menu view
+		 * 
+		 */
+<span class="nc" id="L93">		menuView = new JMenu();</span>
+<span class="nc" id="L94">		menuItemCenterView = new JMenuItem();</span>
+<span class="nc" id="L95">		menuItemCenterView.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, 0));</span>
+<span class="nc" id="L96">		menuItemCenterView.setEnabled(false);</span>
+<span class="nc" id="L97">		menuView.add(menuItemCenterView);</span>
+<span class="nc" id="L98">		add(menuView);</span>
+
+		/**
+		 * Menu unit
+		 * 
+		 */
+<span class="nc" id="L104">		menuUnit = new JMenu();</span>
+<span class="nc" id="L105">		menuItemMove = new JMenuItem();</span>
+<span class="nc" id="L106">		menuItemMove.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_M, 0));</span>
+<span class="nc" id="L107">		menuItemMove.setEnabled(false);</span>
+<span class="nc" id="L108">		menuUnit.add(menuItemMove);</span>
+<span class="nc" id="L109">		add(menuUnit);</span>
+
+		/**
+		 * Preferences
+		 * 
+		 */
+<span class="nc" id="L115">		menuPrefereces = new JMenu();</span>
+<span class="nc" id="L116">		rbMenuItemlanguageEn = new JRadioButtonMenuItem();</span>
+<span class="nc" id="L117">		rbMenuItemlanguageEn.setSelected(gamePreferences.getLanguage().equals(Language.en));</span>
+<span class="nc" id="L118">		rbMenuItemlanguageCz = new JRadioButtonMenuItem();</span>
+<span class="nc" id="L119">		rbMenuItemlanguageCz.setSelected(gamePreferences.getLanguage().equals(Language.cz));</span>
+<span class="nc" id="L120">		final ButtonGroup groupLanguage = new ButtonGroup();</span>
+<span class="nc" id="L121">		groupLanguage.add(rbMenuItemlanguageEn);</span>
+<span class="nc" id="L122">		groupLanguage.add(rbMenuItemlanguageCz);</span>
+<span class="nc" id="L123">		menuLanguage = new JMenu();</span>
+<span class="nc" id="L124">		menuLanguage.add(rbMenuItemlanguageEn);</span>
+<span class="nc" id="L125">		menuLanguage.add(rbMenuItemlanguageCz);</span>
+<span class="nc" id="L126">		menuPrefereces.add(menuLanguage);</span>
+
+<span class="nc" id="L128">		menuItemVolume = new JMenuItem();</span>
+<span class="nc" id="L129">		menuItemVolume.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_V, InputEvent.CTRL_MASK));</span>
+<span class="nc" id="L130">		menuPrefereces.add(menuItemVolume);</span>
+
+<span class="nc" id="L132">		menuItemShowGrid = new JCheckBoxMenuItem();</span>
+<span class="nc" id="L133">		menuItemShowGrid.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_G, 0));</span>
+<span class="nc" id="L134">		menuItemShowGrid.setSelected(gamePreferences.isGridShown());</span>
+<span class="nc" id="L135">		menuPrefereces.add(menuItemShowGrid);</span>
+
+<span class="nc" id="L137">		add(menuPrefereces);</span>
+
+		/**
+		 * Help
+		 */
+<span class="nc" id="L142">		menuHelp = new JMenu();</span>
+<span class="nc" id="L143">		menuItemAbout = new JMenuItem();</span>
+<span class="nc" id="L144">		menuHelp.add(menuItemAbout);</span>
+
+<span class="nc bnc" id="L146" title="All 2 branches missed.">		if (!gamePreferences.isOSX()) {</span>
+<span class="nc" id="L147">			add(menuHelp);</span>
+		}
+<span class="nc" id="L149">		updateLanguage();</span>
+<span class="nc" id="L150">	}</span>
+
+	@Override
+	public void updateLanguage() {
+		/**
+		 * Game
+		 */
+<span class="nc" id="L157">		menuGame.setText(text.get(&quot;mainMenu.game&quot;));</span>
+<span class="nc" id="L158">		menuItemNewGame.setText(text.get(&quot;mainMenu.game.newGame&quot;));</span>
+<span class="nc" id="L159">		menuItemSameGame.setText(text.get(&quot;mainMenu.game.saveGame&quot;));</span>
+<span class="nc" id="L160">		menuItemLoadGame.setText(text.get(&quot;mainMenu.game.loadGame&quot;));</span>
+<span class="nc" id="L161">		menuItemQuitGame.setText(text.get(&quot;mainMenu.game.quitGame&quot;));</span>
+
+		/**
+		 * View
+		 */
+<span class="nc" id="L166">		menuView.setText(text.get(&quot;mainMenu.view&quot;));</span>
+<span class="nc" id="L167">		menuItemCenterView.setText(text.get(&quot;mainMenu.view.center&quot;));</span>
+
+		/**
+		 * Unit
+		 */
+<span class="nc" id="L172">		menuUnit.setText(text.get(&quot;mainMenu.unit&quot;));</span>
+<span class="nc" id="L173">		menuItemMove.setText(text.get(&quot;mainMenu.unit.move&quot;));</span>
+
+		/**
+		 * Preferences
+		 */
+<span class="nc" id="L178">		menuPrefereces.setText(text.get(&quot;mainMenu.preferences&quot;));</span>
+<span class="nc" id="L179">		menuLanguage.setText(text.get(&quot;mainMenu.preferences.language&quot;));</span>
+<span class="nc" id="L180">		rbMenuItemlanguageEn.setText(text.get(&quot;mainMenu.preferences.language.en&quot;));</span>
+<span class="nc" id="L181">		rbMenuItemlanguageCz.setText(text.get(&quot;mainMenu.preferences.language.cz&quot;));</span>
+<span class="nc" id="L182">		menuItemVolume.setText(text.get(&quot;mainMenu.preferences.volume&quot;));</span>
+<span class="nc" id="L183">		menuItemShowGrid.setText(text.get(&quot;mainMenu.preferences.showGrid&quot;));</span>
+
+		/**
+		 * Help &amp; About
+		 */
+<span class="nc" id="L188">		menuHelp.setText(text.get(&quot;mainMenu.help&quot;));</span>
+<span class="nc" id="L189">		menuItemAbout.setText(text.get(&quot;mainMenu.help.about&quot;));</span>
+<span class="nc" id="L190">	}</span>
+
+	@Override
+	public JMenuItem getMenuItemNewGame() {
+<span class="nc" id="L194">		return menuItemNewGame;</span>
+	}
+
+	@Override
+	public JMenuItem getMenuItemQuitGame() {
+<span class="nc" id="L199">		return menuItemQuitGame;</span>
+	}
+
+	@Override
+	public JMenuItem getMenuItemSameGame() {
+<span class="nc" id="L204">		return menuItemSameGame;</span>
+	}
+
+	@Override
+	public JMenuItem getMenuItemLoadGame() {
+<span class="nc" id="L209">		return menuItemLoadGame;</span>
+	}
+
+	@Override
+	public JMenuItem getMenuItemAbout() {
+<span class="nc" id="L214">		return menuItemAbout;</span>
+	}
+
+	@Override
+	public JRadioButtonMenuItem getRbMenuItemlanguageEn() {
+<span class="nc" id="L219">		return rbMenuItemlanguageEn;</span>
+	}
+
+	@Override
+	public JRadioButtonMenuItem getRbMenuItemlanguageCz() {
+<span class="nc" id="L224">		return rbMenuItemlanguageCz;</span>
+	}
+
+	@Override
+	public JMenuItem getMenuItemVolume() {
+<span class="nc" id="L229">		return menuItemVolume;</span>
+	}
+
+	@Override
+	public JCheckBoxMenuItem getMenuItemShowGrid() {
+<span class="nc" id="L234">		return menuItemShowGrid;</span>
+	}
+
+	@Override
+	public JMenuItem getMenuItemMove() {
+<span class="nc" id="L239">		return menuItemMove;</span>
+	}
+
+	@Override
+	public JMenuItem getMenuItemCenterView() {
+<span class="nc" id="L244">		return menuItemCenterView;</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

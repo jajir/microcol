@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Location.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">MicroCol game classes</a> &gt; <a href="index.source.html" class="el_package">org.microcol.model</a> &gt; <span class="el_source">Location.java</span></div><h1>Location.java</h1><pre class="source lang-java linenums">package org.microcol.model;
+
+import com.google.common.base.MoreObjects;
+import com.google.common.base.Preconditions;
+
+// TODO JKA Documentation
+public class Location {
+	private final int x;
+	private final int y;
+
+<span class="fc" id="L11">	public Location(final int x, final int y) {</span>
+<span class="fc" id="L12">		this.x = x;</span>
+<span class="fc" id="L13">		this.y = y;</span>
+<span class="fc" id="L14">	}</span>
+
+	public int getX() {
+<span class="fc" id="L17">		return x;</span>
+	}
+
+	public int getY() {
+<span class="fc" id="L21">		return y;</span>
+	}
+
+	public boolean isAdjacent(final Location location) {
+<span class="fc" id="L25">		Preconditions.checkNotNull(location);</span>
+
+<span class="fc bfc" id="L27" title="All 2 branches covered.">		if (equals(location)) {</span>
+<span class="fc" id="L28">			return false;</span>
+		}
+
+<span class="fc bfc" id="L31" title="All 4 branches covered.">		return Math.abs(x - location.x) &lt;= 1</span>
+<span class="fc" id="L32">			&amp;&amp; Math.abs(y - location.y) &lt;= 1; </span>
+	}
+
+	public Location add(final Location location) {
+<span class="fc" id="L36">		Preconditions.checkNotNull(location);</span>
+
+<span class="fc" id="L38">		return new Location(x + location.x, y + location.y);</span>
+	}
+
+	@Override
+	public int hashCode() {
+<span class="fc" id="L43">		return x + (y &lt;&lt; 16);</span>
+	}
+
+	@Override
+	public boolean equals(final Object object) {
+<span class="fc bfc" id="L48" title="All 2 branches covered.">		if (object == null) {</span>
+<span class="fc" id="L49">			return false;</span>
+		}
+
+<span class="fc bfc" id="L52" title="All 2 branches covered.">		if (!(object instanceof Location)) {</span>
+<span class="fc" id="L53">			return false;</span>
+		}
+
+<span class="fc" id="L56">		final Location location = (Location) object;</span>
+
+<span class="fc bfc" id="L58" title="All 2 branches covered.">		return x == location.x</span>
+<span class="fc bfc" id="L59" title="All 2 branches covered.">			&amp;&amp; y == location.y;</span>
+	}
+
+	@Override
+	public String toString() {
+<span class="fc" id="L64">		return MoreObjects.toStringHelper(this)</span>
+<span class="fc" id="L65">			.add(&quot;x&quot;, x)</span>
+<span class="fc" id="L66">			.add(&quot;y&quot;, y)</span>
+<span class="fc" id="L67">			.toString();</span>
+	}
+
+	public static Location of(final int x, final int y) {
+<span class="fc" id="L71">		return new Location(x, y);</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

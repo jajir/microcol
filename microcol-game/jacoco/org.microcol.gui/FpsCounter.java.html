@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>FpsCounter.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">MicroCol game classes</a> &gt; <a href="index.source.html" class="el_package">org.microcol.gui</a> &gt; <span class="el_source">FpsCounter.java</span></div><h1>FpsCounter.java</h1><pre class="source lang-java linenums">package org.microcol.gui;
+
+import javax.swing.Timer;
+
+import org.apache.log4j.Logger;
+
+/**
+ * Class helps measure Frame per second rate.
+ * 
+ * @author jan
+ *
+ */
+public class FpsCounter {
+
+<span class="nc" id="L15">	private final Logger logger = Logger.getLogger(FpsCounter.class);</span>
+
+	private final Timer timer;
+
+	private int fps;
+
+	private int counter;
+
+<span class="nc" id="L23">	public FpsCounter() {</span>
+<span class="nc" id="L24">		timer = new Timer(1000, e -&gt; {</span>
+<span class="nc" id="L25">			fps = counter;</span>
+<span class="nc" id="L26">			counter = 0;</span>
+<span class="nc" id="L27">			logger.debug(&quot;Fps is: &quot; + fps);</span>
+<span class="nc" id="L28">		});</span>
+<span class="nc" id="L29">	}</span>
+
+	public void start() {
+<span class="nc" id="L32">		counter = 0;</span>
+<span class="nc" id="L33">		fps = 0;</span>
+<span class="nc" id="L34">		timer.start();</span>
+<span class="nc" id="L35">	}</span>
+
+	public void stop() {
+<span class="nc" id="L38">		timer.stop();</span>
+<span class="nc" id="L39">	}</span>
+
+	public void screenWasPainted() {
+<span class="nc" id="L42">		counter++;</span>
+<span class="nc" id="L43">	}</span>
+
+	/**
+	 * Return actual FPS.
+	 * 
+	 * @return fps value
+	 */
+	public int getFps() {
+<span class="nc" id="L51">		return fps;</span>
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

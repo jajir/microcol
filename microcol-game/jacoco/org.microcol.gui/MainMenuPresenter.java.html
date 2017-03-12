@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MainMenuPresenter.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">MicroCol game classes</a> &gt; <a href="index.source.html" class="el_package">org.microcol.gui</a> &gt; <span class="el_source">MainMenuPresenter.java</span></div><h1>MainMenuPresenter.java</h1><pre class="source lang-java linenums">package org.microcol.gui;
+
+import javax.swing.JCheckBoxMenuItem;
+import javax.swing.JMenuItem;
+import javax.swing.JRadioButtonMenuItem;
+
+import org.microcol.gui.event.ChangeLanguageController;
+import org.microcol.gui.event.FocusedTileController;
+import org.microcol.gui.event.GameEventController;
+import org.microcol.gui.event.MoveUnitController;
+import org.microcol.gui.event.ShowGridController;
+import org.microcol.gui.event.ViewController;
+import org.microcol.gui.event.VolumeChangeController;
+
+import com.google.inject.Inject;
+
+public class MainMenuPresenter {
+
+	public interface Display {
+		JMenuItem getMenuItemNewGame();
+
+		JMenuItem getMenuItemLoadGame();
+
+		JMenuItem getMenuItemSameGame();
+
+		JMenuItem getMenuItemQuitGame();
+
+		JMenuItem getMenuItemAbout();
+
+		JRadioButtonMenuItem getRbMenuItemlanguageEn();
+
+		JRadioButtonMenuItem getRbMenuItemlanguageCz();
+
+		void updateLanguage();
+
+		JMenuItem getMenuItemVolume();
+
+		JCheckBoxMenuItem getMenuItemShowGrid();
+
+		JMenuItem getMenuItemMove();
+
+		JMenuItem getMenuItemCenterView();
+	}
+
+	@Inject
+<span class="nc" id="L46">	public MainMenuPresenter(final MainMenuPresenter.Display display, final GameEventController gameEventController,</span>
+			final GamePreferences gamePreferences, final ChangeLanguageController languangeController, final Text text,
+			final ViewUtil viewUtil, final VolumeChangeController volumeChangeController,
+			final ShowGridController showGridController, final FocusedTileController focusedTileController,
+			final MoveUnitController moveUnitController, final ViewController viewController) {
+<span class="nc" id="L51">		display.getMenuItemNewGame().addActionListener(actionEvent -&gt; {</span>
+
+<span class="nc" id="L53">		});</span>
+<span class="nc bnc" id="L54" title="All 2 branches missed.">		if (!gamePreferences.isOSX()) {</span>
+<span class="nc" id="L55">			display.getMenuItemQuitGame().addActionListener(actionEvent -&gt; {</span>
+<span class="nc" id="L56">				gameEventController.fireGameExit();</span>
+<span class="nc" id="L57">			});</span>
+<span class="nc" id="L58">			display.getMenuItemAbout().addActionListener(actionEvent -&gt; {</span>
+<span class="nc" id="L59">				gameEventController.fireAboutGameEvent();</span>
+<span class="nc" id="L60">			});</span>
+		}
+<span class="nc" id="L62">		display.getRbMenuItemlanguageCz().addActionListener(actionEvent -&gt; {</span>
+<span class="nc" id="L63">			languangeController.fireLanguageWasChangedEvent(Text.Language.cz);</span>
+<span class="nc" id="L64">		});</span>
+<span class="nc" id="L65">		display.getRbMenuItemlanguageEn().addActionListener(actionEvent -&gt; {</span>
+<span class="nc" id="L66">			languangeController.fireLanguageWasChangedEvent(Text.Language.en);</span>
+<span class="nc" id="L67">		});</span>
+<span class="nc" id="L68">		display.getMenuItemVolume().addActionListener(actionEvent -&gt; {</span>
+<span class="nc" id="L69">			PreferencesVolume preferencesVolume = new PreferencesVolume(viewUtil, text, volumeChangeController,</span>
+<span class="nc" id="L70">					gamePreferences.getVolume());</span>
+<span class="nc" id="L71">			preferencesVolume.setVisible(true);</span>
+<span class="nc" id="L72">		});</span>
+<span class="nc" id="L73">		display.getMenuItemShowGrid().addActionListener(</span>
+<span class="nc" id="L74">				ectionEvent -&gt; showGridController.fireShowGridEvent(display.getMenuItemShowGrid().isSelected()));</span>
+<span class="nc" id="L75">		display.getMenuItemMove().addActionListener(ectionEvent -&gt; {</span>
+<span class="nc" id="L76">			moveUnitController.fireStartMoveEvent();</span>
+<span class="nc" id="L77">			display.getMenuItemMove().setEnabled(false);</span>
+<span class="nc" id="L78">		});</span>
+<span class="nc" id="L79">		display.getMenuItemCenterView().addActionListener(event -&gt; viewController.fireCenterView());</span>
+<span class="nc" id="L80">		languangeController.addLanguageListener(event -&gt; {</span>
+<span class="nc" id="L81">			display.updateLanguage();</span>
+<span class="nc" id="L82">		});</span>
+<span class="nc" id="L83">		focusedTileController.addFocusedTileListener(event -&gt; {</span>
+<span class="nc" id="L84">			display.getMenuItemCenterView().setEnabled(true);</span>
+<span class="nc bnc" id="L85" title="All 2 branches missed.">			if (event.isTileContainsMovebleUnit()) {</span>
+<span class="nc" id="L86">				display.getMenuItemMove().setEnabled(true);</span>
+<span class="nc" id="L87">			} else {</span>
+<span class="nc" id="L88">				display.getMenuItemMove().setEnabled(false);</span>
+			}
+<span class="nc" id="L90">		});</span>
+<span class="nc" id="L91">	}</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

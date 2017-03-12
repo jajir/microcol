@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>WalkAnimator.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">MicroCol game classes</a> &gt; <a href="index.source.html" class="el_package">org.microcol.gui.panelview</a> &gt; <span class="el_source">WalkAnimator.java</span></div><h1>WalkAnimator.java</h1><pre class="source lang-java linenums">package org.microcol.gui.panelview;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.microcol.gui.PathPlanning;
+import org.microcol.gui.Point;
+import org.microcol.model.Location;
+import org.microcol.model.Ship;
+
+import com.google.common.base.Preconditions;
+
+/**
+ * Draw walk animation based on predefined path.
+ * 
+ */
+public class WalkAnimator {
+
+	/**
+	 * Total path that have to animated, it's list of location on map.
+	 */
+	private final List&lt;Location&gt; path;
+
+	/**
+	 * Moving unit.
+	 */
+	private final Ship unit;
+
+	/**
+	 * Path computing.
+	 */
+	private final PathPlanning pathPlanning;
+
+	/**
+	 * Final tile where animation finish.
+	 */
+	private final Location to;
+
+	/**
+	 * Contains locations for move between two tiles.
+	 */
+	private final List&lt;Point&gt; partialPath;
+
+	/**
+	 * 
+	 */
+	private Location partialPathFrom;
+
+	private Point nextCoordinates;
+
+<span class="fc" id="L51">	public WalkAnimator(final PathPlanning pathPlanning, final List&lt;Location&gt; path, final Ship unit) {</span>
+<span class="fc" id="L52">		Preconditions.checkNotNull(path);</span>
+<span class="pc bpc" id="L53" title="1 of 2 branches missed.">		Preconditions.checkArgument(!path.isEmpty(), &quot;Path can't be empty&quot;);</span>
+<span class="pc bpc" id="L54" title="1 of 2 branches missed.">		Preconditions.checkArgument(path.size() &gt; 1, &quot;Path should contains more than one locations&quot;);</span>
+<span class="fc" id="L55">		this.pathPlanning = Preconditions.checkNotNull(pathPlanning);</span>
+<span class="fc" id="L56">		this.unit = Preconditions.checkNotNull(unit);</span>
+<span class="fc" id="L57">		this.path = new ArrayList&lt;&gt;(path);</span>
+<span class="fc" id="L58">		partialPathFrom = this.path.remove(0);</span>
+<span class="fc" id="L59">		to = this.path.get(this.path.size() - 1);</span>
+<span class="fc" id="L60">		partialPath = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L61">		countNextAnimationLocation();</span>
+<span class="fc" id="L62">	}</span>
+
+	public void countNextAnimationLocation() {
+<span class="fc bfc" id="L65" title="All 2 branches covered.">		if (partialPath.isEmpty()) {</span>
+<span class="fc" id="L66">			nextCoordinates = null;</span>
+<span class="fc bfc" id="L67" title="All 2 branches covered.">			if (!path.isEmpty()) {</span>
+				// pathPlanning.paintPath(partialPathFrom.multiply(GamePanelView.TOTAL_TILE_WIDTH_IN_PX),
+				// path.get(0).multiply(GamePanelView.TOTAL_TILE_WIDTH_IN_PX),
+				// point -&gt; {
+				// TODO JJ Point should be used
+<span class="fc" id="L72">				final Location from = new Location(partialPathFrom.getX() * GamePanelView.TOTAL_TILE_WIDTH_IN_PX,</span>
+<span class="fc" id="L73">						partialPathFrom.getY() * GamePanelView.TOTAL_TILE_WIDTH_IN_PX);</span>
+<span class="fc" id="L74">				final Location to = new Location(path.get(0).getX() * GamePanelView.TOTAL_TILE_WIDTH_IN_PX,</span>
+<span class="fc" id="L75">						path.get(0).getY() * GamePanelView.TOTAL_TILE_WIDTH_IN_PX);</span>
+<span class="fc" id="L76">				pathPlanning.paintPath(from, to, location -&gt; {</span>
+<span class="fc" id="L77">					partialPath.add(Point.of(location.getX(), location.getY()));</span>
+<span class="fc" id="L78">				});</span>
+<span class="fc" id="L79">				partialPathFrom = path.remove(0);</span>
+			}
+		}
+<span class="fc bfc" id="L82" title="All 2 branches covered.">		if (partialPath.isEmpty()) {</span>
+<span class="fc" id="L83">			nextCoordinates = null;</span>
+<span class="fc" id="L84">		} else {</span>
+<span class="fc" id="L85">			nextCoordinates = partialPath.remove(0);</span>
+		}
+<span class="fc" id="L87">	}</span>
+
+	/**
+	 * Provide information if animation should continue.
+	 * 
+	 * @return return &lt;code&gt;true&lt;/code&gt; when not all animation was drawn, it
+	 *         return &lt;code&gt;false&lt;/code&gt; when all animation is done
+	 */
+	public boolean isNextAnimationLocationAvailable() {
+<span class="fc bfc" id="L96" title="All 2 branches covered.">		return nextCoordinates != null;</span>
+	}
+
+	/**
+	 * Return location tile where animated unit go.
+	 * 
+	 * @return {@link Location} return to tile location
+	 */
+	public Location getTo() {
+<span class="fc" id="L105">		return to;</span>
+	}
+
+	public Point getNextCoordinates() {
+<span class="fc" id="L109">		return nextCoordinates;</span>
+	}
+
+	public Ship getUnit() {
+<span class="nc" id="L113">		return unit;</span>
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

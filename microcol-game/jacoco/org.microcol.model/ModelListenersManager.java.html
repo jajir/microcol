@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ModelListenersManager.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">MicroCol game classes</a> &gt; <a href="index.source.html" class="el_package">org.microcol.model</a> &gt; <span class="el_source">ModelListenersManager.java</span></div><h1>ModelListenersManager.java</h1><pre class="source lang-java linenums">package org.microcol.model;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.microcol.model.event.GameFinishedEvent;
+import org.microcol.model.event.GameStartedEvent;
+import org.microcol.model.event.RoundStartedEvent;
+import org.microcol.model.event.ShipMovedEvent;
+import org.microcol.model.event.TurnStartedEvent;
+
+// TODO JKA Documentation
+// TODO JKA Tests
+class ModelListenersManager {
+	private final List&lt;ModelListener&gt; listeners;
+
+<span class="nc" id="L17">	public ModelListenersManager() {</span>
+<span class="nc" id="L18">		this.listeners = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L19">	}</span>
+
+	public void addListener(final ModelListener listener) {
+<span class="nc bnc" id="L22" title="All 2 branches missed.">		if (!listeners.contains(listener)) {</span>
+<span class="nc" id="L23">			listeners.add(listener);</span>
+		}
+<span class="nc" id="L25">	}</span>
+
+	public void removeListener(final ModelListener listener) {
+<span class="nc" id="L28">		listeners.remove(listener);</span>
+<span class="nc" id="L29">	}</span>
+
+	public void fireGameStarted(final Game game) {
+<span class="nc" id="L32">		final GameStartedEvent event = new GameStartedEvent(game);</span>
+
+<span class="nc" id="L34">		listeners.forEach(listener -&gt; {</span>
+<span class="nc" id="L35">			listener.gameStarted(event);</span>
+<span class="nc" id="L36">		});</span>
+<span class="nc" id="L37">	}</span>
+
+	public void fireRoundStarted(final Game game, final Calendar calendar) {
+<span class="nc" id="L40">		final RoundStartedEvent event = new RoundStartedEvent(game, calendar);</span>
+
+<span class="nc" id="L42">		listeners.forEach(listener -&gt; {</span>
+<span class="nc" id="L43">			listener.roundStarted(event);</span>
+<span class="nc" id="L44">		});</span>
+<span class="nc" id="L45">	}</span>
+
+	public void fireTurnStarted(final Game game, final Player player) {
+<span class="nc" id="L48">		final TurnStartedEvent event = new TurnStartedEvent(game, player);</span>
+
+<span class="nc" id="L50">		listeners.forEach(listener -&gt; {</span>
+<span class="nc" id="L51">			listener.turnStarted(event);</span>
+<span class="nc" id="L52">		});</span>
+<span class="nc" id="L53">	}</span>
+
+	public void fireShipMoved(final Game game, final Ship ship, final Location startLocation, final Path path) {
+<span class="nc" id="L56">		final ShipMovedEvent event = new ShipMovedEvent(game, ship, startLocation, path);</span>
+
+<span class="nc" id="L58">		listeners.forEach(listener -&gt; {</span>
+<span class="nc" id="L59">			listener.shipMoved(event);</span>
+<span class="nc" id="L60">		});</span>
+<span class="nc" id="L61">	}</span>
+
+	public void fireGameFinished(final Game game) {
+<span class="nc" id="L64">		final GameFinishedEvent event = new GameFinishedEvent(game);</span>
+
+<span class="nc" id="L66">		listeners.forEach(listener -&gt; {</span>
+<span class="nc" id="L67">			listener.gameFinished(event);</span>
+<span class="nc" id="L68">		});</span>
+<span class="nc" id="L69">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

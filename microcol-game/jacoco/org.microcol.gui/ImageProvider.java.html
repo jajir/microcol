@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ImageProvider.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">MicroCol game classes</a> &gt; <a href="index.source.html" class="el_package">org.microcol.gui</a> &gt; <span class="el_source">ImageProvider.java</span></div><h1>ImageProvider.java</h1><pre class="source lang-java linenums">package org.microcol.gui;
+
+import java.awt.Graphics2D;
+import java.awt.GraphicsConfiguration;
+import java.awt.GraphicsEnvironment;
+import java.awt.Image;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.imageio.ImageIO;
+
+/**
+ * Provide image instances.
+ * 
+ * @author jan
+ *
+ */
+public class ImageProvider {
+
+	public final static String IMG_CURSOR_GOTO = &quot;cursor-goto.png&quot;;
+
+	public final static String IMG_ICON_STEPS_25x25 = &quot;icon-steps-25x25.png&quot;;
+
+	public final static String IMG_ICON_STEPS_TURN_25x25 = &quot;icon-steps-turn-25x25.png&quot;;
+
+	public final static String IMG_SPLASH_SCREEN = &quot;splash-screen.png&quot;;
+
+	public final static String IMG_TILE_OCEAN = &quot;tile-ocean.png&quot;;
+
+	public final static String IMG_TILE_SHIP1 = &quot;tile-ship1.png&quot;;
+
+	public final static String IMG_TILE_SHIP2 = &quot;tile-ship2.png&quot;;
+
+	public final static String IMG_TILE_MODE_GOTO = &quot;tile-mode-goto.png&quot;;
+
+	public final static String IMG_TILE_MODE_FORTIFY = &quot;tile-mode-fortify.png&quot;;
+
+	public final static String IMG_TILE_MODE_PLOW = &quot;tile-mode-plow.png&quot;;
+
+	public final static String IMG_TILE_MODE_ROAD = &quot;tile-mode-road.png&quot;;
+
+	private final static String BASE_PACKAGE = &quot;images&quot;;
+
+	private final Map&lt;String, BufferedImage&gt; images;
+
+<span class="fc" id="L49">	public ImageProvider() {</span>
+<span class="fc" id="L50">		images = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L51">	}</span>
+
+	/**
+	 * Load image for name.
+	 * 
+	 * @param name
+	 *            required image name
+	 * @return loaded image
+	 */
+	public Image getImage(final String name) {
+<span class="fc" id="L61">		BufferedImage img = images.get(name);</span>
+<span class="fc bfc" id="L62" title="All 2 branches covered.">		if (img == null) {</span>
+<span class="fc" id="L63">			img = ImageProvider.getRawImage(BASE_PACKAGE + &quot;/&quot; + name);</span>
+<span class="pc bpc" id="L64" title="1 of 2 branches missed.">			if (img == null) {</span>
+<span class="nc" id="L65">				return null;</span>
+			} else {
+<span class="fc" id="L67">				images.put(name, img);</span>
+			}
+		}
+<span class="fc" id="L70">		return img;</span>
+	}
+
+	/**
+	 * This should improve image draw speed.
+	 *
+	 * @param image
+	 *            required image
+	 * @return improved image
+	 */
+	@SuppressWarnings(&quot;unused&quot;)
+	private BufferedImage getCompatibleImage(final BufferedImage image) {
+		// obtain the current system graphical settings
+<span class="nc" id="L83">		GraphicsConfiguration gfx_config = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice()</span>
+<span class="nc" id="L84">				.getDefaultConfiguration();</span>
+
+		/*
+		 * if image is already compatible and optimized for current system
+		 * settings, simply return it
+		 */
+<span class="nc bnc" id="L90" title="All 2 branches missed.">		if (image.getColorModel().equals(gfx_config.getColorModel()))</span>
+<span class="nc" id="L91">			return image;</span>
+
+		// image is not optimized, so create a new image that is
+<span class="nc" id="L94">		BufferedImage new_image = gfx_config.createCompatibleImage(image.getWidth(), image.getHeight(),</span>
+<span class="nc" id="L95">				image.getTransparency());</span>
+
+		// get the graphics context of the new image to draw the old image on
+<span class="nc" id="L98">		Graphics2D g2d = (Graphics2D) new_image.getGraphics();</span>
+
+		// actually draw the image and dispose of context no longer needed
+<span class="nc" id="L101">		g2d.drawImage(image, 0, 0, null);</span>
+<span class="nc" id="L102">		g2d.dispose();</span>
+
+		// return the new optimized image
+<span class="nc" id="L105">		return new_image;</span>
+	}
+
+	/**
+	 * Simplify loading image from resource. Path should look like: &lt;code&gt;
+	 * org/microcol/images/unit-60x60.gif
+	 * &lt;/code&gt;
+	 * 
+	 * @param path
+	 *            path at classpath where is stored image
+	 * @return image object
+	 */
+	public static BufferedImage getRawImage(final String path) {
+		try {
+<span class="fc" id="L119">			ClassLoader cl = ImageProvider.class.getClassLoader();</span>
+<span class="fc" id="L120">			final InputStream in = cl.getResourceAsStream(path);</span>
+<span class="fc bfc" id="L121" title="All 2 branches covered.">			if (in == null) {</span>
+<span class="fc" id="L122">				throw new MicroColException(&quot;Unable to load file '&quot; + path + &quot;'.&quot;);</span>
+			} else {
+<span class="fc" id="L124">				return ImageIO.read(cl.getResourceAsStream(path));</span>
+			}
+<span class="nc" id="L126">		} catch (IOException e) {</span>
+<span class="nc" id="L127">			throw new MicroColException(&quot;Unable to load file '&quot; + path + &quot;'.&quot;, e);</span>
+		}
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

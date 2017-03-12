@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MainFramePresenter.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">MicroCol game classes</a> &gt; <a href="index.source.html" class="el_package">org.microcol.gui</a> &gt; <span class="el_source">MainFramePresenter.java</span></div><h1>MainFramePresenter.java</h1><pre class="source lang-java linenums"><span class="nc" id="L1">package org.microcol.gui;</span>
+
+import java.awt.Rectangle;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+
+import javax.swing.JFrame;
+
+import org.apache.log4j.Logger;
+import org.microcol.gui.event.GameEventController;
+import org.microcol.gui.event.GameEventListener;
+import org.microcol.gui.event.KeyController;
+
+import com.google.common.base.Preconditions;
+import com.google.inject.Inject;
+
+/**
+ * MicroCol's main frame.
+ */
+public class MainFramePresenter {
+
+	public interface Display {
+
+		JFrame getFrame();
+	}
+
+<span class="nc" id="L31">	private final Logger logger = Logger.getLogger(MainFramePresenter.class);</span>
+
+	private Rectangle lastNormalBounds;
+
+	private final GamePreferences gamePreferences;
+
+	private final MainFramePresenter.Display display;
+
+	@Inject
+<span class="nc" id="L40">	public MainFramePresenter(final MainFramePresenter.Display display, final KeyController keyController,</span>
+			final GamePreferences gamePreferences, final GameEventController gameEventController) {
+<span class="nc" id="L42">		this.gamePreferences = Preconditions.checkNotNull(gamePreferences);</span>
+<span class="nc" id="L43">		this.display = Preconditions.checkNotNull(display);</span>
+<span class="nc" id="L44">		display.getFrame().addKeyListener(new KeyAdapter() {</span>
+			@Override
+			public void keyPressed(final KeyEvent e) {
+<span class="nc" id="L47">				keyController.fireKeyWasPressed(e);</span>
+<span class="nc" id="L48">			}</span>
+		});
+
+<span class="nc" id="L51">		display.getFrame().addComponentListener(new ComponentAdapter() {</span>
+			@Override
+			public void componentMoved(ComponentEvent event) {
+<span class="nc bnc" id="L54" title="All 2 branches missed.">				if (display.getFrame().getExtendedState() == JFrame.NORMAL) {</span>
+<span class="nc" id="L55">					lastNormalBounds = display.getFrame().getBounds();</span>
+				}
+<span class="nc" id="L57">			}</span>
+
+			@Override
+			public void componentResized(ComponentEvent event) {
+<span class="nc bnc" id="L61" title="All 2 branches missed.">				if (display.getFrame().getExtendedState() == JFrame.NORMAL) {</span>
+<span class="nc" id="L62">					lastNormalBounds = display.getFrame().getBounds();</span>
+				}
+<span class="nc" id="L64">			}</span>
+		});
+
+<span class="nc" id="L67">		gameEventController.addGameEventListener(new GameEventListener() {</span>
+
+			@Override
+			public void onGameExit() {
+<span class="nc" id="L71">				savePreferences();</span>
+<span class="nc" id="L72">				display.getFrame().dispose();</span>
+<span class="nc" id="L73">			}</span>
+
+			@Override
+			public void onAboutGame() {
+				/**
+				 * Do nothing
+				 */
+<span class="nc" id="L80">			}</span>
+		});
+
+<span class="nc" id="L83">		display.getFrame().addWindowListener(new WindowAdapter() {</span>
+			@Override
+			public void windowClosing(WindowEvent event) {
+<span class="nc" id="L86">				logger.debug(&quot;Event windowClosing&quot;);</span>
+<span class="nc" id="L87">				gameEventController.fireGameExit();</span>
+<span class="nc" id="L88">			}</span>
+		});
+<span class="nc" id="L90">	}</span>
+
+	private void savePreferences() {
+<span class="nc bnc" id="L93" title="All 2 branches missed.">		final Rectangle normalBounds = display.getFrame().getExtendedState() == JFrame.NORMAL</span>
+<span class="nc" id="L94">				? display.getFrame().getBounds() : lastNormalBounds;</span>
+<span class="nc" id="L95">		gamePreferences.setMainFramePosition(normalBounds);</span>
+<span class="nc" id="L96">		gamePreferences.setMainFrameState(display.getFrame().getExtendedState());</span>
+<span class="nc" id="L97">	}</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>
