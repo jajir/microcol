@@ -185,7 +185,6 @@
 				<artifactId>maven-site-plugin</artifactId>
 			</plugin>
 			<!-- Deploy the web site -->
-			<!-- 
 			<plugin>
 				<groupId>com.github.github</groupId>
 				<artifactId>site-maven-plugin</artifactId>
@@ -193,7 +192,6 @@
 					<path>microcol-game/</path>
 				</configuration>
 			</plugin>
-			 -->
 		</plugins>
 	</build>
 
