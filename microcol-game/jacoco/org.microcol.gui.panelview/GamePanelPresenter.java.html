@@ -85,7 +85,7 @@ public class GamePanelPresenter implements Localized {
 
 	private Point lastMousePosition;
 
-	class PopUpDemo extends JPopupMenu {
+	static class PopUpDemo extends JPopupMenu {
 
 		/**
 		 * Default serialVersionUID.
