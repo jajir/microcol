@@ -155,28 +155,36 @@ public class GamePanelPresenter implements Localized {
 			@Override
 			public void mousePressed(final MouseEvent e) {
 				logger.debug("mouse pressed at " + e.getX() + ", " + e.getY() + ", " + e.getButton());
-				if (e.isPopupTrigger()) {
-					doPop(e);
+				if (isMouseEnabled()) {
+					if (e.isPopupTrigger()) {
+						doPop(e);
+					}
+					onMousePressed(e);
 				}
-				onMousePressed(e);
 			}
 
 			@Override
 			public void mouseReleased(final MouseEvent e) {
-				if (e.isPopupTrigger()) {
-					doPop(e);
+				if (isMouseEnabled()) {
+					if (e.isPopupTrigger()) {
+						doPop(e);
+					}
 				}
 			}
 
 			@Override
 			public void mouseMoved(final MouseEvent e) {
-				onMouseMoved(e);
+				if (isMouseEnabled()) {
+					onMouseMoved(e);
+				}
 			}
 
 			@Override
 			public void mouseDragged(final MouseEvent e) {
-				logger.debug("mouse dragged at " + e.getX() + ", " + e.getY() + ", " + e.getButton());
-				onMouseDragged(e);
+				if (isMouseEnabled()) {
+					logger.debug("mouse dragged at " + e.getX() + ", " + e.getY() + ", " + e.getButton());
+					onMouseDragged(e);
+				}
 			}
 
 			private void doPop(MouseEvent e) {
@@ -209,6 +217,10 @@ public class GamePanelPresenter implements Localized {
 			}
 		});
 
+	}
+
+	private boolean isMouseEnabled() {
+		return gameController.getGame().getCurrentPlayer().isHuman();
 	}
 
 	private void onCenterView() {
