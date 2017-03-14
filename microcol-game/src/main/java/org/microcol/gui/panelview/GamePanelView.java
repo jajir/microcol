@@ -154,6 +154,7 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 	 */
 	@Override
 	public void paint(final Graphics g) {
+		super.paint(g);
 		final Graphics2D g2d = (Graphics2D) g;
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		final Area area = new Area((JViewport) this.getParent(), gameController.getGame().getMap());

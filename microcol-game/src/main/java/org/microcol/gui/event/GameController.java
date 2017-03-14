@@ -60,9 +60,16 @@ public class GameController implements Localized {
 	 */
 	public void newGame() {
 		GameBuilder builder = new GameBuilder();
-		game = builder.setMap(500, 500).setCalendar(1570, 1800).addPlayer("Player1", false).addShip("Player1", 5, 5, 5)
-				.addShip("Player1", 5, 4, 4).addPlayer("Pocitac", true).addShip("Pocitac", 5, 6, 6)
-				.addShip("Pocitac", 5, 7, 7).addShip("Pocitac", 5, 8, 8).build();
+		game = builder.setMap(500, 500).setCalendar(1570, 1800)
+				/**
+				 * Player 1
+				 */
+				.addPlayer("Player1", false).addShip("Player1", 5, 5, 5).addShip("Player1", 5, 4, 4)
+				/**
+				 * PLayer 2
+				 */
+				.addPlayer("Pocitac", true).addShip("Pocitac", 5, 6, 6).addShip("Pocitac", 5, 7, 7)
+				.addShip("Pocitac", 5, 8, 8).build();
 		game.addListener(new ModelListener() {
 
 			@Override
