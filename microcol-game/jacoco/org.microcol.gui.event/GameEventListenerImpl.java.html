@@ -8,10 +8,12 @@ import org.microcol.gui.ViewUtil;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
-
+//TODO JJ listener should support some prioritization of listeners
+//TODO JJ add some generic suer class for controllers.
+//TODO generic controller should support parametrized event method
 public class GameEventListenerImpl implements GameEventListener {
 
-<span class="nc" id="L14">	private final Logger logger = Logger.getLogger(GameEventListenerImpl.class);</span>
+<span class="nc" id="L16">	private final Logger logger = Logger.getLogger(GameEventListenerImpl.class);</span>
 
 	private final ViewUtil viewUtil;
 
@@ -21,23 +23,25 @@ public class GameEventListenerImpl implements GameEventListener {
 
 	@Inject
 	public GameEventListenerImpl(final GameEventController gameEventController, final ViewUtil viewUtil,
-<span class="nc" id="L24">			final Text text, final MusicController musicController) {</span>
-<span class="nc" id="L25">		gameEventController.addGameEventListener(this);</span>
-<span class="nc" id="L26">		this.viewUtil = Preconditions.checkNotNull(viewUtil);</span>
-<span class="nc" id="L27">		this.text = Preconditions.checkNotNull(text);</span>
-<span class="nc" id="L28">		this.musicController = Preconditions.checkNotNull(musicController);</span>
-<span class="nc" id="L29">	}</span>
+<span class="nc" id="L26">			final Text text, final MusicController musicController) {</span>
+<span class="nc" id="L27">		gameEventController.addGameEventListener(this);</span>
+<span class="nc" id="L28">		this.viewUtil = Preconditions.checkNotNull(viewUtil);</span>
+<span class="nc" id="L29">		this.text = Preconditions.checkNotNull(text);</span>
+<span class="nc" id="L30">		this.musicController = Preconditions.checkNotNull(musicController);</span>
+<span class="nc" id="L31">	}</span>
 
 	@Override
 	public void onGameExit() {
-<span class="nc" id="L33">		logger.debug(&quot;onGameExit was triggered&quot;);</span>
-<span class="nc" id="L34">		musicController.stop();</span>
-<span class="nc" id="L35">	}</span>
+<span class="nc" id="L35">		logger.debug(&quot;onGameExit was triggered&quot;);</span>
+<span class="nc" id="L36">		musicController.stop();</span>
+		//TODO JJ following code should be in separate listener
+<span class="nc" id="L38">		System.exit(0);</span>
+<span class="nc" id="L39">	}</span>
 
 	@Override
 	public void onAboutGame() {
-<span class="nc" id="L39">		new AboutDialog(viewUtil, text).setVisible(true);</span>
-<span class="nc" id="L40">	}</span>
+<span class="nc" id="L43">		new AboutDialog(viewUtil, text).setVisible(true);</span>
+<span class="nc" id="L44">	}</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>
