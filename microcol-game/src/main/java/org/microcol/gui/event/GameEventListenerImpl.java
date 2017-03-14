@@ -8,7 +8,9 @@ import org.microcol.gui.ViewUtil;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
-
+//TODO JJ listener should support some prioritization of listeners
+//TODO JJ add some generic suer class for controllers.
+//TODO generic controller should support parametrized event method
 public class GameEventListenerImpl implements GameEventListener {
 
 	private final Logger logger = Logger.getLogger(GameEventListenerImpl.class);
@@ -32,6 +34,8 @@ public class GameEventListenerImpl implements GameEventListener {
 	public void onGameExit() {
 		logger.debug("onGameExit was triggered");
 		musicController.stop();
+		//TODO JJ following code should be in separate listener
+		System.exit(0);
 	}
 
 	@Override
