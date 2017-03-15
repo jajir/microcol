@@ -1,96 +1,99 @@
 GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
 MicroCol game classes,org.microcol.model.event,ModelEvent,11,0,0,0,4,0,2,0,2,0
-MicroCol game classes,org.microcol.model.event,RoundStartedEvent,20,0,0,0,7,0,3,0,3,0
 MicroCol game classes,org.microcol.model.event,TurnStartedEvent,20,0,0,0,7,0,3,0,3,0
-MicroCol game classes,org.microcol.model.event,GameStartedEvent,8,0,0,0,4,0,2,0,2,0
 MicroCol game classes,org.microcol.model.event,GameFinishedEvent,8,0,0,0,4,0,2,0,2,0
+MicroCol game classes,org.microcol.model.event,RoundStartedEvent,20,0,0,0,7,0,3,0,3,0
+MicroCol game classes,org.microcol.model.event,GameStartedEvent,8,0,0,0,4,0,2,0,2,0
 MicroCol game classes,org.microcol.model.event,ShipMovedEvent,44,0,0,0,13,0,5,0,5,0
 MicroCol game classes,org.microcol.gui.panelview,GamePanelPresenter.PopUpDemo,28,0,2,0,5,0,2,0,1,0
 MicroCol game classes,org.microcol.gui.panelview,Area,106,123,16,0,13,20,15,6,7,6
 MicroCol game classes,org.microcol.gui.panelview,WalkAnimator,5,160,2,10,1,30,3,10,1,6
-MicroCol game classes,org.microcol.gui.panelview,GamePanelView,944,0,59,0,186,0,76,0,45,0
 MicroCol game classes,org.microcol.gui.panelview,ScreenScrolling,60,0,4,0,9,0,6,0,4,0
-MicroCol game classes,org.microcol.gui.panelview,GamePanelPresenter.new GameEventListener() {...},14,0,0,0,4,0,3,0,3,0
+MicroCol game classes,org.microcol.gui.panelview,GamePanelPresenter,542,0,22,0,104,0,31,0,20,0
+MicroCol game classes,org.microcol.gui.panelview,GamePanelListener,16,0,0,0,8,0,5,0,5,0
+MicroCol game classes,org.microcol.gui.panelview,GamePanelView,944,0,59,0,186,0,76,0,45,0
 MicroCol game classes,org.microcol.gui.panelview,GamePanelPresenter.new MouseAdapter() {...},109,0,12,0,21,0,12,0,6,0
 MicroCol game classes,org.microcol.gui.panelview,GamePanelPresenter.new KeyAdapter() {...},46,0,4,0,8,0,4,0,2,0
-MicroCol game classes,org.microcol.gui.panelview,GamePanelPresenter,542,0,22,0,104,0,30,0,19,0
-MicroCol game classes,org.microcol.gui.panelview,GamePanelListener,16,0,0,0,8,0,5,0,5,0
 MicroCol game classes,org.microcol.gui.panelview,GoToMode,21,0,2,0,7,0,5,0,4,0
 MicroCol game classes,org.microcol,MicroCol,145,0,10,0,48,0,13,0,8,0
 MicroCol game classes,org.microcol.ai,SkyNet,188,0,16,0,35,0,15,0,7,0
 MicroCol game classes,org.microcol.ai,SkyNet.new ModelListener() {...},20,0,2,0,8,0,7,0,6,0
 MicroCol game classes,org.microcol.gui.event,ViewController,25,0,0,0,7,0,4,0,4,0
 MicroCol game classes,org.microcol.gui.event,ChangeLanguageEvent,15,0,0,0,6,0,3,0,3,0
-MicroCol game classes,org.microcol.gui.event,ShowGridController,47,0,0,0,12,0,4,0,4,0
 MicroCol game classes,org.microcol.gui.event,VolumeChangedListenerPreferences,12,0,0,0,3,0,2,0,2,0
 MicroCol game classes,org.microcol.gui.event,ChangeLanguageListenerPreferences,17,0,0,0,6,0,2,0,2,0
 MicroCol game classes,org.microcol.gui.event,MoveUnitController,53,0,0,0,18,0,7,0,7,0
-MicroCol game classes,org.microcol.gui.event,FocusedTileEvent,48,0,4,0,9,0,6,0,4,0
 MicroCol game classes,org.microcol.gui.event,FocusedTileController,45,0,0,0,12,0,4,0,4,0
-MicroCol game classes,org.microcol.gui.event,GameController,158,0,0,0,27,0,8,0,8,0
 MicroCol game classes,org.microcol.gui.event,ChangeLanguageController.Priority,38,0,0,0,2,0,4,0,4,0
 MicroCol game classes,org.microcol.gui.event,ChangeLanguageListenerText,18,0,0,0,6,0,2,0,2,0
 MicroCol game classes,org.microcol.gui.event,TurnStartedController,45,0,0,0,12,0,4,0,4,0
 MicroCol game classes,org.microcol.gui.event,StatusBarMessageControllerImpl,45,0,0,0,12,0,4,0,4,0
 MicroCol game classes,org.microcol.gui.event,VolumeChangeEvent,9,0,0,0,4,0,2,0,2,0
-MicroCol game classes,org.microcol.gui.event,GameEventController,45,0,0,0,16,0,6,0,6,0
 MicroCol game classes,org.microcol.gui.event,ChangeLanguageController,80,0,2,0,21,0,6,0,5,0
-MicroCol game classes,org.microcol.gui.event,ExitGameEvent,3,0,0,0,1,0,1,0,1,0
-MicroCol game classes,org.microcol.gui.event,GameController.new ModelListener() {...},105,0,0,0,16,0,6,0,6,0
+MicroCol game classes,org.microcol.gui.event,ExitGameEvent,7,0,0,0,2,0,2,0,2,0
 MicroCol game classes,org.microcol.gui.event,ShowGridListenerPreferences,12,0,0,0,3,0,2,0,2,0
 MicroCol game classes,org.microcol.gui.event,ShowGridEvent,9,0,0,0,4,0,2,0,2,0
-MicroCol game classes,org.microcol.gui.event,VolumeChangeController,47,0,0,0,12,0,4,0,4,0
 MicroCol game classes,org.microcol.gui.event,KeyController,45,0,0,0,12,0,4,0,4,0
-MicroCol game classes,org.microcol.gui.event,GameEventListenerImpl,45,0,0,0,13,0,3,0,3,0
-MicroCol game classes,org.microcol.gui.event,NextTurnController,45,0,0,0,12,0,4,0,4,0
+MicroCol game classes,org.microcol.gui.event,GameEventListenerImpl,26,0,0,0,7,0,2,0,2,0
 MicroCol game classes,org.microcol.gui.event,NewGameController,46,0,0,0,12,0,4,0,4,0
+MicroCol game classes,org.microcol.gui.event,ShowGridController,47,0,0,0,12,0,4,0,4,0
+MicroCol game classes,org.microcol.gui.event,FocusedTileEvent,48,0,4,0,9,0,6,0,4,0
+MicroCol game classes,org.microcol.gui.event,EventInitializer,25,0,0,0,6,0,3,0,3,0
+MicroCol game classes,org.microcol.gui.event,GameController,158,0,0,0,27,0,8,0,8,0
+MicroCol game classes,org.microcol.gui.event,GameEventController,33,0,0,0,11,0,4,0,4,0
+MicroCol game classes,org.microcol.gui.event,OrderedEventController.ValueWithPriority,0,18,0,0,0,6,0,3,0,3
+MicroCol game classes,org.microcol.gui.event,GameController.new ModelListener() {...},105,0,0,0,16,0,6,0,6,0
+MicroCol game classes,org.microcol.gui.event,ExitGameController,3,0,0,0,1,0,1,0,1,0
+MicroCol game classes,org.microcol.gui.event,VolumeChangeController,47,0,0,0,12,0,4,0,4,0
+MicroCol game classes,org.microcol.gui.event,NextTurnController,45,0,0,0,12,0,4,0,4,0
+MicroCol game classes,org.microcol.gui.event,OrderedEventController,5,62,0,0,2,12,1,5,1,5
 MicroCol game classes,org.microcol.gui.model,TileOcean,3,0,0,0,1,0,1,0,1,0
-MicroCol game classes,org.microcol.gui,AboutDialog,91,0,0,0,15,0,2,0,2,0
-MicroCol game classes,org.microcol.gui,MainFramePresenter.new WindowAdapter() {...},18,0,0,0,4,0,2,0,2,0
-MicroCol game classes,org.microcol.gui,UnitsPanel,187,0,2,0,29,0,4,0,3,0
-MicroCol game classes,org.microcol.gui,AppleMenuListener,16,0,0,0,7,0,3,0,3,0
-MicroCol game classes,org.microcol.gui,Localized,2,0,0,0,1,0,1,0,1,0
+MicroCol game classes,org.microcol.gui,MainFramePresenter.new WindowAdapter() {...},21,0,0,0,4,0,2,0,2,0
 MicroCol game classes,org.microcol.gui,Text.Language,9,45,0,0,0,6,2,3,2,3
-MicroCol game classes,org.microcol.gui,MicroColException,5,4,0,0,2,2,1,1,1,1
-MicroCol game classes,org.microcol.gui,MusicPlayer,135,0,6,0,41,0,7,0,4,0
-MicroCol game classes,org.microcol.gui,MainFramePresenter,73,0,2,0,14,0,3,0,2,0
+MicroCol game classes,org.microcol.gui,MainFramePresenter,83,0,2,0,18,0,4,0,3,0
 MicroCol game classes,org.microcol.gui,PathPlanning,255,165,19,15,32,24,12,10,2,3
 MicroCol game classes,org.microcol.gui,ImageProvider,54,64,3,5,13,14,3,5,1,3
-MicroCol game classes,org.microcol.gui,StatusBarPresenter,82,0,0,0,18,0,5,0,5,0
 MicroCol game classes,org.microcol.gui,MainFramePresenter.new KeyAdapter() {...},14,0,0,0,3,0,2,0,2,0
-MicroCol game classes,org.microcol.gui,MainFramePresenter.new GameEventListener() {...},18,0,0,0,5,0,3,0,3,0
+MicroCol game classes,org.microcol.gui,MainFramePresenter.new GameEventListener() {...},7,0,0,0,2,0,2,0,2,0
 MicroCol game classes,org.microcol.gui,MainFramePresenter.new ComponentAdapter() {...},37,0,4,0,7,0,5,0,3,0
-MicroCol game classes,org.microcol.gui,MicroColModule,207,0,0,0,42,0,3,0,3,0
+MicroCol game classes,org.microcol.gui,MicroColModule,217,0,0,0,44,0,3,0,3,0
 MicroCol game classes,org.microcol.gui,RightPanelPresenter.new KeyAdapter() {...},14,0,0,0,3,0,2,0,2,0
 MicroCol game classes,org.microcol.gui,MusicController,40,0,0,0,10,0,6,0,6,0
 MicroCol game classes,org.microcol.gui,RightPanelPresenter.new MouseAdapter() {...},18,0,0,0,4,0,2,0,2,0
-MicroCol game classes,org.microcol.gui,MainMenuPresenter,194,0,10,0,53,0,20,0,15,0
-MicroCol game classes,org.microcol.gui,GamePreferences,140,0,0,0,36,0,13,0,13,0
+MicroCol game classes,org.microcol.gui,MainMenuPresenter,197,0,10,0,53,0,20,0,15,0
 MicroCol game classes,org.microcol.gui,RightPanelPresenter.new MouseAdapter() {...},18,0,0,0,3,0,2,0,2,0
 MicroCol game classes,org.microcol.gui,FpsCounter,59,0,0,0,17,0,6,0,6,0
-MicroCol game classes,org.microcol.gui,RightPanelPresenter,114,0,8,0,25,0,10,0,6,0
 MicroCol game classes,org.microcol.gui,StatusBarPresenter.new MouseAdapter() {...},18,0,0,0,3,0,2,0,2,0
 MicroCol game classes,org.microcol.gui,StatusBarPresenter.new MouseAdapter() {...},18,0,0,0,4,0,2,0,2,0
-MicroCol game classes,org.microcol.gui,StatusBarView,104,0,0,0,12,0,3,0,3,0
 MicroCol game classes,org.microcol.gui,MainPanelView,84,0,0,0,7,0,1,0,1,0
+MicroCol game classes,org.microcol.gui,UnitsPanel.new MouseAdapter() {...},18,0,0,0,3,0,2,0,2,0
+MicroCol game classes,org.microcol.gui,StepCounter,32,0,4,0,11,0,4,0,2,0
+MicroCol game classes,org.microcol.gui,Point,55,98,4,4,8,15,9,9,5,9
+MicroCol game classes,org.microcol.gui,WaitingDialog,141,0,0,0,23,0,2,0,2,0
+MicroCol game classes,org.microcol.gui,AboutDialog,91,0,0,0,15,0,2,0,2,0
+MicroCol game classes,org.microcol.gui,UnitsPanel,187,0,2,0,29,0,4,0,3,0
+MicroCol game classes,org.microcol.gui,AppleMenuListener,24,0,0,0,8,0,3,0,3,0
+MicroCol game classes,org.microcol.gui,Localized,2,0,0,0,1,0,1,0,1,0
+MicroCol game classes,org.microcol.gui,MicroColException,5,4,0,0,2,2,1,1,1,1
+MicroCol game classes,org.microcol.gui,MusicPlayer,135,0,6,0,41,0,7,0,4,0
+MicroCol game classes,org.microcol.gui,StatusBarPresenter,82,0,0,0,18,0,5,0,5,0
+MicroCol game classes,org.microcol.gui,GamePreferences,140,0,0,0,36,0,13,0,13,0
+MicroCol game classes,org.microcol.gui,RightPanelPresenter,114,0,8,0,25,0,10,0,6,0
+MicroCol game classes,org.microcol.gui,StatusBarView,104,0,0,0,12,0,3,0,3,0
 MicroCol game classes,org.microcol.gui,MainMenuView,450,0,4,0,88,0,15,0,13,0
 MicroCol game classes,org.microcol.gui,MainFrameView,95,0,8,0,21,0,8,0,4,0
 MicroCol game classes,org.microcol.gui,Text,0,36,0,0,0,9,0,4,0,4
 MicroCol game classes,org.microcol.gui,ViewUtil,27,0,0,0,4,0,2,0,2,0
-MicroCol game classes,org.microcol.gui,UnitsPanel.new MouseAdapter() {...},18,0,0,0,3,0,2,0,2,0
-MicroCol game classes,org.microcol.gui,StepCounter,32,0,4,0,11,0,4,0,2,0
 MicroCol game classes,org.microcol.gui,RightPanelView,347,0,2,0,50,0,6,0,5,0
 MicroCol game classes,org.microcol.gui,PreferencesVolume,158,0,0,0,28,0,3,0,3,0
-MicroCol game classes,org.microcol.gui,Point,55,98,4,4,8,15,9,9,5,9
-MicroCol game classes,org.microcol.gui,WaitingDialog,141,0,0,0,23,0,2,0,2,0
 MicroCol game classes,org.microcol.model,Player,125,0,6,0,32,0,18,0,15,0
 MicroCol game classes,org.microcol.model,ShipsStorage,168,0,12,0,44,0,20,0,14,0
 MicroCol game classes,org.microcol.model,Map,20,81,2,14,6,17,5,9,3,3
 MicroCol game classes,org.microcol.model,Location,0,113,0,14,0,25,0,16,0,9
-MicroCol game classes,org.microcol.model,Calendar,16,79,0,6,5,13,1,9,1,6
-MicroCol game classes,org.microcol.model,Path,14,68,0,6,3,16,2,7,2,4
 MicroCol game classes,org.microcol.model,Ship,219,0,12,0,42,0,15,0,9,0
 MicroCol game classes,org.microcol.model,PathBuilder,15,25,0,0,4,6,3,3,3,3
 MicroCol game classes,org.microcol.model,ModelListenersManager,105,0,2,0,33,0,14,0,13,0
 MicroCol game classes,org.microcol.model,GameBuilder,117,0,8,0,20,0,11,0,7,0
+MicroCol game classes,org.microcol.model,Calendar,16,79,0,6,5,13,1,9,1,6
+MicroCol game classes,org.microcol.model,Path,14,68,0,6,3,16,2,7,2,4
 MicroCol game classes,org.microcol.model,Game,223,0,10,0,53,0,24,0,19,0

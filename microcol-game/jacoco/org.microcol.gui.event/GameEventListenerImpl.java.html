@@ -1,47 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GameEventListenerImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">MicroCol game classes</a> &gt; <a href="index.source.html" class="el_package">org.microcol.gui.event</a> &gt; <span class="el_source">GameEventListenerImpl.java</span></div><h1>GameEventListenerImpl.java</h1><pre class="source lang-java linenums">package org.microcol.gui.event;
 
-import org.apache.log4j.Logger;
 import org.microcol.gui.AboutDialog;
-import org.microcol.gui.MusicController;
 import org.microcol.gui.Text;
 import org.microcol.gui.ViewUtil;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
-//TODO JJ listener should support some prioritization of listeners
-//TODO JJ add some generic suer class for controllers.
-//TODO generic controller should support parametrized event method
-public class GameEventListenerImpl implements GameEventListener {
 
-<span class="nc" id="L16">	private final Logger logger = Logger.getLogger(GameEventListenerImpl.class);</span>
+//TODO JJ add some generic super class for controllers.
+//TODO JJ generic controller should support parametrized event method
+public class GameEventListenerImpl implements GameEventListener {
 
 	private final ViewUtil viewUtil;
 
 	private final Text text;
 
-	private final MusicController musicController;
-
 	@Inject
 	public GameEventListenerImpl(final GameEventController gameEventController, final ViewUtil viewUtil,
-<span class="nc" id="L26">			final Text text, final MusicController musicController) {</span>
-<span class="nc" id="L27">		gameEventController.addGameEventListener(this);</span>
-<span class="nc" id="L28">		this.viewUtil = Preconditions.checkNotNull(viewUtil);</span>
-<span class="nc" id="L29">		this.text = Preconditions.checkNotNull(text);</span>
-<span class="nc" id="L30">		this.musicController = Preconditions.checkNotNull(musicController);</span>
-<span class="nc" id="L31">	}</span>
-
-	@Override
-	public void onGameExit() {
-<span class="nc" id="L35">		logger.debug(&quot;onGameExit was triggered&quot;);</span>
-<span class="nc" id="L36">		musicController.stop();</span>
-		//TODO JJ following code should be in separate listener
-<span class="nc" id="L38">		System.exit(0);</span>
-<span class="nc" id="L39">	}</span>
+<span class="nc" id="L20">			final Text text) {</span>
+<span class="nc" id="L21">		gameEventController.addGameEventListener(this);</span>
+<span class="nc" id="L22">		this.viewUtil = Preconditions.checkNotNull(viewUtil);</span>
+<span class="nc" id="L23">		this.text = Preconditions.checkNotNull(text);</span>
+<span class="nc" id="L24">	}</span>
 
 	@Override
 	public void onAboutGame() {
-<span class="nc" id="L43">		new AboutDialog(viewUtil, text).setVisible(true);</span>
-<span class="nc" id="L44">	}</span>
+<span class="nc" id="L28">		new AboutDialog(viewUtil, text).setVisible(true);</span>
+<span class="nc" id="L29">	}</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>
