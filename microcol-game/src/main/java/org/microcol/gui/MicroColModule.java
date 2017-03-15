@@ -3,6 +3,7 @@ package org.microcol.gui;
 import org.microcol.gui.event.ChangeLanguageController;
 import org.microcol.gui.event.ChangeLanguageListenerPreferences;
 import org.microcol.gui.event.ChangeLanguageListenerText;
+import org.microcol.gui.event.ExitGameController;
 import org.microcol.gui.event.FocusedTileController;
 import org.microcol.gui.event.GameController;
 import org.microcol.gui.event.GameEventController;
@@ -52,6 +53,7 @@ public class MicroColModule extends AbstractModule {
 		bind(VolumeChangeController.class).in(Singleton.class);
 		bind(ShowGridController.class).in(Singleton.class);
 		bind(ViewController.class).in(Singleton.class);
+		bind(ExitGameController.class).in(Singleton.class);
 
 		/**
 		 * Initialize MVP classes
