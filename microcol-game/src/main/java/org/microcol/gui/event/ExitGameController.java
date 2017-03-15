@@ -1,5 +1,9 @@
 package org.microcol.gui.event;
 
-public class ExitGameController extends OrderedEventListener<ExitGameEvent> {
+/**
+ * Controller for exit game.
+ *
+ */
+public class ExitGameController extends OrderedEventController<ExitGameEvent> {
 
 }

@@ -17,11 +17,11 @@ import org.microcol.gui.GamePreferences;
 import org.microcol.gui.Localized;
 import org.microcol.gui.PathPlanning;
 import org.microcol.gui.Point;
+import org.microcol.gui.event.ExitGameController;
 import org.microcol.gui.event.FocusedTileController;
 import org.microcol.gui.event.FocusedTileEvent;
 import org.microcol.gui.event.GameController;
 import org.microcol.gui.event.GameEventController;
-import org.microcol.gui.event.GameEventListener;
 import org.microcol.gui.event.KeyController;
 import org.microcol.gui.event.MoveUnitController;
 import org.microcol.gui.event.NewGameController;
@@ -106,7 +106,8 @@ public class GamePanelPresenter implements Localized {
 			final FocusedTileController focusedTileController, final PathPlanning pathPlanning,
 			final MoveUnitController moveUnitController, final NewGameController newGameController,
 			final GamePreferences gamePreferences, final ShowGridController showGridController,
-			final ViewController viewController, final GameEventController gameEventController) {
+			final ViewController viewController, final GameEventController gameEventController,
+			final ExitGameController exitGameController) {
 		this.focusedTileController = focusedTileController;
 		this.gameController = Preconditions.checkNotNull(gameController);
 		this.statusBarMessageController = Preconditions.checkNotNull(statusBarMessageController);
@@ -202,20 +203,7 @@ public class GamePanelPresenter implements Localized {
 		display.getGamePanelView().getParent().addComponentListener(new GamePanelListener(display));
 		viewController.addCenterViewListener(() -> onCenterView());
 
-		gameEventController.addGameEventListener(new GameEventListener() {
-
-			@Override
-			public void onGameExit() {
-				display.stopTimer();
-			}
-
-			@Override
-			public void onAboutGame() {
-				/**
-				 * It's intentionally empty.
-				 */
-			}
-		});
+		exitGameController.addListener(event -> display.stopTimer());
 
 	}
 

@@ -6,34 +6,34 @@ import java.util.List;
 
 import org.junit.Test;
 import org.microcol.gui.event.Listener;
-import org.microcol.gui.event.OrderedEventListener;
+import org.microcol.gui.event.OrderedEventController;
 
-public class OrderedEventListenerTest {
+public class OrderedEventControllerTest {
 
 	@Test(expected = NullPointerException.class)
 	public void test_addListener_nullValue() throws Exception {
-		OrderedEventListener<String> controller = new OrderedEventListener<>();
+		OrderedEventController<String> controller = new OrderedEventController<>();
 
 		controller.addListener(null);
 	}
 
 	@Test(expected = NullPointerException.class)
 	public void test_addListener_withPriority_nullValue() throws Exception {
-		OrderedEventListener<String> controller = new OrderedEventListener<>();
+		OrderedEventController<String> controller = new OrderedEventController<>();
 
 		controller.addListener(null, 11);
 	}
 
 	@Test(expected = NullPointerException.class)
 	public void test_fireEvent_verifyThatEventIsRequired_1() throws Exception {
-		OrderedEventListener<String> controller = new OrderedEventListener<>();
+		OrderedEventController<String> controller = new OrderedEventController<>();
 
 		controller.fireEvent(null);
 	}
 
 	@Test
 	public void test_fireEvent_verifyCorrectOrdering() throws Exception {
-		OrderedEventListener<List<String>> controller = new OrderedEventListener<>();
+		OrderedEventController<List<String>> controller = new OrderedEventController<>();
 
 		MockListener l0 = new MockListener("l0");
 		MockListener l1 = new MockListener("l1");

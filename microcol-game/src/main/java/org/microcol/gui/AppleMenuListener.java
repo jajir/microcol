@@ -1,5 +1,7 @@
 package org.microcol.gui;
 
+import org.microcol.gui.event.ExitGameController;
+import org.microcol.gui.event.ExitGameEvent;
 import org.microcol.gui.event.GameEventController;
 
 import com.apple.mrj.MRJAboutHandler;
@@ -17,9 +19,13 @@ public class AppleMenuListener implements MRJAboutHandler, MRJQuitHandler {
 
 	private final GameEventController gameEventController;
 
+	private final ExitGameController exitGameController;
+
 	@Inject
-	public AppleMenuListener(final GameEventController mainMenuController) {
+	public AppleMenuListener(final GameEventController mainMenuController,
+			final ExitGameController exitGameController) {
 		this.gameEventController = Preconditions.checkNotNull(mainMenuController);
+		this.exitGameController = Preconditions.checkNotNull(exitGameController);
 	}
 
 	@Override
@@ -29,7 +35,7 @@ public class AppleMenuListener implements MRJAboutHandler, MRJQuitHandler {
 
 	@Override
 	public void handleQuit() throws IllegalStateException {
-		gameEventController.fireGameExit();
+		exitGameController.fireEvent(new ExitGameEvent());
 	}
 
 }

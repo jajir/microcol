@@ -5,6 +5,8 @@ import javax.swing.JMenuItem;
 import javax.swing.JRadioButtonMenuItem;
 
 import org.microcol.gui.event.ChangeLanguageController;
+import org.microcol.gui.event.ExitGameController;
+import org.microcol.gui.event.ExitGameEvent;
 import org.microcol.gui.event.FocusedTileController;
 import org.microcol.gui.event.FocusedTileEvent;
 import org.microcol.gui.event.GameEventController;
@@ -58,14 +60,14 @@ public class MainMenuPresenter {
 			final ViewUtil viewUtil, final VolumeChangeController volumeChangeController,
 			final ShowGridController showGridController, final FocusedTileController focusedTileController,
 			final MoveUnitController moveUnitController, final ViewController viewController,
-			final TurnStartedController turnStartedController) {
+			final TurnStartedController turnStartedController, final ExitGameController exitGameController) {
 		this.display = Preconditions.checkNotNull(display);
 		display.getMenuItemNewGame().addActionListener(actionEvent -> {
 
 		});
 		if (!gamePreferences.isOSX()) {
 			display.getMenuItemQuitGame().addActionListener(actionEvent -> {
-				gameEventController.fireGameExit();
+				exitGameController.fireEvent(new ExitGameEvent());
 			});
 			display.getMenuItemAbout().addActionListener(actionEvent -> {
 				gameEventController.fireAboutGameEvent();

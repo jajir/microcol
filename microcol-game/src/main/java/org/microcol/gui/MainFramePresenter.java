@@ -11,6 +11,8 @@ import java.awt.event.WindowEvent;
 import javax.swing.JFrame;
 
 import org.apache.log4j.Logger;
+import org.microcol.gui.event.ExitGameController;
+import org.microcol.gui.event.ExitGameEvent;
 import org.microcol.gui.event.GameEventController;
 import org.microcol.gui.event.GameEventListener;
 import org.microcol.gui.event.KeyController;
@@ -38,7 +40,8 @@ public class MainFramePresenter {
 
 	@Inject
 	public MainFramePresenter(final MainFramePresenter.Display display, final KeyController keyController,
-			final GamePreferences gamePreferences, final GameEventController gameEventController) {
+			final GamePreferences gamePreferences, final GameEventController gameEventController,
+			final ExitGameController exitGameController) {
 		this.gamePreferences = Preconditions.checkNotNull(gamePreferences);
 		this.display = Preconditions.checkNotNull(display);
 		display.getFrame().addKeyListener(new KeyAdapter() {
@@ -64,14 +67,13 @@ public class MainFramePresenter {
 			}
 		});
 
+		exitGameController.addListener(event -> {
+			savePreferences();
+			display.getFrame().dispose();
+		});
+
 		gameEventController.addGameEventListener(new GameEventListener() {
-
-			@Override
-			public void onGameExit() {
-				savePreferences();
-				display.getFrame().dispose();
-			}
-
+			// TODO JJ move to lambda or remove
 			@Override
 			public void onAboutGame() {
 				/**
@@ -84,7 +86,7 @@ public class MainFramePresenter {
 			@Override
 			public void windowClosing(WindowEvent event) {
 				logger.debug("Event windowClosing");
-				gameEventController.fireGameExit();
+				exitGameController.fireEvent(new ExitGameEvent());
 			}
 		});
 	}

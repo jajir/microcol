@@ -3,9 +3,13 @@ package org.microcol.gui.event;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import com.google.common.base.Preconditions;
 
-public class OrderedEventListener<E> {
+public class OrderedEventController<E> {
+
+	private final Logger logger = Logger.getLogger(OrderedEventController.class);
 
 	/**
 	 * Value of priority when it's not specified.
@@ -39,6 +43,7 @@ public class OrderedEventListener<E> {
 	 */
 	public void fireEvent(final E event) {
 		Preconditions.checkNotNull(event);
+		logger.debug("Event " + event + " was triggered.");
 		listeners.stream().sorted((v1, v2) -> v1.getPriority() - v2.getPriority())
 				.forEach(valueWithPriority -> valueWithPriority.getListener().onEvent(event));
 	}

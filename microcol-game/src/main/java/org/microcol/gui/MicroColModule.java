@@ -3,6 +3,7 @@ package org.microcol.gui;
 import org.microcol.gui.event.ChangeLanguageController;
 import org.microcol.gui.event.ChangeLanguageListenerPreferences;
 import org.microcol.gui.event.ChangeLanguageListenerText;
+import org.microcol.gui.event.EventInitializer;
 import org.microcol.gui.event.ExitGameController;
 import org.microcol.gui.event.FocusedTileController;
 import org.microcol.gui.event.GameController;
@@ -91,6 +92,8 @@ public class MicroColModule extends AbstractModule {
 
 		bind(MusicPlayer.class).in(Singleton.class);
 		bind(MusicController.class).in(Singleton.class);
+
+		bind(EventInitializer.class).in(Singleton.class);
 	}
 
 	@Provides
