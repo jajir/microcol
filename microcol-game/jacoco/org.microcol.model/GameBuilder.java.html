@@ -25,42 +25,48 @@ public class GameBuilder {
 <span class="nc" id="L25">		return this;</span>
 	}
 
-	public GameBuilder setCalendar(final int startYear, final int endYear) {
-<span class="nc" id="L29">		calendar = new Calendar(startYear, endYear);</span>
+	public GameBuilder setMap(final String fileName) {
+<span class="nc" id="L29">		map = Map.load(fileName);</span>
 
 <span class="nc" id="L31">		return this;</span>
 	}
 
+	public GameBuilder setCalendar(final int startYear, final int endYear) {
+<span class="nc" id="L35">		calendar = new Calendar(startYear, endYear);</span>
+
+<span class="nc" id="L37">		return this;</span>
+	}
+
 	public GameBuilder addPlayer(final String name, final boolean computer) {
-<span class="nc bnc" id="L35" title="All 2 branches missed.">		Preconditions.checkArgument(getPlayer(name) == null, &quot;Player name must be unique: %s&quot;, name);</span>
+<span class="nc bnc" id="L41" title="All 2 branches missed.">		Preconditions.checkArgument(getPlayer(name) == null, &quot;Player name must be unique: %s&quot;, name);</span>
 
-<span class="nc" id="L37">		players.add(new Player(name, computer));</span>
+<span class="nc" id="L43">		players.add(new Player(name, computer));</span>
 
-<span class="nc" id="L39">		return this;</span>
+<span class="nc" id="L45">		return this;</span>
 	}
 
 	private Player getPlayer(final String name) {
 		// TODO JKA Use streams
-<span class="nc bnc" id="L44" title="All 2 branches missed.">		for (Player player : players) {</span>
-<span class="nc bnc" id="L45" title="All 2 branches missed.">			if (player.getName().equals(name)) {</span>
-<span class="nc" id="L46">				return player;</span>
+<span class="nc bnc" id="L50" title="All 2 branches missed.">		for (Player player : players) {</span>
+<span class="nc bnc" id="L51" title="All 2 branches missed.">			if (player.getName().equals(name)) {</span>
+<span class="nc" id="L52">				return player;</span>
 			}
-<span class="nc" id="L48">		}</span>
+<span class="nc" id="L54">		}</span>
 
-<span class="nc" id="L50">		return null;</span>
+<span class="nc" id="L56">		return null;</span>
 	}
 
 	public GameBuilder addShip(final String ownerName, final int maxMoves, final int x, final int y) {
 		// TODO JKA Check location - there is not any enemy ship
-<span class="nc" id="L55">		ships.add(new Ship(getPlayer(ownerName), maxMoves, new Location(x, y)));</span>
+<span class="nc" id="L61">		ships.add(new Ship(getPlayer(ownerName), maxMoves, new Location(x, y)));</span>
 
-<span class="nc" id="L57">		return this;</span>
+<span class="nc" id="L63">		return this;</span>
 	}
 
 	public Game build() {
-<span class="nc bnc" id="L61" title="All 2 branches missed.">		Preconditions.checkState(!players.isEmpty(), &quot;Game must have at least one player.&quot;);</span>
+<span class="nc bnc" id="L67" title="All 2 branches missed.">		Preconditions.checkState(!players.isEmpty(), &quot;Game must have at least one player.&quot;);</span>
 
-<span class="nc" id="L63">		return new Game(map, calendar, players, ships);</span>
+<span class="nc" id="L69">		return new Game(map, calendar, players, ships);</span>
 	}
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>
