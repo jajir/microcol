@@ -1,5 +1,6 @@
 package org.microcol.model;
 
+import java.util.Collection;
 import java.util.List;
 
 import com.google.common.base.MoreObjects;
@@ -38,7 +39,18 @@ public class Path {
 		return locations.contains(location);
 	}
 
-	// TODO JKA containsAny
+	public boolean containsAny(final Collection<Location> locations) {
+		Preconditions.checkNotNull(locations);
+
+		// TODO JKA Use streams
+		for (Location location : locations) {
+			if (this.locations.contains(location)) {
+				return true;
+			}
+		}
+
+		return false;
+	}
 
 	public List<Location> getLocations() {
 		return locations;

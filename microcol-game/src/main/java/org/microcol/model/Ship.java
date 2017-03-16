@@ -54,13 +54,7 @@ public class Ship {
 		Preconditions.checkArgument(game.getMap().isValid(path), "Path (%s) must be valid.", path);
 		Preconditions.checkState(game.isActive(), "Game must be active.");
 		Preconditions.checkState(owner.equals(game.getCurrentPlayer()), "Current player (%s) is not owner (%s) of this ship (%s).", game.getCurrentPlayer(), owner, this);
-
-		// TODO JKA Use streams
-		for (Ship ship : owner.getEnemyShips()) {
-			if (path.contains(ship.getLocation())) {
-				Preconditions.checkArgument(false, "Enemy ship (%s) on path (%s).", ship, path);
-			}
-		}
+		Preconditions.checkArgument(!path.containsAny(owner.getEnemyShipsAt().keySet()), "There is enemy ship on path (%s).", path);
 
 		final Location startLocation = location;
 		final PathBuilder pathBuilder = new PathBuilder();

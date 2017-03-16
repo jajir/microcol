@@ -101,4 +101,46 @@ public class PathTest {
 		final Path path = new Path(locations);
 		path.getLocations().add(new Location(3, 2));
 	}
+
+	public void testContains() {
+		final String message = "Test contains failed: ";
+
+		final List<Location> locations = new ArrayList<>();
+		locations.add(new Location(2, 3));
+		locations.add(new Location(3, 3));
+		locations.add(new Location(3, 4));
+		locations.add(new Location(3, 5));
+		locations.add(new Location(4, 5));
+
+		final Path path = new Path(locations);
+		Assert.assertTrue(message + "[2, 3]", path.contains(new Location(2, 3)));		
+		Assert.assertTrue(message + "[3, 4]", path.contains(new Location(2, 3)));		
+		Assert.assertTrue(message + "[4, 5]", path.contains(new Location(2, 3)));
+		// TODO JKA
+	}
+
+	@Test(expected = NullPointerException.class)
+	public void testContainsNull() {
+		final List<Location> locations = new ArrayList<>();
+		locations.add(new Location(2, 3));
+
+		final Path path = new Path(locations);
+		path.contains(null);
+	}
+
+	public void testContainsAny() {
+		
+	}
+
+	public void testContainsAnyNull() {
+		final List<Location> locations = new ArrayList<>();
+		locations.add(new Location(2, 3));
+
+		final Path path = new Path(locations);
+		path.contains(null);
+	}
+
+	public void testGetFirstLocation() {
+		
+	}
 }

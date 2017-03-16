@@ -51,6 +51,7 @@ public class GameBuilder {
 	}
 
 	public GameBuilder addShip(final String ownerName, final int maxMoves, final int x, final int y) {
+		// TODO JKA Check location - there is not any enemy ship
 		ships.add(new Ship(getPlayer(ownerName), maxMoves, new Location(x, y)));
 
 		return this;
