@@ -25,6 +25,12 @@ public class GameBuilder {
 		return this;
 	}
 
+	public GameBuilder setMap(final String fileName) {
+		map = Map.load(fileName);
+
+		return this;
+	}
+
 	public GameBuilder setCalendar(final int startYear, final int endYear) {
 		calendar = new Calendar(startYear, endYear);
 
