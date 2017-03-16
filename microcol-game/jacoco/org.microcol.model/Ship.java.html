@@ -54,38 +54,32 @@ public class Ship {
 <span class="nc" id="L54">		Preconditions.checkArgument(game.getMap().isValid(path), &quot;Path (%s) must be valid.&quot;, path);</span>
 <span class="nc" id="L55">		Preconditions.checkState(game.isActive(), &quot;Game must be active.&quot;);</span>
 <span class="nc" id="L56">		Preconditions.checkState(owner.equals(game.getCurrentPlayer()), &quot;Current player (%s) is not owner (%s) of this ship (%s).&quot;, game.getCurrentPlayer(), owner, this);</span>
+<span class="nc bnc" id="L57" title="All 2 branches missed.">		Preconditions.checkArgument(!path.containsAny(owner.getEnemyShipsAt().keySet()), &quot;There is enemy ship on path (%s).&quot;, path);</span>
 
+<span class="nc" id="L59">		final Location startLocation = location;</span>
+<span class="nc" id="L60">		final PathBuilder pathBuilder = new PathBuilder();</span>
 		// TODO JKA Use streams
-<span class="nc bnc" id="L59" title="All 2 branches missed.">		for (Ship ship : owner.getEnemyShips()) {</span>
-<span class="nc bnc" id="L60" title="All 2 branches missed.">			if (path.contains(ship.getLocation())) {</span>
-<span class="nc" id="L61">				Preconditions.checkArgument(false, &quot;Enemy ship (%s) on path (%s).&quot;, ship, path);</span>
+<span class="nc bnc" id="L62" title="All 2 branches missed.">		for (Location newLocation : path.getLocations()) {</span>
+<span class="nc bnc" id="L63" title="All 2 branches missed.">			if (availableMoves &lt;= 0) {</span>
+<span class="nc" id="L64">				break;</span>
 			}
-<span class="nc" id="L63">		}</span>
-
-<span class="nc" id="L65">		final Location startLocation = location;</span>
-<span class="nc" id="L66">		final PathBuilder pathBuilder = new PathBuilder();</span>
-		// TODO JKA Use streams
-<span class="nc bnc" id="L68" title="All 2 branches missed.">		for (Location newLocation : path.getLocations()) {</span>
-<span class="nc bnc" id="L69" title="All 2 branches missed.">			if (availableMoves &lt;= 0) {</span>
-<span class="nc" id="L70">				break;</span>
-			}
-<span class="nc" id="L72">			pathBuilder.add(newLocation);</span>
-<span class="nc" id="L73">			location = newLocation;</span>
-<span class="nc" id="L74">			availableMoves--;</span>
-<span class="nc" id="L75">		}</span>
-<span class="nc bnc" id="L76" title="All 2 branches missed.">		if (!pathBuilder.isEmpty()) {</span>
-<span class="nc" id="L77">			game.fireShipMoved(game, this, startLocation, pathBuilder.build());</span>
+<span class="nc" id="L66">			pathBuilder.add(newLocation);</span>
+<span class="nc" id="L67">			location = newLocation;</span>
+<span class="nc" id="L68">			availableMoves--;</span>
+<span class="nc" id="L69">		}</span>
+<span class="nc bnc" id="L70" title="All 2 branches missed.">		if (!pathBuilder.isEmpty()) {</span>
+<span class="nc" id="L71">			game.fireShipMoved(game, this, startLocation, pathBuilder.build());</span>
 		}
-<span class="nc" id="L79">	}</span>
+<span class="nc" id="L73">	}</span>
 
 	@Override
 	public String toString() {
-<span class="nc" id="L83">		return MoreObjects.toStringHelper(this)</span>
-<span class="nc" id="L84">			.add(&quot;owner&quot;, owner)</span>
-<span class="nc" id="L85">			.add(&quot;maxMoves&quot;, maxMoves)</span>
-<span class="nc" id="L86">			.add(&quot;location&quot;, location)</span>
-<span class="nc" id="L87">			.add(&quot;availableMoves&quot;, availableMoves)</span>
-<span class="nc" id="L88">			.toString();</span>
+<span class="nc" id="L77">		return MoreObjects.toStringHelper(this)</span>
+<span class="nc" id="L78">			.add(&quot;owner&quot;, owner)</span>
+<span class="nc" id="L79">			.add(&quot;maxMoves&quot;, maxMoves)</span>
+<span class="nc" id="L80">			.add(&quot;location&quot;, location)</span>
+<span class="nc" id="L81">			.add(&quot;availableMoves&quot;, availableMoves)</span>
+<span class="nc" id="L82">			.toString();</span>
 	}
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

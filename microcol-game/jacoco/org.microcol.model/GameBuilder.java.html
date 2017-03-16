@@ -51,15 +51,16 @@ public class GameBuilder {
 	}
 
 	public GameBuilder addShip(final String ownerName, final int maxMoves, final int x, final int y) {
-<span class="nc" id="L54">		ships.add(new Ship(getPlayer(ownerName), maxMoves, new Location(x, y)));</span>
+		// TODO JKA Check location - there is not any enemy ship
+<span class="nc" id="L55">		ships.add(new Ship(getPlayer(ownerName), maxMoves, new Location(x, y)));</span>
 
-<span class="nc" id="L56">		return this;</span>
+<span class="nc" id="L57">		return this;</span>
 	}
 
 	public Game build() {
-<span class="nc bnc" id="L60" title="All 2 branches missed.">		Preconditions.checkState(!players.isEmpty(), &quot;Game must have at least one player.&quot;);</span>
+<span class="nc bnc" id="L61" title="All 2 branches missed.">		Preconditions.checkState(!players.isEmpty(), &quot;Game must have at least one player.&quot;);</span>
 
-<span class="nc" id="L62">		return new Game(map, calendar, players, ships);</span>
+<span class="nc" id="L63">		return new Game(map, calendar, players, ships);</span>
 	}
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

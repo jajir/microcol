@@ -9,88 +9,89 @@ import java.util.stream.Collectors;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 
+// TODO JKA Optimalizovat
 // TODO JKA Documentation
 // TODO JKA Tests
 class ShipsStorage {
 	private final List&lt;Ship&gt; ships;
 
-<span class="nc" id="L17">	public ShipsStorage(final List&lt;Ship&gt; ships) {</span>
-<span class="nc" id="L18">		this.ships = ImmutableList.copyOf(ships);</span>
-<span class="nc" id="L19">	}</span>
+<span class="nc" id="L18">	public ShipsStorage(final List&lt;Ship&gt; ships) {</span>
+<span class="nc" id="L19">		this.ships = ImmutableList.copyOf(ships);</span>
+<span class="nc" id="L20">	}</span>
 
 	public List&lt;Ship&gt; getShips() {
-<span class="nc" id="L22">		return ships;</span>
+<span class="nc" id="L23">		return ships;</span>
 	}
 
 	public Map&lt;Location, List&lt;Ship&gt;&gt; getShipsAt() {
-<span class="nc" id="L26">		Map&lt;Location, List&lt;Ship&gt;&gt; shipsAt = new HashMap&lt;&gt;();</span>
+<span class="nc" id="L27">		Map&lt;Location, List&lt;Ship&gt;&gt; shipsAt = new HashMap&lt;&gt;();</span>
 
 		// TODO JKA Use stream and immutable
-<span class="nc" id="L29">		ships.forEach(ship -&gt; {</span>
-<span class="nc" id="L30">			List&lt;Ship&gt; ships = shipsAt.get(ship.getLocation());</span>
-<span class="nc bnc" id="L31" title="All 2 branches missed.">			if (ships == null) {</span>
-<span class="nc" id="L32">				ships = new ArrayList&lt;&gt;();</span>
-<span class="nc" id="L33">				shipsAt.put(ship.getLocation(), ships);</span>
+<span class="nc" id="L30">		ships.forEach(ship -&gt; {</span>
+<span class="nc" id="L31">			List&lt;Ship&gt; ships = shipsAt.get(ship.getLocation());</span>
+<span class="nc bnc" id="L32" title="All 2 branches missed.">			if (ships == null) {</span>
+<span class="nc" id="L33">				ships = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L34">				shipsAt.put(ship.getLocation(), ships);</span>
 			}
-<span class="nc" id="L35">			ships.add(ship);</span>
-<span class="nc" id="L36">		});</span>
+<span class="nc" id="L36">			ships.add(ship);</span>
+<span class="nc" id="L37">		});</span>
 
-<span class="nc" id="L38">		return ImmutableMap.copyOf(shipsAt);</span>
+<span class="nc" id="L39">		return ImmutableMap.copyOf(shipsAt);</span>
 	}
 
 	public List&lt;Ship&gt; getShipsAt(final Location location) {
-<span class="nc" id="L42">		return ships.stream()</span>
-<span class="nc" id="L43">			.filter(ship -&gt; {</span>
-<span class="nc" id="L44">				return ship.getLocation().equals(location);</span>
+<span class="nc" id="L43">		return ships.stream()</span>
+<span class="nc" id="L44">			.filter(ship -&gt; {</span>
+<span class="nc" id="L45">				return ship.getLocation().equals(location);</span>
 			})
-<span class="nc" id="L46">			.collect(Collectors.collectingAndThen(</span>
-<span class="nc" id="L47">				Collectors.toList(), ImmutableList::copyOf));</span>
+<span class="nc" id="L47">			.collect(Collectors.collectingAndThen(</span>
+<span class="nc" id="L48">				Collectors.toList(), ImmutableList::copyOf));</span>
 	}
 
 	public List&lt;Ship&gt; getShips(final Player player) {
-<span class="nc" id="L51">		return ships.stream()</span>
-<span class="nc" id="L52">			.filter(ship -&gt; {</span>
-<span class="nc" id="L53">				return ship.getOwner().equals(player);</span>
+<span class="nc" id="L52">		return ships.stream()</span>
+<span class="nc" id="L53">			.filter(ship -&gt; {</span>
+<span class="nc" id="L54">				return ship.getOwner().equals(player);</span>
 			})
-<span class="nc" id="L55">			.collect(Collectors.collectingAndThen(</span>
-<span class="nc" id="L56">				Collectors.toList(), ImmutableList::copyOf));</span>
+<span class="nc" id="L56">			.collect(Collectors.collectingAndThen(</span>
+<span class="nc" id="L57">				Collectors.toList(), ImmutableList::copyOf));</span>
 	}
 
 	public List&lt;Ship&gt; getShipsAt(final Player player, final Location location) {
-<span class="nc" id="L60">		return ships.stream()</span>
-<span class="nc" id="L61">			.filter(ship -&gt; {</span>
-<span class="nc bnc" id="L62" title="All 2 branches missed.">				return ship.getOwner().equals(player)</span>
-<span class="nc bnc" id="L63" title="All 2 branches missed.">					&amp;&amp; ship.getLocation().equals(location);</span>
+<span class="nc" id="L61">		return ships.stream()</span>
+<span class="nc" id="L62">			.filter(ship -&gt; {</span>
+<span class="nc bnc" id="L63" title="All 2 branches missed.">				return ship.getOwner().equals(player)</span>
+<span class="nc bnc" id="L64" title="All 2 branches missed.">					&amp;&amp; ship.getLocation().equals(location);</span>
 			})
-<span class="nc" id="L65">			.collect(Collectors.collectingAndThen(</span>
-<span class="nc" id="L66">				Collectors.toList(), ImmutableList::copyOf));</span>
+<span class="nc" id="L66">			.collect(Collectors.collectingAndThen(</span>
+<span class="nc" id="L67">				Collectors.toList(), ImmutableList::copyOf));</span>
 	}
 
 	public List&lt;Ship&gt; getEnemyShips(final Player player) {
-<span class="nc" id="L70">		return ships.stream()</span>
-<span class="nc" id="L71">			.filter(ship -&gt; {</span>
-<span class="nc bnc" id="L72" title="All 2 branches missed.">				return !ship.getOwner().equals(player);</span>
+<span class="nc" id="L71">		return ships.stream()</span>
+<span class="nc" id="L72">			.filter(ship -&gt; {</span>
+<span class="nc bnc" id="L73" title="All 2 branches missed.">				return !ship.getOwner().equals(player);</span>
 			})
-<span class="nc" id="L74">			.collect(Collectors.collectingAndThen(</span>
-<span class="nc" id="L75">				Collectors.toList(), ImmutableList::copyOf));</span>
+<span class="nc" id="L75">			.collect(Collectors.collectingAndThen(</span>
+<span class="nc" id="L76">				Collectors.toList(), ImmutableList::copyOf));</span>
 	}
 
 	public Map&lt;Location, List&lt;Ship&gt;&gt; getEnemyShipsAt(final Player player) {
-<span class="nc" id="L79">		Map&lt;Location, List&lt;Ship&gt;&gt; enemyShipsAt = new HashMap&lt;&gt;();</span>
+<span class="nc" id="L80">		Map&lt;Location, List&lt;Ship&gt;&gt; enemyShipsAt = new HashMap&lt;&gt;();</span>
 
 		// TODO JKA Use stream and immutable
-<span class="nc" id="L82">		ships.forEach(ship -&gt; {</span>
-<span class="nc bnc" id="L83" title="All 2 branches missed.">			if (!ship.getOwner().equals(player)) {</span>
-<span class="nc" id="L84">				List&lt;Ship&gt; ships = enemyShipsAt.get(ship.getLocation());</span>
-<span class="nc bnc" id="L85" title="All 2 branches missed.">				if (ships == null) {</span>
-<span class="nc" id="L86">					ships = new ArrayList&lt;&gt;();</span>
-<span class="nc" id="L87">					enemyShipsAt.put(ship.getLocation(), ships);</span>
+<span class="nc" id="L83">		ships.forEach(ship -&gt; {</span>
+<span class="nc bnc" id="L84" title="All 2 branches missed.">			if (!ship.getOwner().equals(player)) {</span>
+<span class="nc" id="L85">				List&lt;Ship&gt; ships = enemyShipsAt.get(ship.getLocation());</span>
+<span class="nc bnc" id="L86" title="All 2 branches missed.">				if (ships == null) {</span>
+<span class="nc" id="L87">					ships = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L88">					enemyShipsAt.put(ship.getLocation(), ships);</span>
 				}
-<span class="nc" id="L89">				ships.add(ship);</span>
+<span class="nc" id="L90">				ships.add(ship);</span>
 			}
-<span class="nc" id="L91">		});</span>
+<span class="nc" id="L92">		});</span>
 
-<span class="nc" id="L93">		return ImmutableMap.copyOf(enemyShipsAt);</span>
+<span class="nc" id="L94">		return ImmutableMap.copyOf(enemyShipsAt);</span>
 	}
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>
