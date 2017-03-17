@@ -12,6 +12,7 @@ import org.microcol.model.ModelListener;
 import org.microcol.model.PathBuilder;
 import org.microcol.model.Player;
 import org.microcol.model.Ship;
+import org.microcol.model.Terrain;
 import org.microcol.model.event.GameFinishedEvent;
 import org.microcol.model.event.GameStartedEvent;
 import org.microcol.model.event.RoundStartedEvent;
@@ -95,7 +96,7 @@ public class SkyNet {
 		while (pathBuilder.getLength() < ship.getAvailableMoves()) {
 			final Location lastDirection = lastDirections.get(ship);
 			final Location newLocation = lastLocation.add(lastDirection);
-			if (game.getMap().isValid(newLocation) && !isEnemyShipAt(newLocation)) {
+			if (game.getMap().isValid(newLocation) && game.getMap().getTerrainAt(newLocation) == Terrain.OCEAN && !isEnemyShipAt(newLocation)) {
 				pathBuilder.add(newLocation);
 				lastLocation = newLocation;
 			} else {
