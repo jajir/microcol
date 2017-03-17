@@ -63,23 +63,26 @@ public class Ship {
 <span class="nc bnc" id="L63" title="All 2 branches missed.">			if (availableMoves &lt;= 0) {</span>
 <span class="nc" id="L64">				break;</span>
 			}
-<span class="nc" id="L66">			pathBuilder.add(newLocation);</span>
-<span class="nc" id="L67">			location = newLocation;</span>
-<span class="nc" id="L68">			availableMoves--;</span>
-<span class="nc" id="L69">		}</span>
-<span class="nc bnc" id="L70" title="All 2 branches missed.">		if (!pathBuilder.isEmpty()) {</span>
-<span class="nc" id="L71">			game.fireShipMoved(game, this, startLocation, pathBuilder.build());</span>
+<span class="nc bnc" id="L66" title="All 2 branches missed.">			if (game.getMap().getTerrainAt(newLocation) != Terrain.OCEAN) {</span>
+<span class="nc" id="L67">				throw new IllegalArgumentException(String.format(&quot;Path (%s) must contain only ocean (%s).&quot;, newLocation, game.getMap().getTerrainAt(newLocation)));</span>
+			}
+<span class="nc" id="L69">			pathBuilder.add(newLocation);</span>
+<span class="nc" id="L70">			location = newLocation;</span>
+<span class="nc" id="L71">			availableMoves--;</span>
+<span class="nc" id="L72">		}</span>
+<span class="nc bnc" id="L73" title="All 2 branches missed.">		if (!pathBuilder.isEmpty()) {</span>
+<span class="nc" id="L74">			game.fireShipMoved(game, this, startLocation, pathBuilder.build());</span>
 		}
-<span class="nc" id="L73">	}</span>
+<span class="nc" id="L76">	}</span>
 
 	@Override
 	public String toString() {
-<span class="nc" id="L77">		return MoreObjects.toStringHelper(this)</span>
-<span class="nc" id="L78">			.add(&quot;owner&quot;, owner)</span>
-<span class="nc" id="L79">			.add(&quot;maxMoves&quot;, maxMoves)</span>
-<span class="nc" id="L80">			.add(&quot;location&quot;, location)</span>
-<span class="nc" id="L81">			.add(&quot;availableMoves&quot;, availableMoves)</span>
-<span class="nc" id="L82">			.toString();</span>
+<span class="nc" id="L80">		return MoreObjects.toStringHelper(this)</span>
+<span class="nc" id="L81">			.add(&quot;owner&quot;, owner)</span>
+<span class="nc" id="L82">			.add(&quot;maxMoves&quot;, maxMoves)</span>
+<span class="nc" id="L83">			.add(&quot;location&quot;, location)</span>
+<span class="nc" id="L84">			.add(&quot;availableMoves&quot;, availableMoves)</span>
+<span class="nc" id="L85">			.toString();</span>
 	}
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

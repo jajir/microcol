@@ -89,9 +89,9 @@ MicroCol game classes,org.microcol.gui,RightPanelView,347,0,2,0,50,0,6,0,5,0
 MicroCol game classes,org.microcol.gui,PreferencesVolume,158,0,0,0,28,0,3,0,3,0
 MicroCol game classes,org.microcol.model,Player,125,0,6,0,32,0,18,0,15,0
 MicroCol game classes,org.microcol.model,ShipsStorage,168,0,12,0,44,0,20,0,14,0
-MicroCol game classes,org.microcol.model,Map,318,94,36,14,47,18,25,11,6,5
+MicroCol game classes,org.microcol.model,Map,320,102,36,14,47,20,25,13,6,7
 MicroCol game classes,org.microcol.model,Location,0,113,0,14,0,25,0,16,0,9
-MicroCol game classes,org.microcol.model,Ship,206,0,10,0,39,0,14,0,9,0
+MicroCol game classes,org.microcol.model,Ship,233,0,12,0,41,0,15,0,9,0
 MicroCol game classes,org.microcol.model,PathBuilder,15,25,0,0,4,6,3,3,3,3
 MicroCol game classes,org.microcol.model,ModelListenersManager,105,0,2,0,33,0,14,0,13,0
 MicroCol game classes,org.microcol.model,GameBuilder,123,0,8,0,22,0,12,0,8,0
