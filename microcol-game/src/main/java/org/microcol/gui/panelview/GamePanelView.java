@@ -425,11 +425,11 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 	}
 
 	private int getGameMapWidth() {
-		return (gameController.getGame().getMap().getMaxX() + 1) * TOTAL_TILE_WIDTH_IN_PX - 1;
+		return (gameController.getGame().getMap().getMaxX()) * TOTAL_TILE_WIDTH_IN_PX - 1;
 	}
 
 	private int getGameMapHeight() {
-		return (gameController.getGame().getMap().getMaxY() + 1) * TOTAL_TILE_WIDTH_IN_PX - 1;
+		return (gameController.getGame().getMap().getMaxY()) * TOTAL_TILE_WIDTH_IN_PX - 1;
 	}
 
 	@Override
