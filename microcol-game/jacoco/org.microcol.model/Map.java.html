@@ -2,7 +2,6 @@
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,142 +12,125 @@ import com.google.common.base.Preconditions;
 // TODO JKA Documentation
 // TODO JKA Tests
 public class Map {
-	private final int maxX;
-	private final int maxY;
+	private final Terrain[][] terrain;
 
-	private final Terrain[][] xxx;
+<span class="fc" id="L17">	public Map(final int maxX, final int maxY) {</span>
+<span class="pc bpc" id="L18" title="1 of 2 branches missed.">		Preconditions.checkArgument(maxX &gt;= 1, &quot;MaxX (%s) must be positive.&quot;, maxX);</span>
+<span class="pc bpc" id="L19" title="1 of 2 branches missed.">		Preconditions.checkArgument(maxY &gt;= 1, &quot;MaxY (%s) must be positive.&quot;, maxY);</span>
 
-<span class="fc" id="L21">	public Map(final int maxX, final int maxY) {</span>
-		// FIXME JKA &gt;= 0
-<span class="pc bpc" id="L23" title="1 of 2 branches missed.">		Preconditions.checkArgument(maxX &gt;= 1, &quot;MaxX (%s) must be positive.&quot;, maxX);</span>
-		// FIXME JKA &gt;= 0
-<span class="pc bpc" id="L25" title="1 of 2 branches missed.">		Preconditions.checkArgument(maxY &gt;= 1, &quot;MaxY (%s) must be positive.&quot;, maxY);</span>
+<span class="fc" id="L21">		terrain = new Terrain[maxX][maxY];</span>
+<span class="fc" id="L22">	}</span>
 
-<span class="fc" id="L27">		this.maxX = maxX;</span>
-<span class="fc" id="L28">		this.maxY = maxY;</span>
+<span class="nc" id="L24">	public Map(final Terrain[][] terrain) {</span>
+<span class="nc" id="L25">		Preconditions.checkNotNull(terrain);</span>
+<span class="nc bnc" id="L26" title="All 2 branches missed.">		Preconditions.checkArgument(terrain.length &gt;= 1, &quot;MaxX (%s) must be positive.&quot;, terrain.length);</span>
+<span class="nc bnc" id="L27" title="All 2 branches missed.">		Preconditions.checkArgument(terrain[0].length &gt;= 1, &quot;MaxY (%s) must be positive.&quot;, terrain[0].length);</span>
 
-<span class="fc" id="L30">		this.xxx = new Terrain[maxX + 1][maxY + 1];</span>
-<span class="fc" id="L31">		this.xxx[3][2] = Terrain.CONTINENT;</span>
-<span class="fc" id="L32">	}</span>
-
-<span class="nc" id="L34">	public Map(final Terrain[][] xxx) {</span>
-<span class="nc" id="L35">		this.maxX = xxx.length;</span>
-<span class="nc" id="L36">		this.maxY = xxx[0].length;</span>
-<span class="nc" id="L37">		this.xxx = xxx;</span>
-<span class="nc" id="L38">	}</span>
+<span class="nc" id="L29">		this.terrain = terrain;</span>
+<span class="nc" id="L30">	}</span>
 
 	public int getMaxX() {
-<span class="nc" id="L41">		return maxX;</span>
+<span class="fc" id="L33">		return terrain.length;</span>
 	}
 
 	public int getMaxY() {
-<span class="nc" id="L45">		return maxY;</span>
+<span class="fc" id="L37">		return terrain[0].length;</span>
 	}
 
 	public Terrain getTerrainAt(final Location location) {
-<span class="nc" id="L49">		return xxx[location.getX()][location.getY()];</span>
+<span class="nc" id="L41">		Preconditions.checkNotNull(location);</span>
+
+<span class="nc" id="L43">		return terrain[location.getX() - 1][location.getY() - 1];</span>
 	}
 
 	public boolean isValid(final Location location) {
-<span class="fc" id="L53">		Preconditions.checkNotNull(location);</span>
+<span class="fc" id="L47">		Preconditions.checkNotNull(location);</span>
 
-<span class="fc bfc" id="L55" title="All 2 branches covered.">		return location.getX() &gt;= 1</span>
-<span class="fc bfc" id="L56" title="All 2 branches covered.">			&amp;&amp; location.getX() &lt;= maxX</span>
-<span class="fc bfc" id="L57" title="All 2 branches covered.">			&amp;&amp; location.getY() &gt;= 1</span>
-<span class="fc bfc" id="L58" title="All 2 branches covered.">			&amp;&amp; location.getY() &lt;= maxY;</span>
+<span class="fc bfc" id="L49" title="All 2 branches covered.">		return location.getX() &gt;= 1</span>
+<span class="fc bfc" id="L50" title="All 2 branches covered.">			&amp;&amp; location.getX() &lt;= getMaxX()</span>
+<span class="fc bfc" id="L51" title="All 2 branches covered.">			&amp;&amp; location.getY() &gt;= 1</span>
+<span class="fc bfc" id="L52" title="All 2 branches covered.">			&amp;&amp; location.getY() &lt;= getMaxY();</span>
 	}
 
 	public boolean isValid(final Path path) {
-<span class="fc" id="L62">		Preconditions.checkNotNull(path);</span>
+<span class="fc" id="L56">		Preconditions.checkNotNull(path);</span>
 
 		// TODO JKA Use streams
-<span class="fc bfc" id="L65" title="All 2 branches covered.">		for (Location location : path.getLocations()) {</span>
-<span class="fc bfc" id="L66" title="All 2 branches covered.">			if (!isValid(location)) {</span>
-<span class="fc" id="L67">				return false;</span>
+<span class="fc bfc" id="L59" title="All 2 branches covered.">		for (Location location : path.getLocations()) {</span>
+<span class="fc bfc" id="L60" title="All 2 branches covered.">			if (!isValid(location)) {</span>
+<span class="fc" id="L61">				return false;</span>
 			}
-<span class="fc" id="L69">		}</span>
+<span class="fc" id="L63">		}</span>
 
-<span class="fc" id="L71">		return true;</span>
+<span class="fc" id="L65">		return true;</span>
 	}
 
 	@Override
 	public String toString() {
-<span class="nc" id="L76">		return MoreObjects.toStringHelper(this)</span>
-<span class="nc" id="L77">			.add(&quot;maxX&quot;, maxX)</span>
-<span class="nc" id="L78">			.add(&quot;maxY&quot;, maxY)</span>
-<span class="nc" id="L79">			.toString();</span>
+<span class="nc" id="L70">		return MoreObjects.toStringHelper(this)</span>
+<span class="nc" id="L71">			.add(&quot;maxX&quot;, getMaxX())</span>
+<span class="nc" id="L72">			.add(&quot;maxY&quot;, getMaxY())</span>
+<span class="nc" id="L73">			.toString();</span>
 	}
 
-	public String toString2() {
-<span class="nc" id="L83">		StringBuilder builder = new StringBuilder();</span>
+	public String print() {
+<span class="nc" id="L77">		StringBuilder builder = new StringBuilder();</span>
 
-<span class="nc bnc" id="L85" title="All 2 branches missed.">		for (int x = 0; x &lt; xxx.length + 2; x++) {</span>
-<span class="nc" id="L86">			builder.append(&quot;-&quot;);</span>
+<span class="nc bnc" id="L79" title="All 2 branches missed.">		for (int x = 0; x &lt; terrain.length + 2; x++) {</span>
+<span class="nc" id="L80">			builder.append(&quot;-&quot;);</span>
 		}
-<span class="nc" id="L88">		builder.append(&quot;\n&quot;);</span>
+<span class="nc" id="L82">		builder.append(&quot;\n&quot;);</span>
 
-<span class="nc bnc" id="L90" title="All 2 branches missed.">		for (int y = 0; y &lt; xxx[0].length; y++) {</span>
-<span class="nc" id="L91">			builder.append(&quot;|&quot;);</span>
-<span class="nc bnc" id="L92" title="All 2 branches missed.">			for (int x = 0; x &lt; xxx.length; x++) {</span>
-<span class="nc bnc" id="L93" title="All 2 branches missed.">				if (xxx[x][y] == Terrain.CONTINENT) {</span>
-<span class="nc" id="L94">					builder.append(&quot;o&quot;);</span>
+<span class="nc bnc" id="L84" title="All 2 branches missed.">		for (int y = 0; y &lt; terrain[0].length; y++) {</span>
+<span class="nc" id="L85">			builder.append(&quot;|&quot;);</span>
+<span class="nc bnc" id="L86" title="All 2 branches missed.">			for (int x = 0; x &lt; terrain.length; x++) {</span>
+<span class="nc bnc" id="L87" title="All 2 branches missed.">				if (terrain[x][y] == Terrain.CONTINENT) {</span>
+<span class="nc" id="L88">					builder.append(&quot;o&quot;);</span>
 				} else {
-<span class="nc" id="L96">					builder.append(&quot; &quot;);</span>
+<span class="nc" id="L90">					builder.append(&quot; &quot;);</span>
 				}
 			}
-<span class="nc" id="L99">			builder.append(&quot;|\n&quot;);</span>
+<span class="nc" id="L93">			builder.append(&quot;|\n&quot;);</span>
 		}
 
-<span class="nc bnc" id="L102" title="All 2 branches missed.">		for (int x = 0; x &lt; xxx.length + 2; x++) {</span>
-<span class="nc" id="L103">			builder.append(&quot;-&quot;);</span>
+<span class="nc bnc" id="L96" title="All 2 branches missed.">		for (int x = 0; x &lt; terrain.length + 2; x++) {</span>
+<span class="nc" id="L97">			builder.append(&quot;-&quot;);</span>
 		}
-<span class="nc" id="L105">		builder.append(&quot;\n&quot;);</span>
 
-<span class="nc" id="L107">		return builder.toString();</span>
+<span class="nc" id="L100">		return builder.toString();</span>
 	}
 
 	public static Map load(final String fileName) {
-<span class="nc" id="L111">		final InputStream in = Map.class.getResourceAsStream(fileName);</span>
-<span class="nc" id="L112">		final BufferedReader reader = new BufferedReader(new InputStreamReader(in));</span>
-<span class="nc" id="L113">		final List&lt;List&lt;Terrain&gt;&gt; aaa = new ArrayList&lt;List&lt;Terrain&gt;&gt;();</span>
-<span class="nc" id="L114">		String line = null;</span>
-		try {
-<span class="nc bnc" id="L116" title="All 2 branches missed.">			while ((line = reader.readLine()) != null) {</span>
-<span class="nc bnc" id="L117" title="All 2 branches missed.">				if (line.startsWith(&quot;-&quot;)) {</span>
-<span class="nc" id="L118">					break;</span>
-				}
-<span class="nc" id="L120">				final List&lt;Terrain&gt; pole = new ArrayList&lt;&gt;();</span>
-<span class="nc bnc" id="L121" title="All 2 branches missed.">				for (int i = 0; i &lt; line.length(); i++) {</span>
-<span class="nc bnc" id="L122" title="All 2 branches missed.">					if (line.charAt(i) == '|') {</span>
-<span class="nc" id="L123">						break;</span>
-					}
-<span class="nc bnc" id="L125" title="All 2 branches missed.">					if (line.charAt(i) == 'o') {</span>
-<span class="nc" id="L126">						pole.add(Terrain.CONTINENT);</span>
-					} else {
-<span class="nc" id="L128">						pole.add(Terrain.OCEAN);</span>
-					}
-				}
-				//System.out.println(line);
-<span class="nc" id="L132">				aaa.add(pole);</span>
-<span class="nc" id="L133">			}</span>
-<span class="nc" id="L134">		} catch (IOException ex) {</span>
-<span class="nc" id="L135">			throw new RuntimeException(ex);</span>
-<span class="nc" id="L136">		}</span>
+<span class="nc" id="L104">		final List&lt;Terrain[]&gt; rows = new ArrayList&lt;&gt;();</span>
 
-<span class="nc" id="L138">		Terrain[][] xxx = new Terrain[aaa.get(0).size()][aaa.size()];</span>
-<span class="nc bnc" id="L139" title="All 2 branches missed.">		for (int y = 0; y &lt; aaa.size(); y++) {</span>
-<span class="nc bnc" id="L140" title="All 2 branches missed.">			for (int x = 0; x &lt; aaa.get(y).size(); x++) {</span>
-<span class="nc" id="L141">				xxx[x][y] = aaa.get(y).get(x);</span>
+<span class="nc" id="L106">		try (final BufferedReader reader = new BufferedReader(</span>
+<span class="nc" id="L107">			new InputStreamReader(Map.class.getResourceAsStream(fileName)))) {</span>
+<span class="nc" id="L108">			String line = null;</span>
+<span class="nc bnc" id="L109" title="All 4 branches missed.">			while ((line = reader.readLine()) != null &amp;&amp; !line.startsWith(&quot;-&quot;)) {</span>
+<span class="nc" id="L110">				final Terrain[] row = new Terrain[line.length() - 1];</span>
+<span class="nc bnc" id="L111" title="All 2 branches missed.">				for (int x = 0; x &lt; line.length() - 1; x++) {</span>
+<span class="nc bnc" id="L112" title="All 2 branches missed.">					row[x] = line.charAt(x) == 'o' ? Terrain.CONTINENT : Terrain.OCEAN; </span>
+				}
+<span class="nc" id="L114">				rows.add(row);</span>
+<span class="nc" id="L115">			}</span>
+<span class="nc bnc" id="L116" title="All 8 branches missed.">		} catch (IOException ex) {</span>
+<span class="nc" id="L117">			throw new RuntimeException(ex);</span>
+<span class="nc" id="L118">		}</span>
+
+<span class="nc" id="L120">		final Terrain[][] terrain = new Terrain[rows.get(0).length][rows.size()];</span>
+<span class="nc bnc" id="L121" title="All 2 branches missed.">		for (int y = 0; y &lt; rows.size(); y++) {</span>
+<span class="nc bnc" id="L122" title="All 2 branches missed.">			for (int x = 0; x &lt; rows.get(y).length; x++) {</span>
+<span class="nc" id="L123">				terrain[x][y] = rows.get(y)[x];</span>
 			}
 		}
 
-<span class="nc" id="L145">		return new Map(xxx);</span>
+<span class="nc" id="L127">		return new Map(terrain);</span>
 	}
 
 	public static void main(String[] args) {
 //		Map map = new Map(20, 10);
-<span class="nc" id="L150">		Map map = load(&quot;/maps/map-01.txt&quot;);</span>
-<span class="nc" id="L151">		System.out.println(map.toString2());</span>
-<span class="nc" id="L152">	}</span>
+<span class="nc" id="L132">		Map map = load(&quot;/maps/map-01.txt&quot;);</span>
+<span class="nc" id="L133">		System.out.println(map.print());</span>
+<span class="nc" id="L134">	}</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

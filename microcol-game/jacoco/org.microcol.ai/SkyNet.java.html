@@ -12,6 +12,7 @@ import org.microcol.model.ModelListener;
 import org.microcol.model.PathBuilder;
 import org.microcol.model.Player;
 import org.microcol.model.Ship;
+import org.microcol.model.Terrain;
 import org.microcol.model.event.GameFinishedEvent;
 import org.microcol.model.event.GameStartedEvent;
 import org.microcol.model.event.RoundStartedEvent;
@@ -21,7 +22,7 @@ import org.microcol.model.event.TurnStartedEvent;
 import com.google.common.collect.ImmutableList;
 
 public class SkyNet {
-<span class="nc" id="L24">	private static final ImmutableList&lt;Location&gt; directions = ImmutableList.of(</span>
+<span class="nc" id="L25">	private static final ImmutableList&lt;Location&gt; directions = ImmutableList.of(</span>
 		new Location(1, 1),
 		new Location(0, 1),
 		new Location(-1, 1),
@@ -38,84 +39,84 @@ public class SkyNet {
 
 	private Map&lt;Location, List&lt;Ship&gt;&gt; enemyShipsAt;
 
-<span class="nc" id="L41">	public SkyNet(final Game game) {</span>
-<span class="nc" id="L42">		this.game = game;</span>
-<span class="nc" id="L43">		this.random = new Random();</span>
-<span class="nc" id="L44">		this.lastDirections = new HashMap&lt;&gt;();</span>
-<span class="nc" id="L45">	}</span>
+<span class="nc" id="L42">	public SkyNet(final Game game) {</span>
+<span class="nc" id="L43">		this.game = game;</span>
+<span class="nc" id="L44">		this.random = new Random();</span>
+<span class="nc" id="L45">		this.lastDirections = new HashMap&lt;&gt;();</span>
+<span class="nc" id="L46">	}</span>
 
 	public void searchAndDestroy() {
-<span class="nc" id="L48">		game.addListener(new ModelListener() {</span>
+<span class="nc" id="L49">		game.addListener(new ModelListener() {</span>
 			@Override
 			public void gameStarted(GameStartedEvent event) {
 				// Do nothing.
-<span class="nc" id="L52">			}</span>
+<span class="nc" id="L53">			}</span>
 
 			@Override
 			public void roundStarted(RoundStartedEvent event) {
 				// Do nothing.
-<span class="nc" id="L57">			}</span>
+<span class="nc" id="L58">			}</span>
 
 			@Override
 			public void turnStarted(TurnStartedEvent event) {
-<span class="nc bnc" id="L61" title="All 2 branches missed.">				if (event.getPlayer().isComputer()) {</span>
-<span class="nc" id="L62">					turn(event.getPlayer());</span>
+<span class="nc bnc" id="L62" title="All 2 branches missed.">				if (event.getPlayer().isComputer()) {</span>
+<span class="nc" id="L63">					turn(event.getPlayer());</span>
 				}
-<span class="nc" id="L64">			}</span>
+<span class="nc" id="L65">			}</span>
 
 			@Override
 			public void shipMoved(ShipMovedEvent event) {
 				// Do nothing.
-<span class="nc" id="L69">			}</span>
+<span class="nc" id="L70">			}</span>
 
 			@Override
 			public void gameFinished(GameFinishedEvent event) {
 				// Do nothing.
-<span class="nc" id="L74">			}</span>
+<span class="nc" id="L75">			}</span>
 		});
-<span class="nc" id="L76">	}</span>
+<span class="nc" id="L77">	}</span>
 
 	private void turn(final Player player) {
-<span class="nc" id="L79">		enemyShipsAt = player.getEnemyShipsAt();</span>
+<span class="nc" id="L80">		enemyShipsAt = player.getEnemyShipsAt();</span>
 
-<span class="nc" id="L81">		player.getShips().forEach(ship -&gt; {</span>
-<span class="nc" id="L82">			move(ship);</span>
-<span class="nc" id="L83">		});</span>
-<span class="nc" id="L84">		player.endTurn();</span>
-<span class="nc" id="L85">	}</span>
+<span class="nc" id="L82">		player.getShips().forEach(ship -&gt; {</span>
+<span class="nc" id="L83">			move(ship);</span>
+<span class="nc" id="L84">		});</span>
+<span class="nc" id="L85">		player.endTurn();</span>
+<span class="nc" id="L86">	}</span>
 
 	private void move(final Ship ship) {
-<span class="nc bnc" id="L88" title="All 2 branches missed.">		if (lastDirections.get(ship) == null) {</span>
-<span class="nc" id="L89">			lastDirections.put(ship, directions.get(random.nextInt(directions.size())));</span>
+<span class="nc bnc" id="L89" title="All 2 branches missed.">		if (lastDirections.get(ship) == null) {</span>
+<span class="nc" id="L90">			lastDirections.put(ship, directions.get(random.nextInt(directions.size())));</span>
 		}
 
-<span class="nc" id="L92">		final List&lt;Location&gt; directions = new ArrayList&lt;&gt;(SkyNet.directions);</span>
-<span class="nc" id="L93">		Location lastLocation = ship.getLocation();</span>
-<span class="nc" id="L94">		final PathBuilder pathBuilder = new PathBuilder();</span>
-<span class="nc bnc" id="L95" title="All 2 branches missed.">		while (pathBuilder.getLength() &lt; ship.getAvailableMoves()) {</span>
-<span class="nc" id="L96">			final Location lastDirection = lastDirections.get(ship);</span>
-<span class="nc" id="L97">			final Location newLocation = lastLocation.add(lastDirection);</span>
-<span class="nc bnc" id="L98" title="All 4 branches missed.">			if (game.getMap().isValid(newLocation) &amp;&amp; !isEnemyShipAt(newLocation)) {</span>
-<span class="nc" id="L99">				pathBuilder.add(newLocation);</span>
-<span class="nc" id="L100">				lastLocation = newLocation;</span>
+<span class="nc" id="L93">		final List&lt;Location&gt; directions = new ArrayList&lt;&gt;(SkyNet.directions);</span>
+<span class="nc" id="L94">		Location lastLocation = ship.getLocation();</span>
+<span class="nc" id="L95">		final PathBuilder pathBuilder = new PathBuilder();</span>
+<span class="nc bnc" id="L96" title="All 2 branches missed.">		while (pathBuilder.getLength() &lt; ship.getAvailableMoves()) {</span>
+<span class="nc" id="L97">			final Location lastDirection = lastDirections.get(ship);</span>
+<span class="nc" id="L98">			final Location newLocation = lastLocation.add(lastDirection);</span>
+<span class="nc bnc" id="L99" title="All 6 branches missed.">			if (game.getMap().isValid(newLocation) &amp;&amp; game.getMap().getTerrainAt(newLocation) == Terrain.OCEAN &amp;&amp; !isEnemyShipAt(newLocation)) {</span>
+<span class="nc" id="L100">				pathBuilder.add(newLocation);</span>
+<span class="nc" id="L101">				lastLocation = newLocation;</span>
 			} else {
-<span class="nc" id="L102">				directions.remove(lastDirection);</span>
-<span class="nc bnc" id="L103" title="All 2 branches missed.">				if (directions.isEmpty()) {</span>
-<span class="nc" id="L104">					break;</span>
+<span class="nc" id="L103">				directions.remove(lastDirection);</span>
+<span class="nc bnc" id="L104" title="All 2 branches missed.">				if (directions.isEmpty()) {</span>
+<span class="nc" id="L105">					break;</span>
 				}
-<span class="nc" id="L106">				lastDirections.put(ship, directions.get(random.nextInt(directions.size())));</span>
+<span class="nc" id="L107">				lastDirections.put(ship, directions.get(random.nextInt(directions.size())));</span>
 			}
-<span class="nc" id="L108">		}</span>
+<span class="nc" id="L109">		}</span>
 
-<span class="nc bnc" id="L110" title="All 2 branches missed.">		if (!pathBuilder.isEmpty()) {</span>
-<span class="nc" id="L111">			ship.moveTo(pathBuilder.build());</span>
+<span class="nc bnc" id="L111" title="All 2 branches missed.">		if (!pathBuilder.isEmpty()) {</span>
+<span class="nc" id="L112">			ship.moveTo(pathBuilder.build());</span>
 		}
-<span class="nc" id="L113">	}</span>
+<span class="nc" id="L114">	}</span>
 
 	private boolean isEnemyShipAt(final Location location) {
-<span class="nc" id="L116">		List&lt;Ship&gt; ships = enemyShipsAt.get(location);</span>
+<span class="nc" id="L117">		List&lt;Ship&gt; ships = enemyShipsAt.get(location);</span>
 
-<span class="nc bnc" id="L118" title="All 4 branches missed.">		return ships != null &amp;&amp; ships.size() &gt; 0;</span>
+<span class="nc bnc" id="L119" title="All 4 branches missed.">		return ships != null &amp;&amp; ships.size() &gt; 0;</span>
 	}
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>
