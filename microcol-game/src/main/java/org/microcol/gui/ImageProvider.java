@@ -12,6 +12,10 @@ import java.util.Map;
 
 import javax.imageio.ImageIO;
 
+import org.microcol.model.Terrain;
+
+import com.google.common.collect.ImmutableMap;
+
 /**
  * Provide image instances.
  * 
@@ -30,6 +34,8 @@ public class ImageProvider {
 
 	public final static String IMG_TILE_OCEAN = "tile-ocean.png";
 
+	public final static String IMG_TILE_LAND = "tile-land.png";
+
 	public final static String IMG_TILE_SHIP1 = "tile-ship1.png";
 
 	public final static String IMG_TILE_SHIP2 = "tile-ship2.png";
@@ -46,6 +52,9 @@ public class ImageProvider {
 
 	private final Map<String, BufferedImage> images;
 
+	private final Map<Terrain, Image> terrainMap = ImmutableMap.<Terrain, Image>builder()
+			.put(Terrain.CONTINENT, getRawImage(IMG_TILE_LAND)).put(Terrain.OCEAN, getRawImage(IMG_TILE_OCEAN)).build();
+
 	public ImageProvider() {
 		images = new HashMap<>();
 	}
@@ -60,7 +69,7 @@ public class ImageProvider {
 	public Image getImage(final String name) {
 		BufferedImage img = images.get(name);
 		if (img == null) {
-			img = ImageProvider.getRawImage(BASE_PACKAGE + "/" + name);
+			img = ImageProvider.getRawImage(name);
 			if (img == null) {
 				return null;
 			} else {
@@ -108,13 +117,14 @@ public class ImageProvider {
 	/**
 	 * Simplify loading image from resource. Path should look like: <code>
 	 * org/microcol/images/unit-60x60.gif
-	 * </code>
+	 * </code>. Class suppose that all images are in directory <i>images</i>.
 	 * 
 	 * @param path
 	 *            path at classpath where is stored image
 	 * @return image object
 	 */
-	public static BufferedImage getRawImage(final String path) {
+	public static BufferedImage getRawImage(final String rawPath) {
+		final String path = BASE_PACKAGE + "/" + rawPath;
 		try {
 			ClassLoader cl = ImageProvider.class.getClassLoader();
 			final InputStream in = cl.getResourceAsStream(path);
@@ -126,6 +136,17 @@ public class ImageProvider {
 		} catch (IOException e) {
 			throw new MicroColException("Unable to load file '" + path + "'.", e);
 		}
+	}
+
+	/**
+	 * For specific terrain type find corresponding image.
+	 * 
+	 * @param terrain
+	 *            required terrain type
+	 * @return image representing terrain image
+	 */
+	public Image getTerrainImage(final Terrain terrain) {
+		return terrainMap.get(terrain);
 	}
 
 }

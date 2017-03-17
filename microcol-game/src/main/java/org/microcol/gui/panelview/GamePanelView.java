@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JViewport;
 import javax.swing.Timer;
@@ -30,6 +31,7 @@ import org.microcol.model.Game;
 import org.microcol.model.Location;
 import org.microcol.model.Player;
 import org.microcol.model.Ship;
+import org.microcol.model.Terrain;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
@@ -228,9 +230,9 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 		for (int i = area.getTopLeft().getX(); i <= area.getBottomRight().getX(); i++) {
 			for (int j = area.getTopLeft().getY(); j <= area.getBottomRight().getY(); j++) {
 				final Location location = Location.of(i, j);
-				// TODO JJ location will be used to get correct tile
 				final Point point = area.convert(location);
-				graphics.drawImage(imageProvider.getImage(ImageProvider.IMG_TILE_OCEAN), point.getX(), point.getY(),
+				final Terrain terrain = gameController.getGame().getMap().getTerrainAt(location);
+				graphics.drawImage(imageProvider.getTerrainImage(terrain), point.getX(), point.getY(),
 						point.getX() + 35, point.getY() + 35, 0, 0, 35, 35, this);
 			}
 		}

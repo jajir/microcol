@@ -83,7 +83,7 @@ public class MicroCol {
 				Method m = clazz.getMethod("getApplication");
 				Object o = m.invoke(null);
 				Method m2 = clazz.getMethod("setDockIconImage", Image.class);
-				m2.invoke(o, ImageProvider.getRawImage("images/splash-screen.png"));
+				m2.invoke(o, ImageProvider.getRawImage("splash-screen.png"));
 			}
 		} catch (ClassNotFoundException | NoSuchMethodException | SecurityException | IllegalAccessException
 				| IllegalArgumentException | InvocationTargetException e) {
