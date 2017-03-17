@@ -20,9 +20,9 @@ public class Map {
 
 	public Map(final int maxX, final int maxY) {
 		// FIXME JKA >= 0
-		Preconditions.checkArgument(maxX > 0, "MaxX (%s) must be positive.", maxX);
+		Preconditions.checkArgument(maxX >= 1, "MaxX (%s) must be positive.", maxX);
 		// FIXME JKA >= 0
-		Preconditions.checkArgument(maxY > 0, "MaxY (%s) must be positive.", maxY);
+		Preconditions.checkArgument(maxY >= 1, "MaxY (%s) must be positive.", maxY);
 
 		this.maxX = maxX;
 		this.maxY = maxY;
@@ -52,9 +52,9 @@ public class Map {
 	public boolean isValid(final Location location) {
 		Preconditions.checkNotNull(location);
 
-		return location.getX() >= 0
+		return location.getX() >= 1
 			&& location.getX() <= maxX
-			&& location.getY() >= 0
+			&& location.getY() >= 1
 			&& location.getY() <= maxY;
 	}
 

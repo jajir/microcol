@@ -37,7 +37,7 @@ public class Area {
 						(int) Math.ceil(pointBottomRight.getY() / (float) GamePanelView.TOTAL_TILE_WIDTH_IN_PX))
 				.add(Point.of(1, 1));
 
-		topLeft = Location.of(Math.max(0, p1.getX()), Math.max(0, p1.getY()));
+		topLeft = Location.of(Math.max(1, p1.getX()), Math.max(1, p1.getY()));
 		bottomRight = Location.of(Math.min(p2.getX(), map.getMaxX()), Math.min(p2.getY(), map.getMaxY()));
 	}
 
