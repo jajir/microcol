@@ -6,7 +6,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import com.google.common.base.Preconditions;
-
+//TODO JJ java doc
 public class OrderedEventController<E> {
 
 	private final Logger logger = Logger.getLogger(OrderedEventController.class);
@@ -15,7 +15,7 @@ public class OrderedEventController<E> {
 	 * Value of priority when it's not specified.
 	 */
 	private final static int DEFAULT_PRIORITY = 10;
-
+	//TODO JJ java doc
 	private final List<ValueWithPriority<E>> listeners = new ArrayList<>();
 
 	/**
