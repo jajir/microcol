@@ -20,9 +20,9 @@ public class Map {
 
 <span class="fc" id="L21">	public Map(final int maxX, final int maxY) {</span>
 		// FIXME JKA &gt;= 0
-<span class="pc bpc" id="L23" title="1 of 2 branches missed.">		Preconditions.checkArgument(maxX &gt; 0, &quot;MaxX (%s) must be positive.&quot;, maxX);</span>
+<span class="pc bpc" id="L23" title="1 of 2 branches missed.">		Preconditions.checkArgument(maxX &gt;= 1, &quot;MaxX (%s) must be positive.&quot;, maxX);</span>
 		// FIXME JKA &gt;= 0
-<span class="pc bpc" id="L25" title="1 of 2 branches missed.">		Preconditions.checkArgument(maxY &gt; 0, &quot;MaxY (%s) must be positive.&quot;, maxY);</span>
+<span class="pc bpc" id="L25" title="1 of 2 branches missed.">		Preconditions.checkArgument(maxY &gt;= 1, &quot;MaxY (%s) must be positive.&quot;, maxY);</span>
 
 <span class="fc" id="L27">		this.maxX = maxX;</span>
 <span class="fc" id="L28">		this.maxY = maxY;</span>
@@ -52,9 +52,9 @@ public class Map {
 	public boolean isValid(final Location location) {
 <span class="fc" id="L53">		Preconditions.checkNotNull(location);</span>
 
-<span class="fc bfc" id="L55" title="All 2 branches covered.">		return location.getX() &gt;= 0</span>
+<span class="fc bfc" id="L55" title="All 2 branches covered.">		return location.getX() &gt;= 1</span>
 <span class="fc bfc" id="L56" title="All 2 branches covered.">			&amp;&amp; location.getX() &lt;= maxX</span>
-<span class="fc bfc" id="L57" title="All 2 branches covered.">			&amp;&amp; location.getY() &gt;= 0</span>
+<span class="fc bfc" id="L57" title="All 2 branches covered.">			&amp;&amp; location.getY() &gt;= 1</span>
 <span class="fc bfc" id="L58" title="All 2 branches covered.">			&amp;&amp; location.getY() &lt;= maxY;</span>
 	}
 

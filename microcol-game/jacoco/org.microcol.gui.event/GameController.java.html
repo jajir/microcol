@@ -60,64 +60,66 @@ public class GameController implements Localized {
 	 */
 	public void newGame() {
 <span class="nc" id="L62">		GameBuilder builder = new GameBuilder();</span>
-<span class="nc" id="L63">		game = builder.setMap(&quot;/maps/map-01.txt&quot;).setCalendar(1570, 1800)</span>
-<span class="nc" id="L64">			.addPlayer(&quot;Player1&quot;, true).addShip(&quot;Player1&quot;, 5, 5, 5).addShip(&quot;Player1&quot;, 5, 4, 4)</span>
-<span class="nc" id="L65">			.addPlayer(&quot;Player2&quot;, true).addShip(&quot;Player2&quot;, 5, 6, 6).addShip(&quot;Player2&quot;, 5, 7, 7).addShip(&quot;Player2&quot;, 5, 8, 8)</span>
-<span class="nc" id="L66">			.build();</span>
-<span class="nc" id="L67">		game.addListener(new ModelListener() {</span>
+<span class="nc" id="L63">		game = builder.setCalendar(1570, 1800)</span>
+<span class="nc" id="L64">			.setMap(10, 10)</span>
+			//.setMap(&quot;/maps/map-01.txt&quot;)
+<span class="nc" id="L66">			.addPlayer(&quot;Player1&quot;, true).addShip(&quot;Player1&quot;, 5, 4, 4)//.addShip(&quot;Player1&quot;, 5, 1, 1)</span>
+<span class="nc" id="L67">			.addPlayer(&quot;Player2&quot;, true).addShip(&quot;Player2&quot;, 5, 5, 5)//.addShip(&quot;Player2&quot;, 5, 12, 7).addShip(&quot;Player2&quot;, 5, 12, 7)</span>
+<span class="nc" id="L68">			.build();</span>
+<span class="nc" id="L69">		game.addListener(new ModelListener() {</span>
 
 			@Override
 			public void turnStarted(final TurnStartedEvent event) {
-<span class="nc" id="L71">				logger.debug(&quot;Turn started for player '&quot; + event.getPlayer().getName() + &quot;'.&quot;);</span>
-<span class="nc" id="L72">				turnStartedController.fireTurnStartedEvent(event);</span>
-<span class="nc" id="L73">			}</span>
+<span class="nc" id="L73">				logger.debug(&quot;Turn started for player '&quot; + event.getPlayer().getName() + &quot;'.&quot;);</span>
+<span class="nc" id="L74">				turnStartedController.fireTurnStartedEvent(event);</span>
+<span class="nc" id="L75">			}</span>
 
 			@Override
 			public void shipMoved(final ShipMovedEvent event) {
-<span class="nc" id="L77">				logger.debug(&quot;Ship moved &quot; + event);</span>
-<span class="nc" id="L78">				moveUnitController.fireUnitMovedEvent(event);</span>
-<span class="nc" id="L79">			}</span>
+<span class="nc" id="L79">				logger.debug(&quot;Ship moved &quot; + event);</span>
+<span class="nc" id="L80">				moveUnitController.fireUnitMovedEvent(event);</span>
+<span class="nc" id="L81">			}</span>
 
 			@Override
 			public void roundStarted(final RoundStartedEvent event) {
-<span class="nc" id="L83">				logger.debug(&quot;Turn started for year '&quot; + event.getCalendar().getCurrentYear() + &quot;'.&quot;);</span>
-<span class="nc" id="L84">				nextTurnController.fireNextTurnEvent(event);</span>
-<span class="nc" id="L85">			}</span>
+<span class="nc" id="L85">				logger.debug(&quot;Turn started for year '&quot; + event.getCalendar().getCurrentYear() + &quot;'.&quot;);</span>
+<span class="nc" id="L86">				nextTurnController.fireNextTurnEvent(event);</span>
+<span class="nc" id="L87">			}</span>
 
 			@Override
 			public void gameStarted(final GameStartedEvent event) {
-<span class="nc" id="L89">				logger.debug(&quot;Game started &quot; + event);</span>
-<span class="nc" id="L90">				game = event.getGame();</span>
-<span class="nc" id="L91">				newGameController.fireNewGameStartedEvent(event);</span>
-<span class="nc" id="L92">			}</span>
+<span class="nc" id="L91">				logger.debug(&quot;Game started &quot; + event);</span>
+<span class="nc" id="L92">				game = event.getGame();</span>
+<span class="nc" id="L93">				newGameController.fireNewGameStartedEvent(event);</span>
+<span class="nc" id="L94">			}</span>
 
 			@Override
 			public void gameFinished(final GameFinishedEvent event) {
-<span class="nc" id="L96">				logger.debug(&quot;Game finished &quot; + event);</span>
-<span class="nc" id="L97">			}</span>
+<span class="nc" id="L98">				logger.debug(&quot;Game finished &quot; + event);</span>
+<span class="nc" id="L99">			}</span>
 		});
-<span class="nc" id="L99">		SkyNet skyNet = new SkyNet(game);</span>
-<span class="nc" id="L100">		skyNet.searchAndDestroy();</span>
-<span class="nc" id="L101">		new Thread(() -&gt; game.start()).start();</span>
-<span class="nc" id="L102">		musicController.start(gamePreferences.getVolume());</span>
-<span class="nc" id="L103">	}</span>
+<span class="nc" id="L101">		SkyNet skyNet = new SkyNet(game);</span>
+<span class="nc" id="L102">		skyNet.searchAndDestroy();</span>
+<span class="nc" id="L103">		new Thread(() -&gt; game.start()).start();</span>
+<span class="nc" id="L104">		musicController.start(gamePreferences.getVolume());</span>
+<span class="nc" id="L105">	}</span>
 
 	public Game getGame() {
-<span class="nc" id="L106">		return game;</span>
+<span class="nc" id="L108">		return game;</span>
 	}
 
 	public void performMove(final Ship ship, final List&lt;Location&gt; path) {
-<span class="nc" id="L110">		logger.debug(&quot;Start move ship: &quot; + ship);</span>
-<span class="nc" id="L111">		new Thread(() -&gt; ship.moveTo(new Path(path))).start();</span>
+<span class="nc" id="L112">		logger.debug(&quot;Start move ship: &quot; + ship);</span>
+<span class="nc" id="L113">		new Thread(() -&gt; ship.moveTo(new Path(path))).start();</span>
 		// moveAutomatization.addMove(new MoveAutomatization.MovePlanner(ship,
 		// path));
-<span class="nc" id="L114">	}</span>
+<span class="nc" id="L116">	}</span>
 
 	public void nextTurn() {
-<span class="nc" id="L117">		logger.debug(&quot;Next Year event was triggered.&quot;);</span>
-<span class="nc" id="L118">		new Thread(() -&gt; game.endTurn()).start();</span>
+<span class="nc" id="L119">		logger.debug(&quot;Next Year event was triggered.&quot;);</span>
+<span class="nc" id="L120">		new Thread(() -&gt; game.endTurn()).start();</span>
 		// moveAutomatization.perforMoves();
-<span class="nc" id="L120">	}</span>
+<span class="nc" id="L122">	}</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>
