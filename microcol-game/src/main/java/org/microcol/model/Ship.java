@@ -63,6 +63,9 @@ public class Ship {
 			if (availableMoves <= 0) {
 				break;
 			}
+			if (game.getMap().getTerrainAt(newLocation) != Terrain.OCEAN) {
+				throw new IllegalArgumentException(String.format("Path (%s) must contain only ocean (%s).", newLocation, game.getMap().getTerrainAt(newLocation)));
+			}
 			pathBuilder.add(newLocation);
 			location = newLocation;
 			availableMoves--;

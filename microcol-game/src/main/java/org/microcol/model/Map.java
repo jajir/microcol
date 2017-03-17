@@ -15,18 +15,26 @@ public class Map {
 	private final Terrain[][] terrain;
 
 	public Map(final int maxX, final int maxY) {
-		Preconditions.checkArgument(maxX >= 1, "MaxX (%s) must be positive.", maxX);
-		Preconditions.checkArgument(maxY >= 1, "MaxY (%s) must be positive.", maxY);
+		Preconditions.checkArgument(maxX >= getMinX(), "MaxX (%s) must be positive.", maxX);
+		Preconditions.checkArgument(maxY >= getMinY(), "MaxY (%s) must be positive.", maxY);
 
 		terrain = new Terrain[maxX][maxY];
 	}
 
 	public Map(final Terrain[][] terrain) {
 		Preconditions.checkNotNull(terrain);
-		Preconditions.checkArgument(terrain.length >= 1, "MaxX (%s) must be positive.", terrain.length);
-		Preconditions.checkArgument(terrain[0].length >= 1, "MaxY (%s) must be positive.", terrain[0].length);
+		Preconditions.checkArgument(terrain.length >= getMinX(), "MaxX (%s) must be positive.", terrain.length);
+		Preconditions.checkArgument(terrain[0].length >= getMinY(), "MaxY (%s) must be positive.", terrain[0].length);
 
 		this.terrain = terrain;
+	}
+
+	public int getMinX() {
+		return 1;
+	}
+
+	public int getMinY() {
+		return 1;
 	}
 
 	public int getMaxX() {
@@ -46,9 +54,9 @@ public class Map {
 	public boolean isValid(final Location location) {
 		Preconditions.checkNotNull(location);
 
-		return location.getX() >= 1
+		return location.getX() >= getMinX()
 			&& location.getX() <= getMaxX()
-			&& location.getY() >= 1
+			&& location.getY() >= getMinY()
 			&& location.getY() <= getMaxY();
 	}
 
