@@ -20,6 +20,7 @@ public class Location {
 		return y;
 	}
 
+	// tranzitivní
 	public boolean isAdjacent(final Location location) {
 		Preconditions.checkNotNull(location);
 
@@ -31,6 +32,8 @@ public class Location {
 			&& Math.abs(y - location.y) <= 1; 
 	}
 
+	// tranzitivní
+	// funguje správně pouze pro čísla menší než MAX_INT
 	public Location add(final Location location) {
 		Preconditions.checkNotNull(location);
 
