@@ -9,7 +9,7 @@ public class Calendar {
 
 	private int currentYear;
 
-	public Calendar(final int startYear, final int endYear) {
+	Calendar(final int startYear, final int endYear) {
 		Preconditions.checkArgument(startYear < endYear, "Start year (%s) must be less than end year (%s).", startYear, endYear);
 
 		this.startYear = startYear;
@@ -30,12 +30,12 @@ public class Calendar {
 		return currentYear;
 	}
 
-	protected boolean isFinished() {
+	boolean isFinished() {
 		return currentYear >= endYear;
 	}
 
-	protected void endRound() {
-		Preconditions.checkState(!isFinished(), "Current year (%s) must be less than or equal to end year (%s).", currentYear, endYear);
+	void endRound() {
+		Preconditions.checkState(!isFinished(), "End year (%s) already reached.", endYear);
 
 		currentYear++;
 	}

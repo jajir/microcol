@@ -3,7 +3,6 @@ package org.microcol.model;
 import java.util.Arrays;
 import java.util.Collection;
 
-import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -11,30 +10,25 @@ import org.junit.runners.Parameterized.Parameter;
 import org.junit.runners.Parameterized.Parameters;
 
 @RunWith(Parameterized.class)
-public class LocationCreationTest {
-	@Parameters(name = "{index}: x = {0}, y = {1}")
+public class CalendarInvalidCreationTest {
+	@Parameters(name = "{index}: startYear = {0}, endYear = {1}")
 	public static Collection<Object[]> data() {
 		return Arrays.asList(new Object[][] {
-			{ 0,  0},
-			{ 1,  1},
-			{ 2,  3},
-			{-2,  3},
-			{ 2, -3},
-			{-2, -3},
+			{ 1750,  1590},
+			{ 1590,  1590},
+			{-1590, -1750},
+			{-1590, -1590},
 		});
 	}
 
 	@Parameter(0)
-	public int x;
+	public int startYear;
 
 	@Parameter(1)
-	public int y;
+	public int endYear;
 
-	@Test
-	public void testCreation() {
-		final Location location = Location.of(x, y);
-
-		Assert.assertEquals("Test of X-axis failed:", x, location.getX());
-		Assert.assertEquals("Test of Y-axis failed:", y, location.getY());
+	@Test(expected = IllegalArgumentException.class)
+	public void testInvalidCreation() {
+		new Calendar(startYear, endYear);
 	}
 }

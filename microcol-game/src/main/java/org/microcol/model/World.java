@@ -16,8 +16,8 @@ public class World {
 	private final ImmutableMap<Location, Terrain> terrain;
 
 	World(final int maxX, final int maxY) {
-		Preconditions.checkArgument(maxX >= 1, "MaxX (%s) must be positive.", maxX);
-		Preconditions.checkArgument(maxY >= 1, "MaxY (%s) must be positive.", maxY);
+		Preconditions.checkArgument(maxX >= 1, "Max X (%s) must be positive.", maxX);
+		Preconditions.checkArgument(maxY >= 1, "Max Y (%s) must be positive.", maxY);
 
 		this.maxX = maxX;
 		this.maxY = maxY;
@@ -55,8 +55,8 @@ public class World {
 			throw new RuntimeException(ex);
 		}
 
-		Preconditions.checkArgument(maxX >= 1, "MaxX (%s) must be positive.", maxX);
-		Preconditions.checkArgument(maxY >= 1, "MaxY (%s) must be positive.", maxY);
+		Preconditions.checkArgument(maxX >= 1, "Max X (%s) must be positive.", maxX);
+		Preconditions.checkArgument(maxY >= 1, "Max Y (%s) must be positive.", maxY);
 
 		this.maxX = maxX;
 		this.maxY = maxY;

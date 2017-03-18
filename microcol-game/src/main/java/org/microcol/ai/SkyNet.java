@@ -96,6 +96,7 @@ public class SkyNet {
 		while (pathBuilder.size() < ship.getAvailableMoves()) {
 			final Location lastDirection = lastDirections.get(ship);
 			final Location newLocation = lastLocation.add(lastDirection);
+			// TODO JKA Tohle je spatne XXX == Terrain.OCEAN - dat na Ship
 			if (game.getWorld().isValid(newLocation) && game.getWorld().getTerrainAt(newLocation) == Terrain.OCEAN && !isEnemyShipAt(newLocation)) {
 				pathBuilder.add(newLocation);
 				lastLocation = newLocation;
