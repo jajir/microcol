@@ -1,5 +1,7 @@
 package org.microcol.model;
 
+import java.util.Arrays;
+
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -30,19 +32,19 @@ public class MapTest {
 
 		final Map map = new Map(10, 10);
 
-		Path path = new PathBuilder().add(1, 1).add(2, 2).add(3, 3).build();
+		Path path = Path.of(Arrays.asList(Location.of(1, 1), Location.of(2, 2), Location.of(3, 3)));
 		Assert.assertTrue(message + path, map.isValid(path));
 
-		path = new PathBuilder().add(10, 10).add(9, 9).add(8, 8).build();
+		path = Path.of(Arrays.asList(Location.of(10, 10), Location.of(9, 9), Location.of(8, 8)));
 		Assert.assertTrue(message + path, map.isValid(path));
 
-		path = new PathBuilder().add(4, 6).add(5, 5).add(6, 4).build();
+		path = Path.of(Arrays.asList(Location.of(4, 6), Location.of(5, 5), Location.of(6, 4)));
 		Assert.assertTrue(message + path, map.isValid(path));
 
-		path = new PathBuilder().add(2, 2).add(1, 1).add(0, 0).build();
+		path = Path.of(Arrays.asList(Location.of(2, 2), Location.of(1, 1), Location.of(0, 0)));
 		Assert.assertFalse(message + path, map.isValid(path));
 
-		path = new PathBuilder().add(9, 9).add(10, 10).add(11, 11).build();
+		path = Path.of(Arrays.asList(Location.of(9, 9), Location.of(10, 10), Location.of(11, 11)));
 		Assert.assertFalse(message + path, map.isValid(path));
 	}
 }

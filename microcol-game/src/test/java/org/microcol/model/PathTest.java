@@ -42,18 +42,12 @@ public class PathTest {
 
 	@Test
 	public void testContains() {
-		final List<Location> locations = Arrays.asList(Location.of(2, 3),
-			Location.of(3, 3), Location.of(3, 4), Location.of(3, 5), Location.of(4, 5));
+		final List<Location> locations = Arrays.asList(Location.of(2, 3), Location.of(3, 3), Location.of(3, 4));
 		final Path path = Path.of(locations);
 
 		for (Location location : locations) {
 			Assert.assertTrue(String.format("%s not found.", location), path.contains(location));
 		}
-	}
-
-	@Test
-	public void testNotContains() {
-		// TODO JKA
 	}
 
 	@Test(expected = NullPointerException.class)
@@ -65,12 +59,10 @@ public class PathTest {
 
 	@Test
 	public void testContainsAny() {
-		// TODO JKA
-	}
+		final Path path = Path.of(Arrays.asList(Location.of(2, 3), Location.of(3, 3), Location.of(3, 4)));
+		final List<Location> locations = Arrays.asList(Location.of(1, 1), Location.of(2, 2), Location.of(3, 3));
 
-	@Test
-	public void testNotContainsAny() {
-		// TODO JKA
+		Assert.assertTrue(path.containsAny(locations));
 	}
 
 	@Test(expected = NullPointerException.class)
@@ -84,6 +76,6 @@ public class PathTest {
 	public void testContainsAnyNullInside() {
 		final Path path = Path.of(Arrays.asList(Location.of(2, 3)));
 
-		path.containsAny(Arrays.asList(Location.of(3, 2), null, Location.of(2, 3)));
+		path.containsAny(Arrays.asList(Location.of(2, 3), null, Location.of(3, 2)));
 	}
 }

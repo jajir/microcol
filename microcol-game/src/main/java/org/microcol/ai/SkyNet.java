@@ -9,7 +9,7 @@ import java.util.Random;
 import org.microcol.model.Game;
 import org.microcol.model.Location;
 import org.microcol.model.ModelListener;
-import org.microcol.model.PathBuilder;
+import org.microcol.model.Path;
 import org.microcol.model.Player;
 import org.microcol.model.Ship;
 import org.microcol.model.Terrain;
@@ -92,8 +92,8 @@ public class SkyNet {
 
 		final List<Location> directions = new ArrayList<>(SkyNet.directions);
 		Location lastLocation = ship.getLocation();
-		final PathBuilder pathBuilder = new PathBuilder();
-		while (pathBuilder.getLength() < ship.getAvailableMoves()) {
+		final List<Location> pathBuilder = new ArrayList<>(); // TODO JKA Rename
+		while (pathBuilder.size() < ship.getAvailableMoves()) {
 			final Location lastDirection = lastDirections.get(ship);
 			final Location newLocation = lastLocation.add(lastDirection);
 			if (game.getMap().isValid(newLocation) && game.getMap().getTerrainAt(newLocation) == Terrain.OCEAN && !isEnemyShipAt(newLocation)) {
@@ -109,7 +109,7 @@ public class SkyNet {
 		}
 
 		if (!pathBuilder.isEmpty()) {
-			ship.moveTo(pathBuilder.build());
+			ship.moveTo(Path.of(pathBuilder));
 		}
 	}
 

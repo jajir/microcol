@@ -1,5 +1,8 @@
 package org.microcol.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 
@@ -55,7 +58,7 @@ public class Ship {
 		Preconditions.checkArgument(!path.containsAny(owner.getEnemyShipsAt().keySet()), "There is enemy ship on path (%s).", path);
 
 		final Location startLocation = location;
-		final PathBuilder pathBuilder = new PathBuilder();
+		final List<Location> pathBuilder = new ArrayList<>(); // TODO JKA Rename
 		// TODO JKA Use streams
 		for (Location newLocation : path.getLocations()) {
 			if (availableMoves <= 0) {
@@ -69,7 +72,7 @@ public class Ship {
 			availableMoves--;
 		}
 		if (!pathBuilder.isEmpty()) {
-			game.fireShipMoved(game, this, startLocation, pathBuilder.build());
+			game.fireShipMoved(game, this, startLocation, Path.of(pathBuilder));
 		}
 	}
 

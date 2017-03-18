@@ -36,11 +36,13 @@ public class Path {
 		return locations.contains(location);
 	}
 
-	// NPE pokud se narazi na null (kdyz je shoda drive, tak nic)
 	public boolean containsAny(final Collection<Location> locations) {
 		Preconditions.checkNotNull(locations);
+		if (locations.contains(null)) {
+			throw new NullPointerException(String.format("Locations contains null element: %s", locations));
+		}
 
-		return locations.stream().anyMatch(location -> contains(location));
+		return locations.stream().anyMatch(location -> this.locations.contains(location));
 	}
 
 	public List<Location> getLocations() {
