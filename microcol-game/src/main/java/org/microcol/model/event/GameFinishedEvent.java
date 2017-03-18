@@ -4,7 +4,6 @@ import org.microcol.model.Game;
 
 import com.google.common.base.MoreObjects;
 
-// TODO JKA Documentation
 public class GameFinishedEvent extends ModelEvent {
 	public GameFinishedEvent(final Game game) {
 		super(game);

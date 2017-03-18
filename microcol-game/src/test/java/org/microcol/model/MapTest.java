@@ -10,18 +10,18 @@ public class MapTest {
 
 		final Map map = new Map(10, 10);
 
-		Assert.assertTrue(message + "[1, 1]", map.isValid(new Location(1, 1)));
-		Assert.assertTrue(message + "[10, 1]", map.isValid(new Location(10, 1)));
-		Assert.assertTrue(message + "[10, 10]", map.isValid(new Location(10, 10)));
-		Assert.assertTrue(message + "[1, 10]", map.isValid(new Location(1, 10)));
-		Assert.assertTrue(message + "[5, 5]", map.isValid(new Location(5, 5)));
+		Assert.assertTrue(message + "[1, 1]", map.isValid(Location.of(1, 1)));
+		Assert.assertTrue(message + "[10, 1]", map.isValid(Location.of(10, 1)));
+		Assert.assertTrue(message + "[10, 10]", map.isValid(Location.of(10, 10)));
+		Assert.assertTrue(message + "[1, 10]", map.isValid(Location.of(1, 10)));
+		Assert.assertTrue(message + "[5, 5]", map.isValid(Location.of(5, 5)));
 
-		Assert.assertFalse(message + "[0, 0]", map.isValid(new Location(0, 0)));
-		Assert.assertFalse(message + "[0, 5]", map.isValid(new Location(0, 5)));
-		Assert.assertFalse(message + "[5, 0]", map.isValid(new Location(5, 0)));
-		Assert.assertFalse(message + "[11, 5]", map.isValid(new Location(11, 5)));
-		Assert.assertFalse(message + "[5, 11]", map.isValid(new Location(5, 11)));
-		Assert.assertFalse(message + "[11, 11]", map.isValid(new Location(11, 11)));
+		Assert.assertFalse(message + "[0, 0]", map.isValid(Location.of(0, 0)));
+		Assert.assertFalse(message + "[0, 5]", map.isValid(Location.of(0, 5)));
+		Assert.assertFalse(message + "[5, 0]", map.isValid(Location.of(5, 0)));
+		Assert.assertFalse(message + "[11, 5]", map.isValid(Location.of(11, 5)));
+		Assert.assertFalse(message + "[5, 11]", map.isValid(Location.of(5, 11)));
+		Assert.assertFalse(message + "[11, 11]", map.isValid(Location.of(11, 11)));
 	}
 
 	@Test

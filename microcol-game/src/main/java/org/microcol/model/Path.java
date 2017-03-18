@@ -7,8 +7,6 @@ import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 
-// TODO JKA Documentation
-// TODO JKA Tests
 public class Path {
 	private final ImmutableList<Location> locations;
 

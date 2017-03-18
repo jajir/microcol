@@ -9,8 +9,6 @@ import java.util.List;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 
-// TODO JKA Documentation
-// TODO JKA Tests
 public class Map {
 	private final Terrain[][] terrain;
 
@@ -76,6 +74,8 @@ public class Map {
 	@Override
 	public String toString() {
 		return MoreObjects.toStringHelper(this)
+			.add("minX", getMinX())
+			.add("minY", getMinY())
 			.add("maxX", getMaxX())
 			.add("maxY", getMaxY())
 			.toString();

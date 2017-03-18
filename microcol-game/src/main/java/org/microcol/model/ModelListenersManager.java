@@ -9,8 +9,6 @@ import org.microcol.model.event.RoundStartedEvent;
 import org.microcol.model.event.ShipMovedEvent;
 import org.microcol.model.event.TurnStartedEvent;
 
-// TODO JKA Documentation
-// TODO JKA Tests
 class ModelListenersManager {
 	private final List<ModelListener> listeners;
 

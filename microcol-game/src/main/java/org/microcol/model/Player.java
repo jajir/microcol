@@ -6,8 +6,6 @@ import java.util.Map;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 
-// TODO JKA Documentation
-// TODO JKA Tests
 public class Player {
 	private Game game;
 

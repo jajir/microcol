@@ -9,9 +9,6 @@ import java.util.stream.Collectors;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 
-// TODO JKA Optimalizovat
-// TODO JKA Documentation
-// TODO JKA Tests
 class ShipsStorage {
 	private final List<Ship> ships;
 

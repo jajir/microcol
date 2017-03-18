@@ -3,12 +3,11 @@ package org.microcol.model;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 
-// TODO JKA Documentation
 public class Location {
 	private final int x;
 	private final int y;
 
-	public Location(final int x, final int y) {
+	private Location(final int x, final int y) {
 		this.x = x;
 		this.y = y;
 	}
@@ -35,7 +34,7 @@ public class Location {
 	public Location add(final Location location) {
 		Preconditions.checkNotNull(location);
 
-		return new Location(x + location.x, y + location.y);
+		return Location.of(x + location.x, y + location.y);
 	}
 
 	@Override

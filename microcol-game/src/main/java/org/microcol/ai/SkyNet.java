@@ -23,14 +23,14 @@ import com.google.common.collect.ImmutableList;
 
 public class SkyNet {
 	private static final ImmutableList<Location> directions = ImmutableList.of(
-		new Location(1, 1),
-		new Location(0, 1),
-		new Location(-1, 1),
-		new Location(-1, 0),
-		new Location(-1, -1),
-		new Location(0, -1),
-		new Location(1, -1),
-		new Location(1, 0)
+		Location.of(1, 1),
+		Location.of(0, 1),
+		Location.of(-1, 1),
+		Location.of(-1, 0),
+		Location.of(-1, -1),
+		Location.of(0, -1),
+		Location.of(1, -1),
+		Location.of(1, 0)
 	);
 
 	private final Game game;

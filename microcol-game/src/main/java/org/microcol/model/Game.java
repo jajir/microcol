@@ -5,8 +5,6 @@ import java.util.List;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 
-// TODO JKA Documentation
-// TODO JKA Tests
 public class Game {
 	private final Map map;
 	private final Calendar calendar;

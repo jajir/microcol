@@ -3,8 +3,6 @@ package org.microcol.model;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 
-// TODO JKA Documentation
-// TODO JKA Tests
 public class Ship {
 	private Game game;
 

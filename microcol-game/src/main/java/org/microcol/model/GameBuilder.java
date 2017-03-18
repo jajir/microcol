@@ -5,8 +5,6 @@ import java.util.List;
 
 import com.google.common.base.Preconditions;
 
-// TODO JKA Documentation
-// TODO JKA Tests
 public class GameBuilder {
 	private final List<Player> players;
 	private final List<Ship> ships;
@@ -58,7 +56,7 @@ public class GameBuilder {
 
 	public GameBuilder addShip(final String ownerName, final int maxMoves, final int x, final int y) {
 		// TODO JKA Check location - there is not any enemy ship
-		ships.add(new Ship(getPlayer(ownerName), maxMoves, new Location(x, y)));
+		ships.add(new Ship(getPlayer(ownerName), maxMoves, Location.of(x, y)));
 
 		return this;
 	}
