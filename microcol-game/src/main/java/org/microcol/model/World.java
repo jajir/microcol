@@ -3,46 +3,80 @@ package org.microcol.model;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
+import com.google.common.collect.ImmutableMap;
 
 public class World {
-	private final Terrain[][] terrain;
+	private final int maxX;
+	private final int maxY;
+	private final ImmutableMap<Location, Terrain> terrain;
 
 	World(final int maxX, final int maxY) {
 		Preconditions.checkArgument(maxX >= 1, "MaxX (%s) must be positive.", maxX);
 		Preconditions.checkArgument(maxY >= 1, "MaxY (%s) must be positive.", maxY);
 
-		terrain = new Terrain[maxX][maxY];
-		for (int x = 0; x < terrain.length; x++) {
-			Arrays.fill(terrain[x], Terrain.OCEAN);
-		}
+		this.maxX = maxX;
+		this.maxY = maxY;
+		this.terrain = ImmutableMap.of();
 	}
 
-	World(final Terrain[][] terrain) {
-		Preconditions.checkNotNull(terrain);
-		Preconditions.checkArgument(terrain.length >= 1, "MaxX (%s) must be positive.", terrain.length);
-		Preconditions.checkArgument(terrain[0].length >= 1, "MaxY (%s) must be positive.", terrain[0].length);
+	World(final String fileName) {
+		Preconditions.checkNotNull(fileName);
 
-		this.terrain = terrain;
+		int maxX = 0;
+		int maxY = 0;
+		final Map<Location, Terrain> terrain = new HashMap<>();
+
+		try (final BufferedReader reader = new BufferedReader(
+				new InputStreamReader(World.class.getResourceAsStream(fileName)))) {
+			String line = null;
+			while ((line = reader.readLine()) != null && !line.startsWith("-")) {
+				maxX = Math.max(maxX, line.length() - 1);
+				maxY++;
+				for (int x = 0; x < line.length() - 1; x++) {
+					final char tile = line.charAt(x);
+					switch (tile) {
+						case 'o':
+							terrain.put(Location.of(x + 1, maxY), Terrain.CONTINENT);
+							break;
+						case ' ':
+							// Do nothing.
+							break;
+						default:
+							throw new IllegalArgumentException(String.format("Unsupported character (%s).", tile));
+					}
+				}
+			}
+		} catch (IOException ex) {
+			throw new RuntimeException(ex);
+		}
+
+		Preconditions.checkArgument(maxX >= 1, "MaxX (%s) must be positive.", maxX);
+		Preconditions.checkArgument(maxY >= 1, "MaxY (%s) must be positive.", maxY);
+
+		this.maxX = maxX;
+		this.maxY = maxY;
+		this.terrain = ImmutableMap.copyOf(terrain);
 	}
 
 	public int getMaxX() {
-		return terrain.length;
+		return maxX;
 	}
 
 	public int getMaxY() {
-		return terrain[0].length;
+		return maxY;
 	}
 
 	public Terrain getTerrainAt(final Location location) {
 		Preconditions.checkNotNull(location);
 
-		return terrain[location.getX() - 1][location.getY() - 1];
+		Terrain terrain = this.terrain.get(location);
+
+		return terrain != null ? terrain : Terrain.OCEAN;
 	}
 
 	public boolean isValid(final Location location) {
@@ -57,14 +91,7 @@ public class World {
 	public boolean isValid(final Path path) {
 		Preconditions.checkNotNull(path);
 
-		// TODO JKA Use streams
-		for (Location location : path.getLocations()) {
-			if (!isValid(location)) {
-				return false;
-			}
-		}
-
-		return true;
+		return !path.getLocations().stream().anyMatch(location -> !isValid(location));
 	}
 
 	@Override
@@ -75,63 +102,39 @@ public class World {
 			.toString();
 	}
 
-	public String print() {
+	String print() {
 		StringBuilder builder = new StringBuilder();
 
-		for (int x = 0; x < terrain.length + 2; x++) {
+		for (int x = 1; x <= maxX + 2; x++) {
 			builder.append("-");
 		}
 		builder.append("\n");
 
-		for (int y = 0; y < terrain[0].length; y++) {
+		for (int y = 1; y <= maxY; y++) {
 			builder.append("|");
-			for (int x = 0; x < terrain.length; x++) {
-				if (terrain[x][y] == Terrain.CONTINENT) {
-					builder.append("o");
-				} else {
-					builder.append(" ");
+			for (int x = 1; x <= maxX; x++) {
+				switch (terrain.get(Location.of(x, y))) {
+					case CONTINENT:
+						builder.append("o");
+						break;
+					case OCEAN:
+						builder.append(" ");
+						break;
 				}
 			}
 			builder.append("|\n");
 		}
 
-		for (int x = 0; x < terrain.length + 2; x++) {
+		for (int x = 1; x <= maxX + 2; x++) {
 			builder.append("-");
 		}
 
 		return builder.toString();
 	}
 
-	public static World load(final String fileName) {
-		final List<Terrain[]> rows = new ArrayList<>();
-
-		try (final BufferedReader reader = new BufferedReader(
-			new InputStreamReader(World.class.getResourceAsStream(fileName)))) {
-			String line = null;
-			while ((line = reader.readLine()) != null && !line.startsWith("-")) {
-				final Terrain[] row = new Terrain[line.length() - 1];
-				for (int x = 0; x < line.length() - 1; x++) {
-					row[x] = line.charAt(x) == 'o' ? Terrain.CONTINENT : Terrain.OCEAN; 
-				}
-				rows.add(row);
-			}
-		} catch (IOException ex) {
-			throw new RuntimeException(ex);
-		}
-
-		final Terrain[][] terrain = new Terrain[rows.get(0).length][rows.size()];
-		for (int y = 0; y < rows.size(); y++) {
-			for (int x = 0; x < rows.get(y).length; x++) {
-				terrain[x][y] = rows.get(y)[x];
-			}
-		}
-
-		return new World(terrain);
-	}
-
 	public static void main(String[] args) {
-//		Map map = new Map(20, 10);
-		World map = load("/maps/map-01.txt");
-		System.out.println(map.print());
+//		World world = new World(15, 10);
+		World world = new World("/maps/map-01.txt");
+		System.out.println(world.print());
 	}
 }

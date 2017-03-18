@@ -30,7 +30,7 @@ public class GameBuilder {
 	}
 
 	public GameBuilder setWorld(final String fileName) {
-		world = World.load(fileName);
+		world = new World(fileName);
 
 		return this;
 	}
