@@ -34,19 +34,27 @@ public class Player {
 	}
 
 	public List<Ship> getShips() {
-		return game.getShipsStorage().getShips(this);
+		return game.getShipStorage().getShips(this);
+	}
+
+	public Map<Location, List<Ship>> getShipsAt() {
+		return game.getShipStorage().getShipsAt(this);
 	}
 
 	public List<Ship> getShipsAt(final Location location) {
-		return game.getShipsStorage().getShipsAt(this, location);
+		return game.getShipStorage().getShipsAt(this, location);
 	}
 
 	public List<Ship> getEnemyShips() {
-		return game.getShipsStorage().getEnemyShips(this);
+		return game.getShipStorage().getEnemyShips(this);
 	}
 
 	public Map<Location, List<Ship>> getEnemyShipsAt() {
-		return game.getShipsStorage().getEnemyShipsAt(this);
+		return game.getShipStorage().getEnemyShipsAt(this);
+	}
+
+	public List<Ship> getEnemyShipsAt(final Location location) {
+		return game.getShipStorage().getEnemyShipsAt(this, location);
 	}
 
 	protected void startTurn() {

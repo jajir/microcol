@@ -1,6 +1,7 @@
 package org.microcol.model;
 
 import java.util.List;
+import java.util.Map;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
@@ -11,7 +12,7 @@ public class Game {
 	private final ImmutableList<Player> players;
 
 	private final ListenerManager listenerManager;
-	private final ShipsStorage shipsStorage; 
+	private final ShipStorage shipStorage; 
 
 	private Player currentPlayer;
 	private boolean started;
@@ -25,8 +26,8 @@ public class Game {
 		});
 
 		listenerManager = new ListenerManager();
-		shipsStorage = new ShipsStorage(ships);
-		shipsStorage.getShips().forEach(ship -> {
+		shipStorage = new ShipStorage(ships);
+		shipStorage.getShips().forEach(ship -> {
 			ship.setGame(this);
 		});
 	}
@@ -57,20 +58,20 @@ public class Game {
 		return currentPlayer;
 	}
 
-	ShipsStorage getShipsStorage() {
-		return shipsStorage;
+	ShipStorage getShipStorage() {
+		return shipStorage;
 	}
 
 	public List<Ship> getShips() {
-		return shipsStorage.getShips();
+		return shipStorage.getShips();
 	}
 
-	public java.util.Map<Location, List<Ship>> getShipsAt() {
-		return shipsStorage.getShipsAt();
+	public Map<Location, List<Ship>> getShipsAt() {
+		return shipStorage.getShipsAt();
 	}
 
 	public List<Ship> getShipsAt(final Location location) {
-		return shipsStorage.getShipsAt(location);
+		return shipStorage.getShipsAt(location);
 	}
 
 	public boolean isStarted() {
