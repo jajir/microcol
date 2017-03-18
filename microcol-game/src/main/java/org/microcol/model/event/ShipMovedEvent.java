@@ -10,14 +10,14 @@ import com.google.common.base.Preconditions;
 
 public class ShipMovedEvent extends ModelEvent {
 	private final Ship ship;
-	private final Location startLocation;
+	private final Location start;
 	private final Path path;
 
-	public ShipMovedEvent(final Game game, final Ship ship, final Location startLocation, final Path path) {
+	public ShipMovedEvent(final Game game, final Ship ship, final Location start, final Path path) {
 		super(game);
 
 		this.ship = Preconditions.checkNotNull(ship);
-		this.startLocation = Preconditions.checkNotNull(startLocation);
+		this.start = Preconditions.checkNotNull(start);
 		this.path = Preconditions.checkNotNull(path);
 	}
 
@@ -25,8 +25,8 @@ public class ShipMovedEvent extends ModelEvent {
 		return ship;
 	}
 
-	public Location getStartLocation() {
-		return startLocation;
+	public Location getStart() {
+		return start;
 	}
 
 	public Path getPath() {
@@ -37,7 +37,7 @@ public class ShipMovedEvent extends ModelEvent {
 	public String toString() {
 		return MoreObjects.toStringHelper(this)
 			.add("ship", ship)
-			.add("startLocation", startLocation)
+			.add("start", start)
 			.add("path", path)
 			.toString();
 	}

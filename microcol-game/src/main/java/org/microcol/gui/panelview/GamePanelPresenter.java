@@ -322,9 +322,9 @@ public class GamePanelPresenter implements Localized {
 	private void scheduleWalkAnimation(final ShipMovedEvent event) {
 		Preconditions.checkArgument(event.getPath().getLocations().size() >= 1,
 				"Path for moving doesn't contains enought steps to move.");
-		display.planScrollingAnimationToPoint(display.getArea().getCenterAreaTo(Point.of(event.getStartLocation())));
+		display.planScrollingAnimationToPoint(display.getArea().getCenterAreaTo(Point.of(event.getStart())));
 		List<Location> path = new ArrayList<>(event.getPath().getLocations());
-		path.add(0, event.getStartLocation());
+		path.add(0, event.getStart());
 		final WalkAnimator walkAnimator = new WalkAnimator(pathPlanning, path, event.getShip());
 		display.setWalkAnimator(walkAnimator);
 	}
