@@ -57,7 +57,7 @@ public class Ship {
 		Preconditions.checkState(owner.equals(game.getCurrentPlayer()), "Current player (%s) is not owner (%s) of this ship (%s).", game.getCurrentPlayer(), owner, this);
 		Preconditions.checkArgument(!path.containsAny(owner.getEnemyShipsAt().keySet()), "There is enemy ship on path (%s).", path);
 
-		final Location startLocation = location;
+		final Location start = location;
 		final List<Location> pathBuilder = new ArrayList<>(); // TODO JKA Rename
 		// TODO JKA Use streams
 		for (Location newLocation : path.getLocations()) {
@@ -72,7 +72,7 @@ public class Ship {
 			availableMoves--;
 		}
 		if (!pathBuilder.isEmpty()) {
-			game.fireShipMoved(game, this, startLocation, Path.of(pathBuilder));
+			game.fireShipMoved(game, this, start, Path.of(pathBuilder));
 		}
 	}
 

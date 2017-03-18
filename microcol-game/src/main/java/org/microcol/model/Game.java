@@ -10,7 +10,7 @@ public class Game {
 	private final World world;
 	private final ImmutableList<Player> players;
 
-	private final ModelListenersManager listenersManager;
+	private final ListenerManager listenerManager;
 	private final ShipsStorage shipsStorage; 
 
 	private Player currentPlayer;
@@ -24,7 +24,7 @@ public class Game {
 			player.setGame(this);
 		});
 
-		listenersManager = new ModelListenersManager();
+		listenerManager = new ListenerManager();
 		shipsStorage = new ShipsStorage(ships);
 		shipsStorage.getShips().forEach(ship -> {
 			ship.setGame(this);
@@ -32,11 +32,11 @@ public class Game {
 	}
 
 	public void addListener(ModelListener listener) {
-		listenersManager.addListener(listener);
+		listenerManager.addListener(listener);
 	}
 
 	public void removeListener(ModelListener listener) {
-		listenersManager.removeListener(listener);
+		listenerManager.removeListener(listener);
 	}
 
 	public Calendar getCalendar() {
@@ -57,7 +57,7 @@ public class Game {
 		return currentPlayer;
 	}
 
-	protected ShipsStorage getShipsStorage() {
+	ShipsStorage getShipsStorage() {
 		return shipsStorage;
 	}
 
@@ -81,7 +81,7 @@ public class Game {
 		return calendar.isFinished();
 	}
 
-	protected boolean isActive() {
+	boolean isActive() {
 		return started && !isFinished();
 	}
 
@@ -90,10 +90,10 @@ public class Game {
 
 		started = true;
 		currentPlayer = players.get(0);
-		listenersManager.fireGameStarted(this);
-		listenersManager.fireRoundStarted(this, calendar);
+		listenerManager.fireGameStarted(this);
+		listenerManager.fireRoundStarted(this, calendar);
 		currentPlayer.startTurn();
-		listenersManager.fireTurnStarted(this, currentPlayer);
+		listenerManager.fireTurnStarted(this, currentPlayer);
 	}
 
 	public void endTurn() {
@@ -103,21 +103,21 @@ public class Game {
 		if (index < players.size() - 1) {
 			currentPlayer = players.get(index + 1);
 			currentPlayer.startTurn();
-			listenersManager.fireTurnStarted(this, currentPlayer);
+			listenerManager.fireTurnStarted(this, currentPlayer);
 		} else {
 			calendar.endRound();
 			if (!calendar.isFinished()) {
 				currentPlayer = players.get(0);
-				listenersManager.fireRoundStarted(this, calendar);
+				listenerManager.fireRoundStarted(this, calendar);
 				currentPlayer.startTurn();
-				listenersManager.fireTurnStarted(this, currentPlayer);
+				listenerManager.fireTurnStarted(this, currentPlayer);
 			} else {
-				listenersManager.fireGameFinished(this);
+				listenerManager.fireGameFinished(this);
 			}
 		}
 	}
 
-	protected void fireShipMoved(final Game game, final Ship ship, final Location startLocation, final Path path) {
-		listenersManager.fireShipMoved(game, ship, startLocation, path);
+	void fireShipMoved(final Game game, final Ship ship, final Location start, final Path path) {
+		listenerManager.fireShipMoved(game, ship, start, path);
 	}
 }
