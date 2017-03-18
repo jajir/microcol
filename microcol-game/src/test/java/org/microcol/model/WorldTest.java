@@ -5,12 +5,12 @@ import java.util.Arrays;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class MapTest {
+public class WorldTest {
 	@Test
 	public void testValidLocation() {
 		final String message = "Test of isValid location failed: ";
 
-		final Map map = new Map(10, 10);
+		final World map = new World(10, 10);
 
 		Assert.assertTrue(message + "[1, 1]", map.isValid(Location.of(1, 1)));
 		Assert.assertTrue(message + "[10, 1]", map.isValid(Location.of(10, 1)));
@@ -30,7 +30,7 @@ public class MapTest {
 	public void testValidPath() {
 		final String message = "Test of isValid path failed: ";
 
-		final Map map = new Map(10, 10);
+		final World map = new World(10, 10);
 
 		Path path = Path.of(Arrays.asList(Location.of(1, 1), Location.of(2, 2), Location.of(3, 3)));
 		Assert.assertTrue(message + path, map.isValid(path));

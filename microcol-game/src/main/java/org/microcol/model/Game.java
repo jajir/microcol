@@ -6,8 +6,8 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 
 public class Game {
-	private final Map map;
 	private final Calendar calendar;
+	private final World world;
 	private final ImmutableList<Player> players;
 
 	private final ModelListenersManager listenersManager;
@@ -16,9 +16,9 @@ public class Game {
 	private Player currentPlayer;
 	private boolean started;
 
-	protected Game(final Map map, final Calendar calendar, final List<Player> players, final List<Ship> ships) {
-		this.map = Preconditions.checkNotNull(map);
+	protected Game(final Calendar calendar, final World world, final List<Player> players, final List<Ship> ships) {
 		this.calendar = Preconditions.checkNotNull(calendar);
+		this.world = Preconditions.checkNotNull(world);
 		this.players = ImmutableList.copyOf(players);
 		this.players.forEach(player -> {
 			player.setGame(this);
@@ -39,12 +39,12 @@ public class Game {
 		listenersManager.removeListener(listener);
 	}
 
-	public Map getMap() {
-		return map;
-	}
-
 	public Calendar getCalendar() {
 		return calendar;
+	}
+
+	public World getWorld() {
+		return world;
 	}
 
 	public List<Player> getPlayers() {

@@ -157,7 +157,7 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 		super.paint(g);
 		final Graphics2D g2d = (Graphics2D) g;
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-		final Area area = new Area((JViewport) this.getParent(), gameController.getGame().getMap());
+		final Area area = new Area((JViewport) this.getParent(), gameController.getGame().getWorld());
 		if (dbImage == null) {
 			dbImage = prepareImage(area);
 			if (dbImage == null) {
@@ -230,7 +230,7 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 			for (int j = area.getTopLeft().getY(); j <= area.getBottomRight().getY(); j++) {
 				final Location location = Location.of(i, j);
 				final Point point = area.convert(location);
-				final Terrain terrain = gameController.getGame().getMap().getTerrainAt(location);
+				final Terrain terrain = gameController.getGame().getWorld().getTerrainAt(location);
 				graphics.drawImage(imageProvider.getTerrainImage(terrain), point.getX(), point.getY(),
 						point.getX() + 35, point.getY() + 35, 0, 0, 35, 35, this);
 			}
@@ -426,11 +426,11 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 	}
 
 	private int getGameMapWidth() {
-		return (gameController.getGame().getMap().getMaxX()) * TOTAL_TILE_WIDTH_IN_PX - 1;
+		return (gameController.getGame().getWorld().getMaxX()) * TOTAL_TILE_WIDTH_IN_PX - 1;
 	}
 
 	private int getGameMapHeight() {
-		return (gameController.getGame().getMap().getMaxY()) * TOTAL_TILE_WIDTH_IN_PX - 1;
+		return (gameController.getGame().getWorld().getMaxY()) * TOTAL_TILE_WIDTH_IN_PX - 1;
 	}
 
 	@Override
@@ -492,7 +492,7 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 
 	@Override
 	public Area getArea() {
-		return new Area((JViewport) getParent(), gameController.getGame().getMap());
+		return new Area((JViewport) getParent(), gameController.getGame().getWorld());
 	}
 
 }

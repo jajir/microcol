@@ -6,7 +6,7 @@ import javax.swing.JViewport;
 
 import org.microcol.gui.Point;
 import org.microcol.model.Location;
-import org.microcol.model.Map;
+import org.microcol.model.World;
 
 import com.google.common.base.MoreObjects;
 
@@ -24,7 +24,7 @@ public class Area {
 
 	private final Point pointBottomRight;
 
-	public Area(final JViewport viewport, final Map map) {
+	public Area(final JViewport viewport, final World map) {
 		final Dimension dim = viewport.getExtentSize();
 		final java.awt.Point pos = viewport.getViewPosition();
 

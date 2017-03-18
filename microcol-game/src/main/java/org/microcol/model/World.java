@@ -4,35 +4,31 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 
-public class Map {
+public class World {
 	private final Terrain[][] terrain;
 
-	public Map(final int maxX, final int maxY) {
-		Preconditions.checkArgument(maxX >= getMinX(), "MaxX (%s) must be positive.", maxX);
-		Preconditions.checkArgument(maxY >= getMinY(), "MaxY (%s) must be positive.", maxY);
+	World(final int maxX, final int maxY) {
+		Preconditions.checkArgument(maxX >= 1, "MaxX (%s) must be positive.", maxX);
+		Preconditions.checkArgument(maxY >= 1, "MaxY (%s) must be positive.", maxY);
 
 		terrain = new Terrain[maxX][maxY];
+		for (int x = 0; x < terrain.length; x++) {
+			Arrays.fill(terrain[x], Terrain.OCEAN);
+		}
 	}
 
-	public Map(final Terrain[][] terrain) {
+	World(final Terrain[][] terrain) {
 		Preconditions.checkNotNull(terrain);
-		Preconditions.checkArgument(terrain.length >= getMinX(), "MaxX (%s) must be positive.", terrain.length);
-		Preconditions.checkArgument(terrain[0].length >= getMinY(), "MaxY (%s) must be positive.", terrain[0].length);
+		Preconditions.checkArgument(terrain.length >= 1, "MaxX (%s) must be positive.", terrain.length);
+		Preconditions.checkArgument(terrain[0].length >= 1, "MaxY (%s) must be positive.", terrain[0].length);
 
 		this.terrain = terrain;
-	}
-
-	public int getMinX() {
-		return 1;
-	}
-
-	public int getMinY() {
-		return 1;
 	}
 
 	public int getMaxX() {
@@ -52,9 +48,9 @@ public class Map {
 	public boolean isValid(final Location location) {
 		Preconditions.checkNotNull(location);
 
-		return location.getX() >= getMinX()
+		return location.getX() >= 1
 			&& location.getX() <= getMaxX()
-			&& location.getY() >= getMinY()
+			&& location.getY() >= 1
 			&& location.getY() <= getMaxY();
 	}
 
@@ -74,8 +70,6 @@ public class Map {
 	@Override
 	public String toString() {
 		return MoreObjects.toStringHelper(this)
-			.add("minX", getMinX())
-			.add("minY", getMinY())
 			.add("maxX", getMaxX())
 			.add("maxY", getMaxY())
 			.toString();
@@ -108,11 +102,11 @@ public class Map {
 		return builder.toString();
 	}
 
-	public static Map load(final String fileName) {
+	public static World load(final String fileName) {
 		final List<Terrain[]> rows = new ArrayList<>();
 
 		try (final BufferedReader reader = new BufferedReader(
-			new InputStreamReader(Map.class.getResourceAsStream(fileName)))) {
+			new InputStreamReader(World.class.getResourceAsStream(fileName)))) {
 			String line = null;
 			while ((line = reader.readLine()) != null && !line.startsWith("-")) {
 				final Terrain[] row = new Terrain[line.length() - 1];
@@ -132,12 +126,12 @@ public class Map {
 			}
 		}
 
-		return new Map(terrain);
+		return new World(terrain);
 	}
 
 	public static void main(String[] args) {
 //		Map map = new Map(20, 10);
-		Map map = load("/maps/map-01.txt");
+		World map = load("/maps/map-01.txt");
 		System.out.println(map.print());
 	}
 }

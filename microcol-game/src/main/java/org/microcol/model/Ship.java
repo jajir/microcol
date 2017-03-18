@@ -52,7 +52,7 @@ public class Ship {
 	public void moveTo(final Path path) {
 		Preconditions.checkNotNull(path);
 		Preconditions.checkArgument(path.getStart().isAdjacent(location), "Path (%s) must be adjacent to current location (%s).", path.getStart(), location);
-		Preconditions.checkArgument(game.getMap().isValid(path), "Path (%s) must be valid.", path);
+		Preconditions.checkArgument(game.getWorld().isValid(path), "Path (%s) must be valid.", path);
 		Preconditions.checkState(game.isActive(), "Game must be active.");
 		Preconditions.checkState(owner.equals(game.getCurrentPlayer()), "Current player (%s) is not owner (%s) of this ship (%s).", game.getCurrentPlayer(), owner, this);
 		Preconditions.checkArgument(!path.containsAny(owner.getEnemyShipsAt().keySet()), "There is enemy ship on path (%s).", path);
@@ -64,8 +64,8 @@ public class Ship {
 			if (availableMoves <= 0) {
 				break;
 			}
-			if (game.getMap().getTerrainAt(newLocation) != Terrain.OCEAN) {
-				throw new IllegalArgumentException(String.format("Path (%s) must contain only ocean (%s).", newLocation, game.getMap().getTerrainAt(newLocation)));
+			if (game.getWorld().getTerrainAt(newLocation) != Terrain.OCEAN) {
+				throw new IllegalArgumentException(String.format("Path (%s) must contain only ocean (%s).", newLocation, game.getWorld().getTerrainAt(newLocation)));
 			}
 			pathBuilder.add(newLocation);
 			location = newLocation;

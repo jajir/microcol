@@ -61,8 +61,8 @@ public class GameController implements Localized {
 	public void newGame() {
 		GameBuilder builder = new GameBuilder();
 		game = builder.setCalendar(1570, 1800)
-			//.setMap(10, 10)
-			.setMap("/maps/map-01.txt")
+			//.setWorld(10, 10)
+			.setWorld("/maps/map-01.txt")
 			.addPlayer("Player1", true).addShip("Player1", 5, 4, 2).addShip("Player1", 5, 3, 3)
 			.addPlayer("Player2", true).addShip("Player2", 5, 7, 7).addShip("Player2", 5, 7, 9).addShip("Player2", 5, 14, 9)
 			.build();

@@ -9,28 +9,28 @@ public class GameBuilder {
 	private final List<Player> players;
 	private final List<Ship> ships;
 
-	private Map map;
 	private Calendar calendar;
+	private World world;
 
 	public GameBuilder() {
 		players = new ArrayList<>();
 		ships = new ArrayList<>();
 	}
 
-	public GameBuilder setMap(final int maxX, final int maxY) {
-		map = new Map(maxX, maxY);
-
-		return this;
-	}
-
-	public GameBuilder setMap(final String fileName) {
-		map = Map.load(fileName);
-
-		return this;
-	}
-
 	public GameBuilder setCalendar(final int startYear, final int endYear) {
 		calendar = new Calendar(startYear, endYear);
+
+		return this;
+	}
+
+	public GameBuilder setWorld(final int maxX, final int maxY) {
+		world = new World(maxX, maxY);
+
+		return this;
+	}
+
+	public GameBuilder setWorld(final String fileName) {
+		world = World.load(fileName);
 
 		return this;
 	}
@@ -64,6 +64,6 @@ public class GameBuilder {
 	public Game build() {
 		Preconditions.checkState(!players.isEmpty(), "Game must have at least one player.");
 
-		return new Game(map, calendar, players, ships);
+		return new Game(calendar, world, players, ships);
 	}
 }
