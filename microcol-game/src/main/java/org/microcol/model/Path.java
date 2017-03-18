@@ -10,25 +10,24 @@ import com.google.common.collect.ImmutableList;
 public class Path {
 	private final ImmutableList<Location> locations;
 
-	public Path(final List<Location> locations) {
+	private Path(final List<Location> locations) {
 		Preconditions.checkNotNull(locations);
 		Preconditions.checkArgument(locations.size() > 0, "Path cannot be empty.");
-		Preconditions.checkArgument(isValid(locations), "Invalid path: %s", locations);
+		checkAdjacent(locations);
 
+		// Throws NPE if any element is null.
 		this.locations = ImmutableList.copyOf(locations);
 	}
 
-	private boolean isValid(final List<Location> locations) {
-		// TODO JKA Use streams
+	private void checkAdjacent(final List<Location> locations) {
 		for (int i = 1; i < locations.size(); i++) {
 			final Location prevLocation = locations.get(i - 1);
 			final Location nextLocation = locations.get(i);
+			// Possible NPE is not problem here.
 			if (!prevLocation.isAdjacent(nextLocation)) {
-				return false;
+				throw new IllegalArgumentException(String.format("Locations are not adjacent: %s", locations));
 			}
 		}
-
-		return true;
 	}
 
 	public boolean contains(final Location location) {
@@ -37,24 +36,18 @@ public class Path {
 		return locations.contains(location);
 	}
 
+	// NPE pokud se narazi na null (kdyz je shoda drive, tak nic)
 	public boolean containsAny(final Collection<Location> locations) {
 		Preconditions.checkNotNull(locations);
 
-		// TODO JKA Use streams
-		for (Location location : locations) {
-			if (this.locations.contains(location)) {
-				return true;
-			}
-		}
-
-		return false;
+		return locations.stream().anyMatch(location -> contains(location));
 	}
 
 	public List<Location> getLocations() {
 		return locations;
 	}
 
-	public Location getFirstLocation() {
+	public Location getStart() {
 		return locations.get(0);
 	}
 
@@ -63,5 +56,9 @@ public class Path {
 		return MoreObjects.toStringHelper(this)
 			.add("locations", locations)
 			.toString();
+	}
+
+	public static Path of(final List<Location> locations) {
+		return new Path(locations);
 	}
 }

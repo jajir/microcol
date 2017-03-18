@@ -110,7 +110,7 @@ public class GameController implements Localized {
 
 	public void performMove(final Ship ship, final List<Location> path) {
 		logger.debug("Start move ship: " + ship);
-		new Thread(() -> ship.moveTo(new Path(path))).start();
+		new Thread(() -> ship.moveTo(Path.of(path))).start();
 		// moveAutomatization.addMove(new MoveAutomatization.MovePlanner(ship,
 		// path));
 	}

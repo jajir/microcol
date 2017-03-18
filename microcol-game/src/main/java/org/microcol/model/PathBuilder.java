@@ -31,6 +31,6 @@ public class PathBuilder {
 	}
 
 	public Path build() {
-		return new Path(locations);
+		return Path.of(locations);
 	}
 }

@@ -48,7 +48,7 @@ public class Ship {
 
 	public void moveTo(final Path path) {
 		Preconditions.checkNotNull(path);
-		Preconditions.checkArgument(path.getFirstLocation().isAdjacent(location), "Path (%s) must be adjacent to current location (%s).", path.getFirstLocation(), location);
+		Preconditions.checkArgument(path.getStart().isAdjacent(location), "Path (%s) must be adjacent to current location (%s).", path.getStart(), location);
 		Preconditions.checkArgument(game.getMap().isValid(path), "Path (%s) must be valid.", path);
 		Preconditions.checkState(game.isActive(), "Game must be active.");
 		Preconditions.checkState(owner.equals(game.getCurrentPlayer()), "Current player (%s) is not owner (%s) of this ship (%s).", game.getCurrentPlayer(), owner, this);

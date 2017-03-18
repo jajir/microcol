@@ -1,146 +1,89 @@
 package org.microcol.model;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Test;
 
 public class PathTest {
-	@Test
-	public void testCreationOne() {
-		final List<Location> locations = new ArrayList<>();
-		locations.add(Location.of(2, 3));
-
-		final Path path = new Path(locations);
-		Assert.assertEquals("Test of creation failed:", locations, path.getLocations());
-	}
-
-	@Test
-	public void testCreationMore() {
-		final List<Location> locations = new ArrayList<>();
-		locations.add(Location.of(2, 3));
-		locations.add(Location.of(3, 3));
-		locations.add(Location.of(3, 4));
-		locations.add(Location.of(3, 5));
-		locations.add(Location.of(4, 5));
-
-		final Path path = new Path(locations);
-		Assert.assertEquals("Test of creation failed:", locations, path.getLocations());
-	}
-
-	@Test
-	public void testCreationCircle() {
-		final List<Location> locations = new ArrayList<>();
-		locations.add(Location.of(2, 3));
-		locations.add(Location.of(3, 3));
-		locations.add(Location.of(3, 4));
-		locations.add(Location.of(2, 4));
-		locations.add(Location.of(2, 3));
-
-		final Path path = new Path(locations);
-		Assert.assertEquals("Test of creation failed:", locations, path.getLocations());
-	}
-
-	@Test
-	public void testCreationBack() {
-		final List<Location> locations = new ArrayList<>();
-		locations.add(Location.of(2, 3));
-		locations.add(Location.of(3, 3));
-		locations.add(Location.of(4, 3));
-		locations.add(Location.of(3, 3));
-		locations.add(Location.of(2, 3));
-
-		final Path path = new Path(locations);
-		Assert.assertEquals("Test of creation failed:", locations, path.getLocations());
-	}
-
 	@Test(expected = NullPointerException.class)
 	public void testCreationNull() {
-		new Path(null);
+		Path.of(null);
 	}
 
 	@Test(expected = NullPointerException.class)
 	public void testCreationNullElement() {
-		final List<Location> locations = new ArrayList<>();
-		locations.add(Location.of(2, 3));
-		locations.add(null);
-		locations.add(Location.of(3, 2));
-
-		new Path(locations);
+		Path.of(Arrays.asList(Location.of(2, 3), null, Location.of(3, 2)));
 	}
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testCreationEmpty() {
-		new Path(new ArrayList<>());
+		Path.of(new ArrayList<>());
 	}
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testCreationInvalidSame() {
-		final List<Location> locations = new ArrayList<>();
-		locations.add(Location.of(2, 3));
-		locations.add(Location.of(2, 3));
-
-		new Path(locations);
+		Path.of(Arrays.asList(Location.of(2, 3), Location.of(2, 3)));
 	}
 
 	@Test(expected = IllegalArgumentException.class)
-	public void testCreationInvalidGap() {
-		final List<Location> locations = new ArrayList<>();
-		locations.add(Location.of(2, 3));
-		locations.add(Location.of(4, 3));
-
-		new Path(locations);
+	public void testCreationInvalidAdjacent() {
+		Path.of(Arrays.asList(Location.of(2, 3), Location.of(4, 3)));
 	}
 
 	@Test(expected = UnsupportedOperationException.class)
 	public void testImmutable() {
-		final List<Location> locations = new ArrayList<>();
-		locations.add(Location.of(2, 3));
+		final Path path = Path.of(Arrays.asList(Location.of(2, 3)));
 
-		final Path path = new Path(locations);
 		path.getLocations().add(Location.of(3, 2));
 	}
 
+	@Test
 	public void testContains() {
-		final String message = "Test contains failed: ";
+		final List<Location> locations = Arrays.asList(Location.of(2, 3),
+			Location.of(3, 3), Location.of(3, 4), Location.of(3, 5), Location.of(4, 5));
+		final Path path = Path.of(locations);
 
-		final List<Location> locations = new ArrayList<>();
-		locations.add(Location.of(2, 3));
-		locations.add(Location.of(3, 3));
-		locations.add(Location.of(3, 4));
-		locations.add(Location.of(3, 5));
-		locations.add(Location.of(4, 5));
+		for (Location location : locations) {
+			Assert.assertTrue(String.format("%s not found.", location), path.contains(location));
+		}
+	}
 
-		final Path path = new Path(locations);
-		Assert.assertTrue(message + "[2, 3]", path.contains(Location.of(2, 3)));		
-		Assert.assertTrue(message + "[3, 4]", path.contains(Location.of(2, 3)));		
-		Assert.assertTrue(message + "[4, 5]", path.contains(Location.of(2, 3)));
+	@Test
+	public void testNotContains() {
 		// TODO JKA
 	}
 
 	@Test(expected = NullPointerException.class)
 	public void testContainsNull() {
-		final List<Location> locations = new ArrayList<>();
-		locations.add(Location.of(2, 3));
+		final Path path = Path.of(Arrays.asList(Location.of(2, 3)));
 
-		final Path path = new Path(locations);
 		path.contains(null);
 	}
 
+	@Test
 	public void testContainsAny() {
-		
+		// TODO JKA
 	}
 
+	@Test
+	public void testNotContainsAny() {
+		// TODO JKA
+	}
+
+	@Test(expected = NullPointerException.class)
 	public void testContainsAnyNull() {
-		final List<Location> locations = new ArrayList<>();
-		locations.add(Location.of(2, 3));
+		final Path path = Path.of(Arrays.asList(Location.of(2, 3)));
 
-		final Path path = new Path(locations);
-		path.contains(null);
+		path.containsAny(null);
 	}
 
-	public void testGetFirstLocation() {
-		
+	@Test(expected = NullPointerException.class)
+	public void testContainsAnyNullInside() {
+		final Path path = Path.of(Arrays.asList(Location.of(2, 3)));
+
+		path.containsAny(Arrays.asList(Location.of(3, 2), null, Location.of(2, 3)));
 	}
 }
