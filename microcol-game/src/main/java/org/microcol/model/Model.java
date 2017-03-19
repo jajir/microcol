@@ -70,10 +70,6 @@ public class Model {
 		return gameManager.getCurrentPlayer();
 	}
 
-	ShipStorage getShipStorage() {
-		return shipStorage;
-	}
-
 	public List<Ship> getShips() {
 		return shipStorage.getShips();
 	}
@@ -84,6 +80,30 @@ public class Model {
 
 	public List<Ship> getShipsAt(final Location location) {
 		return shipStorage.getShipsAt(location);
+	}
+
+	List<Ship> getShips(final Player player) {
+		return shipStorage.getShips(player);
+	}
+
+	Map<Location, List<Ship>> getShipsAt(final Player player) {
+		return shipStorage.getShipsAt(player);
+	}
+
+	List<Ship> getShipsAt(final Player player, final Location location) {
+		return shipStorage.getShipsAt(player, location);
+	}
+
+	List<Ship> getEnemyShips(final Player player) {
+		return shipStorage.getEnemyShips(player);
+	}
+
+	Map<Location, List<Ship>> getEnemyShipsAt(final Player player) {
+		return shipStorage.getEnemyShipsAt(player);
+	}
+
+	List<Ship> getEnemyShipsAt(final Player player, final Location location) {
+		return shipStorage.getEnemyShipsAt(player, location);
 	}
 
 	public void startGame() {
