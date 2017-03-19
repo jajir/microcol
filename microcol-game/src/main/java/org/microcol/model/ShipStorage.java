@@ -1,5 +1,6 @@
 package org.microcol.model;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -13,6 +14,21 @@ class ShipStorage {
 
 	ShipStorage(final List<Ship> ships) {
 		this.ships = ImmutableList.copyOf(ships);
+		checkShipLocations(this.ships);
+	}
+
+	private void checkShipLocations(final List<Ship> ships) {
+		Map<Location, Player> owners = new HashMap<>();
+		ships.forEach(ship -> {
+			Player owner = owners.get(ship.getLocation());
+			if (owner != null) {
+				if (!owner.equals(ship.getOwner())) {
+					throw new IllegalArgumentException(String.format("There is an enemy ship at the same location (%s).", ship.getLocation()));
+				}
+			} else {
+				owners.put(ship.getLocation(), ship.getOwner());
+			}
+		});
 	}
 
 	List<Ship> getShips() {
