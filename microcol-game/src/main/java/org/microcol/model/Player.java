@@ -7,18 +7,18 @@ import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 
 public class Player {
-	private Game game;
+	private Model model;
 
 	private final String name;
 	private final boolean computer;
 
-	protected Player(final String name, final boolean computer) {
+	Player(final String name, final boolean computer) {
 		this.name = Preconditions.checkNotNull(name);
 		this.computer = computer;
 	}
 
-	protected void setGame(final Game game) {
-		this.game = Preconditions.checkNotNull(game);
+	void setModel(final Model model) {
+		this.model = Preconditions.checkNotNull(model);
 	}
 
 	public String getName() {
@@ -34,40 +34,40 @@ public class Player {
 	}
 
 	public List<Ship> getShips() {
-		return game.getShipStorage().getShips(this);
+		return model.getShipStorage().getShips(this);
 	}
 
 	public Map<Location, List<Ship>> getShipsAt() {
-		return game.getShipStorage().getShipsAt(this);
+		return model.getShipStorage().getShipsAt(this);
 	}
 
 	public List<Ship> getShipsAt(final Location location) {
-		return game.getShipStorage().getShipsAt(this, location);
+		return model.getShipStorage().getShipsAt(this, location);
 	}
 
 	public List<Ship> getEnemyShips() {
-		return game.getShipStorage().getEnemyShips(this);
+		return model.getShipStorage().getEnemyShips(this);
 	}
 
 	public Map<Location, List<Ship>> getEnemyShipsAt() {
-		return game.getShipStorage().getEnemyShipsAt(this);
+		return model.getShipStorage().getEnemyShipsAt(this);
 	}
 
 	public List<Ship> getEnemyShipsAt(final Location location) {
-		return game.getShipStorage().getEnemyShipsAt(this, location);
+		return model.getShipStorage().getEnemyShipsAt(this, location);
 	}
 
-	protected void startTurn() {
+	void startTurn() {
 		getShips().forEach(ship -> {
 			ship.startTurn();
 		});
 	}
 
 	public void endTurn() {
-		Preconditions.checkState(game.isActive(), "Game must be active.");
-		Preconditions.checkState(game.getCurrentPlayer().equals(this), "This player (%s) is not current player (%s).", this, game.getCurrentPlayer());
+		Preconditions.checkState(model.isActive(), "Game must be active.");
+		Preconditions.checkState(model.getCurrentPlayer().equals(this), "This player (%s) is not current player (%s).", this, model.getCurrentPlayer());
 
-		game.endTurn();
+		model.endTurn();
 	}
 
 	@Override

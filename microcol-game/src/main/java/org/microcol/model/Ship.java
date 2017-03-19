@@ -7,7 +7,7 @@ import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 
 public class Ship {
-	private Game game;
+	private Model model;
 
 	private final Player owner;
 	private final int maxMoves;
@@ -15,7 +15,7 @@ public class Ship {
 	private Location location;
 	private int availableMoves;
 
-	protected Ship(final Player owner, final int maxMoves, final Location location) {
+	Ship(final Player owner, final int maxMoves, final Location location) {
 		this.owner = Preconditions.checkNotNull(owner);
 
 		Preconditions.checkArgument(maxMoves > 0, "Number of maximum moves (%s) must be positive.", maxMoves);
@@ -25,8 +25,8 @@ public class Ship {
 		this.availableMoves = maxMoves;
 	}
 
-	protected void setGame(final Game game) {
-		this.game = Preconditions.checkNotNull(game);
+	void setModel(final Model model) {
+		this.model = Preconditions.checkNotNull(model);
 	}
 
 	public Player getOwner() {
@@ -45,16 +45,16 @@ public class Ship {
 		return availableMoves;
 	}
 
-	protected void startTurn() {
+	void startTurn() {
 		availableMoves = maxMoves;
 	}
 
 	public void moveTo(final Path path) {
 		Preconditions.checkNotNull(path);
 		Preconditions.checkArgument(path.getStart().isAdjacent(location), "Path (%s) must be adjacent to current location (%s).", path.getStart(), location);
-		Preconditions.checkArgument(game.getWorld().isValid(path), "Path (%s) must be valid.", path);
-		Preconditions.checkState(game.isActive(), "Game must be active.");
-		Preconditions.checkState(owner.equals(game.getCurrentPlayer()), "Current player (%s) is not owner (%s) of this ship (%s).", game.getCurrentPlayer(), owner, this);
+		Preconditions.checkArgument(model.getWorld().isValid(path), "Path (%s) must be valid.", path);
+		Preconditions.checkState(model.isActive(), "Game must be active.");
+		Preconditions.checkState(owner.equals(model.getCurrentPlayer()), "Current player (%s) is not owner (%s) of this ship (%s).", model.getCurrentPlayer(), owner, this);
 		Preconditions.checkArgument(!path.containsAny(owner.getEnemyShipsAt().keySet()), "There is enemy ship on path (%s).", path);
 
 		final Location start = location;
@@ -64,15 +64,15 @@ public class Ship {
 			if (availableMoves <= 0) {
 				break;
 			}
-			if (game.getWorld().getTerrainAt(newLocation) != Terrain.OCEAN) {
-				throw new IllegalArgumentException(String.format("Path (%s) must contain only ocean (%s).", newLocation, game.getWorld().getTerrainAt(newLocation)));
+			if (model.getWorld().getTerrainAt(newLocation) != Terrain.OCEAN) {
+				throw new IllegalArgumentException(String.format("Path (%s) must contain only ocean (%s).", newLocation, model.getWorld().getTerrainAt(newLocation)));
 			}
 			pathBuilder.add(newLocation);
 			location = newLocation;
 			availableMoves--;
 		}
 		if (!pathBuilder.isEmpty()) {
-			game.fireShipMoved(game, this, start, Path.of(pathBuilder));
+			model.fireShipMoved(this, start, Path.of(pathBuilder));
 		}
 	}
 

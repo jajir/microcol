@@ -26,7 +26,7 @@ public class NewGameController {
 		Preconditions.checkNotNull(event);
 		logger.debug("New game started: " + event);
 		listeners.forEach(listener -> {
-			listener.onNewGame(event.getGame());
+			listener.onNewGame(event.getModel());
 		});
 	}
 }

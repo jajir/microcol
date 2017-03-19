@@ -1,17 +1,17 @@
 package org.microcol.model.event;
 
-import org.microcol.model.Game;
+import org.microcol.model.Model;
 
 import com.google.common.base.Preconditions;
 
 abstract class ModelEvent {
-	private final Game game;
+	private final Model model;
 
-	public ModelEvent(final Game game) {
-		this.game = Preconditions.checkNotNull(game);
+	ModelEvent(final Model model) {
+		this.model = Preconditions.checkNotNull(model);
 	}
 
-	public Game getGame() {
-		return game;
+	public Model getModel() {
+		return model;
 	}
 }

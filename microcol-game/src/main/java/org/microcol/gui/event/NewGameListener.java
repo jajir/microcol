@@ -1,6 +1,6 @@
 package org.microcol.gui.event;
 
-import org.microcol.model.Game;
+import org.microcol.model.Model;
 
 /**
  * New game listener.
@@ -13,6 +13,6 @@ public interface NewGameListener {
 	 * @param game
 	 *            required new game
 	 */
-	void onNewGame(Game game);
+	void onNewGame(Model game);
 
 }

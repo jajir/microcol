@@ -1,7 +1,7 @@
 package org.microcol.model.event;
 
 import org.microcol.model.Calendar;
-import org.microcol.model.Game;
+import org.microcol.model.Model;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
@@ -9,8 +9,8 @@ import com.google.common.base.Preconditions;
 public class RoundStartedEvent extends ModelEvent {
 	private final Calendar calendar;
 
-	public RoundStartedEvent(final Game game, final Calendar calendar) {
-		super(game);
+	public RoundStartedEvent(final Model model, final Calendar calendar) {
+		super(model);
 
 		this.calendar = Preconditions.checkNotNull(calendar);
 	}

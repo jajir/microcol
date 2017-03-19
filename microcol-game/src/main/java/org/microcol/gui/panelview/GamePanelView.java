@@ -26,7 +26,7 @@ import org.microcol.gui.Point;
 import org.microcol.gui.StepCounter;
 import org.microcol.gui.event.GameController;
 import org.microcol.gui.event.NextTurnController;
-import org.microcol.model.Game;
+import org.microcol.model.Model;
 import org.microcol.model.Location;
 import org.microcol.model.Player;
 import org.microcol.model.Ship;
@@ -249,7 +249,7 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 	 * @param game
 	 *            required {@link Game}
 	 */
-	private void paintUnits(final Graphics2D graphics, final Game world, final Area area) {
+	private void paintUnits(final Graphics2D graphics, final Model world, final Area area) {
 		final java.util.Map<Location, List<Ship>> ships = world.getShipsAt();
 
 		final java.util.Map<Location, List<Ship>> ships2 = ships.entrySet().stream()

@@ -6,7 +6,7 @@ import java.util.Map;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 
-public class Game {
+public class Model {
 	private final Calendar calendar;
 	private final World world;
 	private final ImmutableList<Player> players;
@@ -17,18 +17,18 @@ public class Game {
 	private Player currentPlayer;
 	private boolean started;
 
-	protected Game(final Calendar calendar, final World world, final List<Player> players, final List<Ship> ships) {
+	Model(final Calendar calendar, final World world, final List<Player> players, final List<Ship> ships) {
 		this.calendar = Preconditions.checkNotNull(calendar);
 		this.world = Preconditions.checkNotNull(world);
 		this.players = ImmutableList.copyOf(players);
 		this.players.forEach(player -> {
-			player.setGame(this);
+			player.setModel(this);
 		});
 
 		listenerManager = new ListenerManager();
 		shipStorage = new ShipStorage(ships);
 		shipStorage.getShips().forEach(ship -> {
-			ship.setGame(this);
+			ship.setModel(this);
 		});
 	}
 
@@ -118,7 +118,7 @@ public class Game {
 		}
 	}
 
-	void fireShipMoved(final Game game, final Ship ship, final Location start, final Path path) {
-		listenerManager.fireShipMoved(game, ship, start, path);
+	void fireShipMoved(final Ship ship, final Location start, final Path path) {
+		listenerManager.fireShipMoved(this, ship, start, path);
 	}
 }

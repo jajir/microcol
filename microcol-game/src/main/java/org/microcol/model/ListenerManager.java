@@ -32,32 +32,32 @@ class ListenerManager {
 		listeners.remove(listener);
 	}
 
-	void fireGameStarted(final Game game) {
-		final GameStartedEvent event = new GameStartedEvent(game);
+	void fireGameStarted(final Model model) {
+		final GameStartedEvent event = new GameStartedEvent(model);
 
 		listeners.forEach(listener -> listener.gameStarted(event));
 	}
 
-	void fireRoundStarted(final Game game, final Calendar calendar) {
-		final RoundStartedEvent event = new RoundStartedEvent(game, calendar);
+	void fireRoundStarted(final Model model, final Calendar calendar) {
+		final RoundStartedEvent event = new RoundStartedEvent(model, calendar);
 
 		listeners.forEach(listener -> listener.roundStarted(event));
 	}
 
-	void fireTurnStarted(final Game game, final Player player) {
-		final TurnStartedEvent event = new TurnStartedEvent(game, player);
+	void fireTurnStarted(final Model model, final Player player) {
+		final TurnStartedEvent event = new TurnStartedEvent(model, player);
 
 		listeners.forEach(listener -> listener.turnStarted(event));
 	}
 
-	void fireShipMoved(final Game game, final Ship ship, final Location start, final Path path) {
-		final ShipMovedEvent event = new ShipMovedEvent(game, ship, start, path);
+	void fireShipMoved(final Model model, final Ship ship, final Location start, final Path path) {
+		final ShipMovedEvent event = new ShipMovedEvent(model, ship, start, path);
 
 		listeners.forEach(listener -> listener.shipMoved(event));
 	}
 
-	void fireGameFinished(final Game game) {
-		final GameFinishedEvent event = new GameFinishedEvent(game);
+	void fireGameFinished(final Model model) {
+		final GameFinishedEvent event = new GameFinishedEvent(model);
 
 		listeners.forEach(listener -> listener.gameFinished(event));
 	}

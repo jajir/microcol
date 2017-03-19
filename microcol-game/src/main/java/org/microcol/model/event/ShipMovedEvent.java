@@ -1,6 +1,6 @@
 package org.microcol.model.event;
 
-import org.microcol.model.Game;
+import org.microcol.model.Model;
 import org.microcol.model.Location;
 import org.microcol.model.Path;
 import org.microcol.model.Ship;
@@ -13,8 +13,8 @@ public class ShipMovedEvent extends ModelEvent {
 	private final Location start;
 	private final Path path;
 
-	public ShipMovedEvent(final Game game, final Ship ship, final Location start, final Path path) {
-		super(game);
+	public ShipMovedEvent(final Model model, final Ship ship, final Location start, final Path path) {
+		super(model);
 
 		this.ship = Preconditions.checkNotNull(ship);
 		this.start = Preconditions.checkNotNull(start);

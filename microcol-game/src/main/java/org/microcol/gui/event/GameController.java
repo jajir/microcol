@@ -7,8 +7,8 @@ import org.microcol.ai.SkyNet;
 import org.microcol.gui.GamePreferences;
 import org.microcol.gui.Localized;
 import org.microcol.gui.MusicController;
-import org.microcol.model.Game;
-import org.microcol.model.GameBuilder;
+import org.microcol.model.Model;
+import org.microcol.model.ModelBuilder;
 import org.microcol.model.Location;
 import org.microcol.model.ModelListener;
 import org.microcol.model.Path;
@@ -41,7 +41,7 @@ public class GameController implements Localized {
 
 	private final GamePreferences gamePreferences;
 
-	private Game game;
+	private Model game;
 
 	@Inject
 	public GameController(final NextTurnController nextTurnController, final MoveUnitController moveUnitController,
@@ -59,7 +59,7 @@ public class GameController implements Localized {
 	 * Start new game and register listener.
 	 */
 	public void newGame() {
-		GameBuilder builder = new GameBuilder();
+		ModelBuilder builder = new ModelBuilder();
 		game = builder.setCalendar(1570, 1800)
 			//.setWorld(15, 10)
 			.setWorld("/maps/map-01.txt")
@@ -89,7 +89,7 @@ public class GameController implements Localized {
 			@Override
 			public void gameStarted(final GameStartedEvent event) {
 				logger.debug("Game started " + event);
-				game = event.getGame();
+				game = event.getModel();
 				newGameController.fireNewGameStartedEvent(event);
 			}
 
@@ -104,7 +104,7 @@ public class GameController implements Localized {
 		musicController.start(gamePreferences.getVolume());
 	}
 
-	public Game getGame() {
+	public Model getGame() {
 		return game;
 	}
 

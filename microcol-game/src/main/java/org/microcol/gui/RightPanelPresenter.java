@@ -15,7 +15,7 @@ import org.microcol.gui.event.GameController;
 import org.microcol.gui.event.KeyController;
 import org.microcol.gui.event.StatusBarMessageController;
 import org.microcol.gui.event.TurnStartedController;
-import org.microcol.model.Game;
+import org.microcol.model.Model;
 import org.microcol.model.Location;
 import org.microcol.model.Player;
 
@@ -26,7 +26,7 @@ public class RightPanelPresenter implements Localized {
 	public interface Display {
 		JButton getNextTurnButton();
 
-		void showTile(final FocusedTileEvent event, Game game);
+		void showTile(final FocusedTileEvent event, Model game);
 
 		JPanel getRightPanel();
 

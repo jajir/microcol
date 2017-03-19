@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-import org.microcol.model.Game;
+import org.microcol.model.Model;
 import org.microcol.model.Location;
 import org.microcol.model.ModelListener;
 import org.microcol.model.Path;
@@ -33,20 +33,20 @@ public class SkyNet {
 		Location.of(1, 0)
 	);
 
-	private final Game game;
+	private final Model model;
 	private final Random random;
 	private final Map<Ship, Location> lastDirections;
 
 	private Map<Location, List<Ship>> enemyShipsAt;
 
-	public SkyNet(final Game game) {
-		this.game = game;
+	public SkyNet(final Model model) {
+		this.model = model;
 		this.random = new Random();
 		this.lastDirections = new HashMap<>();
 	}
 
 	public void searchAndDestroy() {
-		game.addListener(new ModelListener() {
+		model.addListener(new ModelListener() {
 			@Override
 			public void gameStarted(GameStartedEvent event) {
 				// Do nothing.
@@ -97,7 +97,7 @@ public class SkyNet {
 			final Location lastDirection = lastDirections.get(ship);
 			final Location newLocation = lastLocation.add(lastDirection);
 			// TODO JKA Tohle je spatne XXX == Terrain.OCEAN - dat na Ship
-			if (game.getWorld().isValid(newLocation) && game.getWorld().getTerrainAt(newLocation) == Terrain.OCEAN && !isEnemyShipAt(newLocation)) {
+			if (model.getWorld().isValid(newLocation) && model.getWorld().getTerrainAt(newLocation) == Terrain.OCEAN && !isEnemyShipAt(newLocation)) {
 				pathBuilder.add(newLocation);
 				lastLocation = newLocation;
 			} else {

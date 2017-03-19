@@ -1,12 +1,12 @@
 package org.microcol.model.event;
 
-import org.microcol.model.Game;
+import org.microcol.model.Model;
 
 import com.google.common.base.MoreObjects;
 
 public class GameFinishedEvent extends ModelEvent {
-	public GameFinishedEvent(final Game game) {
-		super(game);
+	public GameFinishedEvent(final Model model) {
+		super(model);
 	}
 
 	@Override
