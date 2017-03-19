@@ -26,7 +26,7 @@ import org.microcol.gui.event.NewGameController;
 import org.microcol.gui.event.ShowGridController;
 import org.microcol.gui.event.StatusBarMessageController;
 import org.microcol.gui.event.StatusBarMessageEvent;
-import org.microcol.gui.event.ViewController;
+import org.microcol.gui.event.CenterViewController;
 import org.microcol.model.Location;
 import org.microcol.model.Ship;
 import org.microcol.model.Terrain;
@@ -105,7 +105,7 @@ public class GamePanelPresenter implements Localized {
 			final FocusedTileController focusedTileController, final PathPlanning pathPlanning,
 			final MoveUnitController moveUnitController, final NewGameController newGameController,
 			final GamePreferences gamePreferences, final ShowGridController showGridController,
-			final ViewController viewController, final AboutGameEventController gameEventController,
+			final CenterViewController viewController, final AboutGameEventController gameEventController,
 			final ExitGameController exitGameController) {
 		this.focusedTileController = focusedTileController;
 		this.gameController = Preconditions.checkNotNull(gameController);
@@ -197,7 +197,7 @@ public class GamePanelPresenter implements Localized {
 		display.getGamePanelView().addMouseListener(ma);
 		display.getGamePanelView().addMouseMotionListener(ma);
 		display.getGamePanelView().getParent().addComponentListener(new GamePanelListener(display));
-		viewController.addCenterViewListener(() -> onCenterView());
+		viewController.addListener(event -> onCenterView());
 
 		exitGameController.addListener(event -> display.stopTimer());
 

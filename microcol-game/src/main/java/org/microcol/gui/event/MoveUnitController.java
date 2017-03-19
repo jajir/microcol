@@ -14,16 +14,16 @@ import com.google.common.base.Preconditions;
 //TODO JJ split to separate event classes use AbstractEventController
 public class MoveUnitController {
 
-	private final List<MoveUnitListener> listeners = new ArrayList<MoveUnitListener>();
+	private final List<Listener<ShipMovedEvent>> listeners = new ArrayList<>();
 
-	private final List<MicrocolListener<String>> listenersStartMove = new ArrayList<>();
+	private final List<Listener<String>> listenersStartMove = new ArrayList<>();
 
-	public void addMoveUnitListener(final MoveUnitListener listener) {
+	public void addMoveUnitListener(final Listener<ShipMovedEvent> listener) {
 		Preconditions.checkNotNull(listener);
 		listeners.add(listener);
 	}
 
-	public void addStartMovingListener(final MicrocolListener<String> listener) {
+	public void addStartMovingListener(final Listener<String> listener) {
 		Preconditions.checkNotNull(listener);
 		listenersStartMove.add(listener);
 	}
@@ -31,7 +31,7 @@ public class MoveUnitController {
 	public void fireUnitMovedEvent(final ShipMovedEvent event) {
 		Preconditions.checkNotNull(event);
 		listeners.forEach(listener -> {
-			listener.onMoveUnit(event);
+			listener.onEvent(event);
 		});
 	}
 

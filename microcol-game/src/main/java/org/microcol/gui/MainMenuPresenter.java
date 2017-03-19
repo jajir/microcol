@@ -6,6 +6,8 @@ import javax.swing.JRadioButtonMenuItem;
 
 import org.microcol.gui.event.AboutGameEvent;
 import org.microcol.gui.event.AboutGameEventController;
+import org.microcol.gui.event.CenterViewController;
+import org.microcol.gui.event.CenterViewEvent;
 import org.microcol.gui.event.ChangeLanguageController;
 import org.microcol.gui.event.ChangeLanguageEvent;
 import org.microcol.gui.event.ExitGameController;
@@ -17,7 +19,6 @@ import org.microcol.gui.event.MoveUnitController;
 import org.microcol.gui.event.ShowGridController;
 import org.microcol.gui.event.ShowGridEvent;
 import org.microcol.gui.event.TurnStartedController;
-import org.microcol.gui.event.ViewController;
 import org.microcol.gui.event.VolumeChangeController;
 import org.microcol.model.event.TurnStartedEvent;
 
@@ -64,7 +65,7 @@ public class MainMenuPresenter {
 			final ChangeLanguageController changeLanguangeController, final Text text, final ViewUtil viewUtil,
 			final VolumeChangeController volumeChangeController, final ShowGridController showGridController,
 			final FocusedTileController focusedTileController, final MoveUnitController moveUnitController,
-			final ViewController viewController, final TurnStartedController turnStartedController,
+			final CenterViewController centerViewController, final TurnStartedController turnStartedController,
 			final ExitGameController exitGameController, final GameController gameController) {
 		this.display = Preconditions.checkNotNull(display);
 		display.getMenuItemNewGame().addActionListener(actionEvent -> {
@@ -95,7 +96,7 @@ public class MainMenuPresenter {
 			moveUnitController.fireStartMoveEvent();
 			display.getMenuItemMove().setEnabled(false);
 		});
-		display.getMenuItemCenterView().addActionListener(event -> viewController.fireCenterView());
+		display.getMenuItemCenterView().addActionListener(event -> centerViewController.fireEvent(new CenterViewEvent()));
 		changeLanguangeController.addListener(event -> {
 			display.updateLanguage();
 		});
