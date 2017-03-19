@@ -12,6 +12,7 @@ import javax.swing.SwingConstants;
 import javax.swing.WindowConstants;
 
 import org.microcol.gui.event.VolumeChangeController;
+import org.microcol.gui.event.VolumeChangeEvent;
 
 public class PreferencesVolume extends JDialog {
 
@@ -51,7 +52,7 @@ public class PreferencesVolume extends JDialog {
 		slider.setPaintLabels(false);
 		slider.setValue(actualVolume);
 		slider.addChangeListener(changeEvent -> {
-			volumeChangeController.fireVolumeChangedEvent(slider.getValue());
+			volumeChangeController.fireEvent(new VolumeChangeEvent(slider.getValue()));
 		});
 
 		add(slider, new GridBagConstraints(0, 1, 1, 1, 1.0D, 1.0D, GridBagConstraints.SOUTHEAST,

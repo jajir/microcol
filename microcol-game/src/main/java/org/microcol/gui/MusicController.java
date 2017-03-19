@@ -17,7 +17,7 @@ public class MusicController {
 	@Inject
 	public MusicController(final MusicPlayer musicPlayer, final VolumeChangeController volumeChangeController) {
 		this.musicPlayer = Preconditions.checkNotNull(musicPlayer);
-		volumeChangeController.addFocusedTileListener(e -> onVolumeChanged(e));
+		volumeChangeController.addListener(e -> onVolumeChanged(e));
 	}
 
 	private void onVolumeChanged(final VolumeChangeEvent event) {

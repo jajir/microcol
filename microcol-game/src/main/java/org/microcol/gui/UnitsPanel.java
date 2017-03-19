@@ -12,6 +12,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import org.microcol.gui.event.StatusBarMessageController;
+import org.microcol.gui.event.StatusBarMessageEvent;
 import org.microcol.model.Ship;
 
 import com.google.common.base.Preconditions;
@@ -37,7 +38,8 @@ public class UnitsPanel extends JPanel implements Localized {
 		addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(final MouseEvent e) {
-				statusBarMessageController.fireStatusMessageWasChangedEvent(getText().get("unitsPanel.description"));
+				statusBarMessageController
+						.fireEvent(new StatusBarMessageEvent(getText().get("unitsPanel.description")));
 			}
 		});
 	}

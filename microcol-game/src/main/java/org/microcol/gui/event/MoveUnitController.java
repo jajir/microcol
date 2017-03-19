@@ -11,7 +11,7 @@ import com.google.common.base.Preconditions;
  * Controller allows to register unit moving listeners and fire events.
  * 
  */
-//FIXME JJ split to separate event classes use AbstractEventController
+//TODO JJ split to separate event classes use AbstractEventController
 public class MoveUnitController {
 
 	private final List<MoveUnitListener> listeners = new ArrayList<MoveUnitListener>();

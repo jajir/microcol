@@ -12,7 +12,7 @@ public class VolumeChangedListenerPreferences {
 	@Inject
 	public VolumeChangedListenerPreferences(final VolumeChangeController volumeChangeController,
 			final GamePreferences gamePreferences) {
-		volumeChangeController.addFocusedTileListener(e -> gamePreferences.setVolume(e.getVolume()));
+		volumeChangeController.addListener(e -> gamePreferences.setVolume(e.getVolume()));
 	}
 
 }

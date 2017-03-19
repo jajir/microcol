@@ -3,19 +3,21 @@ package org.microcol.gui.event;
 import org.microcol.gui.Text;
 import org.microcol.model.Model;
 
+import com.google.common.base.Preconditions;
+
 public class ChangeLanguageEvent {
 
 	private final Text.Language language;
 
-	private final Model game;
+	private final Model model;
 
-	public ChangeLanguageEvent(final Text.Language language, final Model game) {
-		this.language = language;
-		this.game = game;
+	public ChangeLanguageEvent(final Text.Language language, final Model model) {
+		this.language = Preconditions.checkNotNull(language);
+		this.model = Preconditions.checkNotNull(model);
 	}
 
-	public Model getGame() {
-		return game;
+	public Model getModel() {
+		return model;
 	}
 
 	public Text.Language getLanguage() {

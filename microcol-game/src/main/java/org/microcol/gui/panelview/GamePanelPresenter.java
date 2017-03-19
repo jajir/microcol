@@ -1,8 +1,6 @@
 package org.microcol.gui.panelview;
 
 import java.awt.Rectangle;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -17,16 +15,17 @@ import org.microcol.gui.GamePreferences;
 import org.microcol.gui.Localized;
 import org.microcol.gui.PathPlanning;
 import org.microcol.gui.Point;
+import org.microcol.gui.event.AboutGameEventController;
 import org.microcol.gui.event.ExitGameController;
 import org.microcol.gui.event.FocusedTileController;
 import org.microcol.gui.event.FocusedTileEvent;
 import org.microcol.gui.event.GameController;
-import org.microcol.gui.event.AboutGameEventController;
 import org.microcol.gui.event.KeyController;
 import org.microcol.gui.event.MoveUnitController;
 import org.microcol.gui.event.NewGameController;
 import org.microcol.gui.event.ShowGridController;
 import org.microcol.gui.event.StatusBarMessageController;
+import org.microcol.gui.event.StatusBarMessageEvent;
 import org.microcol.gui.event.ViewController;
 import org.microcol.gui.model.TileOcean;
 import org.microcol.model.Location;
@@ -131,24 +130,21 @@ public class GamePanelPresenter implements Localized {
 		});
 		moveUnitController.addStartMovingListener(event -> swithToMoveMode());
 
-		keyController.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyPressed(final KeyEvent e) {
-				/**
-				 * Escape
-				 */
-				if (27 == e.getKeyCode()) {
-					onKeyPressed_escape();
-				}
-				/**
-				 * Enter
-				 */
-				if (10 == e.getKeyCode()) {
-					onKeyPressed_enter();
-				}
-				logger.debug("Pressed key: '" + e.getKeyChar() + "' has code '" + e.getKeyCode() + "', modifiers '"
-						+ e.getModifiers() + "'");
+		keyController.addListener(e -> {
+			/**
+			 * Escape
+			 */
+			if (27 == e.getKeyCode()) {
+				onKeyPressed_escape();
 			}
+			/**
+			 * Enter
+			 */
+			if (10 == e.getKeyCode()) {
+				onKeyPressed_enter();
+			}
+			logger.debug("Pressed key: '" + e.getKeyChar() + "' has code '" + e.getKeyCode() + "', modifiers '"
+					+ e.getModifiers() + "'");
 		});
 
 		final MouseAdapter ma = new MouseAdapter() {
@@ -194,9 +190,9 @@ public class GamePanelPresenter implements Localized {
 			}
 		};
 
-		newGameController.addNewGameListener(event -> display.initGame(gamePreferences.isGridShown()));
+		newGameController.addListener(event -> display.initGame(gamePreferences.isGridShown()));
 
-		showGridController.addShowGridListener(e -> display.setGridShown(e.isGridShown()));
+		showGridController.addListener(e -> display.setGridShown(e.isGridShown()));
 
 		display.getGamePanelView().addMouseListener(ma);
 		display.getGamePanelView().addMouseMotionListener(ma);
@@ -208,7 +204,7 @@ public class GamePanelPresenter implements Localized {
 	}
 
 	private boolean isMouseEnabled() {
-		return gameController.getGame().getCurrentPlayer().isHuman();
+		return gameController.getModel().getCurrentPlayer().isHuman();
 	}
 
 	private void onCenterView() {
@@ -224,7 +220,7 @@ public class GamePanelPresenter implements Localized {
 
 	private void swithToMoveMode() {
 		Preconditions.checkNotNull(display.getCursorLocation(), "Cursor location is empty");
-		final List<Ship> units = gameController.getGame().getCurrentPlayer().getShipsAt(display.getCursorLocation());
+		final List<Ship> units = gameController.getModel().getCurrentPlayer().getShipsAt(display.getCursorLocation());
 		// TODO JJ Filter unit that have enough action points
 		Preconditions.checkState(!units.isEmpty(), "there are some moveable units");
 		final Ship unit = units.get(0);
@@ -252,8 +248,7 @@ public class GamePanelPresenter implements Localized {
 			switchToNormalMode(p);
 		} else {
 			display.setCursorLocation(p);
-			focusedTileController
-					.fireFocusedTileEvent(new FocusedTileEvent(gameController.getGame(), p, new TileOcean()));
+			focusedTileController.fireEvent(new FocusedTileEvent(gameController.getModel(), p, new TileOcean()));
 		}
 	}
 
@@ -288,19 +283,18 @@ public class GamePanelPresenter implements Localized {
 		buff.append(" ");
 		buff.append(getText().get("statusBar.tile.withUnit"));
 		buff.append(" ");
-		gameController.getGame().getShipsAt(where).forEach(ship -> {
+		gameController.getModel().getShipsAt(where).forEach(ship -> {
 			buff.append(ship.getClass().getSimpleName());
 			buff.append(" ");
 		});
-		statusBarMessageController.fireStatusMessageWasChangedEvent(buff.toString());
+		statusBarMessageController.fireEvent(new StatusBarMessageEvent(buff.toString()));
 	}
 
 	private void cancelGoToMode(final Location moveTo) {
 		display.setCursorNormal();
 		display.setCursorLocation(moveTo);
 		// TODO JJ read tile ocean from map
-		focusedTileController
-				.fireFocusedTileEvent(new FocusedTileEvent(gameController.getGame(), moveTo, new TileOcean()));
+		focusedTileController.fireEvent(new FocusedTileEvent(gameController.getModel(), moveTo, new TileOcean()));
 	}
 
 	private final void switchToNormalMode(final Location moveTo) {
@@ -309,11 +303,11 @@ public class GamePanelPresenter implements Localized {
 		pathPlanning.paintPath(display.getCursorLocation(), moveTo, location -> path.add(location));
 		if (path.size() > 0) {
 			// TODO JJ active ship can be different from ship first at list
-			Ship ship = gameController.getGame().getCurrentPlayer().getShipsAt(display.getCursorLocation()).get(0);
+			Ship ship = gameController.getModel().getCurrentPlayer().getShipsAt(display.getCursorLocation()).get(0);
 			gameController.performMove(ship, path);
 			// TODO JJ tile ocean should be obtained from map
-			focusedTileController.fireFocusedTileEvent(
-					new FocusedTileEvent(gameController.getGame(), display.getCursorLocation(), new TileOcean()));
+			focusedTileController.fireEvent(
+					new FocusedTileEvent(gameController.getModel(), display.getCursorLocation(), new TileOcean()));
 		}
 		display.setCursorLocation(moveTo);
 		display.setCursorNormal();

@@ -44,7 +44,7 @@ public class MainFramePresenter {
 		display.getFrame().addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(final KeyEvent e) {
-				keyController.fireKeyWasPressed(e);
+				keyController.fireEvent(e);
 			}
 		});
 

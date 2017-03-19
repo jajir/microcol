@@ -14,9 +14,10 @@ import org.microcol.gui.event.FocusedTileEvent;
 import org.microcol.gui.event.GameController;
 import org.microcol.gui.event.KeyController;
 import org.microcol.gui.event.StatusBarMessageController;
+import org.microcol.gui.event.StatusBarMessageEvent;
 import org.microcol.gui.event.TurnStartedController;
-import org.microcol.model.Model;
 import org.microcol.model.Location;
+import org.microcol.model.Model;
 import org.microcol.model.Player;
 
 import com.google.inject.Inject;
@@ -53,7 +54,7 @@ public class RightPanelPresenter implements Localized {
 		display.getNextTurnButton().addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(final KeyEvent keyEvent) {
-				keyController.fireKeyWasPressed(keyEvent);
+				keyController.fireEvent(keyEvent);
 			}
 		});
 
@@ -61,27 +62,28 @@ public class RightPanelPresenter implements Localized {
 			@Override
 			public void mouseEntered(final MouseEvent e) {
 				statusBarMessageController
-						.fireStatusMessageWasChangedEvent(getText().get("nextTurnButton.desctiption"));
+						.fireEvent(new StatusBarMessageEvent(getText().get("nextTurnButton.desctiption")));
 			}
 		});
 
 		display.getRightPanel().addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(final MouseEvent e) {
-				statusBarMessageController.fireStatusMessageWasChangedEvent(getText().get("rightPanel.description"));
+				statusBarMessageController
+						.fireEvent(new StatusBarMessageEvent(getText().get("rightPanel.description")));
 			}
 		});
 
-		languangeController.addLanguageListener(event -> {
+		languangeController.addListener(event -> {
 			display.getNextTurnButton().setText(getText().get("nextTurnButton"));
 		});
-		focusedTileController.addFocusedTileListener(event -> {
+		focusedTileController.addListener(event -> {
 			if (isItDifferentTile(event.getLocation())) {
 				focusedTile = event.getLocation();
-				display.showTile(event, gameController.getGame());
+				display.showTile(event, gameController.getModel());
 			}
 		});
-		turnStartedController.addTurnStartedListener(event -> {
+		turnStartedController.addListener(event -> {
 			display.setCurrentPlayer(event.getPlayer());
 			if (event.getPlayer().isHuman()) {
 				display.getNextTurnButton().setEnabled(true);

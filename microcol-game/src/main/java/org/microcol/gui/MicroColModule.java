@@ -1,5 +1,7 @@
 package org.microcol.gui;
 
+import org.microcol.gui.event.AboutGameEventController;
+import org.microcol.gui.event.AboutGameListenerImpl;
 import org.microcol.gui.event.ChangeLanguageController;
 import org.microcol.gui.event.ChangeLanguageListenerPreferences;
 import org.microcol.gui.event.ChangeLanguageListenerText;
@@ -7,8 +9,6 @@ import org.microcol.gui.event.EventInitializer;
 import org.microcol.gui.event.ExitGameController;
 import org.microcol.gui.event.FocusedTileController;
 import org.microcol.gui.event.GameController;
-import org.microcol.gui.event.AboutGameEventController;
-import org.microcol.gui.event.AboutGameListenerImpl;
 import org.microcol.gui.event.KeyController;
 import org.microcol.gui.event.MoveUnitController;
 import org.microcol.gui.event.NewGameController;
@@ -16,7 +16,6 @@ import org.microcol.gui.event.NextTurnController;
 import org.microcol.gui.event.ShowGridController;
 import org.microcol.gui.event.ShowGridListenerPreferences;
 import org.microcol.gui.event.StatusBarMessageController;
-import org.microcol.gui.event.StatusBarMessageControllerImpl;
 import org.microcol.gui.event.TurnStartedController;
 import org.microcol.gui.event.ViewController;
 import org.microcol.gui.event.VolumeChangeController;
@@ -33,7 +32,7 @@ public class MicroColModule extends AbstractModule {
 	@Override
 	protected void configure() {
 
-		bind(StatusBarMessageController.class).to(StatusBarMessageControllerImpl.class).in(Singleton.class);
+		bind(StatusBarMessageController.class).in(Singleton.class);
 
 		bind(PathPlanning.class).in(Singleton.class);
 		bind(ImageProvider.class).in(Singleton.class);

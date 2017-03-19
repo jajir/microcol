@@ -12,7 +12,7 @@ public class ShowGridListenerPreferences {
 	@Inject
 	public ShowGridListenerPreferences(final ShowGridController showGridController,
 			final GamePreferences gamePreferences) {
-		showGridController.addShowGridListener(e -> gamePreferences.setShowGrid(e.isGridShown()));
+		showGridController.addListener(e -> gamePreferences.setShowGrid(e.isGridShown()));
 	}
 
 }

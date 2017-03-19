@@ -7,12 +7,15 @@ import javax.swing.JRadioButtonMenuItem;
 import org.microcol.gui.event.AboutGameEvent;
 import org.microcol.gui.event.AboutGameEventController;
 import org.microcol.gui.event.ChangeLanguageController;
+import org.microcol.gui.event.ChangeLanguageEvent;
 import org.microcol.gui.event.ExitGameController;
 import org.microcol.gui.event.ExitGameEvent;
 import org.microcol.gui.event.FocusedTileController;
 import org.microcol.gui.event.FocusedTileEvent;
+import org.microcol.gui.event.GameController;
 import org.microcol.gui.event.MoveUnitController;
 import org.microcol.gui.event.ShowGridController;
+import org.microcol.gui.event.ShowGridEvent;
 import org.microcol.gui.event.TurnStartedController;
 import org.microcol.gui.event.ViewController;
 import org.microcol.gui.event.VolumeChangeController;
@@ -56,12 +59,13 @@ public class MainMenuPresenter {
 	public boolean isTileFocused = false;
 
 	@Inject
-	public MainMenuPresenter(final MainMenuPresenter.Display display, final AboutGameEventController gameEventController,
-			final GamePreferences gamePreferences, final ChangeLanguageController languangeController, final Text text,
-			final ViewUtil viewUtil, final VolumeChangeController volumeChangeController,
-			final ShowGridController showGridController, final FocusedTileController focusedTileController,
-			final MoveUnitController moveUnitController, final ViewController viewController,
-			final TurnStartedController turnStartedController, final ExitGameController exitGameController) {
+	public MainMenuPresenter(final MainMenuPresenter.Display display,
+			final AboutGameEventController gameEventController, final GamePreferences gamePreferences,
+			final ChangeLanguageController changeLanguangeController, final Text text, final ViewUtil viewUtil,
+			final VolumeChangeController volumeChangeController, final ShowGridController showGridController,
+			final FocusedTileController focusedTileController, final MoveUnitController moveUnitController,
+			final ViewController viewController, final TurnStartedController turnStartedController,
+			final ExitGameController exitGameController, final GameController gameController) {
 		this.display = Preconditions.checkNotNull(display);
 		display.getMenuItemNewGame().addActionListener(actionEvent -> {
 
@@ -75,28 +79,28 @@ public class MainMenuPresenter {
 			});
 		}
 		display.getRbMenuItemlanguageCz().addActionListener(actionEvent -> {
-			languangeController.fireLanguageWasChangedEvent(Text.Language.cz);
+			changeLanguangeController.fireEvent(new ChangeLanguageEvent(Text.Language.cz, gameController.getModel()));
 		});
 		display.getRbMenuItemlanguageEn().addActionListener(actionEvent -> {
-			languangeController.fireLanguageWasChangedEvent(Text.Language.en);
+			changeLanguangeController.fireEvent(new ChangeLanguageEvent(Text.Language.en, gameController.getModel()));
 		});
 		display.getMenuItemVolume().addActionListener(actionEvent -> {
 			PreferencesVolume preferencesVolume = new PreferencesVolume(viewUtil, text, volumeChangeController,
 					gamePreferences.getVolume());
 			preferencesVolume.setVisible(true);
 		});
-		display.getMenuItemShowGrid().addActionListener(
-				ectionEvent -> showGridController.fireShowGridEvent(display.getMenuItemShowGrid().isSelected()));
+		display.getMenuItemShowGrid().addActionListener(ectionEvent -> showGridController
+				.fireEvent(new ShowGridEvent(display.getMenuItemShowGrid().isSelected())));
 		display.getMenuItemMove().addActionListener(ectionEvent -> {
 			moveUnitController.fireStartMoveEvent();
 			display.getMenuItemMove().setEnabled(false);
 		});
 		display.getMenuItemCenterView().addActionListener(event -> viewController.fireCenterView());
-		languangeController.addLanguageListener(event -> {
+		changeLanguangeController.addListener(event -> {
 			display.updateLanguage();
 		});
-		focusedTileController.addFocusedTileListener(event -> onFocusedTileEvent(event));
-		turnStartedController.addTurnStartedListener(event -> onTurnStartedEvent(event));
+		focusedTileController.addListener(event -> onFocusedTileEvent(event));
+		turnStartedController.addListener(event -> onTurnStartedEvent(event));
 	}
 
 	/**

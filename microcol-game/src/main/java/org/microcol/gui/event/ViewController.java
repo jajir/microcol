@@ -8,6 +8,7 @@ import com.google.common.base.Preconditions;
 /**
  * Process events related to view of game.
  */
+//TODO JJ is it in use?
 public class ViewController {
 
 	private final List<MicrocolListenerVoid> listeners = new ArrayList<>();

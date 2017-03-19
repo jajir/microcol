@@ -72,7 +72,7 @@ public class GameController implements Localized {
 			@Override
 			public void turnStarted(final TurnStartedEvent event) {
 				logger.debug("Turn started for player '" + event.getPlayer().getName() + "'.");
-				turnStartedController.fireTurnStartedEvent(event);
+				turnStartedController.fireEvent(event);
 			}
 
 			@Override
@@ -84,14 +84,14 @@ public class GameController implements Localized {
 			@Override
 			public void roundStarted(final RoundStartedEvent event) {
 				logger.debug("Turn started for year '" + event.getCalendar().getCurrentYear() + "'.");
-				nextTurnController.fireNextTurnEvent(event);
+				nextTurnController.fireEvent(event);
 			}
 
 			@Override
 			public void gameStarted(final GameStartedEvent event) {
 				logger.debug("Game started " + event);
 				game = event.getModel();
-				newGameController.fireNewGameStartedEvent(event);
+				newGameController.fireEvent(event);
 			}
 
 			@Override
@@ -105,7 +105,7 @@ public class GameController implements Localized {
 		musicController.start(gamePreferences.getVolume());
 	}
 
-	public Model getGame() {
+	public Model getModel() {
 		return game;
 	}
 

@@ -5,22 +5,6 @@ package org.microcol.gui.event;
  * message was changed.
  * 
  */
-//FIXME JJ extends from AbstractEventController
-public interface StatusBarMessageController {
+public class StatusBarMessageController extends AbstractEventController<StatusBarMessageEvent> {
 
-	/**
-	 * Add status message listener.
-	 * 
-	 * @param listener
-	 *            required listener instance
-	 */
-	void addStatusMessageListener(StatusBarMessageListener listener);
-
-	/**
-	 * Allows set status message for main window.
-	 * 
-	 * @param statusMessage
-	 *            required message text in main window.
-	 */
-	void fireStatusMessageWasChangedEvent(String statusMessage);
 }
