@@ -6,7 +6,7 @@ import javax.swing.JViewport;
 
 import org.microcol.gui.Point;
 import org.microcol.model.Location;
-import org.microcol.model.Map;
+import org.microcol.model.World;
 
 import com.google.common.base.MoreObjects;
 
@@ -16,50 +16,64 @@ import com.google.common.base.MoreObjects;
  */
 public class Area {
 
+	/**
+	 * Locations in world of top left corner of visible area.
+	 */
 	private final Location topLeft;
 
+	/**
+	 * Locations in world of bottom right corner of visible area.
+	 */
 	private final Location bottomRight;
 
+	/**
+	 * Top left corner of visible area in on-screen coordinates. It define
+	 * visible area.
+	 */
 	private final Point pointTopLeft;
 
+	/**
+	 * Bottom right corner of visible area in on-screen coordinates. It define
+	 * visible area.
+	 */
 	private final Point pointBottomRight;
 
-<span class="fc" id="L27">	public Area(final JViewport viewport, final Map map) {</span>
-<span class="fc" id="L28">		final Dimension dim = viewport.getExtentSize();</span>
-<span class="fc" id="L29">		final java.awt.Point pos = viewport.getViewPosition();</span>
+<span class="fc" id="L41">	public Area(final JViewport viewport, final World world) {</span>
+<span class="fc" id="L42">		final Dimension dim = viewport.getExtentSize();</span>
+<span class="fc" id="L43">		final java.awt.Point pos = viewport.getViewPosition();</span>
 
-<span class="fc" id="L31">		pointTopLeft = Point.of((int) pos.getX(), (int) pos.getY());</span>
-<span class="fc" id="L32">		pointBottomRight = pointTopLeft.add((int) dim.getWidth(), (int) dim.getHeight());</span>
+<span class="fc" id="L45">		pointTopLeft = Point.of((int) pos.getX(), (int) pos.getY());</span>
+<span class="fc" id="L46">		pointBottomRight = pointTopLeft.add((int) dim.getWidth(), (int) dim.getHeight());</span>
 
-<span class="fc" id="L34">		final Point p1 = pointTopLeft.divide(GamePanelView.TOTAL_TILE_WIDTH_IN_PX).add(Point.of(-1, -1));</span>
-<span class="fc" id="L35">		final Point p2 = Point</span>
-<span class="fc" id="L36">				.of((int) Math.ceil(pointBottomRight.getX() / (float) GamePanelView.TOTAL_TILE_WIDTH_IN_PX),</span>
-<span class="fc" id="L37">						(int) Math.ceil(pointBottomRight.getY() / (float) GamePanelView.TOTAL_TILE_WIDTH_IN_PX))</span>
-<span class="fc" id="L38">				.add(Point.of(1, 1));</span>
+<span class="fc" id="L48">		final Point p1 = pointTopLeft.divide(GamePanelView.TOTAL_TILE_WIDTH_IN_PX).add(Point.of(-1, -1));</span>
+<span class="fc" id="L49">		final Point p2 = Point</span>
+<span class="fc" id="L50">				.of((int) Math.ceil(pointBottomRight.getX() / (float) GamePanelView.TOTAL_TILE_WIDTH_IN_PX),</span>
+<span class="fc" id="L51">						(int) Math.ceil(pointBottomRight.getY() / (float) GamePanelView.TOTAL_TILE_WIDTH_IN_PX))</span>
+<span class="fc" id="L52">				.add(Point.of(1, 1));</span>
 
-<span class="fc" id="L40">		topLeft = Location.of(Math.max(1, p1.getX()), Math.max(1, p1.getY()));</span>
-<span class="fc" id="L41">		bottomRight = Location.of(Math.min(p2.getX(), map.getMaxX()), Math.min(p2.getY(), map.getMaxY()));</span>
-<span class="fc" id="L42">	}</span>
+<span class="fc" id="L54">		topLeft = Location.of(Math.max(1, p1.getX()), Math.max(1, p1.getY()));</span>
+<span class="fc" id="L55">		bottomRight = Location.of(Math.min(p2.getX(), world.getMaxX()), Math.min(p2.getY(), world.getMaxY()));</span>
+<span class="fc" id="L56">	}</span>
 
 	public Location getTopLeft() {
-<span class="fc" id="L45">		return topLeft;</span>
+<span class="fc" id="L59">		return topLeft;</span>
 	}
 
 	public Location getBottomRight() {
-<span class="fc" id="L49">		return bottomRight;</span>
+<span class="fc" id="L63">		return bottomRight;</span>
 	}
 
 	public int getWidth() {
-<span class="fc" id="L53">		return bottomRight.getX() - topLeft.getX();</span>
+<span class="fc" id="L67">		return bottomRight.getX() - topLeft.getX();</span>
 	}
 
 	public int getHeight() {
-<span class="fc" id="L57">		return bottomRight.getY() - topLeft.getY();</span>
+<span class="fc" id="L71">		return bottomRight.getY() - topLeft.getY();</span>
 	}
 
 	public boolean isInArea(final Location location) {
-<span class="nc bnc" id="L61" title="All 4 branches missed.">		return topLeft.getX() &lt;= location.getX() &amp;&amp; bottomRight.getX() &gt;= location.getX()</span>
-<span class="nc bnc" id="L62" title="All 4 branches missed.">				&amp;&amp; topLeft.getY() &lt;= location.getY() &amp;&amp; bottomRight.getY() &gt;= location.getY();</span>
+<span class="nc bnc" id="L75" title="All 4 branches missed.">		return topLeft.getX() &lt;= location.getX() &amp;&amp; bottomRight.getX() &gt;= location.getX()</span>
+<span class="nc bnc" id="L76" title="All 4 branches missed.">				&amp;&amp; topLeft.getY() &lt;= location.getY() &amp;&amp; bottomRight.getY() &gt;= location.getY();</span>
 	}
 
 	/**
@@ -70,7 +84,7 @@ public class Area {
 	 * @return point coordinates that could be directly used to draw on canvas
 	 */
 	public Point convert(final Location location) {
-<span class="nc" id="L73">		return Point.of(Location.of(location.getX() - topLeft.getX(), location.getY() - topLeft.getY()));</span>
+<span class="nc" id="L87">		return Point.of(Location.of(location.getX() - topLeft.getX(), location.getY() - topLeft.getY()));</span>
 	}
 
 	/**
@@ -81,8 +95,8 @@ public class Area {
 	 * @return point coordinates that could be directly used to draw on canvas
 	 */
 	public Point convert(final Point point) {
-<span class="nc" id="L84">		final Point topLeftPoint = Point.of(topLeft);</span>
-<span class="nc" id="L85">		return point.add(-topLeftPoint.getX(), -topLeftPoint.getY());</span>
+<span class="nc" id="L98">		final Point topLeftPoint = Point.of(topLeft);</span>
+<span class="nc" id="L99">		return point.add(-topLeftPoint.getX(), -topLeftPoint.getY());</span>
 	}
 
 	/**
@@ -93,7 +107,7 @@ public class Area {
 	 * @return return map location
 	 */
 	public Location convertToLocation(final Point point) {
-<span class="nc" id="L96">		return point.toLocation();</span>
+<span class="nc" id="L110">		return point.toLocation();</span>
 	}
 
 	/**
@@ -105,16 +119,16 @@ public class Area {
 	 *         return &lt;code&gt;false&lt;/code&gt;
 	 */
 	public boolean isInArea(final Point point) {
-<span class="nc" id="L108">		final Point topLeftPoint = Point.of(topLeft);</span>
-<span class="nc" id="L109">		final Point bottomRightPoint = Point.of(bottomRight);</span>
-<span class="nc bnc" id="L110" title="All 4 branches missed.">		return topLeftPoint.getX() &lt;= point.getX() &amp;&amp; bottomRightPoint.getX() &gt;= point.getX()</span>
-<span class="nc bnc" id="L111" title="All 4 branches missed.">				&amp;&amp; topLeftPoint.getY() &lt;= point.getY() &amp;&amp; bottomRightPoint.getY() &gt;= point.getY();</span>
+<span class="nc" id="L122">		final Point topLeftPoint = Point.of(topLeft);</span>
+<span class="nc" id="L123">		final Point bottomRightPoint = Point.of(bottomRight);</span>
+<span class="nc bnc" id="L124" title="All 4 branches missed.">		return topLeftPoint.getX() &lt;= point.getX() &amp;&amp; bottomRightPoint.getX() &gt;= point.getX()</span>
+<span class="nc bnc" id="L125" title="All 4 branches missed.">				&amp;&amp; topLeftPoint.getY() &lt;= point.getY() &amp;&amp; bottomRightPoint.getY() &gt;= point.getY();</span>
 	}
 
 	@Override
 	public String toString() {
-<span class="nc" id="L116">		return MoreObjects.toStringHelper(Area.class).add(&quot;topLeft&quot;, topLeft).add(&quot;bottomRight&quot;, bottomRight)</span>
-<span class="nc" id="L117">				.toString();</span>
+<span class="nc" id="L130">		return MoreObjects.toStringHelper(Area.class).add(&quot;topLeft&quot;, topLeft).add(&quot;bottomRight&quot;, bottomRight)</span>
+<span class="nc" id="L131">				.toString();</span>
 	}
 
 	/**
@@ -125,13 +139,13 @@ public class Area {
 	 * @return position of top left corner of view
 	 */
 	public Point getCenterAreaTo(final Point point) {
-<span class="fc" id="L128">		final Point p = pointBottomRight.substract(pointTopLeft)</span>
-<span class="fc" id="L129">				.add(-GamePanelView.TOTAL_TILE_WIDTH_IN_PX, -GamePanelView.TOTAL_TILE_WIDTH_IN_PX).divide(2.0);</span>
-<span class="fc" id="L130">		return point.substract(p);</span>
+<span class="fc" id="L142">		final Point p = pointBottomRight.substract(pointTopLeft)</span>
+<span class="fc" id="L143">				.add(-GamePanelView.TOTAL_TILE_WIDTH_IN_PX, -GamePanelView.TOTAL_TILE_WIDTH_IN_PX).divide(2.0);</span>
+<span class="fc" id="L144">		return point.substract(p);</span>
 	}
 
 	public Point getPointTopLeft() {
-<span class="nc" id="L134">		return pointTopLeft;</span>
+<span class="nc" id="L148">		return pointTopLeft;</span>
 	}
 
 }

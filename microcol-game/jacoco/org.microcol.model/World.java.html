@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>World.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">MicroCol game classes</a> &gt; <a href="index.source.html" class="el_package">org.microcol.model</a> &gt; <span class="el_source">World.java</span></div><h1>World.java</h1><pre class="source lang-java linenums">package org.microcol.model;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.HashMap;
+import java.util.Map;
+
+import com.google.common.base.MoreObjects;
+import com.google.common.base.Preconditions;
+import com.google.common.collect.ImmutableMap;
+
+public class World {
+	private final int maxX;
+	private final int maxY;
+	private final ImmutableMap&lt;Location, Terrain&gt; terrain;
+
+<span class="fc" id="L18">	World(final int maxX, final int maxY) {</span>
+<span class="pc bpc" id="L19" title="1 of 2 branches missed.">		Preconditions.checkArgument(maxX &gt;= 1, &quot;Max X (%s) must be positive.&quot;, maxX);</span>
+<span class="pc bpc" id="L20" title="1 of 2 branches missed.">		Preconditions.checkArgument(maxY &gt;= 1, &quot;Max Y (%s) must be positive.&quot;, maxY);</span>
+
+<span class="fc" id="L22">		this.maxX = maxX;</span>
+<span class="fc" id="L23">		this.maxY = maxY;</span>
+<span class="fc" id="L24">		this.terrain = ImmutableMap.of();</span>
+<span class="fc" id="L25">	}</span>
+
+<span class="nc" id="L27">	World(final String fileName) {</span>
+<span class="nc" id="L28">		Preconditions.checkNotNull(fileName);</span>
+
+<span class="nc" id="L30">		int maxX = 0;</span>
+<span class="nc" id="L31">		int maxY = 0;</span>
+<span class="nc" id="L32">		final Map&lt;Location, Terrain&gt; terrain = new HashMap&lt;&gt;();</span>
+
+<span class="nc" id="L34">		try (final BufferedReader reader = new BufferedReader(</span>
+<span class="nc" id="L35">				new InputStreamReader(World.class.getResourceAsStream(fileName)))) {</span>
+<span class="nc" id="L36">			String line = null;</span>
+<span class="nc bnc" id="L37" title="All 4 branches missed.">			while ((line = reader.readLine()) != null &amp;&amp; !line.startsWith(&quot;-&quot;)) {</span>
+<span class="nc" id="L38">				maxX = Math.max(maxX, line.length() - 1);</span>
+<span class="nc" id="L39">				maxY++;</span>
+<span class="nc bnc" id="L40" title="All 2 branches missed.">				for (int x = 0; x &lt; line.length() - 1; x++) {</span>
+<span class="nc" id="L41">					final char tile = line.charAt(x);</span>
+<span class="nc bnc" id="L42" title="All 3 branches missed.">					switch (tile) {</span>
+						case 'o':
+<span class="nc" id="L44">							terrain.put(Location.of(x + 1, maxY), Terrain.CONTINENT);</span>
+<span class="nc" id="L45">							break;</span>
+						case ' ':
+							// Do nothing.
+<span class="nc" id="L48">							break;</span>
+						default:
+<span class="nc" id="L50">							throw new IllegalArgumentException(String.format(&quot;Unsupported character (%s).&quot;, tile));</span>
+					}
+				}
+			}
+<span class="nc bnc" id="L54" title="All 8 branches missed.">		} catch (IOException ex) {</span>
+<span class="nc" id="L55">			throw new RuntimeException(ex);</span>
+<span class="nc" id="L56">		}</span>
+
+<span class="nc bnc" id="L58" title="All 2 branches missed.">		Preconditions.checkArgument(maxX &gt;= 1, &quot;Max X (%s) must be positive.&quot;, maxX);</span>
+<span class="nc bnc" id="L59" title="All 2 branches missed.">		Preconditions.checkArgument(maxY &gt;= 1, &quot;Max Y (%s) must be positive.&quot;, maxY);</span>
+
+<span class="nc" id="L61">		this.maxX = maxX;</span>
+<span class="nc" id="L62">		this.maxY = maxY;</span>
+<span class="nc" id="L63">		this.terrain = ImmutableMap.copyOf(terrain);</span>
+<span class="nc" id="L64">	}</span>
+
+	public int getMaxX() {
+<span class="fc" id="L67">		return maxX;</span>
+	}
+
+	public int getMaxY() {
+<span class="fc" id="L71">		return maxY;</span>
+	}
+
+	public Terrain getTerrainAt(final Location location) {
+<span class="nc" id="L75">		Preconditions.checkNotNull(location);</span>
+
+<span class="nc" id="L77">		Terrain terrain = this.terrain.get(location);</span>
+
+<span class="nc bnc" id="L79" title="All 2 branches missed.">		return terrain != null ? terrain : Terrain.OCEAN;</span>
+	}
+
+	public boolean isValid(final Location location) {
+<span class="fc" id="L83">		Preconditions.checkNotNull(location);</span>
+
+<span class="fc bfc" id="L85" title="All 2 branches covered.">		return location.getX() &gt;= 1</span>
+<span class="fc bfc" id="L86" title="All 2 branches covered.">			&amp;&amp; location.getX() &lt;= getMaxX()</span>
+<span class="fc bfc" id="L87" title="All 2 branches covered.">			&amp;&amp; location.getY() &gt;= 1</span>
+<span class="fc bfc" id="L88" title="All 2 branches covered.">			&amp;&amp; location.getY() &lt;= getMaxY();</span>
+	}
+
+	public boolean isValid(final Path path) {
+<span class="fc" id="L92">		Preconditions.checkNotNull(path);</span>
+
+<span class="fc bfc" id="L94" title="All 4 branches covered.">		return !path.getLocations().stream().anyMatch(location -&gt; !isValid(location));</span>
+	}
+
+	@Override
+	public String toString() {
+<span class="nc" id="L99">		return MoreObjects.toStringHelper(this)</span>
+<span class="nc" id="L100">			.add(&quot;maxX&quot;, getMaxX())</span>
+<span class="nc" id="L101">			.add(&quot;maxY&quot;, getMaxY())</span>
+<span class="nc" id="L102">			.toString();</span>
+	}
+
+	String print() {
+<span class="nc" id="L106">		StringBuilder builder = new StringBuilder();</span>
+
+<span class="nc bnc" id="L108" title="All 2 branches missed.">		for (int x = 1; x &lt;= maxX + 2; x++) {</span>
+<span class="nc" id="L109">			builder.append(&quot;-&quot;);</span>
+		}
+<span class="nc" id="L111">		builder.append(&quot;\n&quot;);</span>
+
+<span class="nc bnc" id="L113" title="All 2 branches missed.">		for (int y = 1; y &lt;= maxY; y++) {</span>
+<span class="nc" id="L114">			builder.append(&quot;|&quot;);</span>
+<span class="nc bnc" id="L115" title="All 2 branches missed.">			for (int x = 1; x &lt;= maxX; x++) {</span>
+<span class="nc bnc" id="L116" title="All 3 branches missed.">				switch (terrain.get(Location.of(x, y))) {</span>
+					case CONTINENT:
+<span class="nc" id="L118">						builder.append(&quot;o&quot;);</span>
+<span class="nc" id="L119">						break;</span>
+					case OCEAN:
+<span class="nc" id="L121">						builder.append(&quot; &quot;);</span>
+						break;
+				}
+			}
+<span class="nc" id="L125">			builder.append(&quot;|\n&quot;);</span>
+		}
+
+<span class="nc bnc" id="L128" title="All 2 branches missed.">		for (int x = 1; x &lt;= maxX + 2; x++) {</span>
+<span class="nc" id="L129">			builder.append(&quot;-&quot;);</span>
+		}
+
+<span class="nc" id="L132">		return builder.toString();</span>
+	}
+
+	public static void main(String[] args) {
+//		World world = new World(15, 10);
+<span class="nc" id="L137">		World world = new World(&quot;/maps/map-01.txt&quot;);</span>
+<span class="nc" id="L138">		System.out.println(world.print());</span>
+<span class="nc" id="L139">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

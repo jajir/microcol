@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GameManager.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">MicroCol game classes</a> &gt; <a href="index.source.html" class="el_package">org.microcol.model</a> &gt; <span class="el_source">GameManager.java</span></div><h1>GameManager.java</h1><pre class="source lang-java linenums">package org.microcol.model;
+
+import com.google.common.base.Preconditions;
+
+class GameManager {
+	private final Model model;
+
+	private boolean started;
+	private Player currentPlayer;
+
+<span class="nc" id="L11">	GameManager(final Model model) {</span>
+<span class="nc" id="L12">		this.model = model;</span>
+<span class="nc" id="L13">	}</span>
+
+	boolean isStarted() {
+<span class="nc" id="L16">		return started;</span>
+	}
+
+	boolean isFinished() {
+<span class="nc" id="L20">		return model.getCalendar().isFinished();</span>
+	}
+
+	boolean isActive() {
+<span class="nc bnc" id="L24" title="All 4 branches missed.">		return started &amp;&amp; !isFinished();</span>
+	}
+
+	void checkGameActive() {
+<span class="nc bnc" id="L28" title="All 2 branches missed.">		if (!isActive()) {</span>
+<span class="nc" id="L29">			throw new IllegalStateException(&quot;Game must be active.&quot;);</span>
+		}
+<span class="nc" id="L31">	}</span>
+
+	void checkCurrentPlayer(final Player player) {
+<span class="nc" id="L34">		Preconditions.checkNotNull(player);</span>
+
+<span class="nc bnc" id="L36" title="All 2 branches missed.">		if (!player.equals(currentPlayer)) {</span>
+<span class="nc" id="L37">			throw new IllegalStateException(String.format(&quot;This player (%s) is not current player (%s).&quot;, player, currentPlayer));</span>
+		}
+<span class="nc" id="L39">	}</span>
+
+	Player getCurrentPlayer() {
+<span class="nc" id="L42">		checkGameActive();</span>
+
+<span class="nc" id="L44">		return currentPlayer;</span>
+	}
+
+	void startGame() {
+<span class="nc bnc" id="L48" title="All 2 branches missed.">		Preconditions.checkState(!started, &quot;Game was already started.&quot;);</span>
+
+<span class="nc" id="L50">		started = true;</span>
+<span class="nc" id="L51">		currentPlayer = model.getPlayers().get(0);</span>
+<span class="nc" id="L52">		model.fireGameStarted();</span>
+<span class="nc" id="L53">		model.fireRoundStarted();</span>
+<span class="nc" id="L54">		currentPlayer.startTurn();</span>
+<span class="nc" id="L55">		model.fireTurnStarted(currentPlayer);</span>
+<span class="nc" id="L56">	}</span>
+
+	void endTurn() {
+<span class="nc" id="L59">		checkGameActive();</span>
+
+<span class="nc" id="L61">		final int index = model.getPlayers().indexOf(currentPlayer);</span>
+<span class="nc bnc" id="L62" title="All 2 branches missed.">		if (index &lt; model.getPlayers().size() - 1) {</span>
+<span class="nc" id="L63">			currentPlayer = model.getPlayers().get(index + 1);</span>
+<span class="nc" id="L64">			currentPlayer.startTurn();</span>
+<span class="nc" id="L65">			model.fireTurnStarted(currentPlayer);</span>
+		} else {
+<span class="nc" id="L67">			model.getCalendar().endRound();</span>
+<span class="nc bnc" id="L68" title="All 2 branches missed.">			if (!model.getCalendar().isFinished()) {</span>
+<span class="nc" id="L69">				currentPlayer = model.getPlayers().get(0);</span>
+<span class="nc" id="L70">				model.fireRoundStarted();</span>
+<span class="nc" id="L71">				currentPlayer.startTurn();</span>
+<span class="nc" id="L72">				model.fireTurnStarted(currentPlayer);</span>
+			} else {
+<span class="nc" id="L74">				model.fireGameFinished();</span>
+			}
+		}
+<span class="nc" id="L77">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

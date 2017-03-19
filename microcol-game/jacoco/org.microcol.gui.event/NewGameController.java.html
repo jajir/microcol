@@ -26,7 +26,7 @@ import com.google.common.base.Preconditions;
 <span class="nc" id="L26">		Preconditions.checkNotNull(event);</span>
 <span class="nc" id="L27">		logger.debug(&quot;New game started: &quot; + event);</span>
 <span class="nc" id="L28">		listeners.forEach(listener -&gt; {</span>
-<span class="nc" id="L29">			listener.onNewGame(event.getGame());</span>
+<span class="nc" id="L29">			listener.onNewGame(event.getModel());</span>
 <span class="nc" id="L30">		});</span>
 <span class="nc" id="L31">	}</span>
 }

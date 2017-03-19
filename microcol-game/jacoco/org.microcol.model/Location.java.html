@@ -3,24 +3,24 @@
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 
-// TODO JKA Documentation
 public class Location {
 	private final int x;
 	private final int y;
 
-<span class="fc" id="L11">	public Location(final int x, final int y) {</span>
-<span class="fc" id="L12">		this.x = x;</span>
-<span class="fc" id="L13">		this.y = y;</span>
-<span class="fc" id="L14">	}</span>
+<span class="fc" id="L10">	private Location(final int x, final int y) {</span>
+<span class="fc" id="L11">		this.x = x;</span>
+<span class="fc" id="L12">		this.y = y;</span>
+<span class="fc" id="L13">	}</span>
 
 	public int getX() {
-<span class="fc" id="L17">		return x;</span>
+<span class="fc" id="L16">		return x;</span>
 	}
 
 	public int getY() {
-<span class="fc" id="L21">		return y;</span>
+<span class="fc" id="L20">		return y;</span>
 	}
 
+	// tranzitivní
 	public boolean isAdjacent(final Location location) {
 <span class="fc" id="L25">		Preconditions.checkNotNull(location);</span>
 
@@ -32,43 +32,45 @@ public class Location {
 <span class="fc bfc" id="L32" title="All 2 branches covered.">			&amp;&amp; Math.abs(y - location.y) &lt;= 1; </span>
 	}
 
+	// tranzitivní
+	// funguje správně pouze pro čísla menší než MAX_INT
 	public Location add(final Location location) {
-<span class="fc" id="L36">		Preconditions.checkNotNull(location);</span>
+<span class="fc" id="L38">		Preconditions.checkNotNull(location);</span>
 
-<span class="fc" id="L38">		return new Location(x + location.x, y + location.y);</span>
+<span class="fc" id="L40">		return Location.of(x + location.x, y + location.y);</span>
 	}
 
 	@Override
 	public int hashCode() {
-<span class="fc" id="L43">		return x + (y &lt;&lt; 16);</span>
+<span class="fc" id="L45">		return x + (y &lt;&lt; 16);</span>
 	}
 
 	@Override
 	public boolean equals(final Object object) {
-<span class="fc bfc" id="L48" title="All 2 branches covered.">		if (object == null) {</span>
-<span class="fc" id="L49">			return false;</span>
+<span class="fc bfc" id="L50" title="All 2 branches covered.">		if (object == null) {</span>
+<span class="fc" id="L51">			return false;</span>
 		}
 
-<span class="fc bfc" id="L52" title="All 2 branches covered.">		if (!(object instanceof Location)) {</span>
-<span class="fc" id="L53">			return false;</span>
+<span class="fc bfc" id="L54" title="All 2 branches covered.">		if (!(object instanceof Location)) {</span>
+<span class="fc" id="L55">			return false;</span>
 		}
 
-<span class="fc" id="L56">		final Location location = (Location) object;</span>
+<span class="fc" id="L58">		final Location location = (Location) object;</span>
 
-<span class="fc bfc" id="L58" title="All 4 branches covered.">		return x == location.x</span>
+<span class="fc bfc" id="L60" title="All 4 branches covered.">		return x == location.x</span>
 			&amp;&amp; y == location.y;
 	}
 
 	@Override
 	public String toString() {
-<span class="fc" id="L64">		return MoreObjects.toStringHelper(this)</span>
-<span class="fc" id="L65">			.add(&quot;x&quot;, x)</span>
-<span class="fc" id="L66">			.add(&quot;y&quot;, y)</span>
-<span class="fc" id="L67">			.toString();</span>
+<span class="fc" id="L66">		return MoreObjects.toStringHelper(this)</span>
+<span class="fc" id="L67">			.add(&quot;x&quot;, x)</span>
+<span class="fc" id="L68">			.add(&quot;y&quot;, y)</span>
+<span class="fc" id="L69">			.toString();</span>
 	}
 
 	public static Location of(final int x, final int y) {
-<span class="fc" id="L71">		return new Location(x, y);</span>
+<span class="fc" id="L73">		return new Location(x, y);</span>
 	}
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

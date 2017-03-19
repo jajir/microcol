@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ModelBuilder.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">MicroCol game classes</a> &gt; <a href="index.source.html" class="el_package">org.microcol.model</a> &gt; <span class="el_source">ModelBuilder.java</span></div><h1>ModelBuilder.java</h1><pre class="source lang-java linenums">package org.microcol.model;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class ModelBuilder {
+	private final List&lt;Player&gt; players;
+	private final List&lt;Ship&gt; ships;
+
+	private Calendar calendar;
+	private World world;
+
+<span class="nc" id="L13">	public ModelBuilder() {</span>
+<span class="nc" id="L14">		players = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L15">		ships = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L16">	}</span>
+
+	public ModelBuilder setCalendar(final int startYear, final int endYear) {
+<span class="nc" id="L19">		calendar = new Calendar(startYear, endYear);</span>
+
+<span class="nc" id="L21">		return this;</span>
+	}
+
+	public ModelBuilder setWorld(final int maxX, final int maxY) {
+<span class="nc" id="L25">		world = new World(maxX, maxY);</span>
+
+<span class="nc" id="L27">		return this;</span>
+	}
+
+	public ModelBuilder setWorld(final String fileName) {
+<span class="nc" id="L31">		world = new World(fileName);</span>
+
+<span class="nc" id="L33">		return this;</span>
+	}
+
+	public ModelBuilder addPlayer(final String name, final boolean computer) {
+<span class="nc" id="L37">		players.add(new Player(name, computer));</span>
+
+<span class="nc" id="L39">		return this;</span>
+	}
+
+	public ModelBuilder addShip(final String ownerName, final int maxMoves, final Location location) {
+<span class="nc" id="L43">		ships.add(new Ship(getPlayer(ownerName), maxMoves, location));</span>
+
+<span class="nc" id="L45">		return this;</span>
+	}
+
+	private Player getPlayer(final String name) {
+<span class="nc" id="L49">		return players.stream()</span>
+<span class="nc" id="L50">			.filter(player -&gt; player.getName().equals(name))</span>
+<span class="nc" id="L51">			.findAny()</span>
+<span class="nc" id="L52">			.orElse(null);</span>
+	}
+
+	public Model build() {
+<span class="nc" id="L56">		return new Model(calendar, world, players, ships);</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

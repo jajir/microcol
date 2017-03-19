@@ -3,7 +3,7 @@
 import java.util.Optional;
 
 import org.microcol.gui.model.TileOcean;
-import org.microcol.model.Game;
+import org.microcol.model.Model;
 import org.microcol.model.Location;
 import org.microcol.model.Ship;
 
@@ -15,13 +15,13 @@ import com.google.common.base.Preconditions;
  */
 public class FocusedTileEvent {
 
-	private final Game game;
+	private final Model game;
 
 	private final Location location;
 
 	private final TileOcean tile;
 
-<span class="nc" id="L24">	public FocusedTileEvent(final Game game, final Location location, final TileOcean tile) {</span>
+<span class="nc" id="L24">	public FocusedTileEvent(final Model game, final Location location, final TileOcean tile) {</span>
 <span class="nc" id="L25">		this.game = Preconditions.checkNotNull(game);</span>
 <span class="nc" id="L26">		this.location = Preconditions.checkNotNull(location);</span>
 <span class="nc" id="L27">		this.tile = Preconditions.checkNotNull(tile);</span>

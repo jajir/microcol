@@ -7,64 +7,61 @@ import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 
-// TODO JKA Documentation
-// TODO JKA Tests
 public class Path {
 	private final ImmutableList&lt;Location&gt; locations;
 
-<span class="fc" id="L15">	public Path(final List&lt;Location&gt; locations) {</span>
-<span class="fc" id="L16">		Preconditions.checkNotNull(locations);</span>
-<span class="fc bfc" id="L17" title="All 2 branches covered.">		Preconditions.checkArgument(locations.size() &gt; 0, &quot;Path cannot be empty.&quot;);</span>
-<span class="fc" id="L18">		Preconditions.checkArgument(isValid(locations), &quot;Invalid path: %s&quot;, locations);</span>
+<span class="fc" id="L13">	private Path(final List&lt;Location&gt; locations) {</span>
+<span class="fc" id="L14">		Preconditions.checkNotNull(locations);</span>
+<span class="fc bfc" id="L15" title="All 2 branches covered.">		Preconditions.checkArgument(locations.size() &gt; 0, &quot;Path cannot be empty.&quot;);</span>
+<span class="fc" id="L16">		checkAdjacent(locations);</span>
 
-<span class="fc" id="L20">		this.locations = ImmutableList.copyOf(locations);</span>
-<span class="fc" id="L21">	}</span>
+		// Throws NPE if any element is null.
+<span class="fc" id="L19">		this.locations = ImmutableList.copyOf(locations);</span>
+<span class="fc" id="L20">	}</span>
 
-	private boolean isValid(final List&lt;Location&gt; locations) {
-		// TODO JKA Use streams
-<span class="fc bfc" id="L25" title="All 2 branches covered.">		for (int i = 1; i &lt; locations.size(); i++) {</span>
-<span class="fc" id="L26">			final Location prevLocation = locations.get(i - 1);</span>
-<span class="fc" id="L27">			final Location nextLocation = locations.get(i);</span>
-<span class="fc bfc" id="L28" title="All 2 branches covered.">			if (!prevLocation.isAdjacent(nextLocation)) {</span>
-<span class="fc" id="L29">				return false;</span>
+	private void checkAdjacent(final List&lt;Location&gt; locations) {
+<span class="fc bfc" id="L23" title="All 2 branches covered.">		for (int i = 1; i &lt; locations.size(); i++) {</span>
+<span class="fc" id="L24">			final Location prevLocation = locations.get(i - 1);</span>
+<span class="fc" id="L25">			final Location nextLocation = locations.get(i);</span>
+			// Possible NPE is not problem here.
+<span class="fc bfc" id="L27" title="All 2 branches covered.">			if (!prevLocation.isAdjacent(nextLocation)) {</span>
+<span class="fc" id="L28">				throw new IllegalArgumentException(String.format(&quot;Locations are not adjacent: %s&quot;, locations));</span>
 			}
 		}
-
-<span class="fc" id="L33">		return true;</span>
-	}
+<span class="fc" id="L31">	}</span>
 
 	public boolean contains(final Location location) {
-<span class="nc" id="L37">		Preconditions.checkNotNull(location);</span>
+<span class="fc" id="L34">		Preconditions.checkNotNull(location);</span>
 
-<span class="nc" id="L39">		return locations.contains(location);</span>
+<span class="fc" id="L36">		return locations.contains(location);</span>
 	}
 
 	public boolean containsAny(final Collection&lt;Location&gt; locations) {
-<span class="nc" id="L43">		Preconditions.checkNotNull(locations);</span>
+<span class="fc" id="L40">		Preconditions.checkNotNull(locations);</span>
+<span class="fc bfc" id="L41" title="All 2 branches covered.">		if (locations.contains(null)) {</span>
+<span class="fc" id="L42">			throw new NullPointerException(String.format(&quot;Locations contains null element: %s&quot;, locations));</span>
+		}
 
-		// TODO JKA Use streams
-<span class="nc bnc" id="L46" title="All 2 branches missed.">		for (Location location : locations) {</span>
-<span class="nc bnc" id="L47" title="All 2 branches missed.">			if (this.locations.contains(location)) {</span>
-<span class="nc" id="L48">				return true;</span>
-			}
-<span class="nc" id="L50">		}</span>
-
-<span class="nc" id="L52">		return false;</span>
+<span class="fc" id="L45">		return locations.stream().anyMatch(location -&gt; this.locations.contains(location));</span>
 	}
 
 	public List&lt;Location&gt; getLocations() {
-<span class="fc" id="L56">		return locations;</span>
+<span class="fc" id="L49">		return locations;</span>
 	}
 
-	public Location getFirstLocation() {
-<span class="nc" id="L60">		return locations.get(0);</span>
+	public Location getStart() {
+<span class="fc" id="L53">		return locations.get(0);</span>
 	}
 
 	@Override
 	public String toString() {
-<span class="fc" id="L65">		return MoreObjects.toStringHelper(this)</span>
-<span class="fc" id="L66">			.add(&quot;locations&quot;, locations)</span>
-<span class="fc" id="L67">			.toString();</span>
+<span class="fc" id="L58">		return MoreObjects.toStringHelper(this)</span>
+<span class="fc" id="L59">			.add(&quot;locations&quot;, locations)</span>
+<span class="fc" id="L60">			.toString();</span>
+	}
+
+	public static Path of(final List&lt;Location&gt; locations) {
+<span class="fc" id="L64">		return new Path(locations);</span>
 	}
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

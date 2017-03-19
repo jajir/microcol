@@ -13,7 +13,7 @@ import javax.swing.JScrollPane;
 
 import org.microcol.gui.event.FocusedTileEvent;
 import org.microcol.gui.model.TileOcean;
-import org.microcol.model.Game;
+import org.microcol.model.Model;
 import org.microcol.model.Player;
 
 import com.google.common.base.Preconditions;
@@ -91,7 +91,7 @@ public class RightPanelView extends JPanel implements RightPanelPresenter.Displa
 <span class="nc" id="L91">	}</span>
 
 	@Override
-	public void showTile(final FocusedTileEvent event, final Game game) {
+	public void showTile(final FocusedTileEvent event, final Model game) {
 <span class="nc" id="L95">		setCurrentPlayer(game.getCurrentPlayer());</span>
 <span class="nc" id="L96">		final TileOcean tile = event.getTile();</span>
 <span class="nc" id="L97">		tileImage.setImage(imageProvider.getImage(ImageProvider.IMG_TILE_OCEAN));</span>

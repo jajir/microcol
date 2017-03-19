@@ -3,52 +3,50 @@
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 
-// TODO JKA Documentation
-// TODO JKA Tests
 public class Calendar {
 	private final int startYear;
 	private final int endYear;
 
 	private int currentYear;
 
-<span class="fc" id="L14">	public Calendar(final int startYear, final int endYear) {</span>
-<span class="fc bfc" id="L15" title="All 2 branches covered.">		Preconditions.checkArgument(startYear &lt; endYear, &quot;Start year (%s) must be less than end year (%s).&quot;, startYear, endYear);</span>
+<span class="fc" id="L12">	Calendar(final int startYear, final int endYear) {</span>
+<span class="fc bfc" id="L13" title="All 2 branches covered.">		Preconditions.checkArgument(startYear &lt; endYear, &quot;Start year (%s) must be less than end year (%s).&quot;, startYear, endYear);</span>
 
-<span class="fc" id="L17">		this.startYear = startYear;</span>
-<span class="fc" id="L18">		this.endYear = endYear;</span>
+<span class="fc" id="L15">		this.startYear = startYear;</span>
+<span class="fc" id="L16">		this.endYear = endYear;</span>
 
-<span class="fc" id="L20">		this.currentYear = startYear;</span>
-<span class="fc" id="L21">	}</span>
+<span class="fc" id="L18">		this.currentYear = startYear;</span>
+<span class="fc" id="L19">	}</span>
 
 	public int getStartYear() {
-<span class="fc" id="L24">		return startYear;</span>
+<span class="fc" id="L22">		return startYear;</span>
 	}
 
 	public int getEndYear() {
-<span class="fc" id="L28">		return endYear;</span>
+<span class="fc" id="L26">		return endYear;</span>
 	}
 
 	public int getCurrentYear() {
-<span class="fc" id="L32">		return currentYear;</span>
+<span class="fc" id="L30">		return currentYear;</span>
 	}
 
-	protected boolean isFinished() {
-<span class="fc bfc" id="L36" title="All 2 branches covered.">		return currentYear &gt;= endYear;</span>
+	boolean isFinished() {
+<span class="fc bfc" id="L34" title="All 2 branches covered.">		return currentYear &gt;= endYear;</span>
 	}
 
-	protected void endRound() {
-<span class="fc bfc" id="L40" title="All 2 branches covered.">		Preconditions.checkState(!isFinished(), &quot;Current year (%s) must be less than or equal to end year (%s).&quot;, currentYear, endYear);</span>
+	void endRound() {
+<span class="fc bfc" id="L38" title="All 2 branches covered.">		Preconditions.checkState(!isFinished(), &quot;End year (%s) already reached.&quot;, endYear);</span>
 
-<span class="fc" id="L42">		currentYear++;</span>
-<span class="fc" id="L43">	}</span>
+<span class="fc" id="L40">		currentYear++;</span>
+<span class="fc" id="L41">	}</span>
 
 	@Override
 	public String toString() {
-<span class="nc" id="L47">		return MoreObjects.toStringHelper(this)</span>
-<span class="nc" id="L48">			.add(&quot;startYear&quot;, startYear)</span>
-<span class="nc" id="L49">			.add(&quot;endYear&quot;, endYear)</span>
-<span class="nc" id="L50">			.add(&quot;currentYear&quot;, currentYear)</span>
-<span class="nc" id="L51">			.toString();</span>
+<span class="nc" id="L45">		return MoreObjects.toStringHelper(this)</span>
+<span class="nc" id="L46">			.add(&quot;startYear&quot;, startYear)</span>
+<span class="nc" id="L47">			.add(&quot;endYear&quot;, endYear)</span>
+<span class="nc" id="L48">			.add(&quot;currentYear&quot;, currentYear)</span>
+<span class="nc" id="L49">			.toString();</span>
 	}
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

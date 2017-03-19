@@ -12,6 +12,10 @@ import java.util.Map;
 
 import javax.imageio.ImageIO;
 
+import org.microcol.model.Terrain;
+
+import com.google.common.collect.ImmutableMap;
+
 /**
  * Provide image instances.
  * 
@@ -30,6 +34,8 @@ public class ImageProvider {
 
 	public final static String IMG_TILE_OCEAN = &quot;tile-ocean.png&quot;;
 
+	public final static String IMG_TILE_LAND = &quot;tile-land.png&quot;;
+
 	public final static String IMG_TILE_SHIP1 = &quot;tile-ship1.png&quot;;
 
 	public final static String IMG_TILE_SHIP2 = &quot;tile-ship2.png&quot;;
@@ -46,9 +52,12 @@ public class ImageProvider {
 
 	private final Map&lt;String, BufferedImage&gt; images;
 
-<span class="fc" id="L49">	public ImageProvider() {</span>
-<span class="fc" id="L50">		images = new HashMap&lt;&gt;();</span>
-<span class="fc" id="L51">	}</span>
+<span class="fc" id="L55">	private final Map&lt;Terrain, Image&gt; terrainMap = ImmutableMap.&lt;Terrain, Image&gt;builder()</span>
+<span class="fc" id="L56">			.put(Terrain.CONTINENT, getRawImage(IMG_TILE_LAND)).put(Terrain.OCEAN, getRawImage(IMG_TILE_OCEAN)).build();</span>
+
+<span class="fc" id="L58">	public ImageProvider() {</span>
+<span class="fc" id="L59">		images = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L60">	}</span>
 
 	/**
 	 * Load image for name.
@@ -58,16 +67,16 @@ public class ImageProvider {
 	 * @return loaded image
 	 */
 	public Image getImage(final String name) {
-<span class="fc" id="L61">		BufferedImage img = images.get(name);</span>
-<span class="fc bfc" id="L62" title="All 2 branches covered.">		if (img == null) {</span>
-<span class="fc" id="L63">			img = ImageProvider.getRawImage(BASE_PACKAGE + &quot;/&quot; + name);</span>
-<span class="pc bpc" id="L64" title="1 of 2 branches missed.">			if (img == null) {</span>
-<span class="nc" id="L65">				return null;</span>
+<span class="fc" id="L70">		BufferedImage img = images.get(name);</span>
+<span class="fc bfc" id="L71" title="All 2 branches covered.">		if (img == null) {</span>
+<span class="fc" id="L72">			img = ImageProvider.getRawImage(name);</span>
+<span class="pc bpc" id="L73" title="1 of 2 branches missed.">			if (img == null) {</span>
+<span class="nc" id="L74">				return null;</span>
 			} else {
-<span class="fc" id="L67">				images.put(name, img);</span>
+<span class="fc" id="L76">				images.put(name, img);</span>
 			}
 		}
-<span class="fc" id="L70">		return img;</span>
+<span class="fc" id="L79">		return img;</span>
 	}
 
 	/**
@@ -80,52 +89,63 @@ public class ImageProvider {
 	@SuppressWarnings(&quot;unused&quot;)
 	private BufferedImage getCompatibleImage(final BufferedImage image) {
 		// obtain the current system graphical settings
-<span class="nc" id="L83">		GraphicsConfiguration gfx_config = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice()</span>
-<span class="nc" id="L84">				.getDefaultConfiguration();</span>
+<span class="nc" id="L92">		GraphicsConfiguration gfx_config = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice()</span>
+<span class="nc" id="L93">				.getDefaultConfiguration();</span>
 
 		/*
 		 * if image is already compatible and optimized for current system
 		 * settings, simply return it
 		 */
-<span class="nc bnc" id="L90" title="All 2 branches missed.">		if (image.getColorModel().equals(gfx_config.getColorModel()))</span>
-<span class="nc" id="L91">			return image;</span>
+<span class="nc bnc" id="L99" title="All 2 branches missed.">		if (image.getColorModel().equals(gfx_config.getColorModel()))</span>
+<span class="nc" id="L100">			return image;</span>
 
 		// image is not optimized, so create a new image that is
-<span class="nc" id="L94">		BufferedImage new_image = gfx_config.createCompatibleImage(image.getWidth(), image.getHeight(),</span>
-<span class="nc" id="L95">				image.getTransparency());</span>
+<span class="nc" id="L103">		BufferedImage new_image = gfx_config.createCompatibleImage(image.getWidth(), image.getHeight(),</span>
+<span class="nc" id="L104">				image.getTransparency());</span>
 
 		// get the graphics context of the new image to draw the old image on
-<span class="nc" id="L98">		Graphics2D g2d = (Graphics2D) new_image.getGraphics();</span>
+<span class="nc" id="L107">		Graphics2D g2d = (Graphics2D) new_image.getGraphics();</span>
 
 		// actually draw the image and dispose of context no longer needed
-<span class="nc" id="L101">		g2d.drawImage(image, 0, 0, null);</span>
-<span class="nc" id="L102">		g2d.dispose();</span>
+<span class="nc" id="L110">		g2d.drawImage(image, 0, 0, null);</span>
+<span class="nc" id="L111">		g2d.dispose();</span>
 
 		// return the new optimized image
-<span class="nc" id="L105">		return new_image;</span>
+<span class="nc" id="L114">		return new_image;</span>
 	}
 
 	/**
 	 * Simplify loading image from resource. Path should look like: &lt;code&gt;
 	 * org/microcol/images/unit-60x60.gif
-	 * &lt;/code&gt;
+	 * &lt;/code&gt;. Class suppose that all images are in directory &lt;i&gt;images&lt;/i&gt;.
 	 * 
-	 * @param path
+	 * @param rawPath
 	 *            path at classpath where is stored image
-	 * @return image object
 	 */
-	public static BufferedImage getRawImage(final String path) {
+	public static BufferedImage getRawImage(final String rawPath) {
+<span class="fc" id="L126">		final String path = BASE_PACKAGE + &quot;/&quot; + rawPath;</span>
 		try {
-<span class="fc" id="L119">			ClassLoader cl = ImageProvider.class.getClassLoader();</span>
-<span class="fc" id="L120">			final InputStream in = cl.getResourceAsStream(path);</span>
-<span class="fc bfc" id="L121" title="All 2 branches covered.">			if (in == null) {</span>
-<span class="fc" id="L122">				throw new MicroColException(&quot;Unable to load file '&quot; + path + &quot;'.&quot;);</span>
+<span class="fc" id="L128">			ClassLoader cl = ImageProvider.class.getClassLoader();</span>
+<span class="fc" id="L129">			final InputStream in = cl.getResourceAsStream(path);</span>
+<span class="fc bfc" id="L130" title="All 2 branches covered.">			if (in == null) {</span>
+<span class="fc" id="L131">				throw new MicroColException(&quot;Unable to load file '&quot; + path + &quot;'.&quot;);</span>
 			} else {
-<span class="fc" id="L124">				return ImageIO.read(cl.getResourceAsStream(path));</span>
+<span class="fc" id="L133">				return ImageIO.read(cl.getResourceAsStream(path));</span>
 			}
-<span class="nc" id="L126">		} catch (IOException e) {</span>
-<span class="nc" id="L127">			throw new MicroColException(&quot;Unable to load file '&quot; + path + &quot;'.&quot;, e);</span>
+<span class="nc" id="L135">		} catch (IOException e) {</span>
+<span class="nc" id="L136">			throw new MicroColException(&quot;Unable to load file '&quot; + path + &quot;'.&quot;, e);</span>
 		}
+	}
+
+	/**
+	 * For specific terrain type find corresponding image.
+	 * 
+	 * @param terrain
+	 *            required terrain type
+	 * @return image representing terrain image
+	 */
+	public Image getTerrainImage(final Terrain terrain) {
+<span class="nc" id="L148">		return terrainMap.get(terrain);</span>
 	}
 
 }

@@ -83,7 +83,7 @@ import com.google.inject.Stage;
 <span class="nc" id="L83">				Method m = clazz.getMethod(&quot;getApplication&quot;);</span>
 <span class="nc" id="L84">				Object o = m.invoke(null);</span>
 <span class="nc" id="L85">				Method m2 = clazz.getMethod(&quot;setDockIconImage&quot;, Image.class);</span>
-<span class="nc" id="L86">				m2.invoke(o, ImageProvider.getRawImage(&quot;images/splash-screen.png&quot;));</span>
+<span class="nc" id="L86">				m2.invoke(o, ImageProvider.getRawImage(&quot;splash-screen.png&quot;));</span>
 			}
 <span class="nc" id="L88">		} catch (ClassNotFoundException | NoSuchMethodException | SecurityException | IllegalAccessException</span>
 				| IllegalArgumentException | InvocationTargetException e) {
