@@ -8,7 +8,6 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 
-// TODO JKA groupingBy -> ImmutableList::copyOf, Guava verze 21 ma svoje kolektory
 class ShipStorage {
 	private final List<Ship> ships;
 

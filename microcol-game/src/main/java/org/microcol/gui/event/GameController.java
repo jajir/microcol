@@ -7,9 +7,9 @@ import org.microcol.ai.SkyNet;
 import org.microcol.gui.GamePreferences;
 import org.microcol.gui.Localized;
 import org.microcol.gui.MusicController;
+import org.microcol.model.Location;
 import org.microcol.model.Model;
 import org.microcol.model.ModelBuilder;
-import org.microcol.model.Location;
 import org.microcol.model.ModelListener;
 import org.microcol.model.Path;
 import org.microcol.model.Ship;
@@ -63,8 +63,9 @@ public class GameController implements Localized {
 		game = builder.setCalendar(1570, 1800)
 			//.setWorld(15, 10)
 			.setWorld("/maps/map-01.txt")
-			.addPlayer("Player1", true).addShip("Player1", 5, 4, 2).addShip("Player1", 5, 3, 3)
-			.addPlayer("Player2", true).addShip("Player2", 5, 7, 7).addShip("Player2", 5, 7, 9).addShip("Player2", 5, 14, 9)
+			.addPlayer("Player1", true).addShip("Player1", 5, Location.of(4, 2)).addShip("Player1", 5, Location.of(3, 3))
+			.addPlayer("Player2", true).addShip("Player2", 5, Location.of(7, 7)).addShip("Player2", 5, Location.of(7, 9)).addShip("Player2", 5, Location.of(14, 9))
+			//.addPlayer("Player3", true)
 			.build();
 		game.addListener(new ModelListener() {
 

@@ -1,18 +1,18 @@
 package org.microcol.model;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 
 public class Model {
 	private final ListenerManager listenerManager;
-
 	private final Calendar calendar;
 	private final World world;
 	private final ImmutableList<Player> players;
-
 	private final ShipStorage shipStorage;
 	private final GameManager gameManager;
 
@@ -23,6 +23,8 @@ public class Model {
 		this.world = Preconditions.checkNotNull(world);
 
 		this.players = ImmutableList.copyOf(players);
+		Preconditions.checkArgument(!this.players.isEmpty(), "There must be at least one player.");
+		checkPlayerNames(this.players);
 		this.players.forEach(player -> {
 			player.setModel(this);
 		});
@@ -33,6 +35,15 @@ public class Model {
 		});
 
 		gameManager = new GameManager(this);
+	}
+
+	private void checkPlayerNames(final List<Player> players) {
+		Set<String> names = new HashSet<>();
+		players.forEach(player -> {
+			if (!names.add(player.getName())) {
+				throw new IllegalArgumentException(String.format("Duplicate player name (%s).", player.getName()));
+			}
+		});
 	}
 
 	public void addListener(ModelListener listener) {
