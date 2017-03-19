@@ -119,9 +119,8 @@ public class ImageProvider {
 	 * org/microcol/images/unit-60x60.gif
 	 * </code>. Class suppose that all images are in directory <i>images</i>.
 	 * 
-	 * @param path
+	 * @param rawPath
 	 *            path at classpath where is stored image
-	 * @return image object
 	 */
 	public static BufferedImage getRawImage(final String rawPath) {
 		final String path = BASE_PACKAGE + "/" + rawPath;
