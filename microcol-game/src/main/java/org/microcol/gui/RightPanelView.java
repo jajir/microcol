@@ -12,9 +12,9 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import org.microcol.gui.event.FocusedTileEvent;
-import org.microcol.gui.model.TileOcean;
 import org.microcol.model.Model;
 import org.microcol.model.Player;
+import org.microcol.model.Terrain;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
@@ -93,10 +93,11 @@ public class RightPanelView extends JPanel implements RightPanelPresenter.Displa
 	@Override
 	public void showTile(final FocusedTileEvent event, final Model game) {
 		setCurrentPlayer(game.getCurrentPlayer());
-		final TileOcean tile = event.getTile();
+		final Terrain tile = event.getTerrain();
 		tileImage.setImage(imageProvider.getImage(ImageProvider.IMG_TILE_OCEAN));
 		StringBuilder sb = new StringBuilder(200);
 		sb.append("<html><div>");
+		//TODO JJ look to property file for tile details 
 		sb.append(tile.getClass().getSimpleName());
 		sb.append("");
 		sb.append("</div><div>");

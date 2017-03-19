@@ -27,9 +27,9 @@ import org.microcol.gui.event.ShowGridController;
 import org.microcol.gui.event.StatusBarMessageController;
 import org.microcol.gui.event.StatusBarMessageEvent;
 import org.microcol.gui.event.ViewController;
-import org.microcol.gui.model.TileOcean;
 import org.microcol.model.Location;
 import org.microcol.model.Ship;
+import org.microcol.model.Terrain;
 import org.microcol.model.event.ShipMovedEvent;
 
 import com.google.common.base.Preconditions;
@@ -242,13 +242,14 @@ public class GamePanelPresenter implements Localized {
 	}
 
 	private void onMousePressed(final MouseEvent e) {
-		final Location p = display.getArea().convertToLocation(Point.of(e.getX(), e.getY()));
-		System.out.println("location p: " + p);
+		final Location location = display.getArea().convertToLocation(Point.of(e.getX(), e.getY()));
+		System.out.println("location p: " + location);
 		if (display.isGotoMode()) {
-			switchToNormalMode(p);
+			switchToNormalMode(location);
 		} else {
-			display.setCursorLocation(p);
-			focusedTileController.fireEvent(new FocusedTileEvent(gameController.getModel(), p, new TileOcean()));
+			display.setCursorLocation(location);
+			focusedTileController.fireEvent(new FocusedTileEvent(gameController.getModel(), location,
+					gameController.getModel().getWorld().getTerrainAt(location)));
 		}
 	}
 
@@ -275,10 +276,11 @@ public class GamePanelPresenter implements Localized {
 		 * Set status bar message
 		 */
 		final Location where = lastMousePosition.toLocation();
-		final TileOcean tile = new TileOcean();
+		final Terrain tile = gameController.getModel().getWorld().getTerrainAt(where);
 		final StringBuilder buff = new StringBuilder();
 		buff.append(getText().get("statusBar.tile.start"));
 		buff.append(" ");
+		// TODO JJ look to property file for tile details
 		buff.append(tile.getClass().getSimpleName());
 		buff.append(" ");
 		buff.append(getText().get("statusBar.tile.withUnit"));
@@ -293,8 +295,8 @@ public class GamePanelPresenter implements Localized {
 	private void cancelGoToMode(final Location moveTo) {
 		display.setCursorNormal();
 		display.setCursorLocation(moveTo);
-		// TODO JJ read tile ocean from map
-		focusedTileController.fireEvent(new FocusedTileEvent(gameController.getModel(), moveTo, new TileOcean()));
+		focusedTileController.fireEvent(new FocusedTileEvent(gameController.getModel(), moveTo,
+				gameController.getModel().getWorld().getTerrainAt(moveTo)));
 	}
 
 	private final void switchToNormalMode(final Location moveTo) {
@@ -305,9 +307,8 @@ public class GamePanelPresenter implements Localized {
 			// TODO JJ active ship can be different from ship first at list
 			Ship ship = gameController.getModel().getCurrentPlayer().getShipsAt(display.getCursorLocation()).get(0);
 			gameController.performMove(ship, path);
-			// TODO JJ tile ocean should be obtained from map
-			focusedTileController.fireEvent(
-					new FocusedTileEvent(gameController.getModel(), display.getCursorLocation(), new TileOcean()));
+			focusedTileController.fireEvent(new FocusedTileEvent(gameController.getModel(), display.getCursorLocation(),
+					gameController.getModel().getWorld().getTerrainAt(display.getCursorLocation())));
 		}
 		display.setCursorLocation(moveTo);
 		display.setCursorNormal();
