@@ -64,9 +64,8 @@ public class Player {
 	}
 
 	public void endTurn() {
-		Preconditions.checkState(model.isActive(), "Game must be active.");
-		Preconditions.checkState(model.getCurrentPlayer().equals(this), "This player (%s) is not current player (%s).", this, model.getCurrentPlayer());
-
+		model.checkGameActive();
+		model.checkCurrentPlayer(this);
 		model.endTurn();
 	}
 

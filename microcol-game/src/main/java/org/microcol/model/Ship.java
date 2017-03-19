@@ -50,15 +50,16 @@ public class Ship {
 	}
 
 	public void moveTo(final Path path) {
+		model.checkGameActive();
+		model.checkCurrentPlayer(owner);
+
 		Preconditions.checkNotNull(path);
 		Preconditions.checkArgument(path.getStart().isAdjacent(location), "Path (%s) must be adjacent to current location (%s).", path.getStart(), location);
 		Preconditions.checkArgument(model.getWorld().isValid(path), "Path (%s) must be valid.", path);
-		Preconditions.checkState(model.isActive(), "Game must be active.");
-		Preconditions.checkState(owner.equals(model.getCurrentPlayer()), "Current player (%s) is not owner (%s) of this ship (%s).", model.getCurrentPlayer(), owner, this);
 		Preconditions.checkArgument(!path.containsAny(owner.getEnemyShipsAt().keySet()), "There is enemy ship on path (%s).", path);
 
 		final Location start = location;
-		final List<Location> pathBuilder = new ArrayList<>(); // TODO JKA Rename
+		final List<Location> locations = new ArrayList<>();
 		// TODO JKA Use streams
 		for (Location newLocation : path.getLocations()) {
 			if (availableMoves <= 0) {
@@ -67,12 +68,12 @@ public class Ship {
 			if (model.getWorld().getTerrainAt(newLocation) != Terrain.OCEAN) {
 				throw new IllegalArgumentException(String.format("Path (%s) must contain only ocean (%s).", newLocation, model.getWorld().getTerrainAt(newLocation)));
 			}
-			pathBuilder.add(newLocation);
+			locations.add(newLocation);
 			location = newLocation;
 			availableMoves--;
 		}
-		if (!pathBuilder.isEmpty()) {
-			model.fireShipMoved(this, start, Path.of(pathBuilder));
+		if (!locations.isEmpty()) {
+			model.fireShipMoved(this, start, Path.of(locations));
 		}
 	}
 

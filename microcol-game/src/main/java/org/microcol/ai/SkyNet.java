@@ -68,13 +68,13 @@ public class SkyNet {
 
 		final List<Location> directions = new ArrayList<>(SkyNet.directions);
 		Location lastLocation = ship.getLocation();
-		final List<Location> pathBuilder = new ArrayList<>(); // TODO JKA Rename
-		while (pathBuilder.size() < ship.getAvailableMoves()) {
+		final List<Location> locations = new ArrayList<>();
+		while (locations.size() < ship.getAvailableMoves()) {
 			final Location lastDirection = lastDirections.get(ship);
 			final Location newLocation = lastLocation.add(lastDirection);
 			// TODO JKA Tohle je spatne XXX == Terrain.OCEAN - dat na Ship
 			if (model.getWorld().isValid(newLocation) && model.getWorld().getTerrainAt(newLocation) == Terrain.OCEAN && !isEnemyShipAt(newLocation)) {
-				pathBuilder.add(newLocation);
+				locations.add(newLocation);
 				lastLocation = newLocation;
 			} else {
 				directions.remove(lastDirection);
@@ -85,8 +85,8 @@ public class SkyNet {
 			}
 		}
 
-		if (!pathBuilder.isEmpty()) {
-			ship.moveTo(Path.of(pathBuilder));
+		if (!locations.isEmpty()) {
+			ship.moveTo(Path.of(locations));
 		}
 	}
 

@@ -100,7 +100,7 @@ public class GameController implements Localized {
 		});
 		SkyNet skyNet = new SkyNet(game);
 		skyNet.searchAndDestroy();
-		new Thread(() -> game.start()).start();
+		new Thread(() -> game.startGame()).start();
 		musicController.start(gamePreferences.getVolume());
 	}
 

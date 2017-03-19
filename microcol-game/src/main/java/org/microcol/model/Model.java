@@ -7,29 +7,32 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 
 public class Model {
+	private final ListenerManager listenerManager;
+
 	private final Calendar calendar;
 	private final World world;
 	private final ImmutableList<Player> players;
 
-	private final ListenerManager listenerManager;
-	private final ShipStorage shipStorage; 
-
-	private Player currentPlayer;
-	private boolean started;
+	private final ShipStorage shipStorage;
+	private final GameManager gameManager;
 
 	Model(final Calendar calendar, final World world, final List<Player> players, final List<Ship> ships) {
+		listenerManager = new ListenerManager();
+
 		this.calendar = Preconditions.checkNotNull(calendar);
 		this.world = Preconditions.checkNotNull(world);
+
 		this.players = ImmutableList.copyOf(players);
 		this.players.forEach(player -> {
 			player.setModel(this);
 		});
 
-		listenerManager = new ListenerManager();
 		shipStorage = new ShipStorage(ships);
 		shipStorage.getShips().forEach(ship -> {
 			ship.setModel(this);
 		});
+
+		gameManager = new GameManager(this);
 	}
 
 	public void addListener(ModelListener listener) {
@@ -53,9 +56,7 @@ public class Model {
 	}
 
 	public Player getCurrentPlayer() {
-		Preconditions.checkState(isActive(), "Game must be active.");
-
-		return currentPlayer;
+		return gameManager.getCurrentPlayer();
 	}
 
 	ShipStorage getShipStorage() {
@@ -74,51 +75,39 @@ public class Model {
 		return shipStorage.getShipsAt(location);
 	}
 
-	public boolean isStarted() {
-		return started;
-	}
-
-	public boolean isFinished() {
-		return calendar.isFinished();
-	}
-
-	boolean isActive() {
-		return started && !isFinished();
-	}
-
-	public void start() {
-		Preconditions.checkState(!started, "Game was already started.");
-
-		started = true;
-		currentPlayer = players.get(0);
-		listenerManager.fireGameStarted(this);
-		listenerManager.fireRoundStarted(this, calendar);
-		currentPlayer.startTurn();
-		listenerManager.fireTurnStarted(this, currentPlayer);
+	public void startGame() {
+		gameManager.startGame();
 	}
 
 	public void endTurn() {
-		Preconditions.checkState(isActive(), "Game must be active.");
+		gameManager.endTurn();
+	}
 
-		final int index = players.indexOf(currentPlayer);
-		if (index < players.size() - 1) {
-			currentPlayer = players.get(index + 1);
-			currentPlayer.startTurn();
-			listenerManager.fireTurnStarted(this, currentPlayer);
-		} else {
-			calendar.endRound();
-			if (!calendar.isFinished()) {
-				currentPlayer = players.get(0);
-				listenerManager.fireRoundStarted(this, calendar);
-				currentPlayer.startTurn();
-				listenerManager.fireTurnStarted(this, currentPlayer);
-			} else {
-				listenerManager.fireGameFinished(this);
-			}
-		}
+	void checkGameActive() {
+		gameManager.checkGameActive();
+	}
+
+	void checkCurrentPlayer(final Player player) {
+		gameManager.checkCurrentPlayer(player);
+	}
+
+	void fireGameStarted() {
+		listenerManager.fireGameStarted(this);
+	}
+
+	void fireRoundStarted() {
+		listenerManager.fireRoundStarted(this, calendar);
+	}
+
+	void fireTurnStarted(final Player player) {
+		listenerManager.fireTurnStarted(this, player);
 	}
 
 	void fireShipMoved(final Ship ship, final Location start, final Path path) {
 		listenerManager.fireShipMoved(this, ship, start, path);
+	}
+
+	void fireGameFinished() {
+		listenerManager.fireGameFinished(this);
 	}
 }
