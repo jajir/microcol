@@ -11,6 +11,7 @@ import com.google.common.base.Preconditions;
 /**
  * Allows to trigger new game event and manage event listeners.
  */
+//FIXME JJ extends from AbstractEventController
 public class NewGameController {
 
 	private final Logger logger = Logger.getLogger(NewGameController.class);

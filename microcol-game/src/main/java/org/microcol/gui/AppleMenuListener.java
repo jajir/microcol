@@ -2,7 +2,8 @@ package org.microcol.gui;
 
 import org.microcol.gui.event.ExitGameController;
 import org.microcol.gui.event.ExitGameEvent;
-import org.microcol.gui.event.GameEventController;
+import org.microcol.gui.event.AboutGameEvent;
+import org.microcol.gui.event.AboutGameEventController;
 
 import com.apple.mrj.MRJAboutHandler;
 import com.apple.mrj.MRJQuitHandler;
@@ -17,12 +18,12 @@ import com.google.inject.Inject;
  */
 public class AppleMenuListener implements MRJAboutHandler, MRJQuitHandler {
 
-	private final GameEventController gameEventController;
+	private final AboutGameEventController gameEventController;
 
 	private final ExitGameController exitGameController;
 
 	@Inject
-	public AppleMenuListener(final GameEventController mainMenuController,
+	public AppleMenuListener(final AboutGameEventController mainMenuController,
 			final ExitGameController exitGameController) {
 		this.gameEventController = Preconditions.checkNotNull(mainMenuController);
 		this.exitGameController = Preconditions.checkNotNull(exitGameController);
@@ -30,7 +31,7 @@ public class AppleMenuListener implements MRJAboutHandler, MRJQuitHandler {
 
 	@Override
 	public void handleAbout() {
-		gameEventController.fireAboutGameEvent();
+		gameEventController.fireEvent(new AboutGameEvent());
 	}
 
 	@Override

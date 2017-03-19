@@ -12,9 +12,8 @@ import com.google.common.base.Preconditions;
 /**
  * Allow to register key listener and fire key events.
  * 
- * @author Jan Jirout
- *
  */
+//FIXME JJ extends from AbstractEventController
 public class KeyController {
 
 	private final Logger logger = Logger.getLogger(KeyController.class);

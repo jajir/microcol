@@ -4,12 +4,13 @@ import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JMenuItem;
 import javax.swing.JRadioButtonMenuItem;
 
+import org.microcol.gui.event.AboutGameEvent;
+import org.microcol.gui.event.AboutGameEventController;
 import org.microcol.gui.event.ChangeLanguageController;
 import org.microcol.gui.event.ExitGameController;
 import org.microcol.gui.event.ExitGameEvent;
 import org.microcol.gui.event.FocusedTileController;
 import org.microcol.gui.event.FocusedTileEvent;
-import org.microcol.gui.event.GameEventController;
 import org.microcol.gui.event.MoveUnitController;
 import org.microcol.gui.event.ShowGridController;
 import org.microcol.gui.event.TurnStartedController;
@@ -55,7 +56,7 @@ public class MainMenuPresenter {
 	public boolean isTileFocused = false;
 
 	@Inject
-	public MainMenuPresenter(final MainMenuPresenter.Display display, final GameEventController gameEventController,
+	public MainMenuPresenter(final MainMenuPresenter.Display display, final AboutGameEventController gameEventController,
 			final GamePreferences gamePreferences, final ChangeLanguageController languangeController, final Text text,
 			final ViewUtil viewUtil, final VolumeChangeController volumeChangeController,
 			final ShowGridController showGridController, final FocusedTileController focusedTileController,
@@ -70,7 +71,7 @@ public class MainMenuPresenter {
 				exitGameController.fireEvent(new ExitGameEvent());
 			});
 			display.getMenuItemAbout().addActionListener(actionEvent -> {
-				gameEventController.fireAboutGameEvent();
+				gameEventController.fireEvent(new AboutGameEvent());
 			});
 		}
 		display.getRbMenuItemlanguageCz().addActionListener(actionEvent -> {

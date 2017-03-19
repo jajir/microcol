@@ -7,7 +7,6 @@ import org.apache.log4j.Logger;
 
 import com.google.common.base.Preconditions;
 
-//TODO JJ test
 /**
  * Simple event controller. Class should not be extended.
  * 
@@ -31,7 +30,11 @@ public abstract class AbstractEventController<E> {
 	 */
 	public void addListener(final Listener<E> listener) {
 		Preconditions.checkNotNull(listener);
-		listeners.add(listener);
+		if (listeners.contains(listener)) {
+			logger.debug("Attempt to register one listener '" + listener + "'more that one time.");
+		} else {
+			listeners.add(listener);
+		}
 	}
 
 	/**

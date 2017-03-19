@@ -7,8 +7,8 @@ import org.microcol.gui.event.EventInitializer;
 import org.microcol.gui.event.ExitGameController;
 import org.microcol.gui.event.FocusedTileController;
 import org.microcol.gui.event.GameController;
-import org.microcol.gui.event.GameEventController;
-import org.microcol.gui.event.GameEventListenerImpl;
+import org.microcol.gui.event.AboutGameEventController;
+import org.microcol.gui.event.AboutGameListenerImpl;
 import org.microcol.gui.event.KeyController;
 import org.microcol.gui.event.MoveUnitController;
 import org.microcol.gui.event.NewGameController;
@@ -46,7 +46,7 @@ public class MicroColModule extends AbstractModule {
 		bind(KeyController.class).in(Singleton.class);
 		bind(NextTurnController.class).in(Singleton.class);
 		bind(FocusedTileController.class).in(Singleton.class);
-		bind(GameEventController.class).in(Singleton.class);
+		bind(AboutGameEventController.class).in(Singleton.class);
 		bind(ChangeLanguageController.class).in(Singleton.class);
 		bind(NewGameController.class).in(Singleton.class);
 		bind(GameController.class).in(Singleton.class);
@@ -84,7 +84,7 @@ public class MicroColModule extends AbstractModule {
 		/**
 		 * Load events manually
 		 */
-		bind(GameEventListenerImpl.class).asEagerSingleton();
+		bind(AboutGameListenerImpl.class).asEagerSingleton();
 		bind(ChangeLanguageListenerPreferences.class).asEagerSingleton();
 		bind(ChangeLanguageListenerText.class).asEagerSingleton();
 		bind(VolumeChangedListenerPreferences.class).asEagerSingleton();

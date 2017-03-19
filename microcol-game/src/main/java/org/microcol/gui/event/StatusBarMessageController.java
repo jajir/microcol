@@ -5,6 +5,7 @@ package org.microcol.gui.event;
  * message was changed.
  * 
  */
+//FIXME JJ extends from AbstractEventController
 public interface StatusBarMessageController {
 
 	/**

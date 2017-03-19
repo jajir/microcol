@@ -12,6 +12,7 @@ import com.google.common.base.Preconditions;
  * It's called when human user should start play his move.
  * 
  */
+//FIXME JJ extends from AbstractEventController
 public class NextTurnController {
 
 	private final Logger logger = Logger.getLogger(NextTurnController.class);

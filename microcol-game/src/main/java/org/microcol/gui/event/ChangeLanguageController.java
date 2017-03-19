@@ -12,6 +12,7 @@ import com.google.inject.Inject;
 /**
  * Allows to trigger change language event and manage event listeners.
  */
+//FIXME JJ extends from orderedEventController
 public class ChangeLanguageController {
 
 	private final Logger logger = Logger.getLogger(ChangeLanguageController.class);

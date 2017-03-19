@@ -7,6 +7,7 @@ package org.microcol.gui.event;
  * @param <E>
  *            generic event
  */
+//TODO JJ asi odstarnit
 public interface MicrocolListener<E> {
 
 	/**

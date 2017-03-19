@@ -7,24 +7,25 @@ import org.microcol.gui.ViewUtil;
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
 
-//TODO JJ add some generic super class for controllers.
-//TODO JJ generic controller should support parametrized event method
-public class GameEventListenerImpl implements GameEventListener {
+/**
+ * Provide about game event listener. Listener open about game dialog.
+ */
+public class AboutGameListenerImpl implements Listener<AboutGameEvent> {
 
 	private final ViewUtil viewUtil;
 
 	private final Text text;
 
 	@Inject
-	public GameEventListenerImpl(final GameEventController gameEventController, final ViewUtil viewUtil,
+	public AboutGameListenerImpl(final AboutGameEventController gameEventController, final ViewUtil viewUtil,
 			final Text text) {
-		gameEventController.addGameEventListener(this);
+		gameEventController.addListener(this);
 		this.viewUtil = Preconditions.checkNotNull(viewUtil);
 		this.text = Preconditions.checkNotNull(text);
 	}
 
 	@Override
-	public void onAboutGame() {
+	public void onEvent(final AboutGameEvent event) {
 		new AboutDialog(viewUtil, text).setVisible(true);
 	}
 

@@ -13,8 +13,6 @@ import javax.swing.JFrame;
 import org.apache.log4j.Logger;
 import org.microcol.gui.event.ExitGameController;
 import org.microcol.gui.event.ExitGameEvent;
-import org.microcol.gui.event.GameEventController;
-import org.microcol.gui.event.GameEventListener;
 import org.microcol.gui.event.KeyController;
 
 import com.google.common.base.Preconditions;
@@ -40,8 +38,7 @@ public class MainFramePresenter {
 
 	@Inject
 	public MainFramePresenter(final MainFramePresenter.Display display, final KeyController keyController,
-			final GamePreferences gamePreferences, final GameEventController gameEventController,
-			final ExitGameController exitGameController) {
+			final GamePreferences gamePreferences, final ExitGameController exitGameController) {
 		this.gamePreferences = Preconditions.checkNotNull(gamePreferences);
 		this.display = Preconditions.checkNotNull(display);
 		display.getFrame().addKeyListener(new KeyAdapter() {
@@ -70,16 +67,6 @@ public class MainFramePresenter {
 		exitGameController.addListener(event -> {
 			savePreferences();
 			display.getFrame().dispose();
-		});
-
-		gameEventController.addGameEventListener(new GameEventListener() {
-			// TODO JJ move to lambda or remove
-			@Override
-			public void onAboutGame() {
-				/**
-				 * Do nothing
-				 */
-			}
 		});
 
 		display.getFrame().addWindowListener(new WindowAdapter() {

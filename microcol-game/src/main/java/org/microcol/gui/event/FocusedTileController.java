@@ -7,6 +7,7 @@ import org.apache.log4j.Logger;
 
 import com.google.common.base.Preconditions;
 
+//FIXME JJ extends from AbstractEventController
 public class FocusedTileController {
 
 	private final Logger logger = Logger.getLogger(FocusedTileController.class);
