@@ -12,7 +12,7 @@ public class VolumeChangedListenerPreferences {
 	@Inject
 	public VolumeChangedListenerPreferences(final VolumeChangeController volumeChangeController,
 <span class="nc" id="L14">			final GamePreferences gamePreferences) {</span>
-<span class="nc" id="L15">		volumeChangeController.addFocusedTileListener(e -&gt; gamePreferences.setVolume(e.getVolume()));</span>
+<span class="nc" id="L15">		volumeChangeController.addListener(e -&gt; gamePreferences.setVolume(e.getVolume()));</span>
 <span class="nc" id="L16">	}</span>
 
 }

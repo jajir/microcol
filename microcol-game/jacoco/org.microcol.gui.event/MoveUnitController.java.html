@@ -11,19 +11,19 @@ import com.google.common.base.Preconditions;
  * Controller allows to register unit moving listeners and fire events.
  * 
  */
-//FIXME JJ split to separate event classes use AbstractEventController
+//TODO JJ split to separate event classes use AbstractEventController
 <span class="nc" id="L15">public class MoveUnitController {</span>
 
-<span class="nc" id="L17">	private final List&lt;MoveUnitListener&gt; listeners = new ArrayList&lt;MoveUnitListener&gt;();</span>
+<span class="nc" id="L17">	private final List&lt;Listener&lt;ShipMovedEvent&gt;&gt; listeners = new ArrayList&lt;&gt;();</span>
 
-<span class="nc" id="L19">	private final List&lt;MicrocolListener&lt;String&gt;&gt; listenersStartMove = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L19">	private final List&lt;Listener&lt;String&gt;&gt; listenersStartMove = new ArrayList&lt;&gt;();</span>
 
-	public void addMoveUnitListener(final MoveUnitListener listener) {
+	public void addMoveUnitListener(final Listener&lt;ShipMovedEvent&gt; listener) {
 <span class="nc" id="L22">		Preconditions.checkNotNull(listener);</span>
 <span class="nc" id="L23">		listeners.add(listener);</span>
 <span class="nc" id="L24">	}</span>
 
-	public void addStartMovingListener(final MicrocolListener&lt;String&gt; listener) {
+	public void addStartMovingListener(final Listener&lt;String&gt; listener) {
 <span class="nc" id="L27">		Preconditions.checkNotNull(listener);</span>
 <span class="nc" id="L28">		listenersStartMove.add(listener);</span>
 <span class="nc" id="L29">	}</span>
@@ -31,7 +31,7 @@ import com.google.common.base.Preconditions;
 	public void fireUnitMovedEvent(final ShipMovedEvent event) {
 <span class="nc" id="L32">		Preconditions.checkNotNull(event);</span>
 <span class="nc" id="L33">		listeners.forEach(listener -&gt; {</span>
-<span class="nc" id="L34">			listener.onMoveUnit(event);</span>
+<span class="nc" id="L34">			listener.onEvent(event);</span>
 <span class="nc" id="L35">		});</span>
 <span class="nc" id="L36">	}</span>
 

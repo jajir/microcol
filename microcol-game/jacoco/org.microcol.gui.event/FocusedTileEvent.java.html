@@ -2,10 +2,10 @@
 
 import java.util.Optional;
 
-import org.microcol.gui.model.TileOcean;
-import org.microcol.model.Model;
 import org.microcol.model.Location;
+import org.microcol.model.Model;
 import org.microcol.model.Ship;
+import org.microcol.model.Terrain;
 
 import com.google.common.base.Preconditions;
 
@@ -19,12 +19,12 @@ public class FocusedTileEvent {
 
 	private final Location location;
 
-	private final TileOcean tile;
+	private final Terrain terrain;
 
-<span class="nc" id="L24">	public FocusedTileEvent(final Model game, final Location location, final TileOcean tile) {</span>
+<span class="nc" id="L24">	public FocusedTileEvent(final Model game, final Location location, final Terrain tile) {</span>
 <span class="nc" id="L25">		this.game = Preconditions.checkNotNull(game);</span>
 <span class="nc" id="L26">		this.location = Preconditions.checkNotNull(location);</span>
-<span class="nc" id="L27">		this.tile = Preconditions.checkNotNull(tile);</span>
+<span class="nc" id="L27">		this.terrain = Preconditions.checkNotNull(tile);</span>
 <span class="nc" id="L28">	}</span>
 
 	public boolean isTileContainsMovebleUnit() {
@@ -36,8 +36,8 @@ public class FocusedTileEvent {
 <span class="nc" id="L36">		return location;</span>
 	}
 
-	public TileOcean getTile() {
-<span class="nc" id="L40">		return tile;</span>
+	public Terrain getTerrain() {
+<span class="nc" id="L40">		return terrain;</span>
 	}
 
 }

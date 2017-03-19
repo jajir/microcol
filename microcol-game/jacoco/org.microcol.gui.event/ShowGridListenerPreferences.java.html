@@ -12,7 +12,7 @@ public class ShowGridListenerPreferences {
 	@Inject
 	public ShowGridListenerPreferences(final ShowGridController showGridController,
 <span class="nc" id="L14">			final GamePreferences gamePreferences) {</span>
-<span class="nc" id="L15">		showGridController.addShowGridListener(e -&gt; gamePreferences.setShowGrid(e.isGridShown()));</span>
+<span class="nc" id="L15">		showGridController.addListener(e -&gt; gamePreferences.setShowGrid(e.isGridShown()));</span>
 <span class="nc" id="L16">	}</span>
 
 }

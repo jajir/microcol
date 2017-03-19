@@ -12,6 +12,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import org.microcol.gui.event.StatusBarMessageController;
+import org.microcol.gui.event.StatusBarMessageEvent;
 import org.microcol.model.Ship;
 
 import com.google.common.base.Preconditions;
@@ -31,48 +32,49 @@ public class UnitsPanel extends JPanel implements Localized {
 	private final ImageProvider imageProvider;
 
 	@Inject
-<span class="nc" id="L34">	public UnitsPanel(final ImageProvider imageProvider, final StatusBarMessageController statusBarMessageController) {</span>
-<span class="nc" id="L35">		this.imageProvider = Preconditions.checkNotNull(imageProvider);</span>
-<span class="nc" id="L36">		this.setLayout(new GridBagLayout());</span>
-<span class="nc" id="L37">		addMouseListener(new MouseAdapter() {</span>
+<span class="nc" id="L35">	public UnitsPanel(final ImageProvider imageProvider, final StatusBarMessageController statusBarMessageController) {</span>
+<span class="nc" id="L36">		this.imageProvider = Preconditions.checkNotNull(imageProvider);</span>
+<span class="nc" id="L37">		this.setLayout(new GridBagLayout());</span>
+<span class="nc" id="L38">		addMouseListener(new MouseAdapter() {</span>
 			@Override
 			public void mouseEntered(final MouseEvent e) {
-<span class="nc" id="L40">				statusBarMessageController.fireStatusMessageWasChangedEvent(getText().get(&quot;unitsPanel.description&quot;));</span>
-<span class="nc" id="L41">			}</span>
+<span class="nc" id="L41">				statusBarMessageController</span>
+<span class="nc" id="L42">						.fireEvent(new StatusBarMessageEvent(getText().get(&quot;unitsPanel.description&quot;)));</span>
+<span class="nc" id="L43">			}</span>
 		});
-<span class="nc" id="L43">	}</span>
+<span class="nc" id="L45">	}</span>
 
 	public void clear() {
-<span class="nc" id="L46">		removeAll();</span>
-<span class="nc" id="L47">	}</span>
+<span class="nc" id="L48">		removeAll();</span>
+<span class="nc" id="L49">	}</span>
 
 	public void setUnits(final List&lt;Ship&gt; units) {
-<span class="nc" id="L50">		int i = 0;</span>
-<span class="nc bnc" id="L51" title="All 2 branches missed.">		for (final Ship u : units) {</span>
-<span class="nc" id="L52">			Ship s = (Ship) u;</span>
-<span class="nc" id="L53">			add(new JLabel(new ImageIcon(imageProvider.getImage(ImageProvider.IMG_TILE_SHIP1))),</span>
+<span class="nc" id="L52">		int i = 0;</span>
+<span class="nc bnc" id="L53" title="All 2 branches missed.">		for (final Ship u : units) {</span>
+<span class="nc" id="L54">			Ship s = (Ship) u;</span>
+<span class="nc" id="L55">			add(new JLabel(new ImageIcon(imageProvider.getImage(ImageProvider.IMG_TILE_SHIP1))),</span>
 					new GridBagConstraints(0, i, 1, 2, 0D, 0D, GridBagConstraints.NORTH, GridBagConstraints.NONE,
 							new Insets(0, 0, 0, 0), 0, 0));
-<span class="nc" id="L56">			final StringBuilder sb = new StringBuilder(200);</span>
-<span class="nc" id="L57">			sb.append(&quot;&lt;html&gt;&lt;div&gt;&quot;);</span>
-<span class="nc" id="L58">			sb.append(&quot;Galeon&quot;);</span>
-<span class="nc" id="L59">			sb.append(&quot;&lt;/div&gt;&lt;div&gt;&quot;);</span>
-<span class="nc" id="L60">			sb.append(getText().get(&quot;unitsPanel.availableMoved&quot;));</span>
-<span class="nc" id="L61">			sb.append(&quot; &quot;);</span>
-<span class="nc" id="L62">			sb.append(s.getAvailableMoves());</span>
-<span class="nc" id="L63">			sb.append(&quot;&lt;/div&gt;&lt;div&gt;&quot;);</span>
-<span class="nc" id="L64">			sb.append(getText().get(&quot;unitsPanel.owner&quot;));</span>
-<span class="nc" id="L65">			sb.append(&quot; &quot;);</span>
-<span class="nc" id="L66">			sb.append(s.getOwner().getName());</span>
-<span class="nc" id="L67">			sb.append(&quot;&lt;/div&gt;&lt;/html&gt;&quot;);</span>
-<span class="nc" id="L68">			add(new JLabel(sb.toString()), new GridBagConstraints(1, i, 1, 1, 1D, 0D, GridBagConstraints.NORTHWEST,</span>
+<span class="nc" id="L58">			final StringBuilder sb = new StringBuilder(200);</span>
+<span class="nc" id="L59">			sb.append(&quot;&lt;html&gt;&lt;div&gt;&quot;);</span>
+<span class="nc" id="L60">			sb.append(&quot;Galeon&quot;);</span>
+<span class="nc" id="L61">			sb.append(&quot;&lt;/div&gt;&lt;div&gt;&quot;);</span>
+<span class="nc" id="L62">			sb.append(getText().get(&quot;unitsPanel.availableMoved&quot;));</span>
+<span class="nc" id="L63">			sb.append(&quot; &quot;);</span>
+<span class="nc" id="L64">			sb.append(s.getAvailableMoves());</span>
+<span class="nc" id="L65">			sb.append(&quot;&lt;/div&gt;&lt;div&gt;&quot;);</span>
+<span class="nc" id="L66">			sb.append(getText().get(&quot;unitsPanel.owner&quot;));</span>
+<span class="nc" id="L67">			sb.append(&quot; &quot;);</span>
+<span class="nc" id="L68">			sb.append(s.getOwner().getName());</span>
+<span class="nc" id="L69">			sb.append(&quot;&lt;/div&gt;&lt;/html&gt;&quot;);</span>
+<span class="nc" id="L70">			add(new JLabel(sb.toString()), new GridBagConstraints(1, i, 1, 1, 1D, 0D, GridBagConstraints.NORTHWEST,</span>
 					GridBagConstraints.VERTICAL, new Insets(0, 0, 0, 0), 0, 0));
-<span class="nc" id="L70">			i += 1;</span>
-<span class="nc" id="L71">		}</span>
-<span class="nc" id="L72">		add(new JLabel(&quot;&quot;), new GridBagConstraints(1, i + 1, 2, 1, 1D, 1D, GridBagConstraints.NORTH,</span>
+<span class="nc" id="L72">			i += 1;</span>
+<span class="nc" id="L73">		}</span>
+<span class="nc" id="L74">		add(new JLabel(&quot;&quot;), new GridBagConstraints(1, i + 1, 2, 1, 1D, 1D, GridBagConstraints.NORTH,</span>
 				GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
-<span class="nc" id="L74">		validate();</span>
-<span class="nc" id="L75">	}</span>
+<span class="nc" id="L76">		validate();</span>
+<span class="nc" id="L77">	}</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

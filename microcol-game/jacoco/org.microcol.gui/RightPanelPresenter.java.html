@@ -14,9 +14,10 @@ import org.microcol.gui.event.FocusedTileEvent;
 import org.microcol.gui.event.GameController;
 import org.microcol.gui.event.KeyController;
 import org.microcol.gui.event.StatusBarMessageController;
+import org.microcol.gui.event.StatusBarMessageEvent;
 import org.microcol.gui.event.TurnStartedController;
-import org.microcol.model.Model;
 import org.microcol.model.Location;
+import org.microcol.model.Model;
 import org.microcol.model.Player;
 
 import com.google.inject.Inject;
@@ -40,57 +41,58 @@ public class RightPanelPresenter implements Localized {
 			final KeyController keyController, final FocusedTileController focusedTileController,
 			final ChangeLanguageController languangeController,
 			final StatusBarMessageController statusBarMessageController,
-<span class="nc" id="L43">			final TurnStartedController turnStartedController) {</span>
+<span class="nc" id="L44">			final TurnStartedController turnStartedController) {</span>
 
-<span class="nc" id="L45">		display.getNextTurnButton().setText(getText().get(&quot;nextTurnButton&quot;));</span>
-<span class="nc" id="L46">		display.getNextTurnButton().setEnabled(false);</span>
+<span class="nc" id="L46">		display.getNextTurnButton().setText(getText().get(&quot;nextTurnButton&quot;));</span>
+<span class="nc" id="L47">		display.getNextTurnButton().setEnabled(false);</span>
 
-<span class="nc" id="L48">		display.getNextTurnButton().addActionListener(e -&gt; {</span>
-<span class="nc" id="L49">			display.getNextTurnButton().setEnabled(false);</span>
-<span class="nc" id="L50">			gameController.nextTurn();</span>
-<span class="nc" id="L51">		});</span>
+<span class="nc" id="L49">		display.getNextTurnButton().addActionListener(e -&gt; {</span>
+<span class="nc" id="L50">			display.getNextTurnButton().setEnabled(false);</span>
+<span class="nc" id="L51">			gameController.nextTurn();</span>
+<span class="nc" id="L52">		});</span>
 
-<span class="nc" id="L53">		display.getNextTurnButton().addKeyListener(new KeyAdapter() {</span>
+<span class="nc" id="L54">		display.getNextTurnButton().addKeyListener(new KeyAdapter() {</span>
 			@Override
 			public void keyPressed(final KeyEvent keyEvent) {
-<span class="nc" id="L56">				keyController.fireKeyWasPressed(keyEvent);</span>
-<span class="nc" id="L57">			}</span>
+<span class="nc" id="L57">				keyController.fireEvent(keyEvent);</span>
+<span class="nc" id="L58">			}</span>
 		});
 
-<span class="nc" id="L60">		display.getNextTurnButton().addMouseListener(new MouseAdapter() {</span>
+<span class="nc" id="L61">		display.getNextTurnButton().addMouseListener(new MouseAdapter() {</span>
 			@Override
 			public void mouseEntered(final MouseEvent e) {
-<span class="nc" id="L63">				statusBarMessageController</span>
-<span class="nc" id="L64">						.fireStatusMessageWasChangedEvent(getText().get(&quot;nextTurnButton.desctiption&quot;));</span>
-<span class="nc" id="L65">			}</span>
+<span class="nc" id="L64">				statusBarMessageController</span>
+<span class="nc" id="L65">						.fireEvent(new StatusBarMessageEvent(getText().get(&quot;nextTurnButton.desctiption&quot;)));</span>
+<span class="nc" id="L66">			}</span>
 		});
 
-<span class="nc" id="L68">		display.getRightPanel().addMouseListener(new MouseAdapter() {</span>
+<span class="nc" id="L69">		display.getRightPanel().addMouseListener(new MouseAdapter() {</span>
 			@Override
 			public void mouseEntered(final MouseEvent e) {
-<span class="nc" id="L71">				statusBarMessageController.fireStatusMessageWasChangedEvent(getText().get(&quot;rightPanel.description&quot;));</span>
-<span class="nc" id="L72">			}</span>
+<span class="nc" id="L72">				statusBarMessageController</span>
+<span class="nc" id="L73">						.fireEvent(new StatusBarMessageEvent(getText().get(&quot;rightPanel.description&quot;)));</span>
+<span class="nc" id="L74">			}</span>
 		});
 
-<span class="nc" id="L75">		languangeController.addLanguageListener(event -&gt; {</span>
-<span class="nc" id="L76">			display.getNextTurnButton().setText(getText().get(&quot;nextTurnButton&quot;));</span>
-<span class="nc" id="L77">		});</span>
-<span class="nc" id="L78">		focusedTileController.addFocusedTileListener(event -&gt; {</span>
-<span class="nc bnc" id="L79" title="All 2 branches missed.">			if (isItDifferentTile(event.getLocation())) {</span>
-<span class="nc" id="L80">				focusedTile = event.getLocation();</span>
-<span class="nc" id="L81">				display.showTile(event, gameController.getGame());</span>
+<span class="nc" id="L77">		languangeController.addListener(event -&gt; {</span>
+<span class="nc" id="L78">			display.getNextTurnButton().setText(getText().get(&quot;nextTurnButton&quot;));</span>
+<span class="nc" id="L79">		});</span>
+<span class="nc" id="L80">		focusedTileController.addListener(event -&gt; {</span>
+<span class="nc bnc" id="L81" title="All 2 branches missed.">			if (isItDifferentTile(event.getLocation())) {</span>
+<span class="nc" id="L82">				focusedTile = event.getLocation();</span>
+<span class="nc" id="L83">				display.showTile(event, gameController.getModel());</span>
 			}
-<span class="nc" id="L83">		});</span>
-<span class="nc" id="L84">		turnStartedController.addTurnStartedListener(event -&gt; {</span>
-<span class="nc" id="L85">			display.setCurrentPlayer(event.getPlayer());</span>
-<span class="nc bnc" id="L86" title="All 2 branches missed.">			if (event.getPlayer().isHuman()) {</span>
-<span class="nc" id="L87">				display.getNextTurnButton().setEnabled(true);</span>
+<span class="nc" id="L85">		});</span>
+<span class="nc" id="L86">		turnStartedController.addListener(event -&gt; {</span>
+<span class="nc" id="L87">			display.setCurrentPlayer(event.getPlayer());</span>
+<span class="nc bnc" id="L88" title="All 2 branches missed.">			if (event.getPlayer().isHuman()) {</span>
+<span class="nc" id="L89">				display.getNextTurnButton().setEnabled(true);</span>
 			}
-<span class="nc" id="L89">		});</span>
-<span class="nc" id="L90">	}</span>
+<span class="nc" id="L91">		});</span>
+<span class="nc" id="L92">	}</span>
 
 	private boolean isItDifferentTile(final Location tile) {
-<span class="nc bnc" id="L93" title="All 4 branches missed.">		return focusedTile == null || !focusedTile.equals(tile);</span>
+<span class="nc bnc" id="L95" title="All 4 branches missed.">		return focusedTile == null || !focusedTile.equals(tile);</span>
 	}
 
 }

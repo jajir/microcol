@@ -12,9 +12,9 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import org.microcol.gui.event.FocusedTileEvent;
-import org.microcol.gui.model.TileOcean;
 import org.microcol.model.Model;
 import org.microcol.model.Player;
+import org.microcol.model.Terrain;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
@@ -93,45 +93,46 @@ public class RightPanelView extends JPanel implements RightPanelPresenter.Displa
 	@Override
 	public void showTile(final FocusedTileEvent event, final Model game) {
 <span class="nc" id="L95">		setCurrentPlayer(game.getCurrentPlayer());</span>
-<span class="nc" id="L96">		final TileOcean tile = event.getTile();</span>
+<span class="nc" id="L96">		final Terrain tile = event.getTerrain();</span>
 <span class="nc" id="L97">		tileImage.setImage(imageProvider.getImage(ImageProvider.IMG_TILE_OCEAN));</span>
 <span class="nc" id="L98">		StringBuilder sb = new StringBuilder(200);</span>
 <span class="nc" id="L99">		sb.append(&quot;&lt;html&gt;&lt;div&gt;&quot;);</span>
-<span class="nc" id="L100">		sb.append(tile.getClass().getSimpleName());</span>
-<span class="nc" id="L101">		sb.append(&quot;&quot;);</span>
-<span class="nc" id="L102">		sb.append(&quot;&lt;/div&gt;&lt;div&gt;&quot;);</span>
-<span class="nc" id="L103">		sb.append(&quot;Move cost: 1&quot;);</span>
-<span class="nc" id="L104">		sb.append(&quot;&lt;/div&gt;&lt;/html&gt;&quot;);</span>
-<span class="nc" id="L105">		tileName.setText(sb.toString());</span>
-<span class="nc" id="L106">		unitsPanel.clear();</span>
-<span class="nc bnc" id="L107" title="All 2 branches missed.">		if (game.getShipsAt(event.getLocation()).isEmpty()) {</span>
-<span class="nc" id="L108">			unitsLabel.setText(&quot;&quot;);</span>
+		//TODO JJ look to property file for tile details 
+<span class="nc" id="L101">		sb.append(tile.getClass().getSimpleName());</span>
+<span class="nc" id="L102">		sb.append(&quot;&quot;);</span>
+<span class="nc" id="L103">		sb.append(&quot;&lt;/div&gt;&lt;div&gt;&quot;);</span>
+<span class="nc" id="L104">		sb.append(&quot;Move cost: 1&quot;);</span>
+<span class="nc" id="L105">		sb.append(&quot;&lt;/div&gt;&lt;/html&gt;&quot;);</span>
+<span class="nc" id="L106">		tileName.setText(sb.toString());</span>
+<span class="nc" id="L107">		unitsPanel.clear();</span>
+<span class="nc bnc" id="L108" title="All 2 branches missed.">		if (game.getShipsAt(event.getLocation()).isEmpty()) {</span>
+<span class="nc" id="L109">			unitsLabel.setText(&quot;&quot;);</span>
 		} else {
-<span class="nc" id="L110">			unitsLabel.setText(getText().get(&quot;unitsPanel.units&quot;));</span>
-<span class="nc" id="L111">			unitsPanel.setUnits(game.getShipsAt(event.getLocation()));</span>
+<span class="nc" id="L111">			unitsLabel.setText(getText().get(&quot;unitsPanel.units&quot;));</span>
+<span class="nc" id="L112">			unitsPanel.setUnits(game.getShipsAt(event.getLocation()));</span>
 		}
-<span class="nc" id="L113">		repaint();</span>
-<span class="nc" id="L114">	}</span>
+<span class="nc" id="L114">		repaint();</span>
+<span class="nc" id="L115">	}</span>
 	
 	@Override
 	public void setCurrentPlayer(final Player player){
-<span class="nc" id="L118">		StringBuilder sb = new StringBuilder(200);</span>
-<span class="nc" id="L119">		sb.append(&quot;&lt;html&gt;&lt;div&gt;&quot;);</span>
-<span class="nc" id="L120">		sb.append(getText().get(&quot;unitsPanel.currentUser&quot;));</span>
-<span class="nc" id="L121">		sb.append(&quot; &quot;);</span>
-<span class="nc" id="L122">		sb.append(player.getName());</span>
-<span class="nc" id="L123">		sb.append(&quot;&lt;/div&gt;&lt;/html&gt;&quot;);</span>
-<span class="nc" id="L124">		tileOnMove.setText(sb.toString());</span>
-<span class="nc" id="L125">	}</span>
+<span class="nc" id="L119">		StringBuilder sb = new StringBuilder(200);</span>
+<span class="nc" id="L120">		sb.append(&quot;&lt;html&gt;&lt;div&gt;&quot;);</span>
+<span class="nc" id="L121">		sb.append(getText().get(&quot;unitsPanel.currentUser&quot;));</span>
+<span class="nc" id="L122">		sb.append(&quot; &quot;);</span>
+<span class="nc" id="L123">		sb.append(player.getName());</span>
+<span class="nc" id="L124">		sb.append(&quot;&lt;/div&gt;&lt;/html&gt;&quot;);</span>
+<span class="nc" id="L125">		tileOnMove.setText(sb.toString());</span>
+<span class="nc" id="L126">	}</span>
 
 	@Override
 	public JButton getNextTurnButton() {
-<span class="nc" id="L129">		return nextTurnButton;</span>
+<span class="nc" id="L130">		return nextTurnButton;</span>
 	}
 
 	@Override
 	public JPanel getRightPanel() {
-<span class="nc" id="L134">		return this;</span>
+<span class="nc" id="L135">		return this;</span>
 	}
 
 }

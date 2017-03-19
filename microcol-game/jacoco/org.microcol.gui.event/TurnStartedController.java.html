@@ -1,41 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TurnStartedController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">MicroCol game classes</a> &gt; <a href="index.source.html" class="el_package">org.microcol.gui.event</a> &gt; <span class="el_source">TurnStartedController.java</span></div><h1>TurnStartedController.java</h1><pre class="source lang-java linenums">package org.microcol.gui.event;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.log4j.Logger;
 import org.microcol.model.event.TurnStartedEvent;
-
-import com.google.common.base.Preconditions;
 
 /**
  * Allows to trigger new game event and manage event listeners.
  */
-//FIXME JJ extends from AbstractEventController
-<span class="nc" id="L15">public class TurnStartedController {</span>
+<span class="nc" id="L8">public class TurnStartedController extends AbstractEventController&lt;TurnStartedEvent&gt; {</span>
 
-<span class="nc" id="L17">	private final Logger logger = Logger.getLogger(TurnStartedController.class);</span>
-
-<span class="nc" id="L19">	private final List&lt;TurnStartedListener&gt; listeners = new ArrayList&lt;TurnStartedListener&gt;();</span>
-
-	public void addTurnStartedListener(final TurnStartedListener listener) {
-<span class="nc" id="L22">		Preconditions.checkNotNull(listener);</span>
-<span class="nc" id="L23">		listeners.add(listener);</span>
-<span class="nc" id="L24">	}</span>
-
-	/**
-	 * Controlled accept all user but listeners are called just for human
-	 * players.
-	 * 
-	 * @param event
-	 *            required event object
-	 */
-	public void fireTurnStartedEvent(final TurnStartedEvent event) {
-<span class="nc" id="L34">		Preconditions.checkNotNull(event);</span>
-<span class="nc" id="L35">		logger.debug(&quot;New turn started: &quot; + event);</span>
-<span class="nc" id="L36">		listeners.forEach(listener -&gt; {</span>
-<span class="nc" id="L37">			listener.onNewTurn(event);</span>
-<span class="nc" id="L38">		});</span>
-<span class="nc" id="L39">	}</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

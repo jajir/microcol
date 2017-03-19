@@ -5,7 +5,7 @@ import org.microcol.gui.GamePreferences;
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
 
-public class ChangeLanguageListenerPreferences implements ChangeLanguageListener {
+public class ChangeLanguageListenerPreferences implements Listener&lt;ChangeLanguageEvent&gt; {
 
 	private final GamePreferences gamePreferences;
 
@@ -13,11 +13,11 @@ public class ChangeLanguageListenerPreferences implements ChangeLanguageListener
 	public ChangeLanguageListenerPreferences(final GamePreferences gamePreferences,
 <span class="nc" id="L14">			final ChangeLanguageController languangeController) {</span>
 <span class="nc" id="L15">		this.gamePreferences = Preconditions.checkNotNull(gamePreferences);</span>
-<span class="nc" id="L16">		languangeController.addLanguageListener(this);</span>
+<span class="nc" id="L16">		languangeController.addListener(this);</span>
 <span class="nc" id="L17">	}</span>
 
 	@Override
-	public void onChangeLanguage(final ChangeLanguageEvent event) {
+	public void onEvent(final ChangeLanguageEvent event) {
 <span class="nc" id="L21">		gamePreferences.setLanguage(event.getLanguage());</span>
 <span class="nc" id="L22">	}</span>
 

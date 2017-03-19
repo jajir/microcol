@@ -3,23 +3,25 @@
 import org.microcol.gui.Text;
 import org.microcol.model.Model;
 
+import com.google.common.base.Preconditions;
+
 public class ChangeLanguageEvent {
 
 	private final Text.Language language;
 
-	private final Model game;
+	private final Model model;
 
-<span class="nc" id="L12">	public ChangeLanguageEvent(final Text.Language language, final Model game) {</span>
-<span class="nc" id="L13">		this.language = language;</span>
-<span class="nc" id="L14">		this.game = game;</span>
-<span class="nc" id="L15">	}</span>
+<span class="nc" id="L14">	public ChangeLanguageEvent(final Text.Language language, final Model model) {</span>
+<span class="nc" id="L15">		this.language = Preconditions.checkNotNull(language);</span>
+<span class="nc" id="L16">		this.model = Preconditions.checkNotNull(model);</span>
+<span class="nc" id="L17">	}</span>
 
-	public Model getGame() {
-<span class="nc" id="L18">		return game;</span>
+	public Model getModel() {
+<span class="nc" id="L20">		return model;</span>
 	}
 
 	public Text.Language getLanguage() {
-<span class="nc" id="L22">		return language;</span>
+<span class="nc" id="L24">		return language;</span>
 	}
 
 }

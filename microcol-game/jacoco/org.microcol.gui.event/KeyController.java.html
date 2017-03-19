@@ -1,36 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>KeyController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">MicroCol game classes</a> &gt; <a href="index.source.html" class="el_package">org.microcol.gui.event</a> &gt; <span class="el_source">KeyController.java</span></div><h1>KeyController.java</h1><pre class="source lang-java linenums">package org.microcol.gui.event;
 
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.log4j.Logger;
-
-import com.google.common.base.Preconditions;
 
 /**
  * Allow to register key listener and fire key events.
- * 
  */
-//FIXME JJ extends from AbstractEventController
-<span class="nc" id="L17">public class KeyController {</span>
+<span class="nc" id="L8">public class KeyController extends AbstractEventController&lt;KeyEvent&gt; {</span>
 
-<span class="nc" id="L19">	private final Logger logger = Logger.getLogger(KeyController.class);</span>
-
-<span class="nc" id="L21">	private final List&lt;KeyListener&gt; listeners = new ArrayList&lt;KeyListener&gt;();</span>
-
-	public void addKeyListener(final KeyListener listener) {
-<span class="nc" id="L24">		Preconditions.checkNotNull(listener);</span>
-<span class="nc" id="L25">		listeners.add(listener);</span>
-<span class="nc" id="L26">	}</span>
-
-	public void fireKeyWasPressed(final KeyEvent keyEvent) {
-<span class="nc" id="L29">		Preconditions.checkNotNull(keyEvent);</span>
-<span class="nc" id="L30">		logger.trace(&quot;firing event: &quot; + keyEvent);</span>
-<span class="nc" id="L31">		listeners.forEach(listener -&gt; {</span>
-<span class="nc" id="L32">			listener.keyPressed(keyEvent);</span>
-<span class="nc" id="L33">		});</span>
-<span class="nc" id="L34">	}</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

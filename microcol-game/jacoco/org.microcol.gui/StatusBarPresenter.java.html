@@ -8,6 +8,7 @@ import javax.swing.JLabel;
 import org.microcol.gui.event.ChangeLanguageController;
 import org.microcol.gui.event.NextTurnController;
 import org.microcol.gui.event.StatusBarMessageController;
+import org.microcol.gui.event.StatusBarMessageEvent;
 import org.microcol.model.Calendar;
 
 import com.google.common.base.Preconditions;
@@ -24,37 +25,38 @@ public class StatusBarPresenter implements Localized {
 	@Inject
 	public StatusBarPresenter(final StatusBarPresenter.Display display,
 			final StatusBarMessageController statusBarMessageController, final NextTurnController nextTurnController,
-<span class="nc" id="L27">			final ChangeLanguageController languangeController) {</span>
-<span class="nc" id="L28">		statusBarMessageController.addStatusMessageListener(message -&gt; {</span>
-<span class="nc" id="L29">			display.getStatusBarDescription().setText(message);</span>
-<span class="nc" id="L30">		});</span>
-<span class="nc" id="L31">		nextTurnController.addNextTurnListener(event -&gt; {</span>
-<span class="nc" id="L32">			setYearText(display.getLabelEra(), event.getCalendar());</span>
-<span class="nc" id="L33">		});</span>
-<span class="nc" id="L34">		languangeController.addLanguageListener(event -&gt; {</span>
-<span class="nc" id="L35">			setYearText(display.getLabelEra(), event.getGame().getCalendar());</span>
-<span class="nc" id="L36">			display.getStatusBarDescription().setText(&quot;&quot;);</span>
-<span class="nc" id="L37">		});</span>
-<span class="nc" id="L38">		display.getLabelEra().addMouseListener(new MouseAdapter() {</span>
+<span class="nc" id="L28">			final ChangeLanguageController languangeController) {</span>
+<span class="nc" id="L29">		statusBarMessageController.addListener(event -&gt; {</span>
+<span class="nc" id="L30">			display.getStatusBarDescription().setText(event.getStatusMessage());</span>
+<span class="nc" id="L31">		});</span>
+<span class="nc" id="L32">		nextTurnController.addListener(event -&gt; {</span>
+<span class="nc" id="L33">			setYearText(display.getLabelEra(), event.getCalendar());</span>
+<span class="nc" id="L34">		});</span>
+<span class="nc" id="L35">		languangeController.addListener(event -&gt; {</span>
+<span class="nc" id="L36">			setYearText(display.getLabelEra(), event.getModel().getCalendar());</span>
+<span class="nc" id="L37">			display.getStatusBarDescription().setText(&quot;&quot;);</span>
+<span class="nc" id="L38">		});</span>
+<span class="nc" id="L39">		display.getLabelEra().addMouseListener(new MouseAdapter() {</span>
 			@Override
 			public void mouseEntered(MouseEvent e) {
-<span class="nc" id="L41">				statusBarMessageController.fireStatusMessageWasChangedEvent(getText().get(&quot;statusBar.era.description&quot;));</span>
-<span class="nc" id="L42">			}</span>
+<span class="nc" id="L42">				statusBarMessageController</span>
+<span class="nc" id="L43">						.fireEvent(new StatusBarMessageEvent(getText().get(&quot;statusBar.era.description&quot;)));</span>
+<span class="nc" id="L44">			}</span>
 		});
-<span class="nc" id="L44">		display.getStatusBarDescription().addMouseListener(new MouseAdapter() {</span>
+<span class="nc" id="L46">		display.getStatusBarDescription().addMouseListener(new MouseAdapter() {</span>
 			@Override
 			public void mouseEntered(MouseEvent e) {
-<span class="nc" id="L47">				statusBarMessageController</span>
-<span class="nc" id="L48">						.fireStatusMessageWasChangedEvent(getText().get(&quot;statusBar.status.description&quot;));</span>
-<span class="nc" id="L49">			}</span>
+<span class="nc" id="L49">				statusBarMessageController</span>
+<span class="nc" id="L50">						.fireEvent(new StatusBarMessageEvent(getText().get(&quot;statusBar.status.description&quot;)));</span>
+<span class="nc" id="L51">			}</span>
 		});
-<span class="nc" id="L51">	}</span>
+<span class="nc" id="L53">	}</span>
 
 	private final void setYearText(JLabel labelEra, final Calendar calendar) {
-<span class="nc" id="L54">		Preconditions.checkNotNull(labelEra);</span>
-<span class="nc" id="L55">		Preconditions.checkNotNull(calendar);</span>
-<span class="nc" id="L56">		labelEra.setText(getText().get(&quot;statusBar.year&quot;) + &quot; &quot; + calendar.getCurrentYear() + &quot; AD&quot;);</span>
-<span class="nc" id="L57">	}</span>
+<span class="nc" id="L56">		Preconditions.checkNotNull(labelEra);</span>
+<span class="nc" id="L57">		Preconditions.checkNotNull(calendar);</span>
+<span class="nc" id="L58">		labelEra.setText(getText().get(&quot;statusBar.year&quot;) + &quot; &quot; + calendar.getCurrentYear() + &quot; AD&quot;);</span>
+<span class="nc" id="L59">	}</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

@@ -17,7 +17,7 @@ public class MusicController {
 	@Inject
 <span class="nc" id="L18">	public MusicController(final MusicPlayer musicPlayer, final VolumeChangeController volumeChangeController) {</span>
 <span class="nc" id="L19">		this.musicPlayer = Preconditions.checkNotNull(musicPlayer);</span>
-<span class="nc" id="L20">		volumeChangeController.addFocusedTileListener(e -&gt; onVolumeChanged(e));</span>
+<span class="nc" id="L20">		volumeChangeController.addListener(e -&gt; onVolumeChanged(e));</span>
 <span class="nc" id="L21">	}</span>
 
 	private void onVolumeChanged(final VolumeChangeEvent event) {

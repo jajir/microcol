@@ -72,7 +72,7 @@ public class GameController implements Localized {
 			@Override
 			public void turnStarted(final TurnStartedEvent event) {
 <span class="nc" id="L74">				logger.debug(&quot;Turn started for player '&quot; + event.getPlayer().getName() + &quot;'.&quot;);</span>
-<span class="nc" id="L75">				turnStartedController.fireTurnStartedEvent(event);</span>
+<span class="nc" id="L75">				turnStartedController.fireEvent(event);</span>
 <span class="nc" id="L76">			}</span>
 
 			@Override
@@ -84,14 +84,14 @@ public class GameController implements Localized {
 			@Override
 			public void roundStarted(final RoundStartedEvent event) {
 <span class="nc" id="L86">				logger.debug(&quot;Turn started for year '&quot; + event.getCalendar().getCurrentYear() + &quot;'.&quot;);</span>
-<span class="nc" id="L87">				nextTurnController.fireNextTurnEvent(event);</span>
+<span class="nc" id="L87">				nextTurnController.fireEvent(event);</span>
 <span class="nc" id="L88">			}</span>
 
 			@Override
 			public void gameStarted(final GameStartedEvent event) {
 <span class="nc" id="L92">				logger.debug(&quot;Game started &quot; + event);</span>
 <span class="nc" id="L93">				game = event.getModel();</span>
-<span class="nc" id="L94">				newGameController.fireNewGameStartedEvent(event);</span>
+<span class="nc" id="L94">				newGameController.fireEvent(event);</span>
 <span class="nc" id="L95">			}</span>
 
 			@Override
@@ -105,7 +105,7 @@ public class GameController implements Localized {
 <span class="nc" id="L105">		musicController.start(gamePreferences.getVolume());</span>
 <span class="nc" id="L106">	}</span>
 
-	public Model getGame() {
+	public Model getModel() {
 <span class="nc" id="L109">		return game;</span>
 	}
 
