@@ -6,17 +6,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-import org.microcol.model.Model;
 import org.microcol.model.Location;
-import org.microcol.model.ModelListener;
+import org.microcol.model.Model;
+import org.microcol.model.ModelAdapter;
 import org.microcol.model.Path;
 import org.microcol.model.Player;
 import org.microcol.model.Ship;
 import org.microcol.model.Terrain;
-import org.microcol.model.event.GameFinishedEvent;
-import org.microcol.model.event.GameStartedEvent;
-import org.microcol.model.event.RoundStartedEvent;
-import org.microcol.model.event.ShipMovedEvent;
 import org.microcol.model.event.TurnStartedEvent;
 
 import com.google.common.collect.ImmutableList;
@@ -46,32 +42,12 @@ public class SkyNet {
 	}
 
 	public void searchAndDestroy() {
-		model.addListener(new ModelListener() {
-			@Override
-			public void gameStarted(GameStartedEvent event) {
-				// Do nothing.
-			}
-
-			@Override
-			public void roundStarted(RoundStartedEvent event) {
-				// Do nothing.
-			}
-
+		model.addListener(new ModelAdapter() {
 			@Override
 			public void turnStarted(TurnStartedEvent event) {
 				if (event.getPlayer().isComputer()) {
 					turn(event.getPlayer());
 				}
-			}
-
-			@Override
-			public void shipMoved(ShipMovedEvent event) {
-				// Do nothing.
-			}
-
-			@Override
-			public void gameFinished(GameFinishedEvent event) {
-				// Do nothing.
 			}
 		});
 	}
