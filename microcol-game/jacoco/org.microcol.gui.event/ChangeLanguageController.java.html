@@ -12,48 +12,49 @@ import com.google.inject.Inject;
 /**
  * Allows to trigger change language event and manage event listeners.
  */
+//FIXME JJ extends from orderedEventController
 public class ChangeLanguageController {
 
-<span class="nc" id="L17">	private final Logger logger = Logger.getLogger(ChangeLanguageController.class);</span>
+<span class="nc" id="L18">	private final Logger logger = Logger.getLogger(ChangeLanguageController.class);</span>
 
-<span class="nc" id="L19">	private final List&lt;ChangeLanguageListener&gt; listeners = new ArrayList&lt;ChangeLanguageListener&gt;();</span>
+<span class="nc" id="L20">	private final List&lt;ChangeLanguageListener&gt; listeners = new ArrayList&lt;ChangeLanguageListener&gt;();</span>
 
 	private final GameController gameController;
 
 	/**
 	 * Priority allows to call high priority events as first.
 	 */
-<span class="nc" id="L26">	public static enum Priority {</span>
-<span class="nc" id="L27">		high, low</span>
+<span class="nc" id="L27">	public static enum Priority {</span>
+<span class="nc" id="L28">		high, low</span>
 	}
 
 	@Inject
-<span class="nc" id="L31">	public ChangeLanguageController(final GameController gameController) {</span>
-<span class="nc" id="L32">		this.gameController = Preconditions.checkNotNull(gameController);</span>
-<span class="nc" id="L33">	}</span>
+<span class="nc" id="L32">	public ChangeLanguageController(final GameController gameController) {</span>
+<span class="nc" id="L33">		this.gameController = Preconditions.checkNotNull(gameController);</span>
+<span class="nc" id="L34">	}</span>
 
 	public void addLanguageListener(final ChangeLanguageListener listener) {
-<span class="nc" id="L36">		Preconditions.checkNotNull(listener);</span>
-<span class="nc" id="L37">		listeners.add(listener);</span>
-<span class="nc" id="L38">	}</span>
+<span class="nc" id="L37">		Preconditions.checkNotNull(listener);</span>
+<span class="nc" id="L38">		listeners.add(listener);</span>
+<span class="nc" id="L39">	}</span>
 
 	public void addLanguageListener(final ChangeLanguageListener listener, final Priority priority) {
-<span class="nc" id="L41">		Preconditions.checkNotNull(listener);</span>
-<span class="nc" id="L42">		Preconditions.checkNotNull(priority);</span>
-<span class="nc bnc" id="L43" title="All 2 branches missed.">		if (priority.equals(Priority.high)) {</span>
-<span class="nc" id="L44">			listeners.add(0, listener);</span>
+<span class="nc" id="L42">		Preconditions.checkNotNull(listener);</span>
+<span class="nc" id="L43">		Preconditions.checkNotNull(priority);</span>
+<span class="nc bnc" id="L44" title="All 2 branches missed.">		if (priority.equals(Priority.high)) {</span>
+<span class="nc" id="L45">			listeners.add(0, listener);</span>
 		} else {
-<span class="nc" id="L46">			listeners.add(listener);</span>
+<span class="nc" id="L47">			listeners.add(listener);</span>
 		}
-<span class="nc" id="L48">	}</span>
+<span class="nc" id="L49">	}</span>
 
 	public void fireLanguageWasChangedEvent(final Text.Language language) {
-<span class="nc" id="L51">		Preconditions.checkNotNull(language);</span>
-<span class="nc" id="L52">		ChangeLanguageEvent event = new ChangeLanguageEvent(language, gameController.getGame());</span>
-<span class="nc" id="L53">		logger.debug(&quot;firing event language was changed: &quot; + language);</span>
-<span class="nc" id="L54">		listeners.forEach(listener -&gt; {</span>
-<span class="nc" id="L55">			listener.onChangeLanguage(event);</span>
-<span class="nc" id="L56">		});</span>
-<span class="nc" id="L57">	}</span>
+<span class="nc" id="L52">		Preconditions.checkNotNull(language);</span>
+<span class="nc" id="L53">		ChangeLanguageEvent event = new ChangeLanguageEvent(language, gameController.getGame());</span>
+<span class="nc" id="L54">		logger.debug(&quot;firing event language was changed: &quot; + language);</span>
+<span class="nc" id="L55">		listeners.forEach(listener -&gt; {</span>
+<span class="nc" id="L56">			listener.onChangeLanguage(event);</span>
+<span class="nc" id="L57">		});</span>
+<span class="nc" id="L58">	}</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

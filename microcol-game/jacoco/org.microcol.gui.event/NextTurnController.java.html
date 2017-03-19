@@ -12,24 +12,25 @@ import com.google.common.base.Preconditions;
  * It's called when human user should start play his move.
  * 
  */
-<span class="nc" id="L15">public class NextTurnController {</span>
+//FIXME JJ extends from AbstractEventController
+<span class="nc" id="L16">public class NextTurnController {</span>
 
-<span class="nc" id="L17">	private final Logger logger = Logger.getLogger(NextTurnController.class);</span>
+<span class="nc" id="L18">	private final Logger logger = Logger.getLogger(NextTurnController.class);</span>
 
-<span class="nc" id="L19">	private final List&lt;NextTurnListener&gt; listeners = new ArrayList&lt;NextTurnListener&gt;();</span>
+<span class="nc" id="L20">	private final List&lt;NextTurnListener&gt; listeners = new ArrayList&lt;NextTurnListener&gt;();</span>
 
 	public void addNextTurnListener(final NextTurnListener listener) {
-<span class="nc" id="L22">		Preconditions.checkNotNull(listener);</span>
-<span class="nc" id="L23">		listeners.add(listener);</span>
-<span class="nc" id="L24">	}</span>
+<span class="nc" id="L23">		Preconditions.checkNotNull(listener);</span>
+<span class="nc" id="L24">		listeners.add(listener);</span>
+<span class="nc" id="L25">	}</span>
 
 	public void fireNextTurnEvent(final RoundStartedEvent event) {
-<span class="nc" id="L27">		Preconditions.checkNotNull(event);</span>
-<span class="nc" id="L28">		logger.trace(&quot;firing next turn event: &quot; + event);</span>
-<span class="nc" id="L29">		listeners.forEach(listener -&gt; {</span>
-<span class="nc" id="L30">			listener.onNextTurn(event);</span>
-<span class="nc" id="L31">		});</span>
-<span class="nc" id="L32">	}</span>
+<span class="nc" id="L28">		Preconditions.checkNotNull(event);</span>
+<span class="nc" id="L29">		logger.trace(&quot;firing next turn event: &quot; + event);</span>
+<span class="nc" id="L30">		listeners.forEach(listener -&gt; {</span>
+<span class="nc" id="L31">			listener.onNextTurn(event);</span>
+<span class="nc" id="L32">		});</span>
+<span class="nc" id="L33">	}</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

@@ -7,8 +7,8 @@ import org.microcol.gui.event.EventInitializer;
 import org.microcol.gui.event.ExitGameController;
 import org.microcol.gui.event.FocusedTileController;
 import org.microcol.gui.event.GameController;
-import org.microcol.gui.event.GameEventController;
-import org.microcol.gui.event.GameEventListenerImpl;
+import org.microcol.gui.event.AboutGameEventController;
+import org.microcol.gui.event.AboutGameListenerImpl;
 import org.microcol.gui.event.KeyController;
 import org.microcol.gui.event.MoveUnitController;
 import org.microcol.gui.event.NewGameController;
@@ -46,7 +46,7 @@ import com.google.inject.Singleton;
 <span class="nc" id="L46">		bind(KeyController.class).in(Singleton.class);</span>
 <span class="nc" id="L47">		bind(NextTurnController.class).in(Singleton.class);</span>
 <span class="nc" id="L48">		bind(FocusedTileController.class).in(Singleton.class);</span>
-<span class="nc" id="L49">		bind(GameEventController.class).in(Singleton.class);</span>
+<span class="nc" id="L49">		bind(AboutGameEventController.class).in(Singleton.class);</span>
 <span class="nc" id="L50">		bind(ChangeLanguageController.class).in(Singleton.class);</span>
 <span class="nc" id="L51">		bind(NewGameController.class).in(Singleton.class);</span>
 <span class="nc" id="L52">		bind(GameController.class).in(Singleton.class);</span>
@@ -84,7 +84,7 @@ import com.google.inject.Singleton;
 		/**
 		 * Load events manually
 		 */
-<span class="nc" id="L87">		bind(GameEventListenerImpl.class).asEagerSingleton();</span>
+<span class="nc" id="L87">		bind(AboutGameListenerImpl.class).asEagerSingleton();</span>
 <span class="nc" id="L88">		bind(ChangeLanguageListenerPreferences.class).asEagerSingleton();</span>
 <span class="nc" id="L89">		bind(ChangeLanguageListenerText.class).asEagerSingleton();</span>
 <span class="nc" id="L90">		bind(VolumeChangedListenerPreferences.class).asEagerSingleton();</span>

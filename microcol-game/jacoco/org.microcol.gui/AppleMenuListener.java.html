@@ -2,7 +2,8 @@
 
 import org.microcol.gui.event.ExitGameController;
 import org.microcol.gui.event.ExitGameEvent;
-import org.microcol.gui.event.GameEventController;
+import org.microcol.gui.event.AboutGameEvent;
+import org.microcol.gui.event.AboutGameEventController;
 
 import com.apple.mrj.MRJAboutHandler;
 import com.apple.mrj.MRJQuitHandler;
@@ -17,26 +18,26 @@ import com.google.inject.Inject;
  */
 public class AppleMenuListener implements MRJAboutHandler, MRJQuitHandler {
 
-	private final GameEventController gameEventController;
+	private final AboutGameEventController gameEventController;
 
 	private final ExitGameController exitGameController;
 
 	@Inject
-	public AppleMenuListener(final GameEventController mainMenuController,
-<span class="nc" id="L26">			final ExitGameController exitGameController) {</span>
-<span class="nc" id="L27">		this.gameEventController = Preconditions.checkNotNull(mainMenuController);</span>
-<span class="nc" id="L28">		this.exitGameController = Preconditions.checkNotNull(exitGameController);</span>
-<span class="nc" id="L29">	}</span>
+	public AppleMenuListener(final AboutGameEventController mainMenuController,
+<span class="nc" id="L27">			final ExitGameController exitGameController) {</span>
+<span class="nc" id="L28">		this.gameEventController = Preconditions.checkNotNull(mainMenuController);</span>
+<span class="nc" id="L29">		this.exitGameController = Preconditions.checkNotNull(exitGameController);</span>
+<span class="nc" id="L30">	}</span>
 
 	@Override
 	public void handleAbout() {
-<span class="nc" id="L33">		gameEventController.fireAboutGameEvent();</span>
-<span class="nc" id="L34">	}</span>
+<span class="nc" id="L34">		gameEventController.fireEvent(new AboutGameEvent());</span>
+<span class="nc" id="L35">	}</span>
 
 	@Override
 	public void handleQuit() throws IllegalStateException {
-<span class="nc" id="L38">		exitGameController.fireEvent(new ExitGameEvent());</span>
-<span class="nc" id="L39">	}</span>
+<span class="nc" id="L39">		exitGameController.fireEvent(new ExitGameEvent());</span>
+<span class="nc" id="L40">	}</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

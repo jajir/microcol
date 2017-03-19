@@ -6,24 +6,25 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import com.google.common.base.Preconditions;
+//FIXME JJ extends from AbstractEventController
 
-<span class="nc" id="L10">public class ShowGridController {</span>
+<span class="nc" id="L11">public class ShowGridController {</span>
 
-<span class="nc" id="L12">	private final Logger logger = Logger.getLogger(ShowGridController.class);</span>
+<span class="nc" id="L13">	private final Logger logger = Logger.getLogger(ShowGridController.class);</span>
 
-<span class="nc" id="L14">	private final List&lt;ShowGridListener&gt; listeners = new ArrayList&lt;ShowGridListener&gt;();</span>
+<span class="nc" id="L15">	private final List&lt;ShowGridListener&gt; listeners = new ArrayList&lt;ShowGridListener&gt;();</span>
 
 	public void addShowGridListener(final ShowGridListener listener) {
-<span class="nc" id="L17">		Preconditions.checkNotNull(listener);</span>
-<span class="nc" id="L18">		listeners.add(listener);</span>
-<span class="nc" id="L19">	}</span>
+<span class="nc" id="L18">		Preconditions.checkNotNull(listener);</span>
+<span class="nc" id="L19">		listeners.add(listener);</span>
+<span class="nc" id="L20">	}</span>
 
 	public void fireShowGridEvent(final boolean isGridShown) {
-<span class="nc" id="L22">		logger.debug(&quot;firing new show grid event: &quot; + isGridShown);</span>
-<span class="nc" id="L23">		ShowGridEvent event = new ShowGridEvent(isGridShown);</span>
-<span class="nc" id="L24">		listeners.forEach(listener -&gt; {</span>
-<span class="nc" id="L25">			listener.onShowGridChanged(event);</span>
-<span class="nc" id="L26">		});</span>
-<span class="nc" id="L27">	}</span>
+<span class="nc" id="L23">		logger.debug(&quot;firing new show grid event: &quot; + isGridShown);</span>
+<span class="nc" id="L24">		ShowGridEvent event = new ShowGridEvent(isGridShown);</span>
+<span class="nc" id="L25">		listeners.forEach(listener -&gt; {</span>
+<span class="nc" id="L26">			listener.onShowGridChanged(event);</span>
+<span class="nc" id="L27">		});</span>
+<span class="nc" id="L28">	}</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

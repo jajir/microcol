@@ -13,8 +13,6 @@ import javax.swing.JFrame;
 import org.apache.log4j.Logger;
 import org.microcol.gui.event.ExitGameController;
 import org.microcol.gui.event.ExitGameEvent;
-import org.microcol.gui.event.GameEventController;
-import org.microcol.gui.event.GameEventListener;
 import org.microcol.gui.event.KeyController;
 
 import com.google.common.base.Preconditions;
@@ -30,7 +28,7 @@ public class MainFramePresenter {
 		JFrame getFrame();
 	}
 
-<span class="nc" id="L33">	private final Logger logger = Logger.getLogger(MainFramePresenter.class);</span>
+<span class="nc" id="L31">	private final Logger logger = Logger.getLogger(MainFramePresenter.class);</span>
 
 	private Rectangle lastNormalBounds;
 
@@ -40,63 +38,52 @@ public class MainFramePresenter {
 
 	@Inject
 	public MainFramePresenter(final MainFramePresenter.Display display, final KeyController keyController,
-			final GamePreferences gamePreferences, final GameEventController gameEventController,
-<span class="nc" id="L44">			final ExitGameController exitGameController) {</span>
-<span class="nc" id="L45">		this.gamePreferences = Preconditions.checkNotNull(gamePreferences);</span>
-<span class="nc" id="L46">		this.display = Preconditions.checkNotNull(display);</span>
-<span class="nc" id="L47">		display.getFrame().addKeyListener(new KeyAdapter() {</span>
+<span class="nc" id="L41">			final GamePreferences gamePreferences, final ExitGameController exitGameController) {</span>
+<span class="nc" id="L42">		this.gamePreferences = Preconditions.checkNotNull(gamePreferences);</span>
+<span class="nc" id="L43">		this.display = Preconditions.checkNotNull(display);</span>
+<span class="nc" id="L44">		display.getFrame().addKeyListener(new KeyAdapter() {</span>
 			@Override
 			public void keyPressed(final KeyEvent e) {
-<span class="nc" id="L50">				keyController.fireKeyWasPressed(e);</span>
-<span class="nc" id="L51">			}</span>
+<span class="nc" id="L47">				keyController.fireKeyWasPressed(e);</span>
+<span class="nc" id="L48">			}</span>
 		});
 
-<span class="nc" id="L54">		display.getFrame().addComponentListener(new ComponentAdapter() {</span>
+<span class="nc" id="L51">		display.getFrame().addComponentListener(new ComponentAdapter() {</span>
 			@Override
 			public void componentMoved(ComponentEvent event) {
-<span class="nc bnc" id="L57" title="All 2 branches missed.">				if (display.getFrame().getExtendedState() == JFrame.NORMAL) {</span>
-<span class="nc" id="L58">					lastNormalBounds = display.getFrame().getBounds();</span>
+<span class="nc bnc" id="L54" title="All 2 branches missed.">				if (display.getFrame().getExtendedState() == JFrame.NORMAL) {</span>
+<span class="nc" id="L55">					lastNormalBounds = display.getFrame().getBounds();</span>
 				}
-<span class="nc" id="L60">			}</span>
+<span class="nc" id="L57">			}</span>
 
 			@Override
 			public void componentResized(ComponentEvent event) {
-<span class="nc bnc" id="L64" title="All 2 branches missed.">				if (display.getFrame().getExtendedState() == JFrame.NORMAL) {</span>
-<span class="nc" id="L65">					lastNormalBounds = display.getFrame().getBounds();</span>
+<span class="nc bnc" id="L61" title="All 2 branches missed.">				if (display.getFrame().getExtendedState() == JFrame.NORMAL) {</span>
+<span class="nc" id="L62">					lastNormalBounds = display.getFrame().getBounds();</span>
 				}
-<span class="nc" id="L67">			}</span>
+<span class="nc" id="L64">			}</span>
 		});
 
-<span class="nc" id="L70">		exitGameController.addListener(event -&gt; {</span>
-<span class="nc" id="L71">			savePreferences();</span>
-<span class="nc" id="L72">			display.getFrame().dispose();</span>
-<span class="nc" id="L73">		});</span>
+<span class="nc" id="L67">		exitGameController.addListener(event -&gt; {</span>
+<span class="nc" id="L68">			savePreferences();</span>
+<span class="nc" id="L69">			display.getFrame().dispose();</span>
+<span class="nc" id="L70">		});</span>
 
-<span class="nc" id="L75">		gameEventController.addGameEventListener(new GameEventListener() {</span>
-			// TODO JJ move to lambda or remove
-			@Override
-			public void onAboutGame() {
-				/**
-				 * Do nothing
-				 */
-<span class="nc" id="L82">			}</span>
-		});
-
-<span class="nc" id="L85">		display.getFrame().addWindowListener(new WindowAdapter() {</span>
+<span class="nc" id="L72">		display.getFrame().addWindowListener(new WindowAdapter() {</span>
 			@Override
 			public void windowClosing(WindowEvent event) {
-<span class="nc" id="L88">				logger.debug(&quot;Event windowClosing&quot;);</span>
-<span class="nc" id="L89">				exitGameController.fireEvent(new ExitGameEvent());</span>
-<span class="nc" id="L90">			}</span>
+<span class="nc" id="L75">				logger.debug(&quot;Event windowClosing&quot;);</span>
+<span class="nc" id="L76">				exitGameController.fireEvent(new ExitGameEvent());</span>
+<span class="nc" id="L77">			}</span>
 		});
-<span class="nc" id="L92">	}</span>
+<span class="nc" id="L79">	}</span>
 
 	private void savePreferences() {
-<span class="nc bnc" id="L95" title="All 2 branches missed.">		final Rectangle normalBounds = display.getFrame().getExtendedState() == JFrame.NORMAL</span>
-<span class="nc" id="L96">				? display.getFrame().getBounds() : lastNormalBounds;</span>
-<span class="nc" id="L97">		gamePreferences.setMainFramePosition(normalBounds);</span>
-<span class="nc" id="L98">		gamePreferences.setMainFrameState(display.getFrame().getExtendedState());</span>
-<span class="nc" id="L99">	}</span>
+<span class="nc bnc" id="L82" title="All 2 branches missed.">		final Rectangle normalBounds = display.getFrame().getExtendedState() == JFrame.NORMAL</span>
+<span class="nc" id="L83">				? display.getFrame().getBounds() : lastNormalBounds;</span>
+<span class="nc" id="L84">		gamePreferences.setMainFramePosition(normalBounds);</span>
+<span class="nc" id="L85">		gamePreferences.setMainFrameState(display.getFrame().getExtendedState());</span>
+<span class="nc" id="L86">	}</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

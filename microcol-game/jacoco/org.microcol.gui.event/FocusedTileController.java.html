@@ -7,23 +7,24 @@ import org.apache.log4j.Logger;
 
 import com.google.common.base.Preconditions;
 
-<span class="nc" id="L10">public class FocusedTileController {</span>
+//FIXME JJ extends from AbstractEventController
+<span class="nc" id="L11">public class FocusedTileController {</span>
 
-<span class="nc" id="L12">	private final Logger logger = Logger.getLogger(FocusedTileController.class);</span>
+<span class="nc" id="L13">	private final Logger logger = Logger.getLogger(FocusedTileController.class);</span>
 
-<span class="nc" id="L14">	private final List&lt;FocusedTileListener&gt; listeners = new ArrayList&lt;FocusedTileListener&gt;();</span>
+<span class="nc" id="L15">	private final List&lt;FocusedTileListener&gt; listeners = new ArrayList&lt;FocusedTileListener&gt;();</span>
 
 	public void addFocusedTileListener(final FocusedTileListener listener) {
-<span class="nc" id="L17">		Preconditions.checkNotNull(listener);</span>
-<span class="nc" id="L18">		listeners.add(listener);</span>
-<span class="nc" id="L19">	}</span>
+<span class="nc" id="L18">		Preconditions.checkNotNull(listener);</span>
+<span class="nc" id="L19">		listeners.add(listener);</span>
+<span class="nc" id="L20">	}</span>
 
 	public void fireFocusedTileEvent(final FocusedTileEvent tile) {
-<span class="nc" id="L22">		Preconditions.checkNotNull(tile);</span>
-<span class="nc" id="L23">		logger.trace(&quot;firing next turn event: &quot; + tile);</span>
-<span class="nc" id="L24">		listeners.forEach(listener -&gt; {</span>
-<span class="nc" id="L25">			listener.onTileFocused(tile);</span>
-<span class="nc" id="L26">		});</span>
-<span class="nc" id="L27">	}</span>
+<span class="nc" id="L23">		Preconditions.checkNotNull(tile);</span>
+<span class="nc" id="L24">		logger.trace(&quot;firing next turn event: &quot; + tile);</span>
+<span class="nc" id="L25">		listeners.forEach(listener -&gt; {</span>
+<span class="nc" id="L26">			listener.onTileFocused(tile);</span>
+<span class="nc" id="L27">		});</span>
+<span class="nc" id="L28">	}</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

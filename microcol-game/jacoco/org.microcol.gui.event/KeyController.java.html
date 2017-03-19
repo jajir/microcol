@@ -12,26 +12,25 @@ import com.google.common.base.Preconditions;
 /**
  * Allow to register key listener and fire key events.
  * 
- * @author Jan Jirout
- *
  */
-<span class="nc" id="L18">public class KeyController {</span>
+//FIXME JJ extends from AbstractEventController
+<span class="nc" id="L17">public class KeyController {</span>
 
-<span class="nc" id="L20">	private final Logger logger = Logger.getLogger(KeyController.class);</span>
+<span class="nc" id="L19">	private final Logger logger = Logger.getLogger(KeyController.class);</span>
 
-<span class="nc" id="L22">	private final List&lt;KeyListener&gt; listeners = new ArrayList&lt;KeyListener&gt;();</span>
+<span class="nc" id="L21">	private final List&lt;KeyListener&gt; listeners = new ArrayList&lt;KeyListener&gt;();</span>
 
 	public void addKeyListener(final KeyListener listener) {
-<span class="nc" id="L25">		Preconditions.checkNotNull(listener);</span>
-<span class="nc" id="L26">		listeners.add(listener);</span>
-<span class="nc" id="L27">	}</span>
+<span class="nc" id="L24">		Preconditions.checkNotNull(listener);</span>
+<span class="nc" id="L25">		listeners.add(listener);</span>
+<span class="nc" id="L26">	}</span>
 
 	public void fireKeyWasPressed(final KeyEvent keyEvent) {
-<span class="nc" id="L30">		Preconditions.checkNotNull(keyEvent);</span>
-<span class="nc" id="L31">		logger.trace(&quot;firing event: &quot; + keyEvent);</span>
-<span class="nc" id="L32">		listeners.forEach(listener -&gt; {</span>
-<span class="nc" id="L33">			listener.keyPressed(keyEvent);</span>
-<span class="nc" id="L34">		});</span>
-<span class="nc" id="L35">	}</span>
+<span class="nc" id="L29">		Preconditions.checkNotNull(keyEvent);</span>
+<span class="nc" id="L30">		logger.trace(&quot;firing event: &quot; + keyEvent);</span>
+<span class="nc" id="L31">		listeners.forEach(listener -&gt; {</span>
+<span class="nc" id="L32">			listener.keyPressed(keyEvent);</span>
+<span class="nc" id="L33">		});</span>
+<span class="nc" id="L34">	}</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

@@ -11,35 +11,36 @@ import com.google.common.base.Preconditions;
  * Controller allows to register unit moving listeners and fire events.
  * 
  */
-<span class="nc" id="L14">public class MoveUnitController {</span>
+//FIXME JJ split to separate event classes use AbstractEventController
+<span class="nc" id="L15">public class MoveUnitController {</span>
 
-<span class="nc" id="L16">	private final List&lt;MoveUnitListener&gt; listeners = new ArrayList&lt;MoveUnitListener&gt;();</span>
+<span class="nc" id="L17">	private final List&lt;MoveUnitListener&gt; listeners = new ArrayList&lt;MoveUnitListener&gt;();</span>
 
-<span class="nc" id="L18">	private final List&lt;MicrocolListener&lt;String&gt;&gt; listenersStartMove = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L19">	private final List&lt;MicrocolListener&lt;String&gt;&gt; listenersStartMove = new ArrayList&lt;&gt;();</span>
 
 	public void addMoveUnitListener(final MoveUnitListener listener) {
-<span class="nc" id="L21">		Preconditions.checkNotNull(listener);</span>
-<span class="nc" id="L22">		listeners.add(listener);</span>
-<span class="nc" id="L23">	}</span>
+<span class="nc" id="L22">		Preconditions.checkNotNull(listener);</span>
+<span class="nc" id="L23">		listeners.add(listener);</span>
+<span class="nc" id="L24">	}</span>
 
 	public void addStartMovingListener(final MicrocolListener&lt;String&gt; listener) {
-<span class="nc" id="L26">		Preconditions.checkNotNull(listener);</span>
-<span class="nc" id="L27">		listenersStartMove.add(listener);</span>
-<span class="nc" id="L28">	}</span>
+<span class="nc" id="L27">		Preconditions.checkNotNull(listener);</span>
+<span class="nc" id="L28">		listenersStartMove.add(listener);</span>
+<span class="nc" id="L29">	}</span>
 
 	public void fireUnitMovedEvent(final ShipMovedEvent event) {
-<span class="nc" id="L31">		Preconditions.checkNotNull(event);</span>
-<span class="nc" id="L32">		listeners.forEach(listener -&gt; {</span>
-<span class="nc" id="L33">			listener.onMoveUnit(event);</span>
-<span class="nc" id="L34">		});</span>
-<span class="nc" id="L35">	}</span>
+<span class="nc" id="L32">		Preconditions.checkNotNull(event);</span>
+<span class="nc" id="L33">		listeners.forEach(listener -&gt; {</span>
+<span class="nc" id="L34">			listener.onMoveUnit(event);</span>
+<span class="nc" id="L35">		});</span>
+<span class="nc" id="L36">	}</span>
 
 	public void fireStartMoveEvent() {
-<span class="nc" id="L38">		listenersStartMove.forEach(listener -&gt; {</span>
-<span class="nc" id="L39">			listener.onEvent(&quot;&quot;);</span>
-<span class="nc" id="L40">		});</span>
+<span class="nc" id="L39">		listenersStartMove.forEach(listener -&gt; {</span>
+<span class="nc" id="L40">			listener.onEvent(&quot;&quot;);</span>
+<span class="nc" id="L41">		});</span>
 
-<span class="nc" id="L42">	}</span>
+<span class="nc" id="L43">	}</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>
