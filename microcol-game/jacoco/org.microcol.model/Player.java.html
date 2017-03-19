@@ -34,27 +34,27 @@ public class Player {
 	}
 
 	public List&lt;Ship&gt; getShips() {
-<span class="nc" id="L37">		return model.getShipStorage().getShips(this);</span>
+<span class="nc" id="L37">		return model.getShips(this);</span>
 	}
 
 	public Map&lt;Location, List&lt;Ship&gt;&gt; getShipsAt() {
-<span class="nc" id="L41">		return model.getShipStorage().getShipsAt(this);</span>
+<span class="nc" id="L41">		return model.getShipsAt(this);</span>
 	}
 
 	public List&lt;Ship&gt; getShipsAt(final Location location) {
-<span class="nc" id="L45">		return model.getShipStorage().getShipsAt(this, location);</span>
+<span class="nc" id="L45">		return model.getShipsAt(this, location);</span>
 	}
 
 	public List&lt;Ship&gt; getEnemyShips() {
-<span class="nc" id="L49">		return model.getShipStorage().getEnemyShips(this);</span>
+<span class="nc" id="L49">		return model.getEnemyShips(this);</span>
 	}
 
 	public Map&lt;Location, List&lt;Ship&gt;&gt; getEnemyShipsAt() {
-<span class="nc" id="L53">		return model.getShipStorage().getEnemyShipsAt(this);</span>
+<span class="nc" id="L53">		return model.getEnemyShipsAt(this);</span>
 	}
 
 	public List&lt;Ship&gt; getEnemyShipsAt(final Location location) {
-<span class="nc" id="L57">		return model.getShipStorage().getEnemyShipsAt(this, location);</span>
+<span class="nc" id="L57">		return model.getEnemyShipsAt(this, location);</span>
 	}
 
 	void startTurn() {

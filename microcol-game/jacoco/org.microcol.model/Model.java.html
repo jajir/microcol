@@ -70,56 +70,76 @@ public class Model {
 <span class="nc" id="L70">		return gameManager.getCurrentPlayer();</span>
 	}
 
-	ShipStorage getShipStorage() {
-<span class="nc" id="L74">		return shipStorage;</span>
-	}
-
 	public List&lt;Ship&gt; getShips() {
-<span class="nc" id="L78">		return shipStorage.getShips();</span>
+<span class="nc" id="L74">		return shipStorage.getShips();</span>
 	}
 
 	public Map&lt;Location, List&lt;Ship&gt;&gt; getShipsAt() {
-<span class="nc" id="L82">		return shipStorage.getShipsAt();</span>
+<span class="nc" id="L78">		return shipStorage.getShipsAt();</span>
 	}
 
 	public List&lt;Ship&gt; getShipsAt(final Location location) {
-<span class="nc" id="L86">		return shipStorage.getShipsAt(location);</span>
+<span class="nc" id="L82">		return shipStorage.getShipsAt(location);</span>
+	}
+
+	List&lt;Ship&gt; getShips(final Player player) {
+<span class="nc" id="L86">		return shipStorage.getShips(player);</span>
+	}
+
+	Map&lt;Location, List&lt;Ship&gt;&gt; getShipsAt(final Player player) {
+<span class="nc" id="L90">		return shipStorage.getShipsAt(player);</span>
+	}
+
+	List&lt;Ship&gt; getShipsAt(final Player player, final Location location) {
+<span class="nc" id="L94">		return shipStorage.getShipsAt(player, location);</span>
+	}
+
+	List&lt;Ship&gt; getEnemyShips(final Player player) {
+<span class="nc" id="L98">		return shipStorage.getEnemyShips(player);</span>
+	}
+
+	Map&lt;Location, List&lt;Ship&gt;&gt; getEnemyShipsAt(final Player player) {
+<span class="nc" id="L102">		return shipStorage.getEnemyShipsAt(player);</span>
+	}
+
+	List&lt;Ship&gt; getEnemyShipsAt(final Player player, final Location location) {
+<span class="nc" id="L106">		return shipStorage.getEnemyShipsAt(player, location);</span>
 	}
 
 	public void startGame() {
-<span class="nc" id="L90">		gameManager.startGame();</span>
-<span class="nc" id="L91">	}</span>
-
-	public void endTurn() {
-<span class="nc" id="L94">		gameManager.endTurn();</span>
-<span class="nc" id="L95">	}</span>
-
-	void checkGameActive() {
-<span class="nc" id="L98">		gameManager.checkGameActive();</span>
-<span class="nc" id="L99">	}</span>
-
-	void checkCurrentPlayer(final Player player) {
-<span class="nc" id="L102">		gameManager.checkCurrentPlayer(player);</span>
-<span class="nc" id="L103">	}</span>
-
-	void fireGameStarted() {
-<span class="nc" id="L106">		listenerManager.fireGameStarted(this);</span>
-<span class="nc" id="L107">	}</span>
-
-	void fireRoundStarted() {
-<span class="nc" id="L110">		listenerManager.fireRoundStarted(this, calendar);</span>
+<span class="nc" id="L110">		gameManager.startGame();</span>
 <span class="nc" id="L111">	}</span>
 
-	void fireTurnStarted(final Player player) {
-<span class="nc" id="L114">		listenerManager.fireTurnStarted(this, player);</span>
+	public void endTurn() {
+<span class="nc" id="L114">		gameManager.endTurn();</span>
 <span class="nc" id="L115">	}</span>
 
-	void fireShipMoved(final Ship ship, final Location start, final Path path) {
-<span class="nc" id="L118">		listenerManager.fireShipMoved(this, ship, start, path);</span>
+	void checkGameActive() {
+<span class="nc" id="L118">		gameManager.checkGameActive();</span>
 <span class="nc" id="L119">	}</span>
 
-	void fireGameFinished() {
-<span class="nc" id="L122">		listenerManager.fireGameFinished(this);</span>
+	void checkCurrentPlayer(final Player player) {
+<span class="nc" id="L122">		gameManager.checkCurrentPlayer(player);</span>
 <span class="nc" id="L123">	}</span>
+
+	void fireGameStarted() {
+<span class="nc" id="L126">		listenerManager.fireGameStarted(this);</span>
+<span class="nc" id="L127">	}</span>
+
+	void fireRoundStarted() {
+<span class="nc" id="L130">		listenerManager.fireRoundStarted(this, calendar);</span>
+<span class="nc" id="L131">	}</span>
+
+	void fireTurnStarted(final Player player) {
+<span class="nc" id="L134">		listenerManager.fireTurnStarted(this, player);</span>
+<span class="nc" id="L135">	}</span>
+
+	void fireShipMoved(final Ship ship, final Location start, final Path path) {
+<span class="nc" id="L138">		listenerManager.fireShipMoved(this, ship, start, path);</span>
+<span class="nc" id="L139">	}</span>
+
+	void fireGameFinished() {
+<span class="nc" id="L142">		listenerManager.fireGameFinished(this);</span>
+<span class="nc" id="L143">	}</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>
