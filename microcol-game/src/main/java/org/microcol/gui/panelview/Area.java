@@ -16,15 +16,29 @@ import com.google.common.base.MoreObjects;
  */
 public class Area {
 
+	/**
+	 * Locations in world of top left corner of visible area.
+	 */
 	private final Location topLeft;
 
+	/**
+	 * Locations in world of bottom right corner of visible area.
+	 */
 	private final Location bottomRight;
 
+	/**
+	 * Top left corner of visible area in on-screen coordinates. It define
+	 * visible area.
+	 */
 	private final Point pointTopLeft;
 
+	/**
+	 * Bottom right corner of visible area in on-screen coordinates. It define
+	 * visible area.
+	 */
 	private final Point pointBottomRight;
 
-	public Area(final JViewport viewport, final World map) {
+	public Area(final JViewport viewport, final World world) {
 		final Dimension dim = viewport.getExtentSize();
 		final java.awt.Point pos = viewport.getViewPosition();
 
@@ -38,7 +52,7 @@ public class Area {
 				.add(Point.of(1, 1));
 
 		topLeft = Location.of(Math.max(1, p1.getX()), Math.max(1, p1.getY()));
-		bottomRight = Location.of(Math.min(p2.getX(), map.getMaxX()), Math.min(p2.getY(), map.getMaxY()));
+		bottomRight = Location.of(Math.min(p2.getX(), world.getMaxX()), Math.min(p2.getY(), world.getMaxY()));
 	}
 
 	public Location getTopLeft() {
