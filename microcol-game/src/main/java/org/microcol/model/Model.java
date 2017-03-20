@@ -25,14 +25,10 @@ public class Model {
 		this.players = ImmutableList.copyOf(players);
 		Preconditions.checkArgument(!this.players.isEmpty(), "There must be at least one player.");
 		checkPlayerNames(this.players);
-		this.players.forEach(player -> {
-			player.setModel(this);
-		});
+		this.players.forEach(player -> player.setModel(this));
 
 		shipStorage = new ShipStorage(ships);
-		shipStorage.getShips().forEach(ship -> {
-			ship.setModel(this);
-		});
+		shipStorage.getShips().forEach(ship -> ship.setModel(this));
 
 		gameManager = new GameManager(this);
 	}

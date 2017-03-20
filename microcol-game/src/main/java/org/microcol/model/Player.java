@@ -58,9 +58,7 @@ public class Player {
 	}
 
 	void startTurn() {
-		getShips().forEach(ship -> {
-			ship.startTurn();
-		});
+		getShips().forEach(ship -> ship.startTurn());
 	}
 
 	public void endTurn() {
