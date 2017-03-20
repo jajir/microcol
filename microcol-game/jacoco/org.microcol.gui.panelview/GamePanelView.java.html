@@ -186,7 +186,7 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 <span class="nc" id="L186">			paintCursor(dbg, area);</span>
 <span class="nc" id="L187">			paintGoToPath(dbg, area);</span>
 <span class="nc" id="L188">			paintMovingAnimation(dbg, area);</span>
-<span class="nc" id="L189">			final Point p = Point.of(area.getTopLeft().add(Location.of(-1, -1)));</span>
+<span class="nc" id="L189">			final Point p = Point.of(area.getTopLeft());</span>
 <span class="nc" id="L190">			g.drawImage(dbImage, p.getX(), p.getY(), null);</span>
 <span class="nc bnc" id="L191" title="All 2 branches missed.">			if (gameController.getModel().getCurrentPlayer().isComputer()) {</span>
 				/**
