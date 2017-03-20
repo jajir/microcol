@@ -16,7 +16,7 @@ public class ChangeLanguageListenerText implements Listener<ChangeLanguageEvent>
 	@Inject
 	public ChangeLanguageListenerText(final Text text, final ChangeLanguageController languangeController) {
 		this.text = Preconditions.checkNotNull(text);
-		languangeController.addListener(this, 100);
+		languangeController.addListener(this, 1);
 	}
 
 	@Override

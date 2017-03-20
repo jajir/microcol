@@ -17,6 +17,7 @@ import com.google.inject.Inject;
 public class StatusBarPresenter implements Localized {
 
 	public interface Display {
+		
 		JLabel getStatusBarDescription();
 
 		JLabel getLabelEra();
@@ -25,14 +26,14 @@ public class StatusBarPresenter implements Localized {
 	@Inject
 	public StatusBarPresenter(final StatusBarPresenter.Display display,
 			final StatusBarMessageController statusBarMessageController, final NextTurnController nextTurnController,
-			final ChangeLanguageController languangeController) {
+			final ChangeLanguageController changeLanguangeController) {
 		statusBarMessageController.addListener(event -> {
 			display.getStatusBarDescription().setText(event.getStatusMessage());
 		});
 		nextTurnController.addListener(event -> {
 			setYearText(display.getLabelEra(), event.getCalendar());
 		});
-		languangeController.addListener(event -> {
+		changeLanguangeController.addListener(event -> {
 			setYearText(display.getLabelEra(), event.getModel().getCalendar());
 			display.getStatusBarDescription().setText("");
 		});
