@@ -12,88 +12,74 @@ import org.microcol.model.ModelAdapter;
 import org.microcol.model.Path;
 import org.microcol.model.Player;
 import org.microcol.model.Ship;
-import org.microcol.model.Terrain;
 import org.microcol.model.event.TurnStartedEvent;
 
 import com.google.common.collect.ImmutableList;
 
 public class SkyNet {
-<span class="nc" id="L21">	private static final ImmutableList&lt;Location&gt; directions = ImmutableList.of(</span>
-<span class="nc" id="L22">		Location.of(1, 1),</span>
-<span class="nc" id="L23">		Location.of(0, 1),</span>
-<span class="nc" id="L24">		Location.of(-1, 1),</span>
-<span class="nc" id="L25">		Location.of(-1, 0),</span>
-<span class="nc" id="L26">		Location.of(-1, -1),</span>
-<span class="nc" id="L27">		Location.of(0, -1),</span>
-<span class="nc" id="L28">		Location.of(1, -1),</span>
-<span class="nc" id="L29">		Location.of(1, 0)</span>
+<span class="nc" id="L20">	private static final ImmutableList&lt;Location&gt; directions = ImmutableList.of(</span>
+<span class="nc" id="L21">		Location.of(1, 1),</span>
+<span class="nc" id="L22">		Location.of(0, 1),</span>
+<span class="nc" id="L23">		Location.of(-1, 1),</span>
+<span class="nc" id="L24">		Location.of(-1, 0),</span>
+<span class="nc" id="L25">		Location.of(-1, -1),</span>
+<span class="nc" id="L26">		Location.of(0, -1),</span>
+<span class="nc" id="L27">		Location.of(1, -1),</span>
+<span class="nc" id="L28">		Location.of(1, 0)</span>
 	);
 
 	private final Model model;
 	private final Random random;
 	private final Map&lt;Ship, Location&gt; lastDirections;
 
-	private Map&lt;Location, List&lt;Ship&gt;&gt; enemyShipsAt;
-
-<span class="nc" id="L38">	public SkyNet(final Model model) {</span>
-<span class="nc" id="L39">		this.model = model;</span>
-<span class="nc" id="L40">		this.random = new Random();</span>
-<span class="nc" id="L41">		this.lastDirections = new HashMap&lt;&gt;();</span>
-<span class="nc" id="L42">	}</span>
+<span class="nc" id="L35">	public SkyNet(final Model model) {</span>
+<span class="nc" id="L36">		this.model = model;</span>
+<span class="nc" id="L37">		this.random = new Random();</span>
+<span class="nc" id="L38">		this.lastDirections = new HashMap&lt;&gt;();</span>
+<span class="nc" id="L39">	}</span>
 
 	public void searchAndDestroy() {
-<span class="nc" id="L45">		model.addListener(new ModelAdapter() {</span>
+<span class="nc" id="L42">		model.addListener(new ModelAdapter() {</span>
 			@Override
 			public void turnStarted(TurnStartedEvent event) {
-<span class="nc bnc" id="L48" title="All 2 branches missed.">				if (event.getPlayer().isComputer()) {</span>
-<span class="nc" id="L49">					turn(event.getPlayer());</span>
+<span class="nc bnc" id="L45" title="All 2 branches missed.">				if (event.getPlayer().isComputer()) {</span>
+<span class="nc" id="L46">					turn(event.getPlayer());</span>
 				}
-<span class="nc" id="L51">			}</span>
+<span class="nc" id="L48">			}</span>
 		});
-<span class="nc" id="L53">	}</span>
+<span class="nc" id="L50">	}</span>
 
 	private void turn(final Player player) {
-<span class="nc" id="L56">		enemyShipsAt = player.getEnemyShipsAt();</span>
-
-<span class="nc" id="L58">		player.getShips().forEach(ship -&gt; {</span>
-<span class="nc" id="L59">			move(ship);</span>
-<span class="nc" id="L60">		});</span>
-<span class="nc" id="L61">		player.endTurn();</span>
-<span class="nc" id="L62">	}</span>
+<span class="nc" id="L53">		player.getShips().forEach(ship -&gt; move(ship));</span>
+<span class="nc" id="L54">		player.endTurn();</span>
+<span class="nc" id="L55">	}</span>
 
 	private void move(final Ship ship) {
-<span class="nc bnc" id="L65" title="All 2 branches missed.">		if (lastDirections.get(ship) == null) {</span>
-<span class="nc" id="L66">			lastDirections.put(ship, directions.get(random.nextInt(directions.size())));</span>
+<span class="nc bnc" id="L58" title="All 2 branches missed.">		if (lastDirections.get(ship) == null) {</span>
+<span class="nc" id="L59">			lastDirections.put(ship, directions.get(random.nextInt(directions.size())));</span>
 		}
 
-<span class="nc" id="L69">		final List&lt;Location&gt; directions = new ArrayList&lt;&gt;(SkyNet.directions);</span>
-<span class="nc" id="L70">		Location lastLocation = ship.getLocation();</span>
-<span class="nc" id="L71">		final List&lt;Location&gt; locations = new ArrayList&lt;&gt;();</span>
-<span class="nc bnc" id="L72" title="All 2 branches missed.">		while (locations.size() &lt; ship.getAvailableMoves()) {</span>
-<span class="nc" id="L73">			final Location lastDirection = lastDirections.get(ship);</span>
-<span class="nc" id="L74">			final Location newLocation = lastLocation.add(lastDirection);</span>
-			// TODO JKA Tohle je spatne XXX == Terrain.OCEAN - dat na Ship
-<span class="nc bnc" id="L76" title="All 6 branches missed.">			if (model.getWorld().isValid(newLocation) &amp;&amp; model.getWorld().getTerrainAt(newLocation) == Terrain.OCEAN &amp;&amp; !isEnemyShipAt(newLocation)) {</span>
-<span class="nc" id="L77">				locations.add(newLocation);</span>
-<span class="nc" id="L78">				lastLocation = newLocation;</span>
+<span class="nc" id="L62">		final List&lt;Location&gt; directions = new ArrayList&lt;&gt;(SkyNet.directions);</span>
+<span class="nc" id="L63">		Location lastLocation = ship.getLocation();</span>
+<span class="nc" id="L64">		final List&lt;Location&gt; locations = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L65" title="All 2 branches missed.">		while (locations.size() &lt; ship.getAvailableMoves()) {</span>
+<span class="nc" id="L66">			final Location lastDirection = lastDirections.get(ship);</span>
+<span class="nc" id="L67">			final Location newLocation = lastLocation.add(lastDirection);</span>
+<span class="nc bnc" id="L68" title="All 2 branches missed.">			if (ship.isReachable(newLocation, true)) {</span>
+<span class="nc" id="L69">				locations.add(newLocation);</span>
+<span class="nc" id="L70">				lastLocation = newLocation;</span>
 			} else {
-<span class="nc" id="L80">				directions.remove(lastDirection);</span>
-<span class="nc bnc" id="L81" title="All 2 branches missed.">				if (directions.isEmpty()) {</span>
-<span class="nc" id="L82">					break;</span>
+<span class="nc" id="L72">				directions.remove(lastDirection);</span>
+<span class="nc bnc" id="L73" title="All 2 branches missed.">				if (directions.isEmpty()) {</span>
+<span class="nc" id="L74">					break;</span>
 				}
-<span class="nc" id="L84">				lastDirections.put(ship, directions.get(random.nextInt(directions.size())));</span>
+<span class="nc" id="L76">				lastDirections.put(ship, directions.get(random.nextInt(directions.size())));</span>
 			}
-<span class="nc" id="L86">		}</span>
+<span class="nc" id="L78">		}</span>
 
-<span class="nc bnc" id="L88" title="All 2 branches missed.">		if (!locations.isEmpty()) {</span>
-<span class="nc" id="L89">			ship.moveTo(Path.of(locations));</span>
+<span class="nc bnc" id="L80" title="All 2 branches missed.">		if (!locations.isEmpty()) {</span>
+<span class="nc" id="L81">			ship.moveTo(Path.of(locations));</span>
 		}
-<span class="nc" id="L91">	}</span>
-
-	private boolean isEnemyShipAt(final Location location) {
-<span class="nc" id="L94">		List&lt;Ship&gt; ships = enemyShipsAt.get(location);</span>
-
-<span class="nc bnc" id="L96" title="All 4 branches missed.">		return ships != null &amp;&amp; ships.size() &gt; 0;</span>
-	}
+<span class="nc" id="L83">	}</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

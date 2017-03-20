@@ -25,121 +25,117 @@ public class Model {
 <span class="nc" id="L25">		this.players = ImmutableList.copyOf(players);</span>
 <span class="nc bnc" id="L26" title="All 2 branches missed.">		Preconditions.checkArgument(!this.players.isEmpty(), &quot;There must be at least one player.&quot;);</span>
 <span class="nc" id="L27">		checkPlayerNames(this.players);</span>
-<span class="nc" id="L28">		this.players.forEach(player -&gt; {</span>
-<span class="nc" id="L29">			player.setModel(this);</span>
-<span class="nc" id="L30">		});</span>
+<span class="nc" id="L28">		this.players.forEach(player -&gt; player.setModel(this));</span>
 
-<span class="nc" id="L32">		shipStorage = new ShipStorage(ships);</span>
-<span class="nc" id="L33">		shipStorage.getShips().forEach(ship -&gt; {</span>
-<span class="nc" id="L34">			ship.setModel(this);</span>
-<span class="nc" id="L35">		});</span>
+<span class="nc" id="L30">		shipStorage = new ShipStorage(ships);</span>
+<span class="nc" id="L31">		shipStorage.getShips().forEach(ship -&gt; ship.setModel(this));</span>
 
-<span class="nc" id="L37">		gameManager = new GameManager(this);</span>
-<span class="nc" id="L38">	}</span>
+<span class="nc" id="L33">		gameManager = new GameManager(this);</span>
+<span class="nc" id="L34">	}</span>
 
 	private void checkPlayerNames(final List&lt;Player&gt; players) {
-<span class="nc" id="L41">		Set&lt;String&gt; names = new HashSet&lt;&gt;();</span>
-<span class="nc" id="L42">		players.forEach(player -&gt; {</span>
-<span class="nc bnc" id="L43" title="All 2 branches missed.">			if (!names.add(player.getName())) {</span>
-<span class="nc" id="L44">				throw new IllegalArgumentException(String.format(&quot;Duplicate player name (%s).&quot;, player.getName()));</span>
+<span class="nc" id="L37">		Set&lt;String&gt; names = new HashSet&lt;&gt;();</span>
+<span class="nc" id="L38">		players.forEach(player -&gt; {</span>
+<span class="nc bnc" id="L39" title="All 2 branches missed.">			if (!names.add(player.getName())) {</span>
+<span class="nc" id="L40">				throw new IllegalArgumentException(String.format(&quot;Duplicate player name (%s).&quot;, player.getName()));</span>
 			}
-<span class="nc" id="L46">		});</span>
-<span class="nc" id="L47">	}</span>
+<span class="nc" id="L42">		});</span>
+<span class="nc" id="L43">	}</span>
 
 	public void addListener(ModelListener listener) {
-<span class="nc" id="L50">		listenerManager.addListener(listener);</span>
-<span class="nc" id="L51">	}</span>
+<span class="nc" id="L46">		listenerManager.addListener(listener);</span>
+<span class="nc" id="L47">	}</span>
 
 	public void removeListener(ModelListener listener) {
-<span class="nc" id="L54">		listenerManager.removeListener(listener);</span>
-<span class="nc" id="L55">	}</span>
+<span class="nc" id="L50">		listenerManager.removeListener(listener);</span>
+<span class="nc" id="L51">	}</span>
 
 	public Calendar getCalendar() {
-<span class="nc" id="L58">		return calendar;</span>
+<span class="nc" id="L54">		return calendar;</span>
 	}
 
 	public World getWorld() {
-<span class="nc" id="L62">		return world;</span>
+<span class="nc" id="L58">		return world;</span>
 	}
 
 	public List&lt;Player&gt; getPlayers() {
-<span class="nc" id="L66">		return players;</span>
+<span class="nc" id="L62">		return players;</span>
 	}
 
 	public Player getCurrentPlayer() {
-<span class="nc" id="L70">		return gameManager.getCurrentPlayer();</span>
+<span class="nc" id="L66">		return gameManager.getCurrentPlayer();</span>
 	}
 
 	public List&lt;Ship&gt; getShips() {
-<span class="nc" id="L74">		return shipStorage.getShips();</span>
+<span class="nc" id="L70">		return shipStorage.getShips();</span>
 	}
 
 	public Map&lt;Location, List&lt;Ship&gt;&gt; getShipsAt() {
-<span class="nc" id="L78">		return shipStorage.getShipsAt();</span>
+<span class="nc" id="L74">		return shipStorage.getShipsAt();</span>
 	}
 
 	public List&lt;Ship&gt; getShipsAt(final Location location) {
-<span class="nc" id="L82">		return shipStorage.getShipsAt(location);</span>
+<span class="nc" id="L78">		return shipStorage.getShipsAt(location);</span>
 	}
 
 	List&lt;Ship&gt; getShips(final Player player) {
-<span class="nc" id="L86">		return shipStorage.getShips(player);</span>
+<span class="nc" id="L82">		return shipStorage.getShips(player);</span>
 	}
 
 	Map&lt;Location, List&lt;Ship&gt;&gt; getShipsAt(final Player player) {
-<span class="nc" id="L90">		return shipStorage.getShipsAt(player);</span>
+<span class="nc" id="L86">		return shipStorage.getShipsAt(player);</span>
 	}
 
 	List&lt;Ship&gt; getShipsAt(final Player player, final Location location) {
-<span class="nc" id="L94">		return shipStorage.getShipsAt(player, location);</span>
+<span class="nc" id="L90">		return shipStorage.getShipsAt(player, location);</span>
 	}
 
 	List&lt;Ship&gt; getEnemyShips(final Player player) {
-<span class="nc" id="L98">		return shipStorage.getEnemyShips(player);</span>
+<span class="nc" id="L94">		return shipStorage.getEnemyShips(player);</span>
 	}
 
 	Map&lt;Location, List&lt;Ship&gt;&gt; getEnemyShipsAt(final Player player) {
-<span class="nc" id="L102">		return shipStorage.getEnemyShipsAt(player);</span>
+<span class="nc" id="L98">		return shipStorage.getEnemyShipsAt(player);</span>
 	}
 
 	List&lt;Ship&gt; getEnemyShipsAt(final Player player, final Location location) {
-<span class="nc" id="L106">		return shipStorage.getEnemyShipsAt(player, location);</span>
+<span class="nc" id="L102">		return shipStorage.getEnemyShipsAt(player, location);</span>
 	}
 
 	public void startGame() {
-<span class="nc" id="L110">		gameManager.startGame();</span>
-<span class="nc" id="L111">	}</span>
+<span class="nc" id="L106">		gameManager.startGame();</span>
+<span class="nc" id="L107">	}</span>
 
 	public void endTurn() {
-<span class="nc" id="L114">		gameManager.endTurn();</span>
-<span class="nc" id="L115">	}</span>
+<span class="nc" id="L110">		gameManager.endTurn();</span>
+<span class="nc" id="L111">	}</span>
 
 	void checkGameActive() {
-<span class="nc" id="L118">		gameManager.checkGameActive();</span>
-<span class="nc" id="L119">	}</span>
+<span class="nc" id="L114">		gameManager.checkGameActive();</span>
+<span class="nc" id="L115">	}</span>
 
 	void checkCurrentPlayer(final Player player) {
-<span class="nc" id="L122">		gameManager.checkCurrentPlayer(player);</span>
-<span class="nc" id="L123">	}</span>
+<span class="nc" id="L118">		gameManager.checkCurrentPlayer(player);</span>
+<span class="nc" id="L119">	}</span>
 
 	void fireGameStarted() {
-<span class="nc" id="L126">		listenerManager.fireGameStarted(this);</span>
-<span class="nc" id="L127">	}</span>
+<span class="nc" id="L122">		listenerManager.fireGameStarted(this);</span>
+<span class="nc" id="L123">	}</span>
 
 	void fireRoundStarted() {
-<span class="nc" id="L130">		listenerManager.fireRoundStarted(this, calendar);</span>
-<span class="nc" id="L131">	}</span>
+<span class="nc" id="L126">		listenerManager.fireRoundStarted(this, calendar);</span>
+<span class="nc" id="L127">	}</span>
 
 	void fireTurnStarted(final Player player) {
-<span class="nc" id="L134">		listenerManager.fireTurnStarted(this, player);</span>
-<span class="nc" id="L135">	}</span>
+<span class="nc" id="L130">		listenerManager.fireTurnStarted(this, player);</span>
+<span class="nc" id="L131">	}</span>
 
 	void fireShipMoved(final Ship ship, final Location start, final Path path) {
-<span class="nc" id="L138">		listenerManager.fireShipMoved(this, ship, start, path);</span>
-<span class="nc" id="L139">	}</span>
+<span class="nc" id="L134">		listenerManager.fireShipMoved(this, ship, start, path);</span>
+<span class="nc" id="L135">	}</span>
 
 	void fireGameFinished() {
-<span class="nc" id="L142">		listenerManager.fireGameFinished(this);</span>
-<span class="nc" id="L143">	}</span>
+<span class="nc" id="L138">		listenerManager.fireGameFinished(this);</span>
+<span class="nc" id="L139">	}</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>
