@@ -27,6 +27,11 @@ public class Ship {
 
 	void setModel(final Model model) {
 		this.model = Preconditions.checkNotNull(model);
+
+		final Terrain terrain = this.model.getWorld().getTerrainAt(location);
+		if (terrain != Terrain.OCEAN) {
+			throw new IllegalStateException(String.format("Ship must start on ocen (%s -> %s).", location, terrain));
+		}
 	}
 
 	public Player getOwner() {
@@ -49,6 +54,26 @@ public class Ship {
 		availableMoves = maxMoves;
 	}
 
+	public boolean isReachable(final Location location, final boolean includeShips) {
+		Preconditions.checkNotNull(location);
+
+		if (!model.getWorld().isValid(location)) {
+			return false;
+		}
+
+		if (model.getWorld().getTerrainAt(location) != Terrain.OCEAN) {
+			return false;
+		}
+
+		// TODO JKA FIND PATH
+
+		if (!includeShips) {
+			return true;
+		}
+
+		return model.getEnemyShipsAt(owner, location).isEmpty();
+	}
+
 	public void moveTo(final Path path) {
 		model.checkGameActive();
 		model.checkCurrentPlayer(owner);
@@ -63,6 +88,7 @@ public class Ship {
 		// TODO JKA Use streams
 		for (Location newLocation : path.getLocations()) {
 			if (availableMoves <= 0) {
+				// TODO JKA neumožnit zadat delší cestu, než je povolený počet
 				break;
 			}
 			if (model.getWorld().getTerrainAt(newLocation) != Terrain.OCEAN) {

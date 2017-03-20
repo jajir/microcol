@@ -12,7 +12,6 @@ import org.microcol.model.ModelAdapter;
 import org.microcol.model.Path;
 import org.microcol.model.Player;
 import org.microcol.model.Ship;
-import org.microcol.model.Terrain;
 import org.microcol.model.event.TurnStartedEvent;
 
 import com.google.common.collect.ImmutableList;
@@ -33,8 +32,6 @@ public class SkyNet {
 	private final Random random;
 	private final Map<Ship, Location> lastDirections;
 
-	private Map<Location, List<Ship>> enemyShipsAt;
-
 	public SkyNet(final Model model) {
 		this.model = model;
 		this.random = new Random();
@@ -53,11 +50,7 @@ public class SkyNet {
 	}
 
 	private void turn(final Player player) {
-		enemyShipsAt = player.getEnemyShipsAt();
-
-		player.getShips().forEach(ship -> {
-			move(ship);
-		});
+		player.getShips().forEach(ship -> move(ship));
 		player.endTurn();
 	}
 
@@ -72,8 +65,7 @@ public class SkyNet {
 		while (locations.size() < ship.getAvailableMoves()) {
 			final Location lastDirection = lastDirections.get(ship);
 			final Location newLocation = lastLocation.add(lastDirection);
-			// TODO JKA Tohle je spatne XXX == Terrain.OCEAN - dat na Ship
-			if (model.getWorld().isValid(newLocation) && model.getWorld().getTerrainAt(newLocation) == Terrain.OCEAN && !isEnemyShipAt(newLocation)) {
+			if (ship.isReachable(newLocation, true)) {
 				locations.add(newLocation);
 				lastLocation = newLocation;
 			} else {
@@ -88,11 +80,5 @@ public class SkyNet {
 		if (!locations.isEmpty()) {
 			ship.moveTo(Path.of(locations));
 		}
-	}
-
-	private boolean isEnemyShipAt(final Location location) {
-		List<Ship> ships = enemyShipsAt.get(location);
-
-		return ships != null && ships.size() > 0;
 	}
 }
