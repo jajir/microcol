@@ -14,7 +14,6 @@ import javax.swing.JScrollPane;
 import org.microcol.gui.event.FocusedTileEvent;
 import org.microcol.model.Model;
 import org.microcol.model.Player;
-import org.microcol.model.Terrain;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
@@ -48,10 +47,14 @@ public class RightPanelView extends JPanel implements RightPanelPresenter.Displa
 
 	private final JButton nextTurnButton;
 
+	private final LocalizationHelper localizationHelper;
+
 	@Inject
-	public RightPanelView(final ImageProvider imageProvider, final UnitsPanel unitsPanel) {
+	public RightPanelView(final ImageProvider imageProvider, final UnitsPanel unitsPanel,
+			final LocalizationHelper localizationHelper) {
 		this.imageProvider = Preconditions.checkNotNull(imageProvider);
 		this.unitsPanel = Preconditions.checkNotNull(unitsPanel);
+		this.localizationHelper = Preconditions.checkNotNull(localizationHelper);
 		this.setLayout(new GridBagLayout());
 
 		// Y=0
@@ -66,7 +69,6 @@ public class RightPanelView extends JPanel implements RightPanelPresenter.Displa
 		tileName = new JLabel();
 		add(tileName, new GridBagConstraints(1, 1, 1, 1, 0D, 0D, GridBagConstraints.NORTH, GridBagConstraints.NONE,
 				new Insets(0, 0, 0, 0), 0, 0));
-
 
 		// Y=2
 		unitsLabel = new JLabel();
@@ -93,12 +95,10 @@ public class RightPanelView extends JPanel implements RightPanelPresenter.Displa
 	@Override
 	public void showTile(final FocusedTileEvent event, final Model game) {
 		setCurrentPlayer(game.getCurrentPlayer());
-		final Terrain tile = event.getTerrain();
-		tileImage.setImage(imageProvider.getImage(ImageProvider.IMG_TILE_OCEAN));
+		tileImage.setImage(imageProvider.getTerrainImage(event.getTerrain()));
 		StringBuilder sb = new StringBuilder(200);
 		sb.append("<html><div>");
-		//TODO JJ look to property file for tile details 
-		sb.append(tile.getClass().getSimpleName());
+		sb.append(localizationHelper.getTerrainName(event.getTerrain()));
 		sb.append("");
 		sb.append("</div><div>");
 		sb.append("Move cost: 1");
@@ -113,9 +113,9 @@ public class RightPanelView extends JPanel implements RightPanelPresenter.Displa
 		}
 		repaint();
 	}
-	
+
 	@Override
-	public void setCurrentPlayer(final Player player){
+	public void setCurrentPlayer(final Player player) {
 		StringBuilder sb = new StringBuilder(200);
 		sb.append("<html><div>");
 		sb.append(getText().get("unitsPanel.currentUser"));

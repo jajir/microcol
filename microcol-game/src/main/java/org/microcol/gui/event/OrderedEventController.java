@@ -6,7 +6,13 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import com.google.common.base.Preconditions;
-//TODO JJ java doc
+
+/**
+ * Listener controller that support ordering of listeners. s *
+ * 
+ * @param <E>
+ *            event object
+ */
 public class OrderedEventController<E> {
 
 	private final Logger logger = Logger.getLogger(OrderedEventController.class);
@@ -15,7 +21,10 @@ public class OrderedEventController<E> {
 	 * Value of priority when it's not specified.
 	 */
 	private final static int DEFAULT_PRIORITY = 10;
-	//TODO JJ java doc
+
+	/**
+	 * Listeners
+	 */
 	private final List<ValueWithPriority<E>> listeners = new ArrayList<>();
 
 	/**
@@ -28,6 +37,14 @@ public class OrderedEventController<E> {
 		addListener(listener, DEFAULT_PRIORITY);
 	}
 
+	/**
+	 * Add listener with priority.
+	 * 
+	 * @param listener
+	 *            required listener
+	 * @param priority
+	 *            priority lower values are executed first higher later
+	 */
 	public void addListener(final Listener<E> listener, final int priority) {
 		Preconditions.checkNotNull(listener);
 		listeners.add(new ValueWithPriority<>(listener, priority));

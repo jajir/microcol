@@ -12,6 +12,7 @@ import javax.swing.JViewport;
 
 import org.apache.log4j.Logger;
 import org.microcol.gui.GamePreferences;
+import org.microcol.gui.LocalizationHelper;
 import org.microcol.gui.Localized;
 import org.microcol.gui.PathPlanning;
 import org.microcol.gui.Point;
@@ -83,6 +84,8 @@ public class GamePanelPresenter implements Localized {
 	private final StatusBarMessageController statusBarMessageController;
 
 	private Point lastMousePosition;
+	
+	private final LocalizationHelper localizationHelper;
 
 	static class PopUpDemo extends JPopupMenu {
 
@@ -106,12 +109,13 @@ public class GamePanelPresenter implements Localized {
 			final MoveUnitController moveUnitController, final NewGameController newGameController,
 			final GamePreferences gamePreferences, final ShowGridController showGridController,
 			final CenterViewController viewController, final AboutGameEventController gameEventController,
-			final ExitGameController exitGameController) {
+			final ExitGameController exitGameController, final LocalizationHelper localizationHelper) {
 		this.focusedTileController = focusedTileController;
 		this.gameController = Preconditions.checkNotNull(gameController);
 		this.statusBarMessageController = Preconditions.checkNotNull(statusBarMessageController);
 		this.pathPlanning = Preconditions.checkNotNull(pathPlanning);
 		this.display = Preconditions.checkNotNull(display);
+		this.localizationHelper = Preconditions.checkNotNull(localizationHelper);
 
 		moveUnitController.addMoveUnitListener(event -> {
 			scheduleWalkAnimation(event);
@@ -280,8 +284,7 @@ public class GamePanelPresenter implements Localized {
 		final StringBuilder buff = new StringBuilder();
 		buff.append(getText().get("statusBar.tile.start"));
 		buff.append(" ");
-		// TODO JJ look to property file for tile details
-		buff.append(tile.getClass().getSimpleName());
+		buff.append(localizationHelper.getTerrainName(tile));
 		buff.append(" ");
 		buff.append(getText().get("statusBar.tile.withUnit"));
 		buff.append(" ");
