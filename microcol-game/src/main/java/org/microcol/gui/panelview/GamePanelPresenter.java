@@ -243,7 +243,7 @@ public class GamePanelPresenter implements Localized {
 
 	private void onMousePressed(final MouseEvent e) {
 		final Location location = display.getArea().convertToLocation(Point.of(e.getX(), e.getY()));
-		System.out.println("location p: " + location);
+		logger.debug("location p: " + location);
 		if (display.isGotoMode()) {
 			switchToNormalMode(location);
 		} else {
