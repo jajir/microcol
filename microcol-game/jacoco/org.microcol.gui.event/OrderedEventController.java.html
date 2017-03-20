@@ -6,17 +6,26 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import com.google.common.base.Preconditions;
-//TODO JJ java doc
-<span class="fc" id="L10">public class OrderedEventController&lt;E&gt; {</span>
 
-<span class="fc" id="L12">	private final Logger logger = Logger.getLogger(OrderedEventController.class);</span>
+/**
+ * Listener controller that support ordering of listeners. s *
+ * 
+ * @param &lt;E&gt;
+ *            event object
+ */
+<span class="fc" id="L16">public class OrderedEventController&lt;E&gt; {</span>
+
+<span class="fc" id="L18">	private final Logger logger = Logger.getLogger(OrderedEventController.class);</span>
 
 	/**
 	 * Value of priority when it's not specified.
 	 */
 	private final static int DEFAULT_PRIORITY = 10;
-	//TODO JJ java doc
-<span class="fc" id="L19">	private final List&lt;ValueWithPriority&lt;E&gt;&gt; listeners = new ArrayList&lt;&gt;();</span>
+
+	/**
+	 * Listeners
+	 */
+<span class="fc" id="L28">	private final List&lt;ValueWithPriority&lt;E&gt;&gt; listeners = new ArrayList&lt;&gt;();</span>
 
 	/**
 	 * It add listener with default priority.
@@ -25,13 +34,21 @@ import com.google.common.base.Preconditions;
 	 *            required listener
 	 */
 	public void addListener(final Listener&lt;E&gt; listener) {
-<span class="nc" id="L28">		addListener(listener, DEFAULT_PRIORITY);</span>
-<span class="nc" id="L29">	}</span>
+<span class="nc" id="L37">		addListener(listener, DEFAULT_PRIORITY);</span>
+<span class="nc" id="L38">	}</span>
 
+	/**
+	 * Add listener with priority.
+	 * 
+	 * @param listener
+	 *            required listener
+	 * @param priority
+	 *            priority lower values are executed first higher later
+	 */
 	public void addListener(final Listener&lt;E&gt; listener, final int priority) {
-<span class="fc" id="L32">		Preconditions.checkNotNull(listener);</span>
-<span class="fc" id="L33">		listeners.add(new ValueWithPriority&lt;&gt;(listener, priority));</span>
-<span class="fc" id="L34">	}</span>
+<span class="fc" id="L49">		Preconditions.checkNotNull(listener);</span>
+<span class="fc" id="L50">		listeners.add(new ValueWithPriority&lt;&gt;(listener, priority));</span>
+<span class="fc" id="L51">	}</span>
 
 	/**
 	 * Synchronously invoke event on all listeners. Listeners are called in
@@ -42,11 +59,11 @@ import com.google.common.base.Preconditions;
 	 *            required event object
 	 */
 	public void fireEvent(final E event) {
-<span class="fc" id="L45">		Preconditions.checkNotNull(event);</span>
-<span class="fc" id="L46">		logger.debug(&quot;Event &quot; + event + &quot; was triggered.&quot;);</span>
-<span class="fc" id="L47">		listeners.stream().sorted((v1, v2) -&gt; v1.getPriority() - v2.getPriority())</span>
-<span class="fc" id="L48">				.forEach(valueWithPriority -&gt; valueWithPriority.getListener().onEvent(event));</span>
-<span class="fc" id="L49">	}</span>
+<span class="fc" id="L62">		Preconditions.checkNotNull(event);</span>
+<span class="fc" id="L63">		logger.debug(&quot;Event &quot; + event + &quot; was triggered.&quot;);</span>
+<span class="fc" id="L64">		listeners.stream().sorted((v1, v2) -&gt; v1.getPriority() - v2.getPriority())</span>
+<span class="fc" id="L65">				.forEach(valueWithPriority -&gt; valueWithPriority.getListener().onEvent(event));</span>
+<span class="fc" id="L66">	}</span>
 
 	/**
 	 * Class helps to hold listener of specific type and it's priority.
@@ -54,23 +71,23 @@ import com.google.common.base.Preconditions;
 	 * @param &lt;ET&gt;
 	 *            event type
 	 */
-<span class="fc" id="L57">	private class ValueWithPriority&lt;ET&gt; {</span>
+<span class="fc" id="L74">	private class ValueWithPriority&lt;ET&gt; {</span>
 
 		private final Listener&lt;ET&gt; listener;
 
 		private final int priority;
 
-<span class="fc" id="L63">		public ValueWithPriority(final Listener&lt;ET&gt; listener, final int priority) {</span>
-<span class="fc" id="L64">			this.listener = listener;</span>
-<span class="fc" id="L65">			this.priority = priority;</span>
-<span class="fc" id="L66">		}</span>
+<span class="fc" id="L80">		public ValueWithPriority(final Listener&lt;ET&gt; listener, final int priority) {</span>
+<span class="fc" id="L81">			this.listener = listener;</span>
+<span class="fc" id="L82">			this.priority = priority;</span>
+<span class="fc" id="L83">		}</span>
 
 		public Listener&lt;ET&gt; getListener() {
-<span class="fc" id="L69">			return listener;</span>
+<span class="fc" id="L86">			return listener;</span>
 		}
 
 		public int getPriority() {
-<span class="fc" id="L73">			return priority;</span>
+<span class="fc" id="L90">			return priority;</span>
 		}
 
 	}

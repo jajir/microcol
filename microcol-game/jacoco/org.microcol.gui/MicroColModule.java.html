@@ -37,68 +37,69 @@ import com.google.inject.Singleton;
 <span class="nc" id="L37">		bind(PathPlanning.class).in(Singleton.class);</span>
 <span class="nc" id="L38">		bind(ImageProvider.class).in(Singleton.class);</span>
 <span class="nc" id="L39">		bind(ViewUtil.class).in(Singleton.class);</span>
+<span class="nc" id="L40">		bind(LocalizationHelper.class).in(Singleton.class);</span>
 
 		/**
 		 * Event controllers.
 		 */
-<span class="nc" id="L44">		bind(MoveUnitController.class).in(Singleton.class);</span>
-<span class="nc" id="L45">		bind(KeyController.class).in(Singleton.class);</span>
-<span class="nc" id="L46">		bind(NextTurnController.class).in(Singleton.class);</span>
-<span class="nc" id="L47">		bind(FocusedTileController.class).in(Singleton.class);</span>
-<span class="nc" id="L48">		bind(AboutGameEventController.class).in(Singleton.class);</span>
-<span class="nc" id="L49">		bind(ChangeLanguageController.class).in(Singleton.class);</span>
-<span class="nc" id="L50">		bind(NewGameController.class).in(Singleton.class);</span>
-<span class="nc" id="L51">		bind(GameController.class).in(Singleton.class);</span>
-<span class="nc" id="L52">		bind(TurnStartedController.class).in(Singleton.class);</span>
-<span class="nc" id="L53">		bind(VolumeChangeController.class).in(Singleton.class);</span>
-<span class="nc" id="L54">		bind(ShowGridController.class).in(Singleton.class);</span>
-<span class="nc" id="L55">		bind(CenterViewController.class).in(Singleton.class);</span>
-<span class="nc" id="L56">		bind(ExitGameController.class).in(Singleton.class);</span>
+<span class="nc" id="L45">		bind(MoveUnitController.class).in(Singleton.class);</span>
+<span class="nc" id="L46">		bind(KeyController.class).in(Singleton.class);</span>
+<span class="nc" id="L47">		bind(NextTurnController.class).in(Singleton.class);</span>
+<span class="nc" id="L48">		bind(FocusedTileController.class).in(Singleton.class);</span>
+<span class="nc" id="L49">		bind(AboutGameEventController.class).in(Singleton.class);</span>
+<span class="nc" id="L50">		bind(ChangeLanguageController.class).in(Singleton.class);</span>
+<span class="nc" id="L51">		bind(NewGameController.class).in(Singleton.class);</span>
+<span class="nc" id="L52">		bind(GameController.class).in(Singleton.class);</span>
+<span class="nc" id="L53">		bind(TurnStartedController.class).in(Singleton.class);</span>
+<span class="nc" id="L54">		bind(VolumeChangeController.class).in(Singleton.class);</span>
+<span class="nc" id="L55">		bind(ShowGridController.class).in(Singleton.class);</span>
+<span class="nc" id="L56">		bind(CenterViewController.class).in(Singleton.class);</span>
+<span class="nc" id="L57">		bind(ExitGameController.class).in(Singleton.class);</span>
 
 		/**
 		 * Initialize MVP classes
 		 */
-<span class="nc" id="L61">		bind(MainFrameView.class).in(Singleton.class);</span>
-<span class="nc" id="L62">		bind(MainFramePresenter.Display.class).to(MainFrameView.class).in(Singleton.class);</span>
-<span class="nc" id="L63">		bind(MainFramePresenter.class).in(Singleton.class);</span>
+<span class="nc" id="L62">		bind(MainFrameView.class).in(Singleton.class);</span>
+<span class="nc" id="L63">		bind(MainFramePresenter.Display.class).to(MainFrameView.class).in(Singleton.class);</span>
+<span class="nc" id="L64">		bind(MainFramePresenter.class).in(Singleton.class);</span>
 
-<span class="nc" id="L65">		bind(GamePanelView.class).in(Singleton.class);</span>
-<span class="nc" id="L66">		bind(GamePanelPresenter.Display.class).to(GamePanelView.class).in(Singleton.class);</span>
-<span class="nc" id="L67">		bind(GamePanelPresenter.class).asEagerSingleton();</span>
+<span class="nc" id="L66">		bind(GamePanelView.class).in(Singleton.class);</span>
+<span class="nc" id="L67">		bind(GamePanelPresenter.Display.class).to(GamePanelView.class).in(Singleton.class);</span>
+<span class="nc" id="L68">		bind(GamePanelPresenter.class).asEagerSingleton();</span>
 
-<span class="nc" id="L69">		bind(StatusBarView.class).in(Singleton.class);</span>
-<span class="nc" id="L70">		bind(StatusBarPresenter.Display.class).to(StatusBarView.class).in(Singleton.class);</span>
-<span class="nc" id="L71">		bind(StatusBarPresenter.class).asEagerSingleton();</span>
+<span class="nc" id="L70">		bind(StatusBarView.class).in(Singleton.class);</span>
+<span class="nc" id="L71">		bind(StatusBarPresenter.Display.class).to(StatusBarView.class).in(Singleton.class);</span>
+<span class="nc" id="L72">		bind(StatusBarPresenter.class).asEagerSingleton();</span>
 
-<span class="nc" id="L73">		bind(MainMenuView.class).in(Singleton.class);</span>
-<span class="nc" id="L74">		bind(MainMenuPresenter.Display.class).to(MainMenuView.class).in(Singleton.class);</span>
-<span class="nc" id="L75">		bind(MainMenuPresenter.class).asEagerSingleton();</span>
+<span class="nc" id="L74">		bind(MainMenuView.class).in(Singleton.class);</span>
+<span class="nc" id="L75">		bind(MainMenuPresenter.Display.class).to(MainMenuView.class).in(Singleton.class);</span>
+<span class="nc" id="L76">		bind(MainMenuPresenter.class).asEagerSingleton();</span>
 
-<span class="nc" id="L77">		bind(RightPanelView.class).in(Singleton.class);</span>
-<span class="nc" id="L78">		bind(RightPanelPresenter.Display.class).to(RightPanelView.class).in(Singleton.class);</span>
-<span class="nc" id="L79">		bind(RightPanelPresenter.class).asEagerSingleton();</span>
+<span class="nc" id="L78">		bind(RightPanelView.class).in(Singleton.class);</span>
+<span class="nc" id="L79">		bind(RightPanelPresenter.Display.class).to(RightPanelView.class).in(Singleton.class);</span>
+<span class="nc" id="L80">		bind(RightPanelPresenter.class).asEagerSingleton();</span>
 
-<span class="nc" id="L81">		bind(UnitsPanel.class).asEagerSingleton();</span>
+<span class="nc" id="L82">		bind(UnitsPanel.class).asEagerSingleton();</span>
 
 		/**
 		 * Load events manually
 		 */
-<span class="nc" id="L86">		bind(AboutGameListenerImpl.class).asEagerSingleton();</span>
-<span class="nc" id="L87">		bind(ChangeLanguageListenerPreferences.class).asEagerSingleton();</span>
-<span class="nc" id="L88">		bind(ChangeLanguageListenerText.class).asEagerSingleton();</span>
-<span class="nc" id="L89">		bind(VolumeChangedListenerPreferences.class).asEagerSingleton();</span>
-<span class="nc" id="L90">		bind(ShowGridListenerPreferences.class).asEagerSingleton();</span>
+<span class="nc" id="L87">		bind(AboutGameListenerImpl.class).asEagerSingleton();</span>
+<span class="nc" id="L88">		bind(ChangeLanguageListenerPreferences.class).asEagerSingleton();</span>
+<span class="nc" id="L89">		bind(ChangeLanguageListenerText.class).asEagerSingleton();</span>
+<span class="nc" id="L90">		bind(VolumeChangedListenerPreferences.class).asEagerSingleton();</span>
+<span class="nc" id="L91">		bind(ShowGridListenerPreferences.class).asEagerSingleton();</span>
 
-<span class="nc" id="L92">		bind(MusicPlayer.class).in(Singleton.class);</span>
-<span class="nc" id="L93">		bind(MusicController.class).in(Singleton.class);</span>
+<span class="nc" id="L93">		bind(MusicPlayer.class).in(Singleton.class);</span>
+<span class="nc" id="L94">		bind(MusicController.class).in(Singleton.class);</span>
 
-<span class="nc" id="L95">		bind(EventInitializer.class).in(Singleton.class);</span>
-<span class="nc" id="L96">	}</span>
+<span class="nc" id="L96">		bind(EventInitializer.class).in(Singleton.class);</span>
+<span class="nc" id="L97">	}</span>
 
 	@Provides
 	@Singleton
 	Text makeText(final GamePreferences gamePreferences) {
-<span class="nc" id="L101">		return new Text(gamePreferences.getLanguage());</span>
+<span class="nc" id="L102">		return new Text(gamePreferences.getLanguage());</span>
 	}
 
 }

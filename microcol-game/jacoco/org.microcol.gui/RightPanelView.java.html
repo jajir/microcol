@@ -14,7 +14,6 @@ import javax.swing.JScrollPane;
 import org.microcol.gui.event.FocusedTileEvent;
 import org.microcol.model.Model;
 import org.microcol.model.Player;
-import org.microcol.model.Terrain;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
@@ -48,57 +47,58 @@ public class RightPanelView extends JPanel implements RightPanelPresenter.Displa
 
 	private final JButton nextTurnButton;
 
+	private final LocalizationHelper localizationHelper;
+
 	@Inject
-<span class="nc" id="L52">	public RightPanelView(final ImageProvider imageProvider, final UnitsPanel unitsPanel) {</span>
-<span class="nc" id="L53">		this.imageProvider = Preconditions.checkNotNull(imageProvider);</span>
-<span class="nc" id="L54">		this.unitsPanel = Preconditions.checkNotNull(unitsPanel);</span>
-<span class="nc" id="L55">		this.setLayout(new GridBagLayout());</span>
+	public RightPanelView(final ImageProvider imageProvider, final UnitsPanel unitsPanel,
+<span class="nc" id="L54">			final LocalizationHelper localizationHelper) {</span>
+<span class="nc" id="L55">		this.imageProvider = Preconditions.checkNotNull(imageProvider);</span>
+<span class="nc" id="L56">		this.unitsPanel = Preconditions.checkNotNull(unitsPanel);</span>
+<span class="nc" id="L57">		this.localizationHelper = Preconditions.checkNotNull(localizationHelper);</span>
+<span class="nc" id="L58">		this.setLayout(new GridBagLayout());</span>
 
 		// Y=0
-<span class="nc" id="L58">		tileOnMove = new JLabel();</span>
-<span class="nc" id="L59">		add(tileOnMove, new GridBagConstraints(0, 0, 2, 1, 0D, 0D, GridBagConstraints.NORTH, GridBagConstraints.NONE,</span>
+<span class="nc" id="L61">		tileOnMove = new JLabel();</span>
+<span class="nc" id="L62">		add(tileOnMove, new GridBagConstraints(0, 0, 2, 1, 0D, 0D, GridBagConstraints.NORTH, GridBagConstraints.NONE,</span>
 				new Insets(0, 0, 0, 0), 0, 0));
 
 		// Y=1
-<span class="nc" id="L63">		tileImage = new ImageIcon();</span>
-<span class="nc" id="L64">		add(new JLabel(tileImage), new GridBagConstraints(0, 1, 1, 1, 0D, 0D, GridBagConstraints.NORTHWEST,</span>
+<span class="nc" id="L66">		tileImage = new ImageIcon();</span>
+<span class="nc" id="L67">		add(new JLabel(tileImage), new GridBagConstraints(0, 1, 1, 1, 0D, 0D, GridBagConstraints.NORTHWEST,</span>
 				GridBagConstraints.VERTICAL, new Insets(0, 0, 0, 0), 0, 0));
-<span class="nc" id="L66">		tileName = new JLabel();</span>
-<span class="nc" id="L67">		add(tileName, new GridBagConstraints(1, 1, 1, 1, 0D, 0D, GridBagConstraints.NORTH, GridBagConstraints.NONE,</span>
+<span class="nc" id="L69">		tileName = new JLabel();</span>
+<span class="nc" id="L70">		add(tileName, new GridBagConstraints(1, 1, 1, 1, 0D, 0D, GridBagConstraints.NORTH, GridBagConstraints.NONE,</span>
 				new Insets(0, 0, 0, 0), 0, 0));
 
-
 		// Y=2
-<span class="nc" id="L72">		unitsLabel = new JLabel();</span>
-<span class="nc" id="L73">		add(unitsLabel, new GridBagConstraints(0, 2, 2, 1, 1D, 0D, GridBagConstraints.NORTHWEST,</span>
+<span class="nc" id="L74">		unitsLabel = new JLabel();</span>
+<span class="nc" id="L75">		add(unitsLabel, new GridBagConstraints(0, 2, 2, 1, 1D, 0D, GridBagConstraints.NORTHWEST,</span>
 				GridBagConstraints.HORIZONTAL, new Insets(10, 0, 5, 0), 0, 0));
 
 		// Y=3
-<span class="nc" id="L77">		scrollPaneGamePanel = new JScrollPane(unitsPanel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,</span>
+<span class="nc" id="L79">		scrollPaneGamePanel = new JScrollPane(unitsPanel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,</span>
 				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-<span class="nc" id="L79">		add(scrollPaneGamePanel, new GridBagConstraints(0, 3, 2, 1, 1D, 1D, GridBagConstraints.NORTH,</span>
+<span class="nc" id="L81">		add(scrollPaneGamePanel, new GridBagConstraints(0, 3, 2, 1, 1D, 1D, GridBagConstraints.NORTH,</span>
 				GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
 
 		// Y=10
-<span class="nc" id="L83">		nextTurnButton = new JButton();</span>
-<span class="nc" id="L84">		add(nextTurnButton, new GridBagConstraints(0, 10, 2, 1, 0D, 0D, GridBagConstraints.SOUTH,</span>
+<span class="nc" id="L85">		nextTurnButton = new JButton();</span>
+<span class="nc" id="L86">		add(nextTurnButton, new GridBagConstraints(0, 10, 2, 1, 0D, 0D, GridBagConstraints.SOUTH,</span>
 				GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
-<span class="nc" id="L86">		setPreferredSize(new Dimension(RIGHT_PANEL_WIDTH, 200));</span>
-<span class="nc" id="L87">		setMinimumSize(new Dimension(RIGHT_PANEL_WIDTH, 200));</span>
-<span class="nc" id="L88">		validate();</span>
-<span class="nc" id="L89">		unitsPanel.setMaximumSize(scrollPaneGamePanel.getViewport().getExtentSize());</span>
-<span class="nc" id="L90">		unitsPanel.setPreferredSize(scrollPaneGamePanel.getViewport().getExtentSize());</span>
-<span class="nc" id="L91">	}</span>
+<span class="nc" id="L88">		setPreferredSize(new Dimension(RIGHT_PANEL_WIDTH, 200));</span>
+<span class="nc" id="L89">		setMinimumSize(new Dimension(RIGHT_PANEL_WIDTH, 200));</span>
+<span class="nc" id="L90">		validate();</span>
+<span class="nc" id="L91">		unitsPanel.setMaximumSize(scrollPaneGamePanel.getViewport().getExtentSize());</span>
+<span class="nc" id="L92">		unitsPanel.setPreferredSize(scrollPaneGamePanel.getViewport().getExtentSize());</span>
+<span class="nc" id="L93">	}</span>
 
 	@Override
 	public void showTile(final FocusedTileEvent event, final Model game) {
-<span class="nc" id="L95">		setCurrentPlayer(game.getCurrentPlayer());</span>
-<span class="nc" id="L96">		final Terrain tile = event.getTerrain();</span>
-<span class="nc" id="L97">		tileImage.setImage(imageProvider.getImage(ImageProvider.IMG_TILE_OCEAN));</span>
-<span class="nc" id="L98">		StringBuilder sb = new StringBuilder(200);</span>
-<span class="nc" id="L99">		sb.append(&quot;&lt;html&gt;&lt;div&gt;&quot;);</span>
-		//TODO JJ look to property file for tile details 
-<span class="nc" id="L101">		sb.append(tile.getClass().getSimpleName());</span>
+<span class="nc" id="L97">		setCurrentPlayer(game.getCurrentPlayer());</span>
+<span class="nc" id="L98">		tileImage.setImage(imageProvider.getTerrainImage(event.getTerrain()));</span>
+<span class="nc" id="L99">		StringBuilder sb = new StringBuilder(200);</span>
+<span class="nc" id="L100">		sb.append(&quot;&lt;html&gt;&lt;div&gt;&quot;);</span>
+<span class="nc" id="L101">		sb.append(localizationHelper.getTerrainName(event.getTerrain()));</span>
 <span class="nc" id="L102">		sb.append(&quot;&quot;);</span>
 <span class="nc" id="L103">		sb.append(&quot;&lt;/div&gt;&lt;div&gt;&quot;);</span>
 <span class="nc" id="L104">		sb.append(&quot;Move cost: 1&quot;);</span>
@@ -113,9 +113,9 @@ public class RightPanelView extends JPanel implements RightPanelPresenter.Displa
 		}
 <span class="nc" id="L114">		repaint();</span>
 <span class="nc" id="L115">	}</span>
-	
+
 	@Override
-	public void setCurrentPlayer(final Player player){
+	public void setCurrentPlayer(final Player player) {
 <span class="nc" id="L119">		StringBuilder sb = new StringBuilder(200);</span>
 <span class="nc" id="L120">		sb.append(&quot;&lt;html&gt;&lt;div&gt;&quot;);</span>
 <span class="nc" id="L121">		sb.append(getText().get(&quot;unitsPanel.currentUser&quot;));</span>

@@ -9,7 +9,7 @@ MicroCol game classes,org.microcol.gui.panelview,GamePanelPresenter.PopUpDemo,28
 MicroCol game classes,org.microcol.gui.panelview,Area,106,123,16,0,13,20,15,6,7,6
 MicroCol game classes,org.microcol.gui.panelview,WalkAnimator,5,156,2,10,1,30,3,10,1,6
 MicroCol game classes,org.microcol.gui.panelview,ScreenScrolling,60,0,4,0,9,0,6,0,4,0
-MicroCol game classes,org.microcol.gui.panelview,GamePanelPresenter,595,0,26,0,111,0,34,0,21,0
+MicroCol game classes,org.microcol.gui.panelview,GamePanelPresenter,601,0,26,0,112,0,34,0,21,0
 MicroCol game classes,org.microcol.gui.panelview,GamePanelListener,16,0,0,0,8,0,5,0,5,0
 MicroCol game classes,org.microcol.gui.panelview,GamePanelView,947,0,59,0,187,0,76,0,45,0
 MicroCol game classes,org.microcol.gui.panelview,GamePanelPresenter.new MouseAdapter() {...},109,0,12,0,21,0,12,0,6,0
@@ -70,7 +70,7 @@ MicroCol game classes,org.microcol.gui,ImageProvider,60,78,3,5,14,17,4,5,2,3
 MicroCol game classes,org.microcol.gui,MainFramePresenter.new KeyAdapter() {...},14,0,0,0,3,0,2,0,2,0
 MicroCol game classes,org.microcol.gui,MainFramePresenter.new WindowAdapter() {...},21,0,0,0,4,0,2,0,2,0
 MicroCol game classes,org.microcol.gui,MainFramePresenter.new ComponentAdapter() {...},37,0,4,0,7,0,5,0,3,0
-MicroCol game classes,org.microcol.gui,MicroColModule,215,0,0,0,44,0,3,0,3,0
+MicroCol game classes,org.microcol.gui,MicroColModule,220,0,0,0,45,0,3,0,3,0
 MicroCol game classes,org.microcol.gui,RightPanelPresenter.new KeyAdapter() {...},14,0,0,0,3,0,2,0,2,0
 MicroCol game classes,org.microcol.gui,MusicController,40,0,0,0,10,0,6,0,6,0
 MicroCol game classes,org.microcol.gui,RightPanelPresenter.new MouseAdapter() {...},21,0,0,0,4,0,2,0,2,0
@@ -85,6 +85,7 @@ MicroCol game classes,org.microcol.gui,StepCounter,32,0,4,0,11,0,4,0,2,0
 MicroCol game classes,org.microcol.gui,Point,55,98,4,4,8,15,9,9,5,9
 MicroCol game classes,org.microcol.gui,WaitingDialog,141,0,0,0,23,0,2,0,2,0
 MicroCol game classes,org.microcol.gui,AboutDialog,91,0,0,0,15,0,2,0,2,0
+MicroCol game classes,org.microcol.gui,LocalizationHelper,0,23,0,0,0,4,0,2,0,2
 MicroCol game classes,org.microcol.gui,UnitsPanel,187,0,2,0,29,0,4,0,3,0
 MicroCol game classes,org.microcol.gui,AppleMenuListener,27,0,0,0,8,0,3,0,3,0
 MicroCol game classes,org.microcol.gui,Localized,2,0,0,0,1,0,1,0,1,0
@@ -98,5 +99,5 @@ MicroCol game classes,org.microcol.gui,MainMenuView,450,0,4,0,88,0,15,0,13,0
 MicroCol game classes,org.microcol.gui,MainFrameView,95,0,8,0,21,0,8,0,4,0
 MicroCol game classes,org.microcol.gui,Text,0,36,0,0,0,9,0,4,0,4
 MicroCol game classes,org.microcol.gui,ViewUtil,27,0,0,0,4,0,2,0,2,0
-MicroCol game classes,org.microcol.gui,RightPanelView,347,0,2,0,50,0,6,0,5,0
+MicroCol game classes,org.microcol.gui,RightPanelView,352,0,2,0,50,0,6,0,5,0
 MicroCol game classes,org.microcol.gui,PreferencesVolume,161,0,0,0,28,0,3,0,3,0
