@@ -69,40 +69,42 @@ public class MainMenuPresenter {
 <span class="nc" id="L69">			final ExitGameController exitGameController, final GameController gameController) {</span>
 <span class="nc" id="L70">		this.display = Preconditions.checkNotNull(display);</span>
 <span class="nc" id="L71">		display.getMenuItemNewGame().addActionListener(actionEvent -&gt; {</span>
-
-<span class="nc" id="L73">		});</span>
-<span class="nc bnc" id="L74" title="All 2 branches missed.">		if (!gamePreferences.isOSX()) {</span>
-<span class="nc" id="L75">			display.getMenuItemQuitGame().addActionListener(actionEvent -&gt; {</span>
-<span class="nc" id="L76">				exitGameController.fireEvent(new ExitGameEvent());</span>
-<span class="nc" id="L77">			});</span>
-<span class="nc" id="L78">			display.getMenuItemAbout().addActionListener(actionEvent -&gt; {</span>
-<span class="nc" id="L79">				gameEventController.fireEvent(new AboutGameEvent());</span>
-<span class="nc" id="L80">			});</span>
+<span class="nc" id="L72">			final NewGameDialog newGameDialog = new NewGameDialog(viewUtil, text);</span>
+<span class="nc" id="L73">			newGameDialog.setVisible(true);</span>
+<span class="nc" id="L74">		});</span>
+<span class="nc bnc" id="L75" title="All 2 branches missed.">		if (!gamePreferences.isOSX()) {</span>
+<span class="nc" id="L76">			display.getMenuItemQuitGame().addActionListener(actionEvent -&gt; {</span>
+<span class="nc" id="L77">				exitGameController.fireEvent(new ExitGameEvent());</span>
+<span class="nc" id="L78">			});</span>
+<span class="nc" id="L79">			display.getMenuItemAbout().addActionListener(actionEvent -&gt; {</span>
+<span class="nc" id="L80">				gameEventController.fireEvent(new AboutGameEvent());</span>
+<span class="nc" id="L81">			});</span>
 		}
-<span class="nc" id="L82">		display.getRbMenuItemlanguageCz().addActionListener(actionEvent -&gt; {</span>
-<span class="nc" id="L83">			changeLanguangeController.fireEvent(new ChangeLanguageEvent(Text.Language.cz, gameController.getModel()));</span>
-<span class="nc" id="L84">		});</span>
-<span class="nc" id="L85">		display.getRbMenuItemlanguageEn().addActionListener(actionEvent -&gt; {</span>
-<span class="nc" id="L86">			changeLanguangeController.fireEvent(new ChangeLanguageEvent(Text.Language.en, gameController.getModel()));</span>
-<span class="nc" id="L87">		});</span>
-<span class="nc" id="L88">		display.getMenuItemVolume().addActionListener(actionEvent -&gt; {</span>
-<span class="nc" id="L89">			PreferencesVolume preferencesVolume = new PreferencesVolume(viewUtil, text, volumeChangeController,</span>
-<span class="nc" id="L90">					gamePreferences.getVolume());</span>
-<span class="nc" id="L91">			preferencesVolume.setVisible(true);</span>
-<span class="nc" id="L92">		});</span>
-<span class="nc" id="L93">		display.getMenuItemShowGrid().addActionListener(ectionEvent -&gt; showGridController</span>
-<span class="nc" id="L94">				.fireEvent(new ShowGridEvent(display.getMenuItemShowGrid().isSelected())));</span>
-<span class="nc" id="L95">		display.getMenuItemMove().addActionListener(ectionEvent -&gt; {</span>
-<span class="nc" id="L96">			moveUnitController.fireStartMoveEvent();</span>
-<span class="nc" id="L97">			display.getMenuItemMove().setEnabled(false);</span>
-<span class="nc" id="L98">		});</span>
-<span class="nc" id="L99">		display.getMenuItemCenterView().addActionListener(event -&gt; centerViewController.fireEvent(new CenterViewEvent()));</span>
-<span class="nc" id="L100">		changeLanguangeController.addListener(event -&gt; {</span>
-<span class="nc" id="L101">			display.updateLanguage();</span>
-<span class="nc" id="L102">		});</span>
-<span class="nc" id="L103">		focusedTileController.addListener(event -&gt; onFocusedTileEvent(event));</span>
-<span class="nc" id="L104">		turnStartedController.addListener(event -&gt; onTurnStartedEvent(event));</span>
-<span class="nc" id="L105">	}</span>
+<span class="nc" id="L83">		display.getRbMenuItemlanguageCz().addActionListener(actionEvent -&gt; {</span>
+<span class="nc" id="L84">			changeLanguangeController.fireEvent(new ChangeLanguageEvent(Text.Language.cz, gameController.getModel()));</span>
+<span class="nc" id="L85">		});</span>
+<span class="nc" id="L86">		display.getRbMenuItemlanguageEn().addActionListener(actionEvent -&gt; {</span>
+<span class="nc" id="L87">			changeLanguangeController.fireEvent(new ChangeLanguageEvent(Text.Language.en, gameController.getModel()));</span>
+<span class="nc" id="L88">		});</span>
+<span class="nc" id="L89">		display.getMenuItemVolume().addActionListener(actionEvent -&gt; {</span>
+<span class="nc" id="L90">			PreferencesVolume preferencesVolume = new PreferencesVolume(viewUtil, text, volumeChangeController,</span>
+<span class="nc" id="L91">					gamePreferences.getVolume());</span>
+<span class="nc" id="L92">			preferencesVolume.setVisible(true);</span>
+<span class="nc" id="L93">		});</span>
+<span class="nc" id="L94">		display.getMenuItemShowGrid().addActionListener(ectionEvent -&gt; showGridController</span>
+<span class="nc" id="L95">				.fireEvent(new ShowGridEvent(display.getMenuItemShowGrid().isSelected())));</span>
+<span class="nc" id="L96">		display.getMenuItemMove().addActionListener(ectionEvent -&gt; {</span>
+<span class="nc" id="L97">			moveUnitController.fireStartMoveEvent();</span>
+<span class="nc" id="L98">			display.getMenuItemMove().setEnabled(false);</span>
+<span class="nc" id="L99">		});</span>
+<span class="nc" id="L100">		display.getMenuItemCenterView()</span>
+<span class="nc" id="L101">				.addActionListener(event -&gt; centerViewController.fireEvent(new CenterViewEvent()));</span>
+<span class="nc" id="L102">		changeLanguangeController.addListener(event -&gt; {</span>
+<span class="nc" id="L103">			display.updateLanguage();</span>
+<span class="nc" id="L104">		});</span>
+<span class="nc" id="L105">		focusedTileController.addListener(event -&gt; onFocusedTileEvent(event));</span>
+<span class="nc" id="L106">		turnStartedController.addListener(event -&gt; onTurnStartedEvent(event));</span>
+<span class="nc" id="L107">	}</span>
 
 	/**
 	 * Method process event when user put focus to some tile.
@@ -111,30 +113,30 @@ public class MainMenuPresenter {
 	 *            required event
 	 */
 	private final void onFocusedTileEvent(final FocusedTileEvent event) {
-<span class="nc" id="L114">		display.getMenuItemCenterView().setEnabled(true);</span>
-<span class="nc" id="L115">		isTileFocused = true;</span>
-<span class="nc bnc" id="L116" title="All 2 branches missed.">		if (event.isTileContainsMovebleUnit()) {</span>
-<span class="nc" id="L117">			display.getMenuItemMove().setEnabled(true);</span>
-<span class="nc" id="L118">			isFocusedMoveableUnit = true;</span>
+<span class="nc" id="L116">		display.getMenuItemCenterView().setEnabled(true);</span>
+<span class="nc" id="L117">		isTileFocused = true;</span>
+<span class="nc bnc" id="L118" title="All 2 branches missed.">		if (event.isTileContainsMovebleUnit()) {</span>
+<span class="nc" id="L119">			display.getMenuItemMove().setEnabled(true);</span>
+<span class="nc" id="L120">			isFocusedMoveableUnit = true;</span>
 		} else {
-<span class="nc" id="L120">			display.getMenuItemMove().setEnabled(false);</span>
-<span class="nc" id="L121">			isFocusedMoveableUnit = false;</span>
+<span class="nc" id="L122">			display.getMenuItemMove().setEnabled(false);</span>
+<span class="nc" id="L123">			isFocusedMoveableUnit = false;</span>
 		}
-<span class="nc" id="L123">	}</span>
+<span class="nc" id="L125">	}</span>
 
 	private final void onTurnStartedEvent(final TurnStartedEvent event) {
-<span class="nc bnc" id="L126" title="All 2 branches missed.">		if (event.getPlayer().isHuman()) {</span>
-<span class="nc bnc" id="L127" title="All 2 branches missed.">			if (isTileFocused) {</span>
-<span class="nc" id="L128">				display.getMenuItemCenterView().setEnabled(true);</span>
+<span class="nc bnc" id="L128" title="All 2 branches missed.">		if (event.getPlayer().isHuman()) {</span>
+<span class="nc bnc" id="L129" title="All 2 branches missed.">			if (isTileFocused) {</span>
+<span class="nc" id="L130">				display.getMenuItemCenterView().setEnabled(true);</span>
 			}
-<span class="nc bnc" id="L130" title="All 2 branches missed.">			if (isFocusedMoveableUnit) {</span>
-<span class="nc" id="L131">				display.getMenuItemMove().setEnabled(true);</span>
+<span class="nc bnc" id="L132" title="All 2 branches missed.">			if (isFocusedMoveableUnit) {</span>
+<span class="nc" id="L133">				display.getMenuItemMove().setEnabled(true);</span>
 			}
 		} else {
-<span class="nc" id="L134">			display.getMenuItemCenterView().setEnabled(false);</span>
-<span class="nc" id="L135">			display.getMenuItemMove().setEnabled(false);</span>
+<span class="nc" id="L136">			display.getMenuItemCenterView().setEnabled(false);</span>
+<span class="nc" id="L137">			display.getMenuItemMove().setEnabled(false);</span>
 		}
-<span class="nc" id="L137">	}</span>
+<span class="nc" id="L139">	}</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>
