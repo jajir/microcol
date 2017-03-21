@@ -69,7 +69,8 @@ public class MainMenuPresenter {
 			final ExitGameController exitGameController, final GameController gameController) {
 		this.display = Preconditions.checkNotNull(display);
 		display.getMenuItemNewGame().addActionListener(actionEvent -> {
-
+			final NewGameDialog newGameDialog = new NewGameDialog(viewUtil, text);
+			newGameDialog.setVisible(true);
 		});
 		if (!gamePreferences.isOSX()) {
 			display.getMenuItemQuitGame().addActionListener(actionEvent -> {
@@ -96,7 +97,8 @@ public class MainMenuPresenter {
 			moveUnitController.fireStartMoveEvent();
 			display.getMenuItemMove().setEnabled(false);
 		});
-		display.getMenuItemCenterView().addActionListener(event -> centerViewController.fireEvent(new CenterViewEvent()));
+		display.getMenuItemCenterView()
+				.addActionListener(event -> centerViewController.fireEvent(new CenterViewEvent()));
 		changeLanguangeController.addListener(event -> {
 			display.updateLanguage();
 		});
