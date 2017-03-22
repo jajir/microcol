@@ -39,8 +39,8 @@ public class ModelBuilder {
 <span class="nc" id="L39">		return this;</span>
 	}
 
-	public ModelBuilder addShip(final String ownerName, final int maxMoves, final Location location) {
-<span class="nc" id="L43">		ships.add(new Ship(getPlayer(ownerName), maxMoves, location));</span>
+	public ModelBuilder addShip(final String ownerName, final ShipType type, final Location location) {
+<span class="nc" id="L43">		ships.add(new Ship(getPlayer(ownerName), type, location));</span>
 
 <span class="nc" id="L45">		return this;</span>
 	}

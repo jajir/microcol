@@ -40,7 +40,7 @@ MicroCol game classes,org.microcol.gui.event,CenterViewEvent,7,0,0,0,2,0,2,0,2,0
 MicroCol game classes,org.microcol.gui.event,ShowGridController,3,0,0,0,1,0,1,0,1,0
 MicroCol game classes,org.microcol.gui.event,FocusedTileEvent,48,0,4,0,9,0,6,0,4,0
 MicroCol game classes,org.microcol.gui.event,EventInitializer,25,0,0,0,6,0,3,0,3,0
-MicroCol game classes,org.microcol.gui.event,GameController,154,0,0,0,28,0,8,0,8,0
+MicroCol game classes,org.microcol.gui.event,GameController,160,0,0,0,28,0,8,0,8,0
 MicroCol game classes,org.microcol.gui.event,StatusBarMessageController,3,0,0,0,1,0,1,0,1,0
 MicroCol game classes,org.microcol.gui.event,OrderedEventController.ValueWithPriority,0,18,0,0,0,6,0,3,0,3
 MicroCol game classes,org.microcol.gui.event,GameController.new ModelListener() {...},105,0,0,0,16,0,6,0,6,0
@@ -55,12 +55,13 @@ MicroCol game classes,org.microcol.model,Player,115,0,6,0,32,0,20,0,17,0
 MicroCol game classes,org.microcol.model,World.new Object() {...},19,0,0,0,1,0,1,0,1,0
 MicroCol game classes,org.microcol.model,ModelBuilder,92,0,0,0,19,0,9,0,9,0
 MicroCol game classes,org.microcol.model,Location,0,111,0,14,0,25,0,16,0,9
-MicroCol game classes,org.microcol.model,Ship,309,0,22,0,58,0,23,0,12,0
+MicroCol game classes,org.microcol.model,Ship,301,0,20,0,57,0,22,0,12,0
 MicroCol game classes,org.microcol.model,ModelAdapter,8,0,0,0,6,0,6,0,6,0
 MicroCol game classes,org.microcol.model,Model,210,0,4,0,53,0,31,0,29,0
 MicroCol game classes,org.microcol.model,Calendar,16,73,0,6,5,13,1,9,1,6
 MicroCol game classes,org.microcol.model,Path,0,118,0,8,0,24,0,13,0,9
 MicroCol game classes,org.microcol.model,World,292,93,36,14,52,16,25,12,5,6
+MicroCol game classes,org.microcol.model,ShipType,54,0,0,0,10,0,6,0,6,0
 MicroCol game classes,org.microcol.model,Terrain,9,29,0,0,0,3,2,2,2,2
 MicroCol game classes,org.microcol.model,ListenerManager,103,8,2,0,22,3,13,1,12,1
 MicroCol game classes,org.microcol.gui,Text.Language,9,45,0,0,0,6,2,3,2,3
