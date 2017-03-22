@@ -10,19 +10,17 @@ public class Ship {
 	private Model model;
 
 	private final Player owner;
-	private final int maxMoves;
+	private final ShipType type;
 
 	private Location location;
 	private int availableMoves;
 
-	Ship(final Player owner, final int maxMoves, final Location location) {
+	Ship(final Player owner, final ShipType type, final Location location) {
 		this.owner = Preconditions.checkNotNull(owner);
+		this.type = Preconditions.checkNotNull(type);
+		this.location = Preconditions.checkNotNull(location);
 
-		Preconditions.checkArgument(maxMoves > 0, "Number of maximum moves (%s) must be positive.", maxMoves);
-		this.maxMoves = maxMoves;
-
-		this.location = location;
-		this.availableMoves = maxMoves;
+		this.availableMoves = type.getSpeed();
 	}
 
 	void setModel(final Model model) {
@@ -38,8 +36,8 @@ public class Ship {
 		return owner;
 	}
 
-	public int getMaxMoves() {
-		return maxMoves;
+	public ShipType getType() {
+		return type;
 	}
 
 	public Location getLocation() {
@@ -51,7 +49,7 @@ public class Ship {
 	}
 
 	void startTurn() {
-		availableMoves = maxMoves;
+		availableMoves = type.getSpeed();
 	}
 
 	public boolean isReachable(final Location location, final boolean includeShips) {
@@ -121,7 +119,7 @@ public class Ship {
 	public String toString() {
 		return MoreObjects.toStringHelper(this)
 			.add("owner", owner)
-			.add("maxMoves", maxMoves)
+			.add("type", type)
 			.add("location", location)
 			.add("availableMoves", availableMoves)
 			.toString();
