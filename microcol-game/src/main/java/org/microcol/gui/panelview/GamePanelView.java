@@ -186,7 +186,7 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 			paintCursor(dbg, area);
 			paintGoToPath(dbg, area);
 			paintMovingAnimation(dbg, area);
-			final Point p = Point.of(area.getTopLeft());
+			final Point p = Point.of(area.getTopLeft().add(Location.of(-1, -1)));
 			g.drawImage(dbImage, p.getX(), p.getY(), null);
 			if (gameController.getModel().getCurrentPlayer().isComputer()) {
 				/**
