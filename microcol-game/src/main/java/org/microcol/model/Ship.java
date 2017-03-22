@@ -74,6 +74,20 @@ public class Ship {
 		return model.getEnemyShipsAt(owner, location).isEmpty();
 	}
 
+	public int movementCost(final Location toLocation) {
+		Preconditions.checkNotNull(toLocation);
+
+		return movementCost(location, toLocation);
+	}
+
+	public int movementCost(final Location fromLocation, final Location toLocation) {
+		Preconditions.checkNotNull(fromLocation);
+		Preconditions.checkNotNull(toLocation);
+		Preconditions.checkArgument(fromLocation.isAdjacent(toLocation), "Locations (%s - %s) are not adjacent.", fromLocation, toLocation);
+
+		return model.getWorld().getTerrainAt(toLocation) == Terrain.OCEAN ? 1 : -1;
+	}
+
 	public void moveTo(final Path path) {
 		model.checkGameActive();
 		model.checkCurrentPlayer(owner);
