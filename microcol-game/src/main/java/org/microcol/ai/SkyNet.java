@@ -14,20 +14,7 @@ import org.microcol.model.Player;
 import org.microcol.model.Ship;
 import org.microcol.model.event.TurnStartedEvent;
 
-import com.google.common.collect.ImmutableList;
-
 public class SkyNet {
-	private static final ImmutableList<Location> directions = ImmutableList.of(
-		Location.of(1, 1),
-		Location.of(0, 1),
-		Location.of(-1, 1),
-		Location.of(-1, 0),
-		Location.of(-1, -1),
-		Location.of(0, -1),
-		Location.of(1, -1),
-		Location.of(1, 0)
-	);
-
 	private final Model model;
 	private final Random random;
 	private final Map<Ship, Location> lastDirections;
@@ -55,11 +42,16 @@ public class SkyNet {
 	}
 
 	private void move(final Ship ship) {
+//		System.out.println("### " + ship.getLocation() + "  " + ship.getType().getSpeed());
+//		long start = System.currentTimeMillis();
+//		System.out.println(ship.getAvailableLocations());
+//		System.out.println("FINISHED IN " + (System.currentTimeMillis() - start));
+
 		if (lastDirections.get(ship) == null) {
-			lastDirections.put(ship, directions.get(random.nextInt(directions.size())));
+			lastDirections.put(ship, Location.DIRECTIONS.get(random.nextInt(Location.DIRECTIONS.size())));
 		}
 
-		final List<Location> directions = new ArrayList<>(SkyNet.directions);
+		final List<Location> directions = new ArrayList<>(Location.DIRECTIONS);
 		Location lastLocation = ship.getLocation();
 		final List<Location> locations = new ArrayList<>();
 		while (locations.size() < ship.getAvailableMoves()) {
