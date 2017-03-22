@@ -55,7 +55,7 @@ MicroCol game classes,org.microcol.model,Player,115,0,6,0,32,0,20,0,17,0
 MicroCol game classes,org.microcol.model,World.new Object() {...},19,0,0,0,1,0,1,0,1,0
 MicroCol game classes,org.microcol.model,ModelBuilder,92,0,0,0,19,0,9,0,9,0
 MicroCol game classes,org.microcol.model,Location,0,111,0,14,0,25,0,16,0,9
-MicroCol game classes,org.microcol.model,Ship,268,0,20,0,52,0,20,0,10,0
+MicroCol game classes,org.microcol.model,Ship,309,0,22,0,58,0,23,0,12,0
 MicroCol game classes,org.microcol.model,ModelAdapter,8,0,0,0,6,0,6,0,6,0
 MicroCol game classes,org.microcol.model,Model,210,0,4,0,53,0,31,0,29,0
 MicroCol game classes,org.microcol.model,Calendar,16,73,0,6,5,13,1,9,1,6
