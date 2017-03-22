@@ -39,8 +39,8 @@ public class ModelBuilder {
 		return this;
 	}
 
-	public ModelBuilder addShip(final String ownerName, final int maxMoves, final Location location) {
-		ships.add(new Ship(getPlayer(ownerName), maxMoves, location));
+	public ModelBuilder addShip(final String ownerName, final ShipType type, final Location location) {
+		ships.add(new Ship(getPlayer(ownerName), type, location));
 
 		return this;
 	}

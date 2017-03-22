@@ -1,9 +1,32 @@
 package org.microcol.model;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
+import com.google.common.collect.ImmutableList;
 
 public class Location {
+	public static final Location DIRECTION_NORTH      = new Location( 0, -1);
+	public static final Location DIRECTION_NORTH_EAST = new Location( 1, -1);
+	public static final Location DIRECTION_EAST       = new Location( 1,  0);
+	public static final Location DIRECTION_SOUTH_EAST = new Location( 1,  1);
+	public static final Location DIRECTION_SOUTH      = new Location( 0,  1);
+	public static final Location DIRECTION_SOUTH_WEST = new Location(-1,  1);
+	public static final Location DIRECTION_WEST       = new Location(-1,  0);
+	public static final Location DIRECTION_NORTH_WEST = new Location(-1, -1);
+
+	public static final List<Location> DIRECTIONS = ImmutableList.of(
+		DIRECTION_NORTH,
+		DIRECTION_NORTH_EAST,
+		DIRECTION_EAST,
+		DIRECTION_SOUTH_EAST,
+		DIRECTION_SOUTH,
+		DIRECTION_SOUTH_WEST,
+		DIRECTION_WEST,
+		DIRECTION_NORTH_WEST);
+
 	private final int x;
 	private final int y;
 
@@ -18,6 +41,13 @@ public class Location {
 
 	public int getY() {
 		return y;
+	}
+
+	public List<Location> getNeighbors() {
+		return DIRECTIONS.stream()
+			.map(direction -> add(direction))
+			.collect(Collectors.collectingAndThen(
+				Collectors.toList(), ImmutableList::copyOf));
 	}
 
 	// tranzitivní

@@ -5,24 +5,23 @@ import java.util.List;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
+import com.google.common.collect.ImmutableList;
 
 public class Ship {
 	private Model model;
 
 	private final Player owner;
-	private final int maxMoves;
+	private final ShipType type;
 
 	private Location location;
 	private int availableMoves;
 
-	Ship(final Player owner, final int maxMoves, final Location location) {
+	Ship(final Player owner, final ShipType type, final Location location) {
 		this.owner = Preconditions.checkNotNull(owner);
+		this.type = Preconditions.checkNotNull(type);
+		this.location = Preconditions.checkNotNull(location);
 
-		Preconditions.checkArgument(maxMoves > 0, "Number of maximum moves (%s) must be positive.", maxMoves);
-		this.maxMoves = maxMoves;
-
-		this.location = location;
-		this.availableMoves = maxMoves;
+		this.availableMoves = type.getSpeed();
 	}
 
 	void setModel(final Model model) {
@@ -38,8 +37,8 @@ public class Ship {
 		return owner;
 	}
 
-	public int getMaxMoves() {
-		return maxMoves;
+	public ShipType getType() {
+		return type;
 	}
 
 	public Location getLocation() {
@@ -51,7 +50,7 @@ public class Ship {
 	}
 
 	void startTurn() {
-		availableMoves = maxMoves;
+		availableMoves = type.getSpeed();
 	}
 
 	public boolean isReachable(final Location location, final boolean includeShips) {
@@ -72,6 +71,56 @@ public class Ship {
 		}
 
 		return model.getEnemyShipsAt(owner, location).isEmpty();
+	}
+
+	public List<Location> getAvailableLocations() {
+		if (availableMoves == 0) {
+			return ImmutableList.of();
+		}
+
+		List<Location> open = new ArrayList<>();
+		open.add(location);
+		List<Location> closed = new ArrayList<>();
+		for (int i = 0; i < availableMoves + 1; i++) {
+			List<Location> current = new ArrayList<>();
+			while (!open.isEmpty()) {
+				Location location = open.remove(0);
+				location.getNeighbors().forEach(xxx -> {
+					if (!current.contains(xxx)) {
+						current.add(xxx);
+					}
+				});
+				//current.addAll();
+				if (!closed.contains(location)) {
+					closed.add(location);
+				}
+			}
+			open.addAll(current);
+		}
+		closed.remove(location);
+		closed.removeAll(owner.getEnemyShipsAt().keySet());
+		List<Location> result = new ArrayList<>();
+		closed.forEach(location -> {
+			if (model.getWorld().isValid(location) && model.getWorld().getTerrainAt(location) == Terrain.OCEAN) {
+				result.add(location);
+			}
+		});
+
+		return ImmutableList.copyOf(result);
+	}
+
+	public int movementCost(final Location toLocation) {
+		Preconditions.checkNotNull(toLocation);
+
+		return movementCost(location, toLocation);
+	}
+
+	public int movementCost(final Location fromLocation, final Location toLocation) {
+		Preconditions.checkNotNull(fromLocation);
+		Preconditions.checkNotNull(toLocation);
+		Preconditions.checkArgument(fromLocation.isAdjacent(toLocation), "Locations (%s - %s) are not adjacent.", fromLocation, toLocation);
+
+		return model.getWorld().getTerrainAt(toLocation) == Terrain.OCEAN ? 1 : -1;
 	}
 
 	public void moveTo(final Path path) {
@@ -107,7 +156,7 @@ public class Ship {
 	public String toString() {
 		return MoreObjects.toStringHelper(this)
 			.add("owner", owner)
-			.add("maxMoves", maxMoves)
+			.add("type", type)
 			.add("location", location)
 			.add("availableMoves", availableMoves)
 			.toString();
