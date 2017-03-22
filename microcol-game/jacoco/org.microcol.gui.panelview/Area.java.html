@@ -51,7 +51,7 @@ public class Area {
 <span class="fc" id="L51">						(int) Math.ceil(pointBottomRight.getY() / (float) GamePanelView.TOTAL_TILE_WIDTH_IN_PX))</span>
 <span class="fc" id="L52">				.add(Point.of(1, 1));</span>
 
-<span class="fc" id="L54">		topLeft = Location.of(Math.max(0, p1.getX()), Math.max(0, p1.getY()));</span>
+<span class="fc" id="L54">		topLeft = Location.of(Math.max(1, p1.getX()), Math.max(1, p1.getY()));</span>
 <span class="fc" id="L55">		bottomRight = Location.of(Math.min(p2.getX(), world.getMaxX()), Math.min(p2.getY(), world.getMaxY()));</span>
 <span class="fc" id="L56">	}</span>
 
@@ -107,7 +107,7 @@ public class Area {
 	 * @return return map location
 	 */
 	public Location convertToLocation(final Point point) {
-<span class="nc" id="L110">		return point.toLocation();</span>
+<span class="nc" id="L110">		return point.toLocation().add(Location.of(1, 1));</span>
 	}
 
 	/**

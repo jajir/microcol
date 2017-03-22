@@ -247,7 +247,7 @@ public class GamePanelPresenter implements Localized {
 
 	private void onMousePressed(final MouseEvent e) {
 <span class="nc" id="L249">		final Location location = display.getArea().convertToLocation(Point.of(e.getX(), e.getY()));</span>
-<span class="nc" id="L250">		logger.debug(&quot;location p: &quot; + location);</span>
+<span class="nc" id="L250">		logger.debug(&quot;location of mouse: &quot; + location);</span>
 <span class="nc bnc" id="L251" title="All 2 branches missed.">		if (display.isGotoMode()) {</span>
 <span class="nc" id="L252">			switchToNormalMode(location);</span>
 		} else {

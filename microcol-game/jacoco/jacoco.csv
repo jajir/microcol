@@ -6,12 +6,12 @@ MicroCol game classes,org.microcol.model.event,RoundStartedEvent,20,0,0,0,7,0,3,
 MicroCol game classes,org.microcol.model.event,GameStartedEvent,8,0,0,0,4,0,2,0,2,0
 MicroCol game classes,org.microcol.model.event,ShipMovedEvent,44,0,0,0,13,0,5,0,5,0
 MicroCol game classes,org.microcol.gui.panelview,GamePanelPresenter.PopUpDemo,28,0,2,0,5,0,2,0,1,0
-MicroCol game classes,org.microcol.gui.panelview,Area,106,123,16,0,13,20,15,6,7,6
+MicroCol game classes,org.microcol.gui.panelview,Area,110,123,16,0,13,20,15,6,7,6
 MicroCol game classes,org.microcol.gui.panelview,WalkAnimator,5,156,2,10,1,30,3,10,1,6
 MicroCol game classes,org.microcol.gui.panelview,ScreenScrolling,60,0,4,0,9,0,6,0,4,0
 MicroCol game classes,org.microcol.gui.panelview,GamePanelPresenter,601,0,26,0,112,0,34,0,21,0
 MicroCol game classes,org.microcol.gui.panelview,GamePanelListener,16,0,0,0,8,0,5,0,5,0
-MicroCol game classes,org.microcol.gui.panelview,GamePanelView,947,0,59,0,187,0,76,0,45,0
+MicroCol game classes,org.microcol.gui.panelview,GamePanelView,951,0,59,0,187,0,76,0,45,0
 MicroCol game classes,org.microcol.gui.panelview,GamePanelPresenter.new MouseAdapter() {...},109,0,12,0,21,0,12,0,6,0
 MicroCol game classes,org.microcol.gui.panelview,GoToMode,21,0,2,0,7,0,5,0,4,0
 MicroCol game classes,org.microcol,MicroCol,145,0,10,0,48,0,13,0,8,0
