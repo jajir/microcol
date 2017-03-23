@@ -42,36 +42,31 @@ public class SkyNet {
 <span class="nc" id="L42">	}</span>
 
 	private void move(final Ship ship) {
-//		System.out.println(&quot;### &quot; + ship.getLocation() + &quot;  &quot; + ship.getType().getSpeed());
-//		long start = System.currentTimeMillis();
-//		System.out.println(ship.getAvailableLocations());
-//		System.out.println(&quot;FINISHED IN &quot; + (System.currentTimeMillis() - start));
-
-<span class="nc bnc" id="L50" title="All 2 branches missed.">		if (lastDirections.get(ship) == null) {</span>
-<span class="nc" id="L51">			lastDirections.put(ship, Location.DIRECTIONS.get(random.nextInt(Location.DIRECTIONS.size())));</span>
+<span class="nc bnc" id="L45" title="All 2 branches missed.">		if (lastDirections.get(ship) == null) {</span>
+<span class="nc" id="L46">			lastDirections.put(ship, Location.DIRECTIONS.get(random.nextInt(Location.DIRECTIONS.size())));</span>
 		}
 
-<span class="nc" id="L54">		final List&lt;Location&gt; directions = new ArrayList&lt;&gt;(Location.DIRECTIONS);</span>
-<span class="nc" id="L55">		Location lastLocation = ship.getLocation();</span>
-<span class="nc" id="L56">		final List&lt;Location&gt; locations = new ArrayList&lt;&gt;();</span>
-<span class="nc bnc" id="L57" title="All 2 branches missed.">		while (locations.size() &lt; ship.getAvailableMoves()) {</span>
-<span class="nc" id="L58">			final Location lastDirection = lastDirections.get(ship);</span>
-<span class="nc" id="L59">			final Location newLocation = lastLocation.add(lastDirection);</span>
-<span class="nc bnc" id="L60" title="All 2 branches missed.">			if (ship.isReachable(newLocation, true)) {</span>
-<span class="nc" id="L61">				locations.add(newLocation);</span>
-<span class="nc" id="L62">				lastLocation = newLocation;</span>
+<span class="nc" id="L49">		final List&lt;Location&gt; directions = new ArrayList&lt;&gt;(Location.DIRECTIONS);</span>
+<span class="nc" id="L50">		Location lastLocation = ship.getLocation();</span>
+<span class="nc" id="L51">		final List&lt;Location&gt; locations = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L52" title="All 2 branches missed.">		while (locations.size() &lt; ship.getAvailableMoves()) {</span>
+<span class="nc" id="L53">			final Location lastDirection = lastDirections.get(ship);</span>
+<span class="nc" id="L54">			final Location newLocation = lastLocation.add(lastDirection);</span>
+<span class="nc bnc" id="L55" title="All 2 branches missed.">			if (ship.isMoveable(newLocation)) {</span>
+<span class="nc" id="L56">				locations.add(newLocation);</span>
+<span class="nc" id="L57">				lastLocation = newLocation;</span>
 			} else {
-<span class="nc" id="L64">				directions.remove(lastDirection);</span>
-<span class="nc bnc" id="L65" title="All 2 branches missed.">				if (directions.isEmpty()) {</span>
-<span class="nc" id="L66">					break;</span>
+<span class="nc" id="L59">				directions.remove(lastDirection);</span>
+<span class="nc bnc" id="L60" title="All 2 branches missed.">				if (directions.isEmpty()) {</span>
+<span class="nc" id="L61">					break;</span>
 				}
-<span class="nc" id="L68">				lastDirections.put(ship, directions.get(random.nextInt(directions.size())));</span>
+<span class="nc" id="L63">				lastDirections.put(ship, directions.get(random.nextInt(directions.size())));</span>
 			}
-<span class="nc" id="L70">		}</span>
+<span class="nc" id="L65">		}</span>
 
-<span class="nc bnc" id="L72" title="All 2 branches missed.">		if (!locations.isEmpty()) {</span>
-<span class="nc" id="L73">			ship.moveTo(Path.of(locations));</span>
+<span class="nc bnc" id="L67" title="All 2 branches missed.">		if (!locations.isEmpty()) {</span>
+<span class="nc" id="L68">			ship.moveTo(Path.of(locations));</span>
 		}
-<span class="nc" id="L75">	}</span>
+<span class="nc" id="L70">	}</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>
