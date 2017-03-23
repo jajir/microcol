@@ -72,7 +72,7 @@ public class World {
 	}
 
 	public Terrain getTerrainAt(final Location location) {
-		Preconditions.checkNotNull(location);
+		Preconditions.checkArgument(isValid(location), "Location (%) is not part of this map.", location);
 
 		Terrain terrain = this.terrain.get(location);
 
