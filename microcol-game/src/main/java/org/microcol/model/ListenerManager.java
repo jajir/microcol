@@ -3,6 +3,7 @@ package org.microcol.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.microcol.model.event.DebugRequestedEvent;
 import org.microcol.model.event.GameFinishedEvent;
 import org.microcol.model.event.GameStartedEvent;
 import org.microcol.model.event.RoundStartedEvent;
@@ -60,5 +61,11 @@ class ListenerManager {
 		final GameFinishedEvent event = new GameFinishedEvent(model);
 
 		listeners.forEach(listener -> listener.gameFinished(event));
+	}
+
+	void fireDebugRequested(final Model model, final List<Location> locations) {
+		final DebugRequestedEvent event = new DebugRequestedEvent(model, locations);
+
+		listeners.forEach(listener -> listener.debugRequested(event));
 	}
 }

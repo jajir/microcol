@@ -1,5 +1,6 @@
 package org.microcol.model;
 
+import org.microcol.model.event.DebugRequestedEvent;
 import org.microcol.model.event.GameFinishedEvent;
 import org.microcol.model.event.GameStartedEvent;
 import org.microcol.model.event.RoundStartedEvent;
@@ -16,4 +17,6 @@ public interface ModelListener {
 	void shipMoved(ShipMovedEvent event);
 
 	void gameFinished(GameFinishedEvent event);
+
+	void debugRequested(DebugRequestedEvent event);
 }

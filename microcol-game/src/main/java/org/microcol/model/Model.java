@@ -137,4 +137,8 @@ public class Model {
 	void fireGameFinished() {
 		listenerManager.fireGameFinished(this);
 	}
+
+	public void requestDebug(final List<Location> locations) {
+		listenerManager.fireDebugRequested(this, locations);
+	}
 }

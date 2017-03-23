@@ -9,8 +9,8 @@ import org.microcol.gui.Localized;
 import org.microcol.gui.MusicController;
 import org.microcol.model.Location;
 import org.microcol.model.Model;
+import org.microcol.model.ModelAdapter;
 import org.microcol.model.ModelBuilder;
-import org.microcol.model.ModelListener;
 import org.microcol.model.Path;
 import org.microcol.model.Ship;
 import org.microcol.model.ShipType;
@@ -70,7 +70,7 @@ public class GameController implements Localized {
 //			.addPlayer("Player1", true).addShip("Player1", ShipType.GALLEON, Location.of(1, 1)).addShip("Player1", ShipType.FRIGATE, Location.of(3, 1))
 //			.addPlayer("Player2", true).addShip("Player2", ShipType.GALLEON, Location.of(3, 3)).addShip("Player2", ShipType.FRIGATE, Location.of(1, 3))
 			.build();
-		game.addListener(new ModelListener() {
+		game.addListener(new ModelAdapter() {
 
 			@Override
 			public void turnStarted(final TurnStartedEvent event) {
