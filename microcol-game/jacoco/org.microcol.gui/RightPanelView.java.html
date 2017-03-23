@@ -83,56 +83,57 @@ public class RightPanelView extends JPanel implements RightPanelPresenter.Displa
 
 		// Y=10
 <span class="nc" id="L85">		nextTurnButton = new JButton();</span>
-<span class="nc" id="L86">		add(nextTurnButton, new GridBagConstraints(0, 10, 2, 1, 0D, 0D, GridBagConstraints.SOUTH,</span>
+<span class="nc" id="L86">		nextTurnButton.setName(&quot;nextTurnButton&quot;);</span>
+<span class="nc" id="L87">		add(nextTurnButton, new GridBagConstraints(0, 10, 2, 1, 0D, 0D, GridBagConstraints.SOUTH,</span>
 				GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
-<span class="nc" id="L88">		setPreferredSize(new Dimension(RIGHT_PANEL_WIDTH, 200));</span>
-<span class="nc" id="L89">		setMinimumSize(new Dimension(RIGHT_PANEL_WIDTH, 200));</span>
-<span class="nc" id="L90">		validate();</span>
-<span class="nc" id="L91">		unitsPanel.setMaximumSize(scrollPaneGamePanel.getViewport().getExtentSize());</span>
-<span class="nc" id="L92">		unitsPanel.setPreferredSize(scrollPaneGamePanel.getViewport().getExtentSize());</span>
-<span class="nc" id="L93">	}</span>
+<span class="nc" id="L89">		setPreferredSize(new Dimension(RIGHT_PANEL_WIDTH, 200));</span>
+<span class="nc" id="L90">		setMinimumSize(new Dimension(RIGHT_PANEL_WIDTH, 200));</span>
+<span class="nc" id="L91">		validate();</span>
+<span class="nc" id="L92">		unitsPanel.setMaximumSize(scrollPaneGamePanel.getViewport().getExtentSize());</span>
+<span class="nc" id="L93">		unitsPanel.setPreferredSize(scrollPaneGamePanel.getViewport().getExtentSize());</span>
+<span class="nc" id="L94">	}</span>
 
 	@Override
 	public void showTile(final FocusedTileEvent event, final Model game) {
-<span class="nc" id="L97">		setCurrentPlayer(game.getCurrentPlayer());</span>
-<span class="nc" id="L98">		tileImage.setImage(imageProvider.getTerrainImage(event.getTerrain()));</span>
-<span class="nc" id="L99">		StringBuilder sb = new StringBuilder(200);</span>
-<span class="nc" id="L100">		sb.append(&quot;&lt;html&gt;&lt;div&gt;&quot;);</span>
-<span class="nc" id="L101">		sb.append(localizationHelper.getTerrainName(event.getTerrain()));</span>
-<span class="nc" id="L102">		sb.append(&quot;&quot;);</span>
-<span class="nc" id="L103">		sb.append(&quot;&lt;/div&gt;&lt;div&gt;&quot;);</span>
-<span class="nc" id="L104">		sb.append(&quot;Move cost: 1&quot;);</span>
-<span class="nc" id="L105">		sb.append(&quot;&lt;/div&gt;&lt;/html&gt;&quot;);</span>
-<span class="nc" id="L106">		tileName.setText(sb.toString());</span>
-<span class="nc" id="L107">		unitsPanel.clear();</span>
-<span class="nc bnc" id="L108" title="All 2 branches missed.">		if (game.getShipsAt(event.getLocation()).isEmpty()) {</span>
-<span class="nc" id="L109">			unitsLabel.setText(&quot;&quot;);</span>
+<span class="nc" id="L98">		setCurrentPlayer(game.getCurrentPlayer());</span>
+<span class="nc" id="L99">		tileImage.setImage(imageProvider.getTerrainImage(event.getTerrain()));</span>
+<span class="nc" id="L100">		StringBuilder sb = new StringBuilder(200);</span>
+<span class="nc" id="L101">		sb.append(&quot;&lt;html&gt;&lt;div&gt;&quot;);</span>
+<span class="nc" id="L102">		sb.append(localizationHelper.getTerrainName(event.getTerrain()));</span>
+<span class="nc" id="L103">		sb.append(&quot;&quot;);</span>
+<span class="nc" id="L104">		sb.append(&quot;&lt;/div&gt;&lt;div&gt;&quot;);</span>
+<span class="nc" id="L105">		sb.append(&quot;Move cost: 1&quot;);</span>
+<span class="nc" id="L106">		sb.append(&quot;&lt;/div&gt;&lt;/html&gt;&quot;);</span>
+<span class="nc" id="L107">		tileName.setText(sb.toString());</span>
+<span class="nc" id="L108">		unitsPanel.clear();</span>
+<span class="nc bnc" id="L109" title="All 2 branches missed.">		if (game.getShipsAt(event.getLocation()).isEmpty()) {</span>
+<span class="nc" id="L110">			unitsLabel.setText(&quot;&quot;);</span>
 		} else {
-<span class="nc" id="L111">			unitsLabel.setText(getText().get(&quot;unitsPanel.units&quot;));</span>
-<span class="nc" id="L112">			unitsPanel.setUnits(game.getShipsAt(event.getLocation()));</span>
+<span class="nc" id="L112">			unitsLabel.setText(getText().get(&quot;unitsPanel.units&quot;));</span>
+<span class="nc" id="L113">			unitsPanel.setUnits(game.getShipsAt(event.getLocation()));</span>
 		}
-<span class="nc" id="L114">		repaint();</span>
-<span class="nc" id="L115">	}</span>
+<span class="nc" id="L115">		repaint();</span>
+<span class="nc" id="L116">	}</span>
 
 	@Override
 	public void setCurrentPlayer(final Player player) {
-<span class="nc" id="L119">		StringBuilder sb = new StringBuilder(200);</span>
-<span class="nc" id="L120">		sb.append(&quot;&lt;html&gt;&lt;div&gt;&quot;);</span>
-<span class="nc" id="L121">		sb.append(getText().get(&quot;unitsPanel.currentUser&quot;));</span>
-<span class="nc" id="L122">		sb.append(&quot; &quot;);</span>
-<span class="nc" id="L123">		sb.append(player.getName());</span>
-<span class="nc" id="L124">		sb.append(&quot;&lt;/div&gt;&lt;/html&gt;&quot;);</span>
-<span class="nc" id="L125">		tileOnMove.setText(sb.toString());</span>
-<span class="nc" id="L126">	}</span>
+<span class="nc" id="L120">		StringBuilder sb = new StringBuilder(200);</span>
+<span class="nc" id="L121">		sb.append(&quot;&lt;html&gt;&lt;div&gt;&quot;);</span>
+<span class="nc" id="L122">		sb.append(getText().get(&quot;unitsPanel.currentUser&quot;));</span>
+<span class="nc" id="L123">		sb.append(&quot; &quot;);</span>
+<span class="nc" id="L124">		sb.append(player.getName());</span>
+<span class="nc" id="L125">		sb.append(&quot;&lt;/div&gt;&lt;/html&gt;&quot;);</span>
+<span class="nc" id="L126">		tileOnMove.setText(sb.toString());</span>
+<span class="nc" id="L127">	}</span>
 
 	@Override
 	public JButton getNextTurnButton() {
-<span class="nc" id="L130">		return nextTurnButton;</span>
+<span class="nc" id="L131">		return nextTurnButton;</span>
 	}
 
 	@Override
 	public JPanel getRightPanel() {
-<span class="nc" id="L135">		return this;</span>
+<span class="nc" id="L136">		return this;</span>
 	}
 
 }
