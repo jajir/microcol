@@ -137,5 +137,9 @@ public class Model {
 	void fireGameFinished() {
 <span class="nc" id="L138">		listenerManager.fireGameFinished(this);</span>
 <span class="nc" id="L139">	}</span>
+
+	public void requestDebug(final List&lt;Location&gt; locations) {
+<span class="nc" id="L142">		listenerManager.fireDebugRequested(this, locations);</span>
+<span class="nc" id="L143">	}</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

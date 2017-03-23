@@ -46,27 +46,29 @@ public class SkyNet {
 <span class="nc" id="L46">			lastDirections.put(ship, Location.DIRECTIONS.get(random.nextInt(Location.DIRECTIONS.size())));</span>
 		}
 
-<span class="nc" id="L49">		final List&lt;Location&gt; directions = new ArrayList&lt;&gt;(Location.DIRECTIONS);</span>
-<span class="nc" id="L50">		Location lastLocation = ship.getLocation();</span>
-<span class="nc" id="L51">		final List&lt;Location&gt; locations = new ArrayList&lt;&gt;();</span>
-<span class="nc bnc" id="L52" title="All 2 branches missed.">		while (locations.size() &lt; ship.getAvailableMoves()) {</span>
-<span class="nc" id="L53">			final Location lastDirection = lastDirections.get(ship);</span>
-<span class="nc" id="L54">			final Location newLocation = lastLocation.add(lastDirection);</span>
-<span class="nc bnc" id="L55" title="All 2 branches missed.">			if (ship.isMoveable(newLocation)) {</span>
-<span class="nc" id="L56">				locations.add(newLocation);</span>
-<span class="nc" id="L57">				lastLocation = newLocation;</span>
-			} else {
-<span class="nc" id="L59">				directions.remove(lastDirection);</span>
-<span class="nc bnc" id="L60" title="All 2 branches missed.">				if (directions.isEmpty()) {</span>
-<span class="nc" id="L61">					break;</span>
-				}
-<span class="nc" id="L63">				lastDirections.put(ship, directions.get(random.nextInt(directions.size())));</span>
-			}
-<span class="nc" id="L65">		}</span>
+<span class="nc" id="L49">		model.requestDebug(ship.getAvailableLocations());</span>
 
-<span class="nc bnc" id="L67" title="All 2 branches missed.">		if (!locations.isEmpty()) {</span>
-<span class="nc" id="L68">			ship.moveTo(Path.of(locations));</span>
+<span class="nc" id="L51">		final List&lt;Location&gt; directions = new ArrayList&lt;&gt;(Location.DIRECTIONS);</span>
+<span class="nc" id="L52">		Location lastLocation = ship.getLocation();</span>
+<span class="nc" id="L53">		final List&lt;Location&gt; locations = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L54" title="All 2 branches missed.">		while (locations.size() &lt; ship.getAvailableMoves()) {</span>
+<span class="nc" id="L55">			final Location lastDirection = lastDirections.get(ship);</span>
+<span class="nc" id="L56">			final Location newLocation = lastLocation.add(lastDirection);</span>
+<span class="nc bnc" id="L57" title="All 2 branches missed.">			if (ship.isMoveable(newLocation)) {</span>
+<span class="nc" id="L58">				locations.add(newLocation);</span>
+<span class="nc" id="L59">				lastLocation = newLocation;</span>
+			} else {
+<span class="nc" id="L61">				directions.remove(lastDirection);</span>
+<span class="nc bnc" id="L62" title="All 2 branches missed.">				if (directions.isEmpty()) {</span>
+<span class="nc" id="L63">					break;</span>
+				}
+<span class="nc" id="L65">				lastDirections.put(ship, directions.get(random.nextInt(directions.size())));</span>
+			}
+<span class="nc" id="L67">		}</span>
+
+<span class="nc bnc" id="L69" title="All 2 branches missed.">		if (!locations.isEmpty()) {</span>
+<span class="nc" id="L70">			ship.moveTo(Path.of(locations));</span>
 		}
-<span class="nc" id="L70">	}</span>
+<span class="nc" id="L72">	}</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>
