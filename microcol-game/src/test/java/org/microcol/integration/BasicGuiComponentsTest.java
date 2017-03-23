@@ -1,4 +1,4 @@
-package org.microcol.gui;
+package org.microcol.integration;
 
 import static org.junit.Assert.assertNotNull;
 
@@ -8,13 +8,15 @@ import org.assertj.swing.fixture.JButtonFixture;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.microcol.gui.MainFrameView;
+import org.microcol.gui.MicroColModule;
 import org.microcol.gui.event.GameController;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Stage;
 
-public class IntegrationTest {
+public class BasicGuiComponentsTest {
 
 	private FrameFixture window;
 
