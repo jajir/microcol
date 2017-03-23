@@ -61,7 +61,7 @@ MicroCol game classes,org.microcol.model,ModelAdapter,9,0,0,0,7,0,7,0,7,0
 MicroCol game classes,org.microcol.model,Model,216,0,4,0,55,0,32,0,30,0
 MicroCol game classes,org.microcol.model,Calendar,16,73,0,6,5,13,1,9,1,6
 MicroCol game classes,org.microcol.model,Path,0,118,0,8,0,24,0,13,0,9
-MicroCol game classes,org.microcol.model,World,292,93,36,14,52,16,25,12,5,6
+MicroCol game classes,org.microcol.model,World,300,93,36,14,52,16,25,12,5,6
 MicroCol game classes,org.microcol.model,ShipType,54,0,0,0,10,0,6,0,6,0
 MicroCol game classes,org.microcol.model,Terrain,9,29,0,0,0,3,2,2,2,2
 MicroCol game classes,org.microcol.model,ListenerManager,119,8,2,0,25,3,15,1,14,1
