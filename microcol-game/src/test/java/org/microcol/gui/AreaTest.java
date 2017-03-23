@@ -18,18 +18,34 @@ import org.microcol.model.World;
  */
 public class AreaTest {
 
+
+	@Test
+	public void test_small_map_huge_view() {
+		Area area = makeArea(0, 0, 320, 237, 3, 3);
+		
+		assertEquals(1, area.getTopLeft().getX());
+		assertEquals(1, area.getTopLeft().getY());
+		
+		assertEquals(3, area.getBottomRight().getX());
+		assertEquals(3, area.getBottomRight().getY());
+		
+		assertEquals(3, area.getWidth());
+		assertEquals(3, area.getHeight());
+	}
+
+	
 	@Test
 	public void test_constructor() {
 		Area area = makeArea(222, 222, 800, 600, 500, 500);
 		
-		assertEquals(5, area.getTopLeft().getX());
-		assertEquals(5, area.getTopLeft().getY());
+		assertEquals(7, area.getTopLeft().getX());
+		assertEquals(7, area.getTopLeft().getY());
 		
 		assertEquals(31, area.getBottomRight().getX());
 		assertEquals(25, area.getBottomRight().getY());
 		
-		assertEquals(26, area.getWidth());
-		assertEquals(20, area.getHeight());
+		assertEquals(25, area.getWidth());
+		assertEquals(19, area.getHeight());
 	}
 
 	@Test

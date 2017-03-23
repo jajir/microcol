@@ -38,6 +38,16 @@ public class Area {
 	 */
 	private final Point pointBottomRight;
 
+	/**
+	 * Minimal x value.
+	 */
+	private final static int MAP_MIN_X = 1;
+
+	/**
+	 * Minimal y value.
+	 */
+	private final static int MAP_MIN_Y = 1;
+
 	public Area(final JViewport viewport, final World world) {
 		final Dimension dim = viewport.getExtentSize();
 		final java.awt.Point pos = viewport.getViewPosition();
@@ -45,13 +55,13 @@ public class Area {
 		pointTopLeft = Point.of((int) pos.getX(), (int) pos.getY());
 		pointBottomRight = pointTopLeft.add((int) dim.getWidth(), (int) dim.getHeight());
 
-		final Point p1 = pointTopLeft.divide(GamePanelView.TOTAL_TILE_WIDTH_IN_PX).add(Point.of(-1, -1));
+		final Point p1 = pointTopLeft.divide(GamePanelView.TOTAL_TILE_WIDTH_IN_PX).add(MAP_MIN_X, MAP_MIN_Y);
 		final Point p2 = Point
 				.of((int) Math.ceil(pointBottomRight.getX() / (float) GamePanelView.TOTAL_TILE_WIDTH_IN_PX),
 						(int) Math.ceil(pointBottomRight.getY() / (float) GamePanelView.TOTAL_TILE_WIDTH_IN_PX))
 				.add(Point.of(1, 1));
 
-		topLeft = Location.of(Math.max(1, p1.getX()), Math.max(1, p1.getY()));
+		topLeft = Location.of(Math.max(MAP_MIN_X, p1.getX()), Math.max(MAP_MIN_Y, p1.getY()));
 		bottomRight = Location.of(Math.min(p2.getX(), world.getMaxX()), Math.min(p2.getY(), world.getMaxY()));
 	}
 
@@ -64,11 +74,11 @@ public class Area {
 	}
 
 	public int getWidth() {
-		return bottomRight.getX() - topLeft.getX();
+		return bottomRight.getX() - topLeft.getX() + MAP_MIN_X;
 	}
 
 	public int getHeight() {
-		return bottomRight.getY() - topLeft.getY();
+		return bottomRight.getY() - topLeft.getY() + MAP_MIN_Y;
 	}
 
 	public boolean isInArea(final Location location) {

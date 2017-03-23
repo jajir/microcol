@@ -145,7 +145,7 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 	}
 
 	private VolatileImage prepareImage(final Area area) {
-		final Point p = Point.of(area.getWidth() + 1, area.getHeight() + 1).multiply(TILE_WIDTH_IN_PX);
+		final Point p = Point.of(area.getWidth(), area.getHeight()).multiply(TILE_WIDTH_IN_PX);
 		return createVolatileImage(p.getX(), p.getY());
 	}
 
