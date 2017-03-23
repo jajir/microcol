@@ -65,7 +65,7 @@ public class GameController implements Localized {
 			//.setWorld(15, 10)
 			.setWorld("/maps/map-01.txt")
 			.addPlayer("Player1", true).addShip("Player1", ShipType.GALLEON, Location.of(4, 2)).addShip("Player1", ShipType.FRIGATE, Location.of(3, 3))
-			.addPlayer("Player2", true).addShip("Player2", ShipType.GALLEON, Location.of(7, 7)).addShip("Player2", ShipType.FRIGATE, Location.of(7, 9)).addShip("Player2", ShipType.FRIGATE, Location.of(14, 9))
+			.addPlayer("Player2", true).addShip("Player2", ShipType.GALLEON, Location.of(5, 1)).addShip("Player2", ShipType.GALLEON, Location.of(7, 7)).addShip("Player2", ShipType.FRIGATE, Location.of(7, 9)).addShip("Player2", ShipType.FRIGATE, Location.of(14, 9))
 //			.setWorld("/maps/map-02.txt")
 //			.addPlayer("Player1", true).addShip("Player1", ShipType.GALLEON, Location.of(1, 1)).addShip("Player1", ShipType.FRIGATE, Location.of(3, 1))
 //			.addPlayer("Player2", true).addShip("Player2", ShipType.GALLEON, Location.of(3, 3)).addShip("Player2", ShipType.FRIGATE, Location.of(1, 3))

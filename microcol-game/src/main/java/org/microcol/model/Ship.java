@@ -1,7 +1,9 @@
 package org.microcol.model;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
@@ -53,7 +55,8 @@ public class Ship {
 		availableMoves = type.getSpeed();
 	}
 
-	public boolean isReachable(final Location location, final boolean includeShips) {
+	// Netestuje nedosažitelné lokace, pouze jestli je teoreticky možné na danou lokaci vstoupit
+	public boolean isMoveable(final Location location) {
 		Preconditions.checkNotNull(location);
 
 		if (!model.getWorld().isValid(location)) {
@@ -64,63 +67,36 @@ public class Ship {
 			return false;
 		}
 
-		// TODO JKA FIND PATH
-
-		if (!includeShips) {
-			return true;
-		}
-
-		return model.getEnemyShipsAt(owner, location).isEmpty();
+		return owner.getEnemyShipsAt(location).isEmpty();
 	}
 
 	public List<Location> getAvailableLocations() {
+		model.checkGameActive();
+		model.checkCurrentPlayer(owner);
+
 		if (availableMoves == 0) {
 			return ImmutableList.of();
 		}
 
-		List<Location> open = new ArrayList<>();
-		open.add(location);
-		List<Location> closed = new ArrayList<>();
+		Set<Location> openSet = new HashSet<>();
+		openSet.add(location);
+		Set<Location> closedSet = new HashSet<>();
 		for (int i = 0; i < availableMoves + 1; i++) {
-			List<Location> current = new ArrayList<>();
-			while (!open.isEmpty()) {
-				Location location = open.remove(0);
-				location.getNeighbors().forEach(xxx -> {
-					if (!current.contains(xxx)) {
-						current.add(xxx);
+			Set<Location> currentSet = new HashSet<>();
+			for (Location location : openSet) {
+				for (Location neighbor : location.getNeighbors()) {
+					if (isMoveable(neighbor)) {
+						currentSet.add(neighbor);
 					}
-				});
-				//current.addAll();
-				if (!closed.contains(location)) {
-					closed.add(location);
 				}
+				closedSet.add(location);
 			}
-			open.addAll(current);
+			openSet.clear();
+			openSet.addAll(currentSet);
 		}
-		closed.remove(location);
-		closed.removeAll(owner.getEnemyShipsAt().keySet());
-		List<Location> result = new ArrayList<>();
-		closed.forEach(location -> {
-			if (model.getWorld().isValid(location) && model.getWorld().getTerrainAt(location) == Terrain.OCEAN) {
-				result.add(location);
-			}
-		});
+		closedSet.remove(location);
 
-		return ImmutableList.copyOf(result);
-	}
-
-	public int movementCost(final Location toLocation) {
-		Preconditions.checkNotNull(toLocation);
-
-		return movementCost(location, toLocation);
-	}
-
-	public int movementCost(final Location fromLocation, final Location toLocation) {
-		Preconditions.checkNotNull(fromLocation);
-		Preconditions.checkNotNull(toLocation);
-		Preconditions.checkArgument(fromLocation.isAdjacent(toLocation), "Locations (%s - %s) are not adjacent.", fromLocation, toLocation);
-
-		return model.getWorld().getTerrainAt(toLocation) == Terrain.OCEAN ? 1 : -1;
+		return ImmutableList.copyOf(closedSet);
 	}
 
 	public void moveTo(final Path path) {

@@ -42,11 +42,6 @@ public class SkyNet {
 	}
 
 	private void move(final Ship ship) {
-//		System.out.println("### " + ship.getLocation() + "  " + ship.getType().getSpeed());
-//		long start = System.currentTimeMillis();
-//		System.out.println(ship.getAvailableLocations());
-//		System.out.println("FINISHED IN " + (System.currentTimeMillis() - start));
-
 		if (lastDirections.get(ship) == null) {
 			lastDirections.put(ship, Location.DIRECTIONS.get(random.nextInt(Location.DIRECTIONS.size())));
 		}
@@ -57,7 +52,7 @@ public class SkyNet {
 		while (locations.size() < ship.getAvailableMoves()) {
 			final Location lastDirection = lastDirections.get(ship);
 			final Location newLocation = lastLocation.add(lastDirection);
-			if (ship.isReachable(newLocation, true)) {
+			if (ship.isMoveable(newLocation)) {
 				locations.add(newLocation);
 				lastLocation = newLocation;
 			} else {
