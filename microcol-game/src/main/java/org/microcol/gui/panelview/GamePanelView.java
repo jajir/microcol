@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JViewport;
 import javax.swing.Timer;
@@ -26,8 +27,8 @@ import org.microcol.gui.Point;
 import org.microcol.gui.StepCounter;
 import org.microcol.gui.event.GameController;
 import org.microcol.gui.event.NextTurnController;
-import org.microcol.model.Model;
 import org.microcol.model.Location;
+import org.microcol.model.Model;
 import org.microcol.model.Player;
 import org.microcol.model.Ship;
 import org.microcol.model.Terrain;
@@ -56,6 +57,8 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 
 	private final PathPlanning pathPlanning;
 
+	private final VisualDebugInfo visualDebugInfo;
+
 	private Location gotoCursorTitle;
 
 	private Location cursorLocation;
@@ -76,6 +79,7 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 		this.gameController = Preconditions.checkNotNull(gameController);
 		this.pathPlanning = Preconditions.checkNotNull(pathPlanning);
 		this.imageProvider = Preconditions.checkNotNull(imageProvider);
+		this.visualDebugInfo = new VisualDebugInfo();
 		Toolkit toolkit = Toolkit.getDefaultToolkit();
 		gotoModeCursor = toolkit.createCustomCursor(imageProvider.getImage(ImageProvider.IMG_CURSOR_GOTO),
 				new java.awt.Point(1, 1), "gotoModeCursor");
@@ -186,6 +190,7 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 			paintCursor(dbg, area);
 			paintGoToPath(dbg, area);
 			paintMovingAnimation(dbg, area);
+			paintDebugInfo(dbg, visualDebugInfo, area);
 			final Point p = Point.of(area.getTopLeft().add(Location.of(-1, -1)));
 			g.drawImage(dbImage, p.getX(), p.getY(), null);
 			if (gameController.getModel().getCurrentPlayer().isComputer()) {
@@ -406,6 +411,14 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 		}
 	}
 
+	private void paintDebugInfo(final Graphics2D graphics, final VisualDebugInfo visualDebugInfo, final Area area) {
+		visualDebugInfo.getLocations().stream().filter(location -> area.isInArea(location)).forEach(location -> {
+			final Point p = area.convert(location).add(10, 4);
+			graphics.setColor(Color.white);
+			graphics.fillRect(p.getX() + 1, p.getY() + 1, FLAG_WIDTH - 1, FLAG_HEIGHT - 1);
+		});
+	}
+
 	@Override
 	public Dimension getPreferredSize() {
 		return getMinimumSize();
@@ -493,6 +506,11 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 	@Override
 	public Area getArea() {
 		return new Area((JViewport) getParent(), gameController.getModel().getWorld());
+	}
+
+	@Override
+	public VisualDebugInfo getVisualDebugInfo() {
+		return visualDebugInfo;
 	}
 
 }

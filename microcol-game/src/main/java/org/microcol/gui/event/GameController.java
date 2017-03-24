@@ -14,6 +14,7 @@ import org.microcol.model.ModelBuilder;
 import org.microcol.model.Path;
 import org.microcol.model.Ship;
 import org.microcol.model.ShipType;
+import org.microcol.model.event.DebugRequestedEvent;
 import org.microcol.model.event.GameFinishedEvent;
 import org.microcol.model.event.GameStartedEvent;
 import org.microcol.model.event.RoundStartedEvent;
@@ -42,18 +43,22 @@ public class GameController implements Localized {
 
 	private final GamePreferences gamePreferences;
 
+	private final DebugRequestController debugRequestController;
+
 	private Model game;
 
 	@Inject
 	public GameController(final NextTurnController nextTurnController, final MoveUnitController moveUnitController,
 			final NewGameController newGameController, final TurnStartedController turnStartedController,
-			final MusicController musicController, final GamePreferences gamePreferences) {
+			final MusicController musicController, final GamePreferences gamePreferences,
+			final DebugRequestController debugRequestController) {
 		this.nextTurnController = Preconditions.checkNotNull(nextTurnController);
 		this.moveUnitController = Preconditions.checkNotNull(moveUnitController);
 		this.newGameController = Preconditions.checkNotNull(newGameController);
 		this.turnStartedController = Preconditions.checkNotNull(turnStartedController);
 		this.musicController = Preconditions.checkNotNull(musicController);
 		this.gamePreferences = Preconditions.checkNotNull(gamePreferences);
+		this.debugRequestController = Preconditions.checkNotNull(debugRequestController);
 	}
 
 	/**
@@ -62,14 +67,22 @@ public class GameController implements Localized {
 	public void newGame() {
 		ModelBuilder builder = new ModelBuilder();
 		game = builder.setCalendar(1570, 1800)
-			//.setWorld(15, 10)
-			.setWorld("/maps/map-01.txt")
-			.addPlayer("Player1", true).addShip("Player1", ShipType.GALLEON, Location.of(4, 2)).addShip("Player1", ShipType.FRIGATE, Location.of(3, 3))
-			.addPlayer("Player2", true).addShip("Player2", ShipType.GALLEON, Location.of(5, 1)).addShip("Player2", ShipType.GALLEON, Location.of(7, 7)).addShip("Player2", ShipType.FRIGATE, Location.of(7, 9)).addShip("Player2", ShipType.FRIGATE, Location.of(14, 9))
-//			.setWorld("/maps/map-02.txt")
-//			.addPlayer("Player1", true).addShip("Player1", ShipType.GALLEON, Location.of(1, 1)).addShip("Player1", ShipType.FRIGATE, Location.of(3, 1))
-//			.addPlayer("Player2", true).addShip("Player2", ShipType.GALLEON, Location.of(3, 3)).addShip("Player2", ShipType.FRIGATE, Location.of(1, 3))
-			.build();
+				// .setWorld(15, 10)
+				.setWorld("/maps/map-01.txt").addPlayer("Player1", true)
+				.addShip("Player1", ShipType.GALLEON, Location.of(4, 2))
+				.addShip("Player1", ShipType.FRIGATE, Location.of(3, 3)).addPlayer("Player2", true)
+				.addShip("Player2", ShipType.GALLEON, Location.of(5, 1))
+				.addShip("Player2", ShipType.GALLEON, Location.of(7, 7))
+				.addShip("Player2", ShipType.FRIGATE, Location.of(7, 9))
+				.addShip("Player2", ShipType.FRIGATE, Location.of(14, 9))
+				// .setWorld("/maps/map-02.txt")
+				// .addPlayer("Player1", true).addShip("Player1",
+				// ShipType.GALLEON, Location.of(1, 1)).addShip("Player1",
+				// ShipType.FRIGATE, Location.of(3, 1))
+				// .addPlayer("Player2", true).addShip("Player2",
+				// ShipType.GALLEON, Location.of(3, 3)).addShip("Player2",
+				// ShipType.FRIGATE, Location.of(1, 3))
+				.build();
 		game.addListener(new ModelAdapter() {
 
 			@Override
@@ -100,6 +113,12 @@ public class GameController implements Localized {
 			@Override
 			public void gameFinished(final GameFinishedEvent event) {
 				logger.debug("Game finished " + event);
+			}
+
+			@Override
+			public void debugRequested(final DebugRequestedEvent event) {
+				logger.debug("Debug request " + event);
+				debugRequestController.fireEvent(event);
 			}
 		});
 		SkyNet skyNet = new SkyNet(game);

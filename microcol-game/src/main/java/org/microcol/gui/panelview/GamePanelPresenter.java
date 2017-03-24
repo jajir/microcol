@@ -17,6 +17,8 @@ import org.microcol.gui.Localized;
 import org.microcol.gui.PathPlanning;
 import org.microcol.gui.Point;
 import org.microcol.gui.event.AboutGameEventController;
+import org.microcol.gui.event.CenterViewController;
+import org.microcol.gui.event.DebugRequestController;
 import org.microcol.gui.event.ExitGameController;
 import org.microcol.gui.event.FocusedTileController;
 import org.microcol.gui.event.FocusedTileEvent;
@@ -27,7 +29,6 @@ import org.microcol.gui.event.NewGameController;
 import org.microcol.gui.event.ShowGridController;
 import org.microcol.gui.event.StatusBarMessageController;
 import org.microcol.gui.event.StatusBarMessageEvent;
-import org.microcol.gui.event.CenterViewController;
 import org.microcol.model.Location;
 import org.microcol.model.Ship;
 import org.microcol.model.Terrain;
@@ -71,6 +72,8 @@ public class GamePanelPresenter implements Localized {
 		void planScrollingAnimationToPoint(Point targetPoint);
 
 		void stopTimer();
+
+		VisualDebugInfo getVisualDebugInfo();
 	}
 
 	private final GameController gameController;
@@ -84,7 +87,7 @@ public class GamePanelPresenter implements Localized {
 	private final StatusBarMessageController statusBarMessageController;
 
 	private Point lastMousePosition;
-	
+
 	private final LocalizationHelper localizationHelper;
 
 	static class PopUpDemo extends JPopupMenu {
@@ -109,7 +112,8 @@ public class GamePanelPresenter implements Localized {
 			final MoveUnitController moveUnitController, final NewGameController newGameController,
 			final GamePreferences gamePreferences, final ShowGridController showGridController,
 			final CenterViewController viewController, final AboutGameEventController gameEventController,
-			final ExitGameController exitGameController, final LocalizationHelper localizationHelper) {
+			final ExitGameController exitGameController, final LocalizationHelper localizationHelper,
+			final DebugRequestController debugRequestController) {
 		this.focusedTileController = focusedTileController;
 		this.gameController = Preconditions.checkNotNull(gameController);
 		this.statusBarMessageController = Preconditions.checkNotNull(statusBarMessageController);
@@ -197,6 +201,9 @@ public class GamePanelPresenter implements Localized {
 		newGameController.addListener(event -> display.initGame(gamePreferences.isGridShown()));
 
 		showGridController.addListener(e -> display.setGridShown(e.isGridShown()));
+		debugRequestController.addListener(e -> {
+			display.getVisualDebugInfo().setLocations(e.getLocations());
+		});
 
 		display.getGamePanelView().addMouseListener(ma);
 		display.getGamePanelView().addMouseMotionListener(ma);

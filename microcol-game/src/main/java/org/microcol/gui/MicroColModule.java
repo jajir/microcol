@@ -2,9 +2,11 @@ package org.microcol.gui;
 
 import org.microcol.gui.event.AboutGameEventController;
 import org.microcol.gui.event.AboutGameListenerImpl;
+import org.microcol.gui.event.CenterViewController;
 import org.microcol.gui.event.ChangeLanguageController;
 import org.microcol.gui.event.ChangeLanguageListenerPreferences;
 import org.microcol.gui.event.ChangeLanguageListenerText;
+import org.microcol.gui.event.DebugRequestController;
 import org.microcol.gui.event.EventInitializer;
 import org.microcol.gui.event.ExitGameController;
 import org.microcol.gui.event.FocusedTileController;
@@ -17,7 +19,6 @@ import org.microcol.gui.event.ShowGridController;
 import org.microcol.gui.event.ShowGridListenerPreferences;
 import org.microcol.gui.event.StatusBarMessageController;
 import org.microcol.gui.event.TurnStartedController;
-import org.microcol.gui.event.CenterViewController;
 import org.microcol.gui.event.VolumeChangeController;
 import org.microcol.gui.event.VolumeChangedListenerPreferences;
 import org.microcol.gui.panelview.GamePanelPresenter;
@@ -55,6 +56,7 @@ public class MicroColModule extends AbstractModule {
 		bind(ShowGridController.class).in(Singleton.class);
 		bind(CenterViewController.class).in(Singleton.class);
 		bind(ExitGameController.class).in(Singleton.class);
+		bind(DebugRequestController.class).in(Singleton.class);
 
 		/**
 		 * Initialize MVP classes
