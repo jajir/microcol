@@ -10,7 +10,7 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 
 public class Ship {
-	private Model model;
+	Model model; // FIXME JKA private
 
 	private final Player owner;
 	private final ShipType type;
@@ -97,6 +97,12 @@ public class Ship {
 		closedSet.remove(location);
 
 		return ImmutableList.copyOf(closedSet);
+	}
+
+	public List<Location> getPath(final Location destination) {
+		PathFinder finder = new PathFinder(this, location, destination);
+
+		return finder.search();
 	}
 
 	public void moveTo(final Path path) {

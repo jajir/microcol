@@ -43,6 +43,13 @@ public class Location {
 		return y;
 	}
 
+	// TODO JKA TEST
+	public int getDistance(final Location location) {
+		Preconditions.checkNotNull(location);
+
+		return Math.abs(x - location.x) + Math.abs(y - location.y);
+	}
+
 	public List<Location> getNeighbors() {
 		return DIRECTIONS.stream()
 			.map(direction -> add(direction))

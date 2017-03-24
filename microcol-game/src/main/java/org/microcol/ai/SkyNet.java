@@ -46,7 +46,7 @@ public class SkyNet {
 			lastDirections.put(ship, Location.DIRECTIONS.get(random.nextInt(Location.DIRECTIONS.size())));
 		}
 
-		model.requestDebug(ship.getAvailableLocations());
+		model.requestDebug(ship.getPath(Location.of(14, 9)));
 
 		final List<Location> directions = new ArrayList<>(Location.DIRECTIONS);
 		Location lastLocation = ship.getLocation();
