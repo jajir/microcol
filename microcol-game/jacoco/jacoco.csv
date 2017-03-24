@@ -17,7 +17,7 @@ MicroCol game classes,org.microcol.gui.panelview,GamePanelView,999,0,59,0,196,0,
 MicroCol game classes,org.microcol.gui.panelview,GamePanelPresenter.new MouseAdapter() {...},109,0,12,0,21,0,12,0,6,0
 MicroCol game classes,org.microcol.gui.panelview,GoToMode,21,0,2,0,7,0,5,0,4,0
 MicroCol game classes,org.microcol,MicroCol,145,0,10,0,48,0,13,0,8,0
-MicroCol game classes,org.microcol.ai,SkyNet,125,0,10,0,30,0,10,0,5,0
+MicroCol game classes,org.microcol.ai,SkyNet,128,0,10,0,30,0,10,0,5,0
 MicroCol game classes,org.microcol.ai,SkyNet.new ModelAdapter() {...},16,0,2,0,4,0,3,0,2,0
 MicroCol game classes,org.microcol.gui.event,StatusBarMessageEvent,19,0,0,0,5,0,3,0,3,0
 MicroCol game classes,org.microcol.gui.event,ChangeLanguageEvent,19,0,0,0,6,0,3,0,3,0
@@ -43,7 +43,7 @@ MicroCol game classes,org.microcol.gui.event,ShowGridController,3,0,0,0,1,0,1,0,
 MicroCol game classes,org.microcol.gui.event,DebugRequestController,3,0,0,0,1,0,1,0,1,0
 MicroCol game classes,org.microcol.gui.event,FocusedTileEvent,48,0,4,0,9,0,6,0,4,0
 MicroCol game classes,org.microcol.gui.event,EventInitializer,25,0,0,0,6,0,3,0,3,0
-MicroCol game classes,org.microcol.gui.event,GameController,171,0,0,0,33,0,8,0,8,0
+MicroCol game classes,org.microcol.gui.event,GameController,138,0,0,0,29,0,8,0,8,0
 MicroCol game classes,org.microcol.gui.event,StatusBarMessageController,3,0,0,0,1,0,1,0,1,0
 MicroCol game classes,org.microcol.gui.event,OrderedEventController.ValueWithPriority,0,18,0,0,0,6,0,3,0,3
 MicroCol game classes,org.microcol.gui.event,GameController.new ModelAdapter() {...},123,0,0,0,19,0,7,0,7,0
@@ -57,9 +57,11 @@ MicroCol game classes,org.microcol.model,GameManager,167,0,14,0,37,0,16,0,9,0
 MicroCol game classes,org.microcol.model,Player,115,0,6,0,32,0,20,0,17,0
 MicroCol game classes,org.microcol.model,World.new Object() {...},19,0,0,0,1,0,1,0,1,0
 MicroCol game classes,org.microcol.model,ModelBuilder,92,0,0,0,19,0,9,0,9,0
-MicroCol game classes,org.microcol.model,Location,0,185,0,14,0,38,0,19,0,12
-MicroCol game classes,org.microcol.model,Ship,343,0,26,0,69,0,24,0,11,0
+MicroCol game classes,org.microcol.model,Location,17,185,0,14,2,38,1,19,1,12
+MicroCol game classes,org.microcol.model,Ship,354,0,26,0,71,0,25,0,12,0
 MicroCol game classes,org.microcol.model,ModelAdapter,9,0,0,0,7,0,7,0,7,0
+MicroCol game classes,org.microcol.model,PathFinder,211,0,30,0,52,0,20,0,5,0
+MicroCol game classes,org.microcol.model,PathFinder.Node,47,0,2,0,12,0,9,0,8,0
 MicroCol game classes,org.microcol.model,Model,216,0,4,0,55,0,32,0,30,0
 MicroCol game classes,org.microcol.model,Calendar,16,73,0,6,5,13,1,9,1,6
 MicroCol game classes,org.microcol.model,Path,0,118,0,8,0,24,0,13,0,9

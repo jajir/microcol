@@ -43,64 +43,71 @@ public class Location {
 <span class="fc" id="L43">		return y;</span>
 	}
 
+	// TODO JKA TEST
+	public int getDistance(final Location location) {
+<span class="nc" id="L48">		Preconditions.checkNotNull(location);</span>
+
+<span class="nc" id="L50">		return Math.abs(x - location.x) + Math.abs(y - location.y);</span>
+	}
+
 	public List&lt;Location&gt; getNeighbors() {
-<span class="fc" id="L47">		return DIRECTIONS.stream()</span>
-<span class="fc" id="L48">			.map(direction -&gt; add(direction))</span>
-<span class="fc" id="L49">			.collect(Collectors.collectingAndThen(</span>
-<span class="fc" id="L50">				Collectors.toList(), ImmutableList::copyOf));</span>
+<span class="fc" id="L54">		return DIRECTIONS.stream()</span>
+<span class="fc" id="L55">			.map(direction -&gt; add(direction))</span>
+<span class="fc" id="L56">			.collect(Collectors.collectingAndThen(</span>
+<span class="fc" id="L57">				Collectors.toList(), ImmutableList::copyOf));</span>
 	}
 
 	// tranzitivní
 	public boolean isAdjacent(final Location location) {
-<span class="fc" id="L55">		Preconditions.checkNotNull(location);</span>
+<span class="fc" id="L62">		Preconditions.checkNotNull(location);</span>
 
-<span class="fc bfc" id="L57" title="All 2 branches covered.">		if (equals(location)) {</span>
-<span class="fc" id="L58">			return false;</span>
+<span class="fc bfc" id="L64" title="All 2 branches covered.">		if (equals(location)) {</span>
+<span class="fc" id="L65">			return false;</span>
 		}
 
-<span class="fc bfc" id="L61" title="All 2 branches covered.">		return Math.abs(x - location.x) &lt;= 1</span>
-<span class="fc bfc" id="L62" title="All 2 branches covered.">			&amp;&amp; Math.abs(y - location.y) &lt;= 1; </span>
+<span class="fc bfc" id="L68" title="All 2 branches covered.">		return Math.abs(x - location.x) &lt;= 1</span>
+<span class="fc bfc" id="L69" title="All 2 branches covered.">			&amp;&amp; Math.abs(y - location.y) &lt;= 1; </span>
 	}
 
 	// tranzitivní
 	// funguje správně pouze pro čísla menší než MAX_INT
 	public Location add(final Location location) {
-<span class="fc" id="L68">		Preconditions.checkNotNull(location);</span>
+<span class="fc" id="L75">		Preconditions.checkNotNull(location);</span>
 
-<span class="fc" id="L70">		return Location.of(x + location.x, y + location.y);</span>
+<span class="fc" id="L77">		return Location.of(x + location.x, y + location.y);</span>
 	}
 
 	@Override
 	public int hashCode() {
-<span class="fc" id="L75">		return x + (y &lt;&lt; 16);</span>
+<span class="fc" id="L82">		return x + (y &lt;&lt; 16);</span>
 	}
 
 	@Override
 	public boolean equals(final Object object) {
-<span class="fc bfc" id="L80" title="All 2 branches covered.">		if (object == null) {</span>
-<span class="fc" id="L81">			return false;</span>
+<span class="fc bfc" id="L87" title="All 2 branches covered.">		if (object == null) {</span>
+<span class="fc" id="L88">			return false;</span>
 		}
 
-<span class="fc bfc" id="L84" title="All 2 branches covered.">		if (!(object instanceof Location)) {</span>
-<span class="fc" id="L85">			return false;</span>
+<span class="fc bfc" id="L91" title="All 2 branches covered.">		if (!(object instanceof Location)) {</span>
+<span class="fc" id="L92">			return false;</span>
 		}
 
-<span class="fc" id="L88">		final Location location = (Location) object;</span>
+<span class="fc" id="L95">		final Location location = (Location) object;</span>
 
-<span class="fc bfc" id="L90" title="All 4 branches covered.">		return x == location.x</span>
+<span class="fc bfc" id="L97" title="All 4 branches covered.">		return x == location.x</span>
 			&amp;&amp; y == location.y;
 	}
 
 	@Override
 	public String toString() {
-<span class="fc" id="L96">		return MoreObjects.toStringHelper(this)</span>
-<span class="fc" id="L97">			.add(&quot;x&quot;, x)</span>
-<span class="fc" id="L98">			.add(&quot;y&quot;, y)</span>
-<span class="fc" id="L99">			.toString();</span>
+<span class="fc" id="L103">		return MoreObjects.toStringHelper(this)</span>
+<span class="fc" id="L104">			.add(&quot;x&quot;, x)</span>
+<span class="fc" id="L105">			.add(&quot;y&quot;, y)</span>
+<span class="fc" id="L106">			.toString();</span>
 	}
 
 	public static Location of(final int x, final int y) {
-<span class="fc" id="L103">		return new Location(x, y);</span>
+<span class="fc" id="L110">		return new Location(x, y);</span>
 	}
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

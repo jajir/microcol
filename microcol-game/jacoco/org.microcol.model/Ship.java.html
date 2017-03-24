@@ -10,7 +10,7 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 
 public class Ship {
-	private Model model;
+	Model model; // FIXME JKA private
 
 	private final Player owner;
 	private final ShipType type;
@@ -99,43 +99,49 @@ public class Ship {
 <span class="nc" id="L99">		return ImmutableList.copyOf(closedSet);</span>
 	}
 
+	public List&lt;Location&gt; getPath(final Location destination) {
+<span class="nc" id="L103">		PathFinder finder = new PathFinder(this, location, destination);</span>
+
+<span class="nc" id="L105">		return finder.search();</span>
+	}
+
 	public void moveTo(final Path path) {
-<span class="nc" id="L103">		model.checkGameActive();</span>
-<span class="nc" id="L104">		model.checkCurrentPlayer(owner);</span>
+<span class="nc" id="L109">		model.checkGameActive();</span>
+<span class="nc" id="L110">		model.checkCurrentPlayer(owner);</span>
 
-<span class="nc" id="L106">		Preconditions.checkNotNull(path);</span>
-<span class="nc" id="L107">		Preconditions.checkArgument(path.getStart().isAdjacent(location), &quot;Path (%s) must be adjacent to current location (%s).&quot;, path.getStart(), location);</span>
-<span class="nc" id="L108">		Preconditions.checkArgument(model.getWorld().isValid(path), &quot;Path (%s) must be valid.&quot;, path);</span>
-<span class="nc bnc" id="L109" title="All 2 branches missed.">		Preconditions.checkArgument(!path.containsAny(owner.getEnemyShipsAt().keySet()), &quot;There is enemy ship on path (%s).&quot;, path);</span>
+<span class="nc" id="L112">		Preconditions.checkNotNull(path);</span>
+<span class="nc" id="L113">		Preconditions.checkArgument(path.getStart().isAdjacent(location), &quot;Path (%s) must be adjacent to current location (%s).&quot;, path.getStart(), location);</span>
+<span class="nc" id="L114">		Preconditions.checkArgument(model.getWorld().isValid(path), &quot;Path (%s) must be valid.&quot;, path);</span>
+<span class="nc bnc" id="L115" title="All 2 branches missed.">		Preconditions.checkArgument(!path.containsAny(owner.getEnemyShipsAt().keySet()), &quot;There is enemy ship on path (%s).&quot;, path);</span>
 
-<span class="nc" id="L111">		final Location start = location;</span>
-<span class="nc" id="L112">		final List&lt;Location&gt; locations = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L117">		final Location start = location;</span>
+<span class="nc" id="L118">		final List&lt;Location&gt; locations = new ArrayList&lt;&gt;();</span>
 		// TODO JKA Use streams
-<span class="nc bnc" id="L114" title="All 2 branches missed.">		for (Location newLocation : path.getLocations()) {</span>
-<span class="nc bnc" id="L115" title="All 2 branches missed.">			if (availableMoves &lt;= 0) {</span>
+<span class="nc bnc" id="L120" title="All 2 branches missed.">		for (Location newLocation : path.getLocations()) {</span>
+<span class="nc bnc" id="L121" title="All 2 branches missed.">			if (availableMoves &lt;= 0) {</span>
 				// TODO JKA neumožnit zadat delší cestu, než je povolený počet
-<span class="nc" id="L117">				break;</span>
+<span class="nc" id="L123">				break;</span>
 			}
-<span class="nc bnc" id="L119" title="All 2 branches missed.">			if (model.getWorld().getTerrainAt(newLocation) != Terrain.OCEAN) {</span>
-<span class="nc" id="L120">				throw new IllegalArgumentException(String.format(&quot;Path (%s) must contain only ocean (%s).&quot;, newLocation, model.getWorld().getTerrainAt(newLocation)));</span>
+<span class="nc bnc" id="L125" title="All 2 branches missed.">			if (model.getWorld().getTerrainAt(newLocation) != Terrain.OCEAN) {</span>
+<span class="nc" id="L126">				throw new IllegalArgumentException(String.format(&quot;Path (%s) must contain only ocean (%s).&quot;, newLocation, model.getWorld().getTerrainAt(newLocation)));</span>
 			}
-<span class="nc" id="L122">			locations.add(newLocation);</span>
-<span class="nc" id="L123">			location = newLocation;</span>
-<span class="nc" id="L124">			availableMoves--;</span>
-<span class="nc" id="L125">		}</span>
-<span class="nc bnc" id="L126" title="All 2 branches missed.">		if (!locations.isEmpty()) {</span>
-<span class="nc" id="L127">			model.fireShipMoved(this, start, Path.of(locations));</span>
+<span class="nc" id="L128">			locations.add(newLocation);</span>
+<span class="nc" id="L129">			location = newLocation;</span>
+<span class="nc" id="L130">			availableMoves--;</span>
+<span class="nc" id="L131">		}</span>
+<span class="nc bnc" id="L132" title="All 2 branches missed.">		if (!locations.isEmpty()) {</span>
+<span class="nc" id="L133">			model.fireShipMoved(this, start, Path.of(locations));</span>
 		}
-<span class="nc" id="L129">	}</span>
+<span class="nc" id="L135">	}</span>
 
 	@Override
 	public String toString() {
-<span class="nc" id="L133">		return MoreObjects.toStringHelper(this)</span>
-<span class="nc" id="L134">			.add(&quot;owner&quot;, owner)</span>
-<span class="nc" id="L135">			.add(&quot;type&quot;, type)</span>
-<span class="nc" id="L136">			.add(&quot;location&quot;, location)</span>
-<span class="nc" id="L137">			.add(&quot;availableMoves&quot;, availableMoves)</span>
-<span class="nc" id="L138">			.toString();</span>
+<span class="nc" id="L139">		return MoreObjects.toStringHelper(this)</span>
+<span class="nc" id="L140">			.add(&quot;owner&quot;, owner)</span>
+<span class="nc" id="L141">			.add(&quot;type&quot;, type)</span>
+<span class="nc" id="L142">			.add(&quot;location&quot;, location)</span>
+<span class="nc" id="L143">			.add(&quot;availableMoves&quot;, availableMoves)</span>
+<span class="nc" id="L144">			.toString();</span>
 	}
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>
