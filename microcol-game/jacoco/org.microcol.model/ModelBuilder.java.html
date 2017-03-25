@@ -8,7 +8,7 @@ public class ModelBuilder {
 	private final List&lt;Ship&gt; ships;
 
 	private Calendar calendar;
-	private World world;
+	private WorldMap map;
 
 <span class="nc" id="L13">	public ModelBuilder() {</span>
 <span class="nc" id="L14">		players = new ArrayList&lt;&gt;();</span>
@@ -21,14 +21,14 @@ public class ModelBuilder {
 <span class="nc" id="L21">		return this;</span>
 	}
 
-	public ModelBuilder setWorld(final int maxX, final int maxY) {
-<span class="nc" id="L25">		world = new World(maxX, maxY);</span>
+	public ModelBuilder setMap(final int maxX, final int maxY) {
+<span class="nc" id="L25">		map = new WorldMap(maxX, maxY);</span>
 
 <span class="nc" id="L27">		return this;</span>
 	}
 
-	public ModelBuilder setWorld(final String fileName) {
-<span class="nc" id="L31">		world = new World(fileName);</span>
+	public ModelBuilder setMap(final String fileName) {
+<span class="nc" id="L31">		map = new WorldMap(fileName);</span>
 
 <span class="nc" id="L33">		return this;</span>
 	}
@@ -53,7 +53,7 @@ public class ModelBuilder {
 	}
 
 	public Model build() {
-<span class="nc" id="L56">		return new Model(calendar, world, players, ships);</span>
+<span class="nc" id="L56">		return new Model(calendar, map, players, ships);</span>
 	}
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

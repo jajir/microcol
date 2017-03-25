@@ -260,7 +260,7 @@ public class GamePanelPresenter implements Localized {
 		} else {
 <span class="nc" id="L261">			display.setCursorLocation(location);</span>
 <span class="nc" id="L262">			focusedTileController.fireEvent(new FocusedTileEvent(gameController.getModel(), location,</span>
-<span class="nc" id="L263">					gameController.getModel().getWorld().getTerrainAt(location)));</span>
+<span class="nc" id="L263">					gameController.getModel().getMap().getTerrainAt(location)));</span>
 		}
 <span class="nc" id="L265">	}</span>
 
@@ -287,7 +287,7 @@ public class GamePanelPresenter implements Localized {
 		 * Set status bar message
 		 */
 <span class="nc" id="L289">		final Location where = lastMousePosition.toLocation();</span>
-<span class="nc" id="L290">		final Terrain tile = gameController.getModel().getWorld().getTerrainAt(where);</span>
+<span class="nc" id="L290">		final Terrain tile = gameController.getModel().getMap().getTerrainAt(where);</span>
 <span class="nc" id="L291">		final StringBuilder buff = new StringBuilder();</span>
 <span class="nc" id="L292">		buff.append(getText().get(&quot;statusBar.tile.start&quot;));</span>
 <span class="nc" id="L293">		buff.append(&quot; &quot;);</span>
@@ -306,7 +306,7 @@ public class GamePanelPresenter implements Localized {
 <span class="nc" id="L306">		display.setCursorNormal();</span>
 <span class="nc" id="L307">		display.setCursorLocation(moveTo);</span>
 <span class="nc" id="L308">		focusedTileController.fireEvent(new FocusedTileEvent(gameController.getModel(), moveTo,</span>
-<span class="nc" id="L309">				gameController.getModel().getWorld().getTerrainAt(moveTo)));</span>
+<span class="nc" id="L309">				gameController.getModel().getMap().getTerrainAt(moveTo)));</span>
 <span class="nc" id="L310">	}</span>
 
 	private final void switchToNormalMode(final Location moveTo) {
@@ -318,7 +318,7 @@ public class GamePanelPresenter implements Localized {
 <span class="nc" id="L318">			Ship ship = gameController.getModel().getCurrentPlayer().getShipsAt(display.getCursorLocation()).get(0);</span>
 <span class="nc" id="L319">			gameController.performMove(ship, path);</span>
 <span class="nc" id="L320">			focusedTileController.fireEvent(new FocusedTileEvent(gameController.getModel(), display.getCursorLocation(),</span>
-<span class="nc" id="L321">					gameController.getModel().getWorld().getTerrainAt(display.getCursorLocation())));</span>
+<span class="nc" id="L321">					gameController.getModel().getMap().getTerrainAt(display.getCursorLocation())));</span>
 		}
 <span class="nc" id="L323">		display.setCursorLocation(moveTo);</span>
 <span class="nc" id="L324">		display.setCursorNormal();</span>

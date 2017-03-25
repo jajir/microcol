@@ -53,9 +53,9 @@ MicroCol game classes,org.microcol.gui.event,VolumeChangeController,3,0,0,0,1,0,
 MicroCol game classes,org.microcol.gui.event,NextTurnController,3,0,0,0,1,0,1,0,1,0
 MicroCol game classes,org.microcol.gui.event,OrderedEventController,5,62,0,0,2,12,1,5,1,5
 MicroCol game classes,org.microcol.model,ShipStorage,243,0,16,0,54,0,27,0,19,0
+MicroCol game classes,org.microcol.model,WorldMap.new Object() {...},19,0,0,0,1,0,1,0,1,0
 MicroCol game classes,org.microcol.model,GameManager,167,0,14,0,37,0,16,0,9,0
 MicroCol game classes,org.microcol.model,Player,115,0,6,0,32,0,20,0,17,0
-MicroCol game classes,org.microcol.model,World.new Object() {...},19,0,0,0,1,0,1,0,1,0
 MicroCol game classes,org.microcol.model,ModelBuilder,92,0,0,0,19,0,9,0,9,0
 MicroCol game classes,org.microcol.model,Location,17,185,0,14,2,38,1,19,1,12
 MicroCol game classes,org.microcol.model,Ship,354,0,26,0,71,0,25,0,12,0
@@ -65,7 +65,7 @@ MicroCol game classes,org.microcol.model,PathFinder.Node,47,0,2,0,12,0,9,0,8,0
 MicroCol game classes,org.microcol.model,Model,216,0,4,0,55,0,32,0,30,0
 MicroCol game classes,org.microcol.model,Calendar,16,73,0,6,5,13,1,9,1,6
 MicroCol game classes,org.microcol.model,Path,0,118,0,8,0,24,0,13,0,9
-MicroCol game classes,org.microcol.model,World,300,93,36,14,52,16,25,12,5,6
+MicroCol game classes,org.microcol.model,WorldMap,300,93,36,14,52,16,25,12,5,6
 MicroCol game classes,org.microcol.model,ShipType,54,0,0,0,10,0,6,0,6,0
 MicroCol game classes,org.microcol.model,Terrain,9,29,0,0,0,3,2,2,2,2
 MicroCol game classes,org.microcol.model,ListenerManager,119,8,2,0,25,3,15,1,14,1

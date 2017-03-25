@@ -29,7 +29,7 @@ public class Ship {
 	void setModel(final Model model) {
 <span class="nc" id="L30">		this.model = Preconditions.checkNotNull(model);</span>
 
-<span class="nc" id="L32">		final Terrain terrain = this.model.getWorld().getTerrainAt(location);</span>
+<span class="nc" id="L32">		final Terrain terrain = this.model.getMap().getTerrainAt(location);</span>
 <span class="nc bnc" id="L33" title="All 2 branches missed.">		if (terrain != Terrain.OCEAN) {</span>
 <span class="nc" id="L34">			throw new IllegalStateException(String.format(&quot;Ship must start on ocen (%s -&gt; %s).&quot;, location, terrain));</span>
 		}
@@ -59,11 +59,11 @@ public class Ship {
 	public boolean isMoveable(final Location location) {
 <span class="nc" id="L60">		Preconditions.checkNotNull(location);</span>
 
-<span class="nc bnc" id="L62" title="All 2 branches missed.">		if (!model.getWorld().isValid(location)) {</span>
+<span class="nc bnc" id="L62" title="All 2 branches missed.">		if (!model.getMap().isValid(location)) {</span>
 <span class="nc" id="L63">			return false;</span>
 		}
 
-<span class="nc bnc" id="L66" title="All 2 branches missed.">		if (model.getWorld().getTerrainAt(location) != Terrain.OCEAN) {</span>
+<span class="nc bnc" id="L66" title="All 2 branches missed.">		if (model.getMap().getTerrainAt(location) != Terrain.OCEAN) {</span>
 <span class="nc" id="L67">			return false;</span>
 		}
 
@@ -111,7 +111,7 @@ public class Ship {
 
 <span class="nc" id="L112">		Preconditions.checkNotNull(path);</span>
 <span class="nc" id="L113">		Preconditions.checkArgument(path.getStart().isAdjacent(location), &quot;Path (%s) must be adjacent to current location (%s).&quot;, path.getStart(), location);</span>
-<span class="nc" id="L114">		Preconditions.checkArgument(model.getWorld().isValid(path), &quot;Path (%s) must be valid.&quot;, path);</span>
+<span class="nc" id="L114">		Preconditions.checkArgument(model.getMap().isValid(path), &quot;Path (%s) must be valid.&quot;, path);</span>
 <span class="nc bnc" id="L115" title="All 2 branches missed.">		Preconditions.checkArgument(!path.containsAny(owner.getEnemyShipsAt().keySet()), &quot;There is enemy ship on path (%s).&quot;, path);</span>
 
 <span class="nc" id="L117">		final Location start = location;</span>
@@ -122,8 +122,8 @@ public class Ship {
 				// TODO JKA neumožnit zadat delší cestu, než je povolený počet
 <span class="nc" id="L123">				break;</span>
 			}
-<span class="nc bnc" id="L125" title="All 2 branches missed.">			if (model.getWorld().getTerrainAt(newLocation) != Terrain.OCEAN) {</span>
-<span class="nc" id="L126">				throw new IllegalArgumentException(String.format(&quot;Path (%s) must contain only ocean (%s).&quot;, newLocation, model.getWorld().getTerrainAt(newLocation)));</span>
+<span class="nc bnc" id="L125" title="All 2 branches missed.">			if (model.getMap().getTerrainAt(newLocation) != Terrain.OCEAN) {</span>
+<span class="nc" id="L126">				throw new IllegalArgumentException(String.format(&quot;Path (%s) must contain only ocean (%s).&quot;, newLocation, model.getMap().getTerrainAt(newLocation)));</span>
 			}
 <span class="nc" id="L128">			locations.add(newLocation);</span>
 <span class="nc" id="L129">			location = newLocation;</span>

@@ -160,7 +160,7 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 <span class="nc" id="L160">		super.paint(g);</span>
 <span class="nc" id="L161">		final Graphics2D g2d = (Graphics2D) g;</span>
 <span class="nc" id="L162">		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);</span>
-<span class="nc" id="L163">		final Area area = new Area((JViewport) this.getParent(), gameController.getModel().getWorld());</span>
+<span class="nc" id="L163">		final Area area = new Area((JViewport) this.getParent(), gameController.getModel().getMap());</span>
 <span class="nc bnc" id="L164" title="All 2 branches missed.">		if (dbImage == null) {</span>
 <span class="nc" id="L165">			dbImage = prepareImage(area);</span>
 <span class="nc bnc" id="L166" title="All 2 branches missed.">			if (dbImage == null) {</span>
@@ -234,7 +234,7 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 <span class="nc bnc" id="L234" title="All 2 branches missed.">			for (int j = area.getTopLeft().getY(); j &lt;= area.getBottomRight().getY(); j++) {</span>
 <span class="nc" id="L235">				final Location location = Location.of(i, j);</span>
 <span class="nc" id="L236">				final Point point = area.convert(location);</span>
-<span class="nc" id="L237">				final Terrain terrain = gameController.getModel().getWorld().getTerrainAt(location);</span>
+<span class="nc" id="L237">				final Terrain terrain = gameController.getModel().getMap().getTerrainAt(location);</span>
 <span class="nc" id="L238">				graphics.drawImage(imageProvider.getTerrainImage(terrain), point.getX(), point.getY(),</span>
 <span class="nc" id="L239">						point.getX() + 35, point.getY() + 35, 0, 0, 35, 35, this);</span>
 			}
@@ -438,11 +438,11 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 	}
 
 	private int getGameMapWidth() {
-<span class="nc" id="L441">		return (gameController.getModel().getWorld().getMaxX()) * TOTAL_TILE_WIDTH_IN_PX - 1;</span>
+<span class="nc" id="L441">		return (gameController.getModel().getMap().getMaxX()) * TOTAL_TILE_WIDTH_IN_PX - 1;</span>
 	}
 
 	private int getGameMapHeight() {
-<span class="nc" id="L445">		return (gameController.getModel().getWorld().getMaxY()) * TOTAL_TILE_WIDTH_IN_PX - 1;</span>
+<span class="nc" id="L445">		return (gameController.getModel().getMap().getMaxY()) * TOTAL_TILE_WIDTH_IN_PX - 1;</span>
 	}
 
 	@Override
@@ -504,7 +504,7 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 
 	@Override
 	public Area getArea() {
-<span class="nc" id="L507">		return new Area((JViewport) getParent(), gameController.getModel().getWorld());</span>
+<span class="nc" id="L507">		return new Area((JViewport) getParent(), gameController.getModel().getMap());</span>
 	}
 
 	@Override

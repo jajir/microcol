@@ -11,16 +11,16 @@ import com.google.common.collect.ImmutableList;
 public class Model {
 	private final ListenerManager listenerManager;
 	private final Calendar calendar;
-	private final World world;
+	private final WorldMap map;
 	private final ImmutableList&lt;Player&gt; players;
 	private final ShipStorage shipStorage;
 	private final GameManager gameManager;
 
-<span class="nc" id="L19">	Model(final Calendar calendar, final World world, final List&lt;Player&gt; players, final List&lt;Ship&gt; ships) {</span>
+<span class="nc" id="L19">	Model(final Calendar calendar, final WorldMap map, final List&lt;Player&gt; players, final List&lt;Ship&gt; ships) {</span>
 <span class="nc" id="L20">		listenerManager = new ListenerManager();</span>
 
 <span class="nc" id="L22">		this.calendar = Preconditions.checkNotNull(calendar);</span>
-<span class="nc" id="L23">		this.world = Preconditions.checkNotNull(world);</span>
+<span class="nc" id="L23">		this.map = Preconditions.checkNotNull(map);</span>
 
 <span class="nc" id="L25">		this.players = ImmutableList.copyOf(players);</span>
 <span class="nc bnc" id="L26" title="All 2 branches missed.">		Preconditions.checkArgument(!this.players.isEmpty(), &quot;There must be at least one player.&quot;);</span>
@@ -54,8 +54,8 @@ public class Model {
 <span class="nc" id="L54">		return calendar;</span>
 	}
 
-	public World getWorld() {
-<span class="nc" id="L58">		return world;</span>
+	public WorldMap getMap() {
+<span class="nc" id="L58">		return map;</span>
 	}
 
 	public List&lt;Player&gt; getPlayers() {
