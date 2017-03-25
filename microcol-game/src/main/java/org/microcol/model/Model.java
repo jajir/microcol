@@ -118,6 +118,10 @@ public class Model {
 		gameManager.checkCurrentPlayer(player);
 	}
 
+	void destroyShip(final Ship ship) {
+		shipStorage.remove(ship);
+	}
+
 	void fireGameStarted() {
 		listenerManager.fireGameStarted(this);
 	}
@@ -132,6 +136,10 @@ public class Model {
 
 	void fireShipMoved(final Ship ship, final Location start, final Path path) {
 		listenerManager.fireShipMoved(this, ship, start, path);
+	}
+
+	void fireShipAttacked(final Ship attacker, final Ship defender, final Ship destroyed) {
+		listenerManager.fireShipAttacked(this, attacker, defender, destroyed);
 	}
 
 	void fireGameFinished() {

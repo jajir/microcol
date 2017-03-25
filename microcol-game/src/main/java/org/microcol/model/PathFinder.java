@@ -70,7 +70,6 @@ class PathFinder {
 
 		while (!openSet.isEmpty()) {
 			current = findNext(openSet);
-//			ship.model.requestDebug(getList(current));
 			if (current.getLocation().equals(destination)) {
 				break;
 			}
@@ -84,7 +83,7 @@ class PathFinder {
 					while (iter.hasNext()) {
 						node = iter.next();
 						if (node.getLocation().equals(neighbor)) {
-							iter.remove();
+							iter.remove(); // FIXME JKA CO KDYZ SE NA TO NECO ODKAZUJE?
 							break;
 						}
 						node = null;

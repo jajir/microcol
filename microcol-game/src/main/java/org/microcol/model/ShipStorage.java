@@ -1,5 +1,6 @@
 package org.microcol.model;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,7 +14,7 @@ class ShipStorage {
 	private final List<Ship> ships;
 
 	ShipStorage(final List<Ship> ships) {
-		this.ships = ImmutableList.copyOf(ships);
+		this.ships = new ArrayList<>(ships);
 		checkShipLocations(this.ships);
 	}
 
@@ -32,7 +33,7 @@ class ShipStorage {
 	}
 
 	List<Ship> getShips() {
-		return ships;
+		return ImmutableList.copyOf(ships);
 	}
 
 	Map<Location, List<Ship>> getShipsAt() {
@@ -104,5 +105,11 @@ class ShipStorage {
 			.filter(ship -> !ship.getOwner().equals(player) && ship.getLocation().equals(location))
 			.collect(Collectors.collectingAndThen(
 				Collectors.toList(), ImmutableList::copyOf));
+	}
+
+	void remove(final Ship ship) {
+		Preconditions.checkNotNull(ship);
+
+		ships.remove(ship);
 	}
 }

@@ -7,6 +7,7 @@ import org.microcol.model.event.DebugRequestedEvent;
 import org.microcol.model.event.GameFinishedEvent;
 import org.microcol.model.event.GameStartedEvent;
 import org.microcol.model.event.RoundStartedEvent;
+import org.microcol.model.event.ShipAttackedEvent;
 import org.microcol.model.event.ShipMovedEvent;
 import org.microcol.model.event.TurnStartedEvent;
 
@@ -55,6 +56,12 @@ class ListenerManager {
 		final ShipMovedEvent event = new ShipMovedEvent(model, ship, start, path);
 
 		listeners.forEach(listener -> listener.shipMoved(event));
+	}
+
+	void fireShipAttacked(final Model model, final Ship attacker, final Ship defender, final Ship destroyed) {
+		final ShipAttackedEvent event = new ShipAttackedEvent(model, attacker, defender, destroyed);
+
+		listeners.forEach(listener -> listener.shipAttacked(event));
 	}
 
 	void fireGameFinished(final Model model) {

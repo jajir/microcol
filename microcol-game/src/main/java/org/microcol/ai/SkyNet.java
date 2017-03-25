@@ -46,7 +46,7 @@ public class SkyNet {
 			lastDirections.put(ship, Location.DIRECTIONS.get(random.nextInt(Location.DIRECTIONS.size())));
 		}
 
-		model.requestDebug(ship.getPath(Location.of(14, 9)));
+//		model.requestDebug(ship.getPath(Location.of(14, 9)));
 
 		final List<Location> directions = new ArrayList<>(Location.DIRECTIONS);
 		Location lastLocation = ship.getLocation();
@@ -68,6 +68,14 @@ public class SkyNet {
 
 		if (!locations.isEmpty()) {
 			ship.moveTo(Path.of(locations));
+		}
+
+		for (Location location : ship.getLocation().getNeighbors()) {
+			List<Ship> enemies = ship.getOwner().getEnemyShipsAt(location);
+			if (!enemies.isEmpty()) {
+				ship.attack(enemies.get(0));
+				break;
+			}
 		}
 	}
 }
