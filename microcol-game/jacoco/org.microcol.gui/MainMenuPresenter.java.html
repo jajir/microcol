@@ -62,7 +62,7 @@ public class MainMenuPresenter {
 	@Inject
 	public MainMenuPresenter(final MainMenuPresenter.Display display,
 			final AboutGameEventController gameEventController, final GamePreferences gamePreferences,
-			final ChangeLanguageController changeLanguangeController, final Text text, final ViewUtil viewUtil,
+			final ChangeLanguageController changeLanguageController, final Text text, final ViewUtil viewUtil,
 			final VolumeChangeController volumeChangeController, final ShowGridController showGridController,
 			final FocusedTileController focusedTileController, final MoveUnitController moveUnitController,
 			final CenterViewController centerViewController, final TurnStartedController turnStartedController,
@@ -81,10 +81,10 @@ public class MainMenuPresenter {
 <span class="nc" id="L81">			});</span>
 		}
 <span class="nc" id="L83">		display.getRbMenuItemlanguageCz().addActionListener(actionEvent -&gt; {</span>
-<span class="nc" id="L84">			changeLanguangeController.fireEvent(new ChangeLanguageEvent(Text.Language.cz, gameController.getModel()));</span>
+<span class="nc" id="L84">			changeLanguageController.fireEvent(new ChangeLanguageEvent(Text.Language.cz, gameController.getModel()));</span>
 <span class="nc" id="L85">		});</span>
 <span class="nc" id="L86">		display.getRbMenuItemlanguageEn().addActionListener(actionEvent -&gt; {</span>
-<span class="nc" id="L87">			changeLanguangeController.fireEvent(new ChangeLanguageEvent(Text.Language.en, gameController.getModel()));</span>
+<span class="nc" id="L87">			changeLanguageController.fireEvent(new ChangeLanguageEvent(Text.Language.en, gameController.getModel()));</span>
 <span class="nc" id="L88">		});</span>
 <span class="nc" id="L89">		display.getMenuItemVolume().addActionListener(actionEvent -&gt; {</span>
 <span class="nc" id="L90">			PreferencesVolume preferencesVolume = new PreferencesVolume(viewUtil, text, volumeChangeController,</span>
@@ -99,7 +99,7 @@ public class MainMenuPresenter {
 <span class="nc" id="L99">		});</span>
 <span class="nc" id="L100">		display.getMenuItemCenterView()</span>
 <span class="nc" id="L101">				.addActionListener(event -&gt; centerViewController.fireEvent(new CenterViewEvent()));</span>
-<span class="nc" id="L102">		changeLanguangeController.addListener(event -&gt; {</span>
+<span class="nc" id="L102">		changeLanguageController.addListener(event -&gt; {</span>
 <span class="nc" id="L103">			display.updateLanguage();</span>
 <span class="nc" id="L104">		});</span>
 <span class="nc" id="L105">		focusedTileController.addListener(event -&gt; onFocusedTileEvent(event));</span>

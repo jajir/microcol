@@ -24,12 +24,19 @@ import com.google.inject.Inject;
  */
 public class MainFramePresenter {
 
+	public final static String START_PANEL = &quot;Start panel&quot;;
+
+	public final static String MAIN_GAME_PANEL = &quot;Main game panel&quot;;
+	
 	public interface Display {
 
 		JFrame getFrame();
+		
+		
+		void showPanel(String panelName);
 	}
 
-<span class="nc" id="L32">	private final Logger logger = LoggerFactory.getLogger(MainFramePresenter.class);</span>
+<span class="nc" id="L39">	private final Logger logger = LoggerFactory.getLogger(MainFramePresenter.class);</span>
 
 	private Rectangle lastNormalBounds;
 
@@ -39,52 +46,57 @@ public class MainFramePresenter {
 
 	@Inject
 	public MainFramePresenter(final MainFramePresenter.Display display, final KeyController keyController,
-<span class="nc" id="L42">			final GamePreferences gamePreferences, final ExitGameController exitGameController) {</span>
-<span class="nc" id="L43">		this.gamePreferences = Preconditions.checkNotNull(gamePreferences);</span>
-<span class="nc" id="L44">		this.display = Preconditions.checkNotNull(display);</span>
-<span class="nc" id="L45">		display.getFrame().addKeyListener(new KeyAdapter() {</span>
+<span class="nc" id="L49">			final GamePreferences gamePreferences, final ExitGameController exitGameController) {</span>
+<span class="nc" id="L50">		this.gamePreferences = Preconditions.checkNotNull(gamePreferences);</span>
+<span class="nc" id="L51">		this.display = Preconditions.checkNotNull(display);</span>
+<span class="nc" id="L52">		display.getFrame().addKeyListener(new KeyAdapter() {</span>
 			@Override
 			public void keyPressed(final KeyEvent e) {
-<span class="nc" id="L48">				keyController.fireEvent(e);</span>
-<span class="nc" id="L49">			}</span>
+<span class="nc" id="L55">				keyController.fireEvent(e);</span>
+<span class="nc" id="L56">			}</span>
 		});
 
-<span class="nc" id="L52">		display.getFrame().addComponentListener(new ComponentAdapter() {</span>
+<span class="nc" id="L59">		display.getFrame().addComponentListener(new ComponentAdapter() {</span>
 			@Override
 			public void componentMoved(ComponentEvent event) {
-<span class="nc bnc" id="L55" title="All 2 branches missed.">				if (display.getFrame().getExtendedState() == JFrame.NORMAL) {</span>
-<span class="nc" id="L56">					lastNormalBounds = display.getFrame().getBounds();</span>
-				}
-<span class="nc" id="L58">			}</span>
-
-			@Override
-			public void componentResized(ComponentEvent event) {
 <span class="nc bnc" id="L62" title="All 2 branches missed.">				if (display.getFrame().getExtendedState() == JFrame.NORMAL) {</span>
 <span class="nc" id="L63">					lastNormalBounds = display.getFrame().getBounds();</span>
 				}
 <span class="nc" id="L65">			}</span>
+
+			@Override
+			public void componentResized(ComponentEvent event) {
+<span class="nc bnc" id="L69" title="All 2 branches missed.">				if (display.getFrame().getExtendedState() == JFrame.NORMAL) {</span>
+<span class="nc" id="L70">					lastNormalBounds = display.getFrame().getBounds();</span>
+				}
+<span class="nc" id="L72">			}</span>
 		});
 
-<span class="nc" id="L68">		exitGameController.addListener(event -&gt; {</span>
-<span class="nc" id="L69">			savePreferences();</span>
-<span class="nc" id="L70">			display.getFrame().dispose();</span>
-<span class="nc" id="L71">		});</span>
+<span class="nc" id="L75">		exitGameController.addListener(event -&gt; {</span>
+<span class="nc" id="L76">			savePreferences();</span>
+<span class="nc" id="L77">			display.getFrame().dispose();</span>
+<span class="nc" id="L78">		});</span>
 
-<span class="nc" id="L73">		display.getFrame().addWindowListener(new WindowAdapter() {</span>
+<span class="nc" id="L80">		display.getFrame().addWindowListener(new WindowAdapter() {</span>
 			@Override
 			public void windowClosing(WindowEvent event) {
-<span class="nc" id="L76">				logger.debug(&quot;Event windowClosing&quot;);</span>
-<span class="nc" id="L77">				exitGameController.fireEvent(new ExitGameEvent());</span>
-<span class="nc" id="L78">			}</span>
+<span class="nc" id="L83">				logger.debug(&quot;Event windowClosing&quot;);</span>
+<span class="nc" id="L84">				exitGameController.fireEvent(new ExitGameEvent());</span>
+<span class="nc" id="L85">			}</span>
 		});
-<span class="nc" id="L80">	}</span>
+<span class="nc" id="L87">	}</span>
 
 	private void savePreferences() {
-<span class="nc bnc" id="L83" title="All 2 branches missed.">		final Rectangle normalBounds = display.getFrame().getExtendedState() == JFrame.NORMAL</span>
-<span class="nc" id="L84">				? display.getFrame().getBounds() : lastNormalBounds;</span>
-<span class="nc" id="L85">		gamePreferences.setMainFramePosition(normalBounds);</span>
-<span class="nc" id="L86">		gamePreferences.setMainFrameState(display.getFrame().getExtendedState());</span>
-<span class="nc" id="L87">	}</span>
+<span class="nc bnc" id="L90" title="All 2 branches missed.">		final Rectangle normalBounds = display.getFrame().getExtendedState() == JFrame.NORMAL</span>
+<span class="nc" id="L91">				? display.getFrame().getBounds() : lastNormalBounds;</span>
+<span class="nc" id="L92">		gamePreferences.setMainFramePosition(normalBounds);</span>
+<span class="nc" id="L93">		gamePreferences.setMainFrameState(display.getFrame().getExtendedState());</span>
+<span class="nc" id="L94">	}</span>
+	
+	public void showPanel(final String panelName){
+<span class="nc" id="L97">		display.showPanel(panelName);</span>
+<span class="nc" id="L98">	}</span>
+	
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

@@ -11,10 +11,10 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
 import org.microcol.gui.AppleMenuListener;
+import org.microcol.gui.ApplicationController;
 import org.microcol.gui.ImageProvider;
 import org.microcol.gui.MainFrameView;
 import org.microcol.gui.MicroColModule;
-import org.microcol.gui.event.GameController;
 
 import com.apple.mrj.MRJApplicationUtils;
 import com.google.inject.Guice;
@@ -120,9 +120,9 @@ import com.google.inject.Stage;
 
 <span class="nc" id="L121">		SwingUtilities.invokeLater(() -&gt; {</span>
 <span class="nc" id="L122">			final MainFrameView mainFrame = injector.getInstance(MainFrameView.class);</span>
-<span class="nc" id="L123">			final GameController gameController = injector.getInstance(GameController.class);</span>
+<span class="nc" id="L123">			final ApplicationController applicationController  = injector.getInstance(ApplicationController.class);</span>
 <span class="nc" id="L124">			mainFrame.setVisible(true);</span>
-<span class="nc" id="L125">			gameController.newGame();</span>
+<span class="nc" id="L125">			applicationController.startNewGame();</span>
 <span class="nc" id="L126">		});</span>
 <span class="nc" id="L127">	}</span>
 }
