@@ -3,7 +3,8 @@ package org.microcol.gui.event;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
 
@@ -15,7 +16,7 @@ import com.google.common.base.Preconditions;
  */
 public class OrderedEventController<E> {
 
-	private final Logger logger = Logger.getLogger(OrderedEventController.class);
+	private final Logger logger = LoggerFactory.getLogger(OrderedEventController.class);
 
 	/**
 	 * Value of priority when it's not specified.

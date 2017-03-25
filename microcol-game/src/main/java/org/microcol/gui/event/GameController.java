@@ -2,7 +2,6 @@ package org.microcol.gui.event;
 
 import java.util.List;
 
-import org.apache.log4j.Logger;
 import org.microcol.ai.SkyNet;
 import org.microcol.gui.GamePreferences;
 import org.microcol.gui.Localized;
@@ -20,6 +19,8 @@ import org.microcol.model.event.GameStartedEvent;
 import org.microcol.model.event.RoundStartedEvent;
 import org.microcol.model.event.ShipMovedEvent;
 import org.microcol.model.event.TurnStartedEvent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
@@ -29,7 +30,7 @@ import com.google.inject.Inject;
  */
 public class GameController implements Localized {
 
-	private Logger logger = Logger.getLogger(GameController.class);
+	private Logger logger = LoggerFactory.getLogger(GameController.class);
 
 	private final NextTurnController nextTurnController;
 

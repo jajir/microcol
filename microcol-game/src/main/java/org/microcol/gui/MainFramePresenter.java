@@ -10,10 +10,11 @@ import java.awt.event.WindowEvent;
 
 import javax.swing.JFrame;
 
-import org.apache.log4j.Logger;
 import org.microcol.gui.event.ExitGameController;
 import org.microcol.gui.event.ExitGameEvent;
 import org.microcol.gui.event.KeyController;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
@@ -28,7 +29,7 @@ public class MainFramePresenter {
 		JFrame getFrame();
 	}
 
-	private final Logger logger = Logger.getLogger(MainFramePresenter.class);
+	private final Logger logger = LoggerFactory.getLogger(MainFramePresenter.class);
 
 	private Rectangle lastNormalBounds;
 

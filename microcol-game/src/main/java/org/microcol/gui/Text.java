@@ -3,7 +3,8 @@ package org.microcol.gui;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.inject.Inject;
 
@@ -14,7 +15,7 @@ import com.google.inject.Inject;
  */
 public class Text {
 
-	private final static Logger logger = Logger.getLogger(Text.class);
+	private final static Logger logger = LoggerFactory.getLogger(Text.class);
 
 	private final static String RESOURCE_BUNDLE_NAME = "localization";
 
