@@ -47,7 +47,7 @@ MicroCol game classes,org.microcol.gui.event,EventInitializer,25,0,0,0,6,0,3,0,3
 MicroCol game classes,org.microcol.gui.event,GameController,165,0,0,0,34,0,8,0,8,0
 MicroCol game classes,org.microcol.gui.event,StatusBarMessageController,3,0,0,0,1,0,1,0,1,0
 MicroCol game classes,org.microcol.gui.event,OrderedEventController.ValueWithPriority,0,18,0,0,0,6,0,3,0,3
-MicroCol game classes,org.microcol.gui.event,GameController.new ModelAdapter() {...},123,0,0,0,19,0,7,0,7,0
+MicroCol game classes,org.microcol.gui.event,GameController.new ModelAdapter() {...},42,0,0,0,12,0,6,0,6,0
 MicroCol game classes,org.microcol.gui.event,ExitGameController,3,0,0,0,1,0,1,0,1,0
 MicroCol game classes,org.microcol.gui.event,AboutGameEventController,3,0,0,0,1,0,1,0,1,0
 MicroCol game classes,org.microcol.gui.event,VolumeChangeController,3,0,0,0,1,0,1,0,1,0
@@ -69,7 +69,7 @@ MicroCol game classes,org.microcol.model,Path,0,118,0,8,0,24,0,13,0,9
 MicroCol game classes,org.microcol.model,WorldMap,300,93,36,14,52,16,25,12,5,6
 MicroCol game classes,org.microcol.model,ShipType,54,0,0,0,10,0,6,0,6,0
 MicroCol game classes,org.microcol.model,Terrain,9,29,0,0,0,3,2,2,2,2
-MicroCol game classes,org.microcol.model,ListenerManager,137,8,2,0,28,3,17,1,16,1
+MicroCol game classes,org.microcol.model,ListenerManager,183,13,2,0,37,4,17,1,16,1
 MicroCol game classes,org.microcol.gui,Text.Language,9,45,0,0,0,6,2,3,2,3
 MicroCol game classes,org.microcol.gui,MainFramePresenter,77,0,2,0,17,0,4,0,3,0
 MicroCol game classes,org.microcol.gui,PathPlanning,255,165,19,15,32,24,12,10,2,3
