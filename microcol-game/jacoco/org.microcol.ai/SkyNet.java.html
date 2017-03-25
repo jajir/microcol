@@ -46,7 +46,7 @@ public class SkyNet {
 <span class="nc" id="L46">			lastDirections.put(ship, Location.DIRECTIONS.get(random.nextInt(Location.DIRECTIONS.size())));</span>
 		}
 
-<span class="nc" id="L49">		model.requestDebug(ship.getPath(Location.of(14, 9)));</span>
+//		model.requestDebug(ship.getPath(Location.of(14, 9)));
 
 <span class="nc" id="L51">		final List&lt;Location&gt; directions = new ArrayList&lt;&gt;(Location.DIRECTIONS);</span>
 <span class="nc" id="L52">		Location lastLocation = ship.getLocation();</span>
@@ -69,6 +69,14 @@ public class SkyNet {
 <span class="nc bnc" id="L69" title="All 2 branches missed.">		if (!locations.isEmpty()) {</span>
 <span class="nc" id="L70">			ship.moveTo(Path.of(locations));</span>
 		}
-<span class="nc" id="L72">	}</span>
+
+<span class="nc bnc" id="L73" title="All 2 branches missed.">		for (Location location : ship.getLocation().getNeighbors()) {</span>
+<span class="nc" id="L74">			List&lt;Ship&gt; enemies = ship.getOwner().getEnemyShipsAt(location);</span>
+<span class="nc bnc" id="L75" title="All 2 branches missed.">			if (!enemies.isEmpty()) {</span>
+<span class="nc" id="L76">				ship.attack(enemies.get(0));</span>
+<span class="nc" id="L77">				break;</span>
+			}
+<span class="nc" id="L79">		}</span>
+<span class="nc" id="L80">	}</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

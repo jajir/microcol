@@ -4,38 +4,44 @@ import org.microcol.model.event.DebugRequestedEvent;
 import org.microcol.model.event.GameFinishedEvent;
 import org.microcol.model.event.GameStartedEvent;
 import org.microcol.model.event.RoundStartedEvent;
+import org.microcol.model.event.ShipAttackedEvent;
 import org.microcol.model.event.ShipMovedEvent;
 import org.microcol.model.event.TurnStartedEvent;
 
-<span class="nc" id="L10">public class ModelAdapter implements ModelListener {</span>
+<span class="nc" id="L11">public class ModelAdapter implements ModelListener {</span>
 	@Override
 	public void gameStarted(GameStartedEvent event) {
 		// Do nothing.
-<span class="nc" id="L14">	}</span>
+<span class="nc" id="L15">	}</span>
 
 	@Override
 	public void roundStarted(RoundStartedEvent event) {
 		// Do nothing.
-<span class="nc" id="L19">	}</span>
+<span class="nc" id="L20">	}</span>
 
 	@Override
 	public void turnStarted(TurnStartedEvent event) {
 		// Do nothing.
-<span class="nc" id="L24">	}</span>
+<span class="nc" id="L25">	}</span>
 
 	@Override
 	public void shipMoved(ShipMovedEvent event) {
 		// Do nothing.
-<span class="nc" id="L29">	}</span>
+<span class="nc" id="L30">	}</span>
+
+	@Override
+	public void shipAttacked(ShipAttackedEvent event) {
+		// Do nothing.
+<span class="nc" id="L35">	}</span>
 
 	@Override
 	public void gameFinished(GameFinishedEvent event) {
 		// Do nothing.
-<span class="nc" id="L34">	}</span>
+<span class="nc" id="L40">	}</span>
 
 	@Override
 	public void debugRequested(DebugRequestedEvent event) {
 		// Do nothing.
-<span class="nc" id="L39">	}</span>
+<span class="nc" id="L45">	}</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

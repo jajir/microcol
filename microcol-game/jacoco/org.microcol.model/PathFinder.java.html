@@ -70,73 +70,72 @@ class PathFinder {
 
 <span class="nc bnc" id="L71" title="All 2 branches missed.">		while (!openSet.isEmpty()) {</span>
 <span class="nc" id="L72">			current = findNext(openSet);</span>
-//			ship.model.requestDebug(getList(current));
-<span class="nc bnc" id="L74" title="All 2 branches missed.">			if (current.getLocation().equals(destination)) {</span>
-<span class="nc" id="L75">				break;</span>
+<span class="nc bnc" id="L73" title="All 2 branches missed.">			if (current.getLocation().equals(destination)) {</span>
+<span class="nc" id="L74">				break;</span>
 			}
-<span class="nc" id="L77">			openSet.remove(current);</span>
-<span class="nc" id="L78">			closedSet.add(current);</span>
-<span class="nc" id="L79">			List&lt;Location&gt; neighbors = current.getLocation().getNeighbors();</span>
-<span class="nc bnc" id="L80" title="All 2 branches missed.">			for (Location neighbor : neighbors) {</span>
-<span class="nc bnc" id="L81" title="All 4 branches missed.">				if (!contains(closedSet, neighbor) &amp;&amp; ship.isMoveable(neighbor)) {</span>
-<span class="nc" id="L82">					Node node = null;</span>
-<span class="nc" id="L83">					Iterator&lt;Node&gt; iter = openSet.iterator();</span>
-<span class="nc bnc" id="L84" title="All 2 branches missed.">					while (iter.hasNext()) {</span>
-<span class="nc" id="L85">						node = iter.next();</span>
-<span class="nc bnc" id="L86" title="All 2 branches missed.">						if (node.getLocation().equals(neighbor)) {</span>
-<span class="nc" id="L87">							iter.remove();</span>
-<span class="nc" id="L88">							break;</span>
+<span class="nc" id="L76">			openSet.remove(current);</span>
+<span class="nc" id="L77">			closedSet.add(current);</span>
+<span class="nc" id="L78">			List&lt;Location&gt; neighbors = current.getLocation().getNeighbors();</span>
+<span class="nc bnc" id="L79" title="All 2 branches missed.">			for (Location neighbor : neighbors) {</span>
+<span class="nc bnc" id="L80" title="All 4 branches missed.">				if (!contains(closedSet, neighbor) &amp;&amp; ship.isMoveable(neighbor)) {</span>
+<span class="nc" id="L81">					Node node = null;</span>
+<span class="nc" id="L82">					Iterator&lt;Node&gt; iter = openSet.iterator();</span>
+<span class="nc bnc" id="L83" title="All 2 branches missed.">					while (iter.hasNext()) {</span>
+<span class="nc" id="L84">						node = iter.next();</span>
+<span class="nc bnc" id="L85" title="All 2 branches missed.">						if (node.getLocation().equals(neighbor)) {</span>
+<span class="nc" id="L86">							iter.remove(); // FIXME JKA CO KDYZ SE NA TO NECO ODKAZUJE?</span>
+<span class="nc" id="L87">							break;</span>
 						}
-<span class="nc" id="L90">						node = null;</span>
+<span class="nc" id="L89">						node = null;</span>
 					}
-<span class="nc" id="L92">					Node nnn = new Node(current, neighbor, neighbor.getDistance(destination));</span>
-<span class="nc bnc" id="L93" title="All 2 branches missed.">					if (node == null) {</span>
-<span class="nc" id="L94">						openSet.add(nnn);</span>
+<span class="nc" id="L91">					Node nnn = new Node(current, neighbor, neighbor.getDistance(destination));</span>
+<span class="nc bnc" id="L92" title="All 2 branches missed.">					if (node == null) {</span>
+<span class="nc" id="L93">						openSet.add(nnn);</span>
 					} else {
-<span class="nc bnc" id="L96" title="All 2 branches missed.">						if (nnn.getCost() &lt; node.getCost()) {</span>
-<span class="nc" id="L97">							openSet.add(nnn);</span>
+<span class="nc bnc" id="L95" title="All 2 branches missed.">						if (nnn.getCost() &lt; node.getCost()) {</span>
+<span class="nc" id="L96">							openSet.add(nnn);</span>
 						} else {
-<span class="nc" id="L99">							openSet.add(node);</span>
+<span class="nc" id="L98">							openSet.add(node);</span>
 						}
 					}
 				}
-<span class="nc" id="L103">			}</span>
-<span class="nc" id="L104">		}</span>
+<span class="nc" id="L102">			}</span>
+<span class="nc" id="L103">		}</span>
 
-<span class="nc" id="L106">		return getList(current);</span>
+<span class="nc" id="L105">		return getList(current);</span>
 	}
 
 	private Node findNext(final Set&lt;Node&gt; openSet) {
-<span class="nc" id="L110">		Node found = null;</span>
-<span class="nc bnc" id="L111" title="All 2 branches missed.">		for (Node node : openSet) {</span>
-<span class="nc bnc" id="L112" title="All 4 branches missed.">			if (found == null || node.getScore() &lt; found.getScore()) {</span>
-<span class="nc" id="L113">				found = node;</span>
+<span class="nc" id="L109">		Node found = null;</span>
+<span class="nc bnc" id="L110" title="All 2 branches missed.">		for (Node node : openSet) {</span>
+<span class="nc bnc" id="L111" title="All 4 branches missed.">			if (found == null || node.getScore() &lt; found.getScore()) {</span>
+<span class="nc" id="L112">				found = node;</span>
 			}
-<span class="nc" id="L115">		}</span>
+<span class="nc" id="L114">		}</span>
 
-<span class="nc" id="L117">		return found;</span>
+<span class="nc" id="L116">		return found;</span>
 	}
 
 	private boolean contains(final Set&lt;Node&gt; closedSet, final Location location) {
-<span class="nc bnc" id="L121" title="All 2 branches missed.">		for (Node node : closedSet) {</span>
-<span class="nc bnc" id="L122" title="All 2 branches missed.">			if (node.getLocation().equals(location)) {</span>
-<span class="nc" id="L123">				return true;</span>
+<span class="nc bnc" id="L120" title="All 2 branches missed.">		for (Node node : closedSet) {</span>
+<span class="nc bnc" id="L121" title="All 2 branches missed.">			if (node.getLocation().equals(location)) {</span>
+<span class="nc" id="L122">				return true;</span>
 			}
-<span class="nc" id="L125">		}</span>
+<span class="nc" id="L124">		}</span>
 
-<span class="nc" id="L127">		return false;</span>
+<span class="nc" id="L126">		return false;</span>
 	}
 
 	private List&lt;Location&gt; getList(Node node) {
-<span class="nc" id="L131">		List&lt;Location&gt; list = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L130">		List&lt;Location&gt; list = new ArrayList&lt;&gt;();</span>
 
-<span class="nc bnc" id="L133" title="All 2 branches missed.">		while (node != null) {</span>
-<span class="nc" id="L134">			list.add(node.getLocation());</span>
-<span class="nc" id="L135">			node = node.getParent();</span>
+<span class="nc bnc" id="L132" title="All 2 branches missed.">		while (node != null) {</span>
+<span class="nc" id="L133">			list.add(node.getLocation());</span>
+<span class="nc" id="L134">			node = node.getParent();</span>
 		}
-<span class="nc" id="L137">		Collections.reverse(list);</span>
+<span class="nc" id="L136">		Collections.reverse(list);</span>
 
-<span class="nc" id="L139">		return list;</span>
+<span class="nc" id="L138">		return list;</span>
 	}
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

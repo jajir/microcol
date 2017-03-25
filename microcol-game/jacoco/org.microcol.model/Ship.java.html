@@ -10,49 +10,49 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 
 public class Ship {
-	Model model; // FIXME JKA private
+	private Model model;
 
 	private final Player owner;
 	private final ShipType type;
 
 	private Location location;
 	private int availableMoves;
+	private boolean canAttack;
 
-<span class="nc" id="L21">	Ship(final Player owner, final ShipType type, final Location location) {</span>
-<span class="nc" id="L22">		this.owner = Preconditions.checkNotNull(owner);</span>
-<span class="nc" id="L23">		this.type = Preconditions.checkNotNull(type);</span>
-<span class="nc" id="L24">		this.location = Preconditions.checkNotNull(location);</span>
-
-<span class="nc" id="L26">		this.availableMoves = type.getSpeed();</span>
-<span class="nc" id="L27">	}</span>
+<span class="nc" id="L22">	Ship(final Player owner, final ShipType type, final Location location) {</span>
+<span class="nc" id="L23">		this.owner = Preconditions.checkNotNull(owner);</span>
+<span class="nc" id="L24">		this.type = Preconditions.checkNotNull(type);</span>
+<span class="nc" id="L25">		this.location = Preconditions.checkNotNull(location);</span>
+<span class="nc" id="L26">	}</span>
 
 	void setModel(final Model model) {
-<span class="nc" id="L30">		this.model = Preconditions.checkNotNull(model);</span>
+<span class="nc" id="L29">		this.model = Preconditions.checkNotNull(model);</span>
 
-<span class="nc" id="L32">		final Terrain terrain = this.model.getMap().getTerrainAt(location);</span>
-<span class="nc bnc" id="L33" title="All 2 branches missed.">		if (terrain != Terrain.OCEAN) {</span>
-<span class="nc" id="L34">			throw new IllegalStateException(String.format(&quot;Ship must start on ocen (%s -&gt; %s).&quot;, location, terrain));</span>
+<span class="nc" id="L31">		final Terrain terrain = this.model.getMap().getTerrainAt(location);</span>
+<span class="nc bnc" id="L32" title="All 2 branches missed.">		if (terrain != Terrain.OCEAN) {</span>
+<span class="nc" id="L33">			throw new IllegalStateException(String.format(&quot;Ship must start on ocen (%s -&gt; %s).&quot;, location, terrain));</span>
 		}
-<span class="nc" id="L36">	}</span>
+<span class="nc" id="L35">	}</span>
 
 	public Player getOwner() {
-<span class="nc" id="L39">		return owner;</span>
+<span class="nc" id="L38">		return owner;</span>
 	}
 
 	public ShipType getType() {
-<span class="nc" id="L43">		return type;</span>
+<span class="nc" id="L42">		return type;</span>
 	}
 
 	public Location getLocation() {
-<span class="nc" id="L47">		return location;</span>
+<span class="nc" id="L46">		return location;</span>
 	}
 
 	public int getAvailableMoves() {
-<span class="nc" id="L51">		return availableMoves;</span>
+<span class="nc" id="L50">		return availableMoves;</span>
 	}
 
 	void startTurn() {
-<span class="nc" id="L55">		availableMoves = type.getSpeed();</span>
+<span class="nc" id="L54">		availableMoves = type.getSpeed();</span>
+<span class="nc" id="L55">		canAttack = true;</span>
 <span class="nc" id="L56">	}</span>
 
 	// Netestuje nedosažitelné lokace, pouze jestli je teoreticky možné na danou lokaci vstoupit
@@ -134,14 +134,34 @@ public class Ship {
 		}
 <span class="nc" id="L135">	}</span>
 
+	// TODO JKA canAttack
+
+	public void attack(final Ship ship) {
+<span class="nc" id="L140">		model.checkGameActive();</span>
+<span class="nc" id="L141">		model.checkCurrentPlayer(owner);</span>
+
+<span class="nc" id="L143">		Preconditions.checkNotNull(ship);</span>
+<span class="nc bnc" id="L144" title="All 2 branches missed.">		Preconditions.checkArgument(!owner.equals(ship.owner), &quot;Cannot attack own ship (%s - %s).&quot;, this, ship);</span>
+<span class="nc" id="L145">		Preconditions.checkArgument(location.isAdjacent(ship.location), &quot;Ship is not adjacent (%s - %s)&quot;, this, ship);</span>
+<span class="nc" id="L146">		Preconditions.checkArgument(canAttack, &quot;This ship (%s) already fight this turn.&quot;, this);</span>
+
+<span class="nc" id="L148">		availableMoves = 0;</span>
+<span class="nc" id="L149">		canAttack = false;</span>
+
+<span class="nc bnc" id="L151" title="All 2 branches missed.">		final Ship destroyed = (Math.random() &lt;= 0.6) ? ship : this;</span>
+<span class="nc" id="L152">		model.destroyShip(destroyed);</span>
+<span class="nc" id="L153">		model.fireShipAttacked(this, ship, destroyed);</span>
+<span class="nc" id="L154">	}</span>
+
 	@Override
 	public String toString() {
-<span class="nc" id="L139">		return MoreObjects.toStringHelper(this)</span>
-<span class="nc" id="L140">			.add(&quot;owner&quot;, owner)</span>
-<span class="nc" id="L141">			.add(&quot;type&quot;, type)</span>
-<span class="nc" id="L142">			.add(&quot;location&quot;, location)</span>
-<span class="nc" id="L143">			.add(&quot;availableMoves&quot;, availableMoves)</span>
-<span class="nc" id="L144">			.toString();</span>
+<span class="nc" id="L158">		return MoreObjects.toStringHelper(this)</span>
+<span class="nc" id="L159">			.add(&quot;owner&quot;, owner)</span>
+<span class="nc" id="L160">			.add(&quot;type&quot;, type)</span>
+<span class="nc" id="L161">			.add(&quot;location&quot;, location)</span>
+<span class="nc" id="L162">			.add(&quot;availableMoves&quot;, availableMoves)</span>
+<span class="nc" id="L163">			.add(&quot;canAttack&quot;, canAttack)</span>
+<span class="nc" id="L164">			.toString();</span>
 	}
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

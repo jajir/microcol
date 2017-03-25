@@ -118,28 +118,36 @@ public class Model {
 <span class="nc" id="L118">		gameManager.checkCurrentPlayer(player);</span>
 <span class="nc" id="L119">	}</span>
 
-	void fireGameStarted() {
-<span class="nc" id="L122">		listenerManager.fireGameStarted(this);</span>
+	void destroyShip(final Ship ship) {
+<span class="nc" id="L122">		shipStorage.remove(ship);</span>
 <span class="nc" id="L123">	}</span>
 
-	void fireRoundStarted() {
-<span class="nc" id="L126">		listenerManager.fireRoundStarted(this, calendar);</span>
+	void fireGameStarted() {
+<span class="nc" id="L126">		listenerManager.fireGameStarted(this);</span>
 <span class="nc" id="L127">	}</span>
 
-	void fireTurnStarted(final Player player) {
-<span class="nc" id="L130">		listenerManager.fireTurnStarted(this, player);</span>
+	void fireRoundStarted() {
+<span class="nc" id="L130">		listenerManager.fireRoundStarted(this, calendar);</span>
 <span class="nc" id="L131">	}</span>
 
-	void fireShipMoved(final Ship ship, final Location start, final Path path) {
-<span class="nc" id="L134">		listenerManager.fireShipMoved(this, ship, start, path);</span>
+	void fireTurnStarted(final Player player) {
+<span class="nc" id="L134">		listenerManager.fireTurnStarted(this, player);</span>
 <span class="nc" id="L135">	}</span>
 
-	void fireGameFinished() {
-<span class="nc" id="L138">		listenerManager.fireGameFinished(this);</span>
+	void fireShipMoved(final Ship ship, final Location start, final Path path) {
+<span class="nc" id="L138">		listenerManager.fireShipMoved(this, ship, start, path);</span>
 <span class="nc" id="L139">	}</span>
 
-	public void requestDebug(final List&lt;Location&gt; locations) {
-<span class="nc" id="L142">		listenerManager.fireDebugRequested(this, locations);</span>
+	void fireShipAttacked(final Ship attacker, final Ship defender, final Ship destroyed) {
+<span class="nc" id="L142">		listenerManager.fireShipAttacked(this, attacker, defender, destroyed);</span>
 <span class="nc" id="L143">	}</span>
+
+	void fireGameFinished() {
+<span class="nc" id="L146">		listenerManager.fireGameFinished(this);</span>
+<span class="nc" id="L147">	}</span>
+
+	public void requestDebug(final List&lt;Location&gt; locations) {
+<span class="nc" id="L150">		listenerManager.fireDebugRequested(this, locations);</span>
+<span class="nc" id="L151">	}</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>
