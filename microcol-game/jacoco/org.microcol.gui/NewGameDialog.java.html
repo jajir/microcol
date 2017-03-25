@@ -55,32 +55,31 @@ public class NewGameDialog extends JDialog {
 <span class="nc" id="L55">		final JButton buttonStartGame = new JButton(text.get(&quot;newGameDialog.startGame&quot;));</span>
 <span class="nc" id="L56">		buttonStartGame.addActionListener(e -&gt; {</span>
 <span class="nc" id="L57">			final String selectedMap = (String) comboBoxSelectMap.getSelectedItem();</span>
-<span class="nc" id="L58">			System.out.println(&quot;selected was: &quot; + selectedMap);</span>
-<span class="nc" id="L59">			setVisible(false);</span>
-<span class="nc" id="L60">		});</span>
-<span class="nc" id="L61">		buttonStartGame.requestFocus();</span>
-<span class="nc" id="L62">		add(buttonStartGame, new GridBagConstraints(1, 10, 1, 1, 1.0D, 1.0D, GridBagConstraints.SOUTHEAST,</span>
+<span class="nc" id="L58">			setVisible(false);</span>
+<span class="nc" id="L59">		});</span>
+<span class="nc" id="L60">		buttonStartGame.requestFocus();</span>
+<span class="nc" id="L61">		add(buttonStartGame, new GridBagConstraints(1, 10, 1, 1, 1.0D, 1.0D, GridBagConstraints.SOUTHEAST,</span>
 				GridBagConstraints.NONE, new Insets(0, 0, BORDER_SPAN, BORDER_SPAN), 0, 0));
 
-<span class="nc" id="L65">		setResizable(false);</span>
-<span class="nc" id="L66">		pack();</span>
-<span class="nc" id="L67">		setLocation(viewUtil.centerWindow(this));</span>
-<span class="nc" id="L68">		setModal(true);</span>
-<span class="nc" id="L69">	}</span>
+<span class="nc" id="L64">		setResizable(false);</span>
+<span class="nc" id="L65">		pack();</span>
+<span class="nc" id="L66">		setLocation(viewUtil.centerWindow(this));</span>
+<span class="nc" id="L67">		setModal(true);</span>
+<span class="nc" id="L68">	}</span>
 
 	private String[] getMaps() {
 		try {
-<span class="nc" id="L73">			final URL resource = ClassLoader.getSystemClassLoader().getResource(&quot;maps&quot;);</span>
-<span class="nc" id="L74">			File directory = new File(resource.toURI());</span>
-<span class="nc" id="L75">			String[] out = new String[directory.listFiles().length];</span>
-<span class="nc" id="L76">			int i = 0;</span>
-<span class="nc bnc" id="L77" title="All 2 branches missed.">			for (final File f : directory.listFiles()) {</span>
-<span class="nc" id="L78">				out[i] = f.getName();</span>
-<span class="nc" id="L79">				i++;</span>
+<span class="nc" id="L72">			final URL resource = ClassLoader.getSystemClassLoader().getResource(&quot;maps&quot;);</span>
+<span class="nc" id="L73">			File directory = new File(resource.toURI());</span>
+<span class="nc" id="L74">			String[] out = new String[directory.listFiles().length];</span>
+<span class="nc" id="L75">			int i = 0;</span>
+<span class="nc bnc" id="L76" title="All 2 branches missed.">			for (final File f : directory.listFiles()) {</span>
+<span class="nc" id="L77">				out[i] = f.getName();</span>
+<span class="nc" id="L78">				i++;</span>
 			}
-<span class="nc" id="L81">			return out;</span>
-<span class="nc" id="L82">		} catch (URISyntaxException e) {</span>
-<span class="nc" id="L83">			throw new MicroColException(e.getMessage(), e);</span>
+<span class="nc" id="L80">			return out;</span>
+<span class="nc" id="L81">		} catch (URISyntaxException e) {</span>
+<span class="nc" id="L82">			throw new MicroColException(e.getMessage(), e);</span>
 		}
 	}
 

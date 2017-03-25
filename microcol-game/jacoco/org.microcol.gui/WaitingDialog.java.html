@@ -38,25 +38,24 @@ public class WaitingDialog extends JDialog {
 				new Insets(0, 0, 10, 10), 0, 0));
 
 <span class="nc" id="L40">		URL url = WaitingDialog.class.getResource(&quot;/images/waiting-gears2.gif&quot;);</span>
-<span class="nc" id="L41">		System.out.println(url.getPath());</span>
-<span class="nc" id="L42">		ImageIcon imageIcon = new ImageIcon(url);</span>
-<span class="nc" id="L43">		JLabel l = new JLabel(imageIcon);</span>
-<span class="nc" id="L44">		l.setDoubleBuffered(true);</span>
-<span class="nc" id="L45">		add(l, new GridBagConstraints(0, 1, 1, 1, 1.0D, 1.0D, GridBagConstraints.SOUTHEAST, GridBagConstraints.NONE,</span>
+<span class="nc" id="L41">		ImageIcon imageIcon = new ImageIcon(url);</span>
+<span class="nc" id="L42">		JLabel l = new JLabel(imageIcon);</span>
+<span class="nc" id="L43">		l.setDoubleBuffered(true);</span>
+<span class="nc" id="L44">		add(l, new GridBagConstraints(0, 1, 1, 1, 1.0D, 1.0D, GridBagConstraints.SOUTHEAST, GridBagConstraints.NONE,</span>
 				new Insets(0, 0, 10, 10), 0, 0));
 
-<span class="nc" id="L48">		final JButton buttonOk = new JButton(text.get(&quot;dialog.ok&quot;));</span>
-<span class="nc" id="L49">		buttonOk.addActionListener(e -&gt; {</span>
-<span class="nc" id="L50">			setVisible(false);</span>
-<span class="nc" id="L51">		});</span>
-<span class="nc" id="L52">		buttonOk.requestFocus();</span>
-<span class="nc" id="L53">		add(buttonOk, new GridBagConstraints(0, 10, 1, 1, 1.0D, 1.0D, GridBagConstraints.SOUTHEAST,</span>
+<span class="nc" id="L47">		final JButton buttonOk = new JButton(text.get(&quot;dialog.ok&quot;));</span>
+<span class="nc" id="L48">		buttonOk.addActionListener(e -&gt; {</span>
+<span class="nc" id="L49">			setVisible(false);</span>
+<span class="nc" id="L50">		});</span>
+<span class="nc" id="L51">		buttonOk.requestFocus();</span>
+<span class="nc" id="L52">		add(buttonOk, new GridBagConstraints(0, 10, 1, 1, 1.0D, 1.0D, GridBagConstraints.SOUTHEAST,</span>
 				GridBagConstraints.NONE, new Insets(0, 0, 10, 10), 0, 0));
 
-<span class="nc" id="L56">		pack();</span>
-<span class="nc" id="L57">		setLocation(viewUtil.centerWindow(this));</span>
-<span class="nc" id="L58">		setModal(true);</span>
-<span class="nc" id="L59">	}</span>
+<span class="nc" id="L55">		pack();</span>
+<span class="nc" id="L56">		setLocation(viewUtil.centerWindow(this));</span>
+<span class="nc" id="L57">		setModal(true);</span>
+<span class="nc" id="L58">	}</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

@@ -56,7 +56,7 @@ import com.google.inject.Stage;
 		} else {
 <span class="nc" id="L57">			Graphics2D g = splash.createGraphics();</span>
 <span class="nc bnc" id="L58" title="All 2 branches missed.">			if (g == null) {</span>
-<span class="nc" id="L59">				System.out.println(&quot;unable to instantiate graphics for splash screen&quot;);</span>
+<span class="nc" id="L59">				System.err.println(&quot;unable to instantiate graphics for splash screen&quot;);</span>
 <span class="nc" id="L60">				return;</span>
 			}
 		}
