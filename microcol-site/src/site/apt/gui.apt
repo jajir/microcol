@@ -4,11 +4,13 @@
 
 GUI structure
 
- Following help find class responsible for specific GUI features.
+ Following help find class responsible for specific GUI features. For most of panels is used {{{https://en.wikipedia.org/wiki/Model–view–presenter}Model view presenter}} (MVP).
+ It's described at {{{http://www.g-widgets.com/2016/01/19/introduction-to-the-mvp-pattern-in-gwt/}http://www.g-widgets.com/2016/01/19/introduction-to-the-mvp-pattern-in-gwt/}}.
 
-* Game view
+* Main Frame
 
- Whole game looks like:
+ Main frame is called MainFrameView with it's MainFramePresenter.
+ Main Frame have following structure:
 
 ----
  +--------------------------------------------+
@@ -16,22 +18,42 @@ GUI structure
  +--------------------------------------------+
  |                                            |
  |                                            |
- |                                            |
- |                MainPanel                   |
- |                                            |
- |                                            |
- |                                            |
+ |     Depending on game state there is:      |
+ |             or StartPanel                  |
+ |               MainPanel                    |
  |                                            |
  |                                            |
  |                                            |
- +--------------------------------------------+
- | StatuBar                                   |
+ |                                            |
+ |                                            |
+ |                                            |
+ |                                            |
  +--------------------------------------------+
 -----
 
-* MainPanel
+* Start Panel
+
+ Start panel just show simple option "start new game" and "close application".
+
+----
+ +--------------------------------------------+
+ |                                            |
+ |                                            |
+ |              Menu:                         |
+ |              -------                       |
+ |              Start new game                |
+ |              Setting                       |
+ |              Exit game                     |
+ |              Load game                     |
+ |                                            |
+ |                                            |
+ |                                            |
+ +--------------------------------------------+
+-----
+
+* Main Panel
  
- MainPanel have following structure:
+ Game itself is inside this frame. MainPanel have following structure:
  
 ----
  +---------------------------------+----------+

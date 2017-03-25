@@ -1,5 +1,6 @@
 package org.microcol.gui;
 
+import java.awt.CardLayout;
 import java.awt.Rectangle;
 
 import javax.swing.JFrame;
@@ -20,13 +21,19 @@ public class MainFrameView extends JFrame implements MainFramePresenter.Display 
 
 	private final GamePreferences gamePreferences;
 
+	private final CardLayout cardLayout;
+
 	@Inject
-	public MainFrameView(final MainPanelView mainPanel, final MainMenuView mainMenu,
-			final GamePreferences gamePreferences) {
+	public MainFrameView(final MainPanelView mainPanelView, final StartPanelView startPanelView,
+			final MainMenuView mainMenu, final GamePreferences gamePreferences) {
 		super("MicroCol");
 		this.gamePreferences = Preconditions.checkNotNull(gamePreferences);
 		setJMenuBar(mainMenu);
-		add(mainPanel);
+		cardLayout = new CardLayout();
+		getContentPane().setLayout(cardLayout);
+		getContentPane().add(mainPanelView, MainFramePresenter.MAIN_GAME_PANEL);
+		getContentPane().add(startPanelView, MainFramePresenter.START_PANEL);
+		cardLayout.show(getContentPane(), MainFramePresenter.MAIN_GAME_PANEL);
 		loadPreferences();
 		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 	}
@@ -53,6 +60,11 @@ public class MainFrameView extends JFrame implements MainFramePresenter.Display 
 			}
 		}
 		return true;
+	}
+
+	@Override
+	public void showPanel(final String panelName) {
+		cardLayout.show(getContentPane(), Preconditions.checkNotNull(panelName));
 	}
 
 	@Override

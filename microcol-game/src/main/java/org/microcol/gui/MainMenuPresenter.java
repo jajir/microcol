@@ -62,7 +62,7 @@ public class MainMenuPresenter {
 	@Inject
 	public MainMenuPresenter(final MainMenuPresenter.Display display,
 			final AboutGameEventController gameEventController, final GamePreferences gamePreferences,
-			final ChangeLanguageController changeLanguangeController, final Text text, final ViewUtil viewUtil,
+			final ChangeLanguageController changeLanguageController, final Text text, final ViewUtil viewUtil,
 			final VolumeChangeController volumeChangeController, final ShowGridController showGridController,
 			final FocusedTileController focusedTileController, final MoveUnitController moveUnitController,
 			final CenterViewController centerViewController, final TurnStartedController turnStartedController,
@@ -81,10 +81,10 @@ public class MainMenuPresenter {
 			});
 		}
 		display.getRbMenuItemlanguageCz().addActionListener(actionEvent -> {
-			changeLanguangeController.fireEvent(new ChangeLanguageEvent(Text.Language.cz, gameController.getModel()));
+			changeLanguageController.fireEvent(new ChangeLanguageEvent(Text.Language.cz, gameController.getModel()));
 		});
 		display.getRbMenuItemlanguageEn().addActionListener(actionEvent -> {
-			changeLanguangeController.fireEvent(new ChangeLanguageEvent(Text.Language.en, gameController.getModel()));
+			changeLanguageController.fireEvent(new ChangeLanguageEvent(Text.Language.en, gameController.getModel()));
 		});
 		display.getMenuItemVolume().addActionListener(actionEvent -> {
 			PreferencesVolume preferencesVolume = new PreferencesVolume(viewUtil, text, volumeChangeController,
@@ -99,7 +99,7 @@ public class MainMenuPresenter {
 		});
 		display.getMenuItemCenterView()
 				.addActionListener(event -> centerViewController.fireEvent(new CenterViewEvent()));
-		changeLanguangeController.addListener(event -> {
+		changeLanguageController.addListener(event -> {
 			display.updateLanguage();
 		});
 		focusedTileController.addListener(event -> onFocusedTileEvent(event));

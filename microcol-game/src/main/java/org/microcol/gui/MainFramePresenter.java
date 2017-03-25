@@ -23,9 +23,16 @@ import com.google.inject.Inject;
  */
 public class MainFramePresenter {
 
+	public final static String START_PANEL = "Start panel";
+
+	public final static String MAIN_GAME_PANEL = "Main game panel";
+	
 	public interface Display {
 
 		JFrame getFrame();
+		
+		
+		void showPanel(String panelName);
 	}
 
 	private final Logger logger = Logger.getLogger(MainFramePresenter.class);
@@ -84,5 +91,10 @@ public class MainFramePresenter {
 		gamePreferences.setMainFramePosition(normalBounds);
 		gamePreferences.setMainFrameState(display.getFrame().getExtendedState());
 	}
+	
+	public void showPanel(final String panelName){
+		display.showPanel(panelName);
+	}
+	
 
 }

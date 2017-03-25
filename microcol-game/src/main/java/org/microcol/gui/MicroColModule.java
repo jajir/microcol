@@ -11,6 +11,7 @@ import org.microcol.gui.event.EventInitializer;
 import org.microcol.gui.event.ExitGameController;
 import org.microcol.gui.event.FocusedTileController;
 import org.microcol.gui.event.GameController;
+import org.microcol.gui.event.GameFinishedController;
 import org.microcol.gui.event.KeyController;
 import org.microcol.gui.event.MoveUnitController;
 import org.microcol.gui.event.NewGameController;
@@ -43,6 +44,7 @@ public class MicroColModule extends AbstractModule {
 		/**
 		 * Event controllers.
 		 */
+		bind(ApplicationController.class).in(Singleton.class);
 		bind(MoveUnitController.class).in(Singleton.class);
 		bind(KeyController.class).in(Singleton.class);
 		bind(NextTurnController.class).in(Singleton.class);
@@ -57,6 +59,7 @@ public class MicroColModule extends AbstractModule {
 		bind(CenterViewController.class).in(Singleton.class);
 		bind(ExitGameController.class).in(Singleton.class);
 		bind(DebugRequestController.class).in(Singleton.class);
+		bind(GameFinishedController.class).in(Singleton.class);
 
 		/**
 		 * Initialize MVP classes
@@ -69,6 +72,10 @@ public class MicroColModule extends AbstractModule {
 		bind(GamePanelPresenter.Display.class).to(GamePanelView.class).in(Singleton.class);
 		bind(GamePanelPresenter.class).asEagerSingleton();
 
+		bind(StartPanelView.class).in(Singleton.class);
+		bind(StartPanelPresenter.Display.class).to(StartPanelView.class).in(Singleton.class);
+		bind(StartPanelPresenter.class).asEagerSingleton();
+		
 		bind(StatusBarView.class).in(Singleton.class);
 		bind(StatusBarPresenter.Display.class).to(StatusBarView.class).in(Singleton.class);
 		bind(StatusBarPresenter.class).asEagerSingleton();

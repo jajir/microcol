@@ -45,13 +45,15 @@ public class GameController implements Localized {
 
 	private final DebugRequestController debugRequestController;
 
+	private final GameFinishedController gameFinishedController;
+
 	private Model game;
 
 	@Inject
 	public GameController(final NextTurnController nextTurnController, final MoveUnitController moveUnitController,
 			final NewGameController newGameController, final TurnStartedController turnStartedController,
 			final MusicController musicController, final GamePreferences gamePreferences,
-			final DebugRequestController debugRequestController) {
+			final DebugRequestController debugRequestController, final GameFinishedController gameFinishedController) {
 		this.nextTurnController = Preconditions.checkNotNull(nextTurnController);
 		this.moveUnitController = Preconditions.checkNotNull(moveUnitController);
 		this.newGameController = Preconditions.checkNotNull(newGameController);
@@ -59,6 +61,7 @@ public class GameController implements Localized {
 		this.musicController = Preconditions.checkNotNull(musicController);
 		this.gamePreferences = Preconditions.checkNotNull(gamePreferences);
 		this.debugRequestController = Preconditions.checkNotNull(debugRequestController);
+		this.gameFinishedController = Preconditions.checkNotNull(gameFinishedController);
 	}
 
 	/**
@@ -66,23 +69,21 @@ public class GameController implements Localized {
 	 */
 	public void newGame() {
 		ModelBuilder builder = new ModelBuilder();
-		game = builder.setCalendar(1570, 1800)
+		game = builder.setCalendar(1570, 1571)
 				// .setMap(15, 10)
-				.setMap("/maps/map-01.txt")
-				.addPlayer("Player1", true)
-					.addShip("Player1", ShipType.GALLEON, Location.of(4, 2))
-//					.addShip("Player1", ShipType.FRIGATE, Location.of(3, 3))
-//				.addPlayer("Player2", true)
-//					.addShip("Player2", ShipType.GALLEON, Location.of(7, 7))
-//					.addShip("Player2", ShipType.FRIGATE, Location.of(7, 9))
-//					.addShip("Player2", ShipType.FRIGATE, Location.of(14, 9))
-//				.setMap("/maps/map-02.txt")
-//				.addPlayer("Player1", true)
-//					.addShip("Player1", ShipType.GALLEON, Location.of(1, 1))
-//					.addShip("Player1", ShipType.FRIGATE, Location.of(3, 1))
-//				.addPlayer("Player2", true)
-//					.addShip("Player2", ShipType.GALLEON, Location.of(3, 3))
-//					.addShip("Player2", ShipType.FRIGATE, Location.of(1, 3))
+				.setMap("/maps/map-01.txt").addPlayer("Player1", false)
+				.addShip("Player1", ShipType.GALLEON, Location.of(4, 2))
+				.addShip("Player1", ShipType.FRIGATE, Location.of(3, 3)).addPlayer("Player2", true)
+				.addShip("Player2", ShipType.GALLEON, Location.of(7, 7))
+				// .addShip("Player2", ShipType.FRIGATE, Location.of(7, 9))
+				// .addShip("Player2", ShipType.FRIGATE, Location.of(14, 9))
+				// .setMap("/maps/map-02.txt")
+				// .addPlayer("Player1", true)
+				// .addShip("Player1", ShipType.GALLEON, Location.of(1, 1))
+				// .addShip("Player1", ShipType.FRIGATE, Location.of(3, 1))
+				// .addPlayer("Player2", true)
+				// .addShip("Player2", ShipType.GALLEON, Location.of(3, 3))
+				// .addShip("Player2", ShipType.FRIGATE, Location.of(1, 3))
 				.build();
 		game.addListener(new ModelAdapter() {
 
@@ -114,6 +115,7 @@ public class GameController implements Localized {
 			@Override
 			public void gameFinished(final GameFinishedEvent event) {
 				logger.debug("Game finished " + event);
+				gameFinishedController.fireEvent(event);
 			}
 
 			@Override

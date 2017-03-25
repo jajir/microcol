@@ -11,10 +11,10 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
 import org.microcol.gui.AppleMenuListener;
+import org.microcol.gui.ApplicationController;
 import org.microcol.gui.ImageProvider;
 import org.microcol.gui.MainFrameView;
 import org.microcol.gui.MicroColModule;
-import org.microcol.gui.event.GameController;
 
 import com.apple.mrj.MRJApplicationUtils;
 import com.google.inject.Guice;
@@ -120,9 +120,9 @@ public class MicroCol {
 
 		SwingUtilities.invokeLater(() -> {
 			final MainFrameView mainFrame = injector.getInstance(MainFrameView.class);
-			final GameController gameController = injector.getInstance(GameController.class);
+			final ApplicationController applicationController  = injector.getInstance(ApplicationController.class);
 			mainFrame.setVisible(true);
-			gameController.newGame();
+			applicationController.startNewGame();
 		});
 	}
 }
