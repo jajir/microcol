@@ -38,7 +38,6 @@ public class WaitingDialog extends JDialog {
 				new Insets(0, 0, 10, 10), 0, 0));
 
 		URL url = WaitingDialog.class.getResource("/images/waiting-gears2.gif");
-		System.out.println(url.getPath());
 		ImageIcon imageIcon = new ImageIcon(url);
 		JLabel l = new JLabel(imageIcon);
 		l.setDoubleBuffered(true);

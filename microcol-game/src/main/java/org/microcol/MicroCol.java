@@ -56,7 +56,7 @@ public class MicroCol {
 		} else {
 			Graphics2D g = splash.createGraphics();
 			if (g == null) {
-				System.out.println("unable to instantiate graphics for splash screen");
+				System.err.println("unable to instantiate graphics for splash screen");
 				return;
 			}
 		}

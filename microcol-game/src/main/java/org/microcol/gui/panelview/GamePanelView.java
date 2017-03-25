@@ -479,7 +479,6 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 
 	@Override
 	public void setGotoCursorTitle(final Location gotoCursorTitle) {
-		System.out.println(gotoCursorTitle);
 		this.gotoCursorTitle = gotoCursorTitle;
 	}
 

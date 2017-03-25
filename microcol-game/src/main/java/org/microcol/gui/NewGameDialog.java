@@ -55,7 +55,6 @@ public class NewGameDialog extends JDialog {
 		final JButton buttonStartGame = new JButton(text.get("newGameDialog.startGame"));
 		buttonStartGame.addActionListener(e -> {
 			final String selectedMap = (String) comboBoxSelectMap.getSelectedItem();
-			System.out.println("selected was: " + selectedMap);
 			setVisible(false);
 		});
 		buttonStartGame.requestFocus();
