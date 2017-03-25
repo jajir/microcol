@@ -10,21 +10,21 @@ import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableMap;
 
-public class World {
+public class WorldMap {
 	private final int maxX;
 	private final int maxY;
-	private final ImmutableMap<Location, Terrain> terrain;
+	private final ImmutableMap<Location, Terrain> terrainMap;
 
-	World(final int maxX, final int maxY) {
+	WorldMap(final int maxX, final int maxY) {
 		Preconditions.checkArgument(maxX >= 1, "Max X (%s) must be positive.", maxX);
 		Preconditions.checkArgument(maxY >= 1, "Max Y (%s) must be positive.", maxY);
 
 		this.maxX = maxX;
 		this.maxY = maxY;
-		this.terrain = ImmutableMap.of();
+		this.terrainMap = ImmutableMap.of();
 	}
 
-	World(final String fileName) {
+	WorldMap(final String fileName) {
 		Preconditions.checkNotNull(fileName);
 
 		int maxX = 0;
@@ -32,7 +32,7 @@ public class World {
 		final Map<Location, Terrain> terrain = new HashMap<>();
 
 		try (final BufferedReader reader = new BufferedReader(
-				new InputStreamReader(World.class.getResourceAsStream(fileName)))) {
+				new InputStreamReader(WorldMap.class.getResourceAsStream(fileName)))) {
 			String line = null;
 			while ((line = reader.readLine()) != null && !line.startsWith("-")) {
 				maxX = Math.max(maxX, line.length() - 1);
@@ -60,7 +60,7 @@ public class World {
 
 		this.maxX = maxX;
 		this.maxY = maxY;
-		this.terrain = ImmutableMap.copyOf(terrain);
+		this.terrainMap = ImmutableMap.copyOf(terrain);
 	}
 
 	public int getMaxX() {
@@ -74,7 +74,7 @@ public class World {
 	public Terrain getTerrainAt(final Location location) {
 		Preconditions.checkArgument(isValid(location), "Location (%) is not part of this map.", location);
 
-		Terrain terrain = this.terrain.get(location);
+		Terrain terrain = terrainMap.get(location);
 
 		return terrain != null ? terrain : Terrain.OCEAN;
 	}
@@ -113,7 +113,7 @@ public class World {
 		for (int y = 1; y <= maxY; y++) {
 			builder.append("|");
 			for (int x = 1; x <= maxX; x++) {
-				switch (terrain.get(Location.of(x, y))) {
+				switch (terrainMap.get(Location.of(x, y))) {
 					case CONTINENT:
 						builder.append("o");
 						break;
@@ -133,8 +133,8 @@ public class World {
 	}
 
 	public static void main(String[] args) {
-//		World world = new World(15, 10);
-		World world = new World("/maps/map-01.txt");
-		System.out.println(world.print());
+//		WorldMap map = new WorldMap(15, 10);
+		WorldMap map = new WorldMap("/maps/map-01.txt");
+		System.out.println(map.print());
 	}
 }

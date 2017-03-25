@@ -260,7 +260,7 @@ public class GamePanelPresenter implements Localized {
 		} else {
 			display.setCursorLocation(location);
 			focusedTileController.fireEvent(new FocusedTileEvent(gameController.getModel(), location,
-					gameController.getModel().getWorld().getTerrainAt(location)));
+					gameController.getModel().getMap().getTerrainAt(location)));
 		}
 	}
 
@@ -287,7 +287,7 @@ public class GamePanelPresenter implements Localized {
 		 * Set status bar message
 		 */
 		final Location where = lastMousePosition.toLocation();
-		final Terrain tile = gameController.getModel().getWorld().getTerrainAt(where);
+		final Terrain tile = gameController.getModel().getMap().getTerrainAt(where);
 		final StringBuilder buff = new StringBuilder();
 		buff.append(getText().get("statusBar.tile.start"));
 		buff.append(" ");
@@ -306,7 +306,7 @@ public class GamePanelPresenter implements Localized {
 		display.setCursorNormal();
 		display.setCursorLocation(moveTo);
 		focusedTileController.fireEvent(new FocusedTileEvent(gameController.getModel(), moveTo,
-				gameController.getModel().getWorld().getTerrainAt(moveTo)));
+				gameController.getModel().getMap().getTerrainAt(moveTo)));
 	}
 
 	private final void switchToNormalMode(final Location moveTo) {
@@ -318,7 +318,7 @@ public class GamePanelPresenter implements Localized {
 			Ship ship = gameController.getModel().getCurrentPlayer().getShipsAt(display.getCursorLocation()).get(0);
 			gameController.performMove(ship, path);
 			focusedTileController.fireEvent(new FocusedTileEvent(gameController.getModel(), display.getCursorLocation(),
-					gameController.getModel().getWorld().getTerrainAt(display.getCursorLocation())));
+					gameController.getModel().getMap().getTerrainAt(display.getCursorLocation())));
 		}
 		display.setCursorLocation(moveTo);
 		display.setCursorNormal();

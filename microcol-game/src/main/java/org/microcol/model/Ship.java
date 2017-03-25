@@ -29,7 +29,7 @@ public class Ship {
 	void setModel(final Model model) {
 		this.model = Preconditions.checkNotNull(model);
 
-		final Terrain terrain = this.model.getWorld().getTerrainAt(location);
+		final Terrain terrain = this.model.getMap().getTerrainAt(location);
 		if (terrain != Terrain.OCEAN) {
 			throw new IllegalStateException(String.format("Ship must start on ocen (%s -> %s).", location, terrain));
 		}
@@ -59,11 +59,11 @@ public class Ship {
 	public boolean isMoveable(final Location location) {
 		Preconditions.checkNotNull(location);
 
-		if (!model.getWorld().isValid(location)) {
+		if (!model.getMap().isValid(location)) {
 			return false;
 		}
 
-		if (model.getWorld().getTerrainAt(location) != Terrain.OCEAN) {
+		if (model.getMap().getTerrainAt(location) != Terrain.OCEAN) {
 			return false;
 		}
 
@@ -111,7 +111,7 @@ public class Ship {
 
 		Preconditions.checkNotNull(path);
 		Preconditions.checkArgument(path.getStart().isAdjacent(location), "Path (%s) must be adjacent to current location (%s).", path.getStart(), location);
-		Preconditions.checkArgument(model.getWorld().isValid(path), "Path (%s) must be valid.", path);
+		Preconditions.checkArgument(model.getMap().isValid(path), "Path (%s) must be valid.", path);
 		Preconditions.checkArgument(!path.containsAny(owner.getEnemyShipsAt().keySet()), "There is enemy ship on path (%s).", path);
 
 		final Location start = location;
@@ -122,8 +122,8 @@ public class Ship {
 				// TODO JKA neumožnit zadat delší cestu, než je povolený počet
 				break;
 			}
-			if (model.getWorld().getTerrainAt(newLocation) != Terrain.OCEAN) {
-				throw new IllegalArgumentException(String.format("Path (%s) must contain only ocean (%s).", newLocation, model.getWorld().getTerrainAt(newLocation)));
+			if (model.getMap().getTerrainAt(newLocation) != Terrain.OCEAN) {
+				throw new IllegalArgumentException(String.format("Path (%s) must contain only ocean (%s).", newLocation, model.getMap().getTerrainAt(newLocation)));
 			}
 			locations.add(newLocation);
 			location = newLocation;

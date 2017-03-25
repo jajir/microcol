@@ -8,7 +8,7 @@ public class ModelBuilder {
 	private final List<Ship> ships;
 
 	private Calendar calendar;
-	private World world;
+	private WorldMap map;
 
 	public ModelBuilder() {
 		players = new ArrayList<>();
@@ -21,14 +21,14 @@ public class ModelBuilder {
 		return this;
 	}
 
-	public ModelBuilder setWorld(final int maxX, final int maxY) {
-		world = new World(maxX, maxY);
+	public ModelBuilder setMap(final int maxX, final int maxY) {
+		map = new WorldMap(maxX, maxY);
 
 		return this;
 	}
 
-	public ModelBuilder setWorld(final String fileName) {
-		world = new World(fileName);
+	public ModelBuilder setMap(final String fileName) {
+		map = new WorldMap(fileName);
 
 		return this;
 	}
@@ -53,6 +53,6 @@ public class ModelBuilder {
 	}
 
 	public Model build() {
-		return new Model(calendar, world, players, ships);
+		return new Model(calendar, map, players, ships);
 	}
 }

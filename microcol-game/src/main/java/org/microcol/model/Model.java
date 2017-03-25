@@ -11,16 +11,16 @@ import com.google.common.collect.ImmutableList;
 public class Model {
 	private final ListenerManager listenerManager;
 	private final Calendar calendar;
-	private final World world;
+	private final WorldMap map;
 	private final ImmutableList<Player> players;
 	private final ShipStorage shipStorage;
 	private final GameManager gameManager;
 
-	Model(final Calendar calendar, final World world, final List<Player> players, final List<Ship> ships) {
+	Model(final Calendar calendar, final WorldMap map, final List<Player> players, final List<Ship> ships) {
 		listenerManager = new ListenerManager();
 
 		this.calendar = Preconditions.checkNotNull(calendar);
-		this.world = Preconditions.checkNotNull(world);
+		this.map = Preconditions.checkNotNull(map);
 
 		this.players = ImmutableList.copyOf(players);
 		Preconditions.checkArgument(!this.players.isEmpty(), "There must be at least one player.");
@@ -54,8 +54,8 @@ public class Model {
 		return calendar;
 	}
 
-	public World getWorld() {
-		return world;
+	public WorldMap getMap() {
+		return map;
 	}
 
 	public List<Player> getPlayers() {

@@ -10,7 +10,7 @@ import javax.swing.JViewport;
 import org.easymock.classextension.EasyMock;
 import org.junit.Test;
 import org.microcol.gui.panelview.Area;
-import org.microcol.model.World;
+import org.microcol.model.WorldMap;
 
 /**
  * Tests for {@link Area}.
@@ -65,7 +65,7 @@ public class AreaTest {
 		EasyMock.expect(jViewport.getViewPosition())
 				.andReturn(new java.awt.Point(viewTopLeftCornerX, viewTopLeftCornerY));
 
-		World map = EasyMock.createMock(World.class);
+		WorldMap map = EasyMock.createMock(WorldMap.class);
 		EasyMock.expect(map.getMaxX()).andReturn(maxMapLocationX);
 		EasyMock.expect(map.getMaxY()).andReturn(maxMapLocationY);
 
