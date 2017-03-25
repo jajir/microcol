@@ -105,7 +105,7 @@ MicroCol game classes,org.microcol.gui,StatusBarView,104,0,0,0,12,0,3,0,3,0
 MicroCol game classes,org.microcol.gui,MainMenuView,450,0,4,0,88,0,15,0,13,0
 MicroCol game classes,org.microcol.gui,MainFrameView,95,0,8,0,21,0,8,0,4,0
 MicroCol game classes,org.microcol.gui,Text,0,36,0,0,0,9,0,4,0,4
-MicroCol game classes,org.microcol.gui,NewGameDialog,226,0,2,0,37,0,5,0,4,0
+MicroCol game classes,org.microcol.gui,NewGameDialog,221,0,2,0,36,0,5,0,4,0
 MicroCol game classes,org.microcol.gui,ViewUtil,27,0,0,0,4,0,2,0,2,0
 MicroCol game classes,org.microcol.gui,RightPanelView,356,0,2,0,51,0,6,0,5,0
 MicroCol game classes,org.microcol.gui,PreferencesVolume,161,0,0,0,28,0,3,0,3,0

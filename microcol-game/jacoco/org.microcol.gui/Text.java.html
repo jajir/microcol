@@ -3,7 +3,8 @@
 import java.util.Locale;
 import java.util.ResourceBundle;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.inject.Inject;
 
@@ -14,23 +15,23 @@ import com.google.inject.Inject;
  */
 public class Text {
 
-<span class="fc" id="L17">	private final static Logger logger = Logger.getLogger(Text.class);</span>
+<span class="fc" id="L18">	private final static Logger logger = LoggerFactory.getLogger(Text.class);</span>
 
 	private final static String RESOURCE_BUNDLE_NAME = &quot;localization&quot;;
 
 	public static Text INSTANCE;
 
-<span class="pc" id="L23">	public static enum Language {</span>
-<span class="fc" id="L24">		en(new Locale(&quot;en&quot;, &quot;US&quot;)), cz(new Locale(&quot;cs&quot;, &quot;CZ&quot;));</span>
+<span class="pc" id="L24">	public static enum Language {</span>
+<span class="fc" id="L25">		en(new Locale(&quot;en&quot;, &quot;US&quot;)), cz(new Locale(&quot;cs&quot;, &quot;CZ&quot;));</span>
 
 		private final Locale locale;
 
-<span class="fc" id="L28">		private Language(final Locale locale) {</span>
-<span class="fc" id="L29">			this.locale = locale;</span>
-<span class="fc" id="L30">		}</span>
+<span class="fc" id="L29">		private Language(final Locale locale) {</span>
+<span class="fc" id="L30">			this.locale = locale;</span>
+<span class="fc" id="L31">		}</span>
 
 		public Locale getLocale() {
-<span class="fc" id="L33">			return locale;</span>
+<span class="fc" id="L34">			return locale;</span>
 		}
 
 	}
@@ -38,18 +39,18 @@ public class Text {
 	private ResourceBundle bundle;
 
 	@Inject
-<span class="fc" id="L41">	public Text(final Language language) {</span>
-<span class="fc" id="L42">		setLanguage(language);</span>
-<span class="fc" id="L43">		INSTANCE = this;</span>
-<span class="fc" id="L44">	}</span>
+<span class="fc" id="L42">	public Text(final Language language) {</span>
+<span class="fc" id="L43">		setLanguage(language);</span>
+<span class="fc" id="L44">		INSTANCE = this;</span>
+<span class="fc" id="L45">	}</span>
 
 	public void setLanguage(final Language language) {
-<span class="fc" id="L47">		bundle = ResourceBundle.getBundle(RESOURCE_BUNDLE_NAME, language.getLocale());</span>
-<span class="fc" id="L48">		logger.debug(&quot;Language &quot; + language + &quot; was set.&quot;);</span>
-<span class="fc" id="L49">	}</span>
+<span class="fc" id="L48">		bundle = ResourceBundle.getBundle(RESOURCE_BUNDLE_NAME, language.getLocale());</span>
+<span class="fc" id="L49">		logger.debug(&quot;Language &quot; + language + &quot; was set.&quot;);</span>
+<span class="fc" id="L50">	}</span>
 
 	public String get(final String key) {
-<span class="fc" id="L52">		return bundle.getString(key);</span>
+<span class="fc" id="L53">		return bundle.getString(key);</span>
 	}
 
 }

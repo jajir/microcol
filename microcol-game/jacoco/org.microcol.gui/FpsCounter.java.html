@@ -2,7 +2,8 @@
 
 import javax.swing.Timer;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Class helps measure Frame per second rate.
@@ -12,7 +13,7 @@ import org.apache.log4j.Logger;
  */
 public class FpsCounter {
 
-<span class="nc" id="L15">	private final Logger logger = Logger.getLogger(FpsCounter.class);</span>
+<span class="nc" id="L16">	private final Logger logger = LoggerFactory.getLogger(FpsCounter.class);</span>
 
 	private final Timer timer;
 
@@ -20,27 +21,27 @@ public class FpsCounter {
 
 	private int counter;
 
-<span class="nc" id="L23">	public FpsCounter() {</span>
-<span class="nc" id="L24">		timer = new Timer(1000, e -&gt; {</span>
-<span class="nc" id="L25">			fps = counter;</span>
-<span class="nc" id="L26">			counter = 0;</span>
-<span class="nc" id="L27">			logger.debug(&quot;Fps is: &quot; + fps);</span>
-<span class="nc" id="L28">		});</span>
-<span class="nc" id="L29">	}</span>
+<span class="nc" id="L24">	public FpsCounter() {</span>
+<span class="nc" id="L25">		timer = new Timer(1000, e -&gt; {</span>
+<span class="nc" id="L26">			fps = counter;</span>
+<span class="nc" id="L27">			counter = 0;</span>
+<span class="nc" id="L28">			logger.debug(&quot;Fps is: &quot; + fps);</span>
+<span class="nc" id="L29">		});</span>
+<span class="nc" id="L30">	}</span>
 
 	public void start() {
-<span class="nc" id="L32">		counter = 0;</span>
-<span class="nc" id="L33">		fps = 0;</span>
-<span class="nc" id="L34">		timer.start();</span>
-<span class="nc" id="L35">	}</span>
+<span class="nc" id="L33">		counter = 0;</span>
+<span class="nc" id="L34">		fps = 0;</span>
+<span class="nc" id="L35">		timer.start();</span>
+<span class="nc" id="L36">	}</span>
 
 	public void stop() {
-<span class="nc" id="L38">		timer.stop();</span>
-<span class="nc" id="L39">	}</span>
+<span class="nc" id="L39">		timer.stop();</span>
+<span class="nc" id="L40">	}</span>
 
 	public void screenWasPainted() {
-<span class="nc" id="L42">		counter++;</span>
-<span class="nc" id="L43">	}</span>
+<span class="nc" id="L43">		counter++;</span>
+<span class="nc" id="L44">	}</span>
 
 	/**
 	 * Return actual FPS.
@@ -48,7 +49,7 @@ public class FpsCounter {
 	 * @return fps value
 	 */
 	public int getFps() {
-<span class="nc" id="L51">		return fps;</span>
+<span class="nc" id="L52">		return fps;</span>
 	}
 
 }
