@@ -10,20 +10,19 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 
 public class Ship {
-	Model model; // FIXME JKA private
+	private Model model;
 
 	private final Player owner;
 	private final ShipType type;
 
 	private Location location;
 	private int availableMoves;
+	private boolean canAttack;
 
 	Ship(final Player owner, final ShipType type, final Location location) {
 		this.owner = Preconditions.checkNotNull(owner);
 		this.type = Preconditions.checkNotNull(type);
 		this.location = Preconditions.checkNotNull(location);
-
-		this.availableMoves = type.getSpeed();
 	}
 
 	void setModel(final Model model) {
@@ -53,6 +52,7 @@ public class Ship {
 
 	void startTurn() {
 		availableMoves = type.getSpeed();
+		canAttack = true;
 	}
 
 	// Netestuje nedosažitelné lokace, pouze jestli je teoreticky možné na danou lokaci vstoupit
@@ -134,6 +134,25 @@ public class Ship {
 		}
 	}
 
+	// TODO JKA canAttack
+
+	public void attack(final Ship ship) {
+		model.checkGameActive();
+		model.checkCurrentPlayer(owner);
+
+		Preconditions.checkNotNull(ship);
+		Preconditions.checkArgument(!owner.equals(ship.owner), "Cannot attack own ship (%s - %s).", this, ship);
+		Preconditions.checkArgument(location.isAdjacent(ship.location), "Ship is not adjacent (%s - %s)", this, ship);
+		Preconditions.checkArgument(canAttack, "This ship (%s) already fight this turn.", this);
+
+		availableMoves = 0;
+		canAttack = false;
+
+		final Ship destroyed = (Math.random() <= 0.6) ? ship : this;
+		model.destroyShip(destroyed);
+		model.fireShipAttacked(this, ship, destroyed);
+	}
+
 	@Override
 	public String toString() {
 		return MoreObjects.toStringHelper(this)
@@ -141,6 +160,7 @@ public class Ship {
 			.add("type", type)
 			.add("location", location)
 			.add("availableMoves", availableMoves)
+			.add("canAttack", canAttack)
 			.toString();
 	}
 }

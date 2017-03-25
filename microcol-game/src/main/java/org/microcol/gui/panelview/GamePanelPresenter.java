@@ -10,7 +10,6 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.JViewport;
 
-import org.apache.log4j.Logger;
 import org.microcol.gui.GamePreferences;
 import org.microcol.gui.LocalizationHelper;
 import org.microcol.gui.Localized;
@@ -33,13 +32,15 @@ import org.microcol.model.Location;
 import org.microcol.model.Ship;
 import org.microcol.model.Terrain;
 import org.microcol.model.event.ShipMovedEvent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
 
 public class GamePanelPresenter implements Localized {
 
-	private final Logger logger = Logger.getLogger(GamePanelPresenter.class);
+	private final Logger logger = LoggerFactory.getLogger(GamePanelPresenter.class);
 
 	public interface Display {
 

@@ -2,7 +2,8 @@ package org.microcol.gui;
 
 import javax.swing.Timer;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Class helps measure Frame per second rate.
@@ -12,7 +13,7 @@ import org.apache.log4j.Logger;
  */
 public class FpsCounter {
 
-	private final Logger logger = Logger.getLogger(FpsCounter.class);
+	private final Logger logger = LoggerFactory.getLogger(FpsCounter.class);
 
 	private final Timer timer;
 

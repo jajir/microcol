@@ -2,7 +2,6 @@ package org.microcol.gui.event;
 
 import java.util.List;
 
-import org.apache.log4j.Logger;
 import org.microcol.ai.SkyNet;
 import org.microcol.gui.GamePreferences;
 import org.microcol.gui.Localized;
@@ -20,6 +19,8 @@ import org.microcol.model.event.GameStartedEvent;
 import org.microcol.model.event.RoundStartedEvent;
 import org.microcol.model.event.ShipMovedEvent;
 import org.microcol.model.event.TurnStartedEvent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
@@ -29,7 +30,7 @@ import com.google.inject.Inject;
  */
 public class GameController implements Localized {
 
-	private Logger logger = Logger.getLogger(GameController.class);
+	private Logger logger = LoggerFactory.getLogger(GameController.class);
 
 	private final NextTurnController nextTurnController;
 
@@ -71,43 +72,41 @@ public class GameController implements Localized {
 		ModelBuilder builder = new ModelBuilder();
 		game = builder.setCalendar(1570, 1571)
 				// .setMap(15, 10)
-				.setMap("/maps/map-01.txt").addPlayer("Player1", false)
-				.addShip("Player1", ShipType.GALLEON, Location.of(4, 2))
-				.addShip("Player1", ShipType.FRIGATE, Location.of(3, 3)).addPlayer("Player2", true)
-				.addShip("Player2", ShipType.GALLEON, Location.of(7, 7))
-				// .addShip("Player2", ShipType.FRIGATE, Location.of(7, 9))
-				// .addShip("Player2", ShipType.FRIGATE, Location.of(14, 9))
-				// .setMap("/maps/map-02.txt")
-				// .addPlayer("Player1", true)
-				// .addShip("Player1", ShipType.GALLEON, Location.of(1, 1))
-				// .addShip("Player1", ShipType.FRIGATE, Location.of(3, 1))
-				// .addPlayer("Player2", true)
-				// .addShip("Player2", ShipType.GALLEON, Location.of(3, 3))
-				// .addShip("Player2", ShipType.FRIGATE, Location.of(1, 3))
+				.setMap("/maps/map-01.txt")
+				.addPlayer("Player1", true)
+					.addShip("Player1", ShipType.GALLEON, Location.of(4, 2))
+					.addShip("Player1", ShipType.FRIGATE, Location.of(3, 3))
+				.addPlayer("Player2", true)
+					.addShip("Player2", ShipType.GALLEON, Location.of(7, 7))
+					.addShip("Player2", ShipType.FRIGATE, Location.of(7, 9))
+					.addShip("Player2", ShipType.FRIGATE, Location.of(14, 9))
+//				.setMap("/maps/map-02.txt")
+//				.addPlayer("Player1", true)
+//					.addShip("Player1", ShipType.GALLEON, Location.of(1, 1))
+//					.addShip("Player1", ShipType.FRIGATE, Location.of(3, 1))
+//				.addPlayer("Player2", true)
+//					.addShip("Player2", ShipType.GALLEON, Location.of(3, 3))
+//					.addShip("Player2", ShipType.FRIGATE, Location.of(1, 3))
 				.build();
 		game.addListener(new ModelAdapter() {
 
 			@Override
 			public void turnStarted(final TurnStartedEvent event) {
-				logger.debug("Turn started for player '" + event.getPlayer().getName() + "'.");
 				turnStartedController.fireEvent(event);
 			}
 
 			@Override
 			public void shipMoved(final ShipMovedEvent event) {
-				logger.debug("Ship moved " + event);
 				moveUnitController.fireUnitMovedEvent(event);
 			}
 
 			@Override
 			public void roundStarted(final RoundStartedEvent event) {
-				logger.debug("Turn started for year '" + event.getCalendar().getCurrentYear() + "'.");
 				nextTurnController.fireEvent(event);
 			}
 
 			@Override
 			public void gameStarted(final GameStartedEvent event) {
-				logger.debug("Game started " + event);
 				game = event.getModel();
 				newGameController.fireEvent(event);
 			}
@@ -120,7 +119,6 @@ public class GameController implements Localized {
 
 			@Override
 			public void debugRequested(final DebugRequestedEvent event) {
-				logger.debug("Debug request " + event);
 				debugRequestController.fireEvent(event);
 			}
 		});
