@@ -14,7 +14,6 @@ import org.microcol.model.Path;
 import org.microcol.model.Ship;
 import org.microcol.model.ShipType;
 import org.microcol.model.event.DebugRequestedEvent;
-import org.microcol.model.event.GameFinishedEvent;
 import org.microcol.model.event.GameStartedEvent;
 import org.microcol.model.event.RoundStartedEvent;
 import org.microcol.model.event.ShipMovedEvent;
@@ -89,37 +88,27 @@ public class GameController implements Localized {
 
 			@Override
 			public void turnStarted(final TurnStartedEvent event) {
-				logger.debug("Turn started for player '" + event.getPlayer().getName() + "'.");
 				turnStartedController.fireEvent(event);
 			}
 
 			@Override
 			public void shipMoved(final ShipMovedEvent event) {
-				logger.debug("Ship moved " + event);
 				moveUnitController.fireUnitMovedEvent(event);
 			}
 
 			@Override
 			public void roundStarted(final RoundStartedEvent event) {
-				logger.debug("Turn started for year '" + event.getCalendar().getCurrentYear() + "'.");
 				nextTurnController.fireEvent(event);
 			}
 
 			@Override
 			public void gameStarted(final GameStartedEvent event) {
-				logger.debug("Game started " + event);
 				game = event.getModel();
 				newGameController.fireEvent(event);
 			}
 
 			@Override
-			public void gameFinished(final GameFinishedEvent event) {
-				logger.debug("Game finished " + event);
-			}
-
-			@Override
 			public void debugRequested(final DebugRequestedEvent event) {
-				logger.debug("Debug request " + event);
 				debugRequestController.fireEvent(event);
 			}
 		});
