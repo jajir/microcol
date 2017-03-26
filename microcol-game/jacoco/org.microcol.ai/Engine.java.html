@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Engine.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">MicroCol game classes</a> &gt; <a href="index.source.html" class="el_package">org.microcol.ai</a> &gt; <span class="el_source">Engine.java</span></div><h1>Engine.java</h1><pre class="source lang-java linenums">package org.microcol.ai;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+
+import org.microcol.model.Location;
+import org.microcol.model.Model;
+import org.microcol.model.ModelAdapter;
+import org.microcol.model.Path;
+import org.microcol.model.Player;
+import org.microcol.model.Ship;
+import org.microcol.model.event.TurnStartedEvent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+public class Engine {
+<span class="nc" id="L20">	private final Logger logger = LoggerFactory.getLogger(getClass());</span>
+
+	private final Model model;
+	private final Random random;
+	private final Map&lt;Ship, Location&gt; lastDirections;
+
+<span class="nc" id="L26">	public Engine(final Model model) {</span>
+<span class="nc" id="L27">		this.model = model;</span>
+<span class="nc" id="L28">		this.random = new Random();</span>
+<span class="nc" id="L29">		this.lastDirections = new HashMap&lt;&gt;();</span>
+<span class="nc" id="L30">	}</span>
+
+	public void start() {
+<span class="nc" id="L33">		model.addListener(new ModelAdapter() {</span>
+			@Override
+			public void turnStarted(TurnStartedEvent event) {
+<span class="nc bnc" id="L36" title="All 2 branches missed.">				if (event.getPlayer().isComputer()) {</span>
+<span class="nc" id="L37">					turn(event.getPlayer());</span>
+				}
+<span class="nc" id="L39">			}</span>
+		});
+<span class="nc" id="L41">		logger.info(&quot;AI engine started.&quot;);</span>
+<span class="nc" id="L42">	}</span>
+
+	void turn(final Player player) {
+<span class="nc" id="L45">		player.getShips().forEach(ship -&gt; move(ship));</span>
+<span class="nc" id="L46">		player.endTurn();</span>
+<span class="nc" id="L47">	}</span>
+
+	void move(final Ship ship) {
+<span class="nc bnc" id="L50" title="All 2 branches missed.">		if (lastDirections.get(ship) == null) {</span>
+<span class="nc" id="L51">			lastDirections.put(ship, Location.DIRECTIONS.get(random.nextInt(Location.DIRECTIONS.size())));</span>
+		}
+
+//		model.requestDebug(ship.getPath(Location.of(14, 9)));
+
+<span class="nc" id="L56">		final List&lt;Location&gt; directions = new ArrayList&lt;&gt;(Location.DIRECTIONS);</span>
+<span class="nc" id="L57">		Location lastLocation = ship.getLocation();</span>
+<span class="nc" id="L58">		final List&lt;Location&gt; locations = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L59" title="All 2 branches missed.">		while (locations.size() &lt; ship.getAvailableMoves()) {</span>
+<span class="nc" id="L60">			final Location lastDirection = lastDirections.get(ship);</span>
+<span class="nc" id="L61">			final Location newLocation = lastLocation.add(lastDirection);</span>
+<span class="nc bnc" id="L62" title="All 2 branches missed.">			if (ship.isMoveable(newLocation)) {</span>
+<span class="nc" id="L63">				locations.add(newLocation);</span>
+<span class="nc" id="L64">				lastLocation = newLocation;</span>
+			} else {
+<span class="nc" id="L66">				directions.remove(lastDirection);</span>
+<span class="nc bnc" id="L67" title="All 2 branches missed.">				if (directions.isEmpty()) {</span>
+<span class="nc" id="L68">					break;</span>
+				}
+<span class="nc" id="L70">				lastDirections.put(ship, directions.get(random.nextInt(directions.size())));</span>
+			}
+<span class="nc" id="L72">		}</span>
+
+<span class="nc bnc" id="L74" title="All 2 branches missed.">		if (!locations.isEmpty()) {</span>
+<span class="nc" id="L75">			ship.moveTo(Path.of(locations));</span>
+		}
+
+<span class="nc bnc" id="L78" title="All 2 branches missed.">		for (Location location : ship.getLocation().getNeighbors()) {</span>
+<span class="nc" id="L79">			List&lt;Ship&gt; enemies = ship.getOwner().getEnemyShipsAt(location);</span>
+<span class="nc bnc" id="L80" title="All 2 branches missed.">			if (!enemies.isEmpty()) {</span>
+<span class="nc" id="L81">				ship.attack(enemies.get(0));</span>
+<span class="nc" id="L82">				break;</span>
+			}
+<span class="nc" id="L84">		}</span>
+<span class="nc" id="L85">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

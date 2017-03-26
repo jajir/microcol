@@ -3,7 +3,7 @@
 import java.util.List;
 
 import org.microcol.ai.AIModelBuilder;
-import org.microcol.ai.SkyNet;
+import org.microcol.ai.Engine;
 import org.microcol.gui.GamePreferences;
 import org.microcol.gui.Localized;
 import org.microcol.gui.MusicController;
@@ -121,8 +121,8 @@ public class GameController implements Localized {
 <span class="nc" id="L121">				debugRequestController.fireEvent(event);</span>
 <span class="nc" id="L122">			}</span>
 		});
-<span class="nc" id="L124">		SkyNet skyNet = new SkyNet(game);</span>
-<span class="nc" id="L125">		skyNet.searchAndDestroy();</span>
+<span class="nc" id="L124">		Engine skyNet = new Engine(game);</span>
+<span class="nc" id="L125">		skyNet.start();</span>
 <span class="nc" id="L126">		new Thread(() -&gt; game.startGame()).start();</span>
 <span class="nc" id="L127">		musicController.start(gamePreferences.getVolume());</span>
 <span class="nc" id="L128">	}</span>
