@@ -43,7 +43,7 @@ public class Location {
 		return y;
 	}
 
-	// TODO JKA TEST
+	// tranzitivní
 	public int getDistance(final Location location) {
 		Preconditions.checkNotNull(location);
 
