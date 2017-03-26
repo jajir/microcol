@@ -3,7 +3,7 @@ package org.microcol.gui.event;
 import java.util.List;
 
 import org.microcol.ai.AIModelBuilder;
-import org.microcol.ai.SkyNet;
+import org.microcol.ai.Engine;
 import org.microcol.gui.GamePreferences;
 import org.microcol.gui.Localized;
 import org.microcol.gui.MusicController;
@@ -121,8 +121,8 @@ public class GameController implements Localized {
 				debugRequestController.fireEvent(event);
 			}
 		});
-		SkyNet skyNet = new SkyNet(game);
-		skyNet.searchAndDestroy();
+		Engine skyNet = new Engine(game);
+		skyNet.start();
 		new Thread(() -> game.startGame()).start();
 		musicController.start(gamePreferences.getVolume());
 	}
