@@ -69,8 +69,8 @@ public class AIModelBuilder {
 		builder.setCalendar(1570, 1600);
 //		builder.createMinimal();
 //		builder.createHuge();
-		builder.createMap01_2ships();
-//		builder.createMap01_5ships();
+//		builder.createMap01_2ships();
+		builder.createMap01_5ships();
 //		builder.createMap02();
 
 		return builder.buildModel();

@@ -100,7 +100,11 @@ public class Ship {
 	}
 
 	public List<Location> getPath(final Location destination) {
-		PathFinder finder = new PathFinder(this, location, destination);
+		return getPath(destination, false);
+	}
+
+	public List<Location> getPath(final Location destination, final boolean excludeDestination) {
+		PathFinder finder = new PathFinder(this, location, destination, excludeDestination);
 
 		return finder.search();
 	}

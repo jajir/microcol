@@ -51,7 +51,13 @@ public class Engine {
 			lastDirections.put(ship, Location.DIRECTIONS.get(random.nextInt(Location.DIRECTIONS.size())));
 		}
 
-//		model.requestDebug(ship.getPath(Location.of(14, 9)));
+		{
+			final List<Ship> enemies = ship.getOwner().getEnemyShips();
+			if (enemies.size() > 0) {
+				final Ship enemy = enemies.get(0);
+				model.requestDebug(ship.getPath(enemy.getLocation(), true));
+			}
+		}
 
 		final List<Location> directions = new ArrayList<>(Location.DIRECTIONS);
 		Location lastLocation = ship.getLocation();

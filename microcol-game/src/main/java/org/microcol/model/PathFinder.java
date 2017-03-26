@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Set;
 
 import com.google.common.base.Preconditions;
+import com.google.common.collect.ImmutableList;
 
 class PathFinder {
 	private static class Node {
@@ -55,11 +56,13 @@ class PathFinder {
 	final Ship ship;
 	final Location start;
 	final Location destination;
+	final boolean excludeDestination;
 
-	PathFinder(final Ship ship, final Location start, final Location destination) {
+	PathFinder(final Ship ship, final Location start, final Location destination, final boolean excludeDestination) {
 		this.ship = Preconditions.checkNotNull(ship);
 		this.start = Preconditions.checkNotNull(start);
 		this.destination = Preconditions.checkNotNull(destination);
+		this.excludeDestination = excludeDestination;
 	}
 
 	List<Location> search() {
@@ -68,9 +71,15 @@ class PathFinder {
 		Set<Node> closedSet = new HashSet<>();
 		Node current = null;
 
+		Node path = null;
 		while (!openSet.isEmpty()) {
 			current = findNext(openSet);
+			if (excludeDestination && current.getLocation().isAdjacent(destination)) {
+				path = current;
+				break;
+			}
 			if (current.getLocation().equals(destination)) {
+				path = current;
 				break;
 			}
 			openSet.remove(current);
@@ -102,7 +111,7 @@ class PathFinder {
 			}
 		}
 
-		return getList(current);
+		return path != null ? getList(path) : ImmutableList.of();
 	}
 
 	private Node findNext(final Set<Node> openSet) {
@@ -129,7 +138,7 @@ class PathFinder {
 	private List<Location> getList(Node node) {
 		List<Location> list = new ArrayList<>();
 
-		while (node != null) {
+		while (node != null && node.getParent() != null) {
 			list.add(node.getLocation());
 			node = node.getParent();
 		}
