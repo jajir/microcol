@@ -12,6 +12,7 @@ import java.util.Map;
 
 import javax.imageio.ImageIO;
 
+import org.microcol.model.ShipType;
 import org.microcol.model.Terrain;
 
 import com.google.common.collect.ImmutableMap;
@@ -36,9 +37,9 @@ public class ImageProvider {
 
 	public final static String IMG_TILE_LAND = "tile-land.png";
 
-	public final static String IMG_TILE_SHIP1 = "tile-ship1.png";
+	public final static String IMG_TILE_SHIP_GALEON = "tile-ship-galeon.png";
 
-	public final static String IMG_TILE_SHIP2 = "tile-ship2.png";
+	public final static String IMG_TILE_SHIP_FRIGATE = "tile-ship-frigate.png";
 
 	public final static String IMG_TILE_MODE_GOTO = "tile-mode-goto.png";
 
@@ -54,6 +55,10 @@ public class ImageProvider {
 
 	private final Map<Terrain, Image> terrainMap = ImmutableMap.<Terrain, Image>builder()
 			.put(Terrain.CONTINENT, getRawImage(IMG_TILE_LAND)).put(Terrain.OCEAN, getRawImage(IMG_TILE_OCEAN)).build();
+
+	private final Map<ShipType, Image> shipMap = ImmutableMap.<ShipType, Image>builder()
+			.put(ShipType.GALLEON, getRawImage(IMG_TILE_SHIP_GALEON))
+			.put(ShipType.FRIGATE, getRawImage(IMG_TILE_SHIP_FRIGATE)).build();
 
 	public ImageProvider() {
 		images = new HashMap<>();
@@ -147,6 +152,17 @@ public class ImageProvider {
 	 */
 	public Image getTerrainImage(final Terrain terrain) {
 		return terrainMap.get(terrain);
+	}
+
+	/**
+	 * For specific ship type find corresponding image.
+	 * 
+	 * @param shipType
+	 *            required ship type
+	 * @return image representing ship image
+	 */
+	public Image getShipImage(final ShipType shipType) {
+		return shipMap.get(shipType);
 	}
 
 }

@@ -52,7 +52,7 @@ public class UnitsPanel extends JPanel implements Localized {
 		int i = 0;
 		for (final Ship u : units) {
 			Ship s = (Ship) u;
-			add(new JLabel(new ImageIcon(imageProvider.getImage(ImageProvider.IMG_TILE_SHIP1))),
+			add(new JLabel(new ImageIcon(imageProvider.getShipImage(s.getType()))),
 					new GridBagConstraints(0, i, 1, 2, 0D, 0D, GridBagConstraints.NORTH, GridBagConstraints.NONE,
 							new Insets(0, 0, 0, 0), 0, 0));
 			final StringBuilder sb = new StringBuilder(200);

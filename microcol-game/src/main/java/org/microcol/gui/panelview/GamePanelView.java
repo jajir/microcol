@@ -275,7 +275,7 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 
 	private void paintUnit(final Graphics2D graphics, final Point point, final Ship ship) {
 		Point p = point.add(2, 4);
-		graphics.drawImage(imageProvider.getImage(ImageProvider.IMG_TILE_SHIP1), p.getX(), p.getY(), this);
+		graphics.drawImage(imageProvider.getShipImage(ship.getType()), p.getX(), p.getY(), this);
 		paintOwnersFlag(graphics, point.add(1, 5), ship.getOwner());
 	}
 
