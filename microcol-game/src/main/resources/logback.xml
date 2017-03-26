@@ -6,17 +6,17 @@
 	</appender>
 
 	<!-- MODEL -->
-	<logger name="org.microcol.model" level="DEBUG"/>
+	<logger name="org.microcol.model" level="INFO"/>
 
 	<!-- GUI -->
-	<logger name="org.microcol.gui" level="DEBUG"/>
+	<logger name="org.microcol.gui" level="INFO"/>
 	<logger name="org.microcol.gui.FpsCounter" level="WARN"/>
 	<logger name="org.microcol.gui.event.AbstractEventController" level="WARN"/>
 
 	<!-- AI -->
-	<logger name="org.microcol.ai" level="DEBUG"/>
+	<logger name="org.microcol.ai" level="INFO"/>
 
-	<root level="debug">
+	<root level="INFO">
 		<appender-ref ref="STDOUT" />
 	</root>
 </configuration>
