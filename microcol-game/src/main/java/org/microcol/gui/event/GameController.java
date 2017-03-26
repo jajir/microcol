@@ -73,7 +73,8 @@ public class GameController implements Localized {
 			// TODO JJ already running game should be stopped
 		}
 		ModelBuilder builder = new ModelBuilder();
-		game = builder.setCalendar(1570, 1600)
+		if ("true".equals(System.getProperty("development")) && "JKA".equals(System.getProperty("developer"))) {
+			builder.setCalendar(1570, 1600)
 //				.setMap(15, 10)
 				.setMap("/maps/map-01.txt")
 				.addPlayer("Player1", true)
@@ -82,15 +83,25 @@ public class GameController implements Localized {
 				.addPlayer("Player2", true)
 					.addShip("Player2", ShipType.GALLEON, Location.of(7, 7))
 					.addShip("Player2", ShipType.FRIGATE, Location.of(7, 9))
-					.addShip("Player2", ShipType.FRIGATE, Location.of(14, 9))
+					.addShip("Player2", ShipType.FRIGATE, Location.of(14, 9));
 //				.setMap("/maps/map-02.txt")
 //				.addPlayer("Player1", true)
 //					.addShip("Player1", ShipType.GALLEON, Location.of(1, 1))
 //					.addShip("Player1", ShipType.FRIGATE, Location.of(3, 1))
 //				.addPlayer("Player2", true)
 //					.addShip("Player2", ShipType.GALLEON, Location.of(3, 3))
-//					.addShip("Player2", ShipType.FRIGATE, Location.of(1, 3))
-				.build();
+//					.addShip("Player2", ShipType.FRIGATE, Location.of(1, 3));
+		} else {
+			builder.setCalendar(1570, 1600)
+				.setMap("/maps/map-01.txt")
+				.addPlayer("Player1", false)
+					.addShip("Player1", ShipType.GALLEON, Location.of(4, 2))
+					.addShip("Player1", ShipType.FRIGATE, Location.of(3, 3))
+				.addPlayer("Player2", true)
+					.addShip("Player2", ShipType.GALLEON, Location.of(7, 7))
+					.addShip("Player2", ShipType.FRIGATE, Location.of(7, 9));
+		}
+		game = builder.build();
 		game.addListener(new ModelAdapter() {
 
 			@Override
