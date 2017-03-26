@@ -5,7 +5,7 @@ import java.util.List;
 import org.microcol.model.Location;
 
 /**
- * Helps highlight area where user could move in first turn.
+ * Helps to highlight area where use could move in first turn.
  */
 public class OneTurnMoveHighlighter {
 
