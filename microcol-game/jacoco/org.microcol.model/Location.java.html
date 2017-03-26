@@ -43,11 +43,11 @@ public class Location {
 <span class="fc" id="L43">		return y;</span>
 	}
 
-	// TODO JKA TEST
+	// tranzitivní
 	public int getDistance(final Location location) {
-<span class="nc" id="L48">		Preconditions.checkNotNull(location);</span>
+<span class="fc" id="L48">		Preconditions.checkNotNull(location);</span>
 
-<span class="nc" id="L50">		return Math.abs(x - location.x) + Math.abs(y - location.y);</span>
+<span class="fc" id="L50">		return Math.abs(x - location.x) + Math.abs(y - location.y);</span>
 	}
 
 	public List&lt;Location&gt; getNeighbors() {
