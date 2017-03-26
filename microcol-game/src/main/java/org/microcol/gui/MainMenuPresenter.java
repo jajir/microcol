@@ -66,11 +66,11 @@ public class MainMenuPresenter {
 			final VolumeChangeController volumeChangeController, final ShowGridController showGridController,
 			final FocusedTileController focusedTileController, final MoveUnitController moveUnitController,
 			final CenterViewController centerViewController, final TurnStartedController turnStartedController,
-			final ExitGameController exitGameController, final GameController gameController) {
+			final ExitGameController exitGameController, final GameController gameController,
+			final ApplicationController applicationController) {
 		this.display = Preconditions.checkNotNull(display);
 		display.getMenuItemNewGame().addActionListener(actionEvent -> {
-			final NewGameDialog newGameDialog = new NewGameDialog(viewUtil, text);
-			newGameDialog.setVisible(true);
+			applicationController.startNewGame();
 		});
 		if (!gamePreferences.isOSX()) {
 			display.getMenuItemQuitGame().addActionListener(actionEvent -> {
