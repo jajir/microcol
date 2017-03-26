@@ -25,7 +25,7 @@ public class Path {
 <span class="fc" id="L25">			final Location nextLocation = locations.get(i);</span>
 			// Possible NPE is not problem here.
 <span class="fc bfc" id="L27" title="All 2 branches covered.">			if (!prevLocation.isAdjacent(nextLocation)) {</span>
-<span class="fc" id="L28">				throw new IllegalArgumentException(String.format(&quot;Locations are not adjacent: %s&quot;, locations));</span>
+<span class="fc" id="L28">				throw new IllegalArgumentException(String.format(&quot;Locations are not adjacent: (%s - %s)&quot;, prevLocation, nextLocation));</span>
 			}
 		}
 <span class="fc" id="L31">	}</span>

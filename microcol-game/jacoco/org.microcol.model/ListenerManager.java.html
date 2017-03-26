@@ -17,83 +17,84 @@ import com.google.common.base.Preconditions;
 
 class ListenerManager {
 <span class="fc" id="L19">	private final Logger logger = LoggerFactory.getLogger(getClass());</span>
+
 	private final List&lt;ModelListener&gt; listeners;
 
-<span class="fc" id="L22">	ListenerManager() {</span>
-<span class="fc" id="L23">		listeners = new ArrayList&lt;&gt;();</span>
-<span class="fc" id="L24">	}</span>
+<span class="fc" id="L23">	ListenerManager() {</span>
+<span class="fc" id="L24">		listeners = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L25">	}</span>
 
 	void addListener(final ModelListener listener) {
-<span class="nc" id="L27">		Preconditions.checkNotNull(listener);</span>
+<span class="nc" id="L28">		Preconditions.checkNotNull(listener);</span>
 
-<span class="nc bnc" id="L29" title="All 2 branches missed.">		if (!listeners.contains(listener)) {</span>
-<span class="nc" id="L30">			logger.info(&quot;Added model listener {}.&quot;, listener);</span>
-<span class="nc" id="L31">			listeners.add(listener);</span>
+<span class="nc bnc" id="L30" title="All 2 branches missed.">		if (!listeners.contains(listener)) {</span>
+<span class="nc" id="L31">			logger.info(&quot;Added model listener {}.&quot;, listener);</span>
+<span class="nc" id="L32">			listeners.add(listener);</span>
 		} else {
-<span class="nc" id="L33">			logger.warn(&quot;Model listener {} already added.&quot;, listener);</span>
+<span class="nc" id="L34">			logger.warn(&quot;Model listener {} already added.&quot;, listener);</span>
 		}
-<span class="nc" id="L35">	}</span>
+<span class="nc" id="L36">	}</span>
 
 	void removeListener(final ModelListener listener) {
-<span class="nc" id="L38">		Preconditions.checkNotNull(listener);</span>
+<span class="nc" id="L39">		Preconditions.checkNotNull(listener);</span>
 
-<span class="nc" id="L40">		logger.info(&quot;Removed model listener {}.&quot;, listener);</span>
+<span class="nc" id="L41">		logger.info(&quot;Removed model listener {}.&quot;, listener);</span>
 
-<span class="nc" id="L42">		listeners.remove(listener);</span>
-<span class="nc" id="L43">	}</span>
+<span class="nc" id="L43">		listeners.remove(listener);</span>
+<span class="nc" id="L44">	}</span>
 
 	void fireGameStarted(final Model model) {
-<span class="nc" id="L46">		final GameStartedEvent event = new GameStartedEvent(model);</span>
+<span class="nc" id="L47">		final GameStartedEvent event = new GameStartedEvent(model);</span>
 
-<span class="nc" id="L48">		logger.debug(&quot;Game started {}.&quot;, event);</span>
+<span class="nc" id="L49">		logger.info(&quot;Game started {}.&quot;, event);</span>
 
-<span class="nc" id="L50">		listeners.forEach(listener -&gt; listener.gameStarted(event));</span>
-<span class="nc" id="L51">	}</span>
+<span class="nc" id="L51">		listeners.forEach(listener -&gt; listener.gameStarted(event));</span>
+<span class="nc" id="L52">	}</span>
 
 	void fireRoundStarted(final Model model, final Calendar calendar) {
-<span class="nc" id="L54">		final RoundStartedEvent event = new RoundStartedEvent(model, calendar);</span>
+<span class="nc" id="L55">		final RoundStartedEvent event = new RoundStartedEvent(model, calendar);</span>
 
-<span class="nc" id="L56">		logger.debug(&quot;Round started {}.&quot;, event);</span>
+<span class="nc" id="L57">		logger.info(&quot;Round started {}.&quot;, event);</span>
 
-<span class="nc" id="L58">		listeners.forEach(listener -&gt; listener.roundStarted(event));</span>
-<span class="nc" id="L59">	}</span>
+<span class="nc" id="L59">		listeners.forEach(listener -&gt; listener.roundStarted(event));</span>
+<span class="nc" id="L60">	}</span>
 
 	void fireTurnStarted(final Model model, final Player player) {
-<span class="nc" id="L62">		final TurnStartedEvent event = new TurnStartedEvent(model, player);</span>
+<span class="nc" id="L63">		final TurnStartedEvent event = new TurnStartedEvent(model, player);</span>
 
-<span class="nc" id="L64">		logger.debug(&quot;Turn started {}.&quot;, event);</span>
+<span class="nc" id="L65">		logger.info(&quot;Turn started {}.&quot;, event);</span>
 
-<span class="nc" id="L66">		listeners.forEach(listener -&gt; listener.turnStarted(event));</span>
-<span class="nc" id="L67">	}</span>
+<span class="nc" id="L67">		listeners.forEach(listener -&gt; listener.turnStarted(event));</span>
+<span class="nc" id="L68">	}</span>
 
 	void fireShipMoved(final Model model, final Ship ship, final Location start, final Path path) {
-<span class="nc" id="L70">		final ShipMovedEvent event = new ShipMovedEvent(model, ship, start, path);</span>
+<span class="nc" id="L71">		final ShipMovedEvent event = new ShipMovedEvent(model, ship, start, path);</span>
 
-<span class="nc" id="L72">		logger.debug(&quot;Ship moved {}.&quot;, event);</span>
+<span class="nc" id="L73">		logger.info(&quot;Ship moved {}.&quot;, event);</span>
 
-<span class="nc" id="L74">		listeners.forEach(listener -&gt; listener.shipMoved(event));</span>
-<span class="nc" id="L75">	}</span>
+<span class="nc" id="L75">		listeners.forEach(listener -&gt; listener.shipMoved(event));</span>
+<span class="nc" id="L76">	}</span>
 
 	void fireShipAttacked(final Model model, final Ship attacker, final Ship defender, final Ship destroyed) {
-<span class="nc" id="L78">		final ShipAttackedEvent event = new ShipAttackedEvent(model, attacker, defender, destroyed);</span>
+<span class="nc" id="L79">		final ShipAttackedEvent event = new ShipAttackedEvent(model, attacker, defender, destroyed);</span>
 
-<span class="nc" id="L80">		logger.debug(&quot;Ship attacked {}.&quot;, event);</span>
+<span class="nc" id="L81">		logger.info(&quot;Ship attacked {}.&quot;, event);</span>
 
-<span class="nc" id="L82">		listeners.forEach(listener -&gt; listener.shipAttacked(event));</span>
-<span class="nc" id="L83">	}</span>
+<span class="nc" id="L83">		listeners.forEach(listener -&gt; listener.shipAttacked(event));</span>
+<span class="nc" id="L84">	}</span>
 
 	void fireGameFinished(final Model model) {
-<span class="nc" id="L86">		final GameFinishedEvent event = new GameFinishedEvent(model);</span>
+<span class="nc" id="L87">		final GameFinishedEvent event = new GameFinishedEvent(model);</span>
 
-<span class="nc" id="L88">		logger.debug(&quot;Game finished {}.&quot;, event);</span>
+<span class="nc" id="L89">		logger.info(&quot;Game finished {}.&quot;, event);</span>
 
-<span class="nc" id="L90">		listeners.forEach(listener -&gt; listener.gameFinished(event));</span>
-<span class="nc" id="L91">	}</span>
+<span class="nc" id="L91">		listeners.forEach(listener -&gt; listener.gameFinished(event));</span>
+<span class="nc" id="L92">	}</span>
 
 	void fireDebugRequested(final Model model, final List&lt;Location&gt; locations) {
-<span class="nc" id="L94">		final DebugRequestedEvent event = new DebugRequestedEvent(model, locations);</span>
+<span class="nc" id="L95">		final DebugRequestedEvent event = new DebugRequestedEvent(model, locations);</span>
 
-<span class="nc" id="L96">		listeners.forEach(listener -&gt; listener.debugRequested(event));</span>
-<span class="nc" id="L97">	}</span>
+<span class="nc" id="L97">		listeners.forEach(listener -&gt; listener.debugRequested(event));</span>
+<span class="nc" id="L98">	}</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>
