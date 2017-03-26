@@ -5,49 +5,75 @@ import org.microcol.model.Model;
 import org.microcol.model.ModelBuilder;
 import org.microcol.model.ShipType;
 
-<span class="nc" id="L8">public class AIModelBuilder {</span>
-	static void createMinimal(final ModelBuilder builder) {
-<span class="nc" id="L10">		builder.setMap(1, 1)</span>
-<span class="nc" id="L11">			.addPlayer(&quot;Player1&quot;, true)</span>
-<span class="nc" id="L12">				.addShip(&quot;Player1&quot;, ShipType.GALLEON, Location.of(1, 1));</span>
+public class AIModelBuilder {
+	private final ModelBuilder builder;
+
+<span class="nc" id="L11">	AIModelBuilder() {</span>
+<span class="nc" id="L12">		builder = new ModelBuilder();</span>
 <span class="nc" id="L13">	}</span>
 
-	static void createHuge(final ModelBuilder builder) {
-<span class="nc" id="L16">		builder.setMap(1000, 1000)</span>
-<span class="nc" id="L17">			.addPlayer(&quot;Player1&quot;, true)</span>
-<span class="nc" id="L18">				.addShip(&quot;Player1&quot;, ShipType.GALLEON, Location.of(1, 1));</span>
-<span class="nc" id="L19">	}</span>
+	void setCalendar(final int startYear, final int endYear) {
+<span class="nc" id="L16">		builder.setCalendar(startYear, endYear);</span>
+<span class="nc" id="L17">	}</span>
 
-	static void createMap01(final ModelBuilder builder) {
-<span class="nc" id="L22">		builder</span>
-//			.setMap(15, 10)
-<span class="nc" id="L24">			.setMap(&quot;/maps/map-01.txt&quot;)</span>
-<span class="nc" id="L25">			.addPlayer(&quot;Player1&quot;, true)</span>
-<span class="nc" id="L26">				.addShip(&quot;Player1&quot;, ShipType.GALLEON, Location.of(4, 2))</span>
-//				.addShip(&quot;Player1&quot;, ShipType.FRIGATE, Location.of(3, 3))
-<span class="nc" id="L28">			.addPlayer(&quot;Player2&quot;, true)</span>
-<span class="nc" id="L29">				.addShip(&quot;Player2&quot;, ShipType.GALLEON, Location.of(7, 7))</span>
-//				.addShip(&quot;Player2&quot;, ShipType.FRIGATE, Location.of(7, 9))
-//				.addShip(&quot;Player2&quot;, ShipType.FRIGATE, Location.of(14, 9))
-		;
-<span class="nc" id="L33">	}</span>
+	void createMinimal() {
+<span class="nc" id="L20">		builder.setMap(1, 1)</span>
+<span class="nc" id="L21">			.addPlayer(&quot;Player1&quot;, true)</span>
+<span class="nc" id="L22">				.addShip(&quot;Player1&quot;, ShipType.GALLEON, Location.of(1, 1));</span>
+<span class="nc" id="L23">	}</span>
 
-	static void createMap02(final ModelBuilder builder) {
-<span class="nc" id="L36">		builder.setMap(&quot;/maps/map-02.txt&quot;)</span>
-<span class="nc" id="L37">			.addPlayer(&quot;Player1&quot;, true)</span>
-<span class="nc" id="L38">				.addShip(&quot;Player1&quot;, ShipType.GALLEON, Location.of(1, 1))</span>
-<span class="nc" id="L39">				.addShip(&quot;Player1&quot;, ShipType.FRIGATE, Location.of(3, 1))</span>
-<span class="nc" id="L40">			.addPlayer(&quot;Player2&quot;, true)</span>
-<span class="nc" id="L41">				.addShip(&quot;Player2&quot;, ShipType.GALLEON, Location.of(3, 3))</span>
-<span class="nc" id="L42">				.addShip(&quot;Player2&quot;, ShipType.FRIGATE, Location.of(1, 3));</span>
-<span class="nc" id="L43">	}</span>
+	void createHuge() {
+<span class="nc" id="L26">		builder.setMap(1000, 1000)</span>
+<span class="nc" id="L27">			.addPlayer(&quot;Player1&quot;, true)</span>
+<span class="nc" id="L28">				.addShip(&quot;Player1&quot;, ShipType.GALLEON, Location.of(1, 1));</span>
+<span class="nc" id="L29">	}</span>
+
+	void createMap01_2ships() {
+<span class="nc" id="L32">		builder</span>
+<span class="nc" id="L33">			.setMap(&quot;/maps/map-01.txt&quot;)</span>
+<span class="nc" id="L34">			.addPlayer(&quot;Player1&quot;, true)</span>
+<span class="nc" id="L35">				.addShip(&quot;Player1&quot;, ShipType.GALLEON, Location.of(4, 2))</span>
+<span class="nc" id="L36">			.addPlayer(&quot;Player2&quot;, true)</span>
+<span class="nc" id="L37">				.addShip(&quot;Player2&quot;, ShipType.GALLEON, Location.of(7, 7));</span>
+<span class="nc" id="L38">	}</span>
+
+	void createMap01_5ships() {
+<span class="nc" id="L41">		builder</span>
+<span class="nc" id="L42">			.setMap(&quot;/maps/map-01.txt&quot;)</span>
+<span class="nc" id="L43">			.addPlayer(&quot;Player1&quot;, true)</span>
+<span class="nc" id="L44">				.addShip(&quot;Player1&quot;, ShipType.GALLEON, Location.of(4, 2))</span>
+<span class="nc" id="L45">				.addShip(&quot;Player1&quot;, ShipType.FRIGATE, Location.of(3, 3))</span>
+<span class="nc" id="L46">			.addPlayer(&quot;Player2&quot;, true)</span>
+<span class="nc" id="L47">				.addShip(&quot;Player2&quot;, ShipType.GALLEON, Location.of(7, 7))</span>
+<span class="nc" id="L48">				.addShip(&quot;Player2&quot;, ShipType.FRIGATE, Location.of(7, 9))</span>
+<span class="nc" id="L49">				.addShip(&quot;Player2&quot;, ShipType.FRIGATE, Location.of(14, 9));</span>
+<span class="nc" id="L50">	}</span>
+
+	void createMap02() {
+<span class="nc" id="L53">		builder.setMap(&quot;/maps/map-02.txt&quot;)</span>
+<span class="nc" id="L54">			.addPlayer(&quot;Player1&quot;, true)</span>
+<span class="nc" id="L55">				.addShip(&quot;Player1&quot;, ShipType.GALLEON, Location.of(1, 1))</span>
+<span class="nc" id="L56">				.addShip(&quot;Player1&quot;, ShipType.FRIGATE, Location.of(3, 1))</span>
+<span class="nc" id="L57">			.addPlayer(&quot;Player2&quot;, true)</span>
+<span class="nc" id="L58">				.addShip(&quot;Player2&quot;, ShipType.GALLEON, Location.of(3, 3))</span>
+<span class="nc" id="L59">				.addShip(&quot;Player2&quot;, ShipType.FRIGATE, Location.of(1, 3));</span>
+<span class="nc" id="L60">	}</span>
+
+	Model buildModel() {
+<span class="nc" id="L63">		return builder.build();</span>
+	}
 
 	public static Model build() {
-<span class="nc" id="L46">		final ModelBuilder builder = new ModelBuilder();</span>
-<span class="nc" id="L47">		builder.setCalendar(1570, 1600);</span>
-<span class="nc" id="L48">		createMap01(builder);</span>
+<span class="nc" id="L67">		final AIModelBuilder builder = new AIModelBuilder();</span>
 
-<span class="nc" id="L50">		return builder.build();</span>
+<span class="nc" id="L69">		builder.setCalendar(1570, 1600);</span>
+//		builder.createMinimal();
+//		builder.createHuge();
+<span class="nc" id="L72">		builder.createMap01_2ships();</span>
+//		builder.createMap01_5ships();
+//		builder.createMap02();
+
+<span class="nc" id="L76">		return builder.buildModel();</span>
 	}
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>
