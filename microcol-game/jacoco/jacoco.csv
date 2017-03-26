@@ -14,7 +14,7 @@ MicroCol game classes,org.microcol.gui.panelview,ScreenScrolling,60,0,4,0,9,0,6,
 MicroCol game classes,org.microcol.gui.panelview,GamePanelPresenter,611,0,26,0,115,0,35,0,22,0
 MicroCol game classes,org.microcol.gui.panelview,GamePanelListener,16,0,0,0,8,0,5,0,5,0
 MicroCol game classes,org.microcol.gui.panelview,VisualDebugInfo,17,0,0,0,6,0,3,0,3,0
-MicroCol game classes,org.microcol.gui.panelview,GamePanelView,996,0,59,0,195,0,80,0,49,0
+MicroCol game classes,org.microcol.gui.panelview,GamePanelView,997,0,59,0,195,0,80,0,49,0
 MicroCol game classes,org.microcol.gui.panelview,GamePanelPresenter.new MouseAdapter() {...},109,0,12,0,21,0,12,0,6,0
 MicroCol game classes,org.microcol.gui.panelview,GoToMode,21,0,2,0,7,0,5,0,4,0
 MicroCol game classes,org.microcol,MicroCol,145,0,10,0,48,0,13,0,8,0
@@ -68,14 +68,14 @@ MicroCol game classes,org.microcol.model,Model,229,0,4,0,59,0,34,0,32,0
 MicroCol game classes,org.microcol.model,Calendar,16,73,0,6,5,13,1,9,1,6
 MicroCol game classes,org.microcol.model,Path,0,118,0,8,0,24,0,13,0,9
 MicroCol game classes,org.microcol.model,WorldMap,300,93,36,14,52,16,25,12,5,6
-MicroCol game classes,org.microcol.model,ShipType,54,0,0,0,10,0,6,0,6,0
+MicroCol game classes,org.microcol.model,ShipType,20,34,0,0,4,6,4,2,4,2
 MicroCol game classes,org.microcol.model,Terrain,9,29,0,0,0,3,2,2,2,2
 MicroCol game classes,org.microcol.model,ListenerManager,183,13,2,0,37,4,17,1,16,1
 MicroCol game classes,org.microcol.gui,Text.Language,9,45,0,0,0,6,2,3,2,3
 MicroCol game classes,org.microcol.gui,StartPanelPresenter,18,0,0,0,4,0,3,0,3,0
 MicroCol game classes,org.microcol.gui,MainFramePresenter,82,0,2,0,19,0,5,0,4,0
 MicroCol game classes,org.microcol.gui,PathPlanning,255,165,19,15,32,24,12,10,2,3
-MicroCol game classes,org.microcol.gui,ImageProvider,60,78,3,5,14,17,4,5,2,3
+MicroCol game classes,org.microcol.gui,ImageProvider,66,90,3,5,15,20,5,5,3,3
 MicroCol game classes,org.microcol.gui,MainFramePresenter.new KeyAdapter() {...},14,0,0,0,3,0,2,0,2,0
 MicroCol game classes,org.microcol.gui,MainFramePresenter.new WindowAdapter() {...},21,0,0,0,4,0,2,0,2,0
 MicroCol game classes,org.microcol.gui,MainFramePresenter.new ComponentAdapter() {...},37,0,4,0,7,0,5,0,3,0
@@ -95,7 +95,7 @@ MicroCol game classes,org.microcol.gui,Point,45,111,4,4,6,17,8,10,4,10
 MicroCol game classes,org.microcol.gui,WaitingDialog,137,0,0,0,22,0,2,0,2,0
 MicroCol game classes,org.microcol.gui,AboutDialog,91,0,0,0,15,0,2,0,2,0
 MicroCol game classes,org.microcol.gui,LocalizationHelper,0,23,0,0,0,4,0,2,0,2
-MicroCol game classes,org.microcol.gui,UnitsPanel,187,0,2,0,29,0,4,0,3,0
+MicroCol game classes,org.microcol.gui,UnitsPanel,188,0,2,0,29,0,4,0,3,0
 MicroCol game classes,org.microcol.gui,AppleMenuListener,27,0,0,0,8,0,3,0,3,0
 MicroCol game classes,org.microcol.gui,Localized,2,0,0,0,1,0,1,0,1,0
 MicroCol game classes,org.microcol.gui,MicroColException,5,4,0,0,2,2,1,1,1,1

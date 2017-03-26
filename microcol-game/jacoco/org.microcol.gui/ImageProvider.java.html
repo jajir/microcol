@@ -12,6 +12,7 @@ import java.util.Map;
 
 import javax.imageio.ImageIO;
 
+import org.microcol.model.ShipType;
 import org.microcol.model.Terrain;
 
 import com.google.common.collect.ImmutableMap;
@@ -36,9 +37,9 @@ public class ImageProvider {
 
 	public final static String IMG_TILE_LAND = &quot;tile-land.png&quot;;
 
-	public final static String IMG_TILE_SHIP1 = &quot;tile-ship1.png&quot;;
+	public final static String IMG_TILE_SHIP_GALEON = &quot;tile-ship-galeon.png&quot;;
 
-	public final static String IMG_TILE_SHIP2 = &quot;tile-ship2.png&quot;;
+	public final static String IMG_TILE_SHIP_FRIGATE = &quot;tile-ship-frigate.png&quot;;
 
 	public final static String IMG_TILE_MODE_GOTO = &quot;tile-mode-goto.png&quot;;
 
@@ -52,12 +53,16 @@ public class ImageProvider {
 
 	private final Map&lt;String, BufferedImage&gt; images;
 
-<span class="fc" id="L55">	private final Map&lt;Terrain, Image&gt; terrainMap = ImmutableMap.&lt;Terrain, Image&gt;builder()</span>
-<span class="fc" id="L56">			.put(Terrain.CONTINENT, getRawImage(IMG_TILE_LAND)).put(Terrain.OCEAN, getRawImage(IMG_TILE_OCEAN)).build();</span>
+<span class="fc" id="L56">	private final Map&lt;Terrain, Image&gt; terrainMap = ImmutableMap.&lt;Terrain, Image&gt;builder()</span>
+<span class="fc" id="L57">			.put(Terrain.CONTINENT, getRawImage(IMG_TILE_LAND)).put(Terrain.OCEAN, getRawImage(IMG_TILE_OCEAN)).build();</span>
 
-<span class="fc" id="L58">	public ImageProvider() {</span>
-<span class="fc" id="L59">		images = new HashMap&lt;&gt;();</span>
-<span class="fc" id="L60">	}</span>
+<span class="fc" id="L59">	private final Map&lt;ShipType, Image&gt; shipMap = ImmutableMap.&lt;ShipType, Image&gt;builder()</span>
+<span class="fc" id="L60">			.put(ShipType.GALLEON, getRawImage(IMG_TILE_SHIP_GALEON))</span>
+<span class="fc" id="L61">			.put(ShipType.FRIGATE, getRawImage(IMG_TILE_SHIP_FRIGATE)).build();</span>
+
+<span class="fc" id="L63">	public ImageProvider() {</span>
+<span class="fc" id="L64">		images = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L65">	}</span>
 
 	/**
 	 * Load image for name.
@@ -67,16 +72,16 @@ public class ImageProvider {
 	 * @return loaded image
 	 */
 	public Image getImage(final String name) {
-<span class="fc" id="L70">		BufferedImage img = images.get(name);</span>
-<span class="fc bfc" id="L71" title="All 2 branches covered.">		if (img == null) {</span>
-<span class="fc" id="L72">			img = ImageProvider.getRawImage(name);</span>
-<span class="pc bpc" id="L73" title="1 of 2 branches missed.">			if (img == null) {</span>
-<span class="nc" id="L74">				return null;</span>
+<span class="fc" id="L75">		BufferedImage img = images.get(name);</span>
+<span class="fc bfc" id="L76" title="All 2 branches covered.">		if (img == null) {</span>
+<span class="fc" id="L77">			img = ImageProvider.getRawImage(name);</span>
+<span class="pc bpc" id="L78" title="1 of 2 branches missed.">			if (img == null) {</span>
+<span class="nc" id="L79">				return null;</span>
 			} else {
-<span class="fc" id="L76">				images.put(name, img);</span>
+<span class="fc" id="L81">				images.put(name, img);</span>
 			}
 		}
-<span class="fc" id="L79">		return img;</span>
+<span class="fc" id="L84">		return img;</span>
 	}
 
 	/**
@@ -89,29 +94,29 @@ public class ImageProvider {
 	@SuppressWarnings(&quot;unused&quot;)
 	private BufferedImage getCompatibleImage(final BufferedImage image) {
 		// obtain the current system graphical settings
-<span class="nc" id="L92">		GraphicsConfiguration gfx_config = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice()</span>
-<span class="nc" id="L93">				.getDefaultConfiguration();</span>
+<span class="nc" id="L97">		GraphicsConfiguration gfx_config = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice()</span>
+<span class="nc" id="L98">				.getDefaultConfiguration();</span>
 
 		/*
 		 * if image is already compatible and optimized for current system
 		 * settings, simply return it
 		 */
-<span class="nc bnc" id="L99" title="All 2 branches missed.">		if (image.getColorModel().equals(gfx_config.getColorModel()))</span>
-<span class="nc" id="L100">			return image;</span>
+<span class="nc bnc" id="L104" title="All 2 branches missed.">		if (image.getColorModel().equals(gfx_config.getColorModel()))</span>
+<span class="nc" id="L105">			return image;</span>
 
 		// image is not optimized, so create a new image that is
-<span class="nc" id="L103">		BufferedImage new_image = gfx_config.createCompatibleImage(image.getWidth(), image.getHeight(),</span>
-<span class="nc" id="L104">				image.getTransparency());</span>
+<span class="nc" id="L108">		BufferedImage new_image = gfx_config.createCompatibleImage(image.getWidth(), image.getHeight(),</span>
+<span class="nc" id="L109">				image.getTransparency());</span>
 
 		// get the graphics context of the new image to draw the old image on
-<span class="nc" id="L107">		Graphics2D g2d = (Graphics2D) new_image.getGraphics();</span>
+<span class="nc" id="L112">		Graphics2D g2d = (Graphics2D) new_image.getGraphics();</span>
 
 		// actually draw the image and dispose of context no longer needed
-<span class="nc" id="L110">		g2d.drawImage(image, 0, 0, null);</span>
-<span class="nc" id="L111">		g2d.dispose();</span>
+<span class="nc" id="L115">		g2d.drawImage(image, 0, 0, null);</span>
+<span class="nc" id="L116">		g2d.dispose();</span>
 
 		// return the new optimized image
-<span class="nc" id="L114">		return new_image;</span>
+<span class="nc" id="L119">		return new_image;</span>
 	}
 
 	/**
@@ -124,17 +129,17 @@ public class ImageProvider {
 	 * @return return {@link BufferedImage} object
 	 */
 	public static BufferedImage getRawImage(final String rawPath) {
-<span class="fc" id="L127">		final String path = BASE_PACKAGE + &quot;/&quot; + rawPath;</span>
+<span class="fc" id="L132">		final String path = BASE_PACKAGE + &quot;/&quot; + rawPath;</span>
 		try {
-<span class="fc" id="L129">			ClassLoader cl = ImageProvider.class.getClassLoader();</span>
-<span class="fc" id="L130">			final InputStream in = cl.getResourceAsStream(path);</span>
-<span class="fc bfc" id="L131" title="All 2 branches covered.">			if (in == null) {</span>
-<span class="fc" id="L132">				throw new MicroColException(&quot;Unable to load file '&quot; + path + &quot;'.&quot;);</span>
+<span class="fc" id="L134">			ClassLoader cl = ImageProvider.class.getClassLoader();</span>
+<span class="fc" id="L135">			final InputStream in = cl.getResourceAsStream(path);</span>
+<span class="fc bfc" id="L136" title="All 2 branches covered.">			if (in == null) {</span>
+<span class="fc" id="L137">				throw new MicroColException(&quot;Unable to load file '&quot; + path + &quot;'.&quot;);</span>
 			} else {
-<span class="fc" id="L134">				return ImageIO.read(cl.getResourceAsStream(path));</span>
+<span class="fc" id="L139">				return ImageIO.read(cl.getResourceAsStream(path));</span>
 			}
-<span class="nc" id="L136">		} catch (IOException e) {</span>
-<span class="nc" id="L137">			throw new MicroColException(&quot;Unable to load file '&quot; + path + &quot;'.&quot;, e);</span>
+<span class="nc" id="L141">		} catch (IOException e) {</span>
+<span class="nc" id="L142">			throw new MicroColException(&quot;Unable to load file '&quot; + path + &quot;'.&quot;, e);</span>
 		}
 	}
 
@@ -146,7 +151,18 @@ public class ImageProvider {
 	 * @return image representing terrain image
 	 */
 	public Image getTerrainImage(final Terrain terrain) {
-<span class="nc" id="L149">		return terrainMap.get(terrain);</span>
+<span class="nc" id="L154">		return terrainMap.get(terrain);</span>
+	}
+
+	/**
+	 * For specific ship type find corresponding image.
+	 * 
+	 * @param shipType
+	 *            required ship type
+	 * @return image representing ship image
+	 */
+	public Image getShipImage(final ShipType shipType) {
+<span class="nc" id="L165">		return shipMap.get(shipType);</span>
 	}
 
 }
