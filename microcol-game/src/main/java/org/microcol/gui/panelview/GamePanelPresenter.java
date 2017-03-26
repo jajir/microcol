@@ -75,6 +75,8 @@ public class GamePanelPresenter implements Localized {
 		void stopTimer();
 
 		VisualDebugInfo getVisualDebugInfo();
+		
+		void startMoveUnit(Ship ship);
 	}
 
 	private final GameController gameController;
@@ -236,6 +238,7 @@ public class GamePanelPresenter implements Localized {
 		// TODO JJ Filter unit that have enough action points
 		Preconditions.checkState(!units.isEmpty(), "there are some moveable units");
 		final Ship unit = units.get(0);
+		display.startMoveUnit(unit);
 		display.setGotoCursorTitle(lastMousePosition.toLocation());
 		logger.debug("Switching '" + unit + "' to go mode.");
 		display.setCursorGoto();
