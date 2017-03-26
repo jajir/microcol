@@ -31,9 +31,13 @@ public class UnitsPanel extends JPanel implements Localized {
 
 	private final ImageProvider imageProvider;
 
+	private final LocalizationHelper localizationHelper;
+
 	@Inject
-	public UnitsPanel(final ImageProvider imageProvider, final StatusBarMessageController statusBarMessageController) {
+	public UnitsPanel(final ImageProvider imageProvider, final StatusBarMessageController statusBarMessageController,
+			final LocalizationHelper localizationHelper) {
 		this.imageProvider = Preconditions.checkNotNull(imageProvider);
+		this.localizationHelper = Preconditions.checkNotNull(localizationHelper);
 		this.setLayout(new GridBagLayout());
 		addMouseListener(new MouseAdapter() {
 			@Override
@@ -52,12 +56,11 @@ public class UnitsPanel extends JPanel implements Localized {
 		int i = 0;
 		for (final Ship u : units) {
 			Ship s = (Ship) u;
-			add(new JLabel(new ImageIcon(imageProvider.getShipImage(s.getType()))),
-					new GridBagConstraints(0, i, 1, 2, 0D, 0D, GridBagConstraints.NORTH, GridBagConstraints.NONE,
-							new Insets(0, 0, 0, 0), 0, 0));
+			add(new JLabel(new ImageIcon(imageProvider.getShipImage(s.getType()))), new GridBagConstraints(0, i, 1, 2,
+					0D, 0D, GridBagConstraints.NORTH, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
 			final StringBuilder sb = new StringBuilder(200);
 			sb.append("<html><div>");
-			sb.append("Galeon");
+			sb.append(localizationHelper.getShipName(s.getType()));
 			sb.append("</div><div>");
 			sb.append(getText().get("unitsPanel.availableMoved"));
 			sb.append(" ");
