@@ -66,11 +66,11 @@ public class MainMenuPresenter {
 			final VolumeChangeController volumeChangeController, final ShowGridController showGridController,
 			final FocusedTileController focusedTileController, final MoveUnitController moveUnitController,
 			final CenterViewController centerViewController, final TurnStartedController turnStartedController,
-<span class="nc" id="L69">			final ExitGameController exitGameController, final GameController gameController) {</span>
-<span class="nc" id="L70">		this.display = Preconditions.checkNotNull(display);</span>
-<span class="nc" id="L71">		display.getMenuItemNewGame().addActionListener(actionEvent -&gt; {</span>
-<span class="nc" id="L72">			final NewGameDialog newGameDialog = new NewGameDialog(viewUtil, text);</span>
-<span class="nc" id="L73">			newGameDialog.setVisible(true);</span>
+			final ExitGameController exitGameController, final GameController gameController,
+<span class="nc" id="L70">			final ApplicationController applicationController) {</span>
+<span class="nc" id="L71">		this.display = Preconditions.checkNotNull(display);</span>
+<span class="nc" id="L72">		display.getMenuItemNewGame().addActionListener(actionEvent -&gt; {</span>
+<span class="nc" id="L73">			applicationController.startNewGame();</span>
 <span class="nc" id="L74">		});</span>
 <span class="nc bnc" id="L75" title="All 2 branches missed.">		if (!gamePreferences.isOSX()) {</span>
 <span class="nc" id="L76">			display.getMenuItemQuitGame().addActionListener(actionEvent -&gt; {</span>

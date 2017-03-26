@@ -10,78 +10,95 @@ import com.google.common.base.MoreObjects;
  */
 public class Point {
 
+	/**
+	 * Minimal x value.
+	 */
+	public final static int MAP_MIN_X = 1;
+
+	/**
+	 * Minimal y value.
+	 */
+	public final static int MAP_MIN_Y = 1;
+
+	/**
+	 * On screen X coordinate.
+	 */
 	private final int x;
+
+	/**
+	 * On screen Y coordinate.
+	 */
 	private final int y;
 
-<span class="fc" id="L16">	private Point(final int x, final int y) {</span>
-<span class="fc" id="L17">		this.x = x;</span>
-<span class="fc" id="L18">		this.y = y;</span>
-<span class="fc" id="L19">	}</span>
+<span class="fc" id="L33">	private Point(final int x, final int y) {</span>
+<span class="fc" id="L34">		this.x = x;</span>
+<span class="fc" id="L35">		this.y = y;</span>
+<span class="fc" id="L36">	}</span>
 
 	public int getX() {
-<span class="fc" id="L22">		return x;</span>
+<span class="fc" id="L39">		return x;</span>
 	}
 
 	public int getY() {
-<span class="fc" id="L26">		return y;</span>
+<span class="fc" id="L43">		return y;</span>
 	}
 
 	@Override
 	public int hashCode() {
-<span class="nc" id="L31">		return x + (y &lt;&lt; 16);</span>
+<span class="nc" id="L48">		return x + (y &lt;&lt; 16);</span>
 	}
 
 	@Override
 	public boolean equals(final Object object) {
-<span class="pc bpc" id="L36" title="1 of 2 branches missed.">		if (object == null) {</span>
-<span class="nc" id="L37">			return false;</span>
+<span class="pc bpc" id="L53" title="1 of 2 branches missed.">		if (object == null) {</span>
+<span class="nc" id="L54">			return false;</span>
 		}
 
-<span class="pc bpc" id="L40" title="1 of 2 branches missed.">		if (!(object instanceof Point)) {</span>
-<span class="nc" id="L41">			return false;</span>
+<span class="pc bpc" id="L57" title="1 of 2 branches missed.">		if (!(object instanceof Point)) {</span>
+<span class="nc" id="L58">			return false;</span>
 		}
 
-<span class="fc" id="L44">		final Point location = (Point) object;</span>
+<span class="fc" id="L61">		final Point location = (Point) object;</span>
 
-<span class="pc bpc" id="L46" title="2 of 4 branches missed.">		return x == location.x &amp;&amp; y == location.y;</span>
+<span class="pc bpc" id="L63" title="2 of 4 branches missed.">		return x == location.x &amp;&amp; y == location.y;</span>
 	}
 
 	@Override
 	public String toString() {
-<span class="nc" id="L51">		return MoreObjects.toStringHelper(this).add(&quot;x&quot;, x).add(&quot;y&quot;, y).toString();</span>
+<span class="nc" id="L68">		return MoreObjects.toStringHelper(this).add(&quot;x&quot;, x).add(&quot;y&quot;, y).toString();</span>
 	}
 
 	public Location toLocation() {
-<span class="nc" id="L55">		final Point p = divide(GamePanelView.TOTAL_TILE_WIDTH_IN_PX);</span>
-<span class="nc" id="L56">		return Location.of(p.getX(), p.getY());</span>
+<span class="fc" id="L72">		final Point p = divide(GamePanelView.TOTAL_TILE_WIDTH_IN_PX).add(MAP_MIN_X, MAP_MIN_Y);</span>
+<span class="fc" id="L73">		return Location.of(p.getX(), p.getY());</span>
 	}
 
 	public static Point of(final int x, final int y) {
-<span class="fc" id="L60">		return new Point(x, y);</span>
+<span class="fc" id="L77">		return new Point(x, y);</span>
 	}
 
 	public static Point of(final Location location) {
-<span class="nc" id="L64">		return Point.of(location.getX(), location.getY()).multiply(GamePanelView.TOTAL_TILE_WIDTH_IN_PX);</span>
+<span class="nc" id="L81">		return Point.of(location.getX(), location.getY()).multiply(GamePanelView.TOTAL_TILE_WIDTH_IN_PX);</span>
 	}
 
 	public Point add(final int addX, final int addY) {
-<span class="fc" id="L68">		return new Point(x + addX, y + addY);</span>
+<span class="fc" id="L85">		return new Point(x + addX, y + addY);</span>
 	}
 
 	public Point add(final Point point) {
-<span class="fc" id="L72">		return new Point(x + point.getX(), y + point.getY());</span>
+<span class="fc" id="L89">		return new Point(x + point.getX(), y + point.getY());</span>
 	}
 
 	public Point substract(final Point p) {
-<span class="fc" id="L76">		return new Point(x - p.x, y - p.y);</span>
+<span class="fc" id="L93">		return new Point(x - p.x, y - p.y);</span>
 	}
 
 	public Point multiply(final int factor) {
-<span class="nc" id="L80">		return new Point(x * factor, y * factor);</span>
+<span class="nc" id="L97">		return new Point(x * factor, y * factor);</span>
 	}
 
 	public Point divide(final double factor) {
-<span class="fc" id="L84">		return new Point((int) (x / factor), (int) (y / factor));</span>
+<span class="fc" id="L101">		return new Point((int) (x / factor), (int) (y / factor));</span>
 	}
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

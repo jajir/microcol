@@ -69,81 +69,82 @@ public class GameController implements Localized {
 	 * Start new game and register listener.
 	 */
 	public void newGame() {
-<span class="nc" id="L72">		ModelBuilder builder = new ModelBuilder();</span>
-<span class="nc" id="L73">		game = builder.setCalendar(1570, 1571)</span>
+<span class="nc bnc" id="L72" title="All 2 branches missed.">		if (game != null) {</span>
+			// TODO JJ already running game should be stopped
+		}
+<span class="nc" id="L75">		ModelBuilder builder = new ModelBuilder();</span>
+<span class="nc" id="L76">		game = builder.setCalendar(1570, 1571)</span>
 				// .setMap(15, 10)
-<span class="nc" id="L75">				.setMap(&quot;/maps/map-01.txt&quot;)</span>
-<span class="nc" id="L76">				.addPlayer(&quot;Player1&quot;, true)</span>
-<span class="nc" id="L77">					.addShip(&quot;Player1&quot;, ShipType.GALLEON, Location.of(4, 2))</span>
-<span class="nc" id="L78">					.addShip(&quot;Player1&quot;, ShipType.FRIGATE, Location.of(3, 3))</span>
-<span class="nc" id="L79">				.addPlayer(&quot;Player2&quot;, true)</span>
-<span class="nc" id="L80">					.addShip(&quot;Player2&quot;, ShipType.GALLEON, Location.of(7, 7))</span>
-<span class="nc" id="L81">					.addShip(&quot;Player2&quot;, ShipType.FRIGATE, Location.of(7, 9))</span>
-<span class="nc" id="L82">					.addShip(&quot;Player2&quot;, ShipType.FRIGATE, Location.of(14, 9))</span>
-//				.setMap(&quot;/maps/map-02.txt&quot;)
-//				.addPlayer(&quot;Player1&quot;, true)
-//					.addShip(&quot;Player1&quot;, ShipType.GALLEON, Location.of(1, 1))
-//					.addShip(&quot;Player1&quot;, ShipType.FRIGATE, Location.of(3, 1))
-//				.addPlayer(&quot;Player2&quot;, true)
-//					.addShip(&quot;Player2&quot;, ShipType.GALLEON, Location.of(3, 3))
-//					.addShip(&quot;Player2&quot;, ShipType.FRIGATE, Location.of(1, 3))
-<span class="nc" id="L90">				.build();</span>
-<span class="nc" id="L91">		game.addListener(new ModelAdapter() {</span>
+<span class="nc" id="L78">				.setMap(&quot;/maps/map-01.txt&quot;).addPlayer(&quot;Player1&quot;, false)</span>
+<span class="nc" id="L79">				.addShip(&quot;Player1&quot;, ShipType.GALLEON, Location.of(4, 2))</span>
+<span class="nc" id="L80">				.addShip(&quot;Player1&quot;, ShipType.FRIGATE, Location.of(3, 3)).addPlayer(&quot;Player2&quot;, true)</span>
+<span class="nc" id="L81">				.addShip(&quot;Player2&quot;, ShipType.GALLEON, Location.of(7, 7))</span>
+				// .addShip(&quot;Player2&quot;, ShipType.FRIGATE, Location.of(7, 9))
+				// .addShip(&quot;Player2&quot;, ShipType.FRIGATE, Location.of(14, 9))
+				// .setMap(&quot;/maps/map-02.txt&quot;)
+				// .addPlayer(&quot;Player1&quot;, true)
+				// .addShip(&quot;Player1&quot;, ShipType.GALLEON, Location.of(1, 1))
+				// .addShip(&quot;Player1&quot;, ShipType.FRIGATE, Location.of(3, 1))
+				// .addPlayer(&quot;Player2&quot;, true)
+				// .addShip(&quot;Player2&quot;, ShipType.GALLEON, Location.of(3, 3))
+				// .addShip(&quot;Player2&quot;, ShipType.FRIGATE, Location.of(1, 3))
+<span class="nc" id="L91">				.build();</span>
+<span class="nc" id="L92">		game.addListener(new ModelAdapter() {</span>
 
 			@Override
 			public void turnStarted(final TurnStartedEvent event) {
-<span class="nc" id="L95">				turnStartedController.fireEvent(event);</span>
-<span class="nc" id="L96">			}</span>
+<span class="nc" id="L96">				turnStartedController.fireEvent(event);</span>
+<span class="nc" id="L97">			}</span>
 
 			@Override
 			public void shipMoved(final ShipMovedEvent event) {
-<span class="nc" id="L100">				moveUnitController.fireUnitMovedEvent(event);</span>
-<span class="nc" id="L101">			}</span>
+<span class="nc" id="L101">				moveUnitController.fireUnitMovedEvent(event);</span>
+<span class="nc" id="L102">			}</span>
 
 			@Override
 			public void roundStarted(final RoundStartedEvent event) {
-<span class="nc" id="L105">				nextTurnController.fireEvent(event);</span>
-<span class="nc" id="L106">			}</span>
+<span class="nc" id="L106">				nextTurnController.fireEvent(event);</span>
+<span class="nc" id="L107">			}</span>
 
 			@Override
 			public void gameStarted(final GameStartedEvent event) {
-<span class="nc" id="L110">				game = event.getModel();</span>
-<span class="nc" id="L111">				newGameController.fireEvent(event);</span>
-<span class="nc" id="L112">			}</span>
+<span class="nc" id="L111">				game = event.getModel();</span>
+<span class="nc" id="L112">				newGameController.fireEvent(event);</span>
+<span class="nc" id="L113">			}</span>
 
 			@Override
 			public void gameFinished(final GameFinishedEvent event) {
-<span class="nc" id="L116">				logger.debug(&quot;Game finished &quot; + event);</span>
-<span class="nc" id="L117">				gameFinishedController.fireEvent(event);</span>
-<span class="nc" id="L118">			}</span>
+<span class="nc" id="L117">				logger.debug(&quot;Game finished &quot; + event);</span>
+<span class="nc" id="L118">				gameFinishedController.fireEvent(event);</span>
+<span class="nc" id="L119">			}</span>
 
 			@Override
 			public void debugRequested(final DebugRequestedEvent event) {
-<span class="nc" id="L122">				debugRequestController.fireEvent(event);</span>
-<span class="nc" id="L123">			}</span>
+<span class="nc" id="L123">				debugRequestController.fireEvent(event);</span>
+<span class="nc" id="L124">			}</span>
 		});
-<span class="nc" id="L125">		SkyNet skyNet = new SkyNet(game);</span>
-<span class="nc" id="L126">		skyNet.searchAndDestroy();</span>
-<span class="nc" id="L127">		new Thread(() -&gt; game.startGame()).start();</span>
-<span class="nc" id="L128">		musicController.start(gamePreferences.getVolume());</span>
-<span class="nc" id="L129">	}</span>
+<span class="nc" id="L126">		SkyNet skyNet = new SkyNet(game);</span>
+<span class="nc" id="L127">		skyNet.searchAndDestroy();</span>
+<span class="nc" id="L128">		new Thread(() -&gt; game.startGame()).start();</span>
+<span class="nc" id="L129">		musicController.start(gamePreferences.getVolume());</span>
+<span class="nc" id="L130">	}</span>
 
 	public Model getModel() {
-<span class="nc" id="L132">		return game;</span>
+<span class="nc" id="L133">		return game;</span>
 	}
 
 	public void performMove(final Ship ship, final List&lt;Location&gt; path) {
-<span class="nc" id="L136">		logger.debug(&quot;Start move ship: &quot; + ship);</span>
-<span class="nc" id="L137">		new Thread(() -&gt; ship.moveTo(Path.of(path))).start();</span>
+<span class="nc" id="L137">		logger.debug(&quot;Start move ship: &quot; + ship);</span>
+<span class="nc" id="L138">		new Thread(() -&gt; ship.moveTo(Path.of(path))).start();</span>
 		// moveAutomatization.addMove(new MoveAutomatization.MovePlanner(ship,
 		// path));
-<span class="nc" id="L140">	}</span>
+<span class="nc" id="L141">	}</span>
 
 	public void nextTurn() {
-<span class="nc" id="L143">		logger.debug(&quot;Next Year event was triggered.&quot;);</span>
-<span class="nc" id="L144">		new Thread(() -&gt; game.endTurn()).start();</span>
+<span class="nc" id="L144">		logger.debug(&quot;Next Year event was triggered.&quot;);</span>
+<span class="nc" id="L145">		new Thread(() -&gt; game.endTurn()).start();</span>
 		// moveAutomatization.perforMoves();
-<span class="nc" id="L146">	}</span>
+<span class="nc" id="L147">	}</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

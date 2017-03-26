@@ -8,7 +8,7 @@ MicroCol game classes,org.microcol.model.event,DebugRequestedEvent,19,0,0,0,7,0,
 MicroCol game classes,org.microcol.model.event,GameStartedEvent,8,0,0,0,4,0,2,0,2,0
 MicroCol game classes,org.microcol.model.event,ShipMovedEvent,44,0,0,0,13,0,5,0,5,0
 MicroCol game classes,org.microcol.gui.panelview,GamePanelPresenter.PopUpDemo,28,0,2,0,5,0,2,0,1,0
-MicroCol game classes,org.microcol.gui.panelview,Area,110,126,16,0,13,20,15,6,7,6
+MicroCol game classes,org.microcol.gui.panelview,Area,106,126,16,0,13,20,15,6,7,6
 MicroCol game classes,org.microcol.gui.panelview,WalkAnimator,5,156,2,10,1,30,3,10,1,6
 MicroCol game classes,org.microcol.gui.panelview,ScreenScrolling,60,0,4,0,9,0,6,0,4,0
 MicroCol game classes,org.microcol.gui.panelview,GamePanelPresenter,611,0,26,0,115,0,35,0,22,0
@@ -45,7 +45,7 @@ MicroCol game classes,org.microcol.gui.event,ShowGridController,3,0,0,0,1,0,1,0,
 MicroCol game classes,org.microcol.gui.event,DebugRequestController,3,0,0,0,1,0,1,0,1,0
 MicroCol game classes,org.microcol.gui.event,FocusedTileEvent,48,0,4,0,9,0,6,0,4,0
 MicroCol game classes,org.microcol.gui.event,EventInitializer,25,0,0,0,6,0,3,0,3,0
-MicroCol game classes,org.microcol.gui.event,GameController,170,0,0,0,35,0,8,0,8,0
+MicroCol game classes,org.microcol.gui.event,GameController,161,0,2,0,32,0,9,0,8,0
 MicroCol game classes,org.microcol.gui.event,StatusBarMessageController,3,0,0,0,1,0,1,0,1,0
 MicroCol game classes,org.microcol.gui.event,OrderedEventController.ValueWithPriority,0,18,0,0,0,6,0,3,0,3
 MicroCol game classes,org.microcol.gui.event,GameController.new ModelAdapter() {...},60,0,0,0,15,0,7,0,7,0
@@ -83,7 +83,7 @@ MicroCol game classes,org.microcol.gui,MicroColModule,251,0,0,0,51,0,3,0,3,0
 MicroCol game classes,org.microcol.gui,RightPanelPresenter.new KeyAdapter() {...},14,0,0,0,3,0,2,0,2,0
 MicroCol game classes,org.microcol.gui,MusicController,40,0,0,0,10,0,6,0,6,0
 MicroCol game classes,org.microcol.gui,RightPanelPresenter.new MouseAdapter() {...},21,0,0,0,4,0,2,0,2,0
-MicroCol game classes,org.microcol.gui,MainMenuPresenter,229,0,10,0,56,0,20,0,15,0
+MicroCol game classes,org.microcol.gui,MainMenuPresenter,221,0,10,0,55,0,20,0,15,0
 MicroCol game classes,org.microcol.gui,RightPanelPresenter.new MouseAdapter() {...},21,0,0,0,4,0,2,0,2,0
 MicroCol game classes,org.microcol.gui,FpsCounter,59,0,0,0,17,0,6,0,6,0
 MicroCol game classes,org.microcol.gui,StatusBarPresenter.new MouseAdapter() {...},21,0,0,0,4,0,2,0,2,0
@@ -91,7 +91,7 @@ MicroCol game classes,org.microcol.gui,StatusBarPresenter.new MouseAdapter() {..
 MicroCol game classes,org.microcol.gui,MainPanelView,84,0,0,0,7,0,1,0,1,0
 MicroCol game classes,org.microcol.gui,UnitsPanel.new MouseAdapter() {...},21,0,0,0,4,0,2,0,2,0
 MicroCol game classes,org.microcol.gui,StepCounter,32,0,4,0,11,0,4,0,2,0
-MicroCol game classes,org.microcol.gui,Point,55,98,4,4,8,15,9,9,5,9
+MicroCol game classes,org.microcol.gui,Point,45,111,4,4,6,17,8,10,4,10
 MicroCol game classes,org.microcol.gui,WaitingDialog,137,0,0,0,22,0,2,0,2,0
 MicroCol game classes,org.microcol.gui,AboutDialog,91,0,0,0,15,0,2,0,2,0
 MicroCol game classes,org.microcol.gui,LocalizationHelper,0,23,0,0,0,4,0,2,0,2
