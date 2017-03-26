@@ -4,21 +4,22 @@ import java.util.List;
 
 import org.microcol.model.Location;
 
-import com.google.common.base.Preconditions;
-
+/**
+ * Helps to highlight area where use could move in first turn.
+ */
 public class OneTurnMoveHighlighter {
 
 	private List&lt;Location&gt; locations;
 
-<span class="nc" id="L13">	public OneTurnMoveHighlighter() {</span>
-<span class="nc" id="L14">	}</span>
+<span class="nc" id="L14">	public OneTurnMoveHighlighter() {</span>
+<span class="nc" id="L15">	}</span>
 
 	void setLocations(final List&lt;Location&gt; locations) {
-<span class="nc" id="L17">		this.locations = Preconditions.checkNotNull(locations);</span>
-<span class="nc" id="L18">	}</span>
+<span class="nc" id="L18">		this.locations = locations;</span>
+<span class="nc" id="L19">	}</span>
 
 	public boolean isItHighlighted(final Location location) {
-<span class="nc bnc" id="L21" title="All 4 branches missed.">		return locations != null &amp;&amp; locations.contains(location);</span>
+<span class="nc bnc" id="L22" title="All 4 branches missed.">		return locations != null &amp;&amp; locations.contains(location);</span>
 	}
 
 }

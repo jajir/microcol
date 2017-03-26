@@ -471,58 +471,59 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 
 	@Override
 	public void setCursorNormal() {
-<span class="nc" id="L474">		setCursor(Cursor.getDefaultCursor());</span>
-<span class="nc" id="L475">		gotoMode = false;</span>
-<span class="nc" id="L476">	}</span>
+<span class="nc" id="L474">		oneTurnMoveHighlighter.setLocations(null);</span>
+<span class="nc" id="L475">		setCursor(Cursor.getDefaultCursor());</span>
+<span class="nc" id="L476">		gotoMode = false;</span>
+<span class="nc" id="L477">	}</span>
 
 	@Override
 	public void setCursorGoto() {
-<span class="nc" id="L480">		setCursor(gotoModeCursor);</span>
-<span class="nc" id="L481">		gotoMode = true;</span>
-<span class="nc" id="L482">	}</span>
+<span class="nc" id="L481">		setCursor(gotoModeCursor);</span>
+<span class="nc" id="L482">		gotoMode = true;</span>
+<span class="nc" id="L483">	}</span>
 
 	@Override
 	public boolean isGotoMode() {
-<span class="nc" id="L486">		return gotoMode;</span>
+<span class="nc" id="L487">		return gotoMode;</span>
 	}
 
 	@Override
 	public Location getGotoCursorTitle() {
-<span class="nc" id="L491">		return gotoCursorTitle;</span>
+<span class="nc" id="L492">		return gotoCursorTitle;</span>
 	}
 
 	@Override
 	public void setGotoCursorTitle(final Location gotoCursorTitle) {
-<span class="nc" id="L496">		this.gotoCursorTitle = gotoCursorTitle;</span>
-<span class="nc" id="L497">	}</span>
+<span class="nc" id="L497">		this.gotoCursorTitle = gotoCursorTitle;</span>
+<span class="nc" id="L498">	}</span>
 
 	@Override
 	public void setWalkAnimator(final WalkAnimator walkAnimator) {
-<span class="nc" id="L501">		this.walkAnimator = walkAnimator;</span>
-<span class="nc" id="L502">	}</span>
+<span class="nc" id="L502">		this.walkAnimator = walkAnimator;</span>
+<span class="nc" id="L503">	}</span>
 
 	@Override
 	public WalkAnimator getWalkAnimator() {
-<span class="nc" id="L506">		return walkAnimator;</span>
+<span class="nc" id="L507">		return walkAnimator;</span>
 	}
 
 	@Override
 	public void setGridShown(final boolean isGridShown) {
-<span class="nc" id="L511">		this.isGridShown = isGridShown;</span>
-<span class="nc" id="L512">	}</span>
+<span class="nc" id="L512">		this.isGridShown = isGridShown;</span>
+<span class="nc" id="L513">	}</span>
 
 	public void onViewPortResize() {
-<span class="nc" id="L515">		dbImage = null;</span>
-<span class="nc" id="L516">	}</span>
+<span class="nc" id="L516">		dbImage = null;</span>
+<span class="nc" id="L517">	}</span>
 
 	@Override
 	public Area getArea() {
-<span class="nc" id="L520">		return new Area((JViewport) getParent(), gameController.getModel().getMap());</span>
+<span class="nc" id="L521">		return new Area((JViewport) getParent(), gameController.getModel().getMap());</span>
 	}
 
 	@Override
 	public VisualDebugInfo getVisualDebugInfo() {
-<span class="nc" id="L525">		return visualDebugInfo;</span>
+<span class="nc" id="L526">		return visualDebugInfo;</span>
 	}
 
 }
