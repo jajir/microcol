@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JViewport;
 import javax.swing.Timer;
@@ -72,6 +73,8 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 
 	private ScreenScrolling screenScrolling;
 
+	private final OneTurnMoveHighlighter oneTurnMoveHighlighter;
+
 	@Inject
 	public GamePanelView(final GameController gameController, final NextTurnController nextTurnController,
 			final PathPlanning pathPlanning, final ImageProvider imageProvider) {
@@ -79,6 +82,7 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 		this.pathPlanning = Preconditions.checkNotNull(pathPlanning);
 		this.imageProvider = Preconditions.checkNotNull(imageProvider);
 		this.visualDebugInfo = new VisualDebugInfo();
+		oneTurnMoveHighlighter = new OneTurnMoveHighlighter();
 		Toolkit toolkit = Toolkit.getDefaultToolkit();
 		gotoModeCursor = toolkit.createCustomCursor(imageProvider.getImage(ImageProvider.IMG_CURSOR_GOTO),
 				new java.awt.Point(1, 1), "gotoModeCursor");
@@ -236,7 +240,12 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 				final Point point = area.convert(location);
 				final Terrain terrain = gameController.getModel().getMap().getTerrainAt(location);
 				graphics.drawImage(imageProvider.getTerrainImage(terrain), point.getX(), point.getY(),
-						point.getX() + 35, point.getY() + 35, 0, 0, 35, 35, this);
+						point.getX() + TILE_WIDTH_IN_PX, point.getY() + TILE_WIDTH_IN_PX, 0, 0, TILE_WIDTH_IN_PX,
+						TILE_WIDTH_IN_PX, this);
+				if (oneTurnMoveHighlighter.isItHighlighted(location)) {
+					graphics.setColor(new Color(255, 200, 255, 100));
+					graphics.fillRect(point.getX(), point.getY(), TILE_WIDTH_IN_PX, TILE_WIDTH_IN_PX);
+				}
 			}
 		}
 	}
@@ -416,6 +425,11 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 			graphics.setColor(Color.white);
 			graphics.fillRect(p.getX() + 1, p.getY() + 1, FLAG_WIDTH - 1, FLAG_HEIGHT - 1);
 		});
+	}
+
+	@Override
+	public void startMoveUnit(final Ship ship) {
+		oneTurnMoveHighlighter.setLocations(ship.getAvailableLocations());
 	}
 
 	@Override
