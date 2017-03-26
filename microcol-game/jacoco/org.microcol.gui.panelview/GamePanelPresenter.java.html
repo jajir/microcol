@@ -75,6 +75,8 @@ public class GamePanelPresenter implements Localized {
 		void stopTimer();
 
 		VisualDebugInfo getVisualDebugInfo();
+		
+		void startMoveUnit(Ship ship);
 	}
 
 	private final GameController gameController;
@@ -98,12 +100,12 @@ public class GamePanelPresenter implements Localized {
 		 */
 		private static final long serialVersionUID = 1L;
 
-<span class="nc" id="L101">		public PopUpDemo() {</span>
-<span class="nc bnc" id="L102" title="All 2 branches missed.">			for (int i = 0; i &lt; 10; i++) {</span>
-<span class="nc" id="L103">				JMenuItem anItem = new JMenuItem(&quot;Item &quot; + i + &quot; click me!&quot;);</span>
-<span class="nc" id="L104">				add(anItem);</span>
+<span class="nc" id="L103">		public PopUpDemo() {</span>
+<span class="nc bnc" id="L104" title="All 2 branches missed.">			for (int i = 0; i &lt; 10; i++) {</span>
+<span class="nc" id="L105">				JMenuItem anItem = new JMenuItem(&quot;Item &quot; + i + &quot; click me!&quot;);</span>
+<span class="nc" id="L106">				add(anItem);</span>
 			}
-<span class="nc" id="L106">		}</span>
+<span class="nc" id="L108">		}</span>
 	}
 
 	@Inject
@@ -114,226 +116,227 @@ public class GamePanelPresenter implements Localized {
 			final GamePreferences gamePreferences, final ShowGridController showGridController,
 			final CenterViewController viewController, final AboutGameEventController gameEventController,
 			final ExitGameController exitGameController, final LocalizationHelper localizationHelper,
-<span class="nc" id="L117">			final DebugRequestController debugRequestController) {</span>
-<span class="nc" id="L118">		this.focusedTileController = focusedTileController;</span>
-<span class="nc" id="L119">		this.gameController = Preconditions.checkNotNull(gameController);</span>
-<span class="nc" id="L120">		this.statusBarMessageController = Preconditions.checkNotNull(statusBarMessageController);</span>
-<span class="nc" id="L121">		this.pathPlanning = Preconditions.checkNotNull(pathPlanning);</span>
-<span class="nc" id="L122">		this.display = Preconditions.checkNotNull(display);</span>
-<span class="nc" id="L123">		this.localizationHelper = Preconditions.checkNotNull(localizationHelper);</span>
+<span class="nc" id="L119">			final DebugRequestController debugRequestController) {</span>
+<span class="nc" id="L120">		this.focusedTileController = focusedTileController;</span>
+<span class="nc" id="L121">		this.gameController = Preconditions.checkNotNull(gameController);</span>
+<span class="nc" id="L122">		this.statusBarMessageController = Preconditions.checkNotNull(statusBarMessageController);</span>
+<span class="nc" id="L123">		this.pathPlanning = Preconditions.checkNotNull(pathPlanning);</span>
+<span class="nc" id="L124">		this.display = Preconditions.checkNotNull(display);</span>
+<span class="nc" id="L125">		this.localizationHelper = Preconditions.checkNotNull(localizationHelper);</span>
 
-<span class="nc" id="L125">		moveUnitController.addMoveUnitListener(event -&gt; {</span>
-<span class="nc" id="L126">			scheduleWalkAnimation(event);</span>
+<span class="nc" id="L127">		moveUnitController.addMoveUnitListener(event -&gt; {</span>
+<span class="nc" id="L128">			scheduleWalkAnimation(event);</span>
 			/**
 			 * Wait until animation is finished.
 			 */
-<span class="nc bnc" id="L130" title="All 4 branches missed.">			while (display.getWalkAnimator() != null &amp;&amp; display.getWalkAnimator().isNextAnimationLocationAvailable()) {</span>
+<span class="nc bnc" id="L132" title="All 4 branches missed.">			while (display.getWalkAnimator() != null &amp;&amp; display.getWalkAnimator().isNextAnimationLocationAvailable()) {</span>
 				try {
-<span class="nc" id="L132">					Thread.sleep(100);</span>
-<span class="nc" id="L133">				} catch (InterruptedException e1) {</span>
+<span class="nc" id="L134">					Thread.sleep(100);</span>
+<span class="nc" id="L135">				} catch (InterruptedException e1) {</span>
 					/**
 					 * Exception is intentionally sink.
 					 */
-<span class="nc" id="L137">				}</span>
+<span class="nc" id="L139">				}</span>
 			}
-<span class="nc" id="L139">		});</span>
-<span class="nc" id="L140">		moveUnitController.addStartMovingListener(event -&gt; swithToMoveMode());</span>
+<span class="nc" id="L141">		});</span>
+<span class="nc" id="L142">		moveUnitController.addStartMovingListener(event -&gt; swithToMoveMode());</span>
 
-<span class="nc" id="L142">		keyController.addListener(e -&gt; {</span>
+<span class="nc" id="L144">		keyController.addListener(e -&gt; {</span>
 			/**
 			 * Escape
 			 */
-<span class="nc bnc" id="L146" title="All 2 branches missed.">			if (27 == e.getKeyCode()) {</span>
-<span class="nc" id="L147">				onKeyPressed_escape();</span>
+<span class="nc bnc" id="L148" title="All 2 branches missed.">			if (27 == e.getKeyCode()) {</span>
+<span class="nc" id="L149">				onKeyPressed_escape();</span>
 			}
 			/**
 			 * Enter
 			 */
-<span class="nc bnc" id="L152" title="All 2 branches missed.">			if (10 == e.getKeyCode()) {</span>
-<span class="nc" id="L153">				onKeyPressed_enter();</span>
+<span class="nc bnc" id="L154" title="All 2 branches missed.">			if (10 == e.getKeyCode()) {</span>
+<span class="nc" id="L155">				onKeyPressed_enter();</span>
 			}
-<span class="nc" id="L155">			logger.debug(&quot;Pressed key: '&quot; + e.getKeyChar() + &quot;' has code '&quot; + e.getKeyCode() + &quot;', modifiers '&quot;</span>
-<span class="nc" id="L156">					+ e.getModifiers() + &quot;'&quot;);</span>
-<span class="nc" id="L157">		});</span>
+<span class="nc" id="L157">			logger.debug(&quot;Pressed key: '&quot; + e.getKeyChar() + &quot;' has code '&quot; + e.getKeyCode() + &quot;', modifiers '&quot;</span>
+<span class="nc" id="L158">					+ e.getModifiers() + &quot;'&quot;);</span>
+<span class="nc" id="L159">		});</span>
 
-<span class="nc" id="L159">		final MouseAdapter ma = new MouseAdapter() {</span>
+<span class="nc" id="L161">		final MouseAdapter ma = new MouseAdapter() {</span>
 
 			@Override
 			public void mousePressed(final MouseEvent e) {
-<span class="nc" id="L163">				logger.debug(&quot;mouse pressed at &quot; + e.getX() + &quot;, &quot; + e.getY() + &quot;, &quot; + e.getButton());</span>
-<span class="nc bnc" id="L164" title="All 2 branches missed.">				if (isMouseEnabled()) {</span>
-<span class="nc bnc" id="L165" title="All 2 branches missed.">					if (e.isPopupTrigger()) {</span>
-<span class="nc" id="L166">						doPop(e);</span>
+<span class="nc" id="L165">				logger.debug(&quot;mouse pressed at &quot; + e.getX() + &quot;, &quot; + e.getY() + &quot;, &quot; + e.getButton());</span>
+<span class="nc bnc" id="L166" title="All 2 branches missed.">				if (isMouseEnabled()) {</span>
+<span class="nc bnc" id="L167" title="All 2 branches missed.">					if (e.isPopupTrigger()) {</span>
+<span class="nc" id="L168">						doPop(e);</span>
 					}
-<span class="nc" id="L168">					onMousePressed(e);</span>
+<span class="nc" id="L170">					onMousePressed(e);</span>
 				}
-<span class="nc" id="L170">			}</span>
+<span class="nc" id="L172">			}</span>
 
 			@Override
 			public void mouseReleased(final MouseEvent e) {
-<span class="nc bnc" id="L174" title="All 2 branches missed.">				if (isMouseEnabled()) {</span>
-<span class="nc bnc" id="L175" title="All 2 branches missed.">					if (e.isPopupTrigger()) {</span>
-<span class="nc" id="L176">						doPop(e);</span>
+<span class="nc bnc" id="L176" title="All 2 branches missed.">				if (isMouseEnabled()) {</span>
+<span class="nc bnc" id="L177" title="All 2 branches missed.">					if (e.isPopupTrigger()) {</span>
+<span class="nc" id="L178">						doPop(e);</span>
 					}
 				}
-<span class="nc" id="L179">			}</span>
+<span class="nc" id="L181">			}</span>
 
 			@Override
 			public void mouseMoved(final MouseEvent e) {
-<span class="nc bnc" id="L183" title="All 2 branches missed.">				if (isMouseEnabled()) {</span>
-<span class="nc" id="L184">					onMouseMoved(e);</span>
+<span class="nc bnc" id="L185" title="All 2 branches missed.">				if (isMouseEnabled()) {</span>
+<span class="nc" id="L186">					onMouseMoved(e);</span>
 				}
-<span class="nc" id="L186">			}</span>
+<span class="nc" id="L188">			}</span>
 
 			@Override
 			public void mouseDragged(final MouseEvent e) {
-<span class="nc bnc" id="L190" title="All 2 branches missed.">				if (isMouseEnabled()) {</span>
-<span class="nc" id="L191">					logger.debug(&quot;mouse dragged at &quot; + e.getX() + &quot;, &quot; + e.getY() + &quot;, &quot; + e.getButton());</span>
-<span class="nc" id="L192">					onMouseDragged(e);</span>
+<span class="nc bnc" id="L192" title="All 2 branches missed.">				if (isMouseEnabled()) {</span>
+<span class="nc" id="L193">					logger.debug(&quot;mouse dragged at &quot; + e.getX() + &quot;, &quot; + e.getY() + &quot;, &quot; + e.getButton());</span>
+<span class="nc" id="L194">					onMouseDragged(e);</span>
 				}
-<span class="nc" id="L194">			}</span>
+<span class="nc" id="L196">			}</span>
 
 			private void doPop(MouseEvent e) {
-<span class="nc" id="L197">				PopUpDemo menu = new PopUpDemo();</span>
-<span class="nc" id="L198">				menu.show(e.getComponent(), e.getX(), e.getY());</span>
-<span class="nc" id="L199">			}</span>
+<span class="nc" id="L199">				PopUpDemo menu = new PopUpDemo();</span>
+<span class="nc" id="L200">				menu.show(e.getComponent(), e.getX(), e.getY());</span>
+<span class="nc" id="L201">			}</span>
 		};
 
-<span class="nc" id="L202">		newGameController.addListener(event -&gt; display.initGame(gamePreferences.isGridShown()));</span>
+<span class="nc" id="L204">		newGameController.addListener(event -&gt; display.initGame(gamePreferences.isGridShown()));</span>
 
-<span class="nc" id="L204">		showGridController.addListener(e -&gt; display.setGridShown(e.isGridShown()));</span>
-<span class="nc" id="L205">		debugRequestController.addListener(e -&gt; {</span>
-<span class="nc" id="L206">			display.getVisualDebugInfo().setLocations(e.getLocations());</span>
-<span class="nc" id="L207">		});</span>
+<span class="nc" id="L206">		showGridController.addListener(e -&gt; display.setGridShown(e.isGridShown()));</span>
+<span class="nc" id="L207">		debugRequestController.addListener(e -&gt; {</span>
+<span class="nc" id="L208">			display.getVisualDebugInfo().setLocations(e.getLocations());</span>
+<span class="nc" id="L209">		});</span>
 
-<span class="nc" id="L209">		display.getGamePanelView().addMouseListener(ma);</span>
-<span class="nc" id="L210">		display.getGamePanelView().addMouseMotionListener(ma);</span>
-<span class="nc" id="L211">		display.getGamePanelView().getParent().addComponentListener(new GamePanelListener(display));</span>
-<span class="nc" id="L212">		viewController.addListener(event -&gt; onCenterView());</span>
+<span class="nc" id="L211">		display.getGamePanelView().addMouseListener(ma);</span>
+<span class="nc" id="L212">		display.getGamePanelView().addMouseMotionListener(ma);</span>
+<span class="nc" id="L213">		display.getGamePanelView().getParent().addComponentListener(new GamePanelListener(display));</span>
+<span class="nc" id="L214">		viewController.addListener(event -&gt; onCenterView());</span>
 
-<span class="nc" id="L214">		exitGameController.addListener(event -&gt; display.stopTimer());</span>
+<span class="nc" id="L216">		exitGameController.addListener(event -&gt; display.stopTimer());</span>
 
-<span class="nc" id="L216">	}</span>
+<span class="nc" id="L218">	}</span>
 
 	private boolean isMouseEnabled() {
-<span class="nc" id="L219">		return gameController.getModel().getCurrentPlayer().isHuman();</span>
+<span class="nc" id="L221">		return gameController.getModel().getCurrentPlayer().isHuman();</span>
 	}
 
 	private void onCenterView() {
-<span class="nc" id="L223">		logger.debug(&quot;Center view event&quot;);</span>
-<span class="nc" id="L224">		Preconditions.checkNotNull(display.getCursorLocation(), &quot;Cursor location is empty&quot;);</span>
+<span class="nc" id="L225">		logger.debug(&quot;Center view event&quot;);</span>
+<span class="nc" id="L226">		Preconditions.checkNotNull(display.getCursorLocation(), &quot;Cursor location is empty&quot;);</span>
 		/**
 		 * Here could be verification of race conditions like centering to
 		 * bottom right corner of map. Luckily it's done by JViewport.
 		 */
-<span class="nc" id="L229">		final Point p = display.getArea().getCenterAreaTo(Point.of(display.getCursorLocation()));</span>
-<span class="nc" id="L230">		display.planScrollingAnimationToPoint(p);</span>
-<span class="nc" id="L231">	}</span>
+<span class="nc" id="L231">		final Point p = display.getArea().getCenterAreaTo(Point.of(display.getCursorLocation()));</span>
+<span class="nc" id="L232">		display.planScrollingAnimationToPoint(p);</span>
+<span class="nc" id="L233">	}</span>
 
 	private void swithToMoveMode() {
-<span class="nc" id="L234">		Preconditions.checkNotNull(display.getCursorLocation(), &quot;Cursor location is empty&quot;);</span>
-<span class="nc" id="L235">		final List&lt;Ship&gt; units = gameController.getModel().getCurrentPlayer().getShipsAt(display.getCursorLocation());</span>
+<span class="nc" id="L236">		Preconditions.checkNotNull(display.getCursorLocation(), &quot;Cursor location is empty&quot;);</span>
+<span class="nc" id="L237">		final List&lt;Ship&gt; units = gameController.getModel().getCurrentPlayer().getShipsAt(display.getCursorLocation());</span>
 		// TODO JJ Filter unit that have enough action points
-<span class="nc bnc" id="L237" title="All 2 branches missed.">		Preconditions.checkState(!units.isEmpty(), &quot;there are some moveable units&quot;);</span>
-<span class="nc" id="L238">		final Ship unit = units.get(0);</span>
-<span class="nc" id="L239">		display.setGotoCursorTitle(lastMousePosition.toLocation());</span>
-<span class="nc" id="L240">		logger.debug(&quot;Switching '&quot; + unit + &quot;' to go mode.&quot;);</span>
-<span class="nc" id="L241">		display.setCursorGoto();</span>
-<span class="nc" id="L242">	}</span>
+<span class="nc bnc" id="L239" title="All 2 branches missed.">		Preconditions.checkState(!units.isEmpty(), &quot;there are some moveable units&quot;);</span>
+<span class="nc" id="L240">		final Ship unit = units.get(0);</span>
+<span class="nc" id="L241">		display.startMoveUnit(unit);</span>
+<span class="nc" id="L242">		display.setGotoCursorTitle(lastMousePosition.toLocation());</span>
+<span class="nc" id="L243">		logger.debug(&quot;Switching '&quot; + unit + &quot;' to go mode.&quot;);</span>
+<span class="nc" id="L244">		display.setCursorGoto();</span>
+<span class="nc" id="L245">	}</span>
 
 	private void onKeyPressed_escape() {
-<span class="nc bnc" id="L245" title="All 2 branches missed.">		if (display.isGotoMode()) {</span>
-<span class="nc" id="L246">			cancelGoToMode(display.getGotoCursorTitle());</span>
+<span class="nc bnc" id="L248" title="All 2 branches missed.">		if (display.isGotoMode()) {</span>
+<span class="nc" id="L249">			cancelGoToMode(display.getGotoCursorTitle());</span>
 		}
-<span class="nc" id="L248">	}</span>
+<span class="nc" id="L251">	}</span>
 
 	private void onKeyPressed_enter() {
-<span class="nc bnc" id="L251" title="All 2 branches missed.">		if (display.isGotoMode()) {</span>
-<span class="nc" id="L252">			switchToNormalMode(display.getGotoCursorTitle());</span>
+<span class="nc bnc" id="L254" title="All 2 branches missed.">		if (display.isGotoMode()) {</span>
+<span class="nc" id="L255">			switchToNormalMode(display.getGotoCursorTitle());</span>
 		}
-<span class="nc" id="L254">	}</span>
+<span class="nc" id="L257">	}</span>
 
 	private void onMousePressed(final MouseEvent e) {
-<span class="nc" id="L257">		final Location location = display.getArea().convertToLocation(Point.of(e.getX(), e.getY()));</span>
-<span class="nc" id="L258">		logger.debug(&quot;location of mouse: &quot; + location);</span>
-<span class="nc bnc" id="L259" title="All 2 branches missed.">		if (display.isGotoMode()) {</span>
-<span class="nc" id="L260">			switchToNormalMode(location);</span>
+<span class="nc" id="L260">		final Location location = display.getArea().convertToLocation(Point.of(e.getX(), e.getY()));</span>
+<span class="nc" id="L261">		logger.debug(&quot;location of mouse: &quot; + location);</span>
+<span class="nc bnc" id="L262" title="All 2 branches missed.">		if (display.isGotoMode()) {</span>
+<span class="nc" id="L263">			switchToNormalMode(location);</span>
 		} else {
-<span class="nc" id="L262">			display.setCursorLocation(location);</span>
-<span class="nc" id="L263">			focusedTileController.fireEvent(new FocusedTileEvent(gameController.getModel(), location,</span>
-<span class="nc" id="L264">					gameController.getModel().getMap().getTerrainAt(location)));</span>
+<span class="nc" id="L265">			display.setCursorLocation(location);</span>
+<span class="nc" id="L266">			focusedTileController.fireEvent(new FocusedTileEvent(gameController.getModel(), location,</span>
+<span class="nc" id="L267">					gameController.getModel().getMap().getTerrainAt(location)));</span>
 		}
-<span class="nc" id="L266">	}</span>
+<span class="nc" id="L269">	}</span>
 
 	private void onMouseDragged(final MouseEvent e) {
-<span class="nc bnc" id="L269" title="All 2 branches missed.">		if (lastMousePosition != null) {</span>
-<span class="nc" id="L270">			final JViewport viewPort = (JViewport) display.getGamePanelView().getParent();</span>
-<span class="nc bnc" id="L271" title="All 2 branches missed.">			if (viewPort != null) {</span>
-<span class="nc" id="L272">				final Point currentPosition = Point.of(e.getX(), e.getY());</span>
-<span class="nc" id="L273">				final Point delta = lastMousePosition.substract(currentPosition);</span>
-<span class="nc" id="L274">				final Rectangle view = viewPort.getViewRect();</span>
-<span class="nc" id="L275">				view.x += delta.getX();</span>
-<span class="nc" id="L276">				view.y += delta.getY();</span>
-<span class="nc" id="L277">				display.getGamePanelView().scrollRectToVisible(view);</span>
+<span class="nc bnc" id="L272" title="All 2 branches missed.">		if (lastMousePosition != null) {</span>
+<span class="nc" id="L273">			final JViewport viewPort = (JViewport) display.getGamePanelView().getParent();</span>
+<span class="nc bnc" id="L274" title="All 2 branches missed.">			if (viewPort != null) {</span>
+<span class="nc" id="L275">				final Point currentPosition = Point.of(e.getX(), e.getY());</span>
+<span class="nc" id="L276">				final Point delta = lastMousePosition.substract(currentPosition);</span>
+<span class="nc" id="L277">				final Rectangle view = viewPort.getViewRect();</span>
+<span class="nc" id="L278">				view.x += delta.getX();</span>
+<span class="nc" id="L279">				view.y += delta.getY();</span>
+<span class="nc" id="L280">				display.getGamePanelView().scrollRectToVisible(view);</span>
 			}
 		}
-<span class="nc" id="L280">	}</span>
+<span class="nc" id="L283">	}</span>
 
 	private void onMouseMoved(final MouseEvent e) {
-<span class="nc" id="L283">		lastMousePosition = Point.of(e.getX(), e.getY());</span>
-<span class="nc bnc" id="L284" title="All 2 branches missed.">		if (display.isGotoMode()) {</span>
-<span class="nc" id="L285">			display.setGotoCursorTitle(lastMousePosition.toLocation());</span>
+<span class="nc" id="L286">		lastMousePosition = Point.of(e.getX(), e.getY());</span>
+<span class="nc bnc" id="L287" title="All 2 branches missed.">		if (display.isGotoMode()) {</span>
+<span class="nc" id="L288">			display.setGotoCursorTitle(lastMousePosition.toLocation());</span>
 		}
 		/**
 		 * Set status bar message
 		 */
-<span class="nc" id="L290">		final Location where = lastMousePosition.toLocation();</span>
-<span class="nc" id="L291">		final Terrain tile = gameController.getModel().getMap().getTerrainAt(where);</span>
-<span class="nc" id="L292">		final StringBuilder buff = new StringBuilder();</span>
-<span class="nc" id="L293">		buff.append(getText().get(&quot;statusBar.tile.start&quot;));</span>
-<span class="nc" id="L294">		buff.append(&quot; &quot;);</span>
-<span class="nc" id="L295">		buff.append(localizationHelper.getTerrainName(tile));</span>
-<span class="nc" id="L296">		buff.append(&quot; &quot;);</span>
-<span class="nc" id="L297">		buff.append(getText().get(&quot;statusBar.tile.withUnit&quot;));</span>
-<span class="nc" id="L298">		buff.append(&quot; &quot;);</span>
-<span class="nc" id="L299">		gameController.getModel().getShipsAt(where).forEach(ship -&gt; {</span>
-<span class="nc" id="L300">			buff.append(ship.getClass().getSimpleName());</span>
-<span class="nc" id="L301">			buff.append(&quot; &quot;);</span>
-<span class="nc" id="L302">		});</span>
-<span class="nc" id="L303">		statusBarMessageController.fireEvent(new StatusBarMessageEvent(buff.toString()));</span>
-<span class="nc" id="L304">	}</span>
+<span class="nc" id="L293">		final Location where = lastMousePosition.toLocation();</span>
+<span class="nc" id="L294">		final Terrain tile = gameController.getModel().getMap().getTerrainAt(where);</span>
+<span class="nc" id="L295">		final StringBuilder buff = new StringBuilder();</span>
+<span class="nc" id="L296">		buff.append(getText().get(&quot;statusBar.tile.start&quot;));</span>
+<span class="nc" id="L297">		buff.append(&quot; &quot;);</span>
+<span class="nc" id="L298">		buff.append(localizationHelper.getTerrainName(tile));</span>
+<span class="nc" id="L299">		buff.append(&quot; &quot;);</span>
+<span class="nc" id="L300">		buff.append(getText().get(&quot;statusBar.tile.withUnit&quot;));</span>
+<span class="nc" id="L301">		buff.append(&quot; &quot;);</span>
+<span class="nc" id="L302">		gameController.getModel().getShipsAt(where).forEach(ship -&gt; {</span>
+<span class="nc" id="L303">			buff.append(ship.getClass().getSimpleName());</span>
+<span class="nc" id="L304">			buff.append(&quot; &quot;);</span>
+<span class="nc" id="L305">		});</span>
+<span class="nc" id="L306">		statusBarMessageController.fireEvent(new StatusBarMessageEvent(buff.toString()));</span>
+<span class="nc" id="L307">	}</span>
 
 	private void cancelGoToMode(final Location moveTo) {
-<span class="nc" id="L307">		display.setCursorNormal();</span>
-<span class="nc" id="L308">		display.setCursorLocation(moveTo);</span>
-<span class="nc" id="L309">		focusedTileController.fireEvent(new FocusedTileEvent(gameController.getModel(), moveTo,</span>
-<span class="nc" id="L310">				gameController.getModel().getMap().getTerrainAt(moveTo)));</span>
-<span class="nc" id="L311">	}</span>
+<span class="nc" id="L310">		display.setCursorNormal();</span>
+<span class="nc" id="L311">		display.setCursorLocation(moveTo);</span>
+<span class="nc" id="L312">		focusedTileController.fireEvent(new FocusedTileEvent(gameController.getModel(), moveTo,</span>
+<span class="nc" id="L313">				gameController.getModel().getMap().getTerrainAt(moveTo)));</span>
+<span class="nc" id="L314">	}</span>
 
 	private final void switchToNormalMode(final Location moveTo) {
-<span class="nc" id="L314">		logger.debug(&quot;Switching to normal mode, from &quot; + display.getCursorLocation() + &quot; to &quot; + moveTo);</span>
-<span class="nc" id="L315">		final List&lt;Location&gt; path = new ArrayList&lt;Location&gt;();</span>
-<span class="nc" id="L316">		pathPlanning.paintPath(display.getCursorLocation(), moveTo, location -&gt; path.add(location));</span>
-<span class="nc bnc" id="L317" title="All 2 branches missed.">		if (path.size() &gt; 0) {</span>
+<span class="nc" id="L317">		logger.debug(&quot;Switching to normal mode, from &quot; + display.getCursorLocation() + &quot; to &quot; + moveTo);</span>
+<span class="nc" id="L318">		final List&lt;Location&gt; path = new ArrayList&lt;Location&gt;();</span>
+<span class="nc" id="L319">		pathPlanning.paintPath(display.getCursorLocation(), moveTo, location -&gt; path.add(location));</span>
+<span class="nc bnc" id="L320" title="All 2 branches missed.">		if (path.size() &gt; 0) {</span>
 			// TODO JJ active ship can be different from ship first at list
-<span class="nc" id="L319">			Ship ship = gameController.getModel().getCurrentPlayer().getShipsAt(display.getCursorLocation()).get(0);</span>
-<span class="nc" id="L320">			gameController.performMove(ship, path);</span>
-<span class="nc" id="L321">			focusedTileController.fireEvent(new FocusedTileEvent(gameController.getModel(), display.getCursorLocation(),</span>
-<span class="nc" id="L322">					gameController.getModel().getMap().getTerrainAt(display.getCursorLocation())));</span>
+<span class="nc" id="L322">			Ship ship = gameController.getModel().getCurrentPlayer().getShipsAt(display.getCursorLocation()).get(0);</span>
+<span class="nc" id="L323">			gameController.performMove(ship, path);</span>
+<span class="nc" id="L324">			focusedTileController.fireEvent(new FocusedTileEvent(gameController.getModel(), display.getCursorLocation(),</span>
+<span class="nc" id="L325">					gameController.getModel().getMap().getTerrainAt(display.getCursorLocation())));</span>
 		}
-<span class="nc" id="L324">		display.setCursorLocation(moveTo);</span>
-<span class="nc" id="L325">		display.setCursorNormal();</span>
-<span class="nc" id="L326">	}</span>
+<span class="nc" id="L327">		display.setCursorLocation(moveTo);</span>
+<span class="nc" id="L328">		display.setCursorNormal();</span>
+<span class="nc" id="L329">	}</span>
 
 	private void scheduleWalkAnimation(final ShipMovedEvent event) {
-<span class="nc bnc" id="L329" title="All 2 branches missed.">		Preconditions.checkArgument(event.getPath().getLocations().size() &gt;= 1,</span>
+<span class="nc bnc" id="L332" title="All 2 branches missed.">		Preconditions.checkArgument(event.getPath().getLocations().size() &gt;= 1,</span>
 				&quot;Path for moving doesn't contains enought steps to move.&quot;);
-<span class="nc" id="L331">		display.planScrollingAnimationToPoint(display.getArea().getCenterAreaTo(Point.of(event.getStart())));</span>
-<span class="nc" id="L332">		List&lt;Location&gt; path = new ArrayList&lt;&gt;(event.getPath().getLocations());</span>
-<span class="nc" id="L333">		path.add(0, event.getStart());</span>
-<span class="nc" id="L334">		final WalkAnimator walkAnimator = new WalkAnimator(pathPlanning, path, event.getShip());</span>
-<span class="nc" id="L335">		display.setWalkAnimator(walkAnimator);</span>
-<span class="nc" id="L336">	}</span>
+<span class="nc" id="L334">		display.planScrollingAnimationToPoint(display.getArea().getCenterAreaTo(Point.of(event.getStart())));</span>
+<span class="nc" id="L335">		List&lt;Location&gt; path = new ArrayList&lt;&gt;(event.getPath().getLocations());</span>
+<span class="nc" id="L336">		path.add(0, event.getStart());</span>
+<span class="nc" id="L337">		final WalkAnimator walkAnimator = new WalkAnimator(pathPlanning, path, event.getShip());</span>
+<span class="nc" id="L338">		display.setWalkAnimator(walkAnimator);</span>
+<span class="nc" id="L339">	}</span>
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>
