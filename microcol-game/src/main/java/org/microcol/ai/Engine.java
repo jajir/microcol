@@ -13,19 +13,23 @@ import org.microcol.model.Path;
 import org.microcol.model.Player;
 import org.microcol.model.Ship;
 import org.microcol.model.event.TurnStartedEvent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-public class SkyNet {
+public class Engine {
+	private final Logger logger = LoggerFactory.getLogger(getClass());
+
 	private final Model model;
 	private final Random random;
 	private final Map<Ship, Location> lastDirections;
 
-	public SkyNet(final Model model) {
+	public Engine(final Model model) {
 		this.model = model;
 		this.random = new Random();
 		this.lastDirections = new HashMap<>();
 	}
 
-	public void searchAndDestroy() {
+	public void start() {
 		model.addListener(new ModelAdapter() {
 			@Override
 			public void turnStarted(TurnStartedEvent event) {
@@ -34,14 +38,15 @@ public class SkyNet {
 				}
 			}
 		});
+		logger.info("AI engine started.");
 	}
 
-	private void turn(final Player player) {
+	void turn(final Player player) {
 		player.getShips().forEach(ship -> move(ship));
 		player.endTurn();
 	}
 
-	private void move(final Ship ship) {
+	void move(final Ship ship) {
 		if (lastDirections.get(ship) == null) {
 			lastDirections.put(ship, Location.DIRECTIONS.get(random.nextInt(Location.DIRECTIONS.size())));
 		}
