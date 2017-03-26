@@ -20,7 +20,7 @@ MicroCol game classes,org.microcol.gui.panelview,GoToMode,21,0,2,0,7,0,5,0,4,0
 MicroCol game classes,org.microcol,MicroCol,145,0,10,0,48,0,13,0,8,0
 MicroCol game classes,org.microcol.ai,Engine.new ModelAdapter() {...},16,0,2,0,4,0,3,0,2,0
 MicroCol game classes,org.microcol.ai,AIModelBuilder,166,0,0,0,43,0,9,0,9,0
-MicroCol game classes,org.microcol.ai,Engine,157,0,14,0,37,0,12,0,5,0
+MicroCol game classes,org.microcol.ai,Engine,177,0,16,0,41,0,13,0,5,0
 MicroCol game classes,org.microcol.gui.event,StatusBarMessageEvent,19,0,0,0,5,0,3,0,3,0
 MicroCol game classes,org.microcol.gui.event,ChangeLanguageEvent,19,0,0,0,6,0,3,0,3,0
 MicroCol game classes,org.microcol.gui.event,VolumeChangedListenerPreferences,12,0,0,0,3,0,2,0,2,0
@@ -61,9 +61,9 @@ MicroCol game classes,org.microcol.model,GameManager,167,0,14,0,37,0,16,0,9,0
 MicroCol game classes,org.microcol.model,Player,115,0,6,0,32,0,20,0,17,0
 MicroCol game classes,org.microcol.model,ModelBuilder,92,0,0,0,19,0,9,0,9,0
 MicroCol game classes,org.microcol.model,Location,0,202,0,14,0,40,0,20,0,13
-MicroCol game classes,org.microcol.model,Ship,441,0,30,0,84,0,28,0,13,0
+MicroCol game classes,org.microcol.model,Ship,447,0,30,0,85,0,29,0,14,0
 MicroCol game classes,org.microcol.model,ModelAdapter,10,0,0,0,8,0,8,0,8,0
-MicroCol game classes,org.microcol.model,PathFinder,211,0,30,0,52,0,20,0,5,0
+MicroCol game classes,org.microcol.model,PathFinder,237,0,38,0,58,0,24,0,5,0
 MicroCol game classes,org.microcol.model,PathFinder.Node,47,0,2,0,12,0,9,0,8,0
 MicroCol game classes,org.microcol.model,Model,229,0,4,0,59,0,34,0,32,0
 MicroCol game classes,org.microcol.model,Calendar,16,73,0,6,5,13,1,9,1,6

@@ -100,68 +100,72 @@ public class Ship {
 	}
 
 	public List&lt;Location&gt; getPath(final Location destination) {
-<span class="nc" id="L103">		PathFinder finder = new PathFinder(this, location, destination);</span>
+<span class="nc" id="L103">		return getPath(destination, false);</span>
+	}
 
-<span class="nc" id="L105">		return finder.search();</span>
+	public List&lt;Location&gt; getPath(final Location destination, final boolean excludeDestination) {
+<span class="nc" id="L107">		PathFinder finder = new PathFinder(this, location, destination, excludeDestination);</span>
+
+<span class="nc" id="L109">		return finder.search();</span>
 	}
 
 	public void moveTo(final Path path) {
-<span class="nc" id="L109">		model.checkGameActive();</span>
-<span class="nc" id="L110">		model.checkCurrentPlayer(owner);</span>
+<span class="nc" id="L113">		model.checkGameActive();</span>
+<span class="nc" id="L114">		model.checkCurrentPlayer(owner);</span>
 
-<span class="nc" id="L112">		Preconditions.checkNotNull(path);</span>
-<span class="nc" id="L113">		Preconditions.checkArgument(path.getStart().isAdjacent(location), &quot;Path (%s) must be adjacent to current location (%s).&quot;, path.getStart(), location);</span>
-<span class="nc" id="L114">		Preconditions.checkArgument(model.getMap().isValid(path), &quot;Path (%s) must be valid.&quot;, path);</span>
-<span class="nc bnc" id="L115" title="All 2 branches missed.">		Preconditions.checkArgument(!path.containsAny(owner.getEnemyShipsAt().keySet()), &quot;There is enemy ship on path (%s).&quot;, path);</span>
+<span class="nc" id="L116">		Preconditions.checkNotNull(path);</span>
+<span class="nc" id="L117">		Preconditions.checkArgument(path.getStart().isAdjacent(location), &quot;Path (%s) must be adjacent to current location (%s).&quot;, path.getStart(), location);</span>
+<span class="nc" id="L118">		Preconditions.checkArgument(model.getMap().isValid(path), &quot;Path (%s) must be valid.&quot;, path);</span>
+<span class="nc bnc" id="L119" title="All 2 branches missed.">		Preconditions.checkArgument(!path.containsAny(owner.getEnemyShipsAt().keySet()), &quot;There is enemy ship on path (%s).&quot;, path);</span>
 
-<span class="nc" id="L117">		final Location start = location;</span>
-<span class="nc" id="L118">		final List&lt;Location&gt; locations = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L121">		final Location start = location;</span>
+<span class="nc" id="L122">		final List&lt;Location&gt; locations = new ArrayList&lt;&gt;();</span>
 		// TODO JKA Use streams
-<span class="nc bnc" id="L120" title="All 2 branches missed.">		for (Location newLocation : path.getLocations()) {</span>
-<span class="nc bnc" id="L121" title="All 2 branches missed.">			if (availableMoves &lt;= 0) {</span>
+<span class="nc bnc" id="L124" title="All 2 branches missed.">		for (Location newLocation : path.getLocations()) {</span>
+<span class="nc bnc" id="L125" title="All 2 branches missed.">			if (availableMoves &lt;= 0) {</span>
 				// TODO JKA neumožnit zadat delší cestu, než je povolený počet
-<span class="nc" id="L123">				break;</span>
+<span class="nc" id="L127">				break;</span>
 			}
-<span class="nc bnc" id="L125" title="All 2 branches missed.">			if (model.getMap().getTerrainAt(newLocation) != Terrain.OCEAN) {</span>
-<span class="nc" id="L126">				throw new IllegalArgumentException(String.format(&quot;Path (%s) must contain only ocean (%s).&quot;, newLocation, model.getMap().getTerrainAt(newLocation)));</span>
+<span class="nc bnc" id="L129" title="All 2 branches missed.">			if (model.getMap().getTerrainAt(newLocation) != Terrain.OCEAN) {</span>
+<span class="nc" id="L130">				throw new IllegalArgumentException(String.format(&quot;Path (%s) must contain only ocean (%s).&quot;, newLocation, model.getMap().getTerrainAt(newLocation)));</span>
 			}
-<span class="nc" id="L128">			locations.add(newLocation);</span>
-<span class="nc" id="L129">			location = newLocation;</span>
-<span class="nc" id="L130">			availableMoves--;</span>
-<span class="nc" id="L131">		}</span>
-<span class="nc bnc" id="L132" title="All 2 branches missed.">		if (!locations.isEmpty()) {</span>
-<span class="nc" id="L133">			model.fireShipMoved(this, start, Path.of(locations));</span>
+<span class="nc" id="L132">			locations.add(newLocation);</span>
+<span class="nc" id="L133">			location = newLocation;</span>
+<span class="nc" id="L134">			availableMoves--;</span>
+<span class="nc" id="L135">		}</span>
+<span class="nc bnc" id="L136" title="All 2 branches missed.">		if (!locations.isEmpty()) {</span>
+<span class="nc" id="L137">			model.fireShipMoved(this, start, Path.of(locations));</span>
 		}
-<span class="nc" id="L135">	}</span>
+<span class="nc" id="L139">	}</span>
 
 	// TODO JKA canAttack
 
 	public void attack(final Ship ship) {
-<span class="nc" id="L140">		model.checkGameActive();</span>
-<span class="nc" id="L141">		model.checkCurrentPlayer(owner);</span>
+<span class="nc" id="L144">		model.checkGameActive();</span>
+<span class="nc" id="L145">		model.checkCurrentPlayer(owner);</span>
 
-<span class="nc" id="L143">		Preconditions.checkNotNull(ship);</span>
-<span class="nc bnc" id="L144" title="All 2 branches missed.">		Preconditions.checkArgument(!owner.equals(ship.owner), &quot;Cannot attack own ship (%s - %s).&quot;, this, ship);</span>
-<span class="nc" id="L145">		Preconditions.checkArgument(location.isAdjacent(ship.location), &quot;Ship is not adjacent (%s - %s)&quot;, this, ship);</span>
-<span class="nc" id="L146">		Preconditions.checkArgument(canAttack, &quot;This ship (%s) already fight this turn.&quot;, this);</span>
+<span class="nc" id="L147">		Preconditions.checkNotNull(ship);</span>
+<span class="nc bnc" id="L148" title="All 2 branches missed.">		Preconditions.checkArgument(!owner.equals(ship.owner), &quot;Cannot attack own ship (%s - %s).&quot;, this, ship);</span>
+<span class="nc" id="L149">		Preconditions.checkArgument(location.isAdjacent(ship.location), &quot;Ship is not adjacent (%s - %s)&quot;, this, ship);</span>
+<span class="nc" id="L150">		Preconditions.checkArgument(canAttack, &quot;This ship (%s) already fight this turn.&quot;, this);</span>
 
-<span class="nc" id="L148">		availableMoves = 0;</span>
-<span class="nc" id="L149">		canAttack = false;</span>
+<span class="nc" id="L152">		availableMoves = 0;</span>
+<span class="nc" id="L153">		canAttack = false;</span>
 
-<span class="nc bnc" id="L151" title="All 2 branches missed.">		final Ship destroyed = (Math.random() &lt;= 0.6) ? ship : this;</span>
-<span class="nc" id="L152">		model.destroyShip(destroyed);</span>
-<span class="nc" id="L153">		model.fireShipAttacked(this, ship, destroyed);</span>
-<span class="nc" id="L154">	}</span>
+<span class="nc bnc" id="L155" title="All 2 branches missed.">		final Ship destroyed = (Math.random() &lt;= 0.6) ? ship : this;</span>
+<span class="nc" id="L156">		model.destroyShip(destroyed);</span>
+<span class="nc" id="L157">		model.fireShipAttacked(this, ship, destroyed);</span>
+<span class="nc" id="L158">	}</span>
 
 	@Override
 	public String toString() {
-<span class="nc" id="L158">		return MoreObjects.toStringHelper(this)</span>
-<span class="nc" id="L159">			.add(&quot;owner&quot;, owner)</span>
-<span class="nc" id="L160">			.add(&quot;type&quot;, type)</span>
-<span class="nc" id="L161">			.add(&quot;location&quot;, location)</span>
-<span class="nc" id="L162">			.add(&quot;availableMoves&quot;, availableMoves)</span>
-<span class="nc" id="L163">			.add(&quot;canAttack&quot;, canAttack)</span>
-<span class="nc" id="L164">			.toString();</span>
+<span class="nc" id="L162">		return MoreObjects.toStringHelper(this)</span>
+<span class="nc" id="L163">			.add(&quot;owner&quot;, owner)</span>
+<span class="nc" id="L164">			.add(&quot;type&quot;, type)</span>
+<span class="nc" id="L165">			.add(&quot;location&quot;, location)</span>
+<span class="nc" id="L166">			.add(&quot;availableMoves&quot;, availableMoves)</span>
+<span class="nc" id="L167">			.add(&quot;canAttack&quot;, canAttack)</span>
+<span class="nc" id="L168">			.toString();</span>
 	}
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>
