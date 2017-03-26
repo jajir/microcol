@@ -20,6 +20,7 @@ MicroCol game classes,org.microcol.gui.panelview,GoToMode,21,0,2,0,7,0,5,0,4,0
 MicroCol game classes,org.microcol,MicroCol,145,0,10,0,48,0,13,0,8,0
 MicroCol game classes,org.microcol.ai,SkyNet,148,0,14,0,35,0,12,0,5,0
 MicroCol game classes,org.microcol.ai,SkyNet.new ModelAdapter() {...},16,0,2,0,4,0,3,0,2,0
+MicroCol game classes,org.microcol.ai,AIModelBuilder,105,0,0,0,28,0,6,0,6,0
 MicroCol game classes,org.microcol.gui.event,StatusBarMessageEvent,19,0,0,0,5,0,3,0,3,0
 MicroCol game classes,org.microcol.gui.event,ChangeLanguageEvent,19,0,0,0,6,0,3,0,3,0
 MicroCol game classes,org.microcol.gui.event,VolumeChangedListenerPreferences,12,0,0,0,3,0,2,0,2,0
@@ -45,7 +46,7 @@ MicroCol game classes,org.microcol.gui.event,ShowGridController,3,0,0,0,1,0,1,0,
 MicroCol game classes,org.microcol.gui.event,DebugRequestController,3,0,0,0,1,0,1,0,1,0
 MicroCol game classes,org.microcol.gui.event,FocusedTileEvent,48,0,4,0,9,0,6,0,4,0
 MicroCol game classes,org.microcol.gui.event,EventInitializer,25,0,0,0,6,0,3,0,3,0
-MicroCol game classes,org.microcol.gui.event,GameController,223,0,6,0,45,0,11,0,8,0
+MicroCol game classes,org.microcol.gui.event,GameController,183,0,6,0,37,0,11,0,8,0
 MicroCol game classes,org.microcol.gui.event,StatusBarMessageController,3,0,0,0,1,0,1,0,1,0
 MicroCol game classes,org.microcol.gui.event,OrderedEventController.ValueWithPriority,0,18,0,0,0,6,0,3,0,3
 MicroCol game classes,org.microcol.gui.event,GameController.new ModelAdapter() {...},60,0,0,0,15,0,7,0,7,0
