@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JViewport;
 import javax.swing.Timer;
@@ -63,7 +62,7 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 
 	private Location cursorLocation;
 
-<span class="nc" id="L66">	private boolean gotoMode = false;</span>
+<span class="nc" id="L65">	private boolean gotoMode = false;</span>
 
 	private WalkAnimator walkAnimator;
 
@@ -77,27 +76,27 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 
 	@Inject
 	public GamePanelView(final GameController gameController, final NextTurnController nextTurnController,
-<span class="nc" id="L80">			final PathPlanning pathPlanning, final ImageProvider imageProvider) {</span>
-<span class="nc" id="L81">		this.gameController = Preconditions.checkNotNull(gameController);</span>
-<span class="nc" id="L82">		this.pathPlanning = Preconditions.checkNotNull(pathPlanning);</span>
-<span class="nc" id="L83">		this.imageProvider = Preconditions.checkNotNull(imageProvider);</span>
-<span class="nc" id="L84">		this.visualDebugInfo = new VisualDebugInfo();</span>
-<span class="nc" id="L85">		oneTurnMoveHighlighter = new OneTurnMoveHighlighter();</span>
-<span class="nc" id="L86">		Toolkit toolkit = Toolkit.getDefaultToolkit();</span>
-<span class="nc" id="L87">		gotoModeCursor = toolkit.createCustomCursor(imageProvider.getImage(ImageProvider.IMG_CURSOR_GOTO),</span>
+<span class="nc" id="L79">			final PathPlanning pathPlanning, final ImageProvider imageProvider) {</span>
+<span class="nc" id="L80">		this.gameController = Preconditions.checkNotNull(gameController);</span>
+<span class="nc" id="L81">		this.pathPlanning = Preconditions.checkNotNull(pathPlanning);</span>
+<span class="nc" id="L82">		this.imageProvider = Preconditions.checkNotNull(imageProvider);</span>
+<span class="nc" id="L83">		this.visualDebugInfo = new VisualDebugInfo();</span>
+<span class="nc" id="L84">		oneTurnMoveHighlighter = new OneTurnMoveHighlighter();</span>
+<span class="nc" id="L85">		Toolkit toolkit = Toolkit.getDefaultToolkit();</span>
+<span class="nc" id="L86">		gotoModeCursor = toolkit.createCustomCursor(imageProvider.getImage(ImageProvider.IMG_CURSOR_GOTO),</span>
 				new java.awt.Point(1, 1), &quot;gotoModeCursor&quot;);
-<span class="nc" id="L89">		final GamePanelView map = this;</span>
+<span class="nc" id="L88">		final GamePanelView map = this;</span>
 
-<span class="nc" id="L91">		nextTurnController.addListener(w -&gt; map.repaint());</span>
+<span class="nc" id="L90">		nextTurnController.addListener(w -&gt; map.repaint());</span>
 
-<span class="nc" id="L93">		setAutoscrolls(true);</span>
+<span class="nc" id="L92">		setAutoscrolls(true);</span>
 
-<span class="nc" id="L95">		fpsCounter = new FpsCounter();</span>
-<span class="nc" id="L96">		fpsCounter.start();</span>
+<span class="nc" id="L94">		fpsCounter = new FpsCounter();</span>
+<span class="nc" id="L95">		fpsCounter.start();</span>
 
-<span class="nc" id="L98">		isGridShown = true;</span>
-<span class="nc" id="L99">		timer = new Timer(1000 / DEFAULT_FRAME_PER_SECOND, event -&gt; nextGameTick());</span>
-<span class="nc" id="L100">	}</span>
+<span class="nc" id="L97">		isGridShown = true;</span>
+<span class="nc" id="L98">		timer = new Timer(1000 / DEFAULT_FRAME_PER_SECOND, event -&gt; nextGameTick());</span>
+<span class="nc" id="L99">	}</span>
 
 	private final Timer timer;
 
@@ -110,50 +109,50 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 
 	@Override
 	public void initGame(final boolean idGridShown) {
-<span class="nc" id="L113">		this.isGridShown = idGridShown;</span>
-<span class="nc bnc" id="L114" title="All 2 branches missed.">		if (!timer.isRunning()) {</span>
-<span class="nc" id="L115">			timer.start();</span>
+<span class="nc" id="L112">		this.isGridShown = idGridShown;</span>
+<span class="nc bnc" id="L113" title="All 2 branches missed.">		if (!timer.isRunning()) {</span>
+<span class="nc" id="L114">			timer.start();</span>
 		}
-<span class="nc" id="L117">	}</span>
+<span class="nc" id="L116">	}</span>
 
 	@Override
 	public void stopTimer() {
-<span class="nc" id="L121">		fpsCounter.stop();</span>
-<span class="nc" id="L122">		timer.stop();</span>
-<span class="nc" id="L123">	}</span>
+<span class="nc" id="L120">		fpsCounter.stop();</span>
+<span class="nc" id="L121">		timer.stop();</span>
+<span class="nc" id="L122">	}</span>
 
 	/**
 	 * Smallest game time interval. In ideal case it have time to draw world on
 	 * screen.
 	 */
 	private void nextGameTick() {
-<span class="nc bnc" id="L130" title="All 4 branches missed.">		if (screenScrolling != null &amp;&amp; screenScrolling.isNextPointAvailable()) {</span>
-<span class="nc" id="L131">			scrollToPoint(screenScrolling.getNextPoint());</span>
+<span class="nc bnc" id="L129" title="All 4 branches missed.">		if (screenScrolling != null &amp;&amp; screenScrolling.isNextPointAvailable()) {</span>
+<span class="nc" id="L130">			scrollToPoint(screenScrolling.getNextPoint());</span>
 		}
-<span class="nc" id="L133">		repaint();</span>
-<span class="nc" id="L134">	}</span>
+<span class="nc" id="L132">		repaint();</span>
+<span class="nc" id="L133">	}</span>
 
 	@Override
 	public void planScrollingAnimationToPoint(final Point targetPoint) {
-<span class="nc" id="L138">		screenScrolling = new ScreenScrolling(pathPlanning, getArea().getPointTopLeft(), targetPoint);</span>
-<span class="nc" id="L139">	}</span>
+<span class="nc" id="L137">		screenScrolling = new ScreenScrolling(pathPlanning, getArea().getPointTopLeft(), targetPoint);</span>
+<span class="nc" id="L138">	}</span>
 
 	private void scrollToPoint(final Point point) {
-<span class="nc" id="L142">		final JViewport viewPort = (JViewport) getParent();</span>
-<span class="nc" id="L143">		final Rectangle view = viewPort.getViewRect();</span>
-<span class="nc" id="L144">		view.x = point.getX();</span>
-<span class="nc" id="L145">		view.y = point.getY();</span>
-<span class="nc" id="L146">		scrollRectToVisible(view);</span>
-<span class="nc" id="L147">	}</span>
+<span class="nc" id="L141">		final JViewport viewPort = (JViewport) getParent();</span>
+<span class="nc" id="L142">		final Rectangle view = viewPort.getViewRect();</span>
+<span class="nc" id="L143">		view.x = point.getX();</span>
+<span class="nc" id="L144">		view.y = point.getY();</span>
+<span class="nc" id="L145">		scrollRectToVisible(view);</span>
+<span class="nc" id="L146">	}</span>
 
 	@Override
 	public GamePanelView getGamePanelView() {
-<span class="nc" id="L151">		return this;</span>
+<span class="nc" id="L150">		return this;</span>
 	}
 
 	private VolatileImage prepareImage(final Area area) {
-<span class="nc" id="L155">		final Point p = Point.of(area.getWidth(), area.getHeight()).multiply(TILE_WIDTH_IN_PX);</span>
-<span class="nc" id="L156">		return createVolatileImage(p.getX(), p.getY());</span>
+<span class="nc" id="L154">		final Point p = Point.of(area.getWidth(), area.getHeight()).multiply(TILE_WIDTH_IN_PX);</span>
+<span class="nc" id="L155">		return createVolatileImage(p.getX(), p.getY());</span>
 	}
 
 	/**
@@ -161,25 +160,25 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 	 */
 	@Override
 	public void paint(final Graphics g) {
-<span class="nc" id="L164">		super.paint(g);</span>
-<span class="nc" id="L165">		final Graphics2D g2d = (Graphics2D) g;</span>
-<span class="nc" id="L166">		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);</span>
-<span class="nc" id="L167">		final Area area = new Area((JViewport) this.getParent(), gameController.getModel().getMap());</span>
-<span class="nc bnc" id="L168" title="All 2 branches missed.">		if (dbImage == null) {</span>
-<span class="nc" id="L169">			dbImage = prepareImage(area);</span>
-<span class="nc bnc" id="L170" title="All 2 branches missed.">			if (dbImage == null) {</span>
+<span class="nc" id="L163">		super.paint(g);</span>
+<span class="nc" id="L164">		final Graphics2D g2d = (Graphics2D) g;</span>
+<span class="nc" id="L165">		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);</span>
+<span class="nc" id="L166">		final Area area = new Area((JViewport) this.getParent(), gameController.getModel().getMap());</span>
+<span class="nc bnc" id="L167" title="All 2 branches missed.">		if (dbImage == null) {</span>
+<span class="nc" id="L168">			dbImage = prepareImage(area);</span>
+<span class="nc bnc" id="L169" title="All 2 branches missed.">			if (dbImage == null) {</span>
 				/**
 				 * This could happens when Graphics is not ready.
 				 */
-<span class="nc" id="L174">				return;</span>
+<span class="nc" id="L173">				return;</span>
 			}
 		}
-<span class="nc bnc" id="L177" title="All 2 branches missed.">		if (dbImage.validate(getGraphicsConfiguration()) == VolatileImage.IMAGE_INCOMPATIBLE) {</span>
-<span class="nc" id="L178">			dbImage = prepareImage(area);</span>
+<span class="nc bnc" id="L176" title="All 2 branches missed.">		if (dbImage.validate(getGraphicsConfiguration()) == VolatileImage.IMAGE_INCOMPATIBLE) {</span>
+<span class="nc" id="L177">			dbImage = prepareImage(area);</span>
 		}
-<span class="nc bnc" id="L180" title="All 2 branches missed.">		if (dbImage != null) {</span>
-<span class="nc" id="L181">			final Graphics2D dbg = (Graphics2D) dbImage.getGraphics();</span>
-<span class="nc" id="L182">			g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);</span>
+<span class="nc bnc" id="L179" title="All 2 branches missed.">		if (dbImage != null) {</span>
+<span class="nc" id="L180">			final Graphics2D dbg = (Graphics2D) dbImage.getGraphics();</span>
+<span class="nc" id="L181">			g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);</span>
 			/**
 			 * Following background drawing just verify that there are no
 			 * uncovered pixels.
@@ -187,45 +186,45 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 			// dbg.setColor(Color.YELLOW);
 			// dbg.fillRect(0, 0, getWidth(), getHeight());
 
-<span class="nc" id="L190">			paintTiles(dbg, area);</span>
-<span class="nc" id="L191">			paintUnits(dbg, gameController.getModel(), area);</span>
-<span class="nc" id="L192">			paintGrid(dbg, area);</span>
-<span class="nc" id="L193">			paintCursor(dbg, area);</span>
-<span class="nc" id="L194">			paintGoToPath(dbg, area);</span>
-<span class="nc" id="L195">			paintMovingAnimation(dbg, area);</span>
-<span class="nc" id="L196">			paintDebugInfo(dbg, visualDebugInfo, area);</span>
-<span class="nc" id="L197">			final Point p = Point.of(area.getTopLeft().add(Location.of(-1, -1)));</span>
-<span class="nc" id="L198">			g.drawImage(dbImage, p.getX(), p.getY(), null);</span>
-<span class="nc bnc" id="L199" title="All 2 branches missed.">			if (gameController.getModel().getCurrentPlayer().isComputer()) {</span>
+<span class="nc" id="L189">			paintTiles(dbg, area);</span>
+<span class="nc" id="L190">			paintUnits(dbg, gameController.getModel(), area);</span>
+<span class="nc" id="L191">			paintGrid(dbg, area);</span>
+<span class="nc" id="L192">			paintCursor(dbg, area);</span>
+<span class="nc" id="L193">			paintGoToPath(dbg, area);</span>
+<span class="nc" id="L194">			paintMovingAnimation(dbg, area);</span>
+<span class="nc" id="L195">			paintDebugInfo(dbg, visualDebugInfo, area);</span>
+<span class="nc" id="L196">			final Point p = Point.of(area.getTopLeft().add(Location.of(-1, -1)));</span>
+<span class="nc" id="L197">			g.drawImage(dbImage, p.getX(), p.getY(), null);</span>
+<span class="nc bnc" id="L198" title="All 2 branches missed.">			if (gameController.getModel().getCurrentPlayer().isComputer()) {</span>
 				/**
 				 * If move computer that make game field darker.
 				 */
-<span class="nc" id="L203">				g.drawImage(dbImage, p.getX(), p.getY(), null);</span>
-<span class="nc" id="L204">				g.setColor(new Color(0, 0, 0, 64));</span>
-<span class="nc" id="L205">				g.fillRect(p.getX(), p.getY(), dbImage.getWidth(this), dbImage.getHeight(this));</span>
+<span class="nc" id="L202">				g.drawImage(dbImage, p.getX(), p.getY(), null);</span>
+<span class="nc" id="L203">				g.setColor(new Color(0, 0, 0, 64));</span>
+<span class="nc" id="L204">				g.fillRect(p.getX(), p.getY(), dbImage.getWidth(this), dbImage.getHeight(this));</span>
 			}
-<span class="nc" id="L207">			dbg.dispose();</span>
+<span class="nc" id="L206">			dbg.dispose();</span>
 		}
 		// Sync the display on some systems.
 		// (on Linux, this fixes event queue problems)
-<span class="nc" id="L211">		Toolkit.getDefaultToolkit().sync();</span>
-<span class="nc" id="L212">		fpsCounter.screenWasPainted();</span>
-<span class="nc" id="L213">	}</span>
+<span class="nc" id="L210">		Toolkit.getDefaultToolkit().sync();</span>
+<span class="nc" id="L211">		fpsCounter.screenWasPainted();</span>
+<span class="nc" id="L212">	}</span>
 
 	private void paintMovingAnimation(final Graphics2D graphics, final Area area) {
-<span class="nc bnc" id="L216" title="All 4 branches missed.">		if (walkAnimator != null &amp;&amp; walkAnimator.getNextCoordinates() != null) {</span>
-<span class="nc bnc" id="L217" title="All 2 branches missed.">			if (area.isInArea(walkAnimator.getNextCoordinates())) {</span>
-<span class="nc" id="L218">				final Point part = area.convert(walkAnimator.getNextCoordinates());</span>
-<span class="nc" id="L219">				paintUnit(graphics, part, walkAnimator.getUnit());</span>
-<span class="nc" id="L220">				graphics.drawImage(imageProvider.getImage(ImageProvider.IMG_TILE_MODE_GOTO),</span>
-<span class="nc" id="L221">						part.getX() + TILE_WIDTH_IN_PX - 12, part.getY(), this);</span>
+<span class="nc bnc" id="L215" title="All 4 branches missed.">		if (walkAnimator != null &amp;&amp; walkAnimator.getNextCoordinates() != null) {</span>
+<span class="nc bnc" id="L216" title="All 2 branches missed.">			if (area.isInArea(walkAnimator.getNextCoordinates())) {</span>
+<span class="nc" id="L217">				final Point part = area.convert(walkAnimator.getNextCoordinates());</span>
+<span class="nc" id="L218">				paintUnit(graphics, part, walkAnimator.getUnit());</span>
+<span class="nc" id="L219">				graphics.drawImage(imageProvider.getImage(ImageProvider.IMG_TILE_MODE_GOTO),</span>
+<span class="nc" id="L220">						part.getX() + TILE_WIDTH_IN_PX - 12, part.getY(), this);</span>
 			}
-<span class="nc bnc" id="L223" title="All 2 branches missed.">			if (walkAnimator.isNextAnimationLocationAvailable()) {</span>
-<span class="nc" id="L224">				walkAnimator.countNextAnimationLocation();</span>
+<span class="nc bnc" id="L222" title="All 2 branches missed.">			if (walkAnimator.isNextAnimationLocationAvailable()) {</span>
+<span class="nc" id="L223">				walkAnimator.countNextAnimationLocation();</span>
 			}
 		}
 
-<span class="nc" id="L228">	}</span>
+<span class="nc" id="L227">	}</span>
 
 	/**
 	 * Draw main game tiles.
@@ -234,21 +233,21 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 	 *            required {@link Graphics2D}
 	 */
 	private void paintTiles(final Graphics2D graphics, final Area area) {
-<span class="nc bnc" id="L237" title="All 2 branches missed.">		for (int i = area.getTopLeft().getX(); i &lt;= area.getBottomRight().getX(); i++) {</span>
-<span class="nc bnc" id="L238" title="All 2 branches missed.">			for (int j = area.getTopLeft().getY(); j &lt;= area.getBottomRight().getY(); j++) {</span>
-<span class="nc" id="L239">				final Location location = Location.of(i, j);</span>
-<span class="nc" id="L240">				final Point point = area.convert(location);</span>
-<span class="nc" id="L241">				final Terrain terrain = gameController.getModel().getMap().getTerrainAt(location);</span>
-<span class="nc" id="L242">				graphics.drawImage(imageProvider.getTerrainImage(terrain), point.getX(), point.getY(),</span>
-<span class="nc" id="L243">						point.getX() + TILE_WIDTH_IN_PX, point.getY() + TILE_WIDTH_IN_PX, 0, 0, TILE_WIDTH_IN_PX,</span>
+<span class="nc bnc" id="L236" title="All 2 branches missed.">		for (int i = area.getTopLeft().getX(); i &lt;= area.getBottomRight().getX(); i++) {</span>
+<span class="nc bnc" id="L237" title="All 2 branches missed.">			for (int j = area.getTopLeft().getY(); j &lt;= area.getBottomRight().getY(); j++) {</span>
+<span class="nc" id="L238">				final Location location = Location.of(i, j);</span>
+<span class="nc" id="L239">				final Point point = area.convert(location);</span>
+<span class="nc" id="L240">				final Terrain terrain = gameController.getModel().getMap().getTerrainAt(location);</span>
+<span class="nc" id="L241">				graphics.drawImage(imageProvider.getTerrainImage(terrain), point.getX(), point.getY(),</span>
+<span class="nc" id="L242">						point.getX() + TILE_WIDTH_IN_PX, point.getY() + TILE_WIDTH_IN_PX, 0, 0, TILE_WIDTH_IN_PX,</span>
 						TILE_WIDTH_IN_PX, this);
-<span class="nc bnc" id="L245" title="All 2 branches missed.">				if (oneTurnMoveHighlighter.isItHighlighted(location)) {</span>
-<span class="nc" id="L246">					graphics.setColor(new Color(255, 200, 255, 100));</span>
-<span class="nc" id="L247">					graphics.fillRect(point.getX(), point.getY(), TILE_WIDTH_IN_PX, TILE_WIDTH_IN_PX);</span>
+<span class="nc bnc" id="L244" title="All 2 branches missed.">				if (oneTurnMoveHighlighter.isItHighlighted(location)) {</span>
+<span class="nc" id="L245">					graphics.setColor(new Color(255, 200, 255, 100));</span>
+<span class="nc" id="L246">					graphics.fillRect(point.getX(), point.getY(), TILE_WIDTH_IN_PX, TILE_WIDTH_IN_PX);</span>
 				}
 			}
 		}
-<span class="nc" id="L251">	}</span>
+<span class="nc" id="L250">	}</span>
 
 	/**
 	 * Draw units.
@@ -263,92 +262,92 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 	 *            required {@link Game}
 	 */
 	private void paintUnits(final Graphics2D graphics, final Model world, final Area area) {
-<span class="nc" id="L266">		final java.util.Map&lt;Location, List&lt;Ship&gt;&gt; ships = world.getShipsAt();</span>
+<span class="nc" id="L265">		final java.util.Map&lt;Location, List&lt;Ship&gt;&gt; ships = world.getShipsAt();</span>
 
-<span class="nc" id="L268">		final java.util.Map&lt;Location, List&lt;Ship&gt;&gt; ships2 = ships.entrySet().stream()</span>
-<span class="nc" id="L269">				.filter(e -&gt; area.isInArea(e.getKey())).collect(Collectors.toMap(e -&gt; e.getKey(), e -&gt; e.getValue()));</span>
+<span class="nc" id="L267">		final java.util.Map&lt;Location, List&lt;Ship&gt;&gt; ships2 = ships.entrySet().stream()</span>
+<span class="nc" id="L268">				.filter(e -&gt; area.isInArea(e.getKey())).collect(Collectors.toMap(e -&gt; e.getKey(), e -&gt; e.getValue()));</span>
 
-<span class="nc" id="L271">		ships2.forEach((location, list) -&gt; {</span>
-<span class="nc" id="L272">			final Ship ship = list.stream().findFirst().get();</span>
-<span class="nc" id="L273">			final Point point = area.convert(location);</span>
-<span class="nc bnc" id="L274" title="All 4 branches missed.">			if (walkAnimator == null || !walkAnimator.isNextAnimationLocationAvailable()</span>
-<span class="nc bnc" id="L275" title="All 2 branches missed.">					|| !walkAnimator.getTo().equals(location)) {</span>
-<span class="nc" id="L276">				paintUnit(graphics, point, ship);</span>
+<span class="nc" id="L270">		ships2.forEach((location, list) -&gt; {</span>
+<span class="nc" id="L271">			final Ship ship = list.stream().findFirst().get();</span>
+<span class="nc" id="L272">			final Point point = area.convert(location);</span>
+<span class="nc bnc" id="L273" title="All 4 branches missed.">			if (walkAnimator == null || !walkAnimator.isNextAnimationLocationAvailable()</span>
+<span class="nc bnc" id="L274" title="All 2 branches missed.">					|| !walkAnimator.getTo().equals(location)) {</span>
+<span class="nc" id="L275">				paintUnit(graphics, point, ship);</span>
 			}
-<span class="nc" id="L278">		});</span>
-<span class="nc" id="L279">	}</span>
+<span class="nc" id="L277">		});</span>
+<span class="nc" id="L278">	}</span>
 
 	private final static int FLAG_WIDTH = 7;
 
 	private final static int FLAG_HEIGHT = 12;
 
 	private void paintUnit(final Graphics2D graphics, final Point point, final Ship ship) {
-<span class="nc" id="L286">		Point p = point.add(2, 4);</span>
-<span class="nc" id="L287">		graphics.drawImage(imageProvider.getShipImage(ship.getType()), p.getX(), p.getY(), this);</span>
-<span class="nc" id="L288">		paintOwnersFlag(graphics, point.add(1, 5), ship.getOwner());</span>
-<span class="nc" id="L289">	}</span>
+<span class="nc" id="L285">		Point p = point.add(2, 4);</span>
+<span class="nc" id="L286">		graphics.drawImage(imageProvider.getShipImage(ship.getType()), p.getX(), p.getY(), this);</span>
+<span class="nc" id="L287">		paintOwnersFlag(graphics, point.add(1, 5), ship.getOwner());</span>
+<span class="nc" id="L288">	}</span>
 
 	/**
 	 * All units have flag containing color of owner. Method draw this flag.
 	 */
 	private void paintOwnersFlag(final Graphics2D graphics, final Point point, final Player player) {
-<span class="nc" id="L295">		graphics.setColor(Color.BLACK);</span>
-<span class="nc" id="L296">		graphics.drawRect(point.getX(), point.getY(), FLAG_WIDTH, FLAG_HEIGHT);</span>
+<span class="nc" id="L294">		graphics.setColor(Color.BLACK);</span>
+<span class="nc" id="L295">		graphics.drawRect(point.getX(), point.getY(), FLAG_WIDTH, FLAG_HEIGHT);</span>
 		// TODO JJ player's color should be property
-<span class="nc bnc" id="L298" title="All 2 branches missed.">		if (player.isHuman()) {</span>
-<span class="nc" id="L299">			graphics.setColor(Color.YELLOW);</span>
+<span class="nc bnc" id="L297" title="All 2 branches missed.">		if (player.isHuman()) {</span>
+<span class="nc" id="L298">			graphics.setColor(Color.YELLOW);</span>
 		} else {
-<span class="nc bnc" id="L301" title="All 5 branches missed.">			switch (player.getName().hashCode() % 4) {</span>
+<span class="nc bnc" id="L300" title="All 5 branches missed.">			switch (player.getName().hashCode() % 4) {</span>
 			case 0:
-<span class="nc" id="L303">				graphics.setColor(Color.RED);</span>
-<span class="nc" id="L304">				break;</span>
+<span class="nc" id="L302">				graphics.setColor(Color.RED);</span>
+<span class="nc" id="L303">				break;</span>
 			case 1:
-<span class="nc" id="L306">				graphics.setColor(Color.GREEN);</span>
-<span class="nc" id="L307">				break;</span>
+<span class="nc" id="L305">				graphics.setColor(Color.GREEN);</span>
+<span class="nc" id="L306">				break;</span>
 			case 2:
-<span class="nc" id="L309">				graphics.setColor(Color.MAGENTA);</span>
-<span class="nc" id="L310">				break;</span>
+<span class="nc" id="L308">				graphics.setColor(Color.MAGENTA);</span>
+<span class="nc" id="L309">				break;</span>
 			case 3:
-<span class="nc" id="L312">				graphics.setColor(Color.BLUE);</span>
-<span class="nc" id="L313">				break;</span>
+<span class="nc" id="L311">				graphics.setColor(Color.BLUE);</span>
+<span class="nc" id="L312">				break;</span>
 			default:
-<span class="nc" id="L315">				graphics.setColor(Color.gray);</span>
+<span class="nc" id="L314">				graphics.setColor(Color.gray);</span>
 				break;
 			}
 		}
-<span class="nc" id="L319">		graphics.fillRect(point.getX() + 1, point.getY() + 1, FLAG_WIDTH - 1, FLAG_HEIGHT - 1);</span>
-<span class="nc" id="L320">	}</span>
+<span class="nc" id="L318">		graphics.fillRect(point.getX() + 1, point.getY() + 1, FLAG_WIDTH - 1, FLAG_HEIGHT - 1);</span>
+<span class="nc" id="L319">	}</span>
 
 	private void paintGrid(final Graphics2D graphics, final Area area) {
-<span class="nc bnc" id="L323" title="All 2 branches missed.">		if (isGridShown) {</span>
-<span class="nc" id="L324">			graphics.setColor(Color.LIGHT_GRAY);</span>
-<span class="nc" id="L325">			graphics.setStroke(new BasicStroke(1));</span>
-<span class="nc bnc" id="L326" title="All 2 branches missed.">			for (int i = area.getTopLeft().getX(); i &lt;= area.getBottomRight().getX(); i++) {</span>
-<span class="nc" id="L327">				final Location l_1 = Location.of(i, area.getTopLeft().getY());</span>
-<span class="nc" id="L328">				final Location l_2 = Location.of(i, area.getBottomRight().getY() + 1);</span>
-<span class="nc" id="L329">				drawNetLine(graphics, area, l_1, l_2);</span>
+<span class="nc bnc" id="L322" title="All 2 branches missed.">		if (isGridShown) {</span>
+<span class="nc" id="L323">			graphics.setColor(Color.LIGHT_GRAY);</span>
+<span class="nc" id="L324">			graphics.setStroke(new BasicStroke(1));</span>
+<span class="nc bnc" id="L325" title="All 2 branches missed.">			for (int i = area.getTopLeft().getX(); i &lt;= area.getBottomRight().getX(); i++) {</span>
+<span class="nc" id="L326">				final Location l_1 = Location.of(i, area.getTopLeft().getY());</span>
+<span class="nc" id="L327">				final Location l_2 = Location.of(i, area.getBottomRight().getY() + 1);</span>
+<span class="nc" id="L328">				drawNetLine(graphics, area, l_1, l_2);</span>
 			}
-<span class="nc bnc" id="L331" title="All 2 branches missed.">			for (int j = area.getTopLeft().getY(); j &lt;= area.getBottomRight().getY(); j++) {</span>
-<span class="nc" id="L332">				final Location l_1 = Location.of(area.getTopLeft().getX(), j);</span>
-<span class="nc" id="L333">				final Location l_2 = Location.of(area.getBottomRight().getX() + 1, j);</span>
-<span class="nc" id="L334">				drawNetLine(graphics, area, l_1, l_2);</span>
+<span class="nc bnc" id="L330" title="All 2 branches missed.">			for (int j = area.getTopLeft().getY(); j &lt;= area.getBottomRight().getY(); j++) {</span>
+<span class="nc" id="L331">				final Location l_1 = Location.of(area.getTopLeft().getX(), j);</span>
+<span class="nc" id="L332">				final Location l_2 = Location.of(area.getBottomRight().getX() + 1, j);</span>
+<span class="nc" id="L333">				drawNetLine(graphics, area, l_1, l_2);</span>
 			}
 		}
-<span class="nc" id="L337">	}</span>
+<span class="nc" id="L336">	}</span>
 
 	private void drawNetLine(final Graphics2D graphics, final Area area, final Location l_1, Location l_2) {
-<span class="nc" id="L340">		final Point p_1 = area.convert(l_1).add(-1, -1);</span>
-<span class="nc" id="L341">		final Point p_2 = area.convert(l_2).add(-1, -1);</span>
-<span class="nc" id="L342">		graphics.drawLine(p_1.getX(), p_1.getY(), p_2.getX(), p_2.getY());</span>
-<span class="nc" id="L343">	}</span>
+<span class="nc" id="L339">		final Point p_1 = area.convert(l_1).add(-1, -1);</span>
+<span class="nc" id="L340">		final Point p_2 = area.convert(l_2).add(-1, -1);</span>
+<span class="nc" id="L341">		graphics.drawLine(p_1.getX(), p_1.getY(), p_2.getX(), p_2.getY());</span>
+<span class="nc" id="L342">	}</span>
 
 	private void paintCursor(final Graphics2D graphics, final Area area) {
-<span class="nc bnc" id="L346" title="All 2 branches missed.">		if (cursorLocation != null) {</span>
-<span class="nc" id="L347">			graphics.setColor(Color.RED);</span>
-<span class="nc" id="L348">			graphics.setStroke(new BasicStroke(1));</span>
-<span class="nc" id="L349">			paintCursor(graphics, area, cursorLocation);</span>
+<span class="nc bnc" id="L345" title="All 2 branches missed.">		if (cursorLocation != null) {</span>
+<span class="nc" id="L346">			graphics.setColor(Color.RED);</span>
+<span class="nc" id="L347">			graphics.setStroke(new BasicStroke(1));</span>
+<span class="nc" id="L348">			paintCursor(graphics, area, cursorLocation);</span>
 		}
-<span class="nc" id="L351">	}</span>
+<span class="nc" id="L350">	}</span>
 
 	/**
 	 * Draw highlight of some tile.
@@ -361,14 +360,14 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 	 *            required tiles where to draw cursor
 	 */
 	private void paintCursor(final Graphics2D graphics, final Area area, final Location location) {
-<span class="nc" id="L364">		final Point p = area.convert(location);</span>
-<span class="nc" id="L365">		graphics.drawLine(p.getX(), p.getY(), p.getX() + TILE_WIDTH_IN_PX, p.getY());</span>
-<span class="nc" id="L366">		graphics.drawLine(p.getX(), p.getY(), p.getX(), p.getY() + TILE_WIDTH_IN_PX);</span>
-<span class="nc" id="L367">		graphics.drawLine(p.getX() + TILE_WIDTH_IN_PX, p.getY(), p.getX() + TILE_WIDTH_IN_PX,</span>
-<span class="nc" id="L368">				p.getY() + TILE_WIDTH_IN_PX);</span>
-<span class="nc" id="L369">		graphics.drawLine(p.getX(), p.getY() + TILE_WIDTH_IN_PX, p.getX() + TILE_WIDTH_IN_PX,</span>
-<span class="nc" id="L370">				p.getY() + TILE_WIDTH_IN_PX);</span>
-<span class="nc" id="L371">	}</span>
+<span class="nc" id="L363">		final Point p = area.convert(location);</span>
+<span class="nc" id="L364">		graphics.drawLine(p.getX(), p.getY(), p.getX() + TILE_WIDTH_IN_PX, p.getY());</span>
+<span class="nc" id="L365">		graphics.drawLine(p.getX(), p.getY(), p.getX(), p.getY() + TILE_WIDTH_IN_PX);</span>
+<span class="nc" id="L366">		graphics.drawLine(p.getX() + TILE_WIDTH_IN_PX, p.getY(), p.getX() + TILE_WIDTH_IN_PX,</span>
+<span class="nc" id="L367">				p.getY() + TILE_WIDTH_IN_PX);</span>
+<span class="nc" id="L368">		graphics.drawLine(p.getX(), p.getY() + TILE_WIDTH_IN_PX, p.getX() + TILE_WIDTH_IN_PX,</span>
+<span class="nc" id="L369">				p.getY() + TILE_WIDTH_IN_PX);</span>
+<span class="nc" id="L370">	}</span>
 
 	/**
 	 * When move mode is enabled mouse cursor is followed by highlighted path.
@@ -379,25 +378,25 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 	 *            required displayed area
 	 */
 	private void paintGoToPath(final Graphics2D graphics, final Area area) {
-<span class="nc bnc" id="L382" title="All 4 branches missed.">		if (gotoMode &amp;&amp; gotoCursorTitle != null) {</span>
-<span class="nc" id="L383">			graphics.setColor(Color.yellow);</span>
-<span class="nc" id="L384">			graphics.setStroke(new BasicStroke(1));</span>
-<span class="nc" id="L385">			paintCursor(graphics, area, gotoCursorTitle);</span>
-<span class="nc bnc" id="L386" title="All 2 branches missed.">			if (!cursorLocation.equals(gotoCursorTitle)) {</span>
-<span class="nc" id="L387">				List&lt;Point&gt; steps = new ArrayList&lt;&gt;();</span>
-<span class="nc" id="L388">				pathPlanning.paintPath(cursorLocation, gotoCursorTitle, location -&gt; steps.add(area.convert(location)));</span>
+<span class="nc bnc" id="L381" title="All 4 branches missed.">		if (gotoMode &amp;&amp; gotoCursorTitle != null) {</span>
+<span class="nc" id="L382">			graphics.setColor(Color.yellow);</span>
+<span class="nc" id="L383">			graphics.setStroke(new BasicStroke(1));</span>
+<span class="nc" id="L384">			paintCursor(graphics, area, gotoCursorTitle);</span>
+<span class="nc bnc" id="L385" title="All 2 branches missed.">			if (!cursorLocation.equals(gotoCursorTitle)) {</span>
+<span class="nc" id="L386">				List&lt;Point&gt; steps = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L387">				pathPlanning.paintPath(cursorLocation, gotoCursorTitle, location -&gt; steps.add(area.convert(location)));</span>
 				// TODO JJ get(0) could return different ship that is really
 				// moved
-<span class="nc" id="L391">				final Ship unit = gameController.getModel().getCurrentPlayer().getShipsAt(cursorLocation).get(0);</span>
-<span class="nc" id="L392">				final StepCounter stepCounter = new StepCounter(5, unit.getAvailableMoves());</span>
+<span class="nc" id="L390">				final Ship unit = gameController.getModel().getCurrentPlayer().getShipsAt(cursorLocation).get(0);</span>
+<span class="nc" id="L391">				final StepCounter stepCounter = new StepCounter(5, unit.getAvailableMoves());</span>
 				/**
 				 * Here could be check if particular step in on screen, but draw
 				 * few images outside screen is not big deal.
 				 */
-<span class="nc" id="L397">				steps.forEach(point -&gt; paintStepsToTile(graphics, point, stepCounter));</span>
+<span class="nc" id="L396">				steps.forEach(point -&gt; paintStepsToTile(graphics, point, stepCounter));</span>
 			}
 		}
-<span class="nc" id="L400">	}</span>
+<span class="nc" id="L399">	}</span>
 
 	/**
 	 * Draw image on tile. Image is part of highlighted path.
@@ -408,33 +407,33 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 	 *            required point where to draw image
 	 */
 	private void paintStepsToTile(final Graphics2D graphics, final Point point, final StepCounter stepCounter) {
-<span class="nc" id="L411">		graphics.drawImage(getImageFoStep(stepCounter.canMakeMoveInSameTurn(1)), point.getX(), point.getY(), this);</span>
-<span class="nc" id="L412">	}</span>
+<span class="nc" id="L410">		graphics.drawImage(getImageFoStep(stepCounter.canMakeMoveInSameTurn(1)), point.getX(), point.getY(), this);</span>
+<span class="nc" id="L411">	}</span>
 
 	private Image getImageFoStep(final boolean normalStep) {
-<span class="nc bnc" id="L415" title="All 2 branches missed.">		if (normalStep) {</span>
-<span class="nc" id="L416">			return imageProvider.getImage(ImageProvider.IMG_ICON_STEPS_25x25);</span>
+<span class="nc bnc" id="L414" title="All 2 branches missed.">		if (normalStep) {</span>
+<span class="nc" id="L415">			return imageProvider.getImage(ImageProvider.IMG_ICON_STEPS_25x25);</span>
 		} else {
-<span class="nc" id="L418">			return imageProvider.getImage(ImageProvider.IMG_ICON_STEPS_TURN_25x25);</span>
+<span class="nc" id="L417">			return imageProvider.getImage(ImageProvider.IMG_ICON_STEPS_TURN_25x25);</span>
 		}
 	}
 
 	private void paintDebugInfo(final Graphics2D graphics, final VisualDebugInfo visualDebugInfo, final Area area) {
-<span class="nc" id="L423">		visualDebugInfo.getLocations().stream().filter(location -&gt; area.isInArea(location)).forEach(location -&gt; {</span>
-<span class="nc" id="L424">			final Point p = area.convert(location).add(10, 4);</span>
-<span class="nc" id="L425">			graphics.setColor(Color.white);</span>
-<span class="nc" id="L426">			graphics.fillRect(p.getX() + 1, p.getY() + 1, FLAG_WIDTH - 1, FLAG_HEIGHT - 1);</span>
-<span class="nc" id="L427">		});</span>
-<span class="nc" id="L428">	}</span>
+<span class="nc" id="L422">		visualDebugInfo.getLocations().stream().filter(location -&gt; area.isInArea(location)).forEach(location -&gt; {</span>
+<span class="nc" id="L423">			final Point p = area.convert(location).add(10, 4);</span>
+<span class="nc" id="L424">			graphics.setColor(Color.white);</span>
+<span class="nc" id="L425">			graphics.fillRect(p.getX() + 1, p.getY() + 1, FLAG_WIDTH - 1, FLAG_HEIGHT - 1);</span>
+<span class="nc" id="L426">		});</span>
+<span class="nc" id="L427">	}</span>
 
 	@Override
 	public void startMoveUnit(final Ship ship) {
-<span class="nc" id="L432">		oneTurnMoveHighlighter.setLocations(ship.getAvailableLocations());</span>
-<span class="nc" id="L433">	}</span>
+<span class="nc" id="L431">		oneTurnMoveHighlighter.setLocations(ship.getAvailableLocations());</span>
+<span class="nc" id="L432">	}</span>
 
 	@Override
 	public Dimension getPreferredSize() {
-<span class="nc" id="L437">		return getMinimumSize();</span>
+<span class="nc" id="L436">		return getMinimumSize();</span>
 	}
 
 	@Override
@@ -444,86 +443,86 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 		 * exists. Because than graphics is not initialize and initGame can't
 		 * prepare dbImage.
 		 */
-<span class="nc bnc" id="L447" title="All 2 branches missed.">		if (gameController.getModel() == null) {</span>
-<span class="nc" id="L448">			return new Dimension(100, 100);</span>
+<span class="nc bnc" id="L446" title="All 2 branches missed.">		if (gameController.getModel() == null) {</span>
+<span class="nc" id="L447">			return new Dimension(100, 100);</span>
 		} else {
-<span class="nc" id="L450">			return new Dimension(getGameMapWidth(), getGameMapHeight());</span>
+<span class="nc" id="L449">			return new Dimension(getGameMapWidth(), getGameMapHeight());</span>
 		}
 	}
 
 	private int getGameMapWidth() {
-<span class="nc" id="L455">		return (gameController.getModel().getMap().getMaxX()) * TOTAL_TILE_WIDTH_IN_PX - 1;</span>
+<span class="nc" id="L454">		return (gameController.getModel().getMap().getMaxX()) * TOTAL_TILE_WIDTH_IN_PX - 1;</span>
 	}
 
 	private int getGameMapHeight() {
-<span class="nc" id="L459">		return (gameController.getModel().getMap().getMaxY()) * TOTAL_TILE_WIDTH_IN_PX - 1;</span>
+<span class="nc" id="L458">		return (gameController.getModel().getMap().getMaxY()) * TOTAL_TILE_WIDTH_IN_PX - 1;</span>
 	}
 
 	@Override
 	public Location getCursorLocation() {
-<span class="nc" id="L464">		return cursorLocation;</span>
+<span class="nc" id="L463">		return cursorLocation;</span>
 	}
 
 	@Override
 	public void setCursorLocation(Location cursorTile) {
-<span class="nc" id="L469">		this.cursorLocation = cursorTile;</span>
-<span class="nc" id="L470">	}</span>
+<span class="nc" id="L468">		this.cursorLocation = cursorTile;</span>
+<span class="nc" id="L469">	}</span>
 
 	@Override
 	public void setCursorNormal() {
-<span class="nc" id="L474">		oneTurnMoveHighlighter.setLocations(null);</span>
-<span class="nc" id="L475">		setCursor(Cursor.getDefaultCursor());</span>
-<span class="nc" id="L476">		gotoMode = false;</span>
-<span class="nc" id="L477">	}</span>
+<span class="nc" id="L473">		oneTurnMoveHighlighter.setLocations(null);</span>
+<span class="nc" id="L474">		setCursor(Cursor.getDefaultCursor());</span>
+<span class="nc" id="L475">		gotoMode = false;</span>
+<span class="nc" id="L476">	}</span>
 
 	@Override
 	public void setCursorGoto() {
-<span class="nc" id="L481">		setCursor(gotoModeCursor);</span>
-<span class="nc" id="L482">		gotoMode = true;</span>
-<span class="nc" id="L483">	}</span>
+<span class="nc" id="L480">		setCursor(gotoModeCursor);</span>
+<span class="nc" id="L481">		gotoMode = true;</span>
+<span class="nc" id="L482">	}</span>
 
 	@Override
 	public boolean isGotoMode() {
-<span class="nc" id="L487">		return gotoMode;</span>
+<span class="nc" id="L486">		return gotoMode;</span>
 	}
 
 	@Override
 	public Location getGotoCursorTitle() {
-<span class="nc" id="L492">		return gotoCursorTitle;</span>
+<span class="nc" id="L491">		return gotoCursorTitle;</span>
 	}
 
 	@Override
 	public void setGotoCursorTitle(final Location gotoCursorTitle) {
-<span class="nc" id="L497">		this.gotoCursorTitle = gotoCursorTitle;</span>
-<span class="nc" id="L498">	}</span>
+<span class="nc" id="L496">		this.gotoCursorTitle = gotoCursorTitle;</span>
+<span class="nc" id="L497">	}</span>
 
 	@Override
 	public void setWalkAnimator(final WalkAnimator walkAnimator) {
-<span class="nc" id="L502">		this.walkAnimator = walkAnimator;</span>
-<span class="nc" id="L503">	}</span>
+<span class="nc" id="L501">		this.walkAnimator = walkAnimator;</span>
+<span class="nc" id="L502">	}</span>
 
 	@Override
 	public WalkAnimator getWalkAnimator() {
-<span class="nc" id="L507">		return walkAnimator;</span>
+<span class="nc" id="L506">		return walkAnimator;</span>
 	}
 
 	@Override
 	public void setGridShown(final boolean isGridShown) {
-<span class="nc" id="L512">		this.isGridShown = isGridShown;</span>
-<span class="nc" id="L513">	}</span>
+<span class="nc" id="L511">		this.isGridShown = isGridShown;</span>
+<span class="nc" id="L512">	}</span>
 
 	public void onViewPortResize() {
-<span class="nc" id="L516">		dbImage = null;</span>
-<span class="nc" id="L517">	}</span>
+<span class="nc" id="L515">		dbImage = null;</span>
+<span class="nc" id="L516">	}</span>
 
 	@Override
 	public Area getArea() {
-<span class="nc" id="L521">		return new Area((JViewport) getParent(), gameController.getModel().getMap());</span>
+<span class="nc" id="L520">		return new Area((JViewport) getParent(), gameController.getModel().getMap());</span>
 	}
 
 	@Override
 	public VisualDebugInfo getVisualDebugInfo() {
-<span class="nc" id="L526">		return visualDebugInfo;</span>
+<span class="nc" id="L525">		return visualDebugInfo;</span>
 	}
 
 }
