@@ -59,7 +59,7 @@ public class AIModelBuilder {
 				.addShip("Player2", ShipType.FRIGATE, Location.of(1, 3));
 	}
 
-	Model buildModel() {
+	Model buildImpl() {
 		return builder.build();
 	}
 
@@ -73,6 +73,6 @@ public class AIModelBuilder {
 		builder.createMap01_5ships();
 //		builder.createMap02();
 
-		return builder.buildModel();
+		return builder.buildImpl();
 	}
 }
