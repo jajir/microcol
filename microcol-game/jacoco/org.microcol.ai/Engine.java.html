@@ -51,18 +51,18 @@ public class Engine {
 <span class="nc" id="L51">			lastDirections.put(ship, Location.DIRECTIONS.get(random.nextInt(Location.DIRECTIONS.size())));</span>
 		}
 
-		{
-<span class="nc" id="L55">			final List&lt;Ship&gt; enemies = ship.getOwner().getEnemyShips();</span>
-<span class="nc bnc" id="L56" title="All 2 branches missed.">			if (enemies.size() &gt; 0) {</span>
-<span class="nc" id="L57">				final Ship enemy = enemies.get(0);</span>
-<span class="nc" id="L58">				model.requestDebug(ship.getPath(enemy.getLocation(), true));</span>
-			}
-		}
+<span class="nc" id="L54">		showDebug(ship);</span>
 
-<span class="nc" id="L62">		final List&lt;Location&gt; directions = new ArrayList&lt;&gt;(Location.DIRECTIONS);</span>
-<span class="nc" id="L63">		Location lastLocation = ship.getLocation();</span>
-<span class="nc" id="L64">		final List&lt;Location&gt; locations = new ArrayList&lt;&gt;();</span>
-<span class="nc bnc" id="L65" title="All 2 branches missed.">		while (locations.size() &lt; ship.getAvailableMoves()) {</span>
+<span class="nc" id="L56">		final List&lt;Location&gt; directions = new ArrayList&lt;&gt;(Location.DIRECTIONS);</span>
+<span class="nc" id="L57">		final List&lt;Location&gt; locations = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L58">		Location lastLocation = ship.getLocation();</span>
+		outerloop:
+<span class="nc bnc" id="L60" title="All 2 branches missed.">		while (locations.size() &lt; ship.getAvailableMoves()) {</span>
+<span class="nc bnc" id="L61" title="All 2 branches missed.">			for (final Location location : lastLocation.getNeighbors()) {</span>
+<span class="nc bnc" id="L62" title="All 2 branches missed.">				if (!ship.getOwner().getEnemyShipsAt(location).isEmpty()) {</span>
+<span class="nc" id="L63">					break outerloop;</span>
+				}
+<span class="nc" id="L65">			}</span>
 <span class="nc" id="L66">			final Location lastDirection = lastDirections.get(ship);</span>
 <span class="nc" id="L67">			final Location newLocation = lastLocation.add(lastDirection);</span>
 <span class="nc bnc" id="L68" title="All 2 branches missed.">			if (ship.isMoveable(newLocation)) {</span>
@@ -81,13 +81,22 @@ public class Engine {
 <span class="nc" id="L81">			ship.moveTo(Path.of(locations));</span>
 		}
 
-<span class="nc bnc" id="L84" title="All 2 branches missed.">		for (Location location : ship.getLocation().getNeighbors()) {</span>
-<span class="nc" id="L85">			List&lt;Ship&gt; enemies = ship.getOwner().getEnemyShipsAt(location);</span>
+<span class="nc bnc" id="L84" title="All 2 branches missed.">		for (final Location location : ship.getLocation().getNeighbors()) {</span>
+<span class="nc" id="L85">			final List&lt;Ship&gt; enemies = ship.getOwner().getEnemyShipsAt(location);</span>
 <span class="nc bnc" id="L86" title="All 2 branches missed.">			if (!enemies.isEmpty()) {</span>
 <span class="nc" id="L87">				ship.attack(enemies.get(0));</span>
 <span class="nc" id="L88">				break;</span>
 			}
 <span class="nc" id="L90">		}</span>
 <span class="nc" id="L91">	}</span>
+
+	void showDebug(final Ship ship) {
+<span class="nc" id="L94">		final List&lt;Location&gt; locations = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L95" title="All 2 branches missed.">		for (final Ship enemy : ship.getOwner().getEnemyShips()) {</span>
+<span class="nc" id="L96">			locations.addAll(ship.getPath(enemy.getLocation(), true));</span>
+<span class="nc" id="L97">		}</span>
+
+<span class="nc" id="L99">		model.requestDebug(locations);</span>
+<span class="nc" id="L100">	}</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>
