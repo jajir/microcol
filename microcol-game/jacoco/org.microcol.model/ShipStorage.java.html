@@ -4,42 +4,42 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.function.Function;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableListMultimap;
+import com.google.common.collect.Multimaps;
 
 class ShipStorage {
 	private final List&lt;Ship&gt; ships;
 
-<span class="nc" id="L16">	ShipStorage(final List&lt;Ship&gt; ships) {</span>
-<span class="nc" id="L17">		this.ships = new ArrayList&lt;&gt;(ships);</span>
-<span class="nc" id="L18">		checkShipLocations(this.ships);</span>
-<span class="nc" id="L19">	}</span>
+<span class="nc" id="L17">	ShipStorage(final List&lt;Ship&gt; ships) {</span>
+<span class="nc" id="L18">		this.ships = new ArrayList&lt;&gt;(ships);</span>
+<span class="nc" id="L19">		checkShipLocations(this.ships);</span>
+<span class="nc" id="L20">	}</span>
 
 	private void checkShipLocations(final List&lt;Ship&gt; ships) {
-<span class="nc" id="L22">		Map&lt;Location, Player&gt; owners = new HashMap&lt;&gt;();</span>
-<span class="nc" id="L23">		ships.forEach(ship -&gt; {</span>
-<span class="nc" id="L24">			Player owner = owners.get(ship.getLocation());</span>
-<span class="nc bnc" id="L25" title="All 2 branches missed.">			if (owner != null) {</span>
-<span class="nc bnc" id="L26" title="All 2 branches missed.">				if (!owner.equals(ship.getOwner())) {</span>
-<span class="nc" id="L27">					throw new IllegalArgumentException(String.format(&quot;There is an enemy ship at the same location (%s).&quot;, ship.getLocation()));</span>
+<span class="nc" id="L23">		Map&lt;Location, Player&gt; owners = new HashMap&lt;&gt;();</span>
+<span class="nc" id="L24">		ships.forEach(ship -&gt; {</span>
+<span class="nc" id="L25">			Player owner = owners.get(ship.getLocation());</span>
+<span class="nc bnc" id="L26" title="All 2 branches missed.">			if (owner != null) {</span>
+<span class="nc bnc" id="L27" title="All 2 branches missed.">				if (!owner.equals(ship.getOwner())) {</span>
+<span class="nc" id="L28">					throw new IllegalArgumentException(String.format(&quot;There is an enemy ship at the same location (%s).&quot;, ship.getLocation()));</span>
 				}
 			} else {
-<span class="nc" id="L30">				owners.put(ship.getLocation(), ship.getOwner());</span>
+<span class="nc" id="L31">				owners.put(ship.getLocation(), ship.getOwner());</span>
 			}
-<span class="nc" id="L32">		});</span>
-<span class="nc" id="L33">	}</span>
+<span class="nc" id="L33">		});</span>
+<span class="nc" id="L34">	}</span>
 
 	List&lt;Ship&gt; getShips() {
-<span class="nc" id="L36">		return ImmutableList.copyOf(ships);</span>
+<span class="nc" id="L37">		return ImmutableList.copyOf(ships);</span>
 	}
 
 	Map&lt;Location, List&lt;Ship&gt;&gt; getShipsAt() {
-<span class="nc" id="L40">		return ships.stream()</span>
-<span class="nc" id="L41">			.collect(Collectors.collectingAndThen(</span>
-<span class="nc" id="L42">				Collectors.groupingBy(Ship::getLocation), ImmutableMap::copyOf));</span>
+<span class="nc" id="L41">		return Multimaps.asMap(ships.stream()</span>
+<span class="nc" id="L42">			.collect(ImmutableListMultimap.toImmutableListMultimap(Ship::getLocation, Function.identity())));</span>
 	}
 
 	List&lt;Ship&gt; getShipsAt(final Location location) {
@@ -47,70 +47,63 @@ class ShipStorage {
 
 <span class="nc" id="L48">		return ships.stream()</span>
 <span class="nc" id="L49">			.filter(ship -&gt; ship.getLocation().equals(location))</span>
-<span class="nc" id="L50">			.collect(Collectors.collectingAndThen(</span>
-<span class="nc" id="L51">				Collectors.toList(), ImmutableList::copyOf));</span>
+<span class="nc" id="L50">			.collect(ImmutableList.toImmutableList());</span>
 	}
 
 	List&lt;Ship&gt; getShips(final Player player) {
-<span class="nc" id="L55">		Preconditions.checkNotNull(player);</span>
+<span class="nc" id="L54">		Preconditions.checkNotNull(player);</span>
 
-<span class="nc" id="L57">		return ships.stream()</span>
-<span class="nc" id="L58">			.filter(ship -&gt; ship.getOwner().equals(player))</span>
-<span class="nc" id="L59">			.collect(Collectors.collectingAndThen(</span>
-<span class="nc" id="L60">				Collectors.toList(), ImmutableList::copyOf));</span>
+<span class="nc" id="L56">		return ships.stream()</span>
+<span class="nc" id="L57">			.filter(ship -&gt; ship.getOwner().equals(player))</span>
+<span class="nc" id="L58">			.collect(ImmutableList.toImmutableList());</span>
 	}
 
 	Map&lt;Location, List&lt;Ship&gt;&gt; getShipsAt(final Player player) {
-<span class="nc" id="L64">		Preconditions.checkNotNull(player);</span>
+<span class="nc" id="L62">		Preconditions.checkNotNull(player);</span>
 
-<span class="nc" id="L66">		return ships.stream()</span>
-<span class="nc" id="L67">			.filter(ship -&gt; ship.getOwner().equals(player))</span>
-<span class="nc" id="L68">			.collect(Collectors.collectingAndThen(</span>
-<span class="nc" id="L69">				Collectors.groupingBy(Ship::getLocation), ImmutableMap::copyOf));</span>
+<span class="nc" id="L64">		return Multimaps.asMap(ships.stream()</span>
+<span class="nc" id="L65">			.filter(ship -&gt; ship.getOwner().equals(player))</span>
+<span class="nc" id="L66">			.collect(ImmutableListMultimap.toImmutableListMultimap(Ship::getLocation, Function.identity())));</span>
 	}
 
 	List&lt;Ship&gt; getShipsAt(final Player player, final Location location) {
-<span class="nc" id="L73">		Preconditions.checkNotNull(player);</span>
-<span class="nc" id="L74">		Preconditions.checkNotNull(location);</span>
+<span class="nc" id="L70">		Preconditions.checkNotNull(player);</span>
+<span class="nc" id="L71">		Preconditions.checkNotNull(location);</span>
 
-<span class="nc" id="L76">		return ships.stream()</span>
-<span class="nc bnc" id="L77" title="All 4 branches missed.">			.filter(ship -&gt; ship.getOwner().equals(player) &amp;&amp; ship.getLocation().equals(location))</span>
-<span class="nc" id="L78">			.collect(Collectors.collectingAndThen(</span>
-<span class="nc" id="L79">				Collectors.toList(), ImmutableList::copyOf));</span>
+<span class="nc" id="L73">		return ships.stream()</span>
+<span class="nc bnc" id="L74" title="All 4 branches missed.">			.filter(ship -&gt; ship.getOwner().equals(player) &amp;&amp; ship.getLocation().equals(location))</span>
+<span class="nc" id="L75">			.collect(ImmutableList.toImmutableList());</span>
 	}
 
 	List&lt;Ship&gt; getEnemyShips(final Player player) {
-<span class="nc" id="L83">		Preconditions.checkNotNull(player);</span>
+<span class="nc" id="L79">		Preconditions.checkNotNull(player);</span>
 
-<span class="nc" id="L85">		return ships.stream()</span>
-<span class="nc bnc" id="L86" title="All 2 branches missed.">			.filter(ship -&gt; !ship.getOwner().equals(player))</span>
-<span class="nc" id="L87">			.collect(Collectors.collectingAndThen(</span>
-<span class="nc" id="L88">				Collectors.toList(), ImmutableList::copyOf));</span>
+<span class="nc" id="L81">		return ships.stream()</span>
+<span class="nc bnc" id="L82" title="All 2 branches missed.">			.filter(ship -&gt; !ship.getOwner().equals(player))</span>
+<span class="nc" id="L83">			.collect(ImmutableList.toImmutableList());</span>
 	}
 
 	Map&lt;Location, List&lt;Ship&gt;&gt; getEnemyShipsAt(final Player player) {
-<span class="nc" id="L92">		Preconditions.checkNotNull(player);</span>
+<span class="nc" id="L87">		Preconditions.checkNotNull(player);</span>
 
-<span class="nc" id="L94">		return ships.stream()</span>
-<span class="nc bnc" id="L95" title="All 2 branches missed.">			.filter(ship -&gt; !ship.getOwner().equals(player))</span>
-<span class="nc" id="L96">			.collect(Collectors.collectingAndThen(</span>
-<span class="nc" id="L97">				Collectors.groupingBy(Ship::getLocation), ImmutableMap::copyOf));</span>
+<span class="nc" id="L89">		return Multimaps.asMap(ships.stream()</span>
+<span class="nc bnc" id="L90" title="All 2 branches missed.">			.filter(ship -&gt; !ship.getOwner().equals(player))</span>
+<span class="nc" id="L91">			.collect(ImmutableListMultimap.toImmutableListMultimap(Ship::getLocation, Function.identity())));</span>
 	}
 
 	List&lt;Ship&gt; getEnemyShipsAt(final Player player, final Location location) {
-<span class="nc" id="L101">		Preconditions.checkNotNull(player);</span>
-<span class="nc" id="L102">		Preconditions.checkNotNull(location);</span>
+<span class="nc" id="L95">		Preconditions.checkNotNull(player);</span>
+<span class="nc" id="L96">		Preconditions.checkNotNull(location);</span>
 
-<span class="nc" id="L104">		return ships.stream()</span>
-<span class="nc bnc" id="L105" title="All 4 branches missed.">			.filter(ship -&gt; !ship.getOwner().equals(player) &amp;&amp; ship.getLocation().equals(location))</span>
-<span class="nc" id="L106">			.collect(Collectors.collectingAndThen(</span>
-<span class="nc" id="L107">				Collectors.toList(), ImmutableList::copyOf));</span>
+<span class="nc" id="L98">		return ships.stream()</span>
+<span class="nc bnc" id="L99" title="All 4 branches missed.">			.filter(ship -&gt; !ship.getOwner().equals(player) &amp;&amp; ship.getLocation().equals(location))</span>
+<span class="nc" id="L100">			.collect(ImmutableList.toImmutableList());</span>
 	}
 
 	void remove(final Ship ship) {
-<span class="nc" id="L111">		Preconditions.checkNotNull(ship);</span>
+<span class="nc" id="L104">		Preconditions.checkNotNull(ship);</span>
 
-<span class="nc" id="L113">		ships.remove(ship);</span>
-<span class="nc" id="L114">	}</span>
+<span class="nc" id="L106">		ships.remove(ship);</span>
+<span class="nc" id="L107">	}</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>
