@@ -4,11 +4,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.function.Function;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableListMultimap;
+import com.google.common.collect.Multimaps;
 
 class ShipStorage {
 	private final List<Ship> ships;
@@ -37,9 +38,8 @@ class ShipStorage {
 	}
 
 	Map<Location, List<Ship>> getShipsAt() {
-		return ships.stream()
-			.collect(Collectors.collectingAndThen(
-				Collectors.groupingBy(Ship::getLocation), ImmutableMap::copyOf));
+		return Multimaps.asMap(ships.stream()
+			.collect(ImmutableListMultimap.toImmutableListMultimap(Ship::getLocation, Function.identity())));
 	}
 
 	List<Ship> getShipsAt(final Location location) {
@@ -47,8 +47,7 @@ class ShipStorage {
 
 		return ships.stream()
 			.filter(ship -> ship.getLocation().equals(location))
-			.collect(Collectors.collectingAndThen(
-				Collectors.toList(), ImmutableList::copyOf));
+			.collect(ImmutableList.toImmutableList());
 	}
 
 	List<Ship> getShips(final Player player) {
@@ -56,17 +55,15 @@ class ShipStorage {
 
 		return ships.stream()
 			.filter(ship -> ship.getOwner().equals(player))
-			.collect(Collectors.collectingAndThen(
-				Collectors.toList(), ImmutableList::copyOf));
+			.collect(ImmutableList.toImmutableList());
 	}
 
 	Map<Location, List<Ship>> getShipsAt(final Player player) {
 		Preconditions.checkNotNull(player);
 
-		return ships.stream()
+		return Multimaps.asMap(ships.stream()
 			.filter(ship -> ship.getOwner().equals(player))
-			.collect(Collectors.collectingAndThen(
-				Collectors.groupingBy(Ship::getLocation), ImmutableMap::copyOf));
+			.collect(ImmutableListMultimap.toImmutableListMultimap(Ship::getLocation, Function.identity())));
 	}
 
 	List<Ship> getShipsAt(final Player player, final Location location) {
@@ -75,8 +72,7 @@ class ShipStorage {
 
 		return ships.stream()
 			.filter(ship -> ship.getOwner().equals(player) && ship.getLocation().equals(location))
-			.collect(Collectors.collectingAndThen(
-				Collectors.toList(), ImmutableList::copyOf));
+			.collect(ImmutableList.toImmutableList());
 	}
 
 	List<Ship> getEnemyShips(final Player player) {
@@ -84,17 +80,15 @@ class ShipStorage {
 
 		return ships.stream()
 			.filter(ship -> !ship.getOwner().equals(player))
-			.collect(Collectors.collectingAndThen(
-				Collectors.toList(), ImmutableList::copyOf));
+			.collect(ImmutableList.toImmutableList());
 	}
 
 	Map<Location, List<Ship>> getEnemyShipsAt(final Player player) {
 		Preconditions.checkNotNull(player);
 
-		return ships.stream()
+		return Multimaps.asMap(ships.stream()
 			.filter(ship -> !ship.getOwner().equals(player))
-			.collect(Collectors.collectingAndThen(
-				Collectors.groupingBy(Ship::getLocation), ImmutableMap::copyOf));
+			.collect(ImmutableListMultimap.toImmutableListMultimap(Ship::getLocation, Function.identity())));
 	}
 
 	List<Ship> getEnemyShipsAt(final Player player, final Location location) {
@@ -103,8 +97,7 @@ class ShipStorage {
 
 		return ships.stream()
 			.filter(ship -> !ship.getOwner().equals(player) && ship.getLocation().equals(location))
-			.collect(Collectors.collectingAndThen(
-				Collectors.toList(), ImmutableList::copyOf));
+			.collect(ImmutableList.toImmutableList());
 	}
 
 	void remove(final Ship ship) {
