@@ -18,7 +18,8 @@ MicroCol game classes,org.microcol.gui.panelview,VisualDebugInfo,17,0,0,0,6,0,3,
 MicroCol game classes,org.microcol.gui.panelview,GamePanelView,1034,0,61,0,202,0,82,0,50,0
 MicroCol game classes,org.microcol.gui.panelview,GamePanelPresenter.new MouseAdapter() {...},109,0,12,0,21,0,12,0,6,0
 MicroCol game classes,org.microcol.gui.panelview,GoToMode,21,0,2,0,7,0,5,0,4,0
-MicroCol game classes,org.microcol,MicroCol,145,0,10,0,48,0,13,0,8,0
+MicroCol game classes,org.microcol,MicroCol,156,0,10,0,55,0,14,0,9,0
+MicroCol game classes,org.microcol,MicroCol.ConsoleHandler,7,0,0,0,3,0,2,0,2,0
 MicroCol game classes,org.microcol.ai,Engine.new ModelAdapter() {...},16,0,2,0,4,0,3,0,2,0
 MicroCol game classes,org.microcol.ai,AIModelBuilder,166,0,0,0,43,0,9,0,9,0
 MicroCol game classes,org.microcol.ai,Engine,209,0,20,0,48,0,16,0,6,0

@@ -3,8 +3,11 @@
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.SplashScreen;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.logging.LogManager;
 
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
@@ -24,7 +27,22 @@ import com.google.inject.Stage;
 /**
  * MicroCol's main class.
  */
-<span class="nc" id="L27">public class MicroCol {</span>
+<span class="nc" id="L30">public class MicroCol {</span>
+
+<span class="nc" id="L32">	public static class ConsoleHandler extends java.util.logging.ConsoleHandler {</span>
+		@Override
+		protected synchronized void setOutputStream(final OutputStream out) throws SecurityException {
+<span class="nc" id="L35">			super.setOutputStream(System.out);</span>
+<span class="nc" id="L36">		}</span>
+	}
+
+	private static void initJavaLogging() {
+		try {
+<span class="nc" id="L41">			LogManager.getLogManager().readConfiguration(MicroCol.class.getResourceAsStream(&quot;/logging.properties&quot;));</span>
+<span class="nc" id="L42">		} catch (IOException ex) {</span>
+<span class="nc" id="L43">			ex.printStackTrace();</span>
+<span class="nc" id="L44">		}</span>
+<span class="nc" id="L45">	}</span>
 
 	/**
 	 * Provide information if it's apple operation system.
@@ -33,8 +51,8 @@ import com.google.inject.Stage;
 	 *         otherwise return &lt;code&gt;false&lt;/code&gt;
 	 */
 	private static boolean isOSX() {
-<span class="nc" id="L36">		final String osName = System.getProperty(&quot;os.name&quot;);</span>
-<span class="nc" id="L37">		return osName.contains(&quot;OS X&quot;);</span>
+<span class="nc" id="L54">		final String osName = System.getProperty(&quot;os.name&quot;);</span>
+<span class="nc" id="L55">		return osName.contains(&quot;OS X&quot;);</span>
 	}
 
 	/**
@@ -43,33 +61,33 @@ import com.google.inject.Stage;
 	 * applied.
 	 */
 	private static void initAppleProperties() {
-<span class="nc" id="L46">		System.setProperty(&quot;com.apple.mrj.application.apple.menu.about.name&quot;, &quot;MicroCol&quot;);</span>
-<span class="nc" id="L47">		System.setProperty(&quot;apple.laf.useScreenMenuBar&quot;, &quot;true&quot;);</span>
-<span class="nc" id="L48">		System.setProperty(&quot;apple.awt.application.name&quot;, &quot;MicroCol&quot;);</span>
-<span class="nc" id="L49">		System.setProperty(&quot;apple.awt.brushMetalLook&quot;, &quot;true&quot;);</span>
-<span class="nc" id="L50">	}</span>
+<span class="nc" id="L64">		System.setProperty(&quot;com.apple.mrj.application.apple.menu.about.name&quot;, &quot;MicroCol&quot;);</span>
+<span class="nc" id="L65">		System.setProperty(&quot;apple.laf.useScreenMenuBar&quot;, &quot;true&quot;);</span>
+<span class="nc" id="L66">		System.setProperty(&quot;apple.awt.application.name&quot;, &quot;MicroCol&quot;);</span>
+<span class="nc" id="L67">		System.setProperty(&quot;apple.awt.brushMetalLook&quot;, &quot;true&quot;);</span>
+<span class="nc" id="L68">	}</span>
 
 	private static void setSplashScreen() {
-<span class="nc" id="L53">		final SplashScreen splash = SplashScreen.getSplashScreen();</span>
-<span class="nc bnc" id="L54" title="All 2 branches missed.">		if (splash == null) {</span>
-<span class="nc" id="L55">			System.err.println(&quot;Splash screen is null!&quot;);</span>
+<span class="nc" id="L71">		final SplashScreen splash = SplashScreen.getSplashScreen();</span>
+<span class="nc bnc" id="L72" title="All 2 branches missed.">		if (splash == null) {</span>
+<span class="nc" id="L73">			System.err.println(&quot;Splash screen is null!&quot;);</span>
 		} else {
-<span class="nc" id="L57">			Graphics2D g = splash.createGraphics();</span>
-<span class="nc bnc" id="L58" title="All 2 branches missed.">			if (g == null) {</span>
-<span class="nc" id="L59">				System.err.println(&quot;unable to instantiate graphics for splash screen&quot;);</span>
-<span class="nc" id="L60">				return;</span>
+<span class="nc" id="L75">			Graphics2D g = splash.createGraphics();</span>
+<span class="nc bnc" id="L76" title="All 2 branches missed.">			if (g == null) {</span>
+<span class="nc" id="L77">				System.err.println(&quot;unable to instantiate graphics for splash screen&quot;);</span>
+<span class="nc" id="L78">				return;</span>
 			}
 		}
-<span class="nc" id="L63">	}</span>
+<span class="nc" id="L81">	}</span>
 
 	private static void setSystemNativeUi() {
 		try {
-<span class="nc" id="L67">			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());</span>
-<span class="nc" id="L68">		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException</span>
+<span class="nc" id="L85">			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());</span>
+<span class="nc" id="L86">		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException</span>
 				| UnsupportedLookAndFeelException ex) {
-<span class="nc" id="L70">			ex.printStackTrace();</span>
-<span class="nc" id="L71">		}</span>
-<span class="nc" id="L72">	}</span>
+<span class="nc" id="L88">			ex.printStackTrace();</span>
+<span class="nc" id="L89">		}</span>
+<span class="nc" id="L90">	}</span>
 
 	/**
 	 * Method try to set application icon. It use apple native classes. Because
@@ -78,21 +96,21 @@ import com.google.inject.Stage;
 	 */
 	private static void setAppleDockIcon() {
 		try {
-<span class="nc" id="L81">			Class&lt;?&gt; clazz = Class.forName(&quot;com.apple.eawt.Application&quot;, false, null);</span>
-<span class="nc bnc" id="L82" title="All 2 branches missed.">			if (clazz != null) {</span>
-<span class="nc" id="L83">				Method m = clazz.getMethod(&quot;getApplication&quot;);</span>
-<span class="nc" id="L84">				Object o = m.invoke(null);</span>
-<span class="nc" id="L85">				Method m2 = clazz.getMethod(&quot;setDockIconImage&quot;, Image.class);</span>
-<span class="nc" id="L86">				m2.invoke(o, ImageProvider.getRawImage(&quot;splash-screen.png&quot;));</span>
+<span class="nc" id="L99">			Class&lt;?&gt; clazz = Class.forName(&quot;com.apple.eawt.Application&quot;, false, null);</span>
+<span class="nc bnc" id="L100" title="All 2 branches missed.">			if (clazz != null) {</span>
+<span class="nc" id="L101">				Method m = clazz.getMethod(&quot;getApplication&quot;);</span>
+<span class="nc" id="L102">				Object o = m.invoke(null);</span>
+<span class="nc" id="L103">				Method m2 = clazz.getMethod(&quot;setDockIconImage&quot;, Image.class);</span>
+<span class="nc" id="L104">				m2.invoke(o, ImageProvider.getRawImage(&quot;splash-screen.png&quot;));</span>
 			}
-<span class="nc" id="L88">		} catch (ClassNotFoundException | NoSuchMethodException | SecurityException | IllegalAccessException</span>
+<span class="nc" id="L106">		} catch (ClassNotFoundException | NoSuchMethodException | SecurityException | IllegalAccessException</span>
 				| IllegalArgumentException | InvocationTargetException e) {
 			/**
 			 * intentionally do nothing.
 			 */
-<span class="nc" id="L93">			e.printStackTrace();</span>
-<span class="nc" id="L94">		}</span>
-<span class="nc" id="L95">	}</span>
+<span class="nc" id="L111">			e.printStackTrace();</span>
+<span class="nc" id="L112">		}</span>
+<span class="nc" id="L113">	}</span>
 
 	/**
 	 * Creates and displays the form.
@@ -102,28 +120,30 @@ import com.google.inject.Stage;
 	 */
 	public static void main(final String... args) {
 
-<span class="nc" id="L105">		setSplashScreen();</span>
+<span class="nc" id="L123">		initJavaLogging();</span>
 
-<span class="nc bnc" id="L107" title="All 2 branches missed.">		if (isOSX()) {</span>
-<span class="nc" id="L108">			initAppleProperties();</span>
-<span class="nc" id="L109">			setAppleDockIcon();</span>
+<span class="nc" id="L125">		setSplashScreen();</span>
+
+<span class="nc bnc" id="L127" title="All 2 branches missed.">		if (isOSX()) {</span>
+<span class="nc" id="L128">			initAppleProperties();</span>
+<span class="nc" id="L129">			setAppleDockIcon();</span>
 		}
 
-<span class="nc" id="L112">		final Injector injector = Guice.createInjector(Stage.PRODUCTION, new MicroColModule());</span>
+<span class="nc" id="L132">		final Injector injector = Guice.createInjector(Stage.PRODUCTION, new MicroColModule());</span>
 
-<span class="nc bnc" id="L114" title="All 2 branches missed.">		if (isOSX()) {</span>
-<span class="nc" id="L115">			AppleMenuListener macController = injector.getInstance(AppleMenuListener.class);</span>
-<span class="nc" id="L116">			MRJApplicationUtils.registerQuitHandler(macController);</span>
-<span class="nc" id="L117">			MRJApplicationUtils.registerAboutHandler(macController);</span>
-<span class="nc" id="L118">			setSystemNativeUi();</span>
+<span class="nc bnc" id="L134" title="All 2 branches missed.">		if (isOSX()) {</span>
+<span class="nc" id="L135">			AppleMenuListener macController = injector.getInstance(AppleMenuListener.class);</span>
+<span class="nc" id="L136">			MRJApplicationUtils.registerQuitHandler(macController);</span>
+<span class="nc" id="L137">			MRJApplicationUtils.registerAboutHandler(macController);</span>
+<span class="nc" id="L138">			setSystemNativeUi();</span>
 		}
 
-<span class="nc" id="L121">		SwingUtilities.invokeLater(() -&gt; {</span>
-<span class="nc" id="L122">			final MainFrameView mainFrame = injector.getInstance(MainFrameView.class);</span>
-<span class="nc" id="L123">			final ApplicationController applicationController  = injector.getInstance(ApplicationController.class);</span>
-<span class="nc" id="L124">			mainFrame.setVisible(true);</span>
-<span class="nc" id="L125">			applicationController.startNewGame();</span>
-<span class="nc" id="L126">		});</span>
-<span class="nc" id="L127">	}</span>
+<span class="nc" id="L141">		SwingUtilities.invokeLater(() -&gt; {</span>
+<span class="nc" id="L142">			final MainFrameView mainFrame = injector.getInstance(MainFrameView.class);</span>
+<span class="nc" id="L143">			final ApplicationController applicationController  = injector.getInstance(ApplicationController.class);</span>
+<span class="nc" id="L144">			mainFrame.setVisible(true);</span>
+<span class="nc" id="L145">			applicationController.startNewGame();</span>
+<span class="nc" id="L146">		});</span>
+<span class="nc" id="L147">	}</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>
