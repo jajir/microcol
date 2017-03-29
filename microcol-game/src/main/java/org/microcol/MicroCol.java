@@ -3,8 +3,11 @@ package org.microcol;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.SplashScreen;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.logging.LogManager;
 
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
@@ -25,6 +28,21 @@ import com.google.inject.Stage;
  * MicroCol's main class.
  */
 public class MicroCol {
+
+	public static class ConsoleHandler extends java.util.logging.ConsoleHandler {
+		@Override
+		protected synchronized void setOutputStream(final OutputStream out) throws SecurityException {
+			super.setOutputStream(System.out);
+		}
+	}
+
+	private static void initJavaLogging() {
+		try {
+			LogManager.getLogManager().readConfiguration(MicroCol.class.getResourceAsStream("/logging.properties"));
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		}
+	}
 
 	/**
 	 * Provide information if it's apple operation system.
@@ -101,6 +119,8 @@ public class MicroCol {
 	 *            the command line arguments
 	 */
 	public static void main(final String... args) {
+
+		initJavaLogging();
 
 		setSplashScreen();
 
