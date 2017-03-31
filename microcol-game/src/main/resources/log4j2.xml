@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+	<Appenders>
+		<Console name="stdout">
+			<ThresholdFilter level="WARN" onMatch="DENY" onMismatch="ACCEPT"/>
+			<PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5p - %m --> %l%n"/>
+		</Console>
+		<Console name="stderr" target="SYSTEM_ERR">
+			<ThresholdFilter level="WARN" onMatch="ACCEPT" onMismatch="DENY"/>
+			<PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5p - %m --> %l%n"/>
+		</Console>
+	</Appenders>
+	<Loggers>
+		<!-- MODEL -->
+		<Logger name="org.microcol.model" level="INFO"/>
+		<!-- GUI -->
+		<Logger name="org.microcol.gui" level="INFO"/>
+		<Logger name="org.microcol.gui.FpsCounter" level="WARN"/>
+		<Logger name="org.microcol.gui.event.AbstractEventController" level="WARN"/>
+		<!-- AI -->
+		<Logger name="org.microcol.ai" level="INFO"/>
+		<!-- ROOT -->
+		<Root level="INFO">
+			<AppenderRef ref="stdout"/>
+			<AppenderRef ref="stderr"/>
+		</Root>
+	</Loggers>
+</Configuration>
