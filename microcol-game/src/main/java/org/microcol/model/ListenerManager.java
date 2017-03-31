@@ -46,7 +46,7 @@ class ListenerManager {
 	void fireGameStarted(final Model model) {
 		final GameStartedEvent event = new GameStartedEvent(model);
 
-		logger.info("Game started {}.", event);
+		logger.info("Game started: {}.", event);
 
 		listeners.forEach(listener -> listener.gameStarted(event));
 	}
@@ -54,7 +54,7 @@ class ListenerManager {
 	void fireRoundStarted(final Model model, final Calendar calendar) {
 		final RoundStartedEvent event = new RoundStartedEvent(model, calendar);
 
-		logger.info("Round started {}.", event);
+		logger.info("Round started: {}.", event);
 
 		listeners.forEach(listener -> listener.roundStarted(event));
 	}
@@ -62,7 +62,7 @@ class ListenerManager {
 	void fireTurnStarted(final Model model, final Player player) {
 		final TurnStartedEvent event = new TurnStartedEvent(model, player);
 
-		logger.info("Turn started {}.", event);
+		logger.info("Turn started: {}.", event);
 
 		listeners.forEach(listener -> listener.turnStarted(event));
 	}
@@ -70,7 +70,7 @@ class ListenerManager {
 	void fireShipMoved(final Model model, final Ship ship, final Location start, final Path path) {
 		final ShipMovedEvent event = new ShipMovedEvent(model, ship, start, path);
 
-		logger.info("Ship moved {}.", event);
+		logger.info("Ship moved: {}.", event);
 
 		listeners.forEach(listener -> listener.shipMoved(event));
 	}
@@ -78,7 +78,7 @@ class ListenerManager {
 	void fireShipAttacked(final Model model, final Ship attacker, final Ship defender, final Ship destroyed) {
 		final ShipAttackedEvent event = new ShipAttackedEvent(model, attacker, defender, destroyed);
 
-		logger.info("Ship attacked {}.", event);
+		logger.info("Ship attacked: {}.", event);
 
 		listeners.forEach(listener -> listener.shipAttacked(event));
 	}
@@ -86,7 +86,7 @@ class ListenerManager {
 	void fireGameFinished(final Model model) {
 		final GameFinishedEvent event = new GameFinishedEvent(model);
 
-		logger.info("Game finished {}.", event);
+		logger.info("Game finished: {}.", event);
 
 		listeners.forEach(listener -> listener.gameFinished(event));
 	}
