@@ -75,7 +75,7 @@ public class GamePanelPresenter implements Localized {
 		void stopTimer();
 
 		VisualDebugInfo getVisualDebugInfo();
-		
+
 		void startMoveUnit(Ship ship);
 	}
 
@@ -258,13 +258,17 @@ public class GamePanelPresenter implements Localized {
 
 	private void onMousePressed(final MouseEvent e) {
 		final Location location = display.getArea().convertToLocation(Point.of(e.getX(), e.getY()));
-		logger.debug("location of mouse: " + location);
-		if (display.isGotoMode()) {
-			switchToNormalMode(location);
+		if (gameController.getModel().getMap().isValid(location)) {
+			logger.debug("location of mouse: " + location);
+			if (display.isGotoMode()) {
+				switchToNormalMode(location);
+			} else {
+				display.setCursorLocation(location);
+				focusedTileController.fireEvent(new FocusedTileEvent(gameController.getModel(), location,
+						gameController.getModel().getMap().getTerrainAt(location)));
+			}
 		} else {
-			display.setCursorLocation(location);
-			focusedTileController.fireEvent(new FocusedTileEvent(gameController.getModel(), location,
-					gameController.getModel().getMap().getTerrainAt(location)));
+			logger.debug("invalid mouse location: " + location);
 		}
 	}
 
@@ -290,12 +294,28 @@ public class GamePanelPresenter implements Localized {
 		/**
 		 * Set status bar message
 		 */
-		final Location where = lastMousePosition.toLocation();
-		final Terrain tile = gameController.getModel().getMap().getTerrainAt(where);
+		final Location location = lastMousePosition.toLocation();
+		if (gameController.getModel().getMap().isValid(location)) {
+			final Terrain terrain = gameController.getModel().getMap().getTerrainAt(location);
+			setStatusMessageForTile(terrain, location);
+		} else {
+			statusBarMessageController.fireEvent(new StatusBarMessageEvent());
+		}
+	}
+
+	/**
+	 * When mouse is over tile method set correct status message.
+	 *
+	 * @param terrain
+	 *            required terrain
+	 * @param where
+	 *            required location over which is now mouse
+	 */
+	private void setStatusMessageForTile(final Terrain terrain, final Location where) {
 		final StringBuilder buff = new StringBuilder();
 		buff.append(getText().get("statusBar.tile.start"));
 		buff.append(" ");
-		buff.append(localizationHelper.getTerrainName(tile));
+		buff.append(localizationHelper.getTerrainName(terrain));
 		buff.append(" ");
 		buff.append(getText().get("statusBar.tile.withUnit"));
 		buff.append(" ");

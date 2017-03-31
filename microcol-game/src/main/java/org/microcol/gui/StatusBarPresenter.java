@@ -39,21 +39,22 @@ public class StatusBarPresenter implements Localized {
 		});
 		display.getLabelEra().addMouseListener(new MouseAdapter() {
 			@Override
-			public void mouseEntered(MouseEvent e) {
+			public void mouseEntered(final MouseEvent e) {
 				statusBarMessageController
 						.fireEvent(new StatusBarMessageEvent(getText().get("statusBar.era.description")));
 			}
 		});
 		display.getStatusBarDescription().addMouseListener(new MouseAdapter() {
 			@Override
-			public void mouseEntered(MouseEvent e) {
+			public void mouseEntered(final MouseEvent e) {
+				System.out.println("brekeke");
 				statusBarMessageController
 						.fireEvent(new StatusBarMessageEvent(getText().get("statusBar.status.description")));
 			}
 		});
 	}
 
-	private final void setYearText(JLabel labelEra, final Calendar calendar) {
+	private final void setYearText(final JLabel labelEra, final Calendar calendar) {
 		Preconditions.checkNotNull(labelEra);
 		Preconditions.checkNotNull(calendar);
 		labelEra.setText(getText().get("statusBar.year") + " " + calendar.getCurrentYear() + " AD");

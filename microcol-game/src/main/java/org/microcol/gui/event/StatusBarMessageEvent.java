@@ -11,8 +11,27 @@ public class StatusBarMessageEvent {
 
 	private final String statusMessage;
 
+	/**
+	 * Constructor that allows to show no text in status bar.
+	 * <p>
+	 * It can't be done by setting null or empty string to status message, in
+	 * that case JLabel is not shown and consequently no events on components
+	 * are fired.
+	 * </p>
+	 */
+	public StatusBarMessageEvent() {
+		statusMessage = "<html>&nbsp;</html>";
+	}
+
+	/**
+	 * Text in parameter will be in status bar.
+	 * 
+	 * @param statusMessage
+	 *            required status message
+	 */
 	public StatusBarMessageEvent(final String statusMessage) {
 		this.statusMessage = Preconditions.checkNotNull(statusMessage);
+		Preconditions.checkArgument(!statusMessage.isEmpty(), "status message can't be empty");
 	}
 
 	@Override
