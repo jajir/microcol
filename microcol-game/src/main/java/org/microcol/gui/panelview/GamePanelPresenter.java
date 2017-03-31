@@ -315,11 +315,10 @@ public class GamePanelPresenter implements Localized {
 
 	private final void switchToNormalMode(final Location moveTo) {
 		logger.debug("Switching to normal mode, from " + display.getCursorLocation() + " to " + moveTo);
-		final List<Location> path = new ArrayList<Location>();
-		pathPlanning.paintPath(display.getCursorLocation(), moveTo, location -> path.add(location));
+		// TODO JJ active ship can be different from ship first at list
+		final Ship ship = gameController.getModel().getCurrentPlayer().getShipsAt(display.getCursorLocation()).get(0);
+		final List<Location> path = ship.getPath(moveTo);
 		if (path.size() > 0) {
-			// TODO JJ active ship can be different from ship first at list
-			Ship ship = gameController.getModel().getCurrentPlayer().getShipsAt(display.getCursorLocation()).get(0);
 			gameController.performMove(ship, path);
 			focusedTileController.fireEvent(new FocusedTileEvent(gameController.getModel(), display.getCursorLocation(),
 					gameController.getModel().getMap().getTerrainAt(display.getCursorLocation())));

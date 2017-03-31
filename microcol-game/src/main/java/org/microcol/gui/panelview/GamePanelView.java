@@ -11,10 +11,10 @@ import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.Toolkit;
 import java.awt.image.VolatileImage;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JViewport;
 import javax.swing.Timer;
@@ -33,8 +33,12 @@ import org.microcol.model.Ship;
 import org.microcol.model.Terrain;
 
 import com.google.common.base.Preconditions;
+import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 
+/**
+ * View for main game panel.
+ */
 public class GamePanelView extends JPanel implements GamePanelPresenter.Display {
 
 	/**
@@ -383,12 +387,13 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 			graphics.setStroke(new BasicStroke(1));
 			paintCursor(graphics, area, gotoCursorTitle);
 			if (!cursorLocation.equals(gotoCursorTitle)) {
-				List<Point> steps = new ArrayList<>();
-				pathPlanning.paintPath(cursorLocation, gotoCursorTitle, location -> steps.add(area.convert(location)));
 				// TODO JJ get(0) could return different ship that is really
 				// moved
 				final Ship unit = gameController.getModel().getCurrentPlayer().getShipsAt(cursorLocation).get(0);
+				// TODO JJ step counter should be core function
 				final StepCounter stepCounter = new StepCounter(5, unit.getAvailableMoves());
+				final List<Point> steps = Lists.transform(unit.getPath(gotoCursorTitle),
+						location -> area.convert(location));
 				/**
 				 * Here could be check if particular step in on screen, but draw
 				 * few images outside screen is not big deal.
