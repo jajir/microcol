@@ -58,6 +58,7 @@ public class Location {
 	}
 
 	// tranzitivní
+	// prejemnovat na isNeighbor?
 	public boolean isAdjacent(final Location location) {
 		Preconditions.checkNotNull(location);
 

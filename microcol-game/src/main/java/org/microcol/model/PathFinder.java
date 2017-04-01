@@ -1,58 +1,15 @@
 package org.microcol.model;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
 import com.google.common.base.Preconditions;
-import com.google.common.collect.ImmutableList;
 
 class PathFinder {
-	private static class Node {
-		final Node parent;
-		final Location location;
-		final int distance;
-
-		Node(final Node parent, final Location location, final int distance) {
-			this.parent = parent;
-			this.location = location;
-			this.distance = distance;
-		}
-
-		Node getParent() {
-			return parent;
-		}
-
-		Location getLocation() {
-			return location;
-		}
-
-		int getCost() {
-			return parent != null ? parent.getCost() + 1 : 0;
-		}
-
-		int getDistance() {
-			return distance;
-		}
-
-		int getScore() {
-			return getCost() + getDistance();
-		}
-
-		@Override
-		public int hashCode() {
-			return location.hashCode();
-		}
-
-		@Override
-		public boolean equals(final Object object) {
-			return location.equals(object);
-		}
-	}
-
 	final Ship ship;
 	final Location start;
 	final Location destination;
@@ -63,80 +20,66 @@ class PathFinder {
 		this.start = Preconditions.checkNotNull(start);
 		this.destination = Preconditions.checkNotNull(destination);
 		this.excludeDestination = excludeDestination;
+
+		Preconditions.checkArgument(!start.equals(destination), "Start and destination must be different (%s).", start);
 	}
 
-	List<Location> search() {
-		Set<Node> openSet = new HashSet<>();
-		openSet.add(new Node(null, start, start.getDistance(destination)));
-		Set<Node> closedSet = new HashSet<>();
-		Node current = null;
+	List<Location> find() {
+		final Set<PathFindingNode> openSet = new HashSet<>();
+		openSet.add(new PathFindingNode(null, start, start.getDistance(destination)));
+		final Set<Location> closedSet = new HashSet<>();
+		PathFindingNode current = null;
 
-		Node path = null;
 		while (!openSet.isEmpty()) {
-			current = findNext(openSet);
-			if (excludeDestination && current.getLocation().isAdjacent(destination)) {
-				path = current;
-				break;
-			}
-			if (current.getLocation().equals(destination)) {
-				path = current;
-				break;
+			current = findLowest(openSet);
+			if ((excludeDestination && current.getLocation().isAdjacent(destination))
+				|| current.getLocation().equals(destination)) {
+				return createList(current);
 			}
 			openSet.remove(current);
-			closedSet.add(current);
-			List<Location> neighbors = current.getLocation().getNeighbors();
-			for (Location neighbor : neighbors) {
-				if (!contains(closedSet, neighbor) && ship.isMoveable(neighbor)) {
-					Node node = null;
-					Iterator<Node> iter = openSet.iterator();
-					while (iter.hasNext()) {
-						node = iter.next();
-						if (node.getLocation().equals(neighbor)) {
-							iter.remove(); // FIXME JKA CO KDYZ SE NA TO NECO ODKAZUJE?
-							break;
-						}
-						node = null;
-					}
-					Node nnn = new Node(current, neighbor, neighbor.getDistance(destination));
-					if (node == null) {
-						openSet.add(nnn);
+			closedSet.add(current.getLocation());
+			final List<Location> neighbors = current.getLocation().getNeighbors();
+			for (final Location neighbor : neighbors) {
+				if (!closedSet.contains(neighbor) && ship.isMoveable(neighbor)) {
+					final PathFindingNode oldNode = get(openSet, neighbor);
+					final PathFindingNode newNode = new PathFindingNode(current, neighbor, neighbor.getDistance(destination));
+					if (oldNode == null) {
+						openSet.add(newNode);
 					} else {
-						if (nnn.getCost() < node.getCost()) {
-							openSet.add(nnn);
-						} else {
-							openSet.add(node);
+						if (newNode.getCost() < oldNode.getCost()) {
+							oldNode.setParent(newNode.getParent());
 						}
 					}
 				}
 			}
 		}
 
-		return path != null ? getList(path) : ImmutableList.of();
+		return null;
 	}
 
-	private Node findNext(final Set<Node> openSet) {
-		Node found = null;
-		for (Node node : openSet) {
-			if (found == null || node.getScore() < found.getScore()) {
-				found = node;
+	private PathFindingNode findLowest(final Collection<PathFindingNode> nodes) {
+		PathFindingNode lowestNode = null;
+		for (final PathFindingNode node : nodes) {
+			if (lowestNode == null || node.getScore() < lowestNode.getScore()) {
+				lowestNode = node;
 			}
 		}
 
-		return found;
+		return lowestNode;
 	}
 
-	private boolean contains(final Set<Node> closedSet, final Location location) {
-		for (Node node : closedSet) {
+	private PathFindingNode get(final Collection<PathFindingNode> nodes, final Location location) {
+		for (final PathFindingNode node : nodes) {
 			if (node.getLocation().equals(location)) {
-				return true;
+				return node;
 			}
 		}
 
-		return false;
+		return null;
 	}
 
-	private List<Location> getList(Node node) {
-		List<Location> list = new ArrayList<>();
+	private List<Location> createList(PathFindingNode node) {
+		final List<Location> list = new ArrayList<>();
 
 		while (node != null && node.getParent() != null) {
 			list.add(node.getLocation());

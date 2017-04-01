@@ -106,7 +106,7 @@ public class Ship {
 	public List<Location> getPath(final Location destination, final boolean excludeDestination) {
 		PathFinder finder = new PathFinder(this, location, destination, excludeDestination);
 
-		return finder.search();
+		return finder.find();
 	}
 
 	public void moveTo(final Path path) {
