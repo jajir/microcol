@@ -391,13 +391,16 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 				final Ship unit = gameController.getModel().getCurrentPlayer().getShipsAt(cursorLocation).get(0);
 				// TODO JJ step counter should be core function
 				final StepCounter stepCounter = new StepCounter(5, unit.getAvailableMoves());
-				final List<Point> steps = Lists.transform(unit.getPath(gotoCursorTitle),
-						location -> area.convert(location));
+				final List<Location> locations = unit.getPath(gotoCursorTitle);
+				//TODO JJ when find return empty list this if not necessary
+				if (locations != null) {
+					final List<Point> steps = Lists.transform(locations, location -> area.convert(location));
 				/**
 				 * Here could be check if particular step in on screen, but draw
 				 * few images outside screen is not big deal.
 				 */
 				steps.forEach(point -> paintStepsToTile(graphics, point, stepCounter));
+				}
 			}
 		}
 	}
