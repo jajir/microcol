@@ -394,7 +394,7 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 				final List<Location> locations = unit.getPath(gotoCursorTitle);
 				//TODO JJ when find return empty list this if not necessary
 				if (locations != null) {
-					final List<Point> steps = Lists.transform(locations, location -> area.convert(location));
+					final List<Point> steps = Lists.transform(locations, location -> area.convert((Location)location));
 				/**
 				 * Here could be check if particular step in on screen, but draw
 				 * few images outside screen is not big deal.
