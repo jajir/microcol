@@ -217,7 +217,7 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 	private void paintMovingAnimation(final Graphics2D graphics, final Area area) {
 		if (walkAnimator != null && walkAnimator.getNextCoordinates() != null) {
 			if (area.isInArea(walkAnimator.getNextCoordinates())) {
-				final Point part = area.convert(walkAnimator.getNextCoordinates());
+				final Point part = area.convertPoint(walkAnimator.getNextCoordinates());
 				paintUnit(graphics, part, walkAnimator.getUnit());
 				graphics.drawImage(imageProvider.getImage(ImageProvider.IMG_TILE_MODE_GOTO),
 						part.getX() + TILE_WIDTH_IN_PX - 12, part.getY(), this);

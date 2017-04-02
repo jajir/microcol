@@ -91,11 +91,13 @@ public class Area {
 	/**
 	 * Convert given point to coordinates in area.
 	 * 
+	 * TODO JJ is it really needed?
+	 * 
 	 * @param point
 	 *            required on virtual map coordinates
 	 * @return point coordinates that could be directly used to draw on canvas
 	 */
-	public Point convert(final Point point) {
+	public Point convertPoint(final Point point) {
 		final Point topLeftPoint = Point.of(topLeft);
 		return point.add(-topLeftPoint.getX(), -topLeftPoint.getY());
 	}
