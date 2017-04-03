@@ -4,6 +4,7 @@ import java.awt.Rectangle;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.swing.JMenuItem;
@@ -337,7 +338,7 @@ public class GamePanelPresenter implements Localized {
 		logger.debug("Switching to normal mode, from " + display.getCursorLocation() + " to " + moveTo);
 		// TODO JJ active ship can be different from ship first at list
 		final Ship ship = gameController.getModel().getCurrentPlayer().getShipsAt(display.getCursorLocation()).get(0);
-		final List<Location> path = ship.getPath(moveTo);
+		final List<Location> path = ship.getPath(moveTo).orElse(Collections.emptyList());
 		if (path.size() > 0) {
 			gameController.performMove(ship, path);
 			focusedTileController.fireEvent(new FocusedTileEvent(gameController.getModel(), display.getCursorLocation(),

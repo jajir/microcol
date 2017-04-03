@@ -3,6 +3,7 @@ package org.microcol.model;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import com.google.common.base.MoreObjects;
@@ -99,14 +100,14 @@ public class Ship {
 		return ImmutableList.copyOf(closedSet);
 	}
 
-	public List<Location> getPath(final Location destination) {
+	public Optional<List<Location>> getPath(final Location destination) {
 		return getPath(destination, false);
 	}
 
-	public List<Location> getPath(final Location destination, final boolean excludeDestination) {
+	public Optional<List<Location>> getPath(final Location destination, final boolean excludeDestination) {
 		PathFinder finder = new PathFinder(this, location, destination, excludeDestination);
 
-		return finder.find();
+		return Optional.ofNullable(finder.find());
 	}
 
 	public void moveTo(final Path path) {

@@ -1,6 +1,7 @@
 package org.microcol.ai;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -93,7 +94,7 @@ public class Engine {
 	void showDebug(final Ship ship) {
 		final List<Location> locations = new ArrayList<>();
 		for (final Ship enemy : ship.getOwner().getEnemyShips()) {
-			locations.addAll(ship.getPath(enemy.getLocation(), true));
+			locations.addAll(ship.getPath(enemy.getLocation(), true).orElse(Collections.emptyList()));
 		}
 
 		model.requestDebug(locations);

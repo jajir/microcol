@@ -11,6 +11,7 @@ import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.Toolkit;
 import java.awt.image.VolatileImage;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -391,16 +392,13 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 				final Ship unit = gameController.getModel().getCurrentPlayer().getShipsAt(cursorLocation).get(0);
 				// TODO JJ step counter should be core function
 				final StepCounter stepCounter = new StepCounter(5, unit.getAvailableMoves());
-				final List<Location> locations = unit.getPath(gotoCursorTitle);
-				//TODO JJ when find return empty list this if not necessary
-				if (locations != null) {
-					final List<Point> steps = Lists.transform(locations, location -> area.convert((Location)location));
+				final List<Location> locations = unit.getPath(gotoCursorTitle).orElse(Collections.emptyList());
+				final List<Point> steps = Lists.transform(locations, location -> area.convert((Location)location));
 				/**
 				 * Here could be check if particular step in on screen, but draw
 				 * few images outside screen is not big deal.
 				 */
 				steps.forEach(point -> paintStepsToTile(graphics, point, stepCounter));
-				}
 			}
 		}
 	}
