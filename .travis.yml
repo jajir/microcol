@@ -5,7 +5,8 @@ sudo: false
 install:
 - mvn install -DskipTests=true -Dmaven.javadoc.skip=true -Dtravis-ci=true -B -V
 script:
-- travis_wait 30 mvn clean verify site-deploy  -Dtravis-ci=true -B -V
+- mvn clean verify site -Dtravis-ci=true -B -V
+- travis_wait 30 mvn site-deploy -Dtravis-ci=true -B -V
 addons:
   apt:
     packages:
