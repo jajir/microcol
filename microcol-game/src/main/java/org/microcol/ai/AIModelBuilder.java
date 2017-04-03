@@ -17,13 +17,13 @@ public class AIModelBuilder {
 	}
 
 	void createMinimal() {
-		builder.setMap(1, 1)
+		builder.setMap("/maps/map-ocean-1x1.txt")
 			.addPlayer("Player1", true)
 				.addShip("Player1", ShipType.GALLEON, Location.of(1, 1));
 	}
 
 	void createHuge() {
-		builder.setMap(1000, 1000)
+		builder.setMap("/maps/map-ocean-1000x1000.txt")
 			.addPlayer("Player1", true)
 				.addShip("Player1", ShipType.GALLEON, Location.of(1, 1));
 	}

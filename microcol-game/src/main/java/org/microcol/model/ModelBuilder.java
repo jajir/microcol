@@ -21,12 +21,6 @@ public class ModelBuilder {
 		return this;
 	}
 
-	public ModelBuilder setMap(final int maxX, final int maxY) {
-		map = new WorldMap(maxX, maxY);
-
-		return this;
-	}
-
 	public ModelBuilder setMap(final String fileName) {
 		map = new WorldMap(fileName);
 

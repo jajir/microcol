@@ -15,21 +15,12 @@ public class WorldMap {
 	private final int maxY;
 	private final ImmutableMap<Location, Terrain> terrainMap;
 
-	WorldMap(final int maxX, final int maxY) {
-		Preconditions.checkArgument(maxX >= 1, "Max X (%s) must be positive.", maxX);
-		Preconditions.checkArgument(maxY >= 1, "Max Y (%s) must be positive.", maxY);
-
-		this.maxX = maxX;
-		this.maxY = maxY;
-		this.terrainMap = ImmutableMap.of();
-	}
-
 	WorldMap(final String fileName) {
 		Preconditions.checkNotNull(fileName);
 
 		int maxX = 0;
 		int maxY = 0;
-		final Map<Location, Terrain> terrain = new HashMap<>();
+		final Map<Location, Terrain> terrainMap = new HashMap<>();
 
 		try (final BufferedReader reader = new BufferedReader(
 				new InputStreamReader(WorldMap.class.getResourceAsStream(fileName)))) {
@@ -41,7 +32,7 @@ public class WorldMap {
 					final char tile = line.charAt(x);
 					switch (tile) {
 						case 'o':
-							terrain.put(Location.of(x + 1, maxY), Terrain.CONTINENT);
+							terrainMap.put(Location.of(x + 1, maxY), Terrain.CONTINENT);
 							break;
 						case ' ':
 							// Do nothing.
@@ -52,7 +43,7 @@ public class WorldMap {
 				}
 			}
 		} catch (IOException ex) {
-			throw new RuntimeException(ex);
+			throw new IllegalArgumentException(String.format("Unable to load map from file (%s)", fileName), ex);
 		}
 
 		Preconditions.checkArgument(maxX >= 1, "Max X (%s) must be positive.", maxX);
@@ -60,7 +51,7 @@ public class WorldMap {
 
 		this.maxX = maxX;
 		this.maxY = maxY;
-		this.terrainMap = ImmutableMap.copyOf(terrain);
+		this.terrainMap = ImmutableMap.copyOf(terrainMap);
 	}
 
 	public int getMaxX() {
@@ -97,44 +88,9 @@ public class WorldMap {
 	@Override
 	public String toString() {
 		return MoreObjects.toStringHelper(this)
-			.add("maxX", getMaxX())
-			.add("maxY", getMaxY())
+			.add("maxX", maxX)
+			.add("maxY", maxY)
+			.add("landmass", terrainMap.keySet().size())
 			.toString();
-	}
-
-	String print() {
-		StringBuilder builder = new StringBuilder();
-
-		for (int x = 1; x <= maxX + 2; x++) {
-			builder.append("-");
-		}
-		builder.append("\n");
-
-		for (int y = 1; y <= maxY; y++) {
-			builder.append("|");
-			for (int x = 1; x <= maxX; x++) {
-				switch (terrainMap.get(Location.of(x, y))) {
-					case CONTINENT:
-						builder.append("o");
-						break;
-					case OCEAN:
-						builder.append(" ");
-						break;
-				}
-			}
-			builder.append("|\n");
-		}
-
-		for (int x = 1; x <= maxX + 2; x++) {
-			builder.append("-");
-		}
-
-		return builder.toString();
-	}
-
-	public static void main(String[] args) {
-//		WorldMap map = new WorldMap(15, 10);
-		WorldMap map = new WorldMap("/maps/map-01.txt");
-		System.out.println(map.print());
 	}
 }
