@@ -6,7 +6,6 @@ install:
 - mvn install -DskipTests=true -Dmaven.javadoc.skip=true -Dtravis-ci=true -B -V
 script:
 - mvn clean verify site -Dtravis-ci=true -B -V
-- mvn site-deploy -Dtravis-ci=true -B -V
 addons:
   apt:
     packages:
