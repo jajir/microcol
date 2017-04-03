@@ -25,26 +25,26 @@ class PathFinder {
 	}
 
 	List<Location> find() {
-		final Set<PathFindingNode> openSet = new HashSet<>();
-		openSet.add(new PathFindingNode(null, start, start.getDistance(destination)));
+		final List<PathFindingNode> openList = new ArrayList<>();
+		openList.add(new PathFindingNode(null, start, start.getDistance(destination)));
 		final Set<Location> closedSet = new HashSet<>();
 		PathFindingNode current = null;
 
-		while (!openSet.isEmpty()) {
-			current = findLowest(openSet);
+		while (!openList.isEmpty()) {
+			current = findLowest(openList);
 			if ((excludeDestination && current.getLocation().isAdjacent(destination))
 				|| current.getLocation().equals(destination)) {
 				return createList(current);
 			}
-			openSet.remove(current);
+			openList.remove(current);
 			closedSet.add(current.getLocation());
 			final List<Location> neighbors = current.getLocation().getNeighbors();
 			for (final Location neighbor : neighbors) {
 				if (!closedSet.contains(neighbor) && ship.isMoveable(neighbor)) {
-					final PathFindingNode oldNode = get(openSet, neighbor);
+					final PathFindingNode oldNode = get(openList, neighbor);
 					final PathFindingNode newNode = new PathFindingNode(current, neighbor, neighbor.getDistance(destination));
 					if (oldNode == null) {
-						openSet.add(newNode);
+						openList.add(newNode);
 					} else {
 						if (newNode.getCost() < oldNode.getCost()) {
 							oldNode.setParent(newNode.getParent());
