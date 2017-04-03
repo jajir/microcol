@@ -43,6 +43,8 @@ public class ImageProvider {
 
 	public final static String IMG_TILE_MODE_GOTO = "tile-mode-goto.png";
 
+	public final static String IMG_TILE_MODE_MOVE = "tile-mode-move.png";
+
 	public final static String IMG_TILE_MODE_FORTIFY = "tile-mode-fortify.png";
 
 	public final static String IMG_TILE_MODE_PLOW = "tile-mode-plow.png";

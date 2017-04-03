@@ -4,7 +4,6 @@ import java.awt.Rectangle;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import javax.swing.JMenuItem;
@@ -336,16 +335,22 @@ public class GamePanelPresenter implements Localized {
 
 	private final void switchToNormalMode(final Location moveTo) {
 		logger.debug("Switching to normal mode, from " + display.getCursorLocation() + " to " + moveTo);
+		if (display.getCursorLocation().equals(moveTo)) {
+			return;
+		}
 		// TODO JJ active ship can be different from ship first at list
 		final Ship ship = gameController.getModel().getCurrentPlayer().getShipsAt(display.getCursorLocation()).get(0);
-		final List<Location> path = ship.getPath(moveTo).orElse(Collections.emptyList());
-		if (path.size() > 0) {
-			gameController.performMove(ship, path);
-			focusedTileController.fireEvent(new FocusedTileEvent(gameController.getModel(), display.getCursorLocation(),
-					gameController.getModel().getMap().getTerrainAt(display.getCursorLocation())));
+		if (ship.getPath(moveTo).isPresent()) {
+			final List<Location> path = ship.getPath(moveTo).get();
+			if (path.size() > 0) {
+				gameController.performMove(ship, path);
+				focusedTileController
+						.fireEvent(new FocusedTileEvent(gameController.getModel(), display.getCursorLocation(),
+								gameController.getModel().getMap().getTerrainAt(display.getCursorLocation())));
+			}
+			display.setCursorLocation(moveTo);
+			display.setCursorNormal();
 		}
-		display.setCursorLocation(moveTo);
-		display.setCursorNormal();
 	}
 
 	private void scheduleWalkAnimation(final ShipMovedEvent event) {

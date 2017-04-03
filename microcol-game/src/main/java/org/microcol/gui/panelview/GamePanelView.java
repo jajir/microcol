@@ -220,7 +220,7 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 			if (area.isInArea(walkAnimator.getNextCoordinates())) {
 				final Point part = area.convertPoint(walkAnimator.getNextCoordinates());
 				paintUnit(graphics, part, walkAnimator.getUnit());
-				graphics.drawImage(imageProvider.getImage(ImageProvider.IMG_TILE_MODE_GOTO),
+				graphics.drawImage(imageProvider.getImage(ImageProvider.IMG_TILE_MODE_MOVE),
 						part.getX() + TILE_WIDTH_IN_PX - 12, part.getY(), this);
 			}
 			if (walkAnimator.isNextAnimationLocationAvailable()) {
