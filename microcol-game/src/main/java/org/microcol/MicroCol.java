@@ -117,12 +117,19 @@ public class MicroCol {
 			MRJApplicationUtils.registerAboutHandler(macController);
 			setSystemNativeUi();
 		}
-
 		SwingUtilities.invokeLater(() -> {
-			final MainFrameView mainFrame = injector.getInstance(MainFrameView.class);
-			final ApplicationController applicationController  = injector.getInstance(ApplicationController.class);
-			mainFrame.setVisible(true);
-			applicationController.startNewGame();
+			try {
+				final MainFrameView mainFrame = injector.getInstance(MainFrameView.class);
+				final ApplicationController applicationController = injector.getInstance(ApplicationController.class);
+				mainFrame.setVisible(true);
+				applicationController.startNewGame();
+			} catch (Exception e) {
+				e.printStackTrace();
+				/**
+				 * When exception occurs during starting up it's probably fatal.
+				 */
+				System.exit(1);
+			}
 		});
 	}
 }
