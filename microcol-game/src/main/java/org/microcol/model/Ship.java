@@ -153,7 +153,7 @@ public class Ship {
 		availableMoves = 0;
 		canAttack = false;
 
-		final Ship destroyed = (Math.random() <= 0.6) ? ship : this;
+		final Ship destroyed = Math.random() <= 0.6 ? ship : this;
 		model.destroyShip(destroyed);
 		model.fireShipAttacked(this, ship, destroyed);
 	}

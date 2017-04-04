@@ -32,7 +32,7 @@ class PathFinder {
 
 		while (!openList.isEmpty()) {
 			current = findLowest(openList);
-			if ((excludeDestination && current.getLocation().isAdjacent(destination))
+			if (excludeDestination && current.getLocation().isAdjacent(destination)
 				|| current.getLocation().equals(destination)) {
 				return createList(current);
 			}

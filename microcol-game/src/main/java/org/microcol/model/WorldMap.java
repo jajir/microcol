@@ -23,7 +23,7 @@ public class WorldMap {
 		final Map<Location, Terrain> terrainMap = new HashMap<>();
 
 		try (final BufferedReader reader = new BufferedReader(
-				new InputStreamReader(WorldMap.class.getResourceAsStream(fileName)))) {
+				new InputStreamReader(WorldMap.class.getResourceAsStream(fileName), "UTF-8"))) {
 			String line = null;
 			while ((line = reader.readLine()) != null && !line.startsWith("-")) {
 				maxX = Math.max(maxX, line.length() - 1);
