@@ -29,6 +29,7 @@ public class ViewState {
 		this.mouseOverTileChangedController = Preconditions.checkNotNull(mouseOverTileChangedController);
 		mouseOverTile = Optional.empty();
 		selectedTile = Optional.empty();
+		isMoveMode = false;
 	}
 
 	public Optional<Location> getMouseOverTile() {
@@ -54,6 +55,14 @@ public class ViewState {
 
 	public void setSelectedTile(Optional<Location> selectedTile) {
 		this.selectedTile = selectedTile;
+	}
+
+	public boolean isMoveMode() {
+		return isMoveMode;
+	}
+
+	public void setMoveMode(boolean isMoveMode) {
+		this.isMoveMode = isMoveMode;
 	}
 
 }
