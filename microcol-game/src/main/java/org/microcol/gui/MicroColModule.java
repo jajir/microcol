@@ -24,6 +24,7 @@ import org.microcol.gui.event.VolumeChangeController;
 import org.microcol.gui.event.VolumeChangedListenerPreferences;
 import org.microcol.gui.panelview.GamePanelPresenter;
 import org.microcol.gui.panelview.GamePanelView;
+import org.microcol.gui.panelview.MouseOverTileChangedController;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
@@ -60,6 +61,7 @@ public class MicroColModule extends AbstractModule {
 		bind(ExitGameController.class).in(Singleton.class);
 		bind(DebugRequestController.class).in(Singleton.class);
 		bind(GameFinishedController.class).in(Singleton.class);
+		bind(MouseOverTileChangedController.class).in(Singleton.class);
 
 		/**
 		 * Initialize MVP classes

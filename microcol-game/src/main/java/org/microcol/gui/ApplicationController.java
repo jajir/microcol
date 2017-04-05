@@ -30,6 +30,7 @@ public class ApplicationController {
 	}
 
 	private void gameFinished() {
+		System.out.println("game finished");
 		mainFramePresenter.showPanel(MainFramePresenter.START_PANEL);
 	}
 

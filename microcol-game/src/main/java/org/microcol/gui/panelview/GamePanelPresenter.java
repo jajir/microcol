@@ -56,7 +56,7 @@ public class GamePanelPresenter implements Localized {
 
 		boolean isGotoMode();
 
-		void setGotoCursorTitle(Location gotoCursorTitle);
+		void setGotoCursorTile(Location gotoCursorTitle);
 
 		Location getGotoCursorTitle();
 
@@ -239,7 +239,7 @@ public class GamePanelPresenter implements Localized {
 		Preconditions.checkState(!units.isEmpty(), "there are some moveable units");
 		final Ship unit = units.get(0);
 		display.startMoveUnit(unit);
-		display.setGotoCursorTitle(lastMousePosition.toLocation());
+		display.setGotoCursorTile(lastMousePosition.toLocation());
 		logger.debug("Switching '" + unit + "' to go mode.");
 		display.setCursorGoto();
 	}
@@ -289,7 +289,7 @@ public class GamePanelPresenter implements Localized {
 	private void onMouseMoved(final MouseEvent e) {
 		lastMousePosition = Point.of(e.getX(), e.getY());
 		if (display.isGotoMode()) {
-			display.setGotoCursorTitle(lastMousePosition.toLocation());
+			display.setGotoCursorTile(lastMousePosition.toLocation());
 		}
 		/**
 		 * Set status bar message

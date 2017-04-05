@@ -62,7 +62,7 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 
 	private final VisualDebugInfo visualDebugInfo;
 
-	private Location gotoCursorTitle;
+	private Location gotoCursorTile;
 
 	private Location cursorLocation;
 
@@ -194,7 +194,7 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 			paintUnits(dbg, gameController.getModel(), area);
 			paintGrid(dbg, area);
 			paintCursor(dbg, area);
-			paintGoToPath(dbg, area);
+			paintSteps(dbg, area);
 			paintMovingAnimation(dbg, area);
 			paintDebugInfo(dbg, visualDebugInfo, area);
 			final Point p = Point.of(area.getTopLeft().add(Location.of(-1, -1)));
@@ -381,37 +381,37 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 	 * @param area
 	 *            required displayed area
 	 */
-	private void paintGoToPath(final Graphics2D graphics, final Area area) {
-		if (gotoMode && gotoCursorTitle != null) {
+	private void paintSteps(final Graphics2D graphics, final Area area) {
+		if (gotoMode && gotoCursorTile != null) {
 			graphics.setColor(Color.yellow);
 			graphics.setStroke(new BasicStroke(1));
-			paintCursor(graphics, area, gotoCursorTitle);
-			if (!cursorLocation.equals(gotoCursorTitle)) {
+			paintCursor(graphics, area, gotoCursorTile);
+			if (!cursorLocation.equals(gotoCursorTile)) {
 				// TODO JJ get(0) could return different ship that is really
 				// moved
 				final Ship unit = gameController.getModel().getCurrentPlayer().getShipsAt(cursorLocation).get(0);
 				// TODO JJ step counter should be core function
 				final StepCounter stepCounter = new StepCounter(5, unit.getAvailableMoves());
-				final List<Location> locations = unit.getPath(gotoCursorTitle).orElse(Collections.emptyList());
-				final List<Point> steps = Lists.transform(locations, location -> area.convert((Location)location));
+				final List<Location> locations = unit.getPath(gotoCursorTile).orElse(Collections.emptyList());
+				final List<Point> steps = Lists.transform(locations, location -> area.convert((Location) location));
 				/**
 				 * Here could be check if particular step in on screen, but draw
 				 * few images outside screen is not big deal.
 				 */
-				steps.forEach(point -> paintStepsToTile(graphics, point, stepCounter));
+				steps.forEach(point -> paintStep(graphics, point, stepCounter));
 			}
 		}
 	}
 
 	/**
-	 * Draw image on tile. Image is part of highlighted path.
+	 * Draw image of steps on tile. Image is part of highlighted path.
 	 * 
 	 * @param graphics
 	 *            required {@link Graphics2D}
 	 * @param point
 	 *            required point where to draw image
 	 */
-	private void paintStepsToTile(final Graphics2D graphics, final Point point, final StepCounter stepCounter) {
+	private void paintStep(final Graphics2D graphics, final Point point, final StepCounter stepCounter) {
 		graphics.drawImage(getImageFoStep(stepCounter.canMakeMoveInSameTurn(1)), point.getX(), point.getY(), this);
 	}
 
@@ -493,12 +493,12 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 
 	@Override
 	public Location getGotoCursorTitle() {
-		return gotoCursorTitle;
+		return gotoCursorTile;
 	}
 
 	@Override
-	public void setGotoCursorTitle(final Location gotoCursorTitle) {
-		this.gotoCursorTitle = gotoCursorTitle;
+	public void setGotoCursorTile(final Location gotoCursorTitle) {
+		this.gotoCursorTile = gotoCursorTitle;
 	}
 
 	@Override

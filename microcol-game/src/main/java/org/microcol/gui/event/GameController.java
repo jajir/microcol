@@ -77,8 +77,8 @@ public class GameController implements Localized {
 			game = AIModelBuilder.build();
 		} else {
 			ModelBuilder builder = new ModelBuilder();
-			builder.setCalendar(1570, 1600)
-				.setMap("/maps/map-01.txt")
+			builder.setCalendar(1570, 1800)
+				.setMap("/maps/map-ocean-1000x1000.txt")
 				.addPlayer("Player1", false)
 					.addShip("Player1", ShipType.GALLEON, Location.of(4, 2))
 					.addShip("Player1", ShipType.FRIGATE, Location.of(3, 3))
