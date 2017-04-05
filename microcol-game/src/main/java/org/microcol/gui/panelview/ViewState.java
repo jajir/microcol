@@ -5,6 +5,7 @@ import java.util.Optional;
 import org.microcol.model.Location;
 
 import com.google.common.base.Preconditions;
+import com.google.inject.Inject;
 
 /**
  * Control and preserve state of selected tile, mouse over tile and mode.
@@ -25,6 +26,7 @@ public class ViewState {
 	 * @param mouseOverTileChangedController
 	 *            required mouse over tile changed
 	 */
+	@Inject
 	public ViewState(final MouseOverTileChangedController mouseOverTileChangedController) {
 		this.mouseOverTileChangedController = Preconditions.checkNotNull(mouseOverTileChangedController);
 		mouseOverTile = Optional.empty();

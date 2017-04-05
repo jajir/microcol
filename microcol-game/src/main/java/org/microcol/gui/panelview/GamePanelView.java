@@ -15,6 +15,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JViewport;
 import javax.swing.Timer;
@@ -62,11 +63,7 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 
 	private final VisualDebugInfo visualDebugInfo;
 
-	private Location gotoCursorTile;
-
-	private Location cursorLocation;
-
-	private boolean gotoMode = false;
+	private final ViewState viewState;
 
 	private WalkAnimator walkAnimator;
 
@@ -80,12 +77,14 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 
 	@Inject
 	public GamePanelView(final GameController gameController, final NextTurnController nextTurnController,
-			final PathPlanning pathPlanning, final ImageProvider imageProvider) {
+			final PathPlanning pathPlanning, final ImageProvider imageProvider, final ViewState viewState) {
 		this.gameController = Preconditions.checkNotNull(gameController);
 		this.pathPlanning = Preconditions.checkNotNull(pathPlanning);
 		this.imageProvider = Preconditions.checkNotNull(imageProvider);
+		this.viewState = Preconditions.checkNotNull(viewState);
 		this.visualDebugInfo = new VisualDebugInfo();
 		oneTurnMoveHighlighter = new OneTurnMoveHighlighter();
+		// TODO inject whole viewState
 		Toolkit toolkit = Toolkit.getDefaultToolkit();
 		gotoModeCursor = toolkit.createCustomCursor(imageProvider.getImage(ImageProvider.IMG_CURSOR_GOTO),
 				new java.awt.Point(1, 1), "gotoModeCursor");
@@ -346,10 +345,10 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 	}
 
 	private void paintCursor(final Graphics2D graphics, final Area area) {
-		if (cursorLocation != null) {
+		if (viewState.getSelectedTile().isPresent()) {
 			graphics.setColor(Color.RED);
 			graphics.setStroke(new BasicStroke(1));
-			paintCursor(graphics, area, cursorLocation);
+			paintCursor(graphics, area, viewState.getSelectedTile().get());
 		}
 	}
 
@@ -382,17 +381,19 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 	 *            required displayed area
 	 */
 	private void paintSteps(final Graphics2D graphics, final Area area) {
-		if (gotoMode && gotoCursorTile != null) {
+		if (viewState.isMoveMode() && viewState.getMouseOverTile().isPresent()) {
 			graphics.setColor(Color.yellow);
 			graphics.setStroke(new BasicStroke(1));
-			paintCursor(graphics, area, gotoCursorTile);
-			if (!cursorLocation.equals(gotoCursorTile)) {
+			paintCursor(graphics, area, viewState.getMouseOverTile().get());
+			if (!viewState.getSelectedTile().get().equals(viewState.getMouseOverTile().get())) {
 				// TODO JJ get(0) could return different ship that is really
 				// moved
-				final Ship unit = gameController.getModel().getCurrentPlayer().getShipsAt(cursorLocation).get(0);
+				final Ship unit = gameController.getModel().getCurrentPlayer()
+						.getShipsAt(viewState.getSelectedTile().get()).get(0);
 				// TODO JJ step counter should be core function
 				final StepCounter stepCounter = new StepCounter(5, unit.getAvailableMoves());
-				final List<Location> locations = unit.getPath(gotoCursorTile).orElse(Collections.emptyList());
+				final List<Location> locations = unit.getPath(viewState.getMouseOverTile().get())
+						.orElse(Collections.emptyList());
 				final List<Point> steps = Lists.transform(locations, location -> area.convert((Location) location));
 				/**
 				 * Here could be check if particular step in on screen, but draw
@@ -463,43 +464,21 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 		return (gameController.getModel().getMap().getMaxY()) * TOTAL_TILE_WIDTH_IN_PX - 1;
 	}
 
-	@Override
-	public Location getCursorLocation() {
-		return cursorLocation;
-	}
-
-	@Override
-	public void setCursorLocation(Location cursorTile) {
-		this.cursorLocation = cursorTile;
-	}
-
+	// TODO rename it
 	@Override
 	public void setCursorNormal() {
 		oneTurnMoveHighlighter.setLocations(null);
 		setCursor(Cursor.getDefaultCursor());
-		gotoMode = false;
+		viewState.setMoveMode(false);
 	}
 
+	// TODO rename it
 	@Override
 	public void setCursorGoto() {
 		setCursor(gotoModeCursor);
-		gotoMode = true;
+		viewState.setMoveMode(true);
 	}
 
-	@Override
-	public boolean isGotoMode() {
-		return gotoMode;
-	}
-
-	@Override
-	public Location getGotoCursorTitle() {
-		return gotoCursorTile;
-	}
-
-	@Override
-	public void setGotoCursorTile(final Location gotoCursorTitle) {
-		this.gotoCursorTile = gotoCursorTitle;
-	}
 
 	@Override
 	public void setWalkAnimator(final WalkAnimator walkAnimator) {
@@ -528,6 +507,11 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 	@Override
 	public VisualDebugInfo getVisualDebugInfo() {
 		return visualDebugInfo;
+	}
+
+	@Override
+	public ViewState getViewState() {
+		return viewState;
 	}
 
 }

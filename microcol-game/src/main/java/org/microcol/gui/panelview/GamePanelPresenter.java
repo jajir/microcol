@@ -5,6 +5,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
@@ -15,7 +16,6 @@ import org.microcol.gui.LocalizationHelper;
 import org.microcol.gui.Localized;
 import org.microcol.gui.PathPlanning;
 import org.microcol.gui.Point;
-import org.microcol.gui.event.AboutGameEventController;
 import org.microcol.gui.event.CenterViewController;
 import org.microcol.gui.event.DebugRequestController;
 import org.microcol.gui.event.ExitGameController;
@@ -38,7 +38,7 @@ import org.slf4j.LoggerFactory;
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
 
-public class GamePanelPresenter implements Localized {
+public final class GamePanelPresenter implements Localized {
 
 	private final Logger logger = LoggerFactory.getLogger(GamePanelPresenter.class);
 
@@ -46,19 +46,9 @@ public class GamePanelPresenter implements Localized {
 
 		GamePanelView getGamePanelView();
 
-		Location getCursorLocation();
-
-		void setCursorLocation(Location cursorLocation);
-
 		void setCursorNormal();
 
 		void setCursorGoto();
-
-		boolean isGotoMode();
-
-		void setGotoCursorTile(Location gotoCursorTitle);
-
-		Location getGotoCursorTitle();
 
 		void setWalkAnimator(WalkAnimator walkAnimator);
 
@@ -77,6 +67,8 @@ public class GamePanelPresenter implements Localized {
 		VisualDebugInfo getVisualDebugInfo();
 
 		void startMoveUnit(Ship ship);
+
+		ViewState getViewState();
 	}
 
 	private final GameController gameController;
@@ -114,9 +106,8 @@ public class GamePanelPresenter implements Localized {
 			final FocusedTileController focusedTileController, final PathPlanning pathPlanning,
 			final MoveUnitController moveUnitController, final NewGameController newGameController,
 			final GamePreferences gamePreferences, final ShowGridController showGridController,
-			final CenterViewController viewController, final AboutGameEventController gameEventController,
-			final ExitGameController exitGameController, final LocalizationHelper localizationHelper,
-			final DebugRequestController debugRequestController) {
+			final CenterViewController viewController, final ExitGameController exitGameController,
+			final LocalizationHelper localizationHelper, final DebugRequestController debugRequestController) {
 		this.focusedTileController = focusedTileController;
 		this.gameController = Preconditions.checkNotNull(gameController);
 		this.statusBarMessageController = Preconditions.checkNotNull(statusBarMessageController);
@@ -223,36 +214,42 @@ public class GamePanelPresenter implements Localized {
 
 	private void onCenterView() {
 		logger.debug("Center view event");
-		Preconditions.checkNotNull(display.getCursorLocation(), "Cursor location is empty");
 		/**
 		 * Here could be verification of race conditions like centering to
 		 * bottom right corner of map. Luckily it's done by JViewport.
 		 */
-		final Point p = display.getArea().getCenterAreaTo(Point.of(display.getCursorLocation()));
+		final Point p = display.getArea().getCenterAreaTo(Point.of(display.getViewState().getSelectedTile().get()));
 		display.planScrollingAnimationToPoint(p);
 	}
 
 	private void swithToMoveMode() {
-		Preconditions.checkNotNull(display.getCursorLocation(), "Cursor location is empty");
-		final List<Ship> units = gameController.getModel().getCurrentPlayer().getShipsAt(display.getCursorLocation());
+		final List<Ship> units = gameController.getModel().getCurrentPlayer()
+				.getShipsAt(display.getViewState().getSelectedTile().get());
 		// TODO JJ Filter unit that have enough action points
 		Preconditions.checkState(!units.isEmpty(), "there are some moveable units");
 		final Ship unit = units.get(0);
 		display.startMoveUnit(unit);
-		display.setGotoCursorTile(lastMousePosition.toLocation());
+		display.getViewState().setMouseOverTile(Optional.ofNullable(lastMousePosition.toLocation()));
 		logger.debug("Switching '" + unit + "' to go mode.");
 		display.setCursorGoto();
 	}
 
 	private void onKeyPressed_escape() {
-		if (display.isGotoMode()) {
-			cancelGoToMode(display.getGotoCursorTitle());
+		if (display.getViewState().isMoveMode()) {
+			cancelGoToMode();
 		}
 	}
 
+	private void cancelGoToMode() {
+		display.setCursorNormal();
+		focusedTileController.fireEvent(new FocusedTileEvent(gameController.getModel(),
+				display.getViewState().getSelectedTile().get(),
+				gameController.getModel().getMap().getTerrainAt(display.getViewState().getSelectedTile().get())));
+	}
+
 	private void onKeyPressed_enter() {
-		if (display.isGotoMode()) {
-			switchToNormalMode(display.getGotoCursorTitle());
+		if (display.getViewState().isMoveMode()) {
+			switchToNormalMode(display.getViewState().getMouseOverTile().get());
 		}
 	}
 
@@ -260,10 +257,10 @@ public class GamePanelPresenter implements Localized {
 		final Location location = display.getArea().convertToLocation(Point.of(e.getX(), e.getY()));
 		if (gameController.getModel().getMap().isValid(location)) {
 			logger.debug("location of mouse: " + location);
-			if (display.isGotoMode()) {
+			if (display.getViewState().isMoveMode()) {
 				switchToNormalMode(location);
 			} else {
-				display.setCursorLocation(location);
+				display.getViewState().setSelectedTile(Optional.of(location));
 				focusedTileController.fireEvent(new FocusedTileEvent(gameController.getModel(), location,
 						gameController.getModel().getMap().getTerrainAt(location)));
 			}
@@ -288,8 +285,8 @@ public class GamePanelPresenter implements Localized {
 
 	private void onMouseMoved(final MouseEvent e) {
 		lastMousePosition = Point.of(e.getX(), e.getY());
-		if (display.isGotoMode()) {
-			display.setGotoCursorTile(lastMousePosition.toLocation());
+		if (display.getViewState().isMoveMode()) {
+			display.getViewState().setMouseOverTile(Optional.of(lastMousePosition.toLocation()));
 		}
 		/**
 		 * Set status bar message
@@ -326,29 +323,22 @@ public class GamePanelPresenter implements Localized {
 		statusBarMessageController.fireEvent(new StatusBarMessageEvent(buff.toString()));
 	}
 
-	private void cancelGoToMode(final Location moveTo) {
-		display.setCursorNormal();
-		display.setCursorLocation(moveTo);
-		focusedTileController.fireEvent(new FocusedTileEvent(gameController.getModel(), moveTo,
-				gameController.getModel().getMap().getTerrainAt(moveTo)));
-	}
-
-	private final void switchToNormalMode(final Location moveTo) {
-		logger.debug("Switching to normal mode, from " + display.getCursorLocation() + " to " + moveTo);
-		if (display.getCursorLocation().equals(moveTo)) {
+	private void switchToNormalMode(final Location moveTo) {
+		final Location selectedTile = display.getViewState().getSelectedTile().get();
+		logger.debug("Switching to normal mode, from " + selectedTile + " to " + moveTo);
+		if (selectedTile.equals(moveTo)) {
 			return;
 		}
 		// TODO JJ active ship can be different from ship first at list
-		final Ship ship = gameController.getModel().getCurrentPlayer().getShipsAt(display.getCursorLocation()).get(0);
+		final Ship ship = gameController.getModel().getCurrentPlayer().getShipsAt(selectedTile).get(0);
 		if (ship.getPath(moveTo).isPresent()) {
 			final List<Location> path = ship.getPath(moveTo).get();
 			if (path.size() > 0) {
 				gameController.performMove(ship, path);
-				focusedTileController
-						.fireEvent(new FocusedTileEvent(gameController.getModel(), display.getCursorLocation(),
-								gameController.getModel().getMap().getTerrainAt(display.getCursorLocation())));
+				focusedTileController.fireEvent(new FocusedTileEvent(gameController.getModel(), selectedTile,
+						gameController.getModel().getMap().getTerrainAt(selectedTile)));
 			}
-			display.setCursorLocation(moveTo);
+			display.getViewState().setSelectedTile(Optional.of(moveTo));
 			display.setCursorNormal();
 		}
 	}
