@@ -25,6 +25,7 @@ import org.microcol.gui.event.VolumeChangedListenerPreferences;
 import org.microcol.gui.panelview.GamePanelPresenter;
 import org.microcol.gui.panelview.GamePanelView;
 import org.microcol.gui.panelview.MouseOverTileChangedController;
+import org.microcol.gui.panelview.MouseOverTileListener;
 import org.microcol.gui.panelview.MoveModeSupport;
 import org.microcol.gui.panelview.ViewState;
 
@@ -77,11 +78,12 @@ public class MicroColModule extends AbstractModule {
 		bind(GamePanelPresenter.class).asEagerSingleton();
 		bind(ViewState.class).in(Singleton.class);
 		bind(MoveModeSupport.class).in(Singleton.class);
+		bind(MouseOverTileListener.class).asEagerSingleton();
 
 		bind(StartPanelView.class).in(Singleton.class);
 		bind(StartPanelPresenter.Display.class).to(StartPanelView.class).in(Singleton.class);
 		bind(StartPanelPresenter.class).asEagerSingleton();
-		
+
 		bind(StatusBarView.class).in(Singleton.class);
 		bind(StatusBarPresenter.Display.class).to(StatusBarView.class).in(Singleton.class);
 		bind(StatusBarPresenter.class).asEagerSingleton();
@@ -95,7 +97,6 @@ public class MicroColModule extends AbstractModule {
 		bind(RightPanelPresenter.class).asEagerSingleton();
 
 		bind(UnitsPanel.class).asEagerSingleton();
-		
 
 		/**
 		 * Load events manually

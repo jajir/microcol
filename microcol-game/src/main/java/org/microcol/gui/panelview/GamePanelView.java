@@ -461,7 +461,7 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 		return (gameController.getModel().getMap().getMaxY()) * TOTAL_TILE_WIDTH_IN_PX - 1;
 	}
 
-	// TODO rename it
+	// TODO JJ rename it
 	@Override
 	public void setCursorNormal() {
 		oneTurnMoveHighlighter.setLocations(null);
@@ -469,7 +469,7 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 		viewState.setMoveMode(false);
 	}
 
-	// TODO rename it
+	// TODO JJ rename it
 	@Override
 	public void setCursorGoto() {
 		setCursor(gotoModeCursor);
@@ -503,11 +503,6 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 	@Override
 	public VisualDebugInfo getVisualDebugInfo() {
 		return visualDebugInfo;
-	}
-
-	@Override
-	public ViewState getViewState() {
-		return viewState;
 	}
 
 }
