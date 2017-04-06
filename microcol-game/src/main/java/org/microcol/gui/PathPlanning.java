@@ -1,7 +1,5 @@
 package org.microcol.gui;
 
-import org.microcol.model.Location;
-
 /**
  * Class contains methods for computing path for units.
  * 
@@ -17,7 +15,7 @@ public class PathPlanning {
 	 *
 	 */
 	public interface WhatToDoWithPointInPath {
-		void pathPoint(Location point);
+		void pathPoint(Point point);
 	}
 
 	/**
@@ -32,7 +30,7 @@ public class PathPlanning {
 	 *            required function that's executed with each found point to
 	 *            visit
 	 */
-	public void paintPath(final Location tileFrom, final Location tileTo,
+	public void paintPath(final Point tileFrom, final Point tileTo,
 			final WhatToDoWithPointInPath whatToDoWithPointInPath) {
 		final int diff = Math.abs(tileTo.getY() - tileFrom.getY()) - Math.abs(tileTo.getX() - tileFrom.getX());
 		if (diff < 0) {
@@ -41,12 +39,12 @@ public class PathPlanning {
 			if (tileFrom.getX() < tileTo.getX()) {
 				for (int x = tileFrom.getX(); x <= tileTo.getX(); x++) {
 					int y = Math.round(a * x + b);
-					addPoint(tileFrom, whatToDoWithPointInPath, Location.of(x, y));
+					addPoint(tileFrom, whatToDoWithPointInPath, Point.of(x, y));
 				}
 			} else {
 				for (int x = tileFrom.getX(); x >= tileTo.getX(); x--) {
 					int y = Math.round(a * x + b);
-					addPoint(tileFrom, whatToDoWithPointInPath, Location.of(x, y));
+					addPoint(tileFrom, whatToDoWithPointInPath, Point.of(x, y));
 				}
 			}
 		} else if (!tileFrom.equals(tileTo)) {
@@ -55,12 +53,12 @@ public class PathPlanning {
 			if (tileFrom.getY() < tileTo.getY()) {
 				for (int y = tileFrom.getY(); y <= tileTo.getY(); y++) {
 					int x = Math.round(a * y + b);
-					addPoint(tileFrom, whatToDoWithPointInPath, Location.of(x, y));
+					addPoint(tileFrom, whatToDoWithPointInPath, Point.of(x, y));
 				}
 			} else {
 				for (int y = tileFrom.getY(); y >= tileTo.getY(); y--) {
 					int x = Math.round(a * y + b);
-					addPoint(tileFrom, whatToDoWithPointInPath, Location.of(x, y));
+					addPoint(tileFrom, whatToDoWithPointInPath, Point.of(x, y));
 				}
 			}
 		}
@@ -80,7 +78,7 @@ public class PathPlanning {
 	 * @param howManyStepsShouldBeDone
 	 *            required how many steps should be done to reach target
 	 */
-	public void paintPath(final Location tileFrom, final Location tileTo,
+	public void paintPath(final Point tileFrom, final Point tileTo,
 			final WhatToDoWithPointInPath whatToDoWithPointInPath, final int howManyStepsShouldBeDone) {
 		final int diff = Math.abs(tileTo.getY() - tileFrom.getY()) - Math.abs(tileTo.getX() - tileFrom.getX());
 		if (diff < 0) {
@@ -90,13 +88,13 @@ public class PathPlanning {
 				final int increment = getStepSize(tileFrom.getX(), tileTo.getX(), howManyStepsShouldBeDone);
 				for (int x = tileFrom.getX(); x <= tileTo.getX(); x += increment) {
 					int y = Math.round(a * x + b);
-					addPoint(tileFrom, whatToDoWithPointInPath, Location.of(x, y));
+					addPoint(tileFrom, whatToDoWithPointInPath, Point.of(x, y));
 				}
 			} else {
 				final int increment = getStepSize(tileFrom.getX(), tileTo.getX(), howManyStepsShouldBeDone);
 				for (int x = tileFrom.getX(); x >= tileTo.getX(); x += increment) {
 					int y = Math.round(a * x + b);
-					addPoint(tileFrom, whatToDoWithPointInPath, Location.of(x, y));
+					addPoint(tileFrom, whatToDoWithPointInPath, Point.of(x, y));
 				}
 			}
 		} else if (!tileFrom.equals(tileTo)) {
@@ -106,13 +104,13 @@ public class PathPlanning {
 				final int increment = getStepSize(tileFrom.getY(), tileTo.getY(), howManyStepsShouldBeDone);
 				for (int y = tileFrom.getY(); y <= tileTo.getY(); y += increment) {
 					int x = Math.round(a * y + b);
-					addPoint(tileFrom, whatToDoWithPointInPath, Location.of(x, y));
+					addPoint(tileFrom, whatToDoWithPointInPath, Point.of(x, y));
 				}
 			} else {
 				final int increment = getStepSize(tileFrom.getY(), tileTo.getY(), howManyStepsShouldBeDone);
 				for (int y = tileFrom.getY(); y >= tileTo.getY(); y += increment) {
 					int x = Math.round(a * y + b);
-					addPoint(tileFrom, whatToDoWithPointInPath, Location.of(x, y));
+					addPoint(tileFrom, whatToDoWithPointInPath, Point.of(x, y));
 				}
 			}
 		}
@@ -133,8 +131,8 @@ public class PathPlanning {
 	 * @param pointToAdd
 	 *            required to location
 	 */
-	private void addPoint(final Location tileFrom, final WhatToDoWithPointInPath whatToDoWithPointInPath,
-			final Location pointToAdd) {
+	private void addPoint(final Point tileFrom, final WhatToDoWithPointInPath whatToDoWithPointInPath,
+			final Point pointToAdd) {
 		if (!tileFrom.equals(pointToAdd)) {
 			whatToDoWithPointInPath.pathPoint(pointToAdd);
 		}

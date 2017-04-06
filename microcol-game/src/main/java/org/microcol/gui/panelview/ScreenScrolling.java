@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.microcol.gui.PathPlanning;
 import org.microcol.gui.Point;
-import org.microcol.model.Location;
 
 import com.google.common.base.Preconditions;
 
@@ -21,10 +20,8 @@ public class ScreenScrolling {
 
 	public ScreenScrolling(final PathPlanning pathPlanning, final Point from, final Point to) {
 		Preconditions.checkNotNull(pathPlanning);
-		Location p1 = Location.of(from.getX(), from.getY());
-		Location p2 = Location.of(to.getX(), to.getY());
 		stepsToDo = new ArrayList<>();
-		pathPlanning.paintPath(p1, p2, location -> stepsToDo.add(Point.of(location.getX(), location.getY())), SPEED);
+		pathPlanning.paintPath(from, to, point -> stepsToDo.add(point), SPEED);
 	}
 
 	/**

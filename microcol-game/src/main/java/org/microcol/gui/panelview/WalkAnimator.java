@@ -65,17 +65,9 @@ public class WalkAnimator {
 		if (partialPath.isEmpty()) {
 			nextCoordinates = null;
 			if (!path.isEmpty()) {
-				// pathPlanning.paintPath(partialPathFrom.multiply(GamePanelView.TOTAL_TILE_WIDTH_IN_PX),
-				// path.get(0).multiply(GamePanelView.TOTAL_TILE_WIDTH_IN_PX),
-				// point -> {
-				// TODO JJ Point should be used
-				final Location from = Location.of(partialPathFrom.getX() * GamePanelView.TOTAL_TILE_WIDTH_IN_PX,
-						partialPathFrom.getY() * GamePanelView.TOTAL_TILE_WIDTH_IN_PX);
-				final Location to = Location.of(path.get(0).getX() * GamePanelView.TOTAL_TILE_WIDTH_IN_PX,
-						path.get(0).getY() * GamePanelView.TOTAL_TILE_WIDTH_IN_PX);
-				pathPlanning.paintPath(from, to, location -> {
-					partialPath.add(Point.of(location.getX(), location.getY()));
-				});
+				final Point from = Point.of(partialPathFrom);
+				final Point to = Point.of(path.get(0));
+				pathPlanning.paintPath(from, to, point -> partialPath.add(point));
 				partialPathFrom = path.remove(0);
 			}
 		}

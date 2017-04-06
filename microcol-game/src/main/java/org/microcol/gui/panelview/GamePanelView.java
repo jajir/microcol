@@ -87,7 +87,6 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 		this.moveModeSupport = Preconditions.checkNotNull(moveModeSupport);
 		this.visualDebugInfo = new VisualDebugInfo();
 		oneTurnMoveHighlighter = new OneTurnMoveHighlighter();
-		// TODO inject whole viewState
 		Toolkit toolkit = Toolkit.getDefaultToolkit();
 		gotoModeCursor = toolkit.createCustomCursor(imageProvider.getImage(ImageProvider.IMG_CURSOR_GOTO),
 				new java.awt.Point(1, 1), "gotoModeCursor");
