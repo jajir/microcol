@@ -35,6 +35,9 @@
 	<logger name="org.microcol.gui.event.AbstractEventController">
 		<level value="WARN"/>
 	</logger>
+	<logger name="org.microcol.gui.panelview.MoveModeSupport">
+		<level value="INFO"/>
+	</logger>
 
 	<!-- AI -->
 	<logger name="org.microcol.ai">

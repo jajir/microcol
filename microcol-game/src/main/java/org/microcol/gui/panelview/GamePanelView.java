@@ -11,7 +11,6 @@ import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.Toolkit;
 import java.awt.image.VolatileImage;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -75,13 +74,17 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 
 	private final OneTurnMoveHighlighter oneTurnMoveHighlighter;
 
+	private final MoveModeSupport moveModeSupport;
+
 	@Inject
 	public GamePanelView(final GameController gameController, final NextTurnController nextTurnController,
-			final PathPlanning pathPlanning, final ImageProvider imageProvider, final ViewState viewState) {
+			final PathPlanning pathPlanning, final ImageProvider imageProvider, final ViewState viewState,
+			final MoveModeSupport moveModeSupport) {
 		this.gameController = Preconditions.checkNotNull(gameController);
 		this.pathPlanning = Preconditions.checkNotNull(pathPlanning);
 		this.imageProvider = Preconditions.checkNotNull(imageProvider);
 		this.viewState = Preconditions.checkNotNull(viewState);
+		this.moveModeSupport = Preconditions.checkNotNull(moveModeSupport);
 		this.visualDebugInfo = new VisualDebugInfo();
 		oneTurnMoveHighlighter = new OneTurnMoveHighlighter();
 		// TODO inject whole viewState
@@ -385,22 +388,16 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 			graphics.setColor(Color.yellow);
 			graphics.setStroke(new BasicStroke(1));
 			paintCursor(graphics, area, viewState.getMouseOverTile().get());
-			if (!viewState.getSelectedTile().get().equals(viewState.getMouseOverTile().get())) {
-				// TODO JJ get(0) could return different ship that is really
-				// moved
-				final Ship unit = gameController.getModel().getCurrentPlayer()
-						.getShipsAt(viewState.getSelectedTile().get()).get(0);
-				// TODO JJ step counter should be core function
-				final StepCounter stepCounter = new StepCounter(5, unit.getAvailableMoves());
-				final List<Location> locations = unit.getPath(viewState.getMouseOverTile().get())
-						.orElse(Collections.emptyList());
-				final List<Point> steps = Lists.transform(locations, location -> area.convert((Location) location));
-				/**
-				 * Here could be check if particular step in on screen, but draw
-				 * few images outside screen is not big deal.
-				 */
-				steps.forEach(point -> paintStep(graphics, point, stepCounter));
-			}
+			final List<Location> locations = moveModeSupport.getMoveLocations();
+			final Ship unit = gameController.getModel().getCurrentPlayer().getShipsAt(viewState.getSelectedTile().get())
+					.get(0);
+			final StepCounter stepCounter = new StepCounter(5, unit.getAvailableMoves());
+			final List<Point> steps = Lists.transform(locations, location -> area.convert((Location) location));
+			/**
+			 * Here could be check if particular step in on screen, but draw few
+			 * images outside screen is not big deal.
+			 */
+			steps.forEach(point -> paintStep(graphics, point, stepCounter));
 		}
 	}
 
@@ -478,7 +475,6 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 		setCursor(gotoModeCursor);
 		viewState.setMoveMode(true);
 	}
-
 
 	@Override
 	public void setWalkAnimator(final WalkAnimator walkAnimator) {

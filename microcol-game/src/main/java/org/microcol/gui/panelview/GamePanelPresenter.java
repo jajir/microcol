@@ -296,6 +296,7 @@ public final class GamePanelPresenter implements Localized {
 			final Terrain terrain = gameController.getModel().getMap().getTerrainAt(location);
 			setStatusMessageForTile(terrain, location);
 		} else {
+			//TODO JJ use mouseOverTileChangedController
 			statusBarMessageController.fireEvent(new StatusBarMessageEvent());
 		}
 	}
@@ -320,6 +321,7 @@ public final class GamePanelPresenter implements Localized {
 			buff.append(ship.getClass().getSimpleName());
 			buff.append(" ");
 		});
+		//TODO JJ use mouseOverTileChangedController
 		statusBarMessageController.fireEvent(new StatusBarMessageEvent(buff.toString()));
 	}
 
