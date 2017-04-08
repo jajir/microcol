@@ -47,6 +47,7 @@ public class Ship {
 		return location;
 	}
 
+	// TODO JKA package access?
 	public int getAvailableMoves() {
 		return availableMoves;
 	}
@@ -58,6 +59,10 @@ public class Ship {
 
 	// Netestuje nedosažitelné lokace, pouze jestli je teoreticky možné na danou lokaci vstoupit
 	public boolean isMoveable(final Location location) {
+		return isMoveable(location, false);
+	}
+
+	public boolean isMoveable(final Location location, final boolean ignoreEnemies) {
 		Preconditions.checkNotNull(location);
 
 		if (!model.getMap().isValid(location)) {
@@ -68,26 +73,46 @@ public class Ship {
 			return false;
 		}
 
-		return owner.getEnemyShipsAt(location).isEmpty();
+		return ignoreEnemies || owner.getEnemyShipsAt(location).isEmpty();
 	}
 
 	public List<Location> getAvailableLocations() {
+		List<Location> locations = new ArrayList<>();
+		aaa(locations, null);
+
+		return ImmutableList.copyOf(locations);
+	}
+
+	public List<Ship> getAttackableTargets() {
+		List<Ship> enemies = new ArrayList<>();
+		aaa(null, enemies);
+
+		return ImmutableList.copyOf(enemies);
+	}
+
+	private void aaa(final List<Location> availableLocations, final List<Ship> attackableTargets) {
 		model.checkGameActive();
 		model.checkCurrentPlayer(owner);
 
-		if (availableMoves == 0) {
-			return ImmutableList.of();
+		if (availableMoves == 0 || !canAttack) {
+			return;
 		}
 
 		Set<Location> openSet = new HashSet<>();
 		openSet.add(location);
 		Set<Location> closedSet = new HashSet<>();
+		Set<Ship> enemies = new HashSet<>();
 		for (int i = 0; i < availableMoves + 1; i++) {
 			Set<Location> currentSet = new HashSet<>();
 			for (Location location : openSet) {
 				for (Location neighbor : location.getNeighbors()) {
-					if (isMoveable(neighbor)) {
-						currentSet.add(neighbor);
+					if (isMoveable(neighbor, true)) {
+						final List<Ship> eee = owner.getEnemyShipsAt(location);
+						if (eee.isEmpty()) {
+							currentSet.add(neighbor);
+						} else {
+							enemies.addAll(eee);
+						}
 					}
 				}
 				closedSet.add(location);
@@ -97,18 +122,12 @@ public class Ship {
 		}
 		closedSet.remove(location);
 
-		return ImmutableList.copyOf(closedSet);
-	}
-
-	public List<Ship> getAttackableTargets() {
-		model.checkGameActive();
-		model.checkCurrentPlayer(owner);
-
-		if (!canAttack) {
-			return ImmutableList.of();
+		if (availableLocations != null) {
+			availableLocations.addAll(closedSet);
 		}
-
-		return null; // FIXME JKA
+		if (attackableTargets != null) {
+			attackableTargets.addAll(enemies);
+		}
 	}
 
 	public Optional<List<Location>> getPath(final Location destination) {
