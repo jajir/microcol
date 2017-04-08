@@ -2,13 +2,12 @@ package org.microcol.model;
 
 import org.junit.Test;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 public class ModelSerializationTest {
 	@Test
-	public void serializeTest() throws JsonProcessingException {
+	public void serializeTest() {
 		/*
 		final ModelBuilder builder = new ModelBuilder();
 		final Model model = builder
@@ -23,9 +22,8 @@ public class ModelSerializationTest {
 				.addShip("Player2", ShipType.FRIGATE, Location.of(14, 9))
 			.build();
 		*/
-		final ObjectMapper mapper = new ObjectMapper();
-		mapper.enable(SerializationFeature.INDENT_OUTPUT);
-		final String result = mapper.writeValueAsString(Location.of(1, 1));
+		final Gson gson = new GsonBuilder().setPrettyPrinting().create();
+		final String result = gson.toJson(Location.of(1, 1));
 		System.out.println(result);
 	}
 }
