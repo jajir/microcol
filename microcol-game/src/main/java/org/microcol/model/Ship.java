@@ -100,6 +100,17 @@ public class Ship {
 		return ImmutableList.copyOf(closedSet);
 	}
 
+	public List<Ship> getAttackableTargets() {
+		model.checkGameActive();
+		model.checkCurrentPlayer(owner);
+
+		if (!canAttack) {
+			return ImmutableList.of();
+		}
+
+		return null; // FIXME JKA
+	}
+
 	public Optional<List<Location>> getPath(final Location destination) {
 		return getPath(destination, false);
 	}
