@@ -17,13 +17,13 @@ public class AIModelBuilder {
 	}
 
 	void createMinimal() {
-		builder.setMap("/maps/map-ocean-1x1.txt")
+		builder.setMap("/maps/test-map-ocean-1x1.txt")
 			.addPlayer("Player1", true)
 				.addShip("Player1", ShipType.GALLEON, Location.of(1, 1));
 	}
 
 	void createMedium() {
-		builder.setMap("/maps/map-ocean-100x100.txt")
+		builder.setMap("/maps/test-map-ocean-100x100.txt")
 			.addPlayer("Player1", false)
 				.addShip("Player1", ShipType.GALLEON, Location.of(1, 1))
 			.addPlayer("Player2", true)
@@ -31,7 +31,7 @@ public class AIModelBuilder {
 	}
 
 	void createHuge() {
-		builder.setMap("/maps/map-ocean-1000x1000.txt")
+		builder.setMap("/maps/test-map-ocean-1000x1000.txt")
 			.addPlayer("Player1", false)
 				.addShip("Player1", ShipType.GALLEON, Location.of(1, 1))
 			.addPlayer("Player2", true)
@@ -69,6 +69,15 @@ public class AIModelBuilder {
 				.addShip("Player2", ShipType.FRIGATE, Location.of(1, 3));
 	}
 
+	void createMap03() {
+		builder.setMap("/maps/map-03.txt")
+			.addPlayer("Player1", false)
+				.addShip("Player1", ShipType.GALLEON, Location.of(6, 2))
+			.addPlayer("Player2", true)
+				.addShip("Player2", ShipType.GALLEON, Location.of(7, 5))
+				.addShip("Player2", ShipType.FRIGATE, Location.of(9, 6));
+	}
+
 	Model buildImpl() {
 		return builder.build();
 	}
@@ -83,6 +92,7 @@ public class AIModelBuilder {
 //		builder.createMap01_2ships();
 		builder.createMap01_5ships();
 //		builder.createMap02();
+//		builder.createMap03();
 
 		return builder.buildImpl();
 	}

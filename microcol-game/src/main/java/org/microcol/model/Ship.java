@@ -29,9 +29,8 @@ public class Ship {
 	void setModel(final Model model) {
 		this.model = Preconditions.checkNotNull(model);
 
-		final Terrain terrain = this.model.getMap().getTerrainAt(location);
-		if (terrain != Terrain.OCEAN) {
-			throw new IllegalStateException(String.format("Ship must start on ocen (%s -> %s).", location, terrain));
+		if (!isMoveable(location, true)) {
+			throw new IllegalStateException(String.format("Invalid start location of ship (%s).", this));
 		}
 	}
 
