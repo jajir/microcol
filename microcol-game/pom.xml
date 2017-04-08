@@ -46,6 +46,23 @@
 			<version>1.0</version>
 		</dependency>
 
+		<!-- JSON serialization -->
+		<dependency>
+			<groupId>javax.json.bind</groupId>
+			<artifactId>javax.json.bind-api</artifactId>
+			<version>1.0.0-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse</groupId>
+			<artifactId>yasson</artifactId>
+			<version>1.0.0-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>org.glassfish</groupId>
+			<artifactId>javax.json</artifactId>
+			<version>1.1.0-SNAPSHOT</version>
+		</dependency>
+
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
@@ -71,6 +88,22 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
+
+	<repositories>
+		<!-- Needed for JSON-B API -->
+		<repository>
+			<id>java.net-Public</id>
+			<name>Maven Java Net Snapshots and Releases</name>
+			<url>https://maven.java.net/content/groups/public/</url>
+		</repository>
+
+		<!-- Needed for Yasson -->
+		<repository>
+			<id>yasson-snapshots</id>
+			<name>Yasson Snapshots repository</name>
+			<url>https://repo.eclipse.org/content/repositories/yasson-snapshots</url>
+		</repository>
+	</repositories>
 
 	<profiles>
 		<profile>
