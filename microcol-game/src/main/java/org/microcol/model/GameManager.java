@@ -39,7 +39,7 @@ class GameManager {
 	}
 
 	Player getCurrentPlayer() {
-		checkGameActive();
+		Preconditions.checkState(started, "Game must be started.");
 
 		return currentPlayer;
 	}
