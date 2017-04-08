@@ -46,21 +46,21 @@
 			<version>1.0</version>
 		</dependency>
 
-		<!-- JSON serialization -->
+		<!-- JSON -->
 		<dependency>
-			<groupId>javax.json.bind</groupId>
-			<artifactId>javax.json.bind-api</artifactId>
-			<version>1.0.0-SNAPSHOT</version>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-annotations</artifactId>
+			<version>2.8.8</version>
 		</dependency>
 		<dependency>
-			<groupId>org.eclipse</groupId>
-			<artifactId>yasson</artifactId>
-			<version>1.0.0-SNAPSHOT</version>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-core</artifactId>
+			<version>2.8.8</version>
 		</dependency>
 		<dependency>
-			<groupId>org.glassfish</groupId>
-			<artifactId>javax.json</artifactId>
-			<version>1.1.0-SNAPSHOT</version>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>2.8.8</version>
 		</dependency>
 
 		<dependency>
@@ -88,22 +88,6 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
-
-	<repositories>
-		<!-- Needed for JSON-B API -->
-		<repository>
-			<id>java.net-Public</id>
-			<name>Maven Java Net Snapshots and Releases</name>
-			<url>https://maven.java.net/content/groups/public/</url>
-		</repository>
-
-		<!-- Needed for Yasson -->
-		<repository>
-			<id>yasson-snapshots</id>
-			<name>Yasson Snapshots repository</name>
-			<url>https://repo.eclipse.org/content/repositories/yasson-snapshots</url>
-		</repository>
-	</repositories>
 
 	<profiles>
 		<profile>

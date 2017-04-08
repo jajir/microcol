@@ -1,14 +1,14 @@
 package org.microcol.model;
 
-import javax.json.bind.Jsonb;
-import javax.json.bind.JsonbBuilder;
-import javax.json.bind.JsonbConfig;
-
 import org.junit.Test;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 
 public class ModelSerializationTest {
 	@Test
-	public void serializeTest() {
+	public void serializeTest() throws JsonProcessingException {
 		/*
 		final ModelBuilder builder = new ModelBuilder();
 		final Model model = builder
@@ -23,11 +23,9 @@ public class ModelSerializationTest {
 				.addShip("Player2", ShipType.FRIGATE, Location.of(14, 9))
 			.build();
 		*/
-
-		final JsonbConfig config = new JsonbConfig()
-			.withFormatting(true);
-		final Jsonb jsonb = JsonbBuilder.create(config);
-		final String result = jsonb.toJson(Location.of(1, 1));
+		final ObjectMapper mapper = new ObjectMapper();
+		mapper.enable(SerializationFeature.INDENT_OUTPUT);
+		final String result = mapper.writeValueAsString(Location.of(1, 1));
 		System.out.println(result);
 	}
 }

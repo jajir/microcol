@@ -3,8 +3,7 @@ package org.microcol.model;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import javax.json.bind.annotation.JsonbTransient;
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
@@ -46,14 +45,13 @@ public class Location {
 	}
 
 	// tranzitivní
-	@JsonbTransient
 	public int getDistance(final Location location) {
 		Preconditions.checkNotNull(location);
 
 		return Math.abs(x - location.x) + Math.abs(y - location.y);
 	}
 
-	@JsonbTransient
+	@JsonIgnore
 	public List<Location> getNeighbors() {
 		return DIRECTIONS.stream()
 			.map(direction -> add(direction))
@@ -63,7 +61,6 @@ public class Location {
 
 	// tranzitivní
 	// prejemnovat na isNeighbor?
-	@JsonbTransient
 	public boolean isAdjacent(final Location location) {
 		Preconditions.checkNotNull(location);
 
