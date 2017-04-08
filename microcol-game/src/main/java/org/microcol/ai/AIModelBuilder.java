@@ -40,7 +40,7 @@ public class AIModelBuilder {
 
 	void createMap01_2ships() {
 		builder
-			.setMap("/maps/map-01.txt")
+			.setMap("/maps/test-map-2islands-15x10.txt")
 			.addPlayer("Player1", true)
 				.addShip("Player1", ShipType.GALLEON, Location.of(4, 2))
 			.addPlayer("Player2", true)
@@ -49,7 +49,7 @@ public class AIModelBuilder {
 
 	void createMap01_5ships() {
 		builder
-			.setMap("/maps/map-01.txt")
+			.setMap("/maps/test-map-2islands-15x10.txt")
 			.addPlayer("Player1", true)
 				.addShip("Player1", ShipType.GALLEON, Location.of(4, 2))
 				.addShip("Player1", ShipType.FRIGATE, Location.of(3, 3))

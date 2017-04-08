@@ -15,7 +15,7 @@ public class WorldMapCreationTest {
 	@Parameters(name = "{index}: fileName = {0}, maxX = {1}, maxY = {2}")
 	public static Collection<Object[]> data() {
 		return Arrays.asList(new Object[][] {
-			{"/maps/test-map-normal-15x10.txt", 15, 10},
+			{"/maps/test-map-2islands-15x10.txt", 15, 10},
 		});
 	}
 
