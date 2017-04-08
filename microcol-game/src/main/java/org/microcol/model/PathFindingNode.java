@@ -6,12 +6,18 @@ class PathFindingNode {
 	// Parent of start node is null.
 	private PathFindingNode parent;
 	private final Location location;
+	private int cost;
 	private final int distance;
 
 	PathFindingNode(final PathFindingNode parent, final Location location, final int distance) {
 		this.parent = parent;
 		this.location = Preconditions.checkNotNull(location);
+		this.cost = calculateCost();
 		this.distance = distance;
+	}
+
+	private int calculateCost() {
+		return parent != null ? parent.calculateCost() + 1 : 0;
 	}
 
 	PathFindingNode getParent() {
@@ -20,6 +26,7 @@ class PathFindingNode {
 
 	void setParent(final PathFindingNode parent) {
 		this.parent = parent;
+		this.cost = calculateCost();
 	}
 
 	Location getLocation() {
@@ -27,14 +34,10 @@ class PathFindingNode {
 	}
 
 	int getCost() {
-		return parent != null ? parent.getCost() + 1 : 0;
-	}
-
-	int getDistance() {
-		return distance;
+		return cost;
 	}
 
 	int getScore() {
-		return getCost() + getDistance();
+		return cost + distance;
 	}
 }

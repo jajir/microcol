@@ -7,13 +7,18 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.common.base.Preconditions;
 
 class PathFinder {
-	final Ship ship;
-	final Location start;
-	final Location destination;
-	final boolean excludeDestination;
+	private final Logger logger = LoggerFactory.getLogger(getClass());
+
+	private final Ship ship;
+	private final Location start;
+	private final Location destination;
+	private final boolean excludeDestination;
 
 	PathFinder(final Ship ship, final Location start, final Location destination, final boolean excludeDestination) {
 		this.ship = Preconditions.checkNotNull(ship);
@@ -25,6 +30,14 @@ class PathFinder {
 	}
 
 	List<Location> find() {
+		long startTime = System.currentTimeMillis();
+
+		if (!excludeDestination && !ship.isMoveable(destination)) {
+			logger.debug("Path finding finished in {} ms.", System.currentTimeMillis() - startTime);
+
+			return null;
+		}
+
 		final List<PathFindingNode> openList = new ArrayList<>();
 		openList.add(new PathFindingNode(null, start, start.getDistance(destination)));
 		final Set<Location> closedSet = new HashSet<>();
@@ -34,6 +47,8 @@ class PathFinder {
 			current = findLowest(openList);
 			if (excludeDestination && current.getLocation().isAdjacent(destination)
 				|| current.getLocation().equals(destination)) {
+				logger.debug("Path finding finished in {} ms.", System.currentTimeMillis() - startTime);
+
 				return createList(current);
 			}
 			openList.remove(current);
@@ -53,6 +68,8 @@ class PathFinder {
 				}
 			}
 		}
+
+		logger.debug("Path finding finished in {} ms.", System.currentTimeMillis() - startTime);
 
 		return null;
 	}
