@@ -4,6 +4,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 
+import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
@@ -11,6 +12,9 @@ import org.microcol.gui.panelview.GamePanelView;
 
 import com.google.inject.Inject;
 
+/**
+ * Panel hold whole game screen without status bar.
+ */
 public class MainPanelView extends JPanel {
 
 	/**
@@ -24,6 +28,7 @@ public class MainPanelView extends JPanel {
 		this.setLayout(new GridBagLayout());
 		JScrollPane scrollPaneGamePanel = new JScrollPane(gamePanel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
 				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		scrollPaneGamePanel.setBorder(BorderFactory.createEmptyBorder());
 
 		add(scrollPaneGamePanel, new GridBagConstraints(0, 0, 1, 1, 1.0D, 1.0D, GridBagConstraints.NORTH,
 				GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));

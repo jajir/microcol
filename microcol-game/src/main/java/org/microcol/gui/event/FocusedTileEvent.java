@@ -15,21 +15,21 @@ import com.google.common.base.Preconditions;
  */
 public class FocusedTileEvent {
 
-	private final Model game;
+	private final Model model;
 
 	private final Location location;
 
 	private final Terrain terrain;
 
 	public FocusedTileEvent(final Model game, final Location location, final Terrain tile) {
-		this.game = Preconditions.checkNotNull(game);
+		this.model = Preconditions.checkNotNull(game);
 		this.location = Preconditions.checkNotNull(location);
 		this.terrain = Preconditions.checkNotNull(tile);
 	}
 
 	public boolean isTileContainsMovebleUnit() {
-		final Optional<Ship> unit = game.getShipsAt(location).stream().findFirst();
-		return unit.isPresent() && unit.get().getOwner().equals(game.getCurrentPlayer());
+		final Optional<Ship> unit = model.getShipsAt(location).stream().findFirst();
+		return unit.isPresent() && unit.get().getOwner().equals(model.getCurrentPlayer());
 	}
 
 	public Location getLocation() {
@@ -38,6 +38,10 @@ public class FocusedTileEvent {
 
 	public Terrain getTerrain() {
 		return terrain;
+	}
+
+	public Model getModel() {
+		return model;
 	}
 
 }

@@ -9,6 +9,7 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 
 import org.microcol.gui.event.ChangeLanguageController;
+import org.microcol.gui.event.ChangeLanguageEvent;
 import org.microcol.gui.event.FocusedTileController;
 import org.microcol.gui.event.FocusedTileEvent;
 import org.microcol.gui.event.GameController;
@@ -17,32 +18,35 @@ import org.microcol.gui.event.StatusBarMessageController;
 import org.microcol.gui.event.StatusBarMessageEvent;
 import org.microcol.gui.event.TurnStartedController;
 import org.microcol.model.Location;
-import org.microcol.model.Model;
 import org.microcol.model.Player;
 
+import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
 
 public class RightPanelPresenter implements Localized {
 
 	public interface Display {
+
 		JButton getNextTurnButton();
 
-		void showTile(final FocusedTileEvent event, Model game);
+		void showTile(final FocusedTileEvent event);
 
 		JPanel getRightPanel();
 
-		void setCurrentPlayer(Player player);
+		void setOnMovePlayer(Player player);
 	}
 
-	private Location focusedTile;
+	private final RightPanelPresenter.Display display;
+
+	private FocusedTileEvent lastFocusedTileEvent;
 
 	@Inject
 	public RightPanelPresenter(final RightPanelPresenter.Display display, final GameController gameController,
 			final KeyController keyController, final FocusedTileController focusedTileController,
-			final ChangeLanguageController languangeController,
+			final ChangeLanguageController changeLanguangeController,
 			final StatusBarMessageController statusBarMessageController,
 			final TurnStartedController turnStartedController) {
-
+		this.display = Preconditions.checkNotNull(display);
 		display.getNextTurnButton().setText(getText().get("nextTurnButton"));
 		display.getNextTurnButton().setEnabled(false);
 
@@ -74,25 +78,31 @@ public class RightPanelPresenter implements Localized {
 			}
 		});
 
-		languangeController.addListener(event -> {
-			display.getNextTurnButton().setText(getText().get("nextTurnButton"));
-		});
-		focusedTileController.addListener(event -> {
-			if (isItDifferentTile(event.getLocation())) {
-				focusedTile = event.getLocation();
-				display.showTile(event, gameController.getModel());
-			}
-		});
+		changeLanguangeController.addListener(this::onLanguageWasChanged);
+		focusedTileController.addListener(this::onFocusedTile);
 		turnStartedController.addListener(event -> {
-			display.setCurrentPlayer(event.getPlayer());
+			display.setOnMovePlayer(event.getPlayer());
 			if (event.getPlayer().isHuman()) {
 				display.getNextTurnButton().setEnabled(true);
 			}
 		});
 	}
 
+	private void onLanguageWasChanged(final ChangeLanguageEvent event) {
+		display.getNextTurnButton().setText(getText().get("nextTurnButton"));
+		display.setOnMovePlayer(event.getModel().getCurrentPlayer());
+		display.showTile(lastFocusedTileEvent);
+	}
+
+	private void onFocusedTile(final FocusedTileEvent event) {
+		if (isItDifferentTile(event.getLocation())) {
+			lastFocusedTileEvent = event;
+			display.showTile(event);
+		}
+	}
+
 	private boolean isItDifferentTile(final Location tile) {
-		return focusedTile == null || !focusedTile.equals(tile);
+		return lastFocusedTileEvent == null || !lastFocusedTileEvent.equals(tile);
 	}
 
 }

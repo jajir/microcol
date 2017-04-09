@@ -5,6 +5,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -12,7 +13,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import org.microcol.gui.event.FocusedTileEvent;
-import org.microcol.model.Model;
 import org.microcol.model.Player;
 
 import com.google.common.base.Preconditions;
@@ -29,13 +29,13 @@ public class RightPanelView extends JPanel implements RightPanelPresenter.Displa
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private final static int RIGHT_PANEL_WIDTH = 150;
+	private final static int RIGHT_PANEL_WIDTH = 170;
 
 	private final ImageProvider imageProvider;
 
 	private final ImageIcon tileImage;
 
-	private final JLabel tileOnMove;
+	private final JLabel labelOnMove;
 
 	private final JLabel tileName;
 
@@ -58,8 +58,8 @@ public class RightPanelView extends JPanel implements RightPanelPresenter.Displa
 		this.setLayout(new GridBagLayout());
 
 		// Y=0
-		tileOnMove = new JLabel();
-		add(tileOnMove, new GridBagConstraints(0, 0, 2, 1, 0D, 0D, GridBagConstraints.NORTH, GridBagConstraints.NONE,
+		labelOnMove = new JLabel();
+		add(labelOnMove, new GridBagConstraints(0, 0, 2, 1, 0D, 0D, GridBagConstraints.NORTH, GridBagConstraints.NONE,
 				new Insets(0, 0, 0, 0), 0, 0));
 
 		// Y=1
@@ -78,6 +78,7 @@ public class RightPanelView extends JPanel implements RightPanelPresenter.Displa
 		// Y=3
 		scrollPaneGamePanel = new JScrollPane(unitsPanel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
 				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		scrollPaneGamePanel.setBorder(BorderFactory.createEmptyBorder());
 		add(scrollPaneGamePanel, new GridBagConstraints(0, 3, 2, 1, 1D, 1D, GridBagConstraints.NORTH,
 				GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
 
@@ -94,8 +95,10 @@ public class RightPanelView extends JPanel implements RightPanelPresenter.Displa
 	}
 
 	@Override
-	public void showTile(final FocusedTileEvent event, final Model game) {
-		setCurrentPlayer(game.getCurrentPlayer());
+	public void showTile(final FocusedTileEvent event) {
+		if (event == null) {
+			return;
+		}
 		tileImage.setImage(imageProvider.getTerrainImage(event.getTerrain()));
 		StringBuilder sb = new StringBuilder(200);
 		sb.append("<html><div>");
@@ -106,24 +109,24 @@ public class RightPanelView extends JPanel implements RightPanelPresenter.Displa
 		sb.append("</div></html>");
 		tileName.setText(sb.toString());
 		unitsPanel.clear();
-		if (game.getShipsAt(event.getLocation()).isEmpty()) {
+		if (event.getModel().getShipsAt(event.getLocation()).isEmpty()) {
 			unitsLabel.setText("");
 		} else {
 			unitsLabel.setText(getText().get("unitsPanel.units"));
-			unitsPanel.setUnits(game.getShipsAt(event.getLocation()));
+			unitsPanel.setUnits(event.getModel().getShipsAt(event.getLocation()));
 		}
 		repaint();
 	}
 
 	@Override
-	public void setCurrentPlayer(final Player player) {
+	public void setOnMovePlayer(final Player player) {
 		StringBuilder sb = new StringBuilder(200);
 		sb.append("<html><div>");
 		sb.append(getText().get("unitsPanel.currentUser"));
 		sb.append(" ");
 		sb.append(player.getName());
 		sb.append("</div></html>");
-		tileOnMove.setText(sb.toString());
+		labelOnMove.setText(sb.toString());
 	}
 
 	@Override
