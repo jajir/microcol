@@ -83,7 +83,7 @@ public class GameController implements Localized {
 				.setMap("/maps/test-map-ocean-1000x1000.txt")
 				.addPlayer("Player1", false)
 					.addShip("Player1", ShipType.GALLEON, Location.of(4, 2))
-					.addShip("Player1", ShipType.FRIGATE, Location.of(3, 3))
+					.addShip("Player1", ShipType.FRIGATE, Location.of(13, 7))
 				.addPlayer("Player2", true)
 					.addShip("Player2", ShipType.GALLEON, Location.of(7, 7))
 					.addShip("Player2", ShipType.FRIGATE, Location.of(7, 9));

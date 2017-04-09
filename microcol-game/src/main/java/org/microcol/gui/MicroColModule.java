@@ -42,6 +42,7 @@ public class MicroColModule extends AbstractModule {
 
 		bind(StatusBarMessageController.class).in(Singleton.class);
 
+		bind(GamePreferences.class).in(Singleton.class);
 		bind(PathPlanning.class).in(Singleton.class);
 		bind(ImageProvider.class).in(Singleton.class);
 		bind(ViewUtil.class).in(Singleton.class);

@@ -1,11 +1,12 @@
 package org.microcol.gui;
 
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.util.Hashtable;
 
 import javax.swing.JButton;
-import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JSlider;
 import javax.swing.SwingConstants;
@@ -14,7 +15,7 @@ import javax.swing.WindowConstants;
 import org.microcol.gui.event.AnimationSpeedChangeController;
 import org.microcol.gui.event.AnimationSpeedChangeEvent;
 
-public class PreferencesAnimationSpeed extends JDialog {
+public class PreferencesAnimationSpeed extends AbstractDialog {
 
 	/**
 	 * Default serialVersionUID.
@@ -43,20 +44,27 @@ public class PreferencesAnimationSpeed extends JDialog {
 
 		final JLabel label = new JLabel(text.get("preferencesAnimationSpeed.caption"));
 		add(label, new GridBagConstraints(0, 0, 1, 1, 1.0D, 1.0D, GridBagConstraints.SOUTHWEST, GridBagConstraints.NONE,
-				new Insets(10, 10, 0, 0), 0, 0));
+				new Insets(BORDER, BORDER, BORDER_BIG, 0), 0, 0));
 
-		JSlider slider = new JSlider(SwingConstants.HORIZONTAL, 0, 12, actualVolume);
-		slider.setMinorTickSpacing(10);
+		JSlider slider = new JSlider(SwingConstants.HORIZONTAL, PathPlanning.ANIMATION_SPEED_MIN_VALUE,
+				PathPlanning.ANIMATION_SPEED_MAX_VALUE, actualVolume);
+		Hashtable<Integer, JLabel> labelTable = new Hashtable<>();
+		labelTable.put(new Integer(PathPlanning.ANIMATION_SPEED_MIN_VALUE),
+				new JLabel(text.get("preferencesAnimationSpeed.fast")));
+		labelTable.put(new Integer(PathPlanning.ANIMATION_SPEED_MAX_VALUE),
+				new JLabel(text.get("preferencesAnimationSpeed.slow")));
+		slider.setLabelTable(labelTable);
+		slider.setMinorTickSpacing(1);
 		slider.setSnapToTicks(false);
 		slider.setPaintTicks(false);
-		slider.setPaintLabels(false);
+		slider.setPaintLabels(true);
 		slider.setValue(actualVolume);
 		slider.addChangeListener(changeEvent -> {
 			controller.fireEvent(new AnimationSpeedChangeEvent(slider.getValue()));
 		});
 
 		add(slider, new GridBagConstraints(0, 1, 1, 1, 1.0D, 1.0D, GridBagConstraints.SOUTHEAST,
-				GridBagConstraints.BOTH, new Insets(0, 0, 0, 0), 0, 0));
+				GridBagConstraints.BOTH, new Insets(0, BORDER, 0, BORDER), 0, 0));
 
 		final JButton buttonOk = new JButton(text.get("dialog.ok"));
 		buttonOk.addActionListener(e -> {
@@ -64,10 +72,12 @@ public class PreferencesAnimationSpeed extends JDialog {
 		});
 		buttonOk.requestFocus();
 		add(buttonOk, new GridBagConstraints(0, 10, 1, 1, 1.0D, 1.0D, GridBagConstraints.SOUTHEAST,
-				GridBagConstraints.NONE, new Insets(0, 0, 10, 10), 0, 0));
+				GridBagConstraints.NONE, new Insets(BORDER_BIG, 0, BORDER, BORDER), 0, 0));
 
 		setResizable(false);
 		pack();
+		int width = (int) (getPreferredSize().getWidth() * 2);
+		setMinimumSize(new Dimension(width, getMinimumSize().height));
 		setLocation(viewUtil.centerWindow(this));
 		setModal(true);
 	}
