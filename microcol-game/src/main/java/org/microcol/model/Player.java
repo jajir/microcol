@@ -87,7 +87,7 @@ public class Player {
 
 		Player player = (Player) object;
 
-		return name.equals(player.name);
+		return name.equals(player.name) && computer == player.computer;
 	}
 
 	@Override
