@@ -50,6 +50,8 @@ public class GameController implements Localized {
 	private final GameFinishedController gameFinishedController;
 
 	private Model game;
+	
+	private Engine aiEngine;
 
 	@Inject
 	public GameController(final NextTurnController nextTurnController, final MoveUnitController moveUnitController,
@@ -121,8 +123,8 @@ public class GameController implements Localized {
 				debugRequestController.fireEvent(event);
 			}
 		});
-		Engine skyNet = new Engine(game);
-		skyNet.start();
+		aiEngine = new Engine(game);
+		aiEngine.start();
 		new Thread(() -> game.startGame()).start();
 		musicController.start(gamePreferences.getVolume());
 	}
@@ -142,6 +144,10 @@ public class GameController implements Localized {
 		logger.debug("Next Year event was triggered.");
 		new Thread(() -> game.endTurn()).start();
 		// moveAutomatization.perforMoves();
+	}
+
+	public Engine getAiEngine() {
+		return aiEngine;
 	}
 
 }

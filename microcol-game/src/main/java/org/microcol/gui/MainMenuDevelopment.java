@@ -6,6 +6,10 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.KeyStroke;
 
+import org.microcol.gui.event.GameController;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.inject.Inject;
 
 /**
@@ -17,17 +21,20 @@ import com.google.inject.Inject;
  */
 public class MainMenuDevelopment {
 
+	private final Logger logger = LoggerFactory.getLogger(MainMenuDevelopment.class);
+
 	private final JMenu developmentMenu;
 
 	@Inject
-	public MainMenuDevelopment() {
+	public MainMenuDevelopment(final GameController gameController) {
 		developmentMenu = new JMenu("Development");
 
 		final JMenuItem menuItemStartAi = new JMenuItem("Start AI");
 		menuItemStartAi.setEnabled(true);
 		menuItemStartAi.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, KeyEvent.CTRL_MASK + KeyEvent.SHIFT_MASK));
 		menuItemStartAi.addActionListener(event -> {
-			System.out.println("Start");
+			gameController.getAiEngine().suspend();
+			logger.debug("AI was stopped.");
 		});
 		developmentMenu.add(menuItemStartAi);
 
@@ -35,7 +42,8 @@ public class MainMenuDevelopment {
 		menuItemStopAi.setEnabled(true);
 		menuItemStopAi.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, KeyEvent.CTRL_MASK + KeyEvent.SHIFT_MASK));
 		menuItemStopAi.addActionListener(event -> {
-			System.out.println("Stop");
+			gameController.getAiEngine().resume();
+			logger.debug("AI was started.");
 		});
 		developmentMenu.add(menuItemStopAi);
 
