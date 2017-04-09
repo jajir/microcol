@@ -1,10 +1,14 @@
 package org.microcol.model;
 
+import java.io.StringReader;
+import java.io.StringWriter;
+
+import javax.json.Json;
+import javax.json.stream.JsonGenerator;
+import javax.json.stream.JsonParser;
+
 import org.junit.Assert;
 import org.junit.Test;
-
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 public class ModelSaveLoadTest {
 	@Test
@@ -26,16 +30,56 @@ public class ModelSaveLoadTest {
 		final Ship ship = model.getCurrentPlayer().getShips().get(0);
 		*/
 
-		final Gson gson = new GsonBuilder().create();
-		final String json = gson.toJson(Location.of(1, 1));
+		final Location location = Location.of(1, 1);
+
+		final StringWriter writer = new StringWriter();
+		final JsonGenerator generator = Json.createGenerator(writer);
+		generator.writeStartObject()
+			.write("x", location.getX())
+			.write("y", location.getY())
+			.writeEnd();
+		generator.close();
+		final String json = writer.toString();
 
 		Assert.assertEquals("{\"x\":1,\"y\":1}", json);
 	}
 
 	@Test
 	public void loadTest() {
-		final Gson gson = new GsonBuilder().create();
-		final Location location = gson.fromJson("{\"x\": 1,\"y\": 1}", Location.class);
+		String currentKey = null;
+		Integer x = null;
+		Integer y = null;
+
+		final JsonParser parser = Json.createParser(new StringReader("{\"x\": 1,\"y\": 1}"));
+		while (parser.hasNext()) {
+			final JsonParser.Event event = parser.next();
+			switch(event) {
+				case START_OBJECT:
+				case END_OBJECT:
+				case START_ARRAY:
+				case END_ARRAY:
+					break;
+				case KEY_NAME:
+					currentKey = parser.getString();
+					break;
+				case VALUE_NULL:
+				case VALUE_TRUE:
+				case VALUE_FALSE:
+				case VALUE_STRING:
+					Assert.fail();
+				case VALUE_NUMBER:
+					if ("x".equals(currentKey)) {
+						x = parser.getInt();
+					} else if ("y".equals(currentKey)) {
+						y = parser.getInt();
+					} else {
+						Assert.fail();
+					}
+					break;
+			}
+		}
+
+		final Location location = Location.of(x, y);
 
 		Assert.assertEquals(Location.of(1, 1), location);
 	}
