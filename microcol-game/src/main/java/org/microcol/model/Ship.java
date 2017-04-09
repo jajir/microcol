@@ -171,7 +171,9 @@ public class Ship {
 		}
 	}
 
-	// TODO JKA canAttack
+	public boolean canAttack() {
+		return canAttack;
+	}
 
 	public void attack(final Ship ship) {
 		model.checkGameActive();

@@ -60,6 +60,10 @@ public class WorldMap {
 		this.terrainMap = ImmutableMap.copyOf(terrainMap);
 	}
 
+	public String getFileName() {
+		return fileName;
+	}
+
 	public int getMaxX() {
 		return maxX;
 	}
