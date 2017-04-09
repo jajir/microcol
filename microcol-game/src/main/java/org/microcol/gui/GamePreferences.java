@@ -15,6 +15,8 @@ public class GamePreferences {
 	private static final String PREFERENCES_VOLUME = "volume";
 	private static final String PREFERENCES_SHOW_GRID = "showGrid";
 
+	private static final String SYSTEM_PROPERTY_DEVELOPMENT = "development";
+
 	private final Preferences preferences = Preferences.userNodeForPackage(GamePreferences.class);
 
 	/**
@@ -26,6 +28,10 @@ public class GamePreferences {
 	public boolean isOSX() {
 		final String osName = System.getProperty("os.name");
 		return osName.contains("OS X");
+	}
+
+	public boolean isDevelopment() {
+		return Boolean.valueOf(System.getProperty(SYSTEM_PROPERTY_DEVELOPMENT, "false"));
 	}
 
 	public void setMainFramePosition(final Rectangle bounds) {

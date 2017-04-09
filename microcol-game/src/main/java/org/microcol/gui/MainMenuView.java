@@ -60,7 +60,7 @@ public class MainMenuView extends JMenuBar implements MainMenuPresenter.Display 
 	private final JMenu menuHelp;
 
 	@Inject
-	public MainMenuView(final GamePreferences gamePreferences, final Text text) {
+	public MainMenuView(final GamePreferences gamePreferences, final Text text, final MainMenuDevelopment mainMenuDevelopment) {
 		this.text = Preconditions.checkNotNull(text);
 		menuGame = new JMenu();
 
@@ -143,6 +143,10 @@ public class MainMenuView extends JMenuBar implements MainMenuPresenter.Display 
 		menuItemAbout = new JMenuItem();
 		menuHelp.add(menuItemAbout);
 
+		if(gamePreferences.isDevelopment()){
+			add(mainMenuDevelopment.getDevelopmentMenu());
+		}
+		
 		if (!gamePreferences.isOSX()) {
 			add(menuHelp);
 		}
