@@ -1,5 +1,7 @@
 package org.microcol.model;
 
+import javax.json.stream.JsonGenerator;
+
 import com.google.common.base.Preconditions;
 
 class GameManager {
@@ -74,5 +76,18 @@ class GameManager {
 				model.fireGameFinished();
 			}
 		}
+	}
+
+	void save(final String name, final JsonGenerator generator) {
+		generator.writeStartObject(name)
+			.write("started", started);
+
+		if (currentPlayer != null) {
+			generator.write("currentPlayer",  currentPlayer.getName());
+		} else {
+			generator.writeNull("currentPlayer");
+		}
+
+		generator.writeEnd();
 	}
 }

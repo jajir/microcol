@@ -110,8 +110,8 @@ public class Location {
 			.toString();
 	}
 
-	void save(final JsonGenerator generator) {
-		generator.writeStartObject()
+	void save(final String name, final JsonGenerator generator) {
+		generator.writeStartObject(name)
 			.write("x", x)
 			.write("y", y)
 			.writeEnd();

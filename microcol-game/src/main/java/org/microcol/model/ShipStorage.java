@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
+import javax.json.stream.JsonGenerator;
+
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableListMultimap;
@@ -104,5 +106,11 @@ class ShipStorage {
 		Preconditions.checkNotNull(ship);
 
 		ships.remove(ship);
+	}
+
+	void save(final JsonGenerator generator) {
+		generator.writeStartArray("ships");
+		ships.forEach(ship -> ship.save(generator));
+		generator.writeEnd();
 	}
 }

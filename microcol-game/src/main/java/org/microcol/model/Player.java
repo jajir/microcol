@@ -3,6 +3,8 @@ package org.microcol.model;
 import java.util.List;
 import java.util.Map;
 
+import javax.json.stream.JsonGenerator;
+
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 
@@ -93,5 +95,12 @@ public class Player {
 			.add("name", name)
 			.add("computer", computer)
 			.toString();
+	}
+
+	void save(final JsonGenerator generator) {
+		generator.writeStartObject()
+			.write("name", name)
+			.write("computer", computer)
+			.writeEnd();
 	}
 }

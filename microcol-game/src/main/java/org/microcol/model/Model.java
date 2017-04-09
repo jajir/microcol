@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.json.stream.JsonGenerator;
+
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 
@@ -76,6 +78,18 @@ public class Model {
 
 	public List<Ship> getShipsAt(final Location location) {
 		return shipStorage.getShipsAt(location);
+	}
+
+	void save(final JsonGenerator generator) {
+		generator.writeStartObject();
+		calendar.save("calendar", generator);
+		map.save("map", generator);
+		generator.writeStartArray("players");
+		players.forEach(player -> player.save(generator));
+		generator.writeEnd();
+		shipStorage.save(generator);
+		gameManager.save("game", generator);
+		generator.writeEnd();
 	}
 
 	List<Ship> getShips(final Player player) {

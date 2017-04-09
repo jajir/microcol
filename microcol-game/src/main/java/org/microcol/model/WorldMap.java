@@ -6,17 +6,22 @@ import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.json.stream.JsonGenerator;
+
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableMap;
 
 public class WorldMap {
+	private final String fileName;
 	private final int maxX;
 	private final int maxY;
 	private final ImmutableMap<Location, Terrain> terrainMap;
 
 	WorldMap(final String fileName) {
 		Preconditions.checkNotNull(fileName);
+
+		this.fileName = fileName;
 
 		int maxX = 0;
 		int maxY = 0;
@@ -88,9 +93,16 @@ public class WorldMap {
 	@Override
 	public String toString() {
 		return MoreObjects.toStringHelper(this)
+			.add("fileName", fileName)
 			.add("maxX", maxX)
 			.add("maxY", maxY)
 			.add("landmass", terrainMap.keySet().size())
 			.toString();
+	}
+
+	void save(final String name, final JsonGenerator generator) {
+		generator.writeStartObject(name)
+			.write("fileName", fileName)
+			.writeEnd();
 	}
 }

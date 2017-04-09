@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import javax.json.stream.JsonGenerator;
+
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
@@ -13,16 +15,16 @@ import com.google.common.collect.ImmutableList;
 public class Ship {
 	private Model model;
 
-	private final Player owner;
 	private final ShipType type;
+	private final Player owner;
 
 	private Location location;
 	private int availableMoves;
 	private boolean canAttack;
 
 	Ship(final Player owner, final ShipType type, final Location location) {
-		this.owner = Preconditions.checkNotNull(owner);
 		this.type = Preconditions.checkNotNull(type);
+		this.owner = Preconditions.checkNotNull(owner);
 		this.location = Preconditions.checkNotNull(location);
 	}
 
@@ -34,12 +36,12 @@ public class Ship {
 		}
 	}
 
-	public Player getOwner() {
-		return owner;
-	}
-
 	public ShipType getType() {
 		return type;
+	}
+
+	public Player getOwner() {
+		return owner;
 	}
 
 	public Location getLocation() {
@@ -190,11 +192,21 @@ public class Ship {
 	@Override
 	public String toString() {
 		return MoreObjects.toStringHelper(this)
-			.add("owner", owner)
 			.add("type", type)
+			.add("owner", owner)
 			.add("location", location)
 			.add("availableMoves", availableMoves)
 			.add("canAttack", canAttack)
 			.toString();
+	}
+
+	void save(final JsonGenerator generator) {
+		generator.writeStartObject();
+		generator.write("type", type.name());
+		generator.write("owner", owner.getName());
+		location.save("location", generator);
+		generator.write("availableMoves", availableMoves);
+		generator.write("canAttack", canAttack);
+		generator.writeEnd();
 	}
 }
