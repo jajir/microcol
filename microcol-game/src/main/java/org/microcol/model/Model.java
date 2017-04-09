@@ -1,11 +1,13 @@
 package org.microcol.model;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import javax.json.stream.JsonGenerator;
+import javax.json.stream.JsonParser;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
@@ -16,7 +18,7 @@ public class Model {
 	private final WorldMap map;
 	private final ImmutableList<Player> players;
 	private final ShipStorage shipStorage;
-	private final GameManager gameManager;
+	private GameManager gameManager;
 
 	Model(final Calendar calendar, final WorldMap map, final List<Player> players, final List<Ship> ships) {
 		listenerManager = new ListenerManager();
@@ -32,7 +34,8 @@ public class Model {
 		shipStorage = new ShipStorage(ships);
 		shipStorage.getShips().forEach(ship -> ship.setModel(this));
 
-		gameManager = new GameManager(this);
+		gameManager = new GameManager();
+		gameManager.setModel(this);
 	}
 
 	private void checkPlayerNames(final List<Player> players) {
@@ -80,8 +83,8 @@ public class Model {
 		return shipStorage.getShipsAt(location);
 	}
 
-	void save(final JsonGenerator generator) {
-		generator.writeStartObject();
+	public void save(final String name, final JsonGenerator generator) {
+		generator.writeStartObject(name);
 		calendar.save("calendar", generator);
 		map.save("map", generator);
 		generator.writeStartArray("players");
@@ -90,6 +93,32 @@ public class Model {
 		shipStorage.save(generator);
 		gameManager.save("game", generator);
 		generator.writeEnd();
+	}
+
+	public static Model load(final JsonParser parser) {
+		parser.next(); // START_OBJECT
+		parser.next(); // KEY_NAME
+		final Calendar calendar = Calendar.load(parser);
+		parser.next(); // KEY_NAME
+		final WorldMap map = WorldMap.load(parser);
+		parser.next(); // KEY_NAME
+		parser.next();  // START_ARRAY
+		final List<Player> players = new ArrayList<>();
+		Player player = null;
+		while ((player = Player.load(parser)) != null) {
+			players.add(player);
+		}
+		parser.next(); // KEY_NAME
+		final List<Ship> ships = ShipStorage.load(parser, players);
+		parser.next(); // KEY_NAME
+		final GameManager gameManager = GameManager.load(parser, players);
+		parser.next(); // END_OBJECT
+
+		final Model model = new Model(calendar, map, players, ships);
+		gameManager.setModel(model);
+		model.gameManager = gameManager;
+
+		return model;
 	}
 
 	List<Ship> getShips(final Player player) {

@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.json.stream.JsonGenerator;
+import javax.json.stream.JsonParser;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
@@ -102,5 +103,20 @@ public class Player {
 			.write("name", name)
 			.write("computer", computer)
 			.writeEnd();
+	}
+
+	static Player load(final JsonParser parser) {
+		// START_OBJECT or END_ARRAY
+		if (parser.next() == JsonParser.Event.END_ARRAY) {
+			return null;
+		}
+		parser.next(); // KEY_NAME
+		parser.next(); // VALUE_STRING
+		final String name = parser.getString();
+		parser.next(); // KEY_NAME
+		final boolean computer = parser.next() == JsonParser.Event.VALUE_TRUE; // VALUE_TRUE or VALUE_FALSE
+		parser.next(); // END_OBJECT
+
+		return new Player(name, computer);
 	}
 }

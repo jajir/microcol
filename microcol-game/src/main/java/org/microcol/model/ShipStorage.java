@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.function.Function;
 
 import javax.json.stream.JsonGenerator;
+import javax.json.stream.JsonParser;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
@@ -112,5 +113,16 @@ class ShipStorage {
 		generator.writeStartArray("ships");
 		ships.forEach(ship -> ship.save(generator));
 		generator.writeEnd();
+	}
+
+	static List<Ship> load(final JsonParser parser, final List<Player> players) {
+		parser.next();  // START_ARRAY
+		final List<Ship> ships = new ArrayList<>();
+		Ship ship = null;
+		while ((ship = Ship.load(parser, players)) != null) {
+			ships.add(ship);
+		}
+
+		return ships;
 	}
 }

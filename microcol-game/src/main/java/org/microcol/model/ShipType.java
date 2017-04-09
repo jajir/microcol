@@ -19,6 +19,7 @@ public enum ShipType {
 	@Override
 	public String toString() {
 		return MoreObjects.toStringHelper(this)
+			.add("name", name())
 			.add("speed", speed)
 			.toString();
 	}

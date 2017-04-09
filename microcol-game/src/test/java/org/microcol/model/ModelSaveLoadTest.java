@@ -1,6 +1,7 @@
 package org.microcol.model;
 
-import java.io.StringReader;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.io.StringWriter;
 
 import javax.json.Json;
@@ -8,7 +9,6 @@ import javax.json.stream.JsonGenerator;
 import javax.json.stream.JsonGeneratorFactory;
 import javax.json.stream.JsonParser;
 
-import org.junit.Assert;
 import org.junit.Test;
 
 import com.google.common.collect.ImmutableMap;
@@ -34,17 +34,24 @@ public class ModelSaveLoadTest {
 			ImmutableMap.of(JsonGenerator.PRETTY_PRINTING, Boolean.TRUE));
 		final StringWriter writer = new StringWriter();
 		final JsonGenerator generator = prettyGeneratorFactory.createGenerator(writer);
-		model.save(generator);
+		generator.writeStartObject();
+		model.save("model", generator);
+		generator.writeEnd();
 		generator.close();
 		final String json = writer.toString();
 		System.out.println(json);
 	}
 
 	@Test
-	public void loadTest() {
-		final JsonParser parser = Json.createParser(new StringReader("{\"x\": 1,\"y\": 1}"));
-		final Location location = Location.load(parser);
+	public void loadTest() throws Exception {
+		final JsonParser parser = Json.createParser(new BufferedReader(
+			new InputStreamReader(WorldMap.class.getResourceAsStream("/saves/test-save-model-01.json"), "UTF-8")));
+		parser.next(); // START_OBJECT
+		parser.next(); // KEY_NAME
+		final Model model = Model.load(parser);
+		parser.next(); // END_OBJECT
+		parser.close();
 
-		Assert.assertEquals(Location.of(1, 1), location);
+		System.out.println(model);
 	}
 }

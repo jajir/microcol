@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.json.stream.JsonGenerator;
+import javax.json.stream.JsonParser;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
@@ -104,5 +105,15 @@ public class WorldMap {
 		generator.writeStartObject(name)
 			.write("fileName", fileName)
 			.writeEnd();
+	}
+
+	static WorldMap load(final JsonParser parser) {
+		parser.next(); // START_OBJECT
+		parser.next(); // KEY_NAME
+		parser.next(); // VALUE_STRING
+		final String fileName = parser.getString();
+		parser.next(); // END_OBJECT
+
+		return new WorldMap(fileName);
 	}
 }

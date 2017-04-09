@@ -7,6 +7,7 @@ import java.util.Optional;
 import java.util.Set;
 
 import javax.json.stream.JsonGenerator;
+import javax.json.stream.JsonParser;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
@@ -22,7 +23,7 @@ public class Ship {
 	private int availableMoves;
 	private boolean canAttack;
 
-	Ship(final Player owner, final ShipType type, final Location location) {
+	Ship(final ShipType type, final Player owner, final Location location) {
 		this.type = Preconditions.checkNotNull(type);
 		this.owner = Preconditions.checkNotNull(owner);
 		this.location = Preconditions.checkNotNull(location);
@@ -208,5 +209,36 @@ public class Ship {
 		generator.write("availableMoves", availableMoves);
 		generator.write("canAttack", canAttack);
 		generator.writeEnd();
+	}
+
+	static Ship load(final JsonParser parser, final List<Player> players) {
+		// START_OBJECT or END_ARRAY
+		if (parser.next() == JsonParser.Event.END_ARRAY) {
+			return null;
+		}
+		parser.next(); // KEY_NAME
+		parser.next(); // VALUE_STRING
+		final ShipType type = ShipType.valueOf(parser.getString());
+		parser.next(); // KEY_NAME
+		parser.next(); // VALUE_STRING
+		final String ownerName = parser.getString();
+		final Player owner = players.stream()
+			.filter(player -> player.getName().equals(ownerName))
+			.findAny()
+			.orElse(null);
+		parser.next(); // KEY_NAME
+		final Location location = Location.load(parser);
+		parser.next(); // KEY_NAME
+		parser.next(); // VALUE_NUMBER
+		final int availableMoves = parser.getInt();
+		parser.next(); // KEY_NAME
+		final boolean canAttack = parser.next() == JsonParser.Event.VALUE_TRUE; // VALUE_TRUE or VALUE_FALSE
+		parser.next(); // END_OBJECT
+
+		final Ship ship = new Ship(type, owner, location);
+		ship.availableMoves = availableMoves;
+		ship.canAttack = canAttack;
+
+		return ship;
 	}
 }

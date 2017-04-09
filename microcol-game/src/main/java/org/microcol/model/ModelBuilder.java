@@ -33,8 +33,9 @@ public class ModelBuilder {
 		return this;
 	}
 
+	// TODO JKA PROHODIT TYPE A OWNER
 	public ModelBuilder addShip(final String ownerName, final ShipType type, final Location location) {
-		ships.add(new Ship(getPlayer(ownerName), type, location));
+		ships.add(new Ship(type, getPlayer(ownerName), location));
 
 		return this;
 	}
