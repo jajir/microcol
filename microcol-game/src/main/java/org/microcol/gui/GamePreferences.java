@@ -13,7 +13,18 @@ public class GamePreferences {
 	private static final String PREFERENCES_WIDTH = "width";
 	private static final String PREFERENCES_HEIGHT = "height";
 	private static final String PREFERENCES_VOLUME = "volume";
+	private static final String PREFERENCES_ANIMATION_SPEED = "animationSpeed";
 	private static final String PREFERENCES_SHOW_GRID = "showGrid";
+
+	/**
+	 * When there are no value in preferences than this value is used.
+	 */
+	private static final int DEFAULT_VOLUME = 75;
+
+	/**
+	 * When there are no value in preferences than this value is used.
+	 */
+	private static final int DEFAULT_ANIMATION_SPEED = 10;
 
 	private static final String SYSTEM_PROPERTY_DEVELOPMENT = "development";
 
@@ -74,7 +85,16 @@ public class GamePreferences {
 	}
 
 	public int getVolume() {
-		return preferences.getInt(PREFERENCES_VOLUME, 75);
+		return preferences.getInt(PREFERENCES_VOLUME, DEFAULT_VOLUME);
+	}
+
+	public void setAnimationSpeed(final int animationSpeed) {
+		preferences.putInt(PREFERENCES_ANIMATION_SPEED, animationSpeed);
+		flush();
+	}
+
+	public int getAnimationSpeed() {
+		return preferences.getInt(PREFERENCES_ANIMATION_SPEED, DEFAULT_ANIMATION_SPEED);
 	}
 
 	public void setShowGrid(final boolean isGridShown) {

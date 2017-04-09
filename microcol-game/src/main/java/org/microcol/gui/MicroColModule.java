@@ -2,6 +2,8 @@ package org.microcol.gui;
 
 import org.microcol.gui.event.AboutGameEventController;
 import org.microcol.gui.event.AboutGameListenerImpl;
+import org.microcol.gui.event.AnimationSpeedChangeController;
+import org.microcol.gui.event.AnimationSpeedChangedListenerPreferences;
 import org.microcol.gui.event.CenterViewController;
 import org.microcol.gui.event.ChangeLanguageController;
 import org.microcol.gui.event.ChangeLanguageListenerPreferences;
@@ -59,6 +61,7 @@ public class MicroColModule extends AbstractModule {
 		bind(GameController.class).in(Singleton.class);
 		bind(TurnStartedController.class).in(Singleton.class);
 		bind(VolumeChangeController.class).in(Singleton.class);
+		bind(AnimationSpeedChangeController.class).in(Singleton.class);
 		bind(ShowGridController.class).in(Singleton.class);
 		bind(CenterViewController.class).in(Singleton.class);
 		bind(ExitGameController.class).in(Singleton.class);
@@ -106,6 +109,7 @@ public class MicroColModule extends AbstractModule {
 		bind(ChangeLanguageListenerPreferences.class).asEagerSingleton();
 		bind(ChangeLanguageListenerText.class).asEagerSingleton();
 		bind(VolumeChangedListenerPreferences.class).asEagerSingleton();
+		bind(AnimationSpeedChangedListenerPreferences.class).asEagerSingleton();
 		bind(ShowGridListenerPreferences.class).asEagerSingleton();
 
 		bind(MusicPlayer.class).in(Singleton.class);

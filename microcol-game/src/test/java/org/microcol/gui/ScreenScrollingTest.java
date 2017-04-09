@@ -21,7 +21,7 @@ public class ScreenScrollingTest {
 	// TODO JJ how to mock lambda?
 	@Test
 	public void test_constructor() throws Exception {
-		pathPlanning.paintPath(EasyMock.eq(Point.of(10, 10)), EasyMock.eq(Point.of(30, 10)), EasyMock.notNull(),
+		pathPlanning.paintPathWithStepsLimit(EasyMock.eq(Point.of(10, 10)), EasyMock.eq(Point.of(30, 10)), EasyMock.notNull(),
 				EasyMock.eq(10));
 		EasyMock.replay(pathPlanning);
 		ScreenScrolling screenScrolling = new ScreenScrolling(pathPlanning, Point.of(10, 10), Point.of(30, 10));

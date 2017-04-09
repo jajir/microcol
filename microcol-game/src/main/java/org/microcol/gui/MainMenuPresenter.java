@@ -6,6 +6,7 @@ import javax.swing.JRadioButtonMenuItem;
 
 import org.microcol.gui.event.AboutGameEvent;
 import org.microcol.gui.event.AboutGameEventController;
+import org.microcol.gui.event.AnimationSpeedChangeController;
 import org.microcol.gui.event.CenterViewController;
 import org.microcol.gui.event.CenterViewEvent;
 import org.microcol.gui.event.ChangeLanguageController;
@@ -44,6 +45,8 @@ public class MainMenuPresenter {
 
 		void updateLanguage();
 
+		JMenuItem getMenuItemAnimationSpeed();
+
 		JMenuItem getMenuItemVolume();
 
 		JCheckBoxMenuItem getMenuItemShowGrid();
@@ -63,11 +66,12 @@ public class MainMenuPresenter {
 	public MainMenuPresenter(final MainMenuPresenter.Display display,
 			final AboutGameEventController gameEventController, final GamePreferences gamePreferences,
 			final ChangeLanguageController changeLanguageController, final Text text, final ViewUtil viewUtil,
-			final VolumeChangeController volumeChangeController, final ShowGridController showGridController,
-			final FocusedTileController focusedTileController, final MoveUnitController moveUnitController,
-			final CenterViewController centerViewController, final TurnStartedController turnStartedController,
-			final ExitGameController exitGameController, final GameController gameController,
-			final ApplicationController applicationController) {
+			final VolumeChangeController volumeChangeController,
+			final AnimationSpeedChangeController animationSpeedChangeController,
+			final ShowGridController showGridController, final FocusedTileController focusedTileController,
+			final MoveUnitController moveUnitController, final CenterViewController centerViewController,
+			final TurnStartedController turnStartedController, final ExitGameController exitGameController,
+			final GameController gameController, final ApplicationController applicationController) {
 		this.display = Preconditions.checkNotNull(display);
 		display.getMenuItemNewGame().addActionListener(actionEvent -> {
 			applicationController.startNewGame();
@@ -87,9 +91,14 @@ public class MainMenuPresenter {
 			changeLanguageController.fireEvent(new ChangeLanguageEvent(Text.Language.en, gameController.getModel()));
 		});
 		display.getMenuItemVolume().addActionListener(actionEvent -> {
-			PreferencesVolume preferencesVolume = new PreferencesVolume(viewUtil, text, volumeChangeController,
+			PreferencesVolume preferences = new PreferencesVolume(viewUtil, text, volumeChangeController,
 					gamePreferences.getVolume());
-			preferencesVolume.setVisible(true);
+			preferences.setVisible(true);
+		});
+		display.getMenuItemAnimationSpeed().addActionListener(event -> {
+			PreferencesAnimationSpeed preferences = new PreferencesAnimationSpeed(viewUtil, text,
+					animationSpeedChangeController, gamePreferences.getAnimationSpeed());
+			preferences.setVisible(true);
 		});
 		display.getMenuItemShowGrid().addActionListener(ectionEvent -> showGridController
 				.fireEvent(new ShowGridEvent(display.getMenuItemShowGrid().isSelected())));

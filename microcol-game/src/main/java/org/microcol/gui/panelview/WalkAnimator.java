@@ -67,7 +67,7 @@ public class WalkAnimator {
 			if (!path.isEmpty()) {
 				final Point from = Point.of(partialPathFrom);
 				final Point to = Point.of(path.get(0));
-				pathPlanning.paintPath(from, to, point -> partialPath.add(point));
+				pathPlanning.paintPathWithMoveSpeed(from, to, point -> partialPath.add(point));
 				partialPathFrom = path.remove(0);
 			}
 		}

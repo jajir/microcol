@@ -55,6 +55,8 @@ public class MainMenuView extends JMenuBar implements MainMenuPresenter.Display 
 
 	private final JMenuItem menuItemVolume;
 
+	private final JMenuItem menuItemAnimationSpeed;
+
 	private final JCheckBoxMenuItem menuItemShowGrid;
 
 	private final JMenu menuHelp;
@@ -129,6 +131,10 @@ public class MainMenuView extends JMenuBar implements MainMenuPresenter.Display 
 		menuItemVolume.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_V, InputEvent.CTRL_MASK));
 		menuPrefereces.add(menuItemVolume);
 
+		menuItemAnimationSpeed= new JMenuItem();
+		menuItemAnimationSpeed.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A, InputEvent.CTRL_MASK));
+		menuPrefereces.add(menuItemAnimationSpeed);
+
 		menuItemShowGrid = new JCheckBoxMenuItem();
 		menuItemShowGrid.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_G, 0));
 		menuItemShowGrid.setSelected(gamePreferences.isGridShown());
@@ -184,6 +190,7 @@ public class MainMenuView extends JMenuBar implements MainMenuPresenter.Display 
 		rbMenuItemlanguageEn.setText(text.get("mainMenu.preferences.language.en"));
 		rbMenuItemlanguageCz.setText(text.get("mainMenu.preferences.language.cz"));
 		menuItemVolume.setText(text.get("mainMenu.preferences.volume"));
+		menuItemAnimationSpeed.setText(text.get("mainMenu.preferences.animationSpeed"));
 		menuItemShowGrid.setText(text.get("mainMenu.preferences.showGrid"));
 
 		/**
@@ -246,5 +253,10 @@ public class MainMenuView extends JMenuBar implements MainMenuPresenter.Display 
 	@Override
 	public JMenuItem getMenuItemCenterView() {
 		return menuItemCenterView;
+	}
+
+	@Override
+	public JMenuItem getMenuItemAnimationSpeed() {
+		return menuItemAnimationSpeed;
 	}
 }

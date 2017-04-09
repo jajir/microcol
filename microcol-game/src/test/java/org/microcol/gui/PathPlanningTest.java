@@ -18,7 +18,7 @@ public class PathPlanningTest {
 		whatToDo.pathPoint(Point.of(6, 6));
 		whatToDo.pathPoint(Point.of(7, 6));
 		EasyMock.replay(whatToDo);
-		pathPlanning.paintPath(Point.of(2, 4), Point.of(7, 6), whatToDo);
+		pathPlanning.paintPathWithMoveSpeed(Point.of(2, 4), Point.of(7, 6), whatToDo);
 
 		EasyMock.verify(whatToDo);
 	}
@@ -31,7 +31,7 @@ public class PathPlanningTest {
 		whatToDo.pathPoint(Point.of(5, 5));
 		whatToDo.pathPoint(Point.of(6, 6));
 		EasyMock.replay(whatToDo);
-		pathPlanning.paintPath(Point.of(2, 2), Point.of(6, 6), whatToDo);
+		pathPlanning.paintPathWithMoveSpeed(Point.of(2, 2), Point.of(6, 6), whatToDo);
 
 		EasyMock.verify(whatToDo);
 	}
@@ -40,7 +40,7 @@ public class PathPlanningTest {
 	public void test_from_and_destiny_points_are_same() throws Exception {
 		PathPlanning.WhatToDoWithPointInPath whatToDo = EasyMock.createMock(PathPlanning.WhatToDoWithPointInPath.class);
 		EasyMock.replay(whatToDo);
-		pathPlanning.paintPath(Point.of(5, 5), Point.of(5, 5), whatToDo);
+		pathPlanning.paintPathWithMoveSpeed(Point.of(5, 5), Point.of(5, 5), whatToDo);
 		EasyMock.verify(whatToDo);
 	}
 
@@ -54,7 +54,7 @@ public class PathPlanningTest {
 		whatToDo.pathPoint(Point.of(10, 1));
 		whatToDo.pathPoint(Point.of(11, 0));
 		EasyMock.replay(whatToDo);
-		pathPlanning.paintPath(Point.of(5, 5), Point.of(11, 0), whatToDo);
+		pathPlanning.paintPathWithMoveSpeed(Point.of(5, 5), Point.of(11, 0), whatToDo);
 
 		EasyMock.verify(whatToDo);
 	}
@@ -67,7 +67,7 @@ public class PathPlanningTest {
 		whatToDo.pathPoint(Point.of(5, 4));
 		whatToDo.pathPoint(Point.of(4, 3));
 		EasyMock.replay(whatToDo);
-		pathPlanning.paintPath(Point.of(6, 7), Point.of(4, 3), whatToDo);
+		pathPlanning.paintPathWithMoveSpeed(Point.of(6, 7), Point.of(4, 3), whatToDo);
 
 		EasyMock.verify(whatToDo);
 	}

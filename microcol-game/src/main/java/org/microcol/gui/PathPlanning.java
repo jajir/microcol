@@ -30,7 +30,7 @@ public class PathPlanning {
 	 *            required function that's executed with each found point to
 	 *            visit
 	 */
-	public void paintPath(final Point tileFrom, final Point tileTo,
+	public void paintPathWithMoveSpeed(final Point tileFrom, final Point tileTo,
 			final WhatToDoWithPointInPath whatToDoWithPointInPath) {
 		final int diff = Math.abs(tileTo.getY() - tileFrom.getY()) - Math.abs(tileTo.getX() - tileFrom.getX());
 		if (diff < 0) {
@@ -78,7 +78,7 @@ public class PathPlanning {
 	 * @param howManyStepsShouldBeDone
 	 *            required how many steps should be done to reach target
 	 */
-	public void paintPath(final Point tileFrom, final Point tileTo,
+	public void paintPathWithStepsLimit(final Point tileFrom, final Point tileTo,
 			final WhatToDoWithPointInPath whatToDoWithPointInPath, final int howManyStepsShouldBeDone) {
 		final int diff = Math.abs(tileTo.getY() - tileFrom.getY()) - Math.abs(tileTo.getX() - tileFrom.getX());
 		if (diff < 0) {

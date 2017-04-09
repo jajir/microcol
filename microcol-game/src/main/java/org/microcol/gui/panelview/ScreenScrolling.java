@@ -14,14 +14,14 @@ import com.google.common.base.Preconditions;
  */
 public class ScreenScrolling {
 
-	private static final int SPEED = 10;
+	private static final int DEFAULT_SCREEN_SCROLLING_SPEED = 10;
 
 	private final List<Point> stepsToDo;
 
 	public ScreenScrolling(final PathPlanning pathPlanning, final Point from, final Point to) {
 		Preconditions.checkNotNull(pathPlanning);
 		stepsToDo = new ArrayList<>();
-		pathPlanning.paintPath(from, to, point -> stepsToDo.add(point), SPEED);
+		pathPlanning.paintPathWithStepsLimit(from, to, point -> stepsToDo.add(point), DEFAULT_SCREEN_SCROLLING_SPEED);
 	}
 
 	/**
