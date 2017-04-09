@@ -41,6 +41,14 @@ public class Engine {
 		logger.info("AI engine started.");
 	}
 
+	public void suspend() {
+		// TODO JKA IMPLEMENT
+	}
+
+	public void resume() {
+		// TODO JKA IMPLEMENT
+	}
+
 	void turn(final Player player) {
 		player.getShips().forEach(ship -> move(ship));
 		player.endTurn();
