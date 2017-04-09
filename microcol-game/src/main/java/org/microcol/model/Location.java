@@ -3,6 +3,9 @@ package org.microcol.model;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.json.stream.JsonGenerator;
+import javax.json.stream.JsonParser;
+
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
@@ -105,6 +108,26 @@ public class Location {
 			.add("x", x)
 			.add("y", y)
 			.toString();
+	}
+
+	void save(final JsonGenerator generator) {
+		generator.writeStartObject()
+			.write("x", x)
+			.write("y", y)
+			.writeEnd();
+	}
+
+	static Location load(final JsonParser parser) {
+		parser.next(); // START_OBJECT
+		parser.next(); // KEY_NAME
+		parser.next(); // VALUE_NUMBER
+		final int x = parser.getInt();
+		parser.next(); // KEY_NAME
+		parser.next(); // VALUE_NUMBER
+		final int y = parser.getInt();
+		parser.next(); // END_OBJECT
+
+		return of(x, y);
 	}
 
 	public static Location of(final int x, final int y) {

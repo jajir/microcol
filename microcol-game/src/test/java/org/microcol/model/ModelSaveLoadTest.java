@@ -30,14 +30,9 @@ public class ModelSaveLoadTest {
 		final Ship ship = model.getCurrentPlayer().getShips().get(0);
 		*/
 
-		final Location location = Location.of(1, 1);
-
 		final StringWriter writer = new StringWriter();
 		final JsonGenerator generator = Json.createGenerator(writer);
-		generator.writeStartObject()
-			.write("x", location.getX())
-			.write("y", location.getY())
-			.writeEnd();
+		Location.of(1, 1).save(generator);
 		generator.close();
 		final String json = writer.toString();
 
@@ -46,40 +41,8 @@ public class ModelSaveLoadTest {
 
 	@Test
 	public void loadTest() {
-		String currentKey = null;
-		Integer x = null;
-		Integer y = null;
-
 		final JsonParser parser = Json.createParser(new StringReader("{\"x\": 1,\"y\": 1}"));
-		while (parser.hasNext()) {
-			final JsonParser.Event event = parser.next();
-			switch(event) {
-				case START_OBJECT:
-				case END_OBJECT:
-				case START_ARRAY:
-				case END_ARRAY:
-					break;
-				case KEY_NAME:
-					currentKey = parser.getString();
-					break;
-				case VALUE_NULL:
-				case VALUE_TRUE:
-				case VALUE_FALSE:
-				case VALUE_STRING:
-					Assert.fail();
-				case VALUE_NUMBER:
-					if ("x".equals(currentKey)) {
-						x = parser.getInt();
-					} else if ("y".equals(currentKey)) {
-						y = parser.getInt();
-					} else {
-						Assert.fail();
-					}
-					break;
-			}
-		}
-
-		final Location location = Location.of(x, y);
+		final Location location = Location.load(parser);
 
 		Assert.assertEquals(Location.of(1, 1), location);
 	}
