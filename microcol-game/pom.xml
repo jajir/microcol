@@ -84,22 +84,6 @@
 		</dependency>
 	</dependencies>
 
-	<profiles>
-		<profile>
-			<id>travis-ci</id>
-			<activation>
-				<!-- this profile is skipped when system property "travis-ci" is defined. 
-					It allows to skip windows build which not work at Travis CI. -->
-				<property>
-					<name>travis-ci</name>
-				</property>
-			</activation>
-			<properties>
-				<testcase.exclude>org/microcol/integration/**.java</testcase.exclude>
-			</properties>
-		</profile>
-	</profiles>
-
 	<build>
 		<plugins>
 			<plugin>
@@ -168,7 +152,7 @@
 				<version>2.4.2</version>
 				<configuration>
 					<excludes>
-						<exclude>${testcase.exclude}</exclude>
+						<exclude>org/microcol/integration/**.java</exclude>
 					</excludes>
 				</configuration>
 			</plugin>
