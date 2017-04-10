@@ -30,6 +30,8 @@ public class MoveModeSupport {
 
 	private List<Location> moveLocations;
 
+	private boolean fight = false;
+
 	@Inject
 	public MoveModeSupport(final MouseOverTileChangedController mouseOverTileChangedController,
 			final ViewState viewState, final GameController gameController) {
@@ -43,15 +45,43 @@ public class MoveModeSupport {
 		Preconditions.checkNotNull(mouseOverTileChangedEvent);
 		logger.debug("Recounting path: " + mouseOverTileChangedEvent);
 		if (viewState.isMoveMode()) {
-			if (viewState.getSelectedTile().get().equals(viewState.getMouseOverTile().get())) {
-				moveLocations = Lists.newArrayList();
+			if (viewState.getMouseOverTile().isPresent()) {
+				final Location target = viewState.getMouseOverTile().get();
+				if (viewState.getSelectedTile().get().equals(target)) {
+					/**
+					 * Pointing with mouse to unit which should move.
+					 */
+					moveLocations = Lists.newArrayList();
+				} else {
+					// TODO JJ get(0) could return different ship that is really
+					// moved
+					final Ship movingUnit = gameController.getModel().getCurrentPlayer()
+							.getShipsAt(viewState.getSelectedTile().get()).get(0);
+					final List<Ship> ships = gameController.getModel().getShipsAt(target);
+					if (ships.isEmpty()) {
+						// TODO JJ step counter should be core function
+						moveLocations = movingUnit.getPath(target).orElse(Collections.emptyList());
+						fight = false;
+					} else {
+						if (ships.get(0).getOwner().equals(movingUnit.getOwner())) {
+							/**
+							 * Move unit to another my units.
+							 */
+							moveLocations = movingUnit.getPath(target).orElse(Collections.emptyList());
+							fight = false;
+						} else {
+							/**
+							 * It will be fight.
+							 */
+							moveLocations = Lists
+									.newArrayList(movingUnit.getPath(target, true).orElse(Collections.emptyList()));
+							moveLocations.add(target);
+							fight = true;
+						}
+					}
+				}
 			} else {
-				// TODO JJ get(0) could return different ship that is really
-				// moved
-				final Ship unit = gameController.getModel().getCurrentPlayer()
-						.getShipsAt(viewState.getSelectedTile().get()).get(0);
-				// TODO JJ step counter should be core function
-				moveLocations = unit.getPath(viewState.getMouseOverTile().get()).orElse(Collections.emptyList());
+				moveLocations = Collections.emptyList();
 			}
 		} else {
 			moveLocations = Lists.newArrayList();
@@ -60,6 +90,10 @@ public class MoveModeSupport {
 
 	public List<Location> getMoveLocations() {
 		return moveLocations;
+	}
+
+	public boolean isFight() {
+		return fight;
 	}
 
 }

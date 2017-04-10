@@ -30,6 +30,10 @@ public class ImageProvider {
 	public final static String IMG_ICON_STEPS_25x25 = "icon-steps-25x25.png";
 
 	public final static String IMG_ICON_STEPS_TURN_25x25 = "icon-steps-turn-25x25.png";
+	
+	public final static String IMG_ICON_STEPS_FIGHT_25x25 = "icon-steps-fight-25x25.png";
+
+	public final static String IMG_ICON_STEPS_FIGHT_TURN_25x25 = "icon-steps-fight-turn-25x25.png";
 
 	public final static String IMG_SPLASH_SCREEN = "splash-screen.png";
 

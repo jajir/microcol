@@ -14,6 +14,7 @@ import java.awt.image.VolatileImage;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JViewport;
 import javax.swing.Timer;
@@ -387,15 +388,16 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 			graphics.setStroke(new BasicStroke(1));
 			paintCursor(graphics, area, viewState.getMouseOverTile().get());
 			final List<Location> locations = moveModeSupport.getMoveLocations();
-			final Ship unit = gameController.getModel().getCurrentPlayer().getShipsAt(viewState.getSelectedTile().get())
-					.get(0);
-			final StepCounter stepCounter = new StepCounter(5, unit.getAvailableMoves());
+			// TODO JJ get moving unit in specific way
+			final Ship movingUnit = gameController.getModel().getCurrentPlayer()
+					.getShipsAt(viewState.getSelectedTile().get()).get(0);
+			final StepCounter stepCounter = new StepCounter(5, movingUnit.getAvailableMoves());
 			final List<Point> steps = Lists.transform(locations, location -> area.convert((Location) location));
 			/**
 			 * Here could be check if particular step in on screen, but draw few
 			 * images outside screen is not big deal.
 			 */
-			steps.forEach(point -> paintStep(graphics, point, stepCounter));
+			steps.forEach(point -> paintStep(graphics, point, stepCounter, moveModeSupport.isFight()));
 		}
 	}
 
@@ -407,15 +409,25 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 	 * @param point
 	 *            required point where to draw image
 	 */
-	private void paintStep(final Graphics2D graphics, final Point point, final StepCounter stepCounter) {
-		graphics.drawImage(getImageFoStep(stepCounter.canMakeMoveInSameTurn(1)), point.getX(), point.getY(), this);
+	private void paintStep(final Graphics2D graphics, final Point point, final StepCounter stepCounter,
+			final boolean isFight) {
+		graphics.drawImage(getImageFoStep(stepCounter.canMakeMoveInSameTurn(1), isFight), point.getX(), point.getY(),
+				this);
 	}
 
-	private Image getImageFoStep(final boolean normalStep) {
+	private Image getImageFoStep(final boolean normalStep, final boolean isFight) {
 		if (normalStep) {
-			return imageProvider.getImage(ImageProvider.IMG_ICON_STEPS_25x25);
+			if (isFight) {
+				return imageProvider.getImage(ImageProvider.IMG_ICON_STEPS_FIGHT_25x25);
+			} else {
+				return imageProvider.getImage(ImageProvider.IMG_ICON_STEPS_25x25);
+			}
 		} else {
-			return imageProvider.getImage(ImageProvider.IMG_ICON_STEPS_TURN_25x25);
+			if (isFight) {
+				return imageProvider.getImage(ImageProvider.IMG_ICON_STEPS_FIGHT_TURN_25x25);
+			} else {
+				return imageProvider.getImage(ImageProvider.IMG_ICON_STEPS_TURN_25x25);
+			}
 		}
 	}
 
