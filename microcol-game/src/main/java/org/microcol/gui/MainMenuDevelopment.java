@@ -33,7 +33,7 @@ public class MainMenuDevelopment {
 		menuItemStartAi.setEnabled(true);
 		menuItemStartAi.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, KeyEvent.CTRL_MASK + KeyEvent.SHIFT_MASK));
 		menuItemStartAi.addActionListener(event -> {
-			gameController.getAiEngine().suspend();
+			gameController.getAiEngine().resume();
 			logger.debug("AI was stopped.");
 		});
 		developmentMenu.add(menuItemStartAi);
@@ -42,7 +42,7 @@ public class MainMenuDevelopment {
 		menuItemStopAi.setEnabled(true);
 		menuItemStopAi.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, KeyEvent.CTRL_MASK + KeyEvent.SHIFT_MASK));
 		menuItemStopAi.addActionListener(event -> {
-			gameController.getAiEngine().resume();
+			gameController.getAiEngine().suspend();
 			logger.debug("AI was started.");
 		});
 		developmentMenu.add(menuItemStopAi);

@@ -1,6 +1,7 @@
 package org.microcol.ai;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,6 +24,8 @@ public class Engine {
 	private final Random random;
 	private final Map<Ship, Location> lastDirections;
 
+	private boolean running;
+
 	public Engine(final Model model) {
 		this.model = model;
 		this.random = new Random();
@@ -30,6 +33,7 @@ public class Engine {
 	}
 
 	public void start() {
+		running = true;
 		model.addListener(new ModelAdapter() {
 			@Override
 			public void turnStarted(TurnStartedEvent event) {
@@ -42,19 +46,32 @@ public class Engine {
 	}
 
 	public void suspend() {
-		// TODO JKA IMPLEMENT
+		running = false;
 	}
 
 	public void resume() {
-		// TODO JKA IMPLEMENT
+		running = true;
+		// TODO JKA Check if game is running.
+		if (model.getCurrentPlayer().isComputer()) {
+			turn(model.getCurrentPlayer());
+		}
 	}
 
 	void turn(final Player player) {
 		player.getShips().forEach(ship -> move(ship));
+
+		if (!running) {
+			return;
+		}
+
 		player.endTurn();
 	}
 
 	void move(final Ship ship) {
+		if (!running) {
+			return;
+		}
+
 		if (lastDirections.get(ship) == null) {
 			lastDirections.put(ship, Location.DIRECTIONS.get(random.nextInt(Location.DIRECTIONS.size())));
 		}
@@ -102,15 +119,15 @@ public class Engine {
 
 	void showDebug(final Ship ship) {
 		final List<Location> locations = new ArrayList<>();
-		/*
 		for (final Ship enemy : ship.getOwner().getEnemyShips()) {
 			locations.addAll(ship.getPath(enemy.getLocation(), true).orElse(Collections.emptyList()));
 		}
-		*/
+		/*
 		locations.addAll(ship.getAvailableLocations());
 		for (final Ship enemy : ship.getAttackableTargets()) {
 			locations.add(enemy.getLocation());
 		}
+		*/
 
 		model.requestDebug(locations);
 	}
