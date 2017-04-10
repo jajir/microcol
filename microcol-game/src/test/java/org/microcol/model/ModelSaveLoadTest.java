@@ -64,6 +64,7 @@ public class ModelSaveLoadTest {
 		Assert.assertEquals(model.getMap().getFileName(), loadedModel.getMap().getFileName());
 		Assert.assertEquals(model.getMap().getMaxX(), loadedModel.getMap().getMaxX());
 		Assert.assertEquals(model.getMap().getMaxY(), loadedModel.getMap().getMaxY());
+		// TODO JKA TERRAIN?
 		Assert.assertEquals(model.getPlayers(), loadedModel.getPlayers());
 		Assert.assertEquals(model.getShips().size(), loadedModel.getShips().size());
 		for (int i = 0; i < model.getShips().size(); i++) {
@@ -73,7 +74,6 @@ public class ModelSaveLoadTest {
 			Assert.assertEquals(ship.getOwner(), loadedShip.getOwner());
 			Assert.assertEquals(ship.getLocation(), loadedShip.getLocation());
 			Assert.assertEquals(ship.getAvailableMoves(), loadedShip.getAvailableMoves());
-			Assert.assertEquals(ship.canAttack(), loadedShip.canAttack());
 		}
 		// TODO JKA Check GameManager.
 	}

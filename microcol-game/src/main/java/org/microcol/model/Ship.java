@@ -21,7 +21,6 @@ public class Ship {
 
 	private Location location;
 	private int availableMoves;
-	private boolean canAttack;
 
 	Ship(final ShipType type, final Player owner, final Location location) {
 		this.type = Preconditions.checkNotNull(type);
@@ -49,14 +48,12 @@ public class Ship {
 		return location;
 	}
 
-	// TODO JKA package access?
 	public int getAvailableMoves() {
 		return availableMoves;
 	}
 
 	void startTurn() {
 		availableMoves = type.getSpeed();
-		canAttack = true;
 	}
 
 	// Netestuje nedosažitelné lokace, pouze jestli je teoreticky možné na danou lokaci vstoupit
@@ -96,7 +93,7 @@ public class Ship {
 		model.checkGameActive();
 		model.checkCurrentPlayer(owner);
 
-		if (availableMoves == 0 || !canAttack) {
+		if (availableMoves == 0) {
 			return;
 		}
 
@@ -171,25 +168,24 @@ public class Ship {
 		}
 	}
 
-	public boolean canAttack() {
-		return canAttack;
-	}
-
-	public void attack(final Ship ship) {
+	public void attack(final Location location) {
 		model.checkGameActive();
 		model.checkCurrentPlayer(owner);
 
-		Preconditions.checkNotNull(ship);
-		Preconditions.checkArgument(!owner.equals(ship.owner), "Cannot attack own ship (%s - %s).", this, ship);
-		Preconditions.checkArgument(location.isAdjacent(ship.location), "Ship is not adjacent (%s - %s)", this, ship);
-		Preconditions.checkArgument(canAttack, "This ship (%s) already fight this turn.", this);
+		Preconditions.checkNotNull(location);
+		Preconditions.checkArgument(this.location.isAdjacent(location), "Ship (%s) is not adjacent to target location (%s).", this, location);
+		Preconditions.checkState(availableMoves > 0, "Ship (%s) cannot attack this turn.", this);
+		Preconditions.checkState(!owner.getEnemyShipsAt(location).isEmpty(), "There is not any enemy ship on target location (%s).", location);
 
 		availableMoves = 0;
-		canAttack = false;
 
-		final Ship destroyed = Math.random() <= 0.6 ? ship : this;
+		final Ship defender = owner.getEnemyShipsAt(location).get(0);
+		final Ship destroyed = Math.random() <= 0.6 ? defender : this;
 		model.destroyShip(destroyed);
-		model.fireShipAttacked(this, ship, destroyed);
+		if (this != destroyed && owner.getEnemyShipsAt(location).isEmpty()) {
+			this.location = location;
+		}
+		model.fireShipAttacked(this, defender, destroyed);
 	}
 
 	@Override
@@ -199,7 +195,6 @@ public class Ship {
 			.add("owner", owner)
 			.add("location", location)
 			.add("availableMoves", availableMoves)
-			.add("canAttack", canAttack)
 			.toString();
 	}
 
@@ -209,7 +204,6 @@ public class Ship {
 		generator.write("owner", owner.getName());
 		location.save("location", generator);
 		generator.write("availableMoves", availableMoves);
-		generator.write("canAttack", canAttack);
 		generator.writeEnd();
 	}
 
@@ -233,13 +227,10 @@ public class Ship {
 		parser.next(); // KEY_NAME
 		parser.next(); // VALUE_NUMBER
 		final int availableMoves = parser.getInt();
-		parser.next(); // KEY_NAME
-		final boolean canAttack = parser.next() == JsonParser.Event.VALUE_TRUE; // VALUE_TRUE or VALUE_FALSE
 		parser.next(); // END_OBJECT
 
 		final Ship ship = new Ship(type, owner, location);
 		ship.availableMoves = availableMoves;
-		ship.canAttack = canAttack;
 
 		return ship;
 	}

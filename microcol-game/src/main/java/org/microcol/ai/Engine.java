@@ -89,11 +89,13 @@ public class Engine {
 			ship.moveTo(Path.of(locations));
 		}
 
-		for (final Location location : ship.getLocation().getNeighbors()) {
-			final List<Ship> enemies = ship.getOwner().getEnemyShipsAt(location);
-			if (!enemies.isEmpty()) {
-				ship.attack(enemies.get(0));
-				break;
+		if (ship.getAvailableMoves() > 0) {
+			for (final Location location : ship.getLocation().getNeighbors()) {
+				final List<Ship> enemies = ship.getOwner().getEnemyShipsAt(location);
+				if (!enemies.isEmpty()) {
+					ship.attack(enemies.get(0).getLocation());
+					break;
+				}
 			}
 		}
 	}
