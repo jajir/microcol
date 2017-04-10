@@ -90,7 +90,7 @@ public class Ship {
 	}
 
 	private void aaa(final List<Location> availableLocations, final List<Ship> attackableTargets) {
-		model.checkGameActive();
+		model.checkGameRunning();
 		model.checkCurrentPlayer(owner);
 
 		if (availableMoves == 0) {
@@ -140,7 +140,7 @@ public class Ship {
 	}
 
 	public void moveTo(final Path path) {
-		model.checkGameActive();
+		model.checkGameRunning();
 		model.checkCurrentPlayer(owner);
 
 		Preconditions.checkNotNull(path);
@@ -169,7 +169,7 @@ public class Ship {
 	}
 
 	public void attack(final Location location) {
-		model.checkGameActive();
+		model.checkGameRunning();
 		model.checkCurrentPlayer(owner);
 
 		Preconditions.checkNotNull(location);

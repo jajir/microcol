@@ -25,17 +25,17 @@ class GameManager {
 		return started;
 	}
 
+	boolean isRunning() {
+		return started && !isFinished();
+	}
+
 	boolean isFinished() {
 		return model.getCalendar().isFinished();
 	}
 
-	boolean isActive() {
-		return started && !isFinished();
-	}
-
-	void checkGameActive() {
-		if (!isActive()) {
-			throw new IllegalStateException("Game must be active.");
+	void checkGameRunning() {
+		if (!isRunning()) {
+			throw new IllegalStateException("Game must be running.");
 		}
 	}
 
@@ -65,7 +65,7 @@ class GameManager {
 	}
 
 	void endTurn() {
-		checkGameActive();
+		checkGameRunning();
 
 		final int index = model.getPlayers().indexOf(currentPlayer);
 		if (index < model.getPlayers().size() - 1) {

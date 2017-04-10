@@ -65,7 +65,7 @@ public class Player {
 	}
 
 	public void endTurn() {
-		model.checkGameActive();
+		model.checkGameRunning();
 		model.checkCurrentPlayer(this);
 		model.endTurn();
 	}

@@ -47,6 +47,18 @@ public class Model {
 		});
 	}
 
+	public boolean isGameStarted() {
+		return gameManager.isStarted();
+	}
+
+	public boolean isGameRunning() {
+		return gameManager.isRunning();
+	}
+
+	public boolean isGameFinished() {
+		return gameManager.isFinished();
+	}
+
 	public void addListener(ModelListener listener) {
 		listenerManager.addListener(listener);
 	}
@@ -153,8 +165,8 @@ public class Model {
 		gameManager.endTurn();
 	}
 
-	void checkGameActive() {
-		gameManager.checkGameActive();
+	void checkGameRunning() {
+		gameManager.checkGameRunning();
 	}
 
 	void checkCurrentPlayer(final Player player) {

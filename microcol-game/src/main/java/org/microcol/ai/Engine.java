@@ -32,6 +32,10 @@ public class Engine {
 		this.lastDirections = new HashMap<>();
 	}
 
+	public boolean isRunning() {
+		return running;
+	}
+
 	public void start() {
 		running = true;
 		model.addListener(new ModelAdapter() {
@@ -51,8 +55,7 @@ public class Engine {
 
 	public void resume() {
 		running = true;
-		// TODO JKA Check if game is running.
-		if (model.getCurrentPlayer().isComputer()) {
+		if (model.isGameRunning() && model.getCurrentPlayer().isComputer()) {
 			turn(model.getCurrentPlayer());
 		}
 	}
