@@ -82,7 +82,12 @@ public class Ship {
 		return ImmutableList.copyOf(locations);
 	}
 
+	// TODO JKA VRACET LOCATION?
 	public List<Ship> getAttackableTargets() {
+		if (!type.canAttack()) {
+			return ImmutableList.of();
+		}
+
 		List<Ship> enemies = new ArrayList<>();
 		aaa(null, enemies);
 
@@ -172,6 +177,7 @@ public class Ship {
 		model.checkGameRunning();
 		model.checkCurrentPlayer(owner);
 
+		Preconditions.checkState(type.canAttack(), "This ship type (%s) cannot attack.", this);
 		Preconditions.checkNotNull(location);
 		Preconditions.checkArgument(this.location.isAdjacent(location), "Ship (%s) is not adjacent to target location (%s).", this, location);
 		Preconditions.checkState(availableMoves > 0, "Ship (%s) cannot attack this turn.", this);

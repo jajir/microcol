@@ -86,9 +86,11 @@ public class Engine {
 		Location lastLocation = ship.getLocation();
 		outerloop:
 		while (locations.size() < ship.getAvailableMoves()) {
-			for (final Location location : lastLocation.getNeighbors()) {
-				if (!ship.getOwner().getEnemyShipsAt(location).isEmpty()) {
-					break outerloop;
+			if (ship.getType().canAttack()) {
+				for (final Location location : lastLocation.getNeighbors()) {
+					if (!ship.getOwner().getEnemyShipsAt(location).isEmpty()) {
+						break outerloop;
+					}
 				}
 			}
 			final Location lastDirection = lastDirections.get(ship);
@@ -109,7 +111,7 @@ public class Engine {
 			ship.moveTo(Path.of(locations));
 		}
 
-		if (ship.getAvailableMoves() > 0) {
+		if (ship.getType().canAttack() && ship.getAvailableMoves() > 0) {
 			for (final Location location : ship.getLocation().getNeighbors()) {
 				final List<Ship> enemies = ship.getOwner().getEnemyShipsAt(location);
 				if (!enemies.isEmpty()) {
