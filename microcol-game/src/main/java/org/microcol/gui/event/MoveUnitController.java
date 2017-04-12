@@ -3,7 +3,7 @@ package org.microcol.gui.event;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.microcol.model.event.ShipMovedEvent;
+import org.microcol.model.event.UnitMovedEvent;
 
 import com.google.common.base.Preconditions;
 
@@ -14,11 +14,11 @@ import com.google.common.base.Preconditions;
 //TODO JJ split to separate event classes use AbstractEventController
 public class MoveUnitController {
 
-	private final List<Listener<ShipMovedEvent>> listeners = new ArrayList<>();
+	private final List<Listener<UnitMovedEvent>> listeners = new ArrayList<>();
 
 	private final List<Listener<String>> listenersStartMove = new ArrayList<>();
 
-	public void addMoveUnitListener(final Listener<ShipMovedEvent> listener) {
+	public void addMoveUnitListener(final Listener<UnitMovedEvent> listener) {
 		Preconditions.checkNotNull(listener);
 		listeners.add(listener);
 	}
@@ -28,7 +28,7 @@ public class MoveUnitController {
 		listenersStartMove.add(listener);
 	}
 
-	public void fireUnitMovedEvent(final ShipMovedEvent event) {
+	public void fireUnitMovedEvent(final UnitMovedEvent event) {
 		Preconditions.checkNotNull(event);
 		listeners.forEach(listener -> {
 			listener.onEvent(event);

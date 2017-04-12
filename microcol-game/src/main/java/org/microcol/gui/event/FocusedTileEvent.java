@@ -4,7 +4,7 @@ import java.util.Optional;
 
 import org.microcol.model.Location;
 import org.microcol.model.Model;
-import org.microcol.model.Ship;
+import org.microcol.model.Unit;
 import org.microcol.model.Terrain;
 
 import com.google.common.base.Preconditions;
@@ -28,7 +28,7 @@ public class FocusedTileEvent {
 	}
 
 	public boolean isTileContainsMovebleUnit() {
-		final Optional<Ship> unit = model.getShipsAt(location).stream().findFirst();
+		final Optional<Unit> unit = model.getUnitsAt(location).stream().findFirst();
 		return unit.isPresent() && unit.get().getOwner().equals(model.getCurrentPlayer());
 	}
 

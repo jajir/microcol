@@ -12,7 +12,7 @@ import org.microcol.model.Model;
 import org.microcol.model.ModelAdapter;
 import org.microcol.model.Path;
 import org.microcol.model.Player;
-import org.microcol.model.Ship;
+import org.microcol.model.Unit;
 import org.microcol.model.event.TurnStartedEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,7 +22,7 @@ public class Engine {
 
 	private final Model model;
 	private final Random random;
-	private final Map<Ship, Location> lastDirections;
+	private final Map<Unit, Location> lastDirections;
 
 	private boolean running;
 
@@ -61,7 +61,7 @@ public class Engine {
 	}
 
 	void turn(final Player player) {
-		player.getShips().forEach(ship -> move(ship));
+		player.getUnits().forEach(ship -> move(ship));
 
 		if (!running) {
 			return;
@@ -70,7 +70,7 @@ public class Engine {
 		player.endTurn();
 	}
 
-	void move(final Ship ship) {
+	void move(final Unit ship) {
 		if (!running) {
 			return;
 		}
@@ -88,7 +88,7 @@ public class Engine {
 		while (locations.size() < ship.getAvailableMoves()) {
 			if (ship.getType().canAttack()) {
 				for (final Location location : lastLocation.getNeighbors()) {
-					if (!ship.getOwner().getEnemyShipsAt(location).isEmpty()) {
+					if (!ship.getOwner().getEnemyUnitsAt(location).isEmpty()) {
 						break outerloop;
 					}
 				}
@@ -113,7 +113,7 @@ public class Engine {
 
 		if (ship.getType().canAttack() && ship.getAvailableMoves() > 0) {
 			for (final Location location : ship.getLocation().getNeighbors()) {
-				final List<Ship> enemies = ship.getOwner().getEnemyShipsAt(location);
+				final List<Unit> enemies = ship.getOwner().getEnemyUnitsAt(location);
 				if (!enemies.isEmpty()) {
 					ship.attack(enemies.get(0).getLocation());
 					break;
@@ -122,9 +122,9 @@ public class Engine {
 		}
 	}
 
-	void showDebug(final Ship ship) {
+	void showDebug(final Unit ship) {
 		final List<Location> locations = new ArrayList<>();
-		for (final Ship enemy : ship.getOwner().getEnemyShips()) {
+		for (final Unit enemy : ship.getOwner().getEnemyUnits()) {
 			locations.addAll(ship.getPath(enemy.getLocation(), true).orElse(Collections.emptyList()));
 		}
 		/*

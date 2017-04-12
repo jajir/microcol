@@ -7,9 +7,9 @@ import org.microcol.model.event.DebugRequestedEvent;
 import org.microcol.model.event.GameFinishedEvent;
 import org.microcol.model.event.GameStartedEvent;
 import org.microcol.model.event.RoundStartedEvent;
-import org.microcol.model.event.ShipAttackedEvent;
-import org.microcol.model.event.ShipMovedEvent;
 import org.microcol.model.event.TurnStartedEvent;
+import org.microcol.model.event.UnitAttackedEvent;
+import org.microcol.model.event.UnitMovedEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -67,20 +67,20 @@ class ListenerManager {
 		listeners.forEach(listener -> listener.turnStarted(event));
 	}
 
-	void fireShipMoved(final Model model, final Ship ship, final Location start, final Path path) {
-		final ShipMovedEvent event = new ShipMovedEvent(model, ship, start, path);
+	void fireUnitMoved(final Model model, final Unit unit, final Location start, final Path path) {
+		final UnitMovedEvent event = new UnitMovedEvent(model, unit, start, path);
 
-		logger.info("Ship moved: {}.", event);
+		logger.info("Unit moved: {}.", event);
 
-		listeners.forEach(listener -> listener.shipMoved(event));
+		listeners.forEach(listener -> listener.unitMoved(event));
 	}
 
-	void fireShipAttacked(final Model model, final Ship attacker, final Ship defender, final Ship destroyed) {
-		final ShipAttackedEvent event = new ShipAttackedEvent(model, attacker, defender, destroyed);
+	void fireUnitAttacked(final Model model, final Unit attacker, final Unit defender, final Unit destroyed) {
+		final UnitAttackedEvent event = new UnitAttackedEvent(model, attacker, defender, destroyed);
 
-		logger.info("Ship attacked: {}.", event);
+		logger.info("Unit attacked: {}.", event);
 
-		listeners.forEach(listener -> listener.shipAttacked(event));
+		listeners.forEach(listener -> listener.unitAttacked(event));
 	}
 
 	void fireGameFinished(final Model model) {

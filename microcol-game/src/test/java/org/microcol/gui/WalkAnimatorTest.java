@@ -6,13 +6,13 @@ import org.easymock.classextension.EasyMock;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.microcol.model.Ship;
+import org.microcol.model.Unit;
 
 public class WalkAnimatorTest {
 
 	private PathPlanning pathPlanning;
 
-	private Ship unit;
+	private Unit unit;
 
 	@Test
 	public void test_first_steps() throws Exception {
@@ -75,7 +75,7 @@ public class WalkAnimatorTest {
 	@Before
 	public void setup() {
 		pathPlanning = EasyMock.createMock(PathPlanning.class);
-		unit = EasyMock.createMock(Ship.class);
+		unit = EasyMock.createMock(Unit.class);
 	}
 
 	@After

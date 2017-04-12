@@ -4,9 +4,9 @@ import org.microcol.model.event.DebugRequestedEvent;
 import org.microcol.model.event.GameFinishedEvent;
 import org.microcol.model.event.GameStartedEvent;
 import org.microcol.model.event.RoundStartedEvent;
-import org.microcol.model.event.ShipAttackedEvent;
-import org.microcol.model.event.ShipMovedEvent;
 import org.microcol.model.event.TurnStartedEvent;
+import org.microcol.model.event.UnitAttackedEvent;
+import org.microcol.model.event.UnitMovedEvent;
 
 public interface ModelListener {
 	void gameStarted(GameStartedEvent event);
@@ -15,9 +15,9 @@ public interface ModelListener {
 
 	void turnStarted(TurnStartedEvent event);
 
-	void shipMoved(ShipMovedEvent event);
+	void unitMoved(UnitMovedEvent event);
 
-	void shipAttacked(ShipAttackedEvent event);
+	void unitAttacked(UnitAttackedEvent event);
 
 	void gameFinished(GameFinishedEvent event);
 

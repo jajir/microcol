@@ -46,12 +46,12 @@ public class ModelSaveLoadTest {
 			.setCalendar(1570, 1600)
 			.setMap("/maps/test-map-2islands-15x10.txt")
 			.addPlayer("Player1", true)
-				.addShip("Player1", ShipType.GALLEON, Location.of(4, 2))
-				.addShip("Player1", ShipType.FRIGATE, Location.of(3, 3))
+				.addUnit("Player1", UnitType.GALLEON, Location.of(4, 2))
+				.addUnit("Player1", UnitType.FRIGATE, Location.of(3, 3))
 			.addPlayer("Player2", true)
-				.addShip("Player2", ShipType.GALLEON, Location.of(7, 7))
-				.addShip("Player2", ShipType.FRIGATE, Location.of(7, 9))
-				.addShip("Player2", ShipType.FRIGATE, Location.of(14, 9))
+				.addUnit("Player2", UnitType.GALLEON, Location.of(7, 7))
+				.addUnit("Player2", UnitType.FRIGATE, Location.of(7, 9))
+				.addUnit("Player2", UnitType.FRIGATE, Location.of(14, 9))
 			.build();
 		model.startGame();
 
@@ -66,10 +66,10 @@ public class ModelSaveLoadTest {
 		Assert.assertEquals(model.getMap().getMaxY(), loadedModel.getMap().getMaxY());
 		// TODO JKA TERRAIN?
 		Assert.assertEquals(model.getPlayers(), loadedModel.getPlayers());
-		Assert.assertEquals(model.getShips().size(), loadedModel.getShips().size());
-		for (int i = 0; i < model.getShips().size(); i++) {
-			final Ship ship = model.getShips().get(i);
-			final Ship loadedShip = loadedModel.getShips().get(i);
+		Assert.assertEquals(model.getUnits().size(), loadedModel.getUnits().size());
+		for (int i = 0; i < model.getUnits().size(); i++) {
+			final Unit ship = model.getUnits().get(i);
+			final Unit loadedShip = loadedModel.getUnits().get(i);
 			Assert.assertEquals(ship.getType(), loadedShip.getType());
 			Assert.assertEquals(ship.getOwner(), loadedShip.getOwner());
 			Assert.assertEquals(ship.getLocation(), loadedShip.getLocation());

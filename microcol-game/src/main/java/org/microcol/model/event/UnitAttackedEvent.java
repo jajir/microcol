@@ -1,17 +1,17 @@
 package org.microcol.model.event;
 
 import org.microcol.model.Model;
-import org.microcol.model.Ship;
+import org.microcol.model.Unit;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 
-public class ShipAttackedEvent extends ModelEvent {
-	private final Ship attacker;
-	private final Ship defender;
-	private final Ship destroyed;
+public class UnitAttackedEvent extends ModelEvent {
+	private final Unit attacker;
+	private final Unit defender;
+	private final Unit destroyed;
 
-	public ShipAttackedEvent(final Model model, final Ship attacker, final Ship defender, final Ship destroyed) {
+	public UnitAttackedEvent(final Model model, final Unit attacker, final Unit defender, final Unit destroyed) {
 		super(model);
 
 		this.attacker = Preconditions.checkNotNull(attacker);
@@ -19,15 +19,15 @@ public class ShipAttackedEvent extends ModelEvent {
 		this.destroyed = Preconditions.checkNotNull(destroyed);
 	}
 
-	public Ship getAttacker() {
+	public Unit getAttacker() {
 		return attacker;
 	}
 
-	public Ship getDefender() {
+	public Unit getDefender() {
 		return defender;
 	}
 
-	public Ship getDestroyed() {
+	public Unit getDestroyed() {
 		return destroyed;
 	}
 

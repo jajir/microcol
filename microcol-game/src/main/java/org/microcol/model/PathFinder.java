@@ -15,13 +15,13 @@ import com.google.common.base.Preconditions;
 class PathFinder {
 	private final Logger logger = LoggerFactory.getLogger(getClass());
 
-	private final Ship ship;
+	private final Unit unit;
 	private final Location start;
 	private final Location destination;
 	private final boolean excludeDestination;
 
-	PathFinder(final Ship ship, final Location start, final Location destination, final boolean excludeDestination) {
-		this.ship = Preconditions.checkNotNull(ship);
+	PathFinder(final Unit unit, final Location start, final Location destination, final boolean excludeDestination) {
+		this.unit = Preconditions.checkNotNull(unit);
 		this.start = Preconditions.checkNotNull(start);
 		this.destination = Preconditions.checkNotNull(destination);
 		this.excludeDestination = excludeDestination;
@@ -32,7 +32,7 @@ class PathFinder {
 	List<Location> find() {
 		long startTime = System.currentTimeMillis();
 
-		if (!excludeDestination && !ship.isMoveable(destination)) {
+		if (!excludeDestination && !unit.isMoveable(destination)) {
 			logger.debug("Path finding finished in {} ms.", System.currentTimeMillis() - startTime);
 
 			return null;
@@ -55,7 +55,7 @@ class PathFinder {
 			closedSet.add(current.getLocation());
 			final List<Location> neighbors = current.getLocation().getNeighbors();
 			for (final Location neighbor : neighbors) {
-				if (!closedSet.contains(neighbor) && ship.isMoveable(neighbor)) {
+				if (!closedSet.contains(neighbor) && unit.isMoveable(neighbor)) {
 					final PathFindingNode oldNode = get(openList, neighbor);
 					final PathFindingNode newNode = new PathFindingNode(current, neighbor, neighbor.getDistance(destination));
 					if (oldNode == null) {

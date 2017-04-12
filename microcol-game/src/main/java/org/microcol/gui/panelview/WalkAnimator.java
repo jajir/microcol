@@ -6,7 +6,7 @@ import java.util.List;
 import org.microcol.gui.PathPlanning;
 import org.microcol.gui.Point;
 import org.microcol.model.Location;
-import org.microcol.model.Ship;
+import org.microcol.model.Unit;
 
 import com.google.common.base.Preconditions;
 
@@ -24,7 +24,7 @@ public class WalkAnimator {
 	/**
 	 * Moving unit.
 	 */
-	private final Ship unit;
+	private final Unit unit;
 
 	/**
 	 * Path computing.
@@ -48,7 +48,7 @@ public class WalkAnimator {
 
 	private Point nextCoordinates;
 
-	public WalkAnimator(final PathPlanning pathPlanning, final List<Location> path, final Ship unit) {
+	public WalkAnimator(final PathPlanning pathPlanning, final List<Location> path, final Unit unit) {
 		Preconditions.checkNotNull(path);
 		Preconditions.checkArgument(!path.isEmpty(), "Path can't be empty");
 		Preconditions.checkArgument(path.size() > 1, "Path should contains more than one locations");
@@ -101,7 +101,7 @@ public class WalkAnimator {
 		return nextCoordinates;
 	}
 
-	public Ship getUnit() {
+	public Unit getUnit() {
 		return unit;
 	}
 

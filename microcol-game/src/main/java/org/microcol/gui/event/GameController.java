@@ -12,13 +12,13 @@ import org.microcol.model.Model;
 import org.microcol.model.ModelAdapter;
 import org.microcol.model.ModelBuilder;
 import org.microcol.model.Path;
-import org.microcol.model.Ship;
-import org.microcol.model.ShipType;
+import org.microcol.model.Unit;
+import org.microcol.model.UnitType;
 import org.microcol.model.event.DebugRequestedEvent;
 import org.microcol.model.event.GameFinishedEvent;
 import org.microcol.model.event.GameStartedEvent;
 import org.microcol.model.event.RoundStartedEvent;
-import org.microcol.model.event.ShipMovedEvent;
+import org.microcol.model.event.UnitMovedEvent;
 import org.microcol.model.event.TurnStartedEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -82,11 +82,11 @@ public class GameController implements Localized {
 			builder.setCalendar(1570, 1800)
 				.setMap("/maps/test-map-ocean-1000x1000.txt")
 				.addPlayer("Player1", false)
-					.addShip("Player1", ShipType.GALLEON, Location.of(4, 2))
-					.addShip("Player1", ShipType.FRIGATE, Location.of(13, 7))
+					.addUnit("Player1", UnitType.GALLEON, Location.of(4, 2))
+					.addUnit("Player1", UnitType.FRIGATE, Location.of(13, 7))
 				.addPlayer("Player2", true)
-					.addShip("Player2", ShipType.GALLEON, Location.of(7, 7))
-					.addShip("Player2", ShipType.FRIGATE, Location.of(7, 9));
+					.addUnit("Player2", UnitType.GALLEON, Location.of(7, 7))
+					.addUnit("Player2", UnitType.FRIGATE, Location.of(7, 9));
 			game = builder.build();
 		}
 		game.addListener(new ModelAdapter() {
@@ -97,7 +97,7 @@ public class GameController implements Localized {
 			}
 
 			@Override
-			public void shipMoved(final ShipMovedEvent event) {
+			public void unitMoved(final UnitMovedEvent event) {
 				moveUnitController.fireUnitMovedEvent(event);
 			}
 
@@ -133,7 +133,7 @@ public class GameController implements Localized {
 		return game;
 	}
 
-	public void performMove(final Ship ship, final List<Location> path) {
+	public void performMove(final Unit ship, final List<Location> path) {
 		logger.debug("Start move ship: " + ship);
 		new Thread(() -> ship.moveTo(Path.of(path))).start();
 		// moveAutomatization.addMove(new MoveAutomatization.MovePlanner(ship,

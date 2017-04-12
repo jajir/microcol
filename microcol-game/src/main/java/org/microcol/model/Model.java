@@ -17,10 +17,10 @@ public class Model {
 	private final Calendar calendar;
 	private final WorldMap map;
 	private final ImmutableList<Player> players;
-	private final ShipStorage shipStorage;
+	private final UnitStorage unitStorage;
 	private GameManager gameManager;
 
-	Model(final Calendar calendar, final WorldMap map, final List<Player> players, final List<Ship> ships) {
+	Model(final Calendar calendar, final WorldMap map, final List<Player> players, final List<Unit> units) {
 		listenerManager = new ListenerManager();
 
 		this.calendar = Preconditions.checkNotNull(calendar);
@@ -31,8 +31,8 @@ public class Model {
 		checkPlayerNames(this.players);
 		this.players.forEach(player -> player.setModel(this));
 
-		shipStorage = new ShipStorage(ships);
-		shipStorage.getShips().forEach(ship -> ship.setModel(this));
+		unitStorage = new UnitStorage(units);
+		unitStorage.getUnits().forEach(unit -> unit.setModel(this));
 
 		gameManager = new GameManager();
 		gameManager.setModel(this);
@@ -83,16 +83,16 @@ public class Model {
 		return gameManager.getCurrentPlayer();
 	}
 
-	public List<Ship> getShips() {
-		return shipStorage.getShips();
+	public List<Unit> getUnits() {
+		return unitStorage.getUnits();
 	}
 
-	public Map<Location, List<Ship>> getShipsAt() {
-		return shipStorage.getShipsAt();
+	public Map<Location, List<Unit>> getUnitsAt() {
+		return unitStorage.getUnitsAt();
 	}
 
-	public List<Ship> getShipsAt(final Location location) {
-		return shipStorage.getShipsAt(location);
+	public List<Unit> getUnitsAt(final Location location) {
+		return unitStorage.getUnitsAt(location);
 	}
 
 	public void save(final String name, final JsonGenerator generator) {
@@ -102,7 +102,7 @@ public class Model {
 		generator.writeStartArray("players");
 		players.forEach(player -> player.save(generator));
 		generator.writeEnd();
-		shipStorage.save(generator);
+		unitStorage.save(generator);
 		gameManager.save("game", generator);
 		generator.writeEnd();
 	}
@@ -121,40 +121,40 @@ public class Model {
 			players.add(player);
 		}
 		parser.next(); // KEY_NAME
-		final List<Ship> ships = ShipStorage.load(parser, players);
+		final List<Unit> units = UnitStorage.load(parser, players);
 		parser.next(); // KEY_NAME
 		final GameManager gameManager = GameManager.load(parser, players);
 		parser.next(); // END_OBJECT
 
-		final Model model = new Model(calendar, map, players, ships);
+		final Model model = new Model(calendar, map, players, units);
 		gameManager.setModel(model);
 		model.gameManager = gameManager;
 
 		return model;
 	}
 
-	List<Ship> getShips(final Player player) {
-		return shipStorage.getShips(player);
+	List<Unit> getUnits(final Player player) {
+		return unitStorage.getUnits(player);
 	}
 
-	Map<Location, List<Ship>> getShipsAt(final Player player) {
-		return shipStorage.getShipsAt(player);
+	Map<Location, List<Unit>> getUnitsAt(final Player player) {
+		return unitStorage.getUnitsAt(player);
 	}
 
-	List<Ship> getShipsAt(final Player player, final Location location) {
-		return shipStorage.getShipsAt(player, location);
+	List<Unit> getUnitsAt(final Player player, final Location location) {
+		return unitStorage.getUnitsAt(player, location);
 	}
 
-	List<Ship> getEnemyShips(final Player player) {
-		return shipStorage.getEnemyShips(player);
+	List<Unit> getEnemyUnits(final Player player) {
+		return unitStorage.getEnemyUnits(player);
 	}
 
-	Map<Location, List<Ship>> getEnemyShipsAt(final Player player) {
-		return shipStorage.getEnemyShipsAt(player);
+	Map<Location, List<Unit>> getEnemyUnitsAt(final Player player) {
+		return unitStorage.getEnemyUnitsAt(player);
 	}
 
-	List<Ship> getEnemyShipsAt(final Player player, final Location location) {
-		return shipStorage.getEnemyShipsAt(player, location);
+	List<Unit> getEnemyUnitsAt(final Player player, final Location location) {
+		return unitStorage.getEnemyUnitsAt(player, location);
 	}
 
 	public void startGame() {
@@ -173,8 +173,8 @@ public class Model {
 		gameManager.checkCurrentPlayer(player);
 	}
 
-	void destroyShip(final Ship ship) {
-		shipStorage.remove(ship);
+	void destroyUnit(final Unit unit) {
+		unitStorage.remove(unit);
 	}
 
 	void fireGameStarted() {
@@ -189,12 +189,12 @@ public class Model {
 		listenerManager.fireTurnStarted(this, player);
 	}
 
-	void fireShipMoved(final Ship ship, final Location start, final Path path) {
-		listenerManager.fireShipMoved(this, ship, start, path);
+	void fireUnitMoved(final Unit unit, final Location start, final Path path) {
+		listenerManager.fireUnitMoved(this, unit, start, path);
 	}
 
-	void fireShipAttacked(final Ship attacker, final Ship defender, final Ship destroyed) {
-		listenerManager.fireShipAttacked(this, attacker, defender, destroyed);
+	void fireUnitAttacked(final Unit attacker, final Unit defender, final Unit destroyed) {
+		listenerManager.fireUnitAttacked(this, attacker, defender, destroyed);
 	}
 
 	void fireGameFinished() {

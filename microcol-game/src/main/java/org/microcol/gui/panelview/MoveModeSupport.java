@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.microcol.gui.event.GameController;
 import org.microcol.model.Location;
-import org.microcol.model.Ship;
+import org.microcol.model.Unit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -55,9 +55,9 @@ public class MoveModeSupport {
 				} else {
 					// TODO JJ get(0) could return different ship that is really
 					// moved
-					final Ship movingUnit = gameController.getModel().getCurrentPlayer()
-							.getShipsAt(viewState.getSelectedTile().get()).get(0);
-					final List<Ship> ships = gameController.getModel().getShipsAt(target);
+					final Unit movingUnit = gameController.getModel().getCurrentPlayer()
+							.getUnitsAt(viewState.getSelectedTile().get()).get(0);
+					final List<Unit> ships = gameController.getModel().getUnitsAt(target);
 					if (ships.isEmpty()) {
 						// TODO JJ step counter should be core function
 						moveLocations = movingUnit.getPath(target).orElse(Collections.emptyList());

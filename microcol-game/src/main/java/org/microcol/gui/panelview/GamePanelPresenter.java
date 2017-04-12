@@ -26,8 +26,8 @@ import org.microcol.gui.event.MoveUnitController;
 import org.microcol.gui.event.NewGameController;
 import org.microcol.gui.event.ShowGridController;
 import org.microcol.model.Location;
-import org.microcol.model.Ship;
-import org.microcol.model.event.ShipMovedEvent;
+import org.microcol.model.Unit;
+import org.microcol.model.event.UnitMovedEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -62,7 +62,7 @@ public final class GamePanelPresenter implements Localized {
 
 		VisualDebugInfo getVisualDebugInfo();
 
-		void startMoveUnit(Ship ship);
+		void startMoveUnit(Unit ship);
 
 	}
 
@@ -215,11 +215,11 @@ public final class GamePanelPresenter implements Localized {
 	}
 
 	private void swithToMoveMode() {
-		final List<Ship> units = gameController.getModel().getCurrentPlayer()
-				.getShipsAt(viewState.getSelectedTile().get());
+		final List<Unit> units = gameController.getModel().getCurrentPlayer()
+				.getUnitsAt(viewState.getSelectedTile().get());
 		// TODO JJ Filter unit that have enough action points
 		Preconditions.checkState(!units.isEmpty(), "there are some moveable units");
-		final Ship unit = units.get(0);
+		final Unit unit = units.get(0);
 		display.startMoveUnit(unit);
 		viewState.setMouseOverTile(Optional.ofNullable(lastMousePosition.toLocation()));
 		logger.debug("Switching '" + unit + "' to go mode.");
@@ -287,7 +287,7 @@ public final class GamePanelPresenter implements Localized {
 			return;
 		}
 		// TODO JJ active ship can be different from ship first at list
-		final Ship ship = gameController.getModel().getCurrentPlayer().getShipsAt(selectedTile).get(0);
+		final Unit ship = gameController.getModel().getCurrentPlayer().getUnitsAt(selectedTile).get(0);
 		if (ship.getPath(moveTo).isPresent()) {
 			final List<Location> path = ship.getPath(moveTo).get();
 			if (path.size() > 0) {
@@ -300,13 +300,13 @@ public final class GamePanelPresenter implements Localized {
 		}
 	}
 
-	private void scheduleWalkAnimation(final ShipMovedEvent event) {
+	private void scheduleWalkAnimation(final UnitMovedEvent event) {
 		Preconditions.checkArgument(event.getPath().getLocations().size() >= 1,
 				"Path for moving doesn't contains enought steps to move.");
 		display.planScrollingAnimationToPoint(display.getArea().getCenterAreaTo(Point.of(event.getStart())));
 		List<Location> path = new ArrayList<>(event.getPath().getLocations());
 		path.add(0, event.getStart());
-		final WalkAnimator walkAnimator = new WalkAnimator(pathPlanning, path, event.getShip());
+		final WalkAnimator walkAnimator = new WalkAnimator(pathPlanning, path, event.getUnit());
 		display.setWalkAnimator(walkAnimator);
 	}
 

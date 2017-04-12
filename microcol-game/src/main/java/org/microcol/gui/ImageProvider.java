@@ -12,7 +12,7 @@ import java.util.Map;
 
 import javax.imageio.ImageIO;
 
-import org.microcol.model.ShipType;
+import org.microcol.model.UnitType;
 import org.microcol.model.Terrain;
 
 import com.google.common.collect.ImmutableMap;
@@ -62,9 +62,9 @@ public class ImageProvider {
 	private final Map<Terrain, Image> terrainMap = ImmutableMap.<Terrain, Image>builder()
 			.put(Terrain.CONTINENT, getRawImage(IMG_TILE_LAND)).put(Terrain.OCEAN, getRawImage(IMG_TILE_OCEAN)).build();
 
-	private final Map<ShipType, Image> shipMap = ImmutableMap.<ShipType, Image>builder()
-			.put(ShipType.GALLEON, getRawImage(IMG_TILE_SHIP_GALEON))
-			.put(ShipType.FRIGATE, getRawImage(IMG_TILE_SHIP_FRIGATE)).build();
+	private final Map<UnitType, Image> shipMap = ImmutableMap.<UnitType, Image>builder()
+			.put(UnitType.GALLEON, getRawImage(IMG_TILE_SHIP_GALEON))
+			.put(UnitType.FRIGATE, getRawImage(IMG_TILE_SHIP_FRIGATE)).build();
 
 	public ImageProvider() {
 		images = new HashMap<>();
@@ -167,7 +167,7 @@ public class ImageProvider {
 	 *            required ship type
 	 * @return image representing ship image
 	 */
-	public Image getShipImage(final ShipType shipType) {
+	public Image getShipImage(final UnitType shipType) {
 		return shipMap.get(shipType);
 	}
 

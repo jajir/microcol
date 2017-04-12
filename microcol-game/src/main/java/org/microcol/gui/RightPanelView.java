@@ -109,11 +109,11 @@ public class RightPanelView extends JPanel implements RightPanelPresenter.Displa
 		sb.append("</div></html>");
 		tileName.setText(sb.toString());
 		unitsPanel.clear();
-		if (event.getModel().getShipsAt(event.getLocation()).isEmpty()) {
+		if (event.getModel().getUnitsAt(event.getLocation()).isEmpty()) {
 			unitsLabel.setText("");
 		} else {
 			unitsLabel.setText(getText().get("unitsPanel.units"));
-			unitsPanel.setUnits(event.getModel().getShipsAt(event.getLocation()));
+			unitsPanel.setUnits(event.getModel().getUnitsAt(event.getLocation()));
 		}
 		repaint();
 	}

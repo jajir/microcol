@@ -2,16 +2,22 @@ package org.microcol.model;
 
 import com.google.common.base.MoreObjects;
 
-public enum ShipType {
-	GALLEON(6, false),
-	FRIGATE(4, true);
+public enum UnitType {
+	GALLEON(Terrain.OCEAN, 6, false),
+	FRIGATE(Terrain.OCEAN, 4, true);
 
+	private final Terrain moveableTerrain;
 	private final int speed;
 	private final boolean canAttack;
 
-	private ShipType(final int speed, final boolean canAttack) {
+	private UnitType(final Terrain moveableTerrain, final int speed, final boolean canAttack) {
+		this.moveableTerrain = moveableTerrain;
 		this.speed = speed;
 		this.canAttack = canAttack;
+	}
+
+	public Terrain getMoveableTerrain() {
+		return moveableTerrain;
 	}
 
 	public int getSpeed() {

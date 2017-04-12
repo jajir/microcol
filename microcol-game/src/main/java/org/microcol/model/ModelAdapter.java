@@ -4,8 +4,8 @@ import org.microcol.model.event.DebugRequestedEvent;
 import org.microcol.model.event.GameFinishedEvent;
 import org.microcol.model.event.GameStartedEvent;
 import org.microcol.model.event.RoundStartedEvent;
-import org.microcol.model.event.ShipAttackedEvent;
-import org.microcol.model.event.ShipMovedEvent;
+import org.microcol.model.event.UnitAttackedEvent;
+import org.microcol.model.event.UnitMovedEvent;
 import org.microcol.model.event.TurnStartedEvent;
 
 public class ModelAdapter implements ModelListener {
@@ -25,12 +25,12 @@ public class ModelAdapter implements ModelListener {
 	}
 
 	@Override
-	public void shipMoved(ShipMovedEvent event) {
+	public void unitMoved(UnitMovedEvent event) {
 		// Do nothing.
 	}
 
 	@Override
-	public void shipAttacked(ShipAttackedEvent event) {
+	public void unitAttacked(UnitAttackedEvent event) {
 		// Do nothing.
 	}
 

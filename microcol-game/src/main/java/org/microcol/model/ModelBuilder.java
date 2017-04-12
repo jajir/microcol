@@ -5,14 +5,14 @@ import java.util.List;
 
 public class ModelBuilder {
 	private final List<Player> players;
-	private final List<Ship> ships;
+	private final List<Unit> units;
 
 	private Calendar calendar;
 	private WorldMap map;
 
 	public ModelBuilder() {
 		players = new ArrayList<>();
-		ships = new ArrayList<>();
+		units = new ArrayList<>();
 	}
 
 	public ModelBuilder setCalendar(final int startYear, final int endYear) {
@@ -34,8 +34,8 @@ public class ModelBuilder {
 	}
 
 	// TODO JKA PROHODIT TYPE A OWNER
-	public ModelBuilder addShip(final String ownerName, final ShipType type, final Location location) {
-		ships.add(new Ship(type, getPlayer(ownerName), location));
+	public ModelBuilder addUnit(final String ownerName, final UnitType type, final Location location) {
+		units.add(new Unit(type, getPlayer(ownerName), location));
 
 		return this;
 	}
@@ -48,6 +48,6 @@ public class ModelBuilder {
 	}
 
 	public Model build() {
-		return new Model(calendar, map, players, ships);
+		return new Model(calendar, map, players, units);
 	}
 }

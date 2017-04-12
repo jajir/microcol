@@ -13,7 +13,7 @@ import javax.swing.JPanel;
 
 import org.microcol.gui.event.StatusBarMessageController;
 import org.microcol.gui.event.StatusBarMessageEvent;
-import org.microcol.model.Ship;
+import org.microcol.model.Unit;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
@@ -52,10 +52,10 @@ public class UnitsPanel extends JPanel implements Localized {
 		removeAll();
 	}
 
-	public void setUnits(final List<Ship> units) {
+	public void setUnits(final List<Unit> units) {
 		int i = 0;
-		for (final Ship u : units) {
-			Ship s = (Ship) u;
+		for (final Unit u : units) {
+			Unit s = (Unit) u;
 			add(new JLabel(new ImageIcon(imageProvider.getShipImage(s.getType()))), new GridBagConstraints(0, i, 1, 2,
 					0D, 0D, GridBagConstraints.NORTH, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
 			final StringBuilder sb = new StringBuilder(200);

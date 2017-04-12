@@ -28,7 +28,7 @@ import org.microcol.gui.event.NextTurnController;
 import org.microcol.model.Location;
 import org.microcol.model.Model;
 import org.microcol.model.Player;
-import org.microcol.model.Ship;
+import org.microcol.model.Unit;
 import org.microcol.model.Terrain;
 
 import com.google.common.base.Preconditions;
@@ -266,13 +266,13 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 	 *            required {@link Game}
 	 */
 	private void paintUnits(final Graphics2D graphics, final Model world, final Area area) {
-		final java.util.Map<Location, List<Ship>> ships = world.getShipsAt();
+		final java.util.Map<Location, List<Unit>> ships = world.getUnitsAt();
 
-		final java.util.Map<Location, List<Ship>> ships2 = ships.entrySet().stream()
+		final java.util.Map<Location, List<Unit>> ships2 = ships.entrySet().stream()
 				.filter(e -> area.isInArea(e.getKey())).collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue()));
 
 		ships2.forEach((location, list) -> {
-			final Ship ship = list.stream().findFirst().get();
+			final Unit ship = list.stream().findFirst().get();
 			final Point point = area.convert(location);
 			if (walkAnimator == null || !walkAnimator.isNextAnimationLocationAvailable()
 					|| !walkAnimator.getTo().equals(location)) {
@@ -285,7 +285,7 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 
 	private final static int FLAG_HEIGHT = 12;
 
-	private void paintUnit(final Graphics2D graphics, final Point point, final Ship ship) {
+	private void paintUnit(final Graphics2D graphics, final Point point, final Unit ship) {
 		Point p = point.add(2, 4);
 		graphics.drawImage(imageProvider.getShipImage(ship.getType()), p.getX(), p.getY(), this);
 		paintOwnersFlag(graphics, point.add(1, 5), ship.getOwner());
@@ -388,8 +388,8 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 			paintCursor(graphics, area, viewState.getMouseOverTile().get());
 			final List<Location> locations = moveModeSupport.getMoveLocations();
 			// TODO JJ get moving unit in specific way
-			final Ship movingUnit = gameController.getModel().getCurrentPlayer()
-					.getShipsAt(viewState.getSelectedTile().get()).get(0);
+			final Unit movingUnit = gameController.getModel().getCurrentPlayer()
+					.getUnitsAt(viewState.getSelectedTile().get()).get(0);
 			final StepCounter stepCounter = new StepCounter(5, movingUnit.getAvailableMoves());
 			final List<Point> steps = Lists.transform(locations, location -> area.convert((Location) location));
 			/**
@@ -439,7 +439,7 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 	}
 
 	@Override
-	public void startMoveUnit(final Ship ship) {
+	public void startMoveUnit(final Unit ship) {
 		oneTurnMoveHighlighter.setLocations(ship.getAvailableLocations());
 	}
 

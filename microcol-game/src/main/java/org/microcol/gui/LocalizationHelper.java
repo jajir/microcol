@@ -1,6 +1,6 @@
 package org.microcol.gui;
 
-import org.microcol.model.ShipType;
+import org.microcol.model.UnitType;
 import org.microcol.model.Terrain;
 
 import com.google.common.base.Preconditions;
@@ -31,7 +31,7 @@ public class LocalizationHelper {
 		return text.get(TERRAIN_PREFIX + terrain.name() + TERRAIN_SUFFIX_NAME);
 	}
 
-	public String getShipName(final ShipType shipType) {
+	public String getShipName(final UnitType shipType) {
 		return text.get(SHIP_PREFIX + shipType.name() + SHIP_SUFFIX_NAME);
 	}
 

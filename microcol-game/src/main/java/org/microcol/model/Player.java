@@ -36,32 +36,32 @@ public class Player {
 		return !computer;
 	}
 
-	public List<Ship> getShips() {
-		return model.getShips(this);
+	public List<Unit> getUnits() {
+		return model.getUnits(this);
 	}
 
-	public Map<Location, List<Ship>> getShipsAt() {
-		return model.getShipsAt(this);
+	public Map<Location, List<Unit>> getUnitsAt() {
+		return model.getUnitsAt(this);
 	}
 
-	public List<Ship> getShipsAt(final Location location) {
-		return model.getShipsAt(this, location);
+	public List<Unit> getUnitsAt(final Location location) {
+		return model.getUnitsAt(this, location);
 	}
 
-	public List<Ship> getEnemyShips() {
-		return model.getEnemyShips(this);
+	public List<Unit> getEnemyUnits() {
+		return model.getEnemyUnits(this);
 	}
 
-	public Map<Location, List<Ship>> getEnemyShipsAt() {
-		return model.getEnemyShipsAt(this);
+	public Map<Location, List<Unit>> getEnemyUnitsAt() {
+		return model.getEnemyUnitsAt(this);
 	}
 
-	public List<Ship> getEnemyShipsAt(final Location location) {
-		return model.getEnemyShipsAt(this, location);
+	public List<Unit> getEnemyUnitsAt(final Location location) {
+		return model.getEnemyUnitsAt(this, location);
 	}
 
 	void startTurn() {
-		getShips().forEach(ship -> ship.startTurn());
+		getUnits().forEach(unit -> unit.startTurn());
 	}
 
 	public void endTurn() {

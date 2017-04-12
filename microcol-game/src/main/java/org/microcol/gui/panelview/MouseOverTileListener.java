@@ -58,7 +58,7 @@ public class MouseOverTileListener implements Localized {
 		buff.append(" ");
 		buff.append(getText().get("statusBar.tile.withUnit"));
 		buff.append(" ");
-		gameController.getModel().getShipsAt(where).forEach(ship -> {
+		gameController.getModel().getUnitsAt(where).forEach(ship -> {
 			buff.append(ship.getClass().getSimpleName());
 			buff.append(" ");
 		});
