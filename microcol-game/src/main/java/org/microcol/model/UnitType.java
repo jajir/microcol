@@ -3,8 +3,9 @@ package org.microcol.model;
 import com.google.common.base.MoreObjects;
 
 public enum UnitType {
-	GALLEON(Terrain.OCEAN, 6, false),
-	FRIGATE(Terrain.OCEAN, 4, true);
+	COLONIST(Terrain.CONTINENT, 1, true),
+	FRIGATE(Terrain.OCEAN, 4, true),
+	GALLEON(Terrain.OCEAN, 6, false);
 
 	private final Terrain moveableTerrain;
 	private final int speed;
