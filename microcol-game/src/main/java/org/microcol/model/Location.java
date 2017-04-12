@@ -70,7 +70,7 @@ public class Location {
 		}
 
 		return Math.abs(x - location.x) <= 1
-			&& Math.abs(y - location.y) <= 1; 
+			&& Math.abs(y - location.y) <= 1;
 	}
 
 	// tranzitivní
@@ -83,7 +83,7 @@ public class Location {
 
 	@Override
 	public int hashCode() {
-		return x + (y << 16);
+		return x + (y << Integer.SIZE / 2);
 	}
 
 	@Override
