@@ -61,7 +61,7 @@ public class Engine {
 	}
 
 	void turn(final Player player) {
-		player.getUnits().forEach(ship -> move(ship));
+		player.getUnits().forEach(unit -> move(unit));
 
 		if (!running) {
 			return;
@@ -70,32 +70,32 @@ public class Engine {
 		player.endTurn();
 	}
 
-	void move(final Unit ship) {
+	void move(final Unit unit) {
 		if (!running) {
 			return;
 		}
 
-		if (lastDirections.get(ship) == null) {
-			lastDirections.put(ship, Location.DIRECTIONS.get(random.nextInt(Location.DIRECTIONS.size())));
+		if (lastDirections.get(unit) == null) {
+			lastDirections.put(unit, Location.DIRECTIONS.get(random.nextInt(Location.DIRECTIONS.size())));
 		}
 
-		showDebug(ship);
+		showDebug(unit);
 
 		final List<Location> directions = new ArrayList<>(Location.DIRECTIONS);
 		final List<Location> locations = new ArrayList<>();
-		Location lastLocation = ship.getLocation();
+		Location lastLocation = unit.getLocation();
 		outerloop:
-		while (locations.size() < ship.getAvailableMoves()) {
-			if (ship.getType().canAttack()) {
+		while (locations.size() < unit.getAvailableMoves()) {
+			if (unit.getType().canAttack()) {
 				for (final Location location : lastLocation.getNeighbors()) {
-					if (!ship.getOwner().getEnemyUnitsAt(location).isEmpty()) {
+					if (!unit.getOwner().getEnemyUnitsAt(location).isEmpty()) {
 						break outerloop;
 					}
 				}
 			}
-			final Location lastDirection = lastDirections.get(ship);
+			final Location lastDirection = lastDirections.get(unit);
 			final Location newLocation = lastLocation.add(lastDirection);
-			if (ship.isMoveable(newLocation)) {
+			if (unit.isMoveable(newLocation)) {
 				locations.add(newLocation);
 				lastLocation = newLocation;
 			} else {
@@ -103,33 +103,34 @@ public class Engine {
 				if (directions.isEmpty()) {
 					break;
 				}
-				lastDirections.put(ship, directions.get(random.nextInt(directions.size())));
+				lastDirections.put(unit, directions.get(random.nextInt(directions.size())));
 			}
 		}
 
 		if (!locations.isEmpty()) {
-			ship.moveTo(Path.of(locations));
+			unit.moveTo(Path.of(locations));
 		}
 
-		if (ship.getType().canAttack() && ship.getAvailableMoves() > 0) {
-			for (final Location location : ship.getLocation().getNeighbors()) {
-				final List<Unit> enemies = ship.getOwner().getEnemyUnitsAt(location);
+		if (unit.getType().canAttack() && unit.getAvailableMoves() > 0) {
+			for (final Location location : unit.getLocation().getNeighbors()) {
+				final List<Unit> enemies = unit.getOwner().getEnemyUnitsAt(location);
 				if (!enemies.isEmpty()) {
-					ship.attack(enemies.get(0).getLocation());
+					unit.attack(enemies.get(0).getLocation());
 					break;
 				}
 			}
 		}
 	}
 
-	void showDebug(final Unit ship) {
+	void showDebug(final Unit unit) {
 		final List<Location> locations = new ArrayList<>();
-		for (final Unit enemy : ship.getOwner().getEnemyUnits()) {
-			locations.addAll(ship.getPath(enemy.getLocation(), true).orElse(Collections.emptyList()));
+		for (final Unit enemy : unit.getOwner().getEnemyUnits()) {
+			locations.addAll(unit.getPath(enemy.getLocation(), true).orElse(Collections.emptyList()));
 		}
+
 		/*
-		locations.addAll(ship.getAvailableLocations());
-		for (final Ship enemy : ship.getAttackableTargets()) {
+		locations.addAll(unit.getAvailableLocations());
+		for (final Unit enemy : unit.getAttackableTargets()) {
 			locations.add(enemy.getLocation());
 		}
 		*/

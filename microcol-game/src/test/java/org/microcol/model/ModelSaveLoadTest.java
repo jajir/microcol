@@ -68,12 +68,12 @@ public class ModelSaveLoadTest {
 		Assert.assertEquals(model.getPlayers(), loadedModel.getPlayers());
 		Assert.assertEquals(model.getUnits().size(), loadedModel.getUnits().size());
 		for (int i = 0; i < model.getUnits().size(); i++) {
-			final Unit ship = model.getUnits().get(i);
-			final Unit loadedShip = loadedModel.getUnits().get(i);
-			Assert.assertEquals(ship.getType(), loadedShip.getType());
-			Assert.assertEquals(ship.getOwner(), loadedShip.getOwner());
-			Assert.assertEquals(ship.getLocation(), loadedShip.getLocation());
-			Assert.assertEquals(ship.getAvailableMoves(), loadedShip.getAvailableMoves());
+			final Unit unit = model.getUnits().get(i);
+			final Unit loadedUnit = loadedModel.getUnits().get(i);
+			Assert.assertEquals(unit.getType(), loadedUnit.getType());
+			Assert.assertEquals(unit.getOwner(), loadedUnit.getOwner());
+			Assert.assertEquals(unit.getLocation(), loadedUnit.getLocation());
+			Assert.assertEquals(unit.getAvailableMoves(), loadedUnit.getAvailableMoves());
 		}
 		// TODO JKA Check GameManager.
 	}
