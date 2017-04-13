@@ -33,7 +33,6 @@
 	<entry key="mainMenu.help">Nápověda</entry>
 	<entry key="mainMenu.help.about">O MicroCol</entry>
 
-
 	<entry key="aboutDialog.caption">O MicroCol</entry>
 	<entry key="dialog.ok">Ok</entry>
 	<entry key="rightPanel.description">Zde se zobrazí informace o vybraném panelu případně o jednotkách </entry>

@@ -34,7 +34,7 @@
 	<entry key="mainMenu.help.about">About</entry>
 
 
-	<entry key="aboutDialog.caption ">About MicroCol</entry>
+	<entry key="aboutDialog.caption">About MicroCol</entry>
 	<entry key="dialog.ok"> Ok</entry>
 	<entry key="rightPanel.description">Here will be information about selected tile and units on it</entry>
 	<entry key="unitsPanel.description">Here will be information about selected tile and units on it</entry>
