@@ -4,6 +4,8 @@ import java.awt.Rectangle;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 
+import org.microcol.gui.util.Text;
+
 public class GamePreferences {
 
 	private final static String PREFERENCES_LANGUAGE = "language";

@@ -3,9 +3,10 @@ package org.microcol.gui;
 import javax.swing.JDialog;
 import javax.swing.SwingUtilities;
 
-import org.microcol.gui.Text.Language;
 import org.microcol.gui.event.AnimationSpeedChangeController;
 import org.microcol.gui.event.VolumeChangeController;
+import org.microcol.gui.util.Text;
+import org.microcol.gui.util.Text.Language;
 
 /**
  * Allows to display panel and dialog without creating game event.

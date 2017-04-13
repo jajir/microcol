@@ -21,6 +21,7 @@ import org.microcol.gui.event.ShowGridController;
 import org.microcol.gui.event.ShowGridEvent;
 import org.microcol.gui.event.TurnStartedController;
 import org.microcol.gui.event.VolumeChangeController;
+import org.microcol.gui.util.Text;
 import org.microcol.model.event.TurnStartedEvent;
 
 import com.google.common.base.Preconditions;

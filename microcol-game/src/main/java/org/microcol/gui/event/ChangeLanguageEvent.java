@@ -1,6 +1,6 @@
 package org.microcol.gui.event;
 
-import org.microcol.gui.Text;
+import org.microcol.gui.util.Text;
 import org.microcol.model.Model;
 
 import com.google.common.base.Preconditions;

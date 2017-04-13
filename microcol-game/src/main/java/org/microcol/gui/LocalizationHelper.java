@@ -1,6 +1,7 @@
 package org.microcol.gui;
 
 import org.microcol.model.UnitType;
+import org.microcol.gui.util.Text;
 import org.microcol.model.Terrain;
 
 import com.google.common.base.Preconditions;

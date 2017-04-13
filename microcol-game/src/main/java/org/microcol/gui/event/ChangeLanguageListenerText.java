@@ -1,6 +1,6 @@
 package org.microcol.gui.event;
 
-import org.microcol.gui.Text;
+import org.microcol.gui.util.Text;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;

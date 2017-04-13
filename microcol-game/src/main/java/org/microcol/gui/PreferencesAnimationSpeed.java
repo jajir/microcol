@@ -14,6 +14,7 @@ import javax.swing.WindowConstants;
 
 import org.microcol.gui.event.AnimationSpeedChangeController;
 import org.microcol.gui.event.AnimationSpeedChangeEvent;
+import org.microcol.gui.util.Text;
 
 public class PreferencesAnimationSpeed extends AbstractDialog {
 

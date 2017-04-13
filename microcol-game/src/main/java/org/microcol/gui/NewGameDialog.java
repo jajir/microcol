@@ -12,6 +12,8 @@ import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 
+import org.microcol.gui.util.Text;
+
 public class NewGameDialog extends JDialog {
 
 	/**

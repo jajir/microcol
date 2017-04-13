@@ -1,5 +1,7 @@
 package org.microcol.gui;
 
+import org.microcol.gui.util.Text;
+
 /**
  * All classes that implement this interface can easily access {@link Text}
  * class.

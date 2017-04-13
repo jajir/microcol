@@ -13,6 +13,7 @@ import javax.swing.WindowConstants;
 
 import org.microcol.gui.event.VolumeChangeController;
 import org.microcol.gui.event.VolumeChangeEvent;
+import org.microcol.gui.util.Text;
 
 public class PreferencesVolume extends JDialog {
 

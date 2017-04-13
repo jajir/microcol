@@ -3,7 +3,8 @@ package org.microcol.gui;
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
-import org.microcol.gui.Text.Language;
+import org.microcol.gui.util.Text;
+import org.microcol.gui.util.Text.Language;
 
 public class TextTest {
 

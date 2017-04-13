@@ -8,6 +8,8 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 
+import org.microcol.gui.util.Text;
+
 public class AboutDialog extends JDialog {
 
 	/**

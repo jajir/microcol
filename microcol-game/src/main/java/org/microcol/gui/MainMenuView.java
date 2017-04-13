@@ -11,7 +11,8 @@ import javax.swing.JMenuItem;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.KeyStroke;
 
-import org.microcol.gui.Text.Language;
+import org.microcol.gui.util.Text;
+import org.microcol.gui.util.Text.Language;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;

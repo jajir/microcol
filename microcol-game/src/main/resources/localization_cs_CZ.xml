@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE properties [
+<!ELEMENT properties ( comment?, entry* ) >
+<!ATTLIST properties version CDATA #FIXED "1.0">
+<!ELEMENT comment (#PCDATA) >
+<!ELEMENT entry (#PCDATA) >
+<!ATTLIST entry key CDATA #REQUIRED>
+]>
+
+<properties>
+	<comment>Test data for RBCPTest.java</comment>
+	<entry key="mainMenu.game">Hra</entry>
+	<entry key="mainMenu.game.newGame">Nová hra</entry>
+	<entry key="mainMenu.game.saveGame">Uložit hru</entry>
+	<entry key="mainMenu.game.loadGame">Načíst hru</entry>
+	<entry key="mainMenu.game.quitGame">Ukončit hru</entry>
+
+	<entry key="mainMenu.view">Zobrazení</entry>
+	<entry key="mainMenu.view.center">Na aktivní jednotku</entry>
+
+	<entry key="mainMenu.unit">Jednotka</entry>
+	<entry key="mainMenu.unit.move">Táhnout</entry>
+
+	<entry key="mainMenu.preferences">Nastavení</entry>
+	<entry key="mainMenu.preferences.language">Jazyk</entry>
+	<entry key="mainMenu.preferences.language.cz">Česky</entry>
+	<entry key="mainMenu.preferences.language.en">Anglicky</entry>
+	<entry key="mainMenu.preferences.volume">Hlasitost</entry>
+	<entry key="mainMenu.preferences.animationSpeed">Rychlost animací</entry>
+	<entry key="mainMenu.preferences.showGrid">Zobrazit síť</entry>
+
+	<entry key="mainMenu.help">Nápověda</entry>
+	<entry key="mainMenu.help.about">O MicroCol</entry>
+
+
+	<entry key="aboutDialog.caption">O MicroCol</entry>
+	<entry key="dialog.ok">Ok</entry>
+	<entry key="rightPanel.description">Zde se zobrazí informace o vybraném panelu případně o jednotkách </entry>
+	<entry key="unitsPanel.description">Zde se zobrazí informace o vybraném panelu případně o jednotkách </entry>
+	<entry key="unitsPanel.units">Jednotky:</entry>
+	<entry key="unitsPanel.availableMoved">Možných tahů:</entry>
+	<entry key="unitsPanel.owner">Vlastník:</entry>
+	<entry key="unitsPanel.currentUser">Táhne:</entry>
+	<entry key="nextTurnButton">Další tah</entry>
+	<entry key="nextTurnButton.desctiption">Provede další tah, kdy táhnou ostatní hráči</entry>
+	<entry key="statusBar.year">Rok</entry>
+	<entry key="tile.ocean.name">Oceán</entry>
+	<entry key="tile.ocean.description">Široký a pustý oceán</entry>
+	<entry key="statusBar.tile.start">Toto je: </entry>
+	<entry key="statusBar.tile.withUnit">s jednotkami:</entry>
+	<entry key="statusBar.era.description">Aktuální čas</entry>
+	<entry key="statusBar.status.description">Zde se ukáže stručná nápověda</entry>
+
+	<entry key="startPanel.buttonNewGame">Nová hra</entry>
+
+	<entry key="preferencesVolume.caption">Hlasitost</entry>
+
+	<entry key="preferencesAnimationSpeed.caption">Rychlost animací</entry>
+	<entry key="preferencesAnimationSpeed.fast">Vysoká</entry>
+	<entry key="preferencesAnimationSpeed.slow">Nízká</entry>
+
+	<entry key="terrain.OCEAN.name">Oceán</entry>
+	<entry key="terrain.OCEAN.description">Nekonečný studený oceán</entry>
+	<entry key="terrain.CONTINENT.name">Kontinent</entry>
+	<entry key="terrain.CONTINENT.description">Prostě nějaká země</entry>
+
+	<entry key="ship.FRIGATE.name">Frigata</entry>
+	<entry key="ship.GALLEON.name">Galeona</entry>
+
+	<entry key="newGameDialog.title">Nová hra</entry>
+	<entry key="newGameDialog.selectMap">Vyberte mapu</entry>
+	<entry key="newGameDialog.cancel">Zpět</entry>
+	<entry key="newGameDialog.startGame">Hrát</entry>
+
+</properties>

@@ -11,6 +11,8 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.WindowConstants;
 
+import org.microcol.gui.util.Text;
+
 public class WaitingDialog extends JDialog {
 
 	/**

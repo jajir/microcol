@@ -1,4 +1,4 @@
-package org.microcol.gui;
+package org.microcol.gui.util;
 
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -45,7 +45,7 @@ public class Text {
 	}
 
 	public void setLanguage(final Language language) {
-		bundle = ResourceBundle.getBundle(RESOURCE_BUNDLE_NAME, language.getLocale());
+		bundle = ResourceBundle.getBundle(RESOURCE_BUNDLE_NAME, language.getLocale(), new XMLResourceBundleControl());
 		logger.debug("Language " + language + " was set.");
 	}
 

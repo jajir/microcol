@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 
 import org.easymock.classextension.EasyMock;
 import org.junit.Test;
+import org.microcol.gui.util.Text;
 import org.microcol.model.Terrain;
 
 /**

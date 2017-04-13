@@ -30,6 +30,7 @@ import org.microcol.gui.panelview.MouseOverTileChangedController;
 import org.microcol.gui.panelview.MouseOverTileListener;
 import org.microcol.gui.panelview.MoveModeSupport;
 import org.microcol.gui.panelview.ViewState;
+import org.microcol.gui.util.Text;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
