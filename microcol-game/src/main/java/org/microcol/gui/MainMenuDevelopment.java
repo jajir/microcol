@@ -2,8 +2,9 @@ package org.microcol.gui;
 
 import java.awt.event.KeyEvent;
 
+import javax.swing.AbstractButton;
+import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JMenu;
-import javax.swing.JMenuItem;
 import javax.swing.KeyStroke;
 
 import org.microcol.gui.event.GameController;
@@ -29,23 +30,19 @@ public class MainMenuDevelopment {
 	public MainMenuDevelopment(final GameController gameController) {
 		developmentMenu = new JMenu("Development");
 
-		final JMenuItem menuItemStartAi = new JMenuItem("Start AI");
-		menuItemStartAi.setEnabled(true);
-		menuItemStartAi.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, KeyEvent.CTRL_MASK + KeyEvent.SHIFT_MASK));
-		menuItemStartAi.addActionListener(event -> {
-			gameController.getAiEngine().resume();
-			logger.debug("AI was stopped.");
+		final JCheckBoxMenuItem checkBoxStopAi = new JCheckBoxMenuItem("Suspend AI");
+		checkBoxStopAi.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A, KeyEvent.CTRL_MASK + KeyEvent.SHIFT_MASK));
+		checkBoxStopAi.addActionListener(event -> {
+			final AbstractButton aButton = (AbstractButton) event.getSource();
+			if (aButton.getModel().isSelected()) {
+				new Thread(() -> gameController.getAiEngine().resume()).start();
+				logger.debug("AI was stopped.");
+			} else {
+				new Thread(() -> gameController.getAiEngine().suspend()).start();
+				logger.debug("AI was started.");
+			}
 		});
-		developmentMenu.add(menuItemStartAi);
-
-		final JMenuItem menuItemStopAi = new JMenuItem("Stop AI");
-		menuItemStopAi.setEnabled(true);
-		menuItemStopAi.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, KeyEvent.CTRL_MASK + KeyEvent.SHIFT_MASK));
-		menuItemStopAi.addActionListener(event -> {
-			gameController.getAiEngine().suspend();
-			logger.debug("AI was started.");
-		});
-		developmentMenu.add(menuItemStopAi);
+		developmentMenu.add(checkBoxStopAi);
 
 	}
 
