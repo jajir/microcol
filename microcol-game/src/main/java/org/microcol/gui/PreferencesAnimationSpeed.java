@@ -48,12 +48,12 @@ public class PreferencesAnimationSpeed extends AbstractDialog {
 				new Insets(BORDER, BORDER, BORDER_BIG, 0), 0, 0));
 
 		JSlider slider = new JSlider(SwingConstants.HORIZONTAL, PathPlanning.ANIMATION_SPEED_MIN_VALUE,
-				PathPlanning.ANIMATION_SPEED_MAX_VALUE, actualVolume);
+				PathPlanning.ANIMATION_SPEED_MAX_VALUE - 1, actualVolume);
 		Hashtable<Integer, JLabel> labelTable = new Hashtable<>();
 		labelTable.put(new Integer(PathPlanning.ANIMATION_SPEED_MIN_VALUE),
-				new JLabel(text.get("preferencesAnimationSpeed.fast")));
-		labelTable.put(new Integer(PathPlanning.ANIMATION_SPEED_MAX_VALUE),
 				new JLabel(text.get("preferencesAnimationSpeed.slow")));
+		labelTable.put(new Integer(PathPlanning.ANIMATION_SPEED_MAX_VALUE - 1),
+				new JLabel(text.get("preferencesAnimationSpeed.fast")));
 		slider.setLabelTable(labelTable);
 		slider.setMinorTickSpacing(1);
 		slider.setSnapToTicks(false);

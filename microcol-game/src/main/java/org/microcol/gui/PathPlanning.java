@@ -1,6 +1,9 @@
 package org.microcol.gui;
 
+import java.util.Map;
+
 import com.google.common.base.Preconditions;
+import com.google.common.collect.ImmutableMap;
 import com.google.inject.Inject;
 
 /**
@@ -24,11 +27,19 @@ public class PathPlanning {
 	/**
 	 * Maximal value of animation speed.
 	 */
-	public static int ANIMATION_SPEED_MAX_VALUE = 10;
+	public static int ANIMATION_SPEED_MAX_VALUE = 5;
+
+	/**
+	 * Contains mapping of speed to step size.
+	 */
+	private static final Map<Integer, Float> SPEED_FUNCTION = ImmutableMap.of(0, 0.01F, 1, 0.02F, 2, 0.05F, 3, 0.08F, 4,
+			0.15F);
 
 	@Inject
 	public PathPlanning(final GamePreferences gamePreferences) {
 		this.gamePreferences = Preconditions.checkNotNull(gamePreferences);
+		Preconditions.checkArgument(SPEED_FUNCTION.size() == ANIMATION_SPEED_MAX_VALUE - ANIMATION_SPEED_MIN_VALUE,
+				"Animation speed finction is not well defined. It's shorter or longer that required size");
 	}
 
 	/**
@@ -97,16 +108,21 @@ public class PathPlanning {
 	}
 
 	public float countStepSize(int from, int to, int speed) {
-		Preconditions.checkArgument(speed >= ANIMATION_SPEED_MIN_VALUE, "speed '%s' is to low", speed);
-		Preconditions.checkArgument(speed <= ANIMATION_SPEED_MAX_VALUE, "speed '%s' is to high", speed);
 		return countStepSize(to - from, speed);
 	}
 
 	public float countStepSize(final int diff, final int speed) {
 		final int sign = (int) Math.signum(diff);
 		final int diffAbs = Math.abs(diff);
-		float a = (0.5F - diffAbs) / 10F;
-		return sign * (speed * a + diffAbs);
+		return sign * countPositiveStepSize(diffAbs, speed);
+	}
+
+	private float countPositiveStepSize(final int diffAbs, final int speed) {
+		Preconditions.checkArgument(speed >= ANIMATION_SPEED_MIN_VALUE, "speed '%s' is to low", speed);
+		Preconditions.checkArgument(speed < ANIMATION_SPEED_MAX_VALUE, "speed '%s' is to high", speed);
+		// float a = (0.5F - diffAbs) / 10F;
+		// return speed * a + diffAbs;
+		return SPEED_FUNCTION.get(speed) * diffAbs;
 	}
 
 	/**

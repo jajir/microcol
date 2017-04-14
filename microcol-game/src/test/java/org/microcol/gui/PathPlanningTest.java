@@ -1,6 +1,6 @@
 package org.microcol.gui;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import org.easymock.classextension.EasyMock;
 import org.junit.After;
@@ -22,9 +22,10 @@ public class PathPlanningTest {
 		PathPlanning.WhatToDoWithPointInPath whatToDo = EasyMock.createMock(PathPlanning.WhatToDoWithPointInPath.class);
 		whatToDo.pathPoint(Point.of(3, 5));
 		whatToDo.pathPoint(Point.of(4, 5));
+		whatToDo.pathPoint(Point.of(5, 5));
 		whatToDo.pathPoint(Point.of(5, 6));
 		whatToDo.pathPoint(Point.of(6, 6));
-		EasyMock.expect(gamePreferences.getAnimationSpeed()).andReturn(9);
+		EasyMock.expect(gamePreferences.getAnimationSpeed()).andReturn(4);
 		EasyMock.replay(whatToDo, gamePreferences);
 		pathPlanning.paintPath(Point.of(2, 4), Point.of(7, 6), whatToDo);
 
@@ -34,11 +35,9 @@ public class PathPlanningTest {
 	@Test
 	public void test_diagonal_move() throws Exception {
 		PathPlanning.WhatToDoWithPointInPath whatToDo = EasyMock.createMock(PathPlanning.WhatToDoWithPointInPath.class);
-		whatToDo.pathPoint(Point.of(3, 2));
-		whatToDo.pathPoint(Point.of(4, 3));
-		whatToDo.pathPoint(Point.of(5, 4));
-		whatToDo.pathPoint(Point.of(5, 5));
-		EasyMock.expect(gamePreferences.getAnimationSpeed()).andReturn(9);
+		whatToDo.pathPoint(EasyMock.anyObject());
+		EasyMock.expectLastCall().anyTimes();
+		EasyMock.expect(gamePreferences.getAnimationSpeed()).andReturn(4);
 		EasyMock.replay(whatToDo, gamePreferences);
 		pathPlanning.paintPath(Point.of(2, 2), Point.of(6, 6), whatToDo);
 
@@ -51,9 +50,10 @@ public class PathPlanningTest {
 		whatToDo.pathPoint(Point.of(10, 2));
 		whatToDo.pathPoint(Point.of(9, 2));
 		whatToDo.pathPoint(Point.of(8, 2));
+		whatToDo.pathPoint(Point.of(8, 2));
 		whatToDo.pathPoint(Point.of(7, 2));
 		whatToDo.pathPoint(Point.of(6, 2));
-		EasyMock.expect(gamePreferences.getAnimationSpeed()).andReturn(9);
+		EasyMock.expect(gamePreferences.getAnimationSpeed()).andReturn(4);
 		EasyMock.replay(whatToDo, gamePreferences);
 		pathPlanning.paintPath(Point.of(11, 2), Point.of(6, 2), whatToDo);
 
@@ -61,26 +61,27 @@ public class PathPlanningTest {
 	}
 
 	@Test
-	public void test_countStepSize() throws Exception {
-		final int diff = -5;
-		for (int i = 0; i <= 10; i++) {
-			logger.info("'" + diff + "' steps in speed '" + i + "' make step incrememnet '"
-					+ pathPlanning.countStepSize(diff, i) + "'");
+	public void test_countStepSize_positive_value_verify_step_size_decreasing() throws Exception {
+		float previousValue = 0F;
+		final int diff = 20;
+		for (int speed = PathPlanning.ANIMATION_SPEED_MIN_VALUE; speed < PathPlanning.ANIMATION_SPEED_MAX_VALUE; speed++) {
+			final float speedSize = pathPlanning.countStepSize(20, speed);
+			logger.debug("'" + diff + "' steps in speed '" + speed + "' make step incrememnet '" + speedSize + "'");
+			assertTrue(previousValue < speedSize);
+			previousValue = speedSize;
 		}
-		assertEquals(0.5F, pathPlanning.countStepSize(10, PathPlanning.ANIMATION_SPEED_MAX_VALUE), 0.1F);
-		assertEquals(0.5F, pathPlanning.countStepSize(13, PathPlanning.ANIMATION_SPEED_MAX_VALUE), 0.1F);
-		assertEquals(-10F, pathPlanning.countStepSize(-10, PathPlanning.ANIMATION_SPEED_MIN_VALUE), 0.1F);
-		assertEquals(-13F, pathPlanning.countStepSize(-13, PathPlanning.ANIMATION_SPEED_MIN_VALUE), 0.1F);
-		assertEquals(-0.5F, pathPlanning.countStepSize(-5, 10), 0.1F);
-		assertEquals(13F, pathPlanning.countStepSize(13, PathPlanning.ANIMATION_SPEED_MIN_VALUE), 0.1F);
-		assertEquals(11.75F, pathPlanning.countStepSize(13, 1), 0.1F);
 	}
 
 	@Test
-	public void test_countStepSize_negative_value() throws Exception {
-		assertEquals(-10F, pathPlanning.countStepSize(-10, PathPlanning.ANIMATION_SPEED_MIN_VALUE), 0.1F);
-		assertEquals(-13F, pathPlanning.countStepSize(-13, PathPlanning.ANIMATION_SPEED_MIN_VALUE), 0.1F);
-		assertEquals(-0.5F, pathPlanning.countStepSize(-5, 10), 0.1F);
+	public void test_countStepSize_negative_value_verify_step_size_increasing() throws Exception {
+		float previousValue = 0F;
+		final int diff = 20;
+		for (int speed = PathPlanning.ANIMATION_SPEED_MIN_VALUE; speed < PathPlanning.ANIMATION_SPEED_MAX_VALUE; speed++) {
+			final float speedSize = pathPlanning.countStepSize(20, speed);
+			logger.debug("'" + diff + "' steps in speed '" + speed + "' make step incrememnet '" + speedSize + "'");
+			assertTrue(previousValue < speedSize);
+			previousValue = speedSize;
+		}
 	}
 
 	@Test
@@ -95,12 +96,18 @@ public class PathPlanningTest {
 	@Test
 	public void test_first_step_is_skipped() throws Exception {
 		PathPlanning.WhatToDoWithPointInPath whatToDo = EasyMock.createMock(PathPlanning.WhatToDoWithPointInPath.class);
+		whatToDo.pathPoint(Point.of(5, 4));
 		whatToDo.pathPoint(Point.of(6, 4));
+		whatToDo.pathPoint(Point.of(6, 3));
+		whatToDo.pathPoint(Point.of(7, 3));
 		whatToDo.pathPoint(Point.of(7, 3));
 		whatToDo.pathPoint(Point.of(8, 2));
-		whatToDo.pathPoint(Point.of(9, 2));
+		whatToDo.pathPoint(Point.of(8, 2));
+		whatToDo.pathPoint(Point.of(9, 1));
+		whatToDo.pathPoint(Point.of(9, 1));
 		whatToDo.pathPoint(Point.of(10, 1));
-		EasyMock.expect(gamePreferences.getAnimationSpeed()).andReturn(9);
+		whatToDo.pathPoint(Point.of(10, 0));
+		EasyMock.expect(gamePreferences.getAnimationSpeed()).andReturn(3);
 		EasyMock.replay(whatToDo, gamePreferences);
 		pathPlanning.paintPath(Point.of(5, 5), Point.of(11, 0), whatToDo);
 
@@ -110,9 +117,13 @@ public class PathPlanningTest {
 	@Test
 	public void test_move_to_lover_values() throws Exception {
 		PathPlanning.WhatToDoWithPointInPath whatToDo = EasyMock.createMock(PathPlanning.WhatToDoWithPointInPath.class);
+		whatToDo.pathPoint(Point.of(6, 6));
 		whatToDo.pathPoint(Point.of(5, 5));
+		whatToDo.pathPoint(Point.of(5, 5));
+		whatToDo.pathPoint(Point.of(5, 4));
+		whatToDo.pathPoint(Point.of(5, 4));
 		whatToDo.pathPoint(Point.of(4, 3));
-		EasyMock.expect(gamePreferences.getAnimationSpeed()).andReturn(7);
+		EasyMock.expect(gamePreferences.getAnimationSpeed()).andReturn(4);
 		EasyMock.replay(whatToDo, gamePreferences);
 		pathPlanning.paintPath(Point.of(6, 7), Point.of(4, 3), whatToDo);
 
