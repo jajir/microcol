@@ -66,12 +66,15 @@
 	<entry key="terrain.CONTINENT.name">Continent</entry>
 	<entry key="terrain.CONTINENT.description">Some continent</entry>
 
-	<entry key="ship.FRIGATE.name">Frigate</entry>
-	<entry key="ship.GALLEON.name">Galleon</entry>
+	<entry key="unit.FRIGATE.name">Frigate</entry>
+	<entry key="unit.GALLEON.name">Galleon</entry>
 
 	<entry key="newGameDialog.title">New game</entry>
 	<entry key="newGameDialog.selectMap">Select map</entry>
 	<entry key="newGameDialog.cancel">Cancel</entry>
 	<entry key="newGameDialog.startGame">Start play</entry>
 
+	<entry key="dialogFight.title">Fight</entry>
+	<entry key="dialogFight.attacker">Attacker</entry>
+	<entry key="dialogFight.defender">Defender</entry>
 </properties>

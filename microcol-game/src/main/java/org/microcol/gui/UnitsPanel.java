@@ -56,11 +56,11 @@ public class UnitsPanel extends JPanel implements Localized {
 		int i = 0;
 		for (final Unit u : units) {
 			Unit s = (Unit) u;
-			add(new JLabel(new ImageIcon(imageProvider.getShipImage(s.getType()))), new GridBagConstraints(0, i, 1, 2,
+			add(new JLabel(new ImageIcon(imageProvider.getUnitImage(s.getType()))), new GridBagConstraints(0, i, 1, 2,
 					0D, 0D, GridBagConstraints.NORTH, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
 			final StringBuilder sb = new StringBuilder(200);
 			sb.append("<html><div>");
-			sb.append(localizationHelper.getShipName(s.getType()));
+			sb.append(localizationHelper.getUnitName(s.getType()));
 			sb.append("</div><div>");
 			sb.append(getText().get("unitsPanel.availableMoved"));
 			sb.append(" ");

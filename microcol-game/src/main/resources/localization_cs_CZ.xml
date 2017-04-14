@@ -64,12 +64,16 @@
 	<entry key="terrain.CONTINENT.name">Kontinent</entry>
 	<entry key="terrain.CONTINENT.description">Prostě nějaká země</entry>
 
-	<entry key="ship.FRIGATE.name">Frigata</entry>
-	<entry key="ship.GALLEON.name">Galeona</entry>
+	<entry key="unit.FRIGATE.name">Frigata</entry>
+	<entry key="unit.GALLEON.name">Galeona</entry>
 
 	<entry key="newGameDialog.title">Nová hra</entry>
 	<entry key="newGameDialog.selectMap">Vyberte mapu</entry>
 	<entry key="newGameDialog.cancel">Zpět</entry>
 	<entry key="newGameDialog.startGame">Hrát</entry>
+
+	<entry key="dialogFight.title">Útok</entry>
+	<entry key="dialogFight.attacker">Útočník</entry>
+	<entry key="dialogFight.defender">Obránce</entry>
 
 </properties>

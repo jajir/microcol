@@ -26,8 +26,6 @@ public class PreferencesAnimationSpeed extends AbstractDialog {
 	/**
 	 * Constructor when parentFrame is not available.
 	 * 
-	 * @param viewUtil
-	 *            required tool for centering window on screen
 	 * @param text
 	 *            required localization helper class
 	 * @param controller
@@ -35,8 +33,8 @@ public class PreferencesAnimationSpeed extends AbstractDialog {
 	 * @param actualVolume
 	 *            required actual animation speed value
 	 */
-	public PreferencesAnimationSpeed(final ViewUtil viewUtil, final Text text,
-			final AnimationSpeedChangeController controller, final int actualVolume) {
+	public PreferencesAnimationSpeed(final Text text, final AnimationSpeedChangeController controller,
+			final int actualVolume) {
 		super();
 		setUndecorated(true);
 		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
@@ -79,7 +77,7 @@ public class PreferencesAnimationSpeed extends AbstractDialog {
 		pack();
 		int width = (int) (getPreferredSize().getWidth() * 2);
 		setMinimumSize(new Dimension(width, getMinimumSize().height));
-		setLocation(viewUtil.centerWindow(this));
+		setLocationRelativeTo(null);
 		setModal(true);
 	}
 

@@ -27,7 +27,7 @@
 
 	<!-- GUI -->
 	<logger name="org.microcol.gui">
-		<level value="INFO"/>
+		<level value="DEBUG"/>
 	</logger>
 	<logger name="org.microcol.gui.FpsCounter">
 		<level value="WARN"/>

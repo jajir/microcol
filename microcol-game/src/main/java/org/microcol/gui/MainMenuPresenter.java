@@ -97,8 +97,8 @@ public class MainMenuPresenter {
 			preferences.setVisible(true);
 		});
 		display.getMenuItemAnimationSpeed().addActionListener(event -> {
-			PreferencesAnimationSpeed preferences = new PreferencesAnimationSpeed(viewUtil, text,
-					animationSpeedChangeController, gamePreferences.getAnimationSpeed());
+			PreferencesAnimationSpeed preferences = new PreferencesAnimationSpeed(text, animationSpeedChangeController,
+					gamePreferences.getAnimationSpeed());
 			preferences.setVisible(true);
 		});
 		display.getMenuItemShowGrid().addActionListener(ectionEvent -> showGridController

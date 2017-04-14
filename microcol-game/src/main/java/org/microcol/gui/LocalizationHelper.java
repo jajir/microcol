@@ -15,8 +15,8 @@ public class LocalizationHelper {
 	private final static String TERRAIN_PREFIX = "terrain.";
 	private final static String TERRAIN_SUFFIX_NAME = ".name";
 
-	private final static String SHIP_PREFIX = "ship.";
-	private final static String SHIP_SUFFIX_NAME = ".name";
+	private final static String UNIT_PREFIX = "unit.";
+	private final static String UNIT_SUFFIX_NAME = ".name";
 
 	/**
 	 * Localization class.
@@ -32,8 +32,8 @@ public class LocalizationHelper {
 		return text.get(TERRAIN_PREFIX + terrain.name() + TERRAIN_SUFFIX_NAME);
 	}
 
-	public String getShipName(final UnitType shipType) {
-		return text.get(SHIP_PREFIX + shipType.name() + SHIP_SUFFIX_NAME);
+	public String getUnitName(final UnitType unitType) {
+		return text.get(UNIT_PREFIX + unitType.name() + UNIT_SUFFIX_NAME);
 	}
 
 }

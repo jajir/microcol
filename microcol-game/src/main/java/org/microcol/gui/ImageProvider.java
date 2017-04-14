@@ -55,6 +55,8 @@ public class ImageProvider {
 
 	public final static String IMG_TILE_MODE_ROAD = "tile-mode-road.png";
 
+	public final static String IMG_CROSSED_SWORDS = "crossed-swords.png";
+
 	private final static String BASE_PACKAGE = "images";
 
 	private final Map<String, BufferedImage> images;
@@ -62,7 +64,7 @@ public class ImageProvider {
 	private final Map<Terrain, Image> terrainMap = ImmutableMap.<Terrain, Image>builder()
 			.put(Terrain.CONTINENT, getRawImage(IMG_TILE_LAND)).put(Terrain.OCEAN, getRawImage(IMG_TILE_OCEAN)).build();
 
-	private final Map<UnitType, Image> shipMap = ImmutableMap.<UnitType, Image>builder()
+	private final Map<UnitType, Image> unitImageMap = ImmutableMap.<UnitType, Image>builder()
 			.put(UnitType.GALLEON, getRawImage(IMG_TILE_SHIP_GALEON))
 			.put(UnitType.FRIGATE, getRawImage(IMG_TILE_SHIP_FRIGATE)).build();
 
@@ -167,8 +169,8 @@ public class ImageProvider {
 	 *            required ship type
 	 * @return image representing ship image
 	 */
-	public Image getShipImage(final UnitType shipType) {
-		return shipMap.get(shipType);
+	public Image getUnitImage(final UnitType shipType) {
+		return unitImageMap.get(shipType);
 	}
 
 }
