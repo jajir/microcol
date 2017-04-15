@@ -1,8 +1,10 @@
 package org.microcol.gui.panelview;
 
+import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.microcol.gui.ImageProvider;
 import org.microcol.gui.PathPlanning;
 import org.microcol.gui.Point;
 import org.microcol.model.Location;
@@ -48,11 +50,15 @@ public class WalkAnimator {
 
 	private Point nextCoordinates;
 
-	public WalkAnimator(final PathPlanning pathPlanning, final List<Location> path, final Unit unit) {
+	private final PaintService paintService;
+
+	public WalkAnimator(final PathPlanning pathPlanning, final List<Location> path, final Unit unit,
+			final PaintService paintService) {
 		Preconditions.checkNotNull(path);
 		Preconditions.checkArgument(!path.isEmpty(), "Path can't be empty");
 		Preconditions.checkArgument(path.size() > 1, "Path should contains more than one locations");
 		this.pathPlanning = Preconditions.checkNotNull(pathPlanning);
+		this.paintService = Preconditions.checkNotNull(paintService);
 		this.unit = Preconditions.checkNotNull(unit);
 		this.path = new ArrayList<>(path);
 		partialPathFrom = this.path.remove(0);
@@ -103,6 +109,13 @@ public class WalkAnimator {
 
 	public Unit getUnit() {
 		return unit;
+	}
+
+	public void paint(final Graphics2D graphics, final Area area) {
+		if (area.isInArea(getNextCoordinates())) {
+			final Point point = area.convertPoint(getNextCoordinates());
+			paintService.paintUnit(graphics, point, getUnit(), ImageProvider.IMG_TILE_MODE_MOVE);
+		}
 	}
 
 }

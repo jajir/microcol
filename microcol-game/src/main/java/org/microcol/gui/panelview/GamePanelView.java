@@ -31,7 +31,6 @@ import org.microcol.gui.event.NextTurnController;
 import org.microcol.gui.util.Text;
 import org.microcol.model.Location;
 import org.microcol.model.Model;
-import org.microcol.model.Player;
 import org.microcol.model.Terrain;
 import org.microcol.model.Unit;
 
@@ -83,10 +82,13 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 
 	private final LocalizationHelper localizationHelper;
 
+	private final PaintService paintService;
+
 	@Inject
 	public GamePanelView(final GameController gameController, final NextTurnController nextTurnController,
 			final PathPlanning pathPlanning, final ImageProvider imageProvider, final ViewState viewState,
-			final MoveModeSupport moveModeSupport, final Text text, final LocalizationHelper localizationHelper) {
+			final MoveModeSupport moveModeSupport, final Text text, final LocalizationHelper localizationHelper,
+			final PaintService paintService) {
 		this.gameController = Preconditions.checkNotNull(gameController);
 		this.pathPlanning = Preconditions.checkNotNull(pathPlanning);
 		this.imageProvider = Preconditions.checkNotNull(imageProvider);
@@ -94,6 +96,7 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 		this.moveModeSupport = Preconditions.checkNotNull(moveModeSupport);
 		this.text = Preconditions.checkNotNull(text);
 		this.localizationHelper = Preconditions.checkNotNull(localizationHelper);
+		this.paintService = Preconditions.checkNotNull(paintService);
 		this.visualDebugInfo = new VisualDebugInfo();
 		oneTurnMoveHighlighter = new OneTurnMoveHighlighter();
 		Toolkit toolkit = Toolkit.getDefaultToolkit();
@@ -205,8 +208,8 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 			paintGrid(dbg, area);
 			paintCursor(dbg, area);
 			paintSteps(dbg, area);
-			paintMovingAnimation(dbg, area);
-			paintDebugInfo(dbg, visualDebugInfo, area);
+			paintAnimation(dbg, area);
+			paintService.paintDebugInfo(dbg, visualDebugInfo, area);
 			final Point p = Point.of(area.getTopLeft().add(Location.of(-1, -1)));
 			g.drawImage(dbImage, p.getX(), p.getY(), null);
 			if (gameController.getModel().getCurrentPlayer().isComputer()) {
@@ -225,14 +228,9 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 		fpsCounter.screenWasPainted();
 	}
 
-	private void paintMovingAnimation(final Graphics2D graphics, final Area area) {
+	private void paintAnimation(final Graphics2D graphics, final Area area) {
 		if (walkAnimator != null && walkAnimator.getNextCoordinates() != null) {
-			if (area.isInArea(walkAnimator.getNextCoordinates())) {
-				final Point part = area.convertPoint(walkAnimator.getNextCoordinates());
-				paintUnit(graphics, part, walkAnimator.getUnit());
-				graphics.drawImage(imageProvider.getImage(ImageProvider.IMG_TILE_MODE_MOVE),
-						part.getX() + TILE_WIDTH_IN_PX - 12, part.getY(), this);
-			}
+			walkAnimator.paint(graphics, area);
 			if (walkAnimator.isNextAnimationLocationAvailable()) {
 				walkAnimator.countNextAnimationLocation();
 			}
@@ -286,50 +284,9 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 			final Point point = area.convert(location);
 			if (walkAnimator == null || !walkAnimator.isNextAnimationLocationAvailable()
 					|| !walkAnimator.getTo().equals(location)) {
-				paintUnit(graphics, point, ship);
+				paintService.paintUnit(graphics, point, ship);
 			}
 		});
-	}
-
-	private final static int FLAG_WIDTH = 7;
-
-	private final static int FLAG_HEIGHT = 12;
-
-	private void paintUnit(final Graphics2D graphics, final Point point, final Unit ship) {
-		Point p = point.add(2, 4);
-		graphics.drawImage(imageProvider.getUnitImage(ship.getType()), p.getX(), p.getY(), this);
-		paintOwnersFlag(graphics, point.add(1, 5), ship.getOwner());
-	}
-
-	/**
-	 * All units have flag containing color of owner. Method draw this flag.
-	 */
-	private void paintOwnersFlag(final Graphics2D graphics, final Point point, final Player player) {
-		graphics.setColor(Color.BLACK);
-		graphics.drawRect(point.getX(), point.getY(), FLAG_WIDTH, FLAG_HEIGHT);
-		// TODO JJ player's color should be property
-		if (player.isHuman()) {
-			graphics.setColor(Color.YELLOW);
-		} else {
-			switch (player.getName().hashCode() % 4) {
-			case 0:
-				graphics.setColor(Color.RED);
-				break;
-			case 1:
-				graphics.setColor(Color.GREEN);
-				break;
-			case 2:
-				graphics.setColor(Color.MAGENTA);
-				break;
-			case 3:
-				graphics.setColor(Color.BLUE);
-				break;
-			default:
-				graphics.setColor(Color.gray);
-				break;
-			}
-		}
-		graphics.fillRect(point.getX() + 1, point.getY() + 1, FLAG_WIDTH - 1, FLAG_HEIGHT - 1);
 	}
 
 	private void paintGrid(final Graphics2D graphics, final Area area) {
@@ -440,14 +397,6 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 		}
 	}
 
-	private void paintDebugInfo(final Graphics2D graphics, final VisualDebugInfo visualDebugInfo, final Area area) {
-		visualDebugInfo.getLocations().stream().filter(location -> area.isInArea(location)).forEach(location -> {
-			final Point p = area.convert(location).add(10, 4);
-			graphics.setColor(Color.white);
-			graphics.fillRect(p.getX() + 1, p.getY() + 1, FLAG_WIDTH - 1, FLAG_HEIGHT - 1);
-		});
-	}
-
 	@Override
 	public void startMoveUnit(final Unit ship) {
 		oneTurnMoveHighlighter.setLocations(ship.getAvailableLocations());
@@ -496,8 +445,10 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 	}
 
 	@Override
-	public void setWalkAnimator(final WalkAnimator walkAnimator) {
-		this.walkAnimator = walkAnimator;
+	public void addWalkAnimator(final List<Location> path, final Unit movingUnit) {
+		Preconditions.checkNotNull(path);
+		Preconditions.checkNotNull(movingUnit);
+		this.walkAnimator = new WalkAnimator(pathPlanning, path, movingUnit, paintService);
 	}
 
 	@Override

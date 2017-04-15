@@ -29,6 +29,7 @@ import org.microcol.gui.panelview.GamePanelView;
 import org.microcol.gui.panelview.MouseOverTileChangedController;
 import org.microcol.gui.panelview.MouseOverTileListener;
 import org.microcol.gui.panelview.MoveModeSupport;
+import org.microcol.gui.panelview.PaintService;
 import org.microcol.gui.panelview.ViewState;
 import org.microcol.gui.util.Text;
 
@@ -84,6 +85,7 @@ public class MicroColModule extends AbstractModule {
 		bind(ViewState.class).in(Singleton.class);
 		bind(MoveModeSupport.class).in(Singleton.class);
 		bind(MouseOverTileListener.class).asEagerSingleton();
+		bind(PaintService.class).in(Singleton.class);
 
 		bind(StartPanelView.class).in(Singleton.class);
 		bind(StartPanelPresenter.Display.class).to(StartPanelView.class).in(Singleton.class);

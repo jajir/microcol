@@ -13,7 +13,6 @@ import javax.swing.JViewport;
 
 import org.microcol.gui.GamePreferences;
 import org.microcol.gui.Localized;
-import org.microcol.gui.PathPlanning;
 import org.microcol.gui.Point;
 import org.microcol.gui.event.CenterViewController;
 import org.microcol.gui.event.DebugRequestController;
@@ -46,7 +45,7 @@ public final class GamePanelPresenter implements Localized {
 
 		void setCursorGoto();
 
-		void setWalkAnimator(WalkAnimator walkAnimator);
+		void addWalkAnimator(List<Location> path, Unit movingUnit);
 
 		WalkAnimator getWalkAnimator();
 
@@ -72,8 +71,6 @@ public final class GamePanelPresenter implements Localized {
 
 	private final FocusedTileController focusedTileController;
 
-	private final PathPlanning pathPlanning;
-
 	private final GamePanelPresenter.Display display;
 
 	private Point lastMousePosition;
@@ -98,14 +95,12 @@ public final class GamePanelPresenter implements Localized {
 	@Inject
 	public GamePanelPresenter(final GamePanelPresenter.Display display, final GameController gameController,
 			final KeyController keyController, final FocusedTileController focusedTileController,
-			final PathPlanning pathPlanning, final MoveUnitController moveUnitController,
-			final NewGameController newGameController, final GamePreferences gamePreferences,
-			final ShowGridController showGridController, final CenterViewController viewController,
-			final ExitGameController exitGameController, final DebugRequestController debugRequestController,
-			final ViewState viewState) {
+			final MoveUnitController moveUnitController, final NewGameController newGameController,
+			final GamePreferences gamePreferences, final ShowGridController showGridController,
+			final CenterViewController viewController, final ExitGameController exitGameController,
+			final DebugRequestController debugRequestController, final ViewState viewState) {
 		this.focusedTileController = focusedTileController;
 		this.gameController = Preconditions.checkNotNull(gameController);
-		this.pathPlanning = Preconditions.checkNotNull(pathPlanning);
 		this.display = Preconditions.checkNotNull(display);
 		this.viewState = Preconditions.checkNotNull(viewState);
 
@@ -292,14 +287,14 @@ public final class GamePanelPresenter implements Localized {
 		final Unit movingShip = gameController.getModel().getCurrentPlayer().getUnitsAt(selectedTile).get(0);
 		if (isFight(movingShip, moveToLocation)) {
 			final Unit targetUnit = gameController.getModel().getUnitsAt(moveToLocation).get(0);
-			if(display.performFightDialog(movingShip, targetUnit)){
+			if (display.performFightDialog(movingShip, targetUnit)) {
 				// User choose fight
-				
-				display.setCursorNormal();				
-			}else{
-				//User choose to quit fight
+
+				display.setCursorNormal();
+			} else {
+				// User choose to quit fight
 				viewState.setSelectedTile(Optional.of(moveToLocation));
-				display.setCursorNormal();				
+				display.setCursorNormal();
 			}
 		} else {
 			if (movingShip.getPath(moveToLocation).isPresent()) {
@@ -334,8 +329,7 @@ public final class GamePanelPresenter implements Localized {
 		display.planScrollingAnimationToPoint(display.getArea().getCenterAreaTo(Point.of(event.getStart())));
 		List<Location> path = new ArrayList<>(event.getPath().getLocations());
 		path.add(0, event.getStart());
-		final WalkAnimator walkAnimator = new WalkAnimator(pathPlanning, path, event.getUnit());
-		display.setWalkAnimator(walkAnimator);
+		display.addWalkAnimator(path, event.getUnit());
 	}
 
 }
