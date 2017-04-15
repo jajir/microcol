@@ -77,4 +77,6 @@
 	<entry key="dialogFight.title">Fight</entry>
 	<entry key="dialogFight.attacker">Attacker</entry>
 	<entry key="dialogFight.defender">Defender</entry>
+	<entry key="dialogFight.buttonFight">Fight</entry>
+	<entry key="dialogFight.buttonCancel">Cancel</entry>
 </properties>

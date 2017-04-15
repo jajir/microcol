@@ -14,22 +14,26 @@ import java.awt.image.VolatileImage;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JViewport;
 import javax.swing.Timer;
 
+import org.microcol.gui.DialogFigth;
 import org.microcol.gui.FpsCounter;
 import org.microcol.gui.ImageProvider;
+import org.microcol.gui.LocalizationHelper;
 import org.microcol.gui.PathPlanning;
 import org.microcol.gui.Point;
 import org.microcol.gui.StepCounter;
 import org.microcol.gui.event.GameController;
 import org.microcol.gui.event.NextTurnController;
+import org.microcol.gui.util.Text;
 import org.microcol.model.Location;
 import org.microcol.model.Model;
 import org.microcol.model.Player;
-import org.microcol.model.Unit;
 import org.microcol.model.Terrain;
+import org.microcol.model.Unit;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
@@ -75,15 +79,21 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 
 	private final MoveModeSupport moveModeSupport;
 
+	private final Text text;
+
+	private final LocalizationHelper localizationHelper;
+
 	@Inject
 	public GamePanelView(final GameController gameController, final NextTurnController nextTurnController,
 			final PathPlanning pathPlanning, final ImageProvider imageProvider, final ViewState viewState,
-			final MoveModeSupport moveModeSupport) {
+			final MoveModeSupport moveModeSupport, final Text text, final LocalizationHelper localizationHelper) {
 		this.gameController = Preconditions.checkNotNull(gameController);
 		this.pathPlanning = Preconditions.checkNotNull(pathPlanning);
 		this.imageProvider = Preconditions.checkNotNull(imageProvider);
 		this.viewState = Preconditions.checkNotNull(viewState);
 		this.moveModeSupport = Preconditions.checkNotNull(moveModeSupport);
+		this.text = Preconditions.checkNotNull(text);
+		this.localizationHelper = Preconditions.checkNotNull(localizationHelper);
 		this.visualDebugInfo = new VisualDebugInfo();
 		oneTurnMoveHighlighter = new OneTurnMoveHighlighter();
 		Toolkit toolkit = Toolkit.getDefaultToolkit();
@@ -498,6 +508,13 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 	@Override
 	public void setGridShown(final boolean isGridShown) {
 		this.isGridShown = isGridShown;
+	}
+
+	@Override
+	public boolean performFightDialog(final Unit unitAttacker, final Unit unitDefender) {
+		DialogFigth dialogFight = new DialogFigth(text, imageProvider, localizationHelper, unitAttacker, unitDefender);
+		dialogFight.setVisible(true);
+		return dialogFight.isUserChooseFight();
 	}
 
 	public void onViewPortResize() {

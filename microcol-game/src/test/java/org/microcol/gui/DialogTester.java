@@ -58,7 +58,6 @@ public class DialogTester {
 	}
 
 	public final static void testDialogFight() {
-		final ViewUtil viewUtil = new ViewUtil();
 		final Text text = new Text(Text.Language.cz);
 		final ImageProvider imageProvider = new ImageProvider();
 		final LocalizationHelper localizationHelper = new LocalizationHelper(text);
@@ -74,9 +73,9 @@ public class DialogTester {
 
 		EasyMock.replay(playerAttacker, playerDefender, unitAttacker, unitDefender);
 
-		DialogFigth preferences = new DialogFigth(viewUtil, text, imageProvider, localizationHelper, unitAttacker,
-				unitDefender);
+		DialogFigth preferences = new DialogFigth(text, imageProvider, localizationHelper, unitAttacker, unitDefender);
 		preferences.setVisible(true);
+		System.out.println("User wants to fight: " + preferences.isUserChooseFight());
 	}
 
 }

@@ -75,5 +75,7 @@
 	<entry key="dialogFight.title">Útok</entry>
 	<entry key="dialogFight.attacker">Útočník</entry>
 	<entry key="dialogFight.defender">Obránce</entry>
+	<entry key="dialogFight.buttonFight">Bojovat</entry>
+	<entry key="dialogFight.buttonCancel">Zpět</entry>
 
 </properties>

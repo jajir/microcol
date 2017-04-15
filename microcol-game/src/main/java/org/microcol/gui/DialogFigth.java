@@ -20,15 +20,18 @@ public class DialogFigth extends AbstractDialog {
 	private static final long serialVersionUID = 1L;
 
 	/**
+	 * It's <code>true</code> when user choose to fight.
+	 */
+	private boolean userChooseFight = false;
+
+	/**
 	 * Constructor when parentFrame is not available.
 	 * 
-	 * @param viewUtil
-	 *            required tool for centering window on screen
 	 * @param text
 	 *            required localization helper class
 	 */
-	public DialogFigth(final ViewUtil viewUtil, final Text text, final ImageProvider imageProvider,
-			final LocalizationHelper localizationHelper, final Unit unitAttacker, final Unit unitDefender) {
+	public DialogFigth(final Text text, final ImageProvider imageProvider, final LocalizationHelper localizationHelper,
+			final Unit unitAttacker, final Unit unitDefender) {
 		super();
 		setUndecorated(true);
 		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
@@ -65,18 +68,29 @@ public class DialogFigth extends AbstractDialog {
 		/**
 		 * Buttons
 		 */
-		final JButton buttonOk = new JButton(text.get("dialog.ok"));
-		buttonOk.addActionListener(e -> {
+		final JButton buttonCancel = new JButton(text.get("dialogFight.buttonCancel"));
+		buttonCancel.addActionListener(e -> {
+			userChooseFight=false;
 			setVisible(false);
+			dispose();
 		});
-		buttonOk.requestFocus();
-		add(buttonOk, new GridBagConstraints(2, 10, 1, 1, 1.0D, 1.0D, GridBagConstraints.SOUTHEAST,
-				GridBagConstraints.NONE, new Insets(BORDER_BIG, 0, BORDER, BORDER), 0, 0));
+		add(buttonCancel, new GridBagConstraints(0, 10, 1, 1, 0.0D, 0.0D, GridBagConstraints.SOUTHWEST,
+				GridBagConstraints.NONE, new Insets(BORDER_BIG, BORDER, BORDER, BORDER), 0, 0));
+
+		final JButton buttonFight = new JButton(text.get("dialogFight.buttonFight"));
+		buttonFight.addActionListener(e -> {
+			userChooseFight = true;
+			setVisible(false);
+			dispose();
+		});
+		add(buttonFight, new GridBagConstraints(2, 10, 1, 1, 0.0D, 0.0D, GridBagConstraints.SOUTHEAST,
+				GridBagConstraints.NONE, new Insets(BORDER_BIG, BORDER, BORDER, BORDER), 0, 0));
 
 		setResizable(false);
 		pack();
-		setLocation(viewUtil.centerWindow(this));
+		setLocationRelativeTo(null);
 		setModal(true);
+		buttonFight.requestFocus();
 	}
 
 	private void describeUnit(final int column, final Unit unit, final ImageProvider imageProvider,
@@ -88,7 +102,10 @@ public class DialogFigth extends AbstractDialog {
 		final ImageIcon unitImage = new ImageIcon(imageProvider.getUnitImage(unit.getType()));
 		add(new JLabel(unitImage), new GridBagConstraints(column, 3, 1, 1, 0.0D, 0.0D, GridBagConstraints.NORTHWEST,
 				GridBagConstraints.NONE, new Insets(0, BORDER_BIG, BORDER, BORDER_BIG), 0, 0));
+	}
 
+	public boolean isUserChooseFight() {
+		return userChooseFight;
 	}
 
 }

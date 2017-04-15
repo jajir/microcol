@@ -64,6 +64,8 @@ public final class GamePanelPresenter implements Localized {
 
 		void startMoveUnit(Unit ship);
 
+		boolean performFightDialog(Unit unitAttacker, Unit unitDefender);
+
 	}
 
 	private final GameController gameController;
@@ -280,23 +282,49 @@ public final class GamePanelPresenter implements Localized {
 		viewState.setMouseOverTile(Optional.of(lastMousePosition.toLocation()));
 	}
 
-	private void switchToNormalMode(final Location moveTo) {
+	private void switchToNormalMode(final Location moveToLocation) {
 		final Location selectedTile = viewState.getSelectedTile().get();
-		logger.debug("Switching to normal mode, from " + selectedTile + " to " + moveTo);
-		if (selectedTile.equals(moveTo)) {
+		logger.debug("Switching to normal mode, from " + selectedTile + " to " + moveToLocation);
+		if (selectedTile.equals(moveToLocation)) {
 			return;
 		}
 		// TODO JJ active ship can be different from ship first at list
-		final Unit ship = gameController.getModel().getCurrentPlayer().getUnitsAt(selectedTile).get(0);
-		if (ship.getPath(moveTo).isPresent()) {
-			final List<Location> path = ship.getPath(moveTo).get();
-			if (path.size() > 0) {
-				gameController.performMove(ship, path);
-				focusedTileController.fireEvent(new FocusedTileEvent(gameController.getModel(), selectedTile,
-						gameController.getModel().getMap().getTerrainAt(selectedTile)));
+		final Unit movingShip = gameController.getModel().getCurrentPlayer().getUnitsAt(selectedTile).get(0);
+		if (isFight(movingShip, moveToLocation)) {
+			final Unit targetUnit = gameController.getModel().getUnitsAt(moveToLocation).get(0);
+			if(display.performFightDialog(movingShip, targetUnit)){
+				// User choose fight
+				
+				display.setCursorNormal();				
+			}else{
+				//User choose to quit fight
+				viewState.setSelectedTile(Optional.of(moveToLocation));
+				display.setCursorNormal();				
 			}
-			viewState.setSelectedTile(Optional.of(moveTo));
-			display.setCursorNormal();
+		} else {
+			if (movingShip.getPath(moveToLocation).isPresent()) {
+				final List<Location> path = movingShip.getPath(moveToLocation).get();
+				if (path.size() > 0) {
+					gameController.performMove(movingShip, path);
+					focusedTileController.fireEvent(new FocusedTileEvent(gameController.getModel(), selectedTile,
+							gameController.getModel().getMap().getTerrainAt(selectedTile)));
+				}
+				viewState.setSelectedTile(Optional.of(moveToLocation));
+				display.setCursorNormal();
+			}
+		}
+	}
+
+	private boolean isFight(final Unit movingShip, final Location moveToLocation) {
+		if (gameController.getModel().getUnitsAt(moveToLocation).isEmpty()) {
+			return false;
+		} else {
+			final Unit targetUnit = gameController.getModel().getUnitsAt(moveToLocation).get(0);
+			if (targetUnit.getOwner().equals(movingShip.getOwner())) {
+				return false;
+			} else {
+				return true;
+			}
 		}
 	}
 
