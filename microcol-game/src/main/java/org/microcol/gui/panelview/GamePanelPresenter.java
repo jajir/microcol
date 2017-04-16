@@ -47,7 +47,7 @@ public final class GamePanelPresenter implements Localized {
 
 		void addWalkAnimator(List<Location> path, Unit movingUnit);
 
-		WalkAnimator getWalkAnimator();
+		AnimationManager getAnimationManager();
 
 		void initGame(boolean idGridShown);
 
@@ -109,7 +109,7 @@ public final class GamePanelPresenter implements Localized {
 			/**
 			 * Wait until animation is finished.
 			 */
-			while (display.getWalkAnimator() != null && display.getWalkAnimator().isNextAnimationLocationAvailable()) {
+			while (display.getAnimationManager().hasNextStep()) {
 				try {
 					Thread.sleep(100);
 				} catch (InterruptedException e1) {

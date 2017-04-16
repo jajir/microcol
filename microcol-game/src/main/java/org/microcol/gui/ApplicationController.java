@@ -2,6 +2,8 @@ package org.microcol.gui;
 
 import org.microcol.gui.event.GameController;
 import org.microcol.gui.event.GameFinishedController;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
@@ -11,6 +13,8 @@ import com.google.inject.Inject;
  * main application screen.
  */
 public class ApplicationController {
+
+	private final Logger logger = LoggerFactory.getLogger(ApplicationController.class);
 
 	private final MainFramePresenter mainFramePresenter;
 
@@ -25,12 +29,13 @@ public class ApplicationController {
 	}
 
 	public void startNewGame() {
+		logger.debug("Game started.");
 		gameController.newGame();
 		mainFramePresenter.showPanel(MainFramePresenter.MAIN_GAME_PANEL);
 	}
 
 	private void gameFinished() {
-		System.out.println("game finished");
+		logger.debug("Game finished.");
 		mainFramePresenter.showPanel(MainFramePresenter.START_PANEL);
 	}
 

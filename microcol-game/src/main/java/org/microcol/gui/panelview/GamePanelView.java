@@ -66,7 +66,9 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 
 	private final ViewState viewState;
 
-	private WalkAnimator walkAnimator;
+	private final AnimationManager animationManager;
+
+	private final ExcludePainting excludePainting = new ExcludePainting();
 
 	private final FpsCounter fpsCounter;
 
@@ -102,6 +104,8 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 		Toolkit toolkit = Toolkit.getDefaultToolkit();
 		gotoModeCursor = toolkit.createCustomCursor(imageProvider.getImage(ImageProvider.IMG_CURSOR_GOTO),
 				new java.awt.Point(1, 1), "gotoModeCursor");
+		// excludePainting = new ExcludePainting();
+		animationManager = new AnimationManager();
 		final GamePanelView map = this;
 
 		nextTurnController.addListener(w -> map.repaint());
@@ -229,13 +233,10 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 	}
 
 	private void paintAnimation(final Graphics2D graphics, final Area area) {
-		if (walkAnimator != null && walkAnimator.getNextCoordinates() != null) {
-			walkAnimator.paint(graphics, area);
-			if (walkAnimator.isNextAnimationLocationAvailable()) {
-				walkAnimator.countNextAnimationLocation();
-			}
+		if (animationManager.hasNextStep()) {
+			animationManager.paint(graphics, area);
+			animationManager.performStep();
 		}
-
 	}
 
 	/**
@@ -280,11 +281,10 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 				.filter(e -> area.isInArea(e.getKey())).collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue()));
 
 		ships2.forEach((location, list) -> {
-			final Unit ship = list.stream().findFirst().get();
+			final Unit unit = list.stream().findFirst().get();
 			final Point point = area.convert(location);
-			if (walkAnimator == null || !walkAnimator.isNextAnimationLocationAvailable()
-					|| !walkAnimator.getTo().equals(location)) {
-				paintService.paintUnit(graphics, point, ship);
+			if (excludePainting.isUnitIncluded(unit)) {
+				paintService.paintUnit(graphics, point, unit);
 			}
 		});
 	}
@@ -448,12 +448,13 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 	public void addWalkAnimator(final List<Location> path, final Unit movingUnit) {
 		Preconditions.checkNotNull(path);
 		Preconditions.checkNotNull(movingUnit);
-		this.walkAnimator = new WalkAnimator(pathPlanning, path, movingUnit, paintService);
+		animationManager
+				.addAnimationPart(new AnimationPartWalk(pathPlanning, path, movingUnit, paintService, excludePainting));
 	}
 
 	@Override
-	public WalkAnimator getWalkAnimator() {
-		return walkAnimator;
+	public AnimationManager getAnimationManager() {
+		return animationManager;
 	}
 
 	@Override

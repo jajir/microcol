@@ -1,0 +1,19 @@
+ ----
+ Animations
+ ----
+
+How it's working
+
+ All animation related classes are in package <org.microcol.gui.panelview> and <org.microcol.gui.util>.
+
+* Game animation
+
+ This part is about main animation like ship moving.
+ When event should be animated than there is extension of <AnimationPart>.
+ Behavior of method in animation part implementations should be following:  
+ 
+[animation-part.png] Animation part lifecycle 
+ 
+  When some event should be animated than it's added to <AnimationManager>.
+  <AnimationManager> is called each time screen is redrawn. 
+ 

@@ -8,7 +8,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.microcol.model.Unit;
 
-public class WalkAnimatorTest {
+public class AnimatinPartWalkTest {
 
 	private PathPlanning pathPlanning;
 

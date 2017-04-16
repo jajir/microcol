@@ -16,7 +16,7 @@ import com.google.common.base.Preconditions;
  * Draw walk animation based on predefined path.
  * 
  */
-public class WalkAnimator {
+public class AnimationPartWalk extends AnimationPart {
 
 	/**
 	 * Total path that have to animated, it's list of location on map.
@@ -34,17 +34,12 @@ public class WalkAnimator {
 	private final PathPlanning pathPlanning;
 
 	/**
-	 * Final tile where animation finish.
-	 */
-	private final Location to;
-
-	/**
 	 * Contains locations for move between two tiles.
 	 */
 	private final List<Point> partialPath;
 
 	/**
-	 * 
+	 * Draw partial part of path.
 	 */
 	private Location partialPathFrom;
 
@@ -52,22 +47,27 @@ public class WalkAnimator {
 
 	private final PaintService paintService;
 
-	public WalkAnimator(final PathPlanning pathPlanning, final List<Location> path, final Unit unit,
-			final PaintService paintService) {
+	private final ExcludePainting excludePainting;
+
+	public AnimationPartWalk(final PathPlanning pathPlanning, final List<Location> path, final Unit unit,
+			final PaintService paintService, final ExcludePainting excludePainting) {
 		Preconditions.checkNotNull(path);
 		Preconditions.checkArgument(!path.isEmpty(), "Path can't be empty");
 		Preconditions.checkArgument(path.size() > 1, "Path should contains more than one locations");
 		this.pathPlanning = Preconditions.checkNotNull(pathPlanning);
 		this.paintService = Preconditions.checkNotNull(paintService);
 		this.unit = Preconditions.checkNotNull(unit);
+		this.excludePainting = Preconditions.checkNotNull(excludePainting);
 		this.path = new ArrayList<>(path);
+		excludePainting.excludeUnit(unit);
 		partialPathFrom = this.path.remove(0);
-		to = this.path.get(this.path.size() - 1);
 		partialPath = new ArrayList<>();
-		countNextAnimationLocation();
+		nextStep();
+		Preconditions.checkArgument(hasNextStep(), "Animation can't start without any steps.");
 	}
 
-	public void countNextAnimationLocation() {
+	@Override
+	public void nextStep() {
 		if (partialPath.isEmpty()) {
 			nextCoordinates = null;
 			if (!path.isEmpty()) {
@@ -82,6 +82,9 @@ public class WalkAnimator {
 		} else {
 			nextCoordinates = partialPath.remove(0);
 		}
+		if (nextCoordinates == null) {
+			excludePainting.includeUnit(unit);
+		}
 	}
 
 	/**
@@ -90,17 +93,9 @@ public class WalkAnimator {
 	 * @return return <code>true</code> when not all animation was drawn, it
 	 *         return <code>false</code> when all animation is done
 	 */
-	public boolean isNextAnimationLocationAvailable() {
+	@Override
+	public boolean hasNextStep() {
 		return nextCoordinates != null;
-	}
-
-	/**
-	 * Return location tile where animated unit go.
-	 * 
-	 * @return {@link Location} return to tile location
-	 */
-	public Location getTo() {
-		return to;
 	}
 
 	public Point getNextCoordinates() {
@@ -111,6 +106,7 @@ public class WalkAnimator {
 		return unit;
 	}
 
+	@Override
 	public void paint(final Graphics2D graphics, final Area area) {
 		if (area.isInArea(getNextCoordinates())) {
 			final Point point = area.convertPoint(getNextCoordinates());

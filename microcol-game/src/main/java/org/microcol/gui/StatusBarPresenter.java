@@ -47,7 +47,6 @@ public class StatusBarPresenter implements Localized {
 		display.getStatusBarDescription().addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(final MouseEvent e) {
-				System.out.println("brekeke");
 				statusBarMessageController
 						.fireEvent(new StatusBarMessageEvent(getText().get("statusBar.status.description")));
 			}
