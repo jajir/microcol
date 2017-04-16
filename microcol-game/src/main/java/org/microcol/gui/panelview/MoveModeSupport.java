@@ -53,8 +53,7 @@ public class MoveModeSupport {
 					 */
 					moveLocations = Lists.newArrayList();
 				} else {
-					// TODO JJ get(0) could return different ship that is really
-					// moved
+					// TODO JJ get(0) could return different ship that is really moved
 					final Unit movingUnit = gameController.getModel().getCurrentPlayer()
 							.getUnitsAt(viewState.getSelectedTile().get()).get(0);
 					final List<Unit> ships = gameController.getModel().getUnitsAt(target);
@@ -71,12 +70,18 @@ public class MoveModeSupport {
 							fight = false;
 						} else {
 							/**
-							 * It will be fight.
+							 * User wants to fight.
 							 */
-							moveLocations = Lists
-									.newArrayList(movingUnit.getPath(target, true).orElse(Collections.emptyList()));
-							moveLocations.add(target);
-							fight = true;
+							if (movingUnit.getType().canAttack()) {
+								moveLocations = Lists
+										.newArrayList(movingUnit.getPath(target, true).orElse(Collections.emptyList()));
+								moveLocations.add(target);
+								fight = true;
+							} else {
+								// TODO JJ change status bar, that user try to attack with unit that can't attack.
+								moveLocations = Collections.emptyList();
+								fight = false;
+							}
 						}
 					}
 				}

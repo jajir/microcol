@@ -24,7 +24,8 @@ public class DialogTester {
 			// startNewGameDialog();
 			// startPreferencesVolume();
 			// startPreferencesAnimationSpeed();
-			testDialogFight();
+			// testDialogFight();
+			dialowWarning();
 		});
 	}
 
@@ -76,6 +77,11 @@ public class DialogTester {
 		DialogFigth preferences = new DialogFigth(text, imageProvider, localizationHelper, unitAttacker, unitDefender);
 		preferences.setVisible(true);
 		System.out.println("User wants to fight: " + preferences.isUserChooseFight());
+	}
+
+	public final static void dialowWarning() {
+		DialogWarning dialogWarning = new DialogWarning();
+		dialogWarning.setVisible(true);
 	}
 
 }

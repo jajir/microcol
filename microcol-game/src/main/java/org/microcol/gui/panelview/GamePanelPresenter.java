@@ -11,6 +11,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.JViewport;
 
+import org.microcol.gui.DialogWarning;
 import org.microcol.gui.GamePreferences;
 import org.microcol.gui.Localized;
 import org.microcol.gui.Point;
@@ -286,6 +287,14 @@ public final class GamePanelPresenter implements Localized {
 		// TODO JJ active ship can be different from ship first at list
 		final Unit movingUnit = gameController.getModel().getCurrentPlayer().getUnitsAt(selectedTile).get(0);
 		if (isFight(movingUnit, moveToLocation)) {
+			if(!movingUnit.getType().canAttack()){
+				//TODO JJ consider which tile should have focus
+				viewState.setSelectedTile(Optional.of(moveToLocation));
+				display.setCursorNormal();
+				DialogWarning dialogWarning = new DialogWarning();
+				dialogWarning.setVisible(true);
+				return;
+			}
 			final Unit targetUnit = gameController.getModel().getUnitsAt(moveToLocation).get(0);
 			if (display.performFightDialog(movingUnit, targetUnit)) {
 				// User choose to fight
