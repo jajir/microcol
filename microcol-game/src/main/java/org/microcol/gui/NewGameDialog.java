@@ -21,7 +21,7 @@ public class NewGameDialog extends JDialog {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private final static int BORDER_SPAN = 20;
+	private static final int BORDER_SPAN = 20;
 
 	/**
 	 * Constructor when parentFrame is not available.
@@ -56,8 +56,9 @@ public class NewGameDialog extends JDialog {
 
 		final JButton buttonStartGame = new JButton(text.get("newGameDialog.startGame"));
 		buttonStartGame.addActionListener(e -> {
-			//TODO JJ selected map should be used.
-//			final String selectedMap = (String) comboBoxSelectMap.getSelectedItem();
+			// TODO JJ selected map should be used.
+			// final String selectedMap = (String)
+			// comboBoxSelectMap.getSelectedItem();
 			setVisible(false);
 		});
 		buttonStartGame.requestFocus();

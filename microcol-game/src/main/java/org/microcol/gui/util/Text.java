@@ -15,9 +15,9 @@ import com.google.inject.Inject;
  */
 public class Text {
 
-	private final static Logger logger = LoggerFactory.getLogger(Text.class);
+	private static final Logger logger = LoggerFactory.getLogger(Text.class);
 
-	private final static String RESOURCE_BUNDLE_NAME = "localization";
+	private static final String RESOURCE_BUNDLE_NAME = "localization";
 
 	public static Text INSTANCE;
 

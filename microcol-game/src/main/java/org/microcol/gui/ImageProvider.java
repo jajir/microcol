@@ -25,39 +25,39 @@ import com.google.common.collect.ImmutableMap;
  */
 public class ImageProvider {
 
-	public final static String IMG_CURSOR_GOTO = "cursor-goto.png";
+	public static final String IMG_CURSOR_GOTO = "cursor-goto.png";
 
-	public final static String IMG_ICON_STEPS_25x25 = "icon-steps-25x25.png";
+	public static final String IMG_ICON_STEPS_25x25 = "icon-steps-25x25.png";
 
-	public final static String IMG_ICON_STEPS_TURN_25x25 = "icon-steps-turn-25x25.png";
-	
-	public final static String IMG_ICON_STEPS_FIGHT_25x25 = "icon-steps-fight-25x25.png";
+	public static final String IMG_ICON_STEPS_TURN_25x25 = "icon-steps-turn-25x25.png";
 
-	public final static String IMG_ICON_STEPS_FIGHT_TURN_25x25 = "icon-steps-fight-turn-25x25.png";
+	public static final String IMG_ICON_STEPS_FIGHT_25x25 = "icon-steps-fight-25x25.png";
 
-	public final static String IMG_SPLASH_SCREEN = "splash-screen.png";
+	public static final String IMG_ICON_STEPS_FIGHT_TURN_25x25 = "icon-steps-fight-turn-25x25.png";
 
-	public final static String IMG_TILE_OCEAN = "tile-ocean.png";
+	public static final String IMG_SPLASH_SCREEN = "splash-screen.png";
 
-	public final static String IMG_TILE_LAND = "tile-land.png";
+	public static final String IMG_TILE_OCEAN = "tile-ocean.png";
 
-	public final static String IMG_TILE_SHIP_GALEON = "tile-ship-galeon.png";
+	public static final String IMG_TILE_LAND = "tile-land.png";
 
-	public final static String IMG_TILE_SHIP_FRIGATE = "tile-ship-frigate.png";
+	public static final String IMG_TILE_SHIP_GALEON = "tile-ship-galeon.png";
 
-	public final static String IMG_TILE_MODE_GOTO = "tile-mode-goto.png";
+	public static final String IMG_TILE_SHIP_FRIGATE = "tile-ship-frigate.png";
 
-	public final static String IMG_TILE_MODE_MOVE = "tile-mode-move.png";
+	public static final String IMG_TILE_MODE_GOTO = "tile-mode-goto.png";
 
-	public final static String IMG_TILE_MODE_FORTIFY = "tile-mode-fortify.png";
+	public static final String IMG_TILE_MODE_MOVE = "tile-mode-move.png";
 
-	public final static String IMG_TILE_MODE_PLOW = "tile-mode-plow.png";
+	public static final String IMG_TILE_MODE_FORTIFY = "tile-mode-fortify.png";
 
-	public final static String IMG_TILE_MODE_ROAD = "tile-mode-road.png";
+	public static final String IMG_TILE_MODE_PLOW = "tile-mode-plow.png";
 
-	public final static String IMG_CROSSED_SWORDS = "crossed-swords.png";
+	public static final String IMG_TILE_MODE_ROAD = "tile-mode-road.png";
 
-	private final static String BASE_PACKAGE = "images";
+	public static final String IMG_CROSSED_SWORDS = "crossed-swords.png";
+
+	private static final String BASE_PACKAGE = "images";
 
 	private final Map<String, BufferedImage> images;
 

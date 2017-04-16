@@ -29,7 +29,7 @@ public class RightPanelView extends JPanel implements RightPanelPresenter.Displa
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private final static int RIGHT_PANEL_WIDTH = 170;
+	private static final int RIGHT_PANEL_WIDTH = 170;
 
 	private final ImageProvider imageProvider;
 

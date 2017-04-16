@@ -21,7 +21,7 @@ public class OrderedEventController<E> {
 	/**
 	 * Value of priority when it's not specified.
 	 */
-	private final static int DEFAULT_PRIORITY = 10;
+	private static final int DEFAULT_PRIORITY = 10;
 
 	/**
 	 * Listeners

@@ -13,12 +13,12 @@ public class Point {
 	/**
 	 * Minimal x value.
 	 */
-	public final static int MAP_MIN_X = 1;
+	public static final int MAP_MIN_X = 1;
 
 	/**
 	 * Minimal y value.
 	 */
-	public final static int MAP_MIN_Y = 1;
+	public static final int MAP_MIN_Y = 1;
 
 	/**
 	 * On screen X coordinate.

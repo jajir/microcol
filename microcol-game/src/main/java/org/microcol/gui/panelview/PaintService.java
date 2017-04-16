@@ -19,12 +19,12 @@ public class PaintService {
 	/**
 	 * Unit's flag width.
 	 */
-	private final static int FLAG_WIDTH = 7;
+	private static final int FLAG_WIDTH = 7;
 
 	/**
 	 * Unit's flag height.
 	 */
-	private final static int FLAG_HEIGHT = 12;
+	private static final int FLAG_HEIGHT = 12;
 
 	private final ImageProvider imageProvider;
 
@@ -44,7 +44,7 @@ public class PaintService {
 	 *            required unit to draw
 	 */
 	public void paintUnit(final Graphics2D graphics, final Point point, final Unit unit) {
-		//TODO JJ replace magic numbers
+		// TODO JJ replace magic numbers
 		Point p = point.add(2, 4);
 		graphics.drawImage(imageProvider.getUnitImage(unit.getType()), p.getX(), p.getY(), null);
 		paintOwnersFlag(graphics, point.add(1, 5), unit.getOwner());
@@ -64,7 +64,7 @@ public class PaintService {
 	 */
 	public void paintUnit(final Graphics2D graphics, final Point point, final Unit unit,
 			final String flagLeterImageName) {
-		//TODO JJ replace magic numbers
+		// TODO JJ replace magic numbers
 		Point p = point.add(2, 4);
 		graphics.drawImage(imageProvider.getUnitImage(unit.getType()), p.getX(), p.getY(), null);
 		paintOwnersFlag(graphics, point.add(1, 5), unit.getOwner());

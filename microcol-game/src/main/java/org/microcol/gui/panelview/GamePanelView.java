@@ -48,9 +48,9 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private final static int TILE_WIDTH_IN_PX = 35;
+	private static final int TILE_WIDTH_IN_PX = 35;
 
-	public final static int TOTAL_TILE_WIDTH_IN_PX = TILE_WIDTH_IN_PX;
+	public static final int TOTAL_TILE_WIDTH_IN_PX = TILE_WIDTH_IN_PX;
 
 	private final ImageProvider imageProvider;
 
@@ -126,7 +126,7 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 	 * will be always lover than this value. It's because not all
 	 * {@link JComponent#repaint()} leads to real screen repaint.
 	 */
-	private final static int DEFAULT_FRAME_PER_SECOND = 50;
+	private static final int DEFAULT_FRAME_PER_SECOND = 50;
 
 	@Override
 	public void initGame(final boolean idGridShown) {
@@ -455,7 +455,7 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 
 	// TODO JJ animation scheduling should be in separate class.
 	public void addFightAnimation(final Unit attacker, final Unit defender) {
-		//TODO JJ animation speed should come from game preferences
+		// TODO JJ animation speed should come from game preferences
 		animationManager.addAnimationPart(new AnimationPartFight(attacker, defender, imageProvider, 2));
 	}
 

@@ -8,7 +8,7 @@ import org.microcol.gui.util.Text;
 
 public class GamePreferences {
 
-	private final static String PREFERENCES_LANGUAGE = "language";
+	private static final String PREFERENCES_LANGUAGE = "language";
 	private static final String PREFERENCES_STATE = "state";
 	private static final String PREFERENCES_X = "x";
 	private static final String PREFERENCES_Y = "y";

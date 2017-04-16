@@ -12,8 +12,8 @@ public class AbstractDialog extends JDialog {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	protected final static int BORDER = 10;
+	protected static final int BORDER = 10;
 
-	protected final static int BORDER_BIG = 20;
+	protected static final int BORDER_BIG = 20;
 
 }

@@ -12,11 +12,11 @@ import com.google.inject.Inject;
  */
 public class LocalizationHelper {
 
-	private final static String TERRAIN_PREFIX = "terrain.";
-	private final static String TERRAIN_SUFFIX_NAME = ".name";
+	private static final String TERRAIN_PREFIX = "terrain.";
+	private static final String TERRAIN_SUFFIX_NAME = ".name";
 
-	private final static String UNIT_PREFIX = "unit.";
-	private final static String UNIT_SUFFIX_NAME = ".name";
+	private static final String UNIT_PREFIX = "unit.";
+	private static final String UNIT_SUFFIX_NAME = ".name";
 
 	/**
 	 * Localization class.
