@@ -29,6 +29,14 @@ public class DialogFigth extends AbstractDialog {
 	 * 
 	 * @param text
 	 *            required localization helper class
+	 * @param imageProvider
+	 *            required image provider
+	 * @param localizationHelper
+	 *            required localization helper
+	 * @param unitAttacker
+	 *            required attacking unit
+	 * @param unitDefender
+	 *            required defending unit
 	 */
 	public DialogFigth(final Text text, final ImageProvider imageProvider, final LocalizationHelper localizationHelper,
 			final Unit unitAttacker, final Unit unitDefender) {
@@ -70,7 +78,7 @@ public class DialogFigth extends AbstractDialog {
 		 */
 		final JButton buttonCancel = new JButton(text.get("dialogFight.buttonCancel"));
 		buttonCancel.addActionListener(e -> {
-			userChooseFight=false;
+			userChooseFight = false;
 			setVisible(false);
 			dispose();
 		});

@@ -180,6 +180,7 @@
 							<goal>jar</goal>
 						</goals>
 						<configuration>
+							<failOnError>true</failOnError>
 							<additionalparam>-Xdoclint:all</additionalparam>
 						</configuration>
 					</execution>

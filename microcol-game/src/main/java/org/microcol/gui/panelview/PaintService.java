@@ -73,6 +73,13 @@ public class PaintService {
 
 	/**
 	 * All units have flag containing color of owner. Method draw this flag.
+	 * 
+	 * @param graphics
+	 *            required graphics
+	 * @param point
+	 *            required point where will be flag placed
+	 * @param player
+	 *            required player
 	 */
 	public void paintOwnersFlag(final Graphics2D graphics, final Point point, final Player player) {
 		graphics.setColor(Color.BLACK);
