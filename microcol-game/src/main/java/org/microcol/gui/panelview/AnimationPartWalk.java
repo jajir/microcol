@@ -16,7 +16,7 @@ import com.google.common.base.Preconditions;
  * Draw walk animation based on predefined path.
  * 
  */
-public class AnimationPartWalk extends AnimationPart {
+public class AnimationPartWalk implements AnimationPart {
 
 	/**
 	 * Total path that have to animated, it's list of location on map.

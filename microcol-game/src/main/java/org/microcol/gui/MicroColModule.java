@@ -22,6 +22,7 @@ import org.microcol.gui.event.ShowGridController;
 import org.microcol.gui.event.ShowGridListenerPreferences;
 import org.microcol.gui.event.StatusBarMessageController;
 import org.microcol.gui.event.TurnStartedController;
+import org.microcol.gui.event.UnitAttackedEventController;
 import org.microcol.gui.event.VolumeChangeController;
 import org.microcol.gui.event.VolumeChangedListenerPreferences;
 import org.microcol.gui.panelview.GamePanelPresenter;
@@ -30,6 +31,7 @@ import org.microcol.gui.panelview.MouseOverTileChangedController;
 import org.microcol.gui.panelview.MouseOverTileListener;
 import org.microcol.gui.panelview.MoveModeSupport;
 import org.microcol.gui.panelview.PaintService;
+import org.microcol.gui.panelview.UnitAttackedEventListener;
 import org.microcol.gui.panelview.ViewState;
 import org.microcol.gui.util.Text;
 
@@ -71,6 +73,7 @@ public class MicroColModule extends AbstractModule {
 		bind(DebugRequestController.class).in(Singleton.class);
 		bind(GameFinishedController.class).in(Singleton.class);
 		bind(MouseOverTileChangedController.class).in(Singleton.class);
+		bind(UnitAttackedEventController.class).in(Singleton.class);
 
 		/**
 		 * Initialize MVP classes
@@ -86,6 +89,7 @@ public class MicroColModule extends AbstractModule {
 		bind(MoveModeSupport.class).in(Singleton.class);
 		bind(MouseOverTileListener.class).asEagerSingleton();
 		bind(PaintService.class).in(Singleton.class);
+		bind(UnitAttackedEventListener.class).asEagerSingleton();
 
 		bind(StartPanelView.class).in(Singleton.class);
 		bind(StartPanelPresenter.Display.class).to(StartPanelView.class).in(Singleton.class);

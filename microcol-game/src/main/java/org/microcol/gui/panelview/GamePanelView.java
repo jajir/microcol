@@ -444,12 +444,19 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 		viewState.setMoveMode(true);
 	}
 
+	// TODO JJ animation scheduling should be in separate class.
 	@Override
-	public void addWalkAnimator(final List<Location> path, final Unit movingUnit) {
+	public void addMoveAnimator(final List<Location> path, final Unit movingUnit) {
 		Preconditions.checkNotNull(path);
 		Preconditions.checkNotNull(movingUnit);
 		animationManager
 				.addAnimationPart(new AnimationPartWalk(pathPlanning, path, movingUnit, paintService, excludePainting));
+	}
+
+	// TODO JJ animation scheduling should be in separate class.
+	public void addFightAnimation(final Unit attacker, final Unit defender) {
+		//TODO JJ animation speed should come from game preferences
+		animationManager.addAnimationPart(new AnimationPartFight(attacker, defender, imageProvider, 2));
 	}
 
 	@Override

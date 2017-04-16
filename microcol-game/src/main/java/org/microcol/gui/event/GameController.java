@@ -18,8 +18,9 @@ import org.microcol.model.event.DebugRequestedEvent;
 import org.microcol.model.event.GameFinishedEvent;
 import org.microcol.model.event.GameStartedEvent;
 import org.microcol.model.event.RoundStartedEvent;
-import org.microcol.model.event.UnitMovedEvent;
 import org.microcol.model.event.TurnStartedEvent;
+import org.microcol.model.event.UnitAttackedEvent;
+import org.microcol.model.event.UnitMovedEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -49,15 +50,18 @@ public class GameController implements Localized {
 
 	private final GameFinishedController gameFinishedController;
 
+	private final UnitAttackedEventController unitAttackedEventController;
+
 	private Model game;
-	
+
 	private Engine aiEngine;
 
 	@Inject
 	public GameController(final NextTurnController nextTurnController, final MoveUnitController moveUnitController,
 			final NewGameController newGameController, final TurnStartedController turnStartedController,
 			final MusicController musicController, final GamePreferences gamePreferences,
-			final DebugRequestController debugRequestController, final GameFinishedController gameFinishedController) {
+			final DebugRequestController debugRequestController, final GameFinishedController gameFinishedController,
+			final UnitAttackedEventController unitAttackedEventController) {
 		this.nextTurnController = Preconditions.checkNotNull(nextTurnController);
 		this.moveUnitController = Preconditions.checkNotNull(moveUnitController);
 		this.newGameController = Preconditions.checkNotNull(newGameController);
@@ -66,6 +70,7 @@ public class GameController implements Localized {
 		this.gamePreferences = Preconditions.checkNotNull(gamePreferences);
 		this.debugRequestController = Preconditions.checkNotNull(debugRequestController);
 		this.gameFinishedController = Preconditions.checkNotNull(gameFinishedController);
+		this.unitAttackedEventController = Preconditions.checkNotNull(unitAttackedEventController);
 	}
 
 	/**
@@ -79,12 +84,9 @@ public class GameController implements Localized {
 			game = AIModelBuilder.build();
 		} else {
 			ModelBuilder builder = new ModelBuilder();
-			builder.setCalendar(1570, 1800)
-				.setMap("/maps/test-map-ocean-1000x1000.txt")
-				.addPlayer("Player1", false)
+			builder.setCalendar(1570, 1800).setMap("/maps/test-map-ocean-1000x1000.txt").addPlayer("Player1", false)
 					.addUnit("Player1", UnitType.GALLEON, Location.of(4, 2))
-					.addUnit("Player1", UnitType.FRIGATE, Location.of(13, 7))
-				.addPlayer("Player2", true)
+					.addUnit("Player1", UnitType.FRIGATE, Location.of(9, 7)).addPlayer("Player2", true)
 					.addUnit("Player2", UnitType.GALLEON, Location.of(7, 7))
 					.addUnit("Player2", UnitType.FRIGATE, Location.of(7, 9));
 			game = builder.build();
@@ -122,6 +124,11 @@ public class GameController implements Localized {
 			public void debugRequested(final DebugRequestedEvent event) {
 				debugRequestController.fireEvent(event);
 			}
+
+			@Override
+			public void unitAttacked(final UnitAttackedEvent event) {
+				unitAttackedEventController.fireEvent(event);
+			}
 		});
 		aiEngine = new Engine(game);
 		aiEngine.start();
@@ -136,14 +143,27 @@ public class GameController implements Localized {
 	public void performMove(final Unit ship, final List<Location> path) {
 		logger.debug("Start move ship: " + ship);
 		new Thread(() -> ship.moveTo(Path.of(path))).start();
-		// moveAutomatization.addMove(new MoveAutomatization.MovePlanner(ship,
-		// path));
+	}
+
+	public void performFight(final Unit attacker, final Unit defender) {
+		logger.debug("Start move ship: " + attacker);
+		new Thread(() -> {
+			/**
+			 * If it's necessary than move.
+			 */
+			if (attacker.getPath(defender.getLocation(), true).isPresent()) {
+				final List<Location> locations = attacker.getPath(defender.getLocation(), true).get();
+				attacker.moveTo(Path.of(locations));
+				attacker.attack(defender.getLocation());
+			} else {
+				attacker.attack(defender.getLocation());
+			}
+		}).start();
 	}
 
 	public void nextTurn() {
 		logger.debug("Next Year event was triggered.");
 		new Thread(() -> game.endTurn()).start();
-		// moveAutomatization.perforMoves();
 	}
 
 	public Engine getAiEngine() {

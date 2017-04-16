@@ -45,7 +45,7 @@ public final class GamePanelPresenter implements Localized {
 
 		void setCursorGoto();
 
-		void addWalkAnimator(List<Location> path, Unit movingUnit);
+		void addMoveAnimator(List<Location> path, Unit movingUnit);
 
 		AnimationManager getAnimationManager();
 
@@ -284,23 +284,25 @@ public final class GamePanelPresenter implements Localized {
 			return;
 		}
 		// TODO JJ active ship can be different from ship first at list
-		final Unit movingShip = gameController.getModel().getCurrentPlayer().getUnitsAt(selectedTile).get(0);
-		if (isFight(movingShip, moveToLocation)) {
+		final Unit movingUnit = gameController.getModel().getCurrentPlayer().getUnitsAt(selectedTile).get(0);
+		if (isFight(movingUnit, moveToLocation)) {
 			final Unit targetUnit = gameController.getModel().getUnitsAt(moveToLocation).get(0);
-			if (display.performFightDialog(movingShip, targetUnit)) {
-				// User choose fight
-
+			if (display.performFightDialog(movingUnit, targetUnit)) {
+				// User choose to fight
+				// FIXME JJ finish that
 				display.setCursorNormal();
+				gameController.performFight(movingUnit, targetUnit);
 			} else {
 				// User choose to quit fight
 				viewState.setSelectedTile(Optional.of(moveToLocation));
 				display.setCursorNormal();
 			}
 		} else {
-			if (movingShip.getPath(moveToLocation).isPresent()) {
-				final List<Location> path = movingShip.getPath(moveToLocation).get();
+			// user will move
+			if (movingUnit.getPath(moveToLocation).isPresent()) {
+				final List<Location> path = movingUnit.getPath(moveToLocation).get();
 				if (path.size() > 0) {
-					gameController.performMove(movingShip, path);
+					gameController.performMove(movingUnit, path);
 					focusedTileController.fireEvent(new FocusedTileEvent(gameController.getModel(), selectedTile,
 							gameController.getModel().getMap().getTerrainAt(selectedTile)));
 				}
@@ -329,7 +331,7 @@ public final class GamePanelPresenter implements Localized {
 		display.planScrollingAnimationToPoint(display.getArea().getCenterAreaTo(Point.of(event.getStart())));
 		List<Location> path = new ArrayList<>(event.getPath().getLocations());
 		path.add(0, event.getStart());
-		display.addWalkAnimator(path, event.getUnit());
+		display.addMoveAnimator(path, event.getUnit());
 	}
 
 }

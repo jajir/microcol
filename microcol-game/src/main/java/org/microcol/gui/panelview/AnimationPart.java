@@ -5,11 +5,11 @@ import java.awt.Graphics2D;
 /**
  * Animate one part of big animation.
  */
-public abstract class AnimationPart {
+public interface AnimationPart {
 
-	public abstract boolean hasNextStep();
+	boolean hasNextStep();
 
-	public abstract void nextStep();
+	void nextStep();
 
-	public abstract void paint(Graphics2D graphics, Area area);
+	void paint(Graphics2D graphics, Area area);
 }
