@@ -14,7 +14,6 @@ import java.awt.image.VolatileImage;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JViewport;
 import javax.swing.Timer;
