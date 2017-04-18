@@ -16,20 +16,10 @@ public class DialogWarning extends AbstractDialog {
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * Constructor when parentFrame is not available.
+	 * Default constructor.
 	 * 
-	 * @param text
-	 *            required localization helper class
-	 * @param imageProvider
-	 *            required image provider
-	 * @param localizationHelper
-	 *            required localization helper
-	 * @param unitAttacker
-	 *            required attacking unit
-	 * @param unitDefender
-	 *            required defending unit
+	 *FIXME add required parameters. 
 	 */
-	// TODO add proper javadoc
 	public DialogWarning() {
 		super();
 		setUndecorated(true);
