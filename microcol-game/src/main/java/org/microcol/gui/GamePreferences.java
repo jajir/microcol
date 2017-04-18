@@ -26,7 +26,7 @@ public class GamePreferences {
 	/**
 	 * When there are no value in preferences than this value is used.
 	 */
-	private static final int DEFAULT_ANIMATION_SPEED = 10;
+	private static final int DEFAULT_ANIMATION_SPEED = 3;
 
 	private static final String SYSTEM_PROPERTY_DEVELOPMENT = "development";
 

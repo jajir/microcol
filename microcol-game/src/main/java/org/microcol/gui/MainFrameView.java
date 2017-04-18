@@ -1,7 +1,9 @@
 package org.microcol.gui;
 
 import java.awt.CardLayout;
+import java.awt.Dimension;
 import java.awt.Rectangle;
+import java.awt.Toolkit;
 
 import javax.swing.JFrame;
 import javax.swing.WindowConstants;
@@ -41,16 +43,37 @@ public class MainFrameView extends JFrame implements MainFramePresenter.Display 
 	private void loadPreferences() {
 		final int state = gamePreferences.getMainFrameState();
 		final Rectangle bound = gamePreferences.getMainFramePosition();
-
 		if (areValuesSet(state, bound.x, bound.y, bound.width, bound.height)) {
 			setBounds(bound);
 			if ((state & ICONIFIED) != ICONIFIED) {
 				setExtendedState(state);
 			}
 		} else {
-			pack();
+			setBounds(getDefaultWindowSizeAndPosition());
 			setLocationRelativeTo(null);
 		}
+	}
+
+	/**
+	 * When screen resolution is higher that 800 x 600 than create window of 2 /
+	 * 3 of visible monitor size and center it.
+	 * @return default monitor size
+	 */
+	private Rectangle getDefaultWindowSizeAndPosition() {
+		final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		double width = screenSize.getWidth();
+		double height = screenSize.getHeight();
+		width = width * 2 / 3;
+		height = height * 2 / 3;
+		if (width < 800) {
+			width = 800;
+		}
+		if (height < 600) {
+			height = 600;
+		}
+		int positonX = (int) ((screenSize.getWidth() - width) / 2);
+		int positonY = (int) ((screenSize.getHeight() - height) / 2);
+		return new Rectangle(positonX, positonY, (int) width, (int) height);
 	}
 
 	private boolean areValuesSet(int... ints) {
