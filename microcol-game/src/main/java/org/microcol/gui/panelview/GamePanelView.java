@@ -123,7 +123,7 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 	/**
 	 * Define how many times per second will be screen repainted (FPS). Real FPS
 	 * will be always lover than this value. It's because not all
-	 * {@link JComponent#repaint()} leads to real screen repaint.
+	 * {@link javax.swing.JComponent#repaint()} leads to real screen repaint.
 	 */
 	private static final int DEFAULT_FRAME_PER_SECOND = 50;
 
