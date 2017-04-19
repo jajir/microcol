@@ -78,4 +78,10 @@
 	<entry key="dialogFight.buttonFight">Bojovat</entry>
 	<entry key="dialogFight.buttonCancel">Zpět</entry>
 
+	<entry key="FileChooser.cancelButtonText">Zrušit</entry>
+	<entry key="saveGameDialog.title">Uložit hru</entry>
+	<entry key="saveGameDialog.okButtonText">Uložit</entry>
+	<entry key="loadGameDialog.title">Nahrát hru</entry>
+	<entry key="loadGameDialog.okButtonText">Nahrát</entry>
+
 </properties>

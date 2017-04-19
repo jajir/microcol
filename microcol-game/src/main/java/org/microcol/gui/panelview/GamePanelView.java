@@ -413,10 +413,10 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 		 * exists. Because than graphics is not initialize and initGame can't
 		 * prepare dbImage.
 		 */
-		if (gameController.getModel() == null) {
-			return new Dimension(100, 100);
-		} else {
+		if (gameController.getOptionalModel().isPresent()) {
 			return new Dimension(getGameMapWidth(), getGameMapHeight());
+		} else {
+			return new Dimension(100, 100);
 		}
 	}
 

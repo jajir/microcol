@@ -122,7 +122,7 @@ public class MicroCol {
 				final MainFrameView mainFrame = injector.getInstance(MainFrameView.class);
 				final ApplicationController applicationController = injector.getInstance(ApplicationController.class);
 				mainFrame.setVisible(true);
-				applicationController.startNewGame();
+				applicationController.startApplication();
 			} catch (Exception e) {
 				e.printStackTrace();
 				/**

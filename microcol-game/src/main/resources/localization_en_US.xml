@@ -79,4 +79,11 @@
 	<entry key="dialogFight.defender">Defender</entry>
 	<entry key="dialogFight.buttonFight">Fight</entry>
 	<entry key="dialogFight.buttonCancel">Cancel</entry>
+	
+	<entry key="FileChooser.cancelButtonText">Cancel</entry>
+	<entry key="saveGameDialog.title">Save game</entry>
+	<entry key="saveGameDialog.okButtonText">Save</entry>
+	<entry key="loadGameDialog.title">Load game</entry>
+	<entry key="loadGameDialog.okButtonText">Load</entry>
+	
 </properties>

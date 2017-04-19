@@ -1,7 +1,17 @@
 package org.microcol.gui;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
+import javax.swing.Icon;
 import javax.swing.JDialog;
+import javax.swing.JFileChooser;
 import javax.swing.SwingUtilities;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.filechooser.FileSystemView;
+import javax.swing.filechooser.FileView;
 
 import org.easymock.classextension.EasyMock;
 import org.microcol.gui.event.AnimationSpeedChangeController;
@@ -11,6 +21,8 @@ import org.microcol.gui.util.Text.Language;
 import org.microcol.model.Player;
 import org.microcol.model.Unit;
 import org.microcol.model.UnitType;
+
+import com.google.common.io.Files;
 
 /**
  * Allows to display panel and dialog without creating game event.
@@ -25,7 +37,8 @@ public class DialogTester {
 			// startPreferencesVolume();
 			// startPreferencesAnimationSpeed();
 			// testDialogFight();
-			dialowWarning();
+			// dialogWarning();
+			dialogSave();
 		});
 	}
 
@@ -79,9 +92,39 @@ public class DialogTester {
 		System.out.println("User wants to fight: " + preferences.isUserChooseFight());
 	}
 
-	public final static void dialowWarning() {
+	public final static void dialogWarning() {
 		DialogWarning dialogWarning = new DialogWarning();
 		dialogWarning.setVisible(true);
+	}
+
+	public final static void dialogSave() {
+		Path path = Paths.get(System.getProperty("user.home"), ".microcol", "saves");
+		try {
+			Files.createParentDirs(
+					Paths.get(System.getProperty("user.home"), ".microcol", "saves", "pok.microcol").toFile());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		JFileChooser saveFile = new JFileChooser(path.toFile());
+		FileNameExtensionFilter filter = new FileNameExtensionFilter("MicroCol game saves", "microcol");
+		saveFile.setFileFilter(filter);
+		saveFile.setMultiSelectionEnabled(false);
+		saveFile.setFileSelectionMode(JFileChooser.FILES_ONLY);
+		saveFile.setFileView(new FileView() {
+			@Override
+			public Icon getIcon(File f) {
+				return FileSystemView.getFileSystemView().getSystemIcon(f);
+			}
+		});
+		int rVal = saveFile.showSaveDialog(null);
+		if (rVal == JFileChooser.APPROVE_OPTION) {
+			System.out.println(saveFile.getSelectedFile().getName());
+			System.out.println(saveFile.getCurrentDirectory().toString());
+		}
+		if (rVal == JFileChooser.CANCEL_OPTION) {
+			System.out.println("You pressed cancel");
+			System.out.println("");
+		}
 	}
 
 }

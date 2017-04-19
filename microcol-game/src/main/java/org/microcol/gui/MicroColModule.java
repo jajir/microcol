@@ -15,6 +15,7 @@ import org.microcol.gui.event.FocusedTileController;
 import org.microcol.gui.event.GameController;
 import org.microcol.gui.event.GameFinishedController;
 import org.microcol.gui.event.KeyController;
+import org.microcol.gui.event.ModelEventManager;
 import org.microcol.gui.event.MoveUnitController;
 import org.microcol.gui.event.NewGameController;
 import org.microcol.gui.event.NextTurnController;
@@ -74,6 +75,9 @@ public class MicroColModule extends AbstractModule {
 		bind(GameFinishedController.class).in(Singleton.class);
 		bind(MouseOverTileChangedController.class).in(Singleton.class);
 		bind(UnitAttackedEventController.class).in(Singleton.class);
+		
+		bind(ModelEventManager.class).in(Singleton.class);
+		
 
 		/**
 		 * Initialize MVP classes
@@ -109,6 +113,8 @@ public class MicroColModule extends AbstractModule {
 		bind(RightPanelPresenter.class).asEagerSingleton();
 
 		bind(UnitsPanel.class).asEagerSingleton();
+		
+		bind(PersistingDialog.class).in(Singleton.class);
 
 		/**
 		 * Load events manually

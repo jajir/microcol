@@ -72,11 +72,13 @@ public class MainMenuPresenter {
 			final ShowGridController showGridController, final FocusedTileController focusedTileController,
 			final MoveUnitController moveUnitController, final CenterViewController centerViewController,
 			final TurnStartedController turnStartedController, final ExitGameController exitGameController,
-			final GameController gameController, final ApplicationController applicationController) {
+			final GameController gameController, final PersistingDialog persistingDialog) {
 		this.display = Preconditions.checkNotNull(display);
 		display.getMenuItemNewGame().addActionListener(actionEvent -> {
-			applicationController.startNewGame();
+			gameController.startNewGame();
 		});
+		display.getMenuItemSameGame().addActionListener(event -> persistingDialog.saveModel());
+		display.getMenuItemLoadGame().addActionListener(event -> persistingDialog.loadModel());
 		if (!gamePreferences.isOSX()) {
 			display.getMenuItemQuitGame().addActionListener(actionEvent -> {
 				exitGameController.fireEvent(new ExitGameEvent());

@@ -63,7 +63,12 @@ public class BasicGuiComponentsTest {
 			return mainFrame;
 		});
 		window = new FrameFixture(frame);
-//		window.show(); // shows the frame to test
+		/**
+		 * Following code again call pack. Game is running and there are world
+		 * map which could be huge. Another pack call resize window to size much
+		 * more bigger than screen really is.
+		 */
+		// window.show(); // shows the frame to test
 	}
 
 	@After
