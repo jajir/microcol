@@ -1,6 +1,7 @@
 package org.microcol.integration;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
@@ -38,6 +39,15 @@ public class BasicGuiComponentsTest {
 		assertTrue(true);
 	}
 
+	@Test
+	public void test_load_file() {
+//		JMenuItemFixture loadGame = window.menuItem("");
+		final JButtonFixture buttonFixture = window.button("nextTurnButton");
+		assertNotNull(buttonFixture);
+		buttonFixture.click();
+		assertTrue(true);
+	}
+
 	// @BeforeClass
 	// public static void setUpOnce() {
 	// FailOnThreadViolationRepaintManager.install();
@@ -59,7 +69,7 @@ public class BasicGuiComponentsTest {
 			final MainFrameView mainFrame = injector.getInstance(MainFrameView.class);
 			final GameController gameController = injector.getInstance(GameController.class);
 			mainFrame.setVisible(true);
-			gameController.newGame();
+			gameController.startNewGame();
 			return mainFrame;
 		});
 		window = new FrameFixture(frame);

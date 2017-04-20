@@ -44,7 +44,7 @@ public class GameController implements Localized {
 	/**
 	 * Start new game and register listener.
 	 */
-	public void newGame() {
+	public void startNewGame() {
 		if (model.isPresent()) {
 			stopGame();
 		}
@@ -72,11 +72,10 @@ public class GameController implements Localized {
 		model.get().addListener(modelListener.get());
 		aiEngine = Optional.of(new Engine(model.get()));
 		aiEngine.get().start();
-		new Thread(() -> model.get().startGame()).start();
-	}
-
-	public void startNewGame() {
-		newGame();
+		//TODO JJ hra mi prijde nastartovana po loadu. Asi by nemela byt
+		if (!model.get().isGameStarted()) {
+			new Thread(() -> model.get().startGame()).start();
+		}
 	}
 
 	public void setModel(final Model newModel) {
@@ -87,10 +86,6 @@ public class GameController implements Localized {
 
 	public Model getModel() {
 		return model.get();
-	}
-
-	public Optional<Model> getOptionalModel() {
-		return model;
 	}
 
 	private void stopGame() {
@@ -114,13 +109,11 @@ public class GameController implements Localized {
 			/**
 			 * If it's necessary than move.
 			 */
-			if (attacker.getPath(defender.getLocation(), true).isPresent()) {
-				final List<Location> locations = attacker.getPath(defender.getLocation(), true).get();
-				attacker.moveTo(Path.of(locations));
-				attacker.attack(defender.getLocation());
-			} else {
-				attacker.attack(defender.getLocation());
+			final Optional<List<Location>> locations = attacker.getPath(defender.getLocation(), true);
+			if (locations.isPresent() && !locations.get().isEmpty()) {
+				attacker.moveTo(Path.of(locations.get()));
 			}
+			attacker.attack(defender.getLocation());
 		}).start();
 	}
 
