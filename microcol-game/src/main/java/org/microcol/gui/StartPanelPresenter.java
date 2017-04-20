@@ -3,7 +3,7 @@ package org.microcol.gui;
 import javax.swing.JButton;
 
 import org.microcol.gui.event.ChangeLanguageController;
-import org.microcol.gui.event.GameController;
+import org.microcol.gui.event.model.GameController;
 
 import com.google.inject.Inject;
 

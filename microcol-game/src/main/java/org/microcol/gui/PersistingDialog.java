@@ -21,7 +21,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.filechooser.FileSystemView;
 import javax.swing.filechooser.FileView;
 
-import org.microcol.gui.event.GameController;
+import org.microcol.gui.event.model.GameController;
 import org.microcol.gui.util.Text;
 import org.microcol.model.Model;
 import org.slf4j.Logger;

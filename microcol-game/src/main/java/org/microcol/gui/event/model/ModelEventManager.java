@@ -1,4 +1,4 @@
-package org.microcol.gui.event;
+package org.microcol.gui.event.model;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;

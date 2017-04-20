@@ -1,8 +1,9 @@
-package org.microcol.gui.event;
+package org.microcol.gui.event.model;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import org.microcol.gui.event.Listener;
 import org.microcol.model.event.UnitMovedEvent;
 
 import com.google.common.base.Preconditions;

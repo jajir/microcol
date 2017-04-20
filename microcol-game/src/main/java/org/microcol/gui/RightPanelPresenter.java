@@ -12,11 +12,11 @@ import org.microcol.gui.event.ChangeLanguageController;
 import org.microcol.gui.event.ChangeLanguageEvent;
 import org.microcol.gui.event.FocusedTileController;
 import org.microcol.gui.event.FocusedTileEvent;
-import org.microcol.gui.event.GameController;
 import org.microcol.gui.event.KeyController;
 import org.microcol.gui.event.StatusBarMessageController;
 import org.microcol.gui.event.StatusBarMessageEvent;
-import org.microcol.gui.event.TurnStartedController;
+import org.microcol.gui.event.model.GameController;
+import org.microcol.gui.event.model.TurnStartedController;
 import org.microcol.model.Location;
 import org.microcol.model.Player;
 

@@ -1,4 +1,4 @@
-package org.microcol.gui.event;
+package org.microcol.gui.event.model;
 
 import java.util.List;
 import java.util.Optional;

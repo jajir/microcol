@@ -7,7 +7,7 @@ import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JMenu;
 import javax.swing.KeyStroke;
 
-import org.microcol.gui.event.GameController;
+import org.microcol.gui.event.model.GameController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

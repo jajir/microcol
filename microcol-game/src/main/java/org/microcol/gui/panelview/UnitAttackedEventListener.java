@@ -1,6 +1,6 @@
 package org.microcol.gui.panelview;
 
-import org.microcol.gui.event.UnitAttackedEventController;
+import org.microcol.gui.event.model.UnitAttackedEventController;
 import org.microcol.model.event.UnitAttackedEvent;
 
 import com.google.common.base.Preconditions;

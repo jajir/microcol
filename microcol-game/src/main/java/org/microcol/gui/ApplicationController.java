@@ -1,7 +1,7 @@
 package org.microcol.gui;
 
-import org.microcol.gui.event.GameController;
-import org.microcol.gui.event.GameFinishedController;
+import org.microcol.gui.event.model.GameController;
+import org.microcol.gui.event.model.GameFinishedController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

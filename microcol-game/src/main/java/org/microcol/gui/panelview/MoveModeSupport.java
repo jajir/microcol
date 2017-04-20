@@ -3,7 +3,7 @@ package org.microcol.gui.panelview;
 import java.util.Collections;
 import java.util.List;
 
-import org.microcol.gui.event.GameController;
+import org.microcol.gui.event.model.GameController;
 import org.microcol.model.Location;
 import org.microcol.model.Unit;
 import org.slf4j.Logger;

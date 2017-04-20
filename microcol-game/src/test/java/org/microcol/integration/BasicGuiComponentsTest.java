@@ -15,7 +15,7 @@ import org.junit.Test;
 import org.microcol.gui.MainFrameView;
 import org.microcol.gui.MicroColException;
 import org.microcol.gui.MicroColModule;
-import org.microcol.gui.event.GameController;
+import org.microcol.gui.event.model.GameController;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;

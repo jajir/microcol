@@ -15,12 +15,12 @@ import org.microcol.gui.event.ExitGameController;
 import org.microcol.gui.event.ExitGameEvent;
 import org.microcol.gui.event.FocusedTileController;
 import org.microcol.gui.event.FocusedTileEvent;
-import org.microcol.gui.event.GameController;
-import org.microcol.gui.event.MoveUnitController;
 import org.microcol.gui.event.ShowGridController;
 import org.microcol.gui.event.ShowGridEvent;
-import org.microcol.gui.event.TurnStartedController;
 import org.microcol.gui.event.VolumeChangeController;
+import org.microcol.gui.event.model.GameController;
+import org.microcol.gui.event.model.MoveUnitController;
+import org.microcol.gui.event.model.TurnStartedController;
 import org.microcol.gui.util.Text;
 import org.microcol.model.event.TurnStartedEvent;
 
