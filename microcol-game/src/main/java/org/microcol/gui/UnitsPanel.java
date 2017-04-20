@@ -13,6 +13,7 @@ import javax.swing.JPanel;
 
 import org.microcol.gui.event.StatusBarMessageController;
 import org.microcol.gui.event.StatusBarMessageEvent;
+import org.microcol.gui.util.Localized;
 import org.microcol.model.Unit;
 
 import com.google.common.base.Preconditions;

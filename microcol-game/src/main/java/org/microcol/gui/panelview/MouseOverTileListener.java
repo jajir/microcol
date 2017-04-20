@@ -1,10 +1,10 @@
 package org.microcol.gui.panelview;
 
 import org.microcol.gui.LocalizationHelper;
-import org.microcol.gui.Localized;
 import org.microcol.gui.event.StatusBarMessageController;
 import org.microcol.gui.event.StatusBarMessageEvent;
 import org.microcol.gui.event.model.GameController;
+import org.microcol.gui.util.Localized;
 import org.microcol.model.Location;
 import org.microcol.model.Terrain;
 

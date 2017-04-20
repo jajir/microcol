@@ -5,7 +5,7 @@ import java.util.Optional;
 
 import org.microcol.ai.AIModelBuilder;
 import org.microcol.ai.Engine;
-import org.microcol.gui.Localized;
+import org.microcol.gui.util.Localized;
 import org.microcol.model.Location;
 import org.microcol.model.Model;
 import org.microcol.model.ModelBuilder;

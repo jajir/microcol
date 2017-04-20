@@ -7,6 +7,8 @@ import java.awt.Insets;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
+import org.microcol.gui.util.Localized;
+
 import com.google.inject.Inject;
 
 public class StartPanelView extends JPanel implements StartPanelPresenter.Display, Localized {

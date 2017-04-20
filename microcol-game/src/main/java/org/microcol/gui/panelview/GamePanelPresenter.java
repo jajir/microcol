@@ -13,7 +13,6 @@ import javax.swing.JViewport;
 
 import org.microcol.gui.DialogWarning;
 import org.microcol.gui.GamePreferences;
-import org.microcol.gui.Localized;
 import org.microcol.gui.Point;
 import org.microcol.gui.event.CenterViewController;
 import org.microcol.gui.event.ExitGameController;
@@ -25,6 +24,7 @@ import org.microcol.gui.event.model.DebugRequestController;
 import org.microcol.gui.event.model.GameController;
 import org.microcol.gui.event.model.MoveUnitController;
 import org.microcol.gui.event.model.NewGameController;
+import org.microcol.gui.util.Localized;
 import org.microcol.model.Location;
 import org.microcol.model.Unit;
 import org.microcol.model.event.UnitMovedEvent;
@@ -298,7 +298,6 @@ public final class GamePanelPresenter implements Localized {
 			final Unit targetUnit = gameController.getModel().getUnitsAt(moveToLocation).get(0);
 			if (display.performFightDialog(movingUnit, targetUnit)) {
 				// User choose to fight
-				// FIXME JJ finish that
 				display.setCursorNormal();
 				gameController.performFight(movingUnit, targetUnit);
 			} else {

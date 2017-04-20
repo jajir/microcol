@@ -13,6 +13,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import org.microcol.gui.event.FocusedTileEvent;
+import org.microcol.gui.util.Localized;
 import org.microcol.model.Player;
 
 import com.google.common.base.Preconditions;

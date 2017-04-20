@@ -16,7 +16,6 @@ import javax.json.stream.JsonGeneratorFactory;
 import javax.json.stream.JsonParser;
 import javax.swing.Icon;
 import javax.swing.JFileChooser;
-import javax.swing.UIManager;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.filechooser.FileSystemView;
 import javax.swing.filechooser.FileView;
@@ -52,7 +51,6 @@ public class PersistingDialog {
 	public void saveModel() {
 		final JFileChooser saveFile = makeFileChooser();
 		saveFile.setDialogTitle(text.get("saveGameDialog.title"));
-		saveFile.setApproveButtonText(text.get("saveGameDialog.okButtonText"));
 		final int rVal = saveFile.showSaveDialog(null);
 		if (rVal == JFileChooser.APPROVE_OPTION) {
 			saveModelToFile(saveFile.getSelectedFile());
@@ -62,7 +60,6 @@ public class PersistingDialog {
 	public void loadModel() {
 		final JFileChooser loadFile = makeFileChooser();
 		loadFile.setDialogTitle(text.get("loadGameDialog.title"));
-		loadFile.setApproveButtonText(text.get("loadGameDialog.okButtonText"));
 		final int rVal = loadFile.showOpenDialog(null);
 		if (rVal == JFileChooser.APPROVE_OPTION) {
 			loadFromFile(loadFile.getSelectedFile());
@@ -81,41 +78,6 @@ public class PersistingDialog {
 	}
 
 	private JFileChooser makeFileChooser() {
-		/**
-		 * 
-		 * UIManager.put("FileChooser.acceptAllFileFilterText", "Directorios");
-		 * UIManager.put("FileChooser.lookInLabelText", "Localização");
-		 * UIManager.put("FileChooser.cancelButtonText", "Cancelar");
-		 * UIManager.put("FileChooser.cancelButtonToolTipText", "Cancelar");
-		 * UIManager.put("FileChooser.openButtonText", "Adicionar");
-		 * UIManager.put("FileChooser.openButtonToolTipText", "Adicionar
-		 * ficheiro(s)"); UIManager.put("FileChooser.filesOfTypeLabelText",
-		 * "Tipo"); UIManager.put("FileChooser.fileNameLabelText",
-		 * "Ficheiro(s)");
-		 * UIManager.put("FileChooser.listViewButtonToolTipText", "Lista");
-		 * UIManager.put("FileChooser.listViewButtonAccessibleName", "Lista");
-		 * UIManager.put("FileChooser.detailsViewButtonToolTipText",
-		 * "Detalhes");
-		 * UIManager.put("FileChooser.detailsViewButtonAccessibleName",
-		 * "Detalhes"); UIManager.put("FileChooser.upFolderToolTipText", "Um
-		 * nível acima"); UIManager.put("FileChooser.upFolderAccessibleName",
-		 * "Um nível acima"); UIManager.put("FileChooser.homeFolderToolTipText",
-		 * "Ambiente de Trabalho");
-		 * UIManager.put("FileChooser.homeFolderAccessibleName", "Ambiente de
-		 * Trabalho"); UIManager.put("FileChooser.fileNameHeaderText", "Nome");
-		 * UIManager.put("FileChooser.fileSizeHeaderText", "Tamanho");
-		 * UIManager.put("FileChooser.fileTypeHeaderText", "Tipo");
-		 * UIManager.put("FileChooser.fileDateHeaderText", "Data");
-		 * UIManager.put("FileChooser.fileAttrHeaderText", "Atributos");
-		 * UIManager.put("FileChooser.openDialogTitleText","Adicionar Fotos");
-		 * UIManager.put("FileChooser.readOnly", Boolean.TRUE);
-		 * 
-		 * 
-		 * FIXME JJ previous list of properties should be loaded from
-		 * localization file
-		 * 
-		 */
-		UIManager.put("FileChooser.cancelButtonText", text.get("FileChooser.cancelButtonText"));
 		final Path path = Paths.get(System.getProperty("user.home"), ".microcol", "saves");
 		try {
 			Files.createParentDirs(

@@ -79,9 +79,17 @@
 	<entry key="dialogFight.buttonCancel">Zpět</entry>
 
 	<entry key="FileChooser.cancelButtonText">Zrušit</entry>
+	<entry key="FileChooser.fileDateHeaderText">Datum úpravy</entry>
+	<entry key="FileChooser.openButtonText">Nahrát</entry>
+	<entry key="FileChooser.saveButtonText">Uložit</entry>
+	<entry key="FileChooser.saveDialogTitleText">Uložit hru</entry>
+	<entry key="FileChooser.openDialogTitleText">Nahrát hru</entry>
+	<entry key="FileChooser.newFolderTitleText">Vytvořit složku</entry>
+	<entry key="FileChooser.newFolderButtonText">Vytvořit složku</entry>
+	<entry key="FileChooser.filesOfTypeLabelText">Formát souboru:</entry>
+	<entry key="FileChooser.saveDialogFileNameLabelText">Uložit jako:</entry>
+	
 	<entry key="saveGameDialog.title">Uložit hru</entry>
-	<entry key="saveGameDialog.okButtonText">Uložit</entry>
 	<entry key="loadGameDialog.title">Nahrát hru</entry>
-	<entry key="loadGameDialog.okButtonText">Nahrát</entry>
 
 </properties>

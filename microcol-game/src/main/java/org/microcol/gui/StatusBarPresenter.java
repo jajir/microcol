@@ -9,6 +9,7 @@ import org.microcol.gui.event.ChangeLanguageController;
 import org.microcol.gui.event.StatusBarMessageController;
 import org.microcol.gui.event.StatusBarMessageEvent;
 import org.microcol.gui.event.model.NextTurnController;
+import org.microcol.gui.util.Localized;
 import org.microcol.model.Calendar;
 
 import com.google.common.base.Preconditions;
