@@ -21,7 +21,7 @@ public class ChangeLanguageListenerText implements Listener<ChangeLanguageEvent>
 
 	@Override
 	public void onEvent(final ChangeLanguageEvent event) {
-		text.setLanguage(event.getLanguage());
+		text.setLocale(event.getLanguage().getLocale());
 	}
 
 }

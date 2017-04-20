@@ -18,7 +18,7 @@ public class ChangeLanguageListenerPreferences implements Listener<ChangeLanguag
 
 	@Override
 	public void onEvent(final ChangeLanguageEvent event) {
-		gamePreferences.setLanguage(event.getLanguage());
+		gamePreferences.setLanguage(event.getLanguage().getLocale());
 	}
 
 }

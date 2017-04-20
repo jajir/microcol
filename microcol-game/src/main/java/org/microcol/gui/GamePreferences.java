@@ -1,14 +1,20 @@
 package org.microcol.gui;
 
 import java.awt.Rectangle;
+import java.util.Locale;
+import java.util.Optional;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 
 import org.microcol.gui.util.Text;
+import org.microcol.gui.util.Text.Language;
+
+import com.google.common.base.Preconditions;
 
 public class GamePreferences {
 
-	private static final String PREFERENCES_LANGUAGE = "language";
+	private static final String PREFERENCES_LOCALE_LANGUAGE = "locale-language";
+	private static final String PREFERENCES_LOCALE_COUNTRY = "locale-country";
 	private static final String PREFERENCES_STATE = "state";
 	private static final String PREFERENCES_X = "x";
 	private static final String PREFERENCES_Y = "y";
@@ -71,14 +77,25 @@ public class GamePreferences {
 		return preferences.getInt(PREFERENCES_STATE, Integer.MIN_VALUE);
 	}
 
-	public void setLanguage(final Text.Language language) {
-		preferences.put(PREFERENCES_LANGUAGE, language.name());
+	public void setLanguage(final Locale locale) {
+		Preconditions.checkNotNull(locale);
+		preferences.put(PREFERENCES_LOCALE_LANGUAGE, locale.getLanguage());
+		preferences.put(PREFERENCES_LOCALE_COUNTRY, locale.getCountry());
 		flush();
 	}
 
+	public Locale getLocale() {
+		final String language = preferences.get(PREFERENCES_LOCALE_LANGUAGE, Locale.getDefault().getLanguage());
+		final String country = preferences.get(PREFERENCES_LOCALE_COUNTRY, Locale.getDefault().getCountry());
+		return new Locale(language, country);
+	}
+
 	public Text.Language getLanguage() {
-		final String name = preferences.get(PREFERENCES_LANGUAGE, Text.Language.en.name());
-		return Text.Language.valueOf(name);
+		Optional<Language> lang = Language.resolve(getLocale());
+		if (lang.isPresent()) {
+			return lang.get();
+		}
+		return Language.en;
 	}
 
 	public void setVolume(final int volume) {

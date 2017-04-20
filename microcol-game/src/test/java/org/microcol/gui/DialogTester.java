@@ -43,20 +43,20 @@ public class DialogTester {
 	}
 
 	public final static void startNewGameDialog() {
-		JDialog dialog = new NewGameDialog(new ViewUtil(), new Text(Language.cz));
+		JDialog dialog = new NewGameDialog(new ViewUtil(), new Text(Language.cz.getLocale()));
 		dialog.setResizable(false);
 		dialog.setVisible(true);
 	}
 
 	public final static void startWaitingDialog() {
-		JDialog dialog = new WaitingDialog(new ViewUtil(), new Text(Language.cz));
+		JDialog dialog = new WaitingDialog(new ViewUtil(), new Text(Language.cz.getLocale()));
 		dialog.setResizable(false);
 		dialog.setVisible(true);
 	}
 
 	public final static void startPreferencesVolume() {
 		final ViewUtil viewUtil = new ViewUtil();
-		final Text text = new Text(Text.Language.cz);
+		final Text text = new Text(Text.Language.cz.getLocale());
 		VolumeChangeController controller = new VolumeChangeController();
 		int actualVolume = 10;
 		PreferencesVolume preferences = new PreferencesVolume(viewUtil, text, controller, actualVolume);
@@ -64,7 +64,7 @@ public class DialogTester {
 	}
 
 	public final static void startPreferencesAnimationSpeed() {
-		final Text text = new Text(Text.Language.cz);
+		final Text text = new Text(Text.Language.cz.getLocale());
 		AnimationSpeedChangeController controller = new AnimationSpeedChangeController();
 		int actualVolume = 10;
 		PreferencesAnimationSpeed preferences = new PreferencesAnimationSpeed(text, controller, actualVolume);
@@ -72,7 +72,7 @@ public class DialogTester {
 	}
 
 	public final static void testDialogFight() {
-		final Text text = new Text(Text.Language.cz);
+		final Text text = new Text(Text.Language.cz.getLocale());
 		final ImageProvider imageProvider = new ImageProvider();
 		final LocalizationHelper localizationHelper = new LocalizationHelper(text);
 

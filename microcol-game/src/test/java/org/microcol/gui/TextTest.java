@@ -10,22 +10,22 @@ public class TextTest {
 
 	@Test
 	public void test_crate_english() throws Exception {
-		Text text = new Text(Language.en);
+		Text text = new Text(Language.en.getLocale());
 
 		assertEquals("About MicroCol", text.get("aboutDialog.caption"));
 	}
 
 	@Test
 	public void test_crate_czech() throws Exception {
-		Text text = new Text(Language.cz);
+		Text text = new Text(Language.cz.getLocale());
 
 		assertEquals("O MicroCol", text.get("aboutDialog.caption"));
 	}
 
 	@Test
 	public void test_create_english_swith_to_czech() throws Exception {
-		Text text = new Text(Language.en);
-		text.setLanguage(Language.cz);
+		Text text = new Text(Language.en.getLocale());
+		text.setLocale(Language.cz.getLocale());
 
 		assertEquals("O MicroCol", text.get("aboutDialog.caption"));
 	}

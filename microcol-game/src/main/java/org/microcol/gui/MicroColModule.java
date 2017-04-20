@@ -135,7 +135,7 @@ public class MicroColModule extends AbstractModule {
 	@Provides
 	@Singleton
 	Text makeText(final GamePreferences gamePreferences) {
-		return new Text(gamePreferences.getLanguage());
+		return new Text(gamePreferences.getLocale());
 	}
 
 }
