@@ -3,7 +3,6 @@ package org.microcol.gui.panelview;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Cursor;
-import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
@@ -399,33 +398,6 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 	@Override
 	public void startMoveUnit(final Unit ship) {
 		oneTurnMoveHighlighter.setLocations(ship.getAvailableLocations());
-	}
-
-	@Override
-	public Dimension getPreferredSize() {
-		return getMinimumSize();
-	}
-
-	@Override
-	public Dimension getMinimumSize() {
-		/**
-		 * Code solve state when component have to be painted and game doesn't
-		 * exists. Because than graphics is not initialize and initGame can't
-		 * prepare dbImage.
-		 */
-		if (gameController.getOptionalModel().isPresent()) {
-			return new Dimension(getGameMapWidth(), getGameMapHeight());
-		} else {
-			return new Dimension(100, 100);
-		}
-	}
-
-	private int getGameMapWidth() {
-		return (gameController.getModel().getMap().getMaxX()) * TOTAL_TILE_WIDTH_IN_PX - 1;
-	}
-
-	private int getGameMapHeight() {
-		return (gameController.getModel().getMap().getMaxY()) * TOTAL_TILE_WIDTH_IN_PX - 1;
 	}
 
 	// TODO JJ rename it
