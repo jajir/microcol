@@ -36,6 +36,8 @@ import com.google.inject.Inject;
  */
 public class PersistingDialog {
 
+	public static final String SAVE_FILE_EXTENSION = "microcol";
+
 	private final Logger logger = LoggerFactory.getLogger(PersistingDialog.class);
 
 	private final Text text;
@@ -67,14 +69,26 @@ public class PersistingDialog {
 	}
 
 	private void saveModelToFile(final File targetFile) {
-		logger.debug("Saving game to file '{}' ", targetFile.getAbsolutePath());
-		writeModelToFile(gameController.getModel(), targetFile);
-
+		final File file = correctFileNameExtension(targetFile);
+		logger.debug("Saving game to file '{}' ", file.getAbsolutePath());
+		writeModelToFile(gameController.getModel(), file);
 	}
 
 	private void loadFromFile(final File sourceFile) {
-		logger.debug("Loading game from file '{}' ", sourceFile.getAbsolutePath());
-		gameController.setModel(loadModelFromFile(sourceFile));
+		final File file = correctFileNameExtension(sourceFile);
+		logger.debug("Loading game from file '{}' ", file.getAbsolutePath());
+		gameController.setModel(loadModelFromFile(file));
+	}
+
+	private File correctFileNameExtension(final File targetFile) {
+		Path path = targetFile.toPath();
+		if (path.getFileName().toString().toLowerCase().endsWith(SAVE_FILE_EXTENSION)) {
+			return targetFile;
+		} else {
+			final Path parent = path.getParent();
+			Path out = parent.resolve(path.getFileName().toString() + "." + SAVE_FILE_EXTENSION);
+			return out.toFile();
+		}
 	}
 
 	private JFileChooser makeFileChooser() {
@@ -86,7 +100,7 @@ public class PersistingDialog {
 			throw new MicroColException(e.getMessage(), e);
 		}
 		final JFileChooser fileChooser = new JFileChooser(path.toFile());
-		fileChooser.setFileFilter(new FileNameExtensionFilter("MicroCol game saves", "microcol"));
+		fileChooser.setFileFilter(new FileNameExtensionFilter("MicroCol game saves", SAVE_FILE_EXTENSION));
 		fileChooser.setMultiSelectionEnabled(false);
 		fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 		fileChooser.setFileView(new FileView() {

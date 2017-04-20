@@ -27,7 +27,8 @@ public class DialogTester {
 			// startPreferencesAnimationSpeed();
 			// testDialogFight();
 			// dialogWarning();
-			dialogSave();
+//			dialogSave();
+			dialogLoad();
 		});
 	}
 
@@ -92,6 +93,14 @@ public class DialogTester {
 		final PersistingDialog persistingDialog = new PersistingDialog(text, gameController);
 		
 		persistingDialog.saveModel();
+	}
+
+	public final static void dialogLoad() {
+		final Text text = new Text(Text.Language.cz.getLocale());
+		final GameController gameController = EasyMock.createMock(GameController.class);
+		final PersistingDialog persistingDialog = new PersistingDialog(text, gameController);
+		
+		persistingDialog.loadModel();
 	}
 
 }
