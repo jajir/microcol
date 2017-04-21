@@ -56,14 +56,39 @@ public class GameController implements Localized {
 		if ("true".equals(System.getProperty("development")) && "JKA".equals(System.getProperty("developer"))) {
 			setAndStartModel(AIModelBuilder.build());
 		} else {
-			ModelBuilder builder = new ModelBuilder();
-			builder.setCalendar(1570, 1800).setMap("/maps/test-map-ocean-1000x1000.txt").addPlayer("Player1", false)
-					.addUnit("Player1", UnitType.GALLEON, Location.of(4, 2))
-					.addUnit("Player1", UnitType.FRIGATE, Location.of(9, 7)).addPlayer("Player2", true)
-					.addUnit("Player2", UnitType.GALLEON, Location.of(7, 7))
-					.addUnit("Player2", UnitType.FRIGATE, Location.of(7, 9));
-			setAndStartModel(builder.build());
+			setAndStartModel(buidModel());
 		}
+	}
+
+	private Model buidModel() {
+		// return buildHugeModel();
+		return buildComplexModel();
+	}
+
+	Model buildHugeModel() {
+		ModelBuilder builder = new ModelBuilder();
+		builder.setCalendar(1570, 1800).setMap("/maps/test-map-ocean-1000x1000.txt")
+
+				.addPlayer("Player1", false).addUnit("Player1", UnitType.GALLEON, Location.of(4, 2))
+				.addUnit("Player1", UnitType.FRIGATE, Location.of(9, 7))
+
+				.addPlayer("Player2", true).addUnit("Player2", UnitType.GALLEON, Location.of(7, 7))
+				.addUnit("Player2", UnitType.FRIGATE, Location.of(7, 9));
+		return builder.build();
+	}
+
+	Model buildComplexModel() {
+		ModelBuilder builder = new ModelBuilder();
+		builder.setCalendar(1570, 1800).setMap("/maps/test-map-2islands-15x10.txt")
+				.addPlayer("Player1", false).addUnit("Player1", UnitType.GALLEON, Location.of(4, 2))
+				.addUnit("Player1", UnitType.FRIGATE, Location.of(3, 3))
+				.addUnit("Player1", UnitType.COLONIST, Location.of(4, 3))
+
+				.addPlayer("Player2", true).addUnit("Player2", UnitType.GALLEON, Location.of(7, 7))
+				.addUnit("Player2", UnitType.FRIGATE, Location.of(7, 9))
+				.addUnit("Player2", UnitType.FRIGATE, Location.of(14, 9))
+				.addUnit("Player2", UnitType.COLONIST, Location.of(7, 3));
+		return builder.build();
 	}
 
 	private void setAndStartModel(final Model newModel) {
@@ -72,7 +97,7 @@ public class GameController implements Localized {
 		model.get().addListener(modelListener.get());
 		aiEngine = Optional.of(new Engine(model.get()));
 		aiEngine.get().start();
-		//TODO JJ hra mi prijde nastartovana po loadu. Asi by nemela byt
+		// TODO JJ hra mi prijde nastartovana po loadu. Asi by nemela byt
 		if (!model.get().isGameStarted()) {
 			new Thread(() -> model.get().startGame()).start();
 		}

@@ -12,8 +12,8 @@ import java.util.Map;
 
 import javax.imageio.ImageIO;
 
-import org.microcol.model.UnitType;
 import org.microcol.model.Terrain;
+import org.microcol.model.UnitType;
 
 import com.google.common.collect.ImmutableMap;
 
@@ -45,6 +45,8 @@ public class ImageProvider {
 
 	public static final String IMG_TILE_SHIP_FRIGATE = "tile-ship-frigate.png";
 
+	public static final String IMG_UNIT_FREE_COLONIST = "tile-unit-free-colonist.png";
+
 	public static final String IMG_TILE_MODE_GOTO = "tile-mode-goto.png";
 
 	public static final String IMG_TILE_MODE_MOVE = "tile-mode-move.png";
@@ -66,7 +68,8 @@ public class ImageProvider {
 
 	private final Map<UnitType, Image> unitImageMap = ImmutableMap.<UnitType, Image>builder()
 			.put(UnitType.GALLEON, getRawImage(IMG_TILE_SHIP_GALEON))
-			.put(UnitType.FRIGATE, getRawImage(IMG_TILE_SHIP_FRIGATE)).build();
+			.put(UnitType.FRIGATE, getRawImage(IMG_TILE_SHIP_FRIGATE))
+			.put(UnitType.COLONIST, getRawImage(IMG_UNIT_FREE_COLONIST)).build();
 
 	public ImageProvider() {
 		images = new HashMap<>();

@@ -68,6 +68,7 @@
 
 	<entry key="unit.FRIGATE.name">Frigate</entry>
 	<entry key="unit.GALLEON.name">Galleon</entry>
+	<entry key="unit.COLONIST.name">Free Colonist</entry>
 
 	<entry key="newGameDialog.title">New game</entry>
 	<entry key="newGameDialog.selectMap">Select map</entry>
