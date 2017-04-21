@@ -9,13 +9,12 @@ import java.net.URL;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JDialog;
 import javax.swing.JLabel;
 
 import org.microcol.gui.util.Text;
 import org.microcol.gui.util.ViewUtil;
 
-public class NewGameDialog extends JDialog {
+public class NewGameDialog extends AbstractDialog {
 
 	/**
 	 * Default serialVersionUID.

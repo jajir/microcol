@@ -1,8 +1,8 @@
 package org.microcol.gui;
 
-import org.microcol.model.UnitType;
 import org.microcol.gui.util.Text;
 import org.microcol.model.Terrain;
+import org.microcol.model.UnitType;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;

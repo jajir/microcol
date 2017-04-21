@@ -100,11 +100,8 @@ public class MainMenuPresenter {
 		});
 		display.getMenuItemVolume().addActionListener(actionEvent -> new PreferencesVolume(viewUtil, text,
 				volumeChangeController, gamePreferences.getVolume()));
-		display.getMenuItemAnimationSpeed().addActionListener(event -> {
-			PreferencesAnimationSpeed preferences = new PreferencesAnimationSpeed(text, animationSpeedChangeController,
-					gamePreferences.getAnimationSpeed());
-			preferences.setVisible(true);
-		});
+		display.getMenuItemAnimationSpeed().addActionListener(event -> new PreferencesAnimationSpeed(text, viewUtil,
+				animationSpeedChangeController, gamePreferences.getAnimationSpeed()));
 		display.getMenuItemEurope().addActionListener(event -> new EuropeDialog(viewUtil, text, gameController));
 		display.getMenuItemShowGrid().addActionListener(ectionEvent -> showGridController
 				.fireEvent(new ShowGridEvent(display.getMenuItemShowGrid().isSelected())));

@@ -10,11 +10,11 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JSlider;
 import javax.swing.SwingConstants;
-import javax.swing.WindowConstants;
 
 import org.microcol.gui.event.AnimationSpeedChangeController;
 import org.microcol.gui.event.AnimationSpeedChangeEvent;
 import org.microcol.gui.util.Text;
+import org.microcol.gui.util.ViewUtil;
 
 public class PreferencesAnimationSpeed extends AbstractDialog {
 
@@ -33,11 +33,9 @@ public class PreferencesAnimationSpeed extends AbstractDialog {
 	 * @param actualVolume
 	 *            required actual animation speed value
 	 */
-	public PreferencesAnimationSpeed(final Text text, final AnimationSpeedChangeController controller,
-			final int actualVolume) {
-		super();
-		setUndecorated(true);
-		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+	public PreferencesAnimationSpeed(final Text text, final ViewUtil viewUtil,
+			final AnimationSpeedChangeController controller, final int actualVolume) {
+		super(viewUtil.getParentFrame());
 		setTitle(text.get("preferencesAnimationSpeed.caption"));
 		setLayout(new GridBagLayout());
 
@@ -79,6 +77,9 @@ public class PreferencesAnimationSpeed extends AbstractDialog {
 		setMinimumSize(new Dimension(width, getMinimumSize().height));
 		setLocationRelativeTo(null);
 		setModal(true);
+		setUndecorated(true);
+		setLocationRelativeTo(viewUtil.getParentFrame());
+		setVisible(true);
 	}
 
 }

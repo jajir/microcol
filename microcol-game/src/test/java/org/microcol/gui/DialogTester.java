@@ -21,18 +21,21 @@ public class DialogTester {
 
 	private static JFrame parentFrame;
 
+	private static ViewUtil viewUtil;
+
 	public static void main(String[] args) {
 
 		SwingUtilities.invokeLater(() -> {
 			parentFrame = new JFrame("main frame");
+			viewUtil = new ViewUtil(parentFrame);
 			// startWaitingDialog();
 			// startNewGameDialog();
-			// startPreferencesVolume();
+			startPreferencesVolume();
 			// startPreferencesAnimationSpeed();
 			// testDialogFight();
 			// dialogWarning();
 			// dialogSave();
-			dialogLoad();
+			// dialogLoad();
 		});
 	}
 
@@ -45,7 +48,6 @@ public class DialogTester {
 	}
 
 	public final static void startPreferencesVolume() {
-		final ViewUtil viewUtil = new ViewUtil(parentFrame);
 		final Text text = new Text(Text.Language.cz.getLocale());
 		VolumeChangeController controller = new VolumeChangeController();
 		int actualVolume = 10;
@@ -56,7 +58,7 @@ public class DialogTester {
 		final Text text = new Text(Text.Language.cz.getLocale());
 		AnimationSpeedChangeController controller = new AnimationSpeedChangeController();
 		int actualVolume = 10;
-		PreferencesAnimationSpeed preferences = new PreferencesAnimationSpeed(text, controller, actualVolume);
+		PreferencesAnimationSpeed preferences = new PreferencesAnimationSpeed(text, viewUtil, controller, actualVolume);
 		preferences.setVisible(true);
 	}
 
@@ -76,8 +78,8 @@ public class DialogTester {
 
 		EasyMock.replay(playerAttacker, playerDefender, unitAttacker, unitDefender);
 
-		DialogFigth preferences = new DialogFigth(text, imageProvider, localizationHelper, unitAttacker, unitDefender);
-		preferences.setVisible(true);
+		DialogFigth preferences = new DialogFigth(text, viewUtil, imageProvider, localizationHelper, unitAttacker,
+				unitDefender);
 		System.out.println("User wants to fight: " + preferences.isUserChooseFight());
 	}
 

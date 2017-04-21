@@ -55,6 +55,8 @@
 	<entry key="startPanel.buttonNewGame">Nová hra</entry>
 
 	<entry key="preferencesVolume.caption">Hlasitost</entry>
+	<entry key="preferencesVolume.low">Potichu</entry>
+	<entry key="preferencesVolume.high">Nahlas</entry>
 
 	<entry key="preferencesAnimationSpeed.caption">Rychlost animací</entry>
 	<entry key="preferencesAnimationSpeed.fast">Vysoká</entry>

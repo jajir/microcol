@@ -7,13 +7,12 @@ import java.net.URL;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JDialog;
 import javax.swing.JLabel;
 
 import org.microcol.gui.util.Text;
 import org.microcol.gui.util.ViewUtil;
 
-public class WaitingDialog extends JDialog {
+public class WaitingDialog extends AbstractDialog {
 
 	/**
 	 * Default serialVersionUID.

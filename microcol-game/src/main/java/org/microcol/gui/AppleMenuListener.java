@@ -1,9 +1,9 @@
 package org.microcol.gui;
 
-import org.microcol.gui.event.ExitGameController;
-import org.microcol.gui.event.ExitGameEvent;
 import org.microcol.gui.event.AboutGameEvent;
 import org.microcol.gui.event.AboutGameEventController;
+import org.microcol.gui.event.ExitGameController;
+import org.microcol.gui.event.ExitGameEvent;
 
 import com.apple.mrj.MRJAboutHandler;
 import com.apple.mrj.MRJQuitHandler;

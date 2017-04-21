@@ -17,6 +17,17 @@ import javax.sound.sampled.SourceDataLine;
  * 
  */
 public class MusicPlayer {
+
+	/**
+	 * Minimal volume value.
+	 */
+	public static final int MIN_VOLUME = 0;
+
+	/**
+	 * Maximal volume value.
+	 */
+	public static final int MAX_VOLUME = 100;
+
 	private final int BUFFER_SIZE = 128000;
 	private AudioInputStream audioStream;
 	private AudioFormat audioFormat;

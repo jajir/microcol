@@ -27,6 +27,7 @@ import org.microcol.gui.StepCounter;
 import org.microcol.gui.event.model.GameController;
 import org.microcol.gui.event.model.NextTurnController;
 import org.microcol.gui.util.Text;
+import org.microcol.gui.util.ViewUtil;
 import org.microcol.model.Location;
 import org.microcol.model.Model;
 import org.microcol.model.Terrain;
@@ -84,17 +85,20 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 
 	private final PaintService paintService;
 
+	private final ViewUtil viewUtil;
+
 	@Inject
 	public GamePanelView(final GameController gameController, final NextTurnController nextTurnController,
 			final PathPlanning pathPlanning, final ImageProvider imageProvider, final ViewState viewState,
-			final MoveModeSupport moveModeSupport, final Text text, final LocalizationHelper localizationHelper,
-			final PaintService paintService) {
+			final MoveModeSupport moveModeSupport, final Text text, final ViewUtil viewUtil,
+			final LocalizationHelper localizationHelper, final PaintService paintService) {
 		this.gameController = Preconditions.checkNotNull(gameController);
 		this.pathPlanning = Preconditions.checkNotNull(pathPlanning);
 		this.imageProvider = Preconditions.checkNotNull(imageProvider);
 		this.viewState = Preconditions.checkNotNull(viewState);
 		this.moveModeSupport = Preconditions.checkNotNull(moveModeSupport);
 		this.text = Preconditions.checkNotNull(text);
+		this.viewUtil = Preconditions.checkNotNull(viewUtil);
 		this.localizationHelper = Preconditions.checkNotNull(localizationHelper);
 		this.paintService = Preconditions.checkNotNull(paintService);
 		this.visualDebugInfo = new VisualDebugInfo();
@@ -442,8 +446,8 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 
 	@Override
 	public boolean performFightDialog(final Unit unitAttacker, final Unit unitDefender) {
-		DialogFigth dialogFight = new DialogFigth(text, imageProvider, localizationHelper, unitAttacker, unitDefender);
-		dialogFight.setVisible(true);
+		DialogFigth dialogFight = new DialogFigth(text, viewUtil, imageProvider, localizationHelper, unitAttacker,
+				unitDefender);
 		return dialogFight.isUserChooseFight();
 	}
 

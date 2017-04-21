@@ -56,6 +56,8 @@
 	<entry key="startPanel.buttonNewGame">New Game</entry>
 
 	<entry key="preferencesVolume.caption">Volume</entry>
+	<entry key="preferencesVolume.low">Low</entry>
+	<entry key="preferencesVolume.high">High</entry>
 
 	<entry key="preferencesAnimationSpeed.caption">Animation speed</entry>
 	<entry key="preferencesAnimationSpeed.fast">Fast</entry>

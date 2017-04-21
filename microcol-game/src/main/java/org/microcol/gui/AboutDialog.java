@@ -5,13 +5,15 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 
 import javax.swing.JButton;
-import javax.swing.JDialog;
 import javax.swing.JLabel;
 
 import org.microcol.gui.util.Text;
 import org.microcol.gui.util.ViewUtil;
 
-public class AboutDialog extends JDialog {
+/**
+ * About MicroCol game dialog.
+ */
+public class AboutDialog extends AbstractDialog {
 
 	/**
 	 * Default serialVersionUID.
@@ -31,9 +33,9 @@ public class AboutDialog extends JDialog {
 		setTitle(text.get("aboutDialog.caption"));
 		setLayout(new GridBagLayout());
 
-		final JLabel label = new JLabel("<html>Version:<br/>It's funniest game in the world<br/>...</html>");
+		final JLabel label = new JLabel("<html>About MicroCol<br/>Simple Colonization remake.<br/>...</html>");
 		add(label, new GridBagConstraints(0, 0, 1, 1, 1.0D, 1.0D, GridBagConstraints.SOUTHEAST, GridBagConstraints.NONE,
-				new Insets(0, 0, 10, 10), 0, 0));
+				new Insets(BORDER_BIG, BORDER_BIG, BORDER_BIG, BORDER_BIG), 0, 0));
 
 		final JButton buttonOk = new JButton(text.get("dialog.ok"));
 		buttonOk.addActionListener(e -> {
@@ -42,7 +44,7 @@ public class AboutDialog extends JDialog {
 		buttonOk.requestFocus();
 		add(buttonOk, new GridBagConstraints(0, 10, 1, 1, 1.0D, 1.0D, GridBagConstraints.SOUTHEAST,
 				GridBagConstraints.NONE, new Insets(0, 0, 10, 10), 0, 0));
-		
+
 		viewUtil.showDialog(this);
 	}
 

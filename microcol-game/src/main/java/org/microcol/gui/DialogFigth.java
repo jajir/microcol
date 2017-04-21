@@ -7,9 +7,9 @@ import java.awt.Insets;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
-import javax.swing.WindowConstants;
 
 import org.microcol.gui.util.Text;
+import org.microcol.gui.util.ViewUtil;
 import org.microcol.model.Unit;
 
 public class DialogFigth extends AbstractDialog {
@@ -29,6 +29,8 @@ public class DialogFigth extends AbstractDialog {
 	 * 
 	 * @param text
 	 *            required localization helper class
+	 * @param required
+	 *            utilities for showing dialog
 	 * @param imageProvider
 	 *            required image provider
 	 * @param localizationHelper
@@ -38,11 +40,9 @@ public class DialogFigth extends AbstractDialog {
 	 * @param unitDefender
 	 *            required defending unit
 	 */
-	public DialogFigth(final Text text, final ImageProvider imageProvider, final LocalizationHelper localizationHelper,
-			final Unit unitAttacker, final Unit unitDefender) {
-		super();
-		setUndecorated(true);
-		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+	public DialogFigth(final Text text, final ViewUtil viewUtil, final ImageProvider imageProvider,
+			final LocalizationHelper localizationHelper, final Unit unitAttacker, final Unit unitDefender) {
+		super(viewUtil.getParentFrame());
 		setTitle(text.get("dialogFight.title"));
 		setLayout(new GridBagLayout());
 
@@ -94,11 +94,8 @@ public class DialogFigth extends AbstractDialog {
 		add(buttonFight, new GridBagConstraints(2, 10, 1, 1, 0.0D, 0.0D, GridBagConstraints.SOUTHEAST,
 				GridBagConstraints.NONE, new Insets(BORDER_BIG, BORDER, BORDER, BORDER), 0, 0));
 
-		setResizable(false);
-		pack();
-		setLocationRelativeTo(null);
-		setModal(true);
 		buttonFight.requestFocus();
+		viewUtil.showDialog(this);
 	}
 
 	private void describeUnit(final int column, final Unit unit, final ImageProvider imageProvider,
