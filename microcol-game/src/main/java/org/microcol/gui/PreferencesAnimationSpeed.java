@@ -28,6 +28,8 @@ public class PreferencesAnimationSpeed extends AbstractDialog {
 	 * 
 	 * @param text
 	 *            required localization helper class
+	 * @param viewUtil
+	 *            required show dialog utilities
 	 * @param controller
 	 *            required animation speed controller
 	 * @param actualVolume

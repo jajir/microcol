@@ -29,8 +29,8 @@ public class DialogFigth extends AbstractDialog {
 	 * 
 	 * @param text
 	 *            required localization helper class
-	 * @param required
-	 *            utilities for showing dialog
+	 * @param viewUtil
+	 *            required show dialog utilities
 	 * @param imageProvider
 	 *            required image provider
 	 * @param localizationHelper
