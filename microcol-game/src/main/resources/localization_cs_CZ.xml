@@ -18,6 +18,7 @@
 
 	<entry key="mainMenu.view">Zobrazení</entry>
 	<entry key="mainMenu.view.center">Na aktivní jednotku</entry>
+	<entry key="mainMenu.view.europe">Evropský přístav</entry>
 
 	<entry key="mainMenu.unit">Jednotka</entry>
 	<entry key="mainMenu.unit.move">Táhnout</entry>
@@ -67,6 +68,8 @@
 	<entry key="unit.FRIGATE.name">Frigata</entry>
 	<entry key="unit.GALLEON.name">Galeona</entry>
 	<entry key="unit.COLONIST.name">Svobodný kolonista</entry>
+
+	<entry key="europeDialog.caption">Evropský přístav</entry>
 
 	<entry key="newGameDialog.title">Nová hra</entry>
 	<entry key="newGameDialog.selectMap">Vyberte mapu</entry>

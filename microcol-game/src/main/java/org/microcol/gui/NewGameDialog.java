@@ -13,6 +13,7 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 
 import org.microcol.gui.util.Text;
+import org.microcol.gui.util.ViewUtil;
 
 public class NewGameDialog extends JDialog {
 
@@ -32,7 +33,7 @@ public class NewGameDialog extends JDialog {
 	 *            required localization helper class
 	 */
 	public NewGameDialog(final ViewUtil viewUtil, final Text text) {
-		super();
+		super(viewUtil.getParentFrame());
 		setTitle(text.get("newGameDialog.title"));
 		setLayout(new GridBagLayout());
 
@@ -64,11 +65,8 @@ public class NewGameDialog extends JDialog {
 		buttonStartGame.requestFocus();
 		add(buttonStartGame, new GridBagConstraints(1, 10, 1, 1, 1.0D, 1.0D, GridBagConstraints.SOUTHEAST,
 				GridBagConstraints.NONE, new Insets(0, 0, BORDER_SPAN, BORDER_SPAN), 0, 0));
-
-		setResizable(false);
-		pack();
-		setLocation(viewUtil.centerWindow(this));
-		setModal(true);
+		
+		viewUtil.showDialog(this);
 	}
 
 	private String[] getMaps() {

@@ -9,6 +9,7 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 
 import org.microcol.gui.util.Text;
+import org.microcol.gui.util.ViewUtil;
 
 public class AboutDialog extends JDialog {
 
@@ -26,7 +27,7 @@ public class AboutDialog extends JDialog {
 	 *            required localization helper class
 	 */
 	public AboutDialog(final ViewUtil viewUtil, final Text text) {
-		super();
+		super(viewUtil.getParentFrame());
 		setTitle(text.get("aboutDialog.caption"));
 		setLayout(new GridBagLayout());
 
@@ -41,10 +42,8 @@ public class AboutDialog extends JDialog {
 		buttonOk.requestFocus();
 		add(buttonOk, new GridBagConstraints(0, 10, 1, 1, 1.0D, 1.0D, GridBagConstraints.SOUTHEAST,
 				GridBagConstraints.NONE, new Insets(0, 0, 10, 10), 0, 0));
-
-		pack();
-		setLocation(viewUtil.centerWindow(this));
-		setModal(true);
+		
+		viewUtil.showDialog(this);
 	}
 
 }

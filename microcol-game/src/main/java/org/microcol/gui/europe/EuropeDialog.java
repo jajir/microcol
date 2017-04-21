@@ -1,47 +1,38 @@
-package org.microcol.gui;
+package org.microcol.gui.europe;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.net.URL;
 
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JDialog;
 import javax.swing.JLabel;
 
+import org.microcol.gui.AbstractDialog;
+import org.microcol.gui.event.model.GameController;
 import org.microcol.gui.util.Text;
 import org.microcol.gui.util.ViewUtil;
 
-public class WaitingDialog extends JDialog {
+import com.google.inject.Inject;
+
+/**
+ * Show Europe port.
+ */
+public class EuropeDialog extends AbstractDialog {
 
 	/**
 	 * Default serialVersionUID.
 	 */
 	private static final long serialVersionUID = 1L;
 
-	/**
-	 * Constructor when parentFrame is not available.
-	 * 
-	 * @param viewUtil
-	 *            required tool for centering window on screen
-	 * @param text
-	 *            required localization helper class
-	 */
-	public WaitingDialog(final ViewUtil viewUtil, final Text text) {
+	@Inject
+	public EuropeDialog(final ViewUtil viewUtil, final Text text, final GameController gameController) {
 		super(viewUtil.getParentFrame());
-		setTitle(text.get("aboutDialog.caption"));
+		setTitle(text.get("europeDialog.caption"));
 		setLayout(new GridBagLayout());
 
-		final JLabel label = new JLabel("<html>Waiting...</html>");
+		final JLabel label = new JLabel(
+				"<html>brekeke<br/>..." + gameController.getModel().getCurrentPlayer().getName() + "</html>");
 		add(label, new GridBagConstraints(0, 0, 1, 1, 1.0D, 1.0D, GridBagConstraints.SOUTHEAST, GridBagConstraints.NONE,
-				new Insets(0, 0, 10, 10), 0, 0));
-
-		URL url = WaitingDialog.class.getResource("/images/waiting-gears2.gif");
-		ImageIcon imageIcon = new ImageIcon(url);
-		JLabel l = new JLabel(imageIcon);
-		l.setDoubleBuffered(true);
-		add(l, new GridBagConstraints(0, 1, 1, 1, 1.0D, 1.0D, GridBagConstraints.SOUTHEAST, GridBagConstraints.NONE,
 				new Insets(0, 0, 10, 10), 0, 0));
 
 		final JButton buttonOk = new JButton(text.get("dialog.ok"));
@@ -51,7 +42,6 @@ public class WaitingDialog extends JDialog {
 		buttonOk.requestFocus();
 		add(buttonOk, new GridBagConstraints(0, 10, 1, 1, 1.0D, 1.0D, GridBagConstraints.SOUTHEAST,
 				GridBagConstraints.NONE, new Insets(0, 0, 10, 10), 0, 0));
-
 		viewUtil.showDialog(this);
 	}
 

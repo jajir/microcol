@@ -1,8 +1,8 @@
 package org.microcol.gui.event;
 
 import org.microcol.gui.AboutDialog;
-import org.microcol.gui.ViewUtil;
 import org.microcol.gui.util.Text;
+import org.microcol.gui.util.ViewUtil;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
@@ -26,7 +26,7 @@ public class AboutGameListenerImpl implements Listener<AboutGameEvent> {
 
 	@Override
 	public void onEvent(final AboutGameEvent event) {
-		new AboutDialog(viewUtil, text).setVisible(true);
+		new AboutDialog(viewUtil, text);
 	}
 
 }

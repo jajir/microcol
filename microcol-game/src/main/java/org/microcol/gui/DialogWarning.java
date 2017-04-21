@@ -6,7 +6,8 @@ import java.awt.Insets;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
-import javax.swing.WindowConstants;
+
+import org.microcol.gui.util.ViewUtil;
 
 public class DialogWarning extends AbstractDialog {
 
@@ -18,12 +19,11 @@ public class DialogWarning extends AbstractDialog {
 	/**
 	 * Default constructor.
 	 * 
-	 *FIXME add required parameters. 
+	 * @param viewUtil
+	 *            required utility class for showing dialog
 	 */
-	public DialogWarning() {
-		super();
-		setUndecorated(true);
-		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+	public DialogWarning(final ViewUtil viewUtil) {
+		super(viewUtil.getParentFrame());
 		setTitle("Tato jednotka neumi bojovat");
 		setLayout(new GridBagLayout());
 
@@ -42,10 +42,7 @@ public class DialogWarning extends AbstractDialog {
 		add(buttonFight, new GridBagConstraints(2, 10, 1, 1, 0.0D, 0.0D, GridBagConstraints.SOUTHEAST,
 				GridBagConstraints.NONE, new Insets(BORDER_BIG, BORDER, BORDER, BORDER), 0, 0));
 
-		setResizable(false);
-		pack();
-		setLocationRelativeTo(null);
-		setModal(true);
 		buttonFight.requestFocus();
+		viewUtil.showDialog(this);
 	}
 }

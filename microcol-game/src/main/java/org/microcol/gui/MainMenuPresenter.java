@@ -4,6 +4,7 @@ import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JMenuItem;
 import javax.swing.JRadioButtonMenuItem;
 
+import org.microcol.gui.europe.EuropeDialog;
 import org.microcol.gui.event.AboutGameEvent;
 import org.microcol.gui.event.AboutGameEventController;
 import org.microcol.gui.event.AnimationSpeedChangeController;
@@ -22,6 +23,7 @@ import org.microcol.gui.event.model.GameController;
 import org.microcol.gui.event.model.MoveUnitController;
 import org.microcol.gui.event.model.TurnStartedController;
 import org.microcol.gui.util.Text;
+import org.microcol.gui.util.ViewUtil;
 import org.microcol.model.event.TurnStartedEvent;
 
 import com.google.common.base.Preconditions;
@@ -30,6 +32,7 @@ import com.google.inject.Inject;
 public class MainMenuPresenter {
 
 	public interface Display {
+
 		JMenuItem getMenuItemNewGame();
 
 		JMenuItem getMenuItemLoadGame();
@@ -55,6 +58,8 @@ public class MainMenuPresenter {
 		JMenuItem getMenuItemMove();
 
 		JMenuItem getMenuItemCenterView();
+
+		JMenuItem getMenuItemEurope();
 	}
 
 	private final MainMenuPresenter.Display display;
@@ -93,16 +98,14 @@ public class MainMenuPresenter {
 		display.getRbMenuItemlanguageEn().addActionListener(actionEvent -> {
 			changeLanguageController.fireEvent(new ChangeLanguageEvent(Text.Language.en, gameController.getModel()));
 		});
-		display.getMenuItemVolume().addActionListener(actionEvent -> {
-			PreferencesVolume preferences = new PreferencesVolume(viewUtil, text, volumeChangeController,
-					gamePreferences.getVolume());
-			preferences.setVisible(true);
-		});
+		display.getMenuItemVolume().addActionListener(actionEvent -> new PreferencesVolume(viewUtil, text,
+				volumeChangeController, gamePreferences.getVolume()));
 		display.getMenuItemAnimationSpeed().addActionListener(event -> {
 			PreferencesAnimationSpeed preferences = new PreferencesAnimationSpeed(text, animationSpeedChangeController,
 					gamePreferences.getAnimationSpeed());
 			preferences.setVisible(true);
 		});
+		display.getMenuItemEurope().addActionListener(event -> new EuropeDialog(viewUtil, text, gameController));
 		display.getMenuItemShowGrid().addActionListener(ectionEvent -> showGridController
 				.fireEvent(new ShowGridEvent(display.getMenuItemShowGrid().isSelected())));
 		display.getMenuItemMove().addActionListener(ectionEvent -> {

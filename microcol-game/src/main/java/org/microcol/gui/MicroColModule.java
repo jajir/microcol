@@ -35,6 +35,7 @@ import org.microcol.gui.panelview.PaintService;
 import org.microcol.gui.panelview.UnitAttackedEventListener;
 import org.microcol.gui.panelview.ViewState;
 import org.microcol.gui.util.Text;
+import org.microcol.gui.util.ViewUtil;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;

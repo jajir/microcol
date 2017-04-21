@@ -9,11 +9,11 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JSlider;
 import javax.swing.SwingConstants;
-import javax.swing.WindowConstants;
 
 import org.microcol.gui.event.VolumeChangeController;
 import org.microcol.gui.event.VolumeChangeEvent;
 import org.microcol.gui.util.Text;
+import org.microcol.gui.util.ViewUtil;
 
 public class PreferencesVolume extends JDialog {
 
@@ -36,9 +36,8 @@ public class PreferencesVolume extends JDialog {
 	 */
 	public PreferencesVolume(final ViewUtil viewUtil, final Text text,
 			final VolumeChangeController volumeChangeController, final int actualVolume) {
-		super();
-		setUndecorated(true);
-		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+		super(viewUtil.getParentFrame());
+
 		setTitle(text.get("preferencesVolume.caption"));
 		setLayout(new GridBagLayout());
 
@@ -67,10 +66,7 @@ public class PreferencesVolume extends JDialog {
 		add(buttonOk, new GridBagConstraints(0, 10, 1, 1, 1.0D, 1.0D, GridBagConstraints.SOUTHEAST,
 				GridBagConstraints.NONE, new Insets(0, 0, 10, 10), 0, 0));
 
-		setResizable(false);
-		pack();
-		setLocation(viewUtil.centerWindow(this));
-		setModal(true);
+		viewUtil.showDialog(this);
 	}
 
 }

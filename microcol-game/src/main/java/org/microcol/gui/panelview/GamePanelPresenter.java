@@ -25,6 +25,7 @@ import org.microcol.gui.event.model.GameController;
 import org.microcol.gui.event.model.MoveUnitController;
 import org.microcol.gui.event.model.NewGameController;
 import org.microcol.gui.util.Localized;
+import org.microcol.gui.util.ViewUtil;
 import org.microcol.model.Location;
 import org.microcol.model.Unit;
 import org.microcol.model.event.UnitMovedEvent;
@@ -77,6 +78,8 @@ public final class GamePanelPresenter implements Localized {
 	private Point lastMousePosition;
 
 	private final ViewState viewState;
+	
+	private final ViewUtil viewUtil;
 
 	static class PopUpDemo extends JPopupMenu {
 
@@ -99,11 +102,12 @@ public final class GamePanelPresenter implements Localized {
 			final MoveUnitController moveUnitController, final NewGameController newGameController,
 			final GamePreferences gamePreferences, final ShowGridController showGridController,
 			final CenterViewController viewController, final ExitGameController exitGameController,
-			final DebugRequestController debugRequestController, final ViewState viewState) {
+			final DebugRequestController debugRequestController, final ViewState viewState, final ViewUtil viewUtil) {
 		this.focusedTileController = focusedTileController;
 		this.gameController = Preconditions.checkNotNull(gameController);
 		this.display = Preconditions.checkNotNull(display);
 		this.viewState = Preconditions.checkNotNull(viewState);
+		this.viewUtil = Preconditions.checkNotNull(viewUtil);
 
 		moveUnitController.addMoveUnitListener(event -> {
 			scheduleWalkAnimation(event);
@@ -291,8 +295,7 @@ public final class GamePanelPresenter implements Localized {
 				//TODO JJ consider which tile should have focus
 				viewState.setSelectedTile(Optional.of(moveToLocation));
 				display.setCursorNormal();
-				DialogWarning dialogWarning = new DialogWarning();
-				dialogWarning.setVisible(true);
+				new DialogWarning(viewUtil);
 				return;
 			}
 			final Unit targetUnit = gameController.getModel().getUnitsAt(moveToLocation).get(0);

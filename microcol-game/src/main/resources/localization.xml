@@ -18,6 +18,7 @@
 
 	<entry key="mainMenu.view">View</entry>
 	<entry key="mainMenu.view.center">Center</entry>
+	<entry key="mainMenu.view.europe">Evrope</entry>
 
 	<entry key="mainMenu.unit">Unit</entry>
 	<entry key="mainMenu.unit.move">Move</entry>
@@ -69,6 +70,8 @@
 	<entry key="unit.FRIGATE.name">Frigate</entry>
 	<entry key="unit.GALLEON.name">Galleon</entry>
 	<entry key="unit.COLONIST.name">Free Colonist</entry>
+
+	<entry key="europeDialog.caption">European Port</entry>
 
 	<entry key="newGameDialog.title">New game</entry>
 	<entry key="newGameDialog.selectMap">Select map</entry>

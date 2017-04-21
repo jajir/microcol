@@ -1,6 +1,6 @@
 package org.microcol.gui;
 
-import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
 import org.easymock.classextension.EasyMock;
@@ -9,6 +9,7 @@ import org.microcol.gui.event.VolumeChangeController;
 import org.microcol.gui.event.model.GameController;
 import org.microcol.gui.util.Text;
 import org.microcol.gui.util.Text.Language;
+import org.microcol.gui.util.ViewUtil;
 import org.microcol.model.Player;
 import org.microcol.model.Unit;
 import org.microcol.model.UnitType;
@@ -18,39 +19,37 @@ import org.microcol.model.UnitType;
  */
 public class DialogTester {
 
+	private static JFrame parentFrame;
+
 	public static void main(String[] args) {
 
 		SwingUtilities.invokeLater(() -> {
+			parentFrame = new JFrame("main frame");
 			// startWaitingDialog();
 			// startNewGameDialog();
 			// startPreferencesVolume();
 			// startPreferencesAnimationSpeed();
 			// testDialogFight();
 			// dialogWarning();
-//			dialogSave();
+			// dialogSave();
 			dialogLoad();
 		});
 	}
 
 	public final static void startNewGameDialog() {
-		JDialog dialog = new NewGameDialog(new ViewUtil(), new Text(Language.cz.getLocale()));
-		dialog.setResizable(false);
-		dialog.setVisible(true);
+		new NewGameDialog(new ViewUtil(parentFrame), new Text(Language.cz.getLocale()));
 	}
 
 	public final static void startWaitingDialog() {
-		JDialog dialog = new WaitingDialog(new ViewUtil(), new Text(Language.cz.getLocale()));
-		dialog.setResizable(false);
-		dialog.setVisible(true);
+		new WaitingDialog(new ViewUtil(parentFrame), new Text(Language.cz.getLocale()));
 	}
 
 	public final static void startPreferencesVolume() {
-		final ViewUtil viewUtil = new ViewUtil();
+		final ViewUtil viewUtil = new ViewUtil(parentFrame);
 		final Text text = new Text(Text.Language.cz.getLocale());
 		VolumeChangeController controller = new VolumeChangeController();
 		int actualVolume = 10;
-		PreferencesVolume preferences = new PreferencesVolume(viewUtil, text, controller, actualVolume);
-		preferences.setVisible(true);
+		new PreferencesVolume(viewUtil, text, controller, actualVolume);
 	}
 
 	public final static void startPreferencesAnimationSpeed() {
@@ -83,7 +82,7 @@ public class DialogTester {
 	}
 
 	public final static void dialogWarning() {
-		DialogWarning dialogWarning = new DialogWarning();
+		DialogWarning dialogWarning = new DialogWarning(new ViewUtil(parentFrame));
 		dialogWarning.setVisible(true);
 	}
 
@@ -91,7 +90,7 @@ public class DialogTester {
 		final Text text = new Text(Text.Language.cz.getLocale());
 		final GameController gameController = EasyMock.createMock(GameController.class);
 		final PersistingDialog persistingDialog = new PersistingDialog(text, gameController);
-		
+
 		persistingDialog.saveModel();
 	}
 
@@ -99,7 +98,7 @@ public class DialogTester {
 		final Text text = new Text(Text.Language.cz.getLocale());
 		final GameController gameController = EasyMock.createMock(GameController.class);
 		final PersistingDialog persistingDialog = new PersistingDialog(text, gameController);
-		
+
 		persistingDialog.loadModel();
 	}
 

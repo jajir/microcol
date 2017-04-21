@@ -42,6 +42,8 @@ public class MainMenuView extends JMenuBar implements MainMenuPresenter.Display 
 
 	private final JMenuItem menuItemCenterView;
 
+	private final JMenuItem menuItemEurope;
+
 	private final JMenu menuUnit;
 
 	private final JMenuItem menuItemMove;
@@ -98,6 +100,12 @@ public class MainMenuView extends JMenuBar implements MainMenuPresenter.Display 
 		menuItemCenterView.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, 0));
 		menuItemCenterView.setEnabled(false);
 		menuView.add(menuItemCenterView);
+		
+		menuItemEurope = new JMenuItem();
+		menuItemEurope.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E, 0));
+		menuItemEurope.setEnabled(true);
+		menuView.add(menuItemEurope);
+		
 		add(menuView);
 
 		/**
@@ -176,6 +184,7 @@ public class MainMenuView extends JMenuBar implements MainMenuPresenter.Display 
 		 */
 		menuView.setText(text.get("mainMenu.view"));
 		menuItemCenterView.setText(text.get("mainMenu.view.center"));
+		menuItemEurope.setText(text.get("mainMenu.view.europe"));
 
 		/**
 		 * Unit
@@ -259,5 +268,10 @@ public class MainMenuView extends JMenuBar implements MainMenuPresenter.Display 
 	@Override
 	public JMenuItem getMenuItemAnimationSpeed() {
 		return menuItemAnimationSpeed;
+	}
+
+	@Override
+	public JMenuItem getMenuItemEurope() {
+		return menuItemEurope;
 	}
 }
