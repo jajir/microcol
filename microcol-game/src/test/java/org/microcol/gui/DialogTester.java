@@ -4,6 +4,7 @@ import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
 import org.easymock.classextension.EasyMock;
+import org.microcol.gui.europe.EuropeDialog;
 import org.microcol.gui.event.AnimationSpeedChangeController;
 import org.microcol.gui.event.VolumeChangeController;
 import org.microcol.gui.event.model.GameController;
@@ -30,12 +31,13 @@ public class DialogTester {
 			viewUtil = new ViewUtil(parentFrame);
 			// startWaitingDialog();
 			// startNewGameDialog();
-			startPreferencesVolume();
+			// startPreferencesVolume();
 			// startPreferencesAnimationSpeed();
 			// testDialogFight();
 			// dialogWarning();
 			// dialogSave();
 			// dialogLoad();
+			europeDialog();
 		});
 	}
 
@@ -102,6 +104,13 @@ public class DialogTester {
 		final PersistingDialog persistingDialog = new PersistingDialog(text, gameController);
 
 		persistingDialog.loadModel();
+	}
+
+	public final static void europeDialog() {
+		final Text text = new Text(Text.Language.cz.getLocale());
+		final GameController gameController = EasyMock.createMock(GameController.class);
+		EasyMock.replay(gameController);
+		new EuropeDialog(viewUtil, text, gameController);
 	}
 
 }

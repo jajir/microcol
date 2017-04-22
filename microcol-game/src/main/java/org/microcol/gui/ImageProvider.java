@@ -59,6 +59,12 @@ public class ImageProvider {
 
 	public static final String IMG_CROSSED_SWORDS = "crossed-swords.png";
 
+	public static final String IMG_GOOD_CORN = "good-corn.png";
+
+	public static final String IMG_GOOD_SUGAR = "good-sugar.png";
+
+	public static final String IMG_GOOD_TOBACCO = "good-tobacco.png";
+
 	private static final String BASE_PACKAGE = "images";
 
 	private final Map<String, BufferedImage> images;

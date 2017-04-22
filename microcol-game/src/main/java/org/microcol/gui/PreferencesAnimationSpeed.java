@@ -73,13 +73,13 @@ public class PreferencesAnimationSpeed extends AbstractDialog {
 		add(buttonOk, new GridBagConstraints(0, 10, 1, 1, 1.0D, 1.0D, GridBagConstraints.SOUTHEAST,
 				GridBagConstraints.NONE, new Insets(BORDER_BIG, 0, BORDER, BORDER), 0, 0));
 
+		setUndecorated(true);
 		setResizable(false);
 		pack();
 		int width = (int) (getPreferredSize().getWidth() * 2);
 		setMinimumSize(new Dimension(width, getMinimumSize().height));
 		setLocationRelativeTo(null);
 		setModal(true);
-		setUndecorated(true);
 		setLocationRelativeTo(viewUtil.getParentFrame());
 		setVisible(true);
 	}
