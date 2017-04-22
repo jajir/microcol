@@ -4,6 +4,7 @@ import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
 import org.easymock.classextension.EasyMock;
+import org.microcol.gui.colony.ColonyDialog;
 import org.microcol.gui.europe.EuropeDialog;
 import org.microcol.gui.event.AnimationSpeedChangeController;
 import org.microcol.gui.event.VolumeChangeController;
@@ -37,7 +38,9 @@ public class DialogTester {
 			// dialogWarning();
 			// dialogSave();
 			// dialogLoad();
-			europeDialog();
+			// europeDialog();
+			dialogColony();
+
 		});
 	}
 
@@ -111,6 +114,13 @@ public class DialogTester {
 		final GameController gameController = EasyMock.createMock(GameController.class);
 		EasyMock.replay(gameController);
 		new EuropeDialog(viewUtil, text, gameController);
+	}
+
+	public final static void dialogColony() {
+		final Text text = new Text(Text.Language.cz.getLocale());
+		final GameController gameController = EasyMock.createMock(GameController.class);
+		EasyMock.replay(gameController);
+		new ColonyDialog(viewUtil, text, gameController);
 	}
 
 }
