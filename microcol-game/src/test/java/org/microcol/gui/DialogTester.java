@@ -25,11 +25,14 @@ public class DialogTester {
 
 	private static ViewUtil viewUtil;
 
+	private static ImageProvider imageProvider;
+
 	public static void main(String[] args) {
 
 		SwingUtilities.invokeLater(() -> {
 			parentFrame = new JFrame("main frame");
 			viewUtil = new ViewUtil(parentFrame);
+			imageProvider = new ImageProvider();
 			// startWaitingDialog();
 			// startNewGameDialog();
 			// startPreferencesVolume();
@@ -38,8 +41,8 @@ public class DialogTester {
 			// dialogWarning();
 			// dialogSave();
 			// dialogLoad();
-			// europeDialog();
-			dialogColony();
+			europeDialog();
+			// dialogColony();
 
 		});
 	}
@@ -69,7 +72,6 @@ public class DialogTester {
 
 	public final static void testDialogFight() {
 		final Text text = new Text(Text.Language.cz.getLocale());
-		final ImageProvider imageProvider = new ImageProvider();
 		final LocalizationHelper localizationHelper = new LocalizationHelper(text);
 
 		final Player playerAttacker = EasyMock.createMock(Player.class);
@@ -113,14 +115,14 @@ public class DialogTester {
 		final Text text = new Text(Text.Language.cz.getLocale());
 		final GameController gameController = EasyMock.createMock(GameController.class);
 		EasyMock.replay(gameController);
-		new EuropeDialog(viewUtil, text, gameController);
+		new EuropeDialog(viewUtil, text, imageProvider, gameController);
 	}
 
 	public final static void dialogColony() {
 		final Text text = new Text(Text.Language.cz.getLocale());
 		final GameController gameController = EasyMock.createMock(GameController.class);
 		EasyMock.replay(gameController);
-		new ColonyDialog(viewUtil, text, gameController);
+		new ColonyDialog(viewUtil, text, imageProvider, gameController);
 	}
 
 }

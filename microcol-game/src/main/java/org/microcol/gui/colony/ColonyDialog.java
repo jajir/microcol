@@ -8,6 +8,7 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 
 import org.microcol.gui.AbstractDialog;
+import org.microcol.gui.ImageProvider;
 import org.microcol.gui.europe.PanelGoods;
 import org.microcol.gui.europe.PanelPortPier;
 import org.microcol.gui.event.model.GameController;
@@ -28,7 +29,8 @@ public class ColonyDialog extends AbstractDialog {
 	private static final long serialVersionUID = 1L;
 
 	@Inject
-	public ColonyDialog(final ViewUtil viewUtil, final Text text, final GameController gameController) {
+	public ColonyDialog(final ViewUtil viewUtil, final Text text, final ImageProvider imageProvider,
+			final GameController gameController) {
 		super(viewUtil.getParentFrame());
 		Preconditions.checkNotNull(gameController);
 		setTitle(text.get("europeDialog.caption"));
@@ -46,7 +48,7 @@ public class ColonyDialog extends AbstractDialog {
 		final PanelColonyLayout colonyLayout = new PanelColonyLayout();
 		add(colonyLayout, new GridBagConstraints(0, 1, 2, 1, 1.0D, 0.0D, GridBagConstraints.SOUTHEAST,
 				GridBagConstraints.HORIZONTAL, new Insets(0, 0, 10, BORDER_BIG), 0, 0));
-		
+
 		final PanelColonyStructures colonyStructures = new PanelColonyStructures();
 		add(colonyStructures, new GridBagConstraints(1, 1, 2, 1, 1.0D, 0.0D, GridBagConstraints.SOUTHEAST,
 				GridBagConstraints.HORIZONTAL, new Insets(0, 0, 10, BORDER_BIG), 0, 0));
@@ -60,7 +62,7 @@ public class ColonyDialog extends AbstractDialog {
 		/**
 		 * Good row - 3
 		 */
-		final PanelGoods goods = new PanelGoods();
+		final PanelGoods goods = new PanelGoods(imageProvider);
 		add(goods, new GridBagConstraints(0, 3, 3, 1, 1.0D, 0.0D, GridBagConstraints.CENTER,
 				GridBagConstraints.HORIZONTAL, new Insets(BORDER, BORDER_BIG, BORDER, BORDER_BIG), 0, 0));
 
@@ -72,8 +74,8 @@ public class ColonyDialog extends AbstractDialog {
 			setVisible(false);
 		});
 		buttonOk.requestFocus();
-		add(buttonOk, new GridBagConstraints(2, 10, 1, 1, 0.0D, 0.0D, GridBagConstraints.EAST,
-				GridBagConstraints.NONE, new Insets(0, 0, BORDER_BIG, BORDER_BIG), 0, 0));
+		add(buttonOk, new GridBagConstraints(2, 10, 1, 1, 0.0D, 0.0D, GridBagConstraints.EAST, GridBagConstraints.NONE,
+				new Insets(0, 0, BORDER_BIG, BORDER_BIG), 0, 0));
 		viewUtil.showDialog(this);
 	}
 
