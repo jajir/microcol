@@ -1,9 +1,5 @@
 package org.microcol.gui;
 
-import javax.swing.JCheckBoxMenuItem;
-import javax.swing.JMenuItem;
-import javax.swing.JRadioButtonMenuItem;
-
 import org.microcol.gui.europe.EuropeDialog;
 import org.microcol.gui.event.AboutGameEvent;
 import org.microcol.gui.event.AboutGameEventController;
@@ -29,37 +25,41 @@ import org.microcol.model.event.TurnStartedEvent;
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
 
+import javafx.scene.control.CheckMenuItem;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.RadioMenuItem;
+
 public class MainMenuPresenter {
 
 	public interface Display {
 
-		JMenuItem getMenuItemNewGame();
+		MenuItem getMenuItemNewGame();
 
-		JMenuItem getMenuItemLoadGame();
+		MenuItem getMenuItemLoadGame();
 
-		JMenuItem getMenuItemSameGame();
+		MenuItem getMenuItemSameGame();
 
-		JMenuItem getMenuItemQuitGame();
+		MenuItem getMenuItemQuitGame();
 
-		JMenuItem getMenuItemAbout();
+		MenuItem getMenuItemAbout();
 
-		JRadioButtonMenuItem getRbMenuItemlanguageEn();
+		RadioMenuItem getRbMenuItemlanguageEn();
 
-		JRadioButtonMenuItem getRbMenuItemlanguageCz();
+		RadioMenuItem getRbMenuItemlanguageCz();
 
 		void updateLanguage();
 
-		JMenuItem getMenuItemAnimationSpeed();
+		MenuItem getMenuItemAnimationSpeed();
 
-		JMenuItem getMenuItemVolume();
+		MenuItem getMenuItemVolume();
 
-		JCheckBoxMenuItem getMenuItemShowGrid();
+		CheckMenuItem getMenuItemShowGrid();
 
-		JMenuItem getMenuItemMove();
+		MenuItem getMenuItemMove();
 
-		JMenuItem getMenuItemCenterView();
+		MenuItem getMenuItemCenterView();
 
-		JMenuItem getMenuItemEurope();
+		MenuItem getMenuItemEurope();
 	}
 
 	private final MainMenuPresenter.Display display;
@@ -80,39 +80,39 @@ public class MainMenuPresenter {
 			final GameController gameController, final PersistingDialog persistingDialog,
 			final ImageProvider imageProvider) {
 		this.display = Preconditions.checkNotNull(display);
-		display.getMenuItemNewGame().addActionListener(actionEvent -> {
+		display.getMenuItemNewGame().setOnAction(actionEvent -> {
 			gameController.startNewGame();
 		});
-		display.getMenuItemSameGame().addActionListener(event -> persistingDialog.saveModel());
-		display.getMenuItemLoadGame().addActionListener(event -> persistingDialog.loadModel());
+		display.getMenuItemSameGame().setOnAction(event -> persistingDialog.saveModel());
+		display.getMenuItemLoadGame().setOnAction(event -> persistingDialog.loadModel());
 		if (!gamePreferences.isOSX()) {
-			display.getMenuItemQuitGame().addActionListener(actionEvent -> {
+			display.getMenuItemQuitGame().setOnAction(actionEvent -> {
 				exitGameController.fireEvent(new ExitGameEvent());
 			});
-			display.getMenuItemAbout().addActionListener(actionEvent -> {
+			display.getMenuItemAbout().setOnAction(actionEvent -> {
 				gameEventController.fireEvent(new AboutGameEvent());
 			});
 		}
-		display.getRbMenuItemlanguageCz().addActionListener(actionEvent -> {
+		display.getRbMenuItemlanguageCz().setOnAction(actionEvent -> {
 			changeLanguageController.fireEvent(new ChangeLanguageEvent(Text.Language.cz, gameController.getModel()));
 		});
-		display.getRbMenuItemlanguageEn().addActionListener(actionEvent -> {
+		display.getRbMenuItemlanguageEn().setOnAction(actionEvent -> {
 			changeLanguageController.fireEvent(new ChangeLanguageEvent(Text.Language.en, gameController.getModel()));
 		});
-		display.getMenuItemVolume().addActionListener(actionEvent -> new PreferencesVolume(viewUtil, text,
+		display.getMenuItemVolume().setOnAction(actionEvent -> new PreferencesVolume(viewUtil, text,
 				volumeChangeController, gamePreferences.getVolume()));
-		display.getMenuItemAnimationSpeed().addActionListener(event -> new PreferencesAnimationSpeed(text, viewUtil,
+		display.getMenuItemAnimationSpeed().setOnAction(event -> new PreferencesAnimationSpeed(text, viewUtil,
 				animationSpeedChangeController, gamePreferences.getAnimationSpeed()));
 		display.getMenuItemEurope()
-				.addActionListener(event -> new EuropeDialog(viewUtil, text, imageProvider, gameController));
-		display.getMenuItemShowGrid().addActionListener(ectionEvent -> showGridController
+				.setOnAction(event -> new EuropeDialog(viewUtil, text, imageProvider, gameController));
+		display.getMenuItemShowGrid().setOnAction(ectionEvent -> showGridController
 				.fireEvent(new ShowGridEvent(display.getMenuItemShowGrid().isSelected())));
-		display.getMenuItemMove().addActionListener(ectionEvent -> {
+		display.getMenuItemMove().setOnAction(ectionEvent -> {
 			moveUnitController.fireStartMoveEvent();
-			display.getMenuItemMove().setEnabled(false);
+			display.getMenuItemMove().setDisable(true);
 		});
 		display.getMenuItemCenterView()
-				.addActionListener(event -> centerViewController.fireEvent(new CenterViewEvent()));
+				.setOnAction(event -> centerViewController.fireEvent(new CenterViewEvent()));
 		changeLanguageController.addListener(event -> {
 			display.updateLanguage();
 		});
@@ -127,13 +127,13 @@ public class MainMenuPresenter {
 	 *            required event
 	 */
 	private final void onFocusedTileEvent(final FocusedTileEvent event) {
-		display.getMenuItemCenterView().setEnabled(true);
+		display.getMenuItemCenterView().setDisable(false);
 		isTileFocused = true;
 		if (event.isTileContainsMovebleUnit()) {
-			display.getMenuItemMove().setEnabled(true);
+			display.getMenuItemMove().setDisable(false);
 			isFocusedMoveableUnit = true;
 		} else {
-			display.getMenuItemMove().setEnabled(false);
+			display.getMenuItemMove().setDisable(true);
 			isFocusedMoveableUnit = false;
 		}
 	}
@@ -141,14 +141,14 @@ public class MainMenuPresenter {
 	private final void onTurnStartedEvent(final TurnStartedEvent event) {
 		if (event.getPlayer().isHuman()) {
 			if (isTileFocused) {
-				display.getMenuItemCenterView().setEnabled(true);
+				display.getMenuItemCenterView().setDisable(false);
 			}
 			if (isFocusedMoveableUnit) {
-				display.getMenuItemMove().setEnabled(true);
+				display.getMenuItemMove().setDisable(false);
 			}
 		} else {
-			display.getMenuItemCenterView().setEnabled(false);
-			display.getMenuItemMove().setEnabled(false);
+			display.getMenuItemCenterView().setDisable(true);
+			display.getMenuItemMove().setDisable(true);
 		}
 	}
 

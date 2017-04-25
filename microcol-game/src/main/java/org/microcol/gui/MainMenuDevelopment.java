@@ -1,17 +1,18 @@
 package org.microcol.gui;
 
-import java.awt.event.KeyEvent;
-
 import javax.swing.AbstractButton;
-import javax.swing.JCheckBoxMenuItem;
-import javax.swing.JMenu;
-import javax.swing.KeyStroke;
 
 import org.microcol.gui.event.model.GameController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.inject.Inject;
+
+import javafx.scene.control.CheckMenuItem;
+import javafx.scene.control.Menu;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
 
 /**
  * Class just logically separate development menu handling from rest of main
@@ -24,15 +25,16 @@ public class MainMenuDevelopment {
 
 	private final Logger logger = LoggerFactory.getLogger(MainMenuDevelopment.class);
 
-	private final JMenu developmentMenu;
+	private final Menu developmentMenu;
 
 	@Inject
 	public MainMenuDevelopment(final GameController gameController) {
-		developmentMenu = new JMenu("Development");
+		developmentMenu = new Menu("Development");
 
-		final JCheckBoxMenuItem checkBoxStopAi = new JCheckBoxMenuItem("Suspend AI");
-		checkBoxStopAi.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A, KeyEvent.CTRL_MASK + KeyEvent.SHIFT_MASK));
-		checkBoxStopAi.addActionListener(event -> {
+		final CheckMenuItem checkBoxStopAi = new CheckMenuItem("Suspend AI");
+		checkBoxStopAi.setAccelerator(
+				new KeyCodeCombination(KeyCode.A, KeyCombination.CONTROL_DOWN, KeyCombination.SHIFT_DOWN));
+		checkBoxStopAi.setOnAction(event -> {
 			final AbstractButton aButton = (AbstractButton) event.getSource();
 			if (aButton.getModel().isSelected()) {
 				new Thread(() -> gameController.getAiEngine().resume()).start();
@@ -42,11 +44,11 @@ public class MainMenuDevelopment {
 				logger.debug("AI was started.");
 			}
 		});
-		developmentMenu.add(checkBoxStopAi);
+		developmentMenu.getItems().add(checkBoxStopAi);
 
 	}
 
-	public JMenu getDevelopmentMenu() {
+	public Menu getDevelopmentMenu() {
 		return developmentMenu;
 	}
 

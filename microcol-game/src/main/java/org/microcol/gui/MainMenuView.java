@@ -1,170 +1,165 @@
 package org.microcol.gui;
 
-import java.awt.event.InputEvent;
-import java.awt.event.KeyEvent;
-
-import javax.swing.ButtonGroup;
-import javax.swing.JCheckBoxMenuItem;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.JRadioButtonMenuItem;
-import javax.swing.KeyStroke;
-
 import org.microcol.gui.util.Text;
 import org.microcol.gui.util.Text.Language;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
 
-public class MainMenuView extends JMenuBar implements MainMenuPresenter.Display {
+import javafx.scene.control.CheckMenuItem;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.RadioMenuItem;
+import javafx.scene.control.ToggleGroup;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
 
-	/**
-	 * Default serialVersionUID.
-	 */
-	private static final long serialVersionUID = 1L;
+public class MainMenuView implements MainMenuPresenter.Display {
 
 	private final Text text;
 
-	private final JMenu menuGame;
+	private final MenuBar menuBar;
 
-	private final JMenuItem menuItemNewGame;
+	private final Menu menuGame;
 
-	private final JMenuItem menuItemSameGame;
+	private final MenuItem menuItemNewGame;
 
-	private final JMenuItem menuItemLoadGame;
+	private final MenuItem menuItemSameGame;
 
-	private final JMenuItem menuItemQuitGame;
+	private final MenuItem menuItemLoadGame;
 
-	private final JMenuItem menuItemAbout;
+	private final MenuItem menuItemQuitGame;
 
-	private final JMenu menuView;
+	private final MenuItem menuItemAbout;
 
-	private final JMenuItem menuItemCenterView;
+	private final Menu menuView;
 
-	private final JMenuItem menuItemEurope;
+	private final MenuItem menuItemCenterView;
 
-	private final JMenu menuUnit;
+	private final MenuItem menuItemEurope;
 
-	private final JMenuItem menuItemMove;
+	private final Menu menuUnit;
 
-	private final JMenu menuPrefereces;
+	private final MenuItem menuItemMove;
 
-	private final JMenu menuLanguage;
+	private final Menu menuPrefereces;
 
-	private final JRadioButtonMenuItem rbMenuItemlanguageEn;
+	private final Menu menuLanguage;
 
-	private final JRadioButtonMenuItem rbMenuItemlanguageCz;
+	private final RadioMenuItem rbMenuItemlanguageEn;
 
-	private final JMenuItem menuItemVolume;
+	private final RadioMenuItem rbMenuItemlanguageCz;
 
-	private final JMenuItem menuItemAnimationSpeed;
+	private final MenuItem menuItemVolume;
 
-	private final JCheckBoxMenuItem menuItemShowGrid;
+	private final MenuItem menuItemAnimationSpeed;
 
-	private final JMenu menuHelp;
+	private final CheckMenuItem menuItemShowGrid;
+
+	private final Menu menuHelp;
 
 	@Inject
-	public MainMenuView(final GamePreferences gamePreferences, final Text text, final MainMenuDevelopment mainMenuDevelopment) {
+	public MainMenuView(final GamePreferences gamePreferences, final Text text,
+			final MainMenuDevelopment mainMenuDevelopment) {
 		this.text = Preconditions.checkNotNull(text);
-		menuGame = new JMenu();
 
-		menuItemNewGame = new JMenuItem();
-		menuItemNewGame.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_MASK));
-		menuItemNewGame.setEnabled(true);
-		menuGame.add(menuItemNewGame);
-		
-		menuItemLoadGame = new JMenuItem();
-		menuItemLoadGame.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_L, InputEvent.CTRL_MASK));
-		menuItemLoadGame.setEnabled(true);
-		menuGame.add(menuItemLoadGame);
+		/**
+		 * Game menu
+		 */
+		menuItemNewGame = new MenuItem();
+		menuItemNewGame.setAccelerator(new KeyCodeCombination(KeyCode.N, KeyCombination.CONTROL_DOWN));
+		menuItemNewGame.disableProperty().setValue(true);
 
-		menuItemSameGame = new JMenuItem();
-		menuItemSameGame.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_MASK));
-		menuItemSameGame.setEnabled(true);
-		menuGame.add(menuItemSameGame);
+		menuItemLoadGame = new MenuItem();
+		menuItemLoadGame.setAccelerator(new KeyCodeCombination(KeyCode.L, KeyCombination.CONTROL_DOWN));
+		menuItemLoadGame.disableProperty().setValue(true);
 
-		menuItemQuitGame = new JMenuItem();
-		menuItemQuitGame.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q, InputEvent.CTRL_MASK));
-		if (!gamePreferences.isOSX()) {
-			menuGame.add(menuItemQuitGame);
-		}
-		add(menuGame);
-		
+		menuItemSameGame = new MenuItem();
+		menuItemSameGame.setAccelerator(new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN));
+		menuItemSameGame.disableProperty().setValue(true);
+
+		menuItemQuitGame = new MenuItem();
+		menuItemQuitGame.setAccelerator(new KeyCodeCombination(KeyCode.Q, KeyCombination.CONTROL_DOWN));
+
 		/**
 		 * Menu view
 		 * 
 		 */
-		menuView = new JMenu();
-		menuItemCenterView = new JMenuItem();
-		menuItemCenterView.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, 0));
-		menuItemCenterView.setEnabled(false);
-		menuView.add(menuItemCenterView);
-		
-		menuItemEurope = new JMenuItem();
-		menuItemEurope.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E, 0));
-		menuItemEurope.setEnabled(true);
-		menuView.add(menuItemEurope);
-		
-		add(menuView);
+		menuItemCenterView = new MenuItem();
+		menuItemCenterView.setAccelerator(new KeyCodeCombination(KeyCode.C));
+		menuItemCenterView.disableProperty().setValue(false);
+
+		menuItemEurope = new MenuItem();
+		menuItemEurope.setAccelerator(new KeyCodeCombination(KeyCode.E));
+		menuItemEurope.disableProperty().setValue(true);
 
 		/**
 		 * Menu unit
 		 * 
 		 */
-		menuUnit = new JMenu();
-		menuItemMove = new JMenuItem();
-		menuItemMove.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_M, 0));
-		menuItemMove.setEnabled(false);
-		menuUnit.add(menuItemMove);
-		add(menuUnit);
+		menuItemMove = new MenuItem();
+		menuItemMove.setAccelerator(new KeyCodeCombination(KeyCode.M));
+		menuItemMove.disableProperty().setValue(false);
 
 		/**
 		 * Preferences
 		 * 
 		 */
-		menuPrefereces = new JMenu();
-		rbMenuItemlanguageEn = new JRadioButtonMenuItem();
+		final ToggleGroup groupLanguage = new ToggleGroup();
+		rbMenuItemlanguageEn = new RadioMenuItem();
 		rbMenuItemlanguageEn.setSelected(gamePreferences.getLanguage().equals(Language.en));
-		rbMenuItemlanguageCz = new JRadioButtonMenuItem();
+		rbMenuItemlanguageEn.setToggleGroup(groupLanguage);
+		rbMenuItemlanguageCz = new RadioMenuItem();
 		rbMenuItemlanguageCz.setSelected(gamePreferences.getLanguage().equals(Language.cz));
-		final ButtonGroup groupLanguage = new ButtonGroup();
-		groupLanguage.add(rbMenuItemlanguageEn);
-		groupLanguage.add(rbMenuItemlanguageCz);
-		menuLanguage = new JMenu();
-		menuLanguage.add(rbMenuItemlanguageEn);
-		menuLanguage.add(rbMenuItemlanguageCz);
-		menuPrefereces.add(menuLanguage);
+		rbMenuItemlanguageCz.setToggleGroup(groupLanguage);
 
-		menuItemVolume = new JMenuItem();
-		menuItemVolume.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_V, InputEvent.CTRL_MASK));
-		menuPrefereces.add(menuItemVolume);
+		menuLanguage = new Menu();
+		menuLanguage.getItems().addAll(rbMenuItemlanguageEn, rbMenuItemlanguageCz);
 
-		menuItemAnimationSpeed= new JMenuItem();
-		menuItemAnimationSpeed.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A, InputEvent.CTRL_MASK));
-		menuPrefereces.add(menuItemAnimationSpeed);
+		menuItemVolume = new MenuItem();
+		menuItemVolume.setAccelerator(new KeyCodeCombination(KeyCode.V, KeyCombination.CONTROL_DOWN));
 
-		menuItemShowGrid = new JCheckBoxMenuItem();
-		menuItemShowGrid.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_G, 0));
+		menuItemAnimationSpeed = new MenuItem();
+		menuItemAnimationSpeed.setAccelerator(new KeyCodeCombination(KeyCode.A, KeyCombination.CONTROL_DOWN));
+
+		menuItemShowGrid = new CheckMenuItem();
+		menuItemShowGrid.setAccelerator(new KeyCodeCombination(KeyCode.G));
 		menuItemShowGrid.setSelected(gamePreferences.isGridShown());
-		menuPrefereces.add(menuItemShowGrid);
-
-		add(menuPrefereces);
-
+		
 		/**
 		 * Help
 		 */
-		menuHelp = new JMenu();
-		menuItemAbout = new JMenuItem();
-		menuHelp.add(menuItemAbout);
+		menuItemAbout = new MenuItem();
 
-		if(gamePreferences.isDevelopment()){
-			add(mainMenuDevelopment.getDevelopmentMenu());
-		}
-		
+		/**
+		 * menu
+		 */
+		menuGame = new Menu();
+		menuGame.getItems().addAll(menuItemNewGame, menuItemLoadGame, menuItemSameGame, menuItemQuitGame);
 		if (!gamePreferences.isOSX()) {
-			add(menuHelp);
+			menuGame.getItems().add(menuItemQuitGame);
 		}
+		menuView = new Menu();
+		menuView.getItems().addAll(menuItemCenterView, menuItemEurope);
+		menuUnit = new Menu();
+		menuUnit.getItems().addAll(menuItemMove);
+		menuPrefereces = new Menu();
+		menuPrefereces.getItems().addAll(menuLanguage, menuItemVolume, menuItemAnimationSpeed, menuItemShowGrid);
+
+		menuHelp = new Menu();
+		menuHelp.getItems().addAll(menuItemAbout);
+
+		menuBar = new MenuBar();
+		menuBar.getMenus().addAll(menuGame, menuView, menuUnit, menuPrefereces);
+		if (gamePreferences.isDevelopment()) {
+			menuBar.getMenus().add(mainMenuDevelopment.getDevelopmentMenu());
+		}
+		if (!gamePreferences.isOSX()) {
+			menuBar.getMenus().add(menuHelp);
+		}
+
 		updateLanguage();
 	}
 
@@ -211,67 +206,71 @@ public class MainMenuView extends JMenuBar implements MainMenuPresenter.Display 
 	}
 
 	@Override
-	public JMenuItem getMenuItemNewGame() {
+	public MenuItem getMenuItemNewGame() {
 		return menuItemNewGame;
 	}
 
 	@Override
-	public JMenuItem getMenuItemQuitGame() {
+	public MenuItem getMenuItemQuitGame() {
 		return menuItemQuitGame;
 	}
 
 	@Override
-	public JMenuItem getMenuItemSameGame() {
+	public MenuItem getMenuItemSameGame() {
 		return menuItemSameGame;
 	}
 
 	@Override
-	public JMenuItem getMenuItemLoadGame() {
+	public MenuItem getMenuItemLoadGame() {
 		return menuItemLoadGame;
 	}
 
 	@Override
-	public JMenuItem getMenuItemAbout() {
+	public MenuItem getMenuItemAbout() {
 		return menuItemAbout;
 	}
 
 	@Override
-	public JRadioButtonMenuItem getRbMenuItemlanguageEn() {
+	public RadioMenuItem getRbMenuItemlanguageEn() {
 		return rbMenuItemlanguageEn;
 	}
 
 	@Override
-	public JRadioButtonMenuItem getRbMenuItemlanguageCz() {
+	public RadioMenuItem getRbMenuItemlanguageCz() {
 		return rbMenuItemlanguageCz;
 	}
 
 	@Override
-	public JMenuItem getMenuItemVolume() {
+	public MenuItem getMenuItemVolume() {
 		return menuItemVolume;
 	}
 
 	@Override
-	public JCheckBoxMenuItem getMenuItemShowGrid() {
+	public CheckMenuItem getMenuItemShowGrid() {
 		return menuItemShowGrid;
 	}
 
 	@Override
-	public JMenuItem getMenuItemMove() {
+	public MenuItem getMenuItemMove() {
 		return menuItemMove;
 	}
 
 	@Override
-	public JMenuItem getMenuItemCenterView() {
+	public MenuItem getMenuItemCenterView() {
 		return menuItemCenterView;
 	}
 
 	@Override
-	public JMenuItem getMenuItemAnimationSpeed() {
+	public MenuItem getMenuItemAnimationSpeed() {
 		return menuItemAnimationSpeed;
 	}
 
 	@Override
-	public JMenuItem getMenuItemEurope() {
+	public MenuItem getMenuItemEurope() {
 		return menuItemEurope;
+	}
+
+	public MenuBar getMenuBar() {
+		return menuBar;
 	}
 }

@@ -30,7 +30,7 @@ public class MainFrameView extends JFrame implements MainFramePresenter.Display 
 			final MainMenuView mainMenu, final GamePreferences gamePreferences) {
 		super("MicroCol");
 		this.gamePreferences = Preconditions.checkNotNull(gamePreferences);
-		setJMenuBar(mainMenu);
+//		setJMenuBar(mainMenu);
 		cardLayout = new CardLayout();
 		getContentPane().setLayout(cardLayout);
 		getContentPane().add(mainPanelView, MainFramePresenter.MAIN_GAME_PANEL);
