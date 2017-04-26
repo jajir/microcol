@@ -127,7 +127,7 @@ public class MainMenuView implements MainMenuPresenter.Display {
 		menuItemShowGrid = new CheckMenuItem();
 		menuItemShowGrid.setAccelerator(new KeyCodeCombination(KeyCode.G));
 		menuItemShowGrid.setSelected(gamePreferences.isGridShown());
-		
+
 		/**
 		 * Help
 		 */
@@ -156,7 +156,9 @@ public class MainMenuView implements MainMenuPresenter.Display {
 		if (gamePreferences.isDevelopment()) {
 			menuBar.getMenus().add(mainMenuDevelopment.getDevelopmentMenu());
 		}
-		if (!gamePreferences.isOSX()) {
+		if (gamePreferences.isOSX()) {
+			menuBar.setUseSystemMenuBar(true);
+		} else {
 			menuBar.getMenus().add(menuHelp);
 		}
 
