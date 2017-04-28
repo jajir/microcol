@@ -46,6 +46,7 @@ public class MicroColModule extends AbstractModule {
 	@Override
 	protected void configure() {
 
+		bind(MainStageBuilder.class).in(Singleton.class);
 		bind(StatusBarMessageController.class).in(Singleton.class);
 
 		bind(GamePreferences.class).in(Singleton.class);
@@ -76,9 +77,8 @@ public class MicroColModule extends AbstractModule {
 		bind(GameFinishedController.class).in(Singleton.class);
 		bind(MouseOverTileChangedController.class).in(Singleton.class);
 		bind(UnitAttackedEventController.class).in(Singleton.class);
-		
+
 		bind(ModelEventManager.class).in(Singleton.class);
-		
 
 		/**
 		 * Initialize MVP classes
@@ -114,7 +114,7 @@ public class MicroColModule extends AbstractModule {
 		bind(RightPanelPresenter.class).asEagerSingleton();
 
 		bind(UnitsPanel.class).asEagerSingleton();
-		
+
 		bind(PersistingDialog.class).in(Singleton.class);
 
 		/**

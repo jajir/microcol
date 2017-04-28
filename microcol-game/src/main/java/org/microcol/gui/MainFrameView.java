@@ -11,6 +11,11 @@ import javax.swing.WindowConstants;
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
 
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+
 /**
  * MicroCol's main frame.
  */
@@ -25,12 +30,16 @@ public class MainFrameView extends JFrame implements MainFramePresenter.Display 
 
 	private final CardLayout cardLayout;
 
+	private final Scene scene;
+	
+	private final VBox box;
+
 	@Inject
 	public MainFrameView(final MainPanelView mainPanelView, final StartPanelView startPanelView,
 			final MainMenuView mainMenu, final GamePreferences gamePreferences) {
 		super("MicroCol");
 		this.gamePreferences = Preconditions.checkNotNull(gamePreferences);
-//		setJMenuBar(mainMenu);
+		// setJMenuBar(mainMenu);
 		cardLayout = new CardLayout();
 		getContentPane().setLayout(cardLayout);
 		getContentPane().add(mainPanelView, MainFramePresenter.MAIN_GAME_PANEL);
@@ -38,6 +47,15 @@ public class MainFrameView extends JFrame implements MainFramePresenter.Display 
 		cardLayout.show(getContentPane(), MainFramePresenter.MAIN_GAME_PANEL);
 		loadPreferences();
 		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+
+		box = new VBox();
+		scene = new Scene(box);
+		
+		HBox buttons =new HBox();
+		box.getChildren().add(buttons);
+		
+		Button buttonCurrent = new Button("New game!!");
+		buttons.getChildren().add(buttonCurrent);
 	}
 
 	private void loadPreferences() {
@@ -57,6 +75,7 @@ public class MainFrameView extends JFrame implements MainFramePresenter.Display 
 	/**
 	 * When screen resolution is higher that 800 x 600 than create window of 2 /
 	 * 3 of visible monitor size and center it.
+	 * 
 	 * @return default monitor size
 	 */
 	private Rectangle getDefaultWindowSizeAndPosition() {
@@ -93,6 +112,14 @@ public class MainFrameView extends JFrame implements MainFramePresenter.Display 
 	@Override
 	public JFrame getFrame() {
 		return this;
+	}
+
+	public Scene getScene() {
+		return scene;
+	}
+
+	public VBox getBox() {
+		return box;
 	}
 
 }
