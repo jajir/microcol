@@ -14,6 +14,9 @@ import javax.swing.border.EtchedBorder;
 
 import com.google.inject.Inject;
 
+import javafx.scene.control.Label;
+import javafx.scene.layout.HBox;
+
 public class StatusBarView extends JPanel implements StatusBarPresenter.Display {
 
 	/**
@@ -21,36 +24,49 @@ public class StatusBarView extends JPanel implements StatusBarPresenter.Display 
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private final JLabel statusBarDescription;
+	private final HBox box;
 
-	private final JLabel labelEra;
+	private final Label statusBarDescription;
+
+	private final Label labelEra;
 
 	@Inject
 	public StatusBarView() {
+
 		this.setLayout(new GridBagLayout());
 
-		statusBarDescription = new JLabel();
-		add(statusBarDescription, new GridBagConstraints(0, 0, 1, 1, 1D, 0D, GridBagConstraints.CENTER,
-				GridBagConstraints.HORIZONTAL, new Insets(0, 10, 0, 3), 0, 0));
+		statusBarDescription = new Label();
+		labelEra = new Label();
+		
+		//TODO JJ clean up class
+		
+//		add(statusBarDescription, new GridBagConstraints(0, 0, 1, 1, 1D, 0D, GridBagConstraints.CENTER,
+//				GridBagConstraints.HORIZONTAL, new Insets(0, 10, 0, 3), 0, 0));
+//
+//		add(new JSeparator(SwingConstants.VERTICAL), new GridBagConstraints(1, 0, 1, 1, 0D, 1D,
+//				GridBagConstraints.CENTER, GridBagConstraints.VERTICAL, new Insets(0, 3, 0, 15), 0, 0));
+//
+//		add(labelEra, new GridBagConstraints(2, 0, 1, 1, 0D, 0D, GridBagConstraints.CENTER, GridBagConstraints.NONE,
+//				new Insets(0, 3, 0, 15), 0, 0));
+//		Border border = BorderFactory.createBevelBorder(EtchedBorder.LOWERED);
+//		setBorder(border);
+		
+		box = new HBox();
+		box.getChildren().addAll(statusBarDescription,labelEra);
 
-		add(new JSeparator(SwingConstants.VERTICAL), new GridBagConstraints(1, 0, 1, 1, 0D, 1D,
-				GridBagConstraints.CENTER, GridBagConstraints.VERTICAL, new Insets(0, 3, 0, 15), 0, 0));
-
-		labelEra = new JLabel();
-		add(labelEra, new GridBagConstraints(2, 0, 1, 1, 0D, 0D, GridBagConstraints.CENTER, GridBagConstraints.NONE,
-				new Insets(0, 3, 0, 15), 0, 0));
-
-		Border border = BorderFactory.createBevelBorder(EtchedBorder.LOWERED);
-		setBorder(border);
 	}
 
 	@Override
-	public JLabel getStatusBarDescription() {
+	public Label getStatusBarDescription() {
 		return statusBarDescription;
 	}
 
 	@Override
-	public JLabel getLabelEra() {
+	public Label getLabelEra() {
 		return labelEra;
+	}
+
+	public HBox getBox() {
+		return box;
 	}
 }

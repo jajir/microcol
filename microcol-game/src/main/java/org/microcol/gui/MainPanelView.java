@@ -12,6 +12,9 @@ import org.microcol.gui.panelview.GamePanelView;
 
 import com.google.inject.Inject;
 
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+
 /**
  * Panel hold whole game screen without status bar.
  */
@@ -22,9 +25,12 @@ public class MainPanelView extends JPanel {
 	 */
 	private static final long serialVersionUID = 1L;
 
+	private final VBox box;;
+
 	@Inject
 	public MainPanelView(final GamePanelView gamePanel, final StatusBarView statusBar,
 			final RightPanelView rightPanelView) {
+		//TODO JJ remove swing classes
 		this.setLayout(new GridBagLayout());
 		JScrollPane scrollPaneGamePanel = new JScrollPane(gamePanel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
 				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
@@ -38,6 +44,15 @@ public class MainPanelView extends JPanel {
 
 		add(statusBar, new GridBagConstraints(0, 1, 2, 1, 1.0D, 0.0D, GridBagConstraints.NORTH, GridBagConstraints.BOTH,
 				new Insets(0, 0, 0, 0), 0, 0));
+
+		box = new VBox();
+		HBox hBox = new HBox();
+		hBox.getChildren().addAll(gamePanel.getCanvas());
+		box.getChildren().addAll(hBox, statusBar.getBox());
+	}
+
+	public VBox getBox() {
+		return box;
 	}
 
 }

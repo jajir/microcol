@@ -30,13 +30,11 @@ public class MainFrameView extends JFrame implements MainFramePresenter.Display 
 
 	private final CardLayout cardLayout;
 
-	private final Scene scene;
-	
 	private final VBox box;
 
 	@Inject
 	public MainFrameView(final MainPanelView mainPanelView, final StartPanelView startPanelView,
-			final MainMenuView mainMenu, final GamePreferences gamePreferences) {
+			final GamePreferences gamePreferences) {
 		super("MicroCol");
 		this.gamePreferences = Preconditions.checkNotNull(gamePreferences);
 		// setJMenuBar(mainMenu);
@@ -49,13 +47,11 @@ public class MainFrameView extends JFrame implements MainFramePresenter.Display 
 		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 
 		box = new VBox();
-		scene = new Scene(box);
-		
-		HBox buttons =new HBox();
-		box.getChildren().add(buttons);
-		
-		Button buttonCurrent = new Button("New game!!");
-		buttons.getChildren().add(buttonCurrent);
+		box.getChildren().add(mainPanelView.getBox());
+
+//		HBox buttons = new HBox();
+//		Button buttonCurrent = new Button("New game!!");
+//		buttons.getChildren().add(buttonCurrent);
 	}
 
 	private void loadPreferences() {
@@ -112,10 +108,6 @@ public class MainFrameView extends JFrame implements MainFramePresenter.Display 
 	@Override
 	public JFrame getFrame() {
 		return this;
-	}
-
-	public Scene getScene() {
-		return scene;
 	}
 
 	public VBox getBox() {

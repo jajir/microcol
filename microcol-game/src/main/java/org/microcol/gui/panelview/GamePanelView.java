@@ -37,6 +37,8 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 
+import javafx.scene.canvas.Canvas;
+
 /**
  * View for main game panel.
  */
@@ -51,6 +53,8 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 
 	public static final int TOTAL_TILE_WIDTH_IN_PX = TILE_WIDTH_IN_PX;
 
+	private final Canvas canvas;
+	
 	private final ImageProvider imageProvider;
 
 	private VolatileImage dbImage;
@@ -110,6 +114,9 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 		animationManager = new AnimationManager();
 		final GamePanelView map = this;
 
+		//TODO JJ specify canvas size
+		canvas = new Canvas(800, 600);
+		
 		nextTurnController.addListener(w -> map.repaint());
 
 		setAutoscrolls(true);
@@ -463,6 +470,10 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 	@Override
 	public VisualDebugInfo getVisualDebugInfo() {
 		return visualDebugInfo;
+	}
+
+	public Canvas getCanvas() {
+		return canvas;
 	}
 
 }
