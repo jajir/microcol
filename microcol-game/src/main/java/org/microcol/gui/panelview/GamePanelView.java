@@ -1,20 +1,8 @@
 package org.microcol.gui.panelview;
 
-import java.awt.BasicStroke;
-import java.awt.Color;
-import java.awt.Cursor;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Image;
-import java.awt.Rectangle;
-import java.awt.RenderingHints;
-import java.awt.Toolkit;
-import java.awt.image.VolatileImage;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import javax.swing.JPanel;
-import javax.swing.JViewport;
 import javax.swing.Timer;
 
 import org.microcol.gui.DialogFigth;
@@ -37,27 +25,24 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 
+import javafx.animation.AnimationTimer;
+import javafx.scene.Cursor;
+import javafx.scene.ImageCursor;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
 
 /**
  * View for main game panel.
  */
-public class GamePanelView extends JPanel implements GamePanelPresenter.Display {
-
-	/**
-	 * Default serialVersionUID.
-	 */
-	private static final long serialVersionUID = 1L;
+public class GamePanelView implements GamePanelPresenter.Display {
 
 	private static final int TILE_WIDTH_IN_PX = 35;
 
 	public static final int TOTAL_TILE_WIDTH_IN_PX = TILE_WIDTH_IN_PX;
 
 	private final Canvas canvas;
-	
-	private final ImageProvider imageProvider;
 
-	private VolatileImage dbImage;
+	private final ImageProvider imageProvider;
 
 	private final Cursor gotoModeCursor;
 
@@ -107,28 +92,35 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 		this.paintService = Preconditions.checkNotNull(paintService);
 		this.visualDebugInfo = new VisualDebugInfo();
 		oneTurnMoveHighlighter = new OneTurnMoveHighlighter();
-		Toolkit toolkit = Toolkit.getDefaultToolkit();
-		gotoModeCursor = toolkit.createCustomCursor(imageProvider.getImage(ImageProvider.IMG_CURSOR_GOTO),
-				new java.awt.Point(1, 1), "gotoModeCursor");
+		gotoModeCursor = new ImageCursor(imageProvider.getImage(ImageProvider.IMG_CURSOR_GOTO), 1, 1);
 		// excludePainting = new ExcludePainting();
 		animationManager = new AnimationManager();
 		final GamePanelView map = this;
 
-		//TODO JJ specify canvas size
+		// TODO JJ specify canvas size
 		canvas = new Canvas(800, 600);
-		
+
 		nextTurnController.addListener(w -> map.repaint());
 
-		setAutoscrolls(true);
+		// setAutoscrolls(true);
 
 		fpsCounter = new FpsCounter();
 		fpsCounter.start();
 
 		isGridShown = true;
-		timer = new Timer(1000 / DEFAULT_FRAME_PER_SECOND, event -> nextGameTick());
+//		timer = new Timer(1000 / DEFAULT_FRAME_PER_SECOND, event -> nextGameTick());
+		
+		new AnimationTimer() {
+			
+			@Override
+			public void handle(long now) {
+				nextGameTick();
+				repaint();
+			}
+		}.start();
 	}
 
-	private final Timer timer;
+	//private final Timer timer;
 
 	/**
 	 * Define how many times per second will be screen repainted (FPS). Real FPS
@@ -140,15 +132,16 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 	@Override
 	public void initGame(final boolean idGridShown) {
 		this.isGridShown = idGridShown;
-		if (!timer.isRunning()) {
-			timer.start();
-		}
+		//FIXME JJ correct it
+//		if (!timer.isRunning()) {
+//			timer.start();
+//		}
 	}
 
 	@Override
 	public void stopTimer() {
 		fpsCounter.stop();
-		timer.stop();
+//		timer.stop();
 	}
 
 	/**
@@ -180,17 +173,15 @@ public class GamePanelView extends JPanel implements GamePanelPresenter.Display 
 		return this;
 	}
 
-	private VolatileImage prepareImage(final Area area) {
-		final Point p = Point.of(area.getWidth(), area.getHeight()).multiply(TILE_WIDTH_IN_PX);
-		return createVolatileImage(p.getX(), p.getY());
-	}
 
+	public void repaint(){
+		paint(canvas.getGraphicsContext2D());
+	}
+	
 	/**
 	 * Call original paint with antialising on.
 	 */
-	@Override
-	public void paint(final Graphics g) {
-		super.paint(g);
+	public void paint(final GraphicsContext g) {
 		final Graphics2D g2d = (Graphics2D) g;
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		final Area area = new Area((JViewport) this.getParent(), gameController.getModel().getMap());
