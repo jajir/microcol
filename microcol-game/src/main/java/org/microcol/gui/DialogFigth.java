@@ -61,9 +61,10 @@ public class DialogFigth extends AbstractDialog {
 		/**
 		 * Fight image
 		 */
-		final ImageIcon swords = new ImageIcon(imageProvider.getImage(ImageProvider.IMG_CROSSED_SWORDS));
-		add(new JLabel(swords), new GridBagConstraints(1, 1, 1, 7, 1.0D, 1.0D, GridBagConstraints.SOUTH,
-				GridBagConstraints.NONE, new Insets(BORDER, BORDER, BORDER, BORDER), 0, 0));
+		//FIXME JJ image icon
+//		final ImageIcon swords = new ImageIcon(imageProvider.getImage(ImageProvider.IMG_CROSSED_SWORDS));
+//		add(new JLabel(swords), new GridBagConstraints(1, 1, 1, 7, 1.0D, 1.0D, GridBagConstraints.SOUTH,
+//				GridBagConstraints.NONE, new Insets(BORDER, BORDER, BORDER, BORDER), 0, 0));
 
 		/**
 		 * Defender
@@ -104,9 +105,10 @@ public class DialogFigth extends AbstractDialog {
 		add(labelname, new GridBagConstraints(column, 2, 1, 1, 0.0D, 0.0D, GridBagConstraints.NORTHWEST,
 				GridBagConstraints.NONE, new Insets(0, BORDER_BIG, 0, BORDER_BIG), 0, 0));
 
-		final ImageIcon unitImage = new ImageIcon(imageProvider.getUnitImage(unit.getType()));
-		add(new JLabel(unitImage), new GridBagConstraints(column, 3, 1, 1, 0.0D, 0.0D, GridBagConstraints.NORTHWEST,
-				GridBagConstraints.NONE, new Insets(0, BORDER_BIG, BORDER, BORDER_BIG), 0, 0));
+		//TODO JJ correct it
+//		final ImageIcon unitImage = new ImageIcon(imageProvider.getUnitImage(unit.getType()));
+//		add(new JLabel(unitImage), new GridBagConstraints(column, 3, 1, 1, 0.0D, 0.0D, GridBagConstraints.NORTHWEST,
+//				GridBagConstraints.NONE, new Insets(0, BORDER_BIG, BORDER, BORDER_BIG), 0, 0));
 	}
 
 	public boolean isUserChooseFight() {

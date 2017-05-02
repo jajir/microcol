@@ -54,6 +54,7 @@ public class MainFrameView extends JFrame implements MainFramePresenter.Display 
 //		buttons.getChildren().add(buttonCurrent);
 	}
 
+	//TODO JJ should be in MainStageBuilder class
 	private void loadPreferences() {
 		final int state = gamePreferences.getMainFrameState();
 		final Rectangle bound = gamePreferences.getMainFramePosition();
@@ -74,6 +75,7 @@ public class MainFrameView extends JFrame implements MainFramePresenter.Display 
 	 * 
 	 * @return default monitor size
 	 */
+	//TODO JJ should be in MainStageBuilder class
 	private Rectangle getDefaultWindowSizeAndPosition() {
 		final Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		double width = screenSize.getWidth();
@@ -110,6 +112,7 @@ public class MainFrameView extends JFrame implements MainFramePresenter.Display 
 		return this;
 	}
 
+	@Override
 	public VBox getBox() {
 		return box;
 	}

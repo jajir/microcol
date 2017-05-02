@@ -3,8 +3,6 @@ package org.microcol.gui;
 import java.awt.Graphics2D;
 import java.awt.GraphicsConfiguration;
 import java.awt.GraphicsEnvironment;
-import java.awt.Image;
-import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
@@ -16,6 +14,8 @@ import org.microcol.model.Terrain;
 import org.microcol.model.UnitType;
 
 import com.google.common.collect.ImmutableMap;
+
+import javafx.scene.image.Image;
 
 /**
  * Provide image instances.
@@ -67,7 +67,7 @@ public class ImageProvider {
 
 	private static final String BASE_PACKAGE = "images";
 
-	private final Map<String, BufferedImage> images;
+	private final Map<String, Image> images;
 
 	private final Map<Terrain, Image> terrainMap = ImmutableMap.<Terrain, Image>builder()
 			.put(Terrain.CONTINENT, getRawImage(IMG_TILE_LAND)).put(Terrain.OCEAN, getRawImage(IMG_TILE_OCEAN)).build();
@@ -89,7 +89,7 @@ public class ImageProvider {
 	 * @return loaded image
 	 */
 	public Image getImage(final String name) {
-		BufferedImage img = images.get(name);
+		Image img = images.get(name);
 		if (img == null) {
 			img = ImageProvider.getRawImage(name);
 			if (img == null) {
@@ -102,41 +102,6 @@ public class ImageProvider {
 	}
 
 	/**
-	 * This should improve image draw speed.
-	 *
-	 * @param image
-	 *            required image
-	 * @return improved image
-	 */
-	@SuppressWarnings("unused")
-	private BufferedImage getCompatibleImage(final BufferedImage image) {
-		// obtain the current system graphical settings
-		GraphicsConfiguration gfx_config = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice()
-				.getDefaultConfiguration();
-
-		/*
-		 * if image is already compatible and optimized for current system
-		 * settings, simply return it
-		 */
-		if (image.getColorModel().equals(gfx_config.getColorModel()))
-			return image;
-
-		// image is not optimized, so create a new image that is
-		BufferedImage new_image = gfx_config.createCompatibleImage(image.getWidth(), image.getHeight(),
-				image.getTransparency());
-
-		// get the graphics context of the new image to draw the old image on
-		Graphics2D g2d = (Graphics2D) new_image.getGraphics();
-
-		// actually draw the image and dispose of context no longer needed
-		g2d.drawImage(image, 0, 0, null);
-		g2d.dispose();
-
-		// return the new optimized image
-		return new_image;
-	}
-
-	/**
 	 * Simplify loading image from resource. Path should look like: <code>
 	 * org/microcol/images/unit-60x60.gif
 	 * </code>. Class suppose that all images are in directory <i>images</i>.
@@ -145,18 +110,14 @@ public class ImageProvider {
 	 *            path at classpath where is stored image
 	 * @return return {@link BufferedImage} object
 	 */
-	public static BufferedImage getRawImage(final String rawPath) {
+	public static Image getRawImage(final String rawPath) {
 		final String path = BASE_PACKAGE + "/" + rawPath;
-		try {
-			ClassLoader cl = ImageProvider.class.getClassLoader();
-			final InputStream in = cl.getResourceAsStream(path);
-			if (in == null) {
-				throw new MicroColException("Unable to load file '" + path + "'.");
-			} else {
-				return ImageIO.read(cl.getResourceAsStream(path));
-			}
-		} catch (IOException e) {
-			throw new MicroColException("Unable to load file '" + path + "'.", e);
+		ClassLoader cl = ImageProvider.class.getClassLoader();
+		final InputStream in = cl.getResourceAsStream(path);
+		if (in == null) {
+			throw new MicroColException("Unable to load file '" + path + "'.");
+		} else {
+			return new Image(cl.getResourceAsStream(path));
 		}
 	}
 

@@ -1,13 +1,5 @@
 package org.microcol.gui;
 
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-
-import javax.swing.JButton;
-import javax.swing.JPanel;
-
 import org.microcol.gui.event.ChangeLanguageController;
 import org.microcol.gui.event.ChangeLanguageEvent;
 import org.microcol.gui.event.FocusedTileController;
@@ -24,15 +16,18 @@ import org.microcol.model.Player;
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
 
+import javafx.scene.control.Button;
+import javafx.scene.layout.GridPane;
+
 public class RightPanelPresenter implements Localized {
 
 	public interface Display {
 
-		JButton getNextTurnButton();
+		Button getNextTurnButton();
 
 		void showTile(final FocusedTileEvent event);
 
-		JPanel getRightPanel();
+		GridPane getBox();
 
 		void setOnMovePlayer(Player player);
 	}
@@ -49,34 +44,24 @@ public class RightPanelPresenter implements Localized {
 			final TurnStartedController turnStartedController) {
 		this.display = Preconditions.checkNotNull(display);
 		display.getNextTurnButton().setText(getText().get("nextTurnButton"));
-		display.getNextTurnButton().setEnabled(false);
+		display.getNextTurnButton().setDisable(true);
 
-		display.getNextTurnButton().addActionListener(e -> {
-			display.getNextTurnButton().setEnabled(false);
+		display.getNextTurnButton().setOnAction(e -> {
+			display.getNextTurnButton().setDisable(true);
 			gameController.nextTurn();
 		});
 
-		display.getNextTurnButton().addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyPressed(final KeyEvent keyEvent) {
-				keyController.fireEvent(keyEvent);
-			}
+		display.getNextTurnButton().setOnKeyPressed(e -> {
+			keyController.fireEvent(e);
 		});
 
-		display.getNextTurnButton().addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseEntered(final MouseEvent e) {
-				statusBarMessageController
-						.fireEvent(new StatusBarMessageEvent(getText().get("nextTurnButton.desctiption")));
-			}
+		display.getNextTurnButton().setOnMouseEntered(event -> {
+			statusBarMessageController
+					.fireEvent(new StatusBarMessageEvent(getText().get("nextTurnButton.desctiption")));
 		});
 
-		display.getRightPanel().addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseEntered(final MouseEvent e) {
-				statusBarMessageController
-						.fireEvent(new StatusBarMessageEvent(getText().get("rightPanel.description")));
-			}
+		display.getBox().setOnMouseEntered(e -> {
+			statusBarMessageController.fireEvent(new StatusBarMessageEvent(getText().get("rightPanel.description")));
 		});
 
 		changeLanguangeController.addListener(this::onLanguageWasChanged);
@@ -84,7 +69,7 @@ public class RightPanelPresenter implements Localized {
 		turnStartedController.addListener(event -> {
 			display.setOnMovePlayer(event.getPlayer());
 			if (event.getPlayer().isHuman()) {
-				display.getNextTurnButton().setEnabled(true);
+				display.getNextTurnButton().setDisable(false);
 			}
 		});
 	}

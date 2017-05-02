@@ -19,6 +19,8 @@ import org.slf4j.LoggerFactory;
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
 
+import javafx.scene.layout.VBox;
+
 /**
  * MicroCol's main frame.
  */
@@ -31,6 +33,8 @@ public class MainFramePresenter {
 	public interface Display {
 
 		JFrame getFrame();
+
+		VBox getBox();
 
 		void showPanel(String panelName);
 	}
@@ -48,11 +52,8 @@ public class MainFramePresenter {
 			final GamePreferences gamePreferences, final ExitGameController exitGameController) {
 		this.gamePreferences = Preconditions.checkNotNull(gamePreferences);
 		this.display = Preconditions.checkNotNull(display);
-		display.getFrame().addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyPressed(final KeyEvent e) {
-				keyController.fireEvent(e);
-			}
+		display.getBox().setOnKeyPressed(e -> {
+			keyController.fireEvent(e);
 		});
 
 		display.getFrame().addComponentListener(new ComponentAdapter() {

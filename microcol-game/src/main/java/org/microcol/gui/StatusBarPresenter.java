@@ -35,10 +35,10 @@ public class StatusBarPresenter implements Localized {
 			setYearText(display.getLabelEra(), event.getModel().getCalendar());
 			display.getStatusBarDescription().setText("");
 		});
-		display.getLabelEra().setOnMouseDragEntered(event -> {
+		display.getLabelEra().setOnMouseEntered(event -> {
 			statusBarMessageController.fireEvent(new StatusBarMessageEvent(getText().get("statusBar.era.description")));
 		});
-		display.getStatusBarDescription().setOnMouseDragEntered(event -> {
+		display.getStatusBarDescription().setOnMouseEntered(event -> {
 			statusBarMessageController
 					.fireEvent(new StatusBarMessageEvent(getText().get("statusBar.status.description")));
 		});

@@ -119,10 +119,6 @@ public class MicroCol2 {
 		}
 		SwingUtilities.invokeLater(() -> {
 			try {
-				final MainFrameView mainFrame = injector.getInstance(MainFrameView.class);
-				final ApplicationController applicationController = injector.getInstance(ApplicationController.class);
-				mainFrame.setVisible(true);
-				applicationController.startApplication();
 			} catch (Exception e) {
 				e.printStackTrace();
 				/**
