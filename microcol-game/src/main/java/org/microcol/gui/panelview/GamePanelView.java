@@ -112,10 +112,11 @@ public class GamePanelView implements GamePanelPresenter.Display {
 		fpsCounter.start();
 
 		isGridShown = true;
-//		timer = new Timer(1000 / DEFAULT_FRAME_PER_SECOND, event -> nextGameTick());
-		
+		// timer = new Timer(1000 / DEFAULT_FRAME_PER_SECOND, event ->
+		// nextGameTick());
+
 		new AnimationTimer() {
-			
+
 			@Override
 			public void handle(long now) {
 				nextGameTick();
@@ -124,7 +125,7 @@ public class GamePanelView implements GamePanelPresenter.Display {
 		}.start();
 	}
 
-	//private final Timer timer;
+	// private final Timer timer;
 
 	/**
 	 * Define how many times per second will be screen repainted (FPS). Real FPS
@@ -136,16 +137,16 @@ public class GamePanelView implements GamePanelPresenter.Display {
 	@Override
 	public void initGame(final boolean idGridShown) {
 		this.isGridShown = idGridShown;
-		//FIXME JJ correct it
-//		if (!timer.isRunning()) {
-//			timer.start();
-//		}
+		// FIXME JJ correct it
+		// if (!timer.isRunning()) {
+		// timer.start();
+		// }
 	}
 
 	@Override
 	public void stopTimer() {
 		fpsCounter.stop();
-//		timer.stop();
+		// timer.stop();
 	}
 
 	/**
@@ -165,14 +166,14 @@ public class GamePanelView implements GamePanelPresenter.Display {
 	}
 
 	public void scrollToPoint(final Point point) {
-		//FIXME JJ scroll to specified point
-//		final ScrollPane sp = (ScrollPane)canvas.getParent();
-//		final Bounds bounds =sp.getViewportBounds();
-//		final JViewport viewPort = (JViewport) getParent();
-//		final Rectangle view = viewPort.getViewRect();
-//		view.x = point.getX();
-//		view.y = point.getY();
-//		scrollRectToVisible(view);
+		// FIXME JJ scroll to specified point
+		// final ScrollPane sp = (ScrollPane)canvas.getParent();
+		// final Bounds bounds =sp.getViewportBounds();
+		// final JViewport viewPort = (JViewport) getParent();
+		// final Rectangle view = viewPort.getViewRect();
+		// view.x = point.getX();
+		// view.y = point.getY();
+		// scrollRectToVisible(view);
 	}
 
 	@Override
@@ -180,42 +181,39 @@ public class GamePanelView implements GamePanelPresenter.Display {
 		return this;
 	}
 
-
-	public void repaint(){
+	public void repaint() {
 		paint(canvas.getGraphicsContext2D());
 	}
-	
+
 	/**
 	 * Paint everything.
 	 */
 	public void paint(final GraphicsContext g) {
 		final Area area = getArea();
-		
-		
-			/**
-			 * Following background drawing just verify that there are no
-			 * uncovered pixels.
-			 */
-			// dbg.setFill(Color.YELLOW);
-			// dbg.fillRect(0, 0, getWidth(), getHeight());
 
-			paintTiles(g, area);
-			paintUnits(g, gameController.getModel(), area);
-			paintGrid(g, area);
-			paintCursor(g, area);
-			paintSteps(g, area);
-			paintAnimation(g, area);
-			paintService.paintDebugInfo(g, visualDebugInfo, area);
-			final Point p = Point.of(area.getTopLeft().add(Location.of(-1, -1)));
-//			g.drawImage(dbImage, p.getX(), p.getY());
-			if (gameController.getModel().getCurrentPlayer().isComputer()) {
-				/**
-				 * If move computer that make game field darker.
-				 */
-//				g.drawImage(dbImage, p.getX(), p.getY(), null);
-				g.setFill(new Color(0, 0, 0, 64));
-//				g.fillRect(p.getX(), p.getY(), dbImage.getWidth(this), dbImage.getHeight(this));
-			}
+		/**
+		 * Following background drawing just verify that there are no uncovered
+		 * pixels.
+		 */
+		// dbg.setFill(Color.YELLOW);
+		// dbg.fillRect(0, 0, getWidth(), getHeight());
+
+		paintTiles(g, area);
+		paintUnits(g, gameController.getModel(), area);
+		paintGrid(g, area);
+		paintCursor(g, area);
+		paintSteps(g, area);
+		paintAnimation(g, area);
+		paintService.paintDebugInfo(g, visualDebugInfo, area);
+		final Point p = Point.of(area.getTopLeft().add(Location.of(-1, -1)));
+		// g.drawImage(dbImage, p.getX(), p.getY());
+		if (gameController.getModel().getCurrentPlayer().isComputer()) {
+			/**
+			 * If move computer that make game field darker.
+			 */
+			g.setFill(new Color(0, 0, 0, 0.34));
+			g.fillRect(p.getX(), p.getY(), 600, 400);
+		}
 		fpsCounter.screenWasPainted();
 	}
 
@@ -238,9 +236,8 @@ public class GamePanelView implements GamePanelPresenter.Display {
 				final Location location = Location.of(i, j);
 				final Point point = area.convert(location);
 				final Terrain terrain = gameController.getModel().getMap().getTerrainAt(location);
-				graphics.drawImage(imageProvider.getTerrainImage(terrain), point.getX(), point.getY(),
-						point.getX() + TILE_WIDTH_IN_PX, point.getY() + TILE_WIDTH_IN_PX, 0, 0, TILE_WIDTH_IN_PX,
-						TILE_WIDTH_IN_PX);
+				graphics.drawImage(imageProvider.getTerrainImage(terrain), 0, 0, TILE_WIDTH_IN_PX, TILE_WIDTH_IN_PX,
+						point.getX(), point.getY(), TILE_WIDTH_IN_PX, TILE_WIDTH_IN_PX);
 				if (oneTurnMoveHighlighter.isItHighlighted(location)) {
 					graphics.setFill(new Color(255, 200, 255, 100));
 					graphics.fillRect(point.getX(), point.getY(), TILE_WIDTH_IN_PX, TILE_WIDTH_IN_PX);
@@ -436,18 +433,18 @@ public class GamePanelView implements GamePanelPresenter.Display {
 	}
 
 	public void onViewPortResize() {
-		//FIXME JJ is it necessary?
-//		dbImage = null;
+		// FIXME JJ is it necessary?
+		// dbImage = null;
 	}
-	
-	private ScrollPane getScrollPane(){
-		final ScrollPane sp = (ScrollPane)canvas.getParent();
+
+	private ScrollPane getScrollPane() {
+		final ScrollPane sp = (ScrollPane) canvas.getParent();
 		return sp;
 	}
-	
+
 	@Override
-	public Bounds getViewportBounds(){
-		return getScrollPane().getViewportBounds(); 
+	public Bounds getViewportBounds() {
+		return getScrollPane().getViewportBounds();
 	}
 
 	@Override
