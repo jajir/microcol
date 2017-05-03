@@ -1,32 +1,24 @@
 package org.microcol.gui;
 
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-
-import javax.swing.JButton;
-import javax.swing.JPanel;
-
 import org.microcol.gui.util.Localized;
 
 import com.google.inject.Inject;
 
-public class StartPanelView extends JPanel implements StartPanelPresenter.Display, Localized {
+import javafx.scene.control.Button;
+import javafx.scene.layout.VBox;
 
-	/**
-	 * Default serialVersionUID.
-	 */
-	private static final long serialVersionUID = 1L;
+public class StartPanelView implements StartPanelPresenter.Display, Localized {
 
-	private final JButton buttonStartNewGame;
+	private final Button buttonStartNewGame;
+
+	private final VBox box;
 
 	@Inject
 	public StartPanelView() {
-		this.setLayout(new GridBagLayout());
-		buttonStartNewGame = new JButton();
-		add(buttonStartNewGame, new GridBagConstraints(0, 0, 1, 1, 1.0D, 1.0D, GridBagConstraints.CENTER,
-				GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
-		
+		box = new VBox();
+		buttonStartNewGame = new Button();
+		box.getChildren().add(buttonStartNewGame);
+
 		updateLanguage();
 	}
 
@@ -36,8 +28,12 @@ public class StartPanelView extends JPanel implements StartPanelPresenter.Displa
 	}
 
 	@Override
-	public JButton getButtonStartNewGame() {
+	public Button getButtonStartNewGame() {
 		return buttonStartNewGame;
+	}
+
+	public VBox getBox() {
+		return box;
 	}
 
 }

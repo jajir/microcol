@@ -1,11 +1,11 @@
 package org.microcol.gui;
 
-import javax.swing.JButton;
-
 import org.microcol.gui.event.ChangeLanguageController;
 import org.microcol.gui.event.model.GameController;
 
 import com.google.inject.Inject;
+
+import javafx.scene.control.Button;
 
 /**
  * Panel that is visible after game start.
@@ -16,14 +16,14 @@ public class StartPanelPresenter {
 
 		void updateLanguage();
 
-		JButton getButtonStartNewGame();
+		Button getButtonStartNewGame();
 
 	}
 
 	@Inject
 	public StartPanelPresenter(final StartPanelPresenter.Display display, final GameController gameController,
 			final ChangeLanguageController changeLanguageController) {
-		display.getButtonStartNewGame().addActionListener(e -> gameController.startNewGame());
+		display.getButtonStartNewGame().setOnAction(e -> gameController.startNewGame());
 		changeLanguageController.addListener(listener -> display.updateLanguage());
 	}
 

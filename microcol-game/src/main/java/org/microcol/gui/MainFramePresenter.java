@@ -1,14 +1,6 @@
 package org.microcol.gui;
 
 import java.awt.Rectangle;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-
-import javax.swing.JFrame;
 
 import org.microcol.gui.event.ExitGameController;
 import org.microcol.gui.event.ExitGameEvent;
@@ -32,8 +24,6 @@ public class MainFramePresenter {
 
 	public interface Display {
 
-		JFrame getFrame();
-
 		VBox getBox();
 
 		void showPanel(String panelName);
@@ -56,42 +46,42 @@ public class MainFramePresenter {
 			keyController.fireEvent(e);
 		});
 
-		display.getFrame().addComponentListener(new ComponentAdapter() {
-			@Override
-			public void componentMoved(ComponentEvent event) {
-				if (display.getFrame().getExtendedState() == JFrame.NORMAL) {
-					lastNormalBounds = display.getFrame().getBounds();
-				}
-			}
-
-			@Override
-			public void componentResized(ComponentEvent event) {
-				if (display.getFrame().getExtendedState() == JFrame.NORMAL) {
-					lastNormalBounds = display.getFrame().getBounds();
-				}
-			}
-		});
-
-		exitGameController.addListener(event -> {
-			savePreferences();
-			display.getFrame().dispose();
-		});
-
-		display.getFrame().addWindowListener(new WindowAdapter() {
-			@Override
-			public void windowClosing(WindowEvent event) {
-				logger.debug("Event windowClosing");
-				exitGameController.fireEvent(new ExitGameEvent());
-			}
-		});
+//		display.getFrame().addComponentListener(new ComponentAdapter() {
+//			@Override
+//			public void componentMoved(ComponentEvent event) {
+//				if (display.getFrame().getExtendedState() == JFrame.NORMAL) {
+//					lastNormalBounds = display.getFrame().getBounds();
+//				}
+//			}
+//
+//			@Override
+//			public void componentResized(ComponentEvent event) {
+//				if (display.getFrame().getExtendedState() == JFrame.NORMAL) {
+//					lastNormalBounds = display.getFrame().getBounds();
+//				}
+//			}
+//		});
+//
+//		exitGameController.addListener(event -> {
+//			savePreferences();
+//			display.getFrame().dispose();
+//		});
+//
+//		display.getFrame().addWindowListener(new WindowAdapter() {
+//			@Override
+//			public void windowClosing(WindowEvent event) {
+//				logger.debug("Event windowClosing");
+//				exitGameController.fireEvent(new ExitGameEvent());
+//			}
+//		});
 	}
 
-	private void savePreferences() {
-		final Rectangle normalBounds = display.getFrame().getExtendedState() == JFrame.NORMAL
-				? display.getFrame().getBounds() : lastNormalBounds;
-		gamePreferences.setMainFramePosition(normalBounds);
-		gamePreferences.setMainFrameState(display.getFrame().getExtendedState());
-	}
+//	private void savePreferences() {
+//		final Rectangle normalBounds = display.getFrame().getExtendedState() == JFrame.NORMAL
+//				? display.getFrame().getBounds() : lastNormalBounds;
+//		gamePreferences.setMainFramePosition(normalBounds);
+//		gamePreferences.setMainFrameState(display.getFrame().getExtendedState());
+//	}
 
 	public void showPanel(final String panelName) {
 		display.showPanel(panelName);

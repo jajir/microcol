@@ -1,28 +1,12 @@
 package org.microcol.gui;
 
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-
-import javax.swing.BorderFactory;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JSeparator;
-import javax.swing.SwingConstants;
-import javax.swing.border.Border;
-import javax.swing.border.EtchedBorder;
 
 import com.google.inject.Inject;
 
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 
-public class StatusBarView extends JPanel implements StatusBarPresenter.Display {
-
-	/**
-	 * Default serialVersionUID.
-	 */
-	private static final long serialVersionUID = 1L;
+public class StatusBarView implements StatusBarPresenter.Display {
 
 	private final HBox box;
 
@@ -32,8 +16,6 @@ public class StatusBarView extends JPanel implements StatusBarPresenter.Display 
 
 	@Inject
 	public StatusBarView() {
-
-		this.setLayout(new GridBagLayout());
 
 		statusBarDescription = new Label();
 		labelEra = new Label();
