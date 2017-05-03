@@ -1,11 +1,12 @@
 package org.microcol.gui.panelview;
 
-import java.awt.Graphics2D;
 import java.util.LinkedList;
 import java.util.Optional;
 import java.util.Queue;
 
 import com.google.common.base.Preconditions;
+
+import javafx.scene.canvas.GraphicsContext;
 
 /**
  * Hold and manage planned animation steps.
@@ -45,7 +46,7 @@ public class AnimationManager {
 		}
 	}
 
-	public void paint(final Graphics2D graphics, final Area area) {
+	public void paint(final GraphicsContext graphics, final Area area) {
 		Preconditions.checkArgument(hasNextStep, "Can't perform step when there is no next step.");
 		runningPart.get().paint(graphics, area);
 	}

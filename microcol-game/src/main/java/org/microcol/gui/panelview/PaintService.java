@@ -1,8 +1,5 @@
 package org.microcol.gui.panelview;
 
-import java.awt.Color;
-import java.awt.Graphics2D;
-
 import org.microcol.gui.ImageProvider;
 import org.microcol.gui.Point;
 import org.microcol.model.Player;
@@ -10,6 +7,9 @@ import org.microcol.model.Unit;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
+
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
 
 /**
  * Contains methods for painting particular objects.
@@ -43,10 +43,10 @@ public class PaintService {
 	 * @param unit
 	 *            required unit to draw
 	 */
-	public void paintUnit(final Graphics2D graphics, final Point point, final Unit unit) {
+	public void paintUnit(final GraphicsContext graphics, final Point point, final Unit unit) {
 		// TODO JJ replace magic numbers
 		Point p = point.add(2, 4);
-		graphics.drawImage(imageProvider.getUnitImage(unit.getType()), p.getX(), p.getY(), null);
+		graphics.drawImage(imageProvider.getUnitImage(unit.getType()), p.getX(), p.getY());
 		paintOwnersFlag(graphics, point.add(1, 5), unit.getOwner());
 	}
 
@@ -62,13 +62,13 @@ public class PaintService {
 	 * @param flagLeterImageName
 	 *            required name of image that will be drawn into unit flag
 	 */
-	public void paintUnit(final Graphics2D graphics, final Point point, final Unit unit,
+	public void paintUnit(final GraphicsContext graphics, final Point point, final Unit unit,
 			final String flagLeterImageName) {
 		// TODO JJ replace magic numbers
 		Point p = point.add(2, 4);
-		graphics.drawImage(imageProvider.getUnitImage(unit.getType()), p.getX(), p.getY(), null);
+		graphics.drawImage(imageProvider.getUnitImage(unit.getType()), p.getX(), p.getY());
 		paintOwnersFlag(graphics, point.add(1, 5), unit.getOwner());
-		graphics.drawImage(imageProvider.getImage(flagLeterImageName), point.getX() + 35 - 12, point.getY(), null);
+		graphics.drawImage(imageProvider.getImage(flagLeterImageName), point.getX() + 35 - 12, point.getY());
 	}
 
 	/**
@@ -81,38 +81,38 @@ public class PaintService {
 	 * @param player
 	 *            required player
 	 */
-	public void paintOwnersFlag(final Graphics2D graphics, final Point point, final Player player) {
-		graphics.setColor(Color.BLACK);
-		graphics.drawRect(point.getX(), point.getY(), FLAG_WIDTH, FLAG_HEIGHT);
+	public void paintOwnersFlag(final GraphicsContext graphics, final Point point, final Player player) {
+		graphics.setFill(Color.BLACK);
+		graphics.strokeRect(point.getX(), point.getY(), FLAG_WIDTH, FLAG_HEIGHT);
 		// TODO JJ player's color should be property
 		if (player.isHuman()) {
-			graphics.setColor(Color.YELLOW);
+			graphics.setFill(Color.YELLOW);
 		} else {
 			switch (player.getName().hashCode() % 4) {
 			case 0:
-				graphics.setColor(Color.RED);
+				graphics.setFill(Color.RED);
 				break;
 			case 1:
-				graphics.setColor(Color.GREEN);
+				graphics.setFill(Color.GREEN);
 				break;
 			case 2:
-				graphics.setColor(Color.MAGENTA);
+				graphics.setFill(Color.MAGENTA);
 				break;
 			case 3:
-				graphics.setColor(Color.BLUE);
+				graphics.setFill(Color.BLUE);
 				break;
 			default:
-				graphics.setColor(Color.gray);
+				graphics.setFill(Color.GRAY);
 				break;
 			}
 		}
 		graphics.fillRect(point.getX() + 1, point.getY() + 1, FLAG_WIDTH - 1, FLAG_HEIGHT - 1);
 	}
 
-	public void paintDebugInfo(final Graphics2D graphics, final VisualDebugInfo visualDebugInfo, final Area area) {
+	public void paintDebugInfo(final GraphicsContext graphics, final VisualDebugInfo visualDebugInfo, final Area area) {
 		visualDebugInfo.getLocations().stream().filter(location -> area.isInArea(location)).forEach(location -> {
 			final Point p = area.convert(location).add(10, 4);
-			graphics.setColor(Color.white);
+			graphics.setFill(Color.WHITE);
 			graphics.fillRect(p.getX() + 1, p.getY() + 1, FLAG_WIDTH - 1, FLAG_HEIGHT - 1);
 		});
 	}

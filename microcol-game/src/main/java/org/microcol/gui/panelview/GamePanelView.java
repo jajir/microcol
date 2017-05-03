@@ -26,10 +26,14 @@ import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 
 import javafx.animation.AnimationTimer;
+import javafx.geometry.Bounds;
 import javafx.scene.Cursor;
 import javafx.scene.ImageCursor;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.image.Image;
+import javafx.scene.paint.Color;
 
 /**
  * View for main game panel.
@@ -161,11 +165,14 @@ public class GamePanelView implements GamePanelPresenter.Display {
 	}
 
 	private void scrollToPoint(final Point point) {
-		final JViewport viewPort = (JViewport) getParent();
-		final Rectangle view = viewPort.getViewRect();
-		view.x = point.getX();
-		view.y = point.getY();
-		scrollRectToVisible(view);
+		//FIXME JJ scroll to specified point
+//		final ScrollPane sp = (ScrollPane)canvas.getParent();
+//		final Bounds bounds =sp.getViewportBounds();
+//		final JViewport viewPort = (JViewport) getParent();
+//		final Rectangle view = viewPort.getViewRect();
+//		view.x = point.getX();
+//		view.y = point.getY();
+//		scrollRectToVisible(view);
 	}
 
 	@Override
@@ -179,60 +186,40 @@ public class GamePanelView implements GamePanelPresenter.Display {
 	}
 	
 	/**
-	 * Call original paint with antialising on.
+	 * Paint everything.
 	 */
 	public void paint(final GraphicsContext g) {
-		final Graphics2D g2d = (Graphics2D) g;
-		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-		final Area area = new Area((JViewport) this.getParent(), gameController.getModel().getMap());
-		if (dbImage == null) {
-			dbImage = prepareImage(area);
-			if (dbImage == null) {
-				/**
-				 * This could happens when Graphics is not ready.
-				 */
-				return;
-			}
-		}
-		if (dbImage.validate(getGraphicsConfiguration()) == VolatileImage.IMAGE_INCOMPATIBLE) {
-			dbImage = prepareImage(area);
-		}
-		if (dbImage != null) {
-			final Graphics2D dbg = (Graphics2D) dbImage.getGraphics();
-			g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
+		final Area area = getArea();
+		
+		
 			/**
 			 * Following background drawing just verify that there are no
 			 * uncovered pixels.
 			 */
-			// dbg.setColor(Color.YELLOW);
+			// dbg.setFill(Color.YELLOW);
 			// dbg.fillRect(0, 0, getWidth(), getHeight());
 
-			paintTiles(dbg, area);
-			paintUnits(dbg, gameController.getModel(), area);
-			paintGrid(dbg, area);
-			paintCursor(dbg, area);
-			paintSteps(dbg, area);
-			paintAnimation(dbg, area);
-			paintService.paintDebugInfo(dbg, visualDebugInfo, area);
+			paintTiles(g, area);
+			paintUnits(g, gameController.getModel(), area);
+			paintGrid(g, area);
+			paintCursor(g, area);
+			paintSteps(g, area);
+			paintAnimation(g, area);
+			paintService.paintDebugInfo(g, visualDebugInfo, area);
 			final Point p = Point.of(area.getTopLeft().add(Location.of(-1, -1)));
-			g.drawImage(dbImage, p.getX(), p.getY(), null);
+//			g.drawImage(dbImage, p.getX(), p.getY());
 			if (gameController.getModel().getCurrentPlayer().isComputer()) {
 				/**
 				 * If move computer that make game field darker.
 				 */
-				g.drawImage(dbImage, p.getX(), p.getY(), null);
-				g.setColor(new Color(0, 0, 0, 64));
-				g.fillRect(p.getX(), p.getY(), dbImage.getWidth(this), dbImage.getHeight(this));
+//				g.drawImage(dbImage, p.getX(), p.getY(), null);
+				g.setFill(new Color(0, 0, 0, 64));
+//				g.fillRect(p.getX(), p.getY(), dbImage.getWidth(this), dbImage.getHeight(this));
 			}
-			dbg.dispose();
-		}
-		// Sync the display on some systems.
-		// (on Linux, this fixes event queue problems)
-		Toolkit.getDefaultToolkit().sync();
 		fpsCounter.screenWasPainted();
 	}
 
-	private void paintAnimation(final Graphics2D graphics, final Area area) {
+	private void paintAnimation(final GraphicsContext graphics, final Area area) {
 		if (animationManager.hasNextStep()) {
 			animationManager.paint(graphics, area);
 			animationManager.performStep();
@@ -245,7 +232,7 @@ public class GamePanelView implements GamePanelPresenter.Display {
 	 * @param graphics
 	 *            required {@link Graphics2D}
 	 */
-	private void paintTiles(final Graphics2D graphics, final Area area) {
+	private void paintTiles(final GraphicsContext graphics, final Area area) {
 		for (int i = area.getTopLeft().getX(); i <= area.getBottomRight().getX(); i++) {
 			for (int j = area.getTopLeft().getY(); j <= area.getBottomRight().getY(); j++) {
 				final Location location = Location.of(i, j);
@@ -253,9 +240,9 @@ public class GamePanelView implements GamePanelPresenter.Display {
 				final Terrain terrain = gameController.getModel().getMap().getTerrainAt(location);
 				graphics.drawImage(imageProvider.getTerrainImage(terrain), point.getX(), point.getY(),
 						point.getX() + TILE_WIDTH_IN_PX, point.getY() + TILE_WIDTH_IN_PX, 0, 0, TILE_WIDTH_IN_PX,
-						TILE_WIDTH_IN_PX, this);
+						TILE_WIDTH_IN_PX);
 				if (oneTurnMoveHighlighter.isItHighlighted(location)) {
-					graphics.setColor(new Color(255, 200, 255, 100));
+					graphics.setFill(new Color(255, 200, 255, 100));
 					graphics.fillRect(point.getX(), point.getY(), TILE_WIDTH_IN_PX, TILE_WIDTH_IN_PX);
 				}
 			}
@@ -274,7 +261,7 @@ public class GamePanelView implements GamePanelPresenter.Display {
 	 * @param game
 	 *            required {@link Game}
 	 */
-	private void paintUnits(final Graphics2D graphics, final Model world, final Area area) {
+	private void paintUnits(final GraphicsContext graphics, final Model world, final Area area) {
 		final java.util.Map<Location, List<Unit>> ships = world.getUnitsAt();
 
 		final java.util.Map<Location, List<Unit>> ships2 = ships.entrySet().stream()
@@ -289,10 +276,10 @@ public class GamePanelView implements GamePanelPresenter.Display {
 		});
 	}
 
-	private void paintGrid(final Graphics2D graphics, final Area area) {
+	private void paintGrid(final GraphicsContext graphics, final Area area) {
 		if (isGridShown) {
-			graphics.setColor(Color.LIGHT_GRAY);
-			graphics.setStroke(new BasicStroke(1));
+			graphics.setFill(Color.LIGHTGRAY);
+			graphics.setLineWidth(1);
 			for (int i = area.getTopLeft().getX(); i <= area.getBottomRight().getX(); i++) {
 				final Location l_1 = Location.of(i, area.getTopLeft().getY());
 				final Location l_2 = Location.of(i, area.getBottomRight().getY() + 1);
@@ -306,16 +293,16 @@ public class GamePanelView implements GamePanelPresenter.Display {
 		}
 	}
 
-	private void drawNetLine(final Graphics2D graphics, final Area area, final Location l_1, Location l_2) {
+	private void drawNetLine(final GraphicsContext graphics, final Area area, final Location l_1, Location l_2) {
 		final Point p_1 = area.convert(l_1).add(-1, -1);
 		final Point p_2 = area.convert(l_2).add(-1, -1);
-		graphics.drawLine(p_1.getX(), p_1.getY(), p_2.getX(), p_2.getY());
+		graphics.strokeLine(p_1.getX(), p_1.getY(), p_2.getX(), p_2.getY());
 	}
 
-	private void paintCursor(final Graphics2D graphics, final Area area) {
+	private void paintCursor(final GraphicsContext graphics, final Area area) {
 		if (viewState.getSelectedTile().isPresent()) {
-			graphics.setColor(Color.RED);
-			graphics.setStroke(new BasicStroke(1));
+			graphics.setFill(Color.RED);
+			graphics.setLineWidth(1);
 			paintCursor(graphics, area, viewState.getSelectedTile().get());
 		}
 	}
@@ -330,13 +317,13 @@ public class GamePanelView implements GamePanelPresenter.Display {
 	 * @param location
 	 *            required tiles where to draw cursor
 	 */
-	private void paintCursor(final Graphics2D graphics, final Area area, final Location location) {
+	private void paintCursor(final GraphicsContext graphics, final Area area, final Location location) {
 		final Point p = area.convert(location);
-		graphics.drawLine(p.getX(), p.getY(), p.getX() + TILE_WIDTH_IN_PX, p.getY());
-		graphics.drawLine(p.getX(), p.getY(), p.getX(), p.getY() + TILE_WIDTH_IN_PX);
-		graphics.drawLine(p.getX() + TILE_WIDTH_IN_PX, p.getY(), p.getX() + TILE_WIDTH_IN_PX,
+		graphics.strokeLine(p.getX(), p.getY(), p.getX() + TILE_WIDTH_IN_PX, p.getY());
+		graphics.strokeLine(p.getX(), p.getY(), p.getX(), p.getY() + TILE_WIDTH_IN_PX);
+		graphics.strokeLine(p.getX() + TILE_WIDTH_IN_PX, p.getY(), p.getX() + TILE_WIDTH_IN_PX,
 				p.getY() + TILE_WIDTH_IN_PX);
-		graphics.drawLine(p.getX(), p.getY() + TILE_WIDTH_IN_PX, p.getX() + TILE_WIDTH_IN_PX,
+		graphics.strokeLine(p.getX(), p.getY() + TILE_WIDTH_IN_PX, p.getX() + TILE_WIDTH_IN_PX,
 				p.getY() + TILE_WIDTH_IN_PX);
 	}
 
@@ -348,10 +335,10 @@ public class GamePanelView implements GamePanelPresenter.Display {
 	 * @param area
 	 *            required displayed area
 	 */
-	private void paintSteps(final Graphics2D graphics, final Area area) {
+	private void paintSteps(final GraphicsContext graphics, final Area area) {
 		if (viewState.isMoveMode() && viewState.getMouseOverTile().isPresent()) {
-			graphics.setColor(Color.yellow);
-			graphics.setStroke(new BasicStroke(1));
+			graphics.setFill(Color.YELLOW);
+			graphics.setLineWidth(1);
 			paintCursor(graphics, area, viewState.getMouseOverTile().get());
 			final List<Location> locations = moveModeSupport.getMoveLocations();
 			// TODO JJ get moving unit in specific way
@@ -375,10 +362,9 @@ public class GamePanelView implements GamePanelPresenter.Display {
 	 * @param point
 	 *            required point where to draw image
 	 */
-	private void paintStep(final Graphics2D graphics, final Point point, final StepCounter stepCounter,
+	private void paintStep(final GraphicsContext graphics, final Point point, final StepCounter stepCounter,
 			final boolean isFight) {
-		graphics.drawImage(getImageFoStep(stepCounter.canMakeMoveInSameTurn(1), isFight), point.getX(), point.getY(),
-				this);
+		graphics.drawImage(getImageFoStep(stepCounter.canMakeMoveInSameTurn(1), isFight), point.getX(), point.getY());
 	}
 
 	private Image getImageFoStep(final boolean normalStep, final boolean isFight) {
@@ -406,14 +392,14 @@ public class GamePanelView implements GamePanelPresenter.Display {
 	@Override
 	public void setCursorNormal() {
 		oneTurnMoveHighlighter.setLocations(null);
-		setCursor(Cursor.getDefaultCursor());
+		canvas.setCursor(Cursor.DEFAULT);
 		viewState.setMoveMode(false);
 	}
 
 	// TODO JJ rename it
 	@Override
 	public void setCursorGoto() {
-		setCursor(gotoModeCursor);
+		canvas.setCursor(gotoModeCursor);
 		viewState.setMoveMode(true);
 	}
 
@@ -450,12 +436,14 @@ public class GamePanelView implements GamePanelPresenter.Display {
 	}
 
 	public void onViewPortResize() {
-		dbImage = null;
+		//FIXME JJ is it necessary?
+//		dbImage = null;
 	}
 
 	@Override
 	public Area getArea() {
-		return new Area((JViewport) getParent(), gameController.getModel().getMap());
+		final ScrollPane sp = (ScrollPane)canvas.getParent();
+		return new Area(sp, gameController.getModel().getMap());
 	}
 
 	@Override
@@ -463,6 +451,7 @@ public class GamePanelView implements GamePanelPresenter.Display {
 		return visualDebugInfo;
 	}
 
+	@Override
 	public Canvas getCanvas() {
 		return canvas;
 	}

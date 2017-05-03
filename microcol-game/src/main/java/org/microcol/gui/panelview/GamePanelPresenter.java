@@ -1,15 +1,8 @@
 package org.microcol.gui.panelview;
 
-import java.awt.Rectangle;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
-import javax.swing.JMenuItem;
-import javax.swing.JPopupMenu;
-import javax.swing.JViewport;
 
 import org.microcol.gui.DialogWarning;
 import org.microcol.gui.GamePreferences;
@@ -35,6 +28,10 @@ import org.slf4j.LoggerFactory;
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
 
+import javafx.scene.canvas.Canvas;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.MouseEvent;
+
 public final class GamePanelPresenter implements Localized {
 
 	private final Logger logger = LoggerFactory.getLogger(GamePanelPresenter.class);
@@ -42,6 +39,8 @@ public final class GamePanelPresenter implements Localized {
 	public interface Display {
 
 		GamePanelView getGamePanelView();
+
+		Canvas getCanvas();
 
 		void setCursorNormal();
 
@@ -78,23 +77,23 @@ public final class GamePanelPresenter implements Localized {
 	private Point lastMousePosition;
 
 	private final ViewState viewState;
-	
+
 	private final ViewUtil viewUtil;
 
-	static class PopUpDemo extends JPopupMenu {
-
-		/**
-		 * Default serialVersionUID.
-		 */
-		private static final long serialVersionUID = 1L;
-
-		public PopUpDemo() {
-			for (int i = 0; i < 10; i++) {
-				JMenuItem anItem = new JMenuItem("Item " + i + " click me!");
-				add(anItem);
-			}
-		}
-	}
+	// static class PopUpDemo extends PopupMenu {
+	//
+	// /**
+	// * Default serialVersionUID.
+	// */
+	// private static final long serialVersionUID = 1L;
+	//
+	// public PopUpDemo() {
+	// for (int i = 0; i < 10; i++) {
+	// JMenuItem anItem = new JMenuItem("Item " + i + " click me!");
+	// add(anItem);
+	// }
+	// }
+	// }
 
 	@Inject
 	public GamePanelPresenter(final GamePanelPresenter.Display display, final GameController gameController,
@@ -130,74 +129,62 @@ public final class GamePanelPresenter implements Localized {
 			/**
 			 * Escape
 			 */
-			if (27 == e.getKeyCode()) {
+			if (KeyCode.ESCAPE == e.getCode()) {
 				onKeyPressed_escape();
 			}
 			/**
 			 * Enter
 			 */
-			if (10 == e.getKeyCode()) {
+			if (KeyCode.ENTER == e.getCode()) {
 				onKeyPressed_enter();
 			}
-			logger.debug("Pressed key: '" + e.getKeyChar() + "' has code '" + e.getKeyCode() + "', modifiers '"
-					+ e.getModifiers() + "'");
+			logger.debug("Pressed key: '" + e.getCode().getName() + "' has code '" + e.getCharacter() + "', modifiers '"
+					+ e.getCode().isModifierKey() + "'");
 		});
 
-		final MouseAdapter ma = new MouseAdapter() {
-
-			@Override
-			public void mousePressed(final MouseEvent e) {
-				logger.debug("mouse pressed at " + e.getX() + ", " + e.getY() + ", " + e.getButton());
-				if (isMouseEnabled()) {
-					if (e.isPopupTrigger()) {
-						doPop(e);
-					}
-					onMousePressed(e);
+		display.getCanvas().setOnMousePressed(e -> {
+			logger.debug("mouse pressed at " + e.getX() + ", " + e.getY() + ", " + e.getButton());
+			if (isMouseEnabled()) {
+				if (e.isPopupTrigger()) {
+					// TODO JJ pop up menu
+					// doPop(e);
+				}
+				onMousePressed(e);
+			}
+		});
+		display.getCanvas().setOnMouseReleased(e -> {
+			if (isMouseEnabled()) {
+				if (e.isPopupTrigger()) {
+					// TODO JJ pop up menu
+					// doPop(e);
 				}
 			}
-
-			@Override
-			public void mouseReleased(final MouseEvent e) {
-				if (isMouseEnabled()) {
-					if (e.isPopupTrigger()) {
-						doPop(e);
-					}
-				}
+		});
+		display.getCanvas().setOnMouseMoved(e -> {
+			if (isMouseEnabled()) {
+				onMouseMoved(e);
 			}
-
-			@Override
-			public void mouseMoved(final MouseEvent e) {
-				if (isMouseEnabled()) {
-					onMouseMoved(e);
-				}
+		});
+		display.getCanvas().setOnMouseDragged(e -> {
+			if (isMouseEnabled()) {
+				logger.debug("mouse dragged at " + e.getX() + ", " + e.getY() + ", " + e.getButton());
+				onMouseDragged(e);
 			}
+		});
 
-			@Override
-			public void mouseDragged(final MouseEvent e) {
-				if (isMouseEnabled()) {
-					logger.debug("mouse dragged at " + e.getX() + ", " + e.getY() + ", " + e.getButton());
-					onMouseDragged(e);
-				}
-			}
-
-			private void doPop(MouseEvent e) {
-				PopUpDemo menu = new PopUpDemo();
-				menu.show(e.getComponent(), e.getX(), e.getY());
-			}
-		};
+		// private void doPop(MouseEvent e) {
+		// PopUpDemo menu = new PopUpDemo();
+		// menu.show(e.getComponent(), e.getX(), e.getY());
+		// }
 
 		newGameController.addListener(event -> display.initGame(gamePreferences.isGridShown()));
-
 		showGridController.addListener(e -> display.setGridShown(e.isGridShown()));
 		debugRequestController.addListener(e -> {
 			display.getVisualDebugInfo().setLocations(e.getLocations());
 		});
 
-		display.getGamePanelView().addMouseListener(ma);
-		display.getGamePanelView().addMouseMotionListener(ma);
 		display.getGamePanelView().getParent().addComponentListener(new GamePanelListener(display));
 		viewController.addListener(event -> onCenterView());
-
 		exitGameController.addListener(event -> display.stopTimer());
 
 	}
@@ -291,8 +278,8 @@ public final class GamePanelPresenter implements Localized {
 		// TODO JJ active ship can be different from ship first at list
 		final Unit movingUnit = gameController.getModel().getCurrentPlayer().getUnitsAt(selectedTile).get(0);
 		if (isFight(movingUnit, moveToLocation)) {
-			if(!movingUnit.getType().canAttack()){
-				//TODO JJ consider which tile should have focus
+			if (!movingUnit.getType().canAttack()) {
+				// TODO JJ consider which tile should have focus
 				viewState.setSelectedTile(Optional.of(moveToLocation));
 				display.setCursorNormal();
 				new DialogWarning(viewUtil);

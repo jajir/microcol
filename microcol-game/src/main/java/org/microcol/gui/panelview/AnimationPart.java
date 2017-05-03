@@ -1,6 +1,6 @@
 package org.microcol.gui.panelview;
 
-import java.awt.Graphics2D;
+import javafx.scene.canvas.GraphicsContext;
 
 /**
  * Animate one part of big animation.
@@ -11,5 +11,5 @@ public interface AnimationPart {
 
 	void nextStep();
 
-	void paint(Graphics2D graphics, Area area);
+	void paint(GraphicsContext graphics, Area area);
 }

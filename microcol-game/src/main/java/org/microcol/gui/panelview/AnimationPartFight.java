@@ -8,6 +8,8 @@ import org.microcol.model.Unit;
 
 import com.google.common.base.Preconditions;
 
+import javafx.scene.canvas.GraphicsContext;
+
 /**
  * Class animate fight between two adjacent units.
  */
@@ -49,12 +51,11 @@ public class AnimationPartFight implements AnimationPart {
 	}
 
 	@Override
-	public void paint(final Graphics2D graphics, final Area area) {
+	public void paint(final GraphicsContext graphics, final Area area) {
 		final Point aPoint = area.convert(attacker.getLocation());
 		final Point dPoint = area.convert(defender.getLocation());
 		final Point middle = aPoint.add(dPoint.substract(aPoint).divide(2));
-		graphics.drawImage(imageProvider.getImage(ImageProvider.IMG_CROSSED_SWORDS), middle.getX(), middle.getY(),
-				null);
+		graphics.drawImage(imageProvider.getImage(ImageProvider.IMG_CROSSED_SWORDS), middle.getX(), middle.getY());
 	}
 
 }

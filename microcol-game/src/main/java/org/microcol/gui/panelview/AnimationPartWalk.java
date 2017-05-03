@@ -1,6 +1,5 @@
 package org.microcol.gui.panelview;
 
-import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,6 +10,8 @@ import org.microcol.model.Location;
 import org.microcol.model.Unit;
 
 import com.google.common.base.Preconditions;
+
+import javafx.scene.canvas.GraphicsContext;
 
 /**
  * Draw walk animation based on predefined path.
@@ -107,7 +108,7 @@ public class AnimationPartWalk implements AnimationPart {
 	}
 
 	@Override
-	public void paint(final Graphics2D graphics, final Area area) {
+	public void paint(final GraphicsContext graphics, final Area area) {
 		if (area.isInArea(getNextCoordinates())) {
 			final Point point = area.convertPoint(getNextCoordinates());
 			paintService.paintUnit(graphics, point, getUnit(), ImageProvider.IMG_TILE_MODE_MOVE);

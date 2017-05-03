@@ -10,6 +10,9 @@ import org.microcol.model.WorldMap;
 
 import com.google.common.base.MoreObjects;
 
+import javafx.geometry.Bounds;
+import javafx.scene.control.ScrollPane;
+
 /**
  * Define top left corner and bottom right corner.
  * 
@@ -38,12 +41,15 @@ public class Area {
 	 */
 	private final Point pointBottomRight;
 
-	public Area(final JViewport viewport, final WorldMap world) {
-		final Dimension dim = viewport.getExtentSize();
-		final java.awt.Point pos = viewport.getViewPosition();
-
-		pointTopLeft = Point.of((int) pos.getX(), (int) pos.getY());
-		pointBottomRight = pointTopLeft.add((int) dim.getWidth(), (int) dim.getHeight());
+	public Area(final ScrollPane viewport, final WorldMap world) {
+//		final Dimension dim = viewport.getExtentSize();
+//		final java.awt.Point pos = viewport.getViewPosition();
+//
+//		pointTopLeft = Point.of((int) pos.getX(), (int) pos.getY());
+//		pointBottomRight = pointTopLeft.add((int) dim.getWidth(), (int) dim.getHeight());
+		final Bounds bounds = viewport.getViewportBounds();
+		pointTopLeft = Point.of((int)bounds.getMinX(),(int)bounds.getMinY());
+		pointBottomRight = Point.of((int)bounds.getMaxX(),(int)bounds.getMaxY());
 
 		final Point p1 = pointTopLeft.divide(GamePanelView.TOTAL_TILE_WIDTH_IN_PX).add(Point.MAP_MIN_X,
 				Point.MAP_MIN_Y);

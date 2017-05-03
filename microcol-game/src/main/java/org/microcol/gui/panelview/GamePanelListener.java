@@ -31,6 +31,7 @@ public class GamePanelListener implements ComponentListener {
 
 	@Override
 	public void componentResized(final ComponentEvent e) {
+		//TODO JJ should be called on presenter
 		display.getGamePanelView().onViewPortResize();
 	}
 
