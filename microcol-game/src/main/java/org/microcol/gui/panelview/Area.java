@@ -41,13 +41,13 @@ public class Area {
 	 */
 	private final Point pointBottomRight;
 
-	public Area(final ScrollPane viewport, final WorldMap world) {
+	public Area(final Bounds bounds, final WorldMap world) {
 //		final Dimension dim = viewport.getExtentSize();
 //		final java.awt.Point pos = viewport.getViewPosition();
 //
 //		pointTopLeft = Point.of((int) pos.getX(), (int) pos.getY());
 //		pointBottomRight = pointTopLeft.add((int) dim.getWidth(), (int) dim.getHeight());
-		final Bounds bounds = viewport.getViewportBounds();
+//		final Bounds bounds = viewport.getViewportBounds();
 		pointTopLeft = Point.of((int)bounds.getMinX(),(int)bounds.getMinY());
 		pointBottomRight = Point.of((int)bounds.getMaxX(),(int)bounds.getMaxY());
 

@@ -1,9 +1,8 @@
 package org.microcol.gui.panelview;
 
+import java.awt.Graphics2D;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import javax.swing.Timer;
 
 import org.microcol.gui.DialogFigth;
 import org.microcol.gui.FpsCounter;
@@ -24,6 +23,7 @@ import org.microcol.model.Unit;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.google.inject.Inject;
+import com.sun.javafx.scene.control.skin.ScrollPaneSkin;
 
 import javafx.animation.AnimationTimer;
 import javafx.geometry.Bounds;
@@ -164,7 +164,7 @@ public class GamePanelView implements GamePanelPresenter.Display {
 		screenScrolling = new ScreenScrolling(pathPlanning, getArea().getPointTopLeft(), targetPoint);
 	}
 
-	private void scrollToPoint(final Point point) {
+	public void scrollToPoint(final Point point) {
 		//FIXME JJ scroll to specified point
 //		final ScrollPane sp = (ScrollPane)canvas.getParent();
 //		final Bounds bounds =sp.getViewportBounds();
@@ -439,11 +439,20 @@ public class GamePanelView implements GamePanelPresenter.Display {
 		//FIXME JJ is it necessary?
 //		dbImage = null;
 	}
+	
+	private ScrollPane getScrollPane(){
+		final ScrollPane sp = (ScrollPane)canvas.getParent();
+		return sp;
+	}
+	
+	@Override
+	public Bounds getViewportBounds(){
+		return getScrollPane().getViewportBounds(); 
+	}
 
 	@Override
 	public Area getArea() {
-		final ScrollPane sp = (ScrollPane)canvas.getParent();
-		return new Area(sp, gameController.getModel().getMap());
+		return new Area(canvas.getBoundsInParent(), gameController.getModel().getMap());
 	}
 
 	@Override

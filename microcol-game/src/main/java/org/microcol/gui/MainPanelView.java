@@ -29,13 +29,13 @@ public class MainPanelView extends JPanel {
 	public MainPanelView(final GamePanelView gamePanel, final StatusBarView statusBar,
 			final RightPanelView rightPanelView) {
 		this.setLayout(new GridBagLayout());
-		ScrollPane scrollPaneGamePanel = new ScrollPane(gamePanel.getCanvas());
-		scrollPaneGamePanel.setVbarPolicy(ScrollBarPolicy.AS_NEEDED);
-		scrollPaneGamePanel.setHbarPolicy(ScrollBarPolicy.AS_NEEDED);
+		ScrollPane scrollPane = new ScrollPane(gamePanel.getCanvas());
+		scrollPane.setVbarPolicy(ScrollBarPolicy.AS_NEEDED);
+		scrollPane.setHbarPolicy(ScrollBarPolicy.AS_NEEDED);
 
 		box = new VBox();
 		HBox hBox = new HBox();
-		hBox.getChildren().addAll(scrollPaneGamePanel, rightPanelView.getBox());
+		hBox.getChildren().addAll(scrollPane, rightPanelView.getBox());
 		box.getChildren().addAll(hBox, statusBar.getBox());
 	}
 

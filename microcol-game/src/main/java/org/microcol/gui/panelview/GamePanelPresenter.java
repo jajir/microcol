@@ -28,6 +28,7 @@ import org.slf4j.LoggerFactory;
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
 
+import javafx.geometry.Bounds;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
@@ -66,6 +67,7 @@ public final class GamePanelPresenter implements Localized {
 
 		boolean performFightDialog(Unit unitAttacker, Unit unitDefender);
 
+		Bounds getViewportBounds();
 	}
 
 	private final GameController gameController;
@@ -183,7 +185,7 @@ public final class GamePanelPresenter implements Localized {
 			display.getVisualDebugInfo().setLocations(e.getLocations());
 		});
 
-		display.getGamePanelView().getParent().addComponentListener(new GamePanelListener(display));
+//		display.getGamePanelView().getParent().addComponentListener(new GamePanelListener(display));
 		viewController.addListener(event -> onCenterView());
 		exitGameController.addListener(event -> display.stopTimer());
 
@@ -252,14 +254,15 @@ public final class GamePanelPresenter implements Localized {
 
 	private void onMouseDragged(final MouseEvent e) {
 		if (lastMousePosition != null) {
-			final JViewport viewPort = (JViewport) display.getGamePanelView().getParent();
-			if (viewPort != null) {
+			final Bounds bounds = display.getViewportBounds();
+//			final JViewport viewPort = (JViewport) display.getGamePanelView().getParent();
+			if (bounds != null) {
 				final Point currentPosition = Point.of(e.getX(), e.getY());
 				final Point delta = lastMousePosition.substract(currentPosition);
-				final Rectangle view = viewPort.getViewRect();
-				view.x += delta.getX();
-				view.y += delta.getY();
-				display.getGamePanelView().scrollRectToVisible(view);
+				//FIXME JJ please fix it
+//				view.x += delta.getX();
+//				view.y += delta.getY();
+//				display.getGamePanelView().scrollToPoint(Point.of());
 			}
 		}
 	}
