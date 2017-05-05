@@ -23,15 +23,15 @@ import org.microcol.model.Unit;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.google.inject.Inject;
-import com.sun.javafx.scene.control.skin.ScrollPaneSkin;
 
 import javafx.animation.AnimationTimer;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.geometry.Bounds;
 import javafx.scene.Cursor;
 import javafx.scene.ImageCursor;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 
@@ -43,6 +43,8 @@ public class GamePanelView implements GamePanelPresenter.Display {
 	private static final int TILE_WIDTH_IN_PX = 35;
 
 	public static final int TOTAL_TILE_WIDTH_IN_PX = TILE_WIDTH_IN_PX;
+
+	private final ObjectProperty<Bounds> viewPortBounds;
 
 	private final Canvas canvas;
 
@@ -96,6 +98,7 @@ public class GamePanelView implements GamePanelPresenter.Display {
 		this.paintService = Preconditions.checkNotNull(paintService);
 		this.visualDebugInfo = new VisualDebugInfo();
 		oneTurnMoveHighlighter = new OneTurnMoveHighlighter();
+		viewPortBounds = new SimpleObjectProperty<Bounds>();
 		gotoModeCursor = new ImageCursor(imageProvider.getImage(ImageProvider.IMG_CURSOR_GOTO), 1, 1);
 		// excludePainting = new ExcludePainting();
 		animationManager = new AnimationManager();
@@ -190,14 +193,6 @@ public class GamePanelView implements GamePanelPresenter.Display {
 	 */
 	public void paint(final GraphicsContext g) {
 		final Area area = getArea();
-
-		/**
-		 * Following background drawing just verify that there are no uncovered
-		 * pixels.
-		 */
-		// dbg.setFill(Color.YELLOW);
-		// dbg.fillRect(0, 0, getWidth(), getHeight());
-
 		paintTiles(g, area);
 		paintUnits(g, gameController.getModel(), area);
 		paintGrid(g, area);
@@ -206,13 +201,13 @@ public class GamePanelView implements GamePanelPresenter.Display {
 		paintAnimation(g, area);
 		paintService.paintDebugInfo(g, visualDebugInfo, area);
 		final Point p = Point.of(area.getTopLeft().add(Location.of(-1, -1)));
-		// g.drawImage(dbImage, p.getX(), p.getY());
 		if (gameController.getModel().getCurrentPlayer().isComputer()) {
 			/**
 			 * If move computer that make game field darker.
 			 */
 			g.setFill(new Color(0, 0, 0, 0.34));
-			g.fillRect(p.getX(), p.getY(), 600, 400);
+			// TODO JJ paint in shadow just game part of viewport
+			g.fillRect(p.getX(), p.getY(), getViewportBounds().getWidth(), getViewportBounds().getHeight());
 		}
 		fpsCounter.screenWasPainted();
 	}
@@ -437,14 +432,9 @@ public class GamePanelView implements GamePanelPresenter.Display {
 		// dbImage = null;
 	}
 
-	private ScrollPane getScrollPane() {
-		final ScrollPane sp = (ScrollPane) canvas.getParent();
-		return sp;
-	}
-
 	@Override
 	public Bounds getViewportBounds() {
-		return getScrollPane().getViewportBounds();
+		return getViewPortBoundsProperty().get();
 	}
 
 	@Override
@@ -460,6 +450,10 @@ public class GamePanelView implements GamePanelPresenter.Display {
 	@Override
 	public Canvas getCanvas() {
 		return canvas;
+	}
+
+	public ObjectProperty<Bounds> getViewPortBoundsProperty() {
+		return viewPortBounds;
 	}
 
 }

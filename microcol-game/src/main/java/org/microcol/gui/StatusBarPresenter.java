@@ -10,6 +10,7 @@ import org.microcol.model.Calendar;
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
 
+import javafx.application.Platform;
 import javafx.scene.control.Label;
 
 public class StatusBarPresenter implements Localized {
@@ -47,7 +48,8 @@ public class StatusBarPresenter implements Localized {
 	private final void setYearText(final Label labelEra, final Calendar calendar) {
 		Preconditions.checkNotNull(labelEra);
 		Preconditions.checkNotNull(calendar);
-		labelEra.setText(getText().get("statusBar.year") + " " + calendar.getCurrentYear() + " AD");
+		Platform.runLater(
+				() -> labelEra.setText(getText().get("statusBar.year") + " " + calendar.getCurrentYear() + " AD"));
 	}
 
 }

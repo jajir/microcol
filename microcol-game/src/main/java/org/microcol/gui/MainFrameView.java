@@ -3,20 +3,12 @@ package org.microcol.gui;
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
 
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 /**
  * MicroCol's main frame.
  */
 public class MainFrameView implements MainFramePresenter.Display {
-
-	/**
-	 * Default serialVersionUID.
-	 */
-	private static final long serialVersionUID = 1L;
 
 	private final GamePreferences gamePreferences;
 

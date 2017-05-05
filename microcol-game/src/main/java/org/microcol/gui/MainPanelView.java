@@ -12,17 +12,17 @@ import javafx.scene.layout.VBox;
 /**
  * Panel hold whole game screen without status bar.
  */
-public class MainPanelView  {
+public class MainPanelView {
 
 	private final VBox box;;
 
 	@Inject
 	public MainPanelView(final GamePanelView gamePanel, final StatusBarView statusBar,
 			final RightPanelView rightPanelView) {
-		ScrollPane scrollPane = new ScrollPane(gamePanel.getCanvas());
+		final ScrollPane scrollPane = new ScrollPane(gamePanel.getCanvas());
 		scrollPane.setVbarPolicy(ScrollBarPolicy.AS_NEEDED);
 		scrollPane.setHbarPolicy(ScrollBarPolicy.AS_NEEDED);
-
+		gamePanel.getViewPortBoundsProperty().bind(scrollPane.viewportBoundsProperty());
 		box = new VBox();
 		HBox hBox = new HBox();
 		hBox.getChildren().addAll(scrollPane, rightPanelView.getBox());

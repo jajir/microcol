@@ -1,14 +1,9 @@
 package org.microcol.gui;
 
-import java.awt.Graphics2D;
-import java.awt.GraphicsConfiguration;
-import java.awt.GraphicsEnvironment;
-import java.io.IOException;
+import java.awt.image.BufferedImage;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
-
-import javax.imageio.ImageIO;
 
 import org.microcol.model.Terrain;
 import org.microcol.model.UnitType;

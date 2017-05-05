@@ -56,31 +56,26 @@ public class RightPanelView implements RightPanelPresenter.Display, Localized {
 
 		// Y=1
 		tileImage = new ImageView();
-		box.add(new Label("", tileImage),0,1);
+		box.add(new Label("", tileImage), 0, 1);
 
 		tileName = new Label();
-		box.add(tileName,1,1);
+		box.add(tileName, 1, 1);
 
 		// Y=2
 		unitsLabel = new Label();
-		box.add(unitsLabel, 0,2);
+		box.add(unitsLabel, 0, 2);
 
 		// Y=3
 		scrollPaneGamePanel = new ScrollPane(unitsPanel.getNode());
 		scrollPaneGamePanel.setVbarPolicy(ScrollBarPolicy.ALWAYS);
 		scrollPaneGamePanel.setHbarPolicy(ScrollBarPolicy.ALWAYS);
-//		scrollPaneGamePanel.setBorder(BorderFactory.createEmptyBorder());
-		box.add(scrollPaneGamePanel,0,3);
+		box.add(scrollPaneGamePanel, 0, 3);
 
 		// Y=10
 		nextTurnButton = new Button();
 		nextTurnButton.setId("nextTurnButton");
-		box.add(nextTurnButton,0,10);
-//		setPreferredSize(new Dimension(RIGHT_PANEL_WIDTH, 200));
-//		setMinimumSize(new Dimension(RIGHT_PANEL_WIDTH, 200));
-		
-//		unitsPanel.setMaximumSize(scrollPaneGamePanel.getViewport().getExtentSize());
-//		unitsPanel.setPreferredSize(scrollPaneGamePanel.getViewport().getExtentSize());
+		box.add(nextTurnButton, 0, 10);
+		box.setPrefWidth(RIGHT_PANEL_WIDTH);
 	}
 
 	@Override
