@@ -234,7 +234,7 @@ public class GamePanelView implements GamePanelPresenter.Display {
 				graphics.drawImage(imageProvider.getTerrainImage(terrain), 0, 0, TILE_WIDTH_IN_PX, TILE_WIDTH_IN_PX,
 						point.getX(), point.getY(), TILE_WIDTH_IN_PX, TILE_WIDTH_IN_PX);
 				if (oneTurnMoveHighlighter.isItHighlighted(location)) {
-					graphics.setFill(new Color(255, 200, 255, 100));
+					graphics.setFill(new Color(0.95, 0.75, 0.90, 0.4F));
 					graphics.fillRect(point.getX(), point.getY(), TILE_WIDTH_IN_PX, TILE_WIDTH_IN_PX);
 				}
 			}

@@ -85,10 +85,10 @@ public class MainMenuPresenter {
 		});
 		display.getMenuItemSameGame().setOnAction(event -> persistingDialog.saveModel());
 		display.getMenuItemLoadGame().setOnAction(event -> persistingDialog.loadModel());
+		display.getMenuItemQuitGame().setOnAction(actionEvent -> {
+			exitGameController.fireEvent(new ExitGameEvent());
+		});
 		if (!gamePreferences.isOSX()) {
-			display.getMenuItemQuitGame().setOnAction(actionEvent -> {
-				exitGameController.fireEvent(new ExitGameEvent());
-			});
 			display.getMenuItemAbout().setOnAction(actionEvent -> {
 				gameEventController.fireEvent(new AboutGameEvent());
 			});
@@ -111,8 +111,7 @@ public class MainMenuPresenter {
 			moveUnitController.fireStartMoveEvent();
 			display.getMenuItemMove().setDisable(true);
 		});
-		display.getMenuItemCenterView()
-				.setOnAction(event -> centerViewController.fireEvent(new CenterViewEvent()));
+		display.getMenuItemCenterView().setOnAction(event -> centerViewController.fireEvent(new CenterViewEvent()));
 		changeLanguageController.addListener(event -> {
 			display.updateLanguage();
 		});

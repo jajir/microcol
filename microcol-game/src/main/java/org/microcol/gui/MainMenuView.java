@@ -156,11 +156,11 @@ public class MainMenuView implements MainMenuPresenter.Display {
 		if (gamePreferences.isDevelopment()) {
 			menuBar.getMenus().add(mainMenuDevelopment.getDevelopmentMenu());
 		}
+		menuBar.useSystemMenuBarProperty().set(true);
 		if (gamePreferences.isOSX()) {
 			/**
 			 * TODO JJ Following code doesn't work fine.
 			 */
-//			menuBar.setUseSystemMenuBar(true);
 		} else {
 			menuBar.getMenus().add(menuHelp);
 		}
