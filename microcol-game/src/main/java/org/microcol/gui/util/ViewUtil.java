@@ -7,10 +7,11 @@ import java.awt.Rectangle;
 import java.awt.Toolkit;
 
 import javax.swing.JDialog;
-import javax.swing.JFrame;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
+
+import javafx.stage.Stage;
 
 /**
  * 
@@ -19,12 +20,12 @@ public class ViewUtil {
 
 	/**
 	 * All game dialogs, windows and UI features are children of this main
-	 * {@link javax.swing.JFrame}
+	 * {@link javafx.stage.Stage}.
 	 */
-	private final JFrame parentFrame;
+	private final Stage parentFrame;
 
 	@Inject
-	public ViewUtil(final JFrame parentFrame) {
+	public ViewUtil(final Stage parentFrame) {
 		this.parentFrame = Preconditions.checkNotNull(parentFrame);
 	}
 
@@ -40,7 +41,7 @@ public class ViewUtil {
 		dialog.setResizable(false);
 		dialog.setModal(true);
 		dialog.pack();
-		dialog.setLocationRelativeTo(parentFrame);
+//		dialog.setLocationRelativeTo(parentFrame);
 		dialog.setVisible(true);
 	}
 
@@ -57,7 +58,7 @@ public class ViewUtil {
 		return new Point((screen.width - window.width) / 2, (screen.height - window.height) / 2);
 	}
 
-	public JFrame getParentFrame() {
+	public Stage getParentFrame() {
 		return parentFrame;
 	}
 

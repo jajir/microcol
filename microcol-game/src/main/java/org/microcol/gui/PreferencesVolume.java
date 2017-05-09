@@ -1,26 +1,34 @@
 package org.microcol.gui;
 
 import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.util.Hashtable;
-
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JSlider;
-import javax.swing.SwingConstants;
 
 import org.microcol.gui.event.VolumeChangeController;
 import org.microcol.gui.event.VolumeChangeEvent;
 import org.microcol.gui.util.Text;
 import org.microcol.gui.util.ViewUtil;
 
-public class PreferencesVolume extends AbstractDialog {
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.Slider;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+
+public class PreferencesVolume {
 
 	/**
 	 * Default serialVersionUID.
 	 */
 	private static final long serialVersionUID = 1L;
+
+	protected static final int BORDER = 10;
+
+	protected static final int BORDER_BIG = 20;
+
+	private final Stage dialog;
 
 	/**
 	 * Constructor when parentFrame is not available.
@@ -36,42 +44,45 @@ public class PreferencesVolume extends AbstractDialog {
 	 */
 	public PreferencesVolume(final ViewUtil viewUtil, final Text text,
 			final VolumeChangeController volumeChangeController, final int actualVolume) {
-		super(viewUtil.getParentFrame());
+		dialog = new Stage();
+		dialog.initModality(Modality.WINDOW_MODAL);
+		dialog.initOwner(viewUtil.getParentFrame());
+		dialog.setTitle(text.get("preferencesVolume.caption"));
 
-		setTitle(text.get("preferencesVolume.caption"));
-		setLayout(new GridBagLayout());
+		VBox root = new VBox();
+		Scene scene = new Scene(root);
+		dialog.setScene(scene);
 
-		final JLabel label = new JLabel(text.get("preferencesVolume.caption"));
-		add(label, new GridBagConstraints(0, 0, 1, 1, 1.0D, 1.0D, GridBagConstraints.SOUTHWEST, GridBagConstraints.NONE,
-				new Insets(10, BORDER_BIG, 0, 0), 0, 0));
+		final Label label = new Label(text.get("preferencesVolume.caption"));
 
-		JSlider slider = new JSlider(SwingConstants.HORIZONTAL, MusicPlayer.MIN_VOLUME, MusicPlayer.MAX_VOLUME,
-				actualVolume);
-		Hashtable<Integer, JLabel> labelTable = new Hashtable<>();
-		labelTable.put(new Integer(MusicPlayer.MIN_VOLUME), new JLabel(text.get("preferencesVolume.low")));
-		labelTable.put(new Integer(MusicPlayer.MAX_VOLUME - 1), new JLabel(text.get("preferencesVolume.high")));
-		slider.setLabelTable(labelTable);
-		slider.setMinorTickSpacing(10);
-		slider.setSnapToTicks(false);
-		slider.setPaintTicks(false);
-		slider.setPaintLabels(true);
+		Slider slider = new Slider();
+		slider.setMin(MusicPlayer.MIN_VOLUME);
+		slider.setMax(MusicPlayer.MAX_VOLUME);
 		slider.setValue(actualVolume);
-		slider.addChangeListener(changeEvent -> {
-			volumeChangeController.fireEvent(new VolumeChangeEvent(slider.getValue()));
+		slider.setShowTickLabels(true);
+		slider.setShowTickMarks(true);
+		// slider.setMajorTickUnit(1);
+		// slider.setMinorTickCount(5);
+		slider.setBlockIncrement(10);
+
+		// Hashtable<Integer, JLabel> labelTable = new Hashtable<>();
+		// labelTable.put(new Integer(MusicPlayer.MIN_VOLUME), new
+		// JLabel(text.get("preferencesVolume.low")));
+		// labelTable.put(new Integer(MusicPlayer.MAX_VOLUME - 1), new
+		// JLabel(text.get("preferencesVolume.high")));
+		slider.valueProperty().addListener((obj, oldValue, newValue) -> {
+			volumeChangeController.fireEvent(new VolumeChangeEvent(newValue.intValue()));
 		});
-
-		add(slider, new GridBagConstraints(0, 1, 1, 1, 1.0D, 1.0D, GridBagConstraints.SOUTHEAST,
-				GridBagConstraints.BOTH, new Insets(BORDER_BIG, BORDER_BIG, BORDER_BIG, BORDER_BIG), 0, 0));
-
-		final JButton buttonOk = new JButton(text.get("dialog.ok"));
-		buttonOk.addActionListener(e -> {
-			setVisible(false);
+		
+		final Button buttonOk = new Button(text.get("dialog.ok"));
+		buttonOk.setOnAction(e -> {
+			dialog.close();
 		});
 		buttonOk.requestFocus();
-		add(buttonOk, new GridBagConstraints(0, 10, 1, 1, 1.0D, 1.0D, GridBagConstraints.SOUTHEAST,
-				GridBagConstraints.NONE, new Insets(0, 0, 10, BORDER_BIG), 0, 0));
-
-		viewUtil.showDialog(this);
+		
+		root.getChildren().addAll(label, slider, buttonOk);
+		
+		dialog.showAndWait();
 	}
 
 }

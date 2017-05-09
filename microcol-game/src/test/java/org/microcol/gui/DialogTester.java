@@ -1,7 +1,6 @@
 package org.microcol.gui;
 
 import javax.swing.JFrame;
-import javax.swing.SwingUtilities;
 
 import org.easymock.classextension.EasyMock;
 import org.microcol.gui.colony.ColonyDialog;
@@ -16,10 +15,14 @@ import org.microcol.model.Player;
 import org.microcol.model.Unit;
 import org.microcol.model.UnitType;
 
+import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.stage.Stage;
+
 /**
  * Allows to display panel and dialog without creating game event.
  */
-public class DialogTester {
+public class DialogTester extends Application {
 
 	private static JFrame parentFrame;
 
@@ -28,22 +31,27 @@ public class DialogTester {
 	private static ImageProvider imageProvider;
 
 	public static void main(String[] args) {
+		launch(args);
+	}
 
-		SwingUtilities.invokeLater(() -> {
+	@Override
+	public void start(final Stage primaryStage) throws Exception {
+		Platform.runLater(() -> {
 			parentFrame = new JFrame("main frame");
-			viewUtil = new ViewUtil(parentFrame);
+			viewUtil = new ViewUtil(primaryStage);
 			imageProvider = new ImageProvider();
+
 			// startWaitingDialog();
 			// startNewGameDialog();
-			// startPreferencesVolume();
+			 startPreferencesVolume();
 			// startPreferencesAnimationSpeed();
 			// testDialogFight();
 			// dialogWarning();
 			// dialogSave();
 			// dialogLoad();
-			europeDialog();
+			// europeDialog();
 			// dialogColony();
-
+			primaryStage.show();
 		});
 	}
 

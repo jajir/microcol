@@ -14,10 +14,11 @@ import org.microcol.gui.MicroColModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 
+import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.stage.Stage;
 
-public class MicroCol extends javafx.application.Application {
+public class MicroCol extends Application {
 
 	public static void main(String[] args) {
 		launch(args);
