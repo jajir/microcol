@@ -3,9 +3,9 @@ package org.microcol.gui;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
 
-import java.awt.Image;
-
 import org.junit.Test;
+
+import javafx.scene.image.Image;
 
 public class ImageProviderTest {
 
