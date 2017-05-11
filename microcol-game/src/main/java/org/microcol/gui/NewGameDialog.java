@@ -1,27 +1,26 @@
 package org.microcol.gui;
 
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
 import java.io.File;
 import java.net.URISyntaxException;
 import java.net.URL;
 
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
-
 import org.microcol.gui.util.Text;
 import org.microcol.gui.util.ViewUtil;
 
-public class NewGameDialog extends AbstractDialog {
+import javafx.collections.FXCollections;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
+import javafx.scene.layout.GridPane;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
-	/**
-	 * Default serialVersionUID.
-	 */
-	private static final long serialVersionUID = 1L;
+public class NewGameDialog {
 
-	private static final int BORDER_SPAN = 20;
+	private final Stage dialog;
 
 	/**
 	 * Constructor when parentFrame is not available.
@@ -32,40 +31,50 @@ public class NewGameDialog extends AbstractDialog {
 	 *            required localization helper class
 	 */
 	public NewGameDialog(final ViewUtil viewUtil, final Text text) {
-		super(viewUtil.getParentFrame());
-		setTitle(text.get("newGameDialog.title"));
-		setLayout(new GridBagLayout());
+		dialog = new Stage();
+		dialog.initModality(Modality.WINDOW_MODAL);
+		dialog.initOwner(viewUtil.getParentFrame());
+		dialog.setTitle(text.get("newGameDialog.title"));
 
-		final JLabel labelSelectMap = new JLabel(text.get("newGameDialog.selectMap"));
-		add(labelSelectMap, new GridBagConstraints(0, 0, 1, 1, 0.0D, 0.0D, GridBagConstraints.SOUTHEAST,
-				GridBagConstraints.NONE, new Insets(BORDER_SPAN, BORDER_SPAN, 15, 5), 0, 0));
+		GridPane root = new GridPane();
+		root.setAlignment(Pos.CENTER);
+		root.setHgap(10);
+		root.setVgap(10);
+		root.setPadding(new Insets(25, 25, 25, 25));
 
-		final JComboBox<String> comboBoxSelectMap = new JComboBox<>(getMaps());
-		comboBoxSelectMap.setSelectedIndex(0);
+		Scene scene = new Scene(root);
+		dialog.setScene(scene);
+
+		// Y=0
+		final Label labelSelectMap = new Label(text.get("newGameDialog.selectMap"));
+		root.add(labelSelectMap, 0, 0);
+
+		final ComboBox<String> comboBoxSelectMap = new ComboBox<>();
+		comboBoxSelectMap.setItems(FXCollections.observableArrayList(getMaps()));
+		if (getMaps().length > 0) {
+			comboBoxSelectMap.setValue(getMaps()[0]);
+		}
 		comboBoxSelectMap.setEditable(false);
-		add(comboBoxSelectMap, new GridBagConstraints(1, 0, 1, 1, 0.0D, 0.0D, GridBagConstraints.SOUTHWEST,
-				GridBagConstraints.NONE, new Insets(BORDER_SPAN, 5, 15, BORDER_SPAN), 0, 0));
+		root.add(comboBoxSelectMap, 1, 0);
 
-		final JButton buttonCancel = new JButton(text.get("newGameDialog.cancel"));
-		buttonCancel.addActionListener(e -> {
-			setVisible(false);
+		// Y=1
+		final Button buttonCancel = new Button(text.get("newGameDialog.cancel"));
+		buttonCancel.setOnAction(e -> {
+			dialog.close();
 		});
-		buttonCancel.requestFocus();
-		add(buttonCancel, new GridBagConstraints(0, 10, 1, 1, 1.0D, 1.0D, GridBagConstraints.SOUTHWEST,
-				GridBagConstraints.NONE, new Insets(0, BORDER_SPAN, BORDER_SPAN, 10), 0, 0));
+		root.add(buttonCancel, 0, 1);
 
-		final JButton buttonStartGame = new JButton(text.get("newGameDialog.startGame"));
-		buttonStartGame.addActionListener(e -> {
+		final Button buttonStartGame = new Button(text.get("newGameDialog.startGame"));
+		buttonStartGame.setOnAction(e -> {
 			// TODO JJ selected map should be used.
 			// final String selectedMap = (String)
 			// comboBoxSelectMap.getSelectedItem();
-			setVisible(false);
+			dialog.close();
 		});
 		buttonStartGame.requestFocus();
-		add(buttonStartGame, new GridBagConstraints(1, 10, 1, 1, 1.0D, 1.0D, GridBagConstraints.SOUTHEAST,
-				GridBagConstraints.NONE, new Insets(0, 0, BORDER_SPAN, BORDER_SPAN), 0, 0));
-		
-		viewUtil.showDialog(this);
+		root.add(buttonStartGame, 1, 1);
+
+		dialog.showAndWait();
 	}
 
 	private String[] getMaps() {

@@ -1,23 +1,22 @@
 package org.microcol.gui;
 
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-
 import org.microcol.gui.util.Text;
 import org.microcol.gui.util.ViewUtil;
 import org.microcol.model.Unit;
 
-public class DialogFigth extends AbstractDialog {
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.GridPane;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
-	/**
-	 * Default serialVersionUID.
-	 */
-	private static final long serialVersionUID = 1L;
+public class DialogFigth {
+
+	private final Stage dialog;
 
 	/**
 	 * It's <code>true</code> when user choose to fight.
@@ -42,73 +41,71 @@ public class DialogFigth extends AbstractDialog {
 	 */
 	public DialogFigth(final Text text, final ViewUtil viewUtil, final ImageProvider imageProvider,
 			final LocalizationHelper localizationHelper, final Unit unitAttacker, final Unit unitDefender) {
-		super(viewUtil.getParentFrame());
-		setTitle(text.get("dialogFight.title"));
-		setLayout(new GridBagLayout());
+		dialog = new Stage();
+		dialog.initModality(Modality.WINDOW_MODAL);
+		dialog.initOwner(viewUtil.getParentFrame());
+		dialog.setTitle(text.get("dialogFight.title"));
 
-		final JLabel label = new JLabel(text.get("dialogFight.title"));
-		add(label, new GridBagConstraints(0, 0, 1, 1, 1.0D, 1.0D, GridBagConstraints.SOUTHWEST, GridBagConstraints.NONE,
-				new Insets(BORDER, BORDER_BIG, BORDER_BIG, BORDER_BIG), 0, 0));
+		final GridPane root = new GridPane();
+		root.setAlignment(Pos.CENTER);
+		root.setHgap(10);
+		root.setVgap(10);
+		root.setPadding(new Insets(25, 25, 25, 25));
+		Scene scene = new Scene(root);
+		dialog.setScene(scene);
+
+		// Y=0
+		final Label label = new Label(text.get("dialogFight.title"));
+		root.add(label, 0, 0, 3, 1);
 
 		/**
 		 * Attacker
 		 */
-		final JLabel labelAttacker = new JLabel(text.get("dialogFight.attacker"));
-		add(labelAttacker, new GridBagConstraints(0, 1, 1, 1, 1.0D, 1.0D, GridBagConstraints.NORTHWEST,
-				GridBagConstraints.NONE, new Insets(BORDER, BORDER_BIG, 0, BORDER_BIG), 0, 0));
-		describeUnit(0, unitAttacker, imageProvider, localizationHelper);
+		final Label labelAttacker = new Label(text.get("dialogFight.attacker"));
+		root.add(labelAttacker, 0, 1);
+		describeUnit(root, 0, unitAttacker, imageProvider, localizationHelper);
 
 		/**
 		 * Fight image
 		 */
-		//FIXME JJ image icon
-//		final ImageIcon swords = new ImageIcon(imageProvider.getImage(ImageProvider.IMG_CROSSED_SWORDS));
-//		add(new JLabel(swords), new GridBagConstraints(1, 1, 1, 7, 1.0D, 1.0D, GridBagConstraints.SOUTH,
-//				GridBagConstraints.NONE, new Insets(BORDER, BORDER, BORDER, BORDER), 0, 0));
+		final ImageView swords = new ImageView(imageProvider.getImage(ImageProvider.IMG_CROSSED_SWORDS));
+		root.add(swords, 1, 1, 1, 3);
 
 		/**
 		 * Defender
 		 */
-		final JLabel labelDefender = new JLabel(text.get("dialogFight.defender"));
-		add(labelDefender, new GridBagConstraints(2, 1, 1, 1, 1.0D, 1.0D, GridBagConstraints.NORTHWEST,
-				GridBagConstraints.NONE, new Insets(BORDER, BORDER_BIG, 0, BORDER_BIG), 0, 0));
-		describeUnit(2, unitDefender, imageProvider, localizationHelper);
+		final Label labelDefender = new Label(text.get("dialogFight.defender"));
+		root.add(labelDefender, 2, 1);
+		describeUnit(root, 2, unitDefender, imageProvider, localizationHelper);
 
 		/**
-		 * Buttons
+		 * Buttons Y=10
 		 */
-		final JButton buttonCancel = new JButton(text.get("dialogFight.buttonCancel"));
-		buttonCancel.addActionListener(e -> {
+		final Button buttonCancel = new Button(text.get("dialogFight.buttonCancel"));
+		buttonCancel.setOnAction(e -> {
 			userChooseFight = false;
-			setVisible(false);
-			dispose();
+			dialog.close();
 		});
-		add(buttonCancel, new GridBagConstraints(0, 10, 1, 1, 0.0D, 0.0D, GridBagConstraints.SOUTHWEST,
-				GridBagConstraints.NONE, new Insets(BORDER_BIG, BORDER, BORDER, BORDER), 0, 0));
+		root.add(buttonCancel, 0, 10);
 
-		final JButton buttonFight = new JButton(text.get("dialogFight.buttonFight"));
-		buttonFight.addActionListener(e -> {
-			userChooseFight = true;
-			setVisible(false);
-			dispose();
-		});
-		add(buttonFight, new GridBagConstraints(2, 10, 1, 1, 0.0D, 0.0D, GridBagConstraints.SOUTHEAST,
-				GridBagConstraints.NONE, new Insets(BORDER_BIG, BORDER, BORDER, BORDER), 0, 0));
-
+		final Button buttonFight = new Button(text.get("dialogFight.buttonFight"));
 		buttonFight.requestFocus();
-		viewUtil.showDialog(this);
+		buttonFight.setOnAction(e -> {
+			userChooseFight = true;
+			dialog.close();
+		});
+		root.add(buttonFight, 2, 10);
+
+		dialog.showAndWait();
 	}
 
-	private void describeUnit(final int column, final Unit unit, final ImageProvider imageProvider,
+	private void describeUnit(final GridPane root, final int column, final Unit unit, final ImageProvider imageProvider,
 			final LocalizationHelper localizationHelper) {
-		final JLabel labelname = new JLabel(localizationHelper.getUnitName(unit.getType()));
-		add(labelname, new GridBagConstraints(column, 2, 1, 1, 0.0D, 0.0D, GridBagConstraints.NORTHWEST,
-				GridBagConstraints.NONE, new Insets(0, BORDER_BIG, 0, BORDER_BIG), 0, 0));
+		final Label labelname = new Label(localizationHelper.getUnitName(unit.getType()));
+		root.add(labelname, column, 2);
 
-		//TODO JJ correct it
-//		final ImageIcon unitImage = new ImageIcon(imageProvider.getUnitImage(unit.getType()));
-//		add(new JLabel(unitImage), new GridBagConstraints(column, 3, 1, 1, 0.0D, 0.0D, GridBagConstraints.NORTHWEST,
-//				GridBagConstraints.NONE, new Insets(0, BORDER_BIG, BORDER, BORDER_BIG), 0, 0));
+		final ImageView unitImage = new ImageView(imageProvider.getUnitImage(unit.getType()));
+		root.add(unitImage, column, 3);
 	}
 
 	public boolean isUserChooseFight() {

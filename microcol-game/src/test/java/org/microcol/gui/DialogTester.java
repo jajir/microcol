@@ -1,7 +1,5 @@
 package org.microcol.gui;
 
-import javax.swing.JFrame;
-
 import org.easymock.classextension.EasyMock;
 import org.microcol.gui.colony.ColonyDialog;
 import org.microcol.gui.europe.EuropeDialog;
@@ -24,11 +22,11 @@ import javafx.stage.Stage;
  */
 public class DialogTester extends Application {
 
-	private static JFrame parentFrame;
-
 	private static ViewUtil viewUtil;
 
 	private static ImageProvider imageProvider;
+
+	private static Text text;
 
 	public static void main(String[] args) {
 		launch(args);
@@ -37,16 +35,17 @@ public class DialogTester extends Application {
 	@Override
 	public void start(final Stage primaryStage) throws Exception {
 		Platform.runLater(() -> {
-			parentFrame = new JFrame("main frame");
 			viewUtil = new ViewUtil(primaryStage);
 			imageProvider = new ImageProvider();
-
+			text = new Text(Language.cz.getLocale());
+			
 			// startPreferencesVolume();
 			// startPreferencesAnimationSpeed();
-
-			startNewGameDialog();
-			// testDialogFight();
 			// dialogWarning();
+			// testDialogFight();
+			// startNewGameDialog();
+			startAboutDialog();
+			
 			// dialogSave();
 			// dialogLoad();
 			// europeDialog();
@@ -55,26 +54,27 @@ public class DialogTester extends Application {
 		});
 	}
 
+	public final static void startAboutDialog() {
+		new AboutDialog(viewUtil, text);
+	}
+
 	public final static void startNewGameDialog() {
-		new NewGameDialog(new ViewUtil(parentFrame), new Text(Language.cz.getLocale()));
+		new NewGameDialog(viewUtil, text);
 	}
 
 	public final static void startPreferencesVolume() {
-		final Text text = new Text(Text.Language.cz.getLocale());
 		VolumeChangeController controller = new VolumeChangeController();
 		int actualVolume = 10;
 		new PreferencesVolume(viewUtil, text, controller, actualVolume);
 	}
 
 	public final static void startPreferencesAnimationSpeed() {
-		final Text text = new Text(Text.Language.cz.getLocale());
 		AnimationSpeedChangeController controller = new AnimationSpeedChangeController();
 		int actualVolume = 10;
 		new PreferencesAnimationSpeed(text, viewUtil, controller, actualVolume);
 	}
 
 	public final static void testDialogFight() {
-		final Text text = new Text(Text.Language.cz.getLocale());
 		final LocalizationHelper localizationHelper = new LocalizationHelper(text);
 
 		final Player playerAttacker = EasyMock.createMock(Player.class);
@@ -94,12 +94,10 @@ public class DialogTester extends Application {
 	}
 
 	public final static void dialogWarning() {
-		DialogWarning dialogWarning = new DialogWarning(new ViewUtil(parentFrame));
-		dialogWarning.setVisible(true);
+		new DialogWarning(viewUtil);
 	}
 
 	public final static void dialogSave() {
-		final Text text = new Text(Text.Language.cz.getLocale());
 		final GameController gameController = EasyMock.createMock(GameController.class);
 		final PersistingDialog persistingDialog = new PersistingDialog(text, gameController);
 
@@ -107,7 +105,6 @@ public class DialogTester extends Application {
 	}
 
 	public final static void dialogLoad() {
-		final Text text = new Text(Text.Language.cz.getLocale());
 		final GameController gameController = EasyMock.createMock(GameController.class);
 		final PersistingDialog persistingDialog = new PersistingDialog(text, gameController);
 
@@ -115,14 +112,12 @@ public class DialogTester extends Application {
 	}
 
 	public final static void europeDialog() {
-		final Text text = new Text(Text.Language.cz.getLocale());
 		final GameController gameController = EasyMock.createMock(GameController.class);
 		EasyMock.replay(gameController);
 		new EuropeDialog(viewUtil, text, imageProvider, gameController);
 	}
 
 	public final static void dialogColony() {
-		final Text text = new Text(Text.Language.cz.getLocale());
 		final GameController gameController = EasyMock.createMock(GameController.class);
 		EasyMock.replay(gameController);
 		new ColonyDialog(viewUtil, text, imageProvider, gameController);
