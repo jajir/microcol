@@ -1,8 +1,5 @@
 package org.microcol.gui;
 
-import java.awt.GridBagConstraints;
-import java.awt.Insets;
-
 import org.microcol.gui.event.VolumeChangeController;
 import org.microcol.gui.event.VolumeChangeEvent;
 import org.microcol.gui.util.Text;
@@ -13,20 +10,11 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.util.StringConverter;
 
 public class PreferencesVolume {
-
-	/**
-	 * Default serialVersionUID.
-	 */
-	private static final long serialVersionUID = 1L;
-
-	protected static final int BORDER = 10;
-
-	protected static final int BORDER_BIG = 20;
 
 	private final Stage dialog;
 
@@ -59,29 +47,39 @@ public class PreferencesVolume {
 		slider.setMin(MusicPlayer.MIN_VOLUME);
 		slider.setMax(MusicPlayer.MAX_VOLUME);
 		slider.setValue(actualVolume);
+		slider.setSnapToTicks(true);
 		slider.setShowTickLabels(true);
-		slider.setShowTickMarks(true);
-		// slider.setMajorTickUnit(1);
-		// slider.setMinorTickCount(5);
-		slider.setBlockIncrement(10);
+		slider.setShowTickMarks(false);
+		slider.setLabelFormatter(new StringConverter<Double>() {
+			@Override
+			public String toString(final Double value) {
+				if (MusicPlayer.MIN_VOLUME == value) {
+					return text.get("preferencesVolume.low");
+				}
+				if (MusicPlayer.MAX_VOLUME == value) {
+					return text.get("preferencesVolume.high");
+				}
+				return null;
+			}
 
-		// Hashtable<Integer, JLabel> labelTable = new Hashtable<>();
-		// labelTable.put(new Integer(MusicPlayer.MIN_VOLUME), new
-		// JLabel(text.get("preferencesVolume.low")));
-		// labelTable.put(new Integer(MusicPlayer.MAX_VOLUME - 1), new
-		// JLabel(text.get("preferencesVolume.high")));
+			@Override
+			public Double fromString(final String string) {
+				return null;
+			}
+		});
+		slider.setBlockIncrement(10);
 		slider.valueProperty().addListener((obj, oldValue, newValue) -> {
 			volumeChangeController.fireEvent(new VolumeChangeEvent(newValue.intValue()));
 		});
-		
+
 		final Button buttonOk = new Button(text.get("dialog.ok"));
 		buttonOk.setOnAction(e -> {
 			dialog.close();
 		});
 		buttonOk.requestFocus();
-		
+
 		root.getChildren().addAll(label, slider, buttonOk);
-		
+
 		dialog.showAndWait();
 	}
 

@@ -41,26 +41,22 @@ public class DialogTester extends Application {
 			viewUtil = new ViewUtil(primaryStage);
 			imageProvider = new ImageProvider();
 
-			// startWaitingDialog();
-			// startNewGameDialog();
-			 startPreferencesVolume();
+			// startPreferencesVolume();
 			// startPreferencesAnimationSpeed();
+
+			startNewGameDialog();
 			// testDialogFight();
 			// dialogWarning();
 			// dialogSave();
 			// dialogLoad();
 			// europeDialog();
 			// dialogColony();
-			primaryStage.show();
+			// primaryStage.show();
 		});
 	}
 
 	public final static void startNewGameDialog() {
 		new NewGameDialog(new ViewUtil(parentFrame), new Text(Language.cz.getLocale()));
-	}
-
-	public final static void startWaitingDialog() {
-		new WaitingDialog(new ViewUtil(parentFrame), new Text(Language.cz.getLocale()));
 	}
 
 	public final static void startPreferencesVolume() {
@@ -74,8 +70,7 @@ public class DialogTester extends Application {
 		final Text text = new Text(Text.Language.cz.getLocale());
 		AnimationSpeedChangeController controller = new AnimationSpeedChangeController();
 		int actualVolume = 10;
-		PreferencesAnimationSpeed preferences = new PreferencesAnimationSpeed(text, viewUtil, controller, actualVolume);
-		preferences.setVisible(true);
+		new PreferencesAnimationSpeed(text, viewUtil, controller, actualVolume);
 	}
 
 	public final static void testDialogFight() {
