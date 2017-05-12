@@ -29,7 +29,7 @@ public class EuropeDialog extends AbstractDialog {
 	@Inject
 	public EuropeDialog(final ViewUtil viewUtil, final Text text, final ImageProvider imageProvider,
 			final GameController gameController) {
-		super(viewUtil.getParentFrame());
+//		super(viewUtil.getParentFrame());
 		Preconditions.checkNotNull(gameController);
 		setTitle(text.get("europeDialog.caption"));
 		setLayout(new GridBagLayout());

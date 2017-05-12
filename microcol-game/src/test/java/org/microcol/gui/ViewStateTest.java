@@ -6,7 +6,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.Optional;
 
-import org.easymock.classextension.EasyMock;
+import org.easymock.EasyMock;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -40,7 +40,6 @@ public class ViewStateTest {
 		assertEquals(loc, viewState.getMouseOverTile().get());
 		EasyMock.verify(motcController);
 	}
-	
 
 	@Test
 	public void test_setMouseOverTile_moreThanOnce() throws Exception {
@@ -70,7 +69,6 @@ public class ViewStateTest {
 		assertEquals(loc2, viewState.getMouseOverTile().get());
 		EasyMock.verify(motcController);
 	}
-	
 
 	@Before
 	public void setUp() {

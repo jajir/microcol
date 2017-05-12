@@ -3,7 +3,7 @@ package org.microcol.gui;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 
-import org.easymock.classextension.EasyMock;
+import org.easymock.EasyMock;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -21,8 +21,8 @@ public class ScreenScrollingTest {
 	// TODO JJ how to mock lambda?
 	@Test
 	public void test_constructor() throws Exception {
-		pathPlanning.paintPathWithStepsLimit(EasyMock.eq(Point.of(10, 10)), EasyMock.eq(Point.of(30, 10)), EasyMock.notNull(),
-				EasyMock.eq(10));
+		pathPlanning.paintPathWithStepsLimit(EasyMock.eq(Point.of(10, 10)), EasyMock.eq(Point.of(30, 10)),
+				EasyMock.notNull(), EasyMock.eq(10));
 		EasyMock.replay(pathPlanning);
 		ScreenScrolling screenScrolling = new ScreenScrolling(pathPlanning, Point.of(10, 10), Point.of(30, 10));
 

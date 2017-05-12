@@ -16,6 +16,7 @@
 		<jacoco.version>0.7.9</jacoco.version>
 		<github.global.server>github</github.global.server>
 		<github.global.oauth2Token>${env.GITHUB_OAUTH_TOKEN}</github.global.oauth2Token>
+		<easymock.version>3.4</easymock.version>
 	</properties>
 
 	<dependencies>
@@ -73,15 +74,17 @@
 		<dependency>
 			<groupId>org.easymock</groupId>
 			<artifactId>easymock</artifactId>
-			<version>2.4</version>
+			<version>${easymock.version}</version>
 			<scope>test</scope>
 		</dependency>
+		<!-- 
 		<dependency>
 			<groupId>org.easymock</groupId>
 			<artifactId>easymockclassextension</artifactId>
-			<version>2.4</version>
+			<version>${easymock.version}</version>
 			<scope>test</scope>
 		</dependency>
+		 -->
 	</dependencies>
 
 	<build>

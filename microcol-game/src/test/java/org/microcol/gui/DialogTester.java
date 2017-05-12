@@ -1,6 +1,6 @@
 package org.microcol.gui;
 
-import org.easymock.classextension.EasyMock;
+import org.easymock.EasyMock;
 import org.microcol.gui.colony.ColonyDialog;
 import org.microcol.gui.europe.EuropeDialog;
 import org.microcol.gui.event.AnimationSpeedChangeController;
@@ -38,14 +38,14 @@ public class DialogTester extends Application {
 			viewUtil = new ViewUtil(primaryStage);
 			imageProvider = new ImageProvider();
 			text = new Text(Language.cz.getLocale());
-			
+
 			// startPreferencesVolume();
 			// startPreferencesAnimationSpeed();
 			// dialogWarning();
 			// testDialogFight();
 			// startNewGameDialog();
 			startAboutDialog();
-			
+
 			// dialogSave();
 			// dialogLoad();
 			// europeDialog();

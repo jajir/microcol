@@ -2,7 +2,7 @@ package org.microcol.gui;
 
 import static org.junit.Assert.assertEquals;
 
-import org.easymock.classextension.EasyMock;
+import org.easymock.EasyMock;
 import org.junit.Test;
 import org.microcol.gui.util.Text;
 import org.microcol.model.Terrain;
