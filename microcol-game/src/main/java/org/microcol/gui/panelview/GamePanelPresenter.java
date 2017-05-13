@@ -185,7 +185,8 @@ public final class GamePanelPresenter implements Localized {
 			display.getVisualDebugInfo().setLocations(e.getLocations());
 		});
 
-//		display.getGamePanelView().getParent().addComponentListener(new GamePanelListener(display));
+		// display.getGamePanelView().getParent().addComponentListener(new
+		// GamePanelListener(display));
 		viewController.addListener(event -> onCenterView());
 		exitGameController.addListener(event -> display.stopTimer());
 
@@ -206,6 +207,8 @@ public final class GamePanelPresenter implements Localized {
 	}
 
 	private void swithToMoveMode() {
+		Preconditions.checkArgument(viewState.getSelectedTile().isPresent(),
+				"to move mode could be switched just when some tile is selected.");
 		final List<Unit> units = gameController.getModel().getCurrentPlayer()
 				.getUnitsAt(viewState.getSelectedTile().get());
 		// TODO JJ Filter unit that have enough action points
@@ -255,14 +258,15 @@ public final class GamePanelPresenter implements Localized {
 	private void onMouseDragged(final MouseEvent e) {
 		if (lastMousePosition != null) {
 			final Bounds bounds = display.getViewportBounds();
-//			final JViewport viewPort = (JViewport) display.getGamePanelView().getParent();
+			// final JViewport viewPort = (JViewport)
+			// display.getGamePanelView().getParent();
 			if (bounds != null) {
 				final Point currentPosition = Point.of(e.getX(), e.getY());
 				final Point delta = lastMousePosition.substract(currentPosition);
-				//FIXME JJ please fix it
-//				view.x += delta.getX();
-//				view.y += delta.getY();
-//				display.getGamePanelView().scrollToPoint(Point.of());
+				// FIXME JJ please fix it
+				// view.x += delta.getX();
+				// view.y += delta.getY();
+				// display.getGamePanelView().scrollToPoint(Point.of());
 			}
 		}
 	}

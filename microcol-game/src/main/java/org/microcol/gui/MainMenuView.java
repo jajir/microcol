@@ -149,8 +149,14 @@ public class MainMenuView implements MainMenuPresenter.Display {
 		if (gamePreferences.isDevelopment()) {
 			menuBar.getMenus().add(mainMenuDevelopment.getDevelopmentMenu());
 		}
-		menuBar.useSystemMenuBarProperty().set(true);
-		
+		/**
+		 * Following command will use apple system menu. Side effect is that
+		 * menu accelerators like 'm' stop work.
+		 * 
+		 * TODO it's probably bug.
+		 */
+		// menuBar.useSystemMenuBarProperty().set(true);
+
 		/**
 		 * Help
 		 */
@@ -162,7 +168,7 @@ public class MainMenuView implements MainMenuPresenter.Display {
 			Menu defaultApplicationMenu = tk.createDefaultApplicationMenu("MicroCol");
 			// Update the existing Application menu
 			tk.setApplicationMenu(defaultApplicationMenu);
-			
+
 			menuItemAbout = defaultApplicationMenu.getItems().get(0);
 		} else {
 			menuItemAbout = new MenuItem();

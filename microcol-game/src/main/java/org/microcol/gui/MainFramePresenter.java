@@ -76,13 +76,6 @@ public class MainFramePresenter {
 //		});
 	}
 
-//	private void savePreferences() {
-//		final Rectangle normalBounds = display.getFrame().getExtendedState() == JFrame.NORMAL
-//				? display.getFrame().getBounds() : lastNormalBounds;
-//		gamePreferences.setMainFramePosition(normalBounds);
-//		gamePreferences.setMainFrameState(display.getFrame().getExtendedState());
-//	}
-
 	public void showPanel(final String panelName) {
 		display.showPanel(panelName);
 	}

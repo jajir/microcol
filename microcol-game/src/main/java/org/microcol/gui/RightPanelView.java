@@ -76,6 +76,8 @@ public class RightPanelView implements RightPanelPresenter.Display, Localized {
 		nextTurnButton.setId("nextTurnButton");
 		box.add(nextTurnButton, 0, 10);
 		box.setPrefWidth(RIGHT_PANEL_WIDTH);
+		box.setMinWidth(RIGHT_PANEL_WIDTH);
+		box.getStylesheets().add("gui/rightPanelView.css");
 	}
 
 	@Override

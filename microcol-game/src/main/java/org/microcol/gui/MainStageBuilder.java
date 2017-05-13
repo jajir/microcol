@@ -74,7 +74,7 @@ public class MainStageBuilder {
 		}
 		final VBox mainBox = new VBox();
 		final Scene scene = new Scene(mainBox);
-		scene.setFill(Color.OLDLACE);
+		scene.getStylesheets().add("gui/MicroCol.css");
 
 		mainBox.getChildren().add(mainMenuView.getMenuBar());
 		mainBox.getChildren().add(mainFrame.getBox());
