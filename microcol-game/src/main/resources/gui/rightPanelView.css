@@ -2,9 +2,21 @@
  * 
  * 
  */
+#rightPanel{
+}
  
-.button {
-    -fx-font: 26px "Serif";
-    -fx-padding: 10;
-    -fx-background-color: #CCFF99;
+.scroll-pane {
+	-fx-background-color: red;
+	-fx-fit-to-width: true;
+	-fx-fit-to-height:true;
+	-fx-hbar-policy: never;
+	-fx-vbar-policy: as-needed;
+	-fx-padding: 0;
+	-fx-focus-traversable: false;
+}
+
+.scroll-pane:focused {
+  -fx-background-color: -fx-focus-color,-fx-box-border,-fx-control-inner-background;
+  -fx-background-insets: 0,0,0,0;
+  -fx-background-radius: 0;
 }

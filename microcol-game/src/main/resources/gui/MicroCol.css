@@ -2,3 +2,13 @@
  * JavaFx setting for whole MicroCol.
  * 
  */
+ 
+#mainPanel #mainBox{
+}
+
+/* disable focused border on component */
+.scroll-pane:focused {
+  -fx-background-color: -fx-focus-color,-fx-box-border,-fx-control-inner-background;
+  -fx-background-insets: 0,0,0,0;
+  -fx-background-radius: 0;
+}

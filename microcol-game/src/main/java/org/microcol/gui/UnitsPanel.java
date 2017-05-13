@@ -47,17 +47,15 @@ public class UnitsPanel implements Localized {
 			Unit s = (Unit) u;
 			box.getChildren().add(new Label("", new ImageView(imageProvider.getUnitImage(s.getType()))));
 			final StringBuilder sb = new StringBuilder(200);
-			sb.append("<html><div>");
 			sb.append(localizationHelper.getUnitName(s.getType()));
-			sb.append("</div><div>");
+			sb.append("\n");
 			sb.append(getText().get("unitsPanel.availableMoved"));
 			sb.append(" ");
 			sb.append(s.getAvailableMoves());
-			sb.append("</div><div>");
+			sb.append("\n");
 			sb.append(getText().get("unitsPanel.owner"));
 			sb.append(" ");
 			sb.append(s.getOwner().getName());
-			sb.append("</div></html>");
 			box.getChildren().add(new Label(sb.toString()));
 		}
 		box.getChildren().add(new Label(""));

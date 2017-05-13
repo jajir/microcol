@@ -10,7 +10,6 @@ import org.microcol.model.Calendar;
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
 
-import javafx.application.Platform;
 import javafx.scene.control.Label;
 
 public class StatusBarPresenter implements Localized {

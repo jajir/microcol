@@ -24,7 +24,9 @@ public class MainPanelView {
 		scrollPane.setHbarPolicy(ScrollBarPolicy.AS_NEEDED);
 		gamePanel.getViewPortBoundsProperty().bind(scrollPane.viewportBoundsProperty());
 		box = new VBox();
+		box.setId("mainPanel");
 		HBox hBox = new HBox();
+		hBox.setId("mainBox");
 		hBox.getChildren().addAll(scrollPane, rightPanelView.getBox());
 		box.getChildren().addAll(hBox, statusBar.getBox());
 	}
