@@ -1,9 +1,5 @@
 package org.microcol.gui.panelview;
 
-import java.awt.Dimension;
-
-import javax.swing.JViewport;
-
 import org.microcol.gui.Point;
 import org.microcol.model.Location;
 import org.microcol.model.WorldMap;
@@ -11,7 +7,6 @@ import org.microcol.model.WorldMap;
 import com.google.common.base.MoreObjects;
 
 import javafx.geometry.Bounds;
-import javafx.scene.control.ScrollPane;
 
 /**
  * Define top left corner and bottom right corner.
@@ -41,15 +36,16 @@ public class Area {
 	 */
 	private final Point pointBottomRight;
 
-	public Area(final Bounds bounds, final WorldMap world) {
-//		final Dimension dim = viewport.getExtentSize();
-//		final java.awt.Point pos = viewport.getViewPosition();
-//
-//		pointTopLeft = Point.of((int) pos.getX(), (int) pos.getY());
-//		pointBottomRight = pointTopLeft.add((int) dim.getWidth(), (int) dim.getHeight());
-//		final Bounds bounds = viewport.getViewportBounds();
-		pointTopLeft = Point.of((int)bounds.getMinX(),(int)bounds.getMinY());
-		pointBottomRight = Point.of((int)bounds.getMaxX(),(int)bounds.getMaxY());
+	/**
+	 * 
+	 * @param bounds
+	 *            required visible area on screen
+	 * @param worldMap
+	 *            required world map
+	 */
+	public Area(final Bounds bounds, final WorldMap worldMap) {
+		pointTopLeft = Point.of((int) bounds.getMinX(), (int) bounds.getMinY());
+		pointBottomRight = Point.of((int) bounds.getMaxX(), (int) bounds.getMaxY());
 
 		final Point p1 = pointTopLeft.divide(GamePanelView.TOTAL_TILE_WIDTH_IN_PX).add(Point.MAP_MIN_X,
 				Point.MAP_MIN_Y);
@@ -59,7 +55,7 @@ public class Area {
 				.add(Point.of(1, 1));
 
 		topLeft = Location.of(Math.max(Point.MAP_MIN_X, p1.getX()), Math.max(Point.MAP_MIN_Y, p1.getY()));
-		bottomRight = Location.of(Math.min(p2.getX(), world.getMaxX()), Math.min(p2.getY(), world.getMaxY()));
+		bottomRight = Location.of(Math.min(p2.getX(), worldMap.getMaxX()), Math.min(p2.getY(), worldMap.getMaxY()));
 	}
 
 	public Location getTopLeft() {
