@@ -8,9 +8,11 @@ import org.microcol.gui.event.ExitGameEvent;
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
 
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 public class MainStageBuilder {
@@ -60,18 +62,40 @@ public class MainStageBuilder {
 			gamePreferences.setMainFramePosition(rectangle);
 		});
 		final Rectangle rectangle = gamePreferences.getMainFramePosition();
-		primaryStage.setX(rectangle.getX());
-		primaryStage.setY(rectangle.getY());
-		primaryStage.setWidth(rectangle.getWidth());
-		primaryStage.setHeight(rectangle.getHeight());
+		if (isOnScreen(rectangle)) {
+			primaryStage.setX(rectangle.getX());
+			primaryStage.setY(rectangle.getY());
+			primaryStage.setWidth(rectangle.getWidth());
+			primaryStage.setHeight(rectangle.getHeight());
+		} else {
+			// use default game size
+			primaryStage.setWidth(800);
+			primaryStage.setHeight(600);
+		}
 		final VBox mainBox = new VBox();
-		final Scene scene = new Scene(mainBox, 400, 350);
+		final Scene scene = new Scene(mainBox);
 		scene.setFill(Color.OLDLACE);
 
 		mainBox.getChildren().add(mainMenuView.getMenuBar());
 		mainBox.getChildren().add(mainFrame.getBox());
 
 		primaryStage.setScene(scene);
+	}
+
+	private boolean isOnScreen(final Rectangle rectangle) {
+		Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
+		if (isPointOutOfScreen(rectangle.getMinX(), rectangle.getMinY(), primaryScreenBounds)) {
+			return false;
+		}
+		if (isPointOutOfScreen(rectangle.getMaxX(), rectangle.getMaxY(), primaryScreenBounds)) {
+			return false;
+		}
+		return true;
+	}
+
+	private boolean isPointOutOfScreen(final double x, final double y, final Rectangle2D primaryScreenBounds) {
+		return x < primaryScreenBounds.getMinX() || x > primaryScreenBounds.getMaxX()
+				|| y < primaryScreenBounds.getMinY() || y > primaryScreenBounds.getMaxY();
 	}
 
 }

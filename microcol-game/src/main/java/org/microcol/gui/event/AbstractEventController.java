@@ -8,6 +8,8 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
 
+import javafx.application.Platform;
+
 /**
  * Simple event controller. Class should not be extended.
  * 
@@ -59,7 +61,16 @@ public abstract class AbstractEventController<E> {
 	public void fireEvent(final E event) {
 		Preconditions.checkNotNull(event);
 		logger.debug("Event " + event + " was triggered.");
-		listeners.stream().forEach(listener -> listener.onEvent(event));
+		listeners.stream().forEach(listener -> {
+			/**
+			 * TODO JJ verify is it. Split event at UI and non UI.
+			 * 
+			 * Is it correct to call events in Platform.runLater even when
+			 * doesn't change UI? Probably yes. Lot of events could flooding
+			 * queue and make UI unresponsive. See javadoc.
+			 */
+			Platform.runLater(() -> listener.onEvent(event));
+		});
 	}
 
 }

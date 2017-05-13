@@ -62,7 +62,13 @@ public class MicroCol extends Application {
 
 	@Override
 	public void start(final Stage primaryStage) throws Exception {
+		System.setProperty("com.apple.macos.useScreenMenuBar", "true");
+		//set application name for oracle JDK
+		System.setProperty("com.apple.mrj.application.apple.menu.about.name", "MicroCol");
+		//set application name for openJDK
+		System.setProperty("apple.awt.application.name", "MicroCol");
 		if (isOSX()) {
+			
 			setAppleDockIcon();
 		}
 

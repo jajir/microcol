@@ -5,9 +5,13 @@ import static org.junit.Assert.assertEquals;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.microcol.gui.event.AbstractEventController;
 import org.microcol.gui.event.Listener;
+
+import javafx.application.Platform;
+import javafx.embed.swing.JFXPanel;
 
 public class EventControllerTest {
 
@@ -25,7 +29,7 @@ public class EventControllerTest {
 		controller.fireEvent(null);
 	}
 
-	@Test
+	@Test(timeout = 1000)
 	public void test_adding_same_listener_in_more_than_one_count_just_one() throws Exception {
 		MockEventController controller = new MockEventController();
 
@@ -33,16 +37,18 @@ public class EventControllerTest {
 
 		controller.addListener(l0);
 		controller.addListener(l0);
-		
+
 		List<String> set = new ArrayList<>();
 		controller.fireEvent(set);
 
+		while (set.size() == 0) {
+			Thread.sleep(100);
+		}
 		assertEquals("list size is not correct", 1, set.size());
 		assertEquals("set should contains l0", true, set.contains("l0"));
 	}
-	
-	
-	@Test
+
+	@Test(timeout = 1000)
 	public void test_fireEvent_verify_that_all_listeners_are_called() throws Exception {
 		MockEventController controller = new MockEventController();
 
@@ -57,10 +63,19 @@ public class EventControllerTest {
 		List<String> set = new ArrayList<>();
 		controller.fireEvent(set);
 
+		while (set.size() != 3) {
+			Thread.sleep(100);
+		}
 		assertEquals("list size is not correct", 3, set.size());
 		assertEquals("set should contains l0", true, set.contains("l0"));
 		assertEquals("set should contains l1", true, set.contains("l1"));
 		assertEquals("set should contains l2", true, set.contains("l2"));
+	}
+
+	@Before
+	public void setUp() {
+		new JFXPanel();
+		Platform.setImplicitExit(false);
 	}
 
 	private class MockListener implements Listener<List<String>> {

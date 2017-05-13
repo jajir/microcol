@@ -6,6 +6,7 @@ import org.microcol.gui.util.Text.Language;
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
 
+import de.codecentric.centerdevice.MenuToolkit;
 import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
@@ -129,11 +130,6 @@ public class MainMenuView implements MainMenuPresenter.Display {
 		menuItemShowGrid.setSelected(gamePreferences.isGridShown());
 
 		/**
-		 * Help
-		 */
-		menuItemAbout = new MenuItem();
-
-		/**
 		 * menu
 		 */
 		menuGame = new Menu();
@@ -148,21 +144,30 @@ public class MainMenuView implements MainMenuPresenter.Display {
 		menuPrefereces = new Menu();
 		menuPrefereces.getItems().addAll(menuLanguage, menuItemVolume, menuItemAnimationSpeed, menuItemShowGrid);
 
-		menuHelp = new Menu();
-		menuHelp.getItems().addAll(menuItemAbout);
-
 		menuBar = new MenuBar();
 		menuBar.getMenus().addAll(menuGame, menuView, menuUnit, menuPrefereces);
 		if (gamePreferences.isDevelopment()) {
 			menuBar.getMenus().add(mainMenuDevelopment.getDevelopmentMenu());
 		}
 		menuBar.useSystemMenuBarProperty().set(true);
+		
+		/**
+		 * Help
+		 */
+		menuHelp = new Menu();
 		if (gamePreferences.isOSX()) {
-			/**
-			 * TODO JJ Following code doesn't work fine.
-			 */
+			// Get the toolkit
+			MenuToolkit tk = MenuToolkit.toolkit();
+			// Create the default Application menu
+			Menu defaultApplicationMenu = tk.createDefaultApplicationMenu("MicroCol");
+			// Update the existing Application menu
+			tk.setApplicationMenu(defaultApplicationMenu);
+			
+			menuItemAbout = defaultApplicationMenu.getItems().get(0);
 		} else {
+			menuItemAbout = new MenuItem();
 			menuBar.getMenus().add(menuHelp);
+			menuHelp.getItems().addAll(menuItemAbout);
 		}
 
 		updateLanguage();

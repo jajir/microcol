@@ -88,11 +88,9 @@ public class MainMenuPresenter {
 		display.getMenuItemQuitGame().setOnAction(actionEvent -> {
 			exitGameController.fireEvent(new ExitGameEvent());
 		});
-		if (!gamePreferences.isOSX()) {
-			display.getMenuItemAbout().setOnAction(actionEvent -> {
-				gameEventController.fireEvent(new AboutGameEvent());
-			});
-		}
+		display.getMenuItemAbout().setOnAction(actionEvent -> {
+			gameEventController.fireEvent(new AboutGameEvent());
+		});
 		display.getRbMenuItemlanguageCz().setOnAction(actionEvent -> {
 			changeLanguageController.fireEvent(new ChangeLanguageEvent(Text.Language.cz, gameController.getModel()));
 		});

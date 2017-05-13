@@ -48,8 +48,7 @@ public class StatusBarPresenter implements Localized {
 	private final void setYearText(final Label labelEra, final Calendar calendar) {
 		Preconditions.checkNotNull(labelEra);
 		Preconditions.checkNotNull(calendar);
-		Platform.runLater(
-				() -> labelEra.setText(getText().get("statusBar.year") + " " + calendar.getCurrentYear() + " AD"));
+		labelEra.setText(getText().get("statusBar.year") + " " + calendar.getCurrentYear() + " AD");
 	}
 
 }
