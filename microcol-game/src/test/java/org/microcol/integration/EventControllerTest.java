@@ -1,4 +1,4 @@
-package org.microcol.gui;
+package org.microcol.integration;
 
 import static org.junit.Assert.assertEquals;
 
