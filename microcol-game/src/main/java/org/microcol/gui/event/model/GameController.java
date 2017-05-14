@@ -61,8 +61,8 @@ public class GameController implements Localized {
 	}
 
 	private Model buidModel() {
-		// return buildHugeModel();
-		return buildComplexModel();
+		 return buildHugeModel();
+//		return buildComplexModel();
 	}
 
 	Model buildHugeModel() {

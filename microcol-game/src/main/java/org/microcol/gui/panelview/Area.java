@@ -46,7 +46,7 @@ public class Area {
 	public Area(final Bounds bounds, final WorldMap worldMap) {
 		pointTopLeft = Point.of((int) bounds.getMinX(), (int) bounds.getMinY());
 		pointBottomRight = Point.of((int) bounds.getMaxX(), (int) bounds.getMaxY());
-
+		
 		final Point p1 = pointTopLeft.divide(GamePanelView.TOTAL_TILE_WIDTH_IN_PX).add(Point.MAP_MIN_X,
 				Point.MAP_MIN_Y);
 		final Point p2 = Point

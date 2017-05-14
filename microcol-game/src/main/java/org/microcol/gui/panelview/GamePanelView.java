@@ -27,6 +27,7 @@ import com.google.inject.Inject;
 import javafx.animation.AnimationTimer;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
 import javafx.scene.Cursor;
 import javafx.scene.ImageCursor;
@@ -82,6 +83,8 @@ public class GamePanelView implements GamePanelPresenter.Display {
 
 	private final ViewUtil viewUtil;
 
+	private final VisibleArea visibleArea;
+
 	@Inject
 	public GamePanelView(final GameController gameController, final NextTurnController nextTurnController,
 			final PathPlanning pathPlanning, final ImageProvider imageProvider, final ViewState viewState,
@@ -103,32 +106,27 @@ public class GamePanelView implements GamePanelPresenter.Display {
 		// excludePainting = new ExcludePainting();
 		animationManager = new AnimationManager();
 		final GamePanelView map = this;
+		visibleArea = new VisibleArea();
 
 		// TODO JJ specify canvas size
-		canvas = new Canvas(800, 600);
+		canvas = new Canvas(1111, 1111);
 
-		nextTurnController.addListener(w -> map.repaint());
-
-		// setAutoscrolls(true);
+		nextTurnController.addListener(w -> map.paint());
 
 		fpsCounter = new FpsCounter();
 		fpsCounter.start();
 
 		isGridShown = true;
-		// timer = new Timer(1000 / DEFAULT_FRAME_PER_SECOND, event ->
-		// nextGameTick());
 
 		new AnimationTimer() {
 
 			@Override
 			public void handle(long now) {
 				nextGameTick();
-				repaint();
+				paint();
 			}
 		}.start();
 	}
-
-	// private final Timer timer;
 
 	/**
 	 * Define how many times per second will be screen repainted (FPS). Real FPS
@@ -138,8 +136,13 @@ public class GamePanelView implements GamePanelPresenter.Display {
 	private static final int DEFAULT_FRAME_PER_SECOND = 50;
 
 	@Override
-	public void initGame(final boolean idGridShown) {
+	public void initGame(final boolean idGridShown, final Model model) {
+		// TODO JJ here should be correct canvas size specified
 		this.isGridShown = idGridShown;
+		final Point bottomRight = Point.of(Location.of(model.getMap().getMaxX(), model.getMap().getMaxY()));
+		System.out.println(bottomRight);
+		 canvas.setWidth(1000*35);
+		// canvas.setHeight(bottomRight.getY());
 		// FIXME JJ correct it
 		// if (!timer.isRunning()) {
 		// timer.start();
@@ -160,7 +163,7 @@ public class GamePanelView implements GamePanelPresenter.Display {
 		if (screenScrolling != null && screenScrolling.isNextPointAvailable()) {
 			scrollToPoint(screenScrolling.getNextPoint());
 		}
-		repaint();
+		paint();
 	}
 
 	@Override
@@ -184,14 +187,17 @@ public class GamePanelView implements GamePanelPresenter.Display {
 		return this;
 	}
 
-	public void repaint() {
+	/**
+	 * It's called to redraw whole game. It should be called each game tick.
+	 */
+	private void paint() {
 		paint(canvas.getGraphicsContext2D());
 	}
 
 	/**
 	 * Paint everything.
 	 */
-	public void paint(final GraphicsContext g) {
+	private void paint(final GraphicsContext g) {
 		final Area area = getArea();
 		paintTiles(g, area);
 		paintUnits(g, gameController.getModel(), area);
@@ -207,7 +213,8 @@ public class GamePanelView implements GamePanelPresenter.Display {
 			 */
 			g.setFill(new Color(0, 0, 0, 0.34));
 			// TODO JJ paint in shadow just game part of viewport
-			g.fillRect(p.getX(), p.getY(), getViewportBounds().getWidth(), getViewportBounds().getHeight());
+			//FIXME replace with visibleArea
+//			g.fillRect(p.getX(), p.getY(), getViewportBounds().getWidth(), getViewportBounds().getHeight());
 		}
 		fpsCounter.screenWasPainted();
 	}
@@ -433,13 +440,9 @@ public class GamePanelView implements GamePanelPresenter.Display {
 	}
 
 	@Override
-	public Bounds getViewportBounds() {
-		return getViewPortBoundsProperty().get();
-	}
-
-	@Override
 	public Area getArea() {
-		return new Area(canvas.getBoundsInParent(), gameController.getModel().getMap());
+		return new Area(new BoundingBox(visibleArea.getTopLeft().getX(), visibleArea.getTopLeft().getY(),
+				visibleArea.getWidth(), visibleArea.getHeight()), gameController.getModel().getMap());
 	}
 
 	@Override
@@ -452,8 +455,8 @@ public class GamePanelView implements GamePanelPresenter.Display {
 		return canvas;
 	}
 
-	public ObjectProperty<Bounds> getViewPortBoundsProperty() {
-		return viewPortBounds;
+	public VisibleArea getVisibleArea() {
+		return visibleArea;
 	}
 
 }

@@ -20,6 +20,7 @@ import org.microcol.gui.event.model.NewGameController;
 import org.microcol.gui.util.Localized;
 import org.microcol.gui.util.ViewUtil;
 import org.microcol.model.Location;
+import org.microcol.model.Model;
 import org.microcol.model.Unit;
 import org.microcol.model.event.UnitMovedEvent;
 import org.slf4j.Logger;
@@ -51,7 +52,7 @@ public final class GamePanelPresenter implements Localized {
 
 		AnimationManager getAnimationManager();
 
-		void initGame(boolean idGridShown);
+		void initGame(boolean idGridShown, Model model);
 
 		void setGridShown(boolean isGridShown);
 
@@ -67,7 +68,6 @@ public final class GamePanelPresenter implements Localized {
 
 		boolean performFightDialog(Unit unitAttacker, Unit unitDefender);
 
-		Bounds getViewportBounds();
 	}
 
 	private final GameController gameController;
@@ -179,7 +179,7 @@ public final class GamePanelPresenter implements Localized {
 		// menu.show(e.getComponent(), e.getX(), e.getY());
 		// }
 
-		newGameController.addListener(event -> display.initGame(gamePreferences.isGridShown()));
+		newGameController.addListener(event -> display.initGame(gamePreferences.isGridShown(), event.getModel()));
 		showGridController.addListener(e -> display.setGridShown(e.isGridShown()));
 		debugRequestController.addListener(e -> {
 			display.getVisualDebugInfo().setLocations(e.getLocations());
@@ -257,7 +257,8 @@ public final class GamePanelPresenter implements Localized {
 
 	private void onMouseDragged(final MouseEvent e) {
 		if (lastMousePosition != null) {
-			final Bounds bounds = display.getViewportBounds();
+			//FIXME JJ it's just faked
+			final Bounds bounds = null;
 			// final JViewport viewPort = (JViewport)
 			// display.getGamePanelView().getParent();
 			if (bounds != null) {

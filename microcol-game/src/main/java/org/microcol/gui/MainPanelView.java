@@ -22,7 +22,23 @@ public class MainPanelView {
 		final ScrollPane scrollPane = new ScrollPane(gamePanel.getCanvas());
 		scrollPane.setVbarPolicy(ScrollBarPolicy.AS_NEEDED);
 		scrollPane.setHbarPolicy(ScrollBarPolicy.AS_NEEDED);
-		gamePanel.getViewPortBoundsProperty().bind(scrollPane.viewportBoundsProperty());
+		scrollPane.viewportBoundsProperty().addListener((obj, oldValue, newValue) -> {
+			gamePanel.getVisibleArea().setWidth((int) newValue.getWidth());
+			gamePanel.getVisibleArea().setHeight((int) newValue.getHeight());
+		});
+		scrollPane.setHmin(0);
+		//FIXME value is fixed just foe one map, value should be readed from loaded map.
+		scrollPane.setHmax(1000*35);
+		scrollPane.hvalueProperty().addListener((obj, oldValue, newValue) -> {
+			gamePanel.getVisibleArea().setX(newValue.intValue());
+		});
+		scrollPane.setVmin(0);
+		//FIXME value is fixed just foe one map, value should be readed from loaded map.
+		scrollPane.setVmax(1000*35);
+		scrollPane.vvalueProperty().addListener((obj, oldValue, newValue) -> {
+			gamePanel.getVisibleArea().setY(newValue.intValue());
+		});
+
 		box = new VBox();
 		box.setId("mainPanel");
 		HBox hBox = new HBox();
