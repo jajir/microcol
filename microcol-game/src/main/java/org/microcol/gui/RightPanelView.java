@@ -52,6 +52,9 @@ public class RightPanelView implements RightPanelPresenter.Display, Localized {
 
 		gridPane = new GridPane();
 		gridPane.setId("rightPanel");
+		gridPane.setPrefWidth(RIGHT_PANEL_WIDTH);
+		gridPane.setMinWidth(RIGHT_PANEL_WIDTH);
+		gridPane.getStylesheets().add("gui/rightPanelView.css");
 
 		// Y=0
 		labelOnMove = new Label();
@@ -70,19 +73,16 @@ public class RightPanelView implements RightPanelPresenter.Display, Localized {
 
 		// Y=3
 		scrollPaneGamePanel = new ScrollPane(unitsPanel.getNode());
-		RowConstraints column1 = new RowConstraints();
-		column1.setVgrow(Priority.ALWAYS);
-		column1.fillHeightProperty().set(true);
-		gridPane.getRowConstraints().addAll(new RowConstraints(), new RowConstraints(), new RowConstraints(), column1);
+		RowConstraints scrollPaneRow = new RowConstraints();
+		scrollPaneRow.setVgrow(Priority.ALWAYS);
+		scrollPaneRow.fillHeightProperty().set(true);
+		gridPane.getRowConstraints().addAll(new RowConstraints(), new RowConstraints(), new RowConstraints(), scrollPaneRow);
 		gridPane.add(scrollPaneGamePanel, 0, 3, 2, 1);
 
-		// Y=10
+		// Y=4
 		nextTurnButton = new Button();
 		nextTurnButton.setId("nextTurnButton");
-		gridPane.add(nextTurnButton, 0, 10, 2, 1);
-		gridPane.setPrefWidth(RIGHT_PANEL_WIDTH);
-		gridPane.setMinWidth(RIGHT_PANEL_WIDTH);
-		gridPane.getStylesheets().add("gui/rightPanelView.css");
+		gridPane.add(nextTurnButton, 0, 4, 2, 1);
 	}
 
 	@Override

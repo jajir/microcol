@@ -11,12 +11,19 @@
 	-fx-fit-to-height:true;
 	-fx-hbar-policy: never;
 	-fx-vbar-policy: as-needed;
-	-fx-padding: 0;
+	-fx-padding: 0.0;
 	-fx-focus-traversable: false;
 }
 
 .scroll-pane:focused {
   -fx-background-color: -fx-focus-color,-fx-box-border,-fx-control-inner-background;
-  -fx-background-insets: 0,0,0,0;
-  -fx-background-radius: 0;
+  -fx-background-insets: 0.0,0.0,0.0,0.0;
+  -fx-background-radius: 0.0;
+}
+
+/*
+ * I can's set automatically width of button to maximum size. 
+ */
+#nextTurnButton{
+	-fx-min-width: 168px;
 }
