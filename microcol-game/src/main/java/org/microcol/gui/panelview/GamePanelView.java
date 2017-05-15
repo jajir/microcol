@@ -25,10 +25,7 @@ import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 
 import javafx.animation.AnimationTimer;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
 import javafx.geometry.BoundingBox;
-import javafx.geometry.Bounds;
 import javafx.scene.Cursor;
 import javafx.scene.ImageCursor;
 import javafx.scene.canvas.Canvas;
@@ -44,8 +41,6 @@ public class GamePanelView implements GamePanelPresenter.Display {
 	private static final int TILE_WIDTH_IN_PX = 35;
 
 	public static final int TOTAL_TILE_WIDTH_IN_PX = TILE_WIDTH_IN_PX;
-
-	private final ObjectProperty<Bounds> viewPortBounds;
 
 	private final Canvas canvas;
 
@@ -101,7 +96,6 @@ public class GamePanelView implements GamePanelPresenter.Display {
 		this.paintService = Preconditions.checkNotNull(paintService);
 		this.visualDebugInfo = new VisualDebugInfo();
 		oneTurnMoveHighlighter = new OneTurnMoveHighlighter();
-		viewPortBounds = new SimpleObjectProperty<Bounds>();
 		gotoModeCursor = new ImageCursor(imageProvider.getImage(ImageProvider.IMG_CURSOR_GOTO), 1, 1);
 		// excludePainting = new ExcludePainting();
 		animationManager = new AnimationManager();
@@ -109,7 +103,7 @@ public class GamePanelView implements GamePanelPresenter.Display {
 		visibleArea = new VisibleArea();
 
 		// TODO JJ specify canvas size
-		canvas = new Canvas(1111, 1111);
+		canvas = new Canvas();
 
 		nextTurnController.addListener(w -> map.paint());
 
@@ -139,9 +133,10 @@ public class GamePanelView implements GamePanelPresenter.Display {
 	public void initGame(final boolean idGridShown, final Model model) {
 		// TODO JJ here should be correct canvas size specified
 		this.isGridShown = idGridShown;
-		final Point bottomRight = Point.of(Location.of(model.getMap().getMaxX(), model.getMap().getMaxY()));
-		System.out.println(bottomRight);
-		 canvas.setWidth(1000*35);
+		//TODO canvas size should not be set here
+//		final Point bottomRight = Point.of(Location.of(model.getMap().getMaxX(), model.getMap().getMaxY()));
+//		System.out.println(bottomRight);
+//		 canvas.setWidth(1000*35);
 		// canvas.setHeight(bottomRight.getY());
 		// FIXME JJ correct it
 		// if (!timer.isRunning()) {
@@ -441,6 +436,7 @@ public class GamePanelView implements GamePanelPresenter.Display {
 
 	@Override
 	public Area getArea() {
+		System.out.println(visibleArea);
 		return new Area(new BoundingBox(visibleArea.getTopLeft().getX(), visibleArea.getTopLeft().getY(),
 				visibleArea.getWidth(), visibleArea.getHeight()), gameController.getModel().getMap());
 	}

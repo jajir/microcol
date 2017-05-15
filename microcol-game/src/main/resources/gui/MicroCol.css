@@ -3,12 +3,21 @@
  * 
  */
  
-#mainPanel #mainBox{
-}
-
 /* disable focused border on component */
 .scroll-pane:focused {
   -fx-background-color: -fx-focus-color,-fx-box-border,-fx-control-inner-background;
-  -fx-background-insets: 0,0,0,0;
-  -fx-background-radius: 0;
+  -fx-background-insets: 0.0,0.0,0.0,0.0;
+  -fx-background-radius: 0.0;
 }
+
+#mainBox{
+}
+
+#rightPanel{
+}
+
+#canvas{
+	-fx-pref-width: 100000;
+	-fx-pref-height: 100000;
+}
+

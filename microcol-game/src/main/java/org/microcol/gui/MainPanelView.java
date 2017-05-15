@@ -4,9 +4,9 @@ import org.microcol.gui.panelview.GamePanelView;
 
 import com.google.inject.Inject;
 
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.ScrollPane.ScrollBarPolicy;
+import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
 /**
@@ -19,31 +19,33 @@ public class MainPanelView {
 	@Inject
 	public MainPanelView(final GamePanelView gamePanel, final StatusBarView statusBar,
 			final RightPanelView rightPanelView) {
-		final ScrollPane scrollPane = new ScrollPane(gamePanel.getCanvas());
-		scrollPane.setVbarPolicy(ScrollBarPolicy.AS_NEEDED);
-		scrollPane.setHbarPolicy(ScrollBarPolicy.AS_NEEDED);
-		scrollPane.viewportBoundsProperty().addListener((obj, oldValue, newValue) -> {
-			gamePanel.getVisibleArea().setWidth((int) newValue.getWidth());
-			gamePanel.getVisibleArea().setHeight((int) newValue.getHeight());
-		});
-		scrollPane.setHmin(0);
-		//FIXME value is fixed just foe one map, value should be readed from loaded map.
-		scrollPane.setHmax(1000*35);
-		scrollPane.hvalueProperty().addListener((obj, oldValue, newValue) -> {
-			gamePanel.getVisibleArea().setX(newValue.intValue());
-		});
-		scrollPane.setVmin(0);
-		//FIXME value is fixed just foe one map, value should be readed from loaded map.
-		scrollPane.setVmax(1000*35);
-		scrollPane.vvalueProperty().addListener((obj, oldValue, newValue) -> {
-			gamePanel.getVisibleArea().setY(newValue.intValue());
-		});
-
 		box = new VBox();
 		box.setId("mainPanel");
 		HBox hBox = new HBox();
 		hBox.setId("mainBox");
-		hBox.getChildren().addAll(scrollPane, rightPanelView.getBox());
+
+		Pane canvasPane = new Pane();
+		canvasPane.setId("canvas");
+		canvasPane.getChildren().add(gamePanel.getCanvas());
+		gamePanel.getCanvas().widthProperty().bind(canvasPane.widthProperty());
+		gamePanel.getCanvas().heightProperty().bind(canvasPane.heightProperty());
+
+		canvasPane.widthProperty().addListener((obj, oldValue, newValue) -> {
+			if (newValue.intValue() < 1000)
+				gamePanel.getVisibleArea().setWidth(newValue.intValue());
+		});
+		canvasPane.heightProperty().addListener((obj, oldValue, newValue) -> {
+			if (newValue.intValue() < 1000)
+				gamePanel.getVisibleArea().setHeight(newValue.intValue());
+		});
+
+		Pane rightPane = new Pane();
+		rightPane.setId("rightPanel");
+		Label l2 = new Label("blue right panel");
+		rightPane.getChildren().add(l2);
+
+		hBox.getChildren().addAll(canvasPane, rightPanelView.getBox());
+
 		box.getChildren().addAll(hBox, statusBar.getBox());
 	}
 

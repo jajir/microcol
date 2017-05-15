@@ -2,6 +2,8 @@ package org.microcol.gui.panelview;
 
 import org.microcol.gui.Point;
 
+import com.google.common.base.MoreObjects;
+
 public class VisibleArea {
 
 	private Point topLeft = Point.of(0, 0);
@@ -12,6 +14,12 @@ public class VisibleArea {
 
 	VisibleArea() {
 
+	}
+
+	@Override
+	public String toString() {
+		return MoreObjects.toStringHelper(VisibleArea.class).add("topLeft", topLeft).add("width", width)
+				.add("height", height).toString();
 	}
 
 	public int getWidth() {

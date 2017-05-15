@@ -2,13 +2,9 @@
  * 
  * 
  */
-#rightPanel{
-}
- 
+
 .scroll-pane {
 	-fx-background-color: red;
-	-fx-fit-to-width: true;
-	-fx-fit-to-height:true;
 	-fx-hbar-policy: never;
 	-fx-vbar-policy: as-needed;
 	-fx-padding: 0.0;
