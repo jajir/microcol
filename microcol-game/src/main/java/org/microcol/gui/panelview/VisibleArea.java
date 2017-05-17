@@ -1,8 +1,11 @@
 package org.microcol.gui.panelview;
 
 import org.microcol.gui.Point;
+import org.microcol.model.Location;
+import org.microcol.model.WorldMap;
 
 import com.google.common.base.MoreObjects;
+import com.google.common.base.Preconditions;
 
 public class VisibleArea {
 
@@ -12,6 +15,8 @@ public class VisibleArea {
 
 	private int height;
 
+	private Point maxMapSize;
+
 	VisibleArea() {
 
 	}
@@ -20,6 +25,11 @@ public class VisibleArea {
 	public String toString() {
 		return MoreObjects.toStringHelper(VisibleArea.class).add("topLeft", topLeft).add("width", width)
 				.add("height", height).toString();
+	}
+
+	public void setMaxMapSize(final WorldMap worldMap) {
+		Preconditions.checkNotNull(worldMap);
+		maxMapSize = Point.of(Location.of(worldMap.getMaxX(), worldMap.getMaxY()));
 	}
 
 	public int getWidth() {
@@ -48,6 +58,12 @@ public class VisibleArea {
 
 	public Point getTopLeft() {
 		return topLeft;
+	}
+
+	public void addDeltaToPoint(final Point delta) {
+		topLeft = topLeft.add(delta);
+		topLeft = Point.of(Math.max(Math.min(topLeft.getX(), maxMapSize.getX()), 0),
+				Math.max(Math.min(topLeft.getY(), maxMapSize.getY()), 0));
 	}
 
 }

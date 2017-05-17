@@ -133,10 +133,13 @@ public class GamePanelView implements GamePanelPresenter.Display {
 	public void initGame(final boolean idGridShown, final Model model) {
 		// TODO JJ here should be correct canvas size specified
 		this.isGridShown = idGridShown;
-		//TODO canvas size should not be set here
-//		final Point bottomRight = Point.of(Location.of(model.getMap().getMaxX(), model.getMap().getMaxY()));
-//		System.out.println(bottomRight);
-//		 canvas.setWidth(1000*35);
+		visibleArea.setMaxMapSize(model.getMap());
+		//TODO JJ canvas size should not be set here
+		// final Point bottomRight =
+		// Point.of(Location.of(model.getMap().getMaxX(),
+		// model.getMap().getMaxY()));
+		// System.out.println(bottomRight);
+		// canvas.setWidth(1000*35);
 		// canvas.setHeight(bottomRight.getY());
 		// FIXME JJ correct it
 		// if (!timer.isRunning()) {
@@ -208,8 +211,9 @@ public class GamePanelView implements GamePanelPresenter.Display {
 			 */
 			g.setFill(new Color(0, 0, 0, 0.34));
 			// TODO JJ paint in shadow just game part of viewport
-			//FIXME replace with visibleArea
-//			g.fillRect(p.getX(), p.getY(), getViewportBounds().getWidth(), getViewportBounds().getHeight());
+			// FIXME JJ replace with visibleArea
+			// g.fillRect(p.getX(), p.getY(), getViewportBounds().getWidth(),
+			// getViewportBounds().getHeight());
 		}
 		fpsCounter.screenWasPainted();
 	}
@@ -436,7 +440,8 @@ public class GamePanelView implements GamePanelPresenter.Display {
 
 	@Override
 	public Area getArea() {
-		System.out.println(visibleArea);
+		// TODO JJ change area constructor to accept visibleArea object.
+		 System.out.println(visibleArea);
 		return new Area(new BoundingBox(visibleArea.getTopLeft().getX(), visibleArea.getTopLeft().getY(),
 				visibleArea.getWidth(), visibleArea.getHeight()), gameController.getModel().getMap());
 	}
@@ -451,6 +456,7 @@ public class GamePanelView implements GamePanelPresenter.Display {
 		return canvas;
 	}
 
+	@Override
 	public VisibleArea getVisibleArea() {
 		return visibleArea;
 	}

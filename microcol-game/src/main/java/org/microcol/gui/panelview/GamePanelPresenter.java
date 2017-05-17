@@ -68,6 +68,8 @@ public final class GamePanelPresenter implements Localized {
 
 		boolean performFightDialog(Unit unitAttacker, Unit unitDefender);
 
+		VisibleArea getVisibleArea();
+
 	}
 
 	private final GameController gameController;
@@ -171,6 +173,7 @@ public final class GamePanelPresenter implements Localized {
 			if (isMouseEnabled()) {
 				logger.debug("mouse dragged at " + e.getX() + ", " + e.getY() + ", " + e.getButton());
 				onMouseDragged(e);
+				lastMousePosition = Point.of(e.getX(), e.getY());
 			}
 		});
 
@@ -257,18 +260,19 @@ public final class GamePanelPresenter implements Localized {
 
 	private void onMouseDragged(final MouseEvent e) {
 		if (lastMousePosition != null) {
-			//FIXME JJ it's just faked
-			final Bounds bounds = null;
+			// FIXME JJ it's just faked
+			// final Bounds bounds = null;
 			// final JViewport viewPort = (JViewport)
 			// display.getGamePanelView().getParent();
-			if (bounds != null) {
-				final Point currentPosition = Point.of(e.getX(), e.getY());
-				final Point delta = lastMousePosition.substract(currentPosition);
-				// FIXME JJ please fix it
-				// view.x += delta.getX();
-				// view.y += delta.getY();
-				// display.getGamePanelView().scrollToPoint(Point.of());
-			}
+			// if (bounds != null) {
+			final Point currentPosition = Point.of(e.getX(), e.getY());
+			final Point delta = lastMousePosition.substract(currentPosition);
+			display.getVisibleArea().addDeltaToPoint(delta);
+			// FIXME JJ please fix it
+			// view.x += delta.getX();
+			// view.y += delta.getY();
+			// display.getGamePanelView().scrollToPoint(Point.of());
+			// }
 		}
 	}
 

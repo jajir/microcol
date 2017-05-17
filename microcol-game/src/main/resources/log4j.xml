@@ -30,7 +30,7 @@
 		<level value="DEBUG"/>
 	</logger>
 	<logger name="org.microcol.gui.FpsCounter">
-		<level value="DEBUG"/>
+		<level value="INFO"/>
 	</logger>
 	<logger name="org.microcol.gui.event.AbstractEventController">
 		<level value="WARN"/>
