@@ -138,7 +138,6 @@ public class GamePanelView implements GamePanelPresenter.Display {
 		// final Point bottomRight =
 		// Point.of(Location.of(model.getMap().getMaxX(),
 		// model.getMap().getMaxY()));
-		// System.out.println(bottomRight);
 		// canvas.setWidth(1000*35);
 		// canvas.setHeight(bottomRight.getY());
 		// FIXME JJ correct it
@@ -440,10 +439,7 @@ public class GamePanelView implements GamePanelPresenter.Display {
 
 	@Override
 	public Area getArea() {
-		// TODO JJ change area constructor to accept visibleArea object.
-		 System.out.println(visibleArea);
-		return new Area(new BoundingBox(visibleArea.getTopLeft().getX(), visibleArea.getTopLeft().getY(),
-				visibleArea.getWidth(), visibleArea.getHeight()), gameController.getModel().getMap());
+		return new Area(visibleArea, gameController.getModel().getMap());
 	}
 
 	@Override

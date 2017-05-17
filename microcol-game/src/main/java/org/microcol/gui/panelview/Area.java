@@ -35,18 +35,20 @@ public class Area {
 	 * visible area.
 	 */
 	private final Point pointBottomRight;
+	
+	private final Point delta; 
 
 	/**
 	 * 
-	 * @param bounds
+	 * @param visibleArea
 	 *            required visible area on screen
 	 * @param worldMap
 	 *            required world map
 	 */
-	public Area(final Bounds bounds, final WorldMap worldMap) {
-		pointTopLeft = Point.of((int) bounds.getMinX(), (int) bounds.getMinY());
-		pointBottomRight = Point.of((int) bounds.getMaxX(), (int) bounds.getMaxY());
-		
+	public Area(final VisibleArea visibleArea, final WorldMap worldMap) {
+		pointTopLeft = visibleArea.getTopLeft();
+		pointBottomRight = visibleArea.getBottomRight();
+
 		final Point p1 = pointTopLeft.divide(GamePanelView.TOTAL_TILE_WIDTH_IN_PX).add(Point.MAP_MIN_X,
 				Point.MAP_MIN_Y);
 		final Point p2 = Point
@@ -56,6 +58,8 @@ public class Area {
 
 		topLeft = Location.of(Math.max(Point.MAP_MIN_X, p1.getX()), Math.max(Point.MAP_MIN_Y, p1.getY()));
 		bottomRight = Location.of(Math.min(p2.getX(), worldMap.getMaxX()), Math.min(p2.getY(), worldMap.getMaxY()));
+		
+		delta = Point.of(topLeft.add(Location.of(-1, -1))).substract(pointTopLeft);
 	}
 
 	public Location getTopLeft() {
@@ -87,7 +91,7 @@ public class Area {
 	 * @return point coordinates that could be directly used to draw on canvas
 	 */
 	public Point convert(final Location location) {
-		return Point.of(Location.of(location.getX() - topLeft.getX(), location.getY() - topLeft.getY()));
+		return Point.of(Location.of(location.getX() - topLeft.getX(), location.getY() - topLeft.getY())).add(delta);
 	}
 
 	/**

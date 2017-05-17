@@ -60,6 +60,10 @@ public class VisibleArea {
 		return topLeft;
 	}
 
+	public Point getBottomRight() {
+		return topLeft.add(width, height);
+	}
+
 	public void addDeltaToPoint(final Point delta) {
 		topLeft = topLeft.add(delta);
 		topLeft = Point.of(Math.max(Math.min(topLeft.getX(), maxMapSize.getX()), 0),
