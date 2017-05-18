@@ -194,6 +194,11 @@ public class GamePanelView implements GamePanelPresenter.Display {
 	 */
 	private void paint(final GraphicsContext g) {
 		final Area area = getArea();
+		//TODO JJ get background color from css style
+		g.setFill(Color.valueOf("#ececec"));
+		g.fillRect(0, 0, visibleArea.getCanvasWidth(), visibleArea.getCanvasHeight());
+		
+		
 		paintTiles(g, area);
 		paintUnits(g, gameController.getModel(), area);
 		paintGrid(g, area);

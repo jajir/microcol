@@ -46,7 +46,11 @@ public class VisibleArea {
 				topLeft = Point.of(topLeft.getX() - x, topLeft.getY());
 			}
 			if (width > maxMapSize.getX()) {
-				topLeft = Point.of(0, topLeft.getY());
+				/**
+				 * Visible area is greater than map. Map should be centered.
+				 */
+				int x = -(width - maxMapSize.getX()) / 2;
+				topLeft = Point.of(x, topLeft.getY());
 			}
 		}
 		this.canvasWidth = width;
@@ -62,11 +66,15 @@ public class VisibleArea {
 				final int toGrow = maxMapSize.getY() - canvasHeight;
 				final int toGrowLeft = topLeft.getY();
 				final int deltaGrow = height - canvasHeight;
-				int x = (int) (((float) deltaGrow) * ((float) toGrowLeft / toGrow));
-				topLeft = Point.of(topLeft.getX(), topLeft.getY() - x);
+				int y = (int) (((float) deltaGrow) * ((float) toGrowLeft / toGrow));
+				topLeft = Point.of(topLeft.getX(), topLeft.getY() - y);
 			}
 			if (height > maxMapSize.getY()) {
-				topLeft = Point.of(topLeft.getX(), 0);
+				/**
+				 * Visible area is greater than map. Map should be centered.
+				 */
+				int y = -(height - maxMapSize.getY()) / 2;
+				topLeft = Point.of(topLeft.getX(), y);
 			}
 		}
 		this.canvasHeight = height;
