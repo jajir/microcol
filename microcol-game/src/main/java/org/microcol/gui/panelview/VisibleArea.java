@@ -15,6 +15,7 @@ public class VisibleArea {
 
 	private int canvasHeight;
 
+	//TODO JJ use optional
 	private Point maxMapSize;
 
 	VisibleArea() {
@@ -36,48 +37,52 @@ public class VisibleArea {
 		return canvasWidth;
 	}
 
-	public void setCanvasWidth(final int width) {
+	public void setCanvasWidth(final int newCanvasWidth) {
 		if (maxMapSize != null) {
-			if (width > canvasWidth && maxMapSize.getX() > canvasWidth) {
-				final int toGrow = maxMapSize.getX() - canvasWidth;
-				int toGrowLeft = topLeft.getX();
-				final int deltaGrow = width - canvasWidth;
-				int x = (int) (((float) deltaGrow) * ((float) toGrowLeft / toGrow));
-				topLeft = Point.of(topLeft.getX() - x, topLeft.getY());
-			}
-			if (width > maxMapSize.getX()) {
+			if (newCanvasWidth > maxMapSize.getX()) {
 				/**
 				 * Visible area is greater than map. Map should be centered.
 				 */
-				int x = -(width - maxMapSize.getX()) / 2;
+				int x = -(newCanvasWidth - maxMapSize.getX()) / 2;
 				topLeft = Point.of(x, topLeft.getY());
+			} else {
+				/**
+				 * whole map can't fit canvas
+				 */
+				final int toGrow = maxMapSize.getX() - canvasWidth;
+				int toGrowLeft = topLeft.getX();
+				final int deltaGrow = newCanvasWidth - canvasWidth;
+				int x = (int) (((float) deltaGrow) * ((float) toGrowLeft / toGrow));
+				topLeft = Point.of(topLeft.getX() - x, topLeft.getY());
 			}
 		}
-		this.canvasWidth = width;
+		this.canvasWidth = newCanvasWidth;
 	}
 
 	public int getCanvasHeight() {
 		return canvasHeight;
 	}
 
-	public void setCanvasHeight(final int height) {
+	public void setCanvasHeight(final int newCanvasHeight) {
 		if (maxMapSize != null) {
-			if (height > canvasHeight && maxMapSize.getY() > canvasHeight) {
-				final int toGrow = maxMapSize.getY() - canvasHeight;
-				final int toGrowLeft = topLeft.getY();
-				final int deltaGrow = height - canvasHeight;
-				int y = (int) (((float) deltaGrow) * ((float) toGrowLeft / toGrow));
-				topLeft = Point.of(topLeft.getX(), topLeft.getY() - y);
-			}
-			if (height > maxMapSize.getY()) {
+			if (newCanvasHeight > maxMapSize.getY()) {
 				/**
 				 * Visible area is greater than map. Map should be centered.
 				 */
-				int y = -(height - maxMapSize.getY()) / 2;
+				int y = -(newCanvasHeight - maxMapSize.getY()) / 2;
 				topLeft = Point.of(topLeft.getX(), y);
+			} else {
+				/**
+				 * whole map can't fit canvas
+				 */
+				final int toGrow = maxMapSize.getY() - canvasHeight;
+				final int toGrowLeft = topLeft.getY();
+				final int deltaGrow = newCanvasHeight - canvasHeight;
+				int y = (int) (((float) deltaGrow) * ((float) toGrowLeft / toGrow));
+				topLeft = Point.of(topLeft.getX(), topLeft.getY() - y);
 			}
 		}
-		this.canvasHeight = height;
+		this.canvasHeight = newCanvasHeight;
 	}
 
 	public void setX(int x) {
