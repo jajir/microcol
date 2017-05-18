@@ -6,10 +6,8 @@ import static org.junit.Assert.assertNotNull;
 import org.easymock.EasyMock;
 import org.junit.Test;
 import org.microcol.gui.panelview.Area;
+import org.microcol.gui.panelview.VisibleArea;
 import org.microcol.model.WorldMap;
-
-import javafx.geometry.BoundingBox;
-import javafx.geometry.Bounds;
 
 /**
  * Tests for {@link Area}.
@@ -57,15 +55,21 @@ public class AreaTest {
 
 	private Area makeArea(final int viewTopLeftCornerX, final int viewTopLeftCornerY, final int viewWidth,
 			final int viewHeight, final int maxMapLocationX, final int maxMapLocationY) {
-		final Bounds bounds = new BoundingBox(viewTopLeftCornerX, viewTopLeftCornerY, viewWidth, viewHeight);
+		// final VisibleArea bounds = new VisibleArea(viewTopLeftCornerX,
+		// viewTopLeftCornerY, viewWidth, viewHeight);
+		final VisibleArea visibleArea = EasyMock.createMock(VisibleArea.class);
+		final Point topLeft = Point.of(viewTopLeftCornerX, viewTopLeftCornerY);
+		final Point bottomRight = topLeft.add(viewWidth, viewHeight);
+		EasyMock.expect(visibleArea.getTopLeft()).andReturn(topLeft);
+		EasyMock.expect(visibleArea.getBottomRight()).andReturn(bottomRight);
 
-		WorldMap map = EasyMock.createMock(WorldMap.class);
+		final WorldMap map = EasyMock.createMock(WorldMap.class);
 		EasyMock.expect(map.getMaxX()).andReturn(maxMapLocationX);
 		EasyMock.expect(map.getMaxY()).andReturn(maxMapLocationY);
 
-		EasyMock.replay(map);
-		Area out = new Area(bounds, map);
-		EasyMock.verify( map);
+		EasyMock.replay(map, visibleArea);
+		Area out = new Area(visibleArea, map);
+		EasyMock.verify(map, visibleArea);
 		assertNotNull(out);
 		return out;
 	}

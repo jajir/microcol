@@ -6,8 +6,6 @@ import org.microcol.model.WorldMap;
 
 import com.google.common.base.MoreObjects;
 
-import javafx.geometry.Bounds;
-
 /**
  * Define top left corner and bottom right corner.
  * 
@@ -35,8 +33,13 @@ public class Area {
 	 * visible area.
 	 */
 	private final Point pointBottomRight;
-	
-	private final Point delta; 
+
+	/**
+	 * When location is converted to on-screen coordinates there is small shift
+	 * of on-screen coordinates. Small shift represents user screen scrolling.
+	 * Where screen scrolling is in pixels and map is drawn in map tiles.
+	 */
+	private final Point delta;
 
 	/**
 	 * 
@@ -58,7 +61,7 @@ public class Area {
 
 		topLeft = Location.of(Math.max(Point.MAP_MIN_X, p1.getX()), Math.max(Point.MAP_MIN_Y, p1.getY()));
 		bottomRight = Location.of(Math.min(p2.getX(), worldMap.getMaxX()), Math.min(p2.getY(), worldMap.getMaxY()));
-		
+
 		delta = Point.of(topLeft.add(Location.of(-1, -1))).substract(pointTopLeft);
 	}
 
