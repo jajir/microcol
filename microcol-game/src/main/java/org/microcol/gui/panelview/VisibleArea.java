@@ -11,9 +11,9 @@ public class VisibleArea {
 
 	private Point topLeft = Point.of(0, 0);
 
-	private int width;
+	private int canvasWidth;
 
-	private int height;
+	private int canvasHeight;
 
 	private Point maxMapSize;
 
@@ -23,8 +23,8 @@ public class VisibleArea {
 
 	@Override
 	public String toString() {
-		return MoreObjects.toStringHelper(VisibleArea.class).add("topLeft", topLeft).add("width", width)
-				.add("height", height).toString();
+		return MoreObjects.toStringHelper(VisibleArea.class).add("topLeft", topLeft).add("width", canvasWidth)
+				.add("height", canvasHeight).toString();
 	}
 
 	public void setMaxMapSize(final WorldMap worldMap) {
@@ -32,20 +32,44 @@ public class VisibleArea {
 		maxMapSize = Point.of(Location.of(worldMap.getMaxX(), worldMap.getMaxY()));
 	}
 
-	public int getWidth() {
-		return width;
+	public int getCanvasWidth() {
+		return canvasWidth;
 	}
 
-	public void setWidth(int width) {
-		this.width = width;
+	public void setCanvasWidth(final int width) {
+		if (maxMapSize != null) {
+			if (width > canvasWidth && maxMapSize.getX() > canvasWidth) {
+				final int toGrow = maxMapSize.getX() - canvasWidth;
+				int toGrowLeft = topLeft.getX();
+				final int deltaGrow = width - canvasWidth;
+				int x = (int) (((float) deltaGrow) * ((float) toGrowLeft / toGrow));
+				topLeft = Point.of(topLeft.getX() - x, topLeft.getY());
+			}
+			if (width > maxMapSize.getX()) {
+				topLeft = Point.of(0, topLeft.getY());
+			}
+		}
+		this.canvasWidth = width;
 	}
 
-	public int getHeight() {
-		return height;
+	public int getCanvasHeight() {
+		return canvasHeight;
 	}
 
-	public void setHeight(int height) {
-		this.height = height;
+	public void setCanvasHeight(final int height) {
+		if (maxMapSize != null) {
+			if (height > canvasHeight && maxMapSize.getY() > canvasHeight) {
+				final int toGrow = maxMapSize.getY() - canvasHeight;
+				final int toGrowLeft = topLeft.getY();
+				final int deltaGrow = height - canvasHeight;
+				int x = (int) (((float) deltaGrow) * ((float) toGrowLeft / toGrow));
+				topLeft = Point.of(topLeft.getX(), topLeft.getY() - x);
+			}
+			if (height > maxMapSize.getY()) {
+				topLeft = Point.of(topLeft.getX(), 0);
+			}
+		}
+		this.canvasHeight = height;
 	}
 
 	public void setX(int x) {
@@ -61,13 +85,26 @@ public class VisibleArea {
 	}
 
 	public Point getBottomRight() {
-		return topLeft.add(width, height);
+		return topLeft.add(canvasWidth, canvasHeight);
 	}
 
 	public void addDeltaToPoint(final Point delta) {
-		topLeft = topLeft.add(delta);
-		topLeft = Point.of(Math.max(Math.min(topLeft.getX(), maxMapSize.getX()), 0),
-				Math.max(Math.min(topLeft.getY(), maxMapSize.getY()), 0));
+		topLeft = Point.of(adjust(delta.getX(), topLeft.getX(), maxMapSize.getX(), canvasWidth),
+				adjust(delta.getY(), topLeft.getY(), maxMapSize.getY(), canvasHeight));
+	}
+
+	private int adjust(final int delta, final int original, final int maxMap, final int canvasMax) {
+		final int adjusted = original + delta;
+		if (adjusted < 0) {
+			return 0;
+		}
+		if (adjusted > maxMap) {
+			return maxMap;
+		}
+		if (adjusted + canvasMax > maxMap) {
+			return original;
+		}
+		return adjusted;
 	}
 
 }

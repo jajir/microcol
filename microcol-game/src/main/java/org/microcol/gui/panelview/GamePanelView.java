@@ -1,6 +1,5 @@
 package org.microcol.gui.panelview;
 
-import java.awt.Graphics2D;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,7 +24,6 @@ import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 
 import javafx.animation.AnimationTimer;
-import javafx.geometry.BoundingBox;
 import javafx.scene.Cursor;
 import javafx.scene.ImageCursor;
 import javafx.scene.canvas.Canvas;
@@ -134,7 +132,7 @@ public class GamePanelView implements GamePanelPresenter.Display {
 		// TODO JJ here should be correct canvas size specified
 		this.isGridShown = idGridShown;
 		visibleArea.setMaxMapSize(model.getMap());
-		//TODO JJ canvas size should not be set here
+		// TODO JJ canvas size should not be set here
 		// final Point bottomRight =
 		// Point.of(Location.of(model.getMap().getMaxX(),
 		// model.getMap().getMaxY()));
@@ -228,7 +226,7 @@ public class GamePanelView implements GamePanelPresenter.Display {
 	 * Draw main game tiles.
 	 * 
 	 * @param graphics
-	 *            required {@link Graphics2D}
+	 *            required {@link GraphicsContext}
 	 */
 	private void paintTiles(final GraphicsContext graphics, final Area area) {
 		for (int i = area.getTopLeft().getX(); i <= area.getBottomRight().getX(); i++) {
@@ -254,7 +252,7 @@ public class GamePanelView implements GamePanelPresenter.Display {
 	 * </p>
 	 * 
 	 * @param graphics
-	 *            required {@link Graphics2D}
+	 *            required {@link GraphicsContext}
 	 * @param game
 	 *            required {@link Game}
 	 */
@@ -275,7 +273,7 @@ public class GamePanelView implements GamePanelPresenter.Display {
 
 	private void paintGrid(final GraphicsContext graphics, final Area area) {
 		if (isGridShown) {
-			graphics.setFill(Color.LIGHTGRAY);
+			graphics.setStroke(Color.LIGHTGREY);
 			graphics.setLineWidth(1);
 			for (int i = area.getTopLeft().getX(); i <= area.getBottomRight().getX(); i++) {
 				final Location l_1 = Location.of(i, area.getTopLeft().getY());
@@ -308,7 +306,7 @@ public class GamePanelView implements GamePanelPresenter.Display {
 	 * Draw highlight of some tile.
 	 * 
 	 * @param graphics
-	 *            required {@link Graphics2D}
+	 *            required {@link GraphicsContext}
 	 * @param area
 	 *            required displayed area
 	 * @param location
@@ -328,7 +326,7 @@ public class GamePanelView implements GamePanelPresenter.Display {
 	 * When move mode is enabled mouse cursor is followed by highlighted path.
 	 * 
 	 * @param graphics
-	 *            required {@link Graphics2D}
+	 *            required {@link GraphicsContext}
 	 * @param area
 	 *            required displayed area
 	 */
@@ -355,7 +353,7 @@ public class GamePanelView implements GamePanelPresenter.Display {
 	 * Draw image of steps on tile. Image is part of highlighted path.
 	 * 
 	 * @param graphics
-	 *            required {@link Graphics2D}
+	 *            required {@link GraphicsContext}
 	 * @param point
 	 *            required point where to draw image
 	 */
