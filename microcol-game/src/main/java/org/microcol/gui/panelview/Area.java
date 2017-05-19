@@ -110,9 +110,7 @@ public class Area {
 	 * @return return map location
 	 */
 	public Location convertToLocation(final Point point) {
-		final Point p = point.add(visibleArea.getTopLeft());
-		System.out.println(p + " -->  " + p.toLocation());
-		return p.toLocation();
+		return point.add(visibleArea.getTopLeft()).toLocation();
 	}
 
 	/**

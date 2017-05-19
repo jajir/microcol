@@ -280,8 +280,7 @@ public final class GamePanelPresenter implements Localized {
 	private void onMouseMoved(final MouseEvent e) {
 		lastMousePosition = Point.of(e.getX(), e.getY());
 		if (lastMousePosition != null) {
-			Location loc = display.getArea().convertToLocation(lastMousePosition);
-//			System.out.println(lastMousePosition + " --> " + loc);
+			final Location loc = display.getArea().convertToLocation(lastMousePosition);
 			viewState.setMouseOverTile(Optional.of(loc));
 		}
 	}
