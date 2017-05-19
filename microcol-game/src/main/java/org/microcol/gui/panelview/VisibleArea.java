@@ -15,7 +15,7 @@ public class VisibleArea {
 
 	private int canvasHeight;
 
-	//TODO JJ use optional
+	// TODO JJ use optional
 	private Point maxMapSize;
 
 	VisibleArea() {
@@ -31,6 +31,13 @@ public class VisibleArea {
 	public void setMaxMapSize(final WorldMap worldMap) {
 		Preconditions.checkNotNull(worldMap);
 		maxMapSize = Point.of(Location.of(worldMap.getMaxX(), worldMap.getMaxY()));
+		topLeft = Point.of(0, 0);
+		/**
+		 * Following code force class to compute correct position of top left
+		 * corner of map.
+		 */
+		setCanvasHeight(canvasHeight);
+		setCanvasWidth(canvasWidth);
 	}
 
 	public int getCanvasWidth() {
@@ -43,16 +50,16 @@ public class VisibleArea {
 				/**
 				 * Visible area is greater than map. Map should be centered.
 				 */
-				int x = -(newCanvasWidth - maxMapSize.getX()) / 2;
+				final int x = -(newCanvasWidth - maxMapSize.getX()) / 2;
 				topLeft = Point.of(x, topLeft.getY());
 			} else {
 				/**
 				 * whole map can't fit canvas
 				 */
 				final int toGrow = maxMapSize.getX() - canvasWidth;
-				int toGrowLeft = topLeft.getX();
+				final int toGrowLeft = topLeft.getX();
 				final int deltaGrow = newCanvasWidth - canvasWidth;
-				int x = (int) (((float) deltaGrow) * ((float) toGrowLeft / toGrow));
+				final int x = (int) (((float) deltaGrow) * ((float) toGrowLeft / toGrow));
 				topLeft = Point.of(topLeft.getX() - x, topLeft.getY());
 			}
 		}
@@ -69,7 +76,7 @@ public class VisibleArea {
 				/**
 				 * Visible area is greater than map. Map should be centered.
 				 */
-				int y = -(newCanvasHeight - maxMapSize.getY()) / 2;
+				final int y = -(newCanvasHeight - maxMapSize.getY()) / 2;
 				topLeft = Point.of(topLeft.getX(), y);
 			} else {
 				/**
@@ -78,7 +85,7 @@ public class VisibleArea {
 				final int toGrow = maxMapSize.getY() - canvasHeight;
 				final int toGrowLeft = topLeft.getY();
 				final int deltaGrow = newCanvasHeight - canvasHeight;
-				int y = (int) (((float) deltaGrow) * ((float) toGrowLeft / toGrow));
+				final int y = (int) (((float) deltaGrow) * ((float) toGrowLeft / toGrow));
 				topLeft = Point.of(topLeft.getX(), topLeft.getY() - y);
 			}
 		}
@@ -102,8 +109,24 @@ public class VisibleArea {
 	}
 
 	public void addDeltaToPoint(final Point delta) {
-		topLeft = Point.of(adjust(delta.getX(), topLeft.getX(), maxMapSize.getX(), canvasWidth),
-				adjust(delta.getY(), topLeft.getY(), maxMapSize.getY(), canvasHeight));
+		int x = topLeft.getX();
+		int y = topLeft.getY();
+
+		if (canvasWidth < maxMapSize.getX()) {
+			/**
+			 * X could be adjusted
+			 */
+			x = adjust(delta.getX(), topLeft.getX(), maxMapSize.getX(), canvasWidth);
+		}
+
+		if (canvasHeight < maxMapSize.getY()) {
+			/**
+			 * Y could be adjusted
+			 */
+			y = adjust(delta.getY(), topLeft.getY(), maxMapSize.getY(), canvasHeight);
+		}
+
+		topLeft = Point.of(x, y);
 	}
 
 	private int adjust(final int delta, final int original, final int maxMap, final int canvasMax) {

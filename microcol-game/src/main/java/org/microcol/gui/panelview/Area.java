@@ -119,7 +119,7 @@ public class Area {
 	 * @return return map location
 	 */
 	public Location convertToLocation(final Point point) {
-		return point.toLocation();
+		return point.add(pointTopLeft).toLocation();
 	}
 
 	/**

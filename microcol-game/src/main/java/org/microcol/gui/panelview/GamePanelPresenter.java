@@ -243,7 +243,8 @@ public final class GamePanelPresenter implements Localized {
 	}
 
 	private void onMousePressed(final MouseEvent e) {
-		final Location location = display.getArea().convertToLocation(Point.of(e.getX(), e.getY()));
+		final Point pressedAt = Point.of(e.getX(), e.getY());
+		final Location location = display.getArea().convertToLocation(pressedAt);
 		if (gameController.getModel().getMap().isValid(location)) {
 			logger.debug("location of mouse: " + location);
 			if (viewState.isMoveMode()) {
