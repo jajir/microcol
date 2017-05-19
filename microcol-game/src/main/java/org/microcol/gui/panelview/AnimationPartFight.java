@@ -38,10 +38,11 @@ public class AnimationPartFight implements AnimationPart {
 
 	@Override
 	public boolean hasNextStep() {
-		//FIXME JJ animation speed should be used here. 
-		if(animationSpeed==1){
-			
-		};
+		// FIXME JJ animation speed should be used here.
+		if (animationSpeed == 1) {
+
+		}
+		;
 		return step < 60;
 	}
 
@@ -55,6 +56,7 @@ public class AnimationPartFight implements AnimationPart {
 		final Point aPoint = area.convert(attacker.getLocation());
 		final Point dPoint = area.convert(defender.getLocation());
 		final Point middle = aPoint.add(dPoint.substract(aPoint).divide(2));
+		// TODO JJ paint animation just when at least one point is on screen.
 		graphics.drawImage(imageProvider.getImage(ImageProvider.IMG_CROSSED_SWORDS), middle.getX(), middle.getY());
 	}
 

@@ -49,9 +49,11 @@ public class AnimationPartWalk implements AnimationPart {
 	private final PaintService paintService;
 
 	private final ExcludePainting excludePainting;
+	
+	private final Area area;
 
 	public AnimationPartWalk(final PathPlanning pathPlanning, final List<Location> path, final Unit unit,
-			final PaintService paintService, final ExcludePainting excludePainting) {
+			final PaintService paintService, final ExcludePainting excludePainting, final Area area) {
 		Preconditions.checkNotNull(path);
 		Preconditions.checkArgument(!path.isEmpty(), "Path can't be empty");
 		Preconditions.checkArgument(path.size() > 1, "Path should contains more than one locations");
@@ -60,6 +62,7 @@ public class AnimationPartWalk implements AnimationPart {
 		this.unit = Preconditions.checkNotNull(unit);
 		this.excludePainting = Preconditions.checkNotNull(excludePainting);
 		this.path = new ArrayList<>(path);
+		this.area = Preconditions.checkNotNull(area);
 		excludePainting.excludeUnit(unit);
 		partialPathFrom = this.path.remove(0);
 		partialPath = new ArrayList<>();
@@ -72,8 +75,8 @@ public class AnimationPartWalk implements AnimationPart {
 		if (partialPath.isEmpty()) {
 			nextCoordinates = null;
 			if (!path.isEmpty()) {
-				final Point from = Point.of(partialPathFrom);
-				final Point to = Point.of(path.get(0));
+				final Point from = area.convert(partialPathFrom);
+				final Point to = area.convert(path.get(0));
 				pathPlanning.paintPath(from, to, point -> partialPath.add(point));
 				partialPathFrom = path.remove(0);
 			}
@@ -110,7 +113,7 @@ public class AnimationPartWalk implements AnimationPart {
 	@Override
 	public void paint(final GraphicsContext graphics, final Area area) {
 		if (area.isInArea(getNextCoordinates())) {
-			final Point point = area.convertPoint(getNextCoordinates());
+			final Point point = getNextCoordinates();
 			paintService.paintUnit(graphics, point, getUnit(), ImageProvider.IMG_TILE_MODE_MOVE);
 		}
 	}

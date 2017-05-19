@@ -29,7 +29,6 @@ import org.slf4j.LoggerFactory;
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
 
-import javafx.geometry.Bounds;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
@@ -78,6 +77,7 @@ public final class GamePanelPresenter implements Localized {
 
 	private final GamePanelPresenter.Display display;
 
+	// TODO JJ should use optional
 	private Point lastMousePosition;
 
 	private final ViewState viewState;
@@ -279,7 +279,11 @@ public final class GamePanelPresenter implements Localized {
 
 	private void onMouseMoved(final MouseEvent e) {
 		lastMousePosition = Point.of(e.getX(), e.getY());
-		viewState.setMouseOverTile(Optional.of(lastMousePosition.toLocation()));
+		if (lastMousePosition != null) {
+			Location loc = display.getArea().convertToLocation(lastMousePosition);
+//			System.out.println(lastMousePosition + " --> " + loc);
+			viewState.setMouseOverTile(Optional.of(loc));
+		}
 	}
 
 	private void switchToNormalMode(final Location moveToLocation) {

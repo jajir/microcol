@@ -7,15 +7,33 @@ import org.microcol.model.WorldMap;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 
+/**
+ * User see some area where is game map drawn this area is called canvas. Class
+ * define relation between game map, canvas size and canvas position on map.Game
+ * map could be smaller than canvas also could be bigger.
+ * 
+ */
 public class VisibleArea {
 
+	/**
+	 * It's position of top left corner of canvas on game map.
+	 */
 	private Point topLeft = Point.of(0, 0);
 
+	/**
+	 * Define canvas width.
+	 */
 	private int canvasWidth;
 
+	/**
+	 * Define canvas height.
+	 */
 	private int canvasHeight;
 
 	// TODO JJ use optional
+	/**
+	 * Define map size.
+	 */
 	private Point maxMapSize;
 
 	VisibleArea() {

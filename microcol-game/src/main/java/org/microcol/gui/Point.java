@@ -78,9 +78,9 @@ public class Point {
 	}
 
 	public static Point of(final double x, final double y) {
-		return new Point((int)x, (int)y);
+		return new Point((int) x, (int) y);
 	}
-	
+
 	public static Point of(final Location location) {
 		return Point.of(location.getX(), location.getY()).multiply(GamePanelView.TOTAL_TILE_WIDTH_IN_PX);
 	}
@@ -102,6 +102,14 @@ public class Point {
 	}
 
 	public Point divide(final double factor) {
-		return new Point((int) (x / factor), (int) (y / factor));
+		return new Point(div(x, factor), div(y, factor));
+	}
+
+	private int div(final int num, final double factor) {
+		if (num < 0) {
+			return (int) (num / factor) - 1;
+		} else {
+			return (int) (num / factor);
+		}
 	}
 }

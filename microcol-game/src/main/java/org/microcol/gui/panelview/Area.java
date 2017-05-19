@@ -5,6 +5,7 @@ import org.microcol.model.Location;
 import org.microcol.model.WorldMap;
 
 import com.google.common.base.MoreObjects;
+import com.google.common.base.Preconditions;
 
 /**
  * Define top left corner and bottom right corner.
@@ -41,6 +42,8 @@ public class Area {
 	 */
 	private final Point delta;
 
+	private final VisibleArea visibleArea;
+
 	/**
 	 * 
 	 * @param visibleArea
@@ -49,9 +52,11 @@ public class Area {
 	 *            required world map
 	 */
 	public Area(final VisibleArea visibleArea, final WorldMap worldMap) {
+		this.visibleArea = Preconditions.checkNotNull(visibleArea);
 		pointTopLeft = visibleArea.getTopLeft();
 		pointBottomRight = visibleArea.getBottomRight();
 
+		// TODO JJ je to stejne jako point.toLocation
 		final Point p1 = pointTopLeft.divide(GamePanelView.TOTAL_TILE_WIDTH_IN_PX).add(Point.MAP_MIN_X,
 				Point.MAP_MIN_Y);
 		final Point p2 = Point
@@ -98,20 +103,6 @@ public class Area {
 	}
 
 	/**
-	 * Convert given point to coordinates in area.
-	 * 
-	 * TODO JJ is it really needed?
-	 * 
-	 * @param point
-	 *            required on virtual map coordinates
-	 * @return point coordinates that could be directly used to draw on canvas
-	 */
-	public Point convertPoint(final Point point) {
-		final Point topLeftPoint = Point.of(topLeft);
-		return point.add(-topLeftPoint.getX(), -topLeftPoint.getY());
-	}
-
-	/**
 	 * Convert from on-screen area coordinates to map coordinates.
 	 * 
 	 * @param point
@@ -119,7 +110,9 @@ public class Area {
 	 * @return return map location
 	 */
 	public Location convertToLocation(final Point point) {
-		return point.add(pointTopLeft).toLocation();
+		final Point p = point.add(visibleArea.getTopLeft());
+		System.out.println(p + " -->  " + p.toLocation());
+		return p.toLocation();
 	}
 
 	/**

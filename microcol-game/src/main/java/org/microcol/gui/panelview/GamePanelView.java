@@ -36,6 +36,7 @@ import javafx.scene.paint.Color;
  */
 public class GamePanelView implements GamePanelPresenter.Display {
 
+	@Deprecated
 	private static final int TILE_WIDTH_IN_PX = 35;
 
 	public static final int TOTAL_TILE_WIDTH_IN_PX = TILE_WIDTH_IN_PX;
@@ -194,11 +195,10 @@ public class GamePanelView implements GamePanelPresenter.Display {
 	 */
 	private void paint(final GraphicsContext g) {
 		final Area area = getArea();
-		//TODO JJ get background color from css style
+		// TODO JJ get background color from css style
 		g.setFill(Color.valueOf("#ececec"));
 		g.fillRect(0, 0, visibleArea.getCanvasWidth(), visibleArea.getCanvasHeight());
-		
-		
+
 		paintTiles(g, area);
 		paintUnits(g, gameController.getModel(), area);
 		paintGrid(g, area);
@@ -408,8 +408,8 @@ public class GamePanelView implements GamePanelPresenter.Display {
 	public void addMoveAnimator(final List<Location> path, final Unit movingUnit) {
 		Preconditions.checkNotNull(path);
 		Preconditions.checkNotNull(movingUnit);
-		animationManager
-				.addAnimationPart(new AnimationPartWalk(pathPlanning, path, movingUnit, paintService, excludePainting));
+		animationManager.addAnimationPart(
+				new AnimationPartWalk(pathPlanning, path, movingUnit, paintService, excludePainting, getArea()));
 	}
 
 	// TODO JJ animation scheduling should be in separate class.
