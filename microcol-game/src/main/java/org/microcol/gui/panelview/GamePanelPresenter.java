@@ -273,14 +273,14 @@ public final class GamePanelPresenter implements Localized {
 	private void switchToNormalMode(final Location moveToLocation) {
 		Preconditions.checkArgument(viewState.isMoveMode(), "switch to move mode was called from move mode");
 		// TODO JJ add precondition that move mode is enabled.
-		final Location selectedTile = viewState.getSelectedTile().get();
-		logger.debug("Switching to normal mode, from " + selectedTile + " to " + moveToLocation);
-		if (selectedTile.equals(moveToLocation)) {
+		final Location moveFromLocation = viewState.getSelectedTile().get();
+		logger.debug("Switching to normal mode, from " + moveFromLocation + " to " + moveToLocation);
+		if (moveFromLocation.equals(moveToLocation)) {
 			display.setCursorNormal();
 			return;
 		}
 		// TODO JJ active ship can be different from ship first at list
-		final Unit movingUnit = gameController.getModel().getCurrentPlayer().getUnitsAt(selectedTile).get(0);
+		final Unit movingUnit = gameController.getModel().getCurrentPlayer().getUnitsAt(moveFromLocation).get(0);
 		if (isFight(movingUnit, moveToLocation)) {
 			if (!movingUnit.getType().canAttack()) {
 				// TODO JJ consider which tile should have focus
@@ -307,8 +307,6 @@ public final class GamePanelPresenter implements Localized {
 				final List<Location> path = movingUnit.getPath(moveToLocation).get();
 				if (path.size() > 0) {
 					gameController.performMove(movingUnit, path);
-					focusedTileController.fireEvent(new FocusedTileEvent(gameController.getModel(), selectedTile,
-							gameController.getModel().getMap().getTerrainAt(selectedTile)));
 				}
 				viewState.setSelectedTile(Optional.of(moveToLocation));
 				display.setCursorNormal();

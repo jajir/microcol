@@ -63,11 +63,10 @@ public abstract class AbstractEventController<E> {
 		logger.debug("Event " + event + " was triggered.");
 		listeners.stream().forEach(listener -> {
 			/**
-			 * TODO JJ verify is it. Split event at UI and non UI.
-			 * 
 			 * Is it correct to call events in Platform.runLater even when
 			 * doesn't change UI? Probably yes. Lot of events could flooding
-			 * queue and make UI unresponsive. See javadoc.
+			 * queue and make UI unresponsive. In case of problems with
+			 * 'runLatert' than should be used just in case of UI event
 			 */
 			Platform.runLater(() -> listener.onEvent(event));
 		});

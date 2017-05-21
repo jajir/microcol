@@ -11,7 +11,6 @@ import com.google.inject.Inject;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
@@ -39,8 +38,6 @@ public class MainStageBuilder {
 		primaryStage.setOnCloseRequest(event -> {
 			exitGameController.fireEvent(new ExitGameEvent());
 		});
-		// TODO JJ use javafx property object to bind them primary stage
-		// TODO JJ use maximalize / minimalize window
 		primaryStage.xProperty().addListener((object, oldValue, newValue) -> {
 			final Rectangle rectangle = gamePreferences.getMainFramePosition();
 			rectangle.x = newValue.intValue();

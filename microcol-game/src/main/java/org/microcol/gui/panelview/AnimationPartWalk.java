@@ -49,7 +49,7 @@ public class AnimationPartWalk implements AnimationPart {
 	private final PaintService paintService;
 
 	private final ExcludePainting excludePainting;
-	
+
 	private final Area area;
 
 	public AnimationPartWalk(final PathPlanning pathPlanning, final List<Location> path, final Unit unit,
@@ -75,8 +75,9 @@ public class AnimationPartWalk implements AnimationPart {
 		if (partialPath.isEmpty()) {
 			nextCoordinates = null;
 			if (!path.isEmpty()) {
-				final Point from = area.convert(partialPathFrom);
-				final Point to = area.convert(path.get(0));
+				//TODO JJ there should be check that at least one location is visible
+				final Point from = area.convertToPoint(partialPathFrom);
+				final Point to = area.convertToPoint(path.get(0));
 				pathPlanning.paintPath(from, to, point -> partialPath.add(point));
 				partialPathFrom = path.remove(0);
 			}
@@ -112,7 +113,7 @@ public class AnimationPartWalk implements AnimationPart {
 
 	@Override
 	public void paint(final GraphicsContext graphics, final Area area) {
-		if (area.isInArea(getNextCoordinates())) {
+		if (area.isPointVisible(getNextCoordinates())) {
 			final Point point = getNextCoordinates();
 			paintService.paintUnit(graphics, point, getUnit(), ImageProvider.IMG_TILE_MODE_MOVE);
 		}

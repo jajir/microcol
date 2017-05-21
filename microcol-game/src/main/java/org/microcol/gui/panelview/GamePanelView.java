@@ -185,8 +185,8 @@ public class GamePanelView implements GamePanelPresenter.Display {
 			/**
 			 * If move computer that make game field darker.
 			 */
-			final Point topLeftPoint = area.convert(area.getTopLeft());
-			final Point bottomRightPoint = area.convert(area.getBottomRight().add(Location.of(1, 1)));
+			final Point topLeftPoint = area.convertToPoint(area.getTopLeft());
+			final Point bottomRightPoint = area.convertToPoint(area.getBottomRight().add(Location.of(1, 1)));
 			final Point size = bottomRightPoint.substract(topLeftPoint);
 			g.setFill(new Color(0, 0, 0, 0.34));
 			g.fillRect(topLeftPoint.getX(), topLeftPoint.getY(), size.getX(), size.getY());
@@ -211,7 +211,7 @@ public class GamePanelView implements GamePanelPresenter.Display {
 		for (int i = area.getTopLeft().getX(); i <= area.getBottomRight().getX(); i++) {
 			for (int j = area.getTopLeft().getY(); j <= area.getBottomRight().getY(); j++) {
 				final Location location = Location.of(i, j);
-				final Point point = area.convert(location);
+				final Point point = area.convertToPoint(location);
 				final Terrain terrain = gameController.getModel().getMap().getTerrainAt(location);
 				graphics.drawImage(imageProvider.getTerrainImage(terrain), 0, 0, TILE_WIDTH_IN_PX, TILE_WIDTH_IN_PX,
 						point.getX(), point.getY(), TILE_WIDTH_IN_PX, TILE_WIDTH_IN_PX);
@@ -239,11 +239,11 @@ public class GamePanelView implements GamePanelPresenter.Display {
 		final java.util.Map<Location, List<Unit>> ships = world.getUnitsAt();
 
 		final java.util.Map<Location, List<Unit>> ships2 = ships.entrySet().stream()
-				.filter(e -> area.isInArea(e.getKey())).collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue()));
+				.filter(e -> area.isVisible(e.getKey())).collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue()));
 
 		ships2.forEach((location, list) -> {
 			final Unit unit = list.stream().findFirst().get();
-			final Point point = area.convert(location);
+			final Point point = area.convertToPoint(location);
 			if (excludePainting.isUnitIncluded(unit)) {
 				paintService.paintUnit(graphics, point, unit);
 			}
@@ -268,8 +268,8 @@ public class GamePanelView implements GamePanelPresenter.Display {
 	}
 
 	private void drawNetLine(final GraphicsContext graphics, final Area area, final Location l_1, Location l_2) {
-		final Point p_1 = area.convert(l_1).add(-1, -1);
-		final Point p_2 = area.convert(l_2).add(-1, -1);
+		final Point p_1 = area.convertToPoint(l_1).add(-1, -1);
+		final Point p_2 = area.convertToPoint(l_2).add(-1, -1);
 		graphics.strokeLine(p_1.getX(), p_1.getY(), p_2.getX(), p_2.getY());
 	}
 
@@ -292,7 +292,7 @@ public class GamePanelView implements GamePanelPresenter.Display {
 	 *            required tiles where to draw cursor
 	 */
 	private void paintCursor(final GraphicsContext graphics, final Area area, final Location location) {
-		final Point p = area.convert(location);
+		final Point p = area.convertToPoint(location);
 		graphics.strokeLine(p.getX(), p.getY(), p.getX() + TILE_WIDTH_IN_PX, p.getY());
 		graphics.strokeLine(p.getX(), p.getY(), p.getX(), p.getY() + TILE_WIDTH_IN_PX);
 		graphics.strokeLine(p.getX() + TILE_WIDTH_IN_PX, p.getY(), p.getX() + TILE_WIDTH_IN_PX,
@@ -319,7 +319,7 @@ public class GamePanelView implements GamePanelPresenter.Display {
 			final Unit movingUnit = gameController.getModel().getCurrentPlayer()
 					.getUnitsAt(viewState.getSelectedTile().get()).get(0);
 			final StepCounter stepCounter = new StepCounter(5, movingUnit.getAvailableMoves());
-			final List<Point> steps = Lists.transform(locations, location -> area.convert((Location) location));
+			final List<Point> steps = Lists.transform(locations, location -> area.convertToPoint((Location) location));
 			/**
 			 * Here could be check if particular step in on screen, but draw few
 			 * images outside screen is not big deal.
@@ -407,11 +407,6 @@ public class GamePanelView implements GamePanelPresenter.Display {
 		DialogFigth dialogFight = new DialogFigth(text, viewUtil, imageProvider, localizationHelper, unitAttacker,
 				unitDefender);
 		return dialogFight.isUserChooseFight();
-	}
-
-	public void onViewPortResize() {
-		// FIXME JJ is it necessary?
-		// dbImage = null;
 	}
 
 	@Override

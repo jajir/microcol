@@ -14,6 +14,11 @@ import com.google.common.base.Preconditions;
 public class Area {
 
 	/**
+	 * Point which have x and y set to {@link GamePanelView#TILE_WIDTH_IN_PX}.
+	 */
+	private static final Point TILE = Point.of(GamePanelView.TILE_WIDTH_IN_PX, GamePanelView.TILE_WIDTH_IN_PX);
+
+	/**
 	 * Locations in world of top left corner of visible area.
 	 */
 	private final Location topLeft;
@@ -35,13 +40,6 @@ public class Area {
 	 */
 	private final Point pointBottomRight;
 
-	/**
-	 * When location is converted to on-screen coordinates there is small shift
-	 * of on-screen coordinates. Small shift represents user screen scrolling.
-	 * Where screen scrolling is in pixels and map is drawn in map tiles.
-	 */
-	private final Point delta;
-
 	private final VisibleArea visibleArea;
 
 	/**
@@ -56,7 +54,7 @@ public class Area {
 		pointTopLeft = visibleArea.getTopLeft();
 		pointBottomRight = visibleArea.getBottomRight();
 
-		// TODO JJ je to stejne jako point.toLocation
+		// TODO JJ in following code don't use point instead of location.
 		final Point p1 = pointTopLeft.divide(GamePanelView.TILE_WIDTH_IN_PX).add(Point.MAP_MIN_X, Point.MAP_MIN_Y);
 		final Point p2 = Point
 				.of((int) Math.ceil(pointBottomRight.getX() / (float) GamePanelView.TILE_WIDTH_IN_PX),
@@ -65,8 +63,6 @@ public class Area {
 
 		topLeft = Location.of(Math.max(Point.MAP_MIN_X, p1.getX()), Math.max(Point.MAP_MIN_Y, p1.getY()));
 		bottomRight = Location.of(Math.min(p2.getX(), worldMap.getMaxX()), Math.min(p2.getY(), worldMap.getMaxY()));
-
-		delta = Point.of(topLeft.add(Location.of(-1, -1))).substract(pointTopLeft);
 	}
 
 	public Location getTopLeft() {
@@ -77,28 +73,20 @@ public class Area {
 		return bottomRight;
 	}
 
-	public int getWidth() {
-		return bottomRight.getX() - topLeft.getX() + Point.MAP_MIN_X;
-	}
-
-	public int getHeight() {
-		return bottomRight.getY() - topLeft.getY() + Point.MAP_MIN_Y;
-	}
-
-	public boolean isInArea(final Location location) {
-		return topLeft.getX() <= location.getX() && bottomRight.getX() >= location.getX()
-				&& topLeft.getY() <= location.getY() && bottomRight.getY() >= location.getY();
+	public boolean isVisible(final Location location) {
+		final Point point = convertToPoint(location);
+		return isPointVisible(point);
 	}
 
 	/**
-	 * Convert given location to coordinates in area.
+	 * Convert given location to canvas coordinates.
 	 * 
 	 * @param location
 	 *            required on map location
 	 * @return point coordinates that could be directly used to draw on canvas
 	 */
-	public Point convert(final Location location) {
-		return Point.of(Location.of(location.getX() - topLeft.getX(), location.getY() - topLeft.getY())).add(delta);
+	public Point convertToPoint(final Location location) {
+		return Point.of(location).substract(visibleArea.getTopLeft()).substract(TILE);
 	}
 
 	/**
@@ -116,15 +104,15 @@ public class Area {
 	 * Verify that given point is in area.
 	 * 
 	 * @param point
-	 *            required point
+	 *            required point in canvas coordinates
 	 * @return return <code>true</code> when point is inside area otherwise
 	 *         return <code>false</code>
 	 */
-	public boolean isInArea(final Point point) {
-		final Point topLeftPoint = Point.of(topLeft);
-		final Point bottomRightPoint = Point.of(bottomRight);
-		return topLeftPoint.getX() <= point.getX() && bottomRightPoint.getX() >= point.getX()
-				&& topLeftPoint.getY() <= point.getY() && bottomRightPoint.getY() >= point.getY();
+	public boolean isPointVisible(final Point point) {
+		final Point p1 = visibleArea.getTopLeft();
+		final Point p2 = visibleArea.getBottomRight();
+		return p1.getX() <= point.getX() && p2.getX() >= point.getX() && p1.getY() <= point.getY()
+				&& p2.getY() >= point.getY();
 	}
 
 	@Override

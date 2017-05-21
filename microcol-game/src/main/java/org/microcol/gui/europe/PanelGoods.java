@@ -1,8 +1,5 @@
 package org.microcol.gui.europe;
 
-import java.awt.GridBagConstraints;
-import java.awt.Insets;
-
 import org.microcol.gui.ImageProvider;
 
 /**

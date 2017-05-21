@@ -29,9 +29,6 @@ public class AreaTest {
 
 		assertEquals(3, area.getBottomRight().getX());
 		assertEquals(3, area.getBottomRight().getY());
-
-		assertEquals(3, area.getWidth());
-		assertEquals(3, area.getHeight());
 	}
 
 	@Test
@@ -43,9 +40,6 @@ public class AreaTest {
 
 		assertEquals(31, area.getBottomRight().getX());
 		assertEquals(25, area.getBottomRight().getY());
-
-		assertEquals(25, area.getWidth());
-		assertEquals(19, area.getHeight());
 	}
 
 	@Test

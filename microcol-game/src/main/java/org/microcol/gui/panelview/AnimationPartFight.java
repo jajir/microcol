@@ -1,7 +1,5 @@
 package org.microcol.gui.panelview;
 
-import java.awt.Graphics2D;
-
 import org.microcol.gui.ImageProvider;
 import org.microcol.gui.Point;
 import org.microcol.model.Unit;
@@ -53,8 +51,8 @@ public class AnimationPartFight implements AnimationPart {
 
 	@Override
 	public void paint(final GraphicsContext graphics, final Area area) {
-		final Point aPoint = area.convert(attacker.getLocation());
-		final Point dPoint = area.convert(defender.getLocation());
+		final Point aPoint = area.convertToPoint(attacker.getLocation());
+		final Point dPoint = area.convertToPoint(defender.getLocation());
 		final Point middle = aPoint.add(dPoint.substract(aPoint).divide(2));
 		// TODO JJ paint animation just when at least one point is on screen.
 		graphics.drawImage(imageProvider.getImage(ImageProvider.IMG_CROSSED_SWORDS), middle.getX(), middle.getY());

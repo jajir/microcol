@@ -26,6 +26,16 @@ public class PaintService {
 	 */
 	private static final int FLAG_HEIGHT = 12;
 
+	/**
+	 * Position of unit flag from top left tile corner.
+	 */
+	private final Point OWNERS_FLAG_POSITION = Point.of(1, 5);
+
+	/**
+	 * Position of unit image from top left tile corner.
+	 */
+	private final Point UNIT_IMAGE_POSITION = Point.of(2, 4);
+
 	private final ImageProvider imageProvider;
 
 	@Inject
@@ -44,10 +54,9 @@ public class PaintService {
 	 *            required unit to draw
 	 */
 	public void paintUnit(final GraphicsContext graphics, final Point point, final Unit unit) {
-		// TODO JJ replace magic numbers
-		Point p = point.add(2, 4);
+		Point p = point.add(UNIT_IMAGE_POSITION);
 		graphics.drawImage(imageProvider.getUnitImage(unit.getType()), p.getX(), p.getY());
-		paintOwnersFlag(graphics, point.add(1, 5), unit.getOwner());
+		paintOwnersFlag(graphics, point.add(OWNERS_FLAG_POSITION), unit.getOwner());
 	}
 
 	/**
@@ -64,11 +73,10 @@ public class PaintService {
 	 */
 	public void paintUnit(final GraphicsContext graphics, final Point point, final Unit unit,
 			final String flagLeterImageName) {
-		// TODO JJ replace magic numbers
-		Point p = point.add(2, 4);
+		Point p = point.add(UNIT_IMAGE_POSITION);
 		graphics.drawImage(imageProvider.getUnitImage(unit.getType()), p.getX(), p.getY());
-		paintOwnersFlag(graphics, point.add(1, 5), unit.getOwner());
-		graphics.drawImage(imageProvider.getImage(flagLeterImageName), point.getX() + 35 - 12, point.getY());
+		paintOwnersFlag(graphics, point.add(OWNERS_FLAG_POSITION), unit.getOwner());
+		graphics.drawImage(imageProvider.getImage(flagLeterImageName), point.getX() + 23, point.getY());
 	}
 
 	/**
@@ -84,7 +92,6 @@ public class PaintService {
 	public void paintOwnersFlag(final GraphicsContext graphics, final Point point, final Player player) {
 		graphics.setFill(Color.BLACK);
 		graphics.strokeRect(point.getX(), point.getY(), FLAG_WIDTH, FLAG_HEIGHT);
-		// TODO JJ player's color should be property
 		if (player.isHuman()) {
 			graphics.setFill(Color.YELLOW);
 		} else {
@@ -110,8 +117,8 @@ public class PaintService {
 	}
 
 	public void paintDebugInfo(final GraphicsContext graphics, final VisualDebugInfo visualDebugInfo, final Area area) {
-		visualDebugInfo.getLocations().stream().filter(location -> area.isInArea(location)).forEach(location -> {
-			final Point p = area.convert(location).add(10, 4);
+		visualDebugInfo.getLocations().stream().filter(location -> area.isVisible(location)).forEach(location -> {
+			final Point p = area.convertToPoint(location).add(10, 4);
 			graphics.setFill(Color.WHITE);
 			graphics.fillRect(p.getX() + 1, p.getY() + 1, FLAG_WIDTH - 1, FLAG_HEIGHT - 1);
 		});

@@ -1,12 +1,6 @@
 package org.microcol.gui;
 
-import java.awt.Rectangle;
-
-import org.microcol.gui.event.ExitGameController;
-import org.microcol.gui.event.ExitGameEvent;
 import org.microcol.gui.event.KeyController;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
@@ -29,51 +23,14 @@ public class MainFramePresenter {
 		void showPanel(String panelName);
 	}
 
-	private final Logger logger = LoggerFactory.getLogger(MainFramePresenter.class);
-
-	private Rectangle lastNormalBounds;
-
-	private final GamePreferences gamePreferences;
-
 	private final MainFramePresenter.Display display;
 
 	@Inject
-	public MainFramePresenter(final MainFramePresenter.Display display, final KeyController keyController,
-			final GamePreferences gamePreferences, final ExitGameController exitGameController) {
-		this.gamePreferences = Preconditions.checkNotNull(gamePreferences);
+	public MainFramePresenter(final MainFramePresenter.Display display, final KeyController keyController) {
 		this.display = Preconditions.checkNotNull(display);
 		display.getBox().setOnKeyPressed(e -> {
 			keyController.fireEvent(e);
 		});
-
-//		display.getFrame().addComponentListener(new ComponentAdapter() {
-//			@Override
-//			public void componentMoved(ComponentEvent event) {
-//				if (display.getFrame().getExtendedState() == JFrame.NORMAL) {
-//					lastNormalBounds = display.getFrame().getBounds();
-//				}
-//			}
-//
-//			@Override
-//			public void componentResized(ComponentEvent event) {
-//				if (display.getFrame().getExtendedState() == JFrame.NORMAL) {
-//					lastNormalBounds = display.getFrame().getBounds();
-//				}
-//			}
-//		});
-//
-//		exitGameController.addListener(event -> {
-//			savePreferences();
-//			display.getFrame().dispose();
-//		});
-//
-//		display.getFrame().addWindowListener(new WindowAdapter() {
-//			@Override
-//			public void windowClosing(WindowEvent event) {
-//				logger.debug("Event windowClosing");
-//				exitGameController.fireEvent(new ExitGameEvent());
-//			}
-//		});
 	}
 
 	public void showPanel(final String panelName) {

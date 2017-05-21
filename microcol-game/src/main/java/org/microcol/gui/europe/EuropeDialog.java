@@ -5,9 +5,9 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
 
-import org.microcol.gui.AbstractDialog;
 import org.microcol.gui.ImageProvider;
 import org.microcol.gui.event.model.GameController;
 import org.microcol.gui.util.Text;
@@ -19,7 +19,11 @@ import com.google.inject.Inject;
 /**
  * Show Europe port.
  */
-public class EuropeDialog extends AbstractDialog {
+public class EuropeDialog extends JDialog {
+
+	protected static final int BORDER = 10;
+
+	protected static final int BORDER_BIG = 20;
 
 	/**
 	 * Default serialVersionUID.

@@ -166,6 +166,23 @@ public class VisibleArea {
 		return adjusted;
 	}
 
+	private int adjustToLess(final int delta, final int original, final int maxMap, final int canvasMax) {
+		if(canvasMax>maxMap){
+			return original;
+		}
+		final int adjusted = original + delta;
+		if (adjusted < 0) {
+			return 0;
+		}
+		if (adjusted > maxMap) {
+			return maxMap;
+		}
+		if (adjusted + canvasMax > maxMap) {
+			return original;
+		}
+		return adjusted;
+	}
+
 	/**
 	 * Help to scroll screen to some place. It normalize top left screen corner.
 	 * Prevent screen to scroll outside of visible area.
@@ -176,8 +193,8 @@ public class VisibleArea {
 	 */
 	public Point scrollToPoint(final Point newTopLeftScreenCorner) {
 		final Point delta = newTopLeftScreenCorner.substract(topLeft);
-		return Point.of(adjust(delta.getX(), topLeft.getX(), maxMapSize.get().getX(), canvasWidth),
-				adjust(delta.getY(), topLeft.getY(), maxMapSize.get().getY(), canvasHeight));
+		return Point.of(adjustToLess(delta.getX(), topLeft.getX(), maxMapSize.get().getX(), canvasWidth),
+				adjustToLess(delta.getY(), topLeft.getY(), maxMapSize.get().getY(), canvasHeight));
 	}
 
 }

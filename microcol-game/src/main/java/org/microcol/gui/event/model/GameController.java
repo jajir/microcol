@@ -61,9 +61,22 @@ public class GameController implements Localized {
 	}
 
 	private Model buidModel() {
+//		return buildTinyModel();
 //		 return buildComplexModel();
-//		 return buildMediumModel();
-		return buildHugeModel();
+		// return buildMediumModel();
+		 return buildHugeModel();
+	}
+
+	Model buildTinyModel() {
+		ModelBuilder builder = new ModelBuilder();
+		builder.setCalendar(1570, 1800).setMap("/maps/map-02.txt")
+
+				.addPlayer("Player1", false).addUnit("Player1", UnitType.FRIGATE, Location.of(1, 1))
+
+				.addPlayer("Player2", true).addUnit("Player2", UnitType.FRIGATE, Location.of(1, 3))
+				.addUnit("Player2", UnitType.FRIGATE, Location.of(2, 3))
+				.addUnit("Player2", UnitType.FRIGATE, Location.of(3, 3));
+		return builder.build();
 	}
 
 	Model buildHugeModel() {
