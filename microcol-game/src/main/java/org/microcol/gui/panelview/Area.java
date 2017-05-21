@@ -125,7 +125,7 @@ public class Area {
 	 * When user want to see in center of screen given location than this method
 	 * compute top left point of requested screen.
 	 * 
-	 * @param point
+	 * @param location
 	 *            required location that will in center of view
 	 * @return position of top left corner of view
 	 */
