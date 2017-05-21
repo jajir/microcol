@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import org.easymock.EasyMock;
+import org.junit.Before;
 import org.junit.Test;
 import org.microcol.gui.panelview.Area;
 import org.microcol.gui.panelview.GamePanelView;
@@ -16,6 +17,8 @@ import org.microcol.model.WorldMap;
  *
  */
 public class AreaTest {
+
+	private VisibleArea visibleArea;
 
 	@Test
 	public void test_small_map_huge_view() {
@@ -49,18 +52,19 @@ public class AreaTest {
 	public void test_getCenterAreaTo_middle_of_map() throws Exception {
 		Area area = makeArea(222, 222, 800, 600, 100 * GamePanelView.TILE_WIDTH_IN_PX,
 				100 * GamePanelView.TILE_WIDTH_IN_PX);
-
+		EasyMock.expect(visibleArea.getCanvasWidth()).andReturn(800);
+		EasyMock.expect(visibleArea.getCanvasHeight()).andReturn(600);
+		EasyMock.expect(visibleArea.scrollToPoint(Point.of(1350, 1450))).andReturn(Point.of(1351, 1451));
+		EasyMock.replay(visibleArea);
 		Point po = area.getCenterToLocation(Location.of(50, 50));
 
-		assertEquals(618, po.getX());
-		assertEquals(718, po.getY());
+		assertEquals(1351, po.getX());
+		assertEquals(1451, po.getY());
+		EasyMock.verify(visibleArea);
 	}
 
 	private Area makeArea(final int viewTopLeftCornerX, final int viewTopLeftCornerY, final int viewWidth,
 			final int viewHeight, final int maxMapLocationX, final int maxMapLocationY) {
-		// final VisibleArea bounds = new VisibleArea(viewTopLeftCornerX,
-		// viewTopLeftCornerY, viewWidth, viewHeight);
-		final VisibleArea visibleArea = EasyMock.createMock(VisibleArea.class);
 		final Point topLeft = Point.of(viewTopLeftCornerX, viewTopLeftCornerY);
 		final Point bottomRight = topLeft.add(viewWidth, viewHeight);
 		EasyMock.expect(visibleArea.getTopLeft()).andReturn(topLeft);
@@ -73,8 +77,18 @@ public class AreaTest {
 		EasyMock.replay(map, visibleArea);
 		Area out = new Area(visibleArea, map);
 		EasyMock.verify(map, visibleArea);
+		EasyMock.reset(map, visibleArea);
 		assertNotNull(out);
 		return out;
+	}
+
+	@Before
+	public void setup() {
+		visibleArea = EasyMock.createMock(VisibleArea.class);
+	}
+
+	public void tearDown() {
+		visibleArea = null;
 	}
 
 }

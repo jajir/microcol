@@ -31,7 +31,7 @@ public class AnimationPartFight implements AnimationPart {
 		this.defender = Preconditions.checkNotNull(defender);
 		this.imageProvider = Preconditions.checkNotNull(imageProvider);
 		this.animationSpeed = animationSpeed;
-		// FIXME at this point there should be two ships on different fields.
+		// FIXME JJ at this point there should be two ships on different fields.
 		// Preconditions.checkArgument(attacker.getLocation().isAdjacent(defender.getLocation()),
 		// "Attacker %s should be near defender %s", attacker, defender);
 	}

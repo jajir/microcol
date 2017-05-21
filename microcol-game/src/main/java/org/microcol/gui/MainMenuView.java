@@ -102,7 +102,7 @@ public class MainMenuView implements MainMenuPresenter.Display {
 		 */
 		menuItemMove = new MenuItem();
 		menuItemMove.setAccelerator(new KeyCodeCombination(KeyCode.M));
-		menuItemMove.disableProperty().setValue(false);
+		menuItemMove.disableProperty().setValue(true);
 
 		/**
 		 * Preferences
