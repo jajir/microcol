@@ -120,8 +120,6 @@ public class PathPlanning {
 	private float countPositiveStepSize(final int diffAbs, final int speed) {
 		Preconditions.checkArgument(speed >= ANIMATION_SPEED_MIN_VALUE, "speed '%s' is to low", speed);
 		Preconditions.checkArgument(speed < ANIMATION_SPEED_MAX_VALUE, "speed '%s' is to high", speed);
-		// float a = (0.5F - diffAbs) / 10F;
-		// return speed * a + diffAbs;
 		return SPEED_FUNCTION.get(speed) * diffAbs;
 	}
 

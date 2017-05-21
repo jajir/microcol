@@ -142,7 +142,7 @@ public class GamePanelView implements GamePanelPresenter.Display {
 			scrollToPoint(screenScrolling.get().getNextPoint());
 		}
 	}
-	
+
 	private void scrollToPoint(final Point point) {
 		visibleArea.setX(point.getX());
 		visibleArea.setY(point.getY());
@@ -275,8 +275,8 @@ public class GamePanelView implements GamePanelPresenter.Display {
 
 	private void paintCursor(final GraphicsContext graphics, final Area area) {
 		if (viewState.getSelectedTile().isPresent()) {
-			graphics.setFill(Color.RED);
-			graphics.setLineWidth(1);
+			graphics.setStroke(Color.GREY);
+			graphics.setLineWidth(2);
 			paintCursor(graphics, area, viewState.getSelectedTile().get());
 		}
 	}
