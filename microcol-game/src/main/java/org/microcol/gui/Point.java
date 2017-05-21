@@ -69,7 +69,7 @@ public class Point {
 	}
 
 	public Location toLocation() {
-		final Point p = divide(GamePanelView.TOTAL_TILE_WIDTH_IN_PX).add(MAP_MIN_X, MAP_MIN_Y);
+		final Point p = divide(GamePanelView.TILE_WIDTH_IN_PX).add(MAP_MIN_X, MAP_MIN_Y);
 		return Location.of(p.getX(), p.getY());
 	}
 
@@ -82,7 +82,7 @@ public class Point {
 	}
 
 	public static Point of(final Location location) {
-		return Point.of(location.getX(), location.getY()).multiply(GamePanelView.TOTAL_TILE_WIDTH_IN_PX);
+		return Point.of(location.getX(), location.getY()).multiply(GamePanelView.TILE_WIDTH_IN_PX);
 	}
 
 	public Point add(final int addX, final int addY) {

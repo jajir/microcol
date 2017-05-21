@@ -57,11 +57,10 @@ public class Area {
 		pointBottomRight = visibleArea.getBottomRight();
 
 		// TODO JJ je to stejne jako point.toLocation
-		final Point p1 = pointTopLeft.divide(GamePanelView.TOTAL_TILE_WIDTH_IN_PX).add(Point.MAP_MIN_X,
-				Point.MAP_MIN_Y);
+		final Point p1 = pointTopLeft.divide(GamePanelView.TILE_WIDTH_IN_PX).add(Point.MAP_MIN_X, Point.MAP_MIN_Y);
 		final Point p2 = Point
-				.of((int) Math.ceil(pointBottomRight.getX() / (float) GamePanelView.TOTAL_TILE_WIDTH_IN_PX),
-						(int) Math.ceil(pointBottomRight.getY() / (float) GamePanelView.TOTAL_TILE_WIDTH_IN_PX))
+				.of((int) Math.ceil(pointBottomRight.getX() / (float) GamePanelView.TILE_WIDTH_IN_PX),
+						(int) Math.ceil(pointBottomRight.getY() / (float) GamePanelView.TILE_WIDTH_IN_PX))
 				.add(Point.of(1, 1));
 
 		topLeft = Location.of(Math.max(Point.MAP_MIN_X, p1.getX()), Math.max(Point.MAP_MIN_Y, p1.getY()));
@@ -143,7 +142,7 @@ public class Area {
 	 */
 	public Point getCenterAreaTo(final Point point) {
 		final Point p = pointBottomRight.substract(pointTopLeft)
-				.add(-GamePanelView.TOTAL_TILE_WIDTH_IN_PX, -GamePanelView.TOTAL_TILE_WIDTH_IN_PX).divide(2.0);
+				.add(-GamePanelView.TILE_WIDTH_IN_PX, -GamePanelView.TILE_WIDTH_IN_PX).divide(2.0);
 		return point.substract(p);
 	}
 

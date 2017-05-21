@@ -36,10 +36,7 @@ import javafx.scene.paint.Color;
  */
 public class GamePanelView implements GamePanelPresenter.Display {
 
-	@Deprecated
-	private static final int TILE_WIDTH_IN_PX = 35;
-
-	public static final int TOTAL_TILE_WIDTH_IN_PX = TILE_WIDTH_IN_PX;
+	public static final int TILE_WIDTH_IN_PX = 35;
 
 	private final Canvas canvas;
 
@@ -121,34 +118,15 @@ public class GamePanelView implements GamePanelPresenter.Display {
 		}.start();
 	}
 
-	/**
-	 * Define how many times per second will be screen repainted (FPS). Real FPS
-	 * will be always lover than this value. It's because not all
-	 * {@link javax.swing.JComponent#repaint()} leads to real screen repaint.
-	 */
-	private static final int DEFAULT_FRAME_PER_SECOND = 50;
-
 	@Override
 	public void initGame(final boolean idGridShown, final Model model) {
-		// TODO JJ here should be correct canvas size specified
 		this.isGridShown = idGridShown;
 		visibleArea.setMaxMapSize(model.getMap());
-		// TODO JJ canvas size should not be set here
-		// final Point bottomRight =
-		// Point.of(Location.of(model.getMap().getMaxX(),
-		// model.getMap().getMaxY()));
-		// canvas.setWidth(1000*35);
-		// canvas.setHeight(bottomRight.getY());
-		// FIXME JJ correct it
-		// if (!timer.isRunning()) {
-		// timer.start();
-		// }
 	}
 
 	@Override
 	public void stopTimer() {
 		fpsCounter.stop();
-		// timer.stop();
 	}
 
 	/**
@@ -168,14 +146,8 @@ public class GamePanelView implements GamePanelPresenter.Display {
 	}
 
 	public void scrollToPoint(final Point point) {
-		// FIXME JJ scroll to specified point
-		// final ScrollPane sp = (ScrollPane)canvas.getParent();
-		// final Bounds bounds =sp.getViewportBounds();
-		// final JViewport viewPort = (JViewport) getParent();
-		// final Rectangle view = viewPort.getViewRect();
-		// view.x = point.getX();
-		// view.y = point.getY();
-		// scrollRectToVisible(view);
+		visibleArea.setX(point.getX());
+		visibleArea.setY(point.getY());
 	}
 
 	@Override
@@ -206,16 +178,15 @@ public class GamePanelView implements GamePanelPresenter.Display {
 		paintSteps(g, area);
 		paintAnimation(g, area);
 		paintService.paintDebugInfo(g, visualDebugInfo, area);
-		final Point p = Point.of(area.getTopLeft().add(Location.of(-1, -1)));
 		if (gameController.getModel().getCurrentPlayer().isComputer()) {
 			/**
 			 * If move computer that make game field darker.
 			 */
+			final Point topLeftPoint = area.convert(area.getTopLeft());
+			final Point bottomRightPoint = area.convert(area.getBottomRight().add(Location.of(1, 1)));
+			final Point size = bottomRightPoint.substract(topLeftPoint);
 			g.setFill(new Color(0, 0, 0, 0.34));
-			// TODO JJ paint in shadow just game part of viewport
-			// FIXME JJ replace with visibleArea
-			// g.fillRect(p.getX(), p.getY(), getViewportBounds().getWidth(),
-			// getViewportBounds().getHeight());
+			g.fillRect(topLeftPoint.getX(), topLeftPoint.getY(), size.getX(), size.getY());
 		}
 		fpsCounter.screenWasPainted();
 	}

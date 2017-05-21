@@ -77,27 +77,11 @@ public final class GamePanelPresenter implements Localized {
 
 	private final GamePanelPresenter.Display display;
 
-	// TODO JJ should use optional
-	private Point lastMousePosition;
+	private Optional<Point> lastMousePosition = Optional.empty();
 
 	private final ViewState viewState;
 
 	private final ViewUtil viewUtil;
-
-	// static class PopUpDemo extends PopupMenu {
-	//
-	// /**
-	// * Default serialVersionUID.
-	// */
-	// private static final long serialVersionUID = 1L;
-	//
-	// public PopUpDemo() {
-	// for (int i = 0; i < 10; i++) {
-	// JMenuItem anItem = new JMenuItem("Item " + i + " click me!");
-	// add(anItem);
-	// }
-	// }
-	// }
 
 	@Inject
 	public GamePanelPresenter(final GamePanelPresenter.Display display, final GameController gameController,
@@ -149,38 +133,21 @@ public final class GamePanelPresenter implements Localized {
 		display.getCanvas().setOnMousePressed(e -> {
 			logger.debug("mouse pressed at " + e.getX() + ", " + e.getY() + ", " + e.getButton());
 			if (isMouseEnabled()) {
-				if (e.isPopupTrigger()) {
-					// TODO JJ pop up menu
-					// doPop(e);
-				}
 				onMousePressed(e);
-			}
-		});
-		display.getCanvas().setOnMouseReleased(e -> {
-			if (isMouseEnabled()) {
-				if (e.isPopupTrigger()) {
-					// TODO JJ pop up menu
-					// doPop(e);
-				}
 			}
 		});
 		display.getCanvas().setOnMouseMoved(e -> {
 			if (isMouseEnabled()) {
 				onMouseMoved(e);
+				lastMousePosition = Optional.of(Point.of(e.getX(), e.getY()));
 			}
 		});
 		display.getCanvas().setOnMouseDragged(e -> {
 			if (isMouseEnabled()) {
-				logger.debug("mouse dragged at " + e.getX() + ", " + e.getY() + ", " + e.getButton());
 				onMouseDragged(e);
-				lastMousePosition = Point.of(e.getX(), e.getY());
+				lastMousePosition = Optional.of(Point.of(e.getX(), e.getY()));
 			}
 		});
-
-		// private void doPop(MouseEvent e) {
-		// PopUpDemo menu = new PopUpDemo();
-		// menu.show(e.getComponent(), e.getX(), e.getY());
-		// }
 
 		newGameController.addListener(event -> display.initGame(gamePreferences.isGridShown(), event.getModel()));
 		showGridController.addListener(e -> display.setGridShown(e.isGridShown()));
@@ -188,8 +155,6 @@ public final class GamePanelPresenter implements Localized {
 			display.getVisualDebugInfo().setLocations(e.getLocations());
 		});
 
-		// display.getGamePanelView().getParent().addComponentListener(new
-		// GamePanelListener(display));
 		viewController.addListener(event -> onCenterView());
 		exitGameController.addListener(event -> display.stopTimer());
 
@@ -218,7 +183,6 @@ public final class GamePanelPresenter implements Localized {
 		Preconditions.checkState(!units.isEmpty(), "there are some moveable units");
 		final Unit unit = units.get(0);
 		display.startMoveUnit(unit);
-		viewState.setMouseOverTile(Optional.ofNullable(lastMousePosition.toLocation()));
 		logger.debug("Switching '" + unit + "' to go mode.");
 		display.setCursorGoto();
 	}
@@ -260,29 +224,17 @@ public final class GamePanelPresenter implements Localized {
 	}
 
 	private void onMouseDragged(final MouseEvent e) {
-		if (lastMousePosition != null) {
-			// FIXME JJ it's just faked
-			// final Bounds bounds = null;
-			// final JViewport viewPort = (JViewport)
-			// display.getGamePanelView().getParent();
-			// if (bounds != null) {
+		if (lastMousePosition.isPresent()) {
 			final Point currentPosition = Point.of(e.getX(), e.getY());
-			final Point delta = lastMousePosition.substract(currentPosition);
+			final Point delta = lastMousePosition.get().substract(currentPosition);
 			display.getVisibleArea().addDeltaToPoint(delta);
-			// FIXME JJ please fix it
-			// view.x += delta.getX();
-			// view.y += delta.getY();
-			// display.getGamePanelView().scrollToPoint(Point.of());
-			// }
 		}
 	}
 
 	private void onMouseMoved(final MouseEvent e) {
-		lastMousePosition = Point.of(e.getX(), e.getY());
-		if (lastMousePosition != null) {
-			final Location loc = display.getArea().convertToLocation(lastMousePosition);
-			viewState.setMouseOverTile(Optional.of(loc));
-		}
+		final Point currentPosition = Point.of(e.getX(), e.getY());
+		final Location loc = display.getArea().convertToLocation(currentPosition);
+		viewState.setMouseOverTile(Optional.of(loc));
 	}
 
 	private void switchToNormalMode(final Location moveToLocation) {
