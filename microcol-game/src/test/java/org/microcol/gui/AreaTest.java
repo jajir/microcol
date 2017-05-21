@@ -6,7 +6,9 @@ import static org.junit.Assert.assertNotNull;
 import org.easymock.EasyMock;
 import org.junit.Test;
 import org.microcol.gui.panelview.Area;
+import org.microcol.gui.panelview.GamePanelView;
 import org.microcol.gui.panelview.VisibleArea;
+import org.microcol.model.Location;
 import org.microcol.model.WorldMap;
 
 /**
@@ -45,9 +47,10 @@ public class AreaTest {
 
 	@Test
 	public void test_getCenterAreaTo_middle_of_map() throws Exception {
-		Area area = makeArea(222, 222, 800, 600, 500, 500);
+		Area area = makeArea(222, 222, 800, 600, 100 * GamePanelView.TILE_WIDTH_IN_PX,
+				100 * GamePanelView.TILE_WIDTH_IN_PX);
 
-		Point po = area.getCenterAreaTo(Point.of(1000, 1000));
+		Point po = area.getCenterToLocation(Location.of(50, 50));
 
 		assertEquals(618, po.getX());
 		assertEquals(718, po.getY());

@@ -170,7 +170,7 @@ public final class GamePanelPresenter implements Localized {
 		 * Here could be verification of race conditions like centering to
 		 * bottom right corner of map. Luckily it's done by JViewport.
 		 */
-		final Point p = display.getArea().getCenterAreaTo(Point.of(viewState.getSelectedTile().get()));
+		final Point p = display.getArea().getCenterToLocation(viewState.getSelectedTile().get());
 		display.planScrollingAnimationToPoint(p);
 	}
 
@@ -214,9 +214,11 @@ public final class GamePanelPresenter implements Localized {
 			if (viewState.isMoveMode()) {
 				switchToNormalMode(location);
 			} else {
-				viewState.setSelectedTile(Optional.of(location));
-				focusedTileController.fireEvent(new FocusedTileEvent(gameController.getModel(), location,
-						gameController.getModel().getMap().getTerrainAt(location)));
+				if (e.isPrimaryButtonDown()) {
+					viewState.setSelectedTile(Optional.of(location));
+					focusedTileController.fireEvent(new FocusedTileEvent(gameController.getModel(), location,
+							gameController.getModel().getMap().getTerrainAt(location)));
+				}
 			}
 		} else {
 			logger.debug("invalid mouse location: " + location);
@@ -224,10 +226,10 @@ public final class GamePanelPresenter implements Localized {
 	}
 
 	private void onMouseDragged(final MouseEvent e) {
-		if (lastMousePosition.isPresent()) {
+		if (lastMousePosition.isPresent() && e.isSecondaryButtonDown()) {
 			final Point currentPosition = Point.of(e.getX(), e.getY());
 			final Point delta = lastMousePosition.get().substract(currentPosition);
-			display.getVisibleArea().addDeltaToPoint(delta);
+			display.getVisibleArea().addDeltaToTopLeftPoint(delta);
 		}
 	}
 
@@ -294,7 +296,7 @@ public final class GamePanelPresenter implements Localized {
 	private void scheduleWalkAnimation(final UnitMovedEvent event) {
 		Preconditions.checkArgument(event.getPath().getLocations().size() >= 1,
 				"Path for moving doesn't contains enought steps to move.");
-		display.planScrollingAnimationToPoint(display.getArea().getCenterAreaTo(Point.of(event.getStart())));
+		display.planScrollingAnimationToPoint(display.getArea().getCenterToLocation(event.getStart()));
 		List<Location> path = new ArrayList<>(event.getPath().getLocations());
 		path.add(0, event.getStart());
 		display.addMoveAnimator(path, event.getUnit());

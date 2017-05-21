@@ -8,8 +8,8 @@ import org.slf4j.LoggerFactory;
 /**
  * Class helps measure Frame per second rate.
  * 
- * @author jan
  *
+ *TODO JJ replace swing.timer
  */
 public class FpsCounter {
 

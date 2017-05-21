@@ -16,6 +16,10 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Contain size definition common for all dialogs.
+ *
+ *
+ *
+ *TODO JJ remove
  */
 public class AbstractDialog extends JDialog {
 

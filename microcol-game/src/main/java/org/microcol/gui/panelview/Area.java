@@ -134,20 +134,23 @@ public class Area {
 	}
 
 	/**
-	 * When user want to see in center of screen method compute top left corner.
+	 * When user want to see in center of screen given location than this method
+	 * compute top left point of requested screen.
 	 * 
 	 * @param point
-	 *            required point that will in center of view
+	 *            required location that will in center of view
 	 * @return position of top left corner of view
 	 */
-	public Point getCenterAreaTo(final Point point) {
-		final Point p = pointBottomRight.substract(pointTopLeft)
-				.add(-GamePanelView.TILE_WIDTH_IN_PX, -GamePanelView.TILE_WIDTH_IN_PX).divide(2.0);
-		return point.substract(p);
-	}
-
-	public Point getPointTopLeft() {
-		return pointTopLeft;
+	public Point getCenterToLocation(final Location location) {
+		final Point newTopLeftPoint = Point.of(location);
+		/**
+		 * Put new point in the center of screen.
+		 */
+		final Point screenCenter = Point.of(visibleArea.getCanvasWidth(), visibleArea.getCanvasHeight()).divide(2);
+		/**
+		 * Adjust new point that visible are is still on map.
+		 */
+		return visibleArea.scrollToPoint(newTopLeftPoint.substract(screenCenter));
 	}
 
 }

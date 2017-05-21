@@ -1,6 +1,7 @@
 package org.microcol.gui.panelview;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.microcol.gui.DialogFigth;
@@ -60,7 +61,7 @@ public class GamePanelView implements GamePanelPresenter.Display {
 
 	private boolean isGridShown;
 
-	private ScreenScrolling screenScrolling;
+	private Optional<ScreenScrolling> screenScrolling = Optional.empty();
 
 	private final OneTurnMoveHighlighter oneTurnMoveHighlighter;
 
@@ -108,6 +109,9 @@ public class GamePanelView implements GamePanelPresenter.Display {
 
 		isGridShown = true;
 
+		/**
+		 * Following class main define animation loop.
+		 */
 		new AnimationTimer() {
 
 			@Override
@@ -134,20 +138,19 @@ public class GamePanelView implements GamePanelPresenter.Display {
 	 * screen.
 	 */
 	private void nextGameTick() {
-		if (screenScrolling != null && screenScrolling.isNextPointAvailable()) {
-			scrollToPoint(screenScrolling.getNextPoint());
+		if (screenScrolling.isPresent() && screenScrolling.get().isNextPointAvailable()) {
+			scrollToPoint(screenScrolling.get().getNextPoint());
 		}
-		paint();
+	}
+	
+	private void scrollToPoint(final Point point) {
+		visibleArea.setX(point.getX());
+		visibleArea.setY(point.getY());
 	}
 
 	@Override
 	public void planScrollingAnimationToPoint(final Point targetPoint) {
-		screenScrolling = new ScreenScrolling(pathPlanning, getArea().getPointTopLeft(), targetPoint);
-	}
-
-	public void scrollToPoint(final Point point) {
-		visibleArea.setX(point.getX());
-		visibleArea.setY(point.getY());
+		screenScrolling = Optional.of(new ScreenScrolling(pathPlanning, visibleArea.getTopLeft(), targetPoint));
 	}
 
 	@Override

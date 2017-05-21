@@ -43,7 +43,7 @@ public class PersistingDialog {
 	private final Text text;
 
 	private final GameController gameController;
-
+	//FIXME conert to javafx
 	@Inject
 	public PersistingDialog(final Text text, final GameController gameController) {
 		this.text = Preconditions.checkNotNull(text);
