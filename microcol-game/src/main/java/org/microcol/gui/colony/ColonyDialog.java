@@ -23,9 +23,9 @@ import com.google.inject.Inject;
  */
 public class ColonyDialog extends JDialog {
 
-	protected static final int BORDER = 10;
+	private static final int BORDER = 10;
 
-	protected static final int BORDER_BIG = 20;
+	private static final int BORDER_BIG = 20;
 
 	/**
 	 * Default serialVersionUID.
@@ -80,7 +80,6 @@ public class ColonyDialog extends JDialog {
 		buttonOk.requestFocus();
 		add(buttonOk, new GridBagConstraints(2, 10, 1, 1, 0.0D, 0.0D, GridBagConstraints.EAST, GridBagConstraints.NONE,
 				new Insets(0, 0, BORDER_BIG, BORDER_BIG), 0, 0));
-		viewUtil.showDialog(this);
 	}
 
 }

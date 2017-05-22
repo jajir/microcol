@@ -123,7 +123,6 @@ public class GameController implements Localized {
 		model.get().addListener(modelListener.get());
 		aiEngine = Optional.of(new Engine(model.get()));
 		aiEngine.get().start();
-		// TODO JJ hra mi prijde nastartovana po loadu. Asi by nemela byt
 		if (!model.get().isGameStarted()) {
 			new Thread(() -> model.get().startGame()).start();
 		}
