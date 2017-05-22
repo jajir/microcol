@@ -10,6 +10,8 @@
 
 <properties>
 	<comment>Test data for RBCPTest.java</comment>
+	<entry key="game.title">MicroCol</entry>
+	
 	<entry key="mainMenu.game">Game</entry>
 	<entry key="mainMenu.game.newGame">New Game</entry>
 	<entry key="mainMenu.game.saveGame">Save Game</entry>

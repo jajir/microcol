@@ -74,7 +74,7 @@ public class Area {
 	}
 
 	public boolean isVisible(final Location location) {
-		final Point point = convertToPoint(location);
+		final Point point = Point.of(location);
 		return isPointVisible(point);
 	}
 

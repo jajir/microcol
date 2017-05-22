@@ -4,6 +4,7 @@ import java.awt.Rectangle;
 
 import org.microcol.gui.event.ExitGameController;
 import org.microcol.gui.event.ExitGameEvent;
+import org.microcol.gui.util.Text;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
@@ -24,17 +25,20 @@ public class MainStageBuilder {
 
 	private final GamePreferences gamePreferences;
 
+	private final Text text;
+
 	@Inject
 	public MainStageBuilder(final MainMenuView mainMenuView, final MainFrameView mainFrame,
-			final ExitGameController exitGameController, final GamePreferences gamePreferences) {
+			final ExitGameController exitGameController, final GamePreferences gamePreferences, final Text text) {
 		this.mainMenuView = Preconditions.checkNotNull(mainMenuView);
 		this.mainFrame = Preconditions.checkNotNull(mainFrame);
 		this.exitGameController = Preconditions.checkNotNull(exitGameController);
 		this.gamePreferences = Preconditions.checkNotNull(gamePreferences);
+		this.text = Preconditions.checkNotNull(text);
 	}
 
 	public void buildPrimaryStage(final Stage primaryStage) {
-		primaryStage.setTitle("Hello, World!");
+		primaryStage.setTitle(text.get("game.title"));
 		primaryStage.setOnCloseRequest(event -> {
 			exitGameController.fireEvent(new ExitGameEvent());
 		});
