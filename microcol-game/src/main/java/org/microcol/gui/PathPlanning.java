@@ -177,7 +177,9 @@ public class PathPlanning {
 
 	private int getStepSize(final int from, final int to, final int howManyStepsShouldBeDone) {
 		int stepSize = (int) ((to - from) / (float) howManyStepsShouldBeDone);
-		Preconditions.checkArgument(stepSize != 0, "step size can't be 0.");
+		if (stepSize == 0) {
+			return (to - from);
+		}
 		return stepSize;
 	}
 
