@@ -134,9 +134,6 @@ public class MainMenuView implements MainMenuPresenter.Display {
 		 */
 		menuGame = new Menu();
 		menuGame.getItems().addAll(menuItemNewGame, menuItemLoadGame, menuItemSameGame, menuItemQuitGame);
-		if (!gamePreferences.isOSX()) {
-			menuGame.getItems().add(menuItemQuitGame);
-		}
 		menuView = new Menu();
 		menuView.getItems().addAll(menuItemCenterView, menuItemEurope);
 		menuUnit = new Menu();
