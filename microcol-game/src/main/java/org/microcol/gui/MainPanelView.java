@@ -14,7 +14,17 @@ import javafx.scene.layout.VBox;
  */
 public class MainPanelView {
 
-	private final VBox box;;
+	private final VBox box;
+
+	/**
+	 * When game starts canvas size is not available. It's available later from
+	 * canvasPane. Event before correct size is known canvas have to be painted.
+	 * Because of that there should be some maximum canvas size. With unlimited
+	 * canvas size game freeze because canvas is too big and slow to paint.
+	 * 
+	 * XXX JJ try to remove max canvas size
+	 */
+	private final static int MAX_CANVAS_SIDE_LENGTH = 5000;
 
 	@Inject
 	public MainPanelView(final GamePanelView gamePanel, final StatusBarView statusBar,
@@ -31,11 +41,11 @@ public class MainPanelView {
 		gamePanel.getCanvas().heightProperty().bind(canvasPane.heightProperty());
 
 		canvasPane.widthProperty().addListener((obj, oldValue, newValue) -> {
-			if (newValue.intValue() < 1000)
+			if (newValue.intValue() < MAX_CANVAS_SIDE_LENGTH)
 				gamePanel.getVisibleArea().setCanvasWidth(newValue.intValue());
 		});
 		canvasPane.heightProperty().addListener((obj, oldValue, newValue) -> {
-			if (newValue.intValue() < 1000)
+			if (newValue.intValue() < MAX_CANVAS_SIDE_LENGTH)
 				gamePanel.getVisibleArea().setCanvasHeight(newValue.intValue());
 		});
 
