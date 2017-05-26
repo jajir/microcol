@@ -2,6 +2,7 @@ package org.microcol.gui.panelview;
 
 import java.util.Optional;
 
+import org.microcol.gui.MainPanelView;
 import org.microcol.gui.Point;
 import org.microcol.model.Location;
 import org.microcol.model.WorldMap;
@@ -167,7 +168,7 @@ public class VisibleArea {
 	}
 
 	private int adjustToLess(final int delta, final int original, final int maxMap, final int canvasMax) {
-		if(canvasMax>maxMap){
+		if (canvasMax > maxMap) {
 			return original;
 		}
 		final int adjusted = original + delta;
@@ -193,8 +194,14 @@ public class VisibleArea {
 	 */
 	public Point scrollToPoint(final Point newTopLeftScreenCorner) {
 		final Point delta = newTopLeftScreenCorner.substract(topLeft);
-		return Point.of(adjustToLess(delta.getX(), topLeft.getX(), maxMapSize.get().getX(), canvasWidth),
-				adjustToLess(delta.getY(), topLeft.getY(), maxMapSize.get().getY(), canvasHeight));
+		if (maxMapSize.isPresent()) {
+			return Point.of(adjustToLess(delta.getX(), topLeft.getX(), maxMapSize.get().getX(), canvasWidth),
+					adjustToLess(delta.getY(), topLeft.getY(), maxMapSize.get().getY(), canvasHeight));
+		} else {
+			return Point.of(
+					adjustToLess(delta.getX(), topLeft.getX(), MainPanelView.MAX_CANVAS_SIDE_LENGTH, canvasWidth),
+					adjustToLess(delta.getY(), topLeft.getY(), MainPanelView.MAX_CANVAS_SIDE_LENGTH, canvasHeight));
+		}
 	}
 
 }

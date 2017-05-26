@@ -24,7 +24,7 @@ public class MainPanelView {
 	 * 
 	 * XXX JJ try to remove max canvas size
 	 */
-	private final static int MAX_CANVAS_SIDE_LENGTH = 5000;
+	public final static int MAX_CANVAS_SIDE_LENGTH = 5000;
 
 	@Inject
 	public MainPanelView(final GamePanelView gamePanel, final StatusBarView statusBar,
