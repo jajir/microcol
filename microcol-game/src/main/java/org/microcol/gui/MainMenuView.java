@@ -94,7 +94,7 @@ public class MainMenuView implements MainMenuPresenter.Display {
 
 		menuItemEurope = new MenuItem();
 		menuItemEurope.setAccelerator(new KeyCodeCombination(KeyCode.E));
-		menuItemEurope.disableProperty().setValue(true);
+		menuItemEurope.disableProperty().setValue(false);
 
 		/**
 		 * Menu unit

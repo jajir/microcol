@@ -2,18 +2,15 @@ package org.microcol.gui.europe;
 
 import org.microcol.gui.ImageProvider;
 
+import javafx.scene.control.Label;
+
 /**
  * Show list of all available goods.
  */
 public class PanelGoods extends TitledPanel {
 
-	/**
-	 * Default serialVersionUID.
-	 */
-	private static final long serialVersionUID = 1L;
-
 	public PanelGoods(final ImageProvider imageProvider) {
-		super("Good buy & sell");
+		super("zbozi", new Label("zbozi"));
 		//FIXME JJ NYI
 //		final PanelGood pgGrain = new PanelGood(imageProvider.getImage(ImageProvider.IMG_GOOD_CORN), 1, 8);
 //		add(pgGrain, new GridBagConstraints(0, 0, 1, 1, 0.0D, 0.0D, GridBagConstraints.CENTER, GridBagConstraints.NONE,

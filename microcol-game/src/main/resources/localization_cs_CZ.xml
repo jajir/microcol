@@ -80,6 +80,8 @@
 	<entry key="newGameDialog.cancel">Zpět</entry>
 	<entry key="newGameDialog.startGame">Hrát</entry>
 
+	<entry key="europe.title">Evropa</entry>
+
 	<entry key="dialogFight.title">Útok</entry>
 	<entry key="dialogFight.attacker">Útočník</entry>
 	<entry key="dialogFight.defender">Obránce</entry>

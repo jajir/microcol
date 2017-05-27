@@ -35,5 +35,28 @@
 	-fx-padding: 0 5px 0 5px;
 }
 
+/*
+ * Titled panel 
+ */
+.label {
+	/**
+  -fx-font: 28px Vivaldi;
+	 */ 
+}
 
+.bordered-titled-title {
+  -fx-background-color: lightgrey;
+  -fx-translate-y: -13;
+}
 
+.bordered-titled-border {
+  -fx-content-display: top;
+  -fx-border-insets: 20 15 15 15;
+  -fx-background-color: lightgrey;
+  -fx-border-color: black;
+  -fx-border-width: 1;
+}
+
+.bordered-titled-content {
+  -fx-padding: 26 10 10 10;
+}

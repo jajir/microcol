@@ -1,21 +1,23 @@
 package org.microcol.gui.europe;
 
-import java.awt.GridBagLayout;
+import javafx.geometry.Pos;
+import javafx.scene.Node;
+import javafx.scene.control.Label;
+import javafx.scene.layout.StackPane;
 
-import javax.swing.BorderFactory;
-import javax.swing.JPanel;
-import javax.swing.border.Border;
+public class TitledPanel extends StackPane {
 
-public class TitledPanel extends JPanel {
+	public TitledPanel(String titleString, Node content) {
+		Label title = new Label(" " + titleString + " ");
+		title.getStyleClass().add("bordered-titled-title");
+		StackPane.setAlignment(title, Pos.TOP_CENTER);
 
-	/**
-	 * Default serialVersionUID.
-	 */
-	private static final long serialVersionUID = 1L;
+		StackPane contentPane = new StackPane();
+		content.getStyleClass().add("bordered-titled-content");
+		contentPane.getChildren().add(content);
 
-	public TitledPanel(final String title) {
-		setLayout(new GridBagLayout());
-		Border border = BorderFactory.createTitledBorder(title);
-		setBorder(border);
+		getStyleClass().add("bordered-titled-border");
+		getChildren().addAll(title, contentPane);
 	}
+	
 }

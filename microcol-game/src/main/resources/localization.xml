@@ -82,6 +82,8 @@
 	<entry key="newGameDialog.cancel">Cancel</entry>
 	<entry key="newGameDialog.startGame">Start play</entry>
 
+	<entry key="europe.title">Europe</entry>
+
 	<entry key="dialogFight.title">Fight</entry>
 	<entry key="dialogFight.attacker">Attacker</entry>
 	<entry key="dialogFight.defender">Defender</entry>

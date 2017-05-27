@@ -1,13 +1,5 @@
 package org.microcol.gui.europe;
 
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-
-import javax.swing.JButton;
-import javax.swing.JDialog;
-import javax.swing.JLabel;
-
 import org.microcol.gui.ImageProvider;
 import org.microcol.gui.event.model.GameController;
 import org.microcol.gui.util.Text;
@@ -16,73 +8,60 @@ import org.microcol.gui.util.ViewUtil;
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
 
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+
 /**
  * Show Europe port.
  */
-public class EuropeDialog extends JDialog {
+public class EuropeDialog {
 
-	private static final int BORDER = 10;
-
-	private static final int BORDER_BIG = 20;
-
-	/**
-	 * Default serialVersionUID.
-	 */
-	private static final long serialVersionUID = 1L;
+	private final Stage dialog;
 
 	@Inject
 	public EuropeDialog(final ViewUtil viewUtil, final Text text, final ImageProvider imageProvider,
 			final GameController gameController) {
-//		super(viewUtil.getParentFrame());
+		Preconditions.checkNotNull(imageProvider);
 		Preconditions.checkNotNull(gameController);
-		setTitle(text.get("europeDialog.caption"));
-		setLayout(new GridBagLayout());
+		dialog = new Stage();
+		dialog.initModality(Modality.APPLICATION_MODAL);
+		dialog.initOwner(viewUtil.getParentFrame());
+		dialog.setTitle(text.get("europe.title"));
 
-		final JLabel label = new JLabel("European port");
-		add(label, new GridBagConstraints(0, 0, 1, 1, 1.0D, 1.0D, GridBagConstraints.SOUTHEAST, GridBagConstraints.NONE,
-				new Insets(BORDER_BIG, BORDER_BIG, BORDER, BORDER), 0, 0));
-		/**
-		 * Row 1
-		 */
+		final Label label = new Label("European port");
+
 		final PanelShips outgoingShips = new PanelShips("Ships travelling to New World");
-		add(outgoingShips, new GridBagConstraints(0, 1, 1, 1, 1.0D, 1.0D, GridBagConstraints.WEST,
-				GridBagConstraints.NONE, new Insets(0, BORDER_BIG, 10, 10), 0, 0));
-
-		/**
-		 * Row 2
-		 */
 		final PanelShips incomingShips = new PanelShips("Ships travelling to Europe");
-		add(incomingShips, new GridBagConstraints(0, 2, 1, 1, 1.0D, 1.0D, GridBagConstraints.WEST,
-				GridBagConstraints.NONE, new Insets(0, BORDER_BIG, 10, 10), 0, 0));
-
 		final PanelPortPier pierShips = new PanelPortPier();
-		add(pierShips, new GridBagConstraints(1, 2, 2, 1, 1.0D, 0.0D, GridBagConstraints.SOUTHEAST,
-				GridBagConstraints.HORIZONTAL, new Insets(0, 0, 10, BORDER_BIG), 0, 0));
-		/**
-		 * Good row - 3
-		 */
-		final PanelGoods goods = new PanelGoods(imageProvider);
-		add(goods, new GridBagConstraints(0, 3, 3, 1, 1.0D, 0.0D, GridBagConstraints.CENTER,
-				GridBagConstraints.HORIZONTAL, new Insets(BORDER, BORDER_BIG, BORDER, BORDER_BIG), 0, 0));
+		final VBox panelSips = new VBox();
+		panelSips.getChildren().addAll(outgoingShips, incomingShips, pierShips);
 
-		/**
-		 * Last row 10
-		 */
-		final JButton recruiteButton = new JButton("Recruite");
-		add(recruiteButton, new GridBagConstraints(0, 10, 1, 1, 0.0D, 0.0D, GridBagConstraints.WEST,
-				GridBagConstraints.NONE, new Insets(0, BORDER_BIG, BORDER_BIG, 0), 0, 0));
-
-		final JButton buyButton = new JButton("Buy");
-		add(buyButton, new GridBagConstraints(1, 10, 1, 1, 0.0D, 0.0D, GridBagConstraints.WEST, GridBagConstraints.NONE,
-				new Insets(0, 0, BORDER_BIG, 0), 0, 0));
-
-		final JButton buttonOk = new JButton(text.get("dialog.ok"));
-		buttonOk.addActionListener(e -> {
-			setVisible(false);
+		final Button recruiteButton = new Button("Recruite");
+		final Button buyButton = new Button("Buy");
+		final Button buttonOk = new Button(text.get("dialog.ok"));
+		buttonOk.setOnAction(e -> {
+			dialog.close();
 		});
 		buttonOk.requestFocus();
-		add(buttonOk, new GridBagConstraints(2, 10, 1, 1, 0.0D, 0.0D, GridBagConstraints.EAST, GridBagConstraints.NONE,
-				new Insets(0, 0, BORDER_BIG, BORDER_BIG), 0, 0));
+		final VBox panelButtons = new VBox();
+		panelButtons.getChildren().addAll(recruiteButton, buyButton, buttonOk);
+
+		final HBox panelMiddle = new HBox();
+		panelMiddle.getChildren().addAll(panelSips, panelButtons);
+
+		final PanelGoods goods = new PanelGoods(imageProvider);
+
+		VBox mainPanel = new VBox();
+		mainPanel.getChildren().addAll(label, panelMiddle, goods);
+		Scene scene = new Scene(mainPanel);
+		scene.getStylesheets().add("gui/MicroCol.css");
+		dialog.setScene(scene);
+		dialog.showAndWait();
 	}
 
 }

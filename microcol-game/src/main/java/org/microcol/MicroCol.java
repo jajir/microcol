@@ -11,6 +11,7 @@ import org.microcol.gui.ApplicationController;
 import org.microcol.gui.MainStageBuilder;
 import org.microcol.gui.MicroColModule;
 
+import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 
@@ -62,20 +63,31 @@ public class MicroCol extends Application {
 
 	@Override
 	public void start(final Stage primaryStage) throws Exception {
-		System.setProperty("com.apple.macos.useScreenMenuBar", "true");
-		// set application name for oracle JDK
-		System.setProperty("com.apple.mrj.application.apple.menu.about.name", "MicroCol");
-		// set application name for openJDK
-		System.setProperty("apple.awt.application.name", "MicroCol");
 		if (isOSX()) {
-
+			System.setProperty("com.apple.macos.useScreenMenuBar", "true");
+			// set application name for oracle JDK
+			System.setProperty("com.apple.mrj.application.apple.menu.about.name", "MicroCol");
+			// set application name for openJDK
+			System.setProperty("apple.awt.application.name", "MicroCol");
 			setAppleDockIcon();
 		}
 
 		Platform.runLater(() -> {
 			try {
-				final Injector injector = Guice.createInjector(com.google.inject.Stage.PRODUCTION,
-						new MicroColModule());
+				/**
+				 * Extra created module helps inject primary stage to guice
+				 * context.
+				 * 
+				 * TODO JJ consider passing primary stage as parameter to MicroColModule.
+				 */
+				final Injector injector = Guice.createInjector(com.google.inject.Stage.PRODUCTION, new MicroColModule(),
+						new AbstractModule() {
+
+							@Override
+							protected void configure() {
+								bind(Stage.class).toInstance(primaryStage);
+							}
+						});
 				final MainStageBuilder mainStageBuilder = injector.getInstance(MainStageBuilder.class);
 				mainStageBuilder.buildPrimaryStage(primaryStage);
 

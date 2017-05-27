@@ -44,7 +44,8 @@ public class DialogTester extends Application {
 			// dialogWarning();
 			// testDialogFight();
 			// startNewGameDialog();
-			startAboutDialog();
+			// startAboutDialog();
+			dialogEurope();
 
 			// dialogSave();
 			// dialogLoad();
@@ -111,7 +112,7 @@ public class DialogTester extends Application {
 		persistingDialog.loadModel();
 	}
 
-	public final static void europeDialog() {
+	public final static void dialogEurope() {
 		final GameController gameController = EasyMock.createMock(GameController.class);
 		EasyMock.replay(gameController);
 		new EuropeDialog(viewUtil, text, imageProvider, gameController);
