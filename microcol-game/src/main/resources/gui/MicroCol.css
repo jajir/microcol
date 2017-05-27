@@ -21,3 +21,19 @@
 	-fx-pref-height: 100000;
 }
 
+#statusBar #description{
+ 	-fx-border-style: solid inside;
+ 	-fx-border-color: lightgrey ;
+ 	-fx-border-width: 0.0px 1.0px 0.0px 0.0px;
+}
+
+#statusBar #description .label{
+	-fx-padding: 0 5px 0 5px;
+}
+
+#statusBar #labelEra{
+	-fx-padding: 0 5px 0 5px;
+}
+
+
+

@@ -56,7 +56,7 @@ public class MainPanelView {
 
 		hBox.getChildren().addAll(canvasPane, rightPanelView.getBox());
 
-		box.getChildren().addAll(hBox, statusBar.getBox());
+		box.getChildren().addAll(hBox, statusBar.getStatusBar());
 	}
 
 	public VBox getBox() {

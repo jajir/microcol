@@ -83,7 +83,7 @@ public class GameController implements Localized {
 		ModelBuilder builder = new ModelBuilder();
 		builder.setCalendar(1570, 1800).setMap("/maps/test-map-ocean-1000x1000.txt")
 
-				.addPlayer("Player1", true).addUnit("Player1", UnitType.GALLEON, Location.of(4, 2))
+				.addPlayer("Player1", false).addUnit("Player1", UnitType.GALLEON, Location.of(4, 2))
 				.addUnit("Player1", UnitType.FRIGATE, Location.of(9, 7))
 
 				.addPlayer("Player2", true).addUnit("Player2", UnitType.GALLEON, Location.of(7, 7))
