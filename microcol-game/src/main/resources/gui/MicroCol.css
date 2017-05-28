@@ -61,4 +61,17 @@
   -fx-padding: 26 10 10 10;
 }
 
+/*
+ * Ship pane 
+ */
+.paneShip{
+	-fx-fit-to-height: 45px;
+	-fx-fit-to-width: 45px;
+	-fx-pref-width: 45px;
+	-fx-pref-height: 45px;
+}
+.paneShip:selected{
+	-fx-border-color: lightblue ;
+	-fx-border-width: 2;
+}
 

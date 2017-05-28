@@ -6,6 +6,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
 /**
@@ -15,7 +16,8 @@ public class PanelGood extends VBox {
 
 	public PanelGood(final Image image, final int sellPrice, final int buyPrice) {
 		final ImageView imageIcon = new ImageView(image);
-		imageIcon.setOnDragDetected(e -> {
+		Pane paneImage = new Pane(imageIcon);
+		paneImage.setOnDragDetected(e -> {
 			Dragboard db = imageIcon.startDragAndDrop(TransferMode.MOVE);
 			ClipboardContent content = new ClipboardContent();
 			/**
@@ -27,7 +29,7 @@ public class PanelGood extends VBox {
 			e.consume();
 		});
 		final Label labelPrice = new Label(sellPrice + "/" + buyPrice);
-		getChildren().addAll(imageIcon, labelPrice);
+		getChildren().addAll(paneImage, labelPrice);
 	}
 
 }
