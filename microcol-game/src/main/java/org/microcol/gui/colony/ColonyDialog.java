@@ -49,7 +49,7 @@ public class ColonyDialog  {
 		/**
 		 * Row 2
 		 */
-		final PanelPortPier pierShips = new PanelPortPier();
+		final PanelPortPier pierShips = new PanelPortPier(imageProvider);
 		/**
 		 * Good row - 3
 		 */

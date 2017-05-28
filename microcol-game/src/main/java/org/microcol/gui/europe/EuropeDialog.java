@@ -37,7 +37,7 @@ public class EuropeDialog {
 
 		final PanelShips outgoingShips = new PanelShips("Ships travelling to New World");
 		final PanelShips incomingShips = new PanelShips("Ships travelling to Europe");
-		final PanelPortPier pierShips = new PanelPortPier();
+		final PanelPortPier pierShips = new PanelPortPier(imageProvider);
 		final VBox panelSips = new VBox();
 		panelSips.getChildren().addAll(outgoingShips, incomingShips, pierShips);
 

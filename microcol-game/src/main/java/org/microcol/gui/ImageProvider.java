@@ -60,6 +60,36 @@ public class ImageProvider {
 
 	public static final String IMG_GOOD_TOBACCO = "good-tobacco.png";
 
+	public static final String IMG_GOOD_COTTON = "good-cotton.png";
+
+	public static final String IMG_GOOD_FUR = "good-fur.png";
+
+	public static final String IMG_GOOD_LUMBER = "good-lumber.png";
+
+	public static final String IMG_GOOD_ORE = "good-ore.png";
+
+	public static final String IMG_GOOD_SILVER = "good-silver.png";
+
+	public static final String IMG_GOOD_HORSE = "good-horse.png";
+
+	public static final String IMG_GOOD_RUM = "good-rum.png";
+
+	public static final String IMG_GOOD_CIGARS = "good-cigars.png";
+
+	public static final String IMG_GOOD_SILK = "good-silk.png";
+
+	public static final String IMG_GOOD_COAT = "good-coat.png";
+
+	public static final String IMG_GOOD_GOODS = "good-goods.png";
+
+	public static final String IMG_GOOD_TOOLS = "good-tools.png";
+
+	public static final String IMG_GOOD_MUSKET = "good-musket.png";
+
+	public static final String IMG_CRATE_OPEN = "crate-open.png";
+
+	public static final String IMG_CRATE_CLOSED = "crate-closed.png";
+
 	private static final String BASE_PACKAGE = "images";
 
 	private final Map<String, Image> images;

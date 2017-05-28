@@ -1,34 +1,33 @@
 package org.microcol.gui.europe;
 
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Image;
-import java.awt.Insets;
-
-import javax.swing.ImageIcon;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
+import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.ClipboardContent;
+import javafx.scene.input.Dragboard;
+import javafx.scene.input.TransferMode;
+import javafx.scene.layout.VBox;
 
 /**
  * Contains image of of type of good.
  */
-public class PanelGood extends JPanel {
-
-	/**
-	 * Default serialVersionUID.
-	 */
-	private static final long serialVersionUID = 1L;
+public class PanelGood extends VBox {
 
 	public PanelGood(final Image image, final int sellPrice, final int buyPrice) {
-		setLayout(new GridBagLayout());
-		final ImageIcon imageIcon = new ImageIcon(image);
-		final JLabel labelImage = new JLabel(imageIcon);
-		add(labelImage, new GridBagConstraints(0, 0, 1, 1, 0.0D, 0.0D, GridBagConstraints.CENTER,
-				GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
-
-		final JLabel labelPrice = new JLabel(sellPrice + "/" + buyPrice);
-		add(labelPrice, new GridBagConstraints(0, 1, 1, 1, 0.0D, 0.0D, GridBagConstraints.CENTER,
-				GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0));
+		final ImageView imageIcon = new ImageView(image);
+		imageIcon.setOnDragDetected(e -> {
+			Dragboard db = imageIcon.startDragAndDrop(TransferMode.MOVE);
+			ClipboardContent content = new ClipboardContent();
+			/**
+			 * Change dragged object to good image. Put other data like string
+			 * is not possible.
+			 */
+			content.putImage(image);
+			db.setContent(content);
+			e.consume();
+		});
+		final Label labelPrice = new Label(sellPrice + "/" + buyPrice);
+		getChildren().addAll(imageIcon, labelPrice);
 	}
 
 }
