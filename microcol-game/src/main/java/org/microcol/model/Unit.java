@@ -21,11 +21,14 @@ public class Unit {
 
 	private Location location;
 	private int availableMoves;
+	private final CargoHold hold;
+	// FIXME JKA OWNER CARGO HOLD
 
 	Unit(final UnitType type, final Player owner, final Location location) {
 		this.type = Preconditions.checkNotNull(type);
 		this.owner = Preconditions.checkNotNull(owner);
 		this.location = Preconditions.checkNotNull(location);
+		this.hold = new CargoHold(this, type.getCargoCapacity());
 	}
 
 	void setModel(final Model model) {
@@ -50,6 +53,10 @@ public class Unit {
 
 	public int getAvailableMoves() {
 		return availableMoves;
+	}
+
+	public CargoHold getHold() {
+		return hold;
 	}
 
 	void startTurn() {
@@ -195,6 +202,11 @@ public class Unit {
 		model.fireUnitAttacked(this, defender, destroyed);
 	}
 
+	// FIXME JKA PREDELAT
+	void setLocation(final Location location) {
+		this.location = location;
+	}
+
 	@Override
 	public String toString() {
 		return MoreObjects.toStringHelper(this)
@@ -202,6 +214,7 @@ public class Unit {
 			.add("owner", owner)
 			.add("location", location)
 			.add("availableMoves", availableMoves)
+			.add("hold", hold)
 			.toString();
 	}
 
@@ -211,6 +224,7 @@ public class Unit {
 		generator.write("owner", owner.getName());
 		location.save("location", generator);
 		generator.write("availableMoves", availableMoves);
+		// FIXME JKA CARGO HOLD
 		generator.writeEnd();
 	}
 
@@ -235,6 +249,8 @@ public class Unit {
 		parser.next(); // VALUE_NUMBER
 		final int availableMoves = parser.getInt();
 		parser.next(); // END_OBJECT
+
+		// FIXME JKA CARGO HOLD
 
 		final Unit unit = new Unit(type, owner, location);
 		unit.availableMoves = availableMoves;

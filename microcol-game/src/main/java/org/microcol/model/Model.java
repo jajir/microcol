@@ -16,7 +16,7 @@ public class Model {
 	private final ListenerManager listenerManager;
 	private final Calendar calendar;
 	private final WorldMap map;
-	private final ImmutableList<Player> players;
+	private final List<Player> players;
 	private final UnitStorage unitStorage;
 	private GameManager gameManager;
 

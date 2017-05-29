@@ -99,10 +99,10 @@ public class AIModelBuilder {
 //		builder.createMedium();
 //		builder.createHuge();
 //		builder.createMap01_2ships();
-//		builder.createMap01_5ships();
+		builder.createMap01_5ships();
 //		builder.createMap02();
 //		builder.createMap03();
-		builder.createMap01_2colonists();
+//		builder.createMap01_2colonists();
 
 		return builder.buildImpl();
 	}
