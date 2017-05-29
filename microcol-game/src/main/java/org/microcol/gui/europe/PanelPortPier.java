@@ -43,19 +43,31 @@ public class PanelPortPier extends TitledPanel {
 		super("pristav");
 		this.imageProvider = Preconditions.checkNotNull(imageProvider);
 
-		List<Unit> ships = new ArrayList<>();
+		final List<Unit> shipsToEurope = new ArrayList<>();
+		Unit ship21 = EasyMock.createMock(Unit.class);
+		EasyMock.replay(ship21);
+		shipsToEurope.add(ship21);
 
+		final List<Unit> shipsToColony = new ArrayList<>();
+		Unit ship11 = EasyMock.createMock(Unit.class);
+		EasyMock.replay(ship11);
+		shipsToColony.add(ship11);
+
+		/**
+		 * Ships in port
+		 */
+		final List<Unit> shipsInPort = new ArrayList<>();
 		Unit ship1 = EasyMock.createMock(Unit.class);
 		Unit ship2 = EasyMock.createMock(Unit.class);
 		EasyMock.expect(ship1.getType()).andReturn(UnitType.FRIGATE).anyTimes();
 		EasyMock.expect(ship2.getType()).andReturn(UnitType.GALLEON).anyTimes();
 		EasyMock.replay(ship1, ship2);
-		ships.add(ship1);
-		ships.add(ship2);
+		shipsInPort.add(ship1);
+		shipsInPort.add(ship2);
 
 		final HBox panelShips = new HBox();
 		ToggleGroup toggleGroup = new ToggleGroup();
-		for (Unit unit : ships) {
+		for (Unit unit : shipsInPort) {
 			ToggleButton toggleButtonShip = new ToggleButton();
 			BackgroundImage myBI = new BackgroundImage(imageProvider.getUnitImage(unit.getType()),
 					BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
@@ -67,7 +79,9 @@ public class PanelPortPier extends TitledPanel {
 			panelShips.getChildren().add(toggleButtonShip);
 		}
 		toggleGroup.selectedToggleProperty().addListener((object, oldValue, newValue) -> {
-			if (toggleGroup.getSelectedToggle() != null) {
+			if (toggleGroup.getSelectedToggle() == null) {
+				closeAllCrates();
+			} else {
 				setCratesForShip((Unit) toggleGroup.getSelectedToggle().getUserData());
 			}
 		});
@@ -77,16 +91,24 @@ public class PanelPortPier extends TitledPanel {
 			final ImageView imageIcon = new ImageView(imageProvider.getImage(ImageProvider.IMG_CRATE_CLOSED));
 			imageIcon.setFitWidth(70);
 			imageIcon.setFitHeight(70);
-			Pane paneCrate = new Pane(imageIcon);
+			final Pane paneCrate = new Pane(imageIcon);
 			paneCrate.setOnDragDropped(event -> {
-				Dragboard db = event.getDragboard();
-				logger.debug(db.getImage().toString());
-				event.setDropCompleted(true);
-				event.consume();
+				final Pane cratePane = (Pane) event.getSource();
+				final ImageView crateImage = (ImageView) cratePane.getChildren().get(0);
+				if (isOpen(crateImage)) {
+					Dragboard db = event.getDragboard();
+					logger.debug(db.getImage().toString());
+					event.setDropCompleted(true);
+					event.consume();
+				}
 			});
 			paneCrate.setOnDragOver(event -> {
-				event.acceptTransferModes(TransferMode.MOVE);
-				event.consume();
+				final Pane cratePane = (Pane) event.getSource();
+				final ImageView crateImage = (ImageView) cratePane.getChildren().get(0);
+				if (isOpen(crateImage)) {
+					event.acceptTransferModes(TransferMode.MOVE);
+					event.consume();
+				}
 			});
 			crates.add(paneCrate);
 			panelCrates.getChildren().add(paneCrate);
@@ -113,6 +135,15 @@ public class PanelPortPier extends TitledPanel {
 					// change to close
 					crateImage.setImage(imageProvider.getImage(ImageProvider.IMG_CRATE_CLOSED));
 				}
+			}
+		}
+	}
+
+	private final void closeAllCrates() {
+		for (final Pane cratePane : crates) {
+			final ImageView crateImage = (ImageView) cratePane.getChildren().get(0);
+			if (isOpen(crateImage)) {
+				crateImage.setImage(imageProvider.getImage(ImageProvider.IMG_CRATE_CLOSED));
 			}
 		}
 	}
