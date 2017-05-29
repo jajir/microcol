@@ -132,7 +132,7 @@ public class ImageProvider {
 	 * 
 	 * @param rawPath
 	 *            path at classpath where is stored image
-	 * @return return {@link BufferedImage} object
+	 * @return return {@link javafx.scene.image.Image} object
 	 */
 	public static Image getRawImage(final String rawPath) {
 		final String path = BASE_PACKAGE + "/" + rawPath;
