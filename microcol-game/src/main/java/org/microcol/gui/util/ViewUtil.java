@@ -21,8 +21,16 @@ public class ViewUtil {
 		this.parentFrame = Preconditions.checkNotNull(parentFrame);
 	}
 
-	public Stage getParentFrame() {
+	public Stage getPrimaryStage() {
 		return parentFrame;
+	}
+
+	public double getPrimaryStageCenterXPosition() {
+		return parentFrame.getX() + parentFrame.getWidth() / 2d;
+	}
+
+	public double getPrimaryStageCenterYPosition() {
+		return parentFrame.getY() + parentFrame.getHeight() / 2d;
 	}
 
 }

@@ -33,7 +33,7 @@ public class NewGameDialog {
 	public NewGameDialog(final ViewUtil viewUtil, final Text text) {
 		dialog = new Stage();
 		dialog.initModality(Modality.WINDOW_MODAL);
-		dialog.initOwner(viewUtil.getParentFrame());
+		dialog.initOwner(viewUtil.getPrimaryStage());
 		dialog.setTitle(text.get("newGameDialog.title"));
 
 		GridPane root = new GridPane();

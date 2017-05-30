@@ -29,8 +29,8 @@ public class EuropeDialog {
 		Preconditions.checkNotNull(imageProvider);
 		Preconditions.checkNotNull(gameController);
 		dialog = new Stage();
-		dialog.initModality(Modality.APPLICATION_MODAL);
-		dialog.initOwner(viewUtil.getParentFrame());
+		dialog.initModality(Modality.WINDOW_MODAL);
+		dialog.initOwner(viewUtil.getPrimaryStage());
 		dialog.setTitle(text.get("europe.title"));
 
 		final Label label = new Label("European port");
@@ -40,6 +40,8 @@ public class EuropeDialog {
 		final PanelPortPier pierShips = new PanelPortPier(imageProvider);
 		final VBox panelSips = new VBox();
 		panelSips.getChildren().addAll(outgoingShips, incomingShips, pierShips);
+
+		final PanelRecruits panelRecruits = new PanelRecruits("Recruits");
 
 		final Button recruiteButton = new Button("Recruite");
 		final Button buyButton = new Button("Buy");
@@ -52,7 +54,7 @@ public class EuropeDialog {
 		panelButtons.getChildren().addAll(recruiteButton, buyButton, buttonOk);
 
 		final HBox panelMiddle = new HBox();
-		panelMiddle.getChildren().addAll(panelSips, panelButtons);
+		panelMiddle.getChildren().addAll(panelSips, panelRecruits, panelButtons);
 
 		final PanelGoods goods = new PanelGoods(imageProvider);
 

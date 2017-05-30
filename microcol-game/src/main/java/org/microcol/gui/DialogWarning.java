@@ -22,7 +22,7 @@ public class DialogWarning {
 	public DialogWarning(final ViewUtil viewUtil) {
 		dialog = new Stage();
 		dialog.initModality(Modality.WINDOW_MODAL);
-		dialog.initOwner(viewUtil.getParentFrame());
+		dialog.initOwner(viewUtil.getPrimaryStage());
 		dialog.setTitle("Tato jednotka neumi bojovat");
 
 		VBox root = new VBox();

@@ -34,7 +34,7 @@ public class PreferencesAnimationSpeed {
 			final AnimationSpeedChangeController controller, final int actualVolume) {
 		dialog = new Stage();
 		dialog.initModality(Modality.WINDOW_MODAL);
-		dialog.initOwner(viewUtil.getParentFrame());
+		dialog.initOwner(viewUtil.getPrimaryStage());
 		dialog.setTitle(text.get("preferencesAnimationSpeed.caption"));
 
 		VBox root = new VBox();

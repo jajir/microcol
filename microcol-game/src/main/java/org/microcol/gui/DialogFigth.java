@@ -11,12 +11,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
 
-public class DialogFigth {
-
-	private final Stage dialog;
+public class DialogFigth extends AbstractDialog {
 
 	/**
 	 * It's <code>true</code> when user choose to fight.
@@ -41,10 +37,9 @@ public class DialogFigth {
 	 */
 	public DialogFigth(final Text text, final ViewUtil viewUtil, final ImageProvider imageProvider,
 			final LocalizationHelper localizationHelper, final Unit unitAttacker, final Unit unitDefender) {
-		dialog = new Stage();
-		dialog.initModality(Modality.WINDOW_MODAL);
-		dialog.initOwner(viewUtil.getParentFrame());
-		dialog.setTitle(text.get("dialogFight.title"));
+		super(viewUtil);
+		getDialog().setTitle(text.get("dialogFight.title"));	
+
 
 		final GridPane root = new GridPane();
 		root.setAlignment(Pos.CENTER);
@@ -52,7 +47,7 @@ public class DialogFigth {
 		root.setVgap(10);
 		root.setPadding(new Insets(25, 25, 25, 25));
 		Scene scene = new Scene(root);
-		dialog.setScene(scene);
+		getDialog().setScene(scene);
 
 		// Y=0
 		final Label label = new Label(text.get("dialogFight.title"));
@@ -84,7 +79,7 @@ public class DialogFigth {
 		final Button buttonCancel = new Button(text.get("dialogFight.buttonCancel"));
 		buttonCancel.setOnAction(e -> {
 			userChooseFight = false;
-			dialog.close();
+			getDialog().close();
 		});
 		root.add(buttonCancel, 0, 10);
 
@@ -92,11 +87,11 @@ public class DialogFigth {
 		buttonFight.requestFocus();
 		buttonFight.setOnAction(e -> {
 			userChooseFight = true;
-			dialog.close();
+			getDialog().close();
 		});
 		root.add(buttonFight, 2, 10);
 
-		dialog.showAndWait();
+		getDialog().showAndWait();
 	}
 
 	private void describeUnit(final GridPane root, final int column, final Unit unit, final ImageProvider imageProvider,

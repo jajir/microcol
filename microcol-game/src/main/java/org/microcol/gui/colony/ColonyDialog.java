@@ -32,7 +32,7 @@ public class ColonyDialog  {
 		Preconditions.checkNotNull(gameController);
 		dialog = new Stage();
 		dialog.initModality(Modality.APPLICATION_MODAL);
-		dialog.initOwner(viewUtil.getParentFrame());
+		dialog.initOwner(viewUtil.getPrimaryStage());
 		dialog.setTitle(text.get("europeDialog.caption"));
 		
 		/**

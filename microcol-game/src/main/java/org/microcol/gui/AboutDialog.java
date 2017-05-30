@@ -28,7 +28,7 @@ public class AboutDialog {
 	public AboutDialog(final ViewUtil viewUtil, final Text text) {
 		dialog = new Stage();
 		dialog.initModality(Modality.WINDOW_MODAL);
-		dialog.initOwner(viewUtil.getParentFrame());
+		dialog.initOwner(viewUtil.getPrimaryStage());
 		dialog.setTitle("Tato jednotka neumi bojovat");
 
 		VBox root = new VBox();

@@ -34,7 +34,7 @@ public class PreferencesVolume {
 			final VolumeChangeController volumeChangeController, final int actualVolume) {
 		dialog = new Stage();
 		dialog.initModality(Modality.WINDOW_MODAL);
-		dialog.initOwner(viewUtil.getParentFrame());
+		dialog.initOwner(viewUtil.getPrimaryStage());
 		dialog.setTitle(text.get("preferencesVolume.caption"));
 
 		VBox root = new VBox();
