@@ -2,6 +2,7 @@ package org.microcol.gui.europe;
 
 import org.microcol.gui.ImageProvider;
 import org.microcol.gui.event.model.GameController;
+import org.microcol.gui.util.AbstractDialog;
 import org.microcol.gui.util.Text;
 import org.microcol.gui.util.ViewUtil;
 
@@ -13,25 +14,19 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
 
 /**
  * Show Europe port.
  */
-public class EuropeDialog {
-
-	private final Stage dialog;
+public class EuropeDialog extends AbstractDialog {
 
 	@Inject
 	public EuropeDialog(final ViewUtil viewUtil, final Text text, final ImageProvider imageProvider,
 			final GameController gameController) {
+		super(viewUtil);
 		Preconditions.checkNotNull(imageProvider);
 		Preconditions.checkNotNull(gameController);
-		dialog = new Stage();
-		dialog.initModality(Modality.WINDOW_MODAL);
-		dialog.initOwner(viewUtil.getPrimaryStage());
-		dialog.setTitle(text.get("europe.title"));
+		getDialog().setTitle(text.get("europe.title"));
 
 		final Label label = new Label("European port");
 
@@ -47,7 +42,7 @@ public class EuropeDialog {
 		final Button buyButton = new Button("Buy");
 		final Button buttonOk = new Button(text.get("dialog.ok"));
 		buttonOk.setOnAction(e -> {
-			dialog.close();
+			getDialog().close();
 		});
 		buttonOk.requestFocus();
 		final VBox panelButtons = new VBox();
@@ -62,8 +57,8 @@ public class EuropeDialog {
 		mainPanel.getChildren().addAll(label, panelMiddle, goods);
 		Scene scene = new Scene(mainPanel);
 		scene.getStylesheets().add("gui/MicroCol.css");
-		dialog.setScene(scene);
-		dialog.showAndWait();
+		getDialog().setScene(scene);
+		getDialog().showAndWait();
 	}
 
 }

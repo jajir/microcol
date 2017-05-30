@@ -4,6 +4,7 @@ import java.io.File;
 import java.net.URISyntaxException;
 import java.net.URL;
 
+import org.microcol.gui.util.AbstractDialog;
 import org.microcol.gui.util.Text;
 import org.microcol.gui.util.ViewUtil;
 
@@ -15,12 +16,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
 
-public class NewGameDialog {
-
-	private final Stage dialog;
+public class NewGameDialog extends AbstractDialog {
 
 	/**
 	 * Constructor when parentFrame is not available.
@@ -31,10 +28,8 @@ public class NewGameDialog {
 	 *            required localization helper class
 	 */
 	public NewGameDialog(final ViewUtil viewUtil, final Text text) {
-		dialog = new Stage();
-		dialog.initModality(Modality.WINDOW_MODAL);
-		dialog.initOwner(viewUtil.getPrimaryStage());
-		dialog.setTitle(text.get("newGameDialog.title"));
+		super(viewUtil);
+		getDialog().setTitle(text.get("newGameDialog.title"));
 
 		GridPane root = new GridPane();
 		root.setAlignment(Pos.CENTER);
@@ -43,7 +38,7 @@ public class NewGameDialog {
 		root.setPadding(new Insets(25, 25, 25, 25));
 
 		Scene scene = new Scene(root);
-		dialog.setScene(scene);
+		getDialog().setScene(scene);
 
 		// Y=0
 		final Label labelSelectMap = new Label(text.get("newGameDialog.selectMap"));
@@ -60,7 +55,7 @@ public class NewGameDialog {
 		// Y=1
 		final Button buttonCancel = new Button(text.get("newGameDialog.cancel"));
 		buttonCancel.setOnAction(e -> {
-			dialog.close();
+			getDialog().close();
 		});
 		root.add(buttonCancel, 0, 1);
 
@@ -69,12 +64,12 @@ public class NewGameDialog {
 			// TODO JJ selected map should be used.
 			// final String selectedMap = (String)
 			// comboBoxSelectMap.getSelectedItem();
-			dialog.close();
+			getDialog().close();
 		});
 		buttonStartGame.requestFocus();
 		root.add(buttonStartGame, 1, 1);
 
-		dialog.showAndWait();
+		getDialog().showAndWait();
 	}
 
 	private String[] getMaps() {

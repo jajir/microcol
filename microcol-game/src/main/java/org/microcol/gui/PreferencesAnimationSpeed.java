@@ -2,6 +2,7 @@ package org.microcol.gui;
 
 import org.microcol.gui.event.AnimationSpeedChangeController;
 import org.microcol.gui.event.AnimationSpeedChangeEvent;
+import org.microcol.gui.util.AbstractDialog;
 import org.microcol.gui.util.Text;
 import org.microcol.gui.util.ViewUtil;
 
@@ -10,13 +11,9 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.layout.VBox;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
 import javafx.util.StringConverter;
 
-public class PreferencesAnimationSpeed {
-
-	private final Stage dialog;
+public class PreferencesAnimationSpeed extends AbstractDialog {
 
 	/**
 	 * Constructor when parentFrame is not available.
@@ -32,14 +29,12 @@ public class PreferencesAnimationSpeed {
 	 */
 	public PreferencesAnimationSpeed(final Text text, final ViewUtil viewUtil,
 			final AnimationSpeedChangeController controller, final int actualVolume) {
-		dialog = new Stage();
-		dialog.initModality(Modality.WINDOW_MODAL);
-		dialog.initOwner(viewUtil.getPrimaryStage());
-		dialog.setTitle(text.get("preferencesAnimationSpeed.caption"));
+		super(viewUtil);
+		getDialog().setTitle(text.get("preferencesAnimationSpeed.caption"));
 
 		VBox root = new VBox();
 		Scene scene = new Scene(root);
-		dialog.setScene(scene);
+		getDialog().setScene(scene);
 
 		final Label label = new Label(text.get("preferencesAnimationSpeed.caption"));
 
@@ -76,13 +71,13 @@ public class PreferencesAnimationSpeed {
 
 		final Button buttonOk = new Button(text.get("dialog.ok"));
 		buttonOk.setOnAction(e -> {
-			dialog.close();
+			getDialog().close();
 		});
 		buttonOk.requestFocus();
 
 		root.getChildren().addAll(label, slider, buttonOk);
 
-		dialog.showAndWait();
+		getDialog().showAndWait();
 	}
 
 }

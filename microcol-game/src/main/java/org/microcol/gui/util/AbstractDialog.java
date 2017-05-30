@@ -1,6 +1,4 @@
-package org.microcol.gui;
-
-import org.microcol.gui.util.ViewUtil;
+package org.microcol.gui.util;
 
 import com.google.common.base.Preconditions;
 
@@ -17,7 +15,7 @@ public class AbstractDialog {
 
 	private final Stage dialog;
 
-	AbstractDialog(final ViewUtil viewUtil) {
+	public AbstractDialog(final ViewUtil viewUtil) {
 		this.viewUtil = Preconditions.checkNotNull(viewUtil);
 		dialog = new Stage(StageStyle.UNDECORATED);
 		init();

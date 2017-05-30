@@ -1,5 +1,6 @@
 package org.microcol.gui;
 
+import org.microcol.gui.util.AbstractDialog;
 import org.microcol.gui.util.Text;
 import org.microcol.gui.util.ViewUtil;
 import org.microcol.model.Unit;

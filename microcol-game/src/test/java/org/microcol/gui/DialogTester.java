@@ -100,14 +100,14 @@ public class DialogTester extends Application {
 
 	public final static void dialogSave() {
 		final GameController gameController = EasyMock.createMock(GameController.class);
-		final PersistingDialog persistingDialog = new PersistingDialog(text, gameController);
+		final PersistingDialog persistingDialog = new PersistingDialog(viewUtil, text, gameController);
 
 		persistingDialog.saveModel();
 	}
 
 	public final static void dialogLoad() {
 		final GameController gameController = EasyMock.createMock(GameController.class);
-		final PersistingDialog persistingDialog = new PersistingDialog(text, gameController);
+		final PersistingDialog persistingDialog = new PersistingDialog(viewUtil, text, gameController);
 
 		persistingDialog.loadModel();
 	}

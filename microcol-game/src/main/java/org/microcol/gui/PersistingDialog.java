@@ -21,7 +21,9 @@ import javax.swing.filechooser.FileSystemView;
 import javax.swing.filechooser.FileView;
 
 import org.microcol.gui.event.model.GameController;
+import org.microcol.gui.util.AbstractDialog;
 import org.microcol.gui.util.Text;
+import org.microcol.gui.util.ViewUtil;
 import org.microcol.model.Model;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,7 +36,7 @@ import com.google.inject.Inject;
 /**
  * Provide load and save operations.
  */
-public class PersistingDialog {
+public class PersistingDialog extends AbstractDialog {
 
 	public static final String SAVE_FILE_EXTENSION = "microcol";
 
@@ -43,9 +45,11 @@ public class PersistingDialog {
 	private final Text text;
 
 	private final GameController gameController;
-	//FIXME JJ conert to javafx
+
+	// FIXME JJ conert to javafx
 	@Inject
-	public PersistingDialog(final Text text, final GameController gameController) {
+	public PersistingDialog(final ViewUtil viewUtil, final Text text, final GameController gameController) {
+		super(viewUtil);
 		this.text = Preconditions.checkNotNull(text);
 		this.gameController = Preconditions.checkNotNull(gameController);
 	}

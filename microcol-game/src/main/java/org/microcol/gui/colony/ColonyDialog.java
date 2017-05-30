@@ -4,6 +4,7 @@ import org.microcol.gui.ImageProvider;
 import org.microcol.gui.europe.PanelGoods;
 import org.microcol.gui.europe.PanelPortPier;
 import org.microcol.gui.event.model.GameController;
+import org.microcol.gui.util.AbstractDialog;
 import org.microcol.gui.util.Text;
 import org.microcol.gui.util.ViewUtil;
 
@@ -14,26 +15,19 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
 
 /**
  * Show Europe port.
  */
-public class ColonyDialog  {
-
-	private final Stage dialog;
+public class ColonyDialog extends AbstractDialog {
 
 	@Inject
 	public ColonyDialog(final ViewUtil viewUtil, final Text text, final ImageProvider imageProvider,
 			final GameController gameController) {
-		
+		super(viewUtil);
 		Preconditions.checkNotNull(imageProvider);
 		Preconditions.checkNotNull(gameController);
-		dialog = new Stage();
-		dialog.initModality(Modality.APPLICATION_MODAL);
-		dialog.initOwner(viewUtil.getPrimaryStage());
-		dialog.setTitle(text.get("europeDialog.caption"));
+		getDialog().setTitle(text.get("europeDialog.caption"));
 		
 		/**
 		 * Row 1
@@ -60,7 +54,7 @@ public class ColonyDialog  {
 		 */
 		final Button buttonOk = new Button(text.get("dialog.ok"));
 		buttonOk.setOnAction(e -> {
-			dialog.close();
+			getDialog().close();
 		});
 		buttonOk.requestFocus();
 		VBox mainPanel = new VBox();
@@ -68,8 +62,8 @@ public class ColonyDialog  {
 		
 		Scene scene = new Scene(mainPanel);
 		scene.getStylesheets().add("gui/MicroCol.css");
-		dialog.setScene(scene);
-		dialog.showAndWait();
+		getDialog().setScene(scene);
+		getDialog().showAndWait();
 	}
 
 }
