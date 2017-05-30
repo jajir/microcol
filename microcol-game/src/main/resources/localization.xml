@@ -85,11 +85,12 @@
 
 	<entry key="europe.title">Europe</entry>
 
-	<entry key="dialogFight.title">Fight</entry>
+	<entry key="dialogFight.title">Fight Advisor</entry>
 	<entry key="dialogFight.attacker">Attacker</entry>
 	<entry key="dialogFight.defender">Defender</entry>
 	<entry key="dialogFight.buttonFight">Fight</entry>
 	<entry key="dialogFight.buttonCancel">Cancel</entry>
+	<entry key="dialogFight.hideOption">Check this when you don't want to see this Fight Advisor next time. Fight Advisor could be enabled/disabled from Main Menu 'Preferences'"</entry>
 	
 	<entry key="FileChooser.cancelButtonText">Cancel</entry>
 	<entry key="FileChooser.fileDateHeaderText">Date modified</entry>

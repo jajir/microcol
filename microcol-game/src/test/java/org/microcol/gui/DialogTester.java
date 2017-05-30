@@ -89,7 +89,7 @@ public class DialogTester extends Application {
 
 		EasyMock.replay(playerAttacker, playerDefender, unitAttacker, unitDefender);
 
-		DialogFigth preferences = new DialogFigth(text, viewUtil, imageProvider, localizationHelper, unitAttacker,
+		DialogFigth preferences = new DialogFigth(text, viewUtil, imageProvider, localizationHelper, null, unitAttacker,
 				unitDefender);
 		System.out.println("User wants to fight: " + preferences.isUserChooseFight());
 	}

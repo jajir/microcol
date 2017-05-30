@@ -133,7 +133,7 @@ public class MainMenuView implements MainMenuPresenter.Display {
 
 		menuItemShowFightAdvisor = new CheckMenuItem();
 		menuItemShowFightAdvisor.setSelected(gamePreferences.getShowFightAdvisorProperty().get());
-		gamePreferences.getShowFightAdvisorProperty().bind(menuItemShowFightAdvisor.selectedProperty());
+		gamePreferences.getShowFightAdvisorProperty().bindBidirectional(menuItemShowFightAdvisor.selectedProperty());
 
 		/**
 		 * menu

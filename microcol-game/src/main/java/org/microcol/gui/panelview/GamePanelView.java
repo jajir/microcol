@@ -5,6 +5,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.microcol.gui.DialogFigth;
+import org.microcol.gui.GamePreferences;
 import org.microcol.gui.ImageProvider;
 import org.microcol.gui.LocalizationHelper;
 import org.microcol.gui.PathPlanning;
@@ -59,6 +60,8 @@ public class GamePanelView implements GamePanelPresenter.Display {
 
 	private final FpsCounter fpsCounter;
 
+	private final GamePreferences gamePreferences;
+
 	private boolean isGridShown;
 
 	private Optional<ScreenScrolling> screenScrolling = Optional.empty();
@@ -81,7 +84,8 @@ public class GamePanelView implements GamePanelPresenter.Display {
 	public GamePanelView(final GameController gameController, final NextTurnController nextTurnController,
 			final PathPlanning pathPlanning, final ImageProvider imageProvider, final ViewState viewState,
 			final MoveModeSupport moveModeSupport, final Text text, final ViewUtil viewUtil,
-			final LocalizationHelper localizationHelper, final PaintService paintService) {
+			final LocalizationHelper localizationHelper, final PaintService paintService,
+			final GamePreferences gamePreferences) {
 		this.gameController = Preconditions.checkNotNull(gameController);
 		this.pathPlanning = Preconditions.checkNotNull(pathPlanning);
 		this.imageProvider = Preconditions.checkNotNull(imageProvider);
@@ -91,6 +95,7 @@ public class GamePanelView implements GamePanelPresenter.Display {
 		this.viewUtil = Preconditions.checkNotNull(viewUtil);
 		this.localizationHelper = Preconditions.checkNotNull(localizationHelper);
 		this.paintService = Preconditions.checkNotNull(paintService);
+		this.gamePreferences = Preconditions.checkNotNull(gamePreferences);
 		this.visualDebugInfo = new VisualDebugInfo();
 		oneTurnMoveHighlighter = new OneTurnMoveHighlighter();
 		gotoModeCursor = new ImageCursor(imageProvider.getImage(ImageProvider.IMG_CURSOR_GOTO), 1, 1);
@@ -404,8 +409,8 @@ public class GamePanelView implements GamePanelPresenter.Display {
 
 	@Override
 	public boolean performFightDialog(final Unit unitAttacker, final Unit unitDefender) {
-		DialogFigth dialogFight = new DialogFigth(text, viewUtil, imageProvider, localizationHelper, unitAttacker,
-				unitDefender);
+		DialogFigth dialogFight = new DialogFigth(text, viewUtil, imageProvider, localizationHelper, gamePreferences,
+				unitAttacker, unitDefender);
 		return dialogFight.isUserChooseFight();
 	}
 

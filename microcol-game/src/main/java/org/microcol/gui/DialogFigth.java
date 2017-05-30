@@ -9,9 +9,11 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
+import javafx.scene.text.TextAlignment;
 
 public class DialogFigth extends AbstractDialog {
 
@@ -37,10 +39,10 @@ public class DialogFigth extends AbstractDialog {
 	 *            required defending unit
 	 */
 	public DialogFigth(final Text text, final ViewUtil viewUtil, final ImageProvider imageProvider,
-			final LocalizationHelper localizationHelper, final Unit unitAttacker, final Unit unitDefender) {
+			final LocalizationHelper localizationHelper, final GamePreferences gamePreferences, final Unit unitAttacker,
+			final Unit unitDefender) {
 		super(viewUtil);
-		getDialog().setTitle(text.get("dialogFight.title"));	
-
+		getDialog().setTitle(text.get("dialogFight.title"));
 
 		final GridPane root = new GridPane();
 		root.setAlignment(Pos.CENTER);
@@ -75,24 +77,43 @@ public class DialogFigth extends AbstractDialog {
 		describeUnit(root, 2, unitDefender, imageProvider, localizationHelper);
 
 		/**
+		 * Show next time. Y=3
+		 */
+		final CheckBox checkBoxShowNextTime = new CheckBox(text.get("dialogFight.hideOption"));
+		checkBoxShowNextTime.setWrapText(true);
+		checkBoxShowNextTime.setTextAlignment(TextAlignment.JUSTIFY);
+		checkBoxShowNextTime.setMaxWidth(300);
+		root.add(checkBoxShowNextTime, 0, 9, 3, 1);
+
+		/**
 		 * Buttons Y=10
 		 */
 		final Button buttonCancel = new Button(text.get("dialogFight.buttonCancel"));
-		buttonCancel.setOnAction(e -> {
-			userChooseFight = false;
-			getDialog().close();
-		});
+		buttonCancel.setOnAction(e -> onClickCancel(checkBoxShowNextTime.isSelected(), gamePreferences));
 		root.add(buttonCancel, 0, 10);
 
 		final Button buttonFight = new Button(text.get("dialogFight.buttonFight"));
 		buttonFight.requestFocus();
-		buttonFight.setOnAction(e -> {
-			userChooseFight = true;
-			getDialog().close();
-		});
+		buttonFight.setOnAction(e -> onClickFight(checkBoxShowNextTime.isSelected(), gamePreferences));
 		root.add(buttonFight, 2, 10);
 
 		getDialog().showAndWait();
+	}
+
+	private void onClickCancel(final boolean isCheckBoxShowNextTimeSelected, final GamePreferences gamePreferences) {
+		userChooseFight = false;
+		if (isCheckBoxShowNextTimeSelected) {
+			gamePreferences.getShowFightAdvisorProperty().set(false);
+		}
+		getDialog().close();
+	}
+
+	private void onClickFight(final boolean isCheckBoxShowNextTimeSelected, final GamePreferences gamePreferences) {
+		userChooseFight = true;
+		if (isCheckBoxShowNextTimeSelected) {
+			gamePreferences.getShowFightAdvisorProperty().set(false);
+		}
+		getDialog().close();
 	}
 
 	private void describeUnit(final GridPane root, final int column, final Unit unit, final ImageProvider imageProvider,
