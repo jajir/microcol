@@ -71,6 +71,8 @@ public final class GamePanelPresenter implements Localized {
 
 	}
 
+	private final GamePreferences gamePreferences;
+
 	private final GameController gameController;
 
 	private final FocusedTileController focusedTileController;
@@ -94,6 +96,7 @@ public final class GamePanelPresenter implements Localized {
 			final DebugRequestController debugRequestController, final ViewState viewState, final ViewUtil viewUtil) {
 		this.focusedTileController = Preconditions.checkNotNull(focusedTileController);
 		this.gameController = Preconditions.checkNotNull(gameController);
+		this.gamePreferences = gamePreferences;
 		this.moveUnitController = Preconditions.checkNotNull(moveUnitController);
 		this.display = Preconditions.checkNotNull(display);
 		this.viewState = Preconditions.checkNotNull(viewState);
@@ -290,15 +293,22 @@ public final class GamePanelPresenter implements Localized {
 				return;
 			}
 			final Unit targetUnit = gameController.getModel().getUnitsAt(moveToLocation).get(0);
-			if (display.performFightDialog(movingUnit, targetUnit)) {
-				// User choose to fight
+			if (gamePreferences.getShowFightAdvisorProperty().get()) {
+				if (display.performFightDialog(movingUnit, targetUnit)) {
+					// User choose to fight
+					display.setCursorNormal();
+					gameController.performFight(movingUnit, targetUnit);
+					return;
+				} else {
+					// User choose to quit fight
+					viewState.setSelectedTile(Optional.of(moveToLocation));
+					display.setCursorNormal();
+					return;
+				}
+			} else {
+				// implicit fight
 				display.setCursorNormal();
 				gameController.performFight(movingUnit, targetUnit);
-				return;
-			} else {
-				// User choose to quit fight
-				viewState.setSelectedTile(Optional.of(moveToLocation));
-				display.setCursorNormal();
 				return;
 			}
 		} else {

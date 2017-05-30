@@ -5,7 +5,6 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.microcol.gui.DialogFigth;
-import org.microcol.gui.FpsCounter;
 import org.microcol.gui.ImageProvider;
 import org.microcol.gui.LocalizationHelper;
 import org.microcol.gui.PathPlanning;
@@ -13,6 +12,7 @@ import org.microcol.gui.Point;
 import org.microcol.gui.StepCounter;
 import org.microcol.gui.event.model.GameController;
 import org.microcol.gui.event.model.NextTurnController;
+import org.microcol.gui.util.FpsCounter;
 import org.microcol.gui.util.Text;
 import org.microcol.gui.util.ViewUtil;
 import org.microcol.model.Location;

@@ -32,6 +32,7 @@
 	<entry key="mainMenu.preferences.volume">Volume</entry>
 	<entry key="mainMenu.preferences.animationSpeed">Animation speed</entry>
 	<entry key="mainMenu.preferences.showGrid">Show Grid</entry>
+	<entry key="mainMenu.preferences.showFightAdvisor">Use Fight Advisor</entry>
 
 	<entry key="mainMenu.help">Help</entry>
 	<entry key="mainMenu.help.about">About</entry>

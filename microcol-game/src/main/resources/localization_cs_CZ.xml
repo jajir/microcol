@@ -32,6 +32,7 @@
 	<entry key="mainMenu.preferences.volume">Hlasitost</entry>
 	<entry key="mainMenu.preferences.animationSpeed">Rychlost animací</entry>
 	<entry key="mainMenu.preferences.showGrid">Zobrazit síť</entry>
+	<entry key="mainMenu.preferences.showFightAdvisor">Použít náhled před bojem</entry>
 
 	<entry key="mainMenu.help">Nápověda</entry>
 	<entry key="mainMenu.help.about">O MicroCol</entry>

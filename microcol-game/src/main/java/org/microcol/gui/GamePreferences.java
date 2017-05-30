@@ -10,6 +10,9 @@ import org.microcol.gui.util.Text;
 import org.microcol.gui.util.Text.Language;
 
 import com.google.common.base.Preconditions;
+import com.google.inject.Inject;
+
+import javafx.beans.property.SimpleBooleanProperty;
 
 public class GamePreferences {
 
@@ -23,6 +26,8 @@ public class GamePreferences {
 	private static final String PREFERENCES_VOLUME = "volume";
 	private static final String PREFERENCES_ANIMATION_SPEED = "animationSpeed";
 	private static final String PREFERENCES_SHOW_GRID = "showGrid";
+	private static final String PREFERENCES_SHOW_FIGHT_ADVISOR = "showFightAdvisor";
+	private static final boolean PREFERENCES_SHOW_FIGHT_ADVISOR_DEFAULT = true;
 
 	/**
 	 * When there are no value in preferences than this value is used.
@@ -37,6 +42,16 @@ public class GamePreferences {
 	private static final String SYSTEM_PROPERTY_DEVELOPMENT = "development";
 
 	private final Preferences preferences = Preferences.userNodeForPackage(GamePreferences.class);
+
+	private final SimpleBooleanProperty showFightAdvisorProperty = new SimpleBooleanProperty();
+
+	@Inject
+	GamePreferences() {
+		showFightAdvisorProperty.setValue(
+				preferences.getBoolean(PREFERENCES_SHOW_FIGHT_ADVISOR, PREFERENCES_SHOW_FIGHT_ADVISOR_DEFAULT));
+		showFightAdvisorProperty.addListener(
+				(object, old, newValue) -> preferences.putBoolean(PREFERENCES_SHOW_FIGHT_ADVISOR, newValue));
+	}
 
 	/**
 	 * Determine if application runs on Apple system.
@@ -131,6 +146,10 @@ public class GamePreferences {
 		} catch (BackingStoreException e) {
 			e.printStackTrace();
 		}
+	}
+
+	public SimpleBooleanProperty getShowFightAdvisorProperty() {
+		return showFightAdvisorProperty;
 	}
 
 }

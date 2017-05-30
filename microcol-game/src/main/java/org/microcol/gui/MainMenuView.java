@@ -59,6 +59,8 @@ public class MainMenuView implements MainMenuPresenter.Display {
 
 	private final CheckMenuItem menuItemShowGrid;
 
+	private final CheckMenuItem menuItemShowFightAdvisor;
+
 	private final Menu menuHelp;
 
 	@Inject
@@ -129,6 +131,10 @@ public class MainMenuView implements MainMenuPresenter.Display {
 		menuItemShowGrid.setAccelerator(new KeyCodeCombination(KeyCode.G));
 		menuItemShowGrid.setSelected(gamePreferences.isGridShown());
 
+		menuItemShowFightAdvisor = new CheckMenuItem();
+		menuItemShowFightAdvisor.setSelected(gamePreferences.getShowFightAdvisorProperty().get());
+		gamePreferences.getShowFightAdvisorProperty().bind(menuItemShowFightAdvisor.selectedProperty());
+
 		/**
 		 * menu
 		 */
@@ -139,7 +145,8 @@ public class MainMenuView implements MainMenuPresenter.Display {
 		menuUnit = new Menu();
 		menuUnit.getItems().addAll(menuItemMove);
 		menuPrefereces = new Menu();
-		menuPrefereces.getItems().addAll(menuLanguage, menuItemVolume, menuItemAnimationSpeed, menuItemShowGrid);
+		menuPrefereces.getItems().addAll(menuLanguage, menuItemVolume, menuItemAnimationSpeed, menuItemShowGrid,
+				menuItemShowFightAdvisor);
 
 		menuBar = new MenuBar();
 		menuBar.getMenus().addAll(menuGame, menuView, menuUnit, menuPrefereces);
@@ -210,6 +217,7 @@ public class MainMenuView implements MainMenuPresenter.Display {
 		menuItemVolume.setText(text.get("mainMenu.preferences.volume"));
 		menuItemAnimationSpeed.setText(text.get("mainMenu.preferences.animationSpeed"));
 		menuItemShowGrid.setText(text.get("mainMenu.preferences.showGrid"));
+		menuItemShowFightAdvisor.setText(text.get("mainMenu.preferences.showFightAdvisor"));
 
 		/**
 		 * Help & About

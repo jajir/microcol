@@ -1,4 +1,4 @@
-package org.microcol.gui;
+package org.microcol.gui.util;
 
 import javax.swing.Timer;
 
