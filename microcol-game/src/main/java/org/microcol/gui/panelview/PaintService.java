@@ -73,7 +73,7 @@ public class PaintService {
 	 */
 	public void paintUnit(final GraphicsContext graphics, final Point point, final Unit unit,
 			final String flagLeterImageName) {
-		Point p = point.add(UNIT_IMAGE_POSITION);
+		final Point p = point.add(UNIT_IMAGE_POSITION);
 		graphics.drawImage(imageProvider.getUnitImage(unit.getType()), p.getX(), p.getY());
 		paintOwnersFlag(graphics, point.add(OWNERS_FLAG_POSITION), unit.getOwner());
 		graphics.drawImage(imageProvider.getImage(flagLeterImageName), point.getX() + 23, point.getY());

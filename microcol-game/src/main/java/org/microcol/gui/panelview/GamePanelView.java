@@ -185,6 +185,7 @@ public class GamePanelView implements GamePanelPresenter.Display {
 		paintCursor(g, area);
 		paintSteps(g, area);
 		paintAnimation(g, area);
+		// TODO JJ call it just when debug is enabled
 		paintService.paintDebugInfo(g, visualDebugInfo, area);
 		if (gameController.getModel().getCurrentPlayer().isComputer()) {
 			/**
@@ -387,8 +388,8 @@ public class GamePanelView implements GamePanelPresenter.Display {
 	public void addMoveAnimator(final List<Location> path, final Unit movingUnit) {
 		Preconditions.checkNotNull(path);
 		Preconditions.checkNotNull(movingUnit);
-		animationManager.addAnimationPart(
-				new AnimationPartWalk(pathPlanning, path, movingUnit, paintService, excludePainting, getArea()));
+		animationManager
+				.addAnimationPart(new AnimationPartWalk(pathPlanning, path, movingUnit, paintService, excludePainting));
 	}
 
 	// TODO JJ animation scheduling should be in separate class.

@@ -61,10 +61,10 @@ public class GameController implements Localized {
 	}
 
 	private Model buidModel() {
-//		return buildTinyModel();
-//		 return buildComplexModel();
+		// return buildTinyModel();
+		// return buildComplexModel();
 		// return buildMediumModel();
-		 return buildHugeModel();
+		return buildHugeModel();
 	}
 
 	Model buildTinyModel() {
@@ -84,10 +84,12 @@ public class GameController implements Localized {
 		builder.setCalendar(1570, 1800).setMap("/maps/test-map-ocean-1000x1000.txt")
 
 				.addPlayer("Player1", false).addUnit("Player1", UnitType.GALLEON, Location.of(4, 2))
-				.addUnit("Player1", UnitType.FRIGATE, Location.of(9, 7))
+				.addUnit("Player1", UnitType.FRIGATE, Location.of(9, 5))
+				.addUnit("Player1", UnitType.FRIGATE, Location.of(50, 50))
 
 				.addPlayer("Player2", true).addUnit("Player2", UnitType.GALLEON, Location.of(7, 7))
-				.addUnit("Player2", UnitType.FRIGATE, Location.of(7, 9));
+				.addUnit("Player2", UnitType.FRIGATE, Location.of(7, 9))
+				.addUnit("Player2", UnitType.GALLEON, Location.of(50, 53));
 		return builder.build();
 	}
 

@@ -75,7 +75,7 @@ public class Area {
 
 	public boolean isVisible(final Location location) {
 		final Point point = Point.of(location);
-		return isPointVisible(point);
+		return isVisibleCanvasPoint(point);
 	}
 
 	/**
@@ -108,17 +108,30 @@ public class Area {
 	 * @return return <code>true</code> when point is inside area otherwise
 	 *         return <code>false</code>
 	 */
-	public boolean isPointVisible(final Point point) {
+	public boolean isVisibleCanvasPoint(final Point point) {
 		final Point p1 = visibleArea.getTopLeft();
 		final Point p2 = visibleArea.getBottomRight();
 		return p1.getX() <= point.getX() && p2.getX() >= point.getX() && p1.getY() <= point.getY()
 				&& p2.getY() >= point.getY();
 	}
 
+	/**
+	 * Verify that given point is in area.
+	 * 
+	 * @param point
+	 *            required point in on screen coordinates
+	 * @return return <code>true</code> when point is inside area otherwise
+	 *         return <code>false</code>
+	 */
+	public boolean isVisibleScreenPoint(final Point point) {
+		return 0 <= point.getX() && visibleArea.getCanvasWidth() >= point.getX() && 0 <= point.getY()
+				&& visibleArea.getCanvasHeight() >= point.getY();
+	}
+
 	@Override
 	public String toString() {
 		return MoreObjects.toStringHelper(Area.class).add("topLeft", topLeft).add("bottomRight", bottomRight)
-				.toString();
+				.add("visibleArea", visibleArea).toString();
 	}
 
 	/**
