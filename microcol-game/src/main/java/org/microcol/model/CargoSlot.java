@@ -23,7 +23,7 @@ public class CargoSlot {
 		return unit;
 	}
 
-	public void load(final Unit unit) {
+	public void store(final Unit unit) {
 		Preconditions.checkNotNull(unit);
 		Preconditions.checkState(hold.getOwner().getOwner().equals(unit.getOwner()), "Owners must be same (%s - %s).", hold.getOwner().getOwner(), unit.getOwner());
 		// FIXME JKA check unit is already loaded
@@ -34,14 +34,14 @@ public class CargoSlot {
 		this.unit = unit;
 	}
 
-	public Unit unlod(final Location location) {
+	public Unit unload(final Location location) {
 		Preconditions.checkState(unit != null, "Cargo slot (%s) is empty.", this);
 		// FIXME JKA check adjacent location
 		// FIXME JKA run "standard" unit location checks
 
 		final Unit unit = this.unit;
 		// FIXME JKA OWNER CARGO HOLD
-		unit.setLocation(location);
+		unit.unload(location);
 
 		this.unit = null;
 

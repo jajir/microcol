@@ -22,7 +22,7 @@ public class Unit {
 	private Location location;
 	private int availableMoves;
 	private final CargoHold hold;
-	// FIXME JKA OWNER CARGO HOLD
+	private CargoSlot slot; // FIXME JKA RENAME
 
 	Unit(final UnitType type, final Player owner, final Location location) {
 		this.type = Preconditions.checkNotNull(type);
@@ -202,9 +202,23 @@ public class Unit {
 		model.fireUnitAttacked(this, defender, destroyed);
 	}
 
-	// FIXME JKA PREDELAT
-	void setLocation(final Location location) {
+	public boolean isStorable() {
+		return type.isStorable();
+	}
+
+	public boolean isStored() {
+		return slot != null;
+	}
+
+	void store(final CargoSlot slot) {
+		// FIXME JKA PRECONDITIONS
+		this.slot = slot;
+	}
+
+	void unload(final Location location) {
+		// FIXME JKA PRECONDITIONS
 		this.location = location;
+		this.slot = null;
 	}
 
 	@Override
