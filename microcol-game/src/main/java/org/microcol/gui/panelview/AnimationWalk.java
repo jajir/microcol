@@ -15,16 +15,16 @@ import javafx.scene.canvas.GraphicsContext;
  * Draw walk animation based on predefined path.
  * 
  */
-public class AnimationPartWalk implements AnimationPart {
+public class AnimationWalk implements Animation {
 
 	/**
 	 * Moving unit.
 	 */
 	private final Unit unit;
 
-	private final List<WalkParticle> walkParticles;
+	private final List<AnimationWalkParticle> walkParticles;
 
-	public AnimationPartWalk(final PathPlanning pathPlanning, final List<Location> path, final Unit unit,
+	public AnimationWalk(final PathPlanning pathPlanning, final List<Location> path, final Unit unit,
 			final PaintService paintService, final ExcludePainting excludePainting) {
 		Preconditions.checkNotNull(path);
 		Preconditions.checkArgument(!path.isEmpty(), "Path can't be empty");
@@ -35,7 +35,7 @@ public class AnimationPartWalk implements AnimationPart {
 		Location previous = null;
 		for (final Location loc : path) {
 			if (previous != null) {
-				walkParticles.add(new WalkParticle(paintService, previous, loc, pathPlanning));
+				walkParticles.add(new AnimationWalkParticle(paintService, previous, loc, pathPlanning));
 			}
 			previous = loc;
 		}
@@ -62,7 +62,7 @@ public class AnimationPartWalk implements AnimationPart {
 
 	@Override
 	public void paint(final GraphicsContext graphics, final Area area) {
-		WalkParticle particle = walkParticles.get(0);
+		AnimationWalkParticle particle = walkParticles.get(0);
 		particle.paint(graphics, area, unit);
 	}
 

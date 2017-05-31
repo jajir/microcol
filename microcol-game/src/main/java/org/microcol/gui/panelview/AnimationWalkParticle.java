@@ -16,7 +16,7 @@ import javafx.scene.canvas.GraphicsContext;
  * walk from one location to another one.
  *
  */
-public class WalkParticle {
+public class AnimationWalkParticle {
 
 	private final Location locationFrom;
 
@@ -27,7 +27,7 @@ public class WalkParticle {
 
 	private final PaintService paintService;
 
-	WalkParticle(final PaintService paintService, final Location locationFrom, final Location locationTo,
+	AnimationWalkParticle(final PaintService paintService, final Location locationFrom, final Location locationTo,
 			final PathPlanning pathPlanning) {
 		this.paintService = paintService;
 		this.locationFrom = locationFrom;

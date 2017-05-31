@@ -388,14 +388,14 @@ public class GamePanelView implements GamePanelPresenter.Display {
 	public void addMoveAnimator(final List<Location> path, final Unit movingUnit) {
 		Preconditions.checkNotNull(path);
 		Preconditions.checkNotNull(movingUnit);
-		animationManager
-				.addAnimationPart(new AnimationPartWalk(pathPlanning, path, movingUnit, paintService, excludePainting));
+		animationManager.addAnimation(new AnimationWalk(pathPlanning, path, movingUnit, paintService, excludePainting),
+				animation -> excludePainting.includeUnit(movingUnit));
 	}
 
 	// TODO JJ animation scheduling should be in separate class.
 	public void addFightAnimation(final Unit attacker, final Unit defender) {
 		// TODO JJ animation speed should come from game preferences
-		animationManager.addAnimationPart(new AnimationPartFight(attacker, defender, imageProvider, 2));
+		animationManager.addAnimation(new AnimationFight(attacker, defender, imageProvider, 2));
 	}
 
 	@Override

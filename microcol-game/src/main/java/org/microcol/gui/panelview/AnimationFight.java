@@ -11,7 +11,7 @@ import javafx.scene.canvas.GraphicsContext;
 /**
  * Class animate fight between two adjacent units.
  */
-public class AnimationPartFight implements AnimationPart {
+public class AnimationFight implements Animation {
 
 	private int step;
 
@@ -23,7 +23,7 @@ public class AnimationPartFight implements AnimationPart {
 
 	private final int animationSpeed;
 
-	public AnimationPartFight(final Unit attacker, final Unit defender, final ImageProvider imageProvider,
+	public AnimationFight(final Unit attacker, final Unit defender, final ImageProvider imageProvider,
 			final int animationSpeed) {
 		this.attacker = Preconditions.checkNotNull(attacker);
 		this.defender = Preconditions.checkNotNull(defender);

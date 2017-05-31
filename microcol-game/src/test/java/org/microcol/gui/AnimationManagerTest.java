@@ -8,13 +8,13 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.microcol.gui.panelview.AnimationManager;
-import org.microcol.gui.panelview.AnimationPart;
+import org.microcol.gui.panelview.Animation;
 
 public class AnimationManagerTest {
 
-	private AnimationPart part1;
+	private Animation part1;
 
-	private AnimationPart part2;
+	private Animation part2;
 
 	@Test
 	public void test_constructor() throws Exception {
@@ -27,7 +27,7 @@ public class AnimationManagerTest {
 		AnimationManager am = new AnimationManager();
 		EasyMock.expect(part1.hasNextStep()).andReturn(false);
 		EasyMock.replay(part1);
-		am.addAnimationPart(part1);
+		am.addAnimation(part1);
 
 		assertFalse(am.hasNextStep());
 		EasyMock.verify(part1);
@@ -38,7 +38,7 @@ public class AnimationManagerTest {
 		AnimationManager am = new AnimationManager();
 		EasyMock.expect(part1.hasNextStep()).andReturn(true);
 		EasyMock.replay(part1);
-		am.addAnimationPart(part1);
+		am.addAnimation(part1);
 		assertTrue(am.hasNextStep());
 
 		EasyMock.verify(part1);
@@ -49,7 +49,7 @@ public class AnimationManagerTest {
 		AnimationManager am = new AnimationManager();
 		EasyMock.expect(part1.hasNextStep()).andReturn(false);
 		EasyMock.replay(part1);
-		am.addAnimationPart(part1);
+		am.addAnimation(part1);
 		assertFalse(am.hasNextStep());
 
 		EasyMock.verify(part1);
@@ -85,8 +85,8 @@ public class AnimationManagerTest {
 		EasyMock.expect(part2.hasNextStep()).andReturn(false);
 		
 		EasyMock.replay(part1, part2);
-		am.addAnimationPart(part1);
-		am.addAnimationPart(part2);
+		am.addAnimation(part1);
+		am.addAnimation(part2);
 		
 		assertTrue(am.hasNextStep());
 		am.performStep();
@@ -112,13 +112,13 @@ public class AnimationManagerTest {
 		
 		EasyMock.replay(part1, part2);
 		
-		am.addAnimationPart(part1);
+		am.addAnimation(part1);
 		assertTrue(am.hasNextStep());
 		am.performStep();
 		assertFalse(am.hasNextStep());
 		
 		
-		am.addAnimationPart(part2);
+		am.addAnimation(part2);
 		assertTrue(am.hasNextStep());
 		am.performStep();
 		assertFalse(am.hasNextStep());
@@ -129,13 +129,13 @@ public class AnimationManagerTest {
 	@Test(expected = NullPointerException.class)
 	public void test_addAnimationPart_verify_than_null_is_not_allowed() throws Exception {
 		AnimationManager am = new AnimationManager();
-		am.addAnimationPart(null);
+		am.addAnimation(null);
 	}
 
 	@Before
 	public void setup() {
-		part1 = EasyMock.createMock(AnimationPart.class);
-		part2 = EasyMock.createMock(AnimationPart.class);
+		part1 = EasyMock.createMock(Animation.class);
+		part2 = EasyMock.createMock(Animation.class);
 	}
 
 	@After

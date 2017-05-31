@@ -116,11 +116,7 @@ public class ImageProvider {
 		Image img = images.get(name);
 		if (img == null) {
 			img = ImageProvider.getRawImage(name);
-			if (img == null) {
-				return null;
-			} else {
-				images.put(name, img);
-			}
+			images.put(name, img);
 		}
 		return img;
 	}

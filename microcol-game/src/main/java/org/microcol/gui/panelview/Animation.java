@@ -5,7 +5,7 @@ import javafx.scene.canvas.GraphicsContext;
 /**
  * Animate one part of big animation.
  */
-public interface AnimationPart {
+public interface Animation {
 
 	boolean hasNextStep();
 

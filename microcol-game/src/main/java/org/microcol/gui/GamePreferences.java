@@ -106,11 +106,8 @@ public class GamePreferences {
 	}
 
 	public Text.Language getLanguage() {
-		Optional<Language> lang = Language.resolve(getLocale());
-		if (lang.isPresent()) {
-			return lang.get();
-		}
-		return Language.en;
+		final Optional<Language> lang = Language.resolve(getLocale());
+		return lang.orElse(Language.en);
 	}
 
 	public void setVolume(final int volume) {
