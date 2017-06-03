@@ -32,7 +32,7 @@ public class Model {
 		this.players.forEach(player -> player.setModel(this));
 
 		unitStorage = new UnitStorage(units);
-		unitStorage.getUnits().forEach(unit -> unit.setModel(this));
+		unitStorage.getUnits(true).forEach(unit -> unit.setModel(this));
 
 		gameManager = new GameManager();
 		gameManager.setModel(this);
@@ -84,7 +84,11 @@ public class Model {
 	}
 
 	public List<Unit> getUnits() {
-		return unitStorage.getUnits();
+		return unitStorage.getUnits(false);
+	}
+
+	public List<Unit> getUnits(final boolean includeStored) {
+		return unitStorage.getUnits(includeStored);
 	}
 
 	public Map<Location, List<Unit>> getUnitsAt() {
@@ -133,8 +137,8 @@ public class Model {
 		return model;
 	}
 
-	List<Unit> getUnits(final Player player) {
-		return unitStorage.getUnits(player);
+	List<Unit> getUnits(final Player player, final boolean includeStored) {
+		return unitStorage.getUnits(player, includeStored);
 	}
 
 	Map<Location, List<Unit>> getUnitsAt(final Player player) {
@@ -145,8 +149,8 @@ public class Model {
 		return unitStorage.getUnitsAt(player, location);
 	}
 
-	List<Unit> getEnemyUnits(final Player player) {
-		return unitStorage.getEnemyUnits(player);
+	List<Unit> getEnemyUnits(final Player player, final boolean includeStored) {
+		return unitStorage.getEnemyUnits(player, includeStored);
 	}
 
 	Map<Location, List<Unit>> getEnemyUnitsAt(final Player player) {
@@ -201,6 +205,7 @@ public class Model {
 		listenerManager.fireGameFinished(this);
 	}
 
+	// FIXME JKA Temporary solution
 	public void requestDebug(final List<Location> locations) {
 		listenerManager.fireDebugRequested(this, locations);
 	}
