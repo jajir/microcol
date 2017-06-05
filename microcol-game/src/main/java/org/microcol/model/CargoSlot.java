@@ -10,42 +10,37 @@ import com.google.common.base.Preconditions;
 
 public class CargoSlot {
 	private final CargoHold hold;
-	private Optional<Unit> unit;
+	private Optional<Unit> cargo;
 
 	CargoSlot(final CargoHold hold) {
 		this.hold = hold;
-		this.unit = Optional.empty();
+		this.cargo = Optional.empty();
 	}
 
 	public boolean isEmpty() {
-		return unit == null;
+		return !cargo.isPresent();
 	}
 
 	public Optional<Unit> getUnit() {
-		return unit;
+		return cargo;
 	}
 
 	public void store(final Unit unit) {
 		Preconditions.checkNotNull(unit);
+		Preconditions.checkState(!cargo.isPresent(), "Cargo slot (%s) is already loaded with some unit (%s).", this, cargo.get());
 		Preconditions.checkState(hold.getOwner().getOwner().equals(unit.getOwner()), "Owners must be same (%s - %s).", hold.getOwner().getOwner(), unit.getOwner());
-		// FIXME JKA check unit is already loaded
-		// FIXME JKA check adjacent location
-		Preconditions.checkState(this.unit == null, "Cargo slot (%s) is already loaded with some unit (%s).", this, this.unit);
 
-		// FIXME JKA OWNER CARGO HOLD (is unit storeable)
-		this.unit = Optional.of(unit);
+		unit.store(this);
+
+		cargo = Optional.of(unit);
 	}
 
 	public Unit unload(final Location location) {
-		Preconditions.checkState(unit != null, "Cargo slot (%s) is empty.", this);
-		// FIXME JKA check adjacent location
-		// FIXME JKA run "standard" unit location checks
+		Preconditions.checkState(cargo.isPresent(), "Cargo slot (%s) is empty.", this);
 
-		final Unit unit = this.unit.get();
-		// FIXME JKA OWNER CARGO HOLD
+		final Unit unit = cargo.get();
 		unit.unload(location);
-
-		this.unit = null;
+		cargo = Optional.empty();
 
 		return unit;
 	}
@@ -53,7 +48,7 @@ public class CargoSlot {
 	@Override
 	public String toString() {
 		return MoreObjects.toStringHelper(this)
-			.add("unit", unit)
+			.add("cargo", cargo)
 			.toString();
 	}
 
