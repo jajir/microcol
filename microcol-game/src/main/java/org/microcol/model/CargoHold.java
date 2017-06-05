@@ -1,6 +1,5 @@
 package org.microcol.model;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.json.stream.JsonGenerator;
@@ -16,11 +15,11 @@ public class CargoHold {
 	CargoHold(final Unit owner, final int capacity) {
 		this.owner = owner;
 
-		List<CargoSlot> slots = new ArrayList<>();
+		final ImmutableList.Builder<CargoSlot> builder = ImmutableList.builder();
 		for (int i = 0; i < capacity; i++) {
-			slots.add(new CargoSlot(this));
+			builder.add(new CargoSlot(this));
 		}
-		this.slots = ImmutableList.copyOf(slots);
+		this.slots = builder.build();
 	}
 
 	Unit getOwner() {
@@ -39,10 +38,10 @@ public class CargoHold {
 	}
 
 	void save(final JsonGenerator generator) {
-		// FIXME JKA IMPLEMENT
+		// TODO JKA Implement save/load
 	}
 
 	static CargoHold load(final JsonParser parser) {
-		return null; // FIXME JKA IMPLEMENT
+		return null; // TODO JKA Implement save/load
 	}
 }

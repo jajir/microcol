@@ -238,7 +238,7 @@ public class Unit {
 		generator.write("owner", owner.getName());
 		location.save("location", generator);
 		generator.write("availableMoves", availableMoves);
-		// FIXME JKA CARGO HOLD
+		// TODO JKA Implement save/load
 		generator.writeEnd();
 	}
 
@@ -264,7 +264,7 @@ public class Unit {
 		final int availableMoves = parser.getInt();
 		parser.next(); // END_OBJECT
 
-		// FIXME JKA CARGO HOLD
+		// TODO JKA Implement save/load
 
 		final Unit unit = new Unit(type, owner, location);
 		unit.availableMoves = availableMoves;

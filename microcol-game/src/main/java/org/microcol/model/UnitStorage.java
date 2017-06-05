@@ -36,8 +36,10 @@ class UnitStorage {
 		});
 	}
 
-	List<Unit> getUnits() {
-		return ImmutableList.copyOf(units);
+	List<Unit> getUnits(final boolean includeStored) {
+		return units.stream()
+			.filter(unit -> includeStored || !unit.isStored())
+			.collect(ImmutableList.toImmutableList());
 	}
 
 	Map<Location, List<Unit>> getUnitsAt() {
@@ -53,11 +55,12 @@ class UnitStorage {
 			.collect(ImmutableList.toImmutableList());
 	}
 
-	List<Unit> getUnits(final Player player) {
+	List<Unit> getUnits(final Player player, final boolean includeStored) {
 		Preconditions.checkNotNull(player);
 
 		return units.stream()
 			.filter(unit -> unit.getOwner().equals(player))
+			.filter(unit -> includeStored || !unit.isStored())
 			.collect(ImmutableList.toImmutableList());
 	}
 
@@ -74,15 +77,17 @@ class UnitStorage {
 		Preconditions.checkNotNull(location);
 
 		return units.stream()
-			.filter(unit -> unit.getOwner().equals(player) && unit.getLocation().equals(location))
+			.filter(unit -> unit.getOwner().equals(player))
+			.filter(unit -> unit.getLocation().equals(location))
 			.collect(ImmutableList.toImmutableList());
 	}
 
-	List<Unit> getEnemyUnits(final Player player) {
+	List<Unit> getEnemyUnits(final Player player, final boolean includeStored) {
 		Preconditions.checkNotNull(player);
 
 		return units.stream()
 			.filter(unit -> !unit.getOwner().equals(player))
+			.filter(unit -> includeStored || !unit.isStored())
 			.collect(ImmutableList.toImmutableList());
 	}
 
@@ -99,7 +104,8 @@ class UnitStorage {
 		Preconditions.checkNotNull(location);
 
 		return units.stream()
-			.filter(units -> !units.getOwner().equals(player) && units.getLocation().equals(location))
+			.filter(unit -> !unit.getOwner().equals(player))
+			.filter(unit -> unit.getLocation().equals(location))
 			.collect(ImmutableList.toImmutableList());
 	}
 

@@ -37,7 +37,11 @@ public class Player {
 	}
 
 	public List<Unit> getUnits() {
-		return model.getUnits(this);
+		return model.getUnits(this, false);
+	}
+
+	public List<Unit> getUnits(final boolean includeStored) {
+		return model.getUnits(this, includeStored);
 	}
 
 	public Map<Location, List<Unit>> getUnitsAt() {
@@ -49,7 +53,11 @@ public class Player {
 	}
 
 	public List<Unit> getEnemyUnits() {
-		return model.getEnemyUnits(this);
+		return model.getEnemyUnits(this, false);
+	}
+
+	public List<Unit> getEnemyUnits(final boolean includeStored) {
+		return model.getEnemyUnits(this, includeStored);
 	}
 
 	public Map<Location, List<Unit>> getEnemyUnitsAt() {
