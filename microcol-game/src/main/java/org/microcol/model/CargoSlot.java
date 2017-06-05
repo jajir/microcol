@@ -1,5 +1,7 @@
 package org.microcol.model;
 
+import java.util.Optional;
+
 import javax.json.stream.JsonGenerator;
 import javax.json.stream.JsonParser;
 
@@ -8,18 +10,18 @@ import com.google.common.base.Preconditions;
 
 public class CargoSlot {
 	private final CargoHold hold;
-	private Unit unit;
+	private Optional<Unit> unit;
 
 	CargoSlot(final CargoHold hold) {
 		this.hold = hold;
+		this.unit = Optional.empty();
 	}
 
 	public boolean isEmpty() {
 		return unit == null;
 	}
 
-	// FIXME JKA OPTIONAL
-	public Unit getUnit() {
+	public Optional<Unit> getUnit() {
 		return unit;
 	}
 
@@ -31,7 +33,7 @@ public class CargoSlot {
 		Preconditions.checkState(this.unit == null, "Cargo slot (%s) is already loaded with some unit (%s).", this, this.unit);
 
 		// FIXME JKA OWNER CARGO HOLD (is unit storeable)
-		this.unit = unit;
+		this.unit = Optional.of(unit);
 	}
 
 	public Unit unload(final Location location) {
@@ -39,7 +41,7 @@ public class CargoSlot {
 		// FIXME JKA check adjacent location
 		// FIXME JKA run "standard" unit location checks
 
-		final Unit unit = this.unit;
+		final Unit unit = this.unit.get();
 		// FIXME JKA OWNER CARGO HOLD
 		unit.unload(location);
 
@@ -56,10 +58,10 @@ public class CargoSlot {
 	}
 
 	void save(final JsonGenerator generator) {
-		// FIXME JKA IMPLEMENT
+		// TODO JKA Implement save/load
 	}
 
 	static CargoSlot load(final JsonParser parser) {
-		return null; // FIXME JKA IMPLEMENT
+		return null; // TODO JKA Implement save/load
 	}
 }

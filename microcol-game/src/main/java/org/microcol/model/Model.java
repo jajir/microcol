@@ -205,7 +205,7 @@ public class Model {
 		listenerManager.fireGameFinished(this);
 	}
 
-	// FIXME JKA Temporary solution
+	// TODO JKA Temporary solution
 	public void requestDebug(final List<Location> locations) {
 		listenerManager.fireDebugRequested(this, locations);
 	}
