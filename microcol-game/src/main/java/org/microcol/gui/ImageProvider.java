@@ -31,25 +31,25 @@ public class ImageProvider {
 
 	public static final String IMG_SPLASH_SCREEN = "splash-screen.png";
 
-	public static final String IMG_TILE_OCEAN = "tile-ocean.png";
+	private static final String IMG_TILE_OCEAN = "tile-ocean.png";
 
-	public static final String IMG_TILE_LAND = "tile-land.png";
+	private static final String IMG_TILE_LAND = "tile-land.png";
 
-	public static final String IMG_TILE_SHIP_GALEON = "tile-ship-galeon.png";
+	private static final String IMG_TILE_SHIP_GALEON = "tile-ship-galeon.png";
 
-	public static final String IMG_TILE_SHIP_FRIGATE = "tile-ship-frigate.png";
+	private static final String IMG_TILE_SHIP_FRIGATE = "tile-ship-frigate.png";
 
-	public static final String IMG_UNIT_FREE_COLONIST = "tile-unit-free-colonist.png";
+	private static final String IMG_UNIT_FREE_COLONIST = "tile-unit-free-colonist.png";
 
-	public static final String IMG_TILE_MODE_GOTO = "tile-mode-goto.png";
+	private static final String IMG_TILE_MODE_GOTO = "tile-mode-goto.png";
 
 	public static final String IMG_TILE_MODE_MOVE = "tile-mode-move.png";
 
-	public static final String IMG_TILE_MODE_FORTIFY = "tile-mode-fortify.png";
+	private static final String IMG_TILE_MODE_FORTIFY = "tile-mode-fortify.png";
 
-	public static final String IMG_TILE_MODE_PLOW = "tile-mode-plow.png";
+	private static final String IMG_TILE_MODE_PLOW = "tile-mode-plow.png";
 
-	public static final String IMG_TILE_MODE_ROAD = "tile-mode-road.png";
+	private static final String IMG_TILE_MODE_ROAD = "tile-mode-road.png";
 
 	public static final String IMG_CROSSED_SWORDS = "crossed-swords.png";
 

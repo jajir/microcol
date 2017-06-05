@@ -12,9 +12,9 @@ import javafx.scene.layout.VBox;
  */
 public class MainFramePresenter {
 
-	public static final String START_PANEL = "Start panel";
+	static final String START_PANEL = "Start panel";
 
-	public static final String MAIN_GAME_PANEL = "Main game panel";
+	static final String MAIN_GAME_PANEL = "Main game panel";
 
 	public interface Display {
 
@@ -33,7 +33,7 @@ public class MainFramePresenter {
 		});
 	}
 
-	public void showPanel(final String panelName) {
+	void showPanel(final String panelName) {
 		display.showPanel(panelName);
 	}
 

@@ -33,6 +33,8 @@ public class DialogFigth extends AbstractDialog {
 	 *            required image provider
 	 * @param localizationHelper
 	 *            required localization helper
+	 * @param gamePreferences
+	 *            required game preferences
 	 * @param unitAttacker
 	 *            required attacking unit
 	 * @param unitDefender
