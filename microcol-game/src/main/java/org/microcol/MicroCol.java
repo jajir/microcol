@@ -93,7 +93,7 @@ public class MicroCol extends Application {
 
 				final ApplicationController applicationController = injector.getInstance(ApplicationController.class);
 
-				primaryStage.setOnShown(e -> applicationController.startApplication());
+				primaryStage.setOnShowing(e -> applicationController.startApplication());
 				primaryStage.show();
 			} catch (Exception e) {
 				e.printStackTrace();

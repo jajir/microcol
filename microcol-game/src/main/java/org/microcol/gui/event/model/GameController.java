@@ -61,10 +61,10 @@ public class GameController implements Localized {
 	}
 
 	private Model buidModel() {
-		// return buildTinyModel();
-		// return buildComplexModel();
+//		 return buildTinyModel();
+		 return buildComplexModel();
 		// return buildMediumModel();
-		return buildHugeModel();
+//		return buildHugeModel();
 	}
 
 	Model buildTinyModel() {
