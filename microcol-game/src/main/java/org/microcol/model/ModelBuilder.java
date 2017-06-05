@@ -33,8 +33,7 @@ public class ModelBuilder {
 		return this;
 	}
 
-	// TODO JKA PROHODIT TYPE A OWNER
-	public ModelBuilder addUnit(final String ownerName, final UnitType type, final Location location) {
+	public ModelBuilder addUnit(final UnitType type, final String ownerName, final Location location) {
 		units.add(new Unit(type, getPlayer(ownerName), location));
 
 		return this;
