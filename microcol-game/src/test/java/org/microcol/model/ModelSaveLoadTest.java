@@ -46,12 +46,12 @@ public class ModelSaveLoadTest {
 			.setCalendar(1570, 1600)
 			.setMap("/maps/test-map-2islands-15x10.txt")
 			.addPlayer("Player1", true)
-				.addUnit("Player1", UnitType.GALLEON, Location.of(4, 2))
-				.addUnit("Player1", UnitType.FRIGATE, Location.of(3, 3))
+				.addUnit(UnitType.GALLEON, "Player1", Location.of(4, 2))
+				.addUnit(UnitType.FRIGATE, "Player1", Location.of(3, 3))
 			.addPlayer("Player2", true)
-				.addUnit("Player2", UnitType.GALLEON, Location.of(7, 7))
-				.addUnit("Player2", UnitType.FRIGATE, Location.of(7, 9))
-				.addUnit("Player2", UnitType.FRIGATE, Location.of(14, 9))
+				.addUnit(UnitType.GALLEON, "Player2", Location.of(7, 7))
+				.addUnit(UnitType.FRIGATE, "Player2", Location.of(7, 9))
+				.addUnit(UnitType.FRIGATE, "Player2", Location.of(14, 9))
 			.build();
 		model.startGame();
 

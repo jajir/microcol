@@ -22,7 +22,7 @@ public class Unit {
 	private Location location;
 	private int availableMoves;
 	private final CargoHold hold;
-	private CargoSlot slot; // FIXME JKA RENAME
+	private CargoSlot slot; // TODO JKA RENAME
 
 	Unit(final UnitType type, final Player owner, final Location location) {
 		this.type = Preconditions.checkNotNull(type);
@@ -48,10 +48,14 @@ public class Unit {
 	}
 
 	public Location getLocation() {
+		checkNotStored();
+
 		return location;
 	}
 
 	public int getAvailableMoves() {
+		checkNotStored();
+
 		return availableMoves;
 	}
 
@@ -83,6 +87,8 @@ public class Unit {
 	}
 
 	public List<Location> getAvailableLocations() {
+		// TODO JKA IMPLEMENTATION FOR STORED UNIT?
+
 		List<Location> locations = new ArrayList<>();
 		aaa(locations, null);
 
@@ -91,6 +97,8 @@ public class Unit {
 
 	// TODO JKA VRACET LOCATION?
 	public List<Unit> getAttackableTargets() {
+		checkNotStored();
+
 		if (!type.canAttack()) {
 			return ImmutableList.of();
 		}
@@ -142,16 +150,22 @@ public class Unit {
 	}
 
 	public Optional<List<Location>> getPath(final Location destination) {
+		checkNotStored();
+
 		return getPath(destination, false);
 	}
 
 	public Optional<List<Location>> getPath(final Location destination, final boolean excludeDestination) {
+		checkNotStored();
+
 		PathFinder finder = new PathFinder(this, location, destination, excludeDestination);
 
 		return Optional.ofNullable(finder.find());
 	}
 
 	public void moveTo(final Path path) {
+		checkNotStored();
+
 		model.checkGameRunning();
 		model.checkCurrentPlayer(owner);
 
@@ -181,6 +195,8 @@ public class Unit {
 	}
 
 	public void attack(final Location location) {
+		checkNotStored();
+
 		model.checkGameRunning();
 		model.checkCurrentPlayer(owner);
 
@@ -211,14 +227,29 @@ public class Unit {
 	}
 
 	void store(final CargoSlot slot) {
-		// FIXME JKA PRECONDITIONS
+		Preconditions.checkState(isStorable(), "This unit (%s) cannot be stored.", this);
+		checkNotStored();
+		// TODO JKA check adjacent location
+		// TODO JKA check movement?
+		// TODO JKA prazdny naklad?
+
 		this.slot = slot;
 	}
 
 	void unload(final Location location) {
-		// FIXME JKA PRECONDITIONS
+		// TODO JKA check adjacent location
+		// TODO JKA run "standard" unit location checks
+
+		// TODO JKA empty all moves and attacks?
+
 		this.location = location;
 		this.slot = null;
+	}
+
+	void checkNotStored() {
+		if (isStored()) {
+			throw new IllegalStateException(String.format("This unit (%s) is stored in (%s).", this, slot));
+		}
 	}
 
 	@Override
@@ -229,6 +260,7 @@ public class Unit {
 			.add("location", location)
 			.add("availableMoves", availableMoves)
 			.add("hold", hold)
+			// TODO JKA SLOT
 			.toString();
 	}
 
