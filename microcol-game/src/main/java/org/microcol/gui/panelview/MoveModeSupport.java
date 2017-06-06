@@ -3,6 +3,7 @@ package org.microcol.gui.panelview;
 import java.util.Collections;
 import java.util.List;
 
+import org.microcol.gui.ImageProvider;
 import org.microcol.gui.event.model.GameController;
 import org.microcol.model.Location;
 import org.microcol.model.Unit;
@@ -30,7 +31,52 @@ public class MoveModeSupport {
 
 	private List<Location> moveLocations;
 
-	private boolean fight = false;
+	private MoveMode moveMode;
+
+	/**
+	 * Define what mode of move.
+	 *
+	 */
+	public static enum MoveMode {
+
+		MOVE(ImageProvider.IMG_ICON_STEPS_25x25, ImageProvider.IMG_ICON_STEPS_TURN_25x25),
+
+		ANCHOR(ImageProvider.IMG_ICON_STEPS_ANCHOR_25x25, ImageProvider.IMG_ICON_STEPS_ANCHOR_TURN_25x25),
+
+		FIGHT(ImageProvider.IMG_ICON_STEPS_FIGHT_25x25, ImageProvider.IMG_ICON_STEPS_FIGHT_TURN_25x25);
+
+		/**
+		 * Normal step image.
+		 */
+		private final String image;
+
+		/**
+		 * Step image indicating that here ends turn.
+		 */
+		private final String turnImage;
+
+		private MoveMode(final String image, final String turnImage) {
+			this.image = Preconditions.checkNotNull(image);
+			this.turnImage = Preconditions.checkNotNull(turnImage);
+		}
+
+		public String getImageForStep(final boolean normalStep) {
+			if (normalStep) {
+				return image;
+			} else {
+				return turnImage;
+			}
+		}
+
+		public String getImage() {
+			return image;
+		}
+
+		public String getTurnImage() {
+			return turnImage;
+		}
+
+	}
 
 	@Inject
 	public MoveModeSupport(final MouseOverTileChangedController mouseOverTileChangedController,
@@ -53,21 +99,22 @@ public class MoveModeSupport {
 					 */
 					moveLocations = Lists.newArrayList();
 				} else {
-					// TODO JJ get(0) could return different ship that is really moved
+					// TODO JJ get(0) could return different ship that is really
+					// moved
 					final Unit movingUnit = gameController.getModel().getCurrentPlayer()
 							.getUnitsAt(viewState.getSelectedTile().get()).get(0);
 					final List<Unit> ships = gameController.getModel().getUnitsAt(target);
 					if (ships.isEmpty()) {
 						// TODO JJ step counter should be core function
 						moveLocations = movingUnit.getPath(target).orElse(Collections.emptyList());
-						fight = false;
+						moveMode = MoveMode.MOVE;
 					} else {
 						if (ships.get(0).getOwner().equals(movingUnit.getOwner())) {
 							/**
 							 * Move unit to another my units.
 							 */
 							moveLocations = movingUnit.getPath(target).orElse(Collections.emptyList());
-							fight = false;
+							moveMode = MoveMode.MOVE;
 						} else {
 							/**
 							 * User wants to fight.
@@ -76,11 +123,12 @@ public class MoveModeSupport {
 								moveLocations = Lists
 										.newArrayList(movingUnit.getPath(target, true).orElse(Collections.emptyList()));
 								moveLocations.add(target);
-								fight = true;
+								moveMode = MoveMode.FIGHT;
 							} else {
-								// TODO JJ change status bar, that user try to attack with unit that can't attack.
+								// TODO JJ change status bar, that user try to
+								// attack with unit that can't attack.
 								moveLocations = Collections.emptyList();
-								fight = false;
+								moveMode = MoveMode.MOVE;
 							}
 						}
 					}
@@ -97,8 +145,8 @@ public class MoveModeSupport {
 		return moveLocations;
 	}
 
-	public boolean isFight() {
-		return fight;
+	public MoveMode getMoveMode() {
+		return moveMode;
 	}
 
 }

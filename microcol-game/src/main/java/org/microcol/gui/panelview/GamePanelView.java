@@ -13,6 +13,7 @@ import org.microcol.gui.Point;
 import org.microcol.gui.StepCounter;
 import org.microcol.gui.event.model.GameController;
 import org.microcol.gui.event.model.NextTurnController;
+import org.microcol.gui.panelview.MoveModeSupport.MoveMode;
 import org.microcol.gui.util.FpsCounter;
 import org.microcol.gui.util.Text;
 import org.microcol.gui.util.ViewUtil;
@@ -330,7 +331,7 @@ public class GamePanelView implements GamePanelPresenter.Display {
 			 * Here could be check if particular step in on screen, but draw few
 			 * images outside screen is not big deal.
 			 */
-			steps.forEach(point -> paintStep(graphics, point, stepCounter, moveModeSupport.isFight()));
+			steps.forEach(point -> paintStep(graphics, point, stepCounter, moveModeSupport.getMoveMode()));
 		}
 	}
 
@@ -343,24 +344,9 @@ public class GamePanelView implements GamePanelPresenter.Display {
 	 *            required point where to draw image
 	 */
 	private void paintStep(final GraphicsContext graphics, final Point point, final StepCounter stepCounter,
-			final boolean isFight) {
-		graphics.drawImage(getImageFoStep(stepCounter.canMakeMoveInSameTurn(1), isFight), point.getX(), point.getY());
-	}
-
-	private Image getImageFoStep(final boolean normalStep, final boolean isFight) {
-		if (normalStep) {
-			if (isFight) {
-				return imageProvider.getImage(ImageProvider.IMG_ICON_STEPS_FIGHT_25x25);
-			} else {
-				return imageProvider.getImage(ImageProvider.IMG_ICON_STEPS_25x25);
-			}
-		} else {
-			if (isFight) {
-				return imageProvider.getImage(ImageProvider.IMG_ICON_STEPS_FIGHT_TURN_25x25);
-			} else {
-				return imageProvider.getImage(ImageProvider.IMG_ICON_STEPS_TURN_25x25);
-			}
-		}
+			final MoveMode moveMode) {
+		final Image image = imageProvider.getImage(moveMode.getImageForStep(stepCounter.canMakeMoveInSameTurn(1)));
+		graphics.drawImage(image, point.getX(), point.getY());
 	}
 
 	@Override
