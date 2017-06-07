@@ -44,6 +44,7 @@ class UnitStorage {
 
 	Map<Location, List<Unit>> getUnitsAt() {
 		return Multimaps.asMap(units.stream()
+			.filter(unit -> !unit.isStored())
 			.collect(ImmutableListMultimap.toImmutableListMultimap(Unit::getLocation, Function.identity())));
 	}
 
@@ -51,6 +52,7 @@ class UnitStorage {
 		Preconditions.checkNotNull(location);
 
 		return units.stream()
+			.filter(unit -> !unit.isStored())
 			.filter(unit -> unit.getLocation().equals(location))
 			.collect(ImmutableList.toImmutableList());
 	}
@@ -69,6 +71,7 @@ class UnitStorage {
 
 		return Multimaps.asMap(units.stream()
 			.filter(unit -> unit.getOwner().equals(player))
+			.filter(unit -> !unit.isStored())
 			.collect(ImmutableListMultimap.toImmutableListMultimap(Unit::getLocation, Function.identity())));
 	}
 
@@ -78,6 +81,7 @@ class UnitStorage {
 
 		return units.stream()
 			.filter(unit -> unit.getOwner().equals(player))
+			.filter(unit -> !unit.isStored())
 			.filter(unit -> unit.getLocation().equals(location))
 			.collect(ImmutableList.toImmutableList());
 	}
@@ -96,6 +100,7 @@ class UnitStorage {
 
 		return Multimaps.asMap(units.stream()
 			.filter(unit -> !unit.getOwner().equals(player))
+			.filter(unit -> !unit.isStored())
 			.collect(ImmutableListMultimap.toImmutableListMultimap(Unit::getLocation, Function.identity())));
 	}
 
@@ -105,6 +110,7 @@ class UnitStorage {
 
 		return units.stream()
 			.filter(unit -> !unit.getOwner().equals(player))
+			.filter(unit -> !unit.isStored())
 			.filter(unit -> unit.getLocation().equals(location))
 			.collect(ImmutableList.toImmutableList());
 	}
