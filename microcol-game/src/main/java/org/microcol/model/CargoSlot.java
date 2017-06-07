@@ -27,7 +27,9 @@ public class CargoSlot {
 
 	public void store(final Unit unit) {
 		Preconditions.checkNotNull(unit);
-		Preconditions.checkState(!cargo.isPresent(), "Cargo slot (%s) is already loaded with some unit (%s).", this, cargo.get());
+		if (cargo.isPresent()) { // TODO JKA Temporary fix - cargo.get() is problem
+			Preconditions.checkState(!cargo.isPresent(), "Cargo slot (%s) is already loaded with some unit (%s).", this, cargo.get());
+		}
 		Preconditions.checkState(hold.getOwner().getOwner().equals(unit.getOwner()), "Owners must be same (%s - %s).", hold.getOwner().getOwner(), unit.getOwner());
 
 		unit.store(this);
