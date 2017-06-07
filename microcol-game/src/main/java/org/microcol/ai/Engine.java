@@ -13,6 +13,7 @@ import org.microcol.model.ModelAdapter;
 import org.microcol.model.Path;
 import org.microcol.model.Player;
 import org.microcol.model.Unit;
+import org.microcol.model.UnitType;
 import org.microcol.model.event.TurnStartedEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -71,6 +72,16 @@ public class Engine {
 	}
 
 	void move(final Unit unit) {
+		if (unit.getType() == UnitType.COLONIST) {
+			unit.getOwner().getUnits().forEach(xxx -> {
+				if (xxx.getType() == UnitType.GALLEON) {
+					xxx.getHold().getSlots().get(0).store(unit);
+				}
+			});
+		}
+	}
+
+	void move2(final Unit unit) {
 		if (!running) {
 			return;
 		}

@@ -87,6 +87,14 @@ public class AIModelBuilder {
 				.addUnit(UnitType.COLONIST, "Player2", Location.of(6, 9));
 	}
 
+	void createMap01_1colonists() {
+		builder
+			.setMap("/maps/map-15x10.txt")
+			.addPlayer("Player1", true)
+				.addUnit(UnitType.GALLEON, "Player1", Location.of(4, 2))
+				.addUnit(UnitType.COLONIST, "Player1", Location.of(5, 2));
+	}
+
 	Model buildImpl() {
 		return builder.build();
 	}
@@ -99,10 +107,11 @@ public class AIModelBuilder {
 //		builder.createMedium();
 //		builder.createHuge();
 //		builder.createMap01_2ships();
-		builder.createMap01_5ships();
+//		builder.createMap01_5ships();
 //		builder.createMap02();
 //		builder.createMap03();
 //		builder.createMap01_2colonists();
+		builder.createMap01_1colonists();
 
 		return builder.buildImpl();
 	}
