@@ -97,48 +97,88 @@ public class MoveModeSupport {
 					/**
 					 * Pointing with mouse to unit which should move.
 					 */
-					moveLocations = Lists.newArrayList();
+					noMove();
 				} else {
-					// TODO JJ get(0) could return different ship that is really
-					// moved
-					final Unit movingUnit = gameController.getModel().getCurrentPlayer()
-							.getUnitsAt(viewState.getSelectedTile().get()).get(0);
-					final List<Unit> ships = gameController.getModel().getUnitsAt(target);
-					if (ships.isEmpty()) {
-						// TODO JJ step counter should be core function
-						moveLocations = movingUnit.getPath(target).orElse(Collections.emptyList());
-						moveMode = MoveMode.MOVE;
-					} else {
-						if (ships.get(0).getOwner().equals(movingUnit.getOwner())) {
-							/**
-							 * Move unit to another my units.
-							 */
-							moveLocations = movingUnit.getPath(target).orElse(Collections.emptyList());
-							moveMode = MoveMode.MOVE;
-						} else {
-							/**
-							 * User wants to fight.
-							 */
-							if (movingUnit.getType().canAttack()) {
-								moveLocations = Lists
-										.newArrayList(movingUnit.getPath(target, true).orElse(Collections.emptyList()));
-								moveLocations.add(target);
-								moveMode = MoveMode.FIGHT;
-							} else {
-								// TODO JJ change status bar, that user try to
-								// attack with unit that can't attack.
-								moveLocations = Collections.emptyList();
-								moveMode = MoveMode.MOVE;
-							}
-						}
-					}
+					processMove(target);
 				}
 			} else {
-				moveLocations = Collections.emptyList();
+				noMove();
 			}
 		} else {
-			moveLocations = Lists.newArrayList();
+			noMove();
 		}
+	}
+
+	private void processMove(final Location target) {
+		// TODO JJ get(0) could return different ship that is really
+		// moved
+		final Unit movingUnit = gameController.getModel().getCurrentPlayer()
+				.getUnitsAt(viewState.getSelectedTile().get()).get(0);
+		final List<Unit> ships = gameController.getModel().getUnitsAt(target);
+		if (ships.isEmpty()) {
+			// TODO JJ step counter should be core function
+			moveLocations = movingUnit.getPath(target).orElse(Collections.emptyList());
+			moveMode = MoveMode.MOVE;
+		} else {
+			if (isSameOwner(movingUnit, ships)) {
+				if (isPossibleToLoad(null, ships)) {
+					/**
+					 * Try to load unit
+					 */
+					//FIXME JJ locations should be returned by API
+					moveLocations = movingUnit.getPath(target).orElse(Lists.newArrayList(Location.of(3, 3)));
+					moveMode = MoveMode.ANCHOR;
+				} else {
+					/**
+					 * Move unit to another my units.
+					 */
+					moveLocations = movingUnit.getPath(target).orElse(Collections.emptyList());
+					moveMode = MoveMode.MOVE;
+				}
+			} else {
+				/**
+				 * User wants to fight.
+				 */
+				if (movingUnit.getType().canAttack()) {
+					moveLocations = Lists
+							.newArrayList(movingUnit.getPath(target, true).orElse(Collections.emptyList()));
+					moveLocations.add(target);
+					moveMode = MoveMode.FIGHT;
+				} else {
+					// TODO JJ change status bar, that user try to
+					// attack with unit that can't attack.
+					noMove();
+				}
+			}
+		}
+	}
+
+	private boolean isSameOwner(final Unit unit, final List<Unit> units) {
+		return units.get(0).getOwner().equals(unit.getOwner());
+	}
+
+	/**
+	 * 
+	 * @param unit
+	 * @param units
+	 * @return
+	 */
+	private boolean isPossibleToLoad(final Unit unit, final List<Unit> units) {
+		for (final Unit target : units) {
+			if (isAtLeastOneCargoSlotEmpty(target)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private boolean isAtLeastOneCargoSlotEmpty(final Unit unit) {
+		return unit.getHold().getSlots().stream().filter(cargoSlot -> cargoSlot.isEmpty()).findFirst().isPresent();
+	}
+
+	private void noMove() {
+		moveLocations = Lists.newArrayList();
+		moveMode = MoveMode.MOVE;
 	}
 
 	public List<Location> getMoveLocations() {

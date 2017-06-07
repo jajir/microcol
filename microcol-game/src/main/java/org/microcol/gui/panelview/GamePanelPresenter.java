@@ -311,6 +311,10 @@ public final class GamePanelPresenter implements Localized {
 				gameController.performFight(movingUnit, targetUnit);
 				return;
 			}
+		} else if (isLoading(movingUnit, moveToLocation)) {
+			Unit toLoad = gameController.getModel().getUnitsAt(moveToLocation).get(0);
+			toLoad.getHold().getSlots().get(0).store(movingUnit);
+			//FIXME JJ nejak se nalodit
 		} else {
 			// user will move
 			if (movingUnit.getPath(moveToLocation).isPresent()) {
@@ -324,6 +328,11 @@ public final class GamePanelPresenter implements Localized {
 			}
 		}
 		Preconditions.checkArgument(true, "code should not be here.");
+	}
+
+	private boolean isLoading(final Unit movingShip, final Location moveToLocation) {
+		// FIXME JJ it's disgusting hack
+		return !movingShip.equals(moveToLocation);
 	}
 
 	private boolean isFight(final Unit movingShip, final Location moveToLocation) {
