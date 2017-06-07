@@ -7,7 +7,6 @@ import org.microcol.model.Unit;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
@@ -51,8 +50,7 @@ public class DialogFigth extends AbstractDialog {
 		root.setHgap(10);
 		root.setVgap(10);
 		root.setPadding(new Insets(25, 25, 25, 25));
-		Scene scene = new Scene(root);
-		getDialog().setScene(scene);
+		init(root);
 
 		// Y=0
 		final Label label = new Label(text.get("dialogFight.title"));

@@ -6,10 +6,12 @@ import org.microcol.gui.util.AbstractDialog;
 import org.microcol.gui.util.Text;
 import org.microcol.gui.util.ViewUtil;
 
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.util.StringConverter;
 
@@ -33,9 +35,8 @@ public class PreferencesVolume extends AbstractDialog {
 		getDialog().setTitle(text.get("preferencesVolume.caption"));
 
 		VBox root = new VBox();
-		Scene scene = new Scene(root);
-		getDialog().setScene(scene);
-
+		init(root);
+		
 		final Label label = new Label(text.get("preferencesVolume.caption"));
 
 		Slider slider = new Slider();
@@ -67,13 +68,18 @@ public class PreferencesVolume extends AbstractDialog {
 			volumeChangeController.fireEvent(new VolumeChangeEvent(newValue.intValue()));
 		});
 
+
 		final Button buttonOk = new Button(text.get("dialog.ok"));
 		buttonOk.setOnAction(e -> {
 			getDialog().close();
 		});
 		buttonOk.requestFocus();
-
-		root.getChildren().addAll(label, slider, buttonOk);
+		buttonOk.setId("buttonOk");
+		final Pane butttonOkPane = new Pane(buttonOk);
+		HBox.setHgrow(butttonOkPane, Priority.ALWAYS);
+		butttonOkPane.setId("buttonPane");
+		
+		root.getChildren().addAll(label, slider, butttonOkPane);
 
 		getDialog().showAndWait();
 	}

@@ -3,7 +3,6 @@ package org.microcol.gui;
 import org.microcol.gui.util.AbstractDialog;
 import org.microcol.gui.util.ViewUtil;
 
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
@@ -21,8 +20,7 @@ public class DialogWarning extends AbstractDialog {
 		getDialog().setTitle("Tato jednotka neumi bojovat");
 
 		VBox root = new VBox();
-		Scene scene = new Scene(root);
-		getDialog().setScene(scene);
+		init(root);
 
 		final Label label = new Label("Tato jednotka neumi bojovat");
 

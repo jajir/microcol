@@ -2,6 +2,8 @@ package org.microcol.gui.util;
 
 import com.google.common.base.Preconditions;
 
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -15,13 +17,15 @@ public class AbstractDialog {
 
 	private final Stage dialog;
 
+	private Scene scene;
+
 	public AbstractDialog(final ViewUtil viewUtil) {
 		this.viewUtil = Preconditions.checkNotNull(viewUtil);
 		dialog = new Stage(StageStyle.UNDECORATED);
-		init();
+		initInternal();
 	}
 
-	private final void init() {
+	private final void initInternal() {
 		dialog.initModality(Modality.WINDOW_MODAL);
 		dialog.initOwner(viewUtil.getPrimaryStage());
 
@@ -38,12 +42,22 @@ public class AbstractDialog {
 
 	}
 
+	public final void init(final Parent root) {
+		scene = new Scene(root);
+		scene.getStylesheets().add("gui/dialogs.css");
+		dialog.setScene(scene);
+	}
+
 	public ViewUtil getViewUtil() {
 		return viewUtil;
 	}
 
 	public Stage getDialog() {
 		return dialog;
+	}
+
+	public Scene getScene() {
+		return scene;
 	}
 
 }

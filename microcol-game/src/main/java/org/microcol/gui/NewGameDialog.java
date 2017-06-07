@@ -11,7 +11,6 @@ import org.microcol.gui.util.ViewUtil;
 import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -36,9 +35,7 @@ public class NewGameDialog extends AbstractDialog {
 		root.setHgap(10);
 		root.setVgap(10);
 		root.setPadding(new Insets(25, 25, 25, 25));
-
-		Scene scene = new Scene(root);
-		getDialog().setScene(scene);
+		init(root);
 
 		// Y=0
 		final Label labelSelectMap = new Label(text.get("newGameDialog.selectMap"));

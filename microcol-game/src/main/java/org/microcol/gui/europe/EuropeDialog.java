@@ -9,7 +9,6 @@ import org.microcol.gui.util.ViewUtil;
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
 
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
@@ -53,11 +52,10 @@ public class EuropeDialog extends AbstractDialog {
 
 		final PanelGoods goods = new PanelGoods(imageProvider);
 
-		VBox mainPanel = new VBox();
+		final VBox mainPanel = new VBox();
 		mainPanel.getChildren().addAll(label, panelMiddle, goods);
-		Scene scene = new Scene(mainPanel);
-		scene.getStylesheets().add("gui/MicroCol.css");
-		getDialog().setScene(scene);
+		init(mainPanel);
+		getScene().getStylesheets().add("gui/MicroCol.css");
 		getDialog().showAndWait();
 	}
 

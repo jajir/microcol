@@ -6,7 +6,6 @@ import org.microcol.gui.util.AbstractDialog;
 import org.microcol.gui.util.Text;
 import org.microcol.gui.util.ViewUtil;
 
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
@@ -33,9 +32,8 @@ public class PreferencesAnimationSpeed extends AbstractDialog {
 		getDialog().setTitle(text.get("preferencesAnimationSpeed.caption"));
 
 		VBox root = new VBox();
-		Scene scene = new Scene(root);
-		getDialog().setScene(scene);
-
+		init(root);
+		
 		final Label label = new Label(text.get("preferencesAnimationSpeed.caption"));
 
 		Slider slider = new Slider();

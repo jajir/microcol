@@ -1,0 +1,19 @@
+/*
+ * File contains definition of dialogs.
+ */
+
+.root{
+	-fx-padding: 30 30 15 30;
+	-fx-background-color: white;
+}
+
+#buttonPane{
+	-fx-background-color: yellow;
+	-fx-halignment: right ;
+}
+
+#buttonOk{
+	-fx-background-color: red;
+	-fx-alignment: center-right ;
+	
+}

@@ -39,13 +39,13 @@ public class DialogTester extends Application {
 			imageProvider = new ImageProvider();
 			text = new Text(Language.cz.getLocale());
 
-			// startPreferencesVolume();
+			startPreferencesVolume();
 			// startPreferencesAnimationSpeed();
 			// dialogWarning();
 			// testDialogFight();
 			// startNewGameDialog();
 			// startAboutDialog();
-			dialogEurope();
+			// dialogEurope();
 
 			// dialogSave();
 			// dialogLoad();

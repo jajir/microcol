@@ -11,7 +11,6 @@ import org.microcol.gui.util.ViewUtil;
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
 
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
@@ -57,12 +56,11 @@ public class ColonyDialog extends AbstractDialog {
 			getDialog().close();
 		});
 		buttonOk.requestFocus();
-		VBox mainPanel = new VBox();
+		final VBox mainPanel = new VBox();
 		mainPanel.getChildren().addAll(label,colonyLayout, colonyStructures, pierShips,goods,buttonOk);
+		init(mainPanel);
+		getScene().getStylesheets().add("gui/MicroCol.css");
 		
-		Scene scene = new Scene(mainPanel);
-		scene.getStylesheets().add("gui/MicroCol.css");
-		getDialog().setScene(scene);
 		getDialog().showAndWait();
 	}
 
