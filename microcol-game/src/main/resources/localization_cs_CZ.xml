@@ -42,7 +42,7 @@
 	<entry key="rightPanel.description">Zde se zobrazí informace o vybraném panelu případně o jednotkách </entry>
 	<entry key="unitsPanel.description">Zde se zobrazí informace o vybraném panelu případně o jednotkách </entry>
 	<entry key="unitsPanel.units">Jednotky:</entry>
-	<entry key="unitsPanel.availableMoved">Možných tahů:</entry>
+	<entry key="unitsPanel.availableMoves">Tahů:</entry>
 	<entry key="unitsPanel.owner">Vlastník:</entry>
 	<entry key="unitsPanel.currentUser">Táhne:</entry>
 	<entry key="nextTurnButton">Další tah</entry>

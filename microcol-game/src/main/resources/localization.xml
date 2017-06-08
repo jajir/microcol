@@ -43,7 +43,7 @@
 	<entry key="rightPanel.description">Here will be information about selected tile and units on it</entry>
 	<entry key="unitsPanel.description">Here will be information about selected tile and units on it</entry>
 	<entry key="unitsPanel.units">Units:</entry>
-	<entry key="unitsPanel.availableMoved">Available moves:</entry>
+	<entry key="unitsPanel.availableMoves">Moves:</entry>
 	<entry key="unitsPanel.owner">Owner:</entry>
 	<entry key="unitsPanel.currentUser">On move:</entry>
 	<entry key="nextTurnButton">Next turn</entry>

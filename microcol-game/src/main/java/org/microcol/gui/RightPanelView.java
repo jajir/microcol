@@ -76,7 +76,8 @@ public class RightPanelView implements RightPanelPresenter.Display, Localized {
 		RowConstraints scrollPaneRow = new RowConstraints();
 		scrollPaneRow.setVgrow(Priority.ALWAYS);
 		scrollPaneRow.fillHeightProperty().set(true);
-		gridPane.getRowConstraints().addAll(new RowConstraints(), new RowConstraints(), new RowConstraints(), scrollPaneRow);
+		gridPane.getRowConstraints().addAll(new RowConstraints(), new RowConstraints(), new RowConstraints(),
+				scrollPaneRow);
 		gridPane.add(scrollPaneGamePanel, 0, 3, 2, 1);
 
 		// Y=4
@@ -102,7 +103,11 @@ public class RightPanelView implements RightPanelPresenter.Display, Localized {
 			unitsLabel.setText("");
 		} else {
 			unitsLabel.setText(getText().get("unitsPanel.units"));
-			unitsPanel.setUnits(event.getModel().getUnitsAt(event.getLocation()));
+			/**
+			 * Current player is not same as human player. For purposes of this
+			 * method it will be sufficient.
+			 */
+			unitsPanel.setUnits(event.getModel().getCurrentPlayer(), event.getModel().getUnitsAt(event.getLocation()));
 		}
 	}
 
