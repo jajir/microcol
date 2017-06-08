@@ -28,6 +28,8 @@ public class DialogTester extends Application {
 
 	private static Text text;
 
+	private static LocalizationHelper localizationHelper;
+
 	public static void main(String[] args) {
 		launch(args);
 	}
@@ -38,18 +40,18 @@ public class DialogTester extends Application {
 			viewUtil = new ViewUtil(primaryStage);
 			imageProvider = new ImageProvider();
 			text = new Text(Language.cz.getLocale());
+			localizationHelper = new LocalizationHelper(text);
 
-			startPreferencesVolume();
+			// startPreferencesVolume();
 			// startPreferencesAnimationSpeed();
 			// dialogWarning();
 			// testDialogFight();
 			// startNewGameDialog();
 			// startAboutDialog();
-			// dialogEurope();
+			dialogEurope();
 
 			// dialogSave();
 			// dialogLoad();
-			// europeDialog();
 			// dialogColony();
 			// primaryStage.show();
 		});
@@ -115,7 +117,7 @@ public class DialogTester extends Application {
 	public final static void dialogEurope() {
 		final GameController gameController = EasyMock.createMock(GameController.class);
 		EasyMock.replay(gameController);
-		new EuropeDialog(viewUtil, text, imageProvider, gameController);
+		new EuropeDialog(viewUtil, text, imageProvider, gameController, localizationHelper);
 	}
 
 	public final static void dialogColony() {

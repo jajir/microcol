@@ -1,6 +1,7 @@
 package org.microcol.gui.europe;
 
 import org.microcol.gui.ImageProvider;
+import org.microcol.gui.LocalizationHelper;
 import org.microcol.gui.event.model.GameController;
 import org.microcol.gui.util.AbstractDialog;
 import org.microcol.gui.util.Text;
@@ -21,7 +22,7 @@ public class EuropeDialog extends AbstractDialog {
 
 	@Inject
 	public EuropeDialog(final ViewUtil viewUtil, final Text text, final ImageProvider imageProvider,
-			final GameController gameController) {
+			final GameController gameController, final LocalizationHelper localizationHelper) {
 		super(viewUtil);
 		Preconditions.checkNotNull(imageProvider);
 		Preconditions.checkNotNull(gameController);
@@ -35,7 +36,7 @@ public class EuropeDialog extends AbstractDialog {
 		final VBox panelSips = new VBox();
 		panelSips.getChildren().addAll(outgoingShips, incomingShips, pierShips);
 
-		final PanelRecruits panelRecruits = new PanelRecruits("Recruits");
+		final PanelRecruits panelRecruits = new PanelRecruits("Recruits", imageProvider, localizationHelper);
 
 		final Button recruiteButton = new Button("Recruite");
 		final Button buyButton = new Button("Buy");

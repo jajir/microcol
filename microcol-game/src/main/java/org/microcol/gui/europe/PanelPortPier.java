@@ -43,6 +43,7 @@ public class PanelPortPier extends TitledPanel {
 		super("pristav");
 		this.imageProvider = Preconditions.checkNotNull(imageProvider);
 
+		//FIXME JJ get ships from API
 		final List<Unit> shipsToEurope = new ArrayList<>();
 		Unit ship21 = EasyMock.createMock(Unit.class);
 		EasyMock.replay(ship21);

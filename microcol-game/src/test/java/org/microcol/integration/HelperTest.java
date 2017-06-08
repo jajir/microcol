@@ -4,6 +4,7 @@ import java.awt.Dimension;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.Toolkit;
+import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 
 import org.junit.Test;
@@ -30,10 +31,10 @@ public class HelperTest {
 	/**
 	 * test could help with manual testing of default setting.
 	 * 
-	 * @throws Exception
+	 * @throws BackingStoreException
 	 */
 	@Test
-	public void test_clear_preferences() throws Exception {
+	public void test_clear_preferences() throws BackingStoreException {
 		Preferences.userNodeForPackage(org.microcol.gui.GamePreferences.class).clear();
 	}
 

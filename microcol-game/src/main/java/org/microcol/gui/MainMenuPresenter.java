@@ -78,7 +78,7 @@ public class MainMenuPresenter {
 			final MoveUnitController moveUnitController, final CenterViewController centerViewController,
 			final TurnStartedController turnStartedController, final ExitGameController exitGameController,
 			final GameController gameController, final PersistingDialog persistingDialog,
-			final ImageProvider imageProvider) {
+			final ImageProvider imageProvider, final LocalizationHelper localizationHelper) {
 		this.display = Preconditions.checkNotNull(display);
 		display.getMenuItemNewGame().setOnAction(actionEvent -> {
 			gameController.startNewGame();
@@ -101,8 +101,8 @@ public class MainMenuPresenter {
 				volumeChangeController, gamePreferences.getVolume()));
 		display.getMenuItemAnimationSpeed().setOnAction(event -> new PreferencesAnimationSpeed(text, viewUtil,
 				animationSpeedChangeController, gamePreferences.getAnimationSpeed()));
-		display.getMenuItemEurope()
-				.setOnAction(event -> new EuropeDialog(viewUtil, text, imageProvider, gameController));
+		display.getMenuItemEurope().setOnAction(
+				event -> new EuropeDialog(viewUtil, text, imageProvider, gameController, localizationHelper));
 		display.getMenuItemShowGrid().setOnAction(ectionEvent -> showGridController
 				.fireEvent(new ShowGridEvent(display.getMenuItemShowGrid().isSelected())));
 		display.getMenuItemMove().setOnAction(ectionEvent -> {
