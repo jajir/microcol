@@ -149,6 +149,27 @@ public class Unit {
 		}
 	}
 
+	public List<Unit> getXXXUnits() {
+		checkNotStored();
+
+		final ImmutableList.Builder<Unit> builder = ImmutableList.builder();
+
+		// TODO JKA Predelat
+		location.getNeighbors().forEach(neighbor -> {
+			owner.getUnitsAt(neighbor).forEach(unit -> {
+				if (unit != this) {
+					unit.getHold().getSlots().forEach(slot -> {
+						if (slot.isEmpty()) {
+							builder.add(unit);
+						}
+					});
+				}
+			});
+		});
+
+		return builder.build();
+	}
+
 	public Optional<List<Location>> getPath(final Location destination) {
 		checkNotStored();
 
