@@ -22,7 +22,6 @@ public class StatusBarView implements StatusBarPresenter.Display {
 		pane.setId("description");
 		labelEra = new Label();
 		labelEra.setId("labelEra");
-		// XXX JJ Is it possible to move it to css?
 		HBox.setHgrow(pane, Priority.ALWAYS);
 		statusBar = new HBox();
 		statusBar.getChildren().addAll(pane, labelEra);

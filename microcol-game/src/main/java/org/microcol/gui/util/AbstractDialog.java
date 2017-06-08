@@ -18,6 +18,9 @@ public class AbstractDialog {
 	private final Stage dialog;
 
 	private Scene scene;
+	
+	
+	//TODO JJ main Vbox should be handled here
 
 	public AbstractDialog(final ViewUtil viewUtil) {
 		this.viewUtil = Preconditions.checkNotNull(viewUtil);

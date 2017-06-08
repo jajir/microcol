@@ -7,13 +7,11 @@
 	-fx-background-color: white;
 }
 
-#buttonPane{
-	-fx-background-color: yellow;
-	-fx-halignment: right ;
+#caption{
+	-fx-padding: 0 0 30 0;
 }
 
-#buttonOk{
-	-fx-background-color: red;
-	-fx-alignment: center-right ;
-	
+#buttonPane{
+	-fx-padding: 40 0 0 0;
 }
+
