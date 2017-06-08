@@ -201,6 +201,10 @@ public class Model {
 		listenerManager.fireUnitAttacked(this, attacker, defender, destroyed);
 	}
 
+	void fireUnitStored(final CargoSlot slot, final Unit unit) {
+		listenerManager.fireUnitStored(this, slot, unit);
+	}
+
 	void fireGameFinished() {
 		listenerManager.fireGameFinished(this);
 	}

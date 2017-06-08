@@ -10,6 +10,7 @@ import org.microcol.model.event.RoundStartedEvent;
 import org.microcol.model.event.TurnStartedEvent;
 import org.microcol.model.event.UnitAttackedEvent;
 import org.microcol.model.event.UnitMovedEvent;
+import org.microcol.model.event.UnitStoredEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -81,6 +82,14 @@ class ListenerManager {
 		logger.info("Unit attacked: {}.", event);
 
 		listeners.forEach(listener -> listener.unitAttacked(event));
+	}
+
+	void fireUnitStored(final Model model, final CargoSlot slot, final Unit unit) {
+		final UnitStoredEvent event = new UnitStoredEvent(model, slot, unit);
+
+		logger.info("Unit stored: {}.", event);
+
+		listeners.forEach(listener -> listener.unitStored(event));
 	}
 
 	void fireGameFinished(final Model model) {

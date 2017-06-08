@@ -234,6 +234,8 @@ public class Unit {
 		// TODO JKA prazdny naklad?
 
 		this.slot = slot;
+
+		model.fireUnitStored(slot, this); // TODO JKA Move to CargoSlot?
 	}
 
 	void unload(final Location location) {
