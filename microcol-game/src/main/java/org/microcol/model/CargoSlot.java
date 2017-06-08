@@ -32,9 +32,8 @@ public class CargoSlot {
 		}
 		Preconditions.checkState(hold.getOwner().getOwner().equals(unit.getOwner()), "Owners must be same (%s - %s).", hold.getOwner().getOwner(), unit.getOwner());
 
-		unit.store(this);
-
 		cargo = Optional.of(unit);
+		unit.store(this);
 	}
 
 	public Unit unload(final Location location) {
