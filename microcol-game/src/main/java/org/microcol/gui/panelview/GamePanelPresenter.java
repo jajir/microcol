@@ -314,7 +314,10 @@ public final class GamePanelPresenter implements Localized {
 		} else if (isLoading(movingUnit, moveToLocation)) {
 			Unit toLoad = gameController.getModel().getUnitsAt(moveToLocation).get(0);
 			toLoad.getHold().getSlots().get(0).store(movingUnit);
-			//FIXME JJ nejak se nalodit
+			//TODO JJ following code is repeated multiple times
+			viewState.setSelectedTile(Optional.of(moveToLocation));
+			display.setCursorNormal();
+			return;
 		} else {
 			// user will move
 			if (movingUnit.getPath(moveToLocation).isPresent()) {
