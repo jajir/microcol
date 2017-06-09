@@ -9,7 +9,7 @@ import javax.json.stream.JsonParser;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 
-public class Player {
+public final class Player {
 	private Model model;
 
 	private final String name;

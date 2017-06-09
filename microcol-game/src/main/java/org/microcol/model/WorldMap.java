@@ -13,7 +13,7 @@ import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableMap;
 
-public class WorldMap {
+public final class WorldMap {
 	private final String fileName;
 	private final int maxX;
 	private final int maxY;

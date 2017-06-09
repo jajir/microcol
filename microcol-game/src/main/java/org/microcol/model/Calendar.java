@@ -6,7 +6,7 @@ import javax.json.stream.JsonParser;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 
-public class Calendar {
+public final class Calendar {
 	private final int startYear;
 	private final int endYear;
 

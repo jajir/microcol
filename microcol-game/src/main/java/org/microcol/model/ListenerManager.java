@@ -84,8 +84,8 @@ class ListenerManager {
 		listeners.forEach(listener -> listener.unitAttacked(event));
 	}
 
-	void fireUnitStored(final Model model, final CargoSlot slot, final Unit unit) {
-		final UnitStoredEvent event = new UnitStoredEvent(model, slot, unit);
+	void fireUnitStored(final Model model, final Unit unit, final CargoSlot slot) {
+		final UnitStoredEvent event = new UnitStoredEvent(model, unit, slot);
 
 		logger.info("Unit stored: {}.", event);
 

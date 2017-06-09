@@ -8,7 +8,7 @@ import javax.json.stream.JsonParser;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 
-public class CargoSlot {
+public final class CargoSlot {
 	private final CargoHold hold;
 	private Optional<Unit> cargo;
 

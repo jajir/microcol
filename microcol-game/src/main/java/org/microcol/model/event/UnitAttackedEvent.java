@@ -6,7 +6,7 @@ import org.microcol.model.Unit;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 
-public class UnitAttackedEvent extends ModelEvent {
+public final class UnitAttackedEvent extends ModelEvent {
 	private final Unit attacker;
 	private final Unit defender;
 	private final Unit destroyed;

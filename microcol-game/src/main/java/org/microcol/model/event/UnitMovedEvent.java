@@ -8,7 +8,7 @@ import org.microcol.model.Unit;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 
-public class UnitMovedEvent extends ModelEvent {
+public final class UnitMovedEvent extends ModelEvent {
 	private final Unit unit;
 	private final Location start;
 	private final Path path;

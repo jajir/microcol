@@ -13,7 +13,7 @@ import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 
-public class Unit {
+public final class Unit {
 	private Model model;
 
 	private final UnitType type;
@@ -265,7 +265,7 @@ public class Unit {
 
 		this.slot = slot;
 
-		model.fireUnitStored(slot, this); // TODO JKA Move to CargoSlot?
+		model.fireUnitStored(this, slot); // TODO JKA Move to CargoSlot?
 	}
 
 	void unload(final Location location) {

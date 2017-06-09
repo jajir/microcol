@@ -8,7 +8,7 @@ import org.microcol.model.Model;
 import com.google.common.base.MoreObjects;
 import com.google.common.collect.ImmutableList;
 
-public class DebugRequestedEvent extends ModelEvent {
+public final class DebugRequestedEvent extends ModelEvent {
 	private final List<Location> locations;
 
 	public DebugRequestedEvent(final Model model, final List<Location> locations) {

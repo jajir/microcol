@@ -12,7 +12,7 @@ import javax.json.stream.JsonParser;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 
-public class Model {
+public final class Model {
 	private final ListenerManager listenerManager;
 	private final Calendar calendar;
 	private final WorldMap map;
@@ -201,8 +201,8 @@ public class Model {
 		listenerManager.fireUnitAttacked(this, attacker, defender, destroyed);
 	}
 
-	void fireUnitStored(final CargoSlot slot, final Unit unit) {
-		listenerManager.fireUnitStored(this, slot, unit);
+	void fireUnitStored(final Unit unit, final CargoSlot slot) {
+		listenerManager.fireUnitStored(this, unit, slot);
 	}
 
 	void fireGameFinished() {

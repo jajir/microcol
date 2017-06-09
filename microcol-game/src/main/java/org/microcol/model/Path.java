@@ -7,7 +7,7 @@ import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 
-public class Path {
+public final class Path {
 	private final ImmutableList<Location> locations;
 
 	private Path(final List<Location> locations) {

@@ -7,30 +7,30 @@ import org.microcol.model.Unit;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 
-public class UnitStoredEvent extends ModelEvent {
-	private final CargoSlot slot;
+public final class UnitStoredEvent extends ModelEvent {
 	private final Unit unit;
+	private final CargoSlot slot;
 
-	public UnitStoredEvent(final Model model, final CargoSlot slot, final Unit unit) {
+	public UnitStoredEvent(final Model model, final Unit unit, final CargoSlot slot) {
 		super(model);
 
-		this.slot = Preconditions.checkNotNull(slot);
 		this.unit = Preconditions.checkNotNull(unit);
-	}
-
-	public CargoSlot getSlot() {
-		return slot;
+		this.slot = Preconditions.checkNotNull(slot);
 	}
 
 	public Unit getUnit() {
 		return unit;
 	}
 
+	public CargoSlot getSlot() {
+		return slot;
+	}
+
 	@Override
 	public String toString() {
 		return MoreObjects.toStringHelper(this)
-			.add("slot", slot)
 			.add("unit", unit)
+			.add("slot", slot)
 			.toString();
 	}
 }
