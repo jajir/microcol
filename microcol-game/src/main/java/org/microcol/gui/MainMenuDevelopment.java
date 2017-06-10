@@ -35,11 +35,11 @@ public class MainMenuDevelopment {
 		checkBoxStopAi.selectedProperty().addListener((on, oldValue, newValue) -> {
 			boolean isSelected = newValue;
 			if (isSelected) {
-				new Thread(() -> gameController.getAiEngine().resume()).start();
+				new Thread(() -> gameController.getAiEngine().suspend()).start();
 				logger.debug("AI was stopped.");
 			} else {
-				new Thread(() -> gameController.getAiEngine().suspend()).start();
 				logger.debug("AI was started.");
+				new Thread(() -> gameController.getAiEngine().resume()).start();
 			}
 		});
 		developmentMenu.getItems().add(checkBoxStopAi);
