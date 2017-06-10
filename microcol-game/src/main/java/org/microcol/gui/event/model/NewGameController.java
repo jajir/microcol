@@ -8,4 +8,11 @@ import org.microcol.model.event.GameStartedEvent;
  */
 public class NewGameController extends AbstractEventController<GameStartedEvent> {
 
+	/**
+	 * Constructor force controller to fire events in synchronous way.
+	 */
+	public NewGameController() {
+		super(false);
+	}
+
 }

@@ -25,6 +25,16 @@ public abstract class AbstractEventController<E> {
 	 */
 	private final List<Listener<E>> listeners = new ArrayList<>();
 
+	private final boolean fireEventsAsynchronously;
+
+	public AbstractEventController() {
+		this(true);
+	}
+
+	public AbstractEventController(final boolean fireEventsAsynchronously) {
+		this.fireEventsAsynchronously = fireEventsAsynchronously;
+	}
+
 	/**
 	 * Method add listener.
 	 * 
@@ -62,13 +72,17 @@ public abstract class AbstractEventController<E> {
 		Preconditions.checkNotNull(event);
 		logger.debug("Event " + event + " was triggered.");
 		listeners.stream().forEach(listener -> {
-			/**
-			 * Is it correct to call events in Platform.runLater even when
-			 * doesn't change UI? Probably yes. Lot of events could flooding
-			 * queue and make UI unresponsive. In case of problems with
-			 * 'runLatert' than should be used just in case of UI event
-			 */
-			Platform.runLater(() -> listener.onEvent(event));
+			if (fireEventsAsynchronously) {
+				/**
+				 * Is it correct to call events in Platform.runLater even when
+				 * doesn't change UI? Probably yes. Lot of events could flooding
+				 * queue and make UI unresponsive. In case of problems with
+				 * 'runLatert' than should be used just in case of UI event
+				 */
+				Platform.runLater(() -> listener.onEvent(event));
+			} else {
+				listener.onEvent(event);
+			}
 		});
 	}
 

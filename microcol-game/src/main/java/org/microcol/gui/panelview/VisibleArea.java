@@ -48,8 +48,8 @@ public class VisibleArea {
 
 	@Override
 	public String toString() {
-		return MoreObjects.toStringHelper(VisibleArea.class).add("topLeft", topLeft).add("width", canvasWidth)
-				.add("height", canvasHeight).toString();
+		return MoreObjects.toStringHelper(VisibleArea.class).add("topLeft", topLeft).add("canvasWidth", canvasWidth)
+				.add("canvasHeight", canvasHeight).add("maxMapSize", maxMapSize).toString();
 	}
 
 	public void setMaxMapSize(final WorldMap worldMap) {
