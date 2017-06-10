@@ -12,7 +12,6 @@ import org.microcol.gui.PathPlanning;
 import org.microcol.gui.Point;
 import org.microcol.gui.StepCounter;
 import org.microcol.gui.event.model.GameController;
-import org.microcol.gui.event.model.NextTurnController;
 import org.microcol.gui.panelview.MoveModeSupport.MoveMode;
 import org.microcol.gui.util.FpsCounter;
 import org.microcol.gui.util.Text;
@@ -21,6 +20,8 @@ import org.microcol.model.Location;
 import org.microcol.model.Model;
 import org.microcol.model.Terrain;
 import org.microcol.model.Unit;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
@@ -38,6 +39,8 @@ import javafx.scene.paint.Color;
  * View for main game panel.
  */
 public class GamePanelView implements GamePanelPresenter.Display {
+
+	private final Logger logger = LoggerFactory.getLogger(GamePanelView.class);
 
 	public static final int TILE_WIDTH_IN_PX = 35;
 
@@ -82,11 +85,10 @@ public class GamePanelView implements GamePanelPresenter.Display {
 	private final VisibleArea visibleArea;
 
 	@Inject
-	public GamePanelView(final GameController gameController, final NextTurnController nextTurnController,
-			final PathPlanning pathPlanning, final ImageProvider imageProvider, final ViewState viewState,
-			final MoveModeSupport moveModeSupport, final Text text, final ViewUtil viewUtil,
-			final LocalizationHelper localizationHelper, final PaintService paintService,
-			final GamePreferences gamePreferences) {
+	public GamePanelView(final GameController gameController, final PathPlanning pathPlanning,
+			final ImageProvider imageProvider, final ViewState viewState, final MoveModeSupport moveModeSupport,
+			final Text text, final ViewUtil viewUtil, final LocalizationHelper localizationHelper,
+			final PaintService paintService, final GamePreferences gamePreferences) {
 		this.gameController = Preconditions.checkNotNull(gameController);
 		this.pathPlanning = Preconditions.checkNotNull(pathPlanning);
 		this.imageProvider = Preconditions.checkNotNull(imageProvider);
@@ -102,13 +104,10 @@ public class GamePanelView implements GamePanelPresenter.Display {
 		gotoModeCursor = new ImageCursor(imageProvider.getImage(ImageProvider.IMG_CURSOR_GOTO), 1, 1);
 		// excludePainting = new ExcludePainting();
 		animationManager = new AnimationManager();
-		final GamePanelView map = this;
 		visibleArea = new VisibleArea();
 
 		// TODO JJ specify canvas size
 		canvas = new Canvas();
-
-		nextTurnController.addListener(w -> map.paint());
 
 		fpsCounter = new FpsCounter();
 		fpsCounter.start();
@@ -156,7 +155,14 @@ public class GamePanelView implements GamePanelPresenter.Display {
 
 	@Override
 	public void planScrollingAnimationToPoint(final Point targetPoint) {
-		screenScrolling = Optional.of(new ScreenScrolling(pathPlanning, visibleArea.getTopLeft(), targetPoint));
+		/**
+		 * Following if is a hack. Canvas width and height are set after game
+		 * start. When game starts and scroll request is created than game scroll
+		 * map outside of screen. Following hack solve it. But it's not correct.
+		 */
+		if (visibleArea.getCanvasHeight() != 0) {
+			screenScrolling = Optional.of(new ScreenScrolling(pathPlanning, visibleArea.getTopLeft(), targetPoint));
+		}
 	}
 
 	@Override
@@ -168,6 +174,7 @@ public class GamePanelView implements GamePanelPresenter.Display {
 	 * It's called to redraw whole game. It should be called each game tick.
 	 */
 	private void paint() {
+		logger.debug("painting: " + visibleArea);
 		paint(canvas.getGraphicsContext2D());
 	}
 

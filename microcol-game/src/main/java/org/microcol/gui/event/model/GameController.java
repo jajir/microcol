@@ -107,7 +107,7 @@ public class GameController implements Localized {
 
 	Model buildComplexModel() {
 		ModelBuilder builder = new ModelBuilder();
-		builder.setCalendar(1570, 1800).setMap("/maps/test-map-2islands-15x10.txt").addPlayer("Player1", false)
+		builder.setCalendar(1570, 1800).setMap("/maps/test-map-2islands-15x10.txt").addPlayer("Player1", true)
 				.addUnit(UnitType.GALLEON, "Player1", Location.of(4, 2))
 				.addUnit(UnitType.FRIGATE, "Player1", Location.of(3, 3))
 				.addUnit(UnitType.COLONIST, "Player1", Location.of(4, 3))
