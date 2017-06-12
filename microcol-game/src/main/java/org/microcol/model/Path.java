@@ -27,6 +27,14 @@ public final class Path {
 		}
 	}
 
+	public List<Location> getLocations() {
+		return locations;
+	}
+
+	public Location getStart() {
+		return locations.get(0);
+	}
+
 	public boolean contains(final Location location) {
 		Preconditions.checkNotNull(location);
 
@@ -38,14 +46,6 @@ public final class Path {
 		Preconditions.checkArgument(!locations.contains(null), "Locations (%s) contain null element.", locations);
 
 		return locations.stream().anyMatch(location -> this.locations.contains(location));
-	}
-
-	public List<Location> getLocations() {
-		return locations;
-	}
-
-	public Location getStart() {
-		return locations.get(0);
 	}
 
 	@Override

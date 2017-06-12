@@ -109,6 +109,22 @@ public class AIModelBuilder {
 				.addUnit(UnitType.COLONIST, "Player2", Location.of(6, 9));
 	}
 
+	void createMapAfrica() {
+		builder
+			.setMap("/maps/01-africa-220x200.txt")
+			.addPlayer("Player1", true)
+				.addUnit(UnitType.GALLEON, "Player1", Location.of(10, 10))
+				.addUnit(UnitType.COLONIST, "Player1", Location.of(60, 11));
+	}
+
+	void createMapSimple() {
+		builder
+			.setMap("/maps/02-simple-80x40.txt")
+			.addPlayer("Player1", true)
+				.addUnit(UnitType.GALLEON, "Player1", Location.of(10, 10))
+				.addUnit(UnitType.COLONIST, "Player1", Location.of(25, 7));
+	}
+
 	Model buildImpl() {
 		return builder.build();
 	}
@@ -124,9 +140,11 @@ public class AIModelBuilder {
 //		builder.createMap01_5ships();
 //		builder.createMap02();
 //		builder.createMap03();
-//		builder.createMap01_2colonists();
+		builder.createMap01_2colonists();
 //		builder.createMap01_1colonists();
-		builder.createMap01_5ships_2colonists();
+//		builder.createMap01_5ships_2colonists();
+//		builder.createMapAfrica();
+//		builder.createMapSimple();
 
 		return builder.buildImpl();
 	}
