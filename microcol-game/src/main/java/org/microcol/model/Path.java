@@ -8,25 +8,22 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 
 public final class Path {
-	private final ImmutableList<Location> locations;
+	private final List<Location> locations;
 
 	private Path(final List<Location> locations) {
 		Preconditions.checkNotNull(locations);
 		Preconditions.checkArgument(locations.size() > 0, "Path cannot be empty.");
-		checkAdjacent(locations);
+		checkNeighbors(locations);
 
-		// Throws NPE if any element is null.
 		this.locations = ImmutableList.copyOf(locations);
 	}
 
-	private void checkAdjacent(final List<Location> locations) {
+	private void checkNeighbors(final List<Location> locations) {
 		for (int i = 1; i < locations.size(); i++) {
 			final Location prevLocation = locations.get(i - 1);
 			final Location nextLocation = locations.get(i);
 			// Possible NPE is not problem here.
-			if (!prevLocation.isNeighbor(nextLocation)) {
-				throw new IllegalArgumentException(String.format("Locations are not neighbors: (%s - %s)", prevLocation, nextLocation));
-			}
+			Preconditions.checkArgument(prevLocation.isNeighbor(nextLocation), "Locations are not neighbors: (%s - %s)", prevLocation, nextLocation);
 		}
 	}
 
@@ -38,9 +35,7 @@ public final class Path {
 
 	public boolean containsAny(final Collection<Location> locations) {
 		Preconditions.checkNotNull(locations);
-		if (locations.contains(null)) {
-			throw new NullPointerException(String.format("Locations contains null element: %s", locations));
-		}
+		Preconditions.checkArgument(!locations.contains(null), "Locations (%s) contain null element.", locations);
 
 		return locations.stream().anyMatch(location -> this.locations.contains(location));
 	}

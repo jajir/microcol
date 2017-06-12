@@ -72,7 +72,7 @@ public class PathTest {
 		path.containsAny(null);
 	}
 
-	@Test(expected = NullPointerException.class)
+	@Test(expected = IllegalArgumentException.class)
 	public void testContainsAnyNullInside() {
 		final Path path = Path.of(Arrays.asList(Location.of(2, 3)));
 
