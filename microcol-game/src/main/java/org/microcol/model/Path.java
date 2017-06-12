@@ -24,8 +24,8 @@ public final class Path {
 			final Location prevLocation = locations.get(i - 1);
 			final Location nextLocation = locations.get(i);
 			// Possible NPE is not problem here.
-			if (!prevLocation.isAdjacent(nextLocation)) {
-				throw new IllegalArgumentException(String.format("Locations are not adjacent: (%s - %s)", prevLocation, nextLocation));
+			if (!prevLocation.isNeighbor(nextLocation)) {
+				throw new IllegalArgumentException(String.format("Locations are not neighbors: (%s - %s)", prevLocation, nextLocation));
 			}
 		}
 	}

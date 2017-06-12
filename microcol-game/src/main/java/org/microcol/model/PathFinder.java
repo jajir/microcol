@@ -45,7 +45,7 @@ class PathFinder {
 
 		while (!openList.isEmpty()) {
 			current = findLowest(openList);
-			if (excludeDestination && current.getLocation().isAdjacent(destination)
+			if (excludeDestination && current.getLocation().isNeighbor(destination)
 				|| current.getLocation().equals(destination)) {
 				logger.debug("Path finding finished in {} ms.", System.currentTimeMillis() - startTime);
 

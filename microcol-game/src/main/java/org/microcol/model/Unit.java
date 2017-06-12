@@ -200,7 +200,7 @@ public final class Unit {
 		model.checkCurrentPlayer(owner);
 
 		Preconditions.checkNotNull(path);
-		Preconditions.checkArgument(path.getStart().isAdjacent(location), "Path (%s) must be adjacent to current location (%s).", path.getStart(), location);
+		Preconditions.checkArgument(path.getStart().isNeighbor(location), "Path (%s) must be neighbor to current location (%s).", path.getStart(), location);
 		Preconditions.checkArgument(model.getMap().isValid(path), "Path (%s) must be valid.", path);
 		Preconditions.checkArgument(!path.containsAny(owner.getEnemyUnitsAt().keySet()), "There is enemy unit on path (%s).", path);
 
@@ -233,7 +233,7 @@ public final class Unit {
 		Preconditions.checkState(type.canAttack(), "This unit type (%s) cannot attack.", this);
 		Preconditions.checkNotNull(location);
 		Preconditions.checkArgument(model.getMap().getTerrainAt(location) == type.getMoveableTerrain(), "Target location (%s) is not moveable for this unit (%s)", location, this);
-		Preconditions.checkArgument(this.location.isAdjacent(location), "Unit location (%s) is not adjacent to target location (%s).", this.location, location);
+		Preconditions.checkArgument(this.location.isNeighbor(location), "Unit location (%s) is not neighbor to target location (%s).", this.location, location);
 		Preconditions.checkState(availableMoves > 0, "Unit (%s) cannot attack this turn.", this);
 		Preconditions.checkState(!owner.getEnemyUnitsAt(location).isEmpty(), "There is not any enemy unit on target location (%s).", location);
 

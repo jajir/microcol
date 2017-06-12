@@ -11,7 +11,7 @@ import org.junit.runners.Parameterized.Parameter;
 import org.junit.runners.Parameterized.Parameters;
 
 @RunWith(Parameterized.class)
-public class LocationAdjacentTest {
+public class LocationNeighborTest {
 	@Parameters(name = "{index}: location1 = {0}, location2 = {1}")
 	public static Collection<Object[]> data() {
 		return Arrays.asList(new Object[][] {
@@ -61,8 +61,8 @@ public class LocationAdjacentTest {
 	public Location location2;
 
 	@Test
-	public void testAdjacent() {
-		Assert.assertTrue("Test of location1 and location2 failed.", location1.isAdjacent(location2));
-		Assert.assertTrue("Test of location2 and location1 failed.", location2.isAdjacent(location1));
+	public void testNeighbor() {
+		Assert.assertTrue("Test of location1 and location2 failed.", location1.isNeighbor(location2));
+		Assert.assertTrue("Test of location2 and location1 failed.", location2.isNeighbor(location1));
 	}
 }

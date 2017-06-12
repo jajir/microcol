@@ -1,7 +1,6 @@
 package org.microcol.model;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import javax.json.stream.JsonGenerator;
 import javax.json.stream.JsonParser;
@@ -46,23 +45,19 @@ public final class Location {
 		return y;
 	}
 
-	// tranzitivní
 	public int getDistance(final Location location) {
 		Preconditions.checkNotNull(location);
 
 		return Math.abs(x - location.x) + Math.abs(y - location.y);
 	}
 
-	public List<Location> getNeighbors() {
-		return DIRECTIONS.stream()
-			.map(direction -> add(direction))
-			.collect(Collectors.collectingAndThen(
-				Collectors.toList(), ImmutableList::copyOf));
+	public Location add(final Location location) {
+		Preconditions.checkNotNull(location);
+
+		return Location.of(x + location.x, y + location.y);
 	}
 
-	// tranzitivní
-	// prejemnovat na isNeighbor?
-	public boolean isAdjacent(final Location location) {
+	public boolean isNeighbor(final Location location) {
 		Preconditions.checkNotNull(location);
 
 		if (equals(location)) {
@@ -73,12 +68,10 @@ public final class Location {
 			&& Math.abs(y - location.y) <= 1;
 	}
 
-	// tranzitivní
-	// funguje správně pouze pro čísla menší než MAX_INT
-	public Location add(final Location location) {
-		Preconditions.checkNotNull(location);
-
-		return Location.of(x + location.x, y + location.y);
+	public List<Location> getNeighbors() {
+		return DIRECTIONS.stream()
+			.map(direction -> add(direction))
+			.collect(ImmutableList.toImmutableList());
 	}
 
 	@Override
