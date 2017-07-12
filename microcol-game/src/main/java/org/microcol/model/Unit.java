@@ -13,7 +13,7 @@ import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 
-public final class Unit {
+public class Unit {
 	private Model model;
 
 	private final UnitType type;

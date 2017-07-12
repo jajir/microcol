@@ -4,6 +4,7 @@ import com.google.common.base.Preconditions;
 
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.input.KeyCode;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -15,32 +16,31 @@ public class AbstractDialog {
 
 	private final ViewUtil viewUtil;
 
-	private final Stage dialog;
+	private final Stage stageDialog;
 
 	private Scene scene;
-	
-	
-	//TODO JJ main Vbox should be handled here
+
+	// TODO JJ main Vbox should be handled here
 
 	public AbstractDialog(final ViewUtil viewUtil) {
 		this.viewUtil = Preconditions.checkNotNull(viewUtil);
-		dialog = new Stage(StageStyle.UNDECORATED);
+		stageDialog = new Stage(StageStyle.UNDECORATED);
 		initInternal();
 	}
 
 	private final void initInternal() {
-		dialog.initModality(Modality.WINDOW_MODAL);
-		dialog.initOwner(viewUtil.getPrimaryStage());
+		stageDialog.initModality(Modality.WINDOW_MODAL);
+		stageDialog.initOwner(viewUtil.getPrimaryStage());
 
 		/**
 		 * Following code show dialog centered to parent window.
 		 */
-		getDialog().setOnShowing(e -> dialog.hide());
+		getDialog().setOnShowing(e -> stageDialog.hide());
 
-		dialog.setOnShown(ev -> {
-			dialog.setX(getViewUtil().getPrimaryStageCenterXPosition() - dialog.getWidth() / 2d);
-			dialog.setY(getViewUtil().getPrimaryStageCenterYPosition() - dialog.getHeight() / 2d);
-			dialog.show();
+		stageDialog.setOnShown(ev -> {
+			stageDialog.setX(getViewUtil().getPrimaryStageCenterXPosition() - stageDialog.getWidth() / 2d);
+			stageDialog.setY(getViewUtil().getPrimaryStageCenterYPosition() - stageDialog.getHeight() / 2d);
+			stageDialog.show();
 		});
 
 	}
@@ -48,7 +48,18 @@ public class AbstractDialog {
 	public final void init(final Parent root) {
 		scene = new Scene(root);
 		scene.getStylesheets().add("gui/dialogs.css");
-		dialog.setScene(scene);
+		stageDialog.setScene(scene);
+		/**
+		 * Following code manually close dialog. If it's not manually closed JVM
+		 * crash. According to bug
+		 * https://bugs.openjdk.java.net/browse/JDK-8172847 it will be fixed.
+		 */
+		scene.setOnKeyPressed(event -> {
+			System.out.println("code: " + event.getCode());
+			if (event.getCode() == KeyCode.ESCAPE) {
+				stageDialog.close();
+			}
+		});
 	}
 
 	public ViewUtil getViewUtil() {
@@ -56,7 +67,7 @@ public class AbstractDialog {
 	}
 
 	public Stage getDialog() {
-		return dialog;
+		return stageDialog;
 	}
 
 	public Scene getScene() {
