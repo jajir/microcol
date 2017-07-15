@@ -387,10 +387,9 @@ public class GamePanelView implements GamePanelPresenter.Display {
 				animation -> excludePainting.includeUnit(movingUnit));
 	}
 
-	// TODO JJ animation scheduling should be in separate class.
 	public void addFightAnimation(final Unit attacker, final Unit defender) {
-		// TODO JJ animation speed should come from game preferences
-		animationManager.addAnimation(new AnimationFight(attacker, defender, imageProvider, 2));
+		animationManager.addAnimation(
+				new AnimationFight(attacker, defender, imageProvider, gamePreferences.getAnimationSpeed()));
 	}
 
 	@Override

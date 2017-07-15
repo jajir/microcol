@@ -1,10 +1,13 @@
 package org.microcol.gui.panelview;
 
+import java.util.Map;
+
 import org.microcol.gui.ImageProvider;
 import org.microcol.gui.Point;
 import org.microcol.model.Unit;
 
 import com.google.common.base.Preconditions;
+import com.google.common.collect.ImmutableMap;
 
 import javafx.scene.canvas.GraphicsContext;
 
@@ -12,6 +15,12 @@ import javafx.scene.canvas.GraphicsContext;
  * Class animate fight between two adjacent units.
  */
 public class AnimationFight implements Animation {
+
+	/**
+	 * Contains mapping of speed to step size.
+	 */
+	private static final Map<Integer, Integer> SPEED_ANIMATION_STEPS = ImmutableMap.of(0, 200, 1, 150, 2, 100, 3, 60, 4,
+			40);
 
 	private int step;
 
@@ -29,19 +38,11 @@ public class AnimationFight implements Animation {
 		this.defender = Preconditions.checkNotNull(defender);
 		this.imageProvider = Preconditions.checkNotNull(imageProvider);
 		this.animationSpeed = animationSpeed;
-		// FIXME JJ at this point there should be two ships on different fields.
-		// Preconditions.checkArgument(attacker.getLocation().isAdjacent(defender.getLocation()),
-		// "Attacker %s should be near defender %s", attacker, defender);
 	}
 
 	@Override
 	public boolean hasNextStep() {
-		// FIXME JJ animation speed should be used here.
-		if (animationSpeed == 1) {
-
-		}
-		;
-		return step < 60;
+		return step < SPEED_ANIMATION_STEPS.get(animationSpeed);
 	}
 
 	@Override

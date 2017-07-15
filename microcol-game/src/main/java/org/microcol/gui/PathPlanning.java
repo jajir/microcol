@@ -118,11 +118,15 @@ public class PathPlanning {
 	}
 
 	private float countPositiveStepSize(final int diffAbs, final int speed) {
-		Preconditions.checkArgument(speed >= ANIMATION_SPEED_MIN_VALUE, "speed '%s' is to low", speed);
-		Preconditions.checkArgument(speed < ANIMATION_SPEED_MAX_VALUE, "speed '%s' is to high", speed);
+		PathPlanning.checkSpeed(speed);
 		return SPEED_FUNCTION.get(speed) * diffAbs;
 	}
 
+	public static void checkSpeed(final int speed){
+		Preconditions.checkArgument(speed >= ANIMATION_SPEED_MIN_VALUE, "speed '%s' is to low", speed);
+		Preconditions.checkArgument(speed < ANIMATION_SPEED_MAX_VALUE, "speed '%s' is to high", speed);		
+	}
+	
 	/**
 	 * Draw steps between two map points. It use naive algorithm. <i>y = ax +
 	 * b</i>

@@ -120,6 +120,7 @@ public class GamePreferences {
 	}
 
 	public void setAnimationSpeed(final int animationSpeed) {
+		PathPlanning.checkSpeed(animationSpeed);
 		preferences.putInt(PREFERENCES_ANIMATION_SPEED, animationSpeed);
 		flush();
 	}

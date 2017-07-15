@@ -7,18 +7,12 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Map;
 
 import javax.json.Json;
 import javax.json.stream.JsonGenerator;
 import javax.json.stream.JsonGeneratorFactory;
 import javax.json.stream.JsonParser;
-import javax.swing.Icon;
-import javax.swing.JFileChooser;
-import javax.swing.filechooser.FileNameExtensionFilter;
-import javax.swing.filechooser.FileSystemView;
-import javax.swing.filechooser.FileView;
 
 import org.microcol.gui.event.model.GameController;
 import org.microcol.gui.util.AbstractDialog;
@@ -30,8 +24,9 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableMap;
-import com.google.common.io.Files;
 import com.google.inject.Inject;
+
+import javafx.stage.FileChooser;
 
 /**
  * Provide load and save operations.
@@ -46,7 +41,6 @@ public class PersistingDialog extends AbstractDialog {
 
 	private final GameController gameController;
 
-	// FIXME JJ conert to javafx
 	@Inject
 	public PersistingDialog(final ViewUtil viewUtil, final Text text, final GameController gameController) {
 		super(viewUtil);
@@ -55,21 +49,32 @@ public class PersistingDialog extends AbstractDialog {
 	}
 
 	public void saveModel() {
-		final JFileChooser saveFile = makeFileChooser();
-		saveFile.setDialogTitle(text.get("saveGameDialog.title"));
-		final int rVal = saveFile.showSaveDialog(null);
-		if (rVal == JFileChooser.APPROVE_OPTION) {
-			saveModelToFile(saveFile.getSelectedFile());
+		final FileChooser fileChooser = prepareFileChooser("saveGameDialog.title");
+		File saveFile = fileChooser.showSaveDialog(getViewUtil().getPrimaryStage());
+		if (saveFile == null) {
+			logger.debug("User didn't select any file to save game");
+		} else {
+			saveModelToFile(saveFile);
 		}
 	}
 
 	public void loadModel() {
-		final JFileChooser loadFile = makeFileChooser();
-		loadFile.setDialogTitle(text.get("loadGameDialog.title"));
-		final int rVal = loadFile.showOpenDialog(null);
-		if (rVal == JFileChooser.APPROVE_OPTION) {
-			loadFromFile(loadFile.getSelectedFile());
+		final FileChooser fileChooser = prepareFileChooser("saveGameDialog.title");
+		File saveFile = fileChooser.showOpenDialog(getViewUtil().getPrimaryStage());
+		if (saveFile == null) {
+			logger.debug("User didn't select any file to load game");
+		} else {
+			loadFromFile(saveFile);
 		}
+	}
+
+	private FileChooser prepareFileChooser(final String caption) {
+		final FileChooser fileChooser = new FileChooser();
+		fileChooser.setTitle(text.get(caption));
+		fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
+		fileChooser.setInitialFileName("gamesave-01.microcol");
+		fileChooser.setSelectedExtensionFilter(new FileChooser.ExtensionFilter("MicroCol data files", "microcol"));
+		return fileChooser;
 	}
 
 	private void saveModelToFile(final File targetFile) {
@@ -93,27 +98,6 @@ public class PersistingDialog extends AbstractDialog {
 			Path out = parent.resolve(path.getFileName().toString() + "." + SAVE_FILE_EXTENSION);
 			return out.toFile();
 		}
-	}
-
-	private JFileChooser makeFileChooser() {
-		final Path path = Paths.get(System.getProperty("user.home"), ".microcol", "saves");
-		try {
-			Files.createParentDirs(
-					Paths.get(System.getProperty("user.home"), ".microcol", "saves", "pok.microcol").toFile());
-		} catch (IOException e) {
-			throw new MicroColException(e.getMessage(), e);
-		}
-		final JFileChooser fileChooser = new JFileChooser(path.toFile());
-		fileChooser.setFileFilter(new FileNameExtensionFilter("MicroCol game saves", SAVE_FILE_EXTENSION));
-		fileChooser.setMultiSelectionEnabled(false);
-		fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-		fileChooser.setFileView(new FileView() {
-			@Override
-			public Icon getIcon(File f) {
-				return FileSystemView.getFileSystemView().getSystemIcon(f);
-			}
-		});
-		return fileChooser;
 	}
 
 	private void writeModelToFile(final Model model, final File targetFile) {
