@@ -157,8 +157,9 @@ public class GamePanelView implements GamePanelPresenter.Display {
 	public void planScrollingAnimationToPoint(final Point targetPoint) {
 		/**
 		 * Following if is a hack. Canvas width and height are set after game
-		 * start. When game starts and scroll request is created than game scroll
-		 * map outside of screen. Following hack solve it. But it's not correct.
+		 * start. When game starts and scroll request is created than game
+		 * scroll map outside of screen. Following hack solve it. But it's not
+		 * correct.
 		 */
 		if (visibleArea.getCanvasHeight() != 0) {
 			screenScrolling = Optional.of(new ScreenScrolling(pathPlanning, visibleArea.getTopLeft(), targetPoint));
@@ -193,8 +194,9 @@ public class GamePanelView implements GamePanelPresenter.Display {
 		paintCursor(g, area);
 		paintSteps(g, area);
 		paintAnimation(g, area);
-		// TODO JJ call it just when debug is enabled
-		paintService.paintDebugInfo(g, visualDebugInfo, area);
+		if (gamePreferences.isDevelopment()) {
+			paintService.paintDebugInfo(g, visualDebugInfo, area);
+		}
 		if (gameController.getModel().getCurrentPlayer().isComputer()) {
 			/**
 			 * If move computer that make game field darker.

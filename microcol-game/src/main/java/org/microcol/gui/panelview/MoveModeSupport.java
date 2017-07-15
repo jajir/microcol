@@ -15,7 +15,7 @@ import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 
 /**
- * Class helps with drawing of moving path.
+ * Class helps with drawing of action path.
  * <p>
  * Class works with Locations because point could change without moving over
  * different tile. (screen scrolling)
@@ -28,6 +28,8 @@ public class MoveModeSupport {
 	private final ViewState viewState;
 
 	private final GameController gameController;
+
+	private final UnitService unitService;
 
 	private List<Location> moveLocations;
 
@@ -80,10 +82,11 @@ public class MoveModeSupport {
 
 	@Inject
 	public MoveModeSupport(final MouseOverTileChangedController mouseOverTileChangedController,
-			final ViewState viewState, final GameController gameController) {
+			final ViewState viewState, final GameController gameController, final UnitService unitService) {
 		mouseOverTileChangedController.addListener(this::recountPath);
 		this.viewState = Preconditions.checkNotNull(viewState);
 		this.gameController = Preconditions.checkNotNull(gameController);
+		this.unitService = Preconditions.checkNotNull(unitService);
 		moveLocations = Lists.newArrayList();
 	}
 
@@ -109,71 +112,30 @@ public class MoveModeSupport {
 		}
 	}
 
-	private void processMove(final Location target) {
-		// TODO JJ get(0) could return different ship that is really
-		// moved
+	private void processMove(final Location moveToLocation) {
+		// TODO JJ moving unit should be parameter, not first unit
 		final Unit movingUnit = gameController.getModel().getCurrentPlayer()
 				.getUnitsAt(viewState.getSelectedTile().get()).get(0);
-		final List<Unit> ships = gameController.getModel().getUnitsAt(target);
-		if (ships.isEmpty()) {
-			// TODO JJ step counter should be core function
-			moveLocations = movingUnit.getPath(target).orElse(Collections.emptyList());
+		if (unitService.canFight(movingUnit, moveToLocation)) {
+			// fights
+			moveLocations = Lists
+					.newArrayList(movingUnit.getPath(moveToLocation, true).orElse(Collections.emptyList()));
+			moveLocations.add(moveToLocation);
+			moveMode = MoveMode.FIGHT;
+		} else if (unitService.canEmbark(movingUnit, moveToLocation)) {
+			// embark
+			moveLocations = movingUnit.getPath(moveToLocation).orElse(Lists.newArrayList(moveToLocation));
+			moveMode = MoveMode.ANCHOR;
+		} else if (unitService.canDisembark(movingUnit, moveToLocation)) {
+			moveLocations = movingUnit.getPath(moveToLocation).orElse(Lists.newArrayList(moveToLocation));
+			moveMode = MoveMode.ANCHOR;
+		} else if (unitService.canMove(movingUnit, moveToLocation)) {
+			// user will move
+			moveLocations = movingUnit.getPath(moveToLocation).orElse(Collections.emptyList());
 			moveMode = MoveMode.MOVE;
 		} else {
-			if (isSameOwner(movingUnit, ships)) {
-				if (isPossibleToLoad(null, ships)) {
-					/**
-					 * Try to load unit
-					 */
-					//FIXME JJ locations should be returned by API
-					moveLocations = movingUnit.getPath(target).orElse(Lists.newArrayList(Location.of(3, 3)));
-					moveMode = MoveMode.ANCHOR;
-				} else {
-					/**
-					 * Move unit to another my units.
-					 */
-					moveLocations = movingUnit.getPath(target).orElse(Collections.emptyList());
-					moveMode = MoveMode.MOVE;
-				}
-			} else {
-				/**
-				 * User wants to fight.
-				 */
-				if (movingUnit.getType().canAttack()) {
-					moveLocations = Lists
-							.newArrayList(movingUnit.getPath(target, true).orElse(Collections.emptyList()));
-					moveLocations.add(target);
-					moveMode = MoveMode.FIGHT;
-				} else {
-					// TODO JJ change status bar, that user try to
-					// attack with unit that can't attack.
-					noMove();
-				}
-			}
+			noMove();
 		}
-	}
-
-	private boolean isSameOwner(final Unit unit, final List<Unit> units) {
-		return units.get(0).getOwner().equals(unit.getOwner());
-	}
-
-	/**
-	 * 
-	 * @param unit
-	 * @param units
-	 * @return
-	 */
-	private boolean isPossibleToLoad(final Unit unit, final List<Unit> units) {
-		for (final Unit target : units) {
-			if (isAtLeastOneCargoSlotEmpty(target)) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	private boolean isAtLeastOneCargoSlotEmpty(final Unit unit) {
-		return unit.getHold().getSlots().stream().filter(cargoSlot -> cargoSlot.isEmpty()).findFirst().isPresent();
 	}
 
 	private void noMove() {

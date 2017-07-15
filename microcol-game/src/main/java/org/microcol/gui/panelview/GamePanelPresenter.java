@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import org.microcol.gui.DialogWarning;
 import org.microcol.gui.GamePreferences;
+import org.microcol.gui.MicroColException;
 import org.microcol.gui.Point;
 import org.microcol.gui.event.CenterViewController;
 import org.microcol.gui.event.ExitGameController;
@@ -87,13 +88,16 @@ public final class GamePanelPresenter implements Localized {
 
 	private final MoveUnitController moveUnitController;
 
+	private final UnitService unitService;
+
 	@Inject
 	public GamePanelPresenter(final GamePanelPresenter.Display display, final GameController gameController,
 			final KeyController keyController, final FocusedTileController focusedTileController,
 			final MoveUnitController moveUnitController, final NewGameController newGameController,
 			final GamePreferences gamePreferences, final ShowGridController showGridController,
 			final CenterViewController viewController, final ExitGameController exitGameController,
-			final DebugRequestController debugRequestController, final ViewState viewState, final ViewUtil viewUtil) {
+			final DebugRequestController debugRequestController, final ViewState viewState, final ViewUtil viewUtil,
+			final UnitService unitService) {
 		this.focusedTileController = Preconditions.checkNotNull(focusedTileController);
 		this.gameController = Preconditions.checkNotNull(gameController);
 		this.gamePreferences = gamePreferences;
@@ -101,6 +105,7 @@ public final class GamePanelPresenter implements Localized {
 		this.display = Preconditions.checkNotNull(display);
 		this.viewState = Preconditions.checkNotNull(viewState);
 		this.viewUtil = Preconditions.checkNotNull(viewUtil);
+		this.unitService = Preconditions.checkNotNull(unitService);
 
 		moveUnitController.addMoveUnitListener(event -> {
 			scheduleWalkAnimation(event);
@@ -273,9 +278,14 @@ public final class GamePanelPresenter implements Localized {
 		viewState.setMouseOverTile(Optional.of(loc));
 	}
 
+	/**
+	 * This is called when user ends action mode.
+	 * 
+	 * @param moveToLocation
+	 *            required target location
+	 */
 	private void switchToNormalMode(final Location moveToLocation) {
 		Preconditions.checkArgument(viewState.isMoveMode(), "switch to move mode was called from move mode");
-		// TODO JJ add precondition that move mode is enabled.
 		final Location moveFromLocation = viewState.getSelectedTile().get();
 		logger.debug("Switching to normal mode, from " + moveFromLocation + " to " + moveToLocation);
 		if (moveFromLocation.equals(moveToLocation)) {
@@ -284,41 +294,24 @@ public final class GamePanelPresenter implements Localized {
 		}
 		// TODO JJ active ship can be different from ship first at list
 		final Unit movingUnit = gameController.getModel().getCurrentPlayer().getUnitsAt(moveFromLocation).get(0);
-		if (isFight(movingUnit, moveToLocation)) {
-			if (!movingUnit.getType().canAttack()) {
-				// TODO JJ consider which tile should have focus
-				viewState.setSelectedTile(Optional.of(moveToLocation));
-				display.setCursorNormal();
-				new DialogWarning(viewUtil);
-				return;
-			}
-			final Unit targetUnit = gameController.getModel().getUnitsAt(moveToLocation).get(0);
-			if (gamePreferences.getShowFightAdvisorProperty().get()) {
-				if (display.performFightDialog(movingUnit, targetUnit)) {
-					// User choose to fight
-					display.setCursorNormal();
-					gameController.performFight(movingUnit, targetUnit);
-					return;
-				} else {
-					// User choose to quit fight
-					viewState.setSelectedTile(Optional.of(moveToLocation));
-					display.setCursorNormal();
-					return;
-				}
-			} else {
-				// implicit fight
-				display.setCursorNormal();
-				gameController.performFight(movingUnit, targetUnit);
-				return;
-			}
-		} else if (isLoading(movingUnit, moveToLocation)) {
-			Unit toLoad = gameController.getModel().getUnitsAt(moveToLocation).get(0);
+		if (unitService.canFight(movingUnit, moveToLocation)) {
+			// fight
+			fight(movingUnit, moveToLocation);
+		} else if (unitService.canEmbark(movingUnit, moveToLocation)) {
+			// embark
+			final Unit toLoad = gameController.getModel().getUnitsAt(moveToLocation).get(0);
 			toLoad.getHold().getSlots().get(0).store(movingUnit);
-			//TODO JJ following code is repeated multiple times
+			// TODO JJ following code is repeated multiple times
 			viewState.setSelectedTile(Optional.of(moveToLocation));
 			display.setCursorNormal();
-			return;
-		} else {
+		} else if (unitService.canDisembark(movingUnit, moveToLocation)) {
+			// try to disembark
+			System.out.println("embarking");
+			movingUnit.getHold().getSlots().forEach(cargoSlot -> cargoSlot.unload(moveToLocation));
+			// TODO JJ following code is repeated multiple times
+			viewState.setSelectedTile(Optional.of(moveToLocation));
+			display.setCursorNormal();
+		} else if (unitService.canMove(movingUnit, moveToLocation)) {
 			// user will move
 			if (movingUnit.getPath(moveToLocation).isPresent()) {
 				final List<Location> path = movingUnit.getPath(moveToLocation).get();
@@ -327,27 +320,35 @@ public final class GamePanelPresenter implements Localized {
 				}
 				viewState.setSelectedTile(Optional.of(moveToLocation));
 				display.setCursorNormal();
-				return;
 			}
-		}
-		Preconditions.checkArgument(true, "code should not be here.");
-	}
-
-	private boolean isLoading(final Unit movingShip, final Location moveToLocation) {
-		// FIXME JJ it's disgusting hack
-		return !movingShip.equals(moveToLocation);
-	}
-
-	private boolean isFight(final Unit movingShip, final Location moveToLocation) {
-		if (gameController.getModel().getUnitsAt(moveToLocation).isEmpty()) {
-			return false;
 		} else {
-			final Unit targetUnit = gameController.getModel().getUnitsAt(moveToLocation).get(0);
-			if (targetUnit.getOwner().equals(movingShip.getOwner())) {
-				return false;
+			throw new MicroColException("cant determine correct operation");
+		}
+	}
+
+	private void fight(final Unit movingUnit, final Location moveToLocation) {
+		if (!movingUnit.getType().canAttack()) {
+			// TODO JJ consider which tile should have focus
+			viewState.setSelectedTile(Optional.of(moveToLocation));
+			display.setCursorNormal();
+			new DialogWarning(viewUtil);
+			return;
+		}
+		final Unit targetUnit = gameController.getModel().getUnitsAt(moveToLocation).get(0);
+		if (gamePreferences.getShowFightAdvisorProperty().get()) {
+			if (display.performFightDialog(movingUnit, targetUnit)) {
+				// User choose to fight
+				display.setCursorNormal();
+				gameController.performFight(movingUnit, targetUnit);
 			} else {
-				return true;
+				// User choose to quit fight
+				viewState.setSelectedTile(Optional.of(moveToLocation));
+				display.setCursorNormal();
 			}
+		} else {
+			// implicit fight
+			display.setCursorNormal();
+			gameController.performFight(movingUnit, targetUnit);
 		}
 	}
 

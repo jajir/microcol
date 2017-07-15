@@ -33,6 +33,7 @@ import org.microcol.gui.panelview.MouseOverTileListener;
 import org.microcol.gui.panelview.MoveModeSupport;
 import org.microcol.gui.panelview.PaintService;
 import org.microcol.gui.panelview.UnitAttackedEventListener;
+import org.microcol.gui.panelview.UnitService;
 import org.microcol.gui.panelview.ViewState;
 import org.microcol.gui.util.Text;
 import org.microcol.gui.util.ViewUtil;
@@ -54,6 +55,7 @@ public class MicroColModule extends AbstractModule {
 		bind(ImageProvider.class).in(Singleton.class);
 		bind(ViewUtil.class).in(Singleton.class);
 		bind(LocalizationHelper.class).in(Singleton.class);
+		bind(UnitService.class).in(Singleton.class);
 
 		/**
 		 * Event controllers.
