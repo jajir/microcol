@@ -327,8 +327,8 @@ public class GamePanelView implements GamePanelPresenter.Display {
 	 */
 	private void paintSteps(final GraphicsContext graphics, final Area area) {
 		if (viewState.isMoveMode() && viewState.getMouseOverTile().isPresent()) {
-			graphics.setFill(Color.YELLOW);
-			graphics.setLineWidth(1);
+//			graphics.setFill(Color.YELLOW);
+//			graphics.setLineWidth(1);
 			paintCursor(graphics, area, viewState.getMouseOverTile().get());
 			final List<Location> locations = moveModeSupport.getMoveLocations();
 			// TODO JJ get moving unit in specific way

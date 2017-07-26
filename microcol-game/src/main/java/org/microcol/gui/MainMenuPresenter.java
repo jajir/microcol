@@ -1,5 +1,6 @@
 package org.microcol.gui;
 
+import org.microcol.gui.colonizopedia.Colonizopedia;
 import org.microcol.gui.europe.EuropeDialog;
 import org.microcol.gui.event.AboutGameEvent;
 import org.microcol.gui.event.AboutGameEventController;
@@ -60,6 +61,8 @@ public class MainMenuPresenter {
 		MenuItem getMenuItemCenterView();
 
 		MenuItem getMenuItemEurope();
+
+		MenuItem getMenuItemColonizopedia();
 	}
 
 	private final MainMenuPresenter.Display display;
@@ -91,6 +94,8 @@ public class MainMenuPresenter {
 		display.getMenuItemAbout().setOnAction(actionEvent -> {
 			gameEventController.fireEvent(new AboutGameEvent());
 		});
+		display.getMenuItemColonizopedia()
+				.setOnAction(event -> new Colonizopedia(text, viewUtil, imageProvider, localizationHelper));
 		display.getRbMenuItemlanguageCz().setOnAction(actionEvent -> {
 			changeLanguageController.fireEvent(new ChangeLanguageEvent(Text.Language.cz, gameController.getModel()));
 		});

@@ -36,6 +36,7 @@
 
 	<entry key="mainMenu.help">Nápověda</entry>
 	<entry key="mainMenu.help.about">O MicroCol</entry>
+	<entry key="mainMenu.help.colonizopedia">Colonizopedia</entry>
 
 	<entry key="aboutDialog.caption">O MicroCol</entry>
 	<entry key="dialog.ok">Ok</entry>
@@ -103,5 +104,7 @@
 	
 	<entry key="saveGameDialog.title">Uložit hru</entry>
 	<entry key="loadGameDialog.title">Nahrát hru</entry>
+	
+	<entry key="colonizopedia.title">Colonizopedia</entry>
 
 </properties>

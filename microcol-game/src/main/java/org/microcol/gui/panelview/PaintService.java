@@ -90,7 +90,8 @@ public class PaintService {
 	 *            required player
 	 */
 	public void paintOwnersFlag(final GraphicsContext graphics, final Point point, final Player player) {
-		graphics.setFill(Color.BLACK);
+		graphics.setStroke(Color.LIGHTGREY);
+		graphics.setLineWidth(1);
 		graphics.strokeRect(point.getX(), point.getY(), FLAG_WIDTH, FLAG_HEIGHT);
 		if (player.isHuman()) {
 			graphics.setFill(Color.YELLOW);
@@ -113,7 +114,8 @@ public class PaintService {
 				break;
 			}
 		}
-		graphics.fillRect(point.getX() + 1, point.getY() + 1, FLAG_WIDTH - 1, FLAG_HEIGHT - 1);
+		//TODO JJ vyzkouset na win, jak kresleni ramecku funguje
+		graphics.fillRect(point.getX() + 1, point.getY() + 1, FLAG_WIDTH - 2, FLAG_HEIGHT - 2);
 	}
 
 	public void paintDebugInfo(final GraphicsContext graphics, final VisualDebugInfo visualDebugInfo, final Area area) {

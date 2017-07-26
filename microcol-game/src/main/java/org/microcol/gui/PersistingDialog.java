@@ -59,7 +59,7 @@ public class PersistingDialog extends AbstractDialog {
 	}
 
 	public void loadModel() {
-		final FileChooser fileChooser = prepareFileChooser("saveGameDialog.title");
+		final FileChooser fileChooser = prepareFileChooser("loadGameDialog.title");
 		File saveFile = fileChooser.showOpenDialog(getViewUtil().getPrimaryStage());
 		if (saveFile == null) {
 			logger.debug("User didn't select any file to load game");

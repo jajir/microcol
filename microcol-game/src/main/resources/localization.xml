@@ -36,6 +36,7 @@
 
 	<entry key="mainMenu.help">Help</entry>
 	<entry key="mainMenu.help.about">About</entry>
+	<entry key="mainMenu.help.colonizopedia">Colonizopedia</entry>
 
 
 	<entry key="aboutDialog.caption">About MicroCol</entry>
@@ -105,5 +106,7 @@
 	
 	<entry key="saveGameDialog.title">Save game</entry>
 	<entry key="loadGameDialog.title">Load game</entry>
+	
+	<entry key="colonizopedia.title">Colonizopedia</entry>
 	
 </properties>

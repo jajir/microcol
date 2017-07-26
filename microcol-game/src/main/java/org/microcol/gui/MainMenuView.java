@@ -35,6 +35,8 @@ public class MainMenuView implements MainMenuPresenter.Display {
 
 	private final MenuItem menuItemAbout;
 
+	private final MenuItem menuItemColonizopedia;
+
 	private final Menu menuView;
 
 	private final MenuItem menuItemCenterView;
@@ -176,9 +178,14 @@ public class MainMenuView implements MainMenuPresenter.Display {
 			menuItemAbout = defaultApplicationMenu.getItems().get(0);
 		} else {
 			menuItemAbout = new MenuItem();
-			menuBar.getMenus().add(menuHelp);
 			menuHelp.getItems().addAll(menuItemAbout);
 		}
+		menuItemColonizopedia = new MenuItem();
+		menuItemColonizopedia.setAccelerator(new KeyCodeCombination(KeyCode.H, KeyCombination.CONTROL_DOWN));
+		menuItemColonizopedia.disableProperty().setValue(false);
+		menuHelp.getItems().addAll(menuItemColonizopedia);
+
+		menuBar.getMenus().add(menuHelp);
 
 		updateLanguage();
 	}
@@ -224,6 +231,7 @@ public class MainMenuView implements MainMenuPresenter.Display {
 		 */
 		menuHelp.setText(text.get("mainMenu.help"));
 		menuItemAbout.setText(text.get("mainMenu.help.about"));
+		menuItemColonizopedia.setText(text.get("mainMenu.help.colonizopedia"));
 	}
 
 	@Override
@@ -293,5 +301,10 @@ public class MainMenuView implements MainMenuPresenter.Display {
 
 	public MenuBar getMenuBar() {
 		return menuBar;
+	}
+
+	@Override
+	public MenuItem getMenuItemColonizopedia() {
+		return menuItemColonizopedia;
 	}
 }

@@ -1,7 +1,7 @@
 package org.microcol.gui;
 
 import org.easymock.EasyMock;
-import org.microcol.gui.colony.ColonyDialog;
+import org.microcol.gui.colonizopedia.Colonizopedia;
 import org.microcol.gui.europe.EuropeDialog;
 import org.microcol.gui.event.AnimationSpeedChangeController;
 import org.microcol.gui.event.VolumeChangeController;
@@ -48,7 +48,8 @@ public class DialogTester extends Application {
 			// testDialogFight();
 			// startNewGameDialog();
 			// startAboutDialog();
-			dialogEurope();
+//			dialogEurope();
+			dialogColonizopedia();
 
 			// dialogSave();
 			// dialogLoad();
@@ -120,10 +121,10 @@ public class DialogTester extends Application {
 		new EuropeDialog(viewUtil, text, imageProvider, gameController, localizationHelper);
 	}
 
-	public final static void dialogColony() {
+	public final static void dialogColonizopedia() {
 		final GameController gameController = EasyMock.createMock(GameController.class);
 		EasyMock.replay(gameController);
-		new ColonyDialog(viewUtil, text, imageProvider, gameController);
+		new Colonizopedia(text, viewUtil, imageProvider, localizationHelper);
 	}
 
 }
