@@ -36,11 +36,13 @@ public final class CargoSlot {
 		unit.store(this);
 	}
 
-	public Unit unload(final Location location) {
+	public Unit unload(final Location targetLocation) {
+		Preconditions.checkNotNull(targetLocation);
 		Preconditions.checkState(cargo.isPresent(), "Cargo slot (%s) is empty.", this);
+		Preconditions.checkArgument(hold.getOwner().getLocation().isNeighbor(targetLocation),"Unit (%s) can't unload at location (%s), it's too far",hold.getOwner(),targetLocation);
 
 		final Unit unit = cargo.get();
-		unit.unload(location);
+		unit.unload(targetLocation);
 		cargo = Optional.empty();
 
 		return unit;

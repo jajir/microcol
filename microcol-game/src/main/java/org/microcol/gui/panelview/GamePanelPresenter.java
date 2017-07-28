@@ -88,16 +88,13 @@ public final class GamePanelPresenter implements Localized {
 
 	private final MoveUnitController moveUnitController;
 
-	private final UnitService unitService;
-
 	@Inject
 	public GamePanelPresenter(final GamePanelPresenter.Display display, final GameController gameController,
 			final KeyController keyController, final FocusedTileController focusedTileController,
 			final MoveUnitController moveUnitController, final NewGameController newGameController,
 			final GamePreferences gamePreferences, final ShowGridController showGridController,
 			final CenterViewController viewController, final ExitGameController exitGameController,
-			final DebugRequestController debugRequestController, final ViewState viewState, final ViewUtil viewUtil,
-			final UnitService unitService) {
+			final DebugRequestController debugRequestController, final ViewState viewState, final ViewUtil viewUtil) {
 		this.focusedTileController = Preconditions.checkNotNull(focusedTileController);
 		this.gameController = Preconditions.checkNotNull(gameController);
 		this.gamePreferences = gamePreferences;
@@ -105,7 +102,6 @@ public final class GamePanelPresenter implements Localized {
 		this.display = Preconditions.checkNotNull(display);
 		this.viewState = Preconditions.checkNotNull(viewState);
 		this.viewUtil = Preconditions.checkNotNull(viewUtil);
-		this.unitService = Preconditions.checkNotNull(unitService);
 
 		moveUnitController.addMoveUnitListener(event -> {
 			scheduleWalkAnimation(event);
@@ -294,24 +290,25 @@ public final class GamePanelPresenter implements Localized {
 		}
 		// TODO JJ active ship can be different from ship first at list
 		final Unit movingUnit = gameController.getModel().getCurrentPlayer().getUnitsAt(moveFromLocation).get(0);
-		if (unitService.canFight(movingUnit, moveToLocation)) {
+		if (movingUnit.isPossibleToAttackAt(moveToLocation)) {
 			// fight
 			fight(movingUnit, moveToLocation);
-		} else if (unitService.canEmbark(movingUnit, moveToLocation)) {
+		} else if (movingUnit.isPossibleToEmbarkAt(moveToLocation, true)) {
 			// embark
 			final Unit toLoad = gameController.getModel().getUnitsAt(moveToLocation).get(0);
 			toLoad.getHold().getSlots().get(0).store(movingUnit);
 			// TODO JJ following code is repeated multiple times
 			viewState.setSelectedTile(Optional.of(moveToLocation));
 			display.setCursorNormal();
-		} else if (unitService.canDisembark(movingUnit, moveToLocation)) {
+		} else if (movingUnit.isPossibleToDisembarkAt(moveToLocation, true)) {
 			// try to disembark
 			System.out.println("embarking");
-			movingUnit.getHold().getSlots().forEach(cargoSlot -> cargoSlot.unload(moveToLocation));
+			movingUnit.getHold().getSlots().stream().filter(cargoSlot -> !cargoSlot.isEmpty())
+					.forEach(cargoSlot -> cargoSlot.unload(moveToLocation));
 			// TODO JJ following code is repeated multiple times
 			viewState.setSelectedTile(Optional.of(moveToLocation));
 			display.setCursorNormal();
-		} else if (unitService.canMove(movingUnit, moveToLocation)) {
+		} else if (movingUnit.isMoveable(moveToLocation)) {
 			// user will move
 			if (movingUnit.getPath(moveToLocation).isPresent()) {
 				final List<Location> path = movingUnit.getPath(moveToLocation).get();

@@ -40,6 +40,10 @@ public final class Player {
 		return model.getUnits(this, false);
 	}
 
+	public List<Unit> getAllUnits() {
+		return model.getUnits(this, true);
+	}
+
 	public List<Unit> getUnits(final boolean includeStored) {
 		return model.getUnits(this, includeStored);
 	}
@@ -69,7 +73,7 @@ public final class Player {
 	}
 
 	void startTurn() {
-		getUnits().forEach(unit -> unit.startTurn());
+		getAllUnits().forEach(unit -> unit.startTurn());
 	}
 
 	public void endTurn() {

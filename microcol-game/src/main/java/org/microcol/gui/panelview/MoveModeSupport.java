@@ -29,8 +29,6 @@ public class MoveModeSupport {
 
 	private final GameController gameController;
 
-	private final UnitService unitService;
-
 	private List<Location> moveLocations;
 
 	private MoveMode moveMode;
@@ -82,11 +80,10 @@ public class MoveModeSupport {
 
 	@Inject
 	public MoveModeSupport(final MouseOverTileChangedController mouseOverTileChangedController,
-			final ViewState viewState, final GameController gameController, final UnitService unitService) {
+			final ViewState viewState, final GameController gameController) {
 		mouseOverTileChangedController.addListener(this::recountPath);
 		this.viewState = Preconditions.checkNotNull(viewState);
 		this.gameController = Preconditions.checkNotNull(gameController);
-		this.unitService = Preconditions.checkNotNull(unitService);
 		moveLocations = Lists.newArrayList();
 	}
 
@@ -116,20 +113,21 @@ public class MoveModeSupport {
 		// TODO JJ moving unit should be parameter, not first unit
 		final Unit movingUnit = gameController.getModel().getCurrentPlayer()
 				.getUnitsAt(viewState.getSelectedTile().get()).get(0);
-		if (unitService.canFight(movingUnit, moveToLocation)) {
+		if (movingUnit.isPossibleToAttackAt(moveToLocation)) {
 			// fights
 			moveLocations = Lists
 					.newArrayList(movingUnit.getPath(moveToLocation, true).orElse(Collections.emptyList()));
 			moveLocations.add(moveToLocation);
 			moveMode = MoveMode.FIGHT;
-		} else if (unitService.canEmbark(movingUnit, moveToLocation)) {
+			// FIXME use different method ..
+		} else if (movingUnit.isPossibleToEmbarkAt(moveToLocation, true)) {
 			// embark
 			moveLocations = movingUnit.getPath(moveToLocation).orElse(Lists.newArrayList(moveToLocation));
 			moveMode = MoveMode.ANCHOR;
-		} else if (unitService.canDisembark(movingUnit, moveToLocation)) {
+		} else if (movingUnit.isPossibleToDisembarkAt(moveToLocation, true)) {
 			moveLocations = movingUnit.getPath(moveToLocation).orElse(Lists.newArrayList(moveToLocation));
 			moveMode = MoveMode.ANCHOR;
-		} else if (unitService.canMove(movingUnit, moveToLocation)) {
+		} else if (movingUnit.isMoveable(moveToLocation)) {
 			// user will move
 			moveLocations = movingUnit.getPath(moveToLocation).orElse(Collections.emptyList());
 			moveMode = MoveMode.MOVE;

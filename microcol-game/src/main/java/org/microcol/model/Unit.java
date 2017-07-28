@@ -72,6 +72,18 @@ public class Unit {
 		return isMoveable(location, false);
 	}
 
+	/**
+	 * Get info if unit could move to target location. Method doesn't verify if
+	 * target location could be reached in current move.
+	 * 
+	 * @param location
+	 *            required target location
+	 * @param ignoreEnemies
+	 *            when it's <code>true</code> than enemy unit at target location
+	 *            will be ignored
+	 * @return return <code>true</code> when unit could move to target location
+	 *         otherwise return <code>false</code>
+	 */
 	public boolean isMoveable(final Location location, final boolean ignoreEnemies) {
 		Preconditions.checkNotNull(location);
 
@@ -79,7 +91,7 @@ public class Unit {
 			return false;
 		}
 
-		if (model.getMap().getTerrainAt(location) != type.getMoveableTerrain()) {
+		if (!type.canMoveAtTerrain(model.getMap().getTerrainAt(location))) {
 			return false;
 		}
 
@@ -125,12 +137,18 @@ public class Unit {
 			Set<Location> currentSet = new HashSet<>();
 			for (Location location : openSet) {
 				for (Location neighbor : location.getNeighbors()) {
-					if (isMoveable(neighbor, true)) {
-						final List<Unit> eee = owner.getEnemyUnitsAt(location);
-						if (eee.isEmpty()) {
+					if (model.getMap().isValid(neighbor)) {
+						if (isMoveable(neighbor, true)) {
+							final List<Unit> eee = owner.getEnemyUnitsAt(location);
+							if (eee.isEmpty()) {
+								currentSet.add(neighbor);
+							} else {
+								enemies.addAll(eee);
+							}
+						} else if (isPossibleToDisembarkAt(neighbor,true)) {
 							currentSet.add(neighbor);
-						} else {
-							enemies.addAll(eee);
+						} else if (isPossibleToEmbarkAt(neighbor, true)) {
+							currentSet.add(neighbor);
 						}
 					}
 				}
@@ -147,6 +165,81 @@ public class Unit {
 		if (attackableTargets != null) {
 			attackableTargets.addAll(enemies);
 		}
+	}
+	
+	public boolean isPossibleToDisembarkAt(final Location targetLocation, boolean inCurrentTurn){
+		Preconditions.checkNotNull(targetLocation);
+		if (location.isNeighbor(targetLocation) && getType().getCargoCapacity() > 0) {
+			return getHold().getSlots().stream()
+					.filter(cargoSlot -> canCargoDisembark(cargoSlot, targetLocation,inCurrentTurn)).findAny().isPresent();
+		} else {
+			return false;
+		}
+	}
+	
+	private boolean canCargoDisembark(final CargoSlot slot, final Location moveToLocation, boolean inCurrentTurn) {
+		if (slot.isEmpty()) {
+			return false;
+		} else {
+			final Unit unit = slot.getUnit().get();
+			return (!inCurrentTurn || unit.availableMoves>0) && unit.canUnitDisembarkAt(moveToLocation);
+		}
+	}
+	
+	private boolean canUnitDisembarkAt(final Location targeLocation){
+		return getType().getMoveableTerrain()
+				.equals(model.getMap().getTerrainAt(targeLocation));		
+	}
+	
+	public boolean isPossibleToEmbarkAt(final Location targetLocation, boolean inCurrentTurn) {
+		if (isStorable() && location.isNeighbor(targetLocation) && (!inCurrentTurn || availableMoves > 0)) {
+			final List<Unit> units = model.getUnitsAt(targetLocation);
+			return isSameOwner(units)
+					&& units.stream().filter(unit -> unit.isAtLeastOneCargoSlotEmpty()).findAny().isPresent();
+		} else {
+			return false;
+		}
+	}
+
+	public boolean isPossibleToAttackAt(final Location targetLocation) {
+		if (model.getUnitsAt(targetLocation).isEmpty()) {
+			return false;
+		} else {
+			if (type.canMoveAtTerrain(model.getMap().getTerrainAt(targetLocation))) {
+				if (isSameOwner(model.getUnitsAt(targetLocation))) {
+					return false;
+				} else {
+					return true;
+				}
+			} else {
+				return false;
+			}
+		}
+	}
+	
+	/**
+	 * Return true when given unit have free cargo slot for unit.
+	 * 
+	 * @return return <code>true</code> when at least one cargo slot is empty
+	 *         and could be loaded otherwise return <code>false</code>
+	 */
+	public boolean isAtLeastOneCargoSlotEmpty() {
+		return getType().getCargoCapacity() > 0
+				&& getHold().getSlots().stream().filter(cargoSlot -> cargoSlot.isEmpty()).findAny().isPresent();
+	}
+
+	/**
+	 * Verify that all units belongs to same owner.
+	 * 
+	 * @param units
+	 *            required {@link List} of units
+	 * @return return <code>true</code> when all units belongs to same owner as
+	 *         this unit otherwise return <code>false</code>
+	 */
+	public boolean isSameOwner(final List<Unit> units) {
+		Preconditions.checkNotNull(units);
+		// XXX could it be rewritten to stream API?
+		return units.size() > 0 && units.get(0).getOwner().equals(getOwner());
 	}
 
 	public List<Unit> getStorageUnits() {
@@ -264,17 +357,18 @@ public class Unit {
 		// TODO JKA prazdny naklad?
 
 		this.slot = slot;
-
+		availableMoves=0;
 		model.fireUnitStored(this, slot); // TODO JKA Move to CargoSlot?
 	}
 
-	void unload(final Location location) {
-		// TODO JKA check adjacent location
+	void unload(final Location targetLocation) {
+		Preconditions.checkNotNull(targetLocation);
+		Preconditions.checkArgument(availableMoves>0,"Unit (%s) need for unload at least on action point",this);
 		// TODO JKA run "standard" unit location checks
 
 		// TODO JKA empty all moves and attacks?
-
-		this.location = location;
+		this.availableMoves=0;
+		this.location = targetLocation;
 		this.slot = null;
 	}
 

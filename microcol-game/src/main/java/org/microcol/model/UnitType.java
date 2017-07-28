@@ -1,6 +1,7 @@
 package org.microcol.model;
 
 import com.google.common.base.MoreObjects;
+import com.google.common.base.Preconditions;
 
 public enum UnitType {
 	COLONIST(Terrain.CONTINENT, 1, true, 0, true),
@@ -39,6 +40,11 @@ public enum UnitType {
 
 	public boolean isStorable() {
 		return storable;
+	}
+	
+	public boolean canMoveAtTerrain(final Terrain terrain) {
+		Preconditions.checkNotNull(terrain);
+		return moveableTerrain == terrain;
 	}
 
 	@Override
