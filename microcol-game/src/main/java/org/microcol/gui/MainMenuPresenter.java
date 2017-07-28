@@ -15,6 +15,8 @@ import org.microcol.gui.event.FocusedTileController;
 import org.microcol.gui.event.FocusedTileEvent;
 import org.microcol.gui.event.ShowGridController;
 import org.microcol.gui.event.ShowGridEvent;
+import org.microcol.gui.event.StartMoveController;
+import org.microcol.gui.event.StartMoveEvent;
 import org.microcol.gui.event.VolumeChangeController;
 import org.microcol.gui.event.model.GameController;
 import org.microcol.gui.event.model.MoveUnitController;
@@ -81,7 +83,7 @@ public class MainMenuPresenter {
 			final MoveUnitController moveUnitController, final CenterViewController centerViewController,
 			final TurnStartedController turnStartedController, final ExitGameController exitGameController,
 			final GameController gameController, final PersistingDialog persistingDialog,
-			final ImageProvider imageProvider, final LocalizationHelper localizationHelper) {
+			final ImageProvider imageProvider, final LocalizationHelper localizationHelper, final StartMoveController startMoveController) {
 		this.display = Preconditions.checkNotNull(display);
 		display.getMenuItemNewGame().setOnAction(actionEvent -> {
 			gameController.startNewGame();
@@ -111,7 +113,7 @@ public class MainMenuPresenter {
 		display.getMenuItemShowGrid().setOnAction(ectionEvent -> showGridController
 				.fireEvent(new ShowGridEvent(display.getMenuItemShowGrid().isSelected())));
 		display.getMenuItemMove().setOnAction(ectionEvent -> {
-			moveUnitController.fireStartMoveEvent();
+			startMoveController.fireEvent(new StartMoveEvent());
 			display.getMenuItemMove().setDisable(true);
 		});
 		display.getMenuItemCenterView().setOnAction(event -> centerViewController.fireEvent(new CenterViewEvent()));

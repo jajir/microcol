@@ -29,7 +29,7 @@ public class ModelListenerImpl extends ModelAdapter {
 
 	@Override
 	public void unitMoved(final UnitMovedEvent event) {
-		modelEventManager.getMoveUnitController().fireUnitMovedEvent(event);
+		modelEventManager.getMoveUnitController().fireEvent(event);
 	}
 
 	@Override

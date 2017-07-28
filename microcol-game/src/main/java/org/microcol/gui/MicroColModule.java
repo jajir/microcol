@@ -14,6 +14,7 @@ import org.microcol.gui.event.FocusedTileController;
 import org.microcol.gui.event.KeyController;
 import org.microcol.gui.event.ShowGridController;
 import org.microcol.gui.event.ShowGridListenerPreferences;
+import org.microcol.gui.event.StartMoveController;
 import org.microcol.gui.event.StatusBarMessageController;
 import org.microcol.gui.event.VolumeChangeController;
 import org.microcol.gui.event.VolumeChangedListenerPreferences;
@@ -67,6 +68,7 @@ public class MicroColModule extends AbstractModule {
 		bind(FocusedTileController.class).in(Singleton.class);
 		bind(AboutGameEventController.class).in(Singleton.class);
 		bind(ChangeLanguageController.class).in(Singleton.class);
+		bind(StartMoveController.class).in(Singleton.class);
 		bind(NewGameController.class).in(Singleton.class);
 		bind(GameController.class).in(Singleton.class);
 		bind(TurnStartedController.class).in(Singleton.class);

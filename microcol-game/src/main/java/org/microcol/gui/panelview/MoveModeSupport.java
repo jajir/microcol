@@ -4,6 +4,8 @@ import java.util.Collections;
 import java.util.List;
 
 import org.microcol.gui.ImageProvider;
+import org.microcol.gui.event.StartMoveController;
+import org.microcol.gui.event.StartMoveEvent;
 import org.microcol.gui.event.model.GameController;
 import org.microcol.model.Location;
 import org.microcol.model.Unit;
@@ -79,30 +81,40 @@ public class MoveModeSupport {
 	}
 
 	@Inject
-	public MoveModeSupport(final MouseOverTileChangedController mouseOverTileChangedController,
+	public MoveModeSupport(final MouseOverTileChangedController mouseOverTileChangedController, final StartMoveController startMoveController,
 			final ViewState viewState, final GameController gameController) {
-		mouseOverTileChangedController.addListener(this::recountPath);
+		mouseOverTileChangedController.addListener(this::onMouseOverTileChanged);
+		startMoveController.addListener(this::onStartMove);
 		this.viewState = Preconditions.checkNotNull(viewState);
 		this.gameController = Preconditions.checkNotNull(gameController);
 		moveLocations = Lists.newArrayList();
 	}
+	
+	@SuppressWarnings("unused")
+	private void onStartMove(final StartMoveEvent event){
+		recountPath();
+	}
 
-	private void recountPath(final MouseOverTileChangedEvent mouseOverTileChangedEvent) {
+	private void onMouseOverTileChanged(final MouseOverTileChangedEvent mouseOverTileChangedEvent) {
 		Preconditions.checkNotNull(mouseOverTileChangedEvent);
 		logger.debug("Recounting path: " + mouseOverTileChangedEvent);
 		if (viewState.isMoveMode()) {
-			if (viewState.getMouseOverTile().isPresent()) {
-				final Location target = viewState.getMouseOverTile().get();
-				if (viewState.getSelectedTile().get().equals(target)) {
-					/**
-					 * Pointing with mouse to unit which should move.
-					 */
-					noMove();
-				} else {
-					processMove(target);
-				}
-			} else {
+			recountPath();
+		} else {
+			noMove();
+		}
+	}
+
+	private void recountPath() {
+		if (viewState.getMouseOverTile().isPresent()) {
+			final Location target = viewState.getMouseOverTile().get();
+			if (viewState.getSelectedTile().get().equals(target)) {
+				/**
+				 * Pointing with mouse to unit which should move.
+				 */
 				noMove();
+			} else {
+				processMove(target);
 			}
 		} else {
 			noMove();
@@ -119,7 +131,6 @@ public class MoveModeSupport {
 					.newArrayList(movingUnit.getPath(moveToLocation, true).orElse(Collections.emptyList()));
 			moveLocations.add(moveToLocation);
 			moveMode = MoveMode.FIGHT;
-			// FIXME use different method ..
 		} else if (movingUnit.isPossibleToEmbarkAt(moveToLocation, true)) {
 			// embark
 			moveLocations = movingUnit.getPath(moveToLocation).orElse(Lists.newArrayList(moveToLocation));

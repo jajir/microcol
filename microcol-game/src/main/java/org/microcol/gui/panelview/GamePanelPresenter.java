@@ -14,6 +14,8 @@ import org.microcol.gui.event.FocusedTileController;
 import org.microcol.gui.event.FocusedTileEvent;
 import org.microcol.gui.event.KeyController;
 import org.microcol.gui.event.ShowGridController;
+import org.microcol.gui.event.StartMoveController;
+import org.microcol.gui.event.StartMoveEvent;
 import org.microcol.gui.event.model.DebugRequestController;
 import org.microcol.gui.event.model.GameController;
 import org.microcol.gui.event.model.MoveUnitController;
@@ -86,7 +88,7 @@ public final class GamePanelPresenter implements Localized {
 
 	private final ViewUtil viewUtil;
 
-	private final MoveUnitController moveUnitController;
+	private final StartMoveController startMoveController;
 
 	@Inject
 	public GamePanelPresenter(final GamePanelPresenter.Display display, final GameController gameController,
@@ -94,16 +96,17 @@ public final class GamePanelPresenter implements Localized {
 			final MoveUnitController moveUnitController, final NewGameController newGameController,
 			final GamePreferences gamePreferences, final ShowGridController showGridController,
 			final CenterViewController viewController, final ExitGameController exitGameController,
-			final DebugRequestController debugRequestController, final ViewState viewState, final ViewUtil viewUtil) {
+			final DebugRequestController debugRequestController, final ViewState viewState, final ViewUtil viewUtil,
+			final StartMoveController startMoveController) {
 		this.focusedTileController = Preconditions.checkNotNull(focusedTileController);
 		this.gameController = Preconditions.checkNotNull(gameController);
 		this.gamePreferences = gamePreferences;
-		this.moveUnitController = Preconditions.checkNotNull(moveUnitController);
 		this.display = Preconditions.checkNotNull(display);
 		this.viewState = Preconditions.checkNotNull(viewState);
 		this.viewUtil = Preconditions.checkNotNull(viewUtil);
+		this.startMoveController = Preconditions.checkNotNull(startMoveController);
 
-		moveUnitController.addMoveUnitListener(event -> {
+		moveUnitController.addListener(event -> {
 			scheduleWalkAnimation(event);
 			/**
 			 * Wait until animation is finished.
@@ -118,7 +121,7 @@ public final class GamePanelPresenter implements Localized {
 				}
 			}
 		});
-		moveUnitController.addStartMovingListener(event -> swithToMoveMode());
+		startMoveController.addListener(event -> swithToMoveMode());
 
 		keyController.addListener(e -> {
 			/**
@@ -185,11 +188,11 @@ public final class GamePanelPresenter implements Localized {
 		display.planScrollingAnimationToPoint(p);
 	}
 
-	private void tryToSwitchToMoveMode() {
-		final List<Unit> units = gameController.getModel().getCurrentPlayer()
-				.getUnitsAt(viewState.getSelectedTile().get());
+	private void tryToSwitchToMoveMode(final Location currentLocation) {
+		Preconditions.checkNotNull(currentLocation);
+		final List<Unit> units = gameController.getModel().getCurrentPlayer().getUnitsAt(currentLocation);
 		if (!units.isEmpty()) {
-			moveUnitController.fireStartMoveEvent();
+			startMoveController.fireEvent(new StartMoveEvent());
 		}
 	}
 
@@ -237,7 +240,7 @@ public final class GamePanelPresenter implements Localized {
 					viewState.setSelectedTile(Optional.of(location));
 					focusedTileController.fireEvent(new FocusedTileEvent(gameController.getModel(), location,
 							gameController.getModel().getMap().getTerrainAt(location)));
-					tryToSwitchToMoveMode();
+					tryToSwitchToMoveMode(location);
 				}
 			}
 		} else {
