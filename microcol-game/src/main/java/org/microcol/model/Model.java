@@ -5,31 +5,38 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
 
 import javax.json.stream.JsonGenerator;
 import javax.json.stream.JsonParser;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Lists;
 
 public final class Model {
 	private final ListenerManager listenerManager;
 	private final Calendar calendar;
 	private final WorldMap map;
 	private final List<Player> players;
+	private final List<Town> towns;
 	private final UnitStorage unitStorage;
 	private GameManager gameManager;
 
-	Model(final Calendar calendar, final WorldMap map, final List<Player> players, final List<Unit> units) {
+	Model(final Calendar calendar, final WorldMap map, final List<Player> players, final List<Town> towns,
+			final List<Unit> units) {
 		listenerManager = new ListenerManager();
 
 		this.calendar = Preconditions.checkNotNull(calendar);
 		this.map = Preconditions.checkNotNull(map);
 
 		this.players = ImmutableList.copyOf(players);
+		this.towns = Lists.newArrayList(towns);
 		Preconditions.checkArgument(!this.players.isEmpty(), "There must be at least one player.");
 		checkPlayerNames(this.players);
 		this.players.forEach(player -> player.setModel(this));
+		this.towns.forEach(town -> town.setModel(this));
 
 		unitStorage = new UnitStorage(units);
 		unitStorage.getUnits(true).forEach(unit -> unit.setModel(this));
@@ -95,6 +102,10 @@ public final class Model {
 		return unitStorage.getUnitsAt();
 	}
 
+	public Map<Location, Town> getTownsAt(){
+		return towns.stream().collect(ImmutableMap.toImmutableMap(Town::getLocation, Function.identity()));
+	}
+	
 	public List<Unit> getUnitsAt(final Location location) {
 		return unitStorage.getUnitsAt(location);
 	}
@@ -130,7 +141,9 @@ public final class Model {
 		final GameManager gameManager = GameManager.load(parser, players);
 		parser.next(); // END_OBJECT
 
-		final Model model = new Model(calendar, map, players, units);
+		final List<Town> towns = TownsStorage.load(parser, players);
+		
+		final Model model = new Model(calendar, map, players, towns, units);
 		gameManager.setModel(model);
 		model.gameManager = gameManager;
 

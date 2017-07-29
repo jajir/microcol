@@ -112,6 +112,8 @@ public class GameController implements Localized {
 				.addUnit(UnitType.FRIGATE, "Player1", Location.of(3, 3))
 				.addUnit(UnitType.COLONIST, "Player1", Location.of(4, 3))
 
+				.addTown("brunswick", "Player1", Location.of(5, 3))
+				
 				.addPlayer("Player2", true).addUnit(UnitType.GALLEON, "Player2", Location.of(7, 7))
 				.addUnit(UnitType.FRIGATE, "Player2", Location.of(7, 9))
 				.addUnit(UnitType.FRIGATE, "Player2", Location.of(14, 9))

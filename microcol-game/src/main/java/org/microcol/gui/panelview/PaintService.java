@@ -3,6 +3,7 @@ package org.microcol.gui.panelview;
 import org.microcol.gui.ImageProvider;
 import org.microcol.gui.Point;
 import org.microcol.model.Player;
+import org.microcol.model.Town;
 import org.microcol.model.Unit;
 
 import com.google.common.base.Preconditions;
@@ -59,6 +60,12 @@ public class PaintService {
 		paintOwnersFlag(graphics, point.add(OWNERS_FLAG_POSITION), unit.getOwner());
 	}
 
+	public void paintTown(final GraphicsContext graphics, final Point point, final Town town) {
+		Point p = point.add(UNIT_IMAGE_POSITION);
+		graphics.drawImage(imageProvider.getImage(ImageProvider.IMG_TILE_TOWN), p.getX(), p.getY());
+		paintOwnersFlag(graphics, point.add(OWNERS_FLAG_POSITION), town.getOwner());
+	}
+
 	/**
 	 * Draw unit to tile.
 	 * 
@@ -91,7 +98,7 @@ public class PaintService {
 	 */
 	public void paintOwnersFlag(final GraphicsContext graphics, final Point point, final Player player) {
 		graphics.setStroke(Color.LIGHTGREY);
-		graphics.setLineWidth(1);
+		graphics.setLineWidth(1.5F);
 		graphics.strokeRect(point.getX(), point.getY(), FLAG_WIDTH, FLAG_HEIGHT);
 		if (player.isHuman()) {
 			graphics.setFill(Color.YELLOW);
@@ -114,7 +121,7 @@ public class PaintService {
 				break;
 			}
 		}
-		//TODO JJ vyzkouset na win, jak kresleni ramecku funguje
+		// TODO JJ vyzkouset na win, jak kresleni ramecku funguje
 		graphics.fillRect(point.getX() + 1, point.getY() + 1, FLAG_WIDTH - 2, FLAG_HEIGHT - 2);
 	}
 

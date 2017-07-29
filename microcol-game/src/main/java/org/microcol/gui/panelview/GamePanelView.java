@@ -1,6 +1,7 @@
 package org.microcol.gui.panelview;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -19,6 +20,7 @@ import org.microcol.gui.util.ViewUtil;
 import org.microcol.model.Location;
 import org.microcol.model.Model;
 import org.microcol.model.Terrain;
+import org.microcol.model.Town;
 import org.microcol.model.Unit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -189,8 +191,9 @@ public class GamePanelView implements GamePanelPresenter.Display {
 		g.fillRect(0, 0, visibleArea.getCanvasWidth(), visibleArea.getCanvasHeight());
 
 		paintTiles(g, area);
-		paintUnits(g, gameController.getModel(), area);
 		paintGrid(g, area);
+		paintUnits(g, gameController.getModel(), area);
+		paintTowns(g, gameController.getModel(), area);
 		paintCursor(g, area);
 		paintSteps(g, area);
 		paintAnimation(g, area);
@@ -252,10 +255,10 @@ public class GamePanelView implements GamePanelPresenter.Display {
 	 *            required {@link Game}
 	 */
 	private void paintUnits(final GraphicsContext graphics, final Model world, final Area area) {
-		final java.util.Map<Location, List<Unit>> ships = world.getUnitsAt();
+		final Map<Location, List<Unit>> ships = world.getUnitsAt();
 
-		final java.util.Map<Location, List<Unit>> ships2 = ships.entrySet().stream()
-				.filter(e -> area.isVisible(e.getKey())).collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue()));
+		final Map<Location, List<Unit>> ships2 = ships.entrySet().stream().filter(e -> area.isVisible(e.getKey()))
+				.collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue()));
 
 		ships2.forEach((location, list) -> {
 			final Unit unit = list.stream().findFirst().get();
@@ -264,6 +267,18 @@ public class GamePanelView implements GamePanelPresenter.Display {
 				paintService.paintUnit(graphics, point, unit);
 			}
 		});
+	}
+
+	private void paintTowns(final GraphicsContext graphics, final Model world, final Area area) {
+		final Map<Location, Town> towns = world.getTownsAt().entrySet().stream()
+				.filter(entry -> area.isVisible(entry.getKey()))
+				.collect(Collectors.toMap(entry -> entry.getKey(), entry -> entry.getValue()));
+		
+		towns.forEach((location,town)->{
+			final Point point = area.convertToPoint(location);
+			paintService.paintTown(graphics, point, town);
+		});
+
 	}
 
 	private void paintGrid(final GraphicsContext graphics, final Area area) {
