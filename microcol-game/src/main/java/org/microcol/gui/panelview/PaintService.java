@@ -9,8 +9,10 @@ import org.microcol.model.Unit;
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
 
+import javafx.geometry.VPos;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+import javafx.scene.text.TextAlignment;
 
 /**
  * Contains methods for painting particular objects.
@@ -64,6 +66,10 @@ public class PaintService {
 		Point p = point.add(UNIT_IMAGE_POSITION);
 		graphics.drawImage(imageProvider.getImage(ImageProvider.IMG_TILE_TOWN), p.getX(), p.getY());
 		paintOwnersFlag(graphics, point.add(OWNERS_FLAG_POSITION), town.getOwner());
+		graphics.setTextAlign(TextAlignment.CENTER);
+		graphics.setTextBaseline(VPos.CENTER);
+		graphics.setFill(Color.WHITE);
+		graphics.fillText(town.getName(), p.getX() + 20, p.getY() + 30);
 	}
 
 	/**

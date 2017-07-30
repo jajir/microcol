@@ -2,6 +2,7 @@ package org.microcol.model;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.json.stream.JsonGenerator;
 import javax.json.stream.JsonParser;
@@ -54,6 +55,10 @@ public final class Player {
 
 	public List<Unit> getUnitsAt(final Location location) {
 		return model.getUnitsAt(this, location);
+	}
+	
+	public Optional<Town> getTownsAt(final Location location) {
+		return model.getTownsAt(location, this);
 	}
 
 	public List<Unit> getEnemyUnits() {

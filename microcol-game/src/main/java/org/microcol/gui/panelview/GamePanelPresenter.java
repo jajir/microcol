@@ -20,10 +20,12 @@ import org.microcol.gui.event.model.DebugRequestController;
 import org.microcol.gui.event.model.GameController;
 import org.microcol.gui.event.model.MoveUnitController;
 import org.microcol.gui.event.model.NewGameController;
+import org.microcol.gui.town.TownDialog;
 import org.microcol.gui.util.Localized;
 import org.microcol.gui.util.ViewUtil;
 import org.microcol.model.Location;
 import org.microcol.model.Model;
+import org.microcol.model.Town;
 import org.microcol.model.Unit;
 import org.microcol.model.event.UnitMovedEvent;
 import org.slf4j.Logger;
@@ -89,6 +91,8 @@ public final class GamePanelPresenter implements Localized {
 	private final ViewUtil viewUtil;
 
 	private final StartMoveController startMoveController;
+	
+	private final TownDialog colonyDialog;
 
 	@Inject
 	public GamePanelPresenter(final GamePanelPresenter.Display display, final GameController gameController,
@@ -97,7 +101,7 @@ public final class GamePanelPresenter implements Localized {
 			final GamePreferences gamePreferences, final ShowGridController showGridController,
 			final CenterViewController viewController, final ExitGameController exitGameController,
 			final DebugRequestController debugRequestController, final ViewState viewState, final ViewUtil viewUtil,
-			final StartMoveController startMoveController) {
+			final StartMoveController startMoveController, final TownDialog colonyDialog) {
 		this.focusedTileController = Preconditions.checkNotNull(focusedTileController);
 		this.gameController = Preconditions.checkNotNull(gameController);
 		this.gamePreferences = gamePreferences;
@@ -105,6 +109,7 @@ public final class GamePanelPresenter implements Localized {
 		this.viewState = Preconditions.checkNotNull(viewState);
 		this.viewUtil = Preconditions.checkNotNull(viewUtil);
 		this.startMoveController = Preconditions.checkNotNull(startMoveController);
+		this.colonyDialog = Preconditions.checkNotNull(colonyDialog);
 
 		moveUnitController.addListener(event -> {
 			scheduleWalkAnimation(event);
@@ -188,11 +193,22 @@ public final class GamePanelPresenter implements Localized {
 		display.planScrollingAnimationToPoint(p);
 	}
 
-	private void tryToSwitchToMoveMode(final Location currentLocation) {
+	private boolean tryToSwitchToMoveMode(final Location currentLocation) {
 		Preconditions.checkNotNull(currentLocation);
 		final List<Unit> units = gameController.getModel().getCurrentPlayer().getUnitsAt(currentLocation);
 		if (!units.isEmpty()) {
 			startMoveController.fireEvent(new StartMoveEvent());
+			return true;
+		}
+		return false;
+	}
+
+	private void tryToOpenTownDetail(final Location currentLocation) {
+		Preconditions.checkNotNull(currentLocation);
+		final Optional<Town> oTown = gameController.getModel().getCurrentPlayer().getTownsAt(currentLocation);
+		if(oTown.isPresent()){
+			//show town details
+			colonyDialog.showTown(oTown.get());
 		}
 	}
 
@@ -240,7 +256,10 @@ public final class GamePanelPresenter implements Localized {
 					viewState.setSelectedTile(Optional.of(location));
 					focusedTileController.fireEvent(new FocusedTileEvent(gameController.getModel(), location,
 							gameController.getModel().getMap().getTerrainAt(location)));
-					tryToSwitchToMoveMode(location);
+					if(!tryToSwitchToMoveMode(location)){
+						//TODO JJ is this if really needed?
+						tryToOpenTownDetail(location);
+					}
 				}
 			}
 		} else {

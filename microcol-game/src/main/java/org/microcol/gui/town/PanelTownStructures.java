@@ -1,4 +1,4 @@
-package org.microcol.gui.colony;
+package org.microcol.gui.town;
 
 import org.microcol.gui.europe.TitledPanel;
 
@@ -7,9 +7,9 @@ import javafx.scene.control.Label;
 /**
  * Show building factories and other structures build in colony.
  */
-public class PanelColonyStructures extends TitledPanel {
+public class PanelTownStructures extends TitledPanel {
 
-	public PanelColonyStructures() {
+	public PanelTownStructures() {
 		super("Colony Structures", new Label("Colony Structures"));
 	}
 

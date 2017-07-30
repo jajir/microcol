@@ -1,4 +1,4 @@
-package org.microcol.gui.colony;
+package org.microcol.gui.town;
 
 import org.microcol.gui.ImageProvider;
 import org.microcol.gui.europe.PanelGoods;
@@ -7,6 +7,7 @@ import org.microcol.gui.event.model.GameController;
 import org.microcol.gui.util.AbstractDialog;
 import org.microcol.gui.util.Text;
 import org.microcol.gui.util.ViewUtil;
+import org.microcol.model.Town;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
@@ -18,26 +19,30 @@ import javafx.scene.layout.VBox;
 /**
  * Show Europe port.
  */
-public class ColonyDialog extends AbstractDialog {
+public class TownDialog extends AbstractDialog {
+
+	private Town town;
+
+	final Label townName;
 
 	@Inject
-	public ColonyDialog(final ViewUtil viewUtil, final Text text, final ImageProvider imageProvider,
+	public TownDialog(final ViewUtil viewUtil, final Text text, final ImageProvider imageProvider,
 			final GameController gameController) {
 		super(viewUtil);
 		Preconditions.checkNotNull(imageProvider);
 		Preconditions.checkNotNull(gameController);
 		getDialog().setTitle(text.get("europeDialog.caption"));
-		
-		/**
-		 * Row 1
-		 */
-		final Label label = new Label("Colony: First nice colony");
-		/**
-		 * Row 1
-		 */
-		final PanelColonyLayout colonyLayout = new PanelColonyLayout();
 
-		final PanelColonyStructures colonyStructures = new PanelColonyStructures();
+		/**
+		 * Row 1
+		 */
+		townName = new Label("Colony: ");
+		/**
+		 * Row 1
+		 */
+		final PanelTownLayout colonyLayout = new PanelTownLayout();
+
+		final PanelTownStructures colonyStructures = new PanelTownStructures();
 
 		/**
 		 * Row 2
@@ -57,10 +62,14 @@ public class ColonyDialog extends AbstractDialog {
 		});
 		buttonOk.requestFocus();
 		final VBox mainPanel = new VBox();
-		mainPanel.getChildren().addAll(label,colonyLayout, colonyStructures, pierShips,goods,buttonOk);
+		mainPanel.getChildren().addAll(townName, colonyLayout, colonyStructures, pierShips, goods, buttonOk);
 		init(mainPanel);
 		getScene().getStylesheets().add("gui/MicroCol.css");
-		
+	}
+
+	public void showTown(final Town town) {
+		this.town = Preconditions.checkNotNull(town);
+		townName.setText("Colony: " + town.getName());
 		getDialog().showAndWait();
 	}
 

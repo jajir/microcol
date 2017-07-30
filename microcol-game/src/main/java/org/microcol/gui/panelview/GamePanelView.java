@@ -192,9 +192,9 @@ public class GamePanelView implements GamePanelPresenter.Display {
 
 		paintTiles(g, area);
 		paintGrid(g, area);
+		paintSelectedTile(g, area);
 		paintUnits(g, gameController.getModel(), area);
 		paintTowns(g, gameController.getModel(), area);
-		paintCursor(g, area);
 		paintSteps(g, area);
 		paintAnimation(g, area);
 		if (gamePreferences.isDevelopment()) {
@@ -304,7 +304,7 @@ public class GamePanelView implements GamePanelPresenter.Display {
 		graphics.strokeLine(p_1.getX(), p_1.getY(), p_2.getX(), p_2.getY());
 	}
 
-	private void paintCursor(final GraphicsContext graphics, final Area area) {
+	private void paintSelectedTile(final GraphicsContext graphics, final Area area) {
 		if (viewState.getSelectedTile().isPresent()) {
 			graphics.setStroke(Color.GREY);
 			graphics.setLineWidth(2);

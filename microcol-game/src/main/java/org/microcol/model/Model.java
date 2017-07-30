@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
 
@@ -89,7 +90,6 @@ public final class Model {
 	public Player getCurrentPlayer() {
 		return gameManager.getCurrentPlayer();
 	}
-
 	public List<Unit> getUnits() {
 		return unitStorage.getUnits(false);
 	}
@@ -105,7 +105,14 @@ public final class Model {
 	public Map<Location, Town> getTownsAt(){
 		return towns.stream().collect(ImmutableMap.toImmutableMap(Town::getLocation, Function.identity()));
 	}
-	
+
+	public Optional<Town> getTownsAt(final Location location, final Player owner) {
+		Preconditions.checkNotNull(location);
+		Preconditions.checkNotNull(owner);
+		return towns.stream().filter(town -> town.getOwner().equals(owner))
+				.filter(town -> town.getLocation().equals(location)).findFirst();
+	}
+
 	public List<Unit> getUnitsAt(final Location location) {
 		return unitStorage.getUnitsAt(location);
 	}
