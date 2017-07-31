@@ -1,5 +1,9 @@
 package org.microcol.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 
 public class Town {
@@ -13,12 +17,16 @@ public class Town {
 
 	private final Location location;
 
+	private final List<TownSection> townSection;
+
 	private Model model;
 
 	public Town(String name, final Player owner, final Location location) {
 		this.name = name;
 		this.owner = Preconditions.checkNotNull(owner);
 		this.location = Preconditions.checkNotNull(location);
+		townSection = new ArrayList<>();
+		location.getNeighbors().forEach(loc -> townSection.add(new TownSection(loc, null)));
 	}
 
 	public void setModel(Model model) {
@@ -41,4 +49,12 @@ public class Town {
 		return owner;
 	}
 
+	public List<TownSection> getTownSection() {
+		return townSection;
+	}
+
+	@Override
+	public String toString() {
+		return MoreObjects.toStringHelper(Town.class).add("name", name).add("location", location).toString();
+	}
 }

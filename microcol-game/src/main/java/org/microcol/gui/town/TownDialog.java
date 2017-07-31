@@ -4,6 +4,7 @@ import org.microcol.gui.ImageProvider;
 import org.microcol.gui.europe.PanelGoods;
 import org.microcol.gui.europe.PanelPortPier;
 import org.microcol.gui.event.model.GameController;
+import org.microcol.gui.panelview.PaintService;
 import org.microcol.gui.util.AbstractDialog;
 import org.microcol.gui.util.Text;
 import org.microcol.gui.util.ViewUtil;
@@ -23,11 +24,15 @@ public class TownDialog extends AbstractDialog {
 
 	private Town town;
 
-	final Label townName;
+	private final Label townName;
+	
+	private final PanelTownLayout colonyLayout ;
+	
+	private final PanelTownStructures colonyStructures;
 
 	@Inject
 	public TownDialog(final ViewUtil viewUtil, final Text text, final ImageProvider imageProvider,
-			final GameController gameController) {
+			final GameController gameController, final PaintService paintService, final PanelTownLayout panelTownLayout) {
 		super(viewUtil);
 		Preconditions.checkNotNull(imageProvider);
 		Preconditions.checkNotNull(gameController);
@@ -40,9 +45,9 @@ public class TownDialog extends AbstractDialog {
 		/**
 		 * Row 1
 		 */
-		final PanelTownLayout colonyLayout = new PanelTownLayout();
+		colonyLayout = Preconditions.checkNotNull(panelTownLayout);
 
-		final PanelTownStructures colonyStructures = new PanelTownStructures();
+		colonyStructures = new PanelTownStructures();
 
 		/**
 		 * Row 2
@@ -70,6 +75,7 @@ public class TownDialog extends AbstractDialog {
 	public void showTown(final Town town) {
 		this.town = Preconditions.checkNotNull(town);
 		townName.setText("Colony: " + town.getName());
+		colonyLayout.setTown(town);
 		getDialog().showAndWait();
 	}
 

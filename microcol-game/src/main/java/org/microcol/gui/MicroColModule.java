@@ -36,6 +36,8 @@ import org.microcol.gui.panelview.PaintService;
 import org.microcol.gui.panelview.UnitAttackedEventListener;
 import org.microcol.gui.panelview.UnitService;
 import org.microcol.gui.panelview.ViewState;
+import org.microcol.gui.town.PanelTownLayout;
+import org.microcol.gui.town.TownDialog;
 import org.microcol.gui.util.Text;
 import org.microcol.gui.util.ViewUtil;
 
@@ -118,7 +120,8 @@ public class MicroColModule extends AbstractModule {
 		bind(RightPanelPresenter.class).asEagerSingleton();
 
 		bind(UnitsPanel.class).asEagerSingleton();
-
+		bind(TownDialog.class).asEagerSingleton();
+		bind(PanelTownLayout.class).asEagerSingleton();
 		bind(PersistingDialog.class).in(Singleton.class);
 
 		/**

@@ -92,7 +92,7 @@ public final class GamePanelPresenter implements Localized {
 
 	private final StartMoveController startMoveController;
 	
-	private final TownDialog colonyDialog;
+	private final TownDialog townDialog;
 
 	@Inject
 	public GamePanelPresenter(final GamePanelPresenter.Display display, final GameController gameController,
@@ -101,7 +101,7 @@ public final class GamePanelPresenter implements Localized {
 			final GamePreferences gamePreferences, final ShowGridController showGridController,
 			final CenterViewController viewController, final ExitGameController exitGameController,
 			final DebugRequestController debugRequestController, final ViewState viewState, final ViewUtil viewUtil,
-			final StartMoveController startMoveController, final TownDialog colonyDialog) {
+			final StartMoveController startMoveController, final TownDialog townDialog) {
 		this.focusedTileController = Preconditions.checkNotNull(focusedTileController);
 		this.gameController = Preconditions.checkNotNull(gameController);
 		this.gamePreferences = gamePreferences;
@@ -109,7 +109,7 @@ public final class GamePanelPresenter implements Localized {
 		this.viewState = Preconditions.checkNotNull(viewState);
 		this.viewUtil = Preconditions.checkNotNull(viewUtil);
 		this.startMoveController = Preconditions.checkNotNull(startMoveController);
-		this.colonyDialog = Preconditions.checkNotNull(colonyDialog);
+		this.townDialog = Preconditions.checkNotNull(townDialog);
 
 		moveUnitController.addListener(event -> {
 			scheduleWalkAnimation(event);
@@ -208,7 +208,7 @@ public final class GamePanelPresenter implements Localized {
 		final Optional<Town> oTown = gameController.getModel().getCurrentPlayer().getTownsAt(currentLocation);
 		if(oTown.isPresent()){
 			//show town details
-			colonyDialog.showTown(oTown.get());
+			townDialog.showTown(oTown.get());
 		}
 	}
 
