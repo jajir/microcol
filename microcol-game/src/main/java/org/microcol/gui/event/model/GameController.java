@@ -71,9 +71,9 @@ public class GameController implements Localized {
 		ModelBuilder builder = new ModelBuilder();
 		builder.setCalendar(1570, 1800).setMap("/maps/map-02.txt")
 
-				.addPlayer("Player1", false).addUnit(UnitType.FRIGATE, "Player1", Location.of(1, 1))
+				.addPlayer("Player1", false, 900).addUnit(UnitType.FRIGATE, "Player1", Location.of(1, 1))
 
-				.addPlayer("Player2", true).addUnit(UnitType.FRIGATE, "Player2", Location.of(1, 3))
+				.addPlayer("Player2", true, 100).addUnit(UnitType.FRIGATE, "Player2", Location.of(1, 3))
 				.addUnit(UnitType.FRIGATE, "Player2", Location.of(2, 3))
 				.addUnit(UnitType.FRIGATE, "Player2", Location.of(3, 3));
 		return builder.build();
@@ -83,11 +83,11 @@ public class GameController implements Localized {
 		ModelBuilder builder = new ModelBuilder();
 		builder.setCalendar(1570, 1800).setMap("/maps/test-map-ocean-1000x1000.txt")
 
-				.addPlayer("Player1", false).addUnit(UnitType.GALLEON, "Player1", Location.of(4, 2))
+				.addPlayer("Player1", false, 800).addUnit(UnitType.GALLEON, "Player1", Location.of(4, 2))
 				.addUnit(UnitType.FRIGATE, "Player1", Location.of(9, 5))
 				.addUnit(UnitType.FRIGATE, "Player1", Location.of(50, 50))
 
-				.addPlayer("Player2", true).addUnit(UnitType.GALLEON, "Player2", Location.of(7, 7))
+				.addPlayer("Player2", true, 100).addUnit(UnitType.GALLEON, "Player2", Location.of(7, 7))
 				.addUnit(UnitType.FRIGATE, "Player2", Location.of(7, 9))
 				.addUnit(UnitType.GALLEON, "Player2", Location.of(50, 53));
 		return builder.build();
@@ -97,24 +97,24 @@ public class GameController implements Localized {
 		ModelBuilder builder = new ModelBuilder();
 		builder.setCalendar(1570, 1800).setMap("/maps/test-map-ocean-100x100.txt")
 
-				.addPlayer("Player1", false).addUnit(UnitType.GALLEON, "Player1", Location.of(4, 2))
+				.addPlayer("Player1", false, 800).addUnit(UnitType.GALLEON, "Player1", Location.of(4, 2))
 				.addUnit(UnitType.FRIGATE, "Player1", Location.of(9, 7))
 
-				.addPlayer("Player2", true).addUnit(UnitType.GALLEON, "Player2", Location.of(7, 7))
+				.addPlayer("Player2", true, 100).addUnit(UnitType.GALLEON, "Player2", Location.of(7, 7))
 				.addUnit(UnitType.FRIGATE, "Player2", Location.of(7, 9));
 		return builder.build();
 	}
 
 	Model buildComplexModel() {
 		ModelBuilder builder = new ModelBuilder();
-		builder.setCalendar(1570, 1800).setMap("/maps/test-map-2islands-15x10.txt").addPlayer("Player1", false)
+		builder.setCalendar(1570, 1800).setMap("/maps/test-map-2islands-15x10.txt").addPlayer("Player1", false, 100)
 				.addUnit(UnitType.GALLEON, "Player1", Location.of(4, 2))
 				.addUnit(UnitType.FRIGATE, "Player1", Location.of(3, 3))
 				.addUnit(UnitType.COLONIST, "Player1", Location.of(4, 3))
 
 				.addTown("brunswick", "Player1", Location.of(5, 3))
 				
-				.addPlayer("Player2", true).addUnit(UnitType.GALLEON, "Player2", Location.of(7, 7))
+				.addPlayer("Player2", true, 100).addUnit(UnitType.GALLEON, "Player2", Location.of(7, 7))
 				.addUnit(UnitType.FRIGATE, "Player2", Location.of(7, 9))
 				.addUnit(UnitType.FRIGATE, "Player2", Location.of(14, 9))
 				.addUnit(UnitType.COLONIST, "Player2", Location.of(7, 3));

@@ -1,9 +1,13 @@
 package org.microcol.gui.event.model;
 
+import java.util.Optional;
+
 import org.microcol.model.ModelAdapter;
+import org.microcol.model.Player;
 import org.microcol.model.event.DebugRequestedEvent;
 import org.microcol.model.event.GameFinishedEvent;
 import org.microcol.model.event.GameStartedEvent;
+import org.microcol.model.event.GoldWasChangedEvent;
 import org.microcol.model.event.RoundStartedEvent;
 import org.microcol.model.event.TurnStartedEvent;
 import org.microcol.model.event.UnitAttackedEvent;
@@ -40,6 +44,12 @@ public class ModelListenerImpl extends ModelAdapter {
 	@Override
 	public void gameStarted(final GameStartedEvent event) {
 		modelEventManager.getNewGameController().fireEvent(event);
+		final Optional<Player> human = event.getModel().getPlayers().stream().filter(player -> player.isHuman())
+				.findAny();
+		if (human.isPresent()) {
+			goldWasChanged(new GoldWasChangedEvent(event.getModel(), human.get(), human.get().getGold(),
+					human.get().getGold()));
+		}
 	}
 
 	@Override
@@ -55,6 +65,13 @@ public class ModelListenerImpl extends ModelAdapter {
 	@Override
 	public void unitAttacked(final UnitAttackedEvent event) {
 		modelEventManager.getUnitAttackedEventController().fireEvent(event);
+	}
+
+	@Override
+	public void goldWasChanged(GoldWasChangedEvent event) {
+		if (event.getPlayer().isHuman()) {
+			modelEventManager.getGoldWasChangedController().fireEvent(event);
+		}
 	}
 
 }

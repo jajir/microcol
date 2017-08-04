@@ -25,17 +25,22 @@ public class TownDialog extends AbstractDialog {
 	private Town town;
 
 	private final Label townName;
-	
-	private final PanelTownLayout colonyLayout ;
-	
+
+	private final PanelTownLayout colonyLayout;
+
 	private final PanelTownStructures colonyStructures;
+
+	private final PanelTownGoods goods;
+
+	private final GameController gameController;
 
 	@Inject
 	public TownDialog(final ViewUtil viewUtil, final Text text, final ImageProvider imageProvider,
-			final GameController gameController, final PaintService paintService, final PanelTownLayout panelTownLayout) {
+			final GameController gameController, final PaintService paintService,
+			final PanelTownLayout panelTownLayout) {
 		super(viewUtil);
 		Preconditions.checkNotNull(imageProvider);
-		Preconditions.checkNotNull(gameController);
+		this.gameController = Preconditions.checkNotNull(gameController);
 		getDialog().setTitle(text.get("europeDialog.caption"));
 
 		/**
@@ -56,7 +61,7 @@ public class TownDialog extends AbstractDialog {
 		/**
 		 * Good row - 3
 		 */
-		final PanelGoods goods = new PanelGoods(imageProvider);
+		goods = new PanelTownGoods(imageProvider);
 
 		/**
 		 * Last row 10
@@ -76,6 +81,7 @@ public class TownDialog extends AbstractDialog {
 		this.town = Preconditions.checkNotNull(town);
 		townName.setText("Colony: " + town.getName());
 		colonyLayout.setTown(town);
+		goods.setEurope(gameController.getModel().getEurope());
 		getDialog().showAndWait();
 	}
 

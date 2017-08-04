@@ -4,6 +4,7 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.microcol.model.GoodType;
 import org.microcol.model.Terrain;
 import org.microcol.model.UnitType;
 
@@ -45,15 +46,16 @@ public class ImageProvider {
 
 	private static final String IMG_UNIT_FREE_COLONIST = "tile-unit-free-colonist.png";
 
-//	private static final String IMG_TILE_MODE_GOTO = "tile-mode-goto.png";
+	// private static final String IMG_TILE_MODE_GOTO = "tile-mode-goto.png";
 
 	public static final String IMG_TILE_MODE_MOVE = "tile-mode-move.png";
 
-//	private static final String IMG_TILE_MODE_FORTIFY = "tile-mode-fortify.png";
+	// private static final String IMG_TILE_MODE_FORTIFY =
+	// "tile-mode-fortify.png";
 
-//	private static final String IMG_TILE_MODE_PLOW = "tile-mode-plow.png";
+	// private static final String IMG_TILE_MODE_PLOW = "tile-mode-plow.png";
 
-//	private static final String IMG_TILE_MODE_ROAD = "tile-mode-road.png";
+	// private static final String IMG_TILE_MODE_ROAD = "tile-mode-road.png";
 
 	public static final String IMG_CROSSED_SWORDS = "crossed-swords.png";
 
@@ -108,6 +110,17 @@ public class ImageProvider {
 			.put(UnitType.GALLEON, getRawImage(IMG_TILE_SHIP_GALEON))
 			.put(UnitType.FRIGATE, getRawImage(IMG_TILE_SHIP_FRIGATE))
 			.put(UnitType.COLONIST, getRawImage(IMG_UNIT_FREE_COLONIST)).build();
+
+	private final Map<GoodType, Image> goodTypeImageMap = ImmutableMap.<GoodType, Image>builder()
+			.put(GoodType.CORN, getRawImage(IMG_GOOD_CORN)).put(GoodType.SUGAR, getRawImage(IMG_GOOD_SUGAR))
+			.put(GoodType.TABACCO, getRawImage(IMG_GOOD_TOBACCO)).put(GoodType.COTTON, getRawImage(IMG_GOOD_COTTON))
+			.put(GoodType.FUR, getRawImage(IMG_GOOD_FUR)).put(GoodType.LUMBER, getRawImage(IMG_GOOD_LUMBER))
+			.put(GoodType.ORE, getRawImage(IMG_GOOD_ORE)).put(GoodType.SILVER, getRawImage(IMG_GOOD_SILVER))
+			.put(GoodType.HORSE, getRawImage(IMG_GOOD_HORSE)).put(GoodType.RUM, getRawImage(IMG_GOOD_RUM))
+			.put(GoodType.CIGARS, getRawImage(IMG_GOOD_CIGARS)).put(GoodType.SILK, getRawImage(IMG_GOOD_SILK))
+			.put(GoodType.COAT, getRawImage(IMG_GOOD_COAT)).put(GoodType.GOODS, getRawImage(IMG_GOOD_GOODS))
+			.put(GoodType.TOOLS, getRawImage(IMG_GOOD_TOOLS)).put(GoodType.MUSKET, getRawImage(IMG_GOOD_MUSKET))
+			.build();
 
 	public ImageProvider() {
 		images = new HashMap<>();
@@ -169,6 +182,17 @@ public class ImageProvider {
 	 */
 	public Image getUnitImage(final UnitType shipType) {
 		return unitImageMap.get(shipType);
+	}
+
+	/**
+	 * For specific good type find corresponding image.
+	 * 
+	 * @param goodType
+	 *            required good type
+	 * @return image representing good type
+	 */
+	public Image getGoodTypeImage(final GoodType goodType) {
+		return goodTypeImageMap.get(goodType);
 	}
 
 }

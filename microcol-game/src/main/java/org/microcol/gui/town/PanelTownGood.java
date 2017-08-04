@@ -1,4 +1,4 @@
-package org.microcol.gui.europe;
+package org.microcol.gui.town;
 
 import org.microcol.model.GoodTrade;
 
@@ -14,9 +14,9 @@ import javafx.scene.layout.VBox;
 /**
  * Contains image of of type of good.
  */
-public class PanelGood extends VBox {
+public class PanelTownGood extends VBox {
 
-	public PanelGood(final Image image, final GoodTrade goodTrade) {
+	public PanelTownGood(final Image image, final GoodTrade goodTrade) {
 		final ImageView imageIcon = new ImageView(image);
 		Pane paneImage = new Pane(imageIcon);
 		paneImage.setOnDragDetected(e -> {
@@ -30,6 +30,7 @@ public class PanelGood extends VBox {
 			db.setContent(content);
 			e.consume();
 		});
+		//FIXME JJ ma to ukazopat mnozstvi zbozi ne cenu v evrope
 		final Label labelPrice = new Label(goodTrade.getSellPrice() + "/" + goodTrade.getBuyPrice());
 		getChildren().addAll(paneImage, labelPrice);
 	}

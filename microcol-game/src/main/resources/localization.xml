@@ -49,12 +49,14 @@
 	<entry key="unitsPanel.currentUser">On move:</entry>
 	<entry key="nextTurnButton">Next turn</entry>
 	<entry key="nextTurnButton.desctiption">Perform next turn, other players will move</entry>
-	<entry key="statusBar.year">Year</entry>
 	<entry key="tile.ocean.name">Ocean</entry>
 	<entry key="tile.ocean.description">Wide ocean, where you can travel fast and safe</entry>
 	<entry key="statusBar.tile.start">This is:</entry>
 	<entry key="statusBar.tile.withUnit">with: </entry>
+	<entry key="statusBar.era">Year</entry>
 	<entry key="statusBar.era.description">Current year</entry>
+	<entry key="statusBar.gold">Gold</entry>
+	<entry key="statusBar.gold.description">How many golden coins do you have.</entry>
 	<entry key="statusBar.status.description">Here will by simple help message</entry>
 
 	<entry key="startPanel.buttonNewGame">New Game</entry>

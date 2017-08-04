@@ -52,6 +52,7 @@ public class EuropeDialog extends AbstractDialog {
 		panelMiddle.getChildren().addAll(panelSips, panelRecruits, panelButtons);
 
 		final PanelGoods goods = new PanelGoods(imageProvider);
+		goods.setEurope(gameController.getModel().getEurope());
 
 		final VBox mainPanel = new VBox();
 		mainPanel.getChildren().addAll(label, panelMiddle, goods);

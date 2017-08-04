@@ -15,10 +15,12 @@ public final class Player {
 
 	private final String name;
 	private final boolean computer;
+	private int gold;
 
-	Player(final String name, final boolean computer) {
+	Player(final String name, final boolean computer, final int initialGold) {
 		this.name = Preconditions.checkNotNull(name);
 		this.computer = computer;
+		this.gold = initialGold;
 	}
 
 	void setModel(final Model model) {
@@ -56,7 +58,7 @@ public final class Player {
 	public List<Unit> getUnitsAt(final Location location) {
 		return model.getUnitsAt(this, location);
 	}
-	
+
 	public Optional<Town> getTownsAt(final Location location) {
 		return model.getTownsAt(location, this);
 	}
@@ -109,17 +111,11 @@ public final class Player {
 
 	@Override
 	public String toString() {
-		return MoreObjects.toStringHelper(this)
-			.add("name", name)
-			.add("computer", computer)
-			.toString();
+		return MoreObjects.toStringHelper(this).add("name", name).add("computer", computer).toString();
 	}
 
 	void save(final JsonGenerator generator) {
-		generator.writeStartObject()
-			.write("name", name)
-			.write("computer", computer)
-			.writeEnd();
+		generator.writeStartObject().write("name", name).write("computer", computer).writeEnd();
 	}
 
 	static Player load(final JsonParser parser) {
@@ -131,9 +127,21 @@ public final class Player {
 		parser.next(); // VALUE_STRING
 		final String name = parser.getString();
 		parser.next(); // KEY_NAME
-		final boolean computer = parser.next() == JsonParser.Event.VALUE_TRUE; // VALUE_TRUE or VALUE_FALSE
+		final boolean computer = parser.next() == JsonParser.Event.VALUE_TRUE; // VALUE_TRUE
+																				// or
+																				// VALUE_FALSE
 		parser.next(); // END_OBJECT
 
-		return new Player(name, computer);
+		return new Player(name, computer, -34);
+	}
+
+	public int getGold() {
+		return gold;
+	}
+
+	public void setGold(final int newGoldValue) {
+		final int oldValue = gold;
+		this.gold = newGoldValue;
+		model.fireGoldWasChanged(this, oldValue, newGoldValue);
 	}
 }

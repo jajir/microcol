@@ -45,10 +45,10 @@ public class ModelSaveLoadTest {
 		final Model model = builder
 			.setCalendar(1570, 1600)
 			.setMap("/maps/test-map-2islands-15x10.txt")
-			.addPlayer("Player1", true)
+			.addPlayer("Player1", true, 0)
 				.addUnit(UnitType.GALLEON, "Player1", Location.of(4, 2))
 				.addUnit(UnitType.FRIGATE, "Player1", Location.of(3, 3))
-			.addPlayer("Player2", true)
+			.addPlayer("Player2", true, 0)
 				.addUnit(UnitType.GALLEON, "Player2", Location.of(7, 7))
 				.addUnit(UnitType.FRIGATE, "Player2", Location.of(7, 9))
 				.addUnit(UnitType.FRIGATE, "Player2", Location.of(14, 9))

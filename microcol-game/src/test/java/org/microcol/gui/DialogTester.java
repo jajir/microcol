@@ -48,8 +48,8 @@ public class DialogTester extends Application {
 			// testDialogFight();
 			// startNewGameDialog();
 			// startAboutDialog();
-//			dialogEurope();
-			dialogColonizopedia();
+			dialogEurope();
+//			dialogColonizopedia();
 
 			// dialogSave();
 			// dialogLoad();

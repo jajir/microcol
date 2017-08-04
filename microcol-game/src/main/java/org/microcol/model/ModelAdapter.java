@@ -3,6 +3,7 @@ package org.microcol.model;
 import org.microcol.model.event.DebugRequestedEvent;
 import org.microcol.model.event.GameFinishedEvent;
 import org.microcol.model.event.GameStartedEvent;
+import org.microcol.model.event.GoldWasChangedEvent;
 import org.microcol.model.event.RoundStartedEvent;
 import org.microcol.model.event.TurnStartedEvent;
 import org.microcol.model.event.UnitAttackedEvent;
@@ -37,6 +38,11 @@ public class ModelAdapter implements ModelListener {
 
 	@Override
 	public void unitStored(final UnitStoredEvent event) {
+		// Do nothing.
+	}
+
+	@Override
+	public void goldWasChanged(GoldWasChangedEvent event) {
 		// Do nothing.
 	}
 

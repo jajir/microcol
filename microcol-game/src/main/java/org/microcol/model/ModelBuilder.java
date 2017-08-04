@@ -29,8 +29,8 @@ public class ModelBuilder {
 		return this;
 	}
 
-	public ModelBuilder addPlayer(final String name, final boolean computer) {
-		players.add(new Player(name, computer));
+	public ModelBuilder addPlayer(final String name, final boolean computer, final int initialGold) {
+		players.add(new Player(name, computer, initialGold));
 
 		return this;
 	}

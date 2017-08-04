@@ -3,6 +3,7 @@ package org.microcol.model;
 import org.microcol.model.event.DebugRequestedEvent;
 import org.microcol.model.event.GameFinishedEvent;
 import org.microcol.model.event.GameStartedEvent;
+import org.microcol.model.event.GoldWasChangedEvent;
 import org.microcol.model.event.RoundStartedEvent;
 import org.microcol.model.event.TurnStartedEvent;
 import org.microcol.model.event.UnitAttackedEvent;
@@ -25,4 +26,6 @@ public interface ModelListener {
 	void gameFinished(GameFinishedEvent event);
 
 	void debugRequested(DebugRequestedEvent event);
+
+	void goldWasChanged(GoldWasChangedEvent event);
 }

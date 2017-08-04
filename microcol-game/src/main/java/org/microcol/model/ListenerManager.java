@@ -6,6 +6,7 @@ import java.util.List;
 import org.microcol.model.event.DebugRequestedEvent;
 import org.microcol.model.event.GameFinishedEvent;
 import org.microcol.model.event.GameStartedEvent;
+import org.microcol.model.event.GoldWasChangedEvent;
 import org.microcol.model.event.RoundStartedEvent;
 import org.microcol.model.event.TurnStartedEvent;
 import org.microcol.model.event.UnitAttackedEvent;
@@ -91,6 +92,15 @@ class ListenerManager {
 
 		listeners.forEach(listener -> listener.unitStored(event));
 	}
+	
+	void fireGoldWasChanged(final Model model,final Player player, final int oldValue, final int newValue) {
+		final GoldWasChangedEvent event = new GoldWasChangedEvent(model, player, oldValue, newValue);
+
+		logger.info("Gold ammount changed: {}.", event);
+		
+		listeners.forEach(listener -> listener.goldWasChanged(event));
+	}
+
 
 	void fireGameFinished(final Model model) {
 		final GameFinishedEvent event = new GameFinishedEvent(model);

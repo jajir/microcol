@@ -23,6 +23,7 @@ public final class Model {
 	private final List<Player> players;
 	private final List<Town> towns;
 	private final UnitStorage unitStorage;
+	private final Europe europe;
 	private GameManager gameManager;
 
 	Model(final Calendar calendar, final WorldMap map, final List<Player> players, final List<Town> towns,
@@ -44,6 +45,7 @@ public final class Model {
 
 		gameManager = new GameManager();
 		gameManager.setModel(this);
+		europe = new Europe();
 	}
 
 	private void checkPlayerNames(final List<Player> players) {
@@ -225,6 +227,10 @@ public final class Model {
 		listenerManager.fireUnitStored(this, unit, slot);
 	}
 
+	void fireGoldWasChanged(final Player player, final int oldValue, final int newValue) {
+		listenerManager.fireGoldWasChanged(this, player, oldValue, newValue);
+	}
+	
 	void fireGameFinished() {
 		listenerManager.fireGameFinished(this);
 	}
@@ -232,5 +238,9 @@ public final class Model {
 	// TODO JKA Temporary solution
 	public void requestDebug(final List<Location> locations) {
 		listenerManager.fireDebugRequested(this, locations);
+	}
+
+	public Europe getEurope() {
+		return europe;
 	}
 }
