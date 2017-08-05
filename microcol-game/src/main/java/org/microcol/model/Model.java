@@ -24,10 +24,11 @@ public final class Model {
 	private final List<Town> towns;
 	private final UnitStorage unitStorage;
 	private final Europe europe;
+	private final HighSea highSea;
 	private GameManager gameManager;
 
 	Model(final Calendar calendar, final WorldMap map, final List<Player> players, final List<Town> towns,
-			final List<Unit> units) {
+			final List<Unit> units, final Europe europe, final List<HighSeaUnit> highSeaUnits) {
 		listenerManager = new ListenerManager();
 
 		this.calendar = Preconditions.checkNotNull(calendar);
@@ -45,7 +46,9 @@ public final class Model {
 
 		gameManager = new GameManager();
 		gameManager.setModel(this);
-		europe = new Europe();
+
+		highSea = new HighSea(highSeaUnits);
+		this.europe = Preconditions.checkNotNull(europe);
 	}
 
 	private void checkPlayerNames(final List<Player> players) {
@@ -92,6 +95,7 @@ public final class Model {
 	public Player getCurrentPlayer() {
 		return gameManager.getCurrentPlayer();
 	}
+
 	public List<Unit> getUnits() {
 		return unitStorage.getUnits(false);
 	}
@@ -104,7 +108,7 @@ public final class Model {
 		return unitStorage.getUnitsAt();
 	}
 
-	public Map<Location, Town> getTownsAt(){
+	public Map<Location, Town> getTownsAt() {
 		return towns.stream().collect(ImmutableMap.toImmutableMap(Town::getLocation, Function.identity()));
 	}
 
@@ -138,7 +142,7 @@ public final class Model {
 		parser.next(); // KEY_NAME
 		final WorldMap map = WorldMap.load(parser);
 		parser.next(); // KEY_NAME
-		parser.next();  // START_ARRAY
+		parser.next(); // START_ARRAY
 		final List<Player> players = new ArrayList<>();
 		Player player = null;
 		while ((player = Player.load(parser)) != null) {
@@ -151,8 +155,8 @@ public final class Model {
 		parser.next(); // END_OBJECT
 
 		final List<Town> towns = TownsStorage.load(parser, players);
-		
-		final Model model = new Model(calendar, map, players, towns, units);
+
+		final Model model = new Model(calendar, map, players, towns, units, null, null);
 		gameManager.setModel(model);
 		model.gameManager = gameManager;
 
@@ -230,7 +234,7 @@ public final class Model {
 	void fireGoldWasChanged(final Player player, final int oldValue, final int newValue) {
 		listenerManager.fireGoldWasChanged(this, player, oldValue, newValue);
 	}
-	
+
 	void fireGameFinished() {
 		listenerManager.fireGameFinished(this);
 	}
@@ -242,5 +246,9 @@ public final class Model {
 
 	public Europe getEurope() {
 		return europe;
+	}
+
+	public HighSea getHighSea() {
+		return highSea;
 	}
 }

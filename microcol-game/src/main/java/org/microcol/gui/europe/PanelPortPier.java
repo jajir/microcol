@@ -3,8 +3,8 @@ package org.microcol.gui.europe;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.easymock.EasyMock;
 import org.microcol.gui.ImageProvider;
+import org.microcol.model.Port;
 import org.microcol.model.Unit;
 import org.microcol.model.UnitType;
 import org.slf4j.Logger;
@@ -39,46 +39,16 @@ public class PanelPortPier extends TitledPanel {
 
 	private final List<Pane> crates = new ArrayList<>();
 
+	final HBox panelShips;
+
+	final ToggleGroup toggleGroup;
+
 	public PanelPortPier(final ImageProvider imageProvider) {
 		super("pristav");
 		this.imageProvider = Preconditions.checkNotNull(imageProvider);
 
-		//FIXME JJ get ships from API
-		final List<Unit> shipsToEurope = new ArrayList<>();
-		Unit ship21 = EasyMock.createMock(Unit.class);
-		EasyMock.replay(ship21);
-		shipsToEurope.add(ship21);
-
-		final List<Unit> shipsToColony = new ArrayList<>();
-		Unit ship11 = EasyMock.createMock(Unit.class);
-		EasyMock.replay(ship11);
-		shipsToColony.add(ship11);
-
-		/**
-		 * Ships in port
-		 */
-		final List<Unit> shipsInPort = new ArrayList<>();
-		Unit ship1 = EasyMock.createMock(Unit.class);
-		Unit ship2 = EasyMock.createMock(Unit.class);
-		EasyMock.expect(ship1.getType()).andReturn(UnitType.FRIGATE).anyTimes();
-		EasyMock.expect(ship2.getType()).andReturn(UnitType.GALLEON).anyTimes();
-		EasyMock.replay(ship1, ship2);
-		shipsInPort.add(ship1);
-		shipsInPort.add(ship2);
-
-		final HBox panelShips = new HBox();
-		ToggleGroup toggleGroup = new ToggleGroup();
-		for (Unit unit : shipsInPort) {
-			ToggleButton toggleButtonShip = new ToggleButton();
-			BackgroundImage myBI = new BackgroundImage(imageProvider.getUnitImage(unit.getType()),
-					BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
-					BackgroundSize.DEFAULT);
-			toggleButtonShip.getStyleClass().add("paneShip");
-			toggleButtonShip.setBackground(new Background(myBI));
-			toggleButtonShip.setToggleGroup(toggleGroup);
-			toggleButtonShip.setUserData(unit);
-			panelShips.getChildren().add(toggleButtonShip);
-		}
+		panelShips = new HBox();
+		toggleGroup = new ToggleGroup();
 		toggleGroup.selectedToggleProperty().addListener((object, oldValue, newValue) -> {
 			if (toggleGroup.getSelectedToggle() == null) {
 				closeAllCrates();
@@ -116,6 +86,25 @@ public class PanelPortPier extends TitledPanel {
 		}
 		VBox mainPanel = new VBox(panelShips, panelCrates);
 		getContentPane().getChildren().add(mainPanel);
+	}
+
+	public void setPort(final Port port) {
+		/**
+		 * Ships in port
+		 */
+		final List<Unit> shipsInPort = port.getShipsInPort();
+
+		for (Unit unit : shipsInPort) {
+			ToggleButton toggleButtonShip = new ToggleButton();
+			BackgroundImage myBI = new BackgroundImage(imageProvider.getUnitImage(unit.getType()),
+					BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
+					BackgroundSize.DEFAULT);
+			toggleButtonShip.getStyleClass().add("paneShip");
+			toggleButtonShip.setBackground(new Background(myBI));
+			toggleButtonShip.setToggleGroup(toggleGroup);
+			toggleButtonShip.setUserData(unit);
+			panelShips.getChildren().add(toggleButtonShip);
+		}
 	}
 
 	private final void setCratesForShip(final Unit unit) {

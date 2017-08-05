@@ -21,6 +21,10 @@ public enum UnitType {
 		this.cargoCapacity = cargoCapacity;
 		this.storable = storable;
 	}
+	
+	public static boolean isShip(final UnitType unitType) {
+		return unitType == UnitType.FRIGATE || unitType == UnitType.GALLEON;
+	}
 
 	public Terrain getMoveableTerrain() {
 		return moveableTerrain;

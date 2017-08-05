@@ -1,11 +1,13 @@
-               |
-    ooo        |
-   ooooo       |
-     oooo      |
-       oo      |
-               |
-   ooo         |
-  ooooo       o|
-    oo        o|
-             oo|
-----------------
+ttttttttttttttttt|
+h         ttttttt|
+h    ooo        h|
+h   ooooo       h|
+h     oooo      h|
+h       oo      h|
+h               h|
+h   ooo         h|
+h  ooooo   o    h|
+h    oo    ooo  h|
+h               h|
+ttttttttttttttttt|
+-----------------|

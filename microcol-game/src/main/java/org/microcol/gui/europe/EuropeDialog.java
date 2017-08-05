@@ -30,11 +30,14 @@ public class EuropeDialog extends AbstractDialog {
 
 		final Label label = new Label("European port");
 
-		final PanelShips outgoingShips = new PanelShips("Ships travelling to New World");
-		final PanelShips incomingShips = new PanelShips("Ships travelling to Europe");
+		final PanelShips outgoingShips = new PanelShips(imageProvider, "Ships travelling to New World",
+				gameController.getModel(), false);
+		final PanelShips incomingShips = new PanelShips(imageProvider, "Ships travelling to Europe",
+				gameController.getModel(), true);
 		final PanelPortPier pierShips = new PanelPortPier(imageProvider);
-		final VBox panelSips = new VBox();
-		panelSips.getChildren().addAll(outgoingShips, incomingShips, pierShips);
+		pierShips.setPort(gameController.getModel().getEurope().getPort());
+		final VBox panelShips = new VBox();
+		panelShips.getChildren().addAll(outgoingShips, incomingShips, pierShips);
 
 		final PanelRecruits panelRecruits = new PanelRecruits("Recruits", imageProvider, localizationHelper);
 
@@ -49,7 +52,7 @@ public class EuropeDialog extends AbstractDialog {
 		panelButtons.getChildren().addAll(recruiteButton, buyButton, buttonOk);
 
 		final HBox panelMiddle = new HBox();
-		panelMiddle.getChildren().addAll(panelSips, panelRecruits, panelButtons);
+		panelMiddle.getChildren().addAll(panelShips, panelRecruits, panelButtons);
 
 		final PanelGoods goods = new PanelGoods(imageProvider);
 		goods.setEurope(gameController.getModel().getEurope());

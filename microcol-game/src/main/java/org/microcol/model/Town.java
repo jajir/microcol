@@ -23,7 +23,7 @@ public class Town {
 
 	public Town(String name, final Player owner, final Location location) {
 		this.name = name;
-		this.owner = Preconditions.checkNotNull(owner);
+		this.owner = Preconditions.checkNotNull(owner, "owner is null");
 		this.location = Preconditions.checkNotNull(location);
 		townSection = new ArrayList<>();
 		location.getNeighbors().forEach(loc -> townSection.add(new TownSection(loc, null)));

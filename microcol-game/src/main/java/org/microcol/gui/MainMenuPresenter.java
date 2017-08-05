@@ -19,7 +19,6 @@ import org.microcol.gui.event.StartMoveController;
 import org.microcol.gui.event.StartMoveEvent;
 import org.microcol.gui.event.VolumeChangeController;
 import org.microcol.gui.event.model.GameController;
-import org.microcol.gui.event.model.MoveUnitController;
 import org.microcol.gui.event.model.TurnStartedController;
 import org.microcol.gui.util.Text;
 import org.microcol.gui.util.ViewUtil;
@@ -80,10 +79,10 @@ public class MainMenuPresenter {
 			final VolumeChangeController volumeChangeController,
 			final AnimationSpeedChangeController animationSpeedChangeController,
 			final ShowGridController showGridController, final FocusedTileController focusedTileController,
-			final MoveUnitController moveUnitController, final CenterViewController centerViewController,
-			final TurnStartedController turnStartedController, final ExitGameController exitGameController,
-			final GameController gameController, final PersistingDialog persistingDialog,
-			final ImageProvider imageProvider, final LocalizationHelper localizationHelper, final StartMoveController startMoveController) {
+			final CenterViewController centerViewController, final TurnStartedController turnStartedController,
+			final ExitGameController exitGameController, final GameController gameController,
+			final PersistingDialog persistingDialog, final ImageProvider imageProvider,
+			final LocalizationHelper localizationHelper, final StartMoveController startMoveController) {
 		this.display = Preconditions.checkNotNull(display);
 		display.getMenuItemNewGame().setOnAction(actionEvent -> {
 			gameController.startNewGame();

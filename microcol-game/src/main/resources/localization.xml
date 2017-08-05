@@ -74,6 +74,10 @@
 	<entry key="terrain.OCEAN.description">Wild nice ocean</entry>
 	<entry key="terrain.CONTINENT.name">Continent</entry>
 	<entry key="terrain.CONTINENT.description">Some continent</entry>
+	<entry key="terrain.TUNDRA.name">Tundra</entry>
+	<entry key="terrain.TUNDRA.description">Cold freezing wasteland</entry>
+	<entry key="terrain.HIGH_SEA.name">High Sea</entry>
+	<entry key="terrain.HIGH_SEA.description">Huge water mass between Europe and colonies</entry>
 
 	<entry key="unit.FRIGATE.name">Frigate</entry>
 	<entry key="unit.GALLEON.name">Galleon</entry>

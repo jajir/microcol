@@ -34,6 +34,8 @@ public class TownDialog extends AbstractDialog {
 
 	private final GameController gameController;
 
+	private final PanelPortPier pierShips;
+
 	@Inject
 	public TownDialog(final ViewUtil viewUtil, final Text text, final ImageProvider imageProvider,
 			final GameController gameController, final PaintService paintService,
@@ -57,7 +59,8 @@ public class TownDialog extends AbstractDialog {
 		/**
 		 * Row 2
 		 */
-		final PanelPortPier pierShips = new PanelPortPier(imageProvider);
+		pierShips = new PanelPortPier(imageProvider);
+
 		/**
 		 * Good row - 3
 		 */
@@ -82,6 +85,7 @@ public class TownDialog extends AbstractDialog {
 		townName.setText("Colony: " + town.getName());
 		colonyLayout.setTown(town);
 		goods.setEurope(gameController.getModel().getEurope());
+		pierShips.setPort(null);
 		getDialog().showAndWait();
 	}
 

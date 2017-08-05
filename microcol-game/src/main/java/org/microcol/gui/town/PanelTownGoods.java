@@ -22,16 +22,16 @@ public class PanelTownGoods extends TitledPanel {
 		super("zbozi");
 		this.imageProvider = Preconditions.checkNotNull(imageProvider);
 		hBox = new HBox();
+		getContentPane().getChildren().add(hBox);
 	}
 
 	public void setEurope(final Europe europe) {
 		Preconditions.checkNotNull(europe);
-		getContentPane().getChildren().clear();
+		hBox.getChildren().clear();
 		GoodType.getGoodTypes().forEach(goodType -> {
 			hBox.getChildren().add(
 					new PanelTownGood(imageProvider.getGoodTypeImage(goodType), europe.getGoodTradeForType(goodType)));
 		});
-		getContentPane().getChildren().add(hBox);
 	}
 
 }

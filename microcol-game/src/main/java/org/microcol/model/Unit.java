@@ -23,6 +23,7 @@ public class Unit {
 	private int availableMoves;
 	private final CargoHold hold;
 	private CargoSlot slot; // TODO JKA RENAME
+	private HighSeaUnit highSeaUnit;
 
 	Unit(final UnitType type, final Player owner, final Location location) {
 		this.type = Preconditions.checkNotNull(type);
@@ -67,7 +68,8 @@ public class Unit {
 		availableMoves = type.getSpeed();
 	}
 
-	// Netestuje nedosažitelné lokace, pouze jestli je teoreticky možné na danou lokaci vstoupit
+	// Netestuje nedosažitelné lokace, pouze jestli je teoreticky možné na danou
+	// lokaci vstoupit
 	public boolean isMoveable(final Location location) {
 		return isMoveable(location, false);
 	}
@@ -145,7 +147,7 @@ public class Unit {
 							} else {
 								enemies.addAll(eee);
 							}
-						} else if (isPossibleToDisembarkAt(neighbor,true)) {
+						} else if (isPossibleToDisembarkAt(neighbor, true)) {
 							currentSet.add(neighbor);
 						} else if (isPossibleToEmbarkAt(neighbor, true)) {
 							currentSet.add(neighbor);
@@ -166,31 +168,31 @@ public class Unit {
 			attackableTargets.addAll(enemies);
 		}
 	}
-	
-	public boolean isPossibleToDisembarkAt(final Location targetLocation, boolean inCurrentTurn){
+
+	public boolean isPossibleToDisembarkAt(final Location targetLocation, boolean inCurrentTurn) {
 		Preconditions.checkNotNull(targetLocation);
 		if (location.isNeighbor(targetLocation) && getType().getCargoCapacity() > 0) {
 			return getHold().getSlots().stream()
-					.filter(cargoSlot -> canCargoDisembark(cargoSlot, targetLocation,inCurrentTurn)).findAny().isPresent();
+					.filter(cargoSlot -> canCargoDisembark(cargoSlot, targetLocation, inCurrentTurn)).findAny()
+					.isPresent();
 		} else {
 			return false;
 		}
 	}
-	
+
 	private boolean canCargoDisembark(final CargoSlot slot, final Location moveToLocation, boolean inCurrentTurn) {
 		if (slot.isEmpty()) {
 			return false;
 		} else {
 			final Unit unit = slot.getUnit().get();
-			return (!inCurrentTurn || unit.availableMoves>0) && unit.canUnitDisembarkAt(moveToLocation);
+			return (!inCurrentTurn || unit.availableMoves > 0) && unit.canUnitDisembarkAt(moveToLocation);
 		}
 	}
-	
-	private boolean canUnitDisembarkAt(final Location targeLocation){
-		return getType().getMoveableTerrain()
-				.equals(model.getMap().getTerrainAt(targeLocation));		
+
+	private boolean canUnitDisembarkAt(final Location targeLocation) {
+		return getType().getMoveableTerrain().equals(model.getMap().getTerrainAt(targeLocation));
 	}
-	
+
 	public boolean isPossibleToEmbarkAt(final Location targetLocation, boolean inCurrentTurn) {
 		if (isStorable() && location.isNeighbor(targetLocation) && (!inCurrentTurn || availableMoves > 0)) {
 			final List<Unit> units = model.getUnitsAt(targetLocation);
@@ -216,7 +218,7 @@ public class Unit {
 			}
 		}
 	}
-	
+
 	/**
 	 * Return true when given unit have free cargo slot for unit.
 	 * 
@@ -245,31 +247,20 @@ public class Unit {
 	public List<Unit> getStorageUnits() {
 		checkNotStored();
 
-		return location.getNeighbors().stream()
-			.flatMap(neighbor -> owner.getUnitsAt(neighbor).stream())
-			.filter(unit -> unit != this)
-			.filter(unit -> unit.getHold().getSlots().stream()
-				.filter(slot -> slot.isEmpty())
-				.findAny().isPresent())
-			.collect(ImmutableList.toImmutableList());
+		return location.getNeighbors().stream().flatMap(neighbor -> owner.getUnitsAt(neighbor).stream())
+				.filter(unit -> unit != this)
+				.filter(unit -> unit.getHold().getSlots().stream().filter(slot -> slot.isEmpty()).findAny().isPresent())
+				.collect(ImmutableList.toImmutableList());
 		/*
-		final ImmutableList.Builder<Unit> builder = ImmutableList.builder();
-
-		// TODO JKA Predelat
-		location.getNeighbors().forEach(neighbor -> {
-			owner.getUnitsAt(neighbor).forEach(unit -> {
-				if (unit != this) {
-					unit.getHold().getSlots().forEach(slot -> {
-						if (slot.isEmpty()) {
-							builder.add(unit);
-						}
-					});
-				}
-			});
-		});
-
-		return builder.build();
-		*/
+		 * final ImmutableList.Builder<Unit> builder = ImmutableList.builder();
+		 * 
+		 * // TODO JKA Predelat location.getNeighbors().forEach(neighbor -> {
+		 * owner.getUnitsAt(neighbor).forEach(unit -> { if (unit != this) {
+		 * unit.getHold().getSlots().forEach(slot -> { if (slot.isEmpty()) {
+		 * builder.add(unit); } }); } }); });
+		 * 
+		 * return builder.build();
+		 */
 	}
 
 	public Optional<List<Location>> getPath(final Location destination) {
@@ -293,9 +284,11 @@ public class Unit {
 		model.checkCurrentPlayer(owner);
 
 		Preconditions.checkNotNull(path);
-		Preconditions.checkArgument(path.getStart().isNeighbor(location), "Path (%s) must be neighbor to current location (%s).", path.getStart(), location);
+		Preconditions.checkArgument(path.getStart().isNeighbor(location),
+				"Path (%s) must be neighbor to current location (%s).", path.getStart(), location);
 		Preconditions.checkArgument(model.getMap().isValid(path), "Path (%s) must be valid.", path);
-		Preconditions.checkArgument(!path.containsAny(owner.getEnemyUnitsAt().keySet()), "There is enemy unit on path (%s).", path);
+		Preconditions.checkArgument(!path.containsAny(owner.getEnemyUnitsAt().keySet()),
+				"There is enemy unit on path (%s).", path);
 
 		final Location start = location;
 		final List<Location> locations = new ArrayList<>();
@@ -306,7 +299,8 @@ public class Unit {
 				break;
 			}
 			if (model.getMap().getTerrainAt(newLocation) != type.getMoveableTerrain()) {
-				throw new IllegalArgumentException(String.format("Path (%s) must contain only moveable terrain (%s).", newLocation, model.getMap().getTerrainAt(newLocation)));
+				throw new IllegalArgumentException(String.format("Path (%s) must contain only moveable terrain (%s).",
+						newLocation, model.getMap().getTerrainAt(newLocation)));
 			}
 			locations.add(newLocation);
 			location = newLocation;
@@ -325,10 +319,13 @@ public class Unit {
 
 		Preconditions.checkState(type.canAttack(), "This unit type (%s) cannot attack.", this);
 		Preconditions.checkNotNull(location);
-		Preconditions.checkArgument(model.getMap().getTerrainAt(location) == type.getMoveableTerrain(), "Target location (%s) is not moveable for this unit (%s)", location, this);
-		Preconditions.checkArgument(this.location.isNeighbor(location), "Unit location (%s) is not neighbor to target location (%s).", this.location, location);
+		Preconditions.checkArgument(model.getMap().getTerrainAt(location) == type.getMoveableTerrain(),
+				"Target location (%s) is not moveable for this unit (%s)", location, this);
+		Preconditions.checkArgument(this.location.isNeighbor(location),
+				"Unit location (%s) is not neighbor to target location (%s).", this.location, location);
 		Preconditions.checkState(availableMoves > 0, "Unit (%s) cannot attack this turn.", this);
-		Preconditions.checkState(!owner.getEnemyUnitsAt(location).isEmpty(), "There is not any enemy unit on target location (%s).", location);
+		Preconditions.checkState(!owner.getEnemyUnitsAt(location).isEmpty(),
+				"There is not any enemy unit on target location (%s).", location);
 
 		availableMoves = 0;
 
@@ -349,6 +346,10 @@ public class Unit {
 		return slot != null;
 	}
 
+	public boolean isInHighSea() {
+		return highSeaUnit != null;
+	}
+
 	void store(final CargoSlot slot) {
 		Preconditions.checkState(isStorable(), "This unit (%s) cannot be stored.", this);
 		checkNotStored();
@@ -357,17 +358,17 @@ public class Unit {
 		// TODO JKA prazdny naklad?
 
 		this.slot = slot;
-		availableMoves=0;
+		availableMoves = 0;
 		model.fireUnitStored(this, slot); // TODO JKA Move to CargoSlot?
 	}
 
 	void unload(final Location targetLocation) {
 		Preconditions.checkNotNull(targetLocation);
-		Preconditions.checkArgument(availableMoves>0,"Unit (%s) need for unload at least on action point",this);
+		Preconditions.checkArgument(availableMoves > 0, "Unit (%s) need for unload at least on action point", this);
 		// TODO JKA run "standard" unit location checks
 
 		// TODO JKA empty all moves and attacks?
-		this.availableMoves=0;
+		this.availableMoves = 0;
 		this.location = targetLocation;
 		this.slot = null;
 	}
@@ -380,14 +381,10 @@ public class Unit {
 
 	@Override
 	public String toString() {
-		return MoreObjects.toStringHelper(this)
-			.add("type", type)
-			.add("owner", owner)
-			.add("location", location)
-			.add("availableMoves", availableMoves)
-			.add("hold", hold)
-			// TODO JKA SLOT
-			.toString();
+		return MoreObjects.toStringHelper(this).add("type", type).add("owner", owner).add("location", location)
+				.add("availableMoves", availableMoves).add("hold", hold)
+				// TODO JKA SLOT
+				.toString();
 	}
 
 	void save(final JsonGenerator generator) {
@@ -411,10 +408,8 @@ public class Unit {
 		parser.next(); // KEY_NAME
 		parser.next(); // VALUE_STRING
 		final String ownerName = parser.getString();
-		final Player owner = players.stream()
-			.filter(player -> player.getName().equals(ownerName))
-			.findAny()
-			.orElse(null);
+		final Player owner = players.stream().filter(player -> player.getName().equals(ownerName)).findAny()
+				.orElse(null);
 		parser.next(); // KEY_NAME
 		final Location location = Location.load(parser);
 		parser.next(); // KEY_NAME
@@ -429,4 +424,5 @@ public class Unit {
 
 		return unit;
 	}
+
 }

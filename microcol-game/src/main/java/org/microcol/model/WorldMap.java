@@ -37,14 +37,20 @@ public class WorldMap {
 				for (int x = 0; x < line.length() - 1; x++) {
 					final char tile = line.charAt(x);
 					switch (tile) {
-						case 'o':
-							terrainMap.put(Location.of(x + 1, maxY), Terrain.CONTINENT);
-							break;
-						case ' ':
-							// Do nothing.
-							break;
-						default:
-							throw new IllegalArgumentException(String.format("Unsupported character (%s).", tile));
+					case 'o':
+						terrainMap.put(Location.of(x + 1, maxY), Terrain.CONTINENT);
+						break;
+					case 't':
+						terrainMap.put(Location.of(x + 1, maxY), Terrain.TUNDRA);
+						break;
+					case 'h':
+						terrainMap.put(Location.of(x + 1, maxY), Terrain.HIGH_SEA);
+						break;
+					case ' ':
+						// Do nothing.
+						break;
+					default:
+						throw new IllegalArgumentException(String.format("Unsupported character (%s).", tile));
 					}
 				}
 			}
@@ -83,10 +89,8 @@ public class WorldMap {
 	public boolean isValid(final Location location) {
 		Preconditions.checkNotNull(location);
 
-		return location.getX() >= 1
-			&& location.getX() <= getMaxX()
-			&& location.getY() >= 1
-			&& location.getY() <= getMaxY();
+		return location.getX() >= 1 && location.getX() <= getMaxX() && location.getY() >= 1
+				&& location.getY() <= getMaxY();
 	}
 
 	public boolean isValid(final Path path) {
@@ -97,18 +101,12 @@ public class WorldMap {
 
 	@Override
 	public String toString() {
-		return MoreObjects.toStringHelper(this)
-			.add("fileName", fileName)
-			.add("maxX", maxX)
-			.add("maxY", maxY)
-			.add("landmass", terrainMap.keySet().size())
-			.toString();
+		return MoreObjects.toStringHelper(this).add("fileName", fileName).add("maxX", maxX).add("maxY", maxY)
+				.add("landmass", terrainMap.keySet().size()).toString();
 	}
 
 	void save(final String name, final JsonGenerator generator) {
-		generator.writeStartObject(name)
-			.write("fileName", fileName)
-			.writeEnd();
+		generator.writeStartObject(name).write("fileName", fileName).writeEnd();
 	}
 
 	static WorldMap load(final JsonParser parser) {
