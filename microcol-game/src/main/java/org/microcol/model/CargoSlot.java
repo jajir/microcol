@@ -25,6 +25,15 @@ public final class CargoSlot {
 		return cargo;
 	}
 
+	/**
+	 * This method doesn's store store unti and 
+	 * @param unit
+	 */
+	void unsafeStore(final Unit unit){
+		cargo = Optional.of(unit);
+		unit.storeWithoutEvent(this);
+	}
+	
 	public void store(final Unit unit) {
 		Preconditions.checkNotNull(unit);
 		if (cargo.isPresent()) { // TODO JKA Temporary fix - cargo.get() is problem

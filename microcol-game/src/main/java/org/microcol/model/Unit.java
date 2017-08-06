@@ -351,6 +351,11 @@ public class Unit {
 	}
 
 	void store(final CargoSlot slot) {
+		storeWithoutEvent(slot);
+		model.fireUnitStored(this, slot); // TODO JKA Move to CargoSlot?
+	}
+	
+	void storeWithoutEvent(final CargoSlot slot){
 		Preconditions.checkState(isStorable(), "This unit (%s) cannot be stored.", this);
 		checkNotStored();
 		// TODO JKA check adjacent location
@@ -358,8 +363,7 @@ public class Unit {
 		// TODO JKA prazdny naklad?
 
 		this.slot = slot;
-		availableMoves = 0;
-		model.fireUnitStored(this, slot); // TODO JKA Move to CargoSlot?
+		availableMoves = 0;		
 	}
 
 	void unload(final Location targetLocation) {

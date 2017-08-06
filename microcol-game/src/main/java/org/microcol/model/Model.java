@@ -156,7 +156,7 @@ public final class Model {
 
 		final List<Town> towns = TownsStorage.load(parser, players);
 
-		final Model model = new Model(calendar, map, players, towns, units, null, null);
+		final Model model = new Model(calendar, map, players, towns, units, new Europe(Lists.newArrayList()), Lists.newArrayList());
 		gameManager.setModel(model);
 		model.gameManager = gameManager;
 

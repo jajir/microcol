@@ -70,7 +70,7 @@ public class GameController implements Localized {
 
 	Model buildComplexModel() {
 		ModelBuilder builder = new ModelBuilder();
-		builder.setCalendar(1570, 1800).setMap("/maps/test-map-2islands-15x10.txt")
+		builder.setCalendar(1570, 1800).setMap("/maps/test-map-simple-test.txt")
 
 				/**
 				 * Human player

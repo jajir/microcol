@@ -52,6 +52,7 @@ public class ModelSaveLoadTest {
 				.addUnit(UnitType.GALLEON, "Player2", Location.of(7, 7))
 				.addUnit(UnitType.FRIGATE, "Player2", Location.of(7, 9))
 				.addUnit(UnitType.FRIGATE, "Player2", Location.of(14, 9))
+			.getEuropeBuilder().build()
 			.build();
 		model.startGame();
 

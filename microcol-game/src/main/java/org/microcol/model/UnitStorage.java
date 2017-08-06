@@ -25,94 +25,81 @@ class UnitStorage {
 	private void checkUnitLocations(final List<Unit> units) {
 		Map<Location, Player> owners = new HashMap<>();
 		units.forEach(unit -> {
-			Player owner = owners.get(unit.getLocation());
-			if (owner != null) {
-				if (!owner.equals(unit.getOwner())) {
-					throw new IllegalArgumentException(String.format("There is an enemy unit at the same location (%s).", unit.getLocation()));
+			if (!unit.isStored()) {
+				Player owner = owners.get(unit.getLocation());
+				if (owner != null) {
+					if (!owner.equals(unit.getOwner())) {
+						throw new IllegalArgumentException(
+								String.format("There is an enemy unit at the same location (%s).", unit.getLocation()));
+					}
+				} else {
+					owners.put(unit.getLocation(), unit.getOwner());
 				}
-			} else {
-				owners.put(unit.getLocation(), unit.getOwner());
 			}
 		});
 	}
 
 	List<Unit> getUnits(final boolean includeStored) {
-		return units.stream()
-			.filter(unit -> includeStored || !unit.isStored())
-			.collect(ImmutableList.toImmutableList());
+		return units.stream().filter(unit -> includeStored || !unit.isStored())
+				.collect(ImmutableList.toImmutableList());
 	}
 
 	Map<Location, List<Unit>> getUnitsAt() {
-		return Multimaps.asMap(units.stream()
-			.filter(unit -> !unit.isStored())
-			.collect(ImmutableListMultimap.toImmutableListMultimap(Unit::getLocation, Function.identity())));
+		return Multimaps.asMap(units.stream().filter(unit -> !unit.isStored())
+				.collect(ImmutableListMultimap.toImmutableListMultimap(Unit::getLocation, Function.identity())));
 	}
 
 	List<Unit> getUnitsAt(final Location location) {
 		Preconditions.checkNotNull(location);
 
-		return units.stream()
-			.filter(unit -> !unit.isStored())
-			.filter(unit -> unit.getLocation().equals(location))
-			.collect(ImmutableList.toImmutableList());
+		return units.stream().filter(unit -> !unit.isStored()).filter(unit -> unit.getLocation().equals(location))
+				.collect(ImmutableList.toImmutableList());
 	}
 
 	List<Unit> getUnits(final Player player, final boolean includeStored) {
 		Preconditions.checkNotNull(player);
 
-		return units.stream()
-			.filter(unit -> unit.getOwner().equals(player))
-			.filter(unit -> includeStored || !unit.isStored())
-			.collect(ImmutableList.toImmutableList());
+		return units.stream().filter(unit -> unit.getOwner().equals(player))
+				.filter(unit -> includeStored || !unit.isStored()).collect(ImmutableList.toImmutableList());
 	}
 
 	Map<Location, List<Unit>> getUnitsAt(final Player player) {
 		Preconditions.checkNotNull(player);
 
-		return Multimaps.asMap(units.stream()
-			.filter(unit -> unit.getOwner().equals(player))
-			.filter(unit -> !unit.isStored())
-			.collect(ImmutableListMultimap.toImmutableListMultimap(Unit::getLocation, Function.identity())));
+		return Multimaps.asMap(
+				units.stream().filter(unit -> unit.getOwner().equals(player)).filter(unit -> !unit.isStored()).collect(
+						ImmutableListMultimap.toImmutableListMultimap(Unit::getLocation, Function.identity())));
 	}
 
 	List<Unit> getUnitsAt(final Player player, final Location location) {
 		Preconditions.checkNotNull(player);
 		Preconditions.checkNotNull(location);
 
-		return units.stream()
-			.filter(unit -> unit.getOwner().equals(player))
-			.filter(unit -> !unit.isStored())
-			.filter(unit -> unit.getLocation().equals(location))
-			.collect(ImmutableList.toImmutableList());
+		return units.stream().filter(unit -> unit.getOwner().equals(player)).filter(unit -> !unit.isStored())
+				.filter(unit -> unit.getLocation().equals(location)).collect(ImmutableList.toImmutableList());
 	}
 
 	List<Unit> getEnemyUnits(final Player player, final boolean includeStored) {
 		Preconditions.checkNotNull(player);
 
-		return units.stream()
-			.filter(unit -> !unit.getOwner().equals(player))
-			.filter(unit -> includeStored || !unit.isStored())
-			.collect(ImmutableList.toImmutableList());
+		return units.stream().filter(unit -> !unit.getOwner().equals(player))
+				.filter(unit -> includeStored || !unit.isStored()).collect(ImmutableList.toImmutableList());
 	}
 
 	Map<Location, List<Unit>> getEnemyUnitsAt(final Player player) {
 		Preconditions.checkNotNull(player);
 
-		return Multimaps.asMap(units.stream()
-			.filter(unit -> !unit.getOwner().equals(player))
-			.filter(unit -> !unit.isStored())
-			.collect(ImmutableListMultimap.toImmutableListMultimap(Unit::getLocation, Function.identity())));
+		return Multimaps.asMap(
+				units.stream().filter(unit -> !unit.getOwner().equals(player)).filter(unit -> !unit.isStored()).collect(
+						ImmutableListMultimap.toImmutableListMultimap(Unit::getLocation, Function.identity())));
 	}
 
 	List<Unit> getEnemyUnitsAt(final Player player, final Location location) {
 		Preconditions.checkNotNull(player);
 		Preconditions.checkNotNull(location);
 
-		return units.stream()
-			.filter(unit -> !unit.getOwner().equals(player))
-			.filter(unit -> !unit.isStored())
-			.filter(unit -> unit.getLocation().equals(location))
-			.collect(ImmutableList.toImmutableList());
+		return units.stream().filter(unit -> !unit.getOwner().equals(player)).filter(unit -> !unit.isStored())
+				.filter(unit -> unit.getLocation().equals(location)).collect(ImmutableList.toImmutableList());
 	}
 
 	void remove(final Unit unit) {
@@ -128,7 +115,7 @@ class UnitStorage {
 	}
 
 	static List<Unit> load(final JsonParser parser, final List<Player> players) {
-		parser.next();  // START_ARRAY
+		parser.next(); // START_ARRAY
 		final List<Unit> units = new ArrayList<>();
 		Unit unit = null;
 		while ((unit = Unit.load(parser, players)) != null) {

@@ -9,7 +9,7 @@ public class EuropeBuilder {
 
 	private final ModelBuilder modelBuilder;
 
-	private final List<Unit> shipsInPort = Lists.newArrayList();;
+	private final List<Unit> shipsInPort = Lists.newArrayList();
 
 	EuropeBuilder(final ModelBuilder modelBuilder) {
 		this.modelBuilder = Preconditions.checkNotNull(modelBuilder);

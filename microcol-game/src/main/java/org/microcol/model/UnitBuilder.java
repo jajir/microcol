@@ -63,7 +63,7 @@ public class UnitBuilder {
 			int i = cx.getAndIncrement();
 			CargoSlot cargoSlot = unit.getHold().getSlots().get(i);
 			//FIXME JJ samotne ulozeni nefunguje, je tam na modelu vyvolana udalost jednotka byla ulozena
-//			cargoSlot.store(cargoUnit);
+			cargoSlot.unsafeStore(cargoUnit);
 		});
 		modelBuilder.addUnit(unit);
 		return unit;
