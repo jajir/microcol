@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.microcol.gui.ImageProvider;
+import org.microcol.model.CargoSlot;
 import org.microcol.model.Port;
 import org.microcol.model.Unit;
 import org.microcol.model.UnitType;
@@ -37,7 +38,7 @@ public class PanelPortPier extends TitledPanel {
 
 	private final ImageProvider imageProvider;
 
-	private final List<Pane> crates = new ArrayList<>();
+	private final List<PanelCrate> crates = new ArrayList<>();
 
 	final HBox panelShips;
 
@@ -62,25 +63,28 @@ public class PanelPortPier extends TitledPanel {
 			final ImageView imageIcon = new ImageView(imageProvider.getImage(ImageProvider.IMG_CRATE_CLOSED));
 			imageIcon.setFitWidth(70);
 			imageIcon.setFitHeight(70);
-			final Pane paneCrate = new Pane(imageIcon);
-			paneCrate.setOnDragDropped(event -> {
-				final Pane cratePane = (Pane) event.getSource();
-				final ImageView crateImage = (ImageView) cratePane.getChildren().get(0);
-				if (isOpen(crateImage)) {
-					Dragboard db = event.getDragboard();
-					logger.debug(db.getImage().toString());
-					event.setDropCompleted(true);
-					event.consume();
-				}
-			});
-			paneCrate.setOnDragOver(event -> {
-				final Pane cratePane = (Pane) event.getSource();
-				final ImageView crateImage = (ImageView) cratePane.getChildren().get(0);
-				if (isOpen(crateImage)) {
-					event.acceptTransferModes(TransferMode.MOVE);
-					event.consume();
-				}
-			});
+			// final Pane paneCrate = new Pane(imageIcon);
+			// paneCrate.setOnDragDropped(event -> {
+			// final Pane cratePane = (Pane) event.getSource();
+			// final ImageView crateImage = (ImageView)
+			// cratePane.getChildren().get(0);
+			// if (isOpen(crateImage)) {
+			// Dragboard db = event.getDragboard();
+			// logger.debug(db.getImage().toString());
+			// event.setDropCompleted(true);
+			// event.consume();
+			// }
+			// });
+			// paneCrate.setOnDragOver(event -> {
+			// final Pane cratePane = (Pane) event.getSource();
+			// final ImageView crateImage = (ImageView)
+			// cratePane.getChildren().get(0);
+			// if (isOpen(crateImage)) {
+			// event.acceptTransferModes(TransferMode.MOVE);
+			// event.consume();
+			// }
+			// });
+			PanelCrate paneCrate = new PanelCrate(imageProvider);
 			crates.add(paneCrate);
 			panelCrates.getChildren().add(paneCrate);
 		}
@@ -109,22 +113,14 @@ public class PanelPortPier extends TitledPanel {
 
 	private final void setCratesForShip(final Unit unit) {
 		Preconditions.checkNotNull(unit);
-		final int maxNumberOfCrates = numberOfCrates(unit.getType());
+		final int maxNumberOfCrates = unit.getType().getCargoCapacity();
 		for (int i = 0; i < MAX_NUMBER_OF_CRATES; i++) {
-			final Pane cratePane = crates.get(i);
-			final ImageView crateImage = (ImageView) cratePane.getChildren().get(0);
+			final PanelCrate panelCrate = crates.get(i);
 			if (i < maxNumberOfCrates) {
-				// open crate
-				if (!isOpen(crateImage)) {
-					// change to open
-					crateImage.setImage(imageProvider.getImage(ImageProvider.IMG_CRATE_OPEN));
-				}
+				final CargoSlot cargoSlot = unit.getHold().getSlots().get(i);
+				panelCrate.showCargoSlot(cargoSlot);
 			} else {
-				// closed crate
-				if (isOpen(crateImage)) {
-					// change to close
-					crateImage.setImage(imageProvider.getImage(ImageProvider.IMG_CRATE_CLOSED));
-				}
+				panelCrate.setIsClosed(true);
 			}
 		}
 	}
@@ -140,16 +136,6 @@ public class PanelPortPier extends TitledPanel {
 
 	private boolean isOpen(final ImageView crateImage) {
 		return crateImage.getImage().equals(imageProvider.getImage(ImageProvider.IMG_CRATE_OPEN));
-	}
-
-	private int numberOfCrates(final UnitType unitType) {
-		if (UnitType.FRIGATE.equals(unitType)) {
-			return 2;
-		} else if (UnitType.GALLEON.equals(unitType)) {
-			return 5;
-		} else {
-			throw new IllegalArgumentException("unexpected unit type '" + unitType + "'");
-		}
 	}
 
 }

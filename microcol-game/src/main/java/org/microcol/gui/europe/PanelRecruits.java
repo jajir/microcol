@@ -14,7 +14,7 @@ import javafx.scene.layout.VBox;
  * be immediately embark.
  */
 public class PanelRecruits extends TitledPanel {
-
+	//TODO J rename it to port
 	public PanelRecruits(final String title, final ImageProvider imageProvider,
 			final LocalizationHelper localizationHelper) {
 		super(title, new Label(title));
