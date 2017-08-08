@@ -11,21 +11,21 @@ import mockit.Injectable;
 import mockit.Mocked;
 import mockit.Tested;
 
-public class UnitTest {
+public class UnitAtLocationTest {
 
 	@Tested(availableDuringSetup=true)
-	Unit unit;
+	private Unit unit;
 
 	@Injectable
-	UnitType type = UnitType.COLONIST;
+	private UnitType type = UnitType.COLONIST;
 
 	@Injectable
-	Player owner;
+	private Player owner;
 
 	@Injectable()
-	Location location = Location.of(4, 3);
+	private Location location = Location.of(4, 3);
 
-	@Mocked Model model;
+	private @Mocked Model model;
 	
 	@Test
 	public void testInitialization() {
@@ -34,9 +34,14 @@ public class UnitTest {
 		assertEquals(owner, unit.getOwner());
 	}
 	
+	@Test(expected = IllegalStateException.class)
+	public void testPlaceAtMap() throws Exception {
+		unit.unload(Location.of(12, 12));
+	}
+	
 	@Test
 	public void testIsMovable() throws Exception {
-		final Location loc =Location.of(10, 12);
+		final Location loc = Location.of(10, 12);
 		new Expectations() {{
 			model.getMap().isValid(loc); result=true;
 			model.getMap().getTerrainAt(loc); result=Terrain.CONTINENT;
@@ -46,11 +51,8 @@ public class UnitTest {
 	
 	@Before
 	public void setup() {
-		new Expectations() {{
-			model.getMap().isValid(location); result=true;
-			model.getMap().getTerrainAt(location); result=Terrain.CONTINENT;
-		}};
 		unit.setModel(model);
+		unit.startTurn();
 	}
 	
 }

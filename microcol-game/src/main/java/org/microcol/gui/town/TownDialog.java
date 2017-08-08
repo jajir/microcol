@@ -85,7 +85,7 @@ public class TownDialog extends AbstractDialog {
 		townName.setText("Colony: " + town.getName());
 		colonyLayout.setTown(town);
 		goods.setEurope(gameController.getModel().getEurope());
-		pierShips.setPort(null);
+//		pierShips.setPort(null);
 		getDialog().showAndWait();
 	}
 

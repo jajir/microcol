@@ -7,7 +7,6 @@ import org.microcol.gui.ImageProvider;
 import org.microcol.model.CargoSlot;
 import org.microcol.model.Port;
 import org.microcol.model.Unit;
-import org.microcol.model.UnitType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,8 +15,6 @@ import com.google.common.base.Preconditions;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.Dragboard;
-import javafx.scene.input.TransferMode;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BackgroundPosition;
@@ -60,9 +57,6 @@ public class PanelPortPier extends TitledPanel {
 
 		final HBox panelCrates = new HBox();
 		for (int i = 0; i < MAX_NUMBER_OF_CRATES; i++) {
-			final ImageView imageIcon = new ImageView(imageProvider.getImage(ImageProvider.IMG_CRATE_CLOSED));
-			imageIcon.setFitWidth(70);
-			imageIcon.setFitHeight(70);
 			// final Pane paneCrate = new Pane(imageIcon);
 			// paneCrate.setOnDragDropped(event -> {
 			// final Pane cratePane = (Pane) event.getSource();
@@ -85,6 +79,9 @@ public class PanelPortPier extends TitledPanel {
 			// }
 			// });
 			PanelCrate paneCrate = new PanelCrate(imageProvider);
+//			final ImageView imageIcon = new ImageView(imageProvider.getImage(ImageProvider.IMG_CRATE_CLOSED));
+//			imageIcon.setFitWidth(70);
+//			imageIcon.setFitHeight(70);
 			crates.add(paneCrate);
 			panelCrates.getChildren().add(paneCrate);
 		}
@@ -126,16 +123,9 @@ public class PanelPortPier extends TitledPanel {
 	}
 
 	private final void closeAllCrates() {
-		for (final Pane cratePane : crates) {
-			final ImageView crateImage = (ImageView) cratePane.getChildren().get(0);
-			if (isOpen(crateImage)) {
-				crateImage.setImage(imageProvider.getImage(ImageProvider.IMG_CRATE_CLOSED));
-			}
+		for (final PanelCrate cratePane : crates) {
+			cratePane.setIsClosed(true);
 		}
-	}
-
-	private boolean isOpen(final ImageView crateImage) {
-		return crateImage.getImage().equals(imageProvider.getImage(ImageProvider.IMG_CRATE_OPEN));
 	}
 
 }

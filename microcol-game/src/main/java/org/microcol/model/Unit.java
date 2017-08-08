@@ -19,25 +19,27 @@ public class Unit {
 	private final UnitType type;
 	private final Player owner;
 
-	private Location location;
+	private Place place;
 	private int availableMoves;
 	private final CargoHold hold;
-	private CargoSlot slot; // TODO JKA RENAME
 	private HighSeaUnit highSeaUnit;
 
 	Unit(final UnitType type, final Player owner, final Location location) {
 		this.type = Preconditions.checkNotNull(type);
 		this.owner = Preconditions.checkNotNull(owner);
-		this.location = Preconditions.checkNotNull(location);
+		this.place = new PlaceLocation(this, Preconditions.checkNotNull(location));
+		this.hold = new CargoHold(this, type.getCargoCapacity());
+	}
+
+	Unit(final UnitType type, final Player owner, final Place place) {
+		this.type = Preconditions.checkNotNull(type);
+		this.owner = Preconditions.checkNotNull(owner);
+		this.place = Preconditions.checkNotNull(place);
 		this.hold = new CargoHold(this, type.getCargoCapacity());
 	}
 
 	void setModel(final Model model) {
 		this.model = Preconditions.checkNotNull(model);
-
-		if (!isMoveable(location, true)) {
-			throw new IllegalStateException(String.format("Invalid start location of unit (%s).", this));
-		}
 	}
 
 	public UnitType getType() {
@@ -49,9 +51,8 @@ public class Unit {
 	}
 
 	public Location getLocation() {
-		checkNotStored();
-
-		return location;
+		Preconditions.checkArgument(place instanceof PlaceLocation, "unti (%s) is not at map. ", this);
+		return ((PlaceLocation) place).getLocation();
 	}
 
 	public int getAvailableMoves() {
@@ -132,7 +133,7 @@ public class Unit {
 		}
 
 		Set<Location> openSet = new HashSet<>();
-		openSet.add(location);
+		openSet.add(getLocation());
 		Set<Location> closedSet = new HashSet<>();
 		Set<Unit> enemies = new HashSet<>();
 		for (int i = 0; i < availableMoves + 1; i++) {
@@ -159,7 +160,7 @@ public class Unit {
 			openSet.clear();
 			openSet.addAll(currentSet);
 		}
-		closedSet.remove(location);
+		closedSet.remove(getLocation());
 
 		if (availableLocations != null) {
 			availableLocations.addAll(closedSet);
@@ -171,7 +172,7 @@ public class Unit {
 
 	public boolean isPossibleToDisembarkAt(final Location targetLocation, boolean inCurrentTurn) {
 		Preconditions.checkNotNull(targetLocation);
-		if (location.isNeighbor(targetLocation) && getType().getCargoCapacity() > 0) {
+		if (getLocation().isNeighbor(targetLocation) && getType().getCargoCapacity() > 0) {
 			return getHold().getSlots().stream()
 					.filter(cargoSlot -> canCargoDisembark(cargoSlot, targetLocation, inCurrentTurn)).findAny()
 					.isPresent();
@@ -194,7 +195,7 @@ public class Unit {
 	}
 
 	public boolean isPossibleToEmbarkAt(final Location targetLocation, boolean inCurrentTurn) {
-		if (isStorable() && location.isNeighbor(targetLocation) && (!inCurrentTurn || availableMoves > 0)) {
+		if (isStorable() && getLocation().isNeighbor(targetLocation) && (!inCurrentTurn || availableMoves > 0)) {
 			final List<Unit> units = model.getUnitsAt(targetLocation);
 			return isSameOwner(units)
 					&& units.stream().filter(unit -> unit.isAtLeastOneCargoSlotEmpty()).findAny().isPresent();
@@ -247,7 +248,7 @@ public class Unit {
 	public List<Unit> getStorageUnits() {
 		checkNotStored();
 
-		return location.getNeighbors().stream().flatMap(neighbor -> owner.getUnitsAt(neighbor).stream())
+		return getLocation().getNeighbors().stream().flatMap(neighbor -> owner.getUnitsAt(neighbor).stream())
 				.filter(unit -> unit != this)
 				.filter(unit -> unit.getHold().getSlots().stream().filter(slot -> slot.isEmpty()).findAny().isPresent())
 				.collect(ImmutableList.toImmutableList());
@@ -272,7 +273,7 @@ public class Unit {
 	public Optional<List<Location>> getPath(final Location destination, final boolean excludeDestination) {
 		checkNotStored();
 
-		PathFinder finder = new PathFinder(this, location, destination, excludeDestination);
+		PathFinder finder = new PathFinder(this, getLocation(), destination, excludeDestination);
 
 		return Optional.ofNullable(finder.find());
 	}
@@ -284,13 +285,13 @@ public class Unit {
 		model.checkCurrentPlayer(owner);
 
 		Preconditions.checkNotNull(path);
-		Preconditions.checkArgument(path.getStart().isNeighbor(location),
-				"Path (%s) must be neighbor to current location (%s).", path.getStart(), location);
+		Preconditions.checkArgument(path.getStart().isNeighbor(getLocation()),
+				"Path (%s) must be neighbor to current location (%s).", path.getStart(), getLocation());
 		Preconditions.checkArgument(model.getMap().isValid(path), "Path (%s) must be valid.", path);
 		Preconditions.checkArgument(!path.containsAny(owner.getEnemyUnitsAt().keySet()),
 				"There is enemy unit on path (%s).", path);
 
-		final Location start = location;
+		final Location start = getLocation();
 		final List<Location> locations = new ArrayList<>();
 		// TODO JKA Use streams
 		for (Location newLocation : path.getLocations()) {
@@ -303,7 +304,7 @@ public class Unit {
 						newLocation, model.getMap().getTerrainAt(newLocation)));
 			}
 			locations.add(newLocation);
-			location = newLocation;
+			((PlaceLocation)place).setLocation(newLocation);
 			availableMoves--;
 		}
 		if (!locations.isEmpty()) {
@@ -321,8 +322,8 @@ public class Unit {
 		Preconditions.checkNotNull(location);
 		Preconditions.checkArgument(model.getMap().getTerrainAt(location) == type.getMoveableTerrain(),
 				"Target location (%s) is not moveable for this unit (%s)", location, this);
-		Preconditions.checkArgument(this.location.isNeighbor(location),
-				"Unit location (%s) is not neighbor to target location (%s).", this.location, location);
+		Preconditions.checkArgument(this.getLocation().isNeighbor(location),
+				"Unit location (%s) is not neighbor to target location (%s).", this.getLocation(), location);
 		Preconditions.checkState(availableMoves > 0, "Unit (%s) cannot attack this turn.", this);
 		Preconditions.checkState(!owner.getEnemyUnitsAt(location).isEmpty(),
 				"There is not any enemy unit on target location (%s).", location);
@@ -333,7 +334,7 @@ public class Unit {
 		final Unit destroyed = Math.random() <= 0.6 ? defender : this;
 		model.destroyUnit(destroyed);
 		if (this != destroyed && owner.getEnemyUnitsAt(location).isEmpty()) {
-			this.location = location;
+			((PlaceLocation)place).setLocation(location);
 		}
 		model.fireUnitAttacked(this, defender, destroyed);
 	}
@@ -343,7 +344,7 @@ public class Unit {
 	}
 
 	public boolean isStored() {
-		return slot != null;
+		return place instanceof PlaceCargoSlot;
 	}
 
 	public boolean isInHighSea() {
@@ -361,32 +362,31 @@ public class Unit {
 		// TODO JKA check adjacent location
 		// TODO JKA check movement?
 		// TODO JKA prazdny naklad?
-
-		this.slot = slot;
+		place = new PlaceCargoSlot(this,slot);
 		availableMoves = 0;		
 	}
 
 	void unload(final Location targetLocation) {
 		Preconditions.checkNotNull(targetLocation);
 		Preconditions.checkArgument(availableMoves > 0, "Unit (%s) need for unload at least on action point", this);
+		Preconditions.checkState(isStored(), "This unit (%s) can't be unload, it's not stored.", this);
 		// TODO JKA run "standard" unit location checks
 
 		// TODO JKA empty all moves and attacks?
 		this.availableMoves = 0;
-		this.location = targetLocation;
-		this.slot = null;
+		place=new PlaceLocation(this, targetLocation);
 	}
 
 	void checkNotStored() {
 		if (isStored()) {
-			throw new IllegalStateException(String.format("This unit (%s) is stored in (%s).", this, slot));
+			throw new IllegalStateException(String.format("This unit (%s) is stored in (%s).", this, place));
 		}
 	}
 
 	@Override
 	public String toString() {
-		return MoreObjects.toStringHelper(this).add("type", type).add("owner", owner).add("location", location)
-				.add("availableMoves", availableMoves).add("hold", hold)
+		return MoreObjects.toStringHelper(this).add("type", type).add("owner", owner).add("location", getLocation())
+				.add("availableMoves", availableMoves).add("hold", hold).add("place", place.getName())
 				// TODO JKA SLOT
 				.toString();
 	}
@@ -395,7 +395,7 @@ public class Unit {
 		generator.writeStartObject();
 		generator.write("type", type.name());
 		generator.write("owner", owner.getName());
-		location.save("location", generator);
+		getLocation().save("location", generator);
 		generator.write("availableMoves", availableMoves);
 		// TODO JKA Implement save/load
 		generator.writeEnd();

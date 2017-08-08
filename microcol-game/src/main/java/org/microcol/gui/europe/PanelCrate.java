@@ -22,25 +22,47 @@ public class PanelCrate extends StackPane {
 
 	PanelCrate(final ImageProvider imageProvider) {
 		this.imageProvider = Preconditions.checkNotNull(imageProvider);
+
 		crateImage = new ImageView();
+		crateImage.getStyleClass().add("crate");
+		crateImage.setFitWidth(40);
+		crateImage.setFitHeight(40);
+		crateImage.setPreserveRatio(true);
+
 		cargoImage = new ImageView();
-		this.getChildren().addAll(crateImage, cargoImage);
+		cargoImage.getStyleClass().add("cargo");
+		cargoImage.setFitWidth(35);
+		cargoImage.setFitHeight(35);
+		cargoImage.setPreserveRatio(true);
+
+		this.getChildren().addAll(crateImage);
+		getStyleClass().add("cratePanel");
 	}
 
 	public void setIsClosed(final boolean isClosed) {
 		if (isClosed) {
 			crateImage.setImage(imageProvider.getImage(ImageProvider.IMG_CRATE_CLOSED));
+			hideCargo();
 		} else {
 			crateImage.setImage(imageProvider.getImage(ImageProvider.IMG_CRATE_OPEN));
+			if (!getChildren().contains(cargoImage)) {
+				getChildren().add(cargoImage);
+			}
 		}
 	}
 
 	public void showCargoSlot(final CargoSlot cargoSlot) {
 		setIsClosed(false);
-		if (!cargoSlot.isEmpty()) {
+		if (cargoSlot.isEmpty()) {
+			hideCargo();
+		} else {
 			final Unit cargoUnit = cargoSlot.getUnit().get();
-			crateImage.setImage(imageProvider.getUnitImage(cargoUnit.getType()));
+			cargoImage.setImage(imageProvider.getUnitImage(cargoUnit.getType()));
 		}
+	}
+
+	private void hideCargo() {
+		getChildren().remove(cargoImage);
 	}
 
 }
