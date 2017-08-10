@@ -39,6 +39,13 @@ class UnitStorage {
 		});
 	}
 
+	//TODO JJ remove All form name
+	List<Unit> getAllUnits(final boolean includeStored) {
+		return units.stream().filter(unit -> includeStored || unit.isAtMap())
+				.collect(ImmutableList.toImmutableList());
+	}
+
+	//TODO JJ rename it, be more specific about function
 	List<Unit> getUnits(final boolean includeStored) {
 		return units.stream().filter(unit -> includeStored || unit.isAtMap())
 				.collect(ImmutableList.toImmutableList());

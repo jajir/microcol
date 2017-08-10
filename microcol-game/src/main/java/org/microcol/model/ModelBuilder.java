@@ -2,7 +2,6 @@ package org.microcol.model;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import com.google.common.base.Preconditions;
 
@@ -75,9 +74,7 @@ public class ModelBuilder {
 
 	public Model build() {
 		Preconditions.checkNotNull(europe, "Europe was not builded");
-		return new Model(calendar, map, players, towns, units, europe,
-				units.stream().filter(unit -> unit.getPlace() instanceof PlaceHighSea)
-						.map(unit -> (PlaceHighSea) unit.getPlace()).collect(Collectors.toList()));
+		return new Model(calendar, map, players, towns, units, europe);
 	}
 
 	public UnitBuilder makeUnitBuilder() {

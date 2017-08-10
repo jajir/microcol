@@ -28,7 +28,7 @@ public final class Model {
 	private GameManager gameManager;
 
 	Model(final Calendar calendar, final WorldMap map, final List<Player> players, final List<Town> towns,
-			final List<Unit> units, final Europe europe, final List<PlaceHighSea> highSeaUnits) {
+			final List<Unit> units, final Europe europe) {
 		listenerManager = new ListenerManager();
 
 		this.calendar = Preconditions.checkNotNull(calendar);
@@ -47,7 +47,7 @@ public final class Model {
 		gameManager = new GameManager();
 		gameManager.setModel(this);
 
-		highSea = new HighSea(highSeaUnits);
+		highSea = new HighSea(this);
 		this.europe = Preconditions.checkNotNull(europe);
 	}
 
@@ -156,7 +156,7 @@ public final class Model {
 
 		final List<Town> towns = TownsStorage.load(parser, players);
 
-		final Model model = new Model(calendar, map, players, towns, units, new Europe(Lists.newArrayList()), Lists.newArrayList());
+		final Model model = new Model(calendar, map, players, towns, units, new Europe(Lists.newArrayList()));
 		gameManager.setModel(model);
 		model.gameManager = gameManager;
 

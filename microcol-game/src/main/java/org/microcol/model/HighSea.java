@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.google.common.base.Preconditions;
-import com.google.common.collect.Lists;
 
 /**
  * It's a place where are units traveling from colonies to Europe and from
@@ -12,15 +11,19 @@ import com.google.common.collect.Lists;
  */
 public class HighSea {
 
-	private final List<PlaceHighSea> highSeaUnits = Lists.newArrayList();
+	private final Model model;
 
-	public HighSea(final List<PlaceHighSea> initializedHighSeaUnits) {
-		Preconditions.checkNotNull(initializedHighSeaUnits);
-		this.highSeaUnits.addAll(initializedHighSeaUnits);
+	public HighSea(final Model model) {
+		this.model = Preconditions.checkNotNull(model);
+	}
+
+	private List<PlaceHighSea> getHighSeasAll() {
+		return model.getUnits().stream().filter(unit -> unit.getPlace() instanceof PlaceHighSea)
+				.map(unit -> (PlaceHighSea) unit.getPlace()).collect(Collectors.toList());
 	}
 
 	public List<Unit> getUnitsTravelingTo(final boolean isItToEurope) {
-		return highSeaUnits.stream()
+		return getHighSeasAll().stream()
 				.filter(hsu -> (isItToEurope && hsu.isTravelToEurope()) || (!isItToEurope && !hsu.isTravelToEurope()))
 				.map(PlaceHighSea::getUnit).collect(Collectors.toList());
 	}

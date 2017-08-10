@@ -1,8 +1,10 @@
 package org.microcol.model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
@@ -14,14 +16,18 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 
 public class Unit {
+	
 	private Model model;
-
 	private final UnitType type;
 	private final Player owner;
-
 	private Place place;
 	private int availableMoves;
 	private final CargoHold hold;
+	
+	/**
+	 * Temporal attributes that doesn't need proper variable.
+	 */
+	private final Map<String, String> attributes = new HashMap<>();
 	
 	Unit(final UnitType type, final Player owner, final Location location) {
 		this.type = Preconditions.checkNotNull(type);
