@@ -22,8 +22,7 @@ public class Unit {
 	private Place place;
 	private int availableMoves;
 	private final CargoHold hold;
-	private HighSeaUnit highSeaUnit;
-
+	
 	Unit(final UnitType type, final Player owner, final Location location) {
 		this.type = Preconditions.checkNotNull(type);
 		this.owner = Preconditions.checkNotNull(owner);
@@ -31,10 +30,10 @@ public class Unit {
 		this.hold = new CargoHold(this, type.getCargoCapacity());
 	}
 
-	Unit(final UnitType type, final Player owner, final Place place) {
+	Unit(final UnitType type, final Player owner, final PlaceBuilder placeBuilder) {
 		this.type = Preconditions.checkNotNull(type);
 		this.owner = Preconditions.checkNotNull(owner);
-		this.place = Preconditions.checkNotNull(place);
+		this.place = Preconditions.checkNotNull(placeBuilder.build(this));
 		this.hold = new CargoHold(this, type.getCargoCapacity());
 	}
 
@@ -51,7 +50,7 @@ public class Unit {
 	}
 
 	public Location getLocation() {
-		Preconditions.checkArgument(place instanceof PlaceLocation, "unti (%s) is not at map. ", this);
+		Preconditions.checkArgument(place instanceof PlaceLocation, "Unit (%s) is not at map. ", this);
 		return ((PlaceLocation) place).getLocation();
 	}
 
@@ -348,7 +347,11 @@ public class Unit {
 	}
 
 	public boolean isInHighSea() {
-		return highSeaUnit != null;
+		return place instanceof PlaceHighSea;
+	}
+	
+	public boolean isAtMap() {
+		return place instanceof PlaceLocation;
 	}
 
 	void store(final CargoSlot slot) {
@@ -385,9 +388,8 @@ public class Unit {
 
 	@Override
 	public String toString() {
-		return MoreObjects.toStringHelper(this).add("type", type).add("owner", owner).add("location", getLocation())
+		return MoreObjects.toStringHelper(this).add("type", type).add("owner", owner).add("place", place.getName())
 				.add("availableMoves", availableMoves).add("hold", hold).add("place", place.getName())
-				// TODO JKA SLOT
 				.toString();
 	}
 
@@ -427,6 +429,10 @@ public class Unit {
 		unit.availableMoves = availableMoves;
 
 		return unit;
+	}
+
+	Place getPlace() {
+		return place;
 	}
 
 }

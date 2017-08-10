@@ -28,7 +28,7 @@ public final class Model {
 	private GameManager gameManager;
 
 	Model(final Calendar calendar, final WorldMap map, final List<Player> players, final List<Town> towns,
-			final List<Unit> units, final Europe europe, final List<HighSeaUnit> highSeaUnits) {
+			final List<Unit> units, final Europe europe, final List<PlaceHighSea> highSeaUnits) {
 		listenerManager = new ListenerManager();
 
 		this.calendar = Preconditions.checkNotNull(calendar);

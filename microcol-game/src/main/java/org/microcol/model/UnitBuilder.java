@@ -14,7 +14,7 @@ public class UnitBuilder {
 
 	private Player player;
 
-	private Location location;
+	private final PlaceBuilder placeBuilder;
 
 	private final List<Unit> unitsInCargo = Lists.newArrayList();;
 
@@ -22,6 +22,7 @@ public class UnitBuilder {
 
 	UnitBuilder(final ModelBuilder modelBuilder) {
 		this.modelBuilder = Preconditions.checkNotNull(modelBuilder);
+		placeBuilder = new PlaceBuilder();
 	}
 
 	public UnitBuilder setPlayer(final String playerName) {
@@ -36,8 +37,17 @@ public class UnitBuilder {
 	}
 
 	public UnitBuilder setLocation(final Location location) {
-		Preconditions.checkNotNull(location);
-		this.location = location;
+		placeBuilder.setLocation(location);
+		return this;
+	}
+
+	public UnitBuilder setShipIncomingToColonies(int inHowManyturns) {
+		placeBuilder.setShipIncomingToColonies(inHowManyturns);
+		return this;
+	}
+
+	public UnitBuilder setShipIncomingToEurope(int inHowManyturns) {
+		placeBuilder.setShipIncomingToEurope(inHowManyturns);
 		return this;
 	}
 
@@ -56,13 +66,13 @@ public class UnitBuilder {
 	public Unit build() {
 		Preconditions.checkNotNull(modelBuilder);
 		Preconditions.checkNotNull(player, "player was not set");
-		Preconditions.checkNotNull(location, "location was not set");
-		Unit unit = new Unit(type, player, location);
+		Unit unit = new Unit(type, player, placeBuilder);
 		final AtomicInteger cx = new AtomicInteger(0);
 		unitsInCargo.forEach(cargoUnit -> {
 			int i = cx.getAndIncrement();
 			CargoSlot cargoSlot = unit.getHold().getSlots().get(i);
-			//FIXME JJ samotne ulozeni nefunguje, je tam na modelu vyvolana udalost jednotka byla ulozena
+			// FIXME JJ samotne ulozeni nefunguje, je tam na modelu vyvolana
+			// udalost jednotka byla ulozena
 			cargoSlot.unsafeStore(cargoUnit);
 		});
 		modelBuilder.addUnit(unit);

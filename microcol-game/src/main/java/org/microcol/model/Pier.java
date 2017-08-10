@@ -9,6 +9,6 @@ import com.google.common.collect.Lists;
  */
 public class Pier {
 
-	private final List<HighSeaUnit> unitsInPort = Lists.newArrayList();
+	private final List<PlaceHighSea> unitsInPort = Lists.newArrayList();
 
 }

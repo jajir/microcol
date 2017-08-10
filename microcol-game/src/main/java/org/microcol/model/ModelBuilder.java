@@ -2,15 +2,14 @@ package org.microcol.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.google.common.base.Preconditions;
-import com.google.common.collect.Lists;
 
 public class ModelBuilder {
 	private final List<Player> players;
 	private final List<Unit> units;
 	private final List<Town> towns;
-	private final List<HighSeaUnit> highSeas = Lists.newArrayList();
 	private Europe europe;
 
 	private Calendar calendar;
@@ -76,29 +75,10 @@ public class ModelBuilder {
 
 	public Model build() {
 		Preconditions.checkNotNull(europe, "Europe was not builded");
-		return new Model(calendar, map, players, towns, units, europe, highSeas);
+		return new Model(calendar, map, players, towns, units, europe,
+				units.stream().filter(unit -> unit.getPlace() instanceof PlaceHighSea)
+						.map(unit -> (PlaceHighSea) unit.getPlace()).collect(Collectors.toList()));
 	}
-	
-
-	public ModelBuilder addShipIncomingToEurope(final Unit ship, final int remainingTurns) {
-		Preconditions.checkArgument(UnitType.isShip(ship.getType()));
-		final HighSeaUnit highSeaUnit = new HighSeaUnit(ship, true, remainingTurns);  
-		highSeas.add(highSeaUnit);
-		addUnit(ship);
-
-		return this;
-	}
-
-	
-	public ModelBuilder addShipIncomingToColonies(final Unit ship, final int remainingTurns) {
-		Preconditions.checkArgument(UnitType.isShip(ship.getType()));
-		final HighSeaUnit highSeaUnit = new HighSeaUnit(ship, false, remainingTurns);  
-		highSeas.add(highSeaUnit);
-		addUnit(ship);
-
-		return this;
-	}
-
 
 	public UnitBuilder makeUnitBuilder() {
 		return new UnitBuilder(this);

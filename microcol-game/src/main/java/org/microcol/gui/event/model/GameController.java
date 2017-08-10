@@ -81,8 +81,10 @@ public class GameController implements Localized {
 
 				.addTown("brunswick", "Dutch", Location.of(5, 4))
 
-				.addShipIncomingToEurope(builder.makeUnitBuilder().setType(UnitType.FRIGATE).setPlayer("Dutch")
-						.setLocation(Location.of(2, 2)).build(), 3)
+				.addUnit(builder.makeUnitBuilder().setType(UnitType.FRIGATE).setPlayer("Dutch")
+						.setShipIncomingToEurope(4).build())
+				.addUnit(builder.makeUnitBuilder().setType(UnitType.GALLEON).setPlayer("Dutch")
+						.setShipIncomingToColonies(2).build())
 
 				/**
 				 * Opponent player2

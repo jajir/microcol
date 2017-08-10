@@ -25,7 +25,7 @@ class UnitStorage {
 	private void checkUnitLocations(final List<Unit> units) {
 		Map<Location, Player> owners = new HashMap<>();
 		units.forEach(unit -> {
-			if (!unit.isStored()) {
+			if (unit.isAtMap()) {
 				Player owner = owners.get(unit.getLocation());
 				if (owner != null) {
 					if (!owner.equals(unit.getOwner())) {
@@ -40,19 +40,19 @@ class UnitStorage {
 	}
 
 	List<Unit> getUnits(final boolean includeStored) {
-		return units.stream().filter(unit -> includeStored || !unit.isStored())
+		return units.stream().filter(unit -> includeStored || unit.isAtMap())
 				.collect(ImmutableList.toImmutableList());
 	}
 
 	Map<Location, List<Unit>> getUnitsAt() {
-		return Multimaps.asMap(units.stream().filter(unit -> !unit.isStored())
+		return Multimaps.asMap(units.stream().filter(unit -> unit.isAtMap())
 				.collect(ImmutableListMultimap.toImmutableListMultimap(Unit::getLocation, Function.identity())));
 	}
 
 	List<Unit> getUnitsAt(final Location location) {
 		Preconditions.checkNotNull(location);
 
-		return units.stream().filter(unit -> !unit.isStored()).filter(unit -> unit.getLocation().equals(location))
+		return units.stream().filter(unit -> unit.isAtMap()).filter(unit -> unit.getLocation().equals(location))
 				.collect(ImmutableList.toImmutableList());
 	}
 
@@ -60,14 +60,14 @@ class UnitStorage {
 		Preconditions.checkNotNull(player);
 
 		return units.stream().filter(unit -> unit.getOwner().equals(player))
-				.filter(unit -> includeStored || !unit.isStored()).collect(ImmutableList.toImmutableList());
+				.filter(unit -> includeStored || unit.isAtMap()).collect(ImmutableList.toImmutableList());
 	}
 
 	Map<Location, List<Unit>> getUnitsAt(final Player player) {
 		Preconditions.checkNotNull(player);
 
 		return Multimaps.asMap(
-				units.stream().filter(unit -> unit.getOwner().equals(player)).filter(unit -> !unit.isStored()).collect(
+				units.stream().filter(unit -> unit.getOwner().equals(player)).filter(unit -> unit.isAtMap()).collect(
 						ImmutableListMultimap.toImmutableListMultimap(Unit::getLocation, Function.identity())));
 	}
 
@@ -75,7 +75,7 @@ class UnitStorage {
 		Preconditions.checkNotNull(player);
 		Preconditions.checkNotNull(location);
 
-		return units.stream().filter(unit -> unit.getOwner().equals(player)).filter(unit -> !unit.isStored())
+		return units.stream().filter(unit -> unit.getOwner().equals(player)).filter(unit -> unit.isAtMap())
 				.filter(unit -> unit.getLocation().equals(location)).collect(ImmutableList.toImmutableList());
 	}
 
@@ -83,14 +83,14 @@ class UnitStorage {
 		Preconditions.checkNotNull(player);
 
 		return units.stream().filter(unit -> !unit.getOwner().equals(player))
-				.filter(unit -> includeStored || !unit.isStored()).collect(ImmutableList.toImmutableList());
+				.filter(unit -> includeStored || unit.isAtMap()).collect(ImmutableList.toImmutableList());
 	}
 
 	Map<Location, List<Unit>> getEnemyUnitsAt(final Player player) {
 		Preconditions.checkNotNull(player);
 
 		return Multimaps.asMap(
-				units.stream().filter(unit -> !unit.getOwner().equals(player)).filter(unit -> !unit.isStored()).collect(
+				units.stream().filter(unit -> !unit.getOwner().equals(player)).filter(unit -> unit.isAtMap()).collect(
 						ImmutableListMultimap.toImmutableListMultimap(Unit::getLocation, Function.identity())));
 	}
 
@@ -98,7 +98,7 @@ class UnitStorage {
 		Preconditions.checkNotNull(player);
 		Preconditions.checkNotNull(location);
 
-		return units.stream().filter(unit -> !unit.getOwner().equals(player)).filter(unit -> !unit.isStored())
+		return units.stream().filter(unit -> !unit.getOwner().equals(player)).filter(unit -> unit.isAtMap())
 				.filter(unit -> unit.getLocation().equals(location)).collect(ImmutableList.toImmutableList());
 	}
 

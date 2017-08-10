@@ -12,9 +12,9 @@ import com.google.common.collect.Lists;
  */
 public class HighSea {
 
-	private final List<HighSeaUnit> highSeaUnits = Lists.newArrayList();
+	private final List<PlaceHighSea> highSeaUnits = Lists.newArrayList();
 
-	public HighSea(final List<HighSeaUnit> initializedHighSeaUnits) {
+	public HighSea(final List<PlaceHighSea> initializedHighSeaUnits) {
 		Preconditions.checkNotNull(initializedHighSeaUnits);
 		this.highSeaUnits.addAll(initializedHighSeaUnits);
 	}
@@ -22,7 +22,7 @@ public class HighSea {
 	public List<Unit> getUnitsTravelingTo(final boolean isItToEurope) {
 		return highSeaUnits.stream()
 				.filter(hsu -> (isItToEurope && hsu.isTravelToEurope()) || (!isItToEurope && !hsu.isTravelToEurope()))
-				.map(HighSeaUnit::getUnit).collect(Collectors.toList());
+				.map(PlaceHighSea::getUnit).collect(Collectors.toList());
 	}
 
 }

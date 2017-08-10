@@ -4,10 +4,9 @@ import com.google.common.base.Preconditions;
 
 /**
  * Connect unit and high see between each other.
+ * 
  */
-public class HighSeaUnit {
-
-	private final Unit unit;
+public class PlaceHighSea extends AbstractPlace {
 
 	/**
 	 * When it's <code>true</code> than ship travel from colonies to Europe.
@@ -20,9 +19,9 @@ public class HighSeaUnit {
 	 */
 	private int remainigTurns;
 
-	public HighSeaUnit(final Unit unit, final boolean isTravelToEurope, final int requiredTurns) {
-		Preconditions.checkArgument(UnitType.isShip(unit.getType()));
-		this.unit = Preconditions.checkNotNull(unit);
+	public PlaceHighSea(final Unit unit, final boolean isTravelToEurope, final int requiredTurns) {
+		super(unit);
+		Preconditions.checkArgument(UnitType.isShip(unit.getType()), "Only ships could be placed to high sea.");
 		this.isTravelToEurope = isTravelToEurope;
 		this.remainigTurns = requiredTurns;
 	}
@@ -35,12 +34,17 @@ public class HighSeaUnit {
 		this.remainigTurns = remainigTurns;
 	}
 
-	public Unit getUnit() {
-		return unit;
-	}
-
 	public boolean isTravelToEurope() {
 		return isTravelToEurope;
+	}
+
+	@Override
+	public String getName() {
+		if (isTravelToEurope) {
+			return "Travel to Europe";
+		} else {
+			return "Travel to Colonies";
+		}
 	}
 
 }
