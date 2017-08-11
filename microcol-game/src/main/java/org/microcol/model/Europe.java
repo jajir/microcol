@@ -2,13 +2,16 @@ package org.microcol.model;
 
 import java.util.List;
 
+import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 
 public class Europe {
 
-	private final Port port;
+	private final EuropePort port;
 
 	private final Pier pier;
+
+	private final Model model;
 
 	private final List<GoodTrade> goodTrades = ImmutableList.of(new GoodTrade(GoodType.CORN, 0, 8),
 			new GoodTrade(GoodType.SUGAR, 3, 5), new GoodTrade(GoodType.TABACCO, 3, 5),
@@ -20,8 +23,9 @@ public class Europe {
 			new GoodTrade(GoodType.GOODS, 2, 3), new GoodTrade(GoodType.TOOLS, 1, 2),
 			new GoodTrade(GoodType.MUSKET, 2, 3));
 
-	Europe(final List<Unit> shipsInPort) {
-		port = new Port(shipsInPort);
+	Europe(final Model model) {
+		this.model = Preconditions.checkNotNull(model);
+		port = new EuropePort(this.model);
 		pier = new Pier();
 	}
 
@@ -29,7 +33,7 @@ public class Europe {
 		return goodTrades.stream().filter(goodTrade -> goodTrade.getGoodType().equals(goodType)).findAny().get();
 	}
 
-	public Port getPort() {
+	public EuropePort getPort() {
 		return port;
 	}
 

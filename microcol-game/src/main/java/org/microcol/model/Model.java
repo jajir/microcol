@@ -28,7 +28,7 @@ public final class Model {
 	private GameManager gameManager;
 
 	Model(final Calendar calendar, final WorldMap map, final List<Player> players, final List<Town> towns,
-			final List<Unit> units, final Europe europe) {
+			final List<Unit> units, final List<Unit> unitsInEuropePort) {
 		listenerManager = new ListenerManager();
 
 		this.calendar = Preconditions.checkNotNull(calendar);
@@ -48,7 +48,8 @@ public final class Model {
 		gameManager.setModel(this);
 
 		highSea = new HighSea(this);
-		this.europe = Preconditions.checkNotNull(europe);
+		this.europe = new Europe(this);
+		unitsInEuropePort.forEach(unit->unit.placeToEuropePort(europe.getPort()));
 	}
 
 	private void checkPlayerNames(final List<Player> players) {
@@ -94,6 +95,10 @@ public final class Model {
 
 	public Player getCurrentPlayer() {
 		return gameManager.getCurrentPlayer();
+	}
+
+	public List<Unit> getAllUnits() {
+		return unitStorage.getAllUnits();
 	}
 
 	public List<Unit> getUnits() {
@@ -156,7 +161,7 @@ public final class Model {
 
 		final List<Town> towns = TownsStorage.load(parser, players);
 
-		final Model model = new Model(calendar, map, players, towns, units, new Europe(Lists.newArrayList()));
+		final Model model = new Model(calendar, map, players, towns, units, Lists.newArrayList());
 		gameManager.setModel(model);
 		model.gameManager = gameManager;
 

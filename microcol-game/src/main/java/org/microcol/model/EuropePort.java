@@ -4,24 +4,28 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.google.common.base.Preconditions;
-import com.google.common.collect.Lists;
 
 /**
  * Port is a place where units can load and unload cargo.
  */
-public class Port {
+public class EuropePort {
 
-	private final List<PortUnit> portUnits = Lists.newArrayList();
+	private final Model model;
 
-	Port(final List<Unit> shipsInPort) {
-		shipsInPort.forEach(unit -> {
-			Preconditions.checkArgument(UnitType.isShip(unit.getType()), "it's not correct unit type");
-			portUnits.add(new PortUnit(unit, this));
-		});
+	EuropePort(final Model model) {
+		this.model = Preconditions.checkNotNull(model);
 	}
 
-	public List<Unit> getShipsInPort() {
-		return portUnits.stream().map(portUnit -> portUnit.getUnit()).collect(Collectors.toList());
+	public List<Unit> getShipsInPort(final Player player) {
+		return model.getAllUnits().stream().filter(unit -> unit.isAtPort())
+				.filter(unit -> unit.getOwner().equals(player))
+				.filter(unit -> ((PlaceEuropePort) unit.getPlace()).getPort().equals(this))
+				.collect(Collectors.toList());
+	}
+
+	public void placeShipToPort(final Unit unit) {
+		Preconditions.checkArgument(UnitType.isShip(unit.getType()), "it's not correct unit type");
+		unit.placeToEuropePort(this);
 	}
 
 }

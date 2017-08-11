@@ -1,0 +1,28 @@
+ ----
+Coding
+ ----
+
+Coding principles
+
+ Here are described some basic coding principles.
+ 
+* Action mode
+
+ When user press right mouse button over movable unit than user switch to action mode.
+ In action mode user could move mouse.
+
+ * How is highlighted area where user could go in one turn:
+ 
+  * <OneTurnMoveHighlighter> Holds list of location.
+  Locations represents all locations reachable in current turn.
+
+  * <unit.getAvailableLocations()> Get list of location reachable by unit in one turn.
+ 
+ * How are is highlighted path to mouse cursor
+
+  * <MoveModeSupport> Class listen to <MouseOverTileChangedEvent>.
+  When event occurs class recompute path from focused (selected) location to target location.
+  Variable <moveLocations> contains path to target location.
+  
+[]
+

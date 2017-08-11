@@ -35,6 +35,15 @@ public final class Path {
 		return locations.get(0);
 	}
 
+	/**
+	 * Get last location.
+	 * 
+	 * @return return target location.
+	 */
+	public Location getTarget() {
+		return locations.get(locations.size() - 1);
+	}
+
 	public boolean contains(final Location location) {
 		Preconditions.checkNotNull(location);
 

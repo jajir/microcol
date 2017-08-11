@@ -9,7 +9,7 @@ public class ModelBuilder {
 	private final List<Player> players;
 	private final List<Unit> units;
 	private final List<Town> towns;
-	private Europe europe;
+	private EuropeBuilder europeBuilder;
 
 	private Calendar calendar;
 	private WorldMap map;
@@ -20,19 +20,19 @@ public class ModelBuilder {
 		towns = new ArrayList<>();
 	}
 
-	void setEurope(final Europe europe) {
-		this.europe = Preconditions.checkNotNull(europe);
-	}
-
 	public ModelBuilder addUnit(final Unit unit) {
 		Preconditions.checkNotNull(unit);
+		if (units.contains(unit)) {
+			throw new IllegalArgumentException("Unit was already registered. Unit: " + unit);
+		}
 		units.add(unit);
 		return this;
 	}
 
 	public EuropeBuilder getEuropeBuilder() {
-		if (europe == null) {
-			return new EuropeBuilder(this);
+		if (europeBuilder == null) {
+			europeBuilder = new EuropeBuilder(this);
+			return europeBuilder;
 		} else {
 			throw new IllegalStateException("Europe is already build");
 		}
@@ -73,8 +73,8 @@ public class ModelBuilder {
 	}
 
 	public Model build() {
-		Preconditions.checkNotNull(europe, "Europe was not builded");
-		return new Model(calendar, map, players, towns, units, europe);
+		Preconditions.checkNotNull(europeBuilder == null, "Europe was not builded");
+		return new Model(calendar, map, players, towns, units, europeBuilder.getUnitsInEuropePort());
 	}
 
 	public UnitBuilder makeUnitBuilder() {

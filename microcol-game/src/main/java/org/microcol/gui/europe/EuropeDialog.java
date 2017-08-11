@@ -35,7 +35,7 @@ public class EuropeDialog extends AbstractDialog {
 		final PanelShips incomingShips = new PanelShips(imageProvider, "Ships travelling to Europe",
 				gameController.getModel(), true);
 		final PanelPortPier pierShips = new PanelPortPier(imageProvider);
-		pierShips.setPort(gameController.getModel().getEurope().getPort());
+		pierShips.setPort(gameController, gameController.getModel().getEurope().getPort());
 		final VBox panelShips = new VBox();
 		panelShips.getChildren().addAll(outgoingShips, incomingShips, pierShips);
 

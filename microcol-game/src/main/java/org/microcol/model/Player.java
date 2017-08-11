@@ -117,6 +117,37 @@ public final class Player {
 	void save(final JsonGenerator generator) {
 		generator.writeStartObject().write("name", name).write("computer", computer).writeEnd();
 	}
+	
+	
+	/**
+	 * Get information if it's possible to sail to given location. Method verify
+	 * that given location is empty sea or sea occupied by player's ships.
+	 * 
+	 * @param target
+	 *            required target location
+	 * @return return <code>true</code> when it's possible to sail at given
+	 *         location otherwise return <code>false</code>.
+	 */
+	public boolean isPossibleToSailAt(final Location target){
+		final Terrain t = model.getMap().getTerrainAt(target);
+		if (t == Terrain.OCEAN) {
+			return isItPlayersUnits(model.getUnitsAt(target));
+		} else {
+			return false;
+		}
+	}
+	
+	/**
+	 * Find if list of units could belong to this user.
+	 * 
+	 * @param units
+	 * @return return <code>false</code> when list contains at least one unit
+	 *         which not belongs to this player otherwise return
+	 *         <code>true</code>.
+	 */
+	public boolean isItPlayersUnits(final List<Unit> units) {
+		return !units.stream().filter(unit -> !unit.getOwner().equals(this)).findAny().isPresent();
+	}	
 
 	static Player load(final JsonParser parser) {
 		// START_OBJECT or END_ARRAY

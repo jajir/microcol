@@ -1,11 +1,10 @@
 package org.microcol.model;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
+import java.util.Random;
 import java.util.Set;
 
 import javax.json.stream.JsonGenerator;
@@ -16,19 +15,14 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 
 public class Unit {
-	
+
 	private Model model;
 	private final UnitType type;
 	private final Player owner;
 	private Place place;
 	private int availableMoves;
 	private final CargoHold hold;
-	
-	/**
-	 * Temporal attributes that doesn't need proper variable.
-	 */
-	private final Map<String, String> attributes = new HashMap<>();
-	
+
 	Unit(final UnitType type, final Player owner, final Location location) {
 		this.type = Preconditions.checkNotNull(type);
 		this.owner = Preconditions.checkNotNull(owner);
@@ -69,9 +63,28 @@ public class Unit {
 	public CargoHold getHold() {
 		return hold;
 	}
-
+	
+	/**
+	 * It's called before turn starts.
+	 */
 	void startTurn() {
 		availableMoves = type.getSpeed();
+		if (isInHighSea()) {
+			PlaceHighSea placeHighSea = (PlaceHighSea) place;
+			placeHighSea.decreaseRemainingTurns();
+			if (placeHighSea.getRemainigTurns() <= 0) {
+				if(placeHighSea.isTravelToEurope()){
+					model.getEurope().getPort().placeShipToPort(this);
+				}else{
+					//XXX ships always come from east side of map
+					final List<Location> locations = model.getHighSea().getSuitablePlaceForShipCommingFromEurope(getOwner(), true);
+					//TODO random should be class instance
+					final Random random = new Random();
+					final Location location = locations.get(random.nextInt(locations.size()));
+					placeToLocation(location);
+				}
+			}
+		}
 	}
 
 	// Netestuje nedosažitelné lokace, pouze jestli je teoreticky možné na danou
@@ -196,7 +209,7 @@ public class Unit {
 	}
 
 	private boolean canUnitDisembarkAt(final Location targeLocation) {
-		return getType().getMoveableTerrain().equals(model.getMap().getTerrainAt(targeLocation));
+		return getType().canMoveAtTerrain(model.getMap().getTerrainAt(targeLocation));
 	}
 
 	public boolean isPossibleToEmbarkAt(final Location targetLocation, boolean inCurrentTurn) {
@@ -304,16 +317,21 @@ public class Unit {
 				// TODO JKA neumožnit zadat delší cestu, než je povolený počet
 				break;
 			}
-			if (model.getMap().getTerrainAt(newLocation) != type.getMoveableTerrain()) {
+			if (!type.canMoveAtTerrain(model.getMap().getTerrainAt(newLocation))) {
 				throw new IllegalArgumentException(String.format("Path (%s) must contain only moveable terrain (%s).",
 						newLocation, model.getMap().getTerrainAt(newLocation)));
 			}
 			locations.add(newLocation);
-			((PlaceLocation)place).setLocation(newLocation);
+			((PlaceLocation) place).setLocation(newLocation);
 			availableMoves--;
 		}
 		if (!locations.isEmpty()) {
-			model.fireUnitMoved(this, start, Path.of(locations));
+			final Path reallyExecutedPath =  Path.of(locations);
+			final Terrain targetTerrain = model.getMap().getTerrainAt(reallyExecutedPath.getTarget());
+			if (targetTerrain==Terrain.HIGH_SEA){
+				placeToHighSeas(true);
+			}
+			model.fireUnitMoved(this, start, reallyExecutedPath);
 		}
 	}
 
@@ -325,7 +343,7 @@ public class Unit {
 
 		Preconditions.checkState(type.canAttack(), "This unit type (%s) cannot attack.", this);
 		Preconditions.checkNotNull(location);
-		Preconditions.checkArgument(model.getMap().getTerrainAt(location) == type.getMoveableTerrain(),
+		Preconditions.checkArgument(type.canMoveAtTerrain(model.getMap().getTerrainAt(location)),
 				"Target location (%s) is not moveable for this unit (%s)", location, this);
 		Preconditions.checkArgument(this.getLocation().isNeighbor(location),
 				"Unit location (%s) is not neighbor to target location (%s).", this.getLocation(), location);
@@ -339,7 +357,7 @@ public class Unit {
 		final Unit destroyed = Math.random() <= 0.6 ? defender : this;
 		model.destroyUnit(destroyed);
 		if (this != destroyed && owner.getEnemyUnitsAt(location).isEmpty()) {
-			((PlaceLocation)place).setLocation(location);
+			((PlaceLocation) place).setLocation(location);
 		}
 		model.fireUnitAttacked(this, defender, destroyed);
 	}
@@ -355,24 +373,43 @@ public class Unit {
 	public boolean isInHighSea() {
 		return place instanceof PlaceHighSea;
 	}
-	
+
+	public boolean isAtPort() {
+		return place instanceof PlaceEuropePort;
+	}
+
 	public boolean isAtMap() {
 		return place instanceof PlaceLocation;
 	}
 
+	//TODO rename it to placeToCargo
 	void store(final CargoSlot slot) {
 		storeWithoutEvent(slot);
 		model.fireUnitStored(this, slot); // TODO JKA Move to CargoSlot?
 	}
 	
-	void storeWithoutEvent(final CargoSlot slot){
+	void placeToEuropePort(final EuropePort port) {
+		place = new PlaceEuropePort(this, Preconditions.checkNotNull(port));
+	}
+
+	void placeToLocation(final Location target) {
+		place = new PlaceLocation(this, Preconditions.checkNotNull(target));
+	}
+
+	void placeToHighSeas(final boolean isTravelToEurope) {
+		final int requiredTurns = 3;
+		//XXX choose if it's direction to east or to west (+1 rule to europe)
+		place = new PlaceHighSea(this, isTravelToEurope, requiredTurns);
+	}
+
+	void storeWithoutEvent(final CargoSlot slot) {
 		Preconditions.checkState(isStorable(), "This unit (%s) cannot be stored.", this);
 		checkNotStored();
 		// TODO JKA check adjacent location
 		// TODO JKA check movement?
 		// TODO JKA prazdny naklad?
-		place = new PlaceCargoSlot(this,slot);
-		availableMoves = 0;		
+		place = new PlaceCargoSlot(this, slot);
+		availableMoves = 0;
 	}
 
 	void unload(final Location targetLocation) {
@@ -383,7 +420,7 @@ public class Unit {
 
 		// TODO JKA empty all moves and attacks?
 		this.availableMoves = 0;
-		place=new PlaceLocation(this, targetLocation);
+		place = new PlaceLocation(this, targetLocation);
 	}
 
 	void checkNotStored() {
@@ -395,8 +432,7 @@ public class Unit {
 	@Override
 	public String toString() {
 		return MoreObjects.toStringHelper(this).add("type", type).add("owner", owner).add("place", place.getName())
-				.add("availableMoves", availableMoves).add("hold", hold).add("place", place.getName())
-				.toString();
+				.add("availableMoves", availableMoves).add("hold", hold).add("place", place.getName()).toString();
 	}
 
 	void save(final JsonGenerator generator) {

@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.google.common.base.Preconditions;
+import com.google.common.collect.Lists;
 
 /**
  * It's a place where are units traveling from colonies to Europe and from
@@ -17,15 +18,42 @@ public class HighSea {
 		this.model = Preconditions.checkNotNull(model);
 	}
 
-	private List<PlaceHighSea> getHighSeasAll() {
-		return model.getUnits().stream().filter(unit -> unit.getPlace() instanceof PlaceHighSea)
+	List<PlaceHighSea> getHighSeasAll() {
+		return model.getAllUnits().stream().filter(unit -> unit.getPlace() instanceof PlaceHighSea)
 				.map(unit -> (PlaceHighSea) unit.getPlace()).collect(Collectors.toList());
 	}
 
 	public List<Unit> getUnitsTravelingTo(final boolean isItToEurope) {
 		return getHighSeasAll().stream()
-				.filter(hsu -> (isItToEurope && hsu.isTravelToEurope()) || (!isItToEurope && !hsu.isTravelToEurope()))
+				.filter(phs -> (isItToEurope && phs.isTravelToEurope()) || (!isItToEurope && !phs.isTravelToEurope()))
 				.map(PlaceHighSea::getUnit).collect(Collectors.toList());
+	}
+
+	public List<Location> getSuitablePlaceForShipCommingFromEurope(final Player player, final boolean countFromEast) {
+		final WorldMap map = model.getMap();
+		final int range = map.getMaxY() / 4;
+		final int start = range;
+		final int stop = start + range * 2;
+		final List<Location> out = Lists.newArrayList();
+		for (int indexY = start; indexY <= stop; indexY++) {
+			out.add(findFirstSuitableLocation(player, countFromEast, indexY));
+		}
+		return out;
+	}
+
+	private Location findFirstSuitableLocation(final Player player, final boolean countFromEast, final int indexY) {
+		if (countFromEast) {
+			for (int indexX = model.getMap().getMaxX(); indexX >= 0; indexX--) {
+				final Location location = Location.of(indexX, indexY);
+				if (player.isPossibleToSailAt(location)) {
+					return location;
+				}
+			}
+		} else {
+			throw new IllegalArgumentException("NYI");
+		}
+		throw new IllegalStateException("Unable to find suitable place for ship at column '" + indexY
+				+ "', counted from east '" + countFromEast + "' for player '" + player + "'");
 	}
 
 }

@@ -34,6 +34,10 @@ public class PlaceHighSea extends AbstractPlace {
 		this.remainigTurns = remainigTurns;
 	}
 
+	public void decreaseRemainingTurns() {
+		remainigTurns--;
+	}
+
 	public boolean isTravelToEurope() {
 		return isTravelToEurope;
 	}

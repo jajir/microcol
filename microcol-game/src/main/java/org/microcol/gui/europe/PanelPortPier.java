@@ -4,32 +4,27 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.microcol.gui.ImageProvider;
+import org.microcol.gui.event.model.GameController;
 import org.microcol.model.CargoSlot;
-import org.microcol.model.Port;
+import org.microcol.model.EuropePort;
 import org.microcol.model.Unit;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
 
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
 /**
  * Contains ships in port. Good from ships could be loaded/unloaded.
  */
 public class PanelPortPier extends TitledPanel {
-
-	private final Logger logger = LoggerFactory.getLogger(PanelPortPier.class);
 
 	private final static int MAX_NUMBER_OF_CRATES = 6;
 
@@ -79,9 +74,10 @@ public class PanelPortPier extends TitledPanel {
 			// }
 			// });
 			PanelCrate paneCrate = new PanelCrate(imageProvider);
-//			final ImageView imageIcon = new ImageView(imageProvider.getImage(ImageProvider.IMG_CRATE_CLOSED));
-//			imageIcon.setFitWidth(70);
-//			imageIcon.setFitHeight(70);
+			// final ImageView imageIcon = new
+			// ImageView(imageProvider.getImage(ImageProvider.IMG_CRATE_CLOSED));
+			// imageIcon.setFitWidth(70);
+			// imageIcon.setFitHeight(70);
 			crates.add(paneCrate);
 			panelCrates.getChildren().add(paneCrate);
 		}
@@ -89,11 +85,11 @@ public class PanelPortPier extends TitledPanel {
 		getContentPane().getChildren().add(mainPanel);
 	}
 
-	public void setPort(final Port port) {
+	public void setPort(GameController gameController, final EuropePort port) {
 		/**
 		 * Ships in port
 		 */
-		final List<Unit> shipsInPort = port.getShipsInPort();
+		final List<Unit> shipsInPort = port.getShipsInPort(gameController.getModel().getCurrentPlayer());
 
 		for (Unit unit : shipsInPort) {
 			ToggleButton toggleButtonShip = new ToggleButton();

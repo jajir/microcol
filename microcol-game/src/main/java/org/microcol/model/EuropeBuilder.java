@@ -8,26 +8,27 @@ import com.google.common.collect.Lists;
 public class EuropeBuilder {
 
 	private final ModelBuilder modelBuilder;
-
-	private final List<Unit> shipsInPort = Lists.newArrayList();
+	
+	private final List<Unit> unitsInEuropePort=Lists.newArrayList();
 
 	EuropeBuilder(final ModelBuilder modelBuilder) {
 		this.modelBuilder = Preconditions.checkNotNull(modelBuilder);
 	}
 
 	public ModelBuilder build() {
-		Europe europe = new Europe(shipsInPort);
-		// FIXME set ships to places
-		modelBuilder.setEurope(europe);
 		return modelBuilder;
 	}
 
 	public EuropeBuilder addShipToPort(final Unit ship) {
 		Preconditions.checkArgument(UnitType.isShip(ship.getType()));
-		shipsInPort.add(ship);
 		modelBuilder.addUnit(ship);
+		unitsInEuropePort.add(ship);
 
 		return this;
+	}
+
+	List<Unit> getUnitsInEuropePort() {
+		return unitsInEuropePort;
 	}
 
 }

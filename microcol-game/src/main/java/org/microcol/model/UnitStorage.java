@@ -2,8 +2,10 @@ package org.microcol.model;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Function;
 
 import javax.json.stream.JsonGenerator;
@@ -20,6 +22,7 @@ class UnitStorage {
 	UnitStorage(final List<Unit> units) {
 		this.units = new ArrayList<>(units);
 		checkUnitLocations(this.units);
+		checkDuplicities(units);
 	}
 
 	private void checkUnitLocations(final List<Unit> units) {
@@ -39,16 +42,31 @@ class UnitStorage {
 		});
 	}
 
-	//TODO JJ remove All form name
-	List<Unit> getAllUnits(final boolean includeStored) {
-		return units.stream().filter(unit -> includeStored || unit.isAtMap())
-				.collect(ImmutableList.toImmutableList());
+	/**
+	 * Verify that all units are just one time in all unit list.
+	 * 
+	 * @param units
+	 *            required list of units.
+	 */
+	private void checkDuplicities(final List<Unit> units) {
+		final Set<Unit> tmp = new HashSet<>();
+		units.forEach(unit -> {
+			if (tmp.contains(unit)) {
+				throw new IllegalStateException("Unit was registered twice, unit: " + unit);
+			} else {
+				tmp.add(unit);
+			}
+		});
 	}
 
-	//TODO JJ rename it, be more specific about function
+	// TODO JJ remove All form name
+	List<Unit> getAllUnits() {
+		return units;
+	}
+
+	// TODO JJ rename it, be more specific about function
 	List<Unit> getUnits(final boolean includeStored) {
-		return units.stream().filter(unit -> includeStored || unit.isAtMap())
-				.collect(ImmutableList.toImmutableList());
+		return units.stream().filter(unit -> includeStored || unit.isAtMap()).collect(ImmutableList.toImmutableList());
 	}
 
 	Map<Location, List<Unit>> getUnitsAt() {
