@@ -113,10 +113,12 @@ public class Engine {
 
 		if (unit.getType().canAttack() && unit.getAvailableMoves() > 0) {
 			for (final Location location : unit.getLocation().getNeighbors()) {
-				final List<Unit> enemies = unit.getOwner().getEnemyUnitsAt(location);
-				if (!enemies.isEmpty()) {
-					unit.attack(enemies.get(0).getLocation());
-					break;
+				if(unit.isPossibleToAttackAt(location)){
+					final List<Unit> enemies = unit.getOwner().getEnemyUnitsAt(location);
+					if (!enemies.isEmpty()) {
+						unit.attack(enemies.get(0).getLocation());
+						break;
+					}
 				}
 			}
 		}
