@@ -10,7 +10,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 
 /**
- * Container represents
+ * Container represents one open or close crate.
  */
 public class PanelCrate extends StackPane {
 

@@ -52,6 +52,12 @@ public class MouseOverTileListener implements Localized {
 	 */
 	private void setStatusMessageForTile(final Terrain terrain, final Location where) {
 		final StringBuilder buff = new StringBuilder();
+		// TODO show coordinates just when debug mode is on
+		buff.append("(");
+		buff.append(where.getX());
+		buff.append(",");
+		buff.append(where.getY());
+		buff.append(") ");
 		buff.append(getText().get("statusBar.tile.start"));
 		buff.append(" ");
 		buff.append(localizationHelper.getTerrainName(terrain));

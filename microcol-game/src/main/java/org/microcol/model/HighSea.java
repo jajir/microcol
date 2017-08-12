@@ -23,13 +23,13 @@ public class HighSea {
 				.map(unit -> (PlaceHighSea) unit.getPlace()).collect(Collectors.toList());
 	}
 
-	public List<Unit> getUnitsTravelingTo(final boolean isItToEurope) {
+	public List<Unit> getUnitsTravelingTo(final Player player, final boolean isItToEurope) {
 		return getHighSeasAll().stream()
 				.filter(phs -> (isItToEurope && phs.isTravelToEurope()) || (!isItToEurope && !phs.isTravelToEurope()))
-				.map(PlaceHighSea::getUnit).collect(Collectors.toList());
+				.map(PlaceHighSea::getUnit).filter(unit -> unit.getOwner().equals(player)).collect(Collectors.toList());
 	}
 
-	public List<Location> getSuitablePlaceForShipCommingFromEurope(final Player player, final boolean countFromEast) {
+	List<Location> getSuitablePlaceForShipCommingFromEurope(final Player player, final boolean countFromEast) {
 		final WorldMap map = model.getMap();
 		final int range = map.getMaxY() / 4;
 		final int start = range;

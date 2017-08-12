@@ -8,11 +8,18 @@ import org.microcol.gui.event.model.GameController;
 import org.microcol.model.CargoSlot;
 import org.microcol.model.EuropePort;
 import org.microcol.model.Unit;
+import org.microcol.model.UnitType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
 
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.input.ClipboardContent;
+import javafx.scene.input.Dragboard;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.input.TransferMode;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BackgroundPosition;
@@ -24,8 +31,10 @@ import javafx.scene.layout.VBox;
 /**
  * Contains ships in port. Good from ships could be loaded/unloaded.
  */
-public class PanelPortPier extends TitledPanel {
+public class PanelEuropeDock extends TitledPanel {
 
+	private final Logger logger = LoggerFactory.getLogger(PanelEuropeDock.class);
+	
 	private final static int MAX_NUMBER_OF_CRATES = 6;
 
 	private final ImageProvider imageProvider;
@@ -36,7 +45,7 @@ public class PanelPortPier extends TitledPanel {
 
 	final ToggleGroup toggleGroup;
 
-	public PanelPortPier(final ImageProvider imageProvider) {
+	public PanelEuropeDock(final ImageProvider imageProvider) {
 		super("pristav");
 		this.imageProvider = Preconditions.checkNotNull(imageProvider);
 
@@ -52,32 +61,7 @@ public class PanelPortPier extends TitledPanel {
 
 		final HBox panelCrates = new HBox();
 		for (int i = 0; i < MAX_NUMBER_OF_CRATES; i++) {
-			// final Pane paneCrate = new Pane(imageIcon);
-			// paneCrate.setOnDragDropped(event -> {
-			// final Pane cratePane = (Pane) event.getSource();
-			// final ImageView crateImage = (ImageView)
-			// cratePane.getChildren().get(0);
-			// if (isOpen(crateImage)) {
-			// Dragboard db = event.getDragboard();
-			// logger.debug(db.getImage().toString());
-			// event.setDropCompleted(true);
-			// event.consume();
-			// }
-			// });
-			// paneCrate.setOnDragOver(event -> {
-			// final Pane cratePane = (Pane) event.getSource();
-			// final ImageView crateImage = (ImageView)
-			// cratePane.getChildren().get(0);
-			// if (isOpen(crateImage)) {
-			// event.acceptTransferModes(TransferMode.MOVE);
-			// event.consume();
-			// }
-			// });
 			PanelCrate paneCrate = new PanelCrate(imageProvider);
-			// final ImageView imageIcon = new
-			// ImageView(imageProvider.getImage(ImageProvider.IMG_CRATE_CLOSED));
-			// imageIcon.setFitWidth(70);
-			// imageIcon.setFitHeight(70);
 			crates.add(paneCrate);
 			panelCrates.getChildren().add(paneCrate);
 		}
@@ -86,6 +70,7 @@ public class PanelPortPier extends TitledPanel {
 	}
 
 	public void setPort(GameController gameController, final EuropePort port) {
+		panelShips.getChildren().clear();
 		/**
 		 * Ships in port
 		 */
@@ -100,7 +85,24 @@ public class PanelPortPier extends TitledPanel {
 			toggleButtonShip.setBackground(new Background(myBI));
 			toggleButtonShip.setToggleGroup(toggleGroup);
 			toggleButtonShip.setUserData(unit);
+			toggleButtonShip.setOnDragDetected(this::onDragDetected);
 			panelShips.getChildren().add(toggleButtonShip);
+		}
+	}
+
+	private void onDragDetected(final MouseEvent event) {
+		if (event.getSource() instanceof ToggleButton) {
+			final ToggleButton butt = (ToggleButton) event.getSource();
+			final Unit unit = (Unit) butt.getUserData();
+			logger.debug("Start dragging unit: " + unit);
+			Preconditions.checkNotNull(unit);
+			Preconditions.checkArgument(UnitType.isShip(unit.getType()), "Unit (%s) have to be ship.");
+			final Dragboard db = butt.startDragAndDrop(TransferMode.MOVE);
+			final ClipboardContent content = new ClipboardContent();
+			content.putImage(butt.getBackground().getImages().get(0).getImage());
+			content.putString(String.valueOf(unit.getId()));
+			db.setContent(content);
+			event.consume();
 		}
 	}
 

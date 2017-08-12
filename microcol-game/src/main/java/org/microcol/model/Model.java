@@ -108,6 +108,10 @@ public final class Model {
 	public List<Unit> getUnits(final boolean includeStored) {
 		return unitStorage.getUnits(includeStored);
 	}
+	
+	public Unit getUnitById(final int id) {
+		return unitStorage.getUnitById(id);
+	}
 
 	public Map<Location, List<Unit>> getUnitsAt() {
 		return unitStorage.getUnitsAt();

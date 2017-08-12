@@ -16,6 +16,7 @@ import com.google.common.collect.ImmutableList;
 
 public class Unit {
 
+	private final int id;
 	private Model model;
 	private final UnitType type;
 	private final Player owner;
@@ -28,6 +29,7 @@ public class Unit {
 		this.owner = Preconditions.checkNotNull(owner);
 		this.place = new PlaceLocation(this, Preconditions.checkNotNull(location));
 		this.hold = new CargoHold(this, type.getCargoCapacity());
+		this.id = IdManager.nextId();
 	}
 
 	Unit(final UnitType type, final Player owner, final PlaceBuilder placeBuilder) {
@@ -35,6 +37,7 @@ public class Unit {
 		this.owner = Preconditions.checkNotNull(owner);
 		this.place = Preconditions.checkNotNull(placeBuilder.build(this));
 		this.hold = new CargoHold(this, type.getCargoCapacity());
+		this.id = IdManager.nextId();
 	}
 
 	void setModel(final Model model) {
@@ -396,7 +399,8 @@ public class Unit {
 		place = new PlaceLocation(this, Preconditions.checkNotNull(target));
 	}
 
-	void placeToHighSeas(final boolean isTravelToEurope) {
+	public void placeToHighSeas(final boolean isTravelToEurope) {
+		//TODO add some preconditions
 		final int requiredTurns = 3;
 		//XXX choose if it's direction to east or to west (+1 rule to europe)
 		place = new PlaceHighSea(this, isTravelToEurope, requiredTurns);
@@ -431,8 +435,9 @@ public class Unit {
 
 	@Override
 	public String toString() {
-		return MoreObjects.toStringHelper(this).add("type", type).add("owner", owner).add("place", place.getName())
-				.add("availableMoves", availableMoves).add("hold", hold).add("place", place.getName()).toString();
+		return MoreObjects.toStringHelper(this).add("id", id).add("type", type).add("owner", owner)
+				.add("place", place.getName()).add("availableMoves", availableMoves).add("hold", hold)
+				.add("place", place.getName()).toString();
 	}
 
 	void save(final JsonGenerator generator) {
@@ -475,6 +480,10 @@ public class Unit {
 
 	Place getPlace() {
 		return place;
+	}
+
+	public int getId() {
+		return id;
 	}
 
 }

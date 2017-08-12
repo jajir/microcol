@@ -2,7 +2,7 @@ package org.microcol.gui.town;
 
 import org.microcol.gui.ImageProvider;
 import org.microcol.gui.europe.PanelGoods;
-import org.microcol.gui.europe.PanelPortPier;
+import org.microcol.gui.europe.PanelEuropeDock;
 import org.microcol.gui.event.model.GameController;
 import org.microcol.gui.panelview.PaintService;
 import org.microcol.gui.util.AbstractDialog;
@@ -34,7 +34,7 @@ public class TownDialog extends AbstractDialog {
 
 	private final GameController gameController;
 
-	private final PanelPortPier pierShips;
+	private final PanelEuropeDock europeDock;
 
 	@Inject
 	public TownDialog(final ViewUtil viewUtil, final Text text, final ImageProvider imageProvider,
@@ -59,7 +59,7 @@ public class TownDialog extends AbstractDialog {
 		/**
 		 * Row 2
 		 */
-		pierShips = new PanelPortPier(imageProvider);
+		europeDock = new PanelEuropeDock(imageProvider);
 
 		/**
 		 * Good row - 3
@@ -75,7 +75,7 @@ public class TownDialog extends AbstractDialog {
 		});
 		buttonOk.requestFocus();
 		final VBox mainPanel = new VBox();
-		mainPanel.getChildren().addAll(townName, colonyLayout, colonyStructures, pierShips, goods, buttonOk);
+		mainPanel.getChildren().addAll(townName, colonyLayout, colonyStructures, europeDock, goods, buttonOk);
 		init(mainPanel);
 		getScene().getStylesheets().add("gui/MicroCol.css");
 	}

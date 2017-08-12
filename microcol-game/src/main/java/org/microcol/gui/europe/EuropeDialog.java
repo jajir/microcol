@@ -20,24 +20,32 @@ import javafx.scene.layout.VBox;
  */
 public class EuropeDialog extends AbstractDialog {
 
+	private final GameController gameController;
+
+	private final PanelEuropeDock europeDock;
+
+	private final PanelShips shipsTravelingToNewWorld;
+
+	private final PanelShips shipsTravelingToEurope;
+
 	@Inject
 	public EuropeDialog(final ViewUtil viewUtil, final Text text, final ImageProvider imageProvider,
 			final GameController gameController, final LocalizationHelper localizationHelper) {
 		super(viewUtil);
 		Preconditions.checkNotNull(imageProvider);
-		Preconditions.checkNotNull(gameController);
+		this.gameController = Preconditions.checkNotNull(gameController);
 		getDialog().setTitle(text.get("europe.title"));
 
 		final Label label = new Label("European port");
 
-		final PanelShips outgoingShips = new PanelShips(imageProvider, "Ships travelling to New World",
+		shipsTravelingToNewWorld = new PanelShips(this, imageProvider, "Ships travelling to New World",
 				gameController.getModel(), false);
-		final PanelShips incomingShips = new PanelShips(imageProvider, "Ships travelling to Europe",
+		shipsTravelingToEurope = new PanelShips(this, imageProvider, "Ships travelling to Europe",
 				gameController.getModel(), true);
-		final PanelPortPier pierShips = new PanelPortPier(imageProvider);
-		pierShips.setPort(gameController, gameController.getModel().getEurope().getPort());
+		europeDock = new PanelEuropeDock(imageProvider);
+		europeDock.setPort(gameController, gameController.getModel().getEurope().getPort());
 		final VBox panelShips = new VBox();
-		panelShips.getChildren().addAll(outgoingShips, incomingShips, pierShips);
+		panelShips.getChildren().addAll(shipsTravelingToNewWorld, shipsTravelingToEurope, europeDock);
 
 		final PanelRecruits panelRecruits = new PanelRecruits("Recruits", imageProvider, localizationHelper);
 
@@ -62,6 +70,12 @@ public class EuropeDialog extends AbstractDialog {
 		init(mainPanel);
 		getScene().getStylesheets().add("gui/MicroCol.css");
 		getDialog().showAndWait();
+	}
+
+	public void repaint() {
+		europeDock.setPort(gameController, gameController.getModel().getEurope().getPort());
+		shipsTravelingToEurope.repaint();
+		shipsTravelingToNewWorld.repaint();
 	}
 
 }

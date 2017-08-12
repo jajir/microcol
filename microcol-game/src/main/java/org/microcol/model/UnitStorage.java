@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
 
@@ -149,4 +150,10 @@ class UnitStorage {
 
 		return units;
 	}
+	
+	Unit getUnitById(int id) {
+		return units.stream().filter(unit -> unit.getId() == id).findAny()
+				.orElseThrow(() -> new IllegalArgumentException("There is no unit with id '" + id + "'."));
+	}
+	
 }
