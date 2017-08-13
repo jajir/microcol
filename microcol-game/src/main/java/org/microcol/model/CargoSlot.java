@@ -9,8 +9,10 @@ import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 
 public final class CargoSlot {
+	
 	private final CargoHold hold;
 	private Optional<Unit> cargo;
+	private Optional<GoodAmmount> goods;
 
 	CargoSlot(final CargoHold hold) {
 		this.hold = hold;
@@ -26,7 +28,7 @@ public final class CargoSlot {
 	}
 
 	/**
-	 * This method doesn's store store unti and 
+	 * This method doesn's store store unit and 
 	 * @param unit
 	 */
 	void unsafeStore(final Unit unit){

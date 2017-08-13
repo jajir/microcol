@@ -30,8 +30,8 @@ public class AnimationManager {
 	}
 
 	public void performStep() {
-		Preconditions.checkArgument(hasNextStep, "Can't perform step when there is no next step.");
-		Preconditions.checkArgument(runningPart.isPresent(), "Actually running animation was lost.");
+		Preconditions.checkState(hasNextStep, "Can't perform step when there is no next step.");
+		Preconditions.checkState(runningPart.isPresent(), "Actually running animation was lost.");
 		runningPart.get().animation.nextStep();
 		if (runningPart.get().animation.hasNextStep()) {
 			hasNextStep = true;
@@ -44,7 +44,7 @@ public class AnimationManager {
 				hasNextStep = false;
 			} else {
 				runningPart = Optional.of(animationParts.remove());
-				Preconditions.checkArgument(runningPart.get().animation.hasNextStep(),
+				Preconditions.checkState(runningPart.get().animation.hasNextStep(),
 						"Just started animation should have at least one step.");
 			}
 		}

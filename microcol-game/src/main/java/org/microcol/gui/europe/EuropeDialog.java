@@ -27,6 +27,8 @@ public class EuropeDialog extends AbstractDialog {
 	private final PanelShips shipsTravelingToNewWorld;
 
 	private final PanelShips shipsTravelingToEurope;
+	
+	private final PanelPortPier panelPortPier;
 
 	@Inject
 	public EuropeDialog(final ViewUtil viewUtil, final Text text, final ImageProvider imageProvider,
@@ -47,7 +49,8 @@ public class EuropeDialog extends AbstractDialog {
 		final VBox panelShips = new VBox();
 		panelShips.getChildren().addAll(shipsTravelingToNewWorld, shipsTravelingToEurope, europeDock);
 
-		final PanelRecruits panelRecruits = new PanelRecruits("Recruits", imageProvider, localizationHelper);
+		panelPortPier = new PanelPortPier("Pier", imageProvider, localizationHelper);
+		panelPortPier.setEurope(gameController.getModel());
 
 		final Button recruiteButton = new Button("Recruite");
 		final Button buyButton = new Button("Buy");
@@ -60,7 +63,7 @@ public class EuropeDialog extends AbstractDialog {
 		panelButtons.getChildren().addAll(recruiteButton, buyButton, buttonOk);
 
 		final HBox panelMiddle = new HBox();
-		panelMiddle.getChildren().addAll(panelShips, panelRecruits, panelButtons);
+		panelMiddle.getChildren().addAll(panelShips, panelPortPier, panelButtons);
 
 		final PanelGoods goods = new PanelGoods(imageProvider);
 		goods.setEurope(gameController.getModel().getEurope());
@@ -76,6 +79,7 @@ public class EuropeDialog extends AbstractDialog {
 		europeDock.setPort(gameController, gameController.getModel().getEurope().getPort());
 		shipsTravelingToEurope.repaint();
 		shipsTravelingToNewWorld.repaint();
+		panelPortPier.setEurope(gameController.getModel());
 	}
 
 }

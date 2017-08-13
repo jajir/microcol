@@ -9,7 +9,7 @@ public class Europe {
 
 	private final EuropePort port;
 
-	private final Pier pier;
+	private final EuropePier pier;
 
 	private final Model model;
 
@@ -26,7 +26,7 @@ public class Europe {
 	Europe(final Model model) {
 		this.model = Preconditions.checkNotNull(model);
 		port = new EuropePort(this.model);
-		pier = new Pier();
+		pier = new EuropePier(this.model);
 	}
 
 	public GoodTrade getGoodTradeForType(final GoodType goodType) {
@@ -37,7 +37,7 @@ public class Europe {
 		return port;
 	}
 
-	public Pier getPier() {
+	public EuropePier getPier() {
 		return pier;
 	}
 

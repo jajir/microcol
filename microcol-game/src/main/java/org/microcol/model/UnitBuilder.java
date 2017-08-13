@@ -51,6 +51,12 @@ public class UnitBuilder {
 		return this;
 	}
 
+	public UnitBuilder setShipToEuropePortPier() {
+		placeBuilder.setShipToEuropePortPier();
+		return this;
+	}
+
+	
 	public UnitBuilder addCargoGood(final GoodType goodType, final int ammount) {
 		// FIXME JJ dokoncit implementaci
 		return this;

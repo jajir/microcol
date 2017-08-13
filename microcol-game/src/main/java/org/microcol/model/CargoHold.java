@@ -9,6 +9,7 @@ import com.google.common.base.MoreObjects;
 import com.google.common.collect.ImmutableList;
 
 public final class CargoHold {
+	
 	private final Unit owner;
 	private final List<CargoSlot> slots;
 

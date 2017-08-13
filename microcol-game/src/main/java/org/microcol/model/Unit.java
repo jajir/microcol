@@ -72,7 +72,7 @@ public class Unit {
 	 */
 	void startTurn() {
 		availableMoves = type.getSpeed();
-		if (isInHighSea()) {
+		if (isAtHighSea()) {
 			PlaceHighSea placeHighSea = (PlaceHighSea) place;
 			placeHighSea.decreaseRemainingTurns();
 			if (placeHighSea.getRemainigTurns() <= 0) {
@@ -373,7 +373,7 @@ public class Unit {
 		return place instanceof PlaceCargoSlot;
 	}
 
-	public boolean isInHighSea() {
+	public boolean isAtHighSea() {
 		return place instanceof PlaceHighSea;
 	}
 
@@ -383,6 +383,10 @@ public class Unit {
 
 	public boolean isAtMap() {
 		return place instanceof PlaceLocation;
+	}
+
+	public boolean isAtEuropePier() {
+		return place instanceof PlaceEuropePier;
 	}
 
 	//TODO rename it to placeToCargo
@@ -400,6 +404,7 @@ public class Unit {
 	}
 
 	public void placeToHighSeas(final boolean isTravelToEurope) {
+		Preconditions.checkArgument(UnitType.isShip(type), "Only ships could be placed to high sea.");
 		//TODO add some preconditions
 		final int requiredTurns = 3;
 		//XXX choose if it's direction to east or to west (+1 rule to europe)

@@ -1,90 +1,89 @@
 package org.microcol.gui;
 
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-import org.easymock.EasyMock;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
-import org.microcol.gui.panelview.AnimationManager;
+import org.junit.runner.RunWith;
 import org.microcol.gui.panelview.Animation;
+import org.microcol.gui.panelview.AnimationManager;
 
+import mockit.Expectations;
+import mockit.Mocked;
+import mockit.StrictExpectations;
+import mockit.Tested;
+import mockit.integration.junit4.JMockit;
+
+@RunWith(JMockit.class)
 public class AnimationManagerTest {
+	
+	@Tested(availableDuringSetup=true)
+	private AnimationManager am;
 
+	@Mocked
 	private Animation part1;
 
+	@Mocked
 	private Animation part2;
 
 	@Test
 	public void test_constructor() throws Exception {
-		AnimationManager am = new AnimationManager();
+		assertNotNull(am);
 		assertFalse(am.hasNextStep());
 	}
 
 	@Test
-	public void test_simple_scenario_verify_that_paint_is_not_called() throws Exception {
-		AnimationManager am = new AnimationManager();
-		EasyMock.expect(part1.hasNextStep()).andReturn(false);
-		EasyMock.replay(part1);
+	public void test_addiong_one_animation_without_nextStep() throws Exception {
+		new Expectations() {{
+			part1.hasNextStep();result=false;times=1;
+		}};
 		am.addAnimation(part1);
 
 		assertFalse(am.hasNextStep());
-		EasyMock.verify(part1);
 	}
 
 	@Test
-	public void test_simple_scenario() throws Exception {
-		AnimationManager am = new AnimationManager();
-		EasyMock.expect(part1.hasNextStep()).andReturn(true);
-		EasyMock.replay(part1);
+	public void test_addiong_one_animation_with_nextStep() throws Exception {
+		new Expectations() {{
+			part1.hasNextStep();result=true;times=1;
+		}};
+		am.addAnimation(part1);
+
+		assertTrue(am.hasNextStep());
+	}
+
+	@Test
+	public void test_one_animation_with_one_step() throws Exception {
+		new StrictExpectations() {{
+			part1.hasNextStep();result=true;times=1;
+			part1.nextStep();times=1;
+			part1.hasNextStep();result=false;times=1;
+		}};
 		am.addAnimation(part1);
 		assertTrue(am.hasNextStep());
-
-		EasyMock.verify(part1);
-	}
-
-	@Test
-	public void test_last_animationPart() throws Exception {
-		AnimationManager am = new AnimationManager();
-		EasyMock.expect(part1.hasNextStep()).andReturn(false);
-		EasyMock.replay(part1);
-		am.addAnimation(part1);
-		assertFalse(am.hasNextStep());
-
-		EasyMock.verify(part1);
-	}
-
-	@Test(expected=IllegalArgumentException.class)
-	public void test_invalid_next_step_call() throws Exception {
-		AnimationManager am = new AnimationManager();
-		EasyMock.replay(part1);
-		assertFalse(am.hasNextStep());
-		
 		am.performStep();
+		assertFalse(am.hasNextStep());
 	}
 
-	@Test(expected=IllegalArgumentException.class)
-	public void test_invalid_paint_call() throws Exception {
-		AnimationManager am = new AnimationManager();
-		EasyMock.replay(part1);
+	@Test(expected=IllegalStateException.class)
+	public void test_invalid_perform_step_call() throws Exception {
 		assertFalse(am.hasNextStep());
-		
 		am.performStep();
 	}
 
 	@Test
 	public void test_two_parts_together() throws Exception {
-		AnimationManager am = new AnimationManager();
-		EasyMock.expect(part1.hasNextStep()).andReturn(true);
-		part1.nextStep();
-		EasyMock.expect(part1.hasNextStep()).andReturn(false);
-		
-		EasyMock.expect(part2.hasNextStep()).andReturn(true);
-		part2.nextStep();
-		EasyMock.expect(part2.hasNextStep()).andReturn(false);
-		
-		EasyMock.replay(part1, part2);
+		new StrictExpectations() {{
+			part1.hasNextStep();result=true;times=1;
+			part1.nextStep();times=1;
+			part1.hasNextStep();result=false;times=1;
+			
+			part2.hasNextStep();result=true;times=1;
+			part2.nextStep();times=1;
+			part2.hasNextStep();result=false;times=1;
+		}};
+
 		am.addAnimation(part1);
 		am.addAnimation(part2);
 		
@@ -93,55 +92,36 @@ public class AnimationManagerTest {
 		
 		assertTrue(am.hasNextStep());
 		am.performStep();
-		assertFalse(am.hasNextStep());
 		
-		EasyMock.verify(part1, part2);
+		assertFalse(am.hasNextStep());
 	}
 
 	@Test
 	public void test_two_parts_one_by_one() throws Exception {
-		AnimationManager am = new AnimationManager();
-		
-		EasyMock.expect(part1.hasNextStep()).andReturn(true);
-		part1.nextStep();
-		EasyMock.expect(part1.hasNextStep()).andReturn(false);
-		
-		EasyMock.expect(part2.hasNextStep()).andReturn(true);
-		part2.nextStep();
-		EasyMock.expect(part2.hasNextStep()).andReturn(false);
-		
-		EasyMock.replay(part1, part2);
-		
+		new StrictExpectations() {{
+			part1.hasNextStep();result=true;times=1;
+			part1.nextStep();times=1;
+			part1.hasNextStep();result=false;times=1;
+			
+			part2.hasNextStep();result=true;times=1;
+			part2.nextStep();times=1;
+			part2.hasNextStep();result=false;times=1;
+		}};		
 		am.addAnimation(part1);
 		assertTrue(am.hasNextStep());
 		am.performStep();
 		assertFalse(am.hasNextStep());
 		
-		
 		am.addAnimation(part2);
 		assertTrue(am.hasNextStep());
 		am.performStep();
 		assertFalse(am.hasNextStep());
-		
-		EasyMock.verify(part1, part2);
 	}
 
 	@Test(expected = NullPointerException.class)
 	public void test_addAnimationPart_verify_than_null_is_not_allowed() throws Exception {
 		AnimationManager am = new AnimationManager();
 		am.addAnimation(null);
-	}
-
-	@Before
-	public void setup() {
-		part1 = EasyMock.createMock(Animation.class);
-		part2 = EasyMock.createMock(Animation.class);
-	}
-
-	@After
-	public void rearDown() {
-		part1 = null;
-		part2 = null;
 	}
 
 }

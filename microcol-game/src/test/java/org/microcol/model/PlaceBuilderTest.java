@@ -76,6 +76,27 @@ public class PlaceBuilderTest {
 		assertEquals(false, ((PlaceHighSea)ret).isTravelToEurope());
 	}
 
+	@Test
+	public void test_setShipToEuropePortPier(@Mocked Unit unit) throws Exception {
+		placeBuilder.setShipToEuropePortPier();
+		new Expectations() {{
+			unit.getType(); result=UnitType.COLONIST;
+		}};
+		
+		Place ret = placeBuilder.build(unit);
+		assertNotNull(ret);
+		assertTrue(ret instanceof PlaceEuropePier);
+	}
+
+	@Test(expected=IllegalArgumentException.class)
+	public void test_setShipToEuropePortPier_invalidUnitType(@Mocked Unit unit) throws Exception {
+		placeBuilder.setShipToEuropePortPier();
+		new Expectations() {{
+			unit.getType(); result=UnitType.FRIGATE;
+		}};
+		
+		placeBuilder.build(unit);
+	}
 	
 	@Test(expected = IllegalStateException.class)
 	public void test_noTargetPlace(@Mocked Unit unit) throws Exception {
