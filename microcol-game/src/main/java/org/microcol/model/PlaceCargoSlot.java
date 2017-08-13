@@ -19,5 +19,9 @@ public class PlaceCargoSlot extends AbstractPlace {
 	public CargoSlot getCargoSlot() {
 		return cargoSlot;
 	}
+	
+	public boolean isOwnerAtEuropePort(){
+		return cargoSlot.getHold().getOwner().isAtEuropePort();
+	}
 
 }

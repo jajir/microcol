@@ -1,10 +1,9 @@
 package org.microcol.model;
 
-import org.junit.Test;
-
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
+import org.junit.Test;
 
 import mockit.Injectable;
 import mockit.Mocked;
@@ -31,6 +30,11 @@ public class UnitFrigateTest {
 		unit.placeToHighSeas(true);
 		
 		assertTrue(unit.isAtHighSea());
+	}
+	
+	@Test(expected=IllegalStateException.class)
+	public void test_placeToEuropePortPier() throws Exception {
+		unit.placeToEuropePortPier();
 	}
 	
 	@Before

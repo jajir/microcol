@@ -1,18 +1,22 @@
 package org.microcol.gui;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 import org.microcol.model.Location;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class PointTest {
+
+	private final Logger logger = LoggerFactory.getLogger(PointTest.class);
 
 	@Test
 	public void test_simple() throws Exception {
 
 		for (int i = 40; i > -40; i--) {
 			Point p = Point.of(10, i);
-			System.out.println(p + " -->  " + p.toLocation());
+			logger.debug(p + " -->  " + p.toLocation());
 		}
 	}
 

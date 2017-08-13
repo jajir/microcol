@@ -64,9 +64,7 @@ public class PanelPortPier extends TitledPanel {
 	}
 
 	private final void onDragEntered(final DragEvent event) {
-		System.out.println("Entered");
 		if (isItCorrectObject(event.getDragboard())) {
-			System.out.println("It's my object");
 			background = getBackground();
 			setBackground(new Background(new BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY)));
 		}
@@ -74,7 +72,6 @@ public class PanelPortPier extends TitledPanel {
 
 	@SuppressWarnings("unused")
 	private final void onDragExited(final DragEvent event) {
-		System.out.println("Exited");
 		setBackground(background);
 		background = null;
 	}

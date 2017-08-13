@@ -95,7 +95,6 @@ public class PanelHighSeas extends TitledPanel {
 	}
 
 	private final void onDragDropped(DragEvent event) {
-		System.out.println("DragDropped");
 		final Dragboard db = event.getDragboard();
 		if (db.hasString()) {
 			logger.debug("drag over unit id '" + db.getString() + "'.");

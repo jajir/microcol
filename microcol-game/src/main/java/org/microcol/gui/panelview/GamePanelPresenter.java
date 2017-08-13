@@ -324,7 +324,6 @@ public final class GamePanelPresenter implements Localized {
 			display.setCursorNormal();
 		} else if (movingUnit.isPossibleToDisembarkAt(moveToLocation, true)) {
 			// try to disembark
-			System.out.println("embarking");
 			movingUnit.getHold().getSlots().stream().filter(cargoSlot -> !cargoSlot.isEmpty())
 					.forEach(cargoSlot -> cargoSlot.unload(moveToLocation));
 			// TODO JJ following code is repeated multiple times

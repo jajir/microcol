@@ -1,42 +1,58 @@
 package org.microcol.model;
 
+import static org.junit.Assert.assertTrue;
+
 import org.junit.Test;
 
-import static org.junit.Assert.*;
-
-import org.junit.Before;
-
-import mockit.Injectable;
+import mockit.Expectations;
 import mockit.Mocked;
-import mockit.Tested;
 
 public class UnitColonistTest {
 
-	@Tested(availableDuringSetup=true)
-	private Unit unit;
+	private @Mocked Player owner;
 
-	@Injectable
-	private UnitType type = UnitType.COLONIST;
+	private @Mocked PlaceBuilder placeBuilder;
 
-	@Injectable
-	private Player owner;
+	private @Mocked PlaceCargoSlot place;
 
-	@Injectable()
-	private Location location = Location.of(4, 3);
-
-	private @Mocked Model model;
-	
-	@Test(expected=IllegalArgumentException.class)
-	public void test_placeToHighSeas() throws Exception {
+	@Test(expected = IllegalArgumentException.class)
+	public void test_placeToHighSeas_invalid_place_type() throws Exception {
+		Unit unit = new Unit(UnitType.COLONIST, owner, Location.of(4, 3));
 		unit.placeToHighSeas(true);
+	}
+
+	@Test
+	public void test_placeToEuropePortPier(@Mocked PlaceCargoSlot place) throws Exception {
+		new Expectations() {{
+			placeBuilder.build((Unit)any); result=place;
+			place.isOwnerAtEuropePort(); result=true;
+		}};
 		
-		assertTrue(unit.isAtMap());
+		Unit unit = new Unit(UnitType.COLONIST, owner, placeBuilder);
+		unit.placeToEuropePortPier();
+
+		assertTrue(unit.isAtEuropePier());
 	}
-	
-	@Before
-	public void setup() {
-		unit.setModel(model);
-		unit.startTurn();
+
+	@Test(expected = IllegalStateException.class)
+	public void test_placeToEuropePortPier_unit_in_not_in_cargo(@Mocked PlaceLocation place) throws Exception {
+		new Expectations() {{
+			placeBuilder.build((Unit)any); result=place;
+		}};
+		
+		Unit unit =new Unit(UnitType.COLONIST, owner, placeBuilder);
+		unit.placeToEuropePortPier();
 	}
-	
+
+	@Test(expected = IllegalStateException.class)
+	public void test_placeToEuropePortPier_holding_unit_is_not_in_europe_port(@Mocked PlaceCargoSlot place) throws Exception {
+		new Expectations() {{
+			placeBuilder.build((Unit)any); result=place;
+			place.isOwnerAtEuropePort(); result=false;
+		}};
+		Unit unit = new Unit(UnitType.COLONIST, owner, placeBuilder);
+		unit.placeToEuropePortPier();
+	}
+
+
 }

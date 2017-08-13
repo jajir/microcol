@@ -12,6 +12,8 @@ import org.microcol.gui.util.ViewUtil;
 import org.microcol.model.Player;
 import org.microcol.model.Unit;
 import org.microcol.model.UnitType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -21,6 +23,8 @@ import javafx.stage.Stage;
  * Allows to display panel and dialog without creating game event.
  */
 public class DialogTester extends Application {
+
+	private static final Logger logger = LoggerFactory.getLogger(DialogTester.class);
 
 	private static ViewUtil viewUtil;
 
@@ -49,7 +53,7 @@ public class DialogTester extends Application {
 			// startNewGameDialog();
 			// startAboutDialog();
 			dialogEurope();
-//			dialogColonizopedia();
+			// dialogColonizopedia();
 
 			// dialogSave();
 			// dialogLoad();
@@ -94,7 +98,7 @@ public class DialogTester extends Application {
 
 		DialogFigth preferences = new DialogFigth(text, viewUtil, imageProvider, localizationHelper, null, unitAttacker,
 				unitDefender);
-		System.out.println("User wants to fight: " + preferences.isUserChooseFight());
+		logger.debug("User wants to fight: " + preferences.isUserChooseFight());
 	}
 
 	public final static void dialogWarning() {

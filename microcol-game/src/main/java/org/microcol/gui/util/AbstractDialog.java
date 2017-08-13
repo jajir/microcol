@@ -55,7 +55,6 @@ public class AbstractDialog {
 		 * https://bugs.openjdk.java.net/browse/JDK-8172847 it will be fixed.
 		 */
 		scene.setOnKeyPressed(event -> {
-			System.out.println("code: " + event.getCode());
 			if (event.getCode() == KeyCode.ESCAPE) {
 				stageDialog.close();
 			}

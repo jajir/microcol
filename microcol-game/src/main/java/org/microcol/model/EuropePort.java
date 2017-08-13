@@ -17,7 +17,7 @@ public class EuropePort {
 	}
 
 	public List<Unit> getShipsInPort(final Player player) {
-		return model.getAllUnits().stream().filter(unit -> unit.isAtPort())
+		return model.getAllUnits().stream().filter(unit -> unit.isAtEuropePort())
 				.filter(unit -> unit.getOwner().equals(player))
 				.filter(unit -> ((PlaceEuropePort) unit.getPlace()).getPort().equals(this))
 				.collect(Collectors.toList());

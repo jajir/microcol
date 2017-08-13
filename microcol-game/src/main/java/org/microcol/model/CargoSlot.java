@@ -73,4 +73,8 @@ public final class CargoSlot {
 	static CargoSlot load(final JsonParser parser) {
 		return null; // TODO JKA Implement save/load
 	}
+
+	CargoHold getHold() {
+		return hold;
+	}
 }

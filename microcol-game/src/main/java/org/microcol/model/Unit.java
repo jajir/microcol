@@ -66,7 +66,7 @@ public class Unit {
 	public CargoHold getHold() {
 		return hold;
 	}
-	
+
 	/**
 	 * It's called before turn starts.
 	 */
@@ -76,12 +76,13 @@ public class Unit {
 			PlaceHighSea placeHighSea = (PlaceHighSea) place;
 			placeHighSea.decreaseRemainingTurns();
 			if (placeHighSea.getRemainigTurns() <= 0) {
-				if(placeHighSea.isTravelToEurope()){
+				if (placeHighSea.isTravelToEurope()) {
 					model.getEurope().getPort().placeShipToPort(this);
-				}else{
-					//XXX ships always come from east side of map
-					final List<Location> locations = model.getHighSea().getSuitablePlaceForShipCommingFromEurope(getOwner(), true);
-					//TODO random should be class instance
+				} else {
+					// XXX ships always come from east side of map
+					final List<Location> locations = model.getHighSea()
+							.getSuitablePlaceForShipCommingFromEurope(getOwner(), true);
+					// TODO random should be class instance
 					final Random random = new Random();
 					final Location location = locations.get(random.nextInt(locations.size()));
 					placeToLocation(location);
@@ -329,9 +330,9 @@ public class Unit {
 			availableMoves--;
 		}
 		if (!locations.isEmpty()) {
-			final Path reallyExecutedPath =  Path.of(locations);
+			final Path reallyExecutedPath = Path.of(locations);
 			final Terrain targetTerrain = model.getMap().getTerrainAt(reallyExecutedPath.getTarget());
-			if (targetTerrain==Terrain.HIGH_SEA){
+			if (targetTerrain == Terrain.HIGH_SEA) {
 				placeToHighSeas(true);
 			}
 			model.fireUnitMoved(this, start, reallyExecutedPath);
@@ -369,7 +370,7 @@ public class Unit {
 		return type.isStorable();
 	}
 
-	public boolean isStored() {
+	public boolean isAtCargoSlot() {
 		return place instanceof PlaceCargoSlot;
 	}
 
@@ -377,7 +378,7 @@ public class Unit {
 		return place instanceof PlaceHighSea;
 	}
 
-	public boolean isAtPort() {
+	public boolean isAtEuropePort() {
 		return place instanceof PlaceEuropePort;
 	}
 
@@ -389,12 +390,12 @@ public class Unit {
 		return place instanceof PlaceEuropePier;
 	}
 
-	//TODO rename it to placeToCargo
+	// TODO rename it to placeToCargo
 	void store(final CargoSlot slot) {
 		storeWithoutEvent(slot);
 		model.fireUnitStored(this, slot); // TODO JKA Move to CargoSlot?
 	}
-	
+
 	void placeToEuropePort(final EuropePort port) {
 		place = new PlaceEuropePort(this, Preconditions.checkNotNull(port));
 	}
@@ -405,17 +406,16 @@ public class Unit {
 
 	public void placeToHighSeas(final boolean isTravelToEurope) {
 		Preconditions.checkArgument(UnitType.isShip(type), "Only ships could be placed to high sea.");
-		//TODO add some preconditions
+		// TODO add some preconditions
 		final int requiredTurns = 3;
-		//XXX choose if it's direction to east or to west (+1 rule to europe)
+		// XXX choose if it's direction to east or to west (+1 rule to europe)
 		place = new PlaceHighSea(this, isTravelToEurope, requiredTurns);
 	}
-	
-	public void placeToEuropePortPier(){
-		//FIXME JJ add some preconditions:
-		//TODO it's not a ship 
-		//TODO it's placed in cargo
-		//TODO holding unit is ship in Europe port
+
+	public void placeToEuropePortPier() {
+		Preconditions.checkState(isAtCargoSlot(), "Unit is not in cargo.");
+		Preconditions.checkState(getPlaceCargoSlot().isOwnerAtEuropePort(),
+				"Holding unit is not at europe port, cant be placed to port pier.");
 		place = new PlaceEuropePier(this);
 	}
 
@@ -432,7 +432,7 @@ public class Unit {
 	void unload(final Location targetLocation) {
 		Preconditions.checkNotNull(targetLocation);
 		Preconditions.checkArgument(availableMoves > 0, "Unit (%s) need for unload at least on action point", this);
-		Preconditions.checkState(isStored(), "This unit (%s) can't be unload, it's not stored.", this);
+		Preconditions.checkState(isAtCargoSlot(), "This unit (%s) can't be unload, it's not stored.", this);
 		// TODO JKA run "standard" unit location checks
 
 		// TODO JKA empty all moves and attacks?
@@ -441,7 +441,7 @@ public class Unit {
 	}
 
 	void checkNotStored() {
-		if (isStored()) {
+		if (isAtCargoSlot()) {
 			throw new IllegalStateException(String.format("This unit (%s) is stored in (%s).", this, place));
 		}
 	}
@@ -493,6 +493,11 @@ public class Unit {
 
 	Place getPlace() {
 		return place;
+	}
+
+	private PlaceCargoSlot getPlaceCargoSlot() {
+		Preconditions.checkState(isAtCargoSlot(), "Unit have to be in cargo slot");
+		return (PlaceCargoSlot) place;
 	}
 
 	public int getId() {
