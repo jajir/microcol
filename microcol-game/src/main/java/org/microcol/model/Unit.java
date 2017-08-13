@@ -410,6 +410,14 @@ public class Unit {
 		//XXX choose if it's direction to east or to west (+1 rule to europe)
 		place = new PlaceHighSea(this, isTravelToEurope, requiredTurns);
 	}
+	
+	public void placeToEuropePortPier(){
+		//FIXME JJ add some preconditions:
+		//TODO it's not a ship 
+		//TODO it's placed in cargo
+		//TODO holding unit is ship in Europe port
+		place = new PlaceEuropePier(this);
+	}
 
 	void storeWithoutEvent(final CargoSlot slot) {
 		Preconditions.checkState(isStorable(), "This unit (%s) cannot be stored.", this);

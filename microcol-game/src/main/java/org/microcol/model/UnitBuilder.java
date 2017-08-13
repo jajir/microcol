@@ -77,6 +77,7 @@ public class UnitBuilder {
 		unitsInCargo.forEach(cargoUnit -> {
 			int i = cx.getAndIncrement();
 			CargoSlot cargoSlot = unit.getHold().getSlots().get(i);
+			modelBuilder.addUnit(cargoUnit);
 			// FIXME JJ samotne ulozeni nefunguje, je tam na modelu vyvolana udalost jednotka byla ulozena
 			cargoSlot.unsafeStore(cargoUnit);
 		});

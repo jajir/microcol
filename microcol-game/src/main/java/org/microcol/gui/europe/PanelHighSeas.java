@@ -25,9 +25,9 @@ import javafx.scene.paint.Color;
  * Panels shows ships in seas. Ships are incoming to port or are going to new
  * world.
  */
-public class PanelShips extends TitledPanel {
+public class PanelHighSeas extends TitledPanel {
 
-	private final Logger logger = LoggerFactory.getLogger(PanelShips.class);
+	private final Logger logger = LoggerFactory.getLogger(PanelHighSeas.class);
 
 	private final boolean isShownShipsTravelingToEurope;
 	
@@ -41,7 +41,7 @@ public class PanelShips extends TitledPanel {
 
 	private Background background;
 
-	public PanelShips(final EuropeDialog europeDialog, final ImageProvider imageProvider, final String title, final Model model,
+	public PanelHighSeas(final EuropeDialog europeDialog, final ImageProvider imageProvider, final String title, final Model model,
 			final boolean isShownShipsTravelingToEurope) {
 		super(title, new Label(title));
 		this.europeDialog = Preconditions.checkNotNull(europeDialog);
@@ -103,23 +103,16 @@ public class PanelShips extends TitledPanel {
 			Preconditions.checkState(UnitType.isShip(unit.getType()), "Only ships could be send to high seas");
 			unit.placeToHighSeas(false);
 			europeDialog.repaint();
+			event.acceptTransferModes(TransferMode.MOVE);
+			/*
+			 * let the source know whether the string was successfully transferred
+			 * and used
+			 */
+			event.setDropCompleted(true);
+			event.consume();
 		} else {
 			return;
 		}
-
-		boolean success = false;
-		event.acceptTransferModes(TransferMode.MOVE);
-		if (db.hasString()) {
-			System.out.println(db.getString());
-			success = true;
-		}
-		/*
-		 * let the source know whether the string was successfully transferred
-		 * and used
-		 */
-		event.setDropCompleted(success);
-
-		event.consume();
 	}
 
 	private void showShips() {

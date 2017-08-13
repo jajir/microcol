@@ -1,7 +1,9 @@
 package org.microcol.gui.town;
 
+import org.easymock.EasyMock;
 import org.microcol.gui.ImageProvider;
 import org.microcol.gui.europe.PanelGoods;
+import org.microcol.gui.europe.EuropeDialog;
 import org.microcol.gui.europe.PanelEuropeDock;
 import org.microcol.gui.event.model.GameController;
 import org.microcol.gui.panelview.PaintService;
@@ -59,7 +61,7 @@ public class TownDialog extends AbstractDialog {
 		/**
 		 * Row 2
 		 */
-		europeDock = new PanelEuropeDock(imageProvider);
+		europeDock = new PanelEuropeDock(gameController, imageProvider, EasyMock.createMock(EuropeDialog.class));
 
 		/**
 		 * Good row - 3
@@ -85,7 +87,7 @@ public class TownDialog extends AbstractDialog {
 		townName.setText("Colony: " + town.getName());
 		colonyLayout.setTown(town);
 		goods.setEurope(gameController.getModel().getEurope());
-//		pierShips.setPort(null);
+		// pierShips.setPort(null);
 		getDialog().showAndWait();
 	}
 

@@ -1,12 +1,10 @@
 package org.microcol.gui.europe;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.microcol.gui.ImageProvider;
 import org.microcol.gui.event.model.GameController;
-import org.microcol.model.CargoSlot;
-import org.microcol.model.EuropePort;
 import org.microcol.model.Unit;
 import org.microcol.model.UnitType;
 import org.slf4j.Logger;
@@ -34,47 +32,45 @@ import javafx.scene.layout.VBox;
 public class PanelEuropeDock extends TitledPanel {
 
 	private final Logger logger = LoggerFactory.getLogger(PanelEuropeDock.class);
-	
-	private final static int MAX_NUMBER_OF_CRATES = 6;
 
 	private final ImageProvider imageProvider;
 
-	private final List<PanelCrate> crates = new ArrayList<>();
+	private final PanelCratesController panelCratesController;
 
-	final HBox panelShips;
+	private final HBox panelShips;
 
-	final ToggleGroup toggleGroup;
+	private final ToggleGroup toggleGroup;
 
-	public PanelEuropeDock(final ImageProvider imageProvider) {
+	private final GameController gameController;
+
+	public PanelEuropeDock(final GameController gameController, final ImageProvider imageProvider,
+			final EuropeDialog europeDialog) {
 		super("pristav");
 		this.imageProvider = Preconditions.checkNotNull(imageProvider);
+		this.gameController = Preconditions.checkNotNull(gameController);
+		panelCratesController = new PanelCratesController(gameController, imageProvider, europeDialog);
 
 		panelShips = new HBox();
 		toggleGroup = new ToggleGroup();
 		toggleGroup.selectedToggleProperty().addListener((object, oldValue, newValue) -> {
 			if (toggleGroup.getSelectedToggle() == null) {
-				closeAllCrates();
+				panelCratesController.closeAllCrates();
 			} else {
-				setCratesForShip((Unit) toggleGroup.getSelectedToggle().getUserData());
+				panelCratesController.setCratesForShip(getSelectedShip().get());
 			}
 		});
 
-		final HBox panelCrates = new HBox();
-		for (int i = 0; i < MAX_NUMBER_OF_CRATES; i++) {
-			PanelCrate paneCrate = new PanelCrate(imageProvider);
-			crates.add(paneCrate);
-			panelCrates.getChildren().add(paneCrate);
-		}
-		VBox mainPanel = new VBox(panelShips, panelCrates);
+		VBox mainPanel = new VBox(panelShips, panelCratesController.getPanelCratesView());
 		getContentPane().getChildren().add(mainPanel);
 	}
 
-	public void setPort(GameController gameController, final EuropePort port) {
+	void repaint() {
 		panelShips.getChildren().clear();
 		/**
 		 * Ships in port
 		 */
-		final List<Unit> shipsInPort = port.getShipsInPort(gameController.getModel().getCurrentPlayer());
+		final List<Unit> shipsInPort = gameController.getModel().getEurope().getPort()
+				.getShipsInPort(gameController.getModel().getCurrentPlayer());
 
 		for (Unit unit : shipsInPort) {
 			ToggleButton toggleButtonShip = new ToggleButton();
@@ -88,6 +84,14 @@ public class PanelEuropeDock extends TitledPanel {
 			toggleButtonShip.setOnDragDetected(this::onDragDetected);
 			panelShips.getChildren().add(toggleButtonShip);
 		}
+	}
+	
+	void repaintCurrectShipsCrates(){
+		panelCratesController.setCratesForShip(getSelectedShip().get());
+	}
+	
+	private Optional<Unit> getSelectedShip(){
+		return Optional.of((Unit) toggleGroup.getSelectedToggle().getUserData());
 	}
 
 	private void onDragDetected(final MouseEvent event) {
@@ -103,26 +107,6 @@ public class PanelEuropeDock extends TitledPanel {
 			content.putString(String.valueOf(unit.getId()));
 			db.setContent(content);
 			event.consume();
-		}
-	}
-
-	private final void setCratesForShip(final Unit unit) {
-		Preconditions.checkNotNull(unit);
-		final int maxNumberOfCrates = unit.getType().getCargoCapacity();
-		for (int i = 0; i < MAX_NUMBER_OF_CRATES; i++) {
-			final PanelCrate panelCrate = crates.get(i);
-			if (i < maxNumberOfCrates) {
-				final CargoSlot cargoSlot = unit.getHold().getSlots().get(i);
-				panelCrate.showCargoSlot(cargoSlot);
-			} else {
-				panelCrate.setIsClosed(true);
-			}
-		}
-	}
-
-	private final void closeAllCrates() {
-		for (final PanelCrate cratePane : crates) {
-			cratePane.setIsClosed(true);
 		}
 	}
 

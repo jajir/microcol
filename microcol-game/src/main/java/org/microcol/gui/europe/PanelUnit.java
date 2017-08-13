@@ -27,6 +27,7 @@ public class PanelUnit extends HBox {
 			 * is not possible.
 			 */
 			content.putImage(image);
+			content.putString(String.valueOf(unit.getId()));
 			db.setContent(content);
 			e.consume();
 		});
