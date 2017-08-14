@@ -19,4 +19,10 @@ public interface Place {
 	 */
 	String getName();
 
+	/**
+	 * When place is not longer valid than in some cases other side of relation
+	 * should be notified.
+	 */
+	void destroy();
+
 }

@@ -29,7 +29,7 @@ public class PanelCratesController {
 		for (int i = 0; i < PanelCratesView.MAX_NUMBER_OF_CRATES; i++) {
 			final PanelCrate panelCrate = panelCratesView.getCrates().get(i);
 			if (i < maxNumberOfCrates) {
-				final CargoSlot cargoSlot = unit.getHold().getSlots().get(i);
+				final CargoSlot cargoSlot = unit.getCargo().getSlots().get(i);
 				panelCrate.showCargoSlot(unit, cargoSlot);
 			} else {
 				panelCrate.setIsClosed(true);

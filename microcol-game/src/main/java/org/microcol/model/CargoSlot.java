@@ -9,61 +9,90 @@ import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 
 public final class CargoSlot {
-	
-	private final CargoHold hold;
-	private Optional<Unit> cargo;
-	private Optional<GoodAmmount> goods;
 
-	CargoSlot(final CargoHold hold) {
-		this.hold = hold;
-		this.cargo = Optional.empty();
+	/**
+	 * Cargo in which is this slot placed.
+	 */
+	private final Cargo cargo;
+
+	/**
+	 * In this cargo slot could be stored this unit.
+	 */
+	private PlaceCargoSlot cargoUnit;
+
+	/**
+	 * In this cargo slot could be stored this good.
+	 */
+	private GoodAmmount cargoGoods;
+
+	CargoSlot(final Cargo hold) {
+		this.cargo = Preconditions.checkNotNull(hold);
 	}
 
 	public boolean isEmpty() {
-		return !cargo.isPresent();
+		return cargoUnit == null && cargoGoods == null;
+	}
+
+	public void empty() {
+		Preconditions.checkState(!isEmpty(), "Cargo slot (%s) is already empty.", this);
+		cargoUnit = null;
+		cargoGoods = null;
 	}
 
 	public Optional<Unit> getUnit() {
-		return cargo;
+		if(cargoUnit==null){
+			return Optional.empty();
+		}else{
+			return Optional.of(cargoUnit.getUnit());
+		}
+	}
+
+	public Optional<GoodAmmount> getGoods() {
+		return Optional.of(cargoGoods);
 	}
 
 	/**
-	 * This method doesn's store store unit and 
+	 * This method doesn's store store unit and
+	 * 
 	 * @param unit
 	 */
-	void unsafeStore(final Unit unit){
-		cargo = Optional.of(unit);
-		unit.storeWithoutEvent(this);
+	void unsafeStore(final PlaceCargoSlot unit) {
+		cargoUnit = unit;
 	}
-	
+
 	public void store(final Unit unit) {
 		Preconditions.checkNotNull(unit);
-		if (cargo.isPresent()) { // TODO JKA Temporary fix - cargo.get() is problem
-			Preconditions.checkState(!cargo.isPresent(), "Cargo slot (%s) is already loaded with some unit (%s).", this, cargo.get());
-		}
-		Preconditions.checkState(hold.getOwner().getOwner().equals(unit.getOwner()), "Owners must be same (%s - %s).", hold.getOwner().getOwner(), unit.getOwner());
+		Preconditions.checkState(isEmpty(), "Cargo slot (%s) is already loaded.", this);
+		Preconditions.checkState(cargo.getOwner().getOwner().equals(unit.getOwner()), "Owners must be same (%s - %s).",
+				cargo.getOwner().getOwner(), unit.getOwner());
 
-		cargo = Optional.of(unit);
+		cargoUnit = new PlaceCargoSlot(unit, this);
 		unit.store(this);
+	}
+
+	public void store(final GoodAmmount goodAmmount) {
+		Preconditions.checkNotNull(goodAmmount);
+		Preconditions.checkState(isEmpty(), "Cargo slot (%s) is already loaded.", this);
+
+		cargoGoods = goodAmmount;
 	}
 
 	public Unit unload(final Location targetLocation) {
 		Preconditions.checkNotNull(targetLocation);
-		Preconditions.checkState(cargo.isPresent(), "Cargo slot (%s) is empty.", this);
-		Preconditions.checkArgument(hold.getOwner().getLocation().isNeighbor(targetLocation),"Unit (%s) can't unload at location (%s), it's too far",hold.getOwner(),targetLocation);
+		Preconditions.checkState(!isEmpty(), "Cargo slot (%s) is empty.", this);
+		Preconditions.checkArgument(cargo.getOwner().getLocation().isNeighbor(targetLocation),
+				"Unit (%s) can't unload at location (%s), it's too far", cargo.getOwner(), targetLocation);
 
-		final Unit unit = cargo.get();
+		final Unit unit = cargoUnit.getUnit();
 		unit.unload(targetLocation);
-		cargo = Optional.empty();
+		cargoUnit = null;
 
 		return unit;
 	}
 
 	@Override
 	public String toString() {
-		return MoreObjects.toStringHelper(this)
-			.add("cargo", cargo)
-			.toString();
+		return MoreObjects.toStringHelper(this).add("cargo", cargoUnit).toString();
 	}
 
 	void save(final JsonGenerator generator) {
@@ -74,7 +103,7 @@ public final class CargoSlot {
 		return null; // TODO JKA Implement save/load
 	}
 
-	CargoHold getHold() {
-		return hold;
+	Cargo getHold() {
+		return cargo;
 	}
 }

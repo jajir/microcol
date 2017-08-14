@@ -78,7 +78,7 @@ public class PlaceBuilderTest {
 
 	@Test
 	public void test_setShipToEuropePortPier(@Mocked Unit unit) throws Exception {
-		placeBuilder.setShipToEuropePortPier();
+		placeBuilder.setUnitToEuropePortPier();
 		new Expectations() {{
 			unit.getType(); result=UnitType.COLONIST;
 		}};
@@ -90,7 +90,7 @@ public class PlaceBuilderTest {
 
 	@Test(expected=IllegalArgumentException.class)
 	public void test_setShipToEuropePortPier_invalidUnitType(@Mocked Unit unit) throws Exception {
-		placeBuilder.setShipToEuropePortPier();
+		placeBuilder.setUnitToEuropePortPier();
 		new Expectations() {{
 			unit.getType(); result=UnitType.FRIGATE;
 		}};

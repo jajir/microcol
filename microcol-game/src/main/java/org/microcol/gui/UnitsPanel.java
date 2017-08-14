@@ -94,7 +94,7 @@ public class UnitsPanel implements Localized {
 		HBox box = new HBox();
 		// TODO JJ localize it
 		box.getChildren().add(new Label("With:"));
-		unit.getHold().getSlots().stream().filter(cargoSlot -> !cargoSlot.isEmpty()).forEach(cargoSlot -> {
+		unit.getCargo().getSlots().stream().filter(cargoSlot -> !cargoSlot.isEmpty()).forEach(cargoSlot -> {
 			box.getChildren().add(new ImageView(imageProvider.getUnitImage(cargoSlot.getUnit().get().getType())));
 		});
 		return box;

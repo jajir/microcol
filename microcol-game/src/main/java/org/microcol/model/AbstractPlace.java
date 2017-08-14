@@ -18,4 +18,9 @@ public abstract class AbstractPlace implements Place {
 		return unit;
 	}
 
+	@Override
+	public void destroy() {
+		// default empty implementation.
+	}
+
 }

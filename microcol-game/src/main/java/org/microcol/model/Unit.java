@@ -22,13 +22,13 @@ public class Unit {
 	private final Player owner;
 	private Place place;
 	private int availableMoves;
-	private final CargoHold hold;
+	private final Cargo cargo;
 
 	Unit(final UnitType type, final Player owner, final Location location) {
 		this.type = Preconditions.checkNotNull(type);
 		this.owner = Preconditions.checkNotNull(owner);
 		this.place = new PlaceLocation(this, Preconditions.checkNotNull(location));
-		this.hold = new CargoHold(this, type.getCargoCapacity());
+		this.cargo = new Cargo(this, type.getCargoCapacity());
 		this.id = IdManager.nextId();
 	}
 
@@ -36,7 +36,7 @@ public class Unit {
 		this.type = Preconditions.checkNotNull(type);
 		this.owner = Preconditions.checkNotNull(owner);
 		this.place = Preconditions.checkNotNull(placeBuilder.build(this));
-		this.hold = new CargoHold(this, type.getCargoCapacity());
+		this.cargo = new Cargo(this, type.getCargoCapacity());
 		this.id = IdManager.nextId();
 	}
 
@@ -63,8 +63,8 @@ public class Unit {
 		return availableMoves;
 	}
 
-	public CargoHold getHold() {
-		return hold;
+	public Cargo getCargo() {
+		return cargo;
 	}
 
 	/**
@@ -195,7 +195,7 @@ public class Unit {
 	public boolean isPossibleToDisembarkAt(final Location targetLocation, boolean inCurrentTurn) {
 		Preconditions.checkNotNull(targetLocation);
 		if (getLocation().isNeighbor(targetLocation) && getType().getCargoCapacity() > 0) {
-			return getHold().getSlots().stream()
+			return getCargo().getSlots().stream()
 					.filter(cargoSlot -> canCargoDisembark(cargoSlot, targetLocation, inCurrentTurn)).findAny()
 					.isPresent();
 		} else {
@@ -207,6 +207,7 @@ public class Unit {
 		if (slot.isEmpty()) {
 			return false;
 		} else {
+			// TODO jj express it better slot.getUnit().get().getUnit()
 			final Unit unit = slot.getUnit().get();
 			return (!inCurrentTurn || unit.availableMoves > 0) && unit.canUnitDisembarkAt(moveToLocation);
 		}
@@ -250,7 +251,7 @@ public class Unit {
 	 */
 	public boolean isAtLeastOneCargoSlotEmpty() {
 		return getType().getCargoCapacity() > 0
-				&& getHold().getSlots().stream().filter(cargoSlot -> cargoSlot.isEmpty()).findAny().isPresent();
+				&& getCargo().getSlots().stream().filter(cargoSlot -> cargoSlot.isEmpty()).findAny().isPresent();
 	}
 
 	/**
@@ -271,8 +272,8 @@ public class Unit {
 		checkNotStored();
 
 		return getLocation().getNeighbors().stream().flatMap(neighbor -> owner.getUnitsAt(neighbor).stream())
-				.filter(unit -> unit != this)
-				.filter(unit -> unit.getHold().getSlots().stream().filter(slot -> slot.isEmpty()).findAny().isPresent())
+				.filter(unit -> unit != this).filter(unit -> unit.getCargo().getSlots().stream()
+						.filter(slot -> slot.isEmpty()).findAny().isPresent())
 				.collect(ImmutableList.toImmutableList());
 		/*
 		 * final ImmutableList.Builder<Unit> builder = ImmutableList.builder();
@@ -392,7 +393,13 @@ public class Unit {
 
 	// TODO rename it to placeToCargo
 	void store(final CargoSlot slot) {
-		storeWithoutEvent(slot);
+		Preconditions.checkState(isStorable(), "This unit (%s) cannot be stored.", this);
+		checkNotStored();
+		// TODO JKA check adjacent location
+		// TODO JKA check movement?
+		// TODO JKA prazdny naklad?
+		place = new PlaceCargoSlot(this, slot);
+		availableMoves = 0;
 		model.fireUnitStored(this, slot); // TODO JKA Move to CargoSlot?
 	}
 
@@ -419,16 +426,6 @@ public class Unit {
 		place = new PlaceEuropePier(this);
 	}
 
-	void storeWithoutEvent(final CargoSlot slot) {
-		Preconditions.checkState(isStorable(), "This unit (%s) cannot be stored.", this);
-		checkNotStored();
-		// TODO JKA check adjacent location
-		// TODO JKA check movement?
-		// TODO JKA prazdny naklad?
-		place = new PlaceCargoSlot(this, slot);
-		availableMoves = 0;
-	}
-
 	void unload(final Location targetLocation) {
 		Preconditions.checkNotNull(targetLocation);
 		Preconditions.checkArgument(availableMoves > 0, "Unit (%s) need for unload at least on action point", this);
@@ -449,7 +446,7 @@ public class Unit {
 	@Override
 	public String toString() {
 		return MoreObjects.toStringHelper(this).add("id", id).add("type", type).add("owner", owner)
-				.add("place", place.getName()).add("availableMoves", availableMoves).add("hold", hold)
+				.add("place", place.getName()).add("availableMoves", availableMoves).add("hold", cargo)
 				.add("place", place.getName()).toString();
 	}
 

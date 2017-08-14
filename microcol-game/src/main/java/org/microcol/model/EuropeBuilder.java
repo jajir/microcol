@@ -9,7 +9,7 @@ import com.google.common.collect.Lists;
  * Builder for Europe object.
  */
 public class EuropeBuilder {
-	//TODO class could be removed
+	//TODO EuropeBuilder class could be removed
 	private final ModelBuilder modelBuilder;
 
 	private final List<Unit> unitsInEuropePort = Lists.newArrayList();
@@ -22,7 +22,7 @@ public class EuropeBuilder {
 		return modelBuilder;
 	}
 
-	//TODO use same patern like for unitBuilder.
+	//TODO use same pattern like for unitBuilder.
 	public EuropeBuilder addShipToPort(final Unit ship) {
 		Preconditions.checkArgument(UnitType.isShip(ship.getType()),"In Europe port could be just ship.");
 		modelBuilder.addUnit(ship);

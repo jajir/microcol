@@ -6,9 +6,15 @@ public class PlaceCargoSlot extends AbstractPlace {
 
 	private final CargoSlot cargoSlot;
 
-	PlaceCargoSlot(final Unit unit, final CargoSlot cargoSlot) {
-		super(unit);
+	PlaceCargoSlot(final Unit unitToCargo, final CargoSlot cargoSlot) {
+		super(unitToCargo);
 		this.cargoSlot = Preconditions.checkNotNull(cargoSlot);
+		cargoSlot.unsafeStore(this);
+	}
+	
+	@Override
+	public void destroy() {
+		cargoSlot.empty();
 	}
 
 	@Override

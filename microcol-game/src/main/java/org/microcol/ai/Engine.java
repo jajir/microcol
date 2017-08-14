@@ -125,7 +125,7 @@ public class Engine {
 
 		if (unit.isStorable() && unit.getAvailableMoves() > 0) {
 			unit.getStorageUnits().stream()
-				.flatMap(u -> u.getHold().getSlots().stream())
+				.flatMap(u -> u.getCargo().getSlots().stream())
 				.filter(slot -> slot.isEmpty())
 				.findAny()
 				.get().store(unit);

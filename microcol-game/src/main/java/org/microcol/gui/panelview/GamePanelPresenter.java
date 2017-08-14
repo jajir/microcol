@@ -318,13 +318,13 @@ public final class GamePanelPresenter implements Localized {
 		} else if (movingUnit.isPossibleToEmbarkAt(moveToLocation, true)) {
 			// embark
 			final Unit toLoad = gameController.getModel().getUnitsAt(moveToLocation).get(0);
-			toLoad.getHold().getSlots().get(0).store(movingUnit);
+			toLoad.getCargo().getSlots().get(0).store(movingUnit);
 			// TODO JJ following code is repeated multiple times
 			viewState.setSelectedTile(Optional.of(moveToLocation));
 			display.setCursorNormal();
 		} else if (movingUnit.isPossibleToDisembarkAt(moveToLocation, true)) {
 			// try to disembark
-			movingUnit.getHold().getSlots().stream().filter(cargoSlot -> !cargoSlot.isEmpty())
+			movingUnit.getCargo().getSlots().stream().filter(cargoSlot -> !cargoSlot.isEmpty())
 					.forEach(cargoSlot -> cargoSlot.unload(moveToLocation));
 			// TODO JJ following code is repeated multiple times
 			viewState.setSelectedTile(Optional.of(moveToLocation));
