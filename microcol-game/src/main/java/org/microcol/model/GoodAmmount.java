@@ -8,8 +8,9 @@ public class GoodAmmount {
 
 	private final GoodType goodType;
 
-	GoodAmmount(final GoodType goodType) {
+	GoodAmmount(final GoodType goodType, final int initialAmmmount) {
 		this.goodType = Preconditions.checkNotNull(goodType);
+		ammount = initialAmmmount;
 	}
 
 	public int getAmmount() {
