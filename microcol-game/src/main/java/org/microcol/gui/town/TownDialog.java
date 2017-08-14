@@ -1,8 +1,6 @@
 package org.microcol.gui.town;
 
-import org.easymock.EasyMock;
 import org.microcol.gui.ImageProvider;
-import org.microcol.gui.europe.PanelGoods;
 import org.microcol.gui.europe.EuropeDialog;
 import org.microcol.gui.europe.PanelEuropeDock;
 import org.microcol.gui.event.model.GameController;
@@ -40,8 +38,8 @@ public class TownDialog extends AbstractDialog {
 
 	@Inject
 	public TownDialog(final ViewUtil viewUtil, final Text text, final ImageProvider imageProvider,
-			final GameController gameController, final PaintService paintService,
-			final PanelTownLayout panelTownLayout) {
+			final GameController gameController, final PaintService paintService, final PanelTownLayout panelTownLayout,
+			final EuropeDialog europeDialog) {
 		super(viewUtil);
 		Preconditions.checkNotNull(imageProvider);
 		this.gameController = Preconditions.checkNotNull(gameController);
@@ -61,7 +59,7 @@ public class TownDialog extends AbstractDialog {
 		/**
 		 * Row 2
 		 */
-		europeDock = new PanelEuropeDock(gameController, imageProvider, EasyMock.createMock(EuropeDialog.class));
+		europeDock = new PanelEuropeDock(gameController, imageProvider, europeDialog);
 
 		/**
 		 * Good row - 3

@@ -3,22 +3,28 @@ package org.microcol.gui;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-import org.easymock.EasyMock;
-import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.microcol.gui.panelview.Area;
 import org.microcol.gui.panelview.GamePanelView;
 import org.microcol.gui.panelview.VisibleArea;
 import org.microcol.model.Location;
 import org.microcol.model.WorldMap;
 
+import mockit.Expectations;
+import mockit.Mocked;
+import mockit.integration.junit4.JMockit;
+
 /**
  * Tests for {@link Area}.
  *
  */
+@RunWith(JMockit.class)
 public class AreaTest {
 
-	private VisibleArea visibleArea;
+	private @Mocked VisibleArea visibleArea;
+	
+	private @Mocked WorldMap map;
 
 	@Test
 	public void test_small_map_huge_view() {
@@ -46,43 +52,34 @@ public class AreaTest {
 	public void test_getCenterAreaTo_middle_of_map() throws Exception {
 		Area area = makeArea(222, 222, 800, 600, 100 * GamePanelView.TILE_WIDTH_IN_PX,
 				100 * GamePanelView.TILE_WIDTH_IN_PX);
-		EasyMock.expect(visibleArea.getCanvasWidth()).andReturn(800);
-		EasyMock.expect(visibleArea.getCanvasHeight()).andReturn(600);
-		EasyMock.expect(visibleArea.scrollToPoint(Point.of(1350, 1450))).andReturn(Point.of(1351, 1451));
-		EasyMock.replay(visibleArea);
+		new Expectations() {{
+			visibleArea.getCanvasWidth();result=800;times=1;
+			visibleArea.getCanvasHeight();result=600;times=1;
+			visibleArea.scrollToPoint(Point.of(1350, 1450));result=Point.of(1351, 1451);
+		}};
+		
 		Point po = area.getCenterToLocation(Location.of(50, 50));
 
 		assertEquals(1351, po.getX());
 		assertEquals(1451, po.getY());
-		EasyMock.verify(visibleArea);
 	}
 
 	private Area makeArea(final int viewTopLeftCornerX, final int viewTopLeftCornerY, final int viewWidth,
 			final int viewHeight, final int maxMapLocationX, final int maxMapLocationY) {
 		final Point topLeft = Point.of(viewTopLeftCornerX, viewTopLeftCornerY);
 		final Point bottomRight = topLeft.add(viewWidth, viewHeight);
-		EasyMock.expect(visibleArea.getTopLeft()).andReturn(topLeft);
-		EasyMock.expect(visibleArea.getBottomRight()).andReturn(bottomRight);
-
-		final WorldMap map = EasyMock.createMock(WorldMap.class);
-		EasyMock.expect(map.getMaxX()).andReturn(maxMapLocationX);
-		EasyMock.expect(map.getMaxY()).andReturn(maxMapLocationY);
-
-		EasyMock.replay(map, visibleArea);
+		new Expectations() {{
+			visibleArea.getTopLeft();result=topLeft;times=1;
+			visibleArea.getBottomRight();result=bottomRight;times=1;
+		}};
+		
+		new Expectations() {{
+			map.getMaxX();result=maxMapLocationX;times=1;
+			map.getMaxY();result=maxMapLocationY;times=1;
+		}};
 		Area out = new Area(visibleArea, map);
-		EasyMock.verify(map, visibleArea);
-		EasyMock.reset(map, visibleArea);
 		assertNotNull(out);
 		return out;
-	}
-
-	@Before
-	public void setup() {
-		visibleArea = EasyMock.createMock(VisibleArea.class);
-	}
-
-	public void tearDown() {
-		visibleArea = null;
 	}
 
 }
