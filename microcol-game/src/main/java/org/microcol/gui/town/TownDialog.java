@@ -1,6 +1,7 @@
 package org.microcol.gui.town;
 
 import org.microcol.gui.ImageProvider;
+import org.microcol.gui.LocalizationHelper;
 import org.microcol.gui.europe.EuropeDialog;
 import org.microcol.gui.europe.PanelEuropeDock;
 import org.microcol.gui.event.model.GameController;
@@ -38,8 +39,8 @@ public class TownDialog extends AbstractDialog {
 
 	@Inject
 	public TownDialog(final ViewUtil viewUtil, final Text text, final ImageProvider imageProvider,
-			final GameController gameController, final PaintService paintService, final PanelTownLayout panelTownLayout,
-			final EuropeDialog europeDialog) {
+			final GameController gameController, final PaintService paintService,
+			final PanelTownLayout panelTownLayout) {
 		super(viewUtil);
 		Preconditions.checkNotNull(imageProvider);
 		this.gameController = Preconditions.checkNotNull(gameController);
@@ -59,7 +60,9 @@ public class TownDialog extends AbstractDialog {
 		/**
 		 * Row 2
 		 */
-		europeDock = new PanelEuropeDock(gameController, imageProvider, europeDialog);
+		// TODO EuropeDock should be one instance in app
+		europeDock = new PanelEuropeDock(gameController, imageProvider,
+				new EuropeDialog(viewUtil, text, imageProvider, gameController, new LocalizationHelper(text)));
 
 		/**
 		 * Good row - 3

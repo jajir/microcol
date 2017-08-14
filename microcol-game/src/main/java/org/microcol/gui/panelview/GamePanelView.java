@@ -124,7 +124,9 @@ public class GamePanelView implements GamePanelPresenter.Display {
 			@Override
 			public void handle(long now) {
 				nextGameTick();
-				paint();
+				if (gameController.isModelReady()) {
+					paint();
+				}
 			}
 		}.start();
 	}
@@ -273,8 +275,8 @@ public class GamePanelView implements GamePanelPresenter.Display {
 		final Map<Location, Town> towns = world.getTownsAt().entrySet().stream()
 				.filter(entry -> area.isVisible(entry.getKey()))
 				.collect(Collectors.toMap(entry -> entry.getKey(), entry -> entry.getValue()));
-		
-		towns.forEach((location,town)->{
+
+		towns.forEach((location, town) -> {
 			final Point point = area.convertToPoint(location);
 			paintService.paintTown(graphics, point, town);
 		});

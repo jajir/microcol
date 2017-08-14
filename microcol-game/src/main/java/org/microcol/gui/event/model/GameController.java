@@ -131,7 +131,11 @@ public class GameController implements Localized {
 	}
 
 	public Model getModel() {
-		return model.get();
+		return model.orElseThrow(() -> new IllegalStateException("Model is not ready"));
+	}
+
+	public boolean isModelReady() {
+		return model.isPresent();
 	}
 
 	private void stopGame() {

@@ -3,7 +3,6 @@ package org.microcol.gui.europe;
 import org.microcol.gui.ImageProvider;
 import org.microcol.gui.LocalizationHelper;
 import org.microcol.gui.event.model.GameController;
-import org.microcol.model.Model;
 import org.microcol.model.Unit;
 import org.microcol.model.UnitType;
 import org.slf4j.Logger;
@@ -33,7 +32,7 @@ public class PanelPortPier extends TitledPanel {
 	private final GameController gameController;
 
 	private final EuropeDialog europeDialog;
-	
+
 	private final ImageProvider imageProvider;
 
 	private final LocalizationHelper localizationHelper;
@@ -42,8 +41,8 @@ public class PanelPortPier extends TitledPanel {
 
 	private Background background;
 
-	public PanelPortPier(final GameController gameController,final EuropeDialog europeDialog, final String title, final ImageProvider imageProvider,
-			final LocalizationHelper localizationHelper) {
+	public PanelPortPier(final GameController gameController, final EuropeDialog europeDialog, final String title,
+			final ImageProvider imageProvider, final LocalizationHelper localizationHelper) {
 		super(title, new Label(title));
 		this.gameController = Preconditions.checkNotNull(gameController);
 		this.europeDialog = Preconditions.checkNotNull(europeDialog);
@@ -57,9 +56,9 @@ public class PanelPortPier extends TitledPanel {
 		setOnDragDropped(this::onDragDropped);
 	}
 
-	void setEurope(final Model model) {
+	void repaint() {
 		panelUnits.getChildren().clear();
-		model.getEurope().getPier().getUnits(model.getCurrentPlayer())
+		gameController.getModel().getEurope().getPier().getUnits(gameController.getModel().getCurrentPlayer())
 				.forEach(unit -> panelUnits.getChildren().add(new PanelUnit(unit, imageProvider, localizationHelper)));
 	}
 

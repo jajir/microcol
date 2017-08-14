@@ -30,7 +30,8 @@ public class EuropeDialog extends AbstractDialog {
 
 	private final PanelPortPier panelPortPier;
 
-	@Inject
+	private final PanelGoods panelGoods;
+
 	public EuropeDialog(final ViewUtil viewUtil, final Text text, final ImageProvider imageProvider,
 			final GameController gameController, final LocalizationHelper localizationHelper) {
 		super(viewUtil);
@@ -41,16 +42,14 @@ public class EuropeDialog extends AbstractDialog {
 		final Label label = new Label("European port");
 
 		shipsTravelingToNewWorld = new PanelHighSeas(this, imageProvider, "Ships travelling to New World",
-				gameController.getModel(), false);
-		shipsTravelingToEurope = new PanelHighSeas(this, imageProvider, "Ships travelling to Europe",
-				gameController.getModel(), true);
+				gameController, false);
+		shipsTravelingToEurope = new PanelHighSeas(this, imageProvider, "Ships travelling to Europe", gameController,
+				true);
 		europeDock = new PanelEuropeDock(gameController, imageProvider, this);
-		europeDock.repaint();
 		final VBox panelShips = new VBox();
 		panelShips.getChildren().addAll(shipsTravelingToNewWorld, shipsTravelingToEurope, europeDock);
 
 		panelPortPier = new PanelPortPier(gameController, this, "Pier", imageProvider, localizationHelper);
-		panelPortPier.setEurope(gameController.getModel());
 
 		final Button recruiteButton = new Button("Recruite");
 		final Button buyButton = new Button("Buy");
@@ -65,14 +64,17 @@ public class EuropeDialog extends AbstractDialog {
 		final HBox panelMiddle = new HBox();
 		panelMiddle.getChildren().addAll(panelShips, panelPortPier, panelButtons);
 
-		final PanelGoods goods = new PanelGoods(imageProvider);
-		goods.setEurope(gameController.getModel().getEurope());
+		panelGoods = new PanelGoods(gameController, imageProvider);
 
 		final VBox mainPanel = new VBox();
-		mainPanel.getChildren().addAll(label, panelMiddle, goods);
+		mainPanel.getChildren().addAll(label, panelMiddle, panelGoods);
 		init(mainPanel);
 		// TODO call one repaint here
 		getScene().getStylesheets().add("gui/MicroCol.css");
+	}
+	
+	public void show(){
+		repaint();
 		getDialog().showAndWait();
 	}
 
@@ -80,12 +82,13 @@ public class EuropeDialog extends AbstractDialog {
 		europeDock.repaint();
 		shipsTravelingToEurope.repaint();
 		shipsTravelingToNewWorld.repaint();
-		panelPortPier.setEurope(gameController.getModel());
+		panelPortPier.repaint();
+		panelGoods.repaint();
 	}
 
 	public void repaintAfterGoodMoving() {
 		europeDock.repaintCurrectShipsCrates();
-		panelPortPier.setEurope(gameController.getModel());
+		panelPortPier.repaint();
 	}
 
 }

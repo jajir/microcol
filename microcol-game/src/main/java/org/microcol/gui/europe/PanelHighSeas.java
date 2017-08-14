@@ -1,7 +1,7 @@
 package org.microcol.gui.europe;
 
 import org.microcol.gui.ImageProvider;
-import org.microcol.model.Model;
+import org.microcol.gui.event.model.GameController;
 import org.microcol.model.Unit;
 import org.microcol.model.UnitType;
 import org.slf4j.Logger;
@@ -30,34 +30,33 @@ public class PanelHighSeas extends TitledPanel {
 	private final Logger logger = LoggerFactory.getLogger(PanelHighSeas.class);
 
 	private final boolean isShownShipsTravelingToEurope;
-	
+
 	private final EuropeDialog europeDialog;
 
 	private final HBox shipsContainer;
 
 	private final ImageProvider imageProvider;
 
-	private final Model model;
+	private final GameController gameController;
 
 	private Background background;
 
-	public PanelHighSeas(final EuropeDialog europeDialog, final ImageProvider imageProvider, final String title, final Model model,
-			final boolean isShownShipsTravelingToEurope) {
+	public PanelHighSeas(final EuropeDialog europeDialog, final ImageProvider imageProvider, final String title,
+			final GameController gameController, final boolean isShownShipsTravelingToEurope) {
 		super(title, new Label(title));
 		this.europeDialog = Preconditions.checkNotNull(europeDialog);
 		this.imageProvider = Preconditions.checkNotNull(imageProvider);
-		this.model = Preconditions.checkNotNull(model);
+		this.gameController = Preconditions.checkNotNull(gameController);
 		this.isShownShipsTravelingToEurope = isShownShipsTravelingToEurope;
 		shipsContainer = new HBox();
 		getChildren().add(shipsContainer);
-		showShips();
 		setOnDragEntered(this::onDragEntered);
 		setOnDragOver(this::onDragOver);
 		setOnDragDropped(this::onDragDropped);
 		setOnDragExited(this::onDragExited);
 	}
-	
-	public void repaint(){
+
+	public void repaint() {
 		shipsContainer.getChildren().clear();
 		showShips();
 	}
@@ -87,7 +86,7 @@ public class PanelHighSeas extends TitledPanel {
 	private boolean isItCorrectObject(final Dragboard db) {
 		if (!isShownShipsTravelingToEurope && db.hasString()) {
 			logger.debug("drag over unit id '" + db.getString() + "'.");
-			final Unit unit = model.getUnitById(Integer.valueOf(db.getString()));
+			final Unit unit = gameController.getModel().getUnitById(Integer.valueOf(db.getString()));
 			return UnitType.isShip(unit.getType());
 		} else {
 			return false;
@@ -98,14 +97,14 @@ public class PanelHighSeas extends TitledPanel {
 		final Dragboard db = event.getDragboard();
 		if (db.hasString()) {
 			logger.debug("drag over unit id '" + db.getString() + "'.");
-			final Unit unit = model.getUnitById(Integer.valueOf(db.getString()));
+			final Unit unit = gameController.getModel().getUnitById(Integer.valueOf(db.getString()));
 			Preconditions.checkState(UnitType.isShip(unit.getType()), "Only ships could be send to high seas");
 			unit.placeToHighSeas(false);
 			europeDialog.repaint();
 			event.acceptTransferModes(TransferMode.MOVE);
 			/*
-			 * let the source know whether the string was successfully transferred
-			 * and used
+			 * let the source know whether the string was successfully
+			 * transferred and used
 			 */
 			event.setDropCompleted(true);
 			event.consume();
@@ -115,7 +114,8 @@ public class PanelHighSeas extends TitledPanel {
 	}
 
 	private void showShips() {
-		model.getHighSea().getUnitsTravelingTo(model.getCurrentPlayer(), isShownShipsTravelingToEurope)
+		gameController.getModel().getHighSea()
+				.getUnitsTravelingTo(gameController.getModel().getCurrentPlayer(), isShownShipsTravelingToEurope)
 				.forEach(unit -> {
 					shipsContainer.getChildren().add(new ImageView(imageProvider.getUnitImage(unit.getType())));
 				});

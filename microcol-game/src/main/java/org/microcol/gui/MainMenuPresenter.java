@@ -108,7 +108,7 @@ public class MainMenuPresenter {
 		display.getMenuItemAnimationSpeed().setOnAction(event -> new PreferencesAnimationSpeed(text, viewUtil,
 				animationSpeedChangeController, gamePreferences.getAnimationSpeed()));
 		display.getMenuItemEurope().setOnAction(
-				event -> new EuropeDialog(viewUtil, text, imageProvider, gameController, localizationHelper));
+				event -> new EuropeDialog(viewUtil, text, imageProvider, gameController, localizationHelper).show());
 		display.getMenuItemShowGrid().setOnAction(ectionEvent -> showGridController
 				.fireEvent(new ShowGridEvent(display.getMenuItemShowGrid().isSelected())));
 		display.getMenuItemMove().setOnAction(ectionEvent -> {
