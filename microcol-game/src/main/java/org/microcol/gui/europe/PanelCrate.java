@@ -2,6 +2,8 @@ package org.microcol.gui.europe;
 
 import org.microcol.gui.ImageProvider;
 import org.microcol.gui.event.model.GameController;
+import org.microcol.gui.util.ClipboardReader;
+import org.microcol.gui.util.ClipboardWritter;
 import org.microcol.model.CargoSlot;
 import org.microcol.model.Unit;
 import org.microcol.model.UnitType;
@@ -12,7 +14,6 @@ import com.google.common.base.Preconditions;
 
 import javafx.geometry.Insets;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
@@ -126,10 +127,7 @@ public class PanelCrate extends StackPane {
 
 	private final void onDragDropped(DragEvent event) {
 		logger.debug("Object was dropped on ship cargo slot.");
-		final Dragboard db = event.getDragboard();
-		if (db.hasString()) {
-			logger.debug("Drag over unit id '" + db.getString() + "'.");
-			final Unit draggedUnit = gameController.getModel().getUnitById(Integer.valueOf(db.getString()));
+		ClipboardReader.make(gameController.getModel(), event.getDragboard()).readUnit(draggedUnit -> {
 			cargoSlot.store(draggedUnit);
 			europeDialog.repaintAfterGoodMoving();
 			/*
@@ -139,19 +137,13 @@ public class PanelCrate extends StackPane {
 			event.acceptTransferModes(TransferMode.MOVE);
 			event.setDropCompleted(true);
 			event.consume();
-		} else {
-			return;
-		}
+		});
 	}
 
 	private void onDragDetected(final MouseEvent event) {
-		if (unit != null && cargoSlot != null) {
-			final Unit cargoUnit = cargoSlot.getUnit().get();
-			final ClipboardContent content = new ClipboardContent();
-			content.putImage(cargoImage.getImage());
-			content.putString(String.valueOf(cargoUnit.getId()));
-			final Dragboard db = startDragAndDrop(TransferMode.MOVE);
-			db.setContent(content);
+		if (unit != null && cargoSlot != null && cargoSlot.getUnit().isPresent()) {
+			ClipboardWritter.make(startDragAndDrop(TransferMode.MOVE)).addImage(cargoImage.getImage())
+					.addUnit(cargoSlot.getUnit().get()).build();
 			event.consume();
 		}
 	}

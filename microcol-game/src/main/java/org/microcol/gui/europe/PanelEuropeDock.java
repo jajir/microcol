@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.microcol.gui.ImageProvider;
 import org.microcol.gui.event.model.GameController;
+import org.microcol.gui.util.ClipboardWritter;
 import org.microcol.model.Unit;
 import org.microcol.model.UnitType;
 import org.slf4j.Logger;
@@ -14,8 +15,6 @@ import com.google.common.base.Preconditions;
 
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
-import javafx.scene.input.ClipboardContent;
-import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.Background;
@@ -85,12 +84,12 @@ public class PanelEuropeDock extends TitledPanel {
 			panelShips.getChildren().add(toggleButtonShip);
 		}
 	}
-	
-	void repaintCurrectShipsCrates(){
+
+	void repaintCurrectShipsCrates() {
 		panelCratesController.setCratesForShip(getSelectedShip().get());
 	}
-	
-	private Optional<Unit> getSelectedShip(){
+
+	private Optional<Unit> getSelectedShip() {
 		return Optional.of((Unit) toggleGroup.getSelectedToggle().getUserData());
 	}
 
@@ -101,11 +100,8 @@ public class PanelEuropeDock extends TitledPanel {
 			logger.debug("Start dragging unit: " + unit);
 			Preconditions.checkNotNull(unit);
 			Preconditions.checkArgument(UnitType.isShip(unit.getType()), "Unit (%s) have to be ship.");
-			final Dragboard db = butt.startDragAndDrop(TransferMode.MOVE);
-			final ClipboardContent content = new ClipboardContent();
-			content.putImage(butt.getBackground().getImages().get(0).getImage());
-			content.putString(String.valueOf(unit.getId()));
-			db.setContent(content);
+			ClipboardWritter.make(butt.startDragAndDrop(TransferMode.MOVE))
+					.addImage(butt.getBackground().getImages().get(0).getImage()).addUnit(unit).build();
 			event.consume();
 		}
 	}

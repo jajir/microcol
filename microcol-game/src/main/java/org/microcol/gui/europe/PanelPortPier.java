@@ -3,6 +3,7 @@ package org.microcol.gui.europe;
 import org.microcol.gui.ImageProvider;
 import org.microcol.gui.LocalizationHelper;
 import org.microcol.gui.event.model.GameController;
+import org.microcol.gui.util.ClipboardReader;
 import org.microcol.model.Unit;
 import org.microcol.model.UnitType;
 import org.slf4j.Logger;
@@ -82,33 +83,20 @@ public class PanelPortPier extends TitledPanel {
 		}
 	}
 
-	private final void onDragDropped(DragEvent event) {
+	private final void onDragDropped(final DragEvent event) {
 		logger.debug("Object was dropped on ship cargo slot.");
-		final Dragboard db = event.getDragboard();
-		if (db.hasString()) {
-			logger.debug("Drop over unit id '" + db.getString() + "'.");
-			final Unit draggedUnit = gameController.getModel().getUnitById(Integer.valueOf(db.getString()));
+		ClipboardReader.make(gameController.getModel(), event.getDragboard()).readUnit(draggedUnit -> {
 			draggedUnit.placeToEuropePortPier();
 			europeDialog.repaintAfterGoodMoving();
-			/*
-			 * let the source know whether the string was successfully
-			 * transferred and used
-			 */
 			event.acceptTransferModes(TransferMode.MOVE);
 			event.setDropCompleted(true);
 			event.consume();
-		} else {
-			return;
-		}
+		});
 	}
 
 	private boolean isItCorrectObject(final Dragboard db) {
-		if (db.hasString()) {
-			final Unit unit = gameController.getModel().getUnitById(Integer.valueOf(db.getString()));
-			return !UnitType.isShip(unit.getType());
-		} else {
-			return false;
-		}
+		return ClipboardReader.make(gameController.getModel(), db).filterUnit(unit -> !UnitType.isShip(unit.getType()))
+				.isPresent();
 	}
 
 }
