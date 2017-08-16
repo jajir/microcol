@@ -1,8 +1,6 @@
 package org.microcol.gui;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertSame;
+import static org.junit.Assert.*;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -157,5 +155,181 @@ public class ClipboardReaderTest {
 		});
 	}
 
+	@Test
+	public void test_filterUnit_filter_true(final @Mocked Unit unit) throws Exception {
+		new Expectations() {{
+			db.getString(); result = "Unit,67";
+			model.getUnitById(67); result = unit;
+		}};
+		
+		boolean ret = ClipboardReader.make(model, db).filterUnit(u -> {
+			assertNotNull(u);
+			assertSame(unit, u);
+			return true;
+		}).isPresent();
+		assertTrue(ret);
+	}
+
+	@Test
+	public void test_filterUnit_filter_false(final @Mocked Unit unit) throws Exception {
+		new Expectations() {{
+			db.getString(); result = "Unit,67";
+			model.getUnitById(67); result = unit;
+		}};
+		
+		boolean ret = ClipboardReader.make(model, db).filterUnit(u -> {
+			assertNotNull(u);
+			assertSame(unit, u);
+			return false;
+		}).isPresent();
+		assertFalse(ret);
+	}
+
+	@Test
+	public void test_filterUnit_invalid_keyword() throws Exception {
+		new Expectations() {{
+			db.getString(); result = "UnIT,67";
+		}};
+		
+		boolean ret = ClipboardReader.make(model, db).filterUnit(u -> {
+			fail();
+			return true;
+		}).isPresent();
+		assertFalse(ret);
+	}
+
+	@Test
+	public void test_filterUnit_invalid_length() throws Exception {
+		new Expectations() {{
+			db.getString(); result = "Unit";
+		}};
+		
+		boolean ret = ClipboardReader.make(model, db).filterUnit(u -> {
+			fail();
+			return true;
+		}).isPresent();
+		assertFalse(ret);
+	}
+	
+	@Test
+	public void test_filterUnit_unitId_isEmpty() throws Exception {
+		new Expectations() {{
+			db.getString(); result = "Unit,";
+		}};
+		
+		boolean ret = ClipboardReader.make(model, db).filterUnit(u -> {
+			fail();
+			return true;
+		}).isPresent();
+		assertFalse(ret);
+	}
+	
+	@Test
+	public void test_filterUnit_unitId_is_not_a_number() throws Exception {
+		new Expectations() {{
+			db.getString(); result = "Unit,blee";
+		}};
+		
+		boolean ret = ClipboardReader.make(model, db).filterUnit(u -> {
+			fail();
+			return true;
+		}).isPresent();
+		assertFalse(ret);
+	}
+	
+	@Test
+	public void test_filterGood_filter_true() throws Exception {
+		new Expectations() {{
+			db.getString(); result = "Goods,COTTON,75";
+		}};
+		
+		boolean ret = ClipboardReader.make(model, db).filterGood(good -> {
+			assertNotNull(good);
+			assertEquals(GoodType.COTTON, good.getGoodType());
+			assertEquals(75, good.getAmmount());
+			return true;
+		}).isPresent();
+		assertTrue(ret);
+	}
+
+	@Test
+	public void test_filterGood_filter_false() throws Exception {
+		new Expectations() {{
+			db.getString(); result = "Goods,COTTON,75";
+		}};
+		
+		boolean ret = ClipboardReader.make(model, db).filterGood(good -> {
+			assertNotNull(good);
+			assertEquals(GoodType.COTTON, good.getGoodType());
+			assertEquals(75, good.getAmmount());
+			return false;
+		}).isPresent();
+		assertFalse(ret);
+	}
+
+	@Test
+	public void test_filterGood_invalid_keyword() throws Exception {
+		new Expectations() {{
+			db.getString(); result = "GooDS,COTTON,75";
+		}};
+		
+		boolean ret = ClipboardReader.make(model, db).filterGood(good -> {
+			fail();
+			return true;
+		}).isPresent();
+		assertFalse(ret);
+	}
+
+	@Test
+	public void test_filterGood_invalid_length() throws Exception {
+		new Expectations() {{
+			db.getString(); result = "Goods,COTTON";
+		}};
+		
+		boolean ret = ClipboardReader.make(model, db).filterGood(good -> {
+			fail();
+			return true;
+		}).isPresent();
+		assertFalse(ret);
+	}
+
+	@Test
+	public void test_filterGood_invalid_goodType() throws Exception {
+		new Expectations() {{
+			db.getString(); result = "Goods,IRON,75";
+		}};
+		
+		boolean ret = ClipboardReader.make(model, db).filterGood(good -> {
+			fail();
+			return true;
+		}).isPresent();
+		assertFalse(ret);
+	}
+
+	@Test
+	public void test_filterGood_ammount_not_a_number() throws Exception {
+		new Expectations() {{
+			db.getString(); result = "Goods,COTTON,blee";
+		}};
+		
+		boolean ret = ClipboardReader.make(model, db).filterGood(good -> {
+			fail();
+			return true;
+		}).isPresent();
+		assertFalse(ret);
+	}
+
+	@Test
+	public void test_filterGood_ammount_isEmpty() throws Exception {
+		new Expectations() {{
+			db.getString(); result = "Goods,COTTON,";
+		}};
+		
+		boolean ret = ClipboardReader.make(model, db).filterGood(good -> {
+			fail();
+			return true;
+		}).isPresent();
+		assertFalse(ret);
+	}
 	
 }

@@ -45,7 +45,6 @@ public class ClipboardReader {
 		return this;
 	}
 
-	//FIXME JJ add some test
 	public Optional<Unit> filterUnit(final Predicate<Unit> filter) {
 		if (!ClipboardWritter.KEY_UNIT.equals(parts[0])) {
 			return Optional.empty();
@@ -59,6 +58,29 @@ public class ClipboardReader {
 		final Unit unit = model.getUnitById(read(parts[1]));
 		if (filter.test(unit)) {
 			return Optional.of(unit);
+		} else {
+			return Optional.empty();
+		}
+	}
+
+	public Optional<GoodAmmount> filterGood(final Predicate<GoodAmmount> filter) {
+		if (!ClipboardWritter.KEY_GOODS.equals(parts[0])) {
+			return Optional.empty();
+		}
+		if (parts.length <= 2) {
+			return Optional.empty();
+		}
+		if (tryReadGoodType(parts[1]) == null) {
+			return Optional.empty();
+		}
+		if (tryRead(parts[2]) == null) {
+			return Optional.empty();
+		}
+		final int ammount = read(parts[2]);
+		final GoodType goodType = GoodType.valueOf(parts[1]);
+		final GoodAmmount goodAmmount = new GoodAmmount(goodType, ammount);
+		if (filter.test(goodAmmount)) {
+			return Optional.of(goodAmmount);
 		} else {
 			return Optional.empty();
 		}
@@ -86,6 +108,14 @@ public class ClipboardReader {
 		try {
 			return Integer.valueOf(num);
 		} catch (NumberFormatException e) {
+			return null;
+		}
+	}
+
+	private GoodType tryReadGoodType(final String str) {
+		try {
+			return GoodType.valueOf(str);
+		} catch (IllegalArgumentException e) {
 			return null;
 		}
 	}

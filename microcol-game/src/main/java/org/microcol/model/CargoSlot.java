@@ -33,6 +33,14 @@ public final class CargoSlot {
 		return cargoUnit == null && cargoGoods == null;
 	}
 
+	public boolean isLoadedUnit() {
+		return cargoUnit != null;
+	}
+
+	public boolean isLoadedGood() {
+		return cargoGoods != null;
+	}
+
 	public void empty() {
 		Preconditions.checkState(!isEmpty(), "Cargo slot (%s) is already empty.", this);
 		cargoUnit = null;

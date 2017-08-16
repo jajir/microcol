@@ -2,10 +2,8 @@ package org.microcol.gui.europe;
 
 import org.microcol.gui.ImageProvider;
 import org.microcol.gui.event.model.GameController;
-import org.microcol.model.Unit;
+import org.microcol.gui.util.ClipboardReader;
 import org.microcol.model.UnitType;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
 
@@ -26,8 +24,6 @@ import javafx.scene.paint.Color;
  * world.
  */
 public class PanelHighSeas extends TitledPanel {
-
-	private final Logger logger = LoggerFactory.getLogger(PanelHighSeas.class);
 
 	private final boolean isShownShipsTravelingToEurope;
 
@@ -85,9 +81,8 @@ public class PanelHighSeas extends TitledPanel {
 
 	private boolean isItCorrectObject(final Dragboard db) {
 		if (!isShownShipsTravelingToEurope && db.hasString()) {
-			logger.debug("drag over unit id '" + db.getString() + "'.");
-			final Unit unit = gameController.getModel().getUnitById(Integer.valueOf(db.getString()));
-			return UnitType.isShip(unit.getType());
+			return ClipboardReader.make(gameController.getModel(), db)
+					.filterUnit(unit -> UnitType.isShip(unit.getType())).isPresent();
 		} else {
 			return false;
 		}
@@ -95,22 +90,14 @@ public class PanelHighSeas extends TitledPanel {
 
 	private final void onDragDropped(DragEvent event) {
 		final Dragboard db = event.getDragboard();
-		if (db.hasString()) {
-			logger.debug("drag over unit id '" + db.getString() + "'.");
-			final Unit unit = gameController.getModel().getUnitById(Integer.valueOf(db.getString()));
+		ClipboardReader.make(gameController.getModel(), db).readUnit(unit -> {
 			Preconditions.checkState(UnitType.isShip(unit.getType()), "Only ships could be send to high seas");
 			unit.placeToHighSeas(false);
 			europeDialog.repaint();
 			event.acceptTransferModes(TransferMode.MOVE);
-			/*
-			 * let the source know whether the string was successfully
-			 * transferred and used
-			 */
 			event.setDropCompleted(true);
 			event.consume();
-		} else {
-			return;
-		}
+		});
 	}
 
 	private void showShips() {

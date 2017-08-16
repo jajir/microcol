@@ -4,7 +4,6 @@ import org.microcol.gui.ImageProvider;
 import org.microcol.gui.LocalizationHelper;
 import org.microcol.gui.event.model.GameController;
 import org.microcol.gui.util.ClipboardReader;
-import org.microcol.model.Unit;
 import org.microcol.model.UnitType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -70,10 +69,11 @@ public class PanelPortPier extends TitledPanel {
 		}
 	}
 
-	@SuppressWarnings("unused")
 	private final void onDragExited(final DragEvent event) {
-		setBackground(background);
-		background = null;
+		if (isItCorrectObject(event.getDragboard())) {
+			setBackground(background);
+			background = null;
+		}
 	}
 
 	private final void onDragOver(final DragEvent event) {
