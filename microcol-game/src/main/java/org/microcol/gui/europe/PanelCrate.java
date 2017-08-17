@@ -155,10 +155,11 @@ public class PanelCrate extends StackPane {
 		if (unit != null && cargoSlot != null) {
 			if (cargoSlot.getUnit().isPresent()) {
 				ClipboardWritter.make(startDragAndDrop(TransferMode.MOVE)).addImage(cargoImage.getImage())
-						.addUnit(cargoSlot.getUnit().get()).addTransferFromUnit(cargoSlot.getOwnerUnit(), cargoSlot)
+						.addTransferFromUnit(cargoSlot.getOwnerUnit(), cargoSlot).addUnit(cargoSlot.getUnit().get())
 						.build();
 			} else if (cargoSlot.getGoods().isPresent()) {
 				ClipboardWritter.make(startDragAndDrop(TransferMode.MOVE)).addImage(cargoImage.getImage())
+						.addTransferFromUnit(cargoSlot.getOwnerUnit(), cargoSlot)
 						.addGoodAmmount(cargoSlot.getGoods().get()).build();
 			}
 			event.consume();

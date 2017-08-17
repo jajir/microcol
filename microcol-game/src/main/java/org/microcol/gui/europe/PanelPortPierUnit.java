@@ -14,13 +14,14 @@ import javafx.scene.layout.Pane;
 
 public class PanelPortPierUnit extends HBox {
 
-	public PanelPortPierUnit(final Unit unit, final ImageProvider imageProvider, final LocalizationHelper localizationHelper) {
+	public PanelPortPierUnit(final Unit unit, final ImageProvider imageProvider,
+			final LocalizationHelper localizationHelper) {
 		final Image image = imageProvider.getUnitImage(unit.getType());
 		final ImageView imageIcon = new ImageView(image);
 		Pane paneImage = new Pane(imageIcon);
 		paneImage.setOnDragDetected(e -> {
-			//TODO JJ add description that unit is from Europe port pier
-			ClipboardWritter.make(imageIcon.startDragAndDrop(TransferMode.MOVE)).addImage(image).addUnit(unit).build();
+			ClipboardWritter.make(imageIcon.startDragAndDrop(TransferMode.MOVE)).addImage(image)
+					.addTransferFromEuropePortPier().addUnit(unit).build();
 			e.consume();
 		});
 		final Label labelPrice = new Label(localizationHelper.getUnitName(unit.getType()));

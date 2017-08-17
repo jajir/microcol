@@ -19,6 +19,16 @@ import javafx.scene.input.Dragboard;
  */
 public class ClipboardReader {
 
+	final static String KEY_UNIT = "Unit";
+
+	final static String KEY_GOODS = "Goods";
+
+	final static String KEY_FROM_UNIT = "FromUnit";
+
+	final static String KEY_FROM_EUROPE_PORT_PIER = "FromEuropePortPier";
+
+	final static String SEPARATOR = ",";
+
 	private final Model model;
 
 	private final String originalString;
@@ -36,7 +46,7 @@ public class ClipboardReader {
 		if (db.getString() == null || db.getString().isEmpty()) {
 			parts = new String[0];
 		} else {
-			parts = db.getString().split(ClipboardWritter.SEPARATOR);
+			parts = db.getString().split(SEPARATOR);
 		}
 	}
 
@@ -44,7 +54,7 @@ public class ClipboardReader {
 		if (parts.length <= 2) {
 			return null;
 		}
-		if (!ClipboardWritter.KEY_GOODS.equals(parts[0])) {
+		if (!KEY_GOODS.equals(parts[0])) {
 			return null;
 		}
 		if (tryReadGoodType(parts[1]) == null) {
@@ -63,7 +73,7 @@ public class ClipboardReader {
 		if (parts.length <= 1) {
 			return null;
 		}
-		if (!ClipboardWritter.KEY_UNIT.equals(parts[0])) {
+		if (!KEY_UNIT.equals(parts[0])) {
 			return null;
 		}
 		if (tryRead(parts[1]) == null) {
@@ -74,11 +84,11 @@ public class ClipboardReader {
 
 	}
 
-	private TransferFrom tryReadTransferFrom(int fromIndex) {
+	private TransferFromCargoSlot tryReadTransferFrom(int fromIndex) {
 		if (parts.length < fromIndex + 3) {
 			return null;
 		}
-		if (!ClipboardWritter.KEY_FROM_UNIT.equals(parts[fromIndex + 0])) {
+		if (!KEY_FROM_UNIT.equals(parts[fromIndex + 0])) {
 			return null;
 		}
 		if (tryRead(parts[fromIndex + 1]) == null) {
@@ -87,7 +97,7 @@ public class ClipboardReader {
 		if (tryRead(parts[fromIndex + 2]) == null) {
 			return null;
 		}
-		return new TransferFrom(model.getUnitById(read(parts[fromIndex + 1])), read(parts[fromIndex + 2]));
+		return new TransferFromCargoSlot(model.getUnitById(read(parts[fromIndex + 1])), read(parts[fromIndex + 2]));
 	}
 
 	private int read(final String num) {
@@ -207,55 +217,90 @@ public class ClipboardReader {
 
 	}
 
-	class GoodTransfer {
+	public static interface Transfer {
+
+		Optional<TransferFrom> getTransferFrom();
+
+		void writeTo(StringBuilder buff);
+
+	}
+
+	public static abstract class AbstractTransfer implements Transfer {
+
+		private final TransferFrom transferFrom;
+
+		AbstractTransfer(final TransferFrom transferFrom) {
+			this.transferFrom = transferFrom;
+		}
+
+		@Override
+		public Optional<TransferFrom> getTransferFrom() {
+			if (transferFrom == null) {
+				return Optional.empty();
+			} else {
+				return Optional.of(transferFrom);
+			}
+		}
+
+	}
+
+	public static class GoodTransfer extends AbstractTransfer {
 
 		private final GoodAmmount goodAmmount;
 
-		private final TransferFrom transferFrom;
-
-		GoodTransfer(final GoodAmmount goodAmmount, final TransferFrom sourceUnit) {
+		GoodTransfer(final GoodAmmount goodAmmount, final TransferFrom transferFrom) {
+			super(transferFrom);
 			this.goodAmmount = goodAmmount;
-			this.transferFrom = sourceUnit;
 		}
 
-		Optional<TransferFrom> getTransferFrom() {
-			if (transferFrom == null) {
-				return Optional.empty();
-			} else {
-				return Optional.of(transferFrom);
-			}
+		@Override
+		public void writeTo(final StringBuilder buff) {
+			buff.append(KEY_GOODS);
+			buff.append(SEPARATOR);
+			buff.append(goodAmmount.getGoodType().name());
+			buff.append(SEPARATOR);
+			buff.append(goodAmmount.getAmmount());
+			getTransferFrom().ifPresent(transferFrom -> transferFrom.writeTo(buff));
 		}
 
 	}
 
-	class UnitTransfer {
+	public static class UnitTransfer extends AbstractTransfer {
 
 		private final Unit unit;
 
-		private final TransferFrom transferFrom;
-
-		UnitTransfer(final Unit unit, TransferFrom sourceUnit) {
+		UnitTransfer(final Unit unit, TransferFrom transferFrom) {
+			super(transferFrom);
 			this.unit = unit;
-			this.transferFrom = sourceUnit;
 		}
 
-		Optional<TransferFrom> getTransferFrom() {
-			if (transferFrom == null) {
-				return Optional.empty();
-			} else {
-				return Optional.of(transferFrom);
-			}
+		@Override
+		public void writeTo(final StringBuilder buff) {
+			buff.append(KEY_UNIT);
+			buff.append(SEPARATOR);
+			buff.append(unit.getId());
+			getTransferFrom().ifPresent(transferFrom -> transferFrom.writeTo(buff));
 		}
 
 	}
 
-	public class TransferFrom {
+	/**
+	 * Interface unify all description of places from which could be object
+	 * transfered.
+	 */
+	public static interface TransferFrom {
+
+		void writeTo(StringBuilder buff);
+
+	}
+
+	public static class TransferFromCargoSlot implements TransferFrom {
 
 		private final Unit sourceUnit;
 
 		private final CargoSlot cargoSlot;
 
-		TransferFrom(final Unit unit, final int cargoSlotIndex) {
+		TransferFromCargoSlot(final Unit unit, final int cargoSlotIndex) {
 			this.sourceUnit = unit;
 			cargoSlot = unit.getCargo().getSlotByIndex(cargoSlotIndex);
 		}
@@ -266,6 +311,29 @@ public class ClipboardReader {
 
 		public CargoSlot getCargoSlot() {
 			return cargoSlot;
+		}
+
+		@Override
+		public void writeTo(final StringBuilder buff) {
+			buff.append(SEPARATOR);
+			buff.append(KEY_FROM_UNIT);
+			buff.append(SEPARATOR);
+			buff.append(sourceUnit.getId());
+			buff.append(SEPARATOR);
+			buff.append(cargoSlot.getIndex());
+		}
+
+	}
+
+	/**
+	 * Unit was taken from Europe port pier.
+	 */
+	public static class TransferFromEuropePier implements TransferFrom {
+
+		@Override
+		public void writeTo(final StringBuilder buff) {
+			buff.append(SEPARATOR);
+			buff.append(KEY_FROM_EUROPE_PORT_PIER);
 		}
 
 	}

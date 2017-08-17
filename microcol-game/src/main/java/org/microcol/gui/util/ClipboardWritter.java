@@ -1,5 +1,7 @@
 package org.microcol.gui.util;
 
+import org.microcol.gui.util.ClipboardReader.Transfer;
+import org.microcol.gui.util.ClipboardReader.TransferFrom;
 import org.microcol.model.CargoSlot;
 import org.microcol.model.GoodAmmount;
 import org.microcol.model.Unit;
@@ -15,22 +17,9 @@ import javafx.scene.input.Dragboard;
  */
 public class ClipboardWritter {
 
-	final static String KEY_UNIT = "Unit";
-
-	final static String KEY_GOODS = "Goods";
-
-	final static String KEY_FROM_UNIT = "FromUnit";
-
-	final static String SEPARATOR = ",";
-
-	// FIXME JJ allow to define that source is Europe port pier or another cargo
-	// slot
-
 	private final ClipboardContent content;
 
 	private final Dragboard db;
-
-	private boolean isEmpty = true;
 
 	public static ClipboardWritter make(final Dragboard db) {
 		return new ClipboardWritter(db);
@@ -46,30 +35,41 @@ public class ClipboardWritter {
 		return this;
 	}
 
+	private Transfer transfer;
+
+	private TransferFrom transferFrom;
+
 	public ClipboardWritter addUnit(final Unit unit) {
-		Preconditions.checkState(isEmpty, "Clipboard was already set.");
-		content.putString(KEY_UNIT + SEPARATOR + unit.getId());
-		isEmpty = false;
+		Preconditions.checkState(transfer == null, "Clipboard was already set.");
+		transfer = new ClipboardReader.UnitTransfer(unit, transferFrom);
 		return this;
 	}
 
 	public ClipboardWritter addGoodAmmount(final GoodAmmount goodAmmount) {
-		Preconditions.checkState(isEmpty, "Clipboard was already set.");
-		content.putString(
-				KEY_GOODS + SEPARATOR + goodAmmount.getGoodType().name() + SEPARATOR + goodAmmount.getAmmount());
-		isEmpty = false;
+		Preconditions.checkState(transfer == null, "Clipboard was already set.");
+		transfer = new ClipboardReader.GoodTransfer(goodAmmount, transferFrom);
 		return this;
 	}
 
 	public ClipboardWritter addTransferFromUnit(final Unit unit, final CargoSlot cargoSlot) {
-		content.putString(content.getString() + SEPARATOR + KEY_FROM_UNIT + SEPARATOR + unit.getId() + SEPARATOR
-				+ cargoSlot.getIndex());
-		isEmpty = false;
+		Preconditions.checkState(transfer == null, "TransferFrom should be called before setting transferring object");
+		Preconditions.checkState(transferFrom == null, "Transfer from was already set");
+		transferFrom = new ClipboardReader.TransferFromCargoSlot(unit, cargoSlot.getIndex());
+		return this;
+	}
+
+	public ClipboardWritter addTransferFromEuropePortPier() {
+		Preconditions.checkState(transfer == null, "TransferFrom should be called before setting transferring object");
+		Preconditions.checkState(transferFrom == null, "Transfer from was already set");
+		transferFrom = new ClipboardReader.TransferFromEuropePier();
 		return this;
 	}
 
 	public void build() {
-		Preconditions.checkState(!isEmpty, "Clipboard is empty.");
+		Preconditions.checkState(transfer != null, "No object to transfer was defined.");
+		final StringBuilder buff = new StringBuilder();
+		transfer.writeTo(buff);
+		content.putString(buff.toString());
 		db.setContent(content);
 	}
 
