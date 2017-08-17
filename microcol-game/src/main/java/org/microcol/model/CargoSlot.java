@@ -47,10 +47,29 @@ public final class CargoSlot {
 		cargoGoods = null;
 	}
 
+	/**
+	 * Get index that allows to identify this cargo slot. Index is unique in one
+	 * ship.
+	 * 
+	 * @return return unique cargo slot index
+	 */
+	public int getIndex() {
+		return cargo.getIndexOfSlot(this);
+	}
+
+	/**
+	 * Get unit where this cargo slot belongs.
+	 * 
+	 * @return return owner unit
+	 */
+	public Unit getOwnerUnit() {
+		return cargo.getOwner();
+	}
+
 	public Optional<Unit> getUnit() {
-		if(cargoUnit==null){
+		if (cargoUnit == null) {
 			return Optional.empty();
-		}else{
+		} else {
 			return Optional.of(cargoUnit.getUnit());
 		}
 	}

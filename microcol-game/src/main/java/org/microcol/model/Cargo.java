@@ -38,6 +38,14 @@ public final class Cargo {
 		return slots;
 	}
 
+	public CargoSlot getSlotByIndex(final int index) {
+		return slots.get(index);
+	}
+
+	public int getIndexOfSlot(final CargoSlot cargoSlot) {
+		return slots.indexOf(cargoSlot);
+	}
+
 	@Override
 	public String toString() {
 		return MoreObjects.toStringHelper(this).add("slots", slots).toString();

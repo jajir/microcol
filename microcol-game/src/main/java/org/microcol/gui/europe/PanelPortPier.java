@@ -59,7 +59,7 @@ public class PanelPortPier extends TitledPanel {
 	void repaint() {
 		panelUnits.getChildren().clear();
 		gameController.getModel().getEurope().getPier().getUnits(gameController.getModel().getCurrentPlayer())
-				.forEach(unit -> panelUnits.getChildren().add(new PanelUnit(unit, imageProvider, localizationHelper)));
+				.forEach(unit -> panelUnits.getChildren().add(new PanelPortPierUnit(unit, imageProvider, localizationHelper)));
 	}
 
 	private final void onDragEntered(final DragEvent event) {
@@ -85,7 +85,7 @@ public class PanelPortPier extends TitledPanel {
 
 	private final void onDragDropped(final DragEvent event) {
 		logger.debug("Object was dropped on ship cargo slot.");
-		ClipboardReader.make(gameController.getModel(), event.getDragboard()).readUnit(draggedUnit -> {
+		ClipboardReader.make(gameController.getModel(), event.getDragboard()).readUnit((draggedUnit, transferFrom) -> {
 			draggedUnit.placeToEuropePortPier();
 			europeDialog.repaintAfterGoodMoving();
 			event.acceptTransferModes(TransferMode.MOVE);
@@ -96,7 +96,7 @@ public class PanelPortPier extends TitledPanel {
 
 	private boolean isItCorrectObject(final Dragboard db) {
 		return ClipboardReader.make(gameController.getModel(), db).filterUnit(unit -> !UnitType.isShip(unit.getType()))
-				.isPresent();
+				.getUnit().isPresent();
 	}
 
 }

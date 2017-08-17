@@ -423,6 +423,7 @@ public class Unit {
 		Preconditions.checkState(isAtCargoSlot(), "Unit is not in cargo.");
 		Preconditions.checkState(getPlaceCargoSlot().isOwnerAtEuropePort(),
 				"Holding unit is not at europe port, cant be placed to port pier.");
+		getPlaceCargoSlot().getCargoSlot().empty();
 		place = new PlaceEuropePier(this);
 	}
 

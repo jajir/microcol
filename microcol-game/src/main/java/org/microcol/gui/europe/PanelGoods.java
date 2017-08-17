@@ -80,19 +80,17 @@ public class PanelGoods extends TitledPanel {
 	private final void onDragDropped(DragEvent event) {
 		logger.debug("Object was dropped on panel goods.");
 		final Dragboard db = event.getDragboard();
-		if (isItGoodAmmount(db)) {
-			ClipboardReader.make(gameController.getModel(), db).readGood(good -> {
-				//FIXME remove goodAmmount from cargoStore
-				event.acceptTransferModes(TransferMode.MOVE);
-				event.setDropCompleted(true);
-				event.consume();
-			});
-		}
+		ClipboardReader.make(gameController.getModel(), db).tryReadGood((goodAmmount, transferFrom) -> {
+			// FIXME remove goodAmmount from cargoStore
+			event.acceptTransferModes(TransferMode.MOVE);
+			event.setDropCompleted(true);
+			event.consume();
+		});
 	}
-	
+
 	private boolean isItGoodAmmount(final Dragboard db) {
 		logger.debug("Drag over unit id '" + db.getString() + "'.");
-		return ClipboardReader.make(gameController.getModel(), db).filterGood(good -> true).isPresent();
+		return ClipboardReader.make(gameController.getModel(), db).getGoods().isPresent();
 	}
 
 }

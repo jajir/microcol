@@ -1,5 +1,6 @@
 package org.microcol.gui.util;
 
+import org.microcol.model.CargoSlot;
 import org.microcol.model.GoodAmmount;
 import org.microcol.model.Unit;
 
@@ -18,7 +19,12 @@ public class ClipboardWritter {
 
 	final static String KEY_GOODS = "Goods";
 
+	final static String KEY_FROM_UNIT = "FromUnit";
+
 	final static String SEPARATOR = ",";
+
+	// FIXME JJ allow to define that source is Europe port pier or another cargo
+	// slot
 
 	private final ClipboardContent content;
 
@@ -51,6 +57,13 @@ public class ClipboardWritter {
 		Preconditions.checkState(isEmpty, "Clipboard was already set.");
 		content.putString(
 				KEY_GOODS + SEPARATOR + goodAmmount.getGoodType().name() + SEPARATOR + goodAmmount.getAmmount());
+		isEmpty = false;
+		return this;
+	}
+
+	public ClipboardWritter addTransferFromUnit(final Unit unit, final CargoSlot cargoSlot) {
+		content.putString(content.getString() + SEPARATOR + KEY_FROM_UNIT + SEPARATOR + unit.getId() + SEPARATOR
+				+ cargoSlot.getIndex());
 		isEmpty = false;
 		return this;
 	}

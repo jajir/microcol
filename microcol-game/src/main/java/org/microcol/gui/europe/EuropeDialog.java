@@ -8,7 +8,6 @@ import org.microcol.gui.util.Text;
 import org.microcol.gui.util.ViewUtil;
 
 import com.google.common.base.Preconditions;
-import com.google.inject.Inject;
 
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -19,8 +18,6 @@ import javafx.scene.layout.VBox;
  * Show Europe port.
  */
 public class EuropeDialog extends AbstractDialog {
-
-	private final GameController gameController;
 
 	private final PanelEuropeDock europeDock;
 
@@ -36,7 +33,7 @@ public class EuropeDialog extends AbstractDialog {
 			final GameController gameController, final LocalizationHelper localizationHelper) {
 		super(viewUtil);
 		Preconditions.checkNotNull(imageProvider);
-		this.gameController = Preconditions.checkNotNull(gameController);
+		Preconditions.checkNotNull(gameController);
 		getDialog().setTitle(text.get("europe.title"));
 
 		final Label label = new Label("European port");

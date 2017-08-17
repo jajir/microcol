@@ -65,8 +65,8 @@ public class PanelCrate extends StackPane {
 		cargoImage.setFitWidth(35);
 		cargoImage.setFitHeight(35);
 		cargoImage.setPreserveRatio(true);
-		cargoImage.setOnDragDetected(this::onDragDetected);
 
+		setOnDragDetected(this::onDragDetected);
 		setOnDragEntered(this::onDragEntered);
 		setOnDragExited(this::onDragExited);
 		setOnDragOver(this::onDragOver);
@@ -134,32 +134,29 @@ public class PanelCrate extends StackPane {
 	private final void onDragDropped(DragEvent event) {
 		logger.debug("Object was dropped on ship cargo slot.");
 		final Dragboard db = event.getDragboard();
-		// TODO following code read 4 time object from dragboard
-		if (isItGoodAmmount(db)) {
-			ClipboardReader.make(gameController.getModel(), db).readGood(good -> {
-				cargoSlot.store(good);
-				europeDialog.repaintAfterGoodMoving();
-				event.acceptTransferModes(TransferMode.MOVE);
-				event.setDropCompleted(true);
-				event.consume();
-			});
-		}
-		if (isItUnit(db)) {
-			ClipboardReader.make(gameController.getModel(), event.getDragboard()).readUnit(draggedUnit -> {
-				cargoSlot.store(draggedUnit);
-				europeDialog.repaintAfterGoodMoving();
-				event.acceptTransferModes(TransferMode.MOVE);
-				event.setDropCompleted(true);
-				event.consume();
-			});
-		}
+
+		ClipboardReader.make(gameController.getModel(), db).filterUnit(unit -> !UnitType.isShip(unit.getType()))
+				.tryReadGood((goodAmmount, transferFrom) -> {
+					cargoSlot.store(goodAmmount);
+					europeDialog.repaintAfterGoodMoving();
+					event.acceptTransferModes(TransferMode.MOVE);
+					event.setDropCompleted(true);
+					event.consume();
+				}).tryReadUnit((unit, transferFrom) -> {
+					cargoSlot.store(unit);
+					europeDialog.repaintAfterGoodMoving();
+					event.acceptTransferModes(TransferMode.MOVE);
+					event.setDropCompleted(true);
+					event.consume();
+				});
 	}
 
 	private void onDragDetected(final MouseEvent event) {
 		if (unit != null && cargoSlot != null) {
 			if (cargoSlot.getUnit().isPresent()) {
 				ClipboardWritter.make(startDragAndDrop(TransferMode.MOVE)).addImage(cargoImage.getImage())
-						.addUnit(cargoSlot.getUnit().get()).build();
+						.addUnit(cargoSlot.getUnit().get()).addTransferFromUnit(cargoSlot.getOwnerUnit(), cargoSlot)
+						.build();
 			} else if (cargoSlot.getGoods().isPresent()) {
 				ClipboardWritter.make(startDragAndDrop(TransferMode.MOVE)).addImage(cargoImage.getImage())
 						.addGoodAmmount(cargoSlot.getGoods().get()).build();
@@ -170,17 +167,11 @@ public class PanelCrate extends StackPane {
 
 	private boolean isCorrectObject(final Dragboard db) {
 		logger.debug("Drag over unit id '" + db.getString() + "'.");
-		return cargoSlot != null && cargoSlot.isEmpty() && (isItGoodAmmount(db) || isItUnit(db));
-	}
-
-	private boolean isItUnit(final Dragboard db) {
-		return ClipboardReader.make(gameController.getModel(), db).filterUnit(unit -> !UnitType.isShip(unit.getType()))
-				.isPresent();
-	}
-
-	private boolean isItGoodAmmount(final Dragboard db) {
-		logger.debug("Drag over unit id '" + db.getString() + "'.");
-		return ClipboardReader.make(gameController.getModel(), db).filterGood(good -> true).isPresent();
+		if (cargoSlot != null && cargoSlot.isEmpty()) {
+			return !ClipboardReader.make(gameController.getModel(), db)
+					.filterUnit(unit -> !UnitType.isShip(unit.getType())).isEmpty();
+		}
+		return false;
 	}
 
 }
