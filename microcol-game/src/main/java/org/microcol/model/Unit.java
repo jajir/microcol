@@ -391,16 +391,28 @@ public class Unit {
 		return place instanceof PlaceEuropePier;
 	}
 
-	// TODO rename it to placeToCargo
-	void store(final CargoSlot slot) {
-		Preconditions.checkState(isStorable(), "This unit (%s) cannot be stored.", this);
-		checkNotStored();
+	/**
+	 * This unit will be moved to given place cargo slot.
+	 * 
+	 * @param placeCargoSlot
+	 *            required place cargo slot
+	 */
+	void placeToCargoSlot(final PlaceCargoSlot placeCargoSlot) {
+		//Verify that only moving in slots is available.
+		if (isAtCargoSlot()) {
+			if (!getPlaceCargoSlot().getCargoSlotOwner().equals(placeCargoSlot.getCargoSlotOwner())) {
+				throw new IllegalStateException(String.format("This unit (%s) cannot be stored.", this));
+			}
+		}
+		//remove from previous place
+		place.destroy();
 		// TODO JKA check adjacent location
 		// TODO JKA check movement?
 		// TODO JKA prazdny naklad?
-		place = new PlaceCargoSlot(this, slot);
+		place = placeCargoSlot;
 		availableMoves = 0;
-		model.fireUnitStored(this, slot); // TODO JKA Move to CargoSlot?
+		// TODO JKA Move to CargoSlot?
+		model.fireUnitStored(this, placeCargoSlot.getCargoSlot());
 	}
 
 	void placeToEuropePort(final EuropePort port) {
@@ -500,6 +512,10 @@ public class Unit {
 
 	public int getId() {
 		return id;
+	}
+
+	Model getModel() {
+		return model;
 	}
 
 }

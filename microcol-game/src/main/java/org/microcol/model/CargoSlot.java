@@ -7,6 +7,7 @@ import javax.json.stream.JsonParser;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
+import com.google.common.base.Strings;
 
 public final class CargoSlot {
 
@@ -23,10 +24,18 @@ public final class CargoSlot {
 	/**
 	 * In this cargo slot could be stored this good.
 	 */
-	private GoodAmmount cargoGoods;
+	private GoodAmount cargoGoods;
 
 	CargoSlot(final Cargo hold) {
 		this.cargo = Preconditions.checkNotNull(hold);
+	}
+
+	public Player getOwnerPlayer() {
+		return getOwnerUnit().getOwner();
+	}
+
+	private Model getModel() {
+		return cargo.getModel();
 	}
 
 	public boolean isEmpty() {
@@ -74,7 +83,7 @@ public final class CargoSlot {
 		}
 	}
 
-	public Optional<GoodAmmount> getGoods() {
+	public Optional<GoodAmount> getGoods() {
 		return Optional.of(cargoGoods);
 	}
 
@@ -90,18 +99,58 @@ public final class CargoSlot {
 	public void store(final Unit unit) {
 		Preconditions.checkNotNull(unit);
 		Preconditions.checkState(isEmpty(), "Cargo slot (%s) is already loaded.", this);
-		Preconditions.checkState(cargo.getOwner().getOwner().equals(unit.getOwner()), "Owners must be same (%s - %s).",
-				cargo.getOwner().getOwner(), unit.getOwner());
+		Preconditions.checkState(getOwnerUnit().getOwner().equals(unit.getOwner()), "Owners must be same (%s - %s).",
+				getOwnerUnit().getOwner(), unit.getOwner());
 
 		cargoUnit = new PlaceCargoSlot(unit, this);
-		unit.store(this);
+		unit.placeToCargoSlot(cargoUnit);
 	}
 
-	public void store(final GoodAmmount goodAmmount) {
-		Preconditions.checkNotNull(goodAmmount);
+	/**
+	 * 
+	 * @param goodAmount
+	 *            required good amount will
+	 */
+	public void buyAndStore(final GoodAmount goodAmount) {
+		Preconditions.checkNotNull(goodAmount);
 		Preconditions.checkState(isEmpty(), "Cargo slot (%s) is already loaded.", this);
+		getOwnerPlayer().buy(goodAmount);
+		cargoGoods = goodAmount;
+	}
 
-		cargoGoods = goodAmmount;
+	/**
+	 * @param goodAmount
+	 *            required good amount
+	 * @param sourceCargoSlot
+	 *            required source cargo slot
+	 */
+	public void storeFromCargoSlot(final GoodAmount goodAmount, final CargoSlot sourceCargoSlot) {
+		Preconditions.checkNotNull(goodAmount);
+		Preconditions.checkState(getOwnerPlayer().equals(sourceCargoSlot.getOwnerPlayer()),
+				"Source cargo slot and target cargo slots doesn't belongs to same user (%s) (%s).", getOwnerPlayer(),
+				sourceCargoSlot.getOwnerPlayer());
+		if (!isEmpty()) {
+			Preconditions.checkState(isLoadedGood(), "Attempt to move cargo to slot occupied with unit.");
+			Preconditions.checkState(getGoods().get().getGoodType().equals(goodAmount.getGoodType()),
+					"Tranfered cargo is diffrent type this is stored in slot. Stored=(%s), transfered=(%s)",
+					getGoods().get(), cargoGoods);
+		}
+		Preconditions.checkState(sourceCargoSlot.getGoods().isPresent(),
+				"Source cargo slot doesn't contains any good,(%s)", sourceCargoSlot);
+		final GoodAmount sourceGoodAmount = sourceCargoSlot.getGoods().get();
+		Preconditions.checkState(sourceGoodAmount.getGoodType().equals(goodAmount.getGoodType()),
+				"Source cargo slot contains diffrent good than was transfered. Source cargo slot=(%s), Transfered=(%s)",
+				sourceCargoSlot, goodAmount);
+		if (sourceGoodAmount.getAmount() == goodAmount.getAmount()) {
+			sourceCargoSlot.empty();
+		} else if (sourceGoodAmount.getAmount() < goodAmount.getAmount()) {
+			throw new IllegalArgumentException(String.format(
+					"Transfered ammount is higher that is in source. Source cargo slot=(%s), Transfered=(%s)",
+					sourceCargoSlot, goodAmount));
+		} else {
+			sourceGoodAmount.setAmount(sourceGoodAmount.getAmount() - goodAmount.getAmount());
+		}
+		cargoGoods = goodAmount;
 	}
 
 	public Unit unload(final Location targetLocation) {

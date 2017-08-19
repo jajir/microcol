@@ -5,7 +5,7 @@ import java.util.function.BiConsumer;
 import java.util.function.Predicate;
 
 import org.microcol.model.CargoSlot;
-import org.microcol.model.GoodAmmount;
+import org.microcol.model.GoodAmount;
 import org.microcol.model.GoodType;
 import org.microcol.model.Model;
 import org.microcol.model.Unit;
@@ -26,6 +26,8 @@ public class ClipboardReader {
 	final static String KEY_FROM_UNIT = "FromUnit";
 
 	final static String KEY_FROM_EUROPE_PORT_PIER = "FromEuropePortPier";
+
+	final static String KEY_FROM_EUROPE_SHOP = "FromEuropeShop";
 
 	final static String SEPARATOR = ",";
 
@@ -63,10 +65,14 @@ public class ClipboardReader {
 		if (tryRead(parts[2]) == null) {
 			return null;
 		}
-		final int ammount = read(parts[2]);
+		final int amount = read(parts[2]);
 		final GoodType goodType = GoodType.valueOf(parts[1]);
-		final GoodAmmount goodAmmount = new GoodAmmount(goodType, ammount);
-		return new GoodTransfer(goodAmmount, tryReadTransferFrom(3));
+		final GoodAmount goodAmount = new GoodAmount(goodType, amount);
+		TransferFrom transferFrom = tryReadTransferFromCargoSlot(3);
+		if (transferFrom == null) {
+			transferFrom = tryReadTransferFromEuropeShop(3);
+		}
+		return new GoodTransfer(goodAmount, transferFrom);
 	}
 
 	private UnitTransfer tryReadUnitTransfer() {
@@ -80,11 +86,14 @@ public class ClipboardReader {
 			return null;
 		}
 		final Unit unit = model.getUnitById(read(parts[1]));
-		return new UnitTransfer(unit, tryReadTransferFrom(2));
-
+		TransferFrom transferFrom = tryReadTransferFromCargoSlot(2);
+		if (transferFrom == null) {
+			transferFrom = tryReadTransferFromEuropePortPier(2);
+		}
+		return new UnitTransfer(unit, transferFrom);
 	}
 
-	private TransferFromCargoSlot tryReadTransferFrom(int fromIndex) {
+	private TransferFromCargoSlot tryReadTransferFromCargoSlot(int fromIndex) {
 		if (parts.length < fromIndex + 3) {
 			return null;
 		}
@@ -98,6 +107,26 @@ public class ClipboardReader {
 			return null;
 		}
 		return new TransferFromCargoSlot(model.getUnitById(read(parts[fromIndex + 1])), read(parts[fromIndex + 2]));
+	}
+
+	private TransferFromEuropePier tryReadTransferFromEuropePortPier(int fromIndex) {
+		if (parts.length < fromIndex + 1) {
+			return null;
+		}
+		if (!KEY_FROM_EUROPE_PORT_PIER.equals(parts[fromIndex + 0])) {
+			return null;
+		}
+		return new TransferFromEuropePier();
+	}
+
+	private TransferFromEuropeShop tryReadTransferFromEuropeShop(int fromIndex) {
+		if (parts.length < fromIndex + 1) {
+			return null;
+		}
+		if (!KEY_FROM_EUROPE_SHOP.equals(parts[fromIndex + 0])) {
+			return null;
+		}
+		return new TransferFromEuropeShop();
 	}
 
 	private int read(final String num) {
@@ -151,11 +180,11 @@ public class ClipboardReader {
 			}
 		}
 
-		public ParsingResult filterGoods(final Predicate<GoodAmmount> filter) {
+		public ParsingResult filterGoods(final Predicate<GoodAmount> filter) {
 			if (goodTransfer == null) {
 				return this;
 			} else {
-				if (filter.test(goodTransfer.goodAmmount)) {
+				if (filter.test(goodTransfer.goodAmount)) {
 					return this;
 				} else {
 					return new ParsingResult(unitTransfer, null);
@@ -171,11 +200,11 @@ public class ClipboardReader {
 			}
 		}
 
-		public Optional<GoodAmmount> getGoods() {
+		public Optional<GoodAmount> getGoods() {
 			if (goodTransfer == null) {
 				return Optional.empty();
 			} else {
-				return Optional.of(goodTransfer.goodAmmount);
+				return Optional.of(goodTransfer.goodAmount);
 			}
 		}
 
@@ -195,18 +224,18 @@ public class ClipboardReader {
 			}
 		}
 
-		public ParsingResult tryReadGood(final BiConsumer<GoodAmmount, Optional<TransferFrom>> consumer) {
+		public ParsingResult tryReadGood(final BiConsumer<GoodAmount, Optional<TransferFrom>> consumer) {
 			if (goodTransfer != null) {
-				consumer.accept(goodTransfer.goodAmmount, goodTransfer.getTransferFrom());
+				consumer.accept(goodTransfer.goodAmount, goodTransfer.getTransferFrom());
 			}
 			return this;
 		}
 
-		public ParsingResult readGood(final BiConsumer<GoodAmmount, Optional<TransferFrom>> consumer) {
+		public ParsingResult readGood(final BiConsumer<GoodAmount, Optional<TransferFrom>> consumer) {
 			if (goodTransfer == null) {
 				throw new IllegalStateException("Unable to read good from string '" + originalString + "'");
 			} else {
-				consumer.accept(goodTransfer.goodAmmount, goodTransfer.getTransferFrom());
+				consumer.accept(goodTransfer.goodAmount, goodTransfer.getTransferFrom());
 				return this;
 			}
 		}
@@ -246,20 +275,20 @@ public class ClipboardReader {
 
 	public static class GoodTransfer extends AbstractTransfer {
 
-		private final GoodAmmount goodAmmount;
+		private final GoodAmount goodAmount;
 
-		GoodTransfer(final GoodAmmount goodAmmount, final TransferFrom transferFrom) {
+		GoodTransfer(final GoodAmount goodAmount, final TransferFrom transferFrom) {
 			super(transferFrom);
-			this.goodAmmount = goodAmmount;
+			this.goodAmount = goodAmount;
 		}
 
 		@Override
 		public void writeTo(final StringBuilder buff) {
 			buff.append(KEY_GOODS);
 			buff.append(SEPARATOR);
-			buff.append(goodAmmount.getGoodType().name());
+			buff.append(goodAmount.getGoodType().name());
 			buff.append(SEPARATOR);
-			buff.append(goodAmmount.getAmmount());
+			buff.append(goodAmount.getAmount());
 			getTransferFrom().ifPresent(transferFrom -> transferFrom.writeTo(buff));
 		}
 
@@ -334,6 +363,19 @@ public class ClipboardReader {
 		public void writeTo(final StringBuilder buff) {
 			buff.append(SEPARATOR);
 			buff.append(KEY_FROM_EUROPE_PORT_PIER);
+		}
+
+	}
+
+	/**
+	 * Unit was taken from Europe shop.
+	 */
+	public static class TransferFromEuropeShop implements TransferFrom {
+
+		@Override
+		public void writeTo(final StringBuilder buff) {
+			buff.append(SEPARATOR);
+			buff.append(KEY_FROM_EUROPE_SHOP);
 		}
 
 	}

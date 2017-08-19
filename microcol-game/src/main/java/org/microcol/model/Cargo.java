@@ -33,6 +33,10 @@ public final class Cargo {
 	Unit getOwner() {
 		return owner;
 	}
+	
+	Model getModel() {
+		return owner.getModel();
+	}
 
 	public List<CargoSlot> getSlots() {
 		return slots;

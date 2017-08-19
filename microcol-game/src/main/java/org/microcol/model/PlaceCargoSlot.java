@@ -12,6 +12,10 @@ public class PlaceCargoSlot extends AbstractPlace {
 		cargoSlot.unsafeStore(this);
 	}
 	
+	public Player getCargoSlotOwner(){
+		return cargoSlot.getOwnerPlayer();
+	}
+	
 	@Override
 	public void destroy() {
 		cargoSlot.empty();

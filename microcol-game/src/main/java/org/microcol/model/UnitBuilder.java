@@ -17,7 +17,7 @@ public class UnitBuilder {
 
 	private final List<UnitBuilder> unitsInCargo = Lists.newArrayList();;
 
-	private final List<GoodAmmount> goodAmmounts = Lists.newArrayList();;
+	private final List<GoodAmount> goodAmounts = Lists.newArrayList();;
 
 	UnitBuilder(final ModelBuilder modelBuilder) {
 		this.modelBuilder = Preconditions.checkNotNull(modelBuilder);
@@ -60,7 +60,7 @@ public class UnitBuilder {
 		return this;
 	}
 
-	public UnitBuilder addCargoGood(final GoodType goodType, final int ammount) {
+	public UnitBuilder addCargoGood(final GoodType goodType, final int amount) {
 		// FIXME JJ dokoncit implementaci
 		return this;
 	}

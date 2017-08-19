@@ -3,7 +3,7 @@ package org.microcol.gui.util;
 import org.microcol.gui.util.ClipboardReader.Transfer;
 import org.microcol.gui.util.ClipboardReader.TransferFrom;
 import org.microcol.model.CargoSlot;
-import org.microcol.model.GoodAmmount;
+import org.microcol.model.GoodAmount;
 import org.microcol.model.Unit;
 
 import com.google.common.base.Preconditions;
@@ -45,9 +45,12 @@ public class ClipboardWritter {
 		return this;
 	}
 
-	public ClipboardWritter addGoodAmmount(final GoodAmmount goodAmmount) {
+	public ClipboardWritter addGoodAmount(final GoodAmount goodAmount) {
 		Preconditions.checkState(transfer == null, "Clipboard was already set.");
-		transfer = new ClipboardReader.GoodTransfer(goodAmmount, transferFrom);
+		Preconditions.checkState(
+				transferFrom == null || !(transferFrom instanceof ClipboardReader.TransferFromEuropePier),
+				"Can't move good from Europe port pier. Europe pier could contain just unit.");
+		transfer = new ClipboardReader.GoodTransfer(goodAmount, transferFrom);
 		return this;
 	}
 
@@ -62,6 +65,13 @@ public class ClipboardWritter {
 		Preconditions.checkState(transfer == null, "TransferFrom should be called before setting transferring object");
 		Preconditions.checkState(transferFrom == null, "Transfer from was already set");
 		transferFrom = new ClipboardReader.TransferFromEuropePier();
+		return this;
+	}
+
+	public ClipboardWritter addTransferFromEuropeShop() {
+		Preconditions.checkState(transfer == null, "TransferFrom should be called before setting transferring object");
+		Preconditions.checkState(transferFrom == null, "Transfer from was already set");
+		transferFrom = new ClipboardReader.TransferFromEuropeShop();
 		return this;
 	}
 

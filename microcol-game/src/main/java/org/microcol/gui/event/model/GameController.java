@@ -75,7 +75,7 @@ public class GameController implements Localized {
 				/**
 				 * Human player
 				 */
-				.addPlayer("Dutch", false, 100).addUnit(UnitType.GALLEON, "Dutch", Location.of(5, 3))
+				.addPlayer("Dutch", false, 1108).addUnit(UnitType.GALLEON, "Dutch", Location.of(5, 3))
 				.addUnit(UnitType.FRIGATE, "Dutch", Location.of(4, 4))
 				.addUnit(UnitType.COLONIST, "Dutch", Location.of(6, 4))
 

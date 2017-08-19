@@ -5,7 +5,7 @@ import org.microcol.gui.event.model.GameController;
 import org.microcol.gui.util.ClipboardReader;
 import org.microcol.gui.util.ClipboardWritter;
 import org.microcol.model.CargoSlot;
-import org.microcol.model.GoodAmmount;
+import org.microcol.model.GoodAmount;
 import org.microcol.model.Unit;
 import org.microcol.model.UnitType;
 import org.slf4j.Logger;
@@ -98,8 +98,8 @@ public class PanelCrate extends StackPane {
 			hideCargo();
 		} else {
 			if (cargoSlot.isLoadedGood()) {
-				final GoodAmmount goodAmmount = cargoSlot.getGoods().get();
-				cargoImage.setImage(imageProvider.getGoodTypeImage(goodAmmount.getGoodType()));
+				final GoodAmount goodAmount = cargoSlot.getGoods().get();
+				cargoImage.setImage(imageProvider.getGoodTypeImage(goodAmount.getGoodType()));
 			} else if (cargoSlot.isLoadedUnit()) {
 				final Unit cargoUnit = cargoSlot.getUnit().get();
 				cargoImage.setImage(imageProvider.getUnitImage(cargoUnit.getType()));
@@ -136,8 +136,16 @@ public class PanelCrate extends StackPane {
 		final Dragboard db = event.getDragboard();
 
 		ClipboardReader.make(gameController.getModel(), db).filterUnit(unit -> !UnitType.isShip(unit.getType()))
-				.tryReadGood((goodAmmount, transferFrom) -> {
-					cargoSlot.store(goodAmmount);
+				.tryReadGood((goodAmount, transferFrom) -> {
+					Preconditions.checkArgument(transferFrom.isPresent(), "Good origin is not known.");
+					if (transferFrom.get() instanceof ClipboardReader.TransferFromEuropeShop) {
+						cargoSlot.buyAndStore(goodAmount);
+					} else if (transferFrom.get() instanceof ClipboardReader.TransferFromCargoSlot) {
+						cargoSlot.storeFromCargoSlot(goodAmount,
+								((ClipboardReader.TransferFromCargoSlot) transferFrom.get()).getCargoSlot());
+					} else {
+						throw new IllegalArgumentException("Unsupported source transfer '" + transferFrom + "'");
+					}
 					europeDialog.repaintAfterGoodMoving();
 					event.acceptTransferModes(TransferMode.MOVE);
 					event.setDropCompleted(true);
@@ -160,7 +168,7 @@ public class PanelCrate extends StackPane {
 			} else if (cargoSlot.getGoods().isPresent()) {
 				ClipboardWritter.make(startDragAndDrop(TransferMode.MOVE)).addImage(cargoImage.getImage())
 						.addTransferFromUnit(cargoSlot.getOwnerUnit(), cargoSlot)
-						.addGoodAmmount(cargoSlot.getGoods().get()).build();
+						.addGoodAmount(cargoSlot.getGoods().get()).build();
 			}
 			event.consume();
 		}

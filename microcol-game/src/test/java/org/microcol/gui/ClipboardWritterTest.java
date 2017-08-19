@@ -4,7 +4,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.microcol.gui.util.ClipboardWritter;
 import org.microcol.model.CargoSlot;
-import org.microcol.model.GoodAmmount;
+import org.microcol.model.GoodAmount;
 import org.microcol.model.GoodType;
 import org.microcol.model.Unit;
 
@@ -37,13 +37,13 @@ public class ClipboardWritterTest {
 	}
 	
 	@Test
-	public void test_addGood(final @Mocked GoodAmmount good) throws Exception {
+	public void test_addGood(final @Mocked GoodAmount good) throws Exception {
 		new Expectations() {{
-			good.getAmmount(); result = 100;
+			good.getAmount(); result = 100;
 			good.getGoodType(); result = GoodType.COTTON;
 		}};
 		
-		ClipboardWritter.make(db).addGoodAmmount(good).build();
+		ClipboardWritter.make(db).addGoodAmount(good).build();
 		
 		new Verifications() {{
 			ClipboardContent tested;
@@ -54,39 +54,43 @@ public class ClipboardWritterTest {
 	}
 	
 	@Test(expected = IllegalStateException.class)
-	public void test_addGood_fromEuropePortPier_transferFrom_is_called_after_transfer(final @Mocked GoodAmmount good)
+	public void test_addUnit_fromEuropePortPier_transferFrom_is_called_after_transfer(final @Mocked Unit unit)
 			throws Exception {
-		ClipboardWritter.make(db).addGoodAmmount(good).addTransferFromEuropePortPier().build();
+		ClipboardWritter.make(db).addUnit(unit).addTransferFromEuropePortPier().build();
+	}
+	
+	@Test(expected=IllegalStateException.class)
+	public void test_addGood_fromEuropePortPier(final @Mocked GoodAmount good) throws Exception {
+		ClipboardWritter.make(db).addTransferFromEuropePortPier().addGoodAmount(good).build();
 	}
 	
 	@Test
-	public void test_addGood_fromEuropePortPier(final @Mocked GoodAmmount good) throws Exception {
+	public void test_addUnit_fromEuropePortPier(final @Mocked Unit unit) throws Exception {
 		new Expectations() {{
-			good.getAmmount(); result = 100;
-			good.getGoodType(); result = GoodType.COTTON;
+			unit.getId(); result = 12;
 		}};
 		
-		ClipboardWritter.make(db).addTransferFromEuropePortPier().addGoodAmmount(good).build();
+		ClipboardWritter.make(db).addTransferFromEuropePortPier().addUnit(unit).build();
 		
 		new Verifications() {{
 			ClipboardContent tested;
 			db.setContent(tested = withCapture());
 			final String stored = tested.getString();
-			assertEquals("Goods,COTTON,100,FromEuropePortPier", stored);
+			assertEquals("Unit,12,FromEuropePortPier", stored);
 	    }};
 	}
 	
 	@Test
-	public void test_addGood_fromCargoUnit(final @Mocked GoodAmmount good, final @Mocked Unit unit,
+	public void test_addGood_fromCargoUnit(final @Mocked GoodAmount good, final @Mocked Unit unit,
 			final @Mocked CargoSlot cargoSlot) throws Exception {
 		new Expectations() {{
-			good.getAmmount(); result = 100;
+			good.getAmount(); result = 100;
 			good.getGoodType(); result = GoodType.COTTON;
 			unit.getId(); result = 45;
 			cargoSlot.getIndex(); result = 2;
 		}};
 		
-		ClipboardWritter.make(db).addTransferFromUnit(unit, cargoSlot).addGoodAmmount(good).build();
+		ClipboardWritter.make(db).addTransferFromUnit(unit, cargoSlot).addGoodAmount(good).build();
 		
 		new Verifications() {{
 			ClipboardContent tested;
@@ -96,11 +100,28 @@ public class ClipboardWritterTest {
 	    }};
 	}
 	
+	@Test
+	public void test_addGood_fromEuropeShop(final @Mocked GoodAmount good) throws Exception {
+		new Expectations() {{
+			good.getAmount(); result = 100;
+			good.getGoodType(); result = GoodType.COTTON;
+		}};
+		
+		ClipboardWritter.make(db).addTransferFromEuropeShop().addGoodAmount(good).build();
+		
+		new Verifications() {{
+			ClipboardContent tested;
+			db.setContent(tested = withCapture());
+			final String stored = tested.getString();
+			assertEquals("Goods,COTTON,100,FromEuropeShop", stored);
+	    }};
+	}
+	
 	
 	@Test(expected = IllegalStateException.class)
-	public void test_addBoth(final @Mocked Unit unit, final @Mocked GoodAmmount good) throws Exception {
+	public void test_addBoth(final @Mocked Unit unit, final @Mocked GoodAmount good) throws Exception {
 		
-		ClipboardWritter.make(db).addUnit(unit).addGoodAmmount(good).build();
+		ClipboardWritter.make(db).addUnit(unit).addGoodAmount(good).build();
 	}
 	
 }

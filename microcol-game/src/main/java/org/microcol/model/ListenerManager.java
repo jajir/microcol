@@ -96,7 +96,7 @@ class ListenerManager {
 	void fireGoldWasChanged(final Model model,final Player player, final int oldValue, final int newValue) {
 		final GoldWasChangedEvent event = new GoldWasChangedEvent(model, player, oldValue, newValue);
 
-		logger.info("Gold ammount changed: {}.", event);
+		logger.info("Gold amount changed: {}.", event);
 		
 		listeners.forEach(listener -> listener.goldWasChanged(event));
 	}

@@ -76,7 +76,7 @@ public final class Model {
 	public void addListener(ModelListener listener) {
 		listenerManager.addListener(listener);
 	}
-
+	
 	public void removeListener(ModelListener listener) {
 		listenerManager.removeListener(listener);
 	}
