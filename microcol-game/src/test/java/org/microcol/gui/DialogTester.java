@@ -102,7 +102,7 @@ public class DialogTester extends Application {
 	}
 
 	public final static void dialogWarning() {
-		new DialogWarning(viewUtil);
+		new DialogUnitCantFightWarning(viewUtil, text);
 	}
 
 	public final static void dialogSave() {

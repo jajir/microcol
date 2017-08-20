@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import org.microcol.gui.DialogWarning;
+import org.microcol.gui.DialogUnitCantFightWarning;
 import org.microcol.gui.GamePreferences;
 import org.microcol.gui.MicroColException;
 import org.microcol.gui.Point;
@@ -22,6 +22,7 @@ import org.microcol.gui.event.model.MoveUnitController;
 import org.microcol.gui.event.model.NewGameController;
 import org.microcol.gui.town.TownDialog;
 import org.microcol.gui.util.Localized;
+import org.microcol.gui.util.Text;
 import org.microcol.gui.util.ViewUtil;
 import org.microcol.model.Location;
 import org.microcol.model.Model;
@@ -91,8 +92,10 @@ public final class GamePanelPresenter implements Localized {
 	private final ViewUtil viewUtil;
 
 	private final StartMoveController startMoveController;
-	
+
 	private final TownDialog townDialog;
+
+	private final Text text;
 
 	@Inject
 	public GamePanelPresenter(final GamePanelPresenter.Display display, final GameController gameController,
@@ -101,7 +104,7 @@ public final class GamePanelPresenter implements Localized {
 			final GamePreferences gamePreferences, final ShowGridController showGridController,
 			final CenterViewController viewController, final ExitGameController exitGameController,
 			final DebugRequestController debugRequestController, final ViewState viewState, final ViewUtil viewUtil,
-			final StartMoveController startMoveController, final TownDialog townDialog) {
+			final StartMoveController startMoveController, final TownDialog townDialog, final Text text) {
 		this.focusedTileController = Preconditions.checkNotNull(focusedTileController);
 		this.gameController = Preconditions.checkNotNull(gameController);
 		this.gamePreferences = gamePreferences;
@@ -110,6 +113,7 @@ public final class GamePanelPresenter implements Localized {
 		this.viewUtil = Preconditions.checkNotNull(viewUtil);
 		this.startMoveController = Preconditions.checkNotNull(startMoveController);
 		this.townDialog = Preconditions.checkNotNull(townDialog);
+		this.text = Preconditions.checkNotNull(text);
 
 		moveUnitController.addListener(event -> {
 			scheduleWalkAnimation(event);
@@ -206,8 +210,8 @@ public final class GamePanelPresenter implements Localized {
 	private void tryToOpenTownDetail(final Location currentLocation) {
 		Preconditions.checkNotNull(currentLocation);
 		final Optional<Town> oTown = gameController.getModel().getCurrentPlayer().getTownsAt(currentLocation);
-		if(oTown.isPresent()){
-			//show town details
+		if (oTown.isPresent()) {
+			// show town details
 			townDialog.showTown(oTown.get());
 		}
 	}
@@ -256,8 +260,8 @@ public final class GamePanelPresenter implements Localized {
 					viewState.setSelectedTile(Optional.of(location));
 					focusedTileController.fireEvent(new FocusedTileEvent(gameController.getModel(), location,
 							gameController.getModel().getMap().getTerrainAt(location)));
-					if(!tryToSwitchToMoveMode(location)){
-						//TODO JJ is this if really needed?
+					if (!tryToSwitchToMoveMode(location)) {
+						// TODO JJ is this if really needed?
 						tryToOpenTownDetail(location);
 					}
 				}
@@ -349,7 +353,7 @@ public final class GamePanelPresenter implements Localized {
 			// TODO JJ consider which tile should have focus
 			viewState.setSelectedTile(Optional.of(moveToLocation));
 			display.setCursorNormal();
-			new DialogWarning(viewUtil);
+			new DialogUnitCantFightWarning(viewUtil, text);
 			return;
 		}
 		final Unit targetUnit = gameController.getModel().getUnitsAt(moveToLocation).get(0);

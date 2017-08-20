@@ -7,7 +7,6 @@ import javax.json.stream.JsonParser;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
-import com.google.common.base.Strings;
 
 public final class CargoSlot {
 
@@ -32,10 +31,6 @@ public final class CargoSlot {
 
 	public Player getOwnerPlayer() {
 		return getOwnerUnit().getOwner();
-	}
-
-	private Model getModel() {
-		return cargo.getModel();
 	}
 
 	public boolean isEmpty() {

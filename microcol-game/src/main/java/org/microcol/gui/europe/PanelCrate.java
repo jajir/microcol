@@ -1,5 +1,6 @@
 package org.microcol.gui.europe;
 
+import org.microcol.gui.DialogNotEnoughGold;
 import org.microcol.gui.ImageProvider;
 import org.microcol.gui.event.model.GameController;
 import org.microcol.gui.util.ClipboardReader;
@@ -8,6 +9,7 @@ import org.microcol.gui.util.Text;
 import org.microcol.gui.util.ViewUtil;
 import org.microcol.model.CargoSlot;
 import org.microcol.model.GoodAmount;
+import org.microcol.model.NotEnoughtGoldException;
 import org.microcol.model.Unit;
 import org.microcol.model.UnitType;
 import org.slf4j.Logger;
@@ -153,14 +155,18 @@ public class PanelCrate extends StackPane {
 				.tryReadGood((goodAmount, transferFrom) -> {
 					Preconditions.checkArgument(transferFrom.isPresent(), "Good origin is not known.");
 					GoodAmount tmp = goodAmount;
-					System.out.println("wasShiftPressed " + europeDialog.getPropertyShiftWasPressed().get());
+					logger.debug("wasShiftPressed " + europeDialog.getPropertyShiftWasPressed().get());
 					if (europeDialog.getPropertyShiftWasPressed().get()) {
 						ChooseGoodAmount chooseGoodAmount = new ChooseGoodAmount(viewUtil, text,
 								goodAmount.getAmount());
 						tmp = new GoodAmount(goodAmount.getGoodType(), chooseGoodAmount.getActualValue());
 					}
 					if (transferFrom.get() instanceof ClipboardReader.TransferFromEuropeShop) {
+						try{
 						cargoSlot.buyAndStore(tmp);
+						}catch (NotEnoughtGoldException e) {
+							new DialogNotEnoughGold(viewUtil, text);
+						}
 					} else if (transferFrom.get() instanceof ClipboardReader.TransferFromCargoSlot) {
 						cargoSlot.storeFromCargoSlot(tmp,
 								((ClipboardReader.TransferFromCargoSlot) transferFrom.get()).getCargoSlot());

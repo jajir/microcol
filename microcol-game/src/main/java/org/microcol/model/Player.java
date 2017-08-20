@@ -179,6 +179,10 @@ public final class Player {
 	public void buy(final GoodAmount goodAmount) {
 		int price = goodAmount.getAmount()
 				* model.getEurope().getGoodTradeForType(goodAmount.getGoodType()).getBuyPrice();
+		if (getGold() - price < 0) {
+			throw new NotEnoughtGoldException(
+					String.format("You can't buy this item. You need %s and you have %s", price, getGold()));
+		}
 		setGold(getGold() - price);
 	}
 }

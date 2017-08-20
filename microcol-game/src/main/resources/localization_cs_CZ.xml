@@ -101,6 +101,10 @@
 	<entry key="dialogFight.buttonFight">Bojovat</entry>
 	<entry key="dialogFight.buttonCancel">Zpět</entry>
 	<entry key="dialogFight.hideOption">Zašktněte toto pole, pokud příště už náhled před bojem nebude potřebovat. Zapnout a vypnout lze náhled před bojem z nastavení v hlavním menu.</entry>
+	
+	<entry key="dialogUnitCantFightWarning.caption">Tato jednotka neumí bojovat.</entry>
+	
+	<entry key="dialogNotEnoughGold.caption">K dokončení operace nemáte dost zlata.</entry>
 
 	<entry key="FileChooser.cancelButtonText">Zrušit</entry>
 	<entry key="FileChooser.fileDateHeaderText">Datum úpravy</entry>

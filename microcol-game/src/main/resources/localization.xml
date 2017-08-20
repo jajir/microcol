@@ -40,7 +40,7 @@
 
 
 	<entry key="aboutDialog.caption">About MicroCol</entry>
-	<entry key="dialog.ok"> Ok</entry>
+	<entry key="dialog.ok">Ok</entry>
 	<entry key="rightPanel.description">Here will be information about selected tile and units on it</entry>
 	<entry key="unitsPanel.description">Here will be information about selected tile and units on it</entry>
 	<entry key="unitsPanel.units">Units:</entry>
@@ -102,6 +102,10 @@
 	<entry key="dialogFight.buttonFight">Fight</entry>
 	<entry key="dialogFight.buttonCancel">Cancel</entry>
 	<entry key="dialogFight.hideOption">Check this when you don't want to see this Fight Advisor next time. Fight Advisor could be enabled/disabled from Main Menu 'Preferences'"</entry>
+	
+	<entry key="dialogUnitCantFightWarning.caption">This unit can't fight.</entry>
+	
+	<entry key="dialogNotEnoughGold.caption">You don't have enough gold.</entry>
 	
 	<entry key="FileChooser.cancelButtonText">Cancel</entry>
 	<entry key="FileChooser.fileDateHeaderText">Date modified</entry>

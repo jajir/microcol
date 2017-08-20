@@ -1,13 +1,10 @@
-package org.microcol.gui;
-
-import org.microcol.gui.util.AbstractDialog;
-import org.microcol.gui.util.ViewUtil;
+package org.microcol.gui.util;
 
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 
-public class DialogWarning extends AbstractDialog {
+public abstract class AbstractWarningDialog extends AbstractDialog {
 
 	/**
 	 * Default constructor.
@@ -15,19 +12,19 @@ public class DialogWarning extends AbstractDialog {
 	 * @param viewUtil
 	 *            required utility class for showing dialog
 	 */
-	public DialogWarning(final ViewUtil viewUtil) {
+	public AbstractWarningDialog(final ViewUtil viewUtil, final Text text, final String messageKey) {
 		super(viewUtil);
-		getDialog().setTitle("Tato jednotka neumi bojovat");
+		getDialog().setTitle(text.get(messageKey));
 
-		VBox root = new VBox();
+		final VBox root = new VBox();
 		init(root);
 
-		final Label label = new Label("Tato jednotka neumi bojovat");
+		final Label label = new Label(text.get(messageKey));
 
 		/**
 		 * Buttons
 		 */
-		final Button buttonFight = new Button("Ok");
+		final Button buttonFight = new Button(text.get(KEY_DIALOG_OK));
 		buttonFight.setOnAction(e -> {
 			getDialog().close();
 		});

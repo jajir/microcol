@@ -14,6 +14,8 @@ import javafx.stage.StageStyle;
  */
 public class AbstractDialog {
 
+	protected final static String KEY_DIALOG_OK = "dialog.ok";
+	
 	private final ViewUtil viewUtil;
 
 	private final Stage stageDialog;

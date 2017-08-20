@@ -5,7 +5,6 @@ import org.microcol.gui.LocalizationHelper;
 import org.microcol.gui.europe.EuropeDialog;
 import org.microcol.gui.europe.PanelEuropeDock;
 import org.microcol.gui.event.model.GameController;
-import org.microcol.gui.panelview.PaintService;
 import org.microcol.gui.util.AbstractDialog;
 import org.microcol.gui.util.Text;
 import org.microcol.gui.util.ViewUtil;
@@ -23,8 +22,6 @@ import javafx.scene.layout.VBox;
  */
 public class TownDialog extends AbstractDialog {
 
-	private Town town;
-
 	private final Label townName;
 
 	private final PanelTownLayout colonyLayout;
@@ -39,7 +36,7 @@ public class TownDialog extends AbstractDialog {
 
 	@Inject
 	public TownDialog(final ViewUtil viewUtil, final Text text, final ImageProvider imageProvider,
-			final GameController gameController, final PaintService paintService,
+			final GameController gameController,
 			final PanelTownLayout panelTownLayout) {
 		super(viewUtil);
 		Preconditions.checkNotNull(imageProvider);
@@ -84,7 +81,6 @@ public class TownDialog extends AbstractDialog {
 	}
 
 	public void showTown(final Town town) {
-		this.town = Preconditions.checkNotNull(town);
 		townName.setText("Colony: " + town.getName());
 		colonyLayout.setTown(town);
 		goods.setEurope(gameController.getModel().getEurope());
