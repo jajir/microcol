@@ -1,30 +1,133 @@
 package org.microcol.model;
 
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 
-public enum UnitType {
+/**
+ * It's enumeration like class defining all in game available units. Enumeration
+ * doesn't support nice builders. Because of that it's class not enumerations.
+ * 
+ * <p>
+ * It's not necessary to implements equals because of number of instances is
+ * defined here in class. Outside of this class other instances can't be
+ * created.
+ * </p>
+ */
+public class UnitType {
 	
-	COLONIST(ImmutableList.of(Terrain.CONTINENT), 1, true, 0, true),
-	FRIGATE(Terrain.UNIT_CAN_SAIL_AT, 4, true, 1, false),
-	GALLEON(Terrain.UNIT_CAN_SAIL_AT, 6, false, 5, false);
+	public final static UnitType COLONIST = UnitType.make()
+			.setName("Free colonist")
+			.setMoveableTerrains(ImmutableList.of(Terrain.CONTINENT))
+			.setSpeed(1)
+			.setCanAttack(true)
+			.setCargoCapacity(0)
+			.setStorable(true)
+			.build();
 	
+	public final static UnitType FRIGATE = UnitType.make()
+			.setName("Frigate")
+			.setMoveableTerrains(Terrain.UNIT_CAN_SAIL_AT)
+			.setSpeed(4)
+			.setCanAttack(true)
+			.setCargoCapacity(1)
+			.setStorable(false)
+			.build();
+	
+	public final static UnitType GALLEON = UnitType.make()
+			.setName("Galleon")
+			.setMoveableTerrains(Terrain.UNIT_CAN_SAIL_AT)
+			.setSpeed(6)
+			.setCanAttack(false)
+			.setCargoCapacity(5)
+			.setStorable(false)
+			.build();
+	
+	private final static List<UnitType> UNIT_TYPES = ImmutableList.of(COLONIST, FRIGATE, GALLEON);
 
+	private final static Map<String, UnitType> UNIT_TYPES_BY_NAME = UNIT_TYPES.stream()
+			.collect(ImmutableMap.toImmutableMap(UnitType::name, Function.identity()));
+	
+	private final String name;
 	private final List<Terrain> moveableTerrains;
 	private final int speed;
 	private final boolean canAttack;
 	private final int cargoCapacity;
 	private final boolean storable;
+	
+	private static class UnitTypeBuilder{
 
-	private UnitType(final List<Terrain> moveableTerrains, final int speed, final boolean canAttack, final int cargoCapacity, final boolean storable) {
+		private String name;
+		private List<Terrain> moveableTerrains;
+		private int speed;
+		private boolean canAttack;
+		private int cargoCapacity;
+		private boolean storable;
+		
+		private UnitType build(){
+			return new UnitType(name, moveableTerrains, speed, canAttack, cargoCapacity, storable);
+		}
+
+		private UnitTypeBuilder setName(final String name) {
+			this.name = name;
+			return this;
+		}
+
+		private UnitTypeBuilder setMoveableTerrains(final List<Terrain> moveableTerrains) {
+			this.moveableTerrains = moveableTerrains;
+			return this;
+		}
+
+		private UnitTypeBuilder setSpeed(final int speed) {
+			this.speed = speed;
+			return this;
+		}
+
+		private UnitTypeBuilder setCanAttack(final boolean canAttack) {
+			this.canAttack = canAttack;
+			return this;
+		}
+
+		private UnitTypeBuilder setCargoCapacity(final int cargoCapacity) {
+			this.cargoCapacity = cargoCapacity;
+			return this;
+		}
+
+		private UnitTypeBuilder setStorable(final boolean storable) {
+			this.storable = storable;
+			return this;
+		}
+		
+	}
+
+	private UnitType(final String name, final List<Terrain> moveableTerrains, final int speed, final boolean canAttack, final int cargoCapacity, final boolean storable) {
+		this.name = Preconditions.checkNotNull(name);
 		this.moveableTerrains = Preconditions.checkNotNull(moveableTerrains);
 		this.speed = speed;
 		this.canAttack = canAttack;
 		this.cargoCapacity = cargoCapacity;
 		this.storable = storable;
+	}
+	
+	private static UnitTypeBuilder make(){
+		return new UnitTypeBuilder();
+	}
+	
+	public String name(){
+		return name;
+	}
+	
+	public static UnitType valueOf(final String unitTypeName){
+		if (UNIT_TYPES_BY_NAME.get(unitTypeName) == null) {
+			throw new IllegalArgumentException(String.format("There is no such UnitType (%s)", unitTypeName));
+		} else {
+			return UNIT_TYPES_BY_NAME.get(unitTypeName);
+		}
 	}
 	
 	public static boolean isShip(final UnitType unitType) {

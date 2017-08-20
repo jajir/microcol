@@ -43,9 +43,11 @@ public class UnitAtLocationTest {
 	public void testIsMovable() throws Exception {
 		final Location loc = Location.of(10, 12);
 		new Expectations() {{
-			model.getMap().isValid(loc); result=true;
-			model.getMap().getTerrainAt(loc); result=Terrain.CONTINENT;
+			model.getMap().isValid(loc); result = true;
+			model.getMap().getTerrainAt(loc); result = Terrain.CONTINENT;
+			type.canMoveAtTerrain(Terrain.CONTINENT); result = true;
 		}};
+		
 		assertTrue(unit.isMoveable(loc));
 	}
 	

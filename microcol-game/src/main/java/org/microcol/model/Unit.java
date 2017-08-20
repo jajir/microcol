@@ -441,7 +441,7 @@ public class Unit {
 
 	void unload(final Location targetLocation) {
 		Preconditions.checkNotNull(targetLocation);
-		Preconditions.checkArgument(availableMoves > 0, "Unit (%s) need for unload at least on action point", this);
+		Preconditions.checkState(availableMoves > 0, "Unit (%s) need for unload at least on action point", this);
 		Preconditions.checkState(isAtCargoSlot(), "This unit (%s) can't be unload, it's not stored.", this);
 		// TODO JKA run "standard" unit location checks
 
