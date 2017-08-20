@@ -9,8 +9,12 @@ import org.microcol.gui.util.ViewUtil;
 
 import com.google.common.base.Preconditions;
 
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
@@ -28,10 +32,13 @@ public class EuropeDialog extends AbstractDialog {
 	private final PanelPortPier panelPortPier;
 
 	private final PanelGoods panelGoods;
+	
+	private final BooleanProperty propertyShiftWasPressed;
 
 	public EuropeDialog(final ViewUtil viewUtil, final Text text, final ImageProvider imageProvider,
 			final GameController gameController, final LocalizationHelper localizationHelper) {
 		super(viewUtil);
+		propertyShiftWasPressed = new SimpleBooleanProperty(false);
 		Preconditions.checkNotNull(imageProvider);
 		Preconditions.checkNotNull(gameController);
 		getDialog().setTitle(text.get("europe.title"));
@@ -42,7 +49,7 @@ public class EuropeDialog extends AbstractDialog {
 				gameController, false);
 		shipsTravelingToEurope = new PanelHighSeas(this, imageProvider, "Ships travelling to Europe", gameController,
 				true);
-		europeDock = new PanelEuropeDock(gameController, imageProvider, this);
+		europeDock = new PanelEuropeDock(viewUtil, text, gameController, imageProvider, this);
 		final VBox panelShips = new VBox();
 		panelShips.getChildren().addAll(shipsTravelingToNewWorld, shipsTravelingToEurope, europeDock);
 
@@ -66,11 +73,24 @@ public class EuropeDialog extends AbstractDialog {
 		final VBox mainPanel = new VBox();
 		mainPanel.getChildren().addAll(label, panelMiddle, panelGoods);
 		init(mainPanel);
-		// TODO call one repaint here
 		getScene().getStylesheets().add("gui/MicroCol.css");
+		/**
+		 * TODO there is a bug, keyboard events are not send during dragging.
+		 */
+		getScene().addEventFilter(KeyEvent.KEY_RELEASED, event -> {
+			if (event.getCode() == KeyCode.SHIFT) {
+				propertyShiftWasPressed.set(false);
+			}
+		});
+		getScene().addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+			System.out.println("wasShiftPressed " + event);
+			if (event.getCode() == KeyCode.SHIFT) {
+				propertyShiftWasPressed.set(true);
+			}
+		});
 	}
-	
-	public void show(){
+
+	public void show() {
 		repaint();
 		getDialog().showAndWait();
 	}
@@ -86,6 +106,10 @@ public class EuropeDialog extends AbstractDialog {
 	public void repaintAfterGoodMoving() {
 		europeDock.repaintCurrectShipsCrates();
 		panelPortPier.repaint();
+	}
+
+	BooleanProperty getPropertyShiftWasPressed() {
+		return propertyShiftWasPressed;
 	}
 
 }

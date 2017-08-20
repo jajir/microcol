@@ -6,6 +6,8 @@ import java.util.Optional;
 import org.microcol.gui.ImageProvider;
 import org.microcol.gui.event.model.GameController;
 import org.microcol.gui.util.ClipboardWritter;
+import org.microcol.gui.util.Text;
+import org.microcol.gui.util.ViewUtil;
 import org.microcol.model.Unit;
 import org.microcol.model.UnitType;
 import org.slf4j.Logger;
@@ -42,12 +44,12 @@ public class PanelEuropeDock extends TitledPanel {
 
 	private final GameController gameController;
 
-	public PanelEuropeDock(final GameController gameController, final ImageProvider imageProvider,
-			final EuropeDialog europeDialog) {
+	public PanelEuropeDock(final ViewUtil viewUtil, final Text text, final GameController gameController,
+			final ImageProvider imageProvider, final EuropeDialog europeDialog) {
 		super("pristav");
 		this.imageProvider = Preconditions.checkNotNull(imageProvider);
 		this.gameController = Preconditions.checkNotNull(gameController);
-		panelCratesController = new PanelCratesController(gameController, imageProvider, europeDialog);
+		panelCratesController = new PanelCratesController(viewUtil, text, gameController, imageProvider, europeDialog);
 
 		panelShips = new HBox();
 		toggleGroup = new ToggleGroup();

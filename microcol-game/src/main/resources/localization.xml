@@ -69,6 +69,10 @@
 	<entry key="preferencesAnimationSpeed.fast">Fast</entry>
 	<entry key="preferencesAnimationSpeed.slow">Slow</entry>
 
+	<entry key="chooseGoodAmount.caption">How many would you like to transfer?</entry>
+	<entry key="chooseGoodAmount.zero">Nothing</entry>
+	<entry key="chooseGoodAmount.everything">Everything</entry>
+	<entry key="chooseGoodAmount.selectedAmount">Selected amount: </entry>
 
 	<entry key="terrain.OCEAN.name">Ocean</entry>
 	<entry key="terrain.OCEAN.description">Wild nice ocean</entry>

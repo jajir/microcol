@@ -2,7 +2,7 @@ package org.microcol.gui;
 
 import org.easymock.EasyMock;
 import org.microcol.gui.colonizopedia.Colonizopedia;
-import org.microcol.gui.europe.EuropeDialog;
+import org.microcol.gui.europe.ChooseGoodAmount;
 import org.microcol.gui.event.AnimationSpeedChangeController;
 import org.microcol.gui.event.VolumeChangeController;
 import org.microcol.gui.event.model.GameController;
@@ -52,7 +52,7 @@ public class DialogTester extends Application {
 			// testDialogFight();
 			// startNewGameDialog();
 			// startAboutDialog();
-			dialogEurope();
+			startChooseGoodAmount();
 			// dialogColonizopedia();
 
 			// dialogSave();
@@ -119,16 +119,15 @@ public class DialogTester extends Application {
 		persistingDialog.loadModel();
 	}
 
-	public final static void dialogEurope() {
-		final GameController gameController = EasyMock.createMock(GameController.class);
-		EasyMock.replay(gameController);
-		new EuropeDialog(viewUtil, text, imageProvider, gameController, localizationHelper);
-	}
-
 	public final static void dialogColonizopedia() {
 		final GameController gameController = EasyMock.createMock(GameController.class);
 		EasyMock.replay(gameController);
 		new Colonizopedia(text, viewUtil, imageProvider, localizationHelper);
+	}
+
+	public final static void startChooseGoodAmount() {
+		ChooseGoodAmount chooseGoodAmount = new ChooseGoodAmount(viewUtil, text, 75);
+		logger.info("User select: " + chooseGoodAmount.getActualValue());
 	}
 
 }

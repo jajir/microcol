@@ -8,7 +8,6 @@ import org.microcol.model.UnitType;
 import com.google.common.base.Preconditions;
 
 import javafx.geometry.Insets;
-import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
@@ -39,11 +38,12 @@ public class PanelHighSeas extends TitledPanel {
 
 	public PanelHighSeas(final EuropeDialog europeDialog, final ImageProvider imageProvider, final String title,
 			final GameController gameController, final boolean isShownShipsTravelingToEurope) {
-		super(title, new Label(title));
+		super(title, null);
 		this.europeDialog = Preconditions.checkNotNull(europeDialog);
 		this.imageProvider = Preconditions.checkNotNull(imageProvider);
 		this.gameController = Preconditions.checkNotNull(gameController);
 		this.isShownShipsTravelingToEurope = isShownShipsTravelingToEurope;
+		minHeightProperty().set(80);
 		shipsContainer = new HBox();
 		getChildren().add(shipsContainer);
 		setOnDragEntered(this::onDragEntered);

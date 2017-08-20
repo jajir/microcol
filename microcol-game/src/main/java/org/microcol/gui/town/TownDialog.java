@@ -61,7 +61,7 @@ public class TownDialog extends AbstractDialog {
 		 * Row 2
 		 */
 		// TODO EuropeDock should be one instance in app
-		europeDock = new PanelEuropeDock(gameController, imageProvider,
+		europeDock = new PanelEuropeDock(viewUtil, text, gameController, imageProvider,
 				new EuropeDialog(viewUtil, text, imageProvider, gameController, new LocalizationHelper(text)));
 
 		/**

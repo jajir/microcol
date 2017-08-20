@@ -4,6 +4,8 @@ import org.microcol.gui.ImageProvider;
 import org.microcol.gui.event.model.GameController;
 import org.microcol.gui.util.ClipboardReader;
 import org.microcol.gui.util.ClipboardWritter;
+import org.microcol.gui.util.Text;
+import org.microcol.gui.util.ViewUtil;
 import org.microcol.model.CargoSlot;
 import org.microcol.model.GoodAmount;
 import org.microcol.model.Unit;
@@ -14,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import com.google.common.base.Preconditions;
 
 import javafx.geometry.Insets;
+import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
@@ -38,6 +41,12 @@ public class PanelCrate extends StackPane {
 
 	private final ImageView cargoImage;
 
+	private final Label labelAmount;
+
+	private final ViewUtil viewUtil;
+
+	private final Text text;
+
 	private Background background;
 
 	private final GameController gameController;
@@ -48,11 +57,13 @@ public class PanelCrate extends StackPane {
 
 	private final EuropeDialog europeDialog;
 
-	PanelCrate(final GameController gameController, final ImageProvider imageProvider,
-			final EuropeDialog europeDialog) {
+	PanelCrate(final ViewUtil viewUtil, final Text text, final GameController gameController,
+			final ImageProvider imageProvider, final EuropeDialog europeDialog) {
 		this.imageProvider = Preconditions.checkNotNull(imageProvider);
 		this.gameController = Preconditions.checkNotNull(gameController);
 		this.europeDialog = Preconditions.checkNotNull(europeDialog);
+		this.viewUtil = Preconditions.checkNotNull(viewUtil);
+		this.text = Preconditions.checkNotNull(text);
 
 		crateImage = new ImageView();
 		crateImage.getStyleClass().add("crate");
@@ -66,13 +77,15 @@ public class PanelCrate extends StackPane {
 		cargoImage.setFitHeight(35);
 		cargoImage.setPreserveRatio(true);
 
+		labelAmount = new Label(" ");
+
 		setOnDragDetected(this::onDragDetected);
 		setOnDragEntered(this::onDragEntered);
 		setOnDragExited(this::onDragExited);
 		setOnDragOver(this::onDragOver);
 		setOnDragDropped(this::onDragDropped);
 
-		this.getChildren().addAll(crateImage);
+		this.getChildren().addAll(crateImage, labelAmount);
 		getStyleClass().add("cratePanel");
 	}
 
@@ -99,6 +112,8 @@ public class PanelCrate extends StackPane {
 		} else {
 			if (cargoSlot.isLoadedGood()) {
 				final GoodAmount goodAmount = cargoSlot.getGoods().get();
+				// TODO it should appear below crate image
+				labelAmount.setText(String.valueOf(goodAmount.getAmount()));
 				cargoImage.setImage(imageProvider.getGoodTypeImage(goodAmount.getGoodType()));
 			} else if (cargoSlot.isLoadedUnit()) {
 				final Unit cargoUnit = cargoSlot.getUnit().get();
@@ -134,14 +149,20 @@ public class PanelCrate extends StackPane {
 	private final void onDragDropped(DragEvent event) {
 		logger.debug("Object was dropped on ship cargo slot.");
 		final Dragboard db = event.getDragboard();
-
 		ClipboardReader.make(gameController.getModel(), db).filterUnit(unit -> !UnitType.isShip(unit.getType()))
 				.tryReadGood((goodAmount, transferFrom) -> {
 					Preconditions.checkArgument(transferFrom.isPresent(), "Good origin is not known.");
+					GoodAmount tmp = goodAmount;
+					System.out.println("wasShiftPressed " + europeDialog.getPropertyShiftWasPressed().get());
+					if (europeDialog.getPropertyShiftWasPressed().get()) {
+						ChooseGoodAmount chooseGoodAmount = new ChooseGoodAmount(viewUtil, text,
+								goodAmount.getAmount());
+						tmp = new GoodAmount(goodAmount.getGoodType(), chooseGoodAmount.getActualValue());
+					}
 					if (transferFrom.get() instanceof ClipboardReader.TransferFromEuropeShop) {
-						cargoSlot.buyAndStore(goodAmount);
+						cargoSlot.buyAndStore(tmp);
 					} else if (transferFrom.get() instanceof ClipboardReader.TransferFromCargoSlot) {
-						cargoSlot.storeFromCargoSlot(goodAmount,
+						cargoSlot.storeFromCargoSlot(tmp,
 								((ClipboardReader.TransferFromCargoSlot) transferFrom.get()).getCargoSlot());
 					} else {
 						throw new IllegalArgumentException("Unsupported source transfer '" + transferFrom + "'");

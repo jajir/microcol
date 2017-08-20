@@ -2,6 +2,8 @@ package org.microcol.gui.europe;
 
 import org.microcol.gui.ImageProvider;
 import org.microcol.gui.event.model.GameController;
+import org.microcol.gui.util.Text;
+import org.microcol.gui.util.ViewUtil;
 import org.microcol.model.CargoSlot;
 import org.microcol.model.Unit;
 
@@ -13,10 +15,10 @@ public class PanelCratesController {
 	private final PanelCratesView panelCratesView;
 
 	@Inject
-	PanelCratesController(final GameController gameController, final ImageProvider imageProvider,
-			final EuropeDialog europeDialog) {
-		this.panelCratesView = new PanelCratesView(gameController, Preconditions.checkNotNull(imageProvider),
-				europeDialog);
+	PanelCratesController(final ViewUtil viewUtil, final Text text, final GameController gameController,
+			final ImageProvider imageProvider, final EuropeDialog europeDialog) {
+		this.panelCratesView = new PanelCratesView(viewUtil, text, gameController,
+				Preconditions.checkNotNull(imageProvider), europeDialog);
 	}
 
 	PanelCratesView getPanelCratesView() {

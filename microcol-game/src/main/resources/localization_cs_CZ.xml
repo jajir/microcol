@@ -68,6 +68,11 @@
 	<entry key="preferencesAnimationSpeed.fast">Vysoká</entry>
 	<entry key="preferencesAnimationSpeed.slow">Nízká</entry>
 
+	<entry key="chooseGoodAmount.caption">Kolik chcete převést?</entry>
+	<entry key="chooseGoodAmount.zero">Nic</entry>
+	<entry key="chooseGoodAmount.everything">Všechno</entry>
+	<entry key="chooseGoodAmount.selectedAmount">Vybráno: </entry>
+
 	<entry key="terrain.OCEAN.name">Oceán</entry>
 	<entry key="terrain.OCEAN.description">Nekonečný studený oceán</entry>
 	<entry key="terrain.CONTINENT.name">Kontinent</entry>

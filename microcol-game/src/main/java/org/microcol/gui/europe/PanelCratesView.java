@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.microcol.gui.ImageProvider;
 import org.microcol.gui.event.model.GameController;
+import org.microcol.gui.util.Text;
+import org.microcol.gui.util.ViewUtil;
 
 import javafx.scene.layout.HBox;
 
@@ -15,10 +17,10 @@ public class PanelCratesView extends HBox {
 	// XXX could be used getChildrem?
 	private final List<PanelCrate> crates = new ArrayList<>();
 
-	PanelCratesView(final GameController gameController, final ImageProvider imageProvider,
-			final EuropeDialog europeDialog) {
+	PanelCratesView(final ViewUtil viewUtil, final Text text, final GameController gameController,
+			final ImageProvider imageProvider, final EuropeDialog europeDialog) {
 		for (int i = 0; i < MAX_NUMBER_OF_CRATES; i++) {
-			PanelCrate paneCrate = new PanelCrate(gameController, imageProvider, europeDialog);
+			PanelCrate paneCrate = new PanelCrate(viewUtil, text, gameController, imageProvider, europeDialog);
 			crates.add(paneCrate);
 			getChildren().add(paneCrate);
 		}

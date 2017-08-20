@@ -14,7 +14,7 @@ public class TitledPanel extends StackPane {
 	}
 
 	public TitledPanel(final String titleString, final Node content) {
-		Label title = new Label(" " + titleString + " ");
+		final Label title = new Label(" " + titleString + " ");
 		title.getStyleClass().add("bordered-titled-title");
 		StackPane.setAlignment(title, Pos.TOP_CENTER);
 
