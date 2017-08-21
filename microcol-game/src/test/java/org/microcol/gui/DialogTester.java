@@ -2,6 +2,7 @@ package org.microcol.gui;
 
 import org.easymock.EasyMock;
 import org.microcol.gui.colonizopedia.Colonizopedia;
+import org.microcol.gui.europe.BuyUnitsDialog;
 import org.microcol.gui.europe.ChooseGoodAmount;
 import org.microcol.gui.event.AnimationSpeedChangeController;
 import org.microcol.gui.event.VolumeChangeController;
@@ -52,7 +53,8 @@ public class DialogTester extends Application {
 			// testDialogFight();
 			// startNewGameDialog();
 			// startAboutDialog();
-			startChooseGoodAmount();
+//			startChooseGoodAmount();
+			startBuyUnitDialog();
 			// dialogColonizopedia();
 
 			// dialogSave();
@@ -128,6 +130,11 @@ public class DialogTester extends Application {
 	public final static void startChooseGoodAmount() {
 		ChooseGoodAmount chooseGoodAmount = new ChooseGoodAmount(viewUtil, text, 75);
 		logger.info("User select: " + chooseGoodAmount.getActualValue());
+	}
+
+	public final static void startBuyUnitDialog() {
+		final GameController gameController = EasyMock.createMock(GameController.class);
+		BuyUnitsDialog chooseGoodAmount = new BuyUnitsDialog(viewUtil,text,imageProvider, gameController, localizationHelper);
 	}
 
 }

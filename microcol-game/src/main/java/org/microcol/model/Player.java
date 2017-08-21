@@ -185,4 +185,15 @@ public final class Player {
 		}
 		setGold(getGold() - price);
 	}
+	
+	public void buy(final UnitType unitType){
+		int price = unitType.getEuropePrice();
+		if (getGold() - price < 0) {
+			throw new NotEnoughtGoldException(
+					String.format("You can't buy this item. You need %s and you have %s", price, getGold()));
+		}
+		//TODO buy it and place to Europe pier or dock. 
+		setGold(getGold() - price);
+	}
+	
 }

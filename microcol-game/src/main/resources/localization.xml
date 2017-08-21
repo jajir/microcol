@@ -88,6 +88,9 @@
 	<entry key="unit.COLONIST.name">Free Colonist</entry>
 
 	<entry key="europeDialog.caption">European Port</entry>
+	
+	<entry key="buyUnitDialog.title">Buy unit</entry>
+	<entry key="buyUnitDialog.buttonBuyUnit">Buy</entry>
 
 	<entry key="newGameDialog.title">New game</entry>
 	<entry key="newGameDialog.selectMap">Select map</entry>
