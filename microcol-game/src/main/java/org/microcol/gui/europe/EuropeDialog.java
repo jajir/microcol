@@ -44,7 +44,7 @@ public class EuropeDialog extends AbstractDialog {
 		getDialog().setTitle(text.get("europe.title"));
 
 		final Label label = new Label(text.get("europe.title"));
-//TODO localize it
+		// TODO localize it
 		shipsTravelingToNewWorld = new PanelHighSeas(this, imageProvider, "Ships travelling to New World",
 				gameController, false);
 		shipsTravelingToEurope = new PanelHighSeas(this, imageProvider, "Ships travelling to Europe", gameController,
@@ -56,6 +56,8 @@ public class EuropeDialog extends AbstractDialog {
 		panelPortPier = new PanelPortPier(gameController, this, "Pier", imageProvider, localizationHelper);
 
 		final Button recruiteButton = new Button("Recruite");
+		recruiteButton.setOnAction(
+				event -> new RecruiteUnitsDialog(viewUtil, text, imageProvider, gameController, localizationHelper));
 		final Button buyButton = new Button("Buy");
 		buyButton.setOnAction(
 				event -> new BuyUnitsDialog(viewUtil, text, imageProvider, gameController, localizationHelper));

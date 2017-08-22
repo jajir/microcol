@@ -90,7 +90,10 @@
 	<entry key="europeDialog.caption">European Port</entry>
 	
 	<entry key="buyUnitDialog.title">Buy unit</entry>
-	<entry key="buyUnitDialog.buttonBuyUnit">Buy</entry>
+	<entry key="buyUnitDialog.buttonBuyUnit">Buy for</entry>
+
+	<entry key="recruitUnitDialog.title">Recruite unit</entry>
+	<entry key="recruitUnitDialog.buttonRecruiteUnit">Pay</entry>
 
 	<entry key="newGameDialog.title">New game</entry>
 	<entry key="newGameDialog.selectMap">Select map</entry>

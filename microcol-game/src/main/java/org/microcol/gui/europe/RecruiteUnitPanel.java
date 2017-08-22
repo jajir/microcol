@@ -14,14 +14,14 @@ import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 
-public class BuyUnitPanel extends VBox {
+public class RecruiteUnitPanel extends VBox {
 
-	public BuyUnitPanel(final UnitType unitType, final ViewUtil viewUtil, final ImageProvider imageProvider,
+	public RecruiteUnitPanel(final UnitType unitType, final ViewUtil viewUtil, final ImageProvider imageProvider,
 			final GameController gameController, final LocalizationHelper localizationHelper, final Text text,
-			final BuyUnitsDialog buyUnitsDialog) {
+			final RecruiteUnitsDialog buyUnitsDialog) {
 		final ImageView image = new ImageView(imageProvider.getUnitImage(unitType));
 		final Label labelName = new Label(localizationHelper.getUnitName(unitType));
-		final Button buttonBuy = new Button(text.get("buyUnitDialog.buttonBuyUnit") + " " + unitType.getEuropePrice());
+		final Button buttonBuy = new Button(text.get("recruitUnitDialog.buttonRecruiteUnit") + " " + unitType.getEuropePrice());
 		buttonBuy.setOnAction(event -> {
 			try {
 				gameController.getModel().getCurrentPlayer().buy(unitType);

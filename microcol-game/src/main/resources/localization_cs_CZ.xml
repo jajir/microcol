@@ -89,7 +89,10 @@
 	<entry key="europeDialog.caption">Evropský přístav</entry>
 	
 	<entry key="buyUnitDialog.title">Koupit jednotku</entry>
-	<entry key="buyUnitDialog.buttonBuyUnit">Koupit</entry>
+	<entry key="buyUnitDialog.buttonBuyUnit">Koupit za</entry>
+
+	<entry key="recruitUnitDialog.title">Přispět na cestu</entry>
+	<entry key="recruitUnitDialog.buttonRecruiteUnit">Přispět</entry>
 
 	<entry key="newGameDialog.title">Nová hra</entry>
 	<entry key="newGameDialog.selectMap">Vyberte mapu</entry>
