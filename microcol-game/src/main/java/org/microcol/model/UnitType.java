@@ -169,6 +169,27 @@ public class UnitType {
 		Preconditions.checkNotNull(terrain);
 		return moveableTerrains.contains(terrain);
 	}
+	
+	@Override
+	public int hashCode() {
+		return name.hashCode();
+	}
+	
+
+	@Override
+	public boolean equals(final Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (obj instanceof UnitType) {
+			final UnitType other = (UnitType) obj;
+			return name.equals(other.name);
+		}
+		return false;
+	}
 
 	@Override
 	public String toString() {

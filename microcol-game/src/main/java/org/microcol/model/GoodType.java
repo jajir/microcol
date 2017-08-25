@@ -2,6 +2,7 @@ package org.microcol.model;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
@@ -105,11 +106,12 @@ public class GoodType {
 			.build();
 
 	
-	public static List<GoodType> getGoodTypes() {
-		return ImmutableList.<GoodType>of(CORN, SUGAR, TABACCO, COTTON, FUR, LUMBER, ORE, SILVER, HORSE, RUM, CIGARS,
-				SILK, COAT, GOODS, TOOLS, MUSKET, HAMMERS, CROSS, BELL);
-	}
+	public final static List<GoodType> GOOD_TYPES = ImmutableList.<GoodType>of(CORN, SUGAR, TABACCO, COTTON, FUR, LUMBER, ORE, SILVER, HORSE, RUM, CIGARS,
+			SILK, COAT, GOODS, TOOLS, MUSKET, HAMMERS, CROSS, BELL);
 	
+	public final static List<GoodType> BUYABLE_GOOD_TYPES = GOOD_TYPES.stream()
+			.filter(goodType -> goodType.isCanBeBought()).collect(Collectors.toList());
+			
 	private static class GoodTypeBuilder {
 
 		private String name;
@@ -151,7 +153,7 @@ public class GoodType {
 	}
 	
 	public static GoodType valueOf(final String strName) {
-		final Optional<GoodType> oGoodType = getGoodTypes().stream().filter(goodType -> goodType.name().equals(strName))
+		final Optional<GoodType> oGoodType = GOOD_TYPES.stream().filter(goodType -> goodType.name().equals(strName))
 				.findFirst();
 		if (oGoodType.isPresent()) {
 			return oGoodType.get();
@@ -160,6 +162,26 @@ public class GoodType {
 		}
 	}
 
+	@Override
+	public int hashCode() {
+		return name.hashCode();
+	}
+	
+	@Override
+	public boolean equals(final Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (obj instanceof GoodType) {
+			final GoodType other = (GoodType) obj;
+			return name.equals(other.name);
+		}
+		return false;
+	}
+	
 	public boolean isCanBeBought() {
 		return canBeBought;
 	}

@@ -28,7 +28,7 @@ public class PanelTownGoods extends TitledPanel {
 	public void setEurope(final Europe europe) {
 		Preconditions.checkNotNull(europe);
 		hBox.getChildren().clear();
-		GoodType.getGoodTypes().forEach(goodType -> {
+		GoodType.BUYABLE_GOOD_TYPES.forEach(goodType -> {
 			hBox.getChildren().add(
 					new PanelTownGood(imageProvider.getGoodTypeImage(goodType), europe.getGoodTradeForType(goodType)));
 		});

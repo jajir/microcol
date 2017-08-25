@@ -51,7 +51,7 @@ public class PanelGoods extends TitledPanel {
 	public void repaint() {
 		final Europe europe = gameController.getModel().getEurope();
 		hBox.getChildren().clear();
-		GoodType.getGoodTypes().forEach(goodType -> {
+		GoodType.BUYABLE_GOOD_TYPES.forEach(goodType -> {
 			hBox.getChildren()
 					.add(new PanelGood(imageProvider.getGoodTypeImage(goodType), europe.getGoodTradeForType(goodType)));
 		});
