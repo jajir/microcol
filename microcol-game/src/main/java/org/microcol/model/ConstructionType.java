@@ -1,9 +1,11 @@
 package org.microcol.model;
 
+import java.util.List;
 import java.util.Optional;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
+import com.google.common.collect.ImmutableList;
 
 public class ConstructionType {
 	 
@@ -387,6 +389,53 @@ public class ConstructionType {
 	 		.setRequiredTownPopulation(0)
 	 		.build();
 
+	public static List<ConstructionType> ALL = ImmutableList.of(
+			TOWN_HALL,
+			LUMBER_MILL,
+			CARPENTERS_SHOP,
+			IRON_WORKS,
+			BLACKSMITHS_SHOP,
+			BLACKSMITHS_HOUSE,
+			FORTRESS,
+			FORT,
+			STOCKADE,
+			CIGAR_FACTORY,
+			TOBACCONISTS_SHOP,
+			TOBACCONISTS_HOUSE,
+			TEXTILE_MILL,
+			WEAVERS_SHOP,
+			WEAVERS_HOUSE,
+			RUM_FACTORY,
+			RUM_DISTILLERY,
+			RUM_DISTILLERS_HOUSE,
+			FUR_FACTORY,
+			FUR_TRADING_POST,
+			FUR_TRADERS_HOUSE,
+			ARSENAL,
+			MAGAZINE,
+			ARMORY,
+			SHIPYARD,
+			DRYDOCK,
+			DOCK,
+			UNIVERSITY,
+			COLLEGE,
+			SCHOOLHOUSE,
+			WAREHOUSE_EXPANSION,
+			WAREHOUSE,
+			STABLES,
+			CATHEDRAL,
+			CHURCH,
+			NEWSPAPER,
+			PRINTING_PRESS,
+			CUSTOM_HOUSE);
+	
+	/**
+	 * List of construction types that are in all newly builded towns.
+	 */
+	public final static List<ConstructionType> NEW_TOWN_CONSTRUCTIONS = ALL.stream()
+			.filter(constructionType -> constructionType.isBuildFromFounding())
+			.collect(ImmutableList.toImmutableList());
+	
 	private static class ConstructionTypeBuilder {
 
 		private String name;
@@ -468,7 +517,6 @@ public class ConstructionType {
 		return name.hashCode();
 	}
 	
-
 	@Override
 	public boolean equals(final Object obj) {
 		if (this == obj) {
@@ -482,6 +530,17 @@ public class ConstructionType {
 			return name.equals(other.name);
 		}
 		return false;
+	}
+
+	/**
+	 * Say if construction type is in town when is newly build.
+	 *
+	 * @return Return <code>true</code> when building type is in town when it's
+	 *         founded. When construction type have to be builded than return
+	 *         <code>false</code>.
+	 */
+	public boolean isBuildFromFounding(){
+		return buildCostHammers == 0 && buildCostTools == 0;
 	}
 	
 	@Override

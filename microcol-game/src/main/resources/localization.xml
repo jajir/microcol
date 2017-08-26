@@ -129,4 +129,43 @@
 	
 	<entry key="colonizopedia.title">Colonizopedia</entry>
 	
+	<entry key="construction.TOWN_HALL.name">Town Hall</entry>
+	<entry key="construction.LUMBER_MILL.name">Lumber Mill</entry>
+	<entry key="construction.CARPENTERS_SHOP.name">Carpenter’s Shop</entry>
+	<entry key="construction.IRON_WORKS.name">Iron Works</entry>
+	<entry key="construction.BLACKSMITHS_SHOP.name">Blacksmith’s Shop</entry>
+	<entry key="construction.BLACKSMITHS_HOUSE.name">Blacksmith’s House</entry>
+	<entry key="construction.FORTRESS.name">Fortress</entry>
+	<entry key="construction.FORT.name">Fort</entry>
+	<entry key="construction.STOCKADE.name">Stockade</entry>
+	<entry key="construction.CIGAR_FACTORY.name">Cigar Factory</entry>
+	<entry key="construction.TOBACCONISTS_SHOP.name">Tobacconist’s Shop</entry>
+	<entry key="construction.TOBACCONISTS_HOUSE.name">Tobacconist’s House</entry>
+	<entry key="construction.TEXTILE_MILL.name">Textile Mill</entry>
+	<entry key="construction.WEAVERS_SHOP.name">Weaver’s Shop</entry>
+	<entry key="construction.WEAVERS_HOUSE.name">Weaver’s House</entry>
+	<entry key="construction.RUM_FACTORY.name">Rum Factory</entry>
+	<entry key="construction.RUM_DISTILLERY.name">Rum Distillery</entry>
+	<entry key="construction.RUM_DISTILLERS_HOUSE.name">Rum Distiller’s House</entry>
+	<entry key="construction.FUR_FACTORY.name">Fur Factory</entry>
+	<entry key="construction.FUR_TRADING_POST.name">Fur Trading Post</entry>
+	<entry key="construction.FUR_TRADERS_HOUSE.name">Fur Trader’s House</entry>
+	<entry key="construction.ARSENAL.name">Arsenal</entry>
+	<entry key="construction.MAGAZINE.name">Magazine</entry>
+	<entry key="construction.ARMORY.name">Armory</entry>
+	<entry key="construction.SHIPYARD.name">Shipyard</entry>
+	<entry key="construction.DRYDOCK.name">Drydock</entry>
+	<entry key="construction.DOCK.name">Dock</entry>
+	<entry key="construction.UNIVERSITY.name">University</entry>
+	<entry key="construction.COLLEGE.name">College</entry>
+	<entry key="construction.SCHOOLHOUSE.name">Schoolhouse</entry>
+	<entry key="construction.WAREHOUSE_EXPANSION.name">Warehouse Expansion</entry>
+	<entry key="construction.WAREHOUSE.name">Warehouse</entry>
+	<entry key="construction.STABLES.name">Stables</entry>
+	<entry key="construction.CATHEDRAL.name">Cathedral</entry>
+	<entry key="construction.CHURCH.name">Church</entry>
+	<entry key="construction.NEWSPAPER.name">Newspaper</entry>
+	<entry key="construction.PRINTING_PRESS.name">Printing Press</entry>
+	<entry key="construction.CUSTOM_HOUSE.name">Custom House</entry>
+		
 </properties>

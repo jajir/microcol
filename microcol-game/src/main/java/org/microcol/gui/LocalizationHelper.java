@@ -1,6 +1,7 @@
 package org.microcol.gui;
 
 import org.microcol.gui.util.Text;
+import org.microcol.model.ConstructionType;
 import org.microcol.model.Terrain;
 import org.microcol.model.UnitType;
 
@@ -18,6 +19,9 @@ public class LocalizationHelper {
 	private static final String UNIT_PREFIX = "unit.";
 	private static final String UNIT_SUFFIX_NAME = ".name";
 
+	private static final String CONSTRUCTION_PREFIX = "construction.";
+	private static final String CONSTRUCTION_SUFFIX_NAME = ".name";
+
 	/**
 	 * Localization class.
 	 */
@@ -34,6 +38,10 @@ public class LocalizationHelper {
 
 	public String getUnitName(final UnitType unitType) {
 		return text.get(UNIT_PREFIX + unitType.name() + UNIT_SUFFIX_NAME);
+	}
+
+	public String getConstructionTypeName(final ConstructionType constructionType) {
+		return text.get(CONSTRUCTION_PREFIX + constructionType.name() + CONSTRUCTION_SUFFIX_NAME);
 	}
 
 }

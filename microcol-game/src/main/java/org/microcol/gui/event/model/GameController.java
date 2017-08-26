@@ -78,6 +78,7 @@ public class GameController implements Localized {
 				.setGold(1108)
 				.addTown("brunswick")
 					.setLocation(Location.of(5, 4))
+					.setDefaultConstructions(true)
 					.make()
 				.make()
 			.addUnit(UnitType.GALLEON, "Dutch", Location.of(5, 3))

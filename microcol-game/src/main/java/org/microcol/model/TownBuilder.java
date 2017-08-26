@@ -12,6 +12,8 @@ public class TownBuilder {
 	private final PlayerBuilder playerBuilder;
 	
 	private Location location;
+	
+	private boolean defaultCostructions = false;
 
 	public TownBuilder(final String name, final PlayerBuilder playerBuilder) {
 		this.name = Preconditions.checkNotNull(name);
@@ -26,6 +28,11 @@ public class TownBuilder {
 		this.location = location;
 		return this;
 	}
+	
+	public TownBuilder setDefaultConstructions(boolean defaultCostructions) {
+		this.defaultCostructions = defaultCostructions;
+		return this;
+	}
 
 	String getName() {
 		return name;
@@ -33,6 +40,10 @@ public class TownBuilder {
 
 	Location getLocation() {
 		return location;
+	}
+
+	boolean isDefaultCostructions() {
+		return defaultCostructions;
 	}
 
 }

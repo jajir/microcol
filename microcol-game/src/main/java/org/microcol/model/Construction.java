@@ -17,7 +17,7 @@ public class Construction {
 		constructions = Lists.newArrayList();
 	}
 
-	ConstructionType getType() {
+	public ConstructionType getType() {
 		return type;
 	}
 	

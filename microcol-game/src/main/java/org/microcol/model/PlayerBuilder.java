@@ -30,7 +30,14 @@ public class PlayerBuilder {
 		final Player player = new Player(name, isComputerPlayer, gold);
 		modelBuilder.getPlayers().add(player);
 		townBuilders.forEach(townBuilder->{
-			final Town town = new Town(townBuilder.getName(), player, townBuilder.getLocation(), Lists.newArrayList());
+			final List<Construction> constructions = Lists.newArrayList();;
+			if(townBuilder.isDefaultCostructions()){
+				ConstructionType.NEW_TOWN_CONSTRUCTIONS.forEach(constructionType -> {
+					final Construction c = new Construction(constructionType);
+					constructions.add(c);
+				});
+			}
+			final Town town = new Town(townBuilder.getName(), player, townBuilder.getLocation(), constructions);
 			modelBuilder.getTowns().add(town);
 		});
 		return modelBuilder;

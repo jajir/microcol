@@ -106,4 +106,8 @@ public class Town {
 	public String toString() {
 		return MoreObjects.toStringHelper(Town.class).add("name", name).add("location", location).toString();
 	}
+
+	public List<Construction> getConstructions() {
+		return constructions;
+	}
 }

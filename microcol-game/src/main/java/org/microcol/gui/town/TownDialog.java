@@ -15,6 +15,7 @@ import com.google.inject.Inject;
 
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 /**
@@ -36,7 +37,7 @@ public class TownDialog extends AbstractDialog {
 
 	@Inject
 	public TownDialog(final ViewUtil viewUtil, final Text text, final ImageProvider imageProvider,
-			final GameController gameController,
+			final GameController gameController, final LocalizationHelper localizationHelper,
 			final PanelTownLayout panelTownLayout) {
 		super(viewUtil);
 		Preconditions.checkNotNull(imageProvider);
@@ -44,22 +45,32 @@ public class TownDialog extends AbstractDialog {
 		getDialog().setTitle(text.get("europeDialog.caption"));
 
 		/**
-		 * Row 1
+		 * Row 0
 		 */
 		townName = new Label("Colony: ");
+
 		/**
 		 * Row 1
 		 */
 		colonyLayout = Preconditions.checkNotNull(panelTownLayout);
 
-		colonyStructures = new PanelTownStructures();
+		colonyStructures = new PanelTownStructures(localizationHelper);
+
+		final HBox mapAndBuildings = new HBox();
+		mapAndBuildings.getChildren().addAll(colonyStructures, colonyLayout);
 
 		/**
 		 * Row 2
 		 */
-		// TODO EuropeDock should be one instance in app
+		final PanelProductionSummary panelProductionSummary = new PanelProductionSummary();
+
 		europeDock = new PanelEuropeDock(viewUtil, text, gameController, imageProvider,
 				new EuropeDialog(viewUtil, text, imageProvider, gameController, new LocalizationHelper(text)));
+
+		final PanelOutsideColony panelOutsideColony = new PanelOutsideColony();
+
+		final HBox managementRow = new HBox();
+		managementRow.getChildren().addAll(panelProductionSummary, europeDock, panelOutsideColony);
 
 		/**
 		 * Good row - 3
@@ -67,23 +78,26 @@ public class TownDialog extends AbstractDialog {
 		goods = new PanelTownGoods(imageProvider);
 
 		/**
-		 * Last row 10
+		 * Last row 4
 		 */
 		final Button buttonOk = new Button(text.get("dialog.ok"));
 		buttonOk.setOnAction(e -> {
 			getDialog().close();
 		});
 		buttonOk.requestFocus();
+
 		final VBox mainPanel = new VBox();
-		mainPanel.getChildren().addAll(townName, colonyLayout, colonyStructures, europeDock, goods, buttonOk);
+		mainPanel.getChildren().addAll(townName, mapAndBuildings, managementRow, goods, buttonOk);
 		init(mainPanel);
 		getScene().getStylesheets().add("gui/MicroCol.css");
 	}
 
 	public void showTown(final Town town) {
+		System.out.println("Kreslim mesto: " + town);
 		townName.setText("Colony: " + town.getName());
 		colonyLayout.setTown(town);
 		goods.setEurope(gameController.getModel().getEurope());
+		colonyStructures.repaint(town);
 		// pierShips.setPort(null);
 		getDialog().showAndWait();
 	}
