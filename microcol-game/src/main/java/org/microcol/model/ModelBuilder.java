@@ -49,16 +49,9 @@ public class ModelBuilder {
 
 		return this;
 	}
-
-	public ModelBuilder addPlayer(final String name, final boolean computer, final int initialGold) {
-		players.add(new Player(name, computer, initialGold));
-
-		return this;
-	}
-
-	public ModelBuilder addTown(final String name, final String ownerName, final Location location) {
-		towns.add(new Town(name, getPlayer(ownerName), location));
-		return this;
+	
+	public PlayerBuilder addPlayer(final String name){
+		return new PlayerBuilder(this, name);
 	}
 
 	public ModelBuilder addUnit(final UnitType type, final String ownerName, final Location location) {
@@ -79,5 +72,13 @@ public class ModelBuilder {
 
 	public UnitBuilder makeUnitBuilder() {
 		return new UnitBuilder(this);
+	}
+
+	List<Player> getPlayers() {
+		return players;
+	}
+
+	List<Town> getTowns() {
+		return towns;
 	}
 }

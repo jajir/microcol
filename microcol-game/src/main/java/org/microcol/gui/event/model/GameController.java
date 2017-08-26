@@ -62,53 +62,60 @@ public class GameController implements Localized {
 	}
 
 	private Model buidModel() {
-		// return buildTinyModel();
 		return buildComplexModel();
-		// return buildMediumModel();
-		// return buildHugeModel();
 	}
 
-	Model buildComplexModel() {
+	private Model buildComplexModel() {
 		ModelBuilder builder = new ModelBuilder();
-		builder.setCalendar(1570, 1800).setMap("/maps/test-map-simple-test.txt")
+		builder.setCalendar(1570, 1800)
+			.setMap("/maps/test-map-simple-test.txt")
 
-				/**
-				 * Human player
-				 */
-				.addPlayer("Dutch", false, 1108).addUnit(UnitType.GALLEON, "Dutch", Location.of(5, 3))
-				.addUnit(UnitType.FRIGATE, "Dutch", Location.of(4, 4))
-				.addUnit(UnitType.COLONIST, "Dutch", Location.of(6, 4))
+			/**
+			 * Human player
+			 */
+			.addPlayer("Dutch")
+				.setComputerPlayer(false)
+				.setGold(1108)
+				.addTown("brunswick")
+					.setLocation(Location.of(5, 4))
+					.make()
+				.make()
+			.addUnit(UnitType.GALLEON, "Dutch", Location.of(5, 3))
+			.addUnit(UnitType.FRIGATE, "Dutch", Location.of(4, 4))
+			.addUnit(UnitType.COLONIST, "Dutch", Location.of(6, 4))
 
-				.addTown("brunswick", "Dutch", Location.of(5, 4))
+			.addUnit(builder.makeUnitBuilder().setType(UnitType.FRIGATE).setPlayer("Dutch")
+					.setShipIncomingToEurope(4).build())
+			.addUnit(builder.makeUnitBuilder().setType(UnitType.GALLEON).setPlayer("Dutch")
+					.setShipIncomingToColonies(2).build())
 
-				.addUnit(builder.makeUnitBuilder().setType(UnitType.FRIGATE).setPlayer("Dutch")
-						.setShipIncomingToEurope(4).build())
-				.addUnit(builder.makeUnitBuilder().setType(UnitType.GALLEON).setPlayer("Dutch")
-						.setShipIncomingToColonies(2).build())
+			/**
+			 * Opponent player2
+			 */
+			.addPlayer("Player2")
+				.setComputerPlayer(true)
+				.setGold(100)
+				.make()
+			.addUnit(UnitType.GALLEON, "Player2", Location.of(8, 8))
+			.addUnit(UnitType.FRIGATE, "Player2", Location.of(8, 10))
+			.addUnit(UnitType.FRIGATE, "Player2", Location.of(15, 10))
+			.addUnit(UnitType.COLONIST, "Player2", Location.of(8, 4))
 
-				/**
-				 * Opponent player2
-				 */
-				.addPlayer("Player2", true, 100).addUnit(UnitType.GALLEON, "Player2", Location.of(8, 8))
-				.addUnit(UnitType.FRIGATE, "Player2", Location.of(8, 10))
-				.addUnit(UnitType.FRIGATE, "Player2", Location.of(15, 10))
-				.addUnit(UnitType.COLONIST, "Player2", Location.of(8, 4))
-
-				/**
-				 * Europe port
-				 */
-				.addUnit(builder.makeUnitBuilder().setType(UnitType.COLONIST).setPlayer("Dutch")
-						.setUnitToEuropePortPier().build())
-				.addUnit(builder.makeUnitBuilder().setType(UnitType.COLONIST).setPlayer("Dutch")
-						.setUnitToEuropePortPier().build())
-				.getEuropeBuilder()
-				.addShipToPort(builder.makeUnitBuilder().setType(UnitType.GALLEON).setLocation(Location.of(2, 2))
-						.setPlayer("Dutch").addCargoGood(GoodType.COTTON, 100)
-						.addCargoUnit(UnitType.COLONIST, true, false, false).build())
-				.addShipToPort(builder.makeUnitBuilder().setType(UnitType.FRIGATE).setLocation(Location.of(2, 2))
-						.setPlayer("Dutch").addCargoGood(GoodType.CIGARS, 100).addCargoGood(GoodType.RUM, 100)
-						.addCargoGood(GoodType.SILVER, 100).build())
-				.build();
+			/**
+			 * Europe port
+			 */
+			.addUnit(builder.makeUnitBuilder().setType(UnitType.COLONIST).setPlayer("Dutch")
+					.setUnitToEuropePortPier().build())
+			.addUnit(builder.makeUnitBuilder().setType(UnitType.COLONIST).setPlayer("Dutch")
+					.setUnitToEuropePortPier().build())
+			.getEuropeBuilder()
+			.addShipToPort(builder.makeUnitBuilder().setType(UnitType.GALLEON).setLocation(Location.of(2, 2))
+					.setPlayer("Dutch").addCargoGood(GoodType.COTTON, 100)
+					.addCargoUnit(UnitType.COLONIST, true, false, false).build())
+			.addShipToPort(builder.makeUnitBuilder().setType(UnitType.FRIGATE).setLocation(Location.of(2, 2))
+					.setPlayer("Dutch").addCargoGood(GoodType.CIGARS, 100).addCargoGood(GoodType.RUM, 100)
+					.addCargoGood(GoodType.SILVER, 100).build())
+			.build();
 
 		return builder.build();
 	}

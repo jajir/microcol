@@ -8,7 +8,7 @@ import org.microcol.gui.panelview.GamePanelView;
 import org.microcol.gui.panelview.PaintService;
 import org.microcol.model.Terrain;
 import org.microcol.model.Town;
-import org.microcol.model.TownSection;
+import org.microcol.model.TownField;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
@@ -56,7 +56,7 @@ public class PanelTownLayout extends TitledPanel {
 				Point.of(GamePanelView.TILE_WIDTH_IN_PX, GamePanelView.TILE_WIDTH_IN_PX));
 	}
 
-	private void paintSection(final GraphicsContext gc, final TownSection townSection) {
+	private void paintSection(final GraphicsContext gc, final TownField townSection) {
 		final Terrain terrain = gameController.getModel().getMap().getTerrainAt(townSection.getLocation());
 		final Point centre = Point.of(1, 1).multiply(GamePanelView.TILE_WIDTH_IN_PX);
 		final Point point = Point.of(townSection.getLocation()).substract(Point.of(town.getLocation())).add(centre);

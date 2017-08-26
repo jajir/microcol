@@ -2,6 +2,7 @@ package org.microcol.model;
 
 import java.util.Optional;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 
 public class ConstructionType {
@@ -482,6 +483,11 @@ public class ConstructionType {
 		}
 		return false;
 	}
+	
+	@Override
+	public String toString() {
+		return MoreObjects.toStringHelper(ConstructionType.class).add("name", name).toString();
+	}
 
 	public int getBuildCostHammers() {
 		return buildCostHammers;
@@ -492,11 +498,19 @@ public class ConstructionType {
 	}
 
 	public Optional<ConstructionType> getUpgradeTo() {
-		return Optional.of(upgradeTo);
+		if (upgradeTo == null) {
+			return Optional.empty();
+		} else {
+			return Optional.of(upgradeTo);
+		}
 	}
 
 	public Optional<GoodType> getProduce() {
-		return Optional.of(produce);
+		if (produce == null) {
+			return Optional.empty();
+		} else {
+			return Optional.of(produce);
+		}
 	}
 
 	public int getSlotsForWorkers() {
