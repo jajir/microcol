@@ -19,7 +19,7 @@ public class Town {
 
 	private final Location location;
 
-	private final List<TownField> townSection;
+	private final List<TownField> townFields;
 
 	private final List<Construction> constructions;
 
@@ -30,8 +30,8 @@ public class Town {
 		this.name = Preconditions.checkNotNull(name);
 		this.owner = Preconditions.checkNotNull(owner, "owner is null");
 		this.location = Preconditions.checkNotNull(location);
-		townSection = new ArrayList<>();
-		location.getNeighbors().forEach(loc -> townSection.add(new TownField(loc)));
+		townFields = new ArrayList<>();
+		Location.DIRECTIONS.forEach(loc -> townFields.add(new TownField(loc, this)));
 		this.constructions = Preconditions.checkNotNull(constructions);
 		checkConstructions();
 	}
@@ -45,8 +45,8 @@ public class Town {
 	 * </ul>
 	 */
 	private void checkConstructions() {
-		Preconditions.checkState(townSection.size() == 8,
-				String.format("Incorrect town filed number '%s'", townSection.size()));
+		Preconditions.checkState(townFields.size() == 8,
+				String.format("Incorrect town filed number '%s'", townFields.size()));
 		Map<ConstructionType, Long> l1 = constructions.stream()
 				.collect(Collectors.groupingBy(Construction::getType, Collectors.counting()));
 		l1.forEach((constructionType, count) -> {
@@ -84,8 +84,18 @@ public class Town {
 						String.format("No such construction type (%s) in town (%s)", constructionType, getName())));
 	}
 
+	public TownField getTownFieldInDirection(final Location fieldDirection) {
+		Preconditions.checkNotNull(fieldDirection, "Field direction is null");
+		Preconditions.checkArgument(Location.DIRECTIONS.contains(fieldDirection),
+				String.format("Direction (%s) is  not known", fieldDirection));
+		return townFields.stream().filter(townFiled -> townFiled.getLocation().equals(fieldDirection)).findAny()
+				.orElseThrow(() -> new IllegalStateException(
+						String.format("Field directiond (%s) is not in town (%s)", fieldDirection, this)));
+	}
+	
 	public void setModel(Model model) {
 		this.model = model;
+		townFields.forEach(townField -> townField.setModel(model));
 	}
 
 	public String getName() {
@@ -105,7 +115,7 @@ public class Town {
 	}
 
 	public List<TownField> getTownSection() {
-		return townSection;
+		return townFields;
 	}
 
 	@Override
@@ -115,5 +125,9 @@ public class Town {
 
 	public List<Construction> getConstructions() {
 		return constructions;
+	}
+
+	Model getModel() {
+		return model;
 	}
 }

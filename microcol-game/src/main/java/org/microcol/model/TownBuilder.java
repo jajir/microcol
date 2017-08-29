@@ -24,6 +24,8 @@ public class TownBuilder {
 
 	private final List<UnitPlace> unitPlaces = new ArrayList<>();
 
+	private final List<FieldPlace> fieldPlaces = new ArrayList<>();
+
 	public TownBuilder(final String name, final PlayerBuilder playerBuilder) {
 		this.name = Preconditions.checkNotNull(name);
 		this.playerBuilder = Preconditions.checkNotNull(playerBuilder);
@@ -60,6 +62,13 @@ public class TownBuilder {
 		Preconditions.checkNotNull(unitType);
 		Preconditions.checkArgument(position >= 0 && position < 3, "Position is not within range 0,1,2.");
 		unitPlaces.add(new UnitPlace(constructionType, position, unitType));
+		return this;
+	}
+
+	public TownBuilder setWorker(final Location fieldDirection, final UnitType unitType) {
+		Preconditions.checkNotNull(fieldDirection);
+		Preconditions.checkNotNull(unitType);
+		fieldPlaces.add(new FieldPlace(fieldDirection, unitType));
 		return this;
 	}
 
@@ -105,8 +114,32 @@ public class TownBuilder {
 
 	}
 
+	static class FieldPlace {
+
+		private final Location fieldDirection;
+		private final UnitType unitType;
+
+		FieldPlace(final Location fieldDirection, final UnitType unitType) {
+			this.fieldDirection = Preconditions.checkNotNull(fieldDirection);
+			this.unitType = Preconditions.checkNotNull(unitType);
+		}
+
+		public Location getFieldDirection() {
+			return fieldDirection;
+		}
+
+		public UnitType getUnitType() {
+			return unitType;
+		}
+
+	}
+
 	List<UnitPlace> getUnitPlaces() {
 		return unitPlaces;
+	}
+
+	public List<FieldPlace> getFieldPlaces() {
+		return fieldPlaces;
 	}
 
 }

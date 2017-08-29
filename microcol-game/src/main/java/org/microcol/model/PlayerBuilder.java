@@ -52,6 +52,15 @@ public class PlayerBuilder {
 				construction.place(unitPlace.getPosition(), unit.getPlaceConstruction());
 				modelBuilder.addUnit(unit);
 			});
+			townBuilder.getFieldPlaces().forEach(fieldPlace->{
+				final UnitBuilder unitBuilder = modelBuilder.makeUnitBuilder();
+				unitBuilder.setPlayer(player);
+				unitBuilder.setType(fieldPlace.getUnitType());
+				unitBuilder.setUnitToFiled(fieldPlace.getFieldDirection(), town);
+				final Unit unit = unitBuilder.build();
+				town.getTownFieldInDirection(fieldPlace.getFieldDirection())
+						.setPlaceTownField(unit.getPlaceTownField());
+			});
 			modelBuilder.getTowns().add(town);
 		});
 		return modelBuilder;

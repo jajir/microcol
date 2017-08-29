@@ -57,10 +57,13 @@ public class PanelTownLayout extends TitledPanel {
 	}
 
 	private void paintSection(final GraphicsContext gc, final TownField townSection) {
-		final Terrain terrain = gameController.getModel().getMap().getTerrainAt(townSection.getLocation());
+		final Terrain terrain = townSection.getTerrain();
 		final Point centre = Point.of(1, 1).multiply(GamePanelView.TILE_WIDTH_IN_PX);
-		final Point point = Point.of(townSection.getLocation()).substract(Point.of(town.getLocation())).add(centre);
+		final Point point = Point.of(townSection.getLocation()).add(centre);
 		paintTile(gc, terrain, point);
+		if (!townSection.isEmpty()) {
+			gc.drawImage(imageProvider.getUnitImage(townSection.getUnit().getType()), point.getX(), point.getY());
+		}
 	}
 
 	private void paintTile(final GraphicsContext gc, final Terrain terrain, final Point point) {

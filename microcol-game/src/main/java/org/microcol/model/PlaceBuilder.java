@@ -13,62 +13,48 @@ public class PlaceBuilder {
 	private boolean unitIsInEuropePortPier = false;
 
 	private Unit cargoHolder = null;
-	
+
 	private ConstructionTown constructionTown = null;
-	
-	private void checkThatEverythingIsNull(){
+
+	private FieldTown fieldTown = null;
+
+	private void checkThatEverythingIsNull() {
 		Preconditions.checkState(location == null, "Location wa already set");
 		Preconditions.checkState(shipIncomingToColonies == null, "Ship is alredy on way to colonies");
 		Preconditions.checkState(shipIncomingToEurope == null, "Ship is alredy on way to europe");
 		Preconditions.checkState(!unitIsInEuropePortPier, "Unit is alredy in Europe port pier");
-		Preconditions.checkState(this.cargoHolder == null, "Unit was already put to cargo");
 		Preconditions.checkState(cargoHolder == null, "Unit was already put to cargo");
-		Preconditions.checkState(this.cargoHolder == null, "Unit was already put to cargo");
+		Preconditions.checkState(constructionTown == null, "Unit was already put to town construction");
+		Preconditions.checkState(fieldTown == null, "Unit was already put to field");
 	}
 
 	public PlaceBuilder setLocation(final Location location) {
 		Preconditions.checkNotNull(location);
-		Preconditions.checkState(shipIncomingToColonies == null, "Ship is alredy on way to colonies");
-		Preconditions.checkState(shipIncomingToEurope == null, "Ship is alredy on way to europe");
-		Preconditions.checkState(!unitIsInEuropePortPier, "Unit is alredy in Europe port pier");
-		Preconditions.checkState(cargoHolder == null, "Unit was already put to cargo");
+		checkThatEverythingIsNull();
 		this.location = location;
 		return this;
 	}
 
 	public PlaceBuilder setShipIncomingToColonies(int inHowManyturns) {
-		Preconditions.checkState(location == null, "Location was already set");
-		Preconditions.checkState(shipIncomingToEurope == null, "Ship is alredy on way to europe");
-		Preconditions.checkState(!unitIsInEuropePortPier, "Unit is alredy in Europe port pier");
-		Preconditions.checkState(cargoHolder == null, "Unit was already put to cargo");
+		checkThatEverythingIsNull();
 		shipIncomingToColonies = inHowManyturns;
 		return this;
 	}
 
 	public PlaceBuilder setShipIncomingToEurope(int inHowManyturns) {
-		Preconditions.checkState(location == null, "Location wa already set");
-		Preconditions.checkState(shipIncomingToColonies == null, "Ship is alredy on way to colonies");
-		Preconditions.checkState(!unitIsInEuropePortPier, "Unit is alredy in Europe port pier");
-		Preconditions.checkState(cargoHolder == null, "Unit was already put to cargo");
+		checkThatEverythingIsNull();
 		shipIncomingToEurope = inHowManyturns;
 		return this;
 	}
 
 	public PlaceBuilder setUnitToEuropePortPier() {
-		Preconditions.checkState(location == null, "Location wa already set");
-		Preconditions.checkState(shipIncomingToColonies == null, "Ship is alredy on way to colonies");
-		Preconditions.checkState(shipIncomingToEurope == null, "Ship is alredy on way to europe");
-		Preconditions.checkState(cargoHolder == null, "Unit was already put to cargo");
+		checkThatEverythingIsNull();
 		unitIsInEuropePortPier = true;
 		return this;
 	}
 
 	public PlaceBuilder setToCargoSlot(final Unit cargoHolder) {
-		Preconditions.checkState(location == null, "Location wa already set");
-		Preconditions.checkState(shipIncomingToColonies == null, "Ship is alredy on way to colonies");
-		Preconditions.checkState(shipIncomingToEurope == null, "Ship is alredy on way to europe");
-		Preconditions.checkState(!unitIsInEuropePortPier, "Unit is alredy in Europe port pier");
-		Preconditions.checkState(this.cargoHolder == null, "Unit was already put to cargo");
+		checkThatEverythingIsNull();
 		this.cargoHolder = Preconditions.checkNotNull(cargoHolder);
 		return this;
 	}
@@ -76,6 +62,12 @@ public class PlaceBuilder {
 	public PlaceBuilder setToCostruction(final ConstructionType constructionType, final Town town) {
 		checkThatEverythingIsNull();
 		constructionTown = new ConstructionTown(constructionType, town);
+		return this;
+	}
+
+	public PlaceBuilder setUnitToFiled(final Location fieldDirection, final Town town) {
+		checkThatEverythingIsNull();
+		fieldTown = new FieldTown(fieldDirection, town);
 		return this;
 	}
 
@@ -90,6 +82,8 @@ public class PlaceBuilder {
 			return new PlaceEuropePier(unit);
 		} else if (constructionTown != null) {
 			return new PlaceConstruction(unit, constructionTown.getConstruction());
+		} else if (fieldTown != null) {
+			return new PlaceTownField(unit, fieldTown.getTownField());
 		} else if (cargoHolder != null) {
 			return new PlaceCargoSlot(unit, cargoHolder.getCargo().getEmptyCargoSlot().orElseThrow(
 					() -> new IllegalStateException("There is no empty cargo slot at unit (" + unit + ")")));
@@ -98,8 +92,8 @@ public class PlaceBuilder {
 		}
 	}
 
-	class ConstructionTown {
-		
+	private class ConstructionTown {
+
 		private final ConstructionType constructionType;
 		private final Town town;
 
@@ -111,14 +105,22 @@ public class PlaceBuilder {
 		public Construction getConstruction() {
 			return town.getConstructionByType(constructionType);
 		}
+
+	}
+
+	private class FieldTown {
+		private final Location fieldDirection;
+		private final Town town;
+
+		FieldTown(final Location fieldDirection, final Town town) {
+			this.fieldDirection = Preconditions.checkNotNull(fieldDirection);
+			this.town = Preconditions.checkNotNull(town);
+		}
 		
-		public ConstructionType getConstructionType() {
-			return constructionType;
+		public TownField getTownField(){
+			return town.getTownFieldInDirection(fieldDirection);
 		}
 
-		public Town getTown() {
-			return town;
-		}
 	}
 
 }

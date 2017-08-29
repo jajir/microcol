@@ -83,6 +83,8 @@ public class GameController implements Localized {
 					.setWorker(ConstructionType.RUM_DISTILLERS_HOUSE, 0, UnitType.COLONIST)
 					.setWorker(ConstructionType.CARPENTERS_SHOP, 0, UnitType.COLONIST)
 					.setWorker(ConstructionType.TOWN_HALL, 2, UnitType.COLONIST)
+					.setWorker(Location.DIRECTION_NORTH_EAST, UnitType.COLONIST)
+					.setWorker(Location.DIRECTION_SOUTH_WEST, UnitType.COLONIST)
 					.make()
 				.make()
 			.addUnit(UnitType.GALLEON, "Dutch", Location.of(5, 3))

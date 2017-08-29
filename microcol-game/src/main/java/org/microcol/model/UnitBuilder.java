@@ -69,6 +69,11 @@ public class UnitBuilder {
 		placeBuilder.setToCostruction(constructionType, town);
 		return this;
 	}
+	
+	public UnitBuilder setUnitToFiled(final Location fieldDirection, final Town town){
+		placeBuilder.setUnitToFiled(fieldDirection, town);
+		return this;		
+	}
 
 	public UnitBuilder addCargoGood(final GoodType goodType, final int amount) {
 		// FIXME JJ dokoncit implementaci

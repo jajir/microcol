@@ -395,6 +395,10 @@ public class Unit {
 		return place instanceof PlaceConstruction;
 	}
 
+	public boolean isAtPlaceTownField() {
+		return place instanceof PlaceTownField;
+	}
+
 	/**
 	 * This unit will be moved to given place cargo slot.
 	 * 
@@ -517,6 +521,11 @@ public class Unit {
 	PlaceConstruction getPlaceConstruction() {
 		Preconditions.checkState(isAtPlaceConstruction(), "Unit have to be in town construction");
 		return (PlaceConstruction) place;
+	}
+	
+	PlaceTownField getPlaceTownField(){
+		Preconditions.checkState(isAtPlaceTownField(), "Unit have to be in town field");
+		return (PlaceTownField) place;		
 	}
 
 	public int getId() {
