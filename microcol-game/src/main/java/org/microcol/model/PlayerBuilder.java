@@ -3,8 +3,6 @@ package org.microcol.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.microcol.model.TownBuilder.UnitPlace;
-
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 
@@ -20,7 +18,7 @@ public class PlayerBuilder {
 	private int gold;
 
 	private boolean isComputerPlayer;
-	
+
 	private final List<TownBuilder> townBuilders = new ArrayList<>();
 
 	PlayerBuilder(final ModelBuilder modelBuilder, final String name) {
@@ -43,13 +41,17 @@ public class PlayerBuilder {
 				final Construction c = new Construction(constructionType);
 				constructions.add(c);
 			});
-			townBuilder.getUnitPlaces().forEach(unitPlace -> {
-				Preconditions.checkState(constructions.contains(unitPlace.getConstructionType()),
-						String.format("Attempt to assign unit (%s) to not defined construction (%s)",
-								unitPlace.getUnitType(), unitPlace.getConstructionType()));
-				//FIXME find correct construction and add unit there.
-			});
 			final Town town = new Town(townBuilder.getName(), player, townBuilder.getLocation(), constructions);
+			townBuilder.getUnitPlaces().forEach(unitPlace -> {
+				final UnitBuilder unitBuilder = modelBuilder.makeUnitBuilder();
+				unitBuilder.setPlayer(player);
+				unitBuilder.setType(unitPlace.getUnitType());
+				unitBuilder.setUnitToConstruction(unitPlace.getConstructionType(), town);
+				final Unit unit = unitBuilder.build();
+				final Construction construction = town.getConstructionByType(unitPlace.getConstructionType());
+				construction.place(unitPlace.getPosition(), unit.getPlaceConstruction());
+				modelBuilder.addUnit(unit);
+			});
 			modelBuilder.getTowns().add(town);
 		});
 		return modelBuilder;

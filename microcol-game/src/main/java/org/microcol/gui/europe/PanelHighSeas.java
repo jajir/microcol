@@ -64,7 +64,6 @@ public class PanelHighSeas extends TitledPanel {
 		}
 	}
 
-	@SuppressWarnings("unused")
 	private final void onDragExited(final DragEvent event) {
 		if (background != null) {
 			setBackground(background);

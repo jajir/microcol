@@ -77,6 +77,12 @@ public class Town {
 		});
 
 	}
+	
+	public Construction getConstructionByType(final ConstructionType constructionType) {
+		return constructions.stream().filter(construction -> construction.getType().equals(constructionType)).findAny()
+				.orElseThrow(() -> new IllegalStateException(
+						String.format("No such construction type (%s) in town (%s)", constructionType, getName())));
+	}
 
 	public void setModel(Model model) {
 		this.model = model;

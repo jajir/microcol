@@ -54,7 +54,7 @@ public class TownDialog extends AbstractDialog {
 		 */
 		colonyLayout = Preconditions.checkNotNull(panelTownLayout);
 
-		colonyStructures = new PanelTownStructures(localizationHelper);
+		colonyStructures = new PanelTownStructures(localizationHelper, imageProvider);
 
 		final HBox mapAndBuildings = new HBox();
 		mapAndBuildings.getChildren().addAll(colonyStructures, colonyLayout);
@@ -93,7 +93,6 @@ public class TownDialog extends AbstractDialog {
 	}
 
 	public void showTown(final Town town) {
-		System.out.println("Kreslim mesto: " + town);
 		townName.setText("Colony: " + town.getName());
 		colonyLayout.setTown(town);
 		goods.setEurope(gameController.getModel().getEurope());

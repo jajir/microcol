@@ -25,17 +25,17 @@ public class Unit {
 	private final Cargo cargo;
 
 	Unit(final UnitType type, final Player owner, final Location location) {
-		this.type = Preconditions.checkNotNull(type);
-		this.owner = Preconditions.checkNotNull(owner);
+		this.type = Preconditions.checkNotNull(type, "UnitType is null");
+		this.owner = Preconditions.checkNotNull(owner, "Owner is null");
 		this.place = new PlaceLocation(this, Preconditions.checkNotNull(location));
 		this.cargo = new Cargo(this, type.getCargoCapacity());
 		this.id = IdManager.nextId();
 	}
 
 	Unit(final UnitType type, final Player owner, final PlaceBuilder placeBuilder) {
-		this.type = Preconditions.checkNotNull(type);
-		this.owner = Preconditions.checkNotNull(owner);
-		this.place = Preconditions.checkNotNull(placeBuilder.build(this));
+		this.type = Preconditions.checkNotNull(type, "UnitType is null");
+		this.owner = Preconditions.checkNotNull(owner, "Owner is null");
+		this.place = Preconditions.checkNotNull(placeBuilder.build(this), "PlaceBuilder is null");
 		this.cargo = new Cargo(this, type.getCargoCapacity());
 		this.id = IdManager.nextId();
 	}
@@ -391,6 +391,10 @@ public class Unit {
 		return place instanceof PlaceEuropePier;
 	}
 
+	public boolean isAtPlaceConstruction() {
+		return place instanceof PlaceConstruction;
+	}
+
 	/**
 	 * This unit will be moved to given place cargo slot.
 	 * 
@@ -508,6 +512,11 @@ public class Unit {
 	private PlaceCargoSlot getPlaceCargoSlot() {
 		Preconditions.checkState(isAtCargoSlot(), "Unit have to be in cargo slot");
 		return (PlaceCargoSlot) place;
+	}
+	
+	PlaceConstruction getPlaceConstruction() {
+		Preconditions.checkState(isAtPlaceConstruction(), "Unit have to be in town construction");
+		return (PlaceConstruction) place;
 	}
 
 	public int getId() {

@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.microcol.ai.AIModelBuilder;
 import org.microcol.ai.Engine;
 import org.microcol.gui.util.Localized;
+import org.microcol.model.ConstructionType;
 import org.microcol.model.GoodType;
 import org.microcol.model.Location;
 import org.microcol.model.Model;
@@ -79,15 +80,18 @@ public class GameController implements Localized {
 				.addTown("brunswick")
 					.setLocation(Location.of(5, 4))
 					.setDefaultConstructions(true)
+					.setWorker(ConstructionType.RUM_DISTILLERS_HOUSE, 0, UnitType.COLONIST)
+					.setWorker(ConstructionType.CARPENTERS_SHOP, 0, UnitType.COLONIST)
+					.setWorker(ConstructionType.TOWN_HALL, 2, UnitType.COLONIST)
 					.make()
 				.make()
 			.addUnit(UnitType.GALLEON, "Dutch", Location.of(5, 3))
 			.addUnit(UnitType.FRIGATE, "Dutch", Location.of(4, 4))
 			.addUnit(UnitType.COLONIST, "Dutch", Location.of(6, 4))
 
-			.addUnit(builder.makeUnitBuilder().setType(UnitType.FRIGATE).setPlayer("Dutch")
+			.addUnit(builder.makeUnitBuilder().setType(UnitType.FRIGATE).setPlayerName("Dutch")
 					.setShipIncomingToEurope(4).build())
-			.addUnit(builder.makeUnitBuilder().setType(UnitType.GALLEON).setPlayer("Dutch")
+			.addUnit(builder.makeUnitBuilder().setType(UnitType.GALLEON).setPlayerName("Dutch")
 					.setShipIncomingToColonies(2).build())
 
 			/**
@@ -105,16 +109,16 @@ public class GameController implements Localized {
 			/**
 			 * Europe port
 			 */
-			.addUnit(builder.makeUnitBuilder().setType(UnitType.COLONIST).setPlayer("Dutch")
+			.addUnit(builder.makeUnitBuilder().setType(UnitType.COLONIST).setPlayerName("Dutch")
 					.setUnitToEuropePortPier().build())
-			.addUnit(builder.makeUnitBuilder().setType(UnitType.COLONIST).setPlayer("Dutch")
+			.addUnit(builder.makeUnitBuilder().setType(UnitType.COLONIST).setPlayerName("Dutch")
 					.setUnitToEuropePortPier().build())
 			.getEuropeBuilder()
 			.addShipToPort(builder.makeUnitBuilder().setType(UnitType.GALLEON).setLocation(Location.of(2, 2))
-					.setPlayer("Dutch").addCargoGood(GoodType.COTTON, 100)
+					.setPlayerName("Dutch").addCargoGood(GoodType.COTTON, 100)
 					.addCargoUnit(UnitType.COLONIST, true, false, false).build())
 			.addShipToPort(builder.makeUnitBuilder().setType(UnitType.FRIGATE).setLocation(Location.of(2, 2))
-					.setPlayer("Dutch").addCargoGood(GoodType.CIGARS, 100).addCargoGood(GoodType.RUM, 100)
+					.setPlayerName("Dutch").addCargoGood(GoodType.CIGARS, 100).addCargoGood(GoodType.RUM, 100)
 					.addCargoGood(GoodType.SILVER, 100).build())
 			.build();
 

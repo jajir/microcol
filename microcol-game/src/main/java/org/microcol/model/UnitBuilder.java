@@ -15,17 +15,22 @@ public class UnitBuilder {
 
 	private final PlaceBuilder placeBuilder;
 
-	private final List<UnitBuilder> unitsInCargo = Lists.newArrayList();;
+	private final List<UnitBuilder> unitsInCargo = Lists.newArrayList();
 
-	private final List<GoodAmount> goodAmounts = Lists.newArrayList();;
+	private final List<GoodAmount> goodAmounts = Lists.newArrayList();
 
 	UnitBuilder(final ModelBuilder modelBuilder) {
 		this.modelBuilder = Preconditions.checkNotNull(modelBuilder);
 		placeBuilder = new PlaceBuilder();
 	}
 
-	public UnitBuilder setPlayer(final String playerName) {
+	public UnitBuilder setPlayerName(final String playerName) {
 		player = modelBuilder.getPlayer(Preconditions.checkNotNull(playerName));
+		return this;
+	}
+
+	public UnitBuilder setPlayer(final Player player) {
+		this.player = Preconditions.checkNotNull(player);
 		return this;
 	}
 
@@ -60,6 +65,11 @@ public class UnitBuilder {
 		return this;
 	}
 
+	public UnitBuilder setUnitToConstruction(final ConstructionType constructionType, final Town town) {
+		placeBuilder.setToCostruction(constructionType, town);
+		return this;
+	}
+
 	public UnitBuilder addCargoGood(final GoodType goodType, final int amount) {
 		// FIXME JJ dokoncit implementaci
 		return this;
@@ -67,7 +77,7 @@ public class UnitBuilder {
 
 	public UnitBuilder addCargoUnit(final UnitType type, final boolean hasHorse, final boolean hasTools,
 			final boolean hasMuskets) {
-		unitsInCargo.add(modelBuilder.makeUnitBuilder().setType(type).setPlayer(player.getName()));
+		unitsInCargo.add(modelBuilder.makeUnitBuilder().setType(type).setPlayerName(player.getName()));
 		return this;
 	}
 

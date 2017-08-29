@@ -1,7 +1,9 @@
 package org.microcol.gui.town;
 
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
+import org.microcol.gui.ImageProvider;
 import org.microcol.gui.LocalizationHelper;
 import org.microcol.gui.Point;
 import org.microcol.gui.europe.TitledPanel;
@@ -29,6 +31,11 @@ public class PanelTownStructures extends TitledPanel {
 	private final static int ROW_1 = 10;
 	private final static int ROW_2 = 100;
 	private final static int ROW_3 = 190;
+	
+	private final static Point[] SLOT_POSITIONS = new Point[] {
+			Point.of(-58, 10),
+			Point.of(-18, 10),
+			Point.of(22, 10) };
 
 	/**
 	 * Following structure define position of constructions images on town map.
@@ -86,9 +93,12 @@ public class PanelTownStructures extends TitledPanel {
 	
 	private final LocalizationHelper localizationHelper;
 	
-	public PanelTownStructures(final LocalizationHelper localizationHelper) {
+	private final ImageProvider imageProvider;
+	
+	public PanelTownStructures(final LocalizationHelper localizationHelper, final ImageProvider imageProvider) {
 		super("Colony Structures", null);
 		this.localizationHelper = Preconditions.checkNotNull(localizationHelper);
+		this.imageProvider = Preconditions.checkNotNull(imageProvider);
 		canvas = new Canvas(500, 300);
 		getContentPane().getChildren().add(canvas);
 		setMinWidth(500);
@@ -107,9 +117,16 @@ public class PanelTownStructures extends TitledPanel {
 			gc.setFill(Color.BLACK);
 			gc.fillText(name, position.getX(), position.getY());
 			gc.setStroke(Color.DARKGRAY);
-			paintWorkerContainer(gc, position.add(-58,10));
-			paintWorkerContainer(gc, position.add(-18,10));
-			paintWorkerContainer(gc, position.add(22,10));
+			final AtomicInteger cx = new AtomicInteger(0);
+			construction.getConstructionSlots().forEach(constructionSlot -> {
+				final Point topLeftCorner = position.add(SLOT_POSITIONS[cx.get()]);
+				paintWorkerContainer(gc, topLeftCorner);
+				if (!constructionSlot.isEmpty()) {
+					gc.drawImage(imageProvider.getUnitImage(constructionSlot.getUnit().getType()), topLeftCorner.getX(),
+							topLeftCorner.getY());
+				}
+				cx.incrementAndGet();
+			});
 		});
 	}
 	

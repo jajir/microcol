@@ -90,7 +90,6 @@ public class MoveModeSupport {
 		moveLocations = Lists.newArrayList();
 	}
 	
-	@SuppressWarnings("unused")
 	private void onStartMove(final StartMoveEvent event){
 		recountPath();
 	}

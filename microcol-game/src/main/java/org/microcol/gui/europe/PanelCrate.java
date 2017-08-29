@@ -135,7 +135,6 @@ public class PanelCrate extends StackPane {
 		}
 	}
 
-	@SuppressWarnings("unused")
 	private final void onDragExited(final DragEvent event) {
 		setBackground(background);
 		background = null;

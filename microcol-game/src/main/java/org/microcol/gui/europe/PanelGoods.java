@@ -64,7 +64,6 @@ public class PanelGoods extends TitledPanel {
 		}
 	}
 
-	@SuppressWarnings("unused")
 	private final void onDragExited(final DragEvent event) {
 		setBackground(background);
 		background = null;
