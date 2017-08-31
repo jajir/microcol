@@ -170,6 +170,10 @@ public class UnitType {
 		return moveableTerrains.contains(terrain);
 	}
 	
+	public boolean canHoldCargo() {
+		return cargoCapacity > 0;
+	}
+	
 	@Override
 	public int hashCode() {
 		return name.hashCode();

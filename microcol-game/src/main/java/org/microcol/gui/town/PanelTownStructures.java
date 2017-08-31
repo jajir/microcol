@@ -6,7 +6,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.microcol.gui.ImageProvider;
 import org.microcol.gui.LocalizationHelper;
 import org.microcol.gui.Point;
-import org.microcol.gui.europe.TitledPanel;
+import org.microcol.gui.util.TitledPanel;
 import org.microcol.model.ConstructionType;
 import org.microcol.model.Town;
 

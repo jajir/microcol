@@ -1,10 +1,13 @@
-package org.microcol.gui.europe;
+package org.microcol.gui.util;
 
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
 
+/**
+ * Show panel with simple border and title. Title is places in top border line.
+ */
 public class TitledPanel extends StackPane {
 
 	private final StackPane contentPane;

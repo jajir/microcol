@@ -7,6 +7,7 @@ import org.microcol.gui.ImageProvider;
 import org.microcol.gui.event.model.GameController;
 import org.microcol.gui.util.ClipboardWritter;
 import org.microcol.gui.util.Text;
+import org.microcol.gui.util.TitledPanel;
 import org.microcol.gui.util.ViewUtil;
 import org.microcol.model.Unit;
 import org.microcol.model.UnitType;

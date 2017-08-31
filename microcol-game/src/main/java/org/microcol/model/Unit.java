@@ -42,6 +42,15 @@ public class Unit {
 
 	void setModel(final Model model) {
 		this.model = Preconditions.checkNotNull(model);
+		validateTerrain();
+	}
+	
+	private void validateTerrain(){
+		if(isAtMap()){
+			final Terrain t = model.getMap().getTerrainAt(getLocation());
+			Preconditions.checkState(type.canMoveAtTerrain(t),
+					String.format("Unit (%s) is not at valid terrain (%s)", this, t));
+		}
 	}
 
 	public UnitType getType() {
@@ -53,7 +62,7 @@ public class Unit {
 	}
 
 	public Location getLocation() {
-		Preconditions.checkArgument(place instanceof PlaceLocation, "Unit (%s) is not at map. ", this);
+		Preconditions.checkArgument(isAtPlaceLocation(), "Unit (%s) is not at map. ", this);
 		return ((PlaceLocation) place).getLocation();
 	}
 
@@ -377,6 +386,10 @@ public class Unit {
 
 	public boolean isAtHighSea() {
 		return place instanceof PlaceHighSea;
+	}
+
+	public boolean isAtPlaceLocation() {
+		return place instanceof PlaceLocation;
 	}
 
 	public boolean isAtEuropePort() {

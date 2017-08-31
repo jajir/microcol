@@ -2,10 +2,10 @@ package org.microcol.gui.town;
 
 import org.microcol.gui.ImageProvider;
 import org.microcol.gui.Point;
-import org.microcol.gui.europe.TitledPanel;
 import org.microcol.gui.event.model.GameController;
 import org.microcol.gui.panelview.GamePanelView;
 import org.microcol.gui.panelview.PaintService;
+import org.microcol.gui.util.TitledPanel;
 import org.microcol.model.Terrain;
 import org.microcol.model.Town;
 import org.microcol.model.TownField;

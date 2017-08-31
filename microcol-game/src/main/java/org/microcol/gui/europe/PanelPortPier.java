@@ -4,6 +4,7 @@ import org.microcol.gui.ImageProvider;
 import org.microcol.gui.LocalizationHelper;
 import org.microcol.gui.event.model.GameController;
 import org.microcol.gui.util.ClipboardReader;
+import org.microcol.gui.util.TitledPanel;
 import org.microcol.model.UnitType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

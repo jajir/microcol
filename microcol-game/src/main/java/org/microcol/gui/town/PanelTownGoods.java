@@ -1,7 +1,7 @@
 package org.microcol.gui.town;
 
 import org.microcol.gui.ImageProvider;
-import org.microcol.gui.europe.TitledPanel;
+import org.microcol.gui.util.TitledPanel;
 import org.microcol.model.Europe;
 import org.microcol.model.GoodType;
 

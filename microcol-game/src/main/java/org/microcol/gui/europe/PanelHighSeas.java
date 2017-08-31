@@ -3,6 +3,7 @@ package org.microcol.gui.europe;
 import org.microcol.gui.ImageProvider;
 import org.microcol.gui.event.model.GameController;
 import org.microcol.gui.util.ClipboardReader;
+import org.microcol.gui.util.TitledPanel;
 import org.microcol.model.UnitType;
 
 import com.google.common.base.Preconditions;

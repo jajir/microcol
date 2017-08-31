@@ -1,6 +1,6 @@
 package org.microcol.gui.town;
 
-import org.microcol.gui.europe.TitledPanel;
+import org.microcol.gui.util.TitledPanel;
 
 import javafx.scene.control.Label;
 

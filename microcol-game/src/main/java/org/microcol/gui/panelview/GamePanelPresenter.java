@@ -312,6 +312,8 @@ public final class GamePanelPresenter implements Localized {
 		logger.debug("Switching to normal mode, from " + moveFromLocation + " to " + moveToLocation);
 		if (moveFromLocation.equals(moveToLocation)) {
 			display.setCursorNormal();
+			//it's a click? is there a town?
+			tryToOpenTownDetail(moveToLocation);
 			return;
 		}
 		// TODO JJ active ship can be different from ship first at list

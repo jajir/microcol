@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
+import com.google.common.collect.ImmutableList;
 
 public class Town {
 
@@ -76,6 +77,16 @@ public class Town {
 			}
 		});
 
+	}
+	
+	public List<Unit> getUnitsInPort() {
+		return model.getUnitsAt(location).stream().filter(unit -> unit.getType().canHoldCargo())
+				.collect(ImmutableList.toImmutableList());
+	}
+	
+	public List<Unit> getUnitsOutSideColony() {
+		return model.getUnitsAt(location).stream().filter(unit -> !unit.getType().canHoldCargo())
+				.collect(ImmutableList.toImmutableList());
 	}
 	
 	public Construction getConstructionByType(final ConstructionType constructionType) {
