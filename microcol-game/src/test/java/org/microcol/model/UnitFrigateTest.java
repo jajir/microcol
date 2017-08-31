@@ -5,16 +5,14 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
 
+import mockit.Expectations;
 import mockit.Injectable;
 import mockit.Mocked;
-import mockit.Tested;
 
 public class UnitFrigateTest {
 
-	@Tested(availableDuringSetup=true)
 	private Unit unit;
 
-	@Injectable
 	private UnitType type = UnitType.FRIGATE;
 
 	@Injectable
@@ -39,6 +37,11 @@ public class UnitFrigateTest {
 	
 	@Before
 	public void setup() {
+		unit = new Unit(type, owner, location);
+		new Expectations() {{
+			model.getMap().getTerrainAt(location); result = Terrain.OCEAN;
+		}};
+		
 		unit.setModel(model);
 		unit.startTurn();
 	}

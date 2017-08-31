@@ -1,22 +1,21 @@
 package org.microcol.model;
 
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
-import static org.junit.Assert.*;
-
+import org.junit.After;
 import org.junit.Before;
+import org.junit.Test;
 
 import mockit.Expectations;
 import mockit.Injectable;
 import mockit.Mocked;
-import mockit.Tested;
 
 public class UnitAtLocationTest {
 
-	@Tested(availableDuringSetup=true)
 	private Unit unit;
 
-	@Injectable
 	private UnitType type = UnitType.COLONIST;
 
 	@Injectable
@@ -45,7 +44,6 @@ public class UnitAtLocationTest {
 		new Expectations() {{
 			model.getMap().isValid(loc); result = true;
 			model.getMap().getTerrainAt(loc); result = Terrain.CONTINENT;
-			type.canMoveAtTerrain(Terrain.CONTINENT); result = true;
 		}};
 		
 		assertTrue(unit.isMoveable(loc));
@@ -53,8 +51,18 @@ public class UnitAtLocationTest {
 	
 	@Before
 	public void setup() {
+		unit = new Unit(type, owner, location);
+		new Expectations() {{
+			model.getMap().getTerrainAt(location); result = Terrain.CONTINENT;
+		}};
+
 		unit.setModel(model);
 		unit.startTurn();
+	}
+	
+	@After
+	public void teardown() {
+		unit = null;
 	}
 	
 }
