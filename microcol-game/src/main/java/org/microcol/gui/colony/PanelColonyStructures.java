@@ -1,4 +1,4 @@
-package org.microcol.gui.town;
+package org.microcol.gui.colony;
 
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -8,7 +8,7 @@ import org.microcol.gui.LocalizationHelper;
 import org.microcol.gui.Point;
 import org.microcol.gui.util.TitledPanel;
 import org.microcol.model.ConstructionType;
-import org.microcol.model.Town;
+import org.microcol.model.Colony;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableMap;
@@ -22,7 +22,7 @@ import javafx.scene.text.TextAlignment;
 /**
  * Show building factories and other structures build in colony.
  */
-public class PanelTownStructures extends TitledPanel {
+public class PanelColonyStructures extends TitledPanel {
 	
 	private final static int COLUMN_1 = 90;
 	private final static int COLUMN_2 = 250;
@@ -38,7 +38,7 @@ public class PanelTownStructures extends TitledPanel {
 			Point.of(22, 10) };
 
 	/**
-	 * Following structure define position of constructions images on town map.
+	 * Following structure define position of constructions images on colony map.
 	 */
 	private final static Map<ConstructionType, Point> constructionPlaces = ImmutableMap
 			.<ConstructionType, Point>builder()
@@ -95,7 +95,7 @@ public class PanelTownStructures extends TitledPanel {
 	
 	private final ImageProvider imageProvider;
 	
-	public PanelTownStructures(final LocalizationHelper localizationHelper, final ImageProvider imageProvider) {
+	public PanelColonyStructures(final LocalizationHelper localizationHelper, final ImageProvider imageProvider) {
 		super("Colony Structures", null);
 		this.localizationHelper = Preconditions.checkNotNull(localizationHelper);
 		this.imageProvider = Preconditions.checkNotNull(imageProvider);
@@ -105,8 +105,8 @@ public class PanelTownStructures extends TitledPanel {
 		setMinHeight(300);
 	}
 	
-	void repaint(final Town town){
-		town.getConstructions().forEach(construction -> {
+	void repaint(final Colony colony){
+		colony.getConstructions().forEach(construction -> {
 			final Point position = constructionPlaces.get(construction.getType());
 			Preconditions.checkNotNull(position,
 					String.format("There is no defined position for construction type '%s'", position));

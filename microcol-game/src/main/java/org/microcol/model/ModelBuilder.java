@@ -8,7 +8,7 @@ import com.google.common.base.Preconditions;
 public class ModelBuilder {
 	private final List<Player> players;
 	private final List<Unit> units;
-	private final List<Town> towns;
+	private final List<Colony> colonies;
 	private EuropeBuilder europeBuilder;
 
 	private Calendar calendar;
@@ -17,7 +17,7 @@ public class ModelBuilder {
 	public ModelBuilder() {
 		players = new ArrayList<>();
 		units = new ArrayList<>();
-		towns = new ArrayList<>();
+		colonies = new ArrayList<>();
 	}
 
 	public ModelBuilder addUnit(final Unit unit) {
@@ -67,7 +67,7 @@ public class ModelBuilder {
 
 	public Model build() {
 		Preconditions.checkNotNull(europeBuilder == null, "Europe was not builded");
-		return new Model(calendar, map, players, towns, units, europeBuilder.getUnitsInEuropePort());
+		return new Model(calendar, map, players, colonies, units, europeBuilder.getUnitsInEuropePort());
 	}
 
 	public UnitBuilder makeUnitBuilder() {
@@ -78,7 +78,7 @@ public class ModelBuilder {
 		return players;
 	}
 
-	List<Town> getTowns() {
-		return towns;
+	List<Colony> getColonies() {
+		return colonies;
 	}
 }

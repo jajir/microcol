@@ -1,4 +1,4 @@
-package org.microcol.gui.town;
+package org.microcol.gui.colony;
 
 import org.microcol.model.GoodTrade;
 
@@ -14,9 +14,9 @@ import javafx.scene.layout.VBox;
 /**
  * Contains image of of type of good.
  */
-public class PanelTownGood extends VBox {
+public class PanelColonyGood extends VBox {
 
-	public PanelTownGood(final Image image, final GoodTrade goodTrade) {
+	public PanelColonyGood(final Image image, final GoodTrade goodTrade) {
 		final ImageView imageIcon = new ImageView(image);
 		Pane paneImage = new Pane(imageIcon);
 		paneImage.setOnDragDetected(e -> {

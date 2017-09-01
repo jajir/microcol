@@ -3,7 +3,7 @@ package org.microcol.gui.panelview;
 import org.microcol.gui.ImageProvider;
 import org.microcol.gui.Point;
 import org.microcol.model.Player;
-import org.microcol.model.Town;
+import org.microcol.model.Colony;
 import org.microcol.model.Unit;
 
 import com.google.common.base.Preconditions;
@@ -62,14 +62,14 @@ public class PaintService {
 		paintOwnersFlag(graphics, point.add(OWNERS_FLAG_POSITION), unit.getOwner());
 	}
 
-	public void paintTown(final GraphicsContext graphics, final Point point, final Town town) {
+	public void paintColony(final GraphicsContext graphics, final Point point, final Colony colony) {
 		Point p = point.add(UNIT_IMAGE_POSITION);
 		graphics.drawImage(imageProvider.getImage(ImageProvider.IMG_TILE_TOWN), p.getX(), p.getY());
-		paintOwnersFlag(graphics, point.add(OWNERS_FLAG_POSITION), town.getOwner());
+		paintOwnersFlag(graphics, point.add(OWNERS_FLAG_POSITION), colony.getOwner());
 		graphics.setTextAlign(TextAlignment.CENTER);
 		graphics.setTextBaseline(VPos.CENTER);
 		graphics.setFill(Color.WHITE);
-		graphics.fillText(town.getName(), p.getX() + 20, p.getY() + 30);
+		graphics.fillText(colony.getName(), p.getX() + 20, p.getY() + 30);
 	}
 
 	/**

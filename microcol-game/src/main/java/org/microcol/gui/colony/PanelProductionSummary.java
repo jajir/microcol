@@ -1,4 +1,4 @@
-package org.microcol.gui.town;
+package org.microcol.gui.colony;
 
 import org.microcol.gui.util.TitledPanel;
 

@@ -21,13 +21,13 @@ public final class Model {
 	private final Calendar calendar;
 	private final WorldMap map;
 	private final List<Player> players;
-	private final List<Town> towns;
+	private final List<Colony> colonies;
 	private final UnitStorage unitStorage;
 	private final Europe europe;
 	private final HighSea highSea;
 	private GameManager gameManager;
 
-	Model(final Calendar calendar, final WorldMap map, final List<Player> players, final List<Town> towns,
+	Model(final Calendar calendar, final WorldMap map, final List<Player> players, final List<Colony> colonies,
 			final List<Unit> units, final List<Unit> unitsInEuropePort) {
 		listenerManager = new ListenerManager();
 
@@ -35,11 +35,11 @@ public final class Model {
 		this.map = Preconditions.checkNotNull(map);
 
 		this.players = ImmutableList.copyOf(players);
-		this.towns = Lists.newArrayList(towns);
+		this.colonies = Lists.newArrayList(colonies);
 		Preconditions.checkArgument(!this.players.isEmpty(), "There must be at least one player.");
 		checkPlayerNames(this.players);
 		this.players.forEach(player -> player.setModel(this));
-		this.towns.forEach(town -> town.setModel(this));
+		this.colonies.forEach(colony -> colony.setModel(this));
 
 		unitStorage = new UnitStorage(units);
 		unitStorage.getUnits(true).forEach(unit -> unit.setModel(this));
@@ -117,15 +117,15 @@ public final class Model {
 		return unitStorage.getUnitsAt();
 	}
 
-	public Map<Location, Town> getTownsAt() {
-		return towns.stream().collect(ImmutableMap.toImmutableMap(Town::getLocation, Function.identity()));
+	public Map<Location, Colony> getColoniesAt() {
+		return colonies.stream().collect(ImmutableMap.toImmutableMap(Colony::getLocation, Function.identity()));
 	}
 
-	public Optional<Town> getTownsAt(final Location location, final Player owner) {
+	public Optional<Colony> getColoniesAt(final Location location, final Player owner) {
 		Preconditions.checkNotNull(location);
 		Preconditions.checkNotNull(owner);
-		return towns.stream().filter(town -> town.getOwner().equals(owner))
-				.filter(town -> town.getLocation().equals(location)).findFirst();
+		return colonies.stream().filter(colony -> colony.getOwner().equals(owner))
+				.filter(colony -> colony.getLocation().equals(location)).findFirst();
 	}
 
 	public List<Unit> getUnitsAt(final Location location) {
@@ -163,9 +163,9 @@ public final class Model {
 		final GameManager gameManager = GameManager.load(parser, players);
 		parser.next(); // END_OBJECT
 
-		final List<Town> towns = TownsStorage.load(parser, players);
+		final List<Colony> colonies = ColonyStorage.load(parser, players);
 
-		final Model model = new Model(calendar, map, players, towns, units, Lists.newArrayList());
+		final Model model = new Model(calendar, map, players, colonies, units, Lists.newArrayList());
 		gameManager.setModel(model);
 		model.gameManager = gameManager;
 

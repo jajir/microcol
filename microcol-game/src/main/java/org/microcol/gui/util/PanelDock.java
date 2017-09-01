@@ -1,14 +1,10 @@
-package org.microcol.gui.europe;
+package org.microcol.gui.util;
 
 import java.util.List;
 import java.util.Optional;
 
 import org.microcol.gui.ImageProvider;
 import org.microcol.gui.event.model.GameController;
-import org.microcol.gui.util.ClipboardWritter;
-import org.microcol.gui.util.Text;
-import org.microcol.gui.util.TitledPanel;
-import org.microcol.gui.util.ViewUtil;
 import org.microcol.model.Unit;
 import org.microcol.model.UnitType;
 import org.slf4j.Logger;
@@ -31,13 +27,13 @@ import javafx.scene.layout.VBox;
 /**
  * Contains ships in port. Good from ships could be loaded/unloaded.
  */
-public class PanelEuropeDock extends TitledPanel {
+public class PanelDock extends TitledPanel {
 
-	private final Logger logger = LoggerFactory.getLogger(PanelEuropeDock.class);
+	private final Logger logger = LoggerFactory.getLogger(PanelDock.class);
 
 	private final ImageProvider imageProvider;
 
-	private final PanelCratesController panelCratesController;
+	private final PanelDockCratesController panelCratesController;
 
 	private final HBox panelShips;
 
@@ -45,14 +41,12 @@ public class PanelEuropeDock extends TitledPanel {
 
 	private final GameController gameController;
 
-	public PanelEuropeDock(final ViewUtil viewUtil, final Text text, final GameController gameController,
-			final ImageProvider imageProvider, final EuropeDialog europeDialog,
+	public PanelDock(final GameController gameController, final ImageProvider imageProvider,
 			final PanelDockBehavior panelDockBehavior) {
 		super("pristav");
 		this.imageProvider = Preconditions.checkNotNull(imageProvider);
 		this.gameController = Preconditions.checkNotNull(gameController);
-		panelCratesController = new PanelCratesController(viewUtil, text, gameController, imageProvider, europeDialog,
-				panelDockBehavior);
+		panelCratesController = new PanelDockCratesController(imageProvider, panelDockBehavior);
 
 		panelShips = new HBox();
 		toggleGroup = new ToggleGroup();
@@ -68,7 +62,7 @@ public class PanelEuropeDock extends TitledPanel {
 		getContentPane().getChildren().add(mainPanel);
 	}
 
-	void repaint() {
+	public void repaint() {
 		panelShips.getChildren().clear();
 		for (Unit unit : getUnitsInPort()) {
 			ToggleButton toggleButtonShip = new ToggleButton();
@@ -84,7 +78,7 @@ public class PanelEuropeDock extends TitledPanel {
 		}
 	}
 
-	void repaintCurrectShipsCrates() {
+	public void repaintCurrectShipsCrates() {
 		panelCratesController.setCratesForShip(getSelectedShip().get());
 	}
 

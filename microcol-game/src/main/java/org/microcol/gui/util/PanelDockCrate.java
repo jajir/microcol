@@ -1,14 +1,9 @@
-package org.microcol.gui.europe;
+package org.microcol.gui.util;
 
 import org.microcol.gui.ImageProvider;
-import org.microcol.gui.event.model.GameController;
-import org.microcol.gui.util.Text;
-import org.microcol.gui.util.ViewUtil;
 import org.microcol.model.CargoSlot;
 import org.microcol.model.GoodAmount;
 import org.microcol.model.Unit;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
 
@@ -28,9 +23,7 @@ import javafx.scene.paint.Color;
 /**
  * Container represents one open or close crate.
  */
-public class PanelCrate extends StackPane {
-
-	private final Logger logger = LoggerFactory.getLogger(PanelCrate.class);
+public class PanelDockCrate extends StackPane {
 
 	private final ImageProvider imageProvider;
 
@@ -40,30 +33,14 @@ public class PanelCrate extends StackPane {
 
 	private final Label labelAmount;
 
-	private final ViewUtil viewUtil;
-
-	private final Text text;
-
 	private Background background;
-
-	private final GameController gameController;
-
-	private Unit unit;
 
 	private CargoSlot cargoSlot;
 
-	private final DialogCallback europeDialog;
-	
 	private final PanelDockBehavior panelDockBehavior;
 
-	PanelCrate(final ViewUtil viewUtil, final Text text, final GameController gameController,
-			final ImageProvider imageProvider, final DialogCallback europeDialog,
-			final PanelDockBehavior panelDockBehavior) {
+	PanelDockCrate(final ImageProvider imageProvider, final PanelDockBehavior panelDockBehavior) {
 		this.imageProvider = Preconditions.checkNotNull(imageProvider);
-		this.gameController = Preconditions.checkNotNull(gameController);
-		this.europeDialog = Preconditions.checkNotNull(europeDialog);
-		this.viewUtil = Preconditions.checkNotNull(viewUtil);
-		this.text = Preconditions.checkNotNull(text);
 		this.panelDockBehavior = Preconditions.checkNotNull(panelDockBehavior);
 
 		crateImage = new ImageView();
@@ -92,7 +69,6 @@ public class PanelCrate extends StackPane {
 
 	public void setIsClosed(final boolean isClosed) {
 		if (isClosed) {
-			unit = null;
 			cargoSlot = null;
 			crateImage.setImage(imageProvider.getImage(ImageProvider.IMG_CRATE_CLOSED));
 			hideCargo();
@@ -107,7 +83,6 @@ public class PanelCrate extends StackPane {
 	public void showCargoSlot(final Unit unit, final CargoSlot cargoSlot) {
 		setIsClosed(false);
 		this.cargoSlot = cargoSlot;
-		this.unit = unit;
 		if (cargoSlot.isEmpty()) {
 			hideCargo();
 		} else {

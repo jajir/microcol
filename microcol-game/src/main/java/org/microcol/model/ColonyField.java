@@ -7,19 +7,19 @@ import com.google.common.base.Preconditions;
  * Class represents on field outside colony. When unit is placed here than some
  * good is produces each turn.
  */
-public class TownField {
+public class ColonyField {
 
 	private Model model;
 	
-	private final Town town;
+	private final Colony colony;
 	
 	private final Location location;
 
-	private PlaceTownField placeTownField;
+	private PlaceColonyField placeColonyField;
 
-	TownField(final Location location, final Town town) {
+	ColonyField(final Location location, final Colony colony) {
 		this.location = Preconditions.checkNotNull(location);
-		this.town = Preconditions.checkNotNull(town);
+		this.colony = Preconditions.checkNotNull(colony);
 	}
 
 	public Location getLocation() {
@@ -27,7 +27,7 @@ public class TownField {
 	}
 	
 	public Terrain getTerrain() {
-		return model.getMap().getTerrainAt(town.getLocation().add(location));
+		return model.getMap().getTerrainAt(colony.getLocation().add(location));
 	}
 
 	void setModel(final Model model) {
@@ -36,20 +36,20 @@ public class TownField {
 
 	@Override
 	public String toString() {
-		return MoreObjects.toStringHelper(TownField.class).add("location", location)
-				.add("placeTownField", placeTownField).toString();
+		return MoreObjects.toStringHelper(ColonyField.class).add("location", location)
+				.add("placeColonyField", placeColonyField).toString();
 	}
 
 	public boolean isEmpty() {
-		return placeTownField == null;
+		return placeColonyField == null;
 	}
 	
 	public Unit getUnit() {
 		Preconditions.checkState(!isEmpty(), "There is no assigned unit");
-		return placeTownField.getUnit();
+		return placeColonyField.getUnit();
 	}
 	
-	void setPlaceTownField(PlaceTownField placeTownField) {
-		this.placeTownField = placeTownField;
+	void setPlaceColonyField(PlaceColonyField placeColonyField) {
+		this.placeColonyField = placeColonyField;
 	}
 }

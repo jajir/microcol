@@ -408,8 +408,8 @@ public class Unit {
 		return place instanceof PlaceConstruction;
 	}
 
-	public boolean isAtPlaceTownField() {
-		return place instanceof PlaceTownField;
+	public boolean isAtPlaceColonyField() {
+		return place instanceof PlaceColonyField;
 	}
 
 	/**
@@ -532,13 +532,13 @@ public class Unit {
 	}
 	
 	PlaceConstruction getPlaceConstruction() {
-		Preconditions.checkState(isAtPlaceConstruction(), "Unit have to be in town construction");
+		Preconditions.checkState(isAtPlaceConstruction(), "Unit have to be in colony construction");
 		return (PlaceConstruction) place;
 	}
 	
-	PlaceTownField getPlaceTownField(){
-		Preconditions.checkState(isAtPlaceTownField(), "Unit have to be in town field");
-		return (PlaceTownField) place;		
+	PlaceColonyField getPlaceColonyField(){
+		Preconditions.checkState(isAtPlaceColonyField(), "Unit have to be in colony field");
+		return (PlaceColonyField) place;		
 	}
 
 	public int getId() {

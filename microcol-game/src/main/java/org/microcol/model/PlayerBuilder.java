@@ -19,7 +19,7 @@ public class PlayerBuilder {
 
 	private boolean isComputerPlayer;
 
-	private final List<TownBuilder> townBuilders = new ArrayList<>();
+	private final List<ColonyBuilder> colonyBuilders = new ArrayList<>();
 
 	PlayerBuilder(final ModelBuilder modelBuilder, final String name) {
 		this.modelBuilder = Preconditions.checkNotNull(modelBuilder);
@@ -29,39 +29,39 @@ public class PlayerBuilder {
 	public ModelBuilder make() {
 		final Player player = new Player(name, isComputerPlayer, gold);
 		modelBuilder.getPlayers().add(player);
-		townBuilders.forEach(townBuilder -> {
+		colonyBuilders.forEach(colonyBuilder -> {
 			final List<Construction> constructions = Lists.newArrayList();
-			if (townBuilder.isDefaultCostructions()) {
-				ConstructionType.NEW_TOWN_CONSTRUCTIONS.forEach(constructionType -> {
+			if (colonyBuilder.isDefaultCostructions()) {
+				ConstructionType.NEW_COLONY_CONSTRUCTIONS.forEach(constructionType -> {
 					final Construction c = new Construction(constructionType);
 					constructions.add(c);
 				});
 			}
-			townBuilder.getConstructionTypes().forEach(constructionType -> {
+			colonyBuilder.getConstructionTypes().forEach(constructionType -> {
 				final Construction c = new Construction(constructionType);
 				constructions.add(c);
 			});
-			final Town town = new Town(townBuilder.getName(), player, townBuilder.getLocation(), constructions);
-			townBuilder.getUnitPlaces().forEach(unitPlace -> {
+			final Colony colony = new Colony(colonyBuilder.getName(), player, colonyBuilder.getLocation(), constructions);
+			colonyBuilder.getUnitPlaces().forEach(unitPlace -> {
 				final UnitBuilder unitBuilder = modelBuilder.makeUnitBuilder();
 				unitBuilder.setPlayer(player);
 				unitBuilder.setType(unitPlace.getUnitType());
-				unitBuilder.setUnitToConstruction(unitPlace.getConstructionType(), town);
+				unitBuilder.setUnitToConstruction(unitPlace.getConstructionType(), colony);
 				final Unit unit = unitBuilder.build();
-				final Construction construction = town.getConstructionByType(unitPlace.getConstructionType());
+				final Construction construction = colony.getConstructionByType(unitPlace.getConstructionType());
 				construction.place(unitPlace.getPosition(), unit.getPlaceConstruction());
 				modelBuilder.addUnit(unit);
 			});
-			townBuilder.getFieldPlaces().forEach(fieldPlace->{
+			colonyBuilder.getFieldPlaces().forEach(fieldPlace->{
 				final UnitBuilder unitBuilder = modelBuilder.makeUnitBuilder();
 				unitBuilder.setPlayer(player);
 				unitBuilder.setType(fieldPlace.getUnitType());
-				unitBuilder.setUnitToFiled(fieldPlace.getFieldDirection(), town);
+				unitBuilder.setUnitToFiled(fieldPlace.getFieldDirection(), colony);
 				final Unit unit = unitBuilder.build();
-				town.getTownFieldInDirection(fieldPlace.getFieldDirection())
-						.setPlaceTownField(unit.getPlaceTownField());
+				colony.getColonyFieldInDirection(fieldPlace.getFieldDirection())
+						.setPlaceColonyField(unit.getPlaceColonyField());
 			});
-			modelBuilder.getTowns().add(town);
+			modelBuilder.getColonies().add(colony);
 		});
 		return modelBuilder;
 	}
@@ -76,10 +76,10 @@ public class PlayerBuilder {
 		return this;
 	}
 
-	public TownBuilder addTown(final String name) {
-		final TownBuilder townBuilder = new TownBuilder(name, this);
-		townBuilders.add(townBuilder);
-		return townBuilder;
+	public ColonyBuilder addColony(final String name) {
+		final ColonyBuilder colonyBuilder = new ColonyBuilder(name, this);
+		colonyBuilders.add(colonyBuilder);
+		return colonyBuilder;
 	}
 
 }

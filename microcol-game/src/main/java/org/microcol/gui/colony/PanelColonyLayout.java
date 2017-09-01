@@ -1,4 +1,4 @@
-package org.microcol.gui.town;
+package org.microcol.gui.colony;
 
 import org.microcol.gui.ImageProvider;
 import org.microcol.gui.Point;
@@ -7,8 +7,8 @@ import org.microcol.gui.panelview.GamePanelView;
 import org.microcol.gui.panelview.PaintService;
 import org.microcol.gui.util.TitledPanel;
 import org.microcol.model.Terrain;
-import org.microcol.model.Town;
-import org.microcol.model.TownField;
+import org.microcol.model.Colony;
+import org.microcol.model.ColonyField;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
@@ -21,11 +21,11 @@ import javafx.scene.control.Label;
  * Show 3 x 3 tiles occupied by colony. User can assign worker to work outside
  * of colony.
  */
-public class PanelTownLayout extends TitledPanel {
+public class PanelColonyLayout extends TitledPanel {
 
 	private Canvas canvas;
 
-	private Town town;
+	private Colony colony;
 
 	private final PaintService paintService;
 
@@ -34,7 +34,7 @@ public class PanelTownLayout extends TitledPanel {
 	private final GameController gameController;
 
 	@Inject
-	public PanelTownLayout(final PaintService paintService, final ImageProvider imageProvider,
+	public PanelColonyLayout(final PaintService paintService, final ImageProvider imageProvider,
 			final GameController gameController) {
 		super("Colony layout", new Label("Colony layout"));
 		this.paintService = Preconditions.checkNotNull(paintService);
@@ -45,24 +45,24 @@ public class PanelTownLayout extends TitledPanel {
 		getContentPane().getChildren().add(canvas);
 	}
 
-	public void setTown(final Town town) {
-		this.town = Preconditions.checkNotNull(town);
+	public void setColony(final Colony colony) {
+		this.colony = Preconditions.checkNotNull(colony);
 		paint(canvas.getGraphicsContext2D());
 	}
 
 	private void paint(final GraphicsContext gc) {
-		town.getTownSection().forEach(townSection -> paintSection(gc, townSection));
-		paintTile(gc, gameController.getModel().getMap().getTerrainAt(town.getLocation()),
+		colony.getColonySection().forEach(colonySection -> paintSection(gc, colonySection));
+		paintTile(gc, gameController.getModel().getMap().getTerrainAt(colony.getLocation()),
 				Point.of(GamePanelView.TILE_WIDTH_IN_PX, GamePanelView.TILE_WIDTH_IN_PX));
 	}
 
-	private void paintSection(final GraphicsContext gc, final TownField townSection) {
-		final Terrain terrain = townSection.getTerrain();
+	private void paintSection(final GraphicsContext gc, final ColonyField colonySection) {
+		final Terrain terrain = colonySection.getTerrain();
 		final Point centre = Point.of(1, 1).multiply(GamePanelView.TILE_WIDTH_IN_PX);
-		final Point point = Point.of(townSection.getLocation()).add(centre);
+		final Point point = Point.of(colonySection.getLocation()).add(centre);
 		paintTile(gc, terrain, point);
-		if (!townSection.isEmpty()) {
-			gc.drawImage(imageProvider.getUnitImage(townSection.getUnit().getType()), point.getX(), point.getY());
+		if (!colonySection.isEmpty()) {
+			gc.drawImage(imageProvider.getUnitImage(colonySection.getUnit().getType()), point.getX(), point.getY());
 		}
 	}
 

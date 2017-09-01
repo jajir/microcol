@@ -9,15 +9,15 @@ import org.junit.Test;
 
 import mockit.Mocked;
 
-public class TownTest {
+public class ColonyTest {
 
 	
 	@Test
 	public void test_constructor_constructionConsistency(final @Mocked Player owner) throws Exception {
 		List<Construction> list = new ArrayList<>();
-		Town town = new Town("Prague", owner, Location.of(2, 2), list);
+		Colony colony = new Colony("Prague", owner, Location.of(2, 2), list);
 		
-		assertNotNull(town);
+		assertNotNull(colony);
 	}
 	
 	@Test(expected=IllegalStateException.class)
@@ -25,9 +25,9 @@ public class TownTest {
 		List<Construction> list = new ArrayList<>();
 		list.add(new Construction(ConstructionType.BLACKSMITHS_SHOP));
 		list.add(new Construction(ConstructionType.BLACKSMITHS_SHOP));
-		Town town = new Town("Prague", owner, Location.of(2, 2), list);
+		Colony colony = new Colony("Prague", owner, Location.of(2, 2), list);
 		
-		assertNotNull(town);
+		assertNotNull(colony);
 	}
 	
 	@Test(expected=IllegalStateException.class)
@@ -35,9 +35,9 @@ public class TownTest {
 		List<Construction> list = new ArrayList<>();
 		list.add(new Construction(ConstructionType.BLACKSMITHS_SHOP));
 		list.add(new Construction(ConstructionType.BLACKSMITHS_HOUSE));
-		Town town = new Town("Prague", owner, Location.of(2, 2), list);
+		Colony colony = new Colony("Prague", owner, Location.of(2, 2), list);
 		
-		assertNotNull(town);
+		assertNotNull(colony);
 	}
 	
 	@Test(expected=IllegalStateException.class)
@@ -45,9 +45,9 @@ public class TownTest {
 		List<Construction> list = new ArrayList<>();
 		list.add(new Construction(ConstructionType.DOCK));
 		list.add(new Construction(ConstructionType.DRYDOCK));
-		Town town = new Town("Prague", owner, Location.of(2, 2), list);
+		Colony colony = new Colony("Prague", owner, Location.of(2, 2), list);
 		
-		assertNotNull(town);
+		assertNotNull(colony);
 	}
 
 }

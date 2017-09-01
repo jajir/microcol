@@ -8,9 +8,9 @@ import java.util.Set;
 import com.google.common.base.Preconditions;
 
 /**
- * Helps build town.
+ * Helps build colony.
  */
-public class TownBuilder {
+public class ColonyBuilder {
 
 	private final String name;
 
@@ -26,7 +26,7 @@ public class TownBuilder {
 
 	private final List<FieldPlace> fieldPlaces = new ArrayList<>();
 
-	public TownBuilder(final String name, final PlayerBuilder playerBuilder) {
+	public ColonyBuilder(final String name, final PlayerBuilder playerBuilder) {
 		this.name = Preconditions.checkNotNull(name);
 		this.playerBuilder = Preconditions.checkNotNull(playerBuilder);
 	}
@@ -35,29 +35,29 @@ public class TownBuilder {
 		return playerBuilder;
 	}
 
-	public TownBuilder setLocation(final Location location) {
+	public ColonyBuilder setLocation(final Location location) {
 		this.location = location;
 		return this;
 	}
 
-	public TownBuilder setDefaultConstructions(final boolean defaultCostructions) {
+	public ColonyBuilder setDefaultConstructions(final boolean defaultCostructions) {
 		this.defaultCostructions = defaultCostructions;
 		return this;
 	}
 
 	/**
-	 * Allows to specify extra construction in town.
+	 * Allows to specify extra construction in colony.
 	 * 
 	 * @param constructionType
 	 *            required construction type
-	 * @return town builder
+	 * @return colony builder
 	 */
-	public TownBuilder setConstruction(final ConstructionType constructionType) {
+	public ColonyBuilder setConstruction(final ConstructionType constructionType) {
 		constructionTypes.add(Preconditions.checkNotNull(constructionType));
 		return this;
 	}
 
-	public TownBuilder setWorker(final ConstructionType constructionType, final int position, final UnitType unitType) {
+	public ColonyBuilder setWorker(final ConstructionType constructionType, final int position, final UnitType unitType) {
 		Preconditions.checkNotNull(constructionType);
 		Preconditions.checkNotNull(unitType);
 		Preconditions.checkArgument(position >= 0 && position < 3, "Position is not within range 0,1,2.");
@@ -65,7 +65,7 @@ public class TownBuilder {
 		return this;
 	}
 
-	public TownBuilder setWorker(final Location fieldDirection, final UnitType unitType) {
+	public ColonyBuilder setWorker(final Location fieldDirection, final UnitType unitType) {
 		Preconditions.checkNotNull(fieldDirection);
 		Preconditions.checkNotNull(unitType);
 		fieldPlaces.add(new FieldPlace(fieldDirection, unitType));

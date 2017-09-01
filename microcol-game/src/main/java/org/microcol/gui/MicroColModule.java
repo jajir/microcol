@@ -1,5 +1,7 @@
 package org.microcol.gui;
 
+import org.microcol.gui.colony.PanelColonyLayout;
+import org.microcol.gui.colony.ColonyDialog;
 import org.microcol.gui.event.AboutGameEventController;
 import org.microcol.gui.event.AboutGameListenerImpl;
 import org.microcol.gui.event.AnimationSpeedChangeController;
@@ -37,8 +39,6 @@ import org.microcol.gui.panelview.PaintService;
 import org.microcol.gui.panelview.UnitAttackedEventListener;
 import org.microcol.gui.panelview.UnitService;
 import org.microcol.gui.panelview.ViewState;
-import org.microcol.gui.town.PanelTownLayout;
-import org.microcol.gui.town.TownDialog;
 import org.microcol.gui.util.Text;
 import org.microcol.gui.util.ViewUtil;
 
@@ -122,8 +122,8 @@ public class MicroColModule extends AbstractModule {
 		bind(RightPanelPresenter.class).asEagerSingleton();
 
 		bind(UnitsPanel.class).asEagerSingleton();
-		bind(TownDialog.class).asEagerSingleton();
-		bind(PanelTownLayout.class).asEagerSingleton();
+		bind(ColonyDialog.class).asEagerSingleton();
+		bind(PanelColonyLayout.class).asEagerSingleton();
 		bind(PersistingDialog.class).in(Singleton.class);
 
 		/**

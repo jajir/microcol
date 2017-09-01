@@ -59,8 +59,8 @@ public final class Player {
 		return model.getUnitsAt(this, location);
 	}
 
-	public Optional<Town> getTownsAt(final Location location) {
-		return model.getTownsAt(location, this);
+	public Optional<Colony> getColoniesAt(final Location location) {
+		return model.getColoniesAt(location, this);
 	}
 
 	public List<Unit> getEnemyUnits() {

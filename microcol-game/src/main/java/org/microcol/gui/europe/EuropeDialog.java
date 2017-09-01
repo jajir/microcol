@@ -7,6 +7,8 @@ import org.microcol.gui.event.model.GameController;
 import org.microcol.gui.util.AbstractDialog;
 import org.microcol.gui.util.ClipboardReader;
 import org.microcol.gui.util.ClipboardWritter;
+import org.microcol.gui.util.PanelDock;
+import org.microcol.gui.util.PanelDockBehavior;
 import org.microcol.gui.util.Text;
 import org.microcol.gui.util.ViewUtil;
 import org.microcol.model.CargoSlot;
@@ -40,7 +42,7 @@ public class EuropeDialog extends AbstractDialog implements DialogCallback {
 
 	private final Logger logger = LoggerFactory.getLogger(EuropeDialog.class);
 
-	private final PanelEuropeDock europeDock;
+	private final PanelDock europeDock;
 
 	private final PanelHighSeas shipsTravelingToNewWorld;
 
@@ -66,7 +68,7 @@ public class EuropeDialog extends AbstractDialog implements DialogCallback {
 				gameController, false);
 		shipsTravelingToEurope = new PanelHighSeas(this, imageProvider, "Ships travelling to Europe", gameController,
 				true);
-		europeDock = new PanelEuropeDock(viewUtil, text, gameController, imageProvider, this, new PanelDockBehavior() {
+		europeDock = new PanelDock(gameController, imageProvider, new PanelDockBehavior() {
 			@Override
 			public final void onDragDropped(final CargoSlot cargoSlot, final DragEvent event) {
 				logger.debug("Object was dropped on ship cargo slot.");

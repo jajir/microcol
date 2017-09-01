@@ -6,9 +6,9 @@ import javax.json.stream.JsonParser;
 
 import com.google.common.collect.Lists;
 
-public class TownsStorage {
+public class ColonyStorage {
 
-	static List<Town> load(final JsonParser parser, final List<Player> players) {
+	static List<Colony> load(final JsonParser parser, final List<Player> players) {
 		//TODO JJ NYI
 		return Lists.newArrayList();
 	}

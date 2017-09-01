@@ -1,16 +1,15 @@
-package org.microcol.gui.town;
+package org.microcol.gui.colony;
 
 import org.microcol.gui.ImageProvider;
 import org.microcol.gui.LocalizationHelper;
-import org.microcol.gui.europe.EuropeDialog;
-import org.microcol.gui.europe.PanelDockBehavior;
-import org.microcol.gui.europe.PanelEuropeDock;
 import org.microcol.gui.event.model.GameController;
 import org.microcol.gui.util.AbstractDialog;
+import org.microcol.gui.util.PanelDock;
+import org.microcol.gui.util.PanelDockBehavior;
 import org.microcol.gui.util.Text;
 import org.microcol.gui.util.ViewUtil;
 import org.microcol.model.CargoSlot;
-import org.microcol.model.Town;
+import org.microcol.model.Colony;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
@@ -27,24 +26,24 @@ import javafx.scene.layout.VBox;
 /**
  * Show Europe port.
  */
-public class TownDialog extends AbstractDialog {
+public class ColonyDialog extends AbstractDialog {
 
-	private final Label townName;
+	private final Label colonyName;
 
-	private final PanelTownLayout colonyLayout;
+	private final PanelColonyLayout colonyLayout;
 
-	private final PanelTownStructures colonyStructures;
+	private final PanelColonyStructures colonyStructures;
 
-	private final PanelTownGoods goods;
+	private final PanelColonyGoods goods;
 
 	private final GameController gameController;
 
-	private final PanelEuropeDock europeDock;
+	private final PanelDock europeDock;
 
 	@Inject
-	public TownDialog(final ViewUtil viewUtil, final Text text, final ImageProvider imageProvider,
+	public ColonyDialog(final ViewUtil viewUtil, final Text text, final ImageProvider imageProvider,
 			final GameController gameController, final LocalizationHelper localizationHelper,
-			final PanelTownLayout panelTownLayout) {
+			final PanelColonyLayout panelColonyLayout) {
 		super(viewUtil);
 		Preconditions.checkNotNull(imageProvider);
 		this.gameController = Preconditions.checkNotNull(gameController);
@@ -53,14 +52,14 @@ public class TownDialog extends AbstractDialog {
 		/**
 		 * Row 0
 		 */
-		townName = new Label("Colony: ");
+		colonyName = new Label("Colony: ");
 
 		/**
 		 * Row 1
 		 */
-		colonyLayout = Preconditions.checkNotNull(panelTownLayout);
+		colonyLayout = Preconditions.checkNotNull(panelColonyLayout);
 
-		colonyStructures = new PanelTownStructures(localizationHelper, imageProvider);
+		colonyStructures = new PanelColonyStructures(localizationHelper, imageProvider);
 
 		final HBox mapAndBuildings = new HBox();
 		mapAndBuildings.getChildren().addAll(colonyStructures, colonyLayout);
@@ -70,28 +69,26 @@ public class TownDialog extends AbstractDialog {
 		 */
 		final PanelProductionSummary panelProductionSummary = new PanelProductionSummary();
 
-		europeDock = new PanelEuropeDock(viewUtil, text, gameController, imageProvider,
-				new EuropeDialog(viewUtil, text, imageProvider, gameController, new LocalizationHelper(text)),
-				new PanelDockBehavior() {
+		europeDock = new PanelDock(gameController, imageProvider, new PanelDockBehavior() {
 
-					@Override
-					public void onDragDropped(CargoSlot cargoSlot, DragEvent event) {
-						// TODO Auto-generated method stub
+			@Override
+			public void onDragDropped(CargoSlot cargoSlot, DragEvent event) {
+				// TODO Auto-generated method stub
 
-					}
+			}
 
-					@Override
-					public void onDragDetected(CargoSlot cargoSlot, MouseEvent event, Node node) {
-						// TODO Auto-generated method stub
+			@Override
+			public void onDragDetected(CargoSlot cargoSlot, MouseEvent event, Node node) {
+				// TODO Auto-generated method stub
 
-					}
+			}
 
-					@Override
-					public boolean isCorrectObject(CargoSlot cargoSlot, Dragboard db) {
-						// TODO Auto-generated method stub
-						return false;
-					}
-				});
+			@Override
+			public boolean isCorrectObject(CargoSlot cargoSlot, Dragboard db) {
+				// TODO Auto-generated method stub
+				return false;
+			}
+		});
 
 		final PanelOutsideColony panelOutsideColony = new PanelOutsideColony();
 
@@ -101,7 +98,7 @@ public class TownDialog extends AbstractDialog {
 		/**
 		 * Good row - 3
 		 */
-		goods = new PanelTownGoods(imageProvider);
+		goods = new PanelColonyGoods(imageProvider);
 
 		/**
 		 * Last row 4
@@ -113,16 +110,16 @@ public class TownDialog extends AbstractDialog {
 		buttonOk.requestFocus();
 
 		final VBox mainPanel = new VBox();
-		mainPanel.getChildren().addAll(townName, mapAndBuildings, managementRow, goods, buttonOk);
+		mainPanel.getChildren().addAll(colonyName, mapAndBuildings, managementRow, goods, buttonOk);
 		init(mainPanel);
 		getScene().getStylesheets().add("gui/MicroCol.css");
 	}
 
-	public void showTown(final Town town) {
-		townName.setText("Colony: " + town.getName());
-		colonyLayout.setTown(town);
+	public void showColony(final Colony colony) {
+		colonyName.setText("Colony: " + colony.getName());
+		colonyLayout.setColony(colony);
 		goods.setEurope(gameController.getModel().getEurope());
-		colonyStructures.repaint(town);
+		colonyStructures.repaint(colony);
 		// pierShips.setPort(null);
 		getDialog().showAndWait();
 	}

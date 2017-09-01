@@ -1,4 +1,4 @@
-package org.microcol.gui.town;
+package org.microcol.gui.colony;
 
 import org.microcol.gui.ImageProvider;
 import org.microcol.gui.util.TitledPanel;
@@ -12,13 +12,13 @@ import javafx.scene.layout.HBox;
 /**
  * Show list of all available goods.
  */
-public class PanelTownGoods extends TitledPanel {
+public class PanelColonyGoods extends TitledPanel {
 
 	private final HBox hBox;
 
 	private final ImageProvider imageProvider;
 
-	public PanelTownGoods(final ImageProvider imageProvider) {
+	public PanelColonyGoods(final ImageProvider imageProvider) {
 		super("zbozi");
 		this.imageProvider = Preconditions.checkNotNull(imageProvider);
 		hBox = new HBox();
@@ -30,7 +30,7 @@ public class PanelTownGoods extends TitledPanel {
 		hBox.getChildren().clear();
 		GoodType.BUYABLE_GOOD_TYPES.forEach(goodType -> {
 			hBox.getChildren().add(
-					new PanelTownGood(imageProvider.getGoodTypeImage(goodType), europe.getGoodTradeForType(goodType)));
+					new PanelColonyGood(imageProvider.getGoodTypeImage(goodType), europe.getGoodTradeForType(goodType)));
 		});
 	}
 

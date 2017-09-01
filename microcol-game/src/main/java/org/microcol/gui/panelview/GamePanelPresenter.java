@@ -8,6 +8,7 @@ import org.microcol.gui.DialogUnitCantFightWarning;
 import org.microcol.gui.GamePreferences;
 import org.microcol.gui.MicroColException;
 import org.microcol.gui.Point;
+import org.microcol.gui.colony.ColonyDialog;
 import org.microcol.gui.event.CenterViewController;
 import org.microcol.gui.event.ExitGameController;
 import org.microcol.gui.event.FocusedTileController;
@@ -20,13 +21,12 @@ import org.microcol.gui.event.model.DebugRequestController;
 import org.microcol.gui.event.model.GameController;
 import org.microcol.gui.event.model.MoveUnitController;
 import org.microcol.gui.event.model.NewGameController;
-import org.microcol.gui.town.TownDialog;
 import org.microcol.gui.util.Localized;
 import org.microcol.gui.util.Text;
 import org.microcol.gui.util.ViewUtil;
 import org.microcol.model.Location;
 import org.microcol.model.Model;
-import org.microcol.model.Town;
+import org.microcol.model.Colony;
 import org.microcol.model.Unit;
 import org.microcol.model.event.UnitMovedEvent;
 import org.slf4j.Logger;
@@ -93,7 +93,7 @@ public final class GamePanelPresenter implements Localized {
 
 	private final StartMoveController startMoveController;
 
-	private final TownDialog townDialog;
+	private final ColonyDialog colonyDialog;
 
 	private final Text text;
 
@@ -104,7 +104,7 @@ public final class GamePanelPresenter implements Localized {
 			final GamePreferences gamePreferences, final ShowGridController showGridController,
 			final CenterViewController viewController, final ExitGameController exitGameController,
 			final DebugRequestController debugRequestController, final ViewState viewState, final ViewUtil viewUtil,
-			final StartMoveController startMoveController, final TownDialog townDialog, final Text text) {
+			final StartMoveController startMoveController, final ColonyDialog colonyDialog, final Text text) {
 		this.focusedTileController = Preconditions.checkNotNull(focusedTileController);
 		this.gameController = Preconditions.checkNotNull(gameController);
 		this.gamePreferences = gamePreferences;
@@ -112,7 +112,7 @@ public final class GamePanelPresenter implements Localized {
 		this.viewState = Preconditions.checkNotNull(viewState);
 		this.viewUtil = Preconditions.checkNotNull(viewUtil);
 		this.startMoveController = Preconditions.checkNotNull(startMoveController);
-		this.townDialog = Preconditions.checkNotNull(townDialog);
+		this.colonyDialog = Preconditions.checkNotNull(colonyDialog);
 		this.text = Preconditions.checkNotNull(text);
 
 		moveUnitController.addListener(event -> {
@@ -207,12 +207,12 @@ public final class GamePanelPresenter implements Localized {
 		return false;
 	}
 
-	private void tryToOpenTownDetail(final Location currentLocation) {
+	private void tryToOpenColonyDetail(final Location currentLocation) {
 		Preconditions.checkNotNull(currentLocation);
-		final Optional<Town> oTown = gameController.getModel().getCurrentPlayer().getTownsAt(currentLocation);
-		if (oTown.isPresent()) {
-			// show town details
-			townDialog.showTown(oTown.get());
+		final Optional<Colony> oColony = gameController.getModel().getCurrentPlayer().getColoniesAt(currentLocation);
+		if (oColony.isPresent()) {
+			// show colony details
+			colonyDialog.showColony(oColony.get());
 		}
 	}
 
@@ -262,7 +262,7 @@ public final class GamePanelPresenter implements Localized {
 							gameController.getModel().getMap().getTerrainAt(location)));
 					if (!tryToSwitchToMoveMode(location)) {
 						// TODO JJ is this if really needed?
-						tryToOpenTownDetail(location);
+						tryToOpenColonyDetail(location);
 					}
 				}
 			}
@@ -312,8 +312,8 @@ public final class GamePanelPresenter implements Localized {
 		logger.debug("Switching to normal mode, from " + moveFromLocation + " to " + moveToLocation);
 		if (moveFromLocation.equals(moveToLocation)) {
 			display.setCursorNormal();
-			//it's a click? is there a town?
-			tryToOpenTownDetail(moveToLocation);
+			//it's a click? is there a colony?
+			tryToOpenColonyDetail(moveToLocation);
 			return;
 		}
 		// TODO JJ active ship can be different from ship first at list

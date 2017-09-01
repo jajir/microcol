@@ -16,7 +16,7 @@ public class ConstructionType {
 			.setProduce(GoodType.BELL)
 	 		.setSlotsForWorkers(3)
 	 		.setUpgradeTo(null)
-	 		.setRequiredTownPopulation(1)
+	 		.setRequiredColonyPopulation(1)
 	 		.build();
 
 	public final static ConstructionType LUMBER_MILL = ConstructionTypeBuilder.make()
@@ -26,7 +26,7 @@ public class ConstructionType {
 			.setProduce(GoodType.HAMMERS)
 	 		.setSlotsForWorkers(3)
 	 		.setUpgradeTo(null)
-	 		.setRequiredTownPopulation(3)
+	 		.setRequiredColonyPopulation(3)
 	 		.build();
 
 	public final static ConstructionType CARPENTERS_SHOP = ConstructionTypeBuilder.make()
@@ -36,7 +36,7 @@ public class ConstructionType {
 			.setProduce(GoodType.HAMMERS)
 	 		.setSlotsForWorkers(3)
 	 		.setUpgradeTo(LUMBER_MILL)
-	 		.setRequiredTownPopulation(1)
+	 		.setRequiredColonyPopulation(1)
 	 		.build();
   
 	public final static ConstructionType IRON_WORKS = ConstructionTypeBuilder.make()
@@ -46,7 +46,7 @@ public class ConstructionType {
 			.setProduce(GoodType.TOOLS)
 	 		.setSlotsForWorkers(3)
 	 		.setUpgradeTo(null)
-	 		.setRequiredTownPopulation(8)
+	 		.setRequiredColonyPopulation(8)
 	 		.build();
  
 	public final static ConstructionType BLACKSMITHS_SHOP = ConstructionTypeBuilder.make()
@@ -56,7 +56,7 @@ public class ConstructionType {
 			.setProduce(GoodType.TOOLS)
 	 		.setSlotsForWorkers(3)
 	 		.setUpgradeTo(IRON_WORKS)
-	 		.setRequiredTownPopulation(4)
+	 		.setRequiredColonyPopulation(4)
 	 		.build();
 
 	public final static ConstructionType BLACKSMITHS_HOUSE = ConstructionTypeBuilder.make()
@@ -66,7 +66,7 @@ public class ConstructionType {
 			.setProduce(GoodType.TOOLS)
 	 		.setSlotsForWorkers(3)
 	 		.setUpgradeTo(BLACKSMITHS_SHOP)
-	 		.setRequiredTownPopulation(1)
+	 		.setRequiredColonyPopulation(1)
 	 		.build();
  
 	public final static ConstructionType FORTRESS = ConstructionTypeBuilder.make()
@@ -76,7 +76,7 @@ public class ConstructionType {
 			.setProduce(null)
 	 		.setSlotsForWorkers(0)
 	 		.setUpgradeTo(null)
-	 		.setRequiredTownPopulation(8)
+	 		.setRequiredColonyPopulation(8)
 	 		.build();
  
 	public final static ConstructionType FORT = ConstructionTypeBuilder.make()
@@ -86,7 +86,7 @@ public class ConstructionType {
 			.setProduce(null)
 	 		.setSlotsForWorkers(0)
 	 		.setUpgradeTo(FORTRESS)
-	 		.setRequiredTownPopulation(40)
+	 		.setRequiredColonyPopulation(40)
 	 		.build();
 
 	public final static ConstructionType STOCKADE = ConstructionTypeBuilder.make()
@@ -96,7 +96,7 @@ public class ConstructionType {
 			.setProduce(null)
 	 		.setSlotsForWorkers(0)
 	 		.setUpgradeTo(FORT)
-	 		.setRequiredTownPopulation(3)
+	 		.setRequiredColonyPopulation(3)
 	 		.build();
 	 
 	public final static ConstructionType CIGAR_FACTORY = ConstructionTypeBuilder.make()
@@ -106,7 +106,7 @@ public class ConstructionType {
 			.setProduce(GoodType.CIGARS)
 	 		.setSlotsForWorkers(3)
 	 		.setUpgradeTo(null)
-	 		.setRequiredTownPopulation(8)
+	 		.setRequiredColonyPopulation(8)
 	 		.build();
  
 	public final static ConstructionType TOBACCONISTS_SHOP = ConstructionTypeBuilder.make()
@@ -116,7 +116,7 @@ public class ConstructionType {
 			.setProduce(GoodType.CIGARS)
 	 		.setSlotsForWorkers(3)
 	 		.setUpgradeTo(CIGAR_FACTORY)
-	 		.setRequiredTownPopulation(4)
+	 		.setRequiredColonyPopulation(4)
 	 		.build();
  
 		public final static ConstructionType TOBACCONISTS_HOUSE = ConstructionTypeBuilder.make()
@@ -126,7 +126,7 @@ public class ConstructionType {
 			.setProduce(GoodType.CIGARS)
 	 		.setSlotsForWorkers(3)
 	 		.setUpgradeTo(TOBACCONISTS_SHOP)
-	 		.setRequiredTownPopulation(1)
+	 		.setRequiredColonyPopulation(1)
 	 		.build();
 
 	public final static ConstructionType TEXTILE_MILL = ConstructionTypeBuilder.make()
@@ -136,7 +136,7 @@ public class ConstructionType {
 			.setProduce(GoodType.SILK)
 	 		.setSlotsForWorkers(3)
 	 		.setUpgradeTo(null)
-	 		.setRequiredTownPopulation(8)
+	 		.setRequiredColonyPopulation(8)
 	 		.build();
  
 	public final static ConstructionType WEAVERS_SHOP = ConstructionTypeBuilder.make()
@@ -146,7 +146,7 @@ public class ConstructionType {
 			.setProduce(GoodType.SILK)
 	 		.setSlotsForWorkers(3)
 	 		.setUpgradeTo(TEXTILE_MILL)
-	 		.setRequiredTownPopulation(4)
+	 		.setRequiredColonyPopulation(4)
 	 		.build();
 
 	public final static ConstructionType WEAVERS_HOUSE = ConstructionTypeBuilder.make()
@@ -156,7 +156,7 @@ public class ConstructionType {
 			.setProduce(GoodType.SILK)
 	 		.setSlotsForWorkers(3)
 	 		.setUpgradeTo(WEAVERS_SHOP)
-	 		.setRequiredTownPopulation(1)
+	 		.setRequiredColonyPopulation(1)
 	 		.build();
 
 	public final static ConstructionType RUM_FACTORY = ConstructionTypeBuilder.make()
@@ -166,7 +166,7 @@ public class ConstructionType {
 			.setProduce(GoodType.RUM)
 	 		.setSlotsForWorkers(3)
 	 		.setUpgradeTo(null)
-	 		.setRequiredTownPopulation(8)
+	 		.setRequiredColonyPopulation(8)
 	 		.build();
 
 	public final static ConstructionType RUM_DISTILLERY = ConstructionTypeBuilder.make()
@@ -176,7 +176,7 @@ public class ConstructionType {
 			.setProduce(GoodType.RUM)
 	 		.setSlotsForWorkers(3)
 	 		.setUpgradeTo(RUM_FACTORY)
-	 		.setRequiredTownPopulation(4)
+	 		.setRequiredColonyPopulation(4)
 	 		.build();
 
 	public final static ConstructionType RUM_DISTILLERS_HOUSE = ConstructionTypeBuilder.make()
@@ -186,7 +186,7 @@ public class ConstructionType {
 			.setProduce(GoodType.RUM)
 	 		.setSlotsForWorkers(3)
 	 		.setUpgradeTo(RUM_DISTILLERY)
-	 		.setRequiredTownPopulation(1)
+	 		.setRequiredColonyPopulation(1)
 	 		.build();
 
 	public final static ConstructionType FUR_FACTORY = ConstructionTypeBuilder.make()
@@ -196,7 +196,7 @@ public class ConstructionType {
 			.setProduce(GoodType.COAT)
 	 		.setSlotsForWorkers(3)
 	 		.setUpgradeTo(null)
-	 		.setRequiredTownPopulation(6)
+	 		.setRequiredColonyPopulation(6)
 	 		.build();
 	 
 	public final static ConstructionType FUR_TRADING_POST = ConstructionTypeBuilder.make()
@@ -206,7 +206,7 @@ public class ConstructionType {
 			.setProduce(GoodType.COAT)
 	 		.setSlotsForWorkers(3)
 	 		.setUpgradeTo(FUR_FACTORY)
-	 		.setRequiredTownPopulation(3)
+	 		.setRequiredColonyPopulation(3)
 	 		.build();
  
 	public final static ConstructionType FUR_TRADERS_HOUSE = ConstructionTypeBuilder.make()
@@ -216,7 +216,7 @@ public class ConstructionType {
 			.setProduce(GoodType.COAT)
 	 		.setSlotsForWorkers(3)
 	 		.setUpgradeTo(FUR_TRADING_POST)
-	 		.setRequiredTownPopulation(1)
+	 		.setRequiredColonyPopulation(1)
 	 		.build();
 
 	public final static ConstructionType ARSENAL = ConstructionTypeBuilder.make()
@@ -226,7 +226,7 @@ public class ConstructionType {
 			.setProduce(GoodType.MUSKET)
 	 		.setSlotsForWorkers(3)
 	 		.setUpgradeTo(null)
-	 		.setRequiredTownPopulation(8)
+	 		.setRequiredColonyPopulation(8)
 	 		.build();
 
 	public final static ConstructionType MAGAZINE = ConstructionTypeBuilder.make()
@@ -236,7 +236,7 @@ public class ConstructionType {
 			.setProduce(GoodType.MUSKET)
 	 		.setSlotsForWorkers(3)
 	 		.setUpgradeTo(ARSENAL)
-	 		.setRequiredTownPopulation(8)
+	 		.setRequiredColonyPopulation(8)
 	 		.build();
 
 	public final static ConstructionType ARMORY = ConstructionTypeBuilder.make()
@@ -246,7 +246,7 @@ public class ConstructionType {
 			.setProduce(GoodType.MUSKET)
 	 		.setSlotsForWorkers(3)
 	 		.setUpgradeTo(MAGAZINE)
-	 		.setRequiredTownPopulation(1)
+	 		.setRequiredColonyPopulation(1)
 	 		.build();
 
 	public final static ConstructionType SHIPYARD = ConstructionTypeBuilder.make()
@@ -256,7 +256,7 @@ public class ConstructionType {
 			.setProduce(null)
 	 		.setSlotsForWorkers(0)
 	 		.setUpgradeTo(null)
-	 		.setRequiredTownPopulation(8)
+	 		.setRequiredColonyPopulation(8)
 	 		.build();
 
 	public final static ConstructionType DRYDOCK = ConstructionTypeBuilder.make()
@@ -266,7 +266,7 @@ public class ConstructionType {
 			.setProduce(null)
 	 		.setSlotsForWorkers(0)
 	 		.setUpgradeTo(SHIPYARD)
-	 		.setRequiredTownPopulation(6)
+	 		.setRequiredColonyPopulation(6)
 	 		.build();
 
 	public final static ConstructionType DOCK = ConstructionTypeBuilder.make()
@@ -276,7 +276,7 @@ public class ConstructionType {
 			.setProduce(null)
 	 		.setSlotsForWorkers(0)
 	 		.setUpgradeTo(DRYDOCK)
-	 		.setRequiredTownPopulation(1)
+	 		.setRequiredColonyPopulation(1)
 	 		.build();
 
 	public final static ConstructionType UNIVERSITY = ConstructionTypeBuilder.make()
@@ -286,7 +286,7 @@ public class ConstructionType {
 			.setProduce(null)
 	 		.setSlotsForWorkers(3)
 	 		.setUpgradeTo(null)
-	 		.setRequiredTownPopulation(10)
+	 		.setRequiredColonyPopulation(10)
 	 		.build();
 
 	public final static ConstructionType COLLEGE = ConstructionTypeBuilder.make()
@@ -296,7 +296,7 @@ public class ConstructionType {
 			.setProduce(null)
 	 		.setSlotsForWorkers(3)
 	 		.setUpgradeTo(UNIVERSITY)
-	 		.setRequiredTownPopulation(8)
+	 		.setRequiredColonyPopulation(8)
 	 		.build();
 
 	public final static ConstructionType SCHOOLHOUSE = ConstructionTypeBuilder.make()
@@ -306,7 +306,7 @@ public class ConstructionType {
 			.setProduce(null)
 	 		.setSlotsForWorkers(3)
 	 		.setUpgradeTo(COLLEGE)
-	 		.setRequiredTownPopulation(4)
+	 		.setRequiredColonyPopulation(4)
 	 		.build();
 
 	public final static ConstructionType WAREHOUSE_EXPANSION = ConstructionTypeBuilder.make()
@@ -316,7 +316,7 @@ public class ConstructionType {
 			.setProduce(null)
 	 		.setSlotsForWorkers(0)
 	 		.setUpgradeTo(null)
-	 		.setRequiredTownPopulation(1)
+	 		.setRequiredColonyPopulation(1)
 	 		.build();
 
 	public final static ConstructionType WAREHOUSE = ConstructionTypeBuilder.make()
@@ -326,7 +326,7 @@ public class ConstructionType {
 			.setProduce(null)
 	 		.setSlotsForWorkers(0)
 	 		.setUpgradeTo(WAREHOUSE_EXPANSION)
-	 		.setRequiredTownPopulation(1)
+	 		.setRequiredColonyPopulation(1)
 	 		.build();
 
 	public final static ConstructionType STABLES = ConstructionTypeBuilder.make()
@@ -336,7 +336,7 @@ public class ConstructionType {
 			.setProduce(null)
 	 		.setSlotsForWorkers(0)
 	 		.setUpgradeTo(null)
-	 		.setRequiredTownPopulation(1)
+	 		.setRequiredColonyPopulation(1)
 	 		.build();
 
 	public final static ConstructionType CATHEDRAL = ConstructionTypeBuilder.make()
@@ -346,7 +346,7 @@ public class ConstructionType {
 			.setProduce(GoodType.CROSS)
 	 		.setSlotsForWorkers(0)
 	 		.setUpgradeTo(null)
-	 		.setRequiredTownPopulation(8)
+	 		.setRequiredColonyPopulation(8)
 	 		.build();
 
 	public final static ConstructionType CHURCH = ConstructionTypeBuilder.make()
@@ -356,7 +356,7 @@ public class ConstructionType {
 			.setProduce(GoodType.CROSS)
 	 		.setSlotsForWorkers(0)
 	 		.setUpgradeTo(CATHEDRAL)
-	 		.setRequiredTownPopulation(3)
+	 		.setRequiredColonyPopulation(3)
 	 		.build();
 
 	public final static ConstructionType NEWSPAPER = ConstructionTypeBuilder.make()
@@ -366,7 +366,7 @@ public class ConstructionType {
 			.setProduce(GoodType.BELL)
 	 		.setSlotsForWorkers(0)
 	 		.setUpgradeTo(null)
-	 		.setRequiredTownPopulation(4)
+	 		.setRequiredColonyPopulation(4)
 	 		.build();
 
 	public final static ConstructionType PRINTING_PRESS = ConstructionTypeBuilder.make()
@@ -376,7 +376,7 @@ public class ConstructionType {
 			.setProduce(GoodType.BELL)
 	 		.setSlotsForWorkers(0)
 	 		.setUpgradeTo(NEWSPAPER)
-	 		.setRequiredTownPopulation(1)
+	 		.setRequiredColonyPopulation(1)
 	 		.build();
 
 	public final static ConstructionType CUSTOM_HOUSE = ConstructionTypeBuilder.make()
@@ -386,7 +386,7 @@ public class ConstructionType {
 			.setProduce(null)
 	 		.setSlotsForWorkers(0)
 	 		.setUpgradeTo(null)
-	 		.setRequiredTownPopulation(0)
+	 		.setRequiredColonyPopulation(0)
 	 		.build();
 
 	public static List<ConstructionType> ALL = ImmutableList.of(
@@ -430,9 +430,9 @@ public class ConstructionType {
 			CUSTOM_HOUSE);
 	
 	/**
-	 * List of construction types that are in all newly builded towns.
+	 * List of construction types that are in all newly builded colonies.
 	 */
-	public final static List<ConstructionType> NEW_TOWN_CONSTRUCTIONS = ALL.stream()
+	public final static List<ConstructionType> NEW_COLONY_CONSTRUCTIONS = ALL.stream()
 			.filter(constructionType -> constructionType.isBuildFromFounding())
 			.collect(ImmutableList.toImmutableList());
 	
@@ -444,7 +444,7 @@ public class ConstructionType {
 		private ConstructionType upgradeTo;
 		private GoodType produce;
 		private int slotsForWorkers;
-		private int requiredTownPopulation;
+		private int requiredColonyPopulation;
 
 		private static ConstructionTypeBuilder make() {
 			return new ConstructionTypeBuilder();
@@ -452,7 +452,7 @@ public class ConstructionType {
 
 		private ConstructionType build() {
 			return new ConstructionType(name, buildCostHammers, buildCostTools, upgradeTo, produce, slotsForWorkers,
-					requiredTownPopulation);
+					requiredColonyPopulation);
 		}
 
 		private ConstructionTypeBuilder setName(final String name) {
@@ -485,8 +485,8 @@ public class ConstructionType {
 			return this;
 		}
 
-		private ConstructionTypeBuilder setRequiredTownPopulation(final int requiredTownPopulation) {
-			this.requiredTownPopulation = requiredTownPopulation;
+		private ConstructionTypeBuilder setRequiredColonyPopulation(final int requiredColonyPopulation) {
+			this.requiredColonyPopulation = requiredColonyPopulation;
 			return this;
 		}
 
@@ -498,18 +498,18 @@ public class ConstructionType {
 	private final ConstructionType upgradeTo;
 	private final GoodType produce;
 	private final int slotsForWorkers;
-	private final int requiredTownPopulation;
+	private final int requiredColonyPopulation;
 
 	private ConstructionType(final String name, final int buildCostHammers, final int buildCostTools,
 			final ConstructionType upgradeTo, final GoodType produce, final int slotsForWorkers,
-			final int requiredTownPopulation) {
+			final int requiredColonyPopulation) {
 		this.name = Preconditions.checkNotNull(name);
 		this.buildCostHammers = buildCostHammers;
 		this.buildCostTools = buildCostTools;
 		this.upgradeTo = upgradeTo;
 		this.produce = produce;
 		this.slotsForWorkers = slotsForWorkers;
-		this.requiredTownPopulation = requiredTownPopulation;
+		this.requiredColonyPopulation = requiredColonyPopulation;
 	}
 	
 	@Override
@@ -533,9 +533,9 @@ public class ConstructionType {
 	}
 
 	/**
-	 * Say if construction type is in town when is newly build.
+	 * Say if construction type is in colony when is newly build.
 	 *
-	 * @return Return <code>true</code> when building type is in town when it's
+	 * @return Return <code>true</code> when building type is in colony when it's
 	 *         founded. When construction type have to be builded than return
 	 *         <code>false</code>.
 	 */
@@ -584,8 +584,8 @@ public class ConstructionType {
 		return buildCostHammers > 0 && buildCostTools > 0;
 	}
 
-	public int getRequiredTownPopulation() {
-		return requiredTownPopulation;
+	public int getRequiredColonyPopulation() {
+		return requiredColonyPopulation;
 	}
 
 }

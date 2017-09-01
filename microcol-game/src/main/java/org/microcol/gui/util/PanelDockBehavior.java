@@ -1,4 +1,4 @@
-package org.microcol.gui.europe;
+package org.microcol.gui.util;
 
 import org.microcol.model.CargoSlot;
 

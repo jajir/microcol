@@ -20,7 +20,7 @@ import org.microcol.gui.util.ViewUtil;
 import org.microcol.model.Location;
 import org.microcol.model.Model;
 import org.microcol.model.Terrain;
-import org.microcol.model.Town;
+import org.microcol.model.Colony;
 import org.microcol.model.Unit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -196,7 +196,7 @@ public class GamePanelView implements GamePanelPresenter.Display {
 		paintGrid(g, area);
 		paintSelectedTile(g, area);
 		paintUnits(g, gameController.getModel(), area);
-		paintTowns(g, gameController.getModel(), area);
+		paintColonies(g, gameController.getModel(), area);
 		paintSteps(g, area);
 		paintAnimation(g, area);
 		if (gamePreferences.isDevelopment()) {
@@ -271,14 +271,14 @@ public class GamePanelView implements GamePanelPresenter.Display {
 		});
 	}
 
-	private void paintTowns(final GraphicsContext graphics, final Model world, final Area area) {
-		final Map<Location, Town> towns = world.getTownsAt().entrySet().stream()
+	private void paintColonies(final GraphicsContext graphics, final Model world, final Area area) {
+		final Map<Location, Colony> colonies = world.getColoniesAt().entrySet().stream()
 				.filter(entry -> area.isVisible(entry.getKey()))
 				.collect(Collectors.toMap(entry -> entry.getKey(), entry -> entry.getValue()));
 
-		towns.forEach((location, town) -> {
+		colonies.forEach((location, colony) -> {
 			final Point point = area.convertToPoint(location);
-			paintService.paintTown(graphics, point, town);
+			paintService.paintColony(graphics, point, colony);
 		});
 
 	}

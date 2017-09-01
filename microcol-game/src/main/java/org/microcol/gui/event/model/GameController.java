@@ -77,7 +77,7 @@ public class GameController implements Localized {
 			.addPlayer("Dutch")
 				.setComputerPlayer(false)
 				.setGold(1108)
-				.addTown("brunswick")
+				.addColony("brunswick")
 					.setLocation(Location.of(5, 4))
 					.setDefaultConstructions(true)
 					.setWorker(ConstructionType.RUM_DISTILLERS_HOUSE, 0, UnitType.COLONIST)

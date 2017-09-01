@@ -65,13 +65,13 @@ public class UnitBuilder {
 		return this;
 	}
 
-	public UnitBuilder setUnitToConstruction(final ConstructionType constructionType, final Town town) {
-		placeBuilder.setToCostruction(constructionType, town);
+	public UnitBuilder setUnitToConstruction(final ConstructionType constructionType, final Colony colony) {
+		placeBuilder.setToCostruction(constructionType, colony);
 		return this;
 	}
 	
-	public UnitBuilder setUnitToFiled(final Location fieldDirection, final Town town){
-		placeBuilder.setUnitToFiled(fieldDirection, town);
+	public UnitBuilder setUnitToFiled(final Location fieldDirection, final Colony colony){
+		placeBuilder.setUnitToFiled(fieldDirection, colony);
 		return this;		
 	}
 

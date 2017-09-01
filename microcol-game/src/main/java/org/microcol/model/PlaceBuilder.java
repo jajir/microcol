@@ -14,9 +14,9 @@ public class PlaceBuilder {
 
 	private Unit cargoHolder = null;
 
-	private ConstructionTown constructionTown = null;
+	private ConstructionColony constructionColony = null;
 
-	private FieldTown fieldTown = null;
+	private FieldColony fieldColony = null;
 
 	private void checkThatEverythingIsNull() {
 		Preconditions.checkState(location == null, "Location wa already set");
@@ -24,8 +24,8 @@ public class PlaceBuilder {
 		Preconditions.checkState(shipIncomingToEurope == null, "Ship is alredy on way to europe");
 		Preconditions.checkState(!unitIsInEuropePortPier, "Unit is alredy in Europe port pier");
 		Preconditions.checkState(cargoHolder == null, "Unit was already put to cargo");
-		Preconditions.checkState(constructionTown == null, "Unit was already put to town construction");
-		Preconditions.checkState(fieldTown == null, "Unit was already put to field");
+		Preconditions.checkState(constructionColony == null, "Unit was already put to colony construction");
+		Preconditions.checkState(fieldColony == null, "Unit was already put to field");
 	}
 
 	public PlaceBuilder setLocation(final Location location) {
@@ -59,15 +59,15 @@ public class PlaceBuilder {
 		return this;
 	}
 
-	public PlaceBuilder setToCostruction(final ConstructionType constructionType, final Town town) {
+	public PlaceBuilder setToCostruction(final ConstructionType constructionType, final Colony colony) {
 		checkThatEverythingIsNull();
-		constructionTown = new ConstructionTown(constructionType, town);
+		constructionColony = new ConstructionColony(constructionType, colony);
 		return this;
 	}
 
-	public PlaceBuilder setUnitToFiled(final Location fieldDirection, final Town town) {
+	public PlaceBuilder setUnitToFiled(final Location fieldDirection, final Colony colony) {
 		checkThatEverythingIsNull();
-		fieldTown = new FieldTown(fieldDirection, town);
+		fieldColony = new FieldColony(fieldDirection, colony);
 		return this;
 	}
 
@@ -80,10 +80,10 @@ public class PlaceBuilder {
 			return new PlaceHighSea(unit, true, shipIncomingToEurope);
 		} else if (unitIsInEuropePortPier) {
 			return new PlaceEuropePier(unit);
-		} else if (constructionTown != null) {
-			return new PlaceConstruction(unit, constructionTown.getConstruction());
-		} else if (fieldTown != null) {
-			return new PlaceTownField(unit, fieldTown.getTownField());
+		} else if (constructionColony != null) {
+			return new PlaceConstruction(unit, constructionColony.getConstruction());
+		} else if (fieldColony != null) {
+			return new PlaceColonyField(unit, fieldColony.getColonyField());
 		} else if (cargoHolder != null) {
 			return new PlaceCargoSlot(unit, cargoHolder.getCargo().getEmptyCargoSlot().orElseThrow(
 					() -> new IllegalStateException("There is no empty cargo slot at unit (" + unit + ")")));
@@ -92,33 +92,33 @@ public class PlaceBuilder {
 		}
 	}
 
-	private class ConstructionTown {
+	private class ConstructionColony {
 
 		private final ConstructionType constructionType;
-		private final Town town;
+		private final Colony colony;
 
-		ConstructionTown(final ConstructionType constructionType, final Town town) {
+		ConstructionColony(final ConstructionType constructionType, final Colony colony) {
 			this.constructionType = Preconditions.checkNotNull(constructionType);
-			this.town = Preconditions.checkNotNull(town);
+			this.colony = Preconditions.checkNotNull(colony);
 		}
 
 		public Construction getConstruction() {
-			return town.getConstructionByType(constructionType);
+			return colony.getConstructionByType(constructionType);
 		}
 
 	}
 
-	private class FieldTown {
+	private class FieldColony {
 		private final Location fieldDirection;
-		private final Town town;
+		private final Colony colony;
 
-		FieldTown(final Location fieldDirection, final Town town) {
+		FieldColony(final Location fieldDirection, final Colony colony) {
 			this.fieldDirection = Preconditions.checkNotNull(fieldDirection);
-			this.town = Preconditions.checkNotNull(town);
+			this.colony = Preconditions.checkNotNull(colony);
 		}
 		
-		public TownField getTownField(){
-			return town.getTownFieldInDirection(fieldDirection);
+		public ColonyField getColonyField(){
+			return colony.getColonyFieldInDirection(fieldDirection);
 		}
 
 	}

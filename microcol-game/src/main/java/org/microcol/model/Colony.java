@@ -9,10 +9,10 @@ import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 
-public class Town {
+public class Colony {
 
 	/**
-	 * Town unique name.
+	 * Colony unique name.
 	 */
 	private String name;
 
@@ -20,19 +20,19 @@ public class Town {
 
 	private final Location location;
 
-	private final List<TownField> townFields;
+	private final List<ColonyField> colonyFields;
 
 	private final List<Construction> constructions;
 
 	private Model model;
 
-	public Town(final String name, final Player owner, final Location location,
+	public Colony(final String name, final Player owner, final Location location,
 			final List<Construction> constructions) {
 		this.name = Preconditions.checkNotNull(name);
 		this.owner = Preconditions.checkNotNull(owner, "owner is null");
 		this.location = Preconditions.checkNotNull(location);
-		townFields = new ArrayList<>();
-		Location.DIRECTIONS.forEach(loc -> townFields.add(new TownField(loc, this)));
+		colonyFields = new ArrayList<>();
+		Location.DIRECTIONS.forEach(loc -> colonyFields.add(new ColonyField(loc, this)));
 		this.constructions = Preconditions.checkNotNull(constructions);
 		checkConstructions();
 	}
@@ -46,8 +46,8 @@ public class Town {
 	 * </ul>
 	 */
 	private void checkConstructions() {
-		Preconditions.checkState(townFields.size() == 8,
-				String.format("Incorrect town filed number '%s'", townFields.size()));
+		Preconditions.checkState(colonyFields.size() == 8,
+				String.format("Incorrect colony filed number '%s'", colonyFields.size()));
 		Map<ConstructionType, Long> l1 = constructions.stream()
 				.collect(Collectors.groupingBy(Construction::getType, Collectors.counting()));
 		l1.forEach((constructionType, count) -> {
@@ -92,21 +92,21 @@ public class Town {
 	public Construction getConstructionByType(final ConstructionType constructionType) {
 		return constructions.stream().filter(construction -> construction.getType().equals(constructionType)).findAny()
 				.orElseThrow(() -> new IllegalStateException(
-						String.format("No such construction type (%s) in town (%s)", constructionType, getName())));
+						String.format("No such construction type (%s) in colony (%s)", constructionType, getName())));
 	}
 
-	public TownField getTownFieldInDirection(final Location fieldDirection) {
+	public ColonyField getColonyFieldInDirection(final Location fieldDirection) {
 		Preconditions.checkNotNull(fieldDirection, "Field direction is null");
 		Preconditions.checkArgument(Location.DIRECTIONS.contains(fieldDirection),
 				String.format("Direction (%s) is  not known", fieldDirection));
-		return townFields.stream().filter(townFiled -> townFiled.getLocation().equals(fieldDirection)).findAny()
+		return colonyFields.stream().filter(colonyFiled -> colonyFiled.getLocation().equals(fieldDirection)).findAny()
 				.orElseThrow(() -> new IllegalStateException(
-						String.format("Field directiond (%s) is not in town (%s)", fieldDirection, this)));
+						String.format("Field directiond (%s) is not in colony (%s)", fieldDirection, this)));
 	}
 	
 	public void setModel(Model model) {
 		this.model = model;
-		townFields.forEach(townField -> townField.setModel(model));
+		colonyFields.forEach(colonyField -> colonyField.setModel(model));
 	}
 
 	public String getName() {
@@ -125,13 +125,13 @@ public class Town {
 		return owner;
 	}
 
-	public List<TownField> getTownSection() {
-		return townFields;
+	public List<ColonyField> getColonySection() {
+		return colonyFields;
 	}
 
 	@Override
 	public String toString() {
-		return MoreObjects.toStringHelper(Town.class).add("name", name).add("location", location).toString();
+		return MoreObjects.toStringHelper(Colony.class).add("name", name).add("location", location).toString();
 	}
 
 	public List<Construction> getConstructions() {
