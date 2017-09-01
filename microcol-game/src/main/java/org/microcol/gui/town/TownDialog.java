@@ -3,18 +3,24 @@ package org.microcol.gui.town;
 import org.microcol.gui.ImageProvider;
 import org.microcol.gui.LocalizationHelper;
 import org.microcol.gui.europe.EuropeDialog;
+import org.microcol.gui.europe.PanelDockBehavior;
 import org.microcol.gui.europe.PanelEuropeDock;
 import org.microcol.gui.event.model.GameController;
 import org.microcol.gui.util.AbstractDialog;
 import org.microcol.gui.util.Text;
 import org.microcol.gui.util.ViewUtil;
+import org.microcol.model.CargoSlot;
 import org.microcol.model.Town;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
 
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.input.DragEvent;
+import javafx.scene.input.Dragboard;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
@@ -65,7 +71,27 @@ public class TownDialog extends AbstractDialog {
 		final PanelProductionSummary panelProductionSummary = new PanelProductionSummary();
 
 		europeDock = new PanelEuropeDock(viewUtil, text, gameController, imageProvider,
-				new EuropeDialog(viewUtil, text, imageProvider, gameController, new LocalizationHelper(text)));
+				new EuropeDialog(viewUtil, text, imageProvider, gameController, new LocalizationHelper(text)),
+				new PanelDockBehavior() {
+
+					@Override
+					public void onDragDropped(CargoSlot cargoSlot, DragEvent event) {
+						// TODO Auto-generated method stub
+
+					}
+
+					@Override
+					public void onDragDetected(CargoSlot cargoSlot, MouseEvent event, Node node) {
+						// TODO Auto-generated method stub
+
+					}
+
+					@Override
+					public boolean isCorrectObject(CargoSlot cargoSlot, Dragboard db) {
+						// TODO Auto-generated method stub
+						return false;
+					}
+				});
 
 		final PanelOutsideColony panelOutsideColony = new PanelOutsideColony();
 

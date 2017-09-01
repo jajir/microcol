@@ -46,11 +46,13 @@ public class PanelEuropeDock extends TitledPanel {
 	private final GameController gameController;
 
 	public PanelEuropeDock(final ViewUtil viewUtil, final Text text, final GameController gameController,
-			final ImageProvider imageProvider, final EuropeDialog europeDialog) {
+			final ImageProvider imageProvider, final EuropeDialog europeDialog,
+			final PanelDockBehavior panelDockBehavior) {
 		super("pristav");
 		this.imageProvider = Preconditions.checkNotNull(imageProvider);
 		this.gameController = Preconditions.checkNotNull(gameController);
-		panelCratesController = new PanelCratesController(viewUtil, text, gameController, imageProvider, europeDialog);
+		panelCratesController = new PanelCratesController(viewUtil, text, gameController, imageProvider, europeDialog,
+				panelDockBehavior);
 
 		panelShips = new HBox();
 		toggleGroup = new ToggleGroup();
@@ -68,13 +70,7 @@ public class PanelEuropeDock extends TitledPanel {
 
 	void repaint() {
 		panelShips.getChildren().clear();
-		/**
-		 * Ships in port
-		 */
-		final List<Unit> shipsInPort = gameController.getModel().getEurope().getPort()
-				.getShipsInPort(gameController.getModel().getCurrentPlayer());
-
-		for (Unit unit : shipsInPort) {
+		for (Unit unit : getUnitsInPort()) {
 			ToggleButton toggleButtonShip = new ToggleButton();
 			BackgroundImage myBI = new BackgroundImage(imageProvider.getUnitImage(unit.getType()),
 					BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
@@ -96,6 +92,10 @@ public class PanelEuropeDock extends TitledPanel {
 		return Optional.of((Unit) toggleGroup.getSelectedToggle().getUserData());
 	}
 
+	/**
+	 * Move to new behavior interface
+	 */
+
 	private void onDragDetected(final MouseEvent event) {
 		if (event.getSource() instanceof ToggleButton) {
 			final ToggleButton butt = (ToggleButton) event.getSource();
@@ -109,4 +109,8 @@ public class PanelEuropeDock extends TitledPanel {
 		}
 	}
 
+	private List<Unit> getUnitsInPort() {
+		return gameController.getModel().getEurope().getPort()
+				.getShipsInPort(gameController.getModel().getCurrentPlayer());
+	}
 }

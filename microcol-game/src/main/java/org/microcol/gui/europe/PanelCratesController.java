@@ -8,17 +8,16 @@ import org.microcol.model.CargoSlot;
 import org.microcol.model.Unit;
 
 import com.google.common.base.Preconditions;
-import com.google.inject.Inject;
 
 public class PanelCratesController {
 
 	private final PanelCratesView panelCratesView;
 
-	@Inject
 	PanelCratesController(final ViewUtil viewUtil, final Text text, final GameController gameController,
-			final ImageProvider imageProvider, final EuropeDialog europeDialog) {
+			final ImageProvider imageProvider, final DialogCallback europeDialog,
+			final PanelDockBehavior panelDockBehavior) {
 		this.panelCratesView = new PanelCratesView(viewUtil, text, gameController,
-				Preconditions.checkNotNull(imageProvider), europeDialog);
+				Preconditions.checkNotNull(imageProvider), europeDialog, panelDockBehavior);
 	}
 
 	PanelCratesView getPanelCratesView() {

@@ -32,7 +32,7 @@ public class PanelPortPier extends TitledPanel {
 
 	private final GameController gameController;
 
-	private final EuropeDialog europeDialog;
+	private final DialogCallback europeDialog;
 
 	private final ImageProvider imageProvider;
 

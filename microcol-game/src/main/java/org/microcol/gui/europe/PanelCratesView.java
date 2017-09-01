@@ -18,9 +18,11 @@ public class PanelCratesView extends HBox {
 	private final List<PanelCrate> crates = new ArrayList<>();
 
 	PanelCratesView(final ViewUtil viewUtil, final Text text, final GameController gameController,
-			final ImageProvider imageProvider, final EuropeDialog europeDialog) {
+			final ImageProvider imageProvider, final DialogCallback europeDialog,
+			final PanelDockBehavior panelDockBehavior) {
 		for (int i = 0; i < MAX_NUMBER_OF_CRATES; i++) {
-			PanelCrate paneCrate = new PanelCrate(viewUtil, text, gameController, imageProvider, europeDialog);
+			PanelCrate paneCrate = new PanelCrate(viewUtil, text, gameController, imageProvider, europeDialog,
+					panelDockBehavior);
 			crates.add(paneCrate);
 			getChildren().add(paneCrate);
 		}

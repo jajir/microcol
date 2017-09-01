@@ -1,17 +1,12 @@
 package org.microcol.gui.europe;
 
-import org.microcol.gui.DialogNotEnoughGold;
 import org.microcol.gui.ImageProvider;
 import org.microcol.gui.event.model.GameController;
-import org.microcol.gui.util.ClipboardReader;
-import org.microcol.gui.util.ClipboardWritter;
 import org.microcol.gui.util.Text;
 import org.microcol.gui.util.ViewUtil;
 import org.microcol.model.CargoSlot;
 import org.microcol.model.GoodAmount;
-import org.microcol.model.NotEnoughtGoldException;
 import org.microcol.model.Unit;
-import org.microcol.model.UnitType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -57,15 +52,19 @@ public class PanelCrate extends StackPane {
 
 	private CargoSlot cargoSlot;
 
-	private final EuropeDialog europeDialog;
+	private final DialogCallback europeDialog;
+	
+	private final PanelDockBehavior panelDockBehavior;
 
 	PanelCrate(final ViewUtil viewUtil, final Text text, final GameController gameController,
-			final ImageProvider imageProvider, final EuropeDialog europeDialog) {
+			final ImageProvider imageProvider, final DialogCallback europeDialog,
+			final PanelDockBehavior panelDockBehavior) {
 		this.imageProvider = Preconditions.checkNotNull(imageProvider);
 		this.gameController = Preconditions.checkNotNull(gameController);
 		this.europeDialog = Preconditions.checkNotNull(europeDialog);
 		this.viewUtil = Preconditions.checkNotNull(viewUtil);
 		this.text = Preconditions.checkNotNull(text);
+		this.panelDockBehavior = Preconditions.checkNotNull(panelDockBehavior);
 
 		crateImage = new ImageView();
 		crateImage.getStyleClass().add("crate");
@@ -135,6 +134,7 @@ public class PanelCrate extends StackPane {
 		}
 	}
 
+	@SuppressWarnings("unused")
 	private final void onDragExited(final DragEvent event) {
 		setBackground(background);
 		background = null;
@@ -147,66 +147,16 @@ public class PanelCrate extends StackPane {
 		}
 	}
 
-	private final void onDragDropped(DragEvent event) {
-		logger.debug("Object was dropped on ship cargo slot.");
-		final Dragboard db = event.getDragboard();
-		ClipboardReader.make(gameController.getModel(), db).filterUnit(unit -> !UnitType.isShip(unit.getType()))
-				.tryReadGood((goodAmount, transferFrom) -> {
-					Preconditions.checkArgument(transferFrom.isPresent(), "Good origin is not known.");
-					GoodAmount tmp = goodAmount;
-					logger.debug("wasShiftPressed " + europeDialog.getPropertyShiftWasPressed().get());
-					if (europeDialog.getPropertyShiftWasPressed().get()) {
-						ChooseGoodAmount chooseGoodAmount = new ChooseGoodAmount(viewUtil, text,
-								goodAmount.getAmount());
-						tmp = new GoodAmount(goodAmount.getGoodType(), chooseGoodAmount.getActualValue());
-					}
-					if (transferFrom.get() instanceof ClipboardReader.TransferFromEuropeShop) {
-						try{
-						cargoSlot.buyAndStore(tmp);
-						}catch (NotEnoughtGoldException e) {
-							new DialogNotEnoughGold(viewUtil, text);
-						}
-					} else if (transferFrom.get() instanceof ClipboardReader.TransferFromCargoSlot) {
-						cargoSlot.storeFromCargoSlot(tmp,
-								((ClipboardReader.TransferFromCargoSlot) transferFrom.get()).getCargoSlot());
-					} else {
-						throw new IllegalArgumentException("Unsupported source transfer '" + transferFrom + "'");
-					}
-					europeDialog.repaintAfterGoodMoving();
-					event.acceptTransferModes(TransferMode.MOVE);
-					event.setDropCompleted(true);
-					event.consume();
-				}).tryReadUnit((unit, transferFrom) -> {
-					cargoSlot.store(unit);
-					europeDialog.repaintAfterGoodMoving();
-					event.acceptTransferModes(TransferMode.MOVE);
-					event.setDropCompleted(true);
-					event.consume();
-				});
+	private final void onDragDropped(final DragEvent event) {
+		panelDockBehavior.onDragDropped(cargoSlot, event);
 	}
 
 	private void onDragDetected(final MouseEvent event) {
-		if (unit != null && cargoSlot != null) {
-			if (cargoSlot.getUnit().isPresent()) {
-				ClipboardWritter.make(startDragAndDrop(TransferMode.MOVE)).addImage(cargoImage.getImage())
-						.addTransferFromUnit(cargoSlot.getOwnerUnit(), cargoSlot).addUnit(cargoSlot.getUnit().get())
-						.build();
-			} else if (cargoSlot.getGoods().isPresent()) {
-				ClipboardWritter.make(startDragAndDrop(TransferMode.MOVE)).addImage(cargoImage.getImage())
-						.addTransferFromUnit(cargoSlot.getOwnerUnit(), cargoSlot)
-						.addGoodAmount(cargoSlot.getGoods().get()).build();
-			}
-			event.consume();
-		}
+		panelDockBehavior.onDragDetected(cargoSlot, event, this);
 	}
 
 	private boolean isCorrectObject(final Dragboard db) {
-		logger.debug("Drag over unit id '" + db.getString() + "'.");
-		if (cargoSlot != null && cargoSlot.isEmpty()) {
-			return !ClipboardReader.make(gameController.getModel(), db)
-					.filterUnit(unit -> !UnitType.isShip(unit.getType())).isEmpty();
-		}
-		return false;
+		return panelDockBehavior.isCorrectObject(cargoSlot, db);
 	}
 
 }
