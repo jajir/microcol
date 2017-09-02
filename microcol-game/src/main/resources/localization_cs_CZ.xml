@@ -75,8 +75,8 @@
 
 	<entry key="terrain.OCEAN.name">Oceán</entry>
 	<entry key="terrain.OCEAN.description">Nekonečný studený oceán</entry>
-	<entry key="terrain.CONTINENT.name">Kontinent</entry>
-	<entry key="terrain.CONTINENT.description">Prostě nějaká země</entry>
+	<entry key="terrain.GRASSLAND.name">Zelená země</entry>
+	<entry key="terrain.GRASSLAND.description">Úrodné zelené pláně</entry>
 	<entry key="terrain.TUNDRA.name">Tundra</entry>
 	<entry key="terrain.TUNDRA.description">Široká mrazivá pustina</entry>
 	<entry key="terrain.HIGH_SEA.name">Daleké moře</entry>

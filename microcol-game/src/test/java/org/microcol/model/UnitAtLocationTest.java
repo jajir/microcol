@@ -43,7 +43,7 @@ public class UnitAtLocationTest {
 		final Location loc = Location.of(10, 12);
 		new Expectations() {{
 			model.getMap().isValid(loc); result = true;
-			model.getMap().getTerrainAt(loc); result = Terrain.CONTINENT;
+			model.getMap().getTerrainAt(loc); result = Terrain.GRASSLAND;
 		}};
 		
 		assertTrue(unit.isMoveable(loc));
@@ -53,7 +53,7 @@ public class UnitAtLocationTest {
 	public void setup() {
 		unit = new Unit(type, owner, location);
 		new Expectations() {{
-			model.getMap().getTerrainAt(location); result = Terrain.CONTINENT;
+			model.getMap().getTerrainAt(location); result = Terrain.GRASSLAND;
 		}};
 
 		unit.setModel(model);

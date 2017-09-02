@@ -38,7 +38,7 @@ public class WorldMap {
 					final char tile = line.charAt(x);
 					switch (tile) {
 					case 'o':
-						terrainMap.put(Location.of(x + 1, maxY), Terrain.CONTINENT);
+						terrainMap.put(Location.of(x + 1, maxY), Terrain.GRASSLAND);
 						break;
 					case 't':
 						terrainMap.put(Location.of(x + 1, maxY), Terrain.TUNDRA);

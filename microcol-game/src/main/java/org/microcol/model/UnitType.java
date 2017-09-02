@@ -23,7 +23,7 @@ public class UnitType {
 	
 	public final static UnitType COLONIST = UnitType.make()
 			.setName("COLONIST")
-			.setMoveableTerrains(ImmutableList.of(Terrain.CONTINENT))
+			.setMoveableTerrains(ImmutableList.of(Terrain.GRASSLAND))
 			.setSpeed(1)
 			.setCanAttack(true)
 			.setCargoCapacity(0)

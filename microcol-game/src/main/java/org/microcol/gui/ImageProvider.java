@@ -108,7 +108,7 @@ public class ImageProvider {
 	private final Map<String, Image> images;
 
 	private final Map<Terrain, Image> terrainMap = ImmutableMap.<Terrain, Image>builder()
-			.put(Terrain.CONTINENT, getRawImage(IMG_TILE_LAND)).put(Terrain.OCEAN, getRawImage(IMG_TILE_OCEAN))
+			.put(Terrain.GRASSLAND, getRawImage(IMG_TILE_LAND)).put(Terrain.OCEAN, getRawImage(IMG_TILE_OCEAN))
 			.put(Terrain.TUNDRA, getRawImage(IMG_TILE_TUNDRA)).put(Terrain.HIGH_SEA, getRawImage(IMG_TILE_HIGH_SEA)).build();
 
 	private final Map<UnitType, Image> unitImageMap = ImmutableMap.<UnitType, Image>builder()

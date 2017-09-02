@@ -76,8 +76,8 @@
 
 	<entry key="terrain.OCEAN.name">Ocean</entry>
 	<entry key="terrain.OCEAN.description">Wild nice ocean</entry>
-	<entry key="terrain.CONTINENT.name">Continent</entry>
-	<entry key="terrain.CONTINENT.description">Some continent</entry>
+	<entry key="terrain.GRASSLAND.name">Grass land</entry>
+	<entry key="terrain.GRASSLAND.description">Grass land</entry>
 	<entry key="terrain.TUNDRA.name">Tundra</entry>
 	<entry key="terrain.TUNDRA.description">Cold freezing wasteland</entry>
 	<entry key="terrain.HIGH_SEA.name">High Sea</entry>

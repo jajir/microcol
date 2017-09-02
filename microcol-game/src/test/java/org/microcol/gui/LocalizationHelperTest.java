@@ -20,12 +20,12 @@ public class LocalizationHelperTest {
 	@Test
 	public void test_getTerrain_verify_that_correct_key_is_loaded(final @Mocked Text text) throws Exception {
 		new Expectations() {{
-			text.get("terrain.CONTINENT.name");result="continent";times=1;
+			text.get("terrain.GRASSLAND.name");result="grassland";times=1;
 			text.get("terrain.OCEAN.name");result="ocean";times=1;
 		}};
 		final LocalizationHelper helper = new LocalizationHelper(text);
 
-		assertEquals("continent", helper.getTerrainName(Terrain.CONTINENT));
+		assertEquals("grassland", helper.getTerrainName(Terrain.GRASSLAND));
 		assertEquals("ocean", helper.getTerrainName(Terrain.OCEAN));
 	}
 
