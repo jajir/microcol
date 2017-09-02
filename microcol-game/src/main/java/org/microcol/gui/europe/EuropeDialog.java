@@ -1,5 +1,7 @@
 package org.microcol.gui.europe;
 
+import java.util.List;
+
 import org.microcol.gui.DialogNotEnoughGold;
 import org.microcol.gui.ImageProvider;
 import org.microcol.gui.LocalizationHelper;
@@ -14,6 +16,7 @@ import org.microcol.gui.util.ViewUtil;
 import org.microcol.model.CargoSlot;
 import org.microcol.model.GoodAmount;
 import org.microcol.model.NotEnoughtGoldException;
+import org.microcol.model.Unit;
 import org.microcol.model.UnitType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -68,7 +71,14 @@ public class EuropeDialog extends AbstractDialog implements DialogCallback {
 				gameController, false);
 		shipsTravelingToEurope = new PanelHighSeas(this, imageProvider, "Ships travelling to Europe", gameController,
 				true);
-		europeDock = new PanelDock(gameController, imageProvider, new PanelDockBehavior() {
+		europeDock = new PanelDock(imageProvider, new PanelDockBehavior() {
+
+			@Override
+			public List<Unit> getUnitsInPort() {
+				return gameController.getModel().getEurope().getPort()
+						.getShipsInPort(gameController.getModel().getCurrentPlayer());
+			}
+			
 			@Override
 			public final void onDragDropped(final CargoSlot cargoSlot, final DragEvent event) {
 				logger.debug("Object was dropped on ship cargo slot.");

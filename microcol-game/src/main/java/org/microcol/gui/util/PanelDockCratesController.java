@@ -25,7 +25,7 @@ public class PanelDockCratesController {
 			final PanelDockCrate panelCrate = panelCratesView.getCrates().get(i);
 			if (i < maxNumberOfCrates) {
 				final CargoSlot cargoSlot = unit.getCargo().getSlots().get(i);
-				panelCrate.showCargoSlot(unit, cargoSlot);
+				panelCrate.showCargoSlot(cargoSlot);
 			} else {
 				panelCrate.setIsClosed(true);
 			}

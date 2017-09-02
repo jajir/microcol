@@ -1,10 +1,8 @@
 package org.microcol.gui.util;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.microcol.gui.ImageProvider;
-import org.microcol.gui.event.model.GameController;
 import org.microcol.model.Unit;
 import org.microcol.model.UnitType;
 import org.slf4j.Logger;
@@ -39,13 +37,12 @@ public class PanelDock extends TitledPanel {
 
 	private final ToggleGroup toggleGroup;
 
-	private final GameController gameController;
+	private final PanelDockBehavior panelDockBehavior;
 
-	public PanelDock(final GameController gameController, final ImageProvider imageProvider,
-			final PanelDockBehavior panelDockBehavior) {
+	public PanelDock(final ImageProvider imageProvider, final PanelDockBehavior panelDockBehavior) {
 		super("pristav");
 		this.imageProvider = Preconditions.checkNotNull(imageProvider);
-		this.gameController = Preconditions.checkNotNull(gameController);
+		this.panelDockBehavior = Preconditions.checkNotNull(panelDockBehavior);
 		panelCratesController = new PanelDockCratesController(imageProvider, panelDockBehavior);
 
 		panelShips = new HBox();
@@ -64,7 +61,7 @@ public class PanelDock extends TitledPanel {
 
 	public void repaint() {
 		panelShips.getChildren().clear();
-		for (Unit unit : getUnitsInPort()) {
+		for (Unit unit : panelDockBehavior.getUnitsInPort()) {
 			ToggleButton toggleButtonShip = new ToggleButton();
 			BackgroundImage myBI = new BackgroundImage(imageProvider.getUnitImage(unit.getType()),
 					BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
@@ -103,8 +100,4 @@ public class PanelDock extends TitledPanel {
 		}
 	}
 
-	private List<Unit> getUnitsInPort() {
-		return gameController.getModel().getEurope().getPort()
-				.getShipsInPort(gameController.getModel().getCurrentPlayer());
-	}
 }

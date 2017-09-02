@@ -1,6 +1,9 @@
 package org.microcol.gui.util;
 
+import java.util.List;
+
 import org.microcol.model.CargoSlot;
+import org.microcol.model.Unit;
 
 import javafx.scene.Node;
 import javafx.scene.input.DragEvent;
@@ -11,6 +14,13 @@ import javafx.scene.input.MouseEvent;
  * Define what should panel with dock do in some situations.
  */
 public interface PanelDockBehavior {
+
+	/**
+	 * Get list of units placed in dock.
+	 * 
+	 * @return list of units
+	 */
+	List<Unit> getUnitsInPort();
 
 	/**
 	 * Drag on crate was dropped.

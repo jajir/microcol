@@ -80,7 +80,7 @@ public class PanelDockCrate extends StackPane {
 		}
 	}
 
-	public void showCargoSlot(final Unit unit, final CargoSlot cargoSlot) {
+	public void showCargoSlot(final CargoSlot cargoSlot) {
 		setIsClosed(false);
 		this.cargoSlot = cargoSlot;
 		if (cargoSlot.isEmpty()) {

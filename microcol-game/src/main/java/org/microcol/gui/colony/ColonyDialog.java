@@ -1,5 +1,7 @@
 package org.microcol.gui.colony;
 
+import java.util.List;
+
 import org.microcol.gui.ImageProvider;
 import org.microcol.gui.LocalizationHelper;
 import org.microcol.gui.event.model.GameController;
@@ -10,6 +12,7 @@ import org.microcol.gui.util.Text;
 import org.microcol.gui.util.ViewUtil;
 import org.microcol.model.CargoSlot;
 import org.microcol.model.Colony;
+import org.microcol.model.Unit;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
@@ -38,7 +41,11 @@ public class ColonyDialog extends AbstractDialog {
 
 	private final GameController gameController;
 
-	private final PanelDock europeDock;
+	private final PanelDock panelDock;
+	
+	private final PanelOutsideColony panelOutsideColony;
+
+	private Colony colony;
 
 	@Inject
 	public ColonyDialog(final ViewUtil viewUtil, final Text text, final ImageProvider imageProvider,
@@ -69,7 +76,12 @@ public class ColonyDialog extends AbstractDialog {
 		 */
 		final PanelProductionSummary panelProductionSummary = new PanelProductionSummary();
 
-		europeDock = new PanelDock(gameController, imageProvider, new PanelDockBehavior() {
+		panelDock = new PanelDock(imageProvider, new PanelDockBehavior() {
+
+			@Override
+			public List<Unit> getUnitsInPort() {
+				return colony.getUnitsInPort();
+			}
 
 			@Override
 			public void onDragDropped(CargoSlot cargoSlot, DragEvent event) {
@@ -90,10 +102,10 @@ public class ColonyDialog extends AbstractDialog {
 			}
 		});
 
-		final PanelOutsideColony panelOutsideColony = new PanelOutsideColony();
+		panelOutsideColony = new PanelOutsideColony(imageProvider);
 
 		final HBox managementRow = new HBox();
-		managementRow.getChildren().addAll(panelProductionSummary, europeDock, panelOutsideColony);
+		managementRow.getChildren().addAll(panelProductionSummary, panelDock, panelOutsideColony);
 
 		/**
 		 * Good row - 3
@@ -114,14 +126,16 @@ public class ColonyDialog extends AbstractDialog {
 		init(mainPanel);
 		getScene().getStylesheets().add("gui/MicroCol.css");
 	}
-
+	
 	public void showColony(final Colony colony) {
+		this.colony = Preconditions.checkNotNull(colony);
 		colonyName.setText("Colony: " + colony.getName());
 		colonyLayout.setColony(colony);
 		goods.setEurope(gameController.getModel().getEurope());
 		colonyStructures.repaint(colony);
+		panelOutsideColony.setColony(colony);
 		// pierShips.setPort(null);
 		getDialog().showAndWait();
 	}
-
+	
 }
