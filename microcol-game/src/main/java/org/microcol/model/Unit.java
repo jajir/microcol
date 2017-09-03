@@ -48,7 +48,7 @@ public class Unit {
 	private void validateTerrain(){
 		if(isAtMap()){
 			final Terrain t = model.getMap().getTerrainAt(getLocation());
-			Preconditions.checkState(type.canMoveAtTerrain(t),
+			Preconditions.checkState(isMoveable(getLocation(), true),
 					String.format("Unit (%s) is not at valid terrain (%s)", this, t));
 		}
 	}
