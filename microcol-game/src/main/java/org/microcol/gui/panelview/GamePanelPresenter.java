@@ -312,7 +312,7 @@ public final class GamePanelPresenter implements Localized {
 		logger.debug("Switching to normal mode, from " + moveFromLocation + " to " + moveToLocation);
 		if (moveFromLocation.equals(moveToLocation)) {
 			display.setCursorNormal();
-			//it's a click? is there a colony?
+			// it's a click? is there a colony?
 			tryToOpenColonyDetail(moveToLocation);
 			return;
 		}
@@ -337,6 +337,15 @@ public final class GamePanelPresenter implements Localized {
 			display.setCursorNormal();
 		} else if (movingUnit.isMoveable(moveToLocation)) {
 			// user will move
+			if (movingUnit.getPath(moveToLocation).isPresent()) {
+				final List<Location> path = movingUnit.getPath(moveToLocation).get();
+				if (path.size() > 0) {
+					gameController.performMove(movingUnit, path);
+				}
+				viewState.setSelectedTile(Optional.of(moveToLocation));
+				display.setCursorNormal();
+			}
+		} else if (movingUnit.isPossibleGoToPort(moveToLocation)) {
 			if (movingUnit.getPath(moveToLocation).isPresent()) {
 				final List<Location> path = movingUnit.getPath(moveToLocation).get();
 				if (path.size() > 0) {

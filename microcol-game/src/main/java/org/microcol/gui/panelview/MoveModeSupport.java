@@ -81,16 +81,18 @@ public class MoveModeSupport {
 	}
 
 	@Inject
-	public MoveModeSupport(final MouseOverTileChangedController mouseOverTileChangedController, final StartMoveController startMoveController,
-			final ViewState viewState, final GameController gameController) {
+	public MoveModeSupport(final MouseOverTileChangedController mouseOverTileChangedController,
+			final StartMoveController startMoveController, final ViewState viewState,
+			final GameController gameController) {
 		mouseOverTileChangedController.addListener(this::onMouseOverTileChanged);
 		startMoveController.addListener(this::onStartMove);
 		this.viewState = Preconditions.checkNotNull(viewState);
 		this.gameController = Preconditions.checkNotNull(gameController);
 		moveLocations = Lists.newArrayList();
 	}
-	
-	private void onStartMove(final StartMoveEvent event){
+
+	@SuppressWarnings("unused")
+	private void onStartMove(final StartMoveEvent event) {
 		recountPath();
 	}
 

@@ -67,7 +67,7 @@ public class Unit {
 	}
 
 	public int getAvailableMoves() {
-		checkNotStored();
+		Preconditions.checkState(isAtMap(),"Moving unit have to be at map");
 
 		return availableMoves;
 	}
@@ -126,6 +126,9 @@ public class Unit {
 		}
 
 		if (!type.canMoveAtTerrain(model.getMap().getTerrainAt(location))) {
+			if(isPossibleGoToPort(location)){
+				return true;
+			}
 			return false;
 		}
 
@@ -143,7 +146,7 @@ public class Unit {
 
 	// TODO JKA VRACET LOCATION?
 	public List<Unit> getAttackableTargets() {
-		checkNotStored();
+		Preconditions.checkState(isAtMap(),"Moving unit have to be at map");
 
 		if (!type.canAttack()) {
 			return ImmutableList.of();
@@ -212,6 +215,13 @@ public class Unit {
 		}
 	}
 
+	public boolean isPossibleGoToPort(final Location moveToLocation){
+		if(model.getColoniesAt(moveToLocation, owner).isPresent()){
+			return true;
+		}
+		return false;
+	}
+	
 	private boolean canCargoDisembark(final CargoSlot slot, final Location moveToLocation, boolean inCurrentTurn) {
 		if (slot.isEmpty()) {
 			return false;
@@ -278,7 +288,7 @@ public class Unit {
 	}
 
 	public List<Unit> getStorageUnits() {
-		checkNotStored();
+		Preconditions.checkState(isAtMap(),"Moving unit have to be at map");
 
 		return getLocation().getNeighbors().stream().flatMap(neighbor -> owner.getUnitsAt(neighbor).stream())
 				.filter(unit -> unit != this).filter(unit -> unit.getCargo().getSlots().stream()
@@ -297,13 +307,13 @@ public class Unit {
 	}
 
 	public Optional<List<Location>> getPath(final Location destination) {
-		checkNotStored();
+		Preconditions.checkState(isAtMap(), "Moving unit have to be at map");
 
 		return getPath(destination, false);
 	}
 
 	public Optional<List<Location>> getPath(final Location destination, final boolean excludeDestination) {
-		checkNotStored();
+		Preconditions.checkState(isAtMap(), "Moving unit have to be at map");
 
 		PathFinder finder = new PathFinder(this, getLocation(), destination, excludeDestination);
 
@@ -311,7 +321,7 @@ public class Unit {
 	}
 
 	public void moveTo(final Path path) {
-		checkNotStored();
+		Preconditions.checkState(isAtMap(), "Moving unit have to be at map");
 
 		model.checkGameRunning();
 		model.checkCurrentPlayer(owner);
@@ -331,7 +341,7 @@ public class Unit {
 				// TODO JKA neumožnit zadat delší cestu, než je povolený počet
 				break;
 			}
-			if (!type.canMoveAtTerrain(model.getMap().getTerrainAt(newLocation))) {
+			if (!isMoveable(newLocation)) {
 				throw new IllegalArgumentException(String.format("Path (%s) must contain only moveable terrain (%s).",
 						newLocation, model.getMap().getTerrainAt(newLocation)));
 			}
@@ -350,7 +360,7 @@ public class Unit {
 	}
 
 	public void attack(final Location location) {
-		checkNotStored();
+		Preconditions.checkState(isAtMap(),"Moving unit have to be at map");
 
 		model.checkGameRunning();
 		model.checkCurrentPlayer(owner);
@@ -469,12 +479,6 @@ public class Unit {
 		// TODO JKA empty all moves and attacks?
 		this.availableMoves = 0;
 		place = new PlaceLocation(this, targetLocation);
-	}
-
-	void checkNotStored() {
-		if (isAtCargoSlot()) {
-			throw new IllegalStateException(String.format("This unit (%s) is stored in (%s).", this, place));
-		}
 	}
 
 	@Override

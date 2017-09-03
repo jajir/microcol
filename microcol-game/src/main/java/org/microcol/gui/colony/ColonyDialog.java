@@ -132,6 +132,7 @@ public class ColonyDialog extends AbstractDialog {
 		colonyName.setText("Colony: " + colony.getName());
 		colonyLayout.setColony(colony);
 		goods.setEurope(gameController.getModel().getEurope());
+		panelDock.repaint();
 		colonyStructures.repaint(colony);
 		panelOutsideColony.setColony(colony);
 		// pierShips.setPort(null);
