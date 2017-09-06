@@ -29,8 +29,8 @@
 	<logger name="org.microcol.gui">
 		<level value="INFO"/>
 	</logger>
-	<logger name="org.microcol.gui.europe">
-		<level value="INFO"/>
+	<logger name="org.microcol.gui.colony">
+		<level value="DEBUG"/>
 	</logger>
 	<logger name="org.microcol.gui.event.AbstractEventController">
 		<level value="WARN"/>
