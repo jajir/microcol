@@ -186,7 +186,7 @@ public class EuropeDialog extends AbstractDialog implements DialogCallback {
 			}
 		});
 		getScene().addEventFilter(KeyEvent.KEY_PRESSED, event -> {
-			System.out.println("wasShiftPressed " + event);
+			logger.debug("wasShiftPressed " + event);
 			if (event.getCode() == KeyCode.SHIFT) {
 				propertyShiftWasPressed.set(true);
 			}

@@ -1,34 +1,27 @@
 package org.microcol.gui.colony;
 
+import java.util.Optional;
+
 import org.microcol.gui.ImageProvider;
 import org.microcol.gui.Point;
-import org.microcol.gui.Rectangle;
-import org.microcol.gui.europe.PanelPortPier;
 import org.microcol.gui.event.model.GameController;
 import org.microcol.gui.panelview.GamePanelView;
 import org.microcol.gui.panelview.PaintService;
 import org.microcol.gui.util.TitledPanel;
+import org.microcol.model.Colony;
+import org.microcol.model.ColonyField;
+import org.microcol.model.Location;
 import org.microcol.model.Terrain;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.microcol.model.Colony;
-import org.microcol.model.ColonyField;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
 
-import javafx.event.EventHandler;
-import javafx.geometry.Insets;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Label;
 import javafx.scene.input.DragEvent;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.input.TransferMode;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.CornerRadii;
-import javafx.scene.paint.Color;
 
 /**
  * Show 3 x 3 tiles occupied by colony. User can assign worker to work outside
@@ -48,6 +41,8 @@ public class PanelColonyLayout extends TitledPanel {
 
 	private final GameController gameController;
 
+	private final ClickableArea clickableArea = new ClickableArea();
+	
 	@Inject
 	public PanelColonyLayout(final PaintService paintService, final ImageProvider imageProvider,
 			final GameController gameController) {
@@ -58,16 +53,10 @@ public class PanelColonyLayout extends TitledPanel {
 		final int size = 3 * GamePanelView.TILE_WIDTH_IN_PX;
 		canvas = new Canvas(size, size);
 		getContentPane().getChildren().add(canvas);
-//		canvas.setOnDragEntered(ClickableArea.wrap(this::onDragEntered));
-//		canvas.setOnDragExited(ClickableArea.wrap(this::onDragExited));
-		Point square = Point.of(GamePanelView.TILE_WIDTH_IN_PX, GamePanelView.TILE_WIDTH_IN_PX);
-		for(int x=0;x<3;x++){
-			for(int y=0;y<3;y++){
-				final Point p = Point.of(x, y).multiply(GamePanelView.TILE_WIDTH_IN_PX);
-				canvas.setOnDragOver(ClickableArea.wrap(this::onDragOver, Rectangle.ofPointAndSize(p, square)));
-				canvas.setOnDragDropped(ClickableArea.wrap(this::onDragDropped, Rectangle.ofPointAndSize(p, square)));
-			}
-		}
+		canvas.setOnDragEntered(this::onDragEntered);
+		canvas.setOnDragExited(this::onDragExited);
+		canvas.setOnDragOver(this::onDragOver);
+		canvas.setOnDragDropped(this::onDragDropped);
 	}
 	
 	private final void onDragEntered(final DragEvent event) {
@@ -80,6 +69,11 @@ public class PanelColonyLayout extends TitledPanel {
 
 	private final void onDragOver(final DragEvent event) {
 		logger.debug("Drag Over");
+		final Point point = Point.of(event.getX(), event.getY());
+		final Optional<Location> loc= clickableArea.getLocation(point);
+		if(loc.isPresent()){
+			logger.debug("was clicked at: " + loc.get());
+		}
 	}
 
 	private final void onDragDropped(final DragEvent event) {
@@ -92,7 +86,7 @@ public class PanelColonyLayout extends TitledPanel {
 	}
 
 	private void paint(final GraphicsContext gc) {
-		colony.getColonySection().forEach(colonyField -> paintSection(gc, colonyField));
+		colony.getColonyFields().forEach(colonyField -> paintSection(gc, colonyField));
 		paintTile(gc, gameController.getModel().getMap().getTerrainAt(colony.getLocation()),
 				Point.of(GamePanelView.TILE_WIDTH_IN_PX, GamePanelView.TILE_WIDTH_IN_PX));
 	}

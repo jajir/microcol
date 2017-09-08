@@ -1,34 +1,44 @@
 package org.microcol.gui.colony;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+
 import org.microcol.gui.Point;
 import org.microcol.gui.Rectangle;
+import org.microcol.gui.panelview.GamePanelView;
+import org.microcol.model.Location;
 
-import com.google.common.base.Preconditions;
-
-import javafx.event.EventHandler;
-import javafx.scene.input.DragEvent;
+import com.google.common.base.MoreObjects;
+import com.google.common.collect.Lists;
 
 public class ClickableArea {
 
-	private final EventHandler<? super DragEvent> listener;
+	private final Map<Rectangle, Location> areas;
 
-	private final Rectangle area;
-
-	public ClickableArea(final EventHandler<? super DragEvent> listener, final Rectangle area) {
-		this.listener = Preconditions.checkNotNull(listener);
-		this.area = Preconditions.checkNotNull(area);
+	public ClickableArea() {
+		areas = new HashMap<>();
+		final Point square = Point.of(GamePanelView.TILE_WIDTH_IN_PX, GamePanelView.TILE_WIDTH_IN_PX);
+		final Point shift = Point.of(GamePanelView.TILE_WIDTH_IN_PX, GamePanelView.TILE_WIDTH_IN_PX);
+		final Location center = Location.of(0, 0);
+		final List<Location> locs = Lists.newArrayList(center.getNeighbors());
+		locs.add(center);
+		locs.forEach(loc -> {
+			final Point p = Point.of(loc).add(shift);
+			Rectangle rect = Rectangle.ofPointAndSize(p, square);
+			areas.put(rect, loc);
+		});
 	}
 
-	public static final EventHandler<? super DragEvent> wrap(final EventHandler<? super DragEvent> listener,
-			final Rectangle area) {
-		final ClickableArea wrap = new ClickableArea(listener, area);
-		return wrap::wrap;
+	public Optional<Location> getLocation(final Point point) {
+		return areas.entrySet().stream().filter(entry -> entry.getKey().isIn(point)).map(entry -> entry.getValue())
+				.findAny();
 	}
 
-	private void wrap(final DragEvent event) {
-		if (area.isIn(Point.of(event.getX(), event.getY()))) {
-			listener.handle(event);
-		}
+	@Override
+	public String toString() {
+		return MoreObjects.toStringHelper(ClickableArea.class).add("areas", areas).toString();
 	}
 
 }

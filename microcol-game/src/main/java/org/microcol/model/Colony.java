@@ -125,7 +125,7 @@ public class Colony {
 		return owner;
 	}
 
-	public List<ColonyField> getColonySection() {
+	public List<ColonyField> getColonyFields() {
 		return colonyFields;
 	}
 

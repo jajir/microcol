@@ -1,5 +1,6 @@
 package org.microcol.gui;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 
 //TODO JJ add some javadoc and test
@@ -12,7 +13,6 @@ public class Rectangle {
 	private Rectangle(final Point topLeftCorner, final Point bottomRightCorner) {
 		this.topLeftCorner = Preconditions.checkNotNull(topLeftCorner);
 		this.bottomRightCorner = Preconditions.checkNotNull(bottomRightCorner);
-		System.out.println("const:  " + topLeftCorner + " " + bottomRightCorner);
 	}
 
 	public static Rectangle of(final Point topLeftCorner, final Point bottomRightCorner) {
@@ -24,9 +24,16 @@ public class Rectangle {
 	}
 
 	public boolean isIn(final Point point) {
-		System.out.println(point + " " + topLeftCorner + " " + bottomRightCorner);
 		return topLeftCorner.getX() <= point.getX() && bottomRightCorner.getX() >= point.getX()
 				&& topLeftCorner.getY() <= point.getY() && bottomRightCorner.getY() >= point.getY();
+	}
+	
+	@Override
+	public String toString() {
+		return MoreObjects.toStringHelper(Rectangle.class)
+				.add("topLeftCorner", topLeftCorner)
+				.add("bottomRightCorner", bottomRightCorner)
+				.toString();
 	}
 
 }
