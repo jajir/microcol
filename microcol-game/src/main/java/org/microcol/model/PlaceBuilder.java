@@ -59,9 +59,9 @@ public class PlaceBuilder {
 		return this;
 	}
 
-	public PlaceBuilder setToCostruction(final ConstructionType constructionType, final Colony colony) {
+	public PlaceBuilder setToCostruction(final ConstructionType constructionType, final Colony colony, final int positon) {
 		checkThatEverythingIsNull();
-		constructionColony = new ConstructionColony(constructionType, colony);
+		constructionColony = new ConstructionColony(constructionType, colony, positon);
 		return this;
 	}
 
@@ -81,7 +81,8 @@ public class PlaceBuilder {
 		} else if (unitIsInEuropePortPier) {
 			return new PlaceEuropePier(unit);
 		} else if (constructionColony != null) {
-			return new PlaceConstruction(unit, constructionColony.getConstruction());
+			return new PlaceConstructionSlot(unit,
+					constructionColony.getConstruction().getSlotAt(constructionColony.getPositon()));
 		} else if (fieldColony != null) {
 			return new PlaceColonyField(unit, fieldColony.getColonyField());
 		} else if (cargoHolder != null) {
@@ -96,14 +97,20 @@ public class PlaceBuilder {
 
 		private final ConstructionType constructionType;
 		private final Colony colony;
+		private final int positon;
 
-		ConstructionColony(final ConstructionType constructionType, final Colony colony) {
+		ConstructionColony(final ConstructionType constructionType, final Colony colony, final int positon) {
 			this.constructionType = Preconditions.checkNotNull(constructionType);
 			this.colony = Preconditions.checkNotNull(colony);
+			this.positon = Preconditions.checkNotNull(positon);
 		}
 
 		public Construction getConstruction() {
 			return colony.getConstructionByType(constructionType);
+		}
+
+		private int getPositon() {
+			return positon;
 		}
 
 	}

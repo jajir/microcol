@@ -90,6 +90,12 @@ public class ClipboardWritter {
 		return this;
 	}
 
+	public ClipboardWritter addTransferFromConstructionSlot() {
+		transferFromCheck();
+		transferFrom = new ClipboardReader.TransferFromConstructionSlot();
+		return this;
+	}
+
 	public void build() {
 		Preconditions.checkState(transfer != null, "No object to transfer was defined.");
 		final StringBuilder buff = new StringBuilder();

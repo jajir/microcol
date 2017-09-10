@@ -415,7 +415,7 @@ public class Unit {
 	}
 
 	public boolean isAtPlaceConstruction() {
-		return place instanceof PlaceConstruction;
+		return place instanceof PlaceConstructionSlot;
 	}
 
 	public boolean isAtPlaceColonyField() {
@@ -468,6 +468,16 @@ public class Unit {
 				"Holding unit is not at europe port, cant be placed to port pier.");
 		getPlaceCargoSlot().getCargoSlot().empty();
 		place = new PlaceEuropePier(this);
+	}
+	
+	public void placeToColonyStructureSlot(final ConstructionSlot structureSlot){
+		Preconditions.checkNotNull(structureSlot);
+		Preconditions.checkState(!isAtEuropePort(), "Unit can't skip from europe port to map");
+		Preconditions.checkState(!isAtEuropePier(), "Unit can't skip from europe port pier to map");
+		Preconditions.checkState(structureSlot.isEmpty(), "Unit can't be placed to non empty colony structure");
+		place.destroy();
+		place = new PlaceConstructionSlot(this, structureSlot);
+		structureSlot.set((PlaceConstructionSlot)place);
 	}
 	
 	public void placeToColonyField(final ColonyField colonyField){
@@ -564,9 +574,9 @@ public class Unit {
 		return (PlaceCargoSlot) place;
 	}
 	
-	PlaceConstruction getPlaceConstruction() {
+	PlaceConstructionSlot getPlaceConstruction() {
 		Preconditions.checkState(isAtPlaceConstruction(), "Unit have to be in colony construction");
-		return (PlaceConstruction) place;
+		return (PlaceConstructionSlot) place;
 	}
 	
 	PlaceColonyField getPlaceColonyField(){

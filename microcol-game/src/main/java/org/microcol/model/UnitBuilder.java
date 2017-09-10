@@ -65,8 +65,9 @@ public class UnitBuilder {
 		return this;
 	}
 
-	public UnitBuilder setUnitToConstruction(final ConstructionType constructionType, final Colony colony) {
-		placeBuilder.setToCostruction(constructionType, colony);
+	public UnitBuilder setUnitToConstruction(final ConstructionType constructionType, final Colony colony,
+			final int position) {
+		placeBuilder.setToCostruction(constructionType, colony, position);
 		return this;
 	}
 	

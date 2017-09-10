@@ -46,7 +46,7 @@ public class PlayerBuilder {
 				final UnitBuilder unitBuilder = modelBuilder.makeUnitBuilder();
 				unitBuilder.setPlayer(player);
 				unitBuilder.setType(unitPlace.getUnitType());
-				unitBuilder.setUnitToConstruction(unitPlace.getConstructionType(), colony);
+				unitBuilder.setUnitToConstruction(unitPlace.getConstructionType(), colony, unitPlace.getPosition());
 				final Unit unit = unitBuilder.build();
 				final Construction construction = colony.getConstructionByType(unitPlace.getConstructionType());
 				construction.place(unitPlace.getPosition(), unit.getPlaceConstruction());

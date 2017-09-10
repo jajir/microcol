@@ -30,14 +30,15 @@ public class Construction {
 		return MoreObjects.toStringHelper(Construction.class).add("name", type.name()).toString();
 	}
 
-	public PlaceConstruction placeWorker(final int position, final Unit unit) {
+	public PlaceConstructionSlot placeWorker(final int position, final Unit unit) {
 		Preconditions.checkNotNull(unit);
-		final PlaceConstruction placeConstruction = new PlaceConstruction(unit, this);
-		place(position, placeConstruction);
-		return placeConstruction;
+		ConstructionSlot constructionSlot = getSlotAt(position);
+		final PlaceConstructionSlot placeConstructionSlot = new PlaceConstructionSlot(unit, constructionSlot);
+		place(position, placeConstructionSlot);
+		return placeConstructionSlot;
 	}
 
-	void place(final int position, final PlaceConstruction placeConstruction) {
+	void place(final int position, final PlaceConstructionSlot placeConstruction) {
 		Preconditions.checkArgument(position >= 0, "Position index have to bigger that 0.");
 		Preconditions.checkArgument(position < type.getSlotsForWorkers(),
 				"Maximum number of slots for workers is (%s), you try to put worker at (%s).",
@@ -48,5 +49,9 @@ public class Construction {
 
 	public List<ConstructionSlot> getConstructionSlots() {
 		return ImmutableList.copyOf(workingSlots);
+	}
+	
+	ConstructionSlot getSlotAt(final int index){
+		return workingSlots.get(index);
 	}
 }

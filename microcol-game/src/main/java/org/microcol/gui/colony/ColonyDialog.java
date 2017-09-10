@@ -65,7 +65,7 @@ public class ColonyDialog extends AbstractDialog implements ColonyDialogCallback
 		 */
 		colonyLayout = new PanelColonyLayout(imageProvider, gameController, this);
 
-		colonyStructures = new PanelColonyStructures(localizationHelper, imageProvider);
+		colonyStructures = new PanelColonyStructures(localizationHelper, imageProvider, gameController, this);
 
 		final HBox mapAndBuildings = new HBox();
 		mapAndBuildings.getChildren().addAll(colonyStructures, colonyLayout);

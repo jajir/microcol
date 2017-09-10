@@ -9,14 +9,17 @@ import org.microcol.gui.ImageProvider;
 import org.microcol.gui.LocalizationHelper;
 import org.microcol.gui.Point;
 import org.microcol.gui.Rectangle;
+import org.microcol.gui.event.model.GameController;
 import org.microcol.gui.panelview.GamePanelView;
+import org.microcol.gui.util.ClipboardReader;
+import org.microcol.gui.util.ClipboardWritter;
 import org.microcol.gui.util.TitledPanel;
-import org.microcol.model.ConstructionType;
-import org.microcol.model.Location;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.microcol.model.Colony;
 import org.microcol.model.ConstructionSlot;
+import org.microcol.model.ConstructionType;
+import org.microcol.model.Unit;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableMap;
@@ -24,7 +27,11 @@ import com.google.common.collect.ImmutableMap;
 import javafx.geometry.VPos;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
 import javafx.scene.input.DragEvent;
+import javafx.scene.input.Dragboard;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.input.TransferMode;
 import javafx.scene.paint.Color;
 import javafx.scene.text.TextAlignment;
 
@@ -100,29 +107,54 @@ public class PanelColonyStructures extends TitledPanel {
 						ConstructionType.ALL.size(), constructionPlaces.size()));
 	}
 
+	private final static int CANVAS_WIDTH = 500;
+
+	private final static int CANVAS_HEIGHT = 300;
+	
 	private final Canvas canvas;
 	
 	private final LocalizationHelper localizationHelper;
 	
 	private final ImageProvider imageProvider;
 	
+	private final GameController gameController;
+	
+	private final ColonyDialogCallback colonyDialog;
+	
 	private Map<Rectangle, ConstructionSlot> slots;
 	
-	public PanelColonyStructures(final LocalizationHelper localizationHelper, final ImageProvider imageProvider) {
+	public PanelColonyStructures(final LocalizationHelper localizationHelper, final ImageProvider imageProvider,
+			final GameController gameController, final ColonyDialogCallback colonyDialog) {
 		super("Colony Structures", null);
 		this.localizationHelper = Preconditions.checkNotNull(localizationHelper);
 		this.imageProvider = Preconditions.checkNotNull(imageProvider);
-		canvas = new Canvas(500, 300);
+		this.gameController = Preconditions.checkNotNull(gameController);
+		this.colonyDialog = Preconditions.checkNotNull(colonyDialog);
+		canvas = new Canvas(CANVAS_WIDTH, CANVAS_HEIGHT);
 		getContentPane().getChildren().add(canvas);
-		setMinWidth(500);
-		setMinHeight(300);
+		setMinWidth(CANVAS_WIDTH);
+		setMinHeight(CANVAS_HEIGHT);
 		canvas.setOnDragEntered(this::onDragEntered);
 		canvas.setOnDragExited(this::onDragExited);
 		canvas.setOnDragOver(this::onDragOver);
 		canvas.setOnDragDropped(this::onDragDropped);
+		canvas.setOnDragDetected(this::onDragDetected);
 	}
 	
-	
+	private final void onDragDetected(final MouseEvent event) {
+		logger.debug("Drag detected");
+		final Point point = Point.of(event.getX(), event.getY());
+		final Optional<ConstructionSlot> loc = findConstructionSlot(point);
+		if (loc.isPresent() && !loc.get().isEmpty()) {
+			final Unit unit = loc.get().getUnit();
+			final Image image = imageProvider.getUnitImage(unit);
+			final Dragboard db = canvas.startDragAndDrop(TransferMode.MOVE);
+			ClipboardWritter.make(db).addImage(image).addTransferFromConstructionSlot().addUnit(unit).build();
+			event.consume();
+		}
+		event.consume();
+	}
+
 	private final void onDragEntered(final DragEvent event) {
 		logger.debug("Drag entered");
 	}
@@ -135,13 +167,29 @@ public class PanelColonyStructures extends TitledPanel {
 		logger.debug("Drag Over");
 		final Point point = Point.of(event.getX(), event.getY());
 		final Optional<ConstructionSlot> loc = findConstructionSlot(point);
-		if (loc.isPresent()) {
+		if (loc.isPresent() && loc.get().isEmpty()) {
+			event.acceptTransferModes(TransferMode.MOVE);
 			logger.debug("was clicked at: " + loc.get());
+		} else {
+			event.acceptTransferModes(TransferMode.NONE);
 		}
+		event.consume();
 	}
 
 	private final void onDragDropped(final DragEvent event) {
 		logger.debug("Drag dropped");
+		final Point point = Point.of(event.getX(), event.getY());
+		final Optional<ConstructionSlot> loc = findConstructionSlot(point);
+		if (loc.isPresent() && loc.get().isEmpty()) {
+			ConstructionSlot slot = loc.get();
+			final Dragboard db = event.getDragboard();
+			ClipboardReader.make(gameController.getModel(), db).tryReadUnit((unit, transferFrom) -> {
+				unit.placeToColonyStructureSlot(slot);
+				event.setDropCompleted(true);
+				colonyDialog.repaint();
+			});
+		}
+		event.consume();
 	}
 	
 	private Optional<ConstructionSlot> findConstructionSlot(final Point point) {
@@ -151,13 +199,14 @@ public class PanelColonyStructures extends TitledPanel {
 	
 	void repaint(final Colony colony){
 		slots = new HashMap<>();
+		final GraphicsContext gc = canvas.getGraphicsContext2D();
 		final Point square = Point.of(GamePanelView.TILE_WIDTH_IN_PX, GamePanelView.TILE_WIDTH_IN_PX);
+		gc.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 		colony.getConstructions().forEach(construction -> {
 			final Point position = constructionPlaces.get(construction.getType());
 			Preconditions.checkNotNull(position,
 					String.format("There is no defined position for construction type '%s'", position));
 			final String name = localizationHelper.getConstructionTypeName(construction.getType());
-			final GraphicsContext gc = canvas.getGraphicsContext2D();
 			gc.setTextAlign(TextAlignment.CENTER);
 			gc.setTextBaseline(VPos.CENTER);
 			gc.setFill(Color.BLACK);
@@ -178,7 +227,7 @@ public class PanelColonyStructures extends TitledPanel {
 	}
 	
 	private void paintWorkerContainer(final GraphicsContext gc, final Point point){
-		gc.strokeRect(point.getX(), point.getY(), 35, 35);
+		gc.strokeRect(point.getX(), point.getY(), GamePanelView.TILE_WIDTH_IN_PX, GamePanelView.TILE_WIDTH_IN_PX);
 	}
 	
 }

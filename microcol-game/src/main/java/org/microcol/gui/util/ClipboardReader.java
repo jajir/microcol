@@ -34,6 +34,8 @@ public class ClipboardReader {
 
 	final static String KEY_FROM_OUTSIDE_COLONY = "FromOutsideColony";
 
+	final static String KEY_FROM_CONSTRUCTION_SLOT = "FromConstructionSlot";
+
 	final static String SEPARATOR = ",";
 
 	private final Model model;
@@ -366,10 +368,6 @@ public class ClipboardReader {
 		TransferFromColonyField(final Location fieldDirection) {
 			this.fieldDirection = Preconditions.checkNotNull(fieldDirection);
 		}
-		
-		private Location getFieldDirection() {
-			return fieldDirection;
-		}
 
 		@Override
 		public void writeTo(final StringBuilder buff) {
@@ -412,7 +410,7 @@ public class ClipboardReader {
 	}
 
 	/**
-	 * Unit was taken from Europe shop.
+	 * Unit was taken from outside colony.
 	 */
 	public static class TransferFromOutsideColony implements TransferFrom {
 
@@ -420,6 +418,19 @@ public class ClipboardReader {
 		public void writeTo(final StringBuilder buff) {
 			buff.append(SEPARATOR);
 			buff.append(KEY_FROM_OUTSIDE_COLONY);
+		}
+
+	}
+
+	/**
+	 * Unit was taken from construction slot.
+	 */
+	public static class TransferFromConstructionSlot implements TransferFrom {
+
+		@Override
+		public void writeTo(final StringBuilder buff) {
+			buff.append(SEPARATOR);
+			buff.append(KEY_FROM_CONSTRUCTION_SLOT);
 		}
 
 	}
