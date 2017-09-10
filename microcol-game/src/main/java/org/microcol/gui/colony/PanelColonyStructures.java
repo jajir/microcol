@@ -1,14 +1,22 @@
 package org.microcol.gui.colony;
 
+import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.microcol.gui.ImageProvider;
 import org.microcol.gui.LocalizationHelper;
 import org.microcol.gui.Point;
+import org.microcol.gui.Rectangle;
+import org.microcol.gui.panelview.GamePanelView;
 import org.microcol.gui.util.TitledPanel;
 import org.microcol.model.ConstructionType;
+import org.microcol.model.Location;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.microcol.model.Colony;
+import org.microcol.model.ConstructionSlot;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableMap;
@@ -16,6 +24,7 @@ import com.google.common.collect.ImmutableMap;
 import javafx.geometry.VPos;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.input.DragEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.text.TextAlignment;
 
@@ -24,6 +33,8 @@ import javafx.scene.text.TextAlignment;
  */
 public class PanelColonyStructures extends TitledPanel {
 	
+	private final Logger logger = LoggerFactory.getLogger(PanelColonyStructures.class);
+
 	private final static int COLUMN_1 = 90;
 	private final static int COLUMN_2 = 250;
 	private final static int COLUMN_3 = 410;
@@ -95,6 +106,8 @@ public class PanelColonyStructures extends TitledPanel {
 	
 	private final ImageProvider imageProvider;
 	
+	private Map<Rectangle, ConstructionSlot> slots;
+	
 	public PanelColonyStructures(final LocalizationHelper localizationHelper, final ImageProvider imageProvider) {
 		super("Colony Structures", null);
 		this.localizationHelper = Preconditions.checkNotNull(localizationHelper);
@@ -103,9 +116,42 @@ public class PanelColonyStructures extends TitledPanel {
 		getContentPane().getChildren().add(canvas);
 		setMinWidth(500);
 		setMinHeight(300);
+		canvas.setOnDragEntered(this::onDragEntered);
+		canvas.setOnDragExited(this::onDragExited);
+		canvas.setOnDragOver(this::onDragOver);
+		canvas.setOnDragDropped(this::onDragDropped);
+	}
+	
+	
+	private final void onDragEntered(final DragEvent event) {
+		logger.debug("Drag entered");
+	}
+
+	private final void onDragExited(final DragEvent event) {
+		logger.debug("Drag Exited");
+	}
+
+	private final void onDragOver(final DragEvent event) {
+		logger.debug("Drag Over");
+		final Point point = Point.of(event.getX(), event.getY());
+		final Optional<ConstructionSlot> loc = findConstructionSlot(point);
+		if (loc.isPresent()) {
+			logger.debug("was clicked at: " + loc.get());
+		}
+	}
+
+	private final void onDragDropped(final DragEvent event) {
+		logger.debug("Drag dropped");
+	}
+	
+	private Optional<ConstructionSlot> findConstructionSlot(final Point point) {
+		return slots.entrySet().stream().filter(entry -> entry.getKey().isIn(point)).map(entry -> entry.getValue())
+				.findAny();
 	}
 	
 	void repaint(final Colony colony){
+		slots = new HashMap<>();
+		final Point square = Point.of(GamePanelView.TILE_WIDTH_IN_PX, GamePanelView.TILE_WIDTH_IN_PX);
 		colony.getConstructions().forEach(construction -> {
 			final Point position = constructionPlaces.get(construction.getType());
 			Preconditions.checkNotNull(position,
@@ -120,6 +166,7 @@ public class PanelColonyStructures extends TitledPanel {
 			final AtomicInteger cx = new AtomicInteger(0);
 			construction.getConstructionSlots().forEach(constructionSlot -> {
 				final Point topLeftCorner = position.add(SLOT_POSITIONS[cx.get()]);
+				slots.put(Rectangle.ofPointAndSize(topLeftCorner, square), constructionSlot);
 				paintWorkerContainer(gc, topLeftCorner);
 				if (!constructionSlot.isEmpty()) {
 					gc.drawImage(imageProvider.getUnitImage(constructionSlot.getUnit().getType()), topLeftCorner.getX(),
