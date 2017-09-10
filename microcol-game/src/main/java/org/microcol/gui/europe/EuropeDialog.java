@@ -134,8 +134,8 @@ public class EuropeDialog extends AbstractDialog implements DialogCallback {
 								.addTransferFromUnit(cargoSlot.getOwnerUnit(), cargoSlot)
 								.addGoodAmount(cargoSlot.getGoods().get()).build();
 					}
-					event.consume();
 				}
+				event.consume();
 			}
 
 			@Override

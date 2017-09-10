@@ -96,7 +96,6 @@ public final class CargoSlot {
 		Preconditions.checkState(isEmpty(), "Cargo slot (%s) is already loaded.", this);
 		Preconditions.checkState(getOwnerUnit().getOwner().equals(unit.getOwner()), "Owners must be same (%s - %s).",
 				getOwnerUnit().getOwner(), unit.getOwner());
-
 		cargoUnit = new PlaceCargoSlot(unit, this);
 		unit.placeToCargoSlot(cargoUnit);
 	}

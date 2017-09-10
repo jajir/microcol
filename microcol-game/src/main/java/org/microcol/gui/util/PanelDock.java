@@ -55,15 +55,17 @@ public class PanelDock extends TitledPanel {
 			}
 		});
 
-		VBox mainPanel = new VBox(panelShips, panelCratesController.getPanelCratesView());
+		final VBox mainPanel = new VBox(panelShips, panelCratesController.getPanelCratesView());
 		getContentPane().getChildren().add(mainPanel);
 	}
 
 	public void repaint() {
 		panelShips.getChildren().clear();
-		for (Unit unit : panelDockBehavior.getUnitsInPort()) {
-			ToggleButton toggleButtonShip = new ToggleButton();
-			BackgroundImage myBI = new BackgroundImage(imageProvider.getUnitImage(unit.getType()),
+		Optional<Unit> selectedUnit = getSelectedShip();
+		toggleGroup.selectToggle(null);
+		panelDockBehavior.getUnitsInPort().forEach(unit -> {
+			final ToggleButton toggleButtonShip = new ToggleButton();
+			final BackgroundImage myBI = new BackgroundImage(imageProvider.getUnitImage(unit.getType()),
 					BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
 					BackgroundSize.DEFAULT);
 			toggleButtonShip.getStyleClass().add("paneShip");
@@ -71,8 +73,9 @@ public class PanelDock extends TitledPanel {
 			toggleButtonShip.setToggleGroup(toggleGroup);
 			toggleButtonShip.setUserData(unit);
 			toggleButtonShip.setOnDragDetected(this::onDragDetected);
+			toggleButtonShip.setSelected(selectedUnit.isPresent() ? unit.equals(selectedUnit.get()) : false);
 			panelShips.getChildren().add(toggleButtonShip);
-		}
+		});
 	}
 
 	public void repaintCurrectShipsCrates() {
@@ -80,6 +83,9 @@ public class PanelDock extends TitledPanel {
 	}
 
 	private Optional<Unit> getSelectedShip() {
+		if (toggleGroup.getSelectedToggle() == null) {
+			return Optional.empty();
+		}
 		return Optional.of((Unit) toggleGroup.getSelectedToggle().getUserData());
 	}
 
