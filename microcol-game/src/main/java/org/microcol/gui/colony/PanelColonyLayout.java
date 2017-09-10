@@ -6,7 +6,8 @@ import org.microcol.gui.ImageProvider;
 import org.microcol.gui.Point;
 import org.microcol.gui.event.model.GameController;
 import org.microcol.gui.panelview.GamePanelView;
-import org.microcol.gui.panelview.PaintService;
+import org.microcol.gui.util.ClipboardReader;
+import org.microcol.gui.util.ClipboardWritter;
 import org.microcol.gui.util.TitledPanel;
 import org.microcol.model.Colony;
 import org.microcol.model.ColonyField;
@@ -16,12 +17,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
-import com.google.inject.Inject;
 
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.input.DragEvent;
+import javafx.scene.input.Dragboard;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.input.TransferMode;
 
 /**
  * Show 3 x 3 tiles occupied by colony. User can assign worker to work outside
@@ -35,21 +39,20 @@ public class PanelColonyLayout extends TitledPanel {
 
 	private Colony colony;
 
-	private final PaintService paintService;
-
 	private final ImageProvider imageProvider;
 
 	private final GameController gameController;
 
+	private final ColonyDialogCallback colonyDialog;
+
 	private final ClickableArea clickableArea = new ClickableArea();
-	
-	@Inject
-	public PanelColonyLayout(final PaintService paintService, final ImageProvider imageProvider,
-			final GameController gameController) {
+
+	public PanelColonyLayout(final ImageProvider imageProvider, final GameController gameController,
+			final ColonyDialogCallback colonyDialog) {
 		super("Colony layout", new Label("Colony layout"));
-		this.paintService = Preconditions.checkNotNull(paintService);
 		this.imageProvider = Preconditions.checkNotNull(imageProvider);
 		this.gameController = Preconditions.checkNotNull(gameController);
+		this.colonyDialog = Preconditions.checkNotNull(colonyDialog);
 		final int size = 3 * GamePanelView.TILE_WIDTH_IN_PX;
 		canvas = new Canvas(size, size);
 		getContentPane().getChildren().add(canvas);
@@ -57,8 +60,25 @@ public class PanelColonyLayout extends TitledPanel {
 		canvas.setOnDragExited(this::onDragExited);
 		canvas.setOnDragOver(this::onDragOver);
 		canvas.setOnDragDropped(this::onDragDropped);
+		canvas.setOnDragDetected(this::onDragDetected);
 	}
-	
+
+	private final void onDragDetected(final MouseEvent event) {
+		logger.debug("Drag detected");
+		final Point point = Point.of(event.getX(), event.getY());
+		final Optional<Location> loc = clickableArea.getLocation(point);
+		if (loc.isPresent()) {
+			final ColonyField colonyField = colony.getColonyFieldInDirection(loc.get());
+			if (!colonyField.isEmpty()) {
+				final Image image = imageProvider.getUnitImage(colonyField.getUnit());
+				final Dragboard db = canvas.startDragAndDrop(TransferMode.MOVE);
+				ClipboardWritter.make(db).addImage(image).addTransferFromColonyField(loc.get())
+						.addUnit(colonyField.getUnit()).build();
+				event.consume();
+			}
+		}
+	}
+
 	private final void onDragEntered(final DragEvent event) {
 		logger.debug("Drag entered");
 	}
@@ -69,15 +89,45 @@ public class PanelColonyLayout extends TitledPanel {
 
 	private final void onDragOver(final DragEvent event) {
 		logger.debug("Drag Over");
-		final Point point = Point.of(event.getX(), event.getY());
-		final Optional<Location> loc= clickableArea.getLocation(point);
-		if(loc.isPresent()){
-			logger.debug("was clicked at: " + loc.get());
+		if (isItUnit(event.getDragboard())) {
+			final Point point = Point.of(event.getX(), event.getY());
+			final Optional<Location> loc = clickableArea.getLocation(point);
+			if (loc.isPresent() && loc.get().isDirection()) {
+				final ColonyField colonyField = colony.getColonyFieldInDirection(loc.get());
+				if (colonyField.isEmpty()) {
+					event.acceptTransferModes(TransferMode.MOVE);
+					event.consume();
+					return;
+				}
+			}
 		}
+		event.acceptTransferModes(TransferMode.NONE);
+		event.consume();
 	}
 
 	private final void onDragDropped(final DragEvent event) {
 		logger.debug("Drag dropped");
+		final Point point = Point.of(event.getX(), event.getY());
+		final Optional<Location> loc = clickableArea.getLocation(point);
+		if (loc.isPresent() && loc.get().isDirection()) {
+			final ColonyField colonyField = colony.getColonyFieldInDirection(loc.get());
+			if (colonyField.isEmpty()) {
+				final Dragboard db = event.getDragboard();
+				ClipboardReader.make(gameController.getModel(), db).tryReadUnit((unit, transferFrom) -> {
+					unit.placeToColonyField(colonyField);
+					event.setDropCompleted(true);
+					colonyDialog.repaint();
+				});
+			}
+			logger.debug("was clicked at: " + loc.get());
+		}
+		event.consume();
+	}
+	
+
+	private boolean isItUnit(final Dragboard db) {
+		logger.debug("Drag over unit id '" + db.getString() + "'.");
+		return ClipboardReader.make(gameController.getModel(), db).getUnit().isPresent();
 	}
 
 	public void setColony(final Colony colony) {
@@ -94,7 +144,7 @@ public class PanelColonyLayout extends TitledPanel {
 	private void paintSection(final GraphicsContext gc, final ColonyField colonyField) {
 		final Terrain terrain = colonyField.getTerrain();
 		final Point centre = Point.of(1, 1).multiply(GamePanelView.TILE_WIDTH_IN_PX);
-		final Point point = Point.of(colonyField.getLocation()).add(centre);
+		final Point point = Point.of(colonyField.getDirection()).add(centre);
 		paintTile(gc, terrain, point);
 		if (!colonyField.isEmpty()) {
 			gc.drawImage(imageProvider.getUnitImage(colonyField.getUnit().getType()), point.getX(), point.getY());

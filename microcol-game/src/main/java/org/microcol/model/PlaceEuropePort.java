@@ -1,5 +1,6 @@
 package org.microcol.model;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 
 /**
@@ -7,11 +8,11 @@ import com.google.common.base.Preconditions;
  */
 public class PlaceEuropePort extends AbstractPlace {
 
-	private final EuropePort port;
+	private final EuropePort europePort;
 
 	PlaceEuropePort(final Unit unit, final EuropePort port) {
 		super(unit);
-		this.port = Preconditions.checkNotNull(port);
+		this.europePort = Preconditions.checkNotNull(port);
 	}
 
 	@Override
@@ -19,8 +20,16 @@ public class PlaceEuropePort extends AbstractPlace {
 		return "Port";
 	}
 
-	protected EuropePort getPort() {
-		return port;
+	protected EuropePort getEuropePort() {
+		return europePort;
+	}
+	
+	@Override
+	public String toString() {
+		return MoreObjects.toStringHelper(PlaceEuropePort.class)
+				.add("unit id", getUnit().getId())
+				.add("europePort", europePort)
+				.toString();
 	}
 
 }

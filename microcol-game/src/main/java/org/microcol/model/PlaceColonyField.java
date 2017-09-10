@@ -1,5 +1,6 @@
 package org.microcol.model;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 
 /**
@@ -19,8 +20,18 @@ public class PlaceColonyField extends AbstractPlace {
 		return "Construction";
 	}
 
-	private ColonyField getColonyField() {
-		return colonyField;
+	@Override
+	public void destroy() {
+		colonyField.setPlaceColonyField(null);
+	}
+	
+	@Override
+	public String toString() {
+		return MoreObjects.toStringHelper(PlaceColonyField.class)
+				.add("unitId", getUnit().getId())
+				.add("unitType", getUnit().getType())
+				.add("colonyName", colonyField.getColonyName())
+				.toString();
 	}
 
 }

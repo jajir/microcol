@@ -1,7 +1,11 @@
 package org.microcol.model;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 
+/**
+ * 
+ */
 public class PlaceCargoSlot extends AbstractPlace {
 
 	private final CargoSlot cargoSlot;
@@ -32,6 +36,14 @@ public class PlaceCargoSlot extends AbstractPlace {
 	
 	public boolean isOwnerAtEuropePort(){
 		return cargoSlot.getHold().getOwner().isAtEuropePort();
+	}
+	
+	@Override
+	public String toString() {
+		return MoreObjects.toStringHelper(PlaceCargoSlot.class)
+				.add("unit id", getUnit().getId())
+				.add("owner", cargoSlot.getOwnerPlayer())
+				.toString();
 	}
 
 }

@@ -1,5 +1,6 @@
 package org.microcol.model;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 
 /**
@@ -22,4 +23,13 @@ public class PlaceConstruction extends AbstractPlace {
 	public Construction getConstruction() {
 		return construction;
 	}
+	
+	@Override
+	public String toString() {
+		return MoreObjects.toStringHelper(PlaceConstruction.class)
+				.add("unit id", getUnit().getId())
+				.add("construction", construction)
+				.toString();
+	}
+	
 }

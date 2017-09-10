@@ -31,7 +31,7 @@ public class ColonyBuilder {
 		this.playerBuilder = Preconditions.checkNotNull(playerBuilder);
 	}
 
-	public PlayerBuilder make() {
+	public PlayerBuilder build() {
 		return playerBuilder;
 	}
 

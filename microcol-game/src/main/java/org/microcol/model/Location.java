@@ -123,6 +123,10 @@ public final class Location {
 		return of(x, y);
 	}
 
+	public boolean isDirection() {
+		return DIRECTIONS.contains(this);
+	}
+	
 	public static Location of(final int x, final int y) {
 		return new Location(x, y);
 	}

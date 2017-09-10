@@ -29,7 +29,7 @@ import javafx.scene.layout.VBox;
 /**
  * Show Europe port.
  */
-public class ColonyDialog extends AbstractDialog {
+public class ColonyDialog extends AbstractDialog implements ColonyDialogCallback {
 
 	private final Label colonyName;
 
@@ -49,8 +49,7 @@ public class ColonyDialog extends AbstractDialog {
 
 	@Inject
 	public ColonyDialog(final ViewUtil viewUtil, final Text text, final ImageProvider imageProvider,
-			final GameController gameController, final LocalizationHelper localizationHelper,
-			final PanelColonyLayout panelColonyLayout) {
+			final GameController gameController, final LocalizationHelper localizationHelper) {
 		super(viewUtil);
 		Preconditions.checkNotNull(imageProvider);
 		this.gameController = Preconditions.checkNotNull(gameController);
@@ -64,7 +63,7 @@ public class ColonyDialog extends AbstractDialog {
 		/**
 		 * Row 1
 		 */
-		colonyLayout = Preconditions.checkNotNull(panelColonyLayout);
+		colonyLayout = new PanelColonyLayout(imageProvider, gameController, this);
 
 		colonyStructures = new PanelColonyStructures(localizationHelper, imageProvider);
 
@@ -102,7 +101,7 @@ public class ColonyDialog extends AbstractDialog {
 			}
 		});
 
-		panelOutsideColony = new PanelOutsideColony(imageProvider);
+		panelOutsideColony = new PanelOutsideColony(imageProvider, gameController, this);
 
 		final HBox managementRow = new HBox();
 		managementRow.getChildren().addAll(panelProductionSummary, panelDock, panelOutsideColony);
@@ -130,13 +129,17 @@ public class ColonyDialog extends AbstractDialog {
 	public void showColony(final Colony colony) {
 		this.colony = Preconditions.checkNotNull(colony);
 		colonyName.setText("Colony: " + colony.getName());
+		repaint();
+		getDialog().showAndWait();
+	}
+	
+	@Override
+	public void repaint(){
 		colonyLayout.setColony(colony);
 		goods.setEurope(gameController.getModel().getEurope());
 		panelDock.repaint();
 		colonyStructures.repaint(colony);
 		panelOutsideColony.setColony(colony);
-		// pierShips.setPort(null);
-		getDialog().showAndWait();
 	}
 	
 }

@@ -469,6 +469,30 @@ public class Unit {
 		getPlaceCargoSlot().getCargoSlot().empty();
 		place = new PlaceEuropePier(this);
 	}
+	
+	public void placeToColonyField(final ColonyField colonyField){
+		Preconditions.checkNotNull(colonyField);
+		Preconditions.checkState(!isAtEuropePort(), "Unit can't skip from europe port to map");
+		Preconditions.checkState(!isAtEuropePier(), "Unit can't skip from europe port pier to map");
+		Preconditions.checkState(colonyField.isEmpty(), "Unit can't be placed to non empty colony field");
+		place.destroy();
+		place = new PlaceColonyField(this, colonyField);
+		colonyField.setPlaceColonyField((PlaceColonyField)place);
+	}
+
+	/**
+	 * This method place unit to map. It's not about moving unit. MEthod doesn't
+	 * verify if unit can go to target location.
+	 * 
+	 * @param location Required location where is unit placed.
+	 */
+	public void placeToMap(final Location location){
+		Preconditions.checkNotNull(location);
+		Preconditions.checkState(!isAtEuropePort(), "Unit can't skip from europe port to map");
+		Preconditions.checkState(!isAtEuropePier(), "Unit can't skip from europe port pier to map");
+		place.destroy();
+		placeToLocation(location);
+	}
 
 	void unload(final Location targetLocation) {
 		Preconditions.checkNotNull(targetLocation);
@@ -483,8 +507,13 @@ public class Unit {
 
 	@Override
 	public String toString() {
-		return MoreObjects.toStringHelper(this).add("id", id).add("type", type).add("owner", owner)
-				.add("place", place.getName()).add("availableMoves", availableMoves).add("hold", cargo)
+		return MoreObjects.toStringHelper(this)
+				.add("id", id)
+				.add("type", type)
+				.add("owner", owner)
+				.add("place", place.getName())
+				.add("availableMoves", availableMoves)
+				.add("hold", cargo)
 				.add("place", place.getName()).toString();
 	}
 

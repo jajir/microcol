@@ -1,6 +1,5 @@
 package org.microcol.gui;
 
-import org.microcol.gui.colony.PanelColonyLayout;
 import org.microcol.gui.colony.ColonyDialog;
 import org.microcol.gui.event.AboutGameEventController;
 import org.microcol.gui.event.AboutGameListenerImpl;
@@ -123,7 +122,6 @@ public class MicroColModule extends AbstractModule {
 
 		bind(UnitsPanel.class).asEagerSingleton();
 		bind(ColonyDialog.class).asEagerSingleton();
-		bind(PanelColonyLayout.class).asEagerSingleton();
 		bind(PersistingDialog.class).in(Singleton.class);
 
 		/**

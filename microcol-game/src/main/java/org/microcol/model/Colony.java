@@ -97,9 +97,9 @@ public class Colony {
 
 	public ColonyField getColonyFieldInDirection(final Location fieldDirection) {
 		Preconditions.checkNotNull(fieldDirection, "Field direction is null");
-		Preconditions.checkArgument(Location.DIRECTIONS.contains(fieldDirection),
+		Preconditions.checkArgument(fieldDirection.isDirection(),
 				String.format("Direction (%s) is  not known", fieldDirection));
-		return colonyFields.stream().filter(colonyFiled -> colonyFiled.getLocation().equals(fieldDirection)).findAny()
+		return colonyFields.stream().filter(colonyFiled -> colonyFiled.getDirection().equals(fieldDirection)).findAny()
 				.orElseThrow(() -> new IllegalStateException(
 						String.format("Field directiond (%s) is not in colony (%s)", fieldDirection, this)));
 	}

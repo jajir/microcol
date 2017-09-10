@@ -1,5 +1,6 @@
 package org.microcol.model;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 
 /**
@@ -15,6 +16,13 @@ public class PlaceEuropePier extends AbstractPlace {
 	@Override
 	public String getName() {
 		return "Europe pier";
+	}
+	
+	@Override
+	public String toString() {
+		return MoreObjects.toStringHelper(PlaceEuropePier.class)
+				.add("unit id", getUnit().getId())
+				.toString();
 	}
 
 }

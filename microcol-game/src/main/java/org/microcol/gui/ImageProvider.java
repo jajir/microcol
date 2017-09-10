@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.microcol.model.GoodType;
 import org.microcol.model.Terrain;
+import org.microcol.model.Unit;
 import org.microcol.model.UnitType;
 
 import com.google.common.collect.ImmutableMap;
@@ -179,14 +180,25 @@ public class ImageProvider {
 	}
 
 	/**
-	 * For specific ship type find corresponding image.
+	 * For specific unit type find corresponding image.
 	 * 
-	 * @param shipType
-	 *            required ship type
+	 * @param unitType
+	 *            required unit type
 	 * @return image representing ship image
 	 */
-	public Image getUnitImage(final UnitType shipType) {
-		return unitImageMap.get(shipType);
+	public Image getUnitImage(final UnitType unitType) {
+		return unitImageMap.get(unitType);
+	}
+
+	/**
+	 * For specific unit find corresponding image.
+	 * 
+	 * @param unit
+	 *            required unit
+	 * @return image representing ship image
+	 */
+	public Image getUnitImage(final Unit unit) {
+		return unitImageMap.get(unit.getType());
 	}
 
 	/**

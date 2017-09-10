@@ -49,7 +49,35 @@ public final class Model {
 
 		highSea = new HighSea(this);
 		this.europe = new Europe(this);
-		unitsInEuropePort.forEach(unit->unit.placeToEuropePort(europe.getPort()));
+		unitsInEuropePort.forEach(unit -> unit.placeToEuropePort(europe.getPort()));
+		checkUnits();
+	}
+
+	/**
+	 * Verify that all units are in unit storage and that all units from unit
+	 * storage are placed to world.
+	 */
+	private void checkUnits() {
+		/*
+		 * It has to be checked. Because of unit could be hold just in colony
+		 * field and not in unit storage.
+		 */
+		colonies.forEach(colony -> {
+			colony.getColonyFields().forEach(colonyfield -> {
+				if (!colonyfield.isEmpty()) {
+					final Unit unit = colonyfield.getUnit();
+					Preconditions.checkState(unitStorage.getUnitById(unit.getId()).equals(unit));
+				}
+			});
+			colony.getConstructions().forEach(construction -> {
+				construction.getConstructionSlots().forEach(slot -> {
+					if (!slot.isEmpty()) {
+						final Unit unit = slot.getUnit();
+						Preconditions.checkState(unitStorage.getUnitById(unit.getId()).equals(unit));
+					}
+				});
+			});
+		});
 	}
 
 	private void checkPlayerNames(final List<Player> players) {
@@ -76,7 +104,7 @@ public final class Model {
 	public void addListener(ModelListener listener) {
 		listenerManager.addListener(listener);
 	}
-	
+
 	public void removeListener(ModelListener listener) {
 		listenerManager.removeListener(listener);
 	}
@@ -108,7 +136,7 @@ public final class Model {
 	public List<Unit> getUnits(final boolean includeStored) {
 		return unitStorage.getUnits(includeStored);
 	}
-	
+
 	public Unit getUnitById(final int id) {
 		return unitStorage.getUnitById(id);
 	}

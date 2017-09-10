@@ -77,12 +77,11 @@ public class PanelGoods extends TitledPanel {
 		}
 	}
 
-	private final void onDragDropped(DragEvent event) {
+	private final void onDragDropped(final DragEvent event) {
 		logger.debug("Object was dropped on panel goods.");
 		final Dragboard db = event.getDragboard();
 		ClipboardReader.make(gameController.getModel(), db).tryReadGood((goodAmount, transferFrom) -> {
 			// FIXME remove goodAmount from cargoStore
-			event.acceptTransferModes(TransferMode.MOVE);
 			event.setDropCompleted(true);
 			event.consume();
 		});

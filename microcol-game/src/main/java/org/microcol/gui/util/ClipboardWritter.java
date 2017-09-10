@@ -4,6 +4,7 @@ import org.microcol.gui.util.ClipboardReader.Transfer;
 import org.microcol.gui.util.ClipboardReader.TransferFrom;
 import org.microcol.model.CargoSlot;
 import org.microcol.model.GoodAmount;
+import org.microcol.model.Location;
 import org.microcol.model.Unit;
 
 import com.google.common.base.Preconditions;
@@ -54,24 +55,38 @@ public class ClipboardWritter {
 		return this;
 	}
 
-	public ClipboardWritter addTransferFromUnit(final Unit unit, final CargoSlot cargoSlot) {
+	private void transferFromCheck(){
 		Preconditions.checkState(transfer == null, "TransferFrom should be called before setting transferring object");
 		Preconditions.checkState(transferFrom == null, "Transfer from was already set");
+	}
+	
+	public ClipboardWritter addTransferFromUnit(final Unit unit, final CargoSlot cargoSlot) {
+		transferFromCheck();
 		transferFrom = new ClipboardReader.TransferFromCargoSlot(unit, cargoSlot.getIndex());
 		return this;
 	}
 
 	public ClipboardWritter addTransferFromEuropePortPier() {
-		Preconditions.checkState(transfer == null, "TransferFrom should be called before setting transferring object");
-		Preconditions.checkState(transferFrom == null, "Transfer from was already set");
+		transferFromCheck();
 		transferFrom = new ClipboardReader.TransferFromEuropePier();
 		return this;
 	}
 
 	public ClipboardWritter addTransferFromEuropeShop() {
-		Preconditions.checkState(transfer == null, "TransferFrom should be called before setting transferring object");
-		Preconditions.checkState(transferFrom == null, "Transfer from was already set");
+		transferFromCheck();
 		transferFrom = new ClipboardReader.TransferFromEuropeShop();
+		return this;
+	}
+
+	public ClipboardWritter addTransferFromOutsideColony() {
+		transferFromCheck();
+		transferFrom = new ClipboardReader.TransferFromOutsideColony();
+		return this;
+	}
+
+	public ClipboardWritter addTransferFromColonyField(final Location fieldDirection) {
+		transferFromCheck();
+		transferFrom = new ClipboardReader.TransferFromColonyField(fieldDirection);
 		return this;
 	}
 

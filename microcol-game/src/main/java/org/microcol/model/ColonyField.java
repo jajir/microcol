@@ -2,6 +2,7 @@ package org.microcol.model;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
+import com.google.common.base.MoreObjects.ToStringHelper;
 
 /**
  * Class represents on field outside colony. When unit is placed here than some
@@ -13,31 +14,45 @@ public class ColonyField {
 	
 	private final Colony colony;
 	
-	private final Location location;
+	private final Location direction;
 
 	private PlaceColonyField placeColonyField;
 
 	ColonyField(final Location location, final Colony colony) {
-		this.location = Preconditions.checkNotNull(location);
+		this.direction = Preconditions.checkNotNull(location);
 		this.colony = Preconditions.checkNotNull(colony);
+		Preconditions.checkArgument(location.isDirection(),
+				"Field location (%s) is not a valid direction", location);
 	}
 
-	public Location getLocation() {
-		return location;
+	public Location getDirection() {
+		return direction;
 	}
 	
 	public Terrain getTerrain() {
-		return model.getMap().getTerrainAt(colony.getLocation().add(location));
+		return model.getMap().getTerrainAt(colony.getLocation().add(direction));
 	}
 
 	void setModel(final Model model) {
 		this.model = Preconditions.checkNotNull(model);
 	}
+	
+	public String getColonyName(){
+		return colony.getName();
+	}
 
 	@Override
 	public String toString() {
-		return MoreObjects.toStringHelper(ColonyField.class).add("location", location)
-				.add("placeColonyField", placeColonyField).toString();
+		final ToStringHelper toStringHelper = MoreObjects.toStringHelper(ColonyField.class)
+				.add("direction", direction)
+				.add("colonyLocation", colony.getLocation())
+				.add("colonyName", getColonyName());
+		if (isEmpty()) {
+			toStringHelper.addValue("isEmpty");
+		} else {
+			toStringHelper.add("unitId", getUnit().getId());
+		}
+		return toStringHelper.toString();
 	}
 
 	public boolean isEmpty() {

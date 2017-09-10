@@ -7,6 +7,7 @@ import java.util.function.Predicate;
 import org.microcol.model.CargoSlot;
 import org.microcol.model.GoodAmount;
 import org.microcol.model.GoodType;
+import org.microcol.model.Location;
 import org.microcol.model.Model;
 import org.microcol.model.Unit;
 
@@ -28,6 +29,10 @@ public class ClipboardReader {
 	final static String KEY_FROM_EUROPE_PORT_PIER = "FromEuropePortPier";
 
 	final static String KEY_FROM_EUROPE_SHOP = "FromEuropeShop";
+
+	final static String KEY_FROM_COLONY_FIELD = "FromColonyField";
+
+	final static String KEY_FROM_OUTSIDE_COLONY = "FromOutsideColony";
 
 	final static String SEPARATOR = ",";
 
@@ -354,6 +359,32 @@ public class ClipboardReader {
 
 	}
 
+	public static class TransferFromColonyField implements TransferFrom {
+
+		private final Location fieldDirection;
+		
+		TransferFromColonyField(final Location fieldDirection) {
+			this.fieldDirection = Preconditions.checkNotNull(fieldDirection);
+		}
+		
+		private Location getFieldDirection() {
+			return fieldDirection;
+		}
+
+		@Override
+		public void writeTo(final StringBuilder buff) {
+			buff.append(SEPARATOR);
+			buff.append(KEY_FROM_COLONY_FIELD);
+			buff.append(SEPARATOR);
+			buff.append(fieldDirection.getX());
+			buff.append(SEPARATOR);
+			buff.append(fieldDirection.getY());
+		}
+
+	}
+	
+	
+
 	/**
 	 * Unit was taken from Europe port pier.
 	 */
@@ -376,6 +407,19 @@ public class ClipboardReader {
 		public void writeTo(final StringBuilder buff) {
 			buff.append(SEPARATOR);
 			buff.append(KEY_FROM_EUROPE_SHOP);
+		}
+
+	}
+
+	/**
+	 * Unit was taken from Europe shop.
+	 */
+	public static class TransferFromOutsideColony implements TransferFrom {
+
+		@Override
+		public void writeTo(final StringBuilder buff) {
+			buff.append(SEPARATOR);
+			buff.append(KEY_FROM_OUTSIDE_COLONY);
 		}
 
 	}

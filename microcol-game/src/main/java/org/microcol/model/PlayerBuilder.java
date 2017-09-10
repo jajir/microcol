@@ -26,7 +26,7 @@ public class PlayerBuilder {
 		this.name = Preconditions.checkNotNull(name);
 	}
 
-	public ModelBuilder make() {
+	public ModelBuilder build() {
 		final Player player = new Player(name, isComputerPlayer, gold);
 		modelBuilder.getPlayers().add(player);
 		colonyBuilders.forEach(colonyBuilder -> {
@@ -60,6 +60,7 @@ public class PlayerBuilder {
 				final Unit unit = unitBuilder.build();
 				colony.getColonyFieldInDirection(fieldPlace.getFieldDirection())
 						.setPlaceColonyField(unit.getPlaceColonyField());
+				modelBuilder.addUnit(unit);
 			});
 			modelBuilder.getColonies().add(colony);
 		});

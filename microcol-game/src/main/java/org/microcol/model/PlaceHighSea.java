@@ -1,5 +1,6 @@
 package org.microcol.model;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 
 /**
@@ -49,6 +50,15 @@ public class PlaceHighSea extends AbstractPlace {
 		} else {
 			return "Travel to Colonies";
 		}
+	}
+	
+	@Override
+	public String toString() {
+		return MoreObjects.toStringHelper(PlaceHighSea.class)
+				.add("unit id", getUnit().getId())
+				.add("isTravelToEurope", isTravelToEurope)
+				.add("remainigTurns", remainigTurns)
+				.toString();
 	}
 
 }
