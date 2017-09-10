@@ -329,6 +329,16 @@ public class ConstructionType {
 	 		.setRequiredColonyPopulation(1)
 	 		.build();
 
+	public final static ConstructionType BASIC_WAREHOUSE = ConstructionTypeBuilder.make()
+			.setName("BASIC_WAREHOUSE")
+			.setBuildCostHammers(0)
+			.setBuildCostTools(0)
+			.setProduce(null)
+	 		.setSlotsForWorkers(0)
+	 		.setUpgradeTo(WAREHOUSE)
+	 		.setRequiredColonyPopulation(1)
+	 		.build();
+
 	public final static ConstructionType STABLES = ConstructionTypeBuilder.make()
 			.setName("STABLES")
 			.setBuildCostHammers(64)
@@ -422,6 +432,7 @@ public class ConstructionType {
 			SCHOOLHOUSE,
 			WAREHOUSE_EXPANSION,
 			WAREHOUSE,
+			BASIC_WAREHOUSE,
 			STABLES,
 			CATHEDRAL,
 			CHURCH,
@@ -435,7 +446,13 @@ public class ConstructionType {
 	public final static List<ConstructionType> NEW_COLONY_CONSTRUCTIONS = ALL.stream()
 			.filter(constructionType -> constructionType.isBuildFromFounding())
 			.collect(ImmutableList.toImmutableList());
+
+	public final static List<ConstructionType> WAREHOUSES =  ImmutableList.of(
+			WAREHOUSE_EXPANSION,
+			WAREHOUSE,
+			BASIC_WAREHOUSE);
 	
+
 	private static class ConstructionTypeBuilder {
 
 		private String name;

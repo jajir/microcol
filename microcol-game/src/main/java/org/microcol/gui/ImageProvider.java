@@ -4,6 +4,7 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.microcol.model.GoodAmount;
 import org.microcol.model.GoodType;
 import org.microcol.model.Terrain;
 import org.microcol.model.Unit;
@@ -210,6 +211,17 @@ public class ImageProvider {
 	 */
 	public Image getGoodTypeImage(final GoodType goodType) {
 		return goodTypeImageMap.get(goodType);
+	}
+
+	/**
+	 * For specific good amount find corresponding image.
+	 * 
+	 * @param goodAmount
+	 *            required good amount
+	 * @return image representing good type
+	 */
+	public Image getGoodTypeImage(final GoodAmount goodAmount) {
+		return goodTypeImageMap.get(goodAmount.getGoodType());
 	}
 
 }

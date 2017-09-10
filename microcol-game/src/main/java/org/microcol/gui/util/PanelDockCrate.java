@@ -88,11 +88,11 @@ public class PanelDockCrate extends StackPane {
 		} else {
 			if (cargoSlot.isLoadedGood()) {
 				final GoodAmount goodAmount = cargoSlot.getGoods().get();
-				// TODO it should appear below crate image
 				labelAmount.setText(String.valueOf(goodAmount.getAmount()));
 				cargoImage.setImage(imageProvider.getGoodTypeImage(goodAmount.getGoodType()));
 			} else if (cargoSlot.isLoadedUnit()) {
 				final Unit cargoUnit = cargoSlot.getUnit().get();
+				labelAmount.setText("");
 				cargoImage.setImage(imageProvider.getUnitImage(cargoUnit.getType()));
 			}
 		}
@@ -100,6 +100,7 @@ public class PanelDockCrate extends StackPane {
 
 	private void hideCargo() {
 		getChildren().remove(cargoImage);
+		labelAmount.setText("");
 	}
 
 	private final void onDragEntered(final DragEvent event) {

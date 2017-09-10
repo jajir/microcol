@@ -19,8 +19,8 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 
 /**
- * Display one unit description.
- *
+ * Display one unit description. Panel is placed on the right side of main
+ * screen.
  */
 public class UnitsPanel implements Localized {
 
@@ -95,7 +95,11 @@ public class UnitsPanel implements Localized {
 		// TODO JJ localize it
 		box.getChildren().add(new Label("With:"));
 		unit.getCargo().getSlots().stream().filter(cargoSlot -> !cargoSlot.isEmpty()).forEach(cargoSlot -> {
-			box.getChildren().add(new ImageView(imageProvider.getUnitImage(cargoSlot.getUnit().get().getType())));
+			if (cargoSlot.isLoadedUnit()) {
+				box.getChildren().add(new ImageView(imageProvider.getUnitImage(cargoSlot.getUnit().get())));
+			} else {
+				box.getChildren().add(new ImageView(imageProvider.getGoodTypeImage(cargoSlot.getGoods().get())));
+			}
 		});
 		return box;
 	}

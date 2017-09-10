@@ -179,6 +179,7 @@ public class EuropeDialog extends AbstractDialog implements DialogCallback {
 		getScene().getStylesheets().add("gui/MicroCol.css");
 		/**
 		 * TODO there is a bug, keyboard events are not send during dragging.
+		 * TODO copy of this code is n colonyDialog
 		 */
 		getScene().addEventFilter(KeyEvent.KEY_RELEASED, event -> {
 			if (event.getCode() == KeyCode.SHIFT) {

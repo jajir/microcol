@@ -2,7 +2,6 @@ package org.microcol.gui.colony;
 
 import java.util.List;
 
-import org.microcol.gui.DialogNotEnoughGold;
 import org.microcol.gui.ImageProvider;
 import org.microcol.gui.LocalizationHelper;
 import org.microcol.gui.europe.ChooseGoodAmount;
@@ -17,7 +16,6 @@ import org.microcol.gui.util.ViewUtil;
 import org.microcol.model.CargoSlot;
 import org.microcol.model.Colony;
 import org.microcol.model.GoodAmount;
-import org.microcol.model.NotEnoughtGoldException;
 import org.microcol.model.Unit;
 import org.microcol.model.UnitType;
 import org.slf4j.Logger;
@@ -26,12 +24,16 @@ import org.slf4j.LoggerFactory;
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
 
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.HBox;
@@ -52,11 +54,11 @@ public class ColonyDialog extends AbstractDialog implements ColonyDialogCallback
 
 	private final PanelColonyGoods goods;
 
-	private final GameController gameController;
-
 	private final PanelDock panelDock;
 	
 	private final PanelOutsideColony panelOutsideColony;
+
+	private final BooleanProperty propertyShiftWasPressed;
 
 	private Colony colony;
 
@@ -65,7 +67,6 @@ public class ColonyDialog extends AbstractDialog implements ColonyDialogCallback
 			final GameController gameController, final LocalizationHelper localizationHelper) {
 		super(viewUtil);
 		Preconditions.checkNotNull(imageProvider);
-		this.gameController = Preconditions.checkNotNull(gameController);
 		getDialog().setTitle(text.get("europeDialog.caption"));
 
 		/**
@@ -101,31 +102,27 @@ public class ColonyDialog extends AbstractDialog implements ColonyDialogCallback
 				final Dragboard db = event.getDragboard();
 				ClipboardReader.make(gameController.getModel(), db).filterUnit(unit -> !UnitType.isShip(unit.getType()))
 						.tryReadGood((goodAmount, transferFrom) -> {
-//							Preconditions.checkArgument(transferFrom.isPresent(), "Good origin is not known.");
-//							GoodAmount tmp = goodAmount;
-//							logger.debug("wasShiftPressed " + getPropertyShiftWasPressed().get());
-//							if (getPropertyShiftWasPressed().get()) {
-//								ChooseGoodAmount chooseGoodAmount = new ChooseGoodAmount(viewUtil, text,
-//										goodAmount.getAmount());
-//								tmp = new GoodAmount(goodAmount.getGoodType(), chooseGoodAmount.getActualValue());
-//							}
-//							if (transferFrom.get() instanceof ClipboardReader.TransferFromEuropeShop) {
-//								try {
-//									cargoSlot.buyAndStore(tmp);
-//								} catch (NotEnoughtGoldException e) {
-//									new DialogNotEnoughGold(viewUtil, text);
-//								}
-//							} else if (transferFrom.get() instanceof ClipboardReader.TransferFromCargoSlot) {
-//								cargoSlot.storeFromCargoSlot(tmp,
-//										((ClipboardReader.TransferFromCargoSlot) transferFrom.get()).getCargoSlot());
-//							} else {
-//								throw new IllegalArgumentException(
-//										"Unsupported source transfer '" + transferFrom + "'");
-//							}
-//							repaint();
-//							event.acceptTransferModes(TransferMode.MOVE);
-//							event.setDropCompleted(true);
-//							event.consume();
+							Preconditions.checkArgument(transferFrom.isPresent(), "Good origin is not known.");
+							GoodAmount tmp = goodAmount;
+							logger.debug("wasShiftPressed " + getPropertyShiftWasPressed().get());
+							if (getPropertyShiftWasPressed().get()) {
+								ChooseGoodAmount chooseGoodAmount = new ChooseGoodAmount(viewUtil, text,
+										goodAmount.getAmount());
+								tmp = new GoodAmount(goodAmount.getGoodType(), chooseGoodAmount.getActualValue());
+							}
+							if (transferFrom.get() instanceof ClipboardReader.TransferFromColonyWarehouse) {
+								cargoSlot.storeFromColonyWarehouse(tmp, colony);
+							} else if (transferFrom.get() instanceof ClipboardReader.TransferFromCargoSlot) {
+								cargoSlot.storeFromCargoSlot(tmp,
+										((ClipboardReader.TransferFromCargoSlot) transferFrom.get()).getCargoSlot());
+							} else {
+								throw new IllegalArgumentException(
+										"Unsupported source transfer '" + transferFrom + "'");
+							}
+							repaint();
+							event.acceptTransferModes(TransferMode.MOVE);
+							event.setDropCompleted(true);
+							event.consume();
 						}).tryReadUnit((unit, transferFrom) -> {
 							cargoSlot.store(unit);
 							repaint();
@@ -173,7 +170,7 @@ public class ColonyDialog extends AbstractDialog implements ColonyDialogCallback
 		/**
 		 * Good row - 3
 		 */
-		goods = new PanelColonyGoods(imageProvider);
+		goods = new PanelColonyGoods(gameController, imageProvider, this);
 
 		/**
 		 * Last row 4
@@ -188,11 +185,29 @@ public class ColonyDialog extends AbstractDialog implements ColonyDialogCallback
 		mainPanel.getChildren().addAll(colonyName, mapAndBuildings, managementRow, goods, buttonOk);
 		init(mainPanel);
 		getScene().getStylesheets().add("gui/MicroCol.css");
+
+		/**
+		 * TODO there is a bug, keyboard events are not send during dragging.
+		 * TODO copy of this code is in EuropeDialog
+		 */
+		propertyShiftWasPressed = new SimpleBooleanProperty(false);
+		getScene().addEventFilter(KeyEvent.KEY_RELEASED, event -> {
+			if (event.getCode() == KeyCode.SHIFT) {
+				propertyShiftWasPressed.set(false);
+			}
+		});
+		getScene().addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+			logger.debug("wasShiftPressed " + event);
+			if (event.getCode() == KeyCode.SHIFT) {
+				propertyShiftWasPressed.set(true);
+			}
+		});
 	}
 	
 	public void showColony(final Colony colony) {
 		this.colony = Preconditions.checkNotNull(colony);
 		colonyName.setText("Colony: " + colony.getName());
+		goods.setColony(colony);
 		repaint();
 		getDialog().showAndWait();
 	}
@@ -200,10 +215,13 @@ public class ColonyDialog extends AbstractDialog implements ColonyDialogCallback
 	@Override
 	public void repaint(){
 		colonyLayout.setColony(colony);
-		goods.setEurope(gameController.getModel().getEurope());
+		goods.repaint();
 		panelDock.repaint();
 		colonyStructures.repaint(colony);
 		panelOutsideColony.setColony(colony);
 	}
-	
+
+	public BooleanProperty getPropertyShiftWasPressed() {
+		return propertyShiftWasPressed;
+	}
 }

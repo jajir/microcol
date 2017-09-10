@@ -161,6 +161,7 @@
 	<entry key="construction.SCHOOLHOUSE.name">Schoolhouse</entry>
 	<entry key="construction.WAREHOUSE_EXPANSION.name">Warehouse Expansion</entry>
 	<entry key="construction.WAREHOUSE.name">Warehouse</entry>
+	<entry key="construction.BASIC_WAREHOUSE.name">Small warehouse</entry>
 	<entry key="construction.STABLES.name">Stables</entry>
 	<entry key="construction.CATHEDRAL.name">Cathedral</entry>
 	<entry key="construction.CHURCH.name">Church</entry>

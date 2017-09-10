@@ -36,6 +36,8 @@ public class ClipboardReader {
 
 	final static String KEY_FROM_CONSTRUCTION_SLOT = "FromConstructionSlot";
 
+	final static String KEY_FROM_COLONY_WAREHOUSE = "FromColonyWarehouse";
+
 	final static String SEPARATOR = ",";
 
 	private final Model model;
@@ -79,6 +81,9 @@ public class ClipboardReader {
 		if (transferFrom == null) {
 			transferFrom = tryReadTransferFromEuropeShop(3);
 		}
+		if (transferFrom == null) {
+			transferFrom = tryReadTransferFromColonyWarehouse(3);
+		}
 		return new GoodTransfer(goodAmount, transferFrom);
 	}
 
@@ -96,6 +101,15 @@ public class ClipboardReader {
 		TransferFrom transferFrom = tryReadTransferFromCargoSlot(2);
 		if (transferFrom == null) {
 			transferFrom = tryReadTransferFromEuropePortPier(2);
+		}
+		if (transferFrom == null) {
+			transferFrom = tryReadTransferFromColonyField(2);
+		}
+		if (transferFrom == null) {
+			transferFrom = tryReadTransferFromOutsideColony(2);
+		}
+		if (transferFrom == null) {
+			transferFrom = tryReadTransferFromConstructionSlot(2);
 		}
 		return new UnitTransfer(unit, transferFrom);
 	}
@@ -124,6 +138,52 @@ public class ClipboardReader {
 			return null;
 		}
 		return new TransferFromEuropePier();
+	}
+
+	private TransferFromOutsideColony tryReadTransferFromOutsideColony(int fromIndex) {
+		if (parts.length < fromIndex + 1) {
+			return null;
+		}
+		if (!KEY_FROM_OUTSIDE_COLONY.equals(parts[fromIndex + 0])) {
+			return null;
+		}
+		return new TransferFromOutsideColony();
+	}
+
+	private TransferFromColonyWarehouse tryReadTransferFromColonyWarehouse(int fromIndex) {
+		if (parts.length < fromIndex + 1) {
+			return null;
+		}
+		if (!KEY_FROM_COLONY_WAREHOUSE.equals(parts[fromIndex + 0])) {
+			return null;
+		}
+		return new TransferFromColonyWarehouse();
+	}
+
+	private TransferFromConstructionSlot tryReadTransferFromConstructionSlot(int fromIndex) {
+		if (parts.length < fromIndex + 1) {
+			return null;
+		}
+		if (!KEY_FROM_CONSTRUCTION_SLOT.equals(parts[fromIndex + 0])) {
+			return null;
+		}
+		return new TransferFromConstructionSlot();
+	}
+
+	private TransferFromColonyField tryReadTransferFromColonyField(int fromIndex) {
+		if (parts.length < fromIndex + 3) {
+			return null;
+		}
+		if (!KEY_FROM_CONSTRUCTION_SLOT.equals(parts[fromIndex + 0])) {
+			return null;
+		}
+		if (tryRead(parts[fromIndex + 1]) == null) {
+
+		}
+		if (tryRead(parts[fromIndex + 2]) == null) {
+
+		}
+		return new TransferFromColonyField(Location.of(tryRead(parts[fromIndex + 1]), tryRead(parts[fromIndex + 2])));
 	}
 
 	private TransferFromEuropeShop tryReadTransferFromEuropeShop(int fromIndex) {
@@ -435,4 +495,16 @@ public class ClipboardReader {
 
 	}
 
+	/**
+	 * Unit was taken from colony warehouse.
+	 */
+	public static class TransferFromColonyWarehouse implements TransferFrom {
+
+		@Override
+		public void writeTo(final StringBuilder buff) {
+			buff.append(SEPARATOR);
+			buff.append(KEY_FROM_COLONY_WAREHOUSE);
+		}
+
+	}
 }

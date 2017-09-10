@@ -77,6 +77,18 @@ public final class CargoSlot {
 			return Optional.of(cargoUnit.getUnit());
 		}
 	}
+	
+	public void removeCargo(final GoodType goodType, final int amount){
+		Preconditions.checkArgument(isLoadedGood(), "Cargo (%s) doesn't contains any good.", this);
+		Preconditions.checkArgument(cargoGoods.getGoodType().equals(goodType),
+				"Cargo (%s) doesn't contains same typa as was transfered (%s).", this, goodType);
+		Preconditions.checkArgument(cargoGoods.getAmount() >= amount,
+				"Can't transfer more amount (%s) than is in stored (%s).", amount, this);
+		cargoGoods.setAmount(cargoGoods.getAmount() - amount);
+		if (cargoGoods.getAmount() == 0) {
+			cargoGoods = null;
+		}
+	}
 
 	public Optional<GoodAmount> getGoods() {
 		return Optional.of(cargoGoods);
@@ -146,6 +158,31 @@ public final class CargoSlot {
 		}
 		cargoGoods = goodAmount;
 	}
+	
+	//XXX store* methods should share some code
+	
+	public void storeFromColonyWarehouse(final GoodAmount goodAmount, final Colony colony) {
+		Preconditions.checkNotNull(goodAmount);
+		Preconditions.checkState(getOwnerPlayer().equals(colony.getOwner()),
+				"Source colony warehouse and target cargo slots doesn't belongs to same user (%s) (%s).",
+				getOwnerPlayer(), colony.getOwner());
+		if (!isEmpty()) {
+			Preconditions.checkState(isLoadedGood(), "Attempt to move cargo to slot occupied with unit.");
+			Preconditions.checkState(getGoods().get().getGoodType().equals(goodAmount.getGoodType()),
+					"Tranfered cargo is diffrent type this is stored in slot. Stored=(%s), transfered=(%s)",
+					getGoods().get(), cargoGoods);
+		}
+		final ColonyWarehouse warehouse = colony.getColonyWarehouse();
+		final Integer sourceAmount = warehouse.getGoodAmmount(goodAmount.getGoodType());
+		if (sourceAmount < goodAmount.getAmount()) {
+			throw new IllegalArgumentException(String.format(
+					"Transfered ammount is higher that is in source. Source warehouse=(%s), Transfered=(%s)",
+					sourceAmount, goodAmount));
+		} else {
+			warehouse.removeFromWarehouse(goodAmount.getGoodType(), goodAmount.getAmount());
+		}
+		cargoGoods = goodAmount;
+	}
 
 	public Unit unload(final Location targetLocation) {
 		Preconditions.checkNotNull(targetLocation);
@@ -162,7 +199,7 @@ public final class CargoSlot {
 
 	@Override
 	public String toString() {
-		return MoreObjects.toStringHelper(this).add("cargo", cargoUnit).toString();
+		return MoreObjects.toStringHelper(this).add("cargo", cargoUnit).add("goods", cargoGoods).toString();
 	}
 
 	void save(final JsonGenerator generator) {

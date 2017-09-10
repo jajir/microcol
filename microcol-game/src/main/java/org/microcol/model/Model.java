@@ -191,7 +191,7 @@ public final class Model {
 		final GameManager gameManager = GameManager.load(parser, players);
 		parser.next(); // END_OBJECT
 
-		final List<Colony> colonies = ColonyStorage.load(parser, players);
+		final List<Colony> colonies = ColonyWarehouse.load(parser, players);
 
 		final Model model = new Model(calendar, map, players, colonies, units, Lists.newArrayList());
 		gameManager.setModel(model);

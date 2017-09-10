@@ -83,6 +83,12 @@ public class ClipboardWritter {
 		transferFrom = new ClipboardReader.TransferFromOutsideColony();
 		return this;
 	}
+	
+	public ClipboardWritter addTransferFromColonyWarehouse() {
+		transferFromCheck();
+		transferFrom = new ClipboardReader.TransferFromColonyWarehouse();
+		return this;
+	}
 
 	public ClipboardWritter addTransferFromColonyField(final Location fieldDirection) {
 		transferFromCheck();

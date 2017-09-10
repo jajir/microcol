@@ -24,7 +24,10 @@ public class Colony {
 
 	private final List<Construction> constructions;
 
+	private final ColonyWarehouse colonyWarehouse;
+	
 	private Model model;
+	
 
 	public Colony(final String name, final Player owner, final Location location,
 			final List<Construction> constructions) {
@@ -34,6 +37,7 @@ public class Colony {
 		colonyFields = new ArrayList<>();
 		Location.DIRECTIONS.forEach(loc -> colonyFields.add(new ColonyField(loc, this)));
 		this.constructions = Preconditions.checkNotNull(constructions);
+		colonyWarehouse = new ColonyWarehouse(this);
 		checkConstructions();
 	}
 
@@ -94,6 +98,11 @@ public class Colony {
 				.orElseThrow(() -> new IllegalStateException(
 						String.format("No such construction type (%s) in colony (%s)", constructionType, getName())));
 	}
+	
+	ConstructionType getWarehouseType() {
+		return constructions.stream().filter(cont -> ConstructionType.WAREHOUSES.contains(cont.getType())).findAny()
+				.orElseThrow(() -> new IllegalStateException("Colony doesn't contains any warehouse.")).getType();
+	}
 
 	public ColonyField getColonyFieldInDirection(final Location fieldDirection) {
 		Preconditions.checkNotNull(fieldDirection, "Field direction is null");
@@ -140,5 +149,9 @@ public class Colony {
 
 	Model getModel() {
 		return model;
+	}
+
+	public ColonyWarehouse getColonyWarehouse() {
+		return colonyWarehouse;
 	}
 }

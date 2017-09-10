@@ -160,6 +160,7 @@
 	<entry key="construction.SCHOOLHOUSE.name">Škola</entry>
 	<entry key="construction.WAREHOUSE_EXPANSION.name">Rozšířený sklad</entry>
 	<entry key="construction.WAREHOUSE.name">Sklad</entry>
+	<entry key="construction.BASIC_WAREHOUSE.name">Malý sklad</entry>
 	<entry key="construction.STABLES.name">Stáj</entry>
 	<entry key="construction.CATHEDRAL.name">Katedrála</entry>
 	<entry key="construction.CHURCH.name">Kostel</entry>

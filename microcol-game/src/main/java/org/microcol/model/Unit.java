@@ -223,12 +223,12 @@ public class Unit {
 	}
 	
 	private boolean canCargoDisembark(final CargoSlot slot, final Location moveToLocation, boolean inCurrentTurn) {
-		if (slot.isEmpty()) {
+		if (slot.isEmpty() || slot.isLoadedGood()) {
 			return false;
 		} else {
 			// TODO jj express it better slot.getUnit().get().getUnit()
-			final Unit unit = slot.getUnit().get();
-			return (!inCurrentTurn || unit.availableMoves > 0) && unit.canUnitDisembarkAt(moveToLocation);
+			final Unit holdedUnit = slot.getUnit().get();
+			return (!inCurrentTurn || holdedUnit.availableMoves > 0) && holdedUnit.canUnitDisembarkAt(moveToLocation);
 		}
 	}
 
