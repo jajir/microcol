@@ -42,10 +42,13 @@ public class PanelColonyGood extends VBox {
 	}
 
 	private final void onDragDetected(final MouseEvent event) {
-		Preconditions.checkNotNull(colonyWarehouse);
-		Dragboard db = imageView.startDragAndDrop(TransferMode.MOVE);
-		ClipboardWritter.make(db).addImage(image).addTransferFromColonyWarehouse()
-				.addGoodAmount(new GoodAmount(goodType, colonyWarehouse.getTransferableGoodsAmount(goodType))).build();
+		final int amount = colonyWarehouse.getTransferableGoodsAmount(goodType);
+		if (amount > 0) {
+			Preconditions.checkNotNull(colonyWarehouse);
+			Dragboard db = imageView.startDragAndDrop(TransferMode.MOVE);
+			ClipboardWritter.make(db).addImage(image).addTransferFromColonyWarehouse()
+					.addGoodAmount(new GoodAmount(goodType, amount)).build();
+		}
 		event.consume();
 	}
 

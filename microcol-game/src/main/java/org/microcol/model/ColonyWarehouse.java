@@ -42,7 +42,10 @@ public class ColonyWarehouse {
 	}
 
 	public Integer getTransferableGoodsAmount(final GoodType goodType) {
-		Integer amount = goodAmounts.get(goodType);
+		final Integer amount = goodAmounts.get(goodType);
+		if (amount == null) {
+			return 0;
+		}
 		if (amount > 100) {
 			return 100;
 		}
