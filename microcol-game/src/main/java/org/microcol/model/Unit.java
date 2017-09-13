@@ -458,6 +458,7 @@ public class Unit {
 		Preconditions.checkArgument(UnitType.isShip(type), "Only ships could be placed to high sea.");
 		// TODO add some preconditions
 		final int requiredTurns = 3;
+		place.destroy();
 		// XXX choose if it's direction to east or to west (+1 rule to europe)
 		place = new PlaceHighSea(this, isTravelToEurope, requiredTurns);
 	}

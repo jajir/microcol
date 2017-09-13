@@ -9,7 +9,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import mockit.Expectations;
-import mockit.Injectable;
 import mockit.Mocked;
 
 public class UnitAtLocationTest {
@@ -18,10 +17,8 @@ public class UnitAtLocationTest {
 
 	private UnitType type = UnitType.COLONIST;
 
-	@Injectable
-	private Player owner;
+	private @Mocked Player owner;
 
-	@Injectable()
 	private Location location = Location.of(4, 3);
 
 	private @Mocked Model model;
@@ -53,6 +50,7 @@ public class UnitAtLocationTest {
 	public void setup() {
 		unit = new Unit(type, owner, location);
 		new Expectations() {{
+			model.getMap().isValid(location); result = true;
 			model.getMap().getTerrainAt(location); result = Terrain.GRASSLAND;
 		}};
 
