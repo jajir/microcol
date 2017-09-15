@@ -123,6 +123,19 @@ public final class CargoSlot {
 		getOwnerPlayer().buy(goodAmount);
 		cargoGoods = goodAmount;
 	}
+	
+	public void sellAndEmpty(final GoodAmount goodAmount) {
+		Preconditions.checkNotNull(goodAmount);
+		Preconditions.checkState(!isEmpty(), "Cargo slot (%s) is already empty.", this);
+		Preconditions.checkState(getGoods().isPresent(), "Cargo slot (%s) doesn't contains goods.", this);
+		Preconditions.checkState(getGoods().get().getGoodType().equals(goodAmount.getGoodType()),
+				"Cargo slot (%s) doesn't contains correct goods type.", this);
+		getOwnerPlayer().sell(goodAmount);
+		cargoGoods.setAmount(cargoGoods.getAmount() - goodAmount.getAmount());
+		if (cargoGoods.getAmount() <= 0) {
+			cargoGoods = null;
+		}
+	}
 
 	/**
 	 * @param goodAmount

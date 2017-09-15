@@ -34,12 +34,15 @@ public class PanelGoods extends TitledPanel {
 
 	private final GameController gameController;
 
+	private final EuropeDialog europeDialog;
+	
 	private Background background;
 
-	public PanelGoods(final GameController gameController, final ImageProvider imageProvider) {
+	public PanelGoods(final EuropeDialog europeDialog, final GameController gameController, final ImageProvider imageProvider) {
 		super("zbozi");
 		this.gameController = Preconditions.checkNotNull(gameController);
 		this.imageProvider = Preconditions.checkNotNull(imageProvider);
+		this.europeDialog = Preconditions.checkNotNull(europeDialog);
 		hBox = new HBox();
 		getContentPane().getChildren().add(hBox);
 
@@ -65,10 +68,11 @@ public class PanelGoods extends TitledPanel {
 		}
 	}
 
-	@SuppressWarnings("unused")
 	private final void onDragExited(final DragEvent event) {
-		setBackground(background);
-		background = null;
+		if (isItGoodAmount(event.getDragboard())) {
+			setBackground(background);
+			background = null;
+		}
 	}
 
 	private final void onDragOver(final DragEvent event) {
@@ -82,7 +86,12 @@ public class PanelGoods extends TitledPanel {
 		logger.debug("Object was dropped on panel goods.");
 		final Dragboard db = event.getDragboard();
 		ClipboardReader.make(gameController.getModel(), db).tryReadGood((goodAmount, transferFrom) -> {
-			// FIXME remove goodAmount from cargoStore
+			if (transferFrom.isPresent() && transferFrom.get() instanceof ClipboardReader.TransferFromCargoSlot) {
+				final ClipboardReader.TransferFromCargoSlot fromCargo = (ClipboardReader.TransferFromCargoSlot) transferFrom
+						.get();
+				fromCargo.getCargoSlot().sellAndEmpty(goodAmount);
+				europeDialog.repaint();
+			}
 			event.setDropCompleted(true);
 			event.consume();
 		});
@@ -90,7 +99,12 @@ public class PanelGoods extends TitledPanel {
 
 	private boolean isItGoodAmount(final Dragboard db) {
 		logger.debug("Drag over unit id '" + db.getString() + "'.");
-		return ClipboardReader.make(gameController.getModel(), db).getGoods().isPresent();
+		return ClipboardReader.make(gameController.getModel(), db).filterTransferFrom(transferFrom -> {
+			if (transferFrom.isPresent() && transferFrom.get() instanceof ClipboardReader.TransferFromCargoSlot) {
+				return true;
+			}
+			return false;
+		}).getGoods().isPresent();
 	}
 
 }

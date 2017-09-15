@@ -171,7 +171,7 @@ public class EuropeDialog extends AbstractDialog implements DialogCallback {
 		final HBox panelMiddle = new HBox();
 		panelMiddle.getChildren().addAll(panelShips, panelPortPier, panelButtons);
 
-		panelGoods = new PanelGoods(gameController, imageProvider);
+		panelGoods = new PanelGoods(this, gameController, imageProvider);
 
 		final VBox mainPanel = new VBox();
 		mainPanel.getChildren().addAll(label, panelMiddle, panelGoods);

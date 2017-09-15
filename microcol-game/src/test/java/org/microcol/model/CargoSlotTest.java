@@ -1,12 +1,16 @@
 package org.microcol.model;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertSame;
+
+import java.util.Optional;
 
 import org.junit.Test;
 
+import mockit.Expectations;
 import mockit.Injectable;
 import mockit.Mocked;
 import mockit.Tested;
+import mockit.Verifications;
 
 public class CargoSlotTest {
 
@@ -15,18 +19,29 @@ public class CargoSlotTest {
 
 	@Injectable
 	private Cargo cargo;
+	
+	private @Mocked Player player;
+	
+	private @Mocked Unit ownerUnit;
 
 	@Test
-	public void test_store_goods(final @Mocked CargoSlot cargoSlot) throws Exception {
-		slot.storeFromCargoSlot(new GoodAmount(GoodType.CORN, 100),cargoSlot);
+	public void test_storeFromCargoSlot_(final @Injectable CargoSlot sourceCargoSlot) throws Exception {
+		new Expectations() {{
+			cargo.getOwner(); result = ownerUnit;
+			ownerUnit.getOwner(); result = player;
+			sourceCargoSlot.getGoods(); result = Optional.of(new GoodAmount(GoodType.CORN, 100));
+		}};
+		
+		slot.storeFromCargoSlot(new GoodAmount(GoodType.CORN, 100),sourceCargoSlot);
+		
+		new Verifications() {{
+			sourceCargoSlot.empty();
+		}};
 	}
 
-	//FIXME test is wrong, cargoSlot is tested and even mocked.
-//	@Test(expected = IllegalStateException.class)
-	public void test_store_goods_anotherOne(final @Mocked CargoSlot cargoSlot) throws Exception {
-		slot.storeFromCargoSlot(new GoodAmount(GoodType.CORN, 100), cargoSlot);
-		
-		slot.storeFromCargoSlot(new GoodAmount(GoodType.CORN, 100), cargoSlot);
+	@Test(expected = IllegalStateException.class)
+	public void test_storeFromCargoSlot_not_same_owner(final @Injectable CargoSlot sourceCargoSlot) throws Exception {
+		slot.storeFromCargoSlot(new GoodAmount(GoodType.CORN, 100), sourceCargoSlot);
 	}
 
 	@Test

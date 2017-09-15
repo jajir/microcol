@@ -259,6 +259,18 @@ public class ClipboardReader {
 			}
 		}
 
+		public ParsingResult filterTransferFrom(final Predicate<Optional<TransferFrom>> filter) {
+			if (isEmpty()) {
+				return this;
+			} else {
+				if (filter.test(getTransferFrom())) {
+					return this;
+				} else {
+					return new ParsingResult(null, null);
+				}
+			}
+		}
+
 		public Optional<Unit> getUnit() {
 			if (unitTransfer == null) {
 				return Optional.empty();
@@ -310,7 +322,19 @@ public class ClipboardReader {
 		public boolean isEmpty() {
 			return unitTransfer == null && goodTransfer == null;
 		}
-
+		
+		private Optional<TransferFrom> getTransferFrom() {
+			if (unitTransfer == null) {
+				if (goodTransfer == null) {
+					throw new IllegalArgumentException();
+				} else {
+					return goodTransfer.getTransferFrom();
+				}
+			} else {
+				return unitTransfer.getTransferFrom();
+			}
+		}
+		
 	}
 
 	public static interface Transfer {

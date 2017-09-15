@@ -185,6 +185,12 @@ public final class Player {
 		}
 		setGold(getGold() - price);
 	}
+
+	public void sell(final GoodAmount goodAmount) {
+		int price = goodAmount.getAmount()
+				* model.getEurope().getGoodTradeForType(goodAmount.getGoodType()).getBuyPrice();
+		setGold(getGold() + price);
+	}
 	
 	public void buy(final UnitType unitType){
 		int price = unitType.getEuropePrice();
