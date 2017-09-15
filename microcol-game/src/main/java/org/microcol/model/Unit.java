@@ -447,10 +447,12 @@ public class Unit {
 	}
 
 	void placeToEuropePort(final EuropePort port) {
+		place.destroy();
 		place = new PlaceEuropePort(this, Preconditions.checkNotNull(port));
 	}
 
 	void placeToLocation(final Location target) {
+		place.destroy();
 		place = new PlaceLocation(this, Preconditions.checkNotNull(target));
 	}
 

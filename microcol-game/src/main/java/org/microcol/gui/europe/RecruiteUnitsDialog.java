@@ -35,8 +35,6 @@ public class RecruiteUnitsDialog extends AbstractDialog {
 
 		final HBox gridWithUnits = new HBox();
 
-		gameController.getModel();
-		//TODO unit to recruit should be here from some 
 		UnitType.UNIT_TYPES.stream().filter(unitType -> unitType.getEuropePrice() > 0).forEach(unitType -> {
 			final RecruiteUnitPanel buyUnitPanel = new RecruiteUnitPanel(unitType, viewUtil, imageProvider,
 					gameController, localizationHelper, text, this);
