@@ -15,6 +15,7 @@ import org.microcol.gui.util.ClipboardReader;
 import org.microcol.gui.util.ClipboardWritter;
 import org.microcol.gui.util.TitledPanel;
 import org.microcol.model.Colony;
+import org.microcol.model.Construction;
 import org.microcol.model.ConstructionSlot;
 import org.microcol.model.ConstructionType;
 import org.microcol.model.Unit;
@@ -23,6 +24,7 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableMap;
+import com.sun.javafx.tk.Toolkit;
 
 import javafx.geometry.VPos;
 import javafx.scene.canvas.Canvas;
@@ -49,6 +51,11 @@ public class PanelColonyStructures extends TitledPanel {
 	private final static int ROW_1 = 10;
 	private final static int ROW_2 = 100;
 	private final static int ROW_3 = 190;
+	
+	private final static int PRODUCTION_TEXT_X = 0;
+	private final static int PRODUCTION_TEXT_Y = 55;
+	
+	private final static Point PRODUCTION_TEXT = Point.of(PRODUCTION_TEXT_X, PRODUCTION_TEXT_Y);
 	
 	private final static Point[] SLOT_POSITIONS = new Point[] {
 			Point.of(-58, 10),
@@ -94,8 +101,8 @@ public class PanelColonyStructures extends TitledPanel {
 			.put(ConstructionType.WAREHOUSE,            Point.of(COLUMN_1, ROW_1))
 			.put(ConstructionType.BASIC_WAREHOUSE,      Point.of(COLUMN_1, ROW_1))
 			.put(ConstructionType.STABLES,              Point.of(10, 10))
-			.put(ConstructionType.CATHEDRAL,            Point.of(10, 10))
-			.put(ConstructionType.CHURCH,               Point.of(10, 10))
+			.put(ConstructionType.CATHEDRAL,            Point.of(COLUMN_3, ROW_1))
+			.put(ConstructionType.CHURCH,               Point.of(COLUMN_3, ROW_1))
 			.put(ConstructionType.NEWSPAPER,            Point.of(10, 10))
 			.put(ConstructionType.PRINTING_PRESS,       Point.of(10, 10))
 			.put(ConstructionType.CUSTOM_HOUSE,         Point.of(10, 10))
@@ -111,6 +118,8 @@ public class PanelColonyStructures extends TitledPanel {
 	private final static int CANVAS_WIDTH = 500;
 
 	private final static int CANVAS_HEIGHT = 300;
+
+	private final static int GOOD_ICON_WIDTH = 30;
 	
 	private final Canvas canvas;
 	
@@ -224,7 +233,19 @@ public class PanelColonyStructures extends TitledPanel {
 				}
 				cx.incrementAndGet();
 			});
+			paintProduction(gc, position, construction);
 		});
+	}
+	
+	private void paintProduction(final GraphicsContext gc, final Point point, final Construction construction) {
+		if (construction.getType().getProduce().isPresent()) {
+			final Point prod = point.add(PRODUCTION_TEXT);
+			final String toWrite = "x " + construction.getProductionPerTurn();
+			gc.fillText(toWrite, prod.getX(), prod.getY());
+			float width = Toolkit.getToolkit().getFontLoader().computeStringWidth(toWrite, gc.getFont());
+			gc.drawImage(imageProvider.getGoodTypeImage(construction.getType().getProduce().get()),
+					prod.getX() - width / 2 - GOOD_ICON_WIDTH, prod.getY() - 10, GOOD_ICON_WIDTH, GOOD_ICON_WIDTH);
+		}
 	}
 	
 	private void paintWorkerContainer(final GraphicsContext gc, final Point point){

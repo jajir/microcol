@@ -156,6 +156,12 @@ public final class Model {
 				.filter(colony -> colony.getLocation().equals(location)).findFirst();
 	}
 
+	public List<Colony> getColonies(final Player owner) {
+		Preconditions.checkNotNull(owner);
+		return colonies.stream().filter(colony -> colony.getOwner().equals(owner))
+				.collect(ImmutableList.toImmutableList());
+	}
+
 	public List<Unit> getUnitsAt(final Location location) {
 		return unitStorage.getUnitsAt(location);
 	}

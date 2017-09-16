@@ -14,6 +14,8 @@ public class ConstructionType {
 			.setBuildCostHammers(0)
 			.setBuildCostTools(0)
 			.setProduce(GoodType.BELL)
+			.setProductionPerTurn(3)
+			.setBaseProductionPerTurn(1)
 	 		.setSlotsForWorkers(3)
 	 		.setUpgradeTo(null)
 	 		.setRequiredColonyPopulation(1)
@@ -24,6 +26,8 @@ public class ConstructionType {
 			.setBuildCostHammers(52)
 			.setBuildCostTools(0)
 			.setProduce(GoodType.HAMMERS)
+			.setProductionPerTurn(6)
+			.setBaseProductionPerTurn(0)
 	 		.setSlotsForWorkers(3)
 	 		.setUpgradeTo(null)
 	 		.setRequiredColonyPopulation(3)
@@ -34,6 +38,8 @@ public class ConstructionType {
 			.setBuildCostHammers(0)
 			.setBuildCostTools(0)
 			.setProduce(GoodType.HAMMERS)
+			.setProductionPerTurn(6)
+			.setBaseProductionPerTurn(0)
 	 		.setSlotsForWorkers(3)
 	 		.setUpgradeTo(LUMBER_MILL)
 	 		.setRequiredColonyPopulation(1)
@@ -44,6 +50,8 @@ public class ConstructionType {
 			.setBuildCostHammers(240)
 			.setBuildCostTools(100)
 			.setProduce(GoodType.TOOLS)
+			.setProductionPerTurn(6)
+			.setBaseProductionPerTurn(0)
 	 		.setSlotsForWorkers(3)
 	 		.setUpgradeTo(null)
 	 		.setRequiredColonyPopulation(8)
@@ -54,6 +62,8 @@ public class ConstructionType {
 			.setBuildCostHammers(64)
 			.setBuildCostTools(20)
 			.setProduce(GoodType.TOOLS)
+			.setProductionPerTurn(5)
+			.setBaseProductionPerTurn(0)
 	 		.setSlotsForWorkers(3)
 	 		.setUpgradeTo(IRON_WORKS)
 	 		.setRequiredColonyPopulation(4)
@@ -64,6 +74,8 @@ public class ConstructionType {
 			.setBuildCostHammers(0)
 			.setBuildCostTools(0)
 			.setProduce(GoodType.TOOLS)
+			.setProductionPerTurn(3)
+			.setBaseProductionPerTurn(0)
 	 		.setSlotsForWorkers(3)
 	 		.setUpgradeTo(BLACKSMITHS_SHOP)
 	 		.setRequiredColonyPopulation(1)
@@ -74,6 +86,8 @@ public class ConstructionType {
 			.setBuildCostHammers(320)
 			.setBuildCostTools(200)
 			.setProduce(null)
+			.setProductionPerTurn(0)
+			.setBaseProductionPerTurn(0)
 	 		.setSlotsForWorkers(0)
 	 		.setUpgradeTo(null)
 	 		.setRequiredColonyPopulation(8)
@@ -84,6 +98,8 @@ public class ConstructionType {
 			.setBuildCostHammers(120)
 			.setBuildCostTools(100)
 			.setProduce(null)
+			.setProductionPerTurn(0)
+			.setBaseProductionPerTurn(0)
 	 		.setSlotsForWorkers(0)
 	 		.setUpgradeTo(FORTRESS)
 	 		.setRequiredColonyPopulation(40)
@@ -94,6 +110,8 @@ public class ConstructionType {
 			.setBuildCostHammers(64)
 			.setBuildCostTools(0)
 			.setProduce(null)
+			.setProductionPerTurn(0)
+			.setBaseProductionPerTurn(0)
 	 		.setSlotsForWorkers(0)
 	 		.setUpgradeTo(FORT)
 	 		.setRequiredColonyPopulation(3)
@@ -104,6 +122,8 @@ public class ConstructionType {
 			.setBuildCostHammers(160)
 			.setBuildCostTools(100)
 			.setProduce(GoodType.CIGARS)
+			.setProductionPerTurn(8)
+			.setBaseProductionPerTurn(0)
 	 		.setSlotsForWorkers(3)
 	 		.setUpgradeTo(null)
 	 		.setRequiredColonyPopulation(8)
@@ -114,6 +134,8 @@ public class ConstructionType {
 			.setBuildCostHammers(64)
 			.setBuildCostTools(20)
 			.setProduce(GoodType.CIGARS)
+			.setProductionPerTurn(6)
+			.setBaseProductionPerTurn(0)
 	 		.setSlotsForWorkers(3)
 	 		.setUpgradeTo(CIGAR_FACTORY)
 	 		.setRequiredColonyPopulation(4)
@@ -125,6 +147,8 @@ public class ConstructionType {
 			.setBuildCostTools(0)
 			.setProduce(GoodType.CIGARS)
 	 		.setSlotsForWorkers(3)
+			.setProductionPerTurn(3)
+			.setBaseProductionPerTurn(0)
 	 		.setUpgradeTo(TOBACCONISTS_SHOP)
 	 		.setRequiredColonyPopulation(1)
 	 		.build();
@@ -134,6 +158,8 @@ public class ConstructionType {
 			.setBuildCostHammers(160)
 			.setBuildCostTools(100)
 			.setProduce(GoodType.SILK)
+			.setProductionPerTurn(8)
+			.setBaseProductionPerTurn(0)
 	 		.setSlotsForWorkers(3)
 	 		.setUpgradeTo(null)
 	 		.setRequiredColonyPopulation(8)
@@ -144,6 +170,8 @@ public class ConstructionType {
 			.setBuildCostHammers(64)
 			.setBuildCostTools(20)
 			.setProduce(GoodType.SILK)
+			.setProductionPerTurn(6)
+			.setBaseProductionPerTurn(0)
 	 		.setSlotsForWorkers(3)
 	 		.setUpgradeTo(TEXTILE_MILL)
 	 		.setRequiredColonyPopulation(4)
@@ -154,6 +182,8 @@ public class ConstructionType {
 			.setBuildCostHammers(0)
 			.setBuildCostTools(0)
 			.setProduce(GoodType.SILK)
+			.setProductionPerTurn(3)
+			.setBaseProductionPerTurn(0)
 	 		.setSlotsForWorkers(3)
 	 		.setUpgradeTo(WEAVERS_SHOP)
 	 		.setRequiredColonyPopulation(1)
@@ -164,6 +194,8 @@ public class ConstructionType {
 			.setBuildCostHammers(160)
 			.setBuildCostTools(100)
 			.setProduce(GoodType.RUM)
+			.setProductionPerTurn(8)
+			.setBaseProductionPerTurn(0)
 	 		.setSlotsForWorkers(3)
 	 		.setUpgradeTo(null)
 	 		.setRequiredColonyPopulation(8)
@@ -174,6 +206,8 @@ public class ConstructionType {
 			.setBuildCostHammers(64)
 			.setBuildCostTools(20)
 			.setProduce(GoodType.RUM)
+			.setProductionPerTurn(6)
+			.setBaseProductionPerTurn(0)
 	 		.setSlotsForWorkers(3)
 	 		.setUpgradeTo(RUM_FACTORY)
 	 		.setRequiredColonyPopulation(4)
@@ -184,6 +218,8 @@ public class ConstructionType {
 			.setBuildCostHammers(0)
 			.setBuildCostTools(0)
 			.setProduce(GoodType.RUM)
+			.setProductionPerTurn(3)
+			.setBaseProductionPerTurn(0)
 	 		.setSlotsForWorkers(3)
 	 		.setUpgradeTo(RUM_DISTILLERY)
 	 		.setRequiredColonyPopulation(1)
@@ -194,6 +230,8 @@ public class ConstructionType {
 			.setBuildCostHammers(160)
 			.setBuildCostTools(100)
 			.setProduce(GoodType.COAT)
+			.setProductionPerTurn(8)
+			.setBaseProductionPerTurn(0)
 	 		.setSlotsForWorkers(3)
 	 		.setUpgradeTo(null)
 	 		.setRequiredColonyPopulation(6)
@@ -204,6 +242,8 @@ public class ConstructionType {
 			.setBuildCostHammers(56)
 			.setBuildCostTools(20)
 			.setProduce(GoodType.COAT)
+			.setProductionPerTurn(6)
+			.setBaseProductionPerTurn(0)
 	 		.setSlotsForWorkers(3)
 	 		.setUpgradeTo(FUR_FACTORY)
 	 		.setRequiredColonyPopulation(3)
@@ -214,6 +254,8 @@ public class ConstructionType {
 			.setBuildCostHammers(0)
 			.setBuildCostTools(0)
 			.setProduce(GoodType.COAT)
+			.setProductionPerTurn(3)
+			.setBaseProductionPerTurn(0)
 	 		.setSlotsForWorkers(3)
 	 		.setUpgradeTo(FUR_TRADING_POST)
 	 		.setRequiredColonyPopulation(1)
@@ -224,6 +266,8 @@ public class ConstructionType {
 			.setBuildCostHammers(240)
 			.setBuildCostTools(100)
 			.setProduce(GoodType.MUSKET)
+			.setProductionPerTurn(8)
+			.setBaseProductionPerTurn(0)
 	 		.setSlotsForWorkers(3)
 	 		.setUpgradeTo(null)
 	 		.setRequiredColonyPopulation(8)
@@ -234,6 +278,8 @@ public class ConstructionType {
 			.setBuildCostHammers(120)
 			.setBuildCostTools(50)
 			.setProduce(GoodType.MUSKET)
+			.setProductionPerTurn(6)
+			.setBaseProductionPerTurn(0)
 	 		.setSlotsForWorkers(3)
 	 		.setUpgradeTo(ARSENAL)
 	 		.setRequiredColonyPopulation(8)
@@ -244,6 +290,8 @@ public class ConstructionType {
 			.setBuildCostHammers(52)
 			.setBuildCostTools(0)
 			.setProduce(GoodType.MUSKET)
+			.setProductionPerTurn(3)
+			.setBaseProductionPerTurn(0)
 	 		.setSlotsForWorkers(3)
 	 		.setUpgradeTo(MAGAZINE)
 	 		.setRequiredColonyPopulation(1)
@@ -254,6 +302,8 @@ public class ConstructionType {
 			.setBuildCostHammers(240)
 			.setBuildCostTools(100)
 			.setProduce(null)
+			.setProductionPerTurn(0)
+			.setBaseProductionPerTurn(0)
 	 		.setSlotsForWorkers(0)
 	 		.setUpgradeTo(null)
 	 		.setRequiredColonyPopulation(8)
@@ -264,6 +314,8 @@ public class ConstructionType {
 			.setBuildCostHammers(80)
 			.setBuildCostTools(50)
 			.setProduce(null)
+			.setProductionPerTurn(0)
+			.setBaseProductionPerTurn(0)
 	 		.setSlotsForWorkers(0)
 	 		.setUpgradeTo(SHIPYARD)
 	 		.setRequiredColonyPopulation(6)
@@ -274,6 +326,8 @@ public class ConstructionType {
 			.setBuildCostHammers(52)
 			.setBuildCostTools(0)
 			.setProduce(null)
+			.setProductionPerTurn(0)
+			.setBaseProductionPerTurn(0)
 	 		.setSlotsForWorkers(0)
 	 		.setUpgradeTo(DRYDOCK)
 	 		.setRequiredColonyPopulation(1)
@@ -284,6 +338,8 @@ public class ConstructionType {
 			.setBuildCostHammers(200)
 			.setBuildCostTools(100)
 			.setProduce(null)
+			.setProductionPerTurn(0)
+			.setBaseProductionPerTurn(0)
 	 		.setSlotsForWorkers(3)
 	 		.setUpgradeTo(null)
 	 		.setRequiredColonyPopulation(10)
@@ -294,6 +350,8 @@ public class ConstructionType {
 			.setBuildCostHammers(160)
 			.setBuildCostTools(50)
 			.setProduce(null)
+			.setProductionPerTurn(0)
+			.setBaseProductionPerTurn(0)
 	 		.setSlotsForWorkers(3)
 	 		.setUpgradeTo(UNIVERSITY)
 	 		.setRequiredColonyPopulation(8)
@@ -304,6 +362,8 @@ public class ConstructionType {
 			.setBuildCostHammers(64)
 			.setBuildCostTools(0)
 			.setProduce(null)
+			.setProductionPerTurn(0)
+			.setBaseProductionPerTurn(0)
 	 		.setSlotsForWorkers(3)
 	 		.setUpgradeTo(COLLEGE)
 	 		.setRequiredColonyPopulation(4)
@@ -314,6 +374,8 @@ public class ConstructionType {
 			.setBuildCostHammers(80)
 			.setBuildCostTools(20)
 			.setProduce(null)
+			.setProductionPerTurn(0)
+			.setBaseProductionPerTurn(0)
 	 		.setSlotsForWorkers(0)
 	 		.setUpgradeTo(null)
 	 		.setRequiredColonyPopulation(1)
@@ -324,6 +386,8 @@ public class ConstructionType {
 			.setBuildCostHammers(80)
 			.setBuildCostTools(0)
 			.setProduce(null)
+			.setProductionPerTurn(0)
+			.setBaseProductionPerTurn(0)
 	 		.setSlotsForWorkers(0)
 	 		.setUpgradeTo(WAREHOUSE_EXPANSION)
 	 		.setRequiredColonyPopulation(1)
@@ -334,6 +398,8 @@ public class ConstructionType {
 			.setBuildCostHammers(0)
 			.setBuildCostTools(0)
 			.setProduce(null)
+			.setProductionPerTurn(0)
+			.setBaseProductionPerTurn(0)
 	 		.setSlotsForWorkers(0)
 	 		.setUpgradeTo(WAREHOUSE)
 	 		.setRequiredColonyPopulation(1)
@@ -344,6 +410,8 @@ public class ConstructionType {
 			.setBuildCostHammers(64)
 			.setBuildCostTools(0)
 			.setProduce(null)
+			.setProductionPerTurn(0)
+			.setBaseProductionPerTurn(0)
 	 		.setSlotsForWorkers(0)
 	 		.setUpgradeTo(null)
 	 		.setRequiredColonyPopulation(1)
@@ -354,6 +422,8 @@ public class ConstructionType {
 			.setBuildCostHammers(176)
 			.setBuildCostTools(100)
 			.setProduce(GoodType.CROSS)
+			.setProductionPerTurn(3)
+			.setBaseProductionPerTurn(0)
 	 		.setSlotsForWorkers(0)
 	 		.setUpgradeTo(null)
 	 		.setRequiredColonyPopulation(8)
@@ -364,6 +434,8 @@ public class ConstructionType {
 			.setBuildCostHammers(52)
 			.setBuildCostTools(100)
 			.setProduce(GoodType.CROSS)
+			.setProductionPerTurn(3)
+			.setBaseProductionPerTurn(0)
 	 		.setSlotsForWorkers(0)
 	 		.setUpgradeTo(CATHEDRAL)
 	 		.setRequiredColonyPopulation(3)
@@ -374,6 +446,8 @@ public class ConstructionType {
 			.setBuildCostHammers(120)
 			.setBuildCostTools(50)
 			.setProduce(GoodType.BELL)
+			.setProductionPerTurn(6)
+			.setBaseProductionPerTurn(0)
 	 		.setSlotsForWorkers(0)
 	 		.setUpgradeTo(null)
 	 		.setRequiredColonyPopulation(4)
@@ -384,6 +458,8 @@ public class ConstructionType {
 			.setBuildCostHammers(80)
 			.setBuildCostTools(0)
 			.setProduce(GoodType.BELL)
+			.setProductionPerTurn(3)
+			.setBaseProductionPerTurn(0)
 	 		.setSlotsForWorkers(0)
 	 		.setUpgradeTo(NEWSPAPER)
 	 		.setRequiredColonyPopulation(1)
@@ -394,6 +470,8 @@ public class ConstructionType {
 			.setBuildCostHammers(160)
 			.setBuildCostTools(50)
 			.setProduce(null)
+			.setProductionPerTurn(0)
+			.setBaseProductionPerTurn(0)
 	 		.setSlotsForWorkers(0)
 	 		.setUpgradeTo(null)
 	 		.setRequiredColonyPopulation(0)
@@ -460,6 +538,8 @@ public class ConstructionType {
 		private int buildCostTools;
 		private ConstructionType upgradeTo;
 		private GoodType produce;
+		private int productionPerTurn;
+		private int baseProductionPerTurn = 0;
 		private int slotsForWorkers;
 		private int requiredColonyPopulation;
 
@@ -468,8 +548,8 @@ public class ConstructionType {
 		}
 
 		private ConstructionType build() {
-			return new ConstructionType(name, buildCostHammers, buildCostTools, upgradeTo, produce, slotsForWorkers,
-					requiredColonyPopulation);
+			return new ConstructionType(name, buildCostHammers, buildCostTools, upgradeTo, produce, productionPerTurn,
+					baseProductionPerTurn, slotsForWorkers, requiredColonyPopulation);
 		}
 
 		private ConstructionTypeBuilder setName(final String name) {
@@ -497,6 +577,16 @@ public class ConstructionType {
 			return this;
 		}
 
+		private ConstructionTypeBuilder setProductionPerTurn(final int productionPerTurn) {
+			this.productionPerTurn = productionPerTurn;
+			return this;
+		}
+
+		private ConstructionTypeBuilder setBaseProductionPerTurn(final int baseProductionPerTurn) {
+			this.baseProductionPerTurn = baseProductionPerTurn;
+			return this;
+		}
+
 		private ConstructionTypeBuilder setSlotsForWorkers(final int slotsForWorkers) {
 			this.slotsForWorkers = slotsForWorkers;
 			return this;
@@ -514,17 +604,30 @@ public class ConstructionType {
 	private final int buildCostTools;
 	private final ConstructionType upgradeTo;
 	private final GoodType produce;
+	
+	/**
+	 * How many goods is produces when one slot is occupied by on free colonist.
+	 */
+	private final int productionPerTurn;
+	
+	/**
+	 * Basic production per turn. For example one bell is produced in each
+	 * colony each turn.
+	 */
+	private final int baseProductionPerTurn;
 	private final int slotsForWorkers;
 	private final int requiredColonyPopulation;
 
 	private ConstructionType(final String name, final int buildCostHammers, final int buildCostTools,
-			final ConstructionType upgradeTo, final GoodType produce, final int slotsForWorkers,
-			final int requiredColonyPopulation) {
+			final ConstructionType upgradeTo, final GoodType produce, final int productionPerTurn,
+			final int baseProductionPerTurn, final int slotsForWorkers, final int requiredColonyPopulation) {
 		this.name = Preconditions.checkNotNull(name);
 		this.buildCostHammers = buildCostHammers;
 		this.buildCostTools = buildCostTools;
 		this.upgradeTo = upgradeTo;
 		this.produce = produce;
+		this.productionPerTurn = productionPerTurn;
+		this.baseProductionPerTurn = baseProductionPerTurn;
 		this.slotsForWorkers = slotsForWorkers;
 		this.requiredColonyPopulation = requiredColonyPopulation;
 	}
@@ -587,6 +690,14 @@ public class ConstructionType {
 		} else {
 			return Optional.of(produce);
 		}
+	}
+
+	public int getProductionPerTurn() {
+		return productionPerTurn;
+	}
+
+	public int getBaseProductionPerTurn() {
+		return baseProductionPerTurn;
 	}
 
 	public int getSlotsForWorkers() {

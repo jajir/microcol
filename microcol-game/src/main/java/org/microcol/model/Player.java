@@ -62,6 +62,10 @@ public final class Player {
 	public Optional<Colony> getColoniesAt(final Location location) {
 		return model.getColoniesAt(location, this);
 	}
+	
+	public List<Colony> getColonies() {
+		return model.getColonies(this);
+	}
 
 	public List<Unit> getEnemyUnits() {
 		return model.getEnemyUnits(this, false);
@@ -81,6 +85,7 @@ public final class Player {
 
 	void startTurn() {
 		getAllUnits().forEach(unit -> unit.startTurn());
+		getColonies().forEach(colony -> colony.startTurn());
 	}
 
 	public void endTurn() {

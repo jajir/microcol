@@ -1,6 +1,7 @@
 package org.microcol.model;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
@@ -53,5 +54,16 @@ public class Construction {
 	
 	ConstructionSlot getSlotAt(final int index){
 		return workingSlots.get(index);
+	}
+	
+	public int getProductionPerTurn(){
+		final AtomicInteger sum = new AtomicInteger(type.getBaseProductionPerTurn());
+		workingSlots.forEach(slot -> {
+			if (!slot.isEmpty()) {
+				//TODO JJ use here unit production multiplier.
+				sum.addAndGet(type.getProductionPerTurn());
+			}
+		});
+		return sum.get();
 	}
 }

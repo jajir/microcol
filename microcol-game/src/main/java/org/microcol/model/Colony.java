@@ -83,6 +83,18 @@ public class Colony {
 
 	}
 	
+	/**
+	 * Perform operation for next turn.
+	 */
+	public void startTurn(){
+		constructions.forEach(construction -> {
+			if (construction.getType().getProduce().isPresent()) {
+				colonyWarehouse.putToWarehouse(construction.getType().getProduce().get(),
+						construction.getProductionPerTurn());
+			}
+		});
+	}
+	
 	public List<Unit> getUnitsInPort() {
 		return model.getUnitsAt(location).stream().filter(unit -> unit.getType().canHoldCargo())
 				.collect(ImmutableList.toImmutableList());

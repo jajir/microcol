@@ -9,6 +9,8 @@ import com.google.common.base.Preconditions;
  */
 public class StatusBarMessageEvent {
 
+	private final static String EMPTY_MESSAGE = "";
+	
 	private final String statusMessage;
 
 	/**
@@ -20,7 +22,7 @@ public class StatusBarMessageEvent {
 	 * </p>
 	 */
 	public StatusBarMessageEvent() {
-		statusMessage = "<html>&nbsp;</html>";
+		statusMessage = EMPTY_MESSAGE;
 	}
 
 	/**
