@@ -24,7 +24,6 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableMap;
-import com.sun.javafx.tk.Toolkit;
 
 import javafx.geometry.VPos;
 import javafx.scene.canvas.Canvas;
@@ -35,6 +34,7 @@ import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 
 /**
@@ -165,10 +165,12 @@ public class PanelColonyStructures extends TitledPanel {
 		event.consume();
 	}
 
+	@SuppressWarnings("unused")
 	private final void onDragEntered(final DragEvent event) {
 		logger.debug("Drag entered");
 	}
 
+	@SuppressWarnings("unused")
 	private final void onDragExited(final DragEvent event) {
 		logger.debug("Drag Exited");
 	}
@@ -242,7 +244,9 @@ public class PanelColonyStructures extends TitledPanel {
 			final Point prod = point.add(PRODUCTION_TEXT);
 			final String toWrite = "x " + construction.getProductionPerTurn();
 			gc.fillText(toWrite, prod.getX(), prod.getY());
-			float width = Toolkit.getToolkit().getFontLoader().computeStringWidth(toWrite, gc.getFont());
+			final Text theText = new Text(toWrite);
+			theText.setFont(gc.getFont());
+			final double width = theText.getBoundsInLocal().getWidth();
 			gc.drawImage(imageProvider.getGoodTypeImage(construction.getType().getProduce().get()),
 					prod.getX() - width / 2 - GOOD_ICON_WIDTH, prod.getY() - 10, GOOD_ICON_WIDTH, GOOD_ICON_WIDTH);
 		}
