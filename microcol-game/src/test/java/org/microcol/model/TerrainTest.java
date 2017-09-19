@@ -12,7 +12,7 @@ public class TerrainTest {
 	 */
 	@Test
 	public void test_production_matrix() throws Exception {
-		assertEquals(4, Terrain.TERRAINS.size());
+		assertEquals(11, Terrain.TERRAINS.size());
 	}
 
 }
