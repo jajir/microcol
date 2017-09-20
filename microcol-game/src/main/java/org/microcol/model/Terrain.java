@@ -353,15 +353,15 @@ public final class Terrain {
 			this.withoutTrees = withoutTrees;
 		}
 
-		GoodType getGoodType() {
+		public GoodType getGoodType() {
 			return goodType;
 		}
 
-		int getWithTrees() {
+		public int getWithTrees() {
 			return withTrees;
 		}
 
-		int getWithoutTrees() {
+		public int getWithoutTrees() {
 			return withoutTrees;
 		}
 		

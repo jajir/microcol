@@ -20,8 +20,11 @@ import com.google.common.base.Preconditions;
 
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
+import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
+import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
@@ -49,6 +52,8 @@ public class PanelColonyFields extends TitledPanel {
 
 	private final TileClickListener tileClickListener;
 
+	private final ContextMenu contextMenu;
+
 	public PanelColonyFields(final ImageProvider imageProvider, final GameController gameController,
 			final ColonyDialogCallback colonyDialog) {
 		super("Colony layout", new Label("Colony layout"));
@@ -66,6 +71,24 @@ public class PanelColonyFields extends TitledPanel {
 		canvas.setOnMousePressed(this::onMousePressed);
 		canvas.setOnMouseReleased(this::onMouseReleased);
 		tileClickListener = new TileClickListener(clickableArea, this::onClickDirection);
+		contextMenu = new ContextMenu();
+		contextMenu.getStyleClass().add("popup");
+		canvas.setOnContextMenuRequested(this::onContextMenuRequested);
+	}
+
+	private void onContextMenuRequested(final ContextMenuEvent event) {
+		final Optional<Location> direction = clickableArea.getDirection(Point.of(event.getX(), event.getY()));
+		if (direction.isPresent()) {
+			final ColonyField colonyField = colony.getColonyFieldInDirection(direction.get());
+			if (!colonyField.isEmpty()) {
+				contextMenu.getItems().clear();
+				colonyField.getTerrain().getProductions().forEach(production -> {
+					MenuItem item = new MenuItem(production.getGoodType().name() + " x " + production.getWithTrees());
+					contextMenu.getItems().add(item);
+				});
+				contextMenu.show(canvas, event.getScreenX(), event.getScreenY());
+			}
+		}
 	}
 
 	private final void onMousePressed(final MouseEvent event) {

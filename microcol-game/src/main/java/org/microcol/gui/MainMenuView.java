@@ -168,6 +168,9 @@ public class MainMenuView implements MainMenuPresenter.Display {
 		 */
 		menuHelp = new Menu();
 		if (gamePreferences.isOSX()) {
+			/**
+			 * Display menus in apple application menu.
+			 */
 			// Get the toolkit
 			MenuToolkit tk = MenuToolkit.toolkit();
 			// Create the default Application menu

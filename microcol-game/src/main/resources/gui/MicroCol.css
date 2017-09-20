@@ -82,3 +82,17 @@
 	-fx-border-width: 2;
 }
 
+/* I don't know if it's not a bug. Popup background is about 100px bigger than real size of menu items.
+ * Popup on canvas cover with background surrounding area.
+ */
+.popup{
+  -fx-background-color: rgba(0, 0, 0, 0);
+}
+.popup .menu-item {
+  -fx-background-color: white;	
+}
+.popup .menu-item:focused {
+  -fx-background-color: blue;	
+}
+
+
