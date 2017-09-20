@@ -23,15 +23,15 @@ public class ClickableArea {
 		final Point shift = Point.of(GamePanelView.TILE_WIDTH_IN_PX, GamePanelView.TILE_WIDTH_IN_PX);
 		final Location center = Location.of(0, 0);
 		final List<Location> locs = Lists.newArrayList(center.getNeighbors());
-		locs.add(center);
 		locs.forEach(loc -> {
 			final Point p = Point.of(loc).add(shift);
 			Rectangle rect = Rectangle.ofPointAndSize(p, square);
+			System.out.println(rect + "  " + loc);
 			areas.put(rect, loc);
 		});
 	}
 
-	public Optional<Location> getLocation(final Point point) {
+	public Optional<Location> getDirection(final Point point) {
 		return areas.entrySet().stream().filter(entry -> entry.getKey().isIn(point)).map(entry -> entry.getValue())
 				.findAny();
 	}

@@ -31,9 +31,9 @@ import javafx.scene.input.TransferMode;
  * Show 3 x 3 tiles occupied by colony. User can assign worker to work outside
  * of colony.
  */
-public class PanelColonyLayout extends TitledPanel {
+public class PanelColonyFields extends TitledPanel {
 
-	private final Logger logger = LoggerFactory.getLogger(PanelColonyLayout.class);
+	private final Logger logger = LoggerFactory.getLogger(PanelColonyFields.class);
 
 	private Canvas canvas;
 
@@ -47,7 +47,9 @@ public class PanelColonyLayout extends TitledPanel {
 
 	private final ClickableArea clickableArea = new ClickableArea();
 
-	public PanelColonyLayout(final ImageProvider imageProvider, final GameController gameController,
+	private final TileClickListener tileClickListener;
+
+	public PanelColonyFields(final ImageProvider imageProvider, final GameController gameController,
 			final ColonyDialogCallback colonyDialog) {
 		super("Colony layout", new Label("Colony layout"));
 		this.imageProvider = Preconditions.checkNotNull(imageProvider);
@@ -61,12 +63,30 @@ public class PanelColonyLayout extends TitledPanel {
 		canvas.setOnDragOver(this::onDragOver);
 		canvas.setOnDragDropped(this::onDragDropped);
 		canvas.setOnDragDetected(this::onDragDetected);
+		canvas.setOnMousePressed(this::onMousePressed);
+		canvas.setOnMouseReleased(this::onMouseReleased);
+		tileClickListener = new TileClickListener(clickableArea, this::onClickDirection);
+	}
+
+	private final void onMousePressed(final MouseEvent event) {
+		tileClickListener.onMousePressed(event);
+	}
+
+	private final void onMouseReleased(final MouseEvent event) {
+		tileClickListener.onMouseReleased(event);
+	}
+
+	private final void onClickDirection(final Location direction) {
+		final ColonyField colonyField = colony.getColonyFieldInDirection(direction);
+		if (!colonyField.isEmpty()) {
+			System.out.println("clicked: " + colonyField);
+		}
 	}
 
 	private final void onDragDetected(final MouseEvent event) {
 		logger.debug("Drag detected");
 		final Point point = Point.of(event.getX(), event.getY());
-		final Optional<Location> loc = clickableArea.getLocation(point);
+		final Optional<Location> loc = clickableArea.getDirection(point);
 		if (loc.isPresent()) {
 			final ColonyField colonyField = colony.getColonyFieldInDirection(loc.get());
 			if (!colonyField.isEmpty()) {
@@ -91,7 +111,7 @@ public class PanelColonyLayout extends TitledPanel {
 		logger.debug("Drag Over");
 		if (isItUnit(event.getDragboard())) {
 			final Point point = Point.of(event.getX(), event.getY());
-			final Optional<Location> loc = clickableArea.getLocation(point);
+			final Optional<Location> loc = clickableArea.getDirection(point);
 			if (loc.isPresent() && loc.get().isDirection()) {
 				final ColonyField colonyField = colony.getColonyFieldInDirection(loc.get());
 				if (colonyField.isEmpty()) {
@@ -108,7 +128,7 @@ public class PanelColonyLayout extends TitledPanel {
 	private final void onDragDropped(final DragEvent event) {
 		logger.debug("Drag dropped");
 		final Point point = Point.of(event.getX(), event.getY());
-		final Optional<Location> loc = clickableArea.getLocation(point);
+		final Optional<Location> loc = clickableArea.getDirection(point);
 		if (loc.isPresent() && loc.get().isDirection()) {
 			final ColonyField colonyField = colony.getColonyFieldInDirection(loc.get());
 			if (colonyField.isEmpty()) {
@@ -123,7 +143,6 @@ public class PanelColonyLayout extends TitledPanel {
 		}
 		event.consume();
 	}
-	
 
 	private boolean isItUnit(final Dragboard db) {
 		logger.debug("Drag over unit id '" + db.getString() + "'.");

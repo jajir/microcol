@@ -48,7 +48,7 @@ public class ColonyDialog extends AbstractDialog implements ColonyDialogCallback
 
 	private final Label colonyName;
 
-	private final PanelColonyLayout colonyLayout;
+	private final PanelColonyFields colonyFields;
 
 	private final PanelColonyStructures colonyStructures;
 
@@ -77,12 +77,12 @@ public class ColonyDialog extends AbstractDialog implements ColonyDialogCallback
 		/**
 		 * Row 1
 		 */
-		colonyLayout = new PanelColonyLayout(imageProvider, gameController, this);
+		colonyFields = new PanelColonyFields(imageProvider, gameController, this);
 
 		colonyStructures = new PanelColonyStructures(localizationHelper, imageProvider, gameController, this);
 
 		final HBox mapAndBuildings = new HBox();
-		mapAndBuildings.getChildren().addAll(colonyStructures, colonyLayout);
+		mapAndBuildings.getChildren().addAll(colonyStructures, colonyFields);
 
 		/**
 		 * Row 2
@@ -214,7 +214,7 @@ public class ColonyDialog extends AbstractDialog implements ColonyDialogCallback
 	
 	@Override
 	public void repaint(){
-		colonyLayout.setColony(colony);
+		colonyFields.setColony(colony);
 		goods.repaint();
 		panelDock.repaint();
 		colonyStructures.repaint(colony);
