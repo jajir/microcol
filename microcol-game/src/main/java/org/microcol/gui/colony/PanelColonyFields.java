@@ -73,6 +73,7 @@ public class PanelColonyFields extends TitledPanel {
 		tileClickListener = new TileClickListener(clickableArea, this::onClickDirection);
 		contextMenu = new ContextMenu();
 		contextMenu.getStyleClass().add("popup");
+		contextMenu.setAutoHide(true);
 		canvas.setOnContextMenuRequested(this::onContextMenuRequested);
 	}
 
@@ -93,6 +94,8 @@ public class PanelColonyFields extends TitledPanel {
 
 	private final void onMousePressed(final MouseEvent event) {
 		tileClickListener.onMousePressed(event);
+		if(contextMenu.isShowing())
+			contextMenu.hide();
 	}
 
 	private final void onMouseReleased(final MouseEvent event) {

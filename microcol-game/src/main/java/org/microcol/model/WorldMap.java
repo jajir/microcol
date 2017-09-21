@@ -43,6 +43,9 @@ public class WorldMap {
 					case 't':
 						terrainMap.put(Location.of(x + 1, maxY), Terrain.TUNDRA);
 						break;
+					case 'a':
+						terrainMap.put(Location.of(x + 1, maxY), Terrain.ARCTIC);
+						break;
 					case 'h':
 						terrainMap.put(Location.of(x + 1, maxY), Terrain.HIGH_SEA);
 						break;

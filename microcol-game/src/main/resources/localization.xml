@@ -79,7 +79,9 @@
 	<entry key="terrain.GRASSLAND.name">Grass land</entry>
 	<entry key="terrain.GRASSLAND.description">Grass land</entry>
 	<entry key="terrain.TUNDRA.name">Tundra</entry>
-	<entry key="terrain.TUNDRA.description">Cold freezing wasteland</entry>
+	<entry key="terrain.TUNDRA.description">Cold tundra</entry>
+	<entry key="terrain.ARCTIC.name">Arctic</entry>
+	<entry key="terrain.ARCTIC.description">Cold freezing wasteland</entry>
 	<entry key="terrain.HIGH_SEA.name">High Sea</entry>
 	<entry key="terrain.HIGH_SEA.description">Huge water mass between Europe and colonies</entry>
 

@@ -185,8 +185,8 @@ public final class Terrain {
 				.build()
 			.build();
 
-	public final static Terrain ARTCIC = Terrain.make()
-			.setName("ARTCIC")
+	public final static Terrain ARCTIC = Terrain.make()
+			.setName("ARCTIC")
 			.setCanHaveTree(false)
 			.setSee(false)
 			.setMoveCost(2)
@@ -254,7 +254,7 @@ public final class Terrain {
 			.build();
 	
 	public final static List<Terrain> TERRAINS = ImmutableList.of(GRASSLAND, PRAIRIE, SAVANNAH, SWAMP, DESERT, TUNDRA,
-			ARTCIC, HILL, MOUNTAIN, OCEAN, HIGH_SEA);
+			ARCTIC, HILL, MOUNTAIN, OCEAN, HIGH_SEA);
 	
 	private final static Map<String, Terrain> TERRAINS_BY_NAME = TERRAINS.stream()
 			.collect(ImmutableMap.toImmutableMap(Terrain::name, Function.identity()));

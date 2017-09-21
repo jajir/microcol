@@ -1,5 +1,5 @@
-ttttttttttttttttt|
-h         ttttttt|
+aaaaaaaaaaaaaaaaa|
+h         tttaaaa|
 h    ooo        h|
 h   ooooo       h|
 h     oooo      h|
@@ -9,5 +9,5 @@ h   ooo         h|
 h  ooooo   o    h|
 h    oo    ooo  h|
 h               h|
-ttttttttttttttttt|
+aaaaaaaaaaaaaaaaa|
 -----------------|

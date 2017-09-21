@@ -79,6 +79,8 @@
 	<entry key="terrain.GRASSLAND.description">Úrodné zelené pláně</entry>
 	<entry key="terrain.TUNDRA.name">Tundra</entry>
 	<entry key="terrain.TUNDRA.description">Široká mrazivá pustina</entry>
+	<entry key="terrain.ARCTIC.name">Arktika</entry>
+	<entry key="terrain.ARCTIC.description">Arktická pustina</entry>
 	<entry key="terrain.HIGH_SEA.name">Daleké moře</entry>
 	<entry key="terrain.HIGH_SEA.description">Obrovské vodní masy odělující Evropu a kolonie</entry>
 
