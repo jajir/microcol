@@ -5,7 +5,7 @@ import java.util.Optional;
 import org.microcol.model.Location;
 import org.microcol.model.Model;
 import org.microcol.model.Unit;
-import org.microcol.model.Terrain;
+import org.microcol.model.TerrainType;
 
 import com.google.common.base.Preconditions;
 
@@ -19,9 +19,9 @@ public class FocusedTileEvent {
 
 	private final Location location;
 
-	private final Terrain terrain;
+	private final TerrainType terrain;
 
-	public FocusedTileEvent(final Model game, final Location location, final Terrain tile) {
+	public FocusedTileEvent(final Model game, final Location location, final TerrainType tile) {
 		this.model = Preconditions.checkNotNull(game);
 		this.location = Preconditions.checkNotNull(location);
 		this.terrain = Preconditions.checkNotNull(tile);
@@ -36,7 +36,7 @@ public class FocusedTileEvent {
 		return location;
 	}
 
-	public Terrain getTerrain() {
+	public TerrainType getTerrain() {
 		return terrain;
 	}
 

@@ -17,7 +17,7 @@ public class WorldMap {
 	private final String fileName;
 	private final int maxX;
 	private final int maxY;
-	private final ImmutableMap<Location, Terrain> terrainMap;
+	private final ImmutableMap<Location, TerrainType> terrainMap;
 
 	WorldMap(final String fileName) {
 		Preconditions.checkNotNull(fileName);
@@ -26,7 +26,7 @@ public class WorldMap {
 
 		int maxX = 0;
 		int maxY = 0;
-		final Map<Location, Terrain> terrainMap = new HashMap<>();
+		final Map<Location, TerrainType> terrainMap = new HashMap<>();
 
 		try (final BufferedReader reader = new BufferedReader(
 				new InputStreamReader(WorldMap.class.getResourceAsStream(fileName), "UTF-8"))) {
@@ -38,16 +38,16 @@ public class WorldMap {
 					final char tile = line.charAt(x);
 					switch (tile) {
 					case 'o':
-						terrainMap.put(Location.of(x + 1, maxY), Terrain.GRASSLAND);
+						terrainMap.put(Location.of(x + 1, maxY), TerrainType.GRASSLAND);
 						break;
 					case 't':
-						terrainMap.put(Location.of(x + 1, maxY), Terrain.TUNDRA);
+						terrainMap.put(Location.of(x + 1, maxY), TerrainType.TUNDRA);
 						break;
 					case 'a':
-						terrainMap.put(Location.of(x + 1, maxY), Terrain.ARCTIC);
+						terrainMap.put(Location.of(x + 1, maxY), TerrainType.ARCTIC);
 						break;
 					case 'h':
-						terrainMap.put(Location.of(x + 1, maxY), Terrain.HIGH_SEA);
+						terrainMap.put(Location.of(x + 1, maxY), TerrainType.HIGH_SEA);
 						break;
 					case ' ':
 						// Do nothing.
@@ -81,12 +81,12 @@ public class WorldMap {
 		return maxY;
 	}
 
-	public Terrain getTerrainAt(final Location location) {
+	public TerrainType getTerrainTypeAt(final Location location) {
 		Preconditions.checkArgument(isValid(location), "Location (%s) is not part of this map.", location);
 
-		Terrain terrain = terrainMap.get(location);
+		TerrainType terrain = terrainMap.get(location);
 
-		return terrain != null ? terrain : Terrain.OCEAN;
+		return terrain != null ? terrain : TerrainType.OCEAN;
 	}
 
 	public boolean isValid(final Location location) {

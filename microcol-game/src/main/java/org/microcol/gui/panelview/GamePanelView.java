@@ -19,7 +19,7 @@ import org.microcol.gui.util.Text;
 import org.microcol.gui.util.ViewUtil;
 import org.microcol.model.Location;
 import org.microcol.model.Model;
-import org.microcol.model.Terrain;
+import org.microcol.model.TerrainType;
 import org.microcol.model.Colony;
 import org.microcol.model.Unit;
 import org.slf4j.Logger;
@@ -233,7 +233,7 @@ public class GamePanelView implements GamePanelPresenter.Display {
 			for (int j = area.getTopLeft().getY(); j <= area.getBottomRight().getY(); j++) {
 				final Location location = Location.of(i, j);
 				final Point point = area.convertToPoint(location);
-				final Terrain terrain = gameController.getModel().getMap().getTerrainAt(location);
+				final TerrainType terrain = gameController.getModel().getMap().getTerrainTypeAt(location);
 				graphics.drawImage(imageProvider.getTerrainImage(terrain), 0, 0, TILE_WIDTH_IN_PX, TILE_WIDTH_IN_PX,
 						point.getX(), point.getY(), TILE_WIDTH_IN_PX, TILE_WIDTH_IN_PX);
 				if (oneTurnMoveHighlighter.isItHighlighted(location)) {

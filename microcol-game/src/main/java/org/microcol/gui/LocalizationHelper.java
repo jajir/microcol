@@ -2,7 +2,7 @@ package org.microcol.gui;
 
 import org.microcol.gui.util.Text;
 import org.microcol.model.ConstructionType;
-import org.microcol.model.Terrain;
+import org.microcol.model.TerrainType;
 import org.microcol.model.UnitType;
 
 import com.google.common.base.Preconditions;
@@ -32,7 +32,7 @@ public class LocalizationHelper {
 		this.text = Preconditions.checkNotNull(text);
 	}
 
-	public String getTerrainName(final Terrain terrain) {
+	public String getTerrainName(final TerrainType terrain) {
 		return text.get(TERRAIN_PREFIX + terrain.name() + TERRAIN_SUFFIX_NAME);
 	}
 

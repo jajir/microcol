@@ -6,7 +6,7 @@ import java.util.Map;
 
 import org.microcol.model.GoodAmount;
 import org.microcol.model.GoodType;
-import org.microcol.model.Terrain;
+import org.microcol.model.TerrainType;
 import org.microcol.model.Unit;
 import org.microcol.model.UnitType;
 
@@ -111,12 +111,12 @@ public class ImageProvider {
 
 	private final Map<String, Image> images;
 
-	private final Map<Terrain, Image> terrainMap = ImmutableMap.<Terrain, Image>builder()
-			.put(Terrain.GRASSLAND, getRawImage(IMG_TILE_LAND))
-			.put(Terrain.OCEAN, getRawImage(IMG_TILE_OCEAN))
-			.put(Terrain.TUNDRA, getRawImage(IMG_TILE_TUNDRA))
-			.put(Terrain.ARCTIC, getRawImage(IMG_TILE_ARCTIC))
-			.put(Terrain.HIGH_SEA, getRawImage(IMG_TILE_HIGH_SEA))
+	private final Map<TerrainType, Image> terrainMap = ImmutableMap.<TerrainType, Image>builder()
+			.put(TerrainType.GRASSLAND, getRawImage(IMG_TILE_LAND))
+			.put(TerrainType.OCEAN, getRawImage(IMG_TILE_OCEAN))
+			.put(TerrainType.TUNDRA, getRawImage(IMG_TILE_TUNDRA))
+			.put(TerrainType.ARCTIC, getRawImage(IMG_TILE_ARCTIC))
+			.put(TerrainType.HIGH_SEA, getRawImage(IMG_TILE_HIGH_SEA))
 			.build();
 
 	private final Map<UnitType, Image> unitImageMap = ImmutableMap.<UnitType, Image>builder()
@@ -182,7 +182,7 @@ public class ImageProvider {
 	 *            required terrain type
 	 * @return image representing terrain image
 	 */
-	public Image getTerrainImage(final Terrain terrain) {
+	public Image getTerrainImage(final TerrainType terrain) {
 		return terrainMap.get(terrain);
 	}
 

@@ -12,7 +12,7 @@ import org.microcol.gui.util.TitledPanel;
 import org.microcol.model.Colony;
 import org.microcol.model.ColonyField;
 import org.microcol.model.Location;
-import org.microcol.model.Terrain;
+import org.microcol.model.TerrainType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -182,12 +182,12 @@ public class PanelColonyFields extends TitledPanel {
 
 	private void paint(final GraphicsContext gc) {
 		colony.getColonyFields().forEach(colonyField -> paintSection(gc, colonyField));
-		paintTile(gc, gameController.getModel().getMap().getTerrainAt(colony.getLocation()),
+		paintTile(gc, gameController.getModel().getMap().getTerrainTypeAt(colony.getLocation()),
 				Point.of(GamePanelView.TILE_WIDTH_IN_PX, GamePanelView.TILE_WIDTH_IN_PX));
 	}
 
 	private void paintSection(final GraphicsContext gc, final ColonyField colonyField) {
-		final Terrain terrain = colonyField.getTerrain();
+		final TerrainType terrain = colonyField.getTerrain();
 		final Point centre = Point.of(1, 1).multiply(GamePanelView.TILE_WIDTH_IN_PX);
 		final Point point = Point.of(colonyField.getDirection()).add(centre);
 		paintTile(gc, terrain, point);
@@ -196,7 +196,7 @@ public class PanelColonyFields extends TitledPanel {
 		}
 	}
 
-	private void paintTile(final GraphicsContext gc, final Terrain terrain, final Point point) {
+	private void paintTile(final GraphicsContext gc, final TerrainType terrain, final Point point) {
 		gc.drawImage(imageProvider.getTerrainImage(terrain), 0, 0, GamePanelView.TILE_WIDTH_IN_PX,
 				GamePanelView.TILE_WIDTH_IN_PX, point.getX(), point.getY(), GamePanelView.TILE_WIDTH_IN_PX,
 				GamePanelView.TILE_WIDTH_IN_PX);

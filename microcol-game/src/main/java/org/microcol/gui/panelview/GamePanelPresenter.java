@@ -239,7 +239,7 @@ public final class GamePanelPresenter implements Localized {
 		display.setCursorNormal();
 		focusedTileController
 				.fireEvent(new FocusedTileEvent(gameController.getModel(), viewState.getSelectedTile().get(),
-						gameController.getModel().getMap().getTerrainAt(viewState.getSelectedTile().get())));
+						gameController.getModel().getMap().getTerrainTypeAt(viewState.getSelectedTile().get())));
 	}
 
 	private void onKeyPressed_enter() {
@@ -259,7 +259,7 @@ public final class GamePanelPresenter implements Localized {
 				if (e.isPrimaryButtonDown()) {
 					viewState.setSelectedTile(Optional.of(location));
 					focusedTileController.fireEvent(new FocusedTileEvent(gameController.getModel(), location,
-							gameController.getModel().getMap().getTerrainAt(location)));
+							gameController.getModel().getMap().getTerrainTypeAt(location)));
 					if (!tryToSwitchToMoveMode(location)) {
 						// TODO JJ is this if really needed?
 						tryToOpenColonyDetail(location);

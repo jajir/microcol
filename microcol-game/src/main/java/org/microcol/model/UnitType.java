@@ -23,7 +23,7 @@ public class UnitType {
 	
 	public final static UnitType COLONIST = UnitType.make()
 			.setName("COLONIST")
-			.setMoveableTerrains(ImmutableList.of(Terrain.GRASSLAND))
+			.setMoveableTerrains(ImmutableList.of(TerrainType.GRASSLAND))
 			.setSpeed(1)
 			.setCanAttack(true)
 			.setCargoCapacity(0)
@@ -33,7 +33,7 @@ public class UnitType {
 	
 	public final static UnitType FRIGATE = UnitType.make()
 			.setName("FRIGATE")
-			.setMoveableTerrains(Terrain.UNIT_CAN_SAIL_AT)
+			.setMoveableTerrains(TerrainType.UNIT_CAN_SAIL_AT)
 			.setSpeed(4)
 			.setCanAttack(true)
 			.setCargoCapacity(1)
@@ -43,7 +43,7 @@ public class UnitType {
 	
 	public final static UnitType GALLEON = UnitType.make()
 			.setName("GALLEON")
-			.setMoveableTerrains(Terrain.UNIT_CAN_SAIL_AT)
+			.setMoveableTerrains(TerrainType.UNIT_CAN_SAIL_AT)
 			.setSpeed(6)
 			.setCanAttack(false)
 			.setCargoCapacity(5)
@@ -57,7 +57,7 @@ public class UnitType {
 			.collect(ImmutableMap.toImmutableMap(UnitType::name, Function.identity()));
 	
 	private final String name;
-	private final List<Terrain> moveableTerrains;
+	private final List<TerrainType> moveableTerrains;
 	private final int speed;
 	private final boolean canAttack;
 	private final int cargoCapacity;
@@ -67,7 +67,7 @@ public class UnitType {
 	private static class UnitTypeBuilder{
 
 		private String name;
-		private List<Terrain> moveableTerrains;
+		private List<TerrainType> moveableTerrains;
 		private int speed;
 		private boolean canAttack;
 		private int cargoCapacity;
@@ -83,7 +83,7 @@ public class UnitType {
 			return this;
 		}
 
-		private UnitTypeBuilder setMoveableTerrains(final List<Terrain> moveableTerrains) {
+		private UnitTypeBuilder setMoveableTerrains(final List<TerrainType> moveableTerrains) {
 			this.moveableTerrains = moveableTerrains;
 			return this;
 		}
@@ -115,7 +115,7 @@ public class UnitType {
 		
 	}
 
-	private UnitType(final String name, final List<Terrain> moveableTerrains, final int speed, final boolean canAttack, final int cargoCapacity, final boolean storable, final int europePrice) {
+	private UnitType(final String name, final List<TerrainType> moveableTerrains, final int speed, final boolean canAttack, final int cargoCapacity, final boolean storable, final int europePrice) {
 		this.name = Preconditions.checkNotNull(name);
 		this.moveableTerrains = Preconditions.checkNotNull(moveableTerrains);
 		this.speed = speed;
@@ -145,7 +145,7 @@ public class UnitType {
 		return unitType == UnitType.FRIGATE || unitType == UnitType.GALLEON;
 	}
 
-	public List<Terrain> getMoveableTerrains() {
+	public List<TerrainType> getMoveableTerrains() {
 		return moveableTerrains;
 	}
 
@@ -165,7 +165,7 @@ public class UnitType {
 		return storable;
 	}
 	
-	public boolean canMoveAtTerrain(final Terrain terrain) {
+	public boolean canMoveAtTerrain(final TerrainType terrain) {
 		Preconditions.checkNotNull(terrain);
 		return moveableTerrains.contains(terrain);
 	}

@@ -6,7 +6,7 @@ import org.microcol.gui.event.StatusBarMessageEvent;
 import org.microcol.gui.event.model.GameController;
 import org.microcol.gui.util.Localized;
 import org.microcol.model.Location;
-import org.microcol.model.Terrain;
+import org.microcol.model.TerrainType;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
@@ -35,7 +35,7 @@ public class MouseOverTileListener implements Localized {
 
 	private void onMouseOverTileChanged(final MouseOverTileChangedEvent event) {
 		if (gameController.getModel().getMap().isValid(event.getMouseOverTileLocaton())) {
-			final Terrain terrain = gameController.getModel().getMap().getTerrainAt(event.getMouseOverTileLocaton());
+			final TerrainType terrain = gameController.getModel().getMap().getTerrainTypeAt(event.getMouseOverTileLocaton());
 			setStatusMessageForTile(terrain, event.getMouseOverTileLocaton());
 		} else {
 			statusBarMessageController.fireEvent(new StatusBarMessageEvent());
@@ -50,7 +50,7 @@ public class MouseOverTileListener implements Localized {
 	 * @param where
 	 *            required location over which is now mouse
 	 */
-	private void setStatusMessageForTile(final Terrain terrain, final Location where) {
+	private void setStatusMessageForTile(final TerrainType terrain, final Location where) {
 		final StringBuilder buff = new StringBuilder();
 		// TODO show coordinates just when debug mode is on
 		buff.append("(");

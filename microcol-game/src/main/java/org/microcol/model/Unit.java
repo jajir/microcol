@@ -47,7 +47,7 @@ public class Unit {
 	
 	private void validateTerrain(){
 		if(isAtMap()){
-			final Terrain t = model.getMap().getTerrainAt(getLocation());
+			final TerrainType t = model.getMap().getTerrainTypeAt(getLocation());
 			Preconditions.checkState(isMoveable(getLocation(), true),
 					String.format("Unit (%s) is not at valid terrain (%s)", this, t));
 		}
@@ -125,7 +125,7 @@ public class Unit {
 			return false;
 		}
 
-		if (!type.canMoveAtTerrain(model.getMap().getTerrainAt(location))) {
+		if (!type.canMoveAtTerrain(model.getMap().getTerrainTypeAt(location))) {
 			if(isPossibleGoToPort(location)){
 				return true;
 			}
@@ -233,7 +233,7 @@ public class Unit {
 	}
 
 	private boolean canUnitDisembarkAt(final Location targeLocation) {
-		return getType().canMoveAtTerrain(model.getMap().getTerrainAt(targeLocation));
+		return getType().canMoveAtTerrain(model.getMap().getTerrainTypeAt(targeLocation));
 	}
 
 	public boolean isPossibleToEmbarkAt(final Location targetLocation, boolean inCurrentTurn) {
@@ -250,7 +250,7 @@ public class Unit {
 		if (model.getUnitsAt(targetLocation).isEmpty()) {
 			return false;
 		} else {
-			if (type.canMoveAtTerrain(model.getMap().getTerrainAt(targetLocation))) {
+			if (type.canMoveAtTerrain(model.getMap().getTerrainTypeAt(targetLocation))) {
 				if (isSameOwner(model.getUnitsAt(targetLocation))) {
 					return false;
 				} else {
@@ -343,7 +343,7 @@ public class Unit {
 			}
 			if (!isMoveable(newLocation)) {
 				throw new IllegalArgumentException(String.format("Path (%s) must contain only moveable terrain (%s).",
-						newLocation, model.getMap().getTerrainAt(newLocation)));
+						newLocation, model.getMap().getTerrainTypeAt(newLocation)));
 			}
 			locations.add(newLocation);
 			((PlaceLocation) place).setLocation(newLocation);
@@ -351,8 +351,8 @@ public class Unit {
 		}
 		if (!locations.isEmpty()) {
 			final Path reallyExecutedPath = Path.of(locations);
-			final Terrain targetTerrain = model.getMap().getTerrainAt(reallyExecutedPath.getTarget());
-			if (targetTerrain == Terrain.HIGH_SEA) {
+			final TerrainType targetTerrain = model.getMap().getTerrainTypeAt(reallyExecutedPath.getTarget());
+			if (targetTerrain == TerrainType.HIGH_SEA) {
 				placeToHighSeas(true);
 			}
 			model.fireUnitMoved(this, start, reallyExecutedPath);
@@ -367,7 +367,7 @@ public class Unit {
 
 		Preconditions.checkState(type.canAttack(), "This unit type (%s) cannot attack.", this);
 		Preconditions.checkNotNull(location);
-		Preconditions.checkArgument(type.canMoveAtTerrain(model.getMap().getTerrainAt(location)),
+		Preconditions.checkArgument(type.canMoveAtTerrain(model.getMap().getTerrainTypeAt(location)),
 				"Target location (%s) is not moveable for this unit (%s)", location, this);
 		Preconditions.checkArgument(this.getLocation().isNeighbor(location),
 				"Unit location (%s) is not neighbor to target location (%s).", this.getLocation(), location);
