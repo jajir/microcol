@@ -14,12 +14,23 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableMap;
 
 public class WorldMap {
+	@Deprecated
 	private final String fileName;
 	private final int maxX;
 	private final int maxY;
 	private final ImmutableMap<Location, TerrainType> terrainMap;
+	
+	public WorldMap(final int maxX, final int maxY, Map<Location, TerrainType> terrainMap){
+		Preconditions.checkArgument(maxX >= 1, "Max X (%s) must be positive.", maxX);
+		Preconditions.checkArgument(maxY >= 1, "Max Y (%s) must be positive.", maxY);
+		
+		this.fileName = null;
+		this.maxX = maxX;
+		this.maxY = maxY;
+		this.terrainMap = ImmutableMap.copyOf(terrainMap);
+	}
 
-	WorldMap(final String fileName) {
+	public WorldMap(final String fileName) {
 		Preconditions.checkNotNull(fileName);
 
 		this.fileName = fileName;
@@ -60,7 +71,7 @@ public class WorldMap {
 		} catch (IOException ex) {
 			throw new IllegalArgumentException(String.format("Unable to load map from file (%s)", fileName), ex);
 		}
-
+		//XXX it's duplicated code
 		Preconditions.checkArgument(maxX >= 1, "Max X (%s) must be positive.", maxX);
 		Preconditions.checkArgument(maxY >= 1, "Max Y (%s) must be positive.", maxY);
 

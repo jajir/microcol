@@ -69,7 +69,7 @@ public class GameController implements Localized {
 	private Model buildComplexModel() {
 		ModelBuilder builder = new ModelBuilder();
 		builder.setCalendar(1570, 1800)
-			.setMap("/maps/test-map-simple-test.txt")
+			.setMap("/maps/test1.json")
 
 			/**
 			 * Human player

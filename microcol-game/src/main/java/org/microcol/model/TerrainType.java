@@ -16,6 +16,7 @@ public final class TerrainType {
 	
 	public final static TerrainType GRASSLAND = TerrainType.make()
 			.setName("GRASSLAND")
+			.setCode("g")
 			.setCanHaveTree(true)
 			.setSee(false)
 			.setMoveCost(1)
@@ -47,6 +48,7 @@ public final class TerrainType {
 	
 	public final static TerrainType PRAIRIE = TerrainType.make()
 			.setName("PRAIRIE")
+			.setCode("p")
 			.setCanHaveTree(true)
 			.setSee(false)
 			.setMoveCost(1)
@@ -75,6 +77,7 @@ public final class TerrainType {
 	
 	public final static TerrainType SAVANNAH = TerrainType.make()
 			.setName("SAVANNAH")
+			.setCode("s")
 			.setCanHaveTree(true)
 			.setSee(false)
 			.setMoveCost(1)
@@ -106,6 +109,7 @@ public final class TerrainType {
 	
 	public final static TerrainType SWAMP = TerrainType.make()
 			.setName("SWAMP")
+			.setCode("w")
 			.setCanHaveTree(true)
 			.setSee(false)
 			.setMoveCost(1)
@@ -131,6 +135,7 @@ public final class TerrainType {
 	
 	public final static TerrainType DESERT = TerrainType.make()
 			.setName("DESERT")
+			.setCode("d")
 			.setCanHaveTree(true)
 			.setSee(false)
 			.setMoveCost(1)
@@ -163,6 +168,7 @@ public final class TerrainType {
 
 	public final static TerrainType TUNDRA = TerrainType.make()
 			.setName("TUNDRA")
+			.setCode("t")
 			.setCanHaveTree(false)
 			.setSee(false)
 			.setMoveCost(2)
@@ -187,6 +193,7 @@ public final class TerrainType {
 
 	public final static TerrainType ARCTIC = TerrainType.make()
 			.setName("ARCTIC")
+			.setCode("a")
 			.setCanHaveTree(false)
 			.setSee(false)
 			.setMoveCost(2)
@@ -197,6 +204,7 @@ public final class TerrainType {
 	
 	public final static TerrainType HILL = TerrainType.make()
 			.setName("HILL")
+			.setCode("h")
 			.setCanHaveTree(false)
 			.setSee(false)
 			.setMoveCost(1)
@@ -213,6 +221,7 @@ public final class TerrainType {
 	
 	public final static TerrainType MOUNTAIN = TerrainType.make()
 			.setName("MOUNTAIN")
+			.setCode("^")
 			.setCanHaveTree(false)
 			.setSee(false)
 			.setMoveCost(1)
@@ -229,6 +238,7 @@ public final class TerrainType {
 
 	public final static TerrainType HIGH_SEA = TerrainType.make()
 			.setName("HIGH_SEA")
+			.setCode("~")
 			.setCanHaveTree(false)
 			.setSee(true)
 			.setMoveCost(1)
@@ -242,6 +252,7 @@ public final class TerrainType {
 
 	public final static TerrainType OCEAN = TerrainType.make()
 			.setName("OCEAN")
+			.setCode("_")
 			.setCanHaveTree(false)
 			.setSee(true)
 			.setMoveCost(1)
@@ -259,6 +270,9 @@ public final class TerrainType {
 	private final static Map<String, TerrainType> TERRAINS_BY_NAME = TERRAINS.stream()
 			.collect(ImmutableMap.toImmutableMap(TerrainType::name, Function.identity()));
 	
+	private final static Map<String, TerrainType> TERRAINS_BY_CODE = TERRAINS.stream()
+			.collect(ImmutableMap.toImmutableMap(TerrainType::getCode, Function.identity()));
+	
 	public final static List<TerrainType> UNIT_CAN_SAIL_AT = TERRAINS.stream().filter(terrain -> terrain.isSee())
 			.collect(ImmutableList.toImmutableList());
 	
@@ -267,6 +281,8 @@ public final class TerrainType {
 		private final List<Production> productions = new ArrayList<>();
 		
 		private String name = null;
+		
+		private String code;
 		
 		private boolean canHaveTree;
 
@@ -281,12 +297,17 @@ public final class TerrainType {
 		private int defenseBonusWithTree = NO_VALUE;
 		
 		private TerrainType build(){
-			return new TerrainType(name, canHaveTree, isSee, moveCost, moveCostWithTree, defenseBonus,
+			return new TerrainType(name, code, canHaveTree, isSee, moveCost, moveCostWithTree, defenseBonus,
 					defenseBonusWithTree, productions);
 		}
 
 		private TerrainTypeBuilder setName(String name) {
 			this.name = name;
+			return this;
+		}
+
+		private TerrainTypeBuilder setCode(String code) {
+			this.code = code;
 			return this;
 		}
 
@@ -434,6 +455,11 @@ public final class TerrainType {
 	
 	private final String name;
 	
+	/**
+	 * Code is used to identified terrain type in save file.
+	 */
+	private final String code;
+	
 	private final boolean canHaveTree;
 
 	private final boolean isSee;
@@ -448,14 +474,15 @@ public final class TerrainType {
 	
 	private final List<Production> productions;
 	
-	private TerrainType(final String name, final boolean canHaveTree, final boolean isSee, final int moveCost,
-			final int moveCostWithTree, final int defenseBonus, final int defenseBonusWithTree,
+	private TerrainType(final String name, final String code, final boolean canHaveTree, final boolean isSee,
+			final int moveCost, final int moveCostWithTree, final int defenseBonus, final int defenseBonusWithTree,
 			final List<Production> productions) {
 		Preconditions.checkArgument(moveCost != NO_VALUE, "move cost was not set.");
 		Preconditions.checkArgument(moveCostWithTree != NO_VALUE, "move cost in trees was not set.");
 		Preconditions.checkArgument(defenseBonus != NO_VALUE, "defense bonus was not set.");
 		Preconditions.checkArgument(defenseBonusWithTree != NO_VALUE, "defense bonus in trees was not set.");
 		this.name = Preconditions.checkNotNull(name, "name was not set");
+		this.code = Preconditions.checkNotNull(code, "code was not set");
 		this.canHaveTree = canHaveTree;
 		this.isSee = isSee;
 		this.moveCost = moveCost;
@@ -493,6 +520,15 @@ public final class TerrainType {
 		}
 	}
 	
+	public static TerrainType valueOfCode(final String code) {
+		Preconditions.checkNotNull(code, "Terrain code can't be null.");
+		final TerrainType out = TERRAINS_BY_CODE.get(code.trim());
+		if (out == null) {
+			throw new IllegalArgumentException(String.format("There is no terrain type for code '%s'", code));
+		}
+		return out;
+	}
+	
 	@Override
 	public String toString() {
 		return MoreObjects.toStringHelper(TerrainType.class).add("name", name).toString();
@@ -528,6 +564,10 @@ public final class TerrainType {
 
 	public List<Production> getProductions() {
 		return productions;
+	}
+
+	public String getCode() {
+		return code;
 	}
 	
 }
