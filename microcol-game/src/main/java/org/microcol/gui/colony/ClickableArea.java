@@ -26,7 +26,6 @@ public class ClickableArea {
 		locs.forEach(loc -> {
 			final Point p = Point.of(loc).add(shift);
 			Rectangle rect = Rectangle.ofPointAndSize(p, square);
-			System.out.println(rect + "  " + loc);
 			areas.put(rect, loc);
 		});
 	}

@@ -6,8 +6,9 @@ import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.json.stream.JsonGenerator;
 import javax.json.stream.JsonParser;
+
+import org.microcol.model.store.GamePo;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
@@ -119,8 +120,8 @@ public class WorldMap {
 				.add("landmass", terrainMap.keySet().size()).toString();
 	}
 
-	void save(final String name, final JsonGenerator generator) {
-		generator.writeStartObject(name).write("fileName", fileName).writeEnd();
+	void save(final GamePo gamePo) {
+		gamePo.getMap().set(terrainMap, maxX, maxY);
 	}
 
 	static WorldMap load(final JsonParser parser) {

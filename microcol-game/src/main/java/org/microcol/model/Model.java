@@ -11,6 +11,8 @@ import java.util.function.Function;
 import javax.json.stream.JsonGenerator;
 import javax.json.stream.JsonParser;
 
+import org.microcol.model.store.GamePo;
+
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
@@ -166,14 +168,19 @@ public final class Model {
 		return unitStorage.getUnitsAt(location);
 	}
 
+	public GamePo save(){
+		final GamePo out = new GamePo();
+		map.save(out);
+		unitStorage.save(out);
+		return out;
+	}
+	
 	public void save(final String name, final JsonGenerator generator) {
 		generator.writeStartObject(name);
 		calendar.save("calendar", generator);
-		map.save("map", generator);
 		generator.writeStartArray("players");
 		players.forEach(player -> player.save(generator));
 		generator.writeEnd();
-		unitStorage.save(generator);
 		gameManager.save("game", generator);
 		generator.writeEnd();
 	}

@@ -1,5 +1,9 @@
 package org.microcol.model;
 
+import org.microcol.model.store.PlaceMapPo;
+import org.microcol.model.store.PlacePo;
+import org.microcol.model.store.UnitPo;
+
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 
@@ -31,6 +35,14 @@ public class PlaceLocation extends AbstractPlace {
 				.add("unit id", getUnit().getId())
 				.add("location", location)
 				.toString();
+	}
+
+	@Override
+	public PlacePo save(final UnitPo unitPo){
+		PlaceMapPo out = new PlaceMapPo();
+		out.setLocation(location);
+		unitPo.setPlaceMap(out);
+		return out;
 	}
 
 }

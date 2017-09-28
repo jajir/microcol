@@ -10,6 +10,8 @@ import java.util.Set;
 import javax.json.stream.JsonGenerator;
 import javax.json.stream.JsonParser;
 
+import org.microcol.model.store.UnitPo;
+
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
@@ -530,14 +532,14 @@ public class Unit {
 				.add("place", place.getName()).toString();
 	}
 
-	void save(final JsonGenerator generator) {
-		generator.writeStartObject();
-		generator.write("type", type.name());
-		generator.write("owner", owner.getName());
-		getLocation().save("location", generator);
-		generator.write("availableMoves", availableMoves);
-		// TODO JKA Implement save/load
-		generator.writeEnd();
+	UnitPo save() {
+		final UnitPo unitPo = new UnitPo();
+		unitPo.setId(id);
+		unitPo.setAvailableMoves(availableMoves);
+		unitPo.setOwnerId(owner.getName());
+		unitPo.setType(type.name());
+		place.save(unitPo);
+		return unitPo;
 	}
 
 	static Unit load(final JsonParser parser, final List<Player> players) {

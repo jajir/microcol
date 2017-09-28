@@ -1,5 +1,9 @@
 package org.microcol.model;
 
+import org.microcol.model.store.PlaceHighSeasPo;
+import org.microcol.model.store.PlacePo;
+import org.microcol.model.store.UnitPo;
+
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 
@@ -59,6 +63,15 @@ public class PlaceHighSea extends AbstractPlace {
 				.add("isTravelToEurope", isTravelToEurope)
 				.add("remainigTurns", remainigTurns)
 				.toString();
+	}
+
+	@Override
+	public PlacePo save(final UnitPo unitPo){
+		PlaceHighSeasPo out = new PlaceHighSeasPo();
+		out.setTravelToEurope(isTravelToEurope);
+		out.setRemainigTurns(remainigTurns);
+		unitPo.setPlaceHighSeas(out);
+		return out;
 	}
 
 }
