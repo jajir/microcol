@@ -31,7 +31,7 @@ public class PlaceEuropePier extends AbstractPlace {
 
 	@Override
 	public PlacePo save(final UnitPo unitPo){
-		PlaceEuropePortPo out = new PlaceEuropePortPo();
+		final PlaceEuropePortPo out = new PlaceEuropePortPo();
 		out.setOnPier(true);
 		unitPo.setPlaceEuropePort(out);
 		return out;

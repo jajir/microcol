@@ -1,6 +1,7 @@
 package org.microcol.model.store;
 
-import java.util.HashMap;
+import java.io.File;
+import java.io.FileWriter;
 
 import org.junit.Test;
 import org.microcol.model.ConstructionType;
@@ -8,7 +9,6 @@ import org.microcol.model.GoodType;
 import org.microcol.model.Location;
 import org.microcol.model.Model;
 import org.microcol.model.ModelBuilder;
-import org.microcol.model.TerrainType;
 import org.microcol.model.UnitType;
 
 import com.google.gson.Gson;
@@ -19,7 +19,7 @@ public class StoreDao {
 	private Model buildComplexModel() {
 		ModelBuilder builder = new ModelBuilder();
 		builder.setCalendar(1570, 1800)
-			.setMap("/maps/test1.json")
+			.setMap("/maps/test2.json")
 
 			/**
 			 * Human player
@@ -110,7 +110,7 @@ public class StoreDao {
 		GamePo game = new GamePo();
 		game.getUnits().add(UnitPo.make(1, UnitType.COLONIST.name(), "a", null));
 		game.getUnits().add(UnitPo.make(2, UnitType.FRIGATE.name(), "b", null));
-		game.getMap().set(new HashMap<Location,TerrainType>(), 5, 3);
+//		game.getMap().setTerrainType(new HashMap<Location,TerrainType>(), 5, 3);
 //		game.getMap().getTiles()[0][0] = TerrainType.ARCTIC.getCode();
 		
 		String str;
@@ -128,7 +128,20 @@ public class StoreDao {
 		GamePo game = model.save();
 		
 		String str = gson.toJson(game);
-		System.out.println(str);
+//		System.out.println(str);
+		
+		FileWriter fileWriter = new FileWriter(new File("target/test2.json"));
+		fileWriter.write(str);
+		fileWriter.close();
+		
+		ModelBuilder builder = new ModelBuilder();
+		Model model2 = builder.setCalendar(1570, 1800)
+			.setMap("/maps/test2.json").getEuropeBuilder().build().build();
+		GamePo game2 = model2.save();
+		String str2 = gson.toJson(game2);
+		System.out.println(str2);
+		
+		
 	}
 	
 	

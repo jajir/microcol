@@ -3,9 +3,13 @@ package org.microcol.model.store;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.json.Json;
@@ -22,12 +26,15 @@ import org.microcol.model.TerrainType;
 import org.microcol.model.WorldMap;
 
 import com.google.common.base.Preconditions;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 public class WorldMapDao {
 
 	public WorldMapDao() {
 	}
 
+	@Deprecated
 	public void save(final WorldMap worldMap, final String fileName) throws FileNotFoundException {
 		Map<String, Object> properties = new HashMap<String, Object>(1);
 		properties.put(JsonGenerator.PRETTY_PRINTING, true);
@@ -53,6 +60,7 @@ public class WorldMapDao {
 		jg.close();
 	}
 
+	@Deprecated
 	public WorldMap load(final String fileName) throws FileNotFoundException {
 		final InputStream is = WorldMap.class.getResourceAsStream(fileName);
 		Preconditions.checkState(is != null, "Unable to find (%s)", fileName);
@@ -79,6 +87,19 @@ public class WorldMapDao {
 			rowCx.incrementAndGet();
 		});
 		return new WorldMap(maxX, maxY, terrainMap);
+	}
+
+	public WorldMap loadMap(final String fileName) throws FileNotFoundException {
+		final InputStream is = WorldMap.class.getResourceAsStream(fileName);
+		Preconditions.checkState(is != null, "Unable to find (%s)", fileName);
+		
+		Gson gson = new GsonBuilder()
+				.setPrettyPrinting()
+				.create();
+		
+		GamePo loaded = gson.fromJson(new InputStreamReader(is), GamePo.class);		
+		
+		return new WorldMap(loaded);
 	}
 
 	int readInt(final JsonObject json, final String key) {

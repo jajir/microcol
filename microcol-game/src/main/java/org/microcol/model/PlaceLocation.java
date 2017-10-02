@@ -39,7 +39,7 @@ public class PlaceLocation extends AbstractPlace {
 
 	@Override
 	public PlacePo save(final UnitPo unitPo){
-		PlaceMapPo out = new PlaceMapPo();
+		final PlaceMapPo out = new PlaceMapPo();
 		out.setLocation(location);
 		unitPo.setPlaceMap(out);
 		return out;

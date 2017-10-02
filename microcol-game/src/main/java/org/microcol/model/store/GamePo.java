@@ -7,6 +7,8 @@ public class GamePo {
 
 	private List<UnitPo> units = new ArrayList<>();
 	
+	private List<ColonyPo> colonies = new ArrayList<>();
+	
 	private WorldMapPo map = new WorldMapPo();
 	
 	public GamePo() {
@@ -19,6 +21,14 @@ public class GamePo {
 
 	public WorldMapPo getMap() {
 		return map;
+	}
+
+	public List<ColonyPo> getColonies() {
+		return colonies;
+	}
+
+	public void setColonies(List<ColonyPo> colonies) {
+		this.colonies = colonies;
 	}
 
 }

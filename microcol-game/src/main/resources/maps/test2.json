@@ -1,0 +1,237 @@
+{
+  "units": [
+    {
+      "id": 1,
+      "type": "COLONIST",
+      "ownerId": "Dutch",
+      "availableMoves": 0
+    },
+    {
+      "id": 2,
+      "type": "COLONIST",
+      "ownerId": "Dutch",
+      "availableMoves": 0
+    },
+    {
+      "id": 3,
+      "type": "COLONIST",
+      "ownerId": "Dutch",
+      "availableMoves": 0
+    },
+    {
+      "id": 4,
+      "type": "COLONIST",
+      "ownerId": "Dutch",
+      "availableMoves": 0
+    },
+    {
+      "id": 5,
+      "type": "COLONIST",
+      "ownerId": "Dutch",
+      "availableMoves": 0
+    },
+    {
+      "id": 6,
+      "type": "GALLEON",
+      "ownerId": "Dutch",
+      "placeMap": {
+        "location": {
+          "x": 5,
+          "y": 4
+        }
+      },
+      "availableMoves": 0
+    },
+    {
+      "id": 7,
+      "type": "FRIGATE",
+      "ownerId": "Dutch",
+      "placeMap": {
+        "location": {
+          "x": 4,
+          "y": 4
+        }
+      },
+      "availableMoves": 0
+    },
+    {
+      "id": 8,
+      "type": "COLONIST",
+      "ownerId": "Dutch",
+      "placeMap": {
+        "location": {
+          "x": 9,
+          "y": 4
+        }
+      },
+      "availableMoves": 0
+    },
+    {
+      "id": 9,
+      "type": "COLONIST",
+      "ownerId": "Dutch",
+      "placeMap": {
+        "location": {
+          "x": 6,
+          "y": 3
+        }
+      },
+      "availableMoves": 0
+    },
+    {
+      "id": 10,
+      "type": "COLONIST",
+      "ownerId": "Dutch",
+      "placeMap": {
+        "location": {
+          "x": 5,
+          "y": 4
+        }
+      },
+      "availableMoves": 0
+    },
+    {
+      "id": 11,
+      "type": "FRIGATE",
+      "ownerId": "Dutch",
+      "placeHighSeas": {
+        "isTravelToEurope": true,
+        "remainigTurns": 4
+      },
+      "availableMoves": 0
+    },
+    {
+      "id": 12,
+      "type": "GALLEON",
+      "ownerId": "Dutch",
+      "placeHighSeas": {
+        "isTravelToEurope": false,
+        "remainigTurns": 2
+      },
+      "availableMoves": 0
+    },
+    {
+      "id": 13,
+      "type": "GALLEON",
+      "ownerId": "Player2",
+      "placeMap": {
+        "location": {
+          "x": 8,
+          "y": 8
+        }
+      },
+      "availableMoves": 0
+    },
+    {
+      "id": 14,
+      "type": "FRIGATE",
+      "ownerId": "Player2",
+      "placeMap": {
+        "location": {
+          "x": 8,
+          "y": 10
+        }
+      },
+      "availableMoves": 0
+    },
+    {
+      "id": 15,
+      "type": "FRIGATE",
+      "ownerId": "Player2",
+      "placeMap": {
+        "location": {
+          "x": 15,
+          "y": 10
+        }
+      },
+      "availableMoves": 0
+    },
+    {
+      "id": 16,
+      "type": "COLONIST",
+      "ownerId": "Player2",
+      "placeMap": {
+        "location": {
+          "x": 8,
+          "y": 4
+        }
+      },
+      "availableMoves": 0
+    },
+    {
+      "id": 17,
+      "type": "COLONIST",
+      "ownerId": "Dutch",
+      "placeEuropePort": {
+        "isOnPier": true
+      },
+      "availableMoves": 0
+    },
+    {
+      "id": 18,
+      "type": "COLONIST",
+      "ownerId": "Dutch",
+      "placeEuropePort": {
+        "isOnPier": true
+      },
+      "availableMoves": 0
+    },
+    {
+      "id": 20,
+      "type": "COLONIST",
+      "ownerId": "Dutch",
+      "availableMoves": 0
+    },
+    {
+      "id": 19,
+      "type": "GALLEON",
+      "ownerId": "Dutch",
+      "placeEuropePort": {
+        "isOnPier": false
+      },
+      "availableMoves": 0
+    },
+    {
+      "id": 21,
+      "type": "FRIGATE",
+      "ownerId": "Dutch",
+      "placeEuropePort": {
+        "isOnPier": false
+      },
+      "availableMoves": 0
+    }
+  ],
+  "colonies": [],
+  "map": {
+    "tiles": [
+      "a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a",
+      "~,_,_,_,_,_,_,_,_,_,t,t,t,a,a,a,a",
+      "~,_,_,_,_,g,g,g,_,_,_,_,_,_,_,_,~",
+      "~,_,_,_,g,g,g,g,g,_,_,_,_,_,_,_,~",
+      "~,_,_,_,_,_,g,g,g,g,_,_,_,_,_,_,~",
+      "~,_,_,_,_,_,_,_,g,g,_,_,_,_,_,_,~",
+      "~,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,~",
+      "~,_,_,_,g,g,g,_,_,_,_,_,_,_,_,_,~",
+      "~,_,_,g,g,g,g,g,_,_,_,g,_,_,_,_,~",
+      "~,_,_,_,_,g,g,_,_,_,_,g,g,g,_,_,~",
+      "~,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,~",
+      "a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a"
+    ],
+    "trees": [
+      "-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+      "-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+      "-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+      "-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+      "-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+      "-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+      "-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+      "-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+      "-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+      "-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+      "-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+      "-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-"
+    ],
+    "maxX": 17,
+    "maxY": 12
+  }
+}

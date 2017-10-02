@@ -67,7 +67,7 @@ public class PlaceHighSea extends AbstractPlace {
 
 	@Override
 	public PlacePo save(final UnitPo unitPo){
-		PlaceHighSeasPo out = new PlaceHighSeasPo();
+		final PlaceHighSeasPo out = new PlaceHighSeasPo();
 		out.setTravelToEurope(isTravelToEurope);
 		out.setRemainigTurns(remainigTurns);
 		unitPo.setPlaceHighSeas(out);

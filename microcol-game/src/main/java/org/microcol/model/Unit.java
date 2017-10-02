@@ -7,7 +7,6 @@ import java.util.Optional;
 import java.util.Random;
 import java.util.Set;
 
-import javax.json.stream.JsonGenerator;
 import javax.json.stream.JsonParser;
 
 import org.microcol.model.store.UnitPo;

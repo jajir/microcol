@@ -4,40 +4,57 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import javax.json.stream.JsonParser;
 
 import org.microcol.model.store.GamePo;
+import org.microcol.model.store.WorldMapPo;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
 
 public class WorldMap {
-	@Deprecated
-	private final String fileName;
+	
 	private final int maxX;
 	private final int maxY;
+	
 	private final ImmutableMap<Location, TerrainType> terrainMap;
 	
+	private final Set<Location> trees;
+	
+	public WorldMap(final GamePo gamePo){
+		final WorldMapPo worldMapPo = gamePo.getMap();
+		this.maxX = worldMapPo.getMaxX();
+		this.maxY = worldMapPo.getMaxY();
+		Preconditions.checkArgument(maxY >= 1, "Max Y (%s) must be positive.", maxY);
+		Preconditions.checkArgument(maxX >= 1, "Max X (%s) must be positive.", maxX);
+		this.terrainMap = ImmutableMap.copyOf(worldMapPo.getTerrainMap());
+		this.trees = ImmutableSet.copyOf(worldMapPo.getTreeSet());
+	}
+
+	@Deprecated
 	public WorldMap(final int maxX, final int maxY, Map<Location, TerrainType> terrainMap){
 		Preconditions.checkArgument(maxX >= 1, "Max X (%s) must be positive.", maxX);
 		Preconditions.checkArgument(maxY >= 1, "Max Y (%s) must be positive.", maxY);
 		
-		this.fileName = null;
 		this.maxX = maxX;
 		this.maxY = maxY;
 		this.terrainMap = ImmutableMap.copyOf(terrainMap);
+		this.trees = new HashSet<>();
 	}
-
+	
+	@Deprecated
 	public WorldMap(final String fileName) {
 		Preconditions.checkNotNull(fileName);
 
-		this.fileName = fileName;
-
 		int maxX = 0;
 		int maxY = 0;
+		this.trees = new HashSet<>();
 		final Map<Location, TerrainType> terrainMap = new HashMap<>();
 
 		try (final BufferedReader reader = new BufferedReader(
@@ -81,10 +98,6 @@ public class WorldMap {
 		this.terrainMap = ImmutableMap.copyOf(terrainMap);
 	}
 
-	public String getFileName() {
-		return fileName;
-	}
-
 	public int getMaxX() {
 		return maxX;
 	}
@@ -116,12 +129,17 @@ public class WorldMap {
 
 	@Override
 	public String toString() {
-		return MoreObjects.toStringHelper(this).add("fileName", fileName).add("maxX", maxX).add("maxY", maxY)
+		return MoreObjects.toStringHelper(this)
+				.add("maxX", maxX)
+				.add("maxY", maxY)
 				.add("landmass", terrainMap.keySet().size()).toString();
 	}
 
 	void save(final GamePo gamePo) {
-		gamePo.getMap().set(terrainMap, maxX, maxY);
+		gamePo.getMap().setMaxX(maxX);
+		gamePo.getMap().setMaxY(maxY);
+		gamePo.getMap().setTerrainType(terrainMap);
+		gamePo.getMap().setTrees(trees);
 	}
 
 	static WorldMap load(final JsonParser parser) {

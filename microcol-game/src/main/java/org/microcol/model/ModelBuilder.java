@@ -52,7 +52,7 @@ public class ModelBuilder {
 		WorldMapDao dao = new WorldMapDao();
 		//TODO wrapping IoExceptions should be done on DAO methods.
 		try {
-			map = dao.load(fileName);
+			map = dao.loadMap(fileName);
 		} catch (FileNotFoundException e) {
 			throw new MicroColException(e.getMessage(), e);
 		}
