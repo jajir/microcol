@@ -19,6 +19,7 @@ import org.microcol.gui.util.Text;
 import org.microcol.gui.util.ViewUtil;
 import org.microcol.model.Location;
 import org.microcol.model.Model;
+import org.microcol.model.Terrain;
 import org.microcol.model.TerrainType;
 import org.microcol.model.Colony;
 import org.microcol.model.Unit;
@@ -233,16 +234,9 @@ public class GamePanelView implements GamePanelPresenter.Display {
 			for (int j = area.getTopLeft().getY(); j <= area.getBottomRight().getY(); j++) {
 				final Location location = Location.of(i, j);
 				final Point point = area.convertToPoint(location);
-				final TerrainType terrain = gameController.getModel().getMap().getTerrainTypeAt(location);
-				graphics.drawImage(imageProvider.getTerrainImage(terrain), 0, 0, TILE_WIDTH_IN_PX, TILE_WIDTH_IN_PX,
-						point.getX(), point.getY(), TILE_WIDTH_IN_PX, TILE_WIDTH_IN_PX);
-				if(gameController.getModel().getMap().isTreeAt(location)){
-					graphics.drawImage(imageProvider.getImage(ImageProvider.IMG_TREE), point.getX(), point.getY());
-				}
-				if (oneTurnMoveHighlighter.isItHighlighted(location)) {
-					graphics.setFill(new Color(0.95, 0.75, 0.90, 0.4F));
-					graphics.fillRect(point.getX(), point.getY(), TILE_WIDTH_IN_PX, TILE_WIDTH_IN_PX);
-				}
+				final Terrain terrain = gameController.getModel().getMap().getTerrainAt(location);
+				paintService.paintTerrainOnTile(graphics, point, terrain,
+						oneTurnMoveHighlighter.isItHighlighted(location));
 			}
 		}
 	}

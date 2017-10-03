@@ -29,8 +29,12 @@ public class ColonyField {
 		return direction;
 	}
 	
-	public TerrainType getTerrain() {
+	public TerrainType getTerrainType() {
 		return model.getMap().getTerrainTypeAt(colony.getLocation().add(direction));
+	}
+	
+	public Terrain getTerrain() {
+		return model.getMap().getTerrainAt(colony.getLocation().add(direction));
 	}
 
 	void setModel(final Model model) {

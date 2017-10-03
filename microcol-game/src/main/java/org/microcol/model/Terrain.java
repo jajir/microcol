@@ -7,12 +7,15 @@ import com.google.common.base.Preconditions;
  * It's countryside definition. It also specify what is on that land.
  */
 public class Terrain {
+	
+	private final Location location;
 
 	private final TerrainType terrainType;
 	
 	private boolean hasTrees;
 	
-	public Terrain(final TerrainType terrainType) {
+	public Terrain(final Location location, final TerrainType terrainType) {
+		this.location = Preconditions.checkNotNull(location);
 		this.terrainType = Preconditions.checkNotNull(terrainType);
 		hasTrees = false;
 	}
@@ -37,6 +40,10 @@ public class Terrain {
 				.add("terrain", terrainType.name())
 				.add("hasTrees", hasTrees)
 				.toString();
+	}
+
+	public Location getLocation() {
+		return location;
 	}
 
 }

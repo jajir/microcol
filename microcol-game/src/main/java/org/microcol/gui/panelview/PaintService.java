@@ -3,6 +3,7 @@ package org.microcol.gui.panelview;
 import org.microcol.gui.ImageProvider;
 import org.microcol.gui.Point;
 import org.microcol.model.Player;
+import org.microcol.model.Terrain;
 import org.microcol.model.Colony;
 import org.microcol.model.Unit;
 
@@ -138,5 +139,32 @@ public class PaintService {
 			graphics.fillRect(p.getX() + 1, p.getY() + 1, FLAG_WIDTH - 1, FLAG_HEIGHT - 1);
 		});
 	}
-
+	
+	/**
+	 * Paint one tile on game space.
+	 * 
+	 * @param graphics
+	 *            required graphics where will be tile drawn
+	 * @param point
+	 *            required point where will be painted
+	 * @param terrain
+	 *            required terrain object
+	 * @param isHighlighted
+	 *            when it's <code>true</code> than tile is highlighted
+	 */
+	public void paintTerrainOnTile(final GraphicsContext graphics, final Point point, final Terrain terrain,
+			final boolean isHighlighted) {
+		graphics.drawImage(imageProvider.getTerrainImage(terrain.getTerrainType()), 0, 0,
+				GamePanelView.TILE_WIDTH_IN_PX, GamePanelView.TILE_WIDTH_IN_PX, point.getX(), point.getY(),
+				GamePanelView.TILE_WIDTH_IN_PX, GamePanelView.TILE_WIDTH_IN_PX);
+		if (terrain.isHasTrees()) {
+			graphics.drawImage(imageProvider.getImage(ImageProvider.IMG_TREE), point.getX(), point.getY());
+		}
+		if (isHighlighted) {
+			graphics.setFill(new Color(0.95, 0.75, 0.90, 0.4F));
+			graphics.fillRect(point.getX(), point.getY(), GamePanelView.TILE_WIDTH_IN_PX,
+					GamePanelView.TILE_WIDTH_IN_PX);
+		}
+	}
+	
 }

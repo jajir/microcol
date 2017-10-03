@@ -126,6 +126,13 @@ public class WorldMap {
 		
 		return trees.contains(location);
 	}
+	
+	public Terrain getTerrainAt(final Location location){
+		Preconditions.checkArgument(isValid(location), "Location (%s) is not part of this map.", location);
+		final Terrain out = new Terrain(location, getTerrainTypeAt(location));
+		out.setHasTrees(trees.contains(location));
+		return out;
+	}
 
 	public boolean isValid(final Location location) {
 		Preconditions.checkNotNull(location);
