@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.BiConsumer;
 import java.util.function.Function;
 
 import org.microcol.model.Location;
@@ -65,23 +66,36 @@ public class WorldMapPo {
 
 	public Map<Location, TerrainType> getTerrainMap() {
 		final Map<Location, TerrainType> out = new HashMap<>();
-		for(int y = 0; y < tiles.length; y++){
-			final String row = tiles[y];
-			System.out.println(row);
-			final String[] parts = row.split(",");
-			for( int x = 0; x < parts.length; x++){
-				final String charCode = parts[x];
-				final TerrainType terrainType = TerrainType.valueOfCode(charCode);
-				if (!terrainType.equals(TerrainType.OCEAN)) {
-					out.put(Location.of(x + 1, y + 1), terrainType);
-				}
+		iterate(tiles, (location, charCode) -> {
+			final TerrainType terrainType = TerrainType.valueOfCode(charCode);
+			if (!terrainType.equals(TerrainType.OCEAN)) {
+				out.put(location, terrainType);
 			}
-		}
+		});
 		return out;
 	}
-	
-	public Set<Location> getTreeSet(){
-		return new HashSet<>();
+
+	public Set<Location> getTreeSet() {
+		final Set<Location> out = new HashSet<>();
+		iterate(trees, (location, charCode) -> {
+			if (charCode.equals("t")) {
+				out.add(location);
+			}
+		});
+		return out;
+	}
+
+	private void iterate(final String[] rows, final BiConsumer<Location, String> consumer) {
+		for (int y = 0; y < rows.length; y++) {
+			final String row = rows[y];
+			final String[] parts = row.split(",");
+			for (int x = 0; x < parts.length; x++) {
+				final String charCode = parts[x];
+				final Location loc = Location.of(x + 1, y + 1);
+				consumer.accept(loc, charCode);
+			}
+		}
+
 	}
 
 	public int getMaxX() {

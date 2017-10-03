@@ -16,7 +16,6 @@ import org.microcol.model.store.WorldMapPo;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableSet;
 
 public class WorldMap {
 	
@@ -34,7 +33,7 @@ public class WorldMap {
 		Preconditions.checkArgument(maxY >= 1, "Max Y (%s) must be positive.", maxY);
 		Preconditions.checkArgument(maxX >= 1, "Max X (%s) must be positive.", maxX);
 		this.terrainMap = ImmutableMap.copyOf(worldMapPo.getTerrainMap());
-		this.trees = ImmutableSet.copyOf(worldMapPo.getTreeSet());
+		this.trees = worldMapPo.getTreeSet();
 	}
 
 	@Deprecated
@@ -112,6 +111,20 @@ public class WorldMap {
 		TerrainType terrain = terrainMap.get(location);
 
 		return terrain != null ? terrain : TerrainType.OCEAN;
+	}
+	
+	/**
+	 * Provide info about trees on specific location.
+	 * 
+	 * @param location
+	 *            required location
+	 * @return return <code>true</code> if location contain tree otherwise
+	 *         return <code>false</code>
+	 */
+	public boolean isTreeAt(final Location location){
+		Preconditions.checkArgument(isValid(location), "Location (%s) is not part of this map.", location);
+		
+		return trees.contains(location);
 	}
 
 	public boolean isValid(final Location location) {

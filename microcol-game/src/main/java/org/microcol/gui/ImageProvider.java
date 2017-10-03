@@ -105,6 +105,8 @@ public class ImageProvider {
 
 	public static final String IMG_TILE_TOWN = "tile-town.png";
 
+	public static final String IMG_TREE = "tree.png";
+
 	public static final String IMG_TILE_FIELD = "tile-field.png";
 
 	private static final String BASE_PACKAGE = "images";

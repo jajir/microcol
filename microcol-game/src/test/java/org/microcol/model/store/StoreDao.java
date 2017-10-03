@@ -135,8 +135,8 @@ public class StoreDao {
 		fileWriter.close();
 		
 		ModelBuilder builder = new ModelBuilder();
-		Model model2 = builder.setCalendar(1570, 1800)
-			.setMap("/maps/test2.json").getEuropeBuilder().build().build();
+		Model model2 = builder.setCalendar(1570, 1800).setMap("/maps/test2.json").addPlayer("karel").build()
+				.getEuropeBuilder().build().build();
 		GamePo game2 = model2.save();
 		String str2 = gson.toJson(game2);
 		System.out.println(str2);
