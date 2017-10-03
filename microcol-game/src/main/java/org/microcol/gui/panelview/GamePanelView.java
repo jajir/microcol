@@ -237,8 +237,7 @@ public class GamePanelView implements GamePanelPresenter.Display {
 				graphics.drawImage(imageProvider.getTerrainImage(terrain), 0, 0, TILE_WIDTH_IN_PX, TILE_WIDTH_IN_PX,
 						point.getX(), point.getY(), TILE_WIDTH_IN_PX, TILE_WIDTH_IN_PX);
 				if(gameController.getModel().getMap().isTreeAt(location)){
-					graphics.drawImage(imageProvider.getImage(ImageProvider.IMG_TREE), 0, 0, TILE_WIDTH_IN_PX,
-							TILE_WIDTH_IN_PX, point.getX(), point.getY(), TILE_WIDTH_IN_PX, TILE_WIDTH_IN_PX);
+					graphics.drawImage(imageProvider.getImage(ImageProvider.IMG_TREE), point.getX(), point.getY());
 				}
 				if (oneTurnMoveHighlighter.isItHighlighted(location)) {
 					graphics.setFill(new Color(0.95, 0.75, 0.90, 0.4F));
