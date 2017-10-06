@@ -24,17 +24,25 @@ public class ColonyField {
 		Preconditions.checkArgument(location.isDirection(),
 				"Field location (%s) is not a valid direction", location);
 	}
+	
+	public boolean canProduce(final GoodType goodType){
+		return getTerrainType().canProduce(goodType);
+	}
 
 	public Location getDirection() {
 		return direction;
 	}
 	
 	public TerrainType getTerrainType() {
-		return model.getMap().getTerrainTypeAt(colony.getLocation().add(direction));
+		return getMap().getTerrainTypeAt(colony.getLocation().add(direction));
 	}
 	
 	public Terrain getTerrain() {
-		return model.getMap().getTerrainAt(colony.getLocation().add(direction));
+		return getMap().getTerrainAt(colony.getLocation().add(direction));
+	}
+	
+	private WorldMap getMap(){
+		return model.getMap();
 	}
 
 	void setModel(final Model model) {

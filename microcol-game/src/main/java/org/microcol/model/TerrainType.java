@@ -565,6 +565,14 @@ public final class TerrainType {
 	public List<Production> getProductions() {
 		return productions;
 	}
+	
+	public boolean canProduce(final GoodType goodType){
+		return productions.stream()
+				.map(Production::getGoodType)
+				.filter(goodType1 -> goodType1.equals(goodType))
+				.findAny()
+				.isPresent();
+	}
 
 	public String getCode() {
 		return code;

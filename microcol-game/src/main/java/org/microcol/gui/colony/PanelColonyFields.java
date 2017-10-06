@@ -12,6 +12,7 @@ import org.microcol.gui.util.ClipboardWritter;
 import org.microcol.gui.util.TitledPanel;
 import org.microcol.model.Colony;
 import org.microcol.model.ColonyField;
+import org.microcol.model.GoodType;
 import org.microcol.model.Location;
 import org.microcol.model.Terrain;
 import org.slf4j.Logger;
@@ -164,7 +165,7 @@ public class PanelColonyFields extends TitledPanel {
 			if (colonyField.isEmpty()) {
 				final Dragboard db = event.getDragboard();
 				ClipboardReader.make(gameController.getModel(), db).tryReadUnit((unit, transferFrom) -> {
-					unit.placeToColonyField(colonyField);
+					unit.placeToColonyField(colonyField, GoodType.CORN);
 					event.setDropCompleted(true);
 					colonyDialog.repaint();
 				});

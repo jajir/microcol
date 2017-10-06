@@ -65,9 +65,10 @@ public class PlaceBuilder {
 		return this;
 	}
 
-	public PlaceBuilder setUnitToFiled(final Location fieldDirection, final Colony colony) {
+	public PlaceBuilder setUnitToFiled(final Location fieldDirection, final Colony colony,
+			final GoodType producedGoodType) {
 		checkThatEverythingIsNull();
-		fieldColony = new FieldColony(fieldDirection, colony);
+		fieldColony = new FieldColony(fieldDirection, colony, producedGoodType);
 		return this;
 	}
 
@@ -84,7 +85,7 @@ public class PlaceBuilder {
 			return new PlaceConstructionSlot(unit,
 					constructionColony.getConstruction().getSlotAt(constructionColony.getPositon()));
 		} else if (fieldColony != null) {
-			return new PlaceColonyField(unit, fieldColony.getColonyField());
+			return new PlaceColonyField(unit, fieldColony.getColonyField(), fieldColony.getProducedGoodType());
 		} else if (cargoHolder != null) {
 			return new PlaceCargoSlot(unit, cargoHolder.getCargo().getEmptyCargoSlot().orElseThrow(
 					() -> new IllegalStateException("There is no empty cargo slot at unit (" + unit + ")")));
@@ -116,16 +117,23 @@ public class PlaceBuilder {
 	}
 
 	private class FieldColony {
+		
 		private final Location fieldDirection;
 		private final Colony colony;
+		private final GoodType producedGoodType;
 
-		FieldColony(final Location fieldDirection, final Colony colony) {
+		FieldColony(final Location fieldDirection, final Colony colony, final GoodType producedGoodType) {
 			this.fieldDirection = Preconditions.checkNotNull(fieldDirection);
 			this.colony = Preconditions.checkNotNull(colony);
+			this.producedGoodType = Preconditions.checkNotNull(producedGoodType);
 		}
 		
 		public ColonyField getColonyField(){
 			return colony.getColonyFieldInDirection(fieldDirection);
+		}
+
+		public GoodType getProducedGoodType() {
+			return producedGoodType;
 		}
 
 	}

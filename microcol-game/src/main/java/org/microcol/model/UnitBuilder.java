@@ -71,8 +71,9 @@ public class UnitBuilder {
 		return this;
 	}
 	
-	public UnitBuilder setUnitToFiled(final Location fieldDirection, final Colony colony){
-		placeBuilder.setUnitToFiled(fieldDirection, colony);
+	public UnitBuilder setUnitToFiled(final Location fieldDirection, final Colony colony,
+			final GoodType producedGoodType) {
+		placeBuilder.setUnitToFiled(fieldDirection, colony, producedGoodType);
 		return this;		
 	}
 

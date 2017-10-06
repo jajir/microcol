@@ -56,7 +56,7 @@ public class PlayerBuilder {
 				final UnitBuilder unitBuilder = modelBuilder.makeUnitBuilder();
 				unitBuilder.setPlayer(player);
 				unitBuilder.setType(fieldPlace.getUnitType());
-				unitBuilder.setUnitToFiled(fieldPlace.getFieldDirection(), colony);
+				unitBuilder.setUnitToFiled(fieldPlace.getFieldDirection(), colony, fieldPlace.getProducedGoodType());
 				final Unit unit = unitBuilder.build();
 				colony.getColonyFieldInDirection(fieldPlace.getFieldDirection())
 						.setPlaceColonyField(unit.getPlaceColonyField());

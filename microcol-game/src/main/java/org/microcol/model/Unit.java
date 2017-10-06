@@ -484,13 +484,13 @@ public class Unit {
 		structureSlot.set((PlaceConstructionSlot)place);
 	}
 	
-	public void placeToColonyField(final ColonyField colonyField){
+	public void placeToColonyField(final ColonyField colonyField, final GoodType producedGoodType){
 		Preconditions.checkNotNull(colonyField);
 		Preconditions.checkState(!isAtEuropePort(), "Unit can't skip from europe port to map");
 		Preconditions.checkState(!isAtEuropePier(), "Unit can't skip from europe port pier to map");
 		Preconditions.checkState(colonyField.isEmpty(), "Unit can't be placed to non empty colony field");
 		place.destroy();
-		place = new PlaceColonyField(this, colonyField);
+		place = new PlaceColonyField(this, colonyField, producedGoodType);
 		colonyField.setPlaceColonyField((PlaceColonyField)place);
 	}
 
