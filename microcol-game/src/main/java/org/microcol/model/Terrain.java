@@ -1,5 +1,7 @@
 package org.microcol.model;
 
+import org.microcol.model.TerrainType.Production;
+
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 
@@ -32,6 +34,14 @@ public class Terrain {
 		Preconditions.checkArgument(terrainType.isCanHaveTree() || !hasTrees,
 				"this terrain type (%s) can't have trees.", terrainType);
 		this.hasTrees = hasTrees;
+	}
+	
+	public int canProduce(final Production production) {
+		if (isHasTrees()) {
+			return production.getWithTrees();
+		} else {
+			return production.getWithoutTrees();
+		}
 	}
 	
 	@Override

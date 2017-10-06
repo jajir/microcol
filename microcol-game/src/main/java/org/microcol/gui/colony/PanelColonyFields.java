@@ -86,10 +86,20 @@ public class PanelColonyFields extends TitledPanel {
 		final Optional<Location> direction = clickableArea.getDirection(Point.of(event.getX(), event.getY()));
 		if (direction.isPresent()) {
 			final ColonyField colonyField = colony.getColonyFieldInDirection(direction.get());
+			final Terrain terrain = colonyField.getTerrain();
 			if (!colonyField.isEmpty()) {
 				contextMenu.getItems().clear();
-				colonyField.getTerrainType().getProductions().forEach(production -> {
-					MenuItem item = new MenuItem(production.getGoodType().name() + " x " + production.getWithTrees());
+				colonyField.getTerrainType()
+						.getProductions()
+						.stream()
+						.filter(production -> terrain.canProduce(production) > 0)
+						.forEach(production -> {
+							final MenuItem item = new MenuItem(
+							production.getGoodType().name() + "   " + terrain.canProduce(production));
+					item.setOnAction(evt -> {
+						colonyField.setProducedGoodType(production.getGoodType());
+						colonyDialog.repaint();
+					});
 					contextMenu.getItems().add(item);
 				});
 				contextMenu.show(canvas, event.getScreenX(), event.getScreenY());
@@ -198,6 +208,9 @@ public class PanelColonyFields extends TitledPanel {
 		paintService.paintTerrainOnTile(gc, point, terrain, false);
 		if (!colonyField.isEmpty()) {
 			gc.drawImage(imageProvider.getUnitImage(colonyField.getUnit().getType()), point.getX(), point.getY());
+			//TODO on ocean show fish
+			gc.drawImage(imageProvider.getGoodTypeImage(colonyField.getProducedGoodType()), point.getX(), point.getY(),
+					25, 25);
 		}
 	}
 	

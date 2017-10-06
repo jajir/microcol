@@ -76,7 +76,16 @@ public class ColonyField {
 		return placeColonyField.getUnit();
 	}
 	
-	void setPlaceColonyField(PlaceColonyField placeColonyField) {
+	public GoodType getProducedGoodType() {
+		return placeColonyField == null ? null : placeColonyField.getProducedGoodType();
+	}
+	
+	public void setProducedGoodType(final GoodType producedGoodType) {
+		Preconditions.checkNotNull(placeColonyField);
+		placeColonyField.setProducedGoodType(producedGoodType);
+	}
+	
+	public void setPlaceColonyField(PlaceColonyField placeColonyField) {
 		this.placeColonyField = placeColonyField;
 	}
 }
