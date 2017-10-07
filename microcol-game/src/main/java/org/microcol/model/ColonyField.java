@@ -91,6 +91,16 @@ public class ColonyField {
 		placeColonyField.setProducedGoodType(producedGoodType);
 	}
 	
+	/**
+	 * Method should be called once per turn. It produce resources on field.
+	 */
+	public void produce() {
+		if (isEmpty()) {
+			return;
+		}
+		colony.getColonyWarehouse().putToWarehouse(getProducedGoodType(), getProducedGoodsAmmount());
+	}
+	
 	public void setPlaceColonyField(PlaceColonyField placeColonyField) {
 		this.placeColonyField = placeColonyField;
 	}

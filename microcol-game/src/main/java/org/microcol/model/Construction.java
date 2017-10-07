@@ -13,7 +13,7 @@ public class Construction {
 	private final ConstructionType type;
 
 	private final List<ConstructionSlot> workingSlots;
-
+	
 	Construction(final ConstructionType type) {
 		this.type = Preconditions.checkNotNull(type);
 		workingSlots = Lists.newArrayList();
@@ -66,4 +66,14 @@ public class Construction {
 		});
 		return sum.get();
 	}
+	
+	/**
+	 * Method should be called once per turn. It produce resources on field.
+	 */
+	public void produce(final ColonyWarehouse colonyWarehouse){
+		if (getType().getProduce().isPresent()) {
+			colonyWarehouse.putToWarehouse(getType().getProduce().get(), getProductionPerTurn());
+		}
+	}
+	
 }

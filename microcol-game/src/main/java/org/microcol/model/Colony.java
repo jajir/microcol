@@ -84,15 +84,15 @@ public class Colony {
 	}
 	
 	/**
-	 * Perform operation for next turn.
+	 * Perform operation for next turn. Producing order:
+	 * <ul>
+	 * <li>Outside colony produce</li>
+	 * <li>Inside colony</li>
+	 * </ul>
 	 */
 	public void startTurn(){
-		constructions.forEach(construction -> {
-			if (construction.getType().getProduce().isPresent()) {
-				colonyWarehouse.putToWarehouse(construction.getType().getProduce().get(),
-						construction.getProductionPerTurn());
-			}
-		});
+		colonyFields.forEach(ColonyField::produce);
+		constructions.forEach(construction -> construction.produce(getColonyWarehouse()));
 	}
 	
 	public List<Unit> getUnitsInPort() {
