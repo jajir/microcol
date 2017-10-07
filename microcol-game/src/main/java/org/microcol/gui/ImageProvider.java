@@ -69,6 +69,12 @@ public class ImageProvider {
 
 	public static final String IMG_GOOD_CORN = "good-corn.png";
 
+	public static final String IMG_GOOD_BELL = "good-bell.png";
+
+	public static final String IMG_GOOD_HAMMER = "good-hammer.png";
+
+	public static final String IMG_GOOD_CROSS = "good-cross.png";
+
 	public static final String IMG_GOOD_SUGAR = "good-sugar.png";
 
 	public static final String IMG_GOOD_TOBACCO = "good-tobacco.png";
@@ -127,14 +133,25 @@ public class ImageProvider {
 			.put(UnitType.COLONIST, getRawImage(IMG_UNIT_FREE_COLONIST)).build();
 
 	private final Map<GoodType, Image> goodTypeImageMap = ImmutableMap.<GoodType, Image>builder()
-			.put(GoodType.CORN, getRawImage(IMG_GOOD_CORN)).put(GoodType.SUGAR, getRawImage(IMG_GOOD_SUGAR))
-			.put(GoodType.TABACCO, getRawImage(IMG_GOOD_TOBACCO)).put(GoodType.COTTON, getRawImage(IMG_GOOD_COTTON))
-			.put(GoodType.FUR, getRawImage(IMG_GOOD_FUR)).put(GoodType.LUMBER, getRawImage(IMG_GOOD_LUMBER))
-			.put(GoodType.ORE, getRawImage(IMG_GOOD_ORE)).put(GoodType.SILVER, getRawImage(IMG_GOOD_SILVER))
-			.put(GoodType.HORSE, getRawImage(IMG_GOOD_HORSE)).put(GoodType.RUM, getRawImage(IMG_GOOD_RUM))
-			.put(GoodType.CIGARS, getRawImage(IMG_GOOD_CIGARS)).put(GoodType.SILK, getRawImage(IMG_GOOD_SILK))
-			.put(GoodType.COAT, getRawImage(IMG_GOOD_COAT)).put(GoodType.GOODS, getRawImage(IMG_GOOD_GOODS))
-			.put(GoodType.TOOLS, getRawImage(IMG_GOOD_TOOLS)).put(GoodType.MUSKET, getRawImage(IMG_GOOD_MUSKET))
+			.put(GoodType.CORN, getRawImage(IMG_GOOD_CORN))
+			.put(GoodType.BELL, getRawImage(IMG_GOOD_BELL))
+			.put(GoodType.HAMMERS, getRawImage(IMG_GOOD_HAMMER))
+			.put(GoodType.CROSS, getRawImage(IMG_GOOD_CROSS))
+			.put(GoodType.SUGAR, getRawImage(IMG_GOOD_SUGAR))
+			.put(GoodType.TABACCO, getRawImage(IMG_GOOD_TOBACCO))
+			.put(GoodType.COTTON, getRawImage(IMG_GOOD_COTTON))
+			.put(GoodType.FUR, getRawImage(IMG_GOOD_FUR))
+			.put(GoodType.LUMBER, getRawImage(IMG_GOOD_LUMBER))
+			.put(GoodType.ORE, getRawImage(IMG_GOOD_ORE))
+			.put(GoodType.SILVER, getRawImage(IMG_GOOD_SILVER))
+			.put(GoodType.HORSE, getRawImage(IMG_GOOD_HORSE))
+			.put(GoodType.RUM, getRawImage(IMG_GOOD_RUM))
+			.put(GoodType.CIGARS, getRawImage(IMG_GOOD_CIGARS))
+			.put(GoodType.SILK, getRawImage(IMG_GOOD_SILK))
+			.put(GoodType.COAT, getRawImage(IMG_GOOD_COAT))
+			.put(GoodType.GOODS, getRawImage(IMG_GOOD_GOODS))
+			.put(GoodType.TOOLS, getRawImage(IMG_GOOD_TOOLS))
+			.put(GoodType.MUSKET, getRawImage(IMG_GOOD_MUSKET))
 			.build();
 
 	public ImageProvider() {

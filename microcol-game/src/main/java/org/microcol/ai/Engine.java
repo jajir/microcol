@@ -61,7 +61,7 @@ public class Engine {
 	}
 
 	void turn(final Player player) {
-		player.getUnits().stream().filter(unit->unit.isAtMap()).forEach(unit -> move(unit));
+		player.getUnits().stream().filter(unit->unit.isAtPlaceLocation()).forEach(unit -> move(unit));
 
 		if (!running) {
 			return;

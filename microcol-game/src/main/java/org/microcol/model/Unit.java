@@ -47,7 +47,7 @@ public class Unit {
 	}
 	
 	private void validateTerrain(){
-		if(isAtMap()){
+		if(isAtPlaceLocation()){
 			final TerrainType t = model.getMap().getTerrainTypeAt(getLocation());
 			Preconditions.checkState(isMoveable(getLocation(), true),
 					String.format("Unit (%s) is not at valid terrain (%s)", this, t));
@@ -63,16 +63,22 @@ public class Unit {
 	}
 
 	public Location getLocation() {
-		Preconditions.checkArgument(isAtPlaceLocation(), "Unit (%s) is not at map. ", this);
+		verifyThatUnitIsAtMap();
+		
 		return ((PlaceLocation) place).getLocation();
 	}
 
 	public int getAvailableMoves() {
-		Preconditions.checkState(isAtMap(),"Moving unit have to be at map");
-
+		verifyThatUnitIsAtMap();
+		
 		return availableMoves;
 	}
 
+	private void verifyThatUnitIsAtMap() {
+		Preconditions.checkState(isAtPlaceLocation(), "Moving unit have to be at map. Unit (%s) is at (%s)", this,
+				place);
+	}
+	
 	public Cargo getCargo() {
 		return cargo;
 	}
@@ -147,7 +153,7 @@ public class Unit {
 
 	// TODO JKA VRACET LOCATION?
 	public List<Unit> getAttackableTargets() {
-		Preconditions.checkState(isAtMap(),"Moving unit have to be at map");
+		verifyThatUnitIsAtMap();
 
 		if (!type.canAttack()) {
 			return ImmutableList.of();
@@ -289,7 +295,7 @@ public class Unit {
 	}
 
 	public List<Unit> getStorageUnits() {
-		Preconditions.checkState(isAtMap(),"Moving unit have to be at map");
+		verifyThatUnitIsAtMap();
 
 		return getLocation().getNeighbors().stream().flatMap(neighbor -> owner.getUnitsAt(neighbor).stream())
 				.filter(unit -> unit != this).filter(unit -> unit.getCargo().getSlots().stream()
@@ -308,13 +314,13 @@ public class Unit {
 	}
 
 	public Optional<List<Location>> getPath(final Location destination) {
-		Preconditions.checkState(isAtMap(), "Moving unit have to be at map");
+		verifyThatUnitIsAtMap();
 
 		return getPath(destination, false);
 	}
 
 	public Optional<List<Location>> getPath(final Location destination, final boolean excludeDestination) {
-		Preconditions.checkState(isAtMap(), "Moving unit have to be at map");
+		verifyThatUnitIsAtMap();
 
 		PathFinder finder = new PathFinder(this, getLocation(), destination, excludeDestination);
 
@@ -322,7 +328,7 @@ public class Unit {
 	}
 
 	public void moveTo(final Path path) {
-		Preconditions.checkState(isAtMap(), "Moving unit have to be at map");
+		verifyThatUnitIsAtMap();
 
 		model.checkGameRunning();
 		model.checkCurrentPlayer(owner);
@@ -361,7 +367,7 @@ public class Unit {
 	}
 
 	public void attack(final Location location) {
-		Preconditions.checkState(isAtMap(),"Moving unit have to be at map");
+		verifyThatUnitIsAtMap();
 
 		model.checkGameRunning();
 		model.checkCurrentPlayer(owner);
@@ -405,10 +411,6 @@ public class Unit {
 
 	public boolean isAtEuropePort() {
 		return place instanceof PlaceEuropePort;
-	}
-
-	public boolean isAtMap() {
-		return place instanceof PlaceLocation;
 	}
 
 	public boolean isAtEuropePier() {
