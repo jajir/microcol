@@ -46,7 +46,7 @@ public class ImageProvider {
 
 	private static final String IMG_TILE_HIGH_SEA = "tile-high-sea.png";
 
-	private static final String IMG_TILE_LAND = "tile-land.png";
+	private static final String IMG_TILE_GRASSLAND = "tile-grassland.png";
 
 	private static final String IMG_TILE_SHIP_GALEON = "tile-ship-galeon.png";
 
@@ -114,7 +114,7 @@ public class ImageProvider {
 	private final Map<String, Image> images;
 
 	private final Map<TerrainType, Image> terrainMap = ImmutableMap.<TerrainType, Image>builder()
-			.put(TerrainType.GRASSLAND, getRawImage(IMG_TILE_LAND))
+			.put(TerrainType.GRASSLAND, getRawImage(IMG_TILE_GRASSLAND))
 			.put(TerrainType.OCEAN, getRawImage(IMG_TILE_OCEAN))
 			.put(TerrainType.TUNDRA, getRawImage(IMG_TILE_TUNDRA))
 			.put(TerrainType.ARCTIC, getRawImage(IMG_TILE_ARCTIC))

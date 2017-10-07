@@ -20,6 +20,7 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
 
+import javafx.geometry.VPos;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.ContextMenu;
@@ -31,6 +32,8 @@ import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
+import javafx.scene.paint.Color;
+import javafx.scene.text.TextAlignment;
 
 /**
  * Show 3 x 3 tiles occupied by colony. User can assign worker to work outside
@@ -92,10 +95,10 @@ public class PanelColonyFields extends TitledPanel {
 				colonyField.getTerrainType()
 						.getProductions()
 						.stream()
-						.filter(production -> terrain.canProduce(production) > 0)
+						.filter(production -> terrain.canProduceAmmount(production) > 0)
 						.forEach(production -> {
 							final MenuItem item = new MenuItem(
-							production.getGoodType().name() + "   " + terrain.canProduce(production));
+							production.getGoodType().name() + "   " + terrain.canProduceAmmount(production));
 					item.setOnAction(evt -> {
 						colonyField.setProducedGoodType(production.getGoodType());
 						colonyDialog.repaint();
@@ -211,6 +214,10 @@ public class PanelColonyFields extends TitledPanel {
 			//TODO on ocean show fish
 			gc.drawImage(imageProvider.getGoodTypeImage(colonyField.getProducedGoodType()), point.getX(), point.getY(),
 					25, 25);
+			gc.setTextAlign(TextAlignment.CENTER);
+			gc.setTextBaseline(VPos.CENTER);
+			gc.setFill(Color.BLACK);
+			gc.fillText("x " + colonyField.getProducedGoodsAmmount(), point.getX() + 10, point.getY() + 28);
 		}
 	}
 	

@@ -80,8 +80,14 @@ public class ColonyField {
 		return placeColonyField == null ? null : placeColonyField.getProducedGoodType();
 	}
 	
+	public int getProducedGoodsAmmount() {
+		Preconditions.checkNotNull(placeColonyField, "There in no unit placed at field");
+		final GoodType producing = placeColonyField.getProducedGoodType();
+		return getTerrain().canProduceAmmount(producing);
+	}
+	
 	public void setProducedGoodType(final GoodType producedGoodType) {
-		Preconditions.checkNotNull(placeColonyField);
+		Preconditions.checkNotNull(placeColonyField, "There in no unit placed at field");
 		placeColonyField.setProducedGoodType(producedGoodType);
 	}
 	

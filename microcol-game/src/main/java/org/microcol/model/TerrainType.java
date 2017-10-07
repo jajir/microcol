@@ -3,6 +3,7 @@ package org.microcol.model;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Function;
 
 import com.google.common.base.MoreObjects;
@@ -572,6 +573,12 @@ public final class TerrainType {
 				.filter(goodType1 -> goodType1.equals(goodType))
 				.findAny()
 				.isPresent();
+	}
+	
+	public Optional<Production> getProductionForGoodType(final GoodType goodType){
+		return productions.stream()
+				.filter(production -> production.getGoodType().equals(goodType))
+				.findAny();
 	}
 
 	public String getCode() {

@@ -1,5 +1,7 @@
 package org.microcol.model;
 
+import java.util.Optional;
+
 import org.microcol.model.TerrainType.Production;
 
 import com.google.common.base.MoreObjects;
@@ -36,12 +38,22 @@ public class Terrain {
 		this.hasTrees = hasTrees;
 	}
 	
-	public int canProduce(final Production production) {
+	public int canProduceAmmount(final Production production) {
 		if (isHasTrees()) {
 			return production.getWithTrees();
 		} else {
 			return production.getWithoutTrees();
 		}
+	}
+	
+	public int canProduceAmmount(final GoodType producedGoodType) {
+		return canProduceAmmount(getProductionForGoodType(producedGoodType));
+	}
+	
+	private Production getProductionForGoodType(final GoodType producedGoodType) {
+		return terrainType
+				.getProductionForGoodType(producedGoodType)
+				.orElse(new Production(producedGoodType, 0, 0));
 	}
 	
 	@Override
