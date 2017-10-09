@@ -138,7 +138,7 @@ public class ImageProvider {
 			.put(GoodType.HAMMERS, getRawImage(IMG_GOOD_HAMMER))
 			.put(GoodType.CROSS, getRawImage(IMG_GOOD_CROSS))
 			.put(GoodType.SUGAR, getRawImage(IMG_GOOD_SUGAR))
-			.put(GoodType.TABACCO, getRawImage(IMG_GOOD_TOBACCO))
+			.put(GoodType.TOBACCO, getRawImage(IMG_GOOD_TOBACCO))
 			.put(GoodType.COTTON, getRawImage(IMG_GOOD_COTTON))
 			.put(GoodType.FUR, getRawImage(IMG_GOOD_FUR))
 			.put(GoodType.LUMBER, getRawImage(IMG_GOOD_LUMBER))

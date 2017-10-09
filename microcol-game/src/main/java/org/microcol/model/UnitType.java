@@ -21,6 +21,11 @@ import com.google.common.collect.ImmutableMap;
  */
 public class UnitType {
 	
+	/**
+	 * Default production of all goods in default case.
+	 */
+	private final static float DEFAULT_PRODUCTION_MODIFIER = 1F;
+	
 	public final static UnitType COLONIST = UnitType.make()
 			.setName("COLONIST")
 			.setMoveableTerrains(ImmutableList.of(TerrainType.GRASSLAND))
@@ -29,6 +34,28 @@ public class UnitType {
 			.setCargoCapacity(0)
 			.setStorable(true)
 			.setEuropePrice(1400)
+			.build();
+	
+	public final static UnitType EXPERT_ORE_MINER = UnitType.make()
+			.setName("EXPERT_ORE_MINER")
+			.setMoveableTerrains(ImmutableList.of(TerrainType.GRASSLAND))
+			.setSpeed(1)
+			.setCanAttack(true)
+			.setCargoCapacity(0)
+			.setStorable(true)
+			.setEuropePrice(600)
+			.setExpertise(GoodType.ORE, 2.0F)
+			.build();
+	
+	public final static UnitType MASTER_BLACKSMITH = UnitType.make()
+			.setName("MASTER_BLACKSMITH")
+			.setMoveableTerrains(ImmutableList.of(TerrainType.GRASSLAND))
+			.setSpeed(1)
+			.setCanAttack(true)
+			.setCargoCapacity(0)
+			.setStorable(true)
+			.setEuropePrice(1100)
+			.setExpertise(GoodType.TOOLS, 2.0F)
 			.build();
 	
 	public final static UnitType FRIGATE = UnitType.make()
@@ -56,14 +83,6 @@ public class UnitType {
 	private final static Map<String, UnitType> UNIT_TYPES_BY_NAME = UNIT_TYPES.stream()
 			.collect(ImmutableMap.toImmutableMap(UnitType::name, Function.identity()));
 	
-	private final String name;
-	private final List<TerrainType> moveableTerrains;
-	private final int speed;
-	private final boolean canAttack;
-	private final int cargoCapacity;
-	private final boolean storable;
-	private final int europePrice;
-	
 	private static class UnitTypeBuilder{
 
 		private String name;
@@ -73,9 +92,12 @@ public class UnitType {
 		private int cargoCapacity;
 		private boolean storable;
 		private int europePrice;
+		private GoodType expertInProducing;
+		private float expertProductionModifier;
 		
 		private UnitType build(){
-			return new UnitType(name, moveableTerrains, speed, canAttack, cargoCapacity, storable, europePrice);
+			return new UnitType(name, moveableTerrains, speed, canAttack, cargoCapacity, storable, europePrice,
+					expertInProducing, expertProductionModifier);
 		}
 
 		private UnitTypeBuilder setName(final String name) {
@@ -108,14 +130,41 @@ public class UnitType {
 			return this;
 		}
 
-		private UnitTypeBuilder setEuropePrice(int europePrice) {
+		private UnitTypeBuilder setEuropePrice(final int europePrice) {
 			this.europePrice = europePrice;
+			return this;
+		}
+
+		private UnitTypeBuilder setExpertise(final GoodType expertInProducing, final float expertProductionModifier) {
+			this.expertInProducing = expertInProducing;
+			this.expertProductionModifier = expertProductionModifier;
 			return this;
 		}
 		
 	}
+	
+	private final String name;
+	private final List<TerrainType> moveableTerrains;
+	private final int speed;
+	private final boolean canAttack;
+	private final int cargoCapacity;
+	private final boolean storable;
+	private final int europePrice;
+	
+	/**
+	 * Here is good type in which production is unit exceptional. When it's
+	 * <code>null</code> than unit is not expert on producing any type of goods.
+	 */
+	private final GoodType expertInProducing;
+	
+	/**
+	 * Production multiplier on basic good production.
+	 */
+	private final float expertProductionModifier;
 
-	private UnitType(final String name, final List<TerrainType> moveableTerrains, final int speed, final boolean canAttack, final int cargoCapacity, final boolean storable, final int europePrice) {
+	private UnitType(final String name, final List<TerrainType> moveableTerrains, final int speed,
+			final boolean canAttack, final int cargoCapacity, final boolean storable, final int europePrice,
+			final GoodType expertInProducing, final float expertProductionModifier) {
 		this.name = Preconditions.checkNotNull(name);
 		this.moveableTerrains = Preconditions.checkNotNull(moveableTerrains);
 		this.speed = speed;
@@ -123,6 +172,8 @@ public class UnitType {
 		this.cargoCapacity = cargoCapacity;
 		this.storable = storable;
 		this.europePrice = europePrice;
+		this.expertInProducing = expertInProducing;
+		this.expertProductionModifier = expertProductionModifier;
 	}
 	
 	private static UnitTypeBuilder make(){
@@ -172,6 +223,21 @@ public class UnitType {
 	
 	public boolean canHoldCargo() {
 		return cargoCapacity > 0;
+	}
+	
+	/**
+	 * How much more of given goods type could unit produce.
+	 *
+	 * @param goodType
+	 *            required good type
+	 * @return goods type related production modifier
+	 */
+	public float getProductionModifier(final GoodType goodType){
+		if(goodType.equals(expertInProducing)){
+			return expertProductionModifier;
+		}else{
+			return DEFAULT_PRODUCTION_MODIFIER;
+		}
 	}
 	
 	@Override

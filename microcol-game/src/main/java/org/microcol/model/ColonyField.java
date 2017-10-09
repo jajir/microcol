@@ -98,7 +98,7 @@ public class ColonyField {
 		if (isEmpty()) {
 			return;
 		}
-		colony.getColonyWarehouse().putToWarehouse(getProducedGoodType(), getProducedGoodsAmmount());
+		colony.getColonyWarehouse().addToWarehouse(getProducedGoodType(), getProducedGoodsAmmount());
 	}
 	
 	public void setPlaceColonyField(PlaceColonyField placeColonyField) {

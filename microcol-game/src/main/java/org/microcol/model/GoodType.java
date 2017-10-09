@@ -20,7 +20,7 @@ public class GoodType {
 			.setCanBeBought(true)
 			.build();
 
-	public final static GoodType TABACCO = GoodTypeBuilder.make()
+	public final static GoodType TOBACCO = GoodTypeBuilder.make()
 			.setName("TABACCO")
 			.setCanBeBought(true)
 			.build();
@@ -106,7 +106,7 @@ public class GoodType {
 			.build();
 
 	
-	public final static List<GoodType> GOOD_TYPES = ImmutableList.<GoodType>of(CORN, SUGAR, TABACCO, COTTON, FUR, LUMBER, ORE, SILVER, HORSE, RUM, CIGARS,
+	public final static List<GoodType> GOOD_TYPES = ImmutableList.<GoodType>of(CORN, SUGAR, TOBACCO, COTTON, FUR, LUMBER, ORE, SILVER, HORSE, RUM, CIGARS,
 			SILK, COAT, GOODS, TOOLS, MUSKET, HAMMERS, CROSS, BELL);
 	
 	public final static List<GoodType> BUYABLE_GOOD_TYPES = GOOD_TYPES.stream()

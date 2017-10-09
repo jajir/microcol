@@ -63,7 +63,7 @@ public class PlayerBuilder {
 				modelBuilder.addUnit(unit);
 			});
 			colonyBuilder.getGoodAmounts().forEach(goodAmount -> {
-				colony.getColonyWarehouse().putToWarehouse(goodAmount.getGoodType(), goodAmount.getAmount());
+				colony.getColonyWarehouse().addToWarehouse(goodAmount.getGoodType(), goodAmount.getAmount());
 			});
 			modelBuilder.getColonies().add(colony);
 		});

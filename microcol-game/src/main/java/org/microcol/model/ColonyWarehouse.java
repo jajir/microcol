@@ -56,8 +56,8 @@ public class ColonyWarehouse {
 		return colony.getWarehouseType();
 	}
 
-	public void putToWarehouse(final GoodType goodType, final int amount) {
-		goodAmounts.put(goodType, amount);
+	public void addToWarehouse(final GoodType goodType, final int amount) {
+		goodAmounts.put(goodType, getGoodAmmount(goodType) + amount);
 	}
 
 	public void moveToWarehouse(final GoodType goodType, final int amount, final CargoSlot fromCargoSlot) {

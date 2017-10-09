@@ -1,0 +1,20 @@
+ ----
+ Rules
+ ----
+
+Notes to rules
+
+ Rules implementation details
+
+* Colony production
+
+ Production computing follows following rules:
+ 
+ * Buildings consumes and produces goods in ration 1:1.
+ 
+ * Experts consume and produce 2x more goods.
+ 
+ * When building have occupied two slots with free colonist and expert than experts works as a first.
+ Just when there is enough goods to continue free colonist works.  
+ 
+  
