@@ -15,13 +15,18 @@ public class Construction {
 	private final ConstructionType type;
 
 	private final List<ConstructionSlot> workingSlots;
-
-	Construction(final ConstructionType type) {
+	
+	Construction(final ConstructionType type, final List<ConstructionSlot> workingSlots) {
 		this.type = Preconditions.checkNotNull(type);
-		workingSlots = Lists.newArrayList();
+		this.workingSlots = Preconditions.checkNotNull(workingSlots);
+	}
+	
+	static Construction build(final ConstructionType type){
+		final List<ConstructionSlot> list = Lists.newArrayList();
 		for (int i = 0; i < type.getSlotsForWorkers(); i++) {
-			workingSlots.add(new ConstructionSlot());
+			list.add(new ConstructionSlot());
 		}
+		return new Construction(type, list);
 	}
 
 	public ConstructionType getType() {
@@ -75,6 +80,14 @@ public class Construction {
 				.sorted(Comparator.comparing(sort -> -sort.getProductionModifier(getType().getProduce().get())))
 				.collect(Collectors.toList());
 	}
+	
+	/**
+	 * Return value is computed base on construction type basic production per turn.
+	 * @return
+	 */
+	public int getBasicProductionPerSlot(){
+		return getType().getProductionPerTurn();
+	}
 
 	/**
 	 * Method should be called once per turn. It produce resources on field.
@@ -88,7 +101,7 @@ public class Construction {
 			// TODO in all cases is ignored base production per turn
 			if (getType().getConsumed().isPresent()) {
 				final GoodType consumedGoodType = getType().getConsumed().get();
-				getOrderedSlots().forEach(slot -> {
+				getConstructionSlots().forEach(slot -> {
 					final int maxConsumption = slot.getMaxConsumptionPerTurn(getType().getConsumptionPerTurn(),
 							producedGoodType);
 					final int availableGoods = colonyWarehouse.getGoodAmmount(consumedGoodType);

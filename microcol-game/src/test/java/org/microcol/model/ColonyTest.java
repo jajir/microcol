@@ -23,8 +23,8 @@ public class ColonyTest {
 	@Test(expected=IllegalStateException.class)
 	public void test_constructor_constructionConsistency_sameConstructions(final @Mocked Player owner) throws Exception {
 		List<Construction> list = new ArrayList<>();
-		list.add(new Construction(ConstructionType.BLACKSMITHS_SHOP));
-		list.add(new Construction(ConstructionType.BLACKSMITHS_SHOP));
+		list.add(Construction.build(ConstructionType.BLACKSMITHS_SHOP));
+		list.add(Construction.build(ConstructionType.BLACKSMITHS_SHOP));
 		Colony colony = new Colony("Prague", owner, Location.of(2, 2), list);
 		
 		assertNotNull(colony);
@@ -33,8 +33,8 @@ public class ColonyTest {
 	@Test(expected=IllegalStateException.class)
 	public void test_constructor_constructionConsistency_sameConstructionsType(final @Mocked Player owner) throws Exception {
 		List<Construction> list = new ArrayList<>();
-		list.add(new Construction(ConstructionType.BLACKSMITHS_SHOP));
-		list.add(new Construction(ConstructionType.BLACKSMITHS_HOUSE));
+		list.add(Construction.build(ConstructionType.BLACKSMITHS_SHOP));
+		list.add(Construction.build(ConstructionType.BLACKSMITHS_HOUSE));
 		Colony colony = new Colony("Prague", owner, Location.of(2, 2), list);
 		
 		assertNotNull(colony);
@@ -43,8 +43,8 @@ public class ColonyTest {
 	@Test(expected=IllegalStateException.class)
 	public void test_constructor_constructionConsistency_sameConstructionsType_nonProducing(final @Mocked Player owner) throws Exception {
 		List<Construction> list = new ArrayList<>();
-		list.add(new Construction(ConstructionType.DOCK));
-		list.add(new Construction(ConstructionType.DRYDOCK));
+		list.add(Construction.build(ConstructionType.DOCK));
+		list.add(Construction.build(ConstructionType.DRYDOCK));
 		Colony colony = new Colony("Prague", owner, Location.of(2, 2), list);
 		
 		assertNotNull(colony);

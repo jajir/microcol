@@ -33,12 +33,12 @@ public class PlayerBuilder {
 			final List<Construction> constructions = Lists.newArrayList();
 			if (colonyBuilder.isDefaultCostructions()) {
 				ConstructionType.NEW_COLONY_CONSTRUCTIONS.forEach(constructionType -> {
-					final Construction c = new Construction(constructionType);
+					final Construction c = Construction.build(constructionType);
 					constructions.add(c);
 				});
 			}
 			colonyBuilder.getConstructionTypes().forEach(constructionType -> {
-				final Construction c = new Construction(constructionType);
+				final Construction c = Construction.build(constructionType);
 				constructions.add(c);
 			});
 			final Colony colony = new Colony(colonyBuilder.getName(), player, colonyBuilder.getLocation(), constructions);
