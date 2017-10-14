@@ -102,8 +102,8 @@ public class Construction {
 	/**
 	 * Method should be called once per turn. It produce resources on field.
 	 *
-	 * @param required
-	 *            colony where is warehouse and construction placed
+	 * @param colony
+	 *            required colony where is warehouse and construction placed
 	 * @param colonyWarehouse
 	 *            required colony warehouse
 	 */
