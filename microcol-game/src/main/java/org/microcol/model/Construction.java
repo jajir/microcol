@@ -73,8 +73,10 @@ public class Construction {
 	}
 	
 	/**
-	 * Return value is computed base on construction type basic production per turn.
-	 * @return
+	 * Return value is computed base on construction type basic production per
+	 * turn.
+	 *
+	 * @return return basic production per turn
 	 */
 	public int getBasicProductionPerSlot(){
 		return getType().getProductionPerTurn();
@@ -100,6 +102,8 @@ public class Construction {
 	/**
 	 * Method should be called once per turn. It produce resources on field.
 	 *
+	 * @param required
+	 *            colony where is warehouse and construction placed
 	 * @param colonyWarehouse
 	 *            required colony warehouse
 	 */
