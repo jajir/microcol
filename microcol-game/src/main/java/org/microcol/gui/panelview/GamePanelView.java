@@ -20,6 +20,7 @@ import org.microcol.gui.util.ViewUtil;
 import org.microcol.model.Location;
 import org.microcol.model.Model;
 import org.microcol.model.Terrain;
+import org.microcol.model.TerrainType;
 import org.microcol.model.Colony;
 import org.microcol.model.Unit;
 import org.slf4j.Logger;
@@ -192,7 +193,7 @@ public class GamePanelView implements GamePanelPresenter.Display {
 		g.setFill(Color.valueOf("#ececec"));
 		g.fillRect(0, 0, visibleArea.getCanvasWidth(), visibleArea.getCanvasHeight());
 
-		paintTiles(g, area);
+		paintTerrain(g, area);
 		paintGrid(g, area);
 		paintSelectedTile(g, area);
 		paintUnits(g, gameController.getModel(), area);
@@ -228,18 +229,14 @@ public class GamePanelView implements GamePanelPresenter.Display {
 	 * @param graphics
 	 *            required {@link GraphicsContext}
 	 */
-	private void paintTiles(final GraphicsContext graphics, final Area area) {
+	private void paintTerrain(final GraphicsContext graphics, final Area area) {
 		for (int i = area.getTopLeft().getX(); i <= area.getBottomRight().getX(); i++) {
 			for (int j = area.getTopLeft().getY(); j <= area.getBottomRight().getY(); j++) {
 				final Location location = Location.of(i, j);
 				final Point point = area.convertToPoint(location);
 				final Terrain terrain = gameController.getModel().getMap().getTerrainAt(location);
-				graphics.drawImage(imageProvider.getTerrainImage(terrain), 0, 0, TILE_WIDTH_IN_PX, TILE_WIDTH_IN_PX,
-						point.getX(), point.getY(), TILE_WIDTH_IN_PX, TILE_WIDTH_IN_PX);
-				if (oneTurnMoveHighlighter.isItHighlighted(location)) {
-					graphics.setFill(new Color(0.95, 0.75, 0.90, 0.4F));
-					graphics.fillRect(point.getX(), point.getY(), TILE_WIDTH_IN_PX, TILE_WIDTH_IN_PX);
-				}
+				paintService.paintTerrainOnTile(graphics, point, terrain,
+						oneTurnMoveHighlighter.isItHighlighted(location));
 			}
 		}
 	}

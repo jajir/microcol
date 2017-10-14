@@ -33,12 +33,12 @@ public class PlayerBuilder {
 			final List<Construction> constructions = Lists.newArrayList();
 			if (colonyBuilder.isDefaultCostructions()) {
 				ConstructionType.NEW_COLONY_CONSTRUCTIONS.forEach(constructionType -> {
-					final Construction c = new Construction(constructionType);
+					final Construction c = Construction.build(constructionType);
 					constructions.add(c);
 				});
 			}
 			colonyBuilder.getConstructionTypes().forEach(constructionType -> {
-				final Construction c = new Construction(constructionType);
+				final Construction c = Construction.build(constructionType);
 				constructions.add(c);
 			});
 			final Colony colony = new Colony(colonyBuilder.getName(), player, colonyBuilder.getLocation(), constructions);
@@ -56,14 +56,14 @@ public class PlayerBuilder {
 				final UnitBuilder unitBuilder = modelBuilder.makeUnitBuilder();
 				unitBuilder.setPlayer(player);
 				unitBuilder.setType(fieldPlace.getUnitType());
-				unitBuilder.setUnitToFiled(fieldPlace.getFieldDirection(), colony);
+				unitBuilder.setUnitToFiled(fieldPlace.getFieldDirection(), colony, fieldPlace.getProducedGoodType());
 				final Unit unit = unitBuilder.build();
 				colony.getColonyFieldInDirection(fieldPlace.getFieldDirection())
 						.setPlaceColonyField(unit.getPlaceColonyField());
 				modelBuilder.addUnit(unit);
 			});
 			colonyBuilder.getGoodAmounts().forEach(goodAmount -> {
-				colony.getColonyWarehouse().putToWarehouse(goodAmount.getGoodType(), goodAmount.getAmount());
+				colony.getColonyWarehouse().addToWarehouse(goodAmount.getGoodType(), goodAmount.getAmount());
 			});
 			modelBuilder.getColonies().add(colony);
 		});

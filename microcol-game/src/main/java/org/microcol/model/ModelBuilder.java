@@ -1,7 +1,11 @@
 package org.microcol.model;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.microcol.gui.MicroColException;
+import org.microcol.model.store.WorldMapDao;
 
 import com.google.common.base.Preconditions;
 
@@ -45,8 +49,13 @@ public class ModelBuilder {
 	}
 
 	public ModelBuilder setMap(final String fileName) {
-		map = new WorldMap(fileName);
-
+		WorldMapDao dao = new WorldMapDao();
+		//TODO wrapping IoExceptions should be done on DAO methods.
+		try {
+			map = dao.loadMap(fileName);
+		} catch (FileNotFoundException e) {
+			throw new MicroColException(e.getMessage(), e);
+		}
 		return this;
 	}
 	

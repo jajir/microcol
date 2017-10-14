@@ -8,8 +8,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
 
-import javax.json.stream.JsonGenerator;
 import javax.json.stream.JsonParser;
+
+import org.microcol.model.store.GamePo;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
@@ -28,7 +29,7 @@ class UnitStorage {
 	private void checkUnitLocations(final List<Unit> units) {
 		Map<Location, Player> owners = new HashMap<>();
 		units.forEach(unit -> {
-			if (unit.isAtMap()) {
+			if (unit.isAtPlaceLocation()) {
 				Player owner = owners.get(unit.getLocation());
 				if (owner != null) {
 					if (!owner.equals(unit.getOwner())) {
@@ -66,18 +67,18 @@ class UnitStorage {
 
 	// TODO JJ rename it, be more specific about function
 	List<Unit> getUnits(final boolean includeStored) {
-		return units.stream().filter(unit -> includeStored || unit.isAtMap()).collect(ImmutableList.toImmutableList());
+		return units.stream().filter(unit -> includeStored || unit.isAtPlaceLocation()).collect(ImmutableList.toImmutableList());
 	}
 
 	Map<Location, List<Unit>> getUnitsAt() {
-		return Multimaps.asMap(units.stream().filter(unit -> unit.isAtMap())
+		return Multimaps.asMap(units.stream().filter(unit -> unit.isAtPlaceLocation())
 				.collect(ImmutableListMultimap.toImmutableListMultimap(Unit::getLocation, Function.identity())));
 	}
 
 	List<Unit> getUnitsAt(final Location location) {
 		Preconditions.checkNotNull(location);
 
-		return units.stream().filter(unit -> unit.isAtMap()).filter(unit -> unit.getLocation().equals(location))
+		return units.stream().filter(unit -> unit.isAtPlaceLocation()).filter(unit -> unit.getLocation().equals(location))
 				.collect(ImmutableList.toImmutableList());
 	}
 
@@ -85,14 +86,14 @@ class UnitStorage {
 		Preconditions.checkNotNull(player);
 
 		return units.stream().filter(unit -> unit.getOwner().equals(player))
-				.filter(unit -> includeStored || unit.isAtMap()).collect(ImmutableList.toImmutableList());
+				.filter(unit -> includeStored || unit.isAtPlaceLocation()).collect(ImmutableList.toImmutableList());
 	}
 
 	Map<Location, List<Unit>> getUnitsAt(final Player player) {
 		Preconditions.checkNotNull(player);
 
 		return Multimaps.asMap(
-				units.stream().filter(unit -> unit.getOwner().equals(player)).filter(unit -> unit.isAtMap()).collect(
+				units.stream().filter(unit -> unit.getOwner().equals(player)).filter(unit -> unit.isAtPlaceLocation()).collect(
 						ImmutableListMultimap.toImmutableListMultimap(Unit::getLocation, Function.identity())));
 	}
 
@@ -100,7 +101,7 @@ class UnitStorage {
 		Preconditions.checkNotNull(player);
 		Preconditions.checkNotNull(location);
 
-		return units.stream().filter(unit -> unit.getOwner().equals(player)).filter(unit -> unit.isAtMap())
+		return units.stream().filter(unit -> unit.getOwner().equals(player)).filter(unit -> unit.isAtPlaceLocation())
 				.filter(unit -> unit.getLocation().equals(location)).collect(ImmutableList.toImmutableList());
 	}
 
@@ -108,14 +109,14 @@ class UnitStorage {
 		Preconditions.checkNotNull(player);
 
 		return units.stream().filter(unit -> !unit.getOwner().equals(player))
-				.filter(unit -> includeStored || unit.isAtMap()).collect(ImmutableList.toImmutableList());
+				.filter(unit -> includeStored || unit.isAtPlaceLocation()).collect(ImmutableList.toImmutableList());
 	}
 
 	Map<Location, List<Unit>> getEnemyUnitsAt(final Player player) {
 		Preconditions.checkNotNull(player);
 
 		return Multimaps.asMap(
-				units.stream().filter(unit -> !unit.getOwner().equals(player)).filter(unit -> unit.isAtMap()).collect(
+				units.stream().filter(unit -> !unit.getOwner().equals(player)).filter(unit -> unit.isAtPlaceLocation()).collect(
 						ImmutableListMultimap.toImmutableListMultimap(Unit::getLocation, Function.identity())));
 	}
 
@@ -123,7 +124,7 @@ class UnitStorage {
 		Preconditions.checkNotNull(player);
 		Preconditions.checkNotNull(location);
 
-		return units.stream().filter(unit -> !unit.getOwner().equals(player)).filter(unit -> unit.isAtMap())
+		return units.stream().filter(unit -> !unit.getOwner().equals(player)).filter(unit -> unit.isAtPlaceLocation())
 				.filter(unit -> unit.getLocation().equals(location)).collect(ImmutableList.toImmutableList());
 	}
 
@@ -133,10 +134,10 @@ class UnitStorage {
 		units.remove(unit);
 	}
 
-	void save(final JsonGenerator generator) {
-		generator.writeStartArray("units");
-		units.forEach(unit -> unit.save(generator));
-		generator.writeEnd();
+	void save(final GamePo gamePo) {
+		units.forEach(unit -> {
+			gamePo.getUnits().add(unit.save());
+		});
 	}
 
 	static List<Unit> load(final JsonParser parser, final List<Player> players) {
@@ -149,10 +150,10 @@ class UnitStorage {
 
 		return units;
 	}
-	
+
 	Unit getUnitById(int id) {
 		return units.stream().filter(unit -> unit.getId() == id).findAny()
 				.orElseThrow(() -> new IllegalArgumentException("There is no unit with id '" + id + "'."));
 	}
-	
+
 }

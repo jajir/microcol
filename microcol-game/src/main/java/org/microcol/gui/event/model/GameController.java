@@ -69,7 +69,7 @@ public class GameController implements Localized {
 	private Model buildComplexModel() {
 		ModelBuilder builder = new ModelBuilder();
 		builder.setCalendar(1570, 1800)
-			.setMap("/maps/test-map-simple-test.txt")
+			.setMap("/maps/test2.json")
 
 			/**
 			 * Human player
@@ -83,8 +83,8 @@ public class GameController implements Localized {
 					.setWorker(ConstructionType.RUM_DISTILLERS_HOUSE, 0, UnitType.COLONIST)
 					.setWorker(ConstructionType.CARPENTERS_SHOP, 0, UnitType.COLONIST)
 					.setWorker(ConstructionType.TOWN_HALL, 2, UnitType.COLONIST)
-					.setWorker(Location.DIRECTION_NORTH_EAST, UnitType.COLONIST)
-					.setWorker(Location.DIRECTION_SOUTH_WEST, UnitType.COLONIST)
+					.setWorker(Location.DIRECTION_NORTH_EAST, UnitType.COLONIST, GoodType.CORN)
+					.setWorker(Location.DIRECTION_SOUTH_WEST, UnitType.COLONIST, GoodType.CORN)
 					.setGood(GoodType.CIGARS, 33)
 					.setGood(GoodType.COAT, 100)
 					.setGood(GoodType.CORN, 75)

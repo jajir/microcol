@@ -39,7 +39,7 @@ public class UnitFrigateTest {
 	public void setup() {
 		unit = new Unit(type, owner, location);
 		new Expectations() {{
-			model.getMap().getTerrainAt(location); result = Terrain.OCEAN;
+			model.getMap().getTerrainTypeAt(location); result = TerrainType.OCEAN;
 			model.getMap().isValid(location); result = true;
 		}};
 		

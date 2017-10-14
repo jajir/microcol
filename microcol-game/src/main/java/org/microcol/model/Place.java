@@ -1,5 +1,8 @@
 package org.microcol.model;
 
+import org.microcol.model.store.PlacePo;
+import org.microcol.model.store.UnitPo;
+
 /**
  * Just hold information about some place.
  */
@@ -24,5 +27,14 @@ public interface Place {
 	 * should be notified.
 	 */
 	void destroy();
+
+	/**
+	 * Save place internal state to {@link PlacePo} object that could be stored.
+	 * 
+	 * @param unitPo
+	 *            required unit persistent object where will be place stored
+	 * @return return saved state to object
+	 */
+	PlacePo save(UnitPo unitPo);
 
 }

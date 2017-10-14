@@ -24,13 +24,25 @@ public class ColonyField {
 		Preconditions.checkArgument(location.isDirection(),
 				"Field location (%s) is not a valid direction", location);
 	}
+	
+	public boolean canProduce(final GoodType goodType){
+		return getTerrainType().canProduce(goodType);
+	}
 
 	public Location getDirection() {
 		return direction;
 	}
 	
+	public TerrainType getTerrainType() {
+		return getMap().getTerrainTypeAt(colony.getLocation().add(direction));
+	}
+	
 	public Terrain getTerrain() {
-		return model.getMap().getTerrainAt(colony.getLocation().add(direction));
+		return getMap().getTerrainAt(colony.getLocation().add(direction));
+	}
+	
+	private WorldMap getMap(){
+		return model.getMap();
 	}
 
 	void setModel(final Model model) {
@@ -64,7 +76,32 @@ public class ColonyField {
 		return placeColonyField.getUnit();
 	}
 	
-	void setPlaceColonyField(PlaceColonyField placeColonyField) {
+	public GoodType getProducedGoodType() {
+		return placeColonyField == null ? null : placeColonyField.getProducedGoodType();
+	}
+	
+	public int getProducedGoodsAmmount() {
+		Preconditions.checkNotNull(placeColonyField, "There in no unit placed at field");
+		final GoodType producing = placeColonyField.getProducedGoodType();
+		return getTerrain().canProduceAmmount(producing);
+	}
+	
+	public void setProducedGoodType(final GoodType producedGoodType) {
+		Preconditions.checkNotNull(placeColonyField, "There in no unit placed at field");
+		placeColonyField.setProducedGoodType(producedGoodType);
+	}
+	
+	/**
+	 * Method should be called once per turn. It produce resources on field.
+	 */
+	public void produce(final ColonyWarehouse colonyWarehouse) {
+		if (isEmpty()) {
+			return;
+		}
+		colonyWarehouse.addToWarehouse(getProducedGoodType(), getProducedGoodsAmmount());
+	}
+	
+	public void setPlaceColonyField(PlaceColonyField placeColonyField) {
 		this.placeColonyField = placeColonyField;
 	}
 }

@@ -11,6 +11,10 @@ public abstract class AbstractWarningDialog extends AbstractDialog {
 	 * 
 	 * @param viewUtil
 	 *            required utility class for showing dialog
+	 * @param text
+	 *            required localization tool
+	 * @param messageKey
+	 *            required message key
 	 */
 	public AbstractWarningDialog(final ViewUtil viewUtil, final Text text, final String messageKey) {
 		super(viewUtil);

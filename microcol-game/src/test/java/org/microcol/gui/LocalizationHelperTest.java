@@ -5,7 +5,7 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.microcol.gui.util.Text;
-import org.microcol.model.Terrain;
+import org.microcol.model.TerrainType;
 
 import mockit.Expectations;
 import mockit.Mocked;
@@ -25,8 +25,8 @@ public class LocalizationHelperTest {
 		}};
 		final LocalizationHelper helper = new LocalizationHelper(text);
 
-		assertEquals("grassland", helper.getTerrainName(Terrain.GRASSLAND));
-		assertEquals("ocean", helper.getTerrainName(Terrain.OCEAN));
+		assertEquals("grassland", helper.getTerrainName(TerrainType.GRASSLAND));
+		assertEquals("ocean", helper.getTerrainName(TerrainType.OCEAN));
 	}
 
 }

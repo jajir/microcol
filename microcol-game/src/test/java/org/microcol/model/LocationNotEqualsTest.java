@@ -12,6 +12,7 @@ import org.junit.runners.Parameterized.Parameters;
 
 @RunWith(Parameterized.class)
 public class LocationNotEqualsTest {
+	
 	@Parameters(name = "{index}: location = {0}, object = {1}")
 	public static Collection<Object[]> data() {
 		return Arrays.asList(new Object[][] {

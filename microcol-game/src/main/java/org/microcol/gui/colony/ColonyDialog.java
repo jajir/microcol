@@ -6,6 +6,7 @@ import org.microcol.gui.ImageProvider;
 import org.microcol.gui.LocalizationHelper;
 import org.microcol.gui.europe.ChooseGoodAmount;
 import org.microcol.gui.event.model.GameController;
+import org.microcol.gui.panelview.PaintService;
 import org.microcol.gui.util.AbstractDialog;
 import org.microcol.gui.util.ClipboardReader;
 import org.microcol.gui.util.ClipboardWritter;
@@ -64,7 +65,8 @@ public class ColonyDialog extends AbstractDialog implements ColonyDialogCallback
 
 	@Inject
 	public ColonyDialog(final ViewUtil viewUtil, final Text text, final ImageProvider imageProvider,
-			final GameController gameController, final LocalizationHelper localizationHelper) {
+			final GameController gameController, final LocalizationHelper localizationHelper,
+			final PaintService paintService) {
 		super(viewUtil);
 		Preconditions.checkNotNull(imageProvider);
 		getDialog().setTitle(text.get("europeDialog.caption"));
@@ -77,7 +79,7 @@ public class ColonyDialog extends AbstractDialog implements ColonyDialogCallback
 		/**
 		 * Row 1
 		 */
-		colonyFields = new PanelColonyFields(imageProvider, gameController, this);
+		colonyFields = new PanelColonyFields(imageProvider, gameController, this, paintService);
 
 		colonyStructures = new PanelColonyStructures(localizationHelper, imageProvider, gameController, this);
 

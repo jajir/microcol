@@ -7,6 +7,14 @@ import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 
+/**
+ * Define construction types.
+ * <p>
+ * When consumed and produced good type is defined than number of consumed
+ * resources is same as number of produced goods. It doesn't include other
+ * production boosters.
+ * </p>
+ */
 public class ConstructionType {
 	 
 	public final static ConstructionType TOWN_HALL = ConstructionTypeBuilder.make()
@@ -25,6 +33,7 @@ public class ConstructionType {
 			.setName("LUMBER_MILL")
 			.setBuildCostHammers(52)
 			.setBuildCostTools(0)
+			.setConsumed(GoodType.LUMBER)
 			.setProduce(GoodType.HAMMERS)
 			.setProductionPerTurn(6)
 			.setBaseProductionPerTurn(0)
@@ -37,6 +46,7 @@ public class ConstructionType {
 			.setName("CARPENTERS_SHOP")
 			.setBuildCostHammers(0)
 			.setBuildCostTools(0)
+			.setConsumed(GoodType.LUMBER)
 			.setProduce(GoodType.HAMMERS)
 			.setProductionPerTurn(6)
 			.setBaseProductionPerTurn(0)
@@ -49,9 +59,11 @@ public class ConstructionType {
 			.setName("IRON_WORKS")
 			.setBuildCostHammers(240)
 			.setBuildCostTools(100)
+			.setConsumed(GoodType.ORE)
 			.setProduce(GoodType.TOOLS)
-			.setProductionPerTurn(6)
+			.setProductionPerTurn(9)
 			.setBaseProductionPerTurn(0)
+			.setProductionRation(3 / 2F)
 	 		.setSlotsForWorkers(3)
 	 		.setUpgradeTo(null)
 	 		.setRequiredColonyPopulation(8)
@@ -61,6 +73,7 @@ public class ConstructionType {
 			.setName("BLACKSMITHS_SHOP")
 			.setBuildCostHammers(64)
 			.setBuildCostTools(20)
+			.setConsumed(GoodType.ORE)
 			.setProduce(GoodType.TOOLS)
 			.setProductionPerTurn(5)
 			.setBaseProductionPerTurn(0)
@@ -73,6 +86,7 @@ public class ConstructionType {
 			.setName("BLACKSMITHS_HOUSE")
 			.setBuildCostHammers(0)
 			.setBuildCostTools(0)
+			.setConsumed(GoodType.ORE)
 			.setProduce(GoodType.TOOLS)
 			.setProductionPerTurn(3)
 			.setBaseProductionPerTurn(0)
@@ -121,6 +135,7 @@ public class ConstructionType {
 			.setName("CIGAR_FACTORY")
 			.setBuildCostHammers(160)
 			.setBuildCostTools(100)
+			.setConsumed(GoodType.TOBACCO)
 			.setProduce(GoodType.CIGARS)
 			.setProductionPerTurn(8)
 			.setBaseProductionPerTurn(0)
@@ -133,6 +148,7 @@ public class ConstructionType {
 			.setName("TOBACCONISTS_SHOP")
 			.setBuildCostHammers(64)
 			.setBuildCostTools(20)
+			.setConsumed(GoodType.TOBACCO)
 			.setProduce(GoodType.CIGARS)
 			.setProductionPerTurn(6)
 			.setBaseProductionPerTurn(0)
@@ -145,6 +161,7 @@ public class ConstructionType {
 			.setName("TOBACCONISTS_HOUSE")
 			.setBuildCostHammers(0)
 			.setBuildCostTools(0)
+			.setConsumed(GoodType.TOBACCO)
 			.setProduce(GoodType.CIGARS)
 	 		.setSlotsForWorkers(3)
 			.setProductionPerTurn(3)
@@ -157,6 +174,7 @@ public class ConstructionType {
 			.setName("TEXTILE_MILL")
 			.setBuildCostHammers(160)
 			.setBuildCostTools(100)
+			.setConsumed(GoodType.COTTON)
 			.setProduce(GoodType.SILK)
 			.setProductionPerTurn(8)
 			.setBaseProductionPerTurn(0)
@@ -169,6 +187,7 @@ public class ConstructionType {
 			.setName("WEAVERS_SHOP")
 			.setBuildCostHammers(64)
 			.setBuildCostTools(20)
+			.setConsumed(GoodType.COTTON)
 			.setProduce(GoodType.SILK)
 			.setProductionPerTurn(6)
 			.setBaseProductionPerTurn(0)
@@ -181,6 +200,7 @@ public class ConstructionType {
 			.setName("WEAVERS_HOUSE")
 			.setBuildCostHammers(0)
 			.setBuildCostTools(0)
+			.setConsumed(GoodType.COTTON)
 			.setProduce(GoodType.SILK)
 			.setProductionPerTurn(3)
 			.setBaseProductionPerTurn(0)
@@ -193,6 +213,7 @@ public class ConstructionType {
 			.setName("RUM_FACTORY")
 			.setBuildCostHammers(160)
 			.setBuildCostTools(100)
+			.setConsumed(GoodType.SUGAR)
 			.setProduce(GoodType.RUM)
 			.setProductionPerTurn(8)
 			.setBaseProductionPerTurn(0)
@@ -205,6 +226,7 @@ public class ConstructionType {
 			.setName("RUM_DISTILLERY")
 			.setBuildCostHammers(64)
 			.setBuildCostTools(20)
+			.setConsumed(GoodType.SUGAR)
 			.setProduce(GoodType.RUM)
 			.setProductionPerTurn(6)
 			.setBaseProductionPerTurn(0)
@@ -217,6 +239,7 @@ public class ConstructionType {
 			.setName("RUM_DISTILLERS_HOUSE")
 			.setBuildCostHammers(0)
 			.setBuildCostTools(0)
+			.setConsumed(GoodType.SUGAR)
 			.setProduce(GoodType.RUM)
 			.setProductionPerTurn(3)
 			.setBaseProductionPerTurn(0)
@@ -229,6 +252,7 @@ public class ConstructionType {
 			.setName("FUR_FACTORY")
 			.setBuildCostHammers(160)
 			.setBuildCostTools(100)
+			.setConsumed(GoodType.FUR)
 			.setProduce(GoodType.COAT)
 			.setProductionPerTurn(8)
 			.setBaseProductionPerTurn(0)
@@ -241,6 +265,7 @@ public class ConstructionType {
 			.setName("FUR_TRADING_POST")
 			.setBuildCostHammers(56)
 			.setBuildCostTools(20)
+			.setConsumed(GoodType.FUR)
 			.setProduce(GoodType.COAT)
 			.setProductionPerTurn(6)
 			.setBaseProductionPerTurn(0)
@@ -253,6 +278,7 @@ public class ConstructionType {
 			.setName("FUR_TRADERS_HOUSE")
 			.setBuildCostHammers(0)
 			.setBuildCostTools(0)
+			.setConsumed(GoodType.FUR)
 			.setProduce(GoodType.COAT)
 			.setProductionPerTurn(3)
 			.setBaseProductionPerTurn(0)
@@ -265,6 +291,7 @@ public class ConstructionType {
 			.setName("ARSENAL")
 			.setBuildCostHammers(240)
 			.setBuildCostTools(100)
+			.setConsumed(GoodType.TOOLS)
 			.setProduce(GoodType.MUSKET)
 			.setProductionPerTurn(8)
 			.setBaseProductionPerTurn(0)
@@ -277,6 +304,7 @@ public class ConstructionType {
 			.setName("MAGAZINE")
 			.setBuildCostHammers(120)
 			.setBuildCostTools(50)
+			.setConsumed(GoodType.TOOLS)
 			.setProduce(GoodType.MUSKET)
 			.setProductionPerTurn(6)
 			.setBaseProductionPerTurn(0)
@@ -289,6 +317,7 @@ public class ConstructionType {
 			.setName("ARMORY")
 			.setBuildCostHammers(52)
 			.setBuildCostTools(0)
+			.setConsumed(GoodType.TOOLS)
 			.setProduce(GoodType.MUSKET)
 			.setProductionPerTurn(3)
 			.setBaseProductionPerTurn(0)
@@ -423,7 +452,7 @@ public class ConstructionType {
 			.setBuildCostTools(100)
 			.setProduce(GoodType.CROSS)
 			.setProductionPerTurn(3)
-			.setBaseProductionPerTurn(0)
+			.setBaseProductionPerTurn(1)
 	 		.setSlotsForWorkers(0)
 	 		.setUpgradeTo(null)
 	 		.setRequiredColonyPopulation(8)
@@ -435,8 +464,8 @@ public class ConstructionType {
 			.setBuildCostTools(100)
 			.setProduce(GoodType.CROSS)
 			.setProductionPerTurn(3)
-			.setBaseProductionPerTurn(0)
-	 		.setSlotsForWorkers(0)
+			.setBaseProductionPerTurn(1)
+	 		.setSlotsForWorkers(3)
 	 		.setUpgradeTo(CATHEDRAL)
 	 		.setRequiredColonyPopulation(3)
 	 		.build();
@@ -458,7 +487,7 @@ public class ConstructionType {
 			.setBuildCostHammers(80)
 			.setBuildCostTools(0)
 			.setProduce(GoodType.BELL)
-			.setProductionPerTurn(3)
+			.setProductionPerTurn(9)
 			.setBaseProductionPerTurn(0)
 	 		.setSlotsForWorkers(0)
 	 		.setUpgradeTo(NEWSPAPER)
@@ -538,8 +567,10 @@ public class ConstructionType {
 		private int buildCostTools;
 		private ConstructionType upgradeTo;
 		private GoodType produce;
+		private GoodType consumed;
 		private int productionPerTurn;
 		private int baseProductionPerTurn = 0;
+		private float productionRatio = 1F;
 		private int slotsForWorkers;
 		private int requiredColonyPopulation;
 
@@ -548,8 +579,9 @@ public class ConstructionType {
 		}
 
 		private ConstructionType build() {
-			return new ConstructionType(name, buildCostHammers, buildCostTools, upgradeTo, produce, productionPerTurn,
-					baseProductionPerTurn, slotsForWorkers, requiredColonyPopulation);
+			return new ConstructionType(name, buildCostHammers, buildCostTools, upgradeTo, produce, consumed,
+					productionPerTurn, baseProductionPerTurn, productionRatio, slotsForWorkers,
+					requiredColonyPopulation);
 		}
 
 		private ConstructionTypeBuilder setName(final String name) {
@@ -567,6 +599,11 @@ public class ConstructionType {
 			return this;
 		}
 
+		private ConstructionTypeBuilder setProductionRation(final float productionRatio) {
+			this.productionRatio = productionRatio;
+			return this;
+		}
+
 		private ConstructionTypeBuilder setUpgradeTo(final ConstructionType upgradeTo) {
 			this.upgradeTo = upgradeTo;
 			return this;
@@ -574,6 +611,11 @@ public class ConstructionType {
 
 		private ConstructionTypeBuilder setProduce(final GoodType produce) {
 			this.produce = produce;
+			return this;
+		}
+
+		private ConstructionTypeBuilder setConsumed(final GoodType consumed) {
+			this.consumed = consumed;
 			return this;
 		}
 
@@ -603,7 +645,18 @@ public class ConstructionType {
 	private final int buildCostHammers;
 	private final int buildCostTools;
 	private final ConstructionType upgradeTo;
+	
+	/**
+	 * Good type that is produced. When construction doesn't produce any goods
+	 * than it's null.
+	 */
 	private final GoodType produce;
+	
+	/**
+	 * Good type that is consumed during production. When construction doesn't
+	 * consume any goods than it's null.
+	 */
+	private final GoodType consumed;
 	
 	/**
 	 * How many goods is produces when one slot is occupied by on free colonist.
@@ -612,22 +665,37 @@ public class ConstructionType {
 	
 	/**
 	 * Basic production per turn. For example one bell is produced in each
-	 * colony each turn.
+	 * colony each turn event when no unit is in construction.
 	 */
 	private final int baseProductionPerTurn;
+	
+	/**
+	 * Construction production ratio. When building consume goods to produce
+	 * goods than this is production ration defined:
+	 * 
+	 * <pre>
+	 * consumptionPerTurn * productionRatio = productionPerTurn
+	 * </pre>
+	 * Value of consumptionPerTurn could be computed. 
+	 */
+	private final float productionRatio;
+	
 	private final int slotsForWorkers;
 	private final int requiredColonyPopulation;
 
 	private ConstructionType(final String name, final int buildCostHammers, final int buildCostTools,
-			final ConstructionType upgradeTo, final GoodType produce, final int productionPerTurn,
-			final int baseProductionPerTurn, final int slotsForWorkers, final int requiredColonyPopulation) {
+			final ConstructionType upgradeTo, final GoodType produce, final GoodType consumed,
+			final int productionPerTurn, final int baseProductionPerTurn, final float productionRatio,
+			final int slotsForWorkers, final int requiredColonyPopulation) {
 		this.name = Preconditions.checkNotNull(name);
 		this.buildCostHammers = buildCostHammers;
 		this.buildCostTools = buildCostTools;
 		this.upgradeTo = upgradeTo;
 		this.produce = produce;
+		this.consumed = consumed;
 		this.productionPerTurn = productionPerTurn;
 		this.baseProductionPerTurn = baseProductionPerTurn;
+		this.productionRatio = productionRatio;
 		this.slotsForWorkers = slotsForWorkers;
 		this.requiredColonyPopulation = requiredColonyPopulation;
 	}
@@ -692,8 +760,43 @@ public class ConstructionType {
 		}
 	}
 
+	public Optional<GoodType> getConsumed() {
+		if (consumed == null) {
+			return Optional.empty();
+		} else {
+			return Optional.of(consumed);
+		}
+	}
+
 	public int getProductionPerTurn() {
 		return productionPerTurn;
+	}
+
+	public int getConsumptionPerTurn() {
+		if (consumed == null) {
+			return 0;
+		} else {
+			return (int) (productionPerTurn / productionRatio);
+		}
+	}
+	
+	public ConstructionProduction getConstructionProduction(final Colony colony){
+		if(GoodType.BELL.equals(produce)){
+			int consumption = getConsumptionPerTurn();
+			int production = getProductionPerTurn();
+			if (colony.isContainsConstructionByType(PRINTING_PRESS)) {
+				consumption = PRINTING_PRESS.getConsumptionPerTurn();
+				production = PRINTING_PRESS.getProductionPerTurn();
+			}
+			if (colony.isContainsConstructionByType(NEWSPAPER)) {
+				consumption = NEWSPAPER.getConsumptionPerTurn();
+				production = NEWSPAPER.getProductionPerTurn();
+			}
+			return new ConstructionProduction(consumption, baseProductionPerTurn, production, consumed, produce);
+		}else{
+			return new ConstructionProduction(getConsumptionPerTurn(), baseProductionPerTurn, getProductionPerTurn(),
+					consumed, produce);
+		}
 	}
 
 	public int getBaseProductionPerTurn() {
@@ -714,6 +817,10 @@ public class ConstructionType {
 
 	public int getRequiredColonyPopulation() {
 		return requiredColonyPopulation;
+	}
+
+	public float getProductionRatio() {
+		return productionRatio;
 	}
 
 }

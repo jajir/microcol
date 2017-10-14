@@ -6,11 +6,13 @@ import org.microcol.gui.ImageProvider;
 import org.microcol.gui.Point;
 import org.microcol.gui.event.model.GameController;
 import org.microcol.gui.panelview.GamePanelView;
+import org.microcol.gui.panelview.PaintService;
 import org.microcol.gui.util.ClipboardReader;
 import org.microcol.gui.util.ClipboardWritter;
 import org.microcol.gui.util.TitledPanel;
 import org.microcol.model.Colony;
 import org.microcol.model.ColonyField;
+import org.microcol.model.GoodType;
 import org.microcol.model.Location;
 import org.microcol.model.Terrain;
 import org.slf4j.Logger;
@@ -18,6 +20,7 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
 
+import javafx.geometry.VPos;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.ContextMenu;
@@ -29,6 +32,8 @@ import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
+import javafx.scene.paint.Color;
+import javafx.scene.text.TextAlignment;
 
 /**
  * Show 3 x 3 tiles occupied by colony. User can assign worker to work outside
@@ -53,13 +58,16 @@ public class PanelColonyFields extends TitledPanel {
 	private final TileClickListener tileClickListener;
 
 	private final ContextMenu contextMenu;
+	
+	private final PaintService paintService;
 
 	public PanelColonyFields(final ImageProvider imageProvider, final GameController gameController,
-			final ColonyDialogCallback colonyDialog) {
+			final ColonyDialogCallback colonyDialog, final PaintService paintService) {
 		super("Colony layout", new Label("Colony layout"));
 		this.imageProvider = Preconditions.checkNotNull(imageProvider);
 		this.gameController = Preconditions.checkNotNull(gameController);
 		this.colonyDialog = Preconditions.checkNotNull(colonyDialog);
+		this.paintService = Preconditions.checkNotNull(paintService);
 		final int size = 3 * GamePanelView.TILE_WIDTH_IN_PX;
 		canvas = new Canvas(size, size);
 		getContentPane().getChildren().add(canvas);
@@ -81,10 +89,20 @@ public class PanelColonyFields extends TitledPanel {
 		final Optional<Location> direction = clickableArea.getDirection(Point.of(event.getX(), event.getY()));
 		if (direction.isPresent()) {
 			final ColonyField colonyField = colony.getColonyFieldInDirection(direction.get());
+			final Terrain terrain = colonyField.getTerrain();
 			if (!colonyField.isEmpty()) {
 				contextMenu.getItems().clear();
-				colonyField.getTerrain().getProductions().forEach(production -> {
-					MenuItem item = new MenuItem(production.getGoodType().name() + " x " + production.getWithTrees());
+				colonyField.getTerrainType()
+						.getProductions()
+						.stream()
+						.filter(production -> terrain.canProduceAmmount(production) > 0)
+						.forEach(production -> {
+							final MenuItem item = new MenuItem(
+							production.getGoodType().name() + "   " + terrain.canProduceAmmount(production));
+					item.setOnAction(evt -> {
+						colonyField.setProducedGoodType(production.getGoodType());
+						colonyDialog.repaint();
+					});
 					contextMenu.getItems().add(item);
 				});
 				contextMenu.show(canvas, event.getScreenX(), event.getScreenY());
@@ -160,7 +178,7 @@ public class PanelColonyFields extends TitledPanel {
 			if (colonyField.isEmpty()) {
 				final Dragboard db = event.getDragboard();
 				ClipboardReader.make(gameController.getModel(), db).tryReadUnit((unit, transferFrom) -> {
-					unit.placeToColonyField(colonyField);
+					unit.placeToColonyField(colonyField, GoodType.CORN);
 					event.setDropCompleted(true);
 					colonyDialog.repaint();
 				});
@@ -182,24 +200,25 @@ public class PanelColonyFields extends TitledPanel {
 
 	private void paint(final GraphicsContext gc) {
 		colony.getColonyFields().forEach(colonyField -> paintSection(gc, colonyField));
-		paintTile(gc, gameController.getModel().getMap().getTerrainAt(colony.getLocation()),
-				Point.of(GamePanelView.TILE_WIDTH_IN_PX, GamePanelView.TILE_WIDTH_IN_PX));
+		paintService.paintTerrainOnTile(gc, Point.of(GamePanelView.TILE_WIDTH_IN_PX, GamePanelView.TILE_WIDTH_IN_PX),
+				gameController.getModel().getMap().getTerrainAt(colony.getLocation()), false);
 	}
 
 	private void paintSection(final GraphicsContext gc, final ColonyField colonyField) {
 		final Terrain terrain = colonyField.getTerrain();
 		final Point centre = Point.of(1, 1).multiply(GamePanelView.TILE_WIDTH_IN_PX);
 		final Point point = Point.of(colonyField.getDirection()).add(centre);
-		paintTile(gc, terrain, point);
+		paintService.paintTerrainOnTile(gc, point, terrain, false);
 		if (!colonyField.isEmpty()) {
 			gc.drawImage(imageProvider.getUnitImage(colonyField.getUnit().getType()), point.getX(), point.getY());
+			//TODO on ocean show fish
+			gc.drawImage(imageProvider.getGoodTypeImage(colonyField.getProducedGoodType()), point.getX(), point.getY(),
+					25, 25);
+			gc.setTextAlign(TextAlignment.CENTER);
+			gc.setTextBaseline(VPos.CENTER);
+			gc.setFill(Color.BLACK);
+			gc.fillText("x " + colonyField.getProducedGoodsAmmount(), point.getX() + 10, point.getY() + 28);
 		}
 	}
-
-	private void paintTile(final GraphicsContext gc, final Terrain terrain, final Point point) {
-		gc.drawImage(imageProvider.getTerrainImage(terrain), 0, 0, GamePanelView.TILE_WIDTH_IN_PX,
-				GamePanelView.TILE_WIDTH_IN_PX, point.getX(), point.getY(), GamePanelView.TILE_WIDTH_IN_PX,
-				GamePanelView.TILE_WIDTH_IN_PX);
-	}
-
+	
 }

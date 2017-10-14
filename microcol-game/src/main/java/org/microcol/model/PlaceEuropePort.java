@@ -1,5 +1,10 @@
 package org.microcol.model;
 
+import org.microcol.model.store.PlaceEuropePortPo;
+import org.microcol.model.store.PlaceMapPo;
+import org.microcol.model.store.PlacePo;
+import org.microcol.model.store.UnitPo;
+
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 
@@ -30,6 +35,14 @@ public class PlaceEuropePort extends AbstractPlace {
 				.add("unit id", getUnit().getId())
 				.add("europePort", europePort)
 				.toString();
+	}
+
+	@Override
+	public PlacePo save(final UnitPo unitPo){
+		final PlaceEuropePortPo out = new PlaceEuropePortPo();
+		out.setOnPier(false);
+		unitPo.setPlaceEuropePort(out);
+		return out;
 	}
 
 }

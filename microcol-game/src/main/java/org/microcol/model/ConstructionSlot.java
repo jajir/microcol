@@ -23,5 +23,21 @@ public class ConstructionSlot {
 	public Unit getUnit(){
 		return placeConstruction.getUnit();
 	}
+	
+	/**
+	 * When there is unit than return unit production modifier otherwise return
+	 * 0.
+	 *
+	 * @param producedGoodType
+	 *            required produces good type
+	 * @return return production modifier
+	 */
+	public float getProductionModifier(final GoodType producedGoodType){
+		if(isEmpty()){
+			return 0;
+		}else{
+			return getUnit().getType().getProductionModifier(producedGoodType);
+		}
+	}
 
 }

@@ -4,29 +4,57 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
-import javax.json.stream.JsonGenerator;
 import javax.json.stream.JsonParser;
+
+import org.microcol.model.store.GamePo;
+import org.microcol.model.store.WorldMapPo;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableMap;
 
 public class WorldMap {
-	private final String fileName;
+	
 	private final int maxX;
 	private final int maxY;
-	private final ImmutableMap<Location, Terrain> terrainMap;
+	
+	private final ImmutableMap<Location, TerrainType> terrainMap;
+	
+	private final Set<Location> trees;
+	
+	public WorldMap(final GamePo gamePo){
+		final WorldMapPo worldMapPo = gamePo.getMap();
+		this.maxX = worldMapPo.getMaxX();
+		this.maxY = worldMapPo.getMaxY();
+		Preconditions.checkArgument(maxY >= 1, "Max Y (%s) must be positive.", maxY);
+		Preconditions.checkArgument(maxX >= 1, "Max X (%s) must be positive.", maxX);
+		this.terrainMap = ImmutableMap.copyOf(worldMapPo.getTerrainMap());
+		this.trees = worldMapPo.getTreeSet();
+	}
 
-	WorldMap(final String fileName) {
+	@Deprecated
+	public WorldMap(final int maxX, final int maxY, Map<Location, TerrainType> terrainMap){
+		Preconditions.checkArgument(maxX >= 1, "Max X (%s) must be positive.", maxX);
+		Preconditions.checkArgument(maxY >= 1, "Max Y (%s) must be positive.", maxY);
+		
+		this.maxX = maxX;
+		this.maxY = maxY;
+		this.terrainMap = ImmutableMap.copyOf(terrainMap);
+		this.trees = new HashSet<>();
+	}
+	
+	@Deprecated
+	public WorldMap(final String fileName) {
 		Preconditions.checkNotNull(fileName);
-
-		this.fileName = fileName;
 
 		int maxX = 0;
 		int maxY = 0;
-		final Map<Location, Terrain> terrainMap = new HashMap<>();
+		this.trees = new HashSet<>();
+		final Map<Location, TerrainType> terrainMap = new HashMap<>();
 
 		try (final BufferedReader reader = new BufferedReader(
 				new InputStreamReader(WorldMap.class.getResourceAsStream(fileName), "UTF-8"))) {
@@ -38,16 +66,16 @@ public class WorldMap {
 					final char tile = line.charAt(x);
 					switch (tile) {
 					case 'o':
-						terrainMap.put(Location.of(x + 1, maxY), Terrain.GRASSLAND);
+						terrainMap.put(Location.of(x + 1, maxY), TerrainType.GRASSLAND);
 						break;
 					case 't':
-						terrainMap.put(Location.of(x + 1, maxY), Terrain.TUNDRA);
+						terrainMap.put(Location.of(x + 1, maxY), TerrainType.TUNDRA);
 						break;
 					case 'a':
-						terrainMap.put(Location.of(x + 1, maxY), Terrain.ARCTIC);
+						terrainMap.put(Location.of(x + 1, maxY), TerrainType.ARCTIC);
 						break;
 					case 'h':
-						terrainMap.put(Location.of(x + 1, maxY), Terrain.HIGH_SEA);
+						terrainMap.put(Location.of(x + 1, maxY), TerrainType.HIGH_SEA);
 						break;
 					case ' ':
 						// Do nothing.
@@ -60,17 +88,13 @@ public class WorldMap {
 		} catch (IOException ex) {
 			throw new IllegalArgumentException(String.format("Unable to load map from file (%s)", fileName), ex);
 		}
-
+		//XXX it's duplicated code
 		Preconditions.checkArgument(maxX >= 1, "Max X (%s) must be positive.", maxX);
 		Preconditions.checkArgument(maxY >= 1, "Max Y (%s) must be positive.", maxY);
 
 		this.maxX = maxX;
 		this.maxY = maxY;
 		this.terrainMap = ImmutableMap.copyOf(terrainMap);
-	}
-
-	public String getFileName() {
-		return fileName;
 	}
 
 	public int getMaxX() {
@@ -81,12 +105,33 @@ public class WorldMap {
 		return maxY;
 	}
 
-	public Terrain getTerrainAt(final Location location) {
+	public TerrainType getTerrainTypeAt(final Location location) {
 		Preconditions.checkArgument(isValid(location), "Location (%s) is not part of this map.", location);
 
-		Terrain terrain = terrainMap.get(location);
+		TerrainType terrain = terrainMap.get(location);
 
-		return terrain != null ? terrain : Terrain.OCEAN;
+		return terrain != null ? terrain : TerrainType.OCEAN;
+	}
+	
+	/**
+	 * Provide info about trees on specific location.
+	 * 
+	 * @param location
+	 *            required location
+	 * @return return <code>true</code> if location contain tree otherwise
+	 *         return <code>false</code>
+	 */
+	public boolean isTreeAt(final Location location){
+		Preconditions.checkArgument(isValid(location), "Location (%s) is not part of this map.", location);
+		
+		return trees.contains(location);
+	}
+	
+	public Terrain getTerrainAt(final Location location){
+		Preconditions.checkArgument(isValid(location), "Location (%s) is not part of this map.", location);
+		final Terrain out = new Terrain(location, getTerrainTypeAt(location));
+		out.setHasTrees(trees.contains(location));
+		return out;
 	}
 
 	public boolean isValid(final Location location) {
@@ -104,12 +149,17 @@ public class WorldMap {
 
 	@Override
 	public String toString() {
-		return MoreObjects.toStringHelper(this).add("fileName", fileName).add("maxX", maxX).add("maxY", maxY)
+		return MoreObjects.toStringHelper(this)
+				.add("maxX", maxX)
+				.add("maxY", maxY)
 				.add("landmass", terrainMap.keySet().size()).toString();
 	}
 
-	void save(final String name, final JsonGenerator generator) {
-		generator.writeStartObject(name).write("fileName", fileName).writeEnd();
+	void save(final GamePo gamePo) {
+		gamePo.getMap().setMaxX(maxX);
+		gamePo.getMap().setMaxY(maxY);
+		gamePo.getMap().setTerrainType(terrainMap);
+		gamePo.getMap().setTrees(trees);
 	}
 
 	static WorldMap load(final JsonParser parser) {

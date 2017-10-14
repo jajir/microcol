@@ -1,7 +1,8 @@
 package org.microcol.model;
 
+import java.util.Comparator;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
@@ -13,13 +14,18 @@ public class Construction {
 	private final ConstructionType type;
 
 	private final List<ConstructionSlot> workingSlots;
-
-	Construction(final ConstructionType type) {
+	
+	Construction(final ConstructionType type, final List<ConstructionSlot> workingSlots) {
 		this.type = Preconditions.checkNotNull(type);
-		workingSlots = Lists.newArrayList();
+		this.workingSlots = Preconditions.checkNotNull(workingSlots);
+	}
+	
+	static Construction build(final ConstructionType type){
+		final List<ConstructionSlot> list = Lists.newArrayList();
 		for (int i = 0; i < type.getSlotsForWorkers(); i++) {
-			workingSlots.add(new ConstructionSlot());
+			list.add(new ConstructionSlot());
 		}
+		return new Construction(type, list);
 	}
 
 	public ConstructionType getType() {
@@ -51,19 +57,64 @@ public class Construction {
 	public List<ConstructionSlot> getConstructionSlots() {
 		return ImmutableList.copyOf(workingSlots);
 	}
-	
-	ConstructionSlot getSlotAt(final int index){
+
+	ConstructionSlot getSlotAt(final int index) {
 		return workingSlots.get(index);
 	}
-	
-	public int getProductionPerTurn(){
-		final AtomicInteger sum = new AtomicInteger(type.getBaseProductionPerTurn());
-		workingSlots.forEach(slot -> {
-			if (!slot.isEmpty()) {
-				//TODO JJ use here unit production multiplier.
-				sum.addAndGet(type.getProductionPerTurn());
-			}
-		});
-		return sum.get();
+
+	public int getProductionPerTurn(final Colony colony) {
+		return getProduction(colony, colony.getNexTurnTempWarehouse()).getRealProductionPerTurn();
 	}
+
+	List<ConstructionSlot> getOrderedSlots() {
+		return workingSlots.stream()
+				.sorted(Comparator.comparing(sort -> -sort.getProductionModifier(getType().getProduce().get())))
+				.collect(Collectors.toList());
+	}
+	
+	/**
+	 * Return value is computed base on construction type basic production per
+	 * turn.
+	 *
+	 * @return return basic production per turn
+	 */
+	public int getBasicProductionPerSlot(){
+		return getType().getProductionPerTurn();
+	}
+
+	public ConstructionProduction getProduction(final Colony colony, final ColonyWarehouse colonyWarehouse) {
+		if (getType().getProduce().isPresent()) {
+			final GoodType producedGoodType = getType().getProduce().get();
+			ConstructionProduction out = ConstructionProduction.EMPTY;
+			for (final ConstructionSlot slot : getConstructionSlots()) {
+				final ConstructionProduction tmp = getType().getConstructionProduction(colony)
+						.multiply(slot.getProductionModifier(producedGoodType));
+				out = out.add(tmp);
+			}
+			out = out.limit(colonyWarehouse);
+			return out;
+		}else{
+			return ConstructionProduction.EMPTY;
+		}
+	}
+	
+	
+	/**
+	 * Method should be called once per turn. It produce resources on field.
+	 *
+	 * @param required
+	 *            colony where is warehouse and construction placed
+	 * @param colonyWarehouse
+	 *            required colony warehouse
+	 */
+	public void produce(final Colony colony, final ColonyWarehouse colonyWarehouse) {
+		if (getType().getProduce().isPresent()) {
+			final GoodType producedGoodType = getType().getProduce().get();
+			getConstructionSlots().forEach(slot -> {
+				getType().getConstructionProduction(colony).multiply(slot.getProductionModifier(producedGoodType))
+						.limit(colonyWarehouse).consume(colonyWarehouse);
+			});
+		}
+	}
+
 }

@@ -84,15 +84,15 @@ public class Colony {
 	}
 	
 	/**
-	 * Perform operation for next turn.
+	 * Perform operation for next turn. Producing order:
+	 * <ul>
+	 * <li>Outside colony produce</li>
+	 * <li>Inside colony</li>
+	 * </ul>
 	 */
 	public void startTurn(){
-		constructions.forEach(construction -> {
-			if (construction.getType().getProduce().isPresent()) {
-				colonyWarehouse.putToWarehouse(construction.getType().getProduce().get(),
-						construction.getProductionPerTurn());
-			}
-		});
+		colonyFields.forEach(field -> field.produce(colonyWarehouse));
+		constructions.forEach(construction -> construction.produce(this, getColonyWarehouse()));
 	}
 	
 	public List<Unit> getUnitsInPort() {
@@ -109,6 +109,11 @@ public class Colony {
 		return constructions.stream().filter(construction -> construction.getType().equals(constructionType)).findAny()
 				.orElseThrow(() -> new IllegalStateException(
 						String.format("No such construction type (%s) in colony (%s)", constructionType, getName())));
+	}
+	
+	public boolean isContainsConstructionByType(final ConstructionType constructionType) {
+		return constructions.stream().filter(construction -> construction.getType().equals(constructionType)).findAny()
+				.isPresent();
 	}
 	
 	ConstructionType getWarehouseType() {
@@ -165,5 +170,17 @@ public class Colony {
 
 	public ColonyWarehouse getColonyWarehouse() {
 		return colonyWarehouse;
+	}
+	
+	/**
+	 * Return contains of warehouse after fields produce it's goods in next
+	 * turn.
+	 * 
+	 * @return return colony warehouse
+	 */
+	public ColonyWarehouse getNexTurnTempWarehouse(){
+		ColonyWarehouse out = colonyWarehouse.clone();
+		colonyFields.forEach(field -> field.produce(out));
+		return out;
 	}
 }

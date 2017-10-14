@@ -67,10 +67,11 @@ public class ColonyBuilder {
 		return this;
 	}
 
-	public ColonyBuilder setWorker(final Location fieldDirection, final UnitType unitType) {
+	public ColonyBuilder setWorker(final Location fieldDirection, final UnitType unitType,
+			final GoodType producedGoodType) {
 		Preconditions.checkNotNull(fieldDirection);
 		Preconditions.checkNotNull(unitType);
-		fieldPlaces.add(new FieldPlace(fieldDirection, unitType));
+		fieldPlaces.add(new FieldPlace(fieldDirection, unitType, producedGoodType));
 		return this;
 	}
 
@@ -129,10 +130,12 @@ public class ColonyBuilder {
 
 		private final Location fieldDirection;
 		private final UnitType unitType;
+		private final GoodType producedGoodType;
 
-		FieldPlace(final Location fieldDirection, final UnitType unitType) {
+		FieldPlace(final Location fieldDirection, final UnitType unitType, final GoodType producedGoodType) {
 			this.fieldDirection = Preconditions.checkNotNull(fieldDirection);
 			this.unitType = Preconditions.checkNotNull(unitType);
+			this.producedGoodType = Preconditions.checkNotNull(producedGoodType);
 		}
 
 		public Location getFieldDirection() {
@@ -141,6 +144,10 @@ public class ColonyBuilder {
 
 		public UnitType getUnitType() {
 			return unitType;
+		}
+
+		public GoodType getProducedGoodType() {
+			return producedGoodType;
 		}
 
 	}

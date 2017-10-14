@@ -1,6 +1,7 @@
 package org.microcol.gui.util;
 
 import org.microcol.gui.ImageProvider;
+import org.microcol.gui.panelview.GamePanelView;
 import org.microcol.model.CargoSlot;
 import org.microcol.model.GoodAmount;
 import org.microcol.model.Unit;
@@ -51,8 +52,8 @@ public class PanelDockCrate extends StackPane {
 
 		cargoImage = new ImageView();
 		cargoImage.getStyleClass().add("cargo");
-		cargoImage.setFitWidth(35);
-		cargoImage.setFitHeight(35);
+		cargoImage.setFitWidth(GamePanelView.TILE_WIDTH_IN_PX);
+		cargoImage.setFitHeight(GamePanelView.TILE_WIDTH_IN_PX);
 		cargoImage.setPreserveRatio(true);
 
 		labelAmount = new Label(" ");

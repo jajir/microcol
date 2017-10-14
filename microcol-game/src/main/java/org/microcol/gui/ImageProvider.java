@@ -6,7 +6,7 @@ import java.util.Map;
 
 import org.microcol.model.GoodAmount;
 import org.microcol.model.GoodType;
-import org.microcol.model.Terrain;
+import org.microcol.model.TerrainType;
 import org.microcol.model.Unit;
 import org.microcol.model.UnitType;
 
@@ -46,7 +46,7 @@ public class ImageProvider {
 
 	private static final String IMG_TILE_HIGH_SEA = "tile-high-sea.png";
 
-	private static final String IMG_TILE_LAND = "tile-land.png";
+	private static final String IMG_TILE_GRASSLAND = "tile-grassland.png";
 
 	private static final String IMG_TILE_SHIP_GALEON = "tile-ship-galeon.png";
 
@@ -68,6 +68,12 @@ public class ImageProvider {
 	public static final String IMG_CROSSED_SWORDS = "crossed-swords.png";
 
 	public static final String IMG_GOOD_CORN = "good-corn.png";
+
+	public static final String IMG_GOOD_BELL = "good-bell.png";
+
+	public static final String IMG_GOOD_HAMMER = "good-hammer.png";
+
+	public static final String IMG_GOOD_CROSS = "good-cross.png";
 
 	public static final String IMG_GOOD_SUGAR = "good-sugar.png";
 
@@ -105,18 +111,20 @@ public class ImageProvider {
 
 	public static final String IMG_TILE_TOWN = "tile-town.png";
 
+	public static final String IMG_TREE = "tree.png";
+
 	public static final String IMG_TILE_FIELD = "tile-field.png";
 
 	private static final String BASE_PACKAGE = "images";
 
 	private final Map<String, Image> images;
 
-	private final Map<Terrain, Image> terrainMap = ImmutableMap.<Terrain, Image>builder()
-			.put(Terrain.GRASSLAND, getRawImage(IMG_TILE_LAND))
-			.put(Terrain.OCEAN, getRawImage(IMG_TILE_OCEAN))
-			.put(Terrain.TUNDRA, getRawImage(IMG_TILE_TUNDRA))
-			.put(Terrain.ARCTIC, getRawImage(IMG_TILE_ARCTIC))
-			.put(Terrain.HIGH_SEA, getRawImage(IMG_TILE_HIGH_SEA))
+	private final Map<TerrainType, Image> terrainMap = ImmutableMap.<TerrainType, Image>builder()
+			.put(TerrainType.GRASSLAND, getRawImage(IMG_TILE_GRASSLAND))
+			.put(TerrainType.OCEAN, getRawImage(IMG_TILE_OCEAN))
+			.put(TerrainType.TUNDRA, getRawImage(IMG_TILE_TUNDRA))
+			.put(TerrainType.ARCTIC, getRawImage(IMG_TILE_ARCTIC))
+			.put(TerrainType.HIGH_SEA, getRawImage(IMG_TILE_HIGH_SEA))
 			.build();
 
 	private final Map<UnitType, Image> unitImageMap = ImmutableMap.<UnitType, Image>builder()
@@ -125,14 +133,25 @@ public class ImageProvider {
 			.put(UnitType.COLONIST, getRawImage(IMG_UNIT_FREE_COLONIST)).build();
 
 	private final Map<GoodType, Image> goodTypeImageMap = ImmutableMap.<GoodType, Image>builder()
-			.put(GoodType.CORN, getRawImage(IMG_GOOD_CORN)).put(GoodType.SUGAR, getRawImage(IMG_GOOD_SUGAR))
-			.put(GoodType.TABACCO, getRawImage(IMG_GOOD_TOBACCO)).put(GoodType.COTTON, getRawImage(IMG_GOOD_COTTON))
-			.put(GoodType.FUR, getRawImage(IMG_GOOD_FUR)).put(GoodType.LUMBER, getRawImage(IMG_GOOD_LUMBER))
-			.put(GoodType.ORE, getRawImage(IMG_GOOD_ORE)).put(GoodType.SILVER, getRawImage(IMG_GOOD_SILVER))
-			.put(GoodType.HORSE, getRawImage(IMG_GOOD_HORSE)).put(GoodType.RUM, getRawImage(IMG_GOOD_RUM))
-			.put(GoodType.CIGARS, getRawImage(IMG_GOOD_CIGARS)).put(GoodType.SILK, getRawImage(IMG_GOOD_SILK))
-			.put(GoodType.COAT, getRawImage(IMG_GOOD_COAT)).put(GoodType.GOODS, getRawImage(IMG_GOOD_GOODS))
-			.put(GoodType.TOOLS, getRawImage(IMG_GOOD_TOOLS)).put(GoodType.MUSKET, getRawImage(IMG_GOOD_MUSKET))
+			.put(GoodType.CORN, getRawImage(IMG_GOOD_CORN))
+			.put(GoodType.BELL, getRawImage(IMG_GOOD_BELL))
+			.put(GoodType.HAMMERS, getRawImage(IMG_GOOD_HAMMER))
+			.put(GoodType.CROSS, getRawImage(IMG_GOOD_CROSS))
+			.put(GoodType.SUGAR, getRawImage(IMG_GOOD_SUGAR))
+			.put(GoodType.TOBACCO, getRawImage(IMG_GOOD_TOBACCO))
+			.put(GoodType.COTTON, getRawImage(IMG_GOOD_COTTON))
+			.put(GoodType.FUR, getRawImage(IMG_GOOD_FUR))
+			.put(GoodType.LUMBER, getRawImage(IMG_GOOD_LUMBER))
+			.put(GoodType.ORE, getRawImage(IMG_GOOD_ORE))
+			.put(GoodType.SILVER, getRawImage(IMG_GOOD_SILVER))
+			.put(GoodType.HORSE, getRawImage(IMG_GOOD_HORSE))
+			.put(GoodType.RUM, getRawImage(IMG_GOOD_RUM))
+			.put(GoodType.CIGARS, getRawImage(IMG_GOOD_CIGARS))
+			.put(GoodType.SILK, getRawImage(IMG_GOOD_SILK))
+			.put(GoodType.COAT, getRawImage(IMG_GOOD_COAT))
+			.put(GoodType.GOODS, getRawImage(IMG_GOOD_GOODS))
+			.put(GoodType.TOOLS, getRawImage(IMG_GOOD_TOOLS))
+			.put(GoodType.MUSKET, getRawImage(IMG_GOOD_MUSKET))
 			.build();
 
 	public ImageProvider() {
@@ -182,7 +201,7 @@ public class ImageProvider {
 	 *            required terrain type
 	 * @return image representing terrain image
 	 */
-	public Image getTerrainImage(final Terrain terrain) {
+	public Image getTerrainImage(final TerrainType terrain) {
 		return terrainMap.get(terrain);
 	}
 

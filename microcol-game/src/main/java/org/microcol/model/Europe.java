@@ -14,7 +14,7 @@ public class Europe {
 	private final Model model;
 
 	private final List<GoodTrade> goodTrades = ImmutableList.of(new GoodTrade(GoodType.CORN, 0, 8),
-			new GoodTrade(GoodType.SUGAR, 3, 5), new GoodTrade(GoodType.TABACCO, 3, 5),
+			new GoodTrade(GoodType.SUGAR, 3, 5), new GoodTrade(GoodType.TOBACCO, 3, 5),
 			new GoodTrade(GoodType.COTTON, 3, 5), new GoodTrade(GoodType.FUR, 0, 8),
 			new GoodTrade(GoodType.LUMBER, 0, 8), new GoodTrade(GoodType.ORE, 0, 8),
 			new GoodTrade(GoodType.SILVER, 0, 8), new GoodTrade(GoodType.HORSE, 0, 8),

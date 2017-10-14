@@ -7,8 +7,9 @@ import java.util.Optional;
 import java.util.Random;
 import java.util.Set;
 
-import javax.json.stream.JsonGenerator;
 import javax.json.stream.JsonParser;
+
+import org.microcol.model.store.UnitPo;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
@@ -46,8 +47,8 @@ public class Unit {
 	}
 	
 	private void validateTerrain(){
-		if(isAtMap()){
-			final Terrain t = model.getMap().getTerrainAt(getLocation());
+		if(isAtPlaceLocation()){
+			final TerrainType t = model.getMap().getTerrainTypeAt(getLocation());
 			Preconditions.checkState(isMoveable(getLocation(), true),
 					String.format("Unit (%s) is not at valid terrain (%s)", this, t));
 		}
@@ -62,16 +63,22 @@ public class Unit {
 	}
 
 	public Location getLocation() {
-		Preconditions.checkArgument(isAtPlaceLocation(), "Unit (%s) is not at map. ", this);
+		verifyThatUnitIsAtMap();
+		
 		return ((PlaceLocation) place).getLocation();
 	}
 
 	public int getAvailableMoves() {
-		Preconditions.checkState(isAtMap(),"Moving unit have to be at map");
-
+		verifyThatUnitIsAtMap();
+		
 		return availableMoves;
 	}
 
+	private void verifyThatUnitIsAtMap() {
+		Preconditions.checkState(isAtPlaceLocation(), "Moving unit have to be at map. Unit (%s) is at (%s)", this,
+				place);
+	}
+	
 	public Cargo getCargo() {
 		return cargo;
 	}
@@ -125,7 +132,7 @@ public class Unit {
 			return false;
 		}
 
-		if (!type.canMoveAtTerrain(model.getMap().getTerrainAt(location))) {
+		if (!type.canMoveAtTerrain(model.getMap().getTerrainTypeAt(location))) {
 			if(isPossibleGoToPort(location)){
 				return true;
 			}
@@ -146,7 +153,7 @@ public class Unit {
 
 	// TODO JKA VRACET LOCATION?
 	public List<Unit> getAttackableTargets() {
-		Preconditions.checkState(isAtMap(),"Moving unit have to be at map");
+		verifyThatUnitIsAtMap();
 
 		if (!type.canAttack()) {
 			return ImmutableList.of();
@@ -233,7 +240,7 @@ public class Unit {
 	}
 
 	private boolean canUnitDisembarkAt(final Location targeLocation) {
-		return getType().canMoveAtTerrain(model.getMap().getTerrainAt(targeLocation));
+		return getType().canMoveAtTerrain(model.getMap().getTerrainTypeAt(targeLocation));
 	}
 
 	public boolean isPossibleToEmbarkAt(final Location targetLocation, boolean inCurrentTurn) {
@@ -250,7 +257,7 @@ public class Unit {
 		if (model.getUnitsAt(targetLocation).isEmpty()) {
 			return false;
 		} else {
-			if (type.canMoveAtTerrain(model.getMap().getTerrainAt(targetLocation))) {
+			if (type.canMoveAtTerrain(model.getMap().getTerrainTypeAt(targetLocation))) {
 				if (isSameOwner(model.getUnitsAt(targetLocation))) {
 					return false;
 				} else {
@@ -288,7 +295,7 @@ public class Unit {
 	}
 
 	public List<Unit> getStorageUnits() {
-		Preconditions.checkState(isAtMap(),"Moving unit have to be at map");
+		verifyThatUnitIsAtMap();
 
 		return getLocation().getNeighbors().stream().flatMap(neighbor -> owner.getUnitsAt(neighbor).stream())
 				.filter(unit -> unit != this).filter(unit -> unit.getCargo().getSlots().stream()
@@ -307,13 +314,13 @@ public class Unit {
 	}
 
 	public Optional<List<Location>> getPath(final Location destination) {
-		Preconditions.checkState(isAtMap(), "Moving unit have to be at map");
+		verifyThatUnitIsAtMap();
 
 		return getPath(destination, false);
 	}
 
 	public Optional<List<Location>> getPath(final Location destination, final boolean excludeDestination) {
-		Preconditions.checkState(isAtMap(), "Moving unit have to be at map");
+		verifyThatUnitIsAtMap();
 
 		PathFinder finder = new PathFinder(this, getLocation(), destination, excludeDestination);
 
@@ -321,7 +328,7 @@ public class Unit {
 	}
 
 	public void moveTo(final Path path) {
-		Preconditions.checkState(isAtMap(), "Moving unit have to be at map");
+		verifyThatUnitIsAtMap();
 
 		model.checkGameRunning();
 		model.checkCurrentPlayer(owner);
@@ -343,7 +350,7 @@ public class Unit {
 			}
 			if (!isMoveable(newLocation)) {
 				throw new IllegalArgumentException(String.format("Path (%s) must contain only moveable terrain (%s).",
-						newLocation, model.getMap().getTerrainAt(newLocation)));
+						newLocation, model.getMap().getTerrainTypeAt(newLocation)));
 			}
 			locations.add(newLocation);
 			((PlaceLocation) place).setLocation(newLocation);
@@ -351,8 +358,8 @@ public class Unit {
 		}
 		if (!locations.isEmpty()) {
 			final Path reallyExecutedPath = Path.of(locations);
-			final Terrain targetTerrain = model.getMap().getTerrainAt(reallyExecutedPath.getTarget());
-			if (targetTerrain == Terrain.HIGH_SEA) {
+			final TerrainType targetTerrain = model.getMap().getTerrainTypeAt(reallyExecutedPath.getTarget());
+			if (targetTerrain == TerrainType.HIGH_SEA) {
 				placeToHighSeas(true);
 			}
 			model.fireUnitMoved(this, start, reallyExecutedPath);
@@ -360,14 +367,14 @@ public class Unit {
 	}
 
 	public void attack(final Location location) {
-		Preconditions.checkState(isAtMap(),"Moving unit have to be at map");
+		verifyThatUnitIsAtMap();
 
 		model.checkGameRunning();
 		model.checkCurrentPlayer(owner);
 
 		Preconditions.checkState(type.canAttack(), "This unit type (%s) cannot attack.", this);
 		Preconditions.checkNotNull(location);
-		Preconditions.checkArgument(type.canMoveAtTerrain(model.getMap().getTerrainAt(location)),
+		Preconditions.checkArgument(type.canMoveAtTerrain(model.getMap().getTerrainTypeAt(location)),
 				"Target location (%s) is not moveable for this unit (%s)", location, this);
 		Preconditions.checkArgument(this.getLocation().isNeighbor(location),
 				"Unit location (%s) is not neighbor to target location (%s).", this.getLocation(), location);
@@ -404,10 +411,6 @@ public class Unit {
 
 	public boolean isAtEuropePort() {
 		return place instanceof PlaceEuropePort;
-	}
-
-	public boolean isAtMap() {
-		return place instanceof PlaceLocation;
 	}
 
 	public boolean isAtEuropePier() {
@@ -483,13 +486,13 @@ public class Unit {
 		structureSlot.set((PlaceConstructionSlot)place);
 	}
 	
-	public void placeToColonyField(final ColonyField colonyField){
+	public void placeToColonyField(final ColonyField colonyField, final GoodType producedGoodType){
 		Preconditions.checkNotNull(colonyField);
 		Preconditions.checkState(!isAtEuropePort(), "Unit can't skip from europe port to map");
 		Preconditions.checkState(!isAtEuropePier(), "Unit can't skip from europe port pier to map");
 		Preconditions.checkState(colonyField.isEmpty(), "Unit can't be placed to non empty colony field");
 		place.destroy();
-		place = new PlaceColonyField(this, colonyField);
+		place = new PlaceColonyField(this, colonyField, producedGoodType);
 		colonyField.setPlaceColonyField((PlaceColonyField)place);
 	}
 
@@ -530,14 +533,14 @@ public class Unit {
 				.add("place", place.getName()).toString();
 	}
 
-	void save(final JsonGenerator generator) {
-		generator.writeStartObject();
-		generator.write("type", type.name());
-		generator.write("owner", owner.getName());
-		getLocation().save("location", generator);
-		generator.write("availableMoves", availableMoves);
-		// TODO JKA Implement save/load
-		generator.writeEnd();
+	UnitPo save() {
+		final UnitPo unitPo = new UnitPo();
+		unitPo.setId(id);
+		unitPo.setAvailableMoves(availableMoves);
+		unitPo.setOwnerId(owner.getName());
+		unitPo.setType(type.name());
+		place.save(unitPo);
+		return unitPo;
 	}
 
 	static Unit load(final JsonParser parser, final List<Player> players) {

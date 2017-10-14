@@ -67,6 +67,7 @@ class GameManager {
 	void endTurn() {
 		checkGameRunning();
 
+		//XXX JJ ordering of players should be human, AI, Natives
 		final int index = model.getPlayers().indexOf(currentPlayer);
 		if (index < model.getPlayers().size() - 1) {
 			currentPlayer = model.getPlayers().get(index + 1);

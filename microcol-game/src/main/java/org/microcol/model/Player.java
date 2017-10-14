@@ -133,8 +133,8 @@ public final class Player {
 	 *         location otherwise return <code>false</code>.
 	 */
 	public boolean isPossibleToSailAt(final Location target) {
-		final Terrain t = model.getMap().getTerrainAt(target);
-		if (t == Terrain.OCEAN) {
+		final TerrainType t = model.getMap().getTerrainTypeAt(target);
+		if (t == TerrainType.OCEAN) {
 			return isItPlayersUnits(model.getUnitsAt(target));
 		} else {
 			return false;
