@@ -63,7 +63,7 @@ public class Construction {
 	}
 
 	public int getProductionPerTurn(final Colony colony) {
-		return getProduction(colony, colony.getColonyWarehouse()).getRealProductionPerTurn();
+		return getProduction(colony, colony.getNexTurnTempWarehouse()).getRealProductionPerTurn();
 	}
 
 	List<ConstructionSlot> getOrderedSlots() {

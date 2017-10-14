@@ -1,5 +1,8 @@
 package org.microcol.model;
 
+import com.google.common.base.MoreObjects;
+import com.google.common.base.Preconditions;
+
 /**
  * Holds what is produces and consumes in one construction. Class could hold
  * production for one slot and even for all slots.
@@ -28,6 +31,14 @@ public class ConstructionProduction {
 		this.productionPerTurn = productionPerTurn;
 		this.consumedGoods = consumedGoods;
 		this.producedGoods = producedGoods;
+		if(consumedGoods==null){
+			Preconditions.checkArgument(consumptionPerTurn == 0,
+					"When consumed goods is null than consumption per turn should be 0, but it's (%s).", productionPerTurn);
+		}
+		if(producedGoods == null){
+			Preconditions.checkArgument(consumptionPerTurn == 0,
+					"When produced goods is null than production per turn should be 0, but it's (%s).", productionPerTurn);			
+		}
 	}
 	
 	public ConstructionProduction multiply(final float multiplier){
@@ -47,8 +58,8 @@ public class ConstructionProduction {
 				getConsumptionPerTurn() + production.getConsumptionPerTurn(),
 				production.getBaseProductionPerTurn(),
 				getProductionPerTurn() + production.getProductionPerTurn(),
-				consumedGoods,
-				producedGoods);		
+				consumedGoods == null ? production.getConsumedGoods() : consumedGoods,
+				producedGoods == null ? production.getProducedGoods() : producedGoods);
 	}
 	
 	/**
@@ -70,6 +81,17 @@ public class ConstructionProduction {
 			return new ConstructionProduction(willConsumeGoods, baseProductionPerTurn, willProduceGoods, consumedGoods,
 					producedGoods);
 		}
+	}
+	
+	@Override
+	public String toString() {
+		return MoreObjects.toStringHelper(ConstructionProduction.class)
+				.add("consumptionPerTurn", consumptionPerTurn)
+				.add("baseProductionPerTurn", baseProductionPerTurn)
+				.add("productionPerTurn", productionPerTurn)
+				.add("consumedGoods", consumedGoods)
+				.add("producedGoods", producedGoods)
+				.toString();
 	}
 	
 	/**

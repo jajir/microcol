@@ -91,7 +91,7 @@ public class Colony {
 	 * </ul>
 	 */
 	public void startTurn(){
-		colonyFields.forEach(ColonyField::produce);
+		colonyFields.forEach(field -> field.produce(colonyWarehouse));
 		constructions.forEach(construction -> construction.produce(this, getColonyWarehouse()));
 	}
 	
@@ -170,5 +170,17 @@ public class Colony {
 
 	public ColonyWarehouse getColonyWarehouse() {
 		return colonyWarehouse;
+	}
+	
+	/**
+	 * Return contains of warehouse after fields produce it's goods in next
+	 * turn.
+	 * 
+	 * @return return colony warehouse
+	 */
+	public ColonyWarehouse getNexTurnTempWarehouse(){
+		ColonyWarehouse out = colonyWarehouse.clone();
+		colonyFields.forEach(field -> field.produce(out));
+		return out;
 	}
 }

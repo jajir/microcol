@@ -94,11 +94,11 @@ public class ColonyField {
 	/**
 	 * Method should be called once per turn. It produce resources on field.
 	 */
-	public void produce() {
+	public void produce(final ColonyWarehouse colonyWarehouse) {
 		if (isEmpty()) {
 			return;
 		}
-		colony.getColonyWarehouse().addToWarehouse(getProducedGoodType(), getProducedGoodsAmmount());
+		colonyWarehouse.addToWarehouse(getProducedGoodType(), getProducedGoodsAmmount());
 	}
 	
 	public void setPlaceColonyField(PlaceColonyField placeColonyField) {

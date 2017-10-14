@@ -21,15 +21,31 @@ public class ColonyWarehouse {
 
 	private final Colony colony;
 
-	private final Map<GoodType, Integer> goodAmounts = new HashMap<>();
+	private final Map<GoodType, Integer> goodAmounts;
 
 	ColonyWarehouse(final Colony colony) {
 		this.colony = colony;
+		this.goodAmounts = new HashMap<>();
+	}
+
+	ColonyWarehouse(final Colony colony, final Map<GoodType, Integer> goodAmounts) {
+		this.colony = colony;
+		this.goodAmounts = goodAmounts;
 	}
 
 	static List<Colony> load(final JsonParser parser, final List<Player> players) {
-		// TODO JJ NYI
+		// TODO JJ NYI, remove this function
 		return Lists.newArrayList();
+	}
+	
+	/**
+	 * Make data copy of this instance.
+	 */
+	@Override
+	public ColonyWarehouse clone(){
+		Map<GoodType, Integer> tmp = new HashMap<>();
+		tmp.putAll(goodAmounts);
+		return new ColonyWarehouse(colony, tmp);
 	}
 
 	public Integer getGoodAmmount(final GoodType goodType) {
