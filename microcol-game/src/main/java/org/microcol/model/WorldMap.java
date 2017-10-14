@@ -8,8 +8,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import javax.json.stream.JsonParser;
-
 import org.microcol.model.store.GamePo;
 import org.microcol.model.store.WorldMapPo;
 
@@ -162,13 +160,4 @@ public class WorldMap {
 		gamePo.getMap().setTrees(trees);
 	}
 
-	static WorldMap load(final JsonParser parser) {
-		parser.next(); // START_OBJECT
-		parser.next(); // KEY_NAME
-		parser.next(); // VALUE_STRING
-		final String fileName = parser.getString();
-		parser.next(); // END_OBJECT
-
-		return new WorldMap(fileName);
-	}
 }

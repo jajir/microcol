@@ -1,8 +1,5 @@
 package org.microcol.model;
 
-import javax.json.stream.JsonGenerator;
-import javax.json.stream.JsonParser;
-
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 
@@ -50,32 +47,5 @@ public final class Calendar {
 			.add("endYear", endYear)
 			.add("currentYear", currentYear)
 			.toString();
-	}
-
-	void save(final String name, final JsonGenerator generator) {
-		generator.writeStartObject(name)
-			.write("startYear", startYear)
-			.write("endYear", endYear)
-			.write("currentYear", currentYear)
-			.writeEnd();
-	}
-
-	static Calendar load(final JsonParser parser) {
-		parser.next(); // START_OBJECT
-		parser.next(); // KEY_NAME
-		parser.next(); // VALUE_NUMBER
-		final int startYear = parser.getInt();
-		parser.next(); // KEY_NAME
-		parser.next(); // VALUE_NUMBER
-		final int endYear = parser.getInt();
-		parser.next(); // KEY_NAME
-		parser.next(); // VALUE_NUMBER
-		final int currentYear = parser.getInt();
-		parser.next(); // END_OBJECT
-
-		Calendar calendar = new Calendar(startYear, endYear);
-		calendar.currentYear = currentYear;
-
-		return calendar;
 	}
 }

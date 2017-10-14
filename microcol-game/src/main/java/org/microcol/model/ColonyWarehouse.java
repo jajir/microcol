@@ -1,16 +1,12 @@
 package org.microcol.model;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-
-import javax.json.stream.JsonParser;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
-import com.google.common.collect.Lists;
 
 /**
  * Represents place where colony store goods.
@@ -33,11 +29,6 @@ public class ColonyWarehouse {
 		this.goodAmounts = goodAmounts;
 	}
 
-	static List<Colony> load(final JsonParser parser, final List<Player> players) {
-		// TODO JJ NYI, remove this function
-		return Lists.newArrayList();
-	}
-	
 	/**
 	 * Make data copy of this instance.
 	 */

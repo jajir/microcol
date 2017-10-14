@@ -3,9 +3,6 @@ package org.microcol.model;
 import java.util.List;
 import java.util.Optional;
 
-import javax.json.stream.JsonGenerator;
-import javax.json.stream.JsonParser;
-
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
@@ -53,13 +50,5 @@ public final class Cargo {
 	@Override
 	public String toString() {
 		return MoreObjects.toStringHelper(this).add("slots", slots).toString();
-	}
-
-	void save(final JsonGenerator generator) {
-		// TODO JKA Implement save/load
-	}
-
-	static Cargo load(final JsonParser parser) {
-		return null; // TODO JKA Implement save/load
 	}
 }

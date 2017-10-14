@@ -1,15 +1,11 @@
 package org.microcol.model;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
-
-import javax.json.stream.JsonGenerator;
-import javax.json.stream.JsonParser;
 
 import org.microcol.model.store.GamePo;
 
@@ -175,44 +171,6 @@ public final class Model {
 		return out;
 	}
 	
-	public void save(final String name, final JsonGenerator generator) {
-		generator.writeStartObject(name);
-		calendar.save("calendar", generator);
-		generator.writeStartArray("players");
-		players.forEach(player -> player.save(generator));
-		generator.writeEnd();
-		gameManager.save("game", generator);
-		generator.writeEnd();
-	}
-
-	public static Model load(final JsonParser parser) {
-		parser.next(); // START_OBJECT
-		parser.next(); // KEY_NAME
-		final Calendar calendar = Calendar.load(parser);
-		parser.next(); // KEY_NAME
-		final WorldMap map = WorldMap.load(parser);
-		parser.next(); // KEY_NAME
-		parser.next(); // START_ARRAY
-		final List<Player> players = new ArrayList<>();
-		Player player = null;
-		while ((player = Player.load(parser)) != null) {
-			players.add(player);
-		}
-		parser.next(); // KEY_NAME
-		final List<Unit> units = UnitStorage.load(parser, players);
-		parser.next(); // KEY_NAME
-		final GameManager gameManager = GameManager.load(parser, players);
-		parser.next(); // END_OBJECT
-
-		final List<Colony> colonies = ColonyWarehouse.load(parser, players);
-
-		final Model model = new Model(calendar, map, players, colonies, units, Lists.newArrayList());
-		gameManager.setModel(model);
-		model.gameManager = gameManager;
-
-		return model;
-	}
-
 	List<Unit> getUnits(final Player player, final boolean includeStored) {
 		return unitStorage.getUnits(player, includeStored);
 	}

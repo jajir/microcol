@@ -1,10 +1,5 @@
 package org.microcol.model;
 
-import java.util.List;
-
-import javax.json.stream.JsonGenerator;
-import javax.json.stream.JsonParser;
-
 import com.google.common.base.Preconditions;
 
 class GameManager {
@@ -86,34 +81,4 @@ class GameManager {
 		}
 	}
 
-	void save(final String name, final JsonGenerator generator) {
-		generator.writeStartObject(name);
-		generator.write("started", started);
-		if (currentPlayer != null) {
-			generator.write("currentPlayer",  currentPlayer.getName());
-		} else {
-			generator.writeNull("currentPlayer");
-		}
-		generator.writeEnd();
-	}
-
-	static GameManager load(final JsonParser parser, final List<Player> players) {
-		parser.next(); // START_OBJECT
-		parser.next(); // KEY_NAME
-		final boolean started = parser.next() == JsonParser.Event.VALUE_TRUE; // VALUE_TRUE or VALUE_FALSE
-		parser.next(); // KEY_NAME
-		parser.next(); // VALUE_STRING
-		final String currentPlayerName = parser.getString();
-		final Player currentPlayer = players.stream()
-			.filter(player -> player.getName().equals(currentPlayerName))
-			.findAny()
-			.orElse(null);
-		parser.next(); // END_OBJECT
-
-		final GameManager gameManager = new GameManager();
-		gameManager.started = started;
-		gameManager.currentPlayer = currentPlayer;
-
-		return gameManager;
-	}
 }

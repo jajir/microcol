@@ -8,8 +8,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
 
-import javax.json.stream.JsonParser;
-
 import org.microcol.model.store.GamePo;
 
 import com.google.common.base.Preconditions;
@@ -138,17 +136,6 @@ class UnitStorage {
 		units.forEach(unit -> {
 			gamePo.getUnits().add(unit.save());
 		});
-	}
-
-	static List<Unit> load(final JsonParser parser, final List<Player> players) {
-		parser.next(); // START_ARRAY
-		final List<Unit> units = new ArrayList<>();
-		Unit unit = null;
-		while ((unit = Unit.load(parser, players)) != null) {
-			units.add(unit);
-		}
-
-		return units;
 	}
 
 	Unit getUnitById(int id) {

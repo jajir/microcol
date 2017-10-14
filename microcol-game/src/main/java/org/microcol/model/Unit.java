@@ -7,8 +7,6 @@ import java.util.Optional;
 import java.util.Random;
 import java.util.Set;
 
-import javax.json.stream.JsonParser;
-
 import org.microcol.model.store.UnitPo;
 
 import com.google.common.base.MoreObjects;
@@ -541,34 +539,6 @@ public class Unit {
 		unitPo.setType(type.name());
 		place.save(unitPo);
 		return unitPo;
-	}
-
-	static Unit load(final JsonParser parser, final List<Player> players) {
-		// START_OBJECT or END_ARRAY
-		if (parser.next() == JsonParser.Event.END_ARRAY) {
-			return null;
-		}
-		parser.next(); // KEY_NAME
-		parser.next(); // VALUE_STRING
-		final UnitType type = UnitType.valueOf(parser.getString());
-		parser.next(); // KEY_NAME
-		parser.next(); // VALUE_STRING
-		final String ownerName = parser.getString();
-		final Player owner = players.stream().filter(player -> player.getName().equals(ownerName)).findAny()
-				.orElse(null);
-		parser.next(); // KEY_NAME
-		final Location location = Location.load(parser);
-		parser.next(); // KEY_NAME
-		parser.next(); // VALUE_NUMBER
-		final int availableMoves = parser.getInt();
-		parser.next(); // END_OBJECT
-
-		// TODO JKA Implement save/load
-
-		final Unit unit = new Unit(type, owner, location);
-		unit.availableMoves = availableMoves;
-
-		return unit;
 	}
 
 	Place getPlace() {

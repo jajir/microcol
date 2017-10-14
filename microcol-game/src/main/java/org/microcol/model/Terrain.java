@@ -1,7 +1,5 @@
 package org.microcol.model;
 
-import java.util.Optional;
-
 import org.microcol.model.TerrainType.Production;
 
 import com.google.common.base.MoreObjects;
