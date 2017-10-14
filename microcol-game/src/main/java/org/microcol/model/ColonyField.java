@@ -93,6 +93,9 @@ public class ColonyField {
 	
 	/**
 	 * Method should be called once per turn. It produce resources on field.
+	 *
+	 * @param colonyWarehouse
+	 *            required colony warehouse
 	 */
 	public void produce(final ColonyWarehouse colonyWarehouse) {
 		if (isEmpty()) {
