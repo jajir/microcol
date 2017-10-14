@@ -31,4 +31,12 @@ public class GamePo {
 		this.colonies = colonies;
 	}
 
+	public void setUnits(List<UnitPo> units) {
+		this.units = units;
+	}
+
+	public void setMap(WorldMapPo map) {
+		this.map = map;
+	}
+
 }

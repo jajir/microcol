@@ -77,11 +77,13 @@ public class WorldMapPo {
 
 	public Set<Location> getTreeSet() {
 		final Set<Location> out = new HashSet<>();
-		iterate(trees, (location, charCode) -> {
-			if (charCode.equals("t")) {
-				out.add(location);
-			}
-		});
+		if (trees != null) {
+			iterate(trees, (location, charCode) -> {
+				if (charCode.equals("t")) {
+					out.add(location);
+				}
+			});
+		}
 		return out;
 	}
 
