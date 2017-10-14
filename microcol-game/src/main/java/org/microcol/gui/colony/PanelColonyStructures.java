@@ -235,14 +235,14 @@ public class PanelColonyStructures extends TitledPanel {
 				}
 				cx.incrementAndGet();
 			});
-			paintProduction(gc, position, construction);
+			paintProduction(gc, position, colony, construction);
 		});
 	}
 	
-	private void paintProduction(final GraphicsContext gc, final Point point, final Construction construction) {
+	private void paintProduction(final GraphicsContext gc, final Point point, final Colony colony, final Construction construction) {
 		if (construction.getType().getProduce().isPresent()) {
 			final Point prod = point.add(PRODUCTION_TEXT);
-			final String toWrite = "x " + construction.getProductionPerTurn();
+			final String toWrite = "x " + construction.getProductionPerTurn(colony);
 			gc.fillText(toWrite, prod.getX(), prod.getY());
 			final Text theText = new Text(toWrite);
 			theText.setFont(gc.getFont());

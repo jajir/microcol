@@ -1,8 +1,12 @@
 package org.microcol.model;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.junit.Test;
 
@@ -10,22 +14,21 @@ import com.google.common.collect.Lists;
 
 import mockit.Expectations;
 import mockit.Mocked;
-import mockit.Verifications;
 
 public class ConstructionTest {
 
 	@Test
-	public void test_church_verify_base_production() throws Exception {
+	public void test_church_verify_base_production(final @Mocked Colony colony) throws Exception {
 		Construction church = Construction.build(ConstructionType.CHURCH);
 
-		assertEquals(1, church.getProductionPerTurn());
+		assertEquals(1, church.getProductionPerTurn(colony));
 	}
 
 	@Test
-	public void test_blacksmith_verify_base_production_per_turn() throws Exception {
+	public void test_blacksmith_verify_base_production_per_turn(final @Mocked Colony colony) throws Exception {
 		Construction blacksmith = Construction.build(ConstructionType.BLACKSMITHS_HOUSE);
 
-		assertEquals(0, blacksmith.getProductionPerTurn());
+		assertEquals(0, blacksmith.getProductionPerTurn(colony));
 	}
 
 	@Test
@@ -81,31 +84,26 @@ public class ConstructionTest {
 			@Mocked ColonyWarehouse colonyWarehouse,
 			@Mocked final ConstructionSlot slot1,
 			@Mocked final ConstructionSlot slot2,
-			@Mocked final ConstructionSlot slot3
+			@Mocked final ConstructionSlot slot3,
+			@Mocked final ConstructionType buildingType,
+			@Mocked final ConstructionProduction prod,
+			@Mocked final Colony colony
 			) throws Exception {
 		
-		final Construction blacksmith = new Construction(ConstructionType.BLACKSMITHS_HOUSE,
+		final Construction blacksmith = new Construction(buildingType,
 				Lists.newArrayList(slot1, slot2, slot3));
 		
 		new Expectations() {{
-			slot1.getMaxConsumptionPerTurn(3, GoodType.TOOLS); result = 1;
-			slot2.getMaxConsumptionPerTurn(3, GoodType.TOOLS); result = 2;
-			slot3.getMaxConsumptionPerTurn(3, GoodType.TOOLS); result = 3;
-			colonyWarehouse.getGoodAmmount(GoodType.ORE); result = 10;
+			buildingType.getProduce(); result = Optional.of(GoodType.TOOLS);
+			buildingType.getConstructionProduction(colony); result = prod; times = 3;
+			slot1.getProductionModifier(GoodType.TOOLS); result = 1; times = 1;
+			slot2.getProductionModifier(GoodType.TOOLS); result = 1; times = 1;
+			slot3.getProductionModifier(GoodType.TOOLS); result = 1; times = 1;
+			prod.multiply(1); times = 3;
+			prod.limit(colonyWarehouse); times = 3;
 		}};
 
-		blacksmith.produce(colonyWarehouse);
-		
-		new Verifications() {{
-			colonyWarehouse.removeFromWarehouse(GoodType.ORE, 1); times = 1;
-			colonyWarehouse.addToWarehouse(GoodType.TOOLS, 1); times = 1;
-			
-			colonyWarehouse.removeFromWarehouse(GoodType.ORE, 2); times = 1;
-			colonyWarehouse.addToWarehouse(GoodType.TOOLS, 2); times = 1;
-			
-			colonyWarehouse.removeFromWarehouse(GoodType.ORE, 3); times = 1;
-			colonyWarehouse.addToWarehouse(GoodType.TOOLS, 3); times = 1;
-			}};
+		blacksmith.produce(colony, colonyWarehouse);
 	}
 
 }

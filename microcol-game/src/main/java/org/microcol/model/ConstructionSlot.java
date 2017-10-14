@@ -24,21 +24,6 @@ public class ConstructionSlot {
 		return placeConstruction.getUnit();
 	}
 	
-	public int getMaxConsumptionPerTurn(final int baseConstructionProductionPerTurn, final GoodType producedGoodType) {
-		if(isEmpty()){
-			return 0;
-		}
-		return (int)(baseConstructionProductionPerTurn * getUnit().getType().getProductionModifier(producedGoodType));
-	}
-	
-	//TODO it's duplicated method to previous one
-	public int getMaxProductionPerTurn(final int baseConstructionProductionPerTurn, final GoodType producedGoodType) {
-		if(isEmpty()){
-			return 0;
-		}
-		return (int)(baseConstructionProductionPerTurn * getUnit().getType().getProductionModifier(producedGoodType));		
-	}
-	
 	/**
 	 * When there is unit than return unit production modifier otherwise return
 	 * 0.

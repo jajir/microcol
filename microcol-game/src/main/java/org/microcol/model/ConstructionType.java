@@ -465,7 +465,7 @@ public class ConstructionType {
 			.setProduce(GoodType.CROSS)
 			.setProductionPerTurn(3)
 			.setBaseProductionPerTurn(1)
-	 		.setSlotsForWorkers(0)
+	 		.setSlotsForWorkers(3)
 	 		.setUpgradeTo(CATHEDRAL)
 	 		.setRequiredColonyPopulation(3)
 	 		.build();
@@ -487,7 +487,7 @@ public class ConstructionType {
 			.setBuildCostHammers(80)
 			.setBuildCostTools(0)
 			.setProduce(GoodType.BELL)
-			.setProductionPerTurn(3)
+			.setProductionPerTurn(9)
 			.setBaseProductionPerTurn(0)
 	 		.setSlotsForWorkers(0)
 	 		.setUpgradeTo(NEWSPAPER)
@@ -773,7 +773,30 @@ public class ConstructionType {
 	}
 
 	public int getConsumptionPerTurn() {
-		return (int) (productionPerTurn / productionRatio);
+		if (consumed == null) {
+			return 0;
+		} else {
+			return (int) (productionPerTurn / productionRatio);
+		}
+	}
+	
+	public ConstructionProduction getConstructionProduction(final Colony colony){
+		if(GoodType.BELL.equals(produce)){
+			int consumption = getConsumptionPerTurn();
+			int production = getProductionPerTurn();
+			if (colony.isContainsConstructionByType(PRINTING_PRESS)) {
+				consumption = PRINTING_PRESS.getConsumptionPerTurn();
+				production = PRINTING_PRESS.getProductionPerTurn();
+			}
+			if (colony.isContainsConstructionByType(NEWSPAPER)) {
+				consumption = NEWSPAPER.getConsumptionPerTurn();
+				production = NEWSPAPER.getProductionPerTurn();
+			}
+			return new ConstructionProduction(consumption, baseProductionPerTurn, production, consumed, produce);
+		}else{
+			return new ConstructionProduction(getConsumptionPerTurn(), baseProductionPerTurn, getProductionPerTurn(),
+					consumed, produce);
+		}
 	}
 
 	public int getBaseProductionPerTurn() {

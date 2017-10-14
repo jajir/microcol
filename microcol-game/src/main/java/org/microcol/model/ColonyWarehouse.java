@@ -33,7 +33,7 @@ public class ColonyWarehouse {
 	}
 
 	public Integer getGoodAmmount(final GoodType goodType) {
-		Preconditions.checkNotNull(goodType);
+		Preconditions.checkNotNull(goodType, "GoodType is null");
 		Integer amount = goodAmounts.get(goodType);
 		if (amount == null) {
 			return 0;

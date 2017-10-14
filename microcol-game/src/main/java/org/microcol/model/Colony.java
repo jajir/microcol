@@ -92,7 +92,7 @@ public class Colony {
 	 */
 	public void startTurn(){
 		colonyFields.forEach(ColonyField::produce);
-		constructions.forEach(construction -> construction.produce(getColonyWarehouse()));
+		constructions.forEach(construction -> construction.produce(this, getColonyWarehouse()));
 	}
 	
 	public List<Unit> getUnitsInPort() {
@@ -109,6 +109,11 @@ public class Colony {
 		return constructions.stream().filter(construction -> construction.getType().equals(constructionType)).findAny()
 				.orElseThrow(() -> new IllegalStateException(
 						String.format("No such construction type (%s) in colony (%s)", constructionType, getName())));
+	}
+	
+	public boolean isContainsConstructionByType(final ConstructionType constructionType) {
+		return constructions.stream().filter(construction -> construction.getType().equals(constructionType)).findAny()
+				.isPresent();
 	}
 	
 	ConstructionType getWarehouseType() {
