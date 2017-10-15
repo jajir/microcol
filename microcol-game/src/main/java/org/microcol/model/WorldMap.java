@@ -2,7 +2,7 @@ package org.microcol.model;
 
 import java.util.Set;
 
-import org.microcol.model.store.GamePo;
+import org.microcol.model.store.ModelPo;
 import org.microcol.model.store.WorldMapPo;
 
 import com.google.common.base.MoreObjects;
@@ -18,7 +18,7 @@ public class WorldMap {
 	
 	private final Set<Location> trees;
 	
-	public WorldMap(final GamePo gamePo){
+	public WorldMap(final ModelPo gamePo){
 		final WorldMapPo worldMapPo = gamePo.getMap();
 		this.maxX = worldMapPo.getMaxX();
 		this.maxY = worldMapPo.getMaxY();
@@ -86,7 +86,7 @@ public class WorldMap {
 				.add("landmass", terrainMap.keySet().size()).toString();
 	}
 
-	void save(final GamePo gamePo) {
+	void save(final ModelPo gamePo) {
 		gamePo.getMap().setMaxX(maxX);
 		gamePo.getMap().setMaxY(maxY);
 		gamePo.getMap().setTerrainType(terrainMap);

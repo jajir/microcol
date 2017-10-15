@@ -1,5 +1,6 @@
 package org.microcol.model;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -7,7 +8,8 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
 
-import org.microcol.model.store.GamePo;
+import org.microcol.model.store.ModelPo;
+import org.microcol.model.store.PlayerPo;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
@@ -164,10 +166,18 @@ public final class Model {
 		return unitStorage.getUnitsAt(location);
 	}
 
-	public GamePo save(){
-		final GamePo out = new GamePo();
+	public ModelPo save(){
+		final ModelPo out = new ModelPo();
 		map.save(out);
 		unitStorage.save(out);
+		out.setCalendar(calendar.save());
+		out.setPlayers(getSavePlayers());
+		return out;
+	}
+	
+	private List<PlayerPo> getSavePlayers() {
+		final List<PlayerPo> out = new ArrayList<PlayerPo>();
+		players.forEach(player -> out.add(player.save()));
 		return out;
 	}
 	

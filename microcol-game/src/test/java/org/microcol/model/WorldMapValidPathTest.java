@@ -10,7 +10,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameter;
 import org.junit.runners.Parameterized.Parameters;
-import org.microcol.model.store.WorldMapDao;
+import org.microcol.model.store.ModelDao;
 
 @RunWith(Parameterized.class)
 public class WorldMapValidPathTest {
@@ -31,8 +31,8 @@ public class WorldMapValidPathTest {
 
 	@Test
 	public void testValidPath() {
-		final WorldMapDao dao = new WorldMapDao();
-		final WorldMap map = dao.loadMap(fileName);
+		final ModelDao dao = new ModelDao();
+		final WorldMap map = dao.loadPredefinedWorldMap(fileName);
 		final Path path = Path.of(locations);
 
 		Assert.assertTrue(map.isValid(path));

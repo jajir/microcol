@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
 
-import org.microcol.model.store.GamePo;
+import org.microcol.model.store.ModelPo;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
@@ -132,7 +132,7 @@ class UnitStorage {
 		units.remove(unit);
 	}
 
-	void save(final GamePo gamePo) {
+	void save(final ModelPo gamePo) {
 		units.forEach(unit -> {
 			gamePo.getUnits().add(unit.save());
 		});

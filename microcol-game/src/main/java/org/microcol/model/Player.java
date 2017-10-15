@@ -4,20 +4,41 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import org.microcol.model.store.PlayerPo;
+
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 
 public final class Player {
+	
+	//TODO make model final
 	private Model model;
-
 	private final String name;
 	private final boolean computer;
 	private int gold;
 
+	@Deprecated
 	Player(final String name, final boolean computer, final int initialGold) {
+		this(name, computer, initialGold, null);
+	}
+
+	Player(final String name, final boolean computer, final int initialGold, final Model model) {
 		this.name = Preconditions.checkNotNull(name);
 		this.computer = computer;
 		this.gold = initialGold;
+		this.model = model;
+	}
+	
+	public static Player make(final PlayerPo player, final Model model){
+		return new Player(player.getName(), player.isComputer(), player.getGold(), model);
+	}
+	
+	public PlayerPo save(){
+		final PlayerPo out = new PlayerPo();
+		out.setName(name);
+		out.setComputer(computer);
+		out.setGold(gold);
+		return out;
 	}
 
 	void setModel(final Model model) {

@@ -10,7 +10,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameter;
 import org.junit.runners.Parameterized.Parameters;
-import org.microcol.model.store.GamePo;
+import org.microcol.model.store.ModelPo;
 import org.microcol.model.store.WorldMapPo;
 
 @RunWith(Parameterized.class)
@@ -38,7 +38,7 @@ public class WorldMapCreationTest {
 		mapPo.setMaxX(maxX);
 		mapPo.setMaxY(maxY);
 		mapPo.setTerrainType(new HashMap<>());
-		GamePo gamePo = new GamePo();
+		ModelPo gamePo = new ModelPo();
 		gamePo.setMap(mapPo);
 		final WorldMap map = new WorldMap(gamePo);
 

@@ -3,7 +3,7 @@ package org.microcol.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.microcol.model.store.WorldMapDao;
+import org.microcol.model.store.ModelDao;
 
 import com.google.common.base.Preconditions;
 
@@ -47,8 +47,9 @@ public class ModelBuilder {
 	}
 
 	public ModelBuilder setMap(final String fileName) {
-		WorldMapDao dao = new WorldMapDao();
-		map = dao.loadMap(fileName);
+		//TODO share modelDao instance
+		ModelDao modelDao = new ModelDao();
+		map = modelDao.loadPredefinedWorldMap(fileName);
 		return this;
 	}
 	

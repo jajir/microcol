@@ -9,7 +9,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameter;
 import org.junit.runners.Parameterized.Parameters;
-import org.microcol.model.store.WorldMapDao;
+import org.microcol.model.store.ModelDao;
 
 @RunWith(Parameterized.class)
 public class WorldMapInvalidLocationTest {
@@ -35,8 +35,8 @@ public class WorldMapInvalidLocationTest {
 
 	@Test
 	public void testInvalidLocation() {
-		final WorldMapDao dao = new WorldMapDao();
-		final WorldMap map = dao.loadMap(fileName);
+		final ModelDao dao = new ModelDao();
+		final WorldMap map = dao.loadPredefinedWorldMap(fileName);
 
 		Assert.assertFalse(map.isValid(location));
 	}
