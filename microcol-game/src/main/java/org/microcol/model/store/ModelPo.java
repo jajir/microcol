@@ -14,6 +14,8 @@ public class ModelPo {
 	private WorldMapPo map = new WorldMapPo();
 
 	private List<PlayerPo> players = new ArrayList<>();
+	
+	private EuropePo europe;
 
 	public List<UnitPo> getUnits() {
 		return units;
@@ -66,6 +68,20 @@ public class ModelPo {
 	 */
 	public void setCalendar(CalendarPo calendar) {
 		this.calendar = calendar;
+	}
+
+	/**
+	 * @return the europe
+	 */
+	public EuropePo getEurope() {
+		return europe;
+	}
+
+	/**
+	 * @param europe the europe to set
+	 */
+	public void setEurope(EuropePo europe) {
+		this.europe = europe;
 	}
 
 }

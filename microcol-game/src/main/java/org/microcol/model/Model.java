@@ -8,6 +8,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
 
+import org.microcol.model.store.ColonyPo;
 import org.microcol.model.store.ModelPo;
 import org.microcol.model.store.PlayerPo;
 
@@ -172,12 +173,19 @@ public final class Model {
 		unitStorage.save(out);
 		out.setCalendar(calendar.save());
 		out.setPlayers(getSavePlayers());
+		out.setColonies(getSaveColonies());
 		return out;
 	}
 	
 	private List<PlayerPo> getSavePlayers() {
 		final List<PlayerPo> out = new ArrayList<PlayerPo>();
 		players.forEach(player -> out.add(player.save()));
+		return out;
+	}
+	
+	private List<ColonyPo> getSaveColonies() {
+		final List<ColonyPo> out = new ArrayList<>();
+		colonies.forEach(colony -> out.add(colony.save()));
 		return out;
 	}
 	

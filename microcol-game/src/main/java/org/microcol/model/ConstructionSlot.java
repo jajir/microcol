@@ -1,5 +1,7 @@
 package org.microcol.model;
 
+import org.microcol.model.store.ConstructionSlotPo;
+
 import com.google.common.base.Preconditions;
 
 public class ConstructionSlot {
@@ -14,6 +16,14 @@ public class ConstructionSlot {
 		Preconditions.checkState(isEmpty(),
 				String.format("Can't insert placeConstruction (%s) slot (%s) is not empty.", placeConstruction, this));
 		this.placeConstruction = placeConstruction;
+	}
+	
+	ConstructionSlotPo save(){
+		final ConstructionSlotPo out = new ConstructionSlotPo();
+		if (!isEmpty()) {
+			out.setWorkerId(getUnit().getId());
+		}
+		return out;
 	}
 	
 	public void clear(){

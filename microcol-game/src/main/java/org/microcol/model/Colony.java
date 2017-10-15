@@ -5,6 +5,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.microcol.model.store.ColonyFieldPo;
+import org.microcol.model.store.ColonyPo;
+import org.microcol.model.store.ConstructionPo;
+
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
@@ -27,7 +31,6 @@ public class Colony {
 	private final ColonyWarehouse colonyWarehouse;
 	
 	private Model model;
-	
 
 	public Colony(final String name, final Player owner, final Location location,
 			final List<Construction> constructions) {
@@ -80,8 +83,30 @@ public class Colony {
 				});
 			}
 		});
-
 	}
+	
+	ColonyPo save() {
+		ColonyPo out = new ColonyPo();
+		out.setName(name);
+		out.setOwnerName(owner.getName());
+		out.setLocation(location);
+		out.setColonyFields(saveColonyFields());
+		out.setColonyWarehouse(colonyWarehouse.save());
+		out.setConstructions(saveCostructions());
+		return out;
+	}
+	
+	 private List<ColonyFieldPo> saveColonyFields(){
+		 final List<ColonyFieldPo> out = new ArrayList<>();
+		 colonyFields.forEach(field -> out.add(field.save()));
+		 return out;
+	 }
+	 
+	 private List<ConstructionPo> saveCostructions(){
+		 final List<ConstructionPo> out = new ArrayList<>();
+		 constructions.forEach(construction -> out.add(construction.save()));
+		 return out;
+	 }
 	
 	/**
 	 * Perform operation for next turn. Producing order:

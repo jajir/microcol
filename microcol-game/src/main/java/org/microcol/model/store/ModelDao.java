@@ -8,6 +8,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 
 import org.microcol.gui.MicroColException;
+import org.microcol.model.ConstructionType;
+import org.microcol.model.GoodType;
 import org.microcol.model.WorldMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,6 +29,8 @@ public class ModelDao {
 
 	public ModelDao() {
 		gson = new GsonBuilder()
+				.registerTypeAdapter(ConstructionType.class, new GsonConstructionTypeAdapter())
+				.registerTypeAdapter(GoodType.class, new GsonGoodTypeAdapter())
 				.setPrettyPrinting()
 				.create();
 	}

@@ -1,5 +1,7 @@
 package org.microcol.model;
 
+import org.microcol.model.store.ColonyFieldPo;
+
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 import com.google.common.base.MoreObjects.ToStringHelper;
@@ -23,6 +25,16 @@ public class ColonyField {
 		this.colony = Preconditions.checkNotNull(colony);
 		Preconditions.checkArgument(location.isDirection(),
 				"Field location (%s) is not a valid direction", location);
+	}
+	
+	ColonyFieldPo save(){
+		final ColonyFieldPo out = new ColonyFieldPo();
+		out.setDirection(direction);
+		if (!isEmpty()) {
+			out.setWorkerId(getUnit().getId());
+			out.setProducedGoodType(getProducedGoodType());
+		}
+		return out;
 	}
 	
 	public boolean canProduce(final GoodType goodType){

@@ -1,8 +1,12 @@
 package org.microcol.model;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import org.microcol.model.store.ConstructionPo;
+import org.microcol.model.store.ConstructionSlotPo;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
@@ -26,6 +30,19 @@ public class Construction {
 			list.add(new ConstructionSlot());
 		}
 		return new Construction(type, list);
+	}
+	
+	ConstructionPo save(){
+		final ConstructionPo out = new ConstructionPo();
+		out.setType(type);
+		out.setSlots(getSaveConstructionSlots());
+		return out;
+	}
+	
+	private List<ConstructionSlotPo> getSaveConstructionSlots(){
+		final List<ConstructionSlotPo> out = new ArrayList<>();
+		workingSlots.forEach(slot -> out.add(slot.save()));
+		return out;
 	}
 
 	public ConstructionType getType() {

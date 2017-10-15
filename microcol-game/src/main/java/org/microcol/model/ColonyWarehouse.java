@@ -28,7 +28,11 @@ public class ColonyWarehouse {
 		this.colony = colony;
 		this.goodAmounts = goodAmounts;
 	}
-
+	
+	Map<GoodType, Integer> save(){
+		return goodAmounts;
+	}
+	
 	/**
 	 * Make data copy of this instance.
 	 */

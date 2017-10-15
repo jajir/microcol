@@ -13,9 +13,9 @@ import com.google.gson.GsonBuilder;
  * Test create model with fluent API than store than model and finally load and
  * verify that is same as was defined.
  */
-public class StoreDaoTest {
+public class ModelDaoTest {
 	
-	private Logger logger = Logger.getLogger(StoreDaoTest.class);
+	private Logger logger = Logger.getLogger(ModelDaoTest.class);
 
 	private final Logger modelDaoLogger = Logger.getLogger(ModelDao.class);
 	
