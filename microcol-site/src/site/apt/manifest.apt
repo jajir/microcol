@@ -18,7 +18,7 @@ Manifest
 
 Technology rules
 
- * Target pplatform is PC
+ * Target platform is PC
  
  * Target audience should be people looking for smarter game.
 
@@ -30,9 +30,9 @@ Technology rules
 
  * Documentation in mvn site, will always reflect state of code
 
- * Git - as source code repositry
+ * Git - as source code repository
 
- * Gitflow for
+ * Gitflow for source code branching model
 
  * IDE – User should be always able to import project into IDE
  
