@@ -5,6 +5,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.microcol.model.store.ColonyPo;
+import org.microcol.model.store.ModelPo;
+
 import com.google.common.base.Preconditions;
 
 /**
@@ -12,11 +15,9 @@ import com.google.common.base.Preconditions;
  */
 public class ColonyBuilder {
 
-	private final String name;
-
+	private final ColonyPo colonyPo;
+	
 	private final PlayerBuilder playerBuilder;
-
-	private Location location;
 
 	private boolean defaultCostructions = false;
 
@@ -28,9 +29,12 @@ public class ColonyBuilder {
 
 	private final List<GoodAmount> goodAmounts = new ArrayList<>();
 
-	public ColonyBuilder(final String name, final PlayerBuilder playerBuilder) {
-		this.name = Preconditions.checkNotNull(name);
+	public ColonyBuilder(final String name, final PlayerBuilder playerBuilder, final ModelPo modelPo) {
+		this.colonyPo = new ColonyPo();
+		colonyPo.setName(Preconditions.checkNotNull(name));
+		colonyPo.setOwnerName(playerBuilder.getPlayerPo().getName());
 		this.playerBuilder = Preconditions.checkNotNull(playerBuilder);
+		modelPo.getColonies().add(colonyPo);
 	}
 
 	public PlayerBuilder build() {
@@ -38,11 +42,12 @@ public class ColonyBuilder {
 	}
 
 	public ColonyBuilder setLocation(final Location location) {
-		this.location = location;
+		colonyPo.setLocation(location);
 		return this;
 	}
 
 	public ColonyBuilder setDefaultConstructions(final boolean defaultCostructions) {
+		//TODO construct default constructions.
 		this.defaultCostructions = defaultCostructions;
 		return this;
 	}
@@ -85,11 +90,11 @@ public class ColonyBuilder {
 	}
 
 	String getName() {
-		return name;
+		return colonyPo.getName();
 	}
 
 	Location getLocation() {
-		return location;
+		return colonyPo.getLocation();
 	}
 
 	boolean isDefaultCostructions() {
@@ -186,8 +191,6 @@ public class ColonyBuilder {
 		}
 		
 	}
-	
-	
 
 	List<UnitPlace> getUnitPlaces() {
 		return unitPlaces;

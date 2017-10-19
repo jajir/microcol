@@ -1,5 +1,7 @@
 package org.microcol.model.store;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -14,11 +16,11 @@ public class ColonyPo {
 
 	private Location location;
 
-	private List<ColonyFieldPo> colonyFields;
+	private List<ColonyFieldPo> colonyFields = new ArrayList<>();
 
-	private List<ConstructionPo> constructions;
+	private List<ConstructionPo> constructions = new ArrayList<>();
 
-	private Map<GoodType, Integer> colonyWarehouse;
+	private Map<GoodType, Integer> colonyWarehouse = new HashMap<>();
 
 	/**
 	 * @return the name

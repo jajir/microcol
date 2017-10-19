@@ -3,10 +3,12 @@ package org.microcol.model.store;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.common.base.Preconditions;
+
 public class ModelPo {
 
-	private CalendarPo calendar;
-	
+	private CalendarPo calendar = new CalendarPo();
+
 	private List<UnitPo> units = new ArrayList<>();
 
 	private List<ColonyPo> colonies = new ArrayList<>();
@@ -14,8 +16,14 @@ public class ModelPo {
 	private WorldMapPo map = new WorldMapPo();
 
 	private List<PlayerPo> players = new ArrayList<>();
-	
-	private EuropePo europe;
+
+	private EuropePo europe = new EuropePo();
+
+	public PlayerPo getPlayerByName(final String name) {
+		Preconditions.checkState(players != null, "Players are null");
+		return players.stream().filter(player -> player.getName().equals(name)).findAny()
+				.orElseThrow(() -> new IllegalStateException("Invalid owner name '" + name + "'"));
+	}
 
 	public List<UnitPo> getUnits() {
 		return units;
@@ -64,7 +72,8 @@ public class ModelPo {
 	}
 
 	/**
-	 * @param calendar the calendar to set
+	 * @param calendar
+	 *            the calendar to set
 	 */
 	public void setCalendar(CalendarPo calendar) {
 		this.calendar = calendar;
@@ -78,7 +87,8 @@ public class ModelPo {
 	}
 
 	/**
-	 * @param europe the europe to set
+	 * @param europe
+	 *            the europe to set
 	 */
 	public void setEurope(EuropePo europe) {
 		this.europe = europe;

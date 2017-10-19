@@ -46,13 +46,13 @@ public class Unit {
 		Preconditions.checkNotNull(unitPo, "Unit persisten object is null");
 		Preconditions.checkNotNull(model, "Model is null");
 		Preconditions.checkNotNull(placeBuilder, "PlaceBuilder is null");
-		this.type = UnitType.valueOf(unitPo.getType());
+		this.type = unitPo.getType();
 		this.owner = model.getPlayerStore().getPlayerByName(unitPo.getOwnerId());
 		this.cargo = new Cargo(this, type.getCargoCapacity());
 		this.availableMoves = unitPo.getAvailableMoves();
-		this.id = unitPo.getId();
+		this.id = Preconditions.checkNotNull(unitPo.getId(),"ID is null");
 		this.model = model;
-		this.place = placeBuilder.build(this);
+		this.place = Preconditions.checkNotNull(placeBuilder.build(this));
 	}
 	
 	void setModel(final Model model) {
@@ -541,10 +541,9 @@ public class Unit {
 				.add("id", id)
 				.add("type", type)
 				.add("owner", owner)
-				.add("place", place.getName())
+				.add("place", place == null ? place : place.getName())
 				.add("availableMoves", availableMoves)
-				.add("hold", cargo)
-				.add("place", place.getName()).toString();
+				.add("cargo", cargo).toString();
 	}
 
 	UnitPo save() {
@@ -552,7 +551,7 @@ public class Unit {
 		unitPo.setId(id);
 		unitPo.setAvailableMoves(availableMoves);
 		unitPo.setOwnerId(owner.getName());
-		unitPo.setType(type.name());
+		unitPo.setType(type);
 		place.save(unitPo);
 		return unitPo;
 	}

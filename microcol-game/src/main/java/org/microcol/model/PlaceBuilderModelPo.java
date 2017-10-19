@@ -81,8 +81,7 @@ public class PlaceBuilderModelPo implements PlaceBuilder {
 				return place;
 			}
 		}
-		;
-		throw new IllegalArgumentException(String.format("It's not possible to define place for unit (%s)", unit));
+		throw new IllegalArgumentException(String.format("It's not possible to define place for unit (%s)", unitPo));
 	}
 
 	interface Builder {

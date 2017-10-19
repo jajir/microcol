@@ -42,7 +42,7 @@ public class ModelDao {
 	 *            required file name on class path
 	 * @return loaded model persistent object
 	 */
-	public ModelPo loadPredefinedMap(final String fileName) {
+	public ModelPo loadPredefinedModel(final String fileName) {
 		try {
 			return internalLoadPredefinedModel(fileName);
 		} catch (FileNotFoundException e) {

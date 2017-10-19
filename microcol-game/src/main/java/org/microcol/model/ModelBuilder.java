@@ -1,33 +1,30 @@
 package org.microcol.model;
 
-import java.util.ArrayList;
 import java.util.List;
 
+import org.microcol.model.store.CalendarPo;
+import org.microcol.model.store.ColonyPo;
 import org.microcol.model.store.ModelDao;
+import org.microcol.model.store.ModelPo;
+import org.microcol.model.store.PlaceMapPo;
+import org.microcol.model.store.PlayerPo;
+import org.microcol.model.store.UnitPo;
 
 import com.google.common.base.Preconditions;
 
 public class ModelBuilder {
-	private final List<Player> players;
-	private final List<Unit> units;
-	private final List<Colony> colonies;
+
+	private ModelPo modelPo;
+
+	@Deprecated
 	private EuropeBuilder europeBuilder;
 
-	private Calendar calendar;
-	private WorldMap map;
-
-	public ModelBuilder() {
-		players = new ArrayList<>();
-		units = new ArrayList<>();
-		colonies = new ArrayList<>();
-	}
-
-	public ModelBuilder addUnit(final Unit unit) {
+	public ModelBuilder addUnit(final UnitPo unit) {
 		Preconditions.checkNotNull(unit);
-		if (units.contains(unit)) {
+		if (modelPo.getUnits().contains(unit)) {
 			throw new IllegalArgumentException("Unit was already registered. Unit: " + unit);
 		}
-		units.add(unit);
+		modelPo.getUnits().add(unit);
 		return this;
 	}
 
@@ -41,47 +38,65 @@ public class ModelBuilder {
 	}
 
 	public ModelBuilder setCalendar(final int startYear, final int endYear) {
-		calendar = new Calendar(startYear, endYear);
-
+		Preconditions.checkNotNull(modelPo, "map was not initialized");
+		CalendarPo calendarPo = new CalendarPo();
+		calendarPo.setStartYear(startYear);
+		calendarPo.setCurrentYear(startYear);
+		calendarPo.setEndYear(endYear);
+		modelPo.setCalendar(calendarPo);
 		return this;
 	}
 
 	public ModelBuilder setMap(final String fileName) {
-		//TODO share modelDao instance
-		ModelDao modelDao = new ModelDao();
-		map = modelDao.loadPredefinedWorldMap(fileName);
+		final ModelDao modelDao = new ModelDao();
+		modelPo = modelDao.loadPredefinedModel(fileName);
 		return this;
 	}
-	
-	public PlayerBuilder addPlayer(final String name){
+
+	public PlayerBuilder addPlayer(final String name) {
 		return new PlayerBuilder(this, name);
 	}
 
 	public ModelBuilder addUnit(final UnitType type, final String ownerName, final Location location) {
-		units.add(new Unit(type, getPlayer(ownerName), location));
+		UnitPo unit = new UnitPo();
+		unit.setId(IdManager.nextId());
+		unit.setAvailableMoves(0);
+		unit.setOwnerId(ownerName);
+		unit.setType(type);
+		unit.setPlaceMap(new PlaceMapPo());
+		unit.getPlaceMap().setLocation(location);
+		modelPo.getUnits().add(unit);
 
 		return this;
 	}
 
-	Player getPlayer(final String name) {
-		return players.stream().filter(player -> player.getName().equals(name)).findAny()
-				.orElseThrow(() -> new IllegalStateException("Invalid owner name '" + name + "'"));
+	PlayerPo getPlayer(final String name) {
+		return modelPo.getPlayerByName(name);
 	}
 
 	public Model build() {
 		Preconditions.checkNotNull(europeBuilder == null, "Europe was not builded");
-		return new Model(calendar, map, players, colonies, units, europeBuilder.getUnitsInEuropePort());
+		return Model.make(modelPo);
 	}
 
 	public UnitBuilder makeUnitBuilder() {
-		return new UnitBuilder(this);
+		return new UnitBuilder();
 	}
 
-	List<Player> getPlayers() {
-		return players;
+	@Deprecated
+	List<PlayerPo> getPlayers() {
+		return modelPo.getPlayers();
 	}
 
-	List<Colony> getColonies() {
-		return colonies;
+	@Deprecated
+	List<ColonyPo> getColonies() {
+		return modelPo.getColonies();
+	}
+
+	/**
+	 * @return the modelPo
+	 */
+	ModelPo getModelPo() {
+		return modelPo;
 	}
 }

@@ -1,42 +1,36 @@
 package org.microcol.model;
 
-import java.util.List;
+import org.microcol.model.store.CargoSlotPo;
+import org.microcol.model.store.UnitPo;
 
 import com.google.common.base.Preconditions;
-import com.google.common.collect.Lists;
 
 public class UnitBuilder {
 
-	private final ModelBuilder modelBuilder;
-
-	private UnitType type;
-
-	private Player player;
+	private final UnitPo unitPo;
 
 	private final PlaceBuilderImpl placeBuilder;
 
-	private final List<UnitBuilder> unitsInCargo = Lists.newArrayList();
-
-	private final List<GoodAmount> goodAmounts = Lists.newArrayList();
-
-	UnitBuilder(final ModelBuilder modelBuilder) {
-		this.modelBuilder = Preconditions.checkNotNull(modelBuilder);
+	UnitBuilder() {
+		unitPo = new UnitPo();
+		unitPo.setId(IdManager.nextId());
 		placeBuilder = new PlaceBuilderImpl();
 	}
 
 	public UnitBuilder setPlayerName(final String playerName) {
-		player = modelBuilder.getPlayer(Preconditions.checkNotNull(playerName));
+		unitPo.setOwnerId(playerName);
 		return this;
 	}
 
+	@Deprecated
 	public UnitBuilder setPlayer(final Player player) {
-		this.player = Preconditions.checkNotNull(player);
+		unitPo.setOwnerId(player.getName());
 		return this;
 	}
 
 	public UnitBuilder setType(final UnitType type) {
 		Preconditions.checkNotNull(type, "Unit type is empty");
-		this.type = type;
+		unitPo.setType(type);
 		return this;
 	}
 
@@ -70,34 +64,31 @@ public class UnitBuilder {
 		placeBuilder.setToCostruction(constructionType, colony, position);
 		return this;
 	}
-	
+
 	public UnitBuilder setUnitToFiled(final Location fieldDirection, final Colony colony,
 			final GoodType producedGoodType) {
 		placeBuilder.setUnitToFiled(fieldDirection, colony, producedGoodType);
-		return this;		
+		return this;
 	}
 
 	public UnitBuilder addCargoGood(final GoodType goodType, final int amount) {
-		// FIXME JJ dokoncit implementaci
+		final CargoSlotPo cargoSlotPo = new CargoSlotPo();
+		cargoSlotPo.setGoodType(goodType);
+		cargoSlotPo.setAmount(amount);
+		unitPo.getCargo().getSlots().add(cargoSlotPo);
 		return this;
 	}
 
 	public UnitBuilder addCargoUnit(final UnitType type, final boolean hasHorse, final boolean hasTools,
 			final boolean hasMuskets) {
-		unitsInCargo.add(modelBuilder.makeUnitBuilder().setType(type).setPlayerName(player.getName()));
+		final CargoSlotPo cargoSlotPo = new CargoSlotPo();
+		//TODO JJ create unit with ID and put it to cargo
+//		unitPo.getCargo().
 		return this;
 	}
 
-	public Unit build() {
-		Preconditions.checkNotNull(modelBuilder);
-		Preconditions.checkNotNull(player, "player was not set");
-		Unit unit = new Unit(type, player, placeBuilder);
-		unitsInCargo.forEach(cargoUnitBuilder -> {
-			cargoUnitBuilder.setUnitToCargoSlot(unit);
-			final Unit cargoUnit = cargoUnitBuilder.build();
-			modelBuilder.addUnit(cargoUnit);
-		});
-		return unit;
+	public UnitPo build() {
+		return unitPo;
 	}
 
 }

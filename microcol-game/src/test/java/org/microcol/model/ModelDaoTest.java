@@ -13,12 +13,12 @@ public class ModelDaoTest {
 	
 	@Test(expected = JsonSyntaxException.class)
 	public void test_invalid_file_format() {
-		dao.loadPredefinedMap("/maps/test-map-invalid-0x0.json");
+		dao.loadPredefinedModel("/maps/test-map-invalid-0x0.json");
 	}
 
 	@Test(expected = IllegalArgumentException.class)
 	public void test_load_missingFile() {
-		dao.loadPredefinedMap("/maps/test-map-missing-0x0.json");
+		dao.loadPredefinedModel("/maps/test-map-missing-0x0.json");
 	}
 
 	@Test(expected = NullPointerException.class)

@@ -78,6 +78,7 @@ public final class Model {
 
 	Model(final Calendar calendar, final WorldMap map, final ModelPo modelPo, final List<Colony> colonies,
 			final UnitStorage unitStorage, final List<Unit> unitsInEuropePort) {
+		Preconditions.checkNotNull(modelPo);
 		listenerManager = new ListenerManager();
 
 		this.calendar = Preconditions.checkNotNull(calendar);
@@ -92,7 +93,7 @@ public final class Model {
 				final Construction c = Construction.build(constructionPo.getType());
 				constructions.add(c);
 			});
-			final Colony col = new Colony(colonyPo.getOwnerName(), playerStore.getPlayerByName(colonyPo.getName()),
+			final Colony col = new Colony(colonyPo.getName(), playerStore.getPlayerByName(colonyPo.getOwnerName()),
 					colonyPo.getLocation(), constructions);
 			colonies.add(col);
 		});

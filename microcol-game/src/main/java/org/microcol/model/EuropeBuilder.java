@@ -1,38 +1,34 @@
 package org.microcol.model;
 
-import java.util.List;
+import org.microcol.model.store.ModelPo;
+import org.microcol.model.store.PlaceEuropePortPo;
+import org.microcol.model.store.UnitPo;
 
 import com.google.common.base.Preconditions;
-import com.google.common.collect.Lists;
 
 /**
  * Builder for Europe object.
  */
 public class EuropeBuilder {
-	//TODO EuropeBuilder class could be removed
+
 	private final ModelBuilder modelBuilder;
 
-	private final List<Unit> unitsInEuropePort = Lists.newArrayList();
+	private final ModelPo modelPo;
 
 	EuropeBuilder(final ModelBuilder modelBuilder) {
 		this.modelBuilder = Preconditions.checkNotNull(modelBuilder);
+		this.modelPo = Preconditions.checkNotNull(modelBuilder.getModelPo());
 	}
 
 	public ModelBuilder build() {
 		return modelBuilder;
 	}
 
-	//TODO use same pattern like for unitBuilder.
-	public EuropeBuilder addShipToPort(final Unit ship) {
-		Preconditions.checkArgument(UnitType.isShip(ship.getType()),"In Europe port could be just ship.");
-		modelBuilder.addUnit(ship);
-		unitsInEuropePort.add(ship);
-
+	public EuropeBuilder addShipToPort(final UnitPo ship) {
+		Preconditions.checkArgument(UnitType.isShip(ship.getType()), "In Europe port could be just ship.");
+		ship.setPlaceEuropePort(new PlaceEuropePortPo());
+		modelPo.getUnits().add(ship);
 		return this;
-	}
-
-	List<Unit> getUnitsInEuropePort() {
-		return unitsInEuropePort;
 	}
 
 }

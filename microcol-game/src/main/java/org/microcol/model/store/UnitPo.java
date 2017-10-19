@@ -1,10 +1,14 @@
 package org.microcol.model.store;
 
+import org.microcol.model.UnitType;
+
+import com.google.common.base.MoreObjects;
+
 public class UnitPo {
 
 	private Integer id;
 
-	private String type;
+	private UnitType type;
 
 	private String ownerId;
 
@@ -14,21 +18,31 @@ public class UnitPo {
 	
 	private PlaceHighSeasPo placeHighSeas;
 
-	private CargoPo cargo;
+	private CargoPo cargo = new CargoPo();
 
 	private int availableMoves;
 	
-	public UnitPo() {
-		// TODO Auto-generated constructor stub
-	}
-
-	public static UnitPo make(final Integer id, final String type, final String ownerId, final CargoPo cargo) {
+	public static UnitPo make(final Integer id, final UnitType type, final String ownerId, final CargoPo cargo) {
 		final UnitPo out = new UnitPo();
 		out.setId(id);
 		out.setType(type);
 		out.setOwnerId(ownerId);
 		out.setCargo(cargo);
 		return out;
+	}
+	
+	@Override
+	public String toString() {
+		return MoreObjects.toStringHelper(UnitPo.class)
+				.add("id", id)
+				.add("type", type)
+				.add("ownerId", ownerId)
+				.add("availableMoves", availableMoves)
+				.add("placeMap", placeMap)
+				.add("placeEuropePort", placeEuropePort)
+				.add("placeHighSeas", placeHighSeas)
+				.add("cargo", cargo)
+				.toString();
 	}
 
 	public Integer getId() {
@@ -39,11 +53,11 @@ public class UnitPo {
 		this.id = id;
 	}
 
-	public String getType() {
+	public UnitType getType() {
 		return type;
 	}
 
-	public void setType(String type) {
+	public void setType(UnitType type) {
 		this.type = type;
 	}
 
