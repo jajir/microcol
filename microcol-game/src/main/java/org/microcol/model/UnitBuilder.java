@@ -13,7 +13,7 @@ public class UnitBuilder {
 
 	private Player player;
 
-	private final PlaceBuilder placeBuilder;
+	private final PlaceBuilderImpl placeBuilder;
 
 	private final List<UnitBuilder> unitsInCargo = Lists.newArrayList();
 
@@ -21,7 +21,7 @@ public class UnitBuilder {
 
 	UnitBuilder(final ModelBuilder modelBuilder) {
 		this.modelBuilder = Preconditions.checkNotNull(modelBuilder);
-		placeBuilder = new PlaceBuilder();
+		placeBuilder = new PlaceBuilderImpl();
 	}
 
 	public UnitBuilder setPlayerName(final String playerName) {

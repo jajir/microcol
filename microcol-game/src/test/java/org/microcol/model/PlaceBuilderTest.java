@@ -10,7 +10,7 @@ import mockit.Mocked;
 
 public class PlaceBuilderTest {
 
-	private PlaceBuilder placeBuilder;
+	private PlaceBuilderImpl placeBuilder;
 
 	@Test
 	public void testSetLocation(@Mocked Unit unit) throws Exception {
@@ -105,7 +105,7 @@ public class PlaceBuilderTest {
 
 	@Before
 	public void setUp() {
-		placeBuilder = new PlaceBuilder();
+		placeBuilder = new PlaceBuilderImpl();
 	}
 
 	@After

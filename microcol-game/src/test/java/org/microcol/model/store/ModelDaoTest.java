@@ -46,6 +46,15 @@ public class ModelDaoTest {
 		modelDao.saveToFile("target/test.json", modelPo);
 	}
 
+	@Test
+	public void test_writing_loading() throws Exception {
+		ModelPo modelPo = new ModelProvider().buildComplexModel().save();
+
+		ModelDao modelDao = new ModelDao();
+		modelDao.saveToFile("target/test.json", modelPo);
+		//TODO load from file
+	}
+
 	private Level level;
 	
 	@Before

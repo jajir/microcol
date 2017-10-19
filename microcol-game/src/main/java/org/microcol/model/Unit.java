@@ -16,6 +16,7 @@ import com.google.common.collect.ImmutableList;
 public class Unit {
 
 	private final int id;
+	//TODO JJ make model final
 	private Model model;
 	private final UnitType type;
 	private final Player owner;
@@ -23,6 +24,7 @@ public class Unit {
 	private int availableMoves;
 	private final Cargo cargo;
 
+	@Deprecated
 	Unit(final UnitType type, final Player owner, final Location location) {
 		this.type = Preconditions.checkNotNull(type, "UnitType is null");
 		this.owner = Preconditions.checkNotNull(owner, "Owner is null");
@@ -31,6 +33,7 @@ public class Unit {
 		this.id = IdManager.nextId();
 	}
 
+	@Deprecated
 	Unit(final UnitType type, final Player owner, final PlaceBuilder placeBuilder) {
 		this.type = Preconditions.checkNotNull(type, "UnitType is null");
 		this.owner = Preconditions.checkNotNull(owner, "Owner is null");
@@ -38,7 +41,20 @@ public class Unit {
 		this.cargo = new Cargo(this, type.getCargoCapacity());
 		this.id = IdManager.nextId();
 	}
-
+	
+	Unit(final UnitPo unitPo, final Model model, final PlaceBuilder placeBuilder){
+		Preconditions.checkNotNull(unitPo, "Unit persisten object is null");
+		Preconditions.checkNotNull(model, "Model is null");
+		Preconditions.checkNotNull(placeBuilder, "PlaceBuilder is null");
+		this.type = UnitType.valueOf(unitPo.getType());
+		this.owner = model.getPlayerStore().getPlayerByName(unitPo.getOwnerId());
+		this.cargo = new Cargo(this, type.getCargoCapacity());
+		this.availableMoves = unitPo.getAvailableMoves();
+		this.id = unitPo.getId();
+		this.model = model;
+		this.place = placeBuilder.build(this);
+	}
+	
 	void setModel(final Model model) {
 		this.model = Preconditions.checkNotNull(model);
 		validateTerrain();

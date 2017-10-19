@@ -1,11 +1,9 @@
 package org.microcol.model;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 import java.util.function.Function;
 
 import org.microcol.model.store.ColonyPo;
@@ -21,7 +19,7 @@ public final class Model {
 	private final ListenerManager listenerManager;
 	private final Calendar calendar;
 	private final WorldMap map;
-	private final List<Player> players;
+	private final PlayerStore playerStore;
 	private final List<Colony> colonies;
 	private final UnitStorage unitStorage;
 	private final Europe europe;
@@ -35,18 +33,15 @@ public final class Model {
 		this.calendar = Preconditions.checkNotNull(calendar);
 		this.map = Preconditions.checkNotNull(map);
 
-		this.players = ImmutableList.copyOf(players);
+		this.playerStore = new PlayerStore(players);
 		this.colonies = Lists.newArrayList(colonies);
-		Preconditions.checkArgument(!this.players.isEmpty(), "There must be at least one player.");
-		checkPlayerNames(this.players);
-		this.players.forEach(player -> player.setModel(this));
+		this.playerStore.getPlayers().forEach(player -> player.setModel(this));
 		this.colonies.forEach(colony -> colony.setModel(this));
 
 		unitStorage = new UnitStorage(units);
 		unitStorage.getUnits(true).forEach(unit -> unit.setModel(this));
 
-		gameManager = new GameManager();
-		gameManager.setModel(this);
+		gameManager = new GameManager(this);
 
 		highSea = new HighSea(this);
 		this.europe = new Europe(this);
@@ -81,13 +76,65 @@ public final class Model {
 		});
 	}
 
-	private void checkPlayerNames(final List<Player> players) {
-		Set<String> names = new HashSet<>();
-		players.forEach(player -> {
-			if (!names.add(player.getName())) {
-				throw new IllegalArgumentException(String.format("Duplicate player name (%s).", player.getName()));
-			}
+	Model(final Calendar calendar, final WorldMap map, final ModelPo modelPo, final List<Colony> colonies,
+			final UnitStorage unitStorage, final List<Unit> unitsInEuropePort) {
+		listenerManager = new ListenerManager();
+
+		this.calendar = Preconditions.checkNotNull(calendar);
+		this.map = Preconditions.checkNotNull(map);
+
+		this.playerStore = PlayerStore.makePlayers(this, modelPo);
+		
+		this.colonies = Lists.newArrayList(colonies);
+		modelPo.getColonies().forEach(colonyPo -> {
+			final List<Construction> constructions = new ArrayList<>();
+			colonyPo.getConstructions().forEach(constructionPo -> {
+				final Construction c = Construction.build(constructionPo.getType());
+				constructions.add(c);
+			});
+			final Colony col = new Colony(colonyPo.getOwnerName(), playerStore.getPlayerByName(colonyPo.getName()),
+					colonyPo.getLocation(), constructions);
+			colonies.add(col);
 		});
+		
+		this.colonies.forEach(colony -> colony.setModel(this));
+		this.unitStorage = Preconditions.checkNotNull(unitStorage);
+
+		unitStorage.getUnits(true).forEach(unit -> unit.setModel(this));
+
+		gameManager = new GameManager(this);
+
+		highSea = new HighSea(this);
+		this.europe = new Europe(this);
+		unitsInEuropePort.forEach(unit -> unit.placeToEuropePort(europe.getPort()));
+		checkUnits();
+	}
+
+	
+	public static Model make(final ModelPo modelPo) {
+		final Calendar calendar = Calendar.make(modelPo.getCalendar());
+		final WorldMap worldMap = new WorldMap(modelPo);
+		
+		// TODO JJ finish colonies loading
+		final List<Colony> colonies = new ArrayList<>();
+		
+		// TODO JJ finish units loading
+		final List<Unit> units = new ArrayList<>();
+		
+		// TODO JJ finish loading of ships in Europe port
+		final List<Unit> unitsInEuropePort = new ArrayList<>();
+		
+		final UnitStorage unitStorage = new UnitStorage(units);
+		
+		Model model =  new Model(calendar, worldMap, modelPo, colonies, unitStorage, unitsInEuropePort);
+		
+		modelPo.getUnits().forEach(unitPo -> {
+			PlaceBuilderModelPo placeBuilderModelPo = new PlaceBuilderModelPo(unitPo, modelPo, model);
+			Unit u = new Unit(unitPo, model, placeBuilderModelPo);
+			model.unitStorage.getAllUnits().add(u);
+		});
+		
+		return model;
 	}
 
 	public boolean isGameStarted() {
@@ -119,7 +166,7 @@ public final class Model {
 	}
 
 	public List<Player> getPlayers() {
-		return players;
+		return playerStore.getPlayers();
 	}
 
 	public Player getCurrentPlayer() {
@@ -157,6 +204,11 @@ public final class Model {
 				.filter(colony -> colony.getLocation().equals(location)).findFirst();
 	}
 
+	public Optional<Colony> getColoniesAt(final Location location) {
+		Preconditions.checkNotNull(location);
+		return colonies.stream().filter(colony -> colony.getLocation().equals(location)).findFirst();
+	}
+
 	public List<Colony> getColonies(final Player owner) {
 		Preconditions.checkNotNull(owner);
 		return colonies.stream().filter(colony -> colony.getOwner().equals(owner))
@@ -178,8 +230,9 @@ public final class Model {
 	}
 	
 	private List<PlayerPo> getSavePlayers() {
+		//TODO is it necessary? How it's used.
 		final List<PlayerPo> out = new ArrayList<PlayerPo>();
-		players.forEach(player -> out.add(player.save()));
+		playerStore.getPlayers().forEach(player -> out.add(player.save()));
 		return out;
 	}
 	
@@ -276,5 +329,12 @@ public final class Model {
 
 	public HighSea getHighSea() {
 		return highSea;
+	}
+
+	/**
+	 * @return the playerStore
+	 */
+	PlayerStore getPlayerStore() {
+		return playerStore;
 	}
 }

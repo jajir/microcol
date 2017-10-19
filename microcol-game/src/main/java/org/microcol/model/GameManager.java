@@ -3,16 +3,12 @@ package org.microcol.model;
 import com.google.common.base.Preconditions;
 
 class GameManager {
-	private Model model;
-
+	
+	private final Model model;
 	private boolean started;
 	private Player currentPlayer;
 
-	GameManager() {
-		// Do nothing.
-	}
-
-	void setModel(final Model model) {
+	GameManager(final Model model) {
 		this.model = Preconditions.checkNotNull(model);
 	}
 

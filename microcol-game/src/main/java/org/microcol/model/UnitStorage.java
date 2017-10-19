@@ -16,6 +16,7 @@ import com.google.common.collect.ImmutableListMultimap;
 import com.google.common.collect.Multimaps;
 
 class UnitStorage {
+	
 	private final List<Unit> units;
 
 	UnitStorage(final List<Unit> units) {
