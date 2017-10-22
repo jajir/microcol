@@ -1,116 +1,73 @@
 package org.microcol.model;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
 import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
- import static org.junit.Assert.*;
+import org.microcol.model.store.ModelPo;
+import org.microcol.model.store.PlaceMapPo;
+import org.microcol.model.store.UnitPo;
 
 import mockit.Expectations;
+import mockit.Injectable;
 import mockit.Mocked;
+import mockit.Tested;
+import mockit.Verifications;
 
 public class PlaceBuilderTest {
 
-	private PlaceBuilderImpl placeBuilder;
-
-	@Test
-	public void testSetLocation(@Mocked Unit unit) throws Exception {
-		placeBuilder.setLocation(Location.of(3, 2));
-		
-		Place ret = placeBuilder.build(unit);
-		assertNotNull(ret);
-		assertTrue(ret instanceof PlaceLocation);
-		assertEquals(Location.of(3, 2), ((PlaceLocation)ret).getLocation());
-	}
-
-	@Test(expected=IllegalStateException.class)
-	public void testSetLocation_incomingToColonies() throws Exception {
-		placeBuilder.setLocation(Location.of(3, 2));
-		placeBuilder.setShipIncomingToColonies(3);
-	}
-
-	@Test(expected=IllegalStateException.class)
-	public void testSetLocation_incomingToEurope() throws Exception {
-		placeBuilder.setLocation(Location.of(3, 2));
-		placeBuilder.setShipIncomingToEurope(3);
-	}
-
-	@Test
-	public void test_setShipIncomingToEurope(@Mocked Unit unit) throws Exception {
-		placeBuilder.setShipIncomingToEurope(4);
-		new Expectations() {{
-			unit.getType(); result=UnitType.FRIGATE;
-		}};
-		
-		Place ret = placeBuilder.build(unit);
-		assertNotNull(ret);
-		assertTrue(ret instanceof PlaceHighSea);
-		assertEquals(4, ((PlaceHighSea)ret).getRemainigTurns());
-		assertEquals(true, ((PlaceHighSea)ret).isTravelToEurope());
-	}
-
-	@Test
-	public void test_setShipIncomingToColonies(@Mocked Unit unit) throws Exception {
-		placeBuilder.setShipIncomingToColonies(2);
-		new Expectations() {{
-			unit.getType(); result=UnitType.FRIGATE;
-		}};
-		
-		Place ret = placeBuilder.build(unit);
-		assertNotNull(ret);
-		assertTrue(ret instanceof PlaceHighSea);
-		assertEquals(2, ((PlaceHighSea)ret).getRemainigTurns());
-		assertEquals(false, ((PlaceHighSea)ret).isTravelToEurope());
-	}
-
+	@Tested
+	private PlaceBuilderModelPo placeBuilder;
+	
+	@Injectable
+	private UnitPo unitPo;
+	
+	@Injectable
+	private ModelPo modelPo;
+	
+	@Injectable
+	private Model model;
+	
 	@Test(expected=IllegalArgumentException.class)
-	public void test_setShipIncomingToColonies_invalidUnitType(@Mocked Unit unit) throws Exception {
-		placeBuilder.setShipIncomingToColonies(2);
+	public void test_build_verify_thatAllBuilderAreCalled(final @Mocked Unit unit) throws Exception {
 		new Expectations() {{
-			unit.getType(); result=UnitType.COLONIST;
-		}};
-		
-		Place ret = placeBuilder.build(unit);
-		assertNotNull(ret);
-		assertTrue(ret instanceof PlaceHighSea);
-		assertEquals(2, ((PlaceHighSea)ret).getRemainigTurns());
-		assertEquals(false, ((PlaceHighSea)ret).isTravelToEurope());
-	}
-
-	@Test
-	public void test_setShipToEuropePortPier(@Mocked Unit unit) throws Exception {
-		placeBuilder.setUnitToEuropePortPier();
-		new Expectations() {{
-			unit.getType(); result=UnitType.COLONIST;
-		}};
-		
-		Place ret = placeBuilder.build(unit);
-		assertNotNull(ret);
-		assertTrue(ret instanceof PlaceEuropePier);
-	}
-
-	@Test(expected=IllegalArgumentException.class)
-	public void test_setShipToEuropePortPier_invalidUnitType(@Mocked Unit unit) throws Exception {
-		placeBuilder.setUnitToEuropePortPier();
-		new Expectations() {{
-			unit.getType(); result=UnitType.FRIGATE;
-		}};
+			unitPo.getPlaceMap(); result = null;
+			unitPo.getPlaceHighSeas(); result = null;
+			unitPo.getPlaceEuropePort(); result = null;
+		}};		
 		
 		placeBuilder.build(unit);
+		
+		new Verifications() {{
+			unitPo.getPlaceMap(); times = 1;
+			unitPo.getPlaceHighSeas(); times = 1;
+			unitPo.getPlaceEuropePort(); times = 1;
+		}};		
 	}
 	
-	@Test(expected = IllegalStateException.class)
-	public void test_noTargetPlace(@Mocked Unit unit) throws Exception {
-		placeBuilder.build(unit);
+	@Test
+	public void test_build_placeMap(final @Mocked Unit unit) throws Exception {
+		final PlaceMapPo placeMapPo = new PlaceMapPo();
+		placeMapPo.setLocation(Location.of(3, 4));
+		new Expectations() {{
+			unitPo.getPlaceMap(); result = placeMapPo;
+		}};		
+		final Place ret = placeBuilder.build(unit);
+		
+		assertNotNull(ret);
+		assertTrue(ret instanceof PlaceLocation);
+		PlaceLocation placeLoc = (PlaceLocation)ret;
+		assertEquals(Location.of(3, 4), placeLoc.getLocation());
 	}
 
-	@Before
-	public void setUp() {
-		placeBuilder = new PlaceBuilderImpl();
+	public void setup() {
+		placeBuilder = new PlaceBuilderModelPo(unitPo, modelPo, model);
 	}
-
+	
 	@After
-	public void yearDown() {
+	public void tearDown(){
 		placeBuilder = null;
 	}
-
 }

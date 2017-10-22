@@ -10,6 +10,8 @@ import java.io.InputStreamReader;
 import org.microcol.gui.MicroColException;
 import org.microcol.model.ConstructionType;
 import org.microcol.model.GoodType;
+import org.microcol.model.TerrainType;
+import org.microcol.model.UnitType;
 import org.microcol.model.WorldMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,6 +33,8 @@ public class ModelDao {
 		gson = new GsonBuilder()
 				.registerTypeAdapter(ConstructionType.class, new GsonConstructionTypeAdapter())
 				.registerTypeAdapter(GoodType.class, new GsonGoodTypeAdapter())
+				.registerTypeAdapter(TerrainType.class, new GsonTerrainTypeAdapter())
+				.registerTypeAdapter(UnitType.class, new GsonUnitTypeAdapter())
 				.setPrettyPrinting()
 				.create();
 	}
