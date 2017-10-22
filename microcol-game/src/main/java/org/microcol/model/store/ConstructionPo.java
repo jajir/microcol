@@ -1,5 +1,6 @@
 package org.microcol.model.store;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.microcol.model.ConstructionType;
@@ -9,6 +10,13 @@ public class ConstructionPo {
 	private ConstructionType type;
 
 	private List<ConstructionSlotPo> slots;
+	
+	public ConstructionPo(){
+		slots = new ArrayList<>();
+		slots.add(new ConstructionSlotPo());
+		slots.add(new ConstructionSlotPo());
+		slots.add(new ConstructionSlotPo());
+	}
 
 	/**
 	 * @return the type

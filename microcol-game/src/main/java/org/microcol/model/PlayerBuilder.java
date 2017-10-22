@@ -3,6 +3,7 @@ package org.microcol.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.microcol.model.store.ModelPo;
 import org.microcol.model.store.PlayerPo;
 
 import com.google.common.base.Preconditions;
@@ -40,7 +41,7 @@ public class PlayerBuilder {
 	}
 
 	public ColonyBuilder addColony(final String name) {
-		final ColonyBuilder colonyBuilder = new ColonyBuilder(name, this, modelBuilder.getModelPo());
+		final ColonyBuilder colonyBuilder = new ColonyBuilder(name, this);
 		colonyBuilders.add(colonyBuilder);
 		return colonyBuilder;
 	}
@@ -50,6 +51,10 @@ public class PlayerBuilder {
 	 */
 	PlayerPo getPlayerPo() {
 		return playerPo;
+	}
+	
+	ModelPo getModelPo() {
+		return modelBuilder.getModelPo();
 	}
 
 }

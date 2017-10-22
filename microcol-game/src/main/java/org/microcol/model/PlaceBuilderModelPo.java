@@ -3,6 +3,7 @@ package org.microcol.model;
 import java.util.List;
 import java.util.Optional;
 
+import org.microcol.model.store.ColonyFieldPo;
 import org.microcol.model.store.ColonyPo;
 import org.microcol.model.store.ConstructionPo;
 import org.microcol.model.store.ConstructionSlotPo;
@@ -43,16 +44,31 @@ public class PlaceBuilderModelPo implements PlaceBuilder {
 		/**
 		 * Colony field
 		 */
+		if (unitPo.getPlaceColonyFieldPo() != null) {
+			for (final ColonyPo colonyPo : modelPo.getColonies()) {
+				final PlaceColonyField out = tryToFindColonyField(colonyPo, unit, model);
+				if (out != null) {
+					return out;
+				}
+			}
+			throw new IllegalArgumentException(
+					String.format("It's not possible to define place unit (%s) to colony field", unitPo));
+			
+		}
 		return null;
 	}, (unit, unitPo, modelPo, model) -> {
 		/**
 		 * Colony construction
 		 */
-		for (final ColonyPo colonyPo : modelPo.getColonies()) {
-			final PlaceConstructionSlot out = tryToFind(colonyPo, unit, model);
-			if (out != null) {
-				return out;
+		if (unitPo.getPlaceConstructionSlotPo() != null) {
+			for (final ColonyPo colonyPo : modelPo.getColonies()) {
+				final PlaceConstructionSlot out = tryToFindConstructionSlot(colonyPo, unit, model);
+				if (out != null) {
+					return out;
+				}
 			}
+			throw new IllegalArgumentException(
+					String.format("It's not possible to define place unit (%s) to construction slot", unitPo));
 		}
 		return null;
 	}, (unit, unitPo, modelPo, model) -> {
@@ -90,12 +106,12 @@ public class PlaceBuilderModelPo implements PlaceBuilder {
 
 	}
 
-	private PlaceConstructionSlot tryToFind(ColonyPo colonyPo, final Unit unit, final Model model) {
+	private PlaceConstructionSlot tryToFindConstructionSlot(final ColonyPo colonyPo, final Unit unit, final Model model) {
 		for (final ConstructionPo constructionPo : colonyPo.getConstructions()) {
 			int slotId = 0;
 			for (final ConstructionSlotPo slotPo : constructionPo.getSlots()) {
 				if (slotPo.getWorkerId() != null && unit.getId() == slotPo.getWorkerId()) {
-					Optional<Colony> oColony = model.getColoniesAt(colonyPo.getLocation());
+					final Optional<Colony> oColony = model.getColoniesAt(colonyPo.getLocation());
 					Preconditions.checkState(oColony.isPresent(), "Colony at (%s) is not in model",
 							colonyPo.getLocation());
 					final Colony colony = oColony.get();
@@ -105,6 +121,21 @@ public class PlaceBuilderModelPo implements PlaceBuilder {
 					return out;
 				}
 				slotId++;
+			}
+		}
+		return null;
+	}
+
+	private PlaceColonyField tryToFindColonyField(final ColonyPo colonyPo, final Unit unit, final Model model) {
+		for (final ColonyFieldPo constructionPo : colonyPo.getColonyFields()) {
+			if (constructionPo.getWorkerId() != null && unit.getId() == constructionPo.getWorkerId()) {
+				final Optional<Colony> oColony = model.getColoniesAt(colonyPo.getLocation());
+				Preconditions.checkState(oColony.isPresent(), "Colony at (%s) is not in model", colonyPo.getLocation());
+				final Colony colony = oColony.get();
+				final ColonyField colonyField = colony.getColonyFieldInDirection(constructionPo.getDirection());
+				PlaceColonyField out = new PlaceColonyField(unit, colonyField, constructionPo.getProducedGoodType());
+				colonyField.setPlaceColonyField(out);
+				return out;
 			}
 		}
 		return null;

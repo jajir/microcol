@@ -1,9 +1,6 @@
 package org.microcol.model;
 
-import java.util.List;
-
 import org.microcol.model.store.CalendarPo;
-import org.microcol.model.store.ColonyPo;
 import org.microcol.model.store.ModelDao;
 import org.microcol.model.store.ModelPo;
 import org.microcol.model.store.PlaceMapPo;
@@ -81,16 +78,6 @@ public class ModelBuilder {
 
 	public UnitBuilder makeUnitBuilder() {
 		return new UnitBuilder();
-	}
-
-	@Deprecated
-	List<PlayerPo> getPlayers() {
-		return modelPo.getPlayers();
-	}
-
-	@Deprecated
-	List<ColonyPo> getColonies() {
-		return modelPo.getColonies();
 	}
 
 	/**

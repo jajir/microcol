@@ -189,10 +189,6 @@ public class Colony {
 		return constructions;
 	}
 
-	Model getModel() {
-		return model;
-	}
-
 	public ColonyWarehouse getColonyWarehouse() {
 		return colonyWarehouse;
 	}

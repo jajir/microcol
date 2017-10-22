@@ -76,7 +76,7 @@ public final class Model {
 		});
 	}
 
-	Model(final Calendar calendar, final WorldMap map, final ModelPo modelPo, final List<Colony> colonies,
+	Model(final Calendar calendar, final WorldMap map, final ModelPo modelPo, 
 			final UnitStorage unitStorage, final List<Unit> unitsInEuropePort) {
 		Preconditions.checkNotNull(modelPo);
 		listenerManager = new ListenerManager();
@@ -86,7 +86,7 @@ public final class Model {
 
 		this.playerStore = PlayerStore.makePlayers(this, modelPo);
 		
-		this.colonies = Lists.newArrayList(colonies);
+		this.colonies = Lists.newArrayList();
 		modelPo.getColonies().forEach(colonyPo -> {
 			final List<Construction> constructions = new ArrayList<>();
 			colonyPo.getConstructions().forEach(constructionPo -> {
@@ -116,9 +116,6 @@ public final class Model {
 		final Calendar calendar = Calendar.make(modelPo.getCalendar());
 		final WorldMap worldMap = new WorldMap(modelPo);
 		
-		// TODO JJ finish colonies loading
-		final List<Colony> colonies = new ArrayList<>();
-		
 		// TODO JJ finish units loading
 		final List<Unit> units = new ArrayList<>();
 		
@@ -127,7 +124,7 @@ public final class Model {
 		
 		final UnitStorage unitStorage = new UnitStorage(units);
 		
-		Model model =  new Model(calendar, worldMap, modelPo, colonies, unitStorage, unitsInEuropePort);
+		Model model =  new Model(calendar, worldMap, modelPo, unitStorage, unitsInEuropePort);
 		
 		modelPo.getUnits().forEach(unitPo -> {
 			PlaceBuilderModelPo placeBuilderModelPo = new PlaceBuilderModelPo(unitPo, modelPo, model);
@@ -137,7 +134,7 @@ public final class Model {
 		
 		return model;
 	}
-
+	
 	public boolean isGameStarted() {
 		return gameManager.isStarted();
 	}

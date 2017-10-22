@@ -17,6 +17,10 @@ public class UnitPo {
 	private PlaceEuropePortPo placeEuropePort;
 	
 	private PlaceHighSeasPo placeHighSeas;
+	
+	private PlaceConstructionSlotPo placeConstructionSlotPo;
+	
+	private PlaceColonyFieldPo placeColonyFieldPo;
 
 	private CargoPo cargo = new CargoPo();
 
@@ -41,6 +45,8 @@ public class UnitPo {
 				.add("placeMap", placeMap)
 				.add("placeEuropePort", placeEuropePort)
 				.add("placeHighSeas", placeHighSeas)
+				.add("placeConstructionSlotPo", placeConstructionSlotPo)
+				.add("placeColonyFieldPo", placeColonyFieldPo)
 				.add("cargo", cargo)
 				.toString();
 	}
@@ -107,6 +113,34 @@ public class UnitPo {
 
 	public void setPlaceHighSeas(PlaceHighSeasPo placeHighSeas) {
 		this.placeHighSeas = placeHighSeas;
+	}
+
+	/**
+	 * @return the placeConstructionSlotPo
+	 */
+	public PlaceConstructionSlotPo getPlaceConstructionSlotPo() {
+		return placeConstructionSlotPo;
+	}
+
+	/**
+	 * @param placeConstructionSlotPo the placeConstructionSlotPo to set
+	 */
+	public void setPlaceConstructionSlotPo(PlaceConstructionSlotPo placeConstructionSlotPo) {
+		this.placeConstructionSlotPo = placeConstructionSlotPo;
+	}
+
+	/**
+	 * @return the placeColonyFieldPo
+	 */
+	public PlaceColonyFieldPo getPlaceColonyFieldPo() {
+		return placeColonyFieldPo;
+	}
+
+	/**
+	 * @param placeColonyFieldPo the placeColonyFieldPo to set
+	 */
+	public void setPlaceColonyFieldPo(PlaceColonyFieldPo placeColonyFieldPo) {
+		this.placeColonyFieldPo = placeColonyFieldPo;
 	}
 
 }

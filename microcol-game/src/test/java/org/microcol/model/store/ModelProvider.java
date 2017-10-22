@@ -26,7 +26,7 @@ public class ModelProvider {
 				.setGold(1108)
 				.addColony("brunswick")
 					.setLocation(Location.of(5, 4))
-					.setDefaultConstructions(true)
+					.setDefaultConstructions()
 					.setWorker(ConstructionType.RUM_DISTILLERS_HOUSE, 0, UnitType.COLONIST)
 					.setWorker(ConstructionType.CARPENTERS_SHOP, 0, UnitType.COLONIST)
 					.setWorker(ConstructionType.TOWN_HALL, 2, UnitType.COLONIST)
