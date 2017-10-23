@@ -19,7 +19,7 @@ import mockit.Verifications;
 public class PlaceBuilderTest {
 
 	@Tested
-	private PlaceBuilderModelPo placeBuilder;
+	private PlaceBuilder placeBuilder;
 	
 	@Injectable
 	private UnitPo unitPo;
@@ -63,7 +63,7 @@ public class PlaceBuilderTest {
 	}
 
 	public void setup() {
-		placeBuilder = new PlaceBuilderModelPo(unitPo, modelPo, model);
+		placeBuilder = new PlaceBuilder(unitPo, modelPo, model);
 	}
 	
 	@After

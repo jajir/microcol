@@ -24,8 +24,12 @@ public final class Model {
 	private final UnitStorage unitStorage;
 	private final Europe europe;
 	private final HighSea highSea;
-	private GameManager gameManager;
+	private final GameManager gameManager;
 
+	/*
+	 * This constructor should be called from tests. It allows to set mocks to
+	 * internal properties.
+	 */
 	Model(final Calendar calendar, final WorldMap map, final List<Player> players, final List<Colony> colonies,
 			final List<Unit> units, final List<Unit> unitsInEuropePort) {
 		listenerManager = new ListenerManager();
@@ -35,7 +39,6 @@ public final class Model {
 
 		this.playerStore = new PlayerStore(players);
 		this.colonies = Lists.newArrayList(colonies);
-		this.playerStore.getPlayers().forEach(player -> player.setModel(this));
 		this.colonies.forEach(colony -> colony.setModel(this));
 
 		unitStorage = new UnitStorage(units);
@@ -127,7 +130,7 @@ public final class Model {
 		Model model =  new Model(calendar, worldMap, modelPo, unitStorage, unitsInEuropePort);
 		
 		modelPo.getUnits().forEach(unitPo -> {
-			PlaceBuilderModelPo placeBuilderModelPo = new PlaceBuilderModelPo(unitPo, modelPo, model);
+			PlaceBuilder placeBuilderModelPo = new PlaceBuilder(unitPo, modelPo, model);
 			Unit u = new Unit(unitPo, model, placeBuilderModelPo);
 			model.unitStorage.getAllUnits().add(u);
 		});

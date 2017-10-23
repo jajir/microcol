@@ -11,16 +11,10 @@ import com.google.common.base.Preconditions;
 
 public final class Player {
 	
-	//TODO make model final
-	private Model model;
+	private final Model model;
 	private final String name;
 	private final boolean computer;
 	private int gold;
-
-	@Deprecated
-	Player(final String name, final boolean computer, final int initialGold) {
-		this(name, computer, initialGold, null);
-	}
 
 	Player(final String name, final boolean computer, final int initialGold, final Model model) {
 		this.name = Preconditions.checkNotNull(name);
@@ -39,10 +33,6 @@ public final class Player {
 		out.setComputer(computer);
 		out.setGold(gold);
 		return out;
-	}
-
-	void setModel(final Model model) {
-		this.model = Preconditions.checkNotNull(model);
 	}
 
 	public String getName() {

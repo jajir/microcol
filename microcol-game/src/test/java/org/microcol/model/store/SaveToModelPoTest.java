@@ -13,7 +13,7 @@ public class SaveToModelPoTest {
 		
 		assertNotNull(modelPo);
 		assertEquals(2, modelPo.getPlayers().size());
-		assertEquals(21, modelPo.getUnits().size());
+		assertEquals(20, modelPo.getUnits().size());
 	}
 	
 }

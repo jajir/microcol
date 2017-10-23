@@ -122,10 +122,10 @@ public class GameController implements Localized {
 			.addUnit(builder.makeUnitBuilder().setType(UnitType.COLONIST).setPlayerName("Dutch")
 					.setUnitToEuropePortPier().build())
 			.getEuropeBuilder()
-			.addShipToPort(builder.makeUnitBuilder().setType(UnitType.GALLEON).setLocation(Location.of(2, 2))
+				.addShipToPort(builder.makeUnitBuilder().setType(UnitType.GALLEON).setUnitToEuropePortPier()
 					.setPlayerName("Dutch").addCargoGood(GoodType.COTTON, 100)
 					.addCargoUnit(UnitType.COLONIST, true, false, false).build())
-			.addShipToPort(builder.makeUnitBuilder().setType(UnitType.FRIGATE).setLocation(Location.of(2, 2))
+				.addShipToPort(builder.makeUnitBuilder().setType(UnitType.FRIGATE).setUnitToEuropePortPier()
 					.setPlayerName("Dutch").addCargoGood(GoodType.CIGARS, 100).addCargoGood(GoodType.RUM, 100)
 					.addCargoGood(GoodType.SILVER, 100).build())
 			.build();
