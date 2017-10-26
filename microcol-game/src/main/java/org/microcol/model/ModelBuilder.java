@@ -77,7 +77,7 @@ public class ModelBuilder {
 	}
 
 	public UnitBuilder makeUnitBuilder() {
-		return new UnitBuilder();
+		return new UnitBuilder(modelPo);
 	}
 
 	/**

@@ -18,9 +18,11 @@ public class UnitPo {
 	
 	private PlaceHighSeasPo placeHighSeas;
 	
-	private PlaceConstructionSlotPo placeConstructionSlotPo;
+	private PlaceConstructionSlotPo placeConstructionSlot;
 	
-	private PlaceColonyFieldPo placeColonyFieldPo;
+	private PlaceColonyFieldPo placeColonyField;
+	
+	private PlaceCargoSlotPo placeCargoSlot;
 
 	private CargoPo cargo = new CargoPo();
 
@@ -45,8 +47,9 @@ public class UnitPo {
 				.add("placeMap", placeMap)
 				.add("placeEuropePort", placeEuropePort)
 				.add("placeHighSeas", placeHighSeas)
-				.add("placeConstructionSlotPo", placeConstructionSlotPo)
-				.add("placeColonyFieldPo", placeColonyFieldPo)
+				.add("placeCargoSlot", placeCargoSlot)
+				.add("placeConstructionSlot", placeConstructionSlot)
+				.add("placeColonyField", placeColonyField)
 				.add("cargo", cargo)
 				.toString();
 	}
@@ -118,29 +121,43 @@ public class UnitPo {
 	/**
 	 * @return the placeConstructionSlotPo
 	 */
-	public PlaceConstructionSlotPo getPlaceConstructionSlotPo() {
-		return placeConstructionSlotPo;
+	public PlaceConstructionSlotPo getPlaceConstructionSlot() {
+		return placeConstructionSlot;
 	}
 
 	/**
 	 * @param placeConstructionSlotPo the placeConstructionSlotPo to set
 	 */
-	public void setPlaceConstructionSlotPo(PlaceConstructionSlotPo placeConstructionSlotPo) {
-		this.placeConstructionSlotPo = placeConstructionSlotPo;
+	public void setPlaceConstructionSlot(PlaceConstructionSlotPo placeConstructionSlotPo) {
+		this.placeConstructionSlot = placeConstructionSlotPo;
 	}
 
 	/**
 	 * @return the placeColonyFieldPo
 	 */
-	public PlaceColonyFieldPo getPlaceColonyFieldPo() {
-		return placeColonyFieldPo;
+	public PlaceColonyFieldPo getPlaceColonyField() {
+		return placeColonyField;
 	}
 
 	/**
 	 * @param placeColonyFieldPo the placeColonyFieldPo to set
 	 */
-	public void setPlaceColonyFieldPo(PlaceColonyFieldPo placeColonyFieldPo) {
-		this.placeColonyFieldPo = placeColonyFieldPo;
+	public void setPlaceColonyField(PlaceColonyFieldPo placeColonyFieldPo) {
+		this.placeColonyField = placeColonyFieldPo;
+	}
+
+	/**
+	 * @return the placeCargoSlot
+	 */
+	public PlaceCargoSlotPo getPlaceCargoSlot() {
+		return placeCargoSlot;
+	}
+
+	/**
+	 * @param placeCargoSlot the placeCargoSlot to set
+	 */
+	public void setPlaceCargoSlot(PlaceCargoSlotPo placeCargoSlot) {
+		this.placeCargoSlot = placeCargoSlot;
 	}
 
 }

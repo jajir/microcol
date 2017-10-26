@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.google.common.base.MoreObjects;
+import com.google.common.base.Preconditions;
 
 public class CargoPo {
 
@@ -14,6 +15,18 @@ public class CargoPo {
 		return MoreObjects.toStringHelper(CargoPo.class).add("slots", slots).toString();
 	}
 
+	public boolean containsUnitInCargo(final Integer idUnitInCargo){
+		Preconditions.checkState(idUnitInCargo != null, "IdUnitInCargo is null");
+		return slots.stream().filter(slot -> idUnitInCargo.equals(slot.getUnitId())).findAny().isPresent();
+	}
+	
+	public CargoSlotPo getSlotAt(final int index) {
+		if (index < slots.size()) {
+			return slots.get(index);
+		}
+		return null;
+	}
+	
 	/**
 	 * @return the slots
 	 */

@@ -62,6 +62,21 @@ public class PlaceBuilderTest {
 		assertEquals(Location.of(3, 4), placeLoc.getLocation());
 	}
 
+	@Test
+	public void test_build_cargo(final @Mocked Unit unit) throws Exception {
+		final PlaceMapPo placeMapPo = new PlaceMapPo();
+		placeMapPo.setLocation(Location.of(3, 4));
+		new Expectations() {{
+			unitPo.getPlaceMap(); result = placeMapPo;
+		}};		
+		final Place ret = placeBuilder.build(unit);
+		
+		assertNotNull(ret);
+		assertTrue(ret instanceof PlaceLocation);
+		PlaceLocation placeLoc = (PlaceLocation)ret;
+		assertEquals(Location.of(3, 4), placeLoc.getLocation());
+	}
+	
 	public void setup() {
 		placeBuilder = new PlaceBuilder(unitPo, modelPo, model);
 	}

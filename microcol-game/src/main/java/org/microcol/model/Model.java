@@ -9,6 +9,7 @@ import java.util.function.Function;
 import org.microcol.model.store.ColonyPo;
 import org.microcol.model.store.ModelPo;
 import org.microcol.model.store.PlayerPo;
+import org.microcol.model.store.UnitPo;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
@@ -130,12 +131,18 @@ public final class Model {
 		Model model =  new Model(calendar, worldMap, modelPo, unitStorage, unitsInEuropePort);
 		
 		modelPo.getUnits().forEach(unitPo -> {
-			PlaceBuilder placeBuilderModelPo = new PlaceBuilder(unitPo, modelPo, model);
-			Unit u = new Unit(unitPo, model, placeBuilderModelPo);
-			model.unitStorage.getAllUnits().add(u);
+			if (!model.tryGetUnitById(unitPo.getId()).isPresent()) {
+				model.createUnit(model, modelPo, unitPo);
+			}
 		});
 		
 		return model;
+	}
+	
+	Unit createUnit(final Model model, final ModelPo modelPo, final UnitPo unitPo) {
+		final Unit out = Unit.make(model, modelPo, unitPo);
+		model.unitStorage.getAllUnits().add(out);
+		return out;
 	}
 	
 	public boolean isGameStarted() {
@@ -188,6 +195,10 @@ public final class Model {
 
 	public Unit getUnitById(final int id) {
 		return unitStorage.getUnitById(id);
+	}
+	
+	public Optional<Unit> tryGetUnitById(final int id){
+		return unitStorage.tryGetUnitById(id);
 	}
 
 	public Map<Location, List<Unit>> getUnitsAt() {

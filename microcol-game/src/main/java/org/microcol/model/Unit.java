@@ -7,6 +7,7 @@ import java.util.Optional;
 import java.util.Random;
 import java.util.Set;
 
+import org.microcol.model.store.ModelPo;
 import org.microcol.model.store.UnitPo;
 
 import com.google.common.base.MoreObjects;
@@ -48,11 +49,16 @@ public class Unit {
 		Preconditions.checkNotNull(placeBuilder, "PlaceBuilder is null");
 		this.type = unitPo.getType();
 		this.owner = model.getPlayerStore().getPlayerByName(unitPo.getOwnerId());
-		this.cargo = new Cargo(this, type.getCargoCapacity());
+		this.cargo = new Cargo(this, type.getCargoCapacity(), unitPo.getCargo());
 		this.availableMoves = unitPo.getAvailableMoves();
 		this.id = Preconditions.checkNotNull(unitPo.getId(),"ID is null");
 		this.model = model;
 		this.place = Preconditions.checkNotNull(placeBuilder.build(this));
+	}
+	
+	public static Unit make(final Model model, final ModelPo modelPo, final UnitPo unitPo){
+		final PlaceBuilder placeBuilderModelPo = new PlaceBuilder(unitPo, modelPo, model);
+		return new Unit(unitPo, model, placeBuilderModelPo);
 	}
 	
 	void setModel(final Model model) {
@@ -552,6 +558,7 @@ public class Unit {
 		unitPo.setAvailableMoves(availableMoves);
 		unitPo.setOwnerId(owner.getName());
 		unitPo.setType(type);
+		unitPo.setCargo(cargo.save());
 		place.save(unitPo);
 		return unitPo;
 	}

@@ -3,6 +3,8 @@ package org.microcol.model;
 import java.util.List;
 import java.util.Optional;
 
+import org.microcol.gui.MicroColException;
+import org.microcol.model.store.CargoSlotPo;
 import org.microcol.model.store.ColonyFieldPo;
 import org.microcol.model.store.ColonyPo;
 import org.microcol.model.store.ConstructionPo;
@@ -37,9 +39,9 @@ public class PlaceBuilder {
 		 * Europe port
 		 */
 		if (unitPo.getPlaceEuropePort() != null) {
-			if(UnitType.isShip(unitPo.getType())){
+			if (UnitType.isShip(unitPo.getType())) {
 				return new PlaceEuropePort(unit, model.getEurope().getPort());
-			}else{
+			} else {
 				return new PlaceEuropePier(unit);
 			}
 		}
@@ -48,7 +50,7 @@ public class PlaceBuilder {
 		/**
 		 * Colony field
 		 */
-		if (unitPo.getPlaceColonyFieldPo() != null) {
+		if (unitPo.getPlaceColonyField() != null) {
 			for (final ColonyPo colonyPo : modelPo.getColonies()) {
 				final PlaceColonyField out = tryToFindColonyField(colonyPo, unit, model);
 				if (out != null) {
@@ -57,14 +59,13 @@ public class PlaceBuilder {
 			}
 			throw new IllegalArgumentException(
 					String.format("It's not possible to define place unit (%s) to colony field", unitPo));
-			
 		}
 		return null;
 	}, (unit, unitPo, modelPo, model) -> {
 		/**
 		 * Colony construction
 		 */
-		if (unitPo.getPlaceConstructionSlotPo() != null) {
+		if (unitPo.getPlaceConstructionSlot() != null) {
 			for (final ColonyPo colonyPo : modelPo.getColonies()) {
 				final PlaceConstructionSlot out = tryToFindConstructionSlot(colonyPo, unit, model);
 				if (out != null) {
@@ -79,7 +80,23 @@ public class PlaceBuilder {
 		/**
 		 * Unit's cargo
 		 */
-		// TODO NYI
+		if (unitPo.getPlaceCargoSlot() != null) {
+			// find unit in which cargo should be unit placed
+			// place it to correct slot
+			final Integer idUnitInCargo = unitPo.getId();
+			final Integer slotIndex = getSlotId(idUnitInCargo);
+			final UnitPo holdingUnitPo = modelPo.getUnitWithUnitInCargo(idUnitInCargo);
+			Unit holdingUnit = null;
+			Optional<Unit> oHoldingUnit = model.tryGetUnitById(idUnitInCargo);
+			if(oHoldingUnit.isPresent()){
+				holdingUnit = oHoldingUnit.get();
+			}else{
+				// lets create this unit
+				holdingUnit = model.createUnit(model, modelPo, holdingUnitPo);
+			}
+			final PlaceCargoSlot placeCargoSlot = new PlaceCargoSlot(unit, holdingUnit.getCargo().getSlotByIndex(slotIndex));
+			return placeCargoSlot;
+		}
 		return null;
 	});
 
@@ -91,6 +108,18 @@ public class PlaceBuilder {
 		this.unitPo = Preconditions.checkNotNull(unitPo);
 		this.modelPo = Preconditions.checkNotNull(modelPo);
 		this.model = Preconditions.checkNotNull(model);
+	}
+
+	private Integer getSlotId(final Integer idUnitInCargo) {
+		final UnitPo tmp = modelPo.getUnitWithUnitInCargo(idUnitInCargo);
+		int index = 0;
+		for(final CargoSlotPo slot:tmp.getCargo().getSlots()){
+			if(idUnitInCargo.equals(slot.getUnitId())){
+				return index;
+			}
+			index++;
+		}
+		throw new MicroColException(String.format("unable to find slot for (%s)", idUnitInCargo));
 	}
 
 	public Place build(final Unit unit) {
@@ -109,7 +138,8 @@ public class PlaceBuilder {
 
 	}
 
-	private PlaceConstructionSlot tryToFindConstructionSlot(final ColonyPo colonyPo, final Unit unit, final Model model) {
+	private PlaceConstructionSlot tryToFindConstructionSlot(final ColonyPo colonyPo, final Unit unit,
+			final Model model) {
 		for (final ConstructionPo constructionPo : colonyPo.getConstructions()) {
 			int slotId = 0;
 			for (final ConstructionSlotPo slotPo : constructionPo.getSlots()) {

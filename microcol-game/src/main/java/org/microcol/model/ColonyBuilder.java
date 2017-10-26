@@ -75,7 +75,7 @@ public class ColonyBuilder {
 
 		final UnitPo worker = createUnitByType(unitType);
 		final PlaceConstructionSlotPo placeConstructionSlotPo = new PlaceConstructionSlotPo();
-		worker.setPlaceConstructionSlotPo(placeConstructionSlotPo);
+		worker.setPlaceConstructionSlot(placeConstructionSlotPo);
 
 		constructionPo.getSlots().get(position).setWorkerId(worker.getId());
 		return this;
@@ -88,7 +88,7 @@ public class ColonyBuilder {
 		
 		final UnitPo worker = createUnitByType(unitType);
 		final PlaceColonyFieldPo placeColonyFieldPo = new PlaceColonyFieldPo();
-		worker.setPlaceColonyFieldPo(placeColonyFieldPo);
+		worker.setPlaceColonyField(placeColonyFieldPo);
 		
 		colonyPo.getFieldByDirection(fieldDirection).setWorkerId(worker.getId());
 		colonyPo.getFieldByDirection(fieldDirection).setProducedGoodType(producedGoodType);

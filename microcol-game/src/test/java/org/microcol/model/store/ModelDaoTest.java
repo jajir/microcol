@@ -1,5 +1,6 @@
 package org.microcol.model.store;
 
+import static org.junit.Assert.*;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.junit.After;
@@ -41,6 +42,16 @@ public class ModelDaoTest {
 	@Test
 	public void test_writing() throws Exception {
 		ModelPo modelPo = new ModelProvider().buildComplexModel().save();
+
+		ModelDao modelDao = new ModelDao();
+		modelDao.saveToFile("target/test.json", modelPo);
+	}
+
+	@Test
+	public void test_simple_writing() throws Exception {
+		ModelPo modelPo = new ModelProvider().buildSimpleModel().save();
+		
+		assertEquals(2, modelPo.getUnits().size());
 
 		ModelDao modelDao = new ModelDao();
 		modelDao.saveToFile("target/test.json", modelPo);

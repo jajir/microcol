@@ -78,5 +78,39 @@ public class ModelProvider {
 
 		return builder.build();
 	}
+
+	public Model buildSimpleModel() {
+		ModelBuilder builder = new ModelBuilder();
+		builder
+			.setMap("/maps/test2.json")
+			.setCalendar(1570, 1800)
+
+			/**
+			 * Human player
+			 */
+			.addPlayer("Dutch")
+				.setComputerPlayer(false)
+				.setGold(1108)
+			.build()
+
+			/**
+			 * Opponent player2
+			 */
+			.addPlayer("Player2")
+				.setComputerPlayer(true)
+				.setGold(100)
+				.build()
+
+			/**
+			 * Europe port
+			 */
+			.getEuropeBuilder()
+			.addShipToPort(builder.makeUnitBuilder().setType(UnitType.GALLEON).setLocation(Location.of(2, 2))
+					.setPlayerName("Dutch").addCargoGood(GoodType.COTTON, 100)
+					.addCargoUnit(UnitType.COLONIST, true, false, false).build())
+			.build();
+
+		return builder.build();
+	}
 	
 }

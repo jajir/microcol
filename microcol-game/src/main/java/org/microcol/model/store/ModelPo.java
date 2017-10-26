@@ -24,6 +24,12 @@ public class ModelPo {
 		return players.stream().filter(player -> player.getName().equals(name)).findAny()
 				.orElseThrow(() -> new IllegalStateException("Invalid owner name '" + name + "'"));
 	}
+	
+	public UnitPo getUnitWithUnitInCargo(final Integer idUnitInCargo){
+		Preconditions.checkState(idUnitInCargo != null, "IdUnitInCargo is null");
+		return units.stream().filter(unit -> unit.getCargo().containsUnitInCargo(idUnitInCargo)).findAny()
+				.orElseThrow(() -> new IllegalStateException("Invalid unit id in cargo '" + idUnitInCargo + "'"));
+	}
 
 	public List<UnitPo> getUnits() {
 		return units;

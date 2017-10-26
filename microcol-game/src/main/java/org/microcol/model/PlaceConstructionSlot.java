@@ -1,5 +1,9 @@
 package org.microcol.model;
 
+import org.microcol.model.store.PlaceConstructionSlotPo;
+import org.microcol.model.store.PlacePo;
+import org.microcol.model.store.UnitPo;
+
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 
@@ -37,4 +41,10 @@ public class PlaceConstructionSlot extends AbstractPlace {
 				.toString();
 	}
 	
+	@Override
+	public PlacePo save(final UnitPo unitPo) {
+		final PlaceConstructionSlotPo placeConstructionSlotPo = new PlaceConstructionSlotPo();
+		unitPo.setPlaceConstructionSlot(placeConstructionSlotPo);
+		return placeConstructionSlotPo;
+	}
 }

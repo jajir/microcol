@@ -1,6 +1,8 @@
 package org.microcol.model;
 
 import org.microcol.model.store.CargoSlotPo;
+import org.microcol.model.store.ModelPo;
+import org.microcol.model.store.PlaceCargoSlotPo;
 import org.microcol.model.store.PlaceEuropePortPo;
 import org.microcol.model.store.PlaceHighSeasPo;
 import org.microcol.model.store.PlaceMapPo;
@@ -11,8 +13,11 @@ import com.google.common.base.Preconditions;
 public class UnitBuilder {
 
 	private final UnitPo unitPo;
-	
-	UnitBuilder() {
+
+	private final ModelPo modelPo;
+
+	UnitBuilder(final ModelPo modelPo) {
+		this.modelPo = Preconditions.checkNotNull(modelPo);
 		unitPo = new UnitPo();
 		unitPo.setId(IdManager.nextId());
 	}
@@ -60,19 +65,19 @@ public class UnitBuilder {
 	}
 
 	public UnitBuilder setUnitToCargoSlot(final Unit cargoHolder) {
-		//FIXME JJ NYI
+		// FIXME JJ NYI
 		return this;
 	}
 
 	public UnitBuilder setUnitToConstruction(final ConstructionType constructionType, final Colony colony,
 			final int position) {
-		//FIXME JJ NYI
+		// FIXME JJ NYI
 		return this;
 	}
 
 	public UnitBuilder setUnitToFiled(final Location fieldDirection, final Colony colony,
 			final GoodType producedGoodType) {
-		//FIXME JJ NYI
+		// FIXME JJ NYI
 		return this;
 	}
 
@@ -86,9 +91,15 @@ public class UnitBuilder {
 
 	public UnitBuilder addCargoUnit(final UnitType type, final boolean hasHorse, final boolean hasTools,
 			final boolean hasMuskets) {
+		final UnitPo tmpPo = new UnitPo();
+		tmpPo.setId(IdManager.nextId());
+		tmpPo.setType(type);
+		tmpPo.setOwnerId(Preconditions.checkNotNull(unitPo.getOwnerId(), "Player name was not set"));
+		tmpPo.setPlaceCargoSlot(new PlaceCargoSlotPo());
+		modelPo.getUnits().add(tmpPo);
 		final CargoSlotPo cargoSlotPo = new CargoSlotPo();
-		//TODO JJ create unit with ID and put it to cargo
-//		unitPo.getCargo().
+		cargoSlotPo.setUnitId(tmpPo.getId());
+		unitPo.getCargo().getSlots().add(cargoSlotPo);
 		return this;
 	}
 

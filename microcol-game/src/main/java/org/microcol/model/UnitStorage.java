@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
 
@@ -59,12 +60,12 @@ class UnitStorage {
 		});
 	}
 
-	// TODO JJ remove All form name
+	// TODO JJ remove All form name, return immutable list
 	List<Unit> getAllUnits() {
 		return units;
 	}
 
-	// TODO JJ rename it, be more specific about function
+	// TODO JJ rename it, be more specific about function, 
 	List<Unit> getUnits(final boolean includeStored) {
 		return units.stream().filter(unit -> includeStored || unit.isAtPlaceLocation()).collect(ImmutableList.toImmutableList());
 	}
@@ -140,8 +141,12 @@ class UnitStorage {
 	}
 
 	Unit getUnitById(int id) {
-		return units.stream().filter(unit -> unit.getId() == id).findAny()
+		return tryGetUnitById(id)
 				.orElseThrow(() -> new IllegalArgumentException("There is no unit with id '" + id + "'."));
+	}
+	
+	Optional<Unit> tryGetUnitById(final int id) {
+		return units.stream().filter(unit -> unit.getId() == id).findAny();
 	}
 
 }

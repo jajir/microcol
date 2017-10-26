@@ -11,7 +11,7 @@ public class CargoSlotPo {
 	 */
 	private Integer unitId;
 
-	private int amount;
+	private Integer amount;
 
 	private GoodType goodType;
 
@@ -22,6 +22,10 @@ public class CargoSlotPo {
 				.add("amount", amount)
 				.add("goodType", goodType)
 				.toString();
+	}
+	
+	public boolean containsGood() {
+		return goodType != null && amount != null;
 	}
 	
 	/**
@@ -41,14 +45,14 @@ public class CargoSlotPo {
 	/**
 	 * @return the amount
 	 */
-	public int getAmount() {
+	public Integer getAmount() {
 		return amount;
 	}
 
 	/**
 	 * @param amount the amount to set
 	 */
-	public void setAmount(int amount) {
+	public void setAmount(Integer amount) {
 		this.amount = amount;
 	}
 
