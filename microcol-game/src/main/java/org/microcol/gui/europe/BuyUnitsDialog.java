@@ -4,7 +4,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import org.microcol.gui.ImageProvider;
 import org.microcol.gui.LocalizationHelper;
-import org.microcol.gui.event.model.GameController;
+import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.util.AbstractDialog;
 import org.microcol.gui.util.ButtonsBar;
 import org.microcol.gui.util.Text;
@@ -26,7 +26,7 @@ public class BuyUnitsDialog extends AbstractDialog {
 	private final static int MAX_UNITS_IN_ROW = 2;
 
 	public BuyUnitsDialog(final ViewUtil viewUtil, final Text text, final ImageProvider imageProvider,
-			final GameController gameController, final LocalizationHelper localizationHelper) {
+			final GameModelController gameController, final LocalizationHelper localizationHelper) {
 		super(viewUtil);
 		Preconditions.checkNotNull(imageProvider);
 		Preconditions.checkNotNull(gameController);

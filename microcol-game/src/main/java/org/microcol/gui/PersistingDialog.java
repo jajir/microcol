@@ -3,7 +3,7 @@ package org.microcol.gui;
 import java.io.File;
 import java.nio.file.Path;
 
-import org.microcol.gui.event.model.GameController;
+import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.util.AbstractDialog;
 import org.microcol.gui.util.Text;
 import org.microcol.gui.util.ViewUtil;
@@ -27,10 +27,10 @@ public class PersistingDialog extends AbstractDialog {
 
 	private final Text text;
 
-	private final GameController gameController;
+	private final GameModelController gameController;
 
 	@Inject
-	public PersistingDialog(final ViewUtil viewUtil, final Text text, final GameController gameController) {
+	public PersistingDialog(final ViewUtil viewUtil, final Text text, final GameModelController gameController) {
 		super(viewUtil);
 		this.text = Preconditions.checkNotNull(text);
 		this.gameController = Preconditions.checkNotNull(gameController);

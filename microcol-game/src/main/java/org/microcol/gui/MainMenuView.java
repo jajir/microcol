@@ -1,5 +1,7 @@
 package org.microcol.gui;
 
+import org.microcol.gui.event.model.GameController;
+import org.microcol.gui.util.PersistentSrevice;
 import org.microcol.gui.util.Text;
 import org.microcol.gui.util.Text.Language;
 
@@ -31,6 +33,8 @@ public class MainMenuView implements MainMenuPresenter.Display {
 
 	private final MenuItem menuItemLoadGame;
 
+	private final Menu menuNewScenario;
+	
 	private final MenuItem menuItemQuitGame;
 
 	private final MenuItem menuItemAbout;
@@ -67,7 +71,8 @@ public class MainMenuView implements MainMenuPresenter.Display {
 
 	@Inject
 	public MainMenuView(final GamePreferences gamePreferences, final Text text,
-			final MainMenuDevelopment mainMenuDevelopment) {
+			final MainMenuDevelopment mainMenuDevelopment, final PersistentSrevice persistentSrevice,
+			final GameController gameController) {
 		this.text = Preconditions.checkNotNull(text);
 
 		/**
@@ -76,6 +81,15 @@ public class MainMenuView implements MainMenuPresenter.Display {
 		menuItemNewGame = new MenuItem();
 		menuItemNewGame.setAccelerator(new KeyCodeCombination(KeyCode.N, KeyCombination.CONTROL_DOWN));
 		menuItemNewGame.disableProperty().setValue(true);
+		
+		menuNewScenario = new Menu();
+		persistentSrevice.getScenarios().forEach(scenario->{
+			final MenuItem menuItem = new MenuItem(scenario.getName());
+			menuItem.setOnAction(event->{
+				gameController.startScenario(scenario.getFileName());
+			});
+			menuNewScenario.getItems().add(menuItem);
+		});
 
 		menuItemLoadGame = new MenuItem();
 		menuItemLoadGame.setAccelerator(new KeyCodeCombination(KeyCode.L, KeyCombination.CONTROL_DOWN));
@@ -141,7 +155,7 @@ public class MainMenuView implements MainMenuPresenter.Display {
 		 * menu
 		 */
 		menuGame = new Menu();
-		menuGame.getItems().addAll(menuItemNewGame, menuItemLoadGame, menuItemSameGame, menuItemQuitGame);
+		menuGame.getItems().addAll(menuItemNewGame, menuNewScenario, menuItemLoadGame, menuItemSameGame, menuItemQuitGame);
 		menuView = new Menu();
 		menuView.getItems().addAll(menuItemCenterView, menuItemEurope);
 		menuUnit = new Menu();
@@ -202,6 +216,7 @@ public class MainMenuView implements MainMenuPresenter.Display {
 		menuItemNewGame.setText(text.get("mainMenu.game.newGame"));
 		menuItemSameGame.setText(text.get("mainMenu.game.saveGame"));
 		menuItemLoadGame.setText(text.get("mainMenu.game.loadGame"));
+		menuNewScenario.setText(text.get("mainMenu.game.newScenario"));
 		menuItemQuitGame.setText(text.get("mainMenu.game.quitGame"));
 
 		/**

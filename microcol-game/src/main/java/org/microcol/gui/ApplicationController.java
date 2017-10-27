@@ -1,6 +1,6 @@
 package org.microcol.gui;
 
-import org.microcol.gui.event.model.GameController;
+import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.event.model.GameFinishedController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,14 +18,14 @@ public class ApplicationController {
 
 	private final MainFramePresenter mainFramePresenter;
 
-	private final GameController gameController;
+	private final GameModelController gameController;
 
 	private final MusicController musicController;
 
 	private final GamePreferences gamePreferences;
 
 	@Inject
-	public ApplicationController(final MainFramePresenter mainFramePresenter, final GameController gameController,
+	public ApplicationController(final MainFramePresenter mainFramePresenter, final GameModelController gameController,
 			final GameFinishedController gameFinishedController, final MusicController musicController,
 			final GamePreferences gamePreferences) {
 		this.mainFramePresenter = Preconditions.checkNotNull(mainFramePresenter);

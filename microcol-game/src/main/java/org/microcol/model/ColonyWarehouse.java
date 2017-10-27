@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
+import com.google.common.collect.ImmutableMap;
 
 /**
  * Represents place where colony store goods.
@@ -24,23 +25,25 @@ public class ColonyWarehouse {
 		this.goodAmounts = new HashMap<>();
 	}
 
-	ColonyWarehouse(final Colony colony, final Map<GoodType, Integer> initialGoodAmounts) {
+	ColonyWarehouse(final Colony colony, final Map<String, Integer> initialGoodAmounts) {
 		this.colony = colony;
 		Preconditions.checkNotNull(initialGoodAmounts);
-		this.goodAmounts = new HashMap<>(initialGoodAmounts);
+		this.goodAmounts = new HashMap<>();
+		initialGoodAmounts.forEach((goodName, amount) -> goodAmounts.put(GoodType.valueOf(goodName), amount));
 	}
-	
-	Map<GoodType, Integer> save(){
-		return goodAmounts;
+
+	Map<String, Integer> save() {
+		return goodAmounts.entrySet().stream()
+				.collect(ImmutableMap.toImmutableMap(entry -> entry.getKey().name(), entry -> entry.getValue()));
 	}
-	
+
 	/**
 	 * Make data copy of this instance.
 	 */
 	@Override
-	public ColonyWarehouse clone(){
-		Map<GoodType, Integer> tmp = new HashMap<>();
-		tmp.putAll(goodAmounts);
+	public ColonyWarehouse clone() {
+		Map<String, Integer> tmp = new HashMap<>();
+		goodAmounts.forEach((good, amount) -> tmp.put(good.name(), amount));
 		return new ColonyWarehouse(colony, tmp);
 	}
 

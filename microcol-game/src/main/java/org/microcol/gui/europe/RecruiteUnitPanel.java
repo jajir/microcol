@@ -3,7 +3,7 @@ package org.microcol.gui.europe;
 import org.microcol.gui.DialogNotEnoughGold;
 import org.microcol.gui.ImageProvider;
 import org.microcol.gui.LocalizationHelper;
-import org.microcol.gui.event.model.GameController;
+import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.util.Text;
 import org.microcol.gui.util.ViewUtil;
 import org.microcol.model.NotEnoughtGoldException;
@@ -17,7 +17,7 @@ import javafx.scene.layout.VBox;
 public class RecruiteUnitPanel extends VBox {
 
 	public RecruiteUnitPanel(final UnitType unitType, final ViewUtil viewUtil, final ImageProvider imageProvider,
-			final GameController gameController, final LocalizationHelper localizationHelper, final Text text,
+			final GameModelController gameController, final LocalizationHelper localizationHelper, final Text text,
 			final RecruiteUnitsDialog buyUnitsDialog) {
 		final ImageView image = new ImageView(imageProvider.getUnitImage(unitType));
 		final Label labelName = new Label(localizationHelper.getUnitName(unitType));

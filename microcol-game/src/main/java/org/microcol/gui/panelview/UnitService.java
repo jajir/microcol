@@ -1,6 +1,6 @@
 package org.microcol.gui.panelview;
 
-import org.microcol.gui.event.model.GameController;
+import org.microcol.gui.event.model.GameModelController;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
@@ -11,10 +11,10 @@ import com.google.inject.Inject;
  */
 public class UnitService {
 
-	private final GameController gameController;
+	private final GameModelController gameController;
 
 	@Inject
-	public UnitService(final GameController gameController) {
+	public UnitService(final GameModelController gameController) {
 		this.gameController = Preconditions.checkNotNull(gameController);
 	}
 

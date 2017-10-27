@@ -2,7 +2,7 @@ package org.microcol.gui.europe;
 
 import org.microcol.gui.ImageProvider;
 import org.microcol.gui.LocalizationHelper;
-import org.microcol.gui.event.model.GameController;
+import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.util.ClipboardReader;
 import org.microcol.gui.util.TitledPanel;
 import org.microcol.model.UnitType;
@@ -30,7 +30,7 @@ public class PanelPortPier extends TitledPanel {
 
 	private final Logger logger = LoggerFactory.getLogger(PanelPortPier.class);
 
-	private final GameController gameController;
+	private final GameModelController gameController;
 
 	private final DialogCallback europeDialog;
 
@@ -42,7 +42,7 @@ public class PanelPortPier extends TitledPanel {
 
 	private Background background;
 
-	public PanelPortPier(final GameController gameController, final EuropeDialog europeDialog, final String title,
+	public PanelPortPier(final GameModelController gameController, final EuropeDialog europeDialog, final String title,
 			final ImageProvider imageProvider, final LocalizationHelper localizationHelper) {
 		super(title, new Label(title));
 		this.gameController = Preconditions.checkNotNull(gameController);

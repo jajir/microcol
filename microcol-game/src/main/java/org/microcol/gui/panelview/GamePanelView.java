@@ -12,7 +12,7 @@ import org.microcol.gui.LocalizationHelper;
 import org.microcol.gui.PathPlanning;
 import org.microcol.gui.Point;
 import org.microcol.gui.StepCounter;
-import org.microcol.gui.event.model.GameController;
+import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.panelview.MoveModeSupport.MoveMode;
 import org.microcol.gui.util.FpsCounter;
 import org.microcol.gui.util.Text;
@@ -52,7 +52,7 @@ public class GamePanelView implements GamePanelPresenter.Display {
 
 	private final Cursor gotoModeCursor;
 
-	private final GameController gameController;
+	private final GameModelController gameController;
 
 	private final PathPlanning pathPlanning;
 
@@ -87,7 +87,7 @@ public class GamePanelView implements GamePanelPresenter.Display {
 	private final VisibleArea visibleArea;
 
 	@Inject
-	public GamePanelView(final GameController gameController, final PathPlanning pathPlanning,
+	public GamePanelView(final GameModelController gameController, final PathPlanning pathPlanning,
 			final ImageProvider imageProvider, final ViewState viewState, final MoveModeSupport moveModeSupport,
 			final Text text, final ViewUtil viewUtil, final LocalizationHelper localizationHelper,
 			final PaintService paintService, final GamePreferences gamePreferences) {

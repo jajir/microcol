@@ -18,7 +18,7 @@ import org.microcol.gui.event.ShowGridEvent;
 import org.microcol.gui.event.StartMoveController;
 import org.microcol.gui.event.StartMoveEvent;
 import org.microcol.gui.event.VolumeChangeController;
-import org.microcol.gui.event.model.GameController;
+import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.event.model.TurnStartedController;
 import org.microcol.gui.util.Text;
 import org.microcol.gui.util.ViewUtil;
@@ -80,7 +80,7 @@ public class MainMenuPresenter {
 			final AnimationSpeedChangeController animationSpeedChangeController,
 			final ShowGridController showGridController, final FocusedTileController focusedTileController,
 			final CenterViewController centerViewController, final TurnStartedController turnStartedController,
-			final ExitGameController exitGameController, final GameController gameController,
+			final ExitGameController exitGameController, final GameModelController gameController,
 			final PersistingDialog persistingDialog, final ImageProvider imageProvider,
 			final LocalizationHelper localizationHelper, final StartMoveController startMoveController) {
 		this.display = Preconditions.checkNotNull(display);

@@ -18,7 +18,7 @@ import org.microcol.gui.event.ShowGridController;
 import org.microcol.gui.event.StartMoveController;
 import org.microcol.gui.event.StartMoveEvent;
 import org.microcol.gui.event.model.DebugRequestController;
-import org.microcol.gui.event.model.GameController;
+import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.event.model.MoveUnitController;
 import org.microcol.gui.event.model.NewGameController;
 import org.microcol.gui.util.Localized;
@@ -79,7 +79,7 @@ public final class GamePanelPresenter implements Localized {
 
 	private final GamePreferences gamePreferences;
 
-	private final GameController gameController;
+	private final GameModelController gameController;
 
 	private final FocusedTileController focusedTileController;
 
@@ -98,7 +98,7 @@ public final class GamePanelPresenter implements Localized {
 	private final Text text;
 
 	@Inject
-	public GamePanelPresenter(final GamePanelPresenter.Display display, final GameController gameController,
+	public GamePanelPresenter(final GamePanelPresenter.Display display, final GameModelController gameController,
 			final KeyController keyController, final FocusedTileController focusedTileController,
 			final MoveUnitController moveUnitController, final NewGameController newGameController,
 			final GamePreferences gamePreferences, final ShowGridController showGridController,

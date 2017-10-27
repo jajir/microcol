@@ -1,7 +1,7 @@
 package org.microcol.gui.europe;
 
 import org.microcol.gui.ImageProvider;
-import org.microcol.gui.event.model.GameController;
+import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.util.ClipboardReader;
 import org.microcol.gui.util.TitledPanel;
 import org.microcol.model.UnitType;
@@ -33,12 +33,12 @@ public class PanelHighSeas extends TitledPanel {
 
 	private final ImageProvider imageProvider;
 
-	private final GameController gameController;
+	private final GameModelController gameController;
 
 	private Background background;
 
 	public PanelHighSeas(final EuropeDialog europeDialog, final ImageProvider imageProvider, final String title,
-			final GameController gameController, final boolean isShownShipsTravelingToEurope) {
+			final GameModelController gameController, final boolean isShownShipsTravelingToEurope) {
 		super(title, null);
 		this.europeDialog = Preconditions.checkNotNull(europeDialog);
 		this.imageProvider = Preconditions.checkNotNull(imageProvider);

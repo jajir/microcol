@@ -7,7 +7,7 @@ import org.microcol.gui.event.FocusedTileEvent;
 import org.microcol.gui.event.KeyController;
 import org.microcol.gui.event.StatusBarMessageController;
 import org.microcol.gui.event.StatusBarMessageEvent;
-import org.microcol.gui.event.model.GameController;
+import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.event.model.TurnStartedController;
 import org.microcol.gui.util.Localized;
 import org.microcol.model.Location;
@@ -37,7 +37,7 @@ public class RightPanelPresenter implements Localized {
 	private FocusedTileEvent lastFocusedTileEvent;
 
 	@Inject
-	public RightPanelPresenter(final RightPanelPresenter.Display display, final GameController gameController,
+	public RightPanelPresenter(final RightPanelPresenter.Display display, final GameModelController gameController,
 			final KeyController keyController, final FocusedTileController focusedTileController,
 			final ChangeLanguageController changeLanguangeController,
 			final StatusBarMessageController statusBarMessageController,

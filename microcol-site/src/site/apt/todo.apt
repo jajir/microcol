@@ -49,6 +49,12 @@ Planned releases
   * \u2717 Send REF (with aggressive behavior)
   
   * \u2717 game end by conquering REF
+ 
+ * 0.5.0 - game should be playable from start till the end
+  	
+  * \u2717 Save / Load game model. It's necessary for further game states.
+  	
+  * \u2717 Colony building queue and queue editing
   
   * TODO
  
@@ -57,10 +63,6 @@ Planned releases
 Ideas
  
  * 1.0.0 - should be released at the end of first year of development (Jan. 2018), first minimal playable version of game.  
-  	
-  * \u2717 Save / Load game model. It's necessary for further game states.
-  	
-  * \u2717 Colony building queue and queue editing
 
   * no sound
 

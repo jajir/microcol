@@ -7,7 +7,6 @@ import java.util.Map;
 
 import org.microcol.gui.MicroColException;
 import org.microcol.model.ConstructionType;
-import org.microcol.model.GoodType;
 import org.microcol.model.Location;
 
 import com.google.common.base.Preconditions;
@@ -24,7 +23,7 @@ public class ColonyPo {
 
 	private List<ConstructionPo> constructions = new ArrayList<>();
 
-	private Map<GoodType, Integer> colonyWarehouse = new HashMap<>();
+	private Map<String, Integer> colonyWarehouse = new HashMap<>();
 
 	public ColonyPo() {
 		Location.DIRECTIONS.forEach(direction -> {
@@ -126,7 +125,7 @@ public class ColonyPo {
 	/**
 	 * @return the colonyWarehouse
 	 */
-	public Map<GoodType, Integer> getColonyWarehouse() {
+	public Map<String, Integer> getColonyWarehouse() {
 		return colonyWarehouse;
 	}
 
@@ -134,7 +133,7 @@ public class ColonyPo {
 	 * @param colonyWarehouse
 	 *            the colonyWarehouse to set
 	 */
-	public void setColonyWarehouse(final Map<GoodType, Integer> colonyWarehouse) {
+	public void setColonyWarehouse(final Map<String, Integer> colonyWarehouse) {
 		this.colonyWarehouse = colonyWarehouse;
 	}
 
