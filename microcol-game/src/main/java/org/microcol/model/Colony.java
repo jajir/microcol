@@ -1,6 +1,7 @@
 package org.microcol.model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -34,13 +35,18 @@ public class Colony {
 
 	public Colony(final String name, final Player owner, final Location location,
 			final List<Construction> constructions) {
+		this(name, owner, location, constructions, new HashMap<>());
+	}
+
+	public Colony(final String name, final Player owner, final Location location,
+			final List<Construction> constructions, final Map<GoodType, Integer> initialGoodAmounts) {
 		this.name = Preconditions.checkNotNull(name);
 		this.owner = Preconditions.checkNotNull(owner, "owner is null");
 		this.location = Preconditions.checkNotNull(location);
 		colonyFields = new ArrayList<>();
 		Location.DIRECTIONS.forEach(loc -> colonyFields.add(new ColonyField(loc, this)));
 		this.constructions = Preconditions.checkNotNull(constructions);
-		colonyWarehouse = new ColonyWarehouse(this);
+		colonyWarehouse = new ColonyWarehouse(this, initialGoodAmounts);
 		checkConstructions();
 	}
 

@@ -24,9 +24,10 @@ public class ColonyWarehouse {
 		this.goodAmounts = new HashMap<>();
 	}
 
-	ColonyWarehouse(final Colony colony, final Map<GoodType, Integer> goodAmounts) {
+	ColonyWarehouse(final Colony colony, final Map<GoodType, Integer> initialGoodAmounts) {
 		this.colony = colony;
-		this.goodAmounts = goodAmounts;
+		Preconditions.checkNotNull(initialGoodAmounts);
+		this.goodAmounts = new HashMap<>(initialGoodAmounts);
 	}
 	
 	Map<GoodType, Integer> save(){

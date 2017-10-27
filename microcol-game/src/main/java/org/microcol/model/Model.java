@@ -98,7 +98,7 @@ public final class Model {
 				constructions.add(c);
 			});
 			final Colony col = new Colony(colonyPo.getName(), playerStore.getPlayerByName(colonyPo.getOwnerName()),
-					colonyPo.getLocation(), constructions);
+					colonyPo.getLocation(), constructions, colonyPo.getColonyWarehouse());
 			colonies.add(col);
 		});
 		

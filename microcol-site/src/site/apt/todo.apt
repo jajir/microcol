@@ -17,6 +17,12 @@ Planned releases
    * Drag & drop units and goods
    
    * Unit sail from Europe to New World and back
+
+  * \u2713 Model builder store data to persistent model 
+
+  * \u2713 Persistent model could be read to model and back 
+
+  * \u2713 Persistent model could be read from / write to json 
    
   * Colony
   	
@@ -33,14 +39,12 @@ Planned releases
   	* \u2717 Show how many goods is consumed.
   	  	
   	* \u2717 Show that some production doesn't have enough sources.
-  	
-  	* \u2717 Building queue and queue editing
-  	
-  * \u2717 Save / Load game model. It's necessary for further game states.
   
   * \u2717 Colony founding through command B
   
   * \u2717 Declare independence. Now it could be done anytime.
+  
+  * \u2717 Allow to load predefined scenarios from class path.
   
   * \u2717 Send REF (with aggressive behavior)
   
@@ -53,6 +57,10 @@ Planned releases
 Ideas
  
  * 1.0.0 - should be released at the end of first year of development (Jan. 2018), first minimal playable version of game.  
+  	
+  * \u2717 Save / Load game model. It's necessary for further game states.
+  	
+  * \u2717 Colony building queue and queue editing
 
   * no sound
 
