@@ -2,6 +2,7 @@ package org.microcol.model;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -9,6 +10,8 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameter;
 import org.junit.runners.Parameterized.Parameters;
+import org.microcol.model.store.ModelPo;
+import org.microcol.model.store.WorldMapPo;
 
 @RunWith(Parameterized.class)
 public class WorldMapCreationTest {
@@ -16,6 +19,7 @@ public class WorldMapCreationTest {
 	public static Collection<Object[]> data() {
 		return Arrays.asList(new Object[][] {
 			{"/maps/test-map-2islands-15x10.txt", 15, 10},
+			{"/maps/test-map-2islands-15x10.txt", 34, 29},
 		});
 	}
 
@@ -30,7 +34,13 @@ public class WorldMapCreationTest {
 
 	@Test
 	public void testCreation() {
-		final WorldMap map = new WorldMap(fileName);
+		WorldMapPo mapPo = new WorldMapPo();
+		mapPo.setMaxX(maxX);
+		mapPo.setMaxY(maxY);
+		mapPo.setTerrainType(new HashMap<>());
+		ModelPo gamePo = new ModelPo();
+		gamePo.setMap(mapPo);
+		final WorldMap map = new WorldMap(gamePo);
 
 		Assert.assertEquals("Test of maxX failed.", maxX, map.getMaxX());
 		Assert.assertEquals("Test of maxY failed.", maxY, map.getMaxY());

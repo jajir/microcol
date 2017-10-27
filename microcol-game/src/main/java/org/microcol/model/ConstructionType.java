@@ -559,6 +559,16 @@ public class ConstructionType {
 			WAREHOUSE,
 			BASIC_WAREHOUSE);
 	
+	
+	public static ConstructionType valueOf(final String strName) {
+		final Optional<ConstructionType> oGoodType = ALL.stream().filter(type -> type.name().equals(strName))
+				.findFirst();
+		if (oGoodType.isPresent()) {
+			return oGoodType.get();
+		} else {
+			throw new IllegalArgumentException("There is no such type '" + strName + "'");
+		}
+	}
 
 	private static class ConstructionTypeBuilder {
 

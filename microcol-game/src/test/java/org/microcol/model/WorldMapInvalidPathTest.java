@@ -10,14 +10,15 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameter;
 import org.junit.runners.Parameterized.Parameters;
+import org.microcol.model.store.ModelDao;
 
 @RunWith(Parameterized.class)
 public class WorldMapInvalidPathTest {
 	@Parameters(name = "{index}: fileName = {0}, locations = {1}")
 	public static Collection<Object[]> data() {
 		return Arrays.asList(new Object[][] {
-			{"/maps/test-map-ocean-10x10.txt", Arrays.asList(Location.of(2, 2), Location.of(1, 1), Location.of(0, 0))},
-			{"/maps/test-map-ocean-10x10.txt", Arrays.asList(Location.of(9, 9), Location.of(10, 10), Location.of(11, 11))},
+			{"/maps/test-map-ocean-10x10.json", Arrays.asList(Location.of(2, 2), Location.of(1, 1), Location.of(0, 0))},
+			{"/maps/test-map-ocean-10x10.json", Arrays.asList(Location.of(9, 9), Location.of(10, 10), Location.of(11, 11))},
 		});
 	}
 
@@ -29,7 +30,9 @@ public class WorldMapInvalidPathTest {
 
 	@Test
 	public void testInalidPath() {
-		final WorldMap map = new WorldMap(fileName);
+		ModelDao dao = new ModelDao();
+		WorldMap map = dao.loadPredefinedWorldMap(fileName);
+		
 		final Path path = Path.of(locations);
 
 		Assert.assertFalse(map.isValid(path));

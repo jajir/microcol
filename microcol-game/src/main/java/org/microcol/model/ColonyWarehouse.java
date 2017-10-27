@@ -1,16 +1,12 @@
 package org.microcol.model;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-
-import javax.json.stream.JsonParser;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
-import com.google.common.collect.Lists;
 
 /**
  * Represents place where colony store goods.
@@ -28,14 +24,14 @@ public class ColonyWarehouse {
 		this.goodAmounts = new HashMap<>();
 	}
 
-	ColonyWarehouse(final Colony colony, final Map<GoodType, Integer> goodAmounts) {
+	ColonyWarehouse(final Colony colony, final Map<GoodType, Integer> initialGoodAmounts) {
 		this.colony = colony;
-		this.goodAmounts = goodAmounts;
+		Preconditions.checkNotNull(initialGoodAmounts);
+		this.goodAmounts = new HashMap<>(initialGoodAmounts);
 	}
-
-	static List<Colony> load(final JsonParser parser, final List<Player> players) {
-		// TODO JJ NYI, remove this function
-		return Lists.newArrayList();
+	
+	Map<GoodType, Integer> save(){
+		return goodAmounts;
 	}
 	
 	/**

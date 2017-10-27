@@ -1,139 +1,187 @@
 package org.microcol.model;
 
+import java.util.List;
+import java.util.Optional;
+
+import org.microcol.gui.MicroColException;
+import org.microcol.model.store.CargoSlotPo;
+import org.microcol.model.store.ColonyFieldPo;
+import org.microcol.model.store.ColonyPo;
+import org.microcol.model.store.ConstructionPo;
+import org.microcol.model.store.ConstructionSlotPo;
+import org.microcol.model.store.ModelPo;
+import org.microcol.model.store.UnitPo;
+
 import com.google.common.base.Preconditions;
+import com.google.common.collect.Lists;
 
 public class PlaceBuilder {
 
-	private Location location;
+	private final List<Builder> placeBuilders = Lists.newArrayList((unit, unitPo, modelPo, model) -> {
+		/**
+		 * Map
+		 */
+		if (unitPo.getPlaceMap() != null) {
+			return new PlaceLocation(unit, unitPo.getPlaceMap().getLocation());
+		}
+		return null;
+	}, (unit, unitPo, modelPo, model) -> {
+		/**
+		 * High seas
+		 */
+		if (unitPo.getPlaceHighSeas() != null) {
+			return new PlaceHighSea(unit, unitPo.getPlaceHighSeas().isTravelToEurope(),
+					unitPo.getPlaceHighSeas().getRemainigTurns());
+		}
+		return null;
+	}, (unit, unitPo, modelPo, model) -> {
+		/**
+		 * Europe port
+		 */
+		if (unitPo.getPlaceEuropePort() != null) {
+			if (UnitType.isShip(unitPo.getType())) {
+				return new PlaceEuropePort(unit, model.getEurope().getPort());
+			} else {
+				return new PlaceEuropePier(unit);
+			}
+		}
+		return null;
+	}, (unit, unitPo, modelPo, model) -> {
+		/**
+		 * Colony field
+		 */
+		if (unitPo.getPlaceColonyField() != null) {
+			for (final ColonyPo colonyPo : modelPo.getColonies()) {
+				final PlaceColonyField out = tryToFindColonyField(colonyPo, unit, model);
+				if (out != null) {
+					return out;
+				}
+			}
+			throw new IllegalArgumentException(
+					String.format("It's not possible to define place unit (%s) to colony field", unitPo));
+		}
+		return null;
+	}, (unit, unitPo, modelPo, model) -> {
+		/**
+		 * Colony construction
+		 */
+		if (unitPo.getPlaceConstructionSlot() != null) {
+			for (final ColonyPo colonyPo : modelPo.getColonies()) {
+				final PlaceConstructionSlot out = tryToFindConstructionSlot(colonyPo, unit, model);
+				if (out != null) {
+					return out;
+				}
+			}
+			throw new IllegalArgumentException(
+					String.format("It's not possible to define place unit (%s) to construction slot", unitPo));
+		}
+		return null;
+	}, (unit, unitPo, modelPo, model) -> {
+		/**
+		 * Unit's cargo
+		 */
+		if (unitPo.getPlaceCargoSlot() != null) {
+			// find unit in which cargo should be unit placed
+			// place it to correct slot
+			final Integer idUnitInCargo = unitPo.getId();
+			final Integer slotIndex = getSlotId(idUnitInCargo);
+			final UnitPo holdingUnitPo = modelPo.getUnitWithUnitInCargo(idUnitInCargo);
+			Unit holdingUnit = null;
+			Optional<Unit> oHoldingUnit = model.tryGetUnitById(idUnitInCargo);
+			if(oHoldingUnit.isPresent()){
+				holdingUnit = oHoldingUnit.get();
+			}else{
+				// lets create this unit
+				holdingUnit = model.createUnit(model, modelPo, holdingUnitPo);
+			}
+			final PlaceCargoSlot placeCargoSlot = new PlaceCargoSlot(unit, holdingUnit.getCargo().getSlotByIndex(slotIndex));
+			return placeCargoSlot;
+		}
+		return null;
+	});
 
-	private Integer shipIncomingToColonies = null;
+	private final UnitPo unitPo;
+	private final ModelPo modelPo;
+	private final Model model;
 
-	private Integer shipIncomingToEurope = null;
-
-	private boolean unitIsInEuropePortPier = false;
-
-	private Unit cargoHolder = null;
-
-	private ConstructionColony constructionColony = null;
-
-	private FieldColony fieldColony = null;
-
-	private void checkThatEverythingIsNull() {
-		Preconditions.checkState(location == null, "Location wa already set");
-		Preconditions.checkState(shipIncomingToColonies == null, "Ship is alredy on way to colonies");
-		Preconditions.checkState(shipIncomingToEurope == null, "Ship is alredy on way to europe");
-		Preconditions.checkState(!unitIsInEuropePortPier, "Unit is alredy in Europe port pier");
-		Preconditions.checkState(cargoHolder == null, "Unit was already put to cargo");
-		Preconditions.checkState(constructionColony == null, "Unit was already put to colony construction");
-		Preconditions.checkState(fieldColony == null, "Unit was already put to field");
+	PlaceBuilder(final UnitPo unitPo, final ModelPo modelPo, final Model model) {
+		this.unitPo = Preconditions.checkNotNull(unitPo);
+		this.modelPo = Preconditions.checkNotNull(modelPo);
+		this.model = Preconditions.checkNotNull(model);
 	}
 
-	public PlaceBuilder setLocation(final Location location) {
-		Preconditions.checkNotNull(location);
-		checkThatEverythingIsNull();
-		this.location = location;
-		return this;
-	}
-
-	public PlaceBuilder setShipIncomingToColonies(int inHowManyturns) {
-		checkThatEverythingIsNull();
-		shipIncomingToColonies = inHowManyturns;
-		return this;
-	}
-
-	public PlaceBuilder setShipIncomingToEurope(int inHowManyturns) {
-		checkThatEverythingIsNull();
-		shipIncomingToEurope = inHowManyturns;
-		return this;
-	}
-
-	public PlaceBuilder setUnitToEuropePortPier() {
-		checkThatEverythingIsNull();
-		unitIsInEuropePortPier = true;
-		return this;
-	}
-
-	public PlaceBuilder setToCargoSlot(final Unit cargoHolder) {
-		checkThatEverythingIsNull();
-		this.cargoHolder = Preconditions.checkNotNull(cargoHolder);
-		return this;
-	}
-
-	public PlaceBuilder setToCostruction(final ConstructionType constructionType, final Colony colony, final int positon) {
-		checkThatEverythingIsNull();
-		constructionColony = new ConstructionColony(constructionType, colony, positon);
-		return this;
-	}
-
-	public PlaceBuilder setUnitToFiled(final Location fieldDirection, final Colony colony,
-			final GoodType producedGoodType) {
-		checkThatEverythingIsNull();
-		fieldColony = new FieldColony(fieldDirection, colony, producedGoodType);
-		return this;
+	private Integer getSlotId(final Integer idUnitInCargo) {
+		final UnitPo tmp = modelPo.getUnitWithUnitInCargo(idUnitInCargo);
+		int index = 0;
+		for(final CargoSlotPo slot:tmp.getCargo().getSlots()){
+			if(idUnitInCargo.equals(slot.getUnitId())){
+				return index;
+			}
+			index++;
+		}
+		throw new MicroColException(String.format("unable to find slot for (%s)", idUnitInCargo));
 	}
 
 	public Place build(final Unit unit) {
-		if (location != null) {
-			return new PlaceLocation(unit, location);
-		} else if (shipIncomingToColonies != null) {
-			return new PlaceHighSea(unit, false, shipIncomingToColonies);
-		} else if (shipIncomingToEurope != null) {
-			return new PlaceHighSea(unit, true, shipIncomingToEurope);
-		} else if (unitIsInEuropePortPier) {
-			return new PlaceEuropePier(unit);
-		} else if (constructionColony != null) {
-			return new PlaceConstructionSlot(unit,
-					constructionColony.getConstruction().getSlotAt(constructionColony.getPositon()));
-		} else if (fieldColony != null) {
-			return new PlaceColonyField(unit, fieldColony.getColonyField(), fieldColony.getProducedGoodType());
-		} else if (cargoHolder != null) {
-			return new PlaceCargoSlot(unit, cargoHolder.getCargo().getEmptyCargoSlot().orElseThrow(
-					() -> new IllegalStateException("There is no empty cargo slot at unit (" + unit + ")")));
-		} else {
-			throw new IllegalStateException("Place builder doesn't have any place");
+		for (final Builder placeBuilder : placeBuilders) {
+			final Place place = placeBuilder.tryBuild(unit, unitPo, modelPo, model);
+			if (place != null) {
+				return place;
+			}
 		}
+		throw new IllegalArgumentException(String.format("It's not possible to define place for unit (%s)", unitPo));
 	}
 
-	private class ConstructionColony {
+	interface Builder {
 
-		private final ConstructionType constructionType;
-		private final Colony colony;
-		private final int positon;
-
-		ConstructionColony(final ConstructionType constructionType, final Colony colony, final int positon) {
-			this.constructionType = Preconditions.checkNotNull(constructionType);
-			this.colony = Preconditions.checkNotNull(colony);
-			this.positon = Preconditions.checkNotNull(positon);
-		}
-
-		public Construction getConstruction() {
-			return colony.getConstructionByType(constructionType);
-		}
-
-		private int getPositon() {
-			return positon;
-		}
+		Place tryBuild(final Unit unit, final UnitPo unitPo, final ModelPo modelPo, final Model model);
 
 	}
 
-	private class FieldColony {
-		
-		private final Location fieldDirection;
-		private final Colony colony;
-		private final GoodType producedGoodType;
-
-		FieldColony(final Location fieldDirection, final Colony colony, final GoodType producedGoodType) {
-			this.fieldDirection = Preconditions.checkNotNull(fieldDirection);
-			this.colony = Preconditions.checkNotNull(colony);
-			this.producedGoodType = Preconditions.checkNotNull(producedGoodType);
+	private PlaceConstructionSlot tryToFindConstructionSlot(final ColonyPo colonyPo, final Unit unit,
+			final Model model) {
+		for (final ConstructionPo constructionPo : colonyPo.getConstructions()) {
+			int slotId = 0;
+			for (final ConstructionSlotPo slotPo : constructionPo.getSlots()) {
+				if (slotPo.getWorkerId() != null && unit.getId() == slotPo.getWorkerId()) {
+					final Optional<Colony> oColony = model.getColoniesAt(colonyPo.getLocation());
+					Preconditions.checkState(oColony.isPresent(), "Colony at (%s) is not in model",
+							colonyPo.getLocation());
+					final Colony colony = oColony.get();
+					final Construction construction = colony.getConstructionByType(constructionPo.getType());
+					final PlaceConstructionSlot out = new PlaceConstructionSlot(unit, construction.getSlotAt(slotId));
+					construction.getSlotAt(slotId).set(out);
+					return out;
+				}
+				slotId++;
+			}
 		}
-		
-		public ColonyField getColonyField(){
-			return colony.getColonyFieldInDirection(fieldDirection);
-		}
+		return null;
+	}
 
-		public GoodType getProducedGoodType() {
-			return producedGoodType;
+	private PlaceColonyField tryToFindColonyField(final ColonyPo colonyPo, final Unit unit, final Model model) {
+		for (final ColonyFieldPo constructionPo : colonyPo.getColonyFields()) {
+			if (constructionPo.getWorkerId() != null && unit.getId() == constructionPo.getWorkerId()) {
+				final Optional<Colony> oColony = model.getColoniesAt(colonyPo.getLocation());
+				Preconditions.checkState(oColony.isPresent(), "Colony at (%s) is not in model", colonyPo.getLocation());
+				final Colony colony = oColony.get();
+				final ColonyField colonyField = colony.getColonyFieldInDirection(constructionPo.getDirection());
+				PlaceColonyField out = new PlaceColonyField(unit, colonyField, constructionPo.getProducedGoodType());
+				colonyField.setPlaceColonyField(out);
+				return out;
+			}
+		}
+		return null;
+	}
+
+	class BuilderLocation implements Builder {
+
+		@Override
+		public Place tryBuild(final Unit unit, final UnitPo unitPo, final ModelPo modelPo, final Model model) {
+			if (unitPo.getPlaceMap() != null) {
+				return new PlaceLocation(unit, unitPo.getPlaceMap().getLocation());
+			}
+			return null;
 		}
 
 	}

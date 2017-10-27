@@ -4,7 +4,63 @@
 
 Planned releases
 
+ * 0.4.0 - game should be playable from start till the end
+
+  * \u2713 Trees are supported on map
+
+  * \u2713 Europe port, including
+  
+   * Buy unit
+  
+   * Buy good
+   
+   * Drag & drop units and goods
+   
+   * Unit sail from Europe to New World and back
+
+  * \u2713 Model builder store data to persistent model 
+
+  * \u2713 Persistent model could be read to model and back 
+
+  * \u2713 Persistent model could be read from / write to json 
+   
+  * Colony
+  	
+  	* Fields panel
+  	
+  	* Construction (building) in colony
+  	
+  	* production is correctly computed
+  	
+  	* Warehouse was added
+  	
+  	* Drag and drop support was added
+  	
+  	* \u2717 Show how many goods is consumed.
+  	  	
+  	* \u2717 Show that some production doesn't have enough sources.
+  
+  * \u2717 Colony founding through command B
+  
+  * \u2717 Declare independence. Now it could be done anytime.
+  
+  * \u2717 Allow to load predefined scenarios from class path.
+  
+  * \u2717 Send REF (with aggressive behavior)
+  
+  * \u2717 game end by conquering REF
+  
+  * TODO
+ 
+[]
+
+Ideas
+ 
  * 1.0.0 - should be released at the end of first year of development (Jan. 2018), first minimal playable version of game.  
+  	
+  * \u2717 Save / Load game model. It's necessary for further game states.
+  	
+  * \u2717 Colony building queue and queue editing
 
   * no sound
 
@@ -42,68 +98,6 @@ Planned releases
   
    * both unit will be controlled by user and AI
 
- * 0.3.0 - first game entity should be implemented
- 
-  * \u2717 Land is added. 
- 
-  * \u2717 Simple map containing first land.
- 
-  * \u2717 Ships can fight each others.
-  
-  * \u2717 Simple AI, one ship unit controlled by AI
- 
-  * \u2713 Owner of unit will be distinguish by simple flag near unit
-
-  * \u2717 Site report should contains junit test coverage
- 
-  * \u2717 site report should contains measurement of javadoc quality
- 
-  * \u2717 Maven site should be automatically published at github doc site
- 
-  * \u2717 Maven site should be published after each travis-ci build
- 
-  * \u2713 Grid could be enabled/disabled by 'g' and from preferences menu
-  
-  * \u2713 Move 'm' could be accessible from menu "unit" -> "move". Menu option will be disabled when focused tile is not movable
-
- * 0.2.0 - first game entity should be implemented
- 
-  * \u2713 first game map - just empty ocean
-  
-  * \u2713 one ship controlled by user
-  
-  * \u2713 both ships will move each turn
-  
-  * \u2713 localization Czech/English
-  
-  * \u2713 user preferences storing
-  
-  * \u2713 when game is closed window will remember position and size
-  
-  * \u2713 user's ship control
-  
-  * \u2713 basic game domain model
-  
-  * \u2713 enemy ship control
-  
-[]
-
-Already done 
-
- * 0.1.0 - project setup version
-  
-  * \u2713 create project infrastructure
-  
-  * \u2713 create binary distribution
-  
-  * \u2713 first empty form
-  
-  * \u2713 write project "manifest"
-  
-[]
-
-Ideas
- 
  * PoC
  
   * myš na hranu monitoru -> pohyb obrazovky

@@ -1,9 +1,5 @@
 package org.microcol.model.store;
 
-import java.io.File;
-import java.io.FileWriter;
-
-import org.junit.Test;
 import org.microcol.model.ConstructionType;
 import org.microcol.model.GoodType;
 import org.microcol.model.Location;
@@ -11,15 +7,16 @@ import org.microcol.model.Model;
 import org.microcol.model.ModelBuilder;
 import org.microcol.model.UnitType;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+/**
+ * Help class that build model for tests.
+ */
+public class ModelProvider {
 
-public class StoreDao {
-
-	private Model buildComplexModel() {
+	public Model buildComplexModel() {
 		ModelBuilder builder = new ModelBuilder();
-		builder.setCalendar(1570, 1800)
+		builder
 			.setMap("/maps/test2.json")
+			.setCalendar(1570, 1800)
 
 			/**
 			 * Human player
@@ -29,7 +26,7 @@ public class StoreDao {
 				.setGold(1108)
 				.addColony("brunswick")
 					.setLocation(Location.of(5, 4))
-					.setDefaultConstructions(true)
+					.setDefaultConstructions()
 					.setWorker(ConstructionType.RUM_DISTILLERS_HOUSE, 0, UnitType.COLONIST)
 					.setWorker(ConstructionType.CARPENTERS_SHOP, 0, UnitType.COLONIST)
 					.setWorker(ConstructionType.TOWN_HALL, 2, UnitType.COLONIST)
@@ -81,68 +78,39 @@ public class StoreDao {
 
 		return builder.build();
 	}
-	
-	@Test
-	public void test_simple() throws Exception {
-		Gson gson = new GsonBuilder()
-				.create();
-		
-		GameModelDao gameModel = new GameModelDao();
-		gameModel.setAge(32);
-		gameModel.setName("Ahoj lidi");
-		String str;
-		
-		str = gson.toJson(new String[]{"a","b","c"});
-		System.out.println(str);
 
-		str = gson.toJson(new Character[]{'a','b','b'});
-		System.out.println(str);
-
-		str = gson.toJson(gameModel);
-		System.out.println(str);
-	}
-
-	@Test
-	public void test_complex1() throws Exception {
-		Gson gson = new GsonBuilder()
-				.setPrettyPrinting()
-				.create();
-		GamePo game = new GamePo();
-		game.getUnits().add(UnitPo.make(1, UnitType.COLONIST.name(), "a", null));
-		game.getUnits().add(UnitPo.make(2, UnitType.FRIGATE.name(), "b", null));
-//		game.getMap().setTerrainType(new HashMap<Location,TerrainType>(), 5, 3);
-//		game.getMap().getTiles()[0][0] = TerrainType.ARCTIC.getCode();
-		
-		String str;
-		
-		str = gson.toJson(game);
-		System.out.println(str);
-	}
-
-	@Test
-	public void test_complex2() throws Exception {
-		Gson gson = new GsonBuilder()
-				.setPrettyPrinting()
-				.create();
-		Model model = buildComplexModel();
-		GamePo game = model.save();
-		
-		String str = gson.toJson(game);
-//		System.out.println(str);
-		
-		FileWriter fileWriter = new FileWriter(new File("target/test2.json"));
-		fileWriter.write(str);
-		fileWriter.close();
-		
+	public Model buildSimpleModel() {
 		ModelBuilder builder = new ModelBuilder();
-		Model model2 = builder.setCalendar(1570, 1800).setMap("/maps/test2.json").addPlayer("karel").build()
-				.getEuropeBuilder().build().build();
-		GamePo game2 = model2.save();
-		String str2 = gson.toJson(game2);
-		System.out.println(str2);
-		
-		
+		builder
+			.setMap("/maps/test2.json")
+			.setCalendar(1570, 1800)
+
+			/**
+			 * Human player
+			 */
+			.addPlayer("Dutch")
+				.setComputerPlayer(false)
+				.setGold(1108)
+			.build()
+
+			/**
+			 * Opponent player2
+			 */
+			.addPlayer("Player2")
+				.setComputerPlayer(true)
+				.setGold(100)
+				.build()
+
+			/**
+			 * Europe port
+			 */
+			.getEuropeBuilder()
+			.addShipToPort(builder.makeUnitBuilder().setType(UnitType.GALLEON).setLocation(Location.of(2, 2))
+					.setPlayerName("Dutch").addCargoGood(GoodType.COTTON, 100)
+					.addCargoUnit(UnitType.COLONIST, true, false, false).build())
+			.build();
+
+		return builder.build();
 	}
-	
 	
 }

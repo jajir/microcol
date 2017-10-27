@@ -1,7 +1,6 @@
 package org.microcol.model;
 
 import org.microcol.model.store.PlaceEuropePortPo;
-import org.microcol.model.store.PlaceMapPo;
 import org.microcol.model.store.PlacePo;
 import org.microcol.model.store.UnitPo;
 

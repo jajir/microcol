@@ -5,12 +5,11 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
 
-import javax.json.stream.JsonParser;
-
-import org.microcol.model.store.GamePo;
+import org.microcol.model.store.ModelPo;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
@@ -18,6 +17,7 @@ import com.google.common.collect.ImmutableListMultimap;
 import com.google.common.collect.Multimaps;
 
 class UnitStorage {
+	
 	private final List<Unit> units;
 
 	UnitStorage(final List<Unit> units) {
@@ -60,12 +60,12 @@ class UnitStorage {
 		});
 	}
 
-	// TODO JJ remove All form name
+	// TODO JJ remove All form name, return immutable list
 	List<Unit> getAllUnits() {
 		return units;
 	}
 
-	// TODO JJ rename it, be more specific about function
+	// TODO JJ rename it, be more specific about function, 
 	List<Unit> getUnits(final boolean includeStored) {
 		return units.stream().filter(unit -> includeStored || unit.isAtPlaceLocation()).collect(ImmutableList.toImmutableList());
 	}
@@ -134,26 +134,19 @@ class UnitStorage {
 		units.remove(unit);
 	}
 
-	void save(final GamePo gamePo) {
+	void save(final ModelPo gamePo) {
 		units.forEach(unit -> {
 			gamePo.getUnits().add(unit.save());
 		});
 	}
 
-	static List<Unit> load(final JsonParser parser, final List<Player> players) {
-		parser.next(); // START_ARRAY
-		final List<Unit> units = new ArrayList<>();
-		Unit unit = null;
-		while ((unit = Unit.load(parser, players)) != null) {
-			units.add(unit);
-		}
-
-		return units;
-	}
-
 	Unit getUnitById(int id) {
-		return units.stream().filter(unit -> unit.getId() == id).findAny()
+		return tryGetUnitById(id)
 				.orElseThrow(() -> new IllegalArgumentException("There is no unit with id '" + id + "'."));
+	}
+	
+	Optional<Unit> tryGetUnitById(final int id) {
+		return units.stream().filter(unit -> unit.getId() == id).findAny();
 	}
 
 }

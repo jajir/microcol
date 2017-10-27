@@ -4,27 +4,35 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import javax.json.stream.JsonGenerator;
-import javax.json.stream.JsonParser;
+import org.microcol.model.store.PlayerPo;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 
 public final class Player {
-	private Model model;
-
+	
+	private final Model model;
 	private final String name;
 	private final boolean computer;
 	private int gold;
 
-	Player(final String name, final boolean computer, final int initialGold) {
+	Player(final String name, final boolean computer, final int initialGold, final Model model) {
 		this.name = Preconditions.checkNotNull(name);
 		this.computer = computer;
 		this.gold = initialGold;
+		this.model = model;
 	}
-
-	void setModel(final Model model) {
-		this.model = Preconditions.checkNotNull(model);
+	
+	public static Player make(final PlayerPo player, final Model model){
+		return new Player(player.getName(), player.isComputer(), player.getGold(), model);
+	}
+	
+	public PlayerPo save(){
+		final PlayerPo out = new PlayerPo();
+		out.setName(name);
+		out.setComputer(computer);
+		out.setGold(gold);
+		return out;
 	}
 
 	public String getName() {
@@ -119,10 +127,6 @@ public final class Player {
 		return MoreObjects.toStringHelper(this).add("name", name).add("computer", computer).toString();
 	}
 
-	void save(final JsonGenerator generator) {
-		generator.writeStartObject().write("name", name).write("computer", computer).writeEnd();
-	}
-
 	/**
 	 * Get information if it's possible to sail to given location. Method verify
 	 * that given location is empty sea or sea occupied by player's ships.
@@ -152,23 +156,6 @@ public final class Player {
 	 */
 	public boolean isItPlayersUnits(final List<Unit> units) {
 		return !units.stream().filter(unit -> !unit.getOwner().equals(this)).findAny().isPresent();
-	}
-
-	static Player load(final JsonParser parser) {
-		// START_OBJECT or END_ARRAY
-		if (parser.next() == JsonParser.Event.END_ARRAY) {
-			return null;
-		}
-		parser.next(); // KEY_NAME
-		parser.next(); // VALUE_STRING
-		final String name = parser.getString();
-		parser.next(); // KEY_NAME
-		final boolean computer = parser.next() == JsonParser.Event.VALUE_TRUE; // VALUE_TRUE
-																				// or
-																				// VALUE_FALSE
-		parser.next(); // END_OBJECT
-
-		return new Player(name, computer, -34);
 	}
 
 	public int getGold() {

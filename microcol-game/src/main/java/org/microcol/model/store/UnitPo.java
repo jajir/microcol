@@ -1,10 +1,14 @@
 package org.microcol.model.store;
 
+import org.microcol.model.UnitType;
+
+import com.google.common.base.MoreObjects;
+
 public class UnitPo {
 
 	private Integer id;
 
-	private String type;
+	private UnitType type;
 
 	private String ownerId;
 
@@ -13,22 +17,41 @@ public class UnitPo {
 	private PlaceEuropePortPo placeEuropePort;
 	
 	private PlaceHighSeasPo placeHighSeas;
+	
+	private PlaceConstructionSlotPo placeConstructionSlot;
+	
+	private PlaceColonyFieldPo placeColonyField;
+	
+	private PlaceCargoSlotPo placeCargoSlot;
 
-	private CargoPo cargo;
+	private CargoPo cargo = new CargoPo();
 
 	private int availableMoves;
 	
-	public UnitPo() {
-		// TODO Auto-generated constructor stub
-	}
-
-	public static UnitPo make(final Integer id, final String type, final String ownerId, final CargoPo cargo) {
+	public static UnitPo make(final Integer id, final UnitType type, final String ownerId, final CargoPo cargo) {
 		final UnitPo out = new UnitPo();
 		out.setId(id);
 		out.setType(type);
 		out.setOwnerId(ownerId);
 		out.setCargo(cargo);
 		return out;
+	}
+	
+	@Override
+	public String toString() {
+		return MoreObjects.toStringHelper(UnitPo.class)
+				.add("id", id)
+				.add("type", type)
+				.add("ownerId", ownerId)
+				.add("availableMoves", availableMoves)
+				.add("placeMap", placeMap)
+				.add("placeEuropePort", placeEuropePort)
+				.add("placeHighSeas", placeHighSeas)
+				.add("placeCargoSlot", placeCargoSlot)
+				.add("placeConstructionSlot", placeConstructionSlot)
+				.add("placeColonyField", placeColonyField)
+				.add("cargo", cargo)
+				.toString();
 	}
 
 	public Integer getId() {
@@ -39,11 +62,11 @@ public class UnitPo {
 		this.id = id;
 	}
 
-	public String getType() {
+	public UnitType getType() {
 		return type;
 	}
 
-	public void setType(String type) {
+	public void setType(UnitType type) {
 		this.type = type;
 	}
 
@@ -93,6 +116,48 @@ public class UnitPo {
 
 	public void setPlaceHighSeas(PlaceHighSeasPo placeHighSeas) {
 		this.placeHighSeas = placeHighSeas;
+	}
+
+	/**
+	 * @return the placeConstructionSlotPo
+	 */
+	public PlaceConstructionSlotPo getPlaceConstructionSlot() {
+		return placeConstructionSlot;
+	}
+
+	/**
+	 * @param placeConstructionSlotPo the placeConstructionSlotPo to set
+	 */
+	public void setPlaceConstructionSlot(PlaceConstructionSlotPo placeConstructionSlotPo) {
+		this.placeConstructionSlot = placeConstructionSlotPo;
+	}
+
+	/**
+	 * @return the placeColonyFieldPo
+	 */
+	public PlaceColonyFieldPo getPlaceColonyField() {
+		return placeColonyField;
+	}
+
+	/**
+	 * @param placeColonyFieldPo the placeColonyFieldPo to set
+	 */
+	public void setPlaceColonyField(PlaceColonyFieldPo placeColonyFieldPo) {
+		this.placeColonyField = placeColonyFieldPo;
+	}
+
+	/**
+	 * @return the placeCargoSlot
+	 */
+	public PlaceCargoSlotPo getPlaceCargoSlot() {
+		return placeCargoSlot;
+	}
+
+	/**
+	 * @param placeCargoSlot the placeCargoSlot to set
+	 */
+	public void setPlaceCargoSlot(PlaceCargoSlotPo placeCargoSlot) {
+		this.placeCargoSlot = placeCargoSlot;
 	}
 
 }

@@ -1,17 +1,15 @@
 package org.microcol.model;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 import java.util.function.Function;
 
-import javax.json.stream.JsonGenerator;
-import javax.json.stream.JsonParser;
-
-import org.microcol.model.store.GamePo;
+import org.microcol.model.store.ColonyPo;
+import org.microcol.model.store.ModelPo;
+import org.microcol.model.store.PlayerPo;
+import org.microcol.model.store.UnitPo;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
@@ -22,13 +20,17 @@ public final class Model {
 	private final ListenerManager listenerManager;
 	private final Calendar calendar;
 	private final WorldMap map;
-	private final List<Player> players;
+	private final PlayerStore playerStore;
 	private final List<Colony> colonies;
 	private final UnitStorage unitStorage;
 	private final Europe europe;
 	private final HighSea highSea;
-	private GameManager gameManager;
+	private final GameManager gameManager;
 
+	/*
+	 * This constructor should be called from tests. It allows to set mocks to
+	 * internal properties.
+	 */
 	Model(final Calendar calendar, final WorldMap map, final List<Player> players, final List<Colony> colonies,
 			final List<Unit> units, final List<Unit> unitsInEuropePort) {
 		listenerManager = new ListenerManager();
@@ -36,18 +38,14 @@ public final class Model {
 		this.calendar = Preconditions.checkNotNull(calendar);
 		this.map = Preconditions.checkNotNull(map);
 
-		this.players = ImmutableList.copyOf(players);
+		this.playerStore = new PlayerStore(players);
 		this.colonies = Lists.newArrayList(colonies);
-		Preconditions.checkArgument(!this.players.isEmpty(), "There must be at least one player.");
-		checkPlayerNames(this.players);
-		this.players.forEach(player -> player.setModel(this));
 		this.colonies.forEach(colony -> colony.setModel(this));
 
 		unitStorage = new UnitStorage(units);
 		unitStorage.getUnits(true).forEach(unit -> unit.setModel(this));
 
-		gameManager = new GameManager();
-		gameManager.setModel(this);
+		gameManager = new GameManager(this);
 
 		highSea = new HighSea(this);
 		this.europe = new Europe(this);
@@ -82,15 +80,71 @@ public final class Model {
 		});
 	}
 
-	private void checkPlayerNames(final List<Player> players) {
-		Set<String> names = new HashSet<>();
-		players.forEach(player -> {
-			if (!names.add(player.getName())) {
-				throw new IllegalArgumentException(String.format("Duplicate player name (%s).", player.getName()));
-			}
+	Model(final Calendar calendar, final WorldMap map, final ModelPo modelPo, 
+			final UnitStorage unitStorage, final List<Unit> unitsInEuropePort) {
+		Preconditions.checkNotNull(modelPo);
+		listenerManager = new ListenerManager();
+
+		this.calendar = Preconditions.checkNotNull(calendar);
+		this.map = Preconditions.checkNotNull(map);
+
+		this.playerStore = PlayerStore.makePlayers(this, modelPo);
+		
+		this.colonies = Lists.newArrayList();
+		modelPo.getColonies().forEach(colonyPo -> {
+			final List<Construction> constructions = new ArrayList<>();
+			colonyPo.getConstructions().forEach(constructionPo -> {
+				final Construction c = Construction.build(constructionPo.getType());
+				constructions.add(c);
+			});
+			final Colony col = new Colony(colonyPo.getName(), playerStore.getPlayerByName(colonyPo.getOwnerName()),
+					colonyPo.getLocation(), constructions, colonyPo.getColonyWarehouse());
+			colonies.add(col);
 		});
+		
+		this.colonies.forEach(colony -> colony.setModel(this));
+		this.unitStorage = Preconditions.checkNotNull(unitStorage);
+
+		unitStorage.getUnits(true).forEach(unit -> unit.setModel(this));
+
+		gameManager = new GameManager(this);
+
+		highSea = new HighSea(this);
+		this.europe = new Europe(this);
+		unitsInEuropePort.forEach(unit -> unit.placeToEuropePort(europe.getPort()));
+		checkUnits();
 	}
 
+	
+	public static Model make(final ModelPo modelPo) {
+		final Calendar calendar = Calendar.make(modelPo.getCalendar());
+		final WorldMap worldMap = new WorldMap(modelPo);
+		
+		// TODO JJ finish units loading
+		final List<Unit> units = new ArrayList<>();
+		
+		// TODO JJ finish loading of ships in Europe port
+		final List<Unit> unitsInEuropePort = new ArrayList<>();
+		
+		final UnitStorage unitStorage = new UnitStorage(units);
+		
+		Model model =  new Model(calendar, worldMap, modelPo, unitStorage, unitsInEuropePort);
+		
+		modelPo.getUnits().forEach(unitPo -> {
+			if (!model.tryGetUnitById(unitPo.getId()).isPresent()) {
+				model.createUnit(model, modelPo, unitPo);
+			}
+		});
+		
+		return model;
+	}
+	
+	Unit createUnit(final Model model, final ModelPo modelPo, final UnitPo unitPo) {
+		final Unit out = Unit.make(model, modelPo, unitPo);
+		model.unitStorage.getAllUnits().add(out);
+		return out;
+	}
+	
 	public boolean isGameStarted() {
 		return gameManager.isStarted();
 	}
@@ -120,7 +174,7 @@ public final class Model {
 	}
 
 	public List<Player> getPlayers() {
-		return players;
+		return playerStore.getPlayers();
 	}
 
 	public Player getCurrentPlayer() {
@@ -142,6 +196,10 @@ public final class Model {
 	public Unit getUnitById(final int id) {
 		return unitStorage.getUnitById(id);
 	}
+	
+	public Optional<Unit> tryGetUnitById(final int id){
+		return unitStorage.tryGetUnitById(id);
+	}
 
 	public Map<Location, List<Unit>> getUnitsAt() {
 		return unitStorage.getUnitsAt();
@@ -158,6 +216,11 @@ public final class Model {
 				.filter(colony -> colony.getLocation().equals(location)).findFirst();
 	}
 
+	public Optional<Colony> getColoniesAt(final Location location) {
+		Preconditions.checkNotNull(location);
+		return colonies.stream().filter(colony -> colony.getLocation().equals(location)).findFirst();
+	}
+
 	public List<Colony> getColonies(final Player owner) {
 		Preconditions.checkNotNull(owner);
 		return colonies.stream().filter(colony -> colony.getOwner().equals(owner))
@@ -168,51 +231,29 @@ public final class Model {
 		return unitStorage.getUnitsAt(location);
 	}
 
-	public GamePo save(){
-		final GamePo out = new GamePo();
+	public ModelPo save(){
+		final ModelPo out = new ModelPo();
 		map.save(out);
 		unitStorage.save(out);
+		out.setCalendar(calendar.save());
+		out.setPlayers(getSavePlayers());
+		out.setColonies(getSaveColonies());
 		return out;
 	}
 	
-	public void save(final String name, final JsonGenerator generator) {
-		generator.writeStartObject(name);
-		calendar.save("calendar", generator);
-		generator.writeStartArray("players");
-		players.forEach(player -> player.save(generator));
-		generator.writeEnd();
-		gameManager.save("game", generator);
-		generator.writeEnd();
+	private List<PlayerPo> getSavePlayers() {
+		//TODO is it necessary? How it's used.
+		final List<PlayerPo> out = new ArrayList<PlayerPo>();
+		playerStore.getPlayers().forEach(player -> out.add(player.save()));
+		return out;
 	}
-
-	public static Model load(final JsonParser parser) {
-		parser.next(); // START_OBJECT
-		parser.next(); // KEY_NAME
-		final Calendar calendar = Calendar.load(parser);
-		parser.next(); // KEY_NAME
-		final WorldMap map = WorldMap.load(parser);
-		parser.next(); // KEY_NAME
-		parser.next(); // START_ARRAY
-		final List<Player> players = new ArrayList<>();
-		Player player = null;
-		while ((player = Player.load(parser)) != null) {
-			players.add(player);
-		}
-		parser.next(); // KEY_NAME
-		final List<Unit> units = UnitStorage.load(parser, players);
-		parser.next(); // KEY_NAME
-		final GameManager gameManager = GameManager.load(parser, players);
-		parser.next(); // END_OBJECT
-
-		final List<Colony> colonies = ColonyWarehouse.load(parser, players);
-
-		final Model model = new Model(calendar, map, players, colonies, units, Lists.newArrayList());
-		gameManager.setModel(model);
-		model.gameManager = gameManager;
-
-		return model;
+	
+	private List<ColonyPo> getSaveColonies() {
+		final List<ColonyPo> out = new ArrayList<>();
+		colonies.forEach(colony -> out.add(colony.save()));
+		return out;
 	}
-
+	
 	List<Unit> getUnits(final Player player, final boolean includeStored) {
 		return unitStorage.getUnits(player, includeStored);
 	}
@@ -300,5 +341,12 @@ public final class Model {
 
 	public HighSea getHighSea() {
 		return highSea;
+	}
+
+	/**
+	 * @return the playerStore
+	 */
+	PlayerStore getPlayerStore() {
+		return playerStore;
 	}
 }

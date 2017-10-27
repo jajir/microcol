@@ -1,5 +1,9 @@
 package org.microcol.model;
 
+import org.microcol.model.store.PlaceCargoSlotPo;
+import org.microcol.model.store.PlacePo;
+import org.microcol.model.store.UnitPo;
+
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 
@@ -44,6 +48,13 @@ public class PlaceCargoSlot extends AbstractPlace {
 				.add("unit id", getUnit().getId())
 				.add("owner", cargoSlot.getOwnerPlayer())
 				.toString();
+	}
+
+	@Override
+	public PlacePo save(final UnitPo unitPo) {
+		final PlaceCargoSlotPo placeCargoSlotPo = new PlaceCargoSlotPo();
+		unitPo.setPlaceCargoSlot(placeCargoSlotPo);
+		return placeCargoSlotPo;
 	}
 
 }

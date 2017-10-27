@@ -68,8 +68,9 @@ public class GameController implements Localized {
 
 	private Model buildComplexModel() {
 		ModelBuilder builder = new ModelBuilder();
-		builder.setCalendar(1570, 1800)
+		builder
 			.setMap("/maps/test2.json")
+			.setCalendar(1570, 1800)
 
 			/**
 			 * Human player
@@ -79,7 +80,7 @@ public class GameController implements Localized {
 				.setGold(1108)
 				.addColony("brunswick")
 					.setLocation(Location.of(5, 4))
-					.setDefaultConstructions(true)
+					.setDefaultConstructions()
 					.setWorker(ConstructionType.RUM_DISTILLERS_HOUSE, 0, UnitType.COLONIST)
 					.setWorker(ConstructionType.CARPENTERS_SHOP, 0, UnitType.COLONIST)
 					.setWorker(ConstructionType.TOWN_HALL, 2, UnitType.COLONIST)
@@ -121,10 +122,10 @@ public class GameController implements Localized {
 			.addUnit(builder.makeUnitBuilder().setType(UnitType.COLONIST).setPlayerName("Dutch")
 					.setUnitToEuropePortPier().build())
 			.getEuropeBuilder()
-			.addShipToPort(builder.makeUnitBuilder().setType(UnitType.GALLEON).setLocation(Location.of(2, 2))
+				.addShipToPort(builder.makeUnitBuilder().setType(UnitType.GALLEON).setUnitToEuropePortPier()
 					.setPlayerName("Dutch").addCargoGood(GoodType.COTTON, 100)
 					.addCargoUnit(UnitType.COLONIST, true, false, false).build())
-			.addShipToPort(builder.makeUnitBuilder().setType(UnitType.FRIGATE).setLocation(Location.of(2, 2))
+				.addShipToPort(builder.makeUnitBuilder().setType(UnitType.FRIGATE).setUnitToEuropePortPier()
 					.setPlayerName("Dutch").addCargoGood(GoodType.CIGARS, 100).addCargoGood(GoodType.RUM, 100)
 					.addCargoGood(GoodType.SILVER, 100).build())
 			.build();

@@ -1,18 +1,7 @@
 package org.microcol.gui;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.nio.file.Path;
-import java.util.Map;
-
-import javax.json.Json;
-import javax.json.stream.JsonGenerator;
-import javax.json.stream.JsonGeneratorFactory;
-import javax.json.stream.JsonParser;
 
 import org.microcol.gui.event.model.GameController;
 import org.microcol.gui.util.AbstractDialog;
@@ -23,7 +12,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
-import com.google.common.collect.ImmutableMap;
 import com.google.inject.Inject;
 
 import javafx.stage.FileChooser;
@@ -100,32 +88,15 @@ public class PersistingDialog extends AbstractDialog {
 		}
 	}
 
+	@SuppressWarnings("unused")
 	private void writeModelToFile(final Model model, final File targetFile) {
-		final Map<String, ?> config = ImmutableMap.of(JsonGenerator.PRETTY_PRINTING, Boolean.TRUE);
-		final JsonGeneratorFactory factory = Json.createGeneratorFactory(config);
-		try (BufferedWriter writer = new BufferedWriter(new FileWriter(targetFile))) {
-			final JsonGenerator generator = factory.createGenerator(writer);
-			generator.writeStartObject();
-			model.save("model", generator);
-			generator.writeEnd();
-			generator.close();
-		} catch (IOException e) {
-			throw new MicroColException(e.getMessage(), e);
-		}
+		//TODO JJ perform saving of model
 	}
 
+	@SuppressWarnings("unused")
 	private Model loadModelFromFile(final File sourceFile) {
-		try (BufferedReader reader = new BufferedReader(new FileReader(sourceFile))) {
-			final JsonParser parser = Json.createParser(reader);
-			parser.next(); // START_OBJECT
-			parser.next(); // KEY_NAME
-			final Model model = Model.load(parser);
-			parser.next(); // END_OBJECT
-			parser.close();
-			return model;
-		} catch (IOException e) {
-			throw new MicroColException(e.getMessage(), e);
-		}
+		//TODO JJ perform model loading
+		return null;
 	}
 
 }

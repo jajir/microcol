@@ -9,17 +9,18 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameter;
 import org.junit.runners.Parameterized.Parameters;
+import org.microcol.model.store.ModelDao;
 
 @RunWith(Parameterized.class)
 public class WorldMapValidLocationTest {
 	@Parameters(name = "{index}: fileName = {0}, location = {1}")
 	public static Collection<Object[]> data() {
 		return Arrays.asList(new Object[][] {
-			{"/maps/test-map-ocean-10x10.txt", Location.of( 1,  1)},
-			{"/maps/test-map-ocean-10x10.txt", Location.of(10,  1)},
-			{"/maps/test-map-ocean-10x10.txt", Location.of(10, 10)},
-			{"/maps/test-map-ocean-10x10.txt", Location.of( 1, 10)},
-			{"/maps/test-map-ocean-10x10.txt", Location.of( 5,  5)},
+			{"/maps/test-map-ocean-10x10.json", Location.of( 1,  1)},
+			{"/maps/test-map-ocean-10x10.json", Location.of(10,  1)},
+			{"/maps/test-map-ocean-10x10.json", Location.of(10, 10)},
+			{"/maps/test-map-ocean-10x10.json", Location.of( 1, 10)},
+			{"/maps/test-map-ocean-10x10.json", Location.of( 5,  5)},
 		});
 	}
 
@@ -31,7 +32,8 @@ public class WorldMapValidLocationTest {
 
 	@Test
 	public void testValidLocation() {
-		final WorldMap map = new WorldMap(fileName);
+		final ModelDao dao = new ModelDao();
+		final WorldMap map = dao.loadPredefinedWorldMap(fileName);
 
 		Assert.assertTrue(map.isValid(location));
 	}

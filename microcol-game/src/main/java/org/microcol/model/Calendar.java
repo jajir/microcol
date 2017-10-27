@@ -1,24 +1,32 @@
 package org.microcol.model;
 
-import javax.json.stream.JsonGenerator;
-import javax.json.stream.JsonParser;
+import org.microcol.model.store.CalendarPo;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 
 public final class Calendar {
+	
 	private final int startYear;
+	
 	private final int endYear;
 
 	private int currentYear;
-
-	Calendar(final int startYear, final int endYear) {
+	
+	Calendar(final int startYear, final int endYear, final int currentYear) {
 		Preconditions.checkArgument(startYear < endYear, "Start year (%s) must be less than end year (%s).", startYear, endYear);
-
 		this.startYear = startYear;
 		this.endYear = endYear;
+		this.currentYear = currentYear;
+	}
+	
 
-		this.currentYear = startYear;
+	Calendar(final int startYear, final int endYear) {
+		this(startYear, endYear, startYear);
+	}
+	
+	static Calendar make(final CalendarPo cal) {
+		return new Calendar(cal.getStartYear(), cal.getEndYear(), cal.getCurrentYear());
 	}
 
 	public int getStartYear() {
@@ -42,6 +50,14 @@ public final class Calendar {
 
 		currentYear++;
 	}
+	
+	public CalendarPo save(){
+		final CalendarPo out = new CalendarPo();
+		out.setStartYear(startYear);
+		out.setEndYear(endYear);
+		out.setCurrentYear(currentYear);
+		return out;
+	}
 
 	@Override
 	public String toString() {
@@ -50,32 +66,5 @@ public final class Calendar {
 			.add("endYear", endYear)
 			.add("currentYear", currentYear)
 			.toString();
-	}
-
-	void save(final String name, final JsonGenerator generator) {
-		generator.writeStartObject(name)
-			.write("startYear", startYear)
-			.write("endYear", endYear)
-			.write("currentYear", currentYear)
-			.writeEnd();
-	}
-
-	static Calendar load(final JsonParser parser) {
-		parser.next(); // START_OBJECT
-		parser.next(); // KEY_NAME
-		parser.next(); // VALUE_NUMBER
-		final int startYear = parser.getInt();
-		parser.next(); // KEY_NAME
-		parser.next(); // VALUE_NUMBER
-		final int endYear = parser.getInt();
-		parser.next(); // KEY_NAME
-		parser.next(); // VALUE_NUMBER
-		final int currentYear = parser.getInt();
-		parser.next(); // END_OBJECT
-
-		Calendar calendar = new Calendar(startYear, endYear);
-		calendar.currentYear = currentYear;
-
-		return calendar;
 	}
 }

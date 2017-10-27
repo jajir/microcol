@@ -1,9 +1,10 @@
 package org.microcol.model;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import org.microcol.model.store.ColonyPo;
+import org.microcol.model.store.ConstructionPo;
+import org.microcol.model.store.PlaceColonyFieldPo;
+import org.microcol.model.store.PlaceConstructionSlotPo;
+import org.microcol.model.store.UnitPo;
 
 import com.google.common.base.Preconditions;
 
@@ -12,38 +13,33 @@ import com.google.common.base.Preconditions;
  */
 public class ColonyBuilder {
 
-	private final String name;
+	private final ColonyPo colonyPo;
 
 	private final PlayerBuilder playerBuilder;
 
-	private Location location;
-
-	private boolean defaultCostructions = false;
-
-	private final Set<ConstructionType> constructionTypes = new HashSet<>();
-
-	private final List<UnitPlace> unitPlaces = new ArrayList<>();
-
-	private final List<FieldPlace> fieldPlaces = new ArrayList<>();
-
-	private final List<GoodAmount> goodAmounts = new ArrayList<>();
-
 	public ColonyBuilder(final String name, final PlayerBuilder playerBuilder) {
-		this.name = Preconditions.checkNotNull(name);
 		this.playerBuilder = Preconditions.checkNotNull(playerBuilder);
+		this.colonyPo = new ColonyPo();
+		colonyPo.setName(Preconditions.checkNotNull(name));
+		colonyPo.setOwnerName(Preconditions.checkNotNull(playerBuilder.getPlayerPo().getName()));
 	}
 
 	public PlayerBuilder build() {
+		playerBuilder.getModelPo().getColonies().add(colonyPo);
 		return playerBuilder;
 	}
 
 	public ColonyBuilder setLocation(final Location location) {
-		this.location = location;
+		colonyPo.setLocation(location);
 		return this;
 	}
 
-	public ColonyBuilder setDefaultConstructions(final boolean defaultCostructions) {
-		this.defaultCostructions = defaultCostructions;
+	public ColonyBuilder setDefaultConstructions() {
+		ConstructionType.NEW_COLONY_CONSTRUCTIONS.forEach(constructionType -> {
+			final ConstructionPo constructionPo = new ConstructionPo();
+			constructionPo.setType(constructionType);
+			colonyPo.getConstructions().add(constructionPo);
+		});
 		return this;
 	}
 
@@ -55,15 +51,33 @@ public class ColonyBuilder {
 	 * @return colony builder
 	 */
 	public ColonyBuilder setConstruction(final ConstructionType constructionType) {
-		constructionTypes.add(Preconditions.checkNotNull(constructionType));
+		final ConstructionPo constructionPo = new ConstructionPo();
+		constructionPo.setType(constructionType);
+		colonyPo.getConstructions().add(constructionPo);
 		return this;
 	}
 
-	public ColonyBuilder setWorker(final ConstructionType constructionType, final int position, final UnitType unitType) {
+	private UnitPo createUnitByType(final UnitType unitType) {
+		final UnitPo worker = new UnitPo();
+		worker.setId(IdManager.nextId());
+		worker.setOwnerId(playerBuilder.getPlayerPo().getName());
+		worker.setType(unitType);
+		playerBuilder.getModelPo().getUnits().add(worker);
+		return worker;
+	}
+
+	public ColonyBuilder setWorker(final ConstructionType constructionType, final int position,
+			final UnitType unitType) {
 		Preconditions.checkNotNull(constructionType);
 		Preconditions.checkNotNull(unitType);
 		Preconditions.checkArgument(position >= 0 && position < 3, "Position is not within range 0,1,2.");
-		unitPlaces.add(new UnitPlace(constructionType, position, unitType));
+		final ConstructionPo constructionPo = colonyPo.getConstructionByType(constructionType);
+
+		final UnitPo worker = createUnitByType(unitType);
+		final PlaceConstructionSlotPo placeConstructionSlotPo = new PlaceConstructionSlotPo();
+		worker.setPlaceConstructionSlot(placeConstructionSlotPo);
+
+		constructionPo.getSlots().get(position).setWorkerId(worker.getId());
 		return this;
 	}
 
@@ -71,33 +85,23 @@ public class ColonyBuilder {
 			final GoodType producedGoodType) {
 		Preconditions.checkNotNull(fieldDirection);
 		Preconditions.checkNotNull(unitType);
-		fieldPlaces.add(new FieldPlace(fieldDirection, unitType, producedGoodType));
+		
+		final UnitPo worker = createUnitByType(unitType);
+		final PlaceColonyFieldPo placeColonyFieldPo = new PlaceColonyFieldPo();
+		worker.setPlaceColonyField(placeColonyFieldPo);
+		
+		colonyPo.getFieldByDirection(fieldDirection).setWorkerId(worker.getId());
+		colonyPo.getFieldByDirection(fieldDirection).setProducedGoodType(producedGoodType);
 		return this;
 	}
 
 	public ColonyBuilder setGood(final GoodType goodType, final Integer amount) {
 		Preconditions.checkNotNull(goodType);
 		Preconditions.checkNotNull(amount);
-		GoodAmount goodAmount = new GoodAmount(goodType, amount);
-		Preconditions.checkArgument(!goodAmounts.contains(goodAmount), "Good type (%s) was alredy defined.");
-		goodAmounts.add(goodAmount);
+		Preconditions.checkArgument(!colonyPo.getColonyWarehouse().containsKey(goodType),
+				"Good type (%s) was alredy defined.");
+		colonyPo.getColonyWarehouse().put(goodType, amount);
 		return this;
-	}
-
-	String getName() {
-		return name;
-	}
-
-	Location getLocation() {
-		return location;
-	}
-
-	boolean isDefaultCostructions() {
-		return defaultCostructions;
-	}
-
-	Set<ConstructionType> getConstructionTypes() {
-		return constructionTypes;
 	}
 
 	class UnitPlace {
@@ -151,7 +155,6 @@ public class ColonyBuilder {
 		}
 
 	}
-	
 
 	static class GoodAmount {
 
@@ -184,21 +187,7 @@ public class ColonyBuilder {
 			final GoodAmount other = (GoodAmount) obj;
 			return goodType.equals(other.goodType);
 		}
-		
-	}
-	
-	
 
-	List<UnitPlace> getUnitPlaces() {
-		return unitPlaces;
-	}
-
-	public List<FieldPlace> getFieldPlaces() {
-		return fieldPlaces;
-	}
-
-	public List<GoodAmount> getGoodAmounts() {
-		return goodAmounts;
 	}
 
 }

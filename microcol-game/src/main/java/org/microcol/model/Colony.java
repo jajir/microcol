@@ -1,9 +1,14 @@
 package org.microcol.model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+
+import org.microcol.model.store.ColonyFieldPo;
+import org.microcol.model.store.ColonyPo;
+import org.microcol.model.store.ConstructionPo;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
@@ -27,17 +32,21 @@ public class Colony {
 	private final ColonyWarehouse colonyWarehouse;
 	
 	private Model model;
-	
 
 	public Colony(final String name, final Player owner, final Location location,
 			final List<Construction> constructions) {
+		this(name, owner, location, constructions, new HashMap<>());
+	}
+
+	public Colony(final String name, final Player owner, final Location location,
+			final List<Construction> constructions, final Map<GoodType, Integer> initialGoodAmounts) {
 		this.name = Preconditions.checkNotNull(name);
 		this.owner = Preconditions.checkNotNull(owner, "owner is null");
 		this.location = Preconditions.checkNotNull(location);
 		colonyFields = new ArrayList<>();
 		Location.DIRECTIONS.forEach(loc -> colonyFields.add(new ColonyField(loc, this)));
 		this.constructions = Preconditions.checkNotNull(constructions);
-		colonyWarehouse = new ColonyWarehouse(this);
+		colonyWarehouse = new ColonyWarehouse(this, initialGoodAmounts);
 		checkConstructions();
 	}
 
@@ -80,8 +89,30 @@ public class Colony {
 				});
 			}
 		});
-
 	}
+	
+	ColonyPo save() {
+		ColonyPo out = new ColonyPo();
+		out.setName(name);
+		out.setOwnerName(owner.getName());
+		out.setLocation(location);
+		out.setColonyFields(saveColonyFields());
+		out.setColonyWarehouse(colonyWarehouse.save());
+		out.setConstructions(saveCostructions());
+		return out;
+	}
+	
+	 private List<ColonyFieldPo> saveColonyFields(){
+		 final List<ColonyFieldPo> out = new ArrayList<>();
+		 colonyFields.forEach(field -> out.add(field.save()));
+		 return out;
+	 }
+	 
+	 private List<ConstructionPo> saveCostructions(){
+		 final List<ConstructionPo> out = new ArrayList<>();
+		 constructions.forEach(construction -> out.add(construction.save()));
+		 return out;
+	 }
 	
 	/**
 	 * Perform operation for next turn. Producing order:
@@ -162,10 +193,6 @@ public class Colony {
 
 	public List<Construction> getConstructions() {
 		return constructions;
-	}
-
-	Model getModel() {
-		return model;
 	}
 
 	public ColonyWarehouse getColonyWarehouse() {

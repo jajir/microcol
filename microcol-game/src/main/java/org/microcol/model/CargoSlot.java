@@ -2,8 +2,7 @@ package org.microcol.model;
 
 import java.util.Optional;
 
-import javax.json.stream.JsonGenerator;
-import javax.json.stream.JsonParser;
+import org.microcol.model.store.CargoSlotPo;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
@@ -27,6 +26,23 @@ public final class CargoSlot {
 
 	CargoSlot(final Cargo hold) {
 		this.cargo = Preconditions.checkNotNull(hold);
+	}
+
+	CargoSlot(final Cargo hold, final GoodAmount goodAmount) {
+		this.cargo = Preconditions.checkNotNull(hold);
+		this.cargoGoods = Preconditions.checkNotNull(goodAmount);
+	}
+	
+	CargoSlotPo save() {
+		final CargoSlotPo out = new CargoSlotPo();
+		if (isLoadedGood()) {
+			out.setAmount(cargoGoods.getAmount());
+			out.setGoodType(cargoGoods.getGoodType());
+		}
+		if (isLoadedUnit()) {
+			out.setUnitId(getUnit().get().getId());
+		}
+		return out;
 	}
 
 	public Player getOwnerPlayer() {
@@ -213,14 +229,6 @@ public final class CargoSlot {
 	@Override
 	public String toString() {
 		return MoreObjects.toStringHelper(this).add("cargo", cargoUnit).add("goods", cargoGoods).toString();
-	}
-
-	void save(final JsonGenerator generator) {
-		// TODO JKA Implement save/load
-	}
-
-	static CargoSlot load(final JsonParser parser) {
-		return null; // TODO JKA Implement save/load
 	}
 
 	Cargo getHold() {

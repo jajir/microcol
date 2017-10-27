@@ -1,5 +1,9 @@
 package org.microcol.model;
 
+import org.microcol.model.store.PlaceColonyFieldPo;
+import org.microcol.model.store.PlacePo;
+import org.microcol.model.store.UnitPo;
+
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 
@@ -52,6 +56,13 @@ public class PlaceColonyField extends AbstractPlace {
 				colonyField.getTerrainType().name());
 		
 		this.producedGoodType = producedGoodType;
+	}
+	
+	@Override
+	public PlacePo save(final UnitPo unitPo) {
+		final PlaceColonyFieldPo placeColonyFieldPo = new PlaceColonyFieldPo();
+		unitPo.setPlaceColonyField(placeColonyFieldPo);
+		return placeColonyFieldPo;
 	}
 
 }

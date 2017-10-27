@@ -1,103 +1,110 @@
 package org.microcol.model;
 
-import java.util.List;
+import org.microcol.model.store.CargoSlotPo;
+import org.microcol.model.store.ModelPo;
+import org.microcol.model.store.PlaceCargoSlotPo;
+import org.microcol.model.store.PlaceEuropePortPo;
+import org.microcol.model.store.PlaceHighSeasPo;
+import org.microcol.model.store.PlaceMapPo;
+import org.microcol.model.store.UnitPo;
 
 import com.google.common.base.Preconditions;
-import com.google.common.collect.Lists;
 
 public class UnitBuilder {
 
-	private final ModelBuilder modelBuilder;
+	private final UnitPo unitPo;
 
-	private UnitType type;
+	private final ModelPo modelPo;
 
-	private Player player;
-
-	private final PlaceBuilder placeBuilder;
-
-	private final List<UnitBuilder> unitsInCargo = Lists.newArrayList();
-
-	private final List<GoodAmount> goodAmounts = Lists.newArrayList();
-
-	UnitBuilder(final ModelBuilder modelBuilder) {
-		this.modelBuilder = Preconditions.checkNotNull(modelBuilder);
-		placeBuilder = new PlaceBuilder();
+	UnitBuilder(final ModelPo modelPo) {
+		this.modelPo = Preconditions.checkNotNull(modelPo);
+		unitPo = new UnitPo();
+		unitPo.setId(IdManager.nextId());
 	}
 
 	public UnitBuilder setPlayerName(final String playerName) {
-		player = modelBuilder.getPlayer(Preconditions.checkNotNull(playerName));
+		unitPo.setOwnerId(playerName);
 		return this;
 	}
 
+	@Deprecated
 	public UnitBuilder setPlayer(final Player player) {
-		this.player = Preconditions.checkNotNull(player);
+		unitPo.setOwnerId(player.getName());
 		return this;
 	}
 
 	public UnitBuilder setType(final UnitType type) {
 		Preconditions.checkNotNull(type, "Unit type is empty");
-		this.type = type;
+		unitPo.setType(type);
 		return this;
 	}
 
 	public UnitBuilder setLocation(final Location location) {
-		placeBuilder.setLocation(location);
+		unitPo.setPlaceMap(new PlaceMapPo());
+		unitPo.getPlaceMap().setLocation(location);
 		return this;
 	}
 
 	public UnitBuilder setShipIncomingToColonies(int inHowManyturns) {
-		placeBuilder.setShipIncomingToColonies(inHowManyturns);
+		unitPo.setPlaceHighSeas(new PlaceHighSeasPo());
+		unitPo.getPlaceHighSeas().setRemainigTurns(inHowManyturns);
+		unitPo.getPlaceHighSeas().setTravelToEurope(false);
 		return this;
 	}
 
 	public UnitBuilder setShipIncomingToEurope(int inHowManyturns) {
-		placeBuilder.setShipIncomingToEurope(inHowManyturns);
+		unitPo.setPlaceHighSeas(new PlaceHighSeasPo());
+		unitPo.getPlaceHighSeas().setRemainigTurns(inHowManyturns);
+		unitPo.getPlaceHighSeas().setTravelToEurope(true);
 		return this;
 	}
 
 	public UnitBuilder setUnitToEuropePortPier() {
-		placeBuilder.setUnitToEuropePortPier();
+		unitPo.setPlaceEuropePort(new PlaceEuropePortPo());
 		return this;
 	}
 
 	public UnitBuilder setUnitToCargoSlot(final Unit cargoHolder) {
-		placeBuilder.setToCargoSlot(cargoHolder);
+		// FIXME JJ NYI
 		return this;
 	}
 
 	public UnitBuilder setUnitToConstruction(final ConstructionType constructionType, final Colony colony,
 			final int position) {
-		placeBuilder.setToCostruction(constructionType, colony, position);
+		// FIXME JJ NYI
 		return this;
 	}
-	
+
 	public UnitBuilder setUnitToFiled(final Location fieldDirection, final Colony colony,
 			final GoodType producedGoodType) {
-		placeBuilder.setUnitToFiled(fieldDirection, colony, producedGoodType);
-		return this;		
+		// FIXME JJ NYI
+		return this;
 	}
 
 	public UnitBuilder addCargoGood(final GoodType goodType, final int amount) {
-		// FIXME JJ dokoncit implementaci
+		final CargoSlotPo cargoSlotPo = new CargoSlotPo();
+		cargoSlotPo.setGoodType(goodType);
+		cargoSlotPo.setAmount(amount);
+		unitPo.getCargo().getSlots().add(cargoSlotPo);
 		return this;
 	}
 
 	public UnitBuilder addCargoUnit(final UnitType type, final boolean hasHorse, final boolean hasTools,
 			final boolean hasMuskets) {
-		unitsInCargo.add(modelBuilder.makeUnitBuilder().setType(type).setPlayerName(player.getName()));
+		final UnitPo tmpPo = new UnitPo();
+		tmpPo.setId(IdManager.nextId());
+		tmpPo.setType(type);
+		tmpPo.setOwnerId(Preconditions.checkNotNull(unitPo.getOwnerId(), "Player name was not set"));
+		tmpPo.setPlaceCargoSlot(new PlaceCargoSlotPo());
+		modelPo.getUnits().add(tmpPo);
+		final CargoSlotPo cargoSlotPo = new CargoSlotPo();
+		cargoSlotPo.setUnitId(tmpPo.getId());
+		unitPo.getCargo().getSlots().add(cargoSlotPo);
 		return this;
 	}
 
-	public Unit build() {
-		Preconditions.checkNotNull(modelBuilder);
-		Preconditions.checkNotNull(player, "player was not set");
-		Unit unit = new Unit(type, player, placeBuilder);
-		unitsInCargo.forEach(cargoUnitBuilder -> {
-			cargoUnitBuilder.setUnitToCargoSlot(unit);
-			final Unit cargoUnit = cargoUnitBuilder.build();
-			modelBuilder.addUnit(cargoUnit);
-		});
-		return unit;
+	public UnitPo build() {
+		return unitPo;
 	}
 
 }

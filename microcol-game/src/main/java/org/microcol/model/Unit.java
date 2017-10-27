@@ -7,8 +7,7 @@ import java.util.Optional;
 import java.util.Random;
 import java.util.Set;
 
-import javax.json.stream.JsonParser;
-
+import org.microcol.model.store.ModelPo;
 import org.microcol.model.store.UnitPo;
 
 import com.google.common.base.MoreObjects;
@@ -18,6 +17,7 @@ import com.google.common.collect.ImmutableList;
 public class Unit {
 
 	private final int id;
+	//TODO JJ make model final
 	private Model model;
 	private final UnitType type;
 	private final Player owner;
@@ -25,6 +25,7 @@ public class Unit {
 	private int availableMoves;
 	private final Cargo cargo;
 
+	@Deprecated
 	Unit(final UnitType type, final Player owner, final Location location) {
 		this.type = Preconditions.checkNotNull(type, "UnitType is null");
 		this.owner = Preconditions.checkNotNull(owner, "Owner is null");
@@ -33,6 +34,7 @@ public class Unit {
 		this.id = IdManager.nextId();
 	}
 
+	@Deprecated
 	Unit(final UnitType type, final Player owner, final PlaceBuilder placeBuilder) {
 		this.type = Preconditions.checkNotNull(type, "UnitType is null");
 		this.owner = Preconditions.checkNotNull(owner, "Owner is null");
@@ -40,7 +42,25 @@ public class Unit {
 		this.cargo = new Cargo(this, type.getCargoCapacity());
 		this.id = IdManager.nextId();
 	}
-
+	
+	Unit(final UnitPo unitPo, final Model model, final PlaceBuilder placeBuilder){
+		Preconditions.checkNotNull(unitPo, "Unit persisten object is null");
+		Preconditions.checkNotNull(model, "Model is null");
+		Preconditions.checkNotNull(placeBuilder, "PlaceBuilder is null");
+		this.type = unitPo.getType();
+		this.owner = model.getPlayerStore().getPlayerByName(unitPo.getOwnerId());
+		this.cargo = new Cargo(this, type.getCargoCapacity(), unitPo.getCargo());
+		this.availableMoves = unitPo.getAvailableMoves();
+		this.id = Preconditions.checkNotNull(unitPo.getId(),"ID is null");
+		this.model = model;
+		this.place = Preconditions.checkNotNull(placeBuilder.build(this));
+	}
+	
+	public static Unit make(final Model model, final ModelPo modelPo, final UnitPo unitPo){
+		final PlaceBuilder placeBuilderModelPo = new PlaceBuilder(unitPo, modelPo, model);
+		return new Unit(unitPo, model, placeBuilderModelPo);
+	}
+	
 	void setModel(final Model model) {
 		this.model = Preconditions.checkNotNull(model);
 		validateTerrain();
@@ -527,10 +547,9 @@ public class Unit {
 				.add("id", id)
 				.add("type", type)
 				.add("owner", owner)
-				.add("place", place.getName())
+				.add("place", place == null ? place : place.getName())
 				.add("availableMoves", availableMoves)
-				.add("hold", cargo)
-				.add("place", place.getName()).toString();
+				.add("cargo", cargo).toString();
 	}
 
 	UnitPo save() {
@@ -538,37 +557,10 @@ public class Unit {
 		unitPo.setId(id);
 		unitPo.setAvailableMoves(availableMoves);
 		unitPo.setOwnerId(owner.getName());
-		unitPo.setType(type.name());
+		unitPo.setType(type);
+		unitPo.setCargo(cargo.save());
 		place.save(unitPo);
 		return unitPo;
-	}
-
-	static Unit load(final JsonParser parser, final List<Player> players) {
-		// START_OBJECT or END_ARRAY
-		if (parser.next() == JsonParser.Event.END_ARRAY) {
-			return null;
-		}
-		parser.next(); // KEY_NAME
-		parser.next(); // VALUE_STRING
-		final UnitType type = UnitType.valueOf(parser.getString());
-		parser.next(); // KEY_NAME
-		parser.next(); // VALUE_STRING
-		final String ownerName = parser.getString();
-		final Player owner = players.stream().filter(player -> player.getName().equals(ownerName)).findAny()
-				.orElse(null);
-		parser.next(); // KEY_NAME
-		final Location location = Location.load(parser);
-		parser.next(); // KEY_NAME
-		parser.next(); // VALUE_NUMBER
-		final int availableMoves = parser.getInt();
-		parser.next(); // END_OBJECT
-
-		// TODO JKA Implement save/load
-
-		final Unit unit = new Unit(type, owner, location);
-		unit.availableMoves = availableMoves;
-
-		return unit;
 	}
 
 	Place getPlace() {
