@@ -3,7 +3,6 @@ package org.microcol.model.store;
 import static org.junit.Assert.*;
 
 import org.junit.Test;
-import org.microcol.model.ColonyWarehouse;
 import org.microcol.model.Model;
 import org.microcol.model.store.ModelPo;
 

@@ -22,4 +22,8 @@ public class GameController {
 		gameModelController.setAndStartModel(Model.make(modelDao.loadPredefinedModel(fileName)));
 	}
 
+	public void startNewDefaultGame(){
+		gameModelController.startNewDefaultGame();
+	}
+	
 }

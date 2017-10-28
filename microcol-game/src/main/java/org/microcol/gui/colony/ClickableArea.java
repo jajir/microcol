@@ -13,6 +13,10 @@ import org.microcol.model.Location;
 import com.google.common.base.MoreObjects;
 import com.google.common.collect.Lists;
 
+/**
+ * Holds rectangular areas (fields) in on-screen coordinates. It convert on-screen
+ * coordinates to direction of field. Direction is {@link Location}. 
+ */
 public class ClickableArea {
 
 	private final Map<Rectangle, Location> areas;

@@ -16,6 +16,7 @@ import com.google.common.collect.ImmutableList;
 
 public class Unit {
 
+	private final Random random = new Random();
 	private final int id;
 	//TODO JJ make model final
 	private Model model;
@@ -59,7 +60,7 @@ public class Unit {
 	}
 	
 	public static Unit make(final Model model, final ModelPo modelPo, final UnitPo unitPo){
-		final PlaceBuilder placeBuilderModelPo = new PlaceBuilder(unitPo, modelPo, model);
+		final PlaceBuilderPo placeBuilderModelPo = new PlaceBuilderPo(unitPo, modelPo, model);
 		return new Unit(unitPo, model, unitPo.getId(), placeBuilderModelPo, unitPo.getType(),
 				model.getPlayerStore().getPlayerByName(unitPo.getOwnerId()), unitPo.getAvailableMoves());
 	}
@@ -121,10 +122,7 @@ public class Unit {
 					// XXX ships always come from east side of map
 					final List<Location> locations = model.getHighSea()
 							.getSuitablePlaceForShipCommingFromEurope(getOwner(), true);
-					// TODO random should be class instance
-					final Random random = new Random();
-					final Location location = locations.get(random.nextInt(locations.size()));
-					placeToLocation(location);
+					placeToLocation(locations.get(random.nextInt(locations.size())));
 				}
 			}
 		}
@@ -256,7 +254,6 @@ public class Unit {
 		if (slot.isEmpty() || slot.isLoadedGood()) {
 			return false;
 		} else {
-			// TODO jj express it better slot.getUnit().get().getUnit()
 			final Unit holdedUnit = slot.getUnit().get();
 			return (!inCurrentTurn || holdedUnit.availableMoves > 0) && holdedUnit.canUnitDisembarkAt(moveToLocation);
 		}
@@ -483,10 +480,9 @@ public class Unit {
 
 	public void placeToHighSeas(final boolean isTravelToEurope) {
 		Preconditions.checkArgument(UnitType.isShip(type), "Only ships could be placed to high sea.");
-		// TODO add some preconditions
 		final int requiredTurns = 3;
 		place.destroy();
-		// XXX choose if it's direction to east or to west (+1 rule to europe)
+		// XXX choose if it's direction to east or to west (+1 rule to Europe)
 		place = new PlaceHighSea(this, isTravelToEurope, requiredTurns);
 	}
 

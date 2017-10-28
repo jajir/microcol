@@ -174,10 +174,7 @@ public final class Player {
 	public void buy(final GoodAmount goodAmount) {
 		int price = goodAmount.getAmount()
 				* model.getEurope().getGoodTradeForType(goodAmount.getGoodType()).getBuyPrice();
-		if (getGold() - price < 0) {
-			throw new NotEnoughtGoldException(
-					String.format("You can't buy this item. You need %s and you have %s", price, getGold()));
-		}
+		verifyAvailibilityOFGold(price);
 		setGold(getGold() - price);
 	}
 
@@ -189,12 +186,16 @@ public final class Player {
 	
 	public void buy(final UnitType unitType){
 		int price = unitType.getEuropePrice();
+		verifyAvailibilityOFGold(price);
+		setGold(getGold() - price);
+		model.addUnitToPlayer(unitType, this);
+	}
+	
+	private void verifyAvailibilityOFGold(final int price){
 		if (getGold() - price < 0) {
 			throw new NotEnoughtGoldException(
 					String.format("You can't buy this item. You need %s and you have %s", price, getGold()));
-		}
-		//TODO buy it and place to Europe pier or dock. 
-		setGold(getGold() - price);
+		}		
 	}
 
 	/**

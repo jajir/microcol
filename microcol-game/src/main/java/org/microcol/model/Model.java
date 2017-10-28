@@ -141,8 +141,12 @@ public final class Model {
 	
 	Unit createUnit(final Model model, final ModelPo modelPo, final UnitPo unitPo) {
 		final Unit out = Unit.make(model, modelPo, unitPo);
-		model.unitStorage.getAllUnits().add(out);
+		model.unitStorage.addUnit(out);
 		return out;
+	}
+	
+	void addUnitToPlayer(final UnitType unitType, final Player owner){
+		unitStorage.addUnitToPlayer(unitType, owner, this);
 	}
 	
 	public boolean isGameStarted() {
@@ -182,15 +186,7 @@ public final class Model {
 	}
 
 	public List<Unit> getAllUnits() {
-		return unitStorage.getAllUnits();
-	}
-
-	public List<Unit> getUnits() {
-		return unitStorage.getUnits(false);
-	}
-
-	public List<Unit> getUnits(final boolean includeStored) {
-		return unitStorage.getUnits(includeStored);
+		return unitStorage.getUnits();
 	}
 
 	public Unit getUnitById(final int id) {

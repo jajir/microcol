@@ -5,6 +5,7 @@ import java.util.List;
 import org.microcol.gui.event.StatusBarMessageController;
 import org.microcol.gui.event.StatusBarMessageEvent;
 import org.microcol.gui.util.Localized;
+import org.microcol.gui.util.Text;
 import org.microcol.model.Player;
 import org.microcol.model.Unit;
 
@@ -29,12 +30,15 @@ public class UnitsPanel implements Localized {
 	private final LocalizationHelper localizationHelper;
 
 	private final VBox box;
+	
+	private final Text text;
 
 	@Inject
 	public UnitsPanel(final ImageProvider imageProvider, final StatusBarMessageController statusBarMessageController,
-			final LocalizationHelper localizationHelper) {
+			final LocalizationHelper localizationHelper, final Text text) {
 		this.imageProvider = Preconditions.checkNotNull(imageProvider);
 		this.localizationHelper = Preconditions.checkNotNull(localizationHelper);
+		this.text = Preconditions.checkNotNull(text);
 		box = new VBox();
 		box.setOnMouseEntered(e -> {
 			statusBarMessageController.fireEvent(new StatusBarMessageEvent(getText().get("unitsPanel.description")));
@@ -92,8 +96,7 @@ public class UnitsPanel implements Localized {
 
 	private HBox makeGoodsPanel(final Unit unit) {
 		HBox box = new HBox();
-		// TODO JJ localize it
-		box.getChildren().add(new Label("With:"));
+		box.getChildren().add(new Label(text.get("unitsPanel.with")));
 		unit.getCargo().getSlots().stream().filter(cargoSlot -> !cargoSlot.isEmpty()).forEach(cargoSlot -> {
 			if (cargoSlot.isLoadedUnit()) {
 				box.getChildren().add(new ImageView(imageProvider.getUnitImage(cargoSlot.getUnit().get())));

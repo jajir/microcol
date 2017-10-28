@@ -17,5 +17,5 @@ public class PersistentSrevice {
 		return scenarios;
 	}
 	
-	//TODO add methods for save & load game model
+	//XXX add methods for save & load game model
 }

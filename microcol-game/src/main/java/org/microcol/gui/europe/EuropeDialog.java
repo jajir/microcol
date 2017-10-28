@@ -158,7 +158,7 @@ public class EuropeDialog extends AbstractDialog implements DialogCallback {
 				event -> new RecruiteUnitsDialog(viewUtil, text, imageProvider, gameController, localizationHelper));
 		final Button buyButton = new Button(text.get("europe.buy"));
 		buyButton.setOnAction(
-				event -> new BuyUnitsDialog(viewUtil, text, imageProvider, gameController, localizationHelper));
+				event -> new BuyUnitsDialog(viewUtil, text, imageProvider, gameController, localizationHelper, this));
 		final Button buttonOk = new Button(text.get("dialog.ok"));
 		buttonOk.setOnAction(e -> {
 			getDialog().close();

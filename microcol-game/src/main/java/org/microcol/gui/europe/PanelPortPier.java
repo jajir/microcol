@@ -4,6 +4,7 @@ import org.microcol.gui.ImageProvider;
 import org.microcol.gui.LocalizationHelper;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.util.ClipboardReader;
+import org.microcol.gui.util.ClipboardReader.TransferFromEuropePier;
 import org.microcol.gui.util.TitledPanel;
 import org.microcol.model.UnitType;
 import org.slf4j.Logger;
@@ -97,6 +98,8 @@ public class PanelPortPier extends TitledPanel {
 
 	private boolean isItCorrectObject(final Dragboard db) {
 		return ClipboardReader.make(gameController.getModel(), db).filterUnit(unit -> !UnitType.isShip(unit.getType()))
+				.filterTransferFrom(oTransferFrom -> oTransferFrom.isPresent()
+						&& !(oTransferFrom.get() instanceof TransferFromEuropePier))
 				.getUnit().isPresent();
 	}
 

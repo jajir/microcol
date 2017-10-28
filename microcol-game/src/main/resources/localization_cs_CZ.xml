@@ -47,6 +47,7 @@
 	<entry key="unitsPanel.availableMoves">Tahů:</entry>
 	<entry key="unitsPanel.owner">Vlastník:</entry>
 	<entry key="unitsPanel.currentUser">Táhne:</entry>
+	<entry key="unitsPanel.with">S:</entry>
 	<entry key="nextTurnButton">Další tah</entry>
 	<entry key="nextTurnButton.desctiption">Provede další tah, kdy táhnou ostatní hráči</entry>
 	<entry key="tile.ocean.name">Oceán</entry>

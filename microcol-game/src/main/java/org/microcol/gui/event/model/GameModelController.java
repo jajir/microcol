@@ -3,7 +3,6 @@ package org.microcol.gui.event.model;
 import java.util.List;
 import java.util.Optional;
 
-import org.microcol.ai.AIModelBuilder;
 import org.microcol.ai.Engine;
 import org.microcol.gui.util.Localized;
 import org.microcol.model.ConstructionType;
@@ -25,7 +24,7 @@ import com.google.inject.Inject;
  */
 public class GameModelController implements Localized {
 
-	private Logger logger = LoggerFactory.getLogger(GameModelController.class);
+	private final static Logger logger = LoggerFactory.getLogger(GameModelController.class);
 
 	private final ModelEventManager modelEventManager;
 
@@ -46,24 +45,8 @@ public class GameModelController implements Localized {
 	/**
 	 * Start new game and register listener. Model will be removed.
 	 */
-	public void startNewDefaultGame() {
-		if (model.isPresent()) {
-			stopGame();
-		}
-
-		Preconditions.checkArgument(!model.isPresent());
-		Preconditions.checkArgument(!aiEngine.isPresent());
-		Preconditions.checkArgument(!modelListener.isPresent());
-
-		if ("true".equals(System.getProperty("development")) && "JKA".equals(System.getProperty("developer"))) {
-			setAndStartModel(AIModelBuilder.build());
-		} else {
-			setAndStartModel(buidModel());
-		}
-	}
-
-	private Model buidModel() {
-		return buildComplexModel();
+	public void startNewDefaultGame() {		
+		setAndStartModel(buildComplexModel());
 	}
 
 	private Model buildComplexModel() {
@@ -140,9 +123,11 @@ public class GameModelController implements Localized {
 		model.get().addListener(modelListener.get());
 		aiEngine = Optional.of(new Engine(model.get()));
 		aiEngine.get().start();
-		if (!model.get().isGameStarted()) {
-			new Thread(() -> model.get().startGame()).start();
-		}
+		model.get().startGame();
+		//XXX start game is quite complex, but starting in separate thread leads to error
+//		if (!model.get().isGameStarted()) {
+//			new Thread(() -> model.get().startGame()).start();
+//		}
 	}
 
 	public void setModel(final Model newModel) {

@@ -24,10 +24,14 @@ import javafx.scene.layout.VBox;
 public class BuyUnitsDialog extends AbstractDialog {
 
 	private final static int MAX_UNITS_IN_ROW = 2;
+	
+	private final EuropeDialog europeDialog;
 
 	public BuyUnitsDialog(final ViewUtil viewUtil, final Text text, final ImageProvider imageProvider,
-			final GameModelController gameController, final LocalizationHelper localizationHelper) {
+			final GameModelController gameController, final LocalizationHelper localizationHelper,
+			final EuropeDialog europeDialog) {
 		super(viewUtil);
+		this.europeDialog = Preconditions.checkNotNull(europeDialog);
 		Preconditions.checkNotNull(imageProvider);
 		Preconditions.checkNotNull(gameController);
 		getDialog().setTitle(text.get("buyUnitDialog.title"));
@@ -61,6 +65,11 @@ public class BuyUnitsDialog extends AbstractDialog {
 		root.getChildren().addAll(labelCaption, gridWithUnits, buttonBar);
 
 		getDialog().showAndWait();
+	}
+	
+	public void closeAndRepaint(){
+		europeDialog.repaint();
+		getDialog().close();
 	}
 
 }
