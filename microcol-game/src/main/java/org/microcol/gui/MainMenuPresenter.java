@@ -85,7 +85,7 @@ public class MainMenuPresenter {
 			final LocalizationHelper localizationHelper, final StartMoveController startMoveController) {
 		this.display = Preconditions.checkNotNull(display);
 		display.getMenuItemNewGame().setOnAction(actionEvent -> {
-			gameController.startNewGame();
+			gameController.startNewDefaultGame();
 		});
 		display.getMenuItemSameGame().setOnAction(event -> persistingDialog.saveModel());
 		display.getMenuItemLoadGame().setOnAction(event -> persistingDialog.loadModel());

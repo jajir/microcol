@@ -19,8 +19,7 @@ public class GameController {
 	}
 
 	public void startScenario(final String fileName) {
-		gameModelController.setModel(Model.make(modelDao.loadPredefinedModel(fileName)));
-		gameModelController.startNewGame();
+		gameModelController.setAndStartModel(Model.make(modelDao.loadPredefinedModel(fileName)));
 	}
 
 }

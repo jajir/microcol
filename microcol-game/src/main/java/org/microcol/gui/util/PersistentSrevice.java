@@ -10,10 +10,12 @@ import com.google.common.collect.Lists;
 public class PersistentSrevice {
 
 	private final List<Scenario> scenarios = Lists.newArrayList(
-			new Scenario("Simple tiny world", "/maps/map-small.json"));
+			new Scenario("Simple tiny world", "/maps/map-small.json"),
+			new Scenario("Declare Independence", "/maps/map-declare-independence.json"));
 
 	public List<Scenario> getScenarios() {
 		return scenarios;
 	}
-
+	
+	//TODO add methods for save & load game model
 }

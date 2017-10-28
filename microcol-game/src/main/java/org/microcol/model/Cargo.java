@@ -12,6 +12,7 @@ import com.google.common.collect.ImmutableList;
 
 public final class Cargo {
 
+	//TODO try to remove relation to owner.
 	private final Unit owner;
 	private final List<CargoSlot> slots;
 

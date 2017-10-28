@@ -104,6 +104,11 @@
 	<entry key="newGameDialog.startGame">Start play</entry>
 
 	<entry key="europe.title">Europe</entry>
+	<entry key="europe.shipsTravelingToNewWorld">Ships traveling to New World</entry>
+	<entry key="europe.shipsTravelingToEurope">Ships traveling to Europe</entry>
+	<entry key="europe.pier">Pier</entry>
+	<entry key="europe.recruit">Recruit</entry>
+	<entry key="europe.buy">Buy</entry>
 
 	<entry key="dialogFight.title">Fight Advisor</entry>
 	<entry key="dialogFight.attacker">Attacker</entry>

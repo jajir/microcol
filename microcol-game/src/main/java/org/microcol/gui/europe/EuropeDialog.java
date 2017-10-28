@@ -66,11 +66,10 @@ public class EuropeDialog extends AbstractDialog implements DialogCallback {
 		getDialog().setTitle(text.get("europe.title"));
 
 		final Label label = new Label(text.get("europe.title"));
-		// TODO localize it
-		shipsTravelingToNewWorld = new PanelHighSeas(this, imageProvider, "Ships travelling to New World",
+		shipsTravelingToNewWorld = new PanelHighSeas(this, imageProvider, text.get("europe.shipsTravelingToNewWorld"),
 				gameController, false);
-		shipsTravelingToEurope = new PanelHighSeas(this, imageProvider, "Ships travelling to Europe", gameController,
-				true);
+		shipsTravelingToEurope = new PanelHighSeas(this, imageProvider, text.get("europe.shipsTravelingToEurope"),
+				gameController, true);
 		europeDock = new PanelDock(imageProvider, new PanelDockBehavior() {
 
 			@Override
@@ -152,12 +151,12 @@ public class EuropeDialog extends AbstractDialog implements DialogCallback {
 		final VBox panelShips = new VBox();
 		panelShips.getChildren().addAll(shipsTravelingToNewWorld, shipsTravelingToEurope, europeDock);
 
-		panelPortPier = new PanelPortPier(gameController, this, "Pier", imageProvider, localizationHelper);
+		panelPortPier = new PanelPortPier(gameController, this, text.get("europe.pier"), imageProvider, localizationHelper);
 
-		final Button recruiteButton = new Button("Recruite");
+		final Button recruiteButton = new Button(text.get("europe.recruit"));
 		recruiteButton.setOnAction(
 				event -> new RecruiteUnitsDialog(viewUtil, text, imageProvider, gameController, localizationHelper));
-		final Button buyButton = new Button("Buy");
+		final Button buyButton = new Button(text.get("europe.buy"));
 		buyButton.setOnAction(
 				event -> new BuyUnitsDialog(viewUtil, text, imageProvider, gameController, localizationHelper));
 		final Button buttonOk = new Button(text.get("dialog.ok"));

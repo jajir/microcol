@@ -32,7 +32,7 @@ public final class CargoSlot {
 		this.cargo = Preconditions.checkNotNull(hold);
 		this.cargoGoods = Preconditions.checkNotNull(goodAmount);
 	}
-	
+
 	CargoSlotPo save() {
 		final CargoSlotPo out = new CargoSlotPo();
 		if (isLoadedGood()) {
@@ -93,8 +93,8 @@ public final class CargoSlot {
 			return Optional.of(cargoUnit.getUnit());
 		}
 	}
-	
-	public void removeCargo(final GoodType goodType, final int amount){
+
+	public void removeCargo(final GoodType goodType, final int amount) {
 		Preconditions.checkArgument(isLoadedGood(), "Cargo (%s) doesn't contains any good.", this);
 		Preconditions.checkArgument(cargoGoods.getGoodType().equals(goodType),
 				"Cargo (%s) doesn't contains same typa as was transfered (%s).", this, goodType);
@@ -139,7 +139,7 @@ public final class CargoSlot {
 		getOwnerPlayer().buy(goodAmount);
 		cargoGoods = goodAmount;
 	}
-	
+
 	public void sellAndEmpty(final GoodAmount goodAmount) {
 		Preconditions.checkNotNull(goodAmount);
 		Preconditions.checkState(!isEmpty(), "Cargo slot (%s) is already empty.", this);
@@ -154,6 +154,12 @@ public final class CargoSlot {
 	}
 
 	/**
+	 * Method is similar to storeFromColonyWarehouse, it's same logic with
+	 * different objects.
+	 * 
+	 * 
+	 * XXX could storeFromCargoSlot and storeFromColonyWarehouse share some code? 
+	 *
 	 * @param goodAmount
 	 *            required good amount
 	 * @param sourceCargoSlot
@@ -187,9 +193,7 @@ public final class CargoSlot {
 		}
 		cargoGoods = goodAmount;
 	}
-	
-	//XXX store* methods should share some code
-	
+
 	public void storeFromColonyWarehouse(final GoodAmount goodAmount, final Colony colony) {
 		Preconditions.checkNotNull(goodAmount);
 		Preconditions.checkState(getOwnerPlayer().equals(colony.getOwner()),

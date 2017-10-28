@@ -103,6 +103,11 @@
 	<entry key="newGameDialog.startGame">Hrát</entry>
 
 	<entry key="europe.title">Evropa</entry>
+	<entry key="europe.shipsTravelingToNewWorld">Lodě plující do nového světa</entry>
+	<entry key="europe.shipsTravelingToEurope">Lodě plující do Evropy</entry>
+	<entry key="europe.pier">Molo</entry>
+	<entry key="europe.recruit">Najmout</entry>
+	<entry key="europe.buy">Koupit</entry>
 
 	<entry key="dialogFight.title">Útok</entry>
 	<entry key="dialogFight.attacker">Útočník</entry>

@@ -7,6 +7,8 @@ public class PlayerPo {
 	private boolean computer;
 	
 	private int gold;
+	
+	private boolean declaredIndependence;
 
 	/**
 	 * @return the name
@@ -51,6 +53,20 @@ public class PlayerPo {
 	 */
 	public void setGold(int gold) {
 		this.gold = gold;
+	}
+
+	/**
+	 * @return the declaredIndependence
+	 */
+	public boolean isDeclaredIndependence() {
+		return declaredIndependence;
+	}
+
+	/**
+	 * @param declaredIndependence the declaredIndependence to set
+	 */
+	public void setDeclaredIndependence(boolean declaredIndependence) {
+		this.declaredIndependence = declaredIndependence;
 	}
 
 }

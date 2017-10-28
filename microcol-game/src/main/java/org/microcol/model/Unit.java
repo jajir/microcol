@@ -43,22 +43,25 @@ public class Unit {
 		this.id = IdManager.nextId();
 	}
 	
-	Unit(final UnitPo unitPo, final Model model, final PlaceBuilder placeBuilder){
+	Unit(final UnitPo unitPo, final Model model, final Integer id, final PlaceBuilder placeBuilder, final UnitType unitType,
+			final Player owner, final int availableMoves) {
 		Preconditions.checkNotNull(unitPo, "Unit persisten object is null");
 		Preconditions.checkNotNull(model, "Model is null");
 		Preconditions.checkNotNull(placeBuilder, "PlaceBuilder is null");
-		this.type = unitPo.getType();
-		this.owner = model.getPlayerStore().getPlayerByName(unitPo.getOwnerId());
+		Preconditions.checkNotNull(unitType, "UnitType is null");
+		this.type = unitType;
+		this.owner = Preconditions.checkNotNull(owner);
 		this.cargo = new Cargo(this, type.getCargoCapacity(), unitPo.getCargo());
-		this.availableMoves = unitPo.getAvailableMoves();
-		this.id = Preconditions.checkNotNull(unitPo.getId(),"ID is null");
+		this.availableMoves = availableMoves;
+		this.id = Preconditions.checkNotNull(id, "ID is null");
 		this.model = model;
 		this.place = Preconditions.checkNotNull(placeBuilder.build(this));
 	}
 	
 	public static Unit make(final Model model, final ModelPo modelPo, final UnitPo unitPo){
 		final PlaceBuilder placeBuilderModelPo = new PlaceBuilder(unitPo, modelPo, model);
-		return new Unit(unitPo, model, placeBuilderModelPo);
+		return new Unit(unitPo, model, unitPo.getId(), placeBuilderModelPo, unitPo.getType(),
+				model.getPlayerStore().getPlayerByName(unitPo.getOwnerId()), unitPo.getAvailableMoves());
 	}
 	
 	void setModel(final Model model) {
@@ -305,13 +308,12 @@ public class Unit {
 	 * 
 	 * @param units
 	 *            required {@link List} of units
-	 * @return return <code>true</code> when all units belongs to same owner as
-	 *         this unit otherwise return <code>false</code>
+	 * @return return <code>true</code> when there is not unit in list belonging
+	 *         to different owner otherwise return <code>false</code>
 	 */
 	public boolean isSameOwner(final List<Unit> units) {
 		Preconditions.checkNotNull(units);
-		// XXX could it be rewritten to stream API?
-		return units.size() > 0 && units.get(0).getOwner().equals(getOwner());
+		return !units.stream().filter(unit -> !getOwner().equals(unit.getOwner())).findFirst().isPresent();
 	}
 
 	public List<Unit> getStorageUnits() {

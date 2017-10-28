@@ -44,9 +44,9 @@ public class GameModelController implements Localized {
 	}
 
 	/**
-	 * Start new game and register listener.
+	 * Start new game and register listener. Model will be removed.
 	 */
-	public void startNewGame() {
+	public void startNewDefaultGame() {
 		if (model.isPresent()) {
 			stopGame();
 		}
@@ -133,7 +133,8 @@ public class GameModelController implements Localized {
 		return builder.build();
 	}
 
-	private void setAndStartModel(final Model newModel) {
+	public void setAndStartModel(final Model newModel) {
+		Preconditions.checkNotNull(newModel);
 		model = Optional.of(newModel);
 		modelListener = Optional.of(new ModelListenerImpl(modelEventManager));
 		model.get().addListener(modelListener.get());

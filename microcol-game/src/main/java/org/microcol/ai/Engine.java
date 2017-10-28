@@ -28,10 +28,6 @@ public class Engine {
 		unitDirections = new Directions();
 	}
 
-	public boolean isRunning() {
-		return running;
-	}
-
 	public void start() {
 		running = true;
 		model.addListener(new ModelAdapter() {

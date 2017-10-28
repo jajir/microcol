@@ -23,7 +23,7 @@ public class StartPanelPresenter {
 	@Inject
 	public StartPanelPresenter(final StartPanelPresenter.Display display, final GameModelController gameController,
 			final ChangeLanguageController changeLanguageController) {
-		display.getButtonStartNewGame().setOnAction(e -> gameController.startNewGame());
+		display.getButtonStartNewGame().setOnAction(e -> gameController.startNewDefaultGame());
 		changeLanguageController.addListener(listener -> display.updateLanguage());
 	}
 
