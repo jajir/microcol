@@ -39,7 +39,7 @@ public class PlaceBuilderPo implements PlaceBuilder {
 		 * Europe port
 		 */
 		if (unitPo.getPlaceEuropePort() != null) {
-			if (UnitType.isShip(unitPo.getType())) {
+			if (unitPo.getType().isShip()) {
 				return new PlaceEuropePort(unit, model.getEurope().getPort());
 			} else {
 				return new PlaceEuropePier(unit);

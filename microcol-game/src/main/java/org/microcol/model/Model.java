@@ -43,7 +43,6 @@ public final class Model {
 		this.colonies.forEach(colony -> colony.setModel(this));
 
 		unitStorage = new UnitStorage(units);
-		unitStorage.getUnits(true).forEach(unit -> unit.setModel(this));
 
 		gameManager = new GameManager(this);
 
@@ -104,8 +103,6 @@ public final class Model {
 		
 		this.colonies.forEach(colony -> colony.setModel(this));
 		this.unitStorage = Preconditions.checkNotNull(unitStorage);
-
-		unitStorage.getUnits(true).forEach(unit -> unit.setModel(this));
 
 		gameManager = new GameManager(this);
 

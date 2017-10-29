@@ -18,32 +18,13 @@ public class Unit {
 
 	private final Random random = new Random();
 	private final int id;
-	//TODO JJ make model final
-	private Model model;
+	private final Model model;
 	private final UnitType type;
 	private final Player owner;
 	private Place place;
 	private int availableMoves;
 	private final Cargo cargo;
 
-	@Deprecated
-	Unit(final UnitType type, final Player owner, final Location location) {
-		this.type = Preconditions.checkNotNull(type, "UnitType is null");
-		this.owner = Preconditions.checkNotNull(owner, "Owner is null");
-		this.place = new PlaceLocation(this, Preconditions.checkNotNull(location));
-		this.cargo = new Cargo(this, type.getCargoCapacity());
-		this.id = IdManager.nextId();
-	}
-
-	@Deprecated
-	Unit(final UnitType type, final Player owner, final PlaceBuilder placeBuilder) {
-		this.type = Preconditions.checkNotNull(type, "UnitType is null");
-		this.owner = Preconditions.checkNotNull(owner, "Owner is null");
-		this.place = Preconditions.checkNotNull(placeBuilder.build(this), "PlaceBuilder is null");
-		this.cargo = new Cargo(this, type.getCargoCapacity());
-		this.id = IdManager.nextId();
-	}
-	
 	Unit(final UnitPo unitPo, final Model model, final Integer id, final PlaceBuilder placeBuilder, final UnitType unitType,
 			final Player owner, final int availableMoves) {
 		Preconditions.checkNotNull(unitPo, "Unit persisten object is null");
@@ -63,19 +44,6 @@ public class Unit {
 		final PlaceBuilderPo placeBuilderModelPo = new PlaceBuilderPo(unitPo, modelPo, model);
 		return new Unit(unitPo, model, unitPo.getId(), placeBuilderModelPo, unitPo.getType(),
 				model.getPlayerStore().getPlayerByName(unitPo.getOwnerId()), unitPo.getAvailableMoves());
-	}
-	
-	void setModel(final Model model) {
-		this.model = Preconditions.checkNotNull(model);
-		validateTerrain();
-	}
-	
-	private void validateTerrain(){
-		if(isAtPlaceLocation()){
-			final TerrainType t = model.getMap().getTerrainTypeAt(getLocation());
-			Preconditions.checkState(isMoveable(getLocation(), true),
-					String.format("Unit (%s) is not at valid terrain (%s)", this, t));
-		}
 	}
 
 	public UnitType getType() {
@@ -479,7 +447,7 @@ public class Unit {
 	}
 
 	public void placeToHighSeas(final boolean isTravelToEurope) {
-		Preconditions.checkArgument(UnitType.isShip(type), "Only ships could be placed to high sea.");
+		Preconditions.checkArgument(type.isShip(), "Only ships could be placed to high sea.");
 		final int requiredTurns = 3;
 		place.destroy();
 		// XXX choose if it's direction to east or to west (+1 rule to Europe)

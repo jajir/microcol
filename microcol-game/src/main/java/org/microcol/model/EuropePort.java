@@ -24,7 +24,7 @@ public class EuropePort {
 	}
 
 	public void placeShipToPort(final Unit unit) {
-		Preconditions.checkArgument(UnitType.isShip(unit.getType()), "it's not correct unit type");
+		Preconditions.checkArgument(unit.getType().isShip(), "it's not correct unit type");
 		unit.placeToEuropePort(this);
 	}
 

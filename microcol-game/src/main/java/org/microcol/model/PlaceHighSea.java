@@ -26,7 +26,7 @@ public class PlaceHighSea extends AbstractPlace {
 
 	public PlaceHighSea(final Unit unit, final boolean isTravelToEurope, final int requiredTurns) {
 		super(unit);
-		Preconditions.checkArgument(UnitType.isShip(unit.getType()), "Only ships could be placed to high sea.");
+		Preconditions.checkArgument(unit.getType().isShip(), "Only ships could be placed to high sea.");
 		this.isTravelToEurope = isTravelToEurope;
 		this.remainigTurns = requiredTurns;
 	}

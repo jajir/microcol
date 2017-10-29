@@ -191,11 +191,11 @@ public class UnitType {
 			return UNIT_TYPES_BY_NAME.get(unitTypeName);
 		}
 	}
-	
-	public static boolean isShip(final UnitType unitType) {
-		return unitType == UnitType.FRIGATE || unitType == UnitType.GALLEON;
-	}
 
+	public boolean isShip() {
+		return this == UnitType.FRIGATE || this == UnitType.GALLEON;
+	}
+	
 	public List<TerrainType> getMoveableTerrains() {
 		return moveableTerrains;
 	}

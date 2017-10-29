@@ -4,7 +4,6 @@ import org.microcol.gui.ImageProvider;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.util.ClipboardReader;
 import org.microcol.gui.util.TitledPanel;
-import org.microcol.model.UnitType;
 
 import com.google.common.base.Preconditions;
 
@@ -82,7 +81,7 @@ public class PanelHighSeas extends TitledPanel {
 	private boolean isItCorrectObject(final Dragboard db) {
 		if (!isShownShipsTravelingToEurope && db.hasString()) {
 			return ClipboardReader.make(gameController.getModel(), db)
-					.filterUnit(unit -> UnitType.isShip(unit.getType())).getUnit().isPresent();
+					.filterUnit(unit -> unit.getType().isShip()).getUnit().isPresent();
 		} else {
 			return false;
 		}
@@ -91,7 +90,7 @@ public class PanelHighSeas extends TitledPanel {
 	private final void onDragDropped(DragEvent event) {
 		final Dragboard db = event.getDragboard();
 		ClipboardReader.make(gameController.getModel(), db).readUnit((unit, transferFrom) -> {
-			Preconditions.checkState(UnitType.isShip(unit.getType()), "Only ships could be send to high seas");
+			Preconditions.checkState(unit.getType().isShip(), "Only ships could be send to high seas");
 			unit.placeToHighSeas(false);
 			europeDialog.repaint();
 			event.acceptTransferModes(TransferMode.MOVE);

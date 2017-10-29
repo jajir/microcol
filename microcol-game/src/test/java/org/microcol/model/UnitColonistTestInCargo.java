@@ -1,5 +1,7 @@
 package org.microcol.model;
 
+import static org.junit.Assert.assertTrue;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.microcol.model.store.UnitPo;
@@ -9,7 +11,7 @@ import mockit.Injectable;
 import mockit.Mocked;
 import mockit.Tested;
 
-public class UnitColonistTest {
+public class UnitColonistTestInCargo {
 
 	@Tested
 	private Unit unit;
@@ -36,31 +38,35 @@ public class UnitColonistTest {
 	private int availableMoves;
 	
 	@Mocked
-	private PlaceLocation placeLocation;
+	private PlaceCargoSlot placeCargoSlot;
 
-	@Test(expected = IllegalArgumentException.class)
-	public void test_placeToHighSeas_invalid_place_type() throws Exception {
+	@Test
+	public void test_placeToEuropePortPier() throws Exception {
 		new Expectations() {{
-			unitType.isShip(); result = false;
+			placeCargoSlot.isOwnerAtEuropePort(); result = true;
 		}};
-		unit.placeToHighSeas(true);
-	}
-
-	@Test(expected = IllegalStateException.class)
-	public void test_placeToEuropePortPier_unit_in_not_in_cargo() throws Exception {
 		
 		unit.placeToEuropePortPier();
-	}
 
+		assertTrue(unit.isAtEuropePier());
+	}
+	
+	@Test(expected = IllegalStateException.class)
+	public void test_placeToEuropePortPier_holding_unit_is_not_in_europe_port() throws Exception {
+		new Expectations() {{
+			placeCargoSlot.isOwnerAtEuropePort(); result = false;
+		}};
+		unit.placeToEuropePortPier();
+	}
+	
 	@Before
 	public void setup() {
 		/*
-		 * Following expectations will be used for unit constructior
+		 * Following expectations will be used for unit constructor
 		 */
 		new Expectations() {{
-			placeBuilder.build((Unit)any); result = placeLocation;
+			placeBuilder.build((Unit)any); result = placeCargoSlot;
 		}};
 	}
-
 
 }
