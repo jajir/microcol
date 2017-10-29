@@ -72,8 +72,7 @@ public class UnitBuilder {
 		return this;
 	}
 
-	public UnitBuilder addCargoUnit(final UnitType type, final boolean hasHorse, final boolean hasTools,
-			final boolean hasMuskets) {
+	public UnitBuilder addCargoUnit(final UnitType type) {
 		final UnitPo tmpPo = new UnitPo();
 		tmpPo.setId(IdManager.nextId());
 		tmpPo.setType(type);

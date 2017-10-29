@@ -71,8 +71,6 @@ public class PanelColonyFields extends TitledPanel {
 		final int size = 3 * GamePanelView.TILE_WIDTH_IN_PX;
 		canvas = new Canvas(size, size);
 		getContentPane().getChildren().add(canvas);
-		canvas.setOnDragEntered(this::onDragEntered);
-		canvas.setOnDragExited(this::onDragExited);
 		canvas.setOnDragOver(this::onDragOver);
 		canvas.setOnDragDropped(this::onDragDropped);
 		canvas.setOnDragDetected(this::onDragDetected);
@@ -141,14 +139,6 @@ public class PanelColonyFields extends TitledPanel {
 				event.consume();
 			}
 		}
-	}
-
-	private final void onDragEntered(final DragEvent event) {
-		logger.debug("Drag entered");
-	}
-
-	private final void onDragExited(final DragEvent event) {
-		logger.debug("Drag Exited");
 	}
 
 	private final void onDragOver(final DragEvent event) {

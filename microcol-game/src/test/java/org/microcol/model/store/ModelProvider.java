@@ -70,7 +70,7 @@ public class ModelProvider {
 			.getEuropeBuilder()
 			.addShipToPort(builder.makeUnitBuilder().setType(UnitType.GALLEON).setLocation(Location.of(2, 2))
 					.setPlayerName("Dutch").addCargoGood(GoodType.COTTON, 100)
-					.addCargoUnit(UnitType.COLONIST, true, false, false).build())
+					.addCargoUnit(UnitType.COLONIST).build())
 			.addShipToPort(builder.makeUnitBuilder().setType(UnitType.FRIGATE).setLocation(Location.of(2, 2))
 					.setPlayerName("Dutch").addCargoGood(GoodType.CIGARS, 100).addCargoGood(GoodType.RUM, 100)
 					.addCargoGood(GoodType.SILVER, 100).build())
@@ -107,7 +107,7 @@ public class ModelProvider {
 			.getEuropeBuilder()
 			.addShipToPort(builder.makeUnitBuilder().setType(UnitType.GALLEON).setLocation(Location.of(2, 2))
 					.setPlayerName("Dutch").addCargoGood(GoodType.COTTON, 100)
-					.addCargoUnit(UnitType.COLONIST, true, false, false).build())
+					.addCargoUnit(UnitType.COLONIST).build())
 			.build();
 
 		return builder.build();

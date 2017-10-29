@@ -23,8 +23,6 @@ public class King {
 
 	private final Player whosKingThisPlayerIs;
 
-	private boolean running;
-
 	/**
 	 * Royal Expedition Forces was send to colonies after declaring
 	 * independence.
@@ -38,7 +36,6 @@ public class King {
 	}
 
 	public void start() {
-		running = true;
 		model.addListener(new ModelAdapter() {
 			@Override
 			public void turnStarted(TurnStartedEvent event) {
@@ -56,5 +53,8 @@ public class King {
 	 * unit moving.
 	 */
 	void turn() {
+		if (whosKingThisPlayerIs.isDeclaredIndependence() && !refWasSend) {
+			//XXX send REF
+		}
 	}
 }

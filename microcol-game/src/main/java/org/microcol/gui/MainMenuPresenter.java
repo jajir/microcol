@@ -96,7 +96,7 @@ public class MainMenuPresenter {
 			gameEventController.fireEvent(new AboutGameEvent());
 		});
 		display.getMenuItemColonizopedia()
-				.setOnAction(event -> new Colonizopedia(text, viewUtil, imageProvider, localizationHelper));
+				.setOnAction(event -> new Colonizopedia(text, viewUtil));
 		display.getRbMenuItemlanguageCz().setOnAction(actionEvent -> {
 			changeLanguageController.fireEvent(new ChangeLanguageEvent(Text.Language.cz, gameController.getModel()));
 		});

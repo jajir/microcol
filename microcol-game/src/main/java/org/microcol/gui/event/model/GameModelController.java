@@ -107,7 +107,7 @@ public class GameModelController implements Localized {
 			.getEuropeBuilder()
 				.addShipToPort(builder.makeUnitBuilder().setType(UnitType.GALLEON).setUnitToEuropePortPier()
 					.setPlayerName("Dutch").addCargoGood(GoodType.COTTON, 100)
-					.addCargoUnit(UnitType.COLONIST, true, false, false).build())
+					.addCargoUnit(UnitType.COLONIST).build())
 				.addShipToPort(builder.makeUnitBuilder().setType(UnitType.FRIGATE).setUnitToEuropePortPier()
 					.setPlayerName("Dutch").addCargoGood(GoodType.CIGARS, 100).addCargoGood(GoodType.RUM, 100)
 					.addCargoGood(GoodType.SILVER, 100).build())

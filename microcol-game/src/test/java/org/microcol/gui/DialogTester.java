@@ -124,7 +124,7 @@ public class DialogTester extends Application {
 	public final static void dialogColonizopedia() {
 		final GameModelController gameController = EasyMock.createMock(GameModelController.class);
 		EasyMock.replay(gameController);
-		new Colonizopedia(text, viewUtil, imageProvider, localizationHelper);
+		new Colonizopedia(text, viewUtil);
 	}
 
 	public final static void startChooseGoodAmount() {
@@ -134,7 +134,7 @@ public class DialogTester extends Application {
 
 	public final static void startBuyUnitDialog() {
 		final GameModelController gameController = EasyMock.createMock(GameModelController.class);
-		BuyUnitsDialog chooseGoodAmount = new BuyUnitsDialog(viewUtil,text,imageProvider, gameController, localizationHelper, null);
+		new BuyUnitsDialog(viewUtil,text,imageProvider, gameController, localizationHelper, null);
 	}
 
 }
