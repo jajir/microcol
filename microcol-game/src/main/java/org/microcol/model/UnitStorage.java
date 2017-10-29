@@ -77,12 +77,6 @@ class UnitStorage {
 		return ImmutableList.copyOf(units);
 	}
 
-	// TODO JJ rename it, be more specific about function
-	//TODO it's function to remove
-	List<Unit> getUnits(final boolean includeStored) {
-		return units.stream().filter(unit -> includeStored || unit.isAtPlaceLocation()).collect(ImmutableList.toImmutableList());
-	}
-
 	Map<Location, List<Unit>> getUnitsAt() {
 		return Multimaps.asMap(units.stream().filter(unit -> unit.isAtPlaceLocation())
 				.collect(ImmutableListMultimap.toImmutableListMultimap(Unit::getLocation, Function.identity())));

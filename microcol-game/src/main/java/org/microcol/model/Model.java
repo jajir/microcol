@@ -235,10 +235,7 @@ public final class Model {
 	}
 	
 	private List<PlayerPo> getSavePlayers() {
-		//TODO is it necessary? How it's used.
-		final List<PlayerPo> out = new ArrayList<PlayerPo>();
-		playerStore.getPlayers().forEach(player -> out.add(player.save()));
-		return out;
+		return playerStore.getPlayers().stream().map(player -> player.save()).collect(ImmutableList.toImmutableList());
 	}
 	
 	private List<ColonyPo> getSaveColonies() {
