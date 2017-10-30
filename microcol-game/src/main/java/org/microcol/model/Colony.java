@@ -39,7 +39,7 @@ public class Colony {
 	}
 
 	public Colony(final String name, final Player owner, final Location location,
-			final List<Construction> constructions, final Map<GoodType, Integer> initialGoodAmounts) {
+			final List<Construction> constructions, final Map<String, Integer> initialGoodAmounts) {
 		this.name = Preconditions.checkNotNull(name);
 		this.owner = Preconditions.checkNotNull(owner, "owner is null");
 		this.location = Preconditions.checkNotNull(location);

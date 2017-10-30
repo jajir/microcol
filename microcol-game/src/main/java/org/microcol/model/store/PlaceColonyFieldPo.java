@@ -1,7 +1,9 @@
 package org.microcol.model.store;
 
 public class PlaceColonyFieldPo extends PlacePo {
-	
-	//FIXME colony field identification
-	
+
+	/*
+	 * Place doesn't need colony field identification.
+	 */
+
 }

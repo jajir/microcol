@@ -54,14 +54,10 @@ public class Area {
 		pointTopLeft = visibleArea.getTopLeft();
 		pointBottomRight = visibleArea.getBottomRight();
 
-		// TODO JJ in following code don't use point instead of location.
-		final Point p1 = pointTopLeft.divide(GamePanelView.TILE_WIDTH_IN_PX).add(Point.MAP_MIN_X, Point.MAP_MIN_Y);
-		final Point p2 = Point
-				.of((int) Math.ceil(pointBottomRight.getX() / (float) GamePanelView.TILE_WIDTH_IN_PX),
-						(int) Math.ceil(pointBottomRight.getY() / (float) GamePanelView.TILE_WIDTH_IN_PX))
-				.add(Point.of(1, 1));
+		final Location p1 = pointTopLeft.toLocation();
+		final Location p2 = pointBottomRight.toLocationCeilUp();
 
-		topLeft = Location.of(Math.max(Point.MAP_MIN_X, p1.getX()), Math.max(Point.MAP_MIN_Y, p1.getY()));
+		topLeft = Location.of(Math.max(Location.MAP_MIN_X, p1.getX()), Math.max(Location.MAP_MIN_Y, p1.getY()));
 		bottomRight = Location.of(Math.min(p2.getX(), worldMap.getMaxX()), Math.min(p2.getY(), worldMap.getMaxY()));
 	}
 

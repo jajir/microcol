@@ -100,7 +100,7 @@ public class ColonyBuilder {
 		Preconditions.checkNotNull(amount);
 		Preconditions.checkArgument(!colonyPo.getColonyWarehouse().containsKey(goodType),
 				"Good type (%s) was alredy defined.");
-		colonyPo.getColonyWarehouse().put(goodType, amount);
+		colonyPo.getColonyWarehouse().put(goodType.name(), amount);
 		return this;
 	}
 

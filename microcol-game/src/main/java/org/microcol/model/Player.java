@@ -14,17 +14,20 @@ public final class Player {
 	private final Model model;
 	private final String name;
 	private final boolean computer;
+	private boolean declaredIndependence;
 	private int gold;
 
-	Player(final String name, final boolean computer, final int initialGold, final Model model) {
+	private Player(final String name, final boolean computer, final int initialGold, final Model model,
+			final boolean declaredIndependence) {
 		this.name = Preconditions.checkNotNull(name);
 		this.computer = computer;
 		this.gold = initialGold;
 		this.model = model;
+		this.declaredIndependence = declaredIndependence;
 	}
 	
 	public static Player make(final PlayerPo player, final Model model){
-		return new Player(player.getName(), player.isComputer(), player.getGold(), model);
+		return new Player(player.getName(), player.isComputer(), player.getGold(), model, player.isDeclaredIndependence());
 	}
 	
 	public PlayerPo save(){
@@ -171,10 +174,7 @@ public final class Player {
 	public void buy(final GoodAmount goodAmount) {
 		int price = goodAmount.getAmount()
 				* model.getEurope().getGoodTradeForType(goodAmount.getGoodType()).getBuyPrice();
-		if (getGold() - price < 0) {
-			throw new NotEnoughtGoldException(
-					String.format("You can't buy this item. You need %s and you have %s", price, getGold()));
-		}
+		verifyAvailibilityOFGold(price);
 		setGold(getGold() - price);
 	}
 
@@ -186,12 +186,30 @@ public final class Player {
 	
 	public void buy(final UnitType unitType){
 		int price = unitType.getEuropePrice();
+		verifyAvailibilityOFGold(price);
+		setGold(getGold() - price);
+		model.addUnitToPlayer(unitType, this);
+	}
+	
+	private void verifyAvailibilityOFGold(final int price){
 		if (getGold() - price < 0) {
 			throw new NotEnoughtGoldException(
 					String.format("You can't buy this item. You need %s and you have %s", price, getGold()));
-		}
-		//TODO buy it and place to Europe pier or dock. 
-		setGold(getGold() - price);
+		}		
+	}
+
+	/**
+	 * @return the declaredIndependence
+	 */
+	public boolean isDeclaredIndependence() {
+		return declaredIndependence;
+	}
+
+	/**
+	 * @param declaredIndependence the declaredIndependence to set
+	 */
+	public void setDeclaredIndependence(boolean declaredIndependence) {
+		this.declaredIndependence = declaredIndependence;
 	}
 	
 }

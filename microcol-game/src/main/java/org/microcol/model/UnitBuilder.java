@@ -64,23 +64,6 @@ public class UnitBuilder {
 		return this;
 	}
 
-	public UnitBuilder setUnitToCargoSlot(final Unit cargoHolder) {
-		// FIXME JJ NYI
-		return this;
-	}
-
-	public UnitBuilder setUnitToConstruction(final ConstructionType constructionType, final Colony colony,
-			final int position) {
-		// FIXME JJ NYI
-		return this;
-	}
-
-	public UnitBuilder setUnitToFiled(final Location fieldDirection, final Colony colony,
-			final GoodType producedGoodType) {
-		// FIXME JJ NYI
-		return this;
-	}
-
 	public UnitBuilder addCargoGood(final GoodType goodType, final int amount) {
 		final CargoSlotPo cargoSlotPo = new CargoSlotPo();
 		cargoSlotPo.setGoodType(goodType);
@@ -89,8 +72,7 @@ public class UnitBuilder {
 		return this;
 	}
 
-	public UnitBuilder addCargoUnit(final UnitType type, final boolean hasHorse, final boolean hasTools,
-			final boolean hasMuskets) {
+	public UnitBuilder addCargoUnit(final UnitType type) {
 		final UnitPo tmpPo = new UnitPo();
 		tmpPo.setId(IdManager.nextId());
 		tmpPo.setType(type);

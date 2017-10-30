@@ -16,6 +16,7 @@
 	<entry key="mainMenu.game.newGame">Nová hra</entry>
 	<entry key="mainMenu.game.saveGame">Uložit hru</entry>
 	<entry key="mainMenu.game.loadGame">Načíst hru</entry>
+	<entry key="mainMenu.game.newScenario">Nový scénář</entry>
 	<entry key="mainMenu.game.quitGame">Ukončit hru</entry>
 
 	<entry key="mainMenu.view">Zobrazení</entry>
@@ -46,6 +47,7 @@
 	<entry key="unitsPanel.availableMoves">Tahů:</entry>
 	<entry key="unitsPanel.owner">Vlastník:</entry>
 	<entry key="unitsPanel.currentUser">Táhne:</entry>
+	<entry key="unitsPanel.with">S:</entry>
 	<entry key="nextTurnButton">Další tah</entry>
 	<entry key="nextTurnButton.desctiption">Provede další tah, kdy táhnou ostatní hráči</entry>
 	<entry key="tile.ocean.name">Oceán</entry>
@@ -102,6 +104,11 @@
 	<entry key="newGameDialog.startGame">Hrát</entry>
 
 	<entry key="europe.title">Evropa</entry>
+	<entry key="europe.shipsTravelingToNewWorld">Lodě plující do nového světa</entry>
+	<entry key="europe.shipsTravelingToEurope">Lodě plující do Evropy</entry>
+	<entry key="europe.pier">Molo</entry>
+	<entry key="europe.recruit">Najmout</entry>
+	<entry key="europe.buy">Koupit</entry>
 
 	<entry key="dialogFight.title">Útok</entry>
 	<entry key="dialogFight.attacker">Útočník</entry>

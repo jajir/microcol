@@ -5,7 +5,7 @@ import java.util.List;
 import org.microcol.gui.DialogNotEnoughGold;
 import org.microcol.gui.ImageProvider;
 import org.microcol.gui.LocalizationHelper;
-import org.microcol.gui.event.model.GameController;
+import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.util.AbstractDialog;
 import org.microcol.gui.util.ClipboardReader;
 import org.microcol.gui.util.ClipboardWritter;
@@ -17,7 +17,6 @@ import org.microcol.model.CargoSlot;
 import org.microcol.model.GoodAmount;
 import org.microcol.model.NotEnoughtGoldException;
 import org.microcol.model.Unit;
-import org.microcol.model.UnitType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -58,7 +57,7 @@ public class EuropeDialog extends AbstractDialog implements DialogCallback {
 	private final BooleanProperty propertyShiftWasPressed;
 
 	public EuropeDialog(final ViewUtil viewUtil, final Text text, final ImageProvider imageProvider,
-			final GameController gameController, final LocalizationHelper localizationHelper) {
+			final GameModelController gameController, final LocalizationHelper localizationHelper) {
 		super(viewUtil);
 		propertyShiftWasPressed = new SimpleBooleanProperty(false);
 		Preconditions.checkNotNull(imageProvider);
@@ -66,24 +65,23 @@ public class EuropeDialog extends AbstractDialog implements DialogCallback {
 		getDialog().setTitle(text.get("europe.title"));
 
 		final Label label = new Label(text.get("europe.title"));
-		// TODO localize it
-		shipsTravelingToNewWorld = new PanelHighSeas(this, imageProvider, "Ships travelling to New World",
+		shipsTravelingToNewWorld = new PanelHighSeas(this, imageProvider, text.get("europe.shipsTravelingToNewWorld"),
 				gameController, false);
-		shipsTravelingToEurope = new PanelHighSeas(this, imageProvider, "Ships travelling to Europe", gameController,
-				true);
+		shipsTravelingToEurope = new PanelHighSeas(this, imageProvider, text.get("europe.shipsTravelingToEurope"),
+				gameController, true);
 		europeDock = new PanelDock(imageProvider, new PanelDockBehavior() {
 
 			@Override
 			public List<Unit> getUnitsInPort() {
 				return gameController.getModel().getEurope().getPort()
-						.getShipsInPort(gameController.getModel().getCurrentPlayer());
+						.getShipsInPort(gameController.getCurrentPlayer());
 			}
 			
 			@Override
 			public final void onDragDropped(final CargoSlot cargoSlot, final DragEvent event) {
 				logger.debug("Object was dropped on ship cargo slot.");
 				final Dragboard db = event.getDragboard();
-				ClipboardReader.make(gameController.getModel(), db).filterUnit(unit -> !UnitType.isShip(unit.getType()))
+				ClipboardReader.make(gameController.getModel(), db).filterUnit(unit -> !unit.getType().isShip())
 						.tryReadGood((goodAmount, transferFrom) -> {
 							Preconditions.checkArgument(transferFrom.isPresent(), "Good origin is not known.");
 							GoodAmount tmp = goodAmount;
@@ -143,7 +141,7 @@ public class EuropeDialog extends AbstractDialog implements DialogCallback {
 				logger.debug("Drag over unit id '" + db.getString() + "'.");
 				if (cargoSlot != null && cargoSlot.isEmpty()) {
 					return !ClipboardReader.make(gameController.getModel(), db)
-							.filterUnit(unit -> !UnitType.isShip(unit.getType())).isEmpty();
+							.filterUnit(unit -> !unit.getType().isShip()).isEmpty();
 				}
 				return false;
 			}
@@ -152,14 +150,14 @@ public class EuropeDialog extends AbstractDialog implements DialogCallback {
 		final VBox panelShips = new VBox();
 		panelShips.getChildren().addAll(shipsTravelingToNewWorld, shipsTravelingToEurope, europeDock);
 
-		panelPortPier = new PanelPortPier(gameController, this, "Pier", imageProvider, localizationHelper);
+		panelPortPier = new PanelPortPier(gameController, this, text.get("europe.pier"), imageProvider, localizationHelper);
 
-		final Button recruiteButton = new Button("Recruite");
+		final Button recruiteButton = new Button(text.get("europe.recruit"));
 		recruiteButton.setOnAction(
 				event -> new RecruiteUnitsDialog(viewUtil, text, imageProvider, gameController, localizationHelper));
-		final Button buyButton = new Button("Buy");
+		final Button buyButton = new Button(text.get("europe.buy"));
 		buyButton.setOnAction(
-				event -> new BuyUnitsDialog(viewUtil, text, imageProvider, gameController, localizationHelper));
+				event -> new BuyUnitsDialog(viewUtil, text, imageProvider, gameController, localizationHelper, this));
 		final Button buttonOk = new Button(text.get("dialog.ok"));
 		buttonOk.setOnAction(e -> {
 			getDialog().close();

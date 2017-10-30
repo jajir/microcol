@@ -1,7 +1,5 @@
 package org.microcol.gui.colonizopedia;
 
-import org.microcol.gui.ImageProvider;
-import org.microcol.gui.LocalizationHelper;
 import org.microcol.gui.util.AbstractDialog;
 import org.microcol.gui.util.ButtonsBar;
 import org.microcol.gui.util.Text;
@@ -12,8 +10,7 @@ import javafx.scene.layout.VBox;
 
 public class Colonizopedia extends AbstractDialog {
 
-	public Colonizopedia(final Text text, final ViewUtil viewUtil, final ImageProvider imageProvider,
-			final LocalizationHelper localizationHelper) {
+	public Colonizopedia(final Text text, final ViewUtil viewUtil) {
 		super(viewUtil);
 		getDialog().setTitle(text.get("colonizopedia.title"));
 		final VBox root = new VBox();

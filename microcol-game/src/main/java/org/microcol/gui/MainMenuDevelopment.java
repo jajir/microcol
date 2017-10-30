@@ -1,6 +1,6 @@
 package org.microcol.gui;
 
-import org.microcol.gui.event.model.GameController;
+import org.microcol.gui.event.model.GameModelController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,7 +26,7 @@ public class MainMenuDevelopment {
 	private final Menu developmentMenu;
 
 	@Inject
-	public MainMenuDevelopment(final GameController gameController) {
+	public MainMenuDevelopment(final GameModelController gameController) {
 		developmentMenu = new Menu("Development");
 
 		final CheckMenuItem checkBoxStopAi = new CheckMenuItem("Suspend AI");

@@ -20,8 +20,8 @@ import org.microcol.gui.event.StatusBarMessageController;
 import org.microcol.gui.event.VolumeChangeController;
 import org.microcol.gui.event.VolumeChangedListenerPreferences;
 import org.microcol.gui.event.model.DebugRequestController;
-import org.microcol.gui.event.model.GameController;
 import org.microcol.gui.event.model.GameFinishedController;
+import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.event.model.GoldWasChangedController;
 import org.microcol.gui.event.model.ModelEventManager;
 import org.microcol.gui.event.model.MoveUnitController;
@@ -36,10 +36,11 @@ import org.microcol.gui.panelview.MouseOverTileListener;
 import org.microcol.gui.panelview.MoveModeSupport;
 import org.microcol.gui.panelview.PaintService;
 import org.microcol.gui.panelview.UnitAttackedEventListener;
-import org.microcol.gui.panelview.UnitService;
 import org.microcol.gui.panelview.ViewState;
+import org.microcol.gui.util.PersistentSrevice;
 import org.microcol.gui.util.Text;
 import org.microcol.gui.util.ViewUtil;
+import org.microcol.model.store.ModelDao;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
@@ -58,7 +59,8 @@ public class MicroColModule extends AbstractModule {
 		bind(ImageProvider.class).in(Singleton.class);
 		bind(ViewUtil.class).in(Singleton.class);
 		bind(LocalizationHelper.class).in(Singleton.class);
-		bind(UnitService.class).in(Singleton.class);
+		bind(PersistentSrevice.class).in(Singleton.class);
+		bind(ModelDao.class).in(Singleton.class);
 
 		/**
 		 * Event controllers.
@@ -72,7 +74,7 @@ public class MicroColModule extends AbstractModule {
 		bind(ChangeLanguageController.class).in(Singleton.class);
 		bind(StartMoveController.class).in(Singleton.class);
 		bind(NewGameController.class).in(Singleton.class);
-		bind(GameController.class).in(Singleton.class);
+		bind(GameModelController.class).in(Singleton.class);
 		bind(TurnStartedController.class).in(Singleton.class);
 		bind(VolumeChangeController.class).in(Singleton.class);
 		bind(AnimationSpeedChangeController.class).in(Singleton.class);

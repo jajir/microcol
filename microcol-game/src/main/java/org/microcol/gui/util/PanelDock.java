@@ -4,7 +4,6 @@ import java.util.Optional;
 
 import org.microcol.gui.ImageProvider;
 import org.microcol.model.Unit;
-import org.microcol.model.UnitType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -99,7 +98,7 @@ public class PanelDock extends TitledPanel {
 			final Unit unit = (Unit) butt.getUserData();
 			logger.debug("Start dragging unit: " + unit);
 			Preconditions.checkNotNull(unit);
-			Preconditions.checkArgument(UnitType.isShip(unit.getType()), "Unit (%s) have to be ship.");
+			Preconditions.checkArgument(unit.getType().isShip(), "Unit (%s) have to be ship.");
 			ClipboardWritter.make(butt.startDragAndDrop(TransferMode.MOVE))
 					.addImage(butt.getBackground().getImages().get(0).getImage()).addUnit(unit).build();
 			event.consume();

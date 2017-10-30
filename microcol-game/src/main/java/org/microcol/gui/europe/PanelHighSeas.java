@@ -1,10 +1,9 @@
 package org.microcol.gui.europe;
 
 import org.microcol.gui.ImageProvider;
-import org.microcol.gui.event.model.GameController;
+import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.util.ClipboardReader;
 import org.microcol.gui.util.TitledPanel;
-import org.microcol.model.UnitType;
 
 import com.google.common.base.Preconditions;
 
@@ -33,12 +32,12 @@ public class PanelHighSeas extends TitledPanel {
 
 	private final ImageProvider imageProvider;
 
-	private final GameController gameController;
+	private final GameModelController gameController;
 
 	private Background background;
 
 	public PanelHighSeas(final EuropeDialog europeDialog, final ImageProvider imageProvider, final String title,
-			final GameController gameController, final boolean isShownShipsTravelingToEurope) {
+			final GameModelController gameController, final boolean isShownShipsTravelingToEurope) {
 		super(title, null);
 		this.europeDialog = Preconditions.checkNotNull(europeDialog);
 		this.imageProvider = Preconditions.checkNotNull(imageProvider);
@@ -65,6 +64,7 @@ public class PanelHighSeas extends TitledPanel {
 		}
 	}
 
+	@SuppressWarnings("unused")
 	private final void onDragExited(final DragEvent event) {
 		if (background != null) {
 			setBackground(background);
@@ -82,7 +82,7 @@ public class PanelHighSeas extends TitledPanel {
 	private boolean isItCorrectObject(final Dragboard db) {
 		if (!isShownShipsTravelingToEurope && db.hasString()) {
 			return ClipboardReader.make(gameController.getModel(), db)
-					.filterUnit(unit -> UnitType.isShip(unit.getType())).getUnit().isPresent();
+					.filterUnit(unit -> unit.getType().isShip()).getUnit().isPresent();
 		} else {
 			return false;
 		}
@@ -91,7 +91,7 @@ public class PanelHighSeas extends TitledPanel {
 	private final void onDragDropped(DragEvent event) {
 		final Dragboard db = event.getDragboard();
 		ClipboardReader.make(gameController.getModel(), db).readUnit((unit, transferFrom) -> {
-			Preconditions.checkState(UnitType.isShip(unit.getType()), "Only ships could be send to high seas");
+			Preconditions.checkState(unit.getType().isShip(), "Only ships could be send to high seas");
 			unit.placeToHighSeas(false);
 			europeDialog.repaint();
 			event.acceptTransferModes(TransferMode.MOVE);
@@ -102,7 +102,7 @@ public class PanelHighSeas extends TitledPanel {
 
 	private void showShips() {
 		gameController.getModel().getHighSea()
-				.getUnitsTravelingTo(gameController.getModel().getCurrentPlayer(), isShownShipsTravelingToEurope)
+				.getUnitsTravelingTo(gameController.getCurrentPlayer(), isShownShipsTravelingToEurope)
 				.forEach(unit -> {
 					shipsContainer.getChildren().add(new ImageView(imageProvider.getUnitImage(unit.getType())));
 				});

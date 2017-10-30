@@ -16,6 +16,7 @@
 	<entry key="mainMenu.game.newGame">New Game</entry>
 	<entry key="mainMenu.game.saveGame">Save Game</entry>
 	<entry key="mainMenu.game.loadGame">Load Game</entry>
+	<entry key="mainMenu.game.newScenario">New scenario</entry>
 	<entry key="mainMenu.game.quitGame">Quit MicroCol</entry>
 
 	<entry key="mainMenu.view">View</entry>
@@ -47,6 +48,7 @@
 	<entry key="unitsPanel.availableMoves">Moves:</entry>
 	<entry key="unitsPanel.owner">Owner:</entry>
 	<entry key="unitsPanel.currentUser">On move:</entry>
+	<entry key="unitsPanel.with">With:</entry>
 	<entry key="nextTurnButton">Next turn</entry>
 	<entry key="nextTurnButton.desctiption">Perform next turn, other players will move</entry>
 	<entry key="tile.ocean.name">Ocean</entry>
@@ -103,6 +105,11 @@
 	<entry key="newGameDialog.startGame">Start play</entry>
 
 	<entry key="europe.title">Europe</entry>
+	<entry key="europe.shipsTravelingToNewWorld">Ships traveling to New World</entry>
+	<entry key="europe.shipsTravelingToEurope">Ships traveling to Europe</entry>
+	<entry key="europe.pier">Pier</entry>
+	<entry key="europe.recruit">Recruit</entry>
+	<entry key="europe.buy">Buy</entry>
 
 	<entry key="dialogFight.title">Fight Advisor</entry>
 	<entry key="dialogFight.attacker">Attacker</entry>

@@ -25,7 +25,7 @@ public class EuropeBuilder {
 	}
 
 	public EuropeBuilder addShipToPort(final UnitPo ship) {
-		Preconditions.checkArgument(UnitType.isShip(ship.getType()), "In Europe port could be just ship.");
+		Preconditions.checkArgument(ship.getType().isShip(), "In Europe port could be just ship.");
 		ship.setPlaceEuropePort(new PlaceEuropePortPo());
 		modelPo.getUnits().add(ship);
 		return this;

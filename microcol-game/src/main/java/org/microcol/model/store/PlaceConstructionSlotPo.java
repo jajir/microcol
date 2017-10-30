@@ -1,7 +1,9 @@
 package org.microcol.model.store;
 
 public class PlaceConstructionSlotPo extends PlacePo {
-	
-	//FIXME slot identification
-	
+
+	/*
+	 * Place doesn't need construction slot identification.
+	 */
+
 }

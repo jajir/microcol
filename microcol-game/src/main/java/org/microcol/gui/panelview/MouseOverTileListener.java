@@ -3,7 +3,7 @@ package org.microcol.gui.panelview;
 import org.microcol.gui.LocalizationHelper;
 import org.microcol.gui.event.StatusBarMessageController;
 import org.microcol.gui.event.StatusBarMessageEvent;
-import org.microcol.gui.event.model.GameController;
+import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.util.Localized;
 import org.microcol.model.Location;
 import org.microcol.model.TerrainType;
@@ -16,7 +16,7 @@ import com.google.inject.Inject;
  */
 public class MouseOverTileListener implements Localized {
 
-	private final GameController gameController;
+	private final GameModelController gameController;
 
 	private final StatusBarMessageController statusBarMessageController;
 
@@ -24,7 +24,7 @@ public class MouseOverTileListener implements Localized {
 
 	@Inject
 	public MouseOverTileListener(final MouseOverTileChangedController mouseOverTileChangedController,
-			final GameController gameController, final StatusBarMessageController statusBarMessageController,
+			final GameModelController gameController, final StatusBarMessageController statusBarMessageController,
 			final LocalizationHelper localizationHelper) {
 		this.gameController = Preconditions.checkNotNull(gameController);
 		this.statusBarMessageController = Preconditions.checkNotNull(statusBarMessageController);

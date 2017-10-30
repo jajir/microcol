@@ -22,7 +22,7 @@ public class PlaceColonyField extends AbstractPlace {
 	public PlaceColonyField(final Unit unit, final ColonyField colonyField, final GoodType producedGoodType) {
 		super(unit);
 		this.colonyField = Preconditions.checkNotNull(colonyField);
-		//TODO call setProducedGoodType because of validations
+		//XXX call setProducedGoodType because of validations
 		this.producedGoodType = producedGoodType;
 	}
 

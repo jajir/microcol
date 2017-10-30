@@ -43,7 +43,6 @@ public final class Model {
 		this.colonies.forEach(colony -> colony.setModel(this));
 
 		unitStorage = new UnitStorage(units);
-		unitStorage.getUnits(true).forEach(unit -> unit.setModel(this));
 
 		gameManager = new GameManager(this);
 
@@ -105,8 +104,6 @@ public final class Model {
 		this.colonies.forEach(colony -> colony.setModel(this));
 		this.unitStorage = Preconditions.checkNotNull(unitStorage);
 
-		unitStorage.getUnits(true).forEach(unit -> unit.setModel(this));
-
 		gameManager = new GameManager(this);
 
 		highSea = new HighSea(this);
@@ -141,8 +138,12 @@ public final class Model {
 	
 	Unit createUnit(final Model model, final ModelPo modelPo, final UnitPo unitPo) {
 		final Unit out = Unit.make(model, modelPo, unitPo);
-		model.unitStorage.getAllUnits().add(out);
+		model.unitStorage.addUnit(out);
 		return out;
+	}
+	
+	void addUnitToPlayer(final UnitType unitType, final Player owner){
+		unitStorage.addUnitToPlayer(unitType, owner, this);
 	}
 	
 	public boolean isGameStarted() {
@@ -182,15 +183,7 @@ public final class Model {
 	}
 
 	public List<Unit> getAllUnits() {
-		return unitStorage.getAllUnits();
-	}
-
-	public List<Unit> getUnits() {
-		return unitStorage.getUnits(false);
-	}
-
-	public List<Unit> getUnits(final boolean includeStored) {
-		return unitStorage.getUnits(includeStored);
+		return unitStorage.getUnits();
 	}
 
 	public Unit getUnitById(final int id) {
@@ -242,10 +235,7 @@ public final class Model {
 	}
 	
 	private List<PlayerPo> getSavePlayers() {
-		//TODO is it necessary? How it's used.
-		final List<PlayerPo> out = new ArrayList<PlayerPo>();
-		playerStore.getPlayers().forEach(player -> out.add(player.save()));
-		return out;
+		return playerStore.getPlayers().stream().map(player -> player.save()).collect(ImmutableList.toImmutableList());
 	}
 	
 	private List<ColonyPo> getSaveColonies() {

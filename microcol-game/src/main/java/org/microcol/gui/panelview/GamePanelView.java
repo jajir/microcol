@@ -12,7 +12,7 @@ import org.microcol.gui.LocalizationHelper;
 import org.microcol.gui.PathPlanning;
 import org.microcol.gui.Point;
 import org.microcol.gui.StepCounter;
-import org.microcol.gui.event.model.GameController;
+import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.panelview.MoveModeSupport.MoveMode;
 import org.microcol.gui.util.FpsCounter;
 import org.microcol.gui.util.Text;
@@ -52,7 +52,7 @@ public class GamePanelView implements GamePanelPresenter.Display {
 
 	private final Cursor gotoModeCursor;
 
-	private final GameController gameController;
+	private final GameModelController gameController;
 
 	private final PathPlanning pathPlanning;
 
@@ -87,7 +87,7 @@ public class GamePanelView implements GamePanelPresenter.Display {
 	private final VisibleArea visibleArea;
 
 	@Inject
-	public GamePanelView(final GameController gameController, final PathPlanning pathPlanning,
+	public GamePanelView(final GameModelController gameController, final PathPlanning pathPlanning,
 			final ImageProvider imageProvider, final ViewState viewState, final MoveModeSupport moveModeSupport,
 			final Text text, final ViewUtil viewUtil, final LocalizationHelper localizationHelper,
 			final PaintService paintService, final GamePreferences gamePreferences) {
@@ -202,7 +202,7 @@ public class GamePanelView implements GamePanelPresenter.Display {
 		if (gamePreferences.isDevelopment()) {
 			paintService.paintDebugInfo(g, visualDebugInfo, area);
 		}
-		if (gameController.getModel().getCurrentPlayer().isComputer()) {
+		if (gameController.getCurrentPlayer().isComputer()) {
 			/**
 			 * If move computer that make game field darker.
 			 */
@@ -342,10 +342,7 @@ public class GamePanelView implements GamePanelPresenter.Display {
 		if (viewState.isMoveMode() && viewState.getMouseOverTile().isPresent()) {
 			paintCursor(graphics, area, viewState.getMouseOverTile().get());
 			final List<Location> locations = moveModeSupport.getMoveLocations();
-			// TODO JJ get moving unit in specific way
-			final Unit movingUnit = gameController.getModel().getCurrentPlayer()
-					.getUnitsAt(viewState.getSelectedTile().get()).get(0);
-			final StepCounter stepCounter = new StepCounter(5, movingUnit.getAvailableMoves());
+			final StepCounter stepCounter = new StepCounter(5, getMovingUnit().getAvailableMoves());
 			final List<Point> steps = Lists.transform(locations, location -> area.convertToPoint((Location) location));
 			/**
 			 * Here could be check if particular step in on screen, but draw few
@@ -353,6 +350,16 @@ public class GamePanelView implements GamePanelPresenter.Display {
 			 */
 			steps.forEach(point -> paintStep(graphics, point, stepCounter, moveModeSupport.getMoveMode()));
 		}
+	}
+
+	/**
+	 * Return unit that is currently selected. In move mode.
+	 * 
+	 * @return return selected unit
+	 */
+	private Unit getMovingUnit() {
+		//XXX moving unit is choose as first in list. When there are more than one it not will be enough. 
+		return gameController.getCurrentPlayer().getUnitsAt(viewState.getSelectedTile().get()).get(0);
 	}
 
 	/**

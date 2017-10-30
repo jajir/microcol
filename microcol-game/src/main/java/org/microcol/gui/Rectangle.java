@@ -3,7 +3,10 @@ package org.microcol.gui;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 
-//TODO JJ add some javadoc and test
+/**
+ * Define rectangular area and inform if some coordinates are in defined
+ * rectangle.
+ */
 public class Rectangle {
 
 	private final Point topLeftCorner;
@@ -27,13 +30,11 @@ public class Rectangle {
 		return topLeftCorner.getX() <= point.getX() && bottomRightCorner.getX() >= point.getX()
 				&& topLeftCorner.getY() <= point.getY() && bottomRightCorner.getY() >= point.getY();
 	}
-	
+
 	@Override
 	public String toString() {
-		return MoreObjects.toStringHelper(Rectangle.class)
-				.add("topLeftCorner", topLeftCorner)
-				.add("bottomRightCorner", bottomRightCorner)
-				.toString();
+		return MoreObjects.toStringHelper(Rectangle.class).add("topLeftCorner", topLeftCorner)
+				.add("bottomRightCorner", bottomRightCorner).toString();
 	}
 
 }

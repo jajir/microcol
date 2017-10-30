@@ -11,6 +11,7 @@ public class MainFrameView implements MainFramePresenter.Display {
 
 	private final VBox box;
 
+	@SuppressWarnings("unused")
 	@Inject
 	public MainFrameView(final MainPanelView mainPanelView, final StartPanelView startPanelView) {
 		box = new VBox();

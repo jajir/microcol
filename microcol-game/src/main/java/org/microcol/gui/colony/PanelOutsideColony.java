@@ -1,7 +1,7 @@
 package org.microcol.gui.colony;
 
 import org.microcol.gui.ImageProvider;
-import org.microcol.gui.event.model.GameController;
+import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.util.ClipboardReader;
 import org.microcol.gui.util.ClipboardWritter;
 import org.microcol.gui.util.TitledPanel;
@@ -30,11 +30,11 @@ public class PanelOutsideColony extends TitledPanel {
 
 	private final ImageProvider imageProvider;
 
-	private final GameController gameController;
+	private final GameModelController gameController;
 
 	private final ColonyDialogCallback colonyDialog;
 
-	public PanelOutsideColony(final ImageProvider imageProvider, final GameController gameController,
+	public PanelOutsideColony(final ImageProvider imageProvider, final GameModelController gameController,
 			final ColonyDialog colonyDialog) {
 		super("Outside Colony", null);
 		this.imageProvider = Preconditions.checkNotNull(imageProvider);

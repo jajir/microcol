@@ -6,7 +6,7 @@ import java.util.List;
 import org.microcol.gui.ImageProvider;
 import org.microcol.gui.event.StartMoveController;
 import org.microcol.gui.event.StartMoveEvent;
-import org.microcol.gui.event.model.GameController;
+import org.microcol.gui.event.model.GameModelController;
 import org.microcol.model.Location;
 import org.microcol.model.Unit;
 import org.slf4j.Logger;
@@ -29,7 +29,7 @@ public class MoveModeSupport {
 
 	private final ViewState viewState;
 
-	private final GameController gameController;
+	private final GameModelController gameController;
 
 	private List<Location> moveLocations;
 
@@ -83,7 +83,7 @@ public class MoveModeSupport {
 	@Inject
 	public MoveModeSupport(final MouseOverTileChangedController mouseOverTileChangedController,
 			final StartMoveController startMoveController, final ViewState viewState,
-			final GameController gameController) {
+			final GameModelController gameController) {
 		mouseOverTileChangedController.addListener(this::onMouseOverTileChanged);
 		startMoveController.addListener(this::onStartMove);
 		this.viewState = Preconditions.checkNotNull(viewState);
@@ -124,7 +124,7 @@ public class MoveModeSupport {
 
 	private void processMove(final Location moveToLocation) {
 		// TODO JJ moving unit should be parameter, not first unit
-		final Unit movingUnit = gameController.getModel().getCurrentPlayer()
+		final Unit movingUnit = gameController.getCurrentPlayer()
 				.getUnitsAt(viewState.getSelectedTile().get()).get(0);
 		if (movingUnit.isPossibleToAttackAt(moveToLocation)) {
 			// fights

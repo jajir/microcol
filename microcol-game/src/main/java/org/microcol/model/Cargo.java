@@ -12,10 +12,10 @@ import com.google.common.collect.ImmutableList;
 
 public final class Cargo {
 
+	//TODO try to remove relation to owner.
 	private final Unit owner;
 	private final List<CargoSlot> slots;
 
-	// TODO capacity is not required here, it's from unit type
 	Cargo(final Unit owner, final int capacity, final CargoPo cargoPo) {
 		this.owner = Preconditions.checkNotNull(owner);
 
@@ -55,10 +55,6 @@ public final class Cargo {
 
 	Unit getOwner() {
 		return owner;
-	}
-	
-	Model getModel() {
-		return owner.getModel();
 	}
 
 	public List<CargoSlot> getSlots() {

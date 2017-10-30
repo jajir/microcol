@@ -4,7 +4,7 @@ import java.util.Optional;
 
 import org.microcol.gui.ImageProvider;
 import org.microcol.gui.Point;
-import org.microcol.gui.event.model.GameController;
+import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.panelview.GamePanelView;
 import org.microcol.gui.panelview.PaintService;
 import org.microcol.gui.util.ClipboardReader;
@@ -49,7 +49,7 @@ public class PanelColonyFields extends TitledPanel {
 
 	private final ImageProvider imageProvider;
 
-	private final GameController gameController;
+	private final GameModelController gameController;
 
 	private final ColonyDialogCallback colonyDialog;
 
@@ -61,7 +61,7 @@ public class PanelColonyFields extends TitledPanel {
 	
 	private final PaintService paintService;
 
-	public PanelColonyFields(final ImageProvider imageProvider, final GameController gameController,
+	public PanelColonyFields(final ImageProvider imageProvider, final GameModelController gameController,
 			final ColonyDialogCallback colonyDialog, final PaintService paintService) {
 		super("Colony layout", new Label("Colony layout"));
 		this.imageProvider = Preconditions.checkNotNull(imageProvider);
@@ -71,8 +71,6 @@ public class PanelColonyFields extends TitledPanel {
 		final int size = 3 * GamePanelView.TILE_WIDTH_IN_PX;
 		canvas = new Canvas(size, size);
 		getContentPane().getChildren().add(canvas);
-		canvas.setOnDragEntered(this::onDragEntered);
-		canvas.setOnDragExited(this::onDragExited);
 		canvas.setOnDragOver(this::onDragOver);
 		canvas.setOnDragDropped(this::onDragDropped);
 		canvas.setOnDragDetected(this::onDragDetected);
@@ -141,14 +139,6 @@ public class PanelColonyFields extends TitledPanel {
 				event.consume();
 			}
 		}
-	}
-
-	private final void onDragEntered(final DragEvent event) {
-		logger.debug("Drag entered");
-	}
-
-	private final void onDragExited(final DragEvent event) {
-		logger.debug("Drag Exited");
 	}
 
 	private final void onDragOver(final DragEvent event) {

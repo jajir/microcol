@@ -2,7 +2,7 @@ package org.microcol.gui.europe;
 
 import org.microcol.gui.ImageProvider;
 import org.microcol.gui.LocalizationHelper;
-import org.microcol.gui.event.model.GameController;
+import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.util.AbstractDialog;
 import org.microcol.gui.util.ButtonsBar;
 import org.microcol.gui.util.Text;
@@ -22,7 +22,7 @@ import javafx.scene.layout.VBox;
 public class RecruiteUnitsDialog extends AbstractDialog {
 
 	public RecruiteUnitsDialog(final ViewUtil viewUtil, final Text text, final ImageProvider imageProvider,
-			final GameController gameController, final LocalizationHelper localizationHelper) {
+			final GameModelController gameController, final LocalizationHelper localizationHelper) {
 		super(viewUtil);
 		Preconditions.checkNotNull(imageProvider);
 		Preconditions.checkNotNull(gameController);

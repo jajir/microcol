@@ -9,7 +9,7 @@ import org.microcol.gui.ImageProvider;
 import org.microcol.gui.LocalizationHelper;
 import org.microcol.gui.Point;
 import org.microcol.gui.Rectangle;
-import org.microcol.gui.event.model.GameController;
+import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.panelview.GamePanelView;
 import org.microcol.gui.util.ClipboardReader;
 import org.microcol.gui.util.ClipboardWritter;
@@ -127,14 +127,14 @@ public class PanelColonyStructures extends TitledPanel {
 	
 	private final ImageProvider imageProvider;
 	
-	private final GameController gameController;
+	private final GameModelController gameController;
 	
 	private final ColonyDialogCallback colonyDialog;
 	
 	private Map<Rectangle, ConstructionSlot> slots;
 	
 	public PanelColonyStructures(final LocalizationHelper localizationHelper, final ImageProvider imageProvider,
-			final GameController gameController, final ColonyDialogCallback colonyDialog) {
+			final GameModelController gameController, final ColonyDialogCallback colonyDialog) {
 		super("Colony Structures", null);
 		this.localizationHelper = Preconditions.checkNotNull(localizationHelper);
 		this.imageProvider = Preconditions.checkNotNull(imageProvider);

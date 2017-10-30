@@ -9,7 +9,9 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
 
+import org.microcol.model.store.CargoPo;
 import org.microcol.model.store.ModelPo;
+import org.microcol.model.store.UnitPo;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
@@ -24,6 +26,17 @@ class UnitStorage {
 		this.units = new ArrayList<>(units);
 		checkUnitLocations(this.units);
 		checkDuplicities(units);
+	}
+	
+	void addUnit(final Unit unit) {
+		units.add(unit);
+	}
+	
+	void addUnitToPlayer(final UnitType unitType, final Player owner, final Model model){
+		UnitPo unitPo = new UnitPo();
+		unitPo.setCargo(new CargoPo());
+		units.add(new Unit(unitPo, model, IdManager.nextId(),
+				unit -> new PlaceEuropePier(unit), unitType, owner, unitType.getSpeed()));
 	}
 
 	private void checkUnitLocations(final List<Unit> units) {
@@ -60,14 +73,8 @@ class UnitStorage {
 		});
 	}
 
-	// TODO JJ remove All form name, return immutable list
-	List<Unit> getAllUnits() {
-		return units;
-	}
-
-	// TODO JJ rename it, be more specific about function, 
-	List<Unit> getUnits(final boolean includeStored) {
-		return units.stream().filter(unit -> includeStored || unit.isAtPlaceLocation()).collect(ImmutableList.toImmutableList());
+	List<Unit> getUnits() {
+		return ImmutableList.copyOf(units);
 	}
 
 	Map<Location, List<Unit>> getUnitsAt() {

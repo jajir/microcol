@@ -47,6 +47,7 @@ public class ModelDao {
 	 * @return loaded model persistent object
 	 */
 	public ModelPo loadPredefinedModel(final String fileName) {
+		logger.debug("Starting to read from class path ({})", fileName);
 		try {
 			return internalLoadPredefinedModel(fileName);
 		} catch (FileNotFoundException e) {

@@ -16,62 +16,34 @@ import com.google.common.collect.ImmutableList;
 
 public class Unit {
 
+	private final Random random = new Random();
 	private final int id;
-	//TODO JJ make model final
-	private Model model;
+	private final Model model;
 	private final UnitType type;
 	private final Player owner;
 	private Place place;
 	private int availableMoves;
 	private final Cargo cargo;
 
-	@Deprecated
-	Unit(final UnitType type, final Player owner, final Location location) {
-		this.type = Preconditions.checkNotNull(type, "UnitType is null");
-		this.owner = Preconditions.checkNotNull(owner, "Owner is null");
-		this.place = new PlaceLocation(this, Preconditions.checkNotNull(location));
-		this.cargo = new Cargo(this, type.getCargoCapacity());
-		this.id = IdManager.nextId();
-	}
-
-	@Deprecated
-	Unit(final UnitType type, final Player owner, final PlaceBuilder placeBuilder) {
-		this.type = Preconditions.checkNotNull(type, "UnitType is null");
-		this.owner = Preconditions.checkNotNull(owner, "Owner is null");
-		this.place = Preconditions.checkNotNull(placeBuilder.build(this), "PlaceBuilder is null");
-		this.cargo = new Cargo(this, type.getCargoCapacity());
-		this.id = IdManager.nextId();
-	}
-	
-	Unit(final UnitPo unitPo, final Model model, final PlaceBuilder placeBuilder){
+	Unit(final UnitPo unitPo, final Model model, final Integer id, final PlaceBuilder placeBuilder, final UnitType unitType,
+			final Player owner, final int availableMoves) {
 		Preconditions.checkNotNull(unitPo, "Unit persisten object is null");
 		Preconditions.checkNotNull(model, "Model is null");
 		Preconditions.checkNotNull(placeBuilder, "PlaceBuilder is null");
-		this.type = unitPo.getType();
-		this.owner = model.getPlayerStore().getPlayerByName(unitPo.getOwnerId());
+		Preconditions.checkNotNull(unitType, "UnitType is null");
+		this.type = unitType;
+		this.owner = Preconditions.checkNotNull(owner);
 		this.cargo = new Cargo(this, type.getCargoCapacity(), unitPo.getCargo());
-		this.availableMoves = unitPo.getAvailableMoves();
-		this.id = Preconditions.checkNotNull(unitPo.getId(),"ID is null");
+		this.availableMoves = availableMoves;
+		this.id = Preconditions.checkNotNull(id, "ID is null");
 		this.model = model;
 		this.place = Preconditions.checkNotNull(placeBuilder.build(this));
 	}
 	
 	public static Unit make(final Model model, final ModelPo modelPo, final UnitPo unitPo){
-		final PlaceBuilder placeBuilderModelPo = new PlaceBuilder(unitPo, modelPo, model);
-		return new Unit(unitPo, model, placeBuilderModelPo);
-	}
-	
-	void setModel(final Model model) {
-		this.model = Preconditions.checkNotNull(model);
-		validateTerrain();
-	}
-	
-	private void validateTerrain(){
-		if(isAtPlaceLocation()){
-			final TerrainType t = model.getMap().getTerrainTypeAt(getLocation());
-			Preconditions.checkState(isMoveable(getLocation(), true),
-					String.format("Unit (%s) is not at valid terrain (%s)", this, t));
-		}
+		final PlaceBuilderPo placeBuilderModelPo = new PlaceBuilderPo(unitPo, modelPo, model);
+		return new Unit(unitPo, model, unitPo.getId(), placeBuilderModelPo, unitPo.getType(),
+				model.getPlayerStore().getPlayerByName(unitPo.getOwnerId()), unitPo.getAvailableMoves());
 	}
 
 	public UnitType getType() {
@@ -118,10 +90,7 @@ public class Unit {
 					// XXX ships always come from east side of map
 					final List<Location> locations = model.getHighSea()
 							.getSuitablePlaceForShipCommingFromEurope(getOwner(), true);
-					// TODO random should be class instance
-					final Random random = new Random();
-					final Location location = locations.get(random.nextInt(locations.size()));
-					placeToLocation(location);
+					placeToLocation(locations.get(random.nextInt(locations.size())));
 				}
 			}
 		}
@@ -253,7 +222,6 @@ public class Unit {
 		if (slot.isEmpty() || slot.isLoadedGood()) {
 			return false;
 		} else {
-			// TODO jj express it better slot.getUnit().get().getUnit()
 			final Unit holdedUnit = slot.getUnit().get();
 			return (!inCurrentTurn || holdedUnit.availableMoves > 0) && holdedUnit.canUnitDisembarkAt(moveToLocation);
 		}
@@ -305,13 +273,12 @@ public class Unit {
 	 * 
 	 * @param units
 	 *            required {@link List} of units
-	 * @return return <code>true</code> when all units belongs to same owner as
-	 *         this unit otherwise return <code>false</code>
+	 * @return return <code>true</code> when there is not unit in list belonging
+	 *         to different owner otherwise return <code>false</code>
 	 */
 	public boolean isSameOwner(final List<Unit> units) {
 		Preconditions.checkNotNull(units);
-		// XXX could it be rewritten to stream API?
-		return units.size() > 0 && units.get(0).getOwner().equals(getOwner());
+		return !units.stream().filter(unit -> !getOwner().equals(unit.getOwner())).findFirst().isPresent();
 	}
 
 	public List<Unit> getStorageUnits() {
@@ -480,11 +447,10 @@ public class Unit {
 	}
 
 	public void placeToHighSeas(final boolean isTravelToEurope) {
-		Preconditions.checkArgument(UnitType.isShip(type), "Only ships could be placed to high sea.");
-		// TODO add some preconditions
+		Preconditions.checkArgument(type.isShip(), "Only ships could be placed to high sea.");
 		final int requiredTurns = 3;
 		place.destroy();
-		// XXX choose if it's direction to east or to west (+1 rule to europe)
+		// XXX choose if it's direction to east or to west (+1 rule to Europe)
 		place = new PlaceHighSea(this, isTravelToEurope, requiredTurns);
 	}
 

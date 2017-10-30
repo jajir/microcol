@@ -1,7 +1,7 @@
 package org.microcol.gui.europe;
 
 import org.microcol.gui.ImageProvider;
-import org.microcol.gui.event.model.GameController;
+import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.util.ClipboardReader;
 import org.microcol.gui.util.TitledPanel;
 import org.microcol.model.Europe;
@@ -32,13 +32,13 @@ public class PanelGoods extends TitledPanel {
 
 	private final ImageProvider imageProvider;
 
-	private final GameController gameController;
+	private final GameModelController gameController;
 
 	private final EuropeDialog europeDialog;
 	
 	private Background background;
 
-	public PanelGoods(final EuropeDialog europeDialog, final GameController gameController, final ImageProvider imageProvider) {
+	public PanelGoods(final EuropeDialog europeDialog, final GameModelController gameController, final ImageProvider imageProvider) {
 		super("zbozi");
 		this.gameController = Preconditions.checkNotNull(gameController);
 		this.imageProvider = Preconditions.checkNotNull(imageProvider);

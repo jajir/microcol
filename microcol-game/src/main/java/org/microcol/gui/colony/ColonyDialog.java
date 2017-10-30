@@ -5,7 +5,7 @@ import java.util.List;
 import org.microcol.gui.ImageProvider;
 import org.microcol.gui.LocalizationHelper;
 import org.microcol.gui.europe.ChooseGoodAmount;
-import org.microcol.gui.event.model.GameController;
+import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.panelview.PaintService;
 import org.microcol.gui.util.AbstractDialog;
 import org.microcol.gui.util.ClipboardReader;
@@ -18,7 +18,6 @@ import org.microcol.model.CargoSlot;
 import org.microcol.model.Colony;
 import org.microcol.model.GoodAmount;
 import org.microcol.model.Unit;
-import org.microcol.model.UnitType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -65,7 +64,7 @@ public class ColonyDialog extends AbstractDialog implements ColonyDialogCallback
 
 	@Inject
 	public ColonyDialog(final ViewUtil viewUtil, final Text text, final ImageProvider imageProvider,
-			final GameController gameController, final LocalizationHelper localizationHelper,
+			final GameModelController gameController, final LocalizationHelper localizationHelper,
 			final PaintService paintService) {
 		super(viewUtil);
 		Preconditions.checkNotNull(imageProvider);
@@ -102,7 +101,7 @@ public class ColonyDialog extends AbstractDialog implements ColonyDialogCallback
 			public void onDragDropped(final CargoSlot cargoSlot, final DragEvent event) {
 				logger.debug("Object was dropped on ship cargo slot.");
 				final Dragboard db = event.getDragboard();
-				ClipboardReader.make(gameController.getModel(), db).filterUnit(unit -> !UnitType.isShip(unit.getType()))
+				ClipboardReader.make(gameController.getModel(), db).filterUnit(unit -> !unit.getType().isShip())
 						.tryReadGood((goodAmount, transferFrom) -> {
 							Preconditions.checkArgument(transferFrom.isPresent(), "Good origin is not known.");
 							GoodAmount tmp = goodAmount;
@@ -158,7 +157,7 @@ public class ColonyDialog extends AbstractDialog implements ColonyDialogCallback
 				logger.debug("Drag over unit id '" + db.getString() + "'.");
 				if (cargoSlot != null && cargoSlot.isEmpty()) {
 					return !ClipboardReader.make(gameController.getModel(), db)
-							.filterUnit(unit -> !UnitType.isShip(unit.getType())).isEmpty();
+							.filterUnit(unit -> !unit.getType().isShip()).isEmpty();
 				}
 				return false;
 			}

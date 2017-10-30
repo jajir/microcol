@@ -6,7 +6,7 @@ import org.microcol.gui.europe.BuyUnitsDialog;
 import org.microcol.gui.europe.ChooseGoodAmount;
 import org.microcol.gui.event.AnimationSpeedChangeController;
 import org.microcol.gui.event.VolumeChangeController;
-import org.microcol.gui.event.model.GameController;
+import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.util.Text;
 import org.microcol.gui.util.Text.Language;
 import org.microcol.gui.util.ViewUtil;
@@ -108,23 +108,23 @@ public class DialogTester extends Application {
 	}
 
 	public final static void dialogSave() {
-		final GameController gameController = EasyMock.createMock(GameController.class);
+		final GameModelController gameController = EasyMock.createMock(GameModelController.class);
 		final PersistingDialog persistingDialog = new PersistingDialog(viewUtil, text, gameController);
 
 		persistingDialog.saveModel();
 	}
 
 	public final static void dialogLoad() {
-		final GameController gameController = EasyMock.createMock(GameController.class);
+		final GameModelController gameController = EasyMock.createMock(GameModelController.class);
 		final PersistingDialog persistingDialog = new PersistingDialog(viewUtil, text, gameController);
 
 		persistingDialog.loadModel();
 	}
 
 	public final static void dialogColonizopedia() {
-		final GameController gameController = EasyMock.createMock(GameController.class);
+		final GameModelController gameController = EasyMock.createMock(GameModelController.class);
 		EasyMock.replay(gameController);
-		new Colonizopedia(text, viewUtil, imageProvider, localizationHelper);
+		new Colonizopedia(text, viewUtil);
 	}
 
 	public final static void startChooseGoodAmount() {
@@ -133,8 +133,8 @@ public class DialogTester extends Application {
 	}
 
 	public final static void startBuyUnitDialog() {
-		final GameController gameController = EasyMock.createMock(GameController.class);
-		BuyUnitsDialog chooseGoodAmount = new BuyUnitsDialog(viewUtil,text,imageProvider, gameController, localizationHelper);
+		final GameModelController gameController = EasyMock.createMock(GameModelController.class);
+		new BuyUnitsDialog(viewUtil,text,imageProvider, gameController, localizationHelper, null);
 	}
 
 }
