@@ -74,7 +74,7 @@ public class EuropeDialog extends AbstractDialog implements DialogCallback {
 			@Override
 			public List<Unit> getUnitsInPort() {
 				return gameController.getModel().getEurope().getPort()
-						.getShipsInPort(gameController.getModel().getCurrentPlayer());
+						.getShipsInPort(gameController.getCurrentPlayer());
 			}
 			
 			@Override

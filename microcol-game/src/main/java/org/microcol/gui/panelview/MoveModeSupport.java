@@ -124,7 +124,7 @@ public class MoveModeSupport {
 
 	private void processMove(final Location moveToLocation) {
 		// TODO JJ moving unit should be parameter, not first unit
-		final Unit movingUnit = gameController.getModel().getCurrentPlayer()
+		final Unit movingUnit = gameController.getCurrentPlayer()
 				.getUnitsAt(viewState.getSelectedTile().get()).get(0);
 		if (movingUnit.isPossibleToAttackAt(moveToLocation)) {
 			// fights

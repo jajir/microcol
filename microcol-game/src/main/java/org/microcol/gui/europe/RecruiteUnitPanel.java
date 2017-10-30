@@ -24,7 +24,7 @@ public class RecruiteUnitPanel extends VBox {
 		final Button buttonBuy = new Button(text.get("recruitUnitDialog.buttonRecruiteUnit") + " " + unitType.getEuropePrice());
 		buttonBuy.setOnAction(event -> {
 			try {
-				gameController.getModel().getCurrentPlayer().buy(unitType);
+				gameController.getCurrentPlayer().buy(unitType);
 				buyUnitsDialog.getDialog().close();
 			} catch (NotEnoughtGoldException e) {
 				new DialogNotEnoughGold(viewUtil, text);

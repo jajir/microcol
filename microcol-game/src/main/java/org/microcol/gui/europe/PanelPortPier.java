@@ -59,7 +59,7 @@ public class PanelPortPier extends TitledPanel {
 
 	void repaint() {
 		panelUnits.getChildren().clear();
-		gameController.getModel().getEurope().getPier().getUnits(gameController.getModel().getCurrentPlayer())
+		gameController.getModel().getEurope().getPier().getUnits(gameController.getCurrentPlayer())
 				.forEach(unit -> panelUnits.getChildren().add(new PanelPortPierUnit(unit, imageProvider, localizationHelper)));
 	}
 

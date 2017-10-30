@@ -7,6 +7,7 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 
 public final class Location {
+	
 	public static final Location DIRECTION_NORTH      = new Location( 0, -1);
 	public static final Location DIRECTION_NORTH_EAST = new Location( 1, -1);
 	public static final Location DIRECTION_EAST       = new Location( 1,  0);
@@ -16,6 +17,18 @@ public final class Location {
 	public static final Location DIRECTION_WEST       = new Location(-1,  0);
 	public static final Location DIRECTION_NORTH_WEST = new Location(-1, -1);
 
+
+	/**
+	 * Minimal map x-axe value.
+	 */
+	public static final int MAP_MIN_X = 1;
+
+	/**
+	 * Minimal map y-axe value.
+	 */
+	public static final int MAP_MIN_Y = 1;
+
+	
 	public static final List<Location> DIRECTIONS = ImmutableList.of(
 		DIRECTION_NORTH,
 		DIRECTION_NORTH_EAST,

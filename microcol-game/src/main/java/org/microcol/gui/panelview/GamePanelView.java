@@ -202,7 +202,7 @@ public class GamePanelView implements GamePanelPresenter.Display {
 		if (gamePreferences.isDevelopment()) {
 			paintService.paintDebugInfo(g, visualDebugInfo, area);
 		}
-		if (gameController.getModel().getCurrentPlayer().isComputer()) {
+		if (gameController.getCurrentPlayer().isComputer()) {
 			/**
 			 * If move computer that make game field darker.
 			 */
@@ -342,10 +342,7 @@ public class GamePanelView implements GamePanelPresenter.Display {
 		if (viewState.isMoveMode() && viewState.getMouseOverTile().isPresent()) {
 			paintCursor(graphics, area, viewState.getMouseOverTile().get());
 			final List<Location> locations = moveModeSupport.getMoveLocations();
-			// TODO JJ get moving unit in specific way
-			final Unit movingUnit = gameController.getModel().getCurrentPlayer()
-					.getUnitsAt(viewState.getSelectedTile().get()).get(0);
-			final StepCounter stepCounter = new StepCounter(5, movingUnit.getAvailableMoves());
+			final StepCounter stepCounter = new StepCounter(5, getMovingUnit().getAvailableMoves());
 			final List<Point> steps = Lists.transform(locations, location -> area.convertToPoint((Location) location));
 			/**
 			 * Here could be check if particular step in on screen, but draw few
@@ -353,6 +350,16 @@ public class GamePanelView implements GamePanelPresenter.Display {
 			 */
 			steps.forEach(point -> paintStep(graphics, point, stepCounter, moveModeSupport.getMoveMode()));
 		}
+	}
+
+	/**
+	 * Return unit that is currently selected. In move mode.
+	 * 
+	 * @return return selected unit
+	 */
+	private Unit getMovingUnit() {
+		//XXX moving unit is choose as first in list. When there are more than one it not will be enough. 
+		return gameController.getCurrentPlayer().getUnitsAt(viewState.getSelectedTile().get()).get(0);
 	}
 
 	/**

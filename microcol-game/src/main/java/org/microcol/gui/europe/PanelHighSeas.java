@@ -102,7 +102,7 @@ public class PanelHighSeas extends TitledPanel {
 
 	private void showShips() {
 		gameController.getModel().getHighSea()
-				.getUnitsTravelingTo(gameController.getModel().getCurrentPlayer(), isShownShipsTravelingToEurope)
+				.getUnitsTravelingTo(gameController.getCurrentPlayer(), isShownShipsTravelingToEurope)
 				.forEach(unit -> {
 					shipsContainer.getChildren().add(new ImageView(imageProvider.getUnitImage(unit.getType())));
 				});

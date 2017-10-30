@@ -11,16 +11,6 @@ import com.google.common.base.MoreObjects;
 public class Point {
 
 	/**
-	 * Minimal x value.
-	 */
-	public static final int MAP_MIN_X = 1;
-
-	/**
-	 * Minimal y value.
-	 */
-	public static final int MAP_MIN_Y = 1;
-
-	/**
 	 * On screen X coordinate.
 	 */
 	private final int x;
@@ -69,7 +59,20 @@ public class Point {
 	}
 
 	public Location toLocation() {
-		final Point p = divide(GamePanelView.TILE_WIDTH_IN_PX).add(MAP_MIN_X, MAP_MIN_Y);
+		final Point p = divide(GamePanelView.TILE_WIDTH_IN_PX).add(Location.MAP_MIN_X, Location.MAP_MIN_Y);
+		return Location.of(p.getX(), p.getY());
+	}
+
+	/**
+	 * This count location of bottom right corner.
+	 * 
+	 * @return return bottom right corner of location when this point belongs
+	 */
+	public Location toLocationCeilUp() {
+		final Point p = Point
+				.of((int) Math.ceil(getX() / (float) GamePanelView.TILE_WIDTH_IN_PX),
+						(int) Math.ceil(getY() / (float) GamePanelView.TILE_WIDTH_IN_PX))
+				.add(Location.MAP_MIN_X, Location.MAP_MIN_Y);
 		return Location.of(p.getX(), p.getY());
 	}
 
@@ -101,6 +104,13 @@ public class Point {
 		return new Point(x * factor, y * factor);
 	}
 
+	/**
+	 * Divide point by some factor and round down.
+	 *
+	 * @param factor
+	 *            required this number will divide coordinates
+	 * @return divided point by factor
+	 */
 	public Point divide(final double factor) {
 		return new Point(div(x, factor), div(y, factor));
 	}

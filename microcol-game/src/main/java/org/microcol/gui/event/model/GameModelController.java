@@ -11,6 +11,7 @@ import org.microcol.model.Location;
 import org.microcol.model.Model;
 import org.microcol.model.ModelBuilder;
 import org.microcol.model.Path;
+import org.microcol.model.Player;
 import org.microcol.model.Unit;
 import org.microcol.model.UnitType;
 import org.slf4j.Logger;
@@ -142,6 +143,10 @@ public class GameModelController implements Localized {
 
 	public boolean isModelReady() {
 		return model.isPresent();
+	}
+	
+	public Player getCurrentPlayer() {
+		return getModel().getCurrentPlayer();
 	}
 
 	private void stopGame() {

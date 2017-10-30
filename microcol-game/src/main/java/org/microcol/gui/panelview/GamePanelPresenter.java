@@ -184,7 +184,7 @@ public final class GamePanelPresenter implements Localized {
 	}
 
 	private boolean isMouseEnabled() {
-		return gameController.getModel().getCurrentPlayer().isHuman();
+		return gameController.getCurrentPlayer().isHuman();
 	}
 
 	private void onCenterView() {
@@ -199,7 +199,7 @@ public final class GamePanelPresenter implements Localized {
 
 	private boolean tryToSwitchToMoveMode(final Location currentLocation) {
 		Preconditions.checkNotNull(currentLocation);
-		final List<Unit> units = gameController.getModel().getCurrentPlayer().getUnitsAt(currentLocation);
+		final List<Unit> units = gameController.getCurrentPlayer().getUnitsAt(currentLocation);
 		if (!units.isEmpty()) {
 			startMoveController.fireEvent(new StartMoveEvent());
 			return true;
@@ -209,7 +209,7 @@ public final class GamePanelPresenter implements Localized {
 
 	private void tryToOpenColonyDetail(final Location currentLocation) {
 		Preconditions.checkNotNull(currentLocation);
-		final Optional<Colony> oColony = gameController.getModel().getCurrentPlayer().getColoniesAt(currentLocation);
+		final Optional<Colony> oColony = gameController.getCurrentPlayer().getColoniesAt(currentLocation);
 		if (oColony.isPresent()) {
 			// show colony details
 			colonyDialog.showColony(oColony.get());
@@ -219,7 +219,7 @@ public final class GamePanelPresenter implements Localized {
 	private void swithToMoveMode() {
 		Preconditions.checkArgument(viewState.getSelectedTile().isPresent(),
 				"to move mode could be switched just when some tile is selected.");
-		final List<Unit> units = gameController.getModel().getCurrentPlayer()
+		final List<Unit> units = gameController.getCurrentPlayer()
 				.getUnitsAt(viewState.getSelectedTile().get());
 		// TODO JJ Filter unit that have enough action points
 		Preconditions.checkState(!units.isEmpty(), "there are some moveable units");
@@ -317,7 +317,7 @@ public final class GamePanelPresenter implements Localized {
 			return;
 		}
 		// TODO JJ active ship can be different from ship first at list
-		final Unit movingUnit = gameController.getModel().getCurrentPlayer().getUnitsAt(moveFromLocation).get(0);
+		final Unit movingUnit = gameController.getCurrentPlayer().getUnitsAt(moveFromLocation).get(0);
 		if (movingUnit.isPossibleToAttackAt(moveToLocation)) {
 			// fight
 			fight(movingUnit, moveToLocation);
