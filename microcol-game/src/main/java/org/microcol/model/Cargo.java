@@ -52,6 +52,14 @@ public final class Cargo {
 	public Optional<CargoSlot> getEmptyCargoSlot() {
 		return slots.stream().filter(cargoSlot -> cargoSlot.isEmpty()).findAny();
 	}
+	
+	public boolean isFull() {
+		return !getEmptyCargoSlot().isPresent();
+	}
+	
+	public boolean isEmpty(){
+		return !slots.stream().filter(slot->!slot.isEmpty()).findAny().isPresent();
+	}
 
 	Unit getOwner() {
 		return owner;
