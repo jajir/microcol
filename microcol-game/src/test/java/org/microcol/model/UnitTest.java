@@ -1,11 +1,13 @@
 package org.microcol.model;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.util.function.Function;
 
 import org.junit.Test;
-import org.microcol.model.store.UnitPo;
 
 import com.google.common.collect.Lists;
 
@@ -19,7 +21,7 @@ public class UnitTest {
 	private Unit unit;
 	
 	@Injectable
-	private UnitPo unitPo;
+	private Function<Unit, Cargo> cargoProvider;
 	
 	@Injectable
 	private Model model;

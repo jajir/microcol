@@ -4,7 +4,6 @@ import java.util.function.Function;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.microcol.model.store.UnitPo;
 
 import mockit.Expectations;
 import mockit.Injectable;
@@ -17,7 +16,7 @@ public class UnitColonistTest {
 	private Unit unit;
 	
 	@Injectable
-	private UnitPo unitPo;
+	private Function<Unit, Cargo> cargoProvider;
 	
 	@Injectable
 	private Model model;
@@ -40,6 +39,9 @@ public class UnitColonistTest {
 	@Mocked
 	private PlaceLocation placeLocation;
 
+	@Mocked
+	private Cargo cargo;
+
 	@Test(expected = IllegalArgumentException.class)
 	public void test_placeToHighSeas_invalid_place_type() throws Exception {
 		new Expectations() {{
@@ -60,6 +62,7 @@ public class UnitColonistTest {
 		 * Following expectations will be used for unit constructior
 		 */
 		new Expectations() {{
+			cargoProvider.apply((Unit)any); result = cargo;
 			placeBuilder.apply((Unit)any); result = placeLocation;
 		}};
 	}

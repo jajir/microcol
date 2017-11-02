@@ -26,24 +26,25 @@ public class Unit {
 	private int availableMoves;
 	private final Cargo cargo;
 
-	Unit(final UnitPo unitPo, final Model model, final Integer id, final Function<Unit, Place> placeBuilder, final UnitType unitType,
+	Unit(final Function<Unit, Cargo> cargoBuilder, final Model model, final Integer id, final Function<Unit, Place> placeBuilder, final UnitType unitType,
 			final Player owner, final int availableMoves) {
-		Preconditions.checkNotNull(unitPo, "Unit persisten object is null");
 		Preconditions.checkNotNull(model, "Model is null");
+		Preconditions.checkNotNull(cargoBuilder, "CargoBuilder is null");
 		Preconditions.checkNotNull(placeBuilder, "PlaceBuilder is null");
 		Preconditions.checkNotNull(unitType, "UnitType is null");
 		this.type = unitType;
 		this.owner = Preconditions.checkNotNull(owner);
-		this.cargo = new Cargo(this, type.getCargoCapacity(), unitPo.getCargo());
-		this.availableMoves = availableMoves;
 		this.id = Preconditions.checkNotNull(id, "ID is null");
 		this.model = model;
+		this.availableMoves = availableMoves;
+		this.cargo = cargoBuilder.apply(this);
 		this.place = Preconditions.checkNotNull(placeBuilder.apply(this));
 	}
 	
 	public static Unit make(final Model model, final ModelPo modelPo, final UnitPo unitPo){
 		final PlaceBuilderPo placeBuilderModelPo = new PlaceBuilderPo(unitPo, modelPo, model);
-		return new Unit(unitPo, model, unitPo.getId(), placeBuilderModelPo, unitPo.getType(),
+		return new Unit(unit -> new Cargo(unit, unit.getType().getCargoCapacity(), unitPo.getCargo()), model,
+				unitPo.getId(), placeBuilderModelPo, unitPo.getType(),
 				model.getPlayerStore().getPlayerByName(unitPo.getOwnerId()), unitPo.getAvailableMoves());
 	}
 

@@ -6,7 +6,6 @@ import java.util.function.Function;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.microcol.model.store.UnitPo;
 
 import mockit.Expectations;
 import mockit.Injectable;
@@ -19,7 +18,7 @@ public class UnitColonistTestInCargo {
 	private Unit unit;
 	
 	@Injectable
-	private UnitPo unitPo;
+	private Function<Unit, Cargo> cargoProvider;
 	
 	@Injectable
 	private Model model;
@@ -42,6 +41,9 @@ public class UnitColonistTestInCargo {
 	@Mocked
 	private PlaceCargoSlot placeCargoSlot;
 
+	@Mocked
+	private Cargo cargo;
+	
 	@Test
 	public void test_placeToEuropePortPier() throws Exception {
 		new Expectations() {{
@@ -67,6 +69,7 @@ public class UnitColonistTestInCargo {
 		 * Following expectations will be used for unit constructor
 		 */
 		new Expectations() {{
+			cargoProvider.apply((Unit)any); result = cargo;
 			placeBuilder.apply((Unit)any); result = placeCargoSlot;
 		}};
 	}

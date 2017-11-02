@@ -11,7 +11,6 @@ import static org.junit.Assert.assertFalse;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.microcol.model.store.UnitPo;
 
 import com.google.common.collect.Lists;
 
@@ -26,7 +25,7 @@ public class UnitColonistAtLocationTest {
 	private Unit unit;
 	
 	@Injectable
-	private UnitPo unitPo;
+	private Function<Unit, Cargo> cargoProvider;
 	
 	@Injectable
 	private Model model;
@@ -48,6 +47,9 @@ public class UnitColonistAtLocationTest {
 	
 	@Mocked
 	private PlaceLocation placeMap;
+
+	@Mocked
+	private Cargo cargo;
 	
 	@Test
 	public void testInitialization() {
@@ -98,6 +100,7 @@ public class UnitColonistAtLocationTest {
 		 * Following expectations will be used for unit constructor
 		 */
 		new Expectations() {{
+			cargoProvider.apply((Unit)any); result = cargo;
 			placeBuilder.apply((Unit)any); result = placeMap;
 		}};
 	}

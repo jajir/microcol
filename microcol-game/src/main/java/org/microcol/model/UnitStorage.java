@@ -9,9 +9,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
 
-import org.microcol.model.store.CargoPo;
 import org.microcol.model.store.ModelPo;
-import org.microcol.model.store.UnitPo;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
@@ -33,9 +31,7 @@ class UnitStorage {
 	}
 	
 	void addUnitToPlayer(final UnitType unitType, final Player owner, final Model model){
-		UnitPo unitPo = new UnitPo();
-		unitPo.setCargo(new CargoPo());
-		units.add(new Unit(unitPo, model, IdManager.nextId(),
+		units.add(new Unit(unit -> new Cargo(unit, unitType.getCargoCapacity()), model, IdManager.nextId(),
 				unit -> new PlaceEuropePier(unit), unitType, owner, unitType.getSpeed()));
 	}
 
