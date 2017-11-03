@@ -1,5 +1,7 @@
 package org.microcol.model;
 
+import java.util.function.Function;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.microcol.model.store.UnitPo;
@@ -24,7 +26,7 @@ public class UnitColonistTest {
 	private Integer id;
 	
 	@Injectable
-	private PlaceBuilder placeBuilder;
+	private Function<Unit, Place> placeBuilder;
 	
 	@Injectable
 	private UnitType unitType;
@@ -58,7 +60,7 @@ public class UnitColonistTest {
 		 * Following expectations will be used for unit constructior
 		 */
 		new Expectations() {{
-			placeBuilder.build((Unit)any); result = placeLocation;
+			placeBuilder.apply((Unit)any); result = placeLocation;
 		}};
 	}
 

@@ -2,6 +2,8 @@ package org.microcol.model;
 
 import static org.junit.Assert.*;
 
+import java.util.function.Function;
+
 import org.junit.Test;
 import org.microcol.model.store.UnitPo;
 
@@ -26,7 +28,7 @@ public class UnitTest {
 	private Integer id;
 	
 	@Injectable
-	private PlaceBuilder placeBuilder;
+	private Function<Unit, Place> placeBuilder;
 	
 	@Injectable
 	private UnitType unitType;

@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 import java.util.Set;
+import java.util.function.Function;
 
 import org.microcol.model.store.ModelPo;
 import org.microcol.model.store.UnitPo;
@@ -25,7 +26,7 @@ public class Unit {
 	private int availableMoves;
 	private final Cargo cargo;
 
-	Unit(final UnitPo unitPo, final Model model, final Integer id, final PlaceBuilder placeBuilder, final UnitType unitType,
+	Unit(final UnitPo unitPo, final Model model, final Integer id, final Function<Unit, Place> placeBuilder, final UnitType unitType,
 			final Player owner, final int availableMoves) {
 		Preconditions.checkNotNull(unitPo, "Unit persisten object is null");
 		Preconditions.checkNotNull(model, "Model is null");
@@ -37,7 +38,7 @@ public class Unit {
 		this.availableMoves = availableMoves;
 		this.id = Preconditions.checkNotNull(id, "ID is null");
 		this.model = model;
-		this.place = Preconditions.checkNotNull(placeBuilder.build(this));
+		this.place = Preconditions.checkNotNull(placeBuilder.apply(this));
 	}
 	
 	public static Unit make(final Model model, final ModelPo modelPo, final UnitPo unitPo){

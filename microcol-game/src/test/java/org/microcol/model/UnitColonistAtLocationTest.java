@@ -3,6 +3,9 @@ package org.microcol.model;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+
+import java.util.function.Function;
+
 import static org.junit.Assert.assertFalse;
 
 import org.junit.After;
@@ -32,7 +35,7 @@ public class UnitColonistAtLocationTest {
 	private Integer id;
 	
 	@Injectable
-	private PlaceBuilder placeBuilder;
+	private Function<Unit, Place> placeBuilder;
 	
 	@Injectable
 	private UnitType unitType;
@@ -95,7 +98,7 @@ public class UnitColonistAtLocationTest {
 		 * Following expectations will be used for unit constructor
 		 */
 		new Expectations() {{
-			placeBuilder.build((Unit)any); result = placeMap;
+			placeBuilder.apply((Unit)any); result = placeMap;
 		}};
 	}
 	

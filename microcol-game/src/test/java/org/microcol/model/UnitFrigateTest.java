@@ -2,6 +2,8 @@ package org.microcol.model;
 
 import static org.junit.Assert.assertTrue;
 
+import java.util.function.Function;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.microcol.model.store.UnitPo;
@@ -26,7 +28,7 @@ public class UnitFrigateTest {
 	private Integer id;
 	
 	@Injectable
-	private PlaceBuilder placeBuilder;
+	private Function<Unit, Place> placeBuilder;
 	
 	@Injectable
 	private UnitType unitType;
@@ -61,7 +63,7 @@ public class UnitFrigateTest {
 		 * Following expectations will be used for unit constructor
 		 */
 		new Expectations() {{
-			placeBuilder.build((Unit)any); result = placeMap;
+			placeBuilder.apply((Unit)any); result = placeMap;
 		}};
 	}
 	

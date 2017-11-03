@@ -83,7 +83,7 @@ public class VisibleArea {
 				final int toGrow = maxMapSize.get().getX() - canvasWidth;
 				final int toGrowLeft = topLeft.getX();
 				final int deltaGrow = newCanvasWidth - canvasWidth;
-				final int x = (int) (((float) deltaGrow) * ((float) toGrowLeft / toGrow));
+				final int x = (int) (deltaGrow * ((float) toGrowLeft / toGrow));
 				topLeft = Point.of(topLeft.getX() - x, topLeft.getY());
 			}
 		}
@@ -109,7 +109,7 @@ public class VisibleArea {
 				final int toGrow = maxMapSize.get().getY() - canvasHeight;
 				final int toGrowLeft = topLeft.getY();
 				final int deltaGrow = newCanvasHeight - canvasHeight;
-				final int y = (int) (((float) deltaGrow) * ((float) toGrowLeft / toGrow));
+				final int y = (int) (deltaGrow * ((float) toGrowLeft / toGrow));
 				topLeft = Point.of(topLeft.getX(), topLeft.getY() - y);
 			}
 		}

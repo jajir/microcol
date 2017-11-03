@@ -343,7 +343,7 @@ public class GamePanelView implements GamePanelPresenter.Display {
 			paintCursor(graphics, area, viewState.getMouseOverTile().get());
 			final List<Location> locations = moveModeSupport.getMoveLocations();
 			final StepCounter stepCounter = new StepCounter(5, getMovingUnit().getAvailableMoves());
-			final List<Point> steps = Lists.transform(locations, location -> area.convertToPoint((Location) location));
+			final List<Point> steps = Lists.transform(locations, location -> area.convertToPoint(location));
 			/**
 			 * Here could be check if particular step in on screen, but draw few
 			 * images outside screen is not big deal.

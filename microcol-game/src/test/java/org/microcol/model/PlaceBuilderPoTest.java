@@ -38,7 +38,7 @@ public class PlaceBuilderPoTest {
 			unitPo.getPlaceEuropePort(); result = null;
 		}};		
 		
-		placeBuilder.build(unit);
+		placeBuilder.apply(unit);
 		
 		new Verifications() {{
 			unitPo.getPlaceMap(); times = 1;
@@ -54,7 +54,7 @@ public class PlaceBuilderPoTest {
 		new Expectations() {{
 			unitPo.getPlaceMap(); result = placeMapPo;
 		}};		
-		final Place ret = placeBuilder.build(unit);
+		final Place ret = placeBuilder.apply(unit);
 		
 		assertNotNull(ret);
 		assertTrue(ret instanceof PlaceLocation);
@@ -69,7 +69,7 @@ public class PlaceBuilderPoTest {
 		new Expectations() {{
 			unitPo.getPlaceMap(); result = placeMapPo;
 		}};		
-		final Place ret = placeBuilder.build(unit);
+		final Place ret = placeBuilder.apply(unit);
 		
 		assertNotNull(ret);
 		assertTrue(ret instanceof PlaceLocation);

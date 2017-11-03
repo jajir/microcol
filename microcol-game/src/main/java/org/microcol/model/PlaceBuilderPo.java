@@ -2,6 +2,7 @@ package org.microcol.model;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
 
 import org.microcol.gui.MicroColException;
 import org.microcol.model.store.CargoSlotPo;
@@ -15,7 +16,7 @@ import org.microcol.model.store.UnitPo;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 
-public class PlaceBuilderPo implements PlaceBuilder {
+public class PlaceBuilderPo implements Function<Unit, Place> {
 
 	private final List<Builder> placeBuilders = Lists.newArrayList((unit, unitPo, modelPo, model) -> {
 		/**
@@ -126,7 +127,7 @@ public class PlaceBuilderPo implements PlaceBuilder {
 	 * @see org.microcol.model.PlaceBuilder#build(org.microcol.model.Unit)
 	 */
 	@Override
-	public Place build(final Unit unit) {
+	public Place apply(final Unit unit) {
 		for (final Builder placeBuilder : placeBuilders) {
 			final Place place = placeBuilder.tryBuild(unit, unitPo, modelPo, model);
 			if (place != null) {
