@@ -28,17 +28,15 @@ public class Unit {
 
 	Unit(final Function<Unit, Cargo> cargoBuilder, final Model model, final Integer id, final Function<Unit, Place> placeBuilder, final UnitType unitType,
 			final Player owner, final int availableMoves) {
-		Preconditions.checkNotNull(model, "Model is null");
 		Preconditions.checkNotNull(cargoBuilder, "CargoBuilder is null");
 		Preconditions.checkNotNull(placeBuilder, "PlaceBuilder is null");
-		Preconditions.checkNotNull(unitType, "UnitType is null");
-		this.type = unitType;
+		this.type = Preconditions.checkNotNull(unitType, "UnitType is null");
 		this.owner = Preconditions.checkNotNull(owner);
-		this.id = Preconditions.checkNotNull(id, "ID is null");
-		this.model = model;
+		this.id = Preconditions.checkNotNull(id, "Id is null");
+		this.model = Preconditions.checkNotNull(model, "Model is null");;
 		this.availableMoves = availableMoves;
-		this.cargo = cargoBuilder.apply(this);
-		this.place = Preconditions.checkNotNull(placeBuilder.apply(this));
+		this.cargo = Preconditions.checkNotNull(cargoBuilder.apply(this), "Cargo builder didn't created cargo");
+		this.place = Preconditions.checkNotNull(placeBuilder.apply(this), "Place builder didn't created cargo");
 	}
 	
 	public static Unit make(final Model model, final ModelPo modelPo, final UnitPo unitPo){
