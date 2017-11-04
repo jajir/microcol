@@ -9,6 +9,8 @@ import org.microcol.gui.event.CenterViewController;
 import org.microcol.gui.event.ChangeLanguageController;
 import org.microcol.gui.event.ChangeLanguageListenerPreferences;
 import org.microcol.gui.event.ChangeLanguageListenerText;
+import org.microcol.gui.event.DeclareIndependenceController;
+import org.microcol.gui.event.DeclareIndependenceListener;
 import org.microcol.gui.event.EventInitializer;
 import org.microcol.gui.event.ExitGameController;
 import org.microcol.gui.event.FocusedTileController;
@@ -86,6 +88,7 @@ public class MicroColModule extends AbstractModule {
 		bind(MouseOverTileChangedController.class).in(Singleton.class);
 		bind(UnitAttackedEventController.class).in(Singleton.class);
 		bind(GoldWasChangedController.class).in(Singleton.class);
+		bind(DeclareIndependenceController.class).in(Singleton.class);
 
 		bind(ModelEventManager.class).in(Singleton.class);
 
@@ -135,6 +138,7 @@ public class MicroColModule extends AbstractModule {
 		bind(VolumeChangedListenerPreferences.class).asEagerSingleton();
 		bind(AnimationSpeedChangedListenerPreferences.class).asEagerSingleton();
 		bind(ShowGridListenerPreferences.class).asEagerSingleton();
+		bind(DeclareIndependenceListener.class).asEagerSingleton();
 
 		bind(MusicPlayer.class).in(Singleton.class);
 		bind(MusicController.class).in(Singleton.class);

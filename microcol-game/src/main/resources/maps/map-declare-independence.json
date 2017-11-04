@@ -649,7 +649,7 @@
       "name": "Dutch",
       "computer": false,
       "gold": 1108,
-      "declaredIndependence": false
+      "declaredIndependence": true
     },
     {
       "name": "Player2",

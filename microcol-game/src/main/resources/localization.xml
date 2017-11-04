@@ -13,6 +13,7 @@
 	<entry key="game.title">MicroCol</entry>
 	
 	<entry key="mainMenu.game">Game</entry>
+	<entry key="mainMenu.game.declareIndependence">Declare Independence</entry>
 	<entry key="mainMenu.game.newGame">New Game</entry>
 	<entry key="mainMenu.game.saveGame">Save Game</entry>
 	<entry key="mainMenu.game.loadGame">Load Game</entry>
@@ -121,6 +122,8 @@
 	<entry key="dialogUnitCantFightWarning.caption">This unit can't fight.</entry>
 	
 	<entry key="dialogNotEnoughGold.caption">You don't have enough gold.</entry>
+	
+	<entry key="dialogIndependenceWasDeclared.caption">You declared independence. Now get ready for Royal army.</entry>
 	
 	<entry key="FileChooser.cancelButtonText">Cancel</entry>
 	<entry key="FileChooser.fileDateHeaderText">Date modified</entry>

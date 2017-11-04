@@ -13,6 +13,7 @@
 	<entry key="game.title">MicroCol</entry>
 	
 	<entry key="mainMenu.game">Hra</entry>
+	<entry key="mainMenu.game.declareIndependence">Vyhlásit nezávislost</entry>
 	<entry key="mainMenu.game.newGame">Nová hra</entry>
 	<entry key="mainMenu.game.saveGame">Uložit hru</entry>
 	<entry key="mainMenu.game.loadGame">Načíst hru</entry>
@@ -120,6 +121,8 @@
 	<entry key="dialogUnitCantFightWarning.caption">Tato jednotka neumí bojovat.</entry>
 	
 	<entry key="dialogNotEnoughGold.caption">K dokončení operace nemáte dost zlata.</entry>
+
+	<entry key="dialogIndependenceWasDeclared.caption">Vyhlásil jsi nezávislot. Nýní se připrav na útok královské armády.</entry>
 
 	<entry key="FileChooser.cancelButtonText">Zrušit</entry>
 	<entry key="FileChooser.fileDateHeaderText">Datum úpravy</entry>

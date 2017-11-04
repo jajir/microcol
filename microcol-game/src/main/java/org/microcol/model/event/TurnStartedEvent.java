@@ -7,6 +7,7 @@ import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 
 public final class TurnStartedEvent extends ModelEvent {
+	
 	private final Player player;
 
 	public TurnStartedEvent(final Model model, final Player player) {

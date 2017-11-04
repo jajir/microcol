@@ -24,14 +24,16 @@ import com.google.common.collect.ImmutableList;
 public class King {
 
 	private final Logger logger = LoggerFactory.getLogger(getClass());
-
+	
+	private final SimpleUnitBehavior simpleUnitBehavior = new SimpleUnitBehavior();
+	
 	private final Model model;
 
 	private final Player kingPlayer;
 
 	private final Player whosKingThisPlayerIs;
 
-	private PathTool pathTool = new PathTool();
+	private ContinentTool continentTool = new ContinentTool();
 
 	/**
 	 * Royal Expedition Forces was send to colonies after declaring
@@ -71,7 +73,7 @@ public class King {
 				// find units on continent, attack city
 				// XXX what if there is no city to attack???, disband unit and
 				// create new in europe???
-				final List<Continent> continentsToAttack = pathTool.findContinentsToAttack(model, whosKingThisPlayerIs);
+				final Continents continents = continentTool.findContinents(model, whosKingThisPlayerIs);
 				getKingsShipsOnSea().forEach(ship -> {
 					if (ship.getCargo().isEmpty()) {
 						// random move & attack any ship in sight
@@ -79,7 +81,7 @@ public class King {
 						if (isPossibleToDisembark(ship)) {
 							disembarkUnit(ship);
 						} else {
-							tryToReachSomeContinent(ship, continentsToAttack);
+							tryToReachSomeContinent(ship, continents.getContinentsToAttack());
 							//TODO zkusit vylodit jednotky.
 						}
 					}
@@ -88,9 +90,18 @@ public class King {
 					//can unit immediatly attack some city?
 					//find list of enemy cities on ontinent where is this unit.
 					//select first city, go near
+					seekAndDestroy(unit, continents);
 				});
 			}
 		}
+	}
+	
+	private void seekAndDestroy(final Unit unit, final Continents continents) {
+		final Optional<Location> oLoc = continents.getContinentWhereIsUnitPlaced(unit).getClosesEnemyCityToAttack(unit);
+		if (oLoc.isPresent()) {
+			unit.moveTo(Path.of(unit.getPath(oLoc.get(), true).get()));
+		}
+		simpleUnitBehavior.tryToFight(unit);
 	}
 
 	private void tryToReachSomeContinent(final Unit ship, final List<Continent> continentsToAttack) {

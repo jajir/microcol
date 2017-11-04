@@ -16,9 +16,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class Engine {
+	
 	private final Logger logger = LoggerFactory.getLogger(getClass());
+	
+	private final SimpleUnitBehavior simpleUnitBehavior = new SimpleUnitBehavior();
 
 	private final Model model;
+	
 	private final Directions unitDirections;
 
 	private boolean running;
@@ -75,7 +79,7 @@ public class Engine {
 			unit.moveTo(Path.of(locations));
 		}
 
-		tryToFight(unit);
+		simpleUnitBehavior.tryToFight(unit);
 		tryToEmbark(unit);
 	}
 	
@@ -123,20 +127,6 @@ public class Engine {
 			}
 		}
 		return false;
-	}
-	
-	private void tryToFight(final Unit unit){
-		if (unit.getType().canAttack() && unit.getAvailableMoves() > 0 && unit.isAtPlaceLocation()) {
-			for (final Location location : unit.getLocation().getNeighbors()) {
-				if(unit.isPossibleToAttackAt(location)){
-					final List<Unit> enemies = unit.getOwner().getEnemyUnitsAt(location);
-					if (!enemies.isEmpty()) {
-						unit.attack(enemies.get(0).getLocation());
-						break;
-					}
-				}
-			}
-		}		
 	}
 	
 	private void tryToEmbark(final Unit unit){

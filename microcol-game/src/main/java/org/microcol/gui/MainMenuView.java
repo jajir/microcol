@@ -27,6 +27,8 @@ public class MainMenuView implements MainMenuPresenter.Display {
 
 	private final Menu menuGame;
 
+	private final MenuItem menuItemDeclareIndependence;
+	
 	private final MenuItem menuItemNewGame;
 
 	private final MenuItem menuItemSameGame;
@@ -78,6 +80,9 @@ public class MainMenuView implements MainMenuPresenter.Display {
 		/**
 		 * Game menu
 		 */
+		menuItemDeclareIndependence = new MenuItem();
+		menuItemDeclareIndependence.disableProperty().setValue(false);
+		
 		menuItemNewGame = new MenuItem();
 		menuItemNewGame.setAccelerator(new KeyCodeCombination(KeyCode.N, KeyCombination.CONTROL_DOWN));
 		menuItemNewGame.disableProperty().setValue(true);
@@ -155,7 +160,7 @@ public class MainMenuView implements MainMenuPresenter.Display {
 		 * menu
 		 */
 		menuGame = new Menu();
-		menuGame.getItems().addAll(menuItemNewGame, menuNewScenario, menuItemLoadGame, menuItemSameGame, menuItemQuitGame);
+		menuGame.getItems().addAll(menuItemDeclareIndependence, menuItemNewGame, menuNewScenario, menuItemLoadGame, menuItemSameGame, menuItemQuitGame);
 		menuView = new Menu();
 		menuView.getItems().addAll(menuItemCenterView, menuItemEurope);
 		menuUnit = new Menu();
@@ -213,6 +218,7 @@ public class MainMenuView implements MainMenuPresenter.Display {
 		 * Game
 		 */
 		menuGame.setText(text.get("mainMenu.game"));
+		menuItemDeclareIndependence.setText(text.get("mainMenu.game.declareIndependence"));
 		menuItemNewGame.setText(text.get("mainMenu.game.newGame"));
 		menuItemSameGame.setText(text.get("mainMenu.game.saveGame"));
 		menuItemLoadGame.setText(text.get("mainMenu.game.loadGame"));
@@ -324,5 +330,13 @@ public class MainMenuView implements MainMenuPresenter.Display {
 	@Override
 	public MenuItem getMenuItemColonizopedia() {
 		return menuItemColonizopedia;
+	}
+
+	/**
+	 * @return the menuItemDeclareIndependence
+	 */
+	@Override
+	public MenuItem getMenuItemDeclareIndependence() {
+		return menuItemDeclareIndependence;
 	}
 }

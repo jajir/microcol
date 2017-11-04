@@ -1,14 +1,12 @@
 package org.microcol.ai;
 
-import java.util.List;
-
 import org.microcol.model.Location;
 import org.microcol.model.Model;
 import org.microcol.model.Player;
 import org.microcol.model.TerrainType;
 import org.microcol.model.WorldMap;
 
-public class PathTool {
+public class ContinentTool {
 
 	/**
 	 * Find top 3 continents with biggest military forces in cities owned by
@@ -18,11 +16,11 @@ public class PathTool {
 	 *            required model
 	 * @param enemyPlayer
 	 *            required enemy player
-	 * @return 3 strongest continents to attack
+	 * @return continents
 	 */
-	public List<Continent> findContinentsToAttack(final Model model, final Player enemyPlayer) {
+	public Continents findContinents(final Model model, final Player enemyPlayer) {
 		final WorldMap map = model.getMap();
-		final Continents continents = new Continents(model, enemyPlayer);
+		final Continents continents = new Continents();
 		for (int x = 1; x <= model.getMap().getMaxX(); x++) {
 			for (int y = 1; y <= model.getMap().getMaxY(); y++) {
 				final Location loc = Location.of(x, y);
@@ -37,7 +35,7 @@ public class PathTool {
 				}
 			}
 		}
-		return continents.getContinentsToAttack();
+		return continents;
 	}
 
 	private Continent createContinent(final Location loc, final Model model, final Player enemyPlayer) {

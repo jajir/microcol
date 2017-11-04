@@ -205,11 +205,8 @@ public final class Player {
 		return declaredIndependence;
 	}
 
-	/**
-	 * @param declaredIndependence the declaredIndependence to set
-	 */
-	public void setDeclaredIndependence(boolean declaredIndependence) {
-		this.declaredIndependence = declaredIndependence;
+	public void declareIndependence(){
+		Preconditions.checkState(!declaredIndependence,"Independence was already declared");
+		declaredIndependence = true;
 	}
-	
 }

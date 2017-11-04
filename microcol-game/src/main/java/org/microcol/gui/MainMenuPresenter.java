@@ -9,6 +9,8 @@ import org.microcol.gui.event.CenterViewController;
 import org.microcol.gui.event.CenterViewEvent;
 import org.microcol.gui.event.ChangeLanguageController;
 import org.microcol.gui.event.ChangeLanguageEvent;
+import org.microcol.gui.event.DeclareIndependenceController;
+import org.microcol.gui.event.DeclareIndependenceEvent;
 import org.microcol.gui.event.ExitGameController;
 import org.microcol.gui.event.ExitGameEvent;
 import org.microcol.gui.event.FocusedTileController;
@@ -36,6 +38,8 @@ public class MainMenuPresenter {
 	public interface Display {
 
 		MenuItem getMenuItemNewGame();
+		
+		MenuItem getMenuItemDeclareIndependence();
 
 		MenuItem getMenuItemLoadGame();
 
@@ -82,7 +86,8 @@ public class MainMenuPresenter {
 			final CenterViewController centerViewController, final TurnStartedController turnStartedController,
 			final ExitGameController exitGameController, final GameModelController gameController,
 			final PersistingDialog persistingDialog, final ImageProvider imageProvider,
-			final LocalizationHelper localizationHelper, final StartMoveController startMoveController) {
+			final LocalizationHelper localizationHelper, final StartMoveController startMoveController,
+			final DeclareIndependenceController declareIndependenceController) {
 		this.display = Preconditions.checkNotNull(display);
 		display.getMenuItemNewGame().setOnAction(actionEvent -> {
 			gameController.startNewDefaultGame();
@@ -115,12 +120,18 @@ public class MainMenuPresenter {
 			startMoveController.fireEvent(new StartMoveEvent());
 			display.getMenuItemMove().setDisable(true);
 		});
+		display.getMenuItemDeclareIndependence().setOnAction(event -> {
+			new DialogIndependenceWasDeclared(viewUtil, text);
+			declareIndependenceController.fireEvent(
+					new DeclareIndependenceEvent(gameController.getModel(), gameController.getCurrentPlayer()));
+		});
 		display.getMenuItemCenterView().setOnAction(event -> centerViewController.fireEvent(new CenterViewEvent()));
 		changeLanguageController.addListener(event -> {
 			display.updateLanguage();
 		});
 		focusedTileController.addListener(event -> onFocusedTileEvent(event));
 		turnStartedController.addListener(event -> onTurnStartedEvent(event));
+		declareIndependenceController.addListener(event -> display.getMenuItemDeclareIndependence().setDisable(true));
 	}
 
 	/**
@@ -149,10 +160,11 @@ public class MainMenuPresenter {
 			if (isFocusedMoveableUnit) {
 				display.getMenuItemMove().setDisable(false);
 			}
+			display.getMenuItemDeclareIndependence().setDisable(event.getPlayer().isDeclaredIndependence());
 		} else {
 			display.getMenuItemCenterView().setDisable(true);
 			display.getMenuItemMove().setDisable(true);
 		}
 	}
-
+	
 }

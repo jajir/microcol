@@ -1,20 +1,16 @@
 package org.microcol.model.store;
 
-import java.util.List;
+import static org.junit.Assert.*;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.microcol.ai.Continent;
+import org.microcol.ai.ContinentTool;
 import org.microcol.ai.Continents;
-import org.microcol.ai.PathTool;
-import org.microcol.model.Location;
 import org.microcol.model.Model;
 import org.microcol.model.Player;
-import org.microcol.model.TerrainType;
-import org.microcol.model.WorldMap;
 
 /**
  * Test create model with fluent API than store than model and finally load and
@@ -30,10 +26,10 @@ public class FindTargerTest {
 	public void test_writing() throws Exception {
 		final Model model = new ModelProvider().buildComplexModel();
 		final Player enemyPlayer = model.getPlayerByName("Dutch");
-		final PathTool pathTool = new PathTool();
+		final ContinentTool pathTool = new ContinentTool();
 		
-		final List<Continent> toAttack = pathTool.findContinentsToAttack(model, enemyPlayer);
-		
+		final Continents toAttack = pathTool.findContinents(model, enemyPlayer);
+		assertNotNull(toAttack);
 		System.out.println("konec");
 		
 		// XXX send REF
