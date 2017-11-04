@@ -6,7 +6,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
 
-import org.microcol.model.store.CargoPo;
 import org.microcol.model.store.ColonyPo;
 import org.microcol.model.store.ModelPo;
 import org.microcol.model.store.PlayerPo;
@@ -154,10 +153,8 @@ public final class Model {
 	public Unit createCargoShipForKing(final Player king){
 		Preconditions.checkNotNull(king);
 		Preconditions.checkNotNull(king.isComputer(), "king have to be computer player");
-		final UnitPo unitPo = new UnitPo();
-		unitPo.setCargo(new CargoPo());
-		final Unit out = new Unit(unitPo, this, IdManager.nextId(), unit -> new PlaceHighSea(unit, false, 3),
-				UnitType.GALLEON, king, UnitType.GALLEON.getSpeed());
+		final Unit out = new Unit(unit -> new Cargo(unit, UnitType.GALLEON.getSpeed()), this, IdManager.nextId(),
+				unit -> new PlaceHighSea(unit, false, 3), UnitType.GALLEON, king, UnitType.GALLEON.getSpeed());
 		unitStorage.addUnit(out);
 		return out;
 	}
@@ -176,10 +173,8 @@ public final class Model {
 		Preconditions.checkNotNull(king.isComputer(), "king have to be computer player");
 		Preconditions.checkArgument(loadUnitToShip.getCargo().getEmptyCargoSlot().isPresent(),"Ship (%s) for cargo doesn't have any free slot for expedition force unit.",loadUnitToShip);
 		CargoSlot cargoSlot = loadUnitToShip.getCargo().getEmptyCargoSlot().get();
-		final UnitPo unitPo = new UnitPo();
-		unitPo.setCargo(new CargoPo());
-		final Unit out = new Unit(unitPo, this, IdManager.nextId(), unit -> new PlaceCargoSlot(unit, cargoSlot),
-				UnitType.COLONIST, king, UnitType.COLONIST.getSpeed());
+		final Unit out = new Unit(unit -> new Cargo(unit, UnitType.COLONIST.getSpeed()), this, IdManager.nextId(),
+				unit -> new PlaceCargoSlot(unit, cargoSlot), UnitType.COLONIST, king, UnitType.COLONIST.getSpeed());
 		unitStorage.addUnit(out);
 		return out;
 	}
