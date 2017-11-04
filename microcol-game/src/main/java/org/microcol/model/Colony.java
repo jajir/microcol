@@ -210,4 +210,36 @@ public class Colony {
 		colonyFields.forEach(field -> field.produce(out));
 		return out;
 	}
+	
+	private List<Unit> getUnitsInColony(){
+		final List<Unit> out = new ArrayList<>();
+		constructions.forEach(construction->{
+			construction.getConstructionSlots().forEach(slot->{
+				if (!slot.isEmpty()) {
+					out.add(slot.getUnit());
+				}
+			});
+		});
+		colonyFields.forEach(field->{
+			if (!field.isEmpty()) {
+				out.add(field.getUnit());
+			}
+		});
+		return ImmutableList.copyOf(out);
+	}
+	
+	//TODO move statistic read-only method to statistics class.
+	public int getMilitaryForce(){
+		int force = 0;
+		// count units outside colony
+		for (final Unit unit : model.getUnitsAt(owner, location)) {
+			force += unit.getMilitaryStrenght();
+		}
+		// count units in colony
+		for (final Unit unit : getUnitsInColony()) {
+			force += unit.getMilitaryStrenght();
+		}
+		return force;
+	}
+	
 }

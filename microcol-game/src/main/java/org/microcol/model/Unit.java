@@ -556,4 +556,8 @@ public class Unit {
 		return model;
 	}
 
+	public int getMilitaryStrenght(){
+		return 1;
+	}
+	
 }

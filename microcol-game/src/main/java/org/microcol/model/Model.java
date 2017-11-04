@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
 
+import org.microcol.model.store.CargoPo;
 import org.microcol.model.store.ColonyPo;
 import org.microcol.model.store.ModelPo;
 import org.microcol.model.store.PlayerPo;
@@ -142,6 +143,47 @@ public final class Model {
 		return out;
 	}
 	
+	/**
+	 * Create cargo ship for king and put it to high seas in direction to
+	 * colonies.
+	 * 
+	 * @param king
+	 *            required king player
+	 * @return created unit
+	 */
+	public Unit createCargoShipForKing(final Player king){
+		Preconditions.checkNotNull(king);
+		Preconditions.checkNotNull(king.isComputer(), "king have to be computer player");
+		final UnitPo unitPo = new UnitPo();
+		unitPo.setCargo(new CargoPo());
+		final Unit out = new Unit(unitPo, this, IdManager.nextId(), unit -> new PlaceHighSea(unit, false, 3),
+				UnitType.GALLEON, king, UnitType.GALLEON.getSpeed());
+		unitStorage.addUnit(out);
+		return out;
+	}
+	
+	/**
+	 * Create new royal expedition force unit and place it to cargo ship.
+	 * 
+	 * @param king
+	 *            required king
+	 * @param loadUnitToShip
+	 *            required ship that will hold cargo
+	 * @return created unit
+	 */
+	public Unit createRoyalExpeditionForceUnit(final Player king, final Unit loadUnitToShip){
+		Preconditions.checkNotNull(king);
+		Preconditions.checkNotNull(king.isComputer(), "king have to be computer player");
+		Preconditions.checkArgument(loadUnitToShip.getCargo().getEmptyCargoSlot().isPresent(),"Ship (%s) for cargo doesn't have any free slot for expedition force unit.",loadUnitToShip);
+		CargoSlot cargoSlot = loadUnitToShip.getCargo().getEmptyCargoSlot().get();
+		final UnitPo unitPo = new UnitPo();
+		unitPo.setCargo(new CargoPo());
+		final Unit out = new Unit(unitPo, this, IdManager.nextId(), unit -> new PlaceCargoSlot(unit, cargoSlot),
+				UnitType.COLONIST, king, UnitType.COLONIST.getSpeed());
+		unitStorage.addUnit(out);
+		return out;
+	}
+	
 	void addUnitToPlayer(final UnitType unitType, final Player owner){
 		unitStorage.addUnitToPlayer(unitType, owner, this);
 	}
@@ -202,6 +244,15 @@ public final class Model {
 		return colonies.stream().collect(ImmutableMap.toImmutableMap(Colony::getLocation, Function.identity()));
 	}
 
+	/**
+	 * Get colony owned by player at some location.
+	 * 
+	 * @param location
+	 *            required location
+	 * @param owner
+	 *            required player
+	 * @return optional colony object
+	 */
 	public Optional<Colony> getColoniesAt(final Location location, final Player owner) {
 		Preconditions.checkNotNull(location);
 		Preconditions.checkNotNull(owner);
@@ -331,6 +382,10 @@ public final class Model {
 
 	public HighSea getHighSea() {
 		return highSea;
+	}
+	
+	public Player getPlayerByName(final String playerName){
+		return playerStore.getPlayerByName(playerName);
 	}
 
 	/**
