@@ -1,5 +1,6 @@
 package org.microcol.model;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -12,22 +13,41 @@ import com.google.common.base.Preconditions;
 public final class Player {
 	
 	private final Model model;
+	
 	private final String name;
+	
 	private final boolean computer;
+	
+	/**
+	 * If it's not null than it's king player.
+	 */
+	private final Player whosKingThisPlayerIs;
+	
 	private boolean declaredIndependence;
+	
 	private int gold;
+	
+	private final Map<String, Object> extraData = new HashMap<>();
 
 	private Player(final String name, final boolean computer, final int initialGold, final Model model,
-			final boolean declaredIndependence) {
+			final boolean declaredIndependence, final Player whosKingThisPlayerIs,
+			final Map<String, Object> extraData) {
+		this.model = Preconditions.checkNotNull(model);
 		this.name = Preconditions.checkNotNull(name);
 		this.computer = computer;
 		this.gold = initialGold;
-		this.model = model;
 		this.declaredIndependence = declaredIndependence;
+		this.whosKingThisPlayerIs = whosKingThisPlayerIs;
+		this.extraData.putAll(Preconditions.checkNotNull(extraData));
 	}
 	
-	public static Player make(final PlayerPo player, final Model model){
-		return new Player(player.getName(), player.isComputer(), player.getGold(), model, player.isDeclaredIndependence());
+	public static Player make(final PlayerPo player, final Model model, final PlayerStore playerStore){
+		Player subdued = null;
+		if (player.getWhosKingThisPlayerIs() != null) {
+			subdued = playerStore.getPlayerByName(player.getWhosKingThisPlayerIs());
+		}
+		return new Player(player.getName(), player.isComputer(), player.getGold(), model,
+				player.isDeclaredIndependence(), subdued, player.getExtraData());
 	}
 	
 	public PlayerPo save(){
@@ -35,6 +55,8 @@ public final class Player {
 		out.setName(name);
 		out.setComputer(computer);
 		out.setGold(gold);
+		out.setDeclaredIndependence(declaredIndependence);
+		out.getExtraData().putAll(extraData);
 		return out;
 	}
 
@@ -48,6 +70,10 @@ public final class Player {
 
 	public boolean isHuman() {
 		return !computer;
+	}
+	
+	public boolean isKing(){
+		return whosKingThisPlayerIs != null;
 	}
 
 	public List<Unit> getUnits() {
@@ -208,5 +234,12 @@ public final class Player {
 	public void declareIndependence(){
 		Preconditions.checkState(!declaredIndependence,"Independence was already declared");
 		declaredIndependence = true;
+	}
+
+	/**
+	 * @return the whosKingThisPlayerIs
+	 */
+	public Player getWhosKingThisPlayerIs() {
+		return whosKingThisPlayerIs;
 	}
 }

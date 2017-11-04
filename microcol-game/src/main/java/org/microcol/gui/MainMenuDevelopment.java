@@ -26,7 +26,7 @@ public class MainMenuDevelopment {
 	private final Menu developmentMenu;
 
 	@Inject
-	public MainMenuDevelopment(final GameModelController gameController) {
+	public MainMenuDevelopment(final GameModelController gameModelController) {
 		developmentMenu = new Menu("Development");
 
 		final CheckMenuItem checkBoxStopAi = new CheckMenuItem("Suspend AI");
@@ -35,11 +35,11 @@ public class MainMenuDevelopment {
 		checkBoxStopAi.selectedProperty().addListener((on, oldValue, newValue) -> {
 			boolean isSelected = newValue;
 			if (isSelected) {
-				new Thread(() -> gameController.getAiEngine().suspend()).start();
+				new Thread(() -> gameModelController.suspendAi()).start();
 				logger.debug("AI was stopped.");
 			} else {
 				logger.debug("AI was started.");
-				new Thread(() -> gameController.getAiEngine().resume()).start();
+				new Thread(() -> gameModelController.resumeAi()).start();
 			}
 		});
 		developmentMenu.getItems().add(checkBoxStopAi);

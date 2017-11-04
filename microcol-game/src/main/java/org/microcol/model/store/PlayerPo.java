@@ -1,5 +1,8 @@
 package org.microcol.model.store;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class PlayerPo {
 
 	private String name;
@@ -9,7 +12,11 @@ public class PlayerPo {
 	private int gold;
 	
 	private boolean declaredIndependence;
-
+	
+	private String whosKingThisPlayerIs;
+	
+	private Map<String, Object> extraData = new HashMap<>();
+	
 	/**
 	 * @return the name
 	 */
@@ -67,6 +74,34 @@ public class PlayerPo {
 	 */
 	public void setDeclaredIndependence(boolean declaredIndependence) {
 		this.declaredIndependence = declaredIndependence;
+	}
+
+	/**
+	 * @return the whosKingThisPlayerIs
+	 */
+	public String getWhosKingThisPlayerIs() {
+		return whosKingThisPlayerIs;
+	}
+
+	/**
+	 * @param whosKingThisPlayerIs the whosKingThisPlayerIs to set
+	 */
+	public void setWhosKingThisPlayerIs(String whosKingThisPlayerIs) {
+		this.whosKingThisPlayerIs = whosKingThisPlayerIs;
+	}
+
+	/**
+	 * @return the extraData
+	 */
+	public Map<String, Object> getExtraData() {
+		return extraData;
+	}
+
+	/**
+	 * @param extraData the extraData to set
+	 */
+	public void setExtraData(Map<String, Object> extraData) {
+		this.extraData = extraData;
 	}
 
 }

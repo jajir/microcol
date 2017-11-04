@@ -9,27 +9,35 @@ import org.microcol.gui.MicroColException;
 import org.microcol.model.store.ModelPo;
 
 import com.google.common.base.Preconditions;
-import com.google.common.collect.ImmutableList;
 
 public class PlayerStore {
 
 	private final List<Player> players;
 
-	PlayerStore(final List<Player> players) {
-		this.players = ImmutableList.copyOf(players);
-		Preconditions.checkArgument(!this.players.isEmpty(), "There must be at least one player.");
-		checkPlayersDuplicities(players);
-	}
-	
-	static PlayerStore makePlayers(final Model model, final ModelPo modelPo){
-		final List<Player> players = new ArrayList<>();
-		modelPo.getPlayers().forEach(playerPo -> {
-			players.add(Player.make(playerPo, model));
-		});
-		return new PlayerStore(players);
+	PlayerStore() {
+		this.players = new ArrayList<>();
+		checkPlayersDuplicities();
 	}
 
-	private void checkPlayersDuplicities(final List<Player> players) {
+	static PlayerStore makePlayers(final Model model, final ModelPo modelPo) {
+		/*
+		 * First are created player whose are not kings. Next are created kings.
+		 * It's because kings in constructor required player who is under kings
+		 * rule.
+		 */
+		final PlayerStore out = new PlayerStore();
+		modelPo.getPlayers().stream().filter(player -> player.getWhosKingThisPlayerIs() == null).forEach(playerPo -> {
+			out.players.add(Player.make(playerPo, model, out));
+		});
+		modelPo.getPlayers().stream().filter(player -> player.getWhosKingThisPlayerIs() != null).forEach(playerPo -> {
+			out.players.add(Player.make(playerPo, model, out));
+		});
+		out.checkPlayersDuplicities();
+		Preconditions.checkArgument(!out.players.isEmpty(), "There must be at least one player.");
+		return out;
+	}
+
+	private void checkPlayersDuplicities() {
 		Set<String> names = new HashSet<>();
 		players.forEach(player -> {
 			if (!names.add(player.getName())) {

@@ -1,78 +1,28 @@
 package org.microcol.ai;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import org.microcol.model.Location;
 import org.microcol.model.Model;
-import org.microcol.model.ModelAdapter;
 import org.microcol.model.Path;
 import org.microcol.model.Player;
 import org.microcol.model.TerrainType;
 import org.microcol.model.Unit;
-import org.microcol.model.event.TurnStartedEvent;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-public class Engine {
-	
-	private final Logger logger = LoggerFactory.getLogger(getClass());
+public class SimpleAiPlayer extends AbstractRobotPlayer {
 	
 	private final SimpleUnitBehavior simpleUnitBehavior = new SimpleUnitBehavior();
-
-	private final Model model;
 	
 	private final Directions unitDirections;
 
-	private boolean running;
-
-	public Engine(final Model model) {
-		this.model = model;
+	public SimpleAiPlayer(final Model model, final Player player) {
+		super(model, player);
 		unitDirections = new Directions();
 	}
 
-	public void start() {
-		running = true;
-		model.addListener(new ModelAdapter() {
-			@Override
-			public void turnStarted(TurnStartedEvent event) {
-				if (event.getPlayer().isComputer()) {
-					turn(event.getPlayer());
-				}
-			}
-		});
-		logger.info("AI engine started.");
-	}
-
-	public void suspend() {
-		running = false;
-	}
-
-	public void resume() {
-		running = true;
-		if (model.isGameRunning() && model.getCurrentPlayer().isComputer()) {
-			turn(model.getCurrentPlayer());
-		}
-	}
-
-	void turn(final Player player) {
-		player.getUnits().stream().filter(unit->unit.isAtPlaceLocation()).forEach(unit -> move(unit));
-
-		if (!running) {
-			return;
-		}
-
-		player.endTurn();
-	}
-
-	void move(final Unit unit) {
-		if (!running) {
-			return;
-		}
-
-		showDebug(unit);
-
+	@Override
+	void moveUnit(Unit unit) {
 		final List<Location> locations = computeMoveLocation(unit);
 
 		if (!locations.isEmpty()) {
@@ -82,7 +32,6 @@ public class Engine {
 		simpleUnitBehavior.tryToFight(unit);
 		tryToEmbark(unit);
 	}
-	
 	private List<Location> computeMoveLocation(final Unit unit){
 		final List<Location> locations = new ArrayList<>();
 		Location lastLocation = unit.getLocation();
@@ -115,7 +64,7 @@ public class Engine {
 	 * @return return <code>true</code> when unit can move to given location
 	 */
 	private boolean canMoveAt(final Unit unit, final Location location) {
-		return unit.isMoveable(location) && !model.getMap().getTerrainTypeAt(location).equals(TerrainType.HIGH_SEA);
+		return unit.isMoveable(location) && !getModel().getMap().getTerrainTypeAt(location).equals(TerrainType.HIGH_SEA);
 	}
 	
 	private boolean isPossibleToAttack(final Unit unit, final Location lastLocation){
@@ -137,21 +86,5 @@ public class Engine {
 				.findAny()
 				.get().store(unit);
 		}		
-	}
-
-	void showDebug(final Unit unit) {
-		final List<Location> locations = new ArrayList<>();
-		for (final Unit enemy : unit.getOwner().getEnemyUnits()) {
-			locations.addAll(unit.getPath(enemy.getLocation(), true).orElse(Collections.emptyList()));
-		}
-
-		/*
-		locations.addAll(unit.getAvailableLocations());
-		for (final Unit enemy : unit.getAttackableTargets()) {
-			locations.add(enemy.getLocation());
-		}
-		*/
-
-		model.requestDebug(locations);
 	}
 }
