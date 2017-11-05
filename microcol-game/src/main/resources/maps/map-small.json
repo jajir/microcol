@@ -325,7 +325,7 @@
   ],
   "colonies": [
     {
-      "name": "brunswick",
+      "name": "Brunswick",
       "ownerName": "Dutch",
       "location": {
         "x": 5,
@@ -436,6 +436,131 @@
             {
               "workerId": 51
             },
+            {},
+            {}
+          ]
+        },
+        {
+          "type": "FUR_TRADERS_HOUSE",
+          "slots": [
+            {},
+            {},
+            {}
+          ]
+        },
+        {
+          "type": "BASIC_WAREHOUSE",
+          "slots": []
+        }
+      ],
+      "colonyWarehouse": {
+        "COAT": 100,
+        "CIGARS": 33,
+        "CORN": 75
+      }
+    },
+        {
+      "name": "Calais",
+      "ownerName": "Player2",
+      "location": {
+        "x": 7,
+        "y": 4
+      },
+      "colonyFields": [
+        {
+          "direction": {
+            "x": 0,
+            "y": -1
+          }
+        },
+        {
+          "direction": {
+            "x": 1,
+            "y": -1
+          }
+        },
+        {
+          "direction": {
+            "x": 1,
+            "y": 0
+          }
+        },
+        {
+          "direction": {
+            "x": 1,
+            "y": 1
+          }
+        },
+        {
+          "direction": {
+            "x": 0,
+            "y": 1
+          }
+        },
+        {
+          "direction": {
+            "x": -1,
+            "y": 1
+          }
+        },
+        {
+          "direction": {
+            "x": -1,
+            "y": 0
+          }
+        },
+        {
+          "direction": {
+            "x": -1,
+            "y": -1
+          }
+        }
+      ],
+      "constructions": [
+        {
+          "type": "TOWN_HALL",
+          "slots": [
+            {},
+            {},
+            {}
+          ]
+        },
+        {
+          "type": "CARPENTERS_SHOP",
+          "slots": [
+            {},
+            {},
+            {}
+          ]
+        },
+        {
+          "type": "BLACKSMITHS_HOUSE",
+          "slots": [
+            {},
+            {},
+            {}
+          ]
+        },
+        {
+          "type": "TOBACCONISTS_HOUSE",
+          "slots": [
+            {},
+            {},
+            {}
+          ]
+        },
+        {
+          "type": "WEAVERS_HOUSE",
+          "slots": [
+            {},
+            {},
+            {}
+          ]
+        },
+        {
+          "type": "RUM_DISTILLERS_HOUSE",
+          "slots": [
+            {},
             {},
             {}
           ]

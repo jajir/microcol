@@ -242,4 +242,11 @@ public final class Player {
 	public Player getWhosKingThisPlayerIs() {
 		return whosKingThisPlayerIs;
 	}
+
+	/**
+	 * @return the extraData
+	 */
+	public Map<String, Object> getExtraData() {
+		return extraData;
+	}
 }

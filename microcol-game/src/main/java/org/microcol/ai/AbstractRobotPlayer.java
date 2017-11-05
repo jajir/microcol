@@ -34,7 +34,7 @@ public abstract class AbstractRobotPlayer {
 		modelAdapter = new ModelAdapter() {
 			@Override
 			public void turnStarted(TurnStartedEvent event) {
-				if (event.getPlayer().isComputer()) {
+				if (event.getPlayer().equals(player)) {
 					turn(event.getPlayer());
 				}
 			}
@@ -63,6 +63,7 @@ public abstract class AbstractRobotPlayer {
 		if (!running) {
 			return;
 		}
+		turnStarted();
 		player.getUnits().stream().filter(unit -> unit.isAtPlaceLocation()).forEach(unit -> move(unit));
 		player.endTurn();
 	}
@@ -72,6 +73,13 @@ public abstract class AbstractRobotPlayer {
 			return;
 		}
 		moveUnit(unit);
+	}
+	
+	/**
+	 * When AI need to know that turn started than should override this method. 
+	 */
+	protected void turnStarted(){
+		//do nothing
 	}
 
 	abstract void moveUnit(final Unit unit);

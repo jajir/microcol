@@ -20,41 +20,36 @@ public class KingPlayer extends AbstractRobotPlayer {
 
 	private ContinentTool continentTool = new ContinentTool();
 
-	/**
-	 * Royal Expedition Forces was send to colonies after declaring
-	 * independence.
-	 */
-	private boolean refWasSend = false;
-
 	public KingPlayer(final Model model, final Player player) {
 		super(model, player);
 		this.whosKingThisPlayerIs = Preconditions.checkNotNull(player.getWhosKingThisPlayerIs());
-		// TODO init refWasSend from extra data
 	}
 
 	@Override
+	protected void turnStarted() {
+		if (whosKingThisPlayerIs.isDeclaredIndependence() && !isRefWasSend()) {
+			createRoyalArmyForces();
+			setRefWasSend(true);
+		}
+	}
+	
+	@Override
 	void moveUnit(Unit unit) {
-		if (whosKingThisPlayerIs.isDeclaredIndependence()) {
-			if (refWasSend) {
-				createRoyalArmyForces();
-			}
-			final Continents continents = continentTool.findContinents(getModel(), whosKingThisPlayerIs);
-
-			if (unit.isAtPlaceLocation()) {
-				if (unit.getType().isShip()) {
-					if (unit.getCargo().isEmpty()) {
-						// random move & attack any ship in sight
-					} else {
-						if (isPossibleToDisembark(unit)) {
-							disembarkUnit(unit);
-						} else {
-							tryToReachSomeContinent(unit, continents.getContinentsToAttack());
-							// TODO zkusit vylodit jednotky.
-						}
-					}
+		final Continents continents = continentTool.findContinents(getModel(), whosKingThisPlayerIs);
+		if (unit.isAtPlaceLocation()) {
+			if (unit.getType().isShip()) {
+				if (unit.getCargo().isEmpty()) {
+					// random move & attack any ship in sight
 				} else {
-					seekAndDestroy(unit, continents);
+					if (isPossibleToDisembark(unit)) {
+						disembarkUnit(unit);
+					} else {
+						tryToReachSomeContinent(unit, continents.getContinentsToAttack());
+						// TODO zkusit vylodit jednotky.
+					}
 				}
+			} else {
+				seekAndDestroy(unit, continents);
 			}
 		}
 	}
@@ -62,7 +57,10 @@ public class KingPlayer extends AbstractRobotPlayer {
 	private void seekAndDestroy(final Unit unit, final Continents continents) {
 		final Optional<Location> oLoc = continents.getContinentWhereIsUnitPlaced(unit).getClosesEnemyCityToAttack(unit);
 		if (oLoc.isPresent()) {
-			unit.moveTo(Path.of(unit.getPath(oLoc.get(), true).get()));
+			Optional<List<Location>> oPath = unit.getPath(oLoc.get(), true);
+			if (oPath.isPresent() && !oPath.get().isEmpty()) {
+				unit.moveTo(Path.of(oPath.get()));
+			}
 		}
 		simpleUnitBehavior.tryToFight(unit);
 	}
@@ -115,5 +113,26 @@ public class KingPlayer extends AbstractRobotPlayer {
 		// XXX count it based on user's military strength multiplied by
 		// coefficient.
 		return 15;
+	}
+
+	/**
+	 * Royal Expedition Forces was send to colonies after declaring
+	 * independence.
+	 * 
+	 * @return the refWasSend
+	 */
+	public boolean isRefWasSend() {
+		return Boolean.valueOf((String) getPlayer().getExtraData().get("refWasSend"));
+	}
+
+	/**
+	 * Royal Expedition Forces was send to colonies after declaring
+	 * independence.
+	 * 
+	 * @param refWasSend
+	 *            the refWasSend to set
+	 */
+	public void setRefWasSend(boolean refWasSend) {
+		getPlayer().getExtraData().put("refWasSend", String.valueOf(refWasSend));
 	}
 }

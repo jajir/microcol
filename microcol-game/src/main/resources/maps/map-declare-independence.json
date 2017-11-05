@@ -652,6 +652,13 @@
       "declaredIndependence": true
     },
     {
+      "name": "Dutch's King",
+      "computer": true,
+      "gold": 1108,
+      "declaredIndependence": false,
+      "whosKingThisPlayerIs": "Dutch"
+    },
+    {
       "name": "Player2",
       "computer": true,
       "gold": 100,
