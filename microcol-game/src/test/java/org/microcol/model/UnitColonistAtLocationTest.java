@@ -77,7 +77,7 @@ public class UnitColonistAtLocationTest {
 			owner.getEnemyUnitsAt(loc); result = Lists.newArrayList();
 		}};
 		
-		assertTrue(unit.isMoveable(loc));
+		assertTrue(unit.isPossibleToMoveAt(loc));
 	}
 	
 	@Test
@@ -90,7 +90,7 @@ public class UnitColonistAtLocationTest {
 			owner.getEnemyUnitsAt(loc); result = Lists.newArrayList(unit);
 		}};
 		
-		assertFalse(unit.isMoveable(loc));
+		assertFalse(unit.isPossibleToMoveAt(loc));
 	}
 	
 	

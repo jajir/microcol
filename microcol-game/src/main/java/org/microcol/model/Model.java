@@ -133,7 +133,11 @@ public final class Model {
 		unitStorage.addUnit(out);
 		return out;
 	}
-	
+
+	public boolean isValid(final Path path) {
+		return map.isValid(path);
+	}
+
 	/**
 	 * Create new royal expedition force unit and place it to cargo ship.
 	 * 

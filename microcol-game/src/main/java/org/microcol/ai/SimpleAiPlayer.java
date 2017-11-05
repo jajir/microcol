@@ -64,7 +64,7 @@ public class SimpleAiPlayer extends AbstractRobotPlayer {
 	 * @return return <code>true</code> when unit can move to given location
 	 */
 	private boolean canMoveAt(final Unit unit, final Location location) {
-		return unit.isMoveable(location) && !getModel().getMap().getTerrainTypeAt(location).equals(TerrainType.HIGH_SEA);
+		return unit.isPossibleToMoveAt(location) && !getModel().getMap().getTerrainTypeAt(location).equals(TerrainType.HIGH_SEA);
 	}
 	
 	private boolean isPossibleToAttack(final Unit unit, final Location lastLocation){

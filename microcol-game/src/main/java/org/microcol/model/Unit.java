@@ -7,6 +7,7 @@ import java.util.Optional;
 import java.util.Random;
 import java.util.Set;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import org.microcol.model.store.ModelPo;
 import org.microcol.model.store.UnitPo;
@@ -98,8 +99,8 @@ public class Unit {
 
 	// Netestuje nedosažitelné lokace, pouze jestli je teoreticky možné na danou
 	// lokaci vstoupit
-	public boolean isMoveable(final Location location) {
-		return isMoveable(location, false);
+	public boolean isPossibleToMoveAt(final Location location) {
+		return isPossibleToMoveAt(location, false);
 	}
 
 	/**
@@ -114,7 +115,7 @@ public class Unit {
 	 * @return return <code>true</code> when unit could move to target location
 	 *         otherwise return <code>false</code>
 	 */
-	public boolean isMoveable(final Location location, final boolean ignoreEnemies) {
+	public boolean isPossibleToMoveAt(final Location location, final boolean ignoreEnemies) {
 		Preconditions.checkNotNull(location);
 
 		if (!model.getMap().isValid(location)) {
@@ -122,7 +123,7 @@ public class Unit {
 		}
 
 		if (!type.canMoveAtTerrain(model.getMap().getTerrainTypeAt(location))) {
-			if(isPossibleGoToPort(location)){
+			if(isPossibleToGoToPort(location)){
 				return true;
 			}
 			return false;
@@ -171,7 +172,7 @@ public class Unit {
 			for (Location location : openSet) {
 				for (Location neighbor : location.getNeighbors()) {
 					if (model.getMap().isValid(neighbor)) {
-						if (isMoveable(neighbor, true)) {
+						if (isPossibleToMoveAt(neighbor, true)) {
 							final List<Unit> eee = owner.getEnemyUnitsAt(location);
 							if (eee.isEmpty()) {
 								currentSet.add(neighbor);
@@ -211,7 +212,7 @@ public class Unit {
 		}
 	}
 
-	public boolean isPossibleGoToPort(final Location moveToLocation){
+	public boolean isPossibleToGoToPort(final Location moveToLocation){
 		if(model.getColoniesAt(moveToLocation, owner).isPresent()){
 			return true;
 		}
@@ -323,33 +324,27 @@ public class Unit {
 		Preconditions.checkNotNull(path);
 		Preconditions.checkArgument(path.getStart().isNeighbor(getLocation()),
 				"Path (%s) must be neighbor to current location (%s).", path.getStart(), getLocation());
-		Preconditions.checkArgument(model.getMap().isValid(path), "Path (%s) must be valid.", path);
+		Preconditions.checkArgument(model.isValid(path), "Path (%s) must be valid.", path);
 		Preconditions.checkArgument(!path.containsAny(owner.getEnemyUnitsAt().keySet()),
 				"There is enemy unit on path (%s).", path);
 
-		final Location start = getLocation();
-		final List<Location> locations = new ArrayList<>();
-		// TODO JKA Use streams
-		for (Location newLocation : path.getLocations()) {
-			if (availableMoves <= 0) {
-				// TODO JKA neumožnit zadat delší cestu, než je povolený počet
-				break;
-			}
-			if (!isMoveable(newLocation)) {
+		final List<Location> locations = path.getLocations().stream().limit(availableMoves).map(loc -> {
+			if (!isPossibleToMoveAt(loc)) {
 				throw new IllegalArgumentException(String.format("Path (%s) must contain only moveable terrain (%s).",
-						newLocation, model.getMap().getTerrainTypeAt(newLocation)));
+						loc, model.getMap().getTerrainTypeAt(loc)));
 			}
-			locations.add(newLocation);
-			((PlaceLocation) place).setLocation(newLocation);
-			availableMoves--;
-		}
+			return loc;
+		}).collect(Collectors.toList());
+		availableMoves -= locations.size();
+
 		if (!locations.isEmpty()) {
 			final Path reallyExecutedPath = Path.of(locations);
+			//TODO high sea could be tile before last, change it 
 			final TerrainType targetTerrain = model.getMap().getTerrainTypeAt(reallyExecutedPath.getTarget());
 			if (targetTerrain == TerrainType.HIGH_SEA) {
 				placeToHighSeas(true);
 			}
-			model.fireUnitMoved(this, start, reallyExecutedPath);
+			model.fireUnitMoved(this, getLocation(), reallyExecutedPath);
 		}
 	}
 

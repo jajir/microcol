@@ -335,7 +335,7 @@ public final class GamePanelPresenter implements Localized {
 			// TODO JJ following code is repeated multiple times
 			viewState.setSelectedTile(Optional.of(moveToLocation));
 			display.setCursorNormal();
-		} else if (movingUnit.isMoveable(moveToLocation)) {
+		} else if (movingUnit.isPossibleToMoveAt(moveToLocation)) {
 			// user will move
 			if (movingUnit.getPath(moveToLocation).isPresent()) {
 				final List<Location> path = movingUnit.getPath(moveToLocation).get();
@@ -345,7 +345,7 @@ public final class GamePanelPresenter implements Localized {
 				viewState.setSelectedTile(Optional.of(moveToLocation));
 				display.setCursorNormal();
 			}
-		} else if (movingUnit.isPossibleGoToPort(moveToLocation)) {
+		} else if (movingUnit.isPossibleToGoToPort(moveToLocation)) {
 			if (movingUnit.getPath(moveToLocation).isPresent()) {
 				final List<Location> path = movingUnit.getPath(moveToLocation).get();
 				if (path.size() > 0) {

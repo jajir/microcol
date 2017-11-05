@@ -32,7 +32,7 @@ class PathFinder {
 	List<Location> find() {
 		long startTime = System.currentTimeMillis();
 
-		if (!excludeDestination && !unit.isMoveable(destination)) {
+		if (!excludeDestination && !unit.isPossibleToMoveAt(destination)) {
 			logger.debug("Path finding finished in {} ms.", System.currentTimeMillis() - startTime);
 
 			return null;
@@ -55,7 +55,7 @@ class PathFinder {
 			closedSet.add(current.getLocation());
 			final List<Location> neighbors = current.getLocation().getNeighbors();
 			for (final Location neighbor : neighbors) {
-				if (!closedSet.contains(neighbor) && unit.isMoveable(neighbor)) {
+				if (!closedSet.contains(neighbor) && unit.isPossibleToMoveAt(neighbor)) {
 					final PathFindingNode oldNode = get(openList, neighbor);
 					final PathFindingNode newNode = new PathFindingNode(current, neighbor, neighbor.getDistance(destination));
 					if (oldNode == null) {

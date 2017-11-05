@@ -139,7 +139,7 @@ public class MoveModeSupport {
 		} else if (movingUnit.isPossibleToDisembarkAt(moveToLocation, true)) {
 			moveLocations = movingUnit.getPath(moveToLocation).orElse(Lists.newArrayList(moveToLocation));
 			moveMode = MoveMode.ANCHOR;
-		} else if (movingUnit.isMoveable(moveToLocation)) {
+		} else if (movingUnit.isPossibleToMoveAt(moveToLocation)) {
 			// user will move
 			moveLocations = movingUnit.getPath(moveToLocation).orElse(Collections.emptyList());
 			moveMode = MoveMode.MOVE;
