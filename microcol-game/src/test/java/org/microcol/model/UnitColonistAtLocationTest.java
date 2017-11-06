@@ -1,60 +1,24 @@
 package org.microcol.model;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-import java.util.function.Function;
-
-import static org.junit.Assert.assertFalse;
-
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 
 import com.google.common.collect.Lists;
 
 import mockit.Expectations;
-import mockit.Injectable;
-import mockit.Mocked;
-import mockit.Tested;
 
-public class UnitColonistAtLocationTest {
+public class UnitColonistAtLocationTest extends AbstractUnitTest {
 
-	@Tested
-	private Unit unit;
-	
-	@Injectable
-	private Function<Unit, Cargo> cargoProvider;
-	
-	@Injectable
-	private Model model;
-	
-	@Injectable(value="4")
-	private Integer id;
-	
-	@Injectable
-	private Function<Unit, Place> placeBuilder;
-	
-	@Injectable
-	private UnitType unitType;
-	
-	@Injectable
-	private Player owner;
-	
-	@Injectable(value="3")
-	private int availableMoves;
-	
-	@Mocked
-	private PlaceLocation placeMap;
-
-	@Mocked
-	private Cargo cargo;
-	
 	@Test
 	public void testInitialization() {
+		makeUnit(cargo, model, 23, placeLocation, unitType, owner, 1);
+		
 		new Expectations() {{
-			placeMap.getLocation(); result = Location.of(4, 3);
+			placeLocation.getLocation(); result = Location.of(4, 3);
 		}};
 		
 		assertNotNull(unit);
@@ -64,11 +28,14 @@ public class UnitColonistAtLocationTest {
 	
 	@Test(expected = IllegalStateException.class)
 	public void testPlaceAtMap() throws Exception {
+		makeUnit(cargo, model, 23, placeLocation, unitType, owner, 1);
 		unit.unload(Location.of(12, 12));
 	}
 	
 	@Test
 	public void testIsMovable() throws Exception {
+		makeUnit(cargo, model, 23, placeLocation, unitType, owner, 1);
+		
 		final Location loc = Location.of(10, 12);
 		new Expectations() {{
 			model.getMap().isValid(loc); result = true;
@@ -82,6 +49,8 @@ public class UnitColonistAtLocationTest {
 	
 	@Test
 	public void testIsMovable_thereAreEnemyUnit() throws Exception {
+		makeUnit(cargo, model, 23, placeLocation, unitType, owner, 1);
+		
 		final Location loc = Location.of(10, 12);
 		new Expectations() {{
 			model.getMap().isValid(loc); result = true;
@@ -91,23 +60,6 @@ public class UnitColonistAtLocationTest {
 		}};
 		
 		assertFalse(unit.isPossibleToMoveAt(loc));
-	}
-	
-	
-	@Before
-	public void setup() {
-		/*
-		 * Following expectations will be used for unit constructor
-		 */
-		new Expectations() {{
-			cargoProvider.apply((Unit)any); result = cargo;
-			placeBuilder.apply((Unit)any); result = placeMap;
-		}};
-	}
-	
-	@After
-	public void teardown() {
-		unit = null;
 	}
 	
 }
