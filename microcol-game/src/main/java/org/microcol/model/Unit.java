@@ -141,20 +141,6 @@ public class Unit {
 		return ImmutableList.copyOf(locations);
 	}
 
-	// TODO JKA VRACET LOCATION?
-	public List<Unit> getAttackableTargets() {
-		verifyThatUnitIsAtMap();
-
-		if (!type.canAttack()) {
-			return ImmutableList.of();
-		}
-
-		List<Unit> enemies = new ArrayList<>();
-		aaa(null, enemies);
-
-		return ImmutableList.copyOf(enemies);
-	}
-
 	private void aaa(final List<Location> availableLocations, final List<Unit> attackableTargets) {
 		model.checkGameRunning();
 		model.checkCurrentPlayer(owner);
@@ -336,7 +322,7 @@ public class Unit {
 			return loc;
 		}).collect(Collectors.toList());
 		availableMoves -= locations.size();
-
+		
 		if (!locations.isEmpty()) {
 			final Path reallyExecutedPath = Path.of(locations);
 			//TODO high sea could be tile before last, change it 
@@ -344,7 +330,9 @@ public class Unit {
 			if (targetTerrain == TerrainType.HIGH_SEA) {
 				placeToHighSeas(true);
 			}
-			model.fireUnitMoved(this, getLocation(), reallyExecutedPath);
+			final Location start = getLocation();
+			placeToLocation(reallyExecutedPath.getTarget());
+			model.fireUnitMoved(this, start, reallyExecutedPath);
 		}
 	}
 
