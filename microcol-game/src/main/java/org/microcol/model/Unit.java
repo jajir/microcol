@@ -327,12 +327,14 @@ public class Unit {
 			final Path reallyExecutedPath = Path.of(locations);
 			//TODO high sea could be tile before last, change it 
 			final TerrainType targetTerrain = model.getMap().getTerrainTypeAt(reallyExecutedPath.getTarget());
+			final Location start = getLocation();
 			if (targetTerrain == TerrainType.HIGH_SEA) {
 				placeToHighSeas(true);
+			} else {
+				placeToLocation(reallyExecutedPath.getTarget());
 			}
-			final Location start = getLocation();
-			placeToLocation(reallyExecutedPath.getTarget());
 			model.fireUnitMoved(this, start, reallyExecutedPath);
+			//if it's necessary fire event about captured city
 		}
 	}
 
