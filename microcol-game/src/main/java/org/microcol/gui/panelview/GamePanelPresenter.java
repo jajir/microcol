@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.microcol.gui.DialogColonyWasCaptured;
 import org.microcol.gui.DialogUnitCantFightWarning;
 import org.microcol.gui.GamePreferences;
 import org.microcol.gui.MicroColException;
@@ -17,6 +18,7 @@ import org.microcol.gui.event.KeyController;
 import org.microcol.gui.event.ShowGridController;
 import org.microcol.gui.event.StartMoveController;
 import org.microcol.gui.event.StartMoveEvent;
+import org.microcol.gui.event.model.ColonyWasCapturedController;
 import org.microcol.gui.event.model.DebugRequestController;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.event.model.MoveUnitController;
@@ -104,7 +106,8 @@ public final class GamePanelPresenter implements Localized {
 			final GamePreferences gamePreferences, final ShowGridController showGridController,
 			final CenterViewController viewController, final ExitGameController exitGameController,
 			final DebugRequestController debugRequestController, final ViewState viewState, final ViewUtil viewUtil,
-			final StartMoveController startMoveController, final ColonyDialog colonyDialog, final Text text) {
+			final StartMoveController startMoveController, final ColonyDialog colonyDialog, final Text text,
+			final ColonyWasCapturedController colonyWasCapturedController) {
 		this.focusedTileController = Preconditions.checkNotNull(focusedTileController);
 		this.gameController = Preconditions.checkNotNull(gameController);
 		this.gamePreferences = gamePreferences;
@@ -180,7 +183,9 @@ public final class GamePanelPresenter implements Localized {
 
 		viewController.addListener(event -> onCenterView());
 		exitGameController.addListener(event -> display.stopTimer());
-
+		colonyWasCapturedController.addListener(event->{
+			new DialogColonyWasCaptured(viewUtil, text, event);
+		});
 	}
 
 	private boolean isMouseEnabled() {

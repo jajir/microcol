@@ -21,7 +21,7 @@ public class Colony {
 	 */
 	private String name;
 
-	private final Player owner;
+	private Player owner;
 
 	private final Location location;
 
@@ -100,6 +100,12 @@ public class Colony {
 		out.setColonyWarehouse(colonyWarehouse.save());
 		out.setConstructions(saveCostructions());
 		return out;
+	}
+	
+	public void captureColony(final Player player, final Unit capturingUnit) {
+		//TODO add verification that colony could be captured and there are no military units
+		owner = player;
+		model.fireColonyWasCaptured(model, capturingUnit, this);
 	}
 	
 	 private List<ColonyFieldPo> saveColonyFields(){

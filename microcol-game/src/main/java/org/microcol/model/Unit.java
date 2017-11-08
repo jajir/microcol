@@ -330,11 +330,19 @@ public class Unit {
 			final Location start = getLocation();
 			if (targetTerrain == TerrainType.HIGH_SEA) {
 				placeToHighSeas(true);
+				model.fireUnitMoved(this, start, reallyExecutedPath);
 			} else {
 				placeToLocation(reallyExecutedPath.getTarget());
+				model.fireUnitMoved(this, start, reallyExecutedPath);
+				//if it's necessary fire event about captured city
+				final Optional<Colony> oColony = model.getColoniesAt(reallyExecutedPath.getTarget());
+				if (oColony.isPresent()){
+					final Colony col = oColony.get();
+					if (!col.getOwner().equals(owner)){
+						col.captureColony(owner, this);
+					}
+				}
 			}
-			model.fireUnitMoved(this, start, reallyExecutedPath);
-			//if it's necessary fire event about captured city
 		}
 	}
 

@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import org.microcol.model.ModelAdapter;
 import org.microcol.model.Player;
+import org.microcol.model.event.ColonyWasCapturedEvent;
 import org.microcol.model.event.DebugRequestedEvent;
 import org.microcol.model.event.GameFinishedEvent;
 import org.microcol.model.event.GameStartedEvent;
@@ -71,6 +72,13 @@ public class ModelListenerImpl extends ModelAdapter {
 	public void goldWasChanged(GoldWasChangedEvent event) {
 		if (event.getPlayer().isHuman()) {
 			modelEventManager.getGoldWasChangedController().fireEvent(event);
+		}
+	}
+	
+	@Override
+	public void colonyWasCaptured(ColonyWasCapturedEvent event) {
+		if (event.getCapturedColony().getOwner().isHuman()) {
+			modelEventManager.getColonyWasCapturedController().fireEvent(event);
 		}
 	}
 

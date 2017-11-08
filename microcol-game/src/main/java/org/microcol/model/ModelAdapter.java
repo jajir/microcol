@@ -1,5 +1,6 @@
 package org.microcol.model;
 
+import org.microcol.model.event.ColonyWasCapturedEvent;
 import org.microcol.model.event.DebugRequestedEvent;
 import org.microcol.model.event.GameFinishedEvent;
 import org.microcol.model.event.GameStartedEvent;
@@ -45,6 +46,12 @@ public class ModelAdapter implements ModelListener {
 	public void goldWasChanged(GoldWasChangedEvent event) {
 		// Do nothing.
 	}
+	
+	@Override
+	public void colonyWasCaptured(ColonyWasCapturedEvent event){
+		// Do nothing.		
+	}
+
 
 	@Override
 	public void gameFinished(final GameFinishedEvent event) {

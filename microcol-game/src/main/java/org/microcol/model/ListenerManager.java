@@ -3,6 +3,7 @@ package org.microcol.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.microcol.model.event.ColonyWasCapturedEvent;
 import org.microcol.model.event.DebugRequestedEvent;
 import org.microcol.model.event.GameFinishedEvent;
 import org.microcol.model.event.GameStartedEvent;
@@ -99,6 +100,14 @@ class ListenerManager {
 		logger.info("Gold amount changed: {}.", event);
 		
 		listeners.forEach(listener -> listener.goldWasChanged(event));
+	}
+	
+	void fireColonyWasCaptured(final Model model, final Unit capturingUnit, final Colony capturedColony) {
+		final ColonyWasCapturedEvent event = new ColonyWasCapturedEvent(model, capturingUnit, capturedColony);
+
+		logger.info("Colony was captured: {}.", event);
+		
+		listeners.forEach(listener -> listener.colonyWasCaptured(event));
 	}
 
 

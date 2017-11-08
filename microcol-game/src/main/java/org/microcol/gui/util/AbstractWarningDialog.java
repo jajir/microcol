@@ -38,4 +38,28 @@ public abstract class AbstractWarningDialog extends AbstractDialog {
 
 		getDialog().showAndWait();
 	}
+	
+	public AbstractWarningDialog(final ViewUtil viewUtil, final Text text, final String caption, final String message) {
+		super(viewUtil);
+		getDialog().setTitle(caption);
+
+		final VBox root = new VBox();
+		init(root);
+
+		final Label label = new Label(message);
+
+		/**
+		 * Buttons
+		 */
+		final Button buttonFight = new Button(text.get(KEY_DIALOG_OK));
+		buttonFight.setOnAction(e -> {
+			getDialog().close();
+		});
+
+		buttonFight.requestFocus();
+		root.getChildren().addAll(label, buttonFight);
+
+		getDialog().showAndWait();
+	}
+	
 }

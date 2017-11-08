@@ -1,5 +1,6 @@
 package org.microcol.model;
 
+import org.microcol.model.event.ColonyWasCapturedEvent;
 import org.microcol.model.event.DebugRequestedEvent;
 import org.microcol.model.event.GameFinishedEvent;
 import org.microcol.model.event.GameStartedEvent;
@@ -22,6 +23,8 @@ public interface ModelListener {
 	void unitAttacked(UnitAttackedEvent event);
 
 	void unitStored(UnitStoredEvent event);
+	
+	void colonyWasCaptured(ColonyWasCapturedEvent event);
 
 	void gameFinished(GameFinishedEvent event);
 

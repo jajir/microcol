@@ -340,6 +340,10 @@ public final class Model {
 	void fireGoldWasChanged(final Player player, final int oldValue, final int newValue) {
 		listenerManager.fireGoldWasChanged(this, player, oldValue, newValue);
 	}
+	
+	void fireColonyWasCaptured(final Model model, final Unit capturingUnit, final Colony capturedColony) {
+		listenerManager.fireColonyWasCaptured(model, capturingUnit, capturedColony);
+	}
 
 	void fireGameFinished() {
 		listenerManager.fireGameFinished(this);

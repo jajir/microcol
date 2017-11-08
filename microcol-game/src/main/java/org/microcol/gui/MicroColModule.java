@@ -21,6 +21,7 @@ import org.microcol.gui.event.StartMoveController;
 import org.microcol.gui.event.StatusBarMessageController;
 import org.microcol.gui.event.VolumeChangeController;
 import org.microcol.gui.event.VolumeChangedListenerPreferences;
+import org.microcol.gui.event.model.ColonyWasCapturedController;
 import org.microcol.gui.event.model.DebugRequestController;
 import org.microcol.gui.event.model.GameFinishedController;
 import org.microcol.gui.event.model.GameModelController;
@@ -84,6 +85,7 @@ public class MicroColModule extends AbstractModule {
 		bind(CenterViewController.class).in(Singleton.class);
 		bind(ExitGameController.class).in(Singleton.class);
 		bind(DebugRequestController.class).in(Singleton.class);
+		bind(ColonyWasCapturedController.class).in(Singleton.class);
 		bind(GameFinishedController.class).in(Singleton.class);
 		bind(MouseOverTileChangedController.class).in(Singleton.class);
 		bind(UnitAttackedEventController.class).in(Singleton.class);
