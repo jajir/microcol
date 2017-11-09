@@ -335,15 +335,25 @@ public class Unit {
 				placeToLocation(reallyExecutedPath.getTarget());
 				model.fireUnitMoved(this, start, reallyExecutedPath);
 				//if it's necessary fire event about captured city
-				final Optional<Colony> oColony = model.getColoniesAt(reallyExecutedPath.getTarget());
-				if (oColony.isPresent()){
-					final Colony col = oColony.get();
-					if (!col.getOwner().equals(owner)){
-						col.captureColony(owner, this);
-					}
-				}
+				tryToCaptureColony(reallyExecutedPath.getTarget());
 			}
 		}
+	}
+
+	/**
+	 * When unit moves or attack than unit could capture colony.
+	 * 
+	 * @param newLocation
+	 *            required new location
+	 */
+	private void tryToCaptureColony(final Location newLocation){
+		final Optional<Colony> oColony = model.getColoniesAt(newLocation);
+		if (oColony.isPresent()){
+			final Colony col = oColony.get();
+			if (!col.getOwner().equals(owner)){
+				col.captureColony(owner, this);
+			}
+		}		
 	}
 
 	public void attack(final Location location) {
@@ -368,9 +378,12 @@ public class Unit {
 		final Unit destroyed = Math.random() <= 0.6 ? defender : this;
 		model.destroyUnit(destroyed);
 		if (this != destroyed && owner.getEnemyUnitsAt(location).isEmpty()) {
-			((PlaceLocation) place).setLocation(location);
+			placeToLocation(location);
+			model.fireUnitAttacked(this, defender, destroyed);
+			tryToCaptureColony(location);
+		}else{
+			model.fireUnitAttacked(this, defender, destroyed);			
 		}
-		model.fireUnitAttacked(this, defender, destroyed);
 	}
 
 	public boolean isStorable() {

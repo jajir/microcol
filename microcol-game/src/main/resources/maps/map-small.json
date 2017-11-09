@@ -303,6 +303,17 @@
       "availableMoves": 0
     },
     {
+      "id": 73,
+      "type": "FRIGATE",
+      "ownerId": "Player2",
+      "placeMap": {
+        "location": {
+          "x": 7,
+          "y": 4
+        }
+      }
+    },
+    {
       "id": 71,
       "type": "FRIGATE",
       "ownerId": "Dutch",
