@@ -1,14 +1,18 @@
 package org.microcol.model;
 
+import java.util.Optional;
+
 import com.google.common.base.Preconditions;
 
 class GameManager {
-	
+
+	private final GameOverEvaluator gameOverEvaluator;
 	private final Model model;
 	private boolean started;
 	private Player currentPlayer;
 
 	GameManager(final Model model) {
+		gameOverEvaluator = new GameOverEvaluator();
 		this.model = Preconditions.checkNotNull(model);
 	}
 
@@ -66,13 +70,14 @@ class GameManager {
 			model.fireTurnStarted(currentPlayer);
 		} else {
 			model.getCalendar().endRound();
-			if (!model.getCalendar().isFinished()) {
+			final Optional<GameOverResult> oGameOverResult = gameOverEvaluator.evaluate(model); 
+			if (oGameOverResult.isPresent()) {
+				model.fireGameFinished(oGameOverResult.get());
+			} else {
 				currentPlayer = model.getPlayers().get(0);
 				model.fireRoundStarted();
 				currentPlayer.startTurn();
 				model.fireTurnStarted(currentPlayer);
-			} else {
-				model.fireGameFinished();
 			}
 		}
 	}

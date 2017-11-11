@@ -1,6 +1,5 @@
 package org.microcol.model;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
@@ -18,27 +17,34 @@ import com.google.common.collect.Lists;
 
 public class PlaceBuilderPo implements Function<Unit, Place> {
 
-	private final List<Builder> placeBuilders = Lists.newArrayList((unit, unitPo, modelPo, model) -> {
+	private final ChainOfCommandStrategy<PlaceBuilderContext, Place> placeBuilders = new ChainOfCommandStrategy<PlaceBuilderContext, Place>(Lists.newArrayList((context) -> {
 		/**
 		 * Map
 		 */
+		final UnitPo unitPo = context.getUnitPo();
+		final Unit unit = context.getUnit();
 		if (unitPo.getPlaceMap() != null) {
 			return new PlaceLocation(unit, unitPo.getPlaceMap().getLocation());
 		}
 		return null;
-	}, (unit, unitPo, modelPo, model) -> {
+	}, (context) -> {
 		/**
 		 * High seas
 		 */
+		final UnitPo unitPo = context.getUnitPo();
+		final Unit unit = context.getUnit();
 		if (unitPo.getPlaceHighSeas() != null) {
 			return new PlaceHighSea(unit, unitPo.getPlaceHighSeas().isTravelToEurope(),
 					unitPo.getPlaceHighSeas().getRemainigTurns());
 		}
 		return null;
-	}, (unit, unitPo, modelPo, model) -> {
+	}, (context) -> {
 		/**
 		 * Europe port
 		 */
+		final UnitPo unitPo = context.getUnitPo();
+		final Unit unit = context.getUnit();
+		final Model model = context.getModel();
 		if (unitPo.getPlaceEuropePort() != null) {
 			if (unitPo.getType().isShip()) {
 				return new PlaceEuropePort(unit, model.getEurope().getPort());
@@ -47,10 +53,14 @@ public class PlaceBuilderPo implements Function<Unit, Place> {
 			}
 		}
 		return null;
-	}, (unit, unitPo, modelPo, model) -> {
+	}, (context) -> {
 		/**
 		 * Colony field
 		 */
+		final UnitPo unitPo = context.getUnitPo();
+		final Unit unit = context.getUnit();
+		final Model model = context.getModel();
+		final ModelPo modelPo = context.getModelPo();
 		if (unitPo.getPlaceColonyField() != null) {
 			for (final ColonyPo colonyPo : modelPo.getColonies()) {
 				final PlaceColonyField out = tryToFindColonyField(colonyPo, unit, model);
@@ -62,10 +72,14 @@ public class PlaceBuilderPo implements Function<Unit, Place> {
 					String.format("It's not possible to define place unit (%s) to colony field", unitPo));
 		}
 		return null;
-	}, (unit, unitPo, modelPo, model) -> {
+	}, (context) -> {
 		/**
 		 * Colony construction
 		 */
+		final UnitPo unitPo = context.getUnitPo();
+		final Unit unit = context.getUnit();
+		final Model model = context.getModel();
+		final ModelPo modelPo = context.getModelPo();
 		if (unitPo.getPlaceConstructionSlot() != null) {
 			for (final ColonyPo colonyPo : modelPo.getColonies()) {
 				final PlaceConstructionSlot out = tryToFindConstructionSlot(colonyPo, unit, model);
@@ -77,10 +91,14 @@ public class PlaceBuilderPo implements Function<Unit, Place> {
 					String.format("It's not possible to define place unit (%s) to construction slot", unitPo));
 		}
 		return null;
-	}, (unit, unitPo, modelPo, model) -> {
+	}, (context) -> {
 		/**
 		 * Unit's cargo
 		 */
+		final UnitPo unitPo = context.getUnitPo();
+		final Unit unit = context.getUnit();
+		final Model model = context.getModel();
+		final ModelPo modelPo = context.getModelPo();
 		if (unitPo.getPlaceCargoSlot() != null) {
 			// find unit in which cargo should be unit placed
 			// place it to correct slot
@@ -99,7 +117,7 @@ public class PlaceBuilderPo implements Function<Unit, Place> {
 			return placeCargoSlot;
 		}
 		return null;
-	});
+	}));
 
 	private final UnitPo unitPo;
 	private final ModelPo modelPo;
@@ -128,21 +146,9 @@ public class PlaceBuilderPo implements Function<Unit, Place> {
 	 */
 	@Override
 	public Place apply(final Unit unit) {
-		for (final Builder placeBuilder : placeBuilders) {
-			final Place place = placeBuilder.tryBuild(unit, unitPo, modelPo, model);
-			if (place != null) {
-				return place;
-			}
-		}
-		throw new IllegalArgumentException(String.format("It's not possible to define place for unit (%s)", unitPo));
+		return placeBuilders.apply(new PlaceBuilderContext(unit, unitPo, modelPo, model));
 	}
-
-	interface Builder {
-
-		Place tryBuild(final Unit unit, final UnitPo unitPo, final ModelPo modelPo, final Model model);
-
-	}
-
+	
 	private PlaceConstructionSlot tryToFindConstructionSlot(final ColonyPo colonyPo, final Unit unit,
 			final Model model) {
 		for (final ConstructionPo constructionPo : colonyPo.getConstructions()) {
@@ -177,18 +183,6 @@ public class PlaceBuilderPo implements Function<Unit, Place> {
 			}
 		}
 		return null;
-	}
-
-	class BuilderLocation implements Builder {
-
-		@Override
-		public Place tryBuild(final Unit unit, final UnitPo unitPo, final ModelPo modelPo, final Model model) {
-			if (unitPo.getPlaceMap() != null) {
-				return new PlaceLocation(unit, unitPo.getPlaceMap().getLocation());
-			}
-			return null;
-		}
-
 	}
 
 }

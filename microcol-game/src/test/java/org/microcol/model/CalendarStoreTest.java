@@ -7,7 +7,7 @@ import org.microcol.model.store.CalendarPo;
 
 public class CalendarStoreTest {
 
-	private Calendar cal = new Calendar(100, 999, 138);
+	private Calendar cal = new Calendar(100, 999, 138, 0);
 	
 	
 	@Test

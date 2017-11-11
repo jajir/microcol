@@ -2,7 +2,8 @@
   "calendar": {
     "startYear": 1570,
     "endYear": 1800,
-    "currentYear": 1570
+    "currentYear": 1570,
+    "numberOfPlayedTurns": 33
   },
   "units": [
     {

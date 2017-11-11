@@ -345,8 +345,8 @@ public final class Model {
 		listenerManager.fireColonyWasCaptured(model, capturingUnit, capturedColony);
 	}
 
-	void fireGameFinished() {
-		listenerManager.fireGameFinished(this);
+	void fireGameFinished(final GameOverResult gameOverResult) {
+		listenerManager.fireGameFinished(this, gameOverResult);
 	}
 
 	// TODO JKA Temporary solution

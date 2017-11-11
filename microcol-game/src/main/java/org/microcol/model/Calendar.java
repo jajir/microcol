@@ -13,20 +13,26 @@ public final class Calendar {
 
 	private int currentYear;
 	
-	Calendar(final int startYear, final int endYear, final int currentYear) {
-		Preconditions.checkArgument(startYear < endYear, "Start year (%s) must be less than end year (%s).", startYear, endYear);
+	/**
+	 * How many game turns passed. It's different from year.
+	 */
+	private int numberOfPlayedTurns;
+
+	Calendar(final int startYear, final int endYear, final int currentYear, final int numberOfPlayedTurns) {
+		Preconditions.checkArgument(startYear < endYear, "Start year (%s) must be less than end year (%s).", startYear,
+				endYear);
 		this.startYear = startYear;
 		this.endYear = endYear;
 		this.currentYear = currentYear;
+		this.numberOfPlayedTurns = numberOfPlayedTurns;
 	}
-	
 
 	Calendar(final int startYear, final int endYear) {
-		this(startYear, endYear, startYear);
+		this(startYear, endYear, startYear, 0);
 	}
-	
+
 	static Calendar make(final CalendarPo cal) {
-		return new Calendar(cal.getStartYear(), cal.getEndYear(), cal.getCurrentYear());
+		return new Calendar(cal.getStartYear(), cal.getEndYear(), cal.getCurrentYear(), cal.getNumberOfPlayedTurns());
 	}
 
 	public int getStartYear() {
@@ -49,6 +55,7 @@ public final class Calendar {
 		Preconditions.checkState(!isFinished(), "End year (%s) already reached.", endYear);
 
 		currentYear++;
+		numberOfPlayedTurns++;
 	}
 	
 	public CalendarPo save(){
@@ -65,6 +72,16 @@ public final class Calendar {
 			.add("startYear", startYear)
 			.add("endYear", endYear)
 			.add("currentYear", currentYear)
+			.add("numberOfPlayedTurns", numberOfPlayedTurns)
 			.toString();
 	}
+
+
+	/**
+	 * @return the numberOfPlayedTurns
+	 */
+	public int getNumberOfPlayedTurns() {
+		return numberOfPlayedTurns;
+	}
+
 }

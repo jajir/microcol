@@ -5,6 +5,7 @@ public class CalendarPo {
 	private int startYear;
 	private int endYear;
 	private int currentYear;
+	private int numberOfPlayedTurns;
 
 	/**
 	 * @return the startYear
@@ -49,6 +50,20 @@ public class CalendarPo {
 	 */
 	public void setCurrentYear(int currentYear) {
 		this.currentYear = currentYear;
+	}
+
+	/**
+	 * @return the numberOfPlayedTurns
+	 */
+	public int getNumberOfPlayedTurns() {
+		return numberOfPlayedTurns;
+	}
+
+	/**
+	 * @param numberOfPlayedTurns the numberOfPlayedTurns to set
+	 */
+	public void setNumberOfPlayedTurns(int numberOfPlayedTurns) {
+		this.numberOfPlayedTurns = numberOfPlayedTurns;
 	}
 
 }

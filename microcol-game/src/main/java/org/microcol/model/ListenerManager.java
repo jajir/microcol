@@ -111,8 +111,8 @@ class ListenerManager {
 	}
 
 
-	void fireGameFinished(final Model model) {
-		final GameFinishedEvent event = new GameFinishedEvent(model);
+	void fireGameFinished(final Model model, final GameOverResult gameOverResult) {
+		final GameFinishedEvent event = new GameFinishedEvent(model, gameOverResult);
 
 		logger.info("Game finished: {}.", event);
 
