@@ -2,6 +2,9 @@ package org.microcol.gui;
 
 import org.microcol.gui.event.model.GameController;
 import org.microcol.gui.event.model.GameFinishedController;
+import org.microcol.gui.util.Text;
+import org.microcol.gui.util.ViewUtil;
+import org.microcol.model.event.GameFinishedEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,6 +19,10 @@ public class ApplicationController {
 
 	private final Logger logger = LoggerFactory.getLogger(ApplicationController.class);
 
+	private final ViewUtil viewUtil;
+
+	private final Text text;
+	
 	private final MainFramePresenter mainFramePresenter;
 
 	private final GameController gameController;
@@ -27,12 +34,14 @@ public class ApplicationController {
 	@Inject
 	public ApplicationController(final MainFramePresenter mainFramePresenter, final GameController gameController,
 			final GameFinishedController gameFinishedController, final MusicController musicController,
-			final GamePreferences gamePreferences) {
+			final GamePreferences gamePreferences, final ViewUtil viewUtil, final Text text) {
 		this.mainFramePresenter = Preconditions.checkNotNull(mainFramePresenter);
 		this.gameController = Preconditions.checkNotNull(gameController);
 		this.musicController = Preconditions.checkNotNull(musicController);
 		this.gamePreferences = Preconditions.checkNotNull(gamePreferences);
-		gameFinishedController.addListener(event -> gameFinished());
+		this.viewUtil = Preconditions.checkNotNull(viewUtil);
+		this.text = Preconditions.checkNotNull(text);
+		gameFinishedController.addListener(event -> gameFinished(event));
 	}
 
 	/**
@@ -41,15 +50,25 @@ public class ApplicationController {
 	public void startApplication() {
 		logger.debug("Application started.");
 		gameController.startNewDefaultGame();
-		mainFramePresenter.showPanel(MainFramePresenter.MAIN_GAME_PANEL);
+		mainFramePresenter.showPanel(MainFramePresenter.START_PANEL);
 		musicController.start(gamePreferences.getVolume());
+	}
+
+	/**
+	 * It's called only once per application life.
+	 */
+	public void startNewDefaultGame() {
+		logger.debug("Start new default game.");
+		gameController.startNewDefaultGame();
+		mainFramePresenter.showPanel(MainFramePresenter.MAIN_GAME_PANEL);
 	}
 
 	/**
 	 * It's called when game finished and start navigation should be shown.
 	 */
-	private void gameFinished() {
+	private void gameFinished(final GameFinishedEvent event) {
 		logger.debug("Game finished.");
+		new DialogGameOver(viewUtil, text, event);
 		mainFramePresenter.showPanel(MainFramePresenter.START_PANEL);
 	}
 

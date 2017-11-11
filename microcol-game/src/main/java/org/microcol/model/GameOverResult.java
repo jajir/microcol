@@ -9,13 +9,20 @@ import com.google.common.base.Preconditions;
  */
 public class GameOverResult {
 
+	public final static String REASON_TIME_IS_UP = "TIME_IS_UP";
+
+	public final static String REASON_NO_COLONIES = "NO_COLONIES";
+
 	private final Player winner;
+
+	private final Player looser;
 
 	private final String gameOverReason;
 
-	GameOverResult(final Player winner, final String gameOverReason) {
+	GameOverResult(final Player winner, final Player looser, final String gameOverReason) {
 		// winner could be null.
 		this.winner = winner;
+		this.looser = looser;
 		this.gameOverReason = Preconditions.checkNotNull(gameOverReason);
 	}
 
@@ -31,6 +38,13 @@ public class GameOverResult {
 	 */
 	public String getGameOverReason() {
 		return gameOverReason;
+	}
+
+	/**
+	 * @return the looser
+	 */
+	public Optional<Player> getLooser() {
+		return Optional.ofNullable(looser);
 	}
 
 }

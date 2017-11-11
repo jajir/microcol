@@ -1,5 +1,6 @@
 package org.microcol.gui;
 
+import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
 
 import javafx.scene.layout.VBox;
@@ -11,18 +12,27 @@ public class MainFrameView implements MainFramePresenter.Display {
 
 	private final VBox box;
 
-	@SuppressWarnings("unused")
+	private final MainPanelView mainPanelView;
+
+	private final StartPanelView startPanelView;
+
 	@Inject
 	public MainFrameView(final MainPanelView mainPanelView, final StartPanelView startPanelView) {
 		box = new VBox();
-		box.getChildren().add(mainPanelView.getBox());
+		this.mainPanelView = Preconditions.checkNotNull(mainPanelView);
+		this.startPanelView = Preconditions.checkNotNull(startPanelView);
 	}
 
 	@Override
 	public void showPanel(final String panelName) {
-		// FIXME JJ startPanelView switching should be there
-		// cardLayout.show(getContentPane(),
-		// Preconditions.checkNotNull(panelName));
+		box.getChildren().clear();
+		if (MainFramePresenter.MAIN_GAME_PANEL.equals(panelName)) {
+			box.getChildren().add(mainPanelView.getBox());
+		} else if (MainFramePresenter.START_PANEL.equals(panelName)) {
+			box.getChildren().add(startPanelView.getBox());
+		} else {
+			throw new IllegalArgumentException(String.format("Invalid panel name (%s)", panelName));
+		}
 	}
 
 	@Override

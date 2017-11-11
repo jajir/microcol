@@ -14,7 +14,11 @@ public class ButtonsBar extends HBox {
 	private final Button buttonOk;
 
 	public ButtonsBar(final Text text) {
-		buttonOk = new Button(text.get("dialog.ok"));
+		this(text.get(AbstractDialog.KEY_DIALOG_OK));
+	}
+
+	public ButtonsBar(final String buttonOkLabel) {
+		buttonOk = new Button(buttonOkLabel);
 		buttonOk.requestFocus();
 		buttonOk.setId("buttonOk");
 		final Pane spacer = new Pane();
@@ -22,7 +26,7 @@ public class ButtonsBar extends HBox {
 		setId("buttonPane");
 		getChildren().addAll(spacer, buttonOk);
 	}
-
+	
 	public Button getButtonOk() {
 		return buttonOk;
 	}

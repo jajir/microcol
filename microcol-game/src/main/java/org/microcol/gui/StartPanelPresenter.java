@@ -1,7 +1,6 @@
 package org.microcol.gui;
 
 import org.microcol.gui.event.ChangeLanguageController;
-import org.microcol.gui.event.model.GameModelController;
 
 import com.google.inject.Inject;
 
@@ -21,9 +20,10 @@ public class StartPanelPresenter {
 	}
 
 	@Inject
-	public StartPanelPresenter(final StartPanelPresenter.Display display, final GameModelController gameController,
+	public StartPanelPresenter(final StartPanelPresenter.Display display,
+			final ApplicationController applicationController,
 			final ChangeLanguageController changeLanguageController) {
-		display.getButtonStartNewGame().setOnAction(e -> gameController.startNewDefaultGame());
+		display.getButtonStartNewGame().setOnAction(e -> applicationController.startNewDefaultGame());
 		changeLanguageController.addListener(listener -> display.updateLanguage());
 	}
 

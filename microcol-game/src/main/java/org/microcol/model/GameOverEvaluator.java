@@ -9,10 +9,6 @@ import com.google.common.collect.Lists;
  */
 public class GameOverEvaluator {
 
-	public final static String REASON_TIME_IS_UP = "TIME_IS_UP";
-
-	public final static String REASON_NO_COLONIES = "NO_COLONIES";
-
 	private final ChainOfCommandOptionalStrategy<Model, GameOverResult> conditions = new ChainOfCommandOptionalStrategy<>(
 			Lists.newArrayList(this::verifyCalendar, this::verifyHumanPlayerLostAllColonies));
 
@@ -22,7 +18,7 @@ public class GameOverEvaluator {
 
 	private GameOverResult verifyCalendar(final Model model) {
 		if (model.getCalendar().isFinished()) {
-			return new GameOverResult(null, REASON_TIME_IS_UP);
+			return new GameOverResult(null, null, GameOverResult.REASON_TIME_IS_UP);
 		} else {
 			return null;
 		}
@@ -33,7 +29,7 @@ public class GameOverEvaluator {
 			for(final Player player: model.getPlayerStore().getPlayers()){
 				if(player.isHuman()){
 					if(model.getColonies(player).isEmpty()){
-						return new GameOverResult(player, REASON_NO_COLONIES);
+						return new GameOverResult(null, player, GameOverResult.REASON_NO_COLONIES);
 					}
 				}
 			}

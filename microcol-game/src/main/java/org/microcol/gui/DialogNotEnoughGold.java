@@ -8,6 +8,7 @@ public class DialogNotEnoughGold extends AbstractWarningDialog {
 
 	public DialogNotEnoughGold(final ViewUtil viewUtil, final Text text) {
 		super(viewUtil, text, "dialogNotEnoughGold.caption");
+		showAndWait();
 	}
 
 }

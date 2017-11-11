@@ -1,10 +1,29 @@
 package org.microcol.gui.util;
 
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 
 public abstract class AbstractWarningDialog extends AbstractDialog {
+
+	private final VBox context = new VBox();
+
+	public AbstractWarningDialog(final ViewUtil viewUtil, final String buttonOkLabel, final String dialogCaption) {
+		super(viewUtil);
+		getDialog().setTitle(dialogCaption);
+
+		/**
+		 * Buttons
+		 */
+		final ButtonsBar buttonsBar = new ButtonsBar(buttonOkLabel);
+		buttonsBar.getButtonOk().setOnAction(e -> {
+			getDialog().close();
+		});
+		buttonsBar.getButtonOk().requestFocus();
+
+		final VBox root = new VBox();
+		root.getChildren().addAll(context, buttonsBar);
+		init(root);
+	}
 
 	/**
 	 * Default constructor.
@@ -17,49 +36,24 @@ public abstract class AbstractWarningDialog extends AbstractDialog {
 	 *            required message key
 	 */
 	public AbstractWarningDialog(final ViewUtil viewUtil, final Text text, final String messageKey) {
-		super(viewUtil);
-		getDialog().setTitle(text.get(messageKey));
-
-		final VBox root = new VBox();
-		init(root);
-
-		final Label label = new Label(text.get(messageKey));
-
-		/**
-		 * Buttons
-		 */
-		final Button buttonFight = new Button(text.get(KEY_DIALOG_OK));
-		buttonFight.setOnAction(e -> {
-			getDialog().close();
-		});
-
-		buttonFight.requestFocus();
-		root.getChildren().addAll(label, buttonFight);
-
-		getDialog().showAndWait();
+		this(viewUtil, text.get(KEY_DIALOG_OK), text.get(messageKey));
+		context.getChildren().add(new Label(text.get(messageKey)));
 	}
-	
+
 	public AbstractWarningDialog(final ViewUtil viewUtil, final Text text, final String caption, final String message) {
-		super(viewUtil);
-		getDialog().setTitle(caption);
+		this(viewUtil, text.get(KEY_DIALOG_OK), caption);
+		context.getChildren().add(new Label(message));
+	}
 
-		final VBox root = new VBox();
-		init(root);
-
-		final Label label = new Label(message);
-
-		/**
-		 * Buttons
-		 */
-		final Button buttonFight = new Button(text.get(KEY_DIALOG_OK));
-		buttonFight.setOnAction(e -> {
-			getDialog().close();
-		});
-
-		buttonFight.requestFocus();
-		root.getChildren().addAll(label, buttonFight);
-
+	public void showAndWait() {
 		getDialog().showAndWait();
 	}
-	
+
+	/**
+	 * @return the context
+	 */
+	public VBox getContext() {
+		return context;
+	}
+
 }

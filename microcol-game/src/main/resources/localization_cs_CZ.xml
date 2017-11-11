@@ -124,6 +124,10 @@
 
 	<entry key="dialogIndependenceWasDeclared.caption">Vyhlásil jsi nezávislot. Nýní se připrav na útok královské armády.</entry>
 
+	<entry key="dialogGameOver.caption">Konec hry.</entry>
+	<entry key="dialogGameOver.allColoniesAreLost">Ztratil jsi všechny kolonie.</entry>
+	<entry key="dialogGameOver.timeIsUp">Nepodařilo se ti dosáhnout svobody před rokem 1800. V cestě za svobodou jsi selhal..</entry>
+
 	<entry key="FileChooser.cancelButtonText">Zrušit</entry>
 	<entry key="FileChooser.fileDateHeaderText">Datum úpravy</entry>
 	<entry key="FileChooser.openButtonText">Nahrát</entry>

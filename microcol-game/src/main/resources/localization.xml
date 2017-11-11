@@ -124,6 +124,10 @@
 	<entry key="dialogNotEnoughGold.caption">You don't have enough gold.</entry>
 	
 	<entry key="dialogIndependenceWasDeclared.caption">You declared independence. Now get ready for Royal army.</entry>
+
+	<entry key="dialogGameOver.caption">Game over.</entry>
+	<entry key="dialogGameOver.allColoniesAreLost">You lost all colonies.</entry>
+	<entry key="dialogGameOver.timeIsUp">You didn't reach freedom before year 1800. You failed to reach freedom.</entry>
 	
 	<entry key="FileChooser.cancelButtonText">Cancel</entry>
 	<entry key="FileChooser.fileDateHeaderText">Date modified</entry>

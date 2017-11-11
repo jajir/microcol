@@ -8,6 +8,7 @@ public class DialogIndependenceWasDeclared extends AbstractWarningDialog {
 
 	public DialogIndependenceWasDeclared(final ViewUtil viewUtil, final Text text) {
 		super(viewUtil, text, "dialogIndependenceWasDeclared.caption");
+		showAndWait();
 	}
 
 }
