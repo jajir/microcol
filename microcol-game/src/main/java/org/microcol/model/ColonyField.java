@@ -92,6 +92,10 @@ public class ColonyField {
 		return placeColonyField == null ? null : placeColonyField.getProducedGoodType();
 	}
 	
+	public int isPossibleToProduceOfGooodsType(final GoodType goodType){
+		return getTerrain().canProduceAmmount(goodType);		
+	}
+	
 	public int getProducedGoodsAmmount() {
 		Preconditions.checkNotNull(placeColonyField, "There in no unit placed at field");
 		final GoodType producing = placeColonyField.getProducedGoodType();

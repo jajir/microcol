@@ -18,6 +18,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 
 public final class Model {
+	private final ColonyNames colonyNames;
 	private final ListenerManager listenerManager;
 	private final Calendar calendar;
 	private final WorldMap map;
@@ -64,6 +65,8 @@ public final class Model {
 		this.map = Preconditions.checkNotNull(map);
 
 		this.playerStore = PlayerStore.makePlayers(this, modelPo);
+		
+		colonyNames = new ColonyNames(this);
 		
 		this.colonies = Lists.newArrayList();
 		modelPo.getColonies().forEach(colonyPo -> {
@@ -127,34 +130,11 @@ public final class Model {
 			final Construction c = Construction.build(constructionType);
 			constructions.add(c);
 		});
-		final Colony col = new Colony(randomColonyName(player), player,
-				location, constructions, new HashMap<String, Integer>());
+		final Colony col = new Colony(colonyNames.getNewColonyName(player), player, location, constructions,
+				new HashMap<String, Integer>());
 		col.setModel(this);
 		colonies.add(col);
-	}
-	
-	//TODO move colony name generating to separate class
-	final String lexicon = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-
-	final java.util.Random rand = new java.util.Random();
-
-	private boolean isColonyNameAvailable(final Player player, final String colonyName){
-		return !colonies.stream().filter(colony -> colony.getOwner().equals(player))
-				.filter(colony -> colonyName.equals(colony.getName())).findAny().isPresent();
-	}
-	
-	private String randomColonyName(final Player player) {
-		StringBuilder builder = new StringBuilder();
-		while (builder.toString().length() == 0) {
-			int length = rand.nextInt(5) + 5;
-			for (int i = 0; i < length; i++) {
-				builder.append(lexicon.charAt(rand.nextInt(lexicon.length())));
-			}
-			if (!isColonyNameAvailable(player, builder.toString())) {
-				builder = new StringBuilder();
-			}
-		}
-		return builder.toString();
+		col.placeUnitToProduceFood(unit);
 	}
 	
 	Unit createUnit(final Model model, final ModelPo modelPo, final UnitPo unitPo) {

@@ -1,6 +1,7 @@
 package org.microcol.model;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,6 +13,7 @@ import org.microcol.model.store.ConstructionPo;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
+import com.google.common.collect.Comparators;
 import com.google.common.collect.ImmutableList;
 
 public class Colony {
@@ -108,6 +110,14 @@ public class Colony {
 		model.fireColonyWasCaptured(model, capturingUnit, this);
 	}
 	
+	void placeUnitToProduceFood(final Unit unit) {
+		final ColonyField field = colonyFields.stream()
+				.max((f1, f2) -> f2.isPossibleToProduceOfGooodsType(GoodType.CORN)
+						- f1.isPossibleToProduceOfGooodsType(GoodType.CORN))
+				.orElseThrow(() -> new IllegalStateException("There is not place to produce food."));
+		unit.placeToColonyField(field, GoodType.CORN);
+	}
+	
 	 private List<ColonyFieldPo> saveColonyFields(){
 		 final List<ColonyFieldPo> out = new ArrayList<>();
 		 colonyFields.forEach(field -> out.add(field.save()));
@@ -174,10 +184,6 @@ public class Colony {
 
 	public String getName() {
 		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
 	}
 
 	public Location getLocation() {
