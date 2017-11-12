@@ -204,11 +204,15 @@ public class MainMenuView implements MainMenuPresenter.Display {
 			// Get the toolkit
 			MenuToolkit tk = MenuToolkit.toolkit();
 			// Create the default Application menu
-			Menu defaultApplicationMenu = tk.createDefaultApplicationMenu("MicroCol");
-			// Update the existing Application menu
-			tk.setApplicationMenu(defaultApplicationMenu);
-
-			menuItemAbout = defaultApplicationMenu.getItems().get(0);
+			if (tk == null) {
+				menuItemAbout = new MenuItem();
+				menuHelp.getItems().addAll(menuItemAbout);
+			} else {
+				Menu defaultApplicationMenu = tk.createDefaultApplicationMenu("MicroCol");
+				// Update the existing Application menu
+				tk.setApplicationMenu(defaultApplicationMenu);
+				menuItemAbout = defaultApplicationMenu.getItems().get(0);
+			}
 		} else {
 			menuItemAbout = new MenuItem();
 			menuHelp.getItems().addAll(menuItemAbout);
