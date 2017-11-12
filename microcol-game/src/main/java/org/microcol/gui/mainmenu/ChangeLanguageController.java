@@ -1,4 +1,6 @@
-package org.microcol.gui.event;
+package org.microcol.gui.mainmenu;
+
+import org.microcol.gui.util.OrderedEventController;
 
 /**
  * Allows to trigger change language event and manage event listeners.

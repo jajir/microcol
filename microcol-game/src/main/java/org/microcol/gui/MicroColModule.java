@@ -1,25 +1,18 @@
 package org.microcol.gui;
 
 import org.microcol.gui.colony.ColonyDialog;
-import org.microcol.gui.event.AboutGameEventController;
 import org.microcol.gui.event.AboutGameListenerImpl;
-import org.microcol.gui.event.AnimationSpeedChangeController;
 import org.microcol.gui.event.AnimationSpeedChangedListenerPreferences;
-import org.microcol.gui.event.CenterViewController;
-import org.microcol.gui.event.ChangeLanguageController;
+import org.microcol.gui.event.BuildColonyListener;
 import org.microcol.gui.event.ChangeLanguageListenerPreferences;
 import org.microcol.gui.event.ChangeLanguageListenerText;
-import org.microcol.gui.event.DeclareIndependenceController;
 import org.microcol.gui.event.DeclareIndependenceListener;
 import org.microcol.gui.event.EventInitializer;
-import org.microcol.gui.event.ExitGameController;
 import org.microcol.gui.event.FocusedTileController;
 import org.microcol.gui.event.KeyController;
-import org.microcol.gui.event.ShowGridController;
 import org.microcol.gui.event.ShowGridListenerPreferences;
 import org.microcol.gui.event.StartMoveController;
 import org.microcol.gui.event.StatusBarMessageController;
-import org.microcol.gui.event.VolumeChangeController;
 import org.microcol.gui.event.VolumeChangedListenerPreferences;
 import org.microcol.gui.event.model.ColonyWasCapturedController;
 import org.microcol.gui.event.model.DebugRequestController;
@@ -32,6 +25,18 @@ import org.microcol.gui.event.model.NewGameController;
 import org.microcol.gui.event.model.NextTurnController;
 import org.microcol.gui.event.model.TurnStartedController;
 import org.microcol.gui.event.model.UnitAttackedEventController;
+import org.microcol.gui.mainmenu.AboutGameEventController;
+import org.microcol.gui.mainmenu.AnimationSpeedChangeController;
+import org.microcol.gui.mainmenu.BuildColonyEventController;
+import org.microcol.gui.mainmenu.CenterViewController;
+import org.microcol.gui.mainmenu.ChangeLanguageController;
+import org.microcol.gui.mainmenu.DeclareIndependenceController;
+import org.microcol.gui.mainmenu.ExitGameController;
+import org.microcol.gui.mainmenu.MainMenuDevelopment;
+import org.microcol.gui.mainmenu.MainMenuPresenter;
+import org.microcol.gui.mainmenu.MainMenuView;
+import org.microcol.gui.mainmenu.ShowGridController;
+import org.microcol.gui.mainmenu.VolumeChangeController;
 import org.microcol.gui.panelview.GamePanelPresenter;
 import org.microcol.gui.panelview.GamePanelView;
 import org.microcol.gui.panelview.MouseOverTileChangedController;
@@ -91,6 +96,7 @@ public class MicroColModule extends AbstractModule {
 		bind(UnitAttackedEventController.class).in(Singleton.class);
 		bind(GoldWasChangedController.class).in(Singleton.class);
 		bind(DeclareIndependenceController.class).in(Singleton.class);
+		bind(BuildColonyEventController.class).in(Singleton.class);
 
 		bind(ModelEventManager.class).in(Singleton.class);
 
@@ -141,6 +147,7 @@ public class MicroColModule extends AbstractModule {
 		bind(AnimationSpeedChangedListenerPreferences.class).asEagerSingleton();
 		bind(ShowGridListenerPreferences.class).asEagerSingleton();
 		bind(DeclareIndependenceListener.class).asEagerSingleton();
+		bind(BuildColonyListener.class).in(Singleton.class);
 
 		bind(MusicPlayer.class).in(Singleton.class);
 		bind(MusicController.class).in(Singleton.class);

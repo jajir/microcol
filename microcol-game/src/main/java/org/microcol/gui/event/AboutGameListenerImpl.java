@@ -1,6 +1,8 @@
 package org.microcol.gui.event;
 
 import org.microcol.gui.AboutDialog;
+import org.microcol.gui.mainmenu.AboutGameEvent;
+import org.microcol.gui.mainmenu.AboutGameEventController;
 import org.microcol.gui.util.Text;
 import org.microcol.gui.util.ViewUtil;
 

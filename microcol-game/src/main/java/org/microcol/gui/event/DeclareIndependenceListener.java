@@ -1,5 +1,8 @@
 package org.microcol.gui.event;
 
+import org.microcol.gui.mainmenu.DeclareIndependenceController;
+import org.microcol.gui.mainmenu.DeclareIndependenceEvent;
+
 import com.google.inject.Inject;
 
 public class DeclareIndependenceListener implements Listener<DeclareIndependenceEvent> {

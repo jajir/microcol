@@ -1,4 +1,4 @@
-package org.microcol.gui.event;
+package org.microcol.gui.mainmenu;
 
 /**
  * Contains new volume value.

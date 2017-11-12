@@ -1,7 +1,7 @@
 package org.microcol.gui;
 
-import org.microcol.gui.event.VolumeChangeController;
-import org.microcol.gui.event.VolumeChangeEvent;
+import org.microcol.gui.mainmenu.VolumeChangeController;
+import org.microcol.gui.mainmenu.VolumeChangeEvent;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;

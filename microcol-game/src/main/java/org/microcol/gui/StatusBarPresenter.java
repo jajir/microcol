@@ -2,11 +2,11 @@ package org.microcol.gui;
 
 import java.util.Optional;
 
-import org.microcol.gui.event.ChangeLanguageController;
 import org.microcol.gui.event.StatusBarMessageController;
 import org.microcol.gui.event.StatusBarMessageEvent;
 import org.microcol.gui.event.model.GoldWasChangedController;
 import org.microcol.gui.event.model.NextTurnController;
+import org.microcol.gui.mainmenu.ChangeLanguageController;
 import org.microcol.gui.util.Localized;
 import org.microcol.model.Calendar;
 import org.microcol.model.Player;

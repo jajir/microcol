@@ -2,8 +2,9 @@ package org.microcol.gui;
 
 import java.awt.Rectangle;
 
-import org.microcol.gui.event.ExitGameController;
-import org.microcol.gui.event.ExitGameEvent;
+import org.microcol.gui.mainmenu.ExitGameController;
+import org.microcol.gui.mainmenu.ExitGameEvent;
+import org.microcol.gui.mainmenu.MainMenuView;
 import org.microcol.gui.util.Text;
 
 import com.google.common.base.Preconditions;

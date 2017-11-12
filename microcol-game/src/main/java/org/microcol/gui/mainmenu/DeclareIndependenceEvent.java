@@ -1,4 +1,4 @@
-package org.microcol.gui.event;
+package org.microcol.gui.mainmenu;
 
 import org.microcol.model.Model;
 import org.microcol.model.Player;

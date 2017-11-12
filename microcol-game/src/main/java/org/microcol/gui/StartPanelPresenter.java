@@ -1,6 +1,6 @@
 package org.microcol.gui;
 
-import org.microcol.gui.event.ChangeLanguageController;
+import org.microcol.gui.mainmenu.ChangeLanguageController;
 
 import com.google.inject.Inject;
 

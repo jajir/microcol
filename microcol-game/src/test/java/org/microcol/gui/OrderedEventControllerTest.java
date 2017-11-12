@@ -6,7 +6,7 @@ import java.util.List;
 
 import org.junit.Test;
 import org.microcol.gui.event.Listener;
-import org.microcol.gui.event.OrderedEventController;
+import org.microcol.gui.util.OrderedEventController;
 
 public class OrderedEventControllerTest {
 

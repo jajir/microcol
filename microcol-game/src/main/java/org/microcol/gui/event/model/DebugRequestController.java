@@ -1,6 +1,6 @@
 package org.microcol.gui.event.model;
 
-import org.microcol.gui.event.OrderedEventController;
+import org.microcol.gui.util.OrderedEventController;
 import org.microcol.model.event.DebugRequestedEvent;
 
 /**

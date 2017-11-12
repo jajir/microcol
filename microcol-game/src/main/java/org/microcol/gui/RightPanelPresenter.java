@@ -1,7 +1,5 @@
 package org.microcol.gui;
 
-import org.microcol.gui.event.ChangeLanguageController;
-import org.microcol.gui.event.ChangeLanguageEvent;
 import org.microcol.gui.event.FocusedTileController;
 import org.microcol.gui.event.FocusedTileEvent;
 import org.microcol.gui.event.KeyController;
@@ -9,6 +7,8 @@ import org.microcol.gui.event.StatusBarMessageController;
 import org.microcol.gui.event.StatusBarMessageEvent;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.event.model.TurnStartedController;
+import org.microcol.gui.mainmenu.ChangeLanguageController;
+import org.microcol.gui.mainmenu.ChangeLanguageEvent;
 import org.microcol.gui.util.Localized;
 import org.microcol.model.Location;
 import org.microcol.model.Player;

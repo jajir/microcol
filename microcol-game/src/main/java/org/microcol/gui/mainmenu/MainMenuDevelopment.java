@@ -1,4 +1,4 @@
-package org.microcol.gui;
+package org.microcol.gui.mainmenu;
 
 import org.microcol.gui.event.model.GameModelController;
 import org.slf4j.Logger;

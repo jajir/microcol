@@ -1,5 +1,7 @@
 package org.microcol.gui.event;
 
+import org.microcol.gui.mainmenu.ChangeLanguageController;
+import org.microcol.gui.mainmenu.ChangeLanguageEvent;
 import org.microcol.gui.util.Text;
 
 import com.google.common.base.Preconditions;

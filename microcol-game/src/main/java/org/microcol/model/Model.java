@@ -112,11 +112,16 @@ public final class Model {
 		return model;
 	}
 	
-	public void buildColony(final Player player, final Location location, final Unit unit){
+	public void buildColony(final Player player, final Unit unit){
 		//TODO move method to colony store
-		//TODO unit should be required, should be colonist based unit and placed to produce food
+		//TODO place founding unit to produce food 
 		Preconditions.checkNotNull(player);
-		Preconditions.checkNotNull(location);
+		Preconditions.checkNotNull(unit);
+		Preconditions.checkArgument(unit.isAtPlaceLocation(), "Unit (%s) have to be on map", unit);
+		Preconditions.checkArgument(!unit.getType().isShip(), "Ship Unit (%s) can't found city", unit);
+		Preconditions.checkArgument(!unit.getType().canHoldCargo(), "Unit (%s) that transport cargo, can't found city",
+				unit);
+		final Location location = unit.getLocation();
 		final List<Construction> constructions = new ArrayList<>();
 		ConstructionType.NEW_COLONY_CONSTRUCTIONS.forEach(constructionType -> {
 			final Construction c = Construction.build(constructionType);

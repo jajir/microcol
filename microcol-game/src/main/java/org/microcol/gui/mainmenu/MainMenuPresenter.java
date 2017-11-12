@@ -1,28 +1,20 @@
-package org.microcol.gui;
+package org.microcol.gui.mainmenu;
 
+import org.microcol.gui.DialogIndependenceWasDeclared;
+import org.microcol.gui.GamePreferences;
+import org.microcol.gui.ImageProvider;
+import org.microcol.gui.LocalizationHelper;
+import org.microcol.gui.PersistingDialog;
+import org.microcol.gui.PreferencesAnimationSpeed;
+import org.microcol.gui.PreferencesVolume;
 import org.microcol.gui.colonizopedia.Colonizopedia;
 import org.microcol.gui.europe.EuropeDialog;
-import org.microcol.gui.event.AboutGameEvent;
-import org.microcol.gui.event.AboutGameEventController;
-import org.microcol.gui.event.AnimationSpeedChangeController;
-import org.microcol.gui.event.CenterViewController;
-import org.microcol.gui.event.CenterViewEvent;
-import org.microcol.gui.event.ChangeLanguageController;
-import org.microcol.gui.event.ChangeLanguageEvent;
-import org.microcol.gui.event.DeclareIndependenceController;
-import org.microcol.gui.event.DeclareIndependenceEvent;
-import org.microcol.gui.event.ExitGameController;
-import org.microcol.gui.event.ExitGameEvent;
 import org.microcol.gui.event.FocusedTileController;
 import org.microcol.gui.event.FocusedTileEvent;
-import org.microcol.gui.event.ShowGridController;
-import org.microcol.gui.event.ShowGridEvent;
 import org.microcol.gui.event.StartMoveController;
 import org.microcol.gui.event.StartMoveEvent;
-import org.microcol.gui.event.VolumeChangeController;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.event.model.TurnStartedController;
-import org.microcol.gui.panelview.ViewState;
 import org.microcol.gui.util.Text;
 import org.microcol.gui.util.ViewUtil;
 import org.microcol.model.event.TurnStartedEvent;
@@ -35,9 +27,6 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.RadioMenuItem;
 
 public class MainMenuPresenter {
-
-	// TODO move main menu and it's events objects and controllers to separate
-	// package
 
 	public interface Display {
 
@@ -84,48 +73,56 @@ public class MainMenuPresenter {
 
 	@Inject
 	public MainMenuPresenter(final MainMenuPresenter.Display display,
-			final AboutGameEventController gameEventController, final GamePreferences gamePreferences,
-			final ChangeLanguageController changeLanguageController, final Text text, final ViewUtil viewUtil,
-			final VolumeChangeController volumeChangeController,
+			/**
+			 * Following parameters are controllers reacting on menu events 
+			 */
+			final AboutGameEventController gameEventController,
 			final AnimationSpeedChangeController animationSpeedChangeController,
-			final ShowGridController showGridController, final FocusedTileController focusedTileController,
-			final CenterViewController centerViewController, final TurnStartedController turnStartedController,
-			final ExitGameController exitGameController, final GameModelController gameController,
-			final PersistingDialog persistingDialog, final ImageProvider imageProvider,
-			final LocalizationHelper localizationHelper, final StartMoveController startMoveController,
-			final DeclareIndependenceController declareIndependenceController, final ViewState viewState) {
+			final BuildColonyEventController buildColonyEventController,
+			final CenterViewController centerViewController,
+			final ChangeLanguageController changeLanguageController,
+			final DeclareIndependenceController declareIndependenceController,
+			final ExitGameController exitGameController,
+			final ShowGridController showGridController,
+			final VolumeChangeController volumeChangeController,
+			
+			/**
+			 * Menu items react on following events
+			 */
+			final FocusedTileController focusedTileController,
+			final GameModelController gameModelController,
+			final StartMoveController startMoveController,
+			final TurnStartedController turnStartedController,
+			
+			/**
+			 * Other events consumers and helpers
+			 */
+			final GamePreferences gamePreferences,
+			final PersistingDialog persistingDialog,
+			final ImageProvider imageProvider,
+			final LocalizationHelper localizationHelper,
+			final Text text, final ViewUtil viewUtil
+			) {
 		this.display = Preconditions.checkNotNull(display);
-		display.getMenuItemNewGame().setOnAction(actionEvent -> {
-			gameController.startNewDefaultGame();
-		});
+		display.getMenuItemNewGame().setOnAction(actionEvent -> gameModelController.startNewDefaultGame());
 		display.getMenuItemSameGame().setOnAction(event -> persistingDialog.saveModel());
 		display.getMenuItemLoadGame().setOnAction(event -> persistingDialog.loadModel());
-		display.getMenuItemQuitGame().setOnAction(actionEvent -> {
-			exitGameController.fireEvent(new ExitGameEvent());
-		});
-		display.getMenuItemAbout().setOnAction(actionEvent -> {
-			gameEventController.fireEvent(new AboutGameEvent());
-		});
+		display.getMenuItemQuitGame().setOnAction(actionEvent -> exitGameController.fireEvent(new ExitGameEvent()));
+		display.getMenuItemAbout().setOnAction(actionEvent -> gameEventController.fireEvent(new AboutGameEvent()));
 		display.getMenuItemColonizopedia().setOnAction(event -> new Colonizopedia(text, viewUtil));
-		display.getRbMenuItemlanguageCz().setOnAction(actionEvent -> {
-			changeLanguageController.fireEvent(new ChangeLanguageEvent(Text.Language.cz, gameController.getModel()));
-		});
-		display.getRbMenuItemlanguageEn().setOnAction(actionEvent -> {
-			changeLanguageController.fireEvent(new ChangeLanguageEvent(Text.Language.en, gameController.getModel()));
-		});
+		display.getRbMenuItemlanguageCz().setOnAction(actionEvent -> changeLanguageController
+				.fireEvent(new ChangeLanguageEvent(Text.Language.cz, gameModelController.getModel())));
+		display.getRbMenuItemlanguageEn().setOnAction(actionEvent -> changeLanguageController
+				.fireEvent(new ChangeLanguageEvent(Text.Language.en, gameModelController.getModel())));
 		display.getMenuItemVolume().setOnAction(actionEvent -> new PreferencesVolume(viewUtil, text,
 				volumeChangeController, gamePreferences.getVolume()));
 		display.getMenuItemAnimationSpeed().setOnAction(event -> new PreferencesAnimationSpeed(text, viewUtil,
 				animationSpeedChangeController, gamePreferences.getAnimationSpeed()));
 		display.getMenuItemEurope().setOnAction(
-				event -> new EuropeDialog(viewUtil, text, imageProvider, gameController, localizationHelper).show());
+				event -> new EuropeDialog(viewUtil, text, imageProvider, gameModelController, localizationHelper).show());
 		display.getMenuItemShowGrid().setOnAction(ectionEvent -> showGridController
 				.fireEvent(new ShowGridEvent(display.getMenuItemShowGrid().isSelected())));
-		display.getMenuItemBuildColony().setOnAction(event -> {
-			//TODO move this functionality to separate event listener
-			gameController.getModel().buildColony(gameController.getModel().getCurrentPlayer(),
-					viewState.getSelectedTile().get(), null);
-		});
+		display.getMenuItemBuildColony().setOnAction(event -> buildColonyEventController.fireEvent());
 		display.getMenuItemMove().setOnAction(ectionEvent -> {
 			startMoveController.fireEvent(new StartMoveEvent());
 			display.getMenuItemMove().setDisable(true);
@@ -133,9 +130,10 @@ public class MainMenuPresenter {
 		display.getMenuItemDeclareIndependence().setOnAction(event -> {
 			new DialogIndependenceWasDeclared(viewUtil, text);
 			declareIndependenceController.fireEvent(
-					new DeclareIndependenceEvent(gameController.getModel(), gameController.getCurrentPlayer()));
+					new DeclareIndependenceEvent(gameModelController.getModel(), gameModelController.getCurrentPlayer()));
 		});
 		display.getMenuItemCenterView().setOnAction(event -> centerViewController.fireEvent(new CenterViewEvent()));
+		
 		changeLanguageController.addListener(event -> {
 			display.updateLanguage();
 		});

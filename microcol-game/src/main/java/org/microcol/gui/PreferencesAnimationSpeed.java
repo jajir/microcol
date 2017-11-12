@@ -1,7 +1,7 @@
 package org.microcol.gui;
 
-import org.microcol.gui.event.AnimationSpeedChangeController;
-import org.microcol.gui.event.AnimationSpeedChangeEvent;
+import org.microcol.gui.mainmenu.AnimationSpeedChangeController;
+import org.microcol.gui.mainmenu.AnimationSpeedChangeEvent;
 import org.microcol.gui.util.AbstractDialog;
 import org.microcol.gui.util.Text;
 import org.microcol.gui.util.ViewUtil;

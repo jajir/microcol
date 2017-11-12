@@ -1,6 +1,6 @@
 package org.microcol.gui.event.model;
 
-import org.microcol.gui.event.AbstractEventController;
+import org.microcol.gui.util.AbstractEventController;
 import org.microcol.model.event.ColonyWasCapturedEvent;
 
 /**

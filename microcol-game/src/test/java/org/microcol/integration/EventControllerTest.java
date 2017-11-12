@@ -7,8 +7,8 @@ import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.microcol.gui.event.AbstractEventController;
 import org.microcol.gui.event.Listener;
+import org.microcol.gui.util.AbstractEventController;
 
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;

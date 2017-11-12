@@ -1,8 +1,9 @@
-package org.microcol.gui.event;
+package org.microcol.gui.util;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import org.microcol.gui.event.Listener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

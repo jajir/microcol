@@ -1,5 +1,6 @@
-package org.microcol.gui;
+package org.microcol.gui.mainmenu;
 
+import org.microcol.gui.GamePreferences;
 import org.microcol.gui.event.model.GameController;
 import org.microcol.gui.util.PersistentSrevice;
 import org.microcol.gui.util.Text;

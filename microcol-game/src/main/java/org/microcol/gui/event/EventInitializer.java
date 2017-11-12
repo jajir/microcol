@@ -1,6 +1,7 @@
 package org.microcol.gui.event;
 
 import org.microcol.gui.MusicController;
+import org.microcol.gui.mainmenu.ExitGameController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
