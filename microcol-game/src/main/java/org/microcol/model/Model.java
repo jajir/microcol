@@ -1,6 +1,7 @@
 package org.microcol.model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -109,6 +110,46 @@ public final class Model {
 		});
 		
 		return model;
+	}
+	
+	public void buildColony(final Player player, final Location location, final Unit unit){
+		//TODO move method to colony store
+		//TODO unit should be required, should be colonist based unit and placed to produce food
+		Preconditions.checkNotNull(player);
+		Preconditions.checkNotNull(location);
+		final List<Construction> constructions = new ArrayList<>();
+		ConstructionType.NEW_COLONY_CONSTRUCTIONS.forEach(constructionType -> {
+			final Construction c = Construction.build(constructionType);
+			constructions.add(c);
+		});
+		final Colony col = new Colony(randomColonyName(player), player,
+				location, constructions, new HashMap<String, Integer>());
+		col.setModel(this);
+		colonies.add(col);
+	}
+	
+	//TODO move colony name generating to separate class
+	final String lexicon = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+	final java.util.Random rand = new java.util.Random();
+
+	private boolean isColonyNameAvailable(final Player player, final String colonyName){
+		return !colonies.stream().filter(colony -> colony.getOwner().equals(player))
+				.filter(colony -> colonyName.equals(colony.getName())).findAny().isPresent();
+	}
+	
+	private String randomColonyName(final Player player) {
+		StringBuilder builder = new StringBuilder();
+		while (builder.toString().length() == 0) {
+			int length = rand.nextInt(5) + 5;
+			for (int i = 0; i < length; i++) {
+				builder.append(lexicon.charAt(rand.nextInt(lexicon.length())));
+			}
+			if (!isColonyNameAvailable(player, builder.toString())) {
+				builder = new StringBuilder();
+			}
+		}
+		return builder.toString();
 	}
 	
 	Unit createUnit(final Model model, final ModelPo modelPo, final UnitPo unitPo) {

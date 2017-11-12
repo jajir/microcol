@@ -224,6 +224,16 @@ public class UnitType {
 	public boolean canHoldCargo() {
 		return cargoCapacity > 0;
 	}
+
+	/**
+	 * Can unit type build new colony.
+	 *
+	 * @return Return <code>true</code> when unit type could build colony. When
+	 *         return <code>false</code> unit type can't build colony.
+	 */
+	public boolean canBuildColony() {
+		return !isShip() && !canHoldCargo();
+	}
 	
 	/**
 	 * How much more of given goods type could unit produce.

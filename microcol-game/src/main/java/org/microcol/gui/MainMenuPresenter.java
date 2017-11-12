@@ -22,6 +22,7 @@ import org.microcol.gui.event.StartMoveEvent;
 import org.microcol.gui.event.VolumeChangeController;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.event.model.TurnStartedController;
+import org.microcol.gui.panelview.ViewState;
 import org.microcol.gui.util.Text;
 import org.microcol.gui.util.ViewUtil;
 import org.microcol.model.event.TurnStartedEvent;
@@ -35,10 +36,13 @@ import javafx.scene.control.RadioMenuItem;
 
 public class MainMenuPresenter {
 
+	// TODO move main menu and it's events objects and controllers to separate
+	// package
+
 	public interface Display {
 
 		MenuItem getMenuItemNewGame();
-		
+
 		MenuItem getMenuItemDeclareIndependence();
 
 		MenuItem getMenuItemLoadGame();
@@ -62,6 +66,8 @@ public class MainMenuPresenter {
 		CheckMenuItem getMenuItemShowGrid();
 
 		MenuItem getMenuItemMove();
+
+		MenuItem getMenuItemBuildColony();
 
 		MenuItem getMenuItemCenterView();
 
@@ -87,7 +93,7 @@ public class MainMenuPresenter {
 			final ExitGameController exitGameController, final GameModelController gameController,
 			final PersistingDialog persistingDialog, final ImageProvider imageProvider,
 			final LocalizationHelper localizationHelper, final StartMoveController startMoveController,
-			final DeclareIndependenceController declareIndependenceController) {
+			final DeclareIndependenceController declareIndependenceController, final ViewState viewState) {
 		this.display = Preconditions.checkNotNull(display);
 		display.getMenuItemNewGame().setOnAction(actionEvent -> {
 			gameController.startNewDefaultGame();
@@ -100,8 +106,7 @@ public class MainMenuPresenter {
 		display.getMenuItemAbout().setOnAction(actionEvent -> {
 			gameEventController.fireEvent(new AboutGameEvent());
 		});
-		display.getMenuItemColonizopedia()
-				.setOnAction(event -> new Colonizopedia(text, viewUtil));
+		display.getMenuItemColonizopedia().setOnAction(event -> new Colonizopedia(text, viewUtil));
 		display.getRbMenuItemlanguageCz().setOnAction(actionEvent -> {
 			changeLanguageController.fireEvent(new ChangeLanguageEvent(Text.Language.cz, gameController.getModel()));
 		});
@@ -116,6 +121,11 @@ public class MainMenuPresenter {
 				event -> new EuropeDialog(viewUtil, text, imageProvider, gameController, localizationHelper).show());
 		display.getMenuItemShowGrid().setOnAction(ectionEvent -> showGridController
 				.fireEvent(new ShowGridEvent(display.getMenuItemShowGrid().isSelected())));
+		display.getMenuItemBuildColony().setOnAction(event -> {
+			//TODO move this functionality to separate event listener
+			gameController.getModel().buildColony(gameController.getModel().getCurrentPlayer(),
+					viewState.getSelectedTile().get(), null);
+		});
 		display.getMenuItemMove().setOnAction(ectionEvent -> {
 			startMoveController.fireEvent(new StartMoveEvent());
 			display.getMenuItemMove().setDisable(true);
@@ -132,7 +142,7 @@ public class MainMenuPresenter {
 		focusedTileController.addListener(event -> onFocusedTileEvent(event));
 		turnStartedController.addListener(event -> onTurnStartedEvent(event));
 		declareIndependenceController.addListener(event -> display.getMenuItemDeclareIndependence().setDisable(true));
-		
+
 		exitGameController.addListener(evnt -> {
 			display.getMenuItemEurope().setDisable(true);
 		});
@@ -150,7 +160,9 @@ public class MainMenuPresenter {
 		if (event.isTileContainsMovebleUnit()) {
 			display.getMenuItemMove().setDisable(false);
 			isFocusedMoveableUnit = true;
+			display.getMenuItemBuildColony().setDisable(!event.isPossibleToBuildColony());
 		} else {
+			display.getMenuItemBuildColony().setDisable(true);
 			display.getMenuItemMove().setDisable(true);
 			isFocusedMoveableUnit = false;
 		}
@@ -172,5 +184,5 @@ public class MainMenuPresenter {
 			display.getMenuItemEurope().setDisable(true);
 		}
 	}
-	
+
 }

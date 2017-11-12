@@ -11,6 +11,8 @@ import com.google.inject.Inject;
  * Control and preserve state of selected tile, mouse over tile and mode.
  */
 public class ViewState {
+	
+	//TODO add unit which is selected, it will be used for particular action like plow field.
 
 	private final MouseOverTileChangedController mouseOverTileChangedController;
 
