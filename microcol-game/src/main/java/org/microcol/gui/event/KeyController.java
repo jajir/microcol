@@ -3,7 +3,8 @@ package org.microcol.gui.event;
 import javafx.scene.input.KeyEvent;
 
 /**
- * Allow to register key listener and fire key events.
+ * Allows to react on key events from world canvas and pass. Some key events
+ * could come from other sources.
  */
 public class KeyController extends AbstractEventController<KeyEvent> {
 

@@ -28,7 +28,6 @@ public class MainFramePresenter {
 	@Inject
 	public MainFramePresenter(final MainFramePresenter.Display display, final KeyController keyController) {
 		this.display = Preconditions.checkNotNull(display);
-		//TODO JJ add some comment why is following code necessary
 		display.getBox().setOnKeyPressed(e -> {
 			keyController.fireEvent(e);
 		});

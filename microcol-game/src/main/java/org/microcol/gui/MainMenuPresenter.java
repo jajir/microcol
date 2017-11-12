@@ -132,6 +132,10 @@ public class MainMenuPresenter {
 		focusedTileController.addListener(event -> onFocusedTileEvent(event));
 		turnStartedController.addListener(event -> onTurnStartedEvent(event));
 		declareIndependenceController.addListener(event -> display.getMenuItemDeclareIndependence().setDisable(true));
+		
+		exitGameController.addListener(evnt -> {
+			display.getMenuItemEurope().setDisable(true);
+		});
 	}
 
 	/**
@@ -160,10 +164,12 @@ public class MainMenuPresenter {
 			if (isFocusedMoveableUnit) {
 				display.getMenuItemMove().setDisable(false);
 			}
+			display.getMenuItemEurope().setDisable(false);
 			display.getMenuItemDeclareIndependence().setDisable(event.getPlayer().isDeclaredIndependence());
 		} else {
 			display.getMenuItemCenterView().setDisable(true);
 			display.getMenuItemMove().setDisable(true);
+			display.getMenuItemEurope().setDisable(true);
 		}
 	}
 	

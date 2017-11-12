@@ -42,27 +42,53 @@ Planned releases
   
   * \u2717 Colony founding through command B
   
-  * \u2717 Declare independence. Now it could be done anytime.
+  * \u2713 Declare independence. Now it could be done anytime.
   
-  * \u2717 Allow to load predefined scenarios from class path.
+  * \u2713 Allow to load predefined scenarios from class path.
   
-  * \u2717 Send REF (with aggressive behavior)
+  * \u2713 Send REF (with aggressive behavior)
   
-  * \u2717 game end by conquering REF
- 
+  * \u2713 game end by conquering REF
+  
  * 0.5.0 - game should be playable from start till the end
   	
   * \u2717 Save / Load game model. It's necessary for further game states.
   	
   * \u2717 Colony building queue and queue editing
-  
+   	
+  * \u2717 Map discovery. At the beginning of game map is hidden when user come to some place map is revealed. 
+  	
+  * \u2717 Simple statistics, each turn count and remember:
+  	
+  	* Player's military strength
+  	
+  	* Number of units
+  	
+  	* Total price of user's good 
+  	
+  * \u2717 Allow to display this statistics and the end of game
+  	
+  * \u2717 Documentation update
+  	
+  	* development description is outdated
+  	
+  	* release process
+  	
+  	* documentation publishing (return back to manual process)
+  	
   * TODO
  
 []
 
 Ideas
  
- * 1.0.0 - should be released at the end of first year of development (Jan. 2018), first minimal playable version of game.  
+ * 1.0.0 - should be released at the end of first year of development (Jan. 2018), first minimal playable version of game.
+ 
+  * Add unit wagon, can't fight, capture colony, can transport goods
+  
+  * plow field
+  
+  * build road
 
   * no sound
 
@@ -75,10 +101,6 @@ Ideas
   * add speed property to terrain and movable units
   
   * adjust path planning with terrain and unit speed
-  
-  * colonist could move to ship
-  
-  * for creating maps consider {{{http://www.mapeditor.org}http://www.mapeditor.org}}
   
   * first manually created map containing land including basic terrains:
   

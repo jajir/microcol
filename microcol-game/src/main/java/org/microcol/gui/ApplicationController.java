@@ -49,8 +49,7 @@ public class ApplicationController {
 	 */
 	public void startApplication() {
 		logger.debug("Application started.");
-		gameController.startNewDefaultGame();
-		mainFramePresenter.showPanel(MainFramePresenter.START_PANEL);
+		startNewDefaultGame();
 		musicController.start(gamePreferences.getVolume());
 	}
 

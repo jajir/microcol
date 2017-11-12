@@ -85,7 +85,7 @@ public class MainMenuView implements MainMenuPresenter.Display {
 		
 		menuItemNewGame = new MenuItem();
 		menuItemNewGame.setAccelerator(new KeyCodeCombination(KeyCode.N, KeyCombination.CONTROL_DOWN));
-		menuItemNewGame.disableProperty().setValue(true);
+		menuItemNewGame.disableProperty().setValue(false);
 		
 		menuNewScenario = new Menu();
 		persistentSrevice.getScenarios().forEach(scenario->{
@@ -160,7 +160,11 @@ public class MainMenuView implements MainMenuPresenter.Display {
 		 * menu
 		 */
 		menuGame = new Menu();
-		menuGame.getItems().addAll(menuItemDeclareIndependence, menuItemNewGame, menuNewScenario, menuItemLoadGame, menuItemSameGame, menuItemQuitGame);
+		if (gamePreferences.isDevelopment()) {
+			menuGame.getItems().addAll(menuItemDeclareIndependence, menuItemNewGame, menuNewScenario, menuItemLoadGame, menuItemSameGame, menuItemQuitGame);			
+		}else{
+			menuGame.getItems().addAll(menuItemDeclareIndependence, menuItemNewGame, menuItemQuitGame);
+		}
 		menuView = new Menu();
 		menuView.getItems().addAll(menuItemCenterView, menuItemEurope);
 		menuUnit = new Menu();
@@ -207,7 +211,9 @@ public class MainMenuView implements MainMenuPresenter.Display {
 		menuItemColonizopedia.disableProperty().setValue(false);
 		menuHelp.getItems().addAll(menuItemColonizopedia);
 
-		menuBar.getMenus().add(menuHelp);
+		if (gamePreferences.isDevelopment()) {
+			menuBar.getMenus().add(menuHelp);
+		}
 
 		updateLanguage();
 	}

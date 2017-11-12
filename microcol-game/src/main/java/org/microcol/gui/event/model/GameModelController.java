@@ -27,7 +27,7 @@ import com.google.inject.Inject;
  * Exchange events between model and GUI.
  * <p>
  * There is one class instance in runtime.
- * <p/>
+ * </p>
  */
 public class GameModelController implements Localized {
 

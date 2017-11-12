@@ -30,17 +30,6 @@ public class FindTargerTest {
 		
 		final Continents toAttack = pathTool.findContinents(model, enemyPlayer);
 		assertNotNull(toAttack);
-		System.out.println("konec");
-		
-		// XXX send REF
-		// nalozim n lodi s jednotkama
-		// kam maji jet?
-		// najdu pevninu, pro kazdou pevninu sectu mesta podle military force
-		// podle pomeru velikosti mest na pevninach udelam tri armady a ty poslu
-		// na 3 nejvetsi pevniny
-		// po dosazeni pevniny se vylodim
-		// najdu prvni mesto a utocim
-		// win game - rules
 	}
 
 	private Level level;
