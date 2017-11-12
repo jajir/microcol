@@ -4,7 +4,49 @@
 
 Change log
 
- * 0.3.0 - first game entity should be implemented
+ * 0.4.0 - game should be playable from start till the end
+
+  * Trees are supported on map
+
+  * Europe port, including
+  
+   * Buy unit
+  
+   * Buy good
+   
+   * Drag & drop units and goods
+   
+   * Unit sail from Europe to New World and back
+
+  * Model builder store data to persistent model 
+
+  * Persistent model could be read to model and back 
+
+  * Persistent model could be read from / write to json 
+   
+  * Colony
+  	
+  	* Fields panel
+  	
+  	* Construction (building) in colony
+  	
+  	* production is correctly computed
+  	
+  	* Warehouse was added
+  	
+  	* Drag and drop support was added
+  
+  * Colony founding through command B
+  
+  * Declare independence. Now it could be done anytime.
+  
+  * Allow to load predefined scenarios from class path.
+  
+  * Send REF (with aggressive behavior)
+  
+  * game end by conquering REF
+  
+ * 0.3.0 - first game entities are implemented
  
   * Land is added. 
  
@@ -28,7 +70,7 @@ Change log
   
   * Move 'm' could be accessible from menu "unit" -> "move". Menu option will be disabled when focused tile is not movable
 
- * 0.2.0 - first game entity should be implemented
+ * 0.2.0 - game project structure was outlined
  
   * first game map - just empty ocean
   
