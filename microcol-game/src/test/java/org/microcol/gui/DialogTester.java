@@ -107,20 +107,6 @@ public class DialogTester extends Application {
 		new DialogUnitCantFightWarning(viewUtil, text);
 	}
 
-	public final static void dialogSave() {
-		final GameModelController gameController = EasyMock.createMock(GameModelController.class);
-		final PersistingDialog persistingDialog = new PersistingDialog(viewUtil, text, gameController);
-
-		persistingDialog.saveModel();
-	}
-
-	public final static void dialogLoad() {
-		final GameModelController gameController = EasyMock.createMock(GameModelController.class);
-		final PersistingDialog persistingDialog = new PersistingDialog(viewUtil, text, gameController);
-
-		persistingDialog.loadModel();
-	}
-
 	public final static void dialogColonizopedia() {
 		final GameModelController gameController = EasyMock.createMock(GameModelController.class);
 		EasyMock.replay(gameController);

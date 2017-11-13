@@ -46,6 +46,7 @@ import org.microcol.gui.panelview.PaintService;
 import org.microcol.gui.panelview.UnitAttackedEventListener;
 import org.microcol.gui.panelview.ViewState;
 import org.microcol.gui.util.PersistentSrevice;
+import org.microcol.gui.util.PersistingTool;
 import org.microcol.gui.util.Text;
 import org.microcol.gui.util.ViewUtil;
 import org.microcol.model.store.ModelDao;
@@ -153,6 +154,7 @@ public class MicroColModule extends AbstractModule {
 		bind(MusicController.class).in(Singleton.class);
 
 		bind(EventInitializer.class).in(Singleton.class);
+		bind(PersistingTool.class).in(Singleton.class);
 	}
 
 	@Provides

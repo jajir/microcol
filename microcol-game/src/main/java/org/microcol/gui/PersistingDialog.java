@@ -3,11 +3,11 @@ package org.microcol.gui;
 import java.io.File;
 import java.nio.file.Path;
 
-import org.microcol.gui.event.model.GameModelController;
+import org.microcol.gui.event.model.GameController;
 import org.microcol.gui.util.AbstractDialog;
+import org.microcol.gui.util.PersistingTool;
 import org.microcol.gui.util.Text;
 import org.microcol.gui.util.ViewUtil;
-import org.microcol.model.Model;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,13 +27,17 @@ public class PersistingDialog extends AbstractDialog {
 
 	private final Text text;
 
-	private final GameModelController gameController;
+	private final GameController gameController;
+
+	private final PersistingTool persistingTool;
 
 	@Inject
-	public PersistingDialog(final ViewUtil viewUtil, final Text text, final GameModelController gameController) {
+	public PersistingDialog(final ViewUtil viewUtil, final Text text, final GameController gameController,
+			final PersistingTool persistingTool) {
 		super(viewUtil);
 		this.text = Preconditions.checkNotNull(text);
 		this.gameController = Preconditions.checkNotNull(gameController);
+		this.persistingTool = Preconditions.checkNotNull(persistingTool);
 	}
 
 	public void saveModel() {
@@ -59,8 +63,8 @@ public class PersistingDialog extends AbstractDialog {
 	private FileChooser prepareFileChooser(final String caption) {
 		final FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle(text.get(caption));
-		fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
-		fileChooser.setInitialFileName("gamesave-01.microcol");
+		fileChooser.setInitialDirectory(persistingTool.getRootSaveDirectory());
+		fileChooser.setInitialFileName(persistingTool.getSuggestedSaveFileName());
 		fileChooser.setSelectedExtensionFilter(new FileChooser.ExtensionFilter("MicroCol data files", "microcol"));
 		return fileChooser;
 	}
@@ -68,13 +72,13 @@ public class PersistingDialog extends AbstractDialog {
 	private void saveModelToFile(final File targetFile) {
 		final File file = correctFileNameExtension(targetFile);
 		logger.debug("Saving game to file '{}' ", file.getAbsolutePath());
-		writeModelToFile(gameController.getModel(), file);
+		writeModelToFile(file);
 	}
 
 	private void loadFromFile(final File sourceFile) {
 		final File file = correctFileNameExtension(sourceFile);
 		logger.debug("Loading game from file '{}' ", file.getAbsolutePath());
-		gameController.setModel(loadModelFromFile(file));
+		loadModelFromFile(file);
 	}
 
 	private File correctFileNameExtension(final File targetFile) {
@@ -88,15 +92,12 @@ public class PersistingDialog extends AbstractDialog {
 		}
 	}
 
-	@SuppressWarnings("unused")
-	private void writeModelToFile(final Model model, final File targetFile) {
-		//TODO JJ perform saving of model
+	private void writeModelToFile(final File targetFile) {
+		gameController.writeModelToFile(targetFile);
 	}
 
-	@SuppressWarnings("unused")
-	private Model loadModelFromFile(final File sourceFile) {
-		//TODO JJ perform model loading
-		return null;
+	private void loadModelFromFile(final File sourceFile) {
+		gameController.loadModelFromFile(sourceFile);
 	}
 
 }

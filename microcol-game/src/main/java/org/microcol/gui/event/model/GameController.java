@@ -1,5 +1,7 @@
 package org.microcol.gui.event.model;
 
+import java.io.File;
+
 import org.microcol.model.Model;
 import org.microcol.model.store.ModelDao;
 
@@ -24,6 +26,14 @@ public class GameController {
 
 	public void startNewDefaultGame(){
 		gameModelController.startNewDefaultGame();
+	}
+	
+	public void writeModelToFile(final File targetFile) {
+		modelDao.saveToFile(targetFile.getAbsolutePath(), gameModelController.getModel().save());
+	}
+
+	public void loadModelFromFile(final File sourceFile) {
+		gameModelController.setAndStartModel(Model.make(modelDao.loadModel(sourceFile)));
 	}
 	
 }

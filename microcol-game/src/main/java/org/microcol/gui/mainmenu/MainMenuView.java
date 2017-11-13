@@ -101,11 +101,11 @@ public class MainMenuView implements MainMenuPresenter.Display {
 
 		menuItemLoadGame = new MenuItem();
 		menuItemLoadGame.setAccelerator(new KeyCodeCombination(KeyCode.L, KeyCombination.CONTROL_DOWN));
-		menuItemLoadGame.disableProperty().setValue(true);
+		menuItemLoadGame.disableProperty().setValue(false);
 
 		menuItemSameGame = new MenuItem();
 		menuItemSameGame.setAccelerator(new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN));
-		menuItemSameGame.disableProperty().setValue(true);
+		menuItemSameGame.disableProperty().setValue(false);
 
 		menuItemQuitGame = new MenuItem();
 		menuItemQuitGame.setAccelerator(new KeyCodeCombination(KeyCode.Q, KeyCombination.CONTROL_DOWN));

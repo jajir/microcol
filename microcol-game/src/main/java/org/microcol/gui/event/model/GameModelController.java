@@ -52,6 +52,7 @@ public class GameModelController implements Localized {
 	 * Start new game and register listener. Model will be removed.
 	 */
 	public void startNewDefaultGame() {
+		tryToStopGame();
 		setAndStartModel(buildComplexModel());
 	}
 
@@ -116,6 +117,7 @@ public class GameModelController implements Localized {
 	 *            required game model
 	 */
 	public void setAndStartModel(final Model newModel) {
+		tryToStopGame();
 		model = Preconditions.checkNotNull(newModel);
 		players = new ArrayList<>();
 		model.getPlayers().stream().filter(player -> player.isKing()).forEach(player -> {
@@ -134,13 +136,6 @@ public class GameModelController implements Localized {
 		// }
 	}
 
-	// TODO make private, call instead gameController.
-	public void setModel(final Model newModel) {
-		Preconditions.checkNotNull(newModel);
-		stopGame();
-		setAndStartModel(newModel);
-	}
-
 	public Model getModel() {
 		Preconditions.checkState(model != null, "Model is not ready");
 		return model;
@@ -154,14 +149,16 @@ public class GameModelController implements Localized {
 		return getModel().getCurrentPlayer();
 	}
 
-	private void stopGame() {
-		Preconditions.checkArgument(model != null);
-		Preconditions.checkArgument(modelListener != null);
-		model.removeListener(modelListener);
-		model = null;
-		modelListener = null;
-		players.forEach(player -> player.stop());
-		players = null;
+	private void tryToStopGame() {
+		if(model != null){
+			Preconditions.checkArgument(model != null);
+			Preconditions.checkArgument(modelListener != null);
+			model.removeListener(modelListener);
+			model = null;
+			modelListener = null;
+			players.forEach(player -> player.stop());
+			players = null;
+		}
 	}
 
 	public void performMove(final Unit ship, final List<Location> path) {

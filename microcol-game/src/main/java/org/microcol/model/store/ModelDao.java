@@ -1,6 +1,7 @@
 package org.microcol.model.store;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -40,7 +41,7 @@ public class ModelDao {
 	}
 
 	/**
-	 * Load predefined map or scenario stored on class path.
+	 * Load predefined model of scenario stored on class path.
 	 * 
 	 * @param fileName
 	 *            required file name on class path
@@ -50,6 +51,25 @@ public class ModelDao {
 		logger.debug("Starting to read from class path ({})", fileName);
 		try {
 			return internalLoadPredefinedModel(fileName);
+		} catch (FileNotFoundException e) {
+			throw new MicroColException(e.getMessage(), e);
+		}
+	}
+
+	/**
+	 * Load model or scenario stored on class path.
+	 * 
+	 * @param fileName
+	 *            required file name
+	 * @return loaded model persistent object
+	 */
+	public ModelPo loadModel(final File file) {
+		Preconditions.checkNotNull(file);
+		Preconditions.checkArgument(file.exists());
+		Preconditions.checkArgument(file.isFile());
+		logger.debug("Starting to read from class path ({})", file.getAbsolutePath());
+		try {
+			return internalLoadModel(new FileInputStream(file));
 		} catch (FileNotFoundException e) {
 			throw new MicroColException(e.getMessage(), e);
 		}
