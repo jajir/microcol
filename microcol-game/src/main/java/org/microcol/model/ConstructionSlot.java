@@ -6,7 +6,13 @@ import com.google.common.base.Preconditions;
 
 public class ConstructionSlot {
 
+	private final Construction construction;
+	
 	private PlaceConstructionSlot placeConstruction;
+	
+	ConstructionSlot(final Construction construction){
+		this.construction = Preconditions.checkNotNull(construction);
+	}
 
 	public boolean isEmpty() {
 		return placeConstruction == null;
@@ -48,6 +54,10 @@ public class ConstructionSlot {
 		}else{
 			return getUnit().getType().getProductionModifier(producedGoodType);
 		}
+	}
+	
+	public boolean isValid(){
+		return construction.isValid();
 	}
 
 }

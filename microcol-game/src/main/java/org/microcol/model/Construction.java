@@ -3,6 +3,7 @@ package org.microcol.model;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.microcol.model.store.ConstructionPo;
@@ -19,17 +20,23 @@ public class Construction {
 
 	private final List<ConstructionSlot> workingSlots;
 	
-	Construction(final ConstructionType type, final List<ConstructionSlot> workingSlots) {
+	private final Colony colony;
+	
+	Construction(final Colony colony, final ConstructionType type,
+			final Function<Construction, List<ConstructionSlot>> constructionsSlotBuilder) {
+		this.colony = Preconditions.checkNotNull(colony);
 		this.type = Preconditions.checkNotNull(type);
-		this.workingSlots = Preconditions.checkNotNull(workingSlots);
+		this.workingSlots = Preconditions.checkNotNull(constructionsSlotBuilder.apply(this));
 	}
 	
-	static Construction build(final ConstructionType type){
-		final List<ConstructionSlot> list = Lists.newArrayList();
-		for (int i = 0; i < type.getSlotsForWorkers(); i++) {
-			list.add(new ConstructionSlot());
-		}
-		return new Construction(type, list);
+	static Construction build(final Colony colony, final ConstructionType type){
+		return new Construction(colony, type, construction -> {
+			final List<ConstructionSlot> list = Lists.newArrayList();
+			for (int i = 0; i < type.getSlotsForWorkers(); i++) {
+				list.add(new ConstructionSlot(construction));
+			}
+			return list;
+		});
 	}
 	
 	ConstructionPo save(){
@@ -132,6 +139,10 @@ public class Construction {
 						.limit(colonyWarehouse).consume(colonyWarehouse);
 			});
 		}
+	}
+	
+	public boolean isValid(){
+		return colony.isValid();
 	}
 
 }

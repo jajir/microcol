@@ -19,21 +19,21 @@ public class ConstructionTest {
 
 	@Test
 	public void test_church_verify_base_production(final @Mocked Colony colony) throws Exception {
-		Construction church = Construction.build(ConstructionType.CHURCH);
+		Construction church = Construction.build(colony, ConstructionType.CHURCH);
 
 		assertEquals(1, church.getProductionPerTurn(colony));
 	}
 
 	@Test
 	public void test_blacksmith_verify_base_production_per_turn(final @Mocked Colony colony) throws Exception {
-		Construction blacksmith = Construction.build(ConstructionType.BLACKSMITHS_HOUSE);
+		Construction blacksmith = Construction.build(colony, ConstructionType.BLACKSMITHS_HOUSE);
 
 		assertEquals(0, blacksmith.getProductionPerTurn(colony));
 	}
 
 	@Test
-	public void test_getOrderedSlots_noUnits() throws Exception {
-		Construction blacksmith = Construction.build(ConstructionType.BLACKSMITHS_HOUSE);
+	public void test_getOrderedSlots_noUnits(final @Mocked Colony colony) throws Exception {
+		Construction blacksmith = Construction.build(colony, ConstructionType.BLACKSMITHS_HOUSE);
 
 		List<ConstructionSlot> slots = blacksmith.getOrderedSlots();
 
@@ -44,8 +44,8 @@ public class ConstructionTest {
 	}
 
 	@Test
-	public void test_getOrderedSlots_one_freeColonists(@Mocked final Unit colonist) {
-		Construction blacksmith = Construction.build(ConstructionType.BLACKSMITHS_HOUSE);
+	public void test_getOrderedSlots_one_freeColonists(final @Mocked Colony colony, @Mocked final Unit colonist) {
+		Construction blacksmith = Construction.build(colony, ConstructionType.BLACKSMITHS_HOUSE);
 		blacksmith.placeWorker(1, colonist);
 		new Expectations() {{
 				colonist.getType(); result = UnitType.COLONIST;
@@ -60,8 +60,8 @@ public class ConstructionTest {
 	}
 
 	@Test
-	public void test_getOrderedSlots_one_freeColonists_one_ExpertBlacksmith(@Mocked final Unit colonist1, @Mocked final Unit colonist2) {
-		Construction blacksmith = Construction.build(ConstructionType.BLACKSMITHS_HOUSE);
+	public void test_getOrderedSlots_one_freeColonists_one_ExpertBlacksmith(final @Mocked Colony colony, @Mocked final Unit colonist1, @Mocked final Unit colonist2) {
+		Construction blacksmith = Construction.build(colony, ConstructionType.BLACKSMITHS_HOUSE);
 		blacksmith.placeWorker(1, colonist1);
 		blacksmith.placeWorker(2, colonist2);
 		new Expectations() {{
@@ -90,8 +90,8 @@ public class ConstructionTest {
 			@Mocked final Colony colony
 			) throws Exception {
 		
-		final Construction blacksmith = new Construction(buildingType,
-				Lists.newArrayList(slot1, slot2, slot3));
+		final Construction blacksmith = new Construction(colony, buildingType,
+				construction -> Lists.newArrayList(slot1, slot2, slot3));
 		
 		new Expectations() {{
 			buildingType.getProduce(); result = Optional.of(GoodType.TOOLS);

@@ -70,17 +70,18 @@ public final class Model {
 		
 		this.colonies = Lists.newArrayList();
 		modelPo.getColonies().forEach(colonyPo -> {
-			final List<Construction> constructions = new ArrayList<>();
-			colonyPo.getConstructions().forEach(constructionPo -> {
-				final Construction c = Construction.build(constructionPo.getType());
-				constructions.add(c);
-			});
-			final Colony col = new Colony(colonyPo.getName(), playerStore.getPlayerByName(colonyPo.getOwnerName()),
-					colonyPo.getLocation(), constructions, colonyPo.getColonyWarehouse());
+			final Colony col = new Colony(this, colonyPo.getName(), playerStore.getPlayerByName(colonyPo.getOwnerName()),
+					colonyPo.getLocation(), colony -> {
+						final List<Construction> constructions = new ArrayList<>();
+						colonyPo.getConstructions().forEach(constructionPo -> {
+							final Construction c = Construction.build(colony, constructionPo.getType());
+							constructions.add(c);
+						});
+						return constructions;
+					}, colonyPo.getColonyWarehouse());
 			colonies.add(col);
 		});
 		
-		this.colonies.forEach(colony -> colony.setModel(this));
 		this.unitStorage = Preconditions.checkNotNull(unitStorage);
 
 		gameManager = new GameManager(this);
@@ -125,14 +126,14 @@ public final class Model {
 		Preconditions.checkArgument(!unit.getType().canHoldCargo(), "Unit (%s) that transport cargo, can't found city",
 				unit);
 		final Location location = unit.getLocation();
-		final List<Construction> constructions = new ArrayList<>();
-		ConstructionType.NEW_COLONY_CONSTRUCTIONS.forEach(constructionType -> {
-			final Construction c = Construction.build(constructionType);
-			constructions.add(c);
-		});
-		final Colony col = new Colony(colonyNames.getNewColonyName(player), player, location, constructions,
-				new HashMap<String, Integer>());
-		col.setModel(this);
+		final Colony col = new Colony(this, colonyNames.getNewColonyName(player), player, location, colony -> {
+			final List<Construction> constructions = new ArrayList<>();
+			ConstructionType.NEW_COLONY_CONSTRUCTIONS.forEach(constructionType -> {
+				final Construction c = Construction.build(colony, constructionType);
+				constructions.add(c);
+			});
+			return constructions;
+		}, new HashMap<String, Integer>());
 		colonies.add(col);
 		col.placeUnitToProduceFood(unit);
 	}
@@ -398,4 +399,15 @@ public final class Model {
 	PlayerStore getPlayerStore() {
 		return playerStore;
 	}
+	
+	void destroyColony(final Colony colony){
+		Preconditions.checkNotNull(colony);
+		colonies.remove(colony);
+	}
+	
+	boolean isExists(final Colony colony){
+		Preconditions.checkNotNull(colony);
+		return colonies.contains(colony);
+	}
+	
 }

@@ -473,6 +473,7 @@ public class Unit {
 		Preconditions.checkState(!isAtEuropePort(), "Unit can't skip from europe port to map");
 		Preconditions.checkState(!isAtEuropePier(), "Unit can't skip from europe port pier to map");
 		Preconditions.checkState(structureSlot.isEmpty(), "Unit can't be placed to non empty colony structure");
+		Preconditions.checkState(structureSlot.isValid(), "Unit can't be placed to already destroyed colony");
 		place.destroy();
 		place = new PlaceConstructionSlot(this, structureSlot);
 		structureSlot.set((PlaceConstructionSlot)place);
@@ -483,6 +484,7 @@ public class Unit {
 		Preconditions.checkState(!isAtEuropePort(), "Unit can't skip from europe port to map");
 		Preconditions.checkState(!isAtEuropePier(), "Unit can't skip from europe port pier to map");
 		Preconditions.checkState(colonyField.isEmpty(), "Unit can't be placed to non empty colony field");
+		Preconditions.checkState(colonyField.isValid(), "Unit can't be placed to already destroyed colony");
 		place.destroy();
 		place = new PlaceColonyField(this, colonyField, producedGoodType);
 		colonyField.setPlaceColonyField((PlaceColonyField)place);

@@ -1,10 +1,9 @@
 package org.microcol.model;
 
 import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.microcol.model.store.ColonyFieldPo;
@@ -13,7 +12,6 @@ import org.microcol.model.store.ConstructionPo;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
-import com.google.common.collect.Comparators;
 import com.google.common.collect.ImmutableList;
 
 public class Colony {
@@ -33,21 +31,18 @@ public class Colony {
 
 	private final ColonyWarehouse colonyWarehouse;
 	
-	private Model model;
+	private final Model model;
 
-	public Colony(final String name, final Player owner, final Location location,
-			final List<Construction> constructions) {
-		this(name, owner, location, constructions, new HashMap<>());
-	}
-
-	public Colony(final String name, final Player owner, final Location location,
-			final List<Construction> constructions, final Map<String, Integer> initialGoodAmounts) {
+	public Colony(final Model model, final String name, final Player owner, final Location location,
+			final Function<Colony, List<Construction>> constructionsBuilder,
+			final Map<String, Integer> initialGoodAmounts) {
+		this.model = Preconditions.checkNotNull(model);
 		this.name = Preconditions.checkNotNull(name);
 		this.owner = Preconditions.checkNotNull(owner, "owner is null");
 		this.location = Preconditions.checkNotNull(location);
 		colonyFields = new ArrayList<>();
-		Location.DIRECTIONS.forEach(loc -> colonyFields.add(new ColonyField(loc, this)));
-		this.constructions = Preconditions.checkNotNull(constructions);
+		Location.DIRECTIONS.forEach(loc -> colonyFields.add(new ColonyField(model, loc, this)));
+		this.constructions = Preconditions.checkNotNull(constructionsBuilder.apply(this));
 		colonyWarehouse = new ColonyWarehouse(this, initialGoodAmounts);
 		checkConstructions();
 	}
@@ -177,11 +172,6 @@ public class Colony {
 						String.format("Field directiond (%s) is not in colony (%s)", fieldDirection, this)));
 	}
 	
-	public void setModel(Model model) {
-		this.model = model;
-		colonyFields.forEach(colonyField -> colonyField.setModel(model));
-	}
-
 	public String getName() {
 		return name;
 	}
@@ -238,6 +228,16 @@ public class Colony {
 			}
 		});
 		return ImmutableList.copyOf(out);
+	}
+	
+	void verifyNumberOfUnitsOptionallyDestroyColony(){
+		if (getUnitsInColony().isEmpty()){
+			model.destroyColony(this);
+		}
+	}
+	
+	public boolean isValid(){
+		return model.isExists(this);
 	}
 	
 	//TODO move statistic read-only method to statistics class.

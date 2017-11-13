@@ -12,7 +12,7 @@ import com.google.common.base.MoreObjects.ToStringHelper;
  */
 public class ColonyField {
 
-	private Model model;
+	private final Model model;
 	
 	private final Colony colony;
 	
@@ -20,7 +20,8 @@ public class ColonyField {
 
 	private PlaceColonyField placeColonyField;
 
-	ColonyField(final Location location, final Colony colony) {
+	ColonyField(final Model model, final Location location, final Colony colony) {
+		this.model = Preconditions.checkNotNull(model);
 		this.direction = Preconditions.checkNotNull(location);
 		this.colony = Preconditions.checkNotNull(colony);
 		Preconditions.checkArgument(location.isDirection(),
@@ -57,10 +58,6 @@ public class ColonyField {
 		return model.getMap();
 	}
 
-	void setModel(final Model model) {
-		this.model = Preconditions.checkNotNull(model);
-	}
-	
 	public String getColonyName(){
 		return colony.getName();
 	}
@@ -120,7 +117,15 @@ public class ColonyField {
 		colonyWarehouse.addToWarehouse(getProducedGoodType(), getProducedGoodsAmmount());
 	}
 	
-	public void setPlaceColonyField(PlaceColonyField placeColonyField) {
+	public void setPlaceColonyField(final PlaceColonyField placeColonyField) {
 		this.placeColonyField = placeColonyField;
+		if(placeColonyField == null){
+			//it was about removing unit from field
+			colony.verifyNumberOfUnitsOptionallyDestroyColony();
+		}
+	}
+	
+	public boolean isValid(){
+		return model.isExists(colony);
 	}
 }
