@@ -1,6 +1,6 @@
 package org.microcol.gui.europe;
 
-import org.microcol.gui.util.AbstractDialog;
+import org.microcol.gui.util.AbstractMessageWindow;
 import org.microcol.gui.util.Text;
 import org.microcol.gui.util.ViewUtil;
 
@@ -14,7 +14,7 @@ import javafx.util.StringConverter;
 /**
  * Allows user to choose how many goods wants to transfer.
  */
-public class ChooseGoodAmount extends AbstractDialog {
+public class ChooseGoodAmount extends AbstractMessageWindow {
 
 	private final int MIN_VALUE = 0;
 

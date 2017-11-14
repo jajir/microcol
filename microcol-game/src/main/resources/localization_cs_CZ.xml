@@ -43,6 +43,7 @@
 
 	<entry key="aboutDialog.caption">O MicroCol</entry>
 	<entry key="dialog.ok">Ok</entry>
+	<entry key="dialog.cancel">Cancel</entry>
 	<entry key="rightPanel.description">Zde se zobrazí informace o vybraném panelu případně o jednotkách </entry>
 	<entry key="unitsPanel.description">Zde se zobrazí informace o vybraném panelu případně o jednotkách </entry>
 	<entry key="unitsPanel.units">Jednotky:</entry>
@@ -128,6 +129,9 @@
 	<entry key="dialogGameOver.caption">Konec hry.</entry>
 	<entry key="dialogGameOver.allColoniesAreLost">Ztratil jsi všechny kolonie.</entry>
 	<entry key="dialogGameOver.timeIsUp">Nepodařilo se ti dosáhnout svobody před rokem 1800. V cestě za svobodou jsi selhal..</entry>
+
+	<entry key="dialogDestroyColony.caption">Opravdu si přejete zrušit kolonii?</entry>
+	<entry key="dialogDestroyColony.question">Opravdu si přejete zrušit kolonii? Když kolonii opustíte s poslední jednotkou tak bude kolonie zrušena.</entry>
 
 	<entry key="FileChooser.cancelButtonText">Zrušit</entry>
 	<entry key="FileChooser.fileDateHeaderText">Datum úpravy</entry>

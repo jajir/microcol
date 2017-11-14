@@ -230,6 +230,20 @@ public class Colony {
 		return ImmutableList.copyOf(out);
 	}
 	
+	public boolean isLastUnitIncolony(final Unit unit){
+		Preconditions.checkNotNull(unit);
+		final List<Unit> unitsInColony = getUnitsInColony();
+		if(unitsInColony.size()>1){
+			return false;
+		}else if(unitsInColony.size() == 1){
+			final Unit u = unitsInColony.get(0);
+			return unit.equals(u);
+		}else{
+			throw new IllegalStateException(
+					String.format("Colony have invalid number of units (%s)", unitsInColony.size()));
+		}
+	}
+	
 	void verifyNumberOfUnitsOptionallyDestroyColony(){
 		if (getUnitsInColony().isEmpty()){
 			model.destroyColony(this);

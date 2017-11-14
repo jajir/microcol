@@ -14,7 +14,7 @@ public class ButtonsBar extends HBox {
 	private final Button buttonOk;
 
 	public ButtonsBar(final Text text) {
-		this(text.get(AbstractDialog.KEY_DIALOG_OK));
+		this(text.get(AbstractMessageWindow.KEY_DIALOG_OK));
 	}
 
 	public ButtonsBar(final String buttonOkLabel) {

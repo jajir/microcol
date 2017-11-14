@@ -3,7 +3,7 @@ package org.microcol.gui.util;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 
-public abstract class AbstractWarningDialog extends AbstractDialog {
+public abstract class AbstractWarningDialog extends AbstractMessageWindow {
 
 	private final VBox context = new VBox();
 

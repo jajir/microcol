@@ -4,7 +4,7 @@ import java.io.File;
 import java.nio.file.Path;
 
 import org.microcol.gui.event.model.GameController;
-import org.microcol.gui.util.AbstractDialog;
+import org.microcol.gui.util.AbstractMessageWindow;
 import org.microcol.gui.util.PersistingTool;
 import org.microcol.gui.util.Text;
 import org.microcol.gui.util.ViewUtil;
@@ -19,7 +19,7 @@ import javafx.stage.FileChooser;
 /**
  * Provide load and save operations.
  */
-public class PersistingDialog extends AbstractDialog {
+public class PersistingDialog extends AbstractMessageWindow {
 
 	public static final String SAVE_FILE_EXTENSION = "microcol";
 

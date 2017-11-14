@@ -1,6 +1,6 @@
 package org.microcol.gui;
 
-import org.microcol.gui.util.AbstractDialog;
+import org.microcol.gui.util.AbstractMessageWindow;
 import org.microcol.gui.util.Text;
 import org.microcol.gui.util.ViewUtil;
 
@@ -11,7 +11,7 @@ import javafx.scene.layout.VBox;
 /**
  * About MicroCol game dialog.
  */
-public class AboutDialog extends AbstractDialog {
+public class AboutDialog extends AbstractMessageWindow {
 
 	/**
 	 * Constructor when parentFrame is not available.

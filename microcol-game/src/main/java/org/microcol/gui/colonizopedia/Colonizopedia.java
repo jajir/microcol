@@ -1,6 +1,6 @@
 package org.microcol.gui.colonizopedia;
 
-import org.microcol.gui.util.AbstractDialog;
+import org.microcol.gui.util.AbstractMessageWindow;
 import org.microcol.gui.util.ButtonsBar;
 import org.microcol.gui.util.Text;
 import org.microcol.gui.util.ViewUtil;
@@ -8,7 +8,7 @@ import org.microcol.gui.util.ViewUtil;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
-public class Colonizopedia extends AbstractDialog {
+public class Colonizopedia extends AbstractMessageWindow {
 
 	public Colonizopedia(final Text text, final ViewUtil viewUtil) {
 		super(viewUtil);

@@ -4,7 +4,7 @@ import java.io.File;
 import java.net.URISyntaxException;
 import java.net.URL;
 
-import org.microcol.gui.util.AbstractDialog;
+import org.microcol.gui.util.AbstractMessageWindow;
 import org.microcol.gui.util.Text;
 import org.microcol.gui.util.ViewUtil;
 
@@ -16,7 +16,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 
-public class NewGameDialog extends AbstractDialog {
+public class NewGameDialog extends AbstractMessageWindow {
 
 	/**
 	 * Constructor when parentFrame is not available.

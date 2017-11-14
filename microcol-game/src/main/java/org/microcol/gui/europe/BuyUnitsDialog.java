@@ -5,7 +5,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.microcol.gui.ImageProvider;
 import org.microcol.gui.LocalizationHelper;
 import org.microcol.gui.event.model.GameModelController;
-import org.microcol.gui.util.AbstractDialog;
+import org.microcol.gui.util.AbstractMessageWindow;
 import org.microcol.gui.util.ButtonsBar;
 import org.microcol.gui.util.Text;
 import org.microcol.gui.util.ViewUtil;
@@ -21,7 +21,7 @@ import javafx.scene.layout.VBox;
 /**
  * Show Europe port.
  */
-public class BuyUnitsDialog extends AbstractDialog {
+public class BuyUnitsDialog extends AbstractMessageWindow {
 
 	private final static int MAX_UNITS_IN_ROW = 2;
 	

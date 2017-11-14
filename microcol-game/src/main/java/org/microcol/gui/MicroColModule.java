@@ -70,6 +70,11 @@ public class MicroColModule extends AbstractModule {
 		bind(LocalizationHelper.class).in(Singleton.class);
 		bind(PersistentSrevice.class).in(Singleton.class);
 		bind(ModelDao.class).in(Singleton.class);
+		
+		/**
+		 * Dialogs
+		 */
+		bind(DialogDestroyColony.class).in(Singleton.class);
 
 		/**
 		 * Event controllers.

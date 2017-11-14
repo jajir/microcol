@@ -2,12 +2,13 @@ package org.microcol.gui.colony;
 
 import java.util.List;
 
+import org.microcol.gui.DialogDestroyColony;
 import org.microcol.gui.ImageProvider;
 import org.microcol.gui.LocalizationHelper;
 import org.microcol.gui.europe.ChooseGoodAmount;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.panelview.PaintService;
-import org.microcol.gui.util.AbstractDialog;
+import org.microcol.gui.util.AbstractMessageWindow;
 import org.microcol.gui.util.ClipboardReader;
 import org.microcol.gui.util.ClipboardWritter;
 import org.microcol.gui.util.PanelDock;
@@ -42,7 +43,7 @@ import javafx.scene.layout.VBox;
 /**
  * Show Europe port.
  */
-public class ColonyDialog extends AbstractDialog implements ColonyDialogCallback {
+public class ColonyDialog extends AbstractMessageWindow implements ColonyDialogCallback {
 
 	private final Logger logger = LoggerFactory.getLogger(ColonyDialog.class);
 
@@ -65,7 +66,7 @@ public class ColonyDialog extends AbstractDialog implements ColonyDialogCallback
 	@Inject
 	public ColonyDialog(final ViewUtil viewUtil, final Text text, final ImageProvider imageProvider,
 			final GameModelController gameController, final LocalizationHelper localizationHelper,
-			final PaintService paintService) {
+			final PaintService paintService, final DialogDestroyColony dialogDestroyColony) {
 		super(viewUtil);
 		Preconditions.checkNotNull(imageProvider);
 		getDialog().setTitle(text.get("europeDialog.caption"));
@@ -163,7 +164,7 @@ public class ColonyDialog extends AbstractDialog implements ColonyDialogCallback
 			}
 		});
 
-		panelOutsideColony = new PanelOutsideColony(imageProvider, gameController, this);
+		panelOutsideColony = new PanelOutsideColony(imageProvider, gameController, this, dialogDestroyColony);
 
 		final HBox managementRow = new HBox();
 		managementRow.getChildren().addAll(panelProductionSummary, panelDock, panelOutsideColony);
@@ -220,6 +221,11 @@ public class ColonyDialog extends AbstractDialog implements ColonyDialogCallback
 		panelDock.repaint();
 		colonyStructures.repaint(colony);
 		panelOutsideColony.setColony(colony);
+	}
+	
+	@Override
+	public void close(){
+		getDialog().close();
 	}
 
 	public BooleanProperty getPropertyShiftWasPressed() {

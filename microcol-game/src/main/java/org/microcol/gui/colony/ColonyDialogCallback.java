@@ -6,5 +6,7 @@ package org.microcol.gui.colony;
 public interface ColonyDialogCallback {
 
 	void repaint();
+	
+	void close();
 
 }

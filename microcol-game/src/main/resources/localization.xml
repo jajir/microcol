@@ -44,6 +44,7 @@
 
 	<entry key="aboutDialog.caption">About MicroCol</entry>
 	<entry key="dialog.ok">Ok</entry>
+	<entry key="dialog.cancel">Cancel</entry>
 	<entry key="rightPanel.description">Here will be information about selected tile and units on it</entry>
 	<entry key="unitsPanel.description">Here will be information about selected tile and units on it</entry>
 	<entry key="unitsPanel.units">Units:</entry>
@@ -129,6 +130,9 @@
 	<entry key="dialogGameOver.caption">Game over.</entry>
 	<entry key="dialogGameOver.allColoniesAreLost">You lost all colonies.</entry>
 	<entry key="dialogGameOver.timeIsUp">You didn't reach freedom before year 1800. You failed to reach freedom.</entry>
+
+	<entry key="dialogDestroyColony.caption">Do you want do destroy colony?</entry>
+	<entry key="dialogDestroyColony.question">When you leave colony with last unit than colony will be destroyed.</entry>
 	
 	<entry key="FileChooser.cancelButtonText">Cancel</entry>
 	<entry key="FileChooser.fileDateHeaderText">Date modified</entry>

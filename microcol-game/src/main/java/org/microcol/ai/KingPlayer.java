@@ -45,7 +45,9 @@ public class KingPlayer extends AbstractRobotPlayer {
 						disembarkUnit(unit);
 					} else {
 						tryToReachSomeContinent(unit, continents.getContinentsToAttack());
-						// TODO zkusit vylodit jednotky.
+						if (isPossibleToDisembark(unit)) {
+							disembarkUnit(unit);
+						}
 					}
 				}
 			} else {

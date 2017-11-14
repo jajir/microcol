@@ -1,6 +1,6 @@
 package org.microcol.gui;
 
-import org.microcol.gui.util.AbstractDialog;
+import org.microcol.gui.util.AbstractMessageWindow;
 import org.microcol.gui.util.Text;
 import org.microcol.gui.util.ViewUtil;
 import org.microcol.model.Unit;
@@ -14,7 +14,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.TextAlignment;
 
-public class DialogFigth extends AbstractDialog {
+public class DialogFigth extends AbstractMessageWindow {
 
 	/**
 	 * It's <code>true</code> when user choose to fight.

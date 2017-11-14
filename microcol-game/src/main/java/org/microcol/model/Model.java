@@ -118,7 +118,6 @@ public final class Model {
 	
 	public void buildColony(final Player player, final Unit unit){
 		//TODO move method to colony store
-		//TODO place founding unit to produce food 
 		Preconditions.checkNotNull(player);
 		Preconditions.checkNotNull(unit);
 		Preconditions.checkArgument(unit.isAtPlaceLocation(), "Unit (%s) have to be on map", unit);

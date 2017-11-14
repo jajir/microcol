@@ -1,5 +1,6 @@
 package org.microcol.gui.colony;
 
+import org.microcol.gui.DialogDestroyColony;
 import org.microcol.gui.ImageProvider;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.util.ClipboardReader;
@@ -33,13 +34,16 @@ public class PanelOutsideColony extends TitledPanel {
 	private final GameModelController gameController;
 
 	private final ColonyDialogCallback colonyDialog;
+	
+	private final DialogDestroyColony dialogDestroyColony;
 
 	public PanelOutsideColony(final ImageProvider imageProvider, final GameModelController gameController,
-			final ColonyDialog colonyDialog) {
+			final ColonyDialog colonyDialog, final DialogDestroyColony dialogDestroyColony) {
 		super("Outside Colony", null);
 		this.imageProvider = Preconditions.checkNotNull(imageProvider);
 		this.gameController = Preconditions.checkNotNull(gameController);
 		this.colonyDialog = Preconditions.checkNotNull(colonyDialog);
+		this.dialogDestroyColony = Preconditions.checkNotNull(dialogDestroyColony);
 		panelUnits = new HBox();
 		getContentPane().getChildren().add(panelUnits);
 		setOnDragDropped(this::onDragDropped);
@@ -79,8 +83,14 @@ public class PanelOutsideColony extends TitledPanel {
 		logger.debug("Object was dropped on panel outside colony.");
 		final Dragboard db = event.getDragboard();
 		ClipboardReader.make(gameController.getModel(), db).tryReadUnit((unit, transferFrom) -> {
-			unit.placeToMap(colony.getLocation());
-			colonyDialog.repaint();
+			if (colony.isLastUnitIncolony(unit)){
+				if(dialogDestroyColony.showWaitAndReturnIfYesWasSelected()){
+					unit.placeToMap(colony.getLocation());
+					colonyDialog.close();
+				}
+			}else{
+				colonyDialog.repaint();
+			}
 			event.acceptTransferModes(TransferMode.MOVE);
 			event.setDropCompleted(true);
 			event.consume();

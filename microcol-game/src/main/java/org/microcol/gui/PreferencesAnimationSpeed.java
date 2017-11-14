@@ -2,7 +2,7 @@ package org.microcol.gui;
 
 import org.microcol.gui.mainmenu.AnimationSpeedChangeController;
 import org.microcol.gui.mainmenu.AnimationSpeedChangeEvent;
-import org.microcol.gui.util.AbstractDialog;
+import org.microcol.gui.util.AbstractMessageWindow;
 import org.microcol.gui.util.Text;
 import org.microcol.gui.util.ViewUtil;
 
@@ -12,7 +12,7 @@ import javafx.scene.control.Slider;
 import javafx.scene.layout.VBox;
 import javafx.util.StringConverter;
 
-public class PreferencesAnimationSpeed extends AbstractDialog {
+public class PreferencesAnimationSpeed extends AbstractMessageWindow {
 
 	/**
 	 * Constructor when parentFrame is not available.

@@ -2,7 +2,7 @@ package org.microcol.gui;
 
 import org.microcol.gui.mainmenu.VolumeChangeController;
 import org.microcol.gui.mainmenu.VolumeChangeEvent;
-import org.microcol.gui.util.AbstractDialog;
+import org.microcol.gui.util.AbstractMessageWindow;
 import org.microcol.gui.util.ButtonsBar;
 import org.microcol.gui.util.Text;
 import org.microcol.gui.util.ViewUtil;
@@ -12,7 +12,7 @@ import javafx.scene.control.Slider;
 import javafx.scene.layout.VBox;
 import javafx.util.StringConverter;
 
-public class PreferencesVolume extends AbstractDialog {
+public class PreferencesVolume extends AbstractMessageWindow {
 
 	/**
 	 * Constructor when parentFrame is not available.

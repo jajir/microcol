@@ -6,7 +6,7 @@ import org.microcol.gui.DialogNotEnoughGold;
 import org.microcol.gui.ImageProvider;
 import org.microcol.gui.LocalizationHelper;
 import org.microcol.gui.event.model.GameModelController;
-import org.microcol.gui.util.AbstractDialog;
+import org.microcol.gui.util.AbstractMessageWindow;
 import org.microcol.gui.util.ClipboardReader;
 import org.microcol.gui.util.ClipboardWritter;
 import org.microcol.gui.util.PanelDock;
@@ -40,7 +40,7 @@ import javafx.scene.layout.VBox;
 /**
  * Show Europe port.
  */
-public class EuropeDialog extends AbstractDialog implements DialogCallback {
+public class EuropeDialog extends AbstractMessageWindow implements DialogCallback {
 
 	private final Logger logger = LoggerFactory.getLogger(EuropeDialog.class);
 
