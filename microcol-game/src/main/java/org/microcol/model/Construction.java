@@ -46,6 +46,14 @@ public class Construction {
 		return out;
 	}
 	
+	Colony getColony(){
+		return colony;
+	}
+	
+	void verifyNumberOfUnitsOptionallyDestroyColony(){
+		colony.verifyNumberOfUnitsOptionallyDestroyColony();
+	}
+	
 	private List<ConstructionSlotPo> getSaveConstructionSlots(){
 		final List<ConstructionSlotPo> out = new ArrayList<>();
 		workingSlots.forEach(slot -> out.add(slot.save()));

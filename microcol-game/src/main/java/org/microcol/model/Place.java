@@ -24,9 +24,15 @@ public interface Place {
 
 	/**
 	 * When place is not longer valid than in some cases other side of relation
-	 * should be notified.
+	 * should be notified. Method consequently destroy related objects.
 	 */
 	void destroy();
+
+	/**
+	 * When place is not longer valid than in some cases other side of relation
+	 * should be notified. Method doesn't perform any validations. Just destroy place. 
+	 */
+	void destroySimple();
 
 	/**
 	 * Save place internal state to {@link PlacePo} object that could be stored.

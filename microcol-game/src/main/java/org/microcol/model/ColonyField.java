@@ -46,6 +46,10 @@ public class ColonyField {
 		return direction;
 	}
 	
+	Colony getColony(){
+		return colony;
+	}
+	
 	public TerrainType getTerrainType() {
 		return getMap().getTerrainTypeAt(colony.getLocation().add(direction));
 	}
@@ -118,9 +122,12 @@ public class ColonyField {
 	}
 	
 	public void setPlaceColonyField(final PlaceColonyField placeColonyField) {
-		this.placeColonyField = placeColonyField;
-		if(placeColonyField == null){
-			//it was about removing unit from field
+		this.placeColonyField = Preconditions.checkNotNull(placeColonyField);
+	}
+	
+	void empty(final boolean validate) {
+		placeColonyField = null;
+		if(validate){
 			colony.verifyNumberOfUnitsOptionallyDestroyColony();
 		}
 	}

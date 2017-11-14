@@ -213,7 +213,7 @@ public class Colony {
 		return out;
 	}
 	
-	private List<Unit> getUnitsInColony(){
+	List<Unit> getUnitsInColony(){
 		final List<Unit> out = new ArrayList<>();
 		constructions.forEach(construction->{
 			construction.getConstructionSlots().forEach(slot->{
@@ -244,6 +244,9 @@ public class Colony {
 		}
 	}
 	
+	/**
+	 * Verify number of units in colony and when it's 0 than destroy colony. 
+	 */
 	void verifyNumberOfUnitsOptionallyDestroyColony(){
 		if (getUnitsInColony().isEmpty()){
 			model.destroyColony(this);

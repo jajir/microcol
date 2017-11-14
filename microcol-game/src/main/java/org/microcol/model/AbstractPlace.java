@@ -22,5 +22,13 @@ public abstract class AbstractPlace implements Place {
 	public void destroy() {
 		// default empty implementation.
 	}
-	
+
+	/**
+	 * Default implementation just delegate to {@link #destroy()}.
+	 */
+	@Override
+	public void destroySimple() {
+		destroy();
+	}
+
 }

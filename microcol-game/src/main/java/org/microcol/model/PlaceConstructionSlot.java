@@ -23,6 +23,10 @@ public class PlaceConstructionSlot extends AbstractPlace {
 	public String getName() {
 		return "Construction";
 	}
+	
+	Colony getColony(){
+		return constructionSlot.getColony();
+	}
 
 	public ConstructionSlot getConstructionSlot() {
 		return constructionSlot;
@@ -30,7 +34,12 @@ public class PlaceConstructionSlot extends AbstractPlace {
 	
 	@Override
 	public void destroy() {
-		constructionSlot.clear();
+		constructionSlot.clear(true);
+	}
+	
+	@Override
+	public void destroySimple() {
+		constructionSlot.clear(false);
 	}
 	
 	@Override

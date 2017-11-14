@@ -33,7 +33,12 @@ public class PlaceColonyField extends AbstractPlace {
 
 	@Override
 	public void destroy() {
-		colonyField.setPlaceColonyField(null);
+		colonyField.empty(true);
+	}
+	
+	@Override
+	public void destroySimple() {
+		colonyField.empty(false);
 	}
 	
 	@Override
@@ -43,6 +48,10 @@ public class PlaceColonyField extends AbstractPlace {
 				.add("unitType", getUnit().getType())
 				.add("colonyName", colonyField.getColonyName())
 				.toString();
+	}
+	
+	Colony getColony(){
+		return colonyField.getColony();
 	}
 
 	public GoodType getProducedGoodType() {

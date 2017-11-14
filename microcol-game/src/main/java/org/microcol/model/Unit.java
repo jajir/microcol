@@ -410,7 +410,7 @@ public class Unit {
 		return place instanceof PlaceEuropePier;
 	}
 
-	public boolean isAtPlaceConstruction() {
+	public boolean isAtPlaceConstructionSlot() {
 		return place instanceof PlaceConstructionSlot;
 	}
 
@@ -425,6 +425,7 @@ public class Unit {
 	 *            required place cargo slot
 	 */
 	void placeToCargoSlot(final PlaceCargoSlot placeCargoSlot) {
+		//TODO could be called on last unit in colony
 		//Verify that only moving in slots is available.
 		if (isAtCargoSlot()) {
 			if (!getPlaceCargoSlot().getCargoSlotOwner().equals(placeCargoSlot.getCargoSlotOwner())) {
@@ -474,7 +475,11 @@ public class Unit {
 		Preconditions.checkState(!isAtEuropePier(), "Unit can't skip from europe port pier to map");
 		Preconditions.checkState(structureSlot.isEmpty(), "Unit can't be placed to non empty colony structure");
 		Preconditions.checkState(structureSlot.isValid(), "Unit can't be placed to already destroyed colony");
-		place.destroy();
+		if(isAlreadyInSameColony(structureSlot.getColony())){
+			place.destroySimple();
+		}else{
+			place.destroy();
+		}
 		place = new PlaceConstructionSlot(this, structureSlot);
 		structureSlot.set((PlaceConstructionSlot)place);
 	}
@@ -485,9 +490,38 @@ public class Unit {
 		Preconditions.checkState(!isAtEuropePier(), "Unit can't skip from europe port pier to map");
 		Preconditions.checkState(colonyField.isEmpty(), "Unit can't be placed to non empty colony field");
 		Preconditions.checkState(colonyField.isValid(), "Unit can't be placed to already destroyed colony");
-		place.destroy();
+		if(isAlreadyInSameColony(colonyField.getColony())){
+			place.destroySimple();
+		}else{
+			place.destroy();
+		}
 		place = new PlaceColonyField(this, colonyField, producedGoodType);
 		colonyField.setPlaceColonyField((PlaceColonyField)place);
+	}
+	
+	private boolean isAlreadyInSameColony(final Colony colonyWhereWillBeUnitPlaced){
+		final Optional<Colony> oColony = getColony();
+		if(oColony.isPresent()){
+			final Colony colony = oColony.get();
+			if (colony.getUnitsInColony().size() == 1){
+				return colony.equals(colonyWhereWillBeUnitPlaced);
+			}
+		}
+		return false;
+	}
+	
+	/**
+	 * If it's possible return colony where is unit placed.
+	 * @return
+	 */
+	private Optional<Colony> getColony(){
+		if(isAtPlaceColonyField()){
+			return Optional.of(getPlaceColonyField().getColony());
+		}
+		if(isAtPlaceConstructionSlot()){
+			return Optional.of(getPlaceConstruction().getColony());
+		}
+		return Optional.empty();
 	}
 
 	/**
@@ -547,7 +581,7 @@ public class Unit {
 	}
 	
 	PlaceConstructionSlot getPlaceConstruction() {
-		Preconditions.checkState(isAtPlaceConstruction(), "Unit have to be in colony construction");
+		Preconditions.checkState(isAtPlaceConstructionSlot(), "Unit have to be in colony construction");
 		return (PlaceConstructionSlot) place;
 	}
 	

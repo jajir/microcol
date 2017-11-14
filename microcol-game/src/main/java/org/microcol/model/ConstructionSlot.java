@@ -24,6 +24,10 @@ public class ConstructionSlot {
 		this.placeConstruction = placeConstruction;
 	}
 	
+	Colony getColony(){
+		return construction.getColony();
+	}
+	
 	ConstructionSlotPo save(){
 		final ConstructionSlotPo out = new ConstructionSlotPo();
 		if (!isEmpty()) {
@@ -32,8 +36,11 @@ public class ConstructionSlot {
 		return out;
 	}
 	
-	public void clear(){
+	public void clear(final boolean validate){
 		placeConstruction = null;
+		if(validate){
+			construction.verifyNumberOfUnitsOptionallyDestroyColony();
+		}
 	}
 	
 	public Unit getUnit(){
