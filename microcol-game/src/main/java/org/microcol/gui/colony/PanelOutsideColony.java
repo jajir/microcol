@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
+import com.google.inject.Inject;
 
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -37,8 +38,9 @@ public class PanelOutsideColony extends TitledPanel {
 	
 	private final DialogDestroyColony dialogDestroyColony;
 
+	@Inject
 	public PanelOutsideColony(final ImageProvider imageProvider, final GameModelController gameController,
-			final ColonyDialog colonyDialog, final DialogDestroyColony dialogDestroyColony) {
+			final ColonyDialogCallback colonyDialog, final DialogDestroyColony dialogDestroyColony) {
 		super("Outside Colony", null);
 		this.imageProvider = Preconditions.checkNotNull(imageProvider);
 		this.gameController = Preconditions.checkNotNull(gameController);

@@ -9,6 +9,7 @@ import org.microcol.model.ColonyWarehouse;
 import org.microcol.model.GoodType;
 
 import com.google.common.base.Preconditions;
+import com.google.inject.Inject;
 
 import javafx.geometry.Insets;
 import javafx.scene.input.DragEvent;
@@ -34,7 +35,8 @@ public class PanelColonyGoods extends TitledPanel {
 	private Background background;
 	
 	private ColonyWarehouse colonyWarehouse;
-	
+
+	@Inject
 	public PanelColonyGoods(final GameModelController gameController, final ImageProvider imageProvider,
 			final ColonyDialogCallback colonyDialog) {
 		super("zbozi");

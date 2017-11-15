@@ -6,7 +6,7 @@ Planned releases
 
  * 0.5.0 - Make first game smoother
   	
-  * \u2717 Save / Load game model. It's necessary for further game states.
+  * \u2713 Save / Load game model. It's necessary for further game states.
   	
   * \u2717 Allow cycle through units. It allows to give focus to specific unit. Not just first unit at some location.
   	
@@ -26,7 +26,7 @@ Planned releases
   	
   * \u2713 When new colony is builded building unit should be placed to build food
   	
-  * \u2717 When last unit leaves colony than colony should be destroyed
+  * \u2713 When last unit leaves colony than colony should be destroyed
   
   * \u2717 Documentation update
   	

@@ -24,6 +24,7 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableMap;
+import com.google.inject.Inject;
 
 import javafx.geometry.VPos;
 import javafx.scene.canvas.Canvas;
@@ -133,6 +134,7 @@ public class PanelColonyStructures extends TitledPanel {
 	
 	private Map<Rectangle, ConstructionSlot> slots;
 	
+	@Inject
 	public PanelColonyStructures(final LocalizationHelper localizationHelper, final ImageProvider imageProvider,
 			final GameModelController gameController, final ColonyDialogCallback colonyDialog) {
 		super("Colony Structures", null);

@@ -19,6 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
+import com.google.inject.Inject;
 
 import javafx.geometry.VPos;
 import javafx.scene.canvas.Canvas;
@@ -61,6 +62,7 @@ public class PanelColonyFields extends TitledPanel {
 	
 	private final PaintService paintService;
 
+	@Inject
 	public PanelColonyFields(final ImageProvider imageProvider, final GameModelController gameController,
 			final ColonyDialogCallback colonyDialog, final PaintService paintService) {
 		super("Colony layout", new Label("Colony layout"));

@@ -68,10 +68,6 @@ public class DialogTester extends Application {
 		new AboutDialog(viewUtil, text);
 	}
 
-	public final static void startNewGameDialog() {
-		new NewGameDialog(viewUtil, text);
-	}
-
 	public final static void startPreferencesVolume() {
 		VolumeChangeController controller = new VolumeChangeController();
 		int actualVolume = 10;

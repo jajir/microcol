@@ -1,6 +1,12 @@
 package org.microcol.gui;
 
 import org.microcol.gui.colony.ColonyDialog;
+import org.microcol.gui.colony.ColonyDialogCallback;
+import org.microcol.gui.colony.PanelColonyDockBehaviour;
+import org.microcol.gui.colony.PanelColonyFields;
+import org.microcol.gui.colony.PanelColonyGoods;
+import org.microcol.gui.colony.PanelColonyStructures;
+import org.microcol.gui.colony.PanelOutsideColony;
 import org.microcol.gui.event.AboutGameListenerImpl;
 import org.microcol.gui.event.AnimationSpeedChangedListenerPreferences;
 import org.microcol.gui.event.BuildColonyListener;
@@ -138,10 +144,20 @@ public class MicroColModule extends AbstractModule {
 		bind(RightPanelView.class).in(Singleton.class);
 		bind(RightPanelPresenter.Display.class).to(RightPanelView.class).in(Singleton.class);
 		bind(RightPanelPresenter.class).asEagerSingleton();
-
-		bind(UnitsPanel.class).asEagerSingleton();
-		bind(ColonyDialog.class).asEagerSingleton();
+		
+		bind(UnitsPanel.class).in(Singleton.class);
 		bind(PersistingDialog.class).in(Singleton.class);
+
+		/**
+		 * Colony dialog
+		 */
+		bind(ColonyDialog.class).in(Singleton.class);
+		bind(ColonyDialogCallback.class).to(ColonyDialog.class).in(Singleton.class);
+		bind(PanelColonyFields.class).in(Singleton.class);
+		bind(PanelColonyStructures.class).in(Singleton.class);
+		bind(PanelOutsideColony.class).in(Singleton.class);
+		bind(PanelColonyGoods.class).in(Singleton.class);
+		bind(PanelColonyDockBehaviour.class).in(Singleton.class);
 
 		/**
 		 * Load events manually
