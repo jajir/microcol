@@ -25,6 +25,7 @@ import org.microcol.gui.event.DeclareIndependenceListener;
 import org.microcol.gui.event.EventInitializer;
 import org.microcol.gui.event.FocusedTileController;
 import org.microcol.gui.event.KeyController;
+import org.microcol.gui.event.SelectNextUnitListener;
 import org.microcol.gui.event.ShowGridListenerPreferences;
 import org.microcol.gui.event.StartMoveController;
 import org.microcol.gui.event.StatusBarMessageController;
@@ -50,12 +51,14 @@ import org.microcol.gui.mainmenu.ExitGameController;
 import org.microcol.gui.mainmenu.MainMenuDevelopment;
 import org.microcol.gui.mainmenu.MainMenuPresenter;
 import org.microcol.gui.mainmenu.MainMenuView;
+import org.microcol.gui.mainmenu.SelectNextUnitController;
 import org.microcol.gui.mainmenu.ShowGridController;
 import org.microcol.gui.mainmenu.VolumeChangeController;
 import org.microcol.gui.panelview.GamePanelPresenter;
 import org.microcol.gui.panelview.GamePanelView;
 import org.microcol.gui.panelview.MouseOverTileChangedController;
 import org.microcol.gui.panelview.MouseOverTileListener;
+import org.microcol.gui.panelview.MouseOverTileManager;
 import org.microcol.gui.panelview.MoveModeSupport;
 import org.microcol.gui.panelview.PaintService;
 import org.microcol.gui.panelview.UnitAttackedEventListener;
@@ -118,6 +121,7 @@ public class MicroColModule extends AbstractModule {
 		bind(GoldWasChangedController.class).in(Singleton.class);
 		bind(DeclareIndependenceController.class).in(Singleton.class);
 		bind(BuildColonyEventController.class).in(Singleton.class);
+		bind(SelectNextUnitController.class).in(Singleton.class);
 
 		bind(ModelEventManager.class).in(Singleton.class);
 
@@ -136,7 +140,9 @@ public class MicroColModule extends AbstractModule {
 		bind(MouseOverTileListener.class).asEagerSingleton();
 		bind(PaintService.class).in(Singleton.class);
 		bind(UnitAttackedEventListener.class).asEagerSingleton();
-
+		bind(SelectNextUnitListener.class).asEagerSingleton();
+		bind(MouseOverTileManager.class).in(Singleton.class);
+		
 		bind(StartPanelView.class).in(Singleton.class);
 		bind(StartPanelPresenter.Display.class).to(StartPanelView.class).in(Singleton.class);
 		bind(StartPanelPresenter.class).asEagerSingleton();

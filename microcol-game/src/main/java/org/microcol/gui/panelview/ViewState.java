@@ -4,7 +4,6 @@ import java.util.Optional;
 
 import org.microcol.model.Location;
 
-import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
 
 /**
@@ -12,15 +11,11 @@ import com.google.inject.Inject;
  */
 public class ViewState {
 	
-	//TODO add unit which is selected, it will be used for particular action like plow field.
-
-	private final MouseOverTileChangedController mouseOverTileChangedController;
+	//TODO in class in no functionality verify that class in really used
 
 	private boolean isMoveMode;
 
 	private Optional<Location> selectedTile;
-
-	private Optional<Location> mouseOverTile;
 
 	/**
 	 * Default constructor
@@ -29,28 +24,9 @@ public class ViewState {
 	 *            required mouse over tile changed
 	 */
 	@Inject
-	public ViewState(final MouseOverTileChangedController mouseOverTileChangedController) {
-		this.mouseOverTileChangedController = Preconditions.checkNotNull(mouseOverTileChangedController);
-		mouseOverTile = Optional.empty();
+	public ViewState() {
 		selectedTile = Optional.empty();
 		isMoveMode = false;
-	}
-
-	public Optional<Location> getMouseOverTile() {
-		return mouseOverTile;
-	}
-
-	public void setMouseOverTile(final Optional<Location> newMouseOverTile) {
-		Preconditions.checkNotNull(newMouseOverTile);
-		if (mouseOverTile.isPresent()) {
-			mouseOverTile.filter(mot -> !mot.equals(newMouseOverTile.get())).ifPresent(mot -> {
-				this.mouseOverTile = newMouseOverTile;
-				mouseOverTileChangedController.fireEvent(new MouseOverTileChangedEvent(mouseOverTile.get()));
-			});
-		} else {
-			mouseOverTile = newMouseOverTile;
-			mouseOverTileChangedController.fireEvent(new MouseOverTileChangedEvent(mouseOverTile.get()));
-		}
 	}
 
 	public Optional<Location> getSelectedTile() {

@@ -18,6 +18,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 
 public final class Model {
+	
 	private final ColonyNames colonyNames;
 	private final ListenerManager listenerManager;
 	private final Calendar calendar;
@@ -258,6 +259,12 @@ public final class Model {
 		Preconditions.checkNotNull(owner);
 		return colonies.stream().filter(colony -> colony.getOwner().equals(owner))
 				.filter(colony -> colony.getLocation().equals(location)).findFirst();
+	}
+	
+	public Unit getNextUnitForCurrentUser(final Unit currentUnit){
+		Preconditions.checkState(getCurrentPlayer().equals(currentUnit.getOwner()),
+				"current unit (%s) doest belongs to user that is on turn (%s)", currentUnit, getCurrentPlayer());
+		return unitStorage.getNextUnitForCurrentUser(getCurrentPlayer(), currentUnit);
 	}
 
 	public Optional<Colony> getColoniesAt(final Location location) {

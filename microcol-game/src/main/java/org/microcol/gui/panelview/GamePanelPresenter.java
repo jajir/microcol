@@ -98,6 +98,8 @@ public final class GamePanelPresenter implements Localized {
 	private final ColonyDialog colonyDialog;
 
 	private final Text text;
+	
+	private final MouseOverTileManager mouseOverTileManager; 
 
 	@Inject
 	public GamePanelPresenter(final GamePanelPresenter.Display display, final GameModelController gameController,
@@ -107,7 +109,7 @@ public final class GamePanelPresenter implements Localized {
 			final CenterViewController viewController, final ExitGameController exitGameController,
 			final DebugRequestController debugRequestController, final ViewState viewState, final ViewUtil viewUtil,
 			final StartMoveController startMoveController, final ColonyDialog colonyDialog, final Text text,
-			final ColonyWasCapturedController colonyWasCapturedController) {
+			final ColonyWasCapturedController colonyWasCapturedController, final MouseOverTileManager mouseOverTileManager) {
 		this.focusedTileController = Preconditions.checkNotNull(focusedTileController);
 		this.gameController = Preconditions.checkNotNull(gameController);
 		this.gamePreferences = gamePreferences;
@@ -117,6 +119,7 @@ public final class GamePanelPresenter implements Localized {
 		this.startMoveController = Preconditions.checkNotNull(startMoveController);
 		this.colonyDialog = Preconditions.checkNotNull(colonyDialog);
 		this.text = Preconditions.checkNotNull(text);
+		this.mouseOverTileManager = Preconditions.checkNotNull(mouseOverTileManager);
 
 		moveUnitController.addListener(event -> {
 			scheduleWalkAnimation(event);
@@ -249,7 +252,7 @@ public final class GamePanelPresenter implements Localized {
 
 	private void onKeyPressed_enter() {
 		if (viewState.isMoveMode()) {
-			switchToNormalMode(viewState.getMouseOverTile().get());
+			switchToNormalMode(mouseOverTileManager.getMouseOverTile().get());
 		}
 	}
 
@@ -294,7 +297,7 @@ public final class GamePanelPresenter implements Localized {
 			if (viewState.isMoveMode()) {
 				final Point currentPosition = Point.of(e.getX(), e.getY());
 				final Location loc = display.getArea().convertToLocation(currentPosition);
-				viewState.setMouseOverTile(Optional.of(loc));
+				mouseOverTileManager.setMouseOverTile(loc);
 			}
 		}
 	}
@@ -302,7 +305,7 @@ public final class GamePanelPresenter implements Localized {
 	private void onMouseMoved(final MouseEvent e) {
 		final Point currentPosition = Point.of(e.getX(), e.getY());
 		final Location loc = display.getArea().convertToLocation(currentPosition);
-		viewState.setMouseOverTile(Optional.of(loc));
+		mouseOverTileManager.setMouseOverTile(loc);
 	}
 
 	/**

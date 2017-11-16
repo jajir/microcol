@@ -53,6 +53,8 @@ public class MainMenuPresenter {
 		MenuItem getMenuItemMove();
 
 		MenuItem getMenuItemBuildColony();
+		
+		MenuItem getMenuItemNextUnit();
 
 		MenuItem getMenuItemCenterView();
 
@@ -79,6 +81,7 @@ public class MainMenuPresenter {
 			final DeclareIndependenceController declareIndependenceController,
 			final ExitGameController exitGameController,
 			final ShowGridController showGridController,
+			final SelectNextUnitController selectNextUnitController,
 			
 			/**
 			 * Menu items react on following events
@@ -126,6 +129,8 @@ public class MainMenuPresenter {
 					new DeclareIndependenceEvent(gameModelController.getModel(), gameModelController.getCurrentPlayer()));
 		});
 		display.getMenuItemCenterView().setOnAction(event -> centerViewController.fireEvent(new CenterViewEvent()));
+		display.getMenuItemNextUnit()
+				.setOnAction(event -> selectNextUnitController.fireEvent(new SelectNextUnitEvent()));
 		
 		changeLanguageController.addListener(event -> {
 			display.updateLanguage();

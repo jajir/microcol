@@ -1,5 +1,6 @@
 package org.microcol.gui.panelview;
 
+import org.microcol.gui.GamePreferences;
 import org.microcol.gui.LocalizationHelper;
 import org.microcol.gui.event.StatusBarMessageController;
 import org.microcol.gui.event.StatusBarMessageEvent;
@@ -16,26 +17,29 @@ import com.google.inject.Inject;
  */
 public class MouseOverTileListener implements Localized {
 
-	private final GameModelController gameController;
+	private final GameModelController gameModelController;
 
 	private final StatusBarMessageController statusBarMessageController;
 
 	private final LocalizationHelper localizationHelper;
+	
+	private final GamePreferences gamePreferences;
 
 	@Inject
 	public MouseOverTileListener(final MouseOverTileChangedController mouseOverTileChangedController,
-			final GameModelController gameController, final StatusBarMessageController statusBarMessageController,
-			final LocalizationHelper localizationHelper) {
-		this.gameController = Preconditions.checkNotNull(gameController);
+			final GameModelController gameModelController, final StatusBarMessageController statusBarMessageController,
+			final LocalizationHelper localizationHelper, final GamePreferences gamePreferences) {
+		this.gameModelController = Preconditions.checkNotNull(gameModelController);
 		this.statusBarMessageController = Preconditions.checkNotNull(statusBarMessageController);
 		this.localizationHelper = Preconditions.checkNotNull(localizationHelper);
+		this.gamePreferences = Preconditions.checkNotNull(gamePreferences);
 		mouseOverTileChangedController.addListener(this::onMouseOverTileChanged);
 
 	}
 
 	private void onMouseOverTileChanged(final MouseOverTileChangedEvent event) {
-		if (gameController.getModel().getMap().isValid(event.getMouseOverTileLocaton())) {
-			final TerrainType terrain = gameController.getModel().getMap().getTerrainTypeAt(event.getMouseOverTileLocaton());
+		if (gameModelController.getModel().getMap().isValid(event.getMouseOverTileLocaton())) {
+			final TerrainType terrain = gameModelController.getModel().getMap().getTerrainTypeAt(event.getMouseOverTileLocaton());
 			setStatusMessageForTile(terrain, event.getMouseOverTileLocaton());
 		} else {
 			statusBarMessageController.fireEvent(new StatusBarMessageEvent());
@@ -52,23 +56,23 @@ public class MouseOverTileListener implements Localized {
 	 */
 	private void setStatusMessageForTile(final TerrainType terrain, final Location where) {
 		final StringBuilder buff = new StringBuilder();
-		// TODO show coordinates just when debug mode is on
-		buff.append("(");
-		buff.append(where.getX());
-		buff.append(",");
-		buff.append(where.getY());
-		buff.append(") ");
+		if (gamePreferences.isDevelopment()) {
+			buff.append("(");
+			buff.append(where.getX());
+			buff.append(",");
+			buff.append(where.getY());
+			buff.append(") ");
+		}
 		buff.append(getText().get("statusBar.tile.start"));
 		buff.append(" ");
 		buff.append(localizationHelper.getTerrainName(terrain));
 		buff.append(" ");
 		buff.append(getText().get("statusBar.tile.withUnit"));
 		buff.append(" ");
-		gameController.getModel().getUnitsAt(where).forEach(ship -> {
+		gameModelController.getModel().getUnitsAt(where).forEach(ship -> {
 			buff.append(ship.getClass().getSimpleName());
 			buff.append(" ");
 		});
-		// TODO JJ use mouseOverTileChangedController
 		statusBarMessageController.fireEvent(new StatusBarMessageEvent(buff.toString()));
 	}
 }

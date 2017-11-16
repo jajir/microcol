@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import org.microcol.model.store.ModelPo;
 
@@ -18,6 +19,9 @@ import com.google.common.collect.Multimaps;
 
 class UnitStorage {
 	
+	/**
+	 * Ordered list of all units.
+	 */
 	private final List<Unit> units;
 
 	UnitStorage(final List<Unit> units) {
@@ -150,6 +154,18 @@ class UnitStorage {
 	
 	Optional<Unit> tryGetUnitById(final int id) {
 		return units.stream().filter(unit -> unit.getId() == id).findAny();
+	}
+	
+	Unit getNextUnitForCurrentUser(final Player currentPlayer, final Unit currentUnit){
+		final List<Unit> list = units.stream().filter(unit -> currentPlayer.equals(unit.getOwner()))
+				.filter(unit -> unit.isAtHighSea() || unit.isAtPlaceLocation()).collect(Collectors.toList());
+		Preconditions.checkState(list.contains(currentUnit), "Unit (%s) is not available", currentUnit);
+		int pos = list.indexOf(currentUnit);
+		if (pos + 1 < list.size()) {
+			return list.get(pos + 1);
+		} else {
+			return list.get(0);
+		}
 	}
 
 }

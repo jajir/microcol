@@ -56,6 +56,8 @@ public class MainMenuView implements MainMenuPresenter.Display {
 
 	private final MenuItem menuItemBuildColony;
 
+	private final MenuItem menuItemNextUnit;
+
 	private final Menu menuPrefereces;
 
 	private final Menu menuLanguage;
@@ -133,6 +135,10 @@ public class MainMenuView implements MainMenuPresenter.Display {
 		menuItemBuildColony = new MenuItem();
 		menuItemBuildColony.setAccelerator(new KeyCodeCombination(KeyCode.B));
 		menuItemBuildColony.disableProperty().setValue(true);
+
+		menuItemNextUnit = new MenuItem();
+		menuItemNextUnit.setAccelerator(new KeyCodeCombination(KeyCode.TAB));
+		menuItemNextUnit.disableProperty().setValue(false);
 		
 		/**
 		 * Preferences
@@ -175,7 +181,7 @@ public class MainMenuView implements MainMenuPresenter.Display {
 		menuView = new Menu();
 		menuView.getItems().addAll(menuItemCenterView, menuItemEurope);
 		menuUnit = new Menu();
-		menuUnit.getItems().addAll(menuItemMove, menuItemBuildColony);
+		menuUnit.getItems().addAll(menuItemMove, menuItemBuildColony, menuItemNextUnit);
 		menuPrefereces = new Menu();
 		menuPrefereces.getItems().addAll(menuLanguage, menuItemVolume, menuItemAnimationSpeed, menuItemShowGrid,
 				menuItemShowFightAdvisor);
@@ -255,6 +261,7 @@ public class MainMenuView implements MainMenuPresenter.Display {
 		menuUnit.setText(text.get("mainMenu.unit"));
 		menuItemMove.setText(text.get("mainMenu.unit.move"));
 		menuItemBuildColony.setText(text.get("mainMenu.unit.buildColony"));
+		menuItemNextUnit.setText(text.get("mainMenu.unit.nextUnit"));
 
 		/**
 		 * Preferences
@@ -364,5 +371,13 @@ public class MainMenuView implements MainMenuPresenter.Display {
 	@Override
 	public MenuItem getMenuItemBuildColony() {
 		return menuItemBuildColony;
+	}
+
+	/**
+	 * @return the menuItemNextUnit
+	 */
+	@Override
+	public MenuItem getMenuItemNextUnit() {
+		return menuItemNextUnit;
 	}
 }

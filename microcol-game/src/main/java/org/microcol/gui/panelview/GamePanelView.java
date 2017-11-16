@@ -85,12 +85,14 @@ public class GamePanelView implements GamePanelPresenter.Display {
 	private final ViewUtil viewUtil;
 
 	private final VisibleArea visibleArea;
+	
+	private final MouseOverTileManager mouseOverTileManager;
 
 	@Inject
 	public GamePanelView(final GameModelController gameController, final PathPlanning pathPlanning,
 			final ImageProvider imageProvider, final ViewState viewState, final MoveModeSupport moveModeSupport,
 			final Text text, final ViewUtil viewUtil, final LocalizationHelper localizationHelper,
-			final PaintService paintService, final GamePreferences gamePreferences) {
+			final PaintService paintService, final GamePreferences gamePreferences, final MouseOverTileManager mouseOverTileManager) {
 		this.gameController = Preconditions.checkNotNull(gameController);
 		this.pathPlanning = Preconditions.checkNotNull(pathPlanning);
 		this.imageProvider = Preconditions.checkNotNull(imageProvider);
@@ -102,6 +104,7 @@ public class GamePanelView implements GamePanelPresenter.Display {
 		this.paintService = Preconditions.checkNotNull(paintService);
 		this.gamePreferences = Preconditions.checkNotNull(gamePreferences);
 		this.visualDebugInfo = new VisualDebugInfo();
+		this.mouseOverTileManager = Preconditions.checkNotNull(mouseOverTileManager);
 		oneTurnMoveHighlighter = new OneTurnMoveHighlighter();
 		gotoModeCursor = new ImageCursor(imageProvider.getImage(ImageProvider.IMG_CURSOR_GOTO), 1, 1);
 		// excludePainting = new ExcludePainting();
@@ -339,8 +342,8 @@ public class GamePanelView implements GamePanelPresenter.Display {
 	 *            required displayed area
 	 */
 	private void paintSteps(final GraphicsContext graphics, final Area area) {
-		if (viewState.isMoveMode() && viewState.getMouseOverTile().isPresent()) {
-			paintCursor(graphics, area, viewState.getMouseOverTile().get());
+		if (viewState.isMoveMode() && mouseOverTileManager.getMouseOverTile().isPresent()) {
+			paintCursor(graphics, area, mouseOverTileManager.getMouseOverTile().get());
 			final List<Location> locations = moveModeSupport.getMoveLocations();
 			final StepCounter stepCounter = new StepCounter(5, getMovingUnit().getAvailableMoves());
 			final List<Point> steps = Lists.transform(locations, location -> area.convertToPoint(location));

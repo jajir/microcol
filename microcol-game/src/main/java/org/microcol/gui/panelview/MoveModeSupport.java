@@ -30,6 +30,8 @@ public class MoveModeSupport {
 	private final ViewState viewState;
 
 	private final GameModelController gameController;
+	
+	private final MouseOverTileManager mouseOverTileManager;
 
 	private List<Location> moveLocations;
 
@@ -83,11 +85,12 @@ public class MoveModeSupport {
 	@Inject
 	public MoveModeSupport(final MouseOverTileChangedController mouseOverTileChangedController,
 			final StartMoveController startMoveController, final ViewState viewState,
-			final GameModelController gameController) {
+			final GameModelController gameController, final MouseOverTileManager mouseOverTileManager) {
 		mouseOverTileChangedController.addListener(this::onMouseOverTileChanged);
 		startMoveController.addListener(this::onStartMove);
 		this.viewState = Preconditions.checkNotNull(viewState);
 		this.gameController = Preconditions.checkNotNull(gameController);
+		this.mouseOverTileManager = Preconditions.checkNotNull(mouseOverTileManager);
 		moveLocations = Lists.newArrayList();
 	}
 
@@ -107,8 +110,8 @@ public class MoveModeSupport {
 	}
 
 	private void recountPath() {
-		if (viewState.getMouseOverTile().isPresent()) {
-			final Location target = viewState.getMouseOverTile().get();
+		if (mouseOverTileManager.getMouseOverTile().isPresent()) {
+			final Location target = mouseOverTileManager.getMouseOverTile().get();
 			if (viewState.getSelectedTile().get().equals(target)) {
 				/**
 				 * Pointing with mouse to unit which should move.
