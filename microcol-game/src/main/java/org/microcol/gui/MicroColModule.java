@@ -1,5 +1,6 @@
 package org.microcol.gui;
 
+import org.microcol.gui.colonizopedia.Colonizopedia;
 import org.microcol.gui.colony.ColonyDialog;
 import org.microcol.gui.colony.ColonyDialogCallback;
 import org.microcol.gui.colony.PanelColonyDockBehaviour;
@@ -7,6 +8,14 @@ import org.microcol.gui.colony.PanelColonyFields;
 import org.microcol.gui.colony.PanelColonyGoods;
 import org.microcol.gui.colony.PanelColonyStructures;
 import org.microcol.gui.colony.PanelOutsideColony;
+import org.microcol.gui.europe.BuyUnitsDialog;
+import org.microcol.gui.europe.EuropeDialog;
+import org.microcol.gui.europe.EuropeDialogCallback;
+import org.microcol.gui.europe.PanelEuropeDockBehavior;
+import org.microcol.gui.europe.PanelEuropeGoods;
+import org.microcol.gui.europe.PanelHighSeas;
+import org.microcol.gui.europe.PanelPortPier;
+import org.microcol.gui.europe.RecruiteUnitsDialog;
 import org.microcol.gui.event.AboutGameListenerImpl;
 import org.microcol.gui.event.AnimationSpeedChangedListenerPreferences;
 import org.microcol.gui.event.BuildColonyListener;
@@ -76,7 +85,7 @@ public class MicroColModule extends AbstractModule {
 		bind(LocalizationHelper.class).in(Singleton.class);
 		bind(PersistentSrevice.class).in(Singleton.class);
 		bind(ModelDao.class).in(Singleton.class);
-		
+
 		/**
 		 * Dialogs
 		 */
@@ -144,7 +153,7 @@ public class MicroColModule extends AbstractModule {
 		bind(RightPanelView.class).in(Singleton.class);
 		bind(RightPanelPresenter.Display.class).to(RightPanelView.class).in(Singleton.class);
 		bind(RightPanelPresenter.class).asEagerSingleton();
-		
+
 		bind(UnitsPanel.class).in(Singleton.class);
 		bind(PersistingDialog.class).in(Singleton.class);
 
@@ -159,6 +168,26 @@ public class MicroColModule extends AbstractModule {
 		bind(PanelColonyGoods.class).in(Singleton.class);
 		bind(PanelColonyDockBehaviour.class).in(Singleton.class);
 
+		/**
+		 * Europe dialog
+		 */
+		bind(EuropeDialog.class).in(Singleton.class);
+		bind(EuropeDialogCallback.class).to(EuropeDialog.class).in(Singleton.class);
+		bind(PanelHighSeas.class);
+		bind(PanelPortPier.class).in(Singleton.class);
+		bind(PanelEuropeGoods.class).in(Singleton.class);
+		bind(RecruiteUnitsDialog.class).in(Singleton.class);
+		bind(BuyUnitsDialog.class).in(Singleton.class);
+		bind(PanelEuropeDockBehavior.class).in(Singleton.class);
+
+		/**
+		 * Rest of UI
+		 */
+		bind(DialogIndependenceWasDeclared.class).in(Singleton.class);
+		bind(Colonizopedia.class).in(Singleton.class);
+		bind(PreferencesVolume.class).in(Singleton.class);
+		bind(PreferencesAnimationSpeed.class).in(Singleton.class);
+		
 		/**
 		 * Load events manually
 		 */

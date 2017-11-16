@@ -138,6 +138,12 @@ public class ColonyDialog extends AbstractMessageWindow implements ColonyDialogC
 		getDialog().close();
 	}
 
+	@Override
+	public Colony getColony() {
+		return colony;
+	}
+	
+	@Override
 	public BooleanProperty getPropertyShiftWasPressed() {
 		return propertyShiftWasPressed;
 	}

@@ -12,6 +12,7 @@ import org.microcol.gui.util.ViewUtil;
 import org.microcol.model.UnitType;
 
 import com.google.common.base.Preconditions;
+import com.google.inject.Inject;
 
 import javafx.geometry.Insets;
 import javafx.scene.control.Label;
@@ -25,13 +26,14 @@ public class BuyUnitsDialog extends AbstractMessageWindow {
 
 	private final static int MAX_UNITS_IN_ROW = 2;
 	
-	private final EuropeDialog europeDialog;
+	private final EuropeDialogCallback europeDialogCallback;
 
+	@Inject
 	public BuyUnitsDialog(final ViewUtil viewUtil, final Text text, final ImageProvider imageProvider,
 			final GameModelController gameController, final LocalizationHelper localizationHelper,
-			final EuropeDialog europeDialog) {
+			final EuropeDialogCallback europeDialogCallback) {
 		super(viewUtil);
-		this.europeDialog = Preconditions.checkNotNull(europeDialog);
+		this.europeDialogCallback = Preconditions.checkNotNull(europeDialogCallback);
 		Preconditions.checkNotNull(imageProvider);
 		Preconditions.checkNotNull(gameController);
 		getDialog().setTitle(text.get("buyUnitDialog.title"));
@@ -63,13 +65,15 @@ public class BuyUnitsDialog extends AbstractMessageWindow {
 		});
 
 		root.getChildren().addAll(labelCaption, gridWithUnits, buttonBar);
-
-		getDialog().showAndWait();
 	}
 	
 	public void closeAndRepaint(){
-		europeDialog.repaint();
+		europeDialogCallback.repaint();
 		getDialog().close();
+	}
+	
+	public void showAndWait(){
+		getDialog().showAndWait();
 	}
 
 }

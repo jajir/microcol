@@ -10,6 +10,7 @@ import org.microcol.gui.util.ViewUtil;
 import org.microcol.model.UnitType;
 
 import com.google.common.base.Preconditions;
+import com.google.inject.Inject;
 
 import javafx.geometry.Insets;
 import javafx.scene.control.Label;
@@ -21,6 +22,7 @@ import javafx.scene.layout.VBox;
  */
 public class RecruiteUnitsDialog extends AbstractMessageWindow {
 
+	@Inject
 	public RecruiteUnitsDialog(final ViewUtil viewUtil, final Text text, final ImageProvider imageProvider,
 			final GameModelController gameController, final LocalizationHelper localizationHelper) {
 		super(viewUtil);
@@ -48,7 +50,9 @@ public class RecruiteUnitsDialog extends AbstractMessageWindow {
 		});
 
 		root.getChildren().addAll(labelCaption, gridWithUnits, buttonBar);
-
+	}
+	
+	public void showAndWait(){
 		getDialog().showAndWait();
 	}
 

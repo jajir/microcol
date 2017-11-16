@@ -1,9 +1,9 @@
-package org.microcol.gui.colony;
+package org.microcol.gui.europe;
 
 import java.util.List;
 
+import org.microcol.gui.DialogNotEnoughGold;
 import org.microcol.gui.ImageProvider;
-import org.microcol.gui.europe.ChooseGoodAmount;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.util.ClipboardReader;
 import org.microcol.gui.util.ClipboardWritter;
@@ -12,6 +12,7 @@ import org.microcol.gui.util.Text;
 import org.microcol.gui.util.ViewUtil;
 import org.microcol.model.CargoSlot;
 import org.microcol.model.GoodAmount;
+import org.microcol.model.NotEnoughtGoldException;
 import org.microcol.model.Unit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,64 +27,67 @@ import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 
-public class PanelColonyDockBehaviour implements PanelDockBehavior {
-	
-	final Logger logger = LoggerFactory.getLogger(PanelColonyDockBehaviour.class);
-	
+public class PanelEuropeDockBehavior implements PanelDockBehavior {
+
+	final Logger logger = LoggerFactory.getLogger(PanelEuropeDockBehavior.class);
+
 	/**
 	 * 
 	 */
-	private final ColonyDialogCallback colonyDialogCallback;
+	private final EuropeDialogCallback europeDialogCallback;
 	private final GameModelController gameController;
-	private final ViewUtil viewUtil;
 	private final Text text;
+	private final ViewUtil viewUtil;
 	private final ImageProvider imageProvider;
 
 	@Inject
-	PanelColonyDockBehaviour(final ColonyDialogCallback colonyDialogCallback, final GameModelController gameController,
-			final ViewUtil viewUtil, final Text text, final ImageProvider imageProvider) {
-		this.colonyDialogCallback = Preconditions.checkNotNull(colonyDialogCallback);
+	PanelEuropeDockBehavior(EuropeDialogCallback europeDialogCallback, GameModelController gameController, Text text,
+			ViewUtil viewUtil, ImageProvider imageProvider) {
+		this.europeDialogCallback = Preconditions.checkNotNull(europeDialogCallback);
 		this.gameController = Preconditions.checkNotNull(gameController);
-		this.viewUtil = Preconditions.checkNotNull(viewUtil);
 		this.text = Preconditions.checkNotNull(text);
+		this.viewUtil = Preconditions.checkNotNull(viewUtil);
 		this.imageProvider = Preconditions.checkNotNull(imageProvider);
 	}
 
 	@Override
 	public List<Unit> getUnitsInPort() {
-		return colonyDialogCallback.getColony().getUnitsInPort();
+		return gameController.getModel().getEurope().getPort().getShipsInPort(gameController.getCurrentPlayer());
 	}
 
 	@Override
-	public void onDragDropped(final CargoSlot cargoSlot, final DragEvent event) {
+	public final void onDragDropped(final CargoSlot cargoSlot, final DragEvent event) {
 		logger.debug("Object was dropped on ship cargo slot.");
 		final Dragboard db = event.getDragboard();
 		ClipboardReader.make(gameController.getModel(), db).filterUnit(unit -> !unit.getType().isShip())
 				.tryReadGood((goodAmount, transferFrom) -> {
 					Preconditions.checkArgument(transferFrom.isPresent(), "Good origin is not known.");
 					GoodAmount tmp = goodAmount;
-					logger
-							.debug("wasShiftPressed " + colonyDialogCallback.getPropertyShiftWasPressed().get());
-					if (colonyDialogCallback.getPropertyShiftWasPressed().get()) {
+					logger.debug("wasShiftPressed " + europeDialogCallback.getPropertyShiftWasPressed().get());
+					if (europeDialogCallback.getPropertyShiftWasPressed().get()) {
 						ChooseGoodAmount chooseGoodAmount = new ChooseGoodAmount(viewUtil, text,
 								goodAmount.getAmount());
 						tmp = new GoodAmount(goodAmount.getGoodType(), chooseGoodAmount.getActualValue());
 					}
-					if (transferFrom.get() instanceof ClipboardReader.TransferFromColonyWarehouse) {
-						cargoSlot.storeFromColonyWarehouse(tmp, colonyDialogCallback.getColony());
+					if (transferFrom.get() instanceof ClipboardReader.TransferFromEuropeShop) {
+						try {
+							cargoSlot.buyAndStore(tmp);
+						} catch (NotEnoughtGoldException e) {
+							new DialogNotEnoughGold(viewUtil, text);
+						}
 					} else if (transferFrom.get() instanceof ClipboardReader.TransferFromCargoSlot) {
 						cargoSlot.storeFromCargoSlot(tmp,
 								((ClipboardReader.TransferFromCargoSlot) transferFrom.get()).getCargoSlot());
 					} else {
 						throw new IllegalArgumentException("Unsupported source transfer '" + transferFrom + "'");
 					}
-					colonyDialogCallback.repaint();
+					europeDialogCallback.repaintAfterGoodMoving();
 					event.acceptTransferModes(TransferMode.MOVE);
 					event.setDropCompleted(true);
 					event.consume();
 				}).tryReadUnit((unit, transferFrom) -> {
 					cargoSlot.store(unit);
-					colonyDialogCallback.repaint();
+					europeDialogCallback.repaintAfterGoodMoving();
 					event.acceptTransferModes(TransferMode.MOVE);
 					event.setDropCompleted(true);
 					event.consume();

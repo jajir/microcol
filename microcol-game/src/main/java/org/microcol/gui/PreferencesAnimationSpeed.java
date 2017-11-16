@@ -6,6 +6,9 @@ import org.microcol.gui.util.AbstractMessageWindow;
 import org.microcol.gui.util.Text;
 import org.microcol.gui.util.ViewUtil;
 
+import com.google.common.base.Preconditions;
+import com.google.inject.Inject;
+
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
@@ -14,6 +17,10 @@ import javafx.util.StringConverter;
 
 public class PreferencesAnimationSpeed extends AbstractMessageWindow {
 
+	private final GamePreferences gamePreferences;
+	
+	private final Slider slider;
+	
 	/**
 	 * Constructor when parentFrame is not available.
 	 * 
@@ -23,12 +30,14 @@ public class PreferencesAnimationSpeed extends AbstractMessageWindow {
 	 *            required show dialog utilities
 	 * @param controller
 	 *            required animation speed controller
-	 * @param actualVolume
-	 *            required actual animation speed value
+	 * @param gamePreferences
+	 *            required game preferences
 	 */
+	@Inject
 	public PreferencesAnimationSpeed(final Text text, final ViewUtil viewUtil,
-			final AnimationSpeedChangeController controller, final int actualVolume) {
+			final AnimationSpeedChangeController controller, final GamePreferences gamePreferences) {
 		super(viewUtil);
+		this.gamePreferences = Preconditions.checkNotNull(gamePreferences);
 		getDialog().setTitle(text.get("preferencesAnimationSpeed.caption"));
 
 		VBox root = new VBox();
@@ -36,10 +45,9 @@ public class PreferencesAnimationSpeed extends AbstractMessageWindow {
 		
 		final Label label = new Label(text.get("preferencesAnimationSpeed.caption"));
 
-		Slider slider = new Slider();
+		slider = new Slider();
 		slider.setMin(PathPlanning.ANIMATION_SPEED_MIN_VALUE);
 		slider.setMax(PathPlanning.ANIMATION_SPEED_MAX_VALUE - 1);
-		slider.setValue(actualVolume);
 		slider.setSnapToTicks(true);
 		slider.setMajorTickUnit(1);
 		slider.setMinorTickCount(0);
@@ -74,8 +82,11 @@ public class PreferencesAnimationSpeed extends AbstractMessageWindow {
 		buttonOk.requestFocus();
 
 		root.getChildren().addAll(label, slider, buttonOk);
-
-		getDialog().showAndWait();
 	}
 
+	public void resetAndShowAndWait(){
+		slider.setValue(gamePreferences.getAnimationSpeed());
+		getDialog().showAndWait();
+	}
+	
 }

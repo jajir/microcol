@@ -7,6 +7,9 @@ import org.microcol.gui.util.ButtonsBar;
 import org.microcol.gui.util.Text;
 import org.microcol.gui.util.ViewUtil;
 
+import com.google.common.base.Preconditions;
+import com.google.inject.Inject;
+
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.layout.VBox;
@@ -14,6 +17,10 @@ import javafx.util.StringConverter;
 
 public class PreferencesVolume extends AbstractMessageWindow {
 
+	private final GamePreferences gamePreferences;
+	
+	private final Slider slider;
+	
 	/**
 	 * Constructor when parentFrame is not available.
 	 * 
@@ -23,12 +30,14 @@ public class PreferencesVolume extends AbstractMessageWindow {
 	 *            required localization helper class
 	 * @param volumeChangeController
 	 *            required volume change controller
-	 * @param actualVolume
-	 *            required actual volume value
+	 * @param gamePreferences
+	 *            required game preferences
 	 */
+	@Inject
 	public PreferencesVolume(final ViewUtil viewUtil, final Text text,
-			final VolumeChangeController volumeChangeController, final int actualVolume) {
+			final VolumeChangeController volumeChangeController, final GamePreferences gamePreferences) {
 		super(viewUtil);
+		this.gamePreferences = Preconditions.checkNotNull(gamePreferences);
 		getDialog().setTitle(text.get("preferencesVolume.caption"));
 
 		VBox root = new VBox();
@@ -38,10 +47,9 @@ public class PreferencesVolume extends AbstractMessageWindow {
 		final Label label = new Label(text.get("preferencesVolume.caption"));
 		label.setId("caption");
 
-		Slider slider = new Slider();
+		slider = new Slider();
 		slider.setMin(MusicPlayer.MIN_VOLUME);
 		slider.setMax(MusicPlayer.MAX_VOLUME);
-		slider.setValue(actualVolume);
 		slider.setSnapToTicks(true);
 		slider.setShowTickLabels(true);
 		slider.setShowTickMarks(false);
@@ -73,7 +81,10 @@ public class PreferencesVolume extends AbstractMessageWindow {
 		});
 		
 		root.getChildren().addAll(label, slider, buttonBar);
-
+	}
+	
+	public void resetAndShowAndWait(){
+		slider.setValue(gamePreferences.getVolume());
 		getDialog().showAndWait();
 	}
 

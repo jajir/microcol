@@ -6,6 +6,7 @@ import org.microcol.gui.util.ClipboardReader;
 import org.microcol.gui.util.TitledPanel;
 
 import com.google.common.base.Preconditions;
+import com.google.inject.Inject;
 
 import javafx.geometry.Insets;
 import javafx.scene.image.ImageView;
@@ -24,9 +25,9 @@ import javafx.scene.paint.Color;
  */
 public class PanelHighSeas extends TitledPanel {
 
-	private final boolean isShownShipsTravelingToEurope;
+	private boolean isShownShipsTravelingToEurope;
 
-	private final EuropeDialog europeDialog;
+	private final EuropeDialogCallback europeDialog;
 
 	private final HBox shipsContainer;
 
@@ -36,13 +37,13 @@ public class PanelHighSeas extends TitledPanel {
 
 	private Background background;
 
-	public PanelHighSeas(final EuropeDialog europeDialog, final ImageProvider imageProvider, final String title,
-			final GameModelController gameController, final boolean isShownShipsTravelingToEurope) {
-		super(title, null);
+	@Inject
+	public PanelHighSeas(final EuropeDialogCallback europeDialog, final ImageProvider imageProvider,
+			final GameModelController gameController) {
+		super();
 		this.europeDialog = Preconditions.checkNotNull(europeDialog);
 		this.imageProvider = Preconditions.checkNotNull(imageProvider);
 		this.gameController = Preconditions.checkNotNull(gameController);
-		this.isShownShipsTravelingToEurope = isShownShipsTravelingToEurope;
 		minHeightProperty().set(80);
 		shipsContainer = new HBox();
 		getChildren().add(shipsContainer);
@@ -106,6 +107,13 @@ public class PanelHighSeas extends TitledPanel {
 				.forEach(unit -> {
 					shipsContainer.getChildren().add(new ImageView(imageProvider.getUnitImage(unit.getType())));
 				});
+	}
+
+	/**
+	 * @param isShownShipsTravelingToEurope the isShownShipsTravelingToEurope to set
+	 */
+	public void setShownShipsTravelingToEurope(boolean isShownShipsTravelingToEurope) {
+		this.isShownShipsTravelingToEurope = isShownShipsTravelingToEurope;
 	}
 
 }

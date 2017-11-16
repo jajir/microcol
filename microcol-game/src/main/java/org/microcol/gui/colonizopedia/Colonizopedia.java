@@ -5,11 +5,14 @@ import org.microcol.gui.util.ButtonsBar;
 import org.microcol.gui.util.Text;
 import org.microcol.gui.util.ViewUtil;
 
+import com.google.inject.Inject;
+
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 public class Colonizopedia extends AbstractMessageWindow {
 
+	@Inject
 	public Colonizopedia(final Text text, final ViewUtil viewUtil) {
 		super(viewUtil);
 		getDialog().setTitle(text.get("colonizopedia.title"));
@@ -24,6 +27,9 @@ public class Colonizopedia extends AbstractMessageWindow {
 		
 		root.getChildren().addAll( main, buttonBar);
 		init(root);
+	}
+	
+	public void showAndWait(){
 		getDialog().showAndWait();
 	}
 

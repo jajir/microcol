@@ -1,9 +1,6 @@
 package org.microcol.gui.mainmenu;
 
 import org.microcol.gui.DialogIndependenceWasDeclared;
-import org.microcol.gui.GamePreferences;
-import org.microcol.gui.ImageProvider;
-import org.microcol.gui.LocalizationHelper;
 import org.microcol.gui.PersistingDialog;
 import org.microcol.gui.PreferencesAnimationSpeed;
 import org.microcol.gui.PreferencesVolume;
@@ -16,7 +13,6 @@ import org.microcol.gui.event.StartMoveEvent;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.event.model.TurnStartedController;
 import org.microcol.gui.util.Text;
-import org.microcol.gui.util.ViewUtil;
 import org.microcol.model.event.TurnStartedEvent;
 
 import com.google.common.base.Preconditions;
@@ -77,14 +73,12 @@ public class MainMenuPresenter {
 			 * Following parameters are controllers reacting on menu events 
 			 */
 			final AboutGameEventController gameEventController,
-			final AnimationSpeedChangeController animationSpeedChangeController,
 			final BuildColonyEventController buildColonyEventController,
 			final CenterViewController centerViewController,
 			final ChangeLanguageController changeLanguageController,
 			final DeclareIndependenceController declareIndependenceController,
 			final ExitGameController exitGameController,
 			final ShowGridController showGridController,
-			final VolumeChangeController volumeChangeController,
 			
 			/**
 			 * Menu items react on following events
@@ -97,11 +91,12 @@ public class MainMenuPresenter {
 			/**
 			 * Other events consumers and helpers
 			 */
-			final GamePreferences gamePreferences,
 			final PersistingDialog persistingDialog,
-			final ImageProvider imageProvider,
-			final LocalizationHelper localizationHelper,
-			final Text text, final ViewUtil viewUtil
+			final EuropeDialog europeDialog,
+			final DialogIndependenceWasDeclared dialogIndependenceWasDeclared,
+			final Colonizopedia colonizopedia,
+			final PreferencesAnimationSpeed preferencesAnimationSpeed,
+			final PreferencesVolume preferencesVolume
 			) {
 		this.display = Preconditions.checkNotNull(display);
 		display.getMenuItemNewGame().setOnAction(actionEvent -> gameModelController.startNewDefaultGame());
@@ -109,17 +104,15 @@ public class MainMenuPresenter {
 		display.getMenuItemLoadGame().setOnAction(event -> persistingDialog.loadModel());
 		display.getMenuItemQuitGame().setOnAction(actionEvent -> exitGameController.fireEvent(new ExitGameEvent()));
 		display.getMenuItemAbout().setOnAction(actionEvent -> gameEventController.fireEvent(new AboutGameEvent()));
-		display.getMenuItemColonizopedia().setOnAction(event -> new Colonizopedia(text, viewUtil));
+		display.getMenuItemColonizopedia().setOnAction(event -> colonizopedia.showAndWait());
 		display.getRbMenuItemlanguageCz().setOnAction(actionEvent -> changeLanguageController
 				.fireEvent(new ChangeLanguageEvent(Text.Language.cz, gameModelController.getModel())));
 		display.getRbMenuItemlanguageEn().setOnAction(actionEvent -> changeLanguageController
 				.fireEvent(new ChangeLanguageEvent(Text.Language.en, gameModelController.getModel())));
-		display.getMenuItemVolume().setOnAction(actionEvent -> new PreferencesVolume(viewUtil, text,
-				volumeChangeController, gamePreferences.getVolume()));
-		display.getMenuItemAnimationSpeed().setOnAction(event -> new PreferencesAnimationSpeed(text, viewUtil,
-				animationSpeedChangeController, gamePreferences.getAnimationSpeed()));
+		display.getMenuItemVolume().setOnAction(actionEvent -> preferencesVolume.resetAndShowAndWait());
+		display.getMenuItemAnimationSpeed().setOnAction(event -> preferencesAnimationSpeed.resetAndShowAndWait());
 		display.getMenuItemEurope().setOnAction(
-				event -> new EuropeDialog(viewUtil, text, imageProvider, gameModelController, localizationHelper).show());
+				event -> europeDialog.show());
 		display.getMenuItemShowGrid().setOnAction(ectionEvent -> showGridController
 				.fireEvent(new ShowGridEvent(display.getMenuItemShowGrid().isSelected())));
 		display.getMenuItemBuildColony().setOnAction(event -> buildColonyEventController.fireEvent());
@@ -128,7 +121,7 @@ public class MainMenuPresenter {
 			display.getMenuItemMove().setDisable(true);
 		});
 		display.getMenuItemDeclareIndependence().setOnAction(event -> {
-			new DialogIndependenceWasDeclared(viewUtil, text);
+			dialogIndependenceWasDeclared.showAndWait();
 			declareIndependenceController.fireEvent(
 					new DeclareIndependenceEvent(gameModelController.getModel(), gameModelController.getCurrentPlayer()));
 		});

@@ -5,11 +5,13 @@ import org.microcol.gui.LocalizationHelper;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.util.ClipboardReader;
 import org.microcol.gui.util.ClipboardReader.TransferFromEuropePier;
+import org.microcol.gui.util.Text;
 import org.microcol.gui.util.TitledPanel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
+import com.google.inject.Inject;
 
 import javafx.geometry.Insets;
 import javafx.scene.control.Label;
@@ -32,7 +34,7 @@ public class PanelPortPier extends TitledPanel {
 
 	private final GameModelController gameController;
 
-	private final DialogCallback europeDialog;
+	private final EuropeDialogCallback europeDialog;
 
 	private final ImageProvider imageProvider;
 
@@ -42,11 +44,12 @@ public class PanelPortPier extends TitledPanel {
 
 	private Background background;
 
-	public PanelPortPier(final GameModelController gameController, final EuropeDialog europeDialog, final String title,
-			final ImageProvider imageProvider, final LocalizationHelper localizationHelper) {
-		super(title, new Label(title));
+	@Inject
+	public PanelPortPier(final GameModelController gameController, final EuropeDialogCallback europeDialogCallback,
+			final Text text, final ImageProvider imageProvider, final LocalizationHelper localizationHelper) {
+		super(text.get("europe.pier"), new Label(text.get("europe.pier")));
 		this.gameController = Preconditions.checkNotNull(gameController);
-		this.europeDialog = Preconditions.checkNotNull(europeDialog);
+		this.europeDialog = Preconditions.checkNotNull(europeDialogCallback);
 		this.imageProvider = Preconditions.checkNotNull(imageProvider);
 		this.localizationHelper = Preconditions.checkNotNull(localizationHelper);
 		panelUnits = new VBox();
@@ -59,8 +62,8 @@ public class PanelPortPier extends TitledPanel {
 
 	void repaint() {
 		panelUnits.getChildren().clear();
-		gameController.getModel().getEurope().getPier().getUnits(gameController.getCurrentPlayer())
-				.forEach(unit -> panelUnits.getChildren().add(new PanelPortPierUnit(unit, imageProvider, localizationHelper)));
+		gameController.getModel().getEurope().getPier().getUnits(gameController.getCurrentPlayer()).forEach(
+				unit -> panelUnits.getChildren().add(new PanelPortPierUnit(unit, imageProvider, localizationHelper)));
 	}
 
 	private final void onDragEntered(final DragEvent event) {

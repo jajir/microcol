@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
+import com.google.inject.Inject;
 
 import javafx.geometry.Insets;
 import javafx.scene.input.DragEvent;
@@ -24,9 +25,9 @@ import javafx.scene.paint.Color;
 /**
  * Show list of all available goods.
  */
-public class PanelGoods extends TitledPanel {
+public class PanelEuropeGoods extends TitledPanel {
 
-	private final Logger logger = LoggerFactory.getLogger(PanelGoods.class);
+	private final Logger logger = LoggerFactory.getLogger(PanelEuropeGoods.class);
 
 	private final HBox hBox;
 
@@ -34,15 +35,17 @@ public class PanelGoods extends TitledPanel {
 
 	private final GameModelController gameController;
 
-	private final EuropeDialog europeDialog;
+	private final EuropeDialogCallback europeDialogCallback;
 	
 	private Background background;
 
-	public PanelGoods(final EuropeDialog europeDialog, final GameModelController gameController, final ImageProvider imageProvider) {
+	@Inject
+	public PanelEuropeGoods(final EuropeDialogCallback europeDialogCallback, final GameModelController gameController,
+			final ImageProvider imageProvider) {
 		super("zbozi");
 		this.gameController = Preconditions.checkNotNull(gameController);
 		this.imageProvider = Preconditions.checkNotNull(imageProvider);
-		this.europeDialog = Preconditions.checkNotNull(europeDialog);
+		this.europeDialogCallback = Preconditions.checkNotNull(europeDialogCallback);
 		hBox = new HBox();
 		getContentPane().getChildren().add(hBox);
 
@@ -90,7 +93,7 @@ public class PanelGoods extends TitledPanel {
 				final ClipboardReader.TransferFromCargoSlot fromCargo = (ClipboardReader.TransferFromCargoSlot) transferFrom
 						.get();
 				fromCargo.getCargoSlot().sellAndEmpty(goodAmount);
-				europeDialog.repaint();
+				europeDialogCallback.repaint();
 			}
 			event.setDropCompleted(true);
 			event.consume();

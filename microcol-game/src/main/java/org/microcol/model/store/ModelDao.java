@@ -59,8 +59,8 @@ public class ModelDao {
 	/**
 	 * Load model or scenario stored on class path.
 	 * 
-	 * @param fileName
-	 *            required file name
+	 * @param file
+	 *            required file object
 	 * @return loaded model persistent object
 	 */
 	public ModelPo loadModel(final File file) {

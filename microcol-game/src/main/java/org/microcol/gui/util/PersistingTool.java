@@ -30,8 +30,9 @@ public class PersistingTool {
 	}
 
 	/**
+	 * Get base directory where could be file saves.
 	 * 
-	 * @return
+	 * @return return root directory
 	 */
 	public File getRootSaveDirectory() {
 		final File userDir = new File(System.getProperty(SYSTEM_PROPERTY_USER_HOME));

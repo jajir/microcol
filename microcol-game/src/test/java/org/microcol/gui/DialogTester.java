@@ -5,8 +5,6 @@ import org.microcol.gui.colonizopedia.Colonizopedia;
 import org.microcol.gui.europe.BuyUnitsDialog;
 import org.microcol.gui.europe.ChooseGoodAmount;
 import org.microcol.gui.event.model.GameModelController;
-import org.microcol.gui.mainmenu.AnimationSpeedChangeController;
-import org.microcol.gui.mainmenu.VolumeChangeController;
 import org.microcol.gui.util.Text;
 import org.microcol.gui.util.Text.Language;
 import org.microcol.gui.util.ViewUtil;
@@ -66,18 +64,6 @@ public class DialogTester extends Application {
 
 	public final static void startAboutDialog() {
 		new AboutDialog(viewUtil, text);
-	}
-
-	public final static void startPreferencesVolume() {
-		VolumeChangeController controller = new VolumeChangeController();
-		int actualVolume = 10;
-		new PreferencesVolume(viewUtil, text, controller, actualVolume);
-	}
-
-	public final static void startPreferencesAnimationSpeed() {
-		AnimationSpeedChangeController controller = new AnimationSpeedChangeController();
-		int actualVolume = 10;
-		new PreferencesAnimationSpeed(text, viewUtil, controller, actualVolume);
 	}
 
 	public final static void testDialogFight() {
