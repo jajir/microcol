@@ -19,9 +19,6 @@ public class ViewState {
 
 	/**
 	 * Default constructor
-	 * 
-	 * @param mouseOverTileChangedController
-	 *            required mouse over tile changed
 	 */
 	@Inject
 	public ViewState() {
