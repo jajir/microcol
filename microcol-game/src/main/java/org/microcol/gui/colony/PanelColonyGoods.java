@@ -28,7 +28,7 @@ public class PanelColonyGoods extends TitledPanel {
 
 	private final HBox hBox;
 
-	private final GameModelController gameController;
+	private final GameModelController gameModelController;
 	
 	private final ColonyDialogCallback colonyDialog;
 
@@ -37,10 +37,10 @@ public class PanelColonyGoods extends TitledPanel {
 	private ColonyWarehouse colonyWarehouse;
 
 	@Inject
-	public PanelColonyGoods(final GameModelController gameController, final ImageProvider imageProvider,
+	public PanelColonyGoods(final GameModelController gameModelController, final ImageProvider imageProvider,
 			final ColonyDialogCallback colonyDialog) {
 		super("zbozi");
-		this.gameController = Preconditions.checkNotNull(gameController);
+		this.gameModelController = Preconditions.checkNotNull(gameModelController);
 		this.colonyDialog = Preconditions.checkNotNull(colonyDialog);
 		hBox = new HBox();
 		getContentPane().getChildren().add(hBox);
@@ -91,7 +91,7 @@ public class PanelColonyGoods extends TitledPanel {
 
 	private final void onDragDropped(final DragEvent event) {
 		final Dragboard db = event.getDragboard();
-		ClipboardReader.make(gameController.getModel(), db).tryReadGood((goodAmount, transferFrom) -> {
+		ClipboardReader.make(gameModelController.getModel(), db).tryReadGood((goodAmount, transferFrom) -> {
 			if (transferFrom.isPresent() && transferFrom.get() instanceof ClipboardReader.TransferFromCargoSlot) {
 				final ClipboardReader.TransferFromCargoSlot fromCargoSlot = (ClipboardReader.TransferFromCargoSlot) transferFrom
 						.get();
@@ -104,7 +104,7 @@ public class PanelColonyGoods extends TitledPanel {
 	}
 
 	private boolean isItGoodAmount(final Dragboard db) {
-		return ClipboardReader.make(gameController.getModel(), db).getGoods().isPresent();
+		return ClipboardReader.make(gameModelController.getModel(), db).getGoods().isPresent();
 	}
 
 }

@@ -32,18 +32,18 @@ public class PanelOutsideColony extends TitledPanel {
 
 	private final ImageProvider imageProvider;
 
-	private final GameModelController gameController;
+	private final GameModelController gameModelController;
 
 	private final ColonyDialogCallback colonyDialog;
 	
 	private final DialogDestroyColony dialogDestroyColony;
 
 	@Inject
-	public PanelOutsideColony(final ImageProvider imageProvider, final GameModelController gameController,
+	public PanelOutsideColony(final ImageProvider imageProvider, final GameModelController gameModelController,
 			final ColonyDialogCallback colonyDialog, final DialogDestroyColony dialogDestroyColony) {
 		super("Outside Colony", null);
 		this.imageProvider = Preconditions.checkNotNull(imageProvider);
-		this.gameController = Preconditions.checkNotNull(gameController);
+		this.gameModelController = Preconditions.checkNotNull(gameModelController);
 		this.colonyDialog = Preconditions.checkNotNull(colonyDialog);
 		this.dialogDestroyColony = Preconditions.checkNotNull(dialogDestroyColony);
 		panelUnits = new HBox();
@@ -78,13 +78,13 @@ public class PanelOutsideColony extends TitledPanel {
 	}
 
 	private boolean isItUnit(final Dragboard db) {
-		return ClipboardReader.make(gameController.getModel(), db).getUnit().isPresent();
+		return ClipboardReader.make(gameModelController.getModel(), db).getUnit().isPresent();
 	}
 
 	private final void onDragDropped(final DragEvent event) {
 		logger.debug("Object was dropped on panel outside colony.");
 		final Dragboard db = event.getDragboard();
-		ClipboardReader.make(gameController.getModel(), db).tryReadUnit((unit, transferFrom) -> {
+		ClipboardReader.make(gameModelController.getModel(), db).tryReadUnit((unit, transferFrom) -> {
 			if (colony.isLastUnitIncolony(unit)){
 				if(dialogDestroyColony.showWaitAndReturnIfYesWasSelected()){
 					unit.placeToMap(colony.getLocation());

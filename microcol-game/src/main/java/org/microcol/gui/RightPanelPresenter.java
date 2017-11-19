@@ -37,7 +37,7 @@ public class RightPanelPresenter implements Localized {
 	private FocusedTileEvent lastFocusedTileEvent;
 
 	@Inject
-	public RightPanelPresenter(final RightPanelPresenter.Display display, final GameModelController gameController,
+	public RightPanelPresenter(final RightPanelPresenter.Display display, final GameModelController gameModelController,
 			final KeyController keyController, final FocusedTileController focusedTileController,
 			final ChangeLanguageController changeLanguangeController,
 			final StatusBarMessageController statusBarMessageController,
@@ -48,7 +48,7 @@ public class RightPanelPresenter implements Localized {
 
 		display.getNextTurnButton().setOnAction(e -> {
 			display.getNextTurnButton().setDisable(true);
-			gameController.nextTurn();
+			gameModelController.nextTurn();
 		});
 
 		display.getNextTurnButton().setOnKeyPressed(e -> {

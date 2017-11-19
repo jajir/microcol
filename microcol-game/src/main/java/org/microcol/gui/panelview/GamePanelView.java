@@ -52,13 +52,13 @@ public class GamePanelView implements GamePanelPresenter.Display {
 
 	private final Cursor gotoModeCursor;
 
-	private final GameModelController gameController;
+	private final GameModelController gameModelController;
 
 	private final PathPlanning pathPlanning;
 
 	private final VisualDebugInfo visualDebugInfo;
 
-	private final ViewState viewState;
+	private final SelectedTileManager selectedTileManager;
 
 	private final AnimationManager animationManager;
 
@@ -89,14 +89,14 @@ public class GamePanelView implements GamePanelPresenter.Display {
 	private final MouseOverTileManager mouseOverTileManager;
 
 	@Inject
-	public GamePanelView(final GameModelController gameController, final PathPlanning pathPlanning,
-			final ImageProvider imageProvider, final ViewState viewState, final MoveModeSupport moveModeSupport,
+	public GamePanelView(final GameModelController gameModelController, final PathPlanning pathPlanning,
+			final ImageProvider imageProvider, final SelectedTileManager selectedTileManager, final MoveModeSupport moveModeSupport,
 			final Text text, final ViewUtil viewUtil, final LocalizationHelper localizationHelper,
 			final PaintService paintService, final GamePreferences gamePreferences, final MouseOverTileManager mouseOverTileManager) {
-		this.gameController = Preconditions.checkNotNull(gameController);
+		this.gameModelController = Preconditions.checkNotNull(gameModelController);
 		this.pathPlanning = Preconditions.checkNotNull(pathPlanning);
 		this.imageProvider = Preconditions.checkNotNull(imageProvider);
-		this.viewState = Preconditions.checkNotNull(viewState);
+		this.selectedTileManager = Preconditions.checkNotNull(selectedTileManager);
 		this.moveModeSupport = Preconditions.checkNotNull(moveModeSupport);
 		this.text = Preconditions.checkNotNull(text);
 		this.viewUtil = Preconditions.checkNotNull(viewUtil);
@@ -127,7 +127,7 @@ public class GamePanelView implements GamePanelPresenter.Display {
 			@Override
 			public void handle(long now) {
 				nextGameTick();
-				if (gameController.isModelReady()) {
+				if (gameModelController.isModelReady()) {
 					paint();
 				}
 			}
@@ -198,14 +198,14 @@ public class GamePanelView implements GamePanelPresenter.Display {
 		paintTerrain(g, area);
 		paintGrid(g, area);
 		paintSelectedTile(g, area);
-		paintUnits(g, gameController.getModel(), area);
-		paintColonies(g, gameController.getModel(), area);
+		paintUnits(g, gameModelController.getModel(), area);
+		paintColonies(g, gameModelController.getModel(), area);
 		paintSteps(g, area);
 		paintAnimation(g, area);
 		if (gamePreferences.isDevelopment()) {
 			paintService.paintDebugInfo(g, visualDebugInfo, area);
 		}
-		if (gameController.getCurrentPlayer().isComputer()) {
+		if (gameModelController.getCurrentPlayer().isComputer()) {
 			/**
 			 * If move computer that make game field darker.
 			 */
@@ -236,7 +236,7 @@ public class GamePanelView implements GamePanelPresenter.Display {
 			for (int j = area.getTopLeft().getY(); j <= area.getBottomRight().getY(); j++) {
 				final Location location = Location.of(i, j);
 				final Point point = area.convertToPoint(location);
-				final Terrain terrain = gameController.getModel().getMap().getTerrainAt(location);
+				final Terrain terrain = gameModelController.getModel().getMap().getTerrainAt(location);
 				paintService.paintTerrainOnTile(graphics, point, terrain,
 						oneTurnMoveHighlighter.isItHighlighted(location));
 			}
@@ -306,10 +306,10 @@ public class GamePanelView implements GamePanelPresenter.Display {
 	}
 
 	private void paintSelectedTile(final GraphicsContext graphics, final Area area) {
-		if (viewState.getSelectedTile().isPresent()) {
+		if (selectedTileManager.getSelectedTile().isPresent()) {
 			graphics.setStroke(Color.GREY);
 			graphics.setLineWidth(2);
-			paintCursor(graphics, area, viewState.getSelectedTile().get());
+			paintCursor(graphics, area, selectedTileManager.getSelectedTile().get());
 		}
 	}
 
@@ -342,7 +342,7 @@ public class GamePanelView implements GamePanelPresenter.Display {
 	 *            required displayed area
 	 */
 	private void paintSteps(final GraphicsContext graphics, final Area area) {
-		if (viewState.isMoveMode() && mouseOverTileManager.getMouseOverTile().isPresent()) {
+		if (selectedTileManager.isMoveMode() && mouseOverTileManager.getMouseOverTile().isPresent()) {
 			paintCursor(graphics, area, mouseOverTileManager.getMouseOverTile().get());
 			final List<Location> locations = moveModeSupport.getMoveLocations();
 			final StepCounter stepCounter = new StepCounter(5, getMovingUnit().getAvailableMoves());
@@ -362,7 +362,7 @@ public class GamePanelView implements GamePanelPresenter.Display {
 	 */
 	private Unit getMovingUnit() {
 		//XXX moving unit is choose as first in list. When there are more than one it not will be enough. 
-		return gameController.getCurrentPlayer().getUnitsAt(viewState.getSelectedTile().get()).get(0);
+		return gameModelController.getCurrentPlayer().getUnitsAt(selectedTileManager.getSelectedTile().get()).get(0);
 	}
 
 	/**
@@ -389,14 +389,14 @@ public class GamePanelView implements GamePanelPresenter.Display {
 	public void setCursorNormal() {
 		oneTurnMoveHighlighter.setLocations(null);
 		canvas.setCursor(Cursor.DEFAULT);
-		viewState.setMoveMode(false);
+		selectedTileManager.setMoveMode(false);
 	}
 
 	// TODO JJ rename it
 	@Override
 	public void setCursorGoto() {
 		canvas.setCursor(gotoModeCursor);
-		viewState.setMoveMode(true);
+		selectedTileManager.setMoveMode(true);
 	}
 
 	// TODO JJ animation scheduling should be in separate class.
@@ -432,7 +432,7 @@ public class GamePanelView implements GamePanelPresenter.Display {
 
 	@Override
 	public Area getArea() {
-		return new Area(visibleArea, gameController.getModel().getMap());
+		return new Area(visibleArea, gameModelController.getModel().getMap());
 	}
 
 	@Override

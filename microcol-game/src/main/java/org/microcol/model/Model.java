@@ -262,9 +262,18 @@ public final class Model {
 	}
 	
 	public Unit getNextUnitForCurrentUser(final Unit currentUnit){
+		Preconditions.checkNotNull(currentUnit);
 		Preconditions.checkState(getCurrentPlayer().equals(currentUnit.getOwner()),
 				"current unit (%s) doest belongs to user that is on turn (%s)", currentUnit, getCurrentPlayer());
 		return unitStorage.getNextUnitForCurrentUser(getCurrentPlayer(), currentUnit);
+	}
+
+	public Optional<Unit> getFirstSelectableUnitAt(){
+		return unitStorage.getFirstSelectableUnit(getCurrentPlayer());
+	}
+
+	public Optional<Unit> getFirstSelectableUnitAt(final Location location) {
+		return unitStorage.getFirstSelectableUnitAt(getCurrentPlayer(), location);
 	}
 
 	public Optional<Colony> getColoniesAt(final Location location) {

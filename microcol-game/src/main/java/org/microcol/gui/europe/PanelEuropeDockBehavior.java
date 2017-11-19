@@ -35,16 +35,16 @@ public class PanelEuropeDockBehavior implements PanelDockBehavior {
 	 * 
 	 */
 	private final EuropeDialogCallback europeDialogCallback;
-	private final GameModelController gameController;
+	private final GameModelController gameModelController;
 	private final Text text;
 	private final ViewUtil viewUtil;
 	private final ImageProvider imageProvider;
 
 	@Inject
-	PanelEuropeDockBehavior(EuropeDialogCallback europeDialogCallback, GameModelController gameController, Text text,
+	PanelEuropeDockBehavior(EuropeDialogCallback europeDialogCallback, GameModelController gameModelController, Text text,
 			ViewUtil viewUtil, ImageProvider imageProvider) {
 		this.europeDialogCallback = Preconditions.checkNotNull(europeDialogCallback);
-		this.gameController = Preconditions.checkNotNull(gameController);
+		this.gameModelController = Preconditions.checkNotNull(gameModelController);
 		this.text = Preconditions.checkNotNull(text);
 		this.viewUtil = Preconditions.checkNotNull(viewUtil);
 		this.imageProvider = Preconditions.checkNotNull(imageProvider);
@@ -52,14 +52,14 @@ public class PanelEuropeDockBehavior implements PanelDockBehavior {
 
 	@Override
 	public List<Unit> getUnitsInPort() {
-		return gameController.getModel().getEurope().getPort().getShipsInPort(gameController.getCurrentPlayer());
+		return gameModelController.getModel().getEurope().getPort().getShipsInPort(gameModelController.getCurrentPlayer());
 	}
 
 	@Override
 	public final void onDragDropped(final CargoSlot cargoSlot, final DragEvent event) {
 		logger.debug("Object was dropped on ship cargo slot.");
 		final Dragboard db = event.getDragboard();
-		ClipboardReader.make(gameController.getModel(), db).filterUnit(unit -> !unit.getType().isShip())
+		ClipboardReader.make(gameModelController.getModel(), db).filterUnit(unit -> !unit.getType().isShip())
 				.tryReadGood((goodAmount, transferFrom) -> {
 					Preconditions.checkArgument(transferFrom.isPresent(), "Good origin is not known.");
 					GoodAmount tmp = goodAmount;
@@ -116,7 +116,7 @@ public class PanelEuropeDockBehavior implements PanelDockBehavior {
 	public boolean isCorrectObject(final CargoSlot cargoSlot, final Dragboard db) {
 		logger.debug("Drag over unit id '" + db.getString() + "'.");
 		if (cargoSlot != null && cargoSlot.isEmpty()) {
-			return !ClipboardReader.make(gameController.getModel(), db).filterUnit(unit -> !unit.getType().isShip())
+			return !ClipboardReader.make(gameModelController.getModel(), db).filterUnit(unit -> !unit.getType().isShip())
 					.isEmpty();
 		}
 		return false;

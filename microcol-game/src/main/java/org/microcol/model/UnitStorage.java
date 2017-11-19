@@ -157,8 +157,10 @@ class UnitStorage {
 	}
 	
 	Unit getNextUnitForCurrentUser(final Player currentPlayer, final Unit currentUnit){
-		final List<Unit> list = units.stream().filter(unit -> currentPlayer.equals(unit.getOwner()))
-				.filter(unit -> unit.isAtHighSea() || unit.isAtPlaceLocation()).collect(Collectors.toList());
+		final List<Unit> list = units.stream()
+				.filter(unit -> currentPlayer.equals(unit.getOwner()))
+				.filter(unit -> unit.isAtPlaceLocation() && unit.getAvailableMoves() > 0)
+				.collect(Collectors.toList());
 		Preconditions.checkState(list.contains(currentUnit), "Unit (%s) is not available", currentUnit);
 		int pos = list.indexOf(currentUnit);
 		if (pos + 1 < list.size()) {
@@ -168,4 +170,21 @@ class UnitStorage {
 		}
 	}
 
+	Optional<Unit> getFirstSelectableUnit(final Player currentPlayer){
+		return units.stream()
+				.filter(unit -> currentPlayer.equals(unit.getOwner()))
+				.filter(unit -> unit.isAtPlaceLocation())
+				.filter(unit -> unit.getAvailableMoves() > 0)
+				.findFirst();		
+	}
+
+	Optional<Unit> getFirstSelectableUnitAt(final Player currentPlayer, final Location location){
+		return units.stream()
+				.filter(unit -> currentPlayer.equals(unit.getOwner()))
+				.filter(unit -> unit.isAtPlaceLocation())
+				.filter(unit -> unit.getLocation().equals(location))
+				.filter(unit -> unit.getAvailableMoves() > 0)
+				.findFirst();
+	}
+	
 }

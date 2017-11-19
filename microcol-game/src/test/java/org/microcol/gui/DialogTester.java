@@ -90,8 +90,8 @@ public class DialogTester extends Application {
 	}
 
 	public final static void dialogColonizopedia() {
-		final GameModelController gameController = EasyMock.createMock(GameModelController.class);
-		EasyMock.replay(gameController);
+		final GameModelController gameModelController = EasyMock.createMock(GameModelController.class);
+		EasyMock.replay(gameModelController);
 		new Colonizopedia(text, viewUtil);
 	}
 
@@ -101,8 +101,8 @@ public class DialogTester extends Application {
 	}
 
 	public final static void startBuyUnitDialog() {
-		final GameModelController gameController = EasyMock.createMock(GameModelController.class);
-		new BuyUnitsDialog(viewUtil,text,imageProvider, gameController, localizationHelper, null);
+		final GameModelController gameModelController = EasyMock.createMock(GameModelController.class);
+		new BuyUnitsDialog(viewUtil,text,imageProvider, gameModelController, localizationHelper, null);
 	}
 
 }

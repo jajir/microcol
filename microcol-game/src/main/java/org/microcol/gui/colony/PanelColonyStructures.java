@@ -128,7 +128,7 @@ public class PanelColonyStructures extends TitledPanel {
 	
 	private final ImageProvider imageProvider;
 	
-	private final GameModelController gameController;
+	private final GameModelController gameModelController;
 	
 	private final ColonyDialogCallback colonyDialog;
 	
@@ -136,11 +136,11 @@ public class PanelColonyStructures extends TitledPanel {
 	
 	@Inject
 	public PanelColonyStructures(final LocalizationHelper localizationHelper, final ImageProvider imageProvider,
-			final GameModelController gameController, final ColonyDialogCallback colonyDialog) {
+			final GameModelController gameModelController, final ColonyDialogCallback colonyDialog) {
 		super("Colony Structures", null);
 		this.localizationHelper = Preconditions.checkNotNull(localizationHelper);
 		this.imageProvider = Preconditions.checkNotNull(imageProvider);
-		this.gameController = Preconditions.checkNotNull(gameController);
+		this.gameModelController = Preconditions.checkNotNull(gameModelController);
 		this.colonyDialog = Preconditions.checkNotNull(colonyDialog);
 		canvas = new Canvas(CANVAS_WIDTH, CANVAS_HEIGHT);
 		getContentPane().getChildren().add(canvas);
@@ -197,7 +197,7 @@ public class PanelColonyStructures extends TitledPanel {
 		if (loc.isPresent() && loc.get().isEmpty()) {
 			ConstructionSlot slot = loc.get();
 			final Dragboard db = event.getDragboard();
-			ClipboardReader.make(gameController.getModel(), db).tryReadUnit((unit, transferFrom) -> {
+			ClipboardReader.make(gameModelController.getModel(), db).tryReadUnit((unit, transferFrom) -> {
 				unit.placeToColonyStructureSlot(slot);
 				event.setDropCompleted(true);
 				colonyDialog.repaint();

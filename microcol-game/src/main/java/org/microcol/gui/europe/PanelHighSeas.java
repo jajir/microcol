@@ -33,17 +33,17 @@ public class PanelHighSeas extends TitledPanel {
 
 	private final ImageProvider imageProvider;
 
-	private final GameModelController gameController;
+	private final GameModelController gameModelController;
 
 	private Background background;
 
 	@Inject
 	public PanelHighSeas(final EuropeDialogCallback europeDialog, final ImageProvider imageProvider,
-			final GameModelController gameController) {
+			final GameModelController gameModelController) {
 		super();
 		this.europeDialog = Preconditions.checkNotNull(europeDialog);
 		this.imageProvider = Preconditions.checkNotNull(imageProvider);
-		this.gameController = Preconditions.checkNotNull(gameController);
+		this.gameModelController = Preconditions.checkNotNull(gameModelController);
 		minHeightProperty().set(80);
 		shipsContainer = new HBox();
 		getChildren().add(shipsContainer);
@@ -82,7 +82,7 @@ public class PanelHighSeas extends TitledPanel {
 
 	private boolean isItCorrectObject(final Dragboard db) {
 		if (!isShownShipsTravelingToEurope && db.hasString()) {
-			return ClipboardReader.make(gameController.getModel(), db)
+			return ClipboardReader.make(gameModelController.getModel(), db)
 					.filterUnit(unit -> unit.getType().isShip()).getUnit().isPresent();
 		} else {
 			return false;
@@ -91,7 +91,7 @@ public class PanelHighSeas extends TitledPanel {
 
 	private final void onDragDropped(DragEvent event) {
 		final Dragboard db = event.getDragboard();
-		ClipboardReader.make(gameController.getModel(), db).readUnit((unit, transferFrom) -> {
+		ClipboardReader.make(gameModelController.getModel(), db).readUnit((unit, transferFrom) -> {
 			Preconditions.checkState(unit.getType().isShip(), "Only ships could be send to high seas");
 			unit.placeToHighSeas(false);
 			europeDialog.repaint();
@@ -102,8 +102,8 @@ public class PanelHighSeas extends TitledPanel {
 	}
 
 	private void showShips() {
-		gameController.getModel().getHighSea()
-				.getUnitsTravelingTo(gameController.getCurrentPlayer(), isShownShipsTravelingToEurope)
+		gameModelController.getModel().getHighSea()
+				.getUnitsTravelingTo(gameModelController.getCurrentPlayer(), isShownShipsTravelingToEurope)
 				.forEach(unit -> {
 					shipsContainer.getChildren().add(new ImageView(imageProvider.getUnitImage(unit.getType())));
 				});

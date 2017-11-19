@@ -30,12 +30,12 @@ public class BuyUnitsDialog extends AbstractMessageWindow {
 
 	@Inject
 	public BuyUnitsDialog(final ViewUtil viewUtil, final Text text, final ImageProvider imageProvider,
-			final GameModelController gameController, final LocalizationHelper localizationHelper,
+			final GameModelController gameModelController, final LocalizationHelper localizationHelper,
 			final EuropeDialogCallback europeDialogCallback) {
 		super(viewUtil);
 		this.europeDialogCallback = Preconditions.checkNotNull(europeDialogCallback);
 		Preconditions.checkNotNull(imageProvider);
-		Preconditions.checkNotNull(gameController);
+		Preconditions.checkNotNull(gameModelController);
 		getDialog().setTitle(text.get("buyUnitDialog.title"));
 		final Label labelCaption = new Label(text.get("buyUnitDialog.title"));
 
@@ -48,7 +48,7 @@ public class BuyUnitsDialog extends AbstractMessageWindow {
 		AtomicInteger column = new AtomicInteger(0);
 		AtomicInteger row = new AtomicInteger(0);
 		UnitType.UNIT_TYPES.stream().filter(unitType -> unitType.getEuropePrice() > 0).forEach(unitType -> {
-			final BuyUnitPanel buyUnitPanel = new BuyUnitPanel(unitType, viewUtil, imageProvider, gameController,
+			final BuyUnitPanel buyUnitPanel = new BuyUnitPanel(unitType, viewUtil, imageProvider, gameModelController,
 					localizationHelper, text, this);
 			GridPane.setMargin(buyUnitPanel, new Insets(10, 10, 10, 10));
 			gridWithUnits.add(buyUnitPanel, column.intValue(), row.intValue());

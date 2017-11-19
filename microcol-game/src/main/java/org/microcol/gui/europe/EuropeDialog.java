@@ -42,14 +42,14 @@ public class EuropeDialog extends AbstractMessageWindow implements EuropeDialogC
 
 	@Inject
 	public EuropeDialog(final ViewUtil viewUtil, final Text text, final ImageProvider imageProvider,
-			final GameModelController gameController, final PanelHighSeas shipsTravelingToNewWorld,
+			final GameModelController gameModelController, final PanelHighSeas shipsTravelingToNewWorld,
 			final PanelHighSeas shipsTravelingToEurope, final PanelPortPier panelPortPier,
 			final RecruiteUnitsDialog recruiteUnitsDialog, final BuyUnitsDialog buyUnitsDialog,
 			final PanelEuropeDockBehavior panelEuropeDockBehavior, final PanelEuropeGoods panelEuropeGoods) {
 		super(viewUtil);
 		propertyShiftWasPressed = new SimpleBooleanProperty(false);
 		Preconditions.checkNotNull(imageProvider);
-		Preconditions.checkNotNull(gameController);
+		Preconditions.checkNotNull(gameModelController);
 		getDialog().setTitle(text.get("europe.title"));
 
 		final Label label = new Label(text.get("europe.title"));

@@ -33,17 +33,17 @@ public class PanelEuropeGoods extends TitledPanel {
 
 	private final ImageProvider imageProvider;
 
-	private final GameModelController gameController;
+	private final GameModelController gameModelController;
 
 	private final EuropeDialogCallback europeDialogCallback;
 	
 	private Background background;
 
 	@Inject
-	public PanelEuropeGoods(final EuropeDialogCallback europeDialogCallback, final GameModelController gameController,
+	public PanelEuropeGoods(final EuropeDialogCallback europeDialogCallback, final GameModelController gameModelController,
 			final ImageProvider imageProvider) {
 		super("zbozi");
-		this.gameController = Preconditions.checkNotNull(gameController);
+		this.gameModelController = Preconditions.checkNotNull(gameModelController);
 		this.imageProvider = Preconditions.checkNotNull(imageProvider);
 		this.europeDialogCallback = Preconditions.checkNotNull(europeDialogCallback);
 		hBox = new HBox();
@@ -56,7 +56,7 @@ public class PanelEuropeGoods extends TitledPanel {
 	}
 
 	public void repaint() {
-		final Europe europe = gameController.getModel().getEurope();
+		final Europe europe = gameModelController.getModel().getEurope();
 		hBox.getChildren().clear();
 		GoodType.BUYABLE_GOOD_TYPES.forEach(goodType -> {
 			hBox.getChildren()
@@ -88,7 +88,7 @@ public class PanelEuropeGoods extends TitledPanel {
 	private final void onDragDropped(final DragEvent event) {
 		logger.debug("Object was dropped on panel goods.");
 		final Dragboard db = event.getDragboard();
-		ClipboardReader.make(gameController.getModel(), db).tryReadGood((goodAmount, transferFrom) -> {
+		ClipboardReader.make(gameModelController.getModel(), db).tryReadGood((goodAmount, transferFrom) -> {
 			if (transferFrom.isPresent() && transferFrom.get() instanceof ClipboardReader.TransferFromCargoSlot) {
 				final ClipboardReader.TransferFromCargoSlot fromCargo = (ClipboardReader.TransferFromCargoSlot) transferFrom
 						.get();
@@ -102,7 +102,7 @@ public class PanelEuropeGoods extends TitledPanel {
 
 	private boolean isItGoodAmount(final Dragboard db) {
 		logger.debug("Drag over unit id '" + db.getString() + "'.");
-		return ClipboardReader.make(gameController.getModel(), db).filterTransferFrom(transferFrom -> {
+		return ClipboardReader.make(gameModelController.getModel(), db).filterTransferFrom(transferFrom -> {
 			if (transferFrom.isPresent() && transferFrom.get() instanceof ClipboardReader.TransferFromCargoSlot) {
 				return true;
 			}

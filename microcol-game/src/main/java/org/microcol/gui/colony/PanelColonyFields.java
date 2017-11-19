@@ -50,7 +50,7 @@ public class PanelColonyFields extends TitledPanel {
 
 	private final ImageProvider imageProvider;
 
-	private final GameModelController gameController;
+	private final GameModelController gameModelController;
 
 	private final ColonyDialogCallback colonyDialog;
 
@@ -63,11 +63,11 @@ public class PanelColonyFields extends TitledPanel {
 	private final PaintService paintService;
 
 	@Inject
-	public PanelColonyFields(final ImageProvider imageProvider, final GameModelController gameController,
+	public PanelColonyFields(final ImageProvider imageProvider, final GameModelController gameModelController,
 			final ColonyDialogCallback colonyDialog, final PaintService paintService) {
 		super("Colony layout", new Label("Colony layout"));
 		this.imageProvider = Preconditions.checkNotNull(imageProvider);
-		this.gameController = Preconditions.checkNotNull(gameController);
+		this.gameModelController = Preconditions.checkNotNull(gameModelController);
 		this.colonyDialog = Preconditions.checkNotNull(colonyDialog);
 		this.paintService = Preconditions.checkNotNull(paintService);
 		final int size = 3 * GamePanelView.TILE_WIDTH_IN_PX;
@@ -169,7 +169,7 @@ public class PanelColonyFields extends TitledPanel {
 			final ColonyField colonyField = colony.getColonyFieldInDirection(loc.get());
 			if (colonyField.isEmpty()) {
 				final Dragboard db = event.getDragboard();
-				ClipboardReader.make(gameController.getModel(), db).tryReadUnit((unit, transferFrom) -> {
+				ClipboardReader.make(gameModelController.getModel(), db).tryReadUnit((unit, transferFrom) -> {
 					unit.placeToColonyField(colonyField, GoodType.CORN);
 					event.setDropCompleted(true);
 					colonyDialog.repaint();
@@ -182,7 +182,7 @@ public class PanelColonyFields extends TitledPanel {
 
 	private boolean isItUnit(final Dragboard db) {
 		logger.debug("Drag over unit id '" + db.getString() + "'.");
-		return ClipboardReader.make(gameController.getModel(), db).getUnit().isPresent();
+		return ClipboardReader.make(gameModelController.getModel(), db).getUnit().isPresent();
 	}
 
 	public void setColony(final Colony colony) {
@@ -193,7 +193,7 @@ public class PanelColonyFields extends TitledPanel {
 	private void paint(final GraphicsContext gc) {
 		colony.getColonyFields().forEach(colonyField -> paintSection(gc, colonyField));
 		paintService.paintTerrainOnTile(gc, Point.of(GamePanelView.TILE_WIDTH_IN_PX, GamePanelView.TILE_WIDTH_IN_PX),
-				gameController.getModel().getMap().getTerrainAt(colony.getLocation()), false);
+				gameModelController.getModel().getMap().getTerrainAt(colony.getLocation()), false);
 	}
 
 	private void paintSection(final GraphicsContext gc, final ColonyField colonyField) {

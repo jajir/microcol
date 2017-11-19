@@ -1,9 +1,8 @@
 package org.microcol.gui.mainmenu;
 
 import org.microcol.gui.event.model.GameModelController;
-import org.microcol.gui.panelview.ViewState;
+import org.microcol.gui.panelview.SelectedUnitManager;
 import org.microcol.gui.util.AbstractEventController;
-import org.microcol.model.Location;
 import org.microcol.model.Player;
 import org.microcol.model.Unit;
 
@@ -20,20 +19,18 @@ import com.google.inject.Inject;
 public class BuildColonyEventController extends AbstractEventController<BuildColonyEvent> {
 
 	private final GameModelController gameModelController;
-	private final ViewState viewState;
+	private final SelectedUnitManager selectedUnitManager;
 
 	@Inject
-	public BuildColonyEventController(final GameModelController game, final ViewState viewState) {
+	public BuildColonyEventController(final GameModelController game, final SelectedUnitManager selectedUnitManager) {
 		this.gameModelController = Preconditions.checkNotNull(game);
-		this.viewState = Preconditions.checkNotNull(viewState);
+		this.selectedUnitManager = Preconditions.checkNotNull(selectedUnitManager);
 	}
 
 	public void fireEvent() {
 		final Player player = gameModelController.getCurrentPlayer();
-		final Location location = viewState.getSelectedTile().orElseThrow(
-				() -> new IllegalStateException("Build colony event can't be invoked when no tile is selected."));
-		// TODO following hack provide selected unit.
-		final Unit unit = gameModelController.getModel().getUnitsAt(location).get(0);
+		final Unit unit = selectedUnitManager.getSelectedUnit().orElseThrow(
+				() -> new IllegalStateException("Build colony event can't be invoked when no unit is selected."));
 		super.fireEvent(new BuildColonyEvent(player, unit));
 	}
 

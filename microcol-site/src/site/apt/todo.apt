@@ -8,7 +8,7 @@ Planned releases
   	
   * \u2713 Save / Load game model. It's necessary for further game states.
   	
-  * \u2717 Allow cycle through units. It allows to give focus to specific unit. Not just first unit at some location.
+  * \u2713 Allow cycle through units. It allows to give focus to specific unit. Not just first unit at some location.
   	
   * \u2717 Colony building queue and queue editing
    	

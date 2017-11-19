@@ -34,16 +34,16 @@ public class PanelColonyDockBehaviour implements PanelDockBehavior {
 	 * 
 	 */
 	private final ColonyDialogCallback colonyDialogCallback;
-	private final GameModelController gameController;
+	private final GameModelController gameModelController;
 	private final ViewUtil viewUtil;
 	private final Text text;
 	private final ImageProvider imageProvider;
 
 	@Inject
-	PanelColonyDockBehaviour(final ColonyDialogCallback colonyDialogCallback, final GameModelController gameController,
+	PanelColonyDockBehaviour(final ColonyDialogCallback colonyDialogCallback, final GameModelController gameModelController,
 			final ViewUtil viewUtil, final Text text, final ImageProvider imageProvider) {
 		this.colonyDialogCallback = Preconditions.checkNotNull(colonyDialogCallback);
-		this.gameController = Preconditions.checkNotNull(gameController);
+		this.gameModelController = Preconditions.checkNotNull(gameModelController);
 		this.viewUtil = Preconditions.checkNotNull(viewUtil);
 		this.text = Preconditions.checkNotNull(text);
 		this.imageProvider = Preconditions.checkNotNull(imageProvider);
@@ -58,7 +58,7 @@ public class PanelColonyDockBehaviour implements PanelDockBehavior {
 	public void onDragDropped(final CargoSlot cargoSlot, final DragEvent event) {
 		logger.debug("Object was dropped on ship cargo slot.");
 		final Dragboard db = event.getDragboard();
-		ClipboardReader.make(gameController.getModel(), db).filterUnit(unit -> !unit.getType().isShip())
+		ClipboardReader.make(gameModelController.getModel(), db).filterUnit(unit -> !unit.getType().isShip())
 				.tryReadGood((goodAmount, transferFrom) -> {
 					Preconditions.checkArgument(transferFrom.isPresent(), "Good origin is not known.");
 					GoodAmount tmp = goodAmount;
@@ -112,7 +112,7 @@ public class PanelColonyDockBehaviour implements PanelDockBehavior {
 	public boolean isCorrectObject(final CargoSlot cargoSlot, final Dragboard db) {
 		logger.debug("Drag over unit id '" + db.getString() + "'.");
 		if (cargoSlot != null && cargoSlot.isEmpty()) {
-			return !ClipboardReader.make(gameController.getModel(), db).filterUnit(unit -> !unit.getType().isShip())
+			return !ClipboardReader.make(gameModelController.getModel(), db).filterUnit(unit -> !unit.getType().isShip())
 					.isEmpty();
 		}
 		return false;

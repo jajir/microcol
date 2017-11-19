@@ -5,11 +5,17 @@ import static org.junit.Assert.assertFalse;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.microcol.gui.panelview.ViewState;
+import org.microcol.gui.panelview.SelectedTileManager;
+import org.microcol.gui.panelview.TileWasSelectedController;
 
-public class ViewStateTest {
+import mockit.Mocked;
 
-	private ViewState viewState;
+public class SelectedTileManagerTest {
+
+	private SelectedTileManager viewState;
+
+	@Mocked
+	private TileWasSelectedController tileWasSelectedController;
 
 	@Test
 	public void test_getInitialValues() throws Exception {
@@ -18,7 +24,7 @@ public class ViewStateTest {
 
 	@Before
 	public void setUp() {
-		viewState = new ViewState();
+		viewState = new SelectedTileManager(tileWasSelectedController);
 	}
 
 	@After

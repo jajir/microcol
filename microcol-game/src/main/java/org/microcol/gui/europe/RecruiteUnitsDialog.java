@@ -24,10 +24,10 @@ public class RecruiteUnitsDialog extends AbstractMessageWindow {
 
 	@Inject
 	public RecruiteUnitsDialog(final ViewUtil viewUtil, final Text text, final ImageProvider imageProvider,
-			final GameModelController gameController, final LocalizationHelper localizationHelper) {
+			final GameModelController gameModelController, final LocalizationHelper localizationHelper) {
 		super(viewUtil);
 		Preconditions.checkNotNull(imageProvider);
-		Preconditions.checkNotNull(gameController);
+		Preconditions.checkNotNull(gameModelController);
 		getDialog().setTitle(text.get("recruitUnitDialog.title"));
 		final Label labelCaption = new Label(text.get("recruitUnitDialog.title"));
 
@@ -39,7 +39,7 @@ public class RecruiteUnitsDialog extends AbstractMessageWindow {
 
 		UnitType.UNIT_TYPES.stream().filter(unitType -> unitType.getEuropePrice() > 0).forEach(unitType -> {
 			final RecruiteUnitPanel buyUnitPanel = new RecruiteUnitPanel(unitType, viewUtil, imageProvider,
-					gameController, localizationHelper, text, this);
+					gameModelController, localizationHelper, text, this);
 			HBox.setMargin(buyUnitPanel, new Insets(10, 10, 10, 10));
 			gridWithUnits.getChildren().add(buyUnitPanel);
 		});
