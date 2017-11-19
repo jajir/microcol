@@ -261,7 +261,7 @@ public final class Model {
 				.filter(colony -> colony.getLocation().equals(location)).findFirst();
 	}
 	
-	public Unit getNextUnitForCurrentUser(final Unit currentUnit){
+	public Optional<Unit> getNextUnitForCurrentUser(final Unit currentUnit){
 		Preconditions.checkNotNull(currentUnit);
 		Preconditions.checkState(getCurrentPlayer().equals(currentUnit.getOwner()),
 				"current unit (%s) doest belongs to user that is on turn (%s)", currentUnit, getCurrentPlayer());

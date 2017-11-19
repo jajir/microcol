@@ -1,6 +1,6 @@
 package org.microcol.gui;
 
-import org.microcol.gui.event.FocusedTileEvent;
+import org.microcol.gui.panelview.TileWasSelectedEvent;
 import org.microcol.gui.util.Localized;
 import org.microcol.model.Player;
 
@@ -87,7 +87,7 @@ public class RightPanelView implements RightPanelPresenter.Display, Localized {
 	}
 
 	@Override
-	public void showTile(final FocusedTileEvent event) {
+	public void showTile(final TileWasSelectedEvent event) {
 		if (event == null) {
 			return;
 		}

@@ -10,8 +10,6 @@ import org.microcol.gui.GamePreferences;
 import org.microcol.gui.MicroColException;
 import org.microcol.gui.Point;
 import org.microcol.gui.colony.ColonyDialog;
-import org.microcol.gui.event.FocusedTileController;
-import org.microcol.gui.event.FocusedTileEvent;
 import org.microcol.gui.event.KeyController;
 import org.microcol.gui.event.StartMoveController;
 import org.microcol.gui.event.StartMoveEvent;
@@ -83,8 +81,6 @@ public final class GamePanelPresenter implements Localized {
 
 	private final GameModelController gameModelController;
 
-	private final FocusedTileController focusedTileController;
-
 	private final GamePanelPresenter.Display display;
 
 	private Optional<Point> lastMousePosition = Optional.empty();
@@ -103,14 +99,14 @@ public final class GamePanelPresenter implements Localized {
 
 	@Inject
 	public GamePanelPresenter(final GamePanelPresenter.Display display, final GameModelController gameModelController,
-			final KeyController keyController, final FocusedTileController focusedTileController,
-			final MoveUnitController moveUnitController, final NewGameController newGameController,
-			final GamePreferences gamePreferences, final ShowGridController showGridController,
-			final CenterViewController viewController, final ExitGameController exitGameController,
-			final DebugRequestController debugRequestController, final SelectedTileManager selectedTileManager, final ViewUtil viewUtil,
+			final KeyController keyController, final MoveUnitController moveUnitController,
+			final NewGameController newGameController, final GamePreferences gamePreferences,
+			final ShowGridController showGridController, final CenterViewController viewController,
+			final ExitGameController exitGameController, final DebugRequestController debugRequestController,
+			final SelectedTileManager selectedTileManager, final ViewUtil viewUtil,
 			final StartMoveController startMoveController, final ColonyDialog colonyDialog, final Text text,
-			final ColonyWasCapturedController colonyWasCapturedController, final MouseOverTileManager mouseOverTileManager) {
-		this.focusedTileController = Preconditions.checkNotNull(focusedTileController);
+			final ColonyWasCapturedController colonyWasCapturedController,
+			final MouseOverTileManager mouseOverTileManager) {
 		this.gameModelController = Preconditions.checkNotNull(gameModelController);
 		this.gamePreferences = gamePreferences;
 		this.display = Preconditions.checkNotNull(display);
@@ -245,9 +241,6 @@ public final class GamePanelPresenter implements Localized {
 
 	private void cancelGoToMode() {
 		display.setCursorNormal();
-		focusedTileController
-				.fireEvent(new FocusedTileEvent(gameModelController.getModel(), selectedTileManager.getSelectedTile().get(),
-						gameModelController.getModel().getMap().getTerrainTypeAt(selectedTileManager.getSelectedTile().get())));
 	}
 
 	private void onKeyPressed_enter() {
@@ -266,8 +259,6 @@ public final class GamePanelPresenter implements Localized {
 			} else {
 				if (e.isPrimaryButtonDown()) {
 					selectedTileManager.setSelectedTile(location);
-					focusedTileController.fireEvent(new FocusedTileEvent(gameModelController.getModel(), location,
-							gameModelController.getModel().getMap().getTerrainTypeAt(location)));
 					if (!tryToSwitchToMoveMode(location)) {
 						// TODO JJ is this if really needed?
 						tryToOpenColonyDetail(location);

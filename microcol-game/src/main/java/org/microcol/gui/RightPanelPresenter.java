@@ -1,7 +1,5 @@
 package org.microcol.gui;
 
-import org.microcol.gui.event.FocusedTileController;
-import org.microcol.gui.event.FocusedTileEvent;
 import org.microcol.gui.event.KeyController;
 import org.microcol.gui.event.StatusBarMessageController;
 import org.microcol.gui.event.StatusBarMessageEvent;
@@ -9,6 +7,8 @@ import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.event.model.TurnStartedController;
 import org.microcol.gui.mainmenu.ChangeLanguageController;
 import org.microcol.gui.mainmenu.ChangeLanguageEvent;
+import org.microcol.gui.panelview.TileWasSelectedController;
+import org.microcol.gui.panelview.TileWasSelectedEvent;
 import org.microcol.gui.util.Localized;
 import org.microcol.model.Location;
 import org.microcol.model.Player;
@@ -25,7 +25,7 @@ public class RightPanelPresenter implements Localized {
 
 		Button getNextTurnButton();
 
-		void showTile(final FocusedTileEvent event);
+		void showTile(final TileWasSelectedEvent event);
 
 		GridPane getBox();
 
@@ -34,11 +34,11 @@ public class RightPanelPresenter implements Localized {
 
 	private final RightPanelPresenter.Display display;
 
-	private FocusedTileEvent lastFocusedTileEvent;
+	private TileWasSelectedEvent lastFocusedTileEvent;
 
 	@Inject
 	public RightPanelPresenter(final RightPanelPresenter.Display display, final GameModelController gameModelController,
-			final KeyController keyController, final FocusedTileController focusedTileController,
+			final KeyController keyController, final TileWasSelectedController focusedTileController,
 			final ChangeLanguageController changeLanguangeController,
 			final StatusBarMessageController statusBarMessageController,
 			final TurnStartedController turnStartedController) {
@@ -80,7 +80,7 @@ public class RightPanelPresenter implements Localized {
 		display.showTile(lastFocusedTileEvent);
 	}
 
-	private void onFocusedTile(final FocusedTileEvent event) {
+	private void onFocusedTile(final TileWasSelectedEvent event) {
 		if (isItDifferentTile(event.getLocation())) {
 			lastFocusedTileEvent = event;
 			display.showTile(event);

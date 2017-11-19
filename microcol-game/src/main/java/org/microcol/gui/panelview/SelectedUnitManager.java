@@ -36,11 +36,11 @@ public class SelectedUnitManager {
 
 	private void onTileWasChanged(final TileWasSelectedEvent tileWasSelectedEvent) {
 		if(selectedUnit == null){
-			selectedUnit = gameModelController.getModel().getFirstSelectableUnitAt(tileWasSelectedEvent.getLocation()).get();
+			selectedUnit = gameModelController.getModel().getFirstSelectableUnitAt(tileWasSelectedEvent.getLocation()).orElse(null);
 		}else{
 			//If selected tile is location where is selected unit than do nothing 
 			if (!selectedUnit.getLocation().equals(tileWasSelectedEvent.getLocation())){
-				selectedUnit = gameModelController.getModel().getFirstSelectableUnitAt(tileWasSelectedEvent.getLocation()).get();				
+				selectedUnit = gameModelController.getModel().getFirstSelectableUnitAt(tileWasSelectedEvent.getLocation()).orElse(null);				
 			}
 		}
 	}
@@ -48,10 +48,11 @@ public class SelectedUnitManager {
 	private void onSelectNextUnit(final SelectNextUnitEvent selectNextUnitEvent) {
 		Preconditions.checkNotNull(selectNextUnitEvent);
 		if (selectedUnit == null) {
-			selectedUnit = gameModelController.getModel().getFirstSelectableUnitAt().get();
-			selectedTileManager.setSelectedTile(selectedUnit.getLocation());
+			selectedUnit = gameModelController.getModel().getFirstSelectableUnitAt().orElse(null);
 		} else {
-			selectedUnit = gameModelController.getModel().getNextUnitForCurrentUser(selectedUnit);
+			selectedUnit = gameModelController.getModel().getNextUnitForCurrentUser(selectedUnit).orElse(null);
+		}
+		if (selectedUnit != null) {
 			selectedTileManager.setSelectedTile(selectedUnit.getLocation());
 		}
 	}

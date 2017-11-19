@@ -6,12 +6,12 @@ import org.microcol.gui.PreferencesAnimationSpeed;
 import org.microcol.gui.PreferencesVolume;
 import org.microcol.gui.colonizopedia.Colonizopedia;
 import org.microcol.gui.europe.EuropeDialog;
-import org.microcol.gui.event.FocusedTileController;
-import org.microcol.gui.event.FocusedTileEvent;
 import org.microcol.gui.event.StartMoveController;
 import org.microcol.gui.event.StartMoveEvent;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.event.model.TurnStartedController;
+import org.microcol.gui.panelview.TileWasSelectedController;
+import org.microcol.gui.panelview.TileWasSelectedEvent;
 import org.microcol.gui.util.Text;
 import org.microcol.model.event.TurnStartedEvent;
 
@@ -86,7 +86,7 @@ public class MainMenuPresenter {
 			/**
 			 * Menu items react on following events
 			 */
-			final FocusedTileController focusedTileController,
+			final TileWasSelectedController tileWasSelectedController,
 			final GameModelController gameModelController,
 			final StartMoveController startMoveController,
 			final TurnStartedController turnStartedController,
@@ -135,7 +135,7 @@ public class MainMenuPresenter {
 		changeLanguageController.addListener(event -> {
 			display.updateLanguage();
 		});
-		focusedTileController.addListener(event -> onFocusedTileEvent(event));
+		tileWasSelectedController.addListener(event -> onFocusedTileEvent(event));
 		turnStartedController.addListener(event -> onTurnStartedEvent(event));
 		declareIndependenceController.addListener(event -> display.getMenuItemDeclareIndependence().setDisable(true));
 
@@ -150,7 +150,7 @@ public class MainMenuPresenter {
 	 * @param event
 	 *            required event
 	 */
-	private final void onFocusedTileEvent(final FocusedTileEvent event) {
+	private final void onFocusedTileEvent(final TileWasSelectedEvent event) {
 		display.getMenuItemCenterView().setDisable(false);
 		isTileFocused = true;
 		if (event.isTileContainsMovebleUnit()) {

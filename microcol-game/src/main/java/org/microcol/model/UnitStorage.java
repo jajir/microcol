@@ -156,17 +156,23 @@ class UnitStorage {
 		return units.stream().filter(unit -> unit.getId() == id).findAny();
 	}
 	
-	Unit getNextUnitForCurrentUser(final Player currentPlayer, final Unit currentUnit){
+	Optional<Unit> getNextUnitForCurrentUser(final Player currentPlayer, final Unit currentUnit){
 		final List<Unit> list = units.stream()
 				.filter(unit -> currentPlayer.equals(unit.getOwner()))
 				.filter(unit -> unit.isAtPlaceLocation() && unit.getAvailableMoves() > 0)
 				.collect(Collectors.toList());
-		Preconditions.checkState(list.contains(currentUnit), "Unit (%s) is not available", currentUnit);
+		if(list.size()==0){
+			return Optional.empty();
+		}
 		int pos = list.indexOf(currentUnit);
-		if (pos + 1 < list.size()) {
-			return list.get(pos + 1);
+		if (pos >= 0) {
+			if (pos + 1 < list.size()) {
+				return Optional.of(list.get(pos + 1));
+			} else {
+				return Optional.of(list.get(0));
+			}
 		} else {
-			return list.get(0);
+			return Optional.of(list.get(0));
 		}
 	}
 

@@ -23,7 +23,6 @@ import org.microcol.gui.event.ChangeLanguageListenerPreferences;
 import org.microcol.gui.event.ChangeLanguageListenerText;
 import org.microcol.gui.event.DeclareIndependenceListener;
 import org.microcol.gui.event.EventInitializer;
-import org.microcol.gui.event.FocusedTileController;
 import org.microcol.gui.event.KeyController;
 import org.microcol.gui.event.ShowGridListenerPreferences;
 import org.microcol.gui.event.StartMoveController;
@@ -101,7 +100,7 @@ public class MicroColModule extends AbstractModule {
 		bind(MoveUnitController.class).in(Singleton.class);
 		bind(KeyController.class).in(Singleton.class);
 		bind(NextTurnController.class).in(Singleton.class);
-		bind(FocusedTileController.class).in(Singleton.class);
+		bind(TileWasSelectedController.class).in(Singleton.class);
 		bind(AboutGameEventController.class).in(Singleton.class);
 		bind(ChangeLanguageController.class).in(Singleton.class);
 		bind(StartMoveController.class).in(Singleton.class);
@@ -122,7 +121,6 @@ public class MicroColModule extends AbstractModule {
 		bind(DeclareIndependenceController.class).in(Singleton.class);
 		bind(BuildColonyEventController.class).in(Singleton.class);
 		bind(SelectNextUnitController.class).in(Singleton.class);
-		bind(TileWasSelectedController.class).in(Singleton.class);
 
 		bind(ModelEventManager.class).in(Singleton.class);
 
