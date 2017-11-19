@@ -53,7 +53,7 @@ public class MainMenuPresenter {
 		MenuItem getMenuItemMove();
 
 		MenuItem getMenuItemBuildColony();
-		
+
 		MenuItem getMenuItemNextUnit();
 
 		MenuItem getMenuItemCenterView();
@@ -72,35 +72,19 @@ public class MainMenuPresenter {
 	@Inject
 	public MainMenuPresenter(final MainMenuPresenter.Display display,
 			/**
-			 * Following parameters are controllers reacting on menu events 
+			 * Following parameters are controllers reacting on menu events
 			 */
-			final AboutGameEventController gameEventController,
-			final BuildColonyEventController buildColonyEventController,
-			final CenterViewController centerViewController,
-			final ChangeLanguageController changeLanguageController,
-			final DeclareIndependenceController declareIndependenceController,
-			final ExitGameController exitGameController,
-			final ShowGridController showGridController,
-			final SelectNextUnitController selectNextUnitController,
-			
+			final AboutGameEventController gameEventController, final BuildColonyEventController buildColonyEventController, final CenterViewController centerViewController, final ChangeLanguageController changeLanguageController, final DeclareIndependenceController declareIndependenceController, final ExitGameController exitGameController, final ShowGridController showGridController, final SelectNextUnitController selectNextUnitController,
+
 			/**
 			 * Menu items react on following events
 			 */
-			final TileWasSelectedController tileWasSelectedController,
-			final GameModelController gameModelController,
-			final StartMoveController startMoveController,
-			final TurnStartedController turnStartedController,
-			
+			final TileWasSelectedController tileWasSelectedController, final GameModelController gameModelController, final StartMoveController startMoveController, final TurnStartedController turnStartedController,
+
 			/**
 			 * Other events consumers and helpers
 			 */
-			final PersistingDialog persistingDialog,
-			final EuropeDialog europeDialog,
-			final DialogIndependenceWasDeclared dialogIndependenceWasDeclared,
-			final Colonizopedia colonizopedia,
-			final PreferencesAnimationSpeed preferencesAnimationSpeed,
-			final PreferencesVolume preferencesVolume
-			) {
+			final PersistingDialog persistingDialog, final EuropeDialog europeDialog, final DialogIndependenceWasDeclared dialogIndependenceWasDeclared, final Colonizopedia colonizopedia, final PreferencesAnimationSpeed preferencesAnimationSpeed, final PreferencesVolume preferencesVolume) {
 		this.display = Preconditions.checkNotNull(display);
 		display.getMenuItemNewGame().setOnAction(actionEvent -> gameModelController.startNewDefaultGame());
 		display.getMenuItemSameGame().setOnAction(event -> persistingDialog.saveModel());
@@ -114,8 +98,7 @@ public class MainMenuPresenter {
 				.fireEvent(new ChangeLanguageEvent(Text.Language.en, gameModelController.getModel())));
 		display.getMenuItemVolume().setOnAction(actionEvent -> preferencesVolume.resetAndShowAndWait());
 		display.getMenuItemAnimationSpeed().setOnAction(event -> preferencesAnimationSpeed.resetAndShowAndWait());
-		display.getMenuItemEurope().setOnAction(
-				event -> europeDialog.show());
+		display.getMenuItemEurope().setOnAction(event -> europeDialog.show());
 		display.getMenuItemShowGrid().setOnAction(ectionEvent -> showGridController
 				.fireEvent(new ShowGridEvent(display.getMenuItemShowGrid().isSelected())));
 		display.getMenuItemBuildColony().setOnAction(event -> buildColonyEventController.fireEvent());
@@ -125,23 +108,21 @@ public class MainMenuPresenter {
 		});
 		display.getMenuItemDeclareIndependence().setOnAction(event -> {
 			dialogIndependenceWasDeclared.showAndWait();
-			declareIndependenceController.fireEvent(
-					new DeclareIndependenceEvent(gameModelController.getModel(), gameModelController.getCurrentPlayer()));
+			declareIndependenceController.fireEvent(new DeclareIndependenceEvent(gameModelController.getModel(),
+					gameModelController.getCurrentPlayer()));
 		});
 		display.getMenuItemCenterView().setOnAction(event -> centerViewController.fireEvent(new CenterViewEvent()));
 		display.getMenuItemNextUnit()
 				.setOnAction(event -> selectNextUnitController.fireEvent(new SelectNextUnitEvent()));
-		
+
 		changeLanguageController.addListener(event -> {
 			display.updateLanguage();
 		});
 		tileWasSelectedController.addListener(event -> onFocusedTileEvent(event));
-		turnStartedController.addListener(event -> onTurnStartedEvent(event));
+		turnStartedController.addListener(this::onTurnStartedEvent);
 		declareIndependenceController.addListener(event -> display.getMenuItemDeclareIndependence().setDisable(true));
 
-		exitGameController.addListener(evnt -> {
-			display.getMenuItemEurope().setDisable(true);
-		});
+		exitGameController.addListener(this::onGameFinihedEvent);
 	}
 
 	/**
@@ -164,7 +145,14 @@ public class MainMenuPresenter {
 		}
 	}
 
+	@SuppressWarnings("unused")
+	private void onGameFinihedEvent(final ExitGameEvent exitGameEvent) {
+		display.getMenuItemEurope().setDisable(true);
+		display.getMenuItemNextUnit().setDisable(true);
+	}
+
 	private final void onTurnStartedEvent(final TurnStartedEvent event) {
+		System.out.println("onTurnStartedEvent " + event.getPlayer());
 		if (event.getPlayer().isHuman()) {
 			if (isTileFocused) {
 				display.getMenuItemCenterView().setDisable(false);
@@ -173,11 +161,13 @@ public class MainMenuPresenter {
 				display.getMenuItemMove().setDisable(false);
 			}
 			display.getMenuItemEurope().setDisable(false);
+			display.getMenuItemNextUnit().setDisable(false);
 			display.getMenuItemDeclareIndependence().setDisable(event.getPlayer().isDeclaredIndependence());
 		} else {
 			display.getMenuItemCenterView().setDisable(true);
 			display.getMenuItemMove().setDisable(true);
 			display.getMenuItemEurope().setDisable(true);
+			display.getMenuItemNextUnit().setDisable(true);
 		}
 	}
 

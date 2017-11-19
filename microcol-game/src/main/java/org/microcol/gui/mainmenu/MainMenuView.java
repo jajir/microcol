@@ -2,7 +2,7 @@ package org.microcol.gui.mainmenu;
 
 import org.microcol.gui.GamePreferences;
 import org.microcol.gui.event.model.GameController;
-import org.microcol.gui.util.PersistentSrevice;
+import org.microcol.gui.util.PersistentService;
 import org.microcol.gui.util.Text;
 import org.microcol.gui.util.Text.Language;
 
@@ -78,7 +78,7 @@ public class MainMenuView implements MainMenuPresenter.Display {
 
 	@Inject
 	public MainMenuView(final GamePreferences gamePreferences, final Text text,
-			final MainMenuDevelopment mainMenuDevelopment, final PersistentSrevice persistentSrevice,
+			final MainMenuDevelopment mainMenuDevelopment, final PersistentService persistentSrevice,
 			final GameController gameController) {
 		this.text = Preconditions.checkNotNull(text);
 

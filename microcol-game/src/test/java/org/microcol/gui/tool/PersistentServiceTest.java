@@ -5,14 +5,14 @@ import static org.junit.Assert.*;
 import java.util.List;
 
 import org.junit.Test;
-import org.microcol.gui.util.PersistentSrevice;
+import org.microcol.gui.util.PersistentService;
 import org.microcol.gui.util.Scenario;
 
 public class PersistentServiceTest {
 
 	@Test
 	public void test_first_scenario() throws Exception {
-		PersistentSrevice persistentSrevice = new PersistentSrevice();
+		PersistentService persistentSrevice = new PersistentService();
 		List<Scenario> scenarios = persistentSrevice.getScenarios();
 
 		assertNotNull(scenarios);

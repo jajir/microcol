@@ -91,7 +91,9 @@ public class ModelDao {
 	}
 
 	private ModelPo internalLoadPredefinedModel(final String fileName) throws FileNotFoundException {
-		return internalLoadModel(WorldMap.class.getResourceAsStream(fileName));
+		final InputStream is = WorldMap.class.getResourceAsStream(fileName);
+		Preconditions.checkArgument(is != null, "input stream for file (%s) is null", fileName);
+		return internalLoadModel(is);
 	}
 
 	private ModelPo internalLoadModel(final InputStream is) throws FileNotFoundException {

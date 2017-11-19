@@ -62,7 +62,7 @@ import org.microcol.gui.panelview.PaintService;
 import org.microcol.gui.panelview.SelectedTileManager;
 import org.microcol.gui.panelview.TileWasSelectedController;
 import org.microcol.gui.panelview.UnitAttackedEventListener;
-import org.microcol.gui.util.PersistentSrevice;
+import org.microcol.gui.util.PersistentService;
 import org.microcol.gui.util.PersistingTool;
 import org.microcol.gui.util.Text;
 import org.microcol.gui.util.ViewUtil;
@@ -85,7 +85,7 @@ public class MicroColModule extends AbstractModule {
 		bind(ImageProvider.class).in(Singleton.class);
 		bind(ViewUtil.class).in(Singleton.class);
 		bind(LocalizationHelper.class).in(Singleton.class);
-		bind(PersistentSrevice.class).in(Singleton.class);
+		bind(PersistentService.class).in(Singleton.class);
 		bind(ModelDao.class).in(Singleton.class);
 
 		/**
