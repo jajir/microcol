@@ -1,5 +1,6 @@
 package org.microcol.ai;
 
+import org.microcol.gui.panelview.AnimationLock;
 import org.microcol.model.Model;
 import org.microcol.model.ModelAdapter;
 import org.microcol.model.Player;
@@ -21,6 +22,8 @@ public abstract class AbstractRobotPlayer {
 	
 	private final ModelAdapter modelAdapter;
 	
+	private final AnimationLock animationLock;
+	
 	/**
 	 * Controlled player.
 	 */
@@ -28,9 +31,10 @@ public abstract class AbstractRobotPlayer {
 
 	private boolean running;
 
-	public AbstractRobotPlayer(final Model model, final Player player) {
+	public AbstractRobotPlayer(final Model model, final Player player, final AnimationLock animationLock) {
 		this.model = Preconditions.checkNotNull(model);
 		this.player = Preconditions.checkNotNull(player);
+		this.animationLock = Preconditions.checkNotNull(animationLock);
 		modelAdapter = new ModelAdapter() {
 			@Override
 			public void turnStarted(TurnStartedEvent event) {
@@ -65,6 +69,8 @@ public abstract class AbstractRobotPlayer {
 		}
 		turnStarted();
 		player.getUnits().stream().filter(unit -> unit.isAtPlaceLocation()).forEach(unit -> move(unit));
+		animationLock.waitWhileRunning();
+		logger.info("Robot finish move for player {}", player);
 		player.endTurn();
 	}
 

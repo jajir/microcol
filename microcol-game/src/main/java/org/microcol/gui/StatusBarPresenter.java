@@ -32,7 +32,7 @@ public class StatusBarPresenter implements Localized {
 			final StatusBarMessageController statusBarMessageController, final NextTurnController nextTurnController,
 			final ChangeLanguageController changeLanguangeController,
 			final GoldWasChangedController goldWasChangedController) {
-		statusBarMessageController.addListener(event -> {
+		statusBarMessageController.addRunLaterListener(event -> {
 			display.getStatusBarDescription().setText(event.getStatusMessage());
 		});
 		nextTurnController.addListener(event -> {
@@ -47,7 +47,7 @@ public class StatusBarPresenter implements Localized {
 			}
 			display.getStatusBarDescription().setText("");
 		});
-		goldWasChangedController.addListener(event -> {
+		goldWasChangedController.addRunLaterListener(event -> {
 			setGoldText(display.getLabelGold(), event.getNewValue());
 		});
 		display.getLabelEra().setOnMouseEntered(event -> {

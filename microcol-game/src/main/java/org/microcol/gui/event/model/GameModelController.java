@@ -7,6 +7,7 @@ import java.util.Optional;
 import org.microcol.ai.AbstractRobotPlayer;
 import org.microcol.ai.KingPlayer;
 import org.microcol.ai.SimpleAiPlayer;
+import org.microcol.gui.panelview.AnimationManager;
 import org.microcol.gui.util.Localized;
 import org.microcol.model.ConstructionType;
 import org.microcol.model.GoodType;
@@ -34,6 +35,8 @@ public class GameModelController implements Localized {
 	private final static Logger logger = LoggerFactory.getLogger(GameModelController.class);
 
 	private final ModelEventManager modelEventManager;
+	
+	private final AnimationManager animationManager;
 
 	private ModelListenerImpl modelListener;
 
@@ -42,8 +45,9 @@ public class GameModelController implements Localized {
 	private List<AbstractRobotPlayer> players;
 
 	@Inject
-	public GameModelController(final ModelEventManager modelEventManager) {
+	public GameModelController(final ModelEventManager modelEventManager, final AnimationManager animationManager) {
 		this.modelEventManager = Preconditions.checkNotNull(modelEventManager);
+		this.animationManager = Preconditions.checkNotNull(animationManager);
 		model = null;
 		modelListener = null;
 	}
@@ -121,10 +125,10 @@ public class GameModelController implements Localized {
 		model = Preconditions.checkNotNull(newModel);
 		players = new ArrayList<>();
 		model.getPlayers().stream().filter(player -> player.isKing()).forEach(player -> {
-			players.add(new KingPlayer(model, player));
+			players.add(new KingPlayer(model, player, animationManager));
 		});
 		model.getPlayers().stream().filter(player -> !player.isKing() && player.isComputer()).forEach(player -> {
-			players.add(new SimpleAiPlayer(model, player));
+			players.add(new SimpleAiPlayer(model, player, animationManager));
 		});
 		modelListener = new ModelListenerImpl(modelEventManager);
 		model.addListener(modelListener);

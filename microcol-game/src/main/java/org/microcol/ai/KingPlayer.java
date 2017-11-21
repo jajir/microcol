@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.microcol.gui.panelview.AnimationManager;
 import org.microcol.model.Location;
 import org.microcol.model.Model;
 import org.microcol.model.Path;
@@ -20,8 +21,8 @@ public class KingPlayer extends AbstractRobotPlayer {
 
 	private ContinentTool continentTool = new ContinentTool();
 
-	public KingPlayer(final Model model, final Player player) {
-		super(model, player);
+	public KingPlayer(final Model model, final Player player, final AnimationManager animationManager) {
+		super(model, player, animationManager);
 		this.whosKingThisPlayerIs = Preconditions.checkNotNull(player.getWhosKingThisPlayerIs());
 	}
 

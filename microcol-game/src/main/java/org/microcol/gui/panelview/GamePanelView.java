@@ -90,9 +90,11 @@ public class GamePanelView implements GamePanelPresenter.Display {
 
 	@Inject
 	public GamePanelView(final GameModelController gameModelController, final PathPlanning pathPlanning,
-			final ImageProvider imageProvider, final SelectedTileManager selectedTileManager, final MoveModeSupport moveModeSupport,
-			final Text text, final ViewUtil viewUtil, final LocalizationHelper localizationHelper,
-			final PaintService paintService, final GamePreferences gamePreferences, final MouseOverTileManager mouseOverTileManager) {
+			final ImageProvider imageProvider, final SelectedTileManager selectedTileManager,
+			final MoveModeSupport moveModeSupport, final Text text, final ViewUtil viewUtil,
+			final LocalizationHelper localizationHelper, final PaintService paintService,
+			final GamePreferences gamePreferences, final MouseOverTileManager mouseOverTileManager,
+			final AnimationManager animationManager) {
 		this.gameModelController = Preconditions.checkNotNull(gameModelController);
 		this.pathPlanning = Preconditions.checkNotNull(pathPlanning);
 		this.imageProvider = Preconditions.checkNotNull(imageProvider);
@@ -105,10 +107,10 @@ public class GamePanelView implements GamePanelPresenter.Display {
 		this.gamePreferences = Preconditions.checkNotNull(gamePreferences);
 		this.visualDebugInfo = new VisualDebugInfo();
 		this.mouseOverTileManager = Preconditions.checkNotNull(mouseOverTileManager);
+		this.animationManager = Preconditions.checkNotNull(animationManager);
 		oneTurnMoveHighlighter = new OneTurnMoveHighlighter();
 		gotoModeCursor = new ImageCursor(imageProvider.getImage(ImageProvider.IMG_CURSOR_GOTO), 1, 1);
 		// excludePainting = new ExcludePainting();
-		animationManager = new AnimationManager();
 		visibleArea = new VisibleArea();
 
 		// TODO JJ specify canvas size

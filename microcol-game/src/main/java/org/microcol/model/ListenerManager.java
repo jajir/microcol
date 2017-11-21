@@ -2,6 +2,8 @@ package org.microcol.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.function.Consumer;
 
 import org.microcol.model.event.ColonyWasCapturedEvent;
 import org.microcol.model.event.DebugRequestedEvent;
@@ -37,7 +39,7 @@ class ListenerManager {
 			logger.warn("Model listener {} already added.", listener);
 		}
 	}
-
+	
 	void removeListener(final ModelListener listener) {
 		Preconditions.checkNotNull(listener);
 
@@ -59,7 +61,7 @@ class ListenerManager {
 
 		logger.info("Round started: {}.", event);
 
-		listeners.forEach(listener -> listener.roundStarted(event));
+		executeInSeparateThread(listener -> listener.roundStarted(event));
 	}
 
 	void fireTurnStarted(final Model model, final Player player) {
@@ -67,7 +69,7 @@ class ListenerManager {
 
 		logger.info("Turn started: {}.", event);
 
-		listeners.forEach(listener -> listener.turnStarted(event));
+		executeInSeparateThread(listener -> listener.turnStarted(event));
 	}
 
 	void fireUnitMoved(final Model model, final Unit unit, final Location start, final Path path) {
@@ -124,4 +126,9 @@ class ListenerManager {
 
 		listeners.forEach(listener -> listener.debugRequested(event));
 	}
+
+	private void executeInSeparateThread(Consumer<ModelListener> action) {
+		listeners.forEach(listener -> Executors.newSingleThreadExecutor().execute(() -> action.accept(listener)));
+	}
+	
 }

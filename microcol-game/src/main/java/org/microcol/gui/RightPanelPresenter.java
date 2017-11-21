@@ -12,6 +12,9 @@ import org.microcol.gui.panelview.TileWasSelectedEvent;
 import org.microcol.gui.util.Localized;
 import org.microcol.model.Location;
 import org.microcol.model.Player;
+import org.microcol.model.event.TurnStartedEvent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
@@ -20,6 +23,8 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
 
 public class RightPanelPresenter implements Localized {
+	
+	private final Logger logger = LoggerFactory.getLogger(RightPanelPresenter.class);
 
 	public interface Display {
 
@@ -47,6 +52,7 @@ public class RightPanelPresenter implements Localized {
 		display.getNextTurnButton().setDisable(true);
 
 		display.getNextTurnButton().setOnAction(e -> {
+			logger.debug("Next turn button was pressed");
 			display.getNextTurnButton().setDisable(true);
 			gameModelController.nextTurn();
 		});
@@ -65,13 +71,16 @@ public class RightPanelPresenter implements Localized {
 		});
 
 		changeLanguangeController.addListener(this::onLanguageWasChanged);
-		focusedTileController.addListener(this::onFocusedTile);
-		turnStartedController.addListener(event -> {
-			display.setOnMovePlayer(event.getPlayer());
-			if (event.getPlayer().isHuman()) {
-				display.getNextTurnButton().setDisable(false);
-			}
-		});
+		focusedTileController.addRunLaterListener(this::onFocusedTile);
+		turnStartedController.addRunLaterListener(this::onTurnStarted);
+	}
+	
+	private void onTurnStarted(final TurnStartedEvent event){
+		logger.debug("Turn started for player {}", event.getPlayer());
+		display.setOnMovePlayer(event.getPlayer());
+		if (event.getPlayer().isHuman()) {
+			display.getNextTurnButton().setDisable(false);
+		}		
 	}
 
 	private void onLanguageWasChanged(final ChangeLanguageEvent event) {

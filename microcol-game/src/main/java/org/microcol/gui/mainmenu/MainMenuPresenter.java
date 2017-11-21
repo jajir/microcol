@@ -152,7 +152,6 @@ public class MainMenuPresenter {
 	}
 
 	private final void onTurnStartedEvent(final TurnStartedEvent event) {
-		System.out.println("onTurnStartedEvent " + event.getPlayer());
 		if (event.getPlayer().isHuman()) {
 			if (isTileFocused) {
 				display.getMenuItemCenterView().setDisable(false);

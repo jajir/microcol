@@ -52,6 +52,7 @@ import org.microcol.gui.mainmenu.MainMenuView;
 import org.microcol.gui.mainmenu.SelectNextUnitController;
 import org.microcol.gui.mainmenu.ShowGridController;
 import org.microcol.gui.mainmenu.VolumeChangeController;
+import org.microcol.gui.panelview.AnimationManager;
 import org.microcol.gui.panelview.GamePanelPresenter;
 import org.microcol.gui.panelview.GamePanelView;
 import org.microcol.gui.panelview.MouseOverTileChangedController;
@@ -87,6 +88,7 @@ public class MicroColModule extends AbstractModule {
 		bind(LocalizationHelper.class).in(Singleton.class);
 		bind(PersistentService.class).in(Singleton.class);
 		bind(ModelDao.class).in(Singleton.class);
+		bind(AnimationManager.class).in(Singleton.class);
 
 		/**
 		 * Dialogs

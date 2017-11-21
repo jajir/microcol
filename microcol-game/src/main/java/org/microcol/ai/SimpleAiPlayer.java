@@ -3,6 +3,7 @@ package org.microcol.ai;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.microcol.gui.panelview.AnimationManager;
 import org.microcol.model.Location;
 import org.microcol.model.Model;
 import org.microcol.model.Path;
@@ -16,8 +17,8 @@ public class SimpleAiPlayer extends AbstractRobotPlayer {
 	
 	private final Directions unitDirections;
 
-	public SimpleAiPlayer(final Model model, final Player player) {
-		super(model, player);
+	public SimpleAiPlayer(final Model model, final Player player, final AnimationManager animationManager) {
+		super(model, player, animationManager);
 		unitDirections = new Directions();
 	}
 

@@ -6,6 +6,7 @@ import java.util.Queue;
 import java.util.function.Consumer;
 
 import com.google.common.base.Preconditions;
+import com.google.inject.Inject;
 
 import javafx.scene.canvas.GraphicsContext;
 
@@ -13,14 +14,19 @@ import javafx.scene.canvas.GraphicsContext;
  * Hold and manage planned animation steps.
  * 
  */
-public class AnimationManager {
+public class AnimationManager implements AnimationLock {
 
 	private final Queue<AnimationHolder> animationParts = new LinkedList<>();
 
 	private Optional<AnimationHolder> runningPart;
 
 	private boolean hasNextStep = false;
+	
+	private final AnimationLatch latch = new AnimationLatch();
+	
+	//TODO when last animation is fight than lock is released too early
 
+	@Inject
 	public AnimationManager() {
 		runningPart = Optional.empty();
 	}
@@ -42,6 +48,7 @@ public class AnimationManager {
 			if (animationParts.isEmpty()) {
 				runningPart = Optional.empty();
 				hasNextStep = false;
+				latch.unlock();
 			} else {
 				runningPart = Optional.of(animationParts.remove());
 				Preconditions.checkState(runningPart.get().animation.hasNextStep(),
@@ -64,8 +71,15 @@ public class AnimationManager {
 		} else {
 			runningPart = Optional.of(holder);
 			hasNextStep = holder.animation.hasNextStep();
+			if(hasNextStep){
+				latch.lock();
+			}
 		}
-
+	}
+	
+	@Override
+	public void waitWhileRunning(){
+		latch.waitForUnlock();
 	}
 
 	public void addAnimation(final Animation animation) {

@@ -24,7 +24,7 @@ public abstract class AbstractEventController<E> {
 	/**
 	 * Holds all registered listeners.
 	 */
-	private final List<Listener<E>> listeners = new ArrayList<>();
+	private final List<Wrapper<E>> listeners = new ArrayList<>();
 
 	private final boolean fireEventsAsynchronously;
 
@@ -43,11 +43,26 @@ public abstract class AbstractEventController<E> {
 	 *            required listener
 	 */
 	public void addListener(final Listener<E> listener) {
+		addListener(false, listener);
+	}
+
+	/**
+	 * Method add listener which will started in separate thread. This is
+	 * dedicated for operation that changing UI.
+	 * 
+	 * @param listener
+	 *            required listener
+	 */
+	public void addRunLaterListener(final Listener<E> listener) {
+		addListener(true, listener);
+	}
+
+	private void addListener(final boolean fireEventsAsynchronously, final Listener<E> listener) {
 		Preconditions.checkNotNull(listener);
 		if (listeners.contains(listener)) {
 			logger.debug("Attempt to register one listener '" + listener + "'more that one time.");
 		} else {
-			listeners.add(listener);
+			listeners.add(new Wrapper<>(fireEventsAsynchronously, listener));
 		}
 	}
 
@@ -72,7 +87,7 @@ public abstract class AbstractEventController<E> {
 	public void fireEvent(final E event) {
 		Preconditions.checkNotNull(event);
 		logger.debug("Event " + event + " was triggered.");
-		listeners.stream().forEach(listener -> {
+		listeners.stream().forEach(wrapper -> {
 			if (fireEventsAsynchronously) {
 				/**
 				 * Is it correct to call events in Platform.runLater even when
@@ -80,11 +95,28 @@ public abstract class AbstractEventController<E> {
 				 * queue and make UI unresponsive. In case of problems with
 				 * 'runLatert' than should be used just in case of UI event
 				 */
-				Platform.runLater(() -> listener.onEvent(event));
+				Platform.runLater(() -> wrapper.listener.onEvent(event));
 			} else {
-				listener.onEvent(event);
+				if (wrapper.fireEventsAsynchronously) {
+					Platform.runLater(() -> wrapper.listener.onEvent(event));
+				} else {
+					wrapper.listener.onEvent(event);
+				}
 			}
 		});
+	}
+
+	private class Wrapper<T> {
+
+		private final boolean fireEventsAsynchronously;
+
+		private final Listener<T> listener;
+
+		Wrapper(final boolean fireEventsAsynchronously, final Listener<T> listener) {
+			this.fireEventsAsynchronously = fireEventsAsynchronously;
+			this.listener = Preconditions.checkNotNull(listener);
+		}
+
 	}
 
 }
