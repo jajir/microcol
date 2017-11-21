@@ -79,6 +79,7 @@ public abstract class AbstractRobotPlayer {
 			return;
 		}
 		moveUnit(unit);
+		animationLock.waitWhileRunning();
 	}
 	
 	/**

@@ -2,15 +2,17 @@ package org.microcol.gui.panelview;
 
 import java.util.concurrent.CountDownLatch;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
- * Allows to stop waiting threads until some operation is done. 
+ * Allows to stop waiting threads until some operation is done.
  */
 public class AnimationLatch {
 
+	private final Logger logger = LoggerFactory.getLogger(AnimationLatch.class);
+
 	private CountDownLatch latch;
-	
-	//TODO some parts of methods should be synchronized
-	//TODO add some unit test
 
 	/**
 	 * Could be called from any thread. Just first call make it lock other calls
@@ -27,8 +29,10 @@ public class AnimationLatch {
 	 */
 	void unlock() {
 		if (latch != null) {
-			latch.countDown();
-			latch = null;
+			synchronized (latch) {
+				latch.countDown();
+				latch = null;
+			}
 		}
 	}
 
@@ -41,8 +45,7 @@ public class AnimationLatch {
 			try {
 				latch.await();
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				logger.error(e.getMessage(), e);
 			}
 		}
 	}

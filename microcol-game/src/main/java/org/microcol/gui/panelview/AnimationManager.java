@@ -5,6 +5,9 @@ import java.util.Optional;
 import java.util.Queue;
 import java.util.function.Consumer;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
 
@@ -16,15 +19,15 @@ import javafx.scene.canvas.GraphicsContext;
  */
 public class AnimationManager implements AnimationLock {
 
+	private final Logger logger = LoggerFactory.getLogger(AnimationManager.class);
+
 	private final Queue<AnimationHolder> animationParts = new LinkedList<>();
 
 	private Optional<AnimationHolder> runningPart;
 
 	private boolean hasNextStep = false;
-	
+
 	private final AnimationLatch latch = new AnimationLatch();
-	
-	//TODO when last animation is fight than lock is released too early
 
 	@Inject
 	public AnimationManager() {
@@ -39,9 +42,7 @@ public class AnimationManager implements AnimationLock {
 		Preconditions.checkState(hasNextStep, "Can't perform step when there is no next step.");
 		Preconditions.checkState(runningPart.isPresent(), "Actually running animation was lost.");
 		runningPart.get().animation.nextStep();
-		if (runningPart.get().animation.hasNextStep()) {
-			hasNextStep = true;
-		} else {
+		if (!runningPart.get().animation.hasNextStep()) {
 			if (runningPart.get().onAnimationIsDone != null) {
 				runningPart.get().onAnimationIsDone.accept(runningPart.get().animation);
 			}
@@ -49,6 +50,7 @@ public class AnimationManager implements AnimationLock {
 				runningPart = Optional.empty();
 				hasNextStep = false;
 				latch.unlock();
+				logger.debug("u are done, unlocking threads");
 			} else {
 				runningPart = Optional.of(animationParts.remove());
 				Preconditions.checkState(runningPart.get().animation.hasNextStep(),
@@ -71,14 +73,14 @@ public class AnimationManager implements AnimationLock {
 		} else {
 			runningPart = Optional.of(holder);
 			hasNextStep = holder.animation.hasNextStep();
-			if(hasNextStep){
+			if (hasNextStep) {
 				latch.lock();
 			}
 		}
 	}
-	
+
 	@Override
-	public void waitWhileRunning(){
+	public void waitWhileRunning() {
 		latch.waitForUnlock();
 	}
 

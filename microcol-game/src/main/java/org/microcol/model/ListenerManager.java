@@ -77,7 +77,7 @@ class ListenerManager {
 
 		logger.info("Unit moved: {}.", event);
 
-		listeners.forEach(listener -> listener.unitMoved(event));
+		executeInSeparateThread(listener -> listener.unitMoved(event));
 	}
 
 	void fireUnitAttacked(final Model model, final Unit attacker, final Unit defender, final Unit destroyed) {
@@ -85,7 +85,7 @@ class ListenerManager {
 
 		logger.info("Unit attacked: {}.", event);
 
-		listeners.forEach(listener -> listener.unitAttacked(event));
+		executeInSeparateThread(listener -> listener.unitAttacked(event));
 	}
 
 	void fireUnitStored(final Model model, final Unit unit, final CargoSlot slot) {
