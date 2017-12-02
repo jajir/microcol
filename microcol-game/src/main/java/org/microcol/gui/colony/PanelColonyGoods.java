@@ -2,6 +2,7 @@ package org.microcol.gui.colony;
 
 import org.microcol.gui.ImageProvider;
 import org.microcol.gui.event.model.GameModelController;
+import org.microcol.gui.util.BackgroundHighlighter;
 import org.microcol.gui.util.ClipboardReader;
 import org.microcol.gui.util.TitledPanel;
 import org.microcol.model.Colony;
@@ -11,15 +12,10 @@ import org.microcol.model.GoodType;
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
 
-import javafx.geometry.Insets;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.HBox;
-import javafx.scene.paint.Color;
 
 /**
  * Show list of all available goods.
@@ -32,7 +28,7 @@ public class PanelColonyGoods extends TitledPanel {
 	
 	private final ColonyDialogCallback colonyDialog;
 
-	private Background background;
+	private final BackgroundHighlighter backgroundHighlighter;
 	
 	private ColonyWarehouse colonyWarehouse;
 
@@ -47,9 +43,10 @@ public class PanelColonyGoods extends TitledPanel {
 		GoodType.BUYABLE_GOOD_TYPES.forEach(goodType -> {
 			hBox.getChildren().add(new PanelColonyGood(imageProvider.getGoodTypeImage(goodType), goodType));
 		});
-
-		setOnDragEntered(this::onDragEntered);
-		setOnDragExited(this::onDragExited);
+		backgroundHighlighter = new BackgroundHighlighter(this, this::isItGoodAmount);
+		setOnDragEntered(backgroundHighlighter::onDragEntered);
+		setOnDragExited(backgroundHighlighter::onDragExited);
+		
 		setOnDragOver(this::onDragOver);
 		setOnDragDropped(this::onDragDropped);
 	}
@@ -69,19 +66,6 @@ public class PanelColonyGoods extends TitledPanel {
 		});
 	};
 	
-	private final void onDragEntered(final DragEvent event) {
-		if (isItGoodAmount(event.getDragboard())) {
-			background = getBackground();
-			setBackground(new Background(new BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY)));
-		}
-	}
-
-	@SuppressWarnings("unused")
-	private final void onDragExited(final DragEvent event) {
-		setBackground(background);
-		background = null;
-	}
-
 	private final void onDragOver(final DragEvent event) {
 		if (isItGoodAmount(event.getDragboard())) {
 			event.acceptTransferModes(TransferMode.MOVE);

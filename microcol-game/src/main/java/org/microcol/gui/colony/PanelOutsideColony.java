@@ -3,6 +3,7 @@ package org.microcol.gui.colony;
 import org.microcol.gui.DialogDestroyColony;
 import org.microcol.gui.ImageProvider;
 import org.microcol.gui.event.model.GameModelController;
+import org.microcol.gui.util.BackgroundHighlighter;
 import org.microcol.gui.util.ClipboardReader;
 import org.microcol.gui.util.ClipboardWritter;
 import org.microcol.gui.util.TitledPanel;
@@ -38,6 +39,8 @@ public class PanelOutsideColony extends TitledPanel {
 	
 	private final DialogDestroyColony dialogDestroyColony;
 
+	private final BackgroundHighlighter backgroundHighlighter;
+	
 	@Inject
 	public PanelOutsideColony(final ImageProvider imageProvider, final GameModelController gameModelController,
 			final ColonyDialogCallback colonyDialog, final DialogDestroyColony dialogDestroyColony) {
@@ -48,6 +51,9 @@ public class PanelOutsideColony extends TitledPanel {
 		this.dialogDestroyColony = Preconditions.checkNotNull(dialogDestroyColony);
 		panelUnits = new HBox();
 		getContentPane().getChildren().add(panelUnits);
+		backgroundHighlighter = new BackgroundHighlighter(this, this::isItUnit);
+		setOnDragEntered(backgroundHighlighter::onDragEntered);
+		setOnDragExited(backgroundHighlighter::onDragExited);
 		setOnDragDropped(this::onDragDropped);
 		setOnDragOver(this::onDragOver);
 	}
@@ -91,6 +97,7 @@ public class PanelOutsideColony extends TitledPanel {
 					colonyDialog.close();
 				}
 			}else{
+				unit.placeToMap(colony.getLocation());
 				colonyDialog.repaint();
 			}
 			event.acceptTransferModes(TransferMode.MOVE);

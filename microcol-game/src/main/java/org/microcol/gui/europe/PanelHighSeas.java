@@ -2,22 +2,18 @@ package org.microcol.gui.europe;
 
 import org.microcol.gui.ImageProvider;
 import org.microcol.gui.event.model.GameModelController;
+import org.microcol.gui.util.BackgroundHighlighter;
 import org.microcol.gui.util.ClipboardReader;
 import org.microcol.gui.util.TitledPanel;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
 
-import javafx.geometry.Insets;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.HBox;
-import javafx.scene.paint.Color;
 
 /**
  * Panels shows ships in seas. Ships are incoming to port or are going to new
@@ -35,7 +31,7 @@ public class PanelHighSeas extends TitledPanel {
 
 	private final GameModelController gameModelController;
 
-	private Background background;
+	private final BackgroundHighlighter backgroundHighlighter;
 
 	@Inject
 	public PanelHighSeas(final EuropeDialogCallback europeDialog, final ImageProvider imageProvider,
@@ -47,30 +43,16 @@ public class PanelHighSeas extends TitledPanel {
 		minHeightProperty().set(80);
 		shipsContainer = new HBox();
 		getChildren().add(shipsContainer);
-		setOnDragEntered(this::onDragEntered);
+		backgroundHighlighter = new BackgroundHighlighter(this, this::isItCorrectObject);
+		setOnDragEntered(backgroundHighlighter::onDragEntered);
+		setOnDragExited(backgroundHighlighter::onDragExited);
 		setOnDragOver(this::onDragOver);
 		setOnDragDropped(this::onDragDropped);
-		setOnDragExited(this::onDragExited);
 	}
 
 	public void repaint() {
 		shipsContainer.getChildren().clear();
 		showShips();
-	}
-
-	private final void onDragEntered(final DragEvent event) {
-		if (isItCorrectObject(event.getDragboard())) {
-			background = getBackground();
-			setBackground(new Background(new BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY)));
-		}
-	}
-
-	@SuppressWarnings("unused")
-	private final void onDragExited(final DragEvent event) {
-		if (background != null) {
-			setBackground(background);
-			background = null;
-		}
 	}
 
 	private final void onDragOver(final DragEvent event) {

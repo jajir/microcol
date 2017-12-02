@@ -534,7 +534,6 @@ public class Unit {
 		Preconditions.checkNotNull(location);
 		Preconditions.checkState(!isAtEuropePort(), "Unit can't skip from europe port to map");
 		Preconditions.checkState(!isAtEuropePier(), "Unit can't skip from europe port pier to map");
-		place.destroy();
 		placeToLocation(location);
 	}
 

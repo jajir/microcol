@@ -3,6 +3,7 @@ package org.microcol.gui.europe;
 import org.microcol.gui.ImageProvider;
 import org.microcol.gui.LocalizationHelper;
 import org.microcol.gui.event.model.GameModelController;
+import org.microcol.gui.util.BackgroundHighlighter;
 import org.microcol.gui.util.ClipboardReader;
 import org.microcol.gui.util.ClipboardReader.TransferFromEuropePier;
 import org.microcol.gui.util.Text;
@@ -13,16 +14,11 @@ import org.slf4j.LoggerFactory;
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
 
-import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 
 /**
  * Panels shows list of people already recruited. People from this panel could
@@ -42,7 +38,7 @@ public class PanelPortPier extends TitledPanel {
 
 	private final VBox panelUnits;
 
-	private Background background;
+	private final BackgroundHighlighter backgroundHighlighter;
 
 	@Inject
 	public PanelPortPier(final GameModelController gameModelController, final EuropeDialogCallback europeDialogCallback,
@@ -54,8 +50,9 @@ public class PanelPortPier extends TitledPanel {
 		this.localizationHelper = Preconditions.checkNotNull(localizationHelper);
 		panelUnits = new VBox();
 		getContentPane().getChildren().add(panelUnits);
-		setOnDragEntered(this::onDragEntered);
-		setOnDragExited(this::onDragExited);
+		backgroundHighlighter = new BackgroundHighlighter(this, this::isItCorrectObject);
+		setOnDragEntered(backgroundHighlighter::onDragEntered);
+		setOnDragExited(backgroundHighlighter::onDragExited);
 		setOnDragOver(this::onDragOver);
 		setOnDragDropped(this::onDragDropped);
 	}
@@ -64,20 +61,6 @@ public class PanelPortPier extends TitledPanel {
 		panelUnits.getChildren().clear();
 		gameModelController.getModel().getEurope().getPier().getUnits(gameModelController.getCurrentPlayer()).forEach(
 				unit -> panelUnits.getChildren().add(new PanelPortPierUnit(unit, imageProvider, localizationHelper)));
-	}
-
-	private final void onDragEntered(final DragEvent event) {
-		if (isItCorrectObject(event.getDragboard())) {
-			background = getBackground();
-			setBackground(new Background(new BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY)));
-		}
-	}
-
-	private final void onDragExited(final DragEvent event) {
-		if (isItCorrectObject(event.getDragboard())) {
-			setBackground(background);
-			background = null;
-		}
 	}
 
 	private final void onDragOver(final DragEvent event) {

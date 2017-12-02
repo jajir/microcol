@@ -2,6 +2,7 @@ package org.microcol.gui.europe;
 
 import org.microcol.gui.ImageProvider;
 import org.microcol.gui.event.model.GameModelController;
+import org.microcol.gui.util.BackgroundHighlighter;
 import org.microcol.gui.util.ClipboardReader;
 import org.microcol.gui.util.TitledPanel;
 import org.microcol.model.Europe;
@@ -12,15 +13,10 @@ import org.slf4j.LoggerFactory;
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
 
-import javafx.geometry.Insets;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.HBox;
-import javafx.scene.paint.Color;
 
 /**
  * Show list of all available goods.
@@ -37,7 +33,7 @@ public class PanelEuropeGoods extends TitledPanel {
 
 	private final EuropeDialogCallback europeDialogCallback;
 	
-	private Background background;
+	private final BackgroundHighlighter backgroundHighlighter;
 
 	@Inject
 	public PanelEuropeGoods(final EuropeDialogCallback europeDialogCallback, final GameModelController gameModelController,
@@ -48,9 +44,9 @@ public class PanelEuropeGoods extends TitledPanel {
 		this.europeDialogCallback = Preconditions.checkNotNull(europeDialogCallback);
 		hBox = new HBox();
 		getContentPane().getChildren().add(hBox);
-
-		setOnDragEntered(this::onDragEntered);
-		setOnDragExited(this::onDragExited);
+		backgroundHighlighter = new BackgroundHighlighter(this, this::isItGoodAmount);
+		setOnDragEntered(backgroundHighlighter::onDragEntered);
+		setOnDragExited(backgroundHighlighter::onDragExited);
 		setOnDragOver(this::onDragOver);
 		setOnDragDropped(this::onDragDropped);
 	}
@@ -62,20 +58,6 @@ public class PanelEuropeGoods extends TitledPanel {
 			hBox.getChildren()
 					.add(new PanelGood(imageProvider.getGoodTypeImage(goodType), europe.getGoodTradeForType(goodType)));
 		});
-	}
-
-	private final void onDragEntered(final DragEvent event) {
-		if (isItGoodAmount(event.getDragboard())) {
-			background = getBackground();
-			setBackground(new Background(new BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY)));
-		}
-	}
-
-	private final void onDragExited(final DragEvent event) {
-		if (isItGoodAmount(event.getDragboard())) {
-			setBackground(background);
-			background = null;
-		}
 	}
 
 	private final void onDragOver(final DragEvent event) {
