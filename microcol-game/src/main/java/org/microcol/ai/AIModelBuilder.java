@@ -4,8 +4,9 @@ import org.microcol.model.Location;
 import org.microcol.model.Model;
 import org.microcol.model.ModelBuilder;
 import org.microcol.model.UnitType;
-
+//TODO change map names and file extension
 public class AIModelBuilder {
+	
 	private final ModelBuilder builder;
 
 	AIModelBuilder() {

@@ -30,7 +30,7 @@ public class EventControllerTest {
 	}
 
 	@Test(timeout = 1000)
-	public void test_adding_same_listener_in_more_than_one_count_just_one() throws Exception {
+	public void test_adding_same_listener_in_more_than_one_shoul_count_just_one() throws Exception {
 		MockEventController controller = new MockEventController();
 
 		MockListener l0 = new MockListener("l0");

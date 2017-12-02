@@ -19,7 +19,7 @@ public class PersistentServiceTest {
 		assertTrue(scenarios.size() > 0);
 		Scenario sc = scenarios.get(0);
 		assertEquals(sc.getName(), "Simple tiny world");
-		assertEquals(sc.getFileName(), "/maps/map-small.json");
+		assertEquals(sc.getFileName(), "/maps/01-map-small.json");
 	}
 
 }

@@ -59,11 +59,23 @@ public abstract class AbstractEventController<E> {
 
 	private void addListener(final boolean fireEventsAsynchronously, final Listener<E> listener) {
 		Preconditions.checkNotNull(listener);
-		if (listeners.contains(listener)) {
+		if (containsListener(listener)) {
 			logger.debug("Attempt to register one listener '" + listener + "'more that one time.");
 		} else {
 			listeners.add(new Wrapper<>(fireEventsAsynchronously, listener));
 		}
+	}
+
+	/**
+	 * If listener with is already added then return <code>true</code> otherwise
+	 * return <code>false</code>.
+	 * 
+	 * @param listener
+	 *            required listener
+	 * @return return <code>true</code> if given listener is already registered
+	 */
+	private boolean containsListener(final Listener<E> listener) {
+		return listeners.stream().filter(wrapper -> wrapper.listener.equals(listener)).findAny().isPresent();
 	}
 
 	/**
