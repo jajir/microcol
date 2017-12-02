@@ -1,4 +1,4 @@
-package org.microcol.gui.panelview;
+package org.microcol.gui.gamepanel;
 
 import java.util.Collections;
 import java.util.List;

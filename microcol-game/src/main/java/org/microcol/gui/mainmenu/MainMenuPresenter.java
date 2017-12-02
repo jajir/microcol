@@ -10,8 +10,8 @@ import org.microcol.gui.event.StartMoveController;
 import org.microcol.gui.event.StartMoveEvent;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.event.model.TurnStartedController;
-import org.microcol.gui.panelview.TileWasSelectedController;
-import org.microcol.gui.panelview.TileWasSelectedEvent;
+import org.microcol.gui.gamepanel.TileWasSelectedController;
+import org.microcol.gui.gamepanel.TileWasSelectedEvent;
 import org.microcol.gui.util.Text;
 import org.microcol.model.event.TurnStartedEvent;
 

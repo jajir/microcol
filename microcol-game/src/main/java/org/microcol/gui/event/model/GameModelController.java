@@ -7,7 +7,7 @@ import java.util.Optional;
 import org.microcol.ai.AbstractRobotPlayer;
 import org.microcol.ai.KingPlayer;
 import org.microcol.ai.SimpleAiPlayer;
-import org.microcol.gui.panelview.AnimationManager;
+import org.microcol.gui.gamepanel.AnimationManager;
 import org.microcol.gui.util.Localized;
 import org.microcol.model.ConstructionType;
 import org.microcol.model.GoodType;

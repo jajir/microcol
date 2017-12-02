@@ -5,9 +5,9 @@ import static org.junit.Assert.assertNotNull;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.microcol.gui.panelview.Area;
-import org.microcol.gui.panelview.GamePanelView;
-import org.microcol.gui.panelview.VisibleArea;
+import org.microcol.gui.gamepanel.Area;
+import org.microcol.gui.gamepanel.GamePanelView;
+import org.microcol.gui.gamepanel.VisibleArea;
 import org.microcol.model.Location;
 import org.microcol.model.WorldMap;
 

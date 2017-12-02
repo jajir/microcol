@@ -1,6 +1,6 @@
 package org.microcol.ai;
 
-import org.microcol.gui.panelview.AnimationLock;
+import org.microcol.gui.gamepanel.AnimationLock;
 import org.microcol.model.Model;
 import org.microcol.model.ModelAdapter;
 import org.microcol.model.Player;

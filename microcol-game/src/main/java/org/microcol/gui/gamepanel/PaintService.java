@@ -1,4 +1,4 @@
-package org.microcol.gui.panelview;
+package org.microcol.gui.gamepanel;
 
 import org.microcol.gui.ImageProvider;
 import org.microcol.gui.Point;

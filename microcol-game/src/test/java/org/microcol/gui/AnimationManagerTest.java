@@ -6,8 +6,8 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.microcol.gui.panelview.Animation;
-import org.microcol.gui.panelview.AnimationManager;
+import org.microcol.gui.gamepanel.Animation;
+import org.microcol.gui.gamepanel.AnimationManager;
 
 import mockit.Expectations;
 import mockit.Mocked;

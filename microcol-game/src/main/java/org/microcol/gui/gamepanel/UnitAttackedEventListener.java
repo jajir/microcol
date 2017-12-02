@@ -1,4 +1,4 @@
-package org.microcol.gui.panelview;
+package org.microcol.gui.gamepanel;
 
 import org.microcol.gui.event.model.UnitAttackedEventController;
 import org.microcol.model.event.UnitAttackedEvent;

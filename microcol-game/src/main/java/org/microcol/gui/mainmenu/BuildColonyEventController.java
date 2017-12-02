@@ -1,7 +1,7 @@
 package org.microcol.gui.mainmenu;
 
 import org.microcol.gui.event.model.GameModelController;
-import org.microcol.gui.panelview.SelectedUnitManager;
+import org.microcol.gui.gamepanel.SelectedUnitManager;
 import org.microcol.gui.util.AbstractEventController;
 import org.microcol.model.Player;
 import org.microcol.model.Unit;

@@ -6,8 +6,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.microcol.gui.event.model.GameModelController;
-import org.microcol.gui.panelview.SelectedTileManager;
-import org.microcol.gui.panelview.TileWasSelectedController;
+import org.microcol.gui.gamepanel.SelectedTileManager;
+import org.microcol.gui.gamepanel.TileWasSelectedController;
 
 import mockit.Mocked;
 

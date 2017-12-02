@@ -1,6 +1,6 @@
 package org.microcol.gui;
 
-import org.microcol.gui.panelview.GamePanelView;
+import org.microcol.gui.gamepanel.GamePanelView;
 
 import com.google.inject.Inject;
 

@@ -1,6 +1,6 @@
 package org.microcol.gui;
 
-import org.microcol.gui.panelview.TileWasSelectedEvent;
+import org.microcol.gui.gamepanel.TileWasSelectedEvent;
 import org.microcol.gui.util.Localized;
 import org.microcol.model.Player;
 

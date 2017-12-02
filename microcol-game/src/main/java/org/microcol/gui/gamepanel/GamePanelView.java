@@ -1,4 +1,4 @@
-package org.microcol.gui.panelview;
+package org.microcol.gui.gamepanel;
 
 import java.util.List;
 import java.util.Map;
@@ -13,7 +13,7 @@ import org.microcol.gui.PathPlanning;
 import org.microcol.gui.Point;
 import org.microcol.gui.StepCounter;
 import org.microcol.gui.event.model.GameModelController;
-import org.microcol.gui.panelview.MoveModeSupport.MoveMode;
+import org.microcol.gui.gamepanel.MoveModeSupport.MoveMode;
 import org.microcol.gui.util.FpsCounter;
 import org.microcol.gui.util.Text;
 import org.microcol.gui.util.ViewUtil;

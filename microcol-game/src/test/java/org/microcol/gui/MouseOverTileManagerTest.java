@@ -7,9 +7,9 @@ import static org.junit.Assert.assertTrue;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.microcol.gui.panelview.MouseOverTileChangedController;
-import org.microcol.gui.panelview.MouseOverTileChangedEvent;
-import org.microcol.gui.panelview.MouseOverTileManager;
+import org.microcol.gui.gamepanel.MouseOverTileChangedController;
+import org.microcol.gui.gamepanel.MouseOverTileChangedEvent;
+import org.microcol.gui.gamepanel.MouseOverTileManager;
 import org.microcol.model.Location;
 
 import mockit.Expectations;

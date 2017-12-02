@@ -7,7 +7,7 @@ import java.util.Optional;
 
 import org.microcol.gui.Point;
 import org.microcol.gui.Rectangle;
-import org.microcol.gui.panelview.GamePanelView;
+import org.microcol.gui.gamepanel.GamePanelView;
 import org.microcol.model.Location;
 
 import com.google.common.base.MoreObjects;

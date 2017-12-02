@@ -10,7 +10,7 @@ import org.microcol.gui.LocalizationHelper;
 import org.microcol.gui.Point;
 import org.microcol.gui.Rectangle;
 import org.microcol.gui.event.model.GameModelController;
-import org.microcol.gui.panelview.GamePanelView;
+import org.microcol.gui.gamepanel.GamePanelView;
 import org.microcol.gui.util.ClipboardReader;
 import org.microcol.gui.util.ClipboardWritter;
 import org.microcol.gui.util.TitledPanel;
