@@ -42,8 +42,10 @@ public class RightPanelPresenter implements Localized {
 	private TileWasSelectedEvent lastFocusedTileEvent;
 
 	@Inject
-	public RightPanelPresenter(final RightPanelPresenter.Display display, final GameModelController gameModelController,
-			final KeyController keyController, final TileWasSelectedController focusedTileController,
+	public RightPanelPresenter(final RightPanelPresenter.Display display,
+			final GameModelController gameModelController,
+			final KeyController keyController,
+			final TileWasSelectedController tileWasSelectedController,
 			final ChangeLanguageController changeLanguangeController,
 			final StatusBarMessageController statusBarMessageController,
 			final TurnStartedController turnStartedController) {
@@ -71,7 +73,7 @@ public class RightPanelPresenter implements Localized {
 		});
 
 		changeLanguangeController.addListener(this::onLanguageWasChanged);
-		focusedTileController.addRunLaterListener(this::onFocusedTile);
+		tileWasSelectedController.addRunLaterListener(this::onFocusedTile);
 		turnStartedController.addRunLaterListener(this::onTurnStarted);
 	}
 	

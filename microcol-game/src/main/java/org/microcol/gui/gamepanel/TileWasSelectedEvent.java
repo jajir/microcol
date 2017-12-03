@@ -33,13 +33,15 @@ public class TileWasSelectedEvent {
 		this.terrain = Preconditions.checkNotNull(tile);
 	}
 
+	//TODO use selectedUnitController
+	@Deprecated
 	public boolean isTileContainsMovebleUnit() {
 		final Optional<Unit> unit = model.getUnitsAt(location).stream().findFirst();
 		return unit.isPresent() && unit.get().getOwner().equals(model.getCurrentPlayer());
 	}
 	
-	public boolean isPossibleToBuildColony(){
-		if(isTileContainsMovebleUnit()){
+	public boolean isPossibleToBuildColony() {
+		if (isTileContainsMovebleUnit()) {
 			final Unit unit = model.getUnitsAt(location).stream().findFirst()
 					.orElseThrow(() -> new IllegalStateException("It should not be here"));
 			return unit.getType().canBuildColony() && unit.getAvailableMoves() > 0;

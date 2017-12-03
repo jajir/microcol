@@ -10,6 +10,8 @@ import org.microcol.gui.GamePreferences;
 import org.microcol.gui.MicroColException;
 import org.microcol.gui.Point;
 import org.microcol.gui.colony.ColonyDialog;
+import org.microcol.gui.event.EndMoveController;
+import org.microcol.gui.event.EndMoveEvent;
 import org.microcol.gui.event.KeyController;
 import org.microcol.gui.event.StartMoveController;
 import org.microcol.gui.event.StartMoveEvent;
@@ -86,10 +88,14 @@ public final class GamePanelPresenter implements Localized {
 	private Optional<Point> lastMousePosition = Optional.empty();
 
 	private final SelectedTileManager selectedTileManager;
+	
+	private final SelectedUnitManager selectedUnitManager;
 
 	private final ViewUtil viewUtil;
 
 	private final StartMoveController startMoveController;
+	
+	private final EndMoveController endMoveController;
 
 	private final ColonyDialog colonyDialog;
 
@@ -100,26 +106,37 @@ public final class GamePanelPresenter implements Localized {
 	private final ModeController modeController;
 
 	@Inject
-	public GamePanelPresenter(final GamePanelPresenter.Display display, final GameModelController gameModelController,
-			final KeyController keyController, final MoveUnitController moveUnitController,
-			final NewGameController newGameController, final GamePreferences gamePreferences,
-			final ShowGridController showGridController, final CenterViewController viewController,
-			final ExitGameController exitGameController, final DebugRequestController debugRequestController,
-			final SelectedTileManager selectedTileManager, final ViewUtil viewUtil,
-			final StartMoveController startMoveController, final ColonyDialog colonyDialog, final Text text,
+	public GamePanelPresenter(final GamePanelPresenter.Display display,
+			final GameModelController gameModelController,
+			final KeyController keyController,
+			final MoveUnitController moveUnitController,
+			final NewGameController newGameController,
+			final GamePreferences gamePreferences,
+			final ShowGridController showGridController,
+			final CenterViewController viewController,
+			final ExitGameController exitGameController,
+			final DebugRequestController debugRequestController,
+			final SelectedTileManager selectedTileManager,
+			final ViewUtil viewUtil,
+			final StartMoveController startMoveController,
+			final EndMoveController endMoveController,
+			final ColonyDialog colonyDialog, final Text text,
 			final ColonyWasCapturedController colonyWasCapturedController,
 			final MouseOverTileManager mouseOverTileManager,
-			final ModeController modeController) {
+			final ModeController modeController,
+			final SelectedUnitManager selectedUnitManager) {
 		this.gameModelController = Preconditions.checkNotNull(gameModelController);
 		this.gamePreferences = gamePreferences;
 		this.display = Preconditions.checkNotNull(display);
 		this.selectedTileManager = Preconditions.checkNotNull(selectedTileManager);
 		this.viewUtil = Preconditions.checkNotNull(viewUtil);
 		this.startMoveController = Preconditions.checkNotNull(startMoveController);
+		this.endMoveController = Preconditions.checkNotNull(endMoveController);
 		this.colonyDialog = Preconditions.checkNotNull(colonyDialog);
 		this.text = Preconditions.checkNotNull(text);
 		this.mouseOverTileManager = Preconditions.checkNotNull(mouseOverTileManager);
 		this.modeController = Preconditions.checkNotNull(modeController);
+		this.selectedUnitManager = Preconditions.checkNotNull(selectedUnitManager);
 
 		moveUnitController.addListener(event -> {
 			scheduleWalkAnimation(event);
@@ -207,10 +224,7 @@ public final class GamePanelPresenter implements Localized {
 
 	private boolean tryToSwitchToMoveMode(final Location currentLocation) {
 		Preconditions.checkNotNull(currentLocation);
-		final List<Unit> units = gameModelController.getCurrentPlayer().getUnitsAt(currentLocation);
-		//TODO check which unit will move
-		//TODO check if there is unit with enough action points to move
-		if (!units.isEmpty()) {
+		if (selectedUnitManager.isSelectedUnitMoveable()) {
 			startMoveController.fireEvent(new StartMoveEvent());
 			return true;
 		}
@@ -241,12 +255,8 @@ public final class GamePanelPresenter implements Localized {
 
 	private void onKeyPressed_escape() {
 		if (modeController.isMoveMode()) {
-			cancelGoToMode();
+			disableMoveMode();
 		}
-	}
-
-	private void cancelGoToMode() {
-		display.setMoveModeOff();
 	}
 
 	private void onKeyPressed_enter() {
@@ -266,7 +276,6 @@ public final class GamePanelPresenter implements Localized {
 				if (e.isPrimaryButtonDown()) {
 					selectedTileManager.setSelectedTile(location);
 					if (!tryToSwitchToMoveMode(location)) {
-						// TODO JJ is this if really needed?
 						tryToOpenColonyDetail(location);
 					}
 				}
@@ -316,13 +325,12 @@ public final class GamePanelPresenter implements Localized {
 		final Location moveFromLocation = selectedTileManager.getSelectedTile().get();
 		logger.debug("Switching to normal mode, from " + moveFromLocation + " to " + moveToLocation);
 		if (moveFromLocation.equals(moveToLocation)) {
-			display.setMoveModeOff();
+			disableMoveMode();
 			// it's a click? is there a colony?
 			tryToOpenColonyDetail(moveToLocation);
 			return;
 		}
-		// TODO JJ active ship can be different from ship first at list
-		final Unit movingUnit = gameModelController.getCurrentPlayer().getUnitsAt(moveFromLocation).get(0);
+		final Unit movingUnit = selectedUnitManager.getSelectedUnit().get();
 		if (movingUnit.isPossibleToAttackAt(moveToLocation)) {
 			// fight
 			fight(movingUnit, moveToLocation);
@@ -332,14 +340,14 @@ public final class GamePanelPresenter implements Localized {
 			toLoad.getCargo().getSlots().get(0).store(movingUnit);
 			// TODO JJ following code is repeated multiple times
 			selectedTileManager.setSelectedTile(moveToLocation);
-			display.setMoveModeOff();
+			disableMoveMode();
 		} else if (movingUnit.isPossibleToDisembarkAt(moveToLocation, true)) {
 			// try to disembark
 			movingUnit.getCargo().getSlots().stream().filter(cargoSlot -> !cargoSlot.isEmpty())
 					.forEach(cargoSlot -> cargoSlot.unload(moveToLocation));
 			// TODO JJ following code is repeated multiple times
 			selectedTileManager.setSelectedTile(moveToLocation);
-			display.setMoveModeOff();
+			disableMoveMode();
 		} else if (movingUnit.isPossibleToMoveAt(moveToLocation)) {
 			// user will move
 			if (movingUnit.getPath(moveToLocation).isPresent()) {
@@ -348,7 +356,7 @@ public final class GamePanelPresenter implements Localized {
 					gameModelController.performMove(movingUnit, path);
 				}
 				selectedTileManager.setSelectedTile(moveToLocation);
-				display.setMoveModeOff();
+				disableMoveMode();
 			}
 		} else if (movingUnit.isPossibleToGoToPort(moveToLocation)) {
 			if (movingUnit.getPath(moveToLocation).isPresent()) {
@@ -357,18 +365,23 @@ public final class GamePanelPresenter implements Localized {
 					gameModelController.performMove(movingUnit, path);
 				}
 				selectedTileManager.setSelectedTile(moveToLocation);
-				display.setMoveModeOff();
+				disableMoveMode();
 			}
 		} else {
 			throw new MicroColException("cant determine correct operation");
 		}
+	}
+	
+	private void disableMoveMode(){
+		display.setMoveModeOff();
+		endMoveController.fireEvent(new EndMoveEvent());
 	}
 
 	private void fight(final Unit movingUnit, final Location moveToLocation) {
 		if (!movingUnit.getType().canAttack()) {
 			// TODO JJ consider which tile should have focus
 			selectedTileManager.setSelectedTile(moveToLocation);
-			display.setMoveModeOff();
+			disableMoveMode();
 			new DialogUnitCantFightWarning(viewUtil, text);
 			return;
 		}
@@ -376,16 +389,16 @@ public final class GamePanelPresenter implements Localized {
 		if (gamePreferences.getShowFightAdvisorProperty().get()) {
 			if (display.performFightDialog(movingUnit, targetUnit)) {
 				// User choose to fight
-				display.setMoveModeOff();
+				disableMoveMode();
 				gameModelController.performFight(movingUnit, targetUnit);
 			} else {
 				// User choose to quit fight
 				selectedTileManager.setSelectedTile(moveToLocation);
-				display.setMoveModeOff();
+				disableMoveMode();
 			}
 		} else {
 			// implicit fight
-			display.setMoveModeOff();
+			disableMoveMode();
 			gameModelController.performFight(movingUnit, targetUnit);
 		}
 	}

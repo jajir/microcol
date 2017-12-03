@@ -6,10 +6,13 @@ import org.microcol.gui.PreferencesAnimationSpeed;
 import org.microcol.gui.PreferencesVolume;
 import org.microcol.gui.colonizopedia.Colonizopedia;
 import org.microcol.gui.europe.EuropeDialog;
+import org.microcol.gui.event.EndMoveController;
+import org.microcol.gui.event.EndMoveEvent;
 import org.microcol.gui.event.StartMoveController;
 import org.microcol.gui.event.StartMoveEvent;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.event.model.TurnStartedController;
+import org.microcol.gui.gamepanel.SelectedUnitManager;
 import org.microcol.gui.gamepanel.TileWasSelectedController;
 import org.microcol.gui.gamepanel.TileWasSelectedEvent;
 import org.microcol.gui.util.Text;
@@ -64,6 +67,8 @@ public class MainMenuPresenter {
 	}
 
 	private final MainMenuPresenter.Display display;
+	
+	private final SelectedUnitManager selectedUnitManager;
 
 	private boolean isFocusedMoveableUnit = false;
 
@@ -89,6 +94,7 @@ public class MainMenuPresenter {
 			final TileWasSelectedController tileWasSelectedController,
 			final GameModelController gameModelController,
 			final StartMoveController startMoveController,
+			final EndMoveController endMoveController,
 			final TurnStartedController turnStartedController,
 
 			/**
@@ -99,9 +105,11 @@ public class MainMenuPresenter {
 			final DialogIndependenceWasDeclared dialogIndependenceWasDeclared,
 			final Colonizopedia colonizopedia,
 			final PreferencesAnimationSpeed preferencesAnimationSpeed,
-			final PreferencesVolume preferencesVolume
+			final PreferencesVolume preferencesVolume,
+			final SelectedUnitManager selectedUnitManager
 			) {
 		this.display = Preconditions.checkNotNull(display);
+		this.selectedUnitManager = Preconditions.checkNotNull(selectedUnitManager);
 		display.getMenuItemNewGame().setOnAction(actionEvent -> gameModelController.startNewDefaultGame());
 		display.getMenuItemSameGame().setOnAction(event -> persistingDialog.saveModel());
 		display.getMenuItemLoadGame().setOnAction(event -> persistingDialog.loadModel());
@@ -139,6 +147,16 @@ public class MainMenuPresenter {
 		declareIndependenceController.addListener(event -> display.getMenuItemDeclareIndependence().setDisable(true));
 
 		exitGameController.addListener(this::onGameFinihedEvent);
+		endMoveController.addRunLaterListener(this::onEndMoveEvent);
+	}
+	
+	@SuppressWarnings("unused")
+	void onEndMoveEvent(final EndMoveEvent event){
+		if(selectedUnitManager.isSelectedUnitMoveable()){
+			display.getMenuItemMove().setDisable(false);
+		}else{
+			display.getMenuItemMove().setDisable(true);
+		}
 	}
 
 	/**
