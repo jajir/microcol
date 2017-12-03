@@ -74,17 +74,33 @@ public class MainMenuPresenter {
 			/**
 			 * Following parameters are controllers reacting on menu events
 			 */
-			final AboutGameEventController gameEventController, final BuildColonyEventController buildColonyEventController, final CenterViewController centerViewController, final ChangeLanguageController changeLanguageController, final DeclareIndependenceController declareIndependenceController, final ExitGameController exitGameController, final ShowGridController showGridController, final SelectNextUnitController selectNextUnitController,
+			final AboutGameEventController gameEventController,
+			final BuildColonyEventController buildColonyEventController,
+			final CenterViewController centerViewController,
+			final ChangeLanguageController changeLanguageController,
+			final DeclareIndependenceController declareIndependenceController,
+			final ExitGameController exitGameController,
+			final ShowGridController showGridController,
+			final SelectNextUnitController selectNextUnitController,
 
 			/**
 			 * Menu items react on following events
 			 */
-			final TileWasSelectedController tileWasSelectedController, final GameModelController gameModelController, final StartMoveController startMoveController, final TurnStartedController turnStartedController,
+			final TileWasSelectedController tileWasSelectedController,
+			final GameModelController gameModelController,
+			final StartMoveController startMoveController,
+			final TurnStartedController turnStartedController,
 
 			/**
 			 * Other events consumers and helpers
 			 */
-			final PersistingDialog persistingDialog, final EuropeDialog europeDialog, final DialogIndependenceWasDeclared dialogIndependenceWasDeclared, final Colonizopedia colonizopedia, final PreferencesAnimationSpeed preferencesAnimationSpeed, final PreferencesVolume preferencesVolume) {
+			final PersistingDialog persistingDialog,
+			final EuropeDialog europeDialog,
+			final DialogIndependenceWasDeclared dialogIndependenceWasDeclared,
+			final Colonizopedia colonizopedia,
+			final PreferencesAnimationSpeed preferencesAnimationSpeed,
+			final PreferencesVolume preferencesVolume
+			) {
 		this.display = Preconditions.checkNotNull(display);
 		display.getMenuItemNewGame().setOnAction(actionEvent -> gameModelController.startNewDefaultGame());
 		display.getMenuItemSameGame().setOnAction(event -> persistingDialog.saveModel());

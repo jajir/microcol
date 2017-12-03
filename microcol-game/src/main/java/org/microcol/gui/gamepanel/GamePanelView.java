@@ -87,14 +87,19 @@ public class GamePanelView implements GamePanelPresenter.Display {
 	private final VisibleArea visibleArea;
 	
 	private final MouseOverTileManager mouseOverTileManager;
+	
+	private final ModeController modeController;
 
 	@Inject
 	public GamePanelView(final GameModelController gameModelController, final PathPlanning pathPlanning,
 			final ImageProvider imageProvider, final SelectedTileManager selectedTileManager,
 			final MoveModeSupport moveModeSupport, final Text text, final ViewUtil viewUtil,
-			final LocalizationHelper localizationHelper, final PaintService paintService,
-			final GamePreferences gamePreferences, final MouseOverTileManager mouseOverTileManager,
-			final AnimationManager animationManager) {
+			final LocalizationHelper localizationHelper,
+			final PaintService paintService,
+			final GamePreferences gamePreferences,
+			final MouseOverTileManager mouseOverTileManager,
+			final AnimationManager animationManager,
+			final ModeController modeController) {
 		this.gameModelController = Preconditions.checkNotNull(gameModelController);
 		this.pathPlanning = Preconditions.checkNotNull(pathPlanning);
 		this.imageProvider = Preconditions.checkNotNull(imageProvider);
@@ -108,6 +113,7 @@ public class GamePanelView implements GamePanelPresenter.Display {
 		this.visualDebugInfo = new VisualDebugInfo();
 		this.mouseOverTileManager = Preconditions.checkNotNull(mouseOverTileManager);
 		this.animationManager = Preconditions.checkNotNull(animationManager);
+		this.modeController = Preconditions.checkNotNull(modeController);
 		oneTurnMoveHighlighter = new OneTurnMoveHighlighter();
 		gotoModeCursor = new ImageCursor(imageProvider.getImage(ImageProvider.IMG_CURSOR_GOTO), 1, 1);
 		// excludePainting = new ExcludePainting();
@@ -344,7 +350,7 @@ public class GamePanelView implements GamePanelPresenter.Display {
 	 *            required displayed area
 	 */
 	private void paintSteps(final GraphicsContext graphics, final Area area) {
-		if (selectedTileManager.isMoveMode() && mouseOverTileManager.getMouseOverTile().isPresent()) {
+		if (modeController.isMoveMode() && mouseOverTileManager.getMouseOverTile().isPresent()) {
 			paintCursor(graphics, area, mouseOverTileManager.getMouseOverTile().get());
 			final List<Location> locations = moveModeSupport.getMoveLocations();
 			final StepCounter stepCounter = new StepCounter(5, getMovingUnit().getAvailableMoves());
@@ -386,19 +392,17 @@ public class GamePanelView implements GamePanelPresenter.Display {
 		oneTurnMoveHighlighter.setLocations(ship.getAvailableLocations());
 	}
 
-	// TODO JJ rename it
 	@Override
-	public void setCursorNormal() {
+	public void setMoveModeOff() {
 		oneTurnMoveHighlighter.setLocations(null);
 		canvas.setCursor(Cursor.DEFAULT);
-		selectedTileManager.setMoveMode(false);
+		modeController.setMoveMode(false);
 	}
 
-	// TODO JJ rename it
 	@Override
-	public void setCursorGoto() {
+	public void setMoveModeOn() {
 		canvas.setCursor(gotoModeCursor);
-		selectedTileManager.setMoveMode(true);
+		modeController.setMoveMode(true);
 	}
 
 	// TODO JJ animation scheduling should be in separate class.

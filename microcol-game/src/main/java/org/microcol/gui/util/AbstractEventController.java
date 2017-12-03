@@ -32,6 +32,13 @@ public abstract class AbstractEventController<E> {
 		this(true);
 	}
 
+	/**
+	 * Default constructor that allows to set all event as synchronous or asynchronous.
+	 * 
+	 * TODO control sync / async at listener level.
+	 * 
+	 * @param fireEventsAsynchronously
+	 */
 	public AbstractEventController(final boolean fireEventsAsynchronously) {
 		this.fireEventsAsynchronously = fireEventsAsynchronously;
 	}

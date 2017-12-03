@@ -42,6 +42,7 @@ import org.microcol.gui.event.model.UnitAttackedEventController;
 import org.microcol.gui.gamepanel.AnimationManager;
 import org.microcol.gui.gamepanel.GamePanelPresenter;
 import org.microcol.gui.gamepanel.GamePanelView;
+import org.microcol.gui.gamepanel.ModeController;
 import org.microcol.gui.gamepanel.MouseOverTileChangedController;
 import org.microcol.gui.gamepanel.MouseOverTileListener;
 import org.microcol.gui.gamepanel.MouseOverTileManager;
@@ -142,6 +143,7 @@ public class MicroColModule extends AbstractModule {
 		bind(PaintService.class).in(Singleton.class);
 		bind(UnitAttackedEventListener.class).asEagerSingleton();
 		bind(MouseOverTileManager.class).in(Singleton.class);
+		bind(ModeController.class).in(Singleton.class);
 		
 		bind(StartPanelView.class).in(Singleton.class);
 		bind(StartPanelPresenter.Display.class).to(StartPanelView.class).in(Singleton.class);

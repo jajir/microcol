@@ -17,9 +17,6 @@ public class SelectedTileManager {
 	
 	private final GameModelController gameModelController;
 
-	// TODO this property should be in separate class, it's not related to tile
-	private boolean isMoveMode;
-
 	private Location selectedTile;
 
 	/**
@@ -31,7 +28,6 @@ public class SelectedTileManager {
 		this.tileWasSelectedController = Preconditions.checkNotNull(tileWasSelectedController);
 		this.gameModelController = Preconditions.checkNotNull(gameModelController);
 		selectedTile = null;
-		isMoveMode = false;
 	}
 
 	public Optional<Location> getSelectedTile() {
@@ -49,14 +45,6 @@ public class SelectedTileManager {
 				this.selectedTile = newlySelectedTile;
 			}
 		}
-	}
-
-	public boolean isMoveMode() {
-		return isMoveMode;
-	}
-
-	public void setMoveMode(boolean isMoveMode) {
-		this.isMoveMode = isMoveMode;
 	}
 
 }

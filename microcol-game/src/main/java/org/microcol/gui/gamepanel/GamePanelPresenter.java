@@ -49,9 +49,9 @@ public final class GamePanelPresenter implements Localized {
 
 		Canvas getCanvas();
 
-		void setCursorNormal();
+		void setMoveModeOff();
 
-		void setCursorGoto();
+		void setMoveModeOn();
 
 		void addMoveAnimator(List<Location> path, Unit movingUnit);
 
@@ -95,7 +95,9 @@ public final class GamePanelPresenter implements Localized {
 
 	private final Text text;
 	
-	private final MouseOverTileManager mouseOverTileManager; 
+	private final MouseOverTileManager mouseOverTileManager;
+	
+	private final ModeController modeController;
 
 	@Inject
 	public GamePanelPresenter(final GamePanelPresenter.Display display, final GameModelController gameModelController,
@@ -106,7 +108,8 @@ public final class GamePanelPresenter implements Localized {
 			final SelectedTileManager selectedTileManager, final ViewUtil viewUtil,
 			final StartMoveController startMoveController, final ColonyDialog colonyDialog, final Text text,
 			final ColonyWasCapturedController colonyWasCapturedController,
-			final MouseOverTileManager mouseOverTileManager) {
+			final MouseOverTileManager mouseOverTileManager,
+			final ModeController modeController) {
 		this.gameModelController = Preconditions.checkNotNull(gameModelController);
 		this.gamePreferences = gamePreferences;
 		this.display = Preconditions.checkNotNull(display);
@@ -116,6 +119,7 @@ public final class GamePanelPresenter implements Localized {
 		this.colonyDialog = Preconditions.checkNotNull(colonyDialog);
 		this.text = Preconditions.checkNotNull(text);
 		this.mouseOverTileManager = Preconditions.checkNotNull(mouseOverTileManager);
+		this.modeController = Preconditions.checkNotNull(modeController);
 
 		moveUnitController.addListener(event -> {
 			scheduleWalkAnimation(event);
@@ -204,6 +208,8 @@ public final class GamePanelPresenter implements Localized {
 	private boolean tryToSwitchToMoveMode(final Location currentLocation) {
 		Preconditions.checkNotNull(currentLocation);
 		final List<Unit> units = gameModelController.getCurrentPlayer().getUnitsAt(currentLocation);
+		//TODO check which unit will move
+		//TODO check if there is unit with enough action points to move
 		if (!units.isEmpty()) {
 			startMoveController.fireEvent(new StartMoveEvent());
 			return true;
@@ -230,21 +236,21 @@ public final class GamePanelPresenter implements Localized {
 		final Unit unit = units.get(0);
 		display.startMoveUnit(unit);
 		logger.debug("Switching '" + unit + "' to go mode.");
-		display.setCursorGoto();
+		display.setMoveModeOn();
 	}
 
 	private void onKeyPressed_escape() {
-		if (selectedTileManager.isMoveMode()) {
+		if (modeController.isMoveMode()) {
 			cancelGoToMode();
 		}
 	}
 
 	private void cancelGoToMode() {
-		display.setCursorNormal();
+		display.setMoveModeOff();
 	}
 
 	private void onKeyPressed_enter() {
-		if (selectedTileManager.isMoveMode()) {
+		if (modeController.isMoveMode()) {
 			switchToNormalMode(mouseOverTileManager.getMouseOverTile().get());
 		}
 	}
@@ -254,7 +260,7 @@ public final class GamePanelPresenter implements Localized {
 		final Location location = display.getArea().convertToLocation(pressedAt);
 		if (gameModelController.getModel().getMap().isValid(location)) {
 			logger.debug("location of mouse: " + location);
-			if (selectedTileManager.isMoveMode()) {
+			if (modeController.isMoveMode()) {
 				switchToNormalMode(location);
 			} else {
 				if (e.isPrimaryButtonDown()) {
@@ -271,7 +277,7 @@ public final class GamePanelPresenter implements Localized {
 	}
 
 	private void onMouseReleased() {
-		if (selectedTileManager.isMoveMode() && lastMousePosition.isPresent()) {
+		if (modeController.isMoveMode() && lastMousePosition.isPresent()) {
 			final Location loc = display.getArea().convertToLocation(lastMousePosition.get());
 			switchToNormalMode(loc);
 		}
@@ -285,7 +291,7 @@ public final class GamePanelPresenter implements Localized {
 				final Point delta = lastMousePosition.get().substract(currentPosition);
 				display.getVisibleArea().addDeltaToTopLeftPoint(delta);
 			}
-			if (selectedTileManager.isMoveMode()) {
+			if (modeController.isMoveMode()) {
 				final Point currentPosition = Point.of(e.getX(), e.getY());
 				final Location loc = display.getArea().convertToLocation(currentPosition);
 				mouseOverTileManager.setMouseOverTile(loc);
@@ -306,11 +312,11 @@ public final class GamePanelPresenter implements Localized {
 	 *            required target location
 	 */
 	private void switchToNormalMode(final Location moveToLocation) {
-		Preconditions.checkArgument(selectedTileManager.isMoveMode(), "switch to move mode was called from move mode");
+		Preconditions.checkArgument(modeController.isMoveMode(), "switch to move mode was called from move mode");
 		final Location moveFromLocation = selectedTileManager.getSelectedTile().get();
 		logger.debug("Switching to normal mode, from " + moveFromLocation + " to " + moveToLocation);
 		if (moveFromLocation.equals(moveToLocation)) {
-			display.setCursorNormal();
+			display.setMoveModeOff();
 			// it's a click? is there a colony?
 			tryToOpenColonyDetail(moveToLocation);
 			return;
@@ -326,14 +332,14 @@ public final class GamePanelPresenter implements Localized {
 			toLoad.getCargo().getSlots().get(0).store(movingUnit);
 			// TODO JJ following code is repeated multiple times
 			selectedTileManager.setSelectedTile(moveToLocation);
-			display.setCursorNormal();
+			display.setMoveModeOff();
 		} else if (movingUnit.isPossibleToDisembarkAt(moveToLocation, true)) {
 			// try to disembark
 			movingUnit.getCargo().getSlots().stream().filter(cargoSlot -> !cargoSlot.isEmpty())
 					.forEach(cargoSlot -> cargoSlot.unload(moveToLocation));
 			// TODO JJ following code is repeated multiple times
 			selectedTileManager.setSelectedTile(moveToLocation);
-			display.setCursorNormal();
+			display.setMoveModeOff();
 		} else if (movingUnit.isPossibleToMoveAt(moveToLocation)) {
 			// user will move
 			if (movingUnit.getPath(moveToLocation).isPresent()) {
@@ -342,7 +348,7 @@ public final class GamePanelPresenter implements Localized {
 					gameModelController.performMove(movingUnit, path);
 				}
 				selectedTileManager.setSelectedTile(moveToLocation);
-				display.setCursorNormal();
+				display.setMoveModeOff();
 			}
 		} else if (movingUnit.isPossibleToGoToPort(moveToLocation)) {
 			if (movingUnit.getPath(moveToLocation).isPresent()) {
@@ -351,7 +357,7 @@ public final class GamePanelPresenter implements Localized {
 					gameModelController.performMove(movingUnit, path);
 				}
 				selectedTileManager.setSelectedTile(moveToLocation);
-				display.setCursorNormal();
+				display.setMoveModeOff();
 			}
 		} else {
 			throw new MicroColException("cant determine correct operation");
@@ -362,7 +368,7 @@ public final class GamePanelPresenter implements Localized {
 		if (!movingUnit.getType().canAttack()) {
 			// TODO JJ consider which tile should have focus
 			selectedTileManager.setSelectedTile(moveToLocation);
-			display.setCursorNormal();
+			display.setMoveModeOff();
 			new DialogUnitCantFightWarning(viewUtil, text);
 			return;
 		}
@@ -370,16 +376,16 @@ public final class GamePanelPresenter implements Localized {
 		if (gamePreferences.getShowFightAdvisorProperty().get()) {
 			if (display.performFightDialog(movingUnit, targetUnit)) {
 				// User choose to fight
-				display.setCursorNormal();
+				display.setMoveModeOff();
 				gameModelController.performFight(movingUnit, targetUnit);
 			} else {
 				// User choose to quit fight
 				selectedTileManager.setSelectedTile(moveToLocation);
-				display.setCursorNormal();
+				display.setMoveModeOff();
 			}
 		} else {
 			// implicit fight
-			display.setCursorNormal();
+			display.setMoveModeOff();
 			gameModelController.performFight(movingUnit, targetUnit);
 		}
 	}

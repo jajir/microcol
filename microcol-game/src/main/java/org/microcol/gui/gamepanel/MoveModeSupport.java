@@ -31,6 +31,8 @@ public class MoveModeSupport {
 	private final MouseOverTileManager mouseOverTileManager;
 	
 	private final SelectedUnitManager selectedUnitManager;
+	
+	private final ModeController modeController;
 
 	private List<Location> moveLocations;
 
@@ -83,13 +85,17 @@ public class MoveModeSupport {
 
 	@Inject
 	public MoveModeSupport(final MouseOverTileChangedController mouseOverTileChangedController,
-			final StartMoveController startMoveController, final SelectedTileManager selectedTileManager,
-			final MouseOverTileManager mouseOverTileManager, final SelectedUnitManager selectedUnitManager) {
+			final StartMoveController startMoveController,
+			final SelectedTileManager selectedTileManager,
+			final MouseOverTileManager mouseOverTileManager,
+			final SelectedUnitManager selectedUnitManager,
+			final ModeController modeController) {
 		mouseOverTileChangedController.addListener(this::onMouseOverTileChanged);
 		startMoveController.addListener(this::onStartMove);
 		this.selectedTileManager = Preconditions.checkNotNull(selectedTileManager);
 		this.mouseOverTileManager = Preconditions.checkNotNull(mouseOverTileManager);
 		this.selectedUnitManager = Preconditions.checkNotNull(selectedUnitManager);
+		this.modeController = Preconditions.checkNotNull(modeController);
 		moveLocations = Lists.newArrayList();
 	}
 
@@ -101,7 +107,7 @@ public class MoveModeSupport {
 	private void onMouseOverTileChanged(final MouseOverTileChangedEvent mouseOverTileChangedEvent) {
 		Preconditions.checkNotNull(mouseOverTileChangedEvent);
 		logger.debug("Recounting path: " + mouseOverTileChangedEvent);
-		if (selectedTileManager.isMoveMode()) {
+		if (modeController.isMoveMode()) {
 			recountPath();
 		} else {
 			noMove();
