@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.event.model.MoveUnitController;
+import org.microcol.gui.event.model.UnitEmbarkedController;
 import org.microcol.gui.mainmenu.SelectNextUnitController;
 import org.microcol.gui.mainmenu.SelectNextUnitEvent;
 import org.microcol.model.Location;
@@ -32,25 +33,31 @@ public class SelectedUnitManager {
 			final TileWasSelectedController tileWasSelectedController,
 			final SelectNextUnitController selectNextUnitController,
 			final SelectedTileManager selectedTileManager,
-			final MoveUnitController moveUnitController
+			final MoveUnitController moveUnitController,
+			final UnitEmbarkedController unitEmbarkedController
 			) {
 		this.gameModelController = Preconditions.checkNotNull(gameModelController);
 		this.selectedTileManager = Preconditions.checkNotNull(selectedTileManager);
 		tileWasSelectedController.addListener(event -> evaluateLocation(event.getLocation()));
 		selectNextUnitController.addListener(this::onSelectNextUnit);
 		moveUnitController.addRunLaterListener(event -> evaluateLocation(selectedTileManager.getSelectedTile().get()));
+		unitEmbarkedController
+				.addRunLaterListener(event -> evaluateLocation(selectedTileManager.getSelectedTile().get()));
 	}
 	
 	private void evaluateLocation(final Location location) {
 		if (selectedUnit == null) {
-			selectedUnit = gameModelController.getModel().getFirstSelectableUnitAt(location)
-					.orElse(null);
+			selectedUnit = gameModelController.getModel().getFirstSelectableUnitAt(location).orElse(null);
 		} else {
-			// If selected tile is location where is selected unit than do
-			// nothing
+			if (!selectedUnit.isAtPlaceLocation()) {
+				selectedUnit = gameModelController.getModel().getFirstSelectableUnitAt(location).orElse(null);
+			}
+			/*
+			 * If selected tile is location where is selected unit than do
+			 * nothing
+			 */
 			if (!selectedUnit.getLocation().equals(location)) {
-				selectedUnit = gameModelController.getModel()
-						.getFirstSelectableUnitAt(location).orElse(null);
+				selectedUnit = gameModelController.getModel().getFirstSelectableUnitAt(location).orElse(null);
 			}
 		}
 	}

@@ -26,13 +26,16 @@ public class ModelEventManager {
 	private final GoldWasChangedController goldWasChangedController;
 	
 	private final ColonyWasCapturedController colonyWasCapturedController;
+	
+	private final UnitEmbarkedController unitEmbarkedController; 
 
 	@Inject
 	public ModelEventManager(final NextTurnController nextTurnController, final MoveUnitController moveUnitController,
 			final NewGameController newGameController, final TurnStartedController turnStartedController,
 			final DebugRequestController debugRequestController, final GameFinishedController gameFinishedController,
 			final UnitAttackedEventController unitAttackedEventController, final GoldWasChangedController goldWasChangedController,
-			final ColonyWasCapturedController colonyWasCapturedController) {
+			final ColonyWasCapturedController colonyWasCapturedController,
+			final UnitEmbarkedController unitEmbarkedController) {
 		this.nextTurnController = Preconditions.checkNotNull(nextTurnController);
 		this.moveUnitController = Preconditions.checkNotNull(moveUnitController);
 		this.newGameController = Preconditions.checkNotNull(newGameController);
@@ -42,6 +45,7 @@ public class ModelEventManager {
 		this.unitAttackedEventController = Preconditions.checkNotNull(unitAttackedEventController);
 		this.goldWasChangedController = Preconditions.checkNotNull(goldWasChangedController);
 		this.colonyWasCapturedController = Preconditions.checkNotNull(colonyWasCapturedController);
+		this.unitEmbarkedController = Preconditions.checkNotNull(unitEmbarkedController);
 	}
 
 	public NextTurnController getNextTurnController() {
@@ -81,6 +85,13 @@ public class ModelEventManager {
 	 */
 	public ColonyWasCapturedController getColonyWasCapturedController() {
 		return colonyWasCapturedController;
+	}
+
+	/**
+	 * @return the unitEmbarkController
+	 */
+	public UnitEmbarkedController getUnitEmbarkController() {
+		return unitEmbarkedController;
 	}
 	
 }

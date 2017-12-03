@@ -39,6 +39,7 @@ import org.microcol.gui.event.model.NewGameController;
 import org.microcol.gui.event.model.NextTurnController;
 import org.microcol.gui.event.model.TurnStartedController;
 import org.microcol.gui.event.model.UnitAttackedEventController;
+import org.microcol.gui.event.model.UnitEmbarkedController;
 import org.microcol.gui.gamepanel.AnimationManager;
 import org.microcol.gui.gamepanel.GamePanelPresenter;
 import org.microcol.gui.gamepanel.GamePanelView;
@@ -124,6 +125,7 @@ public class MicroColModule extends AbstractModule {
 		bind(DeclareIndependenceController.class).in(Singleton.class);
 		bind(BuildColonyEventController.class).in(Singleton.class);
 		bind(SelectNextUnitController.class).in(Singleton.class);
+		bind(UnitEmbarkedController.class).in(Singleton.class);
 
 		bind(ModelEventManager.class).in(Singleton.class);
 

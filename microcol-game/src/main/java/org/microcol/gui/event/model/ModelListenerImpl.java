@@ -2,7 +2,7 @@ package org.microcol.gui.event.model;
 
 import java.util.Optional;
 
-import org.microcol.model.ModelAdapter;
+import org.microcol.model.ModelListener;
 import org.microcol.model.Player;
 import org.microcol.model.event.ColonyWasCapturedEvent;
 import org.microcol.model.event.DebugRequestedEvent;
@@ -13,13 +13,14 @@ import org.microcol.model.event.RoundStartedEvent;
 import org.microcol.model.event.TurnStartedEvent;
 import org.microcol.model.event.UnitAttackedEvent;
 import org.microcol.model.event.UnitMovedEvent;
+import org.microcol.model.event.UnitEmbarkedEvent;
 
 import com.google.common.base.Preconditions;
 
 /**
  * Translate model events to GUI events.
  */
-public class ModelListenerImpl extends ModelAdapter {
+public class ModelListenerImpl implements ModelListener {
 
 	private final ModelEventManager modelEventManager;
 
@@ -69,17 +70,24 @@ public class ModelListenerImpl extends ModelAdapter {
 	}
 
 	@Override
-	public void goldWasChanged(GoldWasChangedEvent event) {
+	public void goldWasChanged(final GoldWasChangedEvent event) {
 		if (event.getPlayer().isHuman()) {
 			modelEventManager.getGoldWasChangedController().fireEvent(event);
 		}
 	}
 	
 	@Override
-	public void colonyWasCaptured(ColonyWasCapturedEvent event) {
+	public void colonyWasCaptured(final ColonyWasCapturedEvent event) {
 		if (event.getCapturedColony().getOwner().isHuman()) {
 			modelEventManager.getColonyWasCapturedController().fireEvent(event);
 		}
 	}
 
+	@Override
+	public void unitEmbarked(final UnitEmbarkedEvent event) {
+		if(event.getUnit().getOwner().isHuman()){
+			modelEventManager.getUnitEmbarkController().fireEvent(event);
+		}
+	}
+	
 }

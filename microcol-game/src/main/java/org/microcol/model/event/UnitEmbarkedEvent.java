@@ -7,11 +7,11 @@ import org.microcol.model.Unit;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 
-public final class UnitStoredEvent extends ModelEvent {
+public final class UnitEmbarkedEvent extends ModelEvent {
 	private final Unit unit;
 	private final CargoSlot slot;
 
-	public UnitStoredEvent(final Model model, final Unit unit, final CargoSlot slot) {
+	public UnitEmbarkedEvent(final Model model, final Unit unit, final CargoSlot slot) {
 		super(model);
 
 		this.unit = Preconditions.checkNotNull(unit);

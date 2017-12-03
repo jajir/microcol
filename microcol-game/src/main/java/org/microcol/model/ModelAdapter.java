@@ -9,7 +9,7 @@ import org.microcol.model.event.RoundStartedEvent;
 import org.microcol.model.event.TurnStartedEvent;
 import org.microcol.model.event.UnitAttackedEvent;
 import org.microcol.model.event.UnitMovedEvent;
-import org.microcol.model.event.UnitStoredEvent;
+import org.microcol.model.event.UnitEmbarkedEvent;
 
 public class ModelAdapter implements ModelListener {
 	@Override
@@ -38,7 +38,7 @@ public class ModelAdapter implements ModelListener {
 	}
 
 	@Override
-	public void unitStored(final UnitStoredEvent event) {
+	public void unitEmbarked(final UnitEmbarkedEvent event) {
 		// Do nothing.
 	}
 

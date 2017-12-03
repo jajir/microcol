@@ -9,7 +9,7 @@ import org.microcol.model.event.RoundStartedEvent;
 import org.microcol.model.event.TurnStartedEvent;
 import org.microcol.model.event.UnitAttackedEvent;
 import org.microcol.model.event.UnitMovedEvent;
-import org.microcol.model.event.UnitStoredEvent;
+import org.microcol.model.event.UnitEmbarkedEvent;
 
 public interface ModelListener {
 	void gameStarted(GameStartedEvent event);
@@ -22,7 +22,7 @@ public interface ModelListener {
 
 	void unitAttacked(UnitAttackedEvent event);
 
-	void unitStored(UnitStoredEvent event);
+	void unitEmbarked(UnitEmbarkedEvent event);
 	
 	void colonyWasCaptured(ColonyWasCapturedEvent event);
 

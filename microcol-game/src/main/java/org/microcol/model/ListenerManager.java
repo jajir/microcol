@@ -14,7 +14,7 @@ import org.microcol.model.event.RoundStartedEvent;
 import org.microcol.model.event.TurnStartedEvent;
 import org.microcol.model.event.UnitAttackedEvent;
 import org.microcol.model.event.UnitMovedEvent;
-import org.microcol.model.event.UnitStoredEvent;
+import org.microcol.model.event.UnitEmbarkedEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -88,12 +88,12 @@ class ListenerManager {
 		executeInSeparateThread(listener -> listener.unitAttacked(event));
 	}
 
-	void fireUnitStored(final Model model, final Unit unit, final CargoSlot slot) {
-		final UnitStoredEvent event = new UnitStoredEvent(model, unit, slot);
+	void fireUnitEmbarked(final Model model, final Unit unit, final CargoSlot slot) {
+		final UnitEmbarkedEvent event = new UnitEmbarkedEvent(model, unit, slot);
 
-		logger.info("Unit stored: {}.", event);
+		logger.info("Unit embarked: {}.", event);
 
-		listeners.forEach(listener -> listener.unitStored(event));
+		listeners.forEach(listener -> listener.unitEmbarked(event));
 	}
 	
 	void fireGoldWasChanged(final Model model,final Player player, final int oldValue, final int newValue) {

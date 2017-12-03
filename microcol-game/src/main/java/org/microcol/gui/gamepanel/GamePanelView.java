@@ -59,6 +59,8 @@ public class GamePanelView implements GamePanelPresenter.Display {
 	private final VisualDebugInfo visualDebugInfo;
 
 	private final SelectedTileManager selectedTileManager;
+	
+	private final SelectedUnitManager selectedUnitManager;
 
 	private final AnimationManager animationManager;
 
@@ -92,8 +94,12 @@ public class GamePanelView implements GamePanelPresenter.Display {
 
 	@Inject
 	public GamePanelView(final GameModelController gameModelController, final PathPlanning pathPlanning,
-			final ImageProvider imageProvider, final SelectedTileManager selectedTileManager,
-			final MoveModeSupport moveModeSupport, final Text text, final ViewUtil viewUtil,
+			final ImageProvider imageProvider,
+			final SelectedTileManager selectedTileManager,
+			final SelectedUnitManager selectedUnitManager,
+			final MoveModeSupport moveModeSupport,
+			final Text text,
+			final ViewUtil viewUtil,
 			final LocalizationHelper localizationHelper,
 			final PaintService paintService,
 			final GamePreferences gamePreferences,
@@ -104,6 +110,7 @@ public class GamePanelView implements GamePanelPresenter.Display {
 		this.pathPlanning = Preconditions.checkNotNull(pathPlanning);
 		this.imageProvider = Preconditions.checkNotNull(imageProvider);
 		this.selectedTileManager = Preconditions.checkNotNull(selectedTileManager);
+		this.selectedUnitManager = Preconditions.checkNotNull(selectedUnitManager);
 		this.moveModeSupport = Preconditions.checkNotNull(moveModeSupport);
 		this.text = Preconditions.checkNotNull(text);
 		this.viewUtil = Preconditions.checkNotNull(viewUtil);
@@ -351,9 +358,13 @@ public class GamePanelView implements GamePanelPresenter.Display {
 	 */
 	private void paintSteps(final GraphicsContext graphics, final Area area) {
 		if (modeController.isMoveMode() && mouseOverTileManager.getMouseOverTile().isPresent()) {
+			final Unit selectedUnit = selectedUnitManager.getSelectedUnit().get();
+			if(!selectedUnit.isAtPlaceLocation()){
+				return;
+			}
 			paintCursor(graphics, area, mouseOverTileManager.getMouseOverTile().get());
 			final List<Location> locations = moveModeSupport.getMoveLocations();
-			final StepCounter stepCounter = new StepCounter(5, getMovingUnit().getAvailableMoves());
+			final StepCounter stepCounter = new StepCounter(5, selectedUnit.getAvailableMoves());
 			final List<Point> steps = Lists.transform(locations, location -> area.convertToPoint(location));
 			/**
 			 * Here could be check if particular step in on screen, but draw few
@@ -361,16 +372,6 @@ public class GamePanelView implements GamePanelPresenter.Display {
 			 */
 			steps.forEach(point -> paintStep(graphics, point, stepCounter, moveModeSupport.getMoveMode()));
 		}
-	}
-
-	/**
-	 * Return unit that is currently selected. In move mode.
-	 * 
-	 * @return return selected unit
-	 */
-	private Unit getMovingUnit() {
-		//XXX moving unit is choose as first in list. When there are more than one it not will be enough. 
-		return gameModelController.getCurrentPlayer().getUnitsAt(selectedTileManager.getSelectedTile().get()).get(0);
 	}
 
 	/**

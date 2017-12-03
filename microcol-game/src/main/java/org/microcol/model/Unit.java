@@ -440,7 +440,7 @@ public class Unit {
 		place = placeCargoSlot;
 		availableMoves = 0;
 		// TODO JKA Move to CargoSlot?
-		model.fireUnitStored(this, placeCargoSlot.getCargoSlot());
+		model.fireUnitEmbarked(this, placeCargoSlot.getCargoSlot());
 	}
 
 	void placeToEuropePort(final EuropePort port) {

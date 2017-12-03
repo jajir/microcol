@@ -375,8 +375,8 @@ public final class Model {
 		listenerManager.fireUnitAttacked(this, attacker, defender, destroyed);
 	}
 
-	void fireUnitStored(final Unit unit, final CargoSlot slot) {
-		listenerManager.fireUnitStored(this, unit, slot);
+	void fireUnitEmbarked(final Unit unit, final CargoSlot slot) {
+		listenerManager.fireUnitEmbarked(this, unit, slot);
 	}
 
 	void fireGoldWasChanged(final Player player, final int oldValue, final int newValue) {
