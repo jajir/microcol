@@ -7,9 +7,11 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.microcol.gui.gamepanel.Animation;
+import org.microcol.gui.gamepanel.AnimationIsDoneController;
 import org.microcol.gui.gamepanel.AnimationManager;
 
 import mockit.Expectations;
+import mockit.Injectable;
 import mockit.Mocked;
 import mockit.StrictExpectations;
 import mockit.Tested;
@@ -20,6 +22,9 @@ public class AnimationManagerTest {
 	
 	@Tested(availableDuringSetup=true)
 	private AnimationManager am;
+	
+	@Injectable
+	private AnimationIsDoneController animationIsDoneController;
 
 	@Mocked
 	private Animation part1;
@@ -120,7 +125,7 @@ public class AnimationManagerTest {
 
 	@Test(expected = NullPointerException.class)
 	public void test_addAnimationPart_verify_than_null_is_not_allowed() throws Exception {
-		AnimationManager am = new AnimationManager();
+		AnimationManager am = new AnimationManager(animationIsDoneController);
 		am.addAnimation(null);
 	}
 

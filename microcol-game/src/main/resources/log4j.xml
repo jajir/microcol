@@ -35,7 +35,7 @@
 	<logger name="org.microcol.gui.event.AbstractEventController">
 		<level value="WARN"/>
 	</logger>
-	<logger name="org.microcol.gui.RightPanelPresenter">
+	<logger name="org.microcol.gui.gamepanel.SelectedUnitManager">
 		<level value="DEBUG"/>
 	</logger>
 

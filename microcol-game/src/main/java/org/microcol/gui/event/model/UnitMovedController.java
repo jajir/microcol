@@ -5,11 +5,10 @@ import org.microcol.model.event.UnitMovedEvent;
 
 /**
  * Controller allows to register unit moving listeners and fire events.
- * 
  */
-public class MoveUnitController extends AbstractEventController<UnitMovedEvent> {
+public class UnitMovedController extends AbstractEventController<UnitMovedEvent> {
 
-	public MoveUnitController() {
+	public UnitMovedController() {
 		super(false);
 	}
 

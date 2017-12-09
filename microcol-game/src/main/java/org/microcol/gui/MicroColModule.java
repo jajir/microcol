@@ -34,12 +34,13 @@ import org.microcol.gui.event.model.GameFinishedController;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.event.model.GoldWasChangedController;
 import org.microcol.gui.event.model.ModelEventManager;
-import org.microcol.gui.event.model.MoveUnitController;
+import org.microcol.gui.event.model.UnitMovedController;
 import org.microcol.gui.event.model.NewGameController;
 import org.microcol.gui.event.model.NextTurnController;
 import org.microcol.gui.event.model.TurnStartedController;
 import org.microcol.gui.event.model.UnitAttackedEventController;
 import org.microcol.gui.event.model.UnitEmbarkedController;
+import org.microcol.gui.gamepanel.AnimationIsDoneController;
 import org.microcol.gui.gamepanel.AnimationManager;
 import org.microcol.gui.gamepanel.GamePanelPresenter;
 import org.microcol.gui.gamepanel.GamePanelView;
@@ -50,6 +51,7 @@ import org.microcol.gui.gamepanel.MouseOverTileManager;
 import org.microcol.gui.gamepanel.MoveModeSupport;
 import org.microcol.gui.gamepanel.PaintService;
 import org.microcol.gui.gamepanel.SelectedTileManager;
+import org.microcol.gui.gamepanel.SelectedUnitManager;
 import org.microcol.gui.gamepanel.TileWasSelectedController;
 import org.microcol.gui.gamepanel.UnitAttackedEventListener;
 import org.microcol.gui.mainmenu.AboutGameEventController;
@@ -101,7 +103,7 @@ public class MicroColModule extends AbstractModule {
 		 * Event controllers.
 		 */
 		bind(ApplicationController.class).in(Singleton.class);
-		bind(MoveUnitController.class).in(Singleton.class);
+		bind(UnitMovedController.class).in(Singleton.class);
 		bind(KeyController.class).in(Singleton.class);
 		bind(NextTurnController.class).in(Singleton.class);
 		bind(TileWasSelectedController.class).in(Singleton.class);
@@ -126,6 +128,7 @@ public class MicroColModule extends AbstractModule {
 		bind(BuildColonyEventController.class).in(Singleton.class);
 		bind(SelectNextUnitController.class).in(Singleton.class);
 		bind(UnitEmbarkedController.class).in(Singleton.class);
+		bind(AnimationIsDoneController.class).in(Singleton.class);
 
 		bind(ModelEventManager.class).in(Singleton.class);
 
@@ -146,6 +149,7 @@ public class MicroColModule extends AbstractModule {
 		bind(UnitAttackedEventListener.class).asEagerSingleton();
 		bind(MouseOverTileManager.class).in(Singleton.class);
 		bind(ModeController.class).in(Singleton.class);
+		bind(SelectedUnitManager.class).in(Singleton.class);
 		
 		bind(StartPanelView.class).in(Singleton.class);
 		bind(StartPanelPresenter.Display.class).to(StartPanelView.class).in(Singleton.class);

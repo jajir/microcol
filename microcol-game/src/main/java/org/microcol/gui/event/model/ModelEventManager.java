@@ -11,7 +11,7 @@ public class ModelEventManager {
 	
 	private final NextTurnController nextTurnController;
 
-	private final MoveUnitController moveUnitController;
+	private final UnitMovedController unitMovedController;
 
 	private final NewGameController newGameController;
 
@@ -30,14 +30,14 @@ public class ModelEventManager {
 	private final UnitEmbarkedController unitEmbarkedController; 
 
 	@Inject
-	public ModelEventManager(final NextTurnController nextTurnController, final MoveUnitController moveUnitController,
+	public ModelEventManager(final NextTurnController nextTurnController, final UnitMovedController unitMovedController,
 			final NewGameController newGameController, final TurnStartedController turnStartedController,
 			final DebugRequestController debugRequestController, final GameFinishedController gameFinishedController,
 			final UnitAttackedEventController unitAttackedEventController, final GoldWasChangedController goldWasChangedController,
 			final ColonyWasCapturedController colonyWasCapturedController,
 			final UnitEmbarkedController unitEmbarkedController) {
 		this.nextTurnController = Preconditions.checkNotNull(nextTurnController);
-		this.moveUnitController = Preconditions.checkNotNull(moveUnitController);
+		this.unitMovedController = Preconditions.checkNotNull(unitMovedController);
 		this.newGameController = Preconditions.checkNotNull(newGameController);
 		this.turnStartedController = Preconditions.checkNotNull(turnStartedController);
 		this.debugRequestController = Preconditions.checkNotNull(debugRequestController);
@@ -52,8 +52,8 @@ public class ModelEventManager {
 		return nextTurnController;
 	}
 
-	public MoveUnitController getMoveUnitController() {
-		return moveUnitController;
+	public UnitMovedController getMoveUnitController() {
+		return unitMovedController;
 	}
 
 	public NewGameController getNewGameController() {

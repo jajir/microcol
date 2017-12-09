@@ -22,6 +22,8 @@ public class AnimationManager implements AnimationLock {
 	private final Logger logger = LoggerFactory.getLogger(AnimationManager.class);
 
 	private final Queue<AnimationHolder> animationParts = new LinkedList<>();
+	
+	private final AnimationIsDoneController animationIsDoneController;
 
 	private Optional<AnimationHolder> runningPart;
 
@@ -30,7 +32,8 @@ public class AnimationManager implements AnimationLock {
 	private final AnimationLatch latch = new AnimationLatch();
 
 	@Inject
-	public AnimationManager() {
+	public AnimationManager(final AnimationIsDoneController animationIsDoneController) {
+		this.animationIsDoneController = Preconditions.checkNotNull(animationIsDoneController);
 		runningPart = Optional.empty();
 	}
 
@@ -50,7 +53,8 @@ public class AnimationManager implements AnimationLock {
 				runningPart = Optional.empty();
 				hasNextStep = false;
 				latch.unlock();
-				logger.debug("u are done, unlocking threads");
+				animationIsDoneController.fireEvent(new AnimationIsDoneEvent());
+				logger.debug("You are done, unlocking threads");
 			} else {
 				runningPart = Optional.of(animationParts.remove());
 				Preconditions.checkState(runningPart.get().animation.hasNextStep(),

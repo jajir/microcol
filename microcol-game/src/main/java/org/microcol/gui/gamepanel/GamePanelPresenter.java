@@ -18,7 +18,7 @@ import org.microcol.gui.event.StartMoveEvent;
 import org.microcol.gui.event.model.ColonyWasCapturedController;
 import org.microcol.gui.event.model.DebugRequestController;
 import org.microcol.gui.event.model.GameModelController;
-import org.microcol.gui.event.model.MoveUnitController;
+import org.microcol.gui.event.model.UnitMovedController;
 import org.microcol.gui.event.model.NewGameController;
 import org.microcol.gui.mainmenu.CenterViewController;
 import org.microcol.gui.mainmenu.ExitGameController;
@@ -109,7 +109,7 @@ public final class GamePanelPresenter implements Localized {
 	public GamePanelPresenter(final GamePanelPresenter.Display display,
 			final GameModelController gameModelController,
 			final KeyController keyController,
-			final MoveUnitController moveUnitController,
+			final UnitMovedController unitMovedController,
 			final NewGameController newGameController,
 			final GamePreferences gamePreferences,
 			final ShowGridController showGridController,
@@ -138,7 +138,7 @@ public final class GamePanelPresenter implements Localized {
 		this.modeController = Preconditions.checkNotNull(modeController);
 		this.selectedUnitManager = Preconditions.checkNotNull(selectedUnitManager);
 
-		moveUnitController.addListener(event -> {
+		unitMovedController.addListener(event -> {
 			scheduleWalkAnimation(event);
 			/**
 			 * Wait until animation is finished.

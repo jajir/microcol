@@ -10,6 +10,7 @@ import org.microcol.gui.event.EndMoveController;
 import org.microcol.gui.event.EndMoveEvent;
 import org.microcol.gui.event.StartMoveController;
 import org.microcol.gui.event.StartMoveEvent;
+import org.microcol.gui.event.model.GameController;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.event.model.TurnStartedController;
 import org.microcol.gui.gamepanel.SelectedUnitManager;
@@ -92,6 +93,7 @@ public class MainMenuPresenter {
 			 * Menu items react on following events
 			 */
 			final TileWasSelectedController tileWasSelectedController,
+			final GameController gameController,
 			final GameModelController gameModelController,
 			final StartMoveController startMoveController,
 			final EndMoveController endMoveController,
@@ -110,7 +112,7 @@ public class MainMenuPresenter {
 			) {
 		this.display = Preconditions.checkNotNull(display);
 		this.selectedUnitManager = Preconditions.checkNotNull(selectedUnitManager);
-		display.getMenuItemNewGame().setOnAction(actionEvent -> gameModelController.startNewDefaultGame());
+		display.getMenuItemNewGame().setOnAction(actionEvent -> gameController.startNewDefaultGame());
 		display.getMenuItemSameGame().setOnAction(event -> persistingDialog.saveModel());
 		display.getMenuItemLoadGame().setOnAction(event -> persistingDialog.loadModel());
 		display.getMenuItemQuitGame().setOnAction(actionEvent -> exitGameController.fireEvent(new ExitGameEvent()));
