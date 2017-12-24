@@ -13,7 +13,15 @@ Planned releases
   * \u2717 Colony building queue and queue editing
    	
   * \u2717 Map discovery. At the beginning of game map is hidden when user come to some place map is revealed. 
-  	
+
+  * \u2717 Improve UI
+   
+    * right panel allows to select unit
+    
+    * After move is selected unit preserved
+    
+	* When user in move mode move mouse to location where unit can't go than cursor will change icon. 
+	  	
   * \u2717 Simple statistics, each turn count and remember:
   	
   	* Player's military strength

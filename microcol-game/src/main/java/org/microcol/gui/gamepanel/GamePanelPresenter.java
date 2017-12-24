@@ -6,8 +6,8 @@ import java.util.Optional;
 
 import org.microcol.gui.DialogColonyWasCaptured;
 import org.microcol.gui.DialogUnitCantFightWarning;
+import org.microcol.gui.DialogUnitCantMoveHere;
 import org.microcol.gui.GamePreferences;
-import org.microcol.gui.MicroColException;
 import org.microcol.gui.Point;
 import org.microcol.gui.colony.ColonyDialog;
 import org.microcol.gui.event.EndMoveController;
@@ -18,17 +18,17 @@ import org.microcol.gui.event.StartMoveEvent;
 import org.microcol.gui.event.model.ColonyWasCapturedController;
 import org.microcol.gui.event.model.DebugRequestController;
 import org.microcol.gui.event.model.GameModelController;
-import org.microcol.gui.event.model.UnitMovedController;
 import org.microcol.gui.event.model.NewGameController;
+import org.microcol.gui.event.model.UnitMovedController;
 import org.microcol.gui.mainmenu.CenterViewController;
 import org.microcol.gui.mainmenu.ExitGameController;
 import org.microcol.gui.mainmenu.ShowGridController;
 import org.microcol.gui.util.Localized;
 import org.microcol.gui.util.Text;
 import org.microcol.gui.util.ViewUtil;
+import org.microcol.model.Colony;
 import org.microcol.model.Location;
 import org.microcol.model.Model;
-import org.microcol.model.Colony;
 import org.microcol.model.Unit;
 import org.microcol.model.event.UnitMovedEvent;
 import org.slf4j.Logger;
@@ -368,7 +368,9 @@ public final class GamePanelPresenter implements Localized {
 				disableMoveMode();
 			}
 		} else {
-			throw new MicroColException("cant determine correct operation");
+			logger.error("It's not possible to determine correct operation");
+			new DialogUnitCantMoveHere(viewUtil, text);
+			disableMoveMode();
 		}
 	}
 	

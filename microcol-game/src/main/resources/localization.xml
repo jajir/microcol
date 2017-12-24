@@ -128,6 +128,8 @@
 	
 	<entry key="dialogIndependenceWasDeclared.caption">You declared independence. Now get ready for Royal army.</entry>
 
+	<entry key="dialogUnitCantMoveHere.caption">I't not possible to move unit here.</entry>
+
 	<entry key="dialogGameOver.caption">Game over.</entry>
 	<entry key="dialogGameOver.allColoniesAreLost">You lost all colonies.</entry>
 	<entry key="dialogGameOver.timeIsUp">You didn't reach freedom before year 1800. You failed to reach freedom.</entry>
