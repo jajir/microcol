@@ -6,10 +6,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Optional;
-import java.util.function.Function;
 
 import javax.imageio.ImageIO;
 
@@ -30,8 +27,57 @@ import com.google.common.collect.Lists;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.Image;
 import javafx.scene.image.PixelReader;
+import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
+import javafx.scene.paint.Color;
 
+/**
+ * Directions:
+ * 
+ * <pre>
+ * NW  N  NE
+ *  \  |  /
+ *   \ | /
+ *    \|/
+ *W ---*--- E
+ *    /|\
+ *   / | \
+ *  /  |  \
+ * SW  S  SE
+ * </pre>
+ * 
+ * Connections to other tiles:
+ * 
+ * <pre>
+ * 0     1            2    3
+ *   +---+------------+---+
+ *   |\  |            |  /|
+ *   |                    |
+ * b +--                --+ 4
+ *   |                    |
+ *   |                    |
+ *   |                    |
+ *   |                    |
+ * a +--                --+ 5
+ *   |                    |
+ *   |/  |            |  \|
+ *   +---+------------+---+
+ * 9     8            7     6
+ * </pre>
+ * 
+ * Background file defining each terrain type simple "png" bitmap split in
+ * column and rows. Size of each row and column is defined by game tile size.
+ * Each row contains each terrain type:
+ * 
+ * <pre>
+ * well
+ * U-shape
+ * L-shape
+ * I-shape
+ * </pre>
+ * 
+ * II-shape could be create by combining of I-shapes
+ */
 public class ImageTest {
 
 	private final int TILE_MAX_X = 5;
@@ -54,43 +100,18 @@ public class ImageTest {
 				images.put(name, tile);
 			}
 		}
-	}
 
-	/**
-	 * Directions:
-	 * 
-	 * <pre>
-	 * NW  N  NE
-	 *  \  |  /
-	 *   \ | /
-	 *    \|/
-	 *W ---*--- E
-	 *    /|\
-	 *   / | \
-	 *  /  |  \
-	 * SW  S  SE
-	 * </pre>
-	 * 
-	 * Connections to other tiles:
-	 * 
-	 * <pre>
-	 * 0     1            2    3
-	 *   +---+------------+---+
-	 *   |\  |            |  /|
-	 *   |                    |
-	 * b +--                --+ 4
-	 *   |                    |
-	 *   |                    |
-	 *   |                    |
-	 *   |                    |
-	 * a +--                --+ 5
-	 *   |                    |
-	 *   |/  |            |  \|
-	 *   +---+------------+---+
-	 * 9     8            7     6
-	 * </pre>
-	 * 
-	 */
+		{
+			images.put("well", images.get("type00"));
+//			images.put("ii-shapeNorthSouth-b45a", images.get("type00"));
+//			images.put("ii-shapeEastWest-2718", TileWrapper.of(images.get("type00")).getImageRotareRight().get());
+//			saveToFile(images.get("ii-shapeNorthSouth-b45a"), "target/worldMap-ii-shapeNorthSouth-b45a.png");
+//			saveToFile(images.get("ii-shapeEastWest-2718"), "target/worldMap-ii-shapeEastWest-2718.png");
+		}
+
+		// TODO case by case get images, generate codes and put them back to map
+		// under correct code
+	}
 
 	@Test
 	public void test_tryPaintMap() throws Exception {
@@ -99,14 +120,36 @@ public class ImageTest {
 		assertNotNull(model);
 		this.map = model.getMap();
 
+		final WritableImage targetMap = new WritableImage(GamePanelView.TILE_WIDTH_IN_PX * map.getMaxX(),
+				GamePanelView.TILE_WIDTH_IN_PX * map.getMaxY());
+
 		for (int y = 1; y < map.getMaxY(); y++) {
 			for (int x = 1; x < map.getMaxX(); x++) {
 				final Location loc = Location.of(x, y);
-				System.out.println("At " + loc + " is terrain image " + getTileCode(loc));
+				final String code = getTileCode(loc);
+				final Image img = images.get(code);
+				if (img != null) {
+					paintAt(targetMap, x, y, img);
+				}
+				System.out.println("At " + loc + " is terrain image " + code);
 			}
 		}
 
+		saveToFile(targetMap, "target/worldMap.png");
 		System.out.println("Done");
+	}
+
+	private void paintAt(final WritableImage target, final int addX, int addY, final Image tile) {
+		final PixelReader pixelReader = tile.getPixelReader();
+		final PixelWriter pixelWriter = target.getPixelWriter();
+
+		for (int y = 0; y < GamePanelView.TILE_WIDTH_IN_PX; y++) {
+			for (int x = 0; x < GamePanelView.TILE_WIDTH_IN_PX; x++) {
+				final Color color = pixelReader.getColor(x, y);
+				pixelWriter.setColor(x + GamePanelView.TILE_WIDTH_IN_PX * addX,
+						y + GamePanelView.TILE_WIDTH_IN_PX * addY, color);
+			}
+		}
 	}
 
 	private String getTileCode(final Location location) {
@@ -341,8 +384,8 @@ public class ImageTest {
 		return map.getTerrainTypeAt(shifted);
 	}
 
-	private static void saveToFile(final Image image) {
-		final File outputFile = new File("target/pok.png");
+	private static void saveToFile(final Image image, String filePath) {
+		final File outputFile = new File(filePath);
 		final BufferedImage bImage = SwingFXUtils.fromFXImage(image, null);
 		try {
 			ImageIO.write(bImage, "png", outputFile);
