@@ -547,6 +547,10 @@ public final class TerrainType {
 		return isSee;
 	}
 
+	public boolean isLand() {
+		return !isSee;
+	}
+
 	public int getMoveCost() {
 		return moveCost;
 	}

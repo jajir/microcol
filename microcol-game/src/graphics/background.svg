@@ -15,7 +15,7 @@
    viewBox="0 0 210 297"
    version="1.1"
    id="svg8"
-   inkscape:version="0.92.2 5c3e80d, 2017-08-06"
+   inkscape:version="0.92.2 (5c3e80d, 2017-08-06)"
    sodipodi:docname="background.svg"
    inkscape:export-filename="/Users/jan/bitmap.png"
    inkscape:export-xdpi="88.800003"
@@ -36,20 +36,82 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1"
-     inkscape:cx="250.50114"
-     inkscape:cy="911.53868"
+     inkscape:zoom="1.4142136"
+     inkscape:cx="217.37275"
+     inkscape:cy="1041.2912"
      inkscape:document-units="mm"
      inkscape:current-layer="layer2"
      showgrid="true"
-     inkscape:window-width="1604"
-     inkscape:window-height="1005"
-     inkscape:window-x="76"
-     inkscape:window-y="1"
-     inkscape:window-maximized="1">
+     inkscape:window-width="1848"
+     inkscape:window-height="1055"
+     inkscape:window-x="67"
+     inkscape:window-y="-5"
+     inkscape:window-maximized="1"
+     showguides="true"
+     inkscape:guide-bbox="true">
     <inkscape:grid
        type="xygrid"
        id="grid4755" />
+    <sodipodi:guide
+       position="15.875,296.33334"
+       orientation="1,0"
+       id="guide4001"
+       inkscape:locked="false" />
+    <sodipodi:guide
+       position="23.812499,283.10417"
+       orientation="0,1"
+       id="guide4003"
+       inkscape:locked="false" />
+    <sodipodi:guide
+       position="39.687499,269.87501"
+       orientation="0,1"
+       id="guide4005"
+       inkscape:locked="false" />
+    <sodipodi:guide
+       position="29.104166,268.55209"
+       orientation="1,0"
+       id="guide4007"
+       inkscape:locked="false" />
+    <sodipodi:guide
+       position="11.90625,256.64584"
+       orientation="0,1"
+       id="guide4011"
+       inkscape:locked="false" />
+    <sodipodi:guide
+       position="10.583333,243.41667"
+       orientation="0,1"
+       id="guide4013"
+       inkscape:locked="false" />
+    <sodipodi:guide
+       position="19.84375,230.18751"
+       orientation="0,1"
+       id="guide4015"
+       inkscape:locked="false" />
+    <sodipodi:guide
+       position="42.333332,280.45834"
+       orientation="1,0"
+       id="guide4017"
+       inkscape:locked="false" />
+    <sodipodi:guide
+       position="55.562499,273.84376"
+       orientation="1,0"
+       id="guide4019"
+       inkscape:locked="false" />
+    <sodipodi:guide
+       position="27.781249,216.95834"
+       orientation="0,1"
+       id="guide4021"
+       inkscape:locked="false" />
+    <sodipodi:guide
+       position="68.791665,264.58334"
+       orientation="1,0"
+       id="guide4884"
+       inkscape:locked="false" />
+    <sodipodi:guide
+       position="82.020831,260.61459"
+       orientation="1,0"
+       id="guide4886"
+       inkscape:locked="false" />
   </sodipodi:namedview>
   <metadata
      id="metadata5">
@@ -59,7 +121,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -67,7 +129,7 @@
      inkscape:label="pozadi"
      inkscape:groupmode="layer"
      id="layer1"
-     style="display:inline"
+     style="display:none"
      sodipodi:insensitive="true">
     <path
        style="fill:#ff0000;fill-opacity:1;stroke:#000000;stroke-width:0.02929676;stroke-linecap:butt;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
@@ -86,211 +148,209 @@
        y="14.954166"
        x="15.875"
        id="image7128"
-       xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAABCAYAAACc0f2yAAAABHNCSVQICAgIfAhkiAAAABBJREFU
-CJljNDQ0/MAwDAAALJYBhdo8EWQAAAAASUVORK5CYII=
-"
-       style="image-rendering:optimizeSpeed"
+       xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAABCAYAAACc0f2yAAAABHNCSVQICAgIfAhkiAAAABBJREFU CJljNDQ0/MAwDAAALJYBhdo8EWQAAAAASUVORK5CYII= "
+       style="image-rendering:optimizeSpeed;fill:none"
        preserveAspectRatio="none"
        height="0.26458332"
        width="13.229167"
-       inkscape:export-filename="/Users/jan/image7128.png"
-       inkscape:export-xdpi="88.800003"
-       inkscape:export-ydpi="88.800003" />
+       inkscape:export-filename="C:\Projects\repo\github\microcol\microcol-game\target\bitmap.png"
+       inkscape:export-xdpi="67"
+       inkscape:export-ydpi="67" />
     <image
        y="14.954166"
        x="42.333332"
        id="image7148"
-       xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAABCAIAAAATs2rlAAAAA3NCSVQICAjb4U/gAAAAD0lEQVQI
-mWO0tbVlGHwAAGuxALkwRihxAAAAAElFTkSuQmCC
-"
-       style="image-rendering:optimizeSpeed"
+       xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAABCAIAAAATs2rlAAAAA3NCSVQICAjb4U/gAAAAD0lEQVQI mWO0tbVlGHwAAGuxALkwRihxAAAAAElFTkSuQmCC "
+       style="image-rendering:optimizeSpeed;fill:none"
        preserveAspectRatio="none"
        height="0.26458332"
        width="13.229167"
-       inkscape:export-filename="/Users/jan/image7128.png"
-       inkscape:export-xdpi="88.800003"
-       inkscape:export-ydpi="88.800003" />
+       inkscape:export-filename="C:\Projects\repo\github\microcol\microcol-game\target\bitmap.png"
+       inkscape:export-xdpi="67"
+       inkscape:export-ydpi="67" />
     <path
        style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="m 15.875,39.03125 c 13.229167,0 11.90625,0 13.229167,1.322917"
        id="path7151"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc"
-       inkscape:export-filename="/Users/jan/image7128.png"
-       inkscape:export-xdpi="88.800003"
-       inkscape:export-ydpi="88.800003" />
+       inkscape:export-filename="C:\Projects\repo\github\microcol\microcol-game\target\bitmap.png"
+       inkscape:export-xdpi="67"
+       inkscape:export-ydpi="67" />
     <path
        sodipodi:nodetypes="csc"
        inkscape:connector-curvature="0"
        id="path7213"
        d="m 29.104167,27.125 c 1.322916,-1.322917 0,-1.322917 6.085364,-1.313827 6.73653,0.01006 6.072386,0.242411 7.143802,1.313827"
        style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       inkscape:export-filename="/Users/jan/image7128.png"
-       inkscape:export-xdpi="88.800003"
-       inkscape:export-ydpi="88.800003" />
+       inkscape:export-filename="C:\Projects\repo\github\microcol\microcol-game\target\bitmap.png"
+       inkscape:export-xdpi="67"
+       inkscape:export-ydpi="67" />
     <path
        style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="m 29.104167,13.895833 c 1.322916,1.322917 0,1.322917 6.085364,1.313827 6.73653,-0.01006 6.072386,-0.242411 7.143802,-1.313827"
        id="path7215"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="csc"
-       inkscape:export-filename="/Users/jan/image7128.png"
-       inkscape:export-xdpi="88.800003"
-       inkscape:export-ydpi="88.800003" />
+       inkscape:export-filename="C:\Projects\repo\github\microcol\microcol-game\target\bitmap.png"
+       inkscape:export-xdpi="67"
+       inkscape:export-ydpi="67" />
     <path
        style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="m 42.333333,27.125 c 1.322916,-1.322917 0,-1.322917 6.085364,-1.313827 6.73653,0.01006 6.072386,0.242411 7.143802,1.313827"
        id="path7217"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="csc"
-       inkscape:export-filename="/Users/jan/image7128.png"
-       inkscape:export-xdpi="88.800003"
-       inkscape:export-ydpi="88.800003" />
+       inkscape:export-filename="C:\Projects\repo\github\microcol\microcol-game\target\bitmap.png"
+       inkscape:export-xdpi="67"
+       inkscape:export-ydpi="67" />
     <path
        sodipodi:nodetypes="csc"
        inkscape:connector-curvature="0"
        id="path7219"
        d="m 55.562501,27.125 c 1.322916,-1.322917 0,-1.322917 6.085364,-1.313827 6.73653,0.01006 6.072386,0.242411 7.143802,1.313827"
        style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       inkscape:export-filename="/Users/jan/image7128.png"
-       inkscape:export-xdpi="88.800003"
-       inkscape:export-ydpi="88.800003" />
+       inkscape:export-filename="C:\Projects\repo\github\microcol\microcol-game\target\bitmap.png"
+       inkscape:export-xdpi="67"
+       inkscape:export-ydpi="67" />
     <image
        width="13.229167"
        height="0.26458332"
        preserveAspectRatio="none"
-       style="image-rendering:optimizeSpeed"
-       xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAABCAIAAAATs2rlAAAAA3NCSVQICAjb4U/gAAAAD0lEQVQI
-mWO0tbVlGHwAAGuxALkwRihxAAAAAElFTkSuQmCC
-"
+       style="image-rendering:optimizeSpeed;fill:none"
+       xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAABCAIAAAATs2rlAAAAA3NCSVQICAjb4U/gAAAAD0lEQVQI mWO0tbVlGHwAAGuxALkwRihxAAAAAElFTkSuQmCC "
        id="image7221"
        x="68.791664"
        y="25.5375"
-       inkscape:export-filename="/Users/jan/image7128.png"
-       inkscape:export-xdpi="88.800003"
-       inkscape:export-ydpi="88.800003" />
+       inkscape:export-filename="C:\Projects\repo\github\microcol\microcol-game\target\bitmap.png"
+       inkscape:export-xdpi="67"
+       inkscape:export-ydpi="67" />
     <path
        sodipodi:nodetypes="cc"
        inkscape:connector-curvature="0"
        id="path7223"
        d="m 68.791667,39.03125 c -13.229167,0 -11.90625,0 -13.229167,1.322917"
        style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       inkscape:export-filename="/Users/jan/image7128.png"
-       inkscape:export-xdpi="88.800003"
-       inkscape:export-ydpi="88.800003" />
+       inkscape:export-filename="C:\Projects\repo\github\microcol\microcol-game\target\bitmap.png"
+       inkscape:export-xdpi="67"
+       inkscape:export-ydpi="67" />
     <image
        width="13.229167"
        height="0.26458332"
        preserveAspectRatio="none"
-       style="image-rendering:optimizeSpeed"
-       xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAABCAYAAACc0f2yAAAABHNCSVQICAgIfAhkiAAAABBJREFU
-CJljNDQ0/MAwDAAALJYBhdo8EWQAAAAASUVORK5CYII=
-"
+       style="image-rendering:optimizeSpeed;fill:none"
+       xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAABCAYAAACc0f2yAAAABHNCSVQICAgIfAhkiAAAABBJREFU CJljNDQ0/MAwDAAALJYBhdo8EWQAAAAASUVORK5CYII= "
        id="image7225"
        x="29.104166"
        y="28.183332"
-       inkscape:export-filename="/Users/jan/image7128.png"
-       inkscape:export-xdpi="88.800003"
-       inkscape:export-ydpi="88.800003" />
+       inkscape:export-filename="C:\Projects\repo\github\microcol\microcol-game\target\bitmap.png"
+       inkscape:export-xdpi="67"
+       inkscape:export-ydpi="67" />
     <path
        sodipodi:nodetypes="csc"
        inkscape:connector-curvature="0"
        id="path7227"
        d="m 42.333334,27.125 c 1.322916,1.322917 0,1.322917 6.085364,1.313827 6.73653,-0.01006 6.072386,-0.242411 7.143802,-1.313827"
        style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       inkscape:export-filename="/Users/jan/image7128.png"
-       inkscape:export-xdpi="88.800003"
-       inkscape:export-ydpi="88.800003" />
+       inkscape:export-filename="C:\Projects\repo\github\microcol\microcol-game\target\bitmap.png"
+       inkscape:export-xdpi="67"
+       inkscape:export-ydpi="67" />
     <path
        sodipodi:nodetypes="cc"
        inkscape:connector-curvature="0"
        id="path7229"
        d="m 29.104166,39.03125 c 13.229167,0 11.90625,0 13.229167,1.322917"
        style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       inkscape:export-filename="/Users/jan/image7128.png"
-       inkscape:export-xdpi="88.800003"
-       inkscape:export-ydpi="88.800003" />
+       inkscape:export-filename="C:\Projects\repo\github\microcol\microcol-game\target\bitmap.png"
+       inkscape:export-xdpi="67"
+       inkscape:export-ydpi="67" />
     <path
        style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="m 42.333333,39.03125 c 13.229167,0 11.90625,0 13.229167,1.322917"
        id="path7231"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc"
-       inkscape:export-filename="/Users/jan/image7128.png"
-       inkscape:export-xdpi="88.800003"
-       inkscape:export-ydpi="88.800003" />
+       inkscape:export-filename="C:\Projects\repo\github\microcol\microcol-game\target\bitmap.png"
+       inkscape:export-xdpi="67"
+       inkscape:export-ydpi="67" />
     <path
        style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="m 82.020834,39.03125 c -13.229167,0 -11.90625,0 -13.229167,1.322917"
        id="path7233"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc"
-       inkscape:export-filename="/Users/jan/image7128.png"
-       inkscape:export-xdpi="88.800003"
-       inkscape:export-ydpi="88.800003" />
+       inkscape:export-filename="C:\Projects\repo\github\microcol\microcol-game\target\bitmap.png"
+       inkscape:export-xdpi="67"
+       inkscape:export-ydpi="67" />
     <image
        y="28.183332"
        x="55.5625"
        id="image7235"
-       xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAABCAYAAACc0f2yAAAABHNCSVQICAgIfAhkiAAAABBJREFU
-CJljNDQ0/MAwDAAALJYBhdo8EWQAAAAASUVORK5CYII=
-"
-       style="image-rendering:optimizeSpeed"
+       xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAABCAYAAACc0f2yAAAABHNCSVQICAgIfAhkiAAAABBJREFU CJljNDQ0/MAwDAAALJYBhdo8EWQAAAAASUVORK5CYII= "
+       style="image-rendering:optimizeSpeed;fill:none"
        preserveAspectRatio="none"
        height="0.26458332"
        width="13.229167"
-       inkscape:export-filename="/Users/jan/image7128.png"
-       inkscape:export-xdpi="88.800003"
-       inkscape:export-ydpi="88.800003" />
+       inkscape:export-filename="C:\Projects\repo\github\microcol\microcol-game\target\bitmap.png"
+       inkscape:export-xdpi="67"
+       inkscape:export-ydpi="67" />
     <path
        style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="m 68.791667,27.125 c 1.322916,1.322917 0,1.322917 6.085364,1.313827 6.73653,-0.01006 6.072386,-0.242411 7.143802,-1.313827"
        id="path7237"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="csc"
-       inkscape:export-filename="/Users/jan/image7128.png"
-       inkscape:export-xdpi="88.800003"
-       inkscape:export-ydpi="88.800003" />
+       inkscape:export-filename="C:\Projects\repo\github\microcol\microcol-game\target\bitmap.png"
+       inkscape:export-xdpi="67"
+       inkscape:export-ydpi="67" />
     <path
        sodipodi:nodetypes="cc"
        inkscape:connector-curvature="0"
        id="path7239"
        d="m 29.104167,52.260416 c -13.229167,0 -11.90625,0 -13.229167,1.322917"
        style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       inkscape:export-filename="/Users/jan/image7128.png"
-       inkscape:export-xdpi="88.800003"
-       inkscape:export-ydpi="88.800003" />
+       inkscape:export-filename="C:\Projects\repo\github\microcol\microcol-game\target\bitmap.png"
+       inkscape:export-xdpi="67"
+       inkscape:export-ydpi="67" />
     <path
        style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="m 42.333333,40.354167 c -2.645833,1.322916 -1.322916,7.9375 -1.35371,10.488252 -0.01757,1.455669 -0.353801,1.40149 -1.257766,1.405653 -2.68019,0.01234 -9.294774,-1.310572 -10.617691,1.335262"
        id="path7250"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cssc"
-       inkscape:export-filename="/Users/jan/image7128.png"
-       inkscape:export-xdpi="88.800003"
-       inkscape:export-ydpi="88.800003" />
+       inkscape:export-filename="C:\Projects\repo\github\microcol\microcol-game\target\bitmap.png"
+       inkscape:export-xdpi="67"
+       inkscape:export-ydpi="67" />
     <path
        sodipodi:nodetypes="cssssc"
        inkscape:connector-curvature="0"
        id="path7252"
        d="m 55.5625,40.354167 c -2.645833,1.322916 -1.322916,7.9375 -1.35371,10.488252 -0.01757,1.455669 -0.353801,1.401491 -1.257766,1.405653 -1.089857,0.005 -5.326024,0.01234 -7.915683,0.115769 -1.176908,0.047 -1.222587,-0.317462 -1.271349,-1.48732 -0.107742,-2.584854 1.215175,-9.199438 -1.430659,-10.522354"
        style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       inkscape:export-filename="/Users/jan/image7128.png"
-       inkscape:export-xdpi="88.800003"
-       inkscape:export-ydpi="88.800003" />
+       inkscape:export-filename="C:\Projects\repo\github\microcol\microcol-game\target\bitmap.png"
+       inkscape:export-xdpi="67"
+       inkscape:export-ydpi="67" />
     <image
        width="13.229167"
        height="0.26458332"
        preserveAspectRatio="none"
-       style="image-rendering:optimizeSpeed"
-       xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAABCAYAAACc0f2yAAAABHNCSVQICAgIfAhkiAAAABBJREFU
-CJljNDQ0/MAwDAAALJYBhdo8EWQAAAAASUVORK5CYII=
-"
+       style="image-rendering:optimizeSpeed;fill:none"
+       xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAABCAYAAACc0f2yAAAABHNCSVQICAgIfAhkiAAAABBJREFU CJljNDQ0/MAwDAAALJYBhdo8EWQAAAAASUVORK5CYII= "
        id="image7254"
        x="15.875"
        y="25.5375"
-       inkscape:export-filename="/Users/jan/image7128.png"
-       inkscape:export-xdpi="88.800003"
-       inkscape:export-ydpi="88.800003" />
+       inkscape:export-filename="C:\Projects\repo\github\microcol\microcol-game\target\bitmap.png"
+       inkscape:export-xdpi="67"
+       inkscape:export-ydpi="67" />
+    <rect
+       style="opacity:0.292;fill:none;fill-opacity:1;stroke:none;stroke-width:0.1474295;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="rect4009"
+       width="66.145836"
+       height="66.145828"
+       x="15.875"
+       y="13.895833"
+       inkscape:export-filename="C:\Projects\repo\github\microcol\microcol-game\target\bitmap.png"
+       inkscape:export-xdpi="67.199997"
+       inkscape:export-ydpi="67.199997" />
   </g>
 </svg>
