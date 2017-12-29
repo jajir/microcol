@@ -10,37 +10,60 @@ import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
 
-public class TileWrapper {
+public class ImageWrapper {
 
 	private final Image tile;
 
-	private TileWrapper(final Image tile) {
+	private ImageWrapper(final Image tile) {
 		this.tile = Preconditions.checkNotNull(tile);
 	}
 
-	public final static TileWrapper of(final Image tile) {
-		return new TileWrapper(tile);
+	public final static ImageWrapper of(final Image tile) {
+		return new ImageWrapper(tile);
 	}
 
-	public TileWrapper getImageRotareRight() {
+	public ImageWrapper getImageRotareRight() {
 		return getImageTranspose().getImageReverseRows();
 	}
 
-	public TileWrapper getImageReverseRows() {
+	public ImageWrapper getImageReverseRows() {
 		return getImageTransform(this, (pixelWriter, pixelReader, x, y) -> {
 			final Color color = pixelReader.getColor(x, y);
 			pixelWriter.setColor(GamePanelView.TILE_WIDTH_IN_PX - x - 1, y, color);
 		});
 	}
 
-	public TileWrapper getImageTranspose() {
+	public ImageWrapper getImageTranspose() {
 		return getImageTransform(this, (pixelWriter, pixelReader, x, y) -> {
 			final Color color = pixelReader.getColor(x, y);
 			pixelWriter.setColor(y, x, color);
 		});
 	}
 
-	private TileWrapper getImageTransform(final TileWrapper tileWrapper, final Tranform tranform) {
+	public ImageWrapper addImage(final ImageWrapper wrapper) {
+		PixelReader pixelReaderA = get().getPixelReader();
+		PixelReader pixelReaderB = wrapper.get().getPixelReader();
+
+		// process from source to destination pixel by pixel
+		WritableImage writableImage = new WritableImage(GamePanelView.TILE_WIDTH_IN_PX, GamePanelView.TILE_WIDTH_IN_PX);
+		PixelWriter pixelWriter = writableImage.getPixelWriter();
+
+		for (int y = 0; y < GamePanelView.TILE_WIDTH_IN_PX; y++) {
+			for (int x = 0; x < GamePanelView.TILE_WIDTH_IN_PX; x++) {
+				final Color colorA = pixelReaderA.getColor(x, y);
+				final Color colorB = pixelReaderB.getColor(x, y);
+				if (colorA.getOpacity() == 0F) {
+					pixelWriter.setColor(x, y, colorB);
+				} else {
+					pixelWriter.setColor(x, y, colorA);
+				}
+			}
+		}
+
+		return ImageWrapper.of(writableImage);
+	}
+
+	private ImageWrapper getImageTransform(final ImageWrapper tileWrapper, final Tranform tranform) {
 		PixelReader pixelReader = tileWrapper.get().getPixelReader();
 
 		int width = GamePanelView.TILE_WIDTH_IN_PX;
@@ -56,7 +79,7 @@ public class TileWrapper {
 			}
 		}
 
-		return TileWrapper.of(writableImage);
+		return ImageWrapper.of(writableImage);
 	}
 
 	/**
