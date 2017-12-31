@@ -31,6 +31,10 @@
 	-fx-padding: 0 5px 0 5px;
 }
 
+.root {
+	 -fx-font-family: Cardo;
+}
+
 #statusBar #labelGold{
 	-fx-padding: 0 5px 0 5px;
  	-fx-border-style: solid inside;
@@ -94,5 +98,6 @@
 .popup .menu-item:focused {
   -fx-background-color: blue;	
 }
+
 
 

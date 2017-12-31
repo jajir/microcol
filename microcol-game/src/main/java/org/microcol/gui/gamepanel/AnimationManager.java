@@ -92,7 +92,7 @@ public class AnimationManager implements AnimationLock {
 		addAnimation(animation, null);
 	}
 
-	private class AnimationHolder {
+	private static class AnimationHolder {
 
 		private final Animation animation;
 

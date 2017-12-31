@@ -22,12 +22,12 @@ public class PathPlanning {
 	/**
 	 * Minimal value of animation speed.
 	 */
-	public static int ANIMATION_SPEED_MIN_VALUE = 0;
+	public static final int ANIMATION_SPEED_MIN_VALUE = 0;
 
 	/**
 	 * Maximal value of animation speed.
 	 */
-	public static int ANIMATION_SPEED_MAX_VALUE = 5;
+	public static final int ANIMATION_SPEED_MAX_VALUE = 5;
 
 	/**
 	 * Contains mapping of speed to step size.

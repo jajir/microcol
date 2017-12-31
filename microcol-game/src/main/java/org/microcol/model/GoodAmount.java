@@ -11,8 +11,8 @@ public class GoodAmount {
 
 	public GoodAmount(final GoodType goodType, final int initialAmount) {
 		this.goodType = Preconditions.checkNotNull(goodType);
-		Preconditions.checkArgument(initialAmount >= 0, "Amount (%s) can't be less than zero", amount);
-		Preconditions.checkArgument(initialAmount <= 100, "Amount (%s) can't be higher than 100", amount);
+		Preconditions.checkArgument(initialAmount >= 0, "Amount (%s) can't be less than zero", initialAmount);
+		Preconditions.checkArgument(initialAmount <= 100, "Amount (%s) can't be higher than 100", initialAmount);
 		amount = initialAmount;
 	}
 	

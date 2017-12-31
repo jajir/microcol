@@ -196,7 +196,7 @@ public class ClipboardReader {
 		return new TransferFromEuropeShop();
 	}
 
-	private int read(final String num) {
+	private Integer read(final String num) {
 		try {
 			return Integer.valueOf(num);
 		} catch (NumberFormatException e) {

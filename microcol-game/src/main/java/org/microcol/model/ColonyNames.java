@@ -8,12 +8,12 @@ import com.google.common.collect.Lists;
 
 public class ColonyNames {
 
-	private final String lexicon = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+	private final static String LEXICON = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+	
+	private final static List<String> dutchNames = Lists.newArrayList("New Amsterdam", "Delft", "Haarlem", "Leiden",
+			"Rotterdam", "Utrecht", "Eindhoven", "Tilburg", "Groningen", "Almere Stad", "Breda");
 
 	private final Random rand = new Random();
-
-	private final List<String> dutchNames = Lists.newArrayList("New Amsterdam", "Delft", "Haarlem", "Leiden",
-			"Rotterdam", "Utrecht", "Eindhoven", "Tilburg", "Groningen", "Almere Stad", "Breda");
 
 	private final Model model;
 
@@ -48,7 +48,7 @@ public class ColonyNames {
 		while (builder.toString().length() == 0) {
 			int length = rand.nextInt(5) + 5;
 			for (int i = 0; i < length; i++) {
-				builder.append(lexicon.charAt(rand.nextInt(lexicon.length())));
+				builder.append(LEXICON.charAt(rand.nextInt(LEXICON.length())));
 			}
 		}
 		return builder.toString();

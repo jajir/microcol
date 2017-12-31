@@ -13,6 +13,7 @@ import com.google.inject.Inject;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
@@ -77,7 +78,10 @@ public class MainStageBuilder {
 		final VBox mainBox = new VBox();
 		final Scene scene = new Scene(mainBox);
 		scene.getStylesheets().add("gui/MicroCol.css");
-
+		Font.loadFont(MainStageBuilder.class.getResource("/font/Cardo-Bold.ttf").toExternalForm(), 0);
+		Font.loadFont(MainStageBuilder.class.getResource("/font/Cardo-Italic.ttf").toExternalForm(), 0);
+		Font.loadFont(MainStageBuilder.class.getResource("/font/Cardo-Regular.ttf").toExternalForm(), 0);
+		
 		mainBox.getChildren().add(mainMenuView.getMenuBar());
 		mainBox.getChildren().add(mainFrame.getBox());
 

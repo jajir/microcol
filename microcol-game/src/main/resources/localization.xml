@@ -53,6 +53,7 @@
 	<entry key="unitsPanel.owner">Owner:</entry>
 	<entry key="unitsPanel.currentUser">On move:</entry>
 	<entry key="unitsPanel.with">With:</entry>
+	<entry key="unitsPanel.empty">No goods</entry>
 	<entry key="nextTurnButton">Next turn</entry>
 	<entry key="nextTurnButton.desctiption">Perform next turn, other players will move</entry>
 	<entry key="tile.ocean.name">Ocean</entry>

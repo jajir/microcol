@@ -23,3 +23,8 @@
 #nextTurnButton{
 	-fx-min-width: 168px;
 }
+
+.unitPanel{
+ 	-fx-padding: 20px 0 0 0;
+}
+

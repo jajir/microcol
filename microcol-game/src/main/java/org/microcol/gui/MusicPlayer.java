@@ -12,11 +12,16 @@ import javax.sound.sampled.FloatControl;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.SourceDataLine;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * Responsible for playing music.
  * 
  */
 public class MusicPlayer {
+
+	private final Logger logger = LoggerFactory.getLogger(MusicPlayer.class);
 
 	/**
 	 * Minimal volume value.
@@ -58,11 +63,11 @@ public class MusicPlayer {
 			sourceLine = (SourceDataLine) AudioSystem.getLine(info);
 			sourceLine.open(audioFormat);
 		} catch (LineUnavailableException e) {
-			e.printStackTrace();
-			System.exit(1);
+			logger.error(e.getMessage(), e);
+			throw new MicroColException(e.getMessage(), e);
 		} catch (Exception e) {
-			e.printStackTrace();
-			System.exit(1);
+			logger.error(e.getMessage(), e);
+			throw new MicroColException(e.getMessage(), e);
 		}
 
 		setVolume(defaultVolume);

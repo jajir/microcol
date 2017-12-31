@@ -3,10 +3,12 @@ package org.microcol.model.store;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileWriter;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.nio.charset.StandardCharsets;
 
 import org.microcol.gui.MicroColException;
 import org.microcol.model.ConstructionType;
@@ -31,13 +33,10 @@ public class ModelDao {
 	private final Gson gson;
 
 	public ModelDao() {
-		gson = new GsonBuilder()
-				.registerTypeAdapter(ConstructionType.class, new GsonConstructionTypeAdapter())
+		gson = new GsonBuilder().registerTypeAdapter(ConstructionType.class, new GsonConstructionTypeAdapter())
 				.registerTypeAdapter(GoodType.class, new GsonGoodTypeAdapter())
 				.registerTypeAdapter(TerrainType.class, new GsonTerrainTypeAdapter())
-				.registerTypeAdapter(UnitType.class, new GsonUnitTypeAdapter())
-				.setPrettyPrinting()
-				.create();
+				.registerTypeAdapter(UnitType.class, new GsonUnitTypeAdapter()).setPrettyPrinting().create();
 	}
 
 	/**
@@ -74,7 +73,7 @@ public class ModelDao {
 			throw new MicroColException(e.getMessage(), e);
 		}
 	}
-	
+
 	/**
 	 * Load predefined world map stored on class path.
 	 * 
@@ -99,7 +98,7 @@ public class ModelDao {
 	private ModelPo internalLoadModel(final InputStream is) throws FileNotFoundException {
 		Preconditions.checkArgument(is != null, "input stream is null");
 
-		ModelPo loaded = gson.fromJson(new InputStreamReader(is), ModelPo.class);
+		ModelPo loaded = gson.fromJson(new InputStreamReader(is, StandardCharsets.UTF_8), ModelPo.class);
 
 		return loaded;
 	}
@@ -114,12 +113,13 @@ public class ModelDao {
 
 	private void internalSaveModel(final String fileName, final ModelPo modelPo) throws IOException {
 		final String str = gson.toJson(modelPo);
-		if(logger.isDebugEnabled()){
+		if (logger.isDebugEnabled()) {
 			logger.debug(str);
 		}
-		FileWriter fileWriter = new FileWriter(new File(fileName));
-		fileWriter.write(str);
-		fileWriter.close();
+		final OutputStreamWriter outputStreamWriter = new OutputStreamWriter(new FileOutputStream(fileName),
+				StandardCharsets.UTF_8);
+		outputStreamWriter.write(str);
+		outputStreamWriter.close();
 	}
 
 }

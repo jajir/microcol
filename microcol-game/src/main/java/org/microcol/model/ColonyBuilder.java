@@ -98,96 +98,10 @@ public class ColonyBuilder {
 	public ColonyBuilder setGood(final GoodType goodType, final Integer amount) {
 		Preconditions.checkNotNull(goodType);
 		Preconditions.checkNotNull(amount);
-		Preconditions.checkArgument(!colonyPo.getColonyWarehouse().containsKey(goodType),
-				"Good type (%s) was alredy defined.");
+		Preconditions.checkArgument(!colonyPo.getColonyWarehouse().containsKey(goodType.name()),
+				"Good type (%s) was alredy defined.", goodType.name());
 		colonyPo.getColonyWarehouse().put(goodType.name(), amount);
 		return this;
-	}
-
-	class UnitPlace {
-
-		private final ConstructionType constructionType;
-		private final int position;
-		private final UnitType unitType;
-
-		UnitPlace(final ConstructionType constructionType, final int position, final UnitType unitType) {
-			this.constructionType = constructionType;
-			this.position = position;
-			this.unitType = unitType;
-		}
-
-		ConstructionType getConstructionType() {
-			return constructionType;
-		}
-
-		int getPosition() {
-			return position;
-		}
-
-		UnitType getUnitType() {
-			return unitType;
-		}
-
-	}
-
-	static class FieldPlace {
-
-		private final Location fieldDirection;
-		private final UnitType unitType;
-		private final GoodType producedGoodType;
-
-		FieldPlace(final Location fieldDirection, final UnitType unitType, final GoodType producedGoodType) {
-			this.fieldDirection = Preconditions.checkNotNull(fieldDirection);
-			this.unitType = Preconditions.checkNotNull(unitType);
-			this.producedGoodType = Preconditions.checkNotNull(producedGoodType);
-		}
-
-		public Location getFieldDirection() {
-			return fieldDirection;
-		}
-
-		public UnitType getUnitType() {
-			return unitType;
-		}
-
-		public GoodType getProducedGoodType() {
-			return producedGoodType;
-		}
-
-	}
-
-	static class GoodAmount {
-
-		private final GoodType goodType;
-		private final Integer amount;
-
-		GoodAmount(final GoodType goodType, final Integer amount) {
-			this.goodType = Preconditions.checkNotNull(goodType);
-			this.amount = Preconditions.checkNotNull(amount);
-		}
-
-		public GoodType getGoodType() {
-			return goodType;
-		}
-
-		public Integer getAmount() {
-			return amount;
-		}
-
-		@Override
-		public int hashCode() {
-			return goodType.hashCode();
-		}
-
-		@Override
-		public boolean equals(final Object obj) {
-			if (obj == null || !(obj instanceof GoodAmount)) {
-				return false;
-			}
-			final GoodAmount other = (GoodAmount) obj;
-			return goodType.equals(other.goodType);
-		}
-
 	}
 
 }

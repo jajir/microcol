@@ -82,13 +82,28 @@ public class PersistingDialog extends AbstractMessageWindow {
 	}
 
 	private File correctFileNameExtension(final File targetFile) {
-		Path path = targetFile.toPath();
-		if (path.getFileName().toString().toLowerCase().endsWith(SAVE_FILE_EXTENSION)) {
+		Preconditions.checkNotNull(targetFile);
+		final Path path = targetFile.toPath();
+		final String fileName = getFileName(path);
+		if (fileName.toLowerCase().endsWith(SAVE_FILE_EXTENSION)) {
 			return targetFile;
 		} else {
 			final Path parent = path.getParent();
-			Path out = parent.resolve(path.getFileName().toString() + "." + SAVE_FILE_EXTENSION);
+			if ( parent == null ){
+				throw new MicroColException(String.format("Unable to determine paret path of '%s'", path));
+			}
+			Path out = parent.resolve(fileName + "." + SAVE_FILE_EXTENSION);
 			return out.toFile();
+		}
+	}
+	
+	private String getFileName(final Path path){
+		Preconditions.checkNotNull(path);
+		final Path fileName = path.getFileName();
+		if (fileName == null) {
+			throw new MicroColException(String.format("Unable to get file name from path '%s' ", path));
+		} else {
+			return fileName.toString();
 		}
 	}
 

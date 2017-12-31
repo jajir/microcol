@@ -44,11 +44,8 @@ public class XMLResourceBundleControl extends ResourceBundle.Control {
 						// disable caches if reloading
 						connection.setUseCaches(false);
 					}
-					try (InputStream stream = connection.getInputStream()) {
-						if (stream != null) {
-							BufferedInputStream bis = new BufferedInputStream(stream);
-							return new XMLResourceBundle(bis);
-						}
+					try (final InputStream stream = connection.getInputStream()) {
+						return new XMLResourceBundle(new BufferedInputStream(stream));
 					}
 				}
 			}

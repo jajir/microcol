@@ -16,7 +16,7 @@ import javafx.util.StringConverter;
  */
 public class ChooseGoodAmount extends AbstractMessageWindow {
 
-	private final int MIN_VALUE = 0;
+	private final static int MIN_VALUE = 0;
 
 	private int actualValue;
 

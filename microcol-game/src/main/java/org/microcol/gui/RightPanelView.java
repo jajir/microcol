@@ -102,7 +102,7 @@ public class RightPanelView implements RightPanelPresenter.Display, Localized {
 		if (event.getModel().getUnitsAt(event.getLocation()).isEmpty()) {
 			unitsLabel.setText("");
 		} else {
-			unitsLabel.setText(getText().get("unitsPanel.units"));
+			// unitsLabel.setText(getText().get("unitsPanel.units"));
 			/**
 			 * Current player is not same as human player. For purposes of this
 			 * method it will be sufficient.

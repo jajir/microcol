@@ -29,10 +29,8 @@ public class AnimationLatch {
 	 */
 	void unlock() {
 		if (latch != null) {
-			synchronized (latch) {
-				latch.countDown();
-				latch = null;
-			}
+			latch.countDown();
+			latch = null;
 		}
 	}
 

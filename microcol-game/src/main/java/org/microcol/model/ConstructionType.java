@@ -506,7 +506,7 @@ public class ConstructionType {
 	 		.setRequiredColonyPopulation(0)
 	 		.build();
 
-	public static List<ConstructionType> ALL = ImmutableList.of(
+	public final static List<ConstructionType> ALL = ImmutableList.of(
 			TOWN_HALL,
 			LUMBER_MILL,
 			CARPENTERS_SHOP,

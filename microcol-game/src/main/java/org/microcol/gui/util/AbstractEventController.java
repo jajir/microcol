@@ -2,6 +2,7 @@ package org.microcol.gui.util;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.microcol.gui.event.Listener;
 import org.slf4j.Logger;
@@ -93,7 +94,11 @@ public abstract class AbstractEventController<E> {
 	 */
 	public void removeListener(final Listener<E> listener) {
 		Preconditions.checkNotNull(listener);
-		listeners.remove(listener);
+		final Optional<Wrapper<E>> oWrap = listeners.stream().filter(wrapper -> wrapper.listener.equals(listener))
+				.findFirst();
+		if (oWrap.isPresent()) {
+			listeners.remove(oWrap.get());
+		}
 	}
 
 	/**

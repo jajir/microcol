@@ -6,6 +6,7 @@ import org.microcol.gui.event.StatusBarMessageController;
 import org.microcol.gui.event.StatusBarMessageEvent;
 import org.microcol.gui.util.Localized;
 import org.microcol.gui.util.Text;
+import org.microcol.model.CargoSlot;
 import org.microcol.model.Player;
 import org.microcol.model.Unit;
 
@@ -30,7 +31,7 @@ public class UnitsPanel implements Localized {
 	private final LocalizationHelper localizationHelper;
 
 	private final VBox box;
-	
+
 	private final Text text;
 
 	@Inject
@@ -54,10 +55,12 @@ public class UnitsPanel implements Localized {
 			box.getChildren().add(makeUnitPanel(humanPlayer, unit));
 		}
 		box.getChildren().add(new Label(""));
+		box.getStylesheets().add("gui/rightPanelView.css");
 	}
 
 	private Node makeUnitPanel(final Player humanPlayer, final Unit unit) {
 		VBox box = new VBox();
+		box.getStyleClass().add("unitPanel");
 		box.getChildren().add(makeUnitImage(humanPlayer, unit));
 		if (isUnitOwnedBy(unit, humanPlayer) && unit.getType().getCargoCapacity() > 0) {
 			box.getChildren().add(makeGoodsPanel(unit));
@@ -96,15 +99,27 @@ public class UnitsPanel implements Localized {
 
 	private HBox makeGoodsPanel(final Unit unit) {
 		HBox box = new HBox();
-		box.getChildren().add(new Label(text.get("unitsPanel.with")));
-		unit.getCargo().getSlots().stream().filter(cargoSlot -> !cargoSlot.isEmpty()).forEach(cargoSlot -> {
-			if (cargoSlot.isLoadedUnit()) {
-				box.getChildren().add(new ImageView(imageProvider.getUnitImage(cargoSlot.getUnit().get())));
-			} else {
-				box.getChildren().add(new ImageView(imageProvider.getGoodTypeImage(cargoSlot.getGoods().get())));
-			}
-		});
+		box.getStylesheets().add("gui/rightPanelView.css");
+		if (unit.getCargo().isEmpty()) {
+			box.getChildren().add(new Label(text.get("unitsPanel.empty")));
+		} else {
+			box.getChildren().add(new Label(text.get("unitsPanel.with")));
+			unit.getCargo().getSlots().stream().filter(cargoSlot -> !cargoSlot.isEmpty()).forEach(cargoSlot -> {
+				final ImageView imageView = getImageViewForCargoSlot(cargoSlot);
+				imageView.setFitHeight(15);
+				imageView.setFitWidth(15);
+				box.getChildren().add(imageView);
+			});
+		}
 		return box;
+	}
+
+	private ImageView getImageViewForCargoSlot(final CargoSlot cargoSlot) {
+		if (cargoSlot.isLoadedUnit()) {
+			return new ImageView(imageProvider.getUnitImage(cargoSlot.getUnit().get()));
+		} else {
+			return new ImageView(imageProvider.getGoodTypeImage(cargoSlot.getGoods().get()));
+		}
 	}
 
 	public Node getNode() {

@@ -40,8 +40,7 @@ public class ColonyWarehouse {
 	/**
 	 * Make data copy of this instance.
 	 */
-	@Override
-	public ColonyWarehouse clone() {
+	public ColonyWarehouse makeCopy() {
 		Map<String, Integer> tmp = new HashMap<>();
 		goodAmounts.forEach((good, amount) -> tmp.put(good.name(), amount));
 		return new ColonyWarehouse(colony, tmp);

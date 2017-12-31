@@ -208,7 +208,7 @@ public class Colony {
 	 * @return return colony warehouse
 	 */
 	public ColonyWarehouse getNexTurnTempWarehouse(){
-		ColonyWarehouse out = colonyWarehouse.clone();
+		ColonyWarehouse out = colonyWarehouse.makeCopy();
 		colonyFields.forEach(field -> field.produce(out));
 		return out;
 	}
