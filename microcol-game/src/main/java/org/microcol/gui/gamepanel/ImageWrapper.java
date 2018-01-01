@@ -1,6 +1,4 @@
-package org.microcol.integration;
-
-import org.microcol.gui.gamepanel.GamePanelView;
+package org.microcol.gui.gamepanel;
 
 import com.google.common.base.Preconditions;
 

@@ -1,38 +1,27 @@
-package org.microcol.integration;
+package org.microcol.gui.gamepanel;
 
-import static org.junit.Assert.assertNotNull;
-
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.imageio.ImageIO;
-
-import org.junit.Test;
-import org.microcol.gui.ImageProvider;
 import org.microcol.gui.MicroColException;
-import org.microcol.gui.gamepanel.GamePanelView;
 import org.microcol.model.ChainOfCommandOptionalStrategy;
 import org.microcol.model.Location;
-import org.microcol.model.Model;
 import org.microcol.model.TerrainType;
 import org.microcol.model.WorldMap;
-import org.microcol.model.store.ModelProvider;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
+import com.google.inject.Inject;
 
-import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.Image;
-import javafx.scene.image.PixelReader;
-import javafx.scene.image.PixelWriter;
-import javafx.scene.image.WritableImage;
-import javafx.scene.paint.Color;
 
 /**
- * Directions:
+ * Class create map with boundaries between sea and continent. Boundary have to
+ * be smooth. Each tile have to be nicely connected.
+ * <p>
+ * On each tiles there are defined directions. Direction describes tiles around
+ * computed tiles. Directions are:
+ * </p>
  * 
  * <pre>
  * NW  N  NE
@@ -45,8 +34,10 @@ import javafx.scene.paint.Color;
  *  /  |  \
  * SW  S  SE
  * </pre>
- * 
- * Connections to other tiles:
+ * <p>
+ * Boundary on tile have to start at some point and end somewhere. This
+ * connection point are defined in a following way:
+ * </p>
  * 
  * <pre>
  * 0     1            2    3
@@ -64,142 +55,119 @@ import javafx.scene.paint.Color;
  *   +---+------------+---+
  * 9     8            7     6
  * </pre>
- * 
+ * <p>
  * Background file defining each terrain type simple "png" bitmap split in
  * column and rows. Size of each row and column is defined by game tile size.
  * Each row contains each terrain type:
+ * </p>
+ * 
+ * <ul>
+ * <li>well - it's one see tile in the middle of land.</li>
+ * <li>U-shape
  * 
  * <pre>
- * well
- * U-shape
- * L-shape
- * I-shape
+ *   +---+------------+---+
+ *   |   |            |   |
+ *   |   |            |   |
+ *   |   |            |   |
+ *   |   |            |   |
+ *   |   |            |   |
+ *   |   |            |   |
+ *   |   |            |   |
+ *   |   \            /   |
+ *   |    +----------+    |
+ *   |                    |
+ *   +--------------------+
  * </pre>
  * 
- * fIXME describe shapes, describes meaning of direction for each
+ * </li>
+ * <li>L-shape
  * 
- * II-shape could be create by combining of I-shapes
+ * <pre>
+ *   +----------------+---+
+ *   |                |   |
+ *   |                |   |
+ *   |                |   |
+ *   |                |   |
+ *   |                |   |
+ *   |                |   |
+ *   |                |   |
+ *   |                /   |
+ *   +---------------+    |
+ *   |                    |
+ *   +--------------------+
+ * </pre>
+ * 
+ * </li>
+ * <li>I-shape
+ * 
+ * <pre>
+ *   +--------------------+
+ *   |\                   |
+ *   | +------------------+
+ *   |                    |
+ *   |                    |
+ *   |                    |
+ *   |                    |
+ *   |                    |
+ *   |                    |
+ *   |                    |
+ *   |                    |
+ *   +--------------------+
+ * </pre>
+ * 
+ * </li>
+ * <li>II-shape
+ * 
+ * <pre>
+ *   +--------------------+
+ *   |\                   |
+ *   | +------------------+
+ *   |                    |
+ *   |                    |
+ *   |                    |
+ *   |                    |
+ *   |                    |
+ *   |                    |
+ *   | +------------------+
+ *   |/                   |
+ *   +--------------------+
+ * </pre>
+ * 
+ * This images could be made by combining of two I-shape images.</li>
+ * 
+ * </ul>
+ * 
  */
-public class ImageTest {
+public class MapImageGenerator {
 
-	private final int TILE_MAX_X = 3;
-
-	private final int TILE_MAX_Y = 4;
-
-	private final Map<String, Image> images = new HashMap<>();
+	private final MapImageStore mapImageStore;
+	
+	private Map<Location, Image> mapTiles = new HashMap<>();
 
 	private WorldMap map;
 
-	private void init() {
-		final Image img = ImageProvider.getRawImage("backgroud.png");
-		for (int y = 0; y < TILE_MAX_Y; y++) {
-			for (int x = 0; x < TILE_MAX_X; x++) {
-				final String name = "type" + x + y;
-				final PixelReader reader = img.getPixelReader();
-				WritableImage tile = new WritableImage(reader, x * GamePanelView.TILE_WIDTH_IN_PX,
-						y * GamePanelView.TILE_WIDTH_IN_PX, GamePanelView.TILE_WIDTH_IN_PX,
-						GamePanelView.TILE_WIDTH_IN_PX);
-				images.put(name, tile);
-			}
-		}
-
-		images.put("well", images.get("type00"));
-
-		// U-shape
-		addCycle("u-shapeNorth-", "u-shapeEast-", "u-shapeSouth-", "u-shapeWest-", '0', '3', getImg("type01"));
-		addCycle("u-shapeNorth-", "u-shapeEast-", "u-shapeSouth-", "u-shapeWest-", '0', '2', getImg("type11"));
-		addCycle("u-shapeNorth-", "u-shapeEast-", "u-shapeSouth-", "u-shapeWest-", '1', '3',
-				getImg("u-shapeNorth-02").getImageReverseRows());
-		addCycle("u-shapeNorth-", "u-shapeEast-", "u-shapeSouth-", "u-shapeWest-", '1', '2', getImg("type21"));
-
-		// L-shape
-		addCycle("l-shapeSouthEast-", "l-shapeSouthWest-", "l-shapeNorthWest-", "l-shapeNorthEast-", '3', '9',
-				getImg("type02"));
-		addCycle("l-shapeSouthEast-", "l-shapeSouthWest-", "l-shapeNorthWest-", "l-shapeNorthEast-", '2', '9',
-				getImg("type12"));
-		addCycle("l-shapeSouthEast-", "l-shapeSouthWest-", "l-shapeNorthWest-", "l-shapeNorthEast-", '3', 'a',
-				getImg("l-shapeSouthEast-29").getImageTranspose());
-		addCycle("l-shapeSouthEast-", "l-shapeSouthWest-", "l-shapeNorthWest-", "l-shapeNorthEast-", '2', 'a',
-				getImg("type22"));
-
-		// I-shape
-		addCycle("i-shapeNorth-", "i-shapeEast-", "i-shapeSouth-", "i-shapeWest-", '0', '3', getImg("type03"));
-		addCycle("i-shapeNorth-", "i-shapeEast-", "i-shapeSouth-", "i-shapeWest-", '0', '4', getImg("type13"));
-		addCycle("i-shapeNorth-", "i-shapeEast-", "i-shapeSouth-", "i-shapeWest-", 'b', '3',
-				getImg("i-shapeNorth-04").getImageReverseRows());
-		addCycle("i-shapeNorth-", "i-shapeEast-", "i-shapeSouth-", "i-shapeWest-", 'b', '4', getImg("type23"));
-
-		// II-shape
-		generateII_shape(Connector.of('0'), Connector.of('3'));
-		generateII_shape(Connector.of('0'), Connector.of('4'));
-		generateII_shape(Connector.of('b'), Connector.of('3'));
-		generateII_shape(Connector.of('b'), Connector.of('4'));
-
+	@Inject
+	MapImageGenerator(final MapImageStore mapImageStore) {
+		this.mapImageStore = Preconditions.checkNotNull(mapImageStore);
 	}
 
-	private void generateII_shape(final Connector start, final Connector end) {
-		final String name1 = "ii-shapeNorthSouth-" + start.get() + end.get();
-		final String name2 = "ii-shapeEastWest-" + start.rotateRight().get() + end.rotateRight().get();
-		final String imagName = "i-shapeNorth-" + start.get() + end.get();
-
-		TileDef.of(name1, Connector.of('6'), Connector.of('9'), getImg(imagName).addImage(getImg("i-shapeSouth-69")))
-				.storeTo(images).rotateRight(name2).storeTo(images);
-		TileDef.of(name1, Connector.of('5'), Connector.of('9'), getImg(imagName).addImage(getImg("i-shapeSouth-59")))
-				.storeTo(images).rotateRight(name2).storeTo(images);
-		TileDef.of(name1, Connector.of('6'), Connector.of('a'), getImg(imagName).addImage(getImg("i-shapeSouth-6a")))
-				.storeTo(images).rotateRight(name2).storeTo(images);
-		TileDef.of(name1, Connector.of('5'), Connector.of('a'), getImg(imagName).addImage(getImg("i-shapeSouth-5a")))
-				.storeTo(images).rotateRight(name2).storeTo(images);
-	}
-
-	private void addCycle(final String direction1, final String direction2, final String direction3,
-			final String direction4, final char start, final char end, final ImageWrapper imageWrapper) {
-		TileDef.of(direction1, Connector.of(start), Connector.of(end), imageWrapper).storeTo(images)
-				.rotateRight(direction2).storeTo(images).rotateRight(direction3).storeTo(images).rotateRight(direction4)
-				.storeTo(images);
-	}
-
-	ImageWrapper getImg(final String name) {
-		return ImageWrapper.of(images.get(name));
-	}
-
-	@Test
-	public void test_tryPaintMap() throws Exception {
-		init();
-		final Model model = new ModelProvider().buildComplexModel();
-		assertNotNull(model);
-		this.map = model.getMap();
-
-		final WritableImage targetMap = new WritableImage(GamePanelView.TILE_WIDTH_IN_PX * map.getMaxX(),
-				GamePanelView.TILE_WIDTH_IN_PX * map.getMaxY());
+	public void setMap(final WorldMap map) {
+		this.map = Preconditions.checkNotNull(map);
 
 		for (int y = 1; y < map.getMaxY(); y++) {
 			for (int x = 1; x < map.getMaxX(); x++) {
 				final Location loc = Location.of(x, y);
 				final String code = getTileCode(loc);
-				final Image img = images.get(code);
-				if (img != null) {
-					paintAt(targetMap, x, y, img);
-				}
-				System.out.println("At " + loc + " is terrain image " + code);
+				final Image img = mapImageStore.getImage(code);
+				mapTiles.put(loc, img);
 			}
 		}
 
-		saveToFile(targetMap, "target/worldMap.png");
-		System.out.println("Done");
 	}
 
-	private void paintAt(final WritableImage target, final int addX, int addY, final Image tile) {
-		final PixelReader pixelReader = tile.getPixelReader();
-		final PixelWriter pixelWriter = target.getPixelWriter();
-
-		for (int y = 0; y < GamePanelView.TILE_WIDTH_IN_PX; y++) {
-			for (int x = 0; x < GamePanelView.TILE_WIDTH_IN_PX; x++) {
-				final Color color = pixelReader.getColor(x, y);
-				pixelWriter.setColor(x + GamePanelView.TILE_WIDTH_IN_PX * addX,
-						y + GamePanelView.TILE_WIDTH_IN_PX * addY, color);
-			}
-		}
+	public Image getImageAt(final Location location) {
+		return mapTiles.get(location);
 	}
 
 	private String getTileCode(final Location location) {
@@ -432,16 +400,6 @@ public class ImageTest {
 			shifted = Location.of(shifted.getX(), map.getMaxY());
 		}
 		return map.getTerrainTypeAt(shifted);
-	}
-
-	public static void saveToFile(final Image image, String filePath) {
-		final File outputFile = new File(filePath);
-		final BufferedImage bImage = SwingFXUtils.fromFXImage(image, null);
-		try {
-			ImageIO.write(bImage, "png", outputFile);
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
 	}
 
 	/**

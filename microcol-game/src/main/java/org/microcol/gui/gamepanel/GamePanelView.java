@@ -252,7 +252,7 @@ public class GamePanelView implements GamePanelPresenter.Display {
 				final Location location = Location.of(i, j);
 				final Point point = area.convertToPoint(location);
 				final Terrain terrain = gameModelController.getModel().getMap().getTerrainAt(location);
-				paintService.paintTerrainOnTile(graphics, point, terrain,
+				paintService.paintTerrainOnTile(graphics, point, location, terrain,
 						oneTurnMoveHighlighter.isItHighlighted(location));
 			}
 		}

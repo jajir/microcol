@@ -46,16 +46,25 @@ public class ColonyField {
 		return direction;
 	}
 	
-	Colony getColony(){
+	Colony getColony() {
 		return colony;
 	}
 	
 	public TerrainType getTerrainType() {
-		return getMap().getTerrainTypeAt(colony.getLocation().add(direction));
+		return getMap().getTerrainTypeAt(getLocation());
 	}
 	
 	public Terrain getTerrain() {
-		return getMap().getTerrainAt(colony.getLocation().add(direction));
+		return getMap().getTerrainAt(getLocation());
+	}
+
+	/**
+	 * World map colony field location
+	 * 
+	 * @return location where is colony field at map
+	 */
+	public Location getLocation() {
+		return colony.getLocation().add(direction);
 	}
 	
 	private WorldMap getMap(){

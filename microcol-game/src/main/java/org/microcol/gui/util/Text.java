@@ -43,7 +43,7 @@ public class Text {
 	 * Static text instance shared with default method in
 	 * {@link org.microcol.gui.util.Localized} interface.
 	 */
-	public static Text INSTANCE;
+	static Text INSTANCE;
 
 	/**
 	 * Actually loaded resource bundle.

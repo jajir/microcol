@@ -1,4 +1,4 @@
-package org.microcol.integration;
+package org.microcol.gui.gamepanel;
 
 import java.util.List;
 

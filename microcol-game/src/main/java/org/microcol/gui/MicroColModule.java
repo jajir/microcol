@@ -34,16 +34,19 @@ import org.microcol.gui.event.model.GameFinishedController;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.event.model.GoldWasChangedController;
 import org.microcol.gui.event.model.ModelEventManager;
-import org.microcol.gui.event.model.UnitMovedController;
 import org.microcol.gui.event.model.NewGameController;
 import org.microcol.gui.event.model.NextTurnController;
 import org.microcol.gui.event.model.TurnStartedController;
 import org.microcol.gui.event.model.UnitAttackedEventController;
 import org.microcol.gui.event.model.UnitEmbarkedController;
+import org.microcol.gui.event.model.UnitMovedController;
 import org.microcol.gui.gamepanel.AnimationIsDoneController;
 import org.microcol.gui.gamepanel.AnimationManager;
 import org.microcol.gui.gamepanel.GamePanelPresenter;
 import org.microcol.gui.gamepanel.GamePanelView;
+import org.microcol.gui.gamepanel.MapImageGenerator;
+import org.microcol.gui.gamepanel.MapImageStore;
+import org.microcol.gui.gamepanel.MapManager;
 import org.microcol.gui.gamepanel.ModeController;
 import org.microcol.gui.gamepanel.MouseOverTileChangedController;
 import org.microcol.gui.gamepanel.MouseOverTileListener;
@@ -67,6 +70,7 @@ import org.microcol.gui.mainmenu.MainMenuView;
 import org.microcol.gui.mainmenu.SelectNextUnitController;
 import org.microcol.gui.mainmenu.ShowGridController;
 import org.microcol.gui.mainmenu.VolumeChangeController;
+import org.microcol.gui.util.FontService;
 import org.microcol.gui.util.PersistentService;
 import org.microcol.gui.util.PersistingTool;
 import org.microcol.gui.util.Text;
@@ -78,7 +82,7 @@ import com.google.inject.Provides;
 import com.google.inject.Singleton;
 
 public class MicroColModule extends AbstractModule {
-
+	
 	@Override
 	protected void configure() {
 
@@ -93,6 +97,10 @@ public class MicroColModule extends AbstractModule {
 		bind(PersistentService.class).in(Singleton.class);
 		bind(ModelDao.class).in(Singleton.class);
 		bind(AnimationManager.class).in(Singleton.class);
+		bind(MapManager.class).in(Singleton.class);
+		bind(MapImageStore.class).in(Singleton.class);
+		bind(MapImageGenerator.class).in(Singleton.class);
+		bind(FontService.class).asEagerSingleton();
 
 		/**
 		 * Dialogs

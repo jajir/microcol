@@ -193,14 +193,15 @@ public class PanelColonyFields extends TitledPanel {
 	private void paint(final GraphicsContext gc) {
 		colony.getColonyFields().forEach(colonyField -> paintSection(gc, colonyField));
 		paintService.paintTerrainOnTile(gc, Point.of(GamePanelView.TILE_WIDTH_IN_PX, GamePanelView.TILE_WIDTH_IN_PX),
-				gameModelController.getModel().getMap().getTerrainAt(colony.getLocation()), false);
+				colony.getLocation(), gameModelController.getModel().getMap().getTerrainAt(colony.getLocation()),
+				false);
 	}
 
 	private void paintSection(final GraphicsContext gc, final ColonyField colonyField) {
 		final Terrain terrain = colonyField.getTerrain();
 		final Point centre = Point.of(1, 1).multiply(GamePanelView.TILE_WIDTH_IN_PX);
 		final Point point = Point.of(colonyField.getDirection()).add(centre);
-		paintService.paintTerrainOnTile(gc, point, terrain, false);
+		paintService.paintTerrainOnTile(gc, point, colonyField.getLocation(), terrain, false);
 		if (!colonyField.isEmpty()) {
 			gc.drawImage(imageProvider.getUnitImage(colonyField.getUnit().getType()), point.getX(), point.getY());
 			//TODO on ocean show fish

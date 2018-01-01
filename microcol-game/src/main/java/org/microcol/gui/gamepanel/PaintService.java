@@ -2,9 +2,11 @@ package org.microcol.gui.gamepanel;
 
 import org.microcol.gui.ImageProvider;
 import org.microcol.gui.Point;
+import org.microcol.gui.util.FontService;
+import org.microcol.model.Colony;
+import org.microcol.model.Location;
 import org.microcol.model.Player;
 import org.microcol.model.Terrain;
-import org.microcol.model.Colony;
 import org.microcol.model.Unit;
 
 import com.google.common.base.Preconditions;
@@ -12,7 +14,9 @@ import com.google.inject.Inject;
 
 import javafx.geometry.VPos;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 
 /**
@@ -41,10 +45,17 @@ public class PaintService {
 	private final Point UNIT_IMAGE_POSITION = Point.of(2, 4);
 
 	private final ImageProvider imageProvider;
+	
+	private final MapManager mapManager;
+	
+	private final Font colonyFont;
 
 	@Inject
-	public PaintService(final ImageProvider imageProvider) {
+	public PaintService(final ImageProvider imageProvider, final MapManager mapManager,
+			final FontService fontService) {
 		this.imageProvider = Preconditions.checkNotNull(imageProvider);
+		this.mapManager = Preconditions.checkNotNull(mapManager);
+		this.colonyFont = fontService.getFont(FontService.FONT_CARDO_REGULAR, 16);
 	}
 
 	/**
@@ -67,9 +78,10 @@ public class PaintService {
 		Point p = point.add(UNIT_IMAGE_POSITION);
 		graphics.drawImage(imageProvider.getImage(ImageProvider.IMG_TILE_TOWN), p.getX(), p.getY());
 		paintOwnersFlag(graphics, point.add(OWNERS_FLAG_POSITION), colony.getOwner());
+		graphics.setFont(colonyFont);
 		graphics.setTextAlign(TextAlignment.CENTER);
 		graphics.setTextBaseline(VPos.CENTER);
-		graphics.setFill(Color.WHITE);
+		graphics.setFill(Color.BLACK);
 		graphics.fillText(colony.getName(), p.getX() + 20, p.getY() + 30);
 	}
 
@@ -147,14 +159,20 @@ public class PaintService {
 	 *            required graphics where will be tile drawn
 	 * @param point
 	 *            required point where will be painted
+	 * @param location
+	 *            required map location that will be drawn
 	 * @param terrain
 	 *            required terrain object
 	 * @param isHighlighted
 	 *            when it's <code>true</code> than tile is highlighted
 	 */
-	public void paintTerrainOnTile(final GraphicsContext graphics, final Point point, final Terrain terrain,
-			final boolean isHighlighted) {
+	public void paintTerrainOnTile(final GraphicsContext graphics, final Point point, final Location location,
+			final Terrain terrain, final boolean isHighlighted) {
 		graphics.drawImage(imageProvider.getTerrainImage(terrain.getTerrainType()), 0, 0,
+				GamePanelView.TILE_WIDTH_IN_PX, GamePanelView.TILE_WIDTH_IN_PX, point.getX(), point.getY(),
+				GamePanelView.TILE_WIDTH_IN_PX, GamePanelView.TILE_WIDTH_IN_PX);
+		final Image image = mapManager.getImageAt(location);
+		graphics.drawImage(image, 0, 0,
 				GamePanelView.TILE_WIDTH_IN_PX, GamePanelView.TILE_WIDTH_IN_PX, point.getX(), point.getY(),
 				GamePanelView.TILE_WIDTH_IN_PX, GamePanelView.TILE_WIDTH_IN_PX);
 		if (terrain.isHasTrees()) {
