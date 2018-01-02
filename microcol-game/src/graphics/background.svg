@@ -15,7 +15,7 @@
    viewBox="0 0 210 297"
    version="1.1"
    id="svg8"
-   inkscape:version="0.92.2 (5c3e80d, 2017-08-06)"
+   inkscape:version="0.92.2 5c3e80d, 2017-08-06"
    sodipodi:docname="background.svg"
    inkscape:export-filename="/Users/jan/bitmap.png"
    inkscape:export-xdpi="88.800003"
@@ -36,17 +36,17 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1.4142136"
-     inkscape:cx="206.81524"
-     inkscape:cy="924.63254"
+     inkscape:zoom="19.2"
+     inkscape:cx="158.00404"
+     inkscape:cy="909.79428"
      inkscape:document-units="mm"
-     inkscape:current-layer="layer2"
+     inkscape:current-layer="svg8"
      showgrid="true"
-     inkscape:window-width="1848"
-     inkscape:window-height="1055"
-     inkscape:window-x="67"
-     inkscape:window-y="-5"
-     inkscape:window-maximized="1"
+     inkscape:window-width="1600"
+     inkscape:window-height="1005"
+     inkscape:window-x="77"
+     inkscape:window-y="0"
+     inkscape:window-maximized="0"
      showguides="true"
      inkscape:guide-bbox="true">
     <inkscape:grid
@@ -110,6 +110,119 @@
       </cc:Work>
     </rdf:RDF>
   </metadata>
+  <image
+     y="53.583332"
+     x="42.333332"
+     id="image9360"
+     xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAIAAACRXR/mAAAAA3NCSVQICAjb4U/gAAAAUElEQVRY
+he3OMRHAIAAAMeCu0nGGsBro8hMdEgWZzz7jf9btwDetQqvQKrQKrUKr0Cq0Cq1Cq9AqtAqtQqvQ
+KrQKrUKr0Cq0Cq1Cq9AqtIoXWbcBssv46xEAAAAASUVORK5CYII=
+"
+     style="image-rendering:optimizeSpeed"
+     preserveAspectRatio="none"
+     height="13.229167"
+     width="13.229167"
+     inkscape:export-filename="/Users/jan/Documents/repo/github/microcol/microcol-game/src/main/resources/images/backgroud.png"
+     inkscape:export-xdpi="67.20002"
+     inkscape:export-ydpi="67.20002" />
+  <image
+     y="40.354168"
+     x="42.333332"
+     id="image9380"
+     xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAIAAACRXR/mAAAAA3NCSVQICAjb4U/gAAAAUElEQVRY
+he3OMRHAIAAAMeCu0nGGsBro8hMdEgWZzz7jf9btwDetQqvQKrQKrUKr0Cq0Cq1Cq9AqtAqtQqvQ
+KrQKrUKr0Cq0Cq1Cq9AqtIoXWbcBssv46xEAAAAASUVORK5CYII=
+"
+     style="image-rendering:optimizeSpeed"
+     preserveAspectRatio="none"
+     height="13.229167"
+     width="13.229167"
+     inkscape:export-filename="/Users/jan/Documents/repo/github/microcol/microcol-game/src/main/resources/images/backgroud.png"
+     inkscape:export-xdpi="67.20002"
+     inkscape:export-ydpi="67.20002" />
+  <image
+     y="53.583324"
+     x="29.104166"
+     id="image9340"
+     xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAIAAACRXR/mAAAAA3NCSVQICAjb4U/gAAAAUElEQVRY
+he3OMRHAIAAAMeCu0nGGsBro8hMdEgWZzz7jf9btwDetQqvQKrQKrUKr0Cq0Cq1Cq9AqtAqtQqvQ
+KrQKrUKr0Cq0Cq1Cq9AqtIoXWbcBssv46xEAAAAASUVORK5CYII=
+"
+     style="image-rendering:optimizeSpeed"
+     preserveAspectRatio="none"
+     height="13.229167"
+     width="13.229167"
+     inkscape:export-filename="/Users/jan/Documents/repo/github/microcol/microcol-game/src/main/resources/images/backgroud.png"
+     inkscape:export-xdpi="67.20002"
+     inkscape:export-ydpi="67.20002" />
+  <image
+     y="53.583332"
+     x="15.875"
+     id="image9320"
+     xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAIAAACRXR/mAAAAA3NCSVQICAjb4U/gAAAAUElEQVRY
+he3OMRHAIAAAMeCu0nGGsBro8hMdEgWZzz7jf9btwDetQqvQKrQKrUKr0Cq0Cq1Cq9AqtAqtQqvQ
+KrQKrUKr0Cq0Cq1Cq9AqtIoXWbcBssv46xEAAAAASUVORK5CYII=
+"
+     style="image-rendering:optimizeSpeed"
+     preserveAspectRatio="none"
+     height="13.229167"
+     width="13.229167"
+     inkscape:export-filename="/Users/jan/Documents/repo/github/microcol/microcol-game/src/main/resources/images/backgroud.png"
+     inkscape:export-xdpi="67.20002"
+     inkscape:export-ydpi="67.20002" />
+  <image
+     y="40.354164"
+     x="15.875"
+     id="image9309"
+     xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAIAAACRXR/mAAAAA3NCSVQICAjb4U/gAAAAUElEQVRY
+he3OMRHAIAAAMeCu0nGGsBro8hMdEgWZzz7jf9btwDetQqvQKrQKrUKr0Cq0Cq1Cq9AqtAqtQqvQ
+KrQKrUKr0Cq0Cq1Cq9AqtIoXWbcBssv46xEAAAAASUVORK5CYII=
+"
+     style="image-rendering:optimizeSpeed"
+     preserveAspectRatio="none"
+     height="13.229167"
+     width="13.229167"
+     inkscape:export-filename="/Users/jan/Documents/repo/github/microcol/microcol-game/src/main/resources/images/backgroud.png"
+     inkscape:export-xdpi="67.20002"
+     inkscape:export-ydpi="67.20002" />
+  <image
+     y="27.125"
+     x="15.875"
+     id="image9289"
+     xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAIAAACRXR/mAAAAA3NCSVQICAjb4U/gAAAAUElEQVRY
+he3OMRHAIAAAMeCu0nGGsBro8hMdEgWZzz7jf9btwDetQqvQKrQKrUKr0Cq0Cq1Cq9AqtAqtQqvQ
+KrQKrUKr0Cq0Cq1Cq9AqtIoXWbcBssv46xEAAAAASUVORK5CYII=
+"
+     style="image-rendering:optimizeSpeed"
+     preserveAspectRatio="none"
+     height="13.229167"
+     width="13.229167"
+     inkscape:export-filename="/Users/jan/Documents/repo/github/microcol/microcol-game/src/main/resources/images/backgroud.png"
+     inkscape:export-xdpi="67.20002"
+     inkscape:export-ydpi="67.20002" />
+  <path
+     style="fill:#0183c3;fill-opacity:0.97969546;fill-rule:evenodd;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+     d="M 29.104166,40.35416 H 42.333333 V 27.125001 H 29.104166 Z"
+     id="path9241"
+     inkscape:connector-curvature="0"
+     inkscape:export-filename="/Users/jan/Documents/repo/github/microcol/microcol-game/src/main/resources/images/backgroud.png"
+     inkscape:export-xdpi="67.20002"
+     inkscape:export-ydpi="67.20002" />
+  <image
+     y="40.354168"
+     x="29.104166"
+     id="image9207"
+     xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADMAAAAyCAYAAADx/eOPAAAABHNCSVQICAgIfAhkiAAAAGFJREFU
+aIHtz0EJgEAAAEFPsJXNfNvsWvnQEoKLzCTYHds57+UHrmMf69cRbzJTZabKTJWZKjNVZqrMVJmp
+MlNlpspMlZkqM1VmqsxUmakyU2WmykyVmSozVWaqzFSZqXoAzeAEZFTHA8QAAAAASUVORK5CYII=
+"
+     style="image-rendering:optimizeSpeed"
+     preserveAspectRatio="none"
+     height="13.229167"
+     width="13.49375"
+     inkscape:export-filename="/Users/jan/Documents/repo/github/microcol/microcol-game/src/main/resources/images/backgroud.png"
+     inkscape:export-xdpi="67.20002"
+     inkscape:export-ydpi="67.20002" />
   <g
      inkscape:label="pozadi"
      inkscape:groupmode="layer"
@@ -129,45 +242,6 @@
      id="layer2"
      inkscape:label="popredi"
      style="display:inline">
-    <image
-       width="13.229167"
-       height="0.26458332"
-       preserveAspectRatio="none"
-       style="fill:none;image-rendering:optimizeSpeed"
-       xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAABCAYAAACc0f2yAAAABHNCSVQICAgIfAhkiAAAABBJREFU CJljNDQ0/MAwDAAALJYBhdo8EWQAAAAASUVORK5CYII= "
-       id="image7225"
-       x="42.339176"
-       y="54.764442"
-       inkscape:export-filename="C:\Projects\repo\github\microcol\microcol-game\src\main\resources\images\backgroud.png"
-       inkscape:export-xdpi="67.20002"
-       inkscape:export-ydpi="67.20002" />
-    <path
-       sodipodi:nodetypes="cc"
-       inkscape:connector-curvature="0"
-       id="path7229"
-       d="m 42.333332,54.90625 c -13.229167,0 -11.90625,0 -13.229167,-1.322917"
-       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       inkscape:export-filename="C:\Projects\repo\github\microcol\microcol-game\src\main\resources\images\backgroud.png"
-       inkscape:export-xdpi="67.20002"
-       inkscape:export-ydpi="67.20002" />
-    <path
-       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 29.104166,40.354167 c -2.645833,1.322916 -1.322915,7.937499 -1.353709,10.488251 -0.01757,1.455669 -0.353801,1.40149 -1.257766,1.405653 -2.68019,0.01234 -9.294774,-1.310572 -10.617691,1.335262"
-       id="path7250"
-       inkscape:connector-curvature="0"
-       sodipodi:nodetypes="cssc"
-       inkscape:export-filename="C:\Projects\repo\github\microcol\microcol-game\src\main\resources\images\backgroud.png"
-       inkscape:export-xdpi="67.20002"
-       inkscape:export-ydpi="67.20002" />
-    <path
-       sodipodi:nodetypes="cssssc"
-       inkscape:connector-curvature="0"
-       id="path7252"
-       d="m 29.104166,27.125 c -2.645833,1.322916 -1.322916,7.9375 -1.35371,10.488252 -0.01757,1.455669 0.03079,1.417998 -1.257766,1.405653 -1.089818,-0.01044 -5.326024,0.01234 -7.915683,0.115769 -1.176908,0.047 -1.222587,-0.317462 -1.271349,-1.48732 C 17.197916,35.0625 18.520833,28.447916 15.874999,27.125"
-       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       inkscape:export-filename="C:\Projects\repo\github\microcol\microcol-game\src\main\resources\images\backgroud.png"
-       inkscape:export-xdpi="67.20002"
-       inkscape:export-ydpi="67.20002" />
     <rect
        style="opacity:0.29200003;fill:none;fill-opacity:1;stroke:none;stroke-width:0.10214214;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        id="rect4009"
@@ -175,25 +249,7 @@
        height="52.916656"
        x="15.875"
        y="13.895833"
-       inkscape:export-filename="C:\Projects\repo\github\microcol\microcol-game\src\main\resources\images\backgroud.png"
-       inkscape:export-xdpi="67.20002"
-       inkscape:export-ydpi="67.20002" />
-    <path
-       sodipodi:nodetypes="cssssssssc"
-       inkscape:connector-curvature="0"
-       id="path7252-5"
-       d="m 22.489583,15.21875 c 0.863758,0.0617 3.229995,-0.09072 4.104392,-0.03896 0.658108,0.03896 1.190739,1.006793 1.190158,1.510524 -0.0029,2.497183 -0.01392,6.056939 -0.03368,7.693768 -0.01757,1.455668 -0.353801,1.40149 -1.257766,1.405652 -1.089858,0.005 -5.326025,0.01234 -7.915684,0.115769 -1.176908,0.047 -1.222587,-0.317461 -1.271349,-1.48732 -0.06376,-1.529743 -0.10774,-5.495269 -0.04173,-7.893309 0.01583,-0.575092 0.744968,-1.254123 1.290083,-1.267626 1.554326,-0.0385 2.83044,-0.0385 3.935576,-0.0385"
-       style="display:inline;fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       inkscape:export-filename="C:\Projects\repo\github\microcol\microcol-game\src\main\resources\images\backgroud.png"
-       inkscape:export-xdpi="67.20002"
-       inkscape:export-ydpi="67.20002" />
-    <path
-       sodipodi:nodetypes="cssssc"
-       inkscape:connector-curvature="0"
-       id="path7252-0"
-       d="m 41.010417,27.125 c 0,2.645833 -10e-7,7.9375 -0.03079,10.488253 -0.01757,1.455668 0.03079,1.417997 -1.257766,1.405652 -1.089818,-0.01044 -5.326025,0.01234 -7.915684,0.115769 -1.176908,0.047 -1.222587,-0.317461 -1.271349,-1.48732 C 30.427081,35.0625 31.749998,28.447916 29.104164,27.125"
-       style="display:inline;fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       inkscape:export-filename="C:\Projects\repo\github\microcol\microcol-game\src\main\resources\images\backgroud.png"
+       inkscape:export-filename="/Users/jan/Documents/repo/github/microcol/microcol-game/src/main/resources/images/backgroud.png"
        inkscape:export-xdpi="67.20002"
        inkscape:export-ydpi="67.20002" />
     <path
@@ -202,35 +258,149 @@
        id="path7252-0-2"
        d="m 54.239583,27.125 c 0,2.645833 -1e-6,7.9375 -0.03079,10.488253 -0.01757,1.455668 0.03079,1.417997 -1.257766,1.405652 -1.089818,-0.01044 -5.326025,0.01234 -7.915684,0.115769 -1.176908,0.047 -1.222587,-0.317461 -1.271349,-1.48732 C 43.656247,35.0625 43.65625,29.770833 43.65625,27.125"
        style="display:inline;fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       inkscape:export-filename="C:\Projects\repo\github\microcol\microcol-game\src\main\resources\images\backgroud.png"
-       inkscape:export-xdpi="67.20002"
-       inkscape:export-ydpi="67.20002" />
-    <path
-       style="display:inline;fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 41.010417,40.354167 c 0,2.645833 0,7.937493 -0.03079,10.488245 -0.01757,1.455669 -0.353801,1.40149 -1.257766,1.405653 -2.68019,0.01234 -9.294774,-1.310572 -10.617691,1.335263"
-       id="path7250-7"
-       inkscape:connector-curvature="0"
-       sodipodi:nodetypes="cssc"
-       inkscape:export-filename="C:\Projects\repo\github\microcol\microcol-game\src\main\resources\images\backgroud.png"
-       inkscape:export-xdpi="67.20002"
-       inkscape:export-ydpi="67.20002" />
-    <path
-       style="display:inline;fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 54.23958,40.35417 c 0,2.645833 0,7.937493 -0.03079,10.488245 -0.01757,1.455669 -0.353802,1.368419 -1.257767,1.372582 -2.68019,0.01234 -8.501024,0.04542 -10.617691,0.04542"
-       id="path7250-7-8"
-       inkscape:connector-curvature="0"
-       sodipodi:nodetypes="cssc"
-       inkscape:export-filename="C:\Projects\repo\github\microcol\microcol-game\src\main\resources\images\backgroud.png"
-       inkscape:export-xdpi="67.20002"
-       inkscape:export-ydpi="67.20002" />
-    <path
-       style="display:inline;fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 15.875,53.583333 c 1.322916,1.322917 0,1.322917 6.085364,1.313827 6.736531,-0.01006 6.072386,-0.242411 7.143803,-1.313827"
-       id="path7237-0"
-       inkscape:connector-curvature="0"
-       sodipodi:nodetypes="csc"
-       inkscape:export-filename="C:\Projects\repo\github\microcol\microcol-game\src\main\resources\images\backgroud.png"
+       inkscape:export-filename="/Users/jan/Documents/repo/github/microcol/microcol-game/src/main/resources/images/backgroud.png"
        inkscape:export-xdpi="67.20002"
        inkscape:export-ydpi="67.20002" />
   </g>
+  <rect
+     style="opacity:1;fill:#b0cb1f;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.2;stroke-linecap:butt;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     id="rect8395"
+     width="13.229167"
+     height="13.229159"
+     x="29.104166"
+     y="-27.124992"
+     transform="scale(1,-1)"
+     inkscape:export-filename="/Users/jan/Documents/repo/github/microcol/microcol-game/src/main/resources/images/backgroud.png"
+     inkscape:export-xdpi="67.20002"
+     inkscape:export-ydpi="67.20002" />
+  <rect
+     style="opacity:1;fill:#0183c3;fill-opacity:0.97969544;fill-rule:evenodd;stroke:none;stroke-width:1.1111114;stroke-linecap:butt;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     id="rect9107"
+     width="13.229176"
+     height="13.229162"
+     x="42.333332"
+     y="13.895831"
+     inkscape:export-filename="/Users/jan/Documents/repo/github/microcol/microcol-game/src/main/resources/images/backgroud.png"
+     inkscape:export-xdpi="67.20002"
+     inkscape:export-ydpi="67.20002" />
+  <image
+     y="13.895823"
+     x="15.875"
+     id="image9146"
+     xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAIAAACRXR/mAAAAA3NCSVQICAjb4U/gAAAAUUlEQVRY
+he3OMQHAIADAMMDI/H/4wNQM7OnFjkRB5j7P+J91O/BNq9AqtAqtQqvQKrQKrUKr0Cq0Cq1Cq9Aq
+tAqtQqvQKrQKrUKr0Cq0Cq3iBRxeAf5HGIn0AAAAAElFTkSuQmCC
+"
+     style="image-rendering:optimizeSpeed"
+     preserveAspectRatio="none"
+     height="13.229167"
+     width="13.229167"
+     inkscape:export-filename="/Users/jan/Documents/repo/github/microcol/microcol-game/src/main/resources/images/backgroud.png"
+     inkscape:export-xdpi="67.20002"
+     inkscape:export-ydpi="67.20002" />
+  <path
+     style="fill:#0183c3;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+     d="m 27.78125,15.21875 c -1.322916,-1.322917 -9.410501,-1.225934 -10.610894,0 -1.295356,1.322917 -1.212674,9.315538 0.110243,10.638455 1.322912,1.322912 9.177734,1.267786 10.500651,-0.05512 1.322921,-1.322912 1.322916,-9.260416 0,-10.583333 z"
+     id="path9149"
+     inkscape:connector-curvature="0"
+     sodipodi:nodetypes="sssss"
+     inkscape:export-filename="/Users/jan/Documents/repo/github/microcol/microcol-game/src/main/resources/images/backgroud.png"
+     inkscape:export-xdpi="67.20002"
+     inkscape:export-ydpi="67.20002" />
+  <path
+     style="fill:#b0cb1f;fill-opacity:0.97969546;fill-rule:evenodd;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+     d="M 29.104166,53.583334 H 42.33333 l 2e-6,-13.229167 -1.322915,-6e-6 c 0.0033,1.287284 -0.09019,9.287496 -1.324205,10.568547 -1.323924,1.374386 -7.966312,0.06121 -9.259129,1.345961 -1.322916,1.31466 -1.322917,1.314663 -1.322917,1.314663 z"
+     id="path9179"
+     inkscape:connector-curvature="0"
+     sodipodi:nodetypes="ccccsscc"
+     inkscape:export-filename="/Users/jan/Documents/repo/github/microcol/microcol-game/src/main/resources/images/backgroud.png"
+     inkscape:export-xdpi="67.20002"
+     inkscape:export-ydpi="67.20002" />
+  <image
+     y="27.12499"
+     x="42.333332"
+     id="image9269"
+     xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAIAAACRXR/mAAAAA3NCSVQICAjb4U/gAAAAUElEQVRY
+he3OMRHAIAAAMeCu0nGGsBro8hMdEgWZzz7jf9btwDetQqvQKrQKrUKr0Cq0Cq1Cq9AqtAqtQqvQ
+KrQKrUKr0Cq0Cq1Cq9AqtIoXWbcBssv46xEAAAAASUVORK5CYII=
+"
+     style="image-rendering:optimizeSpeed"
+     preserveAspectRatio="none"
+     height="13.229167"
+     width="13.229167"
+     inkscape:export-filename="/Users/jan/Documents/repo/github/microcol/microcol-game/src/main/resources/images/backgroud.png"
+     inkscape:export-xdpi="67.20002"
+     inkscape:export-ydpi="67.20002" />
+  <path
+     inkscape:export-ydpi="67.20002"
+     inkscape:export-xdpi="67.20002"
+     inkscape:export-filename="/Users/jan/Documents/repo/github/microcol/microcol-game/src/main/resources/images/backgroud.png"
+     sodipodi:nodetypes="cccsssc"
+     inkscape:connector-curvature="0"
+     id="path9423"
+     d="m 15.875003,53.583331 h 13.229164 l 3e-6,-13.229174 -1.322916,1.322923 c -1.32291,1.322917 -0.09019,7.964576 -1.324205,9.245627 -1.323924,1.374386 -7.966312,0.06121 -9.259129,1.345961 -1.322916,1.31466 -1.322917,1.314663 -1.322917,1.314663 z"
+     style="fill:#b0cb1f;fill-opacity:0.97969546;fill-rule:evenodd;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+  <path
+     inkscape:export-ydpi="67.20002"
+     inkscape:export-xdpi="67.20002"
+     inkscape:export-filename="/Users/jan/Documents/repo/github/microcol/microcol-game/src/main/resources/images/backgroud.png"
+     sodipodi:nodetypes="ccccsccc"
+     inkscape:connector-curvature="0"
+     id="path9425"
+     d="m 42.333335,53.583333 h 13.229164 l 2e-6,-13.229167 -1.322918,-5e-6 c 0.0033,1.287284 -0.09019,9.287495 -1.324202,10.568546 -1.323924,1.374386 -9.259131,1.33771 -10.58434,1.365449 l 0.0023,1.295175 z"
+     style="fill:#b0cb1f;fill-opacity:0.97969546;fill-rule:evenodd;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+  <path
+     style="fill:#b0cb1f;fill-opacity:0.97969546;fill-rule:evenodd;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+     d="m 29.104169,40.354161 h 13.229164 l 2e-6,-13.229167 -1.322918,-5e-6 c 0.0033,1.287284 -0.016,9.244425 -1.324202,10.568546 -1.321631,1.337709 -6.65246,1.376886 -7.939322,0.05135 -1.319809,-1.359474 0.0031,-7.974061 -1.352363,-9.278653 -1.340979,-1.290642 -1.290363,-1.341238 -1.290363,-1.341238 l 8e-6,13.229165 z"
+     id="path9427"
+     inkscape:connector-curvature="0"
+     sodipodi:nodetypes="ccccsssccc"
+     inkscape:export-filename="/Users/jan/Documents/repo/github/microcol/microcol-game/src/main/resources/images/backgroud.png"
+     inkscape:export-xdpi="67.20002"
+     inkscape:export-ydpi="67.20002" />
+  <path
+     inkscape:export-ydpi="67.20002"
+     inkscape:export-xdpi="67.20002"
+     inkscape:export-filename="/Users/jan/Documents/repo/github/microcol/microcol-game/src/main/resources/images/backgroud.png"
+     sodipodi:nodetypes="ccccsssccc"
+     inkscape:connector-curvature="0"
+     id="path9429"
+     d="m 15.874994,40.354169 h 13.229164 l 2e-6,-13.229167 -1.32291,1.322915 c -1.322917,1.322916 -0.01601,7.921505 -1.32421,9.245626 -1.321631,1.337709 -6.65246,1.376886 -7.939322,0.05135 -1.319809,-1.359474 0.0031,-7.974061 -1.352363,-9.278653 -1.340979,-1.290642 -1.290363,-1.341238 -1.290363,-1.341238 l 8e-6,13.229165 z"
+     style="fill:#b0cb1f;fill-opacity:0.97969546;fill-rule:evenodd;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+  <path
+     style="fill:#b0cb1f;fill-opacity:0.97969546;fill-rule:evenodd;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+     d="M 42.333336,40.354161 H 55.5625 l 2e-6,-13.229167 -1.322918,-5e-6 c 0.0033,1.287284 -0.016,9.244425 -1.324202,10.568546 -1.321631,1.337709 -6.65246,1.376886 -7.939322,0.05135 C 43.656251,36.385411 43.65625,28.447917 43.65625,27.125 l -1.322916,-6e-6 8e-6,13.229165 z"
+     id="path9431"
+     inkscape:connector-curvature="0"
+     sodipodi:nodetypes="ccccsscccc"
+     inkscape:export-filename="/Users/jan/Documents/repo/github/microcol/microcol-game/src/main/resources/images/backgroud.png"
+     inkscape:export-xdpi="67.20002"
+     inkscape:export-ydpi="67.20002" />
+  <path
+     style="fill:#b0cb1f;fill-opacity:0.97969546;fill-rule:evenodd;stroke:none;stroke-width:0.26458326px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+     d="m 15.875002,53.583333 h 13.229164 c 0,0 1e-6,0 -1.322916,1.322917 -1.322917,1.322917 -9.290514,1.276506 -10.583331,-0.0083 z"
+     id="path9433"
+     inkscape:connector-curvature="0"
+     sodipodi:nodetypes="cczsc"
+     inkscape:export-filename="/Users/jan/Documents/repo/github/microcol/microcol-game/src/main/resources/images/backgroud.png"
+     inkscape:export-xdpi="67.20002"
+     inkscape:export-ydpi="67.20002" />
+  <path
+     inkscape:export-ydpi="67.20002"
+     inkscape:export-xdpi="67.20002"
+     inkscape:export-filename="/Users/jan/Documents/repo/github/microcol/microcol-game/src/main/resources/images/backgroud.png"
+     sodipodi:nodetypes="ccssc"
+     inkscape:connector-curvature="0"
+     id="path9435"
+     d="m 29.104167,53.583331 h 13.229164 c 0,0 2e-6,1.322919 10e-7,1.322919 -1.322915,0 -10.613431,1.276504 -11.906248,-0.0083 z"
+     style="fill:#b0cb1f;fill-opacity:0.97969546;fill-rule:evenodd;stroke:none;stroke-width:0.26458326px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+  <path
+     style="fill:#b0cb1f;fill-opacity:0.97969546;fill-rule:evenodd;stroke:none;stroke-width:0.26458326px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+     d="m 42.333332,53.583333 h 13.229164 c 0,0 2e-6,1.322919 10e-7,1.322919 -1.322915,0 -13.229165,-0.0083 -13.229165,-0.0083 z"
+     id="path9437"
+     inkscape:connector-curvature="0"
+     sodipodi:nodetypes="ccscc"
+     inkscape:export-filename="/Users/jan/Documents/repo/github/microcol/microcol-game/src/main/resources/images/backgroud.png"
+     inkscape:export-xdpi="67.20002"
+     inkscape:export-ydpi="67.20002" />
 </svg>
