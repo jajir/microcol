@@ -1,4 +1,6 @@
-package org.microcol.gui.gamepanel;
+package org.microcol.gui.image;
+
+import org.microcol.gui.gamepanel.GamePanelView;
 
 import com.google.common.base.Preconditions;
 
@@ -50,7 +52,7 @@ public class ImageWrapper {
 			for (int x = 0; x < GamePanelView.TILE_WIDTH_IN_PX; x++) {
 				final Color colorA = pixelReaderA.getColor(x, y);
 				final Color colorB = pixelReaderB.getColor(x, y);
-				if (colorA.getOpacity() == 0F) {
+				if (colorA.getOpacity() < colorB.getOpacity()) {
 					pixelWriter.setColor(x, y, colorB);
 				} else {
 					pixelWriter.setColor(x, y, colorA);

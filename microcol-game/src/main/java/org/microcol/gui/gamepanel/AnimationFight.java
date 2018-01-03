@@ -2,8 +2,8 @@ package org.microcol.gui.gamepanel;
 
 import java.util.Map;
 
-import org.microcol.gui.ImageProvider;
 import org.microcol.gui.Point;
+import org.microcol.gui.image.ImageProvider;
 import org.microcol.model.Unit;
 
 import com.google.common.base.Preconditions;

@@ -1,6 +1,6 @@
 package org.microcol.gui.colony;
 
-import org.microcol.gui.ImageProvider;
+import org.microcol.gui.image.ImageProvider;
 import org.microcol.gui.util.AbstractMessageWindow;
 import org.microcol.gui.util.PanelDock;
 import org.microcol.gui.util.Text;

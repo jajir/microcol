@@ -1,10 +1,8 @@
-package org.microcol.gui.gamepanel;
+package org.microcol.gui.image;
 
-import java.util.Map;
+import org.microcol.gui.gamepanel.Connector;
 
 import com.google.common.base.Preconditions;
-
-import javafx.scene.image.Image;
 
 public class TileDef {
 
@@ -32,9 +30,9 @@ public class TileDef {
 		return prefix + start.get() + end.get();
 	}
 
-	public TileDef storeTo(final Map<String, Image> images) {
-		Preconditions.checkNotNull(images);
-		images.put(getCode(), image.get());
+	public TileDef storeTo(final ImageProvider imageProvider) {
+		Preconditions.checkNotNull(imageProvider);
+		imageProvider.registerImage(getCode(), image.get());
 		return this;
 	}
 

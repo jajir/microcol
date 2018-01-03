@@ -1,7 +1,7 @@
 package org.microcol.gui.europe;
 
-import org.microcol.gui.ImageProvider;
 import org.microcol.gui.LocalizationHelper;
+import org.microcol.gui.image.ImageProvider;
 import org.microcol.gui.util.ClipboardWritter;
 import org.microcol.model.Unit;
 

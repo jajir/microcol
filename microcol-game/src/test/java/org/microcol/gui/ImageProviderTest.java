@@ -4,6 +4,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
 
 import org.junit.Test;
+import org.microcol.gui.image.ImageProvider;
 
 import javafx.scene.image.Image;
 

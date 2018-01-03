@@ -1,7 +1,7 @@
 package org.microcol.gui.europe;
 
-import org.microcol.gui.ImageProvider;
 import org.microcol.gui.event.model.GameModelController;
+import org.microcol.gui.image.ImageProvider;
 import org.microcol.gui.util.AbstractMessageWindow;
 import org.microcol.gui.util.PanelDock;
 import org.microcol.gui.util.Text;

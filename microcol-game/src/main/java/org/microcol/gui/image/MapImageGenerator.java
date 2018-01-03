@@ -1,4 +1,4 @@
-package org.microcol.gui.gamepanel;
+package org.microcol.gui.image;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -141,15 +141,15 @@ import javafx.scene.image.Image;
  */
 public class MapImageGenerator {
 
-	private final MapImageStore mapImageStore;
+	private final ImageProvider imageProvider;
 	
 	private Map<Location, Image> mapTiles = new HashMap<>();
 
 	private WorldMap map;
 
 	@Inject
-	MapImageGenerator(final MapImageStore mapImageStore) {
-		this.mapImageStore = Preconditions.checkNotNull(mapImageStore);
+	MapImageGenerator(final ImageProvider imageProvider) {
+		this.imageProvider = Preconditions.checkNotNull(imageProvider);
 	}
 
 	public void setMap(final WorldMap map) {
@@ -159,7 +159,7 @@ public class MapImageGenerator {
 			for (int x = 1; x <= map.getMaxX(); x++) {
 				final Location loc = Location.of(x, y);
 				final String code = getTileCode(loc);
-				final Image img = mapImageStore.getImage(code);
+				final Image img = imageProvider.getImage(code);
 				mapTiles.put(loc, img);
 			}
 		}
@@ -199,7 +199,7 @@ public class MapImageGenerator {
 		final TerrainType ttSouth = getTerrainTypeAt(loc.add(Location.DIRECTION_SOUTH));
 		final TerrainType ttWest = getTerrainTypeAt(loc.add(Location.DIRECTION_WEST));
 		if (ttNorth.isSee() && ttEast.isSee() && ttSouth.isSee() && ttWest.isSee()) {
-			return "openSea";
+			return ImageProvider.IMG_TILE_OCEAN;
 		} else {
 			return null;
 		}
@@ -208,7 +208,8 @@ public class MapImageGenerator {
 	private String isItLand(final Location loc) {
 		final TerrainType tt = getTerrainTypeAt(loc);
 		if (tt.isLand()) {
-			return "land";
+			//TODO improve image selection.
+			return ImageProvider.IMG_TILE_GRASSLAND;
 		} else {
 			return null;
 		}

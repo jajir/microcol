@@ -2,6 +2,7 @@ package org.microcol.gui.gamepanel;
 
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.event.model.NewGameController;
+import org.microcol.gui.image.MapImageGenerator;
 import org.microcol.model.Location;
 
 import com.google.common.base.Preconditions;

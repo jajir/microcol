@@ -1,9 +1,9 @@
 package org.microcol.gui.europe;
 
 import org.microcol.gui.DialogNotEnoughGold;
-import org.microcol.gui.ImageProvider;
 import org.microcol.gui.LocalizationHelper;
 import org.microcol.gui.event.model.GameModelController;
+import org.microcol.gui.image.ImageProvider;
 import org.microcol.gui.util.Text;
 import org.microcol.gui.util.ViewUtil;
 import org.microcol.model.NotEnoughtGoldException;

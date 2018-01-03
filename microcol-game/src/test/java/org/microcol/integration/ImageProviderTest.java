@@ -7,18 +7,18 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 import org.junit.Test;
-import org.microcol.gui.gamepanel.MapImageStore;
+import org.microcol.gui.image.ImageProvider;
 
 import com.google.common.io.Files;
 
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.Image;
 
-public class MapImageStoreTest {
+public class ImageProviderTest {
 
 	@Test
 	public void testName() throws Exception {
-		MapImageStore mapImageStore = new MapImageStore();
+		ImageProvider mapImageStore = new ImageProvider();
 		
 		for (final String key : mapImageStore.getTileNames()) {
 			final Image image = mapImageStore.getImage(key);

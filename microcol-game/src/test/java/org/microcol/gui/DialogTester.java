@@ -5,6 +5,7 @@ import org.microcol.gui.colonizopedia.Colonizopedia;
 import org.microcol.gui.europe.BuyUnitsDialog;
 import org.microcol.gui.europe.ChooseGoodAmount;
 import org.microcol.gui.event.model.GameModelController;
+import org.microcol.gui.image.ImageProvider;
 import org.microcol.gui.util.Text;
 import org.microcol.gui.util.Text.Language;
 import org.microcol.gui.util.ViewUtil;

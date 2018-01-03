@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.microcol.gui.event.StatusBarMessageController;
 import org.microcol.gui.event.StatusBarMessageEvent;
+import org.microcol.gui.image.ImageProvider;
 import org.microcol.gui.util.Localized;
 import org.microcol.gui.util.Text;
 import org.microcol.model.CargoSlot;

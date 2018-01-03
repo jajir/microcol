@@ -12,6 +12,7 @@ import javax.sound.sampled.FloatControl;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.SourceDataLine;
 
+import org.microcol.gui.image.ImageProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

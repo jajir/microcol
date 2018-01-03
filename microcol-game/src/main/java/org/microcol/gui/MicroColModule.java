@@ -44,8 +44,6 @@ import org.microcol.gui.gamepanel.AnimationIsDoneController;
 import org.microcol.gui.gamepanel.AnimationManager;
 import org.microcol.gui.gamepanel.GamePanelPresenter;
 import org.microcol.gui.gamepanel.GamePanelView;
-import org.microcol.gui.gamepanel.MapImageGenerator;
-import org.microcol.gui.gamepanel.MapImageStore;
 import org.microcol.gui.gamepanel.MapManager;
 import org.microcol.gui.gamepanel.ModeController;
 import org.microcol.gui.gamepanel.MouseOverTileChangedController;
@@ -57,6 +55,8 @@ import org.microcol.gui.gamepanel.SelectedTileManager;
 import org.microcol.gui.gamepanel.SelectedUnitManager;
 import org.microcol.gui.gamepanel.TileWasSelectedController;
 import org.microcol.gui.gamepanel.UnitAttackedEventListener;
+import org.microcol.gui.image.ImageProvider;
+import org.microcol.gui.image.MapImageGenerator;
 import org.microcol.gui.mainmenu.AboutGameEventController;
 import org.microcol.gui.mainmenu.AnimationSpeedChangeController;
 import org.microcol.gui.mainmenu.BuildColonyEventController;
@@ -98,7 +98,6 @@ public class MicroColModule extends AbstractModule {
 		bind(ModelDao.class).in(Singleton.class);
 		bind(AnimationManager.class).in(Singleton.class);
 		bind(MapManager.class).in(Singleton.class);
-		bind(MapImageStore.class).in(Singleton.class);
 		bind(MapImageGenerator.class).in(Singleton.class);
 		bind(FontService.class).asEagerSingleton();
 

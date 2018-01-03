@@ -2,7 +2,7 @@ package org.microcol.gui.util;
 
 import java.util.List;
 
-import org.microcol.gui.ImageProvider;
+import org.microcol.gui.image.ImageProvider;
 
 import javafx.scene.layout.HBox;
 

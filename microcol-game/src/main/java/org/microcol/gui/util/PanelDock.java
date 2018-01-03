@@ -2,7 +2,7 @@ package org.microcol.gui.util;
 
 import java.util.Optional;
 
-import org.microcol.gui.ImageProvider;
+import org.microcol.gui.image.ImageProvider;
 import org.microcol.model.Unit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -2,11 +2,11 @@ package org.microcol.gui.colony;
 
 import java.util.Optional;
 
-import org.microcol.gui.ImageProvider;
 import org.microcol.gui.Point;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.gamepanel.GamePanelView;
 import org.microcol.gui.gamepanel.PaintService;
+import org.microcol.gui.image.ImageProvider;
 import org.microcol.gui.util.ClipboardReader;
 import org.microcol.gui.util.ClipboardWritter;
 import org.microcol.gui.util.TitledPanel;

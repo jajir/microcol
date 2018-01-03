@@ -3,9 +3,9 @@ package org.microcol.gui.gamepanel;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.microcol.gui.ImageProvider;
 import org.microcol.gui.PathPlanning;
 import org.microcol.gui.Point;
+import org.microcol.gui.image.ImageProvider;
 import org.microcol.model.Location;
 import org.microcol.model.Unit;
 

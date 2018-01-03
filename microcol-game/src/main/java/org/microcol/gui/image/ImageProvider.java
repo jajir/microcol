@@ -1,27 +1,36 @@
-package org.microcol.gui;
+package org.microcol.gui.image;
 
 import java.io.InputStream;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import org.microcol.gui.MicroColException;
 import org.microcol.model.GoodAmount;
 import org.microcol.model.GoodType;
 import org.microcol.model.TerrainType;
 import org.microcol.model.Unit;
 import org.microcol.model.UnitType;
 
+import com.google.common.base.Preconditions;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Lists;
 
 import javafx.scene.image.Image;
 
 /**
  * Provide image instances.
- * 
- * @author jan
- *
  */
 public class ImageProvider {
+	
+	/**
+	 * Allows to register image loaders. It's ordered list of loaders. 
+	 */
+	private final List<ImageLoader> STARTUP_IMAGE_LOADERS = Lists.newArrayList(new BackgroundImageLoader(), new GrasslandImageLoader());
 
+	public final static String BACKGROUND_IMAGE_NAME = "backgroud.png";
+	
 	public static final String IMG_CURSOR_GOTO = "cursor-goto.png";
 
 	public static final String IMG_ICON_STEPS_25x25 = "icon-steps-25x25.png";
@@ -38,32 +47,23 @@ public class ImageProvider {
 
 	public static final String IMG_SPLASH_SCREEN = "splash-screen.png";
 
-	private static final String IMG_TILE_OCEAN = "tile-ocean.png";
+	public static final String IMG_TILE_OCEAN = "tile-ocean.png";
 
-	private static final String IMG_TILE_TUNDRA = "tile-tundra.png";
+	public static final String IMG_TILE_TUNDRA = "tile-tundra.png";
 
-	private static final String IMG_TILE_ARCTIC = "tile-arctic.png";
+	public static final String IMG_TILE_ARCTIC = "tile-arctic.png";
 
-	private static final String IMG_TILE_HIGH_SEA = "tile-high-sea.png";
+	public static final String IMG_TILE_HIGH_SEA = "tile-high-sea.png";
 
-	private static final String IMG_TILE_GRASSLAND = "tile-grassland.png";
+	public static final String IMG_TILE_GRASSLAND = "tile-grassland.png";
 
-	private static final String IMG_TILE_SHIP_GALEON = "tile-ship-galeon.png";
+	public static final String IMG_TILE_SHIP_GALEON = "tile-ship-galeon.png";
 
-	private static final String IMG_TILE_SHIP_FRIGATE = "tile-ship-frigate.png";
+	public static final String IMG_TILE_SHIP_FRIGATE = "tile-ship-frigate.png";
 
-	private static final String IMG_UNIT_FREE_COLONIST = "tile-unit-free-colonist.png";
-
-	// private static final String IMG_TILE_MODE_GOTO = "tile-mode-goto.png";
+	public static final String IMG_UNIT_FREE_COLONIST = "tile-unit-free-colonist.png";
 
 	public static final String IMG_TILE_MODE_MOVE = "tile-mode-move.png";
-
-	// private static final String IMG_TILE_MODE_FORTIFY =
-	// "tile-mode-fortify.png";
-
-	// private static final String IMG_TILE_MODE_PLOW = "tile-mode-plow.png";
-
-	// private static final String IMG_TILE_MODE_ROAD = "tile-mode-road.png";
 
 	public static final String IMG_CROSSED_SWORDS = "crossed-swords.png";
 
@@ -118,14 +118,8 @@ public class ImageProvider {
 	private static final String BASE_PACKAGE = "images";
 
 	private final Map<String, Image> images;
-
-	private final Map<TerrainType, Image> terrainMap = ImmutableMap.<TerrainType, Image>builder()
-			.put(TerrainType.GRASSLAND, getRawImage(IMG_TILE_GRASSLAND))
-			.put(TerrainType.OCEAN, getRawImage(IMG_TILE_OCEAN))
-			.put(TerrainType.TUNDRA, getRawImage(IMG_TILE_TUNDRA))
-			.put(TerrainType.ARCTIC, getRawImage(IMG_TILE_ARCTIC))
-			.put(TerrainType.HIGH_SEA, getRawImage(IMG_TILE_HIGH_SEA))
-			.build();
+	
+	private final Map<TerrainType, Image> terrainMap;
 
 	private final Map<UnitType, Image> unitImageMap = ImmutableMap.<UnitType, Image>builder()
 			.put(UnitType.GALLEON, getRawImage(IMG_TILE_SHIP_GALEON))
@@ -156,10 +150,23 @@ public class ImageProvider {
 
 	public ImageProvider() {
 		images = new HashMap<>();
+		STARTUP_IMAGE_LOADERS.forEach(loader -> loader.preload(this));
+		terrainMap = ImmutableMap.<TerrainType, Image>builder()
+				.put(TerrainType.GRASSLAND, getImage(IMG_TILE_GRASSLAND))
+				.put(TerrainType.OCEAN, getImage(IMG_TILE_OCEAN))
+				.put(TerrainType.TUNDRA, getImage(IMG_TILE_TUNDRA))
+				.put(TerrainType.ARCTIC, getImage(IMG_TILE_ARCTIC))
+				.put(TerrainType.HIGH_SEA, getImage(IMG_TILE_HIGH_SEA))
+				.build();
+	}
+	
+	public List<String> getTileNames(){
+		return ImmutableList.copyOf(images.keySet());
 	}
 
 	/**
-	 * Load image for name.
+	 * Load image for name. If image is not in cache it try to load it from
+	 * image store.
 	 * 
 	 * @param name
 	 *            required image name
@@ -191,6 +198,24 @@ public class ImageProvider {
 			throw new MicroColException("Unable to load file '" + path + "'.");
 		} else {
 			return new Image(cl.getResourceAsStream(path));
+		}
+	}
+
+	/**
+	 * Allow to register new type of image.
+	 * 
+	 * @param name
+	 *            required unique image name
+	 * @param image
+	 *            required image object
+	 */
+	public void registerImage(final String name, final Image image){
+		Preconditions.checkNotNull(name);
+		Preconditions.checkNotNull(image);
+		if (images.containsKey(name)) {
+			throw new IllegalArgumentException(String.format("Image with name '%s' was already registerd", name));
+		} else {
+			images.put(name, image);
 		}
 	}
 

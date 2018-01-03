@@ -3,9 +3,9 @@ package org.microcol.gui.gamepanel;
 import java.util.Collections;
 import java.util.List;
 
-import org.microcol.gui.ImageProvider;
 import org.microcol.gui.event.StartMoveController;
 import org.microcol.gui.event.StartMoveEvent;
+import org.microcol.gui.image.ImageProvider;
 import org.microcol.model.Location;
 import org.microcol.model.Unit;
 import org.slf4j.Logger;

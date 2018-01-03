@@ -1,7 +1,7 @@
 package org.microcol.gui.gamepanel;
 
-import org.microcol.gui.ImageProvider;
 import org.microcol.gui.Point;
+import org.microcol.gui.image.ImageProvider;
 import org.microcol.gui.util.FontService;
 import org.microcol.model.Colony;
 import org.microcol.model.Location;

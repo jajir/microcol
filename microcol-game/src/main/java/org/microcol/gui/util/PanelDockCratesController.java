@@ -1,6 +1,6 @@
 package org.microcol.gui.util;
 
-import org.microcol.gui.ImageProvider;
+import org.microcol.gui.image.ImageProvider;
 import org.microcol.model.CargoSlot;
 import org.microcol.model.Unit;
 
