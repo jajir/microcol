@@ -155,8 +155,8 @@ public class MapImageGenerator {
 	public void setMap(final WorldMap map) {
 		this.map = Preconditions.checkNotNull(map);
 
-		for (int y = 1; y < map.getMaxY(); y++) {
-			for (int x = 1; x < map.getMaxX(); x++) {
+		for (int y = 1; y <= map.getMaxY(); y++) {
+			for (int x = 1; x <= map.getMaxX(); x++) {
 				final Location loc = Location.of(x, y);
 				final String code = getTileCode(loc);
 				final Image img = mapImageStore.getImage(code);

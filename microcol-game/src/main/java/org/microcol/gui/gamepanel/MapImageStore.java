@@ -1,11 +1,13 @@
 package org.microcol.gui.gamepanel;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.microcol.gui.ImageProvider;
 
 import com.google.common.base.Preconditions;
+import com.google.common.collect.ImmutableList;
 import com.google.inject.Inject;
 
 import javafx.scene.image.Image;
@@ -29,7 +31,7 @@ public class MapImageStore {
 	private final Map<String, Image> images = new HashMap<>();
 
 	@Inject
-	MapImageStore() {
+	public MapImageStore() {
 		init();
 	}
 
@@ -77,7 +79,10 @@ public class MapImageStore {
 		generateII_shape(Connector.of('0'), Connector.of('4'));
 		generateII_shape(Connector.of('b'), Connector.of('3'));
 		generateII_shape(Connector.of('b'), Connector.of('4'));
-
+	}
+	
+	public List<String> getTileNames(){
+		return ImmutableList.copyOf(images.keySet());
 	}
 
 	private void generateII_shape(final Connector start, final Connector end) {

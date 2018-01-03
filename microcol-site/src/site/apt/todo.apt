@@ -50,6 +50,12 @@ Planned releases
   	  	
   	* \u2717 Show that some production doesn't have enough sources.
 
+  * \u2717 Junit test for rotating and composing images.
+
+  * \u2717 Define tiles in one background image.
+
+  * \u2717 Generate tile shapes for different tiles connections, for example sea/grass and sea/tundra.
+
  * 0.6.0 - add some other features	
 
   * \u2717 Add unit wagon, can't fight, capture colony, can transport goods
