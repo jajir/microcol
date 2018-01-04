@@ -152,6 +152,10 @@ public class MapImageGenerator {
 	MapImageGenerator(final ImageProvider imageProvider) {
 		this.imageProvider = Preconditions.checkNotNull(imageProvider);
 	}
+	
+	private String getPrefix(){
+		return "grass-";
+	}
 
 	public void setMap(final WorldMap map) {
 		this.map = Preconditions.checkNotNull(map);
@@ -187,7 +191,7 @@ public class MapImageGenerator {
 		final TerrainType ttSouth = getTerrainTypeAt(loc.add(Location.DIRECTION_SOUTH));
 		final TerrainType ttWest = getTerrainTypeAt(loc.add(Location.DIRECTION_WEST));
 		if (ttNorth.isLand() && ttEast.isLand() && ttSouth.isLand() && ttWest.isLand()) {
-			return "well";
+			return getPrefix() + "well";
 		} else {
 			return null;
 		}
@@ -236,28 +240,28 @@ public class MapImageGenerator {
 		final TerrainType ttNortWest = getTerrainTypeAt(loc.add(Location.DIRECTION_NORTH_WEST));
 
 		if (ttNorth.isSee() && ttEast.isLand() && ttSouth.isLand() && ttWest.isLand()) {
-			String code = "u-shapeNorth-";
+			String code = getPrefix() + "u-shapeNorth-";
 			code += getNorthWestCorner_fromWest(ttNortWest);
 			code += getNorthEastCorner_fromEast(ttNorthEast);
 			return code;
 		}
 
 		if (ttNorth.isLand() && ttEast.isSee() && ttSouth.isLand() && ttWest.isLand()) {
-			String code = "u-shapeEast-";
+			String code = getPrefix() + "u-shapeEast-";
 			code += getNorthEastCorner_fromNorth(ttNorthEast);
 			code += getSouthEastCorner_fromSouth(ttSouthEast);
 			return code;
 		}
 
 		if (ttNorth.isLand() && ttEast.isLand() && ttSouth.isSee() && ttWest.isLand()) {
-			String code = "u-shapeSouth-";
+			String code = getPrefix() + "u-shapeSouth-";
 			code += getSouthEastCorner_fromEast(ttSouthEast);
 			code += getSouthWestCorner_fromWest(ttSouthWest);
 			return code;
 		}
 
 		if (ttNorth.isLand() && ttEast.isLand() && ttSouth.isLand() && ttWest.isSee()) {
-			String code = "u-shapeWest-";
+			String code = getPrefix() + "u-shapeWest-";
 			code += getSouthWestCorner_fromSouth(ttSouthWest);
 			code += getNorthWestCorner_fromNorth(ttNortWest);
 			return code;
@@ -278,28 +282,28 @@ public class MapImageGenerator {
 		final TerrainType ttNortWest = getTerrainTypeAt(loc.add(Location.DIRECTION_NORTH_WEST));
 
 		if (ttNorth.isLand() && ttEast.isLand() && ttSouth.isSee() && ttWest.isSee()) {
-			String code = "l-shapeNorthEast-";
+			String code = getPrefix() + "l-shapeNorthEast-";
 			code += getNorthWestCorner_fromNorth(ttNortWest);
 			code += getSouthEastCorner_fromEast(ttSouthEast);
 			return code;
 		}
 
 		if (ttNorth.isSee() && ttEast.isLand() && ttSouth.isLand() && ttWest.isSee()) {
-			String code = "l-shapeSouthEast-";
+			String code = getPrefix() + "l-shapeSouthEast-";
 			code += getNorthEastCorner_fromEast(ttNorthEast);
 			code += getSouthWestCorner_fromSouth(ttSouthWest);
 			return code;
 		}
 
 		if (ttNorth.isSee() && ttEast.isSee() && ttSouth.isLand() && ttWest.isLand()) {
-			String code = "l-shapeSouthWest-";
+			String code = getPrefix() + "l-shapeSouthWest-";
 			code += getSouthEastCorner_fromSouth(ttSouthEast);
 			code += getNorthWestCorner_fromWest(ttNortWest);
 			return code;
 		}
 
 		if (ttNorth.isLand() && ttEast.isSee() && ttSouth.isSee() && ttWest.isLand()) {
-			String code = "l-shapeNorthWest-";
+			String code = getPrefix() + "l-shapeNorthWest-";
 			code += getSouthWestCorner_fromWest(ttSouthWest);
 			code += getNorthEastCorner_fromNorth(ttNorthEast);
 			return code;
@@ -320,28 +324,28 @@ public class MapImageGenerator {
 		final TerrainType ttNortWest = getTerrainTypeAt(loc.add(Location.DIRECTION_NORTH_WEST));
 
 		if (ttNorth.isLand() && ttEast.isSee() && ttSouth.isSee() && ttWest.isSee()) {
-			String code = "i-shapeNorth-";
+			String code = getPrefix() + "i-shapeNorth-";
 			code += getNorthWestCorner_fromNorth(ttNortWest);
 			code += getNorthEastCorner_fromNorth(ttNorthEast);
 			return code;
 		}
 
 		if (ttNorth.isSee() && ttEast.isLand() && ttSouth.isSee() && ttWest.isSee()) {
-			String code = "i-shapeEast-";
+			String code = getPrefix() + "i-shapeEast-";
 			code += getNorthEastCorner_fromEast(ttNorthEast);
 			code += getSouthEastCorner_fromEast(ttSouthEast);
 			return code;
 		}
 
 		if (ttNorth.isSee() && ttEast.isSee() && ttSouth.isLand() && ttWest.isSee()) {
-			String code = "i-shapeSouth-";
+			String code = getPrefix() + "i-shapeSouth-";
 			code += getSouthEastCorner_fromSouth(ttSouthEast);
 			code += getSouthWestCorner_fromSouth(ttSouthWest);
 			return code;
 		}
 
 		if (ttNorth.isSee() && ttEast.isSee() && ttSouth.isSee() && ttWest.isLand()) {
-			String code = "i-shapeWest-";
+			String code = getPrefix() + "i-shapeWest-";
 			code += getSouthWestCorner_fromWest(ttSouthWest);
 			code += getNorthWestCorner_fromWest(ttNortWest);
 			return code;
@@ -362,7 +366,7 @@ public class MapImageGenerator {
 		final TerrainType ttNortWest = getTerrainTypeAt(loc.add(Location.DIRECTION_NORTH_WEST));
 
 		if (ttNorth.isLand() && ttEast.isSee() && ttSouth.isLand() && ttWest.isSee()) {
-			String code = "ii-shapeNorthSouth-";
+			String code = getPrefix() + "ii-shapeNorthSouth-";
 			// North
 			code += getNorthWestCorner_fromNorth(ttNortWest);
 			code += getNorthEastCorner_fromNorth(ttNorthEast);
@@ -373,7 +377,7 @@ public class MapImageGenerator {
 		}
 
 		if (ttNorth.isSee() && ttEast.isLand() && ttSouth.isSee() && ttWest.isLand()) {
-			String code = "ii-shapeEastWest-";
+			String code = getPrefix() + "ii-shapeEastWest-";
 			// East
 			code += getNorthEastCorner_fromEast(ttNorthEast);
 			code += getSouthEastCorner_fromEast(ttSouthEast);
