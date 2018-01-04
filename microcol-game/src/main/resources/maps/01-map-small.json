@@ -63,7 +63,7 @@
       "placeMap": {
         "location": {
           "x": 5,
-          "y": 4
+          "y": 5
         }
       },
       "cargo": {
@@ -101,7 +101,7 @@
       "placeMap": {
         "location": {
           "x": 9,
-          "y": 4
+          "y": 5
         }
       },
       "cargo": {
@@ -116,7 +116,7 @@
       "placeMap": {
         "location": {
           "x": 6,
-          "y": 3
+          "y": 4
         }
       },
       "cargo": {
@@ -131,7 +131,7 @@
       "placeMap": {
         "location": {
           "x": 5,
-          "y": 4
+          "y": 5
         }
       },
       "cargo": {
@@ -341,7 +341,7 @@
       "ownerName": "Dutch",
       "location": {
         "x": 5,
-        "y": 4
+        "y": 5
       },
       "colonyFields": [
         {
