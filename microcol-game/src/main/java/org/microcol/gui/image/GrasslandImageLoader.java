@@ -28,20 +28,20 @@ public class GrasslandImageLoader implements ImageLoader {
 
 		// L-shape
 		addCycle(imageProvider, "l-shapeSouthEast-", "l-shapeSouthWest-", "l-shapeNorthWest-", "l-shapeNorthEast-", '3', '9',
-				getImg(imageProvider, "type02"));
+				getImg(imageProvider, "type31"));
 		addCycle(imageProvider, "l-shapeSouthEast-", "l-shapeSouthWest-", "l-shapeNorthWest-", "l-shapeNorthEast-", '2', '9',
-				getImg(imageProvider, "type12"));
+				getImg(imageProvider, "type41"));
 		addCycle(imageProvider, "l-shapeSouthEast-", "l-shapeSouthWest-", "l-shapeNorthWest-", "l-shapeNorthEast-", '3', 'a',
 				getImg(imageProvider, "l-shapeSouthEast-29").getImageTranspose());
 		addCycle(imageProvider, "l-shapeSouthEast-", "l-shapeSouthWest-", "l-shapeNorthWest-", "l-shapeNorthEast-", '2', 'a',
-				getImg(imageProvider, "type22"));
+				getImg(imageProvider, "type51"));
 
 		// I-shape
-		addCycle(imageProvider, "i-shapeNorth-", "i-shapeEast-", "i-shapeSouth-", "i-shapeWest-", '0', '3', getImg(imageProvider, "type03"));
-		addCycle(imageProvider, "i-shapeNorth-", "i-shapeEast-", "i-shapeSouth-", "i-shapeWest-", '0', '4', getImg(imageProvider, "type13"));
+		addCycle(imageProvider, "i-shapeNorth-", "i-shapeEast-", "i-shapeSouth-", "i-shapeWest-", '0', '3', getImg(imageProvider, "type61"));
+		addCycle(imageProvider, "i-shapeNorth-", "i-shapeEast-", "i-shapeSouth-", "i-shapeWest-", '0', '4', getImg(imageProvider, "type71"));
 		addCycle(imageProvider, "i-shapeNorth-", "i-shapeEast-", "i-shapeSouth-", "i-shapeWest-", 'b', '3',
 				getImg(imageProvider, "i-shapeNorth-04").getImageReverseRows());
-		addCycle(imageProvider, "i-shapeNorth-", "i-shapeEast-", "i-shapeSouth-", "i-shapeWest-", 'b', '4', getImg(imageProvider, "type23"));
+		addCycle(imageProvider, "i-shapeNorth-", "i-shapeEast-", "i-shapeSouth-", "i-shapeWest-", 'b', '4', getImg(imageProvider, "type81"));
 
 		// II-shape
 		generateII_shape(imageProvider, Connector.of('0'), Connector.of('3'));

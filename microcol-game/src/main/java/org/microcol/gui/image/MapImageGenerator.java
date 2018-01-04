@@ -10,6 +10,7 @@ import org.microcol.model.TerrainType;
 import org.microcol.model.WorldMap;
 
 import com.google.common.base.Preconditions;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 
@@ -199,17 +200,25 @@ public class MapImageGenerator {
 		final TerrainType ttSouth = getTerrainTypeAt(loc.add(Location.DIRECTION_SOUTH));
 		final TerrainType ttWest = getTerrainTypeAt(loc.add(Location.DIRECTION_WEST));
 		if (ttNorth.isSee() && ttEast.isSee() && ttSouth.isSee() && ttWest.isSee()) {
-			return ImageProvider.IMG_TILE_OCEAN;
+			final TerrainType tt = getTerrainTypeAt(loc);
+			return terrainMap.get(tt);
 		} else {
 			return null;
 		}
 	}
+	
+	private Map<TerrainType, String> terrainMap = ImmutableMap.<TerrainType, String>builder()
+			.put(TerrainType.GRASSLAND, ImageProvider.IMG_TILE_GRASSLAND)
+			.put(TerrainType.OCEAN, ImageProvider.IMG_TILE_OCEAN)
+			.put(TerrainType.TUNDRA, ImageProvider.IMG_TILE_TUNDRA)
+			.put(TerrainType.ARCTIC, ImageProvider.IMG_TILE_ARCTIC)
+			.put(TerrainType.HIGH_SEA, ImageProvider.IMG_TILE_HIGH_SEA)
+			.build();
 
 	private String isItLand(final Location loc) {
 		final TerrainType tt = getTerrainTypeAt(loc);
 		if (tt.isLand()) {
-			//TODO improve image selection.
-			return ImageProvider.IMG_TILE_GRASSLAND;
+			return terrainMap.get(tt);
 		} else {
 			return null;
 		}

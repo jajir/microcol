@@ -168,10 +168,12 @@ public class PaintService {
 	 */
 	public void paintTerrainOnTile(final GraphicsContext graphics, final Point point, final Location location,
 			final Terrain terrain, final boolean isHighlighted) {
+		//terrain tile
 		graphics.drawImage(imageProvider.getTerrainImage(terrain.getTerrainType()), 0, 0,
 				GamePanelView.TILE_WIDTH_IN_PX, GamePanelView.TILE_WIDTH_IN_PX, point.getX(), point.getY(),
 				GamePanelView.TILE_WIDTH_IN_PX, GamePanelView.TILE_WIDTH_IN_PX);
 		final Image image = mapManager.getImageAt(location);
+		//prechod
 		graphics.drawImage(image, 0, 0,
 				GamePanelView.TILE_WIDTH_IN_PX, GamePanelView.TILE_WIDTH_IN_PX, point.getX(), point.getY(),
 				GamePanelView.TILE_WIDTH_IN_PX, GamePanelView.TILE_WIDTH_IN_PX);
