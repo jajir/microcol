@@ -2,7 +2,8 @@ package org.microcol.gui.gamepanel;
 
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.event.model.NewGameController;
-import org.microcol.gui.image.MapImageGenerator;
+import org.microcol.gui.image.GrassCoastMapGenerator;
+import org.microcol.gui.image.IceCoastMapGenerator;
 import org.microcol.model.Location;
 
 import com.google.common.base.Preconditions;
@@ -16,20 +17,30 @@ import javafx.scene.image.Image;
  */
 public class MapManager {
 
-	private final MapImageGenerator mapImageGenerator;
+	private final GrassCoastMapGenerator grassCoastMapGenerator;
+
+	private final IceCoastMapGenerator iceCoastMapGenerator;
 
 	@Inject
-	MapManager(final MapImageGenerator mapImageGenerator,
+	MapManager(final GrassCoastMapGenerator grassCoastMapGenerator,
+			final IceCoastMapGenerator iceCoastMapGenerator,
 			final GameModelController gameModelController,
 			final NewGameController newGameController) {
-		this.mapImageGenerator = Preconditions.checkNotNull(mapImageGenerator);
+		this.grassCoastMapGenerator = Preconditions.checkNotNull(grassCoastMapGenerator);
+		this.iceCoastMapGenerator = Preconditions.checkNotNull(iceCoastMapGenerator);
 		newGameController.addListener(event -> {
-			mapImageGenerator.setMap(gameModelController.getModel().getMap());
+			grassCoastMapGenerator.setMap(gameModelController.getModel().getMap());
+			iceCoastMapGenerator.setMap(gameModelController.getModel().getMap());
 		});
 	}
 	
 	public Image getImageAt(final Location location){
-		return mapImageGenerator.getImageAt(location);
+		Image img = grassCoastMapGenerator.getImageAt(location);
+		if (img == null) {
+			return iceCoastMapGenerator.getImageAt(location);
+		} else {
+			return img;
+		}
 	}
 	
 }

@@ -55,8 +55,9 @@ import org.microcol.gui.gamepanel.SelectedTileManager;
 import org.microcol.gui.gamepanel.SelectedUnitManager;
 import org.microcol.gui.gamepanel.TileWasSelectedController;
 import org.microcol.gui.gamepanel.UnitAttackedEventListener;
+import org.microcol.gui.image.GrassCoastMapGenerator;
+import org.microcol.gui.image.IceCoastMapGenerator;
 import org.microcol.gui.image.ImageProvider;
-import org.microcol.gui.image.MapImageGenerator;
 import org.microcol.gui.mainmenu.AboutGameEventController;
 import org.microcol.gui.mainmenu.AnimationSpeedChangeController;
 import org.microcol.gui.mainmenu.BuildColonyEventController;
@@ -98,7 +99,8 @@ public class MicroColModule extends AbstractModule {
 		bind(ModelDao.class).in(Singleton.class);
 		bind(AnimationManager.class).in(Singleton.class);
 		bind(MapManager.class).in(Singleton.class);
-		bind(MapImageGenerator.class).in(Singleton.class);
+		bind(GrassCoastMapGenerator.class).in(Singleton.class);
+		bind(IceCoastMapGenerator.class).in(Singleton.class);
 		bind(FontService.class).asEagerSingleton();
 
 		/**

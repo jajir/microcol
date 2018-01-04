@@ -3,7 +3,6 @@ package org.microcol.gui.image;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.microcol.gui.MicroColException;
 import org.microcol.model.ChainOfCommandOptionalStrategy;
 import org.microcol.model.Location;
 import org.microcol.model.TerrainType;
@@ -12,7 +11,6 @@ import org.microcol.model.WorldMap;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
-import com.google.inject.Inject;
 
 import javafx.scene.image.Image;
 
@@ -140,22 +138,21 @@ import javafx.scene.image.Image;
  * </ul>
  * 
  */
-public class MapImageGenerator {
+public abstract class AbstractCoastMapGenerator {
 
 	private final ImageProvider imageProvider;
-	
+
 	private Map<Location, Image> mapTiles = new HashMap<>();
 
 	private WorldMap map;
 
-	@Inject
-	MapImageGenerator(final ImageProvider imageProvider) {
+	protected AbstractCoastMapGenerator(final ImageProvider imageProvider) {
 		this.imageProvider = Preconditions.checkNotNull(imageProvider);
 	}
-	
-	private String getPrefix(){
-		return "grass-";
-	}
+
+	abstract String getPrefix();
+
+	abstract boolean isItCoast(final TerrainType terrainType);
 
 	public void setMap(final WorldMap map) {
 		this.map = Preconditions.checkNotNull(map);
@@ -164,8 +161,10 @@ public class MapImageGenerator {
 			for (int x = 1; x <= map.getMaxX(); x++) {
 				final Location loc = Location.of(x, y);
 				final String code = getTileCode(loc);
-				final Image img = imageProvider.getImage(code);
-				mapTiles.put(loc, img);
+				if (code != null) {
+					final Image img = imageProvider.getImage(code);
+					mapTiles.put(loc, img);
+				}
 			}
 		}
 
@@ -180,8 +179,12 @@ public class MapImageGenerator {
 		final ChainOfCommandOptionalStrategy<Location, String> terrainImageResolvers = new ChainOfCommandOptionalStrategy<>(
 				Lists.newArrayList(this::isItLand, this::isItWell, this::isItOpenSee, this::isItUShape,
 						this::isItLShape, this::isItIShape, this::isItIIShape));
-		return terrainImageResolvers.apply(location)
-				.orElseThrow(() -> new MicroColException(String.format("Unable to resolve terrain at (%s)", location)));
+		// FIXME originally it always return something
+		// return terrainImageResolvers.apply(location)
+		// .orElseThrow(() -> new MicroColException(String.format("Unable to
+		// resolve terrain at (%s)", location)));
+
+		return terrainImageResolvers.apply(location).orElse(null);
 	}
 
 	private String isItWell(final Location loc) {
@@ -190,7 +193,7 @@ public class MapImageGenerator {
 		final TerrainType ttEast = getTerrainTypeAt(loc.add(Location.DIRECTION_EAST));
 		final TerrainType ttSouth = getTerrainTypeAt(loc.add(Location.DIRECTION_SOUTH));
 		final TerrainType ttWest = getTerrainTypeAt(loc.add(Location.DIRECTION_WEST));
-		if (ttNorth.isLand() && ttEast.isLand() && ttSouth.isLand() && ttWest.isLand()) {
+		if (isItCoast(ttNorth) && isItCoast(ttEast) && isItCoast(ttSouth) && isItCoast(ttWest)) {
 			return getPrefix() + "well";
 		} else {
 			return null;
@@ -210,17 +213,16 @@ public class MapImageGenerator {
 			return null;
 		}
 	}
-	
+
 	private Map<TerrainType, String> terrainMap = ImmutableMap.<TerrainType, String>builder()
 			.put(TerrainType.GRASSLAND, ImageProvider.IMG_TILE_GRASSLAND)
-			.put(TerrainType.OCEAN, ImageProvider.IMG_TILE_OCEAN)
-			.put(TerrainType.TUNDRA, ImageProvider.IMG_TILE_TUNDRA)
+			.put(TerrainType.OCEAN, ImageProvider.IMG_TILE_OCEAN).put(TerrainType.TUNDRA, ImageProvider.IMG_TILE_TUNDRA)
 			.put(TerrainType.ARCTIC, ImageProvider.IMG_TILE_ARCTIC)
-			.put(TerrainType.HIGH_SEA, ImageProvider.IMG_TILE_HIGH_SEA)
-			.build();
+			.put(TerrainType.HIGH_SEA, ImageProvider.IMG_TILE_HIGH_SEA).build();
 
 	private String isItLand(final Location loc) {
 		final TerrainType tt = getTerrainTypeAt(loc);
+		// FIXME -is it correct?
 		if (tt.isLand()) {
 			return terrainMap.get(tt);
 		} else {
@@ -239,28 +241,28 @@ public class MapImageGenerator {
 		final TerrainType ttWest = getTerrainTypeAt(loc.add(Location.DIRECTION_WEST));
 		final TerrainType ttNortWest = getTerrainTypeAt(loc.add(Location.DIRECTION_NORTH_WEST));
 
-		if (ttNorth.isSee() && ttEast.isLand() && ttSouth.isLand() && ttWest.isLand()) {
+		if (ttNorth.isSee() && isItCoast(ttEast) && isItCoast(ttSouth) && isItCoast(ttWest)) {
 			String code = getPrefix() + "u-shapeNorth-";
 			code += getNorthWestCorner_fromWest(ttNortWest);
 			code += getNorthEastCorner_fromEast(ttNorthEast);
 			return code;
 		}
 
-		if (ttNorth.isLand() && ttEast.isSee() && ttSouth.isLand() && ttWest.isLand()) {
+		if (isItCoast(ttNorth) && ttEast.isSee() && isItCoast(ttSouth) && isItCoast(ttWest)) {
 			String code = getPrefix() + "u-shapeEast-";
 			code += getNorthEastCorner_fromNorth(ttNorthEast);
 			code += getSouthEastCorner_fromSouth(ttSouthEast);
 			return code;
 		}
 
-		if (ttNorth.isLand() && ttEast.isLand() && ttSouth.isSee() && ttWest.isLand()) {
+		if (isItCoast(ttNorth) && isItCoast(ttEast) && ttSouth.isSee() && isItCoast(ttWest)) {
 			String code = getPrefix() + "u-shapeSouth-";
 			code += getSouthEastCorner_fromEast(ttSouthEast);
 			code += getSouthWestCorner_fromWest(ttSouthWest);
 			return code;
 		}
 
-		if (ttNorth.isLand() && ttEast.isLand() && ttSouth.isLand() && ttWest.isSee()) {
+		if (isItCoast(ttNorth) && isItCoast(ttEast) && isItCoast(ttSouth) && ttWest.isSee()) {
 			String code = getPrefix() + "u-shapeWest-";
 			code += getSouthWestCorner_fromSouth(ttSouthWest);
 			code += getNorthWestCorner_fromNorth(ttNortWest);
@@ -281,28 +283,28 @@ public class MapImageGenerator {
 		final TerrainType ttWest = getTerrainTypeAt(loc.add(Location.DIRECTION_WEST));
 		final TerrainType ttNortWest = getTerrainTypeAt(loc.add(Location.DIRECTION_NORTH_WEST));
 
-		if (ttNorth.isLand() && ttEast.isLand() && ttSouth.isSee() && ttWest.isSee()) {
+		if (isItCoast(ttNorth) && isItCoast(ttEast) && ttSouth.isSee() && ttWest.isSee()) {
 			String code = getPrefix() + "l-shapeNorthEast-";
 			code += getNorthWestCorner_fromNorth(ttNortWest);
 			code += getSouthEastCorner_fromEast(ttSouthEast);
 			return code;
 		}
 
-		if (ttNorth.isSee() && ttEast.isLand() && ttSouth.isLand() && ttWest.isSee()) {
+		if (ttNorth.isSee() && isItCoast(ttEast) && isItCoast(ttSouth) && ttWest.isSee()) {
 			String code = getPrefix() + "l-shapeSouthEast-";
 			code += getNorthEastCorner_fromEast(ttNorthEast);
 			code += getSouthWestCorner_fromSouth(ttSouthWest);
 			return code;
 		}
 
-		if (ttNorth.isSee() && ttEast.isSee() && ttSouth.isLand() && ttWest.isLand()) {
+		if (ttNorth.isSee() && ttEast.isSee() && isItCoast(ttSouth) && isItCoast(ttWest)) {
 			String code = getPrefix() + "l-shapeSouthWest-";
 			code += getSouthEastCorner_fromSouth(ttSouthEast);
 			code += getNorthWestCorner_fromWest(ttNortWest);
 			return code;
 		}
 
-		if (ttNorth.isLand() && ttEast.isSee() && ttSouth.isSee() && ttWest.isLand()) {
+		if (isItCoast(ttNorth) && ttEast.isSee() && ttSouth.isSee() && isItCoast(ttWest)) {
 			String code = getPrefix() + "l-shapeNorthWest-";
 			code += getSouthWestCorner_fromWest(ttSouthWest);
 			code += getNorthEastCorner_fromNorth(ttNorthEast);
@@ -323,28 +325,28 @@ public class MapImageGenerator {
 		final TerrainType ttWest = getTerrainTypeAt(loc.add(Location.DIRECTION_WEST));
 		final TerrainType ttNortWest = getTerrainTypeAt(loc.add(Location.DIRECTION_NORTH_WEST));
 
-		if (ttNorth.isLand() && ttEast.isSee() && ttSouth.isSee() && ttWest.isSee()) {
+		if (isItCoast(ttNorth) && ttEast.isSee() && ttSouth.isSee() && ttWest.isSee()) {
 			String code = getPrefix() + "i-shapeNorth-";
 			code += getNorthWestCorner_fromNorth(ttNortWest);
 			code += getNorthEastCorner_fromNorth(ttNorthEast);
 			return code;
 		}
 
-		if (ttNorth.isSee() && ttEast.isLand() && ttSouth.isSee() && ttWest.isSee()) {
+		if (ttNorth.isSee() && isItCoast(ttEast) && ttSouth.isSee() && ttWest.isSee()) {
 			String code = getPrefix() + "i-shapeEast-";
 			code += getNorthEastCorner_fromEast(ttNorthEast);
 			code += getSouthEastCorner_fromEast(ttSouthEast);
 			return code;
 		}
 
-		if (ttNorth.isSee() && ttEast.isSee() && ttSouth.isLand() && ttWest.isSee()) {
+		if (ttNorth.isSee() && ttEast.isSee() && isItCoast(ttSouth) && ttWest.isSee()) {
 			String code = getPrefix() + "i-shapeSouth-";
 			code += getSouthEastCorner_fromSouth(ttSouthEast);
 			code += getSouthWestCorner_fromSouth(ttSouthWest);
 			return code;
 		}
 
-		if (ttNorth.isSee() && ttEast.isSee() && ttSouth.isSee() && ttWest.isLand()) {
+		if (ttNorth.isSee() && ttEast.isSee() && ttSouth.isSee() && isItCoast(ttWest)) {
 			String code = getPrefix() + "i-shapeWest-";
 			code += getSouthWestCorner_fromWest(ttSouthWest);
 			code += getNorthWestCorner_fromWest(ttNortWest);
@@ -365,7 +367,7 @@ public class MapImageGenerator {
 		final TerrainType ttWest = getTerrainTypeAt(loc.add(Location.DIRECTION_WEST));
 		final TerrainType ttNortWest = getTerrainTypeAt(loc.add(Location.DIRECTION_NORTH_WEST));
 
-		if (ttNorth.isLand() && ttEast.isSee() && ttSouth.isLand() && ttWest.isSee()) {
+		if (isItCoast(ttNorth) && ttEast.isSee() && isItCoast(ttSouth) && ttWest.isSee()) {
 			String code = getPrefix() + "ii-shapeNorthSouth-";
 			// North
 			code += getNorthWestCorner_fromNorth(ttNortWest);
@@ -376,7 +378,7 @@ public class MapImageGenerator {
 			return code;
 		}
 
-		if (ttNorth.isSee() && ttEast.isLand() && ttSouth.isSee() && ttWest.isLand()) {
+		if (ttNorth.isSee() && isItCoast(ttEast) && ttSouth.isSee() && isItCoast(ttWest)) {
 			String code = getPrefix() + "ii-shapeEastWest-";
 			// East
 			code += getNorthEastCorner_fromEast(ttNorthEast);
