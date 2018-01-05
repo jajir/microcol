@@ -21,31 +21,31 @@ public abstract class AbstractCoastImageLoader implements ImageLoader {
 	@Override
 	public void preload(final ImageProvider imageProvider) {
 		
-		imageProvider.registerImage(getTypePrefix() + "well", imageProvider.getImage("type00"));
+		imageProvider.registerImage(getTypePrefix() + "well", getImgInRow(imageProvider, "0").get());
 
 		// U-shape
-		addCycle(imageProvider, "u-shapeNorth-", "u-shapeEast-", "u-shapeSouth-", "u-shapeWest-", '0', '3', getImgInRow(imageProvider, "0"));
-		addCycle(imageProvider, "u-shapeNorth-", "u-shapeEast-", "u-shapeSouth-", "u-shapeWest-", '0', '2', getImgInRow(imageProvider, "1"));
+		addCycle(imageProvider, "u-shapeNorth-", "u-shapeEast-", "u-shapeSouth-", "u-shapeWest-", '0', '3', getImgInRow(imageProvider, "1"));
+		addCycle(imageProvider, "u-shapeNorth-", "u-shapeEast-", "u-shapeSouth-", "u-shapeWest-", '0', '2', getImgInRow(imageProvider, "2"));
 		addCycle(imageProvider, "u-shapeNorth-", "u-shapeEast-", "u-shapeSouth-", "u-shapeWest-", '1', '3',
 				getImg(imageProvider, getTypePrefix() + "u-shapeNorth-02").getImageReverseRows());
-		addCycle(imageProvider, "u-shapeNorth-", "u-shapeEast-", "u-shapeSouth-", "u-shapeWest-", '1', '2', getImgInRow(imageProvider, "2"));
+		addCycle(imageProvider, "u-shapeNorth-", "u-shapeEast-", "u-shapeSouth-", "u-shapeWest-", '1', '2', getImgInRow(imageProvider, "3"));
 
 		// L-shape
 		addCycle(imageProvider, "l-shapeSouthEast-", "l-shapeSouthWest-", "l-shapeNorthWest-", "l-shapeNorthEast-", '3', '9',
-				getImgInRow(imageProvider, "3"));
-		addCycle(imageProvider, "l-shapeSouthEast-", "l-shapeSouthWest-", "l-shapeNorthWest-", "l-shapeNorthEast-", '2', '9',
 				getImgInRow(imageProvider, "4"));
+		addCycle(imageProvider, "l-shapeSouthEast-", "l-shapeSouthWest-", "l-shapeNorthWest-", "l-shapeNorthEast-", '2', '9',
+				getImgInRow(imageProvider, "5"));
 		addCycle(imageProvider, "l-shapeSouthEast-", "l-shapeSouthWest-", "l-shapeNorthWest-", "l-shapeNorthEast-", '3', 'a',
 				getImg(imageProvider, getTypePrefix() + "l-shapeSouthEast-29").getImageTranspose());
 		addCycle(imageProvider, "l-shapeSouthEast-", "l-shapeSouthWest-", "l-shapeNorthWest-", "l-shapeNorthEast-", '2', 'a',
-				getImgInRow(imageProvider, "5"));
+				getImgInRow(imageProvider, "6"));
 
 		// I-shape
-		addCycle(imageProvider, "i-shapeNorth-", "i-shapeEast-", "i-shapeSouth-", "i-shapeWest-", '0', '3', getImgInRow(imageProvider, "6"));
-		addCycle(imageProvider, "i-shapeNorth-", "i-shapeEast-", "i-shapeSouth-", "i-shapeWest-", '0', '4', getImgInRow(imageProvider, "7"));
+		addCycle(imageProvider, "i-shapeNorth-", "i-shapeEast-", "i-shapeSouth-", "i-shapeWest-", '0', '3', getImgInRow(imageProvider, "7"));
+		addCycle(imageProvider, "i-shapeNorth-", "i-shapeEast-", "i-shapeSouth-", "i-shapeWest-", '0', '4', getImgInRow(imageProvider, "8"));
 		addCycle(imageProvider, "i-shapeNorth-", "i-shapeEast-", "i-shapeSouth-", "i-shapeWest-", 'b', '3',
 				getImg(imageProvider, getTypePrefix() + "i-shapeNorth-04").getImageReverseRows());
-		addCycle(imageProvider, "i-shapeNorth-", "i-shapeEast-", "i-shapeSouth-", "i-shapeWest-", 'b', '4', getImgInRow(imageProvider, "8"));
+		addCycle(imageProvider, "i-shapeNorth-", "i-shapeEast-", "i-shapeSouth-", "i-shapeWest-", 'b', '4', getImgInRow(imageProvider, "9"));
 
 		// II-shape
 		generateII_shape(imageProvider, Connector.of('0'), Connector.of('3'));

@@ -44,7 +44,7 @@ public class GamePanelView implements GamePanelPresenter.Display {
 
 	private final Logger logger = LoggerFactory.getLogger(GamePanelView.class);
 
-	public static final int TILE_WIDTH_IN_PX = 35;
+	public static final int TILE_WIDTH_IN_PX = 45;
 
 	private final Canvas canvas;
 
