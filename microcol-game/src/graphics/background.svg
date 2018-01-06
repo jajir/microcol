@@ -179,8 +179,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1.1300972"
-     inkscape:cx="262.50806"
-     inkscape:cy="812.3192"
+     inkscape:cx="306.77522"
+     inkscape:cy="838.89665"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="true"
@@ -2317,11 +2317,17 @@
        inkscape:connector-curvature="0"
        id="path537"
        d="m 74.083335,42.999977 c -0.54,0.76 -1.09,0.86 -2.760001,0.81 -0.55,-0.01 -0.76,0.16 -0.58,0.4 0.19,0.24 2.380001,0.7 2.980001,0.15 0.22,-0.21 0.57,-0.54 0.9,-1.05 0.56,-0.86 1.1,-2.02 1.06,-2.300001 -0.2,-1.31 -1.25,1.490001 -1.6,1.990001 z"
-       class="fil13" />
+       class="fil13"
+       inkscape:export-filename="/Users/jan/Documents/repo/github/microcol/microcol-game/src/main/resources/images/backgroud.png"
+       inkscape:export-xdpi="86.400002"
+       inkscape:export-ydpi="86.400002" />
     <g
        style="clip-rule:evenodd;fill-rule:evenodd;image-rendering:optimizeQuality;shape-rendering:geometricPrecision;text-rendering:geometricPrecision"
        id="_675303488"
-       transform="matrix(0.01715734,0,0,0.01644986,10.954275,-24.129308)">
+       transform="matrix(0.01715734,0,0,0.01644986,10.954275,-24.129308)"
+       inkscape:export-filename="/Users/jan/Documents/repo/github/microcol/microcol-game/src/main/resources/images/backgroud.png"
+       inkscape:export-xdpi="86.400002"
+       inkscape:export-ydpi="86.400002">
       <path
          style="fill:#a6d7d5"
          inkscape:connector-curvature="0"
