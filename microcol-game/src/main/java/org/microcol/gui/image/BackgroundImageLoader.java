@@ -74,8 +74,10 @@ public class BackgroundImageLoader implements ImageLoader {
 		imageProvider.registerImage(ImageProvider.IMG_TILE_OCEAN_2, imageProvider.getImage("type60"));
 		imageProvider.registerImage(ImageProvider.IMG_TILE_OCEAN_3, imageProvider.getImage("type70"));
 		imageProvider.registerImage(ImageProvider.IMG_TILE_GRASSLAND, imageProvider.getImage("type10"));
-		imageProvider.registerImage(ImageProvider.IMG_TILE_TUNDRA, imageProvider.getImage("type30"));
-		imageProvider.registerImage(ImageProvider.IMG_TILE_ARCTIC, imageProvider.getImage("type40"));
+		imageProvider.registerImage(ImageProvider.IMG_TILE_TUNDRA_1, imageProvider.getImage("type30"));
+		imageProvider.registerImage(ImageProvider.IMG_TILE_TUNDRA_2, imageProvider.getImage("type40"));
+		imageProvider.registerImage(ImageProvider.IMG_TILE_ARCTIC_1, imageProvider.getImage("type04"));
+		imageProvider.registerImage(ImageProvider.IMG_TILE_ARCTIC_2, imageProvider.getImage("type14"));
 		imageProvider.registerImage(ImageProvider.IMG_TILE_HIGH_SEA, imageProvider.getImage("type00"));
 		imageProvider.registerImage(ImageProvider.IMG_UNIT_SHIP_GALEON, imageProvider.getImage("type45"));
 		imageProvider.registerImage(ImageProvider.IMG_TILE_TOWN, imageProvider.getImage("type05"));

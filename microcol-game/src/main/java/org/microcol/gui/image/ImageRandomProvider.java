@@ -49,6 +49,16 @@ public class ImageRandomProvider {
 			return rnd % 2 == 0 ? imageProvider.getImage(ImageProvider.IMG_TILE_PRAIRIE_1)
 					: imageProvider.getImage(ImageProvider.IMG_TILE_PRAIRIE_2);
 		}
+		if (TerrainType.ARCTIC.equals(terrainType)) {
+			final Integer rnd = mapRandoms.getRandomAt(location);
+			return rnd % 2 == 0 ? imageProvider.getImage(ImageProvider.IMG_TILE_ARCTIC_2)
+					: imageProvider.getImage(ImageProvider.IMG_TILE_ARCTIC_1);
+		}
+		if (TerrainType.TUNDRA.equals(terrainType)) {
+			final Integer rnd = mapRandoms.getRandomAt(location);
+			return rnd % 7 == 0 ? imageProvider.getImage(ImageProvider.IMG_TILE_TUNDRA_2)
+					: imageProvider.getImage(ImageProvider.IMG_TILE_TUNDRA_1);
+		}
 		return null;
 	}
 
