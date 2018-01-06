@@ -25,6 +25,8 @@ public class WorldMapPo {
 	private int maxX;
 
 	private int maxY;
+	
+	private Integer seed;
 
 	public void setTerrainType(final Map<Location, TerrainType> terrainMap) {
 		tiles = generateString(loc -> {
@@ -152,6 +154,20 @@ public class WorldMapPo {
 
 	public void setTrees(String[] trees) {
 		this.trees = trees;
+	}
+
+	/**
+	 * @return the seed
+	 */
+	public Integer getSeed() {
+		return seed;
+	}
+
+	/**
+	 * @param seed the seed to set
+	 */
+	public void setSeed(Integer seed) {
+		this.seed = seed;
 	}
 
 }

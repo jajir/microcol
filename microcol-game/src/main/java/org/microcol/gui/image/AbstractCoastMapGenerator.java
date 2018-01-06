@@ -9,7 +9,6 @@ import org.microcol.model.TerrainType;
 import org.microcol.model.WorldMap;
 
 import com.google.common.base.Preconditions;
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 
 import javafx.scene.image.Image;
@@ -140,6 +139,8 @@ import javafx.scene.image.Image;
  */
 public abstract class AbstractCoastMapGenerator {
 
+	public static final String NO_IMAGE = "no-image";
+
 	private final ImageProvider imageProvider;
 
 	private Map<Location, Image> mapTiles = new HashMap<>();
@@ -161,7 +162,7 @@ public abstract class AbstractCoastMapGenerator {
 			for (int x = 1; x <= map.getMaxX(); x++) {
 				final Location loc = Location.of(x, y);
 				final String code = getTileCode(loc);
-				if (code != null) {
+				if (code != null && !NO_IMAGE.equals(code)) {
 					final Image img = imageProvider.getImage(code);
 					mapTiles.put(loc, img);
 				}
@@ -179,11 +180,10 @@ public abstract class AbstractCoastMapGenerator {
 		final ChainOfCommandOptionalStrategy<Location, String> terrainImageResolvers = new ChainOfCommandOptionalStrategy<>(
 				Lists.newArrayList(this::isItLand, this::isItWell, this::isItOpenSee, this::isItUShape,
 						this::isItLShape, this::isItIShape, this::isItIIShape));
-		// FIXME originally it always return something
-		// return terrainImageResolvers.apply(location)
-		// .orElseThrow(() -> new MicroColException(String.format("Unable to
-		// resolve terrain at (%s)", location)));
-
+		/*
+		 * Null can be returned, for example when analyzing arctic borders at
+		 * land border tile.
+		 */
 		return terrainImageResolvers.apply(location).orElse(null);
 	}
 
@@ -207,24 +207,17 @@ public abstract class AbstractCoastMapGenerator {
 		final TerrainType ttSouth = getTerrainTypeAt(loc.add(Location.DIRECTION_SOUTH));
 		final TerrainType ttWest = getTerrainTypeAt(loc.add(Location.DIRECTION_WEST));
 		if (ttNorth.isSee() && ttEast.isSee() && ttSouth.isSee() && ttWest.isSee()) {
-			final TerrainType tt = getTerrainTypeAt(loc);
-			return terrainMap.get(tt);
+			return NO_IMAGE;
 		} else {
 			return null;
 		}
 	}
 
-	private Map<TerrainType, String> terrainMap = ImmutableMap.<TerrainType, String>builder()
-			.put(TerrainType.GRASSLAND, ImageProvider.IMG_TILE_GRASSLAND)
-			.put(TerrainType.OCEAN, ImageProvider.IMG_TILE_OCEAN).put(TerrainType.TUNDRA, ImageProvider.IMG_TILE_TUNDRA)
-			.put(TerrainType.ARCTIC, ImageProvider.IMG_TILE_ARCTIC)
-			.put(TerrainType.HIGH_SEA, ImageProvider.IMG_TILE_HIGH_SEA).build();
-
 	private String isItLand(final Location loc) {
 		final TerrainType tt = getTerrainTypeAt(loc);
 		// FIXME -is it correct?
 		if (tt.isLand()) {
-			return terrainMap.get(tt);
+			return NO_IMAGE;
 		} else {
 			return null;
 		}

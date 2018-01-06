@@ -52,9 +52,13 @@ Planned releases
 
   * \u2717 Junit test for rotating and composing images.
 
-  * \u2717 Define tiles in one background image.
+  * \u2717 Define tiles in one background image. Prevent tiles interfering.
+
+  * \u2717 Create pseudo random landscape, rock, mountain, water .... Show random version of rock. Always show same version of rock in a same game. Prevent trees to change shape after cut down of some other tree. 
 
   * \u2717 Generate tile shapes for different tiles connections, for example sea/grass and sea/tundra.
+
+  * \u2717 Support hiding on not reveal map part.
 
  * 0.6.0 - add some other features	
 
@@ -95,11 +99,7 @@ Planned releases
   * \u2717 Allow to build custom store and allow to automatically sell products
 
   * TODO
-  
-[]
 
-Ideas
- 
  * 1.0.0 - should be released at the end of first year of development (Jan. 2018), first minimal playable version of game.
  
   * Natives
@@ -112,76 +112,8 @@ Ideas
 
   * languages en/cz
   
- * 0.?
-  
-  * add speed property to terrain and movable units
-  
-  * adjust path planning with terrain and unit speed
-  
-  * first manually created map containing land including basic terrains:
-  
-   * swamp
-   
-   * hill
-   
-   * mountain
-   
-   * desert
-   
-   * tundra
-   
-  * map should be stored in file
-  
-  * code formatting standard
-  
-  * on land will be two simple colonist units one owned by user second owned by AI
-  
-   * both unit will be controlled by user and AI
-
- * PoC
- 
-  * myš na hranu monitoru -> pohyb obrazovky
- 	
-  * u více monitorù ta jedna hrana nereaguje
-
-  * šipky -> pohyb obrazovky
-
-  * levé tlaèítko -> výbìr jednotky
-
-  * pravé tlaèítko -> pohyb vybrané jednotky
-  (až po spuštìní tlaèítka, tzn. lze pøerušit)
-
-  * levé tlaèítko myši na hrací plochu + posouvat -> pohyb obrazovky
-
-  * výbìr jednotky myší nehýbá s obrazovkou
-  
-  * výbìr jednotky klávesnicí vycentruje obrazovku na jednotku
-
-  * ctrl, shift nebo alt nemá žádnou funkcni
-
-  * M pøepíná do režimu pohybu (nemusí se držet pravé tlaèítko)
-
-  * minimapa - pouze klíkání levým tlaèítkem, nelze posouvat (nedostatek)
-
-  * obrazovka neskáèe (centrování jednotky je plynulé)
-
-  * koleèko zoomuje obrazovku
-
-  * obrovské šestiúhelníky
-
-  * ovládání je intuitivní a pøíjemné
-
 []
 
-Planned features
-
- * setup project infrastructure git repository, ci, publishing documentation ...
- 
- * keep documentation up to date
- 
- * in swing forms use MVP, describe it in doc
- 
-[]
 
  
     

@@ -48,7 +48,11 @@ public class ImageProvider {
 
 	public static final String IMG_SPLASH_SCREEN = "splash-screen.png";
 
-	public static final String IMG_TILE_OCEAN = "tile-ocean.png";
+	public static final String IMG_TILE_OCEAN_1 = "tile-ocean-1.png";
+
+	public static final String IMG_TILE_OCEAN_2 = "tile-ocean-2.png";
+
+	public static final String IMG_TILE_OCEAN_3 = "tile-ocean-3.png";
 
 	public static final String IMG_TILE_TUNDRA = "tile-tundra.png";
 
@@ -57,10 +61,22 @@ public class ImageProvider {
 	public static final String IMG_TILE_HIGH_SEA = "tile-high-sea.png";
 
 	public static final String IMG_TILE_GRASSLAND = "tile-grassland.png";
+	
+	public static final String IMG_TILE_HILL_1 = "tile-hill-1.png";
 
-	public static final String IMG_TILE_SHIP_GALEON = "tile-ship-galeon.png";
+	public static final String IMG_TILE_HILL_2 = "tile-hill-2.png";
+	
+	public static final String IMG_TILE_MOUNTAIN_1 = "tile-mountain-1.png";
+	
+	public static final String IMG_TILE_MOUNTAIN_2 = "tile-mountain-2.png";
+	
+	public static final String IMG_TILE_PRAIRIE_1 = "tile-prairie-1.png";
+	
+	public static final String IMG_TILE_PRAIRIE_2 = "tile-prairie-2.png";
 
-	public static final String IMG_TILE_SHIP_FRIGATE = "tile-ship-frigate.png";
+	public static final String IMG_UNIT_SHIP_GALEON = "tile-ship-galeon.png";
+
+	public static final String IMG_UNIT_SHIP_FRIGATE = "tile-ship-frigate.png";
 
 	public static final String IMG_UNIT_FREE_COLONIST = "tile-unit-free-colonist.png";
 
@@ -112,7 +128,9 @@ public class ImageProvider {
 
 	public static final String IMG_TILE_TOWN = "tile-town.png";
 
-	public static final String IMG_TREE = "tree.png";
+	public static final String IMG_TREE_1 = "tree-1.png";
+
+	public static final String IMG_TREE_2 = "tree-2.png";
 
 	public static final String IMG_TILE_FIELD = "tile-field.png";
 
@@ -122,42 +140,47 @@ public class ImageProvider {
 	
 	private final Map<TerrainType, Image> terrainMap;
 
-	private final Map<UnitType, Image> unitImageMap = ImmutableMap.<UnitType, Image>builder()
-			.put(UnitType.GALLEON, getRawImage(IMG_TILE_SHIP_GALEON))
-			.put(UnitType.FRIGATE, getRawImage(IMG_TILE_SHIP_FRIGATE))
-			.put(UnitType.COLONIST, getRawImage(IMG_UNIT_FREE_COLONIST)).build();
+	private final Map<UnitType, Image> unitImageMap;
 
-	private final Map<GoodType, Image> goodTypeImageMap = ImmutableMap.<GoodType, Image>builder()
-			.put(GoodType.CORN, getRawImage(IMG_GOOD_CORN))
-			.put(GoodType.BELL, getRawImage(IMG_GOOD_BELL))
-			.put(GoodType.HAMMERS, getRawImage(IMG_GOOD_HAMMER))
-			.put(GoodType.CROSS, getRawImage(IMG_GOOD_CROSS))
-			.put(GoodType.SUGAR, getRawImage(IMG_GOOD_SUGAR))
-			.put(GoodType.TOBACCO, getRawImage(IMG_GOOD_TOBACCO))
-			.put(GoodType.COTTON, getRawImage(IMG_GOOD_COTTON))
-			.put(GoodType.FUR, getRawImage(IMG_GOOD_FUR))
-			.put(GoodType.LUMBER, getRawImage(IMG_GOOD_LUMBER))
-			.put(GoodType.ORE, getRawImage(IMG_GOOD_ORE))
-			.put(GoodType.SILVER, getRawImage(IMG_GOOD_SILVER))
-			.put(GoodType.HORSE, getRawImage(IMG_GOOD_HORSE))
-			.put(GoodType.RUM, getRawImage(IMG_GOOD_RUM))
-			.put(GoodType.CIGARS, getRawImage(IMG_GOOD_CIGARS))
-			.put(GoodType.SILK, getRawImage(IMG_GOOD_SILK))
-			.put(GoodType.COAT, getRawImage(IMG_GOOD_COAT))
-			.put(GoodType.GOODS, getRawImage(IMG_GOOD_GOODS))
-			.put(GoodType.TOOLS, getRawImage(IMG_GOOD_TOOLS))
-			.put(GoodType.MUSKET, getRawImage(IMG_GOOD_MUSKET))
-			.build();
+	private final Map<GoodType, Image> goodTypeImageMap;
 
 	public ImageProvider() {
 		images = new HashMap<>();
 		STARTUP_IMAGE_LOADERS.forEach(loader -> loader.preload(this));
 		terrainMap = ImmutableMap.<TerrainType, Image>builder()
 				.put(TerrainType.GRASSLAND, getImage(IMG_TILE_GRASSLAND))
-				.put(TerrainType.OCEAN, getImage(IMG_TILE_OCEAN))
+				.put(TerrainType.OCEAN, getImage(IMG_TILE_OCEAN_1))
 				.put(TerrainType.TUNDRA, getImage(IMG_TILE_TUNDRA))
 				.put(TerrainType.ARCTIC, getImage(IMG_TILE_ARCTIC))
 				.put(TerrainType.HIGH_SEA, getImage(IMG_TILE_HIGH_SEA))
+				.build();
+		
+		unitImageMap = ImmutableMap.<UnitType, Image>builder()
+				.put(UnitType.GALLEON, getImage(IMG_UNIT_SHIP_GALEON))
+				.put(UnitType.FRIGATE, getImage(IMG_UNIT_SHIP_FRIGATE))
+				.put(UnitType.COLONIST, getImage(IMG_UNIT_FREE_COLONIST))
+				.build();
+		
+		goodTypeImageMap = ImmutableMap.<GoodType, Image>builder()
+				.put(GoodType.CORN, getImage(IMG_GOOD_CORN))
+				.put(GoodType.BELL, getImage(IMG_GOOD_BELL))
+				.put(GoodType.HAMMERS, getImage(IMG_GOOD_HAMMER))
+				.put(GoodType.CROSS, getImage(IMG_GOOD_CROSS))
+				.put(GoodType.SUGAR, getImage(IMG_GOOD_SUGAR))
+				.put(GoodType.TOBACCO, getImage(IMG_GOOD_TOBACCO))
+				.put(GoodType.COTTON, getImage(IMG_GOOD_COTTON))
+				.put(GoodType.FUR, getImage(IMG_GOOD_FUR))
+				.put(GoodType.LUMBER, getImage(IMG_GOOD_LUMBER))
+				.put(GoodType.ORE, getImage(IMG_GOOD_ORE))
+				.put(GoodType.SILVER, getImage(IMG_GOOD_SILVER))
+				.put(GoodType.HORSE, getImage(IMG_GOOD_HORSE))
+				.put(GoodType.RUM, getImage(IMG_GOOD_RUM))
+				.put(GoodType.CIGARS, getImage(IMG_GOOD_CIGARS))
+				.put(GoodType.SILK, getImage(IMG_GOOD_SILK))
+				.put(GoodType.COAT, getImage(IMG_GOOD_COAT))
+				.put(GoodType.GOODS, getImage(IMG_GOOD_GOODS))
+				.put(GoodType.TOOLS, getImage(IMG_GOOD_TOOLS))
+				.put(GoodType.MUSKET, getImage(IMG_GOOD_MUSKET))
 				.build();
 	}
 	

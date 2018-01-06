@@ -92,7 +92,7 @@ Change log
 
  * 0.1.0 - project setup version
   
-  * create project infrastructure
+  * setup project infrastructure git repository, ci, publishing documentation ...
   
   * create binary distribution
   

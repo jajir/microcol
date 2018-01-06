@@ -90,6 +90,12 @@
 	<entry key="terrain.ARCTIC.description">Arktická pustina</entry>
 	<entry key="terrain.HIGH_SEA.name">Daleké moře</entry>
 	<entry key="terrain.HIGH_SEA.description">Obrovské vodní masy odělující Evropu a kolonie</entry>
+	<entry key="terrain.PRAIRIE.name">Prérie</entry>
+	<entry key="terrain.PRAIRIE.description">Velké a rozlehlé planiny divokého západu.</entry>
+	<entry key="terrain.MOUNTAIN.name">Hory</entry>
+	<entry key="terrain.MOUNTAIN.description">Vysoké a nebezpečné hory</entry>
+	<entry key="terrain.HILL.name">Kopce</entry>
+	<entry key="terrain.HILL.description">Krásná velmi úrodná kopcovitá krajina krajina.</entry>
 
 	<entry key="unit.FRIGATE.name">Frigata</entry>
 	<entry key="unit.GALLEON.name">Galeona</entry>

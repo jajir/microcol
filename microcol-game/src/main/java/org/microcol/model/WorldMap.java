@@ -10,15 +10,17 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableMap;
 
 public class WorldMap {
-	
+
 	private final int maxX;
 	private final int maxY;
-	
+
 	private final ImmutableMap<Location, TerrainType> terrainMap;
-	
+
 	private final Set<Location> trees;
-	
-	public WorldMap(final ModelPo gamePo){
+
+	private final Integer seed;
+
+	public WorldMap(final ModelPo gamePo) {
 		final WorldMapPo worldMapPo = gamePo.getMap();
 		this.maxX = worldMapPo.getMaxX();
 		this.maxY = worldMapPo.getMaxY();
@@ -26,8 +28,19 @@ public class WorldMap {
 		Preconditions.checkArgument(maxX >= 1, "Max X (%s) must be positive.", maxX);
 		this.terrainMap = ImmutableMap.copyOf(worldMapPo.getTerrainMap());
 		this.trees = worldMapPo.getTreeSet();
+		this.seed = Preconditions.checkNotNull(worldMapPo.getSeed());
+		veriftThatMapIsComplete();
 	}
-	
+
+	private void veriftThatMapIsComplete() {
+		for (int x = 1; x <= getMaxX(); x++) {
+			for (int y = 1; y <= getMaxY(); y++) {
+				Terrain terrain = getTerrainAt(Location.of(x, y));
+				Preconditions.checkNotNull(terrain);
+			}
+		}
+	}
+
 	public int getMaxX() {
 		return maxX;
 	}
@@ -43,7 +56,7 @@ public class WorldMap {
 
 		return terrain != null ? terrain : TerrainType.OCEAN;
 	}
-	
+
 	/**
 	 * Provide info about trees on specific location.
 	 * 
@@ -52,13 +65,13 @@ public class WorldMap {
 	 * @return return <code>true</code> if location contain tree otherwise
 	 *         return <code>false</code>
 	 */
-	public boolean isTreeAt(final Location location){
+	public boolean isTreeAt(final Location location) {
 		Preconditions.checkArgument(isValid(location), "Location (%s) is not part of this map.", location);
-		
+
 		return trees.contains(location);
 	}
-	
-	public Terrain getTerrainAt(final Location location){
+
+	public Terrain getTerrainAt(final Location location) {
 		Preconditions.checkArgument(isValid(location), "Location (%s) is not part of this map.", location);
 		final Terrain out = new Terrain(location, getTerrainTypeAt(location));
 		out.setHasTrees(trees.contains(location));
@@ -80,9 +93,7 @@ public class WorldMap {
 
 	@Override
 	public String toString() {
-		return MoreObjects.toStringHelper(this)
-				.add("maxX", maxX)
-				.add("maxY", maxY)
+		return MoreObjects.toStringHelper(this).add("maxX", maxX).add("maxY", maxY)
 				.add("landmass", terrainMap.keySet().size()).toString();
 	}
 
@@ -91,6 +102,18 @@ public class WorldMap {
 		gamePo.getMap().setMaxY(maxY);
 		gamePo.getMap().setTerrainType(terrainMap);
 		gamePo.getMap().setTrees(trees);
+	}
+
+	/**
+	 * Seed number for pseudo random function that set game features in random
+	 * way. Numbers will look random but still two instances of map will be
+	 * same. All map location should have generated random number. This number
+	 * helps to determine which type of tree to show.
+	 * 
+	 * @return return map constant pseudo random seed number
+	 */
+	public Integer getSeed() {
+		return seed;
 	}
 
 }

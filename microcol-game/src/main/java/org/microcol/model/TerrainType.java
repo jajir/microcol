@@ -222,7 +222,7 @@ public final class TerrainType {
 	
 	public final static TerrainType MOUNTAIN = TerrainType.make()
 			.setName("MOUNTAIN")
-			.setCode("^")
+			.setCode("m")
 			.setCanHaveTree(false)
 			.setSee(false)
 			.setMoveCost(1)

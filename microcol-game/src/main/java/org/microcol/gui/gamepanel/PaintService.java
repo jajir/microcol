@@ -82,7 +82,7 @@ public class PaintService {
 		graphics.setTextAlign(TextAlignment.CENTER);
 		graphics.setTextBaseline(VPos.CENTER);
 		graphics.setFill(Color.BLACK);
-		graphics.fillText(colony.getName(), p.getX() + 20, p.getY() + 30);
+		graphics.fillText(colony.getName(), p.getX() + 20, p.getY() + 55);
 	}
 
 	/**
@@ -169,16 +169,19 @@ public class PaintService {
 	public void paintTerrainOnTile(final GraphicsContext graphics, final Point point, final Location location,
 			final Terrain terrain, final boolean isHighlighted) {
 		//terrain tile
-		graphics.drawImage(imageProvider.getTerrainImage(terrain.getTerrainType()), 0, 0,
+		final Image imageBackground = mapManager.getTerrainImage(terrain.getTerrainType(), location);
+		graphics.drawImage(imageBackground, 0, 0,
 				GamePanelView.TILE_WIDTH_IN_PX, GamePanelView.TILE_WIDTH_IN_PX, point.getX(), point.getY(),
 				GamePanelView.TILE_WIDTH_IN_PX, GamePanelView.TILE_WIDTH_IN_PX);
-		final Image image = mapManager.getImageAt(location);
-		//prechod
-		graphics.drawImage(image, 0, 0,
+		
+		//prechody
+		final Image imageCoast = mapManager.getCoatsImageAt(location);
+		graphics.drawImage(imageCoast, 0, 0,
 				GamePanelView.TILE_WIDTH_IN_PX, GamePanelView.TILE_WIDTH_IN_PX, point.getX(), point.getY(),
 				GamePanelView.TILE_WIDTH_IN_PX, GamePanelView.TILE_WIDTH_IN_PX);
+		
 		if (terrain.isHasTrees()) {
-			graphics.drawImage(imageProvider.getImage(ImageProvider.IMG_TREE), point.getX(), point.getY());
+			graphics.drawImage(mapManager.getTreeImage(location), point.getX(), point.getY());
 		}
 		if (isHighlighted) {
 			graphics.setFill(new Color(0.95, 0.75, 0.90, 0.4F));

@@ -68,12 +68,23 @@ public class BackgroundImageLoader implements ImageLoader {
 			}
 		}
 
-		imageProvider.registerImage(ImageProvider.IMG_TREE, imageProvider.getImage("type34"));
-		imageProvider.registerImage(ImageProvider.IMG_TILE_OCEAN, imageProvider.getImage("type20"));
+		imageProvider.registerImage(ImageProvider.IMG_TREE_1, imageProvider.getImage("type34"));
+		imageProvider.registerImage(ImageProvider.IMG_TREE_2, imageProvider.getImage("type44"));
+		imageProvider.registerImage(ImageProvider.IMG_TILE_OCEAN_1, imageProvider.getImage("type50"));
+		imageProvider.registerImage(ImageProvider.IMG_TILE_OCEAN_2, imageProvider.getImage("type60"));
+		imageProvider.registerImage(ImageProvider.IMG_TILE_OCEAN_3, imageProvider.getImage("type70"));
 		imageProvider.registerImage(ImageProvider.IMG_TILE_GRASSLAND, imageProvider.getImage("type10"));
 		imageProvider.registerImage(ImageProvider.IMG_TILE_TUNDRA, imageProvider.getImage("type30"));
 		imageProvider.registerImage(ImageProvider.IMG_TILE_ARCTIC, imageProvider.getImage("type40"));
-		imageProvider.registerImage(ImageProvider.IMG_TILE_HIGH_SEA, imageProvider.getImage("type50"));
+		imageProvider.registerImage(ImageProvider.IMG_TILE_HIGH_SEA, imageProvider.getImage("type00"));
+		imageProvider.registerImage(ImageProvider.IMG_UNIT_SHIP_GALEON, imageProvider.getImage("type45"));
+		imageProvider.registerImage(ImageProvider.IMG_TILE_TOWN, imageProvider.getImage("type05"));
+		imageProvider.registerImage(ImageProvider.IMG_TILE_HILL_1, imageProvider.getImage("type65"));
+		imageProvider.registerImage(ImageProvider.IMG_TILE_HILL_2, imageProvider.getImage("type75"));
+		imageProvider.registerImage(ImageProvider.IMG_TILE_MOUNTAIN_1, imageProvider.getImage("type54"));
+		imageProvider.registerImage(ImageProvider.IMG_TILE_MOUNTAIN_2, imageProvider.getImage("type64"));
+		imageProvider.registerImage(ImageProvider.IMG_TILE_PRAIRIE_1, imageProvider.getImage("type80"));
+		imageProvider.registerImage(ImageProvider.IMG_TILE_PRAIRIE_2, imageProvider.getImage("type90"));
 	}
 
 }

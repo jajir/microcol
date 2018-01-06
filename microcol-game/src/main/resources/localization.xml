@@ -91,6 +91,12 @@
 	<entry key="terrain.ARCTIC.description">Cold freezing wasteland</entry>
 	<entry key="terrain.HIGH_SEA.name">High Sea</entry>
 	<entry key="terrain.HIGH_SEA.description">Huge water mass between Europe and colonies</entry>
+	<entry key="terrain.PRAIRIE.name">Prairie</entry>
+	<entry key="terrain.PRAIRIE.description">Big plains known as prairie are fertile and rich.</entry>
+	<entry key="terrain.MOUNTAIN.name">Mountains</entry>
+	<entry key="terrain.MOUNTAIN.description">Huge and dangerous mountains</entry>
+	<entry key="terrain.HILL.name">Hill</entry>
+	<entry key="terrain.HILL.description">Nice and small hills makes landscape more pleasant </entry>
 
 	<entry key="unit.FRIGATE.name">Frigate</entry>
 	<entry key="unit.GALLEON.name">Galleon</entry>
