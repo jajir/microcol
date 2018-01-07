@@ -15,28 +15,29 @@ import org.microcol.model.store.WorldMapPo;
 
 @RunWith(Parameterized.class)
 public class WorldMapCreationTest {
-	@Parameters(name = "{index}: fileName = {0}, maxX = {1}, maxY = {2}")
+	@Parameters(name = "{index}: maxX = {0}, maxY = {1}, seed = {2}")
 	public static Collection<Object[]> data() {
 		return Arrays.asList(new Object[][] {
-			{"/maps/test-map-2islands-15x10.txt", 15, 10},
-			{"/maps/test-map-2islands-15x10.txt", 34, 29},
+			{15, 10, 128},
+			{34, 29, 256},
 		});
 	}
 
 	@Parameter(0)
-	public String fileName;
-
-	@Parameter(1)
 	public int maxX;
 
-	@Parameter(2)
+	@Parameter(1)
 	public int maxY;
+
+	@Parameter(2)
+	public Integer seed;
 
 	@Test
 	public void testCreation() {
 		WorldMapPo mapPo = new WorldMapPo();
 		mapPo.setMaxX(maxX);
 		mapPo.setMaxY(maxY);
+		mapPo.setSeed(seed);
 		mapPo.setTerrainType(new HashMap<>());
 		ModelPo gamePo = new ModelPo();
 		gamePo.setMap(mapPo);
@@ -44,5 +45,6 @@ public class WorldMapCreationTest {
 
 		Assert.assertEquals("Test of maxX failed.", maxX, map.getMaxX());
 		Assert.assertEquals("Test of maxY failed.", maxY, map.getMaxY());
+		Assert.assertEquals("Test of seed failed.", seed, map.getSeed());
 	}
 }

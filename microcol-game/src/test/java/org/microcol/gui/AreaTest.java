@@ -13,6 +13,7 @@ import org.microcol.model.WorldMap;
 
 import mockit.Expectations;
 import mockit.Mocked;
+import mockit.Verifications;
 import mockit.integration.junit4.JMockit;
 
 /**
@@ -41,11 +42,11 @@ public class AreaTest {
 	public void test_constructor() {
 		Area area = makeArea(222, 222, 800, 600, 500, 500);
 
-		assertEquals(7, area.getTopLeft().getX());
-		assertEquals(7, area.getTopLeft().getY());
+		assertEquals(5, area.getTopLeft().getX());
+		assertEquals(5, area.getTopLeft().getY());
 
-		assertEquals(31, area.getBottomRight().getX());
-		assertEquals(25, area.getBottomRight().getY());
+		assertEquals(24, area.getBottomRight().getX());
+		assertEquals(20, area.getBottomRight().getY());
 	}
 
 	@Test
@@ -55,11 +56,15 @@ public class AreaTest {
 		new Expectations() {{
 			visibleArea.getCanvasWidth();result=800;times=1;
 			visibleArea.getCanvasHeight();result=600;times=1;
-			visibleArea.scrollToPoint(Point.of(1350, 1450));result=Point.of(1351, 1451);
+			visibleArea.scrollToPoint(Point.of(1850, 1950));result=Point.of(1351, 1451);
 		}};
 		
 		Point po = area.getCenterToLocation(Location.of(50, 50));
-
+		
+		new Verifications() {{
+			visibleArea.scrollToPoint(Point.of(1850, 1950));
+		}};
+		
 		assertEquals(1351, po.getX());
 		assertEquals(1451, po.getY());
 	}

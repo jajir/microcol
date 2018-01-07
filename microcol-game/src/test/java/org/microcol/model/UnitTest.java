@@ -15,6 +15,12 @@ import mockit.Expectations;
 import mockit.Injectable;
 import mockit.Tested;
 
+/**
+ * Verify basic unit operations.
+ * <p>
+ * This test shows how to mock all unit's private final members.
+ * </p>
+ */
 public class UnitTest {
 	
 	@Tested
@@ -26,7 +32,7 @@ public class UnitTest {
 	@Injectable
 	private Model model;
 	
-	@Injectable(value="4")
+	@Injectable(value = "4")
 	private Integer id;
 	
 	@Injectable

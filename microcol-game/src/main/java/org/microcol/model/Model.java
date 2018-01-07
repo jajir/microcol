@@ -18,7 +18,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 
 public final class Model {
-	
+
 	private final ColonyNames colonyNames;
 	private final ListenerManager listenerManager;
 	private final Calendar calendar;
@@ -57,8 +57,7 @@ public final class Model {
 		});
 	}
 
-	Model(final Calendar calendar, final WorldMap map, final ModelPo modelPo, 
-			final UnitStorage unitStorage, final List<Unit> unitsInEuropePort) {
+	Model(final Calendar calendar, final WorldMap map, final ModelPo modelPo, final UnitStorage unitStorage) {
 		Preconditions.checkNotNull(modelPo);
 		listenerManager = new ListenerManager();
 
@@ -66,13 +65,13 @@ public final class Model {
 		this.map = Preconditions.checkNotNull(map);
 
 		this.playerStore = PlayerStore.makePlayers(this, modelPo);
-		
+
 		colonyNames = new ColonyNames(this);
-		
+
 		this.colonies = Lists.newArrayList();
 		modelPo.getColonies().forEach(colonyPo -> {
-			final Colony col = new Colony(this, colonyPo.getName(), playerStore.getPlayerByName(colonyPo.getOwnerName()),
-					colonyPo.getLocation(), colony -> {
+			final Colony col = new Colony(this, colonyPo.getName(),
+					playerStore.getPlayerByName(colonyPo.getOwnerName()), colonyPo.getLocation(), colony -> {
 						final List<Construction> constructions = new ArrayList<>();
 						colonyPo.getConstructions().forEach(constructionPo -> {
 							final Construction c = Construction.build(colony, constructionPo.getType());
@@ -82,43 +81,46 @@ public final class Model {
 					}, colonyPo.getColonyWarehouse());
 			colonies.add(col);
 		});
-		
+
 		this.unitStorage = Preconditions.checkNotNull(unitStorage);
 
 		gameManager = new GameManager(this);
 
 		highSea = new HighSea(this);
 		this.europe = new Europe(this);
-		unitsInEuropePort.forEach(unit -> unit.placeToEuropePort(europe.getPort()));
-		checkUnits();
+	}
+	
+	/**
+	 * For each unit owned by human on assure that visible are is really
+	 * revealed. It allows to not-define correct visible area in save files.
+	 */
+	private void assureDefaultVisibility(){
+		unitStorage.getUnits().stream().filter(unit -> unit.getOwner().isHuman() && unit.isAtPlaceLocation())
+				.forEach(unit -> map.makeVisibleMapForUnit(unit));
 	}
 
-	
+
 	public static Model make(final ModelPo modelPo) {
 		final Calendar calendar = Calendar.make(modelPo.getCalendar());
 		final WorldMap worldMap = new WorldMap(modelPo);
+		final UnitStorage unitStorage = new UnitStorage(new ArrayList<>());
+
+		Model model = new Model(calendar, worldMap, modelPo, unitStorage);
 		
-		// TODO JJ finish units loading
-		final List<Unit> units = new ArrayList<>();
-		
-		// TODO JJ finish loading of ships in Europe port
-		final List<Unit> unitsInEuropePort = new ArrayList<>();
-		
-		final UnitStorage unitStorage = new UnitStorage(units);
-		
-		Model model =  new Model(calendar, worldMap, modelPo, unitStorage, unitsInEuropePort);
-		
+		//load units
 		modelPo.getUnits().forEach(unitPo -> {
 			if (!model.tryGetUnitById(unitPo.getId()).isPresent()) {
 				model.createUnit(model, modelPo, unitPo);
 			}
 		});
 		
+		model.checkUnits();
+		model.assureDefaultVisibility();
 		return model;
 	}
-	
-	public void buildColony(final Player player, final Unit unit){
-		//TODO move method to colony store
+
+	public void buildColony(final Player player, final Unit unit) {
+		// TODO move method to colony store
 		Preconditions.checkNotNull(player);
 		Preconditions.checkNotNull(unit);
 		Preconditions.checkArgument(unit.isAtPlaceLocation(), "Unit (%s) have to be on map", unit);
@@ -137,13 +139,13 @@ public final class Model {
 		colonies.add(col);
 		col.placeUnitToProduceFood(unit);
 	}
-	
+
 	Unit createUnit(final Model model, final ModelPo modelPo, final UnitPo unitPo) {
 		final Unit out = Unit.make(model, modelPo, unitPo);
 		model.unitStorage.addUnit(out);
 		return out;
 	}
-	
+
 	/**
 	 * Create cargo ship for king and put it to high seas in direction to
 	 * colonies.
@@ -152,7 +154,7 @@ public final class Model {
 	 *            required king player
 	 * @return created unit
 	 */
-	public Unit createCargoShipForKing(final Player king){
+	public Unit createCargoShipForKing(final Player king) {
 		Preconditions.checkNotNull(king);
 		Preconditions.checkNotNull(king.isComputer(), "king have to be computer player");
 		final Unit out = new Unit(unit -> new Cargo(unit, UnitType.GALLEON.getSpeed()), this, IdManager.nextId(),
@@ -174,21 +176,26 @@ public final class Model {
 	 *            required ship that will hold cargo
 	 * @return created unit
 	 */
-	public Unit createRoyalExpeditionForceUnit(final Player king, final Unit loadUnitToShip){
+	public Unit createRoyalExpeditionForceUnit(final Player king, final Unit loadUnitToShip) {
 		Preconditions.checkNotNull(king);
 		Preconditions.checkNotNull(king.isComputer(), "king have to be computer player");
-		Preconditions.checkArgument(loadUnitToShip.getCargo().getEmptyCargoSlot().isPresent(),"Ship (%s) for cargo doesn't have any free slot for expedition force unit.",loadUnitToShip);
+		Preconditions.checkArgument(loadUnitToShip.getCargo().getEmptyCargoSlot().isPresent(),
+				"Ship (%s) for cargo doesn't have any free slot for expedition force unit.", loadUnitToShip);
 		CargoSlot cargoSlot = loadUnitToShip.getCargo().getEmptyCargoSlot().get();
 		final Unit out = new Unit(unit -> new Cargo(unit, UnitType.COLONIST.getSpeed()), this, IdManager.nextId(),
 				unit -> new PlaceCargoSlot(unit, cargoSlot), UnitType.COLONIST, king, UnitType.COLONIST.getSpeed());
 		unitStorage.addUnit(out);
 		return out;
 	}
-	
-	void addUnitToPlayer(final UnitType unitType, final Player owner){
-		unitStorage.addUnitToPlayer(unitType, owner, this);
+
+	public boolean isVisible(final Location location){
+		return map.isVisible(location);
 	}
 	
+	void addUnitToPlayer(final UnitType unitType, final Player owner) {
+		unitStorage.addUnitToPlayer(unitType, owner, this);
+	}
+
 	public boolean isGameStarted() {
 		return gameManager.isStarted();
 	}
@@ -232,8 +239,8 @@ public final class Model {
 	public Unit getUnitById(final int id) {
 		return unitStorage.getUnitById(id);
 	}
-	
-	public Optional<Unit> tryGetUnitById(final int id){
+
+	public Optional<Unit> tryGetUnitById(final int id) {
 		return unitStorage.tryGetUnitById(id);
 	}
 
@@ -260,15 +267,15 @@ public final class Model {
 		return colonies.stream().filter(colony -> colony.getOwner().equals(owner))
 				.filter(colony -> colony.getLocation().equals(location)).findFirst();
 	}
-	
-	public Optional<Unit> getNextUnitForCurrentUser(final Unit currentUnit){
+
+	public Optional<Unit> getNextUnitForCurrentUser(final Unit currentUnit) {
 		Preconditions.checkNotNull(currentUnit);
 		Preconditions.checkState(getCurrentPlayer().equals(currentUnit.getOwner()),
 				"current unit (%s) doest belongs to user that is on turn (%s)", currentUnit, getCurrentPlayer());
 		return unitStorage.getNextUnitForCurrentUser(getCurrentPlayer(), currentUnit);
 	}
 
-	public Optional<Unit> getFirstSelectableUnitAt(){
+	public Optional<Unit> getFirstSelectableUnitAt() {
 		return unitStorage.getFirstSelectableUnit(getCurrentPlayer());
 	}
 
@@ -291,7 +298,7 @@ public final class Model {
 		return unitStorage.getUnitsAt(location);
 	}
 
-	public ModelPo save(){
+	public ModelPo save() {
 		final ModelPo out = new ModelPo();
 		map.save(out);
 		unitStorage.save(out);
@@ -300,17 +307,17 @@ public final class Model {
 		out.setColonies(getSaveColonies());
 		return out;
 	}
-	
+
 	private List<PlayerPo> getSavePlayers() {
 		return playerStore.getPlayers().stream().map(player -> player.save()).collect(ImmutableList.toImmutableList());
 	}
-	
+
 	private List<ColonyPo> getSaveColonies() {
 		final List<ColonyPo> out = new ArrayList<>();
 		colonies.forEach(colony -> out.add(colony.save()));
 		return out;
 	}
-	
+
 	List<Unit> getUnits(final Player player, final boolean includeStored) {
 		return unitStorage.getUnits(player, includeStored);
 	}
@@ -333,6 +340,24 @@ public final class Model {
 
 	List<Unit> getEnemyUnitsAt(final Player player, final Location location) {
 		return unitStorage.getEnemyUnitsAt(player, location);
+	}
+
+	/**
+	 * TODO make landscape visible as units move along path.
+	 * <p>
+	 * Unit have to be on map. Path have to available for unit.
+	 * </p>
+	 * 
+	 * @param unit
+	 *            required moving unit
+	 * @param path
+	 *            required path
+	 */
+	public void moveUnit(final Unit unit, final Path path) {
+		unit.moveTo(path);
+		if (unit.getOwner().isHuman()) {
+			map.makeVisibleMapForUnit(unit);
+		}
 	}
 
 	public void startGame() {
@@ -382,7 +407,7 @@ public final class Model {
 	void fireGoldWasChanged(final Player player, final int oldValue, final int newValue) {
 		listenerManager.fireGoldWasChanged(this, player, oldValue, newValue);
 	}
-	
+
 	void fireColonyWasCaptured(final Model model, final Unit capturingUnit, final Colony capturedColony) {
 		listenerManager.fireColonyWasCaptured(model, capturingUnit, capturedColony);
 	}
@@ -403,8 +428,8 @@ public final class Model {
 	public HighSea getHighSea() {
 		return highSea;
 	}
-	
-	public Player getPlayerByName(final String playerName){
+
+	public Player getPlayerByName(final String playerName) {
 		return playerStore.getPlayerByName(playerName);
 	}
 
@@ -414,15 +439,15 @@ public final class Model {
 	PlayerStore getPlayerStore() {
 		return playerStore;
 	}
-	
-	void destroyColony(final Colony colony){
+
+	void destroyColony(final Colony colony) {
 		Preconditions.checkNotNull(colony);
 		colonies.remove(colony);
 	}
-	
-	boolean isExists(final Colony colony){
+
+	boolean isExists(final Colony colony) {
 		Preconditions.checkNotNull(colony);
 		return colonies.contains(colony);
 	}
-	
+
 }

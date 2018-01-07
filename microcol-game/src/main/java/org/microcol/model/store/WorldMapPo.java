@@ -22,6 +22,11 @@ public class WorldMapPo {
 	 */
 	private String[] trees;
 
+	/**
+	 * Hold information which parts of map are visible.
+	 */
+	private String[] visible;
+
 	private int maxX;
 
 	private int maxY;
@@ -46,6 +51,17 @@ public class WorldMapPo {
 				return "t";
 			} else {
 				return "-";
+			}
+		});
+	}
+
+	public void setVisibles(final Set<Location> visibleSet) {
+		trees = generateString(loc -> {
+			final boolean isVisible = visibleSet.contains(loc);
+			if (isVisible) {
+				return "-";
+			} else {
+				return "#";
 			}
 		});
 	}
@@ -115,6 +131,18 @@ public class WorldMapPo {
 		return out;
 	}
 
+	public Set<Location> getVisibleSet() {
+		final Set<Location> out = new HashSet<>();
+		if (visible != null) {
+			iterate(visible, (location, charCode) -> {
+				if (charCode.equals("-")) {
+					out.add(location);
+				}
+			});
+		}
+		return out;
+	}
+
 	private void iterate(final String[] rows, final BiConsumer<Location, String> consumer) {
 		for (int y = 1; y < rows.length; y++) {
 			final String row = rows[y].substring("row-0001:".length());
@@ -132,7 +160,7 @@ public class WorldMapPo {
 		return maxX;
 	}
 
-	public void setMaxX(int maxX) {
+	public void setMaxX(final int maxX) {
 		this.maxX = maxX;
 	}
 
@@ -152,7 +180,7 @@ public class WorldMapPo {
 		return trees;
 	}
 
-	public void setTrees(String[] trees) {
+	public void setTrees(final String[] trees) {
 		this.trees = trees;
 	}
 
@@ -168,6 +196,20 @@ public class WorldMapPo {
 	 */
 	public void setSeed(Integer seed) {
 		this.seed = seed;
+	}
+
+	/**
+	 * @return the visible
+	 */
+	public String[] getVisible() {
+		return visible;
+	}
+
+	/**
+	 * @param visible the visible to set
+	 */
+	public void setVisible(final String[] visible) {
+		this.visible = visible;
 	}
 
 }

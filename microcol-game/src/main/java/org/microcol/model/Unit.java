@@ -1,8 +1,10 @@
 package org.microcol.model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Random;
 import java.util.Set;
@@ -18,6 +20,12 @@ import com.google.common.collect.ImmutableList;
 
 public class Unit {
 
+	/**
+	 * Unit will see all tiles accessible by it's speed. This define how many
+	 * tiles further will unit see.
+	 */
+	private final static int VISIBILITY_INCREASE = 1;
+	
 	private final Random random = new Random();
 	private final int id;
 	private final Model model;
@@ -186,6 +194,23 @@ public class Unit {
 			attackableTargets.addAll(enemies);
 		}
 	}
+	
+	public List<Location> getVisibleLocations(){
+		Preconditions.checkState(isAtPlaceLocation(),
+				"Visible location can be determined just when unit is on map. Unit is at '%s'", place.getName());
+		int maxMoves = getType().getSpeed() + VISIBILITY_INCREASE;
+		Map<Location, Integer> movePrice = new HashMap<>();
+		movePrice.put(getLocation(), maxMoves);
+		while (maxMoves > 0) {
+			final Integer valToCheck = maxMoves;
+			List<Location> toCheck = movePrice.entrySet().stream().filter(entry -> entry.getValue() == valToCheck)
+					.map(entry -> entry.getKey()).collect(ImmutableList.toImmutableList());
+			maxMoves--;
+			final Integer valToAdd = maxMoves;
+			toCheck.forEach(location -> location.getNeighbors().forEach(loc -> movePrice.put(loc, valToAdd)));
+		}
+		return movePrice.entrySet().stream().map(entry -> entry.getKey()).collect(ImmutableList.toImmutableList());
+	}
 
 	public boolean isPossibleToDisembarkAt(final Location targetLocation, boolean inCurrentTurn) {
 		Preconditions.checkNotNull(targetLocation);
@@ -301,7 +326,7 @@ public class Unit {
 		return Optional.ofNullable(finder.find());
 	}
 
-	public void moveTo(final Path path) {
+	void moveTo(final Path path) {
 		verifyThatUnitIsAtMap();
 
 		model.checkGameRunning();

@@ -101,7 +101,7 @@ public class GameModelController implements Localized {
 
 	public void performMove(final Unit ship, final List<Location> path) {
 		logger.debug("Start move ship: " + ship);
-		new Thread(() -> ship.moveTo(Path.of(path))).start();
+		new Thread(() -> model.moveUnit(ship, Path.of(path))).start();
 	}
 
 	public void performFight(final Unit attacker, final Unit defender) {
@@ -112,7 +112,7 @@ public class GameModelController implements Localized {
 			 */
 			final Optional<List<Location>> locations = attacker.getPath(defender.getLocation(), true);
 			if (locations.isPresent() && !locations.get().isEmpty()) {
-				attacker.moveTo(Path.of(locations.get()));
+				model.moveUnit(attacker, Path.of(locations.get()));
 			}
 			attacker.attack(defender.getLocation());
 		}).start();

@@ -27,7 +27,7 @@ public class SimpleAiPlayer extends AbstractRobotPlayer {
 		final List<Location> locations = computeMoveLocation(unit);
 
 		if (!locations.isEmpty()) {
-			unit.moveTo(Path.of(locations));
+			getModel().moveUnit(unit, Path.of(locations));
 		}
 
 		simpleUnitBehavior.tryToFight(unit);

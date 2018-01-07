@@ -139,7 +139,10 @@ import javafx.scene.image.Image;
  */
 public abstract class AbstractCoastMapGenerator {
 
-	public static final String NO_IMAGE = "no-image";
+	/**
+	 * When it's returned it stop further searching for cost image and result in null image.
+	 */
+	private static final String NO_IMAGE = "no-image";
 
 	private final ImageProvider imageProvider;
 
@@ -207,6 +210,7 @@ public abstract class AbstractCoastMapGenerator {
 		final TerrainType ttSouth = getTerrainTypeAt(loc.add(Location.DIRECTION_SOUTH));
 		final TerrainType ttWest = getTerrainTypeAt(loc.add(Location.DIRECTION_WEST));
 		if (ttNorth.isSee() && ttEast.isSee() && ttSouth.isSee() && ttWest.isSee()) {
+			//skip further processing, result to null image
 			return NO_IMAGE;
 		} else {
 			return null;
@@ -215,8 +219,8 @@ public abstract class AbstractCoastMapGenerator {
 
 	private String isItLand(final Location loc) {
 		final TerrainType tt = getTerrainTypeAt(loc);
-		// FIXME -is it correct?
 		if (tt.isLand()) {
+			//skip further processing, result to null image
 			return NO_IMAGE;
 		} else {
 			return null;

@@ -59,7 +59,7 @@ public class GamePanelView implements GamePanelPresenter.Display {
 	private final VisualDebugInfo visualDebugInfo;
 
 	private final SelectedTileManager selectedTileManager;
-	
+
 	private final SelectedUnitManager selectedUnitManager;
 
 	private final AnimationManager animationManager;
@@ -87,25 +87,18 @@ public class GamePanelView implements GamePanelPresenter.Display {
 	private final ViewUtil viewUtil;
 
 	private final VisibleArea visibleArea;
-	
+
 	private final MouseOverTileManager mouseOverTileManager;
-	
+
 	private final ModeController modeController;
 
 	@Inject
 	public GamePanelView(final GameModelController gameModelController, final PathPlanning pathPlanning,
-			final ImageProvider imageProvider,
-			final SelectedTileManager selectedTileManager,
-			final SelectedUnitManager selectedUnitManager,
-			final MoveModeSupport moveModeSupport,
-			final Text text,
-			final ViewUtil viewUtil,
-			final LocalizationHelper localizationHelper,
-			final PaintService paintService,
-			final GamePreferences gamePreferences,
-			final MouseOverTileManager mouseOverTileManager,
-			final AnimationManager animationManager,
-			final ModeController modeController) {
+			final ImageProvider imageProvider, final SelectedTileManager selectedTileManager,
+			final SelectedUnitManager selectedUnitManager, final MoveModeSupport moveModeSupport, final Text text,
+			final ViewUtil viewUtil, final LocalizationHelper localizationHelper, final PaintService paintService,
+			final GamePreferences gamePreferences, final MouseOverTileManager mouseOverTileManager,
+			final AnimationManager animationManager, final ModeController modeController) {
 		this.gameModelController = Preconditions.checkNotNull(gameModelController);
 		this.pathPlanning = Preconditions.checkNotNull(pathPlanning);
 		this.imageProvider = Preconditions.checkNotNull(imageProvider);
@@ -213,8 +206,8 @@ public class GamePanelView implements GamePanelPresenter.Display {
 		paintTerrain(g, area);
 		paintGrid(g, area);
 		paintSelectedTile(g, area);
-		paintUnits(g, gameModelController.getModel(), area);
 		paintColonies(g, gameModelController.getModel(), area);
+		paintUnits(g, gameModelController.getModel(), area);
 		paintSteps(g, area);
 		paintAnimation(g, area);
 		if (gamePreferences.isDevelopment()) {
@@ -250,10 +243,14 @@ public class GamePanelView implements GamePanelPresenter.Display {
 		for (int i = area.getTopLeft().getX(); i <= area.getBottomRight().getX(); i++) {
 			for (int j = area.getTopLeft().getY(); j <= area.getBottomRight().getY(); j++) {
 				final Location location = Location.of(i, j);
-				final Point point = area.convertToPoint(location);
-				final Terrain terrain = gameModelController.getModel().getMap().getTerrainAt(location);
-				paintService.paintTerrainOnTile(graphics, point, location, terrain,
-						oneTurnMoveHighlighter.isItHighlighted(location));
+				if (gameModelController.getModel().isVisible(location)) {
+					final Point point = area.convertToPoint(location);
+					final Terrain terrain = gameModelController.getModel().getMap().getTerrainAt(location);
+					paintService.paintTerrainOnTile(graphics, point, location, terrain,
+							oneTurnMoveHighlighter.isItHighlighted(location));
+				}else{
+					//FIXME paint black tile
+				}
 			}
 		}
 	}
@@ -359,7 +356,7 @@ public class GamePanelView implements GamePanelPresenter.Display {
 	private void paintSteps(final GraphicsContext graphics, final Area area) {
 		if (modeController.isMoveMode() && mouseOverTileManager.getMouseOverTile().isPresent()) {
 			final Unit selectedUnit = selectedUnitManager.getSelectedUnit().get();
-			if(!selectedUnit.isAtPlaceLocation()){
+			if (!selectedUnit.isAtPlaceLocation()) {
 				return;
 			}
 			paintCursor(graphics, area, mouseOverTileManager.getMouseOverTile().get());

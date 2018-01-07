@@ -62,7 +62,7 @@ public class KingPlayer extends AbstractRobotPlayer {
 		if (oLoc.isPresent()) {
 			Optional<List<Location>> oPath = unit.getPath(oLoc.get(), true);
 			if (oPath.isPresent() && !oPath.get().isEmpty()) {
-				unit.moveTo(Path.of(oPath.get()));
+				getModel().moveUnit(unit, Path.of(oPath.get()));
 			}
 		}
 		simpleUnitBehavior.tryToFight(unit);
@@ -71,7 +71,7 @@ public class KingPlayer extends AbstractRobotPlayer {
 	private void tryToReachSomeContinent(final Unit ship, final List<Continent> continentsToAttack) {
 		final Optional<List<Location>> oPath = findFasterPathToContinent(ship, continentsToAttack.get(0));
 		if (oPath.isPresent()) {
-			ship.moveTo(Path.of(oPath.get()));
+			getModel().moveUnit(ship, Path.of(oPath.get()));
 		}
 	}
 

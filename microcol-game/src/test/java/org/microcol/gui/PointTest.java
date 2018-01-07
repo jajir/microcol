@@ -3,6 +3,7 @@ package org.microcol.gui;
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
+import org.microcol.gui.gamepanel.GamePanelView;
 import org.microcol.model.Location;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,7 +23,7 @@ public class PointTest {
 
 	@Test
 	public void test_toLocation_simple_case() throws Exception {
-		Point p1 = Point.of(20, 40);
+		Point p1 = Point.of(GamePanelView.TILE_WIDTH_IN_PX / 2, GamePanelView.TILE_WIDTH_IN_PX * 3 / 2);
 
 		Location l1 = p1.toLocation();
 
@@ -56,13 +57,13 @@ public class PointTest {
 
 		Location l1 = p1.toLocation();
 
-		assertEquals(29, l1.getX());
+		assertEquals(23, l1.getX());
 		assertEquals(0, l1.getY());
 	}
 
 	@Test
 	public void test_toLocation_negative_close_to_1() throws Exception {
-		Point p1 = Point.of(-40, -40);
+		Point p1 = Point.of(-55, -55);
 
 		Location l1 = p1.toLocation();
 

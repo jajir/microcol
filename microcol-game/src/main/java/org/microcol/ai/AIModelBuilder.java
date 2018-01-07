@@ -5,6 +5,7 @@ import org.microcol.model.Model;
 import org.microcol.model.ModelBuilder;
 import org.microcol.model.UnitType;
 //TODO change map names and file extension
+//FIXME it's not in use remove unused methods, replace functionality
 public class AIModelBuilder {
 	
 	private final ModelBuilder builder;

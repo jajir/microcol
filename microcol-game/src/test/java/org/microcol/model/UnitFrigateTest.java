@@ -1,11 +1,14 @@
 package org.microcol.model;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
+import java.util.List;
 import java.util.function.Function;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import com.google.common.base.Preconditions;
 
 import mockit.Expectations;
 import mockit.Injectable;
@@ -58,6 +61,33 @@ public class UnitFrigateTest {
 	public void test_placeToEuropePortPier() throws Exception {
 		unit.placeToEuropePortPier();
 	}
+	
+	@Test
+	public void test_visibleArea_visibility_1() throws Exception {
+		new Expectations() {{
+			placeMap.getLocation(); result = Location.of(30, 30);
+			unitType.getSpeed(); result = 0;
+		}};
+		
+		final List<Location> visible = unit.getVisibleLocations();
+		
+		Preconditions.checkNotNull(visible);
+		assertEquals(9, visible.size());
+	}
+	
+	@Test
+	public void test_visibleArea_visibility_2() throws Exception {
+		new Expectations() {{
+			placeMap.getLocation(); result = Location.of(30, 30);
+			unitType.getSpeed(); result = 1;
+		}};
+		
+		final List<Location> visible = unit.getVisibleLocations();
+		
+		Preconditions.checkNotNull(visible);
+		assertEquals(25, visible.size());
+	}
+	
 	
 	@Before
 	public void setup() {
