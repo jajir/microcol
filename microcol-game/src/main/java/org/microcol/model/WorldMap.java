@@ -94,7 +94,7 @@ public class WorldMap {
 		return !path.getLocations().stream().anyMatch(location -> !isValid(location));
 	}
 	
-	boolean isVisible(final Location location) {
+	public boolean isVisible(final Location location) {
 		Preconditions.checkNotNull(location);
 		isValid(location);
 		return visible.contains(location);

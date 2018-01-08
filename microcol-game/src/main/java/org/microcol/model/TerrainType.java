@@ -274,7 +274,7 @@ public final class TerrainType {
 	private final static Map<String, TerrainType> TERRAINS_BY_CODE = TERRAINS.stream()
 			.collect(ImmutableMap.toImmutableMap(TerrainType::getCode, Function.identity()));
 	
-	public final static List<TerrainType> UNIT_CAN_SAIL_AT = TERRAINS.stream().filter(terrain -> terrain.isSee())
+	public final static List<TerrainType> UNIT_CAN_SAIL_AT = TERRAINS.stream().filter(terrain -> terrain.isSea())
 			.collect(ImmutableList.toImmutableList());
 	
 	private static class TerrainTypeBuilder{
@@ -543,7 +543,7 @@ public final class TerrainType {
 		return canHaveTree;
 	}
 
-	public boolean isSee() {
+	public boolean isSea() {
 		return isSee;
 	}
 

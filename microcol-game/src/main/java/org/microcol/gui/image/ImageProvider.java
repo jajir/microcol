@@ -28,7 +28,7 @@ public class ImageProvider {
 	 * Allows to register image loaders. It's ordered list of loaders. 
 	 */
 	private final List<ImageLoader> STARTUP_IMAGE_LOADERS = Lists.newArrayList(new BackgroundImageLoader(),
-			new GrassCoastImageLoader(), new IceCoastImageLoader());
+			new GrassCoastImageLoader(), new IceCoastImageLoader(), new HiddenCoastImageLoader());
 
 	public final static String BACKGROUND_IMAGE_NAME = "backgroud.png";
 	

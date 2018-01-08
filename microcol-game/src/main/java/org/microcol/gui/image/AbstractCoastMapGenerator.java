@@ -135,6 +135,11 @@ import javafx.scene.image.Image;
  * This images could be made by combining of two I-shape images.</li>
  * 
  * </ul>
+ * <p>
+ * Coast it crossing from one environment to another one. Example is sea and
+ * green land, another example is arctic and sea. Coats is crossing from some
+ * mass to void. So the sea is void and land is mass.
+ * </p>
  * 
  */
 public abstract class AbstractCoastMapGenerator {
@@ -155,12 +160,17 @@ public abstract class AbstractCoastMapGenerator {
 	}
 
 	abstract String getPrefix();
-
-	abstract boolean isItCoast(final TerrainType terrainType);
+	
+	abstract boolean isVoid(final Location infoHolder);
+	
+	abstract boolean isMass(final Location infoHolder);
+	
+	abstract boolean skipp(final Location infoHolder);
 
 	public void setMap(final WorldMap map) {
 		this.map = Preconditions.checkNotNull(map);
-
+		mapTiles.clear();
+		
 		for (int y = 1; y <= map.getMaxY(); y++) {
 			for (int x = 1; x <= map.getMaxX(); x++) {
 				final Location loc = Location.of(x, y);
@@ -181,7 +191,7 @@ public abstract class AbstractCoastMapGenerator {
 	private String getTileCode(final Location location) {
 		Preconditions.checkArgument(map.isValid(location), "Invalid tile (%s)", location);
 		final ChainOfCommandOptionalStrategy<Location, String> terrainImageResolvers = new ChainOfCommandOptionalStrategy<>(
-				Lists.newArrayList(this::isItLand, this::isItWell, this::isItOpenSee, this::isItUShape,
+				Lists.newArrayList(this::isItMass, this::isItWell, this::isItOpenVoid, this::isItUShape,
 						this::isItLShape, this::isItIShape, this::isItIIShape));
 		/*
 		 * Null can be returned, for example when analyzing arctic borders at
@@ -192,24 +202,20 @@ public abstract class AbstractCoastMapGenerator {
 
 	private String isItWell(final Location loc) {
 		preconditionItsSea(loc);
-		final TerrainType ttNorth = getTerrainTypeAt(loc.add(Location.DIRECTION_NORTH));
-		final TerrainType ttEast = getTerrainTypeAt(loc.add(Location.DIRECTION_EAST));
-		final TerrainType ttSouth = getTerrainTypeAt(loc.add(Location.DIRECTION_SOUTH));
-		final TerrainType ttWest = getTerrainTypeAt(loc.add(Location.DIRECTION_WEST));
-		if (isItCoast(ttNorth) && isItCoast(ttEast) && isItCoast(ttSouth) && isItCoast(ttWest)) {
+		final Neighbors nei = new Neighbors(loc, this);
+		
+		if (isMass(nei.north().loc()) && isMass(nei.east().loc()) && isMass(nei.south().loc()) && isMass(nei.west().loc())) {
 			return getPrefix() + "well";
 		} else {
 			return null;
 		}
 	}
 
-	private String isItOpenSee(final Location loc) {
+	private String isItOpenVoid(final Location loc) {
 		preconditionItsSea(loc);
-		final TerrainType ttNorth = getTerrainTypeAt(loc.add(Location.DIRECTION_NORTH));
-		final TerrainType ttEast = getTerrainTypeAt(loc.add(Location.DIRECTION_EAST));
-		final TerrainType ttSouth = getTerrainTypeAt(loc.add(Location.DIRECTION_SOUTH));
-		final TerrainType ttWest = getTerrainTypeAt(loc.add(Location.DIRECTION_WEST));
-		if (ttNorth.isSee() && ttEast.isSee() && ttSouth.isSee() && ttWest.isSee()) {
+		final Neighbors nei = new Neighbors(loc, this);
+		
+		if (isVoid(nei.north().loc()) && isVoid(nei.east().loc()) && isVoid(nei.south().loc()) && isVoid(nei.west().loc())) {
 			//skip further processing, result to null image
 			return NO_IMAGE;
 		} else {
@@ -217,9 +223,8 @@ public abstract class AbstractCoastMapGenerator {
 		}
 	}
 
-	private String isItLand(final Location loc) {
-		final TerrainType tt = getTerrainTypeAt(loc);
-		if (tt.isLand()) {
+	private String isItMass(final Location loc) {
+		if (isMass(loc) || skipp(loc)) {
 			//skip further processing, result to null image
 			return NO_IMAGE;
 		} else {
@@ -229,40 +234,33 @@ public abstract class AbstractCoastMapGenerator {
 
 	private String isItUShape(final Location loc) {
 		preconditionItsSea(loc);
-		final TerrainType ttNorth = getTerrainTypeAt(loc.add(Location.DIRECTION_NORTH));
-		final TerrainType ttNorthEast = getTerrainTypeAt(loc.add(Location.DIRECTION_NORTH_EAST));
-		final TerrainType ttEast = getTerrainTypeAt(loc.add(Location.DIRECTION_EAST));
-		final TerrainType ttSouthEast = getTerrainTypeAt(loc.add(Location.DIRECTION_SOUTH_EAST));
-		final TerrainType ttSouth = getTerrainTypeAt(loc.add(Location.DIRECTION_SOUTH));
-		final TerrainType ttSouthWest = getTerrainTypeAt(loc.add(Location.DIRECTION_SOUTH_WEST));
-		final TerrainType ttWest = getTerrainTypeAt(loc.add(Location.DIRECTION_WEST));
-		final TerrainType ttNortWest = getTerrainTypeAt(loc.add(Location.DIRECTION_NORTH_WEST));
+		final Neighbors nei = new Neighbors(loc, this);
 
-		if (ttNorth.isSee() && isItCoast(ttEast) && isItCoast(ttSouth) && isItCoast(ttWest)) {
+		if (isVoid(nei.north().loc()) && isMass(nei.east().loc()) && isMass(nei.south().loc()) && isMass(nei.west().loc())) {
 			String code = getPrefix() + "u-shapeNorth-";
-			code += getNorthWestCorner_fromWest(ttNortWest);
-			code += getNorthEastCorner_fromEast(ttNorthEast);
+			code += getNorthWestCorner_fromWest(nei.northWest());
+			code += getNorthEastCorner_fromEast(nei.northEast());
 			return code;
 		}
 
-		if (isItCoast(ttNorth) && ttEast.isSee() && isItCoast(ttSouth) && isItCoast(ttWest)) {
+		if (isMass(nei.north().loc()) && isVoid(nei.east().loc()) && isMass(nei.south().loc()) && isMass(nei.west().loc())) {
 			String code = getPrefix() + "u-shapeEast-";
-			code += getNorthEastCorner_fromNorth(ttNorthEast);
-			code += getSouthEastCorner_fromSouth(ttSouthEast);
+			code += getNorthEastCorner_fromNorth(nei.northEast());
+			code += getSouthEastCorner_fromSouth(nei.southEast());
 			return code;
 		}
 
-		if (isItCoast(ttNorth) && isItCoast(ttEast) && ttSouth.isSee() && isItCoast(ttWest)) {
+		if (isMass(nei.north().loc()) && isMass(nei.east().loc()) && isVoid(nei.south().loc()) && isMass(nei.west().loc())) {
 			String code = getPrefix() + "u-shapeSouth-";
-			code += getSouthEastCorner_fromEast(ttSouthEast);
-			code += getSouthWestCorner_fromWest(ttSouthWest);
+			code += getSouthEastCorner_fromEast(nei.southEast());
+			code += getSouthWestCorner_fromWest(nei.southWest());
 			return code;
 		}
 
-		if (isItCoast(ttNorth) && isItCoast(ttEast) && isItCoast(ttSouth) && ttWest.isSee()) {
+		if (isMass(nei.north().loc()) && isMass(nei.east().loc()) && isMass(nei.south().loc()) && isVoid(nei.west().loc())) {
 			String code = getPrefix() + "u-shapeWest-";
-			code += getSouthWestCorner_fromSouth(ttSouthWest);
-			code += getNorthWestCorner_fromNorth(ttNortWest);
+			code += getSouthWestCorner_fromSouth(nei.southWest());
+			code += getNorthWestCorner_fromNorth(nei.northWest());
 			return code;
 		}
 
@@ -271,40 +269,33 @@ public abstract class AbstractCoastMapGenerator {
 
 	private String isItLShape(final Location loc) {
 		preconditionItsSea(loc);
-		final TerrainType ttNorth = getTerrainTypeAt(loc.add(Location.DIRECTION_NORTH));
-		final TerrainType ttNorthEast = getTerrainTypeAt(loc.add(Location.DIRECTION_NORTH_EAST));
-		final TerrainType ttEast = getTerrainTypeAt(loc.add(Location.DIRECTION_EAST));
-		final TerrainType ttSouthEast = getTerrainTypeAt(loc.add(Location.DIRECTION_SOUTH_EAST));
-		final TerrainType ttSouth = getTerrainTypeAt(loc.add(Location.DIRECTION_SOUTH));
-		final TerrainType ttSouthWest = getTerrainTypeAt(loc.add(Location.DIRECTION_SOUTH_WEST));
-		final TerrainType ttWest = getTerrainTypeAt(loc.add(Location.DIRECTION_WEST));
-		final TerrainType ttNortWest = getTerrainTypeAt(loc.add(Location.DIRECTION_NORTH_WEST));
-
-		if (isItCoast(ttNorth) && isItCoast(ttEast) && ttSouth.isSee() && ttWest.isSee()) {
+		final Neighbors nei = new Neighbors(loc, this);
+		
+		if (isMass(nei.north().loc()) && isMass(nei.east().loc()) && isVoid(nei.south().loc()) && isVoid(nei.west().loc())) {
 			String code = getPrefix() + "l-shapeNorthEast-";
-			code += getNorthWestCorner_fromNorth(ttNortWest);
-			code += getSouthEastCorner_fromEast(ttSouthEast);
+			code += getNorthWestCorner_fromNorth(nei.northWest());
+			code += getSouthEastCorner_fromEast(nei.southEast());
 			return code;
 		}
 
-		if (ttNorth.isSee() && isItCoast(ttEast) && isItCoast(ttSouth) && ttWest.isSee()) {
+		if (isVoid(nei.north().loc()) && isMass(nei.east().loc()) && isMass(nei.south().loc()) && isVoid(nei.west().loc())) {
 			String code = getPrefix() + "l-shapeSouthEast-";
-			code += getNorthEastCorner_fromEast(ttNorthEast);
-			code += getSouthWestCorner_fromSouth(ttSouthWest);
+			code += getNorthEastCorner_fromEast(nei.northEast());
+			code += getSouthWestCorner_fromSouth(nei.southWest());
 			return code;
 		}
 
-		if (ttNorth.isSee() && ttEast.isSee() && isItCoast(ttSouth) && isItCoast(ttWest)) {
+		if (isVoid(nei.north().loc()) && isVoid(nei.east().loc()) && isMass(nei.south().loc()) && isMass(nei.west().loc())) {
 			String code = getPrefix() + "l-shapeSouthWest-";
-			code += getSouthEastCorner_fromSouth(ttSouthEast);
-			code += getNorthWestCorner_fromWest(ttNortWest);
+			code += getSouthEastCorner_fromSouth(nei.southEast());
+			code += getNorthWestCorner_fromWest(nei.northWest());
 			return code;
 		}
 
-		if (isItCoast(ttNorth) && ttEast.isSee() && ttSouth.isSee() && isItCoast(ttWest)) {
+		if (isMass(nei.north().loc()) && isVoid(nei.east().loc()) && isVoid(nei.south().loc()) && isMass(nei.west().loc())) {
 			String code = getPrefix() + "l-shapeNorthWest-";
-			code += getSouthWestCorner_fromWest(ttSouthWest);
-			code += getNorthEastCorner_fromNorth(ttNorthEast);
+			code += getSouthWestCorner_fromWest(nei.southWest());
+			code += getNorthEastCorner_fromNorth(nei.northEast());
 			return code;
 		}
 
@@ -313,40 +304,33 @@ public abstract class AbstractCoastMapGenerator {
 
 	private String isItIShape(final Location loc) {
 		preconditionItsSea(loc);
-		final TerrainType ttNorth = getTerrainTypeAt(loc.add(Location.DIRECTION_NORTH));
-		final TerrainType ttNorthEast = getTerrainTypeAt(loc.add(Location.DIRECTION_NORTH_EAST));
-		final TerrainType ttEast = getTerrainTypeAt(loc.add(Location.DIRECTION_EAST));
-		final TerrainType ttSouthEast = getTerrainTypeAt(loc.add(Location.DIRECTION_SOUTH_EAST));
-		final TerrainType ttSouth = getTerrainTypeAt(loc.add(Location.DIRECTION_SOUTH));
-		final TerrainType ttSouthWest = getTerrainTypeAt(loc.add(Location.DIRECTION_SOUTH_WEST));
-		final TerrainType ttWest = getTerrainTypeAt(loc.add(Location.DIRECTION_WEST));
-		final TerrainType ttNortWest = getTerrainTypeAt(loc.add(Location.DIRECTION_NORTH_WEST));
+		final Neighbors nei = new Neighbors(loc, this);
 
-		if (isItCoast(ttNorth) && ttEast.isSee() && ttSouth.isSee() && ttWest.isSee()) {
+		if (isMass(nei.north().loc()) && isVoid(nei.east().loc()) && isVoid(nei.south().loc()) && isVoid(nei.west().loc())) {
 			String code = getPrefix() + "i-shapeNorth-";
-			code += getNorthWestCorner_fromNorth(ttNortWest);
-			code += getNorthEastCorner_fromNorth(ttNorthEast);
+			code += getNorthWestCorner_fromNorth(nei.northWest());
+			code += getNorthEastCorner_fromNorth(nei.northEast());
 			return code;
 		}
 
-		if (ttNorth.isSee() && isItCoast(ttEast) && ttSouth.isSee() && ttWest.isSee()) {
+		if (isVoid(nei.north().loc()) && isMass(nei.east().loc()) && isVoid(nei.south().loc()) && isVoid(nei.west().loc())) {
 			String code = getPrefix() + "i-shapeEast-";
-			code += getNorthEastCorner_fromEast(ttNorthEast);
-			code += getSouthEastCorner_fromEast(ttSouthEast);
+			code += getNorthEastCorner_fromEast(nei.northEast());
+			code += getSouthEastCorner_fromEast(nei.southEast());
 			return code;
 		}
 
-		if (ttNorth.isSee() && ttEast.isSee() && isItCoast(ttSouth) && ttWest.isSee()) {
+		if (isVoid(nei.north().loc()) && isVoid(nei.east().loc()) && isMass(nei.south().loc()) && isVoid(nei.west().loc())) {
 			String code = getPrefix() + "i-shapeSouth-";
-			code += getSouthEastCorner_fromSouth(ttSouthEast);
-			code += getSouthWestCorner_fromSouth(ttSouthWest);
+			code += getSouthEastCorner_fromSouth(nei.southEast());
+			code += getSouthWestCorner_fromSouth(nei.southWest());
 			return code;
 		}
 
-		if (ttNorth.isSee() && ttEast.isSee() && ttSouth.isSee() && isItCoast(ttWest)) {
+		if (isVoid(nei.north().loc()) && isVoid(nei.east().loc()) && isVoid(nei.south().loc()) && isMass(nei.west().loc())) {
 			String code = getPrefix() + "i-shapeWest-";
-			code += getSouthWestCorner_fromWest(ttSouthWest);
-			code += getNorthWestCorner_fromWest(ttNortWest);
+			code += getSouthWestCorner_fromWest(nei.southWest());
+			code += getNorthWestCorner_fromWest(nei.northWest());
 			return code;
 		}
 
@@ -355,34 +339,27 @@ public abstract class AbstractCoastMapGenerator {
 
 	private String isItIIShape(final Location loc) {
 		preconditionItsSea(loc);
-		final TerrainType ttNorth = getTerrainTypeAt(loc.add(Location.DIRECTION_NORTH));
-		final TerrainType ttNorthEast = getTerrainTypeAt(loc.add(Location.DIRECTION_NORTH_EAST));
-		final TerrainType ttEast = getTerrainTypeAt(loc.add(Location.DIRECTION_EAST));
-		final TerrainType ttSouthEast = getTerrainTypeAt(loc.add(Location.DIRECTION_SOUTH_EAST));
-		final TerrainType ttSouth = getTerrainTypeAt(loc.add(Location.DIRECTION_SOUTH));
-		final TerrainType ttSouthWest = getTerrainTypeAt(loc.add(Location.DIRECTION_SOUTH_WEST));
-		final TerrainType ttWest = getTerrainTypeAt(loc.add(Location.DIRECTION_WEST));
-		final TerrainType ttNortWest = getTerrainTypeAt(loc.add(Location.DIRECTION_NORTH_WEST));
+		final Neighbors nei = new Neighbors(loc, this);
 
-		if (isItCoast(ttNorth) && ttEast.isSee() && isItCoast(ttSouth) && ttWest.isSee()) {
+		if (isMass(nei.north().loc()) && isVoid(nei.east().loc()) && isMass(nei.south().loc()) && isVoid(nei.west().loc())) {
 			String code = getPrefix() + "ii-shapeNorthSouth-";
 			// North
-			code += getNorthWestCorner_fromNorth(ttNortWest);
-			code += getNorthEastCorner_fromNorth(ttNorthEast);
+			code += getNorthWestCorner_fromNorth(nei.northWest());
+			code += getNorthEastCorner_fromNorth(nei.northEast());
 			// South
-			code += getSouthEastCorner_fromSouth(ttSouthEast);
-			code += getSouthWestCorner_fromSouth(ttSouthWest);
+			code += getSouthEastCorner_fromSouth(nei.southEast());
+			code += getSouthWestCorner_fromSouth(nei.southWest());
 			return code;
 		}
 
-		if (ttNorth.isSee() && isItCoast(ttEast) && ttSouth.isSee() && isItCoast(ttWest)) {
+		if (isVoid(nei.north().loc()) && isMass(nei.east().loc()) && isVoid(nei.south().loc()) && isMass(nei.west().loc())) {
 			String code = getPrefix() + "ii-shapeEastWest-";
 			// East
-			code += getNorthEastCorner_fromEast(ttNorthEast);
-			code += getSouthEastCorner_fromEast(ttSouthEast);
+			code += getNorthEastCorner_fromEast(nei.northEast());
+			code += getSouthEastCorner_fromEast(nei.southEast());
 			// West
-			code += getSouthWestCorner_fromWest(ttSouthWest);
-			code += getNorthWestCorner_fromWest(ttNortWest);
+			code += getSouthWestCorner_fromWest(nei.southWest());
+			code += getNorthWestCorner_fromWest(nei.northWest());
 			return code;
 		}
 
@@ -390,14 +367,13 @@ public abstract class AbstractCoastMapGenerator {
 	}
 
 	private void preconditionItsSea(final Location loc) {
-		final TerrainType tt = getTerrainTypeAt(loc);
-		Preconditions.checkArgument(tt.isSee(), "Invalid location {} see is expected but it's {}", loc, tt);
+		Preconditions.checkArgument(isVoid(loc), "Invalid location '%s' it is not void", loc);
 	}
 
 	/**
 	 * When location is out of map it will be moved back to map.
 	 */
-	private TerrainType getTerrainTypeAt(final Location location) {
+	protected TerrainType getTerrainTypeAt(final Location location) {
 		Preconditions.checkNotNull(location);
 		Location shifted = location;
 		if (shifted.getX() < 1) {
@@ -419,48 +395,52 @@ public abstract class AbstractCoastMapGenerator {
 	 * NorthEast
 	 */
 
-	private String getNorthEastCorner_fromNorth(final TerrainType ttNorthEast) {
-		return ttNorthEast.isSee() ? "3" : "4";
+	private String getNorthEastCorner_fromNorth(final InfoHolder ttNorthEast) {
+		return isVoid(ttNorthEast.loc()) ? "3" : "4";
 	}
 
-	private String getNorthEastCorner_fromEast(final TerrainType ttNorthEast) {
-		return ttNorthEast.isSee() ? "3" : "2";
+	private String getNorthEastCorner_fromEast(final InfoHolder ttNorthEast) {
+		return isVoid(ttNorthEast.loc()) ? "3" : "2";
 	}
 
 	/**
 	 * SouthEast
 	 */
 
-	private String getSouthEastCorner_fromEast(final TerrainType ttSouthEast) {
-		return ttSouthEast.isSee() ? "6" : "7";
+	private String getSouthEastCorner_fromEast(final InfoHolder ttSouthEast) {
+		return isVoid(ttSouthEast.loc()) ? "6" : "7";
 	}
 
-	private String getSouthEastCorner_fromSouth(final TerrainType ttSouthEast) {
-		return ttSouthEast.isSee() ? "6" : "5";
+	private String getSouthEastCorner_fromSouth(final InfoHolder ttSouthEast) {
+		return isVoid(ttSouthEast.loc()) ? "6" : "5";
 	}
 
 	/**
 	 * SouthWest
 	 */
 
-	private String getSouthWestCorner_fromSouth(final TerrainType ttSouthWest) {
-		return ttSouthWest.isSee() ? "9" : "a";
+	private String getSouthWestCorner_fromSouth(final InfoHolder ttSouthWest) {
+		return isVoid(ttSouthWest.loc()) ? "9" : "a";
 	}
 
-	private String getSouthWestCorner_fromWest(final TerrainType ttSouthWest) {
-		return ttSouthWest.isSee() ? "9" : "8";
+	private String getSouthWestCorner_fromWest(final InfoHolder ttSouthWest) {
+		return isVoid(ttSouthWest.loc()) ? "9" : "8";
 	}
 
 	/**
 	 * NorthWest
 	 */
 
-	private String getNorthWestCorner_fromWest(final TerrainType ttNortWest) {
-		return ttNortWest.isSee() ? "0" : "1";
+	private String getNorthWestCorner_fromWest(final InfoHolder ttNortWest) {
+		return isVoid(ttNortWest.loc()) ? "0" : "1";
 	}
 
-	private String getNorthWestCorner_fromNorth(final TerrainType ttNortWest) {
-		return ttNortWest.isSee() ? "0" : "b";
+	private String getNorthWestCorner_fromNorth(final InfoHolder ttNortWest) {
+		return isVoid(ttNortWest.loc()) ? "0" : "b";
+	}
+
+	protected WorldMap getMap() {
+		return map;
 	}
 
 }

@@ -247,7 +247,7 @@ public class GamePanelView implements GamePanelPresenter.Display {
 				if (gameModelController.getModel().isVisible(location)) {
 					final Terrain terrain = gameModelController.getModel().getMap().getTerrainAt(location);
 					paintService.paintTerrainOnTile(graphics, point, location, terrain,
-							oneTurnMoveHighlighter.isItHighlighted(location));
+							oneTurnMoveHighlighter.isItHighlighted(location));					
 				} else {
 					final Image imageHidden = imageProvider.getImage(ImageProvider.IMG_TILE_HIDDEN);
 					graphics.drawImage(imageHidden, 0, 0, GamePanelView.TILE_WIDTH_IN_PX,

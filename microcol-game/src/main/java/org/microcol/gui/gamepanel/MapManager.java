@@ -3,6 +3,8 @@ package org.microcol.gui.gamepanel;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.event.model.NewGameController;
 import org.microcol.gui.image.GrassCoastMapGenerator;
+import org.microcol.gui.image.HiddenCoastImageLoader;
+import org.microcol.gui.image.HiddenCoastMapGenerator;
 import org.microcol.gui.image.IceCoastMapGenerator;
 import org.microcol.gui.image.ImageProvider;
 import org.microcol.gui.image.ImageRandomProvider;
@@ -24,16 +26,25 @@ public class MapManager {
 
 	private final IceCoastMapGenerator iceCoastMapGenerator;
 
+	private final HiddenCoastMapGenerator hiddenCoastMapGenerator;
+
 	private final ImageProvider imageProvider;
 
 	private ImageRandomProvider imageRandomProvider;
+	
+	private final GameModelController gameModelController; 
 
 	@Inject
-	MapManager(final GrassCoastMapGenerator grassCoastMapGenerator, final IceCoastMapGenerator iceCoastMapGenerator,
-			final GameModelController gameModelController, final NewGameController newGameController,
+	MapManager(final GrassCoastMapGenerator grassCoastMapGenerator,
+			final IceCoastMapGenerator iceCoastMapGenerator,
+			final HiddenCoastMapGenerator hiddenCoastMapGenerator,
+			final GameModelController gameModelController,
+			final NewGameController newGameController,
 			final ImageProvider imageProvider) {
 		this.grassCoastMapGenerator = Preconditions.checkNotNull(grassCoastMapGenerator);
 		this.iceCoastMapGenerator = Preconditions.checkNotNull(iceCoastMapGenerator);
+		this.hiddenCoastMapGenerator = Preconditions.checkNotNull(hiddenCoastMapGenerator);
+		this.gameModelController = Preconditions.checkNotNull(gameModelController);
 		this.imageProvider = Preconditions.checkNotNull(imageProvider);
 		newGameController.addListener(event -> {
 			grassCoastMapGenerator.setMap(gameModelController.getModel().getMap());
@@ -62,6 +73,11 @@ public class MapManager {
 	
 	public Image getTreeImage(final Location location) {
 		return imageRandomProvider.getTreeImage(location);
+	}
+	
+	public Image getHiddenImageCoast(final Location location){
+		hiddenCoastMapGenerator.setMap(gameModelController.getModel().getMap());
+		return hiddenCoastMapGenerator.getImageAt(location);
 	}
 
 }

@@ -25,7 +25,7 @@ public class ContinentTool {
 			for (int y = 1; y <= model.getMap().getMaxY(); y++) {
 				final Location loc = Location.of(x, y);
 				final TerrainType terrainType = map.getTerrainTypeAt(loc);
-				if (!terrainType.isSee()) {
+				if (!terrainType.isSea()) {
 					if (continents.getForLocation(loc).isPresent()) {
 						// it's already in some continent
 					} else {
@@ -49,7 +49,7 @@ public class ContinentTool {
 			final Location loc = location.add(direction);
 			if (map.isValid(loc)) {
 				final TerrainType terrainType = map.getTerrainTypeAt(loc);
-				if (!terrainType.isSee() && !continent.contains(loc)) {
+				if (!terrainType.isSea() && !continent.contains(loc)) {
 					continent.add(loc);
 					tryToAdd(loc, map, continent);
 				}

@@ -188,6 +188,12 @@ public class PaintService {
 			graphics.fillRect(point.getX(), point.getY(), GamePanelView.TILE_WIDTH_IN_PX,
 					GamePanelView.TILE_WIDTH_IN_PX);
 		}
+		final Image hiddenCoast = mapManager.getHiddenImageCoast(location);
+		if (hiddenCoast != null) {
+			graphics.drawImage(hiddenCoast, 0, 0,
+					GamePanelView.TILE_WIDTH_IN_PX, GamePanelView.TILE_WIDTH_IN_PX, point.getX(), point.getY(),
+					GamePanelView.TILE_WIDTH_IN_PX, GamePanelView.TILE_WIDTH_IN_PX);			
+		}
 	}
 	
 }
