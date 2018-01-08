@@ -190,18 +190,18 @@ public abstract class AbstractCoastMapGenerator {
 
 	private String getTileCode(final Location location) {
 		Preconditions.checkArgument(map.isValid(location), "Invalid tile (%s)", location);
-		final ChainOfCommandOptionalStrategy<Location, String> terrainImageResolvers = new ChainOfCommandOptionalStrategy<>(
+		final ChainOfCommandOptionalStrategy<Neighbors, String> terrainImageResolvers = new ChainOfCommandOptionalStrategy<>(
 				Lists.newArrayList(this::isItMass, this::isItWell, this::isItOpenVoid, this::isItUShape,
 						this::isItLShape, this::isItIShape, this::isItIIShape));
 		/*
 		 * Null can be returned, for example when analyzing arctic borders at
 		 * land border tile.
 		 */
-		return terrainImageResolvers.apply(location).orElse(null);
+		final Neighbors nei = new Neighbors(location, this);
+		return terrainImageResolvers.apply(nei).orElse(null);
 	}
 
-	private String isItWell(final Location loc) {
-		final Neighbors nei = new Neighbors(loc, this);
+	private String isItWell(final Neighbors nei) {
 		preconditionItsVoid(nei.center());
 		
 		if (isMass(nei.north()) && isMass(nei.east()) && isMass(nei.south()) && isMass(nei.west())) {
@@ -211,8 +211,7 @@ public abstract class AbstractCoastMapGenerator {
 		}
 	}
 
-	private String isItOpenVoid(final Location loc) {
-		final Neighbors nei = new Neighbors(loc, this);
+	private String isItOpenVoid(final Neighbors nei) {
 		preconditionItsVoid(nei.center());
 		
 		if (isVoid(nei.north()) && isVoid(nei.east()) && isVoid(nei.south()) && isVoid(nei.west())) {
@@ -223,9 +222,7 @@ public abstract class AbstractCoastMapGenerator {
 		}
 	}
 
-	private String isItMass(final Location loc) {
-		final Neighbors nei = new Neighbors(loc, this);
-		
+	private String isItMass(final Neighbors nei) {
 		if (isMass(nei.center()) || skipp(nei.center())) {
 			//skip further processing, result to null image
 			return NO_IMAGE;
@@ -234,8 +231,7 @@ public abstract class AbstractCoastMapGenerator {
 		}
 	}
 
-	private String isItUShape(final Location loc) {
-		final Neighbors nei = new Neighbors(loc, this);
+	private String isItUShape(final Neighbors nei) {
 		preconditionItsVoid(nei.center());
 
 		if (isVoid(nei.north()) && isMass(nei.east()) && isMass(nei.south()) && isMass(nei.west())) {
@@ -269,8 +265,7 @@ public abstract class AbstractCoastMapGenerator {
 		return null;
 	}
 
-	private String isItLShape(final Location loc) {
-		final Neighbors nei = new Neighbors(loc, this);
+	private String isItLShape(final Neighbors nei) {
 		preconditionItsVoid(nei.center());
 		
 		if (isMass(nei.north()) && isMass(nei.east()) && isVoid(nei.south()) && isVoid(nei.west())) {
@@ -304,8 +299,7 @@ public abstract class AbstractCoastMapGenerator {
 		return null;
 	}
 
-	private String isItIShape(final Location loc) {
-		final Neighbors nei = new Neighbors(loc, this);
+	private String isItIShape(final Neighbors nei) {
 		preconditionItsVoid(nei.center());
 
 		if (isMass(nei.north()) && isVoid(nei.east()) && isVoid(nei.south()) && isVoid(nei.west())) {
@@ -339,8 +333,7 @@ public abstract class AbstractCoastMapGenerator {
 		return null;
 	}
 
-	private String isItIIShape(final Location loc) {
-		final Neighbors nei = new Neighbors(loc, this);
+	private String isItIIShape(final Neighbors nei) {
 		preconditionItsVoid(nei.center());
 
 		if (isMass(nei.north()) && isVoid(nei.east()) && isMass(nei.south()) && isVoid(nei.west())) {

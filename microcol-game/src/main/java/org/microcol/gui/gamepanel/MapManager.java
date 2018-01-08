@@ -2,8 +2,8 @@ package org.microcol.gui.gamepanel;
 
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.event.model.NewGameController;
+import org.microcol.gui.event.model.UnitMovedController;
 import org.microcol.gui.image.GrassCoastMapGenerator;
-import org.microcol.gui.image.HiddenCoastImageLoader;
 import org.microcol.gui.image.HiddenCoastMapGenerator;
 import org.microcol.gui.image.IceCoastMapGenerator;
 import org.microcol.gui.image.ImageProvider;
@@ -32,24 +32,28 @@ public class MapManager {
 
 	private ImageRandomProvider imageRandomProvider;
 	
-	private final GameModelController gameModelController; 
-
 	@Inject
 	MapManager(final GrassCoastMapGenerator grassCoastMapGenerator,
 			final IceCoastMapGenerator iceCoastMapGenerator,
 			final HiddenCoastMapGenerator hiddenCoastMapGenerator,
 			final GameModelController gameModelController,
 			final NewGameController newGameController,
-			final ImageProvider imageProvider) {
+			final ImageProvider imageProvider, 
+			final UnitMovedController unitMovedController) {
 		this.grassCoastMapGenerator = Preconditions.checkNotNull(grassCoastMapGenerator);
 		this.iceCoastMapGenerator = Preconditions.checkNotNull(iceCoastMapGenerator);
 		this.hiddenCoastMapGenerator = Preconditions.checkNotNull(hiddenCoastMapGenerator);
-		this.gameModelController = Preconditions.checkNotNull(gameModelController);
 		this.imageProvider = Preconditions.checkNotNull(imageProvider);
 		newGameController.addListener(event -> {
 			grassCoastMapGenerator.setMap(gameModelController.getModel().getMap());
 			iceCoastMapGenerator.setMap(gameModelController.getModel().getMap());
+			hiddenCoastMapGenerator.setMap(gameModelController.getModel().getMap());
 			imageRandomProvider = new ImageRandomProvider(imageProvider, gameModelController.getModel().getMap());
+		});
+		unitMovedController.addListener(event -> {
+			if (event.getUnit().getOwner().isHuman()) {
+				hiddenCoastMapGenerator.setMap(gameModelController.getModel().getMap());
+			}
 		});
 	}
 
@@ -76,7 +80,6 @@ public class MapManager {
 	}
 	
 	public Image getHiddenImageCoast(final Location location){
-		hiddenCoastMapGenerator.setMap(gameModelController.getModel().getMap());
 		return hiddenCoastMapGenerator.getImageAt(location);
 	}
 
