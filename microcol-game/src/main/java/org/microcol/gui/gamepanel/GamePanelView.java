@@ -243,13 +243,16 @@ public class GamePanelView implements GamePanelPresenter.Display {
 		for (int i = area.getTopLeft().getX(); i <= area.getBottomRight().getX(); i++) {
 			for (int j = area.getTopLeft().getY(); j <= area.getBottomRight().getY(); j++) {
 				final Location location = Location.of(i, j);
+				final Point point = area.convertToPoint(location);
 				if (gameModelController.getModel().isVisible(location)) {
-					final Point point = area.convertToPoint(location);
 					final Terrain terrain = gameModelController.getModel().getMap().getTerrainAt(location);
 					paintService.paintTerrainOnTile(graphics, point, location, terrain,
 							oneTurnMoveHighlighter.isItHighlighted(location));
-				}else{
-					//FIXME paint black tile
+				} else {
+					final Image imageHidden = imageProvider.getImage(ImageProvider.IMG_TILE_HIDDEN);
+					graphics.drawImage(imageHidden, 0, 0, GamePanelView.TILE_WIDTH_IN_PX,
+							GamePanelView.TILE_WIDTH_IN_PX, point.getX(), point.getY(), GamePanelView.TILE_WIDTH_IN_PX,
+							GamePanelView.TILE_WIDTH_IN_PX);
 				}
 			}
 		}
@@ -267,10 +270,12 @@ public class GamePanelView implements GamePanelPresenter.Display {
 	 * @param game
 	 *            required {@link Game}
 	 */
-	private void paintUnits(final GraphicsContext graphics, final Model world, final Area area) {
-		final Map<Location, List<Unit>> ships = world.getUnitsAt();
+	private void paintUnits(final GraphicsContext graphics, final Model model, final Area area) {
+		final Map<Location, List<Unit>> ships = model.getUnitsAt();
 
-		final Map<Location, List<Unit>> ships2 = ships.entrySet().stream().filter(e -> area.isVisible(e.getKey()))
+		final Map<Location, List<Unit>> ships2 = ships.entrySet().stream()
+				.filter(entry -> area.isVisible(entry.getKey()))
+				.filter(entry -> model.isVisible(entry.getKey()))
 				.collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue()));
 
 		ships2.forEach((location, list) -> {
@@ -282,9 +287,10 @@ public class GamePanelView implements GamePanelPresenter.Display {
 		});
 	}
 
-	private void paintColonies(final GraphicsContext graphics, final Model world, final Area area) {
-		final Map<Location, Colony> colonies = world.getColoniesAt().entrySet().stream()
+	private void paintColonies(final GraphicsContext graphics, final Model model, final Area area) {
+		final Map<Location, Colony> colonies = model.getColoniesAt().entrySet().stream()
 				.filter(entry -> area.isVisible(entry.getKey()))
+				.filter(entry->model.isVisible(entry.getKey()))
 				.collect(Collectors.toMap(entry -> entry.getKey(), entry -> entry.getValue()));
 
 		colonies.forEach((location, colony) -> {

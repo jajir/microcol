@@ -77,6 +77,8 @@ public class ImageProvider {
 	public static final String IMG_TILE_PRAIRIE_1 = "tile-prairie-1.png";
 	
 	public static final String IMG_TILE_PRAIRIE_2 = "tile-prairie-2.png";
+	
+	public static final String IMG_TILE_HIDDEN = "tile-hidden.png";
 
 	public static final String IMG_UNIT_SHIP_GALEON = "tile-ship-galeon.png";
 

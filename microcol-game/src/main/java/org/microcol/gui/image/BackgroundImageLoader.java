@@ -17,12 +17,12 @@ public class BackgroundImageLoader implements ImageLoader {
 	/**
 	 * How many tiles will be loaded in each row.
 	 */
-	private final static int TILE_WIDTH_COUNT = 10;
+	private final static int TILE_WIDTH_COUNT = 12;
 
 	/**
 	 * How many tiles will be loaded in each column.
 	 */
-	private final static int TILE_HEIGHT_COUNT = 6;
+	private final static int TILE_HEIGHT_COUNT = 8;
 
 	/**
 	 * Tiles in background image are separated with strip. This strips prevent
@@ -87,6 +87,7 @@ public class BackgroundImageLoader implements ImageLoader {
 		imageProvider.registerImage(ImageProvider.IMG_TILE_MOUNTAIN_2, imageProvider.getImage("type64"));
 		imageProvider.registerImage(ImageProvider.IMG_TILE_PRAIRIE_1, imageProvider.getImage("type80"));
 		imageProvider.registerImage(ImageProvider.IMG_TILE_PRAIRIE_2, imageProvider.getImage("type90"));
+		imageProvider.registerImage(ImageProvider.IMG_TILE_HIDDEN, imageProvider.getImage("type103"));
 	}
 
 }

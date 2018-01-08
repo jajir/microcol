@@ -170,6 +170,46 @@
          in2="BackgroundImage"
          id="feBlend1955-64-0" />
     </filter>
+    <filter
+       inkscape:collect="always"
+       style="color-interpolation-filters:sRGB"
+       id="filter1953-05-9">
+      <feBlend
+         inkscape:collect="always"
+         mode="screen"
+         in2="BackgroundImage"
+         id="feBlend1955-23-3" />
+    </filter>
+    <filter
+       inkscape:collect="always"
+       style="color-interpolation-filters:sRGB"
+       id="filter1953-05-9-2">
+      <feBlend
+         inkscape:collect="always"
+         mode="screen"
+         in2="BackgroundImage"
+         id="feBlend1955-23-3-4" />
+    </filter>
+    <filter
+       inkscape:collect="always"
+       style="color-interpolation-filters:sRGB"
+       id="filter1953-6-9">
+      <feBlend
+         inkscape:collect="always"
+         mode="screen"
+         in2="BackgroundImage"
+         id="feBlend1955-1-0" />
+    </filter>
+    <filter
+       inkscape:collect="always"
+       style="color-interpolation-filters:sRGB"
+       id="filter1953-03-2">
+      <feBlend
+         inkscape:collect="always"
+         mode="screen"
+         in2="BackgroundImage"
+         id="feBlend1955-11-7" />
+    </filter>
   </defs>
   <sodipodi:namedview
      id="base"
@@ -179,15 +219,15 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1.1300972"
-     inkscape:cx="306.77522"
-     inkscape:cy="838.89665"
+     inkscape:cx="353.6649"
+     inkscape:cy="807.16676"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="true"
      units="px"
      inkscape:window-width="1600"
      inkscape:window-height="1005"
-     inkscape:window-x="166"
+     inkscape:window-x="75"
      inkscape:window-y="0"
      inkscape:window-maximized="0"
      inkscape:pagecheckerboard="true"
@@ -386,6 +426,46 @@
        orientation="0,1"
        id="guide3103"
        inkscape:locked="false" />
+    <sodipodi:guide
+       position="171.97917,257.96876"
+       orientation="1,0"
+       id="guide1227"
+       inkscape:locked="false" />
+    <sodipodi:guide
+       position="174.625,255.32293"
+       orientation="1,0"
+       id="guide1229"
+       inkscape:locked="false" />
+    <sodipodi:guide
+       position="187.85417,254.00001"
+       orientation="1,0"
+       id="guide1231"
+       inkscape:locked="false" />
+    <sodipodi:guide
+       position="190.5,250.03126"
+       orientation="1,0"
+       id="guide1233"
+       inkscape:locked="false" />
+    <sodipodi:guide
+       position="18.520834,156.10417"
+       orientation="0,1"
+       id="guide1235"
+       inkscape:locked="false" />
+    <sodipodi:guide
+       position="5.2916667,153.45834"
+       orientation="0,1"
+       id="guide1237"
+       inkscape:locked="false" />
+    <sodipodi:guide
+       position="6.6145834,140.22917"
+       orientation="0,1"
+       id="guide1239"
+       inkscape:locked="false" />
+    <sodipodi:guide
+       position="2.6458334,137.58334"
+       orientation="0,1"
+       id="guide1241"
+       inkscape:locked="false" />
   </sodipodi:namedview>
   <metadata
      id="metadata8409">
@@ -395,7 +475,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -695,7 +775,7 @@
       <polygon
          style="fill:#fefefe"
          id="polygon973"
-         points="6210,3742 6246,3742 6265,3751 6292,3736 6241,3683 6179,3756 "
+         points="6241,3683 6179,3756 6210,3742 6246,3742 6265,3751 6292,3736 "
          class="fil5" />
     </g>
     <g
@@ -834,8 +914,8 @@
        id="rect8395-7"
        width="15.874999"
        height="15.875006"
-       x="142.875"
-       y="-127.66666"
+       x="174.625"
+       y="-159.41664"
        transform="scale(1,-1)"
        inkscape:export-filename="/Users/jan/Documents/repo/github/microcol/microcol-game/src/main/resources/images/backgroud.png"
        inkscape:export-xdpi="86.400002"
@@ -879,7 +959,7 @@
     </g>
     <g
        transform="matrix(0.01177234,0,0,0.01146291,-70.158732,34.982883)"
-       style="clip-rule:evenodd;fill:#dbd9ce;fill-opacity:1;fill-rule:evenodd;image-rendering:optimizeQuality;shape-rendering:geometricPrecision;text-rendering:geometricPrecision;stroke-width:1014065140711107559294177231503;stroke-miterlimit:4;stroke-dasharray:none"
+       style="clip-rule:evenodd;fill:#dbd9ce;fill-opacity:1;fill-rule:evenodd;stroke-width:1014065111380045171181161021440;stroke-miterlimit:4;stroke-dasharray:none;image-rendering:optimizeQuality;shape-rendering:geometricPrecision;text-rendering:geometricPrecision"
        id="g6292"
        inkscape:export-filename="/Users/jan/Documents/repo/github/microcol/microcol-game/src/main/resources/images/backgroud.png"
        inkscape:export-xdpi="86.400002"
@@ -889,13 +969,13 @@
          d="m 6107,6211 c 0,0 148,-9 207,-77 60,-69 133,-117 212,-142 79,-24 146,-8 192,16 46,24 121,134 156,154 36,20 97,77 97,77 0,0 -50,36 -90,27 -40,-9 -139,-82 -165,-108 -27,-27 -102,-95 -163,-102 -62,-6 -137,47 -181,89 -44,41 -113,81 -146,83 -33,3 -88,5 -119,-17 z"
          id="path994"
          inkscape:connector-curvature="0"
-         style="fill:#dbd9ce;fill-opacity:1;stroke-width:1014065140711107559294177231503;stroke-miterlimit:4;stroke-dasharray:none" />
+         style="fill:#dbd9ce;fill-opacity:1;stroke-width:1014065111380045171181161021440;stroke-miterlimit:4;stroke-dasharray:none" />
       <path
          class="fil3"
          d="m 6072,5920 c 0,0 156,-5 234,-66 77,-62 105,-104 158,-106 53,-2 113,-7 205,97 93,103 232,53 232,53 0,0 -84,-18 -121,-33 -38,-16 -126,-122 -190,-142 -64,-19 -146,-33 -218,27 -73,59 -82,79 -126,97 -44,18 -174,73 -174,73 z"
          id="path996"
          inkscape:connector-curvature="0"
-         style="fill:#dbd9ce;fill-opacity:1;stroke-width:1014065140711107559294177231503;stroke-miterlimit:4;stroke-dasharray:none" />
+         style="fill:#dbd9ce;fill-opacity:1;stroke-width:1014065111380045171181161021440;stroke-miterlimit:4;stroke-dasharray:none" />
     </g>
     <g
        id="g1385"
@@ -1233,12 +1313,12 @@
       <polygon
          style="fill:#fefefe"
          id="polygon512"
-         points="7393,5137 7126,5247 7126,5433 7658,5433 7658,5247 "
+         points="7658,5247 7393,5137 7126,5247 7126,5433 7658,5433 "
          class="fil5" />
       <polygon
          style="fill:#fefefe"
          id="polygon514"
-         points="7796,4868 7658,4966 7658,5155 7933,5155 7933,4966 "
+         points="7933,4966 7796,4868 7658,4966 7658,5155 7933,5155 "
          class="fil5" />
       <polygon
          style="fill:#c88f5f"
@@ -1626,7 +1706,7 @@
        inkscape:export-ydpi="86.400002">
       <polygon
          class="fil4"
-         points="6374,4892 6499,4904 6569,4836 6497,4745 6454,4610 6377,4719 6310,4810 6277,4661 6242,4614 6148,4758 6088,4858 6168,4898 6239,4889 6312,4852 "
+         points="6454,4610 6377,4719 6310,4810 6277,4661 6242,4614 6148,4758 6088,4858 6168,4898 6239,4889 6312,4852 6374,4892 6499,4904 6569,4836 6497,4745 "
          id="polygon139"
          style="fill:#d9dada" />
       <path
@@ -1643,17 +1723,17 @@
          style="fill:#fefefe" />
       <polygon
          class="fil5"
-         points="6436,5215 6336,5049 6259,4954 6194,5065 6150,5193 6253,5143 6318,5163 6401,5216 "
+         points="6150,5193 6253,5143 6318,5163 6401,5216 6436,5215 6336,5049 6259,4954 6194,5065 "
          id="polygon145"
          style="fill:#fefefe" />
       <polygon
          class="fil5"
-         points="6251,4661 6239,4698 6177,4713 6200,4668 6242,4614 6277,4661 "
+         points="6242,4614 6277,4661 6251,4661 6239,4698 6177,4713 6200,4668 "
          id="polygon147"
          style="fill:#fefefe" />
       <polygon
          class="fil5"
-         points="6388,4704 6475,4674 6454,4610 "
+         points="6475,4674 6454,4610 6388,4704 "
          id="polygon149"
          style="fill:#fefefe" />
     </g>
@@ -1727,7 +1807,7 @@
       <polygon
          style="fill:#fefefe"
          id="polygon844"
-         points="6081,1788 6016,1947 6294,2061 "
+         points="6016,1947 6294,2061 6081,1788 "
          class="fil5" />
       <path
          style="fill:#c88f5f"
@@ -2278,7 +2358,7 @@
        inkscape:export-ydpi="86.400002" />
     <g
        transform="matrix(0.01320842,0,0,0.01186124,-50.12201,31.833473)"
-       style="clip-rule:evenodd;display:inline;fill-rule:evenodd;image-rendering:optimizeQuality;shape-rendering:geometricPrecision;text-rendering:geometricPrecision;fill:#dbd9ce;fill-opacity:1"
+       style="clip-rule:evenodd;display:inline;fill:#dbd9ce;fill-opacity:1;fill-rule:evenodd;image-rendering:optimizeQuality;shape-rendering:geometricPrecision;text-rendering:geometricPrecision"
        id="g2574-3"
        inkscape:export-filename="/Users/jan/Documents/repo/github/microcol/microcol-game/src/main/resources/images/backgroud.png"
        inkscape:export-xdpi="86.400002"
@@ -2354,12 +2434,23 @@
          cx="3282"
          class="fil10" />
     </g>
+    <rect
+       style="display:inline;opacity:1;fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1.1111114;stroke-linecap:butt;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="rect9107-7"
+       width="13.229176"
+       height="13.229162"
+       x="158.75"
+       y="-93.270805"
+       inkscape:export-filename="/Users/jan/Documents/repo/github/microcol/microcol-game/src/main/resources/images/backgroud.png"
+       inkscape:export-xdpi="86.400002"
+       inkscape:export-ydpi="86.400002"
+       transform="scale(1,-1)" />
   </g>
   <g
      inkscape:groupmode="layer"
      id="layer2"
      inkscape:label="description"
-     style="display:inline;filter:url(#filter2258)"
+     style="display:none;filter:url(#filter2258)"
      sodipodi:insensitive="true">
     <rect
        style="opacity:0.98999999;fill:none;fill-opacity:0.2081218;fill-rule:evenodd;stroke:#000000;stroke-width:0.2;stroke-linecap:butt;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
@@ -2598,5 +2689,53 @@
          x="-0.62109375"
          y="32.712891"
          style="stroke-width:0.99999994px">0</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:40px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.99999994px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;filter:url(#filter1953-05-9)"
+       x="-0.5078125"
+       y="32.712891"
+       id="text1937-9-8-8"
+       transform="matrix(0.26458333,0,0,0.26458333,158.51636,-12.120737)"><tspan
+         sodipodi:role="line"
+         id="tspan1935-30-7-0"
+         x="-0.5078125"
+         y="32.712891"
+         style="stroke-width:0.99999994px">10</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:40px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.99999994px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;filter:url(#filter1953-05-9-2)"
+       x="-0.0078125"
+       y="32.712891"
+       id="text1937-9-8-8-8"
+       transform="matrix(0.26458333,0,0,0.26458333,174.14087,-12.050283)"><tspan
+         sodipodi:role="line"
+         id="tspan1935-30-7-0-3"
+         x="-0.0078125"
+         y="32.712891"
+         style="stroke-width:0.99999994px">11</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:40px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.99999994px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;filter:url(#filter1953-6-9)"
+       x="-0.77929688"
+       y="32.712891"
+       id="text1937-9-40-5"
+       transform="matrix(0.26458333,0,0,0.26458333,-11.629348,97.28583)"><tspan
+         sodipodi:role="line"
+         id="tspan1935-30-81-2"
+         x="-0.77929688"
+         y="32.712891"
+         style="stroke-width:0.99999994px">6</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:40px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.99999994px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;filter:url(#filter1953-03-2)"
+       x="-1.40625"
+       y="32.076172"
+       id="text1937-9-5-3"
+       transform="matrix(0.26458333,0,0,0.26458333,-10.401932,113.23384)"><tspan
+         sodipodi:role="line"
+         id="tspan1935-30-0-7"
+         x="-1.40625"
+         y="32.076172"
+         style="stroke-width:0.99999994px">7</tspan></text>
   </g>
 </svg>
