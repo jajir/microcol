@@ -161,11 +161,11 @@ public abstract class AbstractCoastMapGenerator {
 
 	abstract String getPrefix();
 	
-	abstract boolean isVoid(final Location infoHolder);
+	abstract boolean isVoid(final InfoHolder infoHolder);
 	
-	abstract boolean isMass(final Location infoHolder);
+	abstract boolean isMass(final InfoHolder infoHolder);
 	
-	abstract boolean skipp(final Location infoHolder);
+	abstract boolean skipp(final InfoHolder infoHolder);
 
 	public void setMap(final WorldMap map) {
 		this.map = Preconditions.checkNotNull(map);
@@ -201,10 +201,10 @@ public abstract class AbstractCoastMapGenerator {
 	}
 
 	private String isItWell(final Location loc) {
-		preconditionItsSea(loc);
 		final Neighbors nei = new Neighbors(loc, this);
+		preconditionItsVoid(nei.center());
 		
-		if (isMass(nei.north().loc()) && isMass(nei.east().loc()) && isMass(nei.south().loc()) && isMass(nei.west().loc())) {
+		if (isMass(nei.north()) && isMass(nei.east()) && isMass(nei.south()) && isMass(nei.west())) {
 			return getPrefix() + "well";
 		} else {
 			return null;
@@ -212,10 +212,10 @@ public abstract class AbstractCoastMapGenerator {
 	}
 
 	private String isItOpenVoid(final Location loc) {
-		preconditionItsSea(loc);
 		final Neighbors nei = new Neighbors(loc, this);
+		preconditionItsVoid(nei.center());
 		
-		if (isVoid(nei.north().loc()) && isVoid(nei.east().loc()) && isVoid(nei.south().loc()) && isVoid(nei.west().loc())) {
+		if (isVoid(nei.north()) && isVoid(nei.east()) && isVoid(nei.south()) && isVoid(nei.west())) {
 			//skip further processing, result to null image
 			return NO_IMAGE;
 		} else {
@@ -224,7 +224,9 @@ public abstract class AbstractCoastMapGenerator {
 	}
 
 	private String isItMass(final Location loc) {
-		if (isMass(loc) || skipp(loc)) {
+		final Neighbors nei = new Neighbors(loc, this);
+		
+		if (isMass(nei.center()) || skipp(nei.center())) {
 			//skip further processing, result to null image
 			return NO_IMAGE;
 		} else {
@@ -233,31 +235,31 @@ public abstract class AbstractCoastMapGenerator {
 	}
 
 	private String isItUShape(final Location loc) {
-		preconditionItsSea(loc);
 		final Neighbors nei = new Neighbors(loc, this);
+		preconditionItsVoid(nei.center());
 
-		if (isVoid(nei.north().loc()) && isMass(nei.east().loc()) && isMass(nei.south().loc()) && isMass(nei.west().loc())) {
+		if (isVoid(nei.north()) && isMass(nei.east()) && isMass(nei.south()) && isMass(nei.west())) {
 			String code = getPrefix() + "u-shapeNorth-";
 			code += getNorthWestCorner_fromWest(nei.northWest());
 			code += getNorthEastCorner_fromEast(nei.northEast());
 			return code;
 		}
 
-		if (isMass(nei.north().loc()) && isVoid(nei.east().loc()) && isMass(nei.south().loc()) && isMass(nei.west().loc())) {
+		if (isMass(nei.north()) && isVoid(nei.east()) && isMass(nei.south()) && isMass(nei.west())) {
 			String code = getPrefix() + "u-shapeEast-";
 			code += getNorthEastCorner_fromNorth(nei.northEast());
 			code += getSouthEastCorner_fromSouth(nei.southEast());
 			return code;
 		}
 
-		if (isMass(nei.north().loc()) && isMass(nei.east().loc()) && isVoid(nei.south().loc()) && isMass(nei.west().loc())) {
+		if (isMass(nei.north()) && isMass(nei.east()) && isVoid(nei.south()) && isMass(nei.west())) {
 			String code = getPrefix() + "u-shapeSouth-";
 			code += getSouthEastCorner_fromEast(nei.southEast());
 			code += getSouthWestCorner_fromWest(nei.southWest());
 			return code;
 		}
 
-		if (isMass(nei.north().loc()) && isMass(nei.east().loc()) && isMass(nei.south().loc()) && isVoid(nei.west().loc())) {
+		if (isMass(nei.north()) && isMass(nei.east()) && isMass(nei.south()) && isVoid(nei.west())) {
 			String code = getPrefix() + "u-shapeWest-";
 			code += getSouthWestCorner_fromSouth(nei.southWest());
 			code += getNorthWestCorner_fromNorth(nei.northWest());
@@ -268,31 +270,31 @@ public abstract class AbstractCoastMapGenerator {
 	}
 
 	private String isItLShape(final Location loc) {
-		preconditionItsSea(loc);
 		final Neighbors nei = new Neighbors(loc, this);
+		preconditionItsVoid(nei.center());
 		
-		if (isMass(nei.north().loc()) && isMass(nei.east().loc()) && isVoid(nei.south().loc()) && isVoid(nei.west().loc())) {
+		if (isMass(nei.north()) && isMass(nei.east()) && isVoid(nei.south()) && isVoid(nei.west())) {
 			String code = getPrefix() + "l-shapeNorthEast-";
 			code += getNorthWestCorner_fromNorth(nei.northWest());
 			code += getSouthEastCorner_fromEast(nei.southEast());
 			return code;
 		}
 
-		if (isVoid(nei.north().loc()) && isMass(nei.east().loc()) && isMass(nei.south().loc()) && isVoid(nei.west().loc())) {
+		if (isVoid(nei.north()) && isMass(nei.east()) && isMass(nei.south()) && isVoid(nei.west())) {
 			String code = getPrefix() + "l-shapeSouthEast-";
 			code += getNorthEastCorner_fromEast(nei.northEast());
 			code += getSouthWestCorner_fromSouth(nei.southWest());
 			return code;
 		}
 
-		if (isVoid(nei.north().loc()) && isVoid(nei.east().loc()) && isMass(nei.south().loc()) && isMass(nei.west().loc())) {
+		if (isVoid(nei.north()) && isVoid(nei.east()) && isMass(nei.south()) && isMass(nei.west())) {
 			String code = getPrefix() + "l-shapeSouthWest-";
 			code += getSouthEastCorner_fromSouth(nei.southEast());
 			code += getNorthWestCorner_fromWest(nei.northWest());
 			return code;
 		}
 
-		if (isMass(nei.north().loc()) && isVoid(nei.east().loc()) && isVoid(nei.south().loc()) && isMass(nei.west().loc())) {
+		if (isMass(nei.north()) && isVoid(nei.east()) && isVoid(nei.south()) && isMass(nei.west())) {
 			String code = getPrefix() + "l-shapeNorthWest-";
 			code += getSouthWestCorner_fromWest(nei.southWest());
 			code += getNorthEastCorner_fromNorth(nei.northEast());
@@ -303,31 +305,31 @@ public abstract class AbstractCoastMapGenerator {
 	}
 
 	private String isItIShape(final Location loc) {
-		preconditionItsSea(loc);
 		final Neighbors nei = new Neighbors(loc, this);
+		preconditionItsVoid(nei.center());
 
-		if (isMass(nei.north().loc()) && isVoid(nei.east().loc()) && isVoid(nei.south().loc()) && isVoid(nei.west().loc())) {
+		if (isMass(nei.north()) && isVoid(nei.east()) && isVoid(nei.south()) && isVoid(nei.west())) {
 			String code = getPrefix() + "i-shapeNorth-";
 			code += getNorthWestCorner_fromNorth(nei.northWest());
 			code += getNorthEastCorner_fromNorth(nei.northEast());
 			return code;
 		}
 
-		if (isVoid(nei.north().loc()) && isMass(nei.east().loc()) && isVoid(nei.south().loc()) && isVoid(nei.west().loc())) {
+		if (isVoid(nei.north()) && isMass(nei.east()) && isVoid(nei.south()) && isVoid(nei.west())) {
 			String code = getPrefix() + "i-shapeEast-";
 			code += getNorthEastCorner_fromEast(nei.northEast());
 			code += getSouthEastCorner_fromEast(nei.southEast());
 			return code;
 		}
 
-		if (isVoid(nei.north().loc()) && isVoid(nei.east().loc()) && isMass(nei.south().loc()) && isVoid(nei.west().loc())) {
+		if (isVoid(nei.north()) && isVoid(nei.east()) && isMass(nei.south()) && isVoid(nei.west())) {
 			String code = getPrefix() + "i-shapeSouth-";
 			code += getSouthEastCorner_fromSouth(nei.southEast());
 			code += getSouthWestCorner_fromSouth(nei.southWest());
 			return code;
 		}
 
-		if (isVoid(nei.north().loc()) && isVoid(nei.east().loc()) && isVoid(nei.south().loc()) && isMass(nei.west().loc())) {
+		if (isVoid(nei.north()) && isVoid(nei.east()) && isVoid(nei.south()) && isMass(nei.west())) {
 			String code = getPrefix() + "i-shapeWest-";
 			code += getSouthWestCorner_fromWest(nei.southWest());
 			code += getNorthWestCorner_fromWest(nei.northWest());
@@ -338,10 +340,10 @@ public abstract class AbstractCoastMapGenerator {
 	}
 
 	private String isItIIShape(final Location loc) {
-		preconditionItsSea(loc);
 		final Neighbors nei = new Neighbors(loc, this);
+		preconditionItsVoid(nei.center());
 
-		if (isMass(nei.north().loc()) && isVoid(nei.east().loc()) && isMass(nei.south().loc()) && isVoid(nei.west().loc())) {
+		if (isMass(nei.north()) && isVoid(nei.east()) && isMass(nei.south()) && isVoid(nei.west())) {
 			String code = getPrefix() + "ii-shapeNorthSouth-";
 			// North
 			code += getNorthWestCorner_fromNorth(nei.northWest());
@@ -352,7 +354,7 @@ public abstract class AbstractCoastMapGenerator {
 			return code;
 		}
 
-		if (isVoid(nei.north().loc()) && isMass(nei.east().loc()) && isVoid(nei.south().loc()) && isMass(nei.west().loc())) {
+		if (isVoid(nei.north()) && isMass(nei.east()) && isVoid(nei.south()) && isMass(nei.west())) {
 			String code = getPrefix() + "ii-shapeEastWest-";
 			// East
 			code += getNorthEastCorner_fromEast(nei.northEast());
@@ -366,8 +368,8 @@ public abstract class AbstractCoastMapGenerator {
 		return null;
 	}
 
-	private void preconditionItsSea(final Location loc) {
-		Preconditions.checkArgument(isVoid(loc), "Invalid location '%s' it is not void", loc);
+	private void preconditionItsVoid(final InfoHolder infoHolder) {
+		Preconditions.checkArgument(isVoid(infoHolder), "Invalid location '%s' it is not void", infoHolder.loc());
 	}
 
 	/**
@@ -396,11 +398,11 @@ public abstract class AbstractCoastMapGenerator {
 	 */
 
 	private String getNorthEastCorner_fromNorth(final InfoHolder ttNorthEast) {
-		return isVoid(ttNorthEast.loc()) ? "3" : "4";
+		return isVoid(ttNorthEast) ? "3" : "4";
 	}
 
 	private String getNorthEastCorner_fromEast(final InfoHolder ttNorthEast) {
-		return isVoid(ttNorthEast.loc()) ? "3" : "2";
+		return isVoid(ttNorthEast) ? "3" : "2";
 	}
 
 	/**
@@ -408,11 +410,11 @@ public abstract class AbstractCoastMapGenerator {
 	 */
 
 	private String getSouthEastCorner_fromEast(final InfoHolder ttSouthEast) {
-		return isVoid(ttSouthEast.loc()) ? "6" : "7";
+		return isVoid(ttSouthEast) ? "6" : "7";
 	}
 
 	private String getSouthEastCorner_fromSouth(final InfoHolder ttSouthEast) {
-		return isVoid(ttSouthEast.loc()) ? "6" : "5";
+		return isVoid(ttSouthEast) ? "6" : "5";
 	}
 
 	/**
@@ -420,11 +422,11 @@ public abstract class AbstractCoastMapGenerator {
 	 */
 
 	private String getSouthWestCorner_fromSouth(final InfoHolder ttSouthWest) {
-		return isVoid(ttSouthWest.loc()) ? "9" : "a";
+		return isVoid(ttSouthWest) ? "9" : "a";
 	}
 
 	private String getSouthWestCorner_fromWest(final InfoHolder ttSouthWest) {
-		return isVoid(ttSouthWest.loc()) ? "9" : "8";
+		return isVoid(ttSouthWest) ? "9" : "8";
 	}
 
 	/**
@@ -432,11 +434,11 @@ public abstract class AbstractCoastMapGenerator {
 	 */
 
 	private String getNorthWestCorner_fromWest(final InfoHolder ttNortWest) {
-		return isVoid(ttNortWest.loc()) ? "0" : "1";
+		return isVoid(ttNortWest) ? "0" : "1";
 	}
 
 	private String getNorthWestCorner_fromNorth(final InfoHolder ttNortWest) {
-		return isVoid(ttNortWest.loc()) ? "0" : "b";
+		return isVoid(ttNortWest) ? "0" : "b";
 	}
 
 	protected WorldMap getMap() {

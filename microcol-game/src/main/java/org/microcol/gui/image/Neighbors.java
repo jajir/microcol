@@ -4,6 +4,8 @@ import org.microcol.model.Location;
 
 class Neighbors {
 	
+	private final InfoHolder center;
+	
 	private final InfoHolder north;
 	private final InfoHolder northEast;
 	private final InfoHolder east;
@@ -14,6 +16,7 @@ class Neighbors {
 	private final InfoHolder nortWest;
 	
 	public Neighbors(final Location location, final AbstractCoastMapGenerator generator) {
+		center = new InfoHolder(location, generator);
 		north = new InfoHolder(location.add(Location.DIRECTION_NORTH), generator);
 		northEast = new InfoHolder(location.add(Location.DIRECTION_NORTH_EAST), generator);
 		east = new InfoHolder(location.add(Location.DIRECTION_EAST), generator);
@@ -22,6 +25,13 @@ class Neighbors {
 		southWest = new InfoHolder(location.add(Location.DIRECTION_SOUTH_WEST), generator);
 		west = new InfoHolder(location.add(Location.DIRECTION_WEST), generator);
 		nortWest = new InfoHolder(location.add(Location.DIRECTION_NORTH_WEST), generator);
+	}
+
+	/**
+	 * @return the north
+	 */
+	public InfoHolder center() {
+		return center;
 	}
 
 	/**

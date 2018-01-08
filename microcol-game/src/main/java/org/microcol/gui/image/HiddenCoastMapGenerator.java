@@ -1,7 +1,5 @@
 package org.microcol.gui.image;
 
-import org.microcol.model.Location;
-
 import com.google.inject.Inject;
 
 public class HiddenCoastMapGenerator extends AbstractCoastMapGenerator {
@@ -17,17 +15,17 @@ public class HiddenCoastMapGenerator extends AbstractCoastMapGenerator {
 	}
 
 	@Override
-	public boolean isVoid(final Location infoHolder) {
-		return getMap().isVisible(infoHolder);
+	public boolean isVoid(final InfoHolder infoHolder) {
+		return getMap().isVisible(infoHolder.loc());
 	}
 
 	@Override
-	public boolean isMass(final Location infoHolder) {
-		return !getMap().isVisible(infoHolder);
+	public boolean isMass(final InfoHolder infoHolder) {
+		return !getMap().isVisible(infoHolder.loc());
 	}
 
 	@Override
-	public boolean skipp(final Location infoHolder){
-		return !getMap().isVisible(infoHolder);		
+	public boolean skipp(final InfoHolder infoHolder) {
+		return !getMap().isVisible(infoHolder.loc());
 	}
 }
