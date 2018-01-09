@@ -326,6 +326,37 @@ public class Unit {
 		return Optional.ofNullable(finder.find());
 	}
 
+	/**
+	 * Move one step to adjacent tile.
+	 * @param moveTo required location when unit should be moved
+	 */
+	void moveOneStep(final Location moveTo){
+		verifyThatUnitIsAtMap();
+
+		model.checkGameRunning();
+		model.checkCurrentPlayer(owner);
+
+		Preconditions.checkNotNull(moveTo);
+		Preconditions.checkArgument(getLocation().isNeighbor(moveTo),
+				"Location (%s) must be neighbor to current location (%s).", moveTo, getLocation());
+		Preconditions.checkArgument(model.getMap().isValid(moveTo), "Location (%s) must be valid.", moveTo);
+		Preconditions.checkArgument(isPossibleToMoveAt(moveTo), "It's not possible to move at (%s).", moveTo);		
+		Preconditions.checkState(availableMoves > 0, "There is not enough avilable moves ");		
+		
+		availableMoves--;
+		final TerrainType targetTerrain = model.getMap().getTerrainTypeAt(moveTo);
+		if (targetTerrain == TerrainType.HIGH_SEA) {
+			placeToHighSeas(true);
+			model.fireUnitMoved(this, getLocation(), Path.of(ImmutableList.of(moveTo)));
+		} else {
+			final Location start = getLocation();
+			placeToLocation(moveTo);
+			model.fireUnitMoved(this, start, Path.of(ImmutableList.of(moveTo)));
+			//if it's necessary fire event about captured city
+			tryToCaptureColony(moveTo);
+		}
+	}
+	
 	void moveTo(final Path path) {
 		verifyThatUnitIsAtMap();
 
