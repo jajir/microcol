@@ -1,4 +1,4 @@
-package org.microcol.model;
+package org.microcol.model.builder;
 
 import java.util.ArrayList;
 import java.util.List;

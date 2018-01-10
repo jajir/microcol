@@ -1,5 +1,9 @@
-package org.microcol.model;
+package org.microcol.model.builder;
 
+import org.microcol.model.IdManager;
+import org.microcol.model.Location;
+import org.microcol.model.Model;
+import org.microcol.model.UnitType;
 import org.microcol.model.store.CalendarPo;
 import org.microcol.model.store.ModelDao;
 import org.microcol.model.store.ModelPo;

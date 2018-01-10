@@ -1,5 +1,10 @@
-package org.microcol.model;
+package org.microcol.model.builder;
 
+import org.microcol.model.ConstructionType;
+import org.microcol.model.GoodType;
+import org.microcol.model.IdManager;
+import org.microcol.model.Location;
+import org.microcol.model.UnitType;
 import org.microcol.model.store.ColonyPo;
 import org.microcol.model.store.ConstructionPo;
 import org.microcol.model.store.PlaceColonyFieldPo;

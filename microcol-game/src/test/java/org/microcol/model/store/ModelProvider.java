@@ -4,8 +4,8 @@ import org.microcol.model.ConstructionType;
 import org.microcol.model.GoodType;
 import org.microcol.model.Location;
 import org.microcol.model.Model;
-import org.microcol.model.ModelBuilder;
 import org.microcol.model.UnitType;
+import org.microcol.model.builder.ModelBuilder;
 
 /**
  * Help class that build model for tests.

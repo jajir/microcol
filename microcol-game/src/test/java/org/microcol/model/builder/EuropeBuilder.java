@@ -1,4 +1,4 @@
-package org.microcol.model;
+package org.microcol.model.builder;
 
 import org.microcol.model.store.ModelPo;
 import org.microcol.model.store.PlaceEuropePortPo;
