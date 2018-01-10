@@ -348,12 +348,11 @@ public class Unit {
 		final TerrainType targetTerrain = model.getMap().getTerrainTypeAt(moveTo);
 		if (targetTerrain == TerrainType.HIGH_SEA) {
 			placeToHighSeas(true);
-			model.fireUnitMoved(this, getLocation(), Path.of(ImmutableList.of(moveTo)));
+			model.fireUnitMoved(this, getLocation(), moveTo);
 		} else {
 			final Location start = getLocation();
 			placeToLocation(moveTo);
-			//FIXME change fireUnitMoved and listener to accept just one step to move.
-			model.fireUnitMoved(this, start, Path.of(ImmutableList.of(moveTo)));
+			model.fireUnitMoved(this, start, moveTo);
 			//if it's necessary fire event about captured city
 			tryToCaptureColony(moveTo);
 		}

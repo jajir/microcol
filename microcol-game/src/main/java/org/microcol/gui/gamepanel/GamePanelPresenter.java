@@ -1,6 +1,5 @@
 package org.microcol.gui.gamepanel;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,6 +34,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
+import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 
 import javafx.scene.canvas.Canvas;
@@ -404,11 +404,9 @@ public final class GamePanelPresenter implements Localized {
 	}
 
 	private void scheduleWalkAnimation(final UnitMovedEvent event) {
-		Preconditions.checkArgument(event.getPath().getLocations().size() >= 1,
-				"Path for moving doesn't contains enought steps to move.");
 		display.planScrollingAnimationToPoint(display.getArea().getCenterToLocation(event.getStart()));
-		List<Location> path = new ArrayList<>(event.getPath().getLocations());
-		path.add(0, event.getStart());
+		final List<Location> path = Lists.newArrayList(event.getStart(), event.getEnd());
+		//TODO paths always consists from two places, adjust parameters
 		display.addMoveAnimator(path, event.getUnit());
 	}
 
