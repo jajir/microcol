@@ -3,6 +3,7 @@ package org.microcol.model;
 import java.util.Set;
 
 import org.microcol.model.store.ModelPo;
+import org.microcol.model.store.VisibilityPo;
 import org.microcol.model.store.WorldMapPo;
 
 import com.google.common.base.MoreObjects;
@@ -18,10 +19,8 @@ public class WorldMap {
 
 	private final Set<Location> trees;
 
-	private final Set<Location> visible;
-
 	private final Integer seed;
-
+	
 	public WorldMap(final ModelPo gamePo) {
 		final WorldMapPo worldMapPo = gamePo.getMap();
 		this.maxX = worldMapPo.getMaxX();
@@ -30,12 +29,11 @@ public class WorldMap {
 		Preconditions.checkArgument(maxX >= 1, "Max X (%s) must be positive.", maxX);
 		this.terrainMap = ImmutableMap.copyOf(worldMapPo.getTerrainMap());
 		this.trees = worldMapPo.getTreeSet();
-		this.visible = worldMapPo.getVisibleSet();
 		this.seed = Preconditions.checkNotNull(worldMapPo.getSeed(), "Seed value is null");
-		veriftThatMapIsComplete();
+		verifyThatMapIsComplete();
 	}
 
-	private void veriftThatMapIsComplete() {
+	private void verifyThatMapIsComplete() {
 		for (int x = 1; x <= getMaxX(); x++) {
 			for (int y = 1; y <= getMaxY(); y++) {
 				Terrain terrain = getTerrainAt(Location.of(x, y));
@@ -80,12 +78,6 @@ public class WorldMap {
 		return !path.getLocations().stream().anyMatch(location -> !isValid(location));
 	}
 	
-	public boolean isVisible(final Location location) {
-		Preconditions.checkNotNull(location);
-		isValid(location);
-		return visible.contains(location);
-	}
-	
 	@Override
 	public String toString() {
 		return MoreObjects.toStringHelper(this).add("maxX", maxX).add("maxY", maxY)
@@ -97,16 +89,7 @@ public class WorldMap {
 		gamePo.getMap().setMaxY(maxY);
 		gamePo.getMap().setTerrainType(terrainMap);
 		gamePo.getMap().setTrees(trees);
-		gamePo.getMap().setVisibles(visible);
-	}
-
-	/**
-	 * Method reveals map visible for given unit.
-	 * 
-	 * @param unit required unit. Unit have to be on map.
-	 */
-	void makeVisibleMapForUnit(final Unit unit) {
-		visible.addAll(unit.getVisibleLocations());
+		gamePo.getMap().setVisibility(new VisibilityPo());
 	}
 
 	/**

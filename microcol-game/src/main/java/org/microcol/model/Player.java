@@ -4,8 +4,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 import org.microcol.model.store.PlayerPo;
+import org.microcol.model.store.VisibilityPo;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
@@ -28,10 +30,12 @@ public final class Player {
 	private int gold;
 	
 	private final Map<String, Object> extraData = new HashMap<>();
+	
+	private final Visibility visibility;
 
 	private Player(final String name, final boolean computer, final int initialGold, final Model model,
 			final boolean declaredIndependence, final Player whosKingThisPlayerIs,
-			final Map<String, Object> extraData) {
+			final Map<String, Object> extraData, Set<Location> visible) {
 		this.model = Preconditions.checkNotNull(model);
 		this.name = Preconditions.checkNotNull(name);
 		this.computer = computer;
@@ -39,6 +43,7 @@ public final class Player {
 		this.declaredIndependence = declaredIndependence;
 		this.whosKingThisPlayerIs = whosKingThisPlayerIs;
 		this.extraData.putAll(Preconditions.checkNotNull(extraData));
+		this.visibility = new Visibility(Preconditions.checkNotNull(visible, "Visible is null"));
 	}
 	
 	public static Player make(final PlayerPo player, final Model model, final PlayerStore playerStore){
@@ -46,10 +51,29 @@ public final class Player {
 		if (player.getWhosKingThisPlayerIs() != null) {
 			subdued = playerStore.getPlayerByName(player.getWhosKingThisPlayerIs());
 		}
+		Preconditions.checkNotNull(player.getVisible(), "Visible is null during creating '%s'", player.getName());
 		return new Player(player.getName(), player.isComputer(), player.getGold(), model,
-				player.isDeclaredIndependence(), subdued, player.getExtraData());
+				player.isDeclaredIndependence(), subdued, player.getExtraData(),
+				player.getVisible().getVisibilitySet());
 	}
 	
+	public boolean isVisible(final Location location) {
+		model.isValid(location);
+		return visibility.isVisible(location);
+	}
+
+	/**
+	 * Method reveals map visible for given unit.
+	 * 
+	 * @param unit required unit. Unit have to be on map.
+	 */
+	void makeVisibleMapForUnit(final Unit unit) {
+		Preconditions.checkNotNull(unit, "Unit is null");
+		Preconditions.checkState(unit.getOwner().equals(this), "Unit's owher '%s' is to same as '%s'", unit.getOwner(),
+				this);
+		visibility.makeVisibleMapForUnit(unit);
+	}
+
 	public PlayerPo save(){
 		final PlayerPo out = new PlayerPo();
 		out.setName(name);
@@ -57,6 +81,8 @@ public final class Player {
 		out.setGold(gold);
 		out.setDeclaredIndependence(declaredIndependence);
 		out.getExtraData().putAll(extraData);
+		out.setVisible(new VisibilityPo());
+		visibility.store(out.getVisible(), model.getMap().getMaxX(), model.getMap().getMaxY());
 		return out;
 	}
 

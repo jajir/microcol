@@ -20,6 +20,7 @@ import org.microcol.gui.util.ViewUtil;
 import org.microcol.model.Colony;
 import org.microcol.model.Location;
 import org.microcol.model.Model;
+import org.microcol.model.Player;
 import org.microcol.model.Terrain;
 import org.microcol.model.Unit;
 import org.slf4j.Logger;
@@ -235,11 +236,12 @@ public class GamePanelView implements GamePanelPresenter.Display {
 	 *            required {@link GraphicsContext}
 	 */
 	private void paintTerrain(final GraphicsContext graphics, final Area area) {
+		final Player player = gameModelController.getCurrentPlayer();
 		for (int i = area.getTopLeft().getX(); i <= area.getBottomRight().getX(); i++) {
 			for (int j = area.getTopLeft().getY(); j <= area.getBottomRight().getY(); j++) {
 				final Location location = Location.of(i, j);
 				final Point point = area.convertToPoint(location);
-				if (gameModelController.getModel().isVisible(location)) {
+				if (player.isVisible(location)) {
 					final Terrain terrain = gameModelController.getModel().getMap().getTerrainAt(location);
 					paintService.paintTerrainOnTile(graphics, point, location, terrain,
 							oneTurnMoveHighlighter.isItHighlighted(location));					
@@ -267,10 +269,11 @@ public class GamePanelView implements GamePanelPresenter.Display {
 	 */
 	private void paintUnits(final GraphicsContext graphics, final Model model, final Area area) {
 		final Map<Location, List<Unit>> ships = model.getUnitsAt();
+		final Player player = gameModelController.getCurrentPlayer();
 
 		final Map<Location, List<Unit>> ships2 = ships.entrySet().stream()
 				.filter(entry -> area.isVisible(entry.getKey()))
-				.filter(entry -> model.isVisible(entry.getKey()))
+				.filter(entry -> player.isVisible(entry.getKey()))
 				.collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue()));
 
 		ships2.forEach((location, list) -> {
@@ -283,9 +286,10 @@ public class GamePanelView implements GamePanelPresenter.Display {
 	}
 
 	private void paintColonies(final GraphicsContext graphics, final Model model, final Area area) {
+		final Player player = gameModelController.getCurrentPlayer();
 		final Map<Location, Colony> colonies = model.getColoniesAt().entrySet().stream()
 				.filter(entry -> area.isVisible(entry.getKey()))
-				.filter(entry->model.isVisible(entry.getKey()))
+				.filter(entry -> player.isVisible(entry.getKey()))
 				.collect(Collectors.toMap(entry -> entry.getKey(), entry -> entry.getValue()));
 
 		colonies.forEach((location, colony) -> {

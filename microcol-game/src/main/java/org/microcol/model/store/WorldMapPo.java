@@ -4,13 +4,11 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.function.BiConsumer;
-import java.util.function.Function;
 
 import org.microcol.model.Location;
 import org.microcol.model.TerrainType;
 
-public class WorldMapPo {
+public class WorldMapPo extends AbstractMapStore {
 
 	/**
 	 * Hold tile definitions rows.
@@ -22,10 +20,7 @@ public class WorldMapPo {
 	 */
 	private String[] trees;
 
-	/**
-	 * Hold information which parts of map are visible.
-	 */
-	private String[] visible;
+	private VisibilityPo visibility;
 
 	private int maxX;
 
@@ -41,7 +36,7 @@ public class WorldMapPo {
 			} else {
 				return terrainType.getCode();
 			}
-		});
+		}, maxX, maxY);
 	}
 
 	public void setTrees(final Set<Location> treesSet) {
@@ -52,7 +47,7 @@ public class WorldMapPo {
 			} else {
 				return "-";
 			}
-		});
+		}, maxX, maxY);
 	}
 
 	public void setVisibles(final Set<Location> visibleSet) {
@@ -63,36 +58,7 @@ public class WorldMapPo {
 			} else {
 				return "#";
 			}
-		});
-	}
-
-	private String[] generateString(final Function<Location, String> charProducer) {
-		final String[] out = new String[maxY + 1];
-		final StringBuilder buff1 = new StringBuilder();
-		buff1.append("column  :");
-		for (int x = 0; x < maxX; x++) {
-			if (x > 0) {
-				buff1.append(",");
-			}
-			buff1.append(limit(x + 1, 1));
-		}
-		out[0] = buff1.toString();
-		
-		for (int y = 0; y < maxY; y++) {
-			final StringBuilder buff = new StringBuilder();
-			buff.append("row-");
-			buff.append(limit(y + 1, 4));
-			buff.append(":");
-			for (int x = 0; x < maxX; x++) {
-				if (x > 0) {
-					buff.append(",");
-				}
-				final Location loc = Location.of(x + 1, y + 1);
-				buff.append(charProducer.apply(loc));
-			}
-			out[y + 1] = buff.toString();
-		}
-		return out;
+		}, maxX, maxY);
 	}
 
 	public Map<Location, TerrainType> getTerrainMap() {
@@ -103,19 +69,6 @@ public class WorldMapPo {
 				out.put(location, terrainType);
 			}
 		});
-		return out;
-	}
-	
-	private String limit(final int count, final int lengthLimit) {
-		String out = String.valueOf(count);
-		// cut from beginning of number
-		if (out.length() > lengthLimit) {
-			out = out.substring(out.length() - lengthLimit, out.length());
-		}
-		//add zeros to required length
-		while (out.length() < lengthLimit) {
-			out = "0" + out;
-		}
 		return out;
 	}
 
@@ -129,31 +82,6 @@ public class WorldMapPo {
 			});
 		}
 		return out;
-	}
-
-	public Set<Location> getVisibleSet() {
-		final Set<Location> out = new HashSet<>();
-		if (visible != null) {
-			iterate(visible, (location, charCode) -> {
-				if (charCode.equals("-")) {
-					out.add(location);
-				}
-			});
-		}
-		return out;
-	}
-
-	private void iterate(final String[] rows, final BiConsumer<Location, String> consumer) {
-		for (int y = 1; y < rows.length; y++) {
-			final String row = rows[y].substring("row-0001:".length());
-			final String[] parts = row.split(",");
-			for (int x = 0; x < parts.length; x++) {
-				final String charCode = parts[x];
-				final Location loc = Location.of(x + 1, y);
-				consumer.accept(loc, charCode);
-			}
-		}
-
 	}
 
 	public int getMaxX() {
@@ -199,17 +127,17 @@ public class WorldMapPo {
 	}
 
 	/**
-	 * @return the visible
+	 * @return the visibility
 	 */
-	public String[] getVisible() {
-		return visible;
+	public VisibilityPo getVisibility() {
+		return visibility;
 	}
 
 	/**
-	 * @param visible the visible to set
+	 * @param visibility the visibility to set
 	 */
-	public void setVisible(final String[] visible) {
-		this.visible = visible;
+	public void setVisibility(VisibilityPo visibility) {
+		this.visibility = visibility;
 	}
 
 }

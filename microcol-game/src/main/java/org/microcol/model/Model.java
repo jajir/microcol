@@ -97,7 +97,7 @@ public final class Model {
 	 */
 	private void assureDefaultVisibility(){
 		unitStorage.getUnits().stream().filter(unit -> unit.getOwner().isHuman() && unit.isAtPlaceLocation())
-				.forEach(unit -> map.makeVisibleMapForUnit(unit));
+				.forEach(unit -> unit.getOwner().makeVisibleMapForUnit(unit));
 	}
 
 
@@ -168,6 +168,10 @@ public final class Model {
 		return map.isValid(path);
 	}
 
+	public boolean isValid(final Location location) {
+		return map.isValid(location);
+	}
+
 	/**
 	 * Create new royal expedition force unit and place it to cargo ship.
 	 * 
@@ -187,10 +191,6 @@ public final class Model {
 				unit -> new PlaceCargoSlot(unit, cargoSlot), UnitType.COLONIST, king, UnitType.COLONIST.getSpeed());
 		unitStorage.addUnit(out);
 		return out;
-	}
-
-	public boolean isVisible(final Location location){
-		return map.isVisible(location);
 	}
 	
 	void addUnitToPlayer(final UnitType unitType, final Player owner) {
@@ -357,9 +357,6 @@ public final class Model {
 	public void moveUnit(final Unit unit, final Path path) {
 		path.getLocations().forEach(loc ->{
 			unit.moveOneStep(loc);
-			if (unit.getOwner().isHuman()) {
-				map.makeVisibleMapForUnit(unit);
-			}
 		});
 	}
 

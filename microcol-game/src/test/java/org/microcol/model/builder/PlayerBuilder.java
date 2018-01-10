@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.microcol.model.store.ModelPo;
 import org.microcol.model.store.PlayerPo;
+import org.microcol.model.store.VisibilityPo;
 
 import com.google.common.base.Preconditions;
 
@@ -23,6 +24,7 @@ public class PlayerBuilder {
 		this.modelBuilder = Preconditions.checkNotNull(modelBuilder);
 		this.playerPo = new PlayerPo();
 		playerPo.setName(Preconditions.checkNotNull(name));
+		playerPo.setVisible(new VisibilityPo());
 	}
 
 	public ModelBuilder build() {

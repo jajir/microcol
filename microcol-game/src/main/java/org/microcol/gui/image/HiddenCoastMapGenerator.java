@@ -1,12 +1,19 @@
 package org.microcol.gui.image;
 
+import org.microcol.gui.event.model.GameModelController;
+import org.microcol.model.Player;
+
+import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
 
 public class HiddenCoastMapGenerator extends AbstractCoastMapGenerator {
+	
+	private final GameModelController gameModelController;
 
 	@Inject
-	HiddenCoastMapGenerator(final ImageProvider imageProvider) {
+	HiddenCoastMapGenerator(final ImageProvider imageProvider, final GameModelController gameModelController) {
 		super(imageProvider);
+		this.gameModelController = Preconditions.checkNotNull(gameModelController);
 	}
 
 	@Override
@@ -16,16 +23,20 @@ public class HiddenCoastMapGenerator extends AbstractCoastMapGenerator {
 
 	@Override
 	public boolean isVoid(final InfoHolder infoHolder) {
-		return getMap().isVisible(infoHolder.loc());
+		return getPlayer().isVisible(infoHolder.loc());
 	}
 
 	@Override
 	public boolean isMass(final InfoHolder infoHolder) {
-		return !getMap().isVisible(infoHolder.loc());
+		return !getPlayer().isVisible(infoHolder.loc());
 	}
 
 	@Override
 	public boolean skipp(final InfoHolder infoHolder) {
-		return !getMap().isVisible(infoHolder.loc());
+		return !getPlayer().isVisible(infoHolder.loc());
+	}
+	
+	private Player getPlayer(){
+		return gameModelController.getCurrentPlayer();
 	}
 }

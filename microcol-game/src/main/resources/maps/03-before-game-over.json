@@ -658,14 +658,20 @@
       "computer": false,
       "gold": 1108,
       "declaredIndependence": true,
-      "extraData": {}
+      "extraData": {},
+       "visible": {
+	    	"visible": []
+    	}
     },
     {
       "name": "Player2",
       "computer": true,
       "gold": 100,
       "declaredIndependence": false,
-      "extraData": {}
+      "extraData": {},
+       "visible": {
+	    	"visible": []
+    	}
     },
     {
       "name": "Dutch\u0027s King",
@@ -674,7 +680,10 @@
       "declaredIndependence": false,
       "extraData": {
         "refWasSend": "true"
-      }
+      },
+       "visible": {
+	    	"visible": []
+    	}
     }
   ],
   "europe": {}

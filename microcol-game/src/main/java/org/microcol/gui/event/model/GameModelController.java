@@ -84,7 +84,8 @@ public class GameModelController implements Localized {
 	}
 
 	public Player getCurrentPlayer() {
-		return getModel().getCurrentPlayer();
+		return getModel().getPlayers().stream().filter(Player::isHuman).findFirst()
+				.orElseThrow(() -> new IllegalStateException("There is no human player"));
 	}
 
 	private void tryToStopGame() {

@@ -352,6 +352,7 @@ public class Unit {
 		} else {
 			final Location start = getLocation();
 			placeToLocation(moveTo);
+			owner.makeVisibleMapForUnit(this);
 			model.fireUnitMoved(this, start, moveTo);
 			//if it's necessary fire event about captured city
 			tryToCaptureColony(moveTo);

@@ -650,20 +650,29 @@
       "name": "Dutch",
       "computer": false,
       "gold": 1108,
-      "declaredIndependence": true
+      "declaredIndependence": true,
+       "visible": {
+	    	"visible": []
+    	}
     },
     {
       "name": "Dutch's King",
       "computer": true,
       "gold": 1108,
       "declaredIndependence": false,
-      "whosKingThisPlayerIs": "Dutch"
+      "whosKingThisPlayerIs": "Dutch",
+       "visible": {
+	    	"visible": []
+    	}
     },
     {
       "name": "Player2",
       "computer": true,
       "gold": 100,
-      "declaredIndependence": false
+      "declaredIndependence": false,
+       "visible": {
+	    	"visible": []
+    	}
     }
   ],
   "europe": {}

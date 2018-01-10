@@ -16,6 +16,8 @@ public class PlayerPo {
 	private String whosKingThisPlayerIs;
 	
 	private Map<String, Object> extraData = new HashMap<>();
+
+	private VisibilityPo visible;
 	
 	/**
 	 * @return the name
@@ -102,6 +104,20 @@ public class PlayerPo {
 	 */
 	public void setExtraData(Map<String, Object> extraData) {
 		this.extraData = extraData;
+	}
+
+	/**
+	 * @return the visibility
+	 */
+	public VisibilityPo getVisible() {
+		return visible;
+	}
+
+	/**
+	 * @param visibility the visibility to set
+	 */
+	public void setVisible(VisibilityPo visibility) {
+		this.visible = visibility;
 	}
 
 }
