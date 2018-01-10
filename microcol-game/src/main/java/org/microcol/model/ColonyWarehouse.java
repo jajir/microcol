@@ -20,11 +20,6 @@ public class ColonyWarehouse {
 
 	private final Map<GoodType, Integer> goodAmounts;
 
-	ColonyWarehouse(final Colony colony) {
-		this.colony = colony;
-		this.goodAmounts = new HashMap<>();
-	}
-
 	ColonyWarehouse(final Colony colony, final Map<String, Integer> initialGoodAmounts) {
 		this.colony = colony;
 		Preconditions.checkNotNull(initialGoodAmounts);

@@ -12,6 +12,7 @@ import org.microcol.model.event.UnitMovedEvent;
 import org.microcol.model.event.UnitEmbarkedEvent;
 
 public interface ModelListener {
+	
 	void gameStarted(GameStartedEvent event);
 
 	void roundStarted(RoundStartedEvent event);

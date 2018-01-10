@@ -29,6 +29,6 @@ public class CalendarInvalidCreationTest {
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testInvalidCreation() {
-		new Calendar(startYear, endYear);
+		new Calendar(startYear, endYear, startYear, 0);
 	}
 }

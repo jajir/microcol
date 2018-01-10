@@ -9,7 +9,6 @@ import java.util.Optional;
 import java.util.Random;
 import java.util.Set;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 import org.microcol.model.store.ModelPo;
 import org.microcol.model.store.UnitPo;
@@ -328,9 +327,11 @@ public class Unit {
 
 	/**
 	 * Move one step to adjacent tile.
-	 * @param moveTo required location when unit should be moved
+	 * 
+	 * @param moveTo
+	 *            required location when unit should be moved
 	 */
-	void moveOneStep(final Location moveTo){
+	public void moveOneStep(final Location moveTo){
 		verifyThatUnitIsAtMap();
 
 		model.checkGameRunning();
@@ -351,51 +352,13 @@ public class Unit {
 		} else {
 			final Location start = getLocation();
 			placeToLocation(moveTo);
+			//FIXME change fireUnitMoved and listener to accept just one step to move.
 			model.fireUnitMoved(this, start, Path.of(ImmutableList.of(moveTo)));
 			//if it's necessary fire event about captured city
 			tryToCaptureColony(moveTo);
 		}
 	}
 	
-	void moveTo(final Path path) {
-		verifyThatUnitIsAtMap();
-
-		model.checkGameRunning();
-		model.checkCurrentPlayer(owner);
-
-		Preconditions.checkNotNull(path);
-		Preconditions.checkArgument(path.getStart().isNeighbor(getLocation()),
-				"Path (%s) must be neighbor to current location (%s).", path.getStart(), getLocation());
-		Preconditions.checkArgument(model.isValid(path), "Path (%s) must be valid.", path);
-		Preconditions.checkArgument(!path.containsAny(owner.getEnemyUnitsAt().keySet()),
-				"There is enemy unit on path (%s).", path);
-
-		final List<Location> locations = path.getLocations().stream().limit(availableMoves).map(loc -> {
-			if (!isPossibleToMoveAt(loc)) {
-				throw new IllegalArgumentException(String.format("Path (%s) must contain only moveable terrain (%s).",
-						loc, model.getMap().getTerrainTypeAt(loc)));
-			}
-			return loc;
-		}).collect(Collectors.toList());
-		availableMoves -= locations.size();
-		
-		if (!locations.isEmpty()) {
-			final Path reallyExecutedPath = Path.of(locations);
-			//TODO high sea could be tile before last, change it 
-			final TerrainType targetTerrain = model.getMap().getTerrainTypeAt(reallyExecutedPath.getTarget());
-			final Location start = getLocation();
-			if (targetTerrain == TerrainType.HIGH_SEA) {
-				placeToHighSeas(true);
-				model.fireUnitMoved(this, start, reallyExecutedPath);
-			} else {
-				placeToLocation(reallyExecutedPath.getTarget());
-				model.fireUnitMoved(this, start, reallyExecutedPath);
-				//if it's necessary fire event about captured city
-				tryToCaptureColony(reallyExecutedPath.getTarget());
-			}
-		}
-	}
-
 	/**
 	 * When unit moves or attack than unit could capture colony.
 	 * 
@@ -647,10 +610,6 @@ public class Unit {
 
 	public int getId() {
 		return id;
-	}
-
-	Model getModel() {
-		return model;
 	}
 
 	public int getMilitaryStrenght(){

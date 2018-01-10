@@ -32,7 +32,7 @@ public class CalendarCreationTest {
 
 	@Test
 	public void testCreation() {
-		final Calendar calendar = new Calendar(startYear, endYear);
+		final Calendar calendar = new Calendar(startYear, endYear, startYear, 0);
 
 		Assert.assertEquals("Test of startYear failed:", startYear, calendar.getStartYear());
 		Assert.assertEquals("Test of endYear failed:", endYear, calendar.getEndYear());

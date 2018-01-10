@@ -2,6 +2,7 @@ package org.microcol.model;
 
 import java.util.Optional;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.collect.Lists;
 
 /**
@@ -36,5 +37,12 @@ public class GameOverEvaluator {
 		}
 		return null;
 	}
+
+	@Override
+	public String toString() {
+		return MoreObjects.toStringHelper(this)
+				.add("hashcode", hashCode())
+				.toString();
+	}	
 
 }

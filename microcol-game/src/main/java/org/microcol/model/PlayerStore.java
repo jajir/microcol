@@ -8,6 +8,7 @@ import java.util.Set;
 import org.microcol.gui.MicroColException;
 import org.microcol.model.store.ModelPo;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 
 public class PlayerStore {
@@ -54,5 +55,13 @@ public class PlayerStore {
 		return players.stream().filter(player -> player.getName().equals(playerName)).findAny()
 				.orElseThrow(() -> new MicroColException(String.format("There is no such player (%s)", playerName)));
 	}
+	
+	@Override
+	public String toString() {
+		return MoreObjects.toStringHelper(this)
+				.add("hashcode", hashCode())
+				.add("players", players.size())
+				.toString();
+	}	
 
 }

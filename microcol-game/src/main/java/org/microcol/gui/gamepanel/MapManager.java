@@ -52,6 +52,11 @@ public class MapManager {
 		});
 		unitMovedController.addListener(event -> {
 			if (event.getUnit().getOwner().isHuman()) {
+				//TODO It's synchronous listener, and still underlying map is not correctly updated.
+				/*
+				 * It's because move perform sync listener call and later adjust
+				 * visibility. Listeners should be called as last operation.
+				 */
 				hiddenCoastMapGenerator.setMap(gameModelController.getModel().getMap());
 			}
 		});

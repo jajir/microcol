@@ -25,10 +25,6 @@ public class ChainOfCommandStrategy<T, R> implements Function<T, R> {
 		this.filters = new ArrayList<>(Preconditions.checkNotNull(filters));
 	}
 
-	public void addFiter(final Function<T, R> filter) {
-		filters.add(Preconditions.checkNotNull(filter));
-	}
-
 	/**
 	 * Go through all filters first non-null return value is returned otherwise
 	 * empty is returned.

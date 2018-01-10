@@ -60,20 +60,6 @@ public class WorldMap {
 		return terrain != null ? terrain : TerrainType.OCEAN;
 	}
 
-	/**
-	 * Provide info about trees on specific location.
-	 * 
-	 * @param location
-	 *            required location
-	 * @return return <code>true</code> if location contain tree otherwise
-	 *         return <code>false</code>
-	 */
-	public boolean isTreeAt(final Location location) {
-		Preconditions.checkArgument(isValid(location), "Location (%s) is not part of this map.", location);
-
-		return trees.contains(location);
-	}
-
 	public Terrain getTerrainAt(final Location location) {
 		Preconditions.checkArgument(isValid(location), "Location (%s) is not part of this map.", location);
 		final Terrain out = new Terrain(location, getTerrainTypeAt(location));

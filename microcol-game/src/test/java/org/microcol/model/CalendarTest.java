@@ -6,7 +6,7 @@ import org.junit.Test;
 public class CalendarTest {
 	@Test
 	public void testEndRoundPositive() {
-		final Calendar calendar = new Calendar(1590, 1593);
+		final Calendar calendar = createCalendar(1590, 1593);
 
 		calendar.endRound();
 		Assert.assertEquals(1590, calendar.getStartYear());
@@ -29,7 +29,7 @@ public class CalendarTest {
 
 	@Test
 	public void testEndRoundNegative() {
-		final Calendar calendar = new Calendar(-1593, -1590);
+		final Calendar calendar = createCalendar(-1593, -1590);
 
 		calendar.endRound();
 		Assert.assertEquals(-1593, calendar.getStartYear());
@@ -52,9 +52,15 @@ public class CalendarTest {
 
 	@Test(expected = IllegalStateException.class)
 	public void testEndRoundException() {
-		final Calendar calendar = new Calendar(1590, 1591);
+		final Calendar calendar = createCalendar(1590, 1591);
 
 		calendar.endRound();
 		calendar.endRound();
 	}
+	
+
+	private Calendar createCalendar(final int startYear, final int endYear) {
+		return new Calendar(startYear, endYear, startYear, 0);
+	}
+
 }

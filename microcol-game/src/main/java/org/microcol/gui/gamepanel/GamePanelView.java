@@ -181,11 +181,6 @@ public class GamePanelView implements GamePanelPresenter.Display {
 		}
 	}
 
-	@Override
-	public GamePanelView getGamePanelView() {
-		return this;
-	}
-
 	/**
 	 * It's called to redraw whole game. It should be called each game tick.
 	 */

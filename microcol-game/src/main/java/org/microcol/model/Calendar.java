@@ -27,10 +27,6 @@ public final class Calendar {
 		this.numberOfPlayedTurns = numberOfPlayedTurns;
 	}
 
-	Calendar(final int startYear, final int endYear) {
-		this(startYear, endYear, startYear, 0);
-	}
-
 	static Calendar make(final CalendarPo cal) {
 		return new Calendar(cal.getStartYear(), cal.getEndYear(), cal.getCurrentYear(), cal.getNumberOfPlayedTurns());
 	}

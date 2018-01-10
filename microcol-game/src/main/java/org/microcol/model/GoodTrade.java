@@ -1,11 +1,13 @@
 package org.microcol.model;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 
 /**
  * Holds information about price of some good in Europe.
  */
 public class GoodTrade {
+	
 	private final GoodType goodType;
 	private int sellPrice;
 	private int buyPrice;
@@ -35,4 +37,14 @@ public class GoodTrade {
 	public void setBuyPrice(int buyPrice) {
 		this.buyPrice = buyPrice;
 	}
+	
+	@Override
+	public String toString() {
+		return MoreObjects.toStringHelper(this)
+				.add("buyPrice", buyPrice)
+				.add("goodType", goodType)
+				.add("sellPrice", sellPrice)
+				.toString();
+	}	
+
 }

@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 
 import org.microcol.model.store.ModelPo;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableListMultimap;
@@ -192,5 +193,13 @@ class UnitStorage {
 				.filter(unit -> unit.getAvailableMoves() > 0)
 				.findFirst();
 	}
+	
+	@Override
+	public String toString() {
+		return MoreObjects.toStringHelper(this)
+				.add("hashcode", hashCode())
+				.add("units", units.size())
+				.toString();
+	}	
 	
 }

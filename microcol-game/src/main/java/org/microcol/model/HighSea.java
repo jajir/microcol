@@ -3,6 +3,7 @@ package org.microcol.model;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 
@@ -55,5 +56,12 @@ public class HighSea {
 		throw new IllegalStateException("Unable to find suitable place for ship at column '" + indexY
 				+ "', counted from east '" + countFromEast + "' for player '" + player + "'");
 	}
+	
+	@Override
+	public String toString() {
+		return MoreObjects.toStringHelper(this)
+				.add("hashcode", hashCode())
+				.toString();
+	}	
 
 }

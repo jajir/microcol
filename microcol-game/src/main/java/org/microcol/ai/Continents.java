@@ -36,16 +36,6 @@ public class Continents {
 		return continents.stream().filter(continent -> continent.contains(unit)).findFirst().orElseThrow(
 				() -> new MicroColException(String.format("Unable to find continent for unit (%s)", unit)));
 	}
-	
-	public int size() {
-		return continents.size();
-	}
-
-	public void print() {
-		continents.forEach(continent -> {
-			System.out.println(continent.toString());
-		});
-	}
 
 	@Override
 	public String toString() {

@@ -12,6 +12,7 @@ import org.microcol.model.event.UnitMovedEvent;
 import org.microcol.model.event.UnitEmbarkedEvent;
 
 public class ModelAdapter implements ModelListener {
+	
 	@Override
 	public void gameStarted(final GameStartedEvent event) {
 		// Do nothing.

@@ -9,10 +9,6 @@ public class NotEnoughtGoldException extends MicroColException {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public NotEnoughtGoldException(String message, Throwable cause) {
-		super(message, cause);
-	}
-
 	public NotEnoughtGoldException(String message) {
 		super(message);
 	}

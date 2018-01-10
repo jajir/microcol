@@ -2,6 +2,7 @@ package org.microcol.model;
 
 import java.util.Optional;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 
 /**
@@ -46,5 +47,14 @@ public class GameOverResult {
 	public Optional<Player> getLooser() {
 		return Optional.ofNullable(looser);
 	}
+	
+	@Override
+	public String toString() {
+		return MoreObjects.toStringHelper(this)
+				.add("game", gameOverReason)
+				.add("winner", winner)
+				.add("looser", looser)
+				.toString();
+	}	
 
 }

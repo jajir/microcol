@@ -47,8 +47,6 @@ public final class GamePanelPresenter implements Localized {
 
 	public interface Display {
 
-		GamePanelView getGamePanelView();
-
 		Canvas getCanvas();
 
 		void setMoveModeOff();

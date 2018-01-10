@@ -12,6 +12,7 @@ import org.microcol.model.store.ModelPo;
 import org.microcol.model.store.PlayerPo;
 import org.microcol.model.store.UnitPo;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
@@ -343,7 +344,7 @@ public final class Model {
 	}
 
 	/**
-	 * TODO make landscape visible as units move along path.
+	 * Move selected unit on defined path.
 	 * <p>
 	 * Unit have to be on map. Path have to available for unit.
 	 * </p>
@@ -354,10 +355,12 @@ public final class Model {
 	 *            required path
 	 */
 	public void moveUnit(final Unit unit, final Path path) {
-		unit.moveTo(path);
-		if (unit.getOwner().isHuman()) {
-			map.makeVisibleMapForUnit(unit);
-		}
+		path.getLocations().forEach(loc ->{
+			unit.moveOneStep(loc);
+			if (unit.getOwner().isHuman()) {
+				map.makeVisibleMapForUnit(unit);
+			}
+		});
 	}
 
 	public void startGame() {
@@ -449,5 +452,13 @@ public final class Model {
 		Preconditions.checkNotNull(colony);
 		return colonies.contains(colony);
 	}
+	
+	@Override
+	public String toString() {
+		return MoreObjects.toStringHelper(this)
+				.add("hashcode", hashCode())
+				.toString();
+	}	
+
 
 }
