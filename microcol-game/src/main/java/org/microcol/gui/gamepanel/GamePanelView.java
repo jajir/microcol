@@ -415,6 +415,7 @@ public class GamePanelView implements GamePanelPresenter.Display {
 		Preconditions.checkNotNull(movingUnit);
 		animationManager.addAnimation(new AnimationWalk(pathPlanning, path, movingUnit, paintService, excludePainting),
 				animation -> excludePainting.includeUnit(movingUnit));
+		animationManager.waitWhileRunning();
 	}
 
 	public void addFightAnimation(final Unit attacker, final Unit defender) {

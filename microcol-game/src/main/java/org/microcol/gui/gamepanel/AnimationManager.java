@@ -71,12 +71,13 @@ public class AnimationManager implements AnimationLock {
 	public void addAnimation(final Animation animation, Consumer<Animation> onAnimationIsDone) {
 		Preconditions.checkNotNull(animation);
 		final AnimationHolder holder = new AnimationHolder(animation, onAnimationIsDone);
-
+		logger.debug("Adding animation {}", animation);
 		if (runningPart.isPresent()) {
 			animationParts.add(holder);
 		} else {
 			runningPart = Optional.of(holder);
 			hasNextStep = holder.animation.hasNextStep();
+			//TODO Calling thread should be blocked until animations is done.
 			if (hasNextStep) {
 				latch.lock();
 			}

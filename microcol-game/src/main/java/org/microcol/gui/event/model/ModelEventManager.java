@@ -52,7 +52,7 @@ public class ModelEventManager {
 		return nextTurnController;
 	}
 
-	public UnitMovedController getMoveUnitController() {
+	public UnitMovedController getUnitMovedController() {
 		return unitMovedController;
 	}
 

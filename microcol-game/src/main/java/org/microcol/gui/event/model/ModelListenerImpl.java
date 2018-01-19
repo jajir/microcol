@@ -35,7 +35,7 @@ public class ModelListenerImpl implements ModelListener {
 
 	@Override
 	public void unitMoved(final UnitMovedEvent event) {
-		modelEventManager.getMoveUnitController().fireEvent(event);
+		modelEventManager.getUnitMovedController().fireEvent(event);
 	}
 
 	@Override

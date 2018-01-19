@@ -77,7 +77,7 @@ class ListenerManager {
 
 		logger.info("Unit moved: {}.", event);
 
-		executeInSeparateThread(listener -> listener.unitMoved(event));
+		executeInSameThread(listener -> listener.unitMoved(event));
 	}
 
 	void fireUnitAttacked(final Model model, final Unit attacker, final Unit defender, final Unit destroyed) {
@@ -129,6 +129,10 @@ class ListenerManager {
 
 	private void executeInSeparateThread(Consumer<ModelListener> action) {
 		listeners.forEach(listener -> Executors.newSingleThreadExecutor().execute(() -> action.accept(listener)));
+	}
+
+	private void executeInSameThread(Consumer<ModelListener> action) {
+		listeners.forEach(listener -> action.accept(listener));
 	}
 	
 }
