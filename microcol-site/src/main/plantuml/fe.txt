@@ -1,0 +1,39 @@
+@startuml
+ 
+participant "Model" as M
+participant "Animation manager" as AM
+participant "Front End" as FE
+actor "Player" as P
+ 
+ 
+      
+Activate FE
+ 
+P -> M: Move
+M -> M: Split move to steps
+ 
+loop for each step
+ 
+       M -> AM: animate one step
+       Activate AM
+ 
+       loop for each animation step
+            
+             FE -> AM: Get animation state
+             Activate AM
+             AM --> FE: Return animation state
+             Deactivate AM
+             P -> FE: Watch
+            
+             AM -> AM: next animation step
+            
+       end
+      
+       AM --> M: animation step is done
+       Deactivate AM
+ 
+end
+ 
+Deactivate FE
+ 
+@enduml

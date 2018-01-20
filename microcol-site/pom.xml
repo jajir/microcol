@@ -26,6 +26,37 @@
 				<groupId>com.github.github</groupId>
 				<artifactId>site-maven-plugin</artifactId>
 			</plugin>
+			<!-- mvn com.github.jeluard:plantuml-maven-plugin:generate -->
+			<plugin>
+				<groupId>com.github.jeluard</groupId>
+				<artifactId>plantuml-maven-plugin</artifactId>
+				<version>7941</version>
+				<executions>
+					<execution>
+						<id>generate-images-for-site</id>
+						<phase>site</phase>
+						<goals>
+							<goal>generate</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<sourceFiles>
+						<directory>${basedir}</directory>
+						<includes>
+							<include>src/main/plantuml/**/*.txt</include>
+						</includes>
+					</sourceFiles>
+					<outputDirectory>${basedir}/target/site/</outputDirectory>
+				</configuration>
+				<dependencies>
+					<dependency>
+						<groupId>net.sourceforge.plantuml</groupId>
+						<artifactId>plantuml</artifactId>
+						<version>7999</version>
+					</dependency>
+				</dependencies>
+			</plugin>
 		</plugins>
 	</build>
 

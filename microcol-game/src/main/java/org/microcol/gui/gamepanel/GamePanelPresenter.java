@@ -138,19 +138,6 @@ public final class GamePanelPresenter implements Localized {
 
 		unitMovedController.addListener(event -> {
 			scheduleWalkAnimation(event);
-			//TODO verify that following code is useless
-//			/**
-//			 * Wait until animation is finished.
-//			 */
-//			while (display.getAnimationManager().hasNextStep()) {
-//				try {
-//					Thread.sleep(100);
-//				} catch (InterruptedException e1) {
-//					/**
-//					 * Exception is intentionally sink.
-//					 */
-//				}
-//			}
 			logger.info("Walk animation was scheduled and it's done.");
 		});
 		startMoveController.addListener(event -> swithToMoveMode());
