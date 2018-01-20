@@ -7,9 +7,6 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Class helps measure Frame per second rate.
- * 
- *
- *TODO JJ replace swing.timer
  */
 public class FpsCounter {
 
@@ -39,6 +36,9 @@ public class FpsCounter {
 		timer.stop();
 	}
 
+	/**
+	 * Should be called when screen was painted.
+	 */
 	public void screenWasPainted() {
 		counter++;
 	}

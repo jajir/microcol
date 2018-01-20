@@ -17,3 +17,14 @@ How it's working
   When some event should be animated than it's added to <AnimationManager>.
   <AnimationManager> is called each time screen is redrawn. 
  
+* Animation manager
+
+ Animation manager is responsible for providing information about animation to front end which is periodically repainted.
+ When animation is added called thread is blocked until animation is finished. 
+  
+[animation-manager.png] Role of animation manager
+
+ Model have to split move animation into several small steps. Each step have to painted and than step should be reflected in model.
+ It helps keep state of front and model in similar state.  
+ 
+ 

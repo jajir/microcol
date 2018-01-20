@@ -10,25 +10,26 @@ Planned releases
   	
   * \u2713 Allow cycle through units. It allows to give focus to specific unit. Not just first unit at some location.
   	
-  * \u2717 Colony building queue and queue editing
+  * \u2717 Colony building queue and queue editing - simple and ugly version
    	
-  * \u2717 Map discovery. At the beginning of game map is hidden when user come to some place map is revealed. 
+  * \u2717 Map discovery. At the beginning of game map is hidden when user come to some place map is revealed.
+  	User can't interact with hidden objects.
 
   * \u2717 Improve UI
    
-    * right panel allows to select unit
+    * \u2717 right panel allows to select unit
     
-    * After move is selected unit preserved
+    * \u2717 After move is selected unit preserved
     
-	* When user in move mode move mouse to location where unit can't go than cursor will change icon. 
+    * \u2717 When user in move mode move mouse to location where unit can't go than cursor will change icon. 
 	  	
   * \u2717 Simple statistics, each turn count and remember:
   	
-  	* Player's military strength
+  	* \u2717 Player's military strength
   	
-  	* Number of units
+  	* \u2717 Number of units
   	
-  	* Total price of user's good 
+  	* \u2717 Total price of user's good 
   	
   * \u2717 Allow to display this statistics and the end of game
   	
@@ -38,27 +39,27 @@ Planned releases
   
   * \u2717 Documentation update
   	
-  	* development description is outdated
+  	* \u2717 development description is outdated
   	
-  	* release process
+  	* \u2717 release process
   	
-  	* documentation publishing (return back to manual process)
+  	* \u2717 documentation publishing (return back to manual process)
 
-  * Colony UI improvements 
+  * \u2717 Colony UI improvements 
     	
   	* \u2717 Show how many goods is consumed.
   	  	
   	* \u2717 Show that some production doesn't have enough sources.
 
-  * \u2717 Junit test for rotating and composing images.
+  * \u2713 Junit test for rotating and composing images.
 
-  * \u2717 Define tiles in one background image. Prevent tiles interfering.
+  * \u2713 Define tiles in one background image. Prevent tiles interfering.
 
-  * \u2717 Create pseudo random landscape, rock, mountain, water .... Show random version of rock. Always show same version of rock in a same game. Prevent trees to change shape after cut down of some other tree. 
+  * \u2713 Create pseudo random landscape, rock, mountain, water .... Show random version of rock. Always show same version of rock in a same game. Prevent trees to change shape after cut down of some other tree. 
 
-  * \u2717 Generate tile shapes for different tiles connections, for example sea/grass and sea/tundra.
+  * \u2713 Generate tile shapes for different tiles connections, for example sea/grass and sea/tundra.
 
-  * \u2717 Support hiding on not reveal map part.
+  * \u2713 Support hiding on not reveal map part.
 
  * 0.6.0 - add some other features	
 
