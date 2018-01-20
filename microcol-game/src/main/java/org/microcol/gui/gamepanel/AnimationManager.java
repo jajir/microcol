@@ -63,12 +63,22 @@ public class AnimationManager implements AnimationLock {
 		}
 	}
 
-	public void paint(final GraphicsContext graphics, final Area area) {
+	void paint(final GraphicsContext graphics, final Area area) {
 		Preconditions.checkArgument(hasNextStep, "Can't perform step when there is no next step.");
 		runningPart.get().animation.paint(graphics, area);
 	}
 
-	public void addAnimation(final Animation animation, Consumer<Animation> onAnimationIsDone) {
+	/**
+	 * Schedule animation to be shown. Also allow to lock calling thread with
+	 * method {@link #waitWhileRunning()}.
+	 * 
+	 * @param animation
+	 *            required animation object
+	 * @param onAnimationIsDone
+	 *            optional operation that will be executed when animation is
+	 *            none
+	 */
+	void addAnimation(final Animation animation, Consumer<Animation> onAnimationIsDone) {
 		Preconditions.checkNotNull(animation);
 		final AnimationHolder holder = new AnimationHolder(animation, onAnimationIsDone);
 		logger.debug("Adding animation {}", animation);
@@ -77,11 +87,8 @@ public class AnimationManager implements AnimationLock {
 		} else {
 			runningPart = Optional.of(holder);
 			hasNextStep = holder.animation.hasNextStep();
-			//TODO Calling thread should be blocked until animations is done.
-			if (hasNextStep) {
-				latch.lock();
-			}
 		}
+		latch.lock();
 	}
 
 	@Override

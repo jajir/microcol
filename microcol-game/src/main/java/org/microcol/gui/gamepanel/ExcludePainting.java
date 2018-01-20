@@ -17,6 +17,9 @@ import com.google.inject.Inject;
  */
 public class ExcludePainting {
 
+	/**
+	 * List of units that will not be animated.
+	 */
 	private final Set<Unit> excludeUnits;
 
 	@Inject

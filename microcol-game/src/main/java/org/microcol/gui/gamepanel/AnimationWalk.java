@@ -24,21 +24,18 @@ public class AnimationWalk implements Animation {
 
 	private final List<AnimationWalkParticle> walkParticles;
 
-	public AnimationWalk(final PathPlanning pathPlanning, final List<Location> path, final Unit unit,
+	AnimationWalk(final PathPlanning pathPlanning, final Location start, final Location end, final Unit unit,
 			final PaintService paintService, final ExcludePainting excludePainting) {
-		Preconditions.checkNotNull(path);
-		Preconditions.checkArgument(!path.isEmpty(), "Path can't be empty");
-		Preconditions.checkArgument(path.size() > 1, "Path should contains more than one locations");
+		Preconditions.checkNotNull(start);
+		Preconditions.checkNotNull(end);
+		Preconditions.checkNotNull(paintService);
+		Preconditions.checkNotNull(excludePainting);
+		Preconditions.checkNotNull(start.getNeighbors().contains(end),
+				"Start locations '%s' is not neighbors od end location '%s'", start, end);
 		this.unit = Preconditions.checkNotNull(unit);
 		excludePainting.excludeUnit(unit);
 		walkParticles = new ArrayList<>();
-		Location previous = null;
-		for (final Location loc : path) {
-			if (previous != null) {
-				walkParticles.add(new AnimationWalkParticle(paintService, previous, loc, pathPlanning));
-			}
-			previous = loc;
-		}
+		walkParticles.add(new AnimationWalkParticle(paintService, start, end, pathPlanning));
 		Preconditions.checkArgument(hasNextStep(), "Animation can't start without any steps.");
 	}
 

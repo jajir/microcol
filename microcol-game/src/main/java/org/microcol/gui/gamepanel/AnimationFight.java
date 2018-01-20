@@ -32,7 +32,7 @@ public class AnimationFight implements Animation {
 
 	private final int animationSpeed;
 
-	public AnimationFight(final Unit attacker, final Unit defender, final ImageProvider imageProvider,
+	AnimationFight(final Unit attacker, final Unit defender, final ImageProvider imageProvider,
 			final int animationSpeed) {
 		this.attacker = Preconditions.checkNotNull(attacker);
 		this.defender = Preconditions.checkNotNull(defender);

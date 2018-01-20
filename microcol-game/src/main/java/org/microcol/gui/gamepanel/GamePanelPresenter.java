@@ -18,7 +18,6 @@ import org.microcol.gui.event.model.ColonyWasCapturedController;
 import org.microcol.gui.event.model.DebugRequestController;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.event.model.NewGameController;
-import org.microcol.gui.event.model.UnitMovedController;
 import org.microcol.gui.mainmenu.CenterViewController;
 import org.microcol.gui.mainmenu.ExitGameController;
 import org.microcol.gui.mainmenu.ShowGridController;
@@ -29,12 +28,10 @@ import org.microcol.model.Colony;
 import org.microcol.model.Location;
 import org.microcol.model.Model;
 import org.microcol.model.Unit;
-import org.microcol.model.event.UnitMovedEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
-import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 
 import javafx.scene.canvas.Canvas;
@@ -52,10 +49,6 @@ public final class GamePanelPresenter implements Localized {
 		void setMoveModeOff();
 
 		void setMoveModeOn();
-
-		void addMoveAnimator(List<Location> path, Unit movingUnit);
-
-		AnimationManager getAnimationManager();
 
 		void initGame(boolean idGridShown, Model model);
 
@@ -107,7 +100,6 @@ public final class GamePanelPresenter implements Localized {
 	public GamePanelPresenter(final GamePanelPresenter.Display display,
 			final GameModelController gameModelController,
 			final KeyController keyController,
-			final UnitMovedController unitMovedController,
 			final NewGameController newGameController,
 			final GamePreferences gamePreferences,
 			final ShowGridController showGridController,
@@ -136,10 +128,6 @@ public final class GamePanelPresenter implements Localized {
 		this.modeController = Preconditions.checkNotNull(modeController);
 		this.selectedUnitManager = Preconditions.checkNotNull(selectedUnitManager);
 
-		unitMovedController.addListener(event -> {
-			scheduleWalkAnimation(event);
-			logger.info("Walk animation was scheduled and it's done.");
-		});
 		startMoveController.addListener(event -> swithToMoveMode());
 
 		keyController.addListener(e -> {
@@ -392,11 +380,5 @@ public final class GamePanelPresenter implements Localized {
 		}
 	}
 
-	private void scheduleWalkAnimation(final UnitMovedEvent event) {
-		display.planScrollingAnimationToPoint(display.getArea().getCenterToLocation(event.getStart()));
-		final List<Location> path = Lists.newArrayList(event.getStart(), event.getEnd());
-		//TODO paths always consists from two places, adjust parameters
-		display.addMoveAnimator(path, event.getUnit());
-	}
 
 }

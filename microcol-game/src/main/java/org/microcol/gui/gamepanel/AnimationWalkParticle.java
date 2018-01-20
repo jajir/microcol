@@ -43,11 +43,11 @@ public class AnimationWalkParticle {
 	 * @return return <code>true</code> when not all animation was drawn, it
 	 *         return <code>false</code> when all animation is done
 	 */
-	public boolean hasNextStep() {
+	boolean hasNextStep() {
 		return !partialPath.isEmpty();
 	}
 
-	public void paint(final GraphicsContext graphics, final Area area, final Unit unit) {
+	void paint(final GraphicsContext graphics, final Area area, final Unit unit) {
 		final Point point = partialPath.remove(0).add(area.convertToPoint(locationFrom));
 		if (area.isVisibleScreenPoint(point)) {
 			paintService.paintUnit(graphics, point, unit, ImageProvider.IMG_TILE_MODE_MOVE);

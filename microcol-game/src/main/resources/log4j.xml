@@ -35,7 +35,7 @@
 	<logger name="org.microcol.gui.event.AbstractEventController">
 		<level value="WARN"/>
 	</logger>
-	<logger name="org.microcol.gui.gamepanel.AnimationManager">
+	<logger name="org.microcol.gui.gamepanel.AnimationWalk">
 		<level value="DEBUG"/>
 	</logger>
 

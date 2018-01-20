@@ -65,7 +65,7 @@ public class GamePanelView implements GamePanelPresenter.Display {
 
 	private final AnimationManager animationManager;
 
-	private final ExcludePainting excludePainting = new ExcludePainting();
+	private final ExcludePainting excludePainting;
 
 	private final FpsCounter fpsCounter;
 
@@ -99,7 +99,8 @@ public class GamePanelView implements GamePanelPresenter.Display {
 			final SelectedUnitManager selectedUnitManager, final MoveModeSupport moveModeSupport, final Text text,
 			final ViewUtil viewUtil, final LocalizationHelper localizationHelper, final PaintService paintService,
 			final GamePreferences gamePreferences, final MouseOverTileManager mouseOverTileManager,
-			final AnimationManager animationManager, final ModeController modeController) {
+			final AnimationManager animationManager, final ModeController modeController,
+			final ExcludePainting excludePainting) {
 		this.gameModelController = Preconditions.checkNotNull(gameModelController);
 		this.pathPlanning = Preconditions.checkNotNull(pathPlanning);
 		this.imageProvider = Preconditions.checkNotNull(imageProvider);
@@ -115,9 +116,9 @@ public class GamePanelView implements GamePanelPresenter.Display {
 		this.mouseOverTileManager = Preconditions.checkNotNull(mouseOverTileManager);
 		this.animationManager = Preconditions.checkNotNull(animationManager);
 		this.modeController = Preconditions.checkNotNull(modeController);
+		this.excludePainting = Preconditions.checkNotNull(excludePainting);
 		oneTurnMoveHighlighter = new OneTurnMoveHighlighter();
 		gotoModeCursor = new ImageCursor(imageProvider.getImage(ImageProvider.IMG_CURSOR_GOTO), 1, 1);
-		// excludePainting = new ExcludePainting();
 		visibleArea = new VisibleArea();
 
 		// TODO JJ specify canvas size
@@ -169,6 +170,11 @@ public class GamePanelView implements GamePanelPresenter.Display {
 		visibleArea.setY(point.getY());
 	}
 
+	public void planScrollingAnimationToLocation(final Location location){
+		planScrollingAnimationToPoint(getArea().getCenterToLocation(location));
+	}
+
+	
 	@Override
 	public void planScrollingAnimationToPoint(final Point targetPoint) {
 		/**
@@ -408,24 +414,9 @@ public class GamePanelView implements GamePanelPresenter.Display {
 		modeController.setMoveMode(true);
 	}
 
-	// TODO JJ animation scheduling should be in separate class.
-	@Override
-	public void addMoveAnimator(final List<Location> path, final Unit movingUnit) {
-		Preconditions.checkNotNull(path);
-		Preconditions.checkNotNull(movingUnit);
-		animationManager.addAnimation(new AnimationWalk(pathPlanning, path, movingUnit, paintService, excludePainting),
-				animation -> excludePainting.includeUnit(movingUnit));
-		animationManager.waitWhileRunning();
-	}
-
 	public void addFightAnimation(final Unit attacker, final Unit defender) {
 		animationManager.addAnimation(
 				new AnimationFight(attacker, defender, imageProvider, gamePreferences.getAnimationSpeed()));
-	}
-
-	@Override
-	public AnimationManager getAnimationManager() {
-		return animationManager;
 	}
 
 	@Override

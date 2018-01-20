@@ -59,7 +59,7 @@ public class PaintService {
 	}
 
 	/**
-	 * Draw unit to tile.
+	 * Draw unit to tile. 
 	 * 
 	 * @param graphics
 	 *            required graphics to draw
