@@ -28,7 +28,7 @@ public class UnitType {
 	
 	public final static UnitType COLONIST = UnitType.make()
 			.setName("COLONIST")
-			.setMoveableTerrains(ImmutableList.of(TerrainType.GRASSLAND))
+			.setMoveableTerrains(TerrainType.UNIT_CAN_WALK_AT)
 			.setSpeed(1)
 			.setCanAttack(true)
 			.setCargoCapacity(0)
@@ -38,7 +38,7 @@ public class UnitType {
 	
 	public final static UnitType EXPERT_ORE_MINER = UnitType.make()
 			.setName("EXPERT_ORE_MINER")
-			.setMoveableTerrains(ImmutableList.of(TerrainType.GRASSLAND))
+			.setMoveableTerrains(TerrainType.UNIT_CAN_WALK_AT)
 			.setSpeed(1)
 			.setCanAttack(true)
 			.setCargoCapacity(0)
@@ -49,7 +49,7 @@ public class UnitType {
 	
 	public final static UnitType MASTER_BLACKSMITH = UnitType.make()
 			.setName("MASTER_BLACKSMITH")
-			.setMoveableTerrains(ImmutableList.of(TerrainType.GRASSLAND))
+			.setMoveableTerrains(TerrainType.UNIT_CAN_WALK_AT)
 			.setSpeed(1)
 			.setCanAttack(true)
 			.setCargoCapacity(0)

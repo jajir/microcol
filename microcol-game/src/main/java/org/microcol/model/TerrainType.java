@@ -19,7 +19,7 @@ public final class TerrainType {
 			.setName("GRASSLAND")
 			.setCode("g")
 			.setCanHaveTree(true)
-			.setSee(false)
+			.setSea(false)
 			.setMoveCost(1)
 			.setMoveCostWithTree(2)
 			.setDefenseBonus(0)
@@ -51,7 +51,7 @@ public final class TerrainType {
 			.setName("PRAIRIE")
 			.setCode("p")
 			.setCanHaveTree(true)
-			.setSee(false)
+			.setSea(false)
 			.setMoveCost(1)
 			.setMoveCostWithTree(2)
 			.setDefenseBonus(0)
@@ -80,7 +80,7 @@ public final class TerrainType {
 			.setName("SAVANNAH")
 			.setCode("s")
 			.setCanHaveTree(true)
-			.setSee(false)
+			.setSea(false)
 			.setMoveCost(1)
 			.setMoveCostWithTree(2)
 			.setDefenseBonus(0)
@@ -112,7 +112,7 @@ public final class TerrainType {
 			.setName("SWAMP")
 			.setCode("w")
 			.setCanHaveTree(true)
-			.setSee(false)
+			.setSea(false)
 			.setMoveCost(1)
 			.setMoveCostWithTree(2)
 			.setDefenseBonus(0)
@@ -138,7 +138,7 @@ public final class TerrainType {
 			.setName("DESERT")
 			.setCode("d")
 			.setCanHaveTree(true)
-			.setSee(false)
+			.setSea(false)
 			.setMoveCost(1)
 			.setMoveCostWithTree(2)
 			.setDefenseBonus(0)
@@ -171,7 +171,7 @@ public final class TerrainType {
 			.setName("TUNDRA")
 			.setCode("t")
 			.setCanHaveTree(false)
-			.setSee(false)
+			.setSea(false)
 			.setMoveCost(2)
 			.setMoveCostWithTree(2)
 			.setDefenseBonus(0)
@@ -196,7 +196,7 @@ public final class TerrainType {
 			.setName("ARCTIC")
 			.setCode("a")
 			.setCanHaveTree(false)
-			.setSee(false)
+			.setSea(false)
 			.setMoveCost(2)
 			.setMoveCostWithTree(2)
 			.setDefenseBonus(0)
@@ -207,7 +207,7 @@ public final class TerrainType {
 			.setName("HILL")
 			.setCode("h")
 			.setCanHaveTree(false)
-			.setSee(false)
+			.setSea(false)
 			.setMoveCost(1)
 			.setMoveCostWithTree(2)
 			.setDefenseBonus(0)
@@ -224,7 +224,7 @@ public final class TerrainType {
 			.setName("MOUNTAIN")
 			.setCode("m")
 			.setCanHaveTree(false)
-			.setSee(false)
+			.setSea(false)
 			.setMoveCost(1)
 			.setMoveCostWithTree(2)
 			.setDefenseBonus(0)
@@ -241,7 +241,7 @@ public final class TerrainType {
 			.setName("HIGH_SEA")
 			.setCode("~")
 			.setCanHaveTree(false)
-			.setSee(true)
+			.setSea(true)
 			.setMoveCost(1)
 			.setMoveCostWithTree(1)
 			.setDefenseBonus(0)
@@ -255,7 +255,7 @@ public final class TerrainType {
 			.setName("OCEAN")
 			.setCode("_")
 			.setCanHaveTree(false)
-			.setSee(true)
+			.setSea(true)
 			.setMoveCost(1)
 			.setMoveCostWithTree(1)
 			.setDefenseBonus(0)
@@ -277,6 +277,10 @@ public final class TerrainType {
 	public final static List<TerrainType> UNIT_CAN_SAIL_AT = TERRAINS.stream().filter(terrain -> terrain.isSea())
 			.collect(ImmutableList.toImmutableList());
 	
+	public final static List<TerrainType> UNIT_CAN_WALK_AT = TERRAINS.stream().filter(terrain -> terrain.isLand())
+			.collect(ImmutableList.toImmutableList());
+
+	
 	private static class TerrainTypeBuilder{
 		
 		private final List<Production> productions = new ArrayList<>();
@@ -287,7 +291,7 @@ public final class TerrainType {
 		
 		private boolean canHaveTree;
 
-		private boolean isSee;
+		private boolean isSea;
 		
 		private int moveCost = NO_VALUE;
 		
@@ -298,7 +302,7 @@ public final class TerrainType {
 		private int defenseBonusWithTree = NO_VALUE;
 		
 		private TerrainType build(){
-			return new TerrainType(name, code, canHaveTree, isSee, moveCost, moveCostWithTree, defenseBonus,
+			return new TerrainType(name, code, canHaveTree, isSea, moveCost, moveCostWithTree, defenseBonus,
 					defenseBonusWithTree, productions);
 		}
 
@@ -320,13 +324,13 @@ public final class TerrainType {
 		/**
 		 * Set if it's see or ocean and if ships can sail it.
 		 * 
-		 * @param isSee
+		 * @param isSea
 		 *            required value if it's <code>true</code> than ships can
 		 *            sail on it and it's see
 		 * @return builder object
 		 */
-		private TerrainTypeBuilder setSee(boolean isSee) {
-			this.isSee = isSee;
+		private TerrainTypeBuilder setSea(boolean isSea) {
+			this.isSea = isSea;
 			return this;
 		}
 
@@ -463,7 +467,7 @@ public final class TerrainType {
 	
 	private final boolean canHaveTree;
 
-	private final boolean isSee;
+	private final boolean isSea;
 	
 	private final int moveCost;
 	
@@ -485,7 +489,7 @@ public final class TerrainType {
 		this.name = Preconditions.checkNotNull(name, "name was not set");
 		this.code = Preconditions.checkNotNull(code, "code was not set");
 		this.canHaveTree = canHaveTree;
-		this.isSee = isSee;
+		this.isSea = isSee;
 		this.moveCost = moveCost;
 		this.moveCostWithTree = moveCostWithTree;
 		this.defenseBonus = defenseBonus;
@@ -544,11 +548,11 @@ public final class TerrainType {
 	}
 
 	public boolean isSea() {
-		return isSee;
+		return isSea;
 	}
 
 	public boolean isLand() {
-		return !isSee;
+		return !isSea;
 	}
 
 	public int getMoveCost() {

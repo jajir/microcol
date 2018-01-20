@@ -218,16 +218,16 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1.1300972"
-     inkscape:cx="353.6649"
-     inkscape:cy="807.16676"
+     inkscape:zoom="0.79909939"
+     inkscape:cx="336.04852"
+     inkscape:cy="638.09211"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="true"
      units="px"
      inkscape:window-width="1600"
      inkscape:window-height="1005"
-     inkscape:window-x="75"
+     inkscape:window-x="81"
      inkscape:window-y="0"
      inkscape:window-maximized="0"
      inkscape:pagecheckerboard="true"
@@ -372,7 +372,7 @@
        id="guide2267"
        inkscape:locked="false" />
     <sodipodi:guide
-       position="0,216.95834"
+       position="-29.104168,216.95834"
        orientation="0,1"
        id="guide2269"
        inkscape:locked="false" />
@@ -2445,12 +2445,154 @@
        inkscape:export-xdpi="86.400002"
        inkscape:export-ydpi="86.400002"
        transform="scale(1,-1)" />
+    <g
+       transform="matrix(0.01297926,0,0,0.01366996,-5.9865192,35.168735)"
+       style="clip-rule:evenodd;fill-rule:evenodd;image-rendering:optimizeQuality;shape-rendering:geometricPrecision;text-rendering:geometricPrecision"
+       id="_840327696"
+       inkscape:export-filename="/Users/jan/Documents/repo/github/microcol/microcol-game/src/main/resources/images/backgroud.png"
+       inkscape:export-xdpi="86.400002"
+       inkscape:export-ydpi="86.400002">
+      <path
+         style="fill:#c88f5f"
+         inkscape:connector-curvature="0"
+         id="path883"
+         d="m 3423,4831 c 0,0 -14,374 -8,378 6,4 25,5 26,-4 2,-9 10,-202 10,-202 0,0 11,-2 11,1 1,2 14,204 21,208 8,4 22,0 24,-23 1,-24 -18,-375 -20,-381 -1,-5 -63,-6 -64,23 z"
+         class="fil11" />
+      <path
+         style="fill:#c88f5f"
+         inkscape:connector-curvature="0"
+         id="path885"
+         d="m 3381,4824 c -8,30 -13,177 -3,180 11,4 18,-1 19,-18 1,-17 4,-138 11,-147 6,-8 86,-24 91,-17 4,7 9,40 11,71 2,31 2,107 9,109 7,3 25,3 24,-43 -1,-46 -7,-137 -27,-159 -25,-26 -128,-1 -135,24 z"
+         class="fil11" />
+      <path
+         style="fill:#c88f5f"
+         inkscape:connector-curvature="0"
+         id="path887"
+         d="m 3458,4674 c 0,0 -34,11 -40,43 -6,33 25,61 47,49 23,-12 32,-34 33,-52 1,-18 -15,-40 -40,-40 z"
+         class="fil11" />
+    </g>
+    <g
+       id="g3524"
+       transform="matrix(1.1977049,0,0,1.1814132,-38.937677,-25.238084)"
+       inkscape:export-filename="/Users/jan/Documents/repo/github/microcol/microcol-game/src/main/resources/images/backgroud.png"
+       inkscape:export-xdpi="86.400002"
+       inkscape:export-ydpi="86.400002">
+      <path
+         class="fil11"
+         d="m 36.557501,135.18415 c -0.38,-0.06 -0.75,-0.18 -0.9,0.19 -0.07,0.18 -0.14,0.45 -0.19,0.74 -0.06,0.41 -0.07,0.89 -0.07,0.89 0.08,0.13 0.28,0.09 0.47,0.07 0,0 0,-1 0.05,-1.49 0.02,-0.16 0.08,-0.21 0.1,-0.23 0.1,-0.06 0.54,-0.01 0.54,-0.01 0,-0.05 0,-0.1 0,-0.16 z"
+         id="path867"
+         inkscape:connector-curvature="0"
+         style="clip-rule:evenodd;fill:#c88f5f;fill-rule:evenodd;stroke-width:0.01;image-rendering:optimizeQuality;shape-rendering:geometricPrecision;text-rendering:geometricPrecision" />
+      <path
+         class="fil5"
+         d="m 36.517501,138.03414 c 0.06,0.01 0.22,0.02 0.24,-0.03 0.01,-0.03 -0.04,-0.43999 -0.08,-0.81999 -0.04,-0.34 -0.06,-0.66 -0.07,-0.76 0.36,0.08 2.04,0.15 2.53,0.15 0.28,0 0.51,-0.23 0.51,-0.51 v -0.53 c 0,-0.28 -0.23,-0.51 -0.51,-0.51 h -2.38 c -0.28,0 -0.51,0.23 -0.51,0.51 0,0.17 -0.04,0.46 0,0.86 0.06,0.72 0.22,1.61999 0.27,1.63999 z"
+         id="path871"
+         inkscape:connector-curvature="0"
+         style="clip-rule:evenodd;fill:#fefefe;fill-rule:evenodd;stroke-width:0.01;image-rendering:optimizeQuality;shape-rendering:geometricPrecision;text-rendering:geometricPrecision" />
+      <path
+         class="fil5"
+         d="m 39.237501,136.60415 c 0,-0.04 0.11,0.36 0.06,0.4 -0.05,0.05 -0.41,0.09 -0.61,0.13 l -0.15,-0.08 c 0,0 -0.12,0.2 -0.07,0.26 0.04,0.06 1.04,0.14 1.13,-0.04 0.08,-0.17 0.07,-0.63 -0.04,-0.91 -0.12,-0.29 -0.319999,0.24 -0.32,0.24 z"
+         id="path873"
+         inkscape:connector-curvature="0"
+         style="clip-rule:evenodd;fill:#fefefe;fill-rule:evenodd;stroke-width:0.01;image-rendering:optimizeQuality;shape-rendering:geometricPrecision;text-rendering:geometricPrecision" />
+      <path
+         class="fil5"
+         d="m 39.587501,136.20415 c 0.03,0 0.25,0.46 0.25,0.64 0,0.19 -0.05,1.14999 -0.01,1.15999 0.04,0.02 0.25,0.11 0.29,-0.12 0.03,-0.15 0.08,-0.72999 0.06,-1.12999 -0.03,-0.37 -0.14,-0.61 -0.49,-1.15 l -0.43,0.21 z"
+         id="path875"
+         inkscape:connector-curvature="0"
+         style="clip-rule:evenodd;fill:#fefefe;fill-rule:evenodd;stroke-width:0.01;image-rendering:optimizeQuality;shape-rendering:geometricPrecision;text-rendering:geometricPrecision" />
+      <path
+         class="fil5"
+         d="m 39.137501,135.02415 0.95,-1.13 c 0,0 0.3,-0.52 0.38,-0.58 0.08,-0.07 0.22,-0.07 0.22,-0.07 l -0.16,0.49 c 0,0 0.38,0.41 0.44,0.51 0.05,0.1 0.45,0.64 0.27,0.91 -0.18,0.28 -0.38,0.07 -0.5,-0.05 -0.13,-0.11 -0.35,-0.49 -0.35,-0.49 l -0.69,1.38 z"
+         id="path877"
+         inkscape:connector-curvature="0"
+         style="clip-rule:evenodd;fill:#fefefe;fill-rule:evenodd;stroke-width:0.01;image-rendering:optimizeQuality;shape-rendering:geometricPrecision;text-rendering:geometricPrecision" />
+      <path
+         class="fil11"
+         d="m 37.817501,133.46415 c 0,0 -0.22,0.08 -0.22,0.82 0,0.74 0.01,1.1 0.06,1.2 0.05,0.1 0.31,0.63 0.31,0.63 0,0 -0.31,1.18 -0.26,1.24 0.05,0.06 0.37,0.26 0.37,0.18 0,-0.08 -0.05,-0.35 -0.05,-0.35 0,0 0.46,-1.09 0.38,-1.23 -0.08,-0.14 -0.35,-0.93 -0.35,-0.93 h 0.28 c 0,0 0.1,-1.38 0.04,-1.45 -0.06,-0.07 -0.39,-0.2 -0.56,-0.11 z"
+         id="path879"
+         inkscape:connector-curvature="0"
+         style="clip-rule:evenodd;fill:#c88f5f;fill-rule:evenodd;stroke-width:0.01;image-rendering:optimizeQuality;shape-rendering:geometricPrecision;text-rendering:geometricPrecision" />
+      <path
+         class="fil11"
+         d="m 38.067501,132.55415 c 0,0 -0.4,0.21 -0.33,0.5 0.08,0.3 0.49,0.35 0.57,0.2 0.07,-0.15 0.14,-0.53 0.06,-0.62 -0.08,-0.09 -0.3,-0.08 -0.3,-0.08 z"
+         id="path881"
+         inkscape:connector-curvature="0"
+         style="clip-rule:evenodd;fill:#c88f5f;fill-rule:evenodd;stroke-width:0.01;image-rendering:optimizeQuality;shape-rendering:geometricPrecision;text-rendering:geometricPrecision" />
+    </g>
+    <g
+       id="g3591"
+       transform="matrix(1.4449608,0,0,1.4276241,-35.793338,-49.391931)"
+       inkscape:export-filename="/Users/jan/Documents/repo/github/microcol/microcol-game/src/main/resources/images/backgroud.png"
+       inkscape:export-xdpi="86.400002"
+       inkscape:export-ydpi="86.400002">
+      <path
+         class="fil11"
+         d="m 80.796668,116.56331 c 0,0 0.04,0.64 0.21,1.13 0.16,0.5 1.580001,1.78 3.160001,2.28 1.58,0.49 2.5,0.04 2.67,-0.01 l -3.96,-2.17 z"
+         id="path851"
+         inkscape:connector-curvature="0"
+         style="clip-rule:evenodd;fill:#c88f5f;fill-rule:evenodd;stroke-width:0.01;image-rendering:optimizeQuality;shape-rendering:geometricPrecision;text-rendering:geometricPrecision" />
+      <path
+         class="fil16"
+         d="m 80.816668,116.62331 c 0.18,0.36 1.320001,1.91 3.420001,2.67 2.34,0.84 2.9,0.61 2.9,0.61 0,0 -1.56,-0.8 -2.23,-1.33 -0.49,-0.38 -2.03,-1.39 -3.14,-1.82 -0.370001,-0.14 -0.760001,-0.33 -0.940001,-0.25 -0.05,0.02 -0.03,0.08 -0.01,0.12 z"
+         id="path853"
+         inkscape:connector-curvature="0"
+         style="clip-rule:evenodd;fill:#d7b56d;fill-rule:evenodd;stroke-width:0.01;image-rendering:optimizeQuality;shape-rendering:geometricPrecision;text-rendering:geometricPrecision" />
+      <rect
+         class="fil11"
+         x="83.246666"
+         y="114.12331"
+         width="0.24645102"
+         height="4.1610107"
+         id="rect855"
+         style="clip-rule:evenodd;fill:#c88f5f;fill-rule:evenodd;stroke-width:0.01;image-rendering:optimizeQuality;shape-rendering:geometricPrecision;text-rendering:geometricPrecision" />
+      <rect
+         class="fil11"
+         x="84.706665"
+         y="114.96331"
+         width="0.24645102"
+         height="4.0842104"
+         id="rect857"
+         style="clip-rule:evenodd;fill:#c88f5f;fill-rule:evenodd;stroke-width:0.01;image-rendering:optimizeQuality;shape-rendering:geometricPrecision;text-rendering:geometricPrecision" />
+      <rect
+         class="fil11"
+         x="81.856667"
+         y="114.38332"
+         width="0.24645102"
+         height="2.9927502"
+         id="rect859"
+         style="clip-rule:evenodd;fill:#c88f5f;fill-rule:evenodd;stroke-width:0.01;image-rendering:optimizeQuality;shape-rendering:geometricPrecision;text-rendering:geometricPrecision" />
+      <path
+         class="fil13"
+         d="m 81.146668,116.43331 c 0.550001,0 1.110001,0 1.670001,0 0,-0.57 -0.03,-1.34 -0.23,-1.71 -0.56,0 -0.61,0 -1.17,0 0,0.57 -0.08,1.28 -0.270001,1.71 z"
+         id="path861"
+         inkscape:connector-curvature="0"
+         style="clip-rule:evenodd;fill:#a6d7d5;fill-rule:evenodd;stroke-width:0.01;image-rendering:optimizeQuality;shape-rendering:geometricPrecision;text-rendering:geometricPrecision" />
+      <path
+         class="fil5"
+         d="m 82.076669,117.08331 c 0.86,0 1.73,0 2.59,0 0,-0.86 -0.04,-2.02 -0.36,-2.56 -0.86,0 -0.94,0 -1.8,0 0,0.85 -0.14,1.9 -0.43,2.56 z"
+         id="path863"
+         inkscape:connector-curvature="0"
+         style="clip-rule:evenodd;fill:#fefefe;fill-rule:evenodd;stroke-width:0.01;image-rendering:optimizeQuality;shape-rendering:geometricPrecision;text-rendering:geometricPrecision" />
+      <path
+         class="fil13"
+         d="m 83.446669,117.79331 c 0.91,0 1.83,0 2.74,0 0,-0.75 -0.04,-1.78 -0.38,-2.26 -0.91,0 -1,0 -1.91,0 0,0.75 -0.14,1.68 -0.45,2.26 z"
+         id="path865"
+         inkscape:connector-curvature="0"
+         style="clip-rule:evenodd;fill:#a6d7d5;fill-rule:evenodd;stroke-width:0.01;image-rendering:optimizeQuality;shape-rendering:geometricPrecision;text-rendering:geometricPrecision" />
+      <polygon
+         class="fil5"
+         points="5643,875 5628,1091 5755,1208 "
+         id="polygon869"
+         style="clip-rule:evenodd;fill:#fefefe;fill-rule:evenodd;image-rendering:optimizeQuality;shape-rendering:geometricPrecision;text-rendering:geometricPrecision"
+         transform="matrix(0.01,0,0,0.01,28.916664,107.55331)" />
+    </g>
   </g>
   <g
      inkscape:groupmode="layer"
      id="layer2"
      inkscape:label="description"
-     style="display:none;filter:url(#filter2258)"
+     style="display:inline;filter:url(#filter2258)"
      sodipodi:insensitive="true">
     <rect
        style="opacity:0.98999999;fill:none;fill-opacity:0.2081218;fill-rule:evenodd;stroke:#000000;stroke-width:0.2;stroke-linecap:butt;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
