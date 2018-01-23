@@ -1,7 +1,9 @@
 package org.microcol.model.store;
 
+import com.google.common.base.MoreObjects;
+
 public class PlaceHighSeasPo extends PlacePo {
-	
+
 	private boolean isTravelToEurope;
 
 	private int remainigTurns;
@@ -21,5 +23,11 @@ public class PlaceHighSeasPo extends PlacePo {
 	public void setRemainigTurns(int remainigTurns) {
 		this.remainigTurns = remainigTurns;
 	}
-	
+
+	@Override
+	public String toString() {
+		return MoreObjects.toStringHelper(this.getClass()).add("isTravelToEurope", isTravelToEurope)
+				.add("remainigTurns", remainigTurns).toString();
+	}
+
 }

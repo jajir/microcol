@@ -1,0 +1,664 @@
+{
+  "calendar": {
+    "startYear": 1570,
+    "endYear": 1800,
+    "currentYear": 1574,
+    "numberOfPlayedTurns": 0
+  },
+  "units": [
+    {
+      "id": 51,
+      "type": "COLONIST",
+      "ownerId": "Dutch",
+      "placeColonyField": {},
+      "cargo": {
+        "slots": []
+      },
+      "availableMoves": 1
+    },
+    {
+      "id": 52,
+      "type": "COLONIST",
+      "ownerId": "Dutch",
+      "placeColonyField": {},
+      "cargo": {
+        "slots": []
+      },
+      "availableMoves": 1
+    },
+    {
+      "id": 53,
+      "type": "COLONIST",
+      "ownerId": "Dutch",
+      "placeColonyField": {},
+      "cargo": {
+        "slots": []
+      },
+      "availableMoves": 1
+    },
+    {
+      "id": 54,
+      "type": "COLONIST",
+      "ownerId": "Dutch",
+      "placeColonyField": {},
+      "cargo": {
+        "slots": []
+      },
+      "availableMoves": 1
+    },
+    {
+      "id": 55,
+      "type": "COLONIST",
+      "ownerId": "Dutch",
+      "placeColonyField": {},
+      "cargo": {
+        "slots": []
+      },
+      "availableMoves": 1
+    },
+    {
+      "id": 56,
+      "type": "GALLEON",
+      "ownerId": "Dutch",
+      "placeEuropePort": {
+        "isOnPier": false
+      },
+      "cargo": {
+        "slots": [
+          {
+            "amount": 96,
+            "goodType": "CORN"
+          },
+          {
+            "amount": 100,
+            "goodType": "COAT"
+          },
+          {},
+          {},
+          {}
+        ]
+      },
+      "availableMoves": 6
+    },
+    {
+      "id": 58,
+      "type": "COLONIST",
+      "ownerId": "Dutch",
+      "placeMap": {
+        "location": {
+          "x": 9,
+          "y": 5
+        }
+      },
+      "cargo": {
+        "slots": []
+      },
+      "availableMoves": 1
+    },
+    {
+      "id": 59,
+      "type": "COLONIST",
+      "ownerId": "Dutch",
+      "placeMap": {
+        "location": {
+          "x": 6,
+          "y": 4
+        }
+      },
+      "cargo": {
+        "slots": []
+      },
+      "availableMoves": 1
+    },
+    {
+      "id": 60,
+      "type": "COLONIST",
+      "ownerId": "Dutch",
+      "placeColonyField": {},
+      "cargo": {
+        "slots": []
+      },
+      "availableMoves": 1
+    },
+    {
+      "id": 61,
+      "type": "FRIGATE",
+      "ownerId": "Dutch",
+      "placeEuropePort": {
+        "isOnPier": false
+      },
+      "cargo": {
+        "slots": [
+          {}
+        ]
+      },
+      "availableMoves": 4
+    },
+    {
+      "id": 62,
+      "type": "GALLEON",
+      "ownerId": "Dutch",
+      "placeMap": {
+        "location": {
+          "x": 16,
+          "y": 3
+        }
+      },
+      "cargo": {
+        "slots": [
+          {},
+          {},
+          {},
+          {},
+          {}
+        ]
+      },
+      "availableMoves": 6
+    },
+    {
+      "id": 67,
+      "type": "COLONIST",
+      "ownerId": "Dutch",
+      "placeEuropePort": {
+        "isOnPier": true
+      },
+      "cargo": {
+        "slots": []
+      },
+      "availableMoves": 1
+    },
+    {
+      "id": 68,
+      "type": "COLONIST",
+      "ownerId": "Dutch",
+      "placeEuropePort": {
+        "isOnPier": true
+      },
+      "cargo": {
+        "slots": []
+      },
+      "availableMoves": 1
+    },
+    {
+      "id": 69,
+      "type": "GALLEON",
+      "ownerId": "Dutch",
+      "placeMap": {
+        "location": {
+          "x": 3,
+          "y": 4
+        }
+      },
+      "cargo": {
+        "slots": [
+          {},
+          {},
+          {},
+          {},
+          {}
+        ]
+      },
+      "availableMoves": 6
+    },
+    {
+      "id": 69,
+      "type": "GALLEON",
+      "ownerId": "Dutch",
+      "placeMap": {
+        "location": {
+          "x": 5,
+          "y": 5
+        }
+      },
+      "cargo": {
+        "slots": [
+          {
+            "amount": 100,
+            "goodType": "COTTON"
+          },
+          {},
+          {},
+          {},
+          {}
+        ]
+      },
+      "availableMoves": 3
+    },
+    {
+      "id": 70,
+      "type": "COLONIST",
+      "ownerId": "Dutch",
+      "placeColonyField": {},
+      "cargo": {
+        "slots": []
+      },
+      "availableMoves": 1
+    },
+    {
+      "id": 73,
+      "type": "FRIGATE",
+      "ownerId": "Player2",
+      "placeMap": {
+        "location": {
+          "x": 4,
+          "y": 5
+        }
+      },
+      "cargo": {
+        "slots": [
+          {}
+        ]
+      },
+      "availableMoves": 0
+    }
+  ],
+  "colonies": [
+    {
+      "name": "Brunswick",
+      "ownerName": "Dutch",
+      "location": {
+        "x": 5,
+        "y": 5
+      },
+      "colonyFields": [
+        {
+          "direction": {
+            "x": 0,
+            "y": -1
+          },
+          "workerId": 60,
+          "producedGoodType": "CORN"
+        },
+        {
+          "direction": {
+            "x": 1,
+            "y": -1
+          },
+          "workerId": 54,
+          "producedGoodType": "CORN"
+        },
+        {
+          "direction": {
+            "x": 1,
+            "y": 0
+          }
+        },
+        {
+          "direction": {
+            "x": 1,
+            "y": 1
+          },
+          "workerId": 53,
+          "producedGoodType": "CORN"
+        },
+        {
+          "direction": {
+            "x": 0,
+            "y": 1
+          },
+          "workerId": 52,
+          "producedGoodType": "CORN"
+        },
+        {
+          "direction": {
+            "x": -1,
+            "y": 1
+          },
+          "workerId": 55,
+          "producedGoodType": "CORN"
+        },
+        {
+          "direction": {
+            "x": -1,
+            "y": 0
+          },
+          "workerId": 70,
+          "producedGoodType": "CORN"
+        },
+        {
+          "direction": {
+            "x": -1,
+            "y": -1
+          },
+          "workerId": 51,
+          "producedGoodType": "CORN"
+        }
+      ],
+      "constructions": [
+        {
+          "type": "TOWN_HALL",
+          "slots": [
+            {},
+            {},
+            {}
+          ]
+        },
+        {
+          "type": "CARPENTERS_SHOP",
+          "slots": [
+            {},
+            {},
+            {}
+          ]
+        },
+        {
+          "type": "BLACKSMITHS_HOUSE",
+          "slots": [
+            {},
+            {},
+            {}
+          ]
+        },
+        {
+          "type": "TOBACCONISTS_HOUSE",
+          "slots": [
+            {},
+            {},
+            {}
+          ]
+        },
+        {
+          "type": "WEAVERS_HOUSE",
+          "slots": [
+            {},
+            {},
+            {}
+          ]
+        },
+        {
+          "type": "RUM_DISTILLERS_HOUSE",
+          "slots": [
+            {},
+            {},
+            {}
+          ]
+        },
+        {
+          "type": "FUR_TRADERS_HOUSE",
+          "slots": [
+            {},
+            {},
+            {}
+          ]
+        },
+        {
+          "type": "BASIC_WAREHOUSE",
+          "slots": []
+        }
+      ],
+      "colonyWarehouse": {
+        "COAT": 0,
+        "HAMMERS": 0,
+        "FUR": 0,
+        "ORE": 0,
+        "LUMBER": 0,
+        "RUM": 0,
+        "SUGAR": 0,
+        "SILK": 0,
+        "TABACCO": 0,
+        "CORN": 63,
+        "CIGARS": 33,
+        "BELL": 21,
+        "COTTON": 100,
+        "TOOLS": 0
+      }
+    },
+    {
+      "name": "Calais",
+      "ownerName": "Player2",
+      "location": {
+        "x": 7,
+        "y": 4
+      },
+      "colonyFields": [
+        {
+          "direction": {
+            "x": 0,
+            "y": -1
+          }
+        },
+        {
+          "direction": {
+            "x": 1,
+            "y": -1
+          }
+        },
+        {
+          "direction": {
+            "x": 1,
+            "y": 0
+          }
+        },
+        {
+          "direction": {
+            "x": 1,
+            "y": 1
+          }
+        },
+        {
+          "direction": {
+            "x": 0,
+            "y": 1
+          }
+        },
+        {
+          "direction": {
+            "x": -1,
+            "y": 1
+          }
+        },
+        {
+          "direction": {
+            "x": -1,
+            "y": 0
+          }
+        },
+        {
+          "direction": {
+            "x": -1,
+            "y": -1
+          }
+        }
+      ],
+      "constructions": [
+        {
+          "type": "TOWN_HALL",
+          "slots": [
+            {},
+            {},
+            {}
+          ]
+        },
+        {
+          "type": "CARPENTERS_SHOP",
+          "slots": [
+            {},
+            {},
+            {}
+          ]
+        },
+        {
+          "type": "BLACKSMITHS_HOUSE",
+          "slots": [
+            {},
+            {},
+            {}
+          ]
+        },
+        {
+          "type": "TOBACCONISTS_HOUSE",
+          "slots": [
+            {},
+            {},
+            {}
+          ]
+        },
+        {
+          "type": "WEAVERS_HOUSE",
+          "slots": [
+            {},
+            {},
+            {}
+          ]
+        },
+        {
+          "type": "RUM_DISTILLERS_HOUSE",
+          "slots": [
+            {},
+            {},
+            {}
+          ]
+        },
+        {
+          "type": "FUR_TRADERS_HOUSE",
+          "slots": [
+            {},
+            {},
+            {}
+          ]
+        },
+        {
+          "type": "BASIC_WAREHOUSE",
+          "slots": []
+        }
+      ],
+      "colonyWarehouse": {
+        "COAT": 100,
+        "HAMMERS": 0,
+        "FUR": 0,
+        "ORE": 0,
+        "LUMBER": 0,
+        "RUM": 0,
+        "SUGAR": 0,
+        "SILK": 0,
+        "TABACCO": 0,
+        "CORN": 75,
+        "CIGARS": 33,
+        "BELL": 12,
+        "COTTON": 0,
+        "TOOLS": 0
+      }
+    }
+  ],
+  "map": {
+  	"seed": 134,
+    "tiles": [
+      "column  :1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7",
+      "row-0001:a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a",
+      "row-0002:~,_,_,_,_,_,_,_,_,_,t,t,t,a,a,a,a",
+      "row-0003:~,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,~",
+      "row-0004:~,_,_,_,_,p,p,g,_,_,_,_,_,_,_,_,~",
+      "row-0005:~,_,_,_,g,g,g,g,g,_,_,_,_,_,_,_,~",
+      "row-0006:~,_,_,_,_,_,p,p,p,p,_,_,_,_,_,_,~",
+      "row-0007:~,_,_,_,_,_,_,_,p,p,_,_,g,_,_,_,~",
+      "row-0008:~,_,_,_,g,_,_,_,_,_,_,_,_,_,_,_,~",
+      "row-0009:~,_,_,g,h,h,g,_,_,_,_,_,_,_,_,_,~",
+      "row-0010:~,_,g,m,m,p,p,p,_,_,_,g,_,_,_,_,~",
+      "row-0011:~,_,g,m,m,m,p,p,_,_,_,p,p,g,_,_,~",
+      "row-0012:~,_,_,_,_,_,_,_,_,t,_,_,_,_,_,_,~",
+      "row-0013:~,_,_,_,_,_,_,_,t,a,t,_,_,_,_,_,~",
+      "row-0014:a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a"
+    ],
+    "trees": [
+      "column  :1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7",
+      "row-0001:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+      "row-0002:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+      "row-0003:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+      "row-0004:-,-,-,-,-,t,-,-,-,-,-,-,-,-,-,-,-",
+      "row-0005:-,-,-,-,-,t,t,t,t,-,-,-,-,-,-,-,-",
+      "row-0006:-,-,-,-,-,-,-,-,t,-,-,-,-,-,-,-,-",
+      "row-0007:-,-,-,-,-,-,-,-,-,-,-,-,t,-,-,-,-",
+      "row-0008:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+      "row-0009:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+      "row-0010:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+      "row-0011:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+      "row-0012:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+      "row-0013:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+      "row-0014:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-"
+    ],
+    "visibility": {},
+    "maxX": 17,
+    "maxY": 14
+  },
+  "players": [
+    {
+      "name": "Dutch",
+      "computer": false,
+      "gold": 2108,
+      "declaredIndependence": false,
+      "extraData": {},
+      "visible": {
+        "visible": [
+          "column  :1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7",
+          "row-0001:-,-,-,-,-,-,-,-,-,-,-,-,#,#,#,#,#",
+          "row-0002:-,-,-,-,-,-,-,-,-,-,-,-,#,#,#,#,#",
+          "row-0003:-,-,-,-,-,-,-,-,-,-,-,-,#,#,#,#,#",
+          "row-0004:-,-,-,-,-,-,-,-,-,-,-,-,#,#,#,#,#",
+          "row-0005:-,-,-,-,-,-,-,-,-,-,-,-,#,#,#,#,#",
+          "row-0006:-,-,-,-,-,-,-,-,-,-,-,-,#,#,#,#,#",
+          "row-0007:-,-,-,-,-,-,-,-,-,-,-,-,#,#,#,#,#",
+          "row-0008:-,-,-,-,-,-,-,-,-,-,-,-,#,#,#,#,#",
+          "row-0009:-,-,-,-,-,-,-,-,-,-,-,-,#,#,#,#,#",
+          "row-0010:-,-,-,-,-,-,-,-,-,-,-,-,#,#,#,#,#",
+          "row-0011:-,-,-,-,-,-,-,-,-,-,-,-,#,#,#,#,#",
+          "row-0012:-,-,-,-,-,-,-,-,-,-,-,-,#,#,#,#,#",
+          "row-0013:#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#",
+          "row-0014:#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#"
+        ]
+      }
+    },
+    {
+      "name": "Player2",
+      "computer": true,
+      "gold": 100,
+      "declaredIndependence": false,
+      "extraData": {},
+      "visible": {
+        "visible": [
+          "column  :1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7",
+          "row-0001:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+          "row-0002:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+          "row-0003:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+          "row-0004:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+          "row-0005:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+          "row-0006:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+          "row-0007:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+          "row-0008:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+          "row-0009:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+          "row-0010:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+          "row-0011:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+          "row-0012:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+          "row-0013:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+          "row-0014:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-"
+        ]
+      }
+    },
+    {
+      "name": "Dutch\u0027s King",
+      "computer": true,
+      "gold": 1108,
+      "declaredIndependence": false,
+      "extraData": {},
+      "visible": {
+        "visible": [
+          "column  :1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7",
+          "row-0001:#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#",
+          "row-0002:#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#",
+          "row-0003:#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#",
+          "row-0004:#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#",
+          "row-0005:#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#",
+          "row-0006:#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#",
+          "row-0007:#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#",
+          "row-0008:#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#",
+          "row-0009:#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#",
+          "row-0010:#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#",
+          "row-0011:#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#",
+          "row-0012:#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#",
+          "row-0013:#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#",
+          "row-0014:#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#"
+        ]
+      }
+    }
+  ],
+  "europe": {}
+}

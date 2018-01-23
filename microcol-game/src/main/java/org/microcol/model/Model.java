@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
 
+import org.microcol.gui.MicroColException;
 import org.microcol.model.store.ColonyPo;
 import org.microcol.model.store.ModelPo;
 import org.microcol.model.store.PlayerPo;
@@ -110,7 +111,10 @@ public final class Model {
 		
 		//load units
 		modelPo.getUnits().forEach(unitPo -> {
-			if (!model.tryGetUnitById(unitPo.getId()).isPresent()) {
+			if (model.tryGetUnitById(unitPo.getId()).isPresent()) {
+				throw new MicroColException(
+						String.format("Unit id '%s' belongs to at least two units.", unitPo.getId()));
+			}else{
 				model.createUnit(model, modelPo, unitPo);
 			}
 		});

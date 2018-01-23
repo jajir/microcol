@@ -64,7 +64,7 @@ public class GameModelController implements Localized {
 		model.getPlayers().stream().filter(player -> !player.isKing() && player.isComputer()).forEach(player -> {
 			players.add(new SimpleAiPlayer(model, player, animationManager));
 		});
-		modelListener = new ModelListenerImpl(modelEventManager);
+		modelListener = new ModelListenerImpl(modelEventManager, this);
 		model.addListener(modelListener);
 		model.startGame();
 		// XXX start game is quite complex, but starting in separate thread
@@ -86,6 +86,16 @@ public class GameModelController implements Localized {
 	public Player getCurrentPlayer() {
 		return getModel().getPlayers().stream().filter(Player::isHuman).findFirst()
 				.orElseThrow(() -> new IllegalStateException("There is no human player"));
+	}
+
+	/**
+	 * Get human player, even in not on turn.
+	 * 
+	 * @return return human player
+	 */
+	public Player getHumanPlayer() {
+		//It use getCurrentPLaye implementation which is not correct.
+		return getCurrentPlayer();
 	}
 
 	private void tryToStopGame() {

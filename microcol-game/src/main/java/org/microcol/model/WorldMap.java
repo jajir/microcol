@@ -89,6 +89,7 @@ public class WorldMap {
 		gamePo.getMap().setMaxY(maxY);
 		gamePo.getMap().setTerrainType(terrainMap);
 		gamePo.getMap().setTrees(trees);
+		gamePo.getMap().setSeed(seed);
 		gamePo.getMap().setVisibility(new VisibilityPo());
 	}
 

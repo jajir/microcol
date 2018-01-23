@@ -12,8 +12,8 @@ import org.microcol.model.event.GoldWasChangedEvent;
 import org.microcol.model.event.RoundStartedEvent;
 import org.microcol.model.event.TurnStartedEvent;
 import org.microcol.model.event.UnitAttackedEvent;
-import org.microcol.model.event.UnitMovedEvent;
 import org.microcol.model.event.UnitEmbarkedEvent;
+import org.microcol.model.event.UnitMovedEvent;
 
 import com.google.common.base.Preconditions;
 
@@ -23,9 +23,12 @@ import com.google.common.base.Preconditions;
 public class ModelListenerImpl implements ModelListener {
 
 	private final ModelEventManager modelEventManager;
-
-	public ModelListenerImpl(final ModelEventManager modelEventManager) {
+	
+	private final GameModelController gameModelController;
+	
+	public ModelListenerImpl(final ModelEventManager modelEventManager, final GameModelController gameModelController) {
 		this.modelEventManager = Preconditions.checkNotNull(modelEventManager);
+		this.gameModelController = Preconditions.checkNotNull(gameModelController);
 	}
 
 	@Override
@@ -35,9 +38,11 @@ public class ModelListenerImpl implements ModelListener {
 
 	@Override
 	public void unitMoved(final UnitMovedEvent event) {
-		modelEventManager.getUnitMovedController().fireEvent(event);
+		if (event.canPlayerSeeMove(gameModelController.getCurrentPlayer())) {
+			modelEventManager.getUnitMovedController().fireEvent(event);
+		}
 	}
-
+	
 	@Override
 	public void roundStarted(final RoundStartedEvent event) {
 		modelEventManager.getNextTurnController().fireEvent(event);
