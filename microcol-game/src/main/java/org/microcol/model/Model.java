@@ -362,6 +362,7 @@ public final class Model {
 		path.getLocations().forEach(loc ->{
 			unit.moveOneStep(loc);
 		});
+		listenerManager.fireUnitMovedFinished(this, unit);
 	}
 
 	public void startGame() {
@@ -396,8 +397,8 @@ public final class Model {
 		listenerManager.fireTurnStarted(this, player);
 	}
 
-	void fireUnitMoved(final Unit unit, final Location start, final Location end) {
-		listenerManager.fireUnitMoved(this, unit, start, end);
+	void fireUnitMovedStep(final Unit unit, final Location start, final Location end) {
+		listenerManager.fireUnitMovedStep(this, unit, start, end);
 	}
 
 	void fireUnitAttacked(final Unit attacker, final Unit defender, final Unit destroyed) {

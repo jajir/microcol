@@ -2,7 +2,7 @@ package org.microcol.gui.gamepanel;
 
 import org.microcol.gui.PathPlanning;
 import org.microcol.gui.event.model.UnitMovedController;
-import org.microcol.model.event.UnitMovedEvent;
+import org.microcol.model.event.UnitMovedStepEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -46,7 +46,7 @@ public class UnitMovedListener {
 		});
 	}
 
-	private void scheduleWalkAnimation(final UnitMovedEvent event) {
+	private void scheduleWalkAnimation(final UnitMovedStepEvent event) {
 		gamePanelView.planScrollingAnimationToLocation(event.getStart());
 		animationManager.addAnimation(new AnimationWalk(pathPlanning, event.getStart(), event.getEnd(), event.getUnit(),
 				paintService, excludePainting), animation -> excludePainting.includeUnit(event.getUnit()));

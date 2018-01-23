@@ -13,6 +13,8 @@ public class ModelEventManager {
 
 	private final UnitMovedController unitMovedController;
 
+	private final UnitMoveFinishedController unitMoveFinishedController;
+
 	private final NewGameController newGameController;
 
 	private final TurnStartedController turnStartedController;
@@ -33,9 +35,11 @@ public class ModelEventManager {
 	public ModelEventManager(final NextTurnController nextTurnController, final UnitMovedController unitMovedController,
 			final NewGameController newGameController, final TurnStartedController turnStartedController,
 			final DebugRequestController debugRequestController, final GameFinishedController gameFinishedController,
-			final UnitAttackedEventController unitAttackedEventController, final GoldWasChangedController goldWasChangedController,
+			final UnitAttackedEventController unitAttackedEventController,
+			final GoldWasChangedController goldWasChangedController,
 			final ColonyWasCapturedController colonyWasCapturedController,
-			final UnitEmbarkedController unitEmbarkedController) {
+			final UnitEmbarkedController unitEmbarkedController,
+			final UnitMoveFinishedController unitMoveFinishedController) {
 		this.nextTurnController = Preconditions.checkNotNull(nextTurnController);
 		this.unitMovedController = Preconditions.checkNotNull(unitMovedController);
 		this.newGameController = Preconditions.checkNotNull(newGameController);
@@ -46,6 +50,7 @@ public class ModelEventManager {
 		this.goldWasChangedController = Preconditions.checkNotNull(goldWasChangedController);
 		this.colonyWasCapturedController = Preconditions.checkNotNull(colonyWasCapturedController);
 		this.unitEmbarkedController = Preconditions.checkNotNull(unitEmbarkedController);
+		this.unitMoveFinishedController = Preconditions.checkNotNull(unitMoveFinishedController);
 	}
 
 	public NextTurnController getNextTurnController() {
@@ -92,6 +97,13 @@ public class ModelEventManager {
 	 */
 	public UnitEmbarkedController getUnitEmbarkController() {
 		return unitEmbarkedController;
+	}
+
+	/**
+	 * @return the unitMoveFinishedController
+	 */
+	public UnitMoveFinishedController getUnitMoveFinishedController() {
+		return unitMoveFinishedController;
 	}
 	
 }

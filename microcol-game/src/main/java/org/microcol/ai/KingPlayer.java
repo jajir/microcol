@@ -11,6 +11,7 @@ import org.microcol.model.Path;
 import org.microcol.model.Player;
 import org.microcol.model.Unit;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 
 public class KingPlayer extends AbstractRobotPlayer {
@@ -24,6 +25,11 @@ public class KingPlayer extends AbstractRobotPlayer {
 	public KingPlayer(final Model model, final Player player, final AnimationManager animationManager) {
 		super(model, player, animationManager);
 		this.whosKingThisPlayerIs = Preconditions.checkNotNull(player.getWhosKingThisPlayerIs());
+	}
+	
+	@Override
+	public String toString() {
+		return MoreObjects.toStringHelper(this.getClass()).add("whosKingThisPlayerIs", whosKingThisPlayerIs).toString();
 	}
 
 	@Override

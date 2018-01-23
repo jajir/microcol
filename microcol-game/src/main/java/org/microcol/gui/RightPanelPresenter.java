@@ -92,6 +92,7 @@ public class RightPanelPresenter implements Localized {
 	}
 
 	private void onFocusedTile(final TileWasSelectedEvent event) {
+		//TODO isItDifferentTile is not necessary to call, it's done in calling methods
 		if (isItDifferentTile(event.getLocation())) {
 			lastFocusedTileEvent = event;
 			display.showTile(event);

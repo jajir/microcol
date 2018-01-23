@@ -42,12 +42,12 @@
 	<entry key="mainMenu.help.about">About</entry>
 	<entry key="mainMenu.help.colonizopedia">Colonizopedia</entry>
 
-
 	<entry key="aboutDialog.caption">About MicroCol</entry>
 	<entry key="dialog.ok">Ok</entry>
 	<entry key="dialog.cancel">Cancel</entry>
 	<entry key="rightPanel.description">Here will be information about selected tile and units on it</entry>
 	<entry key="unitsPanel.description">Here will be information about selected tile and units on it</entry>
+	<entry key="unitsPanel.unexplored">Unknown</entry>
 	<entry key="unitsPanel.units">Units:</entry>
 	<entry key="unitsPanel.availableMoves">Moves:</entry>
 	<entry key="unitsPanel.owner">Owner:</entry>

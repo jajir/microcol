@@ -8,12 +8,12 @@ import org.microcol.model.Unit;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 
-public final class UnitMovedEvent extends ModelEvent {
+public final class UnitMovedStepEvent extends ModelEvent {
 	private final Unit unit;
 	private final Location start;
 	private final Location end;
 
-	public UnitMovedEvent(final Model model, final Unit unit, final Location start, final Location end) {
+	public UnitMovedStepEvent(final Model model, final Unit unit, final Location start, final Location end) {
 		super(model);
 
 		this.unit = Preconditions.checkNotNull(unit);

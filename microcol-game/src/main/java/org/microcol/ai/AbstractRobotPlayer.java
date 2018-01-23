@@ -9,6 +9,7 @@ import org.microcol.model.event.TurnStartedEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 
 /**
@@ -37,11 +38,17 @@ public abstract class AbstractRobotPlayer {
 		this.animationLock = Preconditions.checkNotNull(animationLock);
 		modelAdapter = new ModelAdapter() {
 			@Override
-			public void turnStarted(TurnStartedEvent event) {
+			public void turnStarted(final TurnStartedEvent event) {
 				if (event.getPlayer().equals(player)) {
 					turn(event.getPlayer());
 				}
 			}
+			
+			@Override
+			public String toString() {
+				return MoreObjects.toStringHelper("AbstractRobotPlayer.TurnStartedEventListener").toString();
+			}
+			
 		};
 		model.addListener(modelAdapter);
 		running = true;
@@ -87,6 +94,12 @@ public abstract class AbstractRobotPlayer {
 	 */
 	protected void turnStarted(){
 		//do nothing
+	}
+	
+	@Override
+	public String toString() {
+		return MoreObjects.toStringHelper(this.getClass()).add("model", model).add("animationLock", animationLock)
+				.add("running", running).toString();
 	}
 
 	abstract void moveUnit(final Unit unit);

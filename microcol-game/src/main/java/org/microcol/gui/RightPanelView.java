@@ -3,6 +3,7 @@ package org.microcol.gui;
 import org.microcol.gui.gamepanel.TileWasSelectedEvent;
 import org.microcol.gui.image.ImageProvider;
 import org.microcol.gui.util.Localized;
+import org.microcol.gui.util.Text;
 import org.microcol.model.Player;
 
 import com.google.common.base.Preconditions;
@@ -25,6 +26,8 @@ public class RightPanelView implements RightPanelPresenter.Display, Localized {
 	private static final int RIGHT_PANEL_WIDTH = 170;
 
 	private final ImageProvider imageProvider;
+	
+	private final Text text;
 
 	private final ImageView tileImage;
 
@@ -45,9 +48,10 @@ public class RightPanelView implements RightPanelPresenter.Display, Localized {
 	private final GridPane gridPane;
 
 	@Inject
-	public RightPanelView(final ImageProvider imageProvider, final UnitsPanel unitsPanel,
+	public RightPanelView(final ImageProvider imageProvider, final Text text, final UnitsPanel unitsPanel,
 			final LocalizationHelper localizationHelper) {
 		this.imageProvider = Preconditions.checkNotNull(imageProvider);
+		this.text = Preconditions.checkNotNull(text);
 		this.unitsPanel = Preconditions.checkNotNull(unitsPanel);
 		this.localizationHelper = Preconditions.checkNotNull(localizationHelper);
 
@@ -92,24 +96,30 @@ public class RightPanelView implements RightPanelPresenter.Display, Localized {
 		if (event == null) {
 			return;
 		}
-		tileImage.setImage(imageProvider.getTerrainImage(event.getTerrain()));
 		StringBuilder sb = new StringBuilder(200);
-		sb.append(localizationHelper.getTerrainName(event.getTerrain()));
-		sb.append("");
-		sb.append("\n");
-		sb.append("Move cost: 1");
-		tileName.setText(sb.toString());
 		unitsPanel.clear();
-		if (event.getModel().getUnitsAt(event.getLocation()).isEmpty()) {
-			unitsLabel.setText("");
-		} else {
-			// unitsLabel.setText(getText().get("unitsPanel.units"));
-			/**
-			 * Current player is not same as human player. For purposes of this
-			 * method it will be sufficient.
-			 */
-			unitsPanel.setUnits(event.getModel().getCurrentPlayer(), event.getModel().getUnitsAt(event.getLocation()));
+		if(event.isDiscovered()){
+			tileImage.setImage(imageProvider.getTerrainImage(event.getTerrain()));
+			sb.append(localizationHelper.getTerrainName(event.getTerrain()));
+			sb.append("");
+			sb.append("\n");
+			sb.append("Move cost: 1");
+			if (event.getModel().getUnitsAt(event.getLocation()).isEmpty()) {
+				unitsLabel.setText("");
+			} else {
+				// unitsLabel.setText(getText().get("unitsPanel.units"));
+				/**
+				 * Current player is not same as human player. For purposes of
+				 * this method it will be sufficient.
+				 */
+				unitsPanel.setUnits(event.getModel().getCurrentPlayer(),
+						event.getModel().getUnitsAt(event.getLocation()));
+			}
+		}else{
+			tileImage.setImage(imageProvider.getImage(ImageProvider.IMG_TILE_HIDDEN));
+			sb.append(text.get("unitsPanel.unexplored"));
 		}
+		tileName.setText(sb.toString());
 	}
 
 	@Override

@@ -8,8 +8,9 @@ import org.microcol.model.event.GoldWasChangedEvent;
 import org.microcol.model.event.RoundStartedEvent;
 import org.microcol.model.event.TurnStartedEvent;
 import org.microcol.model.event.UnitAttackedEvent;
-import org.microcol.model.event.UnitMovedEvent;
+import org.microcol.model.event.UnitMovedStepEvent;
 import org.microcol.model.event.UnitEmbarkedEvent;
+import org.microcol.model.event.UnitMoveFinishedEvent;
 
 public class ModelAdapter implements ModelListener {
 	
@@ -29,9 +30,15 @@ public class ModelAdapter implements ModelListener {
 	}
 
 	@Override
-	public void unitMoved(final UnitMovedEvent event) {
+	public void unitMovedStep(final UnitMovedStepEvent event) {
 		// Do nothing.
 	}
+	
+	@Override
+	public void unitMoveFinished(final UnitMoveFinishedEvent event){
+		// Do nothing.		
+	}
+
 
 	@Override
 	public void unitAttacked(final UnitAttackedEvent event) {

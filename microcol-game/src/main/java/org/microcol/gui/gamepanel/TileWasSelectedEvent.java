@@ -22,15 +22,20 @@ public class TileWasSelectedEvent {
 
 	private final TerrainType terrain;
 	
+	private final boolean isDiscovered; 
+	
 	public TileWasSelectedEvent(final GameModelController gameModelController, final Location location) {
 		this(gameModelController.getModel(), location,
-				gameModelController.getModel().getMap().getTerrainAt(location).getTerrainType());
+				gameModelController.getModel().getMap().getTerrainAt(location).getTerrainType(),
+				gameModelController.getHumanPlayer().isVisible(location));
 	}
 	
-	public TileWasSelectedEvent(final Model game, final Location location, final TerrainType tile) {
+	public TileWasSelectedEvent(final Model game, final Location location, final TerrainType tile,
+			final boolean isDiscovered) {
 		this.model = Preconditions.checkNotNull(game);
 		this.location = Preconditions.checkNotNull(location);
 		this.terrain = Preconditions.checkNotNull(tile);
+		this.isDiscovered = isDiscovered;
 	}
 
 	//TODO use selectedUnitController
@@ -48,7 +53,7 @@ public class TileWasSelectedEvent {
 		}
 		return false;
 	}
-
+	
 	public Location getLocation() {
 		return location;
 	}
@@ -59,6 +64,16 @@ public class TileWasSelectedEvent {
 
 	public Model getModel() {
 		return model;
+	}
+
+	/**
+	 * If user already explored selected tile.
+	 * 
+	 * @return return <code>true</code> when selected location was already
+	 *         discovered otherwise return <code>false</code>.
+	 */
+	public boolean isDiscovered() {
+		return isDiscovered;
 	}
 
 }

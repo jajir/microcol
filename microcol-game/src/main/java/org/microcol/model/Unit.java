@@ -348,12 +348,12 @@ public class Unit {
 		final TerrainType targetTerrain = model.getMap().getTerrainTypeAt(moveTo);
 		if (targetTerrain == TerrainType.HIGH_SEA) {
 			placeToHighSeas(true);
-			model.fireUnitMoved(this, getLocation(), moveTo);
+			model.fireUnitMovedStep(this, getLocation(), moveTo);
 		} else {
 			final Location start = getLocation();
 			placeToLocation(moveTo);
 			owner.makeVisibleMapForUnit(this);
-			model.fireUnitMoved(this, start, moveTo);
+			model.fireUnitMovedStep(this, start, moveTo);
 			//if it's necessary fire event about captured city
 			tryToCaptureColony(moveTo);
 		}

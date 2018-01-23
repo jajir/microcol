@@ -8,8 +8,9 @@ import org.microcol.model.event.GoldWasChangedEvent;
 import org.microcol.model.event.RoundStartedEvent;
 import org.microcol.model.event.TurnStartedEvent;
 import org.microcol.model.event.UnitAttackedEvent;
-import org.microcol.model.event.UnitMovedEvent;
+import org.microcol.model.event.UnitMovedStepEvent;
 import org.microcol.model.event.UnitEmbarkedEvent;
+import org.microcol.model.event.UnitMoveFinishedEvent;
 
 public interface ModelListener {
 	
@@ -19,7 +20,9 @@ public interface ModelListener {
 
 	void turnStarted(TurnStartedEvent event);
 
-	void unitMoved(UnitMovedEvent event);
+	void unitMovedStep(UnitMovedStepEvent event);
+
+	void unitMoveFinished(UnitMoveFinishedEvent event);
 
 	void unitAttacked(UnitAttackedEvent event);
 

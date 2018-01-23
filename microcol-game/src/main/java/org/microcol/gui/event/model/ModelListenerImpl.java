@@ -13,8 +13,10 @@ import org.microcol.model.event.RoundStartedEvent;
 import org.microcol.model.event.TurnStartedEvent;
 import org.microcol.model.event.UnitAttackedEvent;
 import org.microcol.model.event.UnitEmbarkedEvent;
-import org.microcol.model.event.UnitMovedEvent;
+import org.microcol.model.event.UnitMoveFinishedEvent;
+import org.microcol.model.event.UnitMovedStepEvent;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 
 /**
@@ -30,6 +32,12 @@ public class ModelListenerImpl implements ModelListener {
 		this.modelEventManager = Preconditions.checkNotNull(modelEventManager);
 		this.gameModelController = Preconditions.checkNotNull(gameModelController);
 	}
+	
+	@Override
+	public String toString() {
+		return MoreObjects.toStringHelper(this.getClass()).add("modelEventManager", modelEventManager)
+				.add("gameModelController", gameModelController).toString();
+	}
 
 	@Override
 	public void turnStarted(final TurnStartedEvent event) {
@@ -37,10 +45,15 @@ public class ModelListenerImpl implements ModelListener {
 	}
 
 	@Override
-	public void unitMoved(final UnitMovedEvent event) {
+	public void unitMovedStep(final UnitMovedStepEvent event) {
 		if (event.canPlayerSeeMove(gameModelController.getCurrentPlayer())) {
 			modelEventManager.getUnitMovedController().fireEvent(event);
 		}
+	}
+	
+	@Override
+	public void unitMoveFinished(final UnitMoveFinishedEvent event) {
+		modelEventManager.getUnitMoveFinishedController().fireEvent(event);
 	}
 	
 	@Override

@@ -13,8 +13,9 @@ import org.microcol.model.event.GoldWasChangedEvent;
 import org.microcol.model.event.RoundStartedEvent;
 import org.microcol.model.event.TurnStartedEvent;
 import org.microcol.model.event.UnitAttackedEvent;
-import org.microcol.model.event.UnitMovedEvent;
+import org.microcol.model.event.UnitMovedStepEvent;
 import org.microcol.model.event.UnitEmbarkedEvent;
+import org.microcol.model.event.UnitMoveFinishedEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -72,12 +73,20 @@ class ListenerManager {
 		executeInSeparateThread(listener -> listener.turnStarted(event));
 	}
 
-	void fireUnitMoved(final Model model, final Unit unit, final Location start, final Location end) {
-		final UnitMovedEvent event = new UnitMovedEvent(model, unit, start, end);
+	void fireUnitMovedStep(final Model model, final Unit unit, final Location start, final Location end) {
+		final UnitMovedStepEvent event = new UnitMovedStepEvent(model, unit, start, end);
 
 		logger.info("Unit moved: {}.", event);
 
-		executeInSameThread(listener -> listener.unitMoved(event));
+		executeInSameThread(listener -> listener.unitMovedStep(event));
+	}
+
+	void fireUnitMovedFinished(final Model model, final Unit unit) {
+		final UnitMoveFinishedEvent event = new UnitMoveFinishedEvent(model, unit);
+
+		logger.info("Unit moved: {}.", event);
+
+		executeInSameThread(listener -> listener.unitMoveFinished(event));
 	}
 
 	void fireUnitAttacked(final Model model, final Unit attacker, final Unit defender, final Unit destroyed) {

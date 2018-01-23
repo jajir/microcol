@@ -11,6 +11,8 @@ import org.microcol.model.Player;
 import org.microcol.model.TerrainType;
 import org.microcol.model.Unit;
 
+import com.google.common.base.MoreObjects;
+
 public class SimpleAiPlayer extends AbstractRobotPlayer {
 	
 	private final SimpleUnitBehavior simpleUnitBehavior = new SimpleUnitBehavior();
@@ -20,6 +22,11 @@ public class SimpleAiPlayer extends AbstractRobotPlayer {
 	public SimpleAiPlayer(final Model model, final Player player, final AnimationManager animationManager) {
 		super(model, player, animationManager);
 		unitDirections = new Directions();
+	}
+	
+	@Override
+	public String toString() {
+		return MoreObjects.toStringHelper(this.getClass()).toString();
 	}
 
 	@Override
