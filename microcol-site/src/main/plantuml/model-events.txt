@@ -1,0 +1,56 @@
+@startuml
+ 
+participant "Model" as M
+participant "Front End" as FE
+actor "Player" as P
+actor "AI 1" as AI1
+actor "AI 2" as AI2
+ 
+      
+Activate M
+ 
+M -> FE: Game started event
+ 
+loop for each round in game
+	
+	M --> FE: Round started event
+
+	M -> FE: Turn started event (Player)
+       
+    alt User decide to move unit
+       
+       P --> FE: move unit along path
+       
+       FE --> M: move unit along path
+       
+       M --> FE: Unit move step event 1
+
+       M --> FE: Unit move step event n
+       
+       M --> FE: Unit move finished event
+       
+	end
+       
+	P --> FE: End turn
+   
+	FE --> M: End turn
+
+	M -> FE: Turn started event (AI 1)
+
+	AI1 --> FE: End turn
+       
+	FE --> M: End turn
+
+	M -> FE: Turn started event (AI 2)
+
+	AI2 --> FE: End turn
+       
+	FE --> M: End turn
+	       
+end
+
+M --> FE: Game finished event
+
+Deactivate M
+ 
+@enduml

@@ -32,7 +32,7 @@ public class MainMenuView implements MainMenuPresenter.Display {
 	
 	private final MenuItem menuItemNewGame;
 
-	private final MenuItem menuItemSameGame;
+	private final MenuItem menuItemSaveGame;
 
 	private final MenuItem menuItemLoadGame;
 
@@ -105,9 +105,9 @@ public class MainMenuView implements MainMenuPresenter.Display {
 		menuItemLoadGame.setAccelerator(new KeyCodeCombination(KeyCode.L, KeyCombination.CONTROL_DOWN));
 		menuItemLoadGame.disableProperty().setValue(false);
 
-		menuItemSameGame = new MenuItem();
-		menuItemSameGame.setAccelerator(new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN));
-		menuItemSameGame.disableProperty().setValue(false);
+		menuItemSaveGame = new MenuItem();
+		menuItemSaveGame.setAccelerator(new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN));
+		menuItemSaveGame.disableProperty().setValue(false);
 
 		menuItemQuitGame = new MenuItem();
 		menuItemQuitGame.setAccelerator(new KeyCodeCombination(KeyCode.Q, KeyCombination.CONTROL_DOWN));
@@ -174,7 +174,7 @@ public class MainMenuView implements MainMenuPresenter.Display {
 		 */
 		menuGame = new Menu();
 		if (gamePreferences.isDevelopment()) {
-			menuGame.getItems().addAll(menuItemDeclareIndependence, menuItemNewGame, menuNewScenario, menuItemLoadGame, menuItemSameGame, menuItemQuitGame);			
+			menuGame.getItems().addAll(menuItemDeclareIndependence, menuItemNewGame, menuNewScenario, menuItemLoadGame, menuItemSaveGame, menuItemQuitGame);			
 		}else{
 			menuGame.getItems().addAll(menuItemDeclareIndependence, menuItemNewGame, menuItemQuitGame);
 		}
@@ -243,7 +243,7 @@ public class MainMenuView implements MainMenuPresenter.Display {
 		menuGame.setText(text.get("mainMenu.game"));
 		menuItemDeclareIndependence.setText(text.get("mainMenu.game.declareIndependence"));
 		menuItemNewGame.setText(text.get("mainMenu.game.newGame"));
-		menuItemSameGame.setText(text.get("mainMenu.game.saveGame"));
+		menuItemSaveGame.setText(text.get("mainMenu.game.saveGame"));
 		menuItemLoadGame.setText(text.get("mainMenu.game.loadGame"));
 		menuNewScenario.setText(text.get("mainMenu.game.newScenario"));
 		menuItemQuitGame.setText(text.get("mainMenu.game.quitGame"));
@@ -294,8 +294,8 @@ public class MainMenuView implements MainMenuPresenter.Display {
 	}
 
 	@Override
-	public MenuItem getMenuItemSameGame() {
-		return menuItemSameGame;
+	public MenuItem getMenuItemSaveGame() {
+		return menuItemSaveGame;
 	}
 
 	@Override

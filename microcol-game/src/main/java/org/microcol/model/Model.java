@@ -19,6 +19,11 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 
+/**
+ * Game model.
+ * 
+ * TODO when move is in progress block call of another active operation. 
+ */
 public final class Model {
 
 	private final ColonyNames colonyNames;

@@ -13,11 +13,15 @@ import org.microcol.gui.event.StartMoveEvent;
 import org.microcol.gui.event.model.GameController;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.event.model.TurnStartedController;
+import org.microcol.gui.event.model.UnitMoveFinishedController;
+import org.microcol.gui.event.model.UnitMovedController;
 import org.microcol.gui.gamepanel.SelectedUnitManager;
 import org.microcol.gui.gamepanel.TileWasSelectedController;
 import org.microcol.gui.gamepanel.TileWasSelectedEvent;
 import org.microcol.gui.util.Text;
 import org.microcol.model.event.TurnStartedEvent;
+import org.microcol.model.event.UnitMoveFinishedEvent;
+import org.microcol.model.event.UnitMovedStepEvent;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
@@ -36,7 +40,7 @@ public class MainMenuPresenter {
 
 		MenuItem getMenuItemLoadGame();
 
-		MenuItem getMenuItemSameGame();
+		MenuItem getMenuItemSaveGame();
 
 		MenuItem getMenuItemQuitGame();
 
@@ -108,12 +112,17 @@ public class MainMenuPresenter {
 			final Colonizopedia colonizopedia,
 			final PreferencesAnimationSpeed preferencesAnimationSpeed,
 			final PreferencesVolume preferencesVolume,
-			final SelectedUnitManager selectedUnitManager
+			final SelectedUnitManager selectedUnitManager,
+			final UnitMovedController unitMovedStepController,
+			final UnitMoveFinishedController unitMoveFinishedController
 			) {
 		this.display = Preconditions.checkNotNull(display);
 		this.selectedUnitManager = Preconditions.checkNotNull(selectedUnitManager);
+		/**
+		 * Following section describe what happens when menu item is selected 
+		 */
 		display.getMenuItemNewGame().setOnAction(actionEvent -> gameController.startNewDefaultGame());
-		display.getMenuItemSameGame().setOnAction(event -> persistingDialog.saveModel());
+		display.getMenuItemSaveGame().setOnAction(event -> persistingDialog.saveModel());
 		display.getMenuItemLoadGame().setOnAction(event -> persistingDialog.loadModel());
 		display.getMenuItemQuitGame().setOnAction(actionEvent -> exitGameController.fireEvent(new ExitGameEvent()));
 		display.getMenuItemAbout().setOnAction(actionEvent -> gameEventController.fireEvent(new AboutGameEvent()));
@@ -141,6 +150,9 @@ public class MainMenuPresenter {
 		display.getMenuItemNextUnit()
 				.setOnAction(event -> selectNextUnitController.fireEvent(new SelectNextUnitEvent()));
 
+		/**
+		 * Following section define visibility of menu items.
+		 */
 		changeLanguageController.addListener(event -> {
 			display.updateLanguage();
 		});
@@ -150,6 +162,19 @@ public class MainMenuPresenter {
 
 		exitGameController.addListener(this::onGameFinihedEvent);
 		endMoveController.addRunLaterListener(this::onEndMoveEvent);
+		unitMovedStepController.addRunLaterListener(this::onUnitMovedStep);
+		unitMoveFinishedController.addRunLaterListener(this::unitMoveFinishedController);
+	}
+	
+	@SuppressWarnings("unused")
+	private void onUnitMovedStep(final UnitMovedStepEvent event){
+		//TODO event queue is blocked by animation of move. This method is called as last method. 
+		display.getMenuItemNextUnit().setDisable(true);
+	}
+	
+	@SuppressWarnings("unused")
+	private void unitMoveFinishedController(final UnitMoveFinishedEvent event){
+		display.getMenuItemNextUnit().setDisable(false);		
 	}
 	
 	@SuppressWarnings("unused")
@@ -185,6 +210,7 @@ public class MainMenuPresenter {
 	private void onGameFinihedEvent(final ExitGameEvent exitGameEvent) {
 		display.getMenuItemEurope().setDisable(true);
 		display.getMenuItemNextUnit().setDisable(true);
+		display.getMenuItemBuildColony().setDisable(true);
 	}
 
 	private final void onTurnStartedEvent(final TurnStartedEvent event) {

@@ -6,12 +6,12 @@ import org.microcol.model.event.GameStartedEvent;
 /**
  * Allows to trigger new game event and manage event listeners.
  */
-public class NewGameController extends AbstractEventController<GameStartedEvent> {
+public class GameStartedController extends AbstractEventController<GameStartedEvent> {
 
 	/**
 	 * Constructor force controller to fire events in synchronous way.
 	 */
-	public NewGameController() {
+	public GameStartedController() {
 		super(false);
 	}
 

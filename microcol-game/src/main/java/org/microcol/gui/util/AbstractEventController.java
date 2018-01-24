@@ -27,6 +27,7 @@ public abstract class AbstractEventController<E> {
 	 */
 	private final List<Wrapper<E>> listeners = new ArrayList<>();
 
+	//TODO remove this option, it's solved in Wrapper
 	private final boolean fireEventsAsynchronously;
 
 	public AbstractEventController() {

@@ -34,8 +34,8 @@ import org.microcol.gui.event.model.GameFinishedController;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.event.model.GoldWasChangedController;
 import org.microcol.gui.event.model.ModelEventManager;
-import org.microcol.gui.event.model.NewGameController;
-import org.microcol.gui.event.model.NextTurnController;
+import org.microcol.gui.event.model.GameStartedController;
+import org.microcol.gui.event.model.RoundStartedController;
 import org.microcol.gui.event.model.TurnStartedController;
 import org.microcol.gui.event.model.UnitAttackedEventController;
 import org.microcol.gui.event.model.UnitEmbarkedController;
@@ -44,6 +44,7 @@ import org.microcol.gui.event.model.UnitMovedController;
 import org.microcol.gui.gamepanel.AnimationIsDoneController;
 import org.microcol.gui.gamepanel.AnimationManager;
 import org.microcol.gui.gamepanel.ExcludePainting;
+import org.microcol.gui.gamepanel.GamePanelController;
 import org.microcol.gui.gamepanel.GamePanelPresenter;
 import org.microcol.gui.gamepanel.GamePanelView;
 import org.microcol.gui.gamepanel.MapManager;
@@ -117,12 +118,12 @@ public class MicroColModule extends AbstractModule {
 		bind(ApplicationController.class).in(Singleton.class);
 		bind(UnitMovedController.class).in(Singleton.class);
 		bind(KeyController.class).in(Singleton.class);
-		bind(NextTurnController.class).in(Singleton.class);
+		bind(RoundStartedController.class).in(Singleton.class);
 		bind(TileWasSelectedController.class).in(Singleton.class);
 		bind(AboutGameEventController.class).in(Singleton.class);
 		bind(ChangeLanguageController.class).in(Singleton.class);
 		bind(StartMoveController.class).in(Singleton.class);
-		bind(NewGameController.class).in(Singleton.class);
+		bind(GameStartedController.class).in(Singleton.class);
 		bind(GameModelController.class).in(Singleton.class);
 		bind(TurnStartedController.class).in(Singleton.class);
 		bind(VolumeChangeController.class).in(Singleton.class);
@@ -165,6 +166,7 @@ public class MicroColModule extends AbstractModule {
 		bind(ModeController.class).in(Singleton.class);
 		bind(SelectedUnitManager.class).in(Singleton.class);
 		bind(ExcludePainting.class).in(Singleton.class);
+		bind(GamePanelController.class).in(Singleton.class);
 		bind(UnitMovedListener.class).asEagerSingleton();
 		
 		

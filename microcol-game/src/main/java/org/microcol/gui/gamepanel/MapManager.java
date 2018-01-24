@@ -1,7 +1,7 @@
 package org.microcol.gui.gamepanel;
 
 import org.microcol.gui.event.model.GameModelController;
-import org.microcol.gui.event.model.NewGameController;
+import org.microcol.gui.event.model.GameStartedController;
 import org.microcol.gui.event.model.UnitMovedController;
 import org.microcol.gui.image.GrassCoastMapGenerator;
 import org.microcol.gui.image.HiddenCoastMapGenerator;
@@ -37,14 +37,14 @@ public class MapManager {
 			final IceCoastMapGenerator iceCoastMapGenerator,
 			final HiddenCoastMapGenerator hiddenCoastMapGenerator,
 			final GameModelController gameModelController,
-			final NewGameController newGameController,
+			final GameStartedController gameStartedController,
 			final ImageProvider imageProvider, 
 			final UnitMovedController unitMovedController) {
 		this.grassCoastMapGenerator = Preconditions.checkNotNull(grassCoastMapGenerator);
 		this.iceCoastMapGenerator = Preconditions.checkNotNull(iceCoastMapGenerator);
 		this.hiddenCoastMapGenerator = Preconditions.checkNotNull(hiddenCoastMapGenerator);
 		this.imageProvider = Preconditions.checkNotNull(imageProvider);
-		newGameController.addListener(event -> {
+		gameStartedController.addListener(event -> {
 			grassCoastMapGenerator.setMap(gameModelController.getModel().getMap());
 			iceCoastMapGenerator.setMap(gameModelController.getModel().getMap());
 			hiddenCoastMapGenerator.setMap(gameModelController.getModel().getMap());

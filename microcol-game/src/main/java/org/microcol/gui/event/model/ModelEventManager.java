@@ -9,13 +9,13 @@ import com.google.inject.Inject;
  */
 public class ModelEventManager {
 	
-	private final NextTurnController nextTurnController;
+	private final RoundStartedController roundStartedController;
 
 	private final UnitMovedController unitMovedController;
 
 	private final UnitMoveFinishedController unitMoveFinishedController;
 
-	private final NewGameController newGameController;
+	private final GameStartedController gameStartedController;
 
 	private final TurnStartedController turnStartedController;
 
@@ -32,17 +32,17 @@ public class ModelEventManager {
 	private final UnitEmbarkedController unitEmbarkedController; 
 
 	@Inject
-	public ModelEventManager(final NextTurnController nextTurnController, final UnitMovedController unitMovedController,
-			final NewGameController newGameController, final TurnStartedController turnStartedController,
+	public ModelEventManager(final RoundStartedController roundStartedController, final UnitMovedController unitMovedController,
+			final GameStartedController gameStartedController, final TurnStartedController turnStartedController,
 			final DebugRequestController debugRequestController, final GameFinishedController gameFinishedController,
 			final UnitAttackedEventController unitAttackedEventController,
 			final GoldWasChangedController goldWasChangedController,
 			final ColonyWasCapturedController colonyWasCapturedController,
 			final UnitEmbarkedController unitEmbarkedController,
 			final UnitMoveFinishedController unitMoveFinishedController) {
-		this.nextTurnController = Preconditions.checkNotNull(nextTurnController);
+		this.roundStartedController = Preconditions.checkNotNull(roundStartedController);
 		this.unitMovedController = Preconditions.checkNotNull(unitMovedController);
-		this.newGameController = Preconditions.checkNotNull(newGameController);
+		this.gameStartedController = Preconditions.checkNotNull(gameStartedController);
 		this.turnStartedController = Preconditions.checkNotNull(turnStartedController);
 		this.debugRequestController = Preconditions.checkNotNull(debugRequestController);
 		this.gameFinishedController = Preconditions.checkNotNull(gameFinishedController);
@@ -53,16 +53,16 @@ public class ModelEventManager {
 		this.unitMoveFinishedController = Preconditions.checkNotNull(unitMoveFinishedController);
 	}
 
-	public NextTurnController getNextTurnController() {
-		return nextTurnController;
+	public RoundStartedController getRoundStartedController() {
+		return roundStartedController;
 	}
 
 	public UnitMovedController getUnitMovedController() {
 		return unitMovedController;
 	}
 
-	public NewGameController getNewGameController() {
-		return newGameController;
+	public GameStartedController getGameStartedController() {
+		return gameStartedController;
 	}
 
 	public TurnStartedController getTurnStartedController() {

@@ -57,6 +57,7 @@ public class GamePanelView implements GamePanelPresenter.Display {
 
 	private final PathPlanning pathPlanning;
 
+	//TODO remove it, it's not used
 	private final VisualDebugInfo visualDebugInfo;
 
 	private final SelectedTileManager selectedTileManager;

@@ -17,7 +17,7 @@ import org.microcol.gui.event.StartMoveEvent;
 import org.microcol.gui.event.model.ColonyWasCapturedController;
 import org.microcol.gui.event.model.DebugRequestController;
 import org.microcol.gui.event.model.GameModelController;
-import org.microcol.gui.event.model.NewGameController;
+import org.microcol.gui.event.model.GameStartedController;
 import org.microcol.gui.mainmenu.CenterViewController;
 import org.microcol.gui.mainmenu.ExitGameController;
 import org.microcol.gui.mainmenu.ShowGridController;
@@ -95,12 +95,12 @@ public final class GamePanelPresenter implements Localized {
 	private final MouseOverTileManager mouseOverTileManager;
 	
 	private final ModeController modeController;
-
+	
 	@Inject
 	public GamePanelPresenter(final GamePanelPresenter.Display display,
 			final GameModelController gameModelController,
 			final KeyController keyController,
-			final NewGameController newGameController,
+			final GameStartedController gameStartedController,
 			final GamePreferences gamePreferences,
 			final ShowGridController showGridController,
 			final CenterViewController viewController,
@@ -114,7 +114,8 @@ public final class GamePanelPresenter implements Localized {
 			final ColonyWasCapturedController colonyWasCapturedController,
 			final MouseOverTileManager mouseOverTileManager,
 			final ModeController modeController,
-			final SelectedUnitManager selectedUnitManager) {
+			final SelectedUnitManager selectedUnitManager,
+			final GamePanelController gamePanelController) {
 		this.gameModelController = Preconditions.checkNotNull(gameModelController);
 		this.gamePreferences = gamePreferences;
 		this.display = Preconditions.checkNotNull(display);
@@ -148,29 +149,29 @@ public final class GamePanelPresenter implements Localized {
 		});
 
 		display.getCanvas().setOnMousePressed(e -> {
-			if (isMouseEnabled()) {
+			if (gamePanelController.isMouseEnabled()) {
 				onMousePressed(e);
 			}
 		});
 		display.getCanvas().setOnMouseReleased(e -> {
-			if (isMouseEnabled()) {
+			if (gamePanelController.isMouseEnabled()) {
 				onMouseReleased();
 			}
 		});
 		display.getCanvas().setOnMouseMoved(e -> {
-			if (isMouseEnabled()) {
+			if (gamePanelController.isMouseEnabled()) {
 				onMouseMoved(e);
 				lastMousePosition = Optional.of(Point.of(e.getX(), e.getY()));
 			}
 		});
 		display.getCanvas().setOnMouseDragged(e -> {
-			if (isMouseEnabled()) {
+			if (gamePanelController.isMouseEnabled()) {
 				onMouseDragged(e);
 				lastMousePosition = Optional.of(Point.of(e.getX(), e.getY()));
 			}
 		});
 
-		newGameController.addListener(event -> display.initGame(gamePreferences.isGridShown(), event.getModel()));
+		gameStartedController.addListener(event -> display.initGame(gamePreferences.isGridShown(), event.getModel()));
 		showGridController.addListener(e -> display.setGridShown(e.isGridShown()));
 		debugRequestController.addListener(e -> {
 			display.getVisualDebugInfo().setLocations(e.getLocations());
@@ -181,10 +182,6 @@ public final class GamePanelPresenter implements Localized {
 		colonyWasCapturedController.addListener(event->{
 			new DialogColonyWasCaptured(viewUtil, text, event);
 		});
-	}
-
-	private boolean isMouseEnabled() {
-		return gameModelController.getCurrentPlayer().isHuman();
 	}
 
 	private void onCenterView() {

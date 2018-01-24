@@ -17,6 +17,14 @@ How it's working
   When some event should be animated than it's added to <AnimationManager>.
   <AnimationManager> is called each time screen is redrawn. 
  
+* Game model basic events
+
+ Game model represents game instance. It controls game logic and keep game consistency.
+ Following diagram show how events describe game lifecycle.
+ 
+[model-events.png] Main model events
+  
+ 
 * Animation manager
 
  Animation manager is responsible for providing information about animation to front end which is periodically repainted.

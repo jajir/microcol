@@ -5,7 +5,7 @@ import java.util.Optional;
 import org.microcol.gui.event.StatusBarMessageController;
 import org.microcol.gui.event.StatusBarMessageEvent;
 import org.microcol.gui.event.model.GoldWasChangedController;
-import org.microcol.gui.event.model.NextTurnController;
+import org.microcol.gui.event.model.RoundStartedController;
 import org.microcol.gui.mainmenu.ChangeLanguageController;
 import org.microcol.gui.util.Localized;
 import org.microcol.model.Calendar;
@@ -29,13 +29,13 @@ public class StatusBarPresenter implements Localized {
 
 	@Inject
 	public StatusBarPresenter(final StatusBarPresenter.Display display,
-			final StatusBarMessageController statusBarMessageController, final NextTurnController nextTurnController,
+			final StatusBarMessageController statusBarMessageController, final RoundStartedController roundStartedController,
 			final ChangeLanguageController changeLanguangeController,
 			final GoldWasChangedController goldWasChangedController) {
 		statusBarMessageController.addRunLaterListener(event -> {
 			display.getStatusBarDescription().setText(event.getStatusMessage());
 		});
-		nextTurnController.addListener(event -> {
+		roundStartedController.addListener(event -> {
 			setYearText(display.getLabelEra(), event.getCalendar());
 		});
 		changeLanguangeController.addListener(event -> {

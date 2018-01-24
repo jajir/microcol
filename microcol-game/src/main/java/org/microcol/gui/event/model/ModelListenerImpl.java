@@ -58,12 +58,12 @@ public class ModelListenerImpl implements ModelListener {
 	
 	@Override
 	public void roundStarted(final RoundStartedEvent event) {
-		modelEventManager.getNextTurnController().fireEvent(event);
+		modelEventManager.getRoundStartedController().fireEvent(event);
 	}
 
 	@Override
 	public void gameStarted(final GameStartedEvent event) {
-		modelEventManager.getNewGameController().fireEvent(event);
+		modelEventManager.getGameStartedController().fireEvent(event);
 		final Optional<Player> human = event.getModel().getPlayers().stream().filter(player -> player.isHuman())
 				.findAny();
 		if (human.isPresent()) {
