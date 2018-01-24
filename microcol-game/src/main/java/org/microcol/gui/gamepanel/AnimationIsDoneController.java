@@ -7,11 +7,4 @@ import org.microcol.gui.util.AbstractEventController;
  */
 public class AnimationIsDoneController extends AbstractEventController<AnimationIsDoneEvent> {
 
-	/**
-	 * Make listeners synchronous by default.
-	 */
-	AnimationIsDoneController() {
-		super(false);
-	}
-
 }

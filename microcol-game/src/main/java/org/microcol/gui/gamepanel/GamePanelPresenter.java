@@ -15,7 +15,6 @@ import org.microcol.gui.event.KeyController;
 import org.microcol.gui.event.StartMoveController;
 import org.microcol.gui.event.StartMoveEvent;
 import org.microcol.gui.event.model.ColonyWasCapturedController;
-import org.microcol.gui.event.model.DebugRequestController;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.event.model.GameStartedController;
 import org.microcol.gui.mainmenu.CenterViewController;
@@ -60,8 +59,6 @@ public final class GamePanelPresenter implements Localized {
 
 		void stopTimer();
 
-		VisualDebugInfo getVisualDebugInfo();
-
 		void startMoveUnit(Unit ship);
 
 		boolean performFightDialog(Unit unitAttacker, Unit unitDefender);
@@ -105,7 +102,6 @@ public final class GamePanelPresenter implements Localized {
 			final ShowGridController showGridController,
 			final CenterViewController viewController,
 			final ExitGameController exitGameController,
-			final DebugRequestController debugRequestController,
 			final SelectedTileManager selectedTileManager,
 			final ViewUtil viewUtil,
 			final StartMoveController startMoveController,
@@ -159,10 +155,8 @@ public final class GamePanelPresenter implements Localized {
 			}
 		});
 		display.getCanvas().setOnMouseMoved(e -> {
-			if (gamePanelController.isMouseEnabled()) {
-				onMouseMoved(e);
-				lastMousePosition = Optional.of(Point.of(e.getX(), e.getY()));
-			}
+			onMouseMoved(e);
+			lastMousePosition = Optional.of(Point.of(e.getX(), e.getY()));
 		});
 		display.getCanvas().setOnMouseDragged(e -> {
 			if (gamePanelController.isMouseEnabled()) {
@@ -173,9 +167,6 @@ public final class GamePanelPresenter implements Localized {
 
 		gameStartedController.addListener(event -> display.initGame(gamePreferences.isGridShown(), event.getModel()));
 		showGridController.addListener(e -> display.setGridShown(e.isGridShown()));
-		debugRequestController.addListener(e -> {
-			display.getVisualDebugInfo().setLocations(e.getLocations());
-		});
 
 		viewController.addListener(event -> onCenterView());
 		exitGameController.addListener(event -> display.stopTimer());

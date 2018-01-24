@@ -57,9 +57,6 @@ public class GamePanelView implements GamePanelPresenter.Display {
 
 	private final PathPlanning pathPlanning;
 
-	//TODO remove it, it's not used
-	private final VisualDebugInfo visualDebugInfo;
-
 	private final SelectedTileManager selectedTileManager;
 
 	private final SelectedUnitManager selectedUnitManager;
@@ -113,7 +110,6 @@ public class GamePanelView implements GamePanelPresenter.Display {
 		this.localizationHelper = Preconditions.checkNotNull(localizationHelper);
 		this.paintService = Preconditions.checkNotNull(paintService);
 		this.gamePreferences = Preconditions.checkNotNull(gamePreferences);
-		this.visualDebugInfo = new VisualDebugInfo();
 		this.mouseOverTileManager = Preconditions.checkNotNull(mouseOverTileManager);
 		this.animationManager = Preconditions.checkNotNull(animationManager);
 		this.modeController = Preconditions.checkNotNull(modeController);
@@ -213,9 +209,6 @@ public class GamePanelView implements GamePanelPresenter.Display {
 		paintUnits(g, gameModelController.getModel(), area);
 		paintSteps(g, area);
 		paintAnimation(g, area);
-		if (gamePreferences.isDevelopment()) {
-			paintService.paintDebugInfo(g, visualDebugInfo, area);
-		}
 		if (gameModelController.getCurrentPlayer().isComputer()) {
 			/**
 			 * If move computer that make game field darker.
@@ -435,11 +428,6 @@ public class GamePanelView implements GamePanelPresenter.Display {
 	@Override
 	public Area getArea() {
 		return new Area(visibleArea, gameModelController.getModel().getMap());
-	}
-
-	@Override
-	public VisualDebugInfo getVisualDebugInfo() {
-		return visualDebugInfo;
 	}
 
 	@Override

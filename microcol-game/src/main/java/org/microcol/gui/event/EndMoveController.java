@@ -7,11 +7,4 @@ import org.microcol.gui.util.AbstractEventController;
  */
 public class EndMoveController extends AbstractEventController<EndMoveEvent> {
 
-	/**
-	 * Force even to by synchronous.
-	 */
-	public EndMoveController() {
-		super(false);
-	}
-
 }

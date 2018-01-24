@@ -144,14 +144,6 @@ public class PaintService {
 		graphics.fillRect(point.getX() + 1, point.getY() + 1, FLAG_WIDTH - 2, FLAG_HEIGHT - 2);
 	}
 
-	public void paintDebugInfo(final GraphicsContext graphics, final VisualDebugInfo visualDebugInfo, final Area area) {
-		visualDebugInfo.getLocations().stream().filter(location -> area.isVisible(location)).forEach(location -> {
-			final Point p = area.convertToPoint(location).add(10, 4);
-			graphics.setFill(Color.WHITE);
-			graphics.fillRect(p.getX() + 1, p.getY() + 1, FLAG_WIDTH - 1, FLAG_HEIGHT - 1);
-		});
-	}
-	
 	/**
 	 * Paint one tile on game space.
 	 * 

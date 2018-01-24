@@ -7,11 +7,4 @@ import org.microcol.gui.util.AbstractEventController;
  */
 public class StartMoveController extends AbstractEventController<StartMoveEvent> {
 
-	/**
-	 * Constructor force controller to fire events in synchronous way.
-	 */
-	public StartMoveController() {
-		super(false);
-	}
-
 }

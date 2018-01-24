@@ -8,8 +8,4 @@ import org.microcol.model.event.UnitMovedStepEvent;
  */
 public class UnitMovedController extends AbstractEventController<UnitMovedStepEvent> {
 
-	public UnitMovedController() {
-		super(false);
-	}
-
 }

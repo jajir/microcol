@@ -8,11 +8,4 @@ import org.microcol.model.event.GoldWasChangedEvent;
  */
 public class GoldWasChangedController extends AbstractEventController<GoldWasChangedEvent> {
 
-	/**
-	 * Constructor force controller to fire events in synchronous way.
-	 */
-	public GoldWasChangedController() {
-		super(false);
-	}
-
 }

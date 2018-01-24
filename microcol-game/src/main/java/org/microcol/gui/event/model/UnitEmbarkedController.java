@@ -8,7 +8,4 @@ import org.microcol.model.event.UnitEmbarkedEvent;
  */
 public class UnitEmbarkedController extends AbstractEventController<UnitEmbarkedEvent> {
 
-	public UnitEmbarkedController() {
-		super(false);
-	}
 }

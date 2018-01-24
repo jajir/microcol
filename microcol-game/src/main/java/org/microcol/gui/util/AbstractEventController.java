@@ -27,22 +27,7 @@ public abstract class AbstractEventController<E> {
 	 */
 	private final List<Wrapper<E>> listeners = new ArrayList<>();
 
-	//TODO remove this option, it's solved in Wrapper
-	private final boolean fireEventsAsynchronously;
-
 	public AbstractEventController() {
-		this(true);
-	}
-
-	/**
-	 * Default constructor that allows to set all event as synchronous or asynchronous.
-	 * 
-	 * TODO control sync / async at listener level.
-	 * 
-	 * @param fireEventsAsynchronously
-	 */
-	public AbstractEventController(final boolean fireEventsAsynchronously) {
-		this.fireEventsAsynchronously = fireEventsAsynchronously;
 	}
 
 	/**
@@ -113,7 +98,7 @@ public abstract class AbstractEventController<E> {
 		Preconditions.checkNotNull(event);
 		logger.debug("Event " + event + " was triggered.");
 		listeners.stream().forEach(wrapper -> {
-			if (fireEventsAsynchronously) {
+			if (wrapper.fireEventsAsynchronously) {
 				/**
 				 * Is it correct to call events in Platform.runLater even when
 				 * doesn't change UI? Probably yes. Lot of events could flooding
@@ -122,11 +107,7 @@ public abstract class AbstractEventController<E> {
 				 */
 				Platform.runLater(() -> wrapper.listener.onEvent(event));
 			} else {
-				if (wrapper.fireEventsAsynchronously) {
-					Platform.runLater(() -> wrapper.listener.onEvent(event));
-				} else {
-					wrapper.listener.onEvent(event);
-				}
+				wrapper.listener.onEvent(event);
 			}
 		});
 	}
