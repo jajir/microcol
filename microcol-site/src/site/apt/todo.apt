@@ -5,15 +5,14 @@
 Planned releases
 
  * 0.5.0 - Make first game smoother
-  	
-  * \u2713 Save / Load game model. It's necessary for further game states.
-  	
-  * \u2713 Allow cycle through units. It allows to give focus to specific unit. Not just first unit at some location.
+
+  * \u2717 Colony UI improvements 
+    	
+  	* \u2717 Show how many goods is consumed.
+  	  	
+  	* \u2717 Show that some production doesn't have enough sources.
   	
   * \u2717 Colony building queue and queue editing - simple and ugly version
-   	
-  * \u2717 Map discovery. At the beginning of game map is hidden when user come to some place map is revealed.
-  	User can't interact with hidden objects.
 
   * \u2717 Improve UI
    
@@ -22,34 +21,17 @@ Planned releases
     * \u2717 After move is selected unit preserved
     
     * \u2717 When user in move mode move mouse to location where unit can't go than cursor will change icon. 
-	  	
-  * \u2717 Simple statistics, each turn count and remember:
   	
-  	* \u2717 Player's military strength
+  * \u2713 Save / Load game model. It's necessary for further game states.
   	
-  	* \u2717 Number of units
-  	
-  	* \u2717 Total price of user's good 
-  	
-  * \u2717 Allow to display this statistics and the end of game
+  * \u2713 Allow cycle through units. It allows to give focus to specific unit. Not just first unit at some location.
+   	
+  * \u2713 Map discovery. At the beginning of game map is hidden when user come to some place map is revealed.
+  	User can't interact with hidden objects.
   	
   * \u2713 When new colony is builded building unit should be placed to build food
   	
   * \u2713 When last unit leaves colony than colony should be destroyed
-  
-  * \u2717 Documentation update
-  	
-  	* \u2717 development description is outdated
-  	
-  	* \u2717 release process
-  	
-  	* \u2717 documentation publishing (return back to manual process)
-
-  * \u2717 Colony UI improvements 
-    	
-  	* \u2717 Show how many goods is consumed.
-  	  	
-  	* \u2717 Show that some production doesn't have enough sources.
 
   * \u2713 Junit test for rotating and composing images.
 
@@ -61,11 +43,30 @@ Planned releases
 
   * \u2713 Support hiding on not reveal map part.
 
- * 0.6.0 - add some other features	
+ * Backlog - feature and improvement backlog	
 
   * \u2717 Add unit wagon, can't fight, capture colony, can transport goods
+	  	
+  * \u2717 Simple statistics, each turn count and remember:
+  	
+  	* \u2717 Player's military strength
+  	
+  	* \u2717 Number of units
+  	
+  	* \u2717 Total price of user's good 
+  	
+    * \u2717 Allow to display this statistics and the end of game
   
-  * \u2717 plow field
+  * \u2717 colonist unit equipped with (20) tool can plow field.
+  Depending on unit expertise in a few turns field will be created and 20 tools will be destroyed.
+  
+  * \u2717 Documentation update
+  	
+  	* \u2717 development description is outdated
+  	
+  	* \u2717 release process
+  	
+  	* \u2717 documentation publishing (return back to manual process)
   
   * \u2717 build road
   
@@ -79,7 +80,11 @@ Planned releases
   
   * \u2717 Add nationality bonuses
   
-  * \u2717 Allow to equip muskets
+  * \u2717 Don't allow unit without muskets to fight.
+  
+  * \u2717 Support capturing not armed unit.
+  
+  * \u2717 Allow to equip muskets. Unit equipped with muskets will have different icon.
   
   * \u2717 Allow to produce horses
   
@@ -98,8 +103,6 @@ Planned releases
   * \u2717 When colony have 200 food than produce new colonist and set food to 0
     
   * \u2717 Allow to build custom store and allow to automatically sell products
-
-  * TODO
 
  * 1.0.0 - should be released at the end of first year of development (Jan. 2018), first minimal playable version of game.
  

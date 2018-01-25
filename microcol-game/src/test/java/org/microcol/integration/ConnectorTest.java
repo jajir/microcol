@@ -3,7 +3,7 @@ package org.microcol.integration;
 import static org.junit.Assert.*;
 
 import org.junit.Test;
-import org.microcol.gui.gamepanel.Connector;
+import org.microcol.gui.image.Connector;
 
 public class ConnectorTest {
 

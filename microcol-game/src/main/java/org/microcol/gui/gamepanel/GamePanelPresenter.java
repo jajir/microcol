@@ -293,6 +293,7 @@ public final class GamePanelPresenter implements Localized {
 			tryToOpenColonyDetail(moveToLocation);
 			return;
 		}
+		//TODO don't call selectedTileManager.setSelectedTile
 		final Unit movingUnit = selectedUnitManager.getSelectedUnit().get();
 		if (movingUnit.isPossibleToAttackAt(moveToLocation)) {
 			// fight
@@ -318,7 +319,6 @@ public final class GamePanelPresenter implements Localized {
 				if (path.size() > 0) {
 					gameModelController.performMove(movingUnit, path);
 				}
-				selectedTileManager.setSelectedTile(moveToLocation);
 				disableMoveMode();
 			}
 		} else if (movingUnit.isPossibleToGoToPort(moveToLocation)) {

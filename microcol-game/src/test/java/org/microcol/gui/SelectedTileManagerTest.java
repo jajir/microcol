@@ -6,6 +6,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.microcol.gui.event.model.GameModelController;
+import org.microcol.gui.event.model.UnitMoveFinishedController;
 import org.microcol.gui.gamepanel.SelectedTileManager;
 import org.microcol.gui.gamepanel.TileWasSelectedController;
 
@@ -21,7 +22,9 @@ public class SelectedTileManagerTest {
 	@Mocked
 	private GameModelController gameModelController;
 	
-
+	@Mocked
+	private UnitMoveFinishedController unitMoveFinishedController;
+	
 	@Test
 	public void test_getInitialValues() throws Exception {
 		assertFalse(viewState.getSelectedTile().isPresent());
@@ -29,7 +32,7 @@ public class SelectedTileManagerTest {
 
 	@Before
 	public void setUp() {
-		viewState = new SelectedTileManager(tileWasSelectedController, gameModelController);
+		viewState = new SelectedTileManager(tileWasSelectedController, gameModelController, unitMoveFinishedController);
 	}
 
 	@After

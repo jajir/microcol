@@ -1,7 +1,5 @@
 package org.microcol.gui.image;
 
-import org.microcol.gui.gamepanel.Connector;
-
 import com.google.common.base.Preconditions;
 
 import javafx.scene.image.Image;

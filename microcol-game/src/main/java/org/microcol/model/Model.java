@@ -367,7 +367,7 @@ public final class Model {
 		path.getLocations().forEach(loc ->{
 			unit.moveOneStep(loc);
 		});
-		listenerManager.fireUnitMovedFinished(this, unit);
+		listenerManager.fireUnitMovedFinished(this, unit, path);
 	}
 
 	public void startGame() {

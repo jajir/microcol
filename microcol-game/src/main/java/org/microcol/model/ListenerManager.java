@@ -81,8 +81,8 @@ class ListenerManager {
 		executeInSameThread(listener -> listener.unitMovedStep(event));
 	}
 
-	void fireUnitMovedFinished(final Model model, final Unit unit) {
-		final UnitMoveFinishedEvent event = new UnitMoveFinishedEvent(model, unit);
+	void fireUnitMovedFinished(final Model model, final Unit unit, final Path path) {
+		final UnitMoveFinishedEvent event = new UnitMoveFinishedEvent(model, unit, path);
 
 		logger.info("Unit moved: {}.", event);
 
