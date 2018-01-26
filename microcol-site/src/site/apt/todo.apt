@@ -14,13 +14,7 @@ Planned releases
   	
   * \u2717 Colony building queue and queue editing - simple and ugly version
 
-  * \u2717 Improve UI
-   
-    * \u2717 right panel allows to select unit
-    
-    * \u2717 After move is selected unit preserved
-    
-    * \u2717 When user in move mode move mouse to location where unit can't go than cursor will change icon. 
+  * \u2713 When user in move mode move mouse to location where unit can't go than cursor will change icon. 
   	
   * \u2713 Save / Load game model. It's necessary for further game states.
   	
@@ -46,9 +40,15 @@ Planned releases
  * Backlog - feature and improvement backlog	
 
   * \u2717 Add unit wagon, can't fight, capture colony, can transport goods
-	  	
+
+  * \u2717 Improve UI
+   
+    * \u2717 After move is selected unit preserved
+   
+    * \u2717 right panel allows to select unit
+
   * \u2717 Simple statistics, each turn count and remember:
-  	
+
   	* \u2717 Player's military strength
   	
   	* \u2717 Number of units

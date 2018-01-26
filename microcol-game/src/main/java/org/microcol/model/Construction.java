@@ -3,6 +3,7 @@ package org.microcol.model;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -63,6 +64,10 @@ public class Construction {
 	public ConstructionType getType() {
 		return type;
 	}
+	
+	public Optional<GoodType> getProducedGoodType() {
+		return type.getProduce();
+	}
 
 	@Override
 	public String toString() {
@@ -95,7 +100,7 @@ public class Construction {
 	}
 
 	public int getProductionPerTurn(final Colony colony) {
-		return getProduction(colony, colony.getNexTurnTempWarehouse()).getRealProductionPerTurn();
+		return getProduction(colony, colony.getNextTurnTempWarehouse()).getRealProductionPerTurn();
 	}
 
 	List<ConstructionSlot> getOrderedSlots() {
@@ -130,6 +135,36 @@ public class Construction {
 		}
 	}
 	
+	ConstructionTurnProduction getProductionFrom(final int sourceGoodAmount) {
+		if (getType().getProduce().isPresent()) {
+			final GoodType producedGoodType = getType().getProduce().get();
+			int consumptionPerTurn = 0; //base production doesn't require any additional sources.
+			int productionPerTurn = type.getBaseProductionPerTurn();
+			int productioPerTurnBlocked = 0;
+			for (final ConstructionSlot slot : getConstructionSlots()) {
+				if (!slot.isEmpty()) {
+					float multiplier = slot.getProductionModifier(producedGoodType);
+					final int tmpProd = (int) (getType().getProductionPerTurn() * multiplier);
+					final int tmpCons = getType().getConsumptionPerTurn();
+
+					final int canBeconsumed = sourceGoodAmount - consumptionPerTurn;
+
+					if (tmpCons <= canBeconsumed) {
+						productionPerTurn += tmpProd;
+						consumptionPerTurn += tmpCons;
+					} else {
+						final int partialProd = (int) (getType().getProductionRatio() * canBeconsumed * multiplier);
+						consumptionPerTurn += canBeconsumed;
+						productionPerTurn += partialProd;
+						productioPerTurnBlocked += tmpProd - partialProd;
+					}
+				}
+			}
+			return new ConstructionTurnProduction(consumptionPerTurn, productionPerTurn, productioPerTurnBlocked);
+		}else{
+			return new ConstructionTurnProduction( 0, 0, 0);
+		}
+	}
 	
 	/**
 	 * Method should be called once per turn. It produce resources on field.

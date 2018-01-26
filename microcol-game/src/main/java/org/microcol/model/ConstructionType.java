@@ -559,6 +559,42 @@ public class ConstructionType {
 			WAREHOUSE,
 			BASIC_WAREHOUSE);
 	
+	public static final List<GoodType> SOURCE_1 = GoodType.GOOD_TYPES.stream().filter(goodType -> !isProducedGoodType(goodType))
+			.collect(ImmutableList.toImmutableList());
+	
+	public static final List<GoodType> SOURCE_2 = GoodType.GOOD_TYPES.stream()
+			.filter(goodType -> !SOURCE_1.contains(goodType) && isProducedFromAny(goodType, SOURCE_1))
+			.collect(ImmutableList.toImmutableList());
+	
+	public static final List<GoodType> SOURCE_3 = GoodType.GOOD_TYPES.stream()
+			.filter(goodType -> !SOURCE_2.contains(goodType) && isProducedFromAny(goodType, SOURCE_2))
+			.collect(ImmutableList.toImmutableList());
+	
+	/**
+	 * It's secondary good type source just when good type is produces by some
+	 * facility without any additional inputs.
+	 * 
+	 * @param goodType
+	 *            required good type
+	 * @return if it's secondary good type source
+	 */
+	private final static boolean isProducedGoodType(final GoodType goodType){
+		return ALL.stream()
+				.filter(construction -> (construction.getProduce().isPresent()
+						? construction.getProduce().get().equals(goodType)
+						: false) && construction.getConsumed().isPresent())
+				.findAny().isPresent();
+	}
+	
+	//TODO make this methods readable
+	private final static boolean isProducedFromAny(final GoodType goodType, final List<GoodType> goodTypes) {
+		return ALL.stream()
+				.filter(construction -> (construction.getProduce().isPresent()
+						? construction.getProduce().get().equals(goodType) : false)
+						&& (construction.getConsumed().isPresent()
+								? goodTypes.contains(construction.getConsumed().get()) : false))
+				.findAny().isPresent();
+	}	
 	
 	public static ConstructionType valueOf(final String strName) {
 		final Optional<ConstructionType> oGoodType = ALL.stream().filter(type -> type.name().equals(strName))

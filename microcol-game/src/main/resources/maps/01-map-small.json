@@ -468,6 +468,8 @@
       "colonyWarehouse": {
         "COAT": 100,
         "CIGARS": 33,
+        "SUGAR": 41,
+        "COTTON": 13,
         "CORN": 75
       }
     },
@@ -593,6 +595,8 @@
       "colonyWarehouse": {
         "COAT": 100,
         "CIGARS": 33,
+        "SUGAR": 41,
+        "COTTON": 13,
         "CORN": 75
       }
     }

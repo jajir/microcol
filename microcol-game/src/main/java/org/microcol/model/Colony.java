@@ -3,6 +3,7 @@ package org.microcol.model;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -207,7 +208,7 @@ public class Colony {
 	 * 
 	 * @return return colony warehouse
 	 */
-	public ColonyWarehouse getNexTurnTempWarehouse(){
+	public ColonyWarehouse getNextTurnTempWarehouse(){
 		ColonyWarehouse out = colonyWarehouse.makeCopy();
 		colonyFields.forEach(field -> field.produce(out));
 		return out;
@@ -271,4 +272,66 @@ public class Colony {
 		return force;
 	}
 	
+	//TODO start to use that, improve implementation
+	public ColonyProductionStats getGoodsStats() {
+		final ColonyProductionStats out = new ColonyProductionStats();
+		//set initial warehouse stack
+		GoodType.GOOD_TYPES.forEach(goodType -> {
+			GoodProductionStats goodsStats = out.getStatsByType(goodType);
+			goodsStats.setInWarehouseBefore(colonyWarehouse.getGoodAmmount(goodType));
+		});
+		
+		//get production from all fields
+		colonyFields.forEach(field -> {
+			if(!field.isEmpty()){
+				GoodProductionStats goodsStats = out.getStatsByType(field.getProducedGoodType());
+				goodsStats.addRowProduction(field.getProducedGoodsAmmount());
+			}
+		});
+		
+		//get production from town factories that doesn't consume any sources
+		ConstructionType.SOURCE_1.forEach(goodType -> {
+			//TODO refactor if?
+			if(getConstructionProducing(goodType).isPresent()){
+				GoodProductionStats goodsStats = out.getStatsByType(goodType);
+				Construction con = getConstructionProducing(goodType).get();
+				goodsStats.setRowProduction(con.getProductionPerTurn(this));
+			}
+		});
+		
+		//get production from town factories that consume some primary sources
+		ConstructionType.SOURCE_2.forEach(goodType -> {
+			computeSecondaryProduction(out, goodType);
+		});
+		
+		//get production from town factories that consume secondary sources
+		ConstructionType.SOURCE_3.forEach(goodType -> {
+			computeSecondaryProduction(out, goodType);			
+		});
+		
+		return out;
+	}
+	
+	private void computeSecondaryProduction(final ColonyProductionStats out, final GoodType goodTypeProduced) {
+		if (getConstructionProducing(goodTypeProduced).isPresent()) {
+			final Construction producedAt = getConstructionProducing(goodTypeProduced).get();
+			GoodProductionStats goodProdStats = out.getStatsByType(goodTypeProduced);
+			GoodType goodTypeConsumed = producedAt.getType().getConsumed().get();
+			GoodProductionStats goodConsumedStats = out.getStatsByType(goodTypeConsumed);
+
+			Preconditions.checkState(goodConsumedStats.getConsumed() == 0,
+					"good type was already computed, good was already consumed.");
+			int numberOfavailableInputGoods = goodConsumedStats.getInWarehouseAfter();
+
+			ConstructionTurnProduction turnProd = producedAt.getProductionFrom(numberOfavailableInputGoods);
+			goodConsumedStats.setConsumed(turnProd.getConsumedGoods());
+			goodProdStats.setRowProduction(turnProd.getProducedGoods());
+			goodProdStats.setBlockedProduction(turnProd.getBlockedGoods());
+		}
+	}
+
+	private Optional<Construction> getConstructionProducing(final GoodType goodType) {
+		return constructions.stream().filter(construction -> construction.getType().getProduce().isPresent()
+				? construction.getType().getProduce().get().equals(goodType) : false).findAny();
+	}
 }

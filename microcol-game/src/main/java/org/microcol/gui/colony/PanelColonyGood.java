@@ -1,8 +1,10 @@
 package org.microcol.gui.colony;
 
 import org.microcol.gui.util.ClipboardWritter;
-import org.microcol.model.ColonyWarehouse;
+import org.microcol.model.Colony;
+import org.microcol.model.ColonyProductionStats;
 import org.microcol.model.GoodAmount;
+import org.microcol.model.GoodProductionStats;
 import org.microcol.model.GoodType;
 
 import com.google.common.base.Preconditions;
@@ -29,7 +31,7 @@ public class PanelColonyGood extends VBox {
 
 	private final ImageView imageView;
 
-	private ColonyWarehouse colonyWarehouse;
+	private Colony colony;
 
 	public PanelColonyGood(final Image image, final GoodType goodType) {
 		this.goodType = Preconditions.checkNotNull(goodType);
@@ -42,9 +44,9 @@ public class PanelColonyGood extends VBox {
 	}
 
 	private final void onDragDetected(final MouseEvent event) {
-		final int amount = colonyWarehouse.getTransferableGoodsAmount(goodType);
+		Preconditions.checkNotNull(colony.getColonyWarehouse());
+		final int amount = colony.getColonyWarehouse().getTransferableGoodsAmount(goodType);
 		if (amount > 0) {
-			Preconditions.checkNotNull(colonyWarehouse);
 			Dragboard db = imageView.startDragAndDrop(TransferMode.MOVE);
 			ClipboardWritter.make(db).addImage(image).addTransferFromColonyWarehouse()
 					.addGoodAmount(new GoodAmount(goodType, amount)).build();
@@ -52,12 +54,26 @@ public class PanelColonyGood extends VBox {
 		event.consume();
 	}
 
-	public void setColony(final ColonyWarehouse colonyWarehouse) {
-		this.colonyWarehouse = colonyWarehouse;
+	public void setColony(final Colony colony) {
+		this.colony = colony;
 	}
 
+	//XXX add some formatting to -diff and +diff (css style)
 	public void repaint() {
-		labelAmount.setText(String.valueOf(colonyWarehouse.getGoodAmmount(goodType)));
+		ColonyProductionStats stats = colony.getGoodsStats();
+		GoodProductionStats goodsStats = stats.getStatsByType(goodType);
+		
+		String txt = String.valueOf(goodsStats.getInWarehouseBefore());
+
+		int diff = goodsStats.getInWarehouseAfter() - goodsStats.getInWarehouseBefore();
+
+		if (diff > 0) {
+			txt += " +" + diff;
+		} else if (diff < 0) {
+			txt += " " + diff;
+		}
+
+		labelAmount.setText(txt);
 	};
 
 }

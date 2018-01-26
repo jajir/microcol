@@ -55,7 +55,7 @@ public class PanelColonyGoods extends TitledPanel {
 		colonyWarehouse = Preconditions.checkNotNull(colony).getColonyWarehouse();
 		hBox.getChildren().forEach(node -> {
 			final PanelColonyGood panelColonyGood = (PanelColonyGood) node;
-			panelColonyGood.setColony(colony.getColonyWarehouse());
+			panelColonyGood.setColony(colony);
 		});
 	}
 

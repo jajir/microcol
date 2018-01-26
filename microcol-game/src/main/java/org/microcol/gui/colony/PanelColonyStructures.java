@@ -15,14 +15,17 @@ import org.microcol.gui.util.ClipboardReader;
 import org.microcol.gui.util.ClipboardWritter;
 import org.microcol.gui.util.TitledPanel;
 import org.microcol.model.Colony;
+import org.microcol.model.ColonyProductionStats;
 import org.microcol.model.Construction;
 import org.microcol.model.ConstructionSlot;
 import org.microcol.model.ConstructionType;
+import org.microcol.model.GoodProductionStats;
 import org.microcol.model.Unit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
+import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableMap;
 import com.google.inject.Inject;
 
@@ -54,14 +57,22 @@ public class PanelColonyStructures extends TitledPanel {
 	private final static int ROW_3 = 190;
 	
 	private final static int PRODUCTION_TEXT_X = 0;
-	private final static int PRODUCTION_TEXT_Y = 55;
+	private final static int PRODUCTION_TEXT_Y = 65;
 	
 	private final static Point PRODUCTION_TEXT = Point.of(PRODUCTION_TEXT_X, PRODUCTION_TEXT_Y);
 	
+	private final static int SLOT_POSITION_SLOT_GAP = 3;
+	
+	private final static int SLOT_POSITION_WIDTH = GamePanelView.TILE_WIDTH_IN_PX + SLOT_POSITION_SLOT_GAP;
+	
+	private final static int SLOT_POSITION_TOTAL_WIDTH = 3 * GamePanelView.TILE_WIDTH_IN_PX + 2 * SLOT_POSITION_SLOT_GAP;
+	
+	private final static int SLOT_POSITION_START = - SLOT_POSITION_TOTAL_WIDTH / 2;
+	
 	private final static Point[] SLOT_POSITIONS = new Point[] {
-			Point.of(-58, 10),
-			Point.of(-18, 10),
-			Point.of(22, 10) };
+			Point.of(SLOT_POSITION_START, 10),
+			Point.of(SLOT_POSITION_START + SLOT_POSITION_WIDTH, 10),
+			Point.of(SLOT_POSITION_START + 2 * SLOT_POSITION_WIDTH, 10) };
 
 	/**
 	 * Following structure define position of constructions images on colony map.
@@ -241,17 +252,44 @@ public class PanelColonyStructures extends TitledPanel {
 		});
 	}
 	
-	private void paintProduction(final GraphicsContext gc, final Point point, final Colony colony, final Construction construction) {
+	private void paintProduction(final GraphicsContext gc, final Point point, final Colony colony,
+			final Construction construction) {
 		if (construction.getType().getProduce().isPresent()) {
-			final Point prod = point.add(PRODUCTION_TEXT);
-			final String toWrite = "x " + construction.getProductionPerTurn(colony);
-			gc.fillText(toWrite, prod.getX(), prod.getY());
-			final Text theText = new Text(toWrite);
-			theText.setFont(gc.getFont());
-			final double width = theText.getBoundsInLocal().getWidth();
-			gc.drawImage(imageProvider.getGoodTypeImage(construction.getType().getProduce().get()),
-					prod.getX() - width / 2 - GOOD_ICON_WIDTH, prod.getY() - 10, GOOD_ICON_WIDTH, GOOD_ICON_WIDTH);
+			
+			final ColonyProductionStats colonyStats = colony.getGoodsStats();
+			final GoodProductionStats goodsStats = colonyStats.getStatsByType(construction.getProducedGoodType().get());
+			
+			String toWrite = "";
+			
+			if ( goodsStats.getNetProduction() != 0 ){
+				toWrite += "x " + goodsStats.getNetProduction() + " ";
+			}
+			if ( goodsStats.getBlockedProduction() != 0 ){
+				toWrite += "lost " + goodsStats.getBlockedProduction();
+			}
+			if (!Strings.isNullOrEmpty(toWrite)) {
+				final Point prod = point.add(PRODUCTION_TEXT);
+				gc.fillText(toWrite, prod.getX(), prod.getY());
+				final double width = getTextWidth(gc, toWrite);
+				gc.drawImage(imageProvider.getGoodTypeImage(construction.getType().getProduce().get()),
+						prod.getX() - width / 2 - GOOD_ICON_WIDTH, prod.getY() - 10, GOOD_ICON_WIDTH, GOOD_ICON_WIDTH);
+			}
 		}
+	}
+	
+	/**
+	 * Get length of given text. Use default text font.
+	 * 
+	 * @param gc
+	 *            required graphics context
+	 * @param text
+	 *            required text which size is looking for
+	 * @return text length
+	 */
+	private double getTextWidth(final GraphicsContext gc, final String text){
+		final Text theText = new Text(text);
+		theText.setFont(gc.getFont());
+		return theText.getBoundsInLocal().getWidth();
 	}
 	
 	private void paintWorkerContainer(final GraphicsContext gc, final Point point){
