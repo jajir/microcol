@@ -60,7 +60,7 @@ public class BackgroundImageLoader implements ImageLoader {
 
 		for (int y = 0; y < TILE_HEIGHT_COUNT; y++) {
 			for (int x = 0; x < TILE_WIDTH_COUNT; x++) {
-				final String name = "type" + x + y;
+				final String name = "type_" + x + "_" + y;
 				final PixelReader reader = img.getPixelReader();
 				final WritableImage tile = new WritableImage(reader, x * IMAGE_TILE_WIDTH_IN_PX,
 						y * IMAGE_TILE_WIDTH_IN_PX, GamePanelView.TILE_WIDTH_IN_PX, GamePanelView.TILE_WIDTH_IN_PX);
@@ -68,28 +68,28 @@ public class BackgroundImageLoader implements ImageLoader {
 			}
 		}
 
-		imageProvider.registerImage(ImageProvider.IMG_TREE_1, imageProvider.getImage("type34"));
-		imageProvider.registerImage(ImageProvider.IMG_TREE_2, imageProvider.getImage("type44"));
-		imageProvider.registerImage(ImageProvider.IMG_TILE_OCEAN_1, imageProvider.getImage("type50"));
-		imageProvider.registerImage(ImageProvider.IMG_TILE_OCEAN_2, imageProvider.getImage("type60"));
-		imageProvider.registerImage(ImageProvider.IMG_TILE_OCEAN_3, imageProvider.getImage("type70"));
-		imageProvider.registerImage(ImageProvider.IMG_TILE_GRASSLAND, imageProvider.getImage("type10"));
-		imageProvider.registerImage(ImageProvider.IMG_TILE_TUNDRA_1, imageProvider.getImage("type30"));
-		imageProvider.registerImage(ImageProvider.IMG_TILE_TUNDRA_2, imageProvider.getImage("type40"));
-		imageProvider.registerImage(ImageProvider.IMG_TILE_ARCTIC_1, imageProvider.getImage("type04"));
-		imageProvider.registerImage(ImageProvider.IMG_TILE_ARCTIC_2, imageProvider.getImage("type14"));
-		imageProvider.registerImage(ImageProvider.IMG_TILE_HIGH_SEA, imageProvider.getImage("type00"));
-		imageProvider.registerImage(ImageProvider.IMG_UNIT_SHIP_GALEON, imageProvider.getImage("type45"));
-		imageProvider.registerImage(ImageProvider.IMG_UNIT_SHIP_FRIGATE, imageProvider.getImage("type55"));
-		imageProvider.registerImage(ImageProvider.IMG_UNIT_FREE_COLONIST, imageProvider.getImage("type24"));
-		imageProvider.registerImage(ImageProvider.IMG_TILE_TOWN, imageProvider.getImage("type05"));
-		imageProvider.registerImage(ImageProvider.IMG_TILE_HILL_1, imageProvider.getImage("type65"));
-		imageProvider.registerImage(ImageProvider.IMG_TILE_HILL_2, imageProvider.getImage("type75"));
-		imageProvider.registerImage(ImageProvider.IMG_TILE_MOUNTAIN_1, imageProvider.getImage("type54"));
-		imageProvider.registerImage(ImageProvider.IMG_TILE_MOUNTAIN_2, imageProvider.getImage("type64"));
-		imageProvider.registerImage(ImageProvider.IMG_TILE_PRAIRIE_1, imageProvider.getImage("type80"));
-		imageProvider.registerImage(ImageProvider.IMG_TILE_PRAIRIE_2, imageProvider.getImage("type90"));
-		imageProvider.registerImage(ImageProvider.IMG_TILE_HIDDEN, imageProvider.getImage("type103"));
+		imageProvider.registerImage(ImageProvider.IMG_TREE_1, imageProvider.getImage("type_3_4"));
+		imageProvider.registerImage(ImageProvider.IMG_TREE_2, imageProvider.getImage("type_4_4"));
+		imageProvider.registerImage(ImageProvider.IMG_TILE_OCEAN_1, imageProvider.getImage("type_5_0"));
+		imageProvider.registerImage(ImageProvider.IMG_TILE_OCEAN_2, imageProvider.getImage("type_6_0"));
+		imageProvider.registerImage(ImageProvider.IMG_TILE_OCEAN_3, imageProvider.getImage("type_7_0"));
+		imageProvider.registerImage(ImageProvider.IMG_TILE_GRASSLAND, imageProvider.getImage("type_1_0"));
+		imageProvider.registerImage(ImageProvider.IMG_TILE_TUNDRA_1, imageProvider.getImage("type_3_0"));
+		imageProvider.registerImage(ImageProvider.IMG_TILE_TUNDRA_2, imageProvider.getImage("type_4_0"));
+		imageProvider.registerImage(ImageProvider.IMG_TILE_ARCTIC_1, imageProvider.getImage("type_0_4"));
+		imageProvider.registerImage(ImageProvider.IMG_TILE_ARCTIC_2, imageProvider.getImage("type_1_4"));
+		imageProvider.registerImage(ImageProvider.IMG_TILE_HIGH_SEA, imageProvider.getImage("type_0_0"));
+		imageProvider.registerImage(ImageProvider.IMG_UNIT_SHIP_GALEON, imageProvider.getImage("type_4_5"));
+		imageProvider.registerImage(ImageProvider.IMG_UNIT_SHIP_FRIGATE, imageProvider.getImage("type_5_5"));
+		imageProvider.registerImage(ImageProvider.IMG_UNIT_FREE_COLONIST, imageProvider.getImage("type_2_4"));
+		imageProvider.registerImage(ImageProvider.IMG_TILE_TOWN, imageProvider.getImage("type_0_5"));
+		imageProvider.registerImage(ImageProvider.IMG_TILE_HILL_1, imageProvider.getImage("type_6_5"));
+		imageProvider.registerImage(ImageProvider.IMG_TILE_HILL_2, imageProvider.getImage("type_7_5"));
+		imageProvider.registerImage(ImageProvider.IMG_TILE_MOUNTAIN_1, imageProvider.getImage("type_5_4"));
+		imageProvider.registerImage(ImageProvider.IMG_TILE_MOUNTAIN_2, imageProvider.getImage("type_6_4"));
+		imageProvider.registerImage(ImageProvider.IMG_TILE_PRAIRIE_1, imageProvider.getImage("type_8_0"));
+		imageProvider.registerImage(ImageProvider.IMG_TILE_PRAIRIE_2, imageProvider.getImage("type_9_0"));
+		imageProvider.registerImage(ImageProvider.IMG_TILE_HIDDEN, imageProvider.getImage("type_10_3"));
 	}
 
 }

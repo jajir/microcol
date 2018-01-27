@@ -202,18 +202,6 @@ public class Colony {
 		return colonyWarehouse;
 	}
 	
-	/**
-	 * Return contains of warehouse after fields produce it's goods in next
-	 * turn.
-	 * 
-	 * @return return colony warehouse
-	 */
-	public ColonyWarehouse getNextTurnTempWarehouse(){
-		ColonyWarehouse out = colonyWarehouse.makeCopy();
-		colonyFields.forEach(field -> field.produce(out));
-		return out;
-	}
-	
 	List<Unit> getUnitsInColony(){
 		final List<Unit> out = new ArrayList<>();
 		constructions.forEach(construction->{
@@ -291,12 +279,11 @@ public class Colony {
 		
 		//get production from town factories that doesn't consume any sources
 		ConstructionType.SOURCE_1.forEach(goodType -> {
-			//TODO refactor if?
-			if(getConstructionProducing(goodType).isPresent()){
+			getConstructionProducing(goodType).ifPresent(con ->{
 				GoodProductionStats goodsStats = out.getStatsByType(goodType);
-				Construction con = getConstructionProducing(goodType).get();
-				goodsStats.setRowProduction(con.getProductionPerTurn(this));
-			}
+				ConstructionTurnProduction turnProd = con.getProduction(0);
+				goodsStats.setRowProduction(turnProd.getProducedGoods());
+			});
 		});
 		
 		//get production from town factories that consume some primary sources
@@ -323,7 +310,7 @@ public class Colony {
 					"good type was already computed, good was already consumed.");
 			int numberOfavailableInputGoods = goodConsumedStats.getInWarehouseAfter();
 
-			ConstructionTurnProduction turnProd = producedAt.getProductionFrom(numberOfavailableInputGoods);
+			ConstructionTurnProduction turnProd = producedAt.getProduction(numberOfavailableInputGoods);
 			goodConsumedStats.setConsumed(turnProd.getConsumedGoods());
 			goodProdStats.setRowProduction(turnProd.getProducedGoods());
 			goodProdStats.setBlockedProduction(turnProd.getBlockedGoods());

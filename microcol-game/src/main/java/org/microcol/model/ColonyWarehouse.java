@@ -32,15 +32,6 @@ public class ColonyWarehouse {
 				.collect(ImmutableMap.toImmutableMap(entry -> entry.getKey().name(), entry -> entry.getValue()));
 	}
 
-	/**
-	 * Make data copy of this instance.
-	 */
-	public ColonyWarehouse makeCopy() {
-		Map<String, Integer> tmp = new HashMap<>();
-		goodAmounts.forEach((good, amount) -> tmp.put(good.name(), amount));
-		return new ColonyWarehouse(colony, tmp);
-	}
-
 	public Integer getGoodAmmount(final GoodType goodType) {
 		Preconditions.checkNotNull(goodType, "GoodType is null");
 		Integer amount = goodAmounts.get(goodType);

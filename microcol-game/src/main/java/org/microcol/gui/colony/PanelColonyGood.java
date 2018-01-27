@@ -15,6 +15,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
@@ -24,6 +25,8 @@ import javafx.scene.layout.VBox;
 public class PanelColonyGood extends VBox {
 
 	private final Label labelAmount;
+
+	private final Label labelDiff;
 
 	private final GoodType goodType;
 
@@ -40,7 +43,9 @@ public class PanelColonyGood extends VBox {
 		final Pane paneImage = new Pane(imageView);
 		paneImage.setOnDragDetected(this::onDragDetected);
 		labelAmount = new Label();
-		getChildren().addAll(paneImage, labelAmount);
+		labelDiff = new Label();
+		HBox hlabels = new HBox(labelAmount, labelDiff);
+		getChildren().addAll(paneImage, hlabels);
 	}
 
 	private final void onDragDetected(final MouseEvent event) {
@@ -58,22 +63,29 @@ public class PanelColonyGood extends VBox {
 		this.colony = colony;
 	}
 
-	//XXX add some formatting to -diff and +diff (css style)
 	public void repaint() {
 		ColonyProductionStats stats = colony.getGoodsStats();
 		GoodProductionStats goodsStats = stats.getStatsByType(goodType);
 		
 		String txt = String.valueOf(goodsStats.getInWarehouseBefore());
+		labelAmount.setText(txt);
 
 		int diff = goodsStats.getInWarehouseAfter() - goodsStats.getInWarehouseBefore();
-
 		if (diff > 0) {
-			txt += " +" + diff;
+			txt = "+" + diff;
+			labelDiff.getStyleClass().clear();
+			labelDiff.getStyleClass().add("diffPositive");
+			labelDiff.setText(txt);
 		} else if (diff < 0) {
-			txt += " " + diff;
+			txt = String.valueOf(diff);
+			labelDiff.getStyleClass().clear();
+			labelDiff.getStyleClass().add("diffNegative");
+			labelDiff.setText(txt);
+		} else{
+			labelDiff.getStyleClass().clear();
+			labelDiff.setText("");			
 		}
 
-		labelAmount.setText(txt);
 	};
-
+	
 }

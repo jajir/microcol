@@ -99,46 +99,22 @@ public class Construction {
 		return workingSlots.get(index);
 	}
 
-	public int getProductionPerTurn(final Colony colony) {
-		return getProduction(colony, colony.getNextTurnTempWarehouse()).getRealProductionPerTurn();
-	}
-
 	List<ConstructionSlot> getOrderedSlots() {
 		return workingSlots.stream()
 				.sorted(Comparator.comparing(sort -> -sort.getProductionModifier(getType().getProduce().get())))
 				.collect(Collectors.toList());
 	}
 	
-	/**
-	 * Return value is computed base on construction type basic production per
-	 * turn.
-	 *
-	 * @return return basic production per turn
-	 */
-	public int getBasicProductionPerSlot(){
-		return getType().getProductionPerTurn();
-	}
-
-	public ConstructionProduction getProduction(final Colony colony, final ColonyWarehouse colonyWarehouse) {
+	ConstructionTurnProduction getProduction(final int sourceGoodAmount) {
+		Preconditions.checkArgument(sourceGoodAmount >= 0, "sourceGoodAmount can't be smaller than 0.");
 		if (getType().getProduce().isPresent()) {
 			final GoodType producedGoodType = getType().getProduce().get();
-			ConstructionProduction out = ConstructionProduction.EMPTY;
-			for (final ConstructionSlot slot : getConstructionSlots()) {
-				final ConstructionProduction tmp = getType().getConstructionProduction(colony)
-						.multiply(slot.getProductionModifier(producedGoodType));
-				out = out.add(tmp);
-			}
-			out = out.limit(colonyWarehouse);
-			return out;
-		}else{
-			return ConstructionProduction.EMPTY;
-		}
-	}
-	
-	ConstructionTurnProduction getProductionFrom(final int sourceGoodAmount) {
-		if (getType().getProduce().isPresent()) {
-			final GoodType producedGoodType = getType().getProduce().get();
-			int consumptionPerTurn = 0; //base production doesn't require any additional sources.
+			/*
+			 * Consumption per turn is always 0. Even when there are base
+			 * production like crosses. Base production doesn't consume any
+			 * sources.
+			 */
+			int consumptionPerTurn = 0;
 			int productionPerTurn = type.getBaseProductionPerTurn();
 			int productioPerTurnBlocked = 0;
 			for (final ConstructionSlot slot : getConstructionSlots()) {
@@ -162,7 +138,7 @@ public class Construction {
 			}
 			return new ConstructionTurnProduction(consumptionPerTurn, productionPerTurn, productioPerTurnBlocked);
 		}else{
-			return new ConstructionTurnProduction( 0, 0, 0);
+			return ConstructionTurnProduction.EMPTY;
 		}
 	}
 	
@@ -171,17 +147,23 @@ public class Construction {
 	 *
 	 * @param colony
 	 *            required colony where is warehouse and construction placed
-	 * @param colonyWarehouse
+	 * @param warehouse
 	 *            required colony warehouse
 	 */
-	public void produce(final Colony colony, final ColonyWarehouse colonyWarehouse) {
-		if (getType().getProduce().isPresent()) {
-			final GoodType producedGoodType = getType().getProduce().get();
-			getConstructionSlots().forEach(slot -> {
-				getType().getConstructionProduction(colony).multiply(slot.getProductionModifier(producedGoodType))
-						.limit(colonyWarehouse).consume(colonyWarehouse);
-			});
-		}
+	public void produce(final Colony colony, final ColonyWarehouse warehouse) {
+		getType().getProduce().ifPresent(producedGoodType -> {
+			if (getType().getConsumed().isPresent()) {
+				final GoodType consumedGoodsType = getType().getConsumed().get();
+				final int availableGoodsSource = warehouse.getGoodAmmount(consumedGoodsType);
+				ConstructionTurnProduction prod = getProduction(availableGoodsSource);
+				warehouse.addToWarehouse(consumedGoodsType, -prod.getConsumedGoods());
+				warehouse.addToWarehouse(producedGoodType, prod.getProducedGoods());
+			} else {
+				final int availableGoodsSource = warehouse.getGoodAmmount(producedGoodType);
+				ConstructionTurnProduction prod = getProduction(availableGoodsSource);
+				warehouse.addToWarehouse(producedGoodType, prod.getProducedGoods());
+			}
+		});
 	}
 	
 	public boolean isValid(){

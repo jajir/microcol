@@ -35,7 +35,7 @@ public class StatusBarPresenter implements Localized {
 		statusBarMessageController.addRunLaterListener(event -> {
 			display.getStatusBarDescription().setText(event.getStatusMessage());
 		});
-		roundStartedController.addListener(event -> {
+		roundStartedController.addRunLaterListener(event -> {
 			setYearText(display.getLabelEra(), event.getCalendar());
 		});
 		changeLanguangeController.addListener(event -> {

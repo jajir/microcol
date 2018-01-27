@@ -21,7 +21,6 @@ public class ImageRandomProvider {
 	}
 
 	public Image getTerrainImage(final TerrainType terrainType, final Location location) {
-		//TODO it should be replaced by type
 		if (TerrainType.OCEAN.equals(terrainType)) {
 			final Integer rnd = mapRandoms.getRandomAt(location);
 			if(rnd % 11 == 0){

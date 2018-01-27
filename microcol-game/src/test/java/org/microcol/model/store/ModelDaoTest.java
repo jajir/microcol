@@ -63,7 +63,6 @@ public class ModelDaoTest {
 
 		ModelDao modelDao = new ModelDao();
 		modelDao.saveToFile("target/test.json", modelPo);
-		//TODO load from file
 	}
 
 	private Level level;

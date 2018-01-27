@@ -5,14 +5,14 @@
 Planned releases
 
  * 0.5.0 - Make first game smoother
-
-  * \u2717 Colony UI improvements 
-    	
-  	* \u2717 Show how many goods is consumed.
-  	  	
-  	* \u2717 Show that some production doesn't have enough sources.
   	
   * \u2717 Colony building queue and queue editing - simple and ugly version
+
+  * \u2713 Colony UI improvements 
+    	
+  	* \u2713 Show how many goods is consumed.
+  	  	
+  	* \u2713 Show that some production doesn't have enough sources.
 
   * \u2713 When user in move mode move mouse to location where unit can't go than cursor will change icon. 
   	
@@ -36,10 +36,14 @@ Planned releases
   * \u2713 Generate tile shapes for different tiles connections, for example sea/grass and sea/tundra.
 
   * \u2713 Support hiding on not reveal map part.
+  	
+  * \u2713 Tons of bugs
 
  * Backlog - feature and improvement backlog	
 
   * \u2717 Add unit wagon, can't fight, capture colony, can transport goods
+  	
+  * \u2717 Colonist in colony eats 2 foods per turn.
 
   * \u2717 Improve UI
    

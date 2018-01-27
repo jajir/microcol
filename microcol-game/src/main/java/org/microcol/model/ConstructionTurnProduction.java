@@ -1,6 +1,10 @@
 package org.microcol.model;
 
+import com.google.common.base.MoreObjects;
+
 public class ConstructionTurnProduction {
+	
+	public final static ConstructionTurnProduction EMPTY = new ConstructionTurnProduction(0, 0, 0);
 
 	private final int consumedGoods;
 
@@ -12,6 +16,15 @@ public class ConstructionTurnProduction {
 		this.consumedGoods = consumedGoods;
 		this.producedGoods = producedGoods;
 		this.blockedGoods = blockedGoods;
+	}
+	
+	@Override
+	public String toString() {
+		return MoreObjects.toStringHelper(this.getClass())
+				.add("consumedGoods", consumedGoods)
+				.add("producedGoods", producedGoods)
+				.add("blockedGoods", blockedGoods)
+				.toString();
 	}
 
 	/**

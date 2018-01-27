@@ -96,7 +96,7 @@ public abstract class AbstractCoastImageLoader implements ImageLoader {
 	}
 
 	private ImageWrapper getImgInRow(final ImageProvider imageProvider, final String count) {
-		return getImg(imageProvider, "type" + count + getBackgroundRow());
+		return getImg(imageProvider, "type_" + count + "_" + getBackgroundRow());
 	}
 	
 }

@@ -825,25 +825,6 @@ public class ConstructionType {
 			return (int) (productionPerTurn / productionRatio);
 		}
 	}
-	
-	public ConstructionProduction getConstructionProduction(final Colony colony){
-		if(GoodType.BELL.equals(produce)){
-			int consumption = getConsumptionPerTurn();
-			int production = getProductionPerTurn();
-			if (colony.isContainsConstructionByType(PRINTING_PRESS)) {
-				consumption = PRINTING_PRESS.getConsumptionPerTurn();
-				production = PRINTING_PRESS.getProductionPerTurn();
-			}
-			if (colony.isContainsConstructionByType(NEWSPAPER)) {
-				consumption = NEWSPAPER.getConsumptionPerTurn();
-				production = NEWSPAPER.getProductionPerTurn();
-			}
-			return new ConstructionProduction(consumption, baseProductionPerTurn, production, consumed, produce);
-		}else{
-			return new ConstructionProduction(getConsumptionPerTurn(), baseProductionPerTurn, getProductionPerTurn(),
-					consumed, produce);
-		}
-	}
 
 	public int getBaseProductionPerTurn() {
 		return baseProductionPerTurn;

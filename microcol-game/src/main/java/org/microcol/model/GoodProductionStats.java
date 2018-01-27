@@ -6,7 +6,6 @@ import com.google.common.base.Preconditions;
 /**
  * Hold information about production of some good and about stock in warehouse
  * in one turn.
- * TODO it's not in use
  */
 public class GoodProductionStats {
 
@@ -56,7 +55,8 @@ public class GoodProductionStats {
 	}
 
 	/**
-	 * TODO comment
+	 * Net turn production. it's row production minus consumed goods. Could be
+	 * less than 0, because missing goods is taken from warehouse.
 	 * 
 	 * @return the netProduction
 	 */

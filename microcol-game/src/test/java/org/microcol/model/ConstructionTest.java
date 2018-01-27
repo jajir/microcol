@@ -1,35 +1,15 @@
 package org.microcol.model;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.junit.Test;
-
-import com.google.common.collect.Lists;
 
 import mockit.Expectations;
 import mockit.Mocked;
 
 public class ConstructionTest {
-
-	@Test
-	public void test_church_verify_base_production(final @Mocked Colony colony) throws Exception {
-		Construction church = Construction.build(colony, ConstructionType.CHURCH);
-
-		assertEquals(1, church.getProductionPerTurn(colony));
-	}
-
-	@Test
-	public void test_blacksmith_verify_base_production_per_turn(final @Mocked Colony colony) throws Exception {
-		Construction blacksmith = Construction.build(colony, ConstructionType.BLACKSMITHS_HOUSE);
-
-		assertEquals(0, blacksmith.getProductionPerTurn(colony));
-	}
 
 	@Test
 	public void test_getOrderedSlots_noUnits(final @Mocked Colony colony) throws Exception {
@@ -77,33 +57,6 @@ public class ConstructionTest {
 		assertTrue(slots.get(2).isEmpty());
 		assertSame(colonist1, slots.get(0).getUnit());
 		assertSame(colonist2, slots.get(1).getUnit());
-	}
-	
-	@Test
-	public void test_blacksmith_produce(
-			@Mocked ColonyWarehouse colonyWarehouse,
-			@Mocked final ConstructionSlot slot1,
-			@Mocked final ConstructionSlot slot2,
-			@Mocked final ConstructionSlot slot3,
-			@Mocked final ConstructionType buildingType,
-			@Mocked final ConstructionProduction prod,
-			@Mocked final Colony colony
-			) throws Exception {
-		
-		final Construction blacksmith = new Construction(colony, buildingType,
-				construction -> Lists.newArrayList(slot1, slot2, slot3));
-		
-		new Expectations() {{
-			buildingType.getProduce(); result = Optional.of(GoodType.TOOLS);
-			buildingType.getConstructionProduction(colony); result = prod; times = 3;
-			slot1.getProductionModifier(GoodType.TOOLS); result = 1; times = 1;
-			slot2.getProductionModifier(GoodType.TOOLS); result = 1; times = 1;
-			slot3.getProductionModifier(GoodType.TOOLS); result = 1; times = 1;
-			prod.multiply(1); times = 3;
-			prod.limit(colonyWarehouse); times = 3;
-		}};
-
-		blacksmith.produce(colony, colonyWarehouse);
 	}
 
 }
