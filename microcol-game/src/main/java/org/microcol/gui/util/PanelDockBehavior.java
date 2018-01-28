@@ -23,7 +23,8 @@ public interface PanelDockBehavior {
 	List<Unit> getUnitsInPort();
 
 	/**
-	 * Drag on crate was dropped.
+	 * Drag on crate was dropped. It's called when mouse with some content is
+	 * dropped on watched area.
 	 * 
 	 * @param cargoSlot
 	 *            required cargo slot
@@ -35,6 +36,8 @@ public interface PanelDockBehavior {
 	/**
 	 * User start dragging at this cargo slot.
 	 * 
+	 * TODO add some explanation
+	 * 
 	 * @param cargoSlot
 	 *            required cargo slot
 	 * @param event
@@ -45,7 +48,9 @@ public interface PanelDockBehavior {
 	void onDragDetected(CargoSlot cargoSlot, MouseEvent event, final Node node);
 
 	/**
-	 * Verify if dragged type could be dropped upon given cargo slot.
+	 * Verify if dragged type could be dropped upon given cargo slot. If it's
+	 * true than cargo change appearance to notify user that hold cargo could be
+	 * dropped here.
 	 * 
 	 * @param cargoSlot
 	 *            required cargo slot

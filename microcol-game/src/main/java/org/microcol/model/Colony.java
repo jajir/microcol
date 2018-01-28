@@ -260,7 +260,7 @@ public class Colony {
 		return force;
 	}
 	
-	//TODO start to use that, improve implementation
+	//TODO add some tests
 	public ColonyProductionStats getGoodsStats() {
 		final ColonyProductionStats out = new ColonyProductionStats();
 		//set initial warehouse stack

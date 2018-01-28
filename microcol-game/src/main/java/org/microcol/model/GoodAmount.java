@@ -3,9 +3,12 @@ package org.microcol.model;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 
+/**
+ * Immutable class holding some number of goods of same type.
+ */
 public class GoodAmount {
 
-	private int amount;
+	private final int amount;
 
 	private final GoodType goodType;
 
@@ -23,13 +26,24 @@ public class GoodAmount {
 				.add("amount", amount)
 				.toString();
 	}
-
-	public int getAmount() {
-		return amount;
+	
+	public GoodAmount add(final GoodAmount goodAmount) {
+		Preconditions.checkNotNull(goodAmount);
+		Preconditions.checkArgument(goodType.equals(goodAmount.getGoodType()),
+				"Added good amount have differet type (%s) fro current one (%s)", goodAmount, this);
+		return new GoodAmount(goodType, amount + goodAmount.getAmount());
+	}
+	
+	public boolean isZero() {
+		return amount == 0;
 	}
 
-	public void setAmount(int amount) {
-		this.amount = amount;
+	public GoodAmount substract(final int howMuch) {
+		return new GoodAmount(goodType, amount - howMuch);
+	}
+	
+	public int getAmount() {
+		return amount;
 	}
 
 	public GoodType getGoodType() {

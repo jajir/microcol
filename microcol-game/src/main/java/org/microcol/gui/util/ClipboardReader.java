@@ -235,6 +235,13 @@ public class ClipboardReader {
 			this.goodTransfer = goodTransfer;
 		}
 
+		/**
+		 * Filter transfered unit.
+		 * 
+		 * @param filter
+		 *            required predicated
+		 * @return return parsing result
+		 */
 		public ParsingResult filterUnit(final Predicate<Unit> filter) {
 			if (unitTransfer == null) {
 				return this;
@@ -247,6 +254,14 @@ public class ClipboardReader {
 			}
 		}
 
+		/**
+		 * Filter transfered goods.
+		 * 
+		 * @param filter
+		 *            required predicated, if it's <code>true</code> good will
+		 *            be keep otherwise will be removed.
+		 * @return return parsing result
+		 */
 		public ParsingResult filterGoods(final Predicate<GoodAmount> filter) {
 			if (goodTransfer == null) {
 				return this;
