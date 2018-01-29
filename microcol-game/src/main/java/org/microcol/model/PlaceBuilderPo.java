@@ -106,7 +106,7 @@ public class PlaceBuilderPo implements Function<Unit, Place> {
 			final Integer slotIndex = getSlotId(idUnitInCargo);
 			final UnitPo holdingUnitPo = modelPo.getUnitWithUnitInCargo(idUnitInCargo);
 			Unit holdingUnit = null;
-			Optional<Unit> oHoldingUnit = model.tryGetUnitById(idUnitInCargo);
+			Optional<Unit> oHoldingUnit = model.tryGetUnitById(holdingUnitPo.getId());
 			if(oHoldingUnit.isPresent()){
 				holdingUnit = oHoldingUnit.get();
 			}else{

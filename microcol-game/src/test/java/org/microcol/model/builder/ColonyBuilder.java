@@ -67,7 +67,7 @@ public class ColonyBuilder {
 		worker.setId(IdManager.nextId());
 		worker.setOwnerId(playerBuilder.getPlayerPo().getName());
 		worker.setType(unitType);
-		playerBuilder.getModelPo().getUnits().add(worker);
+		playerBuilder.getModelPo().addUnit(worker);
 		return worker;
 	}
 

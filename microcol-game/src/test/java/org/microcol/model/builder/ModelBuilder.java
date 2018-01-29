@@ -25,7 +25,7 @@ public class ModelBuilder {
 		if (modelPo.getUnits().contains(unit)) {
 			throw new IllegalArgumentException("Unit was already registered. Unit: " + unit);
 		}
-		modelPo.getUnits().add(unit);
+		modelPo.addUnit(unit);
 		return this;
 	}
 
@@ -66,7 +66,7 @@ public class ModelBuilder {
 		unit.setType(type);
 		unit.setPlaceMap(new PlaceMapPo());
 		unit.getPlaceMap().setLocation(location);
-		modelPo.getUnits().add(unit);
+		modelPo.addUnit(unit);
 
 		return this;
 	}

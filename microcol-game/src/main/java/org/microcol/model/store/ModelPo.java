@@ -30,6 +30,13 @@ public class ModelPo {
 		return units.stream().filter(unit -> unit.getCargo().containsUnitInCargo(idUnitInCargo)).findAny()
 				.orElseThrow(() -> new IllegalStateException("Invalid unit id in cargo '" + idUnitInCargo + "'"));
 	}
+	
+	public void addUnit(final UnitPo add) {
+		units.stream().filter(unit -> unit.getId().equals(add.getId())).findFirst().ifPresent(unit -> {
+			throw new IllegalArgumentException("unit " + unit + " is same asss added " + add);
+		});
+		units.add(add);
+	}
 
 	public List<UnitPo> getUnits() {
 		return units;

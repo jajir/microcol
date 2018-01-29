@@ -25,14 +25,21 @@ class UnitStorage {
 	 */
 	private final List<Unit> units;
 
-	UnitStorage(final List<Unit> units) {
-		this.units = new ArrayList<>(units);
-		checkUnitLocations(this.units);
-		checkDuplicities(units);
+	UnitStorage() {
+		this.units = new ArrayList<>();
 	}
 	
 	void addUnit(final Unit unit) {
+		Preconditions.checkNotNull(unit);
+		Preconditions.checkArgument(!units.contains(unit), "unit %s was already added.", unit);
+		Preconditions.checkArgument(!tryGetUnitById(unit.getId()).isPresent(), "Unit with id %s was already added.",
+				unit, unit.getId());
+		//TODO add some preconditions
+		//TODO add test
 		units.add(unit);
+		//TODO change following that will check just added unit 
+		checkUnitLocations(units);
+		checkDuplicities(units);
 	}
 	
 	void addUnitToPlayer(final UnitType unitType, final Player owner, final Model model){

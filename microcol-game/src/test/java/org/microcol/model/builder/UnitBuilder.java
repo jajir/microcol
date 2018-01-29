@@ -83,7 +83,7 @@ public class UnitBuilder {
 		tmpPo.setType(type);
 		tmpPo.setOwnerId(Preconditions.checkNotNull(unitPo.getOwnerId(), "Player name was not set"));
 		tmpPo.setPlaceCargoSlot(new PlaceCargoSlotPo());
-		modelPo.getUnits().add(tmpPo);
+		modelPo.addUnit(tmpPo);
 		final CargoSlotPo cargoSlotPo = new CargoSlotPo();
 		cargoSlotPo.setUnitId(tmpPo.getId());
 		unitPo.getCargo().getSlots().add(cargoSlotPo);

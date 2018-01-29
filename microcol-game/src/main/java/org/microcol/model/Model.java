@@ -110,19 +110,32 @@ public final class Model {
 	public static Model make(final ModelPo modelPo) {
 		final Calendar calendar = Calendar.make(modelPo.getCalendar());
 		final WorldMap worldMap = new WorldMap(modelPo);
-		final UnitStorage unitStorage = new UnitStorage(new ArrayList<>());
+		final UnitStorage unitStorage = new UnitStorage();
 
 		Model model = new Model(calendar, worldMap, modelPo, unitStorage);
 		
-		//load units
-		modelPo.getUnits().forEach(unitPo -> {
+		/*
+		 * First are loaded units which can hold cargo than which can be held in cargo. 
+		 */
+		modelPo.getUnits().stream().filter(unitPo -> unitPo.getType().canHoldCargo()).forEach(unitPo->{
 			if (model.tryGetUnitById(unitPo.getId()).isPresent()) {
-				throw new MicroColException(
-						String.format("Unit id '%s' belongs to at least two units.", unitPo.getId()));
+				throw new MicroColException(String.format("unit with id %s was alredy loaded", unitPo.getId()));
 			}else{
 				model.createUnit(model, modelPo, unitPo);
 			}
 		});
+		modelPo.getUnits().stream().filter(unitPo -> !unitPo.getType().canHoldCargo()).forEach(unitPo->{
+			if (model.tryGetUnitById(unitPo.getId()).isPresent()) {
+				throw new MicroColException(String.format("unit with id %s was alredy loaded", unitPo.getId()));
+			}else{
+				model.createUnit(model, modelPo, unitPo);
+			}
+		});
+		
+		if (modelPo.getUnits().size() != unitStorage.getUnits().size()) {
+			throw new MicroColException(String.format("In source data in %s units by in model is %s units.",
+					modelPo.getUnits().size(), unitStorage.getUnits().size()));
+		}
 		
 		model.checkUnits();
 		model.assureDefaultVisibility();
