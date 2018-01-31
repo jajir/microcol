@@ -133,7 +133,7 @@ public class PanelDockCrate extends StackPane {
 	}
 
 	private boolean isCorrectObject(final Dragboard db) {
-		return panelDockBehavior.isCorrectObject(cargoSlot, db);
+		return cargoSlot != null && panelDockBehavior.isCorrectObject(cargoSlot, db);
 	}
 
 }

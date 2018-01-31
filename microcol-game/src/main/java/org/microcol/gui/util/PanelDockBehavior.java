@@ -3,6 +3,7 @@ package org.microcol.gui.util;
 import java.util.List;
 
 import org.microcol.model.CargoSlot;
+import org.microcol.model.GoodAmount;
 import org.microcol.model.Unit;
 
 import javafx.scene.Node;
@@ -34,9 +35,8 @@ public interface PanelDockBehavior {
 	void onDragDropped(CargoSlot cargoSlot, DragEvent event);
 
 	/**
-	 * User start dragging at this cargo slot.
-	 * 
-	 * TODO add some explanation
+	 * User start dragging at this cargo slot. This is called when user start
+	 * dragging mouse.
 	 * 
 	 * @param cargoSlot
 	 *            required cargo slot
@@ -60,4 +60,12 @@ public interface PanelDockBehavior {
 	 */
 	boolean isCorrectObject(CargoSlot cargoSlot, Dragboard db);
 
+	default boolean canBeGoodsTransfered(final CargoSlot cargoSlot, final GoodAmount goods) {
+		if (cargoSlot.getGoods().isPresent()) {
+			return cargoSlot.getGoods().get().getGoodType().equals(goods.getGoodType());
+		} else {
+			return true;
+		}
+	}
+	
 }

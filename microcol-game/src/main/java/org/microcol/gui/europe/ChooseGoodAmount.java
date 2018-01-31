@@ -1,10 +1,10 @@
 package org.microcol.gui.europe;
 
 import org.microcol.gui.util.AbstractMessageWindow;
+import org.microcol.gui.util.ButtonsBar;
 import org.microcol.gui.util.Text;
 import org.microcol.gui.util.ViewUtil;
 
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.layout.HBox;
@@ -69,13 +69,13 @@ public class ChooseGoodAmount extends AbstractMessageWindow {
 			actualValue = newValue.intValue();
 		});
 
-		final Button buttonOk = new Button(text.get("dialog.ok"));
-		buttonOk.setOnAction(e -> {
+		final ButtonsBar buttonsBar = new ButtonsBar(text.get("dialog.ok"));
+		buttonsBar.getButtonOk().setOnAction(e -> {
 			getDialog().close();
 		});
-		buttonOk.requestFocus();
+		buttonsBar.getButtonOk().requestFocus();
 
-		root.getChildren().addAll(label, boxActualValue, slider, buttonOk);
+		root.getChildren().addAll(label, boxActualValue, slider, buttonsBar);
 
 		getDialog().showAndWait();
 	}

@@ -16,7 +16,7 @@
 		<jacoco.version>0.7.9</jacoco.version>
 		<github.global.server>github</github.global.server>
 		<github.global.oauth2Token>${env.GITHUB_OAUTH_TOKEN}</github.global.oauth2Token>
-		<easymock.version>3.4</easymock.version>
+		<easymock.version>3.5.1</easymock.version>
 	</properties>
 
 	<dependencies>
