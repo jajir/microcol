@@ -28,7 +28,7 @@ public interface PanelDockBehavior {
 	 * dropped on watched area.
 	 * 
 	 * @param cargoSlot
-	 *            required cargo slot
+	 *            required cargo slot where goods will be moved
 	 * @param event
 	 *            required mouse event
 	 */

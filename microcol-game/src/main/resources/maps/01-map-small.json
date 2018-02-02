@@ -143,9 +143,8 @@
       "id": 61,
       "type": "FRIGATE",
       "ownerId": "Dutch",
-      "placeHighSeas": {
-        "isTravelToEurope": true,
-        "remainigTurns": 4
+      "placeEuropePort": {
+        "isOnPier": false
       },
       "cargo": {
         "slots": [
@@ -158,9 +157,8 @@
       "id": 62,
       "type": "GALLEON",
       "ownerId": "Dutch",
-      "placeHighSeas": {
-        "isTravelToEurope": false,
-        "remainigTurns": 2
+      "placeEuropePort": {
+        "isOnPier": false
       },
       "cargo": {
         "slots": [
@@ -467,7 +465,7 @@
       ],
       "colonyWarehouse": {
         "COAT": 100,
-        "CIGARS": 33,
+        "CIGARS": 133,
         "SUGAR": 41,
         "COTTON": 13,
         "CORN": 75

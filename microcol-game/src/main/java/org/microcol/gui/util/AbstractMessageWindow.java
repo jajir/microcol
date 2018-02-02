@@ -58,10 +58,15 @@ public class AbstractMessageWindow {
 		 */
 		scene.setOnKeyPressed(event -> {
 			if (event.getCode() == KeyCode.ESCAPE) {
-				stageDialog.close();
+				onCancelDialog();
 			}
 		});
 	}
+	
+	protected void onCancelDialog() {
+		stageDialog.close();
+	}	
+	
 
 	public ViewUtil getViewUtil() {
 		return viewUtil;

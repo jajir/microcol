@@ -292,6 +292,7 @@ public class Unit {
 		return !units.stream().filter(unit -> !getOwner().equals(unit.getOwner())).findFirst().isPresent();
 	}
 
+	//TODO rename it, name is not corresponding to functionality
 	public List<Unit> getStorageUnits() {
 		verifyThatUnitIsAtMap();
 

@@ -5,8 +5,6 @@
 Planned releases
 
  * 0.5.0 - Make first game smoother
-  	
-  * \u2717 Colony building queue and queue editing - simple and ugly version
 
   * \u2713 Colony UI improvements 
     	
@@ -37,9 +35,21 @@ Planned releases
 
   * \u2713 Support hiding on not reveal map part.
   	
-  * \u2713 Tons of bugs
+  * \u2717 Tons of bugs, for example
+   	
+   * \u2713 Method for removing defeated unit keep units in defeated cargo
+  
+   * \u2717 Transfered good is not correctly counted
+  
+   * \u2717 Key 'shift' pressed during mouse dragging have to be pressed before dragging starts otherwise is ignored. 
+  
+   * \u2717 Some event's are visible in non explored area
+  
+   * \u2717 Buying of 20 goods and than 80, it's not correctly counted. Event amount is 80 even when user don't have enough gold.    
 
  * Backlog - feature and improvement backlog	
+  	
+  * \u2717 Colony building queue and queue editing - simple and ugly version
 
   * \u2717 Add unit wagon, can't fight, capture colony, can transport goods
   	

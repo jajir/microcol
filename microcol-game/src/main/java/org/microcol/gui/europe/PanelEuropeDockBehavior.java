@@ -52,12 +52,15 @@ public class PanelEuropeDockBehavior extends AbstractPanelDockBehavior {
 		GoodAmount tmp = goodAmount;
 		logger.debug("wasShiftPressed " + europeDialogCallback.getPropertyShiftWasPressed().get());
 		if (europeDialogCallback.getPropertyShiftWasPressed().get()) {
-			ChooseGoodAmount chooseGoodAmount = new ChooseGoodAmount(viewUtil, text, goodAmount.getAmount());
+			ChooseGoodAmount chooseGoodAmount = new ChooseGoodAmount(viewUtil, text, cargoSlot.maxPossibleGoodsToMoveHere(10000, goodAmount.getAmount()));
 			tmp = new GoodAmount(goodAmount.getGoodType(), chooseGoodAmount.getActualValue());
+			if (tmp.isZero()) {
+				return;
+			}
 		}
 		if (transferFrom.get() instanceof ClipboardReader.TransferFromEuropeShop) {
 			try {
-				cargoSlot.buyAndStore(tmp);
+				cargoSlot.storeFromEuropePort(tmp);
 			} catch (NotEnoughtGoldException e) {
 				new DialogNotEnoughGold(viewUtil, text);
 			}

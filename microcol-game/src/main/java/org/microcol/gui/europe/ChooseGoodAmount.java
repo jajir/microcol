@@ -39,9 +39,9 @@ public class ChooseGoodAmount extends AbstractMessageWindow {
 		slider.setMin(MIN_VALUE);
 		slider.setMax(maximalNumberToTransfer);
 		slider.setValue(maximalNumberToTransfer);
-		slider.setSnapToTicks(true);
-		slider.setMajorTickUnit(1);
-		slider.setMinorTickCount(0);
+		slider.setSnapToTicks(false);
+		slider.setMajorTickUnit(10);
+		slider.setMinorTickCount(1);
 		slider.setShowTickLabels(true);
 		slider.setShowTickMarks(false);
 		slider.setLabelFormatter(new StringConverter<Double>() {
@@ -80,6 +80,12 @@ public class ChooseGoodAmount extends AbstractMessageWindow {
 		getDialog().showAndWait();
 	}
 
+	@Override
+	protected void onCancelDialog() {
+		actualValue = 0;
+		super.onCancelDialog();
+	}
+	
 	public int getActualValue() {
 		return actualValue;
 	}

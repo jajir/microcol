@@ -112,7 +112,7 @@ public final class Model {
 		final WorldMap worldMap = new WorldMap(modelPo);
 		final UnitStorage unitStorage = new UnitStorage();
 
-		Model model = new Model(calendar, worldMap, modelPo, unitStorage);
+		final Model model = new Model(calendar, worldMap, modelPo, unitStorage);
 		
 		/*
 		 * First are loaded units which can hold cargo than which can be held in cargo. 
@@ -400,6 +400,13 @@ public final class Model {
 	}
 
 	void destroyUnit(final Unit unit) {
+		Preconditions.checkNotNull(unit, "Unit is null");
+		unit.getCargo().getSlots().stream().forEach(cargoSlot ->{
+			if(cargoSlot.isLoadedUnit()){
+				final Unit u = cargoSlot.getUnit().get();
+				destroyUnit(u);
+			}
+		});
 		unitStorage.remove(unit);
 	}
 

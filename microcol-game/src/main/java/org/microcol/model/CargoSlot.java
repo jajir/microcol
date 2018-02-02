@@ -138,11 +138,11 @@ public final class CargoSlot {
 	 * @param goodAmount
 	 *            required good amount will
 	 */
-	public void buyAndStore(final GoodAmount goodAmount) {
+	public void storeFromEuropePort(final GoodAmount goodAmount) {
 		Preconditions.checkNotNull(goodAmount);
-		Preconditions.checkState(isEmpty(), "Cargo slot (%s) is already loaded.", this);
+		verifyThatItCouldStored(goodAmount);
 		getOwnerPlayer().buy(goodAmount);
-		cargoGoods = goodAmount;
+		addGoodsAmount(goodAmount.getGoodType(), goodAmount.getAmount());
 	}
 
 	public void sellAndEmpty(final GoodAmount goodAmount) {
@@ -181,7 +181,7 @@ public final class CargoSlot {
 				sourceCargoSlot, transferredGoodsAmount);
 		final Integer sourceAmount = sourceCargoSlot.getGoods().get().getAmount();
 		
-		final int toTransfer = Math.min(sourceAmount, Math.min(transferredGoodsAmount.getAmount(), getAvailableSpace()));
+		final int toTransfer = maxPossibleGoodsToMoveHere(sourceAmount, transferredGoodsAmount.getAmount());
 		sourceCargoSlot.removeGoodsAmount(toTransfer);
 		addGoodsAmount(transferredGoodsAmount.getGoodType(), toTransfer);
 	}
@@ -204,9 +204,23 @@ public final class CargoSlot {
 		final ColonyWarehouse warehouse = colony.getColonyWarehouse();
 		final Integer warehouseAmount = warehouse.getGoodAmmount(transferredGoodsAmount.getGoodType());
 		
-		final int toTransfer = Math.min(warehouseAmount, Math.min(transferredGoodsAmount.getAmount(), getAvailableSpace()));
+		final int toTransfer =  maxPossibleGoodsToMoveHere(warehouseAmount, transferredGoodsAmount.getAmount());
 		warehouse.removeFromWarehouse(transferredGoodsAmount.getGoodType(), toTransfer);
 		addGoodsAmount(transferredGoodsAmount.getGoodType(), toTransfer);
+	}
+
+	/**
+	 * Get maximum of goods that could be stored to this cargo slot.
+	 * 
+	 * @param maxSourceGoods
+	 *            required maximum number of units in source, source could be
+	 *            Europe port, warehouse or ship cargo slot
+	 * @param howMuchIsTransferred
+	 *            required maximum transferred goods
+	 * @return amount of transfered goods
+	 */
+	public int maxPossibleGoodsToMoveHere(int maxSourceGoods, int howMuchIsTransferred) {
+		return Math.min(maxSourceGoods, Math.min(howMuchIsTransferred, getAvailableSpace()));
 	}
 	
 	/**
@@ -229,9 +243,10 @@ public final class CargoSlot {
 
 	/**
 	 * Return how many of goods could be maximally stored to this cargo slot.
+	 * 
 	 * @return return available space for goods
 	 */
-	private int getAvailableSpace() {
+	public int getAvailableSpace() {
 		if (cargoGoods == null) {
 			return MAX_CARGO_SLOT_CAPACITY;
 		} else {

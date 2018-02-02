@@ -51,8 +51,12 @@ public class PanelColonyDockBehaviour extends AbstractPanelDockBehavior {
 		logger.debug("wasShiftPressed " + colonyDialogCallback.getPropertyShiftWasPressed().get());
 		if (colonyDialogCallback.getPropertyShiftWasPressed().get()) {
 			// synchronously get information about transfered amount
-			ChooseGoodAmount chooseGoodAmount = new ChooseGoodAmount(viewUtil, text, goodAmount.getAmount());
+			ChooseGoodAmount chooseGoodAmount = new ChooseGoodAmount(viewUtil, text,
+					cargoSlot.maxPossibleGoodsToMoveHere(10000, goodAmount.getAmount()));
 			tmp = new GoodAmount(goodAmount.getGoodType(), chooseGoodAmount.getActualValue());
+			if (tmp.isZero()) {
+				return;
+			}
 		}
 		// TODO following code doesn't look readable
 		if (transferFrom.get() instanceof ClipboardReader.TransferFromColonyWarehouse) {
