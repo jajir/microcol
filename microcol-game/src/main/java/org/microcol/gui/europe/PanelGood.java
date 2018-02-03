@@ -21,7 +21,7 @@ public class PanelGood extends VBox {
 		final ImageView imageView = new ImageView(image);
 		Pane paneImage = new Pane(imageView);
 		paneImage.setOnDragDetected(e -> {
-			final Dragboard db = imageView.startDragAndDrop(TransferMode.MOVE);
+			final Dragboard db = imageView.startDragAndDrop(TransferMode.MOVE, TransferMode.LINK);
 			ClipboardWritter.make(db).addImage(image).addTransferFromEuropeShop()
 					.addGoodAmount(new GoodAmount(goodTrade.getGoodType(), 100)).build();
 			e.consume();

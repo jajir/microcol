@@ -123,7 +123,7 @@ public class PanelColonyFields extends TitledPanel {
 	private final void onClickDirection(final Location direction) {
 		final ColonyField colonyField = colony.getColonyFieldInDirection(direction);
 		if (!colonyField.isEmpty()) {
-			System.out.println("clicked: " + colonyField);
+			//FIXME why is this code here?
 		}
 	}
 

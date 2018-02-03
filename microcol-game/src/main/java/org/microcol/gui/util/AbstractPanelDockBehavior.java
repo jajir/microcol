@@ -44,9 +44,10 @@ public abstract class AbstractPanelDockBehavior implements PanelDockBehavior {
 				.tryReadGood((goodAmount, transferFrom) -> {
 					Preconditions.checkArgument(transferFrom.isPresent(), "Good origin is not known.");
 
-					consumeGoods(cargoSlot, goodAmount, transferFrom);
+					consumeGoods(cargoSlot, goodAmount, transferFrom,
+							event.getTransferMode().equals(TransferMode.LINK));
 
-					event.acceptTransferModes(TransferMode.MOVE);
+					event.acceptTransferModes(TransferMode.ANY);
 					event.setDropCompleted(true);
 					event.consume();
 				}).tryReadUnit((unit, transferFrom) -> {
@@ -54,7 +55,7 @@ public abstract class AbstractPanelDockBehavior implements PanelDockBehavior {
 
 					consumeUnit(unit, transferFrom);
 
-					event.acceptTransferModes(TransferMode.MOVE);
+					event.acceptTransferModes(TransferMode.ANY);
 					event.setDropCompleted(true);
 					event.consume();
 				});
@@ -69,9 +70,12 @@ public abstract class AbstractPanelDockBehavior implements PanelDockBehavior {
 	 *            required goods type and it's quantity
 	 * @param transferFrom
 	 *            required place from is goods transfered
+	 * @param specialOperatonWasSelected
+	 *            it's <code>true</code> when user want special drag & drop
+	 *            operation like buy goods
 	 */
 	public abstract void consumeGoods(final CargoSlot cargoSlot, final GoodAmount goodAmount,
-			final Optional<TransferFrom> transferFrom);
+			final Optional<TransferFrom> transferFrom, final boolean specialOperatonWasSelected);
 
 	/**
 	 * Method is called when unit is stored in new cargo store and UI have to
@@ -89,12 +93,12 @@ public abstract class AbstractPanelDockBehavior implements PanelDockBehavior {
 		if (cargoSlot != null) {
 			if (cargoSlot.getUnit().isPresent()) {
 				final Image cargoImage = imageProvider.getUnitImage(cargoSlot.getUnit().get().getType());
-				ClipboardWritter.make(node.startDragAndDrop(TransferMode.MOVE)).addImage(cargoImage)
+				ClipboardWritter.make(node.startDragAndDrop(TransferMode.MOVE, TransferMode.LINK)).addImage(cargoImage)
 						.addTransferFromUnit(cargoSlot.getOwnerUnit(), cargoSlot).addUnit(cargoSlot.getUnit().get())
 						.build();
 			} else if (cargoSlot.getGoods().isPresent()) {
 				final Image cargoImage = imageProvider.getGoodTypeImage(cargoSlot.getGoods().get().getGoodType());
-				ClipboardWritter.make(node.startDragAndDrop(TransferMode.MOVE)).addImage(cargoImage)
+				ClipboardWritter.make(node.startDragAndDrop(TransferMode.MOVE, TransferMode.LINK)).addImage(cargoImage)
 						.addTransferFromUnit(cargoSlot.getOwnerUnit(), cargoSlot)
 						.addGoodAmount(cargoSlot.getGoods().get()).build();
 			}

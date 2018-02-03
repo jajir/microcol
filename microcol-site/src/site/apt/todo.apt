@@ -41,6 +41,8 @@ Planned releases
   
    * \u2717 Transfered good is not correctly counted
   
+   * \u2717 Pressing of 'c' throw exception.
+  
    * \u2717 Key 'shift' pressed during mouse dragging have to be pressed before dragging starts otherwise is ignored. 
   
    * \u2717 Some event's are visible in non explored area

@@ -52,7 +52,7 @@ public class PanelColonyGood extends VBox {
 		Preconditions.checkNotNull(colony.getColonyWarehouse());
 		final int amount = colony.getColonyWarehouse().getTransferableGoodsAmount(goodType);
 		if (amount > 0) {
-			Dragboard db = imageView.startDragAndDrop(TransferMode.MOVE);
+			Dragboard db = imageView.startDragAndDrop(TransferMode.MOVE, TransferMode.LINK);
 			ClipboardWritter.make(db).addImage(image).addTransferFromColonyWarehouse()
 					.addGoodAmount(new GoodAmount(goodType, amount)).build();
 		}

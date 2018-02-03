@@ -45,11 +45,11 @@ public class PanelColonyDockBehaviour extends AbstractPanelDockBehavior {
 
 	@Override
 	public void consumeGoods(final CargoSlot cargoSlot, final GoodAmount goodAmount,
-			final Optional<TransferFrom> transferFrom) {
+			final Optional<TransferFrom> transferFrom, final boolean specialOperatonWasSelected) {
 
 		GoodAmount tmp = goodAmount;
 		logger.debug("wasShiftPressed " + colonyDialogCallback.getPropertyShiftWasPressed().get());
-		if (colonyDialogCallback.getPropertyShiftWasPressed().get()) {
+		if (specialOperatonWasSelected) {
 			// synchronously get information about transfered amount
 			ChooseGoodAmount chooseGoodAmount = new ChooseGoodAmount(viewUtil, text,
 					cargoSlot.maxPossibleGoodsToMoveHere(10000, goodAmount.getAmount()));

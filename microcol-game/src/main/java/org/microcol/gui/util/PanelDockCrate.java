@@ -119,7 +119,7 @@ public class PanelDockCrate extends StackPane {
 
 	private final void onDragOver(final DragEvent event) {
 		if (isCorrectObject(event.getDragboard())) {
-			event.acceptTransferModes(TransferMode.MOVE);
+			event.acceptTransferModes(TransferMode.ANY);
 			event.consume();
 		}
 	}

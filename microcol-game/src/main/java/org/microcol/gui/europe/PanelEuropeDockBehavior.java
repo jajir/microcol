@@ -48,10 +48,10 @@ public class PanelEuropeDockBehavior extends AbstractPanelDockBehavior {
 
 	@Override
 	public void consumeGoods(final CargoSlot cargoSlot, final GoodAmount goodAmount,
-			final Optional<TransferFrom> transferFrom) {
+			final Optional<TransferFrom> transferFrom, final boolean specialOperatonWasSelected) {
 		GoodAmount tmp = goodAmount;
 		logger.debug("wasShiftPressed " + europeDialogCallback.getPropertyShiftWasPressed().get());
-		if (europeDialogCallback.getPropertyShiftWasPressed().get()) {
+		if (specialOperatonWasSelected) {
 			ChooseGoodAmount chooseGoodAmount = new ChooseGoodAmount(viewUtil, text, cargoSlot.maxPossibleGoodsToMoveHere(10000, goodAmount.getAmount()));
 			tmp = new GoodAmount(goodAmount.getGoodType(), chooseGoodAmount.getActualValue());
 			if (tmp.isZero()) {

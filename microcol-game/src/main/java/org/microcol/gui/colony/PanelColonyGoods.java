@@ -68,7 +68,7 @@ public class PanelColonyGoods extends TitledPanel {
 	
 	private final void onDragOver(final DragEvent event) {
 		if (isItGoodAmount(event.getDragboard())) {
-			event.acceptTransferModes(TransferMode.MOVE);
+			event.acceptTransferModes(TransferMode.ANY);
 			event.consume();
 		}
 	}
