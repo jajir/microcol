@@ -35,19 +35,25 @@ Planned releases
 
   * \u2713 Support hiding on not reveal map part.
   	
-  * \u2717 Tons of bugs, for example
+  * \u2717 Tons of bugs, for example:	
    	
    * \u2713 Method for removing defeated unit keep units in defeated cargo
   
-   * \u2717 Transfered good is not correctly counted
+   * \u2713 Transfered good is not correctly counted
   
-   * \u2717 Pressing of 'c' throw exception.
+   * \u2713 Pressing of 'c' throw exception.
   
-   * \u2717 Key 'shift' pressed during mouse dragging have to be pressed before dragging starts otherwise is ignored. 
+   * \u2713 In colony detail view at outside colony panel view colony is not visible.
   
-   * \u2717 Some event's are visible in non explored area
+   * \u2713 Key 'shift' pressed during mouse dragging have to be pressed before dragging starts otherwise is ignored. 
+  
+   * \u2713 Some event's are visible in non explored area.
+  
+   * \u2717 When openent's colony is occupied by ship than there shouln't be fight. Colony just should be captured and opponent's ship moved outside of colony. 
   
    * \u2717 Buying of 20 goods and than 80, it's not correctly counted. Event amount is 80 even when user don't have enough gold.    
+  
+   * \u2717 Travel to Europe throws exception.    
 
  * Backlog - feature and improvement backlog	
   	
@@ -78,11 +84,13 @@ Planned releases
   
   * \u2717 Documentation update
   	
-  	* \u2717 development description is outdated
+  	* \u2717 Review release process description.
+  	
+  	* \u2717 Development description is outdated.
   	
   	* \u2717 release process
   	
-  	* \u2717 documentation publishing (return back to manual process)
+  	* \u2717 Documentation publishing (return back to manual process).
   
   * \u2717 build road
   
@@ -91,6 +99,14 @@ Planned releases
   * \u2717 Colony name editing
   
   * \u2717 Colony name generator
+  
+  * \u2717 Don't show colony as dialog, show it at full screen.  
+  
+  * \u2717 Add mouse over hints to colony. Add hint to optional 'Control' key during dragging.  
+  
+  * \u2717 Don't show Europe as dialog, show it at full screen.  
+  
+  * \u2717 Add mouse over hints to Europe.  
   
   * \u2717 Prepare names for colonies for each nationalities
   

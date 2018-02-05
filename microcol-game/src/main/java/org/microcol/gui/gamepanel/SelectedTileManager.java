@@ -35,7 +35,9 @@ public class SelectedTileManager {
 	}
 	
 	private void onUnitMoveFinished(final UnitMoveFinishedEvent event){
-		setSelectedTile(event.getTargetLocation());
+		if (event.getUnit().getOwner().isHuman()) {
+			setSelectedTile(event.getTargetLocation());
+		}
 	}
 
 	public Optional<Location> getSelectedTile() {

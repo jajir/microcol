@@ -181,8 +181,10 @@ public final class GamePanelPresenter implements Localized {
 		 * Here could be verification of race conditions like centering to
 		 * bottom right corner of map. Luckily it's done by JViewport.
 		 */
-		final Point p = display.getArea().getCenterToLocation(selectedTileManager.getSelectedTile().get());
-		display.planScrollingAnimationToPoint(p);
+		if (selectedTileManager.getSelectedTile().isPresent()) {
+			final Point p = display.getArea().getCenterToLocation(selectedTileManager.getSelectedTile().get());
+			display.planScrollingAnimationToPoint(p);
+		}
 	}
 
 	private boolean tryToSwitchToMoveMode(final Location currentLocation) {

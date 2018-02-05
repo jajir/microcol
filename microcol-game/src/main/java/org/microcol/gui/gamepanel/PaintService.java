@@ -69,20 +69,23 @@ public class PaintService {
 	 *            required unit to draw
 	 */
 	public void paintUnit(final GraphicsContext graphics, final Point point, final Unit unit) {
-		Point p = point.add(UNIT_IMAGE_POSITION);
+		final Point p = point.add(UNIT_IMAGE_POSITION);
 		graphics.drawImage(imageProvider.getUnitImage(unit.getType()), p.getX(), p.getY());
 		paintOwnersFlag(graphics, point.add(OWNERS_FLAG_POSITION), unit.getOwner());
 	}
 
-	public void paintColony(final GraphicsContext graphics, final Point point, final Colony colony) {
-		Point p = point.add(UNIT_IMAGE_POSITION);
+	public void paintColony(final GraphicsContext graphics, final Point point, final Colony colony,
+			final boolean drawColonyName) {
+		final Point p = point.add(UNIT_IMAGE_POSITION);
 		graphics.drawImage(imageProvider.getImage(ImageProvider.IMG_TILE_TOWN), p.getX(), p.getY());
-		paintOwnersFlag(graphics, point.add(OWNERS_FLAG_POSITION), colony.getOwner());
-		graphics.setFont(colonyFont);
-		graphics.setTextAlign(TextAlignment.CENTER);
-		graphics.setTextBaseline(VPos.CENTER);
-		graphics.setFill(Color.BLACK);
-		graphics.fillText(colony.getName(), p.getX() + 20, p.getY() + 55);
+		if (drawColonyName) {
+			paintOwnersFlag(graphics, point.add(OWNERS_FLAG_POSITION), colony.getOwner());
+			graphics.setFont(colonyFont);
+			graphics.setTextAlign(TextAlignment.CENTER);
+			graphics.setTextBaseline(VPos.CENTER);
+			graphics.setFill(Color.BLACK);
+			graphics.fillText(colony.getName(), p.getX() + 20, p.getY() + 55);
+		}
 	}
 
 	/**

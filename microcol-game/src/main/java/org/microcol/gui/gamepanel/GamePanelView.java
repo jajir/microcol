@@ -69,6 +69,7 @@ public class GamePanelView implements GamePanelPresenter.Display {
 
 	private final GamePreferences gamePreferences;
 
+	//TODO it's already in game preferences, should'n be here
 	private boolean isGridShown;
 
 	private Optional<ScreenScrolling> screenScrolling = Optional.empty();
@@ -294,7 +295,7 @@ public class GamePanelView implements GamePanelPresenter.Display {
 
 		colonies.forEach((location, colony) -> {
 			final Point point = area.convertToPoint(location);
-			paintService.paintColony(graphics, point, colony);
+			paintService.paintColony(graphics, point, colony, true);
 		});
 
 	}
