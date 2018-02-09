@@ -29,15 +29,17 @@ public class PanelEuropeDockBehavior extends AbstractPanelDockBehavior {
 	private final GameModelController gameModelController;
 	private final Text text;
 	private final ViewUtil viewUtil;
+	private final DialogNotEnoughGold dialogNotEnoughGold;
 
 	@Inject
 	PanelEuropeDockBehavior(EuropeDialogCallback europeDialogCallback, GameModelController gameModelController,
-			Text text, ViewUtil viewUtil, ImageProvider imageProvider) {
+			Text text, ViewUtil viewUtil, ImageProvider imageProvider, final DialogNotEnoughGold dialogNotEnoughGold) {
 		super(gameModelController, imageProvider);
 		this.europeDialogCallback = Preconditions.checkNotNull(europeDialogCallback);
 		this.gameModelController = Preconditions.checkNotNull(gameModelController);
 		this.text = Preconditions.checkNotNull(text);
 		this.viewUtil = Preconditions.checkNotNull(viewUtil);
+		this.dialogNotEnoughGold = Preconditions.checkNotNull(dialogNotEnoughGold);
 	}
 
 	@Override
@@ -62,7 +64,7 @@ public class PanelEuropeDockBehavior extends AbstractPanelDockBehavior {
 			try {
 				cargoSlot.storeFromEuropePort(tmp);
 			} catch (NotEnoughtGoldException e) {
-				new DialogNotEnoughGold(viewUtil, text);
+				dialogNotEnoughGold.showAndWait();
 			}
 		} else if (transferFrom.get() instanceof ClipboardReader.TransferFromCargoSlot) {
 			cargoSlot.storeFromCargoSlot(tmp,

@@ -1,11 +1,11 @@
 package org.microcol.gui.europe;
 
+import org.microcol.gui.DialogNotEnoughGold;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.image.ImageProvider;
 import org.microcol.gui.util.BackgroundHighlighter;
 import org.microcol.gui.util.ClipboardReader;
 import org.microcol.gui.util.TitledPanel;
-import org.microcol.model.Europe;
 import org.microcol.model.GoodType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,22 +27,23 @@ public class PanelEuropeGoods extends TitledPanel {
 
 	private final HBox hBox;
 
-	private final ImageProvider imageProvider;
-
 	private final GameModelController gameModelController;
 
 	private final EuropeDialogCallback europeDialogCallback;
-	
+
 	private final BackgroundHighlighter backgroundHighlighter;
 
 	@Inject
-	public PanelEuropeGoods(final EuropeDialogCallback europeDialogCallback, final GameModelController gameModelController,
-			final ImageProvider imageProvider) {
+	public PanelEuropeGoods(final EuropeDialogCallback europeDialogCallback,
+			final GameModelController gameModelController, final ImageProvider imageProvider,
+			final DialogNotEnoughGold dialogNotEnoughGold) {
 		super("zbozi");
 		this.gameModelController = Preconditions.checkNotNull(gameModelController);
-		this.imageProvider = Preconditions.checkNotNull(imageProvider);
 		this.europeDialogCallback = Preconditions.checkNotNull(europeDialogCallback);
 		hBox = new HBox();
+		GoodType.BUYABLE_GOOD_TYPES.forEach(goodType -> {
+			hBox.getChildren().add(new PanelGood(goodType, imageProvider, gameModelController, dialogNotEnoughGold));
+		});
 		getContentPane().getChildren().add(hBox);
 		backgroundHighlighter = new BackgroundHighlighter(this, this::isItGoodAmount);
 		setOnDragEntered(backgroundHighlighter::onDragEntered);
@@ -52,11 +53,8 @@ public class PanelEuropeGoods extends TitledPanel {
 	}
 
 	public void repaint() {
-		final Europe europe = gameModelController.getModel().getEurope();
-		hBox.getChildren().clear();
-		GoodType.BUYABLE_GOOD_TYPES.forEach(goodType -> {
-			hBox.getChildren()
-					.add(new PanelGood(imageProvider.getGoodTypeImage(goodType), europe.getGoodTradeForType(goodType)));
+		hBox.getChildren().forEach(node -> {
+			((PanelGood) node).replain();
 		});
 	}
 

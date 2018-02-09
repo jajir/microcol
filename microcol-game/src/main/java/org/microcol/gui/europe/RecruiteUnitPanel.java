@@ -5,7 +5,6 @@ import org.microcol.gui.LocalizationHelper;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.image.ImageProvider;
 import org.microcol.gui.util.Text;
-import org.microcol.gui.util.ViewUtil;
 import org.microcol.model.NotEnoughtGoldException;
 import org.microcol.model.UnitType;
 
@@ -16,9 +15,9 @@ import javafx.scene.layout.VBox;
 
 public class RecruiteUnitPanel extends VBox {
 
-	public RecruiteUnitPanel(final UnitType unitType, final ViewUtil viewUtil, final ImageProvider imageProvider,
+	public RecruiteUnitPanel(final UnitType unitType, final ImageProvider imageProvider,
 			final GameModelController gameModelController, final LocalizationHelper localizationHelper, final Text text,
-			final RecruiteUnitsDialog buyUnitsDialog) {
+			final RecruiteUnitsDialog buyUnitsDialog, final DialogNotEnoughGold dialogNotEnoughGold) {
 		final ImageView image = new ImageView(imageProvider.getUnitImage(unitType));
 		final Label labelName = new Label(localizationHelper.getUnitName(unitType));
 		final Button buttonBuy = new Button(text.get("recruitUnitDialog.buttonRecruiteUnit") + " " + unitType.getEuropePrice());
@@ -27,7 +26,7 @@ public class RecruiteUnitPanel extends VBox {
 				gameModelController.getCurrentPlayer().buy(unitType);
 				buyUnitsDialog.getDialog().close();
 			} catch (NotEnoughtGoldException e) {
-				new DialogNotEnoughGold(viewUtil, text);
+				dialogNotEnoughGold.showAndWait();
 			}
 		});
 		getChildren().addAll(image, labelName, buttonBuy);

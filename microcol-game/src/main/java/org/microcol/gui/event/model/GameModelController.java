@@ -9,6 +9,9 @@ import org.microcol.ai.KingPlayer;
 import org.microcol.ai.SimpleAiPlayer;
 import org.microcol.gui.gamepanel.AnimationManager;
 import org.microcol.gui.util.Localized;
+import org.microcol.model.GoodAmount;
+import org.microcol.model.GoodTrade;
+import org.microcol.model.GoodType;
 import org.microcol.model.Location;
 import org.microcol.model.Model;
 import org.microcol.model.Path;
@@ -87,7 +90,12 @@ public class GameModelController implements Localized {
 		return getModel().getPlayers().stream().filter(Player::isHuman).findFirst()
 				.orElseThrow(() -> new IllegalStateException("There is no human player"));
 	}
-
+	
+	public GoodAmount getMaxBuyableGoodsAmount(final GoodType goodType){
+		GoodTrade goodTrade = model.getEurope().getGoodTradeForType(goodType);
+		return goodTrade.getAvailableAmountFor(getCurrentPlayer().getGold());
+	}
+	
 	/**
 	 * Get human player, even in not on turn.
 	 * 

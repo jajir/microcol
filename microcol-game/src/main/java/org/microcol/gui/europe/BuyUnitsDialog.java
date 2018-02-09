@@ -2,6 +2,7 @@ package org.microcol.gui.europe;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.microcol.gui.DialogNotEnoughGold;
 import org.microcol.gui.LocalizationHelper;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.image.ImageProvider;
@@ -31,7 +32,7 @@ public class BuyUnitsDialog extends AbstractMessageWindow {
 	@Inject
 	public BuyUnitsDialog(final ViewUtil viewUtil, final Text text, final ImageProvider imageProvider,
 			final GameModelController gameModelController, final LocalizationHelper localizationHelper,
-			final EuropeDialogCallback europeDialogCallback) {
+			final EuropeDialogCallback europeDialogCallback, final DialogNotEnoughGold dialogNotEnoughGold) {
 		super(viewUtil);
 		this.europeDialogCallback = Preconditions.checkNotNull(europeDialogCallback);
 		Preconditions.checkNotNull(imageProvider);
@@ -48,8 +49,8 @@ public class BuyUnitsDialog extends AbstractMessageWindow {
 		AtomicInteger column = new AtomicInteger(0);
 		AtomicInteger row = new AtomicInteger(0);
 		UnitType.UNIT_TYPES.stream().filter(unitType -> unitType.getEuropePrice() > 0).forEach(unitType -> {
-			final BuyUnitPanel buyUnitPanel = new BuyUnitPanel(unitType, viewUtil, imageProvider, gameModelController,
-					localizationHelper, text, this);
+			final BuyUnitPanel buyUnitPanel = new BuyUnitPanel(unitType, imageProvider, gameModelController,
+					localizationHelper, text, this, dialogNotEnoughGold);
 			GridPane.setMargin(buyUnitPanel, new Insets(10, 10, 10, 10));
 			gridWithUnits.add(buyUnitPanel, column.intValue(), row.intValue());
 			column.incrementAndGet();

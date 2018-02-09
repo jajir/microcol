@@ -103,7 +103,8 @@ public class DialogTester extends Application {
 
 	public final static void startBuyUnitDialog() {
 		final GameModelController gameModelController = EasyMock.createMock(GameModelController.class);
-		new BuyUnitsDialog(viewUtil,text,imageProvider, gameModelController, localizationHelper, null);
+		new BuyUnitsDialog(viewUtil, text, imageProvider, gameModelController, localizationHelper, null,
+				new DialogNotEnoughGold(viewUtil, text));
 	}
 
 }

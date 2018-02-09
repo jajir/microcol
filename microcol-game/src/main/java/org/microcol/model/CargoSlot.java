@@ -10,7 +10,7 @@ import com.google.common.base.Preconditions;
 public final class CargoSlot {
 
 	/**
-	 * It's maximun number of tools that can be put into cargo slot.
+	 * It's maximum number of tools that can be put into cargo slot.
 	 */
 	public static final int MAX_CARGO_SLOT_CAPACITY = 100;
 	

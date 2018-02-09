@@ -9,13 +9,32 @@ import com.google.common.base.Preconditions;
 public class GoodTrade {
 	
 	private final GoodType goodType;
+	
+	/**
+	 * Player could sell goods for this price. 
+	 */
 	private int sellPrice;
+	
+	/**
+	 * Player could buy goods for this price. 
+	 */
 	private int buyPrice;
 
 	GoodTrade(final GoodType goodType, final int sellPrice, final int buyPrice) {
 		this.goodType = Preconditions.checkNotNull(goodType);
 		this.sellPrice = sellPrice;
 		this.buyPrice = buyPrice;
+	}
+	
+	/**
+	 * Return how much units of given goods could be bought for given gold.
+	 * 
+	 * @param availableGold
+	 *            required gold
+	 * @return Return goods amount which could be bought
+	 */
+	public GoodAmount getAvailableAmountFor(final int availableGold){
+		return new GoodAmount(goodType, Math.min(availableGold / buyPrice, CargoSlot.MAX_CARGO_SLOT_CAPACITY));
 	}
 
 	public int getSellPrice() {

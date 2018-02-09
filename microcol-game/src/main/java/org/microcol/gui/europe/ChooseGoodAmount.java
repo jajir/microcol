@@ -19,7 +19,8 @@ public class ChooseGoodAmount extends AbstractMessageWindow {
 	private final static int MIN_VALUE = 0;
 
 	private int actualValue;
-
+	
+	//TODO don't create dialog manually, guice should create it
 	public ChooseGoodAmount(final ViewUtil viewUtil, final Text text, final int maximalNumberToTransfer) {
 		super(viewUtil);
 		getDialog().setTitle(text.get("chooseGoodAmount.caption"));

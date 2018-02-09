@@ -1,5 +1,6 @@
 package org.microcol.gui.europe;
 
+import org.microcol.gui.DialogNotEnoughGold;
 import org.microcol.gui.LocalizationHelper;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.image.ImageProvider;
@@ -24,7 +25,8 @@ public class RecruiteUnitsDialog extends AbstractMessageWindow {
 
 	@Inject
 	public RecruiteUnitsDialog(final ViewUtil viewUtil, final Text text, final ImageProvider imageProvider,
-			final GameModelController gameModelController, final LocalizationHelper localizationHelper) {
+			final GameModelController gameModelController, final LocalizationHelper localizationHelper,
+			final DialogNotEnoughGold dialogNotEnoughGold) {
 		super(viewUtil);
 		Preconditions.checkNotNull(imageProvider);
 		Preconditions.checkNotNull(gameModelController);
@@ -38,8 +40,8 @@ public class RecruiteUnitsDialog extends AbstractMessageWindow {
 		final HBox gridWithUnits = new HBox();
 
 		UnitType.UNIT_TYPES.stream().filter(unitType -> unitType.getEuropePrice() > 0).forEach(unitType -> {
-			final RecruiteUnitPanel buyUnitPanel = new RecruiteUnitPanel(unitType, viewUtil, imageProvider,
-					gameModelController, localizationHelper, text, this);
+			final RecruiteUnitPanel buyUnitPanel = new RecruiteUnitPanel(unitType, imageProvider, gameModelController,
+					localizationHelper, text, this, dialogNotEnoughGold);
 			HBox.setMargin(buyUnitPanel, new Insets(10, 10, 10, 10));
 			gridWithUnits.getChildren().add(buyUnitPanel);
 		});
