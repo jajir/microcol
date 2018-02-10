@@ -49,11 +49,17 @@ Planned releases
   
    * \u2713 Some event's are visible in non explored area.
   
-   * \u2717 When openent's colony is occupied by ship than there shouln't be fight. Colony just should be captured and opponent's ship moved outside of colony. 
-  
    * \u2713 Buying of 20 goods and than 80, it's not correctly counted. Event amount is 80 even when user don't have enough gold.    
   
    * \u2713 Travel to Europe throws exception.
+  
+   * \u2713 When openent's colony is occupied by ship than there shouln't be fight. Colony just should be captured and opponent's ship moved outside of colony. 
+
+   * \u2717 Colony is not destroyed when last unit leaves colony. 
+
+   * \u2717 New game leads to disabled mouse. 
+
+   * \u2717 When selected unit outside of colony is move to field than attempt to open colony throws exception.  
 
  * Backlog - feature and improvement backlog
   

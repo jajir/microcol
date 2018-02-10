@@ -144,6 +144,10 @@
 
 	<entry key="dialogDestroyColony.caption">Do you want do destroy colony?</entry>
 	<entry key="dialogDestroyColony.question">When you leave colony with last unit than colony will be destroyed.</entry>
+
+	<entry key="dialogColonyWasCaptured.caption">You captured colony</entry>
+	<entry key="dialogColonyWasCaptured.text1">You captured colony '</entry>
+	<entry key="dialogColonyWasCaptured.text2">'. Congratulation.</entry>
 	
 	<entry key="FileChooser.cancelButtonText">Cancel</entry>
 	<entry key="FileChooser.fileDateHeaderText">Date modified</entry>

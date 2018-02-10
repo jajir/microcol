@@ -1,8 +1,10 @@
 package org.microcol.gui.gamepanel;
 
+import org.microcol.gui.event.model.ColonyWasCapturedController;
 import org.microcol.gui.event.model.TurnStartedController;
 import org.microcol.gui.event.model.UnitMoveFinishedController;
 import org.microcol.gui.event.model.UnitMovedController;
+import org.microcol.model.event.ColonyWasCapturedEvent;
 import org.microcol.model.event.TurnStartedEvent;
 import org.microcol.model.event.UnitMoveFinishedEvent;
 import org.microcol.model.event.UnitMovedStepEvent;
@@ -21,10 +23,17 @@ public class GamePanelController {
 	@Inject
 	GamePanelController(final TurnStartedController turnStartedController,
 			final UnitMovedController unitMovedStepController,
-			final UnitMoveFinishedController unitMoveFinishedController) {
+			final UnitMoveFinishedController unitMoveFinishedController,
+			final ColonyWasCapturedController colonyWasCapturedController) {
 		turnStartedController.addListener(this::onTurnStarted);
 		unitMovedStepController.addListener(this::onUnitMovedStep);
 		unitMoveFinishedController.addListener(this::onUnitMovedFinished);
+		colonyWasCapturedController.addListener(this::onColonyWasCaptured);
+	}
+	
+	@SuppressWarnings("unused")
+	private void onColonyWasCaptured(final ColonyWasCapturedEvent event) {
+		unitIsMoving = false;
 	}
 
 	private void onTurnStarted(final TurnStartedEvent event) {

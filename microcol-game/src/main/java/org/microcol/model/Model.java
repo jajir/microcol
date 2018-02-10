@@ -306,7 +306,7 @@ public final class Model {
 		return unitStorage.getFirstSelectableUnitAt(getCurrentPlayer(), location);
 	}
 
-	public Optional<Colony> getColoniesAt(final Location location) {
+	public Optional<Colony> getColonyAt(final Location location) {
 		Preconditions.checkNotNull(location);
 		return colonies.stream().filter(colony -> colony.getLocation().equals(location)).findFirst();
 	}

@@ -3,6 +3,7 @@ package org.microcol.model;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
+import java.util.function.Predicate;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
@@ -26,11 +27,16 @@ public class UnitType {
 	 */
 	private final static float DEFAULT_PRODUCTION_MODIFIER = 1F;
 	
+	/**
+	 * There is no unit that could be attacked.
+	 */
+	private final static Predicate<UnitType> UNIT_TYPE_CANT_ATTACK = unitType -> false;
+	
 	public final static UnitType COLONIST = UnitType.make()
 			.setName("COLONIST")
 			.setMoveableTerrains(TerrainType.UNIT_CAN_WALK_AT)
 			.setSpeed(1)
-			.setCanAttack(true)
+			.setAttackableUnitTypeFilter(unitType -> !unitType.isShip())
 			.setCargoCapacity(0)
 			.setStorable(true)
 			.setEuropePrice(1400)
@@ -40,7 +46,7 @@ public class UnitType {
 			.setName("EXPERT_ORE_MINER")
 			.setMoveableTerrains(TerrainType.UNIT_CAN_WALK_AT)
 			.setSpeed(1)
-			.setCanAttack(true)
+			.setAttackableUnitTypeFilter(UNIT_TYPE_CANT_ATTACK)
 			.setCargoCapacity(0)
 			.setStorable(true)
 			.setEuropePrice(600)
@@ -51,7 +57,7 @@ public class UnitType {
 			.setName("MASTER_BLACKSMITH")
 			.setMoveableTerrains(TerrainType.UNIT_CAN_WALK_AT)
 			.setSpeed(1)
-			.setCanAttack(true)
+			.setAttackableUnitTypeFilter(UNIT_TYPE_CANT_ATTACK)
 			.setCargoCapacity(0)
 			.setStorable(true)
 			.setEuropePrice(1100)
@@ -62,7 +68,7 @@ public class UnitType {
 			.setName("FRIGATE")
 			.setMoveableTerrains(TerrainType.UNIT_CAN_SAIL_AT)
 			.setSpeed(4)
-			.setCanAttack(true)
+			.setAttackableUnitTypeFilter(unitType -> unitType.isShip())
 			.setCargoCapacity(1)
 			.setStorable(false)
 			.setEuropePrice(4000)
@@ -72,7 +78,7 @@ public class UnitType {
 			.setName("GALLEON")
 			.setMoveableTerrains(TerrainType.UNIT_CAN_SAIL_AT)
 			.setSpeed(6)
-			.setCanAttack(false)
+			.setAttackableUnitTypeFilter(UNIT_TYPE_CANT_ATTACK)
 			.setCargoCapacity(5)
 			.setStorable(false)
 			.setEuropePrice(5000)
@@ -88,16 +94,16 @@ public class UnitType {
 		private String name;
 		private List<TerrainType> moveableTerrains;
 		private int speed;
-		private boolean canAttack;
 		private int cargoCapacity;
+		private Predicate<UnitType> attackableUnitTypeFilter;
 		private boolean storable;
 		private int europePrice;
 		private GoodType expertInProducing;
 		private float expertProductionModifier;
 		
 		private UnitType build(){
-			return new UnitType(name, moveableTerrains, speed, canAttack, cargoCapacity, storable, europePrice,
-					expertInProducing, expertProductionModifier);
+			return new UnitType(name, moveableTerrains, speed, attackableUnitTypeFilter, cargoCapacity, storable,
+					europePrice, expertInProducing, expertProductionModifier);
 		}
 
 		private UnitTypeBuilder setName(final String name) {
@@ -115,8 +121,8 @@ public class UnitType {
 			return this;
 		}
 
-		private UnitTypeBuilder setCanAttack(final boolean canAttack) {
-			this.canAttack = canAttack;
+		private UnitTypeBuilder setAttackableUnitTypeFilter(final Predicate<UnitType> attackableUnitTypeFilter) {
+			this.attackableUnitTypeFilter = attackableUnitTypeFilter;
 			return this;
 		}
 
@@ -146,7 +152,6 @@ public class UnitType {
 	private final String name;
 	private final List<TerrainType> moveableTerrains;
 	private final int speed;
-	private final boolean canAttack;
 	private final int cargoCapacity;
 	private final boolean storable;
 	private final int europePrice;
@@ -161,14 +166,20 @@ public class UnitType {
 	 * Production multiplier on basic good production.
 	 */
 	private final float expertProductionModifier;
+	
+	/**
+	 * Predicate allows to find unit types that could be attacked by this unit
+	 * type.
+	 */
+	private final Predicate<UnitType> attackableUnitTypeFilter;
 
 	private UnitType(final String name, final List<TerrainType> moveableTerrains, final int speed,
-			final boolean canAttack, final int cargoCapacity, final boolean storable, final int europePrice,
+			final Predicate<UnitType> attackableUnitTypeFilter, final int cargoCapacity, final boolean storable, final int europePrice,
 			final GoodType expertInProducing, final float expertProductionModifier) {
 		this.name = Preconditions.checkNotNull(name);
 		this.moveableTerrains = Preconditions.checkNotNull(moveableTerrains);
 		this.speed = speed;
-		this.canAttack = canAttack;
+		this.attackableUnitTypeFilter = Preconditions.checkNotNull(attackableUnitTypeFilter);
 		this.cargoCapacity = cargoCapacity;
 		this.storable = storable;
 		this.europePrice = europePrice;
@@ -205,7 +216,11 @@ public class UnitType {
 	}
 
 	public boolean canAttack() {
-		return canAttack;
+		return !getAttackableUnitType().isEmpty();
+	}
+	
+	public List<UnitType> getAttackableUnitType() {
+		return UNIT_TYPES.stream().filter(attackableUnitTypeFilter).collect(ImmutableList.toImmutableList());
 	}
 
 	public int getCargoCapacity() {
@@ -276,7 +291,7 @@ public class UnitType {
 		return MoreObjects.toStringHelper(this)
 			.add("name", name())
 			.add("speed", speed)
-			.add("canAttack", canAttack)
+			.add("canAttack", canAttack())
 			.add("cargoCapacity", cargoCapacity)
 			.add("storable", storable)
 			.toString();

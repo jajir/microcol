@@ -7,7 +7,6 @@ import java.util.stream.Collectors;
 
 import org.microcol.gui.DialogFigth;
 import org.microcol.gui.GamePreferences;
-import org.microcol.gui.LocalizationHelper;
 import org.microcol.gui.PathPlanning;
 import org.microcol.gui.Point;
 import org.microcol.gui.StepCounter;
@@ -15,8 +14,6 @@ import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.gamepanel.MoveModeSupport.MoveMode;
 import org.microcol.gui.image.ImageProvider;
 import org.microcol.gui.util.FpsCounter;
-import org.microcol.gui.util.Text;
-import org.microcol.gui.util.ViewUtil;
 import org.microcol.model.Colony;
 import org.microcol.model.Location;
 import org.microcol.model.Model;
@@ -78,43 +75,36 @@ public class GamePanelView implements GamePanelPresenter.Display {
 
 	private final MoveModeSupport moveModeSupport;
 
-	private final Text text;
-
-	private final LocalizationHelper localizationHelper;
-
 	private final PaintService paintService;
-
-	private final ViewUtil viewUtil;
 
 	private final VisibleArea visibleArea;
 
 	private final MouseOverTileManager mouseOverTileManager;
 
 	private final ModeController modeController;
+	
+	private final DialogFigth dialogFigth;
 
 	@Inject
 	public GamePanelView(final GameModelController gameModelController, final PathPlanning pathPlanning,
 			final ImageProvider imageProvider, final SelectedTileManager selectedTileManager,
-			final SelectedUnitManager selectedUnitManager, final MoveModeSupport moveModeSupport, final Text text,
-			final ViewUtil viewUtil, final LocalizationHelper localizationHelper, final PaintService paintService,
-			final GamePreferences gamePreferences, final MouseOverTileManager mouseOverTileManager,
-			final AnimationManager animationManager, final ModeController modeController,
-			final ExcludePainting excludePainting) {
+			final SelectedUnitManager selectedUnitManager, final MoveModeSupport moveModeSupport,
+			final PaintService paintService, final GamePreferences gamePreferences,
+			final MouseOverTileManager mouseOverTileManager, final AnimationManager animationManager,
+			final ModeController modeController, final ExcludePainting excludePainting, final DialogFigth dialogFigth) {
 		this.gameModelController = Preconditions.checkNotNull(gameModelController);
 		this.pathPlanning = Preconditions.checkNotNull(pathPlanning);
 		this.imageProvider = Preconditions.checkNotNull(imageProvider);
 		this.selectedTileManager = Preconditions.checkNotNull(selectedTileManager);
 		this.selectedUnitManager = Preconditions.checkNotNull(selectedUnitManager);
 		this.moveModeSupport = Preconditions.checkNotNull(moveModeSupport);
-		this.text = Preconditions.checkNotNull(text);
-		this.viewUtil = Preconditions.checkNotNull(viewUtil);
-		this.localizationHelper = Preconditions.checkNotNull(localizationHelper);
 		this.paintService = Preconditions.checkNotNull(paintService);
 		this.gamePreferences = Preconditions.checkNotNull(gamePreferences);
 		this.mouseOverTileManager = Preconditions.checkNotNull(mouseOverTileManager);
 		this.animationManager = Preconditions.checkNotNull(animationManager);
 		this.modeController = Preconditions.checkNotNull(modeController);
 		this.excludePainting = Preconditions.checkNotNull(excludePainting);
+		this.dialogFigth = Preconditions.checkNotNull(dialogFigth);
 		oneTurnMoveHighlighter = new OneTurnMoveHighlighter();
 		gotoModeCursor = new ImageCursor(imageProvider.getImage(ImageProvider.IMG_CURSOR_GOTO), 1, 1);
 		visibleArea = new VisibleArea();
@@ -421,9 +411,8 @@ public class GamePanelView implements GamePanelPresenter.Display {
 
 	@Override
 	public boolean performFightDialog(final Unit unitAttacker, final Unit unitDefender) {
-		DialogFigth dialogFight = new DialogFigth(text, viewUtil, imageProvider, localizationHelper, gamePreferences,
-				unitAttacker, unitDefender);
-		return dialogFight.isUserChooseFight();
+		dialogFigth.showAndWait(unitAttacker, unitDefender);
+		return dialogFigth.isUserChooseFight();
 	}
 
 	@Override

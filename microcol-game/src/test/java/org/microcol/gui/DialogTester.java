@@ -9,9 +9,6 @@ import org.microcol.gui.image.ImageProvider;
 import org.microcol.gui.util.Text;
 import org.microcol.gui.util.Text.Language;
 import org.microcol.gui.util.ViewUtil;
-import org.microcol.model.Player;
-import org.microcol.model.Unit;
-import org.microcol.model.UnitType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -65,25 +62,6 @@ public class DialogTester extends Application {
 
 	public final static void startAboutDialog() {
 		new AboutDialog(viewUtil, text);
-	}
-
-	public final static void testDialogFight() {
-		final LocalizationHelper localizationHelper = new LocalizationHelper(text);
-
-		final Player playerAttacker = EasyMock.createMock(Player.class);
-		final Player playerDefender = EasyMock.createMock(Player.class);
-
-		final Unit unitAttacker = EasyMock.createMock(Unit.class);
-		final Unit unitDefender = EasyMock.createMock(Unit.class);
-
-		EasyMock.expect(unitAttacker.getType()).andReturn(UnitType.FRIGATE).times(2);
-		EasyMock.expect(unitDefender.getType()).andReturn(UnitType.GALLEON).times(2);
-
-		EasyMock.replay(playerAttacker, playerDefender, unitAttacker, unitDefender);
-
-		DialogFigth preferences = new DialogFigth(text, viewUtil, imageProvider, localizationHelper, null, unitAttacker,
-				unitDefender);
-		logger.debug("User wants to fight: " + preferences.isUserChooseFight());
 	}
 
 	public final static void dialogWarning() {

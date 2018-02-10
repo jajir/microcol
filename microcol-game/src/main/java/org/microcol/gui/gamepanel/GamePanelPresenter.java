@@ -95,6 +95,7 @@ public final class GamePanelPresenter implements Localized {
 	
 	@Inject
 	public GamePanelPresenter(final GamePanelPresenter.Display display,
+			final DialogColonyWasCaptured dialogColonyWasCaptured,
 			final GameModelController gameModelController,
 			final KeyController keyController,
 			final GameStartedController gameStartedController,
@@ -170,8 +171,8 @@ public final class GamePanelPresenter implements Localized {
 
 		viewController.addListener(event -> onCenterView());
 		exitGameController.addListener(event -> display.stopTimer());
-		colonyWasCapturedController.addListener(event->{
-			new DialogColonyWasCaptured(viewUtil, text, event);
+		colonyWasCapturedController.addRunLaterListener(event -> {
+			dialogColonyWasCaptured.showAndWait(event);
 		});
 	}
 
@@ -297,7 +298,11 @@ public final class GamePanelPresenter implements Localized {
 		}
 		//TODO don't call selectedTileManager.setSelectedTile
 		final Unit movingUnit = selectedUnitManager.getSelectedUnit().get();
-		if (movingUnit.isPossibleToAttackAt(moveToLocation)) {
+		if (movingUnit.isPossibleToCaptureColonyAt(moveToLocation)) {
+			// use can capture target colony
+			gameModelController.captureColonyAt(movingUnit, moveToLocation);
+			disableMoveMode();
+		} else if (movingUnit.isPossibleToAttackAt(moveToLocation)) {
 			// fight
 			fight(movingUnit, moveToLocation);
 		} else if (movingUnit.isPossibleToEmbarkAt(moveToLocation, true)) {

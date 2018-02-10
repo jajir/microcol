@@ -81,6 +81,10 @@ public class GameModelController implements Localized {
 		Preconditions.checkState(model != null, "Model is not ready");
 		return model;
 	}
+	
+	public void captureColonyAt(final Unit movingUnit, final Location moveToLocation){
+		new Thread(() -> movingUnit.attack(moveToLocation)).start();
+	}
 
 	public boolean isModelReady() {
 		return model != null;

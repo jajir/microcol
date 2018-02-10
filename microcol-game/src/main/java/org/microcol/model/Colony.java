@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Random;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -33,6 +34,8 @@ public class Colony {
 	private final ColonyWarehouse colonyWarehouse;
 	
 	private final Model model;
+	
+	private final Random random = new Random();
 
 	public Colony(final Model model, final String name, final Player owner, final Location location,
 			final Function<Colony, List<Construction>> constructionsBuilder,
@@ -101,9 +104,39 @@ public class Colony {
 	}
 	
 	public void captureColony(final Player player, final Unit capturingUnit) {
-		//TODO add verification that colony could be captured and there are no military units
+		model.getEnemyUnitsAt(player, location).stream()
+				.forEach(unit -> Preconditions.checkState(!unit.getType().canAttack() || unit.getType().isShip(),
+						"At least one unit '%s' at captured city still could fight", unit));
+		model.getEnemyUnitsAt(player, location).stream()
+			.filter(unit -> unit.getType().isShip())
+			.forEach(unit -> escapeOneStep(unit));
+		model.getEnemyUnitsAt(player, location).stream()
+			.filter(unit -> !unit.getType().isShip())
+			.forEach(unit -> unit.takeOver(player));
+		colonyFields.stream().filter(field -> !field.isEmpty()).forEach(field -> field.getUnit().takeOver(player));
+		constructions.forEach(construction -> construction.getConstructionSlots().stream()
+				.filter(slot -> !slot.isEmpty()).forEach(slot -> slot.getUnit().takeOver(player)));
+		
 		owner = player;
 		model.fireColonyWasCaptured(model, capturingUnit, this);
+	}
+	
+	/**
+	 * Unit escape from occupied place. When colony is captured naval unit
+	 * escape from occupied colony.
+	 * 
+	 * @param unit
+	 *            required escaping unit
+	 */
+	private void escapeOneStep(final Unit unit) {
+		final List<Location> whereCouldMove = unit.getLocation().getNeighbors().stream()
+				.filter(loc -> unit.getType().canMoveAtTerrain(model.getMap().getTerrainTypeAt(loc)))
+				.filter(loc -> model.getEnemyUnitsAt(unit.getOwner(), loc).isEmpty())
+				.collect(ImmutableList.toImmutableList());
+		final Location target = whereCouldMove.get(random.nextInt(whereCouldMove.size()));
+		final Location oldLocation = unit.getLocation();
+		unit.placeToLocation(target);
+		model.fireUnitMovedStep(unit, oldLocation, target);
 	}
 	
 	void placeUnitToProduceFood(final Unit unit) {

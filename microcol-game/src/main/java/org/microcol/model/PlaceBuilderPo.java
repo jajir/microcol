@@ -155,7 +155,7 @@ public class PlaceBuilderPo implements Function<Unit, Place> {
 			int slotId = 0;
 			for (final ConstructionSlotPo slotPo : constructionPo.getSlots()) {
 				if (slotPo.getWorkerId() != null && unit.getId() == slotPo.getWorkerId()) {
-					final Optional<Colony> oColony = model.getColoniesAt(colonyPo.getLocation());
+					final Optional<Colony> oColony = model.getColonyAt(colonyPo.getLocation());
 					Preconditions.checkState(oColony.isPresent(), "Colony at (%s) is not in model",
 							colonyPo.getLocation());
 					final Colony colony = oColony.get();
@@ -173,7 +173,7 @@ public class PlaceBuilderPo implements Function<Unit, Place> {
 	private PlaceColonyField tryToFindColonyField(final ColonyPo colonyPo, final Unit unit, final Model model) {
 		for (final ColonyFieldPo constructionPo : colonyPo.getColonyFields()) {
 			if (constructionPo.getWorkerId() != null && unit.getId() == constructionPo.getWorkerId()) {
-				final Optional<Colony> oColony = model.getColoniesAt(colonyPo.getLocation());
+				final Optional<Colony> oColony = model.getColonyAt(colonyPo.getLocation());
 				Preconditions.checkState(oColony.isPresent(), "Colony at (%s) is not in model", colonyPo.getLocation());
 				final Colony colony = oColony.get();
 				final ColonyField colonyField = colony.getColonyFieldInDirection(constructionPo.getDirection());

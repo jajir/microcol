@@ -24,12 +24,18 @@ public class Unit {
 	 * tiles further will unit see.
 	 */
 	private final static int VISIBILITY_INCREASE = 1;
+
+	/**
+	 * Number is probability than attacker will win. When it's less than 0.5
+	 * than attacker will have bigger probability that will win.
+	 */
+	private final static double PROBABILITY_OF_ATTACKER_WIN = 0.0d; //FIXME return it to 0.4
 	
 	private final Random random = new Random();
 	private final int id;
 	private final Model model;
 	private final UnitType type;
-	private final Player owner;
+	private Player owner;
 	private Place place;
 	private int availableMoves;
 	private final Cargo cargo;
@@ -228,6 +234,27 @@ public class Unit {
 		}
 		return false;
 	}
+
+	/**
+	 * Verify that unit can move at target location and there is colony without
+	 * units to defend it.
+	 * 
+	 * @param targetLocation
+	 *            required location where should be captured colony
+	 * @return Return <code>true</code> when target location contains enemy
+	 *         colony without military units to defend it.
+	 */
+	public boolean isPossibleToCaptureColonyAt(final Location targetLocation){
+		if (type.canMoveAtTerrain(model.getMap().getTerrainTypeAt(targetLocation))) {
+			if (model.getColonyAt(targetLocation).isPresent()) {
+				final Colony c = model.getColonyAt(targetLocation).get();
+				if (!c.getOwner().equals(owner) && !isPossibleToAttackAt(targetLocation)) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
 	
 	private boolean canCargoDisembark(final CargoSlot slot, final Location moveToLocation, boolean inCurrentTurn) {
 		if (slot.isEmpty() || slot.isLoadedGood()) {
@@ -257,7 +284,10 @@ public class Unit {
 			return false;
 		} else {
 			if (type.canMoveAtTerrain(model.getMap().getTerrainTypeAt(targetLocation))) {
-				if (isSameOwner(model.getUnitsAt(targetLocation))) {
+				List<Unit> units = model.getEnemyUnitsAt(owner, targetLocation).stream()
+						.filter(unit -> getType().getAttackableUnitType().contains(unit.getType()))
+						.collect(ImmutableList.toImmutableList());
+				if (isSameOwner(units)) {
 					return false;
 				} else {
 					return true;
@@ -367,7 +397,7 @@ public class Unit {
 	 *            required new location
 	 */
 	private void tryToCaptureColony(final Location newLocation){
-		final Optional<Colony> oColony = model.getColoniesAt(newLocation);
+		final Optional<Colony> oColony = model.getColonyAt(newLocation);
 		if (oColony.isPresent()){
 			final Colony col = oColony.get();
 			if (!col.getOwner().equals(owner)){
@@ -376,34 +406,59 @@ public class Unit {
 		}		
 	}
 
-	public void attack(final Location location) {
+	public void attack(final Location attackAt) {
 		verifyThatUnitIsAtMap();
 
 		model.checkGameRunning();
 		model.checkCurrentPlayer(owner);
 
 		Preconditions.checkState(type.canAttack(), "This unit type (%s) cannot attack.", this);
-		Preconditions.checkNotNull(location);
-		Preconditions.checkArgument(type.canMoveAtTerrain(model.getMap().getTerrainTypeAt(location)),
-				"Target location (%s) is not moveable for this unit (%s)", location, this);
-		Preconditions.checkArgument(this.getLocation().isNeighbor(location),
-				"Unit location (%s) is not neighbor to target location (%s).", this.getLocation(), location);
+		Preconditions.checkNotNull(attackAt);
+		Preconditions.checkArgument(type.canMoveAtTerrain(model.getMap().getTerrainTypeAt(attackAt)),
+				"Target location (%s) is not moveable for this unit (%s)", attackAt, this);
+		Preconditions.checkArgument(this.getLocation().isNeighbor(attackAt),
+				"Unit location (%s) is not neighbor to target location (%s).", this.getLocation(), attackAt);
 		Preconditions.checkState(availableMoves > 0, "Unit (%s) cannot attack this turn.", this);
-		Preconditions.checkState(!owner.getEnemyUnitsAt(location).isEmpty(),
-				"There is not any enemy unit on target location (%s).", location);
+		Preconditions.checkState(!owner.getEnemyUnitsAt(attackAt).isEmpty(),
+				"There is not any enemy unit on target location (%s).", attackAt);
 
 		availableMoves = 0;
 
-		final Unit defender = owner.getEnemyUnitsAt(location).get(0);
-		final Unit destroyed = Math.random() <= 0.6 ? defender : this;
-		model.destroyUnit(destroyed);
-		if (this != destroyed && owner.getEnemyUnitsAt(location).isEmpty()) {
-			placeToLocation(location);
-			model.fireUnitAttacked(this, defender, destroyed);
-			tryToCaptureColony(location);
+		if(getAttackableUnitsAt(attackAt).isEmpty()){
+			final Colony col = model.getColonyAt(attackAt).orElseThrow(() -> new IllegalStateException(
+					String.format("There are no units to figh of city at '%s'", attackAt)));
+			final Location start = getLocation();
+			placeToLocation(attackAt);
+			model.fireUnitMovedStep(this, start, attackAt);
+			col.captureColony(owner, this);
 		}else{
-			model.fireUnitAttacked(this, defender, destroyed);			
+			final Unit defender = getAttackableUnitsAt(attackAt).get(0);
+			final Unit destroyed = Math.random() >= PROBABILITY_OF_ATTACKER_WIN ? defender : this;
+			model.destroyUnit(destroyed);
+			if (this != destroyed && owner.getEnemyUnitsAt(attackAt).isEmpty()) {
+				placeToLocation(attackAt);
+				model.fireUnitAttacked(this, defender, destroyed);
+				tryToCaptureColony(attackAt);
+			} else {
+				model.fireUnitAttacked(this, defender, destroyed);
+			}
 		}
+	}
+	
+	private List<Unit> getAttackableUnitsAt(final Location at) {
+		return owner.getEnemyUnitsAt(at).stream().filter(unit -> type.getAttackableUnitType().contains(unit.getType()))
+				.collect(ImmutableList.toImmutableList());
+	}
+	
+	/**
+	 * Allows to change unit owner.
+	 * 
+	 * @param player
+	 *            required player will be new unit's owner
+	 */
+	void takeOver(final Player player) {
+		this.owner = Preconditions.checkNotNull(player);
+		
 	}
 
 	public boolean isStorable() {
@@ -554,6 +609,10 @@ public class Unit {
 		Preconditions.checkNotNull(location);
 		Preconditions.checkState(!isAtEuropePort(), "Unit can't skip from europe port to map");
 		Preconditions.checkState(!isAtEuropePier(), "Unit can't skip from europe port pier to map");
+		Preconditions.checkState(type.canMoveAtTerrain(model.getMap().getTerrainTypeAt(location)),
+				"Unit '%s' can't be placed at '%s' because can't move on terrain '%s'", this, location,
+				model.getMap().getTerrainTypeAt(location));
+
 		placeToLocation(location);
 	}
 

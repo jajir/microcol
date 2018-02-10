@@ -6,6 +6,9 @@ import org.microcol.gui.util.Text;
 import org.microcol.gui.util.ViewUtil;
 import org.microcol.model.Unit;
 
+import com.google.common.base.Preconditions;
+import com.google.inject.Inject;
+
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -21,6 +24,18 @@ public class DialogFigth extends AbstractMessageWindow {
 	 * It's <code>true</code> when user choose to fight.
 	 */
 	private boolean userChooseFight = false;
+	
+	private final Label defenderLabelName;
+	
+	private final ImageView defenderImageView;
+	
+	private final Label attackerLabelName;
+	
+	private final ImageView attackerImageView;
+	
+	private final LocalizationHelper localizationHelper;
+	
+	private final ImageProvider imageProvider;
 
 	/**
 	 * Constructor when parentFrame is not available.
@@ -35,15 +50,13 @@ public class DialogFigth extends AbstractMessageWindow {
 	 *            required localization helper
 	 * @param gamePreferences
 	 *            required game preferences
-	 * @param unitAttacker
-	 *            required attacking unit
-	 * @param unitDefender
-	 *            required defending unit
 	 */
+	@Inject
 	public DialogFigth(final Text text, final ViewUtil viewUtil, final ImageProvider imageProvider,
-			final LocalizationHelper localizationHelper, final GamePreferences gamePreferences, final Unit unitAttacker,
-			final Unit unitDefender) {
+			final LocalizationHelper localizationHelper, final GamePreferences gamePreferences) {
 		super(viewUtil);
+		this.localizationHelper = Preconditions.checkNotNull(localizationHelper);
+		this.imageProvider = Preconditions.checkNotNull(imageProvider);
 		getDialog().setTitle(text.get("dialogFight.title"));
 
 		final GridPane root = new GridPane();
@@ -60,9 +73,12 @@ public class DialogFigth extends AbstractMessageWindow {
 		/**
 		 * Attacker
 		 */
+		attackerLabelName = new Label();
+		attackerImageView = new ImageView();
 		final Label labelAttacker = new Label(text.get("dialogFight.attacker"));
 		root.add(labelAttacker, 0, 1);
-		describeUnit(root, 0, unitAttacker, imageProvider, localizationHelper);
+		root.add(attackerLabelName, 0, 2);
+		root.add(attackerImageView, 0, 3);
 
 		/**
 		 * Fight image
@@ -73,9 +89,12 @@ public class DialogFigth extends AbstractMessageWindow {
 		/**
 		 * Defender
 		 */
+		defenderLabelName = new Label();
+		defenderImageView = new ImageView();
 		final Label labelDefender = new Label(text.get("dialogFight.defender"));
 		root.add(labelDefender, 2, 1);
-		describeUnit(root, 2, unitDefender, imageProvider, localizationHelper);
+		root.add(defenderLabelName, 2, 2);
+		root.add(defenderImageView, 2, 3);
 
 		/**
 		 * Show next time. Y=3
@@ -98,7 +117,25 @@ public class DialogFigth extends AbstractMessageWindow {
 		buttonFight.setOnAction(e -> onClickFight(checkBoxShowNextTime.isSelected(), gamePreferences));
 		root.add(buttonFight, 2, 10);
 
+	}
+	
+	/**
+	 * 
+	 * @param unitAttacker
+	 *            required attacking unit
+	 * @param unitDefender
+	 *            required defending unit
+	 * @return return <code>true</code> when user choose to fight.
+	 */
+	public boolean showAndWait(final Unit unitAttacker, final Unit unitDefender) {
+		defenderLabelName.setText(localizationHelper.getUnitName(unitDefender.getType()));
+		defenderImageView.setImage(imageProvider.getUnitImage(unitDefender.getType()));
+		
+		attackerLabelName.setText(localizationHelper.getUnitName(unitDefender.getType()));
+		attackerImageView.setImage(imageProvider.getUnitImage(unitDefender.getType()));
+		
 		getDialog().showAndWait();
+		return userChooseFight;
 	}
 
 	private void onClickCancel(final boolean isCheckBoxShowNextTimeSelected, final GamePreferences gamePreferences) {
@@ -117,14 +154,6 @@ public class DialogFigth extends AbstractMessageWindow {
 		getDialog().close();
 	}
 
-	private void describeUnit(final GridPane root, final int column, final Unit unit, final ImageProvider imageProvider,
-			final LocalizationHelper localizationHelper) {
-		final Label labelname = new Label(localizationHelper.getUnitName(unit.getType()));
-		root.add(labelname, column, 2);
-
-		final ImageView unitImage = new ImageView(imageProvider.getUnitImage(unit.getType()));
-		root.add(unitImage, column, 3);
-	}
 
 	public boolean isUserChooseFight() {
 		return userChooseFight;

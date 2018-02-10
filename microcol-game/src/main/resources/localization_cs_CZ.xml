@@ -144,6 +144,10 @@
 
 	<entry key="dialogDestroyColony.caption">Opravdu si přejete zrušit kolonii?</entry>
 	<entry key="dialogDestroyColony.question">Opravdu si přejete zrušit kolonii? Když kolonii opustíte s poslední jednotkou tak bude kolonie zrušena.</entry>
+	
+	<entry key="dialogColonyWasCaptured.caption">Kolonie byla obsazena</entry>
+	<entry key="dialogColonyWasCaptured.text1">Dobyl jsi kolonii '</entry>
+	<entry key="dialogColonyWasCaptured.text2">'. Je to velký úspěch.</entry>
 
 	<entry key="FileChooser.cancelButtonText">Zrušit</entry>
 	<entry key="FileChooser.fileDateHeaderText">Datum úpravy</entry>
