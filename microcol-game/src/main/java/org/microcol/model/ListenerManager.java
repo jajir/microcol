@@ -13,9 +13,10 @@ import org.microcol.model.event.GoldWasChangedEvent;
 import org.microcol.model.event.RoundStartedEvent;
 import org.microcol.model.event.TurnStartedEvent;
 import org.microcol.model.event.UnitAttackedEvent;
-import org.microcol.model.event.UnitMovedStepEvent;
 import org.microcol.model.event.UnitEmbarkedEvent;
 import org.microcol.model.event.UnitMoveFinishedEvent;
+import org.microcol.model.event.UnitMovedStepEvent;
+import org.microcol.model.event.UnitMovedToHighSeasEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -79,6 +80,15 @@ class ListenerManager {
 		logger.info("Unit moved: {}.", event);
 
 		executeInSameThread(listener -> listener.unitMovedStep(event));
+	}
+	
+
+	void fireUnitMovedToHighSeas(final Model model, final Unit unit) {
+		final UnitMovedToHighSeasEvent event = new UnitMovedToHighSeasEvent(model, unit);
+
+		logger.info("Unit moved to high seas: {}.", event);
+
+		executeInSameThread(listener -> listener.unitMovedToHighSeas(event));
 	}
 
 	void fireUnitMovedFinished(final Model model, final Unit unit, final Path path) {

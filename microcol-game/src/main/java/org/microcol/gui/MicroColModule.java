@@ -32,15 +32,16 @@ import org.microcol.gui.event.model.ColonyWasCapturedController;
 import org.microcol.gui.event.model.DebugRequestController;
 import org.microcol.gui.event.model.GameFinishedController;
 import org.microcol.gui.event.model.GameModelController;
+import org.microcol.gui.event.model.GameStartedController;
 import org.microcol.gui.event.model.GoldWasChangedController;
 import org.microcol.gui.event.model.ModelEventManager;
-import org.microcol.gui.event.model.GameStartedController;
 import org.microcol.gui.event.model.RoundStartedController;
 import org.microcol.gui.event.model.TurnStartedController;
 import org.microcol.gui.event.model.UnitAttackedEventController;
 import org.microcol.gui.event.model.UnitEmbarkedController;
 import org.microcol.gui.event.model.UnitMoveFinishedController;
 import org.microcol.gui.event.model.UnitMovedController;
+import org.microcol.gui.event.model.UnitMovedToHighSeasController;
 import org.microcol.gui.gamepanel.AnimationIsDoneController;
 import org.microcol.gui.gamepanel.AnimationManager;
 import org.microcol.gui.gamepanel.ExcludePainting;
@@ -143,6 +144,7 @@ public class MicroColModule extends AbstractModule {
 		bind(SelectNextUnitController.class).in(Singleton.class);
 		bind(UnitEmbarkedController.class).in(Singleton.class);
 		bind(AnimationIsDoneController.class).in(Singleton.class);
+		bind(UnitMovedToHighSeasController.class).in(Singleton.class);
 
 		bind(ModelEventManager.class).in(Singleton.class);
 

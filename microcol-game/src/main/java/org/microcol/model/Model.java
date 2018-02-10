@@ -426,6 +426,10 @@ public final class Model {
 		listenerManager.fireUnitMovedStep(this, unit, start, end);
 	}
 
+	void fireUnitMovedToHighSeas(final Unit unit) {
+		listenerManager.fireUnitMovedToHighSeas(this, unit);
+	}
+
 	void fireUnitAttacked(final Unit attacker, final Unit defender, final Unit destroyed) {
 		listenerManager.fireUnitAttacked(this, attacker, defender, destroyed);
 	}

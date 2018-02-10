@@ -9,6 +9,7 @@ import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 
 public final class UnitMovedStepEvent extends ModelEvent {
+	
 	private final Unit unit;
 	private final Location start;
 	private final Location end;

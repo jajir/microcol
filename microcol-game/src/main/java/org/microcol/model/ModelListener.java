@@ -9,6 +9,7 @@ import org.microcol.model.event.RoundStartedEvent;
 import org.microcol.model.event.TurnStartedEvent;
 import org.microcol.model.event.UnitAttackedEvent;
 import org.microcol.model.event.UnitMovedStepEvent;
+import org.microcol.model.event.UnitMovedToHighSeasEvent;
 import org.microcol.model.event.UnitEmbarkedEvent;
 import org.microcol.model.event.UnitMoveFinishedEvent;
 
@@ -21,6 +22,8 @@ public interface ModelListener {
 	void turnStarted(TurnStartedEvent event);
 
 	void unitMovedStep(UnitMovedStepEvent event);
+
+	void unitMovedToHighSeas(UnitMovedToHighSeasEvent event);
 
 	void unitMoveFinished(UnitMoveFinishedEvent event);
 

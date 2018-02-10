@@ -51,12 +51,12 @@ Planned releases
   
    * \u2717 When openent's colony is occupied by ship than there shouln't be fight. Colony just should be captured and opponent's ship moved outside of colony. 
   
-   * \u2717 Buying of 20 goods and than 80, it's not correctly counted. Event amount is 80 even when user don't have enough gold.    
+   * \u2713 Buying of 20 goods and than 80, it's not correctly counted. Event amount is 80 even when user don't have enough gold.    
   
-   * \u2717 Travel to Europe throws exception.    
+   * \u2713 Travel to Europe throws exception.
 
- * Backlog - feature and improvement backlog	
-  	
+ * Backlog - feature and improvement backlog
+  
   * \u2717 Colony building queue and queue editing - simple and ugly version
 
   * \u2717 Add unit wagon, can't fight, capture colony, can transport goods

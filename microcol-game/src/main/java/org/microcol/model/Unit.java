@@ -349,7 +349,7 @@ public class Unit {
 		final TerrainType targetTerrain = model.getMap().getTerrainTypeAt(moveTo);
 		if (targetTerrain == TerrainType.HIGH_SEA) {
 			placeToHighSeas(true);
-			model.fireUnitMovedStep(this, getLocation(), moveTo);
+			model.fireUnitMovedToHighSeas(this);
 		} else {
 			final Location start = getLocation();
 			placeToLocation(moveTo);

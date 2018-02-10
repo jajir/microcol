@@ -15,6 +15,7 @@ import org.microcol.model.event.UnitAttackedEvent;
 import org.microcol.model.event.UnitEmbarkedEvent;
 import org.microcol.model.event.UnitMoveFinishedEvent;
 import org.microcol.model.event.UnitMovedStepEvent;
+import org.microcol.model.event.UnitMovedToHighSeasEvent;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
@@ -48,6 +49,13 @@ public class ModelListenerImpl implements ModelListener {
 	public void unitMovedStep(final UnitMovedStepEvent event) {
 		if (event.canPlayerSeeMove(gameModelController.getCurrentPlayer())) {
 			modelEventManager.getUnitMovedController().fireEvent(event);
+		}
+	}
+
+	@Override
+	public void unitMovedToHighSeas(final UnitMovedToHighSeasEvent event) {
+		if (event.getUnit().getOwner().equals(gameModelController.getCurrentPlayer())) {
+			modelEventManager.getUnitMovedToHighSeasController().fireEvent(event);
 		}
 	}
 	
