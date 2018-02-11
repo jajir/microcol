@@ -407,6 +407,39 @@ public class Unit {
 	}
 
 	public void attack(final Location attackAt) {
+		canAttackValidation(attackAt);
+		Preconditions.checkState(!getAttackableUnitsAt(attackAt).isEmpty(),
+				"There is not attackable unit on target location (%s).", attackAt);
+		
+		availableMoves = 0;
+		final Unit defender = getAttackableUnitsAt(attackAt).get(0);
+		final Unit destroyed = Math.random() >= PROBABILITY_OF_ATTACKER_WIN ? defender : this;
+		model.destroyUnit(destroyed);
+		if (this != destroyed && owner.getEnemyUnitsAt(attackAt).isEmpty()) {
+			placeToLocation(attackAt);
+			model.fireUnitAttacked(this, defender, destroyed);
+			tryToCaptureColony(attackAt);
+		} else {
+			model.fireUnitAttacked(this, defender, destroyed);
+		}
+	}
+
+	public void captureColony(final Location attackAt) {
+		canAttackValidation(attackAt);
+		
+		Preconditions.checkState(getAttackableUnitsAt(attackAt).isEmpty(),
+				"Colony can't be captured, there not attackable unit on target location (%s).", attackAt);
+		final Colony col = model.getColonyAt(attackAt).orElseThrow(() -> new IllegalStateException(
+				String.format("There are no units to figh of city at '%s'", attackAt)));
+		
+		availableMoves = 0;
+		final Location start = getLocation();
+		placeToLocation(attackAt);
+		model.fireUnitMovedStep(this, start, attackAt);
+		col.captureColony(owner, this);
+	}
+	
+	private void canAttackValidation(final Location attackAt){
 		verifyThatUnitIsAtMap();
 
 		model.checkGameRunning();
@@ -419,32 +452,15 @@ public class Unit {
 		Preconditions.checkArgument(this.getLocation().isNeighbor(attackAt),
 				"Unit location (%s) is not neighbor to target location (%s).", this.getLocation(), attackAt);
 		Preconditions.checkState(availableMoves > 0, "Unit (%s) cannot attack this turn.", this);
-		Preconditions.checkState(!owner.getEnemyUnitsAt(attackAt).isEmpty(),
-				"There is not any enemy unit on target location (%s).", attackAt);
-
-		availableMoves = 0;
-
-		if(getAttackableUnitsAt(attackAt).isEmpty()){
-			final Colony col = model.getColonyAt(attackAt).orElseThrow(() -> new IllegalStateException(
-					String.format("There are no units to figh of city at '%s'", attackAt)));
-			final Location start = getLocation();
-			placeToLocation(attackAt);
-			model.fireUnitMovedStep(this, start, attackAt);
-			col.captureColony(owner, this);
-		}else{
-			final Unit defender = getAttackableUnitsAt(attackAt).get(0);
-			final Unit destroyed = Math.random() >= PROBABILITY_OF_ATTACKER_WIN ? defender : this;
-			model.destroyUnit(destroyed);
-			if (this != destroyed && owner.getEnemyUnitsAt(attackAt).isEmpty()) {
-				placeToLocation(attackAt);
-				model.fireUnitAttacked(this, defender, destroyed);
-				tryToCaptureColony(attackAt);
-			} else {
-				model.fireUnitAttacked(this, defender, destroyed);
-			}
-		}
 	}
-	
+
+	/**
+	 * Get list of units that could be attacked by this unit at some location.
+	 * 
+	 * @param at
+	 *            required examined location
+	 * @return Return list of units that could be attacked.
+	 */
 	private List<Unit> getAttackableUnitsAt(final Location at) {
 		return owner.getEnemyUnitsAt(at).stream().filter(unit -> type.getAttackableUnitType().contains(unit.getType()))
 				.collect(ImmutableList.toImmutableList());

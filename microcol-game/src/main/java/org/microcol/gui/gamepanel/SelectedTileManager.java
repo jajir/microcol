@@ -2,9 +2,11 @@ package org.microcol.gui.gamepanel;
 
 import java.util.Optional;
 
+import org.microcol.gui.event.model.ColonyWasCapturedController;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.event.model.UnitMoveFinishedController;
 import org.microcol.model.Location;
+import org.microcol.model.event.ColonyWasCapturedEvent;
 import org.microcol.model.event.UnitMoveFinishedEvent;
 
 import com.google.common.base.Preconditions;
@@ -27,11 +29,17 @@ public class SelectedTileManager {
 	@Inject
 	public SelectedTileManager(final TileWasSelectedController tileWasSelectedController,
 			final GameModelController gameModelController,
-			final UnitMoveFinishedController unitMoveFinishedController) {
+			final UnitMoveFinishedController unitMoveFinishedController,
+			final ColonyWasCapturedController colonyWasCapturedController) {
 		this.tileWasSelectedController = Preconditions.checkNotNull(tileWasSelectedController);
 		this.gameModelController = Preconditions.checkNotNull(gameModelController);
 		unitMoveFinishedController.addListener(this::onUnitMoveFinished);
+		colonyWasCapturedController.addListener(this::onColonyWasCapturedController);
 		selectedTile = null;
+	}
+	
+	private void onColonyWasCapturedController(final ColonyWasCapturedEvent event){
+		setForcelySelectedTile(event.getCapturedColony().getLocation());
 	}
 	
 	private void onUnitMoveFinished(final UnitMoveFinishedEvent event){
@@ -46,15 +54,15 @@ public class SelectedTileManager {
 
 	public void setSelectedTile(final Location newlySelectedTile) {
 		Preconditions.checkNotNull(newlySelectedTile);
-		if (selectedTile == null) {
-			tileWasSelectedController.fireEvent(new TileWasSelectedEvent(gameModelController, newlySelectedTile));
-			this.selectedTile = newlySelectedTile;
-		} else {
-			if (!selectedTile.equals(newlySelectedTile)) {
-				tileWasSelectedController.fireEvent(new TileWasSelectedEvent(gameModelController, newlySelectedTile));
-				this.selectedTile = newlySelectedTile;
-			}
+		if (!newlySelectedTile.equals(selectedTile)) {
+			setForcelySelectedTile(newlySelectedTile);
 		}
+	}
+	
+	private void setForcelySelectedTile(final Location newlySelectedTile){
+		Preconditions.checkNotNull(newlySelectedTile);
+		tileWasSelectedController.fireEvent(new TileWasSelectedEvent(gameModelController, newlySelectedTile));
+		this.selectedTile = newlySelectedTile;		
 	}
 
 }

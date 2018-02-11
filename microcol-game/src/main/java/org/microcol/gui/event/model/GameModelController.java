@@ -83,7 +83,7 @@ public class GameModelController implements Localized {
 	}
 	
 	public void captureColonyAt(final Unit movingUnit, final Location moveToLocation){
-		new Thread(() -> movingUnit.attack(moveToLocation)).start();
+		new Thread(() -> movingUnit.captureColony(moveToLocation)).start();
 	}
 
 	public boolean isModelReady() {

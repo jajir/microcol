@@ -2,6 +2,8 @@ package org.microcol.gui.gamepanel;
 
 import java.util.Optional;
 
+import org.microcol.gui.colony.UnitMovedToFieldController;
+import org.microcol.gui.colony.UnitMovedToFieldEvent;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.event.model.UnitMovedController;
 import org.microcol.gui.event.model.UnitMovedToHighSeasController;
@@ -39,7 +41,8 @@ public class SelectedUnitManager {
 			final SelectNextUnitController selectNextUnitController,
 			final SelectedTileManager selectedTileManager,
 			final UnitMovedController unitMovedController,
-			final UnitMovedToHighSeasController unitMovedToHighSeasController) {
+			final UnitMovedToHighSeasController unitMovedToHighSeasController,
+			final UnitMovedToFieldController unitMovedToFieldController) {
 		this.gameModelController = Preconditions.checkNotNull(gameModelController);
 		this.selectedTileManager = Preconditions.checkNotNull(selectedTileManager);
 		tileWasSelectedController.addListener(event -> evaluateLocation(event.getLocation()));
@@ -50,6 +53,13 @@ public class SelectedUnitManager {
 			}
 		});
 		unitMovedToHighSeasController.addListener(this::onUnitMovedToHighSeas);
+		unitMovedToFieldController.addListener(this::onUnitMovedToField);
+	}
+	
+	private void onUnitMovedToField(final UnitMovedToFieldEvent event){
+		if ( event.getUnit().equals(selectedUnit)){
+			selectedUnit = null;
+		}
 	}
 	
 	@SuppressWarnings("unused")

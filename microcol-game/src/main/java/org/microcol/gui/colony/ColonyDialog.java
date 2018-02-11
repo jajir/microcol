@@ -48,7 +48,10 @@ public class ColonyDialog extends AbstractMessageWindow implements ColonyDialogC
 	public ColonyDialog(final ViewUtil viewUtil, final Text text, final ImageProvider imageProvider,
 			final PanelColonyFields panelColonyFields, final PanelColonyStructures panelColonyStructures,
 			final PanelOutsideColony panelOutsideColony, final PanelColonyGoods panelColonyGoods,
-			final PanelColonyDockBehaviour panelColonyDockBehaviour) {
+			final PanelColonyDockBehaviour panelColonyDockBehaviour,
+			final UnitMovedOutsideColonyController unitMovedOutsideColonyController,
+			final UnitMovedToConstructionController unitMovedToConstructionController,
+			final UnitMovedToFieldController unitMovedToFieldController) {
 		super(viewUtil);
 		Preconditions.checkNotNull(imageProvider);
 		getDialog().setTitle(text.get("europeDialog.caption"));
@@ -114,6 +117,9 @@ public class ColonyDialog extends AbstractMessageWindow implements ColonyDialogC
 				propertyShiftWasPressed.set(true);
 			}
 		});
+		unitMovedOutsideColonyController.addListener(event -> repaint());
+		unitMovedToConstructionController.addListener(event -> repaint());
+		unitMovedToFieldController.addListener(event -> repaint());
 	}
 
 	public void showColony(final Colony colony) {

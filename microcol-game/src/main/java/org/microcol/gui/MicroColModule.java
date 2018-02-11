@@ -8,6 +8,9 @@ import org.microcol.gui.colony.PanelColonyFields;
 import org.microcol.gui.colony.PanelColonyGoods;
 import org.microcol.gui.colony.PanelColonyStructures;
 import org.microcol.gui.colony.PanelOutsideColony;
+import org.microcol.gui.colony.UnitMovedOutsideColonyController;
+import org.microcol.gui.colony.UnitMovedToConstructionController;
+import org.microcol.gui.colony.UnitMovedToFieldController;
 import org.microcol.gui.europe.BuyUnitsDialog;
 import org.microcol.gui.europe.EuropeDialog;
 import org.microcol.gui.europe.EuropeDialogCallback;
@@ -145,6 +148,9 @@ public class MicroColModule extends AbstractModule {
 		bind(UnitEmbarkedController.class).in(Singleton.class);
 		bind(AnimationIsDoneController.class).in(Singleton.class);
 		bind(UnitMovedToHighSeasController.class).in(Singleton.class);
+		bind(UnitMovedOutsideColonyController.class).in(Singleton.class);
+		bind(UnitMovedToConstructionController.class).in(Singleton.class);
+		bind(UnitMovedToFieldController.class).in(Singleton.class);
 
 		bind(ModelEventManager.class).in(Singleton.class);
 

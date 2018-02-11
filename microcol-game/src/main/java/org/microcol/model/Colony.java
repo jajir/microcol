@@ -117,6 +117,8 @@ public class Colony {
 		constructions.forEach(construction -> construction.getConstructionSlots().stream()
 				.filter(slot -> !slot.isEmpty()).forEach(slot -> slot.getUnit().takeOver(player)));
 		
+		placeUnitToProduceFood(capturingUnit);
+		
 		owner = player;
 		model.fireColonyWasCaptured(model, capturingUnit, this);
 	}
@@ -140,9 +142,10 @@ public class Colony {
 	}
 	
 	void placeUnitToProduceFood(final Unit unit) {
+		//TODO use random to select place where will be unit finally placed
 		final ColonyField field = colonyFields.stream()
-				.max((f1, f2) -> f2.isPossibleToProduceOfGooodsType(GoodType.CORN)
-						- f1.isPossibleToProduceOfGooodsType(GoodType.CORN))
+				.max((f1, f2) -> f1.isPossibleToProduceOfGooodsType(GoodType.CORN)
+						- f2.isPossibleToProduceOfGooodsType(GoodType.CORN))
 				.orElseThrow(() -> new IllegalStateException("There is not place to produce food."));
 		unit.placeToColonyField(field, GoodType.CORN);
 	}

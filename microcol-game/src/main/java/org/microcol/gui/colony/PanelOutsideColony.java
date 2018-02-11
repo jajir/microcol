@@ -41,14 +41,18 @@ public class PanelOutsideColony extends TitledPanel {
 
 	private final BackgroundHighlighter backgroundHighlighter;
 	
+	private final UnitMovedOutsideColonyController unitMovedOutsideColonyController;
+	
 	@Inject
 	public PanelOutsideColony(final ImageProvider imageProvider, final GameModelController gameModelController,
-			final ColonyDialogCallback colonyDialog, final DialogDestroyColony dialogDestroyColony) {
+			final ColonyDialogCallback colonyDialog, final DialogDestroyColony dialogDestroyColony,
+			UnitMovedOutsideColonyController unitMovedOutsideColonyController) {
 		super("Outside Colony", null);
 		this.imageProvider = Preconditions.checkNotNull(imageProvider);
 		this.gameModelController = Preconditions.checkNotNull(gameModelController);
 		this.colonyDialog = Preconditions.checkNotNull(colonyDialog);
 		this.dialogDestroyColony = Preconditions.checkNotNull(dialogDestroyColony);
+		this.unitMovedOutsideColonyController = Preconditions.checkNotNull(unitMovedOutsideColonyController);
 		panelUnits = new HBox();
 		getContentPane().getChildren().add(panelUnits);
 		backgroundHighlighter = new BackgroundHighlighter(this, this::isItUnit);
@@ -94,11 +98,12 @@ public class PanelOutsideColony extends TitledPanel {
 			if (colony.isLastUnitIncolony(unit)){
 				if(dialogDestroyColony.showWaitAndReturnIfYesWasSelected()){
 					unit.placeToMap(colony.getLocation());
+					unitMovedOutsideColonyController.fireEvent(new UnitMovedOutsideColonyEvent(unit, colony));
 					colonyDialog.close();
 				}
 			}else{
 				unit.placeToMap(colony.getLocation());
-				colonyDialog.repaint();
+				unitMovedOutsideColonyController.fireEvent(new UnitMovedOutsideColonyEvent(unit, colony));
 			}
 			event.acceptTransferModes(TransferMode.MOVE);
 			event.setDropCompleted(true);

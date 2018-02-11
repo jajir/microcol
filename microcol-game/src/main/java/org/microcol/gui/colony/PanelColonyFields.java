@@ -61,15 +61,18 @@ public class PanelColonyFields extends TitledPanel {
 	private final ContextMenu contextMenu;
 	
 	private final PaintService paintService;
+	
+	private final UnitMovedToFieldController unitMovedToFieldController;
 
 	@Inject
 	public PanelColonyFields(final ImageProvider imageProvider, final GameModelController gameModelController,
-			final ColonyDialogCallback colonyDialog, final PaintService paintService) {
+			final ColonyDialogCallback colonyDialog, final PaintService paintService, final UnitMovedToFieldController unitMovedToFieldController) {
 		super("Colony layout", new Label("Colony layout"));
 		this.imageProvider = Preconditions.checkNotNull(imageProvider);
 		this.gameModelController = Preconditions.checkNotNull(gameModelController);
 		this.colonyDialog = Preconditions.checkNotNull(colonyDialog);
 		this.paintService = Preconditions.checkNotNull(paintService);
+		this.unitMovedToFieldController = Preconditions.checkNotNull(unitMovedToFieldController);
 		final int size = 3 * GamePanelView.TILE_WIDTH_IN_PX;
 		canvas = new Canvas(size, size);
 		getContentPane().getChildren().add(canvas);
@@ -101,7 +104,6 @@ public class PanelColonyFields extends TitledPanel {
 							production.getGoodType().name() + "   " + terrain.canProduceAmmount(production));
 					item.setOnAction(evt -> {
 						colonyField.setProducedGoodType(production.getGoodType());
-						colonyDialog.repaint();
 					});
 					contextMenu.getItems().add(item);
 				});
@@ -172,6 +174,7 @@ public class PanelColonyFields extends TitledPanel {
 				ClipboardReader.make(gameModelController.getModel(), db).tryReadUnit((unit, transferFrom) -> {
 					unit.placeToColonyField(colonyField, GoodType.CORN);
 					event.setDropCompleted(true);
+					unitMovedToFieldController.fireEvent(new UnitMovedToFieldEvent(unit, colony));
 					colonyDialog.repaint();
 				});
 			}

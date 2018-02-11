@@ -305,6 +305,7 @@ public final class GamePanelPresenter implements Localized {
 		} else if (movingUnit.isPossibleToAttackAt(moveToLocation)) {
 			// fight
 			fight(movingUnit, moveToLocation);
+			disableMoveMode();
 		} else if (movingUnit.isPossibleToEmbarkAt(moveToLocation, true)) {
 			// embark
 			final Unit toLoad = gameModelController.getModel().getUnitsAt(moveToLocation).get(0);
