@@ -4,70 +4,15 @@
 
 Planned releases
 
- * 0.5.0 - Make first game smoother
-
-  * \u2713 Colony UI improvements 
-    	
-  	* \u2713 Show how many goods is consumed.
-  	  	
-  	* \u2713 Show that some production doesn't have enough sources.
-
-  * \u2713 When user in move mode move mouse to location where unit can't go than cursor will change icon. 
-  	
-  * \u2713 Save / Load game model. It's necessary for further game states.
-  	
-  * \u2713 Allow cycle through units. It allows to give focus to specific unit. Not just first unit at some location.
-   	
-  * \u2713 Map discovery. At the beginning of game map is hidden when user come to some place map is revealed.
-  	User can't interact with hidden objects.
-  	
-  * \u2713 When new colony is builded building unit should be placed to build food
-  	
-  * \u2713 When last unit leaves colony than colony should be destroyed
-
-  * \u2713 Junit test for rotating and composing images.
-
-  * \u2713 Define tiles in one background image. Prevent tiles interfering.
-
-  * \u2713 Create pseudo random landscape, rock, mountain, water .... Show random version of rock. Always show same version of rock in a same game. Prevent trees to change shape after cut down of some other tree. 
-
-  * \u2713 Generate tile shapes for different tiles connections, for example sea/grass and sea/tundra.
-
-  * \u2713 Support hiding on not reveal map part.
-  	
-  * \u2717 Tons of bugs, for example:	
-   	
-   * \u2713 Method for removing defeated unit keep units in defeated cargo
-  
-   * \u2713 Transfered good is not correctly counted
-  
-   * \u2713 Pressing of 'c' throw exception.
-  
-   * \u2713 In colony detail view at outside colony panel view colony is not visible.
-  
-   * \u2713 Key 'shift' pressed during mouse dragging have to be pressed before dragging starts otherwise is ignored. 
-  
-   * \u2713 Some event's are visible in non explored area.
-  
-   * \u2713 Buying of 20 goods and than 80, it's not correctly counted. Event amount is 80 even when user don't have enough gold.    
-  
-   * \u2713 Travel to Europe throws exception.
-  
-   * \u2713 When openent's colony is occupied by ship than there shouln't be fight. Colony just should be captured and opponent's ship moved outside of colony. 
-
-   * \u2713 When selected unit outside of colony is move to field than attempt to open colony throws exception.  
-
-   * \u2713 When colony is conquered place unit to field to produce food.
-
-   * \u2713 New game leads to disabled mouse.
-
- * Backlog - feature and improvement backlog
+ * 0.6.0 -
   
   * \u2717 Colony building queue and queue editing - simple and ugly version
 
   * \u2717 Add unit wagon, can't fight, capture colony, can transport goods
   	
   * \u2717 Colonist in colony eats 2 foods per turn.
+
+ * Backlog - feature and improvement backlog
 
   * \u2717 Improve UI
    

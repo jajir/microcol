@@ -366,7 +366,12 @@ public abstract class AbstractCoastMapGenerator {
 	}
 
 	/**
-	 * When location is out of map it will be moved back to map.
+	 * Even when location is out of map it will say correct terrain type. For
+	 * locations outside of map it will return closest terrain type at map.
+	 * 
+	 * @param location
+	 *            required location that will be examined
+	 * @return terrain type at given location
 	 */
 	protected TerrainType getTerrainTypeAt(final Location location) {
 		Preconditions.checkNotNull(location);

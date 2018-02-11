@@ -4,6 +4,63 @@
 
 Change log
 
+ * 0.5.0 - Make first game smoother
+
+  * Colony UI improvements 
+    	
+  	* Show how many goods is consumed.
+  	  	
+  	* Show that some production doesn't have enough sources.
+
+  * When user in move mode move mouse to location where unit can't go than cursor will change icon. 
+  	
+  * Save / Load game model. It's necessary for further game states.
+  	
+  * Allow cycle through units. It allows to give focus to specific unit. Not just first unit at some location.
+   	
+  * Map discovery. At the beginning of game map is hidden when user come to some place map is revealed.
+  	User can't interact with hidden objects.
+  	
+  * When new colony is builded building unit should be placed to build food
+  	
+  * When last unit leaves colony than colony should be destroyed
+
+  * Junit test for rotating and composing images.
+
+  * Define tiles in one background image. Prevent tiles interfering.
+
+  * Create pseudo random landscape, rock, mountain, water .... Show random version of rock. Always show same version of rock in a same game. Prevent trees to change shape after cut down of some other tree. 
+
+  * Generate tile shapes for different tiles connections, for example sea/grass and sea/tundra.
+
+  * Support hiding on not reveal map part.
+  	
+  * Tons of bugs, for example:	
+   	
+   * Method for removing defeated unit keep units in defeated cargo
+  
+   * Transfered good is not correctly counted
+  
+   * Pressing of 'c' throw exception.
+  
+   * In colony detail view at outside colony panel view colony is not visible.
+  
+   * Key 'shift' pressed during mouse dragging have to be pressed before dragging starts otherwise is ignored. 
+  
+   * Some event's are visible in non explored area.
+  
+   * Buying of 20 goods and than 80, it's not correctly counted. Event amount is 80 even when user don't have enough gold.    
+  
+   * Travel to Europe throws exception.
+  
+   * When openent's colony is occupied by ship than there shouln't be fight. Colony just should be captured and opponent's ship moved outside of colony. 
+
+   * When selected unit outside of colony is move to field than attempt to open colony throws exception.  
+
+   * When colony is conquered place unit to field to produce food.
+
+   * New game leads to disabled mouse.
+
  * 0.4.0 - game should be playable from start till the end
 
   * Trees are supported on map

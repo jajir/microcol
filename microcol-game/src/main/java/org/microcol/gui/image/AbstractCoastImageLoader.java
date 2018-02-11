@@ -85,6 +85,8 @@ public abstract class AbstractCoastImageLoader implements ImageLoader {
 	/**
 	 * Get tile image for it's code.
 	 * 
+	 * @param imageProvider
+	 *            required image provider object
 	 * @param code
 	 *            required tile code.
 	 * @return When there is tile image for given code image is returned when

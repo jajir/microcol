@@ -22,7 +22,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 
 /**
- * Provide basic support for drag & drop over ships in dock.
+ * Provide basic support for drag &amp; drop over ships in dock.
  */
 public abstract class AbstractPanelDockBehavior implements PanelDockBehavior {
 
@@ -71,7 +71,7 @@ public abstract class AbstractPanelDockBehavior implements PanelDockBehavior {
 	 * @param transferFrom
 	 *            required place from is goods transfered
 	 * @param specialOperatonWasSelected
-	 *            it's <code>true</code> when user want special drag & drop
+	 *            it's <code>true</code> when user want special drag &amp; drop
 	 *            operation like buy goods
 	 */
 	public abstract void consumeGoods(final CargoSlot cargoSlot, final GoodAmount goodAmount,

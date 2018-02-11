@@ -32,9 +32,6 @@ public class SelectedUnitManager {
 
 	private Unit selectedUnit;
 
-	/**
-	 * Default constructor
-	 */
 	@Inject
 	public SelectedUnitManager(final GameModelController gameModelController,
 			final TileWasSelectedController tileWasSelectedController,

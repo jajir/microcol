@@ -23,9 +23,6 @@ public class SelectedTileManager {
 
 	private Location selectedTile;
 
-	/**
-	 * Default constructor
-	 */
 	@Inject
 	public SelectedTileManager(final TileWasSelectedController tileWasSelectedController,
 			final GameModelController gameModelController,
