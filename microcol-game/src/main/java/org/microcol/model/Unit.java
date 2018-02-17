@@ -26,10 +26,10 @@ public class Unit {
 	private final static int VISIBILITY_INCREASE = 1;
 
 	/**
-	 * Number is probability than attacker will win. When it's less than 0.5
+	 * Number is probability than attacker will win. When it's bigger than 0.5
 	 * than attacker will have bigger probability that will win.
 	 */
-	private final static double PROBABILITY_OF_ATTACKER_WIN = 0.0d; //FIXME return it to 0.4
+	private final static double PROBABILITY_OF_ATTACKER_WIN = 0.6d;
 	
 	private final Random random = new Random();
 	private final int id;
@@ -405,7 +405,17 @@ public class Unit {
 			}
 		}		
 	}
-
+	
+	private boolean isWinnerAttacker(){
+		return random.nextDouble() < PROBABILITY_OF_ATTACKER_WIN;
+	}
+	
+	/**
+	 * This unit attack unit at given location.
+	 * 
+	 * @param attackAt
+	 *            Required attacked location.
+	 */
 	public void attack(final Location attackAt) {
 		canAttackValidation(attackAt);
 		Preconditions.checkState(!getAttackableUnitsAt(attackAt).isEmpty(),
@@ -413,13 +423,18 @@ public class Unit {
 		
 		availableMoves = 0;
 		final Unit defender = getAttackableUnitsAt(attackAt).get(0);
-		final Unit destroyed = Math.random() >= PROBABILITY_OF_ATTACKER_WIN ? defender : this;
-		model.destroyUnit(destroyed);
-		if (this != destroyed && owner.getEnemyUnitsAt(attackAt).isEmpty()) {
-			placeToLocation(attackAt);
+		final Unit winner = isWinnerAttacker() ? this : defender;
+		if (winner == this){
+			final Unit destroyed = defender;
+			model.destroyUnit(destroyed);
 			model.fireUnitAttacked(this, defender, destroyed);
-			tryToCaptureColony(attackAt);
+			if(owner.getEnemyUnitsAt(attackAt).isEmpty()){
+				placeToLocation(attackAt);
+				tryToCaptureColony(attackAt);				
+			}
 		} else {
+			final Unit destroyed = this;
+			model.destroyUnit(destroyed);
 			model.fireUnitAttacked(this, defender, destroyed);
 		}
 	}

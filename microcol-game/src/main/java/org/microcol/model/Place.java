@@ -6,7 +6,7 @@ import org.microcol.model.store.UnitPo;
 /**
  * Just hold information about some place.
  */
-public interface Place {
+interface Place {
 
 	/**
 	 * Return unit which place is described by this instance;
