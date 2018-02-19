@@ -56,8 +56,6 @@ public class PanelColonyFields extends TitledPanel {
 
 	private final ClickableArea clickableArea = new ClickableArea();
 
-	private final TileClickListener tileClickListener;
-
 	private final ContextMenu contextMenu;
 	
 	private final PaintService paintService;
@@ -80,8 +78,6 @@ public class PanelColonyFields extends TitledPanel {
 		canvas.setOnDragDropped(this::onDragDropped);
 		canvas.setOnDragDetected(this::onDragDetected);
 		canvas.setOnMousePressed(this::onMousePressed);
-		canvas.setOnMouseReleased(this::onMouseReleased);
-		tileClickListener = new TileClickListener(clickableArea, this::onClickDirection);
 		contextMenu = new ContextMenu();
 		contextMenu.getStyleClass().add("popup");
 		contextMenu.setAutoHide(true);
@@ -104,6 +100,7 @@ public class PanelColonyFields extends TitledPanel {
 							production.getGoodType().name() + "   " + terrain.canProduceAmmount(production));
 					item.setOnAction(evt -> {
 						colonyField.setProducedGoodType(production.getGoodType());
+						colonyDialog.repaint();
 					});
 					contextMenu.getItems().add(item);
 				});
@@ -112,21 +109,10 @@ public class PanelColonyFields extends TitledPanel {
 		}
 	}
 
+	@SuppressWarnings("unused")
 	private final void onMousePressed(final MouseEvent event) {
-		tileClickListener.onMousePressed(event);
 		if(contextMenu.isShowing())
 			contextMenu.hide();
-	}
-
-	private final void onMouseReleased(final MouseEvent event) {
-		tileClickListener.onMouseReleased(event);
-	}
-
-	private final void onClickDirection(final Location direction) {
-		final ColonyField colonyField = colony.getColonyFieldInDirection(direction);
-		if (!colonyField.isEmpty()) {
-			//FIXME why is this code here?
-		}
 	}
 
 	private final void onDragDetected(final MouseEvent event) {

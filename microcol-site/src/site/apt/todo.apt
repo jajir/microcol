@@ -4,7 +4,19 @@
 
 Planned releases
 
- * 0.6.0 -
+ * 0.5.1 - Bugfixing
+ 
+  * \u2717 Game block user to disembark unit at location where is already player's unit.
+  
+  * \u2717 When user choose in context menu on field some produced goods than colony dialog is not repainted and previous production remain displayed..
+  
+  * \u2717 Support selecting unit from right panel.
+  
+  * \u2717 Load and Save options should be enabled, not just in debug mode.
+  
+  * \u2717 Focused unit is without available action points to move. User press next turn when user is on turn again unit still seems without actions point. Select another unit and back helps.  
+
+ * 0.6.0 - functionality release
   
   * \u2717 Colony building queue and queue editing - simple and ugly version
 
@@ -13,6 +25,16 @@ Planned releases
   * \u2717 Colonist in colony eats 2 foods per turn.
 
  * Backlog - feature and improvement backlog
+
+  * \u2717 Turn report - when turn starts, events summary to user. Informations like:
+  
+    * \u2717 Ship is in Europe port
+  
+    * \u2717 Prices drop rise in Europe.
+  
+    * \u2717 Colony is plagued by famine.
+  
+    * \u2717 Taxes was changed.
 
   * \u2717 Improve UI
    
