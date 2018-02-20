@@ -66,9 +66,6 @@ public class GamePanelView implements GamePanelPresenter.Display {
 
 	private final GamePreferences gamePreferences;
 
-	//TODO it's already in game preferences, should'n be here
-	private boolean isGridShown;
-
 	private Optional<ScreenScrolling> screenScrolling = Optional.empty();
 
 	private final OneTurnMoveHighlighter oneTurnMoveHighlighter;
@@ -115,8 +112,6 @@ public class GamePanelView implements GamePanelPresenter.Display {
 		fpsCounter = new FpsCounter();
 		fpsCounter.start();
 
-		isGridShown = true;
-
 		/**
 		 * Following class main define animation loop.
 		 */
@@ -133,8 +128,7 @@ public class GamePanelView implements GamePanelPresenter.Display {
 	}
 
 	@Override
-	public void initGame(final boolean idGridShown, final Model model) {
-		this.isGridShown = idGridShown;
+	public void initGame(final Model model) {
 		visibleArea.setMaxMapSize(model.getMap());
 	}
 
@@ -291,7 +285,7 @@ public class GamePanelView implements GamePanelPresenter.Display {
 	}
 
 	private void paintGrid(final GraphicsContext graphics, final Area area) {
-		if (isGridShown) {
+		if (gamePreferences.isGridShown()) {
 			graphics.setStroke(Color.LIGHTGREY);
 			graphics.setLineWidth(1);
 			for (int i = area.getTopLeft().getX(); i <= area.getBottomRight().getX(); i++) {
@@ -402,11 +396,6 @@ public class GamePanelView implements GamePanelPresenter.Display {
 	public void addFightAnimation(final Unit attacker, final Unit defender) {
 		animationManager.addAnimation(
 				new AnimationFight(attacker, defender, imageProvider, gamePreferences.getAnimationSpeed()));
-	}
-
-	@Override
-	public void setGridShown(final boolean isGridShown) {
-		this.isGridShown = isGridShown;
 	}
 
 	@Override

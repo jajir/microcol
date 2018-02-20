@@ -19,7 +19,6 @@ import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.event.model.GameStartedController;
 import org.microcol.gui.mainmenu.CenterViewController;
 import org.microcol.gui.mainmenu.ExitGameController;
-import org.microcol.gui.mainmenu.ShowGridController;
 import org.microcol.gui.util.Localized;
 import org.microcol.gui.util.Text;
 import org.microcol.gui.util.ViewUtil;
@@ -49,9 +48,7 @@ public final class GamePanelPresenter implements Localized {
 
 		void setMoveModeOn();
 
-		void initGame(boolean idGridShown, Model model);
-
-		void setGridShown(boolean isGridShown);
+		void initGame(Model model);
 
 		Area getArea();
 
@@ -100,7 +97,6 @@ public final class GamePanelPresenter implements Localized {
 			final KeyController keyController,
 			final GameStartedController gameStartedController,
 			final GamePreferences gamePreferences,
-			final ShowGridController showGridController,
 			final CenterViewController viewController,
 			final ExitGameController exitGameController,
 			final SelectedTileManager selectedTileManager,
@@ -166,8 +162,7 @@ public final class GamePanelPresenter implements Localized {
 			}
 		});
 
-		gameStartedController.addListener(event -> display.initGame(gamePreferences.isGridShown(), event.getModel()));
-		showGridController.addListener(e -> display.setGridShown(e.isGridShown()));
+		gameStartedController.addListener(event -> display.initGame(event.getModel()));
 
 		viewController.addListener(event -> onCenterView());
 		exitGameController.addListener(event -> display.stopTimer());
