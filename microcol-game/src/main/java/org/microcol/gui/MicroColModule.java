@@ -12,6 +12,7 @@ import org.microcol.gui.colony.UnitMovedOutsideColonyController;
 import org.microcol.gui.colony.UnitMovedToConstructionController;
 import org.microcol.gui.colony.UnitMovedToFieldController;
 import org.microcol.gui.europe.BuyUnitsDialog;
+import org.microcol.gui.europe.ChooseGoodAmount;
 import org.microcol.gui.europe.EuropeDialog;
 import org.microcol.gui.europe.EuropeDialogCallback;
 import org.microcol.gui.europe.PanelEuropeDockBehavior;
@@ -115,6 +116,7 @@ public class MicroColModule extends AbstractModule {
 		 * Dialogs
 		 */
 		bind(DialogDestroyColony.class).in(Singleton.class);
+		bind(ChooseGoodAmount.class).in(Singleton.class);
 
 		/**
 		 * Event controllers.

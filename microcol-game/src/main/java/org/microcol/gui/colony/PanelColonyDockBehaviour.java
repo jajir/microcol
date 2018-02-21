@@ -9,8 +9,6 @@ import org.microcol.gui.image.ImageProvider;
 import org.microcol.gui.util.AbstractPanelDockBehavior;
 import org.microcol.gui.util.ClipboardReader;
 import org.microcol.gui.util.ClipboardReader.TransferFrom;
-import org.microcol.gui.util.Text;
-import org.microcol.gui.util.ViewUtil;
 import org.microcol.model.CargoSlot;
 import org.microcol.model.GoodAmount;
 import org.microcol.model.Unit;
@@ -25,17 +23,15 @@ public class PanelColonyDockBehaviour extends AbstractPanelDockBehavior {
 	final Logger logger = LoggerFactory.getLogger(PanelColonyDockBehaviour.class);
 
 	private final ColonyDialogCallback colonyDialogCallback;
-	private final ViewUtil viewUtil;
-	private final Text text;
+	private final ChooseGoodAmount chooseGoodAmount;
 
 	@Inject
 	PanelColonyDockBehaviour(final ColonyDialogCallback colonyDialogCallback,
-			final GameModelController gameModelController, final ViewUtil viewUtil, final Text text,
-			final ImageProvider imageProvider) {
+			final GameModelController gameModelController, final ImageProvider imageProvider,
+			final ChooseGoodAmount chooseGoodAmount) {
 		super(gameModelController, imageProvider);
 		this.colonyDialogCallback = Preconditions.checkNotNull(colonyDialogCallback);
-		this.viewUtil = Preconditions.checkNotNull(viewUtil);
-		this.text = Preconditions.checkNotNull(text);
+		this.chooseGoodAmount = Preconditions.checkNotNull(chooseGoodAmount);
 	}
 
 	@Override
@@ -51,8 +47,8 @@ public class PanelColonyDockBehaviour extends AbstractPanelDockBehavior {
 		logger.debug("wasShiftPressed " + colonyDialogCallback.getPropertyShiftWasPressed().get());
 		if (specialOperatonWasSelected) {
 			// synchronously get information about transfered amount
-			ChooseGoodAmount chooseGoodAmount = new ChooseGoodAmount(viewUtil, text,
-					cargoSlot.maxPossibleGoodsToMoveHere(10000, goodAmount.getAmount()));
+			chooseGoodAmount.init(
+					cargoSlot.maxPossibleGoodsToMoveHere(CargoSlot.MAX_CARGO_SLOT_CAPACITY, goodAmount.getAmount()));
 			tmp = new GoodAmount(goodAmount.getGoodType(), chooseGoodAmount.getActualValue());
 			if (tmp.isZero()) {
 				return;

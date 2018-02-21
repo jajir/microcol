@@ -5,6 +5,9 @@ import org.microcol.gui.util.ButtonsBar;
 import org.microcol.gui.util.Text;
 import org.microcol.gui.util.ViewUtil;
 
+import com.google.common.base.Preconditions;
+import com.google.inject.Inject;
+
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.layout.HBox;
@@ -20,11 +23,15 @@ public class ChooseGoodAmount extends AbstractMessageWindow {
 
 	private int actualValue;
 	
-	//TODO don't create dialog manually, guice should create it
-	public ChooseGoodAmount(final ViewUtil viewUtil, final Text text, final int maximalNumberToTransfer) {
+	private final Slider slider;
+	
+	private final Text text;
+
+	@Inject
+	public ChooseGoodAmount(final ViewUtil viewUtil, final Text text) {
 		super(viewUtil);
+		this.text = Preconditions.checkNotNull(text);
 		getDialog().setTitle(text.get("chooseGoodAmount.caption"));
-		actualValue = maximalNumberToTransfer;
 
 		VBox root = new VBox();
 		init(root);
@@ -36,15 +43,37 @@ public class ChooseGoodAmount extends AbstractMessageWindow {
 		final Label labelValue = new Label(String.valueOf(actualValue));
 		boxActualValue.getChildren().addAll(labelActualValue, labelValue);
 
-		Slider slider = new Slider();
+		slider = new Slider();
 		slider.setMin(MIN_VALUE);
-		slider.setMax(maximalNumberToTransfer);
-		slider.setValue(maximalNumberToTransfer);
 		slider.setSnapToTicks(false);
 		slider.setMajorTickUnit(10);
 		slider.setMinorTickCount(1);
 		slider.setShowTickLabels(true);
 		slider.setShowTickMarks(false);
+		
+		slider.valueProperty().addListener((obj, oldValue, newValue) -> {
+			// TODO JJ value is send on each change, only last value is enough
+			labelValue.setText(String.valueOf(newValue.intValue()));
+			actualValue = newValue.intValue();
+		});
+
+		final ButtonsBar buttonsBar = new ButtonsBar(text.get("dialog.ok"));
+		buttonsBar.getButtonOk().setOnAction(e -> {
+			getDialog().close();
+		});
+		buttonsBar.getButtonOk().requestFocus();
+
+		root.getChildren().addAll(label, boxActualValue, slider, buttonsBar);
+	}
+	
+	public void showAndWait(){
+		getDialog().showAndWait();
+	}
+	
+	public void init( final int maximalNumberToTransfer){
+		actualValue = maximalNumberToTransfer;
+		slider.setMax(maximalNumberToTransfer);
+		slider.setValue(maximalNumberToTransfer);
 		slider.setLabelFormatter(new StringConverter<Double>() {
 			@Override
 			public String toString(final Double value) {
@@ -64,21 +93,7 @@ public class ChooseGoodAmount extends AbstractMessageWindow {
 				return null;
 			}
 		});
-		slider.valueProperty().addListener((obj, oldValue, newValue) -> {
-			// TODO JJ value is send on each change, only last value is enough
-			labelValue.setText(String.valueOf(newValue.intValue()));
-			actualValue = newValue.intValue();
-		});
-
-		final ButtonsBar buttonsBar = new ButtonsBar(text.get("dialog.ok"));
-		buttonsBar.getButtonOk().setOnAction(e -> {
-			getDialog().close();
-		});
-		buttonsBar.getButtonOk().requestFocus();
-
-		root.getChildren().addAll(label, boxActualValue, slider, buttonsBar);
-
-		getDialog().showAndWait();
+		showAndWait();
 	}
 
 	@Override

@@ -9,8 +9,6 @@ import org.microcol.gui.image.ImageProvider;
 import org.microcol.gui.util.AbstractPanelDockBehavior;
 import org.microcol.gui.util.ClipboardReader;
 import org.microcol.gui.util.ClipboardReader.TransferFrom;
-import org.microcol.gui.util.Text;
-import org.microcol.gui.util.ViewUtil;
 import org.microcol.model.CargoSlot;
 import org.microcol.model.GoodAmount;
 import org.microcol.model.NotEnoughtGoldException;
@@ -27,19 +25,17 @@ public class PanelEuropeDockBehavior extends AbstractPanelDockBehavior {
 
 	private final EuropeDialogCallback europeDialogCallback;
 	private final GameModelController gameModelController;
-	private final Text text;
-	private final ViewUtil viewUtil;
 	private final DialogNotEnoughGold dialogNotEnoughGold;
+	private final ChooseGoodAmount chooseGoodAmount;
 
 	@Inject
 	PanelEuropeDockBehavior(EuropeDialogCallback europeDialogCallback, GameModelController gameModelController,
-			Text text, ViewUtil viewUtil, ImageProvider imageProvider, final DialogNotEnoughGold dialogNotEnoughGold) {
+			ImageProvider imageProvider, final DialogNotEnoughGold dialogNotEnoughGold, final ChooseGoodAmount chooseGoodAmount) {
 		super(gameModelController, imageProvider);
 		this.europeDialogCallback = Preconditions.checkNotNull(europeDialogCallback);
 		this.gameModelController = Preconditions.checkNotNull(gameModelController);
-		this.text = Preconditions.checkNotNull(text);
-		this.viewUtil = Preconditions.checkNotNull(viewUtil);
 		this.dialogNotEnoughGold = Preconditions.checkNotNull(dialogNotEnoughGold);
+		this.chooseGoodAmount = Preconditions.checkNotNull(chooseGoodAmount);
 	}
 
 	@Override
@@ -54,7 +50,8 @@ public class PanelEuropeDockBehavior extends AbstractPanelDockBehavior {
 		GoodAmount tmp = goodAmount;
 		logger.debug("wasShiftPressed " + europeDialogCallback.getPropertyShiftWasPressed().get());
 		if (specialOperatonWasSelected) {
-			ChooseGoodAmount chooseGoodAmount = new ChooseGoodAmount(viewUtil, text, cargoSlot.maxPossibleGoodsToMoveHere(10000, goodAmount.getAmount()));
+			chooseGoodAmount.init(
+					cargoSlot.maxPossibleGoodsToMoveHere(CargoSlot.MAX_CARGO_SLOT_CAPACITY, goodAmount.getAmount()));
 			tmp = new GoodAmount(goodAmount.getGoodType(), chooseGoodAmount.getActualValue());
 			if (tmp.isZero()) {
 				return;
