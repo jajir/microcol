@@ -19,6 +19,8 @@ Planned releases
   * \u2717 Load and Save options should be enabled, not just in debug mode.
   
   * \u2717 Focused unit is without available action points to move. User press next turn when user is on turn again unit still seems without actions point. Select another unit and back helps.  
+  
+  * \u2717 When ship is port and user try to move another ground unit there than ground unit is embark instead of moving to colony.  
 
  * 0.6.0 - functionality release
   
