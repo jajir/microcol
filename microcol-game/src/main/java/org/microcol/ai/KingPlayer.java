@@ -45,9 +45,7 @@ public class KingPlayer extends AbstractRobotPlayer {
 		final Continents continents = continentTool.findContinents(getModel(), whosKingThisPlayerIs);
 		if (unit.isAtPlaceLocation()) {
 			if (unit.getType().isShip()) {
-				if (unit.getCargo().isEmpty()) {
-					// random move & attack any ship in sight
-				} else {
+				if (!unit.getCargo().isEmpty()) {
 					if (isPossibleToDisembark(unit)) {
 						disembarkUnit(unit);
 					} else {
@@ -119,8 +117,7 @@ public class KingPlayer extends AbstractRobotPlayer {
 	}
 
 	public int getKingsMilitaryStrength() {
-		// XXX count it based on user's military strength multiplied by
-		// coefficient.
+		// TODO count it based on user's military strength multiplied by coefficient.
 		return 15;
 	}
 

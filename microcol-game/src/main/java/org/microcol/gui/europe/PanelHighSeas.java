@@ -55,7 +55,7 @@ public class PanelHighSeas extends TitledPanel {
 		showShips();
 	}
 
-	private final void onDragOver(final DragEvent event) {
+	private void onDragOver(final DragEvent event) {
 		if (isItCorrectObject(event.getDragboard())) {
 			event.acceptTransferModes(TransferMode.MOVE);
 			event.consume();
@@ -71,7 +71,7 @@ public class PanelHighSeas extends TitledPanel {
 		}
 	}
 
-	private final void onDragDropped(DragEvent event) {
+	private void onDragDropped(DragEvent event) {
 		final Dragboard db = event.getDragboard();
 		ClipboardReader.make(gameModelController.getModel(), db).readUnit((unit, transferFrom) -> {
 			Preconditions.checkState(unit.getType().isShip(), "Only ships could be send to high seas");

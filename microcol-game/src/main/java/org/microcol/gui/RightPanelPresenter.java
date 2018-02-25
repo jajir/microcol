@@ -9,7 +9,7 @@ import org.microcol.gui.gamepanel.TileWasSelectedController;
 import org.microcol.gui.gamepanel.TileWasSelectedEvent;
 import org.microcol.gui.mainmenu.ChangeLanguageController;
 import org.microcol.gui.mainmenu.ChangeLanguageEvent;
-import org.microcol.gui.util.Localized;
+import org.microcol.gui.util.Text;
 import org.microcol.model.Location;
 import org.microcol.model.Player;
 import org.microcol.model.event.TurnStartedEvent;
@@ -22,9 +22,11 @@ import com.google.inject.Inject;
 import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
 
-public class RightPanelPresenter implements Localized {
+public class RightPanelPresenter {
 	
 	private final Logger logger = LoggerFactory.getLogger(RightPanelPresenter.class);
+	
+	private final Text text;
 
 	public interface Display {
 
@@ -47,10 +49,12 @@ public class RightPanelPresenter implements Localized {
 			final KeyController keyController,
 			final TileWasSelectedController tileWasSelectedController,
 			final ChangeLanguageController changeLanguangeController,
+			final Text text,
 			final StatusBarMessageController statusBarMessageController,
 			final TurnStartedController turnStartedController) {
 		this.display = Preconditions.checkNotNull(display);
-		display.getNextTurnButton().setText(getText().get("nextTurnButton"));
+		this.text = Preconditions.checkNotNull(text);
+		display.getNextTurnButton().setText(text.get("nextTurnButton"));
 		display.getNextTurnButton().setDisable(true);
 
 		display.getNextTurnButton().setOnAction(e -> {
@@ -65,11 +69,11 @@ public class RightPanelPresenter implements Localized {
 
 		display.getNextTurnButton().setOnMouseEntered(event -> {
 			statusBarMessageController
-					.fireEvent(new StatusBarMessageEvent(getText().get("nextTurnButton.desctiption")));
+					.fireEvent(new StatusBarMessageEvent(text.get("nextTurnButton.desctiption")));
 		});
 
 		display.getBox().setOnMouseEntered(e -> {
-			statusBarMessageController.fireEvent(new StatusBarMessageEvent(getText().get("rightPanel.description")));
+			statusBarMessageController.fireEvent(new StatusBarMessageEvent(text.get("rightPanel.description")));
 		});
 
 		changeLanguangeController.addListener(this::onLanguageWasChanged);
@@ -86,7 +90,7 @@ public class RightPanelPresenter implements Localized {
 	}
 
 	private void onLanguageWasChanged(final ChangeLanguageEvent event) {
-		display.getNextTurnButton().setText(getText().get("nextTurnButton"));
+		display.getNextTurnButton().setText(text.get("nextTurnButton"));
 		display.setOnMovePlayer(event.getModel().getCurrentPlayer());
 		display.showTile(lastFocusedTileEvent);
 	}

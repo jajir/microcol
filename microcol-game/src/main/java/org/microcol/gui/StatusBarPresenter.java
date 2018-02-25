@@ -7,7 +7,7 @@ import org.microcol.gui.event.StatusBarMessageEvent;
 import org.microcol.gui.event.model.GoldWasChangedController;
 import org.microcol.gui.event.model.RoundStartedController;
 import org.microcol.gui.mainmenu.ChangeLanguageController;
-import org.microcol.gui.util.Localized;
+import org.microcol.gui.util.Text;
 import org.microcol.model.Calendar;
 import org.microcol.model.Player;
 
@@ -16,7 +16,9 @@ import com.google.inject.Inject;
 
 import javafx.scene.control.Label;
 
-public class StatusBarPresenter implements Localized {
+public class StatusBarPresenter {
+	
+	private final Text text;
 
 	public interface Display {
 
@@ -31,7 +33,9 @@ public class StatusBarPresenter implements Localized {
 	public StatusBarPresenter(final StatusBarPresenter.Display display,
 			final StatusBarMessageController statusBarMessageController, final RoundStartedController roundStartedController,
 			final ChangeLanguageController changeLanguangeController,
-			final GoldWasChangedController goldWasChangedController) {
+			final GoldWasChangedController goldWasChangedController,
+			final Text text) {
+		this.text  = Preconditions.checkNotNull(text);
 		statusBarMessageController.addRunLaterListener(event -> {
 			display.getStatusBarDescription().setText(event.getStatusMessage());
 		});
@@ -51,27 +55,27 @@ public class StatusBarPresenter implements Localized {
 			setGoldText(display.getLabelGold(), event.getNewValue());
 		});
 		display.getLabelEra().setOnMouseEntered(event -> {
-			statusBarMessageController.fireEvent(new StatusBarMessageEvent(getText().get("statusBar.era.description")));
+			statusBarMessageController.fireEvent(new StatusBarMessageEvent(text.get("statusBar.era.description")));
 		});
 		display.getLabelGold().setOnMouseEntered(event -> {
 			statusBarMessageController
-					.fireEvent(new StatusBarMessageEvent(getText().get("statusBar.gold.description")));
+					.fireEvent(new StatusBarMessageEvent(text.get("statusBar.gold.description")));
 		});
 		display.getStatusBarDescription().setOnMouseEntered(event -> {
 			statusBarMessageController
-					.fireEvent(new StatusBarMessageEvent(getText().get("statusBar.status.description")));
+					.fireEvent(new StatusBarMessageEvent(text.get("statusBar.status.description")));
 		});
 	}
 
-	private final void setYearText(final Label labelEra, final Calendar calendar) {
+	private void setYearText(final Label labelEra, final Calendar calendar) {
 		Preconditions.checkNotNull(labelEra);
 		Preconditions.checkNotNull(calendar);
-		labelEra.setText(getText().get("statusBar.era") + " " + calendar.getCurrentYear() + " AD");
+		labelEra.setText(text.get("statusBar.era") + " " + calendar.getCurrentYear() + " AD");
 	}
 
-	private final void setGoldText(final Label labelGold, final int gold) {
+	private void setGoldText(final Label labelGold, final int gold) {
 		Preconditions.checkNotNull(labelGold);
-		labelGold.setText(getText().get("statusBar.gold") + " " + gold);
+		labelGold.setText(text.get("statusBar.gold") + " " + gold);
 	}
 
 }

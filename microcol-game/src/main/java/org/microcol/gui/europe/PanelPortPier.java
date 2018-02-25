@@ -63,14 +63,14 @@ public class PanelPortPier extends TitledPanel {
 				unit -> panelUnits.getChildren().add(new PanelPortPierUnit(unit, imageProvider, localizationHelper)));
 	}
 
-	private final void onDragOver(final DragEvent event) {
+	private void onDragOver(final DragEvent event) {
 		if (isItCorrectObject(event.getDragboard())) {
 			event.acceptTransferModes(TransferMode.MOVE);
 			event.consume();
 		}
 	}
 
-	private final void onDragDropped(final DragEvent event) {
+	private void onDragDropped(final DragEvent event) {
 		logger.debug("Object was dropped on ship cargo slot.");
 		ClipboardReader.make(gameModelController.getModel(), event.getDragboard()).readUnit((draggedUnit, transferFrom) -> {
 			draggedUnit.placeToEuropePortPier();

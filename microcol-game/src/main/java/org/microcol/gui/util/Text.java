@@ -40,17 +40,11 @@ public class Text {
 			"FileChooser.saveDialogFileNameLabelText"));
 
 	/**
-	 * Static text instance shared with default method in
-	 * {@link org.microcol.gui.util.Localized} interface.
-	 */
-	static Text INSTANCE;
-
-	/**
 	 * Actually loaded resource bundle.
 	 */
 	private ResourceBundle bundle;
 
-	public static enum Language {
+	public enum Language {
 		en(new Locale("en", "US")), cz(new Locale("cs", "CZ"));
 
 		private final Locale locale;
@@ -78,7 +72,6 @@ public class Text {
 	@Inject
 	public Text(final Locale language) {
 		setLocale(language);
-		INSTANCE = this;
 	}
 
 	public void setLocale(final Locale locale) {

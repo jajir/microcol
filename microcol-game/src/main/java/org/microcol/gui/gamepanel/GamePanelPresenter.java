@@ -19,7 +19,6 @@ import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.event.model.GameStartedController;
 import org.microcol.gui.mainmenu.CenterViewController;
 import org.microcol.gui.mainmenu.ExitGameController;
-import org.microcol.gui.util.Localized;
 import org.microcol.gui.util.Text;
 import org.microcol.gui.util.ViewUtil;
 import org.microcol.model.Colony;
@@ -36,7 +35,7 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 
-public final class GamePanelPresenter implements Localized {
+public final class GamePanelPresenter {
 
 	private final Logger logger = LoggerFactory.getLogger(GamePanelPresenter.class);
 

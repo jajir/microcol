@@ -195,7 +195,7 @@ public class MainMenuView implements MainMenuPresenter.Display {
 		 * Following command will use apple system menu. Side effect is that
 		 * menu accelerators like 'm' stop work.
 		 * 
-		 * XXX JJ it's probably bug.
+		 * TODO JJ it's probably bug.
 		 */
 		// menuBar.useSystemMenuBarProperty().set(true);
 

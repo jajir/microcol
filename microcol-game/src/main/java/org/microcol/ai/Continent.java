@@ -51,6 +51,7 @@ public class Continent {
 	public List<Location> getLocations() {
 		return ImmutableList.copyOf(locations);
 	}
+	
 	public int getColonyWeight() {
 		int out = 0;
 		for (final Location loc : locations) {

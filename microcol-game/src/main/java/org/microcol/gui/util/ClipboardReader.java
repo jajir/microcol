@@ -177,12 +177,6 @@ public class ClipboardReader {
 		if (!KEY_FROM_CONSTRUCTION_SLOT.equals(parts[fromIndex + 0])) {
 			return null;
 		}
-		if (tryRead(parts[fromIndex + 1]) == null) {
-
-		}
-		if (tryRead(parts[fromIndex + 2]) == null) {
-
-		}
 		return new TransferFromColonyField(Location.of(tryRead(parts[fromIndex + 1]), tryRead(parts[fromIndex + 2])));
 	}
 
@@ -352,7 +346,7 @@ public class ClipboardReader {
 		
 	}
 
-	public static interface Transfer {
+	public interface Transfer {
 
 		Optional<TransferFrom> getTransferFrom();
 
@@ -423,7 +417,7 @@ public class ClipboardReader {
 	 * Interface unify all description of places from which could be object
 	 * transfered.
 	 */
-	public static interface TransferFrom {
+	public interface TransferFrom {
 
 		void writeTo(StringBuilder buff);
 

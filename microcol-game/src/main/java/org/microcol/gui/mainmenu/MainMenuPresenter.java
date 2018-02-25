@@ -192,7 +192,7 @@ public class MainMenuPresenter {
 	 * @param event
 	 *            required event
 	 */
-	private final void onFocusedTileEvent(final TileWasSelectedEvent event) {
+	private void onFocusedTileEvent(final TileWasSelectedEvent event) {
 		display.getMenuItemCenterView().setDisable(false);
 		isTileFocused = true;
 		if (event.isTileContainsMovebleUnit()) {
@@ -213,7 +213,7 @@ public class MainMenuPresenter {
 		display.getMenuItemBuildColony().setDisable(true);
 	}
 
-	private final void onTurnStartedEvent(final TurnStartedEvent event) {
+	private void onTurnStartedEvent(final TurnStartedEvent event) {
 		if (event.getPlayer().isHuman()) {
 			if (isTileFocused) {
 				display.getMenuItemCenterView().setDisable(false);

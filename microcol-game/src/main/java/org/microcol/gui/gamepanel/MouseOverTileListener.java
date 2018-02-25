@@ -5,7 +5,7 @@ import org.microcol.gui.LocalizationHelper;
 import org.microcol.gui.event.StatusBarMessageController;
 import org.microcol.gui.event.StatusBarMessageEvent;
 import org.microcol.gui.event.model.GameModelController;
-import org.microcol.gui.util.Localized;
+import org.microcol.gui.util.Text;
 import org.microcol.model.Location;
 import org.microcol.model.Player;
 import org.microcol.model.TerrainType;
@@ -16,7 +16,7 @@ import com.google.inject.Inject;
 /**
  * When mouse change tile which is over this class set new status message.
  */
-public class MouseOverTileListener implements Localized {
+public class MouseOverTileListener {
 
 	private final GameModelController gameModelController;
 
@@ -25,15 +25,18 @@ public class MouseOverTileListener implements Localized {
 	private final LocalizationHelper localizationHelper;
 	
 	private final GamePreferences gamePreferences;
+	
+	private final Text text;
 
 	@Inject
 	public MouseOverTileListener(final MouseOverTileChangedController mouseOverTileChangedController,
 			final GameModelController gameModelController, final StatusBarMessageController statusBarMessageController,
-			final LocalizationHelper localizationHelper, final GamePreferences gamePreferences) {
+			final LocalizationHelper localizationHelper, final GamePreferences gamePreferences, final Text text) {
 		this.gameModelController = Preconditions.checkNotNull(gameModelController);
 		this.statusBarMessageController = Preconditions.checkNotNull(statusBarMessageController);
 		this.localizationHelper = Preconditions.checkNotNull(localizationHelper);
 		this.gamePreferences = Preconditions.checkNotNull(gamePreferences);
+		this.text = Preconditions.checkNotNull(text);
 		mouseOverTileChangedController.addListener(this::onMouseOverTileChanged);
 
 	}
@@ -66,18 +69,18 @@ public class MouseOverTileListener implements Localized {
 			buff.append(") ");
 		}
 		if (player.isVisible(where)) {
-			buff.append(getText().get("statusBar.tile.start"));
+			buff.append(text.get("statusBar.tile.start"));
 			buff.append(" ");
 			buff.append(localizationHelper.getTerrainName(terrain));
 			buff.append(" ");
-			buff.append(getText().get("statusBar.tile.withUnit"));
+			buff.append(text.get("statusBar.tile.withUnit"));
 			buff.append(" ");
 			gameModelController.getModel().getUnitsAt(where).forEach(ship -> {
 				buff.append(ship.getClass().getSimpleName());
 				buff.append(" ");
 			});
 		} else {
-			buff.append(getText().get("statusBar.tile.notExplored"));
+			buff.append(text.get("statusBar.tile.notExplored"));
 		}
 		statusBarMessageController.fireEvent(new StatusBarMessageEvent(buff.toString()));
 	}

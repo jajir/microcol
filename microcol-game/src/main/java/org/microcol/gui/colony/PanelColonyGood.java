@@ -48,7 +48,7 @@ public class PanelColonyGood extends VBox {
 		getChildren().addAll(paneImage, hlabels);
 	}
 
-	private final void onDragDetected(final MouseEvent event) {
+	private void onDragDetected(final MouseEvent event) {
 		Preconditions.checkNotNull(colony.getColonyWarehouse());
 		final int amount = colony.getColonyWarehouse().getTransferableGoodsAmount(goodType);
 		if (amount > 0) {

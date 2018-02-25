@@ -167,7 +167,7 @@ public class PanelColonyStructures extends TitledPanel {
 		canvas.setOnDragDetected(this::onDragDetected);
 	}
 	
-	private final void onDragDetected(final MouseEvent event) {
+	private void onDragDetected(final MouseEvent event) {
 		logger.debug("Drag detected");
 		final Point point = Point.of(event.getX(), event.getY());
 		final Optional<ConstructionSlot> loc = findConstructionSlot(point);
@@ -182,16 +182,16 @@ public class PanelColonyStructures extends TitledPanel {
 	}
 
 	@SuppressWarnings("unused")
-	private final void onDragEntered(final DragEvent event) {
+	private void onDragEntered(final DragEvent event) {
 		logger.debug("Drag entered");
 	}
 
 	@SuppressWarnings("unused")
-	private final void onDragExited(final DragEvent event) {
+	private void onDragExited(final DragEvent event) {
 		logger.debug("Drag Exited");
 	}
 
-	private final void onDragOver(final DragEvent event) {
+	private void onDragOver(final DragEvent event) {
 		logger.debug("Drag Over");
 		final Point point = Point.of(event.getX(), event.getY());
 		final Optional<ConstructionSlot> loc = findConstructionSlot(point);
@@ -204,7 +204,7 @@ public class PanelColonyStructures extends TitledPanel {
 		event.consume();
 	}
 
-	private final void onDragDropped(final DragEvent event) {
+	private void onDragDropped(final DragEvent event) {
 		logger.debug("Drag dropped");
 		final Point point = Point.of(event.getX(), event.getY());
 		final Optional<ConstructionSlot> loc = findConstructionSlot(point);

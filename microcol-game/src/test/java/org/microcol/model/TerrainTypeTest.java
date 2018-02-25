@@ -15,6 +15,7 @@ public class TerrainTypeTest {
 	 * It just print out production matrix
 	 * 
 	 * @throws Exception
+	 *             Could throws any exception
 	 */
 	@Test
 	public void test_production_matrix() throws Exception {

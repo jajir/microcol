@@ -42,7 +42,7 @@ public class MoveModeSupport {
 	 * Define what mode of move.
 	 *
 	 */
-	public static enum MoveMode {
+	public enum MoveMode {
 
 		MOVE(ImageProvider.IMG_ICON_STEPS_25x25, ImageProvider.IMG_ICON_STEPS_TURN_25x25),
 

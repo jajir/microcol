@@ -25,13 +25,9 @@ public class ContinentTool {
 			for (int y = 1; y <= model.getMap().getMaxY(); y++) {
 				final Location loc = Location.of(x, y);
 				final TerrainType terrainType = map.getTerrainTypeAt(loc);
-				if (!terrainType.isSea()) {
-					if (continents.getForLocation(loc).isPresent()) {
-						// it's already in some continent
-					} else {
-						final Continent continent = createContinent(loc, model, enemyPlayer);
-						continents.add(continent);
-					}
+				if (!terrainType.isSea() && !continents.getForLocation(loc).isPresent()) {
+					final Continent continent = createContinent(loc, model, enemyPlayer);
+					continents.add(continent);
 				}
 			}
 		}

@@ -6,8 +6,12 @@ Planned releases
 
  * 0.5.1 - Bugfixing
  
+  * \u2713 Corrected bug in last scenario.
+ 
+  * \u2713 Localization was improved, class Localize was removed.
+ 
   * \u2717 Game block user to disembark unit at location where is already player's unit.
-  
+  	
   * \u2717 When user choose in context menu on field some produced goods than colony dialog is not repainted and previous production remain displayed..
   
   * \u2717 Support selecting unit from right panel.

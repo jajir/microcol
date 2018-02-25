@@ -11,7 +11,6 @@ import org.microcol.gui.ApplicationController;
 import org.microcol.gui.MainStageBuilder;
 import org.microcol.gui.MicroColModule;
 
-import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 
@@ -74,25 +73,10 @@ public class MicroCol extends Application {
 
 		Platform.runLater(() -> {
 			try {
-				/**
-				 * Extra created module helps inject primary stage to guice
-				 * context.
-				 * 
-				 * TODO JJ consider passing primary stage as parameter to MicroColModule.
-				 */
-				final Injector injector = Guice.createInjector(com.google.inject.Stage.PRODUCTION, new MicroColModule(),
-						new AbstractModule() {
-
-							@Override
-							protected void configure() {
-								bind(Stage.class).toInstance(primaryStage);
-							}
-						});
+				final Injector injector = Guice.createInjector(com.google.inject.Stage.PRODUCTION, new MicroColModule());
 				final MainStageBuilder mainStageBuilder = injector.getInstance(MainStageBuilder.class);
 				mainStageBuilder.buildPrimaryStage(primaryStage);
-
 				final ApplicationController applicationController = injector.getInstance(ApplicationController.class);
-
 				primaryStage.setOnShowing(e -> applicationController.startApplication());
 				primaryStage.show();
 			} catch (Exception e) {

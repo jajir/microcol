@@ -93,42 +93,6 @@
       "availableMoves": 6
     },
     {
-      "id": 69,
-      "type": "GALLEON",
-      "ownerId": "Dutch",
-      "placeMap": {
-        "location": {
-          "x": 2,
-          "y": 2
-        }
-      },
-      "cargo": {
-        "slots": [
-          {
-            "amount": 100,
-            "goodType": "COTTON"
-          },
-          {
-            "unitId": 70
-          },
-          {},
-          {},
-          {}
-        ]
-      },
-      "availableMoves": 6
-    },
-    {
-      "id": 70,
-      "type": "COLONIST",
-      "ownerId": "Dutch",
-      "placeCargoSlot": {},
-      "cargo": {
-        "slots": []
-      },
-      "availableMoves": 1
-    },
-    {
       "id": 71,
       "type": "FRIGATE",
       "ownerId": "Dutch",

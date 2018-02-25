@@ -1,7 +1,8 @@
 package org.microcol.gui;
 
-import org.microcol.gui.util.Localized;
+import org.microcol.gui.util.Text;
 
+import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
 
 import javafx.geometry.Pos;
@@ -11,14 +12,17 @@ import javafx.scene.layout.VBox;
 /**
  * In main area shows basic menu "Start new game".
  */
-public class StartPanelView implements StartPanelPresenter.Display, Localized {
+public class StartPanelView implements StartPanelPresenter.Display {
 
+	private final Text text;
+	
 	private final Button buttonStartNewGame;
 
 	private final VBox box;
 
 	@Inject
-	public StartPanelView() {
+	public StartPanelView(final Text text) {
+		this.text = Preconditions.checkNotNull(text);
 		box = new VBox();
 		box.setStyle("-fx-pref-width: 100000; -fx-pref-height: 100000;");
 		box.setAlignment(Pos.CENTER);
@@ -29,7 +33,7 @@ public class StartPanelView implements StartPanelPresenter.Display, Localized {
 
 	@Override
 	public void updateLanguage() {
-		buttonStartNewGame.setText(getText().get("startPanel.buttonNewGame"));
+		buttonStartNewGame.setText(text.get("startPanel.buttonNewGame"));
 	}
 
 	@Override

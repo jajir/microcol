@@ -38,6 +38,12 @@ public class MainStageBuilder {
 		this.text = Preconditions.checkNotNull(text);
 	}
 
+	/**
+	 * Pass primary stage to builder.
+	 * 
+	 * @param primaryStage
+	 *            required primary stage
+	 */
 	public void buildPrimaryStage(final Stage primaryStage) {
 		primaryStage.setTitle(text.get("game.title"));
 		primaryStage.setOnCloseRequest(event -> {

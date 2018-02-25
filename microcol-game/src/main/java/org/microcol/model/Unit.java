@@ -47,7 +47,7 @@ public class Unit {
 		this.type = Preconditions.checkNotNull(unitType, "UnitType is null");
 		this.owner = Preconditions.checkNotNull(owner);
 		this.id = Preconditions.checkNotNull(id, "Id is null");
-		this.model = Preconditions.checkNotNull(model, "Model is null");;
+		this.model = Preconditions.checkNotNull(model, "Model is null");
 		this.availableMoves = availableMoves;
 		this.cargo = Preconditions.checkNotNull(cargoBuilder.apply(this), "Cargo builder didn't created cargo");
 		this.place = Preconditions.checkNotNull(placeBuilder.apply(this), "Place builder didn't created cargo");
@@ -101,7 +101,7 @@ public class Unit {
 				if (placeHighSea.isTravelToEurope()) {
 					model.getEurope().getPort().placeShipToPort(this);
 				} else {
-					// XXX ships always come from east side of map
+					// TODO ships always come from east side of map
 					final List<Location> locations = model.getHighSea()
 							.getSuitablePlaceForShipCommingFromEurope(getOwner(), true);
 					placeToLocation(locations.get(random.nextInt(locations.size())));
@@ -245,12 +245,11 @@ public class Unit {
 	 *         colony without military units to defend it.
 	 */
 	public boolean isPossibleToCaptureColonyAt(final Location targetLocation){
-		if (type.canMoveAtTerrain(model.getMap().getTerrainTypeAt(targetLocation))) {
-			if (model.getColonyAt(targetLocation).isPresent()) {
-				final Colony c = model.getColonyAt(targetLocation).get();
-				if (!c.getOwner().equals(owner) && !isPossibleToAttackAt(targetLocation)) {
-					return true;
-				}
+		if (type.canMoveAtTerrain(model.getMap().getTerrainTypeAt(targetLocation))
+				&& model.getColonyAt(targetLocation).isPresent()) {
+			final Colony c = model.getColonyAt(targetLocation).get();
+			if (!c.getOwner().equals(owner) && !isPossibleToAttackAt(targetLocation)) {
+				return true;
 			}
 		}
 		return false;
@@ -533,14 +532,12 @@ public class Unit {
 	void placeToCargoSlot(final PlaceCargoSlot placeCargoSlot) {
 		//TODO could be called on last unit in colony
 		//Verify that only moving in slots is available.
-		if (isAtCargoSlot()) {
-			if (!getPlaceCargoSlot().getCargoSlotOwner().equals(placeCargoSlot.getCargoSlotOwner())) {
-				throw new IllegalStateException(String.format("This unit (%s) cannot be stored.", this));
-			}
+		if (isAtCargoSlot() && !getPlaceCargoSlot().getCargoSlotOwner().equals(placeCargoSlot.getCargoSlotOwner())) {
+			throw new IllegalStateException(String.format("This unit (%s) cannot be stored.", this));
 		}
 		//remove from previous place
 		place.destroy();
-		// TODO JKA check adjacent location
+		// TODO JKA check adjacent location, why?
 		// TODO JKA check movement?
 		// TODO JKA prazdny naklad?
 		place = placeCargoSlot;
@@ -563,7 +560,7 @@ public class Unit {
 		Preconditions.checkArgument(type.isShip(), "Only ships could be placed to high sea.");
 		final int requiredTurns = 3;
 		place.destroy();
-		// XXX choose if it's direction to east or to west (+1 rule to Europe)
+		//TODO choose if it's direction to east or to west (+1 rule to Europe)
 		place = new PlaceHighSea(this, isTravelToEurope, requiredTurns);
 	}
 

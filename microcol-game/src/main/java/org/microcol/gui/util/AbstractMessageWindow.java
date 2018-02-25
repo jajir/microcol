@@ -30,7 +30,7 @@ public class AbstractMessageWindow {
 		initInternal();
 	}
 
-	private final void initInternal() {
+	private void initInternal() {
 		stageDialog.initModality(Modality.WINDOW_MODAL);
 		stageDialog.initOwner(viewUtil.getPrimaryStage());
 

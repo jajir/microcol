@@ -72,7 +72,7 @@ public class PanelDock extends TitledPanel {
 			toggleButtonShip.setToggleGroup(toggleGroup);
 			toggleButtonShip.setUserData(unit);
 			toggleButtonShip.setOnDragDetected(this::onDragDetected);
-			toggleButtonShip.setSelected(selectedUnit.isPresent() ? unit.equals(selectedUnit.get()) : false);
+			toggleButtonShip.setSelected(selectedUnit.isPresent() && unit.equals(selectedUnit.get()));
 			panelShips.getChildren().add(toggleButtonShip);
 		});
 	}

@@ -52,7 +52,6 @@ public class ChooseGoodAmount extends AbstractMessageWindow {
 		slider.setShowTickMarks(false);
 		
 		slider.valueProperty().addListener((obj, oldValue, newValue) -> {
-			// TODO JJ value is send on each change, only last value is enough
 			labelValue.setText(String.valueOf(newValue.intValue()));
 			actualValue = newValue.intValue();
 		});

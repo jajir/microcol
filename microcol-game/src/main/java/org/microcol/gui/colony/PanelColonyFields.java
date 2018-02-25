@@ -110,12 +110,12 @@ public class PanelColonyFields extends TitledPanel {
 	}
 
 	@SuppressWarnings("unused")
-	private final void onMousePressed(final MouseEvent event) {
+	private void onMousePressed(final MouseEvent event) {
 		if(contextMenu.isShowing())
 			contextMenu.hide();
 	}
 
-	private final void onDragDetected(final MouseEvent event) {
+	private void onDragDetected(final MouseEvent event) {
 		logger.debug("Drag detected");
 		final Point point = Point.of(event.getX(), event.getY());
 		final Optional<Location> loc = clickableArea.getDirection(point);
@@ -131,7 +131,7 @@ public class PanelColonyFields extends TitledPanel {
 		}
 	}
 
-	private final void onDragOver(final DragEvent event) {
+	private void onDragOver(final DragEvent event) {
 		logger.debug("Drag Over");
 		if (isItUnit(event.getDragboard())) {
 			final Point point = Point.of(event.getX(), event.getY());
@@ -149,7 +149,7 @@ public class PanelColonyFields extends TitledPanel {
 		event.consume();
 	}
 
-	private final void onDragDropped(final DragEvent event) {
+	private void onDragDropped(final DragEvent event) {
 		logger.debug("Drag dropped");
 		final Point point = Point.of(event.getX(), event.getY());
 		final Optional<Location> loc = clickableArea.getDirection(point);

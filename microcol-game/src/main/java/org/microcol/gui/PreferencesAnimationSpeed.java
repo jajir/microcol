@@ -71,7 +71,10 @@ public class PreferencesAnimationSpeed extends AbstractMessageWindow {
 			}
 		});
 		slider.valueProperty().addListener((obj, oldValue, newValue) -> {
-			// TODO JJ value is send on each change, only last value is enough
+			/*
+			 * Every small change is send to listeners. It allows change sound
+			 * or music immediately.
+			 */
 			controller.fireEvent(new AnimationSpeedChangeEvent(newValue.intValue()));
 		});
 

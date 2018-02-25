@@ -355,6 +355,6 @@ public class Colony {
 
 	private Optional<Construction> getConstructionProducing(final GoodType goodType) {
 		return constructions.stream().filter(construction -> construction.getType().getProduce().isPresent()
-				? construction.getType().getProduce().get().equals(goodType) : false).findAny();
+				&& construction.getType().getProduce().get().equals(goodType)).findAny();
 	}
 }

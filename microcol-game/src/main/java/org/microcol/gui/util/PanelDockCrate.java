@@ -104,7 +104,7 @@ public class PanelDockCrate extends StackPane {
 		labelAmount.setText("");
 	}
 
-	private final void onDragEntered(final DragEvent event) {
+	private void onDragEntered(final DragEvent event) {
 		if (isCorrectObject(event.getDragboard())) {
 			background = getBackground();
 			setBackground(new Background(new BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY)));
@@ -112,19 +112,19 @@ public class PanelDockCrate extends StackPane {
 	}
 
 	@SuppressWarnings("unused")
-	private final void onDragExited(final DragEvent event) {
+	private void onDragExited(final DragEvent event) {
 		setBackground(background);
 		background = null;
 	}
 
-	private final void onDragOver(final DragEvent event) {
+	private void onDragOver(final DragEvent event) {
 		if (isCorrectObject(event.getDragboard())) {
 			event.acceptTransferModes(TransferMode.ANY);
 			event.consume();
 		}
 	}
 
-	private final void onDragDropped(final DragEvent event) {
+	private void onDragDropped(final DragEvent event) {
 		panelDockBehavior.onDragDropped(cargoSlot, event);
 	}
 

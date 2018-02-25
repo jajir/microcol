@@ -26,12 +26,10 @@ public class GameOverEvaluator {
 	}
 
 	private GameOverResult verifyHumanPlayerLostAllColonies(final Model model) {
-		if(model.getCalendar().getNumberOfPlayedTurns()>15){
-			for(final Player player: model.getPlayerStore().getPlayers()){
-				if(player.isHuman()){
-					if(model.getColonies(player).isEmpty()){
-						return new GameOverResult(null, player, GameOverResult.REASON_NO_COLONIES);
-					}
+		if (model.getCalendar().getNumberOfPlayedTurns() > 15) {
+			for (final Player player : model.getPlayerStore().getPlayers()) {
+				if (player.isHuman() && model.getColonies(player).isEmpty()) {
+					return new GameOverResult(null, player, GameOverResult.REASON_NO_COLONIES);
 				}
 			}
 		}

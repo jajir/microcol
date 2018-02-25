@@ -8,7 +8,6 @@ import org.microcol.ai.AbstractRobotPlayer;
 import org.microcol.ai.KingPlayer;
 import org.microcol.ai.SimpleAiPlayer;
 import org.microcol.gui.gamepanel.AnimationManager;
-import org.microcol.gui.util.Localized;
 import org.microcol.model.GoodAmount;
 import org.microcol.model.GoodTrade;
 import org.microcol.model.GoodType;
@@ -29,7 +28,7 @@ import com.google.inject.Inject;
  * There is one class instance in runtime.
  * </p>
  */
-public class GameModelController implements Localized {
+public class GameModelController {
 
 	private final static Logger logger = LoggerFactory.getLogger(GameModelController.class);
 
@@ -70,7 +69,7 @@ public class GameModelController implements Localized {
 		modelListener = new ModelListenerImpl(modelEventManager, this);
 		model.addListener(modelListener);
 		model.startGame();
-		// XXX start game is quite complex, but starting in separate thread
+		// TODO start game is quite complex, but starting in separate thread
 		// leads to error
 		// if (!model.get().isGameStarted()) {
 		// new Thread(() -> model.get().startGame()).start();

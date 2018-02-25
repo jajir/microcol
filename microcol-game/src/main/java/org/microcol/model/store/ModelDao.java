@@ -67,10 +67,22 @@ public class ModelDao {
 		Preconditions.checkArgument(file.exists());
 		Preconditions.checkArgument(file.isFile());
 		logger.debug("Starting to read from class path ({})", file.getAbsolutePath());
+		FileInputStream fis = null;
 		try {
-			return internalLoadModel(new FileInputStream(file));
-		} catch (FileNotFoundException e) {
-			throw new MicroColException(e.getMessage(), e);
+			try {
+				fis = new FileInputStream(file);
+				return internalLoadModel(fis);
+			} catch (FileNotFoundException e) {
+				throw new MicroColException(e.getMessage(), e);
+			}
+		} finally {
+			try {
+				if (fis != null) {
+					fis.close();
+				}
+			} catch (IOException e) {
+				throw new MicroColException(e.getMessage(), e);
+			}
 		}
 	}
 
@@ -90,14 +102,24 @@ public class ModelDao {
 	}
 
 	private ModelPo internalLoadPredefinedModel(final String fileName) throws FileNotFoundException {
-		final InputStream is = WorldMap.class.getResourceAsStream(fileName);
-		Preconditions.checkArgument(is != null, "input stream for file (%s) is null", fileName);
-		return internalLoadModel(is);
+		InputStream is = null;
+		try {
+			is = WorldMap.class.getResourceAsStream(fileName);
+			Preconditions.checkArgument(is != null, "input stream for file (%s) is null", fileName);
+			return internalLoadModel(is);
+		} finally {
+			try {
+				if (is != null) {
+					is.close();
+				}
+			} catch (IOException e) {
+				throw new MicroColException(e.getMessage(), e);
+			}
+		}
 	}
 
 	private ModelPo internalLoadModel(final InputStream is) throws FileNotFoundException {
 		Preconditions.checkArgument(is != null, "input stream is null");
-
 		ModelPo loaded = gson.fromJson(new InputStreamReader(is, StandardCharsets.UTF_8), ModelPo.class);
 
 		return loaded;

@@ -77,14 +77,14 @@ public class PathPlanning {
 			float b = tileFrom.getY() - tileFrom.getX() * a;
 			if (tileFrom.getX() < tileTo.getX()) {
 				final float increment = countStepSize(tileFrom.getX(), tileTo.getX(), speed);
-				for (float x = tileFrom.getX(); x <= tileTo.getX(); x += increment) {
-					int y = Math.round(a * x + b);
+				for (double x = tileFrom.getX(); x <= tileTo.getX(); x += increment) {
+					int y = (int) Math.round(a * x + b);
 					addPoint(tileFrom, whatToDoWithPointInPath, Point.of((int) x, y));
 				}
 			} else {
 				final float increment = countStepSize(tileFrom.getX(), tileTo.getX(), speed);
-				for (float x = tileFrom.getX(); x >= tileTo.getX(); x += increment) {
-					int y = Math.round(a * x + b);
+				for (double x = tileFrom.getX(); x >= tileTo.getX(); x += increment) {
+					int y = (int) Math.round(a * x + b);
 					addPoint(tileFrom, whatToDoWithPointInPath, Point.of((int) x, y));
 				}
 			}
@@ -93,14 +93,14 @@ public class PathPlanning {
 			float b = tileFrom.getX() - tileFrom.getY() * a;
 			if (tileFrom.getY() < tileTo.getY()) {
 				final float increment = countStepSize(tileFrom.getY(), tileTo.getY(), speed);
-				for (float y = tileFrom.getY(); y <= tileTo.getY(); y += increment) {
-					int x = Math.round(a * y + b);
+				for (double y = tileFrom.getY(); y <= tileTo.getY(); y += increment) {
+					int x = (int) Math.round(a * y + b);
 					addPoint(tileFrom, whatToDoWithPointInPath, Point.of(x, (int) y));
 				}
 			} else {
 				final float increment = countStepSize(tileFrom.getY(), tileTo.getY(), speed);
-				for (float y = tileFrom.getY(); y >= tileTo.getY(); y += increment) {
-					int x = Math.round(a * y + b);
+				for (double y = tileFrom.getY(); y >= tileTo.getY(); y += increment) {
+					int x = (int) Math.round(a * y + b);
 					addPoint(tileFrom, whatToDoWithPointInPath, Point.of(x, (int) y));
 				}
 			}
@@ -182,7 +182,7 @@ public class PathPlanning {
 	private int getStepSize(final int from, final int to, final int howManyStepsShouldBeDone) {
 		int stepSize = (int) ((to - from) / (float) howManyStepsShouldBeDone);
 		if (stepSize == 0) {
-			return (to - from);
+			return to - from;
 		}
 		return stepSize;
 	}

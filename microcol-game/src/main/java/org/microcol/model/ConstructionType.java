@@ -578,21 +578,20 @@ public class ConstructionType {
 	 *            required good type
 	 * @return if it's secondary good type source
 	 */
-	private final static boolean isProducedGoodType(final GoodType goodType){
+	private static boolean isProducedGoodType(final GoodType goodType){
 		return ALL.stream()
-				.filter(construction -> (construction.getProduce().isPresent()
-						? construction.getProduce().get().equals(goodType)
-						: false) && construction.getConsumed().isPresent())
+				.filter(construction -> construction.getProduce().isPresent()
+						&& construction.getProduce().get().equals(goodType)
+						&& construction.getConsumed().isPresent())
 				.findAny().isPresent();
 	}
 	
-	//TODO make this methods readable
-	private final static boolean isProducedFromAny(final GoodType goodType, final List<GoodType> goodTypes) {
+	private static boolean isProducedFromAny(final GoodType goodType, final List<GoodType> goodTypes) {
 		return ALL.stream()
-				.filter(construction -> (construction.getProduce().isPresent()
-						? construction.getProduce().get().equals(goodType) : false)
-						&& (construction.getConsumed().isPresent()
-								? goodTypes.contains(construction.getConsumed().get()) : false))
+				.filter(construction -> construction.getProduce().isPresent()
+						&& construction.getProduce().get().equals(goodType)
+						&& construction.getConsumed().isPresent()
+						&& goodTypes.contains(construction.getConsumed().get()))
 				.findAny().isPresent();
 	}	
 	

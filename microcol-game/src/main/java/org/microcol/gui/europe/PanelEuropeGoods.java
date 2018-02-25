@@ -58,14 +58,14 @@ public class PanelEuropeGoods extends TitledPanel {
 		});
 	}
 
-	private final void onDragOver(final DragEvent event) {
+	private void onDragOver(final DragEvent event) {
 		if (isItGoodAmount(event.getDragboard())) {
 			event.acceptTransferModes(TransferMode.ANY);
 			event.consume();
 		}
 	}
 
-	private final void onDragDropped(final DragEvent event) {
+	private void onDragDropped(final DragEvent event) {
 		logger.debug("Object was dropped on panel goods.");
 		final Dragboard db = event.getDragboard();
 		ClipboardReader.make(gameModelController.getModel(), db).tryReadGood((goodAmount, transferFrom) -> {

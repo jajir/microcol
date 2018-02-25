@@ -2,7 +2,6 @@ package org.microcol.gui;
 
 import org.microcol.gui.gamepanel.TileWasSelectedEvent;
 import org.microcol.gui.image.ImageProvider;
-import org.microcol.gui.util.Localized;
 import org.microcol.gui.util.Text;
 import org.microcol.model.Player;
 
@@ -21,7 +20,7 @@ import javafx.scene.layout.RowConstraints;
  * Draw right panel containing info about selected tile and selected unit.
  *
  */
-public class RightPanelView implements RightPanelPresenter.Display, Localized {
+public class RightPanelView implements RightPanelPresenter.Display {
 
 	private static final int RIGHT_PANEL_WIDTH = 170;
 
@@ -125,7 +124,7 @@ public class RightPanelView implements RightPanelPresenter.Display, Localized {
 	@Override
 	public void setOnMovePlayer(final Player player) {
 		StringBuilder sb = new StringBuilder(200);
-		sb.append(getText().get("unitsPanel.currentUser"));
+		sb.append(text.get("unitsPanel.currentUser"));
 		sb.append(" ");
 		sb.append(player.getName());
 		labelOnMove.setText(sb.toString());

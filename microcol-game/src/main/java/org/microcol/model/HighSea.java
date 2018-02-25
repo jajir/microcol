@@ -26,7 +26,7 @@ public class HighSea {
 
 	public List<Unit> getUnitsTravelingTo(final Player player, final boolean isItToEurope) {
 		return getHighSeasAll().stream()
-				.filter(phs -> (isItToEurope && phs.isTravelToEurope()) || (!isItToEurope && !phs.isTravelToEurope()))
+				.filter(phs -> isItToEurope && phs.isTravelToEurope() || !isItToEurope && !phs.isTravelToEurope())
 				.map(PlaceHighSea::getUnit).filter(unit -> unit.getOwner().equals(player)).collect(Collectors.toList());
 	}
 

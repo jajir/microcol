@@ -80,7 +80,7 @@ public class PanelOutsideColony extends TitledPanel {
 		});
 	}
 
-	private final void onDragOver(final DragEvent event) {
+	private void onDragOver(final DragEvent event) {
 		if (isItUnit(event.getDragboard())) {
 			event.acceptTransferModes(TransferMode.MOVE);
 			event.consume();
@@ -91,7 +91,7 @@ public class PanelOutsideColony extends TitledPanel {
 		return ClipboardReader.make(gameModelController.getModel(), db).getUnit().isPresent();
 	}
 
-	private final void onDragDropped(final DragEvent event) {
+	private void onDragDropped(final DragEvent event) {
 		logger.debug("Object was dropped on panel outside colony.");
 		final Dragboard db = event.getDragboard();
 		ClipboardReader.make(gameModelController.getModel(), db).tryReadUnit((unit, transferFrom) -> {

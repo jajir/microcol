@@ -34,10 +34,7 @@ class UnitStorage {
 		Preconditions.checkArgument(!units.contains(unit), "unit %s was already added.", unit);
 		Preconditions.checkArgument(!tryGetUnitById(unit.getId()).isPresent(), "Unit with id %s was already added.",
 				unit, unit.getId());
-		//TODO add some preconditions
-		//TODO add test
 		units.add(unit);
-		//TODO change following that will check just added unit 
 		checkUnitLocations(units);
 		checkDuplicities(units);
 	}

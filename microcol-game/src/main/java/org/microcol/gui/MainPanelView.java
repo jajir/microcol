@@ -22,7 +22,7 @@ public class MainPanelView {
 	 * Because of that there should be some maximum canvas size. With unlimited
 	 * canvas size game freeze because canvas is too big and slow to paint.
 	 * 
-	 * XXX JJ try to remove max canvas size
+	 * TODO JJ try to remove max canvas size
 	 */
 	public final static int MAX_CANVAS_SIDE_LENGTH = 5000;
 

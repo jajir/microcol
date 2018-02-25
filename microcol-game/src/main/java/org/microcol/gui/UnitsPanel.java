@@ -5,7 +5,6 @@ import java.util.List;
 import org.microcol.gui.event.StatusBarMessageController;
 import org.microcol.gui.event.StatusBarMessageEvent;
 import org.microcol.gui.image.ImageProvider;
-import org.microcol.gui.util.Localized;
 import org.microcol.gui.util.Text;
 import org.microcol.model.CargoSlot;
 import org.microcol.model.Player;
@@ -25,7 +24,7 @@ import javafx.scene.layout.VBox;
  * Display one unit description. Panel is placed on the right side of main
  * screen.
  */
-public class UnitsPanel implements Localized {
+public class UnitsPanel {
 
 	private final ImageProvider imageProvider;
 
@@ -43,7 +42,7 @@ public class UnitsPanel implements Localized {
 		this.text = Preconditions.checkNotNull(text);
 		box = new VBox();
 		box.setOnMouseEntered(e -> {
-			statusBarMessageController.fireEvent(new StatusBarMessageEvent(getText().get("unitsPanel.description")));
+			statusBarMessageController.fireEvent(new StatusBarMessageEvent(text.get("unitsPanel.description")));
 		});
 	}
 
@@ -82,12 +81,12 @@ public class UnitsPanel implements Localized {
 		sb.append(localizationHelper.getUnitName(unit.getType()));
 		sb.append("\n");
 		if (isUnitOwnedBy(unit, humanPlayer)) {
-			sb.append(getText().get("unitsPanel.availableMoves"));
+			sb.append(text.get("unitsPanel.availableMoves"));
 			sb.append(" ");
 			sb.append(unit.getAvailableMoves());
 			sb.append("\n");
 		}
-		sb.append(getText().get("unitsPanel.owner"));
+		sb.append(text.get("unitsPanel.owner"));
 		sb.append(" ");
 		sb.append(unit.getOwner().getName());
 		box.getChildren().add(new Label(sb.toString()));
