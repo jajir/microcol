@@ -2,6 +2,7 @@ package org.microcol.gui;
 
 import java.io.File;
 import java.nio.file.Path;
+import java.util.Locale;
 
 import org.microcol.gui.event.model.GameController;
 import org.microcol.gui.util.AbstractMessageWindow;
@@ -85,7 +86,7 @@ public class PersistingDialog extends AbstractMessageWindow {
 		Preconditions.checkNotNull(targetFile);
 		final Path path = targetFile.toPath();
 		final String fileName = getFileName(path);
-		if (fileName.toLowerCase().endsWith(SAVE_FILE_EXTENSION)) {
+		if (fileName.toLowerCase(Locale.getDefault()).endsWith(SAVE_FILE_EXTENSION)) {
 			return targetFile;
 		} else {
 			final Path parent = path.getParent();

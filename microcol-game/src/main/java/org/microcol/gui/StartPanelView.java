@@ -21,18 +21,22 @@ public class StartPanelView implements StartPanelPresenter.Display {
 	private final VBox box;
 
 	@Inject
-	public StartPanelView(final Text text) {
+	StartPanelView(final Text text) {
 		this.text = Preconditions.checkNotNull(text);
 		box = new VBox();
 		box.setStyle("-fx-pref-width: 100000; -fx-pref-height: 100000;");
 		box.setAlignment(Pos.CENTER);
 		buttonStartNewGame = new Button();
 		box.getChildren().add(buttonStartNewGame);
-		updateLanguage();
+		setLocalizedText();
 	}
 
 	@Override
 	public void updateLanguage() {
+		setLocalizedText();
+	}
+	
+	private void setLocalizedText(){
 		buttonStartNewGame.setText(text.get("startPanel.buttonNewGame"));
 	}
 

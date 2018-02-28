@@ -40,6 +40,7 @@ public class SimpleAiPlayer extends AbstractRobotPlayer {
 		simpleUnitBehavior.tryToFight(unit);
 		tryToEmbark(unit);
 	}
+	
 	private List<Location> computeMoveLocation(final Unit unit){
 		final List<Location> locations = new ArrayList<>();
 		Location lastLocation = unit.getLocation();
@@ -94,5 +95,10 @@ public class SimpleAiPlayer extends AbstractRobotPlayer {
 				.findAny()
 				.get().store(unit);
 		}		
+	}
+
+	@Override
+	void turnStarted() {
+		// do nothing
 	}
 }

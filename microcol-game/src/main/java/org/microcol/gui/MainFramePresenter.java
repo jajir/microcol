@@ -16,6 +16,8 @@ public class MainFramePresenter {
 
 	static final String MAIN_GAME_PANEL = "Main game panel";
 
+	private final MainFramePresenter.Display display;
+	
 	public interface Display {
 
 		VBox getBox();
@@ -23,7 +25,6 @@ public class MainFramePresenter {
 		void showPanel(String panelName);
 	}
 
-	private final MainFramePresenter.Display display;
 
 	@Inject
 	public MainFramePresenter(final MainFramePresenter.Display display, final KeyController keyController) {

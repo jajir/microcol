@@ -20,7 +20,7 @@ public class KingPlayer extends AbstractRobotPlayer {
 
 	private final Player whosKingThisPlayerIs;
 
-	private ContinentTool continentTool = new ContinentTool();
+	private final ContinentTool continentTool = new ContinentTool();
 
 	public KingPlayer(final Model model, final Player player, final AnimationManager animationManager) {
 		super(model, player, animationManager);
@@ -41,27 +41,31 @@ public class KingPlayer extends AbstractRobotPlayer {
 	}
 	
 	@Override
-	void moveUnit(Unit unit) {
+	void moveUnit(final Unit unit) {
 		final Continents continents = continentTool.findContinents(getModel(), whosKingThisPlayerIs);
 		if (unit.isAtPlaceLocation()) {
 			if (unit.getType().isShip()) {
-				if (!unit.getCargo().isEmpty()) {
-					if (isPossibleToDisembark(unit)) {
-						disembarkUnit(unit);
-					} else {
-						tryToReachSomeContinent(unit, continents.getContinentsToAttack());
-						if (isPossibleToDisembark(unit)) {
-							disembarkUnit(unit);
-						}
-					}
-				}
+				performMoveUnit(unit, continents);
 			} else {
-				seekAndDestroy(unit, continents);
+				performSeekAndDestroy(unit, continents);
+			}
+		}
+	}
+	
+	private void performMoveUnit(final Unit unit, final Continents continents) {
+		if (!unit.getCargo().isEmpty()) {
+			if (isPossibleToDisembark(unit)) {
+				disembarkUnit(unit);
+			} else {
+				tryToReachSomeContinent(unit, continents.getContinentsToAttack());
+				if (isPossibleToDisembark(unit)) {
+					disembarkUnit(unit);
+				}
 			}
 		}
 	}
 
-	private void seekAndDestroy(final Unit unit, final Continents continents) {
+	private void performSeekAndDestroy(final Unit unit, final Continents continents) {
 		final Optional<Location> oLoc = continents.getContinentWhereIsUnitPlaced(unit).getClosesEnemyCityToAttack(unit);
 		if (oLoc.isPresent()) {
 			Optional<List<Location>> oPath = unit.getPath(oLoc.get(), true);

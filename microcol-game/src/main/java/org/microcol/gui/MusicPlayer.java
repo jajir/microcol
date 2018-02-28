@@ -34,10 +34,11 @@ public class MusicPlayer {
 	 */
 	static final int MAX_VOLUME = 100;
 
-	private final int BUFFER_SIZE = 128000;
-	private AudioInputStream audioStream;
-	private AudioFormat audioFormat;
+	private final static int BUFFER_SIZE = 128000;
+	
 	private SourceDataLine sourceLine;
+
+	private boolean run = true;
 
 	/**
 	 * Start play background music.
@@ -48,16 +49,8 @@ public class MusicPlayer {
 	 *            required default volume
 	 */
 	public void playSound(final String filename, final int defaultVolume) {
-
-		try {
-			final ClassLoader cl = ImageProvider.class.getClassLoader();
-			final InputStream in = cl.getResourceAsStream(filename);
-			audioStream = AudioSystem.getAudioInputStream(new BufferedInputStream(in));
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		audioFormat = audioStream.getFormat();
+		final AudioInputStream audioStream = getAudioInputStream(filename);
+		final AudioFormat audioFormat = audioStream.getFormat();
 
 		DataLine.Info info = new DataLine.Info(SourceDataLine.class, audioFormat);
 		try {
@@ -93,8 +86,16 @@ public class MusicPlayer {
 		sourceLine.close();
 	}
 
-	private boolean run = true;
-
+	private AudioInputStream getAudioInputStream(final String filename){
+		try {
+			final ClassLoader cl = ImageProvider.class.getClassLoader();
+			final InputStream in = cl.getResourceAsStream(filename);
+			return AudioSystem.getAudioInputStream(new BufferedInputStream(in));
+		} catch (Exception e) {
+			throw new MicroColException(e.getMessage(), e);
+		}
+	}
+	
 	public void setVolume(final int volume) {
 		final FloatControl volumeControll = (FloatControl) sourceLine.getControl(FloatControl.Type.MASTER_GAIN);
 		float step = 100F / (volumeControll.getMaximum() - volumeControll.getMinimum());

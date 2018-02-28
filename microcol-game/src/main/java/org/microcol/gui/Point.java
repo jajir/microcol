@@ -8,7 +8,7 @@ import com.google.common.base.MoreObjects;
 /**
  * Represents point in on-screen coordinates.
  */
-public class Point {
+public final class Point {
 
 	/**
 	 * On screen X coordinate.

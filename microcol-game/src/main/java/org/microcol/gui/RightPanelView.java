@@ -36,8 +36,6 @@ public class RightPanelView implements RightPanelPresenter.Display {
 
 	private final Label unitsLabel;
 
-	private final ScrollPane scrollPaneGamePanel;
-
 	private final UnitsPanel unitsPanel;
 
 	private final Button nextTurnButton;
@@ -76,7 +74,8 @@ public class RightPanelView implements RightPanelPresenter.Display {
 		gridPane.add(unitsLabel, 0, 2);
 
 		// Y=3
-		scrollPaneGamePanel = new ScrollPane(unitsPanel.getNode());
+
+		final ScrollPane scrollPaneGamePanel = new ScrollPane(unitsPanel.getNode());
 		RowConstraints scrollPaneRow = new RowConstraints();
 		scrollPaneRow.setVgrow(Priority.ALWAYS);
 		scrollPaneRow.fillHeightProperty().set(true);

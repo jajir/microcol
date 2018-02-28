@@ -27,6 +27,10 @@ public class RightPanelPresenter {
 	private final Logger logger = LoggerFactory.getLogger(RightPanelPresenter.class);
 	
 	private final Text text;
+	
+	private final RightPanelPresenter.Display display;
+	
+	private TileWasSelectedEvent lastFocusedTileEvent;
 
 	public interface Display {
 
@@ -39,12 +43,8 @@ public class RightPanelPresenter {
 		void setOnMovePlayer(Player player);
 	}
 
-	private final RightPanelPresenter.Display display;
-
-	private TileWasSelectedEvent lastFocusedTileEvent;
-
 	@Inject
-	public RightPanelPresenter(final RightPanelPresenter.Display display,
+	RightPanelPresenter(final RightPanelPresenter.Display display,
 			final GameModelController gameModelController,
 			final KeyController keyController,
 			final TileWasSelectedController tileWasSelectedController,

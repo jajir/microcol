@@ -7,7 +7,7 @@ import com.google.common.base.Preconditions;
  * Define rectangular area and inform if some coordinates are in defined
  * rectangle.
  */
-public class Rectangle {
+public final class Rectangle {
 
 	private final Point topLeftCorner;
 

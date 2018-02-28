@@ -10,6 +10,8 @@ Planned releases
  
   * \u2713 Localization was improved, class Localize was removed.
  
+  * \u2717 PMD setting was improved.
+ 
   * \u2717 Game block user to disembark unit at location where is already player's unit.
   	
   * \u2717 When user choose in context menu on field some produced goods than colony dialog is not repainted and previous production remain displayed..

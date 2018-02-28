@@ -90,19 +90,14 @@ public class MainStageBuilder {
 	}
 
 	private boolean isOnScreen(final Rectangle rectangle) {
-		Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
-		if (isPointOutOfScreen(rectangle.getMinX(), rectangle.getMinY(), primaryScreenBounds)) {
-			return false;
-		}
-		if (isPointOutOfScreen(rectangle.getMaxX(), rectangle.getMaxY(), primaryScreenBounds)) {
-			return false;
-		}
-		return true;
+		final Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
+		return isPointOnScreen(rectangle.getMinX(), rectangle.getMinY(), primaryScreenBounds)
+				&& isPointOnScreen(rectangle.getMaxX(), rectangle.getMaxY(), primaryScreenBounds);
 	}
 
-	private boolean isPointOutOfScreen(final double x, final double y, final Rectangle2D primaryScreenBounds) {
-		return x < primaryScreenBounds.getMinX() || x > primaryScreenBounds.getMaxX()
-				|| y < primaryScreenBounds.getMinY() || y > primaryScreenBounds.getMaxY();
+	private boolean isPointOnScreen(final double x, final double y, final Rectangle2D primaryScreenBounds) {
+		return x >= primaryScreenBounds.getMinX() && x <= primaryScreenBounds.getMaxX()
+				&& y >= primaryScreenBounds.getMinY() && y <= primaryScreenBounds.getMaxY();
 	}
 
 }

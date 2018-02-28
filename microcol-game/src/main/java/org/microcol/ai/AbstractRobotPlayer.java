@@ -1,5 +1,7 @@
 package org.microcol.ai;
 
+import java.util.function.Consumer;
+
 import org.microcol.gui.gamepanel.AnimationLock;
 import org.microcol.model.Model;
 import org.microcol.model.ModelAdapter;
@@ -20,11 +22,11 @@ public abstract class AbstractRobotPlayer {
 	private final Logger logger = LoggerFactory.getLogger(AbstractRobotPlayer.class);
 
 	private final Model model;
-	
+
 	private final ModelAdapter modelAdapter;
-	
+
 	private final AnimationLock animationLock;
-	
+
 	/**
 	 * Controlled player.
 	 */
@@ -36,25 +38,18 @@ public abstract class AbstractRobotPlayer {
 		this.model = Preconditions.checkNotNull(model);
 		this.player = Preconditions.checkNotNull(player);
 		this.animationLock = Preconditions.checkNotNull(animationLock);
-		modelAdapter = new ModelAdapter() {
-			@Override
-			public void turnStarted(final TurnStartedEvent event) {
-				if (event.getPlayer().equals(player)) {
-					turn(event.getPlayer());
-				}
-			}
-			
-			@Override
-			public String toString() {
-				return MoreObjects.toStringHelper("AbstractRobotPlayer.TurnStartedEventListener").toString();
-			}
-			
-		};
+		this.modelAdapter = new RobotModelListener(this::onTurnStarted);
 		model.addListener(modelAdapter);
 		running = true;
 		logger.info("Robot player started.");
 	}
-	
+
+	private void onTurnStarted(final TurnStartedEvent event) {
+		if (event.getPlayer().equals(player)) {
+			turn(event.getPlayer());
+		}
+	}
+
 	public void stop() {
 		model.removeListener(modelAdapter);
 	}
@@ -88,14 +83,12 @@ public abstract class AbstractRobotPlayer {
 		moveUnit(unit);
 		animationLock.waitWhileRunning();
 	}
-	
+
 	/**
-	 * When AI need to know that turn started than should override this method. 
+	 * When AI need to know that turn started than should override this method.
 	 */
-	protected void turnStarted(){
-		//do nothing
-	}
-	
+	abstract void turnStarted();
+
 	@Override
 	public String toString() {
 		return MoreObjects.toStringHelper(this.getClass()).add("model", model).add("animationLock", animationLock)
@@ -117,5 +110,25 @@ public abstract class AbstractRobotPlayer {
 	protected Player getPlayer() {
 		return player;
 	}
+
+	private class RobotModelListener extends ModelAdapter {
+
+		private final Consumer<TurnStartedEvent> onTurnStarted;
+
+		RobotModelListener(final Consumer<TurnStartedEvent> onTurnStarted) {
+			this.onTurnStarted = Preconditions.checkNotNull(onTurnStarted);
+		}
+
+		@Override
+		public void turnStarted(final TurnStartedEvent event) {
+			onTurnStarted.accept(event);
+		}
+
+		@Override
+		public String toString() {
+			return MoreObjects.toStringHelper("AbstractRobotPlayer.TurnStartedEventListener").toString();
+		}
+
+	};
 
 }

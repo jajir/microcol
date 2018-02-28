@@ -44,7 +44,7 @@ public class PanelColonyFields extends TitledPanel {
 
 	private final Logger logger = LoggerFactory.getLogger(PanelColonyFields.class);
 
-	private Canvas canvas;
+	private final Canvas canvas;
 
 	private Colony colony;
 

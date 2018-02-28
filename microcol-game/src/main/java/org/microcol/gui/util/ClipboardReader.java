@@ -194,7 +194,7 @@ public class ClipboardReader {
 		try {
 			return Integer.valueOf(num);
 		} catch (NumberFormatException e) {
-			throw new IllegalArgumentException("String (" + num + ") is not a number.");
+			throw new IllegalArgumentException("String (" + num + ") is not a number.", e);
 		}
 	}
 
