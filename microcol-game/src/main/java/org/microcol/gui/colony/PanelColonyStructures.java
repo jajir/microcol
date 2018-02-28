@@ -119,8 +119,11 @@ public class PanelColonyStructures extends TitledPanel {
 			.put(ConstructionType.PRINTING_PRESS,       Point.of(10, 10))
 			.put(ConstructionType.CUSTOM_HOUSE,         Point.of(10, 10))
 			.build();
-	
-	{
+
+	/**
+	 * Validation that constants are consistent.
+	 */
+	static {
 		Preconditions.checkState(ConstructionType.ALL.size() == constructionPlaces.size(),
 				String.format(
 						"There is different number of construction types '%s' and it's definitions of position '%s'.",

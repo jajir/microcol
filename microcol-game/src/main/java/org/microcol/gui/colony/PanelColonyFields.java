@@ -136,17 +136,24 @@ public class PanelColonyFields extends TitledPanel {
 		if (isItUnit(event.getDragboard())) {
 			final Point point = Point.of(event.getX(), event.getY());
 			final Optional<Location> loc = clickableArea.getDirection(point);
-			if (loc.isPresent() && loc.get().isDirection()) {
-				final ColonyField colonyField = colony.getColonyFieldInDirection(loc.get());
-				if (colonyField.isEmpty()) {
-					event.acceptTransferModes(TransferMode.MOVE);
-					event.consume();
-					return;
-				}
+			if(canFieldAcceptDraggedUnit(loc)){
+				event.acceptTransferModes(TransferMode.MOVE);
+				event.consume();
+				return;
 			}
 		}
 		event.acceptTransferModes(TransferMode.NONE);
 		event.consume();
+	}
+	
+	private boolean canFieldAcceptDraggedUnit(final Optional<Location> loc){
+		if (loc.isPresent() && loc.get().isDirection()) {
+			final ColonyField colonyField = colony.getColonyFieldInDirection(loc.get());
+			if (colonyField.isEmpty()) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	private void onDragDropped(final DragEvent event) {

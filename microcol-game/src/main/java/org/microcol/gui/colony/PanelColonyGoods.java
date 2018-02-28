@@ -27,8 +27,6 @@ public class PanelColonyGoods extends TitledPanel {
 	private final GameModelController gameModelController;
 	
 	private final ColonyDialogCallback colonyDialog;
-
-	private final BackgroundHighlighter backgroundHighlighter;
 	
 	private ColonyWarehouse colonyWarehouse;
 
@@ -43,7 +41,8 @@ public class PanelColonyGoods extends TitledPanel {
 		GoodType.BUYABLE_GOOD_TYPES.forEach(goodType -> {
 			hBox.getChildren().add(new PanelColonyGood(imageProvider.getGoodTypeImage(goodType), goodType));
 		});
-		backgroundHighlighter = new BackgroundHighlighter(this, this::isItGoodAmount);
+
+		final BackgroundHighlighter backgroundHighlighter = new BackgroundHighlighter(this, this::isItGoodAmount);
 		setOnDragEntered(backgroundHighlighter::onDragEntered);
 		setOnDragExited(backgroundHighlighter::onDragExited);
 		

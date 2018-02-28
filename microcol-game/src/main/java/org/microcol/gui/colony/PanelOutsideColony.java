@@ -38,10 +38,10 @@ public class PanelOutsideColony extends TitledPanel {
 	private final ColonyDialogCallback colonyDialog;
 	
 	private final DialogDestroyColony dialogDestroyColony;
-
-	private final BackgroundHighlighter backgroundHighlighter;
 	
 	private final UnitMovedOutsideColonyController unitMovedOutsideColonyController;
+
+	private Colony colony;
 	
 	@Inject
 	public PanelOutsideColony(final ImageProvider imageProvider, final GameModelController gameModelController,
@@ -55,14 +55,12 @@ public class PanelOutsideColony extends TitledPanel {
 		this.unitMovedOutsideColonyController = Preconditions.checkNotNull(unitMovedOutsideColonyController);
 		panelUnits = new HBox();
 		getContentPane().getChildren().add(panelUnits);
-		backgroundHighlighter = new BackgroundHighlighter(this, this::isItUnit);
+		final BackgroundHighlighter backgroundHighlighter = new BackgroundHighlighter(this, this::isItUnit);
 		setOnDragEntered(backgroundHighlighter::onDragEntered);
 		setOnDragExited(backgroundHighlighter::onDragExited);
 		setOnDragDropped(this::onDragDropped);
 		setOnDragOver(this::onDragOver);
 	}
-
-	private Colony colony;
 
 	public void setColony(final Colony colony) {
 		this.colony = colony;
