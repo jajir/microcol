@@ -32,6 +32,30 @@ public class UnitType {
 	 */
 	private final static Predicate<UnitType> UNIT_TYPE_CANT_ATTACK = unitType -> false;
 	
+	private final String name;
+	private final List<TerrainType> moveableTerrains;
+	private final int speed;
+	private final int cargoCapacity;
+	private final boolean storable;
+	private final int europePrice;
+	
+	/**
+	 * Here is good type in which production is unit exceptional. When it's
+	 * <code>null</code> than unit is not expert on producing any type of goods.
+	 */
+	private final GoodType expertInProducing;
+	
+	/**
+	 * Production multiplier on basic good production.
+	 */
+	private final float expertProductionModifier;
+	
+	/**
+	 * Predicate allows to find unit types that could be attacked by this unit
+	 * type.
+	 */
+	private final Predicate<UnitType> attackableUnitTypeFilter;
+	
 	public final static UnitType COLONIST = UnitType.make()
 			.setName("COLONIST")
 			.setMoveableTerrains(TerrainType.UNIT_CAN_WALK_AT)
@@ -101,79 +125,55 @@ public class UnitType {
 		private GoodType expertInProducing;
 		private float expertProductionModifier;
 		
-		private UnitType build(){
+		UnitType build(){
 			return new UnitType(name, moveableTerrains, speed, attackableUnitTypeFilter, cargoCapacity, storable,
 					europePrice, expertInProducing, expertProductionModifier);
 		}
 
-		private UnitTypeBuilder setName(final String name) {
+		UnitTypeBuilder setName(final String name) {
 			this.name = name;
 			return this;
 		}
 
-		private UnitTypeBuilder setMoveableTerrains(final List<TerrainType> moveableTerrains) {
+		UnitTypeBuilder setMoveableTerrains(final List<TerrainType> moveableTerrains) {
 			this.moveableTerrains = moveableTerrains;
 			return this;
 		}
 
-		private UnitTypeBuilder setSpeed(final int speed) {
+		UnitTypeBuilder setSpeed(final int speed) {
 			this.speed = speed;
 			return this;
 		}
 
-		private UnitTypeBuilder setAttackableUnitTypeFilter(final Predicate<UnitType> attackableUnitTypeFilter) {
+		UnitTypeBuilder setAttackableUnitTypeFilter(final Predicate<UnitType> attackableUnitTypeFilter) {
 			this.attackableUnitTypeFilter = attackableUnitTypeFilter;
 			return this;
 		}
 
-		private UnitTypeBuilder setCargoCapacity(final int cargoCapacity) {
+		UnitTypeBuilder setCargoCapacity(final int cargoCapacity) {
 			this.cargoCapacity = cargoCapacity;
 			return this;
 		}
 
-		private UnitTypeBuilder setStorable(final boolean storable) {
+		UnitTypeBuilder setStorable(final boolean storable) {
 			this.storable = storable;
 			return this;
 		}
 
-		private UnitTypeBuilder setEuropePrice(final int europePrice) {
+		UnitTypeBuilder setEuropePrice(final int europePrice) {
 			this.europePrice = europePrice;
 			return this;
 		}
 
-		private UnitTypeBuilder setExpertise(final GoodType expertInProducing, final float expertProductionModifier) {
+		UnitTypeBuilder setExpertise(final GoodType expertInProducing, final float expertProductionModifier) {
 			this.expertInProducing = expertInProducing;
 			this.expertProductionModifier = expertProductionModifier;
 			return this;
 		}
 		
 	}
-	
-	private final String name;
-	private final List<TerrainType> moveableTerrains;
-	private final int speed;
-	private final int cargoCapacity;
-	private final boolean storable;
-	private final int europePrice;
-	
-	/**
-	 * Here is good type in which production is unit exceptional. When it's
-	 * <code>null</code> than unit is not expert on producing any type of goods.
-	 */
-	private final GoodType expertInProducing;
-	
-	/**
-	 * Production multiplier on basic good production.
-	 */
-	private final float expertProductionModifier;
-	
-	/**
-	 * Predicate allows to find unit types that could be attacked by this unit
-	 * type.
-	 */
-	private final Predicate<UnitType> attackableUnitTypeFilter;
 
-	private UnitType(final String name, final List<TerrainType> moveableTerrains, final int speed,
+	UnitType(final String name, final List<TerrainType> moveableTerrains, final int speed,
 			final Predicate<UnitType> attackableUnitTypeFilter, final int cargoCapacity, final boolean storable, final int europePrice,
 			final GoodType expertInProducing, final float expertProductionModifier) {
 		this.name = Preconditions.checkNotNull(name);

@@ -16,6 +16,48 @@ import com.google.common.collect.ImmutableList;
  * </p>
  */
 public class ConstructionType {
+
+	private final String name;
+	private final int buildCostHammers;
+	private final int buildCostTools;
+	private final ConstructionType upgradeTo;
+	
+	/**
+	 * Good type that is produced. When construction doesn't produce any goods
+	 * than it's null.
+	 */
+	private final GoodType produce;
+	
+	/**
+	 * Good type that is consumed during production. When construction doesn't
+	 * consume any goods than it's null.
+	 */
+	private final GoodType consumed;
+	
+	/**
+	 * How many goods is produces when one slot is occupied by on free colonist.
+	 */
+	private final int productionPerTurn;
+	
+	/**
+	 * Basic production per turn. For example one bell is produced in each
+	 * colony each turn event when no unit is in construction.
+	 */
+	private final int baseProductionPerTurn;
+	
+	/**
+	 * Construction production ratio. When building consume goods to produce
+	 * goods than this is production ration defined:
+	 * 
+	 * <pre>
+	 * consumptionPerTurn * productionRatio = productionPerTurn
+	 * </pre>
+	 * Value of consumptionPerTurn could be computed. 
+	 */
+	private final float productionRatio;
+	
+	private final int slotsForWorkers;
+	private final int requiredColonyPopulation;
 	 
 	public final static ConstructionType TOWN_HALL = ConstructionTypeBuilder.make()
 			.setName("TOWN_HALL")
@@ -685,48 +727,6 @@ public class ConstructionType {
 		}
 
 	}
-
-	private final String name;
-	private final int buildCostHammers;
-	private final int buildCostTools;
-	private final ConstructionType upgradeTo;
-	
-	/**
-	 * Good type that is produced. When construction doesn't produce any goods
-	 * than it's null.
-	 */
-	private final GoodType produce;
-	
-	/**
-	 * Good type that is consumed during production. When construction doesn't
-	 * consume any goods than it's null.
-	 */
-	private final GoodType consumed;
-	
-	/**
-	 * How many goods is produces when one slot is occupied by on free colonist.
-	 */
-	private final int productionPerTurn;
-	
-	/**
-	 * Basic production per turn. For example one bell is produced in each
-	 * colony each turn event when no unit is in construction.
-	 */
-	private final int baseProductionPerTurn;
-	
-	/**
-	 * Construction production ratio. When building consume goods to produce
-	 * goods than this is production ration defined:
-	 * 
-	 * <pre>
-	 * consumptionPerTurn * productionRatio = productionPerTurn
-	 * </pre>
-	 * Value of consumptionPerTurn could be computed. 
-	 */
-	private final float productionRatio;
-	
-	private final int slotsForWorkers;
-	private final int requiredColonyPopulation;
 
 	private ConstructionType(final String name, final int buildCostHammers, final int buildCostTools,
 			final ConstructionType upgradeTo, final GoodType produce, final GoodType consumed,

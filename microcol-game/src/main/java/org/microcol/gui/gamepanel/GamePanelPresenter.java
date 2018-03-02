@@ -38,6 +38,32 @@ import javafx.scene.input.MouseEvent;
 public final class GamePanelPresenter {
 
 	private final Logger logger = LoggerFactory.getLogger(GamePanelPresenter.class);
+	
+	private final GamePreferences gamePreferences;
+	
+	private final GameModelController gameModelController;
+	
+	private final GamePanelPresenter.Display display;
+	
+	private Optional<Point> lastMousePosition = Optional.empty();
+	
+	private final SelectedTileManager selectedTileManager;
+	
+	private final SelectedUnitManager selectedUnitManager;
+	
+	private final ViewUtil viewUtil;
+	
+	private final StartMoveController startMoveController;
+	
+	private final EndMoveController endMoveController;
+	
+	private final ColonyDialog colonyDialog;
+	
+	private final Text text;
+	
+	private final MouseOverTileManager mouseOverTileManager;
+	
+	private final ModeController modeController;
 
 	public interface Display {
 
@@ -62,32 +88,6 @@ public final class GamePanelPresenter {
 		VisibleArea getVisibleArea();
 
 	}
-
-	private final GamePreferences gamePreferences;
-
-	private final GameModelController gameModelController;
-
-	private final GamePanelPresenter.Display display;
-
-	private Optional<Point> lastMousePosition = Optional.empty();
-
-	private final SelectedTileManager selectedTileManager;
-	
-	private final SelectedUnitManager selectedUnitManager;
-
-	private final ViewUtil viewUtil;
-
-	private final StartMoveController startMoveController;
-	
-	private final EndMoveController endMoveController;
-
-	private final ColonyDialog colonyDialog;
-
-	private final Text text;
-	
-	private final MouseOverTileManager mouseOverTileManager;
-	
-	private final ModeController modeController;
 	
 	@Inject
 	public GamePanelPresenter(final GamePanelPresenter.Display display,
@@ -318,7 +318,7 @@ public final class GamePanelPresenter {
 			// user will move
 			if (movingUnit.getPath(moveToLocation).isPresent()) {
 				final List<Location> path = movingUnit.getPath(moveToLocation).get();
-				if (path.size() > 0) {
+				if (!path.isEmpty()) {
 					gameModelController.performMove(movingUnit, path);
 				}
 				disableMoveMode();
@@ -326,7 +326,7 @@ public final class GamePanelPresenter {
 		} else if (movingUnit.isPossibleToGoToPort(moveToLocation)) {
 			if (movingUnit.getPath(moveToLocation).isPresent()) {
 				final List<Location> path = movingUnit.getPath(moveToLocation).get();
-				if (path.size() > 0) {
+				if (!path.isEmpty()) {
 					gameModelController.performMove(movingUnit, path);
 				}
 				selectedTileManager.setSelectedTile(moveToLocation);

@@ -38,8 +38,6 @@ public class PanelPortPier extends TitledPanel {
 
 	private final VBox panelUnits;
 
-	private final BackgroundHighlighter backgroundHighlighter;
-
 	@Inject
 	public PanelPortPier(final GameModelController gameModelController, final EuropeDialogCallback europeDialogCallback,
 			final Text text, final ImageProvider imageProvider, final LocalizationHelper localizationHelper) {
@@ -50,7 +48,7 @@ public class PanelPortPier extends TitledPanel {
 		this.localizationHelper = Preconditions.checkNotNull(localizationHelper);
 		panelUnits = new VBox();
 		getContentPane().getChildren().add(panelUnits);
-		backgroundHighlighter = new BackgroundHighlighter(this, this::isItCorrectObject);
+		final BackgroundHighlighter backgroundHighlighter = new BackgroundHighlighter(this, this::isItCorrectObject);
 		setOnDragEntered(backgroundHighlighter::onDragEntered);
 		setOnDragExited(backgroundHighlighter::onDragExited);
 		setOnDragOver(this::onDragOver);

@@ -32,6 +32,14 @@ import javafx.scene.control.RadioMenuItem;
 
 public class MainMenuPresenter {
 
+	private final MainMenuPresenter.Display display;
+	
+	private final SelectedUnitManager selectedUnitManager;
+
+	private boolean isFocusedMoveableUnit = false;
+
+	public boolean isTileFocused = false;
+
 	public interface Display {
 
 		MenuItem getMenuItemNewGame();
@@ -70,14 +78,6 @@ public class MainMenuPresenter {
 
 		MenuItem getMenuItemColonizopedia();
 	}
-
-	private final MainMenuPresenter.Display display;
-	
-	private final SelectedUnitManager selectedUnitManager;
-
-	private boolean isFocusedMoveableUnit = false;
-
-	public boolean isTileFocused = false;
 
 	@Inject
 	public MainMenuPresenter(final MainMenuPresenter.Display display,

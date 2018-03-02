@@ -27,7 +27,6 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 
-import javafx.animation.AnimationTimer;
 import javafx.scene.Cursor;
 import javafx.scene.ImageCursor;
 import javafx.scene.canvas.Canvas;
@@ -115,16 +114,7 @@ public class GamePanelView implements GamePanelPresenter.Display {
 		/**
 		 * Following class main define animation loop.
 		 */
-		new AnimationTimer() {
-
-			@Override
-			public void handle(long now) {
-				nextGameTick();
-				if (gameModelController.isModelReady()) {
-					paint();
-				}
-			}
-		}.start();
+		new SimpleAnimationTimer(this::onNextGameTick).start();
 	}
 
 	@Override
@@ -141,9 +131,13 @@ public class GamePanelView implements GamePanelPresenter.Display {
 	 * Smallest game time interval. In ideal case it have time to draw world on
 	 * screen.
 	 */
-	private void nextGameTick() {
+	@SuppressWarnings("unused")
+	private void onNextGameTick(final Long now) {
 		if (screenScrolling.isPresent() && screenScrolling.get().isNextPointAvailable()) {
 			scrollToPoint(screenScrolling.get().getNextPoint());
+		}
+		if (gameModelController.isModelReady()) {
+			paint();
 		}
 	}
 

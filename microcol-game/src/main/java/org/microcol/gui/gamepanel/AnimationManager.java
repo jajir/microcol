@@ -1,7 +1,6 @@
 package org.microcol.gui.gamepanel;
 
 import java.util.LinkedList;
-import java.util.Optional;
 import java.util.Queue;
 import java.util.function.Consumer;
 
@@ -25,7 +24,7 @@ public class AnimationManager implements AnimationLock {
 	
 	private final AnimationIsDoneController animationIsDoneController;
 
-	private Optional<AnimationHolder> runningPart;
+	private AnimationHolder runningPart;
 
 	private boolean hasNextStep = false;
 
@@ -34,7 +33,7 @@ public class AnimationManager implements AnimationLock {
 	@Inject
 	public AnimationManager(final AnimationIsDoneController animationIsDoneController) {
 		this.animationIsDoneController = Preconditions.checkNotNull(animationIsDoneController);
-		runningPart = Optional.empty();
+		runningPart = null;
 	}
 
 	public boolean hasNextStep() {
@@ -43,21 +42,21 @@ public class AnimationManager implements AnimationLock {
 
 	public void performStep() {
 		Preconditions.checkState(hasNextStep, "Can't perform step when there is no next step.");
-		Preconditions.checkState(runningPart.isPresent(), "Actually running animation was lost.");
-		runningPart.get().animation.nextStep();
-		if (!runningPart.get().animation.hasNextStep()) {
-			if (runningPart.get().onAnimationIsDone != null) {
-				runningPart.get().onAnimationIsDone.accept(runningPart.get().animation);
+		Preconditions.checkState(runningPart != null, "Actually running animation was lost.");
+		runningPart.getAnimation().nextStep();
+		if (!runningPart.getAnimation().hasNextStep()) {
+			if (runningPart.getOnAnimationIsDone() != null) {
+				runningPart.getOnAnimationIsDone().accept(runningPart.getAnimation());
 			}
 			if (animationParts.isEmpty()) {
-				runningPart = Optional.empty();
+				runningPart = null;
 				hasNextStep = false;
 				latch.unlock();
 				animationIsDoneController.fireEvent(new AnimationIsDoneEvent());
 				logger.debug("You are done, unlocking threads");
 			} else {
-				runningPart = Optional.of(animationParts.remove());
-				Preconditions.checkState(runningPart.get().animation.hasNextStep(),
+				runningPart = animationParts.remove();
+				Preconditions.checkState(runningPart.getAnimation().hasNextStep(),
 						"Just started animation should have at least one step.");
 			}
 		}
@@ -65,7 +64,7 @@ public class AnimationManager implements AnimationLock {
 
 	void paint(final GraphicsContext graphics, final Area area) {
 		Preconditions.checkArgument(hasNextStep, "Can't perform step when there is no next step.");
-		runningPart.get().animation.paint(graphics, area);
+		runningPart.getAnimation().paint(graphics, area);
 	}
 
 	/**
@@ -82,11 +81,11 @@ public class AnimationManager implements AnimationLock {
 		Preconditions.checkNotNull(animation);
 		final AnimationHolder holder = new AnimationHolder(animation, onAnimationIsDone);
 		logger.debug("Adding animation {}", animation);
-		if (runningPart.isPresent()) {
-			animationParts.add(holder);
+		if (runningPart == null) {
+			runningPart = holder;
+			hasNextStep = holder.getAnimation().hasNextStep();
 		} else {
-			runningPart = Optional.of(holder);
-			hasNextStep = holder.animation.hasNextStep();
+			animationParts.add(holder);
 		}
 		latch.lock();
 	}
@@ -98,19 +97,6 @@ public class AnimationManager implements AnimationLock {
 
 	public void addAnimation(final Animation animation) {
 		addAnimation(animation, null);
-	}
-
-	private static class AnimationHolder {
-
-		private final Animation animation;
-
-		private final Consumer<Animation> onAnimationIsDone;
-
-		AnimationHolder(final Animation animation, final Consumer<Animation> onAnimationIsDone) {
-			this.animation = animation;
-			this.onAnimationIsDone = onAnimationIsDone;
-		}
-
 	}
 
 }

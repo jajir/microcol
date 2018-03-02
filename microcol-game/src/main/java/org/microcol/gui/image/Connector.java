@@ -8,7 +8,7 @@ import com.google.common.collect.ImmutableList;
 /**
  * Define points where can cost line connect from current tile to another one.
  */
-public class Connector {
+public final class Connector {
 
 	private final List<Character> VALUES = ImmutableList.of('0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b');
 

@@ -22,7 +22,7 @@ import javafx.scene.image.Image;
 /**
  * Provide image instances.
  */
-public class ImageProvider {
+public final class ImageProvider {
 	
 	/**
 	 * Allows to register image loaders. It's ordered list of loaders. 

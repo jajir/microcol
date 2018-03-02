@@ -28,18 +28,6 @@ public class Area {
 	 */
 	private final Location bottomRight;
 
-	/**
-	 * Top left corner of visible area in on-screen coordinates. It define
-	 * visible area.
-	 */
-	private final Point pointTopLeft;
-
-	/**
-	 * Bottom right corner of visible area in on-screen coordinates. It define
-	 * visible area.
-	 */
-	private final Point pointBottomRight;
-
 	private final VisibleArea visibleArea;
 
 	/**
@@ -51,8 +39,18 @@ public class Area {
 	 */
 	public Area(final VisibleArea visibleArea, final WorldMap worldMap) {
 		this.visibleArea = Preconditions.checkNotNull(visibleArea);
-		pointTopLeft = visibleArea.getTopLeft();
-		pointBottomRight = visibleArea.getBottomRight();
+		
+		/**
+		 * Top left corner of visible area in on-screen coordinates. It define
+		 * visible area.
+		 */
+		final Point pointTopLeft = visibleArea.getTopLeft();
+		
+		/**
+		 * Bottom right corner of visible area in on-screen coordinates. It define
+		 * visible area.
+		 */
+		final Point pointBottomRight = visibleArea.getBottomRight();
 
 		final Location p1 = pointTopLeft.toLocation();
 		final Location p2 = pointBottomRight.toLocationCeilUp();

@@ -42,10 +42,6 @@ public class VisibleArea {
 	 */
 	private Optional<Point> maxMapSize = Optional.empty();
 
-	VisibleArea() {
-
-	}
-
 	@Override
 	public String toString() {
 		return MoreObjects.toStringHelper(VisibleArea.class).add("topLeft", topLeft).add("canvasWidth", canvasWidth)

@@ -36,7 +36,6 @@ public class AnimationWalk implements Animation {
 		excludePainting.excludeUnit(unit);
 		walkParticles = new ArrayList<>();
 		walkParticles.add(new AnimationWalkParticle(paintService, start, end, pathPlanning));
-		Preconditions.checkArgument(hasNextStep(), "Animation can't start without any steps.");
 	}
 
 	@Override

@@ -14,7 +14,9 @@ Planned releases
  
   * \u2717 Game block user to disembark unit at location where is already player's unit.
   	
-  * \u2717 When user choose in context menu on field some produced goods than colony dialog is not repainted and previous production remain displayed..
+  * \u2717 When user choose in context menu on field some produced goods than colony dialog is not repainted and previous production remain displayed.
+  	
+  * \u2717 When player attack colony with units only at field. Units try defend but is at field it throw exception. 
   
   * \u2717 Support selecting unit from right panel.
   

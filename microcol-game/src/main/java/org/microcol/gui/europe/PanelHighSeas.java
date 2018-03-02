@@ -31,8 +31,6 @@ public class PanelHighSeas extends TitledPanel {
 
 	private final GameModelController gameModelController;
 
-	private final BackgroundHighlighter backgroundHighlighter;
-
 	@Inject
 	public PanelHighSeas(final EuropeDialogCallback europeDialog, final ImageProvider imageProvider,
 			final GameModelController gameModelController) {
@@ -43,7 +41,7 @@ public class PanelHighSeas extends TitledPanel {
 		minHeightProperty().set(80);
 		shipsContainer = new HBox();
 		getChildren().add(shipsContainer);
-		backgroundHighlighter = new BackgroundHighlighter(this, this::isItCorrectObject);
+		final BackgroundHighlighter backgroundHighlighter = new BackgroundHighlighter(this, this::isItCorrectObject);
 		setOnDragEntered(backgroundHighlighter::onDragEntered);
 		setOnDragExited(backgroundHighlighter::onDragExited);
 		setOnDragOver(this::onDragOver);

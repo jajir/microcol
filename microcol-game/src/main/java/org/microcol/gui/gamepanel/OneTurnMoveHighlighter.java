@@ -11,9 +11,6 @@ public class OneTurnMoveHighlighter {
 
 	private List<Location> locations;
 
-	public OneTurnMoveHighlighter() {
-	}
-
 	void setLocations(final List<Location> locations) {
 		this.locations = locations;
 	}

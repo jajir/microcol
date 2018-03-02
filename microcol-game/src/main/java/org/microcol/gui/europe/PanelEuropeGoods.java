@@ -31,8 +31,6 @@ public class PanelEuropeGoods extends TitledPanel {
 
 	private final EuropeDialogCallback europeDialogCallback;
 
-	private final BackgroundHighlighter backgroundHighlighter;
-
 	@Inject
 	public PanelEuropeGoods(final EuropeDialogCallback europeDialogCallback,
 			final GameModelController gameModelController, final ImageProvider imageProvider,
@@ -45,7 +43,7 @@ public class PanelEuropeGoods extends TitledPanel {
 			hBox.getChildren().add(new PanelGood(goodType, imageProvider, gameModelController, dialogNotEnoughGold));
 		});
 		getContentPane().getChildren().add(hBox);
-		backgroundHighlighter = new BackgroundHighlighter(this, this::isItGoodAmount);
+		final BackgroundHighlighter backgroundHighlighter = new BackgroundHighlighter(this, this::isItGoodAmount);
 		setOnDragEntered(backgroundHighlighter::onDragEntered);
 		setOnDragExited(backgroundHighlighter::onDragExited);
 		setOnDragOver(this::onDragOver);
@@ -82,12 +80,10 @@ public class PanelEuropeGoods extends TitledPanel {
 
 	private boolean isItGoodAmount(final Dragboard db) {
 		logger.debug("Drag over unit id '" + db.getString() + "'.");
-		return ClipboardReader.make(gameModelController.getModel(), db).filterTransferFrom(transferFrom -> {
-			if (transferFrom.isPresent() && transferFrom.get() instanceof ClipboardReader.TransferFromCargoSlot) {
-				return true;
-			}
-			return false;
-		}).getGoods().isPresent();
+		return ClipboardReader.make(gameModelController.getModel(), db)
+				.filterTransferFrom(transferFrom -> transferFrom.isPresent()
+						&& transferFrom.get() instanceof ClipboardReader.TransferFromCargoSlot)
+				.getGoods().isPresent();
 	}
 
 }

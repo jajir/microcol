@@ -18,14 +18,14 @@ import javafx.application.Platform;
  * @param <E>
  *            event object type
  */
-public abstract class AbstractEventController<E> {
+public class AbstractEventController<E> {
 
 	private final Logger logger = LoggerFactory.getLogger(AbstractEventController.class);
 
 	/**
 	 * Holds all registered listeners.
 	 */
-	private final List<Wrapper<E>> listeners = new ArrayList<>();
+	private final List<ListenerWrapper<E>> listeners = new ArrayList<>();
 
 	public AbstractEventController() {
 	}
@@ -56,7 +56,7 @@ public abstract class AbstractEventController<E> {
 		if (containsListener(listener)) {
 			logger.debug("Attempt to register one listener '" + listener + "'more that one time.");
 		} else {
-			listeners.add(new Wrapper<>(fireEventsAsynchronously, listener));
+			listeners.add(new ListenerWrapper<>(fireEventsAsynchronously, listener));
 		}
 	}
 
@@ -69,7 +69,7 @@ public abstract class AbstractEventController<E> {
 	 * @return return <code>true</code> if given listener is already registered
 	 */
 	private boolean containsListener(final Listener<E> listener) {
-		return listeners.stream().filter(wrapper -> wrapper.listener.equals(listener)).findAny().isPresent();
+		return listeners.stream().filter(wrapper -> wrapper.getListener().equals(listener)).findAny().isPresent();
 	}
 
 	/**
@@ -80,8 +80,8 @@ public abstract class AbstractEventController<E> {
 	 */
 	public void removeListener(final Listener<E> listener) {
 		Preconditions.checkNotNull(listener);
-		final Optional<Wrapper<E>> oWrap = listeners.stream().filter(wrapper -> wrapper.listener.equals(listener))
-				.findFirst();
+		final Optional<ListenerWrapper<E>> oWrap = listeners.stream()
+				.filter(wrapper -> wrapper.getListener().equals(listener)).findFirst();
 		if (oWrap.isPresent()) {
 			listeners.remove(oWrap.get());
 		}
@@ -98,31 +98,18 @@ public abstract class AbstractEventController<E> {
 		Preconditions.checkNotNull(event);
 		logger.debug("Event " + event + " was triggered.");
 		listeners.stream().forEach(wrapper -> {
-			if (wrapper.fireEventsAsynchronously) {
+			if (wrapper.isFireEventsAsynchronously()) {
 				/**
 				 * Is it correct to call events in Platform.runLater even when
 				 * doesn't change UI? Probably yes. Lot of events could flooding
 				 * queue and make UI unresponsive. In case of problems with
 				 * 'runLatert' than should be used just in case of UI event
 				 */
-				Platform.runLater(() -> wrapper.listener.onEvent(event));
+				Platform.runLater(() -> wrapper.getListener().onEvent(event));
 			} else {
-				wrapper.listener.onEvent(event);
+				wrapper.getListener().onEvent(event);
 			}
 		});
-	}
-
-	private class Wrapper<T> {
-
-		private final boolean fireEventsAsynchronously;
-
-		private final Listener<T> listener;
-
-		Wrapper(final boolean fireEventsAsynchronously, final Listener<T> listener) {
-			this.fireEventsAsynchronously = fireEventsAsynchronously;
-			this.listener = Preconditions.checkNotNull(listener);
-		}
-
 	}
 
 }

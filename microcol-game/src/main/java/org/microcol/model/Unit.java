@@ -81,7 +81,7 @@ public class Unit {
 	}
 
 	private void verifyThatUnitIsAtMap() {
-		Preconditions.checkState(isAtPlaceLocation(), "Moving unit have to be at map. Unit (%s) is at (%s)", this,
+		Preconditions.checkState(isAtPlaceLocation(), "Unit have to be at map. Unit (%s) is at (%s)", this,
 				place);
 	}
 	

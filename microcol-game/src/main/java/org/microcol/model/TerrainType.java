@@ -13,7 +13,28 @@ import com.google.common.collect.ImmutableMap;
 
 public final class TerrainType {
 
-	private final static int NO_VALUE = -1;
+	final static int NO_VALUE = -1;
+	
+	private final String name;
+	
+	/**
+	 * Code is used to identified terrain type in save file.
+	 */
+	private final String code;
+	
+	private final boolean canHaveTree;
+
+	private final boolean isSea;
+	
+	private final int moveCost;
+	
+	private final int moveCostWithTree;
+	
+	private final int defenseBonus;
+	
+	private final int defenseBonusWithTree;
+	
+	private final List<Production> productions;
 	
 	public final static TerrainType GRASSLAND = TerrainType.make()
 			.setName("GRASSLAND")
@@ -301,22 +322,22 @@ public final class TerrainType {
 		
 		private int defenseBonusWithTree = NO_VALUE;
 		
-		private TerrainType build(){
+		 TerrainType build(){
 			return new TerrainType(name, code, canHaveTree, isSea, moveCost, moveCostWithTree, defenseBonus,
 					defenseBonusWithTree, productions);
 		}
 
-		private TerrainTypeBuilder setName(String name) {
+		TerrainTypeBuilder setName(String name) {
 			this.name = name;
 			return this;
 		}
 
-		private TerrainTypeBuilder setCode(String code) {
+		TerrainTypeBuilder setCode(String code) {
 			this.code = code;
 			return this;
 		}
 
-		private TerrainTypeBuilder setCanHaveTree(boolean canHaveTree) {
+		TerrainTypeBuilder setCanHaveTree(boolean canHaveTree) {
 			this.canHaveTree = canHaveTree;
 			return this;
 		}
@@ -329,36 +350,36 @@ public final class TerrainType {
 		 *            sail on it and it's see
 		 * @return builder object
 		 */
-		private TerrainTypeBuilder setSea(boolean isSea) {
+		TerrainTypeBuilder setSea(boolean isSea) {
 			this.isSea = isSea;
 			return this;
 		}
 
-		private TerrainTypeBuilder setMoveCost(int moveCost) {
+		TerrainTypeBuilder setMoveCost(int moveCost) {
 			this.moveCost = moveCost;
 			return this;
 		}
 
-		private TerrainTypeBuilder setMoveCostWithTree(int moveCostWithTree) {
+		TerrainTypeBuilder setMoveCostWithTree(int moveCostWithTree) {
 			this.moveCostWithTree = moveCostWithTree;
 			return this;
 		}
 
-		private TerrainTypeBuilder setDefenseBonus(int defenseBonus) {
+		TerrainTypeBuilder setDefenseBonus(int defenseBonus) {
 			this.defenseBonus = defenseBonus;
 			return this;
 		}
 
-		private TerrainTypeBuilder setDefenseBonusWithTree(int defenseBonusWithTree) {
+		TerrainTypeBuilder setDefenseBonusWithTree(int defenseBonusWithTree) {
 			this.defenseBonusWithTree = defenseBonusWithTree;
 			return this;
 		}
 
-		private ProductionBuilder setProduction(final GoodType goodType) {
+		ProductionBuilder setProduction(final GoodType goodType) {
 			return new ProductionBuilder(this, goodType);
 		}
 		
-		private void addProduction(final Production production) {
+		void addProduction(final Production production) {
 			Preconditions.checkArgument(!productions.contains(production), "Production (%s) was already defined");
 			productions.add(Preconditions.checkNotNull(production));
 		}
@@ -437,17 +458,17 @@ public final class TerrainType {
 			this.goodType = Preconditions.checkNotNull(goodType);
 		}
 
-		private ProductionBuilder setWithTrees(final int withTrees) {
+		ProductionBuilder setWithTrees(final int withTrees) {
 			this.withTrees = withTrees;
 			return this;
 		}
 
-		private ProductionBuilder setWithoutTrees(final int withoutTrees) {
+		ProductionBuilder setWithoutTrees(final int withoutTrees) {
 			this.withoutTrees = withoutTrees;
 			return this;
 		}
 		
-		private TerrainTypeBuilder build() {
+		TerrainTypeBuilder build() {
 			terrainBuilder.addProduction(new Production(goodType, withTrees, withoutTrees));
 			return terrainBuilder;
 		}
@@ -458,28 +479,7 @@ public final class TerrainType {
 		return new TerrainTypeBuilder();
 	}
 	
-	private final String name;
-	
-	/**
-	 * Code is used to identified terrain type in save file.
-	 */
-	private final String code;
-	
-	private final boolean canHaveTree;
-
-	private final boolean isSea;
-	
-	private final int moveCost;
-	
-	private final int moveCostWithTree;
-	
-	private final int defenseBonus;
-	
-	private final int defenseBonusWithTree;
-	
-	private final List<Production> productions;
-	
-	private TerrainType(final String name, final String code, final boolean canHaveTree, final boolean isSee,
+	TerrainType(final String name, final String code, final boolean canHaveTree, final boolean isSee,
 			final int moveCost, final int moveCostWithTree, final int defenseBonus, final int defenseBonusWithTree,
 			final List<Production> productions) {
 		Preconditions.checkArgument(moveCost != NO_VALUE, "move cost was not set.");

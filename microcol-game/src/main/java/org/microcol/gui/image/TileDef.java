@@ -2,7 +2,7 @@ package org.microcol.gui.image;
 
 import com.google.common.base.Preconditions;
 
-public class TileDef {
+public final class TileDef {
 
 	private final String prefix;
 

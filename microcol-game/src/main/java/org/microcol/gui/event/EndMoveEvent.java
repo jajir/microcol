@@ -5,7 +5,4 @@ package org.microcol.gui.event;
  */
 public class EndMoveEvent {
 
-	public EndMoveEvent() {
-	}
-
 }

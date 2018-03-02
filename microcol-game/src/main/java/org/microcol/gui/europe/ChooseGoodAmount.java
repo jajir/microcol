@@ -1,5 +1,7 @@
 package org.microcol.gui.europe;
 
+import java.util.function.Function;
+
 import org.microcol.gui.util.AbstractMessageWindow;
 import org.microcol.gui.util.ButtonsBar;
 import org.microcol.gui.util.Text;
@@ -19,13 +21,15 @@ import javafx.util.StringConverter;
  */
 public class ChooseGoodAmount extends AbstractMessageWindow {
 
-	private final static int MIN_VALUE = 0;
+	final static int MIN_VALUE = 0;
 
 	private int actualValue;
-	
+
 	private final Slider slider;
-	
+
 	private final Text text;
+
+	private int maximalNumberToTransfer;
 
 	@Inject
 	public ChooseGoodAmount(final ViewUtil viewUtil, final Text text) {
@@ -44,13 +48,14 @@ public class ChooseGoodAmount extends AbstractMessageWindow {
 		boxActualValue.getChildren().addAll(labelActualValue, labelValue);
 
 		slider = new Slider();
+		slider.setLabelFormatter(new MyStringConverted(this::converToString));
 		slider.setMin(MIN_VALUE);
 		slider.setSnapToTicks(false);
 		slider.setMajorTickUnit(10);
 		slider.setMinorTickCount(1);
 		slider.setShowTickLabels(true);
 		slider.setShowTickMarks(false);
-		
+
 		slider.valueProperty().addListener((obj, oldValue, newValue) -> {
 			labelValue.setText(String.valueOf(newValue.intValue()));
 			actualValue = newValue.intValue();
@@ -64,34 +69,16 @@ public class ChooseGoodAmount extends AbstractMessageWindow {
 
 		root.getChildren().addAll(label, boxActualValue, slider, buttonsBar);
 	}
-	
-	public void showAndWait(){
+
+	public void showAndWait() {
 		getDialog().showAndWait();
 	}
-	
-	public void init( final int maximalNumberToTransfer){
+
+	public void init(final int maximalNumberToTransfer) {
 		actualValue = maximalNumberToTransfer;
+		this.maximalNumberToTransfer = maximalNumberToTransfer;
 		slider.setMax(maximalNumberToTransfer);
 		slider.setValue(maximalNumberToTransfer);
-		slider.setLabelFormatter(new StringConverter<Double>() {
-			@Override
-			public String toString(final Double value) {
-				int v = value.intValue();
-				if (MIN_VALUE == value) {
-					return text.get("chooseGoodAmount.zero");
-				} else if (maximalNumberToTransfer == value) {
-					return text.get("chooseGoodAmount.everything");
-				} else if (v % 10 == 0) {
-					return String.valueOf(v);
-				}
-				return null;
-			}
-
-			@Override
-			public Double fromString(final String string) {
-				return null;
-			}
-		});
 		showAndWait();
 	}
 
@@ -100,9 +87,40 @@ public class ChooseGoodAmount extends AbstractMessageWindow {
 		actualValue = 0;
 		super.onCancelDialog();
 	}
-	
+
 	public int getActualValue() {
 		return actualValue;
+	}
+
+	private String converToString(final Double value) {
+		int v = value.intValue();
+		if (MIN_VALUE == value) {
+			return text.get("chooseGoodAmount.zero");
+		} else if (maximalNumberToTransfer == value) {
+			return text.get("chooseGoodAmount.everything");
+		} else if (v % 10 == 0) {
+			return String.valueOf(v);
+		}
+		return null;
+	}
+
+	private class MyStringConverted extends StringConverter<Double> {
+
+		private final Function<Double, String> convertorToString;
+
+		MyStringConverted(final Function<Double, String> convertorToString) {
+			this.convertorToString = Preconditions.checkNotNull(convertorToString);
+		}
+
+		@Override
+		public String toString(final Double value) {
+			return convertorToString.apply(value);
+		}
+
+		@Override
+		public Double fromString(final String string) {
+			return null;
+		}
 	}
 
 }

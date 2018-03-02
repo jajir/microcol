@@ -151,7 +151,7 @@ public abstract class AbstractCoastMapGenerator {
 
 	private final ImageProvider imageProvider;
 
-	private Map<Location, Image> mapTiles = new HashMap<>();
+	private final Map<Location, Image> mapTiles = new HashMap<>();
 
 	private WorldMap map;
 
