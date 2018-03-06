@@ -10,7 +10,13 @@ Planned releases
  
   * \u2713 Localization was improved, class Localize was removed.
  
-  * \u2717 PMD setting was improved.
+  * \u2713 PMD setting was improved.
+  
+  * \u2713 When fight advisor is shown than mouse moves are detected on main screen.
+  
+  * \u2713 When same dialog is opened second time than dialog is located at top left corner of the screen instead in the meddle of game application window.  
+ 
+  * \u2713 Checkstyle setting was improved.
  
   * \u2717 Game block user to disembark unit at location where is already player's unit.
   	

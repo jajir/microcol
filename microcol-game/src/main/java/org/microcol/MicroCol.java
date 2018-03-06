@@ -95,7 +95,7 @@ public final class MicroCol extends Application {
     private void initializeMicrocol(final Stage primaryStage) {
         try {
             final Injector injector = Guice.createInjector(com.google.inject.Stage.PRODUCTION,
-                    new MicroColModule());
+                    new MicroColModule(), new ExternalModule(primaryStage));
             final MainStageBuilder mainStageBuilder = injector.getInstance(MainStageBuilder.class);
             mainStageBuilder.buildPrimaryStage(primaryStage);
             final ApplicationController applicationController = injector
