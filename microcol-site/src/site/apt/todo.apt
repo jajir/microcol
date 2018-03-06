@@ -18,21 +18,23 @@ Planned releases
  
   * \u2713 Checkstyle setting was improved.
  
-  * \u2717 Game block user to disembark unit at location where is already player's unit.
+  * \u2713 Game block user to disembark unit at location where is already player's unit.
   	
-  * \u2717 When user choose in context menu on field some produced goods than colony dialog is not repainted and previous production remain displayed.
+  * \u2713 When user choose in context menu on field produced goods than colony dialog is not repainted and previous production remain displayed.
   	
-  * \u2717 When player attack colony with units only at field. Units try defend but is at field it throw exception. 
+  * \u2713 When player attack colony with units only at field. Units try defend but is at field it throw exception. 
   
-  * \u2717 Support selecting unit from right panel.
-  
-  * \u2717 Load and Save options should be enabled, not just in debug mode.
+  * \u2713 Load and Save options should be enabled, not just in debug mode.
   
   * \u2717 Focused unit is without available action points to move. User press next turn when user is on turn again unit still seems without actions point. Select another unit and back helps.  
   
-  * \u2717 When ship is port and user try to move another ground unit there than ground unit is embark instead of moving to colony.  
+  * \u2717 When ship is in port and user try to move another ground unit there than ground unit is embark instead of moving to colony.  
+  
+  * \u2717 Game over scenario daesn't work.  
 
  * 0.6.0 - functionality release
+  
+  * \u2717 Support selecting unit from right panel.
   
   * \u2717 Colony building queue and queue editing - simple and ugly version
 

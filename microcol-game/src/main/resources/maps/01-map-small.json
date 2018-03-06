@@ -331,6 +331,26 @@
         ]
       },
       "availableMoves": 0
+    },
+    {
+      "id": 72,
+      "type": "COLONIST",
+      "ownerId": "Player2",
+      "placeColonyField": {},
+      "cargo": {
+        "slots": []
+      },
+      "availableMoves": 0
+    },
+    {
+      "id": 74,
+      "type": "COLONIST",
+      "ownerId": "Player2",
+      "placeConstructionSlot": {},
+      "cargo": {
+        "slots": []
+      },
+      "availableMoves": 0
     }
   ],
   "colonies": [
@@ -471,7 +491,7 @@
         "CORN": 75
       }
     },
-        {
+    {
       "name": "Calais",
       "ownerName": "Player2",
       "location": {
@@ -483,7 +503,9 @@
           "direction": {
             "x": 0,
             "y": -1
-          }
+          },
+		 "workerId": 72,
+         "producedGoodType": "CORN"
         },
         {
           "direction": {
@@ -533,7 +555,7 @@
           "type": "TOWN_HALL",
           "slots": [
             {},
-            {},
+            {"workerId": 74},
             {}
           ]
         },

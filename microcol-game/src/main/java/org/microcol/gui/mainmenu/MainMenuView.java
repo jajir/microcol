@@ -176,7 +176,7 @@ public class MainMenuView implements MainMenuPresenter.Display {
 		if (gamePreferences.isDevelopment()) {
 			menuGame.getItems().addAll(menuItemDeclareIndependence, menuItemNewGame, menuNewScenario, menuItemLoadGame, menuItemSaveGame, menuItemQuitGame);			
 		}else{
-			menuGame.getItems().addAll(menuItemDeclareIndependence, menuItemNewGame, menuItemQuitGame);
+			menuGame.getItems().addAll(menuItemDeclareIndependence, menuItemNewGame, menuItemLoadGame, menuItemSaveGame, menuItemQuitGame);
 		}
 		menuView = new Menu();
 		menuView.getItems().addAll(menuItemCenterView, menuItemEurope);

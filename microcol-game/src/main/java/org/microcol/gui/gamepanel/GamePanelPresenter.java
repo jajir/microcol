@@ -309,7 +309,7 @@ public final class GamePanelPresenter {
 			disableMoveMode();
 		} else if (movingUnit.isPossibleToDisembarkAt(moveToLocation, true)) {
 			// try to disembark
-			movingUnit.getCargo().getSlots().stream().filter(cargoSlot -> !cargoSlot.isEmpty())
+			movingUnit.getCargo().getSlots().stream().filter(cargoSlot -> cargoSlot.isLoadedUnit())
 					.forEach(cargoSlot -> cargoSlot.unload(moveToLocation));
 			// TODO JJ following code is repeated multiple times
 			selectedTileManager.setSelectedTile(moveToLocation);
