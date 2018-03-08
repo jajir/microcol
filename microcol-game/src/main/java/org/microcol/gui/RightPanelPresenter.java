@@ -10,7 +10,6 @@ import org.microcol.gui.gamepanel.TileWasSelectedEvent;
 import org.microcol.gui.mainmenu.ChangeLanguageController;
 import org.microcol.gui.mainmenu.ChangeLanguageEvent;
 import org.microcol.gui.util.Text;
-import org.microcol.model.Location;
 import org.microcol.model.Player;
 import org.microcol.model.event.TurnStartedEvent;
 import org.slf4j.Logger;
@@ -23,88 +22,81 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
 
 public class RightPanelPresenter {
-	
-	private final Logger logger = LoggerFactory.getLogger(RightPanelPresenter.class);
-	
-	private final Text text;
-	
-	private final RightPanelPresenter.Display display;
-	
-	private TileWasSelectedEvent lastFocusedTileEvent;
 
-	public interface Display {
+    private final Logger logger = LoggerFactory.getLogger(RightPanelPresenter.class);
 
-		Button getNextTurnButton();
+    private final Text text;
 
-		void showTile(final TileWasSelectedEvent event);
+    private final RightPanelPresenter.Display display;
 
-		GridPane getBox();
+    private TileWasSelectedEvent lastFocusedTileEvent;
 
-		void setOnMovePlayer(Player player);
-	}
+    public interface Display {
 
-	@Inject
-	RightPanelPresenter(final RightPanelPresenter.Display display,
-			final GameModelController gameModelController,
-			final KeyController keyController,
-			final TileWasSelectedController tileWasSelectedController,
-			final ChangeLanguageController changeLanguangeController,
-			final Text text,
-			final StatusBarMessageController statusBarMessageController,
-			final TurnStartedController turnStartedController) {
-		this.display = Preconditions.checkNotNull(display);
-		this.text = Preconditions.checkNotNull(text);
-		display.getNextTurnButton().setText(text.get("nextTurnButton"));
-		display.getNextTurnButton().setDisable(true);
+        Button getNextTurnButton();
 
-		display.getNextTurnButton().setOnAction(e -> {
-			logger.debug("Next turn button was pressed");
-			display.getNextTurnButton().setDisable(true);
-			gameModelController.nextTurn();
-		});
+        void refreshView(final TileWasSelectedEvent event);
 
-		display.getNextTurnButton().setOnKeyPressed(e -> {
-			keyController.fireEvent(e);
-		});
+        GridPane getBox();
 
-		display.getNextTurnButton().setOnMouseEntered(event -> {
-			statusBarMessageController
-					.fireEvent(new StatusBarMessageEvent(text.get("nextTurnButton.desctiption")));
-		});
+        void setOnMovePlayer(Player player);
+    }
 
-		display.getBox().setOnMouseEntered(e -> {
-			statusBarMessageController.fireEvent(new StatusBarMessageEvent(text.get("rightPanel.description")));
-		});
+    @Inject
+    RightPanelPresenter(final RightPanelPresenter.Display display,
+            final GameModelController gameModelController, final KeyController keyController,
+            final TileWasSelectedController tileWasSelectedController,
+            final ChangeLanguageController changeLanguangeController, final Text text,
+            final StatusBarMessageController statusBarMessageController,
+            final TurnStartedController turnStartedController) {
+        this.display = Preconditions.checkNotNull(display);
+        this.text = Preconditions.checkNotNull(text);
+        display.getNextTurnButton().setText(text.get("nextTurnButton"));
+        display.getNextTurnButton().setDisable(true);
 
-		changeLanguangeController.addListener(this::onLanguageWasChanged);
-		tileWasSelectedController.addRunLaterListener(this::onFocusedTile);
-		turnStartedController.addRunLaterListener(this::onTurnStarted);
-	}
-	
-	private void onTurnStarted(final TurnStartedEvent event){
-		logger.debug("Turn started for player {}", event.getPlayer());
-		display.setOnMovePlayer(event.getPlayer());
-		if (event.getPlayer().isHuman()) {
-			display.getNextTurnButton().setDisable(false);
-		}		
-	}
+        display.getNextTurnButton().setOnAction(e -> {
+            logger.debug("Next turn button was pressed");
+            display.getNextTurnButton().setDisable(true);
+            gameModelController.nextTurn();
+        });
 
-	private void onLanguageWasChanged(final ChangeLanguageEvent event) {
-		display.getNextTurnButton().setText(text.get("nextTurnButton"));
-		display.setOnMovePlayer(event.getModel().getCurrentPlayer());
-		display.showTile(lastFocusedTileEvent);
-	}
+        display.getNextTurnButton().setOnKeyPressed(e -> {
+            keyController.fireEvent(e);
+        });
 
-	private void onFocusedTile(final TileWasSelectedEvent event) {
-		//TODO isItDifferentTile is not necessary to call, it's done in calling methods
-		if (isItDifferentTile(event.getLocation())) {
-			lastFocusedTileEvent = event;
-			display.showTile(event);
-		}
-	}
+        display.getNextTurnButton().setOnMouseEntered(event -> {
+            statusBarMessageController
+                    .fireEvent(new StatusBarMessageEvent(text.get("nextTurnButton.desctiption")));
+        });
 
-	private boolean isItDifferentTile(final Location tile) {
-		return lastFocusedTileEvent == null || !lastFocusedTileEvent.getLocation().equals(tile);
-	}
+        display.getBox().setOnMouseEntered(e -> {
+            statusBarMessageController
+                    .fireEvent(new StatusBarMessageEvent(text.get("rightPanel.description")));
+        });
+
+        changeLanguangeController.addListener(this::onLanguageWasChanged);
+        tileWasSelectedController.addRunLaterListener(this::onFocusedTile);
+        turnStartedController.addRunLaterListener(this::onTurnStarted);
+    }
+
+    private void onTurnStarted(final TurnStartedEvent event) {
+        logger.debug("Turn started for player {}", event.getPlayer());
+        display.setOnMovePlayer(event.getPlayer());
+        if (event.getPlayer().isHuman()) {
+            display.getNextTurnButton().setDisable(false);
+            display.refreshView(lastFocusedTileEvent);        
+        }
+    }
+
+    private void onLanguageWasChanged(final ChangeLanguageEvent event) {
+        display.getNextTurnButton().setText(text.get("nextTurnButton"));
+        display.setOnMovePlayer(event.getModel().getCurrentPlayer());
+        display.refreshView(lastFocusedTileEvent);
+    }
+
+    private void onFocusedTile(final TileWasSelectedEvent event) {
+        lastFocusedTileEvent = event;
+        display.refreshView(event);
+    }
 
 }

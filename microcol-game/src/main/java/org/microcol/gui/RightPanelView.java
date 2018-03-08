@@ -22,121 +22,120 @@ import javafx.scene.layout.RowConstraints;
  */
 public class RightPanelView implements RightPanelPresenter.Display {
 
-	private static final int RIGHT_PANEL_WIDTH = 170;
+    private static final int RIGHT_PANEL_WIDTH = 170;
 
-	private final ImageProvider imageProvider;
-	
-	private final Text text;
+    private final ImageProvider imageProvider;
 
-	private final ImageView tileImage;
+    private final Text text;
 
-	private final Label labelOnMove;
+    private final ImageView tileImage;
 
-	private final Label tileName;
+    private final Label labelOnMove;
 
-	private final Label unitsLabel;
+    private final Label tileName;
 
-	private final UnitsPanel unitsPanel;
+    private final Label unitsLabel;
 
-	private final Button nextTurnButton;
+    private final UnitsPanel unitsPanel;
 
-	private final LocalizationHelper localizationHelper;
+    private final Button nextTurnButton;
 
-	private final GridPane gridPane;
+    private final LocalizationHelper localizationHelper;
 
-	@Inject
-	public RightPanelView(final ImageProvider imageProvider, final Text text, final UnitsPanel unitsPanel,
-			final LocalizationHelper localizationHelper) {
-		this.imageProvider = Preconditions.checkNotNull(imageProvider);
-		this.text = Preconditions.checkNotNull(text);
-		this.unitsPanel = Preconditions.checkNotNull(unitsPanel);
-		this.localizationHelper = Preconditions.checkNotNull(localizationHelper);
+    private final GridPane gridPane;
 
-		gridPane = new GridPane();
-		gridPane.setId("rightPanel");
-		gridPane.setPrefWidth(RIGHT_PANEL_WIDTH);
-		gridPane.setMinWidth(RIGHT_PANEL_WIDTH);
-		gridPane.getStylesheets().add("gui/rightPanelView.css");
+    @Inject
+    public RightPanelView(final ImageProvider imageProvider, final Text text,
+            final UnitsPanel unitsPanel, final LocalizationHelper localizationHelper) {
+        this.imageProvider = Preconditions.checkNotNull(imageProvider);
+        this.text = Preconditions.checkNotNull(text);
+        this.unitsPanel = Preconditions.checkNotNull(unitsPanel);
+        this.localizationHelper = Preconditions.checkNotNull(localizationHelper);
 
-		// Y=0
-		labelOnMove = new Label();
-		gridPane.add(labelOnMove, 0, 0, 2, 1);
+        gridPane = new GridPane();
+        gridPane.setId("rightPanel");
+        gridPane.setPrefWidth(RIGHT_PANEL_WIDTH);
+        gridPane.setMinWidth(RIGHT_PANEL_WIDTH);
+        gridPane.getStylesheets().add("gui/rightPanelView.css");
 
-		// Y=1
-		tileImage = new ImageView();
-		gridPane.add(tileImage, 0, 1);
+        // Y=0
+        labelOnMove = new Label();
+        gridPane.add(labelOnMove, 0, 0, 2, 1);
 
-		tileName = new Label();
-		gridPane.add(tileName, 1, 1);
+        // Y=1
+        tileImage = new ImageView();
+        gridPane.add(tileImage, 0, 1);
 
-		// Y=2
-		unitsLabel = new Label();
-		gridPane.add(unitsLabel, 0, 2);
+        tileName = new Label();
+        gridPane.add(tileName, 1, 1);
 
-		// Y=3
+        // Y=2
+        unitsLabel = new Label();
+        gridPane.add(unitsLabel, 0, 2);
 
-		final ScrollPane scrollPaneGamePanel = new ScrollPane(unitsPanel.getNode());
-		RowConstraints scrollPaneRow = new RowConstraints();
-		scrollPaneRow.setVgrow(Priority.ALWAYS);
-		scrollPaneRow.fillHeightProperty().set(true);
-		gridPane.getRowConstraints().addAll(new RowConstraints(), new RowConstraints(), new RowConstraints(),
-				scrollPaneRow);
-		gridPane.add(scrollPaneGamePanel, 0, 3, 2, 1);
+        // Y=3
 
-		// Y=4
-		nextTurnButton = new Button();
-		nextTurnButton.setId("nextTurnButton");
-		gridPane.add(nextTurnButton, 0, 4, 2, 1);
-	}
+        final ScrollPane scrollPaneGamePanel = new ScrollPane(unitsPanel.getNode());
+        RowConstraints scrollPaneRow = new RowConstraints();
+        scrollPaneRow.setVgrow(Priority.ALWAYS);
+        scrollPaneRow.fillHeightProperty().set(true);
+        gridPane.getRowConstraints().addAll(new RowConstraints(), new RowConstraints(),
+                new RowConstraints(), scrollPaneRow);
+        gridPane.add(scrollPaneGamePanel, 0, 3, 2, 1);
 
-	@Override
-	public void showTile(final TileWasSelectedEvent event) {
-		if (event == null) {
-			return;
-		}
-		StringBuilder sb = new StringBuilder(200);
-		unitsPanel.clear();
-		if(event.isDiscovered()){
-			tileImage.setImage(imageProvider.getTerrainImage(event.getTerrain()));
-			sb.append(localizationHelper.getTerrainName(event.getTerrain()));
-			sb.append("");
-			sb.append("\n");
-			sb.append("Move cost: 1");
-			if (event.getModel().getUnitsAt(event.getLocation()).isEmpty()) {
-				unitsLabel.setText("");
-			} else {
-				// unitsLabel.setText(getText().get("unitsPanel.units"));
-				/**
-				 * Current player is not same as human player. For purposes of
-				 * this method it will be sufficient.
-				 */
-				unitsPanel.setUnits(event.getModel().getCurrentPlayer(),
-						event.getModel().getUnitsAt(event.getLocation()));
-			}
-		}else{
-			tileImage.setImage(imageProvider.getImage(ImageProvider.IMG_TILE_HIDDEN));
-			sb.append(text.get("unitsPanel.unexplored"));
-		}
-		tileName.setText(sb.toString());
-	}
+        // Y=4
+        nextTurnButton = new Button();
+        nextTurnButton.setId("nextTurnButton");
+        gridPane.add(nextTurnButton, 0, 4, 2, 1);
+    }
 
-	@Override
-	public void setOnMovePlayer(final Player player) {
-		StringBuilder sb = new StringBuilder(200);
-		sb.append(text.get("unitsPanel.currentUser"));
-		sb.append(" ");
-		sb.append(player.getName());
-		labelOnMove.setText(sb.toString());
-	}
+    @Override
+    public void refreshView(final TileWasSelectedEvent event) {
+        if (event == null) {
+            return;
+        }
+        StringBuilder sb = new StringBuilder(200);
+        unitsPanel.clear();
+        if (event.isDiscovered()) {
+            tileImage.setImage(imageProvider.getTerrainImage(event.getTerrain()));
+            sb.append(localizationHelper.getTerrainName(event.getTerrain()));
+            sb.append("");
+            sb.append("\n");
+            sb.append("Move cost: 1");
+            if (event.getModel().getUnitsAt(event.getLocation()).isEmpty()) {
+                unitsLabel.setText("");
+            } else {
+                /**
+                 * Current player is not same as human player. For purposes of
+                 * this method it will be sufficient.
+                 */
+                unitsPanel.setUnits(event.getModel().getCurrentPlayer(),
+                        event.getModel().getUnitsAt(event.getLocation()));
+            }
+        } else {
+            tileImage.setImage(imageProvider.getImage(ImageProvider.IMG_TILE_HIDDEN));
+            sb.append(text.get("unitsPanel.unexplored"));
+        }
+        tileName.setText(sb.toString());
+    }
 
-	@Override
-	public Button getNextTurnButton() {
-		return nextTurnButton;
-	}
+    @Override
+    public void setOnMovePlayer(final Player player) {
+        StringBuilder sb = new StringBuilder(200);
+        sb.append(text.get("unitsPanel.currentUser"));
+        sb.append(" ");
+        sb.append(player.getName());
+        labelOnMove.setText(sb.toString());
+    }
 
-	@Override
-	public GridPane getBox() {
-		return gridPane;
-	}
+    @Override
+    public Button getNextTurnButton() {
+        return nextTurnButton;
+    }
+
+    @Override
+    public GridPane getBox() {
+        return gridPane;
+    }
 
 }

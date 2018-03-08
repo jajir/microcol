@@ -26,11 +26,11 @@ Planned releases
   
   * \u2713 Load and Save options should be enabled, not just in debug mode.
   
-  * \u2717 Focused unit is without available action points to move. User press next turn when user is on turn again unit still seems without actions point. Select another unit and back helps.  
+  * \u2713 Focused unit is without available action points to move. User press next turn when user is on turn again unit still seems without actions point. Select another unit and back helps.  
   
-  * \u2717 When ship is in port and user try to move another ground unit there than ground unit is embark instead of moving to colony.  
+  * \u2713 When ship is in port and user try to move another ground unit there than ground unit is embark instead of moving to colony.  
   
-  * \u2717 Game over scenario daesn't work.  
+  * \u2713 Game over scenario daesn't work.  
 
  * 0.6.0 - functionality release
   

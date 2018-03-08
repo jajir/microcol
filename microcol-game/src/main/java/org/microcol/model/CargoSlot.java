@@ -124,6 +124,7 @@ public final class CargoSlot {
         cargoUnit = unit;
     }
 
+    //TODO add validation what in case of embark unit in not in town. see unit.isPossibleToEmbark
     public void store(final Unit unit) {
         Preconditions.checkNotNull(unit);
         Preconditions.checkState(isEmpty(), "Cargo slot (%s) is already loaded.", this);

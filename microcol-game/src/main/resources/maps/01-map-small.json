@@ -343,6 +343,21 @@
       "availableMoves": 0
     },
     {
+      "id": 75,
+      "type": "COLONIST",
+      "ownerId": "Dutch",
+      "placeMap": {
+        "location": {
+          "x": 6,
+          "y": 5
+        }
+      },
+      "cargo": {
+        "slots": []
+      },
+      "availableMoves": 0
+    },
+    {
       "id": 74,
       "type": "COLONIST",
       "ownerId": "Player2",
