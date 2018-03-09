@@ -33,6 +33,20 @@ Planned releases
   * \u2713 Game over scenario daesn't work.  
 
  * 0.6.0 - functionality release
+
+ * <<Backlog>> - feature and improvement backlog
+ 
+  * \u2717 Support mission and campaign. Game should support campaign and missions. There will be one campaign with simple missions:
+ 
+    * \u2717 Find land and found colony.
+ 
+    * \u2717 Produce first food and sell it in Europe.
+ 
+    * \u2717 Declare independence and conquer Royal Expedition Forces.
+ 
+  * \u2717 Adjust main menu to offer free game after user finished missions.
+ 
+  * \u2717 
   
   * \u2717 Support selecting unit from right panel.
   
@@ -41,8 +55,6 @@ Planned releases
   * \u2717 Add unit wagon, can't fight, capture colony, can transport goods
   	
   * \u2717 Colonist in colony eats 2 foods per turn.
-
- * Backlog - feature and improvement backlog
 
   * \u2717 Turn report - when turn starts, events summary to user. Informations like:
   

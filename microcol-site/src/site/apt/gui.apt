@@ -2,7 +2,23 @@
  GUI
  ----
 
-GUI structure
+GUI page flow
+
+ Diagram describe what happen when user starts application. For now it's enough to count with one hard-coded campaign.
+
+[start-application.png] Application start. 
+
+ When user look at game menu than main menu is shown. Main menu is shown like this:
+ 
+[main-menu.png] Main menu
+ 
+ When user finish one mission next one is automatically started.
+ 
+ When last mission is finished than game menu is shown.
+ 
+ When user choose "Exit Game" from main menu than game menu is shown. 
+
+GUI class structure
 
  Following help find class responsible for specific GUI features. For most of panels is used {{{https://en.wikipedia.org/wiki/Model–view–presenter}Model view presenter}} (MVP).
  It's described at {{{http://www.g-widgets.com/2016/01/19/introduction-to-the-mvp-pattern-in-gwt/}http://www.g-widgets.com/2016/01/19/introduction-to-the-mvp-pattern-in-gwt/}}.

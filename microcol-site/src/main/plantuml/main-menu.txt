@@ -1,0 +1,19 @@
+@startuml
+
+start
+
+if (Is all missions finished?) then (yes)
+  :Show 'free play' button;
+else (no)
+endif
+
+if (Exists game in progress?) then (yes)
+  :show button 'Continue game';
+else (no)
+endif
+
+- Show game menu
+
+end
+
+@enduml

@@ -22,9 +22,11 @@ How to make a release
 
  * <microcol-dist/src/icon_square_64x64.ico> - should be 64 x 64 px square Microsoft icon
 
-* Release pre-requirements
+* Release prerequisite
 
- Installed java 1.8.
+ * Installed java 1.8.
+ 
+ * Installed graphviz. It could be verified by running <./dot>. It's required by plant UML diagrams maven plugin.
 
 * Release steps
 

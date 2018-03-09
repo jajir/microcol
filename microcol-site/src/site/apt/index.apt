@@ -35,6 +35,9 @@ git clone https://github.com/jajir/microcol.git
 mvn exec:exec
 +----+
  
+ * Use development mode
+
+ To run application with enabled some additional development features start application with VM argument <-Ddevelopment=true>.
  
 []
  
@@ -147,8 +150,24 @@ exit
  
 []
 
+UML Diagrams - plant UML
+
+ Before generating UML diagrams graphviz have to be installed.
+ For UML diagrams are used plant UML diagrams.
+ Diagrams are generated from plain text source files located at <./src/main/plantuml/>.
+ Images are generated during site generating process to directory <./target/site/>.
+ Images could be generated manually by:
+
++----+
+mvn plantuml:generate
++----+
+ 
 Useful links
 
+ * PlantUML online editor is at {{http://sujoyu.github.io/plantuml-previewer/}}.
+ 
+ * PlantUML language specification is at {{http://plantuml.com/sitemap-language-specification}}.   
+ 
  * Loading animations: {{{http://loading.io}http://loading.io}}.
  
 []

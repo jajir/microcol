@@ -1,0 +1,9 @@
+@startuml
+(*) --> if "Exists game in progress?"
+--> [true] "Load game in progress"
+else
+--> [false] "Show game menu"
+endif
+"Show game menu" --> (*)
+"Load game in progress" --> (*)
+@enduml
