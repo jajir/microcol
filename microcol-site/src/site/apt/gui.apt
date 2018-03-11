@@ -16,7 +16,14 @@ GUI page flow
  
  When last mission is finished than game menu is shown.
  
- When user choose "Exit Game" from main menu than game menu is shown. 
+ When user choose "Exit Game" from main menu than game menu is shown.
+ 
+Campaign
+
+[campaign.png] Campaign
+
+ Mission will register it's own <ModelListener> to be notify about all important events.
+ It allows to show success message like "You did it". 
 
 GUI class structure
 

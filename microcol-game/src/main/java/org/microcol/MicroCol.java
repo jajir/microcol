@@ -10,6 +10,7 @@ import javax.imageio.ImageIO;
 import org.microcol.gui.ApplicationController;
 import org.microcol.gui.MainStageBuilder;
 import org.microcol.gui.MicroColModule;
+import org.microcol.model.campaign.CampaignModule;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
@@ -95,7 +96,7 @@ public final class MicroCol extends Application {
     private void initializeMicrocol(final Stage primaryStage) {
         try {
             final Injector injector = Guice.createInjector(com.google.inject.Stage.PRODUCTION,
-                    new MicroColModule(), new ExternalModule(primaryStage));
+                    new MicroColModule(), new ExternalModule(primaryStage), new CampaignModule());
             final MainStageBuilder mainStageBuilder = injector.getInstance(MainStageBuilder.class);
             mainStageBuilder.buildPrimaryStage(primaryStage);
             final ApplicationController applicationController = injector

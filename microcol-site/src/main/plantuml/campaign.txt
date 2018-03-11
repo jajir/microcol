@@ -1,0 +1,5 @@
+@startuml
+abstract class AbstractCampaign
+abstract class AbstractMission
+AbstractCampaign o-- AbstractMission : 1..n
+@enduml

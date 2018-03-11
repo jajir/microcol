@@ -39,7 +39,7 @@ public class GameController {
 	}
 
 	public void loadModelFromFile(final File sourceFile) {
-		gameModelController.setAndStartModel(Model.make(modelDao.loadModel(sourceFile)));
+		gameModelController.setAndStartModel(Model.make(modelDao.loadModelFromFile(sourceFile)));
 	}
 
 }

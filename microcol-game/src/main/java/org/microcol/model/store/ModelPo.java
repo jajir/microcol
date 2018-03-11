@@ -18,6 +18,8 @@ public class ModelPo {
 	private List<PlayerPo> players = new ArrayList<>();
 
 	private EuropePo europe = new EuropePo();
+	
+	private CampaignPo campaign = new CampaignPo();
 
 	public PlayerPo getPlayerByName(final String name) {
 		Preconditions.checkState(players != null, "Players are null");
@@ -106,5 +108,19 @@ public class ModelPo {
 	public void setEurope(EuropePo europe) {
 		this.europe = europe;
 	}
+
+    /**
+     * @return the campaign
+     */
+    public CampaignPo getCampaign() {
+        return campaign;
+    }
+
+    /**
+     * @param campaign the campaign to set
+     */
+    public void setCampaign(CampaignPo campaign) {
+        this.campaign = campaign;
+    }
 
 }
