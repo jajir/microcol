@@ -15,6 +15,7 @@ public class CampaignModule extends AbstractModule {
     @Override
     protected void configure() {
         bind(ModelDao.class).in(Singleton.class);
+        bind(ModelCampaignDao.class).in(Singleton.class);
     }
 
     @Provides

@@ -721,5 +721,9 @@
     	}
     }
   ],
-  "europe": {}
+  "europe": {},
+  "campaign": {
+  	"name": "freePlay",
+  	"mission": "freePlay"
+  }
 }

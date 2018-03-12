@@ -27,7 +27,8 @@ public class CampaignManager {
      * @return campaign object
      */
     AbstractCampaign getCmapaignByName(final String name) {
-        final AbstractCampaign out = campaigns.get(Preconditions.checkNotNull(name));
+        Preconditions.checkNotNull(name, "Campaign name is null");
+        final AbstractCampaign out = campaigns.get(name);
         if (out == null) {
             throw new IllegalArgumentException(
                     String.format("There is no campaign for name '%s'", name));

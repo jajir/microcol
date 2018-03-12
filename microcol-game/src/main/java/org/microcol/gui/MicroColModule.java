@@ -85,7 +85,6 @@ import org.microcol.gui.util.PersistentService;
 import org.microcol.gui.util.PersistingTool;
 import org.microcol.gui.util.Text;
 import org.microcol.gui.util.ViewUtil;
-import org.microcol.model.store.ModelDao;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
@@ -105,7 +104,6 @@ public class MicroColModule extends AbstractModule {
 		bind(ViewUtil.class).in(Singleton.class);
 		bind(LocalizationHelper.class).in(Singleton.class);
 		bind(PersistentService.class).in(Singleton.class);
-		bind(ModelDao.class).in(Singleton.class);
 		bind(AnimationManager.class).in(Singleton.class);
 		bind(MapManager.class).in(Singleton.class);
 		bind(GrassCoastMapGenerator.class).in(Singleton.class);

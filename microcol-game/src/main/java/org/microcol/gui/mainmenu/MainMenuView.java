@@ -96,7 +96,7 @@ public class MainMenuView implements MainMenuPresenter.Display {
 		persistentSrevice.getScenarios().forEach(scenario->{
 			final MenuItem menuItem = new MenuItem(scenario.getName());
 			menuItem.setOnAction(event->{
-				gameController.startScenario(scenario.getFileName());
+				gameController.startTestScenario(scenario.getFileName());
 			});
 			menuNewScenario.getItems().add(menuItem);
 		});

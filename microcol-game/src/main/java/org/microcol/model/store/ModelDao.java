@@ -77,8 +77,9 @@ public class ModelDao {
      * @return loaded model persistent object
      */
     public ModelPo loadModelFromFile(final File file) {
-        Preconditions.checkNotNull(file);
-        Preconditions.checkArgument(file.exists());
+        Preconditions.checkNotNull(file, "File is null");
+        Preconditions.checkArgument(file.exists(), "File '%s' doesn't exists.",
+                file.getAbsolutePath());
         Preconditions.checkArgument(file.isFile());
         logger.debug("Starting to read from class path ({})", file.getAbsolutePath());
         FileInputStream fis = null;

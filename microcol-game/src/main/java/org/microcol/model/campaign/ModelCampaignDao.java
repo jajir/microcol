@@ -5,23 +5,32 @@ import org.microcol.model.store.ModelDao;
 import org.microcol.model.store.ModelPo;
 
 import com.google.common.base.Preconditions;
+import com.google.inject.Inject;
 
 /**
  * Load and save model campaign from to file.
  */
-public class ModelCamapignDao {
+public class ModelCampaignDao {
 
     private final ModelDao modelDao;
 
     private final CampaignManager campaignManager;
 
-    ModelCamapignDao(final ModelDao modelDao, final CampaignManager campaignManager) {
+    @Inject
+    ModelCampaignDao(final ModelDao modelDao, final CampaignManager campaignManager) {
         this.modelDao = Preconditions.checkNotNull(modelDao);
         this.campaignManager = Preconditions.checkNotNull(campaignManager);
     }
 
-    ModelCampaign load(final String fileName) {
-        final ModelPo modelPo = modelDao.loadModelFromFile(fileName);
+    public ModelCampaign loadFromFile(final String fileName) {
+        return makeFromModelPo(modelDao.loadModelFromFile(fileName));
+    }
+
+    public ModelCampaign loadFromClassPath(final String fileName) {
+        return makeFromModelPo(modelDao.loadPredefinedModel(fileName));
+    }
+
+    private ModelCampaign makeFromModelPo(final ModelPo modelPo) {
         final AbstractCampaign campaign = campaignManager
                 .getCmapaignByName(modelPo.getCampaign().getName());
         final AbstractMission mission = campaign

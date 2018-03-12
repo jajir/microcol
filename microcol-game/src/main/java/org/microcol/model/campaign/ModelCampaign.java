@@ -43,4 +43,14 @@ public class ModelCampaign {
         out.getCampaign().setMission(mission.getName());
         return out;
     }
+
+    /**
+     * TODO this should be replace by direct calls.
+     * Direct calls allows to call mission to verify move.
+     * @return
+     */
+    @Deprecated
+    public Model getModel() {
+        return model;
+    }
 }

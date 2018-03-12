@@ -34,8 +34,6 @@ Planned releases
 
  * 0.6.0 - functionality release
 
- * <<Backlog>> - feature and improvement backlog
- 
   * \u2717 Support mission and campaign. Game should support campaign and missions. There will be one campaign with simple missions:
  
     * \u2717 Find land and found colony.
@@ -43,6 +41,10 @@ Planned releases
     * \u2717 Produce first food and sell it in Europe.
  
     * \u2717 Declare independence and conquer Royal Expedition Forces.
+
+  * \u2717 Support start logic as described in GUI
+ 
+ * <<Backlog>> - feature and improvement backlog
  
   * \u2717 Adjust main menu to offer free game after user finished missions.
  
