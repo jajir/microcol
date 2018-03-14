@@ -42,13 +42,13 @@ Planned releases
  
     * \u2717 Declare independence and conquer Royal Expedition Forces.
 
+  * \u2717 Support game in progress, at start of each turn persist played game and save it to preferences.
+
   * \u2717 Support start logic as described in GUI
  
  * <<Backlog>> - feature and improvement backlog
  
   * \u2717 Adjust main menu to offer free game after user finished missions.
- 
-  * \u2717 
   
   * \u2717 Support selecting unit from right panel.
   
@@ -140,6 +140,12 @@ Planned releases
   * \u2717 When colony have 200 food than produce new colonist and set food to 0
     
   * \u2717 Allow to build custom store and allow to automatically sell products
+ 
+  * \u2717 Support application start parameter --clean to clean all setting. It will be usefull for testing. 
+ 
+  * \u2717 
+ 
+  * \u2717 
 
  * 1.0.0 - should be released at the end of first year of development (Jan. 2018), first minimal playable version of game.
  

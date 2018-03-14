@@ -14,51 +14,59 @@ import com.google.inject.Inject;
  */
 public class PersistingTool {
 
-	private final Logger logger = LoggerFactory.getLogger(getClass());
+    private final Logger logger = LoggerFactory.getLogger(getClass());
 
-	private final static String SYSTEM_PROPERTY_USER_HOME = "user.home";
+    private final static String SYSTEM_PROPERTY_USER_HOME = "user.home";
 
-	private final static String SAVE_DIRECTORY = ".microcol";
+    private final static String SAVE_DIRECTORY = ".microcol";
 
-	private final static String EXTENSION = ".microcol";
+    private final static String EXTENSION = ".microcol";
 
-	private final GameModelController gameModelController;
+    private final static String AUTOSAVE_FILE_NAME = "autosave.microcol";
 
-	@Inject
-	public PersistingTool(final GameModelController gameModelController) {
-		this.gameModelController = Preconditions.checkNotNull(gameModelController);
-	}
+    private final GameModelController gameModelController;
 
-	/**
-	 * Get base directory where could be file saves.
-	 * 
-	 * @return return root directory
-	 */
-	public File getRootSaveDirectory() {
-		final File userDir = new File(System.getProperty(SYSTEM_PROPERTY_USER_HOME));
-		Preconditions.checkState(userDir.exists());
-		Preconditions.checkState(userDir.isDirectory());
+    @Inject
+    public PersistingTool(final GameModelController gameModelController) {
+        this.gameModelController = Preconditions.checkNotNull(gameModelController);
+    }
 
-		final File out = userDir.toPath().resolve(SAVE_DIRECTORY).toFile();
-		if (!out.exists()) {
-			logger.info("creating microCol save directory at '{}'", out.getAbsolutePath());
-			Preconditions.checkState(out.mkdir(), "Unable to create file (%s)", out.getAbsolutePath());
-		}
+    /**
+     * Get base directory where could be file saves.
+     * 
+     * @return return root directory
+     */
+    public File getRootSaveDirectory() {
+        final File userDir = new File(System.getProperty(SYSTEM_PROPERTY_USER_HOME));
+        Preconditions.checkState(userDir.exists());
+        Preconditions.checkState(userDir.isDirectory());
 
-		Preconditions.checkState(out.exists());
-		Preconditions.checkState(out.isDirectory());
-		return out;
-	}
+        final File out = userDir.toPath().resolve(SAVE_DIRECTORY).toFile();
+        if (!out.exists()) {
+            logger.info("creating microCol save directory at '{}'", out.getAbsolutePath());
+            Preconditions.checkState(out.mkdir(), "Unable to create file (%s)",
+                    out.getAbsolutePath());
+        }
 
-	public String getSuggestedSaveFileName() {
-		Preconditions.checkState(gameModelController.isModelReady(), "Can't suggest file name when model is not ready");
+        Preconditions.checkState(out.exists());
+        Preconditions.checkState(out.isDirectory());
+        return out;
+    }
+    
+    public File getAutoSaveFile(){
+        return getRootSaveDirectory().toPath().resolve(AUTOSAVE_FILE_NAME).toFile();
+    }
 
-		String str = gameModelController.getCurrentPlayer().getName() + "-"
-				+ gameModelController.getModel().getCalendar().getCurrentYear();
+    public String getSuggestedSaveFileName() {
+        Preconditions.checkState(gameModelController.isModelReady(),
+                "Can't suggest file name when model is not ready");
 
-		str = str.replaceAll("[^a-zA-Z0-9\\.\\-]", "_") + EXTENSION;
+        String str = gameModelController.getCurrentPlayer().getName() + "-"
+                + gameModelController.getModel().getCalendar().getCurrentYear();
 
-		return str;
-	}
+        str = str.replaceAll("[^a-zA-Z0-9\\.\\-]", "_") + EXTENSION;
+
+        return str;
+    }
 
 }

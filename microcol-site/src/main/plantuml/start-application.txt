@@ -1,19 +1,12 @@
-@startuml
-(*) --> if "Exists game in progress?"
-   --> [true] "Load game in progress" as a1
-   a1 --> (*)
-else
-   --> [false] if "Exists campaign in progress?"
-      --> [true] "Start next mission" as a2
-      a2 --> (*)
-   else
-      --> [false] if "Is default campaign finished"
-         --> [true] "Show game menu" as a3
-         a3 --> (*)
-      else
-         --> [false] "Start next mission\nfrom default campaign" as a4
-         a4 --> (*)
-      endif
-   endif
-endif
-@enduml
+@startsalt
+{
+  MicroCol
+  --
+  [Continue in last saved game]
+  [Load saved game]
+  [Play campaign]
+  [New free play]
+  --
+  [  Exit MicroCol  ]
+}
+@endsalt

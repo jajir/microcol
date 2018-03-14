@@ -4,9 +4,14 @@
 
 GUI page flow
 
- Diagram describe what happen when user starts application. For now it's enough to count with one hard-coded campaign.
+ Diagram describe menu which will be shown to user when starts application.
+ For now it's enough to count with one hard-coded campaign.
 
 [start-application.png] Application start. 
+
+ Campaign menu will look like:
+ 
+[start-application-mission.png] Campaign menu 
 
  When user look at game menu than main menu is shown. Main menu is shown like this:
  
@@ -18,6 +23,10 @@ GUI page flow
  
  When user choose "Exit Game" from main menu than game menu is shown.
  
+Application Screen flow
+
+[main-screen-flow.png] main application screen flow
+
 Campaign
 
 [campaign.png] Campaign

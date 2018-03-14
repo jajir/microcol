@@ -67,7 +67,16 @@
 	<entry key="statusBar.gold.description">How many golden coins do you have.</entry>
 	<entry key="statusBar.status.description">Here will by simple help message</entry>
 
-	<entry key="startPanel.buttonNewGame">New Game</entry>
+	<entry key="startPanel.buttonContinue">Continue in last played game</entry>
+	<entry key="startPanel.buttonLoadSave">Load saved game</entry>
+	<entry key="startPanel.buttonPlayCampaign">Play campaign</entry>
+	<entry key="startPanel.buttonFreeGame">New free play game</entry>
+	<entry key="startPanel.buttonExitMicroCol">Exit</entry>
+
+	<entry key="campaignPanel.buttonBack">Back</entry>
+	<entry key="campaignPanel.default.findNewWorld">New World</entry>
+	<entry key="campaignPanel.default.foundColony">Found new colony</entry>
+	<entry key="campaignPanel.default.thrive">Thrive</entry>
 
 	<entry key="preferencesVolume.caption">Volume</entry>
 	<entry key="preferencesVolume.low">Low</entry>

@@ -7,23 +7,23 @@ import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 
 public final class TurnStartedEvent extends ModelEvent {
-	
-	private final Player player;
 
-	public TurnStartedEvent(final Model model, final Player player) {
-		super(model);
+    private final Player player;
 
-		this.player = Preconditions.checkNotNull(player);
-	}
+    public TurnStartedEvent(final Model model, final Player player) {
+        super(model);
 
-	public Player getPlayer() {
-		return player;
-	}
+        this.player = Preconditions.checkNotNull(player);
+    }
 
-	@Override
-	public String toString() {
-		return MoreObjects.toStringHelper(this)
-			.add("player", player)
-			.toString();
-	}
+    public Player getPlayer() {
+        return player;
+    }
+
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(this)
+                .add("player", player)
+                .toString();
+    }
 }

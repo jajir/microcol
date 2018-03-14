@@ -19,20 +19,19 @@ import com.google.common.base.Preconditions;
  */
 public class ModelCampaign {
 
-    private final AbstractCampaign campaign;
+    private final Campaign campaign;
 
-    private final AbstractMission mission;
+    private final Mission mission;
 
     private final Model model;
 
-    ModelCampaign(final AbstractCampaign campaign, final AbstractMission mission,
-            final Model model) {
+    ModelCampaign(final Campaign campaign, final Mission mission, final Model model) {
         this.campaign = Preconditions.checkNotNull(campaign);
         this.mission = Preconditions.checkNotNull(mission);
         this.model = Preconditions.checkNotNull(model);
     }
 
-    AbstractMission getNextMission() {
+    Mission getNextMission() {
         return null;
     }
 
@@ -45,8 +44,9 @@ public class ModelCampaign {
     }
 
     /**
-     * TODO this should be replace by direct calls.
-     * Direct calls allows to call mission to verify move.
+     * TODO this should be replace by direct calls. Direct calls allows to call
+     * mission to verify move.
+     * 
      * @return
      */
     @Deprecated

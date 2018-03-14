@@ -17,58 +17,60 @@ import com.google.inject.Inject;
  */
 public class ApplicationController {
 
-	private final Logger logger = LoggerFactory.getLogger(ApplicationController.class);
+    private final Logger logger = LoggerFactory.getLogger(ApplicationController.class);
 
-	private final ViewUtil viewUtil;
+    private final ViewUtil viewUtil;
 
-	private final Text text;
-	
-	private final MainFramePresenter mainFramePresenter;
+    private final Text text;
 
-	private final GameController gameController;
+    private final MainFramePresenter mainFramePresenter;
 
-	private final MusicController musicController;
+    private final GameController gameController;
 
-	private final GamePreferences gamePreferences;
+    private final MusicController musicController;
 
-	@Inject
-	public ApplicationController(final MainFramePresenter mainFramePresenter, final GameController gameController,
-			final GameFinishedController gameFinishedController, final MusicController musicController,
-			final GamePreferences gamePreferences, final ViewUtil viewUtil, final Text text) {
-		this.mainFramePresenter = Preconditions.checkNotNull(mainFramePresenter);
-		this.gameController = Preconditions.checkNotNull(gameController);
-		this.musicController = Preconditions.checkNotNull(musicController);
-		this.gamePreferences = Preconditions.checkNotNull(gamePreferences);
-		this.viewUtil = Preconditions.checkNotNull(viewUtil);
-		this.text = Preconditions.checkNotNull(text);
-		gameFinishedController.addListener(event -> gameFinished(event));
-	}
+    private final GamePreferences gamePreferences;
 
-	/**
-	 * It's called only once per application life.
-	 */
-	public void startApplication() {
-		logger.debug("Application started.");
-		startNewDefaultGame();
-		musicController.start(gamePreferences.getVolume());
-	}
+    @Inject
+    public ApplicationController(final MainFramePresenter mainFramePresenter,
+            final GameController gameController,
+            final GameFinishedController gameFinishedController,
+            final MusicController musicController, final GamePreferences gamePreferences,
+            final ViewUtil viewUtil, final Text text) {
+        this.mainFramePresenter = Preconditions.checkNotNull(mainFramePresenter);
+        this.gameController = Preconditions.checkNotNull(gameController);
+        this.musicController = Preconditions.checkNotNull(musicController);
+        this.gamePreferences = Preconditions.checkNotNull(gamePreferences);
+        this.viewUtil = Preconditions.checkNotNull(viewUtil);
+        this.text = Preconditions.checkNotNull(text);
+        gameFinishedController.addListener(event -> gameFinished(event));
+    }
 
-	/**
-	 * It's called only once per application life.
-	 */
-	public void startNewDefaultGame() {
-		logger.debug("Start new default game.");
-		gameController.startNewDefaultGame();
-		mainFramePresenter.showPanel(MainFramePresenter.MAIN_GAME_PANEL);
-	}
+    /**
+     * It's called only once per application life.
+     */
+    public void startApplication() {
+        logger.debug("Application started.");
+        musicController.start(gamePreferences.getVolume());
+        mainFramePresenter.showPanel(MainFramePresenter.START_PANEL);
+    }
 
-	/**
-	 * It's called when game finished and start navigation should be shown.
-	 */
-	private void gameFinished(final GameFinishedEvent event) {
-		logger.debug("Game finished.");
-		new DialogGameOver(viewUtil, text, event);
-		mainFramePresenter.showPanel(MainFramePresenter.START_PANEL);
-	}
+    /**
+     * It's called only once per application life.
+     */
+    public void startNewDefaultGame() {
+        logger.debug("Start new default game.");
+        gameController.startNewDefaultGame();
+        mainFramePresenter.showPanel(MainFramePresenter.MAIN_GAME_PANEL);
+    }
+
+    /**
+     * It's called when game finished and start navigation should be shown.
+     */
+    private void gameFinished(final GameFinishedEvent event) {
+        logger.debug("Game finished.");
+        new DialogGameOver(viewUtil, text, event);
+        mainFramePresenter.showPanel(MainFramePresenter.START_PANEL);
+    }
 
 }

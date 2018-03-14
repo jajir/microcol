@@ -12,41 +12,91 @@ import javafx.scene.layout.VBox;
 /**
  * In main area shows basic menu "Start new game".
  */
-public class StartPanelView implements StartPanelPresenter.Display {
+public class StartPanelView {
 
-	private final Text text;
-	
-	private final Button buttonStartNewGame;
+    private final Text text;
 
-	private final VBox box;
+    private final Button buttonContinue;
 
-	@Inject
-	StartPanelView(final Text text) {
-		this.text = Preconditions.checkNotNull(text);
-		box = new VBox();
-		box.setStyle("-fx-pref-width: 100000; -fx-pref-height: 100000;");
-		box.setAlignment(Pos.CENTER);
-		buttonStartNewGame = new Button();
-		box.getChildren().add(buttonStartNewGame);
-		setLocalizedText();
-	}
+    private final Button buttonLoadSave;
 
-	@Override
-	public void updateLanguage() {
-		setLocalizedText();
-	}
-	
-	private void setLocalizedText(){
-		buttonStartNewGame.setText(text.get("startPanel.buttonNewGame"));
-	}
+    private final Button buttonPlayCampaign;
 
-	@Override
-	public Button getButtonStartNewGame() {
-		return buttonStartNewGame;
-	}
+    private final Button buttonStartFreeGame;
 
-	public VBox getBox() {
-		return box;
-	}
+    private final Button buttonExitMicroCol;
+
+    private final VBox box;
+
+    @Inject
+    StartPanelView(final Text text) {
+        this.text = Preconditions.checkNotNull(text);
+        box = new VBox();
+        box.setStyle("-fx-pref-width: 100000; -fx-pref-height: 100000;");
+        box.setAlignment(Pos.CENTER);
+        buttonContinue = new Button();
+        buttonLoadSave = new Button();
+        buttonPlayCampaign = new Button();
+        buttonStartFreeGame = new Button();
+        buttonExitMicroCol = new Button();
+        box.getChildren().add(buttonContinue);
+        box.getChildren().add(buttonLoadSave);
+        box.getChildren().add(buttonPlayCampaign);
+        box.getChildren().add(buttonStartFreeGame);
+        box.getChildren().add(buttonExitMicroCol);
+        setLocalizedText();
+    }
+
+    void setContinueEnabled(final boolean isEnabled) {
+        buttonContinue.setDisable(!isEnabled);
+    }
+
+    public void updateLanguage() {
+        setLocalizedText();
+    }
+
+    private void setLocalizedText() {
+        buttonContinue.setText(text.get("startPanel.buttonContinue"));
+        buttonLoadSave.setText(text.get("startPanel.buttonLoadSave"));
+        buttonPlayCampaign.setText(text.get("startPanel.buttonPlayCampaign"));
+        buttonStartFreeGame.setText(text.get("startPanel.buttonFreeGame"));
+        buttonExitMicroCol.setText(text.get("startPanel.buttonExitMicroCol"));
+    }
+
+    public Button getButtonStartFreeGame() {
+        return buttonStartFreeGame;
+    }
+
+    public VBox getBox() {
+        return box;
+    }
+
+    /**
+     * @return the buttonContinue
+     */
+    public Button getButtonContinue() {
+        return buttonContinue;
+    }
+
+    /**
+     * @return the buttonLoadSave
+     */
+    public Button getButtonLoadSave() {
+        return buttonLoadSave;
+    }
+
+    /**
+     * @return the buttonPlayCampaign
+     */
+    public Button getButtonPlayCampaign() {
+        return buttonPlayCampaign;
+    }
+
+    /**
+     * @return the buttonExitMicroCol
+     */
+    public Button getButtonExitMicroCol() {
+        return buttonExitMicroCol;
+    }
 
 }

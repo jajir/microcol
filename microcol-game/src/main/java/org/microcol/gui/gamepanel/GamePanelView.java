@@ -39,378 +39,388 @@ import javafx.scene.paint.Color;
  */
 public class GamePanelView implements GamePanelPresenter.Display {
 
-	private final Logger logger = LoggerFactory.getLogger(GamePanelView.class);
+    private final Logger logger = LoggerFactory.getLogger(GamePanelView.class);
 
-	public static final int TILE_WIDTH_IN_PX = 45;
+    public static final int TILE_WIDTH_IN_PX = 45;
 
-	private final Canvas canvas;
+    private final Canvas canvas;
 
-	private final ImageProvider imageProvider;
+    private final ImageProvider imageProvider;
 
-	private final Cursor gotoModeCursor;
+    private final Cursor gotoModeCursor;
 
-	private final GameModelController gameModelController;
+    private final GameModelController gameModelController;
 
-	private final PathPlanning pathPlanning;
+    private final PathPlanning pathPlanning;
 
-	private final SelectedTileManager selectedTileManager;
+    private final SelectedTileManager selectedTileManager;
 
-	private final SelectedUnitManager selectedUnitManager;
+    private final SelectedUnitManager selectedUnitManager;
 
-	private final AnimationManager animationManager;
+    private final AnimationManager animationManager;
 
-	private final ExcludePainting excludePainting;
+    private final ExcludePainting excludePainting;
 
-	private final FpsCounter fpsCounter;
+    private final FpsCounter fpsCounter;
 
-	private final GamePreferences gamePreferences;
+    private final GamePreferences gamePreferences;
 
-	private Optional<ScreenScrolling> screenScrolling = Optional.empty();
+    private Optional<ScreenScrolling> screenScrolling = Optional.empty();
 
-	private final OneTurnMoveHighlighter oneTurnMoveHighlighter;
+    private final OneTurnMoveHighlighter oneTurnMoveHighlighter;
 
-	private final MoveModeSupport moveModeSupport;
+    private final MoveModeSupport moveModeSupport;
 
-	private final PaintService paintService;
+    private final PaintService paintService;
 
-	private final VisibleArea visibleArea;
+    private final VisibleArea visibleArea;
 
-	private final MouseOverTileManager mouseOverTileManager;
+    private final MouseOverTileManager mouseOverTileManager;
 
-	private final ModeController modeController;
-	
-	private final DialogFigth dialogFigth;
+    private final ModeController modeController;
 
-	@Inject
-	public GamePanelView(final GameModelController gameModelController, final PathPlanning pathPlanning,
-			final ImageProvider imageProvider, final SelectedTileManager selectedTileManager,
-			final SelectedUnitManager selectedUnitManager, final MoveModeSupport moveModeSupport,
-			final PaintService paintService, final GamePreferences gamePreferences,
-			final MouseOverTileManager mouseOverTileManager, final AnimationManager animationManager,
-			final ModeController modeController, final ExcludePainting excludePainting, final DialogFigth dialogFigth) {
-		this.gameModelController = Preconditions.checkNotNull(gameModelController);
-		this.pathPlanning = Preconditions.checkNotNull(pathPlanning);
-		this.imageProvider = Preconditions.checkNotNull(imageProvider);
-		this.selectedTileManager = Preconditions.checkNotNull(selectedTileManager);
-		this.selectedUnitManager = Preconditions.checkNotNull(selectedUnitManager);
-		this.moveModeSupport = Preconditions.checkNotNull(moveModeSupport);
-		this.paintService = Preconditions.checkNotNull(paintService);
-		this.gamePreferences = Preconditions.checkNotNull(gamePreferences);
-		this.mouseOverTileManager = Preconditions.checkNotNull(mouseOverTileManager);
-		this.animationManager = Preconditions.checkNotNull(animationManager);
-		this.modeController = Preconditions.checkNotNull(modeController);
-		this.excludePainting = Preconditions.checkNotNull(excludePainting);
-		this.dialogFigth = Preconditions.checkNotNull(dialogFigth);
-		oneTurnMoveHighlighter = new OneTurnMoveHighlighter();
-		gotoModeCursor = new ImageCursor(imageProvider.getImage(ImageProvider.IMG_CURSOR_GOTO), 1, 1);
-		visibleArea = new VisibleArea();
+    private final DialogFigth dialogFigth;
 
-		// TODO JJ specify canvas size
-		canvas = new Canvas();
+    @Inject
+    public GamePanelView(final GameModelController gameModelController,
+            final PathPlanning pathPlanning, final ImageProvider imageProvider,
+            final SelectedTileManager selectedTileManager,
+            final SelectedUnitManager selectedUnitManager, final MoveModeSupport moveModeSupport,
+            final PaintService paintService, final GamePreferences gamePreferences,
+            final MouseOverTileManager mouseOverTileManager,
+            final AnimationManager animationManager, final ModeController modeController,
+            final ExcludePainting excludePainting, final DialogFigth dialogFigth) {
+        this.gameModelController = Preconditions.checkNotNull(gameModelController);
+        this.pathPlanning = Preconditions.checkNotNull(pathPlanning);
+        this.imageProvider = Preconditions.checkNotNull(imageProvider);
+        this.selectedTileManager = Preconditions.checkNotNull(selectedTileManager);
+        this.selectedUnitManager = Preconditions.checkNotNull(selectedUnitManager);
+        this.moveModeSupport = Preconditions.checkNotNull(moveModeSupport);
+        this.paintService = Preconditions.checkNotNull(paintService);
+        this.gamePreferences = Preconditions.checkNotNull(gamePreferences);
+        this.mouseOverTileManager = Preconditions.checkNotNull(mouseOverTileManager);
+        this.animationManager = Preconditions.checkNotNull(animationManager);
+        this.modeController = Preconditions.checkNotNull(modeController);
+        this.excludePainting = Preconditions.checkNotNull(excludePainting);
+        this.dialogFigth = Preconditions.checkNotNull(dialogFigth);
+        oneTurnMoveHighlighter = new OneTurnMoveHighlighter();
+        gotoModeCursor = new ImageCursor(imageProvider.getImage(ImageProvider.IMG_CURSOR_GOTO), 1,
+                1);
+        visibleArea = new VisibleArea();
 
-		fpsCounter = new FpsCounter();
-		fpsCounter.start();
+        // TODO JJ specify canvas size
+        canvas = new Canvas();
 
-		/**
-		 * Following class main define animation loop.
-		 */
-		new SimpleAnimationTimer(this::onNextGameTick).start();
-	}
+        fpsCounter = new FpsCounter();
+        fpsCounter.start();
 
-	@Override
-	public void initGame(final Model model) {
-		visibleArea.setMaxMapSize(model.getMap());
-	}
+        /**
+         * Following class main define animation loop.
+         */
+        new SimpleAnimationTimer(this::onNextGameTick).start();
+    }
 
-	@Override
-	public void stopTimer() {
-		fpsCounter.stop();
-	}
+    @Override
+    public void initGame(final Model model) {
+        visibleArea.setMaxMapSize(model.getMap());
+    }
 
-	/**
-	 * Smallest game time interval. In ideal case it have time to draw world on
-	 * screen.
-	 */
-	@SuppressWarnings("unused")
-	private void onNextGameTick(final Long now) {
-		if (screenScrolling.isPresent() && screenScrolling.get().isNextPointAvailable()) {
-			scrollToPoint(screenScrolling.get().getNextPoint());
-		}
-		if (gameModelController.isModelReady()) {
-			paint();
-		}
-	}
+    @Override
+    public void stopTimer() {
+        fpsCounter.stop();
+    }
 
-	private void scrollToPoint(final Point point) {
-		visibleArea.setX(point.getX());
-		visibleArea.setY(point.getY());
-	}
+    /**
+     * Smallest game time interval. In ideal case it have time to draw world on
+     * screen.
+     */
+    @SuppressWarnings("unused")
+    private void onNextGameTick(final Long now) {
+        if (screenScrolling.isPresent() && screenScrolling.get().isNextPointAvailable()) {
+            scrollToPoint(screenScrolling.get().getNextPoint());
+        }
+        if (gameModelController.isModelReady()) {
+            paint();
+        }
+    }
 
-	public void planScrollingAnimationToLocation(final Location location){
-		planScrollingAnimationToPoint(getArea().getCenterToLocation(location));
-	}
+    private void scrollToPoint(final Point point) {
+        visibleArea.setX(point.getX());
+        visibleArea.setY(point.getY());
+    }
 
-	
-	@Override
-	public void planScrollingAnimationToPoint(final Point targetPoint) {
-		/**
-		 * Following if is a hack. Canvas width and height are set after game
-		 * start. When game starts and scroll request is created than game
-		 * scroll map outside of screen. Following hack solve it. But it's not
-		 * correct.
-		 */
-		if (visibleArea.getCanvasHeight() != 0) {
-			screenScrolling = Optional.of(new ScreenScrolling(pathPlanning, visibleArea.getTopLeft(), targetPoint));
-		}
-	}
+    public void planScrollingAnimationToLocation(final Location location) {
+        planScrollingAnimationToPoint(getArea().getCenterToLocation(location));
+    }
 
-	/**
-	 * It's called to redraw whole game. It should be called each game tick.
-	 */
-	private void paint() {
-		logger.debug("painting: " + visibleArea);
-		paint(canvas.getGraphicsContext2D());
-	}
+    @Override
+    public void planScrollingAnimationToPoint(final Point targetPoint) {
+        /**
+         * Following if is a hack. Canvas width and height are set after game
+         * start. When game starts and scroll request is created than game
+         * scroll map outside of screen. Following hack solve it. But it's not
+         * correct.
+         */
+        if (visibleArea.getCanvasHeight() != 0) {
+            screenScrolling = Optional
+                    .of(new ScreenScrolling(pathPlanning, visibleArea.getTopLeft(), targetPoint));
+        }
+    }
 
-	/**
-	 * Paint everything.
-	 */
-	private void paint(final GraphicsContext g) {
-		final Area area = getArea();
-		// TODO JJ get background color from css style
-		g.setFill(Color.valueOf("#ececec"));
-		g.fillRect(0, 0, visibleArea.getCanvasWidth(), visibleArea.getCanvasHeight());
+    /**
+     * It's called to redraw whole game. It should be called each game tick.
+     */
+    private void paint() {
+        logger.debug("painting: " + visibleArea);
+        paint(canvas.getGraphicsContext2D());
+    }
 
-		paintTerrain(g, area);
-		paintGrid(g, area);
-		paintSelectedTile(g, area);
-		paintColonies(g, gameModelController.getModel(), area);
-		paintUnits(g, gameModelController.getModel(), area);
-		paintSteps(g, area);
-		paintAnimation(g, area);
-		if (gameModelController.getCurrentPlayer().isComputer()) {
-			/**
-			 * If move computer that make game field darker.
-			 */
-			final Point topLeftPoint = area.convertToPoint(area.getTopLeft());
-			final Point bottomRightPoint = area.convertToPoint(area.getBottomRight().add(Location.of(1, 1)));
-			final Point size = bottomRightPoint.substract(topLeftPoint);
-			g.setFill(new Color(0, 0, 0, 0.34));
-			g.fillRect(topLeftPoint.getX(), topLeftPoint.getY(), size.getX(), size.getY());
-		}
-		fpsCounter.screenWasPainted();
-	}
+    /**
+     * Paint everything.
+     */
+    private void paint(final GraphicsContext g) {
+        final Area area = getArea();
+        // TODO JJ get background color from css style
+        g.setFill(Color.valueOf("#ececec"));
+        g.fillRect(0, 0, visibleArea.getCanvasWidth(), visibleArea.getCanvasHeight());
 
-	private void paintAnimation(final GraphicsContext graphics, final Area area) {
-		if (animationManager.hasNextStep()) {
-			animationManager.paint(graphics, area);
-			animationManager.performStep();
-		}
-	}
+        paintTerrain(g, area);
+        paintGrid(g, area);
+        paintSelectedTile(g, area);
+        paintColonies(g, gameModelController.getModel(), area);
+        paintUnits(g, gameModelController.getModel(), area);
+        paintSteps(g, area);
+        paintAnimation(g, area);
+        if (gameModelController.getCurrentPlayer().isComputer()) {
+            /**
+             * If move computer that make game field darker.
+             */
+            final Point topLeftPoint = area.convertToPoint(area.getTopLeft());
+            final Point bottomRightPoint = area
+                    .convertToPoint(area.getBottomRight().add(Location.of(1, 1)));
+            final Point size = bottomRightPoint.substract(topLeftPoint);
+            g.setFill(new Color(0, 0, 0, 0.34));
+            g.fillRect(topLeftPoint.getX(), topLeftPoint.getY(), size.getX(), size.getY());
+        }
+        fpsCounter.screenWasPainted();
+    }
 
-	/**
-	 * Draw main game tiles.
-	 * 
-	 * @param graphics
-	 *            required {@link GraphicsContext}
-	 */
-	private void paintTerrain(final GraphicsContext graphics, final Area area) {
-		final Player player = gameModelController.getCurrentPlayer();
-		for (int i = area.getTopLeft().getX(); i <= area.getBottomRight().getX(); i++) {
-			for (int j = area.getTopLeft().getY(); j <= area.getBottomRight().getY(); j++) {
-				final Location location = Location.of(i, j);
-				final Point point = area.convertToPoint(location);
-				if (player.isVisible(location)) {
-					final Terrain terrain = gameModelController.getModel().getMap().getTerrainAt(location);
-					paintService.paintTerrainOnTile(graphics, point, location, terrain,
-							oneTurnMoveHighlighter.isItHighlighted(location));					
-				} else {
-					final Image imageHidden = imageProvider.getImage(ImageProvider.IMG_TILE_HIDDEN);
-					graphics.drawImage(imageHidden, 0, 0, GamePanelView.TILE_WIDTH_IN_PX,
-							GamePanelView.TILE_WIDTH_IN_PX, point.getX(), point.getY(), GamePanelView.TILE_WIDTH_IN_PX,
-							GamePanelView.TILE_WIDTH_IN_PX);
-				}
-			}
-		}
-	}
+    private void paintAnimation(final GraphicsContext graphics, final Area area) {
+        if (animationManager.hasNextStep()) {
+            animationManager.paint(graphics, area);
+            animationManager.performStep();
+        }
+    }
 
-	/**
-	 * Draw units.
-	 * <p>
-	 * Methods iterate through all location with ships, select first ship and
-	 * draw it.
-	 * </p>
-	 * 
-	 * @param graphics
-	 *            required {@link GraphicsContext}
-	 * @param game
-	 *            required {@link Game}
-	 */
-	private void paintUnits(final GraphicsContext graphics, final Model model, final Area area) {
-		final Map<Location, List<Unit>> ships = model.getUnitsAt();
-		final Player player = gameModelController.getCurrentPlayer();
+    /**
+     * Draw main game tiles.
+     * 
+     * @param graphics
+     *            required {@link GraphicsContext}
+     */
+    private void paintTerrain(final GraphicsContext graphics, final Area area) {
+        final Player player = gameModelController.getCurrentPlayer();
+        for (int i = area.getTopLeft().getX(); i <= area.getBottomRight().getX(); i++) {
+            for (int j = area.getTopLeft().getY(); j <= area.getBottomRight().getY(); j++) {
+                final Location location = Location.of(i, j);
+                final Point point = area.convertToPoint(location);
+                if (player.isVisible(location)) {
+                    final Terrain terrain = gameModelController.getModel().getMap()
+                            .getTerrainAt(location);
+                    paintService.paintTerrainOnTile(graphics, point, location, terrain,
+                            oneTurnMoveHighlighter.isItHighlighted(location));
+                } else {
+                    final Image imageHidden = imageProvider.getImage(ImageProvider.IMG_TILE_HIDDEN);
+                    graphics.drawImage(imageHidden, 0, 0, GamePanelView.TILE_WIDTH_IN_PX,
+                            GamePanelView.TILE_WIDTH_IN_PX, point.getX(), point.getY(),
+                            GamePanelView.TILE_WIDTH_IN_PX, GamePanelView.TILE_WIDTH_IN_PX);
+                }
+            }
+        }
+    }
 
-		final Map<Location, List<Unit>> ships2 = ships.entrySet().stream()
-				.filter(entry -> area.isVisible(entry.getKey()))
-				.filter(entry -> player.isVisible(entry.getKey()))
-				.collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue()));
+    /**
+     * Draw units.
+     * <p>
+     * Methods iterate through all location with ships, select first ship and
+     * draw it.
+     * </p>
+     * 
+     * @param graphics
+     *            required {@link GraphicsContext}
+     * @param game
+     *            required {@link Game}
+     */
+    private void paintUnits(final GraphicsContext graphics, final Model model, final Area area) {
+        final Map<Location, List<Unit>> ships = model.getUnitsAt();
+        final Player player = gameModelController.getCurrentPlayer();
 
-		ships2.forEach((location, list) -> {
-			final Unit unit = list.stream().findFirst().get();
-			final Point point = area.convertToPoint(location);
-			if (excludePainting.isUnitIncluded(unit)) {
-				paintService.paintUnit(graphics, point, unit);
-			}
-		});
-	}
+        final Map<Location, List<Unit>> ships2 = ships.entrySet().stream()
+                .filter(entry -> area.isVisible(entry.getKey()))
+                .filter(entry -> player.isVisible(entry.getKey()))
+                .collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue()));
 
-	private void paintColonies(final GraphicsContext graphics, final Model model, final Area area) {
-		final Player player = gameModelController.getCurrentPlayer();
-		final Map<Location, Colony> colonies = model.getColoniesAt().entrySet().stream()
-				.filter(entry -> area.isVisible(entry.getKey()))
-				.filter(entry -> player.isVisible(entry.getKey()))
-				.collect(Collectors.toMap(entry -> entry.getKey(), entry -> entry.getValue()));
+        ships2.forEach((location, list) -> {
+            final Unit unit = list.stream().findFirst().get();
+            final Point point = area.convertToPoint(location);
+            if (excludePainting.isUnitIncluded(unit)) {
+                paintService.paintUnit(graphics, point, unit);
+            }
+        });
+    }
 
-		colonies.forEach((location, colony) -> {
-			final Point point = area.convertToPoint(location);
-			paintService.paintColony(graphics, point, colony, true);
-		});
+    private void paintColonies(final GraphicsContext graphics, final Model model, final Area area) {
+        final Player player = gameModelController.getCurrentPlayer();
+        final Map<Location, Colony> colonies = model.getColoniesAt().entrySet().stream()
+                .filter(entry -> area.isVisible(entry.getKey()))
+                .filter(entry -> player.isVisible(entry.getKey()))
+                .collect(Collectors.toMap(entry -> entry.getKey(), entry -> entry.getValue()));
 
-	}
+        colonies.forEach((location, colony) -> {
+            final Point point = area.convertToPoint(location);
+            paintService.paintColony(graphics, point, colony, true);
+        });
 
-	private void paintGrid(final GraphicsContext graphics, final Area area) {
-		if (gamePreferences.isGridShown()) {
-			graphics.setStroke(Color.LIGHTGREY);
-			graphics.setLineWidth(1);
-			for (int i = area.getTopLeft().getX(); i <= area.getBottomRight().getX(); i++) {
-				final Location l_1 = Location.of(i, area.getTopLeft().getY());
-				final Location l_2 = Location.of(i, area.getBottomRight().getY() + 1);
-				drawNetLine(graphics, area, l_1, l_2);
-			}
-			for (int j = area.getTopLeft().getY(); j <= area.getBottomRight().getY(); j++) {
-				final Location l_1 = Location.of(area.getTopLeft().getX(), j);
-				final Location l_2 = Location.of(area.getBottomRight().getX() + 1, j);
-				drawNetLine(graphics, area, l_1, l_2);
-			}
-		}
-	}
+    }
 
-	private void drawNetLine(final GraphicsContext graphics, final Area area, final Location l_1, Location l_2) {
-		final Point p_1 = area.convertToPoint(l_1).add(-1, -1);
-		final Point p_2 = area.convertToPoint(l_2).add(-1, -1);
-		graphics.strokeLine(p_1.getX(), p_1.getY(), p_2.getX(), p_2.getY());
-	}
+    private void paintGrid(final GraphicsContext graphics, final Area area) {
+        if (gamePreferences.isGridShown()) {
+            graphics.setStroke(Color.LIGHTGREY);
+            graphics.setLineWidth(1);
+            for (int i = area.getTopLeft().getX(); i <= area.getBottomRight().getX(); i++) {
+                final Location l_1 = Location.of(i, area.getTopLeft().getY());
+                final Location l_2 = Location.of(i, area.getBottomRight().getY() + 1);
+                drawNetLine(graphics, area, l_1, l_2);
+            }
+            for (int j = area.getTopLeft().getY(); j <= area.getBottomRight().getY(); j++) {
+                final Location l_1 = Location.of(area.getTopLeft().getX(), j);
+                final Location l_2 = Location.of(area.getBottomRight().getX() + 1, j);
+                drawNetLine(graphics, area, l_1, l_2);
+            }
+        }
+    }
 
-	private void paintSelectedTile(final GraphicsContext graphics, final Area area) {
-		if (selectedTileManager.getSelectedTile().isPresent()) {
-			graphics.setStroke(Color.GREY);
-			graphics.setLineWidth(2);
-			paintCursor(graphics, area, selectedTileManager.getSelectedTile().get());
-		}
-	}
+    private void drawNetLine(final GraphicsContext graphics, final Area area, final Location l_1,
+            Location l_2) {
+        final Point p_1 = area.convertToPoint(l_1).add(-1, -1);
+        final Point p_2 = area.convertToPoint(l_2).add(-1, -1);
+        graphics.strokeLine(p_1.getX(), p_1.getY(), p_2.getX(), p_2.getY());
+    }
 
-	/**
-	 * Draw highlight of some tile.
-	 * 
-	 * @param graphics
-	 *            required {@link GraphicsContext}
-	 * @param area
-	 *            required displayed area
-	 * @param location
-	 *            required tiles where to draw cursor
-	 */
-	private void paintCursor(final GraphicsContext graphics, final Area area, final Location location) {
-		final Point p = area.convertToPoint(location);
-		graphics.strokeLine(p.getX(), p.getY(), p.getX() + TILE_WIDTH_IN_PX, p.getY());
-		graphics.strokeLine(p.getX(), p.getY(), p.getX(), p.getY() + TILE_WIDTH_IN_PX);
-		graphics.strokeLine(p.getX() + TILE_WIDTH_IN_PX, p.getY(), p.getX() + TILE_WIDTH_IN_PX,
-				p.getY() + TILE_WIDTH_IN_PX);
-		graphics.strokeLine(p.getX(), p.getY() + TILE_WIDTH_IN_PX, p.getX() + TILE_WIDTH_IN_PX,
-				p.getY() + TILE_WIDTH_IN_PX);
-	}
+    private void paintSelectedTile(final GraphicsContext graphics, final Area area) {
+        if (selectedTileManager.getSelectedTile().isPresent()) {
+            graphics.setStroke(Color.GREY);
+            graphics.setLineWidth(2);
+            paintCursor(graphics, area, selectedTileManager.getSelectedTile().get());
+        }
+    }
 
-	/**
-	 * When move mode is enabled mouse cursor is followed by highlighted path.
-	 * 
-	 * @param graphics
-	 *            required {@link GraphicsContext}
-	 * @param area
-	 *            required displayed area
-	 */
-	private void paintSteps(final GraphicsContext graphics, final Area area) {
-		if (modeController.isMoveMode() && mouseOverTileManager.getMouseOverTile().isPresent()) {
-			final Unit selectedUnit = selectedUnitManager.getSelectedUnit().get();
-			if (!selectedUnit.isAtPlaceLocation()) {
-				return;
-			}
-			paintCursor(graphics, area, mouseOverTileManager.getMouseOverTile().get());
-			final List<Location> locations = moveModeSupport.getMoveLocations();
-			final StepCounter stepCounter = new StepCounter(5, selectedUnit.getAvailableMoves());
-			final List<Point> steps = Lists.transform(locations, location -> area.convertToPoint(location));
-			/**
-			 * Here could be check if particular step in on screen, but draw few
-			 * images outside screen is not big deal.
-			 */
-			steps.forEach(point -> paintStep(graphics, point, stepCounter, moveModeSupport.getMoveMode()));
-		}
-	}
+    /**
+     * Draw highlight of some tile.
+     * 
+     * @param graphics
+     *            required {@link GraphicsContext}
+     * @param area
+     *            required displayed area
+     * @param location
+     *            required tiles where to draw cursor
+     */
+    private void paintCursor(final GraphicsContext graphics, final Area area,
+            final Location location) {
+        final Point p = area.convertToPoint(location);
+        graphics.strokeLine(p.getX(), p.getY(), p.getX() + TILE_WIDTH_IN_PX, p.getY());
+        graphics.strokeLine(p.getX(), p.getY(), p.getX(), p.getY() + TILE_WIDTH_IN_PX);
+        graphics.strokeLine(p.getX() + TILE_WIDTH_IN_PX, p.getY(), p.getX() + TILE_WIDTH_IN_PX,
+                p.getY() + TILE_WIDTH_IN_PX);
+        graphics.strokeLine(p.getX(), p.getY() + TILE_WIDTH_IN_PX, p.getX() + TILE_WIDTH_IN_PX,
+                p.getY() + TILE_WIDTH_IN_PX);
+    }
 
-	/**
-	 * Draw image of steps on tile. Image is part of highlighted path.
-	 * 
-	 * @param graphics
-	 *            required {@link GraphicsContext}
-	 * @param point
-	 *            required point where to draw image
-	 */
-	private void paintStep(final GraphicsContext graphics, final Point point, final StepCounter stepCounter,
-			final MoveMode moveMode) {
-		final Image image = imageProvider.getImage(moveMode.getImageForStep(stepCounter.canMakeMoveInSameTurn(1)));
-		graphics.drawImage(image, point.getX(), point.getY());
-	}
+    /**
+     * When move mode is enabled mouse cursor is followed by highlighted path.
+     * 
+     * @param graphics
+     *            required {@link GraphicsContext}
+     * @param area
+     *            required displayed area
+     */
+    private void paintSteps(final GraphicsContext graphics, final Area area) {
+        if (modeController.isMoveMode() && mouseOverTileManager.getMouseOverTile().isPresent()) {
+            final Unit selectedUnit = selectedUnitManager.getSelectedUnit().get();
+            if (!selectedUnit.isAtPlaceLocation()) {
+                return;
+            }
+            paintCursor(graphics, area, mouseOverTileManager.getMouseOverTile().get());
+            final List<Location> locations = moveModeSupport.getMoveLocations();
+            final StepCounter stepCounter = new StepCounter(5, selectedUnit.getAvailableMoves());
+            final List<Point> steps = Lists.transform(locations,
+                    location -> area.convertToPoint(location));
+            /**
+             * Here could be check if particular step in on screen, but draw few
+             * images outside screen is not big deal.
+             */
+            steps.forEach(point -> paintStep(graphics, point, stepCounter,
+                    moveModeSupport.getMoveMode()));
+        }
+    }
 
-	@Override
-	public void startMoveUnit(final Unit ship) {
-		oneTurnMoveHighlighter.setLocations(ship.getAvailableLocations());
-	}
+    /**
+     * Draw image of steps on tile. Image is part of highlighted path.
+     * 
+     * @param graphics
+     *            required {@link GraphicsContext}
+     * @param point
+     *            required point where to draw image
+     */
+    private void paintStep(final GraphicsContext graphics, final Point point,
+            final StepCounter stepCounter, final MoveMode moveMode) {
+        final Image image = imageProvider
+                .getImage(moveMode.getImageForStep(stepCounter.canMakeMoveInSameTurn(1)));
+        graphics.drawImage(image, point.getX(), point.getY());
+    }
 
-	@Override
-	public void setMoveModeOff() {
-		oneTurnMoveHighlighter.setLocations(null);
-		canvas.setCursor(Cursor.DEFAULT);
-		modeController.setMoveMode(false);
-	}
+    @Override
+    public void startMoveUnit(final Unit ship) {
+        oneTurnMoveHighlighter.setLocations(ship.getAvailableLocations());
+    }
 
-	@Override
-	public void setMoveModeOn() {
-		canvas.setCursor(gotoModeCursor);
-		modeController.setMoveMode(true);
-	}
+    @Override
+    public void setMoveModeOff() {
+        oneTurnMoveHighlighter.setLocations(null);
+        canvas.setCursor(Cursor.DEFAULT);
+        modeController.setMoveMode(false);
+    }
 
-	public void addFightAnimation(final Unit attacker, final Unit defender) {
-		animationManager.addAnimation(
-				new AnimationFight(attacker, defender, imageProvider, gamePreferences.getAnimationSpeed()));
-	}
+    @Override
+    public void setMoveModeOn() {
+        canvas.setCursor(gotoModeCursor);
+        modeController.setMoveMode(true);
+    }
 
-	@Override
-	public boolean performFightDialog(final Unit unitAttacker, final Unit unitDefender) {
-		dialogFigth.showAndWait(unitAttacker, unitDefender);
-		return dialogFigth.isUserChooseFight();
-	}
+    public void addFightAnimation(final Unit attacker, final Unit defender) {
+        animationManager.addAnimation(new AnimationFight(attacker, defender, imageProvider,
+                gamePreferences.getAnimationSpeed()));
+    }
 
-	@Override
-	public Area getArea() {
-		return new Area(visibleArea, gameModelController.getModel().getMap());
-	}
+    @Override
+    public boolean performFightDialog(final Unit unitAttacker, final Unit unitDefender) {
+        dialogFigth.showAndWait(unitAttacker, unitDefender);
+        return dialogFigth.isUserChooseFight();
+    }
 
-	@Override
-	public Canvas getCanvas() {
-		return canvas;
-	}
+    @Override
+    public Area getArea() {
+        return new Area(visibleArea, gameModelController.getModel().getMap());
+    }
 
-	@Override
-	public VisibleArea getVisibleArea() {
-		return visibleArea;
-	}
+    @Override
+    public Canvas getCanvas() {
+        return canvas;
+    }
+
+    @Override
+    public VisibleArea getVisibleArea() {
+        return visibleArea;
+    }
 
 }

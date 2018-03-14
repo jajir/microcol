@@ -1,0 +1,13 @@
+@startsalt
+{
+  MicroCol campaign
+  --
+  Select mission
+  [Mission 1 - Find New World]
+  [Mission 2 - Found colony]
+  [Mission 3 - Thrive]
+  [Mission 4 - Independence]
+  --
+  [Back]
+}
+@endsalt

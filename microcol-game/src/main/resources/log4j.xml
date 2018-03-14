@@ -30,7 +30,7 @@
 		<level value="INFO"/>
 	</logger>
 	<logger name="org.microcol.model.store">
-		<level value="DEBUG"/>
+		<level value="WARN"/>
 	</logger>
 	<logger name="org.microcol.gui.util.AbstractEventController">
 		<level value="INFO"/>

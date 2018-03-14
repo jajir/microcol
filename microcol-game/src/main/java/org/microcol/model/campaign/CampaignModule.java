@@ -21,7 +21,8 @@ public class CampaignModule extends AbstractModule {
     @Provides
     @Singleton
     CampaignManager getCampaignManager() {
-        return new CampaignManager(Lists.newArrayList(new CampaignFreePlay()));
+        return new CampaignManager(
+                Lists.newArrayList(new CampaignFreePlay(), new CampaignDefault()));
     }
 
 }

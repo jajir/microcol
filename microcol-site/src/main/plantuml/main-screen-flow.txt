@@ -1,0 +1,21 @@
+@startuml
+
+StartPanel : First menu that user will see\nafter application start
+GamePanel: Game main screen with world
+CampaignPanel : Allows to choose mission to play
+Colony : Colony detail wiew
+
+[*] --> StartPanel
+
+StartPanel --> CampaignPanel
+CampaignPanel --> StartPanel
+
+CampaignPanel --> GamePanel
+GamePanel --> CampaignPanel
+
+GamePanel --> Colony
+Colony --> GamePanel
+
+StartPanel --> [*]
+
+@enduml

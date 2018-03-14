@@ -6,8 +6,12 @@ import java.util.Optional;
 
 import com.google.common.base.Preconditions;
 
-public abstract class AbstractCampaign {
+public abstract class AbstractCampaign implements Campaign {
 
+    /**
+     * Name is unique identification of campaign. It's later used as part of
+     * localization key.
+     */
     private final String name;
 
     private final List<AbstractMission> missions = new ArrayList<>();
@@ -16,7 +20,8 @@ public abstract class AbstractCampaign {
         this.name = Preconditions.checkNotNull(name);
     }
 
-    AbstractMission getMisssionByName(final String name) {
+    @Override
+    public Mission getMisssionByName(final String name) {
         Preconditions.checkNotNull(name);
         final Optional<AbstractMission> oMission = missions.stream()
                 .filter(mission -> mission.getName().equals(name)).findAny();
@@ -28,16 +33,18 @@ public abstract class AbstractCampaign {
         }
     }
 
-    /**
-     * @return the name
+    /* (non-Javadoc)
+     * @see org.microcol.model.campaign.Campaign#getName()
      */
+    @Override
     public String getName() {
         return name;
     }
 
-    /**
-     * @return the missions
+    /* (non-Javadoc)
+     * @see org.microcol.model.campaign.Campaign#getMissions()
      */
+    @Override
     public List<AbstractMission> getMissions() {
         return missions;
     }

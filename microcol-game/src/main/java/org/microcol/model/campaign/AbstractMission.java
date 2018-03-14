@@ -2,7 +2,7 @@ package org.microcol.model.campaign;
 
 import com.google.common.base.Preconditions;
 
-public class AbstractMission {
+public class AbstractMission implements Mission {
 
     private final String name;
 
@@ -20,23 +20,26 @@ public class AbstractMission {
         this.modelFileName = Preconditions.checkNotNull(modelFileName);
     }
 
-    /**
-     * @return the name
+    /* (non-Javadoc)
+     * @see org.microcol.model.campaign.Mission#getName()
      */
+    @Override
     public String getName() {
         return name;
     }
 
-    /**
-     * @return the orderNo
+    /* (non-Javadoc)
+     * @see org.microcol.model.campaign.Mission#getOrderNo()
      */
+    @Override
     public Integer getOrderNo() {
         return orderNo;
     }
 
-    /**
-     * @return the modelFileName
+    /* (non-Javadoc)
+     * @see org.microcol.model.campaign.Mission#getModelFileName()
      */
+    @Override
     public String getModelFileName() {
         return modelFileName;
     }

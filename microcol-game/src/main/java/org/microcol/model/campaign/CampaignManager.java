@@ -12,9 +12,9 @@ import com.google.common.base.Preconditions;
  */
 public class CampaignManager {
 
-    private final Map<String, AbstractCampaign> campaigns;
+    private final Map<String, Campaign> campaigns;
 
-    CampaignManager(final List<AbstractCampaign> campaigns) {
+    CampaignManager(final List<Campaign> campaigns) {
         this.campaigns = Preconditions.checkNotNull(campaigns).stream()
                 .collect(Collectors.toMap(c -> c.getName(), Function.identity()));
     }
@@ -26,9 +26,9 @@ public class CampaignManager {
      *            required campaign name
      * @return campaign object
      */
-    AbstractCampaign getCmapaignByName(final String name) {
+    public Campaign getCmapaignByName(final String name) {
         Preconditions.checkNotNull(name, "Campaign name is null");
-        final AbstractCampaign out = campaigns.get(name);
+        final Campaign out = campaigns.get(name);
         if (out == null) {
             throw new IllegalArgumentException(
                     String.format("There is no campaign for name '%s'", name));
