@@ -17,4 +17,12 @@ public interface Mission {
      */
     String getModelFileName();
 
+    /**
+     * Inform if player finished this mission.
+     *
+     * @return return <code>true</code> when user already finished this mission
+     *         otherwise return <code>false</code>.
+     */
+    boolean isFinished();
+
 }

@@ -4,7 +4,6 @@ import java.util.function.Consumer;
 
 import org.microcol.gui.util.Text;
 import org.microcol.model.campaign.Campaign;
-import org.microcol.model.campaign.CampaignDefault;
 import org.microcol.model.campaign.CampaignManager;
 
 import com.google.common.base.Preconditions;
@@ -26,7 +25,7 @@ public class CampaignPanelView implements CampaignPanelPresenter.Display {
     private final Button buttonBack;
 
     private final VBox box;
-    
+
     private Consumer<String> onSelectedMission;
 
     @Inject
@@ -43,12 +42,13 @@ public class CampaignPanelView implements CampaignPanelPresenter.Display {
 
     private void refresh() {
         box.getChildren().clear();
-        final Campaign campaign = campaignManager.getCmapaignByName(CampaignDefault.NAME);
+        final Campaign campaign = campaignManager.getDefaultCampain();
         campaign.getMissions().forEach(mission -> {
             final Button missionButton = new Button(
                     text.get("campaignPanel." + campaign.getName() + "." + mission.getName()));
-            box.getChildren().add(missionButton);
+            missionButton.setDisable(!campaign.isMissionEnabled(mission));
             missionButton.setOnAction(event -> onSelectedMission(mission.getName()));
+            box.getChildren().add(missionButton);
         });
         box.getChildren().add(buttonBack);
     }
@@ -79,7 +79,8 @@ public class CampaignPanelView implements CampaignPanelPresenter.Display {
     }
 
     /**
-     * @param onSelectedMission the onSelectedMission to set
+     * @param onSelectedMission
+     *            the onSelectedMission to set
      */
     @Override
     public void setOnSelectedMission(final Consumer<String> onSelectedMission) {

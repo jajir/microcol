@@ -26,7 +26,7 @@ public class CampaignManager {
      *            required campaign name
      * @return campaign object
      */
-    public Campaign getCmapaignByName(final String name) {
+    public Campaign getCampaignByName(final String name) {
         Preconditions.checkNotNull(name, "Campaign name is null");
         final Campaign out = campaigns.get(name);
         if (out == null) {
@@ -34,6 +34,10 @@ public class CampaignManager {
                     String.format("There is no campaign for name '%s'", name));
         }
         return out;
+    }
+
+    public Campaign getDefaultCampain() {
+        return getCampaignByName(CampaignDefault.NAME);
     }
 
 }

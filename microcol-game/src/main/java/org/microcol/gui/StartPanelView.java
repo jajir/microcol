@@ -51,6 +51,10 @@ public class StartPanelView {
         buttonContinue.setDisable(!isEnabled);
     }
 
+    void setFreeGameEnabled(final boolean isEnabled) {
+        buttonStartFreeGame.setDisable(!isEnabled);
+    }
+
     public void updateLanguage() {
         setLocalizedText();
     }

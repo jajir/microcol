@@ -6,7 +6,7 @@ public class CampaignFreePlay extends AbstractCampaign {
 
     CampaignFreePlay() {
         super(FREE_PLAY);
-        getMissions().add(new MissionFreePlay());
+        addMission(new MissionFreePlay());
     }
 
 }
