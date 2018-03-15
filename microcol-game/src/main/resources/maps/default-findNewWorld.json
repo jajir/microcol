@@ -171,5 +171,9 @@
   "campaign": {
   	"name": "default",
   	"mission": "findNewWorld"
+  },
+  "focusedField": {
+    "x": 35,
+    "y": 15
   }
 }

@@ -62,6 +62,7 @@ import org.microcol.gui.gamepanel.PaintService;
 import org.microcol.gui.gamepanel.SelectedTileManager;
 import org.microcol.gui.gamepanel.SelectedUnitManager;
 import org.microcol.gui.gamepanel.TileWasSelectedController;
+import org.microcol.gui.gamepanel.TileWasSelectedListener;
 import org.microcol.gui.gamepanel.UnitAttackedEventListener;
 import org.microcol.gui.gamepanel.UnitMovedListener;
 import org.microcol.gui.image.GrassCoastMapGenerator;
@@ -110,7 +111,6 @@ public class MicroColModule extends AbstractModule {
         bind(GrassCoastMapGenerator.class).in(Singleton.class);
         bind(IceCoastMapGenerator.class).in(Singleton.class);
         bind(FontService.class).asEagerSingleton();
-        bind(TurnStartedListener.class).asEagerSingleton();
 
         /**
          * Dialogs
@@ -153,6 +153,8 @@ public class MicroColModule extends AbstractModule {
         bind(UnitMovedOutsideColonyController.class).in(Singleton.class);
         bind(UnitMovedToConstructionController.class).in(Singleton.class);
         bind(UnitMovedToFieldController.class).in(Singleton.class);
+        bind(TurnStartedListener.class).asEagerSingleton();
+        bind(TileWasSelectedListener.class).asEagerSingleton();
 
         bind(ModelEventManager.class).in(Singleton.class);
 

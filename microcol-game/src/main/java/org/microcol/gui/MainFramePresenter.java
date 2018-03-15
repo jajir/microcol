@@ -14,7 +14,7 @@ public class MainFramePresenter {
 
     static final String START_PANEL = "Start panel";
 
-    static final String MAIN_GAME_PANEL = "Main game panel";
+    public static final String MAIN_GAME_PANEL = "Main game panel";
     
     static final String CAMPAIGN_PANEL = "Campaign panel";
     
@@ -36,7 +36,7 @@ public class MainFramePresenter {
         });
     }
 
-    void showPanel(final String panelName) {
+    public void showPanel(final String panelName) {
         display.showPanel(panelName);
     }
 

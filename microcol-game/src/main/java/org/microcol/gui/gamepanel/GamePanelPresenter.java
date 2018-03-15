@@ -94,7 +94,7 @@ public final class GamePanelPresenter {
             final DialogColonyWasCaptured dialogColonyWasCaptured,
             final GameModelController gameModelController, final KeyController keyController,
             final GameStartedController gameStartedController,
-            final GamePreferences gamePreferences, final CenterViewController viewController,
+            final GamePreferences gamePreferences, final CenterViewController centerViewController,
             final ExitGameController exitGameController,
             final SelectedTileManager selectedTileManager, final ViewUtil viewUtil,
             final StartMoveController startMoveController,
@@ -160,7 +160,7 @@ public final class GamePanelPresenter {
 
         gameStartedController.addListener(event -> display.initGame(event.getModel()));
 
-        viewController.addListener(event -> onCenterView());
+        centerViewController.addListener(event -> onCenterView());
         exitGameController.addListener(event -> display.stopTimer());
         colonyWasCapturedController.addRunLaterListener(event -> {
             dialogColonyWasCaptured.showAndWait(event);

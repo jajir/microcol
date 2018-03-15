@@ -3,6 +3,8 @@ package org.microcol.model.store;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.microcol.model.Location;
+
 import com.google.common.base.Preconditions;
 
 public class ModelPo {
@@ -20,6 +22,8 @@ public class ModelPo {
 	private EuropePo europe = new EuropePo();
 	
 	private CampaignPo campaign = new CampaignPo();
+	
+	private Location focusedField;
 
 	public PlayerPo getPlayerByName(final String name) {
 		Preconditions.checkState(players != null, "Players are null");
@@ -121,6 +125,20 @@ public class ModelPo {
      */
     public void setCampaign(CampaignPo campaign) {
         this.campaign = campaign;
+    }
+
+    /**
+     * @return the focusedField
+     */
+    public Location getFocusedField() {
+        return focusedField;
+    }
+
+    /**
+     * @param focusedField the focusedField to set
+     */
+    public void setFocusedField(Location focusedField) {
+        this.focusedField = focusedField;
     }
 
 }

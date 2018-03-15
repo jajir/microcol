@@ -1,9 +1,13 @@
 package org.microcol.gui;
 
+import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.gamepanel.TileWasSelectedEvent;
 import org.microcol.gui.image.ImageProvider;
 import org.microcol.gui.util.Text;
+import org.microcol.model.Location;
+import org.microcol.model.Model;
 import org.microcol.model.Player;
+import org.microcol.model.TerrainType;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
@@ -44,13 +48,17 @@ public class RightPanelView implements RightPanelPresenter.Display {
 
     private final GridPane gridPane;
 
+    private final GameModelController gameModelController;
+
     @Inject
     public RightPanelView(final ImageProvider imageProvider, final Text text,
-            final UnitsPanel unitsPanel, final LocalizationHelper localizationHelper) {
+            final UnitsPanel unitsPanel, final LocalizationHelper localizationHelper,
+            final GameModelController gameModelController) {
         this.imageProvider = Preconditions.checkNotNull(imageProvider);
         this.text = Preconditions.checkNotNull(text);
         this.unitsPanel = Preconditions.checkNotNull(unitsPanel);
         this.localizationHelper = Preconditions.checkNotNull(localizationHelper);
+        this.gameModelController = Preconditions.checkNotNull(gameModelController);
 
         gridPane = new GridPane();
         gridPane.setId("rightPanel");
@@ -96,27 +104,48 @@ public class RightPanelView implements RightPanelPresenter.Display {
         }
         StringBuilder sb = new StringBuilder(200);
         unitsPanel.clear();
-        if (event.isDiscovered()) {
-            tileImage.setImage(imageProvider.getTerrainImage(event.getTerrain()));
-            sb.append(localizationHelper.getTerrainName(event.getTerrain()));
+        if (isDiscovered(event.getLocation())) {
+            tileImage
+                    .setImage(imageProvider.getTerrainImage(getTerrainTypeAt(event.getLocation())));
+            sb.append(localizationHelper.getTerrainName(getTerrainTypeAt(event.getLocation())));
             sb.append("");
             sb.append("\n");
             sb.append("Move cost: 1");
-            if (event.getModel().getUnitsAt(event.getLocation()).isEmpty()) {
+            if (getModel().getUnitsAt(event.getLocation()).isEmpty()) {
                 unitsLabel.setText("");
             } else {
                 /**
                  * Current player is not same as human player. For purposes of
                  * this method it will be sufficient.
                  */
-                unitsPanel.setUnits(event.getModel().getCurrentPlayer(),
-                        event.getModel().getUnitsAt(event.getLocation()));
+                unitsPanel.setUnits(getModel().getCurrentPlayer(),
+                        getModel().getUnitsAt(event.getLocation()));
             }
         } else {
             tileImage.setImage(imageProvider.getImage(ImageProvider.IMG_TILE_HIDDEN));
             sb.append(text.get("unitsPanel.unexplored"));
         }
         tileName.setText(sb.toString());
+    }
+
+    private Model getModel() {
+        return gameModelController.getModel();
+    }
+
+    private TerrainType getTerrainTypeAt(final Location location) {
+        return gameModelController.getModel().getMap().getTerrainAt(location).getTerrainType();
+    }
+
+    /**
+     * If user already explored selected tile.
+     * 
+     * @param location
+     *            required locaton
+     * @return return <code>true</code> when selected location was already
+     *         discovered otherwise return <code>false</code>.
+     */
+    private boolean isDiscovered(final Location location) {
+        return gameModelController.getHumanPlayer().isVisible(location);
     }
 
     @Override

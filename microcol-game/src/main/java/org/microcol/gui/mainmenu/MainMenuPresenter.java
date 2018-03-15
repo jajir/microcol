@@ -1,6 +1,10 @@
 package org.microcol.gui.mainmenu;
 
+import java.util.Optional;
+import java.util.function.Consumer;
+
 import org.microcol.gui.DialogIndependenceWasDeclared;
+import org.microcol.gui.MainFramePresenter;
 import org.microcol.gui.PersistingDialog;
 import org.microcol.gui.PreferencesAnimationSpeed;
 import org.microcol.gui.PreferencesVolume;
@@ -19,6 +23,8 @@ import org.microcol.gui.gamepanel.SelectedUnitManager;
 import org.microcol.gui.gamepanel.TileWasSelectedController;
 import org.microcol.gui.gamepanel.TileWasSelectedEvent;
 import org.microcol.gui.util.Text;
+import org.microcol.model.Model;
+import org.microcol.model.Unit;
 import org.microcol.model.event.TurnStartedEvent;
 import org.microcol.model.event.UnitMoveFinishedEvent;
 import org.microcol.model.event.UnitMovedStepEvent;
@@ -32,204 +38,242 @@ import javafx.scene.control.RadioMenuItem;
 
 public class MainMenuPresenter {
 
-	private final MainMenuPresenter.Display display;
-	
-	private final SelectedUnitManager selectedUnitManager;
+    private final MainMenuPresenter.Display display;
 
-	private boolean isFocusedMoveableUnit = false;
+    private final SelectedUnitManager selectedUnitManager;
 
-	public boolean isTileFocused = false;
+    private boolean isFocusedMoveableUnit = false;
 
-	public interface Display {
+    public boolean isTileFocused = false;
+    
+    private final GameModelController gameModelController;
 
-		MenuItem getMenuItemNewGame();
+    public interface Display {
 
-		MenuItem getMenuItemDeclareIndependence();
+        MenuItem getMenuItemNewGame();
 
-		MenuItem getMenuItemLoadGame();
+        MenuItem getMenuItemDeclareIndependence();
 
-		MenuItem getMenuItemSaveGame();
+        MenuItem getMenuItemLoadGame();
 
-		MenuItem getMenuItemQuitGame();
+        MenuItem getMenuItemSaveGame();
 
-		MenuItem getMenuItemAbout();
+        MenuItem getMenuItemQuitGame();
 
-		RadioMenuItem getRbMenuItemlanguageEn();
+        MenuItem getMenuItemAbout();
 
-		RadioMenuItem getRbMenuItemlanguageCz();
+        RadioMenuItem getRbMenuItemlanguageEn();
 
-		void updateLanguage();
+        RadioMenuItem getRbMenuItemlanguageCz();
 
-		MenuItem getMenuItemAnimationSpeed();
+        void updateLanguage();
 
-		MenuItem getMenuItemVolume();
+        MenuItem getMenuItemAnimationSpeed();
 
-		CheckMenuItem getMenuItemShowGrid();
+        MenuItem getMenuItemVolume();
 
-		MenuItem getMenuItemMove();
+        CheckMenuItem getMenuItemShowGrid();
 
-		MenuItem getMenuItemBuildColony();
+        MenuItem getMenuItemMove();
 
-		MenuItem getMenuItemNextUnit();
+        MenuItem getMenuItemBuildColony();
 
-		MenuItem getMenuItemCenterView();
+        MenuItem getMenuItemNextUnit();
 
-		MenuItem getMenuItemEurope();
+        MenuItem getMenuItemCenterView();
 
-		MenuItem getMenuItemColonizopedia();
-	}
+        MenuItem getMenuItemEurope();
 
-	@Inject
-	public MainMenuPresenter(final MainMenuPresenter.Display display,
-			/**
-			 * Following parameters are controllers reacting on menu events
-			 */
-			final AboutGameEventController gameEventController,
-			final BuildColonyEventController buildColonyEventController,
-			final CenterViewController centerViewController,
-			final ChangeLanguageController changeLanguageController,
-			final DeclareIndependenceController declareIndependenceController,
-			final ExitGameController exitGameController,
-			final ShowGridController showGridController,
-			final SelectNextUnitController selectNextUnitController,
+        MenuItem getMenuItemColonizopedia();
 
-			/**
-			 * Menu items react on following events
-			 */
-			final TileWasSelectedController tileWasSelectedController,
-			final GameController gameController,
-			final GameModelController gameModelController,
-			final StartMoveController startMoveController,
-			final EndMoveController endMoveController,
-			final TurnStartedController turnStartedController,
+        void setOnSelectedTestScenario(Consumer<String> onSelectedTestScenario);
+    }
 
-			/**
-			 * Other events consumers and helpers
-			 */
-			final PersistingDialog persistingDialog,
-			final EuropeDialog europeDialog,
-			final DialogIndependenceWasDeclared dialogIndependenceWasDeclared,
-			final Colonizopedia colonizopedia,
-			final PreferencesAnimationSpeed preferencesAnimationSpeed,
-			final PreferencesVolume preferencesVolume,
-			final SelectedUnitManager selectedUnitManager,
-			final UnitMovedController unitMovedStepController,
-			final UnitMoveFinishedController unitMoveFinishedController
-			) {
-		this.display = Preconditions.checkNotNull(display);
-		this.selectedUnitManager = Preconditions.checkNotNull(selectedUnitManager);
-		/**
-		 * Following section describe what happens when menu item is selected 
-		 */
-		display.getMenuItemNewGame().setOnAction(actionEvent -> gameController.startNewDefaultGame());
-		display.getMenuItemSaveGame().setOnAction(event -> persistingDialog.saveModel());
-		display.getMenuItemLoadGame().setOnAction(event -> persistingDialog.loadModel());
-		display.getMenuItemQuitGame().setOnAction(actionEvent -> exitGameController.fireEvent(new ExitGameEvent()));
-		display.getMenuItemAbout().setOnAction(actionEvent -> gameEventController.fireEvent(new AboutGameEvent()));
-		display.getMenuItemColonizopedia().setOnAction(event -> colonizopedia.showAndWait());
-		display.getRbMenuItemlanguageCz().setOnAction(actionEvent -> changeLanguageController
-				.fireEvent(new ChangeLanguageEvent(Text.Language.cz, gameModelController.getModel())));
-		display.getRbMenuItemlanguageEn().setOnAction(actionEvent -> changeLanguageController
-				.fireEvent(new ChangeLanguageEvent(Text.Language.en, gameModelController.getModel())));
-		display.getMenuItemVolume().setOnAction(actionEvent -> preferencesVolume.resetAndShowAndWait());
-		display.getMenuItemAnimationSpeed().setOnAction(event -> preferencesAnimationSpeed.resetAndShowAndWait());
-		display.getMenuItemEurope().setOnAction(event -> europeDialog.show());
-		display.getMenuItemShowGrid().setOnAction(ectionEvent -> showGridController
-				.fireEvent(new ShowGridEvent(display.getMenuItemShowGrid().isSelected())));
-		display.getMenuItemBuildColony().setOnAction(event -> buildColonyEventController.fireEvent());
-		display.getMenuItemMove().setOnAction(ectionEvent -> {
-			startMoveController.fireEvent(new StartMoveEvent());
-			display.getMenuItemMove().setDisable(true);
-		});
-		display.getMenuItemDeclareIndependence().setOnAction(event -> {
-			dialogIndependenceWasDeclared.showAndWait();
-			declareIndependenceController.fireEvent(new DeclareIndependenceEvent(gameModelController.getModel(),
-					gameModelController.getCurrentPlayer()));
-		});
-		display.getMenuItemCenterView().setOnAction(event -> centerViewController.fireEvent(new CenterViewEvent()));
-		display.getMenuItemNextUnit()
-				.setOnAction(event -> selectNextUnitController.fireEvent(new SelectNextUnitEvent()));
+    @Inject
+    public MainMenuPresenter(final MainMenuPresenter.Display display,
+            /**
+             * Following parameters are controllers reacting on menu events
+             */
+            final AboutGameEventController gameEventController,
+            final BuildColonyEventController buildColonyEventController,
+            final CenterViewController centerViewController,
+            final ChangeLanguageController changeLanguageController,
+            final DeclareIndependenceController declareIndependenceController,
+            final ExitGameController exitGameController,
+            final ShowGridController showGridController,
+            final SelectNextUnitController selectNextUnitController,
 
-		/**
-		 * Following section define visibility of menu items.
-		 */
-		changeLanguageController.addListener(event -> {
-			display.updateLanguage();
-		});
-		tileWasSelectedController.addListener(event -> onFocusedTileEvent(event));
-		turnStartedController.addListener(this::onTurnStartedEvent);
-		declareIndependenceController.addListener(event -> display.getMenuItemDeclareIndependence().setDisable(true));
+            /**
+             * Menu items react on following events
+             */
+            final TileWasSelectedController tileWasSelectedController,
+            final GameController gameController,
+            final GameModelController gameModelController,
+            final StartMoveController startMoveController,
+            final EndMoveController endMoveController,
+            final TurnStartedController turnStartedController,
 
-		exitGameController.addListener(this::onGameFinihedEvent);
-		endMoveController.addRunLaterListener(this::onEndMoveEvent);
-		unitMovedStepController.addRunLaterListener(this::onUnitMovedStep);
-		unitMoveFinishedController.addRunLaterListener(this::unitMoveFinishedController);
-	}
-	
-	@SuppressWarnings("unused")
-	private void onUnitMovedStep(final UnitMovedStepEvent event){
-		//TODO event queue is blocked by animation of move. This method is called as last method. 
-		display.getMenuItemNextUnit().setDisable(true);
-	}
-	
-	@SuppressWarnings("unused")
-	private void unitMoveFinishedController(final UnitMoveFinishedEvent event){
-		display.getMenuItemNextUnit().setDisable(false);		
-	}
-	
-	@SuppressWarnings("unused")
-	void onEndMoveEvent(final EndMoveEvent event){
-		if(selectedUnitManager.isSelectedUnitMoveable()){
-			display.getMenuItemMove().setDisable(false);
-		}else{
-			display.getMenuItemMove().setDisable(true);
-		}
-	}
+            /**
+             * Other events consumers and helpers
+             */
+            final PersistingDialog persistingDialog,
+            final EuropeDialog europeDialog,
+            final DialogIndependenceWasDeclared dialogIndependenceWasDeclared,
+            final Colonizopedia colonizopedia,
+            final PreferencesAnimationSpeed preferencesAnimationSpeed,
+            final PreferencesVolume preferencesVolume,
+            final SelectedUnitManager selectedUnitManager,
+            final UnitMovedController unitMovedStepController,
+            final UnitMoveFinishedController unitMoveFinishedController,
+            final MainFramePresenter mainFramePresenter) {
+        this.display = Preconditions.checkNotNull(display);
+        this.selectedUnitManager = Preconditions.checkNotNull(selectedUnitManager);
+        this.gameModelController = Preconditions.checkNotNull(gameModelController);
+        /**
+         * Following section describe what happens when menu item is selected
+         */
+        display.getMenuItemNewGame()
+                .setOnAction(actionEvent -> gameController.startNewDefaultGame());
+        display.getMenuItemSaveGame().setOnAction(event -> persistingDialog.saveModel());
+        display.getMenuItemLoadGame().setOnAction(event -> persistingDialog.loadModel());
+        display.getMenuItemQuitGame()
+                .setOnAction(actionEvent -> exitGameController.fireEvent(new ExitGameEvent()));
+        display.getMenuItemAbout()
+                .setOnAction(actionEvent -> gameEventController.fireEvent(new AboutGameEvent()));
+        display.getMenuItemColonizopedia().setOnAction(event -> colonizopedia.showAndWait());
+        display.getRbMenuItemlanguageCz()
+                .setOnAction(actionEvent -> changeLanguageController.fireEvent(
+                        new ChangeLanguageEvent(Text.Language.cz, gameModelController.getModel())));
+        display.getRbMenuItemlanguageEn()
+                .setOnAction(actionEvent -> changeLanguageController.fireEvent(
+                        new ChangeLanguageEvent(Text.Language.en, gameModelController.getModel())));
+        display.getMenuItemVolume()
+                .setOnAction(actionEvent -> preferencesVolume.resetAndShowAndWait());
+        display.getMenuItemAnimationSpeed()
+                .setOnAction(event -> preferencesAnimationSpeed.resetAndShowAndWait());
+        display.getMenuItemEurope().setOnAction(event -> europeDialog.show());
+        display.getMenuItemShowGrid().setOnAction(ectionEvent -> showGridController
+                .fireEvent(new ShowGridEvent(display.getMenuItemShowGrid().isSelected())));
+        display.getMenuItemBuildColony()
+                .setOnAction(event -> buildColonyEventController.fireEvent());
+        display.getMenuItemMove().setOnAction(ectionEvent -> {
+            startMoveController.fireEvent(new StartMoveEvent());
+            display.getMenuItemMove().setDisable(true);
+        });
+        display.getMenuItemDeclareIndependence().setOnAction(event -> {
+            dialogIndependenceWasDeclared.showAndWait();
+            declareIndependenceController.fireEvent(new DeclareIndependenceEvent(
+                    gameModelController.getModel(), gameModelController.getCurrentPlayer()));
+        });
+        display.getMenuItemCenterView()
+                .setOnAction(event -> centerViewController.fireEvent(new CenterViewEvent()));
+        display.getMenuItemNextUnit().setOnAction(
+                event -> selectNextUnitController.fireEvent(new SelectNextUnitEvent()));
+        display.setOnSelectedTestScenario(scenarioFileName -> {
+            gameController.startTestScenario(scenarioFileName);
+            mainFramePresenter.showPanel(MainFramePresenter.MAIN_GAME_PANEL);
+        });
 
-	/**
-	 * Method process event when user put focus to some tile.
-	 * 
-	 * @param event
-	 *            required event
-	 */
-	private void onFocusedTileEvent(final TileWasSelectedEvent event) {
-		display.getMenuItemCenterView().setDisable(false);
-		isTileFocused = true;
-		if (event.isTileContainsMovebleUnit()) {
-			display.getMenuItemMove().setDisable(false);
-			isFocusedMoveableUnit = true;
-			display.getMenuItemBuildColony().setDisable(!event.isPossibleToBuildColony());
-		} else {
-			display.getMenuItemBuildColony().setDisable(true);
-			display.getMenuItemMove().setDisable(true);
-			isFocusedMoveableUnit = false;
-		}
-	}
+        /**
+         * Following section define visibility of menu items.
+         */
+        changeLanguageController.addListener(event -> {
+            display.updateLanguage();
+        });
+        tileWasSelectedController.addListener(event -> onFocusedTileEvent(event));
+        turnStartedController.addListener(this::onTurnStartedEvent);
+        declareIndependenceController
+                .addListener(event -> display.getMenuItemDeclareIndependence().setDisable(true));
 
-	@SuppressWarnings("unused")
-	private void onGameFinihedEvent(final ExitGameEvent exitGameEvent) {
-		display.getMenuItemEurope().setDisable(true);
-		display.getMenuItemNextUnit().setDisable(true);
-		display.getMenuItemBuildColony().setDisable(true);
-	}
+        exitGameController.addListener(this::onGameFinihedEvent);
+        endMoveController.addRunLaterListener(this::onEndMoveEvent);
+        unitMovedStepController.addRunLaterListener(this::onUnitMovedStep);
+        unitMoveFinishedController.addRunLaterListener(this::unitMoveFinishedController);
+    }
 
-	private void onTurnStartedEvent(final TurnStartedEvent event) {
-		if (event.getPlayer().isHuman()) {
-			if (isTileFocused) {
-				display.getMenuItemCenterView().setDisable(false);
-			}
-			if (isFocusedMoveableUnit) {
-				display.getMenuItemMove().setDisable(false);
-			}
-			display.getMenuItemEurope().setDisable(false);
-			display.getMenuItemNextUnit().setDisable(false);
-			display.getMenuItemDeclareIndependence().setDisable(event.getPlayer().isDeclaredIndependence());
-		} else {
-			display.getMenuItemCenterView().setDisable(true);
-			display.getMenuItemMove().setDisable(true);
-			display.getMenuItemEurope().setDisable(true);
-			display.getMenuItemNextUnit().setDisable(true);
-		}
-	}
+    @SuppressWarnings("unused")
+    private void onUnitMovedStep(final UnitMovedStepEvent event) {
+        // TODO event queue is blocked by animation of move. This method is
+        // called as last method.
+        display.getMenuItemNextUnit().setDisable(true);
+    }
+
+    @SuppressWarnings("unused")
+    private void unitMoveFinishedController(final UnitMoveFinishedEvent event) {
+        display.getMenuItemNextUnit().setDisable(false);
+    }
+
+    @SuppressWarnings("unused")
+    void onEndMoveEvent(final EndMoveEvent event) {
+        if (selectedUnitManager.isSelectedUnitMoveable()) {
+            display.getMenuItemMove().setDisable(false);
+        } else {
+            display.getMenuItemMove().setDisable(true);
+        }
+    }
+
+    /**
+     * Method process event when user put focus to some tile.
+     * 
+     * @param event
+     *            required event
+     */
+    private void onFocusedTileEvent(final TileWasSelectedEvent event) {
+        display.getMenuItemCenterView().setDisable(false);
+        isTileFocused = true;
+        if (isTileContainsMovebleUnit(event)) {
+            display.getMenuItemMove().setDisable(false);
+            isFocusedMoveableUnit = true;
+            display.getMenuItemBuildColony().setDisable(!isPossibleToBuildColony(event));
+        } else {
+            display.getMenuItemBuildColony().setDisable(true);
+            display.getMenuItemMove().setDisable(true);
+            isFocusedMoveableUnit = false;
+        }
+    }
+    
+    // TODO use selectedUnitController
+    private boolean isTileContainsMovebleUnit(final TileWasSelectedEvent event) {
+        final Model model = gameModelController.getModel();
+        final Optional<Unit> unit = model.getUnitsAt(event.getLocation()).stream().findFirst();
+        return unit.isPresent() && unit.get().getOwner().equals(model.getCurrentPlayer());
+    }
+
+    private boolean isPossibleToBuildColony(final TileWasSelectedEvent event) {
+        final Model model = gameModelController.getModel();
+        if (isTileContainsMovebleUnit(event)) {
+            final Unit unit = model.getUnitsAt(event.getLocation()).stream().findFirst()
+                    .orElseThrow(() -> new IllegalStateException("It should not be here"));
+            return unit.getType().canBuildColony() && unit.getAvailableMoves() > 0;
+        }
+        return false;
+    }
+
+    @SuppressWarnings("unused")
+    private void onGameFinihedEvent(final ExitGameEvent exitGameEvent) {
+        display.getMenuItemEurope().setDisable(true);
+        display.getMenuItemNextUnit().setDisable(true);
+        display.getMenuItemBuildColony().setDisable(true);
+    }
+
+    private void onTurnStartedEvent(final TurnStartedEvent event) {
+        if (event.getPlayer().isHuman()) {
+            if (isTileFocused) {
+                display.getMenuItemCenterView().setDisable(false);
+            }
+            if (isFocusedMoveableUnit) {
+                display.getMenuItemMove().setDisable(false);
+            }
+            display.getMenuItemEurope().setDisable(false);
+            display.getMenuItemNextUnit().setDisable(false);
+            display.getMenuItemDeclareIndependence()
+                    .setDisable(event.getPlayer().isDeclaredIndependence());
+        } else {
+            display.getMenuItemCenterView().setDisable(true);
+            display.getMenuItemMove().setDisable(true);
+            display.getMenuItemEurope().setDisable(true);
+            display.getMenuItemNextUnit().setDisable(true);
+        }
+    }
 
 }

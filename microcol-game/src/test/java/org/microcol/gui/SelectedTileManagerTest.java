@@ -15,34 +15,34 @@ import mockit.Mocked;
 
 public class SelectedTileManagerTest {
 
-	private SelectedTileManager viewState;
+    private SelectedTileManager viewState;
 
-	@Mocked
-	private TileWasSelectedController tileWasSelectedController;
-	
-	@Mocked
-	private GameModelController gameModelController;
-	
-	@Mocked
-	private UnitMoveFinishedController unitMoveFinishedController;
-	
-	@Mocked
-	private ColonyWasCapturedController colonyWasCapturedController;
-	
-	@Test
-	public void test_getInitialValues() throws Exception {
-		assertFalse(viewState.getSelectedTile().isPresent());
-	}
+    @Mocked
+    private TileWasSelectedController tileWasSelectedController;
 
-	@Before
-	public void setUp() {
-		viewState = new SelectedTileManager(tileWasSelectedController, gameModelController, unitMoveFinishedController,
-				colonyWasCapturedController);
-	}
+    @Mocked
+    private GameModelController gameModelController;
 
-	@After
-	public void tearDown() {
-		viewState = null;
-	}
+    @Mocked
+    private UnitMoveFinishedController unitMoveFinishedController;
+
+    @Mocked
+    private ColonyWasCapturedController colonyWasCapturedController;
+
+    @Test
+    public void test_getInitialValues() throws Exception {
+        assertFalse(viewState.getSelectedTile().isPresent());
+    }
+
+    @Before
+    public void setUp() {
+        viewState = new SelectedTileManager(tileWasSelectedController, unitMoveFinishedController,
+                colonyWasCapturedController);
+    }
+
+    @After
+    public void tearDown() {
+        viewState = null;
+    }
 
 }

@@ -8,6 +8,9 @@ import org.microcol.ai.AbstractRobotPlayer;
 import org.microcol.ai.KingPlayer;
 import org.microcol.ai.SimpleAiPlayer;
 import org.microcol.gui.gamepanel.AnimationManager;
+import org.microcol.gui.gamepanel.SelectedTileManager;
+import org.microcol.gui.mainmenu.CenterViewController;
+import org.microcol.gui.mainmenu.CenterViewEvent;
 import org.microcol.model.GoodAmount;
 import org.microcol.model.GoodTrade;
 import org.microcol.model.GoodType;
@@ -43,11 +46,19 @@ public class GameModelController {
 
     private List<AbstractRobotPlayer> players;
 
+    private final CenterViewController centerViewController;
+
+    private final SelectedTileManager selectedTileManager;
+
     @Inject
     public GameModelController(final ModelEventManager modelEventManager,
-            final AnimationManager animationManager) {
+            final AnimationManager animationManager,
+            final CenterViewController centerViewController,
+            final SelectedTileManager selectedTileManager) {
         this.modelEventManager = Preconditions.checkNotNull(modelEventManager);
         this.animationManager = Preconditions.checkNotNull(animationManager);
+        this.centerViewController = Preconditions.checkNotNull(centerViewController);
+        this.selectedTileManager = Preconditions.checkNotNull(selectedTileManager);
         modelCampaign = null;
         modelListener = null;
     }
@@ -62,16 +73,20 @@ public class GameModelController {
         tryToStopGame();
         modelCampaign = Preconditions.checkNotNull(newModel);
         players = new ArrayList<>();
-        modelCampaign.getModel().getPlayers().stream().filter(player -> player.isKing()).forEach(player -> {
-            players.add(new KingPlayer(modelCampaign.getModel(), player, animationManager));
-        });
-        modelCampaign.getModel().getPlayers().stream().filter(player -> !player.isKing() && player.isComputer())
+        modelCampaign.getModel().getPlayers().stream().filter(player -> player.isKing())
                 .forEach(player -> {
-                    players.add(new SimpleAiPlayer(modelCampaign.getModel(), player, animationManager));
+                    players.add(new KingPlayer(modelCampaign.getModel(), player, animationManager));
+                });
+        modelCampaign.getModel().getPlayers().stream()
+                .filter(player -> !player.isKing() && player.isComputer()).forEach(player -> {
+                    players.add(
+                            new SimpleAiPlayer(modelCampaign.getModel(), player, animationManager));
                 });
         modelListener = new ModelListenerImpl(modelEventManager, this);
         modelCampaign.getModel().addListener(modelListener);
         modelCampaign.getModel().startGame();
+        selectedTileManager.setSelectedTile(getModel().getFocusedField());
+        centerViewController.fireEvent(new CenterViewEvent());
     }
 
     public Model getModel() {
@@ -93,7 +108,8 @@ public class GameModelController {
     }
 
     public GoodAmount getMaxBuyableGoodsAmount(final GoodType goodType) {
-        final GoodTrade goodTrade = modelCampaign.getModel().getEurope().getGoodTradeForType(goodType);
+        final GoodTrade goodTrade = modelCampaign.getModel().getEurope()
+                .getGoodTradeForType(goodType);
         return goodTrade.getAvailableAmountFor(getCurrentPlayer().getGold());
     }
 

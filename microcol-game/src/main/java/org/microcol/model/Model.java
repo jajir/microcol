@@ -36,6 +36,7 @@ public final class Model {
 	private final Europe europe;
 	private final HighSea highSea;
 	private final GameManager gameManager;
+        private Location focusedField;
 
 	/**
 	 * Verify that all units are in unit storage and that all units from unit
@@ -67,6 +68,7 @@ public final class Model {
 	Model(final Calendar calendar, final WorldMap map, final ModelPo modelPo, final UnitStorage unitStorage) {
 		Preconditions.checkNotNull(modelPo);
 		listenerManager = new ListenerManager();
+		this.focusedField = modelPo.getFocusedField();
 
 		this.calendar = Preconditions.checkNotNull(calendar);
 		this.map = Preconditions.checkNotNull(map);
@@ -328,6 +330,7 @@ public final class Model {
 		out.setCalendar(calendar.save());
 		out.setPlayers(getSavePlayers());
 		out.setColonies(getSaveColonies());
+		out.setFocusedField(focusedField);
 		return out;
 	}
 
@@ -489,7 +492,21 @@ public final class Model {
 		return MoreObjects.toStringHelper(this)
 				.add("hashcode", hashCode())
 				.toString();
-	}	
+	}
+
+    /**
+     * @return the focusedField
+     */
+    public Location getFocusedField() {
+        return focusedField;
+    }
+
+    /**
+     * @param focusedField the focusedField to set
+     */
+    public void setFocusedField(Location focusedField) {
+        this.focusedField = focusedField;
+    }	
 
 
 }
