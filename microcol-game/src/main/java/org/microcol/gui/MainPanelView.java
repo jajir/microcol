@@ -41,12 +41,14 @@ public class MainPanelView {
         gamePanel.getCanvas().heightProperty().bind(canvasPane.heightProperty());
 
         canvasPane.widthProperty().addListener((obj, oldValue, newValue) -> {
-            if (newValue.intValue() < MAX_CANVAS_SIDE_LENGTH)
+            if (newValue.intValue() < MAX_CANVAS_SIDE_LENGTH) {
                 gamePanel.getVisibleArea().setCanvasWidth(newValue.intValue());
+            }
         });
         canvasPane.heightProperty().addListener((obj, oldValue, newValue) -> {
-            if (newValue.intValue() < MAX_CANVAS_SIDE_LENGTH)
+            if (newValue.intValue() < MAX_CANVAS_SIDE_LENGTH) {
                 gamePanel.getVisibleArea().setCanvasHeight(newValue.intValue());
+            }
         });
 
         Pane rightPane = new Pane();

@@ -156,15 +156,14 @@ public class GamePanelView implements GamePanelPresenter.Display {
     @Override
     public void planScrollingAnimationToPoint(final Point targetPoint) {
         /**
-         * Following if is a hack. Canvas width and height are set after game
-         * start. When game starts and scroll request is created than game
-         * scroll map outside of screen. Following hack solve it. But it's not
-         * correct.
+         * Following precondition throws exception when scroll planning is
+         * called before canvas was fully initialized. Just after full
+         * canvas initialization is height property set.
          */
-        if (visibleArea.getCanvasHeight() != 0) {
-            screenScrolling = Optional
-                    .of(new ScreenScrolling(pathPlanning, visibleArea.getTopLeft(), targetPoint));
-        }
+        Preconditions.checkState(visibleArea.getCanvasHeight() != 0,
+                "screen scroll is called before canvas initialization was finished.");
+        screenScrolling = Optional
+                .of(new ScreenScrolling(pathPlanning, visibleArea.getTopLeft(), targetPoint));
     }
 
     /**

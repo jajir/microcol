@@ -85,8 +85,10 @@ public class GameModelController {
         modelListener = new ModelListenerImpl(modelEventManager, this);
         modelCampaign.getModel().addListener(modelListener);
         modelCampaign.getModel().startGame();
-        selectedTileManager.setSelectedTile(getModel().getFocusedField());
-        centerViewController.fireEvent(new CenterViewEvent());
+        if (getModel().getFocusedField() != null) {
+            selectedTileManager.setSelectedTile(getModel().getFocusedField());
+            centerViewController.fireEvent(new CenterViewEvent());
+        }
     }
 
     public Model getModel() {
