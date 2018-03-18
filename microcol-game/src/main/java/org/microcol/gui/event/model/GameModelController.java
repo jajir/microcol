@@ -19,7 +19,7 @@ import org.microcol.model.Model;
 import org.microcol.model.Path;
 import org.microcol.model.Player;
 import org.microcol.model.Unit;
-import org.microcol.model.campaign.ModelCampaign;
+import org.microcol.model.campaign.ModelMission;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,24 +42,27 @@ public class GameModelController {
 
     private ModelListenerImpl modelListener;
 
-    private ModelCampaign modelCampaign;
+    private ModelMission modelMission;
 
     private List<AbstractRobotPlayer> players;
 
     private final CenterViewController centerViewController;
 
     private final SelectedTileManager selectedTileManager;
+    
+    private final MissionCallBack missionCallBack;
 
     @Inject
     public GameModelController(final ModelEventManager modelEventManager,
             final AnimationManager animationManager,
             final CenterViewController centerViewController,
-            final SelectedTileManager selectedTileManager) {
+            final SelectedTileManager selectedTileManager, final MissionCallBack missionCallBack) {
         this.modelEventManager = Preconditions.checkNotNull(modelEventManager);
         this.animationManager = Preconditions.checkNotNull(animationManager);
         this.centerViewController = Preconditions.checkNotNull(centerViewController);
         this.selectedTileManager = Preconditions.checkNotNull(selectedTileManager);
-        modelCampaign = null;
+        this.missionCallBack = Preconditions.checkNotNull(missionCallBack);
+        modelMission = null;
         modelListener = null;
     }
 
@@ -69,22 +72,22 @@ public class GameModelController {
      * @param newModel
      *            required game model
      */
-    public void setAndStartModel(final ModelCampaign newModel) {
+    public void setAndStartModel(final ModelMission newModel) {
         tryToStopGame();
-        modelCampaign = Preconditions.checkNotNull(newModel);
+        modelMission = Preconditions.checkNotNull(newModel);
         players = new ArrayList<>();
-        modelCampaign.getModel().getPlayers().stream().filter(player -> player.isKing())
+        modelMission.getModel().getPlayers().stream().filter(player -> player.isKing())
                 .forEach(player -> {
-                    players.add(new KingPlayer(modelCampaign.getModel(), player, animationManager));
+                    players.add(new KingPlayer(modelMission.getModel(), player, animationManager));
                 });
-        modelCampaign.getModel().getPlayers().stream()
+        modelMission.getModel().getPlayers().stream()
                 .filter(player -> !player.isKing() && player.isComputer()).forEach(player -> {
                     players.add(
-                            new SimpleAiPlayer(modelCampaign.getModel(), player, animationManager));
+                            new SimpleAiPlayer(modelMission.getModel(), player, animationManager));
                 });
         modelListener = new ModelListenerImpl(modelEventManager, this);
-        modelCampaign.getModel().addListener(modelListener);
-        modelCampaign.getModel().startGame();
+        modelMission.getModel().addListener(modelListener);
+        modelMission.startGame(missionCallBack);
         if (getModel().getFocusedField() != null) {
             selectedTileManager.setSelectedTile(getModel().getFocusedField());
             centerViewController.fireEvent(new CenterViewEvent());
@@ -92,8 +95,8 @@ public class GameModelController {
     }
 
     public Model getModel() {
-        Preconditions.checkState(modelCampaign != null, "Model is not ready");
-        return modelCampaign.getModel();
+        Preconditions.checkState(modelMission != null, "Model is not ready");
+        return modelMission.getModel();
     }
 
     public void captureColonyAt(final Unit movingUnit, final Location moveToLocation) {
@@ -101,7 +104,7 @@ public class GameModelController {
     }
 
     public boolean isModelReady() {
-        return modelCampaign != null;
+        return modelMission != null;
     }
 
     public Player getCurrentPlayer() {
@@ -110,7 +113,7 @@ public class GameModelController {
     }
 
     public GoodAmount getMaxBuyableGoodsAmount(final GoodType goodType) {
-        final GoodTrade goodTrade = modelCampaign.getModel().getEurope()
+        final GoodTrade goodTrade = modelMission.getModel().getEurope()
                 .getGoodTradeForType(goodType);
         return goodTrade.getAvailableAmountFor(getCurrentPlayer().getGold());
     }
@@ -126,11 +129,11 @@ public class GameModelController {
     }
 
     private void tryToStopGame() {
-        if (modelCampaign != null) {
-            Preconditions.checkArgument(modelCampaign != null);
+        if (modelMission != null) {
+            Preconditions.checkArgument(modelMission != null);
             Preconditions.checkArgument(modelListener != null);
-            modelCampaign.getModel().removeListener(modelListener);
-            modelCampaign = null;
+            modelMission.getModel().removeListener(modelListener);
+            modelMission = null;
             modelListener = null;
             players.forEach(player -> player.stop());
             players = null;
@@ -139,7 +142,7 @@ public class GameModelController {
 
     public void performMove(final Unit ship, final List<Location> path) {
         logger.debug("Start move ship: " + ship);
-        new Thread(() -> modelCampaign.getModel().moveUnit(ship, Path.of(path))).start();
+        new Thread(() -> modelMission.getModel().moveUnit(ship, Path.of(path))).start();
     }
 
     public void performFight(final Unit attacker, final Unit defender) {
@@ -151,7 +154,7 @@ public class GameModelController {
             final Optional<List<Location>> locations = attacker.getPath(defender.getLocation(),
                     true);
             if (locations.isPresent() && !locations.get().isEmpty()) {
-                modelCampaign.getModel().moveUnit(attacker, Path.of(locations.get()));
+                modelMission.getModel().moveUnit(attacker, Path.of(locations.get()));
             }
             attacker.attack(defender.getLocation());
         }).start();
@@ -159,7 +162,7 @@ public class GameModelController {
 
     public void nextTurn() {
         logger.debug("Next Year event was triggered.");
-        new Thread(() -> modelCampaign.getModel().endTurn()).start();
+        new Thread(() -> modelMission.getModel().endTurn()).start();
     }
 
     public void suspendAi() {
@@ -173,8 +176,8 @@ public class GameModelController {
     /**
      * @return the modelCapgaign
      */
-    public ModelCampaign getModelCampaign() {
-        return modelCampaign;
+    public ModelMission getModelCampaign() {
+        return modelMission;
     }
 
 }

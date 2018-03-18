@@ -3,7 +3,7 @@ package org.microcol.model.campaign;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 
-public class AbstractMission implements Mission {
+public abstract class AbstractMission implements Mission {
 
     private final String name;
 

@@ -16,48 +16,48 @@ import com.google.inject.Inject;
  */
 public class GamePanelController {
 
-	private boolean humanIsOnTurn;
+    private boolean humanIsOnTurn;
 
-	private boolean unitIsMoving;
+    private boolean unitIsMoving;
 
-	@Inject
-	GamePanelController(final TurnStartedController turnStartedController,
-			final UnitMovedController unitMovedStepController,
-			final UnitMoveFinishedController unitMoveFinishedController,
-			final ColonyWasCapturedController colonyWasCapturedController) {
-		turnStartedController.addListener(this::onTurnStarted);
-		unitMovedStepController.addListener(this::onUnitMovedStep);
-		unitMoveFinishedController.addListener(this::onUnitMovedFinished);
-		colonyWasCapturedController.addListener(this::onColonyWasCaptured);
-	}
-	
-	@SuppressWarnings("unused")
-	private void onColonyWasCaptured(final ColonyWasCapturedEvent event) {
-		unitIsMoving = false;
-	}
+    @Inject
+    GamePanelController(final TurnStartedController turnStartedController,
+            final UnitMovedController unitMovedStepController,
+            final UnitMoveFinishedController unitMoveFinishedController,
+            final ColonyWasCapturedController colonyWasCapturedController) {
+        turnStartedController.addListener(this::onTurnStarted);
+        unitMovedStepController.addListener(this::onUnitMovedStep);
+        unitMoveFinishedController.addListener(this::onUnitMovedFinished);
+        colonyWasCapturedController.addListener(this::onColonyWasCaptured);
+    }
 
-	private void onTurnStarted(final TurnStartedEvent event) {
-		humanIsOnTurn = event.getPlayer().isHuman();
-	}
+    @SuppressWarnings("unused")
+    private void onColonyWasCaptured(final ColonyWasCapturedEvent event) {
+        unitIsMoving = false;
+    }
 
-	@SuppressWarnings("unused")
-	private void onUnitMovedStep(final UnitMovedStepEvent event) {
-		unitIsMoving = true;
-	}
+    private void onTurnStarted(final TurnStartedEvent event) {
+        humanIsOnTurn = event.getPlayer().isHuman();
+    }
 
-	@SuppressWarnings("unused")
-	private void onUnitMovedFinished(final UnitMoveFinishedEvent event) {
-		unitIsMoving = false;
-	}
+    @SuppressWarnings("unused")
+    private void onUnitMovedStep(final UnitMovedStepEvent event) {
+        unitIsMoving = true;
+    }
 
-	/**
-	 * If Game panel is enabled. For example when animation is in progress than
-	 * mouse should be disabled.
-	 * 
-	 * @return the mouseEnabled
-	 */
-	public boolean isMouseEnabled() {
-		return humanIsOnTurn && !unitIsMoving;
-	}
+    @SuppressWarnings("unused")
+    private void onUnitMovedFinished(final UnitMoveFinishedEvent event) {
+        unitIsMoving = false;
+    }
+
+    /**
+     * If Game panel is enabled. For example when animation is in progress than
+     * mouse should be disabled.
+     * 
+     * @return the mouseEnabled
+     */
+    public boolean isMouseEnabled() {
+        return humanIsOnTurn && !unitIsMoving;
+    }
 
 }

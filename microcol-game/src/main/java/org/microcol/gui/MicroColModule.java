@@ -38,6 +38,7 @@ import org.microcol.gui.event.model.GameFinishedController;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.event.model.GameStartedController;
 import org.microcol.gui.event.model.GoldWasChangedController;
+import org.microcol.gui.event.model.MissionCallBack;
 import org.microcol.gui.event.model.ModelEventManager;
 import org.microcol.gui.event.model.RoundStartedController;
 import org.microcol.gui.event.model.TurnStartedController;
@@ -117,6 +118,8 @@ public class MicroColModule extends AbstractModule {
          */
         bind(DialogDestroyColony.class).in(Singleton.class);
         bind(ChooseGoodAmount.class).in(Singleton.class);
+        bind(DialogMessage.class).in(Singleton.class);
+        bind(MissionCallBack.class).in(Singleton.class);
 
         /**
          * Event controllers.

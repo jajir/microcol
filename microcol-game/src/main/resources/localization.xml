@@ -78,6 +78,8 @@
 	<entry key="campaignPanel.default.foundColony">Found new colony</entry>
 	<entry key="campaignPanel.default.thrive">Thrive</entry>
 
+	<entry key="campaign.default.start">Find Now World to found new colony.</entry>
+
 	<entry key="preferencesVolume.caption">Volume</entry>
 	<entry key="preferencesVolume.low">Low</entry>
 	<entry key="preferencesVolume.high">High</entry>

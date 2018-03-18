@@ -1,5 +1,6 @@
 package org.microcol.model.campaign;
 
+import org.microcol.gui.event.model.MissionCallBack;
 import org.microcol.model.Model;
 import org.microcol.model.store.CampaignPo;
 import org.microcol.model.store.ModelPo;
@@ -17,7 +18,7 @@ import com.google.common.base.Preconditions;
  * </p>
  * 
  */
-public class ModelCampaign {
+public class ModelMission {
 
     private final Campaign campaign;
 
@@ -25,7 +26,7 @@ public class ModelCampaign {
 
     private final Model model;
 
-    ModelCampaign(final Campaign campaign, final Mission mission, final Model model) {
+    ModelMission(final Campaign campaign, final Mission mission, final Model model) {
         this.campaign = Preconditions.checkNotNull(campaign);
         this.mission = Preconditions.checkNotNull(mission);
         this.model = Preconditions.checkNotNull(model);
@@ -52,5 +53,10 @@ public class ModelCampaign {
     @Deprecated
     public Model getModel() {
         return model;
+    }
+
+    public void startGame(final MissionCallBack missionCallBack) {
+        mission.startMission(model, missionCallBack);
+        model.startGame();
     }
 }

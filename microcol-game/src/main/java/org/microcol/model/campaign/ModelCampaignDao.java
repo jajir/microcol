@@ -22,23 +22,22 @@ public class ModelCampaignDao {
         this.campaignManager = Preconditions.checkNotNull(campaignManager);
     }
 
-    public ModelCampaign loadFromFile(final String fileName) {
+    public ModelMission loadFromFile(final String fileName) {
         return makeFromModelPo(modelDao.loadModelFromFile(fileName));
     }
 
-    public ModelCampaign loadFromClassPath(final String fileName) {
+    public ModelMission loadFromClassPath(final String fileName) {
         return makeFromModelPo(modelDao.loadPredefinedModel(fileName));
     }
 
-    private ModelCampaign makeFromModelPo(final ModelPo modelPo) {
+    private ModelMission makeFromModelPo(final ModelPo modelPo) {
         final Campaign campaign = campaignManager
                 .getCampaignByName(modelPo.getCampaign().getName());
-        final Mission mission = campaign
-                .getMisssionByName(modelPo.getCampaign().getMission());
-        return new ModelCampaign(campaign, mission, Model.make(modelPo));
+        final Mission mission = campaign.getMisssionByName(modelPo.getCampaign().getMission());
+        return new ModelMission(campaign, (AbstractMission) mission, Model.make(modelPo));
     }
 
-    public void saveToFile(final String fileName, final ModelCampaign modelCampaign) {
+    public void saveToFile(final String fileName, final ModelMission modelCampaign) {
         modelDao.saveToFile(fileName, modelCampaign.getModelPo());
     }
 

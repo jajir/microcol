@@ -78,6 +78,8 @@
 	<entry key="campaignPanel.default.foundColony">Založení kolonie</entry>
 	<entry key="campaignPanel.default.thrive">Rozkvět</entry>
 
+	<entry key="campaign.default.start">Najděte nový svět, kde založíte kolonii.</entry>
+
 	<entry key="preferencesVolume.caption">Hlasitost</entry>
 	<entry key="preferencesVolume.low">Potichu</entry>
 	<entry key="preferencesVolume.high">Nahlas</entry>

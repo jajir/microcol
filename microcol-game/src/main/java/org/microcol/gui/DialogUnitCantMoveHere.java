@@ -10,9 +10,9 @@ import org.microcol.gui.util.ViewUtil;
  */
 public class DialogUnitCantMoveHere extends AbstractWarningDialog {
 
-	public DialogUnitCantMoveHere(final ViewUtil viewUtil, final Text text) {
-		super(viewUtil, text, "dialogUnitCantMoveHere.caption");
-		showAndWait();
-	}
+    public DialogUnitCantMoveHere(final ViewUtil viewUtil, final Text text) {
+        super(viewUtil, text, "dialogUnitCantMoveHere.caption");
+        showAndWait();
+    }
 
 }
