@@ -67,4 +67,7 @@ public class GameController {
                 .setAndStartModel(modelCampaignDao.loadFromClassPath(mission.getModelFileName()));
     }
 
+    public void stopGame() {
+        gameModelController.stop();
+    }
 }

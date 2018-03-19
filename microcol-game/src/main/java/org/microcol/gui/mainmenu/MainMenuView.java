@@ -1,9 +1,6 @@
 package org.microcol.gui.mainmenu;
 
-import java.util.function.Consumer;
-
 import org.microcol.gui.GamePreferences;
-import org.microcol.gui.util.PersistentService;
 import org.microcol.gui.util.Text;
 import org.microcol.gui.util.Text.Language;
 
@@ -31,13 +28,13 @@ public class MainMenuView implements MainMenuPresenter.Display {
 
     private final MenuItem menuItemDeclareIndependence;
 
+    private final MenuItem menuItemExitGame;
+
     private final MenuItem menuItemNewGame;
 
     private final MenuItem menuItemSaveGame;
 
     private final MenuItem menuItemLoadGame;
-
-    private final Menu menuNewScenario;
 
     private final MenuItem menuItemQuitGame;
 
@@ -77,12 +74,9 @@ public class MainMenuView implements MainMenuPresenter.Display {
 
     private final Menu menuHelp;
 
-    private Consumer<String> onSelectedTestScenario;
-
     @Inject
     public MainMenuView(final GamePreferences gamePreferences, final Text text,
-            final MainMenuDevelopment mainMenuDevelopment,
-            final PersistentService persistentSrevice) {
+            final MainMenuDevelopment mainMenuDevelopment) {
         this.text = Preconditions.checkNotNull(text);
 
         /**
@@ -90,20 +84,14 @@ public class MainMenuView implements MainMenuPresenter.Display {
          */
         menuItemDeclareIndependence = new MenuItem();
         menuItemDeclareIndependence.disableProperty().setValue(false);
+        
+        menuItemExitGame = new MenuItem();
+        menuItemExitGame.disableProperty().setValue(false);
 
         menuItemNewGame = new MenuItem();
         menuItemNewGame
                 .setAccelerator(new KeyCodeCombination(KeyCode.N, KeyCombination.CONTROL_DOWN));
         menuItemNewGame.disableProperty().setValue(false);
-
-        menuNewScenario = new Menu();
-        persistentSrevice.getScenarios().forEach(scenario -> {
-            final MenuItem menuItem = new MenuItem(scenario.getName());
-            menuItem.setOnAction(event -> {
-                onSelectTestScenario(scenario.getFileName());
-            });
-            menuNewScenario.getItems().add(menuItem);
-        });
 
         menuItemLoadGame = new MenuItem();
         menuItemLoadGame
@@ -183,13 +171,8 @@ public class MainMenuView implements MainMenuPresenter.Display {
          * menu
          */
         menuGame = new Menu();
-        if (gamePreferences.isDevelopment()) {
-            menuGame.getItems().addAll(menuItemDeclareIndependence, menuItemNewGame,
-                    menuNewScenario, menuItemLoadGame, menuItemSaveGame, menuItemQuitGame);
-        } else {
-            menuGame.getItems().addAll(menuItemDeclareIndependence, menuItemNewGame,
-                    menuItemLoadGame, menuItemSaveGame, menuItemQuitGame);
-        }
+        menuGame.getItems().addAll(menuItemDeclareIndependence, menuItemExitGame, menuItemNewGame,
+                menuItemLoadGame, menuItemSaveGame, menuItemQuitGame);
         menuView = new Menu();
         menuView.getItems().addAll(menuItemCenterView, menuItemEurope);
         menuUnit = new Menu();
@@ -248,10 +231,6 @@ public class MainMenuView implements MainMenuPresenter.Display {
         updateLanguage();
     }
 
-    private void onSelectTestScenario(final String scenarioFileName) {
-        onSelectedTestScenario.accept(scenarioFileName);
-    }
-
     @Override
     public void updateLanguage() {
         /**
@@ -260,9 +239,9 @@ public class MainMenuView implements MainMenuPresenter.Display {
         menuGame.setText(text.get("mainMenu.game"));
         menuItemDeclareIndependence.setText(text.get("mainMenu.game.declareIndependence"));
         menuItemNewGame.setText(text.get("mainMenu.game.newGame"));
+        menuItemExitGame.setText(text.get("mainMenu.game.exitGame"));
         menuItemSaveGame.setText(text.get("mainMenu.game.saveGame"));
         menuItemLoadGame.setText(text.get("mainMenu.game.loadGame"));
-        menuNewScenario.setText(text.get("mainMenu.game.newScenario"));
         menuItemQuitGame.setText(text.get("mainMenu.game.quitGame"));
 
         /**
@@ -399,10 +378,11 @@ public class MainMenuView implements MainMenuPresenter.Display {
     }
 
     /**
-     * @param onSelectedTestScenario the onSelectedTestScenario to set
+     * @return the menuItemExitGame
      */
     @Override
-    public void setOnSelectedTestScenario(final Consumer<String> onSelectedTestScenario) {
-        this.onSelectedTestScenario = onSelectedTestScenario;
+    public MenuItem getMenuItemExitGame() {
+        return menuItemExitGame;
     }
+
 }

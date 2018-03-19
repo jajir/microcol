@@ -12,11 +12,11 @@ import javafx.scene.layout.VBox;
  */
 public class MainFramePresenter {
 
-    static final String START_PANEL = "Start panel";
+    public static final String START_PANEL = "Start panel";
 
     public static final String MAIN_GAME_PANEL = "Main game panel";
     
-    static final String CAMPAIGN_PANEL = "Campaign panel";
+    public static final String CAMPAIGN_PANEL = "Campaign panel";
     
     private final MainFramePresenter.Display display;
 

@@ -15,9 +15,9 @@
 	<entry key="mainMenu.game">Hra</entry>
 	<entry key="mainMenu.game.declareIndependence">Vyhlásit nezávislost</entry>
 	<entry key="mainMenu.game.newGame">Nová hra</entry>
+	<entry key="mainMenu.game.exitGame">Ukončit hru</entry>
 	<entry key="mainMenu.game.saveGame">Uložit hru</entry>
 	<entry key="mainMenu.game.loadGame">Načíst hru</entry>
-	<entry key="mainMenu.game.newScenario">Nový scénář</entry>
 	<entry key="mainMenu.game.quitGame">Ukončit hru</entry>
 
 	<entry key="mainMenu.view">Zobrazení</entry>

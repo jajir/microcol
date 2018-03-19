@@ -42,7 +42,9 @@ Planned releases
  
     * \u2717 Declare independence and conquer Royal Expedition Forces.
 
-  * \u2717 Support game in progress, at start of each turn persist played game and save it to preferences.
+  * \u2713 Support game in progress, at start of each turn persist played game and save it to preferences.
+
+  * \u2717 Add abandon game menu item.
 
   * \u2717 Support start logic as described in GUI
  

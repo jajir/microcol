@@ -25,95 +25,97 @@ import com.google.common.base.Preconditions;
  */
 public class ModelListenerImpl implements ModelListener {
 
-	private final ModelEventManager modelEventManager;
-	
-	private final GameModelController gameModelController;
-	
-	public ModelListenerImpl(final ModelEventManager modelEventManager, final GameModelController gameModelController) {
-		this.modelEventManager = Preconditions.checkNotNull(modelEventManager);
-		this.gameModelController = Preconditions.checkNotNull(gameModelController);
-	}
-	
-	@Override
-	public String toString() {
-		return MoreObjects.toStringHelper(this.getClass()).add("modelEventManager", modelEventManager)
-				.add("gameModelController", gameModelController).toString();
-	}
+    private final ModelEventManager modelEventManager;
 
-	@Override
-	public void turnStarted(final TurnStartedEvent event) {
-		modelEventManager.getTurnStartedController().fireEvent(event);
-	}
+    private final GameModelController gameModelController;
 
-	@Override
-	public void unitMovedStep(final UnitMovedStepEvent event) {
-		if (event.canPlayerSeeMove(gameModelController.getCurrentPlayer())) {
-			modelEventManager.getUnitMovedController().fireEvent(event);
-		}
-	}
+    public ModelListenerImpl(final ModelEventManager modelEventManager,
+            final GameModelController gameModelController) {
+        this.modelEventManager = Preconditions.checkNotNull(modelEventManager);
+        this.gameModelController = Preconditions.checkNotNull(gameModelController);
+    }
 
-	@Override
-	public void unitMovedToHighSeas(final UnitMovedToHighSeasEvent event) {
-		if (event.getUnit().getOwner().equals(gameModelController.getCurrentPlayer())) {
-			modelEventManager.getUnitMovedToHighSeasController().fireEvent(event);
-		}
-	}
-	
-	@Override
-	public void unitMoveFinished(final UnitMoveFinishedEvent event) {
-		modelEventManager.getUnitMoveFinishedController().fireEvent(event);
-	}
-	
-	@Override
-	public void roundStarted(final RoundStartedEvent event) {
-		modelEventManager.getRoundStartedController().fireEvent(event);
-	}
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(this.getClass())
+                .add("modelEventManager", modelEventManager)
+                .add("gameModelController", gameModelController).toString();
+    }
 
-	@Override
-	public void gameStarted(final GameStartedEvent event) {
-		modelEventManager.getGameStartedController().fireEvent(event);
-		final Optional<Player> human = event.getModel().getPlayers().stream().filter(player -> player.isHuman())
-				.findAny();
-		if (human.isPresent()) {
-			goldWasChanged(new GoldWasChangedEvent(event.getModel(), human.get(), human.get().getGold(),
-					human.get().getGold()));
-		}
-	}
+    @Override
+    public void turnStarted(final TurnStartedEvent event) {
+        modelEventManager.getTurnStartedController().fireEvent(event);
+    }
 
-	@Override
-	public void gameFinished(final GameFinishedEvent event) {
-		modelEventManager.getGameFinishedController().fireEvent(event);
-	}
+    @Override
+    public void unitMovedStep(final UnitMovedStepEvent event) {
+        if (event.canPlayerSeeMove(gameModelController.getCurrentPlayer())) {
+            modelEventManager.getUnitMovedController().fireEvent(event);
+        }
+    }
 
-	@Override
-	public void debugRequested(final DebugRequestedEvent event) {
-		modelEventManager.getDebugRequestController().fireEvent(event);
-	}
+    @Override
+    public void unitMovedToHighSeas(final UnitMovedToHighSeasEvent event) {
+        if (event.getUnit().getOwner().equals(gameModelController.getCurrentPlayer())) {
+            modelEventManager.getUnitMovedToHighSeasController().fireEvent(event);
+        }
+    }
 
-	@Override
-	public void unitAttacked(final UnitAttackedEvent event) {
-		modelEventManager.getUnitAttackedEventController().fireEvent(event);
-	}
+    @Override
+    public void unitMoveFinished(final UnitMoveFinishedEvent event) {
+        modelEventManager.getUnitMoveFinishedController().fireEvent(event);
+    }
 
-	@Override
-	public void goldWasChanged(final GoldWasChangedEvent event) {
-		if (event.getPlayer().isHuman()) {
-			modelEventManager.getGoldWasChangedController().fireEvent(event);
-		}
-	}
-	
-	@Override
-	public void colonyWasCaptured(final ColonyWasCapturedEvent event) {
-		if (event.getCapturedColony().getOwner().isHuman()) {
-			modelEventManager.getColonyWasCapturedController().fireEvent(event);
-		}
-	}
+    @Override
+    public void roundStarted(final RoundStartedEvent event) {
+        modelEventManager.getRoundStartedController().fireEvent(event);
+    }
 
-	@Override
-	public void unitEmbarked(final UnitEmbarkedEvent event) {
-		if(event.getUnit().getOwner().isHuman()){
-			modelEventManager.getUnitEmbarkController().fireEvent(event);
-		}
-	}
-	
+    @Override
+    public void gameStarted(final GameStartedEvent event) {
+        modelEventManager.getGameStartedController().fireEvent(event);
+        final Optional<Player> human = event.getModel().getPlayers().stream()
+                .filter(player -> player.isHuman()).findAny();
+        if (human.isPresent()) {
+            goldWasChanged(new GoldWasChangedEvent(event.getModel(), human.get(),
+                    human.get().getGold(), human.get().getGold()));
+        }
+    }
+
+    @Override
+    public void gameFinished(final GameFinishedEvent event) {
+        modelEventManager.getGameFinishedController().fireEvent(event);
+    }
+
+    @Override
+    public void debugRequested(final DebugRequestedEvent event) {
+        modelEventManager.getDebugRequestController().fireEvent(event);
+    }
+
+    @Override
+    public void unitAttacked(final UnitAttackedEvent event) {
+        modelEventManager.getUnitAttackedEventController().fireEvent(event);
+    }
+
+    @Override
+    public void goldWasChanged(final GoldWasChangedEvent event) {
+        if (event.getPlayer().isHuman()) {
+            modelEventManager.getGoldWasChangedController().fireEvent(event);
+        }
+    }
+
+    @Override
+    public void colonyWasCaptured(final ColonyWasCapturedEvent event) {
+        if (event.getCapturedColony().getOwner().isHuman()) {
+            modelEventManager.getColonyWasCapturedController().fireEvent(event);
+        }
+    }
+
+    @Override
+    public void unitEmbarked(final UnitEmbarkedEvent event) {
+        if (event.getUnit().getOwner().isHuman()) {
+            modelEventManager.getUnitEmbarkController().fireEvent(event);
+        }
+    }
+
 }

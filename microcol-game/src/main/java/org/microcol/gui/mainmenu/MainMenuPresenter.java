@@ -1,7 +1,6 @@
 package org.microcol.gui.mainmenu;
 
 import java.util.Optional;
-import java.util.function.Consumer;
 
 import org.microcol.gui.DialogIndependenceWasDeclared;
 import org.microcol.gui.MainFramePresenter;
@@ -85,8 +84,8 @@ public class MainMenuPresenter {
         MenuItem getMenuItemEurope();
 
         MenuItem getMenuItemColonizopedia();
-
-        void setOnSelectedTestScenario(Consumer<String> onSelectedTestScenario);
+        
+        MenuItem getMenuItemExitGame();
     }
 
     @Inject
@@ -169,9 +168,9 @@ public class MainMenuPresenter {
                 .setOnAction(event -> centerViewController.fireEvent(new CenterViewEvent()));
         display.getMenuItemNextUnit().setOnAction(
                 event -> selectNextUnitController.fireEvent(new SelectNextUnitEvent()));
-        display.setOnSelectedTestScenario(scenarioFileName -> {
-            gameController.startTestScenario(scenarioFileName);
-            mainFramePresenter.showPanel(MainFramePresenter.MAIN_GAME_PANEL);
+        display.getMenuItemExitGame().setOnAction(event->{
+            gameController.stopGame();
+            mainFramePresenter.showPanel(MainFramePresenter.START_PANEL);
         });
 
         /**

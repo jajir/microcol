@@ -2,14 +2,14 @@ package org.microcol.gui;
 
 import org.microcol.gui.event.model.GameController;
 import org.microcol.gui.event.model.GameFinishedController;
-import org.microcol.gui.util.Text;
-import org.microcol.gui.util.ViewUtil;
 import org.microcol.model.event.GameFinishedEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
+
+import javafx.application.Platform;
 
 /**
  * Control application state. It start or load new game. It control content of
@@ -19,9 +19,7 @@ public class ApplicationController {
 
     private final Logger logger = LoggerFactory.getLogger(ApplicationController.class);
 
-    private final ViewUtil viewUtil;
-
-    private final Text text;
+    private final DialogGameOver dialogGameOver;
 
     private final MainFramePresenter mainFramePresenter;
 
@@ -36,13 +34,12 @@ public class ApplicationController {
             final GameController gameController,
             final GameFinishedController gameFinishedController,
             final MusicController musicController, final GamePreferences gamePreferences,
-            final ViewUtil viewUtil, final Text text) {
+            final DialogGameOver dialogGameOver) {
         this.mainFramePresenter = Preconditions.checkNotNull(mainFramePresenter);
         this.gameController = Preconditions.checkNotNull(gameController);
         this.musicController = Preconditions.checkNotNull(musicController);
         this.gamePreferences = Preconditions.checkNotNull(gamePreferences);
-        this.viewUtil = Preconditions.checkNotNull(viewUtil);
-        this.text = Preconditions.checkNotNull(text);
+        this.dialogGameOver = Preconditions.checkNotNull(dialogGameOver);
         gameFinishedController.addListener(event -> gameFinished(event));
     }
 
@@ -69,8 +66,10 @@ public class ApplicationController {
      */
     private void gameFinished(final GameFinishedEvent event) {
         logger.debug("Game finished.");
-        new DialogGameOver(viewUtil, text, event);
-        mainFramePresenter.showPanel(MainFramePresenter.START_PANEL);
+        dialogGameOver.setGameOverEvent(event);
+        // TODO it should not be called in separate thread.
+        Platform.runLater(() -> dialogGameOver.showAndWait());
+        Platform.runLater(() -> mainFramePresenter.showPanel(MainFramePresenter.START_PANEL));
     }
 
 }

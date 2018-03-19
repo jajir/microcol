@@ -49,7 +49,7 @@ public class GameModelController {
     private final CenterViewController centerViewController;
 
     private final SelectedTileManager selectedTileManager;
-    
+
     private final MissionCallBack missionCallBack;
 
     @Inject
@@ -178,6 +178,10 @@ public class GameModelController {
      */
     public ModelMission getModelCampaign() {
         return modelMission;
+    }
+
+    public void stop() {
+        modelMission = null;
     }
 
 }
