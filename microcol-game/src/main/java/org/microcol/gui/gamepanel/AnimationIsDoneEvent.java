@@ -2,11 +2,14 @@ package org.microcol.gui.gamepanel;
 
 import com.google.common.base.MoreObjects;
 
+/**
+ * Event is send when all animations are done.
+ */
 public class AnimationIsDoneEvent {
 
-	@Override
-	public String toString() {
-		return MoreObjects.toStringHelper(this.getClass()).toString();
-	}
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(this.getClass()).toString();
+    }
 
 }

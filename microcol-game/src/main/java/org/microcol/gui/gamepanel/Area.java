@@ -152,4 +152,9 @@ public class Area {
         return visibleArea.scrollToPoint(newScreenCenterPoint.substract(screenCenter));
     }
 
+    public void scrollToPoint(final Point point) {
+        visibleArea.setX(point.getX());
+        visibleArea.setY(point.getY());
+    }
+
 }

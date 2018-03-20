@@ -1,33 +1,23 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <project name="MicroCol">
+	<custom>
+		<fluidoSkin>
+			<topBarEnabled>false</topBarEnabled>
+			<sideBarEnabled>true</sideBarEnabled>
+			<skipGenerationDate>true</skipGenerationDate>
+		</fluidoSkin>
+	</custom>
 	<bannerLeft>
 		<name>MicroCol</name>
-		<!-- 
-		<src>./icon.gif</src>
-		<href>http://microcol.sourceforge.net/</href>
-		 -->
 	</bannerLeft>
-
-	<publishDate format="dd MMM yyyy" position="right" />
-
+	<publishDate format="yyyy-MM-dd" position="none" />
 	<version position="none" />
-
 	<skin>
-		<groupId>org.apache.tapestry</groupId>
-		<artifactId>maven-skin</artifactId>
-		<version>1.1</version>
+		<groupId>org.apache.maven.skins</groupId>
+		<artifactId>maven-fluido-skin</artifactId>
+		<version>1.7</version>
 	</skin>
-	
-	<poweredBy>
-   		<logo name="Maven" href="http://maven.apache.org/" img="./maven-feather.png" />
-	</poweredBy>
-	
 	<body>
-				
-		<breadcrumbs>
-			<item name="Documentation" href="http://microcol.sourceforge.net/"/>
-		</breadcrumbs>
-    		
 		<menu name="MicroCol">
 			<item name="Index" href="./index.html" />
 			<item name="Manifest" href="./manifest.html" />
@@ -39,9 +29,8 @@
 			<item name="Coding" href="./coding.html" />
 			<item name="Rules" href="./rules.html" />
 		</menu>
-		
 		<footer>
+			Version: ${project.version}.
 		</footer>
-
 	</body>
 </project>

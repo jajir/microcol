@@ -50,18 +50,15 @@ public class GameModelController {
 
     private final SelectedTileManager selectedTileManager;
 
-    private final MissionCallBack missionCallBack;
-
     @Inject
     public GameModelController(final ModelEventManager modelEventManager,
             final AnimationManager animationManager,
             final CenterViewController centerViewController,
-            final SelectedTileManager selectedTileManager, final MissionCallBack missionCallBack) {
+            final SelectedTileManager selectedTileManager) {
         this.modelEventManager = Preconditions.checkNotNull(modelEventManager);
         this.animationManager = Preconditions.checkNotNull(animationManager);
         this.centerViewController = Preconditions.checkNotNull(centerViewController);
         this.selectedTileManager = Preconditions.checkNotNull(selectedTileManager);
-        this.missionCallBack = Preconditions.checkNotNull(missionCallBack);
         modelMission = null;
         modelListener = null;
     }
@@ -72,7 +69,7 @@ public class GameModelController {
      * @param newModel
      *            required game model
      */
-    public void setAndStartModel(final ModelMission newModel) {
+    void setAndStartModel(final ModelMission newModel, final MissionCallBack missionCallBack) {
         tryToStopGame();
         modelMission = Preconditions.checkNotNull(newModel);
         players = new ArrayList<>();

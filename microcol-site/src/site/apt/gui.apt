@@ -3,19 +3,9 @@
  ----
 
 GUI page flow
-
+ 
  Diagram describe menu which will be shown to user when starts application.
  For now it's enough to count with one hard-coded campaign.
-
-[start-application.png] Application start. 
-
- Campaign menu will look like:
- 
-[start-application-mission.png] Campaign menu 
-
- When user look at game menu than main menu is shown. Main menu is shown like this:
- 
-[main-menu.png] Main menu
  
  When user finish one mission next one is automatically started.
  
@@ -39,10 +29,10 @@ GUI class structure
  Following help find class responsible for specific GUI features. For most of panels is used {{{https://en.wikipedia.org/wiki/Model–view–presenter}Model view presenter}} (MVP).
  It's described at {{{http://www.g-widgets.com/2016/01/19/introduction-to-the-mvp-pattern-in-gwt/}http://www.g-widgets.com/2016/01/19/introduction-to-the-mvp-pattern-in-gwt/}}.
 
-* Main Frame
+* Main Panel
 
- Main frame is called MainFrameView with it's MainFramePresenter.
- Main Frame have following structure:
+ Main Panel is called MainPanelView with it's MainPanelPresenter.
+ Main Panel have following structure:
 
 ----
  +--------------------------------------------+
@@ -51,8 +41,8 @@ GUI class structure
  |                                            |
  |                                            |
  |     Depending on game state there is:      |
- |             or StartPanel                  |
- |               MainPanel                    |
+ |             or MainGamePanel               |
+ |               GameMenuPanel                |
  |                                            |
  |                                            |
  |                                            |
@@ -63,27 +53,21 @@ GUI class structure
  +--------------------------------------------+
 -----
 
-* Start Panel
+* Game Menu panel
 
- Start panel just show simple option "start new game" and "close application".
+ Start panel just show simple option "start new game" and "close application". It look like:
 
-----
- +--------------------------------------------+
- |                                            |
- |                                            |
- |              Menu:                         |
- |              -------                       |
- |              Start new game                |
- |              Setting                       |
- |              Exit game                     |
- |              Load game                     |
- |                                            |
- |                                            |
- |                                            |
- +--------------------------------------------+
------
+[start-application.png] Application start. 
 
-* Main Panel
+ There is also additional screen to choose Campaign. I will look like:
+ 
+[start-application-mission.png] Campaign menu 
+
+ When user look at game menu just some buttons are enabled. It controlled in a following way:
+ 
+[main-menu.png] Game menu button enabling logic.
+ 
+* Main Game Panel
  
  Game itself is inside this frame. MainPanel have following structure:
  
@@ -102,4 +86,5 @@ GUI class structure
  +---------------------------------+----------+
 -----
 
+ Game panel contains game.
 

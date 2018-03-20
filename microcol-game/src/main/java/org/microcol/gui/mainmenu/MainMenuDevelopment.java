@@ -1,6 +1,5 @@
 package org.microcol.gui.mainmenu;
 
-import org.microcol.gui.MainFramePresenter;
 import org.microcol.gui.event.model.GameController;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.util.PersistentService;
@@ -34,14 +33,10 @@ public class MainMenuDevelopment {
 
     private final GameController gameController;
 
-    private final MainFramePresenter mainFramePresenter;
-
     @Inject
     public MainMenuDevelopment(final GameModelController gameModelController,
-            final PersistentService persistentSrevice, final GameController gameController,
-            final MainFramePresenter mainFramePresenter) {
+            final PersistentService persistentSrevice, final GameController gameController) {
         this.gameController = Preconditions.checkNotNull(gameController);
-        this.mainFramePresenter = Preconditions.checkNotNull(mainFramePresenter);
         developmentMenu = new Menu("Development");
 
         final CheckMenuItem checkBoxStopAi = new CheckMenuItem("Suspend AI");
@@ -77,6 +72,5 @@ public class MainMenuDevelopment {
 
     private void onSelectTestScenario(final String scenarioFileName) {
         gameController.startTestScenario(scenarioFileName);
-        mainFramePresenter.showPanel(MainFramePresenter.MAIN_GAME_PANEL);
     }
 }

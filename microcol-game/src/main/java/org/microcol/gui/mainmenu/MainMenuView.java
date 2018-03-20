@@ -18,7 +18,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 
-public class MainMenuView implements MainMenuPresenter.Display {
+public class MainMenuView {
 
     private final Text text;
 
@@ -231,7 +231,6 @@ public class MainMenuView implements MainMenuPresenter.Display {
         updateLanguage();
     }
 
-    @Override
     public void updateLanguage() {
         /**
          * Game
@@ -279,67 +278,54 @@ public class MainMenuView implements MainMenuPresenter.Display {
         menuItemColonizopedia.setText(text.get("mainMenu.help.colonizopedia"));
     }
 
-    @Override
     public MenuItem getMenuItemNewGame() {
         return menuItemNewGame;
     }
 
-    @Override
     public MenuItem getMenuItemQuitGame() {
         return menuItemQuitGame;
     }
 
-    @Override
     public MenuItem getMenuItemSaveGame() {
         return menuItemSaveGame;
     }
 
-    @Override
     public MenuItem getMenuItemLoadGame() {
         return menuItemLoadGame;
     }
 
-    @Override
     public MenuItem getMenuItemAbout() {
         return menuItemAbout;
     }
 
-    @Override
     public RadioMenuItem getRbMenuItemlanguageEn() {
         return rbMenuItemlanguageEn;
     }
 
-    @Override
     public RadioMenuItem getRbMenuItemlanguageCz() {
         return rbMenuItemlanguageCz;
     }
 
-    @Override
     public MenuItem getMenuItemVolume() {
         return menuItemVolume;
     }
 
-    @Override
     public CheckMenuItem getMenuItemShowGrid() {
         return menuItemShowGrid;
     }
 
-    @Override
     public MenuItem getMenuItemMove() {
         return menuItemMove;
     }
 
-    @Override
     public MenuItem getMenuItemCenterView() {
         return menuItemCenterView;
     }
 
-    @Override
     public MenuItem getMenuItemAnimationSpeed() {
         return menuItemAnimationSpeed;
     }
 
-    @Override
     public MenuItem getMenuItemEurope() {
         return menuItemEurope;
     }
@@ -348,7 +334,6 @@ public class MainMenuView implements MainMenuPresenter.Display {
         return menuBar;
     }
 
-    @Override
     public MenuItem getMenuItemColonizopedia() {
         return menuItemColonizopedia;
     }
@@ -356,7 +341,6 @@ public class MainMenuView implements MainMenuPresenter.Display {
     /**
      * @return the menuItemDeclareIndependence
      */
-    @Override
     public MenuItem getMenuItemDeclareIndependence() {
         return menuItemDeclareIndependence;
     }
@@ -364,7 +348,6 @@ public class MainMenuView implements MainMenuPresenter.Display {
     /**
      * @return the menuItemBuildColony
      */
-    @Override
     public MenuItem getMenuItemBuildColony() {
         return menuItemBuildColony;
     }
@@ -372,7 +355,6 @@ public class MainMenuView implements MainMenuPresenter.Display {
     /**
      * @return the menuItemNextUnit
      */
-    @Override
     public MenuItem getMenuItemNextUnit() {
         return menuItemNextUnit;
     }
@@ -380,7 +362,6 @@ public class MainMenuView implements MainMenuPresenter.Display {
     /**
      * @return the menuItemExitGame
      */
-    @Override
     public MenuItem getMenuItemExitGame() {
         return menuItemExitGame;
     }

@@ -14,14 +14,16 @@ import javafx.application.Platform;
 /**
  * Control application state. It start or load new game. It control content of
  * main application screen.
+ * 
+ * 
+ * 
+ * TODO refactor it, it start's game after application start up.
  */
 public class ApplicationController {
 
     private final Logger logger = LoggerFactory.getLogger(ApplicationController.class);
 
     private final DialogGameOver dialogGameOver;
-
-    private final MainFramePresenter mainFramePresenter;
 
     private final GameController gameController;
 
@@ -30,17 +32,15 @@ public class ApplicationController {
     private final GamePreferences gamePreferences;
 
     @Inject
-    public ApplicationController(final MainFramePresenter mainFramePresenter,
-            final GameController gameController,
+    public ApplicationController(final GameController gameController,
             final GameFinishedController gameFinishedController,
             final MusicController musicController, final GamePreferences gamePreferences,
             final DialogGameOver dialogGameOver) {
-        this.mainFramePresenter = Preconditions.checkNotNull(mainFramePresenter);
         this.gameController = Preconditions.checkNotNull(gameController);
         this.musicController = Preconditions.checkNotNull(musicController);
         this.gamePreferences = Preconditions.checkNotNull(gamePreferences);
         this.dialogGameOver = Preconditions.checkNotNull(dialogGameOver);
-        gameFinishedController.addListener(event -> gameFinished(event));
+        gameFinishedController.addListener(this::onGameFinished);
     }
 
     /**
@@ -49,7 +49,6 @@ public class ApplicationController {
     public void startApplication() {
         logger.debug("Application started.");
         musicController.start(gamePreferences.getVolume());
-        mainFramePresenter.showPanel(MainFramePresenter.START_PANEL);
     }
 
     /**
@@ -58,18 +57,17 @@ public class ApplicationController {
     public void startNewDefaultGame() {
         logger.debug("Start new default game.");
         gameController.startNewDefaultGame();
-        mainFramePresenter.showPanel(MainFramePresenter.MAIN_GAME_PANEL);
     }
 
     /**
      * It's called when game finished and start navigation should be shown.
      */
-    private void gameFinished(final GameFinishedEvent event) {
+    // TODO move it to mainFramePresenter.
+    private void onGameFinished(final GameFinishedEvent event) {
         logger.debug("Game finished.");
         dialogGameOver.setGameOverEvent(event);
         // TODO it should not be called in separate thread.
         Platform.runLater(() -> dialogGameOver.showAndWait());
-        Platform.runLater(() -> mainFramePresenter.showPanel(MainFramePresenter.START_PANEL));
     }
 
 }

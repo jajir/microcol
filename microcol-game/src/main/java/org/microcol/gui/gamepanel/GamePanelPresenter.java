@@ -18,7 +18,7 @@ import org.microcol.gui.event.model.ColonyWasCapturedController;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.event.model.GameStartedController;
 import org.microcol.gui.mainmenu.CenterViewController;
-import org.microcol.gui.mainmenu.ExitGameController;
+import org.microcol.gui.mainmenu.QuitGameController;
 import org.microcol.gui.util.Text;
 import org.microcol.gui.util.ViewUtil;
 import org.microcol.model.Colony;
@@ -95,7 +95,7 @@ public final class GamePanelPresenter {
             final GameModelController gameModelController, final KeyController keyController,
             final GameStartedController gameStartedController,
             final GamePreferences gamePreferences, final CenterViewController centerViewController,
-            final ExitGameController exitGameController,
+            final QuitGameController quitGameController,
             final SelectedTileManager selectedTileManager, final ViewUtil viewUtil,
             final StartMoveController startMoveController,
             final EndMoveController endMoveController, final ColonyDialog colonyDialog,
@@ -161,7 +161,7 @@ public final class GamePanelPresenter {
         gameStartedController.addListener(event -> display.initGame(event.getModel()));
 
         centerViewController.addListener(event -> onCenterView());
-        exitGameController.addListener(event -> display.stopTimer());
+        quitGameController.addListener(event -> display.stopTimer());
         colonyWasCapturedController.addRunLaterListener(event -> {
             dialogColonyWasCaptured.showAndWait(event);
         });

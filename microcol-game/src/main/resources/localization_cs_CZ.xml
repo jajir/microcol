@@ -14,7 +14,7 @@
 	
 	<entry key="mainMenu.game">Hra</entry>
 	<entry key="mainMenu.game.declareIndependence">Vyhlásit nezávislost</entry>
-	<entry key="mainMenu.game.newGame">Nová hra</entry>
+	<entry key="mainMenu.game.newGame">Nová neomezená hra</entry>
 	<entry key="mainMenu.game.exitGame">Ukončit hru</entry>
 	<entry key="mainMenu.game.saveGame">Uložit hru</entry>
 	<entry key="mainMenu.game.loadGame">Načíst hru</entry>
@@ -71,14 +71,14 @@
 	<entry key="startPanel.buttonLoadSave">Nahrád hru</entry>
 	<entry key="startPanel.buttonPlayCampaign">Spustit kampaň</entry>
 	<entry key="startPanel.buttonFreeGame">Nová neomezená hra</entry>
-	<entry key="startPanel.buttonExitMicroCol">Ukončit</entry>
+	<entry key="startPanel.buttonExitMicroCol">Ukončit hru</entry>
 
 	<entry key="campaignPanel.buttonBack">Zpět</entry>
 	<entry key="campaignPanel.default.findNewWorld">Kde je Nový Svět?</entry>
 	<entry key="campaignPanel.default.foundColony">Založení kolonie</entry>
 	<entry key="campaignPanel.default.thrive">Rozkvět</entry>
 
-	<entry key="campaign.default.start">Najděte nový svět, kde založíte kolonii.</entry>
+	<entry key="campaign.default.start">Najděte nový svět, kde založíte kolonii. Jeď lodí doleva, tam asi bude země.</entry>
 
 	<entry key="preferencesVolume.caption">Hlasitost</entry>
 	<entry key="preferencesVolume.low">Potichu</entry>

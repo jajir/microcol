@@ -1,12 +1,15 @@
 @startsalt
-{
-  MicroCol
+{+
+{/ Game | View | Unit | Preferences | Help }
   --
+{
+  MicroCol - game menu
   [Continue in last saved game]
   [Load saved game]
   [Play campaign]
   [New free play]
   --
   [  Exit MicroCol  ]
+}
 }
 @endsalt

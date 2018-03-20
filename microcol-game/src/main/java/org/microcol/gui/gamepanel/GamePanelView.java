@@ -2,7 +2,6 @@ package org.microcol.gui.gamepanel;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.microcol.gui.DialogFigth;
@@ -64,8 +63,6 @@ public class GamePanelView implements GamePanelPresenter.Display {
     private final FpsCounter fpsCounter;
 
     private final GamePreferences gamePreferences;
-
-    private Optional<ScreenScrolling> screenScrolling = Optional.empty();
 
     private final OneTurnMoveHighlighter oneTurnMoveHighlighter;
 
@@ -136,17 +133,9 @@ public class GamePanelView implements GamePanelPresenter.Display {
      */
     @SuppressWarnings("unused")
     private void onNextGameTick(final Long now) {
-        if (screenScrolling.isPresent() && screenScrolling.get().isNextPointAvailable()) {
-            scrollToPoint(screenScrolling.get().getNextPoint());
-        }
         if (gameModelController.isModelReady()) {
             paint();
         }
-    }
-
-    private void scrollToPoint(final Point point) {
-        visibleArea.setX(point.getX());
-        visibleArea.setY(point.getY());
     }
 
     public void planScrollingAnimationToLocation(final Location location) {
@@ -157,13 +146,13 @@ public class GamePanelView implements GamePanelPresenter.Display {
     public void planScrollingAnimationToPoint(final Point targetPoint) {
         /**
          * Following precondition throws exception when scroll planning is
-         * called before canvas was fully initialized. Just after full
-         * canvas initialization is height property set.
+         * called before canvas was fully initialized. Just after full canvas
+         * initialization is height property set.
          */
         Preconditions.checkState(visibleArea.getCanvasHeight() != 0,
                 "screen scroll is called before canvas initialization was finished.");
-        screenScrolling = Optional
-                .of(new ScreenScrolling(pathPlanning, visibleArea.getTopLeft(), targetPoint));
+        animationManager.addAnimation(new AnimatonScreenScroll(
+                new ScreenScrolling(pathPlanning, visibleArea.getTopLeft(), targetPoint)));
     }
 
     /**

@@ -32,6 +32,7 @@ import org.microcol.gui.event.ShowGridListenerPreferences;
 import org.microcol.gui.event.StartMoveController;
 import org.microcol.gui.event.StatusBarMessageController;
 import org.microcol.gui.event.VolumeChangedListenerPreferences;
+import org.microcol.gui.event.model.BeforeGameStartController;
 import org.microcol.gui.event.model.ColonyWasCapturedController;
 import org.microcol.gui.event.model.DebugRequestController;
 import org.microcol.gui.event.model.GameFinishedController;
@@ -47,6 +48,10 @@ import org.microcol.gui.event.model.UnitEmbarkedController;
 import org.microcol.gui.event.model.UnitMoveFinishedController;
 import org.microcol.gui.event.model.UnitMovedController;
 import org.microcol.gui.event.model.UnitMovedToHighSeasController;
+import org.microcol.gui.gamemenu.CampaignPanelPresenter;
+import org.microcol.gui.gamemenu.CampaignPanelView;
+import org.microcol.gui.gamemenu.GameMenuPanelPresenter;
+import org.microcol.gui.gamemenu.GameMenuPanelView;
 import org.microcol.gui.gamepanel.AnimationIsDoneController;
 import org.microcol.gui.gamepanel.AnimationManager;
 import org.microcol.gui.gamepanel.ExcludePainting;
@@ -79,6 +84,7 @@ import org.microcol.gui.mainmenu.ExitGameController;
 import org.microcol.gui.mainmenu.MainMenuDevelopment;
 import org.microcol.gui.mainmenu.MainMenuPresenter;
 import org.microcol.gui.mainmenu.MainMenuView;
+import org.microcol.gui.mainmenu.QuitGameController;
 import org.microcol.gui.mainmenu.SelectNextUnitController;
 import org.microcol.gui.mainmenu.ShowGridController;
 import org.microcol.gui.mainmenu.VolumeChangeController;
@@ -140,7 +146,7 @@ public class MicroColModule extends AbstractModule {
         bind(AnimationSpeedChangeController.class).in(Singleton.class);
         bind(ShowGridController.class).in(Singleton.class);
         bind(CenterViewController.class).in(Singleton.class);
-        bind(ExitGameController.class).in(Singleton.class);
+        bind(QuitGameController.class).in(Singleton.class);
         bind(DebugRequestController.class).in(Singleton.class);
         bind(ColonyWasCapturedController.class).in(Singleton.class);
         bind(GameFinishedController.class).in(Singleton.class);
@@ -157,6 +163,9 @@ public class MicroColModule extends AbstractModule {
         bind(UnitMovedOutsideColonyController.class).in(Singleton.class);
         bind(UnitMovedToConstructionController.class).in(Singleton.class);
         bind(UnitMovedToFieldController.class).in(Singleton.class);
+        bind(ExitGameController.class).in(Singleton.class);
+        bind(BeforeGameStartController.class).in(Singleton.class);
+        
         bind(TurnStartedListener.class).asEagerSingleton();
         bind(TileWasSelectedListener.class).asEagerSingleton();
 
@@ -165,9 +174,8 @@ public class MicroColModule extends AbstractModule {
         /**
          * Initialize MVP classes
          */
-        bind(MainFrameView.class).in(Singleton.class);
-        bind(MainFramePresenter.Display.class).to(MainFrameView.class).in(Singleton.class);
-        bind(MainFramePresenter.class).in(Singleton.class);
+        bind(MainPanelView.class).in(Singleton.class);
+        bind(MainPanelPresenter.class).in(Singleton.class);
 
         // gui.gamepanel package binding
         bind(GamePanelView.class).in(Singleton.class);
@@ -185,8 +193,8 @@ public class MicroColModule extends AbstractModule {
         bind(GamePanelController.class).in(Singleton.class);
         bind(UnitMovedListener.class).asEagerSingleton();
 
-        bind(StartPanelView.class).in(Singleton.class);
-        bind(StartPanelPresenter.class).asEagerSingleton();
+        bind(GameMenuPanelView.class).in(Singleton.class);
+        bind(GameMenuPanelPresenter.class).asEagerSingleton();
 
         bind(CampaignPanelView.class).in(Singleton.class);
         bind(CampaignPanelPresenter.Display.class).to(CampaignPanelView.class).in(Singleton.class);
@@ -197,7 +205,6 @@ public class MicroColModule extends AbstractModule {
         bind(StatusBarPresenter.class).asEagerSingleton();
 
         bind(MainMenuView.class).in(Singleton.class);
-        bind(MainMenuPresenter.Display.class).to(MainMenuView.class).in(Singleton.class);
         bind(MainMenuPresenter.class).asEagerSingleton();
         bind(MainMenuDevelopment.class).in(Singleton.class);
 

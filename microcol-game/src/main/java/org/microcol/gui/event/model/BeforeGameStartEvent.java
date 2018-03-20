@@ -1,11 +1,11 @@
-package org.microcol.gui.mainmenu;
+package org.microcol.gui.event.model;
 
 import com.google.common.base.MoreObjects;
 
 /**
- * Event object for exit game. Exactly it means leave MicroCol application.
+ * Event is triggered before new mission or any other form game is started.
  */
-public class ExitGameEvent {
+public class BeforeGameStartEvent {
 
     @Override
     public String toString() {

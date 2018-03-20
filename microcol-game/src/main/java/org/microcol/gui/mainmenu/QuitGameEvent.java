@@ -5,11 +5,11 @@ import com.google.common.base.MoreObjects;
 /**
  * Event object for exit game. Exactly it means leave MicroCol application.
  */
-public class ExitGameEvent {
+public class QuitGameEvent {
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(getClass()).toString();
+        return MoreObjects.toStringHelper(QuitGameEvent.class).toString();
     }
 
 }

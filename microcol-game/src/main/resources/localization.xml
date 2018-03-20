@@ -14,8 +14,8 @@
 	
 	<entry key="mainMenu.game">Game</entry>
 	<entry key="mainMenu.game.declareIndependence">Declare Independence</entry>
-	<entry key="mainMenu.game.newGame">New Game</entry>
-	<entry key="mainMenu.game.exitGame">Abandon Game</entry>
+	<entry key="mainMenu.game.newGame">New Free Play Game</entry>
+	<entry key="mainMenu.game.exitGame">Exit Game</entry>
 	<entry key="mainMenu.game.saveGame">Save Game</entry>
 	<entry key="mainMenu.game.loadGame">Load Game</entry>
 	<entry key="mainMenu.game.quitGame">Quit MicroCol</entry>
@@ -71,14 +71,14 @@
 	<entry key="startPanel.buttonLoadSave">Load saved game</entry>
 	<entry key="startPanel.buttonPlayCampaign">Play campaign</entry>
 	<entry key="startPanel.buttonFreeGame">New free play game</entry>
-	<entry key="startPanel.buttonExitMicroCol">Exit</entry>
+	<entry key="startPanel.buttonExitMicroCol">Quit MicroCol</entry>
 
 	<entry key="campaignPanel.buttonBack">Back</entry>
 	<entry key="campaignPanel.default.findNewWorld">New World</entry>
 	<entry key="campaignPanel.default.foundColony">Found new colony</entry>
 	<entry key="campaignPanel.default.thrive">Thrive</entry>
 
-	<entry key="campaign.default.start">Find Now World to found new colony.</entry>
+	<entry key="campaign.default.start">Find Now World to found new colony. Try to drag ship to the right part of map.</entry>
 
 	<entry key="preferencesVolume.caption">Volume</entry>
 	<entry key="preferencesVolume.low">Low</entry>

@@ -1,4 +1,4 @@
-package org.microcol.gui;
+package org.microcol.gui.gamemenu;
 
 import org.microcol.gui.util.Text;
 
@@ -12,7 +12,7 @@ import javafx.scene.layout.VBox;
 /**
  * In main area shows basic menu "Start new game".
  */
-public class StartPanelView {
+public class GameMenuPanelView {
 
     private final Text text;
 
@@ -29,7 +29,7 @@ public class StartPanelView {
     private final VBox box;
 
     @Inject
-    StartPanelView(final Text text) {
+    GameMenuPanelView(final Text text) {
         this.text = Preconditions.checkNotNull(text);
         box = new VBox();
         box.setStyle("-fx-pref-width: 100000; -fx-pref-height: 100000;");

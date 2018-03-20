@@ -2,9 +2,9 @@ package org.microcol.gui;
 
 import java.awt.Rectangle;
 
-import org.microcol.gui.mainmenu.ExitGameController;
-import org.microcol.gui.mainmenu.ExitGameEvent;
 import org.microcol.gui.mainmenu.MainMenuView;
+import org.microcol.gui.mainmenu.QuitGameController;
+import org.microcol.gui.mainmenu.QuitGameEvent;
 import org.microcol.gui.util.Text;
 
 import com.google.common.base.Preconditions;
@@ -20,20 +20,20 @@ public class MainStageBuilder {
 
     private final MainMenuView mainMenuView;
 
-    private final MainFrameView mainFrame;
+    private final MainPanelView mainPanelView;
 
-    private final ExitGameController exitGameController;
+    private final QuitGameController exitGameController;
 
     private final GamePreferences gamePreferences;
 
     private final Text text;
 
     @Inject
-    public MainStageBuilder(final MainMenuView mainMenuView, final MainFrameView mainFrame,
-            final ExitGameController exitGameController, final GamePreferences gamePreferences,
+    public MainStageBuilder(final MainMenuView mainMenuView, final MainPanelView mainPanelView,
+            final QuitGameController exitGameController, final GamePreferences gamePreferences,
             final Text text) {
         this.mainMenuView = Preconditions.checkNotNull(mainMenuView);
-        this.mainFrame = Preconditions.checkNotNull(mainFrame);
+        this.mainPanelView = Preconditions.checkNotNull(mainPanelView);
         this.exitGameController = Preconditions.checkNotNull(exitGameController);
         this.gamePreferences = Preconditions.checkNotNull(gamePreferences);
         this.text = Preconditions.checkNotNull(text);
@@ -48,7 +48,7 @@ public class MainStageBuilder {
     public void buildPrimaryStage(final Stage primaryStage) {
         primaryStage.setTitle(text.get("game.title"));
         primaryStage.setOnCloseRequest(event -> {
-            exitGameController.fireEvent(new ExitGameEvent());
+            exitGameController.fireEvent(new QuitGameEvent());
         });
         primaryStage.xProperty().addListener((object, oldValue, newValue) -> {
             final Rectangle rectangle = gamePreferences.getMainFramePosition();
@@ -85,7 +85,7 @@ public class MainStageBuilder {
         final Scene scene = new Scene(mainBox);
         scene.getStylesheets().add("gui/MicroCol.css");
         mainBox.getChildren().add(mainMenuView.getMenuBar());
-        mainBox.getChildren().add(mainFrame.getBox());
+        mainBox.getChildren().add(mainPanelView.getBox());
 
         primaryStage.setScene(scene);
     }

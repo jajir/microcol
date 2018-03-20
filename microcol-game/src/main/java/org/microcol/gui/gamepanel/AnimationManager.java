@@ -18,85 +18,83 @@ import javafx.scene.canvas.GraphicsContext;
  */
 public class AnimationManager implements AnimationLock {
 
-	private final Logger logger = LoggerFactory.getLogger(AnimationManager.class);
+    private final Logger logger = LoggerFactory.getLogger(AnimationManager.class);
 
-	private final Queue<AnimationHolder> animationParts = new LinkedList<>();
-	
-	private final AnimationIsDoneController animationIsDoneController;
+    private final Queue<AnimationHolder> animationParts = new LinkedList<>();
 
-	private AnimationHolder runningPart;
+    private final AnimationIsDoneController animationIsDoneController;
 
-	private boolean hasNextStep = false;
+    private AnimationHolder runningPart;
 
-	private final AnimationLatch latch = new AnimationLatch();
+    private boolean hasNextStep = false;
 
-	@Inject
-	public AnimationManager(final AnimationIsDoneController animationIsDoneController) {
-		this.animationIsDoneController = Preconditions.checkNotNull(animationIsDoneController);
-		runningPart = null;
-	}
+    private final AnimationLatch latch = new AnimationLatch();
 
-	public boolean hasNextStep() {
-		return hasNextStep;
-	}
+    @Inject
+    public AnimationManager(final AnimationIsDoneController animationIsDoneController) {
+        this.animationIsDoneController = Preconditions.checkNotNull(animationIsDoneController);
+        runningPart = null;
+    }
 
-	public void performStep() {
-		Preconditions.checkState(hasNextStep, "Can't perform step when there is no next step.");
-		Preconditions.checkState(runningPart != null, "Actually running animation was lost.");
-		runningPart.getAnimation().nextStep();
-		if (!runningPart.getAnimation().hasNextStep()) {
-			if (runningPart.getOnAnimationIsDone() != null) {
-				runningPart.getOnAnimationIsDone().accept(runningPart.getAnimation());
-			}
-			if (animationParts.isEmpty()) {
-				runningPart = null;
-				hasNextStep = false;
-				latch.unlock();
-				animationIsDoneController.fireEvent(new AnimationIsDoneEvent());
-				logger.debug("You are done, unlocking threads");
-			} else {
-				runningPart = animationParts.remove();
-				Preconditions.checkState(runningPart.getAnimation().hasNextStep(),
-						"Just started animation should have at least one step.");
-			}
-		}
-	}
+    public boolean hasNextStep() {
+        return hasNextStep;
+    }
 
-	void paint(final GraphicsContext graphics, final Area area) {
-		Preconditions.checkArgument(hasNextStep, "Can't perform step when there is no next step.");
-		runningPart.getAnimation().paint(graphics, area);
-	}
+    public void performStep() {
+        Preconditions.checkState(hasNextStep, "Can't perform step when there is no next step.");
+        Preconditions.checkState(runningPart != null, "Actually running animation was lost.");
+        runningPart.getAnimation().nextStep();
+        if (!runningPart.getAnimation().hasNextStep()) {
+            runningPart.runOnAnimationIsDone();
+            if (animationParts.isEmpty()) {
+                runningPart = null;
+                hasNextStep = false;
+                latch.unlock();
+                animationIsDoneController.fireEvent(new AnimationIsDoneEvent());
+                logger.debug("You are done, unlocking threads");
+            } else {
+                runningPart = animationParts.remove();
+                Preconditions.checkState(runningPart.getAnimation().hasNextStep(),
+                        "Just started animation should have at least one step.");
+            }
+        }
+    }
 
-	/**
-	 * Schedule animation to be shown. Also allow to lock calling thread with
-	 * method {@link #waitWhileRunning()}.
-	 * 
-	 * @param animation
-	 *            required animation object
-	 * @param onAnimationIsDone
-	 *            optional operation that will be executed when animation is
-	 *            none
-	 */
-	void addAnimation(final Animation animation, Consumer<Animation> onAnimationIsDone) {
-		Preconditions.checkNotNull(animation);
-		final AnimationHolder holder = new AnimationHolder(animation, onAnimationIsDone);
-		logger.debug("Adding animation {}", animation);
-		if (runningPart == null) {
-			runningPart = holder;
-			hasNextStep = holder.getAnimation().hasNextStep();
-		} else {
-			animationParts.add(holder);
-		}
-		latch.lock();
-	}
+    void paint(final GraphicsContext graphics, final Area area) {
+        Preconditions.checkArgument(hasNextStep, "Can't perform step when there is no next step.");
+        runningPart.getAnimation().paint(graphics, area);
+    }
 
-	@Override
-	public void waitWhileRunning() {
-		latch.waitForUnlock();
-	}
+    /**
+     * Schedule animation to be shown. Also allow to lock calling thread with
+     * method {@link #waitWhileRunning()}.
+     * 
+     * @param animation
+     *            required animation object
+     * @param onAnimationIsDone
+     *            optional operation that will be executed when animation is
+     *            none
+     */
+    void addAnimation(final Animation animation, Consumer<Animation> onAnimationIsDone) {
+        Preconditions.checkNotNull(animation);
+        final AnimationHolder holder = new AnimationHolder(animation, onAnimationIsDone);
+        logger.debug("Adding animation {}", animation);
+        if (runningPart == null) {
+            runningPart = holder;
+            hasNextStep = holder.getAnimation().hasNextStep();
+        } else {
+            animationParts.add(holder);
+        }
+        latch.lock();
+    }
 
-	public void addAnimation(final Animation animation) {
-		addAnimation(animation, null);
-	}
+    @Override
+    public void waitWhileRunning() {
+        latch.waitForUnlock();
+    }
+
+    public void addAnimation(final Animation animation) {
+        addAnimation(animation, null);
+    }
 
 }

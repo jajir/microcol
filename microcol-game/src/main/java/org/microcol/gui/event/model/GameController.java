@@ -8,16 +8,20 @@ import org.microcol.model.campaign.CampaignDefault;
 import org.microcol.model.campaign.CampaignManager;
 import org.microcol.model.campaign.Mission;
 import org.microcol.model.campaign.ModelCampaignDao;
+import org.microcol.model.campaign.ModelMission;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
 
 /**
- * responsible for loading and storing game.
+ * Responsible for loading and storing game. Class knows about state of default
+ * campaign.
  */
 public class GameController {
 
     private final GameModelController gameModelController;
+
+    private final BeforeGameStartController beforeGameStartController;
 
     private final PersistentService persistentService;
 
@@ -25,14 +29,20 @@ public class GameController {
 
     private final ModelCampaignDao modelCampaignDao;
 
+    private final MissionCallBack missionCallBack;
+
     @Inject
     GameController(final GameModelController gameModelController,
             final PersistentService persistentService, final ModelCampaignDao modelCampaignDao,
-            final CampaignManager campaignManager) {
+            final CampaignManager campaignManager,
+            final BeforeGameStartController beforeGameStartController,
+            final MissionCallBack missionCallBack) {
         this.gameModelController = Preconditions.checkNotNull(gameModelController);
         this.persistentService = Preconditions.checkNotNull(persistentService);
         this.modelCampaignDao = Preconditions.checkNotNull(modelCampaignDao);
         this.campaignManager = Preconditions.checkNotNull(campaignManager);
+        this.beforeGameStartController = Preconditions.checkNotNull(beforeGameStartController);
+        this.missionCallBack = Preconditions.checkNotNull(missionCallBack);
     }
 
     /**
@@ -42,11 +52,11 @@ public class GameController {
      *            required class path related file name
      */
     public void startTestScenario(final String fileName) {
-        gameModelController.setAndStartModel(modelCampaignDao.loadFromClassPath(fileName));
+        startMission(modelCampaignDao.loadFromClassPath(fileName));
     }
 
     public void startNewDefaultGame() {
-        gameModelController.setAndStartModel(modelCampaignDao
+        startMission(modelCampaignDao
                 .loadFromClassPath(persistentService.getDefaultScenario().getFileName()));
     }
 
@@ -56,15 +66,23 @@ public class GameController {
     }
 
     public void loadModelFromFile(final File sourceFile) {
-        gameModelController
-                .setAndStartModel(modelCampaignDao.loadFromFile(sourceFile.getAbsolutePath()));
+        startMission(modelCampaignDao.loadFromFile(sourceFile.getAbsolutePath()));
     }
 
     public void startDefaultMission(final String missionName) {
         final Campaign campaign = campaignManager.getCampaignByName(CampaignDefault.NAME);
         final Mission mission = campaign.getMisssionByName(missionName);
-        gameModelController
-                .setAndStartModel(modelCampaignDao.loadFromClassPath(mission.getModelFileName()));
+        startMission(modelCampaignDao.loadFromClassPath(mission.getModelFileName()));
+    }
+
+    private void startMission(final ModelMission modelMission) {
+        beforeGameStartController.fireEvent(new BeforeGameStartEvent());
+        gameModelController.setAndStartModel(modelMission, missionCallBack);
+    }
+
+    public boolean isDefaultCampaignFinished() {
+        final Campaign campaign = campaignManager.getCampaignByName(CampaignDefault.NAME);
+        return campaign.isFinished();
     }
 
     public void stopGame() {

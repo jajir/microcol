@@ -8,7 +8,7 @@
  * <li>{@link org.microcol.gui.mainmenu.CenterViewController}</li>
  * <li>{@link org.microcol.gui.mainmenu.ChangeLanguageController}</li>
  * <li>{@link org.microcol.gui.mainmenu.DeclareIndependenceController}</li>
- * <li>{@link org.microcol.gui.mainmenu.ExitGameController}</li>
+ * <li>{@link org.microcol.gui.mainmenu.QuitGameController}</li>
  * <li>{@link org.microcol.gui.mainmenu.ShowGridController}</li>
  * <li>{@link org.microcol.gui.mainmenu.VolumeChangeController}</li>
  * </ul>

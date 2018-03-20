@@ -1,7 +1,8 @@
-package org.microcol.gui;
+package org.microcol.gui.gamemenu;
 
 import java.util.function.Consumer;
 
+import org.microcol.gui.MainPanelPresenter;
 import org.microcol.gui.event.model.GameController;
 import org.microcol.gui.mainmenu.ChangeLanguageController;
 import org.slf4j.Logger;
@@ -21,7 +22,7 @@ public class CampaignPanelPresenter {
 
     private final GameController gameController;
 
-    private final MainFramePresenter mainFramePresenter;
+    private final MainPanelPresenter mainFramePresenter;
 
     public interface Display {
 
@@ -36,19 +37,19 @@ public class CampaignPanelPresenter {
     @Inject
     public CampaignPanelPresenter(final CampaignPanelPresenter.Display display,
             final ChangeLanguageController changeLanguageController,
-            final MainFramePresenter mainFramePresenter, final GameController gameController) {
+            final MainPanelPresenter mainFramePresenter, final GameController gameController) {
         this.mainFramePresenter = Preconditions.checkNotNull(mainFramePresenter);
         this.gameController = Preconditions.checkNotNull(gameController);
         changeLanguageController.addListener(listener -> display.updateLanguage());
         display.getButtonBack()
-                .setOnAction(event -> mainFramePresenter.showPanel(MainFramePresenter.START_PANEL));
+                .setOnAction(event -> mainFramePresenter.showPanel(MainPanelPresenter.PANEL_GAME_MENU));
         display.setOnSelectedMission(this::onSelectedMission);
     }
 
     private void onSelectedMission(final String missionName) {
         logger.debug("Mission '%s' was selected to play.", missionName);
         gameController.startDefaultMission(missionName);
-        mainFramePresenter.showPanel(MainFramePresenter.MAIN_GAME_PANEL);
+        mainFramePresenter.showPanel(MainPanelPresenter.PANEL_MAIN_GAME);
     }
 
 }

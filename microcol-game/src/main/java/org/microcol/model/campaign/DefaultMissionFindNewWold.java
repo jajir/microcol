@@ -24,7 +24,9 @@ public class DefaultMissionFindNewWold extends AbstractMission {
         model.addListener(new ModelAdapter() {
             @Override
             public void gameStarted(final GameStartedEvent event) {
-                missionCallBack.showMessage("campaign.default.start");
+                missionCallBack.addCallWhenReady(model -> {
+                    missionCallBack.showMessage("campaign.default.start");
+                });
             }
         });
     }

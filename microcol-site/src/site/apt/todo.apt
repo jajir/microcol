@@ -34,19 +34,31 @@ Planned releases
 
  * 0.6.0 - functionality release
 
-  * \u2717 Support mission and campaign. Game should support campaign and missions. There will be one campaign with simple missions:
+  * \u2713 Support game in progress, at start of each turn persist played game and save it to preferences.
+
+  * \u2713 Support mission and campaign. Game should support campaign and missions. There will be one campaign with simple missions:
+
+  * \u2713 Add exit game menu item.
+ 
+  * \u2713 First dialog is shown after animation is done. 
+ 
+  * \u2717 
+
+  * \u2713 Support start logic as described in GUI.
  
     * \u2717 Find land and found colony.
  
     * \u2717 Produce first food and sell it in Europe.
  
     * \u2717 Declare independence and conquer Royal Expedition Forces.
-
-  * \u2713 Support game in progress, at start of each turn persist played game and save it to preferences.
-
-  * \u2717 Add abandon game menu item.
-
-  * \u2717 Support start logic as described in GUI
+  
+  * \u2717 Game finished event comes to UI in non-EDT thread.
+ 
+  * \u2717 Try to move more than allowed number of moves in one move leads to blocking UI. 
+ 
+  * \u2717 
+ 
+  * \u2717 
  
  * <<Backlog>> - feature and improvement backlog
  
