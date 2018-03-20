@@ -2,6 +2,8 @@ package org.microcol.gui.gamepanel;
 
 import java.util.function.Consumer;
 
+import com.google.common.base.MoreObjects;
+
 class AnimationHolder {
 
     private final Animation animation;
@@ -31,6 +33,12 @@ class AnimationHolder {
      */
     Consumer<Animation> getOnAnimationIsDone() {
         return onAnimationIsDone;
+    }
+
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(getClass()).add("animation", animation)
+                .add("onAnimationIsDone", onAnimationIsDone).toString();
     }
 
 }

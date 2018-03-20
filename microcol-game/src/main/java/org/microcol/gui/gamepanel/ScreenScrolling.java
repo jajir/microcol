@@ -6,6 +6,7 @@ import java.util.List;
 import org.microcol.gui.PathPlanning;
 import org.microcol.gui.Point;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 
 /**
@@ -23,6 +24,7 @@ public class ScreenScrolling {
         stepsToDo = new ArrayList<>();
         pathPlanning.paintPathWithStepsLimit(from, to, point -> stepsToDo.add(point),
                 DEFAULT_SCREEN_SCROLLING_SPEED);
+        Preconditions.checkArgument(!stepsToDo.isEmpty(), "There are no steps to scroll");
     }
 
     /**
@@ -43,6 +45,11 @@ public class ScreenScrolling {
     public Point getNextPoint() {
         Preconditions.checkArgument(!stepsToDo.isEmpty(), "There are not available points");
         return stepsToDo.remove(0);
+    }
+
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(getClass()).add("stepsToDo", stepsToDo).toString();
     }
 
 }

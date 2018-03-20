@@ -14,43 +14,42 @@ import com.google.inject.Inject;
  */
 public class UnitMovedListener {
 
-	private final Logger logger = LoggerFactory.getLogger(UnitMovedListener.class);
+    private final Logger logger = LoggerFactory.getLogger(UnitMovedListener.class);
 
-	private final GamePanelView gamePanelView;
+    private final GamePanelView gamePanelView;
 
-	private final PaintService paintService;
-	
-	private final ExcludePainting excludePainting;
+    private final PaintService paintService;
 
-	private final PathPlanning pathPlanning;
+    private final ExcludePainting excludePainting;
 
-	private final AnimationManager animationManager;
+    private final PathPlanning pathPlanning;
 
-	@Inject
-	public UnitMovedListener(
-			final UnitMovedController unitMovedController,
-			final GamePanelView gamePanelView,
-			final PaintService paintService,
-			final ExcludePainting excludePainting,
-			final PathPlanning pathPlanning,
-			final AnimationManager animationManager) {
-		this.gamePanelView = Preconditions.checkNotNull(gamePanelView);
-		this.paintService = Preconditions.checkNotNull(paintService);
-		this.excludePainting = Preconditions.checkNotNull(excludePainting);
-		this.pathPlanning = Preconditions.checkNotNull(pathPlanning);
-		this.animationManager = Preconditions.checkNotNull(animationManager);
-		unitMovedController.addListener(event -> {
-			logger.debug("Walk animation was scheduled.");
-			scheduleWalkAnimation(event);
-			logger.info("Walk animation was completed.");
-		});
-	}
+    private final AnimationManager animationManager;
 
-	private void scheduleWalkAnimation(final UnitMovedStepEvent event) {
-		gamePanelView.planScrollingAnimationToLocation(event.getStart());
-		animationManager.addAnimation(new AnimationWalk(pathPlanning, event.getStart(), event.getEnd(), event.getUnit(),
-				paintService, excludePainting), animation -> excludePainting.includeUnit(event.getUnit()));
-		animationManager.waitWhileRunning();
-	}
+    @Inject
+    public UnitMovedListener(final UnitMovedController unitMovedController,
+            final GamePanelView gamePanelView, final PaintService paintService,
+            final ExcludePainting excludePainting, final PathPlanning pathPlanning,
+            final AnimationManager animationManager) {
+        this.gamePanelView = Preconditions.checkNotNull(gamePanelView);
+        this.paintService = Preconditions.checkNotNull(paintService);
+        this.excludePainting = Preconditions.checkNotNull(excludePainting);
+        this.pathPlanning = Preconditions.checkNotNull(pathPlanning);
+        this.animationManager = Preconditions.checkNotNull(animationManager);
+        unitMovedController.addListener(event -> {
+            logger.debug("Walk animation was scheduled.");
+            scheduleWalkAnimation(event);
+            logger.info("Walk animation was completed.");
+        });
+    }
+
+    private void scheduleWalkAnimation(final UnitMovedStepEvent event) {
+        gamePanelView.planScrollingAnimationToLocation(event.getStart());
+        animationManager.addAnimation(
+                new AnimationWalk(pathPlanning, event.getStart(), event.getEnd(), event.getUnit(),
+                        paintService, excludePainting),
+                animation -> excludePainting.includeUnit(event.getUnit()));
+        animationManager.waitWhileRunning();
+    }
 
 }

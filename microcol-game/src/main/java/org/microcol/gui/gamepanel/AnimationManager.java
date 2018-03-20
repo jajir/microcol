@@ -20,7 +20,7 @@ public class AnimationManager implements AnimationLock {
 
     private final Logger logger = LoggerFactory.getLogger(AnimationManager.class);
 
-    private final Queue<AnimationHolder> animationParts = new LinkedList<>();
+    private final Queue<AnimationHolder> animationsQueue = new LinkedList<>();
 
     private final AnimationIsDoneController animationIsDoneController;
 
@@ -46,14 +46,14 @@ public class AnimationManager implements AnimationLock {
         runningPart.getAnimation().nextStep();
         if (!runningPart.getAnimation().hasNextStep()) {
             runningPart.runOnAnimationIsDone();
-            if (animationParts.isEmpty()) {
+            if (animationsQueue.isEmpty()) {
                 runningPart = null;
                 hasNextStep = false;
                 latch.unlock();
                 animationIsDoneController.fireEvent(new AnimationIsDoneEvent());
                 logger.debug("You are done, unlocking threads");
             } else {
-                runningPart = animationParts.remove();
+                runningPart = animationsQueue.remove();
                 Preconditions.checkState(runningPart.getAnimation().hasNextStep(),
                         "Just started animation should have at least one step.");
             }
@@ -82,8 +82,9 @@ public class AnimationManager implements AnimationLock {
         if (runningPart == null) {
             runningPart = holder;
             hasNextStep = holder.getAnimation().hasNextStep();
+            Preconditions.checkState(hasNextStep, "Animation should contain at least one step.");
         } else {
-            animationParts.add(holder);
+            animationsQueue.add(holder);
         }
         latch.lock();
     }

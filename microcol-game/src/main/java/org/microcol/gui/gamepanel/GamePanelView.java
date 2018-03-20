@@ -139,20 +139,24 @@ public class GamePanelView implements GamePanelPresenter.Display {
     }
 
     public void planScrollingAnimationToLocation(final Location location) {
+        // TODO there are two same methods.
         planScrollingAnimationToPoint(getArea().getCenterToLocation(location));
     }
 
     @Override
-    public void planScrollingAnimationToPoint(final Point targetPoint) {
-        /**
-         * Following precondition throws exception when scroll planning is
-         * called before canvas was fully initialized. Just after full canvas
-         * initialization is height property set.
-         */
-        Preconditions.checkState(visibleArea.getCanvasHeight() != 0,
-                "screen scroll is called before canvas initialization was finished.");
-        animationManager.addAnimation(new AnimatonScreenScroll(
-                new ScreenScrolling(pathPlanning, visibleArea.getTopLeft(), targetPoint)));
+    public void planScrollingAnimationToPoint(final Point to) {
+        final Point from = visibleArea.getTopLeft();
+        if (from.distanceSimplified(to) > 0) {
+            /**
+             * Following precondition throws exception when scroll planning is
+             * called before canvas was fully initialized. Just after full
+             * canvas initialization is height property set.
+             */
+            Preconditions.checkState(visibleArea.getCanvasHeight() != 0,
+                    "screen scroll is called before canvas initialization was finished.");
+            animationManager.addAnimation(
+                    new AnimatonScreenScroll(new ScreenScrolling(pathPlanning, from, to)));
+        }
     }
 
     /**

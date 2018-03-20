@@ -123,4 +123,8 @@ public final class Point {
             return (int) (num / factor);
         }
     }
+
+    public int distanceSimplified(final Point p) {
+        return Math.abs(x - p.getX()) + Math.abs(y - p.getY());
+    }
 }
