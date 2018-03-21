@@ -24,147 +24,150 @@ import com.google.inject.Inject;
  */
 public class MoveModeSupport {
 
-	private final Logger logger = LoggerFactory.getLogger(MoveModeSupport.class);
+    private final Logger logger = LoggerFactory.getLogger(MoveModeSupport.class);
 
-	private final SelectedTileManager selectedTileManager;
+    private final SelectedTileManager selectedTileManager;
 
-	private final MouseOverTileManager mouseOverTileManager;
-	
-	private final SelectedUnitManager selectedUnitManager;
-	
-	private final ModeController modeController;
+    private final MouseOverTileManager mouseOverTileManager;
 
-	private List<Location> moveLocations;
+    private final SelectedUnitManager selectedUnitManager;
 
-	private MoveMode moveMode;
+    private final ModeController modeController;
 
-	/**
-	 * Define what mode of move.
-	 *
-	 */
-	public enum MoveMode {
+    private List<Location> moveLocations;
 
-		MOVE(ImageProvider.IMG_ICON_STEPS_25x25, ImageProvider.IMG_ICON_STEPS_TURN_25x25),
+    private MoveMode moveMode;
 
-		ANCHOR(ImageProvider.IMG_ICON_STEPS_ANCHOR_25x25, ImageProvider.IMG_ICON_STEPS_ANCHOR_TURN_25x25),
+    /**
+     * Define what mode of move.
+     *
+     */
+    public enum MoveMode {
 
-		FIGHT(ImageProvider.IMG_ICON_STEPS_FIGHT_25x25, ImageProvider.IMG_ICON_STEPS_FIGHT_TURN_25x25);
+        MOVE(ImageProvider.IMG_ICON_STEPS_25x25, ImageProvider.IMG_ICON_STEPS_TURN_25x25),
 
-		/**
-		 * Normal step image.
-		 */
-		private final String image;
+        ANCHOR(ImageProvider.IMG_ICON_STEPS_ANCHOR_25x25,
+                ImageProvider.IMG_ICON_STEPS_ANCHOR_TURN_25x25),
 
-		/**
-		 * Step image indicating that here ends turn.
-		 */
-		private final String turnImage;
+        FIGHT(ImageProvider.IMG_ICON_STEPS_FIGHT_25x25,
+                ImageProvider.IMG_ICON_STEPS_FIGHT_TURN_25x25);
 
-		private MoveMode(final String image, final String turnImage) {
-			this.image = Preconditions.checkNotNull(image);
-			this.turnImage = Preconditions.checkNotNull(turnImage);
-		}
+        /**
+         * Normal step image.
+         */
+        private final String image;
 
-		public String getImageForStep(final boolean normalStep) {
-			if (normalStep) {
-				return image;
-			} else {
-				return turnImage;
-			}
-		}
+        /**
+         * Step image indicating that here ends turn.
+         */
+        private final String turnImage;
 
-		public String getImage() {
-			return image;
-		}
+        private MoveMode(final String image, final String turnImage) {
+            this.image = Preconditions.checkNotNull(image);
+            this.turnImage = Preconditions.checkNotNull(turnImage);
+        }
 
-		public String getTurnImage() {
-			return turnImage;
-		}
+        public String getImageForStep(final boolean normalStep) {
+            if (normalStep) {
+                return image;
+            } else {
+                return turnImage;
+            }
+        }
 
-	}
+        public String getImage() {
+            return image;
+        }
 
-	@Inject
-	public MoveModeSupport(final MouseOverTileChangedController mouseOverTileChangedController,
-			final StartMoveController startMoveController,
-			final SelectedTileManager selectedTileManager,
-			final MouseOverTileManager mouseOverTileManager,
-			final SelectedUnitManager selectedUnitManager,
-			final ModeController modeController) {
-		mouseOverTileChangedController.addListener(this::onMouseOverTileChanged);
-		startMoveController.addListener(this::onStartMove);
-		this.selectedTileManager = Preconditions.checkNotNull(selectedTileManager);
-		this.mouseOverTileManager = Preconditions.checkNotNull(mouseOverTileManager);
-		this.selectedUnitManager = Preconditions.checkNotNull(selectedUnitManager);
-		this.modeController = Preconditions.checkNotNull(modeController);
-		moveLocations = Lists.newArrayList();
-	}
+        public String getTurnImage() {
+            return turnImage;
+        }
 
-	@SuppressWarnings("unused")
-	private void onStartMove(final StartMoveEvent event) {
-		recountPath();
-	}
+    }
 
-	private void onMouseOverTileChanged(final MouseOverTileChangedEvent mouseOverTileChangedEvent) {
-		Preconditions.checkNotNull(mouseOverTileChangedEvent);
-		logger.debug("Recounting path: " + mouseOverTileChangedEvent);
-		if (modeController.isMoveMode()) {
-			recountPath();
-		} else {
-			noMove();
-		}
-	}
+    @Inject
+    public MoveModeSupport(final MouseOverTileChangedController mouseOverTileChangedController,
+            final StartMoveController startMoveController,
+            final SelectedTileManager selectedTileManager,
+            final MouseOverTileManager mouseOverTileManager,
+            final SelectedUnitManager selectedUnitManager, final ModeController modeController) {
+        mouseOverTileChangedController.addListener(this::onMouseOverTileChanged);
+        startMoveController.addListener(this::onStartMove);
+        this.selectedTileManager = Preconditions.checkNotNull(selectedTileManager);
+        this.mouseOverTileManager = Preconditions.checkNotNull(mouseOverTileManager);
+        this.selectedUnitManager = Preconditions.checkNotNull(selectedUnitManager);
+        this.modeController = Preconditions.checkNotNull(modeController);
+        moveLocations = Lists.newArrayList();
+    }
 
-	private void recountPath() {
-		if (mouseOverTileManager.getMouseOverTile().isPresent()) {
-			final Location target = mouseOverTileManager.getMouseOverTile().get();
-			if (selectedTileManager.getSelectedTile().get().equals(target)) {
-				/**
-				 * Pointing with mouse to unit which should move.
-				 */
-				noMove();
-			} else {
-				processMove(target);
-			}
-		} else {
-			noMove();
-		}
-	}
+    @SuppressWarnings("unused")
+    private void onStartMove(final StartMoveEvent event) {
+        recountPath();
+    }
 
-	private void processMove(final Location moveToLocation) {
-		final Unit movingUnit = selectedUnitManager.getSelectedUnit().get();
-		if (movingUnit.isPossibleToAttackAt(moveToLocation)) {
-			// fights
-			moveLocations = Lists
-					.newArrayList(movingUnit.getPath(moveToLocation, true).orElse(Collections.emptyList()));
-			moveLocations.add(moveToLocation);
-			moveMode = MoveMode.FIGHT;
-		} else if (movingUnit.isPossibleToEmbarkAt(moveToLocation, true)) {
-			// embark
-			moveLocations = movingUnit.getPath(moveToLocation).orElse(Lists.newArrayList(moveToLocation));
-			moveMode = MoveMode.ANCHOR;
-		} else if (movingUnit.isPossibleToDisembarkAt(moveToLocation, true)) {
-			moveLocations = movingUnit.getPath(moveToLocation).orElse(Lists.newArrayList(moveToLocation));
-			moveMode = MoveMode.ANCHOR;
-		} else if (movingUnit.isPossibleToMoveAt(moveToLocation)) {
-			// user will move
-			moveLocations = movingUnit.getPath(moveToLocation).orElse(Collections.emptyList());
-			moveMode = MoveMode.MOVE;
-		} else {
-			noMove();
-		}
-	}
+    private void onMouseOverTileChanged(final MouseOverTileChangedEvent mouseOverTileChangedEvent) {
+        Preconditions.checkNotNull(mouseOverTileChangedEvent);
+        logger.debug("Recounting path: " + mouseOverTileChangedEvent);
+        if (modeController.isMoveMode()) {
+            recountPath();
+        } else {
+            noMove();
+        }
+    }
 
-	private void noMove() {
-		moveLocations = Lists.newArrayList();
-		moveMode = MoveMode.MOVE;
-	}
+    private void recountPath() {
+        if (mouseOverTileManager.getMouseOverTile().isPresent()) {
+            final Location target = mouseOverTileManager.getMouseOverTile().get();
+            if (selectedTileManager.getSelectedTile().get().equals(target)) {
+                /**
+                 * Pointing with mouse to unit which should move.
+                 */
+                noMove();
+            } else {
+                processMove(target);
+            }
+        } else {
+            noMove();
+        }
+    }
 
-	public List<Location> getMoveLocations() {
-		return moveLocations;
-	}
+    private void processMove(final Location moveToLocation) {
+        final Unit movingUnit = selectedUnitManager.getSelectedUnit().get();
+        final UnitMove unitMove = new UnitMove(movingUnit, moveToLocation);
+        if (movingUnit.isPossibleToAttackAt(moveToLocation)) {
+            // fights
+            moveLocations = Lists.newArrayList(
+                    movingUnit.getPath(moveToLocation, true).orElse(Collections.emptyList()));
+            moveLocations.add(moveToLocation);
+            moveMode = MoveMode.FIGHT;
+        } else if (movingUnit.isPossibleToEmbarkAt(moveToLocation, true)) {
+            // embark
+            moveLocations = movingUnit.getPath(moveToLocation)
+                    .orElse(Lists.newArrayList(moveToLocation));
+            moveMode = MoveMode.ANCHOR;
+        } else if (movingUnit.isPossibleToDisembarkAt(moveToLocation, true)) {
+            moveLocations = movingUnit.getPath(moveToLocation)
+                    .orElse(Lists.newArrayList(moveToLocation));
+            moveMode = MoveMode.ANCHOR;
+        } else if (unitMove.isOneTurnMove()) {
+            moveLocations = unitMove.getPath();
+            moveMode = MoveMode.MOVE;
+        } else {
+            noMove();
+        }
+    }
 
-	public MoveMode getMoveMode() {
-		return moveMode;
-	}
+    private void noMove() {
+        moveLocations = Lists.newArrayList();
+        moveMode = MoveMode.MOVE;
+    }
+
+    public List<Location> getMoveLocations() {
+        return moveLocations;
+    }
+
+    public MoveMode getMoveMode() {
+        return moveMode;
+    }
 
 }

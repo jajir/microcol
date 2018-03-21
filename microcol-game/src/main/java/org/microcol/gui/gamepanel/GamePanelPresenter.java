@@ -295,6 +295,7 @@ public final class GamePanelPresenter {
         }
         // TODO don't call selectedTileManager.setSelectedTile
         final Unit movingUnit = selectedUnitManager.getSelectedUnit().get();
+        final UnitMove unitMove = new UnitMove(movingUnit, moveToLocation);
         if (movingUnit.isPossibleToCaptureColonyAt(moveToLocation)) {
             // use can capture target colony
             gameModelController.captureColonyAt(movingUnit, moveToLocation);
@@ -317,15 +318,12 @@ public final class GamePanelPresenter {
             // TODO JJ following code is repeated multiple times
             selectedTileManager.setSelectedTile(moveToLocation);
             disableMoveMode();
-        } else if (movingUnit.isPossibleToMoveAt(moveToLocation)) {
+        } else if (unitMove.isOneTurnMove()) {
             // user will move
-            if (movingUnit.getPath(moveToLocation).isPresent()) {
-                final List<Location> path = movingUnit.getPath(moveToLocation).get();
-                if (!path.isEmpty()) {
-                    gameModelController.performMove(movingUnit, path);
-                }
-                disableMoveMode();
+            if (!unitMove.getPath().isEmpty()) {
+                gameModelController.performMove(movingUnit, unitMove.getPath());
             }
+            disableMoveMode();
         } else if (movingUnit.isPossibleToGoToPort(moveToLocation)) {
             if (movingUnit.getPath(moveToLocation).isPresent()) {
                 final List<Location> path = movingUnit.getPath(moveToLocation).get();

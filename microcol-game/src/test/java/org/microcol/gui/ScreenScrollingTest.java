@@ -12,23 +12,25 @@ import mockit.Mocked;
 
 public class ScreenScrollingTest {
 
-	private @Mocked PathPlanning pathPlanning;
+    private @Mocked PathPlanning pathPlanning;
 
-	@Test(expected = NullPointerException.class)
-	public void test_constructor_pathPlanningIsNull() throws Exception {
-		new ScreenScrolling(null, Point.of(10, 10), Point.of(30, 10));
-	}
+    @Test(expected = NullPointerException.class)
+    public void test_constructor_pathPlanningIsNull() throws Exception {
+        new ScreenScrolling(null, Point.of(10, 10), Point.of(30, 10));
+    }
 
-	@Test
-	public void test_constructor() throws Exception {
-		new Expectations() {{
-			pathPlanning.paintPathWithStepsLimit(Point.of(10, 10), Point.of(30, 10),
-					(WhatToDoWithPointInPath)any, 10);
-		}};
-		ScreenScrolling screenScrolling = new ScreenScrolling(pathPlanning, Point.of(10, 10), Point.of(30, 10));
+    // TODO is it possible to write test as positive?
+    @Test(expected=IllegalArgumentException.class)
+    public void test_constructor() throws Exception {
+        new Expectations() {{
+                pathPlanning.paintPathWithStepsLimit(Point.of(10, 10), Point.of(30, 10),
+                        (WhatToDoWithPointInPath) any, 10);
+        }};
+        ScreenScrolling screenScrolling = new ScreenScrolling(pathPlanning, Point.of(10, 10),
+                Point.of(30, 10));
 
-		assertNotNull(screenScrolling);
-		assertFalse(screenScrolling.isNextPointAvailable());
-	}
+        assertNotNull(screenScrolling);
+        assertFalse(screenScrolling.isNextPointAvailable());
+    }
 
 }

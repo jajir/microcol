@@ -13,29 +13,38 @@ import org.microcol.model.event.UnitMovedToHighSeasEvent;
 import org.microcol.model.event.UnitEmbarkedEvent;
 import org.microcol.model.event.UnitMoveFinishedEvent;
 
+/**
+ * Evens called from model to registered listeners.
+ */
 public interface ModelListener {
-	
-	void gameStarted(GameStartedEvent event);
 
-	void roundStarted(RoundStartedEvent event);
+    void gameStarted(GameStartedEvent event);
 
-	void turnStarted(TurnStartedEvent event);
+    void roundStarted(RoundStartedEvent event);
 
-	void unitMovedStep(UnitMovedStepEvent event);
+    void turnStarted(TurnStartedEvent event);
 
-	void unitMovedToHighSeas(UnitMovedToHighSeasEvent event);
+    void unitMovedStep(UnitMovedStepEvent event);
 
-	void unitMoveFinished(UnitMoveFinishedEvent event);
+    void unitMovedToHighSeas(UnitMovedToHighSeasEvent event);
 
-	void unitAttacked(UnitAttackedEvent event);
+    /**
+     * It's called move is finished. No other move step event could come.
+     *
+     * @param event
+     *            required event
+     */
+    void unitMoveFinished(UnitMoveFinishedEvent event);
 
-	void unitEmbarked(UnitEmbarkedEvent event);
-	
-	void colonyWasCaptured(ColonyWasCapturedEvent event);
+    void unitAttacked(UnitAttackedEvent event);
 
-	void gameFinished(GameFinishedEvent event);
+    void unitEmbarked(UnitEmbarkedEvent event);
 
-	void debugRequested(DebugRequestedEvent event);
+    void colonyWasCaptured(ColonyWasCapturedEvent event);
 
-	void goldWasChanged(GoldWasChangedEvent event);
+    void gameFinished(GameFinishedEvent event);
+
+    void debugRequested(DebugRequestedEvent event);
+
+    void goldWasChanged(GoldWasChangedEvent event);
 }

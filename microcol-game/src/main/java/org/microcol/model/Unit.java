@@ -115,8 +115,15 @@ public class Unit {
         }
     }
 
-    // Netestuje nedosažitelné lokace, pouze jestli je teoreticky možné na danou
-    // lokaci vstoupit
+    /**
+     * Verify if it's possible to move at give location. Method doesn't verify
+     * if unit have enough action point is if location is reachable.
+     *
+     * @param location
+     *            required map location.
+     * @return Return <code>true</code> when unit could move at given location
+     *         otherwise return <code>false</code>.
+     */
     public boolean isPossibleToMoveAt(final Location location) {
         return isPossibleToMoveAt(location, false);
     }
@@ -124,7 +131,7 @@ public class Unit {
     /**
      * Get info if unit could move to target location. Method doesn't verify if
      * target location could be reached in current move.
-     * 
+     *
      * @param location
      *            required target location
      * @param ignoreEnemies

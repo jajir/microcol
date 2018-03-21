@@ -38,7 +38,7 @@ public class AnimationManagerTest {
 		assertFalse(am.hasNextStep());
 	}
 
-	@Test
+	@Test(expected=IllegalStateException.class)
 	public void test_addiong_one_animation_without_nextStep() throws Exception {
 		new Expectations() {{
 			part1.hasNextStep();result=false;times=1;
