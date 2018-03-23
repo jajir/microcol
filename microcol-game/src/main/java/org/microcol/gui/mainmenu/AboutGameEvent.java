@@ -8,9 +8,9 @@ import com.google.common.base.MoreObjects;
  */
 public class AboutGameEvent {
 
-	@Override
-	public String toString() {
-		return MoreObjects.toStringHelper(AboutGameEvent.class).toString();
-	}
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(AboutGameEvent.class).toString();
+    }
 
 }

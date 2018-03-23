@@ -67,6 +67,9 @@
 	<entry key="statusBar.gold.description">How many golden coins do you have.</entry>
 	<entry key="statusBar.status.description">Here will by simple help message</entry>
 
+	<entry key="dialogAbout.caption">About MicroCol</entry>
+	<entry key="dialogAbout.version">Version :</entry>
+
 	<entry key="startPanel.buttonContinue">Continue in last played game</entry>
 	<entry key="startPanel.buttonLoadSave">Load saved game</entry>
 	<entry key="startPanel.buttonPlayCampaign">Play campaign</entry>

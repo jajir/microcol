@@ -25,6 +25,8 @@ public class RightPanelPresenter {
 
     private final Logger logger = LoggerFactory.getLogger(RightPanelPresenter.class);
 
+    private final GameModelController gameModelController;
+
     private final Text text;
 
     private final RightPanelPresenter.Display display;
@@ -50,6 +52,7 @@ public class RightPanelPresenter {
             final StatusBarMessageController statusBarMessageController,
             final TurnStartedController turnStartedController) {
         this.display = Preconditions.checkNotNull(display);
+        this.gameModelController = Preconditions.checkNotNull(gameModelController);
         this.text = Preconditions.checkNotNull(text);
         display.getNextTurnButton().setText(text.get("nextTurnButton"));
         display.getNextTurnButton().setDisable(true);
@@ -84,13 +87,16 @@ public class RightPanelPresenter {
         display.setOnMovePlayer(event.getPlayer());
         if (event.getPlayer().isHuman()) {
             display.getNextTurnButton().setDisable(false);
-            display.refreshView(lastFocusedTileEvent);        
+            display.refreshView(lastFocusedTileEvent);
         }
     }
 
+    @SuppressWarnings("unused")
     private void onLanguageWasChanged(final ChangeLanguageEvent event) {
         display.getNextTurnButton().setText(text.get("nextTurnButton"));
-        display.setOnMovePlayer(event.getModel().getCurrentPlayer());
+        if (gameModelController.isModelReady()) {
+            display.setOnMovePlayer(gameModelController.getModel().getCurrentPlayer());
+        }
         display.refreshView(lastFocusedTileEvent);
     }
 

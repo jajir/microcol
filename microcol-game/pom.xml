@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>org.microcol</groupId>
 		<artifactId>microcol-root</artifactId>
-		<version>0.5.0-SNAPSHOT</version>
+		<version>0.6.0-SNAPSHOT</version>
 	</parent>
 	<artifactId>microcol-game</artifactId>
 	<packaging>jar</packaging>
@@ -86,10 +86,7 @@
 							<ruleset>rulesets/java/basic.xml</ruleset>
 							<ruleset>rulesets/java/unusedcode.xml</ruleset>
 							<ruleset>rulesets/java/design.xml</ruleset>
-							<!--
-								<ruleset>rulesets/java/codesize.xml</ruleset>
-								<ruleset>rulesets/java/controversial.xml</ruleset>
-							-->
+							<!-- <ruleset>rulesets/java/codesize.xml</ruleset> <ruleset>rulesets/java/controversial.xml</ruleset> -->
 						</rulesets>
 					</configuration>
 				</plugin>
@@ -137,6 +134,8 @@
 								<manifest>
 									<addClasspath>true</addClasspath>
 									<mainClass>org.microcol.MicroCol</mainClass>
+									<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+									<addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
 								</manifest>
 								<manifestEntries>
 									<Manifest-Version>1.0</Manifest-Version>
@@ -150,6 +149,7 @@
 					</execution>
 				</executions>
 			</plugin>
+			<!-- Enable to run it from console 'mvn exec:exec' -->
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>exec-maven-plugin</artifactId>

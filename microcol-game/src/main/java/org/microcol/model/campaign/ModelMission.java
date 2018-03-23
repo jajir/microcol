@@ -48,7 +48,7 @@ public class ModelMission {
      * TODO this should be replace by direct calls. Direct calls allows to call
      * mission to verify move.
      * 
-     * @return
+     * @return return actual game model
      */
     @Deprecated
     public Model getModel() {

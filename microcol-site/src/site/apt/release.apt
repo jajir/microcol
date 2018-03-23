@@ -1,8 +1,12 @@
  ----
- Release methodology
+ How to make release
  ----
+ 
+How to make release
 
-Release versioning
+ Release methodology and how to make it guide.
+
+* Release versioning
  
  x.y.z
  
@@ -10,25 +14,25 @@ Release versioning
  
  * x - major change
  
- * y - minor change, should be done few time per year
+ * y - minor change - Should be done few time per year. Saved data should be compatible with previous release.
  
  * z - bug fixing release
 
 []
 
-How to make a release
+* How to make a release
 
-* Release related files
+** Release related files
 
  * <microcol-dist/src/icon_square_64x64.ico> - should be 64 x 64 px square Microsoft icon
 
-* Release prerequisite
+** Release prerequisite
 
  * Installed java 1.8.
  
  * Installed graphviz. It could be verified by running <./dot>. It's required by plant UML diagrams maven plugin.
 
-* Release steps
+** Release steps
 
  Following guide is useful when new minor or major change should be released. Guide suppose releasing version <x.y.0>. 
 

@@ -4,6 +4,10 @@
 
 Manifest
 
+ Why is MicroCol created and some basic rules how.
+
+* General
+
  Following points are ordered by priority
 
  * Create some useful result
@@ -16,7 +20,7 @@ Manifest
 
 []
 
-Technology rules
+* Technologies and development rules
 
  * Target platform is PC
  
@@ -24,7 +28,7 @@ Technology rules
 
  * Java SE 1.8
 
- * Swing in UI
+ * JavaFX in UI (Originally it was swing)
 
  * Maven 3.*
 

@@ -88,6 +88,7 @@ import org.microcol.gui.mainmenu.QuitGameController;
 import org.microcol.gui.mainmenu.SelectNextUnitController;
 import org.microcol.gui.mainmenu.ShowGridController;
 import org.microcol.gui.mainmenu.VolumeChangeController;
+import org.microcol.gui.util.ApplicationInfo;
 import org.microcol.gui.util.FontService;
 import org.microcol.gui.util.PersistentService;
 import org.microcol.gui.util.PersistingTool;
@@ -118,10 +119,12 @@ public class MicroColModule extends AbstractModule {
         bind(GrassCoastMapGenerator.class).in(Singleton.class);
         bind(IceCoastMapGenerator.class).in(Singleton.class);
         bind(FontService.class).asEagerSingleton();
+        bind(ApplicationInfo.class).in(Singleton.class);
 
         /**
          * Dialogs
          */
+        bind(AboutDialog.class).in(Singleton.class);
         bind(DialogDestroyColony.class).in(Singleton.class);
         bind(ChooseGoodAmount.class).in(Singleton.class);
         bind(DialogMessage.class).in(Singleton.class);
@@ -165,7 +168,7 @@ public class MicroColModule extends AbstractModule {
         bind(UnitMovedToFieldController.class).in(Singleton.class);
         bind(ExitGameController.class).in(Singleton.class);
         bind(BeforeGameStartController.class).in(Singleton.class);
-        
+
         bind(TurnStartedListener.class).asEagerSingleton();
         bind(TileWasSelectedListener.class).asEagerSingleton();
 

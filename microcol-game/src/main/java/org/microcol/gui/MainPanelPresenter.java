@@ -33,11 +33,11 @@ public class MainPanelPresenter {
         this.view = Preconditions.checkNotNull(view);
         view.getBox().setOnKeyPressed(e -> {
             keyController.fireEvent(e);
-            System.out.println("\nHura klavesa\n");
+            System.out.println("\nHura klavesa " + e.toString() + "\n");
         });
         exitGameController.addListener(this::onGameExit);
         beforeGameStartController.addListener(this::onBeforeGameStartEvent);
-        gameFinishedController.addListener(this::onGameFinished);
+        gameFinishedController.addRunLaterListener(this::onGameFinished);
     }
 
     @SuppressWarnings("unused")
@@ -56,7 +56,8 @@ public class MainPanelPresenter {
     }
 
     // TODO it should not be called directly. Just via listeners.
-    // TODO separate game menu both panels to separate parent and switch between them in separate view
+    // TODO separate game menu both panels to separate parent and switch between
+    // them in separate view
     @Deprecated
     public void showPanel(final String panelName) {
         view.showPanel(panelName);

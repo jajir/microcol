@@ -11,9 +11,9 @@ import com.google.inject.Inject;
  */
 public class DialogNotEnoughGold extends AbstractWarningDialog {
 
-	@Inject
-	public DialogNotEnoughGold(final ViewUtil viewUtil, final Text text) {
-		super(viewUtil, text, "dialogNotEnoughGold.caption");
-	}
+    @Inject
+    public DialogNotEnoughGold(final ViewUtil viewUtil, final Text text) {
+        super(viewUtil, text, "dialogNotEnoughGold.caption");
+    }
 
 }

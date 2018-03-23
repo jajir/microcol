@@ -77,12 +77,10 @@ public class MainMenuPresenter {
         view.getMenuItemAbout()
                 .setOnAction(actionEvent -> gameEventController.fireEvent(new AboutGameEvent()));
         view.getMenuItemColonizopedia().setOnAction(event -> colonizopedia.showAndWait());
-        view.getRbMenuItemlanguageCz()
-                .setOnAction(actionEvent -> changeLanguageController.fireEvent(
-                        new ChangeLanguageEvent(Text.Language.cz, gameModelController.getModel())));
-        view.getRbMenuItemlanguageEn()
-                .setOnAction(actionEvent -> changeLanguageController.fireEvent(
-                        new ChangeLanguageEvent(Text.Language.en, gameModelController.getModel())));
+        view.getRbMenuItemlanguageCz().setOnAction(actionEvent -> changeLanguageController
+                .fireEvent(new ChangeLanguageEvent(Text.Language.cz)));
+        view.getRbMenuItemlanguageEn().setOnAction(actionEvent -> changeLanguageController
+                .fireEvent(new ChangeLanguageEvent(Text.Language.en)));
         view.getMenuItemVolume()
                 .setOnAction(actionEvent -> preferencesVolume.resetAndShowAndWait());
         view.getMenuItemAnimationSpeed()
@@ -111,8 +109,8 @@ public class MainMenuPresenter {
         changeLanguageController.addListener(event -> {
             view.updateLanguage();
         });
-        tileWasSelectedController.addListener(event -> onFocusedTileEvent(event));
-        turnStartedController.addListener(this::onTurnStartedEvent);
+        tileWasSelectedController.addRunLaterListener(event -> onFocusedTileEvent(event));
+        turnStartedController.addRunLaterListener(this::onTurnStartedEvent);
         declareIndependenceController
                 .addListener(event -> view.getMenuItemDeclareIndependence().setDisable(true));
 

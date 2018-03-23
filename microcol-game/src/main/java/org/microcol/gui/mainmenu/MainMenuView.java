@@ -186,51 +186,51 @@ public class MainMenuView {
         if (gamePreferences.isDevelopment()) {
             menuBar.getMenus().add(mainMenuDevelopment.getDevelopmentMenu());
         }
-        /**
-         * Following command will use apple system menu. Side effect is that
-         * menu accelerators like 'm' stop work.
-         * 
-         * TODO JJ it's probably bug.
-         */
-        // menuBar.useSystemMenuBarProperty().set(true);
 
+        menuItemColonizopedia = new MenuItem();
+        menuItemColonizopedia
+                .setAccelerator(new KeyCodeCombination(KeyCode.H, KeyCombination.CONTROL_DOWN));
+        menuItemColonizopedia.disableProperty().setValue(false);
+        
         /**
          * Help
          */
         menuHelp = new Menu();
+        if (gamePreferences.isDevelopment()) {
+            menuHelp.getItems().addAll(menuItemColonizopedia);
+        }
+        
         if (gamePreferences.isOSX()) {
             /**
-             * Display menus in apple application menu.
+             * Following command will use apple system menu. Side effect is that
+             * menu accelerators like 'm' stop work.
+             * 
+             * TODO JJ it's probably bug.
              */
-            // Get the toolkit
-            MenuToolkit tk = MenuToolkit.toolkit();
+            menuBar.useSystemMenuBarProperty().set(true);
+            final MenuToolkit tk = MenuToolkit.toolkit();
             // Create the default Application menu
             if (tk == null) {
                 menuItemAbout = new MenuItem();
                 menuHelp.getItems().addAll(menuItemAbout);
+                menuBar.getMenus().add(menuHelp);
             } else {
                 Menu defaultApplicationMenu = tk.createDefaultApplicationMenu("MicroCol");
                 // Update the existing Application menu
                 tk.setApplicationMenu(defaultApplicationMenu);
                 menuItemAbout = defaultApplicationMenu.getItems().get(0);
+                if (gamePreferences.isDevelopment()) {
+                    menuBar.getMenus().add(menuHelp);
+                }
             }
         } else {
             menuItemAbout = new MenuItem();
             menuHelp.getItems().addAll(menuItemAbout);
-        }
-        menuItemColonizopedia = new MenuItem();
-        menuItemColonizopedia
-                .setAccelerator(new KeyCodeCombination(KeyCode.H, KeyCombination.CONTROL_DOWN));
-        menuItemColonizopedia.disableProperty().setValue(false);
-        menuHelp.getItems().addAll(menuItemColonizopedia);
-
-        if (gamePreferences.isDevelopment()) {
             menuBar.getMenus().add(menuHelp);
         }
-
         updateLanguage();
     }
-
+    
     public void updateLanguage() {
         /**
          * Game
