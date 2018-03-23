@@ -43,47 +43,49 @@
 			<build>
 				<plugins>
 					<plugin>
-						<groupId>com.akathist.maven.plugins.launch4j</groupId>
-						<artifactId>launch4j-maven-plugin</artifactId>
-						<version>1.7.15</version>
-						<executions>
-							<execution>
-								<id>launch4j</id>
-								<phase>package</phase>
-								<goals>
-									<goal>launch4j</goal>
-								</goals>
-								<configuration>
-									<headerType>gui</headerType>
-									<outfile>target/microcol.exe</outfile>
-									<jar>target/microcol.jar</jar>
-									<errTitle>MicroCol</errTitle>
-									<icon>src/icon_square_64x64.ico</icon>
-									<classPath>
-										<mainClass>org.microcol.MicroCol</mainClass>
-										<addDependencies>true</addDependencies>
-									</classPath>
-									<jre>
-										<minVersion>1.6.0</minVersion>
-										<jdkPreference>preferJre</jdkPreference>
-									</jre>
-									<!-- <splash> <file>src/icon_square.bmp</file> <timeout>60</timeout> 
-										</splash> -->
-									<versionInfo>
-										<fileVersion>1.0.0.0</fileVersion>
-										<txtFileVersion>1.0</txtFileVersion>
-										<fileDescription>Colonisation remake</fileDescription>
-										<copyright>Apache license</copyright>
-										<productVersion>1.0.0.0</productVersion>
-										<txtProductVersion>${project.version}</txtProductVersion>
-										<productName>MicroCol</productName>
-										<internalName>MicroCol</internalName>
-										<originalFilename>MicroCol.exe</originalFilename>
-									</versionInfo>
-								</configuration>
-							</execution>
-						</executions>
+						<groupId>com.zenjava</groupId>
+						<artifactId>javafx-maven-plugin</artifactId>
+						<version>8.8.3</version>
+						<configuration>
+							<mainClass>org.microcol.MicroCol</mainClass>
+							<jvmArgs>
+								<jvmArg>-Xmx1024m</jvmArg>
+								<jvmArg>-Xms256m</jvmArg>
+							</jvmArgs>
+							<bundleArguments>
+								<!-- https://docs.oracle.com/javase/9/tools/javapackager.htm#GUID-E51F9601-E121-4A50-BCA7-C7F8730078B2__WINDOWSMSIBUNDLERARGUMENTS-26C9A792 -->
+								<runtime>${JAVA_JDK_HOME}/jre</runtime>
+								<icon>${project.basedir}/src/icon_square_64x64.ico</icon>
+								<installdirChooser>false</installdirChooser>
+								<systemWide>false</systemWide>
+							</bundleArguments>
+							<verbose>true</verbose>
+							<appName>MicroCol</appName>
+							<!-- <bundler>msi</bundler> -->
+							<needMenu>false</needMenu>
+							<needShortcut>false</needShortcut>
+							<vendor>MicroCol</vendor>
+
+							<manifestAttributes>
+								<Application-Name>MicroCol</Application-Name>
+								<Build-Version>${project.version}</Build-Version>
+								<Build-Date>${maven.build.timestamp}</Build-Date>
+							</manifestAttributes>
+						</configuration>
 					</plugin>
+					<!-- <plugin> <groupId>com.akathist.maven.plugins.launch4j</groupId> 
+						<artifactId>launch4j-maven-plugin</artifactId> <version>1.7.15</version> 
+						<executions> <execution> <id>launch4j</id> <phase>package</phase> <goals> 
+						<goal>launch4j</goal> </goals> <configuration> <headerType>gui</headerType> 
+						<outfile>target/microcol.exe</outfile> <jar>target/microcol.jar</jar> <errTitle>MicroCol</errTitle> 
+						<icon>src/icon_square_64x64.ico</icon> <classPath> <mainClass>org.microcol.MicroCol</mainClass> 
+						<addDependencies>true</addDependencies> </classPath> <jre> <minVersion>1.6.0</minVersion> 
+						<jdkPreference>preferJre</jdkPreference> </jre> <versionInfo> <fileVersion>1.0.0.0</fileVersion> 
+						<txtFileVersion>1.0</txtFileVersion> <fileDescription>Colonisation remake</fileDescription> 
+						<copyright>Apache license</copyright> <productVersion>1.0.0.0</productVersion> 
+						<txtProductVersion>${project.version}</txtProductVersion> <productName>MicroCol</productName> 
+						<internalName>MicroCol</internalName> <originalFilename>MicroCol.exe</originalFilename> 
+						</versionInfo> </configuration> </execution> </executions> </plugin> -->
 				</plugins>
 			</build>
 		</profile>
