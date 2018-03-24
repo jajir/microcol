@@ -1,10 +1,14 @@
 package org.microcol.model.store;
 
+import java.util.Map;
+
 public class CampaignPo {
 
     private String name;
 
     private String mission;
+    
+    private Map<String, String> data;
 
     /**
      * @return the name
@@ -32,6 +36,20 @@ public class CampaignPo {
      */
     public void setMission(String mission) {
         this.mission = mission;
+    }
+
+    /**
+     * @return the data
+     */
+    public Map<String, String> getData() {
+        return data;
+    }
+
+    /**
+     * @param data the data to set
+     */
+    public void setData(Map<String, String> data) {
+        this.data = data;
     }
     
 }

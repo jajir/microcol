@@ -1,5 +1,10 @@
 package org.microcol.model.campaign;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import org.microcol.model.store.ModelPo;
+
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 
@@ -65,6 +70,16 @@ public abstract class AbstractMission implements Mission {
      */
     public void setFinished(boolean isFinished) {
         this.isFinished = isFinished;
+    }
+
+    @Override
+    public Map<String, String> saveToMap() {
+        return new HashMap<>();
+    }
+
+    @Override
+    public void initialize(final ModelPo modelPo) {
+        // default do nothing implementation
     }
 
     @Override

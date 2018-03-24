@@ -6,7 +6,7 @@ Planned releases
 
  MicroCol backlog. List of functionalities for upcoming releases.
 
- * <<0.6.0>> - functionality release
+ * <<0.6.0>> - First game missions.
 
   * \u2713 Support game in progress, at start of each turn persist played game and save it to preferences.
  

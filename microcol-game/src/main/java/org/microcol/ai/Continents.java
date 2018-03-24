@@ -21,7 +21,7 @@ public class Continents {
         continents.add(continent);
     }
 
-    Optional<Continent> getForLocation(final Location location) {
+    public Optional<Continent> getForLocation(final Location location) {
         return continents.stream().filter(continent -> continent.contains(location)).findAny();
     }
 
@@ -38,10 +38,22 @@ public class Continents {
                         String.format("Unable to find continent for unit (%s)", unit)));
     }
 
+    public List<Continent> getNonBorderContinents() {
+        return continents.stream().filter(continent -> !continent.isMapBorder())
+                .collect(ImmutableList.toImmutableList());
+    }
+
     @Override
     public String toString() {
         return MoreObjects.toStringHelper(Continents.class).add("continents", continents)
                 .toString();
+    }
+
+    /**
+     * @return the continents
+     */
+    public List<Continent> getContinents() {
+        return continents;
     }
 
 }

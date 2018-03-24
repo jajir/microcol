@@ -1,7 +1,10 @@
 package org.microcol.model.campaign;
 
+import java.util.Map;
+
 import org.microcol.gui.event.model.MissionCallBack;
 import org.microcol.model.Model;
+import org.microcol.model.store.ModelPo;
 
 public interface Mission {
 
@@ -29,5 +32,9 @@ public interface Mission {
     boolean isFinished();
 
     void startMission(Model model, MissionCallBack missionCallBack);
+
+    Map<String, String> saveToMap();
+
+    void initialize(ModelPo modelPo);
 
 }

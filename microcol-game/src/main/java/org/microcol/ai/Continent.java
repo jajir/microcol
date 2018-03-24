@@ -52,6 +52,11 @@ public class Continent {
         return ImmutableList.copyOf(locations);
     }
 
+    public int getDistance(final Location location) {
+        return locations.stream().sorted(Comparator.comparingInt(loc -> location.getDistance(loc)))
+                .findFirst().get().getDistance(location);
+    }
+
     public int getColonyWeight() {
         int out = 0;
         for (final Location loc : locations) {
@@ -62,6 +67,24 @@ public class Continent {
             }
         }
         return out;
+    }
+
+    /**
+     * World map usually have thin continents on the north and south of the map.
+     * This two continents should represents Antarctic and Arctic.
+     * 
+     * @return Return <code>true</code> when this continent is par of Arctic or
+     *         Antarctic otherwise return <code>false</code>.
+     */
+    public boolean isMapBorder() {
+        if (locations.stream().filter(loc -> loc.getY() == 1).findAny().isPresent()) {
+            return true;
+        }
+        if (locations.stream().filter(loc -> loc.getY() == model.getMap().getMaxY() - 1).findAny()
+                .isPresent()) {
+            return true;
+        }
+        return false;
     }
 
     @Override

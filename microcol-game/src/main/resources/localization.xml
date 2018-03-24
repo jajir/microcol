@@ -85,6 +85,7 @@
 	<entry key="campaign.default.cantMoveToHighSeas">You should not go back Europe. You come from there to find new world. New world should on the West.</entry>
 	<entry key="campaign.default.pressNextTurn">Ship can't move in this turn more. Ship don't have any action points. You can check it in right panel where are ship's details. Now press 'Next Turn' button.</entry>
 	<entry key="campaign.default.moveUnitBeforeEndTurn">First turn with ship Try to find New World.</entry>
+	<entry key="campaign.default.continentInSight">You found New World. Now lets sail close at try to disembark. Your next task is to found new colony.</entry>
 
 	<entry key="preferencesVolume.caption">Volume</entry>
 	<entry key="preferencesVolume.low">Low</entry>

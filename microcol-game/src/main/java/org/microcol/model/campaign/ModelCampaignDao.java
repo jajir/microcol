@@ -34,6 +34,7 @@ public class ModelCampaignDao {
         final Campaign campaign = campaignManager
                 .getCampaignByName(modelPo.getCampaign().getName());
         final Mission mission = campaign.getMisssionByName(modelPo.getCampaign().getMission());
+        mission.initialize(modelPo);
         return new ModelMission(campaign, (AbstractMission) mission, Model.make(modelPo));
     }
 

@@ -41,6 +41,7 @@ public class ModelMission {
         out.setCampaign(new CampaignPo());
         out.getCampaign().setName(campaign.getName());
         out.getCampaign().setMission(mission.getName());
+        out.getCampaign().setData(mission.saveToMap());
         return out;
     }
 
@@ -59,5 +60,5 @@ public class ModelMission {
         mission.startMission(model, missionCallBack);
         model.startGame();
     }
-    
+
 }
