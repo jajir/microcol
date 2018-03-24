@@ -399,10 +399,12 @@ public final class Model {
      *            required path
      */
     public void moveUnit(final Unit unit, final Path path) {
-        path.getLocations().forEach(loc -> {
-            unit.moveOneStep(loc);
-        });
-        listenerManager.fireUnitMovedFinished(this, unit, path);
+        if (listenerManager.fireUnitMoveStarted(this, unit, path)) {
+            path.getLocations().forEach(loc -> {
+                unit.moveOneStep(loc);
+            });
+            listenerManager.fireUnitMovedFinished(this, unit, path);
+        }
     }
 
     public void startGame() {
@@ -410,7 +412,9 @@ public final class Model {
     }
 
     public void endTurn() {
-        gameManager.endTurn();
+        if (listenerManager.fireBeforeEndTurn(this)) {
+            gameManager.endTurn();
+        }
     }
 
     void checkGameRunning() {

@@ -11,13 +11,13 @@ import com.google.common.base.Preconditions;
 /**
  * Event is send when movement is finished. Event contains movement description.
  */
-public final class UnitMoveFinishedEvent extends AbstractModelEvent {
+public final class UnitMoveStartedEvent extends AbstractStoppableEvent {
 
     private final Unit unit;
 
     private final Path path;
 
-    public UnitMoveFinishedEvent(final Model model, final Unit unit, final Path path) {
+    public UnitMoveStartedEvent(final Model model, final Unit unit, final Path path) {
         super(model);
 
         this.unit = Preconditions.checkNotNull(unit);
@@ -38,7 +38,15 @@ public final class UnitMoveFinishedEvent extends AbstractModelEvent {
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(this).add("unit", unit).toString();
+        return MoreObjects.toStringHelper(this).add("unit", unit).add("stopped", isStopped())
+                .toString();
+    }
+
+    /**
+     * @return the path
+     */
+    public Path getPath() {
+        return path;
     }
 
 }

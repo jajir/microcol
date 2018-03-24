@@ -6,7 +6,7 @@ import org.microcol.model.Player;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 
-public final class TurnStartedEvent extends ModelEvent {
+public final class TurnStartedEvent extends AbstractModelEvent {
 
     private final Player player;
 
@@ -22,8 +22,6 @@ public final class TurnStartedEvent extends ModelEvent {
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(this)
-                .add("player", player)
-                .toString();
+        return MoreObjects.toStringHelper(this).add("player", player).toString();
     }
 }

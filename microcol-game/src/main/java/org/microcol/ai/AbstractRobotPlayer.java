@@ -4,7 +4,7 @@ import java.util.function.Consumer;
 
 import org.microcol.gui.gamepanel.AnimationLock;
 import org.microcol.model.Model;
-import org.microcol.model.ModelAdapter;
+import org.microcol.model.ModelListenerAdapter;
 import org.microcol.model.Player;
 import org.microcol.model.Unit;
 import org.microcol.model.event.TurnStartedEvent;
@@ -23,7 +23,7 @@ public abstract class AbstractRobotPlayer {
 
     private final Model model;
 
-    private final ModelAdapter modelAdapter;
+    private final ModelListenerAdapter modelAdapter;
 
     private final AnimationLock animationLock;
 
@@ -113,7 +113,7 @@ public abstract class AbstractRobotPlayer {
         return player;
     }
 
-    private class RobotModelListener extends ModelAdapter {
+    private class RobotModelListener extends ModelListenerAdapter {
 
         private final Consumer<TurnStartedEvent> onTurnStarted;
 

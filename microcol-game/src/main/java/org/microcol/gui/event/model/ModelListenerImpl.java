@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import org.microcol.model.ModelListener;
 import org.microcol.model.Player;
+import org.microcol.model.event.BeforeEndTurnEvent;
 import org.microcol.model.event.ColonyWasCapturedEvent;
 import org.microcol.model.event.DebugRequestedEvent;
 import org.microcol.model.event.GameFinishedEvent;
@@ -14,6 +15,7 @@ import org.microcol.model.event.TurnStartedEvent;
 import org.microcol.model.event.UnitAttackedEvent;
 import org.microcol.model.event.UnitEmbarkedEvent;
 import org.microcol.model.event.UnitMoveFinishedEvent;
+import org.microcol.model.event.UnitMoveStartedEvent;
 import org.microcol.model.event.UnitMovedStepEvent;
 import org.microcol.model.event.UnitMovedToHighSeasEvent;
 
@@ -116,6 +118,16 @@ public class ModelListenerImpl implements ModelListener {
         if (event.getUnit().getOwner().isHuman()) {
             modelEventManager.getUnitEmbarkController().fireEvent(event);
         }
+    }
+
+    @Override
+    public void unitMoveStarted(final UnitMoveStartedEvent event) {
+        // Front-end doesn't care about this event.
+    }
+
+    @Override
+    public void beforeEndTurn(BeforeEndTurnEvent event) {
+        // Front-end doesn't care about this event.
     }
 
 }

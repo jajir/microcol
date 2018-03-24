@@ -22,7 +22,7 @@ Planned releases
    
   * \u2713 After move is selected unit preserved
  
-  * \u2717 Dialog box 'About' containing application version from pom.xml 
+  * \u2713 Dialog box 'About' containing application version from pom.xml 
  
   * \u2717 
  
@@ -42,7 +42,7 @@ Planned releases
 
   * \u2717 Colony is plagued by famine.
   
-  * \u2717 Support selecting unit from right panel.
+  * \u2717 Add event onBeforeMove, this event should be possible to cancel.
   
   * \u2717 Right panel highlight select unit.
   

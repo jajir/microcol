@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
+import org.microcol.model.event.BeforeEndTurnEvent;
 import org.microcol.model.event.ColonyWasCapturedEvent;
 import org.microcol.model.event.DebugRequestedEvent;
 import org.microcol.model.event.GameFinishedEvent;
@@ -15,6 +17,7 @@ import org.microcol.model.event.TurnStartedEvent;
 import org.microcol.model.event.UnitAttackedEvent;
 import org.microcol.model.event.UnitEmbarkedEvent;
 import org.microcol.model.event.UnitMoveFinishedEvent;
+import org.microcol.model.event.UnitMoveStartedEvent;
 import org.microcol.model.event.UnitMovedStepEvent;
 import org.microcol.model.event.UnitMovedToHighSeasEvent;
 import org.slf4j.Logger;
@@ -23,135 +26,178 @@ import org.slf4j.LoggerFactory;
 import com.google.common.base.Preconditions;
 
 class ListenerManager {
-	private final Logger logger = LoggerFactory.getLogger(getClass());
+    private final Logger logger = LoggerFactory.getLogger(getClass());
 
-	private final List<ModelListener> listeners;
+    private final List<ModelListener> listeners;
 
-	ListenerManager() {
-		listeners = new ArrayList<>();
-	}
+    ListenerManager() {
+        listeners = new ArrayList<>();
+    }
 
-	void addListener(final ModelListener listener) {
-		Preconditions.checkNotNull(listener);
+    void addListener(final ModelListener listener) {
+        Preconditions.checkNotNull(listener);
 
-		if (!listeners.contains(listener)) {
-			logger.info("Added model listener {}.", listener);
-			listeners.add(listener);
-		} else {
-			logger.warn("Model listener {} already added.", listener);
-		}
-	}
-	
-	void removeListener(final ModelListener listener) {
-		Preconditions.checkNotNull(listener);
+        if (!listeners.contains(listener)) {
+            logger.info("Added model listener {}.", listener);
+            listeners.add(listener);
+        } else {
+            logger.warn("Model listener {} already added.", listener);
+        }
+    }
 
-		logger.info("Removed model listener {}.", listener);
+    void removeListener(final ModelListener listener) {
+        Preconditions.checkNotNull(listener);
 
-		listeners.remove(listener);
-	}
+        logger.info("Removed model listener {}.", listener);
 
-	void fireGameStarted(final Model model) {
-		final GameStartedEvent event = new GameStartedEvent(model);
+        listeners.remove(listener);
+    }
 
-		logger.info("Game started: {}.", event);
+    void fireGameStarted(final Model model) {
+        final GameStartedEvent event = new GameStartedEvent(model);
 
-		listeners.forEach(listener -> listener.gameStarted(event));
-	}
+        logger.info("Game started: {}.", event);
 
-	void fireRoundStarted(final Model model, final Calendar calendar) {
-		final RoundStartedEvent event = new RoundStartedEvent(model, calendar);
+        listeners.forEach(listener -> listener.gameStarted(event));
+    }
 
-		logger.info("Round started: {}.", event);
+    void fireRoundStarted(final Model model, final Calendar calendar) {
+        final RoundStartedEvent event = new RoundStartedEvent(model, calendar);
 
-		executeInSeparateThread(listener -> listener.roundStarted(event));
-	}
+        logger.info("Round started: {}.", event);
 
-	void fireTurnStarted(final Model model, final Player player) {
-		final TurnStartedEvent event = new TurnStartedEvent(model, player);
+        executeInSeparateThread(listener -> listener.roundStarted(event));
+    }
 
-		logger.info("Turn started: {}.", event);
+    void fireTurnStarted(final Model model, final Player player) {
+        final TurnStartedEvent event = new TurnStartedEvent(model, player);
 
-		executeInSeparateThread(listener -> listener.turnStarted(event));
-	}
+        logger.info("Turn started: {}.", event);
 
-	void fireUnitMovedStep(final Model model, final Unit unit, final Location start, final Location end) {
-		final UnitMovedStepEvent event = new UnitMovedStepEvent(model, unit, start, end);
+        executeInSeparateThread(listener -> listener.turnStarted(event));
+    }
 
-		logger.info("Unit moved: {}.", event);
+    void fireUnitMovedStep(final Model model, final Unit unit, final Location start,
+            final Location end) {
+        final UnitMovedStepEvent event = new UnitMovedStepEvent(model, unit, start, end);
 
-		executeInSameThread(listener -> listener.unitMovedStep(event));
-	}
-	
+        logger.info("Unit moved: {}.", event);
 
-	void fireUnitMovedToHighSeas(final Model model, final Unit unit) {
-		final UnitMovedToHighSeasEvent event = new UnitMovedToHighSeasEvent(model, unit);
+        executeInSameThread(listener -> listener.unitMovedStep(event));
+    }
 
-		logger.info("Unit moved to high seas: {}.", event);
+    void fireUnitMovedFinished(final Model model, final Unit unit, final Path path) {
+        final UnitMoveFinishedEvent event = new UnitMoveFinishedEvent(model, unit, path);
 
-		executeInSameThread(listener -> listener.unitMovedToHighSeas(event));
-	}
+        logger.info("Unit moved: {}.", event);
 
-	void fireUnitMovedFinished(final Model model, final Unit unit, final Path path) {
-		final UnitMoveFinishedEvent event = new UnitMoveFinishedEvent(model, unit, path);
+        executeInSameThread(listener -> listener.unitMoveFinished(event));
+    }
 
-		logger.info("Unit moved: {}.", event);
+    void fireUnitMovedToHighSeas(final Model model, final Unit unit) {
+        final UnitMovedToHighSeasEvent event = new UnitMovedToHighSeasEvent(model, unit);
 
-		executeInSameThread(listener -> listener.unitMoveFinished(event));
-	}
+        logger.info("Unit moved to high seas: {}.", event);
 
-	void fireUnitAttacked(final Model model, final Unit attacker, final Unit defender, final Unit destroyed) {
-		final UnitAttackedEvent event = new UnitAttackedEvent(model, attacker, defender, destroyed);
+        executeInSameThread(listener -> listener.unitMovedToHighSeas(event));
+    }
 
-		logger.info("Unit attacked: {}.", event);
+    boolean fireBeforeEndTurn(final Model model) {
+        final BeforeEndTurnEvent event = new BeforeEndTurnEvent(model);
 
-		executeInSeparateThread(listener -> listener.unitAttacked(event));
-	}
+        logger.info("Before End Turn: {}.", event);
 
-	void fireUnitEmbarked(final Model model, final Unit unit, final CargoSlot slot) {
-		final UnitEmbarkedEvent event = new UnitEmbarkedEvent(model, unit, slot);
+        return evaluateInSameThread(listener -> {
+            listener.beforeEndTurn(event);
+            return event.isStopped();
+        });        
+    }
 
-		logger.info("Unit embarked: {}.", event);
+    /**
+     *
+     * @param model
+     *            required model
+     * @param unit
+     *            required moved unit
+     * @param path
+     *            required path which unit will move
+     * @return When return <code>true</code> than event processing should
+     *         continue otherwise return <code>false</code> and event processing
+     *         should be stopped.
+     */
+    boolean fireUnitMoveStarted(final Model model, final Unit unit, final Path path) {
+        final UnitMoveStartedEvent event = new UnitMoveStartedEvent(model, unit, path);
 
-		listeners.forEach(listener -> listener.unitEmbarked(event));
-	}
-	
-	void fireGoldWasChanged(final Model model,final Player player, final int oldValue, final int newValue) {
-		final GoldWasChangedEvent event = new GoldWasChangedEvent(model, player, oldValue, newValue);
+        logger.info("Unit move started: {}.", event);
 
-		logger.info("Gold amount changed: {}.", event);
-		
-		listeners.forEach(listener -> listener.goldWasChanged(event));
-	}
-	
-	void fireColonyWasCaptured(final Model model, final Unit capturingUnit, final Colony capturedColony) {
-		final ColonyWasCapturedEvent event = new ColonyWasCapturedEvent(model, capturingUnit, capturedColony);
+        return evaluateInSameThread(listener -> {
+            listener.unitMoveStarted(event);
+            return event.isStopped();
+        });
+    }
 
-		logger.info("Colony was captured: {}.", event);
-		
-		listeners.forEach(listener -> listener.colonyWasCaptured(event));
-	}
+    void fireUnitAttacked(final Model model, final Unit attacker, final Unit defender,
+            final Unit destroyed) {
+        final UnitAttackedEvent event = new UnitAttackedEvent(model, attacker, defender, destroyed);
 
+        logger.info("Unit attacked: {}.", event);
 
-	void fireGameFinished(final Model model, final GameOverResult gameOverResult) {
-		final GameFinishedEvent event = new GameFinishedEvent(model, gameOverResult);
+        executeInSeparateThread(listener -> listener.unitAttacked(event));
+    }
 
-		logger.info("Game finished: {}.", event);
+    void fireUnitEmbarked(final Model model, final Unit unit, final CargoSlot slot) {
+        final UnitEmbarkedEvent event = new UnitEmbarkedEvent(model, unit, slot);
 
-		listeners.forEach(listener -> listener.gameFinished(event));
-	}
+        logger.info("Unit embarked: {}.", event);
 
-	void fireDebugRequested(final Model model, final List<Location> locations) {
-		final DebugRequestedEvent event = new DebugRequestedEvent(model, locations);
+        listeners.forEach(listener -> listener.unitEmbarked(event));
+    }
 
-		listeners.forEach(listener -> listener.debugRequested(event));
-	}
+    void fireGoldWasChanged(final Model model, final Player player, final int oldValue,
+            final int newValue) {
+        final GoldWasChangedEvent event = new GoldWasChangedEvent(model, player, oldValue,
+                newValue);
 
-	private void executeInSeparateThread(Consumer<ModelListener> action) {
-		listeners.forEach(listener -> Executors.newSingleThreadExecutor().execute(() -> action.accept(listener)));
-	}
+        logger.info("Gold amount changed: {}.", event);
 
-	private void executeInSameThread(Consumer<ModelListener> action) {
-		listeners.forEach(listener -> action.accept(listener));
-	}
-	
+        listeners.forEach(listener -> listener.goldWasChanged(event));
+    }
+
+    void fireColonyWasCaptured(final Model model, final Unit capturingUnit,
+            final Colony capturedColony) {
+        final ColonyWasCapturedEvent event = new ColonyWasCapturedEvent(model, capturingUnit,
+                capturedColony);
+
+        logger.info("Colony was captured: {}.", event);
+
+        listeners.forEach(listener -> listener.colonyWasCaptured(event));
+    }
+
+    void fireGameFinished(final Model model, final GameOverResult gameOverResult) {
+        final GameFinishedEvent event = new GameFinishedEvent(model, gameOverResult);
+
+        logger.info("Game finished: {}.", event);
+
+        listeners.forEach(listener -> listener.gameFinished(event));
+    }
+
+    void fireDebugRequested(final Model model, final List<Location> locations) {
+        final DebugRequestedEvent event = new DebugRequestedEvent(model, locations);
+
+        listeners.forEach(listener -> listener.debugRequested(event));
+    }
+
+    private void executeInSeparateThread(Consumer<ModelListener> action) {
+        listeners.forEach(listener -> Executors.newSingleThreadExecutor()
+                .execute(() -> action.accept(listener)));
+    }
+
+    private void executeInSameThread(Consumer<ModelListener> action) {
+        listeners.forEach(listener -> action.accept(listener));
+    }
+
+    private boolean evaluateInSameThread(Function<ModelListener, Boolean> action) {
+        return !listeners.stream().filter(listener -> action.apply(listener)).findAny().isPresent();
+    }
+
 }

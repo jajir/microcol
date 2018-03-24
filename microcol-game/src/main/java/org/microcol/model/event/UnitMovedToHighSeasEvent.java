@@ -9,28 +9,26 @@ import com.google.common.base.Preconditions;
 /**
  * Event is raised when unit move to high seas.
  */
-public final class UnitMovedToHighSeasEvent extends ModelEvent {
-	
-	/**
-	 * Unit which moved to high seas.
-	 */
-	private final Unit unit;
+public final class UnitMovedToHighSeasEvent extends AbstractModelEvent {
 
-	public UnitMovedToHighSeasEvent(final Model model, final Unit unit) {
-		super(model);
+    /**
+     * Unit which moved to high seas.
+     */
+    private final Unit unit;
 
-		this.unit = Preconditions.checkNotNull(unit);
-	}
+    public UnitMovedToHighSeasEvent(final Model model, final Unit unit) {
+        super(model);
 
-	public Unit getUnit() {
-		return unit;
-	}
-	
-	@Override
-	public String toString() {
-		return MoreObjects.toStringHelper(this)
-			.add("unit", unit)
-			.toString();
-	}
-	
+        this.unit = Preconditions.checkNotNull(unit);
+    }
+
+    public Unit getUnit() {
+        return unit;
+    }
+
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(this).add("unit", unit).toString();
+    }
+
 }

@@ -12,6 +12,8 @@ import org.microcol.model.Model;
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
 
+import javafx.application.Platform;
+
 /**
  * Class is called from mission instance when mission want's to say something to
  * player.
@@ -45,8 +47,10 @@ public class MissionCallBack {
     }
 
     public void showMessage(final String messageKey) {
-        dialogMessage.setText(text.get(messageKey));
-        dialogMessage.showAndWait();
+        Platform.runLater(() -> {
+            dialogMessage.setText(text.get(messageKey));
+            dialogMessage.showAndWait();
+        });
     }
 
     public void addCallWhenReady(final Consumer<Model> consumer) {

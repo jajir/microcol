@@ -8,23 +8,21 @@ import org.microcol.model.Model;
 import com.google.common.base.MoreObjects;
 import com.google.common.collect.ImmutableList;
 
-public final class DebugRequestedEvent extends ModelEvent {
-	private final List<Location> locations;
+public final class DebugRequestedEvent extends AbstractModelEvent {
+    private final List<Location> locations;
 
-	public DebugRequestedEvent(final Model model, final List<Location> locations) {
-		super(model);
+    public DebugRequestedEvent(final Model model, final List<Location> locations) {
+        super(model);
 
-		this.locations = ImmutableList.copyOf(locations);
-	}
+        this.locations = ImmutableList.copyOf(locations);
+    }
 
-	public List<Location> getLocations() {
-		return locations;
-	}
+    public List<Location> getLocations() {
+        return locations;
+    }
 
-	@Override
-	public String toString() {
-		return MoreObjects.toStringHelper(this)
-			.add("locations", locations)
-			.toString();
-	}
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(this).add("locations", locations).toString();
+    }
 }

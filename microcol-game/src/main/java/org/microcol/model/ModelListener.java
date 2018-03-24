@@ -1,5 +1,6 @@
 package org.microcol.model;
 
+import org.microcol.model.event.BeforeEndTurnEvent;
 import org.microcol.model.event.ColonyWasCapturedEvent;
 import org.microcol.model.event.DebugRequestedEvent;
 import org.microcol.model.event.GameFinishedEvent;
@@ -8,10 +9,11 @@ import org.microcol.model.event.GoldWasChangedEvent;
 import org.microcol.model.event.RoundStartedEvent;
 import org.microcol.model.event.TurnStartedEvent;
 import org.microcol.model.event.UnitAttackedEvent;
-import org.microcol.model.event.UnitMovedStepEvent;
-import org.microcol.model.event.UnitMovedToHighSeasEvent;
 import org.microcol.model.event.UnitEmbarkedEvent;
 import org.microcol.model.event.UnitMoveFinishedEvent;
+import org.microcol.model.event.UnitMoveStartedEvent;
+import org.microcol.model.event.UnitMovedStepEvent;
+import org.microcol.model.event.UnitMovedToHighSeasEvent;
 
 /**
  * Evens called from model to registered listeners.
@@ -27,6 +29,8 @@ public interface ModelListener {
     void unitMovedStep(UnitMovedStepEvent event);
 
     void unitMovedToHighSeas(UnitMovedToHighSeasEvent event);
+    
+    void unitMoveStarted(UnitMoveStartedEvent event);
 
     /**
      * It's called move is finished. No other move step event could come.
@@ -35,6 +39,8 @@ public interface ModelListener {
      *            required event
      */
     void unitMoveFinished(UnitMoveFinishedEvent event);
+    
+    void beforeEndTurn(BeforeEndTurnEvent event);
 
     void unitAttacked(UnitAttackedEvent event);
 

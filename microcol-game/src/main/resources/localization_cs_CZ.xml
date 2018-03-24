@@ -82,6 +82,10 @@
 	<entry key="campaignPanel.default.thrive">Rozkvět</entry>
 
 	<entry key="campaign.default.start">Najděte nový svět, kde založíte kolonii. Jeď lodí doleva, tam asi bude země.</entry>
+	<entry key="campaign.default.cantMoveToHighSeas">Nemůžeš se vrátit do Evropy odkuď jsi přijel. Zkus najít nový svět, pravděpodobně bude ležet na západě.</entry>
+	<entry key="campaign.default.pressNextTurn">Tento tak už slodí neni monžné dál hýbat. Loď nemá dost action points. Stav bodů je vidět v menu v pravo, kde jsou detaily lodě. Pro další tah stiskni 'Další tah'</entry>
+	<entry key="campaign.default.moveUnitBeforeEndTurn">Nejprve táhni lodí, zkus najít nový svět.</entry>
+	
 
 	<entry key="preferencesVolume.caption">Hlasitost</entry>
 	<entry key="preferencesVolume.low">Potichu</entry>
