@@ -1,8 +1,8 @@
 package org.microcol.gui.event;
 
-import org.microcol.gui.GamePreferences;
 import org.microcol.gui.mainmenu.ChangeLanguageController;
 import org.microcol.gui.mainmenu.ChangeLanguageEvent;
+import org.microcol.gui.util.GamePreferences;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;

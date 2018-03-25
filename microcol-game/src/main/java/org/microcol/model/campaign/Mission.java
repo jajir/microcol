@@ -31,6 +31,8 @@ public interface Mission {
      */
     boolean isFinished();
 
+    void setFinished(boolean isFinished);
+
     void startMission(Model model, MissionCallBack missionCallBack);
 
     Map<String, String> saveToMap();

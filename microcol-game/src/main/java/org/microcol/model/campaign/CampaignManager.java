@@ -3,6 +3,7 @@ package org.microcol.model.campaign;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
+import java.util.prefs.Preferences;
 import java.util.stream.Collectors;
 
 import com.google.common.base.Preconditions;
@@ -14,9 +15,22 @@ public class CampaignManager {
 
     private final Map<String, Campaign> campaigns;
 
+    private final Preferences preferences = Preferences.userNodeForPackage(CampaignManager.class);
+
     CampaignManager(final List<Campaign> campaigns) {
         this.campaigns = Preconditions.checkNotNull(campaigns).stream()
                 .collect(Collectors.toMap(c -> c.getName(), Function.identity()));
+        setIsFinished();
+    }
+
+    private void setIsFinished() {
+        campaigns.forEach((name, campaign) -> {
+            campaign.getMissions().forEach(mission -> {
+                final String key = campaign.getName() + "." + mission.getName() + ".isFinished";
+                mission.setFinished(preferences.getBoolean(key, false));
+            });
+        });
+
     }
 
     /**

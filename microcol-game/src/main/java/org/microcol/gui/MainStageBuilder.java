@@ -5,6 +5,7 @@ import java.awt.Rectangle;
 import org.microcol.gui.mainmenu.MainMenuView;
 import org.microcol.gui.mainmenu.QuitGameController;
 import org.microcol.gui.mainmenu.QuitGameEvent;
+import org.microcol.gui.util.GamePreferences;
 import org.microcol.gui.util.Text;
 
 import com.google.common.base.Preconditions;

@@ -26,3 +26,8 @@ Coding principles
   
 []
 
+* User Preferences
+
+ User preferences are stored in using <java.util.pref.Preferences>. It's key value hierarchical store.
+ At MacOS High Sierra it's stored at file </Library/Preferences/org.microcol.gui.plist> or file <~/Library/Preferences/org.microcol.gui.plist>.
+ At MacOS .plist file could be edited with Xcode.

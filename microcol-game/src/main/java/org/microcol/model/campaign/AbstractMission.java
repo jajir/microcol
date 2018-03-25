@@ -68,6 +68,7 @@ public abstract class AbstractMission implements Mission {
      * @param isFinished
      *            the isFinished to set
      */
+    @Override
     public void setFinished(boolean isFinished) {
         this.isFinished = isFinished;
     }

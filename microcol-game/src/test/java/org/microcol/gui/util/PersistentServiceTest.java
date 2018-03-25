@@ -1,4 +1,4 @@
-package org.microcol.gui.tool;
+package org.microcol.gui.util;
 
 import static org.junit.Assert.*;
 

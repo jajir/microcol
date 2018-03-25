@@ -4,6 +4,7 @@ import org.microcol.gui.mainmenu.VolumeChangeController;
 import org.microcol.gui.mainmenu.VolumeChangeEvent;
 import org.microcol.gui.util.AbstractMessageWindow;
 import org.microcol.gui.util.ButtonsBar;
+import org.microcol.gui.util.GamePreferences;
 import org.microcol.gui.util.Text;
 import org.microcol.gui.util.ViewUtil;
 

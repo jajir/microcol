@@ -67,6 +67,7 @@ import org.microcol.gui.gamepanel.MoveModeSupport;
 import org.microcol.gui.gamepanel.PaintService;
 import org.microcol.gui.gamepanel.SelectedTileManager;
 import org.microcol.gui.gamepanel.SelectedUnitManager;
+import org.microcol.gui.gamepanel.SelectedUnitWasChangedController;
 import org.microcol.gui.gamepanel.TileWasSelectedController;
 import org.microcol.gui.gamepanel.TileWasSelectedListener;
 import org.microcol.gui.gamepanel.UnitAttackedEventListener;
@@ -90,6 +91,7 @@ import org.microcol.gui.mainmenu.ShowGridController;
 import org.microcol.gui.mainmenu.VolumeChangeController;
 import org.microcol.gui.util.ApplicationInfo;
 import org.microcol.gui.util.FontService;
+import org.microcol.gui.util.GamePreferences;
 import org.microcol.gui.util.PersistentService;
 import org.microcol.gui.util.PersistingTool;
 import org.microcol.gui.util.Text;
@@ -168,7 +170,8 @@ public class MicroColModule extends AbstractModule {
         bind(UnitMovedToFieldController.class).in(Singleton.class);
         bind(ExitGameController.class).in(Singleton.class);
         bind(BeforeGameStartController.class).in(Singleton.class);
-
+        bind(SelectedUnitWasChangedController.class).in(Singleton.class);
+        
         bind(TurnStartedListener.class).asEagerSingleton();
         bind(TileWasSelectedListener.class).asEagerSingleton();
 

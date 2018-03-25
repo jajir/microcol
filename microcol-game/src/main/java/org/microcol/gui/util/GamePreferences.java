@@ -1,4 +1,4 @@
-package org.microcol.gui;
+package org.microcol.gui.util;
 
 import java.awt.Rectangle;
 import java.util.Locale;
@@ -6,8 +6,7 @@ import java.util.Optional;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 
-import org.microcol.gui.util.Text;
-import org.microcol.gui.util.Text.Language;
+import org.microcol.gui.PathPlanning;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
@@ -116,8 +115,8 @@ public class GamePreferences {
     }
 
     public Text.Language getLanguage() {
-        final Optional<Language> lang = Language.resolve(getLocale());
-        return lang.orElse(Language.en);
+        final Optional<Text.Language> lang = Text.Language.resolve(getLocale());
+        return lang.orElse(Text.Language.en);
     }
 
     public void setVolume(final int volume) {

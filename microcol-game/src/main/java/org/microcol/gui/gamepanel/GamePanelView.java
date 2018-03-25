@@ -5,7 +5,6 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.microcol.gui.DialogFigth;
-import org.microcol.gui.GamePreferences;
 import org.microcol.gui.PathPlanning;
 import org.microcol.gui.Point;
 import org.microcol.gui.StepCounter;
@@ -13,6 +12,7 @@ import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.gamepanel.MoveModeSupport.MoveMode;
 import org.microcol.gui.image.ImageProvider;
 import org.microcol.gui.util.FpsCounter;
+import org.microcol.gui.util.GamePreferences;
 import org.microcol.model.Colony;
 import org.microcol.model.Location;
 import org.microcol.model.Model;

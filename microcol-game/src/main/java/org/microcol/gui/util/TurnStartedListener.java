@@ -1,6 +1,5 @@
 package org.microcol.gui.util;
 
-import org.microcol.gui.GamePreferences;
 import org.microcol.gui.event.model.GameController;
 import org.microcol.gui.event.model.TurnStartedController;
 import org.microcol.model.event.TurnStartedEvent;

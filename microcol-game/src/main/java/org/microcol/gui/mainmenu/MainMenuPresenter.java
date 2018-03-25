@@ -18,6 +18,8 @@ import org.microcol.gui.event.model.TurnStartedController;
 import org.microcol.gui.event.model.UnitMoveFinishedController;
 import org.microcol.gui.event.model.UnitMovedController;
 import org.microcol.gui.gamepanel.SelectedUnitManager;
+import org.microcol.gui.gamepanel.SelectedUnitWasChangedController;
+import org.microcol.gui.gamepanel.SelectedUnitWasChangedEvent;
 import org.microcol.gui.gamepanel.TileWasSelectedController;
 import org.microcol.gui.gamepanel.TileWasSelectedEvent;
 import org.microcol.gui.util.Text;
@@ -46,20 +48,29 @@ public class MainMenuPresenter {
 
     @Inject
     public MainMenuPresenter(final MainMenuView view,
-            /**
-             * Following parameters are controllers reacting on menu events
-             */
-            final AboutGameEventController gameEventController, final BuildColonyEventController buildColonyEventController, final CenterViewController centerViewController, final ChangeLanguageController changeLanguageController, final DeclareIndependenceController declareIndependenceController, final QuitGameController quitGameController, final ShowGridController showGridController, final SelectNextUnitController selectNextUnitController, final ExitGameController exitGameController,
-
-            /**
-             * Menu items react on following events
-             */
-            final TileWasSelectedController tileWasSelectedController, final GameController gameController, final GameModelController gameModelController, final StartMoveController startMoveController, final EndMoveController endMoveController, final TurnStartedController turnStartedController,
-
-            /**
-             * Other events consumers and helpers
-             */
-            final PersistingDialog persistingDialog, final EuropeDialog europeDialog, final DialogIndependenceWasDeclared dialogIndependenceWasDeclared, final Colonizopedia colonizopedia, final PreferencesAnimationSpeed preferencesAnimationSpeed, final PreferencesVolume preferencesVolume, final SelectedUnitManager selectedUnitManager, final UnitMovedController unitMovedStepController, final UnitMoveFinishedController unitMoveFinishedController) {
+            final AboutGameEventController gameEventController,
+            final BuildColonyEventController buildColonyEventController,
+            final CenterViewController centerViewController,
+            final ChangeLanguageController changeLanguageController,
+            final DeclareIndependenceController declareIndependenceController,
+            final QuitGameController quitGameController,
+            final ShowGridController showGridController,
+            final SelectNextUnitController selectNextUnitController,
+            final ExitGameController exitGameController,
+            final TileWasSelectedController tileWasSelectedController,
+            final GameController gameController, final GameModelController gameModelController,
+            final StartMoveController startMoveController,
+            final EndMoveController endMoveController,
+            final TurnStartedController turnStartedController,
+            final PersistingDialog persistingDialog, final EuropeDialog europeDialog,
+            final DialogIndependenceWasDeclared dialogIndependenceWasDeclared,
+            final Colonizopedia colonizopedia,
+            final PreferencesAnimationSpeed preferencesAnimationSpeed,
+            final PreferencesVolume preferencesVolume,
+            final SelectedUnitManager selectedUnitManager,
+            final UnitMovedController unitMovedStepController,
+            final UnitMoveFinishedController unitMoveFinishedController,
+            final SelectedUnitWasChangedController selectedUnitWasChangedController) {
         this.view = Preconditions.checkNotNull(view);
         this.selectedUnitManager = Preconditions.checkNotNull(selectedUnitManager);
         this.gameModelController = Preconditions.checkNotNull(gameModelController);
@@ -119,6 +130,7 @@ public class MainMenuPresenter {
         unitMovedStepController.addRunLaterListener(this::onUnitMovedStep);
         unitMoveFinishedController.addRunLaterListener(this::unitMoveFinishedController);
         exitGameController.addListener(this::onExitGame);
+        selectedUnitWasChangedController.addListener(this::onSelectedUnitChanged);
         initialSetting();
     }
 
@@ -219,6 +231,8 @@ public class MainMenuPresenter {
             if (isFocusedMoveableUnit) {
                 view.getMenuItemMove().setDisable(false);
             }
+            // TODO when focused unit is settler try to enable build colony menu
+            // item
             view.getMenuItemExitGame().setDisable(false);
             view.getMenuItemSaveGame().setDisable(false);
             view.getMenuItemEurope().setDisable(false);
@@ -233,6 +247,21 @@ public class MainMenuPresenter {
             view.getMenuItemEurope().setDisable(true);
             view.getMenuItemNextUnit().setDisable(true);
         }
+        setBuildColony();
     }
 
+    private void onSelectedUnitChanged(final SelectedUnitWasChangedEvent event) {
+        // FIXME set other menu items
+        setBuildColony();
+    }
+
+    private void setBuildColony() {
+        if (selectedUnitManager.getSelectedUnit().isPresent()) {
+            Unit unit = selectedUnitManager.getSelectedUnit().get();
+            view.getMenuItemBuildColony()
+                    .setDisable(!unit.getType().canBuildColony() || unit.getAvailableMoves() == 0);
+        } else {
+            view.getMenuItemBuildColony().setDisable(true);
+        }
+    }
 }

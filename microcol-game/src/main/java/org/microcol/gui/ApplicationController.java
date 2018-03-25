@@ -2,6 +2,7 @@ package org.microcol.gui;
 
 import org.microcol.gui.event.model.GameController;
 import org.microcol.gui.event.model.GameFinishedController;
+import org.microcol.gui.util.GamePreferences;
 import org.microcol.model.event.GameFinishedEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

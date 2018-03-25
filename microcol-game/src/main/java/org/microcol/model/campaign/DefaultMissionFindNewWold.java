@@ -36,7 +36,6 @@ public class DefaultMissionFindNewWold extends AbstractMission {
 
     DefaultMissionFindNewWold() {
         super(NAME, 0, MODEL_FIND_NEW_WORLD);
-        setFinished(true);
     }
 
     @Override

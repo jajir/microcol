@@ -69,7 +69,7 @@ public abstract class AbstractCampaign implements Campaign {
     @Override
     public boolean isMissionEnabled(final Mission mission) {
         Preconditions.checkNotNull(mission, "Mission is null");
-        boolean isPreviousFinished = false;
+        boolean isPreviousFinished = true;
         for (final Mission m : getMissions()) {
             if (m.equals(mission)) {
                 if (m.isFinished()) {

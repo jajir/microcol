@@ -2,6 +2,7 @@ package org.microcol.gui;
 
 import org.microcol.gui.image.ImageProvider;
 import org.microcol.gui.util.AbstractMessageWindow;
+import org.microcol.gui.util.GamePreferences;
 import org.microcol.gui.util.Text;
 import org.microcol.gui.util.ViewUtil;
 import org.microcol.model.Unit;

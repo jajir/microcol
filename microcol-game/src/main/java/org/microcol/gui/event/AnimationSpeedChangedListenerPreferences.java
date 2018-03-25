@@ -1,7 +1,7 @@
 package org.microcol.gui.event;
 
-import org.microcol.gui.GamePreferences;
 import org.microcol.gui.mainmenu.AnimationSpeedChangeController;
+import org.microcol.gui.util.GamePreferences;
 
 import com.google.inject.Inject;
 

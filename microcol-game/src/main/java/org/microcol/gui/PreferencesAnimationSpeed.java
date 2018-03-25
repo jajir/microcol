@@ -3,6 +3,7 @@ package org.microcol.gui;
 import org.microcol.gui.mainmenu.AnimationSpeedChangeController;
 import org.microcol.gui.mainmenu.AnimationSpeedChangeEvent;
 import org.microcol.gui.util.AbstractMessageWindow;
+import org.microcol.gui.util.GamePreferences;
 import org.microcol.gui.util.Text;
 import org.microcol.gui.util.ViewUtil;
 

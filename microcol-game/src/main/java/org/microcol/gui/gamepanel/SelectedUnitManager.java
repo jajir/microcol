@@ -24,92 +24,107 @@ import com.google.inject.Inject;
  */
 public class SelectedUnitManager {
 
-	private final Logger logger = LoggerFactory.getLogger(SelectedUnitManager.class);
+    private final Logger logger = LoggerFactory.getLogger(SelectedUnitManager.class);
 
-	private final GameModelController gameModelController;
+    private final GameModelController gameModelController;
 
-	private final SelectedTileManager selectedTileManager;
+    private final SelectedTileManager selectedTileManager;
 
-	private Unit selectedUnit;
+    private final SelectedUnitWasChangedController selectedUnitWasChangedController;
 
-	@Inject
-	public SelectedUnitManager(final GameModelController gameModelController,
-			final TileWasSelectedController tileWasSelectedController,
-			final SelectNextUnitController selectNextUnitController,
-			final SelectedTileManager selectedTileManager,
-			final UnitMovedController unitMovedController,
-			final UnitMovedToHighSeasController unitMovedToHighSeasController,
-			final UnitMovedToFieldController unitMovedToFieldController) {
-		this.gameModelController = Preconditions.checkNotNull(gameModelController);
-		this.selectedTileManager = Preconditions.checkNotNull(selectedTileManager);
-		tileWasSelectedController.addListener(event -> evaluateLocation(event.getLocation()));
-		selectNextUnitController.addListener(this::onSelectNextUnit);
-		unitMovedController.addRunLaterListener(event -> {
-			if (event.getUnit().getOwner().isHuman()) {
-				setSelectedUnit(event.getUnit());
-			}
-		});
-		unitMovedToHighSeasController.addListener(this::onUnitMovedToHighSeas);
-		unitMovedToFieldController.addListener(this::onUnitMovedToField);
-	}
-	
-	private void onUnitMovedToField(final UnitMovedToFieldEvent event){
-		if ( event.getUnit().equals(selectedUnit)){
-			selectedUnit = null;
-		}
-	}
-	
-	@SuppressWarnings("unused")
-	private void onUnitMovedToHighSeas(final UnitMovedToHighSeasEvent event){
-		if (selectedTileManager.getSelectedTile().isPresent()) {
-			evaluateLocation(selectedTileManager.getSelectedTile().get());
-		}
-	}
+    private Unit selectedUnit;
 
-	private void setSelectedUnit(final Unit unit) {
-		Preconditions.checkNotNull(unit);
-		Preconditions.checkState(unit.isAtPlaceLocation());
-		selectedUnit = unit;
-		logger.debug("Selected unit is now: {}", selectedUnit);
-	}
+    @Inject
+    public SelectedUnitManager(final GameModelController gameModelController,
+            final TileWasSelectedController tileWasSelectedController,
+            final SelectNextUnitController selectNextUnitController,
+            final SelectedTileManager selectedTileManager,
+            final UnitMovedController unitMovedController,
+            final UnitMovedToHighSeasController unitMovedToHighSeasController,
+            final UnitMovedToFieldController unitMovedToFieldController,
+            final SelectedUnitWasChangedController selectedUnitWasChangedController) {
+        this.gameModelController = Preconditions.checkNotNull(gameModelController);
+        this.selectedTileManager = Preconditions.checkNotNull(selectedTileManager);
+        this.selectedUnitWasChangedController = Preconditions
+                .checkNotNull(selectedUnitWasChangedController);
+        tileWasSelectedController.addListener(event -> evaluateLocation(event.getLocation()));
+        selectNextUnitController.addListener(this::onSelectNextUnit);
+        unitMovedController.addRunLaterListener(event -> {
+            if (event.getUnit().getOwner().isHuman()) {
+                setSelectedUnit(event.getUnit());
+            }
+        });
+        unitMovedToHighSeasController.addListener(this::onUnitMovedToHighSeas);
+        unitMovedToFieldController.addListener(this::onUnitMovedToField);
+    }
 
-	private void evaluateLocation(final Location location) {
-		if (selectedUnit == null) {
-			selectedUnit = gameModelController.getModel().getFirstSelectableUnitAt(location).orElse(null);
-		} else {
-			if (selectedUnit.isAtPlaceLocation()) {
-				/*
-				 * If selected tile is location where is selected unit than do
-				 * nothing
-				 */
-				if (!selectedUnit.getLocation().equals(location)) {
-					selectedUnit = gameModelController.getModel().getFirstSelectableUnitAt(location).orElse(null);
-				}
-			}else{
-				selectedUnit = gameModelController.getModel().getFirstSelectableUnitAt(location).orElse(null);
-			}
-		}
-		logger.debug("Selected unit at {} is now: {}", location, selectedUnit);
-	}
+    private void onUnitMovedToField(final UnitMovedToFieldEvent event) {
+        if (event.getUnit().equals(selectedUnit)) {
+            unselectUnit();
+        }
+    }
 
-	private void onSelectNextUnit(final SelectNextUnitEvent selectNextUnitEvent) {
-		Preconditions.checkNotNull(selectNextUnitEvent);
-		if (selectedUnit == null) {
-			selectedUnit = gameModelController.getModel().getFirstSelectableUnitAt().orElse(null);
-		} else {
-			selectedUnit = gameModelController.getModel().getNextUnitForCurrentUser(selectedUnit).orElse(null);
-		}
-		if (selectedUnit != null) {
-			selectedTileManager.setSelectedTile(selectedUnit.getLocation());
-		}
-	}
+    public void unselectUnit() {
+        setSelectedUnit(null);
+    }
 
-	public Optional<Unit> getSelectedUnit() {
-		return Optional.ofNullable(selectedUnit);
-	}
+    @SuppressWarnings("unused")
+    private void onUnitMovedToHighSeas(final UnitMovedToHighSeasEvent event) {
+        if (selectedTileManager.getSelectedTile().isPresent()) {
+            evaluateLocation(selectedTileManager.getSelectedTile().get());
+        }
+    }
 
-	public boolean isSelectedUnitMoveable() {
-		return selectedUnit != null && selectedUnit.getAvailableMoves() > 0;
-	}
+    private void setSelectedUnit(final Unit unit) {
+        if (unit != null) {
+            Preconditions.checkState(unit.isAtPlaceLocation());
+        }
+        selectedUnit = unit;
+        selectedUnitWasChangedController.fireEvent(new SelectedUnitWasChangedEvent(selectedUnit));
+        logger.debug("Selected unit is now: {}", selectedUnit);
+    }
+
+    private void evaluateLocation(final Location location) {
+        if (selectedUnit == null) {
+            setSelectedUnit(
+                    gameModelController.getModel().getFirstSelectableUnitAt(location).orElse(null));
+        } else {
+            if (selectedUnit.isAtPlaceLocation()) {
+                /*
+                 * If selected tile is location where is selected unit than do
+                 * nothing
+                 */
+                if (!selectedUnit.getLocation().equals(location)) {
+                    setSelectedUnit(gameModelController.getModel()
+                            .getFirstSelectableUnitAt(location).orElse(null));
+                }
+            } else {
+                setSelectedUnit(gameModelController.getModel().getFirstSelectableUnitAt(location)
+                        .orElse(null));
+            }
+        }
+        logger.debug("Selected unit at {} is now: {}", location, selectedUnit);
+    }
+
+    private void onSelectNextUnit(final SelectNextUnitEvent selectNextUnitEvent) {
+        Preconditions.checkNotNull(selectNextUnitEvent);
+        if (selectedUnit == null) {
+            setSelectedUnit(gameModelController.getModel().getFirstSelectableUnitAt().orElse(null));
+        } else {
+            setSelectedUnit(gameModelController.getModel().getNextUnitForCurrentUser(selectedUnit)
+                    .orElse(null));
+        }
+        if (selectedUnit != null) {
+            selectedTileManager.setSelectedTile(selectedUnit.getLocation());
+        }
+    }
+
+    public Optional<Unit> getSelectedUnit() {
+        return Optional.ofNullable(selectedUnit);
+    }
+
+    public boolean isSelectedUnitMoveable() {
+        return selectedUnit != null && selectedUnit.getAvailableMoves() > 0;
+    }
 
 }

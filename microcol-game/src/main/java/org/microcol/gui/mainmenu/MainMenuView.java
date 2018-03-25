@@ -1,6 +1,6 @@
 package org.microcol.gui.mainmenu;
 
-import org.microcol.gui.GamePreferences;
+import org.microcol.gui.util.GamePreferences;
 import org.microcol.gui.util.Text;
 import org.microcol.gui.util.Text.Language;
 

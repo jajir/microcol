@@ -1,13 +1,13 @@
 package org.microcol.gui.gamemenu;
 
 import org.microcol.gui.ApplicationController;
-import org.microcol.gui.GamePreferences;
 import org.microcol.gui.MainPanelPresenter;
 import org.microcol.gui.PersistingDialog;
 import org.microcol.gui.event.model.GameController;
 import org.microcol.gui.mainmenu.ChangeLanguageController;
 import org.microcol.gui.mainmenu.QuitGameController;
 import org.microcol.gui.mainmenu.QuitGameEvent;
+import org.microcol.gui.util.GamePreferences;
 import org.microcol.gui.util.PersistingTool;
 import org.microcol.model.campaign.Campaign;
 import org.microcol.model.campaign.CampaignManager;

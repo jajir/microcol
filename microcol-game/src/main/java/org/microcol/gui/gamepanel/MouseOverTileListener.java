@@ -1,10 +1,10 @@
 package org.microcol.gui.gamepanel;
 
-import org.microcol.gui.GamePreferences;
 import org.microcol.gui.LocalizationHelper;
 import org.microcol.gui.event.StatusBarMessageController;
 import org.microcol.gui.event.StatusBarMessageEvent;
 import org.microcol.gui.event.model.GameModelController;
+import org.microcol.gui.util.GamePreferences;
 import org.microcol.gui.util.Text;
 import org.microcol.model.Location;
 import org.microcol.model.Player;
