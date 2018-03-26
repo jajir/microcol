@@ -1,46 +1,53 @@
 package org.microcol.model;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
 
 import com.google.common.base.MoreObjects;
-import com.google.common.collect.Lists;
+import com.google.common.base.Preconditions;
 
 /**
  * Evaluate game over conditions.
  */
 public class GameOverEvaluator {
 
-	private final ChainOfCommandOptionalStrategy<Model, GameOverResult> conditions = new ChainOfCommandOptionalStrategy<>(
-			Lists.newArrayList(this::verifyCalendar, this::verifyHumanPlayerLostAllColonies));
+    private final ChainOfCommandOptionalStrategy<Model, GameOverResult> conditions;
 
-	public Optional<GameOverResult> evaluate(final Model model) {
-		return conditions.apply(model);
-	}
+    public GameOverEvaluator(final List<Function<Model, GameOverResult>> gameOverEvaluators) {
+        Preconditions.checkNotNull(gameOverEvaluators, "Game over evaluators are null.");
+        Preconditions.checkArgument(!gameOverEvaluators.isEmpty(),
+                "Game over evaluators are empty.");
+        this.conditions = new ChainOfCommandOptionalStrategy<>(gameOverEvaluators);
+    }
 
-	private GameOverResult verifyCalendar(final Model model) {
-		if (model.getCalendar().isFinished()) {
-			return new GameOverResult(null, null, GameOverResult.REASON_TIME_IS_UP);
-		} else {
-			return null;
-		}
-	}
+    public Optional<GameOverResult> evaluate(final Model model) {
+        return conditions.apply(model);
+    }
 
-	private GameOverResult verifyHumanPlayerLostAllColonies(final Model model) {
-		if (model.getCalendar().getNumberOfPlayedTurns() > 15) {
-			for (final Player player : model.getPlayerStore().getPlayers()) {
-				if (player.isHuman() && model.getColonies(player).isEmpty()) {
-					return new GameOverResult(null, player, GameOverResult.REASON_NO_COLONIES);
-				}
-			}
-		}
-		return null;
-	}
+    public static final Function<Model, GameOverResult> GAMEOVER_CONDITION_CALENDAR = (model) -> {
+        if (model.getCalendar().isFinished()) {
+            return new GameOverResult(null, null, GameOverResult.REASON_TIME_IS_UP);
+        } else {
+            return null;
+        }
+    };
 
-	@Override
-	public String toString() {
-		return MoreObjects.toStringHelper(this)
-				.add("hashcode", hashCode())
-				.toString();
-	}	
+    public static final Function<Model, GameOverResult> GAMEOVER_CONDITION_HUMAN_LOST_ALL_COLONIES = (
+            model) -> {
+        if (model.getCalendar().getNumberOfPlayedTurns() > 15) {
+            for (final Player player : model.getPlayerStore().getPlayers()) {
+                if (player.isHuman() && model.getColonies(player).isEmpty()) {
+                    return new GameOverResult(null, player, GameOverResult.REASON_NO_COLONIES);
+                }
+            }
+        }
+        return null;
+    };
+
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(this).add("hashcode", hashCode()).toString();
+    }
 
 }

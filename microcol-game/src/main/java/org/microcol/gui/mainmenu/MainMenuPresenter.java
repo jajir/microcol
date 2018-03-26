@@ -1,6 +1,7 @@
 package org.microcol.gui.mainmenu;
 
 import java.util.Optional;
+import java.util.function.BiConsumer;
 
 import org.microcol.gui.DialogIndependenceWasDeclared;
 import org.microcol.gui.PersistingDialog;
@@ -31,6 +32,8 @@ import org.microcol.model.event.UnitMovedStepEvent;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
+
+import javafx.scene.control.MenuItem;
 
 public class MainMenuPresenter {
 
@@ -250,18 +253,33 @@ public class MainMenuPresenter {
         setBuildColony();
     }
 
+    @SuppressWarnings("unused")
     private void onSelectedUnitChanged(final SelectedUnitWasChangedEvent event) {
-        // FIXME set other menu items
         setBuildColony();
+        setMoveUnit();
+    }
+
+    /**
+     * <p>
+     * It's not necessary to have it as lambda, it could void method. BiConsumer
+     * is not used anywhere else.
+     * </p>
+     */
+    private final BiConsumer<MenuItem, SelectedUnitManager> eval = (menuItem, sum) -> {
+        if (sum.getSelectedUnit().isPresent()) {
+            final Unit unit = sum.getSelectedUnit().get();
+            menuItem.setDisable(!unit.getType().canBuildColony() || unit.getAvailableMoves() == 0);
+        } else {
+            menuItem.setDisable(true);
+        }
+    };
+
+    private void setMoveUnit() {
+        eval.accept(view.getMenuItemMove(), selectedUnitManager);
     }
 
     private void setBuildColony() {
-        if (selectedUnitManager.getSelectedUnit().isPresent()) {
-            Unit unit = selectedUnitManager.getSelectedUnit().get();
-            view.getMenuItemBuildColony()
-                    .setDisable(!unit.getType().canBuildColony() || unit.getAvailableMoves() == 0);
-        } else {
-            view.getMenuItemBuildColony().setDisable(true);
-        }
+        eval.accept(view.getMenuItemBuildColony(), selectedUnitManager);
     }
+
 }

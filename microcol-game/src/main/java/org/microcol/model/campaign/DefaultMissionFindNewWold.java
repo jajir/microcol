@@ -1,13 +1,17 @@
 package org.microcol.model.campaign;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 
 import org.microcol.ai.Continent;
 import org.microcol.ai.ContinentTool;
 import org.microcol.ai.Continents;
 import org.microcol.gui.MicroColException;
 import org.microcol.gui.event.model.MissionCallBack;
+import org.microcol.model.GameOverEvaluator;
+import org.microcol.model.GameOverResult;
 import org.microcol.model.Location;
 import org.microcol.model.Model;
 import org.microcol.model.ModelListenerAdapter;
@@ -20,6 +24,8 @@ import org.microcol.model.event.GameStartedEvent;
 import org.microcol.model.event.UnitMoveFinishedEvent;
 import org.microcol.model.event.UnitMoveStartedEvent;
 import org.microcol.model.store.ModelPo;
+
+import com.google.common.collect.Lists;
 
 /**
  * First mission. Find New World.
@@ -44,9 +50,11 @@ public class DefaultMissionFindNewWold extends AbstractMission {
 
             @Override
             public void gameStarted(final GameStartedEvent event) {
-                missionCallBack.addCallWhenReady(model -> {
-                    missionCallBack.showMessage("campaign.default.start");
-                });
+                if (isFirstTurn(event.getModel())) {
+                    missionCallBack.addCallWhenReady(model -> {
+                        missionCallBack.showMessage("campaign.default.start");
+                    });
+                }
             }
 
             @Override
@@ -133,6 +141,13 @@ public class DefaultMissionFindNewWold extends AbstractMission {
         out.put(MAP_KEY_WAS_CONTINENT_ON_SIGHT_MESSAGE_WAS_SHOWN,
                 Boolean.toString(wasContinentOnSightMessageWasShown));
         return out;
+    }
+
+    @Override
+    public List<Function<Model, GameOverResult>> getGameOverEvaluators() {
+        return Lists.newArrayList(GameOverEvaluator.GAMEOVER_CONDITION_CALENDAR,
+                GameOverEvaluator.GAMEOVER_CONDITION_HUMAN_LOST_ALL_COLONIES);
+        // FIXME implement condition when use have first colony
     }
 
 }

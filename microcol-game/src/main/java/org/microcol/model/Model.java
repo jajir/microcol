@@ -67,7 +67,8 @@ public final class Model {
     }
 
     Model(final Calendar calendar, final WorldMap map, final ModelPo modelPo,
-            final UnitStorage unitStorage) {
+            final UnitStorage unitStorage,
+            final List<Function<Model, GameOverResult>> gameOverEvaluators) {
         Preconditions.checkNotNull(modelPo);
         listenerManager = new ListenerManager();
         this.focusedField = modelPo.getFocusedField();
@@ -97,7 +98,7 @@ public final class Model {
 
         this.unitStorage = Preconditions.checkNotNull(unitStorage);
 
-        gameManager = new GameManager(this);
+        gameManager = new GameManager(this, gameOverEvaluators);
 
         highSea = new HighSea(this);
         this.europe = new Europe(this);
@@ -113,12 +114,13 @@ public final class Model {
                 .forEach(unit -> unit.getOwner().makeVisibleMapForUnit(unit));
     }
 
-    public static Model make(final ModelPo modelPo) {
+    public static Model make(final ModelPo modelPo,
+            final List<Function<Model, GameOverResult>> gameOverEvaluators) {
         final Calendar calendar = Calendar.make(modelPo.getCalendar());
         final WorldMap worldMap = new WorldMap(modelPo);
         final UnitStorage unitStorage = new UnitStorage();
 
-        final Model model = new Model(calendar, worldMap, modelPo, unitStorage);
+        final Model model = new Model(calendar, worldMap, modelPo, unitStorage, gameOverEvaluators);
 
         /*
          * First are loaded units which can hold cargo than which can be held in
