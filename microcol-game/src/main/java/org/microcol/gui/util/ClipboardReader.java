@@ -5,7 +5,7 @@ import java.util.function.BiConsumer;
 import java.util.function.Predicate;
 
 import org.microcol.model.CargoSlot;
-import org.microcol.model.GoodAmount;
+import org.microcol.model.GoodsAmount;
 import org.microcol.model.GoodType;
 import org.microcol.model.Location;
 import org.microcol.model.Model;
@@ -76,7 +76,7 @@ public class ClipboardReader {
 		}
 		final int amount = read(parts[2]);
 		final GoodType goodType = GoodType.valueOf(parts[1]);
-		final GoodAmount goodAmount = new GoodAmount(goodType, amount);
+		final GoodsAmount goodAmount = new GoodsAmount(goodType, amount);
 		TransferFrom transferFrom = tryReadTransferFromCargoSlot(3);
 		if (transferFrom == null) {
 			transferFrom = tryReadTransferFromEuropeShop(3);
@@ -256,11 +256,11 @@ public class ClipboardReader {
 		 *            be keep otherwise will be removed.
 		 * @return return parsing result
 		 */
-		public ParsingResult filterGoods(final Predicate<GoodAmount> filter) {
+		public ParsingResult filterGoods(final Predicate<GoodsAmount> filter) {
 			if (goodTransfer == null) {
 				return this;
 			} else {
-				if (filter.test(goodTransfer.goodAmount)) {
+				if (filter.test(goodTransfer.goodsAmount)) {
 					return this;
 				} else {
 					return new ParsingResult(unitTransfer, null);
@@ -288,11 +288,11 @@ public class ClipboardReader {
 			}
 		}
 
-		public Optional<GoodAmount> getGoods() {
+		public Optional<GoodsAmount> getGoods() {
 			if (goodTransfer == null) {
 				return Optional.empty();
 			} else {
-				return Optional.of(goodTransfer.goodAmount);
+				return Optional.of(goodTransfer.goodsAmount);
 			}
 		}
 
@@ -312,18 +312,18 @@ public class ClipboardReader {
 			}
 		}
 
-		public ParsingResult tryReadGood(final BiConsumer<GoodAmount, Optional<TransferFrom>> consumer) {
+		public ParsingResult tryReadGood(final BiConsumer<GoodsAmount, Optional<TransferFrom>> consumer) {
 			if (goodTransfer != null) {
-				consumer.accept(goodTransfer.goodAmount, goodTransfer.getTransferFrom());
+				consumer.accept(goodTransfer.goodsAmount, goodTransfer.getTransferFrom());
 			}
 			return this;
 		}
 
-		public ParsingResult readGood(final BiConsumer<GoodAmount, Optional<TransferFrom>> consumer) {
+		public ParsingResult readGood(final BiConsumer<GoodsAmount, Optional<TransferFrom>> consumer) {
 			if (goodTransfer == null) {
 				throw new IllegalStateException("Unable to read good from string '" + originalString + "'");
 			} else {
-				consumer.accept(goodTransfer.goodAmount, goodTransfer.getTransferFrom());
+				consumer.accept(goodTransfer.goodsAmount, goodTransfer.getTransferFrom());
 				return this;
 			}
 		}
@@ -375,20 +375,20 @@ public class ClipboardReader {
 
 	public static class GoodTransfer extends AbstractTransfer {
 
-		private final GoodAmount goodAmount;
+		private final GoodsAmount goodsAmount;
 
-		GoodTransfer(final GoodAmount goodAmount, final TransferFrom transferFrom) {
+		GoodTransfer(final GoodsAmount goodsAmount, final TransferFrom transferFrom) {
 			super(transferFrom);
-			this.goodAmount = goodAmount;
+			this.goodsAmount = goodsAmount;
 		}
 
 		@Override
 		public void writeTo(final StringBuilder buff) {
 			buff.append(KEY_GOODS);
 			buff.append(SEPARATOR);
-			buff.append(goodAmount.getGoodType().name());
+			buff.append(goodsAmount.getGoodType().name());
 			buff.append(SEPARATOR);
-			buff.append(goodAmount.getAmount());
+			buff.append(goodsAmount.getAmount());
 			getTransferFrom().ifPresent(transferFrom -> transferFrom.writeTo(buff));
 		}
 

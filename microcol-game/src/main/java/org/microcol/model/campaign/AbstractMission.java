@@ -22,6 +22,8 @@ public abstract class AbstractMission implements Mission {
 
     private boolean isFinished;
 
+    private CampaignManager campaignManager;
+
     AbstractMission(final String name, final Integer orderNo, final String modelFileName) {
         this.name = Preconditions.checkNotNull(name);
         this.orderNo = Preconditions.checkNotNull(orderNo);
@@ -62,6 +64,16 @@ public abstract class AbstractMission implements Mission {
     @Override
     public boolean isFinished() {
         return isFinished;
+    }
+
+    @Override
+    public void setCampaignManager(final CampaignManager campaignManager) {
+        this.campaignManager = campaignManager;
+    }
+
+    void flush() {
+        Preconditions.checkNotNull(campaignManager, "campaignManager is null");
+        campaignManager.saveMissionState();
     }
 
     /**

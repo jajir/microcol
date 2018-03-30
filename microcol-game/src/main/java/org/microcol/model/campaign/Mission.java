@@ -36,6 +36,14 @@ public interface Mission {
 
     void setFinished(boolean isFinished);
 
+    /**
+     * TODO it create circular dependency, remove it.
+     *
+     * @param campaignManager
+     *            required campaign manager
+     */
+    void setCampaignManager(CampaignManager campaignManager);
+
     void startMission(Model model, MissionCallBack missionCallBack);
 
     Map<String, String> saveToMap();

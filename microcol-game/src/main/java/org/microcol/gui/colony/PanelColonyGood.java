@@ -3,7 +3,7 @@ package org.microcol.gui.colony;
 import org.microcol.gui.util.ClipboardWritter;
 import org.microcol.model.Colony;
 import org.microcol.model.ColonyProductionStats;
-import org.microcol.model.GoodAmount;
+import org.microcol.model.GoodsAmount;
 import org.microcol.model.GoodProductionStats;
 import org.microcol.model.GoodType;
 
@@ -54,7 +54,7 @@ public class PanelColonyGood extends VBox {
 		if (amount > 0) {
 			Dragboard db = imageView.startDragAndDrop(TransferMode.MOVE, TransferMode.LINK);
 			ClipboardWritter.make(db).addImage(image).addTransferFromColonyWarehouse()
-					.addGoodAmount(new GoodAmount(goodType, amount)).build();
+					.addGoodAmount(new GoodsAmount(goodType, amount)).build();
 		}
 		event.consume();
 	}

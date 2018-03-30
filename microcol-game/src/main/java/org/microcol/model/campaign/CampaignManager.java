@@ -2,9 +2,13 @@ package org.microcol.model.campaign;
 
 import java.util.List;
 import java.util.Map;
+import java.util.function.BiConsumer;
 import java.util.function.Function;
+import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 import java.util.stream.Collectors;
+
+import org.microcol.gui.MicroColException;
 
 import com.google.common.base.Preconditions;
 
@@ -20,17 +24,33 @@ public class CampaignManager {
     CampaignManager(final List<Campaign> campaigns) {
         this.campaigns = Preconditions.checkNotNull(campaigns).stream()
                 .collect(Collectors.toMap(c -> c.getName(), Function.identity()));
-        setIsFinished();
+        loadMissionStateFromPreferences();
     }
 
-    private void setIsFinished() {
-        campaigns.forEach((name, campaign) -> {
-            campaign.getMissions().forEach(mission -> {
-                final String key = campaign.getName() + "." + mission.getName() + ".isFinished";
-                mission.setFinished(preferences.getBoolean(key, false));
-            });
+    private void loadMissionStateFromPreferences() {
+        wentThroughMissions((key, mission) -> {
+            mission.setFinished(preferences.getBoolean(key, false));
+            mission.setCampaignManager(this);
         });
+    }
 
+    void saveMissionState() {
+        wentThroughMissions((key, mission) -> {
+            preferences.putBoolean(key, mission.isFinished());
+            mission.setFinished(preferences.getBoolean(key, false));
+        });
+        try {
+            preferences.flush();
+        } catch (BackingStoreException e) {
+            throw new MicroColException(e.getMessage(), e);
+        }
+    }
+
+    private void wentThroughMissions(BiConsumer<String, Mission> consumer) {
+        campaigns.forEach((name, campaign) -> {
+            campaign.getMissions().forEach(mission -> consumer
+                    .accept(campaign.getName() + "." + mission.getName() + ".isFinished", mission));
+        });
     }
 
     /**

@@ -2,10 +2,12 @@ package org.microcol.model;
 
 import org.microcol.model.event.BeforeEndTurnEvent;
 import org.microcol.model.event.ColonyWasCapturedEvent;
+import org.microcol.model.event.ColonyWasFoundEvent;
 import org.microcol.model.event.DebugRequestedEvent;
 import org.microcol.model.event.GameFinishedEvent;
 import org.microcol.model.event.GameStartedEvent;
 import org.microcol.model.event.GoldWasChangedEvent;
+import org.microcol.model.event.GoodsWasSoldInEuropeEvent;
 import org.microcol.model.event.RoundStartedEvent;
 import org.microcol.model.event.TurnStartedEvent;
 import org.microcol.model.event.UnitAttackedEvent;
@@ -59,6 +61,16 @@ public class ModelListenerAdapter implements ModelListener {
 
     @Override
     public void goldWasChanged(final GoldWasChangedEvent event) {
+        // Do nothing.
+    }
+
+    @Override
+    public void goodsWasSoldInEurope(GoodsWasSoldInEuropeEvent event) {
+        // Do nothing.
+    }
+
+    @Override
+    public void colonyWasFounded(ColonyWasFoundEvent event) {
         // Do nothing.
     }
 

@@ -11,7 +11,7 @@ import org.microcol.gui.gamepanel.AnimationManager;
 import org.microcol.gui.gamepanel.SelectedTileManager;
 import org.microcol.gui.mainmenu.CenterViewController;
 import org.microcol.gui.mainmenu.CenterViewEvent;
-import org.microcol.model.GoodAmount;
+import org.microcol.model.GoodsAmount;
 import org.microcol.model.GoodTrade;
 import org.microcol.model.GoodType;
 import org.microcol.model.Location;
@@ -109,7 +109,7 @@ public class GameModelController {
                 .orElseThrow(() -> new IllegalStateException("There is no human player"));
     }
 
-    public GoodAmount getMaxBuyableGoodsAmount(final GoodType goodType) {
+    public GoodsAmount getMaxBuyableGoodsAmount(final GoodType goodType) {
         final GoodTrade goodTrade = modelMission.getModel().getEurope()
                 .getGoodTradeForType(goodType);
         return goodTrade.getAvailableAmountFor(getCurrentPlayer().getGold());

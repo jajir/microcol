@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.microcol.gui.MicroColException;
-import org.microcol.model.GoodAmount;
+import org.microcol.model.GoodsAmount;
 import org.microcol.model.GoodType;
 import org.microcol.model.TerrainType;
 import org.microcol.model.Unit;
@@ -296,12 +296,12 @@ public final class ImageProvider {
 	/**
 	 * For specific good amount find corresponding image.
 	 * 
-	 * @param goodAmount
+	 * @param goodsAmount
 	 *            required good amount
 	 * @return image representing good type
 	 */
-	public Image getGoodTypeImage(final GoodAmount goodAmount) {
-		return goodTypeImageMap.get(goodAmount.getGoodType());
+	public Image getGoodTypeImage(final GoodsAmount goodsAmount) {
+		return goodTypeImageMap.get(goodsAmount.getGoodType());
 	}
 
 }

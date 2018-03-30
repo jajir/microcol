@@ -177,6 +177,7 @@ public final class Model {
                 }, new HashMap<String, Integer>());
         colonies.add(col);
         col.placeUnitToProduceFood(unit);
+        listenerManager.fireColonyWasFounded(this, col);
     }
 
     Unit createUnit(final Model model, final ModelPo modelPo, final UnitPo unitPo) {
@@ -436,6 +437,11 @@ public final class Model {
             }
         });
         unitStorage.remove(unit);
+    }
+
+    public void sellGoods(final CargoSlot cargoSlot, final GoodsAmount goodsAmount) {
+        cargoSlot.sellAndEmpty(goodsAmount);
+        listenerManager.fireGoodsWasSoldInEurope(this, goodsAmount);
     }
 
     void fireGameStarted() {

@@ -31,7 +31,7 @@ public class CargoSlotTest {
 
 	@Test(expected = NullPointerException.class)
 	public void test_storeFromCargoSlot_null_sourceCargoSlot() throws Exception {
-		slot.storeFromCargoSlot(new GoodAmount(GoodType.CORN, 100), null);
+		slot.storeFromCargoSlot(new GoodsAmount(GoodType.CORN, 100), null);
 	}
 
 	@Test(expected = IllegalArgumentException.class)
@@ -42,14 +42,14 @@ public class CargoSlotTest {
 			sourceCargoSlot.getOwnerPlayer(); result = null; times = 2;
 		}};
 		
-		slot.storeFromCargoSlot(new GoodAmount(GoodType.CORN, 100), sourceCargoSlot);
+		slot.storeFromCargoSlot(new GoodsAmount(GoodType.CORN, 100), sourceCargoSlot);
 	}
 	
 	@Test(expected = IllegalArgumentException.class)
 	public void test_storeFromCargoSlot_already_occupied_by_unit(final @Injectable CargoSlot sourceCargoSlot, final @Injectable Unit unit) throws Exception {
 		slot.store(unit);
 		
-		slot.storeFromCargoSlot(new GoodAmount(GoodType.CORN, 100), sourceCargoSlot);
+		slot.storeFromCargoSlot(new GoodsAmount(GoodType.CORN, 100), sourceCargoSlot);
 	}
 
 	@Test(expected = IllegalArgumentException.class)
@@ -61,7 +61,7 @@ public class CargoSlotTest {
 			sourceCargoSlot.getGoods(); result = Optional.empty();
 		}};
 		
-		slot.storeFromCargoSlot(new GoodAmount(GoodType.CORN, 13), sourceCargoSlot);		
+		slot.storeFromCargoSlot(new GoodsAmount(GoodType.CORN, 13), sourceCargoSlot);		
 	}
 
 	@Test(expected = IllegalArgumentException.class)
@@ -70,10 +70,10 @@ public class CargoSlotTest {
 			cargo.getOwner(); result = ownerUnit;
 			ownerUnit.getOwner(); result = player;
 			sourceCargoSlot.getOwnerPlayer(); result = player; times = 2;
-			sourceCargoSlot.getGoods(); result = Optional.of(new GoodAmount(GoodType.CIGARS, 13));
+			sourceCargoSlot.getGoods(); result = Optional.of(new GoodsAmount(GoodType.CIGARS, 13));
 		}};
 		
-		slot.storeFromCargoSlot(new GoodAmount(GoodType.CORN, 13), sourceCargoSlot);		
+		slot.storeFromCargoSlot(new GoodsAmount(GoodType.CORN, 13), sourceCargoSlot);		
 	}
 	
 	@Test
@@ -82,10 +82,10 @@ public class CargoSlotTest {
 			cargo.getOwner(); result = ownerUnit;
 			ownerUnit.getOwner(); result = player;
 			sourceCargoSlot.getOwnerPlayer(); result = player; times = 2;
-			sourceCargoSlot.getGoods(); result = Optional.of(new GoodAmount(GoodType.CORN, 13));
+			sourceCargoSlot.getGoods(); result = Optional.of(new GoodsAmount(GoodType.CORN, 13));
 		}};
 		
-		slot.storeFromCargoSlot(new GoodAmount(GoodType.CORN, 13), sourceCargoSlot);		
+		slot.storeFromCargoSlot(new GoodsAmount(GoodType.CORN, 13), sourceCargoSlot);		
 		
 		assertFalse(slot.isEmpty());
 		assertTrue(slot.isLoadedGood());
@@ -95,22 +95,22 @@ public class CargoSlotTest {
 	
 	@Test(expected = IllegalArgumentException.class)
 	public void test_storeFromCargoSlot_transferred_goodType_isDifferent_from_alreadyStored(final @Injectable CargoSlot sourceCargoSlot) throws Exception {
-		slot = new CargoSlot(cargo, new GoodAmount(GoodType.CIGARS, 13));
+		slot = new CargoSlot(cargo, new GoodsAmount(GoodType.CIGARS, 13));
 		
-		slot.storeFromCargoSlot(new GoodAmount(GoodType.CORN, 13), sourceCargoSlot);		
+		slot.storeFromCargoSlot(new GoodsAmount(GoodType.CORN, 13), sourceCargoSlot);		
 	}
 	
 	@Test
 	public void test_storeFromCargoSlot_transfered_good_is_added_to_already_stored_1(final @Injectable CargoSlot sourceCargoSlot) throws Exception {
-		slot = new CargoSlot(cargo, new GoodAmount(GoodType.CORN, 30));
+		slot = new CargoSlot(cargo, new GoodsAmount(GoodType.CORN, 30));
 		new Expectations() {{
 			cargo.getOwner(); result = ownerUnit;
 			ownerUnit.getOwner(); result = player;
 			sourceCargoSlot.getOwnerPlayer(); result = player; times = 2;
-			sourceCargoSlot.getGoods(); result = Optional.of(new GoodAmount(GoodType.CORN, 13));
+			sourceCargoSlot.getGoods(); result = Optional.of(new GoodsAmount(GoodType.CORN, 13));
 		}};
 		
-		slot.storeFromCargoSlot(new GoodAmount(GoodType.CORN, 13), sourceCargoSlot);		
+		slot.storeFromCargoSlot(new GoodsAmount(GoodType.CORN, 13), sourceCargoSlot);		
 		
 		assertFalse(slot.isEmpty());
 		assertTrue(slot.isLoadedGood());
@@ -124,15 +124,15 @@ public class CargoSlotTest {
 
 	@Test
 	public void test_storeFromCargoSlot_transfered_good_is_added_to_already_stored_2(final @Injectable CargoSlot sourceCargoSlot) throws Exception {
-		slot = new CargoSlot(cargo, new GoodAmount(GoodType.CORN, 30));
+		slot = new CargoSlot(cargo, new GoodsAmount(GoodType.CORN, 30));
 		new Expectations() {{
 			cargo.getOwner(); result = ownerUnit;
 			ownerUnit.getOwner(); result = player;
 			sourceCargoSlot.getOwnerPlayer(); result = player; times = 2;
-			sourceCargoSlot.getGoods(); result = Optional.of(new GoodAmount(GoodType.CORN, 13));
+			sourceCargoSlot.getGoods(); result = Optional.of(new GoodsAmount(GoodType.CORN, 13));
 		}};
 		
-		slot.storeFromCargoSlot(new GoodAmount(GoodType.CORN, 80), sourceCargoSlot);		
+		slot.storeFromCargoSlot(new GoodsAmount(GoodType.CORN, 80), sourceCargoSlot);		
 		
 		assertFalse(slot.isEmpty());
 		assertTrue(slot.isLoadedGood());
@@ -165,7 +165,7 @@ public class CargoSlotTest {
 
 	@Test(expected = NullPointerException.class)
 	public void test_storeFromColonyWarehouse_colony_cant_be_null() throws Exception {
-		slot.storeFromColonyWarehouse(new GoodAmount(GoodType.SILK, 10), null);
+		slot.storeFromColonyWarehouse(new GoodsAmount(GoodType.SILK, 10), null);
 	}
 
 	@Test(expected = IllegalArgumentException.class)
@@ -174,14 +174,14 @@ public class CargoSlotTest {
 			colony.getOwner(); result = null;
 		}};
 		
-		slot.storeFromColonyWarehouse(new GoodAmount(GoodType.SILK, 10), colony);
+		slot.storeFromColonyWarehouse(new GoodsAmount(GoodType.SILK, 10), colony);
 	}
 
 	@Test(expected = IllegalArgumentException.class)
 	public void test_storeFromColonyWarehouse_is_allready_occupied_by_unit(final @Mocked Colony colony, final @Mocked Unit unit) throws Exception {
 		slot.store(unit);
 		
-		slot.storeFromColonyWarehouse(new GoodAmount(GoodType.SILK, 10), colony);
+		slot.storeFromColonyWarehouse(new GoodsAmount(GoodType.SILK, 10), colony);
 	}
 
 	@Test()
@@ -192,7 +192,7 @@ public class CargoSlotTest {
 			warehouse.getGoodAmmount(GoodType.SILK); result = 9;
 		}};
 		
-		slot.storeFromColonyWarehouse(new GoodAmount(GoodType.SILK, 10), colony);
+		slot.storeFromColonyWarehouse(new GoodsAmount(GoodType.SILK, 10), colony);
 		
 		assertFalse(slot.isEmpty());
 		assertTrue(slot.isLoadedGood());
@@ -209,7 +209,7 @@ public class CargoSlotTest {
 			warehouse.removeFromWarehouse(GoodType.SILK, 10); times = 1;
 		}};
 		
-		slot.storeFromColonyWarehouse(new GoodAmount(GoodType.SILK, 10), colony);
+		slot.storeFromColonyWarehouse(new GoodsAmount(GoodType.SILK, 10), colony);
 		
 		assertFalse(slot.isEmpty());
 		assertTrue(slot.isLoadedGood());
@@ -219,14 +219,14 @@ public class CargoSlotTest {
 
 	@Test(expected = IllegalArgumentException.class)
 	public void test_storeFromColonyWarehouse_transferred_goodType_isDifferent_from_alreadyStored(final @Mocked Colony colony) throws Exception {
-		slot = new CargoSlot(cargo, new GoodAmount(GoodType.ORE, 22));
+		slot = new CargoSlot(cargo, new GoodsAmount(GoodType.ORE, 22));
 		
-		slot.storeFromColonyWarehouse(new GoodAmount(GoodType.SILK, 10), colony);
+		slot.storeFromColonyWarehouse(new GoodsAmount(GoodType.SILK, 10), colony);
 	}
 	
 	@Test
 	public void test_storeFromColonyWarehouse_transfered_good_is_added_to_already_stored(final @Mocked Colony colony, final @Mocked ColonyWarehouse warehouse) throws Exception {
-		slot = new CargoSlot(cargo, new GoodAmount(GoodType.SILK, 22));
+		slot = new CargoSlot(cargo, new GoodsAmount(GoodType.SILK, 22));
 		new Expectations() {{
 			colony.getOwner(); result = player;
 			colony.getColonyWarehouse(); result = warehouse;
@@ -234,7 +234,7 @@ public class CargoSlotTest {
 			warehouse.removeFromWarehouse(GoodType.SILK, 10); times = 1;
 		}};
 		
-		slot.storeFromColonyWarehouse(new GoodAmount(GoodType.SILK, 10), colony);
+		slot.storeFromColonyWarehouse(new GoodsAmount(GoodType.SILK, 10), colony);
 		
 		assertFalse(slot.isEmpty());
 		assertTrue(slot.isLoadedGood());
@@ -244,7 +244,7 @@ public class CargoSlotTest {
 	
 	@Test
 	public void test_storeFromColonyWarehouse_transfered_good_is_added_to_already_stored_2(final @Mocked Colony colony, final @Mocked ColonyWarehouse warehouse) throws Exception {
-		slot = new CargoSlot(cargo, new GoodAmount(GoodType.SILK, 66));
+		slot = new CargoSlot(cargo, new GoodsAmount(GoodType.SILK, 66));
 		new Expectations() {{
 			colony.getOwner(); result = player;
 			colony.getColonyWarehouse(); result = warehouse;
@@ -252,7 +252,7 @@ public class CargoSlotTest {
 			warehouse.removeFromWarehouse(GoodType.SILK, 34); times = 1;
 		}};
 		
-		slot.storeFromColonyWarehouse(new GoodAmount(GoodType.SILK, 50), colony);
+		slot.storeFromColonyWarehouse(new GoodsAmount(GoodType.SILK, 50), colony);
 		
 		assertFalse(slot.isEmpty());
 		assertTrue(slot.isLoadedGood());

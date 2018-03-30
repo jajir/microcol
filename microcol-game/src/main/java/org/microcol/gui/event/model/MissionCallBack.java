@@ -46,10 +46,12 @@ public class MissionCallBack {
         executor.fire(gameModelController.getModel());
     }
 
-    public void showMessage(final String messageKey) {
+    public void showMessage(final String... messageKeys) {
         Platform.runLater(() -> {
-            dialogMessage.setText(text.get(messageKey));
-            dialogMessage.showAndWait();
+            for (final String messageKey : messageKeys) {
+                dialogMessage.setText(text.get(messageKey));
+                dialogMessage.showAndWait();
+            }
         });
     }
 

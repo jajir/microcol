@@ -40,7 +40,7 @@ public class GoodTradeTest {
 	public void test_getAvailableAmountFor() throws Exception {
 		GoodTrade gt = new GoodTrade(GoodType.CIGARS, sellPrice, buyPrice);
 		
-		GoodAmount ga = gt.getAvailableAmountFor(availableGold);
+		GoodsAmount ga = gt.getAvailableAmountFor(availableGold);
 		
 		assertEquals(GoodType.CIGARS, ga.getGoodType());
 		assertEquals(expectedAmount, ga.getAmount());

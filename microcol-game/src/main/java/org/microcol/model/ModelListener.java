@@ -2,10 +2,12 @@ package org.microcol.model;
 
 import org.microcol.model.event.BeforeEndTurnEvent;
 import org.microcol.model.event.ColonyWasCapturedEvent;
+import org.microcol.model.event.ColonyWasFoundEvent;
 import org.microcol.model.event.DebugRequestedEvent;
 import org.microcol.model.event.GameFinishedEvent;
 import org.microcol.model.event.GameStartedEvent;
 import org.microcol.model.event.GoldWasChangedEvent;
+import org.microcol.model.event.GoodsWasSoldInEuropeEvent;
 import org.microcol.model.event.RoundStartedEvent;
 import org.microcol.model.event.TurnStartedEvent;
 import org.microcol.model.event.UnitAttackedEvent;
@@ -29,7 +31,7 @@ public interface ModelListener {
     void unitMovedStep(UnitMovedStepEvent event);
 
     void unitMovedToHighSeas(UnitMovedToHighSeasEvent event);
-    
+
     void unitMoveStarted(UnitMoveStartedEvent event);
 
     /**
@@ -39,12 +41,14 @@ public interface ModelListener {
      *            required event
      */
     void unitMoveFinished(UnitMoveFinishedEvent event);
-    
+
     void beforeEndTurn(BeforeEndTurnEvent event);
 
     void unitAttacked(UnitAttackedEvent event);
 
     void unitEmbarked(UnitEmbarkedEvent event);
+
+    void colonyWasFounded(ColonyWasFoundEvent event);
 
     void colonyWasCaptured(ColonyWasCapturedEvent event);
 
@@ -53,4 +57,6 @@ public interface ModelListener {
     void debugRequested(DebugRequestedEvent event);
 
     void goldWasChanged(GoldWasChangedEvent event);
+
+    void goodsWasSoldInEurope(GoodsWasSoldInEuropeEvent event);
 }

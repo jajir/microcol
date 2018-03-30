@@ -4,7 +4,7 @@ import org.microcol.gui.DialogNotEnoughGold;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.image.ImageProvider;
 import org.microcol.gui.util.ClipboardWritter;
-import org.microcol.model.GoodAmount;
+import org.microcol.model.GoodsAmount;
 import org.microcol.model.GoodTrade;
 import org.microcol.model.GoodType;
 
@@ -47,7 +47,7 @@ public class PanelGood extends VBox {
 
 	private void onDragDetected(final MouseEvent event) {
 		final Dragboard db = this.startDragAndDrop(TransferMode.MOVE, TransferMode.LINK);
-		final GoodAmount goodAmount = gameModelController.getMaxBuyableGoodsAmount(goodType);
+		final GoodsAmount goodAmount = gameModelController.getMaxBuyableGoodsAmount(goodType);
 		if (goodAmount.isZero()) {
 			dialogNotEnoughGold.showAndWait();
 		} else {

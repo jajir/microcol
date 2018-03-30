@@ -4,7 +4,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.microcol.gui.util.ClipboardWritter;
 import org.microcol.model.CargoSlot;
-import org.microcol.model.GoodAmount;
+import org.microcol.model.GoodsAmount;
 import org.microcol.model.GoodType;
 import org.microcol.model.Unit;
 
@@ -37,7 +37,7 @@ public class ClipboardWritterTest {
 	}
 	
 	@Test
-	public void test_addGood(final @Mocked GoodAmount good) throws Exception {
+	public void test_addGood(final @Mocked GoodsAmount good) throws Exception {
 		new Expectations() {{
 			good.getAmount(); result = 100;
 			good.getGoodType(); result = GoodType.COTTON;
@@ -60,7 +60,7 @@ public class ClipboardWritterTest {
 	}
 	
 	@Test(expected=IllegalStateException.class)
-	public void test_addGood_fromEuropePortPier(final @Mocked GoodAmount good) throws Exception {
+	public void test_addGood_fromEuropePortPier(final @Mocked GoodsAmount good) throws Exception {
 		ClipboardWritter.make(db).addTransferFromEuropePortPier().addGoodAmount(good).build();
 	}
 	
@@ -81,7 +81,7 @@ public class ClipboardWritterTest {
 	}
 	
 	@Test
-	public void test_addGood_fromCargoUnit(final @Mocked GoodAmount good, final @Mocked Unit unit,
+	public void test_addGood_fromCargoUnit(final @Mocked GoodsAmount good, final @Mocked Unit unit,
 			final @Mocked CargoSlot cargoSlot) throws Exception {
 		new Expectations() {{
 			good.getAmount(); result = 100;
@@ -101,7 +101,7 @@ public class ClipboardWritterTest {
 	}
 	
 	@Test
-	public void test_addGood_fromEuropeShop(final @Mocked GoodAmount good) throws Exception {
+	public void test_addGood_fromEuropeShop(final @Mocked GoodsAmount good) throws Exception {
 		new Expectations() {{
 			good.getAmount(); result = 100;
 			good.getGoodType(); result = GoodType.COTTON;
@@ -119,7 +119,7 @@ public class ClipboardWritterTest {
 	
 	
 	@Test(expected = IllegalStateException.class)
-	public void test_addBoth(final @Mocked Unit unit, final @Mocked GoodAmount good) throws Exception {
+	public void test_addBoth(final @Mocked Unit unit, final @Mocked GoodsAmount good) throws Exception {
 		
 		ClipboardWritter.make(db).addUnit(unit).addGoodAmount(good).build();
 	}

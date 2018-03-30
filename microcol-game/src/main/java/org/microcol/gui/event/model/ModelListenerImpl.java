@@ -6,10 +6,12 @@ import org.microcol.model.ModelListener;
 import org.microcol.model.Player;
 import org.microcol.model.event.BeforeEndTurnEvent;
 import org.microcol.model.event.ColonyWasCapturedEvent;
+import org.microcol.model.event.ColonyWasFoundEvent;
 import org.microcol.model.event.DebugRequestedEvent;
 import org.microcol.model.event.GameFinishedEvent;
 import org.microcol.model.event.GameStartedEvent;
 import org.microcol.model.event.GoldWasChangedEvent;
+import org.microcol.model.event.GoodsWasSoldInEuropeEvent;
 import org.microcol.model.event.RoundStartedEvent;
 import org.microcol.model.event.TurnStartedEvent;
 import org.microcol.model.event.UnitAttackedEvent;
@@ -127,6 +129,16 @@ public class ModelListenerImpl implements ModelListener {
 
     @Override
     public void beforeEndTurn(BeforeEndTurnEvent event) {
+        // Front-end doesn't care about this event.
+    }
+
+    @Override
+    public void colonyWasFounded(ColonyWasFoundEvent event) {
+        // Front-end doesn't care about this event.
+    }
+    
+    @Override
+    public void goodsWasSoldInEurope(GoodsWasSoldInEuropeEvent event) {
         // Front-end doesn't care about this event.
     }
 

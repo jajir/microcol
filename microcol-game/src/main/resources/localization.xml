@@ -86,6 +86,11 @@
 	<entry key="campaign.default.pressNextTurn">Ship can't move in this turn more. Ship don't have any action points. You can check it in right panel where are ship's details. Now press 'Next Turn' button.</entry>
 	<entry key="campaign.default.moveUnitBeforeEndTurn">First turn with ship Try to find New World.</entry>
 	<entry key="campaign.default.continentInSight">You found New World. Now lets sail close at try to disembark. Your next task is to found new colony.</entry>
+	<entry key="campaign.default.firstColonyWasFounded">Výborně. Podařilo se ti založit novou kolonii. Teď je na tobě, jak bude dál rozkvétat.</entry>
+	<entry key="campaign.default.produce100cigars">Otevři kliknutím detail kolonie a začni pěstovat tabák a vyrábět z něj cigarety. Jednoho osadníka myší rozmísti na pole aby pěstoval tabák. Dalšiho pošlí do města vyrábět z tabáku cigarety. Pozor na množství jídla ve městě, jestli klesne na nulu, osadnicí začnou umírat hlady.</entry>
+	<entry key="campaign.default.sellCigarsInEuropePort">Konečně. Už máš potřebné množství doutníků. Vezmi je na loď, odvez do Evropy a prodej.</entry>
+	<entry key="campaign.default.cigarsWasSold">Výborně. Podařilo se ti prodat těžce získané doutníky.</entry>
+	<entry key="campaign.default.gameOver">Congratulations. Your first mission is successfully finished.</entry>
 
 	<entry key="preferencesVolume.caption">Volume</entry>
 	<entry key="preferencesVolume.low">Low</entry>

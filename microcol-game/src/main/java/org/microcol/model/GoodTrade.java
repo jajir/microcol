@@ -33,8 +33,8 @@ public class GoodTrade {
 	 *            required gold
 	 * @return Return goods amount which could be bought
 	 */
-	public GoodAmount getAvailableAmountFor(final int availableGold){
-		return new GoodAmount(goodType, Math.min(availableGold / buyPrice, CargoSlot.MAX_CARGO_SLOT_CAPACITY));
+	public GoodsAmount getAvailableAmountFor(final int availableGold){
+		return new GoodsAmount(goodType, Math.min(availableGold / buyPrice, CargoSlot.MAX_CARGO_SLOT_CAPACITY));
 	}
 
 	public int getSellPrice() {

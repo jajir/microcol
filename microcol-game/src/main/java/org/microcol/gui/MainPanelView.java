@@ -40,6 +40,7 @@ public class MainPanelView {
         } else if (MainPanelPresenter.PANEL_GAME_MENU.equals(panelName)) {
             box.getChildren().add(gameMenuPanelView.getBox());
         } else if (MainPanelPresenter.PANEL_CAMPAIGN.equals(panelName)) {
+            campaignPanelView.refresh();
             box.getChildren().add(campaignPanelView.getBox());
         } else {
             throw new IllegalArgumentException(String.format("Invalid panel name (%s)", panelName));

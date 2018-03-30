@@ -27,15 +27,15 @@ public final class CargoSlot {
     /**
      * In this cargo slot could be stored this good.
      */
-    private GoodAmount cargoGoods;
+    private GoodsAmount cargoGoods;
 
     CargoSlot(final Cargo cargo) {
         this.cargo = Preconditions.checkNotNull(cargo);
     }
 
-    CargoSlot(final Cargo cargo, final GoodAmount goodAmount) {
+    CargoSlot(final Cargo cargo, final GoodsAmount goodsAmount) {
         this.cargo = Preconditions.checkNotNull(cargo);
-        this.cargoGoods = Preconditions.checkNotNull(goodAmount);
+        this.cargoGoods = Preconditions.checkNotNull(goodsAmount);
     }
 
     CargoSlotPo save() {
@@ -100,7 +100,8 @@ public final class CargoSlot {
     }
 
     public void removeCargo(final GoodType goodType, final int amount) {
-        Preconditions.checkArgument(isLoadedGood(), "Cargo slot (%s) doesn't contains any good.", this);
+        Preconditions.checkArgument(isLoadedGood(), "Cargo slot (%s) doesn't contains any good.",
+                this);
         Preconditions.checkArgument(cargoGoods.getGoodType().equals(goodType),
                 "Cargo (%s) doesn't contains same typa as was transfered (%s).", this, goodType);
         Preconditions.checkArgument(cargoGoods.getAmount() >= amount,
@@ -111,7 +112,7 @@ public final class CargoSlot {
         }
     }
 
-    public Optional<GoodAmount> getGoods() {
+    public Optional<GoodsAmount> getGoods() {
         return Optional.ofNullable(cargoGoods);
     }
 
@@ -124,7 +125,8 @@ public final class CargoSlot {
         cargoUnit = unit;
     }
 
-    //TODO add validation what in case of embark unit in not in town. see unit.isPossibleToEmbark
+    // TODO add validation what in case of embark unit in not in town. see
+    // unit.isPossibleToEmbark
     public void store(final Unit unit) {
         Preconditions.checkNotNull(unit);
         Preconditions.checkState(isEmpty(), "Cargo slot (%s) is already loaded.", this);
@@ -139,22 +141,22 @@ public final class CargoSlot {
      * @param goodAmount
      *            required good amount will
      */
-    public void storeFromEuropePort(final GoodAmount goodAmount) {
+    public void storeFromEuropePort(final GoodsAmount goodAmount) {
         Preconditions.checkNotNull(goodAmount);
         verifyThatItCouldStored(goodAmount);
         getOwnerPlayer().buy(goodAmount);
         addGoodsAmount(goodAmount.getGoodType(), goodAmount.getAmount());
     }
 
-    public void sellAndEmpty(final GoodAmount goodAmount) {
-        Preconditions.checkNotNull(goodAmount);
+    void sellAndEmpty(final GoodsAmount goodsAmount) {
+        Preconditions.checkNotNull(goodsAmount);
         Preconditions.checkState(!isEmpty(), "Cargo slot (%s) is already empty.", this);
         Preconditions.checkState(getGoods().isPresent(), "Cargo slot (%s) doesn't contains goods.",
                 this);
-        Preconditions.checkState(getGoods().get().getGoodType().equals(goodAmount.getGoodType()),
+        Preconditions.checkState(getGoods().get().getGoodType().equals(goodsAmount.getGoodType()),
                 "Cargo slot (%s) doesn't contains correct goods type.", this);
-        getOwnerPlayer().sell(goodAmount);
-        cargoGoods = cargoGoods.substract(goodAmount.getAmount());
+        getOwnerPlayer().sell(goodsAmount);
+        cargoGoods = cargoGoods.substract(goodsAmount.getAmount());
         if (cargoGoods.isZero()) {
             cargoGoods = null;
         }
@@ -168,7 +170,7 @@ public final class CargoSlot {
      * @param sourceCargoSlot
      *            required source cargo slot
      */
-    public void storeFromCargoSlot(final GoodAmount transferredGoodsAmount,
+    public void storeFromCargoSlot(final GoodsAmount transferredGoodsAmount,
             final CargoSlot sourceCargoSlot) {
         verifyThatItCouldStored(transferredGoodsAmount);
         Preconditions.checkNotNull(sourceCargoSlot, "source cargo slot is null");
@@ -178,7 +180,7 @@ public final class CargoSlot {
         Preconditions.checkArgument(sourceCargoSlot.getGoods().isPresent(),
                 "Source cargo slot doesn't contains any good,(%s)", sourceCargoSlot);
 
-        final GoodAmount sourceGoodAmount = sourceCargoSlot.getGoods().get();
+        final GoodsAmount sourceGoodAmount = sourceCargoSlot.getGoods().get();
         Preconditions.checkArgument(
                 sourceGoodAmount.getGoodType().equals(transferredGoodsAmount.getGoodType()),
                 "Source cargo slot contains diffrent good than was transfered. Source cargo slot=(%s), Transfered=(%s)",
@@ -199,7 +201,7 @@ public final class CargoSlot {
      * @param colony
      *            required colony containing source warehouse
      */
-    public void storeFromColonyWarehouse(final GoodAmount transferredGoodsAmount,
+    public void storeFromColonyWarehouse(final GoodsAmount transferredGoodsAmount,
             final Colony colony) {
         verifyThatItCouldStored(transferredGoodsAmount);
         Preconditions.checkNotNull(colony, "colony is null");
@@ -237,7 +239,7 @@ public final class CargoSlot {
      * @param transferredGoodsAmount
      *            required transferred goods amount
      */
-    private void verifyThatItCouldStored(final GoodAmount transferredGoodsAmount) {
+    private void verifyThatItCouldStored(final GoodsAmount transferredGoodsAmount) {
         Preconditions.checkNotNull(transferredGoodsAmount);
         if (isLoadedUnit()) {
             throw new IllegalArgumentException("Attempt to move cargo to slot occupied with unit.");
@@ -264,7 +266,7 @@ public final class CargoSlot {
     }
 
     private void addGoodsAmount(final GoodType goodType, final int amount) {
-        final GoodAmount tmp = new GoodAmount(goodType, amount);
+        final GoodsAmount tmp = new GoodsAmount(goodType, amount);
         if (cargoGoods == null) {
             cargoGoods = tmp;
         } else {
@@ -297,10 +299,8 @@ public final class CargoSlot {
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(this)
-                .add("cargoUnit", cargoUnit)
-                .add("cargoGoods", cargoGoods)
-                .toString();
+        return MoreObjects.toStringHelper(this).add("cargoUnit", cargoUnit)
+                .add("cargoGoods", cargoGoods).toString();
     }
 
     Cargo getHold() {

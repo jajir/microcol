@@ -3,7 +3,7 @@ package org.microcol.gui.util;
 import org.microcol.gui.util.ClipboardReader.Transfer;
 import org.microcol.gui.util.ClipboardReader.TransferFrom;
 import org.microcol.model.CargoSlot;
-import org.microcol.model.GoodAmount;
+import org.microcol.model.GoodsAmount;
 import org.microcol.model.Location;
 import org.microcol.model.Unit;
 
@@ -46,12 +46,12 @@ public class ClipboardWritter {
 		return this;
 	}
 
-	public ClipboardWritter addGoodAmount(final GoodAmount goodAmount) {
+	public ClipboardWritter addGoodAmount(final GoodsAmount goodsAmount) {
 		Preconditions.checkState(transfer == null, "Clipboard was already set.");
 		Preconditions.checkState(
 				transferFrom == null || !(transferFrom instanceof ClipboardReader.TransferFromEuropePier),
 				"Can't move good from Europe port pier. Europe pier could contain just unit.");
-		transfer = new ClipboardReader.GoodTransfer(goodAmount, transferFrom);
+		transfer = new ClipboardReader.GoodTransfer(goodsAmount, transferFrom);
 		return this;
 	}
 

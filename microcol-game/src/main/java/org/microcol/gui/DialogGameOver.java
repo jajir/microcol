@@ -4,6 +4,7 @@ import org.microcol.gui.util.AbstractWarningDialog;
 import org.microcol.gui.util.Text;
 import org.microcol.gui.util.ViewUtil;
 import org.microcol.model.GameOverResult;
+import org.microcol.model.campaign.DefaultMissionFindNewWold;
 import org.microcol.model.event.GameFinishedEvent;
 
 import com.google.common.base.Preconditions;
@@ -29,6 +30,9 @@ public class DialogGameOver extends AbstractWarningDialog {
             str += text.get("dialogGameOver.allColoniesAreLost");
         } else if (GameOverResult.REASON_TIME_IS_UP.equals(gameOverResult.getGameOverReason())) {
             str += text.get("dialogGameOver.timeIsUp");
+        } else if (DefaultMissionFindNewWold.GAME_OVER_REASON
+                .equals(gameOverResult.getGameOverReason())) {
+            str += text.get("campaign.default.gameOver");
         } else {
             throw new IllegalArgumentException("Invalid game over reason: " + gameOverResult);
         }

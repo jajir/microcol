@@ -13,258 +13,272 @@ import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 
 public final class Player {
-	
-	private final Model model;
-	
-	private final String name;
-	
-	private final boolean computer;
-	
-	/**
-	 * If it's not null than it's king player.
-	 */
-	private final Player whosKingThisPlayerIs;
-	
-	private boolean declaredIndependence;
-	
-	private int gold;
-	
-	private final Map<String, Object> extraData = new HashMap<>();
-	
-	private final Visibility visibility;
 
-	private Player(final String name, final boolean computer, final int initialGold, final Model model,
-			final boolean declaredIndependence, final Player whosKingThisPlayerIs,
-			final Map<String, Object> extraData, Set<Location> visible) {
-		this.model = Preconditions.checkNotNull(model);
-		this.name = Preconditions.checkNotNull(name);
-		this.computer = computer;
-		this.gold = initialGold;
-		this.declaredIndependence = declaredIndependence;
-		this.whosKingThisPlayerIs = whosKingThisPlayerIs;
-		this.extraData.putAll(Preconditions.checkNotNull(extraData));
-		this.visibility = new Visibility(Preconditions.checkNotNull(visible, "Visible is null"));
-	}
-	
-	public static Player make(final PlayerPo player, final Model model, final PlayerStore playerStore){
-		Player subdued = null;
-		if (player.getWhosKingThisPlayerIs() != null) {
-			subdued = playerStore.getPlayerByName(player.getWhosKingThisPlayerIs());
-		}
-		Preconditions.checkNotNull(player.getVisible(), "Visible is null during creating '%s'", player.getName());
-		return new Player(player.getName(), player.isComputer(), player.getGold(), model,
-				player.isDeclaredIndependence(), subdued, player.getExtraData(),
-				player.getVisible().getVisibilitySet());
-	}
-	
-	public boolean isVisible(final Location location) {
-		model.isValid(location);
-		return visibility.isVisible(location);
-	}
+    private final Model model;
 
-	/**
-	 * Method reveals map visible for given unit.
-	 * 
-	 * @param unit required unit. Unit have to be on map.
-	 */
-	void makeVisibleMapForUnit(final Unit unit) {
-		Preconditions.checkNotNull(unit, "Unit is null");
-		Preconditions.checkState(unit.getOwner().equals(this), "Unit's owher '%s' is to same as '%s'", unit.getOwner(),
-				this);
-		visibility.makeVisibleMapForUnit(unit);
-	}
+    private final String name;
 
-	public PlayerPo save(){
-		final PlayerPo out = new PlayerPo();
-		out.setName(name);
-		out.setComputer(computer);
-		out.setGold(gold);
-		out.setDeclaredIndependence(declaredIndependence);
-		out.getExtraData().putAll(extraData);
-		out.setVisible(new VisibilityPo());
-		visibility.store(out.getVisible(), model.getMap().getMaxX(), model.getMap().getMaxY());
-		return out;
-	}
+    private final boolean computer;
 
-	public String getName() {
-		return name;
-	}
+    /**
+     * If it's not null than it's king player.
+     */
+    private final Player whosKingThisPlayerIs;
 
-	public boolean isComputer() {
-		return computer;
-	}
+    private boolean declaredIndependence;
 
-	public boolean isHuman() {
-		return !computer;
-	}
-	
-	public boolean isKing(){
-		return whosKingThisPlayerIs != null;
-	}
+    private int gold;
 
-	public List<Unit> getUnits() {
-		return model.getUnits(this, false);
-	}
+    private final Map<String, Object> extraData = new HashMap<>();
 
-	public List<Unit> getAllUnits() {
-		return model.getUnits(this, true);
-	}
+    private final Visibility visibility;
 
-	public Map<Location, List<Unit>> getUnitsAt() {
-		return model.getUnitsAt(this);
-	}
+    private Player(final String name, final boolean computer, final int initialGold,
+            final Model model, final boolean declaredIndependence,
+            final Player whosKingThisPlayerIs, final Map<String, Object> extraData,
+            Set<Location> visible) {
+        this.model = Preconditions.checkNotNull(model);
+        this.name = Preconditions.checkNotNull(name);
+        this.computer = computer;
+        this.gold = initialGold;
+        this.declaredIndependence = declaredIndependence;
+        this.whosKingThisPlayerIs = whosKingThisPlayerIs;
+        this.extraData.putAll(Preconditions.checkNotNull(extraData));
+        this.visibility = new Visibility(Preconditions.checkNotNull(visible, "Visible is null"));
+    }
 
-	public List<Unit> getUnitsAt(final Location location) {
-		return model.getUnitsAt(this, location);
-	}
+    public static Player make(final PlayerPo player, final Model model,
+            final PlayerStore playerStore) {
+        Player subdued = null;
+        if (player.getWhosKingThisPlayerIs() != null) {
+            subdued = playerStore.getPlayerByName(player.getWhosKingThisPlayerIs());
+        }
+        Preconditions.checkNotNull(player.getVisible(), "Visible is null during creating '%s'",
+                player.getName());
+        return new Player(player.getName(), player.isComputer(), player.getGold(), model,
+                player.isDeclaredIndependence(), subdued, player.getExtraData(),
+                player.getVisible().getVisibilitySet());
+    }
 
-	public Optional<Colony> getColoniesAt(final Location location) {
-		return model.getColoniesAt(location, this);
-	}
-	
-	public List<Colony> getColonies() {
-		return model.getColonies(this);
-	}
+    public boolean isVisible(final Location location) {
+        model.isValid(location);
+        return visibility.isVisible(location);
+    }
 
-	public List<Unit> getEnemyUnits() {
-		return model.getEnemyUnits(this, false);
-	}
+    /**
+     * Method reveals map visible for given unit.
+     * 
+     * @param unit
+     *            required unit. Unit have to be on map.
+     */
+    void makeVisibleMapForUnit(final Unit unit) {
+        Preconditions.checkNotNull(unit, "Unit is null");
+        Preconditions.checkState(unit.getOwner().equals(this),
+                "Unit's owher '%s' is to same as '%s'", unit.getOwner(), this);
+        visibility.makeVisibleMapForUnit(unit);
+    }
 
-	public Map<Location, List<Unit>> getEnemyUnitsAt() {
-		return model.getEnemyUnitsAt(this);
-	}
+    public PlayerPo save() {
+        final PlayerPo out = new PlayerPo();
+        out.setName(name);
+        out.setComputer(computer);
+        out.setGold(gold);
+        out.setDeclaredIndependence(declaredIndependence);
+        out.getExtraData().putAll(extraData);
+        out.setVisible(new VisibilityPo());
+        visibility.store(out.getVisible(), model.getMap().getMaxX(), model.getMap().getMaxY());
+        return out;
+    }
 
-	public List<Unit> getEnemyUnitsAt(final Location location) {
-		return model.getEnemyUnitsAt(this, location);
-	}
+    public String getName() {
+        return name;
+    }
 
-	void startTurn() {
-		getAllUnits().forEach(unit -> unit.startTurn());
-		getColonies().forEach(colony -> colony.startTurn());
-	}
+    public boolean isComputer() {
+        return computer;
+    }
 
-	public void endTurn() {
-		model.checkGameRunning();
-		model.checkCurrentPlayer(this);
-		model.endTurn();
-	}
+    public boolean isHuman() {
+        return !computer;
+    }
 
-	@Override
-	public int hashCode() {
-		return name.hashCode();
-	}
+    public boolean isKing() {
+        return whosKingThisPlayerIs != null;
+    }
 
-	@Override
-	public boolean equals(Object object) {
-		if (object == null) {
-			return false;
-		}
+    public List<Unit> getUnits() {
+        return model.getUnits(this, false);
+    }
 
-		if (!(object instanceof Player)) {
-			return false;
-		}
+    public List<Unit> getAllUnits() {
+        return model.getUnits(this, true);
+    }
 
-		Player player = (Player) object;
+    public Map<Location, List<Unit>> getUnitsAt() {
+        return model.getUnitsAt(this);
+    }
 
-		return name.equals(player.name) && computer == player.computer;
-	}
+    public List<Unit> getUnitsAt(final Location location) {
+        return model.getUnitsAt(this, location);
+    }
 
-	@Override
-	public String toString() {
-		return MoreObjects.toStringHelper(this).add("name", name).add("computer", computer).toString();
-	}
+    public Optional<Colony> getColoniesAt(final Location location) {
+        return model.getColoniesAt(location, this);
+    }
 
-	/**
-	 * Get information if it's possible to sail to given location. Method verify
-	 * that given location is empty sea or sea occupied by player's ships.
-	 * 
-	 * @param target
-	 *            required target location
-	 * @return return <code>true</code> when it's possible to sail at given
-	 *         location otherwise return <code>false</code>.
-	 */
-	public boolean isPossibleToSailAt(final Location target) {
-		final TerrainType t = model.getMap().getTerrainTypeAt(target);
-		if (t == TerrainType.OCEAN) {
-			return isItPlayersUnits(model.getUnitsAt(target));
-		} else {
-			return false;
-		}
-	}
+    public List<Colony> getColonies() {
+        return model.getColonies(this);
+    }
 
-	/**
-	 * Find if list of units could belong to this user.
-	 * 
-	 * @param units
-	 *            required list of units
-	 * @return return <code>false</code> when list contains at least one unit
-	 *         which not belongs to this player otherwise return
-	 *         <code>true</code>.
-	 */
-	public boolean isItPlayersUnits(final List<Unit> units) {
-		return !units.stream().filter(unit -> !unit.getOwner().equals(this)).findAny().isPresent();
-	}
+    public List<Unit> getEnemyUnits() {
+        return model.getEnemyUnits(this, false);
+    }
 
-	public int getGold() {
-		return gold;
-	}
+    public Map<Location, List<Unit>> getEnemyUnitsAt() {
+        return model.getEnemyUnitsAt(this);
+    }
 
-	public void setGold(final int newGoldValue) {
-		final int oldValue = gold;
-		this.gold = newGoldValue;
-		model.fireGoldWasChanged(this, oldValue, newGoldValue);
-	}
+    public List<Unit> getEnemyUnitsAt(final Location location) {
+        return model.getEnemyUnitsAt(this, location);
+    }
 
-	public void buy(final GoodAmount goodAmount) {
-		int price = goodAmount.getAmount()
-				* model.getEurope().getGoodTradeForType(goodAmount.getGoodType()).getBuyPrice();
-		verifyAvailibilityOFGold(price);
-		setGold(getGold() - price);
-	}
+    void startTurn() {
+        getAllUnits().forEach(unit -> unit.startTurn());
+        getColonies().forEach(colony -> colony.startTurn());
+    }
 
-	public void sell(final GoodAmount goodAmount) {
-		int price = goodAmount.getAmount()
-				* model.getEurope().getGoodTradeForType(goodAmount.getGoodType()).getBuyPrice();
-		setGold(getGold() + price);
-	}
-	
-	public void buy(final UnitType unitType){
-		int price = unitType.getEuropePrice();
-		verifyAvailibilityOFGold(price);
-		setGold(getGold() - price);
-		model.addUnitToPlayer(unitType, this);
-	}
-	
-	private void verifyAvailibilityOFGold(final int price){
-		if (getGold() - price < 0) {
-			throw new NotEnoughtGoldException(
-					String.format("You can't buy this item. You need %s and you have %s", price, getGold()));
-		}		
-	}
+    public void endTurn() {
+        model.checkGameRunning();
+        model.checkCurrentPlayer(this);
+        model.endTurn();
+    }
 
-	/**
-	 * @return the declaredIndependence
-	 */
-	public boolean isDeclaredIndependence() {
-		return declaredIndependence;
-	}
+    @Override
+    public int hashCode() {
+        return name.hashCode();
+    }
 
-	public void declareIndependence(){
-		Preconditions.checkState(!declaredIndependence,"Independence was already declared");
-		declaredIndependence = true;
-	}
+    @Override
+    public boolean equals(Object object) {
+        if (object == null) {
+            return false;
+        }
 
-	/**
-	 * @return the whosKingThisPlayerIs
-	 */
-	public Player getWhosKingThisPlayerIs() {
-		return whosKingThisPlayerIs;
-	}
+        if (!(object instanceof Player)) {
+            return false;
+        }
 
-	/**
-	 * @return the extraData
-	 */
-	public Map<String, Object> getExtraData() {
-		return extraData;
-	}
+        Player player = (Player) object;
+
+        return name.equals(player.name) && computer == player.computer;
+    }
+
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(this).add("name", name).add("computer", computer)
+                .toString();
+    }
+
+    /**
+     * Get information if it's possible to sail to given location. Method verify
+     * that given location is empty sea or sea occupied by player's ships.
+     * 
+     * @param target
+     *            required target location
+     * @return return <code>true</code> when it's possible to sail at given
+     *         location otherwise return <code>false</code>.
+     */
+    public boolean isPossibleToSailAt(final Location target) {
+        final TerrainType t = model.getMap().getTerrainTypeAt(target);
+        if (t == TerrainType.OCEAN) {
+            return isItPlayersUnits(model.getUnitsAt(target));
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Find if list of units could belong to this user.
+     * 
+     * @param units
+     *            required list of units
+     * @return return <code>false</code> when list contains at least one unit
+     *         which not belongs to this player otherwise return
+     *         <code>true</code>.
+     */
+    public boolean isItPlayersUnits(final List<Unit> units) {
+        return !units.stream().filter(unit -> !unit.getOwner().equals(this)).findAny().isPresent();
+    }
+
+    public int getGold() {
+        return gold;
+    }
+
+    public void setGold(final int newGoldValue) {
+        final int oldValue = gold;
+        this.gold = newGoldValue;
+        model.fireGoldWasChanged(this, oldValue, newGoldValue);
+    }
+
+    public void buy(final GoodsAmount goodAmount) {
+        int price = goodAmount.getAmount()
+                * model.getEurope().getGoodTradeForType(goodAmount.getGoodType()).getBuyPrice();
+        verifyAvailibilityOFGold(price);
+        setGold(getGold() - price);
+    }
+
+    public void sell(final GoodsAmount goodAmount) {
+        int price = goodAmount.getAmount()
+                * model.getEurope().getGoodTradeForType(goodAmount.getGoodType()).getBuyPrice();
+        setGold(getGold() + price);
+    }
+
+    public void buy(final UnitType unitType) {
+        int price = unitType.getEuropePrice();
+        verifyAvailibilityOFGold(price);
+        setGold(getGold() - price);
+        model.addUnitToPlayer(unitType, this);
+    }
+
+    private void verifyAvailibilityOFGold(final int price) {
+        if (getGold() - price < 0) {
+            throw new NotEnoughtGoldException(String.format(
+                    "You can't buy this item. You need %s and you have %s", price, getGold()));
+        }
+    }
+
+    /**
+     * @return the declaredIndependence
+     */
+    public boolean isDeclaredIndependence() {
+        return declaredIndependence;
+    }
+
+    public void declareIndependence() {
+        Preconditions.checkState(!declaredIndependence, "Independence was already declared");
+        declaredIndependence = true;
+    }
+
+    /**
+     * @return the whosKingThisPlayerIs
+     */
+    public Player getWhosKingThisPlayerIs() {
+        return whosKingThisPlayerIs;
+    }
+
+    /**
+     * @return the extraData
+     */
+    public Map<String, Object> getExtraData() {
+        return extraData;
+    }
+
+    public PlayerStatistics getPlayerStatistics() {
+        final PlayerStatistics out = new PlayerStatistics();
+
+        model.getColonies(this).forEach(out.getGoodsStatistics()::addColonyData);
+        model.getUnits(this, true).forEach(out.getGoodsStatistics()::addUnitData);
+
+        return out;
+    }
 }

@@ -8,10 +8,12 @@ import java.util.function.Function;
 
 import org.microcol.model.event.BeforeEndTurnEvent;
 import org.microcol.model.event.ColonyWasCapturedEvent;
+import org.microcol.model.event.ColonyWasFoundEvent;
 import org.microcol.model.event.DebugRequestedEvent;
 import org.microcol.model.event.GameFinishedEvent;
 import org.microcol.model.event.GameStartedEvent;
 import org.microcol.model.event.GoldWasChangedEvent;
+import org.microcol.model.event.GoodsWasSoldInEuropeEvent;
 import org.microcol.model.event.RoundStartedEvent;
 import org.microcol.model.event.TurnStartedEvent;
 import org.microcol.model.event.UnitAttackedEvent;
@@ -110,7 +112,7 @@ class ListenerManager {
         return evaluateInSameThread(listener -> {
             listener.beforeEndTurn(event);
             return event.isStopped();
-        });        
+        });
     }
 
     /**
@@ -161,6 +163,22 @@ class ListenerManager {
         logger.info("Gold amount changed: {}.", event);
 
         listeners.forEach(listener -> listener.goldWasChanged(event));
+    }
+
+    void fireGoodsWasSoldInEurope(final Model model, final GoodsAmount goodsAmount) {
+        final GoodsWasSoldInEuropeEvent event = new GoodsWasSoldInEuropeEvent(model, goodsAmount);
+
+        logger.info("Goods was sold in Europe: {}.", event);
+
+        listeners.forEach(listener -> listener.goodsWasSoldInEurope(event));
+    }
+
+    void fireColonyWasFounded(final Model model, final Colony foundedColony) {
+        final ColonyWasFoundEvent event = new ColonyWasFoundEvent(model, foundedColony);
+
+        logger.info("Colony was founded: {}.", event);
+
+        listeners.forEach(listener -> listener.colonyWasFounded(event));
     }
 
     void fireColonyWasCaptured(final Model model, final Unit capturingUnit,

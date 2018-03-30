@@ -3,7 +3,7 @@ package org.microcol.gui.util;
 import org.microcol.gui.gamepanel.GamePanelView;
 import org.microcol.gui.image.ImageProvider;
 import org.microcol.model.CargoSlot;
-import org.microcol.model.GoodAmount;
+import org.microcol.model.GoodsAmount;
 import org.microcol.model.Unit;
 
 import com.google.common.base.Preconditions;
@@ -88,9 +88,9 @@ public class PanelDockCrate extends StackPane {
 			hideCargo();
 		} else {
 			if (cargoSlot.isLoadedGood()) {
-				final GoodAmount goodAmount = cargoSlot.getGoods().get();
-				labelAmount.setText(String.valueOf(goodAmount.getAmount()));
-				cargoImage.setImage(imageProvider.getGoodTypeImage(goodAmount.getGoodType()));
+				final GoodsAmount goodaAmount = cargoSlot.getGoods().get();
+				labelAmount.setText(String.valueOf(goodaAmount.getAmount()));
+				cargoImage.setImage(imageProvider.getGoodTypeImage(goodaAmount.getGoodType()));
 			} else if (cargoSlot.isLoadedUnit()) {
 				final Unit cargoUnit = cargoSlot.getUnit().get();
 				labelAmount.setText("");

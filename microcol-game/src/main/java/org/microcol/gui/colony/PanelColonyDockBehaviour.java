@@ -10,7 +10,7 @@ import org.microcol.gui.util.AbstractPanelDockBehavior;
 import org.microcol.gui.util.ClipboardReader;
 import org.microcol.gui.util.ClipboardReader.TransferFrom;
 import org.microcol.model.CargoSlot;
-import org.microcol.model.GoodAmount;
+import org.microcol.model.GoodsAmount;
 import org.microcol.model.Unit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,16 +40,16 @@ public class PanelColonyDockBehaviour extends AbstractPanelDockBehavior {
 	}
 
 	@Override
-	public void consumeGoods(final CargoSlot cargoSlot, final GoodAmount goodAmount,
+	public void consumeGoods(final CargoSlot cargoSlot, final GoodsAmount goodsAmount,
 			final Optional<TransferFrom> transferFrom, final boolean specialOperatonWasSelected) {
 
-		GoodAmount tmp = goodAmount;
+		GoodsAmount tmp = goodsAmount;
 		logger.debug("wasShiftPressed " + colonyDialogCallback.getPropertyShiftWasPressed().get());
 		if (specialOperatonWasSelected) {
 			// synchronously get information about transfered amount
 			chooseGoodAmount.init(
-					cargoSlot.maxPossibleGoodsToMoveHere(CargoSlot.MAX_CARGO_SLOT_CAPACITY, goodAmount.getAmount()));
-			tmp = new GoodAmount(goodAmount.getGoodType(), chooseGoodAmount.getActualValue());
+					cargoSlot.maxPossibleGoodsToMoveHere(CargoSlot.MAX_CARGO_SLOT_CAPACITY, goodsAmount.getAmount()));
+			tmp = new GoodsAmount(goodsAmount.getGoodType(), chooseGoodAmount.getActualValue());
 			if (tmp.isZero()) {
 				return;
 			}

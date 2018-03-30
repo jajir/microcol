@@ -133,7 +133,7 @@ public class MainMenuPresenter {
         unitMovedStepController.addRunLaterListener(this::onUnitMovedStep);
         unitMoveFinishedController.addRunLaterListener(this::unitMoveFinishedController);
         exitGameController.addListener(this::onExitGame);
-        selectedUnitWasChangedController.addListener(this::onSelectedUnitChanged);
+        selectedUnitWasChangedController.addRunLaterListener(this::onSelectedUnitChanged);
         initialSetting();
     }
 

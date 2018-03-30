@@ -7,7 +7,7 @@ import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.image.ImageProvider;
 import org.microcol.gui.util.ClipboardReader.TransferFrom;
 import org.microcol.model.CargoSlot;
-import org.microcol.model.GoodAmount;
+import org.microcol.model.GoodsAmount;
 import org.microcol.model.Unit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -66,7 +66,7 @@ public abstract class AbstractPanelDockBehavior implements PanelDockBehavior {
 	 * 
 	 * @param cargoSlot
 	 *            required cargo slot where will be goods stored
-	 * @param goodAmount
+	 * @param goodsAmount
 	 *            required goods type and it's quantity
 	 * @param transferFrom
 	 *            required place from is goods transfered
@@ -74,7 +74,7 @@ public abstract class AbstractPanelDockBehavior implements PanelDockBehavior {
 	 *            it's <code>true</code> when user want special drag &amp; drop
 	 *            operation like buy goods
 	 */
-	public abstract void consumeGoods(final CargoSlot cargoSlot, final GoodAmount goodAmount,
+	public abstract void consumeGoods(final CargoSlot cargoSlot, final GoodsAmount goodsAmount,
 			final Optional<TransferFrom> transferFrom, final boolean specialOperatonWasSelected);
 
 	/**

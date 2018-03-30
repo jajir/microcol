@@ -68,7 +68,7 @@ public class RightPanelPresenter {
         changeLanguangeController.addListener(this::onLanguageWasChanged);
         tileWasSelectedController.addRunLaterListener(this::onFocusedTile);
         turnStartedController.addRunLaterListener(this::onTurnStarted);
-        selectedUnitWasChangedController.addListener(this::onSelectedUnitWasChanged);
+        selectedUnitWasChangedController.addRunLaterListener(this::onSelectedUnitWasChanged);
     }
 
     private void onSelectedUnitWasChanged(final SelectedUnitWasChangedEvent event) {

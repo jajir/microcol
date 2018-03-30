@@ -40,7 +40,7 @@ public class CampaignPanelView implements CampaignPanelPresenter.Display {
         refresh();
     }
 
-    private void refresh() {
+    public void refresh() {
         box.getChildren().clear();
         final Campaign campaign = campaignManager.getDefaultCampain();
         campaign.getMissions().forEach(mission -> {
