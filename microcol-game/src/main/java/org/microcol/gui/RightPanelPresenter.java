@@ -5,21 +5,19 @@ import org.microcol.gui.event.StatusBarMessageController;
 import org.microcol.gui.event.StatusBarMessageEvent;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.event.model.TurnStartedController;
+import org.microcol.gui.gamepanel.SelectedUnitWasChangedController;
+import org.microcol.gui.gamepanel.SelectedUnitWasChangedEvent;
 import org.microcol.gui.gamepanel.TileWasSelectedController;
 import org.microcol.gui.gamepanel.TileWasSelectedEvent;
 import org.microcol.gui.mainmenu.ChangeLanguageController;
 import org.microcol.gui.mainmenu.ChangeLanguageEvent;
 import org.microcol.gui.util.Text;
-import org.microcol.model.Player;
 import org.microcol.model.event.TurnStartedEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
-
-import javafx.scene.control.Button;
-import javafx.scene.layout.GridPane;
 
 public class RightPanelPresenter {
 
@@ -29,28 +27,18 @@ public class RightPanelPresenter {
 
     private final Text text;
 
-    private final RightPanelPresenter.Display display;
+    private final RightPanelView display;
 
     private TileWasSelectedEvent lastFocusedTileEvent;
 
-    public interface Display {
-
-        Button getNextTurnButton();
-
-        void refreshView(final TileWasSelectedEvent event);
-
-        GridPane getBox();
-
-        void setOnMovePlayer(Player player);
-    }
-
     @Inject
-    RightPanelPresenter(final RightPanelPresenter.Display display,
-            final GameModelController gameModelController, final KeyController keyController,
+    RightPanelPresenter(final RightPanelView display, final GameModelController gameModelController,
+            final KeyController keyController,
             final TileWasSelectedController tileWasSelectedController,
             final ChangeLanguageController changeLanguangeController, final Text text,
             final StatusBarMessageController statusBarMessageController,
-            final TurnStartedController turnStartedController) {
+            final TurnStartedController turnStartedController,
+            final SelectedUnitWasChangedController selectedUnitWasChangedController) {
         this.display = Preconditions.checkNotNull(display);
         this.gameModelController = Preconditions.checkNotNull(gameModelController);
         this.text = Preconditions.checkNotNull(text);
@@ -80,6 +68,19 @@ public class RightPanelPresenter {
         changeLanguangeController.addListener(this::onLanguageWasChanged);
         tileWasSelectedController.addRunLaterListener(this::onFocusedTile);
         turnStartedController.addRunLaterListener(this::onTurnStarted);
+        selectedUnitWasChangedController.addListener(this::onSelectedUnitWasChanged);
+    }
+
+    private void onSelectedUnitWasChanged(final SelectedUnitWasChangedEvent event) {
+        if (lastFocusedTileEvent == null) {
+            if (event.getSelectedUnit().isPresent()) {
+                display.refreshView(event.getSelectedUnit().get().getLocation());
+            } else {
+                display.cleanView();
+            }
+        } else {
+            display.refreshView(lastFocusedTileEvent.getLocation());
+        }
     }
 
     private void onTurnStarted(final TurnStartedEvent event) {

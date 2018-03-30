@@ -24,7 +24,7 @@ import javafx.scene.layout.RowConstraints;
  * Draw right panel containing info about selected tile and selected unit.
  *
  */
-public class RightPanelView implements RightPanelPresenter.Display {
+public class RightPanelView {
 
     private static final int RIGHT_PANEL_WIDTH = 170;
 
@@ -97,29 +97,34 @@ public class RightPanelView implements RightPanelPresenter.Display {
         gridPane.add(nextTurnButton, 0, 4, 2, 1);
     }
 
-    @Override
     public void refreshView(final TileWasSelectedEvent event) {
-        if (event == null) {
-            return;
-        }
+        refreshView(event.getLocation());
+    }
+
+    void cleanView() {
+        unitsPanel.clear();
+        tileName.setText("");
+        tileImage.setImage(null);
+    }
+
+    public void refreshView(final Location location) {
+        Preconditions.checkNotNull(location);
         StringBuilder sb = new StringBuilder(200);
         unitsPanel.clear();
-        if (isDiscovered(event.getLocation())) {
-            tileImage
-                    .setImage(imageProvider.getTerrainImage(getTerrainTypeAt(event.getLocation())));
-            sb.append(localizationHelper.getTerrainName(getTerrainTypeAt(event.getLocation())));
+        if (isDiscovered(location)) {
+            tileImage.setImage(imageProvider.getTerrainImage(getTerrainTypeAt(location)));
+            sb.append(localizationHelper.getTerrainName(getTerrainTypeAt(location)));
             sb.append("");
             sb.append("\n");
             sb.append("Move cost: 1");
-            if (getModel().getUnitsAt(event.getLocation()).isEmpty()) {
+            if (getModel().getUnitsAt(location).isEmpty()) {
                 unitsLabel.setText("");
             } else {
                 /**
                  * Current player is not same as human player. For purposes of
                  * this method it will be sufficient.
                  */
-                unitsPanel.setUnits(getModel().getCurrentPlayer(),
-                        getModel().getUnitsAt(event.getLocation()));
+                unitsPanel.setUnits(getModel().getCurrentPlayer(), getModel().getUnitsAt(location));
             }
         } else {
             tileImage.setImage(imageProvider.getImage(ImageProvider.IMG_TILE_HIDDEN));
@@ -148,7 +153,6 @@ public class RightPanelView implements RightPanelPresenter.Display {
         return gameModelController.getHumanPlayer().isVisible(location);
     }
 
-    @Override
     public void setOnMovePlayer(final Player player) {
         StringBuilder sb = new StringBuilder(200);
         sb.append(text.get("unitsPanel.currentUser"));
@@ -157,12 +161,10 @@ public class RightPanelView implements RightPanelPresenter.Display {
         labelOnMove.setText(sb.toString());
     }
 
-    @Override
     public Button getNextTurnButton() {
         return nextTurnButton;
     }
 
-    @Override
     public GridPane getBox() {
         return gridPane;
     }

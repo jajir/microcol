@@ -23,36 +23,50 @@ Planned releases
   * \u2713 After move is selected unit preserved
  
   * \u2713 Dialog box 'About' containing application version from pom.xml 
- 
-  * \u2717 
- 
-  * \u2717 
+  
+  * \u2713 Add event onBeforeMove, this event should be possible to cancel.
 
   * \u2713 Support start logic as described in GUI.
  
     * \u2717 Find land and found colony.
+    	
+    	* \u2713 Find New World.
+    	
+    	* \u2713 Found colony.
+    	
+    	* \u2717 Produce 100 Cigars. 
+    	
+    	* \u2717 Sell cigars in Europe.
  
     * \u2717 Produce first food and sell it in Europe.
- 
+    	
+    	* \u2717 Found 3 colonies 
+    	
+    	* \u2717 Gain 5000 gold
+    	
+    	* \u2717 Build an army (30 units)
+    	
     * \u2717 Declare independence and conquer Royal Expedition Forces.
+
+    	* \u2717 Declare independence. 
+
+    	* \u2717 Defeat royal expeditions forces.
   
-  * \u2717 Game finished event comes to UI in non-EDT thread.
+  * \u2713 Game finished event comes to UI in non-EDT thread.
+ 
+  * \u2717 Centering dialog based is not correct. Dialog blink at incorrect position and than appears at correct place.
+ 
+  * \u2717 
+ 
+ * <<Backlog>> - feature and improvement backlog
   	
   * \u2717 Colonist in colony eats 2 foods per turn.
 
   * \u2717 Colony is plagued by famine.
   
-  * \u2717 Add event onBeforeMove, this event should be possible to cancel.
-  
   * \u2717 Right panel highlight select unit.
   
   * \u2717 Right panel allows to select unit.
- 
-  * \u2717 Version now have defined version. 
- 
-  * \u2717 Centering dialog based is not correct. Dialog blink at incorrect position and than appears at correct place.
- 
- * <<Backlog>> - feature and improvement backlog
   
   * \u2717 Colony building queue and queue editing - simple and ugly version
 

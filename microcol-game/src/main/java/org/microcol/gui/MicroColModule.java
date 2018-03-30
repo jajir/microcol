@@ -215,7 +215,6 @@ public class MicroColModule extends AbstractModule {
         bind(MainMenuDevelopment.class).in(Singleton.class);
 
         bind(RightPanelView.class).in(Singleton.class);
-        bind(RightPanelPresenter.Display.class).to(RightPanelView.class).in(Singleton.class);
         bind(RightPanelPresenter.class).asEagerSingleton();
 
         bind(UnitsPanel.class).in(Singleton.class);
