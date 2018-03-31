@@ -366,8 +366,20 @@ public final class Model {
         return out;
     }
 
-    List<Unit> getUnits(final Player player, final boolean includeStored) {
-        return unitStorage.getUnits(player, includeStored);
+    /**
+     * Get list of units owned by given player.
+     *
+     * @param player
+     *            required player's object
+     * @param includeStored
+     *            if it's <code>true</code> than list will contains all units
+     *            holds in cargo in colonies and units in Europe port. When it's
+     *            <code>false</code> than result contain just unit visible on
+     *            map.
+     * @return return list of units
+     */
+    List<Unit> getUnitsOwnedBy(final Player player, final boolean includeStored) {
+        return unitStorage.getUnitsOwnedBy(player, includeStored);
     }
 
     Map<Location, List<Unit>> getUnitsAt(final Player player) {

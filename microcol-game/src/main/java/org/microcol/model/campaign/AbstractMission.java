@@ -3,11 +3,17 @@ package org.microcol.model.campaign;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.microcol.gui.MicroColException;
+import org.microcol.model.Model;
+import org.microcol.model.Player;
 import org.microcol.model.store.ModelPo;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 
+/**
+ * Abstract mission. Contain some basic functionality.
+ */
 public abstract class AbstractMission implements Mission {
 
     private final String name;
@@ -94,6 +100,34 @@ public abstract class AbstractMission implements Mission {
     public void initialize(final ModelPo modelPo) {
         // default do nothing implementation
     }
+
+    protected boolean isFirstTurn(final Model model) {
+        return model.getCalendar().getCurrentYear() == model.getCalendar().getStartYear();
+    }
+
+    protected Player getHumanPlayer(final Model model) {
+        return model.getPlayers().stream().filter(p -> p.isHuman()).findAny()
+                .orElseThrow(() -> new MicroColException("There is no human player."));
+    }
+
+    protected boolean playerHaveMoreOrEqualColonies(final Model model, final int numberOfColonies) {
+        return model.getColonies(getHumanPlayer(model)).size() >= numberOfColonies;
+    }
+
+    protected int getNumberOfMilitaryUnits(final Model model) {
+        return (int) getHumanPlayer(model).getAllUnits().stream()
+                .filter(unit -> unit.getType().canAttack()).count();
+    }
+
+    protected Integer get(final Map<String, String> map, final String key) {
+        String val = map.get(key);
+        if (val == null) {
+            return 0;
+        } else {
+            return Integer.parseInt(val);
+        }
+    }
+
 
     @Override
     public String toString() {

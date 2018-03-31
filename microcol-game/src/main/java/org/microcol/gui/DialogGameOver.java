@@ -4,6 +4,7 @@ import org.microcol.gui.util.AbstractWarningDialog;
 import org.microcol.gui.util.Text;
 import org.microcol.gui.util.ViewUtil;
 import org.microcol.model.GameOverResult;
+import org.microcol.model.campaign.DefaultMissionBuildArmy;
 import org.microcol.model.campaign.DefaultMissionFindNewWold;
 import org.microcol.model.event.GameFinishedEvent;
 
@@ -33,6 +34,9 @@ public class DialogGameOver extends AbstractWarningDialog {
         } else if (DefaultMissionFindNewWold.GAME_OVER_REASON
                 .equals(gameOverResult.getGameOverReason())) {
             str += text.get("campaign.default.gameOver");
+        } else if (DefaultMissionBuildArmy.GAME_OVER_REASON
+                .equals(gameOverResult.getGameOverReason())) {
+            str += text.get("campaign.default.m2.done");
         } else {
             throw new IllegalArgumentException("Invalid game over reason: " + gameOverResult);
         }

@@ -6,7 +6,7 @@ Planned releases
 
  MicroCol backlog. List of functionalities for upcoming releases.
 
- * <<0.6.0>> - First game missions.
+ * <<0.6.0>> - First game campaign.
 
   * \u2713 Support game in progress, at start of each turn persist played game and save it to preferences.
  
@@ -28,23 +28,23 @@ Planned releases
 
   * \u2713 Support start logic as described in GUI.
  
-    * \u2717 Find land and found colony.
+    * \u2713 Find land and found colony.
     	
     	* \u2713 Find New World.
     	
     	* \u2713 Found colony.
     	
-    	* \u2717 Produce 100 Cigars. 
+    	* \u2713 Produce 100 Cigars. 
     	
-    	* \u2717 Sell cigars in Europe.
+    	* \u2713 Sell cigars in Europe.
  
     * \u2717 Produce first food and sell it in Europe.
     	
-    	* \u2717 Found 3 colonies 
+    	* \u2713 Found 3 colonies 
     	
-    	* \u2717 Gain 5000 gold
+    	* \u2713 Gain 5000 gold
     	
-    	* \u2717 Build an army (30 units)
+    	* \u2713 Build an army (10 units)
     	
     * \u2717 Declare independence and conquer Royal Expedition Forces.
 
@@ -55,14 +55,14 @@ Planned releases
   * \u2713 Game finished event comes to UI in non-EDT thread.
  
   * \u2717 Centering dialog based is not correct. Dialog blink at incorrect position and than appears at correct place.
- 
-  * \u2717 
- 
- * <<Backlog>> - feature and improvement backlog
   	
   * \u2717 Colonist in colony eats 2 foods per turn.
 
   * \u2717 Colony is plagued by famine.
+ 
+  * \u2717 
+ 
+ * <<Backlog>> - feature and improvement backlog
   
   * \u2717 Right panel highlight select unit.
   

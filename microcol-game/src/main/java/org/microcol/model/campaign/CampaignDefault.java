@@ -10,7 +10,7 @@ public class CampaignDefault extends AbstractCampaign {
     CampaignDefault() {
         super(NAME);
         addMission(new DefaultMissionFindNewWold());
-        addMission(new DefaultMissionFoundColony());
+        addMission(new DefaultMissionBuildArmy());
         addMission(new DefaultMissionThrive());
     }
 }

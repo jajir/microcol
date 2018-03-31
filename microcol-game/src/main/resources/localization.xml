@@ -78,7 +78,7 @@
 
 	<entry key="campaignPanel.buttonBack">Back</entry>
 	<entry key="campaignPanel.default.findNewWorld">New World</entry>
-	<entry key="campaignPanel.default.foundColony">Found new colony</entry>
+	<entry key="campaignPanel.default.buildArmy">Build an army</entry>
 	<entry key="campaignPanel.default.thrive">Thrive</entry>
 
 	<entry key="campaign.default.start">Find Now World to found new colony. Try to drag ship to the right part of map.</entry>
@@ -91,6 +91,13 @@
 	<entry key="campaign.default.sellCigarsInEuropePort">Konečně. Už máš potřebné množství doutníků. Vezmi je na loď, odvez do Evropy a prodej.</entry>
 	<entry key="campaign.default.cigarsWasSold">Výborně. Podařilo se ti prodat těžce získané doutníky.</entry>
 	<entry key="campaign.default.gameOver">Congratulations. Your first mission is successfully finished.</entry>
+	<entry key="campaign.default.m2.start">You found first colony, now you have to build proud and wealth nations.</entry>
+	<entry key="campaign.default.m2.foundColonies">Now you'll need more colonies. Buy some colonist and found at least 3 colonies.</entry>
+	<entry key="campaign.default.m2.foundColonies.done">Perfect. Now you have enought colonies.</entry>
+	<entry key="campaign.default.m2.get5000">You'll need lot of gold. Gain 5000 gold from business with Europe.</entry>
+	<entry key="campaign.default.m2.get5000.done">Great you have 5000 gold.</entry>
+	<entry key="campaign.default.m2.makeArmy">Now make and army. You'l need at least 15 colonits. Colonists will fight for you.</entry>
+	<entry key="campaign.default.m2.done">Fantastic. You did well. Now continue to next mission.</entry>
 
 	<entry key="preferencesVolume.caption">Volume</entry>
 	<entry key="preferencesVolume.low">Low</entry>

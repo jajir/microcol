@@ -152,15 +152,6 @@ public class DefaultMissionFindNewWold extends AbstractMission {
                         .findAny().isPresent();
             }
 
-            private boolean isFirstTurn(final Model model) {
-                return model.getCalendar().getCurrentYear() == model.getCalendar().getStartYear();
-            }
-
-            private Player getHumanPlayer(final Model model) {
-                return model.getPlayers().stream().filter(p -> p.isHuman()).findAny()
-                        .orElseThrow(() -> new MicroColException("There is no human player."));
-            }
-
             private Unit findFirstShip(final Model model, final Player player) {
                 return model.getAllUnits().stream().filter(u -> u.getOwner().equals(player))
                         .filter(u -> u.getType().isShip()).findAny().orElseThrow(
@@ -182,15 +173,6 @@ public class DefaultMissionFindNewWold extends AbstractMission {
             wasMessageSellCigarsShown = Boolean.parseBoolean(
                     modelPo.getCampaign().getData().get(MAP_KEY_WAS_SELL_CIGARS_MESSAGE_SHOWN));
             cigarsWasSold = get(modelPo.getCampaign().getData(), MAP_KEY_CIGARS_WAS_SOLD);
-        }
-    }
-
-    private Integer get(final Map<String, String> map, final String key) {
-        String val = map.get(key);
-        if (val == null) {
-            return 0;
-        } else {
-            return Integer.parseInt(val);
         }
     }
 

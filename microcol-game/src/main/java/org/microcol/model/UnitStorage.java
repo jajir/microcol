@@ -94,7 +94,7 @@ class UnitStorage {
 				.collect(ImmutableList.toImmutableList());
 	}
 
-	List<Unit> getUnits(final Player player, final boolean includeStored) {
+	List<Unit> getUnitsOwnedBy(final Player player, final boolean includeStored) {
 		Preconditions.checkNotNull(player);
 
 		return units.stream().filter(unit -> unit.getOwner().equals(player))

@@ -107,11 +107,11 @@ public final class Player {
     }
 
     public List<Unit> getUnits() {
-        return model.getUnits(this, false);
+        return model.getUnitsOwnedBy(this, false);
     }
 
     public List<Unit> getAllUnits() {
-        return model.getUnits(this, true);
+        return model.getUnitsOwnedBy(this, true);
     }
 
     public Map<Location, List<Unit>> getUnitsAt() {
@@ -277,7 +277,7 @@ public final class Player {
         final PlayerStatistics out = new PlayerStatistics();
 
         model.getColonies(this).forEach(out.getGoodsStatistics()::addColonyData);
-        model.getUnits(this, true).forEach(out.getGoodsStatistics()::addUnitData);
+        model.getUnitsOwnedBy(this, true).forEach(out.getGoodsStatistics()::addUnitData);
 
         return out;
     }
