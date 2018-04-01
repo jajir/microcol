@@ -26,109 +26,113 @@ import javafx.scene.layout.VBox;
  */
 public class EuropeDialog extends AbstractMessageWindow implements EuropeDialogCallback {
 
-	final Logger logger = LoggerFactory.getLogger(EuropeDialog.class);
+    final Logger logger = LoggerFactory.getLogger(EuropeDialog.class);
 
-	private final PanelDock europeDock;
+    private final PanelDock europeDock;
 
-	private final PanelHighSeas shipsTravelingToNewWorld;
+    private final PanelHighSeas shipsTravelingToNewWorld;
 
-	private final PanelHighSeas shipsTravelingToEurope;
+    private final PanelHighSeas shipsTravelingToEurope;
 
-	private final PanelPortPier panelPortPier;
+    private final PanelPortPier panelPortPier;
 
-	private final PanelEuropeGoods panelGoods;
+    private final PanelEuropeGoods panelGoods;
 
-	private final BooleanProperty propertyShiftWasPressed;
+    private final BooleanProperty propertyShiftWasPressed;
 
-	@Inject
-	public EuropeDialog(final ViewUtil viewUtil, final Text text, final ImageProvider imageProvider,
-			final GameModelController gameModelController, final PanelHighSeas shipsTravelingToNewWorld,
-			final PanelHighSeas shipsTravelingToEurope, final PanelPortPier panelPortPier,
-			final RecruiteUnitsDialog recruiteUnitsDialog, final BuyUnitsDialog buyUnitsDialog,
-			final PanelEuropeDockBehavior panelEuropeDockBehavior, final PanelEuropeGoods panelEuropeGoods) {
-		super(viewUtil);
-		propertyShiftWasPressed = new SimpleBooleanProperty(false);
-		Preconditions.checkNotNull(imageProvider);
-		Preconditions.checkNotNull(gameModelController);
-		getDialog().setTitle(text.get("europe.title"));
+    @Inject
+    public EuropeDialog(final ViewUtil viewUtil, final Text text, final ImageProvider imageProvider,
+            final GameModelController gameModelController,
+            final PanelHighSeas shipsTravelingToNewWorld,
+            final PanelHighSeas shipsTravelingToEurope, final PanelPortPier panelPortPier,
+            final RecruiteUnitsDialog recruiteUnitsDialog, final BuyUnitsDialog buyUnitsDialog,
+            final PanelEuropeDockBehavior panelEuropeDockBehavior,
+            final PanelEuropeGoods panelEuropeGoods) {
+        super(viewUtil);
+        propertyShiftWasPressed = new SimpleBooleanProperty(false);
+        Preconditions.checkNotNull(imageProvider);
+        Preconditions.checkNotNull(gameModelController);
+        getDialog().setTitle(text.get("europe.title"));
 
-		final Label label = new Label(text.get("europe.title"));
+        final Label label = new Label(text.get("europe.title"));
 
-		this.shipsTravelingToEurope = Preconditions.checkNotNull(shipsTravelingToEurope);
-		this.shipsTravelingToEurope.setTitle(text.get("europe.shipsTravelingToEurope"));
-		this.shipsTravelingToEurope.setShownShipsTravelingToEurope(true);
-		this.shipsTravelingToNewWorld = Preconditions.checkNotNull(shipsTravelingToNewWorld);
-		this.shipsTravelingToNewWorld.setTitle(text.get("europe.shipsTravelingToNewWorld"));
-		this.shipsTravelingToNewWorld.setShownShipsTravelingToEurope(false);
+        this.shipsTravelingToEurope = Preconditions.checkNotNull(shipsTravelingToEurope);
+        this.shipsTravelingToEurope.setTitle(text.get("europe.shipsTravelingToEurope"));
+        this.shipsTravelingToEurope.setShownShipsTravelingToEurope(true);
+        this.shipsTravelingToNewWorld = Preconditions.checkNotNull(shipsTravelingToNewWorld);
+        this.shipsTravelingToNewWorld.setTitle(text.get("europe.shipsTravelingToNewWorld"));
+        this.shipsTravelingToNewWorld.setShownShipsTravelingToEurope(false);
 
-		europeDock = new PanelDock(imageProvider, panelEuropeDockBehavior);
-		final VBox panelShips = new VBox();
-		panelShips.getChildren().addAll(shipsTravelingToNewWorld, shipsTravelingToEurope, europeDock);
+        europeDock = new PanelDock(imageProvider, panelEuropeDockBehavior);
+        final VBox panelShips = new VBox();
+        panelShips.getChildren().addAll(shipsTravelingToNewWorld, shipsTravelingToEurope,
+                europeDock);
 
-		this.panelPortPier = Preconditions.checkNotNull(panelPortPier);
+        this.panelPortPier = Preconditions.checkNotNull(panelPortPier);
 
-		final Button recruiteButton = new Button(text.get("europe.recruit"));
-		recruiteButton.setOnAction(event -> recruiteUnitsDialog.showAndWait());
-		final Button buyButton = new Button(text.get("europe.buy"));
-		
-		buyButton.setOnAction(event -> buyUnitsDialog.showAndWait());
-		final Button buttonOk = new Button(text.get("dialog.ok"));
-		buttonOk.setOnAction(e -> {
-			getDialog().close();
-		});
-		buttonOk.requestFocus();
-		final VBox panelButtons = new VBox();
-		panelButtons.getChildren().addAll(recruiteButton, buyButton, buttonOk);
+        final Button recruiteButton = new Button(text.get("europe.recruit"));
+        recruiteButton.setVisible(false);
+        recruiteButton.setOnAction(event -> recruiteUnitsDialog.showAndWait());
+        final Button buyButton = new Button(text.get("europe.buy"));
 
-		final HBox panelMiddle = new HBox();
-		panelMiddle.getChildren().addAll(panelShips, panelPortPier, panelButtons);
+        buyButton.setOnAction(event -> buyUnitsDialog.showAndWait());
+        final Button buttonOk = new Button(text.get("dialog.ok"));
+        buttonOk.setOnAction(e -> {
+            getDialog().close();
+        });
+        buttonOk.requestFocus();
+        final VBox panelButtons = new VBox();
+        panelButtons.getChildren().addAll(recruiteButton, buyButton, buttonOk);
 
-		this.panelGoods = Preconditions.checkNotNull(panelEuropeGoods);
+        final HBox panelMiddle = new HBox();
+        panelMiddle.getChildren().addAll(panelShips, panelPortPier, panelButtons);
 
-		final VBox mainPanel = new VBox();
-		mainPanel.getChildren().addAll(label, panelMiddle, panelGoods);
-		init(mainPanel);
-		getScene().getStylesheets().add("gui/MicroCol.css");
-		/**
-		 * TODO there is a bug, keyboard events are not send during dragging.
-		 * TODO copy of this code is n colonyDialog
-		 */
-		getScene().addEventFilter(KeyEvent.KEY_RELEASED, event -> {
-			if (event.getCode() == KeyCode.SHIFT) {
-				propertyShiftWasPressed.set(false);
-			}
-		});
-		getScene().addEventFilter(KeyEvent.KEY_PRESSED, event -> {
-			logger.debug("wasShiftPressed " + event);
-			if (event.getCode() == KeyCode.SHIFT) {
-				propertyShiftWasPressed.set(true);
-			}
-		});
-	}
+        this.panelGoods = Preconditions.checkNotNull(panelEuropeGoods);
 
-	public void show() {
-		repaint();
-		getDialog().showAndWait();
-	}
+        final VBox mainPanel = new VBox();
+        mainPanel.getChildren().addAll(label, panelMiddle, panelGoods);
+        init(mainPanel);
+        getScene().getStylesheets().add("gui/MicroCol.css");
+        /**
+         * TODO there is a bug, keyboard events are not send during dragging.
+         * TODO copy of this code is n colonyDialog
+         */
+        getScene().addEventFilter(KeyEvent.KEY_RELEASED, event -> {
+            if (event.getCode() == KeyCode.SHIFT) {
+                propertyShiftWasPressed.set(false);
+            }
+        });
+        getScene().addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+            logger.debug("wasShiftPressed " + event);
+            if (event.getCode() == KeyCode.SHIFT) {
+                propertyShiftWasPressed.set(true);
+            }
+        });
+    }
 
-	@Override
-	public void repaint() {
-		europeDock.repaint();
-		shipsTravelingToEurope.repaint();
-		shipsTravelingToNewWorld.repaint();
-		panelPortPier.repaint();
-		panelGoods.repaint();
-	}
+    public void show() {
+        repaint();
+        getDialog().showAndWait();
+    }
 
-	@Override
-	public void repaintAfterGoodMoving() {
-		europeDock.repaintCurrectShipsCrates();
-		panelPortPier.repaint();
-	}
+    @Override
+    public void repaint() {
+        europeDock.repaint();
+        shipsTravelingToEurope.repaint();
+        shipsTravelingToNewWorld.repaint();
+        panelPortPier.repaint();
+        panelGoods.repaint();
+    }
 
-	@Override
-	public BooleanProperty getPropertyShiftWasPressed() {
-		return propertyShiftWasPressed;
-	}
+    @Override
+    public void repaintAfterGoodMoving() {
+        europeDock.repaintCurrectShipsCrates();
+        panelPortPier.repaint();
+    }
+
+    @Override
+    public BooleanProperty getPropertyShiftWasPressed() {
+        return propertyShiftWasPressed;
+    }
 
 }

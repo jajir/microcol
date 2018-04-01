@@ -234,8 +234,6 @@ public class MainMenuPresenter {
             if (isFocusedMoveableUnit) {
                 view.getMenuItemMove().setDisable(false);
             }
-            // TODO when focused unit is settler try to enable build colony menu
-            // item
             view.getMenuItemExitGame().setDisable(false);
             view.getMenuItemSaveGame().setDisable(false);
             view.getMenuItemEurope().setDisable(false);
@@ -265,9 +263,10 @@ public class MainMenuPresenter {
      * is not used anywhere else.
      * </p>
      */
-    private final BiConsumer<MenuItem, SelectedUnitManager> eval = (menuItem, sum) -> {
-        if (sum.getSelectedUnit().isPresent()) {
-            final Unit unit = sum.getSelectedUnit().get();
+    private final BiConsumer<MenuItem, SelectedUnitManager> eval = (menuItem,
+            selectedUnitManager) -> {
+        if (selectedUnitManager.getSelectedUnit().isPresent()) {
+            final Unit unit = selectedUnitManager.getSelectedUnit().get();
             menuItem.setDisable(!unit.getType().canBuildColony() || unit.getAvailableMoves() == 0);
         } else {
             menuItem.setDisable(true);

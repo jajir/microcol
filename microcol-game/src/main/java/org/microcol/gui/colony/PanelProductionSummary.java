@@ -9,8 +9,8 @@ import javafx.scene.control.Label;
  */
 public class PanelProductionSummary extends TitledPanel {
 
-	public PanelProductionSummary() {
-		super("Production summary", new Label("Production summary"));
-	}
+    public PanelProductionSummary() {
+        super("Production summary", new Label("Production summary"));
+    }
 
 }

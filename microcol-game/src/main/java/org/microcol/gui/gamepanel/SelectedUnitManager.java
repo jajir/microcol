@@ -15,6 +15,7 @@ import org.microcol.model.event.UnitMovedToHighSeasEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
 
@@ -109,7 +110,7 @@ public class SelectedUnitManager {
     private void onSelectNextUnit(final SelectNextUnitEvent selectNextUnitEvent) {
         Preconditions.checkNotNull(selectNextUnitEvent);
         if (selectedUnit == null) {
-            setSelectedUnit(gameModelController.getModel().getFirstSelectableUnitAt().orElse(null));
+            setSelectedUnit(gameModelController.getModel().getFirstSelectableUnit().orElse(null));
         } else {
             setSelectedUnit(gameModelController.getModel().getNextUnitForCurrentUser(selectedUnit)
                     .orElse(null));
@@ -125,6 +126,11 @@ public class SelectedUnitManager {
 
     public boolean isSelectedUnitMoveable() {
         return selectedUnit != null && selectedUnit.getAvailableMoves() > 0;
+    }
+
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(getClass()).add("selectedUnit", selectedUnit).toString();
     }
 
 }

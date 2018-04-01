@@ -7,10 +7,10 @@ import javafx.beans.property.BooleanProperty;
  */
 public interface EuropeDialogCallback {
 
-	void repaint();
-	
-	void repaintAfterGoodMoving();
+    void repaint();
 
-	BooleanProperty getPropertyShiftWasPressed();
-	
+    void repaintAfterGoodMoving();
+
+    BooleanProperty getPropertyShiftWasPressed();
+
 }

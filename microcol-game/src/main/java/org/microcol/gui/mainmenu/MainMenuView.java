@@ -207,7 +207,7 @@ public class MainMenuView {
              * 
              * TODO JJ it's probably bug.
              */
-            menuBar.useSystemMenuBarProperty().set(true);
+            // menuBar.useSystemMenuBarProperty().set(true);
             final MenuToolkit tk = MenuToolkit.toolkit();
             // Create the default Application menu
             if (tk == null) {

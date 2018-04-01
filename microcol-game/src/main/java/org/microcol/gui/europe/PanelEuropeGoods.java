@@ -74,7 +74,8 @@ public class PanelEuropeGoods extends TitledPanel {
                             .get() instanceof ClipboardReader.TransferFromCargoSlot) {
                         final ClipboardReader.TransferFromCargoSlot fromCargo = (ClipboardReader.TransferFromCargoSlot) transferFrom
                                 .get();
-                        gameModelController.getModel().sellGoods(fromCargo.getCargoSlot(), goodAmount);
+                        gameModelController.getModel().sellGoods(fromCargo.getCargoSlot(),
+                                goodAmount);
                         europeDialogCallback.repaint();
                     }
                     event.setDropCompleted(true);

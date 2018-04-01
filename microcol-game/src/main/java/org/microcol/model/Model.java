@@ -320,7 +320,7 @@ public final class Model {
         return unitStorage.getNextUnitForCurrentUser(getCurrentPlayer(), currentUnit);
     }
 
-    public Optional<Unit> getFirstSelectableUnitAt() {
+    public Optional<Unit> getFirstSelectableUnit() {
         return unitStorage.getFirstSelectableUnit(getCurrentPlayer());
     }
 

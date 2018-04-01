@@ -23,39 +23,42 @@ import javafx.scene.layout.VBox;
  */
 public class RecruiteUnitsDialog extends AbstractMessageWindow {
 
-	@Inject
-	public RecruiteUnitsDialog(final ViewUtil viewUtil, final Text text, final ImageProvider imageProvider,
-			final GameModelController gameModelController, final LocalizationHelper localizationHelper,
-			final DialogNotEnoughGold dialogNotEnoughGold) {
-		super(viewUtil);
-		Preconditions.checkNotNull(imageProvider);
-		Preconditions.checkNotNull(gameModelController);
-		getDialog().setTitle(text.get("recruitUnitDialog.title"));
-		final Label labelCaption = new Label(text.get("recruitUnitDialog.title"));
+    @Inject
+    public RecruiteUnitsDialog(final ViewUtil viewUtil, final Text text,
+            final ImageProvider imageProvider, final GameModelController gameModelController,
+            final LocalizationHelper localizationHelper,
+            final DialogNotEnoughGold dialogNotEnoughGold) {
+        super(viewUtil);
+        Preconditions.checkNotNull(imageProvider);
+        Preconditions.checkNotNull(gameModelController);
+        getDialog().setTitle(text.get("recruitUnitDialog.title"));
+        final Label labelCaption = new Label(text.get("recruitUnitDialog.title"));
 
-		final VBox root = new VBox();
-		root.setId("mainVbox");
-		init(root);
+        final VBox root = new VBox();
+        root.setId("mainVbox");
+        init(root);
 
-		final HBox gridWithUnits = new HBox();
+        final HBox gridWithUnits = new HBox();
 
-		UnitType.UNIT_TYPES.stream().filter(unitType -> unitType.getEuropePrice() > 0).forEach(unitType -> {
-			final RecruiteUnitPanel buyUnitPanel = new RecruiteUnitPanel(unitType, imageProvider, gameModelController,
-					localizationHelper, text, this, dialogNotEnoughGold);
-			HBox.setMargin(buyUnitPanel, new Insets(10, 10, 10, 10));
-			gridWithUnits.getChildren().add(buyUnitPanel);
-		});
+        UnitType.UNIT_TYPES.stream().filter(unitType -> unitType.getEuropePrice() > 0)
+                .forEach(unitType -> {
+                    final RecruiteUnitPanel buyUnitPanel = new RecruiteUnitPanel(unitType,
+                            imageProvider, gameModelController, localizationHelper, text, this,
+                            dialogNotEnoughGold);
+                    HBox.setMargin(buyUnitPanel, new Insets(10, 10, 10, 10));
+                    gridWithUnits.getChildren().add(buyUnitPanel);
+                });
 
-		final ButtonsBar buttonBar = new ButtonsBar(text);
-		buttonBar.getButtonOk().setOnAction(e -> {
-			getDialog().close();
-		});
+        final ButtonsBar buttonBar = new ButtonsBar(text);
+        buttonBar.getButtonOk().setOnAction(e -> {
+            getDialog().close();
+        });
 
-		root.getChildren().addAll(labelCaption, gridWithUnits, buttonBar);
-	}
-	
-	public void showAndWait(){
-		getDialog().showAndWait();
-	}
+        root.getChildren().addAll(labelCaption, gridWithUnits, buttonBar);
+    }
+
+    public void showAndWait() {
+        getDialog().showAndWait();
+    }
 
 }

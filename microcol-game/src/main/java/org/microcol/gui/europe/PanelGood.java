@@ -23,43 +23,45 @@ import javafx.scene.layout.VBox;
  */
 public class PanelGood extends VBox {
 
-	private final ImageView imageView;
+    private final ImageView imageView;
 
-	private final GoodType goodType;
+    private final GoodType goodType;
 
-	private final GameModelController gameModelController;
+    private final GameModelController gameModelController;
 
-	private final Label labelPrice;
-	
-	private final DialogNotEnoughGold dialogNotEnoughGold;
+    private final Label labelPrice;
 
-	public PanelGood(final GoodType goodType, final ImageProvider imageProvider,
-			final GameModelController gameModelController, final DialogNotEnoughGold dialogNotEnoughGold) {
-		this.goodType = Preconditions.checkNotNull(goodType);
-		this.gameModelController = Preconditions.checkNotNull(gameModelController);
-		this.dialogNotEnoughGold = Preconditions.checkNotNull(dialogNotEnoughGold);
-		imageView = new ImageView(imageProvider.getGoodTypeImage(goodType));
-		Pane paneImage = new Pane(imageView);
-		paneImage.setOnDragDetected(this::onDragDetected);
-		labelPrice = new Label();
-		getChildren().addAll(paneImage, labelPrice);
-	}
+    private final DialogNotEnoughGold dialogNotEnoughGold;
 
-	private void onDragDetected(final MouseEvent event) {
-		final Dragboard db = this.startDragAndDrop(TransferMode.MOVE, TransferMode.LINK);
-		final GoodsAmount goodAmount = gameModelController.getMaxBuyableGoodsAmount(goodType);
-		if (goodAmount.isZero()) {
-			dialogNotEnoughGold.showAndWait();
-		} else {
-			ClipboardWritter.make(db).addImage(imageView.getImage()).addTransferFromEuropeShop()
-					.addGoodAmount(goodAmount).build();
-		}
-		event.consume();
-	}
+    public PanelGood(final GoodType goodType, final ImageProvider imageProvider,
+            final GameModelController gameModelController,
+            final DialogNotEnoughGold dialogNotEnoughGold) {
+        this.goodType = Preconditions.checkNotNull(goodType);
+        this.gameModelController = Preconditions.checkNotNull(gameModelController);
+        this.dialogNotEnoughGold = Preconditions.checkNotNull(dialogNotEnoughGold);
+        imageView = new ImageView(imageProvider.getGoodTypeImage(goodType));
+        Pane paneImage = new Pane(imageView);
+        paneImage.setOnDragDetected(this::onDragDetected);
+        labelPrice = new Label();
+        getChildren().addAll(paneImage, labelPrice);
+    }
 
-	public void replain() {
-		final GoodTrade goodTrade = gameModelController.getModel().getEurope().getGoodTradeForType(goodType);
-		labelPrice.setText(goodTrade.getSellPrice() + "/" + goodTrade.getBuyPrice());
-	}
+    private void onDragDetected(final MouseEvent event) {
+        final Dragboard db = this.startDragAndDrop(TransferMode.MOVE, TransferMode.LINK);
+        final GoodsAmount goodAmount = gameModelController.getMaxBuyableGoodsAmount(goodType);
+        if (goodAmount.isZero()) {
+            dialogNotEnoughGold.showAndWait();
+        } else {
+            ClipboardWritter.make(db).addImage(imageView.getImage()).addTransferFromEuropeShop()
+                    .addGoodAmount(goodAmount).build();
+        }
+        event.consume();
+    }
+
+    public void replain() {
+        final GoodTrade goodTrade = gameModelController.getModel().getEurope()
+                .getGoodTradeForType(goodType);
+        labelPrice.setText(goodTrade.getSellPrice() + "/" + goodTrade.getBuyPrice());
+    }
 
 }

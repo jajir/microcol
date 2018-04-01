@@ -5,6 +5,7 @@ import org.microcol.gui.util.AbstractEventController;
 /**
  * Control event when unit is moved outside colony.
  */
-public class UnitMovedOutsideColonyController extends AbstractEventController<UnitMovedOutsideColonyEvent> {
+public class UnitMovedOutsideColonyController
+        extends AbstractEventController<UnitMovedOutsideColonyEvent> {
 
 }

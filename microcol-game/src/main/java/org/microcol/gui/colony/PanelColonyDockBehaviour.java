@@ -20,56 +20,57 @@ import com.google.inject.Inject;
 
 public class PanelColonyDockBehaviour extends AbstractPanelDockBehavior {
 
-	final Logger logger = LoggerFactory.getLogger(PanelColonyDockBehaviour.class);
+    final Logger logger = LoggerFactory.getLogger(PanelColonyDockBehaviour.class);
 
-	private final ColonyDialogCallback colonyDialogCallback;
-	private final ChooseGoodAmount chooseGoodAmount;
+    private final ColonyDialogCallback colonyDialogCallback;
+    private final ChooseGoodAmount chooseGoodAmount;
 
-	@Inject
-	PanelColonyDockBehaviour(final ColonyDialogCallback colonyDialogCallback,
-			final GameModelController gameModelController, final ImageProvider imageProvider,
-			final ChooseGoodAmount chooseGoodAmount) {
-		super(gameModelController, imageProvider);
-		this.colonyDialogCallback = Preconditions.checkNotNull(colonyDialogCallback);
-		this.chooseGoodAmount = Preconditions.checkNotNull(chooseGoodAmount);
-	}
+    @Inject
+    PanelColonyDockBehaviour(final ColonyDialogCallback colonyDialogCallback,
+            final GameModelController gameModelController, final ImageProvider imageProvider,
+            final ChooseGoodAmount chooseGoodAmount) {
+        super(gameModelController, imageProvider);
+        this.colonyDialogCallback = Preconditions.checkNotNull(colonyDialogCallback);
+        this.chooseGoodAmount = Preconditions.checkNotNull(chooseGoodAmount);
+    }
 
-	@Override
-	public List<Unit> getUnitsInPort() {
-		return colonyDialogCallback.getColony().getUnitsInPort();
-	}
+    @Override
+    public List<Unit> getUnitsInPort() {
+        return colonyDialogCallback.getColony().getUnitsInPort();
+    }
 
-	@Override
-	public void consumeGoods(final CargoSlot cargoSlot, final GoodsAmount goodsAmount,
-			final Optional<TransferFrom> transferFrom, final boolean specialOperatonWasSelected) {
+    @Override
+    public void consumeGoods(final CargoSlot cargoSlot, final GoodsAmount goodsAmount,
+            final Optional<TransferFrom> transferFrom, final boolean specialOperatonWasSelected) {
 
-		GoodsAmount tmp = goodsAmount;
-		logger.debug("wasShiftPressed " + colonyDialogCallback.getPropertyShiftWasPressed().get());
-		if (specialOperatonWasSelected) {
-			// synchronously get information about transfered amount
-			chooseGoodAmount.init(
-					cargoSlot.maxPossibleGoodsToMoveHere(CargoSlot.MAX_CARGO_SLOT_CAPACITY, goodsAmount.getAmount()));
-			tmp = new GoodsAmount(goodsAmount.getGoodType(), chooseGoodAmount.getActualValue());
-			if (tmp.isZero()) {
-				return;
-			}
-		}
-		// TODO following code doesn't look readable
-		if (transferFrom.get() instanceof ClipboardReader.TransferFromColonyWarehouse) {
-			cargoSlot.storeFromColonyWarehouse(tmp, colonyDialogCallback.getColony());
-		} else if (transferFrom.get() instanceof ClipboardReader.TransferFromCargoSlot) {
-			cargoSlot.storeFromCargoSlot(tmp,
-					((ClipboardReader.TransferFromCargoSlot) transferFrom.get()).getCargoSlot());
-		} else {
-			throw new IllegalArgumentException("Unsupported source transfer '" + transferFrom + "'");
-		}
+        GoodsAmount tmp = goodsAmount;
+        logger.debug("wasShiftPressed " + colonyDialogCallback.getPropertyShiftWasPressed().get());
+        if (specialOperatonWasSelected) {
+            // synchronously get information about transfered amount
+            chooseGoodAmount.init(cargoSlot.maxPossibleGoodsToMoveHere(
+                    CargoSlot.MAX_CARGO_SLOT_CAPACITY, goodsAmount.getAmount()));
+            tmp = new GoodsAmount(goodsAmount.getGoodType(), chooseGoodAmount.getActualValue());
+            if (tmp.isZero()) {
+                return;
+            }
+        }
+        // TODO following code doesn't look readable
+        if (transferFrom.get() instanceof ClipboardReader.TransferFromColonyWarehouse) {
+            cargoSlot.storeFromColonyWarehouse(tmp, colonyDialogCallback.getColony());
+        } else if (transferFrom.get() instanceof ClipboardReader.TransferFromCargoSlot) {
+            cargoSlot.storeFromCargoSlot(tmp,
+                    ((ClipboardReader.TransferFromCargoSlot) transferFrom.get()).getCargoSlot());
+        } else {
+            throw new IllegalArgumentException(
+                    "Unsupported source transfer '" + transferFrom + "'");
+        }
 
-		colonyDialogCallback.repaint();
-	}
+        colonyDialogCallback.repaint();
+    }
 
-	@Override
-	public void consumeUnit(final Unit unit, final Optional<TransferFrom> transferFrom) {
-		colonyDialogCallback.repaint();
-	}
+    @Override
+    public void consumeUnit(final Unit unit, final Optional<TransferFrom> transferFrom) {
+        colonyDialogCallback.repaint();
+    }
 
 }

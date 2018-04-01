@@ -9,12 +9,12 @@ import javafx.beans.property.BooleanProperty;
  */
 public interface ColonyDialogCallback {
 
-	void repaint();
-	
-	void close();
-	
-	Colony getColony();
-	
-	BooleanProperty getPropertyShiftWasPressed();
+    void repaint();
+
+    void close();
+
+    Colony getColony();
+
+    BooleanProperty getPropertyShiftWasPressed();
 
 }

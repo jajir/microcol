@@ -25,56 +25,60 @@ import javafx.scene.layout.VBox;
  */
 public class BuyUnitsDialog extends AbstractMessageWindow {
 
-	private final static int MAX_UNITS_IN_ROW = 2;
-	
-	private final EuropeDialogCallback europeDialogCallback;
+    private final static int MAX_UNITS_IN_ROW = 2;
 
-	@Inject
-	public BuyUnitsDialog(final ViewUtil viewUtil, final Text text, final ImageProvider imageProvider,
-			final GameModelController gameModelController, final LocalizationHelper localizationHelper,
-			final EuropeDialogCallback europeDialogCallback, final DialogNotEnoughGold dialogNotEnoughGold) {
-		super(viewUtil);
-		this.europeDialogCallback = Preconditions.checkNotNull(europeDialogCallback);
-		Preconditions.checkNotNull(imageProvider);
-		Preconditions.checkNotNull(gameModelController);
-		getDialog().setTitle(text.get("buyUnitDialog.title"));
-		final Label labelCaption = new Label(text.get("buyUnitDialog.title"));
+    private final EuropeDialogCallback europeDialogCallback;
 
-		final VBox root = new VBox();
-		root.setId("mainVbox");
-		init(root);
+    @Inject
+    public BuyUnitsDialog(final ViewUtil viewUtil, final Text text,
+            final ImageProvider imageProvider, final GameModelController gameModelController,
+            final LocalizationHelper localizationHelper,
+            final EuropeDialogCallback europeDialogCallback,
+            final DialogNotEnoughGold dialogNotEnoughGold) {
+        super(viewUtil);
+        this.europeDialogCallback = Preconditions.checkNotNull(europeDialogCallback);
+        Preconditions.checkNotNull(imageProvider);
+        Preconditions.checkNotNull(gameModelController);
+        getDialog().setTitle(text.get("buyUnitDialog.title"));
+        final Label labelCaption = new Label(text.get("buyUnitDialog.title"));
 
-		final GridPane gridWithUnits = new GridPane();
+        final VBox root = new VBox();
+        root.setId("mainVbox");
+        init(root);
 
-		AtomicInteger column = new AtomicInteger(0);
-		AtomicInteger row = new AtomicInteger(0);
-		UnitType.UNIT_TYPES.stream().filter(unitType -> unitType.getEuropePrice() > 0).forEach(unitType -> {
-			final BuyUnitPanel buyUnitPanel = new BuyUnitPanel(unitType, imageProvider, gameModelController,
-					localizationHelper, text, this, dialogNotEnoughGold);
-			GridPane.setMargin(buyUnitPanel, new Insets(10, 10, 10, 10));
-			gridWithUnits.add(buyUnitPanel, column.intValue(), row.intValue());
-			column.incrementAndGet();
-			if (column.intValue() > MAX_UNITS_IN_ROW) {
-				column.set(0);
-				row.incrementAndGet();
-			}
-		});
+        final GridPane gridWithUnits = new GridPane();
 
-		final ButtonsBar buttonBar = new ButtonsBar(text);
-		buttonBar.getButtonOk().setOnAction(e -> {
-			getDialog().close();
-		});
+        AtomicInteger column = new AtomicInteger(0);
+        AtomicInteger row = new AtomicInteger(0);
+        UnitType.UNIT_TYPES.stream().filter(unitType -> unitType.getEuropePrice() > 0)
+                .forEach(unitType -> {
+                    final BuyUnitPanel buyUnitPanel = new BuyUnitPanel(unitType, imageProvider,
+                            gameModelController, localizationHelper, text, this,
+                            dialogNotEnoughGold);
+                    GridPane.setMargin(buyUnitPanel, new Insets(10, 10, 10, 10));
+                    gridWithUnits.add(buyUnitPanel, column.intValue(), row.intValue());
+                    column.incrementAndGet();
+                    if (column.intValue() > MAX_UNITS_IN_ROW) {
+                        column.set(0);
+                        row.incrementAndGet();
+                    }
+                });
 
-		root.getChildren().addAll(labelCaption, gridWithUnits, buttonBar);
-	}
-	
-	public void closeAndRepaint(){
-		europeDialogCallback.repaint();
-		getDialog().close();
-	}
-	
-	public void showAndWait(){
-		getDialog().showAndWait();
-	}
+        final ButtonsBar buttonBar = new ButtonsBar(text);
+        buttonBar.getButtonOk().setOnAction(e -> {
+            getDialog().close();
+        });
+
+        root.getChildren().addAll(labelCaption, gridWithUnits, buttonBar);
+    }
+
+    public void closeAndRepaint() {
+        europeDialogCallback.repaint();
+        getDialog().close();
+    }
+
+    public void showAndWait() {
+        getDialog().showAndWait();
+    }
 
 }

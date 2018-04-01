@@ -19,191 +19,227 @@ import com.google.common.collect.ImmutableListMultimap;
 import com.google.common.collect.Multimaps;
 
 class UnitStorage {
-	
-	/**
-	 * Ordered list of all units.
-	 */
-	private final List<Unit> units;
 
-	UnitStorage() {
-		this.units = new ArrayList<>();
-	}
-	
-	void addUnit(final Unit unit) {
-		Preconditions.checkNotNull(unit);
-		Preconditions.checkArgument(!units.contains(unit), "unit %s was already added.", unit);
-		Preconditions.checkArgument(!tryGetUnitById(unit.getId()).isPresent(), "Unit with id %s was already added.",
-				unit, unit.getId());
-		units.add(unit);
-		checkUnitLocations(units);
-		checkDuplicities(units);
-	}
-	
-	void addUnitToPlayer(final UnitType unitType, final Player owner, final Model model){
-		units.add(new Unit(unit -> new Cargo(unit, unitType.getCargoCapacity()), model, IdManager.nextId(),
-				unit -> new PlaceEuropePier(unit), unitType, owner, unitType.getSpeed()));
-	}
+    /**
+     * Ordered list of all units.
+     */
+    private final List<Unit> units;
 
-	private void checkUnitLocations(final List<Unit> units) {
-		Map<Location, Player> owners = new HashMap<>();
-		units.forEach(unit -> {
-			if (unit.isAtPlaceLocation()) {
-				Player owner = owners.get(unit.getLocation());
-				if (owner != null) {
-					if (!owner.equals(unit.getOwner())) {
-						throw new IllegalArgumentException(
-								String.format("There is an enemy unit at the same location (%s).", unit.getLocation()));
-					}
-				} else {
-					owners.put(unit.getLocation(), unit.getOwner());
-				}
-			}
-		});
-	}
+    UnitStorage() {
+        this.units = new ArrayList<>();
+    }
 
-	/**
-	 * Verify that all units are just one time in all unit list.
-	 * 
-	 * @param units
-	 *            required list of units.
-	 */
-	private void checkDuplicities(final List<Unit> units) {
-		final Set<Unit> tmp = new HashSet<>();
-		units.forEach(unit -> {
-			if (tmp.contains(unit)) {
-				throw new IllegalStateException("Unit was registered twice, unit: " + unit);
-			} else {
-				tmp.add(unit);
-			}
-		});
-	}
+    void addUnit(final Unit unit) {
+        Preconditions.checkNotNull(unit);
+        Preconditions.checkArgument(!units.contains(unit), "unit %s was already added.", unit);
+        Preconditions.checkArgument(!tryGetUnitById(unit.getId()).isPresent(),
+                "Unit with id %s was already added.", unit, unit.getId());
+        units.add(unit);
+        checkUnitLocations(units);
+        checkDuplicities(units);
+    }
 
-	List<Unit> getUnits() {
-		return ImmutableList.copyOf(units);
-	}
+    void addUnitToPlayer(final UnitType unitType, final Player owner, final Model model) {
+        units.add(new Unit(unit -> new Cargo(unit, unitType.getCargoCapacity()), model,
+                IdManager.nextId(), unit -> new PlaceEuropePier(unit), unitType, owner,
+                unitType.getSpeed()));
+    }
 
-	Map<Location, List<Unit>> getUnitsAt() {
-		return Multimaps.asMap(units.stream().filter(unit -> unit.isAtPlaceLocation())
-				.collect(ImmutableListMultimap.toImmutableListMultimap(Unit::getLocation, Function.identity())));
-	}
+    private void checkUnitLocations(final List<Unit> units) {
+        Map<Location, Player> owners = new HashMap<>();
+        units.forEach(unit -> {
+            if (unit.isAtPlaceLocation()) {
+                Player owner = owners.get(unit.getLocation());
+                if (owner != null) {
+                    if (!owner.equals(unit.getOwner())) {
+                        throw new IllegalArgumentException(
+                                String.format("There is an enemy unit at the same location (%s).",
+                                        unit.getLocation()));
+                    }
+                } else {
+                    owners.put(unit.getLocation(), unit.getOwner());
+                }
+            }
+        });
+    }
 
-	List<Unit> getUnitsAt(final Location location) {
-		Preconditions.checkNotNull(location);
+    /**
+     * Verify that all units are just one time in all unit list.
+     * 
+     * @param units
+     *            required list of units.
+     */
+    private void checkDuplicities(final List<Unit> units) {
+        final Set<Unit> tmp = new HashSet<>();
+        units.forEach(unit -> {
+            if (tmp.contains(unit)) {
+                throw new IllegalStateException("Unit was registered twice, unit: " + unit);
+            } else {
+                tmp.add(unit);
+            }
+        });
+    }
 
-		return units.stream().filter(unit -> unit.isAtPlaceLocation()).filter(unit -> unit.getLocation().equals(location))
-				.collect(ImmutableList.toImmutableList());
-	}
+    List<Unit> getUnits() {
+        return ImmutableList.copyOf(units);
+    }
 
-	List<Unit> getUnitsOwnedBy(final Player player, final boolean includeStored) {
-		Preconditions.checkNotNull(player);
+    Map<Location, List<Unit>> getUnitsAt() {
+        return Multimaps.asMap(units.stream().filter(unit -> unit.isAtPlaceLocation())
+                .collect(ImmutableListMultimap.toImmutableListMultimap(Unit::getLocation,
+                        Function.identity())));
+    }
 
-		return units.stream().filter(unit -> unit.getOwner().equals(player))
-				.filter(unit -> includeStored || unit.isAtPlaceLocation()).collect(ImmutableList.toImmutableList());
-	}
+    List<Unit> getUnitsAt(final Location location) {
+        Preconditions.checkNotNull(location);
 
-	Map<Location, List<Unit>> getUnitsAt(final Player player) {
-		Preconditions.checkNotNull(player);
+        return units.stream().filter(unit -> unit.isAtPlaceLocation())
+                .filter(unit -> unit.getLocation().equals(location))
+                .collect(ImmutableList.toImmutableList());
+    }
 
-		return Multimaps.asMap(
-				units.stream().filter(unit -> unit.getOwner().equals(player)).filter(unit -> unit.isAtPlaceLocation()).collect(
-						ImmutableListMultimap.toImmutableListMultimap(Unit::getLocation, Function.identity())));
-	}
+    List<Unit> getUnitsOwnedBy(final Player player, final boolean includeStored) {
+        Preconditions.checkNotNull(player);
 
-	List<Unit> getUnitsAt(final Player player, final Location location) {
-		Preconditions.checkNotNull(player);
-		Preconditions.checkNotNull(location);
+        return units.stream().filter(unit -> unit.getOwner().equals(player))
+                .filter(unit -> includeStored || unit.isAtPlaceLocation())
+                .collect(ImmutableList.toImmutableList());
+    }
 
-		return units.stream().filter(unit -> unit.getOwner().equals(player)).filter(unit -> unit.isAtPlaceLocation())
-				.filter(unit -> unit.getLocation().equals(location)).collect(ImmutableList.toImmutableList());
-	}
+    Map<Location, List<Unit>> getUnitsAt(final Player player) {
+        Preconditions.checkNotNull(player);
 
-	List<Unit> getEnemyUnits(final Player player, final boolean includeStored) {
-		Preconditions.checkNotNull(player);
+        return Multimaps.asMap(units.stream().filter(unit -> unit.getOwner().equals(player))
+                .filter(unit -> unit.isAtPlaceLocation()).collect(ImmutableListMultimap
+                        .toImmutableListMultimap(Unit::getLocation, Function.identity())));
+    }
 
-		return units.stream().filter(unit -> !unit.getOwner().equals(player))
-				.filter(unit -> includeStored || unit.isAtPlaceLocation()).collect(ImmutableList.toImmutableList());
-	}
+    List<Unit> getUnitsAt(final Player player, final Location location) {
+        Preconditions.checkNotNull(player);
+        Preconditions.checkNotNull(location);
 
-	Map<Location, List<Unit>> getEnemyUnitsAt(final Player player) {
-		Preconditions.checkNotNull(player);
+        return units.stream().filter(unit -> unit.getOwner().equals(player))
+                .filter(unit -> unit.isAtPlaceLocation())
+                .filter(unit -> unit.getLocation().equals(location))
+                .collect(ImmutableList.toImmutableList());
+    }
 
-		return Multimaps.asMap(
-				units.stream().filter(unit -> !unit.getOwner().equals(player)).filter(unit -> unit.isAtPlaceLocation()).collect(
-						ImmutableListMultimap.toImmutableListMultimap(Unit::getLocation, Function.identity())));
-	}
+    List<Unit> getEnemyUnits(final Player player, final boolean includeStored) {
+        Preconditions.checkNotNull(player);
 
-	List<Unit> getEnemyUnitsAt(final Player player, final Location location) {
-		Preconditions.checkNotNull(player);
-		Preconditions.checkNotNull(location);
+        return units.stream().filter(unit -> !unit.getOwner().equals(player))
+                .filter(unit -> includeStored || unit.isAtPlaceLocation())
+                .collect(ImmutableList.toImmutableList());
+    }
 
-		return units.stream().filter(unit -> !unit.getOwner().equals(player)).filter(unit -> unit.isAtPlaceLocation())
-				.filter(unit -> unit.getLocation().equals(location)).collect(ImmutableList.toImmutableList());
-	}
+    Map<Location, List<Unit>> getEnemyUnitsAt(final Player player) {
+        Preconditions.checkNotNull(player);
 
-	void remove(final Unit unit) {
-		Preconditions.checkNotNull(unit);
+        return Multimaps.asMap(units.stream().filter(unit -> !unit.getOwner().equals(player))
+                .filter(unit -> unit.isAtPlaceLocation()).collect(ImmutableListMultimap
+                        .toImmutableListMultimap(Unit::getLocation, Function.identity())));
+    }
 
-		units.remove(unit);
-	}
+    List<Unit> getEnemyUnitsAt(final Player player, final Location location) {
+        Preconditions.checkNotNull(player);
+        Preconditions.checkNotNull(location);
 
-	void save(final ModelPo gamePo) {
-		units.forEach(unit -> {
-			gamePo.getUnits().add(unit.save());
-		});
-	}
+        return units.stream().filter(unit -> !unit.getOwner().equals(player))
+                .filter(unit -> unit.isAtPlaceLocation())
+                .filter(unit -> unit.getLocation().equals(location))
+                .collect(ImmutableList.toImmutableList());
+    }
 
-	Unit getUnitById(int id) {
-		return tryGetUnitById(id)
-				.orElseThrow(() -> new IllegalArgumentException("There is no unit with id '" + id + "'."));
-	}
-	
-	Optional<Unit> tryGetUnitById(final int id) {
-		return units.stream().filter(unit -> unit.getId() == id).findAny();
-	}
-	
-	Optional<Unit> getNextUnitForCurrentUser(final Player currentPlayer, final Unit currentUnit){
-		final List<Unit> list = units.stream()
-				.filter(unit -> currentPlayer.equals(unit.getOwner()))
-				.filter(unit -> unit.isAtPlaceLocation() && unit.getAvailableMoves() > 0)
-				.collect(Collectors.toList());
-		if(list.size()==0){
-			return Optional.empty();
-		}
-		int pos = list.indexOf(currentUnit);
-		if (pos >= 0) {
-			if (pos + 1 < list.size()) {
-				return Optional.of(list.get(pos + 1));
-			} else {
-				return Optional.of(list.get(0));
-			}
-		} else {
-			return Optional.of(list.get(0));
-		}
-	}
+    void remove(final Unit unit) {
+        Preconditions.checkNotNull(unit);
 
-	Optional<Unit> getFirstSelectableUnit(final Player currentPlayer){
-		return units.stream()
-				.filter(unit -> currentPlayer.equals(unit.getOwner()))
-				.filter(unit -> unit.isAtPlaceLocation())
-				.filter(unit -> unit.getAvailableMoves() > 0)
-				.findFirst();		
-	}
+        units.remove(unit);
+    }
 
-	Optional<Unit> getFirstSelectableUnitAt(final Player currentPlayer, final Location location){
-		return units.stream()
-				.filter(unit -> currentPlayer.equals(unit.getOwner()))
-				.filter(unit -> unit.isAtPlaceLocation())
-				.filter(unit -> unit.getLocation().equals(location))
-				.filter(unit -> unit.getAvailableMoves() > 0)
-				.findFirst();
-	}
-	
-	@Override
-	public String toString() {
-		return MoreObjects.toStringHelper(this)
-				.add("hashcode", hashCode())
-				.add("units", units.size())
-				.toString();
-	}	
-	
+    void save(final ModelPo gamePo) {
+        units.forEach(unit -> {
+            gamePo.getUnits().add(unit.save());
+        });
+    }
+
+    Unit getUnitById(int id) {
+        return tryGetUnitById(id).orElseThrow(
+                () -> new IllegalArgumentException("There is no unit with id '" + id + "'."));
+    }
+
+    Optional<Unit> tryGetUnitById(final int id) {
+        return units.stream().filter(unit -> unit.getId() == id).findAny();
+    }
+
+    Optional<Unit> getNextUnitForCurrentUser(final Player currentPlayer, final Unit currentUnit) {
+        final List<Unit> list = units.stream().filter(unit -> currentPlayer.equals(unit.getOwner()))
+                .filter(unit -> unit.isAtPlaceLocation() && unit.getAvailableMoves() > 0)
+                .collect(Collectors.toList());
+        if (list.size() == 0) {
+            return Optional.empty();
+        }
+        int pos = list.indexOf(currentUnit);
+        if (pos >= 0) {
+            if (pos + 1 < list.size()) {
+                return Optional.of(list.get(pos + 1));
+            } else {
+                return Optional.of(list.get(0));
+            }
+        } else {
+            return Optional.of(list.get(0));
+        }
+    }
+
+    /**
+     * Find first unit that could be selected.
+     *
+     * @param currentPlayer
+     *            required player for whom will be unit selected
+     * @return Optional object with unit
+     */
+    Optional<Unit> getFirstSelectableUnit(final Player currentPlayer) {
+        Preconditions.checkNotNull(currentPlayer, "Player is null");
+
+        return units.stream().filter(unit -> currentPlayer.equals(unit.getOwner()))
+                .filter(unit -> unit.isAtPlaceLocation())
+                .filter(unit -> unit.getAvailableMoves() > 0).findFirst();
+    }
+
+    /**
+     * Find first unit that could be selected. If there is unit that could move
+     * than such unit is returned. If there is not unit that could move than
+     * first unit is returned.
+     *
+     * @param currentPlayer
+     *            required player for whom will be unit selected
+     * @param location
+     *            required location where should be selected unit
+     * @return Optional object with unit
+     */
+    Optional<Unit> getFirstSelectableUnitAt(final Player currentPlayer, final Location location) {
+        Preconditions.checkNotNull(currentPlayer, "Player is null");
+        Preconditions.checkNotNull(location, "Location is null");
+        
+        final List<Unit> playersUnitAtLocation = units.stream()
+                .filter(unit -> currentPlayer.equals(unit.getOwner()))
+                .filter(unit -> unit.isAtPlaceLocation())
+                .filter(unit -> unit.getLocation().equals(location))
+                .collect(Collectors.toList());
+        
+        final Optional<Unit> moveableUnit = playersUnitAtLocation.stream()
+                .filter(unit -> unit.getAvailableMoves() > 0)
+                .findFirst();
+        if (moveableUnit.isPresent()) {
+            return moveableUnit;
+        } else {
+            return playersUnitAtLocation.stream().findFirst();
+        }
+    }
+
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(this).add("hashcode", hashCode())
+                .add("units", units.size()).toString();
+    }
+
 }

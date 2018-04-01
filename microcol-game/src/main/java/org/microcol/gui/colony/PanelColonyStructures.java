@@ -45,262 +45,273 @@ import javafx.scene.text.TextAlignment;
  * Show building factories and other structures build in colony.
  */
 public class PanelColonyStructures extends TitledPanel {
-	
-	private final Logger logger = LoggerFactory.getLogger(PanelColonyStructures.class);
 
-	private final static int COLUMN_1 = 90;
-	private final static int COLUMN_2 = 250;
-	private final static int COLUMN_3 = 410;
+    private final Logger logger = LoggerFactory.getLogger(PanelColonyStructures.class);
 
-	private final static int ROW_1 = 10;
-	private final static int ROW_2 = 100;
-	private final static int ROW_3 = 190;
-	
-	private final static int PRODUCTION_TEXT_X = 0;
-	private final static int PRODUCTION_TEXT_Y = 65;
-	
-	private final static Point PRODUCTION_TEXT = Point.of(PRODUCTION_TEXT_X, PRODUCTION_TEXT_Y);
-	
-	private final static int SLOT_POSITION_SLOT_GAP = 3;
-	
-	private final static int SLOT_POSITION_WIDTH = GamePanelView.TILE_WIDTH_IN_PX + SLOT_POSITION_SLOT_GAP;
-	
-	private final static int SLOT_POSITION_TOTAL_WIDTH = 3 * GamePanelView.TILE_WIDTH_IN_PX + 2 * SLOT_POSITION_SLOT_GAP;
-	
-	private final static int SLOT_POSITION_START = - SLOT_POSITION_TOTAL_WIDTH / 2;
-	
-	private final static Point[] SLOT_POSITIONS = new Point[] {
-			Point.of(SLOT_POSITION_START, 10),
-			Point.of(SLOT_POSITION_START + SLOT_POSITION_WIDTH, 10),
-			Point.of(SLOT_POSITION_START + 2 * SLOT_POSITION_WIDTH, 10) };
+    private final static int COLUMN_1 = 90;
+    private final static int COLUMN_2 = 250;
+    private final static int COLUMN_3 = 410;
 
-	/**
-	 * Following structure define position of constructions images on colony map.
-	 */
-	private final static Map<ConstructionType, Point> constructionPlaces = ImmutableMap
-			.<ConstructionType, Point>builder()
-			.put(ConstructionType.TOWN_HALL,            Point.of(COLUMN_2, ROW_1))
-			.put(ConstructionType.LUMBER_MILL,          Point.of(COLUMN_1, ROW_3))
-			.put(ConstructionType.CARPENTERS_SHOP,      Point.of(COLUMN_1, ROW_3))
-			.put(ConstructionType.IRON_WORKS,           Point.of(COLUMN_2, ROW_3))
-			.put(ConstructionType.BLACKSMITHS_SHOP,     Point.of(COLUMN_2, ROW_3))
-			.put(ConstructionType.BLACKSMITHS_HOUSE,    Point.of(COLUMN_2, ROW_3))
-			.put(ConstructionType.FORTRESS,             Point.of(COLUMN_1, ROW_1))
-			.put(ConstructionType.FORT,                 Point.of(COLUMN_1, ROW_1))
-			.put(ConstructionType.STOCKADE,             Point.of(COLUMN_1, ROW_1))
-			.put(ConstructionType.CIGAR_FACTORY,        Point.of(COLUMN_2, ROW_2))
-			.put(ConstructionType.TOBACCONISTS_SHOP,    Point.of(COLUMN_2, ROW_2))
-			.put(ConstructionType.TOBACCONISTS_HOUSE,   Point.of(COLUMN_2, ROW_2))
-			.put(ConstructionType.TEXTILE_MILL,         Point.of(COLUMN_1, ROW_2))
-			.put(ConstructionType.WEAVERS_SHOP,         Point.of(COLUMN_1, ROW_2))
-			.put(ConstructionType.WEAVERS_HOUSE,        Point.of(COLUMN_1, ROW_2))
-			.put(ConstructionType.RUM_FACTORY,          Point.of(COLUMN_3, ROW_2))
-			.put(ConstructionType.RUM_DISTILLERY,       Point.of(COLUMN_3, ROW_2))
-			.put(ConstructionType.RUM_DISTILLERS_HOUSE, Point.of(COLUMN_3, ROW_2))
-			.put(ConstructionType.FUR_FACTORY,          Point.of(COLUMN_3, ROW_3))
-			.put(ConstructionType.FUR_TRADING_POST,     Point.of(COLUMN_3, ROW_3))
-			.put(ConstructionType.FUR_TRADERS_HOUSE,    Point.of(COLUMN_3, ROW_3))
-			.put(ConstructionType.ARSENAL,              Point.of(10, 10))
-			.put(ConstructionType.MAGAZINE,             Point.of(10, 10))
-			.put(ConstructionType.ARMORY,               Point.of(10, 10))
-			.put(ConstructionType.SHIPYARD,             Point.of(10, 10))
-			.put(ConstructionType.DRYDOCK,              Point.of(10, 10))
-			.put(ConstructionType.DOCK,                 Point.of(10, 10))
-			.put(ConstructionType.UNIVERSITY,           Point.of(10, 10))
-			.put(ConstructionType.COLLEGE,              Point.of(10, 10))
-			.put(ConstructionType.SCHOOLHOUSE,          Point.of(10, 10))
-			.put(ConstructionType.WAREHOUSE_EXPANSION,  Point.of(COLUMN_1, ROW_1))
-			.put(ConstructionType.WAREHOUSE,            Point.of(COLUMN_1, ROW_1))
-			.put(ConstructionType.BASIC_WAREHOUSE,      Point.of(COLUMN_1, ROW_1))
-			.put(ConstructionType.STABLES,              Point.of(10, 10))
-			.put(ConstructionType.CATHEDRAL,            Point.of(COLUMN_3, ROW_1))
-			.put(ConstructionType.CHURCH,               Point.of(COLUMN_3, ROW_1))
-			.put(ConstructionType.NEWSPAPER,            Point.of(10, 10))
-			.put(ConstructionType.PRINTING_PRESS,       Point.of(10, 10))
-			.put(ConstructionType.CUSTOM_HOUSE,         Point.of(10, 10))
-			.build();
+    private final static int ROW_1 = 10;
+    private final static int ROW_2 = 100;
+    private final static int ROW_3 = 190;
 
-	/**
-	 * Validation that constants are consistent.
-	 */
-	static {
-		Preconditions.checkState(ConstructionType.ALL.size() == constructionPlaces.size(),
-				String.format(
-						"There is different number of construction types '%s' and it's definitions of position '%s'.",
-						ConstructionType.ALL.size(), constructionPlaces.size()));
-	}
+    private final static int PRODUCTION_TEXT_X = 0;
+    private final static int PRODUCTION_TEXT_Y = 65;
 
-	private final static int CANVAS_WIDTH = 500;
+    private final static Point PRODUCTION_TEXT = Point.of(PRODUCTION_TEXT_X, PRODUCTION_TEXT_Y);
 
-	private final static int CANVAS_HEIGHT = 300;
+    private final static int SLOT_POSITION_SLOT_GAP = 3;
 
-	private final static int GOOD_ICON_WIDTH = 30;
-	
-	private final Canvas canvas;
-	
-	private final LocalizationHelper localizationHelper;
-	
-	private final ImageProvider imageProvider;
-	
-	private final GameModelController gameModelController;
-	
-	private final ColonyDialogCallback colonyDialog;
-	
-	private Map<Rectangle, ConstructionSlot> slots;
-	
-	private final UnitMovedToConstructionController unitMovedToConstructionController;
-	
-	@Inject
-	public PanelColonyStructures(final LocalizationHelper localizationHelper, final ImageProvider imageProvider,
-			final GameModelController gameModelController, final ColonyDialogCallback colonyDialog, final UnitMovedToConstructionController unitMovedToConstructionController) {
-		super("Colony Structures", null);
-		this.localizationHelper = Preconditions.checkNotNull(localizationHelper);
-		this.imageProvider = Preconditions.checkNotNull(imageProvider);
-		this.gameModelController = Preconditions.checkNotNull(gameModelController);
-		this.colonyDialog = Preconditions.checkNotNull(colonyDialog);
-		this.unitMovedToConstructionController = Preconditions.checkNotNull(unitMovedToConstructionController);
-		canvas = new Canvas(CANVAS_WIDTH, CANVAS_HEIGHT);
-		getContentPane().getChildren().add(canvas);
-		setMinWidth(CANVAS_WIDTH);
-		setMinHeight(CANVAS_HEIGHT);
-		canvas.setOnDragEntered(this::onDragEntered);
-		canvas.setOnDragExited(this::onDragExited);
-		canvas.setOnDragOver(this::onDragOver);
-		canvas.setOnDragDropped(this::onDragDropped);
-		canvas.setOnDragDetected(this::onDragDetected);
-	}
-	
-	private void onDragDetected(final MouseEvent event) {
-		logger.debug("Drag detected");
-		final Point point = Point.of(event.getX(), event.getY());
-		final Optional<ConstructionSlot> loc = findConstructionSlot(point);
-		if (loc.isPresent() && !loc.get().isEmpty()) {
-			final Unit unit = loc.get().getUnit();
-			final Image image = imageProvider.getUnitImage(unit);
-			final Dragboard db = canvas.startDragAndDrop(TransferMode.MOVE);
-			ClipboardWritter.make(db).addImage(image).addTransferFromConstructionSlot().addUnit(unit).build();
-			event.consume();
-		}
-		event.consume();
-	}
+    private final static int SLOT_POSITION_WIDTH = GamePanelView.TILE_WIDTH_IN_PX
+            + SLOT_POSITION_SLOT_GAP;
 
-	@SuppressWarnings("unused")
-	private void onDragEntered(final DragEvent event) {
-		logger.debug("Drag entered");
-	}
+    private final static int SLOT_POSITION_TOTAL_WIDTH = 3 * GamePanelView.TILE_WIDTH_IN_PX
+            + 2 * SLOT_POSITION_SLOT_GAP;
 
-	@SuppressWarnings("unused")
-	private void onDragExited(final DragEvent event) {
-		logger.debug("Drag Exited");
-	}
+    private final static int SLOT_POSITION_START = -SLOT_POSITION_TOTAL_WIDTH / 2;
 
-	private void onDragOver(final DragEvent event) {
-		logger.debug("Drag Over");
-		final Point point = Point.of(event.getX(), event.getY());
-		final Optional<ConstructionSlot> loc = findConstructionSlot(point);
-		if (loc.isPresent() && loc.get().isEmpty()) {
-			event.acceptTransferModes(TransferMode.MOVE);
-			logger.debug("was clicked at: " + loc.get());
-		} else {
-			event.acceptTransferModes(TransferMode.NONE);
-		}
-		event.consume();
-	}
+    private final static Point[] SLOT_POSITIONS = new Point[] { Point.of(SLOT_POSITION_START, 10),
+            Point.of(SLOT_POSITION_START + SLOT_POSITION_WIDTH, 10),
+            Point.of(SLOT_POSITION_START + 2 * SLOT_POSITION_WIDTH, 10) };
 
-	private void onDragDropped(final DragEvent event) {
-		logger.debug("Drag dropped");
-		final Point point = Point.of(event.getX(), event.getY());
-		final Optional<ConstructionSlot> loc = findConstructionSlot(point);
-		if (loc.isPresent() && loc.get().isEmpty()) {
-			ConstructionSlot slot = loc.get();
-			final Dragboard db = event.getDragboard();
-			ClipboardReader.make(gameModelController.getModel(), db).tryReadUnit((unit, transferFrom) -> {
-				unit.placeToColonyStructureSlot(slot);
-				event.setDropCompleted(true);
-				unitMovedToConstructionController
-						.fireEvent(new UnitMovedToConstructionEvent(unit, colonyDialog.getColony()));
-			});
-		}
-		event.consume();
-	}
-	
-	private Optional<ConstructionSlot> findConstructionSlot(final Point point) {
-		return slots.entrySet().stream().filter(entry -> entry.getKey().isIn(point)).map(entry -> entry.getValue())
-				.findAny();
-	}
-	
-	void repaint(final Colony colony){
-		slots = new HashMap<>();
-		final GraphicsContext gc = canvas.getGraphicsContext2D();
-		final Point square = Point.of(GamePanelView.TILE_WIDTH_IN_PX, GamePanelView.TILE_WIDTH_IN_PX);
-		gc.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
-		colony.getConstructions().forEach(construction -> {
-			final Point position = constructionPlaces.get(construction.getType());
-			Preconditions.checkNotNull(position,
-					String.format("There is no defined position for construction type '%s'", position));
-			final String name = localizationHelper.getConstructionTypeName(construction.getType());
-			gc.setTextAlign(TextAlignment.CENTER);
-			gc.setTextBaseline(VPos.CENTER);
-			gc.setFill(Color.BLACK);
-			gc.fillText(name, position.getX(), position.getY());
-			gc.setStroke(Color.DARKGRAY);
-			final AtomicInteger cx = new AtomicInteger(0);
-			construction.getConstructionSlots().forEach(constructionSlot -> {
-				final Point topLeftCorner = position.add(SLOT_POSITIONS[cx.get()]);
-				slots.put(Rectangle.ofPointAndSize(topLeftCorner, square), constructionSlot);
-				paintWorkerContainer(gc, topLeftCorner);
-				if (!constructionSlot.isEmpty()) {
-					gc.drawImage(imageProvider.getUnitImage(constructionSlot.getUnit().getType()), topLeftCorner.getX(),
-							topLeftCorner.getY());
-				}
-				cx.incrementAndGet();
-			});
-			paintProduction(gc, position, colony, construction);
-		});
-	}
-	
-	private void paintProduction(final GraphicsContext gc, final Point point, final Colony colony,
-			final Construction construction) {
-		if (construction.getType().getProduce().isPresent()) {
-			
-			final ColonyProductionStats colonyStats = colony.getGoodsStats();
-			final GoodProductionStats goodsStats = colonyStats.getStatsByType(construction.getProducedGoodType().get());
-			
-			String toWrite = "";
-			
-			if ( goodsStats.getNetProduction() != 0 ){
-				toWrite += "x " + goodsStats.getNetProduction() + " ";
-			}
-			if ( goodsStats.getBlockedProduction() != 0 ){
-				toWrite += "lost " + goodsStats.getBlockedProduction();
-			}
-			if (!Strings.isNullOrEmpty(toWrite)) {
-				final Point prod = point.add(PRODUCTION_TEXT);
-				gc.fillText(toWrite, prod.getX(), prod.getY());
-				final double width = getTextWidth(gc, toWrite);
-				gc.drawImage(imageProvider.getGoodTypeImage(construction.getType().getProduce().get()),
-						prod.getX() - width / 2 - GOOD_ICON_WIDTH, prod.getY() - 10, GOOD_ICON_WIDTH, GOOD_ICON_WIDTH);
-			}
-		}
-	}
-	
-	/**
-	 * Get length of given text. Use default text font.
-	 * 
-	 * @param gc
-	 *            required graphics context
-	 * @param text
-	 *            required text which size is looking for
-	 * @return text length
-	 */
-	private double getTextWidth(final GraphicsContext gc, final String text){
-		final Text theText = new Text(text);
-		theText.setFont(gc.getFont());
-		return theText.getBoundsInLocal().getWidth();
-	}
-	
-	private void paintWorkerContainer(final GraphicsContext gc, final Point point){
-		gc.strokeRect(point.getX(), point.getY(), GamePanelView.TILE_WIDTH_IN_PX, GamePanelView.TILE_WIDTH_IN_PX);
-	}
-	
+    /**
+     * Following structure define position of constructions images on colony
+     * map.
+     */
+    private final static Map<ConstructionType, Point> constructionPlaces = ImmutableMap
+            .<ConstructionType, Point>builder()
+            .put(ConstructionType.TOWN_HALL, Point.of(COLUMN_2, ROW_1))
+            .put(ConstructionType.LUMBER_MILL, Point.of(COLUMN_1, ROW_3))
+            .put(ConstructionType.CARPENTERS_SHOP, Point.of(COLUMN_1, ROW_3))
+            .put(ConstructionType.IRON_WORKS, Point.of(COLUMN_2, ROW_3))
+            .put(ConstructionType.BLACKSMITHS_SHOP, Point.of(COLUMN_2, ROW_3))
+            .put(ConstructionType.BLACKSMITHS_HOUSE, Point.of(COLUMN_2, ROW_3))
+            .put(ConstructionType.FORTRESS, Point.of(COLUMN_1, ROW_1))
+            .put(ConstructionType.FORT, Point.of(COLUMN_1, ROW_1))
+            .put(ConstructionType.STOCKADE, Point.of(COLUMN_1, ROW_1))
+            .put(ConstructionType.CIGAR_FACTORY, Point.of(COLUMN_2, ROW_2))
+            .put(ConstructionType.TOBACCONISTS_SHOP, Point.of(COLUMN_2, ROW_2))
+            .put(ConstructionType.TOBACCONISTS_HOUSE, Point.of(COLUMN_2, ROW_2))
+            .put(ConstructionType.TEXTILE_MILL, Point.of(COLUMN_1, ROW_2))
+            .put(ConstructionType.WEAVERS_SHOP, Point.of(COLUMN_1, ROW_2))
+            .put(ConstructionType.WEAVERS_HOUSE, Point.of(COLUMN_1, ROW_2))
+            .put(ConstructionType.RUM_FACTORY, Point.of(COLUMN_3, ROW_2))
+            .put(ConstructionType.RUM_DISTILLERY, Point.of(COLUMN_3, ROW_2))
+            .put(ConstructionType.RUM_DISTILLERS_HOUSE, Point.of(COLUMN_3, ROW_2))
+            .put(ConstructionType.FUR_FACTORY, Point.of(COLUMN_3, ROW_3))
+            .put(ConstructionType.FUR_TRADING_POST, Point.of(COLUMN_3, ROW_3))
+            .put(ConstructionType.FUR_TRADERS_HOUSE, Point.of(COLUMN_3, ROW_3))
+            .put(ConstructionType.ARSENAL, Point.of(10, 10))
+            .put(ConstructionType.MAGAZINE, Point.of(10, 10))
+            .put(ConstructionType.ARMORY, Point.of(10, 10))
+            .put(ConstructionType.SHIPYARD, Point.of(10, 10))
+            .put(ConstructionType.DRYDOCK, Point.of(10, 10))
+            .put(ConstructionType.DOCK, Point.of(10, 10))
+            .put(ConstructionType.UNIVERSITY, Point.of(10, 10))
+            .put(ConstructionType.COLLEGE, Point.of(10, 10))
+            .put(ConstructionType.SCHOOLHOUSE, Point.of(10, 10))
+            .put(ConstructionType.WAREHOUSE_EXPANSION, Point.of(COLUMN_1, ROW_1))
+            .put(ConstructionType.WAREHOUSE, Point.of(COLUMN_1, ROW_1))
+            .put(ConstructionType.BASIC_WAREHOUSE, Point.of(COLUMN_1, ROW_1))
+            .put(ConstructionType.STABLES, Point.of(10, 10))
+            .put(ConstructionType.CATHEDRAL, Point.of(COLUMN_3, ROW_1))
+            .put(ConstructionType.CHURCH, Point.of(COLUMN_3, ROW_1))
+            .put(ConstructionType.NEWSPAPER, Point.of(10, 10))
+            .put(ConstructionType.PRINTING_PRESS, Point.of(10, 10))
+            .put(ConstructionType.CUSTOM_HOUSE, Point.of(10, 10)).build();
+
+    /**
+     * Validation that constants are consistent.
+     */
+    static {
+        Preconditions.checkState(ConstructionType.ALL.size() == constructionPlaces.size(),
+                String.format(
+                        "There is different number of construction types '%s' and it's definitions of position '%s'.",
+                        ConstructionType.ALL.size(), constructionPlaces.size()));
+    }
+
+    private final static int CANVAS_WIDTH = 500;
+
+    private final static int CANVAS_HEIGHT = 300;
+
+    private final static int GOOD_ICON_WIDTH = 30;
+
+    private final Canvas canvas;
+
+    private final LocalizationHelper localizationHelper;
+
+    private final ImageProvider imageProvider;
+
+    private final GameModelController gameModelController;
+
+    private final ColonyDialogCallback colonyDialog;
+
+    private Map<Rectangle, ConstructionSlot> slots;
+
+    private final UnitMovedToConstructionController unitMovedToConstructionController;
+
+    @Inject
+    public PanelColonyStructures(final LocalizationHelper localizationHelper,
+            final ImageProvider imageProvider, final GameModelController gameModelController,
+            final ColonyDialogCallback colonyDialog,
+            final UnitMovedToConstructionController unitMovedToConstructionController) {
+        super("Colony Structures", null);
+        this.localizationHelper = Preconditions.checkNotNull(localizationHelper);
+        this.imageProvider = Preconditions.checkNotNull(imageProvider);
+        this.gameModelController = Preconditions.checkNotNull(gameModelController);
+        this.colonyDialog = Preconditions.checkNotNull(colonyDialog);
+        this.unitMovedToConstructionController = Preconditions
+                .checkNotNull(unitMovedToConstructionController);
+        canvas = new Canvas(CANVAS_WIDTH, CANVAS_HEIGHT);
+        getContentPane().getChildren().add(canvas);
+        setMinWidth(CANVAS_WIDTH);
+        setMinHeight(CANVAS_HEIGHT);
+        canvas.setOnDragEntered(this::onDragEntered);
+        canvas.setOnDragExited(this::onDragExited);
+        canvas.setOnDragOver(this::onDragOver);
+        canvas.setOnDragDropped(this::onDragDropped);
+        canvas.setOnDragDetected(this::onDragDetected);
+    }
+
+    private void onDragDetected(final MouseEvent event) {
+        logger.debug("Drag detected");
+        final Point point = Point.of(event.getX(), event.getY());
+        final Optional<ConstructionSlot> loc = findConstructionSlot(point);
+        if (loc.isPresent() && !loc.get().isEmpty()) {
+            final Unit unit = loc.get().getUnit();
+            final Image image = imageProvider.getUnitImage(unit);
+            final Dragboard db = canvas.startDragAndDrop(TransferMode.MOVE);
+            ClipboardWritter.make(db).addImage(image).addTransferFromConstructionSlot()
+                    .addUnit(unit).build();
+            event.consume();
+        }
+        event.consume();
+    }
+
+    @SuppressWarnings("unused")
+    private void onDragEntered(final DragEvent event) {
+        logger.debug("Drag entered");
+    }
+
+    @SuppressWarnings("unused")
+    private void onDragExited(final DragEvent event) {
+        logger.debug("Drag Exited");
+    }
+
+    private void onDragOver(final DragEvent event) {
+        logger.debug("Drag Over");
+        final Point point = Point.of(event.getX(), event.getY());
+        final Optional<ConstructionSlot> loc = findConstructionSlot(point);
+        if (loc.isPresent() && loc.get().isEmpty()) {
+            event.acceptTransferModes(TransferMode.MOVE);
+            logger.debug("was clicked at: " + loc.get());
+        } else {
+            event.acceptTransferModes(TransferMode.NONE);
+        }
+        event.consume();
+    }
+
+    private void onDragDropped(final DragEvent event) {
+        logger.debug("Drag dropped");
+        final Point point = Point.of(event.getX(), event.getY());
+        final Optional<ConstructionSlot> loc = findConstructionSlot(point);
+        if (loc.isPresent() && loc.get().isEmpty()) {
+            ConstructionSlot slot = loc.get();
+            final Dragboard db = event.getDragboard();
+            ClipboardReader.make(gameModelController.getModel(), db)
+                    .tryReadUnit((unit, transferFrom) -> {
+                        unit.placeToColonyStructureSlot(slot);
+                        event.setDropCompleted(true);
+                        unitMovedToConstructionController.fireEvent(
+                                new UnitMovedToConstructionEvent(unit, colonyDialog.getColony()));
+                    });
+        }
+        event.consume();
+    }
+
+    private Optional<ConstructionSlot> findConstructionSlot(final Point point) {
+        return slots.entrySet().stream().filter(entry -> entry.getKey().isIn(point))
+                .map(entry -> entry.getValue()).findAny();
+    }
+
+    void repaint(final Colony colony) {
+        slots = new HashMap<>();
+        final GraphicsContext gc = canvas.getGraphicsContext2D();
+        final Point square = Point.of(GamePanelView.TILE_WIDTH_IN_PX,
+                GamePanelView.TILE_WIDTH_IN_PX);
+        gc.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+        colony.getConstructions().forEach(construction -> {
+            final Point position = constructionPlaces.get(construction.getType());
+            Preconditions.checkNotNull(position, String
+                    .format("There is no defined position for construction type '%s'", position));
+            final String name = localizationHelper.getConstructionTypeName(construction.getType());
+            gc.setTextAlign(TextAlignment.CENTER);
+            gc.setTextBaseline(VPos.CENTER);
+            gc.setFill(Color.BLACK);
+            gc.fillText(name, position.getX(), position.getY());
+            gc.setStroke(Color.DARKGRAY);
+            final AtomicInteger cx = new AtomicInteger(0);
+            construction.getConstructionSlots().forEach(constructionSlot -> {
+                final Point topLeftCorner = position.add(SLOT_POSITIONS[cx.get()]);
+                slots.put(Rectangle.ofPointAndSize(topLeftCorner, square), constructionSlot);
+                paintWorkerContainer(gc, topLeftCorner);
+                if (!constructionSlot.isEmpty()) {
+                    gc.drawImage(imageProvider.getUnitImage(constructionSlot.getUnit().getType()),
+                            topLeftCorner.getX(), topLeftCorner.getY());
+                }
+                cx.incrementAndGet();
+            });
+            paintProduction(gc, position, colony, construction);
+        });
+    }
+
+    private void paintProduction(final GraphicsContext gc, final Point point, final Colony colony,
+            final Construction construction) {
+        if (construction.getType().getProduce().isPresent()) {
+
+            final ColonyProductionStats colonyStats = colony.getGoodsStats();
+            final GoodProductionStats goodsStats = colonyStats
+                    .getStatsByType(construction.getProducedGoodType().get());
+
+            String toWrite = "";
+
+            if (goodsStats.getNetProduction() != 0) {
+                toWrite += "x " + goodsStats.getNetProduction() + " ";
+            }
+            if (goodsStats.getBlockedProduction() != 0) {
+                toWrite += "lost " + goodsStats.getBlockedProduction();
+            }
+            if (!Strings.isNullOrEmpty(toWrite)) {
+                final Point prod = point.add(PRODUCTION_TEXT);
+                gc.fillText(toWrite, prod.getX(), prod.getY());
+                final double width = getTextWidth(gc, toWrite);
+                gc.drawImage(
+                        imageProvider.getGoodTypeImage(construction.getType().getProduce().get()),
+                        prod.getX() - width / 2 - GOOD_ICON_WIDTH, prod.getY() - 10,
+                        GOOD_ICON_WIDTH, GOOD_ICON_WIDTH);
+            }
+        }
+    }
+
+    /**
+     * Get length of given text. Use default text font.
+     * 
+     * @param gc
+     *            required graphics context
+     * @param text
+     *            required text which size is looking for
+     * @return text length
+     */
+    private double getTextWidth(final GraphicsContext gc, final String text) {
+        final Text theText = new Text(text);
+        theText.setFont(gc.getFont());
+        return theText.getBoundsInLocal().getWidth();
+    }
+
+    private void paintWorkerContainer(final GraphicsContext gc, final Point point) {
+        gc.strokeRect(point.getX(), point.getY(), GamePanelView.TILE_WIDTH_IN_PX,
+                GamePanelView.TILE_WIDTH_IN_PX);
+    }
+
 }

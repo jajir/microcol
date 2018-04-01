@@ -26,131 +26,133 @@ import javafx.scene.layout.VBox;
  */
 public class ColonyDialog extends AbstractMessageWindow implements ColonyDialogCallback {
 
-	final Logger logger = LoggerFactory.getLogger(ColonyDialog.class);
+    final Logger logger = LoggerFactory.getLogger(ColonyDialog.class);
 
-	private final Label colonyName;
+    private final Label colonyName;
 
-	private final PanelColonyFields colonyFields;
+    private final PanelColonyFields colonyFields;
 
-	private final PanelColonyStructures colonyStructures;
+    private final PanelColonyStructures colonyStructures;
 
-	private final PanelColonyGoods goods;
+    private final PanelColonyGoods goods;
 
-	private final PanelDock panelDock;
+    private final PanelDock panelDock;
 
-	private final PanelOutsideColony panelOutsideColony;
+    private final PanelOutsideColony panelOutsideColony;
 
-	private final BooleanProperty propertyShiftWasPressed;
+    private final BooleanProperty propertyShiftWasPressed;
 
-	Colony colony;
+    Colony colony;
 
-	@Inject
-	public ColonyDialog(final ViewUtil viewUtil, final Text text, final ImageProvider imageProvider,
-			final PanelColonyFields panelColonyFields, final PanelColonyStructures panelColonyStructures,
-			final PanelOutsideColony panelOutsideColony, final PanelColonyGoods panelColonyGoods,
-			final PanelColonyDockBehaviour panelColonyDockBehaviour,
-			final UnitMovedOutsideColonyController unitMovedOutsideColonyController,
-			final UnitMovedToConstructionController unitMovedToConstructionController,
-			final UnitMovedToFieldController unitMovedToFieldController) {
-		super(viewUtil);
-		Preconditions.checkNotNull(imageProvider);
-		getDialog().setTitle(text.get("europeDialog.caption"));
+    @Inject
+    public ColonyDialog(final ViewUtil viewUtil, final Text text, final ImageProvider imageProvider,
+            final PanelColonyFields panelColonyFields,
+            final PanelColonyStructures panelColonyStructures,
+            final PanelOutsideColony panelOutsideColony, final PanelColonyGoods panelColonyGoods,
+            final PanelColonyDockBehaviour panelColonyDockBehaviour,
+            final UnitMovedOutsideColonyController unitMovedOutsideColonyController,
+            final UnitMovedToConstructionController unitMovedToConstructionController,
+            final UnitMovedToFieldController unitMovedToFieldController) {
+        super(viewUtil);
+        Preconditions.checkNotNull(imageProvider);
+        getDialog().setTitle(text.get("europeDialog.caption"));
 
-		/**
-		 * Row 0
-		 */
-		colonyName = new Label("Colony: ");
+        /**
+         * Row 0
+         */
+        colonyName = new Label("Colony: ");
 
-		/**
-		 * Row 1
-		 */
-		colonyFields = Preconditions.checkNotNull(panelColonyFields);
-		colonyStructures = Preconditions.checkNotNull(panelColonyStructures);
+        /**
+         * Row 1
+         */
+        colonyFields = Preconditions.checkNotNull(panelColonyFields);
+        colonyStructures = Preconditions.checkNotNull(panelColonyStructures);
 
-		final HBox mapAndBuildings = new HBox();
-		mapAndBuildings.getChildren().addAll(colonyStructures, colonyFields);
+        final HBox mapAndBuildings = new HBox();
+        mapAndBuildings.getChildren().addAll(colonyStructures, colonyFields);
 
-		/**
-		 * Row 2
-		 */
-		final PanelProductionSummary panelProductionSummary = new PanelProductionSummary();
+        /**
+         * Row 2
+         */
+        final PanelProductionSummary panelProductionSummary = new PanelProductionSummary();
 
-		panelDock = new PanelDock(imageProvider, Preconditions.checkNotNull(panelColonyDockBehaviour));
+        panelDock = new PanelDock(imageProvider,
+                Preconditions.checkNotNull(panelColonyDockBehaviour));
 
-		this.panelOutsideColony = Preconditions.checkNotNull(panelOutsideColony);
+        this.panelOutsideColony = Preconditions.checkNotNull(panelOutsideColony);
 
-		final HBox managementRow = new HBox();
-		managementRow.getChildren().addAll(panelProductionSummary, panelDock, panelOutsideColony);
+        final HBox managementRow = new HBox();
+        managementRow.getChildren().addAll(panelProductionSummary, panelDock, panelOutsideColony);
 
-		/**
-		 * Good row - 3
-		 */
-		goods = Preconditions.checkNotNull(panelColonyGoods);
+        /**
+         * Good row - 3
+         */
+        goods = Preconditions.checkNotNull(panelColonyGoods);
 
-		/**
-		 * Last row 4
-		 */
-		final Button buttonOk = new Button(text.get("dialog.ok"));
-		buttonOk.setOnAction(e -> {
-			getDialog().close();
-		});
-		buttonOk.requestFocus();
+        /**
+         * Last row 4
+         */
+        final Button buttonOk = new Button(text.get("dialog.ok"));
+        buttonOk.setOnAction(e -> {
+            getDialog().close();
+        });
+        buttonOk.requestFocus();
 
-		final VBox mainPanel = new VBox();
-		mainPanel.getChildren().addAll(colonyName, mapAndBuildings, managementRow, goods, buttonOk);
-		init(mainPanel);
-		getScene().getStylesheets().add("gui/MicroCol.css");
+        final VBox mainPanel = new VBox();
+        mainPanel.getChildren().addAll(colonyName, mapAndBuildings, managementRow, goods, buttonOk);
+        init(mainPanel);
+        getScene().getStylesheets().add("gui/MicroCol.css");
 
-		/**
-		 * TODO there is a bug, keyboard events are not send during dragging.
-		 * TODO copy of this code is in EuropeDialog
-		 */
-		propertyShiftWasPressed = new SimpleBooleanProperty(false);
-		getScene().addEventFilter(KeyEvent.KEY_RELEASED, event -> {
-			if (event.getCode() == KeyCode.SHIFT) {
-				propertyShiftWasPressed.set(false);
-			}
-		});
-		getScene().addEventFilter(KeyEvent.KEY_PRESSED, event -> {
-			logger.debug("wasShiftPressed " + event);
-			if (event.getCode() == KeyCode.SHIFT) {
-				propertyShiftWasPressed.set(true);
-			}
-		});
-		unitMovedOutsideColonyController.addListener(event -> repaint());
-		unitMovedToConstructionController.addListener(event -> repaint());
-		unitMovedToFieldController.addListener(event -> repaint());
-	}
+        /**
+         * TODO there is a bug, keyboard events are not send during dragging.
+         * TODO copy of this code is in EuropeDialog
+         */
+        propertyShiftWasPressed = new SimpleBooleanProperty(false);
+        getScene().addEventFilter(KeyEvent.KEY_RELEASED, event -> {
+            if (event.getCode() == KeyCode.SHIFT) {
+                propertyShiftWasPressed.set(false);
+            }
+        });
+        getScene().addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+            logger.debug("wasShiftPressed " + event);
+            if (event.getCode() == KeyCode.SHIFT) {
+                propertyShiftWasPressed.set(true);
+            }
+        });
+        unitMovedOutsideColonyController.addListener(event -> repaint());
+        unitMovedToConstructionController.addListener(event -> repaint());
+        unitMovedToFieldController.addListener(event -> repaint());
+    }
 
-	public void showColony(final Colony colony) {
-		this.colony = Preconditions.checkNotNull(colony);
-		colonyName.setText("Colony: " + colony.getName());
-		goods.setColony(colony);
-		repaint();
-		getDialog().showAndWait();
-	}
+    public void showColony(final Colony colony) {
+        this.colony = Preconditions.checkNotNull(colony);
+        colonyName.setText("Colony: " + colony.getName());
+        goods.setColony(colony);
+        repaint();
+        getDialog().showAndWait();
+    }
 
-	@Override
-	public void repaint() {
-		colonyFields.setColony(colony);
-		goods.repaint();
-		panelDock.repaint();
-		colonyStructures.repaint(colony);
-		panelOutsideColony.setColony(colony);
-	}
+    @Override
+    public void repaint() {
+        colonyFields.setColony(colony);
+        goods.repaint();
+        panelDock.repaint();
+        colonyStructures.repaint(colony);
+        panelOutsideColony.setColony(colony);
+    }
 
-	@Override
-	public void close() {
-		getDialog().close();
-	}
+    @Override
+    public void close() {
+        getDialog().close();
+    }
 
-	@Override
-	public Colony getColony() {
-		return colony;
-	}
-	
-	@Override
-	public BooleanProperty getPropertyShiftWasPressed() {
-		return propertyShiftWasPressed;
-	}
+    @Override
+    public Colony getColony() {
+        return colony;
+    }
+
+    @Override
+    public BooleanProperty getPropertyShiftWasPressed() {
+        return propertyShiftWasPressed;
+    }
 }
