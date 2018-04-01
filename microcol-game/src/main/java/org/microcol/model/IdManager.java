@@ -1,20 +1,39 @@
 package org.microcol.model;
 
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.OptionalInt;
+
+import org.microcol.model.store.ModelPo;
+
+import com.google.common.base.Preconditions;
 
 /**
- * Generate unique id's for units. It could be accessed in a static way:
+ * Generate unique id's for units. It should be accessed in a way:
  * 
  * <pre>
- *   int myId = IdManager.nextId();
+ * int myId = idManager.nextId();
  * </pre>
  */
 public class IdManager {
 
-	private final static AtomicInteger nextId = new AtomicInteger(0);
+    private Integer nextId;
 
-	public static final int nextId() {
-		return nextId.incrementAndGet();
-	}
+    public IdManager(final int initialNextId) {
+        Preconditions.checkArgument(initialNextId >= 0,
+                "lastUsedId have to by equals or greater than 0.");
+        nextId = initialNextId;
+    }
+
+    public static IdManager makeFromModelPo(final ModelPo modelPo) {
+        final OptionalInt optInt = modelPo.getUnits().stream().mapToInt(unit -> unit.getId()).max();
+        if (optInt.isPresent()) {
+            return new IdManager(optInt.getAsInt() + 1);
+        } else {
+            return new IdManager(0);
+        }
+    }
+
+    public int nextId() {
+        return nextId++;
+    }
 
 }

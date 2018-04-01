@@ -12,36 +12,34 @@ import com.google.common.base.Preconditions;
  */
 public class PlaceEuropePort extends AbstractPlace {
 
-	private final EuropePort europePort;
+    private final EuropePort europePort;
 
-	PlaceEuropePort(final Unit unit, final EuropePort port) {
-		super(unit);
-		this.europePort = Preconditions.checkNotNull(port);
-	}
+    PlaceEuropePort(final Unit unit, final EuropePort port) {
+        super(unit);
+        this.europePort = Preconditions.checkNotNull(port);
+    }
 
-	@Override
-	public String getName() {
-		return "Port";
-	}
+    @Override
+    public String getName() {
+        return "Port";
+    }
 
-	protected EuropePort getEuropePort() {
-		return europePort;
-	}
-	
-	@Override
-	public String toString() {
-		return MoreObjects.toStringHelper(PlaceEuropePort.class)
-				.add("unit id", getUnit().getId())
-				.add("europePort", europePort)
-				.toString();
-	}
+    protected EuropePort getEuropePort() {
+        return europePort;
+    }
 
-	@Override
-	public PlacePo save(final UnitPo unitPo){
-		final PlaceEuropePortPo out = new PlaceEuropePortPo();
-		out.setOnPier(false);
-		unitPo.setPlaceEuropePort(out);
-		return out;
-	}
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(PlaceEuropePort.class).add("unit id", getUnit().getId())
+                .add("europePort", europePort).toString();
+    }
+
+    @Override
+    public PlacePo save(final UnitPo unitPo) {
+        final PlaceEuropePortPo out = new PlaceEuropePortPo();
+        out.setOnPier(false);
+        unitPo.setPlaceEuropePort(out);
+        return out;
+    }
 
 }

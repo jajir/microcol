@@ -118,7 +118,7 @@ public final class Model {
             final List<Function<Model, GameOverResult>> gameOverEvaluators) {
         final Calendar calendar = Calendar.make(modelPo.getCalendar());
         final WorldMap worldMap = new WorldMap(modelPo);
-        final UnitStorage unitStorage = new UnitStorage();
+        final UnitStorage unitStorage = new UnitStorage(IdManager.makeFromModelPo(modelPo));
 
         final Model model = new Model(calendar, worldMap, modelPo, unitStorage, gameOverEvaluators);
 
@@ -197,11 +197,9 @@ public final class Model {
     public Unit createCargoShipForKing(final Player king) {
         Preconditions.checkNotNull(king);
         Preconditions.checkNotNull(king.isComputer(), "king have to be computer player");
-        final Unit out = new Unit(unit -> new Cargo(unit, UnitType.GALLEON.getSpeed()), this,
-                IdManager.nextId(), unit -> new PlaceHighSea(unit, false, 3), UnitType.GALLEON,
-                king, UnitType.GALLEON.getSpeed());
-        unitStorage.addUnit(out);
-        return out;
+        return unitStorage.createUnit(unit -> new Cargo(unit, UnitType.GALLEON.getSpeed()), this,
+                unit -> new PlaceHighSea(unit, false, 3), UnitType.GALLEON, king,
+                UnitType.GALLEON.getSpeed());
     }
 
     public boolean isValid(final Path path) {
@@ -228,11 +226,9 @@ public final class Model {
                 "Ship (%s) for cargo doesn't have any free slot for expedition force unit.",
                 loadUnitToShip);
         CargoSlot cargoSlot = loadUnitToShip.getCargo().getEmptyCargoSlot().get();
-        final Unit out = new Unit(unit -> new Cargo(unit, UnitType.COLONIST.getSpeed()), this,
-                IdManager.nextId(), unit -> new PlaceCargoSlot(unit, cargoSlot), UnitType.COLONIST,
-                king, UnitType.COLONIST.getSpeed());
-        unitStorage.addUnit(out);
-        return out;
+        return unitStorage.createUnit(unit -> new Cargo(unit, UnitType.COLONIST.getSpeed()), this,
+                unit -> new PlaceCargoSlot(unit, cargoSlot), UnitType.COLONIST, king,
+                UnitType.COLONIST.getSpeed());
     }
 
     void addUnitToPlayer(final UnitType unitType, final Player owner) {

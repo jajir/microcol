@@ -1,5 +1,8 @@
 package org.microcol.model;
-import static org.junit.Assert.*;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -7,40 +10,41 @@ import mockit.Mocked;
 
 public class UnitStorageTest {
 
-	private UnitStorage unitStorage;
+    private UnitStorage unitStorage;
 
-	@Mocked
-	private Unit unit;
+    @Mocked
+    private Unit unit;
 
-	@Test(expected=NullPointerException.class)
-	public void test_addUnit_nullUnit() throws Exception {
-		unitStorage.addUnit(null);
-	}
+    private @Mocked IdManager idManager;
 
-	@Test(expected=IllegalArgumentException.class)
-	public void test_addUnit_unitWasAlreadyInserted() throws Exception {
-		unitStorage.addUnit(unit);
-		unitStorage.addUnit(unit);
-	}
-	
-	@Test
-	public void test_thatEmptyStorageDoesntReturnNull() throws Exception {
-		assertNotNull(unitStorage.getUnits());
-		assertEquals(0, unitStorage.getUnits().size());
-	}
-	
+    @Test(expected = NullPointerException.class)
+    public void test_addUnit_nullUnit() throws Exception {
+        unitStorage.addUnit(null);
+    }
 
-	@Test
-	public void test_addUnit() throws Exception {
-		unitStorage.addUnit(unit);
+    @Test(expected = IllegalArgumentException.class)
+    public void test_addUnit_unitWasAlreadyInserted() throws Exception {
+        unitStorage.addUnit(unit);
+        unitStorage.addUnit(unit);
+    }
 
-		assertNotNull(unitStorage.getUnits());
-		assertEquals(1, unitStorage.getUnits().size());
-	}
+    @Test
+    public void test_thatEmptyStorageDoesntReturnNull() throws Exception {
+        assertNotNull(unitStorage.getUnits());
+        assertEquals(0, unitStorage.getUnits().size());
+    }
 
-	@Before
-	public void setup() {
-		unitStorage = new UnitStorage();
-	}
+    @Test
+    public void test_addUnit() throws Exception {
+        unitStorage.addUnit(unit);
+
+        assertNotNull(unitStorage.getUnits());
+        assertEquals(1, unitStorage.getUnits().size());
+    }
+
+    @Before
+    public void setup() {
+        unitStorage = new UnitStorage(idManager);
+    }
 
 }

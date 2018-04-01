@@ -25,7 +25,10 @@ class UnitStorage {
      */
     private final List<Unit> units;
 
-    UnitStorage() {
+    private final IdManager idManager;
+
+    UnitStorage(final IdManager idManager) {
+        this.idManager = Preconditions.checkNotNull(idManager);
         this.units = new ArrayList<>();
     }
 
@@ -39,9 +42,18 @@ class UnitStorage {
         checkDuplicities(units);
     }
 
+    Unit createUnit(final Function<Unit, Cargo> cargoBuilder, final Model model,
+            final Function<Unit, Place> placeBuilder, final UnitType unitType, final Player owner,
+            final int availableMoves) {
+        final Unit unit = new Unit(cargoBuilder, model, idManager.nextId(), placeBuilder, unitType,
+                owner, availableMoves);
+        units.add(unit);
+        return unit;
+    }
+
     void addUnitToPlayer(final UnitType unitType, final Player owner, final Model model) {
         units.add(new Unit(unit -> new Cargo(unit, unitType.getCargoCapacity()), model,
-                IdManager.nextId(), unit -> new PlaceEuropePier(unit), unitType, owner,
+                idManager.nextId(), unit -> new PlaceEuropePier(unit), unitType, owner,
                 unitType.getSpeed()));
     }
 
@@ -219,16 +231,14 @@ class UnitStorage {
     Optional<Unit> getFirstSelectableUnitAt(final Player currentPlayer, final Location location) {
         Preconditions.checkNotNull(currentPlayer, "Player is null");
         Preconditions.checkNotNull(location, "Location is null");
-        
+
         final List<Unit> playersUnitAtLocation = units.stream()
                 .filter(unit -> currentPlayer.equals(unit.getOwner()))
                 .filter(unit -> unit.isAtPlaceLocation())
-                .filter(unit -> unit.getLocation().equals(location))
-                .collect(Collectors.toList());
-        
+                .filter(unit -> unit.getLocation().equals(location)).collect(Collectors.toList());
+
         final Optional<Unit> moveableUnit = playersUnitAtLocation.stream()
-                .filter(unit -> unit.getAvailableMoves() > 0)
-                .findFirst();
+                .filter(unit -> unit.getAvailableMoves() > 0).findFirst();
         if (moveableUnit.isPresent()) {
             return moveableUnit;
         } else {

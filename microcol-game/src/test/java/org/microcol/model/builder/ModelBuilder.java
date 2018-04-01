@@ -19,6 +19,8 @@ public class ModelBuilder {
 
     private ModelPo modelPo;
 
+    private final IdManager idManager = new IdManager(0);
+
     @Deprecated
     private EuropeBuilder europeBuilder;
 
@@ -57,13 +59,13 @@ public class ModelBuilder {
     }
 
     public PlayerBuilder addPlayer(final String name) {
-        return new PlayerBuilder(this, name);
+        return new PlayerBuilder(this, name, idManager);
     }
 
     public ModelBuilder addUnit(final UnitType type, final String ownerName,
             final Location location) {
         UnitPo unit = new UnitPo();
-        unit.setId(IdManager.nextId());
+        unit.setId(idManager.nextId());
         unit.setAvailableMoves(0);
         unit.setOwnerId(ownerName);
         unit.setType(type);
@@ -85,7 +87,7 @@ public class ModelBuilder {
     }
 
     public UnitBuilder makeUnitBuilder() {
-        return new UnitBuilder(modelPo);
+        return new UnitBuilder(modelPo, idManager);
     }
 
     /**
