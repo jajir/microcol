@@ -18,20 +18,22 @@ import com.google.inject.Inject;
  */
 public class BuildColonyEventController extends AbstractEventController<BuildColonyEvent> {
 
-	private final GameModelController gameModelController;
-	private final SelectedUnitManager selectedUnitManager;
+    private final GameModelController gameModelController;
+    private final SelectedUnitManager selectedUnitManager;
 
-	@Inject
-	public BuildColonyEventController(final GameModelController game, final SelectedUnitManager selectedUnitManager) {
-		this.gameModelController = Preconditions.checkNotNull(game);
-		this.selectedUnitManager = Preconditions.checkNotNull(selectedUnitManager);
-	}
+    @Inject
+    public BuildColonyEventController(final GameModelController game,
+            final SelectedUnitManager selectedUnitManager) {
+        this.gameModelController = Preconditions.checkNotNull(game);
+        this.selectedUnitManager = Preconditions.checkNotNull(selectedUnitManager);
+    }
 
-	public void fireEvent() {
-		final Player player = gameModelController.getCurrentPlayer();
-		final Unit unit = selectedUnitManager.getSelectedUnit().orElseThrow(
-				() -> new IllegalStateException("Build colony event can't be invoked when no unit is selected."));
-		super.fireEvent(new BuildColonyEvent(player, unit));
-	}
+    public void fireEvent() {
+        final Player player = gameModelController.getCurrentPlayer();
+        final Unit unit = selectedUnitManager.getSelectedUnit()
+                .orElseThrow(() -> new IllegalStateException(
+                        "Build colony event can't be invoked when no unit is selected."));
+        super.fireEvent(new BuildColonyEvent(player, unit));
+    }
 
 }

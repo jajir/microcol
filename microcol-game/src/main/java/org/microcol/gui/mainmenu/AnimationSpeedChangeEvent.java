@@ -6,14 +6,14 @@ package org.microcol.gui.mainmenu;
  */
 public class AnimationSpeedChangeEvent {
 
-	private final int animationSpeed;
+    private final int animationSpeed;
 
-	public AnimationSpeedChangeEvent(final int animationSpeed) {
-		this.animationSpeed = animationSpeed;
-	}
+    public AnimationSpeedChangeEvent(final int animationSpeed) {
+        this.animationSpeed = animationSpeed;
+    }
 
-	public int getAnimationSpeed() {
-		return animationSpeed;
-	}
+    public int getAnimationSpeed() {
+        return animationSpeed;
+    }
 
 }

@@ -84,7 +84,7 @@ public class MainMenuView {
          */
         menuItemDeclareIndependence = new MenuItem();
         menuItemDeclareIndependence.disableProperty().setValue(false);
-        
+
         menuItemExitGame = new MenuItem();
         menuItemExitGame.disableProperty().setValue(false);
 
@@ -191,7 +191,7 @@ public class MainMenuView {
         menuItemColonizopedia
                 .setAccelerator(new KeyCodeCombination(KeyCode.H, KeyCombination.CONTROL_DOWN));
         menuItemColonizopedia.disableProperty().setValue(false);
-        
+
         /**
          * Help
          */
@@ -199,7 +199,7 @@ public class MainMenuView {
         if (gamePreferences.isDevelopment()) {
             menuHelp.getItems().addAll(menuItemColonizopedia);
         }
-        
+
         if (gamePreferences.isOSX()) {
             /**
              * Following command will use apple system menu. Side effect is that
@@ -230,7 +230,7 @@ public class MainMenuView {
         }
         updateLanguage();
     }
-    
+
     public void updateLanguage() {
         /**
          * Game

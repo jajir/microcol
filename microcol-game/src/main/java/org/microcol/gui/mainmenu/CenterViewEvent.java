@@ -7,9 +7,9 @@ import com.google.common.base.MoreObjects;
  */
 public class CenterViewEvent {
 
-	@Override
-	public String toString() {
-		return MoreObjects.toStringHelper(CenterViewEvent.class).toString();
-	}
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(CenterViewEvent.class).toString();
+    }
 
 }
