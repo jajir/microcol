@@ -9,11 +9,11 @@ import org.microcol.model.event.BeforeEndTurnEvent;
 import org.microcol.model.event.ColonyWasCapturedEvent;
 import org.microcol.model.event.ColonyWasFoundEvent;
 import org.microcol.model.event.DebugRequestedEvent;
-import org.microcol.model.event.IndependenceWasDeclaredEvent;
 import org.microcol.model.event.GameFinishedEvent;
 import org.microcol.model.event.GameStartedEvent;
 import org.microcol.model.event.GoldWasChangedEvent;
 import org.microcol.model.event.GoodsWasSoldInEuropeEvent;
+import org.microcol.model.event.IndependenceWasDeclaredEvent;
 import org.microcol.model.event.RoundStartedEvent;
 import org.microcol.model.event.TurnStartedEvent;
 import org.microcol.model.event.UnitAttackedEvent;
@@ -130,27 +130,29 @@ public class ModelListenerImpl implements ModelListener {
     }
 
     @Override
-    public void beforeEndTurn(BeforeEndTurnEvent event) {
+    public void beforeEndTurn(final BeforeEndTurnEvent event) {
         // Front-end doesn't care about this event.
     }
 
     @Override
-    public void colonyWasFounded(ColonyWasFoundEvent event) {
-        // Front-end doesn't care about this event.
-    }
-    
-    @Override
-    public void goodsWasSoldInEurope(GoodsWasSoldInEuropeEvent event) {
+    public void colonyWasFounded(final ColonyWasFoundEvent event) {
         // Front-end doesn't care about this event.
     }
 
     @Override
-    public void independenceWasDeclared(IndependenceWasDeclaredEvent event) {
+    public void goodsWasSoldInEurope(final GoodsWasSoldInEuropeEvent event) {
         // Front-end doesn't care about this event.
     }
 
     @Override
-    public void beforeDeclaringIndependence(BeforeDeclaringIndependenceEvent event) {
+    public void independenceWasDeclared(final IndependenceWasDeclaredEvent event) {
+        if (event.getWhoDecalareIt().isHuman()) {
+            modelEventManager.getIndependenceWasDeclaredColntroller().fireEvent(event);
+        }
+    }
+
+    @Override
+    public void beforeDeclaringIndependence(final BeforeDeclaringIndependenceEvent event) {
         // Front-end doesn't care about this event.
     }
 

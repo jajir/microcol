@@ -68,6 +68,7 @@ public class DefaultMissionFindNewWold extends AbstractMission {
             @Override
             public void beforeDeclaringIndependence(final BeforeDeclaringIndependenceEvent event) {
                 event.stopEventExecution();
+                missionCallBack.showMessage("campaign.default.m1.cantDeclareIndependence");
             }
 
             @Override

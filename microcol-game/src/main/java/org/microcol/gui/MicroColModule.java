@@ -39,6 +39,7 @@ import org.microcol.gui.event.model.GameFinishedController;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.event.model.GameStartedController;
 import org.microcol.gui.event.model.GoldWasChangedController;
+import org.microcol.gui.event.model.IndependenceWasDeclaredColntroller;
 import org.microcol.gui.event.model.MissionCallBack;
 import org.microcol.gui.event.model.ModelEventManager;
 import org.microcol.gui.event.model.RoundStartedController;
@@ -171,6 +172,7 @@ public class MicroColModule extends AbstractModule {
         bind(ExitGameController.class).in(Singleton.class);
         bind(BeforeGameStartController.class).in(Singleton.class);
         bind(SelectedUnitWasChangedController.class).in(Singleton.class);
+        bind(IndependenceWasDeclaredColntroller.class).in(Singleton.class);
         
         bind(TurnStartedListener.class).asEagerSingleton();
         bind(TileWasSelectedListener.class).asEagerSingleton();
@@ -246,7 +248,6 @@ public class MicroColModule extends AbstractModule {
         /**
          * Rest of UI
          */
-        bind(DialogIndependenceWasDeclared.class).in(Singleton.class);
         bind(Colonizopedia.class).in(Singleton.class);
         bind(PreferencesVolume.class).in(Singleton.class);
         bind(PreferencesAnimationSpeed.class).in(Singleton.class);

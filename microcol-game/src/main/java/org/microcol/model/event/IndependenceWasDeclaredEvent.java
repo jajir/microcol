@@ -7,7 +7,7 @@ import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 
 /**
- * Event is send when player declares independence.
+ * Event is send when player declares independence. Model event.
  */
 public class IndependenceWasDeclaredEvent extends AbstractModelEvent {
 

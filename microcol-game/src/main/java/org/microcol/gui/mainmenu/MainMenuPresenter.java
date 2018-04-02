@@ -3,7 +3,6 @@ package org.microcol.gui.mainmenu;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 
-import org.microcol.gui.DialogIndependenceWasDeclared;
 import org.microcol.gui.PersistingDialog;
 import org.microcol.gui.PreferencesAnimationSpeed;
 import org.microcol.gui.PreferencesVolume;
@@ -15,6 +14,7 @@ import org.microcol.gui.event.StartMoveController;
 import org.microcol.gui.event.StartMoveEvent;
 import org.microcol.gui.event.model.GameController;
 import org.microcol.gui.event.model.GameModelController;
+import org.microcol.gui.event.model.IndependenceWasDeclaredColntroller;
 import org.microcol.gui.event.model.TurnStartedController;
 import org.microcol.gui.event.model.UnitMoveFinishedController;
 import org.microcol.gui.event.model.UnitMovedController;
@@ -26,6 +26,7 @@ import org.microcol.gui.gamepanel.TileWasSelectedEvent;
 import org.microcol.gui.util.Text;
 import org.microcol.model.Model;
 import org.microcol.model.Unit;
+import org.microcol.model.event.IndependenceWasDeclaredEvent;
 import org.microcol.model.event.TurnStartedEvent;
 import org.microcol.model.event.UnitMoveFinishedEvent;
 import org.microcol.model.event.UnitMovedStepEvent;
@@ -66,14 +67,14 @@ public class MainMenuPresenter {
             final EndMoveController endMoveController,
             final TurnStartedController turnStartedController,
             final PersistingDialog persistingDialog, final EuropeDialog europeDialog,
-            final DialogIndependenceWasDeclared dialogIndependenceWasDeclared,
             final Colonizopedia colonizopedia,
             final PreferencesAnimationSpeed preferencesAnimationSpeed,
             final PreferencesVolume preferencesVolume,
             final SelectedUnitManager selectedUnitManager,
             final UnitMovedController unitMovedStepController,
             final UnitMoveFinishedController unitMoveFinishedController,
-            final SelectedUnitWasChangedController selectedUnitWasChangedController) {
+            final SelectedUnitWasChangedController selectedUnitWasChangedController,
+            final IndependenceWasDeclaredColntroller independenceWasDeclaredColntroller) {
         this.view = Preconditions.checkNotNull(view);
         this.selectedUnitManager = Preconditions.checkNotNull(selectedUnitManager);
         this.gameModelController = Preconditions.checkNotNull(gameModelController);
@@ -108,7 +109,6 @@ public class MainMenuPresenter {
             view.getMenuItemMove().setDisable(true);
         });
         view.getMenuItemDeclareIndependence().setOnAction(event -> {
-            dialogIndependenceWasDeclared.showAndWait();
             declareIndependenceController.fireEvent(new DeclareIndependenceEvent(
                     gameModelController.getModel(), gameModelController.getCurrentPlayer()));
         });
@@ -125,9 +125,7 @@ public class MainMenuPresenter {
         });
         tileWasSelectedController.addRunLaterListener(event -> onFocusedTileEvent(event));
         turnStartedController.addRunLaterListener(this::onTurnStartedEvent);
-        declareIndependenceController
-                .addListener(event -> view.getMenuItemDeclareIndependence().setDisable(true));
-
+        independenceWasDeclaredColntroller.addListener(this::onIndependenceWasDeclared);
         quitGameController.addListener(this::onGameFinihedEvent);
         endMoveController.addRunLaterListener(this::onEndMoveEvent);
         unitMovedStepController.addRunLaterListener(this::onUnitMovedStep);
@@ -159,6 +157,11 @@ public class MainMenuPresenter {
         view.getMenuItemNextUnit().setDisable(true);
         view.getMenuItemCenterView().setDisable(true);
         view.getMenuItemEurope().setDisable(true);
+    }
+
+    @SuppressWarnings("unused")
+    private void onIndependenceWasDeclared(final IndependenceWasDeclaredEvent event) {
+        view.getMenuItemDeclareIndependence().setDisable(true);
     }
 
     @SuppressWarnings("unused")

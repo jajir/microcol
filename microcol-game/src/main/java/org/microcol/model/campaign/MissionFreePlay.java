@@ -7,6 +7,8 @@ import org.microcol.gui.event.model.MissionCallBack;
 import org.microcol.model.GameOverEvaluator;
 import org.microcol.model.GameOverResult;
 import org.microcol.model.Model;
+import org.microcol.model.ModelListenerAdapter;
+import org.microcol.model.event.IndependenceWasDeclaredEvent;
 
 import com.google.common.collect.Lists;
 
@@ -27,7 +29,14 @@ public class MissionFreePlay extends AbstractMission {
 
     @Override
     public void startMission(final Model model, final MissionCallBack missionCallBack) {
+        model.addListener(new ModelListenerAdapter() {
 
+            @Override
+            public void independenceWasDeclared(final IndependenceWasDeclaredEvent event) {
+                missionCallBack.showMessage("dialogIndependenceWasDeclared.caption");
+            }
+
+        });
     }
 
     @Override

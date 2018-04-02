@@ -8,113 +8,129 @@ import com.google.inject.Inject;
  * GUI event controllers for model events.
  */
 public class ModelEventManager {
-	
-	private final RoundStartedController roundStartedController;
 
-	private final UnitMovedController unitMovedController;
+    private final RoundStartedController roundStartedController;
 
-	private final UnitMoveFinishedController unitMoveFinishedController;
+    private final UnitMovedController unitMovedController;
 
-	private final GameStartedController gameStartedController;
+    private final UnitMoveFinishedController unitMoveFinishedController;
 
-	private final TurnStartedController turnStartedController;
+    private final GameStartedController gameStartedController;
 
-	private final DebugRequestController debugRequestController;
+    private final TurnStartedController turnStartedController;
 
-	private final GameFinishedController gameFinishedController;
+    private final DebugRequestController debugRequestController;
 
-	private final UnitAttackedEventController unitAttackedEventController;
-	
-	private final GoldWasChangedController goldWasChangedController;
-	
-	private final ColonyWasCapturedController colonyWasCapturedController;
-	
-	private final UnitEmbarkedController unitEmbarkedController;
-	
-	private final UnitMovedToHighSeasController unitMovedToHighSeasController;
+    private final GameFinishedController gameFinishedController;
 
-	@Inject
-	public ModelEventManager(final RoundStartedController roundStartedController, final UnitMovedController unitMovedController,
-			final GameStartedController gameStartedController, final TurnStartedController turnStartedController,
-			final DebugRequestController debugRequestController, final GameFinishedController gameFinishedController,
-			final UnitAttackedEventController unitAttackedEventController,
-			final GoldWasChangedController goldWasChangedController,
-			final ColonyWasCapturedController colonyWasCapturedController,
-			final UnitEmbarkedController unitEmbarkedController,
-			final UnitMoveFinishedController unitMoveFinishedController,
-			final UnitMovedToHighSeasController unitMovedToHighSeasController) {
-		this.roundStartedController = Preconditions.checkNotNull(roundStartedController);
-		this.unitMovedController = Preconditions.checkNotNull(unitMovedController);
-		this.gameStartedController = Preconditions.checkNotNull(gameStartedController);
-		this.turnStartedController = Preconditions.checkNotNull(turnStartedController);
-		this.debugRequestController = Preconditions.checkNotNull(debugRequestController);
-		this.gameFinishedController = Preconditions.checkNotNull(gameFinishedController);
-		this.unitAttackedEventController = Preconditions.checkNotNull(unitAttackedEventController);
-		this.goldWasChangedController = Preconditions.checkNotNull(goldWasChangedController);
-		this.colonyWasCapturedController = Preconditions.checkNotNull(colonyWasCapturedController);
-		this.unitEmbarkedController = Preconditions.checkNotNull(unitEmbarkedController);
-		this.unitMoveFinishedController = Preconditions.checkNotNull(unitMoveFinishedController);
-		this.unitMovedToHighSeasController = Preconditions.checkNotNull(unitMovedToHighSeasController);
-	}
+    private final UnitAttackedEventController unitAttackedEventController;
 
-	public RoundStartedController getRoundStartedController() {
-		return roundStartedController;
-	}
+    private final GoldWasChangedController goldWasChangedController;
 
-	public UnitMovedController getUnitMovedController() {
-		return unitMovedController;
-	}
+    private final ColonyWasCapturedController colonyWasCapturedController;
 
-	public GameStartedController getGameStartedController() {
-		return gameStartedController;
-	}
+    private final UnitEmbarkedController unitEmbarkedController;
 
-	public TurnStartedController getTurnStartedController() {
-		return turnStartedController;
-	}
+    private final UnitMovedToHighSeasController unitMovedToHighSeasController;
 
-	public DebugRequestController getDebugRequestController() {
-		return debugRequestController;
-	}
+    private final IndependenceWasDeclaredColntroller independenceWasDeclaredColntroller;
 
-	public GameFinishedController getGameFinishedController() {
-		return gameFinishedController;
-	}
+    @Inject
+    public ModelEventManager(final RoundStartedController roundStartedController,
+            final UnitMovedController unitMovedController,
+            final GameStartedController gameStartedController,
+            final TurnStartedController turnStartedController,
+            final DebugRequestController debugRequestController,
+            final GameFinishedController gameFinishedController,
+            final UnitAttackedEventController unitAttackedEventController,
+            final GoldWasChangedController goldWasChangedController,
+            final ColonyWasCapturedController colonyWasCapturedController,
+            final UnitEmbarkedController unitEmbarkedController,
+            final UnitMoveFinishedController unitMoveFinishedController,
+            final UnitMovedToHighSeasController unitMovedToHighSeasController,
+            final IndependenceWasDeclaredColntroller independenceWasDeclaredColntroller) {
+        this.roundStartedController = Preconditions.checkNotNull(roundStartedController);
+        this.unitMovedController = Preconditions.checkNotNull(unitMovedController);
+        this.gameStartedController = Preconditions.checkNotNull(gameStartedController);
+        this.turnStartedController = Preconditions.checkNotNull(turnStartedController);
+        this.debugRequestController = Preconditions.checkNotNull(debugRequestController);
+        this.gameFinishedController = Preconditions.checkNotNull(gameFinishedController);
+        this.unitAttackedEventController = Preconditions.checkNotNull(unitAttackedEventController);
+        this.goldWasChangedController = Preconditions.checkNotNull(goldWasChangedController);
+        this.colonyWasCapturedController = Preconditions.checkNotNull(colonyWasCapturedController);
+        this.unitEmbarkedController = Preconditions.checkNotNull(unitEmbarkedController);
+        this.unitMoveFinishedController = Preconditions.checkNotNull(unitMoveFinishedController);
+        this.unitMovedToHighSeasController = Preconditions
+                .checkNotNull(unitMovedToHighSeasController);
+        this.independenceWasDeclaredColntroller = Preconditions
+                .checkNotNull(independenceWasDeclaredColntroller);
+    }
 
-	public UnitAttackedEventController getUnitAttackedEventController() {
-		return unitAttackedEventController;
-	}
-	
-	public GoldWasChangedController getGoldWasChangedController(){
-		return goldWasChangedController;
-	}
+    public RoundStartedController getRoundStartedController() {
+        return roundStartedController;
+    }
 
-	/**
-	 * @return the colonyWasCapturedController
-	 */
-	public ColonyWasCapturedController getColonyWasCapturedController() {
-		return colonyWasCapturedController;
-	}
+    public UnitMovedController getUnitMovedController() {
+        return unitMovedController;
+    }
 
-	/**
-	 * @return the unitEmbarkController
-	 */
-	public UnitEmbarkedController getUnitEmbarkController() {
-		return unitEmbarkedController;
-	}
+    public GameStartedController getGameStartedController() {
+        return gameStartedController;
+    }
 
-	/**
-	 * @return the unitMoveFinishedController
-	 */
-	public UnitMoveFinishedController getUnitMoveFinishedController() {
-		return unitMoveFinishedController;
-	}
+    public TurnStartedController getTurnStartedController() {
+        return turnStartedController;
+    }
 
-	/**
-	 * @return the unitMovedToHighSeasController
-	 */
-	public UnitMovedToHighSeasController getUnitMovedToHighSeasController() {
-		return unitMovedToHighSeasController;
-	}
-	
+    public DebugRequestController getDebugRequestController() {
+        return debugRequestController;
+    }
+
+    public GameFinishedController getGameFinishedController() {
+        return gameFinishedController;
+    }
+
+    public UnitAttackedEventController getUnitAttackedEventController() {
+        return unitAttackedEventController;
+    }
+
+    public GoldWasChangedController getGoldWasChangedController() {
+        return goldWasChangedController;
+    }
+
+    /**
+     * @return the colonyWasCapturedController
+     */
+    public ColonyWasCapturedController getColonyWasCapturedController() {
+        return colonyWasCapturedController;
+    }
+
+    /**
+     * @return the unitEmbarkController
+     */
+    public UnitEmbarkedController getUnitEmbarkController() {
+        return unitEmbarkedController;
+    }
+
+    /**
+     * @return the unitMoveFinishedController
+     */
+    public UnitMoveFinishedController getUnitMoveFinishedController() {
+        return unitMoveFinishedController;
+    }
+
+    /**
+     * @return the unitMovedToHighSeasController
+     */
+    public UnitMovedToHighSeasController getUnitMovedToHighSeasController() {
+        return unitMovedToHighSeasController;
+    }
+
+    /**
+     * @return the independenceWasDeclaredColntroller
+     */
+    public IndependenceWasDeclaredColntroller getIndependenceWasDeclaredColntroller() {
+        return independenceWasDeclaredColntroller;
+    }
+
 }

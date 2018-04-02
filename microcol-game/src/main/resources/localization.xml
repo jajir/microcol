@@ -91,6 +91,7 @@
 	<entry key="campaign.default.sellCigarsInEuropePort">Konečně. Už máš potřebné množství doutníků. Vezmi je na loď, odvez do Evropy a prodej.</entry>
 	<entry key="campaign.default.cigarsWasSold">Výborně. Podařilo se ti prodat těžce získané doutníky.</entry>
 	<entry key="campaign.default.gameOver">Congratulations. Your first mission is successfully finished.</entry>
+	<entry key="campaign.default.m1.cantDeclareIndependence">Ještě vyhlásit nezávislost neůžeš. Vyhlášení nezávislosti hodně pozlobí krále, který se pkusí získat kolonie silo zpět. Na to nemáš dost síly.</entry>
 	<entry key="campaign.default.m2.start">You found first colony, now you have to build proud and wealth nations.</entry>
 	<entry key="campaign.default.m2.foundColonies">Now you'll need more colonies. Buy some colonist and found at least 3 colonies.</entry>
 	<entry key="campaign.default.m2.foundColonies.done">Perfect. Now you have enought colonies.</entry>

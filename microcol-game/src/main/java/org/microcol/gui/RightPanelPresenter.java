@@ -88,7 +88,9 @@ public class RightPanelPresenter {
         display.setOnMovePlayer(event.getPlayer());
         if (event.getPlayer().isHuman()) {
             display.getNextTurnButton().setDisable(false);
-            display.refreshView(lastFocusedTileEvent);
+            if (lastFocusedTileEvent != null) {
+                display.refreshView(lastFocusedTileEvent);
+            }
         }
     }
 
