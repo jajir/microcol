@@ -484,6 +484,14 @@ public final class Model {
         listenerManager.fireGoldWasChanged(this, player, oldValue, newValue);
     }
 
+    void fireIndependenceWasDeclared(final Player whoDecalareIt) {
+        listenerManager.fireIndependenceWasDeclared(this, whoDecalareIt);
+    }
+
+    boolean fireBeforeDeclaringIndependence(final Player whoDecalareIt) {
+        return listenerManager.fireBeforeDeclaringIndependence(this, whoDecalareIt);
+    }
+
     void fireColonyWasCaptured(final Model model, final Unit capturingUnit,
             final Colony capturedColony) {
         listenerManager.fireColonyWasCaptured(model, capturingUnit, capturedColony);

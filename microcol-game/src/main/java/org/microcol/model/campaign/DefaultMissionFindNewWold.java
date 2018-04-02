@@ -20,6 +20,7 @@ import org.microcol.model.Path;
 import org.microcol.model.Player;
 import org.microcol.model.TerrainType;
 import org.microcol.model.Unit;
+import org.microcol.model.event.BeforeDeclaringIndependenceEvent;
 import org.microcol.model.event.BeforeEndTurnEvent;
 import org.microcol.model.event.ColonyWasFoundEvent;
 import org.microcol.model.event.GameStartedEvent;
@@ -63,6 +64,11 @@ public class DefaultMissionFindNewWold extends AbstractMission {
     @Override
     public void startMission(final Model model, final MissionCallBack missionCallBack) {
         model.addListener(new ModelListenerAdapter() {
+            
+            @Override
+            public void beforeDeclaringIndependence(final BeforeDeclaringIndependenceEvent event) {
+                event.stopEventExecution();
+            }
 
             @Override
             public void gameStarted(final GameStartedEvent event) {

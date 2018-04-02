@@ -6,6 +6,7 @@ import java.util.concurrent.Executors;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
+import org.microcol.model.event.BeforeDeclaringIndependenceEvent;
 import org.microcol.model.event.BeforeEndTurnEvent;
 import org.microcol.model.event.ColonyWasCapturedEvent;
 import org.microcol.model.event.ColonyWasFoundEvent;
@@ -14,6 +15,7 @@ import org.microcol.model.event.GameFinishedEvent;
 import org.microcol.model.event.GameStartedEvent;
 import org.microcol.model.event.GoldWasChangedEvent;
 import org.microcol.model.event.GoodsWasSoldInEuropeEvent;
+import org.microcol.model.event.IndependenceWasDeclaredEvent;
 import org.microcol.model.event.RoundStartedEvent;
 import org.microcol.model.event.TurnStartedEvent;
 import org.microcol.model.event.UnitAttackedEvent;
@@ -155,6 +157,27 @@ class ListenerManager {
         listeners.forEach(listener -> listener.unitEmbarked(event));
     }
 
+    void fireIndependenceWasDeclared(final Model model, final Player whoDecalareIt) {
+        final IndependenceWasDeclaredEvent event = new IndependenceWasDeclaredEvent(model,
+                whoDecalareIt);
+
+        logger.info("Independence was declared: {}.", event);
+
+        listeners.forEach(listener -> listener.independenceWasDeclared(event));
+    }
+
+    boolean fireBeforeDeclaringIndependence(final Model model, final Player whoDecalareIt) {
+        final BeforeDeclaringIndependenceEvent event = new BeforeDeclaringIndependenceEvent(model,
+                whoDecalareIt);
+
+        logger.info("Before declaring independence: {}.", event);
+
+        return evaluateInSameThread(listener -> {
+            listener.beforeDeclaringIndependence(event);
+            return event.isStopped();
+        });
+    }
+
     void fireGoldWasChanged(final Model model, final Player player, final int oldValue,
             final int newValue) {
         final GoldWasChangedEvent event = new GoldWasChangedEvent(model, player, oldValue,
@@ -214,6 +237,18 @@ class ListenerManager {
         listeners.forEach(listener -> action.accept(listener));
     }
 
+    /**
+     * Allows to trigger stoppable event.
+     * 
+     * @param action
+     *            required function that return <code>true</code> or
+     *            <code>false</code>. When any function return <code>true</code>
+     *            than action processing will be stopped. When no function
+     *            return <code>true</code> than action is normally executed.
+     * @return Return <code>true</code> when action should be executed. When
+     *         method return <code>false</code> than action should not be
+     *         executed.
+     */
     private boolean evaluateInSameThread(Function<ModelListener, Boolean> action) {
         return !listeners.stream().filter(listener -> action.apply(listener)).findAny().isPresent();
     }

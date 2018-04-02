@@ -95,10 +95,16 @@
 	<entry key="campaign.default.m2.foundColonies">Now you'll need more colonies. Buy some colonist and found at least 3 colonies.</entry>
 	<entry key="campaign.default.m2.foundColonies.done">Perfect. Now you have enought colonies.</entry>
 	<entry key="campaign.default.m2.get5000">You'll need lot of gold. Gain 5000 gold from business with Europe.</entry>
-	<entry key="campaign.default.m2.get5000.done">Great you have 5000 gold.</entry>
+	<entry key="campaign.default.m2.get5000.done">Great. Now you have 5000 gold.</entry>
 	<entry key="campaign.default.m2.makeArmy">Now make and army. You'l need at least 15 colonits. Colonists will fight for you.</entry>
 	<entry key="campaign.default.m2.done">Fantastic. You did well. Now continue to next mission.</entry>
-
+	<entry key="campaign.default.m3.start">Podařilo se ti dojít daleko. Nyní más bohatou a silnou společnost. Posledni krok je získání nezávislostí.</entry>
+	<entry key="campaign.default.m3.declareIndependence">První krok je, že musíš vyhlásit nezávislost. S tím optarně. Počitej, že se král hodně naštve a pošle na tebe silné vojsko s jediním cílem - zničit tě.</entry>
+	<entry key="campaign.default.m3.declareIndependence.done">Tak. Teď jsi se vydal na nevratnou cestu k válce a k nezávislosti. Co nevidět přijede silné expediční vojsko. Připrav se.</entry>
+	<entry key="campaign.default.m3.portIsClosed">Od této chvíle už nemůžeš jezdit do Evropy. Zdá se, že se král hodně zlobí.</entry>
+	<entry key="campaign.default.m3.done1">Sláva. Podařilo se to porazit královké vojsko.</entry>
+	<entry key="campaign.default.m3.done2">Zde tvoje cesta končí. Pro svůj mladý národ jsi vydobyl svobodu. Všechny oběti položené k dosažení vznešeného cíle se mnohokrát vrátili.</entry>
+	
 	<entry key="preferencesVolume.caption">Volume</entry>
 	<entry key="preferencesVolume.low">Low</entry>
 	<entry key="preferencesVolume.high">High</entry>

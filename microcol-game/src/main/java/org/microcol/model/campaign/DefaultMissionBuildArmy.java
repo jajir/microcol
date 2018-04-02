@@ -10,6 +10,7 @@ import org.microcol.model.GameOverEvaluator;
 import org.microcol.model.GameOverResult;
 import org.microcol.model.Model;
 import org.microcol.model.ModelListenerAdapter;
+import org.microcol.model.event.BeforeDeclaringIndependenceEvent;
 import org.microcol.model.event.ColonyWasFoundEvent;
 import org.microcol.model.event.GameStartedEvent;
 import org.microcol.model.event.GoodsWasSoldInEuropeEvent;
@@ -64,6 +65,11 @@ public class DefaultMissionBuildArmy extends AbstractMission {
                     });
                 }
             }
+            
+            @Override
+            public void beforeDeclaringIndependence(final BeforeDeclaringIndependenceEvent event) {
+                event.stopEventExecution();
+            }
 
             @Override
             public void colonyWasFounded(final ColonyWasFoundEvent event) {
@@ -79,14 +85,7 @@ public class DefaultMissionBuildArmy extends AbstractMission {
 
             @Override
             public void goodsWasSoldInEurope(final GoodsWasSoldInEuropeEvent event) {
-                if (!wasNumberOfGoldTargetReached) {
-                    final int golds = getHumanPlayer(event.getModel()).getGold();
-                    if (golds >= TARGET_NUMBER_OF_GOLD) {
-                        missionCallBack.showMessage("campaign.default.m2.get5000.done",
-                                "campaign.default.m2.makeArmy");
-                        wasNumberOfGoldTargetReached = true;
-                    }
-                }
+                checkNumberOfGoldTarget(event.getModel());
             }
 
             @Override
@@ -98,6 +97,18 @@ public class DefaultMissionBuildArmy extends AbstractMission {
                         wasNumberOfMilitaryUnitsTargetReached = true;
                     }
                 }
+                checkNumberOfGoldTarget(event.getModel());
+            }
+            
+            private void checkNumberOfGoldTarget(final Model model){
+                if (!wasNumberOfGoldTargetReached) {
+                    final int golds = getHumanPlayer(model).getGold();
+                    if (golds >= TARGET_NUMBER_OF_GOLD) {
+                        missionCallBack.showMessage("campaign.default.m2.get5000.done",
+                                "campaign.default.m2.makeArmy");
+                        wasNumberOfGoldTargetReached = true;
+                    }
+                }                
             }
 
         });

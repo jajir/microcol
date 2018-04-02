@@ -256,7 +256,10 @@ public final class Player {
 
     public void declareIndependence() {
         Preconditions.checkState(!declaredIndependence, "Independence was already declared");
-        declaredIndependence = true;
+        if (model.fireBeforeDeclaringIndependence(this)) {
+            declaredIndependence = true;
+            model.fireIndependenceWasDeclared(this);
+        }
     }
 
     /**

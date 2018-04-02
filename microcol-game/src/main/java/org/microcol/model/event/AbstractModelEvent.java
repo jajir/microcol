@@ -2,6 +2,7 @@ package org.microcol.model.event;
 
 import org.microcol.model.Model;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 
 abstract class AbstractModelEvent {
@@ -15,4 +16,10 @@ abstract class AbstractModelEvent {
     public Model getModel() {
         return model;
     }
+
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(getClass()).add("model", model).toString();
+    }
+
 }

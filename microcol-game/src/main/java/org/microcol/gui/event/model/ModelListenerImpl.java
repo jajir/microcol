@@ -4,10 +4,12 @@ import java.util.Optional;
 
 import org.microcol.model.ModelListener;
 import org.microcol.model.Player;
+import org.microcol.model.event.BeforeDeclaringIndependenceEvent;
 import org.microcol.model.event.BeforeEndTurnEvent;
 import org.microcol.model.event.ColonyWasCapturedEvent;
 import org.microcol.model.event.ColonyWasFoundEvent;
 import org.microcol.model.event.DebugRequestedEvent;
+import org.microcol.model.event.IndependenceWasDeclaredEvent;
 import org.microcol.model.event.GameFinishedEvent;
 import org.microcol.model.event.GameStartedEvent;
 import org.microcol.model.event.GoldWasChangedEvent;
@@ -139,6 +141,16 @@ public class ModelListenerImpl implements ModelListener {
     
     @Override
     public void goodsWasSoldInEurope(GoodsWasSoldInEuropeEvent event) {
+        // Front-end doesn't care about this event.
+    }
+
+    @Override
+    public void independenceWasDeclared(IndependenceWasDeclaredEvent event) {
+        // Front-end doesn't care about this event.
+    }
+
+    @Override
+    public void beforeDeclaringIndependence(BeforeDeclaringIndependenceEvent event) {
         // Front-end doesn't care about this event.
     }
 

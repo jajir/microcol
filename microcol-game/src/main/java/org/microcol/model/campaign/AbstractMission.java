@@ -115,8 +115,13 @@ public abstract class AbstractMission implements Mission {
     }
 
     protected int getNumberOfMilitaryUnits(final Model model) {
-        return (int) getHumanPlayer(model).getAllUnits().stream()
-                .filter(unit -> unit.getType().canAttack()).count();
+        return getNumberOfMilitaryUnitsForPlayer(getHumanPlayer(model));
+    }
+
+    //TODO this info should be provided by player object itself.
+    protected int getNumberOfMilitaryUnitsForPlayer(final Player player) {
+        return (int) player.getAllUnits().stream().filter(unit -> unit.getType().canAttack())
+                .count();
     }
 
     protected Integer get(final Map<String, String> map, final String key) {
@@ -127,7 +132,6 @@ public abstract class AbstractMission implements Mission {
             return Integer.parseInt(val);
         }
     }
-
 
     @Override
     public String toString() {
