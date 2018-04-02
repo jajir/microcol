@@ -9,14 +9,14 @@ import org.microcol.model.Location;
  */
 public class OneTurnMoveHighlighter {
 
-	private List<Location> locations;
+    private List<Location> locations;
 
-	void setLocations(final List<Location> locations) {
-		this.locations = locations;
-	}
+    void setLocations(final List<Location> locations) {
+        this.locations = locations;
+    }
 
-	public boolean isItHighlighted(final Location location) {
-		return locations != null && locations.contains(location);
-	}
+    public boolean isItHighlighted(final Location location) {
+        return locations != null && locations.contains(location);
+    }
 
 }

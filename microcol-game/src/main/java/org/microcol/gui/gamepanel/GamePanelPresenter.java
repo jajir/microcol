@@ -173,7 +173,7 @@ public final class GamePanelPresenter {
          * Here could be verification of race conditions like centering to
          * bottom right corner of map. Luckily it's done by JViewport.
          */
-        display.getVisibleArea().setOnCanvasReady(str->{
+        display.getVisibleArea().setOnCanvasReady(str -> {
             if (selectedTileManager.getSelectedTile().isPresent()) {
                 final Point p = display.getArea()
                         .getCenterToLocation(selectedTileManager.getSelectedTile().get());

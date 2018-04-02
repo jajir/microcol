@@ -9,40 +9,38 @@ import com.google.common.base.Preconditions;
 
 public class PlaceLocation extends AbstractPlace {
 
-	private Location location;
+    private Location location;
 
-	PlaceLocation(final Unit unit, final Location location) {
-		super(unit);
-		this.location = Preconditions.checkNotNull(location);
-	}
+    PlaceLocation(final Unit unit, final Location location) {
+        super(unit);
+        this.location = Preconditions.checkNotNull(location);
+    }
 
-	@Override
-	public String getName() {
-		return "Location";
-	}
+    @Override
+    public String getName() {
+        return "Location";
+    }
 
-	public Location getLocation() {
-		return location;
-	}
+    public Location getLocation() {
+        return location;
+    }
 
-	public void setLocation(Location location) {
-		this.location = location;
-	}
-	
-	@Override
-	public String toString() {
-		return MoreObjects.toStringHelper(PlaceLocation.class)
-				.add("unit id", getUnit().getId())
-				.add("location", location)
-				.toString();
-	}
+    public void setLocation(Location location) {
+        this.location = location;
+    }
 
-	@Override
-	public PlacePo save(final UnitPo unitPo){
-		final PlaceMapPo out = new PlaceMapPo();
-		out.setLocation(location);
-		unitPo.setPlaceMap(out);
-		return out;
-	}
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(PlaceLocation.class).add("unit id", getUnit().getId())
+                .add("location", location).toString();
+    }
+
+    @Override
+    public PlacePo save(final UnitPo unitPo) {
+        final PlaceMapPo out = new PlaceMapPo();
+        out.setLocation(location);
+        unitPo.setPlaceMap(out);
+        return out;
+    }
 
 }

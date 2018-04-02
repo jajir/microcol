@@ -12,24 +12,21 @@ import com.google.common.base.Preconditions;
  */
 public class EuropePier {
 
-	private final Model model;
+    private final Model model;
 
-	EuropePier(final Model model) {
-		this.model = Preconditions.checkNotNull(model);
-	}
+    EuropePier(final Model model) {
+        this.model = Preconditions.checkNotNull(model);
+    }
 
-	public List<Unit> getUnits(final Player player) {
-		return model.getAllUnits().stream().filter(unit -> unit.isAtEuropePier())
-				.filter(unit -> unit.getOwner().equals(player)).collect(Collectors.toList());
-	}
-	
-	@Override
-	public String toString() {
-		return MoreObjects.toStringHelper(this)
-				.add("hashcode", hashCode())
-				.add("model", model)
-				.toString();
-	}	
+    public List<Unit> getUnits(final Player player) {
+        return model.getAllUnits().stream().filter(unit -> unit.isAtEuropePier())
+                .filter(unit -> unit.getOwner().equals(player)).collect(Collectors.toList());
+    }
 
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(this).add("hashcode", hashCode()).add("model", model)
+                .toString();
+    }
 
 }

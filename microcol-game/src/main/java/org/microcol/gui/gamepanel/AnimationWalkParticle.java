@@ -18,40 +18,40 @@ import javafx.scene.canvas.GraphicsContext;
  */
 public class AnimationWalkParticle {
 
-	private final Location locationFrom;
+    private final Location locationFrom;
 
-	/**
-	 * Contains locations for move between two tiles.
-	 */
-	private final List<Point> partialPath = new ArrayList<>();
+    /**
+     * Contains locations for move between two tiles.
+     */
+    private final List<Point> partialPath = new ArrayList<>();
 
-	private final PaintService paintService;
+    private final PaintService paintService;
 
-	AnimationWalkParticle(final PaintService paintService, final Location locationFrom, final Location locationTo,
-			final PathPlanning pathPlanning) {
-		this.paintService = paintService;
-		this.locationFrom = locationFrom;
-		final Point from = Point.of(0, 0);
-		final Point to = Point
-				.of(Location.of(locationTo.getX() - locationFrom.getX(), locationTo.getY() - locationFrom.getY()));
-		pathPlanning.paintPath(from, to, point -> partialPath.add(point));
-	}
+    AnimationWalkParticle(final PaintService paintService, final Location locationFrom,
+            final Location locationTo, final PathPlanning pathPlanning) {
+        this.paintService = paintService;
+        this.locationFrom = locationFrom;
+        final Point from = Point.of(0, 0);
+        final Point to = Point.of(Location.of(locationTo.getX() - locationFrom.getX(),
+                locationTo.getY() - locationFrom.getY()));
+        pathPlanning.paintPath(from, to, point -> partialPath.add(point));
+    }
 
-	/**
-	 * Provide information if animation should continue.
-	 * 
-	 * @return return <code>true</code> when not all animation was drawn, it
-	 *         return <code>false</code> when all animation is done
-	 */
-	boolean hasNextStep() {
-		return !partialPath.isEmpty();
-	}
+    /**
+     * Provide information if animation should continue.
+     * 
+     * @return return <code>true</code> when not all animation was drawn, it
+     *         return <code>false</code> when all animation is done
+     */
+    boolean hasNextStep() {
+        return !partialPath.isEmpty();
+    }
 
-	void paint(final GraphicsContext graphics, final Area area, final Unit unit) {
-		final Point point = partialPath.remove(0).add(area.convertToPoint(locationFrom));
-		if (area.isVisibleScreenPoint(point)) {
-			paintService.paintUnit(graphics, point, unit, ImageProvider.IMG_TILE_MODE_MOVE);
-		}
-	}
+    void paint(final GraphicsContext graphics, final Area area, final Unit unit) {
+        final Point point = partialPath.remove(0).add(area.convertToPoint(locationFrom));
+        if (area.isVisibleScreenPoint(point)) {
+            paintService.paintUnit(graphics, point, unit, ImageProvider.IMG_TILE_MODE_MOVE);
+        }
+    }
 
 }

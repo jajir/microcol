@@ -9,18 +9,18 @@ import com.google.common.base.Preconditions;
 
 public class VisualDebugInfo {
 
-	private List<Location> locations;
+    private List<Location> locations;
 
-	public VisualDebugInfo() {
-		locations = Arrays.asList();
-	}
+    public VisualDebugInfo() {
+        locations = Arrays.asList();
+    }
 
-	public void setLocations(final List<Location> locations) {
-		this.locations = Preconditions.checkNotNull(locations);
-	}
+    public void setLocations(final List<Location> locations) {
+        this.locations = Preconditions.checkNotNull(locations);
+    }
 
-	public List<Location> getLocations() {
-		return locations;
-	}
+    public List<Location> getLocations() {
+        return locations;
+    }
 
 }

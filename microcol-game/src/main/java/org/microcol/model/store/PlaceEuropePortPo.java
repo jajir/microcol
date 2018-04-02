@@ -4,19 +4,19 @@ import com.google.common.base.MoreObjects;
 
 public class PlaceEuropePortPo extends PlacePo {
 
-	private boolean isOnPier = false;
+    private boolean isOnPier = false;
 
-	public boolean isOnPier() {
-		return isOnPier;
-	}
+    public boolean isOnPier() {
+        return isOnPier;
+    }
 
-	public void setOnPier(boolean isOnPier) {
-		this.isOnPier = isOnPier;
-	}
+    public void setOnPier(boolean isOnPier) {
+        this.isOnPier = isOnPier;
+    }
 
-	@Override
-	public String toString() {
-		return MoreObjects.toStringHelper(this.getClass()).add("isOnPier", isOnPier).toString();
-	}
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(this.getClass()).add("isOnPier", isOnPier).toString();
+    }
 
 }

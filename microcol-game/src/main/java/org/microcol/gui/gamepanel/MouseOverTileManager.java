@@ -17,37 +17,40 @@ import com.google.inject.Inject;
  */
 public class MouseOverTileManager {
 
-	private final MouseOverTileChangedController mouseOverTileChangedController;
+    private final MouseOverTileChangedController mouseOverTileChangedController;
 
-	private Location mouseOverTile;
+    private Location mouseOverTile;
 
-	/**
-	 * Default constructor
-	 * 
-	 * @param mouseOverTileChangedController
-	 *            required mouse over tile changed
-	 */
-	@Inject
-	public MouseOverTileManager(final MouseOverTileChangedController mouseOverTileChangedController) {
-		this.mouseOverTileChangedController = Preconditions.checkNotNull(mouseOverTileChangedController);
-		mouseOverTile = null;
-	}
+    /**
+     * Default constructor
+     * 
+     * @param mouseOverTileChangedController
+     *            required mouse over tile changed
+     */
+    @Inject
+    public MouseOverTileManager(
+            final MouseOverTileChangedController mouseOverTileChangedController) {
+        this.mouseOverTileChangedController = Preconditions
+                .checkNotNull(mouseOverTileChangedController);
+        mouseOverTile = null;
+    }
 
-	public Optional<Location> getMouseOverTile() {
-		return Optional.ofNullable(mouseOverTile);
-	}
+    public Optional<Location> getMouseOverTile() {
+        return Optional.ofNullable(mouseOverTile);
+    }
 
-	public void setMouseOverTile(final Location newMouseOverTile) {
-		Preconditions.checkNotNull(newMouseOverTile);
-		if (mouseOverTile == null) {
-			mouseOverTile = newMouseOverTile;
-			mouseOverTileChangedController.fireEvent(new MouseOverTileChangedEvent(mouseOverTile));
-		} else {
-			if (!mouseOverTile.equals(newMouseOverTile)) {
-				this.mouseOverTile = newMouseOverTile;
-				mouseOverTileChangedController.fireEvent(new MouseOverTileChangedEvent(mouseOverTile));
-			}
-		}
-	}
+    public void setMouseOverTile(final Location newMouseOverTile) {
+        Preconditions.checkNotNull(newMouseOverTile);
+        if (mouseOverTile == null) {
+            mouseOverTile = newMouseOverTile;
+            mouseOverTileChangedController.fireEvent(new MouseOverTileChangedEvent(mouseOverTile));
+        } else {
+            if (!mouseOverTile.equals(newMouseOverTile)) {
+                this.mouseOverTile = newMouseOverTile;
+                mouseOverTileChangedController
+                        .fireEvent(new MouseOverTileChangedEvent(mouseOverTile));
+            }
+        }
+    }
 
 }

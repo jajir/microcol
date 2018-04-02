@@ -18,96 +18,98 @@ import javafx.scene.input.Dragboard;
  */
 public class ClipboardWritter {
 
-	private final ClipboardContent content;
+    private final ClipboardContent content;
 
-	private final Dragboard db;
+    private final Dragboard db;
 
-	public static ClipboardWritter make(final Dragboard db) {
-		return new ClipboardWritter(db);
-	}
+    public static ClipboardWritter make(final Dragboard db) {
+        return new ClipboardWritter(db);
+    }
 
-	private ClipboardWritter(final Dragboard db) {
-		this.db = Preconditions.checkNotNull(db);
-		content = new ClipboardContent();
-	}
+    private ClipboardWritter(final Dragboard db) {
+        this.db = Preconditions.checkNotNull(db);
+        content = new ClipboardContent();
+    }
 
-	public ClipboardWritter addImage(final Image image) {
-		content.putImage(image);
-		return this;
-	}
+    public ClipboardWritter addImage(final Image image) {
+        content.putImage(image);
+        return this;
+    }
 
-	private Transfer transfer;
+    private Transfer transfer;
 
-	private TransferFrom transferFrom;
+    private TransferFrom transferFrom;
 
-	public ClipboardWritter addUnit(final Unit unit) {
-		Preconditions.checkState(transfer == null, "Clipboard was already set.");
-		transfer = new ClipboardReader.UnitTransfer(unit, transferFrom);
-		return this;
-	}
+    public ClipboardWritter addUnit(final Unit unit) {
+        Preconditions.checkState(transfer == null, "Clipboard was already set.");
+        transfer = new ClipboardReader.UnitTransfer(unit, transferFrom);
+        return this;
+    }
 
-	public ClipboardWritter addGoodAmount(final GoodsAmount goodsAmount) {
-		Preconditions.checkState(transfer == null, "Clipboard was already set.");
-		Preconditions.checkState(
-				transferFrom == null || !(transferFrom instanceof ClipboardReader.TransferFromEuropePier),
-				"Can't move good from Europe port pier. Europe pier could contain just unit.");
-		transfer = new ClipboardReader.GoodTransfer(goodsAmount, transferFrom);
-		return this;
-	}
+    public ClipboardWritter addGoodAmount(final GoodsAmount goodsAmount) {
+        Preconditions.checkState(transfer == null, "Clipboard was already set.");
+        Preconditions.checkState(
+                transferFrom == null
+                        || !(transferFrom instanceof ClipboardReader.TransferFromEuropePier),
+                "Can't move good from Europe port pier. Europe pier could contain just unit.");
+        transfer = new ClipboardReader.GoodTransfer(goodsAmount, transferFrom);
+        return this;
+    }
 
-	private void transferFromCheck(){
-		Preconditions.checkState(transfer == null, "TransferFrom should be called before setting transferring object");
-		Preconditions.checkState(transferFrom == null, "Transfer from was already set");
-	}
-	
-	public ClipboardWritter addTransferFromUnit(final Unit unit, final CargoSlot cargoSlot) {
-		transferFromCheck();
-		transferFrom = new ClipboardReader.TransferFromCargoSlot(unit, cargoSlot.getIndex());
-		return this;
-	}
+    private void transferFromCheck() {
+        Preconditions.checkState(transfer == null,
+                "TransferFrom should be called before setting transferring object");
+        Preconditions.checkState(transferFrom == null, "Transfer from was already set");
+    }
 
-	public ClipboardWritter addTransferFromEuropePortPier() {
-		transferFromCheck();
-		transferFrom = new ClipboardReader.TransferFromEuropePier();
-		return this;
-	}
+    public ClipboardWritter addTransferFromUnit(final Unit unit, final CargoSlot cargoSlot) {
+        transferFromCheck();
+        transferFrom = new ClipboardReader.TransferFromCargoSlot(unit, cargoSlot.getIndex());
+        return this;
+    }
 
-	public ClipboardWritter addTransferFromEuropeShop() {
-		transferFromCheck();
-		transferFrom = new ClipboardReader.TransferFromEuropeShop();
-		return this;
-	}
+    public ClipboardWritter addTransferFromEuropePortPier() {
+        transferFromCheck();
+        transferFrom = new ClipboardReader.TransferFromEuropePier();
+        return this;
+    }
 
-	public ClipboardWritter addTransferFromOutsideColony() {
-		transferFromCheck();
-		transferFrom = new ClipboardReader.TransferFromOutsideColony();
-		return this;
-	}
-	
-	public ClipboardWritter addTransferFromColonyWarehouse() {
-		transferFromCheck();
-		transferFrom = new ClipboardReader.TransferFromColonyWarehouse();
-		return this;
-	}
+    public ClipboardWritter addTransferFromEuropeShop() {
+        transferFromCheck();
+        transferFrom = new ClipboardReader.TransferFromEuropeShop();
+        return this;
+    }
 
-	public ClipboardWritter addTransferFromColonyField(final Location fieldDirection) {
-		transferFromCheck();
-		transferFrom = new ClipboardReader.TransferFromColonyField(fieldDirection);
-		return this;
-	}
+    public ClipboardWritter addTransferFromOutsideColony() {
+        transferFromCheck();
+        transferFrom = new ClipboardReader.TransferFromOutsideColony();
+        return this;
+    }
 
-	public ClipboardWritter addTransferFromConstructionSlot() {
-		transferFromCheck();
-		transferFrom = new ClipboardReader.TransferFromConstructionSlot();
-		return this;
-	}
+    public ClipboardWritter addTransferFromColonyWarehouse() {
+        transferFromCheck();
+        transferFrom = new ClipboardReader.TransferFromColonyWarehouse();
+        return this;
+    }
 
-	public void build() {
-		Preconditions.checkState(transfer != null, "No object to transfer was defined.");
-		final StringBuilder buff = new StringBuilder();
-		transfer.writeTo(buff);
-		content.putString(buff.toString());
-		db.setContent(content);
-	}
+    public ClipboardWritter addTransferFromColonyField(final Location fieldDirection) {
+        transferFromCheck();
+        transferFrom = new ClipboardReader.TransferFromColonyField(fieldDirection);
+        return this;
+    }
+
+    public ClipboardWritter addTransferFromConstructionSlot() {
+        transferFromCheck();
+        transferFrom = new ClipboardReader.TransferFromConstructionSlot();
+        return this;
+    }
+
+    public void build() {
+        Preconditions.checkState(transfer != null, "No object to transfer was defined.");
+        final StringBuilder buff = new StringBuilder();
+        transfer.writeTo(buff);
+        content.putString(buff.toString());
+        db.setContent(content);
+    }
 
 }

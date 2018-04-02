@@ -26,83 +26,85 @@ import javafx.scene.layout.VBox;
  */
 public class PanelDock extends TitledPanel {
 
-	private final Logger logger = LoggerFactory.getLogger(PanelDock.class);
+    private final Logger logger = LoggerFactory.getLogger(PanelDock.class);
 
-	private final ImageProvider imageProvider;
+    private final ImageProvider imageProvider;
 
-	private final PanelDockCratesController panelCratesController;
+    private final PanelDockCratesController panelCratesController;
 
-	private final HBox panelShips;
+    private final HBox panelShips;
 
-	private final ToggleGroup toggleGroup;
+    private final ToggleGroup toggleGroup;
 
-	private final PanelDockBehavior panelDockBehavior;
+    private final PanelDockBehavior panelDockBehavior;
 
-	public PanelDock(final ImageProvider imageProvider, final PanelDockBehavior panelDockBehavior) {
-		super("pristav");
-		this.imageProvider = Preconditions.checkNotNull(imageProvider);
-		this.panelDockBehavior = Preconditions.checkNotNull(panelDockBehavior);
-		panelCratesController = new PanelDockCratesController(imageProvider, panelDockBehavior);
+    public PanelDock(final ImageProvider imageProvider, final PanelDockBehavior panelDockBehavior) {
+        super("pristav");
+        this.imageProvider = Preconditions.checkNotNull(imageProvider);
+        this.panelDockBehavior = Preconditions.checkNotNull(panelDockBehavior);
+        panelCratesController = new PanelDockCratesController(imageProvider, panelDockBehavior);
 
-		panelShips = new HBox();
-		toggleGroup = new ToggleGroup();
-		toggleGroup.selectedToggleProperty().addListener((object, oldValue, newValue) -> {
-			if (toggleGroup.getSelectedToggle() == null) {
-				panelCratesController.closeAllCrates();
-			} else {
-				panelCratesController.setCratesForShip(getSelectedShip().get());
-			}
-		});
+        panelShips = new HBox();
+        toggleGroup = new ToggleGroup();
+        toggleGroup.selectedToggleProperty().addListener((object, oldValue, newValue) -> {
+            if (toggleGroup.getSelectedToggle() == null) {
+                panelCratesController.closeAllCrates();
+            } else {
+                panelCratesController.setCratesForShip(getSelectedShip().get());
+            }
+        });
 
-		final VBox mainPanel = new VBox(panelShips, panelCratesController.getPanelCratesView());
-		getContentPane().getChildren().add(mainPanel);
-	}
+        final VBox mainPanel = new VBox(panelShips, panelCratesController.getPanelCratesView());
+        getContentPane().getChildren().add(mainPanel);
+    }
 
-	public void repaint() {
-		panelShips.getChildren().clear();
-		Optional<Unit> selectedUnit = getSelectedShip();
-		toggleGroup.selectToggle(null);
-		panelDockBehavior.getUnitsInPort().forEach(unit -> {
-			final ToggleButton toggleButtonShip = new ToggleButton();
-			final BackgroundImage myBI = new BackgroundImage(imageProvider.getUnitImage(unit.getType()),
-					BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
-					BackgroundSize.DEFAULT);
-			toggleButtonShip.getStyleClass().add("paneShip");
-			toggleButtonShip.setBackground(new Background(myBI));
-			toggleButtonShip.setToggleGroup(toggleGroup);
-			toggleButtonShip.setUserData(unit);
-			toggleButtonShip.setOnDragDetected(this::onDragDetected);
-			toggleButtonShip.setSelected(selectedUnit.isPresent() && unit.equals(selectedUnit.get()));
-			panelShips.getChildren().add(toggleButtonShip);
-		});
-	}
+    public void repaint() {
+        panelShips.getChildren().clear();
+        Optional<Unit> selectedUnit = getSelectedShip();
+        toggleGroup.selectToggle(null);
+        panelDockBehavior.getUnitsInPort().forEach(unit -> {
+            final ToggleButton toggleButtonShip = new ToggleButton();
+            final BackgroundImage myBI = new BackgroundImage(
+                    imageProvider.getUnitImage(unit.getType()), BackgroundRepeat.NO_REPEAT,
+                    BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT);
+            toggleButtonShip.getStyleClass().add("paneShip");
+            toggleButtonShip.setBackground(new Background(myBI));
+            toggleButtonShip.setToggleGroup(toggleGroup);
+            toggleButtonShip.setUserData(unit);
+            toggleButtonShip.setOnDragDetected(this::onDragDetected);
+            toggleButtonShip
+                    .setSelected(selectedUnit.isPresent() && unit.equals(selectedUnit.get()));
+            panelShips.getChildren().add(toggleButtonShip);
+        });
+    }
 
-	public void repaintCurrectShipsCrates() {
-		panelCratesController.setCratesForShip(getSelectedShip().get());
-	}
+    public void repaintCurrectShipsCrates() {
+        panelCratesController.setCratesForShip(getSelectedShip().get());
+    }
 
-	private Optional<Unit> getSelectedShip() {
-		if (toggleGroup.getSelectedToggle() == null) {
-			return Optional.empty();
-		}
-		return Optional.of((Unit) toggleGroup.getSelectedToggle().getUserData());
-	}
+    private Optional<Unit> getSelectedShip() {
+        if (toggleGroup.getSelectedToggle() == null) {
+            return Optional.empty();
+        }
+        return Optional.of((Unit) toggleGroup.getSelectedToggle().getUserData());
+    }
 
-	/**
-	 * Move to new behavior interface
-	 */
+    /**
+     * Move to new behavior interface
+     */
 
-	private void onDragDetected(final MouseEvent event) {
-		if (event.getSource() instanceof ToggleButton) {
-			final ToggleButton butt = (ToggleButton) event.getSource();
-			final Unit unit = (Unit) butt.getUserData();
-			logger.debug("Start dragging unit: " + unit);
-			Preconditions.checkNotNull(unit);
-			Preconditions.checkArgument(unit.getType().isShip(), "Unit (%s) have to be ship.");
-			ClipboardWritter.make(butt.startDragAndDrop(TransferMode.MOVE))
-					.addImage(butt.getBackground().getImages().get(0).getImage()).addUnit(unit).build();
-			event.consume();
-		}
-	}
+    private void onDragDetected(final MouseEvent event) {
+        if (event.getSource() instanceof ToggleButton) {
+            final ToggleButton butt = (ToggleButton) event.getSource();
+            final Unit unit = (Unit) butt.getUserData();
+            logger.debug("Start dragging unit: " + unit);
+            Preconditions.checkNotNull(unit);
+            Preconditions.checkArgument(unit.getType().isShip(), "Unit (%s) have to be ship.");
+            ClipboardWritter.make(butt.startDragAndDrop(TransferMode.MOVE))
+                    .addImage(butt.getBackground().getImages().get(0).getImage()).addUnit(unit)
+                    .build();
+            event.consume();
+        }
+    }
 
 }

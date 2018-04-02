@@ -10,10 +10,10 @@ import com.google.inject.Inject;
  */
 public class ShowGridListenerPreferences {
 
-	@Inject
-	public ShowGridListenerPreferences(final ShowGridController showGridController,
-			final GamePreferences gamePreferences) {
-		showGridController.addListener(e -> gamePreferences.setShowGrid(e.isGridShown()));
-	}
+    @Inject
+    public ShowGridListenerPreferences(final ShowGridController showGridController,
+            final GamePreferences gamePreferences) {
+        showGridController.addListener(e -> gamePreferences.setShowGrid(e.isGridShown()));
+    }
 
 }

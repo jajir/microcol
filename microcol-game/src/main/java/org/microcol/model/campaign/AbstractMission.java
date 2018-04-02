@@ -118,7 +118,7 @@ public abstract class AbstractMission implements Mission {
         return getNumberOfMilitaryUnitsForPlayer(getHumanPlayer(model));
     }
 
-    //TODO this info should be provided by player object itself.
+    // TODO this info should be provided by player object itself.
     protected int getNumberOfMilitaryUnitsForPlayer(final Player player) {
         return (int) player.getAllUnits().stream().filter(unit -> unit.getType().canAttack())
                 .count();

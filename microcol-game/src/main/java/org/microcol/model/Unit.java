@@ -696,14 +696,9 @@ public class Unit {
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(this)
-                .add("id", id)
-                .add("type", type)
-                .add("owner", owner)
+        return MoreObjects.toStringHelper(this).add("id", id).add("type", type).add("owner", owner)
                 .add("place", place == null ? place : place.getName())
-                .add("availableMoves", availableMoves)
-                .add("cargo", cargo)
-                .toString();
+                .add("availableMoves", availableMoves).add("cargo", cargo).toString();
     }
 
     UnitPo save() {

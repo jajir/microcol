@@ -12,24 +12,26 @@ import com.google.inject.Inject;
  */
 public class MusicController {
 
-	private final MusicPlayer musicPlayer;
+    private final MusicPlayer musicPlayer;
 
-	@Inject
-	public MusicController(final MusicPlayer musicPlayer, final VolumeChangeController volumeChangeController) {
-		this.musicPlayer = Preconditions.checkNotNull(musicPlayer);
-		volumeChangeController.addListener(e -> onVolumeChanged(e));
-	}
+    @Inject
+    public MusicController(final MusicPlayer musicPlayer,
+            final VolumeChangeController volumeChangeController) {
+        this.musicPlayer = Preconditions.checkNotNull(musicPlayer);
+        volumeChangeController.addListener(e -> onVolumeChanged(e));
+    }
 
-	private void onVolumeChanged(final VolumeChangeEvent event) {
-		musicPlayer.setVolume(event.getVolume());
-	}
+    private void onVolumeChanged(final VolumeChangeEvent event) {
+        musicPlayer.setVolume(event.getVolume());
+    }
 
-	public void start(int defaultVolume) {
-		new Thread(() -> musicPlayer.playSound("music/AnnounceMyName_1.wav", defaultVolume)).start();
-	}
+    public void start(int defaultVolume) {
+        new Thread(() -> musicPlayer.playSound("music/AnnounceMyName_1.wav", defaultVolume))
+                .start();
+    }
 
-	public void stop() {
-		musicPlayer.stop();
-	}
+    public void stop() {
+        musicPlayer.stop();
+    }
 
 }

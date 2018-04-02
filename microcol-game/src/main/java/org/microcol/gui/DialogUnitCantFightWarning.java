@@ -6,9 +6,9 @@ import org.microcol.gui.util.ViewUtil;
 
 public class DialogUnitCantFightWarning extends AbstractWarningDialog {
 
-	public DialogUnitCantFightWarning(final ViewUtil viewUtil, final Text text) {
-		super(viewUtil, text, "dialogUnitCantFightWarning.caption");
-		showAndWait();
-	}
+    public DialogUnitCantFightWarning(final ViewUtil viewUtil, final Text text) {
+        super(viewUtil, text, "dialogUnitCantFightWarning.caption");
+        showAndWait();
+    }
 
 }

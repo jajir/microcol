@@ -4,43 +4,44 @@ import javafx.scene.layout.VBox;
 
 public abstract class AbstractYesNoDialog extends AbstractMessageWindow {
 
-	private final VBox context = new VBox();
-	
-	private boolean isSelectedYes = false;
+    private final VBox context = new VBox();
 
-	public AbstractYesNoDialog(final ViewUtil viewUtil, final Text text, final String dialogCaption) {
-		super(viewUtil);
-		getDialog().setTitle(dialogCaption);
+    private boolean isSelectedYes = false;
 
-		/**
-		 * Buttons
-		 */
-		final ButtonsBarYesNo buttonsBar = new ButtonsBarYesNo(text);
-		buttonsBar.getButtonYes().setOnAction(e -> {
-			isSelectedYes = true;
-			getDialog().close();
-		});
-		buttonsBar.getButtonNo().setOnAction(e -> {
-			isSelectedYes = false;
-			getDialog().close();
-		});
-		buttonsBar.getButtonYes().requestFocus();
+    public AbstractYesNoDialog(final ViewUtil viewUtil, final Text text,
+            final String dialogCaption) {
+        super(viewUtil);
+        getDialog().setTitle(dialogCaption);
 
-		final VBox root = new VBox();
-		root.getChildren().addAll(context, buttonsBar);
-		init(root);
-	}
+        /**
+         * Buttons
+         */
+        final ButtonsBarYesNo buttonsBar = new ButtonsBarYesNo(text);
+        buttonsBar.getButtonYes().setOnAction(e -> {
+            isSelectedYes = true;
+            getDialog().close();
+        });
+        buttonsBar.getButtonNo().setOnAction(e -> {
+            isSelectedYes = false;
+            getDialog().close();
+        });
+        buttonsBar.getButtonYes().requestFocus();
 
-	public boolean showWaitAndReturnIfYesWasSelected() {
-		getDialog().showAndWait();
-		return isSelectedYes;
-	}
+        final VBox root = new VBox();
+        root.getChildren().addAll(context, buttonsBar);
+        init(root);
+    }
 
-	/**
-	 * @return the context
-	 */
-	public VBox getContext() {
-		return context;
-	}
+    public boolean showWaitAndReturnIfYesWasSelected() {
+        getDialog().showAndWait();
+        return isSelectedYes;
+    }
+
+    /**
+     * @return the context
+     */
+    public VBox getContext() {
+        return context;
+    }
 
 }

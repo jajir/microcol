@@ -26,114 +26,115 @@ import javafx.scene.paint.Color;
  */
 public class PanelDockCrate extends StackPane {
 
-	private final ImageProvider imageProvider;
+    private final ImageProvider imageProvider;
 
-	private final ImageView crateImage;
+    private final ImageView crateImage;
 
-	private final ImageView cargoImage;
+    private final ImageView cargoImage;
 
-	private final Label labelAmount;
+    private final Label labelAmount;
 
-	private Background background;
+    private Background background;
 
-	private CargoSlot cargoSlot;
+    private CargoSlot cargoSlot;
 
-	private final PanelDockBehavior panelDockBehavior;
+    private final PanelDockBehavior panelDockBehavior;
 
-	PanelDockCrate(final ImageProvider imageProvider, final PanelDockBehavior panelDockBehavior) {
-		this.imageProvider = Preconditions.checkNotNull(imageProvider);
-		this.panelDockBehavior = Preconditions.checkNotNull(panelDockBehavior);
+    PanelDockCrate(final ImageProvider imageProvider, final PanelDockBehavior panelDockBehavior) {
+        this.imageProvider = Preconditions.checkNotNull(imageProvider);
+        this.panelDockBehavior = Preconditions.checkNotNull(panelDockBehavior);
 
-		crateImage = new ImageView();
-		crateImage.getStyleClass().add("crate");
-		crateImage.setFitWidth(40);
-		crateImage.setFitHeight(40);
-		crateImage.setPreserveRatio(true);
+        crateImage = new ImageView();
+        crateImage.getStyleClass().add("crate");
+        crateImage.setFitWidth(40);
+        crateImage.setFitHeight(40);
+        crateImage.setPreserveRatio(true);
 
-		cargoImage = new ImageView();
-		cargoImage.getStyleClass().add("cargo");
-		cargoImage.setFitWidth(GamePanelView.TILE_WIDTH_IN_PX);
-		cargoImage.setFitHeight(GamePanelView.TILE_WIDTH_IN_PX);
-		cargoImage.setPreserveRatio(true);
+        cargoImage = new ImageView();
+        cargoImage.getStyleClass().add("cargo");
+        cargoImage.setFitWidth(GamePanelView.TILE_WIDTH_IN_PX);
+        cargoImage.setFitHeight(GamePanelView.TILE_WIDTH_IN_PX);
+        cargoImage.setPreserveRatio(true);
 
-		labelAmount = new Label(" ");
+        labelAmount = new Label(" ");
 
-		setOnDragDetected(this::onDragDetected);
-		setOnDragEntered(this::onDragEntered);
-		setOnDragExited(this::onDragExited);
-		setOnDragOver(this::onDragOver);
-		setOnDragDropped(this::onDragDropped);
+        setOnDragDetected(this::onDragDetected);
+        setOnDragEntered(this::onDragEntered);
+        setOnDragExited(this::onDragExited);
+        setOnDragOver(this::onDragOver);
+        setOnDragDropped(this::onDragDropped);
 
-		this.getChildren().addAll(crateImage, labelAmount);
-		getStyleClass().add("cratePanel");
-	}
+        this.getChildren().addAll(crateImage, labelAmount);
+        getStyleClass().add("cratePanel");
+    }
 
-	public void setIsClosed(final boolean isClosed) {
-		if (isClosed) {
-			cargoSlot = null;
-			crateImage.setImage(imageProvider.getImage(ImageProvider.IMG_CRATE_CLOSED));
-			hideCargo();
-		} else {
-			crateImage.setImage(imageProvider.getImage(ImageProvider.IMG_CRATE_OPEN));
-			if (!getChildren().contains(cargoImage)) {
-				getChildren().add(cargoImage);
-			}
-		}
-	}
+    public void setIsClosed(final boolean isClosed) {
+        if (isClosed) {
+            cargoSlot = null;
+            crateImage.setImage(imageProvider.getImage(ImageProvider.IMG_CRATE_CLOSED));
+            hideCargo();
+        } else {
+            crateImage.setImage(imageProvider.getImage(ImageProvider.IMG_CRATE_OPEN));
+            if (!getChildren().contains(cargoImage)) {
+                getChildren().add(cargoImage);
+            }
+        }
+    }
 
-	public void showCargoSlot(final CargoSlot cargoSlot) {
-		setIsClosed(false);
-		this.cargoSlot = cargoSlot;
-		if (cargoSlot.isEmpty()) {
-			hideCargo();
-		} else {
-			if (cargoSlot.isLoadedGood()) {
-				final GoodsAmount goodaAmount = cargoSlot.getGoods().get();
-				labelAmount.setText(String.valueOf(goodaAmount.getAmount()));
-				cargoImage.setImage(imageProvider.getGoodTypeImage(goodaAmount.getGoodType()));
-			} else if (cargoSlot.isLoadedUnit()) {
-				final Unit cargoUnit = cargoSlot.getUnit().get();
-				labelAmount.setText("");
-				cargoImage.setImage(imageProvider.getUnitImage(cargoUnit.getType()));
-			}
-		}
-	}
+    public void showCargoSlot(final CargoSlot cargoSlot) {
+        setIsClosed(false);
+        this.cargoSlot = cargoSlot;
+        if (cargoSlot.isEmpty()) {
+            hideCargo();
+        } else {
+            if (cargoSlot.isLoadedGood()) {
+                final GoodsAmount goodaAmount = cargoSlot.getGoods().get();
+                labelAmount.setText(String.valueOf(goodaAmount.getAmount()));
+                cargoImage.setImage(imageProvider.getGoodTypeImage(goodaAmount.getGoodType()));
+            } else if (cargoSlot.isLoadedUnit()) {
+                final Unit cargoUnit = cargoSlot.getUnit().get();
+                labelAmount.setText("");
+                cargoImage.setImage(imageProvider.getUnitImage(cargoUnit.getType()));
+            }
+        }
+    }
 
-	private void hideCargo() {
-		getChildren().remove(cargoImage);
-		labelAmount.setText("");
-	}
+    private void hideCargo() {
+        getChildren().remove(cargoImage);
+        labelAmount.setText("");
+    }
 
-	private void onDragEntered(final DragEvent event) {
-		if (isCorrectObject(event.getDragboard())) {
-			background = getBackground();
-			setBackground(new Background(new BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY)));
-		}
-	}
+    private void onDragEntered(final DragEvent event) {
+        if (isCorrectObject(event.getDragboard())) {
+            background = getBackground();
+            setBackground(new Background(
+                    new BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY)));
+        }
+    }
 
-	@SuppressWarnings("unused")
-	private void onDragExited(final DragEvent event) {
-		setBackground(background);
-		background = null;
-	}
+    @SuppressWarnings("unused")
+    private void onDragExited(final DragEvent event) {
+        setBackground(background);
+        background = null;
+    }
 
-	private void onDragOver(final DragEvent event) {
-		if (isCorrectObject(event.getDragboard())) {
-			event.acceptTransferModes(TransferMode.ANY);
-			event.consume();
-		}
-	}
+    private void onDragOver(final DragEvent event) {
+        if (isCorrectObject(event.getDragboard())) {
+            event.acceptTransferModes(TransferMode.ANY);
+            event.consume();
+        }
+    }
 
-	private void onDragDropped(final DragEvent event) {
-		panelDockBehavior.onDragDropped(cargoSlot, event);
-	}
+    private void onDragDropped(final DragEvent event) {
+        panelDockBehavior.onDragDropped(cargoSlot, event);
+    }
 
-	private void onDragDetected(final MouseEvent event) {
-		panelDockBehavior.onDragDetected(cargoSlot, event, this);
-	}
+    private void onDragDetected(final MouseEvent event) {
+        panelDockBehavior.onDragDetected(cargoSlot, event, this);
+    }
 
-	private boolean isCorrectObject(final Dragboard db) {
-		return cargoSlot != null && panelDockBehavior.isCorrectObject(cargoSlot, db);
-	}
+    private boolean isCorrectObject(final Dragboard db) {
+        return cargoSlot != null && panelDockBehavior.isCorrectObject(cargoSlot, db);
+    }
 
 }

@@ -13,19 +13,19 @@ import com.google.inject.Inject;
  */
 public class ModeController {
 
-	private boolean isMoveMode;
-	
-	@Inject
-	ModeController() {
-		isMoveMode = false;
-	}
+    private boolean isMoveMode;
 
-	public boolean isMoveMode() {
-		return isMoveMode;
-	}
+    @Inject
+    ModeController() {
+        isMoveMode = false;
+    }
 
-	public void setMoveMode(boolean isMoveMode) {
-		this.isMoveMode = isMoveMode;
-	}
+    public boolean isMoveMode() {
+        return isMoveMode;
+    }
+
+    public void setMoveMode(boolean isMoveMode) {
+        this.isMoveMode = isMoveMode;
+    }
 
 }

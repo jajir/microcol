@@ -10,10 +10,10 @@ import com.google.inject.Inject;
  */
 public class AnimationSpeedChangedListenerPreferences {
 
-	@Inject
-	public AnimationSpeedChangedListenerPreferences(final AnimationSpeedChangeController controller,
-			final GamePreferences gamePreferences) {
-		controller.addListener(e -> gamePreferences.setAnimationSpeed(e.getAnimationSpeed()));
-	}
+    @Inject
+    public AnimationSpeedChangedListenerPreferences(final AnimationSpeedChangeController controller,
+            final GamePreferences gamePreferences) {
+        controller.addListener(e -> gamePreferences.setAnimationSpeed(e.getAnimationSpeed()));
+    }
 
 }

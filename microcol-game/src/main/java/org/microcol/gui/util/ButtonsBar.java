@@ -11,24 +11,24 @@ import javafx.scene.layout.Priority;
  */
 public class ButtonsBar extends HBox {
 
-	private final Button buttonOk;
+    private final Button buttonOk;
 
-	public ButtonsBar(final Text text) {
-		this(text.get(AbstractMessageWindow.KEY_DIALOG_OK));
-	}
+    public ButtonsBar(final Text text) {
+        this(text.get(AbstractMessageWindow.KEY_DIALOG_OK));
+    }
 
-	public ButtonsBar(final String buttonOkLabel) {
-		buttonOk = new Button(buttonOkLabel);
-		buttonOk.requestFocus();
-		buttonOk.setId("buttonOk");
-		final Pane spacer = new Pane();
-		HBox.setHgrow(spacer, Priority.ALWAYS);
-		setId("buttonPane");
-		getChildren().addAll(spacer, buttonOk);
-	}
-	
-	public Button getButtonOk() {
-		return buttonOk;
-	}
+    public ButtonsBar(final String buttonOkLabel) {
+        buttonOk = new Button(buttonOkLabel);
+        buttonOk.requestFocus();
+        buttonOk.setId("buttonOk");
+        final Pane spacer = new Pane();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
+        setId("buttonPane");
+        getChildren().addAll(spacer, buttonOk);
+    }
+
+    public Button getButtonOk() {
+        return buttonOk;
+    }
 
 }

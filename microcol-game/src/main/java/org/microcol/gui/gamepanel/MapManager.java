@@ -22,70 +22,71 @@ import javafx.scene.image.Image;
  */
 public class MapManager {
 
-	private final GrassCoastMapGenerator grassCoastMapGenerator;
+    private final GrassCoastMapGenerator grassCoastMapGenerator;
 
-	private final IceCoastMapGenerator iceCoastMapGenerator;
+    private final IceCoastMapGenerator iceCoastMapGenerator;
 
-	private final HiddenCoastMapGenerator hiddenCoastMapGenerator;
+    private final HiddenCoastMapGenerator hiddenCoastMapGenerator;
 
-	private final ImageProvider imageProvider;
+    private final ImageProvider imageProvider;
 
-	private ImageRandomProvider imageRandomProvider;
-	
-	@Inject
-	MapManager(final GrassCoastMapGenerator grassCoastMapGenerator,
-			final IceCoastMapGenerator iceCoastMapGenerator,
-			final HiddenCoastMapGenerator hiddenCoastMapGenerator,
-			final GameModelController gameModelController,
-			final GameStartedController gameStartedController,
-			final ImageProvider imageProvider, 
-			final UnitMovedController unitMovedController) {
-		this.grassCoastMapGenerator = Preconditions.checkNotNull(grassCoastMapGenerator);
-		this.iceCoastMapGenerator = Preconditions.checkNotNull(iceCoastMapGenerator);
-		this.hiddenCoastMapGenerator = Preconditions.checkNotNull(hiddenCoastMapGenerator);
-		this.imageProvider = Preconditions.checkNotNull(imageProvider);
-		gameStartedController.addListener(event -> {
-			grassCoastMapGenerator.setMap(gameModelController.getModel().getMap());
-			iceCoastMapGenerator.setMap(gameModelController.getModel().getMap());
-			hiddenCoastMapGenerator.setMap(gameModelController.getModel().getMap());
-			imageRandomProvider = new ImageRandomProvider(imageProvider, gameModelController.getModel().getMap());
-		});
-		unitMovedController.addListener(event -> {
-			if (event.getUnit().getOwner().isHuman()) {
-				//TODO It's synchronous listener, and still underlying map is not correctly updated.
-				/*
-				 * It's because move perform sync listener call and later adjust
-				 * visibility. Listeners should be called as last operation.
-				 */
-				hiddenCoastMapGenerator.setMap(gameModelController.getModel().getMap());
-			}
-		});
-	}
+    private ImageRandomProvider imageRandomProvider;
 
-	public Image getCoatsImageAt(final Location location) {
-		Image img = grassCoastMapGenerator.getImageAt(location);
-		if (img == null) {
-			return iceCoastMapGenerator.getImageAt(location);
-		} else {
-			return img;
-		}
-	}
+    @Inject
+    MapManager(final GrassCoastMapGenerator grassCoastMapGenerator,
+            final IceCoastMapGenerator iceCoastMapGenerator,
+            final HiddenCoastMapGenerator hiddenCoastMapGenerator,
+            final GameModelController gameModelController,
+            final GameStartedController gameStartedController, final ImageProvider imageProvider,
+            final UnitMovedController unitMovedController) {
+        this.grassCoastMapGenerator = Preconditions.checkNotNull(grassCoastMapGenerator);
+        this.iceCoastMapGenerator = Preconditions.checkNotNull(iceCoastMapGenerator);
+        this.hiddenCoastMapGenerator = Preconditions.checkNotNull(hiddenCoastMapGenerator);
+        this.imageProvider = Preconditions.checkNotNull(imageProvider);
+        gameStartedController.addListener(event -> {
+            grassCoastMapGenerator.setMap(gameModelController.getModel().getMap());
+            iceCoastMapGenerator.setMap(gameModelController.getModel().getMap());
+            hiddenCoastMapGenerator.setMap(gameModelController.getModel().getMap());
+            imageRandomProvider = new ImageRandomProvider(imageProvider,
+                    gameModelController.getModel().getMap());
+        });
+        unitMovedController.addListener(event -> {
+            if (event.getUnit().getOwner().isHuman()) {
+                // TODO It's synchronous listener, and still underlying map is
+                // not correctly updated.
+                /*
+                 * It's because move perform sync listener call and later adjust
+                 * visibility. Listeners should be called as last operation.
+                 */
+                hiddenCoastMapGenerator.setMap(gameModelController.getModel().getMap());
+            }
+        });
+    }
 
-	Image getTerrainImage(final TerrainType terrainType, final Location location) {
-		final Image image = imageRandomProvider.getTerrainImage(terrainType, location);
-		if (image == null) {
-			return imageProvider.getTerrainImage(terrainType);
-		} else {
-			return image;
-		}
-	}
-	
-	public Image getTreeImage(final Location location) {
-		return imageRandomProvider.getTreeImage(location);
-	}
-	
-	public Image getHiddenImageCoast(final Location location){
-		return hiddenCoastMapGenerator.getImageAt(location);
-	}
+    public Image getCoatsImageAt(final Location location) {
+        Image img = grassCoastMapGenerator.getImageAt(location);
+        if (img == null) {
+            return iceCoastMapGenerator.getImageAt(location);
+        } else {
+            return img;
+        }
+    }
+
+    Image getTerrainImage(final TerrainType terrainType, final Location location) {
+        final Image image = imageRandomProvider.getTerrainImage(terrainType, location);
+        if (image == null) {
+            return imageProvider.getTerrainImage(terrainType);
+        } else {
+            return image;
+        }
+    }
+
+    public Image getTreeImage(final Location location) {
+        return imageRandomProvider.getTreeImage(location);
+    }
+
+    public Image getHiddenImageCoast(final Location location) {
+        return hiddenCoastMapGenerator.getImageAt(location);
+    }
 
 }

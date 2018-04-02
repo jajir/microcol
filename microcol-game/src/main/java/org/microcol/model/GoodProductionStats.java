@@ -9,118 +9,115 @@ import com.google.common.base.Preconditions;
  */
 public class GoodProductionStats {
 
-	private final GoodType type;
-	private int rowProduction;
-	private int consumed;
+    private final GoodType type;
+    private int rowProduction;
+    private int consumed;
 
-	/**
-	 * How many goods items are blocked by missing source goods.
-	 */
-	private int blockedProduction;
+    /**
+     * How many goods items are blocked by missing source goods.
+     */
+    private int blockedProduction;
 
-	private int inWarehouseBefore;
+    private int inWarehouseBefore;
 
-	GoodProductionStats(final GoodType type) {
-		this.type = Preconditions.checkNotNull(type);
-	}
-	
-	@Override
-	public String toString() {
-		return MoreObjects.toStringHelper(this.getClass())
-				.add("type", type)
-				.add("rowProduction", rowProduction)
-				.add("consumed", consumed)
-				.add("blockedProduction", blockedProduction)
-				.add("inWarehouseBefore", inWarehouseBefore)
-				.toString();
-	}
+    GoodProductionStats(final GoodType type) {
+        this.type = Preconditions.checkNotNull(type);
+    }
 
-	public void addRowProduction(final int add) {
-		rowProduction += add;
-	}
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(this.getClass()).add("type", type)
+                .add("rowProduction", rowProduction).add("consumed", consumed)
+                .add("blockedProduction", blockedProduction)
+                .add("inWarehouseBefore", inWarehouseBefore).toString();
+    }
 
-	/**
-	 * @return the rowProduction
-	 */
-	public int getRowProduction() {
-		return rowProduction;
-	}
+    public void addRowProduction(final int add) {
+        rowProduction += add;
+    }
 
-	/**
-	 * @param rowProduction
-	 *            the rowProduction to set
-	 */
-	public void setRowProduction(final int rowProduction) {
-		this.rowProduction = rowProduction;
-	}
+    /**
+     * @return the rowProduction
+     */
+    public int getRowProduction() {
+        return rowProduction;
+    }
 
-	/**
-	 * Net turn production. it's row production minus consumed goods. Could be
-	 * less than 0, because missing goods is taken from warehouse.
-	 * 
-	 * @return the netProduction
-	 */
-	public int getNetProduction() {
-		return rowProduction - consumed;
-	}
-	
-	/**
-	 * @return the consumed
-	 */
-	public int getConsumed() {
-		return consumed;
-	}
+    /**
+     * @param rowProduction
+     *            the rowProduction to set
+     */
+    public void setRowProduction(final int rowProduction) {
+        this.rowProduction = rowProduction;
+    }
 
-	/**
-	 * @param consumed
-	 *            the consumed to set
-	 */
-	public void setConsumed(int consumed) {
-		this.consumed = consumed;
-	}
+    /**
+     * Net turn production. it's row production minus consumed goods. Could be
+     * less than 0, because missing goods is taken from warehouse.
+     * 
+     * @return the netProduction
+     */
+    public int getNetProduction() {
+        return rowProduction - consumed;
+    }
 
-	/**
-	 * @return the blockedProduction
-	 */
-	public int getBlockedProduction() {
-		return blockedProduction;
-	}
+    /**
+     * @return the consumed
+     */
+    public int getConsumed() {
+        return consumed;
+    }
 
-	/**
-	 * @param blockedProduction
-	 *            the blockedProduction to set
-	 */
-	public void setBlockedProduction(int blockedProduction) {
-		this.blockedProduction = blockedProduction;
-	}
+    /**
+     * @param consumed
+     *            the consumed to set
+     */
+    public void setConsumed(int consumed) {
+        this.consumed = consumed;
+    }
 
-	/**
-	 * @return the inWarehouseBefore
-	 */
-	public int getInWarehouseBefore() {
-		return inWarehouseBefore;
-	}
+    /**
+     * @return the blockedProduction
+     */
+    public int getBlockedProduction() {
+        return blockedProduction;
+    }
 
-	/**
-	 * @param inWarehouseBefore
-	 *            the inWarehouseBefore to set
-	 */
-	public void setInWarehouseBefore(int inWarehouseBefore) {
-		this.inWarehouseBefore = inWarehouseBefore;
-	}
+    /**
+     * @param blockedProduction
+     *            the blockedProduction to set
+     */
+    public void setBlockedProduction(int blockedProduction) {
+        this.blockedProduction = blockedProduction;
+    }
 
-	/**
-	 * @return the inWarehouseAfter
-	 */
-	public int getInWarehouseAfter() {
-		return getInWarehouseBefore() + getNetProduction();
-	}
+    /**
+     * @return the inWarehouseBefore
+     */
+    public int getInWarehouseBefore() {
+        return inWarehouseBefore;
+    }
 
-	/**
-	 * @return the type
-	 */
-	public GoodType getType() {
-		return type;
-	}
+    /**
+     * @param inWarehouseBefore
+     *            the inWarehouseBefore to set
+     */
+    public void setInWarehouseBefore(int inWarehouseBefore) {
+        this.inWarehouseBefore = inWarehouseBefore;
+    }
+
+    /**
+     * @return the inWarehouseAfter
+     */
+    public int getInWarehouseAfter() {
+        return getInWarehouseBefore() + getNetProduction();
+    }
+
+    /**
+     * @return the type
+     */
+    public GoodType getType() {
+        return type;
+    }
 
 }

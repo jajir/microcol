@@ -50,10 +50,9 @@ public class MainPanelPresenter {
         view.showPanel(PANEL_GAME_MENU);
     }
 
-    
     @SuppressWarnings("unused")
     private void onGameFinished(final GameFinishedEvent event) {
-        //FIXME remove method
+        // FIXME remove method
         view.showPanel(PANEL_GAME_MENU);
     }
 

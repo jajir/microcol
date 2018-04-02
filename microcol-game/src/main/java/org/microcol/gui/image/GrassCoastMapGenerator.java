@@ -6,33 +6,33 @@ import com.google.inject.Inject;
 
 public class GrassCoastMapGenerator extends AbstractCoastMapGenerator {
 
-	@Inject
-	GrassCoastMapGenerator(ImageProvider imageProvider) {
-		super(imageProvider);
-	}
+    @Inject
+    GrassCoastMapGenerator(ImageProvider imageProvider) {
+        super(imageProvider);
+    }
 
-	@Override
-	public String getPrefix() {
-		return "grass-";
-	}
+    @Override
+    public String getPrefix() {
+        return "grass-";
+    }
 
-	@Override
-	public boolean isVoid(final InfoHolder infoHolder){
-		return infoHolder.tt().isSea();
-	}
-	
-	@Override
-	public boolean isMass(final InfoHolder infoHolder){
-		final TerrainType terrainType = infoHolder.tt();
-		return terrainType.isLand() && !TerrainType.TUNDRA.equals(terrainType)
-				&& !TerrainType.ARCTIC.equals(terrainType);
-	}
+    @Override
+    public boolean isVoid(final InfoHolder infoHolder) {
+        return infoHolder.tt().isSea();
+    }
 
-	@Override
-	public boolean skipp(final InfoHolder infoHolder){
-		final TerrainType terrainType = infoHolder.tt();
-		return terrainType.isLand() && (TerrainType.TUNDRA.equals(terrainType)
-				|| TerrainType.ARCTIC.equals(terrainType));		
-	}
+    @Override
+    public boolean isMass(final InfoHolder infoHolder) {
+        final TerrainType terrainType = infoHolder.tt();
+        return terrainType.isLand() && !TerrainType.TUNDRA.equals(terrainType)
+                && !TerrainType.ARCTIC.equals(terrainType);
+    }
+
+    @Override
+    public boolean skipp(final InfoHolder infoHolder) {
+        final TerrainType terrainType = infoHolder.tt();
+        return terrainType.isLand() && (TerrainType.TUNDRA.equals(terrainType)
+                || TerrainType.ARCTIC.equals(terrainType));
+    }
 
 }

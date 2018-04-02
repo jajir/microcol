@@ -10,10 +10,10 @@ import com.google.inject.Inject;
  */
 public class VolumeChangedListenerPreferences {
 
-	@Inject
-	public VolumeChangedListenerPreferences(final VolumeChangeController volumeChangeController,
-			final GamePreferences gamePreferences) {
-		volumeChangeController.addListener(e -> gamePreferences.setVolume(e.getVolume()));
-	}
+    @Inject
+    public VolumeChangedListenerPreferences(final VolumeChangeController volumeChangeController,
+            final GamePreferences gamePreferences) {
+        volumeChangeController.addListener(e -> gamePreferences.setVolume(e.getVolume()));
+    }
 
 }

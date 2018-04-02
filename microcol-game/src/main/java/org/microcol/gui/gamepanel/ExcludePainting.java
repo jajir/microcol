@@ -17,26 +17,26 @@ import com.google.inject.Inject;
  */
 public class ExcludePainting {
 
-	/**
-	 * List of units that will not be animated.
-	 */
-	private final Set<Unit> excludeUnits;
+    /**
+     * List of units that will not be animated.
+     */
+    private final Set<Unit> excludeUnits;
 
-	@Inject
-	public ExcludePainting() {
-		excludeUnits = new HashSet<>();
-	}
+    @Inject
+    public ExcludePainting() {
+        excludeUnits = new HashSet<>();
+    }
 
-	public void excludeUnit(final Unit unit) {
-		excludeUnits.add(Preconditions.checkNotNull(unit));
-	}
+    public void excludeUnit(final Unit unit) {
+        excludeUnits.add(Preconditions.checkNotNull(unit));
+    }
 
-	public void includeUnit(final Unit unit) {
-		excludeUnits.remove(Preconditions.checkNotNull(unit));
-	}
+    public void includeUnit(final Unit unit) {
+        excludeUnits.remove(Preconditions.checkNotNull(unit));
+    }
 
-	public boolean isUnitIncluded(final Unit unit) {
-		return !excludeUnits.contains(Preconditions.checkNotNull(unit));
-	}
+    public boolean isUnitIncluded(final Unit unit) {
+        return !excludeUnits.contains(Preconditions.checkNotNull(unit));
+    }
 
 }

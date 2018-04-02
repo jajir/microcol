@@ -10,40 +10,40 @@ import com.google.common.base.Preconditions;
  */
 public class MouseOverTileChangedEvent {
 
-	private final Location mouseOverTileLocaton;
+    private final Location mouseOverTileLocaton;
 
-	public MouseOverTileChangedEvent(final Location mouseOverTileLocaton) {
-		this.mouseOverTileLocaton = Preconditions.checkNotNull(mouseOverTileLocaton);
-	}
+    public MouseOverTileChangedEvent(final Location mouseOverTileLocaton) {
+        this.mouseOverTileLocaton = Preconditions.checkNotNull(mouseOverTileLocaton);
+    }
 
-	public Location getMouseOverTileLocaton() {
-		return mouseOverTileLocaton;
-	}
+    public Location getMouseOverTileLocaton() {
+        return mouseOverTileLocaton;
+    }
 
-	@Override
-	public int hashCode() {
-		return mouseOverTileLocaton.hashCode();
-	}
+    @Override
+    public int hashCode() {
+        return mouseOverTileLocaton.hashCode();
+    }
 
-	@Override
-	public boolean equals(final Object obj) {
-		if (obj == null) {
-			return false;
-		}
+    @Override
+    public boolean equals(final Object obj) {
+        if (obj == null) {
+            return false;
+        }
 
-		if (!(obj instanceof MouseOverTileChangedEvent)) {
-			return false;
-		}
+        if (!(obj instanceof MouseOverTileChangedEvent)) {
+            return false;
+        }
 
-		final MouseOverTileChangedEvent motce = (MouseOverTileChangedEvent) obj;
+        final MouseOverTileChangedEvent motce = (MouseOverTileChangedEvent) obj;
 
-		return mouseOverTileLocaton.equals(motce.getMouseOverTileLocaton());
-	}
+        return mouseOverTileLocaton.equals(motce.getMouseOverTileLocaton());
+    }
 
-	@Override
-	public String toString() {
-		return MoreObjects.toStringHelper(MouseOverTileChangedEvent.class)
-				.add("mouseOverTileLocaton", mouseOverTileLocaton).toString();
-	}
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(MouseOverTileChangedEvent.class)
+                .add("mouseOverTileLocaton", mouseOverTileLocaton).toString();
+    }
 
 }

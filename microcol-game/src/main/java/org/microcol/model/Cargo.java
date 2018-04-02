@@ -12,73 +12,74 @@ import com.google.common.collect.ImmutableList;
 
 public final class Cargo {
 
-	//TODO try to remove relation to owner.
-	private final Unit owner;
-	private final List<CargoSlot> slots;
+    // TODO try to remove relation to owner.
+    private final Unit owner;
+    private final List<CargoSlot> slots;
 
-	Cargo(final Unit owner, final int capacity, final CargoPo cargoPo) {
-		this.owner = Preconditions.checkNotNull(owner);
+    Cargo(final Unit owner, final int capacity, final CargoPo cargoPo) {
+        this.owner = Preconditions.checkNotNull(owner);
 
-		final ImmutableList.Builder<CargoSlot> builder = ImmutableList.builder();
-		for (int i = 0; i < capacity; i++) {
-			final CargoSlotPo cargoSlotPo = cargoPo.getSlotAt(i);
-			if (cargoSlotPo != null && cargoSlotPo.containsGood()) {
-				builder.add(new CargoSlot(this, new GoodsAmount(cargoSlotPo.getGoodType(), cargoSlotPo.getAmount())));
-			} else {
-				builder.add(new CargoSlot(this));
-			}
-		}
-		this.slots = builder.build();
-	}
-	
-	Cargo(final Unit owner, final int capacity) {
-		this.owner = Preconditions.checkNotNull(owner);
+        final ImmutableList.Builder<CargoSlot> builder = ImmutableList.builder();
+        for (int i = 0; i < capacity; i++) {
+            final CargoSlotPo cargoSlotPo = cargoPo.getSlotAt(i);
+            if (cargoSlotPo != null && cargoSlotPo.containsGood()) {
+                builder.add(new CargoSlot(this,
+                        new GoodsAmount(cargoSlotPo.getGoodType(), cargoSlotPo.getAmount())));
+            } else {
+                builder.add(new CargoSlot(this));
+            }
+        }
+        this.slots = builder.build();
+    }
 
-		final ImmutableList.Builder<CargoSlot> builder = ImmutableList.builder();
-		for (int i = 0; i < capacity; i++) {
-			builder.add(new CargoSlot(this));
-		}
-		this.slots = builder.build();
-	}
+    Cargo(final Unit owner, final int capacity) {
+        this.owner = Preconditions.checkNotNull(owner);
 
-	CargoPo save() {
-		final CargoPo out = new CargoPo();
-		slots.forEach(cargoSlot -> {
-			out.getSlots().add(cargoSlot.save());
-		});
-		return out;
-	}
-	
-	public Optional<CargoSlot> getEmptyCargoSlot() {
-		return slots.stream().filter(cargoSlot -> cargoSlot.isEmpty()).findAny();
-	}
-	
-	public boolean isFull() {
-		return !getEmptyCargoSlot().isPresent();
-	}
-	
-	public boolean isEmpty(){
-		return !slots.stream().filter(slot->!slot.isEmpty()).findAny().isPresent();
-	}
+        final ImmutableList.Builder<CargoSlot> builder = ImmutableList.builder();
+        for (int i = 0; i < capacity; i++) {
+            builder.add(new CargoSlot(this));
+        }
+        this.slots = builder.build();
+    }
 
-	Unit getOwner() {
-		return owner;
-	}
+    CargoPo save() {
+        final CargoPo out = new CargoPo();
+        slots.forEach(cargoSlot -> {
+            out.getSlots().add(cargoSlot.save());
+        });
+        return out;
+    }
 
-	public List<CargoSlot> getSlots() {
-		return slots;
-	}
+    public Optional<CargoSlot> getEmptyCargoSlot() {
+        return slots.stream().filter(cargoSlot -> cargoSlot.isEmpty()).findAny();
+    }
 
-	public CargoSlot getSlotByIndex(final int index) {
-		return slots.get(index);
-	}
+    public boolean isFull() {
+        return !getEmptyCargoSlot().isPresent();
+    }
 
-	public int getIndexOfSlot(final CargoSlot cargoSlot) {
-		return slots.indexOf(cargoSlot);
-	}
+    public boolean isEmpty() {
+        return !slots.stream().filter(slot -> !slot.isEmpty()).findAny().isPresent();
+    }
 
-	@Override
-	public String toString() {
-		return MoreObjects.toStringHelper(this).add("slots", slots).toString();
-	}
+    Unit getOwner() {
+        return owner;
+    }
+
+    public List<CargoSlot> getSlots() {
+        return slots;
+    }
+
+    public CargoSlot getSlotByIndex(final int index) {
+        return slots.get(index);
+    }
+
+    public int getIndexOfSlot(final CargoSlot cargoSlot) {
+        return slots.indexOf(cargoSlot);
+    }
+
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(this).add("slots", slots).toString();
+    }
 }

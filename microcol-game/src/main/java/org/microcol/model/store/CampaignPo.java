@@ -7,7 +7,7 @@ public class CampaignPo {
     private String name;
 
     private String mission;
-    
+
     private Map<String, String> data;
 
     /**
@@ -18,7 +18,8 @@ public class CampaignPo {
     }
 
     /**
-     * @param name the name to set
+     * @param name
+     *            the name to set
      */
     public void setName(String name) {
         this.name = name;
@@ -32,7 +33,8 @@ public class CampaignPo {
     }
 
     /**
-     * @param mission the mission to set
+     * @param mission
+     *            the mission to set
      */
     public void setMission(String mission) {
         this.mission = mission;
@@ -46,10 +48,11 @@ public class CampaignPo {
     }
 
     /**
-     * @param data the data to set
+     * @param data
+     *            the data to set
      */
     public void setData(Map<String, String> data) {
         this.data = data;
     }
-    
+
 }

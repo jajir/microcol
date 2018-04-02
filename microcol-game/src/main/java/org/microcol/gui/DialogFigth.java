@@ -87,18 +87,18 @@ public class DialogFigth extends AbstractMessageWindow {
         root.add(labelAttacker, 0, 1);
         final Label labelDefender = new Label(text.get("dialogFight.defender"));
         root.add(labelDefender, 2, 1);
-        //sword image
+        // sword image
         final ImageView swords = new ImageView(
                 imageProvider.getImage(ImageProvider.IMG_CROSSED_SWORDS));
         root.add(swords, 1, 1, 1, 3);
-        
+
         // Y=2
         // Unit names
         attackerLabelName = new Label();
         root.add(attackerLabelName, 0, 2);
         defenderLabelName = new Label();
         root.add(defenderLabelName, 2, 2);
-        
+
         // Y=3
         // Unit's images
         attackerImageView = new ImageView();
@@ -107,11 +107,11 @@ public class DialogFigth extends AbstractMessageWindow {
         root.add(defenderImageView, 2, 3);
 
         // Y=3
-        // checkbox with question 
+        // checkbox with question
         final CheckBox checkBoxShowNextTime = new CheckBox(text.get("dialogFight.hideOption"));
         checkBoxShowNextTime.setWrapText(true);
         checkBoxShowNextTime.setTextAlignment(TextAlignment.JUSTIFY);
-        //following force dialog to split message into several lines. 
+        // following force dialog to split message into several lines.
         checkBoxShowNextTime.setMaxWidth(300);
         root.add(checkBoxShowNextTime, 0, 9, 3, 1);
 

@@ -61,8 +61,8 @@ public interface ModelListener {
     void goldWasChanged(GoldWasChangedEvent event);
 
     void goodsWasSoldInEurope(GoodsWasSoldInEuropeEvent event);
-    
+
     void beforeDeclaringIndependence(BeforeDeclaringIndependenceEvent event);
-    
+
     void independenceWasDeclared(IndependenceWasDeclaredEvent event);
 }

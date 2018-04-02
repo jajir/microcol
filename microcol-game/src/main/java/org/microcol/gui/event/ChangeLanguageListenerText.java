@@ -13,17 +13,18 @@ import com.google.inject.Inject;
  */
 public class ChangeLanguageListenerText implements Listener<ChangeLanguageEvent> {
 
-	private final Text text;
+    private final Text text;
 
-	@Inject
-	public ChangeLanguageListenerText(final Text text, final ChangeLanguageController languangeController) {
-		this.text = Preconditions.checkNotNull(text);
-		languangeController.addListener(this, 1);
-	}
+    @Inject
+    public ChangeLanguageListenerText(final Text text,
+            final ChangeLanguageController languangeController) {
+        this.text = Preconditions.checkNotNull(text);
+        languangeController.addListener(this, 1);
+    }
 
-	@Override
-	public void onEvent(final ChangeLanguageEvent event) {
-		text.setLocale(event.getLanguage().getLocale());
-	}
+    @Override
+    public void onEvent(final ChangeLanguageEvent event) {
+        text.setLocale(event.getLanguage().getLocale());
+    }
 
 }

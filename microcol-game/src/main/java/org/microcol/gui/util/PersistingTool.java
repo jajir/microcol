@@ -52,8 +52,8 @@ public class PersistingTool {
         Preconditions.checkState(out.isDirectory());
         return out;
     }
-    
-    public File getAutoSaveFile(){
+
+    public File getAutoSaveFile() {
         return getRootSaveDirectory().toPath().resolve(AUTOSAVE_FILE_NAME).toFile();
     }
 

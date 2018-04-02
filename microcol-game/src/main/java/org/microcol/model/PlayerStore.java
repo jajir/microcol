@@ -13,55 +13,57 @@ import com.google.common.base.Preconditions;
 
 public class PlayerStore {
 
-	private final List<Player> players;
+    private final List<Player> players;
 
-	PlayerStore() {
-		this.players = new ArrayList<>();
-		checkPlayersDuplicities();
-	}
+    PlayerStore() {
+        this.players = new ArrayList<>();
+        checkPlayersDuplicities();
+    }
 
-	static PlayerStore makePlayers(final Model model, final ModelPo modelPo) {
-		/*
-		 * First are created player whose are not kings. Next are created kings.
-		 * It's because kings in constructor required player who is under kings
-		 * rule.
-		 */
-		final PlayerStore out = new PlayerStore();
-		modelPo.getPlayers().stream().filter(player -> player.getWhosKingThisPlayerIs() == null).forEach(playerPo -> {
-			out.players.add(Player.make(playerPo, model, out));
-		});
-		modelPo.getPlayers().stream().filter(player -> player.getWhosKingThisPlayerIs() != null).forEach(playerPo -> {
-			out.players.add(Player.make(playerPo, model, out));
-		});
-		out.checkPlayersDuplicities();
-		Preconditions.checkArgument(!out.players.isEmpty(), "There must be at least one player.");
-		return out;
-	}
+    static PlayerStore makePlayers(final Model model, final ModelPo modelPo) {
+        /*
+         * First are created player whose are not kings. Next are created kings.
+         * It's because kings in constructor required player who is under kings
+         * rule.
+         */
+        final PlayerStore out = new PlayerStore();
+        modelPo.getPlayers().stream().filter(player -> player.getWhosKingThisPlayerIs() == null)
+                .forEach(playerPo -> {
+                    out.players.add(Player.make(playerPo, model, out));
+                });
+        modelPo.getPlayers().stream().filter(player -> player.getWhosKingThisPlayerIs() != null)
+                .forEach(playerPo -> {
+                    out.players.add(Player.make(playerPo, model, out));
+                });
+        out.checkPlayersDuplicities();
+        Preconditions.checkArgument(!out.players.isEmpty(), "There must be at least one player.");
+        return out;
+    }
 
-	private void checkPlayersDuplicities() {
-		Set<String> names = new HashSet<>();
-		players.forEach(player -> {
-			if (!names.add(player.getName())) {
-				throw new IllegalArgumentException(String.format("Duplicate player name (%s).", player.getName()));
-			}
-		});
-	}
+    private void checkPlayersDuplicities() {
+        Set<String> names = new HashSet<>();
+        players.forEach(player -> {
+            if (!names.add(player.getName())) {
+                throw new IllegalArgumentException(
+                        String.format("Duplicate player name (%s).", player.getName()));
+            }
+        });
+    }
 
-	public List<Player> getPlayers() {
-		return players;
-	}
+    public List<Player> getPlayers() {
+        return players;
+    }
 
-	public Player getPlayerByName(final String playerName) {
-		return players.stream().filter(player -> player.getName().equals(playerName)).findAny()
-				.orElseThrow(() -> new MicroColException(String.format("There is no such player (%s)", playerName)));
-	}
-	
-	@Override
-	public String toString() {
-		return MoreObjects.toStringHelper(this)
-				.add("hashcode", hashCode())
-				.add("players", players.size())
-				.toString();
-	}	
+    public Player getPlayerByName(final String playerName) {
+        return players.stream().filter(player -> player.getName().equals(playerName)).findAny()
+                .orElseThrow(() -> new MicroColException(
+                        String.format("There is no such player (%s)", playerName)));
+    }
+
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(this).add("hashcode", hashCode())
+                .add("players", players.size()).toString();
+    }
 
 }

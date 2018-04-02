@@ -6,158 +6,155 @@ import com.google.common.base.MoreObjects;
 
 public class UnitPo {
 
-	private Integer id;
+    private Integer id;
 
-	private UnitType type;
+    private UnitType type;
 
-	private String ownerId;
+    private String ownerId;
 
-	private PlaceMapPo placeMap;
-	
-	private PlaceEuropePortPo placeEuropePort;
-	
-	private PlaceHighSeasPo placeHighSeas;
-	
-	private PlaceConstructionSlotPo placeConstructionSlot;
-	
-	private PlaceColonyFieldPo placeColonyField;
-	
-	private PlaceCargoSlotPo placeCargoSlot;
+    private PlaceMapPo placeMap;
 
-	private CargoPo cargo = new CargoPo();
+    private PlaceEuropePortPo placeEuropePort;
 
-	private int availableMoves;
-	
-	public static UnitPo make(final Integer id, final UnitType type, final String ownerId, final CargoPo cargo) {
-		final UnitPo out = new UnitPo();
-		out.setId(id);
-		out.setType(type);
-		out.setOwnerId(ownerId);
-		out.setCargo(cargo);
-		return out;
-	}
-	
-	@Override
-	public String toString() {
-		return MoreObjects.toStringHelper(UnitPo.class)
-				.add("id", id)
-				.add("type", type)
-				.add("ownerId", ownerId)
-				.add("availableMoves", availableMoves)
-				.add("placeMap", placeMap)
-				.add("placeEuropePort", placeEuropePort)
-				.add("placeHighSeas", placeHighSeas)
-				.add("placeCargoSlot", placeCargoSlot)
-				.add("placeConstructionSlot", placeConstructionSlot)
-				.add("placeColonyField", placeColonyField)
-				.add("cargo", cargo)
-				.toString();
-	}
+    private PlaceHighSeasPo placeHighSeas;
 
-	public Integer getId() {
-		return id;
-	}
+    private PlaceConstructionSlotPo placeConstructionSlot;
 
-	public void setId(Integer id) {
-		this.id = id;
-	}
+    private PlaceColonyFieldPo placeColonyField;
 
-	public UnitType getType() {
-		return type;
-	}
+    private PlaceCargoSlotPo placeCargoSlot;
 
-	public void setType(UnitType type) {
-		this.type = type;
-	}
+    private CargoPo cargo = new CargoPo();
 
-	public String getOwnerId() {
-		return ownerId;
-	}
+    private int availableMoves;
 
-	public void setOwnerId(String ownerId) {
-		this.ownerId = ownerId;
-	}
+    public static UnitPo make(final Integer id, final UnitType type, final String ownerId,
+            final CargoPo cargo) {
+        final UnitPo out = new UnitPo();
+        out.setId(id);
+        out.setType(type);
+        out.setOwnerId(ownerId);
+        out.setCargo(cargo);
+        return out;
+    }
 
-	public CargoPo getCargo() {
-		return cargo;
-	}
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(UnitPo.class).add("id", id).add("type", type)
+                .add("ownerId", ownerId).add("availableMoves", availableMoves)
+                .add("placeMap", placeMap).add("placeEuropePort", placeEuropePort)
+                .add("placeHighSeas", placeHighSeas).add("placeCargoSlot", placeCargoSlot)
+                .add("placeConstructionSlot", placeConstructionSlot)
+                .add("placeColonyField", placeColonyField).add("cargo", cargo).toString();
+    }
 
-	public void setCargo(CargoPo cargo) {
-		this.cargo = cargo;
-	}
+    public Integer getId() {
+        return id;
+    }
 
-	public int getAvailableMoves() {
-		return availableMoves;
-	}
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
-	public void setAvailableMoves(int availableMoves) {
-		this.availableMoves = availableMoves;
-	}
+    public UnitType getType() {
+        return type;
+    }
 
-	public PlaceMapPo getPlaceMap() {
-		return placeMap;
-	}
+    public void setType(UnitType type) {
+        this.type = type;
+    }
 
-	public void setPlaceMap(PlaceMapPo placeMap) {
-		this.placeMap = placeMap;
-	}
+    public String getOwnerId() {
+        return ownerId;
+    }
 
-	public PlaceEuropePortPo getPlaceEuropePort() {
-		return placeEuropePort;
-	}
+    public void setOwnerId(String ownerId) {
+        this.ownerId = ownerId;
+    }
 
-	public void setPlaceEuropePort(PlaceEuropePortPo placeEuropePort) {
-		this.placeEuropePort = placeEuropePort;
-	}
+    public CargoPo getCargo() {
+        return cargo;
+    }
 
-	public PlaceHighSeasPo getPlaceHighSeas() {
-		return placeHighSeas;
-	}
+    public void setCargo(CargoPo cargo) {
+        this.cargo = cargo;
+    }
 
-	public void setPlaceHighSeas(PlaceHighSeasPo placeHighSeas) {
-		this.placeHighSeas = placeHighSeas;
-	}
+    public int getAvailableMoves() {
+        return availableMoves;
+    }
 
-	/**
-	 * @return the placeConstructionSlotPo
-	 */
-	public PlaceConstructionSlotPo getPlaceConstructionSlot() {
-		return placeConstructionSlot;
-	}
+    public void setAvailableMoves(int availableMoves) {
+        this.availableMoves = availableMoves;
+    }
 
-	/**
-	 * @param placeConstructionSlotPo the placeConstructionSlotPo to set
-	 */
-	public void setPlaceConstructionSlot(PlaceConstructionSlotPo placeConstructionSlotPo) {
-		this.placeConstructionSlot = placeConstructionSlotPo;
-	}
+    public PlaceMapPo getPlaceMap() {
+        return placeMap;
+    }
 
-	/**
-	 * @return the placeColonyFieldPo
-	 */
-	public PlaceColonyFieldPo getPlaceColonyField() {
-		return placeColonyField;
-	}
+    public void setPlaceMap(PlaceMapPo placeMap) {
+        this.placeMap = placeMap;
+    }
 
-	/**
-	 * @param placeColonyFieldPo the placeColonyFieldPo to set
-	 */
-	public void setPlaceColonyField(PlaceColonyFieldPo placeColonyFieldPo) {
-		this.placeColonyField = placeColonyFieldPo;
-	}
+    public PlaceEuropePortPo getPlaceEuropePort() {
+        return placeEuropePort;
+    }
 
-	/**
-	 * @return the placeCargoSlot
-	 */
-	public PlaceCargoSlotPo getPlaceCargoSlot() {
-		return placeCargoSlot;
-	}
+    public void setPlaceEuropePort(PlaceEuropePortPo placeEuropePort) {
+        this.placeEuropePort = placeEuropePort;
+    }
 
-	/**
-	 * @param placeCargoSlot the placeCargoSlot to set
-	 */
-	public void setPlaceCargoSlot(PlaceCargoSlotPo placeCargoSlot) {
-		this.placeCargoSlot = placeCargoSlot;
-	}
+    public PlaceHighSeasPo getPlaceHighSeas() {
+        return placeHighSeas;
+    }
+
+    public void setPlaceHighSeas(PlaceHighSeasPo placeHighSeas) {
+        this.placeHighSeas = placeHighSeas;
+    }
+
+    /**
+     * @return the placeConstructionSlotPo
+     */
+    public PlaceConstructionSlotPo getPlaceConstructionSlot() {
+        return placeConstructionSlot;
+    }
+
+    /**
+     * @param placeConstructionSlotPo
+     *            the placeConstructionSlotPo to set
+     */
+    public void setPlaceConstructionSlot(PlaceConstructionSlotPo placeConstructionSlotPo) {
+        this.placeConstructionSlot = placeConstructionSlotPo;
+    }
+
+    /**
+     * @return the placeColonyFieldPo
+     */
+    public PlaceColonyFieldPo getPlaceColonyField() {
+        return placeColonyField;
+    }
+
+    /**
+     * @param placeColonyFieldPo
+     *            the placeColonyFieldPo to set
+     */
+    public void setPlaceColonyField(PlaceColonyFieldPo placeColonyFieldPo) {
+        this.placeColonyField = placeColonyFieldPo;
+    }
+
+    /**
+     * @return the placeCargoSlot
+     */
+    public PlaceCargoSlotPo getPlaceCargoSlot() {
+        return placeCargoSlot;
+    }
+
+    /**
+     * @param placeCargoSlot
+     *            the placeCargoSlot to set
+     */
+    public void setPlaceCargoSlot(PlaceCargoSlotPo placeCargoSlot) {
+        this.placeCargoSlot = placeCargoSlot;
+    }
 
 }

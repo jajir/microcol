@@ -144,303 +144,321 @@ import javafx.scene.image.Image;
  */
 public abstract class AbstractCoastMapGenerator {
 
-	/**
-	 * When it's returned it stop further searching for cost image and result in null image.
-	 */
-	private static final String NO_IMAGE = "no-image";
+    /**
+     * When it's returned it stop further searching for cost image and result in
+     * null image.
+     */
+    private static final String NO_IMAGE = "no-image";
 
-	private final ImageProvider imageProvider;
+    private final ImageProvider imageProvider;
 
-	private final Map<Location, Image> mapTiles = new HashMap<>();
+    private final Map<Location, Image> mapTiles = new HashMap<>();
 
-	private WorldMap map;
+    private WorldMap map;
 
-	protected AbstractCoastMapGenerator(final ImageProvider imageProvider) {
-		this.imageProvider = Preconditions.checkNotNull(imageProvider);
-	}
+    protected AbstractCoastMapGenerator(final ImageProvider imageProvider) {
+        this.imageProvider = Preconditions.checkNotNull(imageProvider);
+    }
 
-	abstract String getPrefix();
-	
-	abstract boolean isVoid(final InfoHolder infoHolder);
-	
-	abstract boolean isMass(final InfoHolder infoHolder);
-	
-	abstract boolean skipp(final InfoHolder infoHolder);
+    abstract String getPrefix();
 
-	public void setMap(final WorldMap map) {
-		this.map = Preconditions.checkNotNull(map);
-		mapTiles.clear();
-		
-		for (int y = 1; y <= map.getMaxY(); y++) {
-			for (int x = 1; x <= map.getMaxX(); x++) {
-				final Location loc = Location.of(x, y);
-				final String code = getTileCode(loc);
-				if (code != null && !NO_IMAGE.equals(code)) {
-					final Image img = imageProvider.getImage(code);
-					mapTiles.put(loc, img);
-				}
-			}
-		}
+    abstract boolean isVoid(final InfoHolder infoHolder);
 
-	}
+    abstract boolean isMass(final InfoHolder infoHolder);
 
-	public Image getImageAt(final Location location) {
-		return mapTiles.get(location);
-	}
+    abstract boolean skipp(final InfoHolder infoHolder);
 
-	private String getTileCode(final Location location) {
-		Preconditions.checkArgument(map.isValid(location), "Invalid tile (%s)", location);
-		final ChainOfCommandOptionalStrategy<Neighbors, String> terrainImageResolvers = new ChainOfCommandOptionalStrategy<>(
-				Lists.newArrayList(this::isItMass, this::isItWell, this::isItOpenVoid, this::isItUShape,
-						this::isItLShape, this::isItIShape, this::isItIIShape));
-		/*
-		 * Null can be returned, for example when analyzing arctic borders at
-		 * land border tile.
-		 */
-		final Neighbors nei = new Neighbors(location, this);
-		return terrainImageResolvers.apply(nei).orElse(null);
-	}
+    public void setMap(final WorldMap map) {
+        this.map = Preconditions.checkNotNull(map);
+        mapTiles.clear();
 
-	private String isItWell(final Neighbors nei) {
-		preconditionItsVoid(nei.center());
-		
-		if (isMass(nei.north()) && isMass(nei.east()) && isMass(nei.south()) && isMass(nei.west())) {
-			return getPrefix() + "well";
-		} else {
-			return null;
-		}
-	}
+        for (int y = 1; y <= map.getMaxY(); y++) {
+            for (int x = 1; x <= map.getMaxX(); x++) {
+                final Location loc = Location.of(x, y);
+                final String code = getTileCode(loc);
+                if (code != null && !NO_IMAGE.equals(code)) {
+                    final Image img = imageProvider.getImage(code);
+                    mapTiles.put(loc, img);
+                }
+            }
+        }
 
-	private String isItOpenVoid(final Neighbors nei) {
-		preconditionItsVoid(nei.center());
-		
-		if (isVoid(nei.north()) && isVoid(nei.east()) && isVoid(nei.south()) && isVoid(nei.west())) {
-			//skip further processing, result to null image
-			return NO_IMAGE;
-		} else {
-			return null;
-		}
-	}
+    }
 
-	private String isItMass(final Neighbors nei) {
-		if (isMass(nei.center()) || skipp(nei.center())) {
-			//skip further processing, result to null image
-			return NO_IMAGE;
-		} else {
-			return null;
-		}
-	}
+    public Image getImageAt(final Location location) {
+        return mapTiles.get(location);
+    }
 
-	private String isItUShape(final Neighbors nei) {
-		preconditionItsVoid(nei.center());
+    private String getTileCode(final Location location) {
+        Preconditions.checkArgument(map.isValid(location), "Invalid tile (%s)", location);
+        final ChainOfCommandOptionalStrategy<Neighbors, String> terrainImageResolvers = new ChainOfCommandOptionalStrategy<>(
+                Lists.newArrayList(this::isItMass, this::isItWell, this::isItOpenVoid,
+                        this::isItUShape, this::isItLShape, this::isItIShape, this::isItIIShape));
+        /*
+         * Null can be returned, for example when analyzing arctic borders at
+         * land border tile.
+         */
+        final Neighbors nei = new Neighbors(location, this);
+        return terrainImageResolvers.apply(nei).orElse(null);
+    }
 
-		if (isVoid(nei.north()) && isMass(nei.east()) && isMass(nei.south()) && isMass(nei.west())) {
-			String code = getPrefix() + "u-shapeNorth-";
-			code += getNorthWestCorner_fromWest(nei.northWest());
-			code += getNorthEastCorner_fromEast(nei.northEast());
-			return code;
-		}
+    private String isItWell(final Neighbors nei) {
+        preconditionItsVoid(nei.center());
 
-		if (isMass(nei.north()) && isVoid(nei.east()) && isMass(nei.south()) && isMass(nei.west())) {
-			String code = getPrefix() + "u-shapeEast-";
-			code += getNorthEastCorner_fromNorth(nei.northEast());
-			code += getSouthEastCorner_fromSouth(nei.southEast());
-			return code;
-		}
+        if (isMass(nei.north()) && isMass(nei.east()) && isMass(nei.south())
+                && isMass(nei.west())) {
+            return getPrefix() + "well";
+        } else {
+            return null;
+        }
+    }
 
-		if (isMass(nei.north()) && isMass(nei.east()) && isVoid(nei.south()) && isMass(nei.west())) {
-			String code = getPrefix() + "u-shapeSouth-";
-			code += getSouthEastCorner_fromEast(nei.southEast());
-			code += getSouthWestCorner_fromWest(nei.southWest());
-			return code;
-		}
+    private String isItOpenVoid(final Neighbors nei) {
+        preconditionItsVoid(nei.center());
 
-		if (isMass(nei.north()) && isMass(nei.east()) && isMass(nei.south()) && isVoid(nei.west())) {
-			String code = getPrefix() + "u-shapeWest-";
-			code += getSouthWestCorner_fromSouth(nei.southWest());
-			code += getNorthWestCorner_fromNorth(nei.northWest());
-			return code;
-		}
+        if (isVoid(nei.north()) && isVoid(nei.east()) && isVoid(nei.south())
+                && isVoid(nei.west())) {
+            // skip further processing, result to null image
+            return NO_IMAGE;
+        } else {
+            return null;
+        }
+    }
 
-		return null;
-	}
+    private String isItMass(final Neighbors nei) {
+        if (isMass(nei.center()) || skipp(nei.center())) {
+            // skip further processing, result to null image
+            return NO_IMAGE;
+        } else {
+            return null;
+        }
+    }
 
-	private String isItLShape(final Neighbors nei) {
-		preconditionItsVoid(nei.center());
-		
-		if (isMass(nei.north()) && isMass(nei.east()) && isVoid(nei.south()) && isVoid(nei.west())) {
-			String code = getPrefix() + "l-shapeNorthEast-";
-			code += getNorthWestCorner_fromNorth(nei.northWest());
-			code += getSouthEastCorner_fromEast(nei.southEast());
-			return code;
-		}
+    private String isItUShape(final Neighbors nei) {
+        preconditionItsVoid(nei.center());
 
-		if (isVoid(nei.north()) && isMass(nei.east()) && isMass(nei.south()) && isVoid(nei.west())) {
-			String code = getPrefix() + "l-shapeSouthEast-";
-			code += getNorthEastCorner_fromEast(nei.northEast());
-			code += getSouthWestCorner_fromSouth(nei.southWest());
-			return code;
-		}
+        if (isVoid(nei.north()) && isMass(nei.east()) && isMass(nei.south())
+                && isMass(nei.west())) {
+            String code = getPrefix() + "u-shapeNorth-";
+            code += getNorthWestCorner_fromWest(nei.northWest());
+            code += getNorthEastCorner_fromEast(nei.northEast());
+            return code;
+        }
 
-		if (isVoid(nei.north()) && isVoid(nei.east()) && isMass(nei.south()) && isMass(nei.west())) {
-			String code = getPrefix() + "l-shapeSouthWest-";
-			code += getSouthEastCorner_fromSouth(nei.southEast());
-			code += getNorthWestCorner_fromWest(nei.northWest());
-			return code;
-		}
+        if (isMass(nei.north()) && isVoid(nei.east()) && isMass(nei.south())
+                && isMass(nei.west())) {
+            String code = getPrefix() + "u-shapeEast-";
+            code += getNorthEastCorner_fromNorth(nei.northEast());
+            code += getSouthEastCorner_fromSouth(nei.southEast());
+            return code;
+        }
 
-		if (isMass(nei.north()) && isVoid(nei.east()) && isVoid(nei.south()) && isMass(nei.west())) {
-			String code = getPrefix() + "l-shapeNorthWest-";
-			code += getSouthWestCorner_fromWest(nei.southWest());
-			code += getNorthEastCorner_fromNorth(nei.northEast());
-			return code;
-		}
+        if (isMass(nei.north()) && isMass(nei.east()) && isVoid(nei.south())
+                && isMass(nei.west())) {
+            String code = getPrefix() + "u-shapeSouth-";
+            code += getSouthEastCorner_fromEast(nei.southEast());
+            code += getSouthWestCorner_fromWest(nei.southWest());
+            return code;
+        }
 
-		return null;
-	}
+        if (isMass(nei.north()) && isMass(nei.east()) && isMass(nei.south())
+                && isVoid(nei.west())) {
+            String code = getPrefix() + "u-shapeWest-";
+            code += getSouthWestCorner_fromSouth(nei.southWest());
+            code += getNorthWestCorner_fromNorth(nei.northWest());
+            return code;
+        }
 
-	private String isItIShape(final Neighbors nei) {
-		preconditionItsVoid(nei.center());
+        return null;
+    }
 
-		if (isMass(nei.north()) && isVoid(nei.east()) && isVoid(nei.south()) && isVoid(nei.west())) {
-			String code = getPrefix() + "i-shapeNorth-";
-			code += getNorthWestCorner_fromNorth(nei.northWest());
-			code += getNorthEastCorner_fromNorth(nei.northEast());
-			return code;
-		}
+    private String isItLShape(final Neighbors nei) {
+        preconditionItsVoid(nei.center());
 
-		if (isVoid(nei.north()) && isMass(nei.east()) && isVoid(nei.south()) && isVoid(nei.west())) {
-			String code = getPrefix() + "i-shapeEast-";
-			code += getNorthEastCorner_fromEast(nei.northEast());
-			code += getSouthEastCorner_fromEast(nei.southEast());
-			return code;
-		}
+        if (isMass(nei.north()) && isMass(nei.east()) && isVoid(nei.south())
+                && isVoid(nei.west())) {
+            String code = getPrefix() + "l-shapeNorthEast-";
+            code += getNorthWestCorner_fromNorth(nei.northWest());
+            code += getSouthEastCorner_fromEast(nei.southEast());
+            return code;
+        }
 
-		if (isVoid(nei.north()) && isVoid(nei.east()) && isMass(nei.south()) && isVoid(nei.west())) {
-			String code = getPrefix() + "i-shapeSouth-";
-			code += getSouthEastCorner_fromSouth(nei.southEast());
-			code += getSouthWestCorner_fromSouth(nei.southWest());
-			return code;
-		}
+        if (isVoid(nei.north()) && isMass(nei.east()) && isMass(nei.south())
+                && isVoid(nei.west())) {
+            String code = getPrefix() + "l-shapeSouthEast-";
+            code += getNorthEastCorner_fromEast(nei.northEast());
+            code += getSouthWestCorner_fromSouth(nei.southWest());
+            return code;
+        }
 
-		if (isVoid(nei.north()) && isVoid(nei.east()) && isVoid(nei.south()) && isMass(nei.west())) {
-			String code = getPrefix() + "i-shapeWest-";
-			code += getSouthWestCorner_fromWest(nei.southWest());
-			code += getNorthWestCorner_fromWest(nei.northWest());
-			return code;
-		}
+        if (isVoid(nei.north()) && isVoid(nei.east()) && isMass(nei.south())
+                && isMass(nei.west())) {
+            String code = getPrefix() + "l-shapeSouthWest-";
+            code += getSouthEastCorner_fromSouth(nei.southEast());
+            code += getNorthWestCorner_fromWest(nei.northWest());
+            return code;
+        }
 
-		return null;
-	}
+        if (isMass(nei.north()) && isVoid(nei.east()) && isVoid(nei.south())
+                && isMass(nei.west())) {
+            String code = getPrefix() + "l-shapeNorthWest-";
+            code += getSouthWestCorner_fromWest(nei.southWest());
+            code += getNorthEastCorner_fromNorth(nei.northEast());
+            return code;
+        }
 
-	private String isItIIShape(final Neighbors nei) {
-		preconditionItsVoid(nei.center());
+        return null;
+    }
 
-		if (isMass(nei.north()) && isVoid(nei.east()) && isMass(nei.south()) && isVoid(nei.west())) {
-			String code = getPrefix() + "ii-shapeNorthSouth-";
-			// North
-			code += getNorthWestCorner_fromNorth(nei.northWest());
-			code += getNorthEastCorner_fromNorth(nei.northEast());
-			// South
-			code += getSouthEastCorner_fromSouth(nei.southEast());
-			code += getSouthWestCorner_fromSouth(nei.southWest());
-			return code;
-		}
+    private String isItIShape(final Neighbors nei) {
+        preconditionItsVoid(nei.center());
 
-		if (isVoid(nei.north()) && isMass(nei.east()) && isVoid(nei.south()) && isMass(nei.west())) {
-			String code = getPrefix() + "ii-shapeEastWest-";
-			// East
-			code += getNorthEastCorner_fromEast(nei.northEast());
-			code += getSouthEastCorner_fromEast(nei.southEast());
-			// West
-			code += getSouthWestCorner_fromWest(nei.southWest());
-			code += getNorthWestCorner_fromWest(nei.northWest());
-			return code;
-		}
+        if (isMass(nei.north()) && isVoid(nei.east()) && isVoid(nei.south())
+                && isVoid(nei.west())) {
+            String code = getPrefix() + "i-shapeNorth-";
+            code += getNorthWestCorner_fromNorth(nei.northWest());
+            code += getNorthEastCorner_fromNorth(nei.northEast());
+            return code;
+        }
 
-		return null;
-	}
+        if (isVoid(nei.north()) && isMass(nei.east()) && isVoid(nei.south())
+                && isVoid(nei.west())) {
+            String code = getPrefix() + "i-shapeEast-";
+            code += getNorthEastCorner_fromEast(nei.northEast());
+            code += getSouthEastCorner_fromEast(nei.southEast());
+            return code;
+        }
 
-	private void preconditionItsVoid(final InfoHolder infoHolder) {
-		Preconditions.checkArgument(isVoid(infoHolder), "Invalid location '%s' it is not void", infoHolder.loc());
-	}
+        if (isVoid(nei.north()) && isVoid(nei.east()) && isMass(nei.south())
+                && isVoid(nei.west())) {
+            String code = getPrefix() + "i-shapeSouth-";
+            code += getSouthEastCorner_fromSouth(nei.southEast());
+            code += getSouthWestCorner_fromSouth(nei.southWest());
+            return code;
+        }
 
-	/**
-	 * Even when location is out of map it will say correct terrain type. For
-	 * locations outside of map it will return closest terrain type at map.
-	 * 
-	 * @param location
-	 *            required location that will be examined
-	 * @return terrain type at given location
-	 */
-	protected TerrainType getTerrainTypeAt(final Location location) {
-		Preconditions.checkNotNull(location);
-		Location shifted = location;
-		if (shifted.getX() < 1) {
-			shifted = Location.of(1, shifted.getY());
-		}
-		if (shifted.getX() > map.getMaxX()) {
-			shifted = Location.of(map.getMaxX(), shifted.getY());
-		}
-		if (shifted.getY() < 1) {
-			shifted = Location.of(shifted.getX(), 1);
-		}
-		if (shifted.getY() > map.getMaxY()) {
-			shifted = Location.of(shifted.getX(), map.getMaxY());
-		}
-		return map.getTerrainTypeAt(shifted);
-	}
+        if (isVoid(nei.north()) && isVoid(nei.east()) && isVoid(nei.south())
+                && isMass(nei.west())) {
+            String code = getPrefix() + "i-shapeWest-";
+            code += getSouthWestCorner_fromWest(nei.southWest());
+            code += getNorthWestCorner_fromWest(nei.northWest());
+            return code;
+        }
 
-	/**
-	 * NorthEast
-	 */
+        return null;
+    }
 
-	private String getNorthEastCorner_fromNorth(final InfoHolder ttNorthEast) {
-		return isVoid(ttNorthEast) ? "3" : "4";
-	}
+    private String isItIIShape(final Neighbors nei) {
+        preconditionItsVoid(nei.center());
 
-	private String getNorthEastCorner_fromEast(final InfoHolder ttNorthEast) {
-		return isVoid(ttNorthEast) ? "3" : "2";
-	}
+        if (isMass(nei.north()) && isVoid(nei.east()) && isMass(nei.south())
+                && isVoid(nei.west())) {
+            String code = getPrefix() + "ii-shapeNorthSouth-";
+            // North
+            code += getNorthWestCorner_fromNorth(nei.northWest());
+            code += getNorthEastCorner_fromNorth(nei.northEast());
+            // South
+            code += getSouthEastCorner_fromSouth(nei.southEast());
+            code += getSouthWestCorner_fromSouth(nei.southWest());
+            return code;
+        }
 
-	/**
-	 * SouthEast
-	 */
+        if (isVoid(nei.north()) && isMass(nei.east()) && isVoid(nei.south())
+                && isMass(nei.west())) {
+            String code = getPrefix() + "ii-shapeEastWest-";
+            // East
+            code += getNorthEastCorner_fromEast(nei.northEast());
+            code += getSouthEastCorner_fromEast(nei.southEast());
+            // West
+            code += getSouthWestCorner_fromWest(nei.southWest());
+            code += getNorthWestCorner_fromWest(nei.northWest());
+            return code;
+        }
 
-	private String getSouthEastCorner_fromEast(final InfoHolder ttSouthEast) {
-		return isVoid(ttSouthEast) ? "6" : "7";
-	}
+        return null;
+    }
 
-	private String getSouthEastCorner_fromSouth(final InfoHolder ttSouthEast) {
-		return isVoid(ttSouthEast) ? "6" : "5";
-	}
+    private void preconditionItsVoid(final InfoHolder infoHolder) {
+        Preconditions.checkArgument(isVoid(infoHolder), "Invalid location '%s' it is not void",
+                infoHolder.loc());
+    }
 
-	/**
-	 * SouthWest
-	 */
+    /**
+     * Even when location is out of map it will say correct terrain type. For
+     * locations outside of map it will return closest terrain type at map.
+     * 
+     * @param location
+     *            required location that will be examined
+     * @return terrain type at given location
+     */
+    protected TerrainType getTerrainTypeAt(final Location location) {
+        Preconditions.checkNotNull(location);
+        Location shifted = location;
+        if (shifted.getX() < 1) {
+            shifted = Location.of(1, shifted.getY());
+        }
+        if (shifted.getX() > map.getMaxX()) {
+            shifted = Location.of(map.getMaxX(), shifted.getY());
+        }
+        if (shifted.getY() < 1) {
+            shifted = Location.of(shifted.getX(), 1);
+        }
+        if (shifted.getY() > map.getMaxY()) {
+            shifted = Location.of(shifted.getX(), map.getMaxY());
+        }
+        return map.getTerrainTypeAt(shifted);
+    }
 
-	private String getSouthWestCorner_fromSouth(final InfoHolder ttSouthWest) {
-		return isVoid(ttSouthWest) ? "9" : "a";
-	}
+    /**
+     * NorthEast
+     */
 
-	private String getSouthWestCorner_fromWest(final InfoHolder ttSouthWest) {
-		return isVoid(ttSouthWest) ? "9" : "8";
-	}
+    private String getNorthEastCorner_fromNorth(final InfoHolder ttNorthEast) {
+        return isVoid(ttNorthEast) ? "3" : "4";
+    }
 
-	/**
-	 * NorthWest
-	 */
+    private String getNorthEastCorner_fromEast(final InfoHolder ttNorthEast) {
+        return isVoid(ttNorthEast) ? "3" : "2";
+    }
 
-	private String getNorthWestCorner_fromWest(final InfoHolder ttNortWest) {
-		return isVoid(ttNortWest) ? "0" : "1";
-	}
+    /**
+     * SouthEast
+     */
 
-	private String getNorthWestCorner_fromNorth(final InfoHolder ttNortWest) {
-		return isVoid(ttNortWest) ? "0" : "b";
-	}
+    private String getSouthEastCorner_fromEast(final InfoHolder ttSouthEast) {
+        return isVoid(ttSouthEast) ? "6" : "7";
+    }
 
-	protected WorldMap getMap() {
-		return map;
-	}
+    private String getSouthEastCorner_fromSouth(final InfoHolder ttSouthEast) {
+        return isVoid(ttSouthEast) ? "6" : "5";
+    }
+
+    /**
+     * SouthWest
+     */
+
+    private String getSouthWestCorner_fromSouth(final InfoHolder ttSouthWest) {
+        return isVoid(ttSouthWest) ? "9" : "a";
+    }
+
+    private String getSouthWestCorner_fromWest(final InfoHolder ttSouthWest) {
+        return isVoid(ttSouthWest) ? "9" : "8";
+    }
+
+    /**
+     * NorthWest
+     */
+
+    private String getNorthWestCorner_fromWest(final InfoHolder ttNortWest) {
+        return isVoid(ttNortWest) ? "0" : "1";
+    }
+
+    private String getNorthWestCorner_fromNorth(final InfoHolder ttNortWest) {
+        return isVoid(ttNortWest) ? "0" : "b";
+    }
+
+    protected WorldMap getMap() {
+        return map;
+    }
 
 }

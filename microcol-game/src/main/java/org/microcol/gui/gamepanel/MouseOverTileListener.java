@@ -18,70 +18,75 @@ import com.google.inject.Inject;
  */
 public class MouseOverTileListener {
 
-	private final GameModelController gameModelController;
+    private final GameModelController gameModelController;
 
-	private final StatusBarMessageController statusBarMessageController;
+    private final StatusBarMessageController statusBarMessageController;
 
-	private final LocalizationHelper localizationHelper;
-	
-	private final GamePreferences gamePreferences;
-	
-	private final Text text;
+    private final LocalizationHelper localizationHelper;
 
-	@Inject
-	public MouseOverTileListener(final MouseOverTileChangedController mouseOverTileChangedController,
-			final GameModelController gameModelController, final StatusBarMessageController statusBarMessageController,
-			final LocalizationHelper localizationHelper, final GamePreferences gamePreferences, final Text text) {
-		this.gameModelController = Preconditions.checkNotNull(gameModelController);
-		this.statusBarMessageController = Preconditions.checkNotNull(statusBarMessageController);
-		this.localizationHelper = Preconditions.checkNotNull(localizationHelper);
-		this.gamePreferences = Preconditions.checkNotNull(gamePreferences);
-		this.text = Preconditions.checkNotNull(text);
-		mouseOverTileChangedController.addListener(this::onMouseOverTileChanged);
+    private final GamePreferences gamePreferences;
 
-	}
+    private final Text text;
 
-	private void onMouseOverTileChanged(final MouseOverTileChangedEvent event) {
-		if (gameModelController.getModel().getMap().isValid(event.getMouseOverTileLocaton())) {
-			final TerrainType terrain = gameModelController.getModel().getMap().getTerrainTypeAt(event.getMouseOverTileLocaton());
-			final Player player = gameModelController.getCurrentPlayer();
-			setStatusMessageForTile(player, terrain, event.getMouseOverTileLocaton());
-		} else {
-			statusBarMessageController.fireEvent(new StatusBarMessageEvent());
-		}
-	}
+    @Inject
+    public MouseOverTileListener(
+            final MouseOverTileChangedController mouseOverTileChangedController,
+            final GameModelController gameModelController,
+            final StatusBarMessageController statusBarMessageController,
+            final LocalizationHelper localizationHelper, final GamePreferences gamePreferences,
+            final Text text) {
+        this.gameModelController = Preconditions.checkNotNull(gameModelController);
+        this.statusBarMessageController = Preconditions.checkNotNull(statusBarMessageController);
+        this.localizationHelper = Preconditions.checkNotNull(localizationHelper);
+        this.gamePreferences = Preconditions.checkNotNull(gamePreferences);
+        this.text = Preconditions.checkNotNull(text);
+        mouseOverTileChangedController.addListener(this::onMouseOverTileChanged);
 
-	/**
-	 * When mouse is over tile method set correct status message.
-	 *
-	 * @param terrain
-	 *            required terrain
-	 * @param where
-	 *            required location over which is now mouse
-	 */
-	private void setStatusMessageForTile(final Player player, final TerrainType terrain, final Location where) {
-		final StringBuilder buff = new StringBuilder();
-		if (gamePreferences.isDevelopment()) {
-			buff.append("(");
-			buff.append(where.getX());
-			buff.append(",");
-			buff.append(where.getY());
-			buff.append(") ");
-		}
-		if (player.isVisible(where)) {
-			buff.append(text.get("statusBar.tile.start"));
-			buff.append(" ");
-			buff.append(localizationHelper.getTerrainName(terrain));
-			buff.append(" ");
-			buff.append(text.get("statusBar.tile.withUnit"));
-			buff.append(" ");
-			gameModelController.getModel().getUnitsAt(where).forEach(ship -> {
-				buff.append(ship.getClass().getSimpleName());
-				buff.append(" ");
-			});
-		} else {
-			buff.append(text.get("statusBar.tile.notExplored"));
-		}
-		statusBarMessageController.fireEvent(new StatusBarMessageEvent(buff.toString()));
-	}
+    }
+
+    private void onMouseOverTileChanged(final MouseOverTileChangedEvent event) {
+        if (gameModelController.getModel().getMap().isValid(event.getMouseOverTileLocaton())) {
+            final TerrainType terrain = gameModelController.getModel().getMap()
+                    .getTerrainTypeAt(event.getMouseOverTileLocaton());
+            final Player player = gameModelController.getCurrentPlayer();
+            setStatusMessageForTile(player, terrain, event.getMouseOverTileLocaton());
+        } else {
+            statusBarMessageController.fireEvent(new StatusBarMessageEvent());
+        }
+    }
+
+    /**
+     * When mouse is over tile method set correct status message.
+     *
+     * @param terrain
+     *            required terrain
+     * @param where
+     *            required location over which is now mouse
+     */
+    private void setStatusMessageForTile(final Player player, final TerrainType terrain,
+            final Location where) {
+        final StringBuilder buff = new StringBuilder();
+        if (gamePreferences.isDevelopment()) {
+            buff.append("(");
+            buff.append(where.getX());
+            buff.append(",");
+            buff.append(where.getY());
+            buff.append(") ");
+        }
+        if (player.isVisible(where)) {
+            buff.append(text.get("statusBar.tile.start"));
+            buff.append(" ");
+            buff.append(localizationHelper.getTerrainName(terrain));
+            buff.append(" ");
+            buff.append(text.get("statusBar.tile.withUnit"));
+            buff.append(" ");
+            gameModelController.getModel().getUnitsAt(where).forEach(ship -> {
+                buff.append(ship.getClass().getSimpleName());
+                buff.append(" ");
+            });
+        } else {
+            buff.append(text.get("statusBar.tile.notExplored"));
+        }
+        statusBarMessageController.fireEvent(new StatusBarMessageEvent(buff.toString()));
+    }
 }

@@ -6,6 +6,6 @@ package org.microcol.gui.image;
  */
 public interface ImageLoader {
 
-	void preload(final ImageProvider imageProvider);
+    void preload(final ImageProvider imageProvider);
 
 }

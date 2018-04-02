@@ -11,22 +11,22 @@ import com.google.gson.stream.JsonWriter;
 
 public class GsonGoodTypeAdapter extends TypeAdapter<GoodType> {
 
-	@Override
-	public void write(final JsonWriter out, final GoodType value) throws IOException {
-		if (value == null) {
-			out.nullValue();
-			return;
-		}
-		out.value(value.name());
-	}
+    @Override
+    public void write(final JsonWriter out, final GoodType value) throws IOException {
+        if (value == null) {
+            out.nullValue();
+            return;
+        }
+        out.value(value.name());
+    }
 
-	@Override
-	public GoodType read(final JsonReader reader) throws IOException {
-		if (reader.peek() == JsonToken.NULL) {
-			reader.nextNull();
-			return null;
-		}
-		return GoodType.valueOf(reader.nextString());
-	}
+    @Override
+    public GoodType read(final JsonReader reader) throws IOException {
+        if (reader.peek() == JsonToken.NULL) {
+            reader.nextNull();
+            return null;
+        }
+        return GoodType.valueOf(reader.nextString());
+    }
 
 }

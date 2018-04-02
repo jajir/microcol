@@ -41,8 +41,8 @@ public class CampaignPanelPresenter {
         this.mainFramePresenter = Preconditions.checkNotNull(mainFramePresenter);
         this.gameController = Preconditions.checkNotNull(gameController);
         changeLanguageController.addListener(listener -> display.updateLanguage());
-        display.getButtonBack()
-                .setOnAction(event -> mainFramePresenter.showPanel(MainPanelPresenter.PANEL_GAME_MENU));
+        display.getButtonBack().setOnAction(
+                event -> mainFramePresenter.showPanel(MainPanelPresenter.PANEL_GAME_MENU));
         display.setOnSelectedMission(this::onSelectedMission);
     }
 

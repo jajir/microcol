@@ -5,8 +5,8 @@ package org.microcol.model.store;
  */
 public class PlaceCargoSlotPo extends PlacePo {
 
-	/*
-	 * Place doesn't need any cargo identification.
-	 */
+    /*
+     * Place doesn't need any cargo identification.
+     */
 
 }

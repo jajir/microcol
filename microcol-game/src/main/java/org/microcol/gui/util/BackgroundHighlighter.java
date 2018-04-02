@@ -19,39 +19,41 @@ import javafx.scene.paint.Color;
  */
 public class BackgroundHighlighter {
 
-	private final Region region;
+    private final Region region;
 
-	private final Function<Dragboard, Boolean> shoudlByHighlighted;
+    private final Function<Dragboard, Boolean> shoudlByHighlighted;
 
-	private Background background;
+    private Background background;
 
-	public BackgroundHighlighter(final Region region, final Function<Dragboard, Boolean> shoudlByHighlighted) {
-		this.region = Preconditions.checkNotNull(region);
-		this.shoudlByHighlighted = Preconditions.checkNotNull(shoudlByHighlighted);
-	}
+    public BackgroundHighlighter(final Region region,
+            final Function<Dragboard, Boolean> shoudlByHighlighted) {
+        this.region = Preconditions.checkNotNull(region);
+        this.shoudlByHighlighted = Preconditions.checkNotNull(shoudlByHighlighted);
+    }
 
-	/**
-	 * Process event when mouse enter region.
-	 * 
-	 * @param event
-	 *            required event
-	 */
-	public void onDragEntered(final DragEvent event) {
-		background = region.getBackground();
-		if (shoudlByHighlighted.apply(event.getDragboard())) {
-			region.setBackground(new Background(new BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY)));
-		}
-	}
+    /**
+     * Process event when mouse enter region.
+     * 
+     * @param event
+     *            required event
+     */
+    public void onDragEntered(final DragEvent event) {
+        background = region.getBackground();
+        if (shoudlByHighlighted.apply(event.getDragboard())) {
+            region.setBackground(new Background(
+                    new BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY)));
+        }
+    }
 
-	/**
-	 * Process even when mouse leave region.
-	 * 
-	 * @param event
-	 *            optional event
-	 */
-	public void onDragExited(final DragEvent event) {
-		region.setBackground(background);
-		background = null;
-	}
+    /**
+     * Process even when mouse leave region.
+     * 
+     * @param event
+     *            optional event
+     */
+    public void onDragExited(final DragEvent event) {
+        region.setBackground(background);
+        background = null;
+    }
 
 }

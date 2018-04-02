@@ -69,7 +69,8 @@ public class MissionCallBack {
      * be called when mission is over.
      */
     public void startDefaultMission() {
-        //FIXME gameController can't be instantiated here because of circular dependencies
+        // FIXME gameController can't be instantiated here because of circular
+        // dependencies
     }
 
     public void goToGameMenu() {

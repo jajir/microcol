@@ -9,19 +9,19 @@ import com.google.inject.Inject;
 import javafx.scene.control.Label;
 
 /**
- * Dialog ask player if he want to destroy colony. 
+ * Dialog ask player if he want to destroy colony.
  */
 public final class DialogDestroyColony extends AbstractYesNoDialog {
 
-	@Inject
-	DialogDestroyColony(final ViewUtil viewUtil,final Text text) {
-		super(viewUtil, text, text.get("dialogDestroyColony.caption"));
-		
-		getContext().getChildren().add(new Label(text.get("dialogDestroyColony.question")));
-	}
+    @Inject
+    DialogDestroyColony(final ViewUtil viewUtil, final Text text) {
+        super(viewUtil, text, text.get("dialogDestroyColony.caption"));
 
-	boolean isSelectedContinue() {
-		return showWaitAndReturnIfYesWasSelected();
-	}
-	
+        getContext().getChildren().add(new Label(text.get("dialogDestroyColony.question")));
+    }
+
+    boolean isSelectedContinue() {
+        return showWaitAndReturnIfYesWasSelected();
+    }
+
 }

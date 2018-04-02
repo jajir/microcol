@@ -11,17 +11,17 @@ import com.google.inject.Inject;
  * attack animation.
  */
 public class UnitAttackedEventListener {
-	private final GamePanelView gamePanelView;
+    private final GamePanelView gamePanelView;
 
-	@Inject
-	public UnitAttackedEventListener(final GamePanelView gamePanelView,
-			final UnitAttackedEventController unitAttackedEventController) {
-		this.gamePanelView = Preconditions.checkNotNull(gamePanelView);
-		unitAttackedEventController.addListener(this::onUnitAttacked);
-	}
+    @Inject
+    public UnitAttackedEventListener(final GamePanelView gamePanelView,
+            final UnitAttackedEventController unitAttackedEventController) {
+        this.gamePanelView = Preconditions.checkNotNull(gamePanelView);
+        unitAttackedEventController.addListener(this::onUnitAttacked);
+    }
 
-	private void onUnitAttacked(UnitAttackedEvent event) {
-		gamePanelView.addFightAnimation(event.getAttacker(), event.getDefender());
-	}
+    private void onUnitAttacked(UnitAttackedEvent event) {
+        gamePanelView.addFightAnimation(event.getAttacker(), event.getDefender());
+    }
 
 }

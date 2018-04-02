@@ -22,88 +22,89 @@ import org.slf4j.LoggerFactory;
  */
 public class MusicPlayer {
 
-	private final Logger logger = LoggerFactory.getLogger(MusicPlayer.class);
+    private final Logger logger = LoggerFactory.getLogger(MusicPlayer.class);
 
-	/**
-	 * Minimal volume value.
-	 */
-	static final int MIN_VOLUME = 0;
+    /**
+     * Minimal volume value.
+     */
+    static final int MIN_VOLUME = 0;
 
-	/**
-	 * Maximal volume value.
-	 */
-	static final int MAX_VOLUME = 100;
+    /**
+     * Maximal volume value.
+     */
+    static final int MAX_VOLUME = 100;
 
-	private final static int BUFFER_SIZE = 128000;
-	
-	private SourceDataLine sourceLine;
+    private final static int BUFFER_SIZE = 128000;
 
-	private boolean run = true;
+    private SourceDataLine sourceLine;
 
-	/**
-	 * Start play background music.
-	 * 
-	 * @param filename
-	 *            the name of the file that is going to be played
-	 * @param defaultVolume
-	 *            required default volume
-	 */
-	public void playSound(final String filename, final int defaultVolume) {
-		final AudioInputStream audioStream = getAudioInputStream(filename);
-		final AudioFormat audioFormat = audioStream.getFormat();
+    private boolean run = true;
 
-		DataLine.Info info = new DataLine.Info(SourceDataLine.class, audioFormat);
-		try {
-			sourceLine = (SourceDataLine) AudioSystem.getLine(info);
-			sourceLine.open(audioFormat);
-		} catch (LineUnavailableException e) {
-			logger.error(e.getMessage(), e);
-			throw new MicroColException(e.getMessage(), e);
-		} catch (Exception e) {
-			logger.error(e.getMessage(), e);
-			throw new MicroColException(e.getMessage(), e);
-		}
+    /**
+     * Start play background music.
+     * 
+     * @param filename
+     *            the name of the file that is going to be played
+     * @param defaultVolume
+     *            required default volume
+     */
+    public void playSound(final String filename, final int defaultVolume) {
+        final AudioInputStream audioStream = getAudioInputStream(filename);
+        final AudioFormat audioFormat = audioStream.getFormat();
 
-		setVolume(defaultVolume);
+        DataLine.Info info = new DataLine.Info(SourceDataLine.class, audioFormat);
+        try {
+            sourceLine = (SourceDataLine) AudioSystem.getLine(info);
+            sourceLine.open(audioFormat);
+        } catch (LineUnavailableException e) {
+            logger.error(e.getMessage(), e);
+            throw new MicroColException(e.getMessage(), e);
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            throw new MicroColException(e.getMessage(), e);
+        }
 
-		sourceLine.start();
+        setVolume(defaultVolume);
 
-		int nBytesRead = 0;
-		byte[] abData = new byte[BUFFER_SIZE];
-		while (nBytesRead != -1 && run) {
-			try {
-				nBytesRead = audioStream.read(abData, 0, abData.length);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			if (nBytesRead >= 0) {
-				@SuppressWarnings("unused")
-				int nBytesWritten = sourceLine.write(abData, 0, nBytesRead);
-			}
-		}
+        sourceLine.start();
 
-		sourceLine.drain();
-		sourceLine.close();
-	}
+        int nBytesRead = 0;
+        byte[] abData = new byte[BUFFER_SIZE];
+        while (nBytesRead != -1 && run) {
+            try {
+                nBytesRead = audioStream.read(abData, 0, abData.length);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            if (nBytesRead >= 0) {
+                @SuppressWarnings("unused")
+                int nBytesWritten = sourceLine.write(abData, 0, nBytesRead);
+            }
+        }
 
-	private AudioInputStream getAudioInputStream(final String filename){
-		try {
-			final ClassLoader cl = ImageProvider.class.getClassLoader();
-			final InputStream in = cl.getResourceAsStream(filename);
-			return AudioSystem.getAudioInputStream(new BufferedInputStream(in));
-		} catch (Exception e) {
-			throw new MicroColException(e.getMessage(), e);
-		}
-	}
-	
-	public void setVolume(final int volume) {
-		final FloatControl volumeControll = (FloatControl) sourceLine.getControl(FloatControl.Type.MASTER_GAIN);
-		float step = 100F / (volumeControll.getMaximum() - volumeControll.getMinimum());
-		volumeControll.setValue(volumeControll.getMinimum() + volume / step);
-	}
+        sourceLine.drain();
+        sourceLine.close();
+    }
 
-	public void stop() {
-		run = false;
-	}
+    private AudioInputStream getAudioInputStream(final String filename) {
+        try {
+            final ClassLoader cl = ImageProvider.class.getClassLoader();
+            final InputStream in = cl.getResourceAsStream(filename);
+            return AudioSystem.getAudioInputStream(new BufferedInputStream(in));
+        } catch (Exception e) {
+            throw new MicroColException(e.getMessage(), e);
+        }
+    }
+
+    public void setVolume(final int volume) {
+        final FloatControl volumeControll = (FloatControl) sourceLine
+                .getControl(FloatControl.Type.MASTER_GAIN);
+        float step = 100F / (volumeControll.getMaximum() - volumeControll.getMinimum());
+        volumeControll.setValue(volumeControll.getMinimum() + volume / step);
+    }
+
+    public void stop() {
+        run = false;
+    }
 
 }

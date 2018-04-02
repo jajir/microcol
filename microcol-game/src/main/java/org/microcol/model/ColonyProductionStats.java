@@ -12,24 +12,22 @@ import com.google.common.base.Preconditions;
  */
 public class ColonyProductionStats {
 
-	private final Map<GoodType, GoodProductionStats> typeStats = new HashMap<>();
+    private final Map<GoodType, GoodProductionStats> typeStats = new HashMap<>();
 
-	public GoodProductionStats getStatsByType(final GoodType goodType) {
-		Preconditions.checkNotNull(goodType);
-		GoodProductionStats out = typeStats.get(goodType);
-		if (out == null) {
-			out = new GoodProductionStats(goodType);
-			typeStats.put(goodType, out);
-		}
-		return out;
-	}
-	
-	@Override
-	public String toString() {
-		return MoreObjects.toStringHelper(this.getClass())
-				.add("storedTypes", typeStats.size())
-				.toString();
-	}
+    public GoodProductionStats getStatsByType(final GoodType goodType) {
+        Preconditions.checkNotNull(goodType);
+        GoodProductionStats out = typeStats.get(goodType);
+        if (out == null) {
+            out = new GoodProductionStats(goodType);
+            typeStats.put(goodType, out);
+        }
+        return out;
+    }
 
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(this.getClass()).add("storedTypes", typeStats.size())
+                .toString();
+    }
 
 }

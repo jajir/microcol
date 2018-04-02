@@ -15,34 +15,35 @@ import com.google.common.base.Preconditions;
  */
 public class ChainOfCommandStrategy<T, R> implements Function<T, R> {
 
-	private final List<Function<T, R>> filters;
+    private final List<Function<T, R>> filters;
 
-	public ChainOfCommandStrategy() {
-		filters = new ArrayList<>();
-	}
+    public ChainOfCommandStrategy() {
+        filters = new ArrayList<>();
+    }
 
-	public ChainOfCommandStrategy(final List<Function<T, R>> filters) {
-		this.filters = new ArrayList<>(Preconditions.checkNotNull(filters));
-	}
+    public ChainOfCommandStrategy(final List<Function<T, R>> filters) {
+        this.filters = new ArrayList<>(Preconditions.checkNotNull(filters));
+    }
 
-	/**
-	 * Go through all filters first non-null return value is returned otherwise
-	 * empty is returned.
-	 *
-	 * @param t
-	 *            required filter input
-	 * @return optional result of empty
-	 */
-	@Override
-	public R apply(final T t) {
-		Preconditions.checkNotNull(t);
-		for (final Function<T, R> filter : filters) {
-			R result = filter.apply(t);
-			if (result != null) {
-				return result;
-			}
-		}
-		throw new IllegalArgumentException(String.format("Unable to process chain of command input (%s)", t));
-	}
+    /**
+     * Go through all filters first non-null return value is returned otherwise
+     * empty is returned.
+     *
+     * @param t
+     *            required filter input
+     * @return optional result of empty
+     */
+    @Override
+    public R apply(final T t) {
+        Preconditions.checkNotNull(t);
+        for (final Function<T, R> filter : filters) {
+            R result = filter.apply(t);
+            if (result != null) {
+                return result;
+            }
+        }
+        throw new IllegalArgumentException(
+                String.format("Unable to process chain of command input (%s)", t));
+    }
 
 }

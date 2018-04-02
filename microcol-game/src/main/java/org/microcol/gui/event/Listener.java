@@ -8,11 +8,11 @@ package org.microcol.gui.event;
  */
 public interface Listener<E> {
 
-	/**
-	 * Method is called when event is raised.
-	 * 
-	 * @param event
-	 *            required event object
-	 */
-	void onEvent(E event);
+    /**
+     * Method is called when event is raised.
+     * 
+     * @param event
+     *            required event object
+     */
+    void onEvent(E event);
 }

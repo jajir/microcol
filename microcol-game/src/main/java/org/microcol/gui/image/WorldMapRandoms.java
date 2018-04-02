@@ -16,25 +16,25 @@ import com.google.common.collect.ImmutableMap;
  */
 public class WorldMapRandoms {
 
-	/**
-	 * For each map location holds pseudo random number.
-	 */
-	private final Map<Location, Integer> randoms;
+    /**
+     * For each map location holds pseudo random number.
+     */
+    private final Map<Location, Integer> randoms;
 
-	public WorldMapRandoms(final WorldMap map) {
-		final Map<Location, Integer> tmp = new HashMap<>();
-		final Random random = new Random(map.getSeed());
-		// TODO this iteration could be done on list of locations ;-)
-		for (int x = 1; x <= map.getMaxX(); x++) {
-			for (int y = 1; y <= map.getMaxY(); y++) {
-				tmp.put(Location.of(x, y), random.nextInt());
-			}
-		}
-		randoms = ImmutableMap.copyOf(tmp);
-	}
-	
-	public Integer getRandomAt(final Location location){
-		return randoms.get(Preconditions.checkNotNull(location));
-	}
-	
+    public WorldMapRandoms(final WorldMap map) {
+        final Map<Location, Integer> tmp = new HashMap<>();
+        final Random random = new Random(map.getSeed());
+        // TODO this iteration could be done on list of locations ;-)
+        for (int x = 1; x <= map.getMaxX(); x++) {
+            for (int y = 1; y <= map.getMaxY(); y++) {
+                tmp.put(Location.of(x, y), random.nextInt());
+            }
+        }
+        randoms = ImmutableMap.copyOf(tmp);
+    }
+
+    public Integer getRandomAt(final Location location) {
+        return randoms.get(Preconditions.checkNotNull(location));
+    }
+
 }

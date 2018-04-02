@@ -10,46 +10,46 @@ import org.slf4j.LoggerFactory;
  */
 public class FpsCounter {
 
-	private final Logger logger = LoggerFactory.getLogger(FpsCounter.class);
+    private final Logger logger = LoggerFactory.getLogger(FpsCounter.class);
 
-	private final Timer timer;
+    private final Timer timer;
 
-	private int fps;
+    private int fps;
 
-	private int counter;
+    private int counter;
 
-	public FpsCounter() {
-		timer = new Timer(1000, e -> {
-			fps = counter;
-			counter = 0;
-			logger.debug("Fps is: " + fps);
-		});
-	}
+    public FpsCounter() {
+        timer = new Timer(1000, e -> {
+            fps = counter;
+            counter = 0;
+            logger.debug("Fps is: " + fps);
+        });
+    }
 
-	public void start() {
-		counter = 0;
-		fps = 0;
-		timer.start();
-	}
+    public void start() {
+        counter = 0;
+        fps = 0;
+        timer.start();
+    }
 
-	public void stop() {
-		timer.stop();
-	}
+    public void stop() {
+        timer.stop();
+    }
 
-	/**
-	 * Should be called when screen was painted.
-	 */
-	public void screenWasPainted() {
-		counter++;
-	}
+    /**
+     * Should be called when screen was painted.
+     */
+    public void screenWasPainted() {
+        counter++;
+    }
 
-	/**
-	 * Return actual FPS.
-	 * 
-	 * @return fps value
-	 */
-	public int getFps() {
-		return fps;
-	}
+    /**
+     * Return actual FPS.
+     * 
+     * @return fps value
+     */
+    public int getFps() {
+        return fps;
+    }
 
 }

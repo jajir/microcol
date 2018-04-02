@@ -172,7 +172,7 @@ public class MicroColModule extends AbstractModule {
         bind(BeforeGameStartController.class).in(Singleton.class);
         bind(SelectedUnitWasChangedController.class).in(Singleton.class);
         bind(IndependenceWasDeclaredColntroller.class).in(Singleton.class);
-        
+
         bind(TurnStartedListener.class).asEagerSingleton();
         bind(TileWasSelectedListener.class).asEagerSingleton();
 

@@ -24,8 +24,8 @@ public class ListenerWrapper<T> {
     private final Listener<T> listener;
 
     ListenerWrapper(final boolean fireEventsAsynchronously, final Listener<T> listener) {
-	this.fireEventsAsynchronously = fireEventsAsynchronously;
-	this.listener = Preconditions.checkNotNull(listener);
+        this.fireEventsAsynchronously = fireEventsAsynchronously;
+        this.listener = Preconditions.checkNotNull(listener);
     }
 
     /**
@@ -35,7 +35,7 @@ public class ListenerWrapper<T> {
      * @return the fireEventsAsynchronously
      */
     boolean isFireEventsAsynchronously() {
-	return fireEventsAsynchronously;
+        return fireEventsAsynchronously;
     }
 
     /**
@@ -44,7 +44,7 @@ public class ListenerWrapper<T> {
      * @return the listener
      */
     Listener<T> getListener() {
-	return listener;
+        return listener;
     }
 
 }

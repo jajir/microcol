@@ -10,134 +10,136 @@ import org.microcol.model.TerrainType;
 
 public class WorldMapPo extends AbstractMapStore {
 
-	/**
-	 * Hold tile definitions rows.
-	 */
-	private String[] tiles;
+    /**
+     * Hold tile definitions rows.
+     */
+    private String[] tiles;
 
-	/**
-	 * Hold information where are trees.
-	 */
-	private String[] trees;
+    /**
+     * Hold information where are trees.
+     */
+    private String[] trees;
 
-	private VisibilityPo visibility;
+    private VisibilityPo visibility;
 
-	private int maxX;
+    private int maxX;
 
-	private int maxY;
-	
-	private Integer seed;
+    private int maxY;
 
-	public void setTerrainType(final Map<Location, TerrainType> terrainMap) {
-		tiles = generateString(loc -> {
-			final TerrainType terrainType = terrainMap.get(loc);
-			if (terrainType == null) {
-				return TerrainType.OCEAN.getCode();
-			} else {
-				return terrainType.getCode();
-			}
-		}, maxX, maxY);
-	}
+    private Integer seed;
 
-	public void setTrees(final Set<Location> treesSet) {
-		trees = generateString(loc -> {
-			final boolean hasTree = treesSet.contains(loc);
-			if (hasTree) {
-				return "t";
-			} else {
-				return "-";
-			}
-		}, maxX, maxY);
-	}
+    public void setTerrainType(final Map<Location, TerrainType> terrainMap) {
+        tiles = generateString(loc -> {
+            final TerrainType terrainType = terrainMap.get(loc);
+            if (terrainType == null) {
+                return TerrainType.OCEAN.getCode();
+            } else {
+                return terrainType.getCode();
+            }
+        }, maxX, maxY);
+    }
 
-	public void setVisibles(final Set<Location> visibleSet) {
-		trees = generateString(loc -> {
-			final boolean isVisible = visibleSet.contains(loc);
-			if (isVisible) {
-				return "-";
-			} else {
-				return "#";
-			}
-		}, maxX, maxY);
-	}
+    public void setTrees(final Set<Location> treesSet) {
+        trees = generateString(loc -> {
+            final boolean hasTree = treesSet.contains(loc);
+            if (hasTree) {
+                return "t";
+            } else {
+                return "-";
+            }
+        }, maxX, maxY);
+    }
 
-	public Map<Location, TerrainType> getTerrainMap() {
-		final Map<Location, TerrainType> out = new HashMap<>();
-		iterate(tiles, (location, charCode) -> {
-			final TerrainType terrainType = TerrainType.valueOfCode(charCode);
-			if (!terrainType.equals(TerrainType.OCEAN)) {
-				out.put(location, terrainType);
-			}
-		});
-		return out;
-	}
+    public void setVisibles(final Set<Location> visibleSet) {
+        trees = generateString(loc -> {
+            final boolean isVisible = visibleSet.contains(loc);
+            if (isVisible) {
+                return "-";
+            } else {
+                return "#";
+            }
+        }, maxX, maxY);
+    }
 
-	public Set<Location> getTreeSet() {
-		final Set<Location> out = new HashSet<>();
-		if (trees != null) {
-			iterate(trees, (location, charCode) -> {
-				if (charCode.equals("t")) {
-					out.add(location);
-				}
-			});
-		}
-		return out;
-	}
+    public Map<Location, TerrainType> getTerrainMap() {
+        final Map<Location, TerrainType> out = new HashMap<>();
+        iterate(tiles, (location, charCode) -> {
+            final TerrainType terrainType = TerrainType.valueOfCode(charCode);
+            if (!terrainType.equals(TerrainType.OCEAN)) {
+                out.put(location, terrainType);
+            }
+        });
+        return out;
+    }
 
-	public int getMaxX() {
-		return maxX;
-	}
+    public Set<Location> getTreeSet() {
+        final Set<Location> out = new HashSet<>();
+        if (trees != null) {
+            iterate(trees, (location, charCode) -> {
+                if (charCode.equals("t")) {
+                    out.add(location);
+                }
+            });
+        }
+        return out;
+    }
 
-	public void setMaxX(final int maxX) {
-		this.maxX = maxX;
-	}
+    public int getMaxX() {
+        return maxX;
+    }
 
-	public int getMaxY() {
-		return maxY;
-	}
+    public void setMaxX(final int maxX) {
+        this.maxX = maxX;
+    }
 
-	public void setMaxY(int maxY) {
-		this.maxY = maxY;
-	}
+    public int getMaxY() {
+        return maxY;
+    }
 
-	public String[] getTiles() {
-		return tiles;
-	}
+    public void setMaxY(int maxY) {
+        this.maxY = maxY;
+    }
 
-	public String[] getTrees() {
-		return trees;
-	}
+    public String[] getTiles() {
+        return tiles;
+    }
 
-	public void setTrees(final String[] trees) {
-		this.trees = trees;
-	}
+    public String[] getTrees() {
+        return trees;
+    }
 
-	/**
-	 * @return the seed
-	 */
-	public Integer getSeed() {
-		return seed;
-	}
+    public void setTrees(final String[] trees) {
+        this.trees = trees;
+    }
 
-	/**
-	 * @param seed the seed to set
-	 */
-	public void setSeed(Integer seed) {
-		this.seed = seed;
-	}
+    /**
+     * @return the seed
+     */
+    public Integer getSeed() {
+        return seed;
+    }
 
-	/**
-	 * @return the visibility
-	 */
-	public VisibilityPo getVisibility() {
-		return visibility;
-	}
+    /**
+     * @param seed
+     *            the seed to set
+     */
+    public void setSeed(Integer seed) {
+        this.seed = seed;
+    }
 
-	/**
-	 * @param visibility the visibility to set
-	 */
-	public void setVisibility(VisibilityPo visibility) {
-		this.visibility = visibility;
-	}
+    /**
+     * @return the visibility
+     */
+    public VisibilityPo getVisibility() {
+        return visibility;
+    }
+
+    /**
+     * @param visibility
+     *            the visibility to set
+     */
+    public void setVisibility(VisibilityPo visibility) {
+        this.visibility = visibility;
+    }
 
 }

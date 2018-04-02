@@ -121,8 +121,6 @@ public class VisibleArea {
         this.canvasHeight = newCanvasHeight;
         onVisibleAreaIsReady.condition2Passed();
     }
-    
-    
 
     public void setX(int x) {
         topLeft = Point.of(x, topLeft.getY());
@@ -211,15 +209,16 @@ public class VisibleArea {
                             canvasHeight));
         } else {
             return Point.of(
-                    adjustToLess(delta.getX(), topLeft.getX(), MainGamePanelView.MAX_CANVAS_SIDE_LENGTH,
-                            canvasWidth),
-                    adjustToLess(delta.getY(), topLeft.getY(), MainGamePanelView.MAX_CANVAS_SIDE_LENGTH,
-                            canvasHeight));
+                    adjustToLess(delta.getX(), topLeft.getX(),
+                            MainGamePanelView.MAX_CANVAS_SIDE_LENGTH, canvasWidth),
+                    adjustToLess(delta.getY(), topLeft.getY(),
+                            MainGamePanelView.MAX_CANVAS_SIDE_LENGTH, canvasHeight));
         }
     }
-    
+
     /**
-     * @param onCanvasReady the onCanvasReady to set
+     * @param onCanvasReady
+     *            the onCanvasReady to set
      */
     public void setOnCanvasReady(final Consumer<String> onCanvasReady) {
         onVisibleAreaIsReady.setOnConditionsPassed(onCanvasReady);

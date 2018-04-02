@@ -15,10 +15,10 @@ public class DialogMessage extends AbstractWarningDialog {
         super(viewUtil, text, "dialogGameOver.caption");
         getContext().getChildren().add(new Label("prasopes"));
     }
-    
-    public void setText(final String text){
+
+    public void setText(final String text) {
         getContext().getChildren().clear();
-        getContext().getChildren().add(new Label(text));        
+        getContext().getChildren().add(new Label(text));
     }
 
 }
