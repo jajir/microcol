@@ -1,7 +1,5 @@
 package org.microcol.model;
 
-import java.util.Optional;
-
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 
@@ -10,28 +8,10 @@ import com.google.common.base.Preconditions;
  */
 public class GameOverResult {
 
-    public final static String REASON_TIME_IS_UP = "TIME_IS_UP";
-
-    public final static String REASON_NO_COLONIES = "NO_COLONIES";
-
-    private final Player winner;
-
-    private final Player looser;
-
     private final String gameOverReason;
 
-    public GameOverResult(final Player winner, final Player looser, final String gameOverReason) {
-        // winner could be null.
-        this.winner = winner;
-        this.looser = looser;
+    public GameOverResult(final String gameOverReason) {
         this.gameOverReason = Preconditions.checkNotNull(gameOverReason);
-    }
-
-    /**
-     * @return the winner
-     */
-    public Optional<Player> getWinner() {
-        return Optional.ofNullable(winner);
     }
 
     /**
@@ -41,17 +21,9 @@ public class GameOverResult {
         return gameOverReason;
     }
 
-    /**
-     * @return the looser
-     */
-    public Optional<Player> getLooser() {
-        return Optional.ofNullable(looser);
-    }
-
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(this).add("game", gameOverReason).add("winner", winner)
-                .add("looser", looser).toString();
+        return MoreObjects.toStringHelper(this).add("gameOverReason", gameOverReason).toString();
     }
 
 }

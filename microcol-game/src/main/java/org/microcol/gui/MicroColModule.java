@@ -132,7 +132,6 @@ public class MicroColModule extends AbstractModule {
         bind(ChooseGoodAmount.class).in(Singleton.class);
         bind(DialogMessage.class).in(Singleton.class);
         bind(MissionCallBack.class).in(Singleton.class);
-        bind(DialogGameOver.class).in(Singleton.class);
 
         /**
          * Event controllers.

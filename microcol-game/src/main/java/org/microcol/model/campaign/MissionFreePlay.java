@@ -7,7 +7,7 @@ import org.microcol.gui.event.model.MissionCallBack;
 import org.microcol.model.GameOverEvaluator;
 import org.microcol.model.GameOverResult;
 import org.microcol.model.Model;
-import org.microcol.model.ModelListenerAdapter;
+import org.microcol.model.event.GameFinishedEvent;
 import org.microcol.model.event.IndependenceWasDeclaredEvent;
 
 import com.google.common.collect.Lists;
@@ -29,11 +29,37 @@ public class MissionFreePlay extends AbstractMission {
 
     @Override
     public void startMission(final Model model, final MissionCallBack missionCallBack) {
-        model.addListener(new ModelListenerAdapter() {
+        model.addListener(new ExtendedModelListenerAdapter() {
+
+            @Override
+            protected List<Function<GameFinishedEvent, String>> prepareEvaluators() {
+                return Lists.newArrayList((event) -> {
+                    if (GameOverEvaluator.GAMEOVER_CONDITION_CALENDAR
+                            .equals(event.getGameOverResult().getGameOverReason())) {
+                        missionCallBack.showMessage("dialogGameOver.timeIsUp");
+                        missionCallBack.goToGameMenu();
+                        return "ok";
+                    }
+                    return null;
+                }, (event) -> {
+                    if (GameOverEvaluator.GAMEOVER_CONDITION_HUMAN_LOST_ALL_COLONIES
+                            .equals(event.getGameOverResult().getGameOverReason())) {
+                        missionCallBack.showMessage("dialogGameOver.allColoniesAreLost");
+                        missionCallBack.goToGameMenu();
+                        return "ok";
+                    }
+                    return null;
+                });
+            }
 
             @Override
             public void independenceWasDeclared(final IndependenceWasDeclaredEvent event) {
                 missionCallBack.showMessage("dialogIndependenceWasDeclared.caption");
+            }
+
+            @Override
+            public void gameFinished(final GameFinishedEvent event) {
+
             }
 
         });

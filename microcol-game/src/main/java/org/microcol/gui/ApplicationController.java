@@ -1,16 +1,12 @@
 package org.microcol.gui;
 
 import org.microcol.gui.event.model.GameController;
-import org.microcol.gui.event.model.GameFinishedController;
 import org.microcol.gui.util.GamePreferences;
-import org.microcol.model.event.GameFinishedEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
-
-import javafx.application.Platform;
 
 /**
  * Control application state. It start or load new game. It control content of
@@ -24,8 +20,6 @@ public class ApplicationController {
 
     private final Logger logger = LoggerFactory.getLogger(ApplicationController.class);
 
-    private final DialogGameOver dialogGameOver;
-
     private final GameController gameController;
 
     private final MusicController musicController;
@@ -34,14 +28,10 @@ public class ApplicationController {
 
     @Inject
     public ApplicationController(final GameController gameController,
-            final GameFinishedController gameFinishedController,
-            final MusicController musicController, final GamePreferences gamePreferences,
-            final DialogGameOver dialogGameOver) {
+            final MusicController musicController, final GamePreferences gamePreferences) {
         this.gameController = Preconditions.checkNotNull(gameController);
         this.musicController = Preconditions.checkNotNull(musicController);
         this.gamePreferences = Preconditions.checkNotNull(gamePreferences);
-        this.dialogGameOver = Preconditions.checkNotNull(dialogGameOver);
-        gameFinishedController.addListener(this::onGameFinished);
     }
 
     /**
@@ -58,17 +48,6 @@ public class ApplicationController {
     public void startNewDefaultGame() {
         logger.debug("Start new default game.");
         gameController.startNewDefaultGame();
-    }
-
-    /**
-     * It's called when game finished and start navigation should be shown.
-     */
-    // TODO move it to mainFramePresenter.
-    private void onGameFinished(final GameFinishedEvent event) {
-        logger.debug("Game finished.");
-        dialogGameOver.setGameOverEvent(event);
-        // TODO it should not be called in separate thread.
-        Platform.runLater(() -> dialogGameOver.showAndWait());
     }
 
 }

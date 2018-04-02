@@ -12,6 +12,10 @@ import com.google.common.base.Preconditions;
  */
 public class GameOverEvaluator {
 
+    public final static String REASON_TIME_IS_UP = "TIME_IS_UP";
+
+    public final static String REASON_NO_COLONIES = "NO_COLONIES";
+
     private final ChainOfCommandOptionalStrategy<Model, GameOverResult> conditions;
 
     public GameOverEvaluator(final List<Function<Model, GameOverResult>> gameOverEvaluators) {
@@ -27,7 +31,7 @@ public class GameOverEvaluator {
 
     public static final Function<Model, GameOverResult> GAMEOVER_CONDITION_CALENDAR = (model) -> {
         if (model.getCalendar().isFinished()) {
-            return new GameOverResult(null, null, GameOverResult.REASON_TIME_IS_UP);
+            return new GameOverResult(REASON_TIME_IS_UP);
         } else {
             return null;
         }
@@ -38,7 +42,7 @@ public class GameOverEvaluator {
         if (model.getCalendar().getNumberOfPlayedTurns() > 15) {
             for (final Player player : model.getPlayerStore().getPlayers()) {
                 if (player.isHuman() && model.getColonies(player).isEmpty()) {
-                    return new GameOverResult(null, player, GameOverResult.REASON_NO_COLONIES);
+                    return new GameOverResult(REASON_NO_COLONIES);
                 }
             }
         }

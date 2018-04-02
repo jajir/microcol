@@ -15,7 +15,6 @@ import org.microcol.model.GameOverResult;
 import org.microcol.model.GoodType;
 import org.microcol.model.Location;
 import org.microcol.model.Model;
-import org.microcol.model.ModelListenerAdapter;
 import org.microcol.model.Path;
 import org.microcol.model.Player;
 import org.microcol.model.TerrainType;
@@ -23,6 +22,7 @@ import org.microcol.model.Unit;
 import org.microcol.model.event.BeforeDeclaringIndependenceEvent;
 import org.microcol.model.event.BeforeEndTurnEvent;
 import org.microcol.model.event.ColonyWasFoundEvent;
+import org.microcol.model.event.GameFinishedEvent;
 import org.microcol.model.event.GameStartedEvent;
 import org.microcol.model.event.GoodsWasSoldInEuropeEvent;
 import org.microcol.model.event.TurnStartedEvent;
@@ -63,8 +63,36 @@ public class DefaultMissionFindNewWold extends AbstractMission {
 
     @Override
     public void startMission(final Model model, final MissionCallBack missionCallBack) {
-        model.addListener(new ModelListenerAdapter() {
-            
+        model.addListener(new ExtendedModelListenerAdapter() {
+
+            @Override
+            protected List<Function<GameFinishedEvent, String>> prepareEvaluators() {
+                return Lists.newArrayList((event) -> {
+                    if (GameOverEvaluator.GAMEOVER_CONDITION_CALENDAR
+                            .equals(event.getGameOverResult().getGameOverReason())) {
+                        missionCallBack.showMessage("dialogGameOver.timeIsUp");
+                        missionCallBack.goToGameMenu();
+                        return "ok";
+                    }
+                    return null;
+                }, (event) -> {
+                    if (GameOverEvaluator.GAMEOVER_CONDITION_HUMAN_LOST_ALL_COLONIES
+                            .equals(event.getGameOverResult().getGameOverReason())) {
+                        missionCallBack.showMessage("dialogGameOver.allColoniesAreLost");
+                        missionCallBack.goToGameMenu();
+                        return "ok";
+                    }
+                    return null;
+                }, (event) -> {
+                    if (GAME_OVER_REASON.equals(event.getGameOverResult().getGameOverReason())) {
+                        missionCallBack.showMessage("campaign.default.gameOver");
+                        missionCallBack.goToGameMenu();
+                        return "ok";
+                    }
+                    return null;
+                });
+            }
+
             @Override
             public void beforeDeclaringIndependence(final BeforeDeclaringIndependenceEvent event) {
                 event.stopEventExecution();
@@ -205,7 +233,7 @@ public class DefaultMissionFindNewWold extends AbstractMission {
         if (cigarsWasSold >= TRAGET_AMOUNT_OF_CIGARS) {
             setFinished(true);
             flush();
-            return new GameOverResult(null, null, GAME_OVER_REASON);
+            return new GameOverResult(GAME_OVER_REASON);
         } else {
             return null;
         }

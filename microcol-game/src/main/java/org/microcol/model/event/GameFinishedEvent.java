@@ -6,6 +6,9 @@ import org.microcol.model.Model;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 
+/**
+ * Event is send when game is over.
+ */
 public final class GameFinishedEvent extends AbstractModelEvent {
 
     private final GameOverResult gameOverResult;
