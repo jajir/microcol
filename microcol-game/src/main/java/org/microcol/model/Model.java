@@ -231,8 +231,22 @@ public final class Model {
                 UnitType.COLONIST.getSpeed());
     }
 
-    void addUnitToPlayer(final UnitType unitType, final Player owner) {
-        unitStorage.addUnitToPlayer(unitType, owner, this);
+    /**
+     * Add unit to player and place it to Europe.
+     *
+     * @param unitType
+     *            required unit type
+     * @param owner
+     *            required unit owner
+     */
+    void addUnitInEurope(final UnitType unitType, final Player owner) {
+        unitStorage.createUnit(unit -> new Cargo(unit, unitType.getCargoCapacity()), this, unit -> {
+            if (unitType.isShip()) {
+                return new PlaceEuropePort(unit, europe.getPort());
+            } else {
+                return new PlaceEuropePier(unit);
+            }
+        }, unitType, owner, unitType.getSpeed());
     }
 
     public boolean isGameStarted() {

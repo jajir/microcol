@@ -51,12 +51,6 @@ class UnitStorage {
         return unit;
     }
 
-    void addUnitToPlayer(final UnitType unitType, final Player owner, final Model model) {
-        units.add(new Unit(unit -> new Cargo(unit, unitType.getCargoCapacity()), model,
-                idManager.nextId(), unit -> new PlaceEuropePier(unit), unitType, owner,
-                unitType.getSpeed()));
-    }
-
     private void checkUnitLocations(final List<Unit> units) {
         Map<Location, Player> owners = new HashMap<>();
         units.forEach(unit -> {

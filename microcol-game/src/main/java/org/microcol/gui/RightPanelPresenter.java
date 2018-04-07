@@ -100,7 +100,9 @@ public class RightPanelPresenter {
         if (gameModelController.isModelReady()) {
             display.setOnMovePlayer(gameModelController.getModel().getCurrentPlayer());
         }
-        display.refreshView(lastFocusedTileEvent);
+        if (lastFocusedTileEvent != null) {
+            display.refreshView(lastFocusedTileEvent);
+        }
     }
 
     private void onFocusedTile(final TileWasSelectedEvent event) {

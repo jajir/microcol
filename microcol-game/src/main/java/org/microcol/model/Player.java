@@ -237,7 +237,7 @@ public final class Player {
         int price = unitType.getEuropePrice();
         verifyAvailibilityOFGold(price);
         setGold(getGold() - price);
-        model.addUnitToPlayer(unitType, this);
+        model.addUnitInEurope(unitType, this);
     }
 
     private void verifyAvailibilityOFGold(final int price) {
