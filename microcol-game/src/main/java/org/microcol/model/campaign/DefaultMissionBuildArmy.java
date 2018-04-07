@@ -61,23 +61,29 @@ public class DefaultMissionBuildArmy extends AbstractMission {
                 return Lists.newArrayList((event) -> {
                     if (GameOverEvaluator.REASON_TIME_IS_UP
                             .equals(event.getGameOverResult().getGameOverReason())) {
-                        missionCallBack.showMessage("dialogGameOver.timeIsUp");
-                        missionCallBack.goToGameMenu();
+                        missionCallBack.executeOnFrontEnd(context -> {
+                            context.showMessage("dialogGameOver.timeIsUp");
+                            context.goToGameMenu();
+                        });
                         return "ok";
                     }
                     return null;
                 }, (event) -> {
                     if (GameOverEvaluator.REASON_NO_COLONIES
                             .equals(event.getGameOverResult().getGameOverReason())) {
-                        missionCallBack.showMessage("dialogGameOver.allColoniesAreLost");
-                        missionCallBack.goToGameMenu();
+                        missionCallBack.executeOnFrontEnd(context -> {
+                            context.showMessage("dialogGameOver.allColoniesAreLost");
+                            context.goToGameMenu();
+                        });
                         return "ok";
                     }
                     return null;
                 }, (event) -> {
                     if (GAME_OVER_REASON.equals(event.getGameOverResult().getGameOverReason())) {
-                        missionCallBack.showMessage("campaign.default.m2.done");
-                        missionCallBack.goToGameMenu();
+                        missionCallBack.executeOnFrontEnd(context -> {
+                            context.showMessage("campaign.default.m2.done");
+                            context.goToGameMenu();
+                        });
                         return "ok";
                     }
                     return null;

@@ -3,10 +3,8 @@ package org.microcol.gui;
 import org.microcol.gui.event.KeyController;
 import org.microcol.gui.event.model.BeforeGameStartController;
 import org.microcol.gui.event.model.BeforeGameStartEvent;
-import org.microcol.gui.event.model.GameFinishedController;
 import org.microcol.gui.mainmenu.ExitGameController;
 import org.microcol.gui.mainmenu.ExitGameEvent;
-import org.microcol.model.event.GameFinishedEvent;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
@@ -28,8 +26,7 @@ public class MainPanelPresenter {
     @Inject
     public MainPanelPresenter(final MainPanelView view, final KeyController keyController,
             final ExitGameController exitGameController,
-            final BeforeGameStartController beforeGameStartController,
-            final GameFinishedController gameFinishedController) {
+            final BeforeGameStartController beforeGameStartController) {
         this.view = Preconditions.checkNotNull(view);
         view.getBox().setOnKeyPressed(e -> {
             keyController.fireEvent(e);
@@ -37,7 +34,6 @@ public class MainPanelPresenter {
         });
         exitGameController.addListener(this::onGameExit);
         beforeGameStartController.addListener(this::onBeforeGameStartEvent);
-        gameFinishedController.addRunLaterListener(this::onGameFinished);
     }
 
     @SuppressWarnings("unused")
@@ -47,12 +43,6 @@ public class MainPanelPresenter {
 
     @SuppressWarnings("unused")
     private void onGameExit(final ExitGameEvent event) {
-        view.showPanel(PANEL_GAME_MENU);
-    }
-
-    @SuppressWarnings("unused")
-    private void onGameFinished(final GameFinishedEvent event) {
-        // FIXME remove method
         view.showPanel(PANEL_GAME_MENU);
     }
 

@@ -60,21 +60,24 @@ public class MissionCallBack {
         });
     }
 
+    /**
+     * Execute given consumer in FX application thread.
+     *
+     * @param consumer
+     *            required consumer
+     */
+    public void executeOnFrontEnd(final Consumer<CallBackContext> consumer) {
+        Preconditions.checkNotNull(consumer);
+        final CallBackContext callBackContext = new CallBackContext(dialogMessage,
+                mainPanelPresenter, text);
+        Platform.runLater(() -> {
+            consumer.accept(callBackContext);
+        });
+    }
+
     public void addCallWhenReady(final Consumer<Model> consumer) {
         executor.addCallWhenReady(consumer);
     }
 
-    /**
-     * This call cause that front end skip to next mission in campaign. It could
-     * be called when mission is over.
-     */
-    public void startDefaultMission() {
-        // FIXME gameController can't be instantiated here because of circular
-        // dependencies
-    }
-
-    public void goToGameMenu() {
-        mainPanelPresenter.showPanel(MainPanelPresenter.PANEL_GAME_MENU);
-    }
 
 }
