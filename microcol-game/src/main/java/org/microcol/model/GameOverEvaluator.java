@@ -16,6 +16,8 @@ public class GameOverEvaluator {
 
     public final static String REASON_NO_COLONIES = "NO_COLONIES";
 
+    private final static int TURNS_WHEN_COLONY_LOST_IS_NOT_COUNTED = 15;
+
     private final ChainOfCommandOptionalStrategy<Model, GameOverResult> conditions;
 
     public GameOverEvaluator(final List<Function<Model, GameOverResult>> gameOverEvaluators) {
@@ -39,7 +41,7 @@ public class GameOverEvaluator {
 
     public static final Function<Model, GameOverResult> GAMEOVER_CONDITION_HUMAN_LOST_ALL_COLONIES = (
             model) -> {
-        if (model.getCalendar().getNumberOfPlayedTurns() > 15) {
+        if (model.getCalendar().getNumberOfPlayedTurns() > TURNS_WHEN_COLONY_LOST_IS_NOT_COUNTED) {
             for (final Player player : model.getPlayerStore().getPlayers()) {
                 if (player.isHuman() && model.getColonies(player).isEmpty()) {
                     return new GameOverResult(REASON_NO_COLONIES);

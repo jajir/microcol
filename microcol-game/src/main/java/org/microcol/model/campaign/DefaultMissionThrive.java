@@ -7,11 +7,10 @@ import org.microcol.gui.event.model.MissionCallBack;
 import org.microcol.model.GameOverEvaluator;
 import org.microcol.model.GameOverResult;
 import org.microcol.model.Model;
-import org.microcol.model.ModelListenerAdapter;
 import org.microcol.model.Player;
+import org.microcol.model.event.GameFinishedEvent;
 import org.microcol.model.event.GameStartedEvent;
 import org.microcol.model.event.IndependenceWasDeclaredEvent;
-import org.microcol.model.event.TurnStartedEvent;
 
 import com.google.common.collect.Lists;
 
@@ -22,6 +21,8 @@ public class DefaultMissionThrive extends AbstractMission {
 
     private final static String NAME = "thrive";
 
+    public final static String GAME_OVER_REASON = "defaultMission3";
+
     private final static String MODEL_FIND_NEW_WORLD = "/maps/default-" + NAME + ".json";
 
     DefaultMissionThrive() {
@@ -30,7 +31,36 @@ public class DefaultMissionThrive extends AbstractMission {
 
     @Override
     public void startMission(final Model model, final MissionCallBack missionCallBack) {
-        model.addListener(new ModelListenerAdapter() {
+        model.addListener(new ExtendedModelListenerAdapter() {
+
+            @Override
+            protected List<Function<GameFinishedEvent, String>> prepareEvaluators() {
+                return Lists.newArrayList((event) -> {
+                    if (GameOverEvaluator.REASON_TIME_IS_UP
+                            .equals(event.getGameOverResult().getGameOverReason())) {
+                        missionCallBack.showMessage("dialogGameOver.timeIsUp");
+                        missionCallBack.goToGameMenu();
+                        return "ok";
+                    }
+                    return null;
+                }, (event) -> {
+                    if (GameOverEvaluator.REASON_NO_COLONIES
+                            .equals(event.getGameOverResult().getGameOverReason())) {
+                        missionCallBack.showMessage("dialogGameOver.allColoniesAreLost");
+                        missionCallBack.goToGameMenu();
+                        return "ok";
+                    }
+                    return null;
+                }, (event) -> {
+                    if (GAME_OVER_REASON.equals(event.getGameOverResult().getGameOverReason())) {
+                        missionCallBack.showMessage("campaign.default.m3.done1",
+                                "campaign.default.m3.done2");
+                        missionCallBack.goToGameMenu();
+                        return "ok";
+                    }
+                    return null;
+                });
+            }
 
             @Override
             public void gameStarted(final GameStartedEvent event) {
@@ -48,25 +78,26 @@ public class DefaultMissionThrive extends AbstractMission {
                         "campaign.default.m3.portIsClosed");
             }
 
-            @Override
-            public void turnStarted(final TurnStartedEvent event) {
-                final Model model = event.getModel();
-                if (getHumanPlayer(model).isDeclaredIndependence()) {
-                    final Player player = model.getPlayerByName("Dutch's King");
-                    if (getNumberOfMilitaryUnitsForPlayer(player) <= 0) {
-                        missionCallBack.showMessage("campaign.default.m3.done1",
-                                "campaign.default.m3.done2");
-                    }
-                }
-            }
-
         });
     }
 
     @Override
     public List<Function<Model, GameOverResult>> getGameOverEvaluators() {
         return Lists.newArrayList(GameOverEvaluator.GAMEOVER_CONDITION_CALENDAR,
-                GameOverEvaluator.GAMEOVER_CONDITION_HUMAN_LOST_ALL_COLONIES);
+                GameOverEvaluator.GAMEOVER_CONDITION_HUMAN_LOST_ALL_COLONIES,
+                this::evaluateGameOver);
+    }
+
+    private GameOverResult evaluateGameOver(final Model model) {
+        if (getHumanPlayer(model).isDeclaredIndependence()) {
+            final Player player = model.getPlayerByName("Dutch's King");
+            if (getNumberOfMilitaryUnitsForPlayer(player) <= 0) {
+                setFinished(true);
+                flush();
+                return new GameOverResult(GAME_OVER_REASON);
+            }
+        }
+        return null;
     }
 
 }

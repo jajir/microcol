@@ -22,6 +22,8 @@ public class KingPlayer extends AbstractRobotPlayer {
 
     private final ContinentTool continentTool = new ContinentTool();
 
+    private final static float KINGS_MILITARY_STREGTH_COEFICIENT = 2F / 3F;
+
     public KingPlayer(final Model model, final Player player,
             final AnimationManager animationManager) {
         super(model, player, animationManager);
@@ -50,7 +52,9 @@ public class KingPlayer extends AbstractRobotPlayer {
             if (unit.getType().isShip()) {
                 performMoveUnit(unit, continents);
             } else {
-                performSeekAndDestroy(unit, continents);
+                if (unit.isAtPlaceLocation()) {
+                    performSeekAndDestroy(unit, continents);
+                }
             }
         }
     }
@@ -74,7 +78,7 @@ public class KingPlayer extends AbstractRobotPlayer {
         if (oLoc.isPresent()) {
             Optional<List<Location>> oPath = unit.getPath(oLoc.get(), true);
             if (oPath.isPresent() && !oPath.get().isEmpty()) {
-                getModel().moveUnit(unit, Path.of(oPath.get()));
+                getModel().moveUnitAsFarAsPossible(unit, Path.of(oPath.get()));
             }
         }
         simpleUnitBehavior.tryToFight(unit);
@@ -85,7 +89,7 @@ public class KingPlayer extends AbstractRobotPlayer {
         final Optional<List<Location>> oPath = findFasterPathToContinent(ship,
                 continentsToAttack.get(0));
         if (oPath.isPresent()) {
-            getModel().moveUnit(ship, Path.of(oPath.get()));
+            getModel().moveUnitAsFarAsPossible(ship, Path.of(oPath.get()));
         }
     }
 
@@ -129,10 +133,9 @@ public class KingPlayer extends AbstractRobotPlayer {
         }
     }
 
-    public int getKingsMilitaryStrength() {
-        // TODO count it based on user's military strength multiplied by
-        // coefficient.
-        return 15;
+    private int getKingsMilitaryStrength() {
+        return (int) (whosKingThisPlayerIs.getPlayerStatistics().getMilitaryStrength()
+                .getMilitaryStrength() * KINGS_MILITARY_STREGTH_COEFICIENT);
     }
 
     /**

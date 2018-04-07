@@ -1,6 +1,7 @@
 package org.microcol.model;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -146,14 +147,25 @@ public class Colony {
         model.fireUnitMovedStep(unit, oldLocation, target);
     }
 
+    /**
+     * Try to place unit to produce food. If there is no free field than place
+     * unit outside colony.
+     *
+     * @param unit
+     *            required unit
+     */
     void placeUnitToProduceFood(final Unit unit) {
-        // TODO use random to select place where will be unit finally placed
-        final ColonyField field = colonyFields.stream()
-                .max((f1, f2) -> f1.isPossibleToProduceOfGooodsType(GoodType.CORN)
-                        - f2.isPossibleToProduceOfGooodsType(GoodType.CORN))
-                .orElseThrow(
-                        () -> new IllegalStateException("There is not place to produce food."));
-        unit.placeToColonyField(field, GoodType.CORN);
+        final Optional<Integer> oMaxCornProduction = colonyFields.stream().filter(f -> f.isEmpty())
+                .map(f -> f.getGoodTypeProduction(GoodType.CORN)).max(Comparator.naturalOrder());
+        if (oMaxCornProduction.isPresent()) {
+            final List<ColonyField> fields = colonyFields.stream().filter(f -> f.isEmpty())
+                    .collect(ImmutableList.toImmutableList());
+            Preconditions.checkState(!fields.isEmpty(), "Filed can't be empty");
+            final ColonyField field = fields.get(random.nextInt(fields.size()));
+            unit.placeToColonyField(field, GoodType.CORN);
+        } else {
+            unit.placeToLocation(location);
+        }
     }
 
     private List<ColonyFieldPo> saveColonyFields() {

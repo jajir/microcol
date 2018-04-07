@@ -780,7 +780,7 @@
     {
       "name": "Dutch\u0027s King",
       "computer": true,
-      "gold": 1108,
+      "gold": 1000000,
       "declaredIndependence": false,
       "extraData": {},
       "visible": {

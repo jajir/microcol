@@ -281,6 +281,7 @@ public final class Player {
 
         model.getColonies(this).forEach(out.getGoodsStatistics()::addColonyData);
         model.getUnitsOwnedBy(this, true).forEach(out.getGoodsStatistics()::addUnitData);
+        model.getUnitsOwnedBy(this, true).forEach(out.getMilitaryStrength()::addUnitData);
 
         return out;
     }

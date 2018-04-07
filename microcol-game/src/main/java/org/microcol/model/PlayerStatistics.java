@@ -8,6 +8,8 @@ public class PlayerStatistics {
 
     private final PlayerGoodsStatistics goodsStatistics = new PlayerGoodsStatistics();
 
+    private final PlayerMilitaryStrength playerMilitaryStrength = new PlayerMilitaryStrength();
+
     /**
      * @return the goodsStatistics
      */
@@ -15,4 +17,7 @@ public class PlayerStatistics {
         return goodsStatistics;
     };
 
+    public PlayerMilitaryStrength getMilitaryStrength() {
+        return playerMilitaryStrength;
+    }
 }

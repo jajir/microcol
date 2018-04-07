@@ -101,7 +101,7 @@ public class ColonyField {
         return placeColonyField == null ? null : placeColonyField.getProducedGoodType();
     }
 
-    public int isPossibleToProduceOfGooodsType(final GoodType goodType) {
+    public int getGoodTypeProduction(final GoodType goodType) {
         return getTerrain().canProduceAmmount(goodType);
     }
 

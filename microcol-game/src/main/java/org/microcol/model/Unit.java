@@ -397,7 +397,8 @@ public class Unit {
                 moveTo);
         Preconditions.checkArgument(isPossibleToMoveAt(moveTo),
                 "It's not possible to move at (%s).", moveTo);
-        Preconditions.checkState(availableMoves > 0, "There is not enough avilable moves ");
+        Preconditions.checkState(availableMoves > 0, "There is not enough avilable moves (%s)",
+                this);
 
         availableMoves--;
         final TerrainType targetTerrain = model.getMap().getTerrainTypeAt(moveTo);

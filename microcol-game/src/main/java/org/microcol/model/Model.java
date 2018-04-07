@@ -415,6 +415,31 @@ public final class Model {
     /**
      * Move selected unit on defined path.
      * <p>
+     * Unit have to be on map. Path have to be accessible for unit.
+     * </p>
+     * 
+     * @param unit
+     *            required moving unit
+     * @param path
+     *            required path
+     * @throws IllegalStateException
+     *             It's thrown when unit doesn't have enough action points to
+     *             move along whole given path.
+     */
+    public void moveUnit(final Unit unit, final Path path) {
+        if (listenerManager.fireUnitMoveStarted(this, unit, path)) {
+            path.getLocations().forEach(loc -> {
+                unit.moveOneStep(loc);
+            });
+            listenerManager.fireUnitMovedFinished(this, unit, path);
+        }
+    }
+    
+    /**
+     * Move selected unit on defined path. Unit will walk along path as far as
+     * it will be possible. How far unit move depends on terrain and number of
+     * available action points.
+     * <p>
      * Unit have to be on map. Path have to available for unit.
      * </p>
      * 
@@ -423,10 +448,12 @@ public final class Model {
      * @param path
      *            required path
      */
-    public void moveUnit(final Unit unit, final Path path) {
+    public void moveUnitAsFarAsPossible(final Unit unit, final Path path) {
         if (listenerManager.fireUnitMoveStarted(this, unit, path)) {
             path.getLocations().forEach(loc -> {
-                unit.moveOneStep(loc);
+                if (unit.getAvailableMoves() > 0) {
+                    unit.moveOneStep(loc);
+                }
             });
             listenerManager.fireUnitMovedFinished(this, unit, path);
         }

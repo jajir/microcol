@@ -61,6 +61,7 @@ public final class Calendar {
         out.setStartYear(startYear);
         out.setEndYear(endYear);
         out.setCurrentYear(currentYear);
+        out.setNumberOfPlayedTurns(numberOfPlayedTurns);
         return out;
     }
 

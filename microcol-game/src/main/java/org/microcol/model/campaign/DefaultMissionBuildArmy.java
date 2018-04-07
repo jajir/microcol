@@ -59,7 +59,7 @@ public class DefaultMissionBuildArmy extends AbstractMission {
             @Override
             protected List<Function<GameFinishedEvent, String>> prepareEvaluators() {
                 return Lists.newArrayList((event) -> {
-                    if (GameOverEvaluator.GAMEOVER_CONDITION_CALENDAR
+                    if (GameOverEvaluator.REASON_TIME_IS_UP
                             .equals(event.getGameOverResult().getGameOverReason())) {
                         missionCallBack.showMessage("dialogGameOver.timeIsUp");
                         missionCallBack.goToGameMenu();
@@ -67,7 +67,7 @@ public class DefaultMissionBuildArmy extends AbstractMission {
                     }
                     return null;
                 }, (event) -> {
-                    if (GameOverEvaluator.GAMEOVER_CONDITION_HUMAN_LOST_ALL_COLONIES
+                    if (GameOverEvaluator.REASON_NO_COLONIES
                             .equals(event.getGameOverResult().getGameOverReason())) {
                         missionCallBack.showMessage("dialogGameOver.allColoniesAreLost");
                         missionCallBack.goToGameMenu();
