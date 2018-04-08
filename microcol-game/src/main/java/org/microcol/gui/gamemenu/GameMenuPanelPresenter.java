@@ -15,6 +15,7 @@ import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
 
 import javafx.event.ActionEvent;
+import javafx.scene.layout.VBox;
 
 /**
  * Panel that is visible after game start.
@@ -65,6 +66,10 @@ public class GameMenuPanelPresenter {
                 && persistingTool.getAutoSaveFile().exists());
         final Campaign defaultCampain = campaignManager.getDefaultCampain();
         view.setFreeGameEnabled(defaultCampain.isFinished());
+    }
+
+    public VBox getBox() {
+        return view.getBox();
     }
 
 }

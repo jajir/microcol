@@ -52,6 +52,7 @@ import org.microcol.gui.event.model.UnitMovedToHighSeasController;
 import org.microcol.gui.gamemenu.CampaignPanelPresenter;
 import org.microcol.gui.gamemenu.CampaignPanelView;
 import org.microcol.gui.gamemenu.ExitGameListener;
+import org.microcol.gui.gamemenu.GameFinishedListener;
 import org.microcol.gui.gamemenu.GameMenuPanelPresenter;
 import org.microcol.gui.gamemenu.GameMenuPanelView;
 import org.microcol.gui.gamemenu.ShowDefaultCampaignMenuControler;
@@ -183,6 +184,7 @@ public class MicroColModule extends AbstractModule {
 
         bind(ModelEventManager.class).in(Singleton.class);
         bind(ExitGameListener.class).asEagerSingleton();
+        bind(GameFinishedListener.class).asEagerSingleton();
 
         /**
          * Initialize MVP classes

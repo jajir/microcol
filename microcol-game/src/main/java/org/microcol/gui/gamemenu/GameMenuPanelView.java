@@ -71,6 +71,7 @@ public class GameMenuPanelView {
         return buttonStartFreeGame;
     }
 
+    //TODO hide it
     public VBox getBox() {
         return box;
     }

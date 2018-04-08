@@ -135,7 +135,8 @@ public abstract class AbstractMission implements Mission {
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(getClass()).add("name", name).add("orderNo", orderNo)
+        return MoreObjects.toStringHelper(getClass()).add("name", name)
+                .add("isFinished", isFinished).add("orderNo", orderNo)
                 .add("modelFileName", modelFileName).toString();
     }
 
