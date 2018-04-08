@@ -51,8 +51,11 @@ import org.microcol.gui.event.model.UnitMovedController;
 import org.microcol.gui.event.model.UnitMovedToHighSeasController;
 import org.microcol.gui.gamemenu.CampaignPanelPresenter;
 import org.microcol.gui.gamemenu.CampaignPanelView;
+import org.microcol.gui.gamemenu.ExitGameListener;
 import org.microcol.gui.gamemenu.GameMenuPanelPresenter;
 import org.microcol.gui.gamemenu.GameMenuPanelView;
+import org.microcol.gui.gamemenu.ShowDefaultCampaignMenuControler;
+import org.microcol.gui.gamemenu.ShowDefaultCampaignMenuListener;
 import org.microcol.gui.gamepanel.AnimationIsDoneController;
 import org.microcol.gui.gamepanel.AnimationManager;
 import org.microcol.gui.gamepanel.ExcludePainting;
@@ -172,11 +175,14 @@ public class MicroColModule extends AbstractModule {
         bind(BeforeGameStartController.class).in(Singleton.class);
         bind(SelectedUnitWasChangedController.class).in(Singleton.class);
         bind(IndependenceWasDeclaredColntroller.class).in(Singleton.class);
+        bind(ShowDefaultCampaignMenuControler.class).in(Singleton.class);
 
         bind(TurnStartedListener.class).asEagerSingleton();
         bind(TileWasSelectedListener.class).asEagerSingleton();
+        bind(ShowDefaultCampaignMenuListener.class).asEagerSingleton();
 
         bind(ModelEventManager.class).in(Singleton.class);
+        bind(ExitGameListener.class).asEagerSingleton();
 
         /**
          * Initialize MVP classes

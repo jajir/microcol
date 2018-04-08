@@ -41,15 +41,14 @@ public class CampaignPanelPresenter {
         this.mainFramePresenter = Preconditions.checkNotNull(mainFramePresenter);
         this.gameController = Preconditions.checkNotNull(gameController);
         changeLanguageController.addListener(listener -> display.updateLanguage());
-        display.getButtonBack().setOnAction(
-                event -> mainFramePresenter.showPanel(MainPanelPresenter.PANEL_GAME_MENU));
+        display.getButtonBack().setOnAction(event -> mainFramePresenter.showGameMenu());
         display.setOnSelectedMission(this::onSelectedMission);
     }
 
     private void onSelectedMission(final String missionName) {
         logger.debug("Mission '%s' was selected to play.", missionName);
         gameController.startDefaultMission(missionName);
-        mainFramePresenter.showPanel(MainPanelPresenter.PANEL_MAIN_GAME);
+        mainFramePresenter.showGamePanel();
     }
 
 }

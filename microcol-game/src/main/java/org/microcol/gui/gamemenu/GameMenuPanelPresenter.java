@@ -1,7 +1,6 @@
 package org.microcol.gui.gamemenu;
 
 import org.microcol.gui.ApplicationController;
-import org.microcol.gui.MainPanelPresenter;
 import org.microcol.gui.PersistingDialog;
 import org.microcol.gui.event.model.GameController;
 import org.microcol.gui.mainmenu.ChangeLanguageController;
@@ -36,10 +35,10 @@ public class GameMenuPanelPresenter {
     public GameMenuPanelPresenter(final GameMenuPanelView view,
             final ApplicationController applicationController,
             final ChangeLanguageController changeLanguageController,
-            final QuitGameController exitGameController,
-            final MainPanelPresenter mainFramePresenter, final PersistingDialog persistingDialog,
+            final QuitGameController exitGameController, final PersistingDialog persistingDialog,
             final GamePreferences gamePreferences, final PersistingTool persistingTool,
-            final GameController gameController, final CampaignManager campaignManager) {
+            final GameController gameController, final CampaignManager campaignManager,
+            final ShowDefaultCampaignMenuControler showDefaultCampaignMenuControler) {
         this.view = Preconditions.checkNotNull(view);
         this.gamePreferences = Preconditions.checkNotNull(gamePreferences);
         this.persistingTool = Preconditions.checkNotNull(persistingTool);
@@ -47,8 +46,8 @@ public class GameMenuPanelPresenter {
         this.campaignManager = Preconditions.checkNotNull(campaignManager);
         view.getButtonContinue().setOnAction(this::onGameContinue);
         view.getButtonLoadSave().setOnAction(event -> persistingDialog.loadModel());
-        view.getButtonPlayCampaign().setOnAction(
-                event -> mainFramePresenter.showPanel(MainPanelPresenter.PANEL_CAMPAIGN));
+        view.getButtonPlayCampaign().setOnAction(event -> showDefaultCampaignMenuControler
+                .fireEvent(new ShowDefaultCampaignMenuEvent()));
         view.getButtonExitMicroCol()
                 .setOnAction(event -> exitGameController.fireEvent(new QuitGameEvent()));
         view.getButtonStartFreeGame().setOnAction(e -> applicationController.startNewDefaultGame());
@@ -61,7 +60,7 @@ public class GameMenuPanelPresenter {
         gameController.loadModelFromFile(persistingTool.getAutoSaveFile());
     }
 
-    void refresh() {
+    public void refresh() {
         view.setContinueEnabled(gamePreferences.getGameInProgressSaveFile().isPresent()
                 && persistingTool.getAutoSaveFile().exists());
         final Campaign defaultCampain = campaignManager.getDefaultCampain();

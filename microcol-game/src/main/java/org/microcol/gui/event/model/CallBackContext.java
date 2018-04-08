@@ -29,7 +29,7 @@ public class CallBackContext {
     }
 
     public void goToGameMenu() {
-        mainPanelPresenter.showPanel(MainPanelPresenter.PANEL_GAME_MENU);
+        mainPanelPresenter.showGameMenu();
     }
 
 }

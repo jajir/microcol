@@ -13,9 +13,7 @@ import javafx.scene.layout.VBox;
  */
 public class MainPanelView {
 
-    private final static String DEFAULT_PANEL_NAME = MainPanelPresenter.PANEL_GAME_MENU;
-
-    private final VBox box;
+    private final VBox mainBox;
 
     private final MainGamePanelView mainGamePanelView;
 
@@ -26,29 +24,33 @@ public class MainPanelView {
     @Inject
     public MainPanelView(final MainGamePanelView mainGamePanelView,
             final GameMenuPanelView gameMenuPanelView, final CampaignPanelView campaignPanelView) {
-        box = new VBox();
+        mainBox = new VBox();
         this.mainGamePanelView = Preconditions.checkNotNull(mainGamePanelView);
         this.gameMenuPanelView = Preconditions.checkNotNull(gameMenuPanelView);
         this.campaignPanelView = Preconditions.checkNotNull(campaignPanelView);
-        showPanel(DEFAULT_PANEL_NAME);
+        showGameMenu();
     }
 
-    public void showPanel(final String panelName) {
-        box.getChildren().clear();
-        if (MainPanelPresenter.PANEL_MAIN_GAME.equals(panelName)) {
-            box.getChildren().add(mainGamePanelView.getBox());
-        } else if (MainPanelPresenter.PANEL_GAME_MENU.equals(panelName)) {
-            box.getChildren().add(gameMenuPanelView.getBox());
-        } else if (MainPanelPresenter.PANEL_CAMPAIGN.equals(panelName)) {
-            campaignPanelView.refresh();
-            box.getChildren().add(campaignPanelView.getBox());
-        } else {
-            throw new IllegalArgumentException(String.format("Invalid panel name (%s)", panelName));
-        }
+    public void showDefaultCampaignMenu() {
+        campaignPanelView.refresh();
+        showBox(campaignPanelView.getBox());
+    }
+
+    public void showGamePanel() {
+        showBox(mainGamePanelView.getBox());
+    }
+
+    public void showGameMenu() {
+        showBox(gameMenuPanelView.getBox());
+    }
+
+    private void showBox(final VBox box) {
+        mainBox.getChildren().clear();
+        mainBox.getChildren().add(box);
     }
 
     public VBox getBox() {
-        return box;
+        return mainBox;
     }
 
 }
