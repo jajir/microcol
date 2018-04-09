@@ -1,5 +1,7 @@
 package org.microcol.gui.util;
 
+import org.microcol.gui.MainStageBuilder;
+
 import com.google.common.base.Preconditions;
 
 import javafx.scene.Parent;
@@ -50,7 +52,7 @@ public class AbstractMessageWindow {
 
     public final void init(final Parent root) {
         scene = new Scene(root);
-        scene.getStylesheets().add("gui/dialogs.css");
+        scene.getStylesheets().add(MainStageBuilder.STYLE_SHEET_DIALOGS);
         stageDialog.setScene(scene);
         /**
          * Following code manually close dialog. If it's not manually closed JVM

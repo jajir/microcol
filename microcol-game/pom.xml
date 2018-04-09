@@ -17,6 +17,10 @@
 		<github.global.server>github</github.global.server>
 		<github.global.oauth2Token>${env.GITHUB_OAUTH_TOKEN}</github.global.oauth2Token>
 		<easymock.version>3.5.1</easymock.version>
+
+		<!-- default values for exec plugin properties -->
+		<development>false</development>
+		<clean>false</clean>
 	</properties>
 
 	<dependencies>
@@ -153,12 +157,16 @@
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>exec-maven-plugin</artifactId>
-				<version>1.5.0</version>
+				<version>1.6.0</version>
 				<configuration>
 					<executable>java</executable>
 					<arguments>
 						<argument>-splash:src/main/resources/${splash-creen-image}</argument>
+						<argument>-Ddevelopment=${development}</argument>
+						<argument>-Dclean=${clean}</argument>
 						<argument>-classpath</argument>
+						<!-- Empty tag have to be here to force plugin to include project class 
+							path -->
 						<classpath />
 						<argument>org.microcol.MicroCol</argument>
 					</arguments>

@@ -1,5 +1,6 @@
 package org.microcol.gui.colony;
 
+import org.microcol.gui.MainStageBuilder;
 import org.microcol.gui.image.ImageProvider;
 import org.microcol.gui.util.AbstractMessageWindow;
 import org.microcol.gui.util.PanelDock;
@@ -101,7 +102,7 @@ public class ColonyDialog extends AbstractMessageWindow implements ColonyDialogC
         final VBox mainPanel = new VBox();
         mainPanel.getChildren().addAll(colonyName, mapAndBuildings, managementRow, goods, buttonOk);
         init(mainPanel);
-        getScene().getStylesheets().add("gui/MicroCol.css");
+        getScene().getStylesheets().add(MainStageBuilder.STYLE_SHEET_MICROCOL);
 
         /**
          * TODO there is a bug, keyboard events are not send during dragging.

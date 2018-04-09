@@ -4,13 +4,19 @@ import java.awt.Image;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.prefs.BackingStoreException;
+import java.util.prefs.Preferences;
 
 import javax.imageio.ImageIO;
 
 import org.microcol.gui.ApplicationController;
 import org.microcol.gui.MainStageBuilder;
 import org.microcol.gui.MicroColModule;
+import org.microcol.gui.util.GamePreferences;
+import org.microcol.model.campaign.CampaignManager;
 import org.microcol.model.campaign.CampaignModule;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
@@ -24,6 +30,8 @@ import javafx.stage.Stage;
  */
 public final class MicroCol extends Application {
 
+    private final static Logger logger = LoggerFactory.getLogger(MicroCol.class);
+
     /**
      * Main static method.
      *
@@ -31,7 +39,42 @@ public final class MicroCol extends Application {
      *            list of command line parameters.
      */
     public static void main(final String[] args) {
-        launch(args);
+        if (isClean()) {
+            cleanAll();
+        } else {
+            launch(args);
+        }
+    }
+
+    private static boolean isClean() {
+        return Boolean.getBoolean(GamePreferences.SYSTEM_PROPERTY_CLEAN_SETTINGS);
+    }
+
+    @FunctionalInterface
+    public interface ExceptionWrapper {
+        void consume() throws BackingStoreException;
+    }
+
+    private static void exec(final ExceptionWrapper consumer) {
+        try {
+            consumer.consume();
+        } catch (BackingStoreException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void cleanAll() {
+        logger.info("Cleaning all game setting");
+        exec(() -> {
+            final Preferences gamePref = Preferences.userNodeForPackage(GamePreferences.class);
+            gamePref.removeNode();
+            gamePref.flush();
+        });
+        exec(() -> {
+            final Preferences campaignPref = Preferences.userNodeForPackage(CampaignManager.class);
+            campaignPref.removeNode();
+            campaignPref.flush();
+        });
     }
 
     /**

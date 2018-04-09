@@ -48,6 +48,8 @@ public class GamePreferences {
 
     private static final String SYSTEM_PROPERTY_DEVELOPMENT = "development";
 
+    public static final String SYSTEM_PROPERTY_CLEAN_SETTINGS = "clean";
+
     private final Preferences preferences = Preferences.userNodeForPackage(GamePreferences.class);
 
     private final SimpleBooleanProperty showFightAdvisorProperty = new SimpleBooleanProperty();

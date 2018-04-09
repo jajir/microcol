@@ -19,6 +19,15 @@ import javafx.stage.Stage;
 
 public class MainStageBuilder {
 
+    public static final String STYLE_SHEET_MICROCOL = MainStageBuilder.class
+            .getResource("/gui/MicroCol.css").toExternalForm();
+
+    public static final String STYLE_SHEET_DIALOGS = MainStageBuilder.class
+            .getResource("/gui/dialogs.css").toExternalForm();
+
+    public static final String STYLE_SHEET_RIGHT_PANEL_VIEW = MainStageBuilder.class
+            .getResource("/gui/rightPanelView.css").toExternalForm();
+
     private final MainMenuView mainMenuView;
 
     private final MainPanelView mainPanelView;
@@ -84,7 +93,7 @@ public class MainStageBuilder {
         }
         final VBox mainBox = new VBox();
         final Scene scene = new Scene(mainBox);
-        scene.getStylesheets().add("gui/MicroCol.css");
+        scene.getStylesheets().add(STYLE_SHEET_MICROCOL);
         mainBox.getChildren().add(mainMenuView.getMenuBar());
         mainBox.getChildren().add(mainPanelView.getBox());
 

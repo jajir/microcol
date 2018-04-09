@@ -1,5 +1,6 @@
 package org.microcol.gui.europe;
 
+import org.microcol.gui.MainStageBuilder;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.image.ImageProvider;
 import org.microcol.gui.util.AbstractMessageWindow;
@@ -92,7 +93,7 @@ public class EuropeDialog extends AbstractMessageWindow implements EuropeDialogC
         final VBox mainPanel = new VBox();
         mainPanel.getChildren().addAll(label, panelMiddle, panelGoods);
         init(mainPanel);
-        getScene().getStylesheets().add("gui/MicroCol.css");
+        getScene().getStylesheets().add(MainStageBuilder.STYLE_SHEET_MICROCOL);
         /**
          * TODO there is a bug, keyboard events are not send during dragging.
          * TODO copy of this code is n colonyDialog

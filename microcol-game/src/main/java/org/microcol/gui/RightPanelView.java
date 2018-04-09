@@ -64,7 +64,7 @@ public class RightPanelView {
         gridPane.setId("rightPanel");
         gridPane.setPrefWidth(RIGHT_PANEL_WIDTH);
         gridPane.setMinWidth(RIGHT_PANEL_WIDTH);
-        gridPane.getStylesheets().add("gui/rightPanelView.css");
+        gridPane.getStylesheets().add(MainStageBuilder.STYLE_SHEET_RIGHT_PANEL_VIEW);
 
         // Y=0
         labelOnMove = new Label();

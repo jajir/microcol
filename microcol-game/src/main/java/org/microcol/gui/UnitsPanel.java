@@ -57,7 +57,7 @@ public class UnitsPanel {
             box.getChildren().add(makeUnitPanel(humanPlayer, unit));
         }
         box.getChildren().add(new Label(""));
-        box.getStylesheets().add("gui/rightPanelView.css");
+        box.getStylesheets().add(MainStageBuilder.STYLE_SHEET_RIGHT_PANEL_VIEW);
     }
 
     private Node makeUnitPanel(final Player humanPlayer, final Unit unit) {
@@ -101,7 +101,7 @@ public class UnitsPanel {
 
     private HBox makeGoodsPanel(final Unit unit) {
         HBox box = new HBox();
-        box.getStylesheets().add("gui/rightPanelView.css");
+        box.getStylesheets().add(MainStageBuilder.STYLE_SHEET_RIGHT_PANEL_VIEW);
         if (unit.getCargo().isEmpty()) {
             box.getChildren().add(new Label(text.get("unitsPanel.empty")));
         } else {

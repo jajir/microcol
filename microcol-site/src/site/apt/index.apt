@@ -12,7 +12,7 @@ About MicroCol
 
 How to start development
  
- * Checkout project
+* Checkout project
  
  Go to directory where MicroCol source code will be stored and execute:
  
@@ -20,27 +20,45 @@ How to start development
 git clone https://github.com/jajir/microcol.git
 +----+
 
- Directory <microcol> should be there.
+ Now directory <microcol> should be there.
  
 
- * Import to Eclipse
+* Import to Eclipse
  
  From main menu select "File" --> "Import". Select option "Existing maven projects". Importing wizard should appear. In field "Root directory" select previously created <microcol> directory. Click to "Finish". Now all maven modules should be imported. 
 
- * Run game from command line
+* Run game from command line
  
+ This guide is useful when you just need start game for testing purposes.
+ For running from command line is used {{{http://www.mojohaus.org/exec-maven-plugin/}maven exec plugin}}.
  To compile whole game and start it go to directory <microcol-game> and execute:
  
 +----+
-mvn exec:exec
+mvn compile exec:exec
 +----+
  
- * Use development mode
+** Clean all settings
+
+ Sometimes it's useful to clean all game setting and achievements. Execute:
+ 
++----+
+mvn exec:exec -Dclean=true
++----+
+
+ Information about cleaning settings should appears in log and game should not start.
+ 
+** Development mode
+ 
+ When you want to run MicroCol from command line in development mode run this:
+  
++----+
+mvn exec:exec -Ddevelopment=true
++----+
+
+* Use development mode
 
  To run application with enabled some additional development features start application with VM argument <-Ddevelopment=true>.
- 
-[]
- 
+  
 Project infrastructure
 
  * Source code repository: {{{https://github.com/jajir/microcol}github.com/jajir/microcol}}
