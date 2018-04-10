@@ -25,6 +25,8 @@ Planned releases
   * \u2713 Dialog box 'About' containing application version from pom.xml 
   
   * \u2713 Add event onBeforeMove, this event should be possible to cancel.
+ 
+  * \u2713 Game could be started from command line even in development mode. See documentation. 
 
   * \u2713 Support start logic as described in GUI.
  
@@ -55,14 +57,14 @@ Planned releases
   * \u2713 Game finished event comes to UI in non-EDT thread.
  
   * \u2717 Centering dialog based is not correct. Dialog blink at incorrect position and than appears at correct place.
-  	
-  * \u2717 Colonist in colony eats 2 foods per turn.
-
-  * \u2717 Colony is plagued by famine.
  
   * \u2717 
  
  * <<Backlog>> - feature and improvement backlog
+  	
+  * \u2717 Colonist in colony eats 2 foods per turn.
+
+  * \u2717 Colony is plagued by famine.
   
   * \u2717 Right panel highlight select unit.
   

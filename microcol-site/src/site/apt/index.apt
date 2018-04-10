@@ -45,7 +45,7 @@ mvn compile exec:exec
 mvn exec:exec -Dclean=true
 +----+
 
- Information about cleaning settings should appears in log and game should not start.
+ Information about cleaning should appears in log and game should not start.
  
 ** Development mode
  

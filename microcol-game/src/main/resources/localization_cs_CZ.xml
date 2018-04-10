@@ -71,7 +71,7 @@
 	<entry key="dialogAbout.version">Verze :</entry>
 
 	<entry key="startPanel.buttonContinue">Pokračovat v naposledy hrané hře</entry>
-	<entry key="startPanel.buttonLoadSave">Nahrád hru</entry>
+	<entry key="startPanel.buttonLoadSave">Nahrát hru</entry>
 	<entry key="startPanel.buttonPlayCampaign">Spustit kampaň</entry>
 	<entry key="startPanel.buttonFreeGame">Nová neomezená hra</entry>
 	<entry key="startPanel.buttonExitMicroCol">Ukončit hru</entry>
@@ -87,7 +87,10 @@
 	<entry key="campaign.default.moveUnitBeforeEndTurn">Nejprve táhni lodí, zkus najít nový svět.</entry>
 	<entry key="campaign.default.continentInSight">Nový Svět už je na dohled. Priraž loď a vyloď jednotky. Založíš novou kolonii.</entry>
 	<entry key="campaign.default.firstColonyWasFounded">Výborně. Podařilo se ti založit novou kolonii. Teď je na tobě, jak bude dál rozkvétat.</entry>
-	<entry key="campaign.default.produce100cigars">Otevři kliknutím detail kolonie a začni pěstovat tabák a vyrábět z něj cigarety. Jednoho osadníka myší rozmísti na pole aby pěstoval tabák. Dalšiho pošlí do města vyrábět z tabáku cigarety. Pozor na množství jídla ve městě, jestli klesne na nulu, osadnicí začnou umírat hlady.</entry>
+	<entry key="campaign.default.produce100cigars">Otevři kliknutím detail kolonie a začni pěstovat tabák a vyrábět z něj cigarety.
+Jednoho osadníka myší rozmísti na pole aby pěstoval tabák.
+Dalšiho pošlí do města vyrábět z tabáku cigarety. Pozor na množství jídla ve městě,
+jestli klesne na nulu, osadnicí začnou umírat hlady. Vyrob 30 doutníků.</entry>
 	<entry key="campaign.default.sellCigarsInEuropePort">Konečně. Už máš potřebné množství doutníků. Vezmi je na loď, odvez do Evropy a prodej.</entry>
 	<entry key="campaign.default.cigarsWasSold">Výborně. Podařilo se ti prodat těžce získané doutníky.</entry>
 	<entry key="campaign.default.gameOver">Gratuluji. Podařilo se ti splnit první misi.</entry>

@@ -49,7 +49,7 @@ public class DefaultMissionFindNewWold extends AbstractMission {
 
     private final static String MAP_KEY_CIGARS_WAS_SOLD = "cigarsWasSold";
 
-    private final static Integer TRAGET_AMOUNT_OF_CIGARS = 10;
+    private final static Integer TRAGET_AMOUNT_OF_CIGARS = 30;
 
     private Integer cigarsWasSold = 0;
 
