@@ -58,6 +58,8 @@ Planned releases
  
   * \u2717 Centering dialog based is not correct. Dialog blink at incorrect position and than appears at correct place.
  
+  * \u2717 When first mission is played until end than next run will keep game setting.
+ 
   * \u2717 
  
  * <<Backlog>> - feature and improvement backlog

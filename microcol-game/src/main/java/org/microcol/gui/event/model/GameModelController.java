@@ -11,9 +11,9 @@ import org.microcol.gui.gamepanel.AnimationManager;
 import org.microcol.gui.gamepanel.SelectedTileManager;
 import org.microcol.gui.mainmenu.CenterViewController;
 import org.microcol.gui.mainmenu.CenterViewEvent;
-import org.microcol.model.GoodsAmount;
 import org.microcol.model.GoodTrade;
 import org.microcol.model.GoodType;
+import org.microcol.model.GoodsAmount;
 import org.microcol.model.Location;
 import org.microcol.model.Model;
 import org.microcol.model.Path;
@@ -178,6 +178,7 @@ public class GameModelController {
     }
 
     public void stop() {
+        tryToStopGame();
         modelMission = null;
     }
 
