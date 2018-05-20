@@ -28,6 +28,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
+import com.google.common.collect.Lists;
 
 class ListenerManager {
     private final Logger logger = LoggerFactory.getLogger(getClass());
@@ -55,6 +56,15 @@ class ListenerManager {
         logger.info("Removed model listener {}.", listener);
 
         listeners.remove(listener);
+    }
+    
+    void removeAllListeners() {
+        logger.info("Removed all listeners.");
+
+        List<ModelListener> copy = Lists.newArrayList(listeners);
+        copy.forEach(listener -> {
+            removeListener(listener);
+        });
     }
 
     void fireGameStarted(final Model model) {

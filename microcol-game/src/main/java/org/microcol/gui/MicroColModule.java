@@ -42,6 +42,7 @@ import org.microcol.gui.event.model.GoldWasChangedController;
 import org.microcol.gui.event.model.IndependenceWasDeclaredColntroller;
 import org.microcol.gui.event.model.MissionCallBack;
 import org.microcol.gui.event.model.ModelEventManager;
+import org.microcol.gui.event.model.ArtifitialPlayersManager;
 import org.microcol.gui.event.model.RoundStartedController;
 import org.microcol.gui.event.model.TurnStartedController;
 import org.microcol.gui.event.model.UnitAttackedEventController;
@@ -149,7 +150,6 @@ public class MicroColModule extends AbstractModule {
         bind(ChangeLanguageController.class).in(Singleton.class);
         bind(StartMoveController.class).in(Singleton.class);
         bind(GameStartedController.class).in(Singleton.class);
-        bind(GameModelController.class).in(Singleton.class);
         bind(TurnStartedController.class).in(Singleton.class);
         bind(VolumeChangeController.class).in(Singleton.class);
         bind(AnimationSpeedChangeController.class).in(Singleton.class);
@@ -177,6 +177,8 @@ public class MicroColModule extends AbstractModule {
         bind(SelectedUnitWasChangedController.class).in(Singleton.class);
         bind(IndependenceWasDeclaredColntroller.class).in(Singleton.class);
         bind(ShowDefaultCampaignMenuControler.class).in(Singleton.class);
+        bind(GameModelController.class).in(Singleton.class);
+        bind(ArtifitialPlayersManager.class).in(Singleton.class);
 
         bind(TurnStartedListener.class).asEagerSingleton();
         bind(TileWasSelectedListener.class).asEagerSingleton();

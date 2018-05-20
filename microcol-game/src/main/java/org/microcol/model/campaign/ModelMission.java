@@ -2,6 +2,7 @@ package org.microcol.model.campaign;
 
 import org.microcol.gui.event.model.MissionCallBack;
 import org.microcol.model.Model;
+import org.microcol.model.ModelListener;
 import org.microcol.model.store.CampaignPo;
 import org.microcol.model.store.ModelPo;
 
@@ -46,19 +47,23 @@ public class ModelMission {
     }
 
     /**
-     * TODO this should be replace by direct calls. Direct calls allows to call
-     * mission to verify move.
-     * 
      * @return return actual game model
      */
-    @Deprecated
     public Model getModel() {
         return model;
+    }
+
+    public void addListener(final ModelListener listener) {
+        model.addListener(listener);
     }
 
     public void startGame(final MissionCallBack missionCallBack) {
         mission.startMission(model, missionCallBack);
         model.startGame();
+    }
+
+    public void stop() {
+        model.stop();
     }
 
 }

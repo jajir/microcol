@@ -14,7 +14,6 @@ import javafx.scene.canvas.GraphicsContext;
 
 /**
  * Hold and manage planned animation steps.
- * 
  */
 public class AnimationManager implements AnimationLock {
 

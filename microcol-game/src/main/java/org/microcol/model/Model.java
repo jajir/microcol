@@ -261,12 +261,19 @@ public final class Model {
         return gameManager.isFinished();
     }
 
-    public void addListener(ModelListener listener) {
+    public void addListener(final ModelListener listener) {
         listenerManager.addListener(listener);
     }
 
-    public void removeListener(ModelListener listener) {
+    public void removeListener(final ModelListener listener) {
         listenerManager.removeListener(listener);
+    }
+
+    /**
+     * Prepare model to be removed from memory.
+     */
+    public void stop() {
+        listenerManager.removeAllListeners();
     }
 
     public Calendar getCalendar() {
@@ -434,7 +441,7 @@ public final class Model {
             listenerManager.fireUnitMovedFinished(this, unit, path);
         }
     }
-    
+
     /**
      * Move selected unit on defined path. Unit will walk along path as far as
      * it will be possible. How far unit move depends on terrain and number of

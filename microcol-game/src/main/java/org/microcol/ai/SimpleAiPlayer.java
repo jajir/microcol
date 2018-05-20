@@ -99,6 +99,5 @@ public class SimpleAiPlayer extends AbstractRobotPlayer {
     @Override
     void turnStarted() {
         // do nothing
-        System.out.println("brekeke");
     }
 }
