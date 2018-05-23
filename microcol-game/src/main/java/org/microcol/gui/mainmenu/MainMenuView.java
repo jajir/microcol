@@ -48,6 +48,8 @@ public class MainMenuView {
 
     private final MenuItem menuItemEurope;
 
+    private final MenuItem menuItemTurnReport;
+
     private final Menu menuUnit;
 
     private final MenuItem menuItemMove;
@@ -119,6 +121,10 @@ public class MainMenuView {
         menuItemEurope.setAccelerator(new KeyCodeCombination(KeyCode.E));
         menuItemEurope.disableProperty().setValue(false);
 
+        menuItemTurnReport = new MenuItem();
+        menuItemTurnReport.setAccelerator(new KeyCodeCombination(KeyCode.T));
+        menuItemTurnReport.disableProperty().setValue(false);
+
         /**
          * Menu unit
          * 
@@ -174,7 +180,7 @@ public class MainMenuView {
         menuGame.getItems().addAll(menuItemDeclareIndependence, menuItemExitGame, menuItemNewGame,
                 menuItemLoadGame, menuItemSaveGame, menuItemQuitGame);
         menuView = new Menu();
-        menuView.getItems().addAll(menuItemCenterView, menuItemEurope);
+        menuView.getItems().addAll(menuItemCenterView, menuItemEurope, menuItemTurnReport);
         menuUnit = new Menu();
         menuUnit.getItems().addAll(menuItemMove, menuItemBuildColony, menuItemNextUnit);
         menuPrefereces = new Menu();
@@ -249,6 +255,7 @@ public class MainMenuView {
         menuView.setText(text.get("mainMenu.view"));
         menuItemCenterView.setText(text.get("mainMenu.view.center"));
         menuItemEurope.setText(text.get("mainMenu.view.europe"));
+        menuItemTurnReport.setText(text.get("mainMenu.view.turnReport"));
 
         /**
          * Unit
@@ -364,6 +371,13 @@ public class MainMenuView {
      */
     public MenuItem getMenuItemExitGame() {
         return menuItemExitGame;
+    }
+
+    /**
+     * @return the menuItemTurnReport
+     */
+    public MenuItem getMenuItemTurnReport() {
+        return menuItemTurnReport;
     }
 
 }

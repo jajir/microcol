@@ -32,6 +32,7 @@ import org.microcol.gui.event.ShowGridListenerPreferences;
 import org.microcol.gui.event.StartMoveController;
 import org.microcol.gui.event.StatusBarMessageController;
 import org.microcol.gui.event.VolumeChangedListenerPreferences;
+import org.microcol.gui.event.model.ArtifitialPlayersManager;
 import org.microcol.gui.event.model.BeforeGameStartController;
 import org.microcol.gui.event.model.ColonyWasCapturedController;
 import org.microcol.gui.event.model.DebugRequestController;
@@ -42,7 +43,6 @@ import org.microcol.gui.event.model.GoldWasChangedController;
 import org.microcol.gui.event.model.IndependenceWasDeclaredColntroller;
 import org.microcol.gui.event.model.MissionCallBack;
 import org.microcol.gui.event.model.ModelEventManager;
-import org.microcol.gui.event.model.ArtifitialPlayersManager;
 import org.microcol.gui.event.model.RoundStartedController;
 import org.microcol.gui.event.model.TurnStartedController;
 import org.microcol.gui.event.model.UnitAttackedEventController;
@@ -94,7 +94,9 @@ import org.microcol.gui.mainmenu.MainMenuView;
 import org.microcol.gui.mainmenu.QuitGameController;
 import org.microcol.gui.mainmenu.SelectNextUnitController;
 import org.microcol.gui.mainmenu.ShowGridController;
+import org.microcol.gui.mainmenu.ShowTurnReportController;
 import org.microcol.gui.mainmenu.VolumeChangeController;
+import org.microcol.gui.turnreport.ShowTurnReportListener;
 import org.microcol.gui.util.ApplicationInfo;
 import org.microcol.gui.util.FontService;
 import org.microcol.gui.util.GamePreferences;
@@ -179,15 +181,17 @@ public class MicroColModule extends AbstractModule {
         bind(ShowDefaultCampaignMenuControler.class).in(Singleton.class);
         bind(GameModelController.class).in(Singleton.class);
         bind(ArtifitialPlayersManager.class).in(Singleton.class);
+        bind(ShowTurnReportController.class).in(Singleton.class);
 
         bind(TurnStartedListener.class).asEagerSingleton();
         bind(TileWasSelectedListener.class).asEagerSingleton();
         bind(ShowDefaultCampaignMenuListener.class).asEagerSingleton();
-
+        
         bind(ModelEventManager.class).in(Singleton.class);
         bind(ExitGameListener.class).asEagerSingleton();
         bind(GameFinishedListener.class).asEagerSingleton();
-
+        bind(ShowTurnReportListener.class).asEagerSingleton();
+        
         /**
          * Initialize MVP classes
          */

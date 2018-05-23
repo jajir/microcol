@@ -23,6 +23,7 @@
 	<entry key="mainMenu.view">View</entry>
 	<entry key="mainMenu.view.center">Center</entry>
 	<entry key="mainMenu.view.europe">Evrope</entry>
+	<entry key="mainMenu.view.turnReport">Turn report</entry>
 
 	<entry key="mainMenu.unit">Unit</entry>
 	<entry key="mainMenu.unit.move">Move</entry>
@@ -162,6 +163,13 @@ jestli klesne na nulu, osadnicí začnou umírat hlady. Vyrob 30 doutníků.</en
 	<entry key="europe.pier">Pier</entry>
 	<entry key="europe.recruit">Recruit</entry>
 	<entry key="europe.buy">Buy</entry>
+	
+	<entry key="turnReport.title">Turn Report</entry>
+	<entry key="turnReport.caption">Turn Report</entry>
+	<entry key="turnEvent.shipComeToEuropePort">Shop come to European port.</entry>
+	<entry key="turnEvent.shipComeToHighSeas">Ship arrived from Europe and waiting for next command.</entry>
+	<entry key="turnEvent.faminePlagueColony">Famine plague colony %s. Colonists are dying.</entry>
+	<entry key="turnEvent.famineWillPlagueColony">Famine is coming in colony %s. in next turn colonist will die.</entry>
 
 	<entry key="dialogFight.title">Fight Advisor</entry>
 	<entry key="dialogFight.attacker">Attacker</entry>

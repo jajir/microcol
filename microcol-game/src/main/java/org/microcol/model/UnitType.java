@@ -71,7 +71,12 @@ public final class UnitType {
      * There is no unit that could be attacked.
      */
     private static final Predicate<UnitType> UNIT_TYPE_CANT_ATTACK = unitType -> false;
-
+    
+    /**
+     * When unit is in colony that this define number of food ate per turn.
+     */
+    private final static int ATE_FOOD_PER_TURN = 2;
+  
     private final String name;
     private final List<TerrainType> moveableTerrains;
     private final int speed;
@@ -373,6 +378,15 @@ public final class UnitType {
      */
     public List<TerrainType> getMoveableTerrains() {
         return moveableTerrains;
+    }
+    
+    /**
+     * How many food eat unit when is located in colony per turn.
+     *
+     * @return number of ate food
+     */
+    public int getAteFoodPerTurn() {
+        return ATE_FOOD_PER_TURN;
     }
 
     /**

@@ -77,6 +77,7 @@ class GameManager {
                 model.fireGameFinished(oGameOverResult.get());
             } else {
                 currentPlayer = model.getPlayers().get(0);
+                model.getTurnEventStore().clearAllTurnEvents();
                 model.fireRoundStarted();
                 currentPlayer.startTurn();
                 model.fireTurnStarted(currentPlayer);

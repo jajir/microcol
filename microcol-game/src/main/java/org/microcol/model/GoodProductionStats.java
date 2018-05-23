@@ -72,8 +72,8 @@ public class GoodProductionStats {
      * @param consumed
      *            the consumed to set
      */
-    public void setConsumed(int consumed) {
-        this.consumed = consumed;
+    public void addConsumed(int consumed) {
+        this.consumed += consumed;
     }
 
     /**

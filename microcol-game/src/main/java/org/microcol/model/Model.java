@@ -12,6 +12,8 @@ import org.microcol.model.store.ColonyPo;
 import org.microcol.model.store.ModelPo;
 import org.microcol.model.store.PlayerPo;
 import org.microcol.model.store.UnitPo;
+import org.microcol.model.turnevent.TurnEvent;
+import org.microcol.model.turnevent.TurnEventStore;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
@@ -37,6 +39,7 @@ public final class Model {
     private final HighSea highSea;
     private final GameManager gameManager;
     private Location focusedField;
+    private final TurnEventStore turnEventStore;
 
     /**
      * Verify that all units are in unit storage and that all units from unit
@@ -77,6 +80,7 @@ public final class Model {
         this.map = Preconditions.checkNotNull(map);
 
         this.playerStore = PlayerStore.makePlayers(this, modelPo);
+        turnEventStore = new TurnEventStore(modelPo, playerStore);
 
         colonyNames = new ColonyNames(this);
 
@@ -200,6 +204,11 @@ public final class Model {
         return unitStorage.createUnit(unit -> new Cargo(unit, UnitType.GALLEON.getSpeed()), this,
                 unit -> new PlaceHighSea(unit, false, 3), UnitType.GALLEON, king,
                 UnitType.GALLEON.getSpeed());
+    }
+    
+    public List<TurnEvent> getLocalizedMessages(final Player player,
+            final Function<String, String> messageProvider) {
+        return turnEventStore.getLocalizedMessages(player, messageProvider);
     }
 
     public boolean isValid(final Path path) {
@@ -369,6 +378,7 @@ public final class Model {
         out.setPlayers(getSavePlayers());
         out.setColonies(getSaveColonies());
         out.setFocusedField(focusedField);
+        out.setTurnEvents(turnEventStore.save());
         return out;
     }
 
@@ -601,6 +611,18 @@ public final class Model {
      */
     public void setFocusedField(Location focusedField) {
         this.focusedField = focusedField;
+    }
+
+    /**
+     * @return the turnEventStore
+     */
+    TurnEventStore getTurnEventStore() {
+        return turnEventStore;
+    }
+    
+    public List<TurnEvent> getTurnEventsLocalizedMessages(final Player player,
+            final Function<String, String> messageProvider) {
+        return turnEventStore.getLocalizedMessages(player, messageProvider);
     }
 
 }

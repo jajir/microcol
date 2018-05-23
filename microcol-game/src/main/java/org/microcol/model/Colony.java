@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 import org.microcol.model.store.ColonyFieldPo;
 import org.microcol.model.store.ColonyPo;
 import org.microcol.model.store.ConstructionPo;
+import org.microcol.model.turnevent.TurnEventProvider;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
@@ -190,6 +191,37 @@ public class Colony {
     public void startTurn() {
         colonyFields.forEach(field -> field.produce(colonyWarehouse));
         constructions.forEach(construction -> construction.produce(this, getColonyWarehouse()));
+        eatFood();
+    }
+
+    private void eatFood() {
+        final int food = colonyWarehouse.getGoodAmmount(GoodType.CORN);
+        if (food < getRequiredFoodPerTurn()) {
+            // famine plague colony message
+            model.getTurnEventStore().add(TurnEventProvider.getFaminePlagueColony(owner, this));
+            killOneRandomUnit();
+            colonyWarehouse.removeFromWarehouse(GoodType.CORN, food);
+        } else {
+            colonyWarehouse.removeFromWarehouse(GoodType.CORN, getRequiredFoodPerTurn());
+            final int foodNew = colonyWarehouse.getGoodAmmount(GoodType.CORN);
+            if (foodNew < getRequiredFoodPerTurn()) {
+                // warn famine will plague colony
+                model.getTurnEventStore()
+                        .add(TurnEventProvider.getFamineWillPlagueColony(owner, this));
+            }
+        }
+    }
+    
+    private void killOneRandomUnit(){
+        int index = random.nextInt(getUnitsInColony().size());
+        final Unit u = getUnitsInColony().get(index);
+        u.getPlace().destroy();
+        model.destroyUnit(u);
+    }
+
+    public Integer getRequiredFoodPerTurn() {
+        return getUnitsInColony().stream().mapToInt(unit -> unit.getType().getAteFoodPerTurn())
+                .sum();
     }
 
     public List<Unit> getUnitsInPort() {
@@ -338,6 +370,8 @@ public class Colony {
                 goodsStats.addRowProduction(field.getProducedGoodsAmmount());
             }
         });
+        
+        out.getStatsByType(GoodType.CORN).addConsumed(getRequiredFoodPerTurn());
 
         // get production from town factories that doesn't consume any sources
         ConstructionType.SOURCE_1.forEach(goodType -> {
@@ -375,7 +409,7 @@ public class Colony {
 
             ConstructionTurnProduction turnProd = producedAt
                     .getProduction(numberOfavailableInputGoods);
-            goodConsumedStats.setConsumed(turnProd.getConsumedGoods());
+            goodConsumedStats.addConsumed(turnProd.getConsumedGoods());
             goodProdStats.setRowProduction(turnProd.getProducedGoods());
             goodProdStats.setBlockedProduction(turnProd.getBlockedGoods());
         }

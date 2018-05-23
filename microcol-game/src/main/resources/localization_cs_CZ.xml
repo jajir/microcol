@@ -23,6 +23,7 @@
 	<entry key="mainMenu.view">Zobrazení</entry>
 	<entry key="mainMenu.view.center">Na aktivní jednotku</entry>
 	<entry key="mainMenu.view.europe">Evropský přístav</entry>
+	<entry key="mainMenu.view.turnReport">Turn report</entry>
 
 	<entry key="mainMenu.unit">Jednotka</entry>
 	<entry key="mainMenu.unit.move">Táhnout</entry>
@@ -162,7 +163,14 @@ jestli klesne na nulu, osadnicí začnou umírat hlady. Vyrob 30 doutníků.</en
 	<entry key="europe.pier">Molo</entry>
 	<entry key="europe.recruit">Najmout</entry>
 	<entry key="europe.buy">Koupit</entry>
-
+	
+	<entry key="turnReport.title">Důležité události</entry>
+	<entry key="turnReport.caption">Důležité události</entry>
+	<entry key="turnEvent.shipComeToEuropePort">Loď prijela do Evropského přístavu, nenech ji dlouho čekat.</entry>
+	<entry key="turnEvent.shipComeToHighSeas">Loď se vrátila z Evrop zpět.</entry>
+	<entry key="turnEvent.faminePlagueColony">Hladomor řádí v kolonii %s. V kolonii umírají kolonisté.</entry>
+	<entry key="turnEvent.famineWillPlagueColony">Blíží se hladomor ve městě %s. V příštím tahu začnou umírat kolonisté.</entry>
+	
 	<entry key="dialogFight.title">Útok</entry>
 	<entry key="dialogFight.attacker">Útočník</entry>
 	<entry key="dialogFight.defender">Obránce</entry>

@@ -15,6 +15,8 @@ public class ModelPo {
 
     private List<ColonyPo> colonies = new ArrayList<>();
 
+    private List<TurnEventPo> turnEvents = new ArrayList<>();
+
     private WorldMapPo map = new WorldMapPo();
 
     private List<PlayerPo> players = new ArrayList<>();
@@ -144,6 +146,20 @@ public class ModelPo {
      */
     public void setFocusedField(Location focusedField) {
         this.focusedField = focusedField;
+    }
+
+    /**
+     * @return the turnEvents
+     */
+    public List<TurnEventPo> getTurnEvents() {
+        return turnEvents;
+    }
+
+    /**
+     * @param turnEvents the turnEvents to set
+     */
+    public void setTurnEvents(List<TurnEventPo> turnEvents) {
+        this.turnEvents = turnEvents;
     }
 
 }
