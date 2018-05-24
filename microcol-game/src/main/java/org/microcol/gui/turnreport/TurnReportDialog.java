@@ -12,7 +12,6 @@ import com.google.inject.Inject;
 
 import javafx.event.ActionEvent;
 import javafx.scene.control.Label;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 public class TurnReportDialog extends AbstractMessageWindow implements TurnReportDialogCallback {
@@ -53,7 +52,7 @@ public class TurnReportDialog extends AbstractMessageWindow implements TurnRepor
                 .getTurnEventsLocalizedMessages(gameModelController.getCurrentPlayer(),
                         key -> text.get(key))
                 .forEach(turnEvent -> turnEventsPanel.getChildren()
-                        .add(new TurnEventPanel(turnEvent, text)));
+                        .add(new TurnEventPanel(turnEvent)));
     }
 
     @SuppressWarnings("unused")

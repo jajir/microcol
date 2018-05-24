@@ -75,9 +75,11 @@ class GameManager {
             final Optional<GameOverResult> oGameOverResult = gameOverEvaluator.evaluate(model);
             if (oGameOverResult.isPresent()) {
                 model.fireGameFinished(oGameOverResult.get());
+                started = false;
             } else {
                 currentPlayer = model.getPlayers().get(0);
                 model.getTurnEventStore().clearAllTurnEvents();
+                model.getStatistics().countNextTurn(model);
                 model.fireRoundStarted();
                 currentPlayer.startTurn();
                 model.fireTurnStarted(currentPlayer);

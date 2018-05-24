@@ -12,6 +12,10 @@ public class PlayerGoodsStatistics {
         colony.getColonyWarehouse().saveStatisticsTo(this);
     }
 
+    public int getEconomyValue() {
+        return goodAmounts.entrySet().stream().mapToInt(entry -> entry.getValue()).sum();
+    }
+
     public int getGoodsAmount(final GoodType goodType) {
         final Integer val = goodAmounts.get(goodType);
         if (val == null) {

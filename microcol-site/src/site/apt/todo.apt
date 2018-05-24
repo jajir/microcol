@@ -60,7 +60,29 @@ Planned releases
  
   * \u2717 When first mission is played until end than next run will keep game setting.
  
-  * \u2717 
+  * \u2713 Turn notifications should be added at least:
+    
+    * \u2717 Colony is plagued by famine.   
+    
+    * \u2717 Colony will be plagued by famine.   
+    
+    * \u2717 Ship come to Europe port.   
+    
+    * \u2717 Ship return from Europe.   
+    
+    * \u2717 Colony is destroyed.   
+ 
+  * \u2717 End game statistics. Count for each player:
+    
+    * \u2717 Military power.
+    
+    * \u2717 Economical colonies value.
+    
+    * \u2717 Number of units.
+    
+    * \u2717 Overall score.
+ 
+  * \u2717 During unit move is next turn button enabled
  
  * <<Backlog>> - feature and improvement backlog
   	

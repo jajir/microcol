@@ -40,6 +40,7 @@ public final class Model {
     private final GameManager gameManager;
     private Location focusedField;
     private final TurnEventStore turnEventStore;
+    private final Statistics statistics;
 
     /**
      * Verify that all units are in unit storage and that all units from unit
@@ -105,6 +106,7 @@ public final class Model {
         gameManager = new GameManager(this, gameOverEvaluators);
 
         highSea = new HighSea(this);
+        statistics = new Statistics(modelPo, playerStore);
         this.europe = new Europe(this);
     }
 
@@ -379,6 +381,7 @@ public final class Model {
         out.setColonies(getSaveColonies());
         out.setFocusedField(focusedField);
         out.setTurnEvents(turnEventStore.save());
+        out.setStatistics(statistics.save());
         return out;
     }
 
@@ -623,6 +626,13 @@ public final class Model {
     public List<TurnEvent> getTurnEventsLocalizedMessages(final Player player,
             final Function<String, String> messageProvider) {
         return turnEventStore.getLocalizedMessages(player, messageProvider);
+    }
+
+    /**
+     * @return the statistics
+     */
+    public Statistics getStatistics() {
+        return statistics;
     }
 
 }

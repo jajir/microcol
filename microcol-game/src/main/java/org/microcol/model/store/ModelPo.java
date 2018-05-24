@@ -26,6 +26,8 @@ public class ModelPo {
     private CampaignPo campaign = new CampaignPo();
 
     private Location focusedField;
+    
+    private StatisticsPo statistics = new StatisticsPo();
 
     public PlayerPo getPlayerByName(final String name) {
         Preconditions.checkState(players != null, "Players are null");
@@ -160,6 +162,20 @@ public class ModelPo {
      */
     public void setTurnEvents(List<TurnEventPo> turnEvents) {
         this.turnEvents = turnEvents;
+    }
+
+    /**
+     * @return the statistics
+     */
+    public StatisticsPo getStatistics() {
+        return statistics;
+    }
+
+    /**
+     * @param statistics the statistics to set
+     */
+    public void setStatistics(StatisticsPo statistics) {
+        this.statistics = statistics;
     }
 
 }

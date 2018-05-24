@@ -1,6 +1,5 @@
 package org.microcol.gui.turnreport;
 
-import org.microcol.gui.util.Text;
 import org.microcol.model.turnevent.TurnEvent;
 
 import javafx.scene.control.Label;
@@ -11,8 +10,8 @@ import javafx.scene.layout.HBox;
  */
 public class TurnEventPanel extends HBox {
 
-    TurnEventPanel(final TurnEvent turnEvent, final Text text) {
+    TurnEventPanel(final TurnEvent turnEvent) {
         getChildren().add(new Label(turnEvent.getLocalizedMessage()));
     }
-    
+
 }
