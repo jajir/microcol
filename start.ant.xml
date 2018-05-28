@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<project name="MyProject" default="dist" basedir=".">
+
+	<!-- Target compile and starts game. -->
+	<!-- Don't call it directly, call: mvn antrun:run -->
+	<target name="start">
+		<echo message="stating MicroCol from dir: ${basedir}" />
+		<exec dir="${basedir}\microcol-game" executable="mvn">
+			<arg line="compile" />
+		</exec>
+		<exec dir="${basedir}\microcol-game" executable="mvn">
+			<arg line="exec:exec" />
+		</exec>
+	</target>
+
+</project>
