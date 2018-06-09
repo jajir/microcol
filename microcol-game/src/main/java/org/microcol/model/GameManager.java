@@ -6,6 +6,9 @@ import java.util.function.Function;
 
 import com.google.common.base.Preconditions;
 
+/**
+ * Each player performs turns. When all players perform one turn it's one round.
+ */
 class GameManager {
 
     private final GameOverEvaluator gameOverEvaluator;

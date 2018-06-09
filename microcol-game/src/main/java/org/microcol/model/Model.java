@@ -207,7 +207,7 @@ public final class Model {
                 unit -> new PlaceHighSea(unit, false, 3), UnitType.GALLEON, king,
                 UnitType.GALLEON.getSpeed());
     }
-    
+
     public List<TurnEvent> getLocalizedMessages(final Player player,
             final Function<String, String> messageProvider) {
         return turnEventStore.getLocalizedMessages(player, messageProvider);
@@ -622,10 +622,14 @@ public final class Model {
     TurnEventStore getTurnEventStore() {
         return turnEventStore;
     }
-    
+
     public List<TurnEvent> getTurnEventsLocalizedMessages(final Player player,
             final Function<String, String> messageProvider) {
         return turnEventStore.getLocalizedMessages(player, messageProvider);
+    }
+
+    public boolean isTurnEventsMessagesEmpty(final Player player) {
+        return turnEventStore.getForPlayer(player).isEmpty();
     }
 
     /**

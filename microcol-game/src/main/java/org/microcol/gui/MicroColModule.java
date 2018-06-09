@@ -96,7 +96,9 @@ import org.microcol.gui.mainmenu.SelectNextUnitController;
 import org.microcol.gui.mainmenu.ShowGridController;
 import org.microcol.gui.mainmenu.ShowTurnReportController;
 import org.microcol.gui.mainmenu.VolumeChangeController;
+import org.microcol.gui.turnreport.ShowTurnEvensOnTurnStartedEvent;
 import org.microcol.gui.turnreport.ShowTurnReportListener;
+import org.microcol.gui.turnreport.TurnReportDialog;
 import org.microcol.gui.util.ApplicationInfo;
 import org.microcol.gui.util.FontService;
 import org.microcol.gui.util.GamePreferences;
@@ -191,6 +193,9 @@ public class MicroColModule extends AbstractModule {
         bind(ExitGameListener.class).asEagerSingleton();
         bind(GameFinishedListener.class).asEagerSingleton();
         bind(ShowTurnReportListener.class).asEagerSingleton();
+        
+        bind(TurnReportDialog.class).in(Singleton.class);
+        bind(ShowTurnEvensOnTurnStartedEvent.class).asEagerSingleton();
         
         /**
          * Initialize MVP classes
