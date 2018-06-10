@@ -17,7 +17,7 @@ public class SaveToModelPoTest {
 		
 		final ModelPo modelPo = model.save();
 		assertNotNull(modelPo);
-		assertEquals(2, modelPo.getPlayers().size());
+		assertEquals(2, modelPo.getGameManager().getPlayers().size());
 		assertEquals(21, modelPo.getUnits().size());
 	}
 	
@@ -30,7 +30,7 @@ public class SaveToModelPoTest {
 		
 		final ModelPo modelPo = model.save();
 		assertNotNull(modelPo);
-		assertEquals(2, modelPo.getPlayers().size());
+		assertEquals(2, modelPo.getGameManager().getPlayers().size());
 		assertEquals(2, modelPo.getUnits().size());
 	}
 	

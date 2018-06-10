@@ -48,11 +48,16 @@ public class TurnReportDialog extends AbstractMessageWindow implements TurnRepor
     @Override
     public void repaint() {
         turnEventsPanel.getChildren().clear();
-        gameModelController.getModel()
-                .getTurnEventsLocalizedMessages(gameModelController.getCurrentPlayer(),
-                        key -> text.get(key))
-                .forEach(turnEvent -> turnEventsPanel.getChildren()
-                        .add(new TurnEventPanel(turnEvent)));
+        if (gameModelController.getModel()
+                .isTurnEventsMessagesEmpty(gameModelController.getCurrentPlayer())) {
+            turnEventsPanel.getChildren().add(new Label(text.get("turnReport.noEvents")));
+        } else {
+            gameModelController.getModel()
+                    .getTurnEventsLocalizedMessages(gameModelController.getCurrentPlayer(),
+                            key -> text.get(key))
+                    .forEach(turnEvent -> turnEventsPanel.getChildren()
+                            .add(new TurnEventPanel(turnEvent)));
+        }
     }
 
     @SuppressWarnings("unused")

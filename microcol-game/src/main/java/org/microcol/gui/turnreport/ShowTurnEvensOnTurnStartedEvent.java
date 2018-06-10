@@ -3,6 +3,8 @@ package org.microcol.gui.turnreport;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.event.model.TurnStartedController;
 import org.microcol.model.event.TurnStartedEvent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
@@ -14,6 +16,9 @@ import javafx.application.Platform;
  * are than show dialog to show them.
  */
 public class ShowTurnEvensOnTurnStartedEvent {
+
+    private final static Logger logger = LoggerFactory
+            .getLogger(ShowTurnEvensOnTurnStartedEvent.class);
 
     private final TurnReportDialog turnReportDialog;
 
@@ -28,11 +33,15 @@ public class ShowTurnEvensOnTurnStartedEvent {
         this.gameModelController = Preconditions.checkNotNull(gameModelController);
     }
 
-    @SuppressWarnings("unused")
     private void onTurnStarted(final TurnStartedEvent event) {
-        if (!isEventsEmpty()) {
+        if (!isEventsEmpty() && event.isFreshStart() && isCorrectPlayer(event)) {
+            logger.debug("Turn started and turn event dialog will be shown.");
             Platform.runLater(() -> turnReportDialog.show());
         }
+    }
+
+    private boolean isCorrectPlayer(final TurnStartedEvent event) {
+        return gameModelController.getCurrentPlayer().equals(event.getPlayer());
     }
 
     private boolean isEventsEmpty() {

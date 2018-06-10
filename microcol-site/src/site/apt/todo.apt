@@ -84,6 +84,8 @@ Planned releases
  
   * \u2717 During unit move is next turn button enabled
  
+  * \u2717 When game is loaded than donn't execute next turn methods on model.
+ 
  * <<Backlog>> - feature and improvement backlog
   	
   * \u2717 Colonist in colony eats 2 foods per turn.

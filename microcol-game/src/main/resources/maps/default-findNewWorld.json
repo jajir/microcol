@@ -130,28 +130,31 @@
     "maxX": 40,
     "maxY": 30
   },
-  "players": [
-    {
-      "name": "Dutch",
-      "computer": false,
-      "gold": 2108,
-      "declaredIndependence": false,
-	    "visible": {
-	    	"visible": [
-	       ]
+  "gameManager" : {
+  	  "gameStarted" : false,
+	  "players": [
+	    {
+	      "name": "Dutch",
+	      "computer": false,
+	      "gold": 2108,
+	      "declaredIndependence": false,
+		    "visible": {
+		    	"visible": [
+		       ]
+		    }
+	    },
+	    {
+	      "name": "Dutch's King",
+	      "computer": true,
+	      "gold": 1108,
+	      "declaredIndependence": false,
+	      "whosKingThisPlayerIs": "Dutch",
+	       "visible": {
+		    	"visible": []
+	    	}
 	    }
-    },
-    {
-      "name": "Dutch's King",
-      "computer": true,
-      "gold": 1108,
-      "declaredIndependence": false,
-      "whosKingThisPlayerIs": "Dutch",
-       "visible": {
-	    	"visible": []
-    	}
-    }
-  ],
+	  ]
+  },
   "europe": {},
   "campaign": {
   	"name": "default",

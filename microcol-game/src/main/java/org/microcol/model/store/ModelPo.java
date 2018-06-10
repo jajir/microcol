@@ -19,8 +19,6 @@ public class ModelPo {
 
     private WorldMapPo map = new WorldMapPo();
 
-    private List<PlayerPo> players = new ArrayList<>();
-
     private EuropePo europe = new EuropePo();
 
     private CampaignPo campaign = new CampaignPo();
@@ -28,11 +26,11 @@ public class ModelPo {
     private Location focusedField;
     
     private StatisticsPo statistics = new StatisticsPo();
+    
+    private GameManagerPo gameManager = new GameManagerPo();
 
     public PlayerPo getPlayerByName(final String name) {
-        Preconditions.checkState(players != null, "Players are null");
-        return players.stream().filter(player -> player.getName().equals(name)).findAny()
-                .orElseThrow(() -> new IllegalStateException("Invalid owner name '" + name + "'"));
+        return gameManager.getPlayerByName(name);
     }
 
     public UnitPo getUnitWithUnitInCargo(final Integer idUnitInCargo) {
@@ -73,21 +71,6 @@ public class ModelPo {
 
     public void setMap(WorldMapPo map) {
         this.map = map;
-    }
-
-    /**
-     * @return the players
-     */
-    public List<PlayerPo> getPlayers() {
-        return players;
-    }
-
-    /**
-     * @param players
-     *            the players to set
-     */
-    public void setPlayers(List<PlayerPo> players) {
-        this.players = players;
     }
 
     /**
@@ -176,6 +159,20 @@ public class ModelPo {
      */
     public void setStatistics(StatisticsPo statistics) {
         this.statistics = statistics;
+    }
+
+    /**
+     * @return the gameManagerPo
+     */
+    public GameManagerPo getGameManager() {
+        return gameManager;
+    }
+
+    /**
+     * @param gameManager the gameManagerPo to set
+     */
+    public void setGameManager(GameManagerPo gameManager) {
+        this.gameManager = gameManager;
     }
 
 }

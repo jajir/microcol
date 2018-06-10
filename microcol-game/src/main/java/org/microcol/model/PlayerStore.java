@@ -27,12 +27,12 @@ public class PlayerStore {
          * rule.
          */
         final PlayerStore out = new PlayerStore();
-        modelPo.getPlayers().stream().filter(player -> player.getWhosKingThisPlayerIs() == null)
-                .forEach(playerPo -> {
+        modelPo.getGameManager().getPlayers().stream()
+                .filter(player -> player.getWhosKingThisPlayerIs() == null).forEach(playerPo -> {
                     out.players.add(Player.make(playerPo, model, out));
                 });
-        modelPo.getPlayers().stream().filter(player -> player.getWhosKingThisPlayerIs() != null)
-                .forEach(playerPo -> {
+        modelPo.getGameManager().getPlayers().stream()
+                .filter(player -> player.getWhosKingThisPlayerIs() != null).forEach(playerPo -> {
                     out.players.add(Player.make(playerPo, model, out));
                 });
         out.checkPlayersDuplicities();

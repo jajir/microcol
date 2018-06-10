@@ -103,7 +103,7 @@ public final class Model {
 
         this.unitStorage = Preconditions.checkNotNull(unitStorage);
 
-        gameManager = new GameManager(this, gameOverEvaluators);
+        gameManager = GameManager.make(this, modelPo, gameOverEvaluators, playerStore);
 
         highSea = new HighSea(this);
         statistics = new Statistics(modelPo, playerStore);
@@ -377,7 +377,10 @@ public final class Model {
         map.save(out);
         unitStorage.save(out);
         out.setCalendar(calendar.save());
-        out.setPlayers(getSavePlayers());
+        //TODO move to same method to game manager
+        out.getGameManager().setPlayers(getSavePlayers());
+        out.getGameManager().setGameStarted(gameManager.isStarted());
+        out.getGameManager().setCurrentPlayer(gameManager.getCurrentPlayer().getName());
         out.setColonies(getSaveColonies());
         out.setFocusedField(focusedField);
         out.setTurnEvents(turnEventStore.save());
@@ -480,7 +483,11 @@ public final class Model {
     }
 
     public void startGame() {
-        gameManager.startGame();
+        if (gameManager.isRunning()) {
+            gameManager.continueGame();
+        } else {
+            gameManager.startGame();
+        }
     }
 
     public void endTurn() {
@@ -521,8 +528,8 @@ public final class Model {
         listenerManager.fireRoundStarted(this, calendar);
     }
 
-    void fireTurnStarted(final Player player) {
-        listenerManager.fireTurnStarted(this, player);
+    void fireTurnStarted(final Player player, final boolean isFreshStart) {
+        listenerManager.fireTurnStarted(this, player, isFreshStart);
     }
 
     void fireUnitMovedStep(final Unit unit, final Location start, final Location end) {

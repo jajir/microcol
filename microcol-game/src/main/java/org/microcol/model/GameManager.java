@@ -4,7 +4,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
+import org.microcol.model.store.ModelPo;
+
 import com.google.common.base.Preconditions;
+import com.google.common.base.Strings;
 
 /**
  * Each player performs turns. When all players perform one turn it's one round.
@@ -16,9 +19,28 @@ class GameManager {
     private boolean started;
     private Player currentPlayer;
 
-    GameManager(final Model model, final List<Function<Model, GameOverResult>> gameOverEvaluators) {
+    GameManager(final Model model, final List<Function<Model, GameOverResult>> gameOverEvaluators,
+            final boolean alreadyStarted, final Player currentPlayer) {
         gameOverEvaluator = new GameOverEvaluator(gameOverEvaluators);
+        this.started = alreadyStarted;
+        this.currentPlayer = currentPlayer;
         this.model = Preconditions.checkNotNull(model);
+    }
+
+    public static GameManager make(final Model model, final ModelPo modelPo,
+            final List<Function<Model, GameOverResult>> gameOverEvaluators,
+            final PlayerStore playerStore) {
+        return new GameManager(model, gameOverEvaluators, modelPo.getGameManager().isGameStarted(),
+                findPlayer(modelPo, playerStore));
+    }
+
+    private static Player findPlayer(final ModelPo modelPo, final PlayerStore playerStore) {
+        final String playerName = modelPo.getGameManager().getCurrentPlayer();
+        if (Strings.isNullOrEmpty(playerName)) {
+            return null;
+        } else {
+            return playerStore.getPlayerByName(playerName);
+        }
     }
 
     boolean isStarted() {
@@ -56,13 +78,23 @@ class GameManager {
 
     void startGame() {
         Preconditions.checkState(!started, "Game was already started.");
-
         started = true;
         currentPlayer = model.getPlayers().get(0);
         model.fireGameStarted();
         model.fireRoundStarted();
         currentPlayer.startTurn();
-        model.fireTurnStarted(currentPlayer);
+        model.fireTurnStarted(currentPlayer, true);
+    }
+
+    /**
+     * When game is loaded from file this should start it.
+     */
+    void continueGame() {
+        Preconditions.checkState(started, "Game can't continue because wasn't started.");
+        Preconditions.checkNotNull(currentPlayer, "Current player is null.");
+        model.fireGameStarted();
+        model.fireRoundStarted();
+        model.fireTurnStarted(currentPlayer, false);
     }
 
     void endTurn() {
@@ -72,7 +104,7 @@ class GameManager {
         if (index < model.getPlayers().size() - 1) {
             currentPlayer = model.getPlayers().get(index + 1);
             currentPlayer.startTurn();
-            model.fireTurnStarted(currentPlayer);
+            model.fireTurnStarted(currentPlayer, true);
         } else {
             model.getCalendar().endRound();
             final Optional<GameOverResult> oGameOverResult = gameOverEvaluator.evaluate(model);
@@ -85,7 +117,7 @@ class GameManager {
                 model.getStatistics().countNextTurn(model);
                 model.fireRoundStarted();
                 currentPlayer.startTurn();
-                model.fireTurnStarted(currentPlayer);
+                model.fireTurnStarted(currentPlayer, true);
             }
         }
     }

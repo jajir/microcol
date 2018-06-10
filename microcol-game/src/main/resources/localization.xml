@@ -166,6 +166,7 @@ jestli klesne na nulu, osadnicí začnou umírat hlady. Vyrob 30 doutníků.</en
 	
 	<entry key="turnReport.title">Turn Report</entry>
 	<entry key="turnReport.caption">Turn Report</entry>
+	<entry key="turnReport.noEvents">There are no events.</entry>
 	<entry key="turnEvent.shipComeToEuropePort">Shop come to European port.</entry>
 	<entry key="turnEvent.shipComeToHighSeas">Ship arrived from Europe and waiting for next command.</entry>
 	<entry key="turnEvent.faminePlagueColony">Famine plague colony %s. Colonists are dying.</entry>

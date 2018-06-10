@@ -166,6 +166,7 @@ jestli klesne na nulu, osadnicí začnou umírat hlady. Vyrob 30 doutníků.</en
 	
 	<entry key="turnReport.title">Důležité události</entry>
 	<entry key="turnReport.caption">Důležité události</entry>
+	<entry key="turnReport.noEvents">Žádné důležité události.</entry>
 	<entry key="turnEvent.shipComeToEuropePort">Loď prijela do Evropského přístavu, nenech ji dlouho čekat.</entry>
 	<entry key="turnEvent.shipComeToHighSeas">Loď se vrátila z Evrop zpět.</entry>
 	<entry key="turnEvent.faminePlagueColony">Hladomor řádí v kolonii %s. V kolonii umírají kolonisté.</entry>

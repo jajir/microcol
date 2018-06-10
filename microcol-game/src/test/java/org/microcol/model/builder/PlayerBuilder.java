@@ -32,7 +32,7 @@ public class PlayerBuilder {
     }
 
     public ModelBuilder build() {
-        modelBuilder.getModelPo().getPlayers().add(playerPo);
+        modelBuilder.getModelPo().getGameManager().getPlayers().add(playerPo);
         return modelBuilder;
     }
 
