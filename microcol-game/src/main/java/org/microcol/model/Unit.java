@@ -12,6 +12,7 @@ import java.util.function.Function;
 
 import org.microcol.model.store.ModelPo;
 import org.microcol.model.store.UnitPo;
+import org.microcol.model.turnevent.TurnEventProvider;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
@@ -105,11 +106,13 @@ public class Unit {
             if (placeHighSea.getRemainigTurns() <= 0) {
                 if (placeHighSea.isTravelToEurope()) {
                     model.getEurope().getPort().placeShipToPort(this);
+                    model.getTurnEventStore().add(TurnEventProvider.getShipComeEuropePort(owner));
                 } else {
                     // TODO ships always come from east side of map
                     final List<Location> locations = model.getHighSea()
                             .getSuitablePlaceForShipCommingFromEurope(getOwner(), true);
                     placeToLocation(locations.get(random.nextInt(locations.size())));
+                    model.getTurnEventStore().add(TurnEventProvider.getShipComeHighSeas(owner));
                 }
             }
         }

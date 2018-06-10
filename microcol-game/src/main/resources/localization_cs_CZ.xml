@@ -171,6 +171,7 @@ jestli klesne na nulu, osadnicí začnou umírat hlady. Vyrob 30 doutníků.</en
 	<entry key="turnEvent.shipComeToHighSeas">Loď se vrátila z Evrop zpět.</entry>
 	<entry key="turnEvent.faminePlagueColony">Hladomor řádí v kolonii %s. V kolonii umírají kolonisté.</entry>
 	<entry key="turnEvent.famineWillPlagueColony">Blíží se hladomor ve městě %s. V příštím tahu začnou umírat kolonisté.</entry>
+	<entry key="turnEvent.colonyWasDestroyed">Kolonie %s byla zničena.</entry>
 	
 	<entry key="dialogFight.title">Útok</entry>
 	<entry key="dialogFight.attacker">Útočník</entry>

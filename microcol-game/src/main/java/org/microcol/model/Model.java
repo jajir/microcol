@@ -13,6 +13,7 @@ import org.microcol.model.store.ModelPo;
 import org.microcol.model.store.PlayerPo;
 import org.microcol.model.store.UnitPo;
 import org.microcol.model.turnevent.TurnEvent;
+import org.microcol.model.turnevent.TurnEventProvider;
 import org.microcol.model.turnevent.TurnEventStore;
 
 import com.google.common.base.MoreObjects;
@@ -595,6 +596,8 @@ public final class Model {
 
     void destroyColony(final Colony colony) {
         Preconditions.checkNotNull(colony);
+        getTurnEventStore()
+                .add(TurnEventProvider.getColonyWasdestroyed(getCurrentPlayer(), colony));
         colonies.remove(colony);
     }
 

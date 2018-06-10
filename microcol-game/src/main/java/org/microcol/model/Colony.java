@@ -195,24 +195,25 @@ public class Colony {
     }
 
     private void eatFood() {
-        final int food = colonyWarehouse.getGoodAmmount(GoodType.CORN);
-        if (food < getRequiredFoodPerTurn()) {
+        final int alreadyHaveFood = colonyWarehouse.getGoodAmmount(GoodType.CORN);
+        if (alreadyHaveFood < getRequiredFoodPerTurn()) {
             // famine plague colony message
             model.getTurnEventStore().add(TurnEventProvider.getFaminePlagueColony(owner, this));
             killOneRandomUnit();
-            colonyWarehouse.removeFromWarehouse(GoodType.CORN, food);
+            colonyWarehouse.setGoodsToZero(GoodType.CORN);
         } else {
             colonyWarehouse.removeFromWarehouse(GoodType.CORN, getRequiredFoodPerTurn());
-            final int foodNew = colonyWarehouse.getGoodAmmount(GoodType.CORN);
-            if (foodNew < getRequiredFoodPerTurn()) {
+            final int willHaveFood = getGoodsStats().getStatsByType(GoodType.CORN)
+                    .getInWarehouseAfter();
+            if (willHaveFood < 0) {
                 // warn famine will plague colony
                 model.getTurnEventStore()
                         .add(TurnEventProvider.getFamineWillPlagueColony(owner, this));
             }
         }
     }
-    
-    private void killOneRandomUnit(){
+
+    private void killOneRandomUnit() {
         int index = random.nextInt(getUnitsInColony().size());
         final Unit u = getUnitsInColony().get(index);
         u.getPlace().destroy();
@@ -354,7 +355,12 @@ public class Colony {
         return force;
     }
 
-    // TODO add some tests
+    //TODO counting of stats should move to separate classes.
+    /**
+     * Get production statistics per turn.
+     *
+     * @return Return colony production statistics per turn.
+     */
     public ColonyProductionStats getGoodsStats() {
         final ColonyProductionStats out = new ColonyProductionStats();
         // set initial warehouse stack
@@ -370,7 +376,7 @@ public class Colony {
                 goodsStats.addRowProduction(field.getProducedGoodsAmmount());
             }
         });
-        
+
         out.getStatsByType(GoodType.CORN).addConsumed(getRequiredFoodPerTurn());
 
         // get production from town factories that doesn't consume any sources

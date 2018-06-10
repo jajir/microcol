@@ -86,6 +86,10 @@ public class ColonyWarehouse {
         goodAmounts.put(goodType, newAmount);
     }
 
+    void setGoodsToZero(final GoodType goodType) {
+        removeFromWarehouse(goodType, getGoodAmmount(goodType));
+    }
+
     int getMaxStorageSpace(final GoodType goodType, final ConstructionType constructionType) {
         if (goodType == GoodType.CORN) {
             return 200;

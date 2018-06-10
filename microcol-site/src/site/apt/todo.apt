@@ -62,13 +62,13 @@ Planned releases
  
   * \u2713 Turn notifications should be added at least:
     
-    * \u2717 Colony is plagued by famine.   
+    * \u2713 Colony is plagued by famine.   
     
-    * \u2717 Colony will be plagued by famine.   
+    * \u2713 Colony will be plagued by famine.   
     
-    * \u2717 Ship come to Europe port.   
+    * \u2713 Ship come to Europe port.   
     
-    * \u2717 Ship return from Europe.   
+    * \u2713 Ship return from Europe.   
     
     * \u2717 Colony is destroyed.   
  
@@ -84,13 +84,17 @@ Planned releases
  
   * \u2717 During unit move is next turn button enabled
  
-  * \u2717 When game is loaded than donn't execute next turn methods on model.
+  * \u2713 When game is loaded than don't execute next turn methods on model.
+  
+  * \u2713 Support application start parameter --clean to clean all setting. It will be useful for testing. 
+  	
+  * \u2713 Colonist in colony eats 2 foods per turn.
+
+  * \u2713 Colony is plagued by famine.
+
+  * \u2717 When next unit is selected than screen should scroll at this unit. 
  
  * <<Backlog>> - feature and improvement backlog
-  	
-  * \u2717 Colonist in colony eats 2 foods per turn.
-
-  * \u2717 Colony is plagued by famine.
   
   * \u2717 Right panel highlight select unit.
   
@@ -178,8 +182,6 @@ Planned releases
   * \u2717 When colony have 200 food than produce new colonist and set food to 0
     
   * \u2717 Allow to build custom store and allow to automatically sell products
- 
-  * \u2717 Support application start parameter --clean to clean all setting. It will be usefull for testing. 
  
   * \u2717 
  

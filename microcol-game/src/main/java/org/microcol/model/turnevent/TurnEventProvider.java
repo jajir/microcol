@@ -16,6 +16,8 @@ public class TurnEventProvider {
 
     private final static String KEY_FAMINE_WILL_PLAGUE_COLONY = "turnEvent.famineWillPlagueColony";
 
+    private final static String KEY_COLONY_WAS_DESTORYED = "turnEvent.colonyWasDestroyed";
+
     public static TurnEvent getShipComeEuropePort(final Player player) {
         return new SimpleTurnEvent(KEY_SHIP_COME_TO_EUROPE, new Object[0], player);
     }
@@ -31,6 +33,11 @@ public class TurnEventProvider {
 
     public static TurnEvent getFamineWillPlagueColony(final Player player, final Colony colony) {
         return new SimpleTurnEvent(KEY_FAMINE_WILL_PLAGUE_COLONY, new Object[] { colony.getName() },
+                player);
+    }
+
+    public static TurnEvent getColonyWasdestroyed(final Player player, final Colony colony) {
+        return new SimpleTurnEvent(KEY_COLONY_WAS_DESTORYED, new Object[] { colony.getName() },
                 player);
     }
 
