@@ -94,6 +94,7 @@ import org.microcol.gui.mainmenu.MainMenuView;
 import org.microcol.gui.mainmenu.QuitGameController;
 import org.microcol.gui.mainmenu.SelectNextUnitController;
 import org.microcol.gui.mainmenu.ShowGridController;
+import org.microcol.gui.mainmenu.ShowStatisticsController;
 import org.microcol.gui.mainmenu.ShowTurnReportController;
 import org.microcol.gui.mainmenu.VolumeChangeController;
 import org.microcol.gui.turnreport.ShowTurnEvensOnTurnStartedEvent;
@@ -184,6 +185,7 @@ public class MicroColModule extends AbstractModule {
         bind(GameModelController.class).in(Singleton.class);
         bind(ArtifitialPlayersManager.class).in(Singleton.class);
         bind(ShowTurnReportController.class).in(Singleton.class);
+        bind(ShowStatisticsController.class).in(Singleton.class);
 
         bind(TurnStartedListener.class).asEagerSingleton();
         bind(TileWasSelectedListener.class).asEagerSingleton();

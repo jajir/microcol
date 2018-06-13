@@ -75,7 +75,8 @@ public class MainMenuPresenter {
             final UnitMoveFinishedController unitMoveFinishedController,
             final SelectedUnitWasChangedController selectedUnitWasChangedController,
             final IndependenceWasDeclaredColntroller independenceWasDeclaredColntroller,
-            final ShowTurnReportController showTurnReportController) {
+            final ShowTurnReportController showTurnReportController,
+            final ShowStatisticsController showStatisticsController) {
         this.view = Preconditions.checkNotNull(view);
         this.selectedUnitManager = Preconditions.checkNotNull(selectedUnitManager);
         this.gameModelController = Preconditions.checkNotNull(gameModelController);
@@ -119,6 +120,8 @@ public class MainMenuPresenter {
                 event -> selectNextUnitController.fireEvent(new SelectNextUnitEvent()));
         view.getMenuItemTurnReport().setOnAction(
                 event -> showTurnReportController.fireEvent(new ShowTurnReportEvent()));
+        view.getMenuItemStatistics().setOnAction(
+                event -> showStatisticsController.fireEvent(new ShowStatisticsEvent()));
 
         /**
          * Following section define visibility of menu items.
@@ -146,6 +149,7 @@ public class MainMenuPresenter {
         view.getMenuItemMove().setDisable(true);
         view.getMenuItemEurope().setDisable(true);
         view.getMenuItemTurnReport().setDisable(true);
+        view.getMenuItemStatistics().setDisable(true);
         view.getMenuItemNextUnit().setDisable(true);
         view.getMenuItemDeclareIndependence().setDisable(true);
     }
@@ -162,6 +166,7 @@ public class MainMenuPresenter {
         view.getMenuItemCenterView().setDisable(true);
         view.getMenuItemEurope().setDisable(true);
         view.getMenuItemTurnReport().setDisable(true);
+        view.getMenuItemStatistics().setDisable(true);
     }
 
     @SuppressWarnings("unused")
@@ -231,6 +236,7 @@ public class MainMenuPresenter {
     private void onGameFinihedEvent(final QuitGameEvent exitGameEvent) {
         view.getMenuItemEurope().setDisable(true);
         view.getMenuItemTurnReport().setDisable(true);
+        view.getMenuItemStatistics().setDisable(true);
         view.getMenuItemNextUnit().setDisable(true);
         view.getMenuItemBuildColony().setDisable(true);
     }
@@ -247,6 +253,7 @@ public class MainMenuPresenter {
             view.getMenuItemSaveGame().setDisable(false);
             view.getMenuItemEurope().setDisable(false);
             view.getMenuItemTurnReport().setDisable(false);
+            view.getMenuItemStatistics().setDisable(false);
             view.getMenuItemNextUnit().setDisable(false);
             view.getMenuItemDeclareIndependence()
                     .setDisable(event.getPlayer().isDeclaredIndependence());
@@ -257,6 +264,7 @@ public class MainMenuPresenter {
             view.getMenuItemMove().setDisable(true);
             view.getMenuItemEurope().setDisable(true);
             view.getMenuItemTurnReport().setDisable(true);
+            view.getMenuItemStatistics().setDisable(true);
             view.getMenuItemNextUnit().setDisable(true);
         }
         setBuildColony();

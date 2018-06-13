@@ -24,6 +24,7 @@
 	<entry key="mainMenu.view.center">Center</entry>
 	<entry key="mainMenu.view.europe">Evrope</entry>
 	<entry key="mainMenu.view.turnReport">Turn report</entry>
+	<entry key="mainMenu.view.statistics">Statistics</entry>
 
 	<entry key="mainMenu.unit">Unit</entry>
 	<entry key="mainMenu.unit.move">Move</entry>

@@ -24,6 +24,7 @@
 	<entry key="mainMenu.view.center">Na aktivní jednotku</entry>
 	<entry key="mainMenu.view.europe">Evropský přístav</entry>
 	<entry key="mainMenu.view.turnReport">Turn report</entry>
+	<entry key="mainMenu.view.statistics">Statistiky</entry>
 
 	<entry key="mainMenu.unit">Jednotka</entry>
 	<entry key="mainMenu.unit.move">Táhnout</entry>

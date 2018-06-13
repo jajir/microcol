@@ -66,8 +66,9 @@ public class PersistingDialog extends AbstractMessageWindow {
         final FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle(text.get(caption));
         fileChooser.setInitialDirectory(persistingTool.getRootSaveDirectory());
-        fileChooser.setSelectedExtensionFilter(
-                new FileChooser.ExtensionFilter("MicroCol data files", "microcol"));
+        fileChooser.getExtensionFilters()
+                .add(new FileChooser.ExtensionFilter("MicroCol data files", "*.microcol"));
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("All Images", "*.*"));
         return fileChooser;
     }
 
