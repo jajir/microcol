@@ -97,6 +97,8 @@ import org.microcol.gui.mainmenu.ShowGridController;
 import org.microcol.gui.mainmenu.ShowStatisticsController;
 import org.microcol.gui.mainmenu.ShowTurnReportController;
 import org.microcol.gui.mainmenu.VolumeChangeController;
+import org.microcol.gui.statistics.ShowStatisticsDialogListener;
+import org.microcol.gui.statistics.StatisticsDialog;
 import org.microcol.gui.turnreport.ShowTurnEvensOnTurnStartedEvent;
 import org.microcol.gui.turnreport.ShowTurnReportListener;
 import org.microcol.gui.turnreport.TurnReportDialog;
@@ -199,6 +201,9 @@ public class MicroColModule extends AbstractModule {
         bind(TurnReportDialog.class).in(Singleton.class);
         bind(ShowTurnEvensOnTurnStartedEvent.class).asEagerSingleton();
         
+        bind(StatisticsDialog.class).in(Singleton.class);
+        bind(ShowStatisticsDialogListener.class).asEagerSingleton();
+
         /**
          * Initialize MVP classes
          */

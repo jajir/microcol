@@ -281,7 +281,7 @@ public final class Player {
     }
 
     public PlayerStatistics getPlayerStatistics() {
-        final PlayerStatistics out = new PlayerStatistics();
+        final PlayerStatistics out = new PlayerStatistics(getGold());
 
         model.getColonies(this).forEach(out.getGoodsStatistics()::addColonyData);
         model.getUnitsOwnedBy(this, true).forEach(out.getGoodsStatistics()::addUnitData);

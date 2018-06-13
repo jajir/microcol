@@ -12,6 +12,13 @@ public class PlayerGoodsStatistics {
         colony.getColonyWarehouse().saveStatisticsTo(this);
     }
 
+    /**
+     * Economy value is counted as simple sum of all goods.
+     *
+     * TODO create something meaningful
+     *
+     * @return economy value of players
+     */
     public int getEconomyValue() {
         return goodAmounts.entrySet().stream().mapToInt(entry -> entry.getValue()).sum();
     }

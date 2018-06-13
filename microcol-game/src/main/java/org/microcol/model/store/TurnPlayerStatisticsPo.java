@@ -9,6 +9,8 @@ public class TurnPlayerStatisticsPo {
     private int econonyScore;
 
     private int militaryScore;
+    
+    private int gold;
 
     /**
      * @return the player
@@ -68,5 +70,19 @@ public class TurnPlayerStatisticsPo {
      */
     public void setMilitaryScore(int militaryScore) {
         this.militaryScore = militaryScore;
+    }
+
+    /**
+     * @return the gold
+     */
+    public int getGold() {
+        return gold;
+    }
+
+    /**
+     * @param gold the gold to set
+     */
+    public void setGold(int gold) {
+        this.gold = gold;
     }
 }

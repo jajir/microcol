@@ -10,6 +10,12 @@ public class PlayerStatistics {
 
     private final PlayerMilitaryStrength playerMilitaryStrength = new PlayerMilitaryStrength();
 
+    private final int gold;
+
+    PlayerStatistics(final int gold) {
+        this.gold = gold;
+    }
+
     /**
      * @return the goodsStatistics
      */
@@ -19,5 +25,12 @@ public class PlayerStatistics {
 
     public PlayerMilitaryStrength getMilitaryStrength() {
         return playerMilitaryStrength;
+    }
+
+    /**
+     * @return the gold
+     */
+    public int getGold() {
+        return gold;
     }
 }

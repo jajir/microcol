@@ -174,6 +174,11 @@ jestli klesne na nulu, osadnicí začnou umírat hlady. Vyrob 30 doutníků.</en
 	<entry key="turnEvent.famineWillPlagueColony">Famine is coming in colony %s. in next turn colonist will die.</entry>
 	<entry key="turnEvent.colonyWasDestroyed">Colony %s was destroyed.</entry>
 
+	<entry key="statistics.title">Statistics</entry>
+	<entry key="statistics.caption">Statistics</entry>
+	<entry key="statistics.year">Year</entry>
+	<entry key="statistics.gold">Gold</entry>
+
 	<entry key="dialogFight.title">Fight Advisor</entry>
 	<entry key="dialogFight.attacker">Attacker</entry>
 	<entry key="dialogFight.defender">Defender</entry>

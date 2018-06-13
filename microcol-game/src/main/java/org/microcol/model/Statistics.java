@@ -6,6 +6,9 @@ import java.util.List;
 import org.microcol.model.store.ModelPo;
 import org.microcol.model.store.StatisticsPo;
 
+import com.google.common.base.Preconditions;
+import com.google.common.collect.ImmutableList;
+
 /**
  * Game statistics.
  */
@@ -25,6 +28,7 @@ public class Statistics {
             final TurnPlayerStatistics stats = new TurnPlayerStatistics(player, turnNo);
             final PlayerStatistics playerStatistics = player.getPlayerStatistics();
             stats.setEcononyScore(playerStatistics.getGoodsStatistics().getEconomyValue());
+            stats.setGold(playerStatistics.getGold());
             stats.setMilitaryScore(playerStatistics.getMilitaryStrength().getMilitaryStrength());
             turnStatistics.add(stats);
         });
@@ -36,6 +40,12 @@ public class Statistics {
             out.getTurnStatistics().add(stats.save());
         });
         return out;
+    }
+
+    public List<TurnPlayerStatistics> getStatsForPlayer(final Player player) {
+        Preconditions.checkNotNull(player);
+        return turnStatistics.stream().filter(stat -> stat.getPlayer().equals(player))
+                .collect(ImmutableList.toImmutableList());
     }
 
 }
