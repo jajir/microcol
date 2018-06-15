@@ -1,6 +1,7 @@
 package org.microcol.gui.statistics;
 
 import java.util.List;
+import java.util.function.Function;
 
 import org.microcol.gui.MainStageBuilder;
 import org.microcol.gui.event.model.GameModelController;
@@ -8,6 +9,7 @@ import org.microcol.gui.util.AbstractMessageWindow;
 import org.microcol.gui.util.ButtonsBar;
 import org.microcol.gui.util.Text;
 import org.microcol.gui.util.ViewUtil;
+import org.microcol.model.Calendar;
 import org.microcol.model.TurnPlayerStatistics;
 
 import com.google.common.base.Preconditions;
@@ -57,96 +59,78 @@ public class StatisticsDialog extends AbstractMessageWindow implements Statistic
     @Override
     public void repaint() {
         chartPanel.getTabs().clear();
+        final List<TurnPlayerStatistics> stats = gameModelController.getModel().getStatistics()
+                .getStatsForPlayer(gameModelController.getCurrentPlayer());
+        final Calendar calendar = gameModelController.getModel().getCalendar();
 
         Tab tab = new Tab();
         tab.setText("Gold");
         tab.setClosable(false);
-        tab.setContent(createChartGold());
+        tab.setContent(createChartGold(stats, calendar));
         chartPanel.getTabs().add(tab);
 
         tab = new Tab();
         tab.setText("Military");
         tab.setClosable(false);
-        tab.setContent(createChartMilitaryPower());
+        tab.setContent(createChartMilitaryPower(stats, calendar));
         chartPanel.getTabs().add(tab);
 
         tab = new Tab();
         tab.setText("Wealth");
         tab.setClosable(false);
-        tab.setContent(createChartWealth());
+        tab.setContent(createChartWealth(stats, calendar));
         chartPanel.getTabs().add(tab);
     }
 
-    private Node createChartWealth() {
-        final NumberAxis xAxis = new NumberAxis();
-        final NumberAxis yAxis = new NumberAxis();
-
-        xAxis.setLabel(text.get("statistics.year"));
-        yAxis.setLabel(text.get("statistics.wealth"));
-
-        final LineChart<Number, Number> lineChart = new LineChart<Number, Number>(xAxis, yAxis);
-
-        lineChart.getData().add(initWealth(gameModelController.getModel().getStatistics()
-                .getStatsForPlayer(gameModelController.getCurrentPlayer())));
+    private Node createChartWealth(final List<TurnPlayerStatistics> stats,
+            final Calendar calendar) {
+        final LineChart<Number, Number> lineChart = makeLineChart(calendar, "statistics.wealth");
+        lineChart.getData().add(
+                initSerie(stats, stat -> stat.getEcononyScore(), "statistics.wealth", calendar));
 
         return lineChart;
     }
 
-    private Node createChartGold() {
-        final NumberAxis xAxis = new NumberAxis();
-        final NumberAxis yAxis = new NumberAxis();
-
-        xAxis.setLabel(text.get("statistics.year"));
-        yAxis.setLabel(text.get("statistics.gold"));
-
-        final LineChart<Number, Number> lineChart = new LineChart<Number, Number>(xAxis, yAxis);
-        
-        lineChart.getData().add(initGold(gameModelController.getModel().getStatistics()
-                .getStatsForPlayer(gameModelController.getCurrentPlayer())));
+    private Node createChartGold(final List<TurnPlayerStatistics> stats, final Calendar calendar) {
+        final LineChart<Number, Number> lineChart = makeLineChart(calendar, "statistics.gold");
+        lineChart.getData()
+                .add(initSerie(stats, stat -> stat.getGold(), "statistics.gold", calendar));
 
         return lineChart;
     }
 
-    private Node createChartMilitaryPower() {
-        final NumberAxis xAxis = new NumberAxis();
-        final NumberAxis yAxis = new NumberAxis();
-
-        xAxis.setLabel(text.get("statistics.year"));
-        yAxis.setLabel(text.get("statistics.militaryPower"));
-
-        final LineChart<Number, Number> lineChart = new LineChart<Number, Number>(xAxis, yAxis);
-
-        lineChart.getData().add(initMilitaryPower(gameModelController.getModel().getStatistics()
-                .getStatsForPlayer(gameModelController.getCurrentPlayer())));
+    private Node createChartMilitaryPower(final List<TurnPlayerStatistics> stats,
+            final Calendar calendar) {
+        final LineChart<Number, Number> lineChart = makeLineChart(calendar,
+                "statistics.militaryPower");
+        lineChart.getData().add(initSerie(stats, stat -> stat.getMilitaryScore(),
+                "statistics.militaryPower", calendar));
 
         return lineChart;
     }
 
-    private XYChart.Series<Number, Number> initMilitaryPower(
-            final List<TurnPlayerStatistics> stats) {
-        XYChart.Series<Number, Number> series = new XYChart.Series<>();
-        series.setName(text.get("statistics.militaryPower"));
-        stats.forEach(stat -> series.getData()
-                .add(new XYChart.Data<Number, Number>(stat.getTurnNo(), stat.getMilitaryScore())));
-        return series;
+    private final LineChart<Number, Number> makeLineChart(final Calendar calendar,
+            final String yAxisMessageKey) {
+        final NumberAxis xAxis = new NumberAxis();
+        final NumberAxis yAxis = new NumberAxis();
+
+        xAxis.setAutoRanging(false);
+        xAxis.setLowerBound(calendar.getStartYear());
+        xAxis.setUpperBound(calendar.getCurrentYear() + 2);
+        xAxis.setLabel(text.get("statistics.year"));
+        yAxis.setLabel(text.get(yAxisMessageKey));
+
+        return new LineChart<Number, Number>(xAxis, yAxis);
     }
 
-    private XYChart.Series<Number, Number> initWealth(
-            final List<TurnPlayerStatistics> stats) {
+    private XYChart.Series<Number, Number> initSerie(final List<TurnPlayerStatistics> stats,
+            final Function<TurnPlayerStatistics, Integer> statFunction, final String messageKey,
+            final Calendar calendar) {
         XYChart.Series<Number, Number> series = new XYChart.Series<>();
-        series.setName(text.get("statistics.wealth"));
-        stats.forEach(stat -> series.getData()
-                .add(new XYChart.Data<Number, Number>(stat.getTurnNo(), stat.getEcononyScore())));
+        series.setName(text.get(messageKey));
+        stats.forEach(stat -> series.getData().add(new XYChart.Data<Number, Number>(
+                calendar.getYearForTurnNo(stat.getTurnNo()), statFunction.apply(stat))));
         return series;
-    }
-
-    private XYChart.Series<Number, Number> initGold(final List<TurnPlayerStatistics> stats) {
-        XYChart.Series<Number, Number> series = new XYChart.Series<>();
-        series.setName(text.get("statistics.gold"));
-        stats.forEach(stat -> series.getData()
-                .add(new XYChart.Data<Number, Number>(stat.getTurnNo(), stat.getGold())));
-        return series;
-
     }
 
     @SuppressWarnings("unused")

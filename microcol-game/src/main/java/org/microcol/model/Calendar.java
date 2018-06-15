@@ -56,6 +56,10 @@ public final class Calendar {
         numberOfPlayedTurns++;
     }
 
+    public int getYearForTurnNo(int turnNo) {
+        return startYear + turnNo;
+    }
+
     public CalendarPo save() {
         final CalendarPo out = new CalendarPo();
         out.setStartYear(startYear);
