@@ -178,6 +178,8 @@ jestli klesne na nulu, osadnicí začnou umírat hlady. Vyrob 30 doutníků.</en
 	<entry key="statistics.caption">Statistics</entry>
 	<entry key="statistics.year">Year</entry>
 	<entry key="statistics.gold">Gold</entry>
+	<entry key="statistics.militaryPower">Military power</entry>
+	<entry key="statistics.wealth">Wealth</entry>
 
 	<entry key="dialogFight.title">Fight Advisor</entry>
 	<entry key="dialogFight.attacker">Attacker</entry>
