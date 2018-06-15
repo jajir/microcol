@@ -30,6 +30,7 @@ public class Statistics {
             stats.setEcononyScore(playerStatistics.getGoodsStatistics().getEconomyValue());
             stats.setGold(playerStatistics.getGold());
             stats.setMilitaryScore(playerStatistics.getMilitaryStrength().getMilitaryStrength());
+            stats.setScore(stats.getEcononyScore() + stats.getMilitaryScore() + stats.getGold());
             turnStatistics.add(stats);
         });
     }

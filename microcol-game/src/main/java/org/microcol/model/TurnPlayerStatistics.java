@@ -18,6 +18,8 @@ public class TurnPlayerStatistics {
     private int militaryScore;
     
     private int gold;
+    
+    private int score;
 
     TurnPlayerStatistics(final Player player, final int turnNo) {
         this.player = Preconditions.checkNotNull(player);
@@ -32,6 +34,7 @@ public class TurnPlayerStatistics {
         out.setEcononyScore(turnPlayerStatisticsPo.getEcononyScore());
         out.setMilitaryScore(turnPlayerStatisticsPo.getMilitaryScore());
         out.setGold(turnPlayerStatisticsPo.getGold());
+        out.setScore(turnPlayerStatisticsPo.getScore());
         return out;
     }
 
@@ -42,6 +45,7 @@ public class TurnPlayerStatistics {
         out.setMilitaryScore(militaryScore);
         out.setEcononyScore(econonyScore);
         out.setGold(gold);
+        out.setScore(score);
         return out;
     }
 
@@ -101,6 +105,20 @@ public class TurnPlayerStatistics {
      */
     public void setGold(int gold) {
         this.gold = gold;
+    }
+
+    /**
+     * @return the score
+     */
+    public int getScore() {
+        return score;
+    }
+
+    /**
+     * @param score the score to set
+     */
+    public void setScore(int score) {
+        this.score = score;
     }
 
 }

@@ -70,19 +70,19 @@ Planned releases
     
     * \u2713 Ship return from Europe.   
     
-    * \u2717 Colony is destroyed.   
+    * \u2713 Colony is destroyed.   
  
-  * \u2717 End game statistics. Count for each player:
+  * \u2713 End game statistics. Count for each player:
     
-    * \u2717 Military power.
+    * \u2713 Military power.
     
-    * \u2717 Economical colonies value.
+    * \u2713 Economical colonies value.
     
-    * \u2717 Number of units.
+    * \u2713 Number of units.
     
-    * \u2717 Overall score.
+    * \u2713 Overall score.
  
-  * \u2717 During unit move is next turn button enabled
+  * \u2713 During unit move is next turn button enabled
  
   * \u2713 When game is loaded than don't execute next turn methods on model.
   

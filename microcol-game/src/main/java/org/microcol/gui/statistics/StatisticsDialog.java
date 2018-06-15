@@ -80,6 +80,21 @@ public class StatisticsDialog extends AbstractMessageWindow implements Statistic
         tab.setClosable(false);
         tab.setContent(createChartWealth(stats, calendar));
         chartPanel.getTabs().add(tab);
+
+        tab = new Tab();
+        tab.setText("Score");
+        tab.setClosable(false);
+        tab.setContent(createChartScore(stats, calendar));
+        chartPanel.getTabs().add(tab);
+    }
+
+    private Node createChartScore(final List<TurnPlayerStatistics> stats,
+            final Calendar calendar) {
+        final LineChart<Number, Number> lineChart = makeLineChart(calendar, "statistics.score");
+        lineChart.getData().add(
+                initSerie(stats, stat -> stat.getScore(), "statistics.score", calendar));
+
+        return lineChart;
     }
 
     private Node createChartWealth(final List<TurnPlayerStatistics> stats,
