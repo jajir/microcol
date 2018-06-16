@@ -4,7 +4,7 @@ import java.io.File;
 
 import org.microcol.gui.util.PersistentService;
 import org.microcol.model.campaign.Campaign;
-import org.microcol.model.campaign.CampaignDefault;
+import org.microcol.model.campaign.Default_campaign;
 import org.microcol.model.campaign.CampaignManager;
 import org.microcol.model.campaign.Mission;
 import org.microcol.model.campaign.ModelCampaignDao;
@@ -70,7 +70,7 @@ public class GameController {
     }
 
     public void startDefaultMission(final String missionName) {
-        final Campaign campaign = campaignManager.getCampaignByName(CampaignDefault.NAME);
+        final Campaign campaign = campaignManager.getCampaignByName(Default_campaign.NAME);
         final Mission mission = campaign.getMisssionByName(missionName);
         startMission(modelCampaignDao.loadFromClassPath(mission.getModelFileName()));
     }
@@ -81,7 +81,7 @@ public class GameController {
     }
 
     public boolean isDefaultCampaignFinished() {
-        final Campaign campaign = campaignManager.getCampaignByName(CampaignDefault.NAME);
+        final Campaign campaign = campaignManager.getCampaignByName(Default_campaign.NAME);
         return campaign.isFinished();
     }
 

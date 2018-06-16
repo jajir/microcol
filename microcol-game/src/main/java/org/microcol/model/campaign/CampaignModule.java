@@ -22,7 +22,7 @@ public class CampaignModule extends AbstractModule {
     @Singleton
     CampaignManager getCampaignManager() {
         return new CampaignManager(
-                Lists.newArrayList(new CampaignFreePlay(), new CampaignDefault()));
+                Lists.newArrayList(new FreePlay_campaign(), new Default_campaign()));
     }
 
 }

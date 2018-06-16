@@ -1,8 +1,6 @@
 package org.microcol.model.campaign;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.function.Function;
 
 import org.microcol.ai.Continent;
@@ -28,37 +26,24 @@ import org.microcol.model.event.GoodsWasSoldInEuropeEvent;
 import org.microcol.model.event.TurnStartedEvent;
 import org.microcol.model.event.UnitMoveFinishedEvent;
 import org.microcol.model.event.UnitMoveStartedEvent;
-import org.microcol.model.store.ModelPo;
 
 import com.google.common.collect.Lists;
 
 /**
  * First mission. Find New World.
  */
-public class DefaultMissionFindNewWold extends AbstractMission {
+public class Default_1_mission extends AbstractMission<Default_1_missionContext> {
 
-    private final static String NAME = "findNewWorld";
+    private final static String MISSION_NAME = "findNewWorld";
 
     public final static String GAME_OVER_REASON = "defaultMission1";
 
-    private final static String MODEL_FIND_NEW_WORLD = "/maps/default-" + NAME + ".json";
-
-    private final static String MAP_KEY_WAS_CONTINENT_ON_SIGHT_MESSAGE_SHOWN = "wasContinentOnSightMessageWasShown";
-
-    private final static String MAP_KEY_WAS_SELL_CIGARS_MESSAGE_SHOWN = "wasSellCigarsMessageShown";
-
-    private final static String MAP_KEY_CIGARS_WAS_SOLD = "cigarsWasSold";
+    private final static String MISSION_MODEL_FILE = "/maps/default-" + MISSION_NAME + ".json";
 
     private final static Integer TRAGET_AMOUNT_OF_CIGARS = 30;
 
-    private Integer cigarsWasSold = 0;
-
-    private boolean wasContinentOnSightMessageShown = false;
-
-    private boolean wasMessageSellCigarsShown = false;
-
-    DefaultMissionFindNewWold() {
-        super(NAME, 0, MODEL_FIND_NEW_WORLD);
+    Default_1_mission() {
+        super(MISSION_NAME, 0, MISSION_MODEL_FILE);
     }
 
     @Override
@@ -128,7 +113,7 @@ public class DefaultMissionFindNewWold extends AbstractMission {
                 if (isFirstTurn(event.getModel()) && event.getUnit().getAvailableMoves() == 0) {
                     missionCallBack.showMessage("campaign.default.pressNextTurn");
                 } else {
-                    if (!wasContinentOnSightMessageShown) {
+                    if (!getContext().isWasContinentOnSightMessageShown()) {
                         final ContinentTool ct = new ContinentTool();
                         final Continents continents = ct.findContinents(event.getModel(),
                                 model.getCurrentPlayer());
@@ -138,7 +123,7 @@ public class DefaultMissionFindNewWold extends AbstractMission {
                         if (event.getUnit().isAtPlaceLocation()
                                 && c.getDistance(event.getUnit().getLocation()) < 4) {
                             missionCallBack.showMessage("campaign.default.continentInSight");
-                            wasContinentOnSightMessageShown = true;
+                            getContext().setWasContinentOnSightMessageShown(true);
                         }
                     }
                 }
@@ -161,9 +146,9 @@ public class DefaultMissionFindNewWold extends AbstractMission {
                     final Player human = getHumanPlayer(event.getModel());
                     if (human.getPlayerStatistics().getGoodsStatistics()
                             .getGoodsAmount(GoodType.CIGARS) >= TRAGET_AMOUNT_OF_CIGARS) {
-                        if (!wasMessageSellCigarsShown) {
+                        if (!getContext().isWasMessageSellCigarsShown()) {
                             missionCallBack.showMessage("campaign.default.sellCigarsInEuropePort");
-                            wasMessageSellCigarsShown = true;
+                            getContext().setWasMessageSellCigarsShown(true);
                         }
                     }
                 }
@@ -172,9 +157,10 @@ public class DefaultMissionFindNewWold extends AbstractMission {
             @Override
             public void goodsWasSoldInEurope(final GoodsWasSoldInEuropeEvent event) {
                 if (event.getGoodsAmount().getGoodType() == GoodType.CIGARS) {
-                    cigarsWasSold += event.getGoodsAmount().getAmount();
+                    getContext().setCigarsWasSold(
+                            getContext().getCigarsWasSold() + event.getGoodsAmount().getAmount());
                 }
-                if (cigarsWasSold >= TRAGET_AMOUNT_OF_CIGARS) {
+                if (getContext().getCigarsWasSold() >= TRAGET_AMOUNT_OF_CIGARS) {
                     missionCallBack.showMessage("campaign.default.cigarsWasSold");
                 }
             }
@@ -207,27 +193,6 @@ public class DefaultMissionFindNewWold extends AbstractMission {
     }
 
     @Override
-    public void initialize(ModelPo modelPo) {
-        if (modelPo.getCampaign().getData() != null) {
-            wasContinentOnSightMessageShown = Boolean.parseBoolean(modelPo.getCampaign().getData()
-                    .get(MAP_KEY_WAS_CONTINENT_ON_SIGHT_MESSAGE_SHOWN));
-            wasMessageSellCigarsShown = Boolean.parseBoolean(
-                    modelPo.getCampaign().getData().get(MAP_KEY_WAS_SELL_CIGARS_MESSAGE_SHOWN));
-            cigarsWasSold = get(modelPo.getCampaign().getData(), MAP_KEY_CIGARS_WAS_SOLD);
-        }
-    }
-
-    @Override
-    public Map<String, String> saveToMap() {
-        final Map<String, String> out = new HashMap<>();
-        out.put(MAP_KEY_WAS_CONTINENT_ON_SIGHT_MESSAGE_SHOWN,
-                Boolean.toString(wasContinentOnSightMessageShown));
-        out.put(MAP_KEY_WAS_SELL_CIGARS_MESSAGE_SHOWN, Boolean.toString(wasMessageSellCigarsShown));
-        out.put(MAP_KEY_CIGARS_WAS_SOLD, Integer.toString(cigarsWasSold));
-        return out;
-    }
-
-    @Override
     public List<Function<Model, GameOverResult>> getGameOverEvaluators() {
         return Lists.newArrayList(GameOverEvaluator.GAMEOVER_CONDITION_CALENDAR,
                 GameOverEvaluator.GAMEOVER_CONDITION_HUMAN_LOST_ALL_COLONIES,
@@ -236,7 +201,7 @@ public class DefaultMissionFindNewWold extends AbstractMission {
 
     @SuppressWarnings("unused")
     private GameOverResult evaluateGameOver(final Model model) {
-        if (cigarsWasSold >= TRAGET_AMOUNT_OF_CIGARS) {
+        if (getContext().getCigarsWasSold() >= TRAGET_AMOUNT_OF_CIGARS) {
             setFinished(true);
             flush();
             return new GameOverResult(GAME_OVER_REASON);

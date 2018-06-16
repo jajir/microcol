@@ -71,7 +71,7 @@ public class CampaignManager {
     }
 
     public Campaign getDefaultCampain() {
-        return getCampaignByName(CampaignDefault.NAME);
+        return getCampaignByName(Default_campaign.NAME);
     }
 
 }

@@ -1,8 +1,6 @@
 package org.microcol.model.campaign;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.function.Function;
 
 import org.microcol.gui.event.model.MissionCallBack;
@@ -15,14 +13,13 @@ import org.microcol.model.event.GameFinishedEvent;
 import org.microcol.model.event.GameStartedEvent;
 import org.microcol.model.event.GoodsWasSoldInEuropeEvent;
 import org.microcol.model.event.TurnStartedEvent;
-import org.microcol.model.store.ModelPo;
 
 import com.google.common.collect.Lists;
 
 /**
  * First mission. Find New World.
  */
-public class DefaultMissionBuildArmy extends AbstractMission {
+public class Default_2_mission extends AbstractMission<Default_2_missionContext> {
 
     private final static String NAME = "buildArmy";
 
@@ -36,19 +33,7 @@ public class DefaultMissionBuildArmy extends AbstractMission {
 
     private final static Integer TARGET_NUMBER_OF_MILITARY_UNITS = 15;
 
-    private final static String KEY_WAS_NUMBER_OF_COLONIES_TARGET_REACHED = "wasNumberOfColoniesTargetReached";
-
-    private final static String KEY_WAS_NUMBER_OF_GOLD_TARGET_REACHED = "wasNumberOfGoldTargetReached";
-
-    private final static String KEY_WAS_NUMBER_OF_MILITARY_UNITS_TARGET_REACHED = "wasNumberOfMilitaryUnitsTargetReached";
-
-    private boolean wasNumberOfColoniesTargetReached = false;
-
-    private boolean wasNumberOfGoldTargetReached = false;
-
-    private boolean wasNumberOfMilitaryUnitsTargetReached = false;
-
-    DefaultMissionBuildArmy() {
+    Default_2_mission() {
         super(NAME, 0, MODEL_FIND_NEW_WORLD);
     }
 
@@ -108,12 +93,12 @@ public class DefaultMissionBuildArmy extends AbstractMission {
 
             @Override
             public void colonyWasFounded(final ColonyWasFoundEvent event) {
-                if (!wasNumberOfColoniesTargetReached) {
+                if (!getContext().isWasNumberOfColoniesTargetReached()) {
                     if (playerHaveMoreOrEqualColonies(event.getModel(),
                             TARGET_NUMBER_OF_COLONIES)) {
                         missionCallBack.showMessage("campaign.default.m2.foundColonies.done",
                                 "campaign.default.m2.get5000");
-                        wasNumberOfColoniesTargetReached = true;
+                        getContext().setWasNumberOfColoniesTargetReached(true);
                     }
                 }
             }
@@ -125,52 +110,28 @@ public class DefaultMissionBuildArmy extends AbstractMission {
 
             @Override
             public void turnStarted(final TurnStartedEvent event) {
-                if (!wasNumberOfMilitaryUnitsTargetReached) {
+                if (!getContext().isWasNumberOfMilitaryUnitsTargetReached()) {
                     if (getNumberOfMilitaryUnits(
                             event.getModel()) >= TARGET_NUMBER_OF_MILITARY_UNITS) {
                         missionCallBack.showMessage("campaign.default.m2.done");
-                        wasNumberOfMilitaryUnitsTargetReached = true;
+                        getContext().setWasNumberOfMilitaryUnitsTargetReached(true);
                     }
                 }
                 checkNumberOfGoldTarget(event.getModel());
             }
 
             private void checkNumberOfGoldTarget(final Model model) {
-                if (!wasNumberOfGoldTargetReached) {
+                if (!getContext().isWasNumberOfGoldTargetReached()) {
                     final int golds = getHumanPlayer(model).getGold();
                     if (golds >= TARGET_NUMBER_OF_GOLD) {
                         missionCallBack.showMessage("campaign.default.m2.get5000.done",
                                 "campaign.default.m2.makeArmy");
-                        wasNumberOfGoldTargetReached = true;
+                        getContext().setWasNumberOfGoldTargetReached(true);
                     }
                 }
             }
 
         });
-    }
-
-    @Override
-    public void initialize(ModelPo modelPo) {
-        if (modelPo.getCampaign().getData() != null) {
-            wasNumberOfColoniesTargetReached = Boolean.parseBoolean(
-                    modelPo.getCampaign().getData().get(KEY_WAS_NUMBER_OF_COLONIES_TARGET_REACHED));
-            wasNumberOfGoldTargetReached = Boolean.parseBoolean(
-                    modelPo.getCampaign().getData().get(KEY_WAS_NUMBER_OF_GOLD_TARGET_REACHED));
-            wasNumberOfMilitaryUnitsTargetReached = Boolean.parseBoolean(modelPo.getCampaign()
-                    .getData().get(KEY_WAS_NUMBER_OF_MILITARY_UNITS_TARGET_REACHED));
-        }
-    }
-
-    @Override
-    public Map<String, String> saveToMap() {
-        final Map<String, String> out = new HashMap<>();
-        out.put(KEY_WAS_NUMBER_OF_COLONIES_TARGET_REACHED,
-                Boolean.toString(wasNumberOfColoniesTargetReached));
-        out.put(KEY_WAS_NUMBER_OF_GOLD_TARGET_REACHED,
-                Boolean.toString(wasNumberOfGoldTargetReached));
-        out.put(KEY_WAS_NUMBER_OF_MILITARY_UNITS_TARGET_REACHED,
-                Boolean.toString(wasNumberOfMilitaryUnitsTargetReached));
-        return out;
     }
 
     @Override
@@ -182,7 +143,7 @@ public class DefaultMissionBuildArmy extends AbstractMission {
 
     @SuppressWarnings("unused")
     private GameOverResult evaluateGameOver(final Model model) {
-        if (wasNumberOfMilitaryUnitsTargetReached) {
+        if (getContext().isWasNumberOfMilitaryUnitsTargetReached()) {
             setFinished(true);
             flush();
             return new GameOverResult(GAME_OVER_REASON);

@@ -1,6 +1,5 @@
 package org.microcol.model.campaign;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import org.microcol.gui.MicroColException;
@@ -14,7 +13,7 @@ import com.google.common.base.Preconditions;
 /**
  * Abstract mission. Contain some basic functionality.
  */
-public abstract class AbstractMission implements Mission {
+public abstract class AbstractMission<T extends MissionContext> implements Mission {
 
     private final String name;
 
@@ -29,6 +28,8 @@ public abstract class AbstractMission implements Mission {
     private boolean isFinished;
 
     private CampaignManager campaignManager;
+
+    private T context;
 
     AbstractMission(final String name, final Integer orderNo, final String modelFileName) {
         this.name = Preconditions.checkNotNull(name);
@@ -91,16 +92,6 @@ public abstract class AbstractMission implements Mission {
         this.isFinished = isFinished;
     }
 
-    @Override
-    public Map<String, String> saveToMap() {
-        return new HashMap<>();
-    }
-
-    @Override
-    public void initialize(final ModelPo modelPo) {
-        // default do nothing implementation
-    }
-
     protected boolean isFirstTurn(final Model model) {
         return model.getCalendar().getCurrentYear() == model.getCalendar().getStartYear();
     }
@@ -161,6 +152,7 @@ public abstract class AbstractMission implements Mission {
      * 
      * @see java.lang.Object#equals(java.lang.Object)
      */
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
@@ -169,7 +161,7 @@ public abstract class AbstractMission implements Mission {
             return false;
         if (getClass() != obj.getClass())
             return false;
-        AbstractMission other = (AbstractMission) obj;
+        AbstractMission<T> other = (AbstractMission) obj;
         if (isFinished != other.isFinished)
             return false;
         if (modelFileName == null) {
@@ -188,6 +180,32 @@ public abstract class AbstractMission implements Mission {
         } else if (!orderNo.equals(other.orderNo))
             return false;
         return true;
+    }
+
+    @Override
+    public void initialize(final ModelPo modelPo) {
+        getContext().initialize(modelPo);
+    }
+
+    @Override
+    public Map<String, String> saveToMap() {
+        return getContext().saveToMap();
+    }
+
+    /**
+     * @return the context
+     */
+    protected T getContext() {
+        return context;
+    }
+
+    /**
+     * @param context
+     *            the context to set
+     */
+    protected void setContext(final T context) {
+        Preconditions.checkNotNull(context);
+        this.context = context;
     }
 
 }

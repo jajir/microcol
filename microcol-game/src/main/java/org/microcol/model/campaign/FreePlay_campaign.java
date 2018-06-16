@@ -1,12 +1,12 @@
 package org.microcol.model.campaign;
 
-public class CampaignFreePlay extends AbstractCampaign {
+public class FreePlay_campaign extends AbstractCampaign {
 
     public final static String FREE_PLAY = "freePlay";
 
-    CampaignFreePlay() {
+    FreePlay_campaign() {
         super(FREE_PLAY);
-        addMission(new MissionFreePlay());
+        addMission(new FreePlay_1_mission());
     }
 
 }

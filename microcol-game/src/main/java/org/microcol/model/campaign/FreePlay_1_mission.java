@@ -16,15 +16,15 @@ import com.google.common.collect.Lists;
  * Free play mission definition. There are no limitations player can do
  * anything.
  */
-public class MissionFreePlay extends AbstractMission {
+public class FreePlay_1_mission extends AbstractMission<Empty_missionContext> {
 
     /**
      * Free play game map.
      */
     private final static String FREE_PLAY_MISSION_MAP = "/maps/free-play.json";
 
-    MissionFreePlay() {
-        super(CampaignFreePlay.FREE_PLAY, 0, FREE_PLAY_MISSION_MAP);
+    FreePlay_1_mission() {
+        super(FreePlay_campaign.FREE_PLAY, 0, FREE_PLAY_MISSION_MAP);
     }
 
     @Override

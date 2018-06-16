@@ -17,7 +17,7 @@ import com.google.common.collect.Lists;
 /**
  * First mission. Thrive.
  */
-public class DefaultMissionThrive extends AbstractMission {
+public class Default_3_mission extends AbstractMission<Empty_missionContext> {
 
     private final static String NAME = "thrive";
 
@@ -25,7 +25,7 @@ public class DefaultMissionThrive extends AbstractMission {
 
     private final static String MODEL_FIND_NEW_WORLD = "/maps/default-" + NAME + ".json";
 
-    DefaultMissionThrive() {
+    Default_3_mission() {
         super(NAME, 0, MODEL_FIND_NEW_WORLD);
     }
 
