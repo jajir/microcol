@@ -29,7 +29,7 @@ public class FreePlay_1_mission extends AbstractMission<Empty_missionContext> {
 
     @Override
     public void startMission(final Model model, final MissionCallBack missionCallBack) {
-        model.addListener(new ExtendedModelListenerAdapter() {
+        model.addListener(new AbstractModelListenerAdapter() {
 
             @Override
             protected List<Function<GameFinishedEvent, String>> prepareEvaluators() {

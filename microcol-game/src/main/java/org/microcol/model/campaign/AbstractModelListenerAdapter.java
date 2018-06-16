@@ -11,11 +11,11 @@ import org.microcol.model.event.GameFinishedEvent;
  * Enhanced model listener adapter. It allows easily define and process game
  * over conditions.
  */
-public abstract class ExtendedModelListenerAdapter extends ModelListenerAdapter {
+public abstract class AbstractModelListenerAdapter extends ModelListenerAdapter {
 
     private final ChainOfCommandStrategy<GameFinishedEvent, String> cocs;
 
-    protected ExtendedModelListenerAdapter() {
+    protected AbstractModelListenerAdapter() {
         cocs = new ChainOfCommandStrategy<>(prepareEvaluators());
     }
 
@@ -26,14 +26,5 @@ public abstract class ExtendedModelListenerAdapter extends ModelListenerAdapter 
         cocs.apply(event);
     }
 
-    class Holder {
-        Function<GameFinishedEvent, String> function;
-        String code;
-        GameFinishedEvent event;
-
-        Holder() {
-
-        }
-    }
 
 }
