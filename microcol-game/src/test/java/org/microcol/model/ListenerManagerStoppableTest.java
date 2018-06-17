@@ -97,7 +97,7 @@ public class ListenerManagerStoppableTest {
         }
 
         @Override
-        public void unitMoveStarted(UnitMoveStartedEvent event) {
+        public void onUnitMoveStarted(UnitMoveStartedEvent event) {
             called = true;
             if (stopEvent) {
                 event.stopEventExecution();

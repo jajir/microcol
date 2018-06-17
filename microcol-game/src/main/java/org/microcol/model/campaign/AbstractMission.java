@@ -29,6 +29,9 @@ public abstract class AbstractMission<T extends MissionContext> implements Missi
 
     private CampaignManager campaignManager;
 
+    /**
+     * Running mission context. There is stored player's achievements.
+     */
     private T context;
 
     AbstractMission(final String name, final Integer orderNo, final String modelFileName) {
@@ -182,9 +185,13 @@ public abstract class AbstractMission<T extends MissionContext> implements Missi
         return true;
     }
 
+    protected abstract T getNewContext();
+
     @Override
     public void initialize(final ModelPo modelPo) {
-        getContext().initialize(modelPo);
+        Preconditions.checkNotNull(modelPo, "Model persisten obbject is null");
+        context = getNewContext();
+        context.initialize(modelPo);
     }
 
     @Override

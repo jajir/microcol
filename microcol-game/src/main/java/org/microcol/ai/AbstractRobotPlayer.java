@@ -122,7 +122,7 @@ public abstract class AbstractRobotPlayer {
         }
 
         @Override
-        public void turnStarted(final TurnStartedEvent event) {
+        public void onTurnStarted(final TurnStartedEvent event) {
             onTurnStarted.accept(event);
         }
 

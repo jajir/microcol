@@ -24,17 +24,17 @@ import org.microcol.model.event.UnitMovedToHighSeasEvent;
  */
 public interface ModelListener {
 
-    void gameStarted(GameStartedEvent event);
+    void onGameStarted(GameStartedEvent event);
 
-    void roundStarted(RoundStartedEvent event);
+    void onRoundStarted(RoundStartedEvent event);
 
-    void turnStarted(TurnStartedEvent event);
+    void onTurnStarted(TurnStartedEvent event);
 
-    void unitMovedStep(UnitMovedStepEvent event);
+    void onUnitMovedStep(UnitMovedStepEvent event);
 
-    void unitMovedToHighSeas(UnitMovedToHighSeasEvent event);
+    void onUnitMovedToHighSeas(UnitMovedToHighSeasEvent event);
 
-    void unitMoveStarted(UnitMoveStartedEvent event);
+    void onUnitMoveStarted(UnitMoveStartedEvent event);
 
     /**
      * It's called move is finished. No other move step event could come.
@@ -42,27 +42,27 @@ public interface ModelListener {
      * @param event
      *            required event
      */
-    void unitMoveFinished(UnitMoveFinishedEvent event);
+    void onUnitMoveFinished(UnitMoveFinishedEvent event);
 
-    void beforeEndTurn(BeforeEndTurnEvent event);
+    void onBeforeEndTurn(BeforeEndTurnEvent event);
 
-    void unitAttacked(UnitAttackedEvent event);
+    void onUnitAttacked(UnitAttackedEvent event);
 
-    void unitEmbarked(UnitEmbarkedEvent event);
+    void onUnitEmbarked(UnitEmbarkedEvent event);
 
-    void colonyWasFounded(ColonyWasFoundEvent event);
+    void onColonyWasFounded(ColonyWasFoundEvent event);
 
-    void colonyWasCaptured(ColonyWasCapturedEvent event);
+    void onColonyWasCaptured(ColonyWasCapturedEvent event);
 
-    void gameFinished(GameFinishedEvent event);
+    void onGameFinished(GameFinishedEvent event);
 
-    void debugRequested(DebugRequestedEvent event);
+    void onDebugRequested(DebugRequestedEvent event);
 
-    void goldWasChanged(GoldWasChangedEvent event);
+    void onGoldWasChanged(GoldWasChangedEvent event);
 
-    void goodsWasSoldInEurope(GoodsWasSoldInEuropeEvent event);
+    void onGoodsWasSoldInEurope(GoodsWasSoldInEuropeEvent event);
 
-    void beforeDeclaringIndependence(BeforeDeclaringIndependenceEvent event);
+    void onBeforeDeclaringIndependence(BeforeDeclaringIndependenceEvent event);
 
-    void independenceWasDeclared(IndependenceWasDeclaredEvent event);
+    void onIndependenceWasDeclared(IndependenceWasDeclaredEvent event);
 }

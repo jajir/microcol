@@ -22,92 +22,92 @@ import org.microcol.model.event.UnitMovedToHighSeasEvent;
 public class ModelListenerAdapter implements ModelListener {
 
     @Override
-    public void gameStarted(final GameStartedEvent event) {
+    public void onGameStarted(final GameStartedEvent event) {
         // Do nothing.
     }
 
     @Override
-    public void roundStarted(final RoundStartedEvent event) {
+    public void onRoundStarted(final RoundStartedEvent event) {
         // Do nothing.
     }
 
     @Override
-    public void turnStarted(final TurnStartedEvent event) {
+    public void onTurnStarted(final TurnStartedEvent event) {
         // Do nothing.
     }
 
     @Override
-    public void unitMovedStep(final UnitMovedStepEvent event) {
+    public void onUnitMovedStep(final UnitMovedStepEvent event) {
         // Do nothing.
     }
 
     @Override
-    public void unitMovedToHighSeas(final UnitMovedToHighSeasEvent event) {
+    public void onUnitMovedToHighSeas(final UnitMovedToHighSeasEvent event) {
         // Do nothing.
     }
 
     @Override
-    public void unitMoveFinished(final UnitMoveFinishedEvent event) {
+    public void onUnitMoveFinished(final UnitMoveFinishedEvent event) {
         // Do nothing.
     }
 
     @Override
-    public void unitAttacked(final UnitAttackedEvent event) {
+    public void onUnitAttacked(final UnitAttackedEvent event) {
         // Do nothing.
     }
 
     @Override
-    public void unitEmbarked(final UnitEmbarkedEvent event) {
+    public void onUnitEmbarked(final UnitEmbarkedEvent event) {
         // Do nothing.
     }
 
     @Override
-    public void goldWasChanged(final GoldWasChangedEvent event) {
+    public void onGoldWasChanged(final GoldWasChangedEvent event) {
         // Do nothing.
     }
 
     @Override
-    public void goodsWasSoldInEurope(GoodsWasSoldInEuropeEvent event) {
+    public void onGoodsWasSoldInEurope(GoodsWasSoldInEuropeEvent event) {
         // Do nothing.
     }
 
     @Override
-    public void colonyWasFounded(ColonyWasFoundEvent event) {
+    public void onColonyWasFounded(ColonyWasFoundEvent event) {
         // Do nothing.
     }
 
     @Override
-    public void colonyWasCaptured(final ColonyWasCapturedEvent event) {
+    public void onColonyWasCaptured(final ColonyWasCapturedEvent event) {
         // Do nothing.
     }
 
     @Override
-    public void gameFinished(final GameFinishedEvent event) {
+    public void onGameFinished(final GameFinishedEvent event) {
         // Do nothing.
     }
 
     @Override
-    public void debugRequested(final DebugRequestedEvent event) {
+    public void onDebugRequested(final DebugRequestedEvent event) {
         // Do nothing.
     }
 
     @Override
-    public void unitMoveStarted(final UnitMoveStartedEvent event) {
+    public void onUnitMoveStarted(final UnitMoveStartedEvent event) {
         // Do nothing.
     }
 
     @Override
-    public void beforeEndTurn(final BeforeEndTurnEvent event) {
+    public void onBeforeEndTurn(final BeforeEndTurnEvent event) {
         // Do nothing.
     }
 
     @Override
-    public void independenceWasDeclared(final IndependenceWasDeclaredEvent event) {
+    public void onIndependenceWasDeclared(final IndependenceWasDeclaredEvent event) {
         // Do nothing.
     }
 
     @Override
-    public void beforeDeclaringIndependence(final BeforeDeclaringIndependenceEvent event) {
+    public void onBeforeDeclaringIndependence(final BeforeDeclaringIndependenceEvent event) {
         // Do nothing.
     }
 }

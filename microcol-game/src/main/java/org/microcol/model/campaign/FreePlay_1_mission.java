@@ -7,8 +7,6 @@ import org.microcol.gui.event.model.MissionCallBack;
 import org.microcol.model.GameOverEvaluator;
 import org.microcol.model.GameOverResult;
 import org.microcol.model.Model;
-import org.microcol.model.event.GameFinishedEvent;
-import org.microcol.model.event.IndependenceWasDeclaredEvent;
 
 import com.google.common.collect.Lists;
 
@@ -29,50 +27,18 @@ public class FreePlay_1_mission extends AbstractMission<Empty_missionContext> {
 
     @Override
     public void startMission(final Model model, final MissionCallBack missionCallBack) {
-        model.addListener(new AbstractModelListenerAdapter() {
-
-            @Override
-            protected List<Function<GameFinishedEvent, String>> prepareEvaluators() {
-                return Lists.newArrayList((event) -> {
-                    if (GameOverEvaluator.GAMEOVER_CONDITION_CALENDAR
-                            .equals(event.getGameOverResult().getGameOverReason())) {
-                        missionCallBack.executeOnFrontEnd(context -> {
-                            context.showMessage("dialogGameOver.timeIsUp");
-                            context.goToGameMenu();
-                        });
-                        return "ok";
-                    }
-                    return null;
-                }, (event) -> {
-                    if (GameOverEvaluator.GAMEOVER_CONDITION_HUMAN_LOST_ALL_COLONIES
-                            .equals(event.getGameOverResult().getGameOverReason())) {
-                        missionCallBack.executeOnFrontEnd(context -> {
-                            context.showMessage("dialogGameOver.allColoniesAreLost");
-                            context.goToGameMenu();
-                        });
-                        return "ok";
-                    }
-                    return null;
-                });
-            }
-
-            @Override
-            public void independenceWasDeclared(final IndependenceWasDeclaredEvent event) {
-                missionCallBack.showMessage("dialogIndependenceWasDeclared.caption");
-            }
-
-            @Override
-            public void gameFinished(final GameFinishedEvent event) {
-
-            }
-
-        });
+        model.addListener(new FreePlay_1_missionDefinition(this, missionCallBack));
     }
 
     @Override
     public List<Function<Model, GameOverResult>> getGameOverEvaluators() {
         return Lists.newArrayList(GameOverEvaluator.GAMEOVER_CONDITION_CALENDAR,
                 GameOverEvaluator.GAMEOVER_CONDITION_HUMAN_LOST_ALL_COLONIES);
+    }
+
+    @Override
+    protected Empty_missionContext getNewContext() {
+        return new Empty_missionContext();
     }
 
 }

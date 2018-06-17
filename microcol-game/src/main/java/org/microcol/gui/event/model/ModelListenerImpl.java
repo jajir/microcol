@@ -49,110 +49,110 @@ public class ModelListenerImpl implements ModelListener {
     }
 
     @Override
-    public void turnStarted(final TurnStartedEvent event) {
+    public void onTurnStarted(final TurnStartedEvent event) {
         modelEventManager.getTurnStartedController().fireEvent(event);
     }
 
     @Override
-    public void unitMovedStep(final UnitMovedStepEvent event) {
+    public void onUnitMovedStep(final UnitMovedStepEvent event) {
         if (event.canPlayerSeeMove(gameModelController.getCurrentPlayer())) {
             modelEventManager.getUnitMovedController().fireEvent(event);
         }
     }
 
     @Override
-    public void unitMovedToHighSeas(final UnitMovedToHighSeasEvent event) {
+    public void onUnitMovedToHighSeas(final UnitMovedToHighSeasEvent event) {
         if (event.getUnit().getOwner().equals(gameModelController.getCurrentPlayer())) {
             modelEventManager.getUnitMovedToHighSeasController().fireEvent(event);
         }
     }
 
     @Override
-    public void unitMoveFinished(final UnitMoveFinishedEvent event) {
+    public void onUnitMoveFinished(final UnitMoveFinishedEvent event) {
         modelEventManager.getUnitMoveFinishedController().fireEvent(event);
     }
 
     @Override
-    public void roundStarted(final RoundStartedEvent event) {
+    public void onRoundStarted(final RoundStartedEvent event) {
         modelEventManager.getRoundStartedController().fireEvent(event);
     }
 
     @Override
-    public void gameStarted(final GameStartedEvent event) {
+    public void onGameStarted(final GameStartedEvent event) {
         modelEventManager.getGameStartedController().fireEvent(event);
         final Optional<Player> human = event.getModel().getPlayers().stream()
                 .filter(player -> player.isHuman()).findAny();
         if (human.isPresent()) {
-            goldWasChanged(new GoldWasChangedEvent(event.getModel(), human.get(),
+            onGoldWasChanged(new GoldWasChangedEvent(event.getModel(), human.get(),
                     human.get().getGold(), human.get().getGold()));
         }
     }
 
     @Override
-    public void gameFinished(final GameFinishedEvent event) {
+    public void onGameFinished(final GameFinishedEvent event) {
         modelEventManager.getGameFinishedController().fireEvent(event);
     }
 
     @Override
-    public void debugRequested(final DebugRequestedEvent event) {
+    public void onDebugRequested(final DebugRequestedEvent event) {
         modelEventManager.getDebugRequestController().fireEvent(event);
     }
 
     @Override
-    public void unitAttacked(final UnitAttackedEvent event) {
+    public void onUnitAttacked(final UnitAttackedEvent event) {
         modelEventManager.getUnitAttackedEventController().fireEvent(event);
     }
 
     @Override
-    public void goldWasChanged(final GoldWasChangedEvent event) {
+    public void onGoldWasChanged(final GoldWasChangedEvent event) {
         if (event.getPlayer().isHuman()) {
             modelEventManager.getGoldWasChangedController().fireEvent(event);
         }
     }
 
     @Override
-    public void colonyWasCaptured(final ColonyWasCapturedEvent event) {
+    public void onColonyWasCaptured(final ColonyWasCapturedEvent event) {
         if (event.getCapturedColony().getOwner().isHuman()) {
             modelEventManager.getColonyWasCapturedController().fireEvent(event);
         }
     }
 
     @Override
-    public void unitEmbarked(final UnitEmbarkedEvent event) {
+    public void onUnitEmbarked(final UnitEmbarkedEvent event) {
         if (event.getUnit().getOwner().isHuman()) {
             modelEventManager.getUnitEmbarkController().fireEvent(event);
         }
     }
 
     @Override
-    public void unitMoveStarted(final UnitMoveStartedEvent event) {
+    public void onUnitMoveStarted(final UnitMoveStartedEvent event) {
         // Front-end doesn't care about this event.
     }
 
     @Override
-    public void beforeEndTurn(final BeforeEndTurnEvent event) {
+    public void onBeforeEndTurn(final BeforeEndTurnEvent event) {
         // Front-end doesn't care about this event.
     }
 
     @Override
-    public void colonyWasFounded(final ColonyWasFoundEvent event) {
+    public void onColonyWasFounded(final ColonyWasFoundEvent event) {
         // Front-end doesn't care about this event.
     }
 
     @Override
-    public void goodsWasSoldInEurope(final GoodsWasSoldInEuropeEvent event) {
+    public void onGoodsWasSoldInEurope(final GoodsWasSoldInEuropeEvent event) {
         // Front-end doesn't care about this event.
     }
 
     @Override
-    public void independenceWasDeclared(final IndependenceWasDeclaredEvent event) {
+    public void onIndependenceWasDeclared(final IndependenceWasDeclaredEvent event) {
         if (event.getWhoDecalareIt().isHuman()) {
             modelEventManager.getIndependenceWasDeclaredColntroller().fireEvent(event);
         }
     }
 
     @Override
-    public void beforeDeclaringIndependence(final BeforeDeclaringIndependenceEvent event) {
+    public void onBeforeDeclaringIndependence(final BeforeDeclaringIndependenceEvent event) {
         // Front-end doesn't care about this event.
     }
 

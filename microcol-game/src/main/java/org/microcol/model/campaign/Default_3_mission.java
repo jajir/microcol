@@ -8,9 +8,6 @@ import org.microcol.model.GameOverEvaluator;
 import org.microcol.model.GameOverResult;
 import org.microcol.model.Model;
 import org.microcol.model.Player;
-import org.microcol.model.event.GameFinishedEvent;
-import org.microcol.model.event.GameStartedEvent;
-import org.microcol.model.event.IndependenceWasDeclaredEvent;
 
 import com.google.common.collect.Lists;
 
@@ -31,60 +28,7 @@ public class Default_3_mission extends AbstractMission<Empty_missionContext> {
 
     @Override
     public void startMission(final Model model, final MissionCallBack missionCallBack) {
-        model.addListener(new AbstractModelListenerAdapter() {
-
-            @Override
-            protected List<Function<GameFinishedEvent, String>> prepareEvaluators() {
-                return Lists.newArrayList((event) -> {
-                    if (GameOverEvaluator.REASON_TIME_IS_UP
-                            .equals(event.getGameOverResult().getGameOverReason())) {
-                        missionCallBack.executeOnFrontEnd(context -> {
-                            context.showMessage("dialogGameOver.timeIsUp");
-                            context.goToGameMenu();
-                        });
-                        return "ok";
-                    }
-                    return null;
-                }, (event) -> {
-                    if (GameOverEvaluator.REASON_NO_COLONIES
-                            .equals(event.getGameOverResult().getGameOverReason())) {
-                        missionCallBack.executeOnFrontEnd(context -> {
-                            context.showMessage("dialogGameOver.allColoniesAreLost");
-                            context.goToGameMenu();
-                        });
-                        return "ok";
-                    }
-                    return null;
-                }, (event) -> {
-                    if (GAME_OVER_REASON.equals(event.getGameOverResult().getGameOverReason())) {
-                        missionCallBack.executeOnFrontEnd(context -> {
-                            context.showMessage("campaign.default.m3.done1",
-                                    "campaign.default.m3.done2");
-                            context.goToGameMenu();
-                        });
-                        return "ok";
-                    }
-                    return null;
-                });
-            }
-
-            @Override
-            public void gameStarted(final GameStartedEvent event) {
-                if (isFirstTurn(event.getModel())) {
-                    missionCallBack.addCallWhenReady(model -> {
-                        missionCallBack.showMessage("campaign.default.m3.start",
-                                "campaign.default.m3.declareIndependence");
-                    });
-                }
-            }
-
-            @Override
-            public void independenceWasDeclared(final IndependenceWasDeclaredEvent event) {
-                missionCallBack.showMessage("campaign.default.m3.declareIndependence.done",
-                        "campaign.default.m3.portIsClosed");
-            }
-
-        });
+        model.addListener(new Default_3_missionDefinition(this, missionCallBack));
     }
 
     @Override
@@ -104,6 +48,11 @@ public class Default_3_mission extends AbstractMission<Empty_missionContext> {
             }
         }
         return null;
+    }
+
+    @Override
+    protected Empty_missionContext getNewContext() {
+        return new Empty_missionContext();
     }
 
 }

@@ -72,7 +72,7 @@ class ListenerManager {
 
         logger.info("Game started: {}.", event);
 
-        listeners.forEach(listener -> listener.gameStarted(event));
+        listeners.forEach(listener -> listener.onGameStarted(event));
     }
 
     void fireRoundStarted(final Model model, final Calendar calendar) {
@@ -80,7 +80,7 @@ class ListenerManager {
 
         logger.info("Round started: {}.", event);
 
-        executeInSeparateThread(listener -> listener.roundStarted(event));
+        executeInSeparateThread(listener -> listener.onRoundStarted(event));
     }
 
     void fireTurnStarted(final Model model, final Player player, final boolean isFreshStart) {
@@ -88,7 +88,7 @@ class ListenerManager {
 
         logger.info("Turn started: {}.", event);
 
-        executeInSeparateThread(listener -> listener.turnStarted(event));
+        executeInSeparateThread(listener -> listener.onTurnStarted(event));
     }
 
     void fireUnitMovedStep(final Model model, final Unit unit, final Location start,
@@ -97,7 +97,7 @@ class ListenerManager {
 
         logger.info("Unit moved: {}.", event);
 
-        executeInSameThread(listener -> listener.unitMovedStep(event));
+        executeInSameThread(listener -> listener.onUnitMovedStep(event));
     }
 
     void fireUnitMovedFinished(final Model model, final Unit unit, final Path path) {
@@ -105,7 +105,7 @@ class ListenerManager {
 
         logger.info("Unit moved: {}.", event);
 
-        executeInSameThread(listener -> listener.unitMoveFinished(event));
+        executeInSameThread(listener -> listener.onUnitMoveFinished(event));
     }
 
     void fireUnitMovedToHighSeas(final Model model, final Unit unit) {
@@ -113,7 +113,7 @@ class ListenerManager {
 
         logger.info("Unit moved to high seas: {}.", event);
 
-        executeInSameThread(listener -> listener.unitMovedToHighSeas(event));
+        executeInSameThread(listener -> listener.onUnitMovedToHighSeas(event));
     }
 
     boolean fireBeforeEndTurn(final Model model) {
@@ -122,7 +122,7 @@ class ListenerManager {
         logger.info("Before End Turn: {}.", event);
 
         return evaluateInSameThread(listener -> {
-            listener.beforeEndTurn(event);
+            listener.onBeforeEndTurn(event);
             return event.isStopped();
         });
     }
@@ -145,7 +145,7 @@ class ListenerManager {
         logger.info("Unit move started: {}.", event);
 
         return evaluateInSameThread(listener -> {
-            listener.unitMoveStarted(event);
+            listener.onUnitMoveStarted(event);
             return event.isStopped();
         });
     }
@@ -156,7 +156,7 @@ class ListenerManager {
 
         logger.info("Unit attacked: {}.", event);
 
-        executeInSeparateThread(listener -> listener.unitAttacked(event));
+        executeInSeparateThread(listener -> listener.onUnitAttacked(event));
     }
 
     void fireUnitEmbarked(final Model model, final Unit unit, final CargoSlot slot) {
@@ -164,7 +164,7 @@ class ListenerManager {
 
         logger.info("Unit embarked: {}.", event);
 
-        listeners.forEach(listener -> listener.unitEmbarked(event));
+        listeners.forEach(listener -> listener.onUnitEmbarked(event));
     }
 
     void fireIndependenceWasDeclared(final Model model, final Player whoDecalareIt) {
@@ -173,7 +173,7 @@ class ListenerManager {
 
         logger.info("Independence was declared: {}.", event);
 
-        listeners.forEach(listener -> listener.independenceWasDeclared(event));
+        listeners.forEach(listener -> listener.onIndependenceWasDeclared(event));
     }
 
     boolean fireBeforeDeclaringIndependence(final Model model, final Player whoDecalareIt) {
@@ -183,7 +183,7 @@ class ListenerManager {
         logger.info("Before declaring independence: {}.", event);
 
         return evaluateInSameThread(listener -> {
-            listener.beforeDeclaringIndependence(event);
+            listener.onBeforeDeclaringIndependence(event);
             return event.isStopped();
         });
     }
@@ -195,7 +195,7 @@ class ListenerManager {
 
         logger.info("Gold amount changed: {}.", event);
 
-        listeners.forEach(listener -> listener.goldWasChanged(event));
+        listeners.forEach(listener -> listener.onGoldWasChanged(event));
     }
 
     void fireGoodsWasSoldInEurope(final Model model, final GoodsAmount goodsAmount) {
@@ -203,7 +203,7 @@ class ListenerManager {
 
         logger.info("Goods was sold in Europe: {}.", event);
 
-        listeners.forEach(listener -> listener.goodsWasSoldInEurope(event));
+        listeners.forEach(listener -> listener.onGoodsWasSoldInEurope(event));
     }
 
     void fireColonyWasFounded(final Model model, final Colony foundedColony) {
@@ -211,7 +211,7 @@ class ListenerManager {
 
         logger.info("Colony was founded: {}.", event);
 
-        listeners.forEach(listener -> listener.colonyWasFounded(event));
+        listeners.forEach(listener -> listener.onColonyWasFounded(event));
     }
 
     void fireColonyWasCaptured(final Model model, final Unit capturingUnit,
@@ -221,7 +221,7 @@ class ListenerManager {
 
         logger.info("Colony was captured: {}.", event);
 
-        listeners.forEach(listener -> listener.colonyWasCaptured(event));
+        listeners.forEach(listener -> listener.onColonyWasCaptured(event));
     }
 
     void fireGameFinished(final Model model, final GameOverResult gameOverResult) {
@@ -229,13 +229,13 @@ class ListenerManager {
 
         logger.info("Game finished: {}.", event);
 
-        listeners.forEach(listener -> listener.gameFinished(event));
+        listeners.forEach(listener -> listener.onGameFinished(event));
     }
 
     void fireDebugRequested(final Model model, final List<Location> locations) {
         final DebugRequestedEvent event = new DebugRequestedEvent(model, locations);
 
-        listeners.forEach(listener -> listener.debugRequested(event));
+        listeners.forEach(listener -> listener.onDebugRequested(event));
     }
 
     private void executeInSeparateThread(Consumer<ModelListener> action) {
