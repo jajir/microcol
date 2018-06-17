@@ -725,5 +725,9 @@
   "campaign": {
   	"name": "freePlay",
   	"mission": "freePlay"
+  },
+  "focusedField": {
+    "x": 35,
+    "y": 15
   }
 }

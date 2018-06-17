@@ -58,7 +58,7 @@ public class SelectedUnitManager {
         unitMovedToHighSeasController.addListener(this::onUnitMovedToHighSeas);
         unitMovedToFieldController.addListener(this::onUnitMovedToField);
     }
-
+    
     private void onUnitMovedToField(final UnitMovedToFieldEvent event) {
         if (event.getUnit().equals(selectedUnit)) {
             unselectUnit();

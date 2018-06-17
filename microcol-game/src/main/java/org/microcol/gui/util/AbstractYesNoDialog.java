@@ -11,7 +11,7 @@ public abstract class AbstractYesNoDialog extends AbstractMessageWindow {
     public AbstractYesNoDialog(final ViewUtil viewUtil, final Text text,
             final String dialogCaption) {
         super(viewUtil);
-        getDialog().setTitle(dialogCaption);
+        setTitle(dialogCaption);
 
         /**
          * Buttons
@@ -19,11 +19,11 @@ public abstract class AbstractYesNoDialog extends AbstractMessageWindow {
         final ButtonsBarYesNo buttonsBar = new ButtonsBarYesNo(text);
         buttonsBar.getButtonYes().setOnAction(e -> {
             isSelectedYes = true;
-            getDialog().close();
+            close();
         });
         buttonsBar.getButtonNo().setOnAction(e -> {
             isSelectedYes = false;
-            getDialog().close();
+            close();
         });
         buttonsBar.getButtonYes().requestFocus();
 
@@ -33,7 +33,7 @@ public abstract class AbstractYesNoDialog extends AbstractMessageWindow {
     }
 
     public boolean showWaitAndReturnIfYesWasSelected() {
-        getDialog().showAndWait();
+        showAndWait();
         return isSelectedYes;
     }
 

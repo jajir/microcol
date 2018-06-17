@@ -31,7 +31,7 @@ public class RecruiteUnitsDialog extends AbstractMessageWindow {
         super(viewUtil);
         Preconditions.checkNotNull(imageProvider);
         Preconditions.checkNotNull(gameModelController);
-        getDialog().setTitle(text.get("recruitUnitDialog.title"));
+        setTitle(text.get("recruitUnitDialog.title"));
         final Label labelCaption = new Label(text.get("recruitUnitDialog.title"));
 
         final VBox root = new VBox();
@@ -51,14 +51,10 @@ public class RecruiteUnitsDialog extends AbstractMessageWindow {
 
         final ButtonsBar buttonBar = new ButtonsBar(text);
         buttonBar.getButtonOk().setOnAction(e -> {
-            getDialog().close();
+            close();
         });
 
         root.getChildren().addAll(labelCaption, gridWithUnits, buttonBar);
-    }
-
-    public void showAndWait() {
-        getDialog().showAndWait();
     }
 
 }

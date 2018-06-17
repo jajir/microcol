@@ -60,7 +60,7 @@ public class DialogFigth extends AbstractMessageWindow {
         super(viewUtil);
         this.localizationHelper = Preconditions.checkNotNull(localizationHelper);
         this.imageProvider = Preconditions.checkNotNull(imageProvider);
-        getDialog().setTitle(text.get("dialogFight.title"));
+        setTitle(text.get("dialogFight.title"));
 
         final GridPane root = new GridPane();
         final ColumnConstraints columnLeft = new ColumnConstraints();
@@ -144,7 +144,7 @@ public class DialogFigth extends AbstractMessageWindow {
         attackerLabelName.setText(localizationHelper.getUnitName(unitDefender.getType()));
         attackerImageView.setImage(imageProvider.getUnitImage(unitDefender.getType()));
 
-        getDialog().showAndWait();
+        showAndWait();
         return userChooseFight;
     }
 
@@ -154,7 +154,7 @@ public class DialogFigth extends AbstractMessageWindow {
         if (isCheckBoxShowNextTimeSelected) {
             gamePreferences.getShowFightAdvisorProperty().set(false);
         }
-        getDialog().close();
+        close();
     }
 
     private void onClickFight(final boolean isCheckBoxShowNextTimeSelected,
@@ -163,7 +163,7 @@ public class DialogFigth extends AbstractMessageWindow {
         if (isCheckBoxShowNextTimeSelected) {
             gamePreferences.getShowFightAdvisorProperty().set(false);
         }
-        getDialog().close();
+        close();
     }
 
     public boolean isUserChooseFight() {

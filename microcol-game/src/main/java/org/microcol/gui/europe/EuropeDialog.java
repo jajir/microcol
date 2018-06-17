@@ -53,7 +53,7 @@ public class EuropeDialog extends AbstractMessageWindow implements EuropeDialogC
         propertyShiftWasPressed = new SimpleBooleanProperty(false);
         Preconditions.checkNotNull(imageProvider);
         Preconditions.checkNotNull(gameModelController);
-        getDialog().setTitle(text.get("europe.title"));
+        setTitle(text.get("europe.title"));
 
         final Label label = new Label(text.get("europe.title"));
 
@@ -79,7 +79,7 @@ public class EuropeDialog extends AbstractMessageWindow implements EuropeDialogC
         buyButton.setOnAction(event -> buyUnitsDialog.showAndWait());
         final Button buttonOk = new Button(text.get("dialog.ok"));
         buttonOk.setOnAction(e -> {
-            getDialog().close();
+            close();
         });
         buttonOk.requestFocus();
         final VBox panelButtons = new VBox();
@@ -113,7 +113,7 @@ public class EuropeDialog extends AbstractMessageWindow implements EuropeDialogC
 
     public void show() {
         repaint();
-        getDialog().showAndWait();
+        showAndWait();
     }
 
     @Override

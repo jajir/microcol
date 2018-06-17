@@ -28,7 +28,7 @@ public class TurnReportDialog extends AbstractMessageWindow implements TurnRepor
         super(viewUtil);
         this.gameModelController = Preconditions.checkNotNull(gameModelController);
         this.text = Preconditions.checkNotNull(text);
-        getDialog().setTitle(text.get("turnReport.title"));
+        setTitle(text.get("turnReport.title"));
 
         final Label labelCaption = new Label(text.get("turnReport.caption"));
 
@@ -62,12 +62,12 @@ public class TurnReportDialog extends AbstractMessageWindow implements TurnRepor
 
     @SuppressWarnings("unused")
     private void onClose(final ActionEvent event) {
-        getDialog().close();
+        close();
     }
 
     public void show() {
         repaint();
-        getDialog().showAndWait();
+        showAndWait();
     }
 
 }

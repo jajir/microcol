@@ -39,7 +39,7 @@ public class BuyUnitsDialog extends AbstractMessageWindow {
         this.europeDialogCallback = Preconditions.checkNotNull(europeDialogCallback);
         Preconditions.checkNotNull(imageProvider);
         Preconditions.checkNotNull(gameModelController);
-        getDialog().setTitle(text.get("buyUnitDialog.title"));
+        setTitle(text.get("buyUnitDialog.title"));
         final Label labelCaption = new Label(text.get("buyUnitDialog.title"));
 
         final VBox root = new VBox();
@@ -66,7 +66,7 @@ public class BuyUnitsDialog extends AbstractMessageWindow {
 
         final ButtonsBar buttonBar = new ButtonsBar(text);
         buttonBar.getButtonOk().setOnAction(e -> {
-            getDialog().close();
+            close();
         });
 
         root.getChildren().addAll(labelCaption, gridWithUnits, buttonBar);
@@ -74,11 +74,7 @@ public class BuyUnitsDialog extends AbstractMessageWindow {
 
     public void closeAndRepaint() {
         europeDialogCallback.repaint();
-        getDialog().close();
-    }
-
-    public void showAndWait() {
-        getDialog().showAndWait();
+        close();
     }
 
 }

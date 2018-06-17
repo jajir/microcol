@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import org.microcol.model.Location;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
 
@@ -33,6 +34,12 @@ public class MouseOverTileManager {
         this.mouseOverTileChangedController = Preconditions
                 .checkNotNull(mouseOverTileChangedController);
         mouseOverTile = null;
+    }
+
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(getClass()).add("mouseOverTile", mouseOverTile)
+                .toString();
     }
 
     public Optional<Location> getMouseOverTile() {

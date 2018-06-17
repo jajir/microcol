@@ -100,6 +100,14 @@ public class MainStageBuilder {
         primaryStage.setScene(scene);
     }
 
+    /**
+     * Compute if given rectangle is whole on player's screen.
+     *
+     * @param rectangle
+     *            required rectangle
+     * @return Return <code>true</code> when whole rectangle is on screen
+     *         otherwise return <code>false</code>.
+     */
     private boolean isOnScreen(final Rectangle rectangle) {
         final Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
         return isPointOnScreen(rectangle.getMinX(), rectangle.getMinY(), primaryScreenBounds)

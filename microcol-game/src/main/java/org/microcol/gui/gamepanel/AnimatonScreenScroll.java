@@ -15,7 +15,7 @@ public class AnimatonScreenScroll implements Animation {
     AnimatonScreenScroll(final ScreenScrolling screenScrolling) {
         this.screenScrolling = Preconditions.checkNotNull(screenScrolling);
     }
-
+    
     @Override
     public boolean hasNextStep() {
         return screenScrolling.isNextPointAvailable();

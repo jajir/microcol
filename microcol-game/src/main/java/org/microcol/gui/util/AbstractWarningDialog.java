@@ -13,14 +13,14 @@ public abstract class AbstractWarningDialog extends AbstractMessageWindow {
     public AbstractWarningDialog(final ViewUtil viewUtil, final String buttonOkLabel,
             final String dialogCaption) {
         super(viewUtil);
-        getDialog().setTitle(dialogCaption);
+        setTitle(dialogCaption);
 
         /**
          * Buttons
          */
         final ButtonsBar buttonsBar = new ButtonsBar(buttonOkLabel);
         buttonsBar.getButtonOk().setOnAction(e -> {
-            getDialog().close();
+            close();
         });
         buttonsBar.getButtonOk().requestFocus();
 
@@ -49,10 +49,6 @@ public abstract class AbstractWarningDialog extends AbstractMessageWindow {
             final String message) {
         this(viewUtil, text.get(KEY_DIALOG_OK), caption);
         context.getChildren().add(new Label(message));
-    }
-
-    public void showAndWait() {
-        getDialog().showAndWait();
     }
 
     /**

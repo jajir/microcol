@@ -35,7 +35,7 @@ public class ChooseGoodAmount extends AbstractMessageWindow {
     public ChooseGoodAmount(final ViewUtil viewUtil, final Text text) {
         super(viewUtil);
         this.text = Preconditions.checkNotNull(text);
-        getDialog().setTitle(text.get("chooseGoodAmount.caption"));
+        setTitle(text.get("chooseGoodAmount.caption"));
 
         VBox root = new VBox();
         init(root);
@@ -63,15 +63,11 @@ public class ChooseGoodAmount extends AbstractMessageWindow {
 
         final ButtonsBar buttonsBar = new ButtonsBar(text.get("dialog.ok"));
         buttonsBar.getButtonOk().setOnAction(e -> {
-            getDialog().close();
+            close();
         });
         buttonsBar.getButtonOk().requestFocus();
 
         root.getChildren().addAll(label, boxActualValue, slider, buttonsBar);
-    }
-
-    public void showAndWait() {
-        getDialog().showAndWait();
     }
 
     public void init(final int maximalNumberToTransfer) {

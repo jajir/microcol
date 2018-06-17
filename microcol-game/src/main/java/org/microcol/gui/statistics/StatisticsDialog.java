@@ -39,7 +39,7 @@ public class StatisticsDialog extends AbstractMessageWindow implements Statistic
         super(viewUtil);
         this.gameModelController = Preconditions.checkNotNull(gameModelController);
         this.text = Preconditions.checkNotNull(text);
-        getDialog().setTitle(text.get("statistics.title"));
+        setTitle(text.get("statistics.title"));
 
         final Label labelCaption = new Label(text.get("statistics.caption"));
 
@@ -150,12 +150,12 @@ public class StatisticsDialog extends AbstractMessageWindow implements Statistic
 
     @SuppressWarnings("unused")
     private void onClose(final ActionEvent event) {
-        getDialog().close();
+        close();
     }
 
     public void show() {
         repaint();
-        getDialog().showAndWait();
+        showAndWait();
     }
 
 }

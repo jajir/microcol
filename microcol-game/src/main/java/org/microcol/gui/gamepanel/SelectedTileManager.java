@@ -8,6 +8,7 @@ import org.microcol.model.Location;
 import org.microcol.model.event.ColonyWasCapturedEvent;
 import org.microcol.model.event.UnitMoveFinishedEvent;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
 
@@ -28,6 +29,11 @@ public class SelectedTileManager {
         unitMoveFinishedController.addListener(this::onUnitMoveFinished);
         colonyWasCapturedController.addListener(this::onColonyWasCapturedController);
         selectedTile = null;
+    }
+    
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(getClass()).add("selectedTile", selectedTile).toString();
     }
 
     private void onColonyWasCapturedController(final ColonyWasCapturedEvent event) {

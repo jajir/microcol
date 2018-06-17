@@ -40,7 +40,7 @@ public class PreferencesVolume extends AbstractMessageWindow {
             final GamePreferences gamePreferences) {
         super(viewUtil);
         this.gamePreferences = Preconditions.checkNotNull(gamePreferences);
-        getDialog().setTitle(text.get("preferencesVolume.caption"));
+        setTitle(text.get("preferencesVolume.caption"));
 
         VBox root = new VBox();
         root.setId("mainVbox");
@@ -79,7 +79,7 @@ public class PreferencesVolume extends AbstractMessageWindow {
 
         final ButtonsBar buttonBar = new ButtonsBar(text);
         buttonBar.getButtonOk().setOnAction(e -> {
-            getDialog().close();
+            close();
         });
 
         root.getChildren().addAll(label, slider, buttonBar);
@@ -87,7 +87,7 @@ public class PreferencesVolume extends AbstractMessageWindow {
 
     public void resetAndShowAndWait() {
         slider.setValue(gamePreferences.getVolume());
-        getDialog().showAndWait();
+        showAndWait();
     }
 
 }

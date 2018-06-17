@@ -56,7 +56,7 @@ public class ColonyDialog extends AbstractMessageWindow implements ColonyDialogC
             final UnitMovedToFieldController unitMovedToFieldController) {
         super(viewUtil);
         Preconditions.checkNotNull(imageProvider);
-        getDialog().setTitle(text.get("europeDialog.caption"));
+        setTitle(text.get("europeDialog.caption"));
 
         /**
          * Row 0
@@ -95,7 +95,7 @@ public class ColonyDialog extends AbstractMessageWindow implements ColonyDialogC
          */
         final Button buttonOk = new Button(text.get("dialog.ok"));
         buttonOk.setOnAction(e -> {
-            getDialog().close();
+            close();
         });
         buttonOk.requestFocus();
 
@@ -130,7 +130,7 @@ public class ColonyDialog extends AbstractMessageWindow implements ColonyDialogC
         colonyName.setText("Colony: " + colony.getName());
         goods.setColony(colony);
         repaint();
-        getDialog().showAndWait();
+        showAndWait();
     }
 
     @Override
@@ -140,11 +140,6 @@ public class ColonyDialog extends AbstractMessageWindow implements ColonyDialogC
         panelDock.repaint();
         colonyStructures.repaint(colony);
         panelOutsideColony.setColony(colony);
-    }
-
-    @Override
-    public void close() {
-        getDialog().close();
     }
 
     @Override

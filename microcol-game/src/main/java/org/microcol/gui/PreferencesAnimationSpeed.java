@@ -40,7 +40,7 @@ public class PreferencesAnimationSpeed extends AbstractMessageWindow {
             final GamePreferences gamePreferences) {
         super(viewUtil);
         this.gamePreferences = Preconditions.checkNotNull(gamePreferences);
-        getDialog().setTitle(text.get("preferencesAnimationSpeed.caption"));
+        setTitle(text.get("preferencesAnimationSpeed.caption"));
 
         VBox root = new VBox();
         init(root);
@@ -82,7 +82,7 @@ public class PreferencesAnimationSpeed extends AbstractMessageWindow {
 
         final Button buttonOk = new Button(text.get("dialog.ok"));
         buttonOk.setOnAction(e -> {
-            getDialog().close();
+            close();
         });
         buttonOk.requestFocus();
 
@@ -91,7 +91,7 @@ public class PreferencesAnimationSpeed extends AbstractMessageWindow {
 
     public void resetAndShowAndWait() {
         slider.setValue(gamePreferences.getAnimationSpeed());
-        getDialog().showAndWait();
+        showAndWait();
     }
 
 }
