@@ -5,6 +5,8 @@ import java.util.concurrent.CountDownLatch;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.base.MoreObjects;
+
 /**
  * Allows to stop waiting threads until some operation is done.
  */
@@ -13,6 +15,11 @@ public class AnimationLatch {
     private final Logger logger = LoggerFactory.getLogger(AnimationLatch.class);
 
     private CountDownLatch latch;
+
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(getClass()).add("latch", latch).toString();
+    }
 
     /**
      * Could be called from any thread. Just first call make it lock other calls

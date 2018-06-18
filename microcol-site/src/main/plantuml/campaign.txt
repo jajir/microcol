@@ -1,6 +1,5 @@
 @startuml
-'following lines cause fail of planuml generating process
-'abstract class AbstractCampaign
-'abstract class AbstractMission
-'AbstractCampaign o-- AbstractMission : 1..n
+abstract class AbstractCampaign
+abstract class AbstractMission
+AbstractCampaign o-- AbstractMission : 1..n
 @enduml

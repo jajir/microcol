@@ -4,49 +4,28 @@
 
 GUI - structure and behavior
 
- GUI is builded in class <org.microcol.gui.MainStageBuilder>. 
+ Here is described class composition of game GUI and it's behavior.
 
-* GUI page flow
- 
- Diagram describe menu which will be shown to user when starts application.
- For now it's enough to count with one hard-coded campaign.
- 
- When user finish one mission next one is automatically started.
- 
- When last mission is finished than game menu is shown.
- 
- When user choose "Exit Game" from main menu than game menu is shown.
- 
-* Application Screen flow
+* GUI structure
 
-[main-screen-flow.png] main application screen flow
-
-* Campaign
-
-[campaign.png] Campaign
-
- Mission will register it's own <ModelListener> to be notify about all important events.
- It allows to show success message like "You did it". 
-
-* GUI class structure
-
- Following help find class responsible for specific GUI features. For most of panels is used {{{https://en.wikipedia.org/wiki/Model–view–presenter}Model view presenter}} (MVP).
+ For most of panels is used {{{https://en.wikipedia.org/wiki/Model–view–presenter}Model view presenter}} (MVP).
  It's described at {{{http://www.g-widgets.com/2016/01/19/introduction-to-the-mvp-pattern-in-gwt/}http://www.g-widgets.com/2016/01/19/introduction-to-the-mvp-pattern-in-gwt/}}.
 
-** Main Panel
-
- Main Panel is called MainPanelView with it's MainPanelPresenter.
- Main Panel have following structure:
+** Class MainStageBuilder
+ 
+ After game start GUI is builded in class <org.microcol.gui.MainStageBuilder>.
+ In this class are composed classes and <org.microcol.gui.mainmenu.MainMenuView> and <org.microcol.gui.MainPanelView>in on view.
+ On screen it look like: 
 
 ----
  +--------------------------------------------+
- | MainMenu                                   |
+ |               MainMenuView                 |
  +--------------------------------------------+
  |                                            |
  |                                            |
- |     Depending on game state there is:      |
- |             or MainGamePanel               |
- |               GameMenuPanel                |
+ |                                            |
+ |               MainPanelView                |
+ |                                            |
  |                                            |
  |                                            |
  |                                            |
@@ -57,22 +36,13 @@ GUI - structure and behavior
  +--------------------------------------------+
 -----
 
-** Game Menu panel
+** Class MainPanelView
 
- Start panel just show simple option "start new game" and "close application". It look like:
+ This class hold whole game.
+ Design pattern in used for this view is MVP. So there is also class MainPanelPresenter.
+ Class <MainPanelView> mainly it switch between three views.  
 
-[start-application.png] Application start. 
-
- There is also additional screen to choose Campaign. I will look like:
- 
-[start-application-mission.png] Campaign menu 
-
- When user look at game menu just some buttons are enabled. It controlled in a following way:
- 
-[main-menu.png] Game menu button enabling logic.
- 
-** Main Game Panel
- 
+ * MainGamePanelView - Contains played game. It's described in next chapter.
  Game itself is inside this frame. MainPanel have following structure:
  
 ----
@@ -91,4 +61,55 @@ GUI - structure and behavior
 -----
 
  Game panel contains game.
+
+ * GameMenuPanelView - Shows list of basic options. 
+
+ Start panel just show simple options like "start new game" and "close application". It look like:
+
+[start-application.png] Application start.
+
+ * CampaignPanelView - contains menu with default campaign.
+ 
+ It show missions and allows user select mission to play. 
+
+[start-application-mission.png] Campaign menu 
+
+[]
+ 
+* GUI behavior
+ 
+ Diagram describes main screen flow when game starts. There are some additional behavior rules:
+ 
+ * When user finish one mission next one is automatically started.
+ 
+ * When last mission is finished than game menu is shown.
+ 
+ * When user choose "Exit Game" from main menu than game menu is shown.
+ 
+[]
+
+ Screen flow is depicted here:
+ 
+[main-screen-flow.png] MicroCol screen flow
+
+** Game Menu panel
+
+ When user look at game menu just some buttons are enabled. It controlled in a following way:
+ 
+[main-menu.png] Game menu button enabling logic.
+
+----
+
+
+ 	Unsorted mess follows.
+
+
+----
+
+** Campaign
+
+[campaign.png] Campaign
+
+ Mission will register it's own <ModelListener> to be notify about all important events.
+ It allows to show success message like "You did it". 
 

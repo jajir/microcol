@@ -69,6 +69,7 @@ public class GameController {
         startMission(modelCampaignDao.loadFromFile(sourceFile.getAbsolutePath()));
     }
 
+    //TODO don't use mission name as string use enum or constant.
     public void startDefaultMission(final String missionName) {
         final Campaign campaign = campaignManager.getCampaignByName(Default_campaign.NAME);
         final Mission mission = campaign.getMisssionByName(missionName);
