@@ -23,7 +23,6 @@ import org.microcol.gui.util.Text;
 import org.microcol.gui.util.ViewUtil;
 import org.microcol.model.Colony;
 import org.microcol.model.Location;
-import org.microcol.model.Model;
 import org.microcol.model.Unit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,7 +30,6 @@ import org.slf4j.LoggerFactory;
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
 
-import javafx.scene.canvas.Canvas;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 
@@ -43,7 +41,7 @@ public final class GamePanelPresenter {
 
     private final GameModelController gameModelController;
 
-    private final GamePanelPresenter.Display display;
+    private final GamePanelView display;
 
     private Optional<Point> lastMousePosition = Optional.empty();
 
@@ -65,32 +63,8 @@ public final class GamePanelPresenter {
 
     private final ModeController modeController;
 
-    public interface Display {
-
-        Canvas getCanvas();
-
-        void setMoveModeOff();
-
-        void setMoveModeOn();
-
-        void initGame(Model model);
-
-        Area getArea();
-
-        void planScrollingAnimationToPoint(Point targetPoint);
-
-        void stopTimer();
-
-        void startMoveUnit(Unit ship);
-
-        boolean performFightDialog(Unit unitAttacker, Unit unitDefender);
-
-        VisibleArea getVisibleArea();
-
-    }
-
     @Inject
-    public GamePanelPresenter(final GamePanelPresenter.Display display,
+    public GamePanelPresenter(final GamePanelView display,
             final DialogColonyWasCaptured dialogColonyWasCaptured,
             final GameModelController gameModelController, final KeyController keyController,
             final GameStartedController gameStartedController,
@@ -135,23 +109,23 @@ public final class GamePanelPresenter {
                     + e.getCharacter() + "', modifiers '" + e.getCode().isModifierKey() + "'");
         });
 
-        display.getCanvas().setOnMousePressed(e -> {
+        display.getCanvas().getCanvas().setOnMousePressed(e -> {
             if (gamePanelController.isMouseEnabled()) {
                 onMousePressed(e);
             }
         });
-        display.getCanvas().setOnMouseReleased(e -> {
+        display.getCanvas().getCanvas().setOnMouseReleased(e -> {
             if (gamePanelController.isMouseEnabled()) {
                 onMouseReleased();
             }
         });
-        display.getCanvas().setOnMouseMoved(e -> {
+        display.getCanvas().getCanvas().setOnMouseMoved(e -> {
             if (gamePanelController.isMouseEnabled()) {
                 onMouseMoved(e);
             }
             lastMousePosition = Optional.of(Point.of(e.getX(), e.getY()));
         });
-        display.getCanvas().setOnMouseDragged(e -> {
+        display.getCanvas().getCanvas().setOnMouseDragged(e -> {
             if (gamePanelController.isMouseEnabled()) {
                 onMouseDragged(e);
                 lastMousePosition = Optional.of(Point.of(e.getX(), e.getY()));
@@ -173,11 +147,12 @@ public final class GamePanelPresenter {
          * Here could be verification of race conditions like centering to
          * bottom right corner of map. Luckily it's done by JViewport.
          */
+        System.out.println("centruju");
         display.getVisibleArea().setOnCanvasReady(str -> {
+            System.out.println("fokusuju");
             if (selectedTileManager.getSelectedTile().isPresent()) {
-                final Point p = display.getArea()
-                        .getCenterToLocation(selectedTileManager.getSelectedTile().get());
-                display.planScrollingAnimationToPoint(p);
+                display.planScrollingAnimationToLocation(
+                        selectedTileManager.getSelectedTile().get());
             }
         });
     }

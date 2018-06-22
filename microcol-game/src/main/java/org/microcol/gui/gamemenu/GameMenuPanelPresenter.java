@@ -51,14 +51,14 @@ public class GameMenuPanelPresenter {
                 .fireEvent(new ShowDefaultCampaignMenuEvent()));
         view.getButtonExitMicroCol()
                 .setOnAction(event -> exitGameController.fireEvent(new QuitGameEvent()));
-        view.getButtonStartFreeGame().setOnAction(e -> applicationController.startNewDefaultGame());
+        view.getButtonStartFreeGame().setOnAction(e -> applicationController.startNewFreeGame());
         changeLanguageController.addListener(listener -> view.updateLanguage());
         refresh();
     }
 
     @SuppressWarnings("unused")
     private void onGameContinue(final ActionEvent actionEvent) {
-        gameController.loadModelFromFile(persistingTool.getAutoSaveFile());
+        gameController.startModelFromFile(persistingTool.getAutoSaveFile());
     }
 
     public void refresh() {

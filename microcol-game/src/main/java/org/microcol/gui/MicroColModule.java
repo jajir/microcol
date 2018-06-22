@@ -212,7 +212,6 @@ public class MicroColModule extends AbstractModule {
 
         // gui.gamepanel package binding
         bind(GamePanelView.class).in(Singleton.class);
-        bind(GamePanelPresenter.Display.class).to(GamePanelView.class).in(Singleton.class);
         bind(GamePanelPresenter.class).asEagerSingleton();
         bind(SelectedTileManager.class).in(Singleton.class);
         bind(MoveModeSupport.class).in(Singleton.class);

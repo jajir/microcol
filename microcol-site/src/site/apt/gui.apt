@@ -98,6 +98,12 @@ GUI - structure and behavior
  
 [main-menu.png] Game menu button enabling logic.
 
+** Game loading
+
+ Suppose that use choose some campaign from campaign menu.
+ 
+[game-starting.png] Loading of campaign.
+
 ----
 
 

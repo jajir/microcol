@@ -2,10 +2,9 @@ package org.microcol.gui.event.model;
 
 import java.io.File;
 
-import org.microcol.gui.util.PersistentService;
 import org.microcol.model.campaign.Campaign;
-import org.microcol.model.campaign.Default_campaign;
 import org.microcol.model.campaign.CampaignManager;
+import org.microcol.model.campaign.Default_campaign;
 import org.microcol.model.campaign.Mission;
 import org.microcol.model.campaign.ModelCampaignDao;
 import org.microcol.model.campaign.ModelMission;
@@ -23,8 +22,6 @@ public class GameController {
 
     private final BeforeGameStartController beforeGameStartController;
 
-    private final PersistentService persistentService;
-
     private final CampaignManager campaignManager;
 
     private final ModelCampaignDao modelCampaignDao;
@@ -33,12 +30,11 @@ public class GameController {
 
     @Inject
     GameController(final GameModelController gameModelController,
-            final PersistentService persistentService, final ModelCampaignDao modelCampaignDao,
+            final ModelCampaignDao modelCampaignDao,
             final CampaignManager campaignManager,
             final BeforeGameStartController beforeGameStartController,
             final MissionCallBack missionCallBack) {
         this.gameModelController = Preconditions.checkNotNull(gameModelController);
-        this.persistentService = Preconditions.checkNotNull(persistentService);
         this.modelCampaignDao = Preconditions.checkNotNull(modelCampaignDao);
         this.campaignManager = Preconditions.checkNotNull(campaignManager);
         this.beforeGameStartController = Preconditions.checkNotNull(beforeGameStartController);
@@ -55,23 +51,18 @@ public class GameController {
         startMission(modelCampaignDao.loadFromClassPath(fileName));
     }
 
-    public void startNewDefaultGame() {
-        startMission(modelCampaignDao
-                .loadFromClassPath(persistentService.getDefaultScenario().getFileName()));
-    }
-
     public void writeModelToFile(final File targetFile) {
         modelCampaignDao.saveToFile(targetFile.getAbsolutePath(),
                 gameModelController.getModelCampaign());
     }
 
-    public void loadModelFromFile(final File sourceFile) {
+    public void startModelFromFile(final File sourceFile) {
         startMission(modelCampaignDao.loadFromFile(sourceFile.getAbsolutePath()));
     }
-
-    //TODO don't use mission name as string use enum or constant.
-    public void startDefaultMission(final String missionName) {
-        final Campaign campaign = campaignManager.getCampaignByName(Default_campaign.NAME);
+    
+    //FIXME don't use mission name as string use enum or constant.
+    public void startCampaignMission(final String campaignName, final String missionName) {
+        final Campaign campaign = campaignManager.getCampaignByName(campaignName);
         final Mission mission = campaign.getMisssionByName(missionName);
         startMission(modelCampaignDao.loadFromClassPath(mission.getModelFileName()));
     }

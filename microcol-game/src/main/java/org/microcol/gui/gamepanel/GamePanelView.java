@@ -13,6 +13,7 @@ import org.microcol.gui.gamepanel.MoveModeSupport.MoveMode;
 import org.microcol.gui.image.ImageProvider;
 import org.microcol.gui.util.FpsCounter;
 import org.microcol.gui.util.GamePreferences;
+import org.microcol.gui.util.PaneCanvas;
 import org.microcol.model.Colony;
 import org.microcol.model.Location;
 import org.microcol.model.Model;
@@ -28,7 +29,6 @@ import com.google.inject.Inject;
 
 import javafx.scene.Cursor;
 import javafx.scene.ImageCursor;
-import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
@@ -36,13 +36,13 @@ import javafx.scene.paint.Color;
 /**
  * View for main game panel.
  */
-public class GamePanelView implements GamePanelPresenter.Display {
+public class GamePanelView {
 
     private final Logger logger = LoggerFactory.getLogger(GamePanelView.class);
 
     public static final int TILE_WIDTH_IN_PX = 45;
 
-    private final Canvas canvas;
+    private final PaneCanvas canvas;
 
     private final ImageProvider imageProvider;
 
@@ -104,9 +104,19 @@ public class GamePanelView implements GamePanelPresenter.Display {
         gotoModeCursor = new ImageCursor(imageProvider.getImage(ImageProvider.IMG_CURSOR_GOTO), 1,
                 1);
         visibleArea = new VisibleArea();
-
+        
         // TODO JJ specify canvas size
-        canvas = new Canvas();
+        canvas = new PaneCanvas();
+        canvas.widthProperty().addListener((obj, oldValue, newValue) -> {
+            if (newValue.intValue() < PaneCanvas.MAX_CANVAS_SIDE_LENGTH) {
+                visibleArea.setCanvasWidth(newValue.intValue());
+            }
+        });
+        canvas.heightProperty().addListener((obj, oldValue, newValue) -> {
+            if (newValue.intValue() < PaneCanvas.MAX_CANVAS_SIDE_LENGTH) {
+                visibleArea.setCanvasHeight(newValue.intValue());
+            }
+        });
 
         fpsCounter = new FpsCounter();
         fpsCounter.start();
@@ -117,12 +127,10 @@ public class GamePanelView implements GamePanelPresenter.Display {
         new SimpleAnimationTimer(this::onNextGameTick).start();
     }
 
-    @Override
     public void initGame(final Model model) {
         visibleArea.setMaxMapSize(model.getMap());
     }
 
-    @Override
     public void stopTimer() {
         fpsCounter.stop();
     }
@@ -139,12 +147,10 @@ public class GamePanelView implements GamePanelPresenter.Display {
     }
 
     public void planScrollingAnimationToLocation(final Location location) {
-        // TODO there are two same methods.
         planScrollingAnimationToPoint(getArea().getCenterToLocation(location));
     }
 
-    @Override
-    public void planScrollingAnimationToPoint(final Point to) {
+    private void planScrollingAnimationToPoint(final Point to) {
         final Point from = visibleArea.getTopLeft();
         if (from.distanceSimplified(to) > 0) {
             /**
@@ -164,7 +170,7 @@ public class GamePanelView implements GamePanelPresenter.Display {
      */
     private void paint() {
         logger.debug("painting: " + visibleArea);
-        paint(canvas.getGraphicsContext2D());
+        paint(canvas.getCanvas().getGraphicsContext2D());
     }
 
     /**
@@ -371,21 +377,18 @@ public class GamePanelView implements GamePanelPresenter.Display {
         graphics.drawImage(image, point.getX(), point.getY());
     }
 
-    @Override
     public void startMoveUnit(final Unit ship) {
         oneTurnMoveHighlighter.setLocations(ship.getAvailableLocations());
     }
 
-    @Override
     public void setMoveModeOff() {
         oneTurnMoveHighlighter.setLocations(null);
-        canvas.setCursor(Cursor.DEFAULT);
+        canvas.getCanvas().setCursor(Cursor.DEFAULT);
         modeController.setMoveMode(false);
     }
 
-    @Override
     public void setMoveModeOn() {
-        canvas.setCursor(gotoModeCursor);
+        canvas.getCanvas().setCursor(gotoModeCursor);
         modeController.setMoveMode(true);
     }
 
@@ -394,23 +397,19 @@ public class GamePanelView implements GamePanelPresenter.Display {
                 gamePreferences.getAnimationSpeed()));
     }
 
-    @Override
     public boolean performFightDialog(final Unit unitAttacker, final Unit unitDefender) {
         dialogFigth.showAndWait(unitAttacker, unitDefender);
         return dialogFigth.isUserChooseFight();
     }
 
-    @Override
     public Area getArea() {
         return new Area(visibleArea, gameModelController.getModel().getMap());
     }
 
-    @Override
-    public Canvas getCanvas() {
+    public PaneCanvas getCanvas() {
         return canvas;
     }
 
-    @Override
     public VisibleArea getVisibleArea() {
         return visibleArea;
     }

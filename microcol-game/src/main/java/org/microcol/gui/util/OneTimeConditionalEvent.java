@@ -22,13 +22,38 @@ public class OneTimeConditionalEvent<T> {
 
     private boolean condition2;
 
-    public void setOnConditionsPassed(final Consumer<T> onConditionsPassed) {
+    /**
+     * Reset both conditions and wait again that they both pass.
+     * 
+     * @param onConditionsPassed
+     *            required consumer that is called when conditions pass both
+     *            again
+     */
+    public void setOnResetConditionsPassed(final Consumer<T> onConditionsPassed) {
         Preconditions.checkState(this.onConditionsPassed == null,
                 "There is previous unprocessed event.");
         Preconditions.checkNotNull(onConditionsPassed);
         this.onConditionsPassed = onConditionsPassed;
         condition1 = false;
         condition2 = false;
+    }
+
+    /**
+     * Call consumer when both conditions are passed. Conditions could already
+     * be passes. In such case is consumer called immediately.
+     * 
+     * @param onConditionsPassed
+     *            required condition to pass
+     */
+    public void setOnConditionsPassed(final Consumer<T> onConditionsPassed) {
+        Preconditions.checkState(this.onConditionsPassed == null,
+                "There is previous unprocessed event.");
+        Preconditions.checkNotNull(onConditionsPassed);
+        if (condition1 && condition2) {
+            onConditionsPassed.accept(null);
+        } else {
+            this.onConditionsPassed = onConditionsPassed;
+        }
     }
 
     public void condition1Passed() {

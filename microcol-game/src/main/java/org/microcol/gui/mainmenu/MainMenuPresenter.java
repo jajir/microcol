@@ -26,6 +26,7 @@ import org.microcol.gui.gamepanel.TileWasSelectedEvent;
 import org.microcol.gui.util.Text;
 import org.microcol.model.Model;
 import org.microcol.model.Unit;
+import org.microcol.model.campaign.FreePlay_campaign;
 import org.microcol.model.event.IndependenceWasDeclaredEvent;
 import org.microcol.model.event.TurnStartedEvent;
 import org.microcol.model.event.UnitMoveFinishedEvent;
@@ -84,7 +85,8 @@ public class MainMenuPresenter {
         /**
          * Following section describe what happens when menu item is selected
          */
-        view.getMenuItemNewGame().setOnAction(actionEvent -> gameController.startNewDefaultGame());
+        view.getMenuItemNewGame().setOnAction(actionEvent -> gameController
+                .startCampaignMission(FreePlay_campaign.FREE_PLAY, FreePlay_campaign.FREE_PLAY));
         view.getMenuItemExitGame()
                 .setOnAction(event -> exitGameController.fireEvent(new ExitGameEvent()));
         view.getMenuItemSaveGame().setOnAction(event -> persistingDialog.saveModel());

@@ -3,9 +3,9 @@ package org.microcol.gui.gamepanel;
 import java.util.Optional;
 import java.util.function.Consumer;
 
-import org.microcol.gui.MainGamePanelView;
 import org.microcol.gui.Point;
 import org.microcol.gui.util.OneTimeConditionalEvent;
+import org.microcol.gui.util.PaneCanvas;
 import org.microcol.model.Location;
 import org.microcol.model.WorldMap;
 
@@ -210,9 +210,9 @@ public class VisibleArea {
         } else {
             return Point.of(
                     adjustToLess(delta.getX(), topLeft.getX(),
-                            MainGamePanelView.MAX_CANVAS_SIDE_LENGTH, canvasWidth),
+                            PaneCanvas.MAX_CANVAS_SIDE_LENGTH, canvasWidth),
                     adjustToLess(delta.getY(), topLeft.getY(),
-                            MainGamePanelView.MAX_CANVAS_SIDE_LENGTH, canvasHeight));
+                            PaneCanvas.MAX_CANVAS_SIDE_LENGTH, canvasHeight));
         }
     }
 

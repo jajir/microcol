@@ -117,7 +117,7 @@ public class PersistingDialog extends AbstractMessageWindow {
     }
 
     private void loadModelFromFile(final File sourceFile) {
-        gameController.loadModelFromFile(sourceFile);
+        gameController.startModelFromFile(sourceFile);
     }
 
 }

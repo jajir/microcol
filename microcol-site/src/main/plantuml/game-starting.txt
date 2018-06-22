@@ -1,0 +1,60 @@
+@startuml
+
+hide footbox
+
+actor Player
+participant CampaignPanel
+participant GameController
+participant GameModelController
+participant MainGamePanel
+participant CampaignManager
+participant Model
+
+
+Player -> CampaignPanel: Start mission
+CampaignPanel -> GameController: Start mission
+activate GameController
+
+' Show loading screen
+GameController -> MainGamePanel: Show loading screen
+activate MainGamePanel
+MainGamePanel --> GameController: Done
+deactivate MainGamePanel
+
+' load campaign
+GameController -> CampaignManager: Load campaign
+activate CampaignManager
+CampaignManager -> Model: Load campaign model
+activate Model
+Model --> CampaignManager: Done
+deactivate Model
+CampaignManager --> GameController: Done
+deactivate CampaignManager
+
+' Show loaded campaign
+GameController -> MainGamePanel: Show loaded campaign
+activate MainGamePanel
+MainGamePanel --> GameController: Done
+deactivate MainGamePanel
+
+' start game
+GameController -> GameModelController: Start game
+activate GameModelController
+GameModelController -> CampaignManager: Start game
+activate CampaignManager
+CampaignManager -> Model: Start game
+activate Model
+Model --> CampaignManager: Done
+deactivate Model
+CampaignManager --> GameModelController: Done
+deactivate CampaignManager
+GameModelController --> GameController: Done
+deactivate GameModelController
+
+
+GameController --> CampaignPanel: Done
+deactivate GameController
+CampaignPanel --> Player: Done - game is started
+
+
+@enduml
