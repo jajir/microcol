@@ -1,6 +1,8 @@
-package org.microcol.gui.util;
+package org.microcol.gui.gamepanel;
 
 import java.util.function.Consumer;
+
+import org.microcol.gui.util.OneTimeConditionalEvent;
 
 import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.scene.canvas.Canvas;

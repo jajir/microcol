@@ -9,7 +9,8 @@ import com.google.common.base.Preconditions;
 
 /**
  * Define top left corner and bottom right corner.
- * 
+ *
+ * FIXME just call methods at visibleArea, so move marked methods there.
  */
 public class Area {
 

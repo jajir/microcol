@@ -13,7 +13,6 @@ import org.microcol.gui.gamepanel.MoveModeSupport.MoveMode;
 import org.microcol.gui.image.ImageProvider;
 import org.microcol.gui.util.FpsCounter;
 import org.microcol.gui.util.GamePreferences;
-import org.microcol.gui.util.PaneCanvas;
 import org.microcol.model.Colony;
 import org.microcol.model.Location;
 import org.microcol.model.Model;

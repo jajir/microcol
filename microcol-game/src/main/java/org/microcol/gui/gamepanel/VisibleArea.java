@@ -5,7 +5,6 @@ import java.util.function.Consumer;
 
 import org.microcol.gui.Point;
 import org.microcol.gui.util.OneTimeConditionalEvent;
-import org.microcol.gui.util.PaneCanvas;
 import org.microcol.model.Location;
 import org.microcol.model.WorldMap;
 
