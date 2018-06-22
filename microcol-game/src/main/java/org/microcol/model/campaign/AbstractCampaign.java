@@ -14,11 +14,11 @@ public abstract class AbstractCampaign implements Campaign {
      * Name is unique identification of campaign. It's later used as part of
      * localization key.
      */
-    private final String name;
+    private final CampaignNames name;
 
     private final List<Mission> missions = new ArrayList<>();
 
-    AbstractCampaign(final String name) {
+    AbstractCampaign(final CampaignNames name) {
         this.name = Preconditions.checkNotNull(name);
     }
 
@@ -40,8 +40,9 @@ public abstract class AbstractCampaign implements Campaign {
      * 
      * @see org.microcol.model.campaign.Campaign#getName()
      */
+    @SuppressWarnings("unchecked")
     @Override
-    public String getName() {
+    public CampaignNames getName() {
         return name;
     }
 

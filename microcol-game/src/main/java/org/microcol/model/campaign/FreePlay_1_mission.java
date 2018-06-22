@@ -22,7 +22,7 @@ public class FreePlay_1_mission extends AbstractMission<Empty_missionContext> {
     private final static String FREE_PLAY_MISSION_MAP = "/maps/free-play.json";
 
     FreePlay_1_mission() {
-        //FIXME messing freeplay mission with campaign
+        //TODO messing freeplay mission with campaign, use interfaces
         super(FreePlay_campaign.FREE_PLAY, 0, FREE_PLAY_MISSION_MAP);
     }
 

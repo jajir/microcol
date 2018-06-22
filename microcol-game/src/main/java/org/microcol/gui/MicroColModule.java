@@ -71,6 +71,7 @@ import org.microcol.gui.gamepanel.MouseOverTileListener;
 import org.microcol.gui.gamepanel.MouseOverTileManager;
 import org.microcol.gui.gamepanel.MoveModeSupport;
 import org.microcol.gui.gamepanel.PaintService;
+import org.microcol.gui.gamepanel.PaneCanvas;
 import org.microcol.gui.gamepanel.SelectedTileManager;
 import org.microcol.gui.gamepanel.SelectedUnitManager;
 import org.microcol.gui.gamepanel.SelectedUnitWasChangedController;
@@ -78,6 +79,7 @@ import org.microcol.gui.gamepanel.TileWasSelectedController;
 import org.microcol.gui.gamepanel.TileWasSelectedListener;
 import org.microcol.gui.gamepanel.UnitAttackedEventListener;
 import org.microcol.gui.gamepanel.UnitMovedListener;
+import org.microcol.gui.gamepanel.VisibleArea;
 import org.microcol.gui.image.GrassCoastMapGenerator;
 import org.microcol.gui.image.IceCoastMapGenerator;
 import org.microcol.gui.image.ImageProvider;
@@ -223,6 +225,8 @@ public class MicroColModule extends AbstractModule {
         bind(SelectedUnitManager.class).in(Singleton.class);
         bind(ExcludePainting.class).in(Singleton.class);
         bind(GamePanelController.class).in(Singleton.class);
+        bind(VisibleArea.class).in(Singleton.class);
+        bind(PaneCanvas.class).in(Singleton.class);
         bind(UnitMovedListener.class).asEagerSingleton();
 
         bind(GameMenuPanelView.class).in(Singleton.class);

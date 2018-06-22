@@ -2,6 +2,7 @@ package org.microcol.gui;
 
 import org.microcol.gui.event.model.GameController;
 import org.microcol.gui.util.GamePreferences;
+import org.microcol.model.campaign.CampaignNames;
 import org.microcol.model.campaign.FreePlay_campaign;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,8 +49,7 @@ public class ApplicationController {
      */
     public void startNewFreeGame() {
         logger.debug("Start new default game.");
-        gameController.startCampaignMission(FreePlay_campaign.FREE_PLAY,
-                FreePlay_campaign.FREE_PLAY);
+        gameController.startCampaignMission(CampaignNames.freePlay, FreePlay_campaign.FREE_PLAY);
     }
 
 }

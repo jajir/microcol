@@ -4,7 +4,8 @@ import java.io.File;
 
 import org.microcol.model.campaign.Campaign;
 import org.microcol.model.campaign.CampaignManager;
-import org.microcol.model.campaign.Default_campaign;
+import org.microcol.model.campaign.CampaignName;
+import org.microcol.model.campaign.CampaignNames;
 import org.microcol.model.campaign.Mission;
 import org.microcol.model.campaign.ModelCampaignDao;
 import org.microcol.model.campaign.ModelMission;
@@ -60,8 +61,8 @@ public class GameController {
         startMission(modelCampaignDao.loadFromFile(sourceFile.getAbsolutePath()));
     }
     
-    //FIXME don't use mission name as string use enum or constant.
-    public void startCampaignMission(final String campaignName, final String missionName) {
+    //TODO don't use mission name as string use enum or constant.
+    public void startCampaignMission(final CampaignName campaignName, final String missionName) {
         final Campaign campaign = campaignManager.getCampaignByName(campaignName);
         final Mission mission = campaign.getMisssionByName(missionName);
         startMission(modelCampaignDao.loadFromClassPath(mission.getModelFileName()));
@@ -73,7 +74,7 @@ public class GameController {
     }
 
     public boolean isDefaultCampaignFinished() {
-        final Campaign campaign = campaignManager.getCampaignByName(Default_campaign.NAME);
+        final Campaign campaign = campaignManager.getCampaignByName(CampaignNames.defaultCampaign);
         return campaign.isFinished();
     }
 

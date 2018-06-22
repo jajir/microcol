@@ -62,6 +62,8 @@ public final class GamePanelPresenter {
     private final MouseOverTileManager mouseOverTileManager;
 
     private final ModeController modeController;
+    
+    private final VisibleArea visibleArea;
 
     @Inject
     public GamePanelPresenter(final GamePanelView display,
@@ -76,7 +78,9 @@ public final class GamePanelPresenter {
             final Text text, final ColonyWasCapturedController colonyWasCapturedController,
             final MouseOverTileManager mouseOverTileManager, final ModeController modeController,
             final SelectedUnitManager selectedUnitManager,
-            final GamePanelController gamePanelController) {
+            final GamePanelController gamePanelController,
+            final VisibleArea visibleArea,
+            final PaneCanvas paneCanvas) {
         this.gameModelController = Preconditions.checkNotNull(gameModelController);
         this.gamePreferences = gamePreferences;
         this.display = Preconditions.checkNotNull(display);
@@ -89,6 +93,7 @@ public final class GamePanelPresenter {
         this.mouseOverTileManager = Preconditions.checkNotNull(mouseOverTileManager);
         this.modeController = Preconditions.checkNotNull(modeController);
         this.selectedUnitManager = Preconditions.checkNotNull(selectedUnitManager);
+        this.visibleArea = Preconditions.checkNotNull(visibleArea);
 
         startMoveController.addListener(event -> swithToMoveMode());
 
@@ -109,30 +114,31 @@ public final class GamePanelPresenter {
                     + e.getCharacter() + "', modifiers '" + e.getCode().isModifierKey() + "'");
         });
 
-        display.getCanvas().getCanvas().setOnMousePressed(e -> {
+        paneCanvas.getCanvas().setOnMousePressed(e -> {
             if (gamePanelController.isMouseEnabled()) {
                 onMousePressed(e);
             }
         });
-        display.getCanvas().getCanvas().setOnMouseReleased(e -> {
+        paneCanvas.getCanvas().setOnMouseReleased(e -> {
             if (gamePanelController.isMouseEnabled()) {
                 onMouseReleased();
             }
         });
-        display.getCanvas().getCanvas().setOnMouseMoved(e -> {
+        paneCanvas.getCanvas().setOnMouseMoved(e -> {
             if (gamePanelController.isMouseEnabled()) {
                 onMouseMoved(e);
             }
             lastMousePosition = Optional.of(Point.of(e.getX(), e.getY()));
         });
-        display.getCanvas().getCanvas().setOnMouseDragged(e -> {
+        paneCanvas.getCanvas().setOnMouseDragged(e -> {
             if (gamePanelController.isMouseEnabled()) {
                 onMouseDragged(e);
                 lastMousePosition = Optional.of(Point.of(e.getX(), e.getY()));
             }
         });
 
-        gameStartedController.addListener(event -> display.initGame(event.getModel()));
+        gameStartedController
+                .addListener(event -> visibleArea.setMaxMapSize(event.getModel().getMap()));
 
         centerViewController.addListener(event -> onCenterView());
         quitGameController.addListener(event -> display.stopTimer());
@@ -147,9 +153,7 @@ public final class GamePanelPresenter {
          * Here could be verification of race conditions like centering to
          * bottom right corner of map. Luckily it's done by JViewport.
          */
-        System.out.println("centruju");
-        display.getVisibleArea().setOnCanvasReady(str -> {
-            System.out.println("fokusuju");
+        visibleArea.setOnCanvasReady(str -> {
             if (selectedTileManager.getSelectedTile().isPresent()) {
                 display.planScrollingAnimationToLocation(
                         selectedTileManager.getSelectedTile().get());
@@ -234,7 +238,7 @@ public final class GamePanelPresenter {
             if (e.isSecondaryButtonDown()) {
                 final Point currentPosition = Point.of(e.getX(), e.getY());
                 final Point delta = lastMousePosition.get().substract(currentPosition);
-                display.getVisibleArea().addDeltaToTopLeftPoint(delta);
+                visibleArea.addDeltaToTopLeftPoint(delta);
             }
             if (modeController.isMoveMode()) {
                 final Point currentPosition = Point.of(e.getX(), e.getY());

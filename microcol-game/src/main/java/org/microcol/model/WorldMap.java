@@ -42,10 +42,20 @@ public class WorldMap {
         }
     }
 
+    /**
+     * Get max X location.
+     * 
+     * @return max X location
+     */
     public int getMaxX() {
         return maxX;
     }
 
+    /**
+     * Get max Y location.
+     * 
+     * @return max Y location
+     */
     public int getMaxY() {
         return maxY;
     }

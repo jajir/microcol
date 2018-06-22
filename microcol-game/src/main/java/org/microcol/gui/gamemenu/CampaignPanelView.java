@@ -45,7 +45,7 @@ public class CampaignPanelView implements CampaignPanelPresenter.Display {
         final Campaign campaign = campaignManager.getDefaultCampain();
         campaign.getMissions().forEach(mission -> {
             final Button missionButton = new Button(
-                    text.get("campaignPanel." + campaign.getName() + "." + mission.getName()));
+                    text.get("campaignPanel." + campaign.getName().toString() + "." + mission.getName()));
             missionButton.setDisable(!campaign.isMissionEnabled(mission));
             missionButton.setOnAction(event -> onSelectedMission(mission.getName()));
             box.getChildren().add(missionButton);

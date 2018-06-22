@@ -89,14 +89,14 @@ Planned releases
   * \u2713 Colony is plagued by famine.
   
   * \u2713 Centering dialog based is not correct. Dialog blink at incorrect position and than appears at correct place.
+ 
+  * \u2713 When first mission is played until the end than next mission run will keep mission setting like achievements.
 
   * \u2717 When next unit is selected than screen should scroll at this unit. 
  
-  * \u2717 When first mission is played until the end than next mission run will keep mission setting like achievements.
- 
  * <<Backlog>> - feature and improvement backlog
   
-  * \u2717 Right panel highlight select unit.
+  * \u2717 Calendar should slow down turns later in game. Split year into spring, summer, autumn and winter.
   
   * \u2717 Right panel allows to select unit.
   

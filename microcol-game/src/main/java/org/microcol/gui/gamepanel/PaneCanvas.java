@@ -4,6 +4,8 @@ import java.util.function.Consumer;
 
 import org.microcol.gui.util.OneTimeConditionalEvent;
 
+import com.google.inject.Inject;
+
 import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.layout.Pane;
@@ -31,6 +33,7 @@ public class PaneCanvas {
 
     private final OneTimeConditionalEvent<PaneCanvas> conditionalEvent = new OneTimeConditionalEvent<>();
 
+    @Inject
     public PaneCanvas() {
         canvas = new Canvas();
 

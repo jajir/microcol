@@ -15,7 +15,29 @@ import com.google.common.base.Preconditions;
  * User see some area where is game map drawn this area is called canvas. Class
  * define relation between game map, canvas size and canvas position on map.Game
  * map could be smaller than canvas also could be bigger.
+ * <p>
+ * Following examples shows case when bigger map with smaller canvas
+ * </p>
  * 
+ * <pre>
+ * +------------------------------------------------------+
+ * |                                                      |
+ * |                 [top left]                           |
+ * |                    +------------+                    |
+ * |                    |            |                    |
+ * |                    |   canvas   | [height]           |
+ * |                    |            |                    |
+ * |                    |            |                    |
+ * |                    +------------+                    |
+ * |                        [width]                       |
+ * |                                                      |
+ * |                                                      |
+ * +------------------------------------------------------+
+ * </pre>
+ * <p>
+ * All variables should be immediately set when they are changed on player's
+ * monitor. Usually by some property listener.
+ * </p>
  * <p>
  * This class work just with {@link Point} class.
  * </p>
@@ -208,10 +230,10 @@ public class VisibleArea {
                             canvasHeight));
         } else {
             return Point.of(
-                    adjustToLess(delta.getX(), topLeft.getX(),
-                            PaneCanvas.MAX_CANVAS_SIDE_LENGTH, canvasWidth),
-                    adjustToLess(delta.getY(), topLeft.getY(),
-                            PaneCanvas.MAX_CANVAS_SIDE_LENGTH, canvasHeight));
+                    adjustToLess(delta.getX(), topLeft.getX(), PaneCanvas.MAX_CANVAS_SIDE_LENGTH,
+                            canvasWidth),
+                    adjustToLess(delta.getY(), topLeft.getY(), PaneCanvas.MAX_CANVAS_SIDE_LENGTH,
+                            canvasHeight));
         }
     }
 

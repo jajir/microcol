@@ -10,7 +10,7 @@ public interface Campaign {
     /**
      * @return the name
      */
-    String getName();
+    <C extends CampaignName> C getName();
 
     /**
      * @return the missions

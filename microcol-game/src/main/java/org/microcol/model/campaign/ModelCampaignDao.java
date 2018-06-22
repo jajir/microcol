@@ -1,5 +1,6 @@
 package org.microcol.model.campaign;
 
+import org.microcol.gui.MicroColException;
 import org.microcol.model.Model;
 import org.microcol.model.store.ModelDao;
 import org.microcol.model.store.ModelPo;
@@ -32,11 +33,20 @@ public class ModelCampaignDao {
 
     private ModelMission makeFromModelPo(final ModelPo modelPo) {
         final Campaign campaign = campaignManager
-                .getCampaignByName(modelPo.getCampaign().getName());
+                .getCampaignByName(resolve(modelPo.getCampaign().getName()));
         final Mission mission = campaign.getMisssionByName(modelPo.getCampaign().getMission());
         mission.initialize(modelPo);
         return new ModelMission(campaign, (AbstractMission<?>) mission,
                 Model.make(modelPo, mission.getGameOverEvaluators()));
+    }
+
+    private CampaignName resolve(final String name) {
+        if (CampaignNames.defaultCampaign.toString().equals(name)) {
+            return CampaignNames.defaultCampaign;
+        } else if (CampaignNames.freePlay.toString().equals(name)) {
+            return CampaignNames.freePlay;
+        }
+        throw new MicroColException(String.format("Unabble to resolve campaign '%s'", name));
     }
 
     public void saveToFile(final String fileName, final ModelMission modelCampaign) {

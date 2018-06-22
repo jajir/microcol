@@ -8,9 +8,9 @@ import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 
 /**
- * Define top left corner and bottom right corner.
- *
- * FIXME just call methods at visibleArea, so move marked methods there.
+ * Define top left corner and bottom right corner in location coordinates. Class
+ * provide access to {@link VisibleArea} class. Class works with point and
+ * location.
  */
 public class Area {
 

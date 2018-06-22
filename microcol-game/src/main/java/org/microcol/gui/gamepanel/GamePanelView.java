@@ -85,7 +85,8 @@ public class GamePanelView {
             final PaintService paintService, final GamePreferences gamePreferences,
             final MouseOverTileManager mouseOverTileManager,
             final AnimationManager animationManager, final ModeController modeController,
-            final ExcludePainting excludePainting, final DialogFigth dialogFigth) {
+            final ExcludePainting excludePainting, final DialogFigth dialogFigth,
+            final VisibleArea visibleArea,final PaneCanvas paneCanvas) {
         this.gameModelController = Preconditions.checkNotNull(gameModelController);
         this.pathPlanning = Preconditions.checkNotNull(pathPlanning);
         this.imageProvider = Preconditions.checkNotNull(imageProvider);
@@ -99,13 +100,13 @@ public class GamePanelView {
         this.modeController = Preconditions.checkNotNull(modeController);
         this.excludePainting = Preconditions.checkNotNull(excludePainting);
         this.dialogFigth = Preconditions.checkNotNull(dialogFigth);
+        this.visibleArea = Preconditions.checkNotNull(visibleArea);
+        this.canvas = Preconditions.checkNotNull(paneCanvas);
         oneTurnMoveHighlighter = new OneTurnMoveHighlighter();
         gotoModeCursor = new ImageCursor(imageProvider.getImage(ImageProvider.IMG_CURSOR_GOTO), 1,
                 1);
-        visibleArea = new VisibleArea();
-        
+
         // TODO JJ specify canvas size
-        canvas = new PaneCanvas();
         canvas.widthProperty().addListener((obj, oldValue, newValue) -> {
             if (newValue.intValue() < PaneCanvas.MAX_CANVAS_SIDE_LENGTH) {
                 visibleArea.setCanvasWidth(newValue.intValue());
@@ -124,10 +125,6 @@ public class GamePanelView {
          * Following class main define animation loop.
          */
         new SimpleAnimationTimer(this::onNextGameTick).start();
-    }
-
-    public void initGame(final Model model) {
-        visibleArea.setMaxMapSize(model.getMap());
     }
 
     public void stopTimer() {
@@ -403,14 +400,6 @@ public class GamePanelView {
 
     public Area getArea() {
         return new Area(visibleArea, gameModelController.getModel().getMap());
-    }
-
-    public PaneCanvas getCanvas() {
-        return canvas;
-    }
-
-    public VisibleArea getVisibleArea() {
-        return visibleArea;
     }
 
 }

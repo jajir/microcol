@@ -1,6 +1,6 @@
 package org.microcol.gui;
 
-import org.microcol.gui.gamepanel.GamePanelView;
+import org.microcol.gui.gamepanel.PaneCanvas;
 
 import com.google.inject.Inject;
 
@@ -17,8 +17,8 @@ public class MainGamePanelView {
     private final VBox box;
 
     @Inject
-    public MainGamePanelView(final GamePanelView gamePanel, final StatusBarView statusBar,
-            final RightPanelView rightPanelView) {
+    public MainGamePanelView(final StatusBarView statusBar, final RightPanelView rightPanelView,
+            final PaneCanvas paneCanvas) {
         box = new VBox();
         box.setId("mainPanel");
         HBox hBox = new HBox();
@@ -29,7 +29,7 @@ public class MainGamePanelView {
         Label l2 = new Label("blue right panel");
         rightPane.getChildren().add(l2);
 
-        hBox.getChildren().addAll(gamePanel.getCanvas().getCanvasPane(), rightPanelView.getBox());
+        hBox.getChildren().addAll(paneCanvas.getCanvasPane(), rightPanelView.getBox());
 
         box.getChildren().addAll(hBox, statusBar.getStatusBar());
     }

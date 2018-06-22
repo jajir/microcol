@@ -17,7 +17,7 @@ import com.google.common.base.Preconditions;
  */
 public class CampaignManager {
 
-    private final Map<String, Campaign> campaigns;
+    private final Map<? extends CampaignName, Campaign> campaigns;
 
     private final Preferences preferences = Preferences.userNodeForPackage(CampaignManager.class);
 
@@ -60,7 +60,7 @@ public class CampaignManager {
      *            required campaign name
      * @return campaign object
      */
-    public Campaign getCampaignByName(final String name) {
+    public <C extends CampaignName> Campaign getCampaignByName(final C name) {
         Preconditions.checkNotNull(name, "Campaign name is null");
         final Campaign out = campaigns.get(name);
         if (out == null) {
@@ -71,7 +71,7 @@ public class CampaignManager {
     }
 
     public Campaign getDefaultCampain() {
-        return getCampaignByName(Default_campaign.NAME);
+        return getCampaignByName(CampaignNames.defaultCampaign);
     }
 
 }

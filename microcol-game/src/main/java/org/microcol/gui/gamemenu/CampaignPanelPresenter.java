@@ -5,7 +5,7 @@ import java.util.function.Consumer;
 import org.microcol.gui.MainPanelPresenter;
 import org.microcol.gui.event.model.GameController;
 import org.microcol.gui.mainmenu.ChangeLanguageController;
-import org.microcol.model.campaign.Default_campaign;
+import org.microcol.model.campaign.CampaignNames;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -48,7 +48,7 @@ public class CampaignPanelPresenter {
 
     private void onSelectedMission(final String missionName) {
         logger.debug("Mission '%s' was selected to play.", missionName);
-        gameController.startCampaignMission(Default_campaign.NAME, missionName);
+        gameController.startCampaignMission(CampaignNames.defaultCampaign, missionName);
         mainFramePresenter.showGamePanel();
     }
 
