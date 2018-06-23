@@ -4,8 +4,6 @@ import java.util.List;
 import java.util.Optional;
 
 import org.microcol.gui.gamepanel.SelectedTileManager;
-import org.microcol.gui.mainmenu.CenterViewController;
-import org.microcol.gui.mainmenu.CenterViewEvent;
 import org.microcol.model.GoodTrade;
 import org.microcol.model.GoodType;
 import org.microcol.model.GoodsAmount;
@@ -33,8 +31,6 @@ public class GameModelController {
 
     private final ModelEventManager modelEventManager;
 
-    private final CenterViewController centerViewController;
-
     private final SelectedTileManager selectedTileManager;
 
     private final ArtifitialPlayersManager artifitialPlayersManager;
@@ -43,11 +39,9 @@ public class GameModelController {
 
     @Inject
     public GameModelController(final ModelEventManager modelEventManager,
-            final CenterViewController centerViewController,
             final SelectedTileManager selectedTileManager,
             final ArtifitialPlayersManager artifitialPlayersManager) {
         this.modelEventManager = Preconditions.checkNotNull(modelEventManager);
-        this.centerViewController = Preconditions.checkNotNull(centerViewController);
         this.selectedTileManager = Preconditions.checkNotNull(selectedTileManager);
         this.artifitialPlayersManager = Preconditions.checkNotNull(artifitialPlayersManager);
     }
@@ -66,7 +60,6 @@ public class GameModelController {
         modelMission.startGame(missionCallBack);
         if (getModel().getFocusedField() != null) {
             selectedTileManager.setSelectedTile(getModel().getFocusedField());
-            centerViewController.fireEvent(new CenterViewEvent());
         }
     }
 

@@ -86,7 +86,7 @@ public class GamePanelView {
             final MouseOverTileManager mouseOverTileManager,
             final AnimationManager animationManager, final ModeController modeController,
             final ExcludePainting excludePainting, final DialogFigth dialogFigth,
-            final VisibleArea visibleArea,final PaneCanvas paneCanvas) {
+            final VisibleArea visibleArea, final PaneCanvas paneCanvas) {
         this.gameModelController = Preconditions.checkNotNull(gameModelController);
         this.pathPlanning = Preconditions.checkNotNull(pathPlanning);
         this.imageProvider = Preconditions.checkNotNull(imageProvider);
@@ -143,7 +143,9 @@ public class GamePanelView {
     }
 
     public void planScrollingAnimationToLocation(final Location location) {
-        planScrollingAnimationToPoint(getArea().getCenterToLocation(location));
+        visibleArea.setOnCanvasReady(state -> {
+            planScrollingAnimationToPoint(getArea().getCenterToLocation(location));
+        });
     }
 
     private void planScrollingAnimationToPoint(final Point to) {

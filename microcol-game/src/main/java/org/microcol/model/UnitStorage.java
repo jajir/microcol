@@ -177,7 +177,7 @@ class UnitStorage {
         return units.stream().filter(unit -> unit.getId() == id).findAny();
     }
 
-    Optional<Unit> getNextUnitForCurrentUser(final Player currentPlayer, final Unit currentUnit) {
+    Optional<Unit> getNextUnitForPlayer(final Player currentPlayer, final Unit currentUnit) {
         final List<Unit> list = units.stream().filter(unit -> currentPlayer.equals(unit.getOwner()))
                 .filter(unit -> unit.isAtPlaceLocation() && unit.getAvailableMoves() > 0)
                 .collect(Collectors.toList());

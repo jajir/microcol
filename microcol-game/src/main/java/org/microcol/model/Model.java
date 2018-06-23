@@ -341,12 +341,12 @@ public final class Model {
                 .filter(colony -> colony.getLocation().equals(location)).findFirst();
     }
 
-    public Optional<Unit> getNextUnitForCurrentUser(final Unit currentUnit) {
+    public Optional<Unit> getNextUnitForCurrentPlayer(final Unit currentUnit) {
         Preconditions.checkNotNull(currentUnit);
         Preconditions.checkState(getCurrentPlayer().equals(currentUnit.getOwner()),
                 "current unit (%s) doest belongs to user that is on turn (%s)", currentUnit,
                 getCurrentPlayer());
-        return unitStorage.getNextUnitForCurrentUser(getCurrentPlayer(), currentUnit);
+        return unitStorage.getNextUnitForPlayer(getCurrentPlayer(), currentUnit);
     }
 
     public Optional<Unit> getFirstSelectableUnit() {

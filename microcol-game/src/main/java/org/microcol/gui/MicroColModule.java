@@ -72,6 +72,7 @@ import org.microcol.gui.gamepanel.MouseOverTileManager;
 import org.microcol.gui.gamepanel.MoveModeSupport;
 import org.microcol.gui.gamepanel.PaintService;
 import org.microcol.gui.gamepanel.PaneCanvas;
+import org.microcol.gui.gamepanel.ScrollToSelectedUnit;
 import org.microcol.gui.gamepanel.SelectedTileManager;
 import org.microcol.gui.gamepanel.SelectedUnitManager;
 import org.microcol.gui.gamepanel.SelectedUnitWasChangedController;
@@ -228,6 +229,7 @@ public class MicroColModule extends AbstractModule {
         bind(VisibleArea.class).in(Singleton.class);
         bind(PaneCanvas.class).in(Singleton.class);
         bind(UnitMovedListener.class).asEagerSingleton();
+        bind(ScrollToSelectedUnit.class).asEagerSingleton();
 
         bind(GameMenuPanelView.class).in(Singleton.class);
         bind(GameMenuPanelPresenter.class).asEagerSingleton();

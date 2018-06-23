@@ -58,7 +58,7 @@ public class SelectedUnitManager {
         unitMovedToHighSeasController.addListener(this::onUnitMovedToHighSeas);
         unitMovedToFieldController.addListener(this::onUnitMovedToField);
     }
-    
+
     private void onUnitMovedToField(final UnitMovedToFieldEvent event) {
         if (event.getUnit().equals(selectedUnit)) {
             unselectUnit();
@@ -80,8 +80,10 @@ public class SelectedUnitManager {
         if (unit != null) {
             Preconditions.checkState(unit.isAtPlaceLocation());
         }
+        final Unit previousUnit = selectedUnit;
         selectedUnit = unit;
-        selectedUnitWasChangedController.fireEvent(new SelectedUnitWasChangedEvent(selectedUnit));
+        selectedUnitWasChangedController
+                .fireEvent(new SelectedUnitWasChangedEvent(previousUnit, selectedUnit));
         logger.debug("Selected unit is now: {}", selectedUnit);
     }
 
@@ -112,7 +114,7 @@ public class SelectedUnitManager {
         if (selectedUnit == null) {
             setSelectedUnit(gameModelController.getModel().getFirstSelectableUnit().orElse(null));
         } else {
-            setSelectedUnit(gameModelController.getModel().getNextUnitForCurrentUser(selectedUnit)
+            setSelectedUnit(gameModelController.getModel().getNextUnitForCurrentPlayer(selectedUnit)
                     .orElse(null));
         }
         if (selectedUnit != null) {

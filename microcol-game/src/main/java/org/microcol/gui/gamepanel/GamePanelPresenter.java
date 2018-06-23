@@ -17,6 +17,7 @@ import org.microcol.gui.event.model.ColonyWasCapturedController;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.event.model.GameStartedController;
 import org.microcol.gui.mainmenu.CenterViewController;
+import org.microcol.gui.mainmenu.CenterViewEvent;
 import org.microcol.gui.mainmenu.QuitGameController;
 import org.microcol.gui.util.GamePreferences;
 import org.microcol.gui.util.Text;
@@ -41,7 +42,7 @@ public final class GamePanelPresenter {
 
     private final GameModelController gameModelController;
 
-    private final GamePanelView display;
+    private final GamePanelView gamePanelView;
 
     private Optional<Point> lastMousePosition = Optional.empty();
 
@@ -66,7 +67,7 @@ public final class GamePanelPresenter {
     private final VisibleArea visibleArea;
 
     @Inject
-    public GamePanelPresenter(final GamePanelView display,
+    public GamePanelPresenter(final GamePanelView gamePanelView,
             final DialogColonyWasCaptured dialogColonyWasCaptured,
             final GameModelController gameModelController, final KeyController keyController,
             final GameStartedController gameStartedController,
@@ -83,7 +84,7 @@ public final class GamePanelPresenter {
             final PaneCanvas paneCanvas) {
         this.gameModelController = Preconditions.checkNotNull(gameModelController);
         this.gamePreferences = gamePreferences;
-        this.display = Preconditions.checkNotNull(display);
+        this.gamePanelView = Preconditions.checkNotNull(gamePanelView);
         this.selectedTileManager = Preconditions.checkNotNull(selectedTileManager);
         this.viewUtil = Preconditions.checkNotNull(viewUtil);
         this.startMoveController = Preconditions.checkNotNull(startMoveController);
@@ -140,14 +141,15 @@ public final class GamePanelPresenter {
         gameStartedController
                 .addListener(event -> visibleArea.setMaxMapSize(event.getModel().getMap()));
 
-        centerViewController.addListener(event -> onCenterView());
-        quitGameController.addListener(event -> display.stopTimer());
+        centerViewController.addListener(this::onCenterView);
+        quitGameController.addListener(event -> gamePanelView.stopTimer());
         colonyWasCapturedController.addRunLaterListener(event -> {
             dialogColonyWasCaptured.showAndWait(event);
         });
     }
 
-    private void onCenterView() {
+    @SuppressWarnings("unused")
+    private void onCenterView(final CenterViewEvent event) {
         logger.debug("Center view event");
         /**
          * Here could be verification of race conditions like centering to
@@ -155,7 +157,7 @@ public final class GamePanelPresenter {
          */
         visibleArea.setOnCanvasReady(str -> {
             if (selectedTileManager.getSelectedTile().isPresent()) {
-                display.planScrollingAnimationToLocation(
+                gamePanelView.planScrollingAnimationToLocation(
                         selectedTileManager.getSelectedTile().get());
             }
         });
@@ -188,9 +190,9 @@ public final class GamePanelPresenter {
         // TODO JJ Filter unit that have enough action points
         Preconditions.checkState(!units.isEmpty(), "there are some moveable units");
         final Unit unit = units.get(0);
-        display.startMoveUnit(unit);
+        gamePanelView.startMoveUnit(unit);
         logger.debug("Switching '" + unit + "' to go mode.");
-        display.setMoveModeOn();
+        gamePanelView.setMoveModeOn();
     }
 
     private void onKeyPressed_escape() {
@@ -207,7 +209,7 @@ public final class GamePanelPresenter {
 
     private void onMousePressed(final MouseEvent e) {
         final Point pressedAt = Point.of(e.getX(), e.getY());
-        final Location location = display.getArea().convertToLocation(pressedAt);
+        final Location location = gamePanelView.getArea().convertToLocation(pressedAt);
         if (gameModelController.getModel().getMap().isValid(location)) {
             logger.debug("location of mouse: " + location);
             if (modeController.isMoveMode()) {
@@ -227,7 +229,7 @@ public final class GamePanelPresenter {
 
     private void onMouseReleased() {
         if (modeController.isMoveMode() && lastMousePosition.isPresent()) {
-            final Location loc = display.getArea().convertToLocation(lastMousePosition.get());
+            final Location loc = gamePanelView.getArea().convertToLocation(lastMousePosition.get());
             switchToNormalMode(loc);
         }
 
@@ -242,7 +244,7 @@ public final class GamePanelPresenter {
             }
             if (modeController.isMoveMode()) {
                 final Point currentPosition = Point.of(e.getX(), e.getY());
-                final Location loc = display.getArea().convertToLocation(currentPosition);
+                final Location loc = gamePanelView.getArea().convertToLocation(currentPosition);
                 mouseOverTileManager.setMouseOverTile(loc);
             }
         }
@@ -250,7 +252,7 @@ public final class GamePanelPresenter {
 
     private void onMouseMoved(final MouseEvent e) {
         final Point currentPosition = Point.of(e.getX(), e.getY());
-        final Location loc = display.getArea().convertToLocation(currentPosition);
+        final Location loc = gamePanelView.getArea().convertToLocation(currentPosition);
         mouseOverTileManager.setMouseOverTile(loc);
     }
 
@@ -320,7 +322,7 @@ public final class GamePanelPresenter {
     }
 
     private void disableMoveMode() {
-        display.setMoveModeOff();
+        gamePanelView.setMoveModeOff();
         endMoveController.fireEvent(new EndMoveEvent());
     }
 
@@ -334,7 +336,7 @@ public final class GamePanelPresenter {
         }
         final Unit targetUnit = gameModelController.getModel().getUnitsAt(moveToLocation).get(0);
         if (gamePreferences.getShowFightAdvisorProperty().get()) {
-            if (display.performFightDialog(movingUnit, targetUnit)) {
+            if (gamePanelView.performFightDialog(movingUnit, targetUnit)) {
                 // User choose to fight
                 disableMoveMode();
                 gameModelController.performFight(movingUnit, targetUnit);
