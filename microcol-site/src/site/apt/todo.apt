@@ -93,10 +93,15 @@ Planned releases
   * \u2713 When first mission is played until the end than next mission run will keep mission setting like achievements.
 
   * \u2713 When next unit is selected than screen should scroll at this unit. 
+  
+  * \u2713 Calendar should slow down turns later in game. Split year into spring, summer, autumn and winter.
  
  * <<Backlog>> - feature and improvement backlog
   
-  * \u2717 Calendar should slow down turns later in game. Split year into spring, summer, autumn and winter.
+  * \u2717 When unit go to west than is turn to west direction.
+ When unit go to to east than turn to east.
+ When unit arrive to some place than keep direction where is facing.
+ Direction where is unit turn is persisted.  
   
   * \u2717 Right panel allows to select unit.
   

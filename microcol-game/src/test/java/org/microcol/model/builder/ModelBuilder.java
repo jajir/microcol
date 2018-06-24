@@ -46,8 +46,8 @@ public class ModelBuilder {
         Preconditions.checkNotNull(modelPo, "map was not initialized");
         CalendarPo calendarPo = new CalendarPo();
         calendarPo.setStartYear(startYear);
-        calendarPo.setCurrentYear(startYear);
         calendarPo.setEndYear(endYear);
+        calendarPo.setNumberOfPlayedTurns(0);
         modelPo.setCalendar(calendarPo);
         return this;
     }
@@ -73,6 +73,12 @@ public class ModelBuilder {
         unit.getPlaceMap().setLocation(location);
         modelPo.addUnit(unit);
 
+        return this;
+    }
+    
+    public ModelBuilder startGame(final String currentPlayerName){
+        modelPo.getGameManager().setGameStarted(true);
+        modelPo.getGameManager().setCurrentPlayer(currentPlayerName);
         return this;
     }
 

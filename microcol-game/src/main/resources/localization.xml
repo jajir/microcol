@@ -68,6 +68,10 @@
 	<entry key="statusBar.gold">Gold</entry>
 	<entry key="statusBar.gold.description">How many golden coins do you have.</entry>
 	<entry key="statusBar.status.description">Here will by simple help message</entry>
+	<entry key="statusBar.season.spring">Spring</entry>
+	<entry key="statusBar.season.summer">Summer</entry>
+	<entry key="statusBar.season.autumn">Autumn</entry>
+	<entry key="statusBar.season.winter">Winter</entry>
 
 	<entry key="dialogAbout.caption">About MicroCol</entry>
 	<entry key="dialogAbout.version">Version :</entry>

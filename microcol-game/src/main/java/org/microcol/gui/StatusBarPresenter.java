@@ -80,7 +80,12 @@ public class StatusBarPresenter {
     private void setYearText(final Label labelEra, final Calendar calendar) {
         Preconditions.checkNotNull(labelEra);
         Preconditions.checkNotNull(calendar);
-        labelEra.setText(text.get("statusBar.era") + " " + calendar.getCurrentYear() + " AD");
+        String date = text.get("statusBar.era") + " " + calendar.getCurrentYear() + " AD";
+        if (calendar.getCurrentSeason().isPresent()) {
+            date += " "
+                    + text.get("statusBar.season." + calendar.getCurrentSeason().get().getKey());
+        }
+        labelEra.setText(date);
     }
 
     private void setGoldText(final Label labelGold, final int gold) {

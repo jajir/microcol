@@ -4,7 +4,6 @@ public class CalendarPo {
 
     private int startYear;
     private int endYear;
-    private int currentYear;
     private int numberOfPlayedTurns;
 
     /**
@@ -35,21 +34,6 @@ public class CalendarPo {
      */
     public void setEndYear(int endYear) {
         this.endYear = endYear;
-    }
-
-    /**
-     * @return the currentYear
-     */
-    public int getCurrentYear() {
-        return currentYear;
-    }
-
-    /**
-     * @param currentYear
-     *            the currentYear to set
-     */
-    public void setCurrentYear(int currentYear) {
-        this.currentYear = currentYear;
     }
 
     /**

@@ -74,7 +74,8 @@ public class ModelProvider {
 			.addShipToPort(builder.makeUnitBuilder().setType(UnitType.FRIGATE).setLocation(Location.of(2, 2))
 					.setPlayerName("Dutch").addCargoGood(GoodType.CIGARS, 100).addCargoGood(GoodType.RUM, 100)
 					.addCargoGood(GoodType.SILVER, 100).build())
-			.build();
+			.build()
+			.startGame("Dutch");
 
 		return builder.build();
 	}
@@ -108,7 +109,9 @@ public class ModelProvider {
 			.addShipToPort(builder.makeUnitBuilder().setType(UnitType.GALLEON).setLocation(Location.of(2, 2))
 					.setPlayerName("Dutch").addCargoGood(GoodType.COTTON, 100)
 					.addCargoUnit(UnitType.COLONIST).build())
-			.build();
+			.build()
+	                .startGame("Dutch");
+
 
 		return builder.build();
 	}

@@ -15,69 +15,68 @@ import com.google.gson.GsonBuilder;
  * verify that is same as was defined.
  */
 public class ModelDaoTest {
-	
-	private Logger logger = Logger.getLogger(ModelDaoTest.class);
 
-	private final Logger modelDaoLogger = Logger.getLogger(ModelDao.class);
-	
-	@Test
-	public void test_simple_gson() throws Exception {
-		Gson gson = new GsonBuilder().create();
+    private Logger logger = Logger.getLogger(ModelDaoTest.class);
 
-		GameModelDao gameModel = new GameModelDao();
-		gameModel.setAge(32);
-		gameModel.setName("Ahoj lidi");
-		String str;
+    private final Logger modelDaoLogger = Logger.getLogger(ModelDao.class);
 
-		str = gson.toJson(new String[] { "a", "b", "c" });
-		logger.debug(str);
+    @Test
+    public void test_simple_gson() throws Exception {
+        Gson gson = new GsonBuilder().create();
 
-		str = gson.toJson(new Character[] { 'a', 'b', 'b' });
-		logger.debug(str);
+        GameModelDao gameModel = new GameModelDao();
+        gameModel.setAge(32);
+        gameModel.setName("Ahoj lidi");
+        String str;
 
-		str = gson.toJson(gameModel);
-		logger.debug(str);
-	}
+        str = gson.toJson(new String[] { "a", "b", "c" });
+        logger.debug(str);
 
-	@Test
-	public void test_writing() throws Exception {
-		ModelPo modelPo = new ModelProvider().buildComplexModel().save();
+        str = gson.toJson(new Character[] { 'a', 'b', 'b' });
+        logger.debug(str);
 
-		ModelDao modelDao = new ModelDao();
-		modelDao.saveToFile("target/test.json", modelPo);
-	}
+        str = gson.toJson(gameModel);
+        logger.debug(str);
+    }
 
-	@Test
-	public void test_simple_writing() throws Exception {
-		ModelPo modelPo = new ModelProvider().buildSimpleModel().save();
-		
-		assertEquals(2, modelPo.getUnits().size());
+    @Test
+    public void test_writing() throws Exception {
+        ModelPo modelPo = new ModelProvider().buildComplexModel().save();
 
-		ModelDao modelDao = new ModelDao();
-		modelDao.saveToFile("target/test.json", modelPo);
-	}
+        ModelDao modelDao = new ModelDao();
+        modelDao.saveToFile("target/test.json", modelPo);
+    }
 
-	@Test
-	public void test_writing_loading() throws Exception {
-		ModelPo modelPo = new ModelProvider().buildComplexModel().save();
+    @Test
+    public void test_simple_writing() throws Exception {
+        ModelPo modelPo = new ModelProvider().buildSimpleModel().save();
 
-		ModelDao modelDao = new ModelDao();
-		modelDao.saveToFile("target/test.json", modelPo);
-	}
+        assertEquals(2, modelPo.getUnits().size());
 
-	private Level level;
-	
-	@Before
-	public void before() {
-		level  = modelDaoLogger.getLevel();
-		modelDaoLogger.setLevel(Level.DEBUG);
-		logger.setLevel(Level.DEBUG);
-	}
+        ModelDao modelDao = new ModelDao();
+        modelDao.saveToFile("target/test.json", modelPo);
+    }
 
-	@After
-	public void after() {
-		modelDaoLogger.setLevel(level);
-	}
-	
+    @Test
+    public void test_writing_loading() throws Exception {
+        ModelPo modelPo = new ModelProvider().buildComplexModel().save();
+
+        ModelDao modelDao = new ModelDao();
+        modelDao.saveToFile("target/test.json", modelPo);
+    }
+
+    private Level level;
+
+    @Before
+    public void before() {
+        level = modelDaoLogger.getLevel();
+        modelDaoLogger.setLevel(Level.DEBUG);
+        logger.setLevel(Level.DEBUG);
+    }
+
+    @After
+    public void after() {
+        modelDaoLogger.setLevel(level);
+    }
 
 }
