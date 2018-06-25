@@ -68,7 +68,7 @@ Planned releases
     
     * \u2713 Colony is destroyed.   
  
-  * \u2713 End game statistics. Count for each player:
+  * \u2713 End game statistics & turn report. Count for each player:
     
     * \u2713 Military power.
     
@@ -95,42 +95,26 @@ Planned releases
   * \u2713 When next unit is selected than screen should scroll at this unit. 
   
   * \u2713 Calendar should slow down turns later in game. Split year into spring, summer, autumn and winter.
+  
+  * \u2713 Every 11 turns new unit appears in Europe port. It's light version of crosses and religion unrest in Old World.
  
  * <<Backlog>> - feature and improvement backlog
+  
+  * \u2717 Right panel allows to select unit.
+  
+  * \u2717 Add item in menu mission goal. There should be some mission description.
   
   * \u2717 When unit go to west than is turn to west direction.
  When unit go to to east than turn to east.
  When unit arrive to some place than keep direction where is facing.
  Direction where is unit turn is persisted.  
   
-  * \u2717 Right panel allows to select unit.
-  
   * \u2717 Colony building queue and queue editing - simple and ugly version
 
   * \u2717 Add unit wagon, can't fight, capture colony, can transport goods
 
-  * \u2717 Turn report - when turn starts, events summary to user. Informations like:
-  
-    * \u2717 Ship is in Europe port
-  
-    * \u2717 Prices drop rise in Europe.
-  
-    * \u2717 Colony is plagued by famine.
-  
-    * \u2717 Taxes was changed.
-
   * \u2717 Improve UI
-   
-  * \u2717 Simple statistics, each turn count and remember:
-
-  	* \u2717 Player's military strength
-  	
-  	* \u2717 Number of units
-  	
-  	* \u2717 Total price of user's good 
-  	
-    * \u2717 Allow to display this statistics and the end of game
-  
+     
   * \u2717 colonist unit equipped with (20) tool can plow field.
   Depending on unit expertise in a few turns field will be created and 20 tools will be destroyed.
   

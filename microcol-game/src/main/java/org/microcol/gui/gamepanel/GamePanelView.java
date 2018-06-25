@@ -153,10 +153,10 @@ public class GamePanelView {
         if (from.distanceSimplified(to) > 0) {
             /**
              * Following precondition throws exception when scroll planning is
-             * called before canvas was fully initialized. Just after full
-             * canvas initialization is height property set.
+             * called before canvas was fully initialized. Method could be
+             * called just after canvas full initialization.
              */
-            Preconditions.checkState(visibleArea.getCanvasHeight() != 0,
+            Preconditions.checkState(visibleArea.isReady(),
                     "screen scroll is called before canvas initialization was finished.");
             animationManager.addAnimation(
                     new AnimatonScreenScroll(new ScreenScrolling(pathPlanning, from, to)));

@@ -100,7 +100,7 @@ jestli klesne na nulu, osadnicí začnou umírat hlady. Vyrob 30 doutníků.</en
 	<entry key="campaign.default.sellCigarsInEuropePort">Konečně. Už máš potřebné množství doutníků. Vezmi je na loď, odvez do Evropy a prodej.</entry>
 	<entry key="campaign.default.cigarsWasSold">Výborně. Podařilo se ti prodat těžce získané doutníky.</entry>
 	<entry key="campaign.default.gameOver">Gratuluji. Podařilo se ti splnit první misi.</entry>
-	<entry key="campaign.default.m1.cantDeclareIndependence">Ještě vyhlásit nezávislost neůžeš. Vyhlášení nezávislosti hodně pozlobí krále, který se pkusí získat kolonie silo zpět. Na to nemáš dost síly.</entry>
+	<entry key="campaign.default.m1.cantDeclareIndependence">Ještě nemůžeš vyhlásit nezávislost. Vyhlášení nezávislosti hodně pozlobí krále. Jakmile se o tom krále dozví, pokusí se získat kolonie silou zpět. Ještě nemáš dost síly se ubránit.</entry>
 	<entry key="campaign.default.m2.start">You found first colony, now you have to build proud and wealth nations.</entry>
 	<entry key="campaign.default.m2.foundColonies">Now you'll need more colonies. Buy some colonist and found at least 3 colonies.</entry>
 	<entry key="campaign.default.m2.foundColonies.done">Perfect. Now you have enought colonies.</entry>
@@ -177,6 +177,7 @@ jestli klesne na nulu, osadnicí začnou umírat hlady. Vyrob 30 doutníků.</en
 	<entry key="turnEvent.faminePlagueColony">Hladomor řádí v kolonii %s. V kolonii umírají kolonisté.</entry>
 	<entry key="turnEvent.famineWillPlagueColony">Blíží se hladomor ve městě %s. V příštím tahu začnou umírat kolonisté.</entry>
 	<entry key="turnEvent.colonyWasDestroyed">Kolonie %s byla zničena.</entry>
+	<entry key="turnEvent.newUnitIsInEurope">Díky náboženskému neklidu ve starém světě se další kolonista rozhodl zkusit štěstí v novém světě, čeká v evropském přístavu.</entry>
 	
 	<entry key="statistics.title">Statistiky</entry>
 	<entry key="statistics.caption">Statistiky</entry>

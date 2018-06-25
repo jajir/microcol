@@ -164,7 +164,11 @@ public class RightPanelView {
     public Button getNextTurnButton() {
         return nextTurnButton;
     }
-
+    
+    public void setDisableNextTurnButton(final boolean disabled){ 
+        nextTurnButton.setDisable(disabled);
+    }
+    
     public GridPane getBox() {
         return gridPane;
     }

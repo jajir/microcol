@@ -21,6 +21,8 @@ public class AnimationManager implements AnimationLock {
 
     private final Queue<AnimationHolder> animationsQueue = new LinkedList<>();
 
+    private final AnimationStartedController animationStartedController;
+    
     private final AnimationIsDoneController animationIsDoneController;
 
     private AnimationHolder runningPart;
@@ -30,7 +32,9 @@ public class AnimationManager implements AnimationLock {
     private final AnimationLatch latch = new AnimationLatch();
 
     @Inject
-    public AnimationManager(final AnimationIsDoneController animationIsDoneController) {
+    public AnimationManager(final AnimationStartedController animationStartedController,
+            final AnimationIsDoneController animationIsDoneController) {
+        this.animationStartedController = Preconditions.checkNotNull(animationStartedController);
         this.animationIsDoneController = Preconditions.checkNotNull(animationIsDoneController);
         runningPart = null;
     }
@@ -53,6 +57,7 @@ public class AnimationManager implements AnimationLock {
                 logger.debug("You are done, unlocking threads");
             } else {
                 runningPart = animationsQueue.remove();
+                animationStartedController.fireEvent(new AnimationStartedEvent());
                 Preconditions.checkState(runningPart.getAnimation().hasNextStep(),
                         "Just started animation should have at least one step.");
             }
@@ -80,6 +85,7 @@ public class AnimationManager implements AnimationLock {
         logger.debug("Adding animation {}", animation);
         if (runningPart == null) {
             runningPart = holder;
+            animationStartedController.fireEvent(new AnimationStartedEvent());
             hasNextStep = holder.getAnimation().hasNextStep();
             Preconditions.checkState(hasNextStep, "Animation should contain at least one step.");
         } else {

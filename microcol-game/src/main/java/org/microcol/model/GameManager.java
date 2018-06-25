@@ -84,6 +84,8 @@ class GameManager {
         model.fireRoundStarted();
         currentPlayer.startTurn();
         model.fireTurnStarted(currentPlayer, true);
+        model.getStatistics().countNextTurn(model);
+        
     }
 
     /**

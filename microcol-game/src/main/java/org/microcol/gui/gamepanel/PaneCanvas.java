@@ -1,9 +1,5 @@
 package org.microcol.gui.gamepanel;
 
-import java.util.function.Consumer;
-
-import org.microcol.gui.util.OneTimeConditionalEvent;
-
 import com.google.inject.Inject;
 
 import javafx.beans.property.ReadOnlyDoubleProperty;
@@ -31,8 +27,6 @@ public class PaneCanvas {
 
     private final Canvas canvas;
 
-    private final OneTimeConditionalEvent<PaneCanvas> conditionalEvent = new OneTimeConditionalEvent<>();
-
     @Inject
     public PaneCanvas() {
         canvas = new Canvas();
@@ -40,28 +34,10 @@ public class PaneCanvas {
         canvasPane = new Pane();
         canvasPane.setId("canvas");
         canvasPane.getChildren().add(canvas);
-        canvasPane.widthProperty().addListener((obj, oldValue, newValue) -> {
-            if (isCorrectSize(newValue.doubleValue())) {
-                conditionalEvent.condition1Passed();
-            }
-        });
-        canvasPane.heightProperty().addListener((obj, oldValue, newValue) -> {
-            if (isCorrectSize(newValue.doubleValue())) {
-                conditionalEvent.condition2Passed();
-            }
-        });
 
         // connect canvas size to canvas pane size
         canvas.widthProperty().bind(canvasPane.widthProperty());
         canvas.heightProperty().bind(canvasPane.heightProperty());
-    }
-
-    public void executeWhenReady(final Consumer<PaneCanvas> consumer) {
-        conditionalEvent.setOnConditionsPassed(consumer);
-    }
-
-    private boolean isCorrectSize(final double size) {
-        return size > 0 && size < MAX_CANVAS_SIDE_LENGTH;
     }
 
     public ReadOnlyDoubleProperty widthProperty() {

@@ -9,6 +9,8 @@ import org.microcol.gui.image.ImageProvider;
 import org.microcol.model.Location;
 import org.microcol.model.Unit;
 
+import com.google.common.base.MoreObjects;
+
 import javafx.scene.canvas.GraphicsContext;
 
 /**
@@ -35,6 +37,12 @@ public class AnimationWalkParticle {
         final Point to = Point.of(Location.of(locationTo.getX() - locationFrom.getX(),
                 locationTo.getY() - locationFrom.getY()));
         pathPlanning.paintPath(from, to, point -> partialPath.add(point));
+    }
+
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(getClass()).add("locationFrom", locationFrom)
+                .add("", partialPath).toString();
     }
 
     /**

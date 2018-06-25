@@ -60,6 +60,7 @@ import org.microcol.gui.gamemenu.ShowDefaultCampaignMenuControler;
 import org.microcol.gui.gamemenu.ShowDefaultCampaignMenuListener;
 import org.microcol.gui.gamepanel.AnimationIsDoneController;
 import org.microcol.gui.gamepanel.AnimationManager;
+import org.microcol.gui.gamepanel.AnimationStartedController;
 import org.microcol.gui.gamepanel.ExcludePainting;
 import org.microcol.gui.gamepanel.GamePanelController;
 import org.microcol.gui.gamepanel.GamePanelPresenter;
@@ -178,6 +179,7 @@ public class MicroColModule extends AbstractModule {
         bind(SelectNextUnitController.class).in(Singleton.class);
         bind(UnitEmbarkedController.class).in(Singleton.class);
         bind(AnimationIsDoneController.class).in(Singleton.class);
+        bind(AnimationStartedController.class).in(Singleton.class);
         bind(UnitMovedToHighSeasController.class).in(Singleton.class);
         bind(UnitMovedOutsideColonyController.class).in(Singleton.class);
         bind(UnitMovedToConstructionController.class).in(Singleton.class);
@@ -248,7 +250,8 @@ public class MicroColModule extends AbstractModule {
 
         bind(RightPanelView.class).in(Singleton.class);
         bind(RightPanelPresenter.class).asEagerSingleton();
-
+        bind(RightPanelNextButtonControll.class).asEagerSingleton();
+        
         bind(UnitsPanel.class).in(Singleton.class);
         bind(PersistingDialog.class).in(Singleton.class);
 

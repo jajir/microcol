@@ -8,6 +8,7 @@ import java.util.Set;
 
 import org.microcol.model.store.PlayerPo;
 import org.microcol.model.store.VisibilityPo;
+import org.microcol.model.turnevent.TurnEventProvider;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
@@ -149,6 +150,18 @@ public final class Player {
     void startTurn() {
         getAllUnits().forEach(unit -> unit.startTurn());
         getColonies().forEach(colony -> colony.startTurn());
+        if (isHuman()) {
+            optionallyAddNewUnitInEuropePort();
+        }
+    }
+
+    private void optionallyAddNewUnitInEuropePort() {
+        final int turnNo = model.getCalendar().getNumberOfPlayedTurns();
+        if (turnNo > 6 && turnNo <= 70 && turnNo % 11 == 0) {
+            // add free colonist to Europe port.
+            model.addUnitInEurope(UnitType.COLONIST, this);
+            model.getTurnEventStore().add(TurnEventProvider.getNewUnitInEurope(this));
+        }
     }
 
     public void endTurn() {

@@ -44,6 +44,8 @@ import com.google.common.base.Preconditions;
  * 
  */
 public class VisibleArea {
+    
+    private final static int NOT_READY = -1;
 
     /**
      * It's position of top left corner of canvas on game map.
@@ -53,12 +55,12 @@ public class VisibleArea {
     /**
      * Define canvas width.
      */
-    private int canvasWidth;
+    private int canvasWidth = NOT_READY;
 
     /**
      * Define canvas height.
      */
-    private int canvasHeight;
+    private int canvasHeight = NOT_READY;
 
     /**
      * Define map size.
@@ -85,8 +87,10 @@ public class VisibleArea {
          * Following code force class to compute correct position of top left
          * corner of map.
          */
-        setCanvasHeight(canvasHeight);
-        setCanvasWidth(canvasWidth);
+        if(isReady()){
+            setCanvasHeight(canvasHeight);
+            setCanvasWidth(canvasWidth);
+        }
     }
 
     public int getCanvasWidth() {
@@ -113,7 +117,11 @@ public class VisibleArea {
             }
         }
         this.canvasWidth = newCanvasWidth;
-        onVisibleAreaIsReady.condition1Passed();
+        onVisibleAreaIsReady.setCondition1Passed();
+    }
+    
+    public boolean isReady() {
+        return canvasWidth != NOT_READY && canvasHeight != NOT_READY;
     }
 
     public int getCanvasHeight() {
@@ -140,7 +148,7 @@ public class VisibleArea {
             }
         }
         this.canvasHeight = newCanvasHeight;
-        onVisibleAreaIsReady.condition2Passed();
+        onVisibleAreaIsReady.setCondition2Passed();
     }
 
     public void setX(int x) {

@@ -47,50 +47,40 @@ public class OneTimeConditionalEvent<T> {
      */
     public void setOnConditionsPassed(final Consumer<T> onConditionsPassed) {
         Preconditions.checkState(this.onConditionsPassed == null,
-                "There is previous unprocessed event.");
-        Preconditions.checkNotNull(onConditionsPassed);
-        if (condition1 && condition2) {
+                "There is previous unprocessed event '%s'.", this.onConditionsPassed);
+        Preconditions.checkNotNull(onConditionsPassed, "onConditionPassed consumer is null");
+        executeIfNecessary(onConditionsPassed);
+    }
+
+    private void executeIfNecessary(final Consumer<T> onConditionsPassed) {
+        if (condition1 && condition2 && onConditionsPassed != null) {
             onConditionsPassed.accept(null);
+            this.onConditionsPassed = null;
         } else {
             this.onConditionsPassed = onConditionsPassed;
         }
     }
 
-    public void condition1Passed() {
-        if (onConditionsPassed == null) {
-            return;
-        }
+    public void setCondition1Passed() {
         condition1 = true;
-        canBeStarted();
+        executeIfNecessary(onConditionsPassed);
     }
 
-    private boolean isEnabled() {
+    private boolean isEventSet() {
         return onConditionsPassed != null;
     }
 
-    public void condition2Passed() {
-        if (onConditionsPassed == null) {
-            return;
-        }
+    public void setCondition2Passed() {
         condition2 = true;
-        canBeStarted();
-    }
-
-    private void canBeStarted() {
-        if (condition1 && condition2) {
-            onConditionsPassed.accept(null);
-            onConditionsPassed = null;
-        }
+        executeIfNecessary(onConditionsPassed);
     }
 
     @Override
     public String toString() {
         final ToStringHelper toStringHelper = MoreObjects.toStringHelper(getClass())
-                .add("isEnabled", isEnabled());
-        if (isEnabled()) {
-            toStringHelper.add("condition1", condition1);
-            toStringHelper.add("condition2", condition2);
-        }
+                .add("isEnabled", isEventSet());
+        toStringHelper.add("condition1", condition1);
+        toStringHelper.add("condition2", condition2);
         return toStringHelper.toString();
     }
 

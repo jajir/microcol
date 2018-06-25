@@ -2,6 +2,7 @@ package org.microcol.model;
 
 import org.microcol.model.store.TurnPlayerStatisticsPo;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 
 /**
@@ -16,9 +17,9 @@ public class TurnPlayerStatistics {
     private int econonyScore;
 
     private int militaryScore;
-    
+
     private int gold;
-    
+
     private int score;
 
     TurnPlayerStatistics(final Player player, final int turnNo) {
@@ -47,6 +48,13 @@ public class TurnPlayerStatistics {
         out.setGold(gold);
         out.setScore(score);
         return out;
+    }
+
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(getClass()).add("turnNo", turnNo).add("playerNames", player.getName())
+                .add("gold", gold).add("militaryScore", militaryScore)
+                .add("econonyScore", econonyScore).add("score", score).toString();
     }
 
     /**
@@ -101,7 +109,8 @@ public class TurnPlayerStatistics {
     }
 
     /**
-     * @param gold the gold to set
+     * @param gold
+     *            the gold to set
      */
     public void setGold(int gold) {
         this.gold = gold;
@@ -115,7 +124,8 @@ public class TurnPlayerStatistics {
     }
 
     /**
-     * @param score the score to set
+     * @param score
+     *            the score to set
      */
     public void setScore(int score) {
         this.score = score;
