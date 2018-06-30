@@ -4,19 +4,20 @@ import java.util.List;
 import java.util.function.Function;
 
 import org.microcol.gui.event.model.MissionCallBack;
+import org.microcol.model.Model;
 import org.microcol.model.event.GameFinishedEvent;
 import org.microcol.model.event.IndependenceWasDeclaredEvent;
 
 import com.google.common.collect.Lists;
 
-public class FreePlay_1_missionDefinition extends AbstractModelListenerAdapter {
+public class FreePlay_1_missionDefinition extends MissionDefinition {
 
     @SuppressWarnings("unused")
     private final FreePlay_1_mission mission;
 
     FreePlay_1_missionDefinition(final FreePlay_1_mission mission,
-            final MissionCallBack missionCallBack) {
-        super(missionCallBack);
+            final MissionCallBack missionCallBack, final Model model) {
+        super(missionCallBack, model);
         this.mission = mission;
     }
 

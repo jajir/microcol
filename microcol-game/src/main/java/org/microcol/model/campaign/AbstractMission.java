@@ -4,11 +4,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
-import org.microcol.gui.MicroColException;
 import org.microcol.model.GameOverEvaluator;
 import org.microcol.model.GameOverResult;
 import org.microcol.model.Model;
-import org.microcol.model.Player;
 import org.microcol.model.store.ModelPo;
 
 import com.google.common.base.MoreObjects;
@@ -18,7 +16,7 @@ import com.google.common.collect.Lists;
 /**
  * Abstract mission. Contain some basic functionality.
  */
-public abstract class AbstractMission<T extends MissionContext> implements Mission {
+public abstract class AbstractMission<G extends MissionGoals, T extends MissionContext> implements Mission<G> {
 
     private final String name;
 
@@ -36,21 +34,30 @@ public abstract class AbstractMission<T extends MissionContext> implements Missi
      * Running mission context. There is stored player's achievements.
      */
     private T context;
+    
+    private final G goals;
 
-    AbstractMission(final String name, final Integer orderNo, final String modelFileName) {
+    AbstractMission(final String name, final Integer orderNo, final String modelFileName, final G goals) {
         this.name = Preconditions.checkNotNull(name);
         this.orderNo = Preconditions.checkNotNull(orderNo);
         this.modelFileName = Preconditions.checkNotNull(modelFileName);
+        this.goals = Preconditions.checkNotNull(goals);
     }
 
+    //TODO there is lot of dependencies to save mission result
     protected void setFinished(final boolean finished) {
-        // FIXME store it?
+        Preconditions.checkNotNull(campaignManager, "campaignManager is null");
+        final Campaign campaign  = campaignManager.getCampaignByName(getCampaignKey());
+        final CampaignMission campaignMission = campaign.getMisssionByName(name);
+        campaignMission.setFinished(finished);
+        campaignManager.saveMissionState();
     }
     
+    abstract <C extends CampaignName> C getCampaignKey(); 
+    
     @Override
-    public MissionGoals getGoals() {
-        // FIXME Auto-generated method stub
-        return null;
+    public G getGoals() {
+        return goals;
     }
 
     /*
@@ -66,34 +73,6 @@ public abstract class AbstractMission<T extends MissionContext> implements Missi
     @Override
     public void setCampaignManager(final CampaignManager campaignManager) {
         this.campaignManager = campaignManager;
-    }
-
-    void flush() {
-        Preconditions.checkNotNull(campaignManager, "campaignManager is null");
-        campaignManager.saveMissionState();
-    }
-
-    protected boolean isFirstTurn(final Model model) {
-        return model.getCalendar().getCurrentYear() == model.getCalendar().getStartYear();
-    }
-
-    protected Player getHumanPlayer(final Model model) {
-        return model.getPlayers().stream().filter(p -> p.isHuman()).findAny()
-                .orElseThrow(() -> new MicroColException("There is no human player."));
-    }
-
-    protected boolean playerHaveMoreOrEqualColonies(final Model model, final int numberOfColonies) {
-        return model.getColonies(getHumanPlayer(model)).size() >= numberOfColonies;
-    }
-
-    protected int getNumberOfMilitaryUnits(final Model model) {
-        return getNumberOfMilitaryUnitsForPlayer(getHumanPlayer(model));
-    }
-
-    // TODO this info should be provided by player object itself.
-    protected int getNumberOfMilitaryUnitsForPlayer(final Player player) {
-        return (int) player.getAllUnits().stream().filter(unit -> unit.getType().canAttack())
-                .count();
     }
 
     protected Integer get(final Map<String, String> map, final String key) {
@@ -132,7 +111,9 @@ public abstract class AbstractMission<T extends MissionContext> implements Missi
 
     @Override
     public Map<String, String> saveToMap() {
-        return getContext().saveToMap();
+        final Map<String, String> out =getContext().saveToMap();
+        goals.save(out);
+        return out;
     }
 
     /**

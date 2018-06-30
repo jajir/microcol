@@ -10,7 +10,7 @@ import org.microcol.model.store.ModelPo;
 /**
  * First mission. Find New World.
  */
-public class Default_1_mission extends AbstractMission<Default_1_missionContext> {
+public class Default_1_mission extends AbstractMission<Default_1_goals, Default_1_missionContext> {
 
     private final static String MISSION_NAME = "findNewWorld";
 
@@ -20,36 +20,39 @@ public class Default_1_mission extends AbstractMission<Default_1_missionContext>
 
     final static Integer TRAGET_AMOUNT_OF_CIGARS = 30;
 
-    private Default_1_goals goals = new Default_1_goals();
-
     Default_1_mission() {
-        super(MISSION_NAME, 0, MISSION_MODEL_FILE);
+        super(MISSION_NAME, 0, MISSION_MODEL_FILE, new Default_1_goals());
     }
 
     @Override
     public void initialize(final ModelPo modelPo) {
         super.initialize(modelPo);
         if (modelPo.getCampaign().getData() == null) {
-            goals.initialize(new HashMap<>());
+            getGoals().initialize(new HashMap<>());
         } else {
-            goals.initialize(modelPo.getCampaign().getData());
+            getGoals().initialize(modelPo.getCampaign().getData());
         }
     }
 
     @Override
     public void startMission(final Model model, final MissionCallBack missionCallBack) {
-        model.addListener(new Default_1_missionDefinition(this, model, missionCallBack, goals));
+        model.addListener(
+                new Default_1_missionDefinition(this, model, missionCallBack, getGoals()));
     }
 
     @Override
     protected GameOverResult evaluateGameOver(final Model model) {
-        if (getContext().getCigarsWasSold() >= TRAGET_AMOUNT_OF_CIGARS) {
+        if (getGoals().isAllGoalsDone()) {
             setFinished(true);
-            flush();
             return new GameOverResult(GAME_OVER_REASON);
-        } else {
-            return null;
         }
+        return null;
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    CampaignNames getCampaignKey() {
+        return CampaignNames.defaultCampaign;
     }
 
     @Override

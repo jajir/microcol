@@ -4,23 +4,16 @@ import java.util.List;
 import java.util.function.Function;
 
 import org.microcol.gui.event.model.MissionCallBack;
+import org.microcol.model.Model;
 import org.microcol.model.event.GameStartedEvent;
 import org.microcol.model.event.IndependenceWasDeclaredEvent;
 
-import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 
-final class Default_3_missionDefinition extends AbstractModelListenerAdapter {
+final class Default_3_missionDefinition extends MissionDefinition {
 
-    /**
-     * 
-     */
-    private final Default_3_mission mission;
-
-    Default_3_missionDefinition(final Default_3_mission mission,
-            final MissionCallBack missionCallBack) {
-        super(missionCallBack);
-        this.mission = Preconditions.checkNotNull(mission);
+    Default_3_missionDefinition(final MissionCallBack missionCallBack, final Model model) {
+        super(missionCallBack, model);
     }
 
     @Override
@@ -42,7 +35,7 @@ final class Default_3_missionDefinition extends AbstractModelListenerAdapter {
 
     @Override
     public void onGameStarted(final GameStartedEvent event) {
-        if (this.mission.isFirstTurn(event.getModel())) {
+        if (isFirstTurn(getModel())) {
             missionCallBack.addCallWhenReady(model -> {
                 missionCallBack.showMessage("campaign.default.m3.start",
                         "campaign.default.m3.declareIndependence");

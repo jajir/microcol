@@ -36,4 +36,8 @@ public abstract class MissionGoals {
         goals.forEach(goal -> goal.save(data));
     }
 
+    boolean isAllGoalsDone() {
+        return !goals.stream().filter(goal -> !goal.isFinished()).findAny().isPresent();
+    }
+
 }

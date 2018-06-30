@@ -14,12 +14,12 @@ public class DefaultCampaignMission implements CampaignMission {
 
     private final Integer orderNo;
 
-    private final Supplier<Mission> missionSupplier;
+    private final Supplier<Mission<?>> missionSupplier;
 
     private boolean isFinished;
 
     DefaultCampaignMission(final String name, final Integer orderNo,
-            final Supplier<Mission> missionSupplier) {
+            final Supplier<Mission<?>> missionSupplier) {
         this.name = Preconditions.checkNotNull(name);
         this.orderNo = Preconditions.checkNotNull(orderNo);
         this.missionSupplier = Preconditions.checkNotNull(missionSupplier);
@@ -57,7 +57,7 @@ public class DefaultCampaignMission implements CampaignMission {
     }
 
     @Override
-    public Mission makeMission() {
+    public Mission<?> makeMission() {
         return missionSupplier.get();
     }
 

@@ -37,7 +37,6 @@ public interface Campaign {
      * @return return <code>true</code> when mission could be played by user
      *         otherwise return <code>false</code>.
      */
-    //FIXME move to campaignMission class
     boolean isMissionEnabled(CampaignMission mission);
 
 }

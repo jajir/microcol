@@ -14,15 +14,15 @@ import org.microcol.model.event.TurnStartedEvent;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 
-final class Default_2_missionDefinition extends AbstractModelListenerAdapter {
+final class Default_2_missionDefinition extends MissionDefinition {
     /**
      * 
      */
     private final Default_2_mission mission;
 
     Default_2_missionDefinition(final Default_2_mission mission,
-            final MissionCallBack missionCallBack) {
-        super(missionCallBack);
+            final MissionCallBack missionCallBack, final Model model) {
+        super(missionCallBack, model);
         this.mission = Preconditions.checkNotNull(mission);
     }
 
@@ -44,7 +44,7 @@ final class Default_2_missionDefinition extends AbstractModelListenerAdapter {
 
     @Override
     public void onGameStarted(final GameStartedEvent event) {
-        if (this.mission.isFirstTurn(event.getModel())) {
+        if (isFirstTurn(event.getModel())) {
             missionCallBack.addCallWhenReady(model -> {
                 missionCallBack.showMessage("campaign.default.m2.start",
                         "campaign.default.m2.foundColonies");
@@ -60,12 +60,12 @@ final class Default_2_missionDefinition extends AbstractModelListenerAdapter {
 
     @Override
     public void onColonyWasFounded(final ColonyWasFoundEvent event) {
-        if (!this.mission.getContext().isWasNumberOfColoniesTargetReached()) {
-            if (this.mission.playerHaveMoreOrEqualColonies(event.getModel(),
+        if (!mission.getContext().isWasNumberOfColoniesTargetReached()) {
+            if (playerHaveMoreOrEqualColonies(event.getModel(),
                     Default_2_mission.TARGET_NUMBER_OF_COLONIES)) {
                 missionCallBack.showMessage("campaign.default.m2.foundColonies.done",
                         "campaign.default.m2.get5000");
-                this.mission.getContext().setWasNumberOfColoniesTargetReached(true);
+                mission.getContext().setWasNumberOfColoniesTargetReached(true);
             }
         }
     }
@@ -77,23 +77,23 @@ final class Default_2_missionDefinition extends AbstractModelListenerAdapter {
 
     @Override
     public void onTurnStarted(final TurnStartedEvent event) {
-        if (!this.mission.getContext().isWasNumberOfMilitaryUnitsTargetReached()) {
-            if (this.mission.getNumberOfMilitaryUnits(
+        if (!mission.getContext().isWasNumberOfMilitaryUnitsTargetReached()) {
+            if (getNumberOfMilitaryUnits(
                     event.getModel()) >= Default_2_mission.TARGET_NUMBER_OF_MILITARY_UNITS) {
                 missionCallBack.showMessage("campaign.default.m2.done");
-                this.mission.getContext().setWasNumberOfMilitaryUnitsTargetReached(true);
+                mission.getContext().setWasNumberOfMilitaryUnitsTargetReached(true);
             }
         }
         checkNumberOfGoldTarget(event.getModel());
     }
 
     private void checkNumberOfGoldTarget(final Model model) {
-        if (!this.mission.getContext().isWasNumberOfGoldTargetReached()) {
-            final int golds = this.mission.getHumanPlayer(model).getGold();
+        if (!mission.getContext().isWasNumberOfGoldTargetReached()) {
+            final int golds = getHumanPlayer(model).getGold();
             if (golds >= Default_2_mission.TARGET_NUMBER_OF_GOLD) {
                 missionCallBack.showMessage("campaign.default.m2.get5000.done",
                         "campaign.default.m2.makeArmy");
-                this.mission.getContext().setWasNumberOfGoldTargetReached(true);
+                mission.getContext().setWasNumberOfGoldTargetReached(true);
             }
         }
     }

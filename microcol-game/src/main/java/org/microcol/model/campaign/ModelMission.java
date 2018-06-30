@@ -25,20 +25,16 @@ public class ModelMission {
 
     private final CampaignMission campaignMission;
 
-    private final Mission mission;
+    private final Mission<?> mission;
 
     private final Model model;
 
     ModelMission(final Campaign campaign, final CampaignMission campaignMission,
-            final Mission mission, final Model model) {
+            final Mission<?> mission, final Model model) {
         this.campaign = Preconditions.checkNotNull(campaign);
         this.campaignMission = Preconditions.checkNotNull(campaignMission);
         this.mission = Preconditions.checkNotNull(mission);
         this.model = Preconditions.checkNotNull(model);
-    }
-
-    Mission getNextMission() {
-        return null;
     }
 
     public ModelPo getModelPo() {
@@ -73,7 +69,7 @@ public class ModelMission {
     /**
      * @return the mission
      */
-    public Mission getMission() {
+    public Mission<?> getMission() {
         return mission;
     }
 

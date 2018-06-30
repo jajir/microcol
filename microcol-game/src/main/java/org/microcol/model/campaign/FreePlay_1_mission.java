@@ -14,7 +14,7 @@ import com.google.common.collect.Lists;
  * Free play mission definition. There are no limitations player can do
  * anything.
  */
-public class FreePlay_1_mission extends AbstractMission<Empty_missionContext> {
+public class FreePlay_1_mission extends AbstractMission<MissionGoalsEmpty, Empty_missionContext> {
 
     /**
      * Free play game map.
@@ -23,12 +23,12 @@ public class FreePlay_1_mission extends AbstractMission<Empty_missionContext> {
 
     FreePlay_1_mission() {
         //TODO messing freeplay mission with campaign, use interfaces
-        super(FreePlay_campaign.FREE_PLAY, 0, FREE_PLAY_MISSION_MAP);
+        super(FreePlay_campaign.FREE_PLAY, 0, FREE_PLAY_MISSION_MAP, new MissionGoalsEmpty());
     }
 
     @Override
     public void startMission(final Model model, final MissionCallBack missionCallBack) {
-        model.addListener(new FreePlay_1_missionDefinition(this, missionCallBack));
+        model.addListener(new FreePlay_1_missionDefinition(this, missionCallBack, model));
     }
 
     @Override
@@ -42,6 +42,11 @@ public class FreePlay_1_mission extends AbstractMission<Empty_missionContext> {
         return new Empty_missionContext();
     }
 
+    @SuppressWarnings("unchecked")
+    @Override
+    CampaignNames getCampaignKey() {
+        return CampaignNames.freePlay;
+    }
     @Override
     protected GameOverResult evaluateGameOver(final Model model) {
         //It's not used.

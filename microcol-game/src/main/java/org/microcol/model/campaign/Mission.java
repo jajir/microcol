@@ -9,7 +9,7 @@ import org.microcol.model.GameOverResult;
 import org.microcol.model.Model;
 import org.microcol.model.store.ModelPo;
 
-public interface Mission {
+public interface Mission<G extends MissionGoals> {
 
     /**
      * @return the modelFileName
@@ -29,7 +29,7 @@ public interface Mission {
      *
      * @return mission goals
      */
-    MissionGoals getGoals();
+    G getGoals();
 
     void startMission(Model model, MissionCallBack missionCallBack);
 

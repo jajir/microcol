@@ -88,19 +88,22 @@
 	<entry key="campaignPanel.default.buildArmy">Build an army</entry>
 	<entry key="campaignPanel.default.thrive">Thrive</entry>
 
-	<entry key="campaign.default.start">Find Now World to found new colony. Try to drag ship to the right part of map.</entry>
-	<entry key="campaign.default.cantMoveToHighSeas">You should not go back Europe. You come from there to find new world. New world should on the West.</entry>
-	<entry key="campaign.default.pressNextTurn">Ship can't move in this turn more. Ship don't have any action points. You can check it in right panel where are ship's details. Now press 'Next Turn' button.</entry>
-	<entry key="campaign.default.moveUnitBeforeEndTurn">First turn with ship Try to find New World.</entry>
-	<entry key="campaign.default.continentInSight">You found New World. Now lets sail close at try to disembark. Your next task is to found new colony.</entry>
-	<entry key="campaign.default.firstColonyWasFounded">Great. You found new colony. Now it's on you how it will thrive.</entry>
-	<entry key="campaign.default.produce100cigars">Otevři kliknutím detail kolonie a začni pěstovat tabák a vyrábět z něj cigarety.
+	<entry key="campaign.default.m1.g1">Find Now World to found new colony. Try to look at left part of map.</entry>
+	<entry key="campaign.default.m1.g2">Disembark at New World and found new colony.</entry>
+	<entry key="campaign.default.m1.g3">Produce and sell cigars.</entry>
+	<entry key="campaign.default.m1.start">Find Now World to found new colony. Try to drag ship to the right part of map.</entry>
+	<entry key="campaign.default.m1.cantMoveToHighSeas">You should not go back Europe. You come from there to find new world. New world should on the West.</entry>
+	<entry key="campaign.default.m1.pressNextTurn">Ship can't move in this turn more. Ship don't have any action points. You can check it in right panel where are ship's details. Now press 'Next Turn' button.</entry>
+	<entry key="campaign.default.m1.moveUnitBeforeEndTurn">First turn with ship Try to find New World.</entry>
+	<entry key="campaign.default.m1.continentInSight">You found New World. Now lets sail close at try to disembark. Your next task is to found new colony.</entry>
+	<entry key="campaign.default.m1.firstColonyWasFounded">Great. You found new colony. Now it's on you how it will thrive.</entry>
+	<entry key="campaign.default.m1.produce100cigars">Otevři kliknutím detail kolonie a začni pěstovat tabák a vyrábět z něj cigarety.
 Jednoho osadníka myší rozmísti na pole aby pěstoval tabák.
 Dalšiho pošlí do města vyrábět z tabáku cigarety. Pozor na množství jídla ve městě,
 jestli klesne na nulu, osadnicí začnou umírat hlady. Vyrob 30 doutníků.</entry>
-	<entry key="campaign.default.sellCigarsInEuropePort">Konečně. Už máš potřebné množství doutníků. Vezmi je na loď, odvez do Evropy a prodej.</entry>
-	<entry key="campaign.default.cigarsWasSold">Výborně. Podařilo se ti prodat těžce získané doutníky.</entry>
-	<entry key="campaign.default.gameOver">Congratulations. Your first mission is successfully finished.</entry>
+	<entry key="campaign.default.m1.sellCigarsInEuropePort">Konečně. Už máš potřebné množství doutníků. Vezmi je na loď, odvez do Evropy a prodej.</entry>
+	<entry key="campaign.default.m1.cigarsWasSold">Výborně. Podařilo se ti prodat těžce získané doutníky.</entry>
+	<entry key="campaign.default.m1.gameOver">Congratulations. Your first mission is successfully finished.</entry>
 	<entry key="campaign.default.m1.cantDeclareIndependence">You can't declare independence. Declaring of independence upset your King. King will try to conquer colonies back by force. You are not strong enough to fight with king.</entry>
 	<entry key="campaign.default.m2.start">You found first colony, now you have to build proud and wealth nations.</entry>
 	<entry key="campaign.default.m2.foundColonies">Now you'll need more colonies. Buy some colonist and found at least 3 colonies.</entry>

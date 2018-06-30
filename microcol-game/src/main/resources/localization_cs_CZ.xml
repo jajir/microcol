@@ -88,19 +88,22 @@
 	<entry key="campaignPanel.default.buildArmy">Armáda</entry>
 	<entry key="campaignPanel.default.thrive">Rozkvět</entry>
 
-	<entry key="campaign.default.start">Najděte nový svět, kde založíte kolonii. Jeď lodí doleva, tam asi bude země.</entry>
-	<entry key="campaign.default.cantMoveToHighSeas">Nemůžeš se vrátit do Evropy odkuď jsi přijel. Zkus najít nový svět, pravděpodobně bude ležet na západě.</entry>
-	<entry key="campaign.default.pressNextTurn">Tento tah už neni monžné s lodí dál hýbat. Loď nemá dost bodů na pohyb. Stav bodů je vidět v panelu naprvo, kde jsou detaily lodě. Pro další tah stiskni 'Další tah'</entry>
-	<entry key="campaign.default.moveUnitBeforeEndTurn">Nejprve táhni lodí, zkus najít nový svět.</entry>
-	<entry key="campaign.default.continentInSight">Nový Svět už je na dohled. Priraž s loďí a vyloď jednotky. Založ novou kolonii.</entry>
-	<entry key="campaign.default.firstColonyWasFounded">Výborně. Podařilo se ti založit novou kolonii. Teď je na tobě, jak bude dál rozkvétat.</entry>
-	<entry key="campaign.default.produce100cigars">Otevři kliknutím detail kolonie a začni pěstovat tabák a vyrábět z něj doutníky.
+	<entry key="campaign.default.m1.g1">Najdi nový svět. Jeď lodí doleva, tam asi bude země.</entry>
+	<entry key="campaign.default.m1.g2">Vyloď se a zolož kolonii.</entry>
+	<entry key="campaign.default.m1.g3">Vyprodukuj a v Evropě prodej doutníky.</entry>
+	<entry key="campaign.default.m1.start">Najděte nový svět, kde založíte kolonii. Jeď lodí doleva, tam asi bude země.</entry>
+	<entry key="campaign.default.m1.cantMoveToHighSeas">Nemůžeš se vrátit do Evropy odkuď jsi přijel. Zkus najít nový svět, pravděpodobně bude ležet na západě.</entry>
+	<entry key="campaign.default.m1.pressNextTurn">Tento tah už neni monžné s lodí dál hýbat. Loď nemá dost bodů na pohyb. Stav bodů je vidět v panelu naprvo, kde jsou detaily lodě. Pro další tah stiskni 'Další tah'</entry>
+	<entry key="campaign.default.m1.moveUnitBeforeEndTurn">Nejprve táhni lodí, zkus najít nový svět.</entry>
+	<entry key="campaign.default.m1.continentInSight">Nový Svět už je na dohled. Priraž s loďí a vyloď jednotky. Založ novou kolonii.</entry>
+	<entry key="campaign.default.m1.firstColonyWasFounded">Výborně. Podařilo se ti založit novou kolonii. Teď je na tobě, jak bude dál rozkvétat.</entry>
+	<entry key="campaign.default.m1.produce100cigars">Otevři kliknutím detail kolonie a začni pěstovat tabák a vyrábět z něj doutníky.
 Jednoho osadníka myší umísti na pole aby pěstoval tabák.
 Dalšího pošli do města vyrábět z tabáku cigarety. Pozor na množství jídla ve městě,
 jestli klesne na nulu, osadnicí začnou umírat hlady. Vyrob 30 doutníků.</entry>
-	<entry key="campaign.default.sellCigarsInEuropePort">Konečně. Už máš potřebné množství doutníků. Vezmi je na loď, odvez do Evropy a prodej.</entry>
-	<entry key="campaign.default.cigarsWasSold">Výborně. Podařilo se ti prodat těžce získané doutníky.</entry>
-	<entry key="campaign.default.gameOver">Gratuluji. Podařilo se ti splnit první misi.</entry>
+	<entry key="campaign.default.m1.sellCigarsInEuropePort">Konečně. Už máš potřebné množství doutníků. Vezmi je na loď, odvez do Evropy a prodej.</entry>
+	<entry key="campaign.default.m1.cigarsWasSold">Výborně. Podařilo se ti prodat těžce získané doutníky.</entry>
+	<entry key="campaign.default.m1.gameOver">Gratuluji. Podařilo se ti splnit první misi.</entry>
 	<entry key="campaign.default.m1.cantDeclareIndependence">Ještě nemůžeš vyhlásit nezávislost. Vyhlášení nezávislosti hodně pozlobí krále. Jakmile se o tom krále dozví, pokusí se získat kolonie silou zpět. Ještě nemáš dost síly se ubránit.</entry>
 	<entry key="campaign.default.m2.start">Máš první kolonii. Nyní musiš vybudovat bohatství.</entry>
 	<entry key="campaign.default.m2.foundColonies">Budeš potřebovat další kolonie. Za prodané zboží kup další kolonisty a založ tři města.</entry>

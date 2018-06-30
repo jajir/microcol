@@ -1,29 +1,17 @@
 package org.microcol.gui;
 
-import java.util.List;
-import java.util.function.Function;
-
-import org.microcol.gui.MainStageBuilder;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.util.AbstractMessageWindow;
 import org.microcol.gui.util.ButtonsBar;
 import org.microcol.gui.util.Text;
 import org.microcol.gui.util.ViewUtil;
-import org.microcol.model.Calendar;
-import org.microcol.model.TurnPlayerStatistics;
 import org.microcol.model.campaign.MissionGoals;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
 
 import javafx.event.ActionEvent;
-import javafx.scene.Node;
-import javafx.scene.chart.LineChart;
-import javafx.scene.chart.NumberAxis;
-import javafx.scene.chart.XYChart;
 import javafx.scene.control.Label;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
 import javafx.scene.layout.VBox;
 
 public class MissionGoalsDialog extends AbstractMessageWindow {

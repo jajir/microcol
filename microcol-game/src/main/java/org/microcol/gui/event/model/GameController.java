@@ -7,7 +7,6 @@ import org.microcol.model.campaign.CampaignManager;
 import org.microcol.model.campaign.CampaignMission;
 import org.microcol.model.campaign.CampaignName;
 import org.microcol.model.campaign.CampaignNames;
-import org.microcol.model.campaign.Mission;
 import org.microcol.model.campaign.ModelCampaignDao;
 import org.microcol.model.campaign.ModelMission;
 

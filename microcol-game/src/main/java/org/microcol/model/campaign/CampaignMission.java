@@ -36,6 +36,6 @@ public interface CampaignMission {
     /**
      * It's concrete mission factory.
      */
-    Mission makeMission();
+    Mission<?> makeMission();
 
 }
