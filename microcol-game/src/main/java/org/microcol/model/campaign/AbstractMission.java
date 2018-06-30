@@ -1,14 +1,19 @@
 package org.microcol.model.campaign;
 
+import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 
 import org.microcol.gui.MicroColException;
+import org.microcol.model.GameOverEvaluator;
+import org.microcol.model.GameOverResult;
 import org.microcol.model.Model;
 import org.microcol.model.Player;
 import org.microcol.model.store.ModelPo;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
+import com.google.common.collect.Lists;
 
 /**
  * Abstract mission. Contain some basic functionality.
@@ -25,8 +30,6 @@ public abstract class AbstractMission<T extends MissionContext> implements Missi
 
     private final Integer orderNo;
 
-    private boolean isFinished;
-
     private CampaignManager campaignManager;
 
     /**
@@ -38,27 +41,16 @@ public abstract class AbstractMission<T extends MissionContext> implements Missi
         this.name = Preconditions.checkNotNull(name);
         this.orderNo = Preconditions.checkNotNull(orderNo);
         this.modelFileName = Preconditions.checkNotNull(modelFileName);
-        setFinished(false);
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.microcol.model.campaign.Mission#getName()
-     */
-    @Override
-    public String getName() {
-        return name;
+    protected void setFinished(final boolean finished) {
+        // FIXME store it?
     }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.microcol.model.campaign.Mission#getOrderNo()
-     */
+    
     @Override
-    public Integer getOrderNo() {
-        return orderNo;
+    public MissionGoals getGoals() {
+        // FIXME Auto-generated method stub
+        return null;
     }
 
     /*
@@ -72,11 +64,6 @@ public abstract class AbstractMission<T extends MissionContext> implements Missi
     }
 
     @Override
-    public boolean isFinished() {
-        return isFinished;
-    }
-
-    @Override
     public void setCampaignManager(final CampaignManager campaignManager) {
         this.campaignManager = campaignManager;
     }
@@ -84,15 +71,6 @@ public abstract class AbstractMission<T extends MissionContext> implements Missi
     void flush() {
         Preconditions.checkNotNull(campaignManager, "campaignManager is null");
         campaignManager.saveMissionState();
-    }
-
-    /**
-     * @param isFinished
-     *            the isFinished to set
-     */
-    @Override
-    public void setFinished(boolean isFinished) {
-        this.isFinished = isFinished;
     }
 
     protected boolean isFirstTurn(final Model model) {
@@ -129,63 +107,21 @@ public abstract class AbstractMission<T extends MissionContext> implements Missi
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(getClass()).add("name", name)
-                .add("isFinished", isFinished).add("orderNo", orderNo)
+        return MoreObjects.toStringHelper(getClass()).add("name", name).add("orderNo", orderNo)
                 .add("modelFileName", modelFileName).toString();
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.lang.Object#hashCode()
-     */
+    // TODO mission game over evaluation should be at mission definition
     @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + (isFinished ? 1231 : 1237);
-        result = prime * result + ((modelFileName == null) ? 0 : modelFileName.hashCode());
-        result = prime * result + ((name == null) ? 0 : name.hashCode());
-        result = prime * result + ((orderNo == null) ? 0 : orderNo.hashCode());
-        return result;
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.lang.Object#equals(java.lang.Object)
-     */
-    @SuppressWarnings({ "unchecked", "rawtypes" })
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null)
-            return false;
-        if (getClass() != obj.getClass())
-            return false;
-        AbstractMission<T> other = (AbstractMission) obj;
-        if (isFinished != other.isFinished)
-            return false;
-        if (modelFileName == null) {
-            if (other.modelFileName != null)
-                return false;
-        } else if (!modelFileName.equals(other.modelFileName))
-            return false;
-        if (name == null) {
-            if (other.name != null)
-                return false;
-        } else if (!name.equals(other.name))
-            return false;
-        if (orderNo == null) {
-            if (other.orderNo != null)
-                return false;
-        } else if (!orderNo.equals(other.orderNo))
-            return false;
-        return true;
+    public List<Function<Model, GameOverResult>> getGameOverEvaluators() {
+        return Lists.newArrayList(GameOverEvaluator.GAMEOVER_CONDITION_CALENDAR,
+                GameOverEvaluator.GAMEOVER_CONDITION_HUMAN_LOST_ALL_COLONIES,
+                this::evaluateGameOver);
     }
 
     protected abstract T getNewContext();
+
+    protected abstract GameOverResult evaluateGameOver(Model model);
 
     @Override
     public void initialize(final ModelPo modelPo) {

@@ -25,6 +25,7 @@
 	<entry key="mainMenu.view.europe">Evrope</entry>
 	<entry key="mainMenu.view.turnReport">Turn report</entry>
 	<entry key="mainMenu.view.statistics">Statistics</entry>
+	<entry key="mainMenu.view.menuItemGoals">Mission Goals</entry>
 
 	<entry key="mainMenu.unit">Unit</entry>
 	<entry key="mainMenu.unit.move">Move</entry>
@@ -92,7 +93,7 @@
 	<entry key="campaign.default.pressNextTurn">Ship can't move in this turn more. Ship don't have any action points. You can check it in right panel where are ship's details. Now press 'Next Turn' button.</entry>
 	<entry key="campaign.default.moveUnitBeforeEndTurn">First turn with ship Try to find New World.</entry>
 	<entry key="campaign.default.continentInSight">You found New World. Now lets sail close at try to disembark. Your next task is to found new colony.</entry>
-	<entry key="campaign.default.firstColonyWasFounded">Výborně. Podařilo se ti založit novou kolonii. Teď je na tobě, jak bude dál rozkvétat.</entry>
+	<entry key="campaign.default.firstColonyWasFounded">Great. You found new colony. Now it's on you how it will thrive.</entry>
 	<entry key="campaign.default.produce100cigars">Otevři kliknutím detail kolonie a začni pěstovat tabák a vyrábět z něj cigarety.
 Jednoho osadníka myší rozmísti na pole aby pěstoval tabák.
 Dalšiho pošlí do města vyrábět z tabáku cigarety. Pozor na množství jídla ve městě,
@@ -186,6 +187,9 @@ jestli klesne na nulu, osadnicí začnou umírat hlady. Vyrob 30 doutníků.</en
 	<entry key="statistics.militaryPower">Military power</entry>
 	<entry key="statistics.wealth">Wealth</entry>
 	<entry key="statistics.score">Score</entry>
+	
+	<entry key="missionGoals.title">Mission Goals</entry>
+	<entry key="missionGoals.caption">Mission Goals</entry>
 
 	<entry key="dialogFight.title">Fight Advisor</entry>
 	<entry key="dialogFight.attacker">Attacker</entry>

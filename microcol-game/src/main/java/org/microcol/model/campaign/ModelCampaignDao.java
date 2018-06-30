@@ -34,9 +34,10 @@ public class ModelCampaignDao {
     private ModelMission makeFromModelPo(final ModelPo modelPo) {
         final Campaign campaign = campaignManager
                 .getCampaignByName(resolve(modelPo.getCampaign().getName()));
-        final Mission mission = campaign.getMisssionByName(modelPo.getCampaign().getMission());
+        final CampaignMission campaignMission = campaign.getMisssionByName(modelPo.getCampaign().getMission());
+        final Mission mission = campaignMission.makeMission();
         mission.initialize(modelPo);
-        return new ModelMission(campaign, (AbstractMission<?>) mission,
+        return new ModelMission(campaign, campaignMission, (AbstractMission<?>) mission,
                 Model.make(modelPo, mission.getGameOverEvaluators()));
     }
 

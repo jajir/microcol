@@ -4,6 +4,7 @@ import java.io.File;
 
 import org.microcol.model.campaign.Campaign;
 import org.microcol.model.campaign.CampaignManager;
+import org.microcol.model.campaign.CampaignMission;
 import org.microcol.model.campaign.CampaignName;
 import org.microcol.model.campaign.CampaignNames;
 import org.microcol.model.campaign.Mission;
@@ -54,7 +55,7 @@ public class GameController {
 
     public void writeModelToFile(final File targetFile) {
         modelCampaignDao.saveToFile(targetFile.getAbsolutePath(),
-                gameModelController.getModelCampaign());
+                gameModelController.getModelMission());
     }
 
     public void startModelFromFile(final File sourceFile) {
@@ -64,8 +65,9 @@ public class GameController {
     //TODO don't use mission name as string use enum or constant.
     public void startCampaignMission(final CampaignName campaignName, final String missionName) {
         final Campaign campaign = campaignManager.getCampaignByName(campaignName);
-        final Mission mission = campaign.getMisssionByName(missionName);
-        startMission(modelCampaignDao.loadFromClassPath(mission.getModelFileName()));
+        final CampaignMission campaignMission = campaign.getMisssionByName(missionName);
+        //TODO It's crazy to load it with mission instance
+        startMission(modelCampaignDao.loadFromClassPath(campaignMission.makeMission().getModelFileName()));
     }
 
     private void startMission(final ModelMission modelMission) {

@@ -91,8 +91,9 @@ public class SimpleAiPlayer extends AbstractRobotPlayer {
 
     private void tryToEmbark(final Unit unit) {
         if (unit.isStorable() && unit.isAtPlaceLocation() && unit.getAvailableMoves() > 0) {
-            unit.getStorageUnits().stream().flatMap(u -> u.getCargo().getSlots().stream())
-                    .filter(slot -> slot.isEmpty()).findAny().get().store(unit);
+            unit.getNeighborUnitsWithFreeSlot().stream()
+                    .flatMap(u -> u.getCargo().getSlots().stream()).filter(slot -> slot.isEmpty())
+                    .findAny().get().store(unit);
         }
     }
 

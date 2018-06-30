@@ -1,14 +1,8 @@
 package org.microcol.model.campaign;
 
-import java.util.List;
-import java.util.function.Function;
-
 import org.microcol.gui.event.model.MissionCallBack;
-import org.microcol.model.GameOverEvaluator;
 import org.microcol.model.GameOverResult;
 import org.microcol.model.Model;
-
-import com.google.common.collect.Lists;
 
 /**
  * First mission. Find New World.
@@ -37,14 +31,7 @@ public class Default_2_mission extends AbstractMission<Default_2_missionContext>
     }
 
     @Override
-    public List<Function<Model, GameOverResult>> getGameOverEvaluators() {
-        return Lists.newArrayList(GameOverEvaluator.GAMEOVER_CONDITION_CALENDAR,
-                GameOverEvaluator.GAMEOVER_CONDITION_HUMAN_LOST_ALL_COLONIES,
-                this::evaluateGameOver);
-    }
-
-    @SuppressWarnings("unused")
-    private GameOverResult evaluateGameOver(final Model model) {
+    protected GameOverResult evaluateGameOver(final Model model) {
         if (getContext().isWasNumberOfMilitaryUnitsTargetReached()) {
             setFinished(true);
             flush();

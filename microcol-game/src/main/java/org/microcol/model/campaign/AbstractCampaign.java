@@ -16,16 +16,16 @@ public abstract class AbstractCampaign implements Campaign {
      */
     private final CampaignNames name;
 
-    private final List<Mission> missions = new ArrayList<>();
+    private final List<CampaignMission> missions = new ArrayList<>();
 
     AbstractCampaign(final CampaignNames name) {
         this.name = Preconditions.checkNotNull(name);
     }
 
     @Override
-    public Mission getMisssionByName(final String name) {
+    public CampaignMission getMisssionByName(final String name) {
         Preconditions.checkNotNull(name);
-        final Optional<Mission> oMission = missions.stream()
+        final Optional<CampaignMission> oMission = missions.stream()
                 .filter(mission -> mission.getName().equals(name)).findAny();
         if (oMission.isPresent()) {
             return oMission.get();
@@ -52,12 +52,12 @@ public abstract class AbstractCampaign implements Campaign {
      * @see org.microcol.model.campaign.Campaign#getMissions()
      */
     @Override
-    public List<Mission> getMissions() {
-        return missions.stream().sorted(Comparator.comparing(Mission::getOrderNo))
+    public List<CampaignMission> getMissions() {
+        return missions.stream().sorted(Comparator.comparing(CampaignMission::getOrderNo))
                 .collect(ImmutableList.toImmutableList());
     }
 
-    void addMission(final Mission mission) {
+    void addMission(final CampaignMission mission) {
         Preconditions.checkNotNull(mission, "Mission is null.");
         missions.add(mission);
     }
@@ -68,10 +68,10 @@ public abstract class AbstractCampaign implements Campaign {
     }
 
     @Override
-    public boolean isMissionEnabled(final Mission mission) {
+    public boolean isMissionEnabled(final CampaignMission mission) {
         Preconditions.checkNotNull(mission, "Mission is null");
         boolean isPreviousFinished = true;
-        for (final Mission m : getMissions()) {
+        for (final CampaignMission m : getMissions()) {
             if (m.equals(mission)) {
                 if (m.isFinished()) {
                     return true;

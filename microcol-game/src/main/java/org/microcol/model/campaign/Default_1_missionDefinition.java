@@ -35,11 +35,14 @@ final class Default_1_missionDefinition extends AbstractModelListenerAdapter {
 
     private final Model model;
 
+    private final Default_1_goals goals;
+
     Default_1_missionDefinition(final Default_1_mission mission, final Model model,
-            MissionCallBack missionCallBack) {
+            final MissionCallBack missionCallBack, final Default_1_goals goals) {
         super(missionCallBack);
         this.mission = Preconditions.checkNotNull(mission);
-        this.model = model;
+        this.model = Preconditions.checkNotNull(model);
+        this.goals = Preconditions.checkNotNull(goals);
     }
 
     @Override
@@ -60,13 +63,16 @@ final class Default_1_missionDefinition extends AbstractModelListenerAdapter {
 
     @Override
     public void onBeforeDeclaringIndependence(final BeforeDeclaringIndependenceEvent event) {
+        /*
+         * Disable declaring of independence.
+         */
         event.stopEventExecution();
         missionCallBack.showMessage("campaign.default.m1.cantDeclareIndependence");
     }
 
     @Override
     public void onGameStarted(final GameStartedEvent event) {
-        if (this.mission.isFirstTurn(event.getModel())) {
+        if (mission.isFirstTurn(event.getModel())) {
             missionCallBack.addCallWhenReady(model -> {
                 missionCallBack.showMessage("campaign.default.start");
             });
@@ -84,11 +90,10 @@ final class Default_1_missionDefinition extends AbstractModelListenerAdapter {
 
     @Override
     public void onUnitMoveFinished(final UnitMoveFinishedEvent event) {
-        if (this.mission.isFirstTurn(event.getModel())
-                && event.getUnit().getAvailableMoves() == 0) {
+        if (mission.isFirstTurn(event.getModel()) && event.getUnit().getAvailableMoves() == 0) {
             missionCallBack.showMessage("campaign.default.pressNextTurn");
         } else {
-            if (!this.mission.getContext().isWasContinentOnSightMessageShown()) {
+            if (!goals.getGoalFindNewWorld().isFinished()) {
                 final ContinentTool ct = new ContinentTool();
                 final Continents continents = ct.findContinents(event.getModel(),
                         model.getCurrentPlayer());
@@ -97,7 +102,7 @@ final class Default_1_missionDefinition extends AbstractModelListenerAdapter {
                 if (event.getUnit().isAtPlaceLocation()
                         && c.getDistance(event.getUnit().getLocation()) < 4) {
                     missionCallBack.showMessage("campaign.default.continentInSight");
-                    this.mission.getContext().setWasContinentOnSightMessageShown(true);
+                    goals.getGoalFindNewWorld().setFinished(true);
                 }
             }
         }
@@ -105,8 +110,8 @@ final class Default_1_missionDefinition extends AbstractModelListenerAdapter {
 
     @Override
     public void onBeforeEndTurn(final BeforeEndTurnEvent event) {
-        if (this.mission.isFirstTurn(event.getModel())) {
-            final Player human = this.mission.getHumanPlayer(event.getModel());
+        if (mission.isFirstTurn(event.getModel())) {
+            final Player human = mission.getHumanPlayer(event.getModel());
             final Unit ship = findFirstShip(event.getModel(), human);
             if (ship.getAvailableMoves() == ship.getType().getSpeed()) {
                 missionCallBack.showMessage("campaign.default.moveUnitBeforeEndTurn");
@@ -117,12 +122,12 @@ final class Default_1_missionDefinition extends AbstractModelListenerAdapter {
     @Override
     public void onTurnStarted(final TurnStartedEvent event) {
         if (isPlayerHaveAnyColony(event.getModel())) {
-            final Player human = this.mission.getHumanPlayer(event.getModel());
+            final Player human = mission.getHumanPlayer(event.getModel());
             if (human.getPlayerStatistics().getGoodsStatistics()
                     .getGoodsAmount(GoodType.CIGARS) >= Default_1_mission.TRAGET_AMOUNT_OF_CIGARS) {
-                if (!this.mission.getContext().isWasMessageSellCigarsShown()) {
+                if (!mission.getContext().isWasMessageSellCigarsShown()) {
                     missionCallBack.showMessage("campaign.default.sellCigarsInEuropePort");
-                    this.mission.getContext().setWasMessageSellCigarsShown(true);
+                    mission.getContext().setWasMessageSellCigarsShown(true);
                 }
             }
         }
@@ -131,11 +136,10 @@ final class Default_1_missionDefinition extends AbstractModelListenerAdapter {
     @Override
     public void onGoodsWasSoldInEurope(final GoodsWasSoldInEuropeEvent event) {
         if (event.getGoodsAmount().getGoodType() == GoodType.CIGARS) {
-            this.mission.getContext().setCigarsWasSold(this.mission.getContext().getCigarsWasSold()
-                    + event.getGoodsAmount().getAmount());
+            mission.getContext().setCigarsWasSold(
+                    mission.getContext().getCigarsWasSold() + event.getGoodsAmount().getAmount());
         }
-        if (this.mission.getContext()
-                .getCigarsWasSold() >= Default_1_mission.TRAGET_AMOUNT_OF_CIGARS) {
+        if (mission.getContext().getCigarsWasSold() >= Default_1_mission.TRAGET_AMOUNT_OF_CIGARS) {
             missionCallBack.showMessage("campaign.default.cigarsWasSold");
         }
     }
@@ -161,6 +165,6 @@ final class Default_1_missionDefinition extends AbstractModelListenerAdapter {
     }
 
     private boolean isPlayerHaveAnyColony(final Model model) {
-        return !model.getColonies(this.mission.getHumanPlayer(model)).isEmpty();
+        return !model.getColonies(mission.getHumanPlayer(model)).isEmpty();
     }
 }

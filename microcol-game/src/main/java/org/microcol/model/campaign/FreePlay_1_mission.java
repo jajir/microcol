@@ -42,4 +42,10 @@ public class FreePlay_1_mission extends AbstractMission<Empty_missionContext> {
         return new Empty_missionContext();
     }
 
+    @Override
+    protected GameOverResult evaluateGameOver(final Model model) {
+        //It's not used.
+        return null;
+    }
+
 }

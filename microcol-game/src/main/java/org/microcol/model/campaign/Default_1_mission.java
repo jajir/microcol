@@ -1,14 +1,11 @@
 package org.microcol.model.campaign;
 
-import java.util.List;
-import java.util.function.Function;
+import java.util.HashMap;
 
 import org.microcol.gui.event.model.MissionCallBack;
-import org.microcol.model.GameOverEvaluator;
 import org.microcol.model.GameOverResult;
 import org.microcol.model.Model;
-
-import com.google.common.collect.Lists;
+import org.microcol.model.store.ModelPo;
 
 /**
  * First mission. Find New World.
@@ -23,24 +20,29 @@ public class Default_1_mission extends AbstractMission<Default_1_missionContext>
 
     final static Integer TRAGET_AMOUNT_OF_CIGARS = 30;
 
+    private Default_1_goals goals = new Default_1_goals();
+
     Default_1_mission() {
         super(MISSION_NAME, 0, MISSION_MODEL_FILE);
     }
 
     @Override
-    public void startMission(final Model model, final MissionCallBack missionCallBack) {
-        model.addListener(new Default_1_missionDefinition(this, model, missionCallBack));
+    public void initialize(final ModelPo modelPo) {
+        super.initialize(modelPo);
+        if (modelPo.getCampaign().getData() == null) {
+            goals.initialize(new HashMap<>());
+        } else {
+            goals.initialize(modelPo.getCampaign().getData());
+        }
     }
 
     @Override
-    public List<Function<Model, GameOverResult>> getGameOverEvaluators() {
-        return Lists.newArrayList(GameOverEvaluator.GAMEOVER_CONDITION_CALENDAR,
-                GameOverEvaluator.GAMEOVER_CONDITION_HUMAN_LOST_ALL_COLONIES,
-                this::evaluateGameOver);
+    public void startMission(final Model model, final MissionCallBack missionCallBack) {
+        model.addListener(new Default_1_missionDefinition(this, model, missionCallBack, goals));
     }
 
-    @SuppressWarnings("unused")
-    private GameOverResult evaluateGameOver(final Model model) {
+    @Override
+    protected GameOverResult evaluateGameOver(final Model model) {
         if (getContext().getCigarsWasSold() >= TRAGET_AMOUNT_OF_CIGARS) {
             setFinished(true);
             flush();

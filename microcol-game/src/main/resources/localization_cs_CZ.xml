@@ -25,6 +25,7 @@
 	<entry key="mainMenu.view.europe">Evropský přístav</entry>
 	<entry key="mainMenu.view.turnReport">Turn report</entry>
 	<entry key="mainMenu.view.statistics">Statistiky</entry>
+	<entry key="mainMenu.view.menuItemGoals">Cíle mise</entry>
 
 	<entry key="mainMenu.unit">Jednotka</entry>
 	<entry key="mainMenu.unit.move">Táhnout</entry>
@@ -89,25 +90,25 @@
 
 	<entry key="campaign.default.start">Najděte nový svět, kde založíte kolonii. Jeď lodí doleva, tam asi bude země.</entry>
 	<entry key="campaign.default.cantMoveToHighSeas">Nemůžeš se vrátit do Evropy odkuď jsi přijel. Zkus najít nový svět, pravděpodobně bude ležet na západě.</entry>
-	<entry key="campaign.default.pressNextTurn">Tento tak už slodí neni monžné dál hýbat. Loď nemá dost action points. Stav bodů je vidět v menu v pravo, kde jsou detaily lodě. Pro další tah stiskni 'Další tah'</entry>
+	<entry key="campaign.default.pressNextTurn">Tento tah už neni monžné s lodí dál hýbat. Loď nemá dost bodů na pohyb. Stav bodů je vidět v panelu naprvo, kde jsou detaily lodě. Pro další tah stiskni 'Další tah'</entry>
 	<entry key="campaign.default.moveUnitBeforeEndTurn">Nejprve táhni lodí, zkus najít nový svět.</entry>
-	<entry key="campaign.default.continentInSight">Nový Svět už je na dohled. Priraž loď a vyloď jednotky. Založíš novou kolonii.</entry>
+	<entry key="campaign.default.continentInSight">Nový Svět už je na dohled. Priraž s loďí a vyloď jednotky. Založ novou kolonii.</entry>
 	<entry key="campaign.default.firstColonyWasFounded">Výborně. Podařilo se ti založit novou kolonii. Teď je na tobě, jak bude dál rozkvétat.</entry>
-	<entry key="campaign.default.produce100cigars">Otevři kliknutím detail kolonie a začni pěstovat tabák a vyrábět z něj cigarety.
-Jednoho osadníka myší rozmísti na pole aby pěstoval tabák.
-Dalšiho pošlí do města vyrábět z tabáku cigarety. Pozor na množství jídla ve městě,
+	<entry key="campaign.default.produce100cigars">Otevři kliknutím detail kolonie a začni pěstovat tabák a vyrábět z něj doutníky.
+Jednoho osadníka myší umísti na pole aby pěstoval tabák.
+Dalšího pošli do města vyrábět z tabáku cigarety. Pozor na množství jídla ve městě,
 jestli klesne na nulu, osadnicí začnou umírat hlady. Vyrob 30 doutníků.</entry>
 	<entry key="campaign.default.sellCigarsInEuropePort">Konečně. Už máš potřebné množství doutníků. Vezmi je na loď, odvez do Evropy a prodej.</entry>
 	<entry key="campaign.default.cigarsWasSold">Výborně. Podařilo se ti prodat těžce získané doutníky.</entry>
 	<entry key="campaign.default.gameOver">Gratuluji. Podařilo se ti splnit první misi.</entry>
 	<entry key="campaign.default.m1.cantDeclareIndependence">Ještě nemůžeš vyhlásit nezávislost. Vyhlášení nezávislosti hodně pozlobí krále. Jakmile se o tom krále dozví, pokusí se získat kolonie silou zpět. Ještě nemáš dost síly se ubránit.</entry>
-	<entry key="campaign.default.m2.start">You found first colony, now you have to build proud and wealth nations.</entry>
-	<entry key="campaign.default.m2.foundColonies">Now you'll need more colonies. Buy some colonist and found at least 3 colonies.</entry>
-	<entry key="campaign.default.m2.foundColonies.done">Perfect. Now you have enought colonies.</entry>
-	<entry key="campaign.default.m2.get5000">You'll need lot of gold. Gain 5000 gold from business with Europe.</entry>
-	<entry key="campaign.default.m2.get5000.done">Great you have 5000 gold.</entry>
-	<entry key="campaign.default.m2.makeArmy">Now make and army. You'l need at least 15 colonits. Colonists will fight for you.</entry>
-	<entry key="campaign.default.m2.done">Fantastic. You did well. Now continue to next mission.</entry>
+	<entry key="campaign.default.m2.start">Máš první kolonii. Nyní musiš vybudovat bohatství.</entry>
+	<entry key="campaign.default.m2.foundColonies">Budeš potřebovat další kolonie. Za prodané zboží kup další kolonisty a založ tři města.</entry>
+	<entry key="campaign.default.m2.foundColonies.done">Skvělé. Nyní máš tři kolonie.</entry>
+	<entry key="campaign.default.m2.get5000">Teď budeš potřebovat zlato. Hodně zlata. Zprodeje zboží v Evrope získej 5000 zlata.</entry>
+	<entry key="campaign.default.m2.get5000.done">Výborně už máš 5000 zlata.</entry>
+	<entry key="campaign.default.m2.makeArmy">Teď bude potřeba vybudovat armádu. Budeš potřebovat nejméně 15 kolonistů. Kolonisti budou za tebe bojovat.</entry>
+	<entry key="campaign.default.m2.done">Skvělé. Vedeš si dobře. Teď hurá do další mise.</entry>
 	<entry key="campaign.default.m3.start">Podařilo se ti dojít daleko. Nyní más bohatou a silnou společnost. Posledni krok je získání nezávislostí.</entry>
 	<entry key="campaign.default.m3.declareIndependence">První krok je, že musíš vyhlásit nezávislost. S tím optarně. Počitej, že se král hodně naštve a pošle na tebe silné vojsko s jediním cílem - zničit tě.</entry>
 	<entry key="campaign.default.m3.declareIndependence.done">Tak, teď jsi se vydal na nevratnou cestu k válce a k nezávislosti. Co nevidět přijede silné expediční vojsko. Připrav se.</entry>
@@ -186,6 +187,9 @@ jestli klesne na nulu, osadnicí začnou umírat hlady. Vyrob 30 doutníků.</en
 	<entry key="statistics.militaryPower">Vojenská síla</entry>
 	<entry key="statistics.wealth">Bohatství</entry>
 	<entry key="statistics.score">Score</entry>
+	
+	<entry key="missionGoals.title">Cíle mise</entry>
+	<entry key="missionGoals.caption">Cíle mise</entry>
 	
 	<entry key="dialogFight.title">Útok</entry>
 	<entry key="dialogFight.attacker">Útočník</entry>

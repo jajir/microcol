@@ -101,6 +101,21 @@ public final class UnitType {
      */
     private final Predicate<UnitType> attackableUnitTypeFilter;
 
+    /**
+     * it's <code>true</code> when unit could plow field.
+     */
+    private final boolean canPlowField;
+    
+    /**
+     * it's <code>true</code> when unit could build road.
+     */
+    private final boolean canBuildRoad;
+    
+    /**
+     * it's <code>true</code> when unit could cut down trees.
+     */
+    private final boolean canCutTrees;
+
     public static final UnitType COLONIST = UnitType.make()
             .setName("COLONIST")
             .setMoveableTerrains(TerrainType.UNIT_CAN_WALK_AT)
@@ -109,6 +124,9 @@ public final class UnitType {
             .setCargoCapacity(0)
             .setStorable(true)
             .setEuropePrice(DEFAULT_FREE_COLONIST_EUROPE_PRICE)
+            .setCanBuildRoad(true)
+            .setCanCutTrees(true)
+            .setCanPlowField(true)
             .build();
 
     public static final UnitType EXPERT_ORE_MINER = UnitType.make()
@@ -120,6 +138,9 @@ public final class UnitType {
             .setStorable(true)
             .setEuropePrice(DEFAULT_ORE_MINER_EUROPE_PRICE)
             .setExpertise(GoodType.ORE, 2.0F)
+            .setCanBuildRoad(true)
+            .setCanCutTrees(true)
+            .setCanPlowField(true)
             .build();
 
     public static final UnitType MASTER_BLACKSMITH = UnitType.make()
@@ -131,6 +152,9 @@ public final class UnitType {
             .setStorable(true)
             .setEuropePrice(DEFAULT_MASTER_BLACKSMITH_EUROPE_PRICE)
             .setExpertise(GoodType.TOOLS, 2.0F)
+            .setCanBuildRoad(true)
+            .setCanCutTrees(true)
+            .setCanPlowField(true)
             .build();
 
     public static final UnitType FRIGATE = UnitType.make()
@@ -172,7 +196,10 @@ public final class UnitType {
         private int europePrice;
         private GoodType expertInProducing;
         private float expertProductionModifier;
-
+        private boolean canPlowField = false;
+        private boolean canBuildRoad = false;
+        private boolean canCutTrees = false;
+        
         /**
          * Method that build final unit type and return it.
          *
@@ -181,7 +208,7 @@ public final class UnitType {
         UnitType build() {
             return new UnitType(name, moveableTerrains, speed, attackableUnitTypeFilter,
                     cargoCapacity, storable, europePrice, expertInProducing,
-                    expertProductionModifier);
+                    expertProductionModifier, canPlowField, canBuildRoad, canCutTrees);
         }
 
         /**
@@ -286,6 +313,33 @@ public final class UnitType {
             return this;
         }
 
+        /**
+         * @param canPlowField
+         *            the canPlowField to set
+         */
+        UnitTypeBuilder setCanPlowField(boolean canPlowField) {
+            this.canPlowField = canPlowField;
+            return this;
+        }
+
+        /**
+         * @param canBuildRoad
+         *            the canBuildRoad to set
+         */
+        UnitTypeBuilder setCanBuildRoad(boolean canBuildRoad) {
+            this.canBuildRoad = canBuildRoad;
+            return this;
+        }
+
+        /**
+         * @param canCutTrees
+         *            the canCutTrees to set
+         */
+        UnitTypeBuilder setCanCutTrees(boolean canCutTrees) {
+            this.canCutTrees = canCutTrees;
+            return this;
+        }
+
     }
 
     /**
@@ -309,11 +363,18 @@ public final class UnitType {
      *            required unit's expertise
      * @param expertProductionModifier
      *            required production modifiers
+     * @param canPlowField
+     *            required if unit could plow field
+     * @param canBuildRoad
+     *            required if unit could build road
+     * @param canCutTrees
+     *            required if unit could cut down trees
      */
     UnitType(final String name, final List<TerrainType> moveableTerrains, final int speed,
             final Predicate<UnitType> attackableUnitTypeFilter, final int cargoCapacity,
             final boolean storable, final int europePrice, final GoodType expertInProducing,
-            final float expertProductionModifier) {
+            final float expertProductionModifier, final boolean canPlowField,
+            final boolean canBuildRoad, final boolean canCutTrees) {
         this.name = Preconditions.checkNotNull(name);
         this.moveableTerrains = Preconditions.checkNotNull(moveableTerrains);
         this.speed = speed;
@@ -323,6 +384,9 @@ public final class UnitType {
         this.europePrice = europePrice;
         this.expertInProducing = expertInProducing;
         this.expertProductionModifier = expertProductionModifier;
+        this.canPlowField = canPlowField;
+        this.canBuildRoad = canBuildRoad;
+        this.canCutTrees = canCutTrees;
     }
 
     /**
@@ -522,5 +586,26 @@ public final class UnitType {
      */
     public int getEuropePrice() {
         return europePrice;
+    }
+
+    /**
+     * @return the canPlowField
+     */
+    public boolean isCanPlowField() {
+        return canPlowField;
+    }
+
+    /**
+     * @return the canBuildRoad
+     */
+    public boolean isCanBuildRoad() {
+        return canBuildRoad;
+    }
+
+    /**
+     * @return the canCutTrees
+     */
+    public boolean isCanCutTrees() {
+        return canCutTrees;
     }
 }

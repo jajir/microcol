@@ -150,7 +150,7 @@ public class GameModelController {
     /**
      * @return the modelCapgaign
      */
-    public ModelMission getModelCampaign() {
+    public ModelMission getModelMission() {
         return modelMission;
     }
 

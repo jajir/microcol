@@ -30,7 +30,6 @@ public class CampaignManager {
     private void loadMissionStateFromPreferences() {
         wentThroughMissions((key, mission) -> {
             mission.setFinished(preferences.getBoolean(key, false));
-            mission.setCampaignManager(this);
         });
     }
 
@@ -46,7 +45,7 @@ public class CampaignManager {
         }
     }
 
-    private void wentThroughMissions(BiConsumer<String, Mission> consumer) {
+    private void wentThroughMissions(final BiConsumer<String, CampaignMission> consumer) {
         campaigns.forEach((name, campaign) -> {
             campaign.getMissions().forEach(mission -> consumer
                     .accept(campaign.getName() + "." + mission.getName() + ".isFinished", mission));

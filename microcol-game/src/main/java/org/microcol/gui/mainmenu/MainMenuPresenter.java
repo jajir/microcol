@@ -78,7 +78,8 @@ public class MainMenuPresenter {
             final SelectedUnitWasChangedController selectedUnitWasChangedController,
             final IndependenceWasDeclaredColntroller independenceWasDeclaredColntroller,
             final ShowTurnReportController showTurnReportController,
-            final ShowStatisticsController showStatisticsController) {
+            final ShowStatisticsController showStatisticsController,
+            final ShowGoalsController showGoalsController) {
         this.view = Preconditions.checkNotNull(view);
         this.selectedUnitManager = Preconditions.checkNotNull(selectedUnitManager);
         this.gameModelController = Preconditions.checkNotNull(gameModelController);
@@ -125,6 +126,8 @@ public class MainMenuPresenter {
                 event -> showTurnReportController.fireEvent(new ShowTurnReportEvent()));
         view.getMenuItemStatistics().setOnAction(
                 event -> showStatisticsController.fireEvent(new ShowStatisticsEvent()));
+        view.getMenuItemGoals()
+                .setOnAction(event -> showGoalsController.fireEvent(new ShowGoalsEvent()));
 
         /**
          * Following section define visibility of menu items.
@@ -153,6 +156,7 @@ public class MainMenuPresenter {
         view.getMenuItemEurope().setDisable(true);
         view.getMenuItemTurnReport().setDisable(true);
         view.getMenuItemStatistics().setDisable(true);
+        view.getMenuItemGoals().setDisable(true);
         view.getMenuItemNextUnit().setDisable(true);
         view.getMenuItemDeclareIndependence().setDisable(true);
     }
@@ -170,6 +174,7 @@ public class MainMenuPresenter {
         view.getMenuItemEurope().setDisable(true);
         view.getMenuItemTurnReport().setDisable(true);
         view.getMenuItemStatistics().setDisable(true);
+        view.getMenuItemGoals().setDisable(true);
     }
 
     @SuppressWarnings("unused")
@@ -240,6 +245,7 @@ public class MainMenuPresenter {
         view.getMenuItemEurope().setDisable(true);
         view.getMenuItemTurnReport().setDisable(true);
         view.getMenuItemStatistics().setDisable(true);
+        view.getMenuItemGoals().setDisable(true);
         view.getMenuItemNextUnit().setDisable(true);
         view.getMenuItemBuildColony().setDisable(true);
     }
@@ -257,6 +263,7 @@ public class MainMenuPresenter {
             view.getMenuItemEurope().setDisable(false);
             view.getMenuItemTurnReport().setDisable(false);
             view.getMenuItemStatistics().setDisable(false);
+            view.getMenuItemGoals().setDisable(false);
             view.getMenuItemNextUnit().setDisable(false);
             view.getMenuItemDeclareIndependence()
                     .setDisable(event.getPlayer().isDeclaredIndependence());
@@ -268,6 +275,7 @@ public class MainMenuPresenter {
             view.getMenuItemEurope().setDisable(true);
             view.getMenuItemTurnReport().setDisable(true);
             view.getMenuItemStatistics().setDisable(true);
+            view.getMenuItemGoals().setDisable(true);
             view.getMenuItemNextUnit().setDisable(true);
         }
         setBuildColony();

@@ -50,6 +50,8 @@ public class MainMenuView {
 
     private final MenuItem menuItemTurnReport;
 
+    private final MenuItem menuItemGoals;
+
     private final MenuItem menuItemStatistics;
 
     private final Menu menuUnit;
@@ -131,6 +133,10 @@ public class MainMenuView {
         menuItemStatistics.setAccelerator(new KeyCodeCombination(KeyCode.A));
         menuItemStatistics.disableProperty().setValue(false);
 
+        menuItemGoals = new MenuItem();
+        menuItemGoals.setAccelerator(new KeyCodeCombination(KeyCode.G));
+        menuItemGoals.disableProperty().setValue(false);
+
         /**
          * Menu unit
          * 
@@ -171,7 +177,8 @@ public class MainMenuView {
                 .setAccelerator(new KeyCodeCombination(KeyCode.A, KeyCombination.CONTROL_DOWN));
 
         menuItemShowGrid = new CheckMenuItem();
-        menuItemShowGrid.setAccelerator(new KeyCodeCombination(KeyCode.G));
+        menuItemShowGrid
+                .setAccelerator(new KeyCodeCombination(KeyCode.G, KeyCombination.CONTROL_DOWN));
         menuItemShowGrid.setSelected(gamePreferences.isGridShown());
 
         menuItemShowFightAdvisor = new CheckMenuItem();
@@ -187,7 +194,7 @@ public class MainMenuView {
                 menuItemLoadGame, menuItemSaveGame, menuItemQuitGame);
         menuView = new Menu();
         menuView.getItems().addAll(menuItemCenterView, menuItemEurope, menuItemTurnReport,
-                menuItemStatistics);
+                menuItemStatistics, menuItemGoals);
         menuUnit = new Menu();
         menuUnit.getItems().addAll(menuItemMove, menuItemBuildColony, menuItemNextUnit);
         menuPrefereces = new Menu();
@@ -264,6 +271,7 @@ public class MainMenuView {
         menuItemEurope.setText(text.get("mainMenu.view.europe"));
         menuItemTurnReport.setText(text.get("mainMenu.view.turnReport"));
         menuItemStatistics.setText(text.get("mainMenu.view.statistics"));
+        menuItemGoals.setText(text.get("mainMenu.view.menuItemGoals"));
 
         /**
          * Unit
@@ -393,6 +401,13 @@ public class MainMenuView {
      */
     public MenuItem getMenuItemStatistics() {
         return menuItemStatistics;
+    }
+
+    /**
+     * @return the menuItemGoals
+     */
+    public MenuItem getMenuItemGoals() {
+        return menuItemGoals;
     }
 
 }

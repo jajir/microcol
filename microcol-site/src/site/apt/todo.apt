@@ -98,6 +98,31 @@ Planned releases
   
   * \u2713 Every 11 turns new unit appears in Europe port. It's light version of crosses and religion unrest in Old World.
  
+ * <<0.7.0>> - Prepare for release
+  
+  * \u2717 Right panel allows to select unit.
+  
+  * \u2717 Add item in menu mission goal. There should be some mission description.
+  
+  * \u2717 When unit go to west than is turn to west direction.
+ When unit go to to east than turn to east.
+ When unit arrive to some place than keep direction where is facing.
+ Direction where is unit turn is persisted.
+ 
+  * \u2717 Redesign game loop, to support parallel animations. Slight changes in water & move animation & scroll to moving unit.
+ 
+  * \u2717 Redesign model events - add some mark to it's name to be able to distinguish them from front-end events.
+ 
+  * \u2717 Finish translation
+ 
+  * \u2717 Try to make package including JVM, it will be nice to use openJDK.
+ 
+  * \u2717 Redesign saving loading missions. Use same pattern as for model save & make
+ 
+  * \u2717 redesign model: unit use class hierarchy, remove unit type, same for terrain. Move outside cargoHold, abstract class bude obsahovat utok a pohyb 
+ 
+  * \u2717 
+ 
  * <<Backlog>> - feature and improvement backlog
   
   * \u2717 Right panel allows to select unit.

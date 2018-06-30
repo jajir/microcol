@@ -97,6 +97,7 @@ import org.microcol.gui.mainmenu.MainMenuPresenter;
 import org.microcol.gui.mainmenu.MainMenuView;
 import org.microcol.gui.mainmenu.QuitGameController;
 import org.microcol.gui.mainmenu.SelectNextUnitController;
+import org.microcol.gui.mainmenu.ShowGoalsController;
 import org.microcol.gui.mainmenu.ShowGridController;
 import org.microcol.gui.mainmenu.ShowStatisticsController;
 import org.microcol.gui.mainmenu.ShowTurnReportController;
@@ -193,6 +194,7 @@ public class MicroColModule extends AbstractModule {
         bind(ArtifitialPlayersManager.class).in(Singleton.class);
         bind(ShowTurnReportController.class).in(Singleton.class);
         bind(ShowStatisticsController.class).in(Singleton.class);
+        bind(ShowGoalsController.class).in(Singleton.class);
 
         bind(TurnStartedListener.class).asEagerSingleton();
         bind(TileWasSelectedListener.class).asEagerSingleton();
@@ -208,6 +210,7 @@ public class MicroColModule extends AbstractModule {
         
         bind(StatisticsDialog.class).in(Singleton.class);
         bind(ShowStatisticsDialogListener.class).asEagerSingleton();
+        bind(MissionGoalsShowListener.class).asEagerSingleton();
 
         /**
          * Initialize MVP classes

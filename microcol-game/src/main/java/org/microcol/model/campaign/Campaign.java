@@ -15,9 +15,9 @@ public interface Campaign {
     /**
      * @return the missions
      */
-    List<Mission> getMissions();
+    List<CampaignMission> getMissions();
 
-    Mission getMisssionByName(String name);
+    CampaignMission getMisssionByName(String name);
 
     /**
      * Inform if player finished this campaign. Player finish campaign when
@@ -37,6 +37,7 @@ public interface Campaign {
      * @return return <code>true</code> when mission could be played by user
      *         otherwise return <code>false</code>.
      */
-    boolean isMissionEnabled(Mission mission);
+    //FIXME move to campaignMission class
+    boolean isMissionEnabled(CampaignMission mission);
 
 }

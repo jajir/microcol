@@ -6,7 +6,9 @@ public class FreePlay_campaign extends AbstractCampaign {
 
     FreePlay_campaign() {
         super(CampaignNames.freePlay);
-        addMission(new FreePlay_1_mission());
+        // FIXME in string is stored enum. Store enum and convert it to String.
+        addMission(new DefaultCampaignMission(FreePlayMissionNames.freePlay.name(), 0,
+                () -> new FreePlay_1_mission()));
     }
 
 }

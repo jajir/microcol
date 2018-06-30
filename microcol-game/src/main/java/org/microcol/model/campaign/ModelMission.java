@@ -23,12 +23,16 @@ public class ModelMission {
 
     private final Campaign campaign;
 
+    private final CampaignMission campaignMission;
+
     private final Mission mission;
 
     private final Model model;
 
-    ModelMission(final Campaign campaign, final Mission mission, final Model model) {
+    ModelMission(final Campaign campaign, final CampaignMission campaignMission,
+            final Mission mission, final Model model) {
         this.campaign = Preconditions.checkNotNull(campaign);
+        this.campaignMission = Preconditions.checkNotNull(campaignMission);
         this.mission = Preconditions.checkNotNull(mission);
         this.model = Preconditions.checkNotNull(model);
     }
@@ -41,7 +45,7 @@ public class ModelMission {
         final ModelPo out = model.save();
         out.setCampaign(new CampaignPo());
         out.getCampaign().setName(campaign.getName().toString());
-        out.getCampaign().setMission(mission.getName());
+        out.getCampaign().setMission(campaignMission.getName());
         out.getCampaign().setData(mission.saveToMap());
         return out;
     }
@@ -64,6 +68,13 @@ public class ModelMission {
 
     public void stop() {
         model.stop();
+    }
+
+    /**
+     * @return the mission
+     */
+    public Mission getMission() {
+        return mission;
     }
 
 }

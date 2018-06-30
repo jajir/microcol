@@ -12,29 +12,9 @@ import org.microcol.model.store.ModelPo;
 public interface Mission {
 
     /**
-     * @return the name
-     */
-    String getName();
-
-    /**
-     * @return the orderNo
-     */
-    Integer getOrderNo();
-
-    /**
      * @return the modelFileName
      */
     String getModelFileName();
-
-    /**
-     * Inform if player finished this mission.
-     *
-     * @return return <code>true</code> when user already finished this mission
-     *         otherwise return <code>false</code>.
-     */
-    boolean isFinished();
-
-    void setFinished(boolean isFinished);
 
     /**
      * TODO it create circular dependency, remove it.
@@ -43,6 +23,13 @@ public interface Mission {
      *            required campaign manager
      */
     void setCampaignManager(CampaignManager campaignManager);
+
+    /**
+     * Get mission goals.
+     *
+     * @return mission goals
+     */
+    MissionGoals getGoals();
 
     void startMission(Model model, MissionCallBack missionCallBack);
 

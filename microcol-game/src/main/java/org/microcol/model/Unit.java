@@ -345,8 +345,12 @@ public class Unit {
                 .isPresent();
     }
 
-    // TODO rename it, name is not corresponding to functionality
-    public List<Unit> getStorageUnits() {
+    /**
+     * Get list of units where could this unit go to storage.
+     *
+     * @return list of units with at least one cargo slot free
+     */
+    public List<Unit> getNeighborUnitsWithFreeSlot() {
         verifyThatUnitIsAtMap();
 
         return getLocation().getNeighbors().stream()
@@ -354,16 +358,6 @@ public class Unit {
                 .filter(unit -> unit != this).filter(unit -> unit.getCargo().getSlots().stream()
                         .filter(slot -> slot.isEmpty()).findAny().isPresent())
                 .collect(ImmutableList.toImmutableList());
-        /*
-         * final ImmutableList.Builder<Unit> builder = ImmutableList.builder();
-         * 
-         * // TODO JKA Predelat location.getNeighbors().forEach(neighbor -> {
-         * owner.getUnitsAt(neighbor).forEach(unit -> { if (unit != this) {
-         * unit.getHold().getSlots().forEach(slot -> { if (slot.isEmpty()) {
-         * builder.add(unit); } }); } }); });
-         * 
-         * return builder.build();
-         */
     }
 
     public Optional<List<Location>> getPath(final Location destination) {
