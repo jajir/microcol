@@ -24,22 +24,15 @@ import org.microcol.model.event.TurnStartedEvent;
 import org.microcol.model.event.UnitMoveFinishedEvent;
 import org.microcol.model.event.UnitMoveStartedEvent;
 
-import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 
-final class Default_1_missionDefinition extends MissionDefinition {
-    /**
-     * 
-     */
-    private final Default_1_mission mission;
+final class Default_1_missionDefinition extends MissionDefinition<Default_1_goals> {
 
-    private final Default_1_goals goals;
+    final static Integer TRAGET_AMOUNT_OF_CIGARS = 30;
 
-    Default_1_missionDefinition(final Default_1_mission mission, final Model model,
-            final MissionCallBack missionCallBack, final Default_1_goals goals) {
-        super(missionCallBack, model);
-        this.mission = Preconditions.checkNotNull(mission);
-        this.goals = Preconditions.checkNotNull(goals);
+    Default_1_missionDefinition(final Model model, final MissionCallBack missionCallBack,
+            final Default_1_goals goals) {
+        super(missionCallBack, model, goals);
     }
 
     @Override
@@ -118,14 +111,16 @@ final class Default_1_missionDefinition extends MissionDefinition {
 
     @Override
     public void onTurnStarted(final TurnStartedEvent event) {
-        if (isPlayerHaveAnyColony(getModel())) {
-            final Player human = getHumanPlayer(getModel());
-            if (human.getPlayerStatistics().getGoodsStatistics()
-                    .getGoodsAmount(GoodType.CIGARS) >= Default_1_mission.TRAGET_AMOUNT_OF_CIGARS) {
-                if (!mission.getContext().isWasMessageSellCigarsShown()) {
+        if (goals.getGoalFoundColony().isFinished()) {
+            if (!goals.getGoalProduceCigars().isFinished()) {
+                // verify cigars producing
+                final Player human = getHumanPlayer(getModel());
+                if (human.getPlayerStatistics().getGoodsStatistics()
+                        .getGoodsAmount(GoodType.CIGARS) >= TRAGET_AMOUNT_OF_CIGARS) {
                     missionCallBack.showMessage("campaign.default.m1.sellCigarsInEuropePort");
-                    mission.getContext().setWasMessageSellCigarsShown(true);
+                    goals.getGoalProduceCigars().setFinished(true);
                 }
+
             }
         }
     }
@@ -133,10 +128,10 @@ final class Default_1_missionDefinition extends MissionDefinition {
     @Override
     public void onGoodsWasSoldInEurope(final GoodsWasSoldInEuropeEvent event) {
         if (event.getGoodsAmount().getGoodType() == GoodType.CIGARS) {
-            mission.getContext().setCigarsWasSold(
-                    mission.getContext().getCigarsWasSold() + event.getGoodsAmount().getAmount());
+            goals.getGoalSellCigars().setWasSold(
+                    goals.getGoalSellCigars().getWasSold() + event.getGoodsAmount().getAmount());
         }
-        if (mission.getContext().getCigarsWasSold() >= Default_1_mission.TRAGET_AMOUNT_OF_CIGARS) {
+        if (goals.getGoalSellCigars().getWasSold() >= TRAGET_AMOUNT_OF_CIGARS) {
             goals.getGoalSellCigars().setFinished(true);
             missionCallBack.showMessage("campaign.default.m1.cigarsWasSold");
         }

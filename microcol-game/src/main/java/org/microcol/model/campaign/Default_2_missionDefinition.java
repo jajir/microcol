@@ -11,19 +11,13 @@ import org.microcol.model.event.GameStartedEvent;
 import org.microcol.model.event.GoodsWasSoldInEuropeEvent;
 import org.microcol.model.event.TurnStartedEvent;
 
-import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 
-final class Default_2_missionDefinition extends MissionDefinition {
-    /**
-     * 
-     */
-    private final Default_2_mission mission;
+final class Default_2_missionDefinition extends MissionDefinition<Default_2_goals> {
 
-    Default_2_missionDefinition(final Default_2_mission mission,
-            final MissionCallBack missionCallBack, final Model model) {
-        super(missionCallBack, model);
-        this.mission = Preconditions.checkNotNull(mission);
+    Default_2_missionDefinition(final MissionCallBack missionCallBack, final Model model,
+            final Default_2_goals goals) {
+        super(missionCallBack, model, goals);
     }
 
     @Override
@@ -60,12 +54,13 @@ final class Default_2_missionDefinition extends MissionDefinition {
 
     @Override
     public void onColonyWasFounded(final ColonyWasFoundEvent event) {
-        if (!mission.getContext().isWasNumberOfColoniesTargetReached()) {
+        if (!goals.getGoalNumberOfColonies().isFinished()) {
             if (playerHaveMoreOrEqualColonies(event.getModel(),
                     Default_2_mission.TARGET_NUMBER_OF_COLONIES)) {
                 missionCallBack.showMessage("campaign.default.m2.foundColonies.done",
                         "campaign.default.m2.get5000");
-                mission.getContext().setWasNumberOfColoniesTargetReached(true);
+                goals.getGoalNumberOfColonies().setFinished(true);
+                ;
             }
         }
     }
@@ -77,23 +72,23 @@ final class Default_2_missionDefinition extends MissionDefinition {
 
     @Override
     public void onTurnStarted(final TurnStartedEvent event) {
-        if (!mission.getContext().isWasNumberOfMilitaryUnitsTargetReached()) {
+        if (!goals.getGoalMilitaryPower().isFinished()) {
             if (getNumberOfMilitaryUnits(
                     event.getModel()) >= Default_2_mission.TARGET_NUMBER_OF_MILITARY_UNITS) {
                 missionCallBack.showMessage("campaign.default.m2.done");
-                mission.getContext().setWasNumberOfMilitaryUnitsTargetReached(true);
+                goals.getGoalMilitaryPower().setFinished(true);
             }
         }
         checkNumberOfGoldTarget(event.getModel());
     }
 
     private void checkNumberOfGoldTarget(final Model model) {
-        if (!mission.getContext().isWasNumberOfGoldTargetReached()) {
+        if (!goals.getGoalAmountOfGold().isFinished()) {
             final int golds = getHumanPlayer(model).getGold();
             if (golds >= Default_2_mission.TARGET_NUMBER_OF_GOLD) {
                 missionCallBack.showMessage("campaign.default.m2.get5000.done",
                         "campaign.default.m2.makeArmy");
-                mission.getContext().setWasNumberOfGoldTargetReached(true);
+                goals.getGoalAmountOfGold().setFinished(true);
             }
         }
     }

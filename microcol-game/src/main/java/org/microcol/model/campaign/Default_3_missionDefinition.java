@@ -10,10 +10,11 @@ import org.microcol.model.event.IndependenceWasDeclaredEvent;
 
 import com.google.common.collect.Lists;
 
-final class Default_3_missionDefinition extends MissionDefinition {
+final class Default_3_missionDefinition extends MissionDefinition<MissionGoalsEmpty> {
 
-    Default_3_missionDefinition(final MissionCallBack missionCallBack, final Model model) {
-        super(missionCallBack, model);
+    Default_3_missionDefinition(final MissionCallBack missionCallBack, final Model model,
+            final MissionGoalsEmpty goals) {
+        super(missionCallBack, model, goals);
     }
 
     @Override

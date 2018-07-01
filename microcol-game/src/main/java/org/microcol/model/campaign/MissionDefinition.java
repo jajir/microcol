@@ -7,13 +7,17 @@ import org.microcol.model.Player;
 
 import com.google.common.base.Preconditions;
 
-public abstract class MissionDefinition extends AbstractModelListenerAdapter {
+public abstract class MissionDefinition<G extends MissionGoals>
+        extends AbstractModelListenerAdapter {
 
     private final Model model;
 
-    MissionDefinition(final MissionCallBack missionCallBack, final Model model) {
+    final protected G goals;
+
+    MissionDefinition(final MissionCallBack missionCallBack, final Model model, final G goals) {
         super(missionCallBack);
         this.model = Preconditions.checkNotNull(model);
+        this.goals = Preconditions.checkNotNull(goals);
     }
 
     /**
@@ -21,6 +25,13 @@ public abstract class MissionDefinition extends AbstractModelListenerAdapter {
      */
     public Model getModel() {
         return model;
+    }
+
+    /**
+     * @return the goals
+     */
+    public G getGoals() {
+        return goals;
     }
 
     protected boolean isFirstTurn(final Model model) {

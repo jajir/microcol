@@ -14,7 +14,7 @@ import com.google.common.collect.Lists;
  * Free play mission definition. There are no limitations player can do
  * anything.
  */
-public class FreePlay_1_mission extends AbstractMission<MissionGoalsEmpty, Empty_missionContext> {
+public class FreePlay_1_mission extends AbstractMission<MissionGoalsEmpty> {
 
     /**
      * Free play game map.
@@ -22,13 +22,15 @@ public class FreePlay_1_mission extends AbstractMission<MissionGoalsEmpty, Empty
     private final static String FREE_PLAY_MISSION_MAP = "/maps/free-play.json";
 
     FreePlay_1_mission() {
-        //TODO messing freeplay mission with campaign, use interfaces
-        super(FreePlay_campaign.FREE_PLAY, 0, FREE_PLAY_MISSION_MAP, new MissionGoalsEmpty());
+        // TODO messing freeplay mission with campaign, use interfaces
+        super(FreePlay_campaign.FREE_PLAY, 0, FREE_PLAY_MISSION_MAP);
     }
 
     @Override
     public void startMission(final Model model, final MissionCallBack missionCallBack) {
-        model.addListener(new FreePlay_1_missionDefinition(this, missionCallBack, model));
+        setMissionDefinition(
+                new FreePlay_1_missionDefinition(missionCallBack, model, new MissionGoalsEmpty()));
+        model.addListener(getMissionDefinition());
     }
 
     @Override
@@ -37,19 +39,15 @@ public class FreePlay_1_mission extends AbstractMission<MissionGoalsEmpty, Empty
                 GameOverEvaluator.GAMEOVER_CONDITION_HUMAN_LOST_ALL_COLONIES);
     }
 
-    @Override
-    protected Empty_missionContext getNewContext() {
-        return new Empty_missionContext();
-    }
-
     @SuppressWarnings("unchecked")
     @Override
     CampaignNames getCampaignKey() {
         return CampaignNames.freePlay;
     }
+
     @Override
     protected GameOverResult evaluateGameOver(final Model model) {
-        //It's not used.
+        // It's not used.
         return null;
     }
 

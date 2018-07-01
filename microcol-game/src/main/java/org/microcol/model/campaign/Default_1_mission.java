@@ -1,16 +1,13 @@
 package org.microcol.model.campaign;
 
-import java.util.HashMap;
-
 import org.microcol.gui.event.model.MissionCallBack;
 import org.microcol.model.GameOverResult;
 import org.microcol.model.Model;
-import org.microcol.model.store.ModelPo;
 
 /**
  * First mission. Find New World.
  */
-public class Default_1_mission extends AbstractMission<Default_1_goals, Default_1_missionContext> {
+public class Default_1_mission extends AbstractMission<Default_1_goals> {
 
     private final static String MISSION_NAME = "findNewWorld";
 
@@ -18,26 +15,23 @@ public class Default_1_mission extends AbstractMission<Default_1_goals, Default_
 
     private final static String MISSION_MODEL_FILE = "/maps/default-" + MISSION_NAME + ".json";
 
-    final static Integer TRAGET_AMOUNT_OF_CIGARS = 30;
+    private MissionDefinition<Default_1_goals> missionDefinition;
 
     Default_1_mission() {
-        super(MISSION_NAME, 0, MISSION_MODEL_FILE, new Default_1_goals());
-    }
-
-    @Override
-    public void initialize(final ModelPo modelPo) {
-        super.initialize(modelPo);
-        if (modelPo.getCampaign().getData() == null) {
-            getGoals().initialize(new HashMap<>());
-        } else {
-            getGoals().initialize(modelPo.getCampaign().getData());
-        }
+        super(MISSION_NAME, 0, MISSION_MODEL_FILE);
     }
 
     @Override
     public void startMission(final Model model, final MissionCallBack missionCallBack) {
-        model.addListener(
-                new Default_1_missionDefinition(this, model, missionCallBack, getGoals()));
+        missionDefinition = new Default_1_missionDefinition(model, missionCallBack,
+                new Default_1_goals());
+        setMissionDefinition(missionDefinition);
+        model.addListener(missionDefinition);
+    }
+
+    @Override
+    public Default_1_goals getGoals() {
+        return super.getGoals();
     }
 
     @Override
@@ -53,11 +47,6 @@ public class Default_1_mission extends AbstractMission<Default_1_goals, Default_
     @Override
     CampaignNames getCampaignKey() {
         return CampaignNames.defaultCampaign;
-    }
-
-    @Override
-    protected Default_1_missionContext getNewContext() {
-        return new Default_1_missionContext();
     }
 
 }

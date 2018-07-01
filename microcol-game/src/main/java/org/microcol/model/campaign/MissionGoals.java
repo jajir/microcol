@@ -40,4 +40,6 @@ public abstract class MissionGoals {
         return !goals.stream().filter(goal -> !goal.isFinished()).findAny().isPresent();
     }
 
+    abstract void initialize(Map<String, String> data);
+
 }

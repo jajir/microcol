@@ -10,15 +10,11 @@ import org.microcol.model.event.IndependenceWasDeclaredEvent;
 
 import com.google.common.collect.Lists;
 
-public class FreePlay_1_missionDefinition extends MissionDefinition {
+public class FreePlay_1_missionDefinition extends MissionDefinition<MissionGoalsEmpty> {
 
-    @SuppressWarnings("unused")
-    private final FreePlay_1_mission mission;
-
-    FreePlay_1_missionDefinition(final FreePlay_1_mission mission,
-            final MissionCallBack missionCallBack, final Model model) {
-        super(missionCallBack, model);
-        this.mission = mission;
+    FreePlay_1_missionDefinition(final MissionCallBack missionCallBack, final Model model,
+            final MissionGoalsEmpty goals) {
+        super(missionCallBack, model, goals);
     }
 
     @Override

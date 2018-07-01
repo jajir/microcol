@@ -21,6 +21,7 @@ public class CampaignModule extends AbstractModule {
     @Provides
     @Singleton
     CampaignManager getCampaignManager() {
+        //FIXME campaign manager should work with abstract factory
         return new CampaignManager(
                 Lists.newArrayList(new FreePlay_campaign(), new Default_campaign()));
     }

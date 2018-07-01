@@ -1,5 +1,6 @@
 package org.microcol.model.campaign;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -16,7 +17,7 @@ import com.google.common.collect.Lists;
 /**
  * Abstract mission. Contain some basic functionality.
  */
-public abstract class AbstractMission<G extends MissionGoals, T extends MissionContext> implements Mission<G> {
+public abstract class AbstractMission<G extends MissionGoals> implements Mission<G> {
 
     private final String name;
 
@@ -30,34 +31,39 @@ public abstract class AbstractMission<G extends MissionGoals, T extends MissionC
 
     private CampaignManager campaignManager;
 
-    /**
-     * Running mission context. There is stored player's achievements.
-     */
-    private T context;
-    
-    private final G goals;
+    private MissionDefinition<G> missionDefinition;
 
-    AbstractMission(final String name, final Integer orderNo, final String modelFileName, final G goals) {
+    AbstractMission(final String name, final Integer orderNo, final String modelFileName) {
         this.name = Preconditions.checkNotNull(name);
         this.orderNo = Preconditions.checkNotNull(orderNo);
         this.modelFileName = Preconditions.checkNotNull(modelFileName);
-        this.goals = Preconditions.checkNotNull(goals);
+        this.missionDefinition = Preconditions.checkNotNull(missionDefinition);
     }
 
-    //TODO there is lot of dependencies to save mission result
+    @Override
+    public void initialize(final ModelPo modelPo) {
+        Preconditions.checkNotNull(modelPo, "Model persistent object is null");
+        if (modelPo.getCampaign().getData() == null) {
+            getGoals().initialize(new HashMap<>());
+        } else {
+            getGoals().initialize(modelPo.getCampaign().getData());
+        }
+    }
+
+    // TODO there is lot of dependencies to save mission result
     protected void setFinished(final boolean finished) {
         Preconditions.checkNotNull(campaignManager, "campaignManager is null");
-        final Campaign campaign  = campaignManager.getCampaignByName(getCampaignKey());
+        final Campaign campaign = campaignManager.getCampaignByName(getCampaignKey());
         final CampaignMission campaignMission = campaign.getMisssionByName(name);
         campaignMission.setFinished(finished);
         campaignManager.saveMissionState();
     }
-    
-    abstract <C extends CampaignName> C getCampaignKey(); 
-    
+
+    abstract <C extends CampaignName> C getCampaignKey();
+
     @Override
     public G getGoals() {
-        return goals;
+        return missionDefinition.goals;
     }
 
     /*
@@ -98,38 +104,30 @@ public abstract class AbstractMission<G extends MissionGoals, T extends MissionC
                 this::evaluateGameOver);
     }
 
-    protected abstract T getNewContext();
-
     protected abstract GameOverResult evaluateGameOver(Model model);
 
     @Override
-    public void initialize(final ModelPo modelPo) {
-        Preconditions.checkNotNull(modelPo, "Model persisten obbject is null");
-        context = getNewContext();
-        context.initialize(modelPo);
-    }
-
-    @Override
     public Map<String, String> saveToMap() {
-        final Map<String, String> out =getContext().saveToMap();
-        goals.save(out);
+        final Map<String, String> out = new HashMap<String, String>();
+        // TODO call it directly
+        missionDefinition.goals.save(out);
         return out;
     }
 
     /**
-     * @return the context
+     * @param missionDefinition
+     *            the missionDefinition to set
      */
-    protected T getContext() {
-        return context;
+    public void setMissionDefinition(MissionDefinition<G> missionDefinition) {
+        // TODO should be set in constructor
+        this.missionDefinition = missionDefinition;
     }
 
     /**
-     * @param context
-     *            the context to set
+     * @return the missionDefinition
      */
-    protected void setContext(final T context) {
-        Preconditions.checkNotNull(context);
-        this.context = context;
+    public MissionDefinition<G> getMissionDefinition() {
+        return missionDefinition;
     }
 
 }

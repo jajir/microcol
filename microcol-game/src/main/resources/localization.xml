@@ -90,7 +90,8 @@
 
 	<entry key="campaign.default.m1.g1">Find Now World to found new colony. Try to look at left part of map.</entry>
 	<entry key="campaign.default.m1.g2">Disembark at New World and found new colony.</entry>
-	<entry key="campaign.default.m1.g3">Produce and sell cigars.</entry>
+	<entry key="campaign.default.m1.g3">Produce 30 cigars.</entry>
+	<entry key="campaign.default.m1.g4">Sell cigars in Europe.</entry>
 	<entry key="campaign.default.m1.start">Find Now World to found new colony. Try to drag ship to the right part of map.</entry>
 	<entry key="campaign.default.m1.cantMoveToHighSeas">You should not go back Europe. You come from there to find new world. New world should on the West.</entry>
 	<entry key="campaign.default.m1.pressNextTurn">Ship can't move in this turn more. Ship don't have any action points. You can check it in right panel where are ship's details. Now press 'Next Turn' button.</entry>

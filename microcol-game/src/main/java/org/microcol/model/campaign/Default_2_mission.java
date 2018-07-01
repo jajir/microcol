@@ -7,7 +7,7 @@ import org.microcol.model.Model;
 /**
  * First mission. Find New World.
  */
-public class Default_2_mission extends AbstractMission<MissionGoalsEmpty, Default_2_missionContext> {
+public class Default_2_mission extends AbstractMission<Default_2_goals> {
 
     private final static String NAME = "buildArmy";
 
@@ -22,32 +22,29 @@ public class Default_2_mission extends AbstractMission<MissionGoalsEmpty, Defaul
     final static Integer TARGET_NUMBER_OF_MILITARY_UNITS = 15;
 
     Default_2_mission() {
-        super(NAME, 0, MODEL_FIND_NEW_WORLD, new MissionGoalsEmpty());
+        super(NAME, 0, MODEL_FIND_NEW_WORLD);
     }
 
     @Override
     public void startMission(final Model model, final MissionCallBack missionCallBack) {
-        model.addListener(new Default_2_missionDefinition(this, missionCallBack, model));
+        setMissionDefinition(
+                new Default_2_missionDefinition(missionCallBack, model, new Default_2_goals()));
+        model.addListener(getMissionDefinition());
     }
 
     @Override
     protected GameOverResult evaluateGameOver(final Model model) {
-        if (getContext().isWasNumberOfMilitaryUnitsTargetReached()) {
+        if (getGoals().isAllGoalsDone()) {
             setFinished(true);
             return new GameOverResult(GAME_OVER_REASON);
-        } else {
-            return null;
         }
+        return null;
     }
 
     @SuppressWarnings("unchecked")
     @Override
     CampaignNames getCampaignKey() {
         return CampaignNames.defaultCampaign;
-    }
-    @Override
-    protected Default_2_missionContext getNewContext() {
-        return new Default_2_missionContext();
     }
 
 }

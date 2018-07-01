@@ -119,7 +119,11 @@ Planned releases
  
   * \u2717 Redesign saving loading missions. Use same pattern as for model save & make
  
+  * \u2717 Missions definition should'n contain MissionCallBack and Model. than move it's creation to mission controller & remove startMission method.
+ 
   * \u2717 redesign model: unit use class hierarchy, remove unit type, same for terrain. Move outside cargoHold, abstract class bude obsahovat utok a pohyb 
+ 
+  * \u2717 Bug, when units can't be accessed and 'next turn' button is disabled forever. 
  
   * \u2717 
  

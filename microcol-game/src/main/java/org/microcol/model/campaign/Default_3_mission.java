@@ -9,7 +9,7 @@ import org.microcol.model.Player;
 /**
  * First mission. Thrive.
  */
-public class Default_3_mission extends AbstractMission<MissionGoalsEmpty, Empty_missionContext> {
+public class Default_3_mission extends AbstractMission<MissionGoalsEmpty> {
 
     private final static String NAME = "thrive";
 
@@ -18,23 +18,21 @@ public class Default_3_mission extends AbstractMission<MissionGoalsEmpty, Empty_
     private final static String MODEL_FIND_NEW_WORLD = "/maps/default-" + NAME + ".json";
 
     Default_3_mission() {
-        super(NAME, 0, MODEL_FIND_NEW_WORLD, new MissionGoalsEmpty());
+        super(NAME, 0, MODEL_FIND_NEW_WORLD);
     }
 
     @Override
     public void startMission(final Model model, final MissionCallBack missionCallBack) {
-        model.addListener(new Default_3_missionDefinition(missionCallBack, model));
+        setMissionDefinition(
+                new Default_3_missionDefinition(missionCallBack, model, new MissionGoalsEmpty()));
+        model.addListener(getMissionDefinition());
     }
 
     @Override
     protected GameOverResult evaluateGameOver(final Model model) {
-        //TODO move it to selarate rule
-        if (getHumanPlayer(model).isDeclaredIndependence()) {
-            final Player player = model.getPlayerByName("Dutch's King");
-            if (getNumberOfMilitaryUnitsForPlayer(player) <= 0) {
-                setFinished(true);
-                return new GameOverResult(GAME_OVER_REASON);
-            }
+        if (getGoals().isAllGoalsDone()) {
+            setFinished(true);
+            return new GameOverResult(GAME_OVER_REASON);
         }
         return null;
     }
@@ -53,11 +51,6 @@ public class Default_3_mission extends AbstractMission<MissionGoalsEmpty, Empty_
     @Override
     CampaignNames getCampaignKey() {
         return CampaignNames.defaultCampaign;
-    }
-
-    @Override
-    protected Empty_missionContext getNewContext() {
-        return new Empty_missionContext();
     }
 
 }
