@@ -7,6 +7,7 @@ import org.microcol.model.campaign.CampaignManager;
 import org.microcol.model.campaign.CampaignMission;
 import org.microcol.model.campaign.CampaignName;
 import org.microcol.model.campaign.CampaignNames;
+import org.microcol.model.campaign.MissionName;
 import org.microcol.model.campaign.ModelCampaignDao;
 import org.microcol.model.campaign.ModelMission;
 
@@ -19,67 +20,70 @@ import com.google.inject.Inject;
  */
 public class GameController {
 
-    private final GameModelController gameModelController;
+	private final GameModelController gameModelController;
 
-    private final BeforeGameStartController beforeGameStartController;
+	private final BeforeGameStartController beforeGameStartController;
 
-    private final CampaignManager campaignManager;
+	private final CampaignManager campaignManager;
 
-    private final ModelCampaignDao modelCampaignDao;
+	private final ModelCampaignDao modelCampaignDao;
 
-    private final MissionCallBack missionCallBack;
+	private final MissionCallBack missionCallBack;
 
-    @Inject
-    GameController(final GameModelController gameModelController,
-            final ModelCampaignDao modelCampaignDao,
-            final CampaignManager campaignManager,
-            final BeforeGameStartController beforeGameStartController,
-            final MissionCallBack missionCallBack) {
-        this.gameModelController = Preconditions.checkNotNull(gameModelController);
-        this.modelCampaignDao = Preconditions.checkNotNull(modelCampaignDao);
-        this.campaignManager = Preconditions.checkNotNull(campaignManager);
-        this.beforeGameStartController = Preconditions.checkNotNull(beforeGameStartController);
-        this.missionCallBack = Preconditions.checkNotNull(missionCallBack);
-    }
+	@Inject
+	GameController(final GameModelController gameModelController, final ModelCampaignDao modelCampaignDao,
+			final CampaignManager campaignManager, final BeforeGameStartController beforeGameStartController,
+			final MissionCallBack missionCallBack) {
+		this.gameModelController = Preconditions.checkNotNull(gameModelController);
+		this.modelCampaignDao = Preconditions.checkNotNull(modelCampaignDao);
+		this.campaignManager = Preconditions.checkNotNull(campaignManager);
+		this.beforeGameStartController = Preconditions.checkNotNull(beforeGameStartController);
+		this.missionCallBack = Preconditions.checkNotNull(missionCallBack);
+	}
 
-    /**
-     * Allows to start testing scenario. In production mode it's blocked.
-     *
-     * @param fileName
-     *            required class path related file name
-     */
-    public void startTestScenario(final String fileName) {
-        startMission(modelCampaignDao.loadFromClassPath(fileName));
-    }
+	/**
+	 * Allows to start testing scenario. In production mode it's blocked.
+	 *
+	 * @param fileName
+	 *            required class path related file name
+	 */
+	public void startTestScenario(final String fileName) {
+		startMission(modelCampaignDao.loadFromClassPath(fileName, missionCallBack));
+	}
 
-    public void writeModelToFile(final File targetFile) {
-        modelCampaignDao.saveToFile(targetFile.getAbsolutePath(),
-                gameModelController.getModelMission());
-    }
+	public void writeModelToFile(final File targetFile) {
+		modelCampaignDao.saveToFile(targetFile.getAbsolutePath(), gameModelController.getModelMission());
+	}
 
-    public void startModelFromFile(final File sourceFile) {
-        startMission(modelCampaignDao.loadFromFile(sourceFile.getAbsolutePath()));
-    }
-    
-    //TODO don't use mission name as string use enum or constant.
-    public void startCampaignMission(final CampaignName campaignName, final String missionName) {
-        final Campaign campaign = campaignManager.getCampaignByName(campaignName);
-        final CampaignMission campaignMission = campaign.getMisssionByName(missionName);
-        //TODO It's crazy to load it with mission instance
-        startMission(modelCampaignDao.loadFromClassPath(campaignMission.makeMission().getModelFileName()));
-    }
+	public void startModelFromFile(final File sourceFile) {
+		startMission(modelCampaignDao.loadFromFile(sourceFile.getAbsolutePath(), missionCallBack));
+	}
 
-    private void startMission(final ModelMission modelMission) {
-        beforeGameStartController.fireEvent(new BeforeGameStartEvent());
-        gameModelController.setAndStartModel(modelMission, missionCallBack);
-    }
+	public void startCampaignMission(final CampaignName campaignName, final String missionName) {
+		final Campaign campaign = campaignManager.getCampaignByName(campaignName);
+		startCampaignMission(campaign.getMisssionByName(missionName));
+	}
 
-    public boolean isDefaultCampaignFinished() {
-        final Campaign campaign = campaignManager.getCampaignByName(CampaignNames.defaultCampaign);
-        return campaign.isFinished();
-    }
+	public void startCampaignMission(final CampaignName campaignName, final MissionName missionName) {
+		final Campaign campaign = campaignManager.getCampaignByName(campaignName);
+		startCampaignMission(campaign.getMisssionByMissionName(missionName));
+	}
 
-    public void stopGame() {
-        gameModelController.stop();
-    }
+	private void startCampaignMission(final CampaignMission campaignMission) {
+		startMission(modelCampaignDao.loadFromClassPath(campaignMission.getClassPathFile(), missionCallBack));
+	}
+
+	private void startMission(final ModelMission modelMission) {
+		beforeGameStartController.fireEvent(new BeforeGameStartEvent());
+		gameModelController.setAndStartModel(modelMission, missionCallBack);
+	}
+
+	public boolean isDefaultCampaignFinished() {
+		final Campaign campaign = campaignManager.getCampaignByName(CampaignNames.defaultCampaign);
+		return campaign.isFinished();
+	}
+
+	public void stopGame() {
+		gameModelController.stop();
+	}
 }

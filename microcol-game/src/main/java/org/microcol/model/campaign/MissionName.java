@@ -5,4 +5,31 @@ package org.microcol.model.campaign;
  */
 public interface MissionName {
 
+	final static String PATH_PREFIX = "/maps/";
+
+	final static String PATH_SUFFIX = ".json";
+
+	/**
+	 * Name used for identification of mission. Name is also used and key to
+	 * localization resource bundles.
+	 *
+	 * @return mission unique name
+	 */
+	String getName();
+
+	/**
+	 * Mission model file name at class path. It's something like
+	 * <i>/maps/03-before-game-over.json</i>.
+	 *
+	 * @return misson definition file name at class path
+	 */
+	String getClassPathFile();
+
+	/**
+	 * Get campaign unique name.
+	 *
+	 * @return campaign unique name
+	 */
+	CampaignName getCampaignName();
+
 }

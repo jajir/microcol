@@ -12,41 +12,38 @@ import com.google.common.collect.Lists;
 
 final class Default_3_missionDefinition extends MissionDefinition<MissionGoalsEmpty> {
 
-    Default_3_missionDefinition(final MissionCallBack missionCallBack, final Model model,
-            final MissionGoalsEmpty goals) {
-        super(missionCallBack, model, goals);
-    }
+	Default_3_missionDefinition(final MissionCallBack missionCallBack, final Model model,
+			final MissionGoalsEmpty goals) {
+		super(missionCallBack, model, goals);
+	}
 
-    @Override
-    protected List<Function<GameOverProcessingContext, String>> prepareProcessors() {
-        return Lists.newArrayList(GameOverProcessors.TIME_IS_UP_PROCESSOR,
-                GameOverProcessors.NO_COLONIES_PROCESSOR, context -> {
-                    if (Default_3_mission.GAME_OVER_REASON
-                            .equals(context.getEvent().getGameOverResult().getGameOverReason())) {
-                        missionCallBack.executeOnFrontEnd(callBackContext -> {
-                            callBackContext.showMessage("campaign.default.m3.done1",
-                                    "campaign.default.m3.done2");
-                            callBackContext.goToGameMenu();
-                        });
-                        return "ok";
-                    }
-                    return null;
-                });
-    }
+	@Override
+	protected List<Function<GameOverProcessingContext, String>> prepareProcessors() {
+		return Lists.newArrayList(GameOverProcessors.TIME_IS_UP_PROCESSOR, GameOverProcessors.NO_COLONIES_PROCESSOR,
+				context -> {
+					if (MissionImpl.GAME_OVER_REASON_ALL_GOALS_ARE_DONE
+							.equals(context.getEvent().getGameOverResult().getGameOverReason())) {
+						missionCallBack.executeOnFrontEnd(callBackContext -> {
+							callBackContext.showMessage("campaign.default.m3.done1", "campaign.default.m3.done2");
+							callBackContext.goToGameMenu();
+						});
+						return "ok";
+					}
+					return null;
+				});
+	}
 
-    @Override
-    public void onGameStarted(final GameStartedEvent event) {
-        if (isFirstTurn(getModel())) {
-            missionCallBack.addCallWhenReady(model -> {
-                missionCallBack.showMessage("campaign.default.m3.start",
-                        "campaign.default.m3.declareIndependence");
-            });
-        }
-    }
+	@Override
+	public void onGameStarted(final GameStartedEvent event) {
+		if (isFirstTurn(getModel())) {
+			missionCallBack.addCallWhenReady(model -> {
+				missionCallBack.showMessage("campaign.default.m3.start", "campaign.default.m3.declareIndependence");
+			});
+		}
+	}
 
-    @Override
-    public void onIndependenceWasDeclared(final IndependenceWasDeclaredEvent event) {
-        missionCallBack.showMessage("campaign.default.m3.declareIndependence.done",
-                "campaign.default.m3.portIsClosed");
-    }
+	@Override
+	public void onIndependenceWasDeclared(final IndependenceWasDeclaredEvent event) {
+		missionCallBack.showMessage("campaign.default.m3.declareIndependence.done", "campaign.default.m3.portIsClosed");
+	}
 }

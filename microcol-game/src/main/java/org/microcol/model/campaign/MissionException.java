@@ -12,9 +12,9 @@ import org.microcol.gui.MicroColException;
  */
 public class MissionException extends MicroColException {
 
-    private static final long serialVersionUID = -2975490267252949111L;
+	private static final long serialVersionUID = -2975490267252949111L;
 
-    public MissionException(final String message) {
-        super(message);
-    }
+	public MissionException(final String message) {
+		super(message);
+	}
 }

@@ -10,28 +10,27 @@ import com.google.common.base.Preconditions;
  */
 class GameOverProcessingContext {
 
-    private final GameFinishedEvent event;
+	private final GameFinishedEvent event;
 
-    private final MissionCallBack missionCallBack;
+	private final MissionCallBack missionCallBack;
 
-    GameOverProcessingContext(final GameFinishedEvent event,
-            final MissionCallBack missionCallBack) {
-        this.event = Preconditions.checkNotNull(event);
-        this.missionCallBack = Preconditions.checkNotNull(missionCallBack);
-    }
+	GameOverProcessingContext(final GameFinishedEvent event, final MissionCallBack missionCallBack) {
+		this.event = Preconditions.checkNotNull(event);
+		this.missionCallBack = Preconditions.checkNotNull(missionCallBack);
+	}
 
-    /**
-     * @return the event
-     */
-    public GameFinishedEvent getEvent() {
-        return event;
-    }
+	/**
+	 * @return the event
+	 */
+	public GameFinishedEvent getEvent() {
+		return event;
+	}
 
-    /**
-     * @return the missionCallBack
-     */
-    public MissionCallBack getMissionCallBack() {
-        return missionCallBack;
-    }
+	/**
+	 * @return the missionCallBack
+	 */
+	public MissionCallBack getMissionCallBack() {
+		return missionCallBack;
+	}
 
 }

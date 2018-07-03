@@ -642,11 +642,15 @@ public final class Model {
         return turnEventStore.getForPlayer(player).isEmpty();
     }
 
-    /**
-     * @return the statistics
-     */
-    public Statistics getStatistics() {
-        return statistics;
-    }
+	/**
+	 * @return the statistics
+	 */
+	public Statistics getStatistics() {
+		return statistics;
+	}
+	
+	public void addGameOverEvaluator(final Function<Model, GameOverResult> evaluator) {
+		gameManager.addEvaluator(evaluator);
+	}
 
 }

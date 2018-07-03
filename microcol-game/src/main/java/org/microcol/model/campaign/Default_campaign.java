@@ -5,15 +5,25 @@ package org.microcol.model.campaign;
  */
 public class Default_campaign extends AbstractCampaign {
 
-    public final static String NAME = "default";
+	Default_campaign() {
+		super(CampaignNames.defaultCampaign);
 
-    Default_campaign() {
-        super(CampaignNames.defaultCampaign);
-        addMission(new DefaultCampaignMission(DefaultMissionNames.findNewWorld.name(), 0,
-                () -> new Default_1_mission()));
-        addMission(new DefaultCampaignMission(DefaultMissionNames.thrive.name(), 1,
-                () -> new Default_2_mission()));
-        addMission(new DefaultCampaignMission(DefaultMissionNames.buildArmy.name(), 2,
-                () -> new Default_3_mission()));
-    }
+		addMission(new DefaultCampaignMission(DefaultMissionNames.findNewWorld, 0,
+				(context) -> new MissionImpl<Default_1_goals>(DefaultMissionNames.findNewWorld, 0,
+						new Default_1_missionDefinition(context.getMissionCallBack(), context.getModel(),
+								new Default_1_goals()),
+						context.getModelPo(), context.getCampaignManager())));
+
+		addMission(new DefaultCampaignMission(DefaultMissionNames.thrive, 1,
+				(context) -> new MissionImpl<Default_2_goals>(
+						DefaultMissionNames.thrive, 1, new Default_2_missionDefinition(context.getMissionCallBack(),
+								context.getModel(), new Default_2_goals()),
+						context.getModelPo(), context.getCampaignManager())));
+
+		addMission(new DefaultCampaignMission(DefaultMissionNames.buildArmy, 2,
+				(context) -> new MissionImpl<MissionGoalsEmpty>(
+						DefaultMissionNames.buildArmy, 2, new Default_3_missionDefinition(context.getMissionCallBack(),
+								context.getModel(), new MissionGoalsEmpty()),
+						context.getModelPo(), context.getCampaignManager())));
+	}
 }

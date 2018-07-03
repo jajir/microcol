@@ -16,25 +16,25 @@ import com.google.common.base.Preconditions;
  */
 public abstract class AbstractModelListenerAdapter extends ModelListenerAdapter {
 
-    private final ChainOfCommandStrategy<GameOverProcessingContext, String> cocs;
+	private final ChainOfCommandStrategy<GameOverProcessingContext, String> cocs;
 
-    protected final MissionCallBack missionCallBack;
+	protected final MissionCallBack missionCallBack;
 
-    protected AbstractModelListenerAdapter(final MissionCallBack missionCallBack) {
-        this.missionCallBack = Preconditions.checkNotNull(missionCallBack);
-        cocs = new ChainOfCommandStrategy<>(prepareProcessors());
-    }
+	protected AbstractModelListenerAdapter(final MissionCallBack missionCallBack) {
+		this.missionCallBack = Preconditions.checkNotNull(missionCallBack);
+		cocs = new ChainOfCommandStrategy<>(prepareProcessors());
+	}
 
-    /**
-     * list of methods that react on game over event.
-     *
-     * @return list of functions
-     */
-    protected abstract List<Function<GameOverProcessingContext, String>> prepareProcessors();
+	/**
+	 * list of methods that react on game over event.
+	 *
+	 * @return list of functions
+	 */
+	protected abstract List<Function<GameOverProcessingContext, String>> prepareProcessors();
 
-    @Override
-    public void onGameFinished(final GameFinishedEvent event) {
-        cocs.apply(new GameOverProcessingContext(event, missionCallBack));
-    }
+	@Override
+	public void onGameFinished(final GameFinishedEvent event) {
+		cocs.apply(new GameOverProcessingContext(event, missionCallBack));
+	}
 
 }

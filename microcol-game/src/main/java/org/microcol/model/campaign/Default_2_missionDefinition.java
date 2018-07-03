@@ -15,81 +15,81 @@ import com.google.common.collect.Lists;
 
 final class Default_2_missionDefinition extends MissionDefinition<Default_2_goals> {
 
-    Default_2_missionDefinition(final MissionCallBack missionCallBack, final Model model,
-            final Default_2_goals goals) {
-        super(missionCallBack, model, goals);
-    }
+	final static Integer TARGET_NUMBER_OF_COLONIES = 3;
 
-    @Override
-    protected List<Function<GameOverProcessingContext, String>> prepareProcessors() {
-        return Lists.newArrayList(GameOverProcessors.TIME_IS_UP_PROCESSOR,
-                GameOverProcessors.NO_COLONIES_PROCESSOR, context -> {
-                    if (Default_2_mission.GAME_OVER_REASON
-                            .equals(context.getEvent().getGameOverResult().getGameOverReason())) {
-                        context.getMissionCallBack().executeOnFrontEnd(callBackContext -> {
-                            callBackContext.showMessage("campaign.default.m2.done");
-                            callBackContext.goToGameMenu();
-                        });
-                        return "ok";
-                    }
-                    return null;
-                });
-    }
+	final static Integer TARGET_NUMBER_OF_GOLD = 5000;
 
-    @Override
-    public void onGameStarted(final GameStartedEvent event) {
-        if (isFirstTurn(event.getModel())) {
-            missionCallBack.addCallWhenReady(model -> {
-                missionCallBack.showMessage("campaign.default.m2.start",
-                        "campaign.default.m2.foundColonies");
-            });
-        }
-    }
+	final static Integer TARGET_NUMBER_OF_MILITARY_UNITS = 15;
 
-    @Override
-    public void onBeforeDeclaringIndependence(final BeforeDeclaringIndependenceEvent event) {
-        event.stopEventExecution();
-        missionCallBack.showMessage("campaign.default.m1.cantDeclareIndependence");
-    }
+	Default_2_missionDefinition(final MissionCallBack missionCallBack, final Model model, final Default_2_goals goals) {
+		super(missionCallBack, model, goals);
+	}
 
-    @Override
-    public void onColonyWasFounded(final ColonyWasFoundEvent event) {
-        if (!goals.getGoalNumberOfColonies().isFinished()) {
-            if (playerHaveMoreOrEqualColonies(event.getModel(),
-                    Default_2_mission.TARGET_NUMBER_OF_COLONIES)) {
-                missionCallBack.showMessage("campaign.default.m2.foundColonies.done",
-                        "campaign.default.m2.get5000");
-                goals.getGoalNumberOfColonies().setFinished(true);
-                ;
-            }
-        }
-    }
+	@Override
+	protected List<Function<GameOverProcessingContext, String>> prepareProcessors() {
+		return Lists.newArrayList(GameOverProcessors.TIME_IS_UP_PROCESSOR, GameOverProcessors.NO_COLONIES_PROCESSOR,
+				context -> {
+					if (MissionImpl.GAME_OVER_REASON_ALL_GOALS_ARE_DONE
+							.equals(context.getEvent().getGameOverResult().getGameOverReason())) {
+						context.getMissionCallBack().executeOnFrontEnd(callBackContext -> {
+							callBackContext.showMessage("campaign.default.m2.done");
+							callBackContext.goToGameMenu();
+						});
+						return "ok";
+					}
+					return null;
+				});
+	}
 
-    @Override
-    public void onGoodsWasSoldInEurope(final GoodsWasSoldInEuropeEvent event) {
-        checkNumberOfGoldTarget(event.getModel());
-    }
+	@Override
+	public void onGameStarted(final GameStartedEvent event) {
+		if (isFirstTurn(event.getModel())) {
+			missionCallBack.addCallWhenReady(model -> {
+				missionCallBack.showMessage("campaign.default.m2.start", "campaign.default.m2.foundColonies");
+			});
+		}
+	}
 
-    @Override
-    public void onTurnStarted(final TurnStartedEvent event) {
-        if (!goals.getGoalMilitaryPower().isFinished()) {
-            if (getNumberOfMilitaryUnits(
-                    event.getModel()) >= Default_2_mission.TARGET_NUMBER_OF_MILITARY_UNITS) {
-                missionCallBack.showMessage("campaign.default.m2.done");
-                goals.getGoalMilitaryPower().setFinished(true);
-            }
-        }
-        checkNumberOfGoldTarget(event.getModel());
-    }
+	@Override
+	public void onBeforeDeclaringIndependence(final BeforeDeclaringIndependenceEvent event) {
+		event.stopEventExecution();
+		missionCallBack.showMessage("campaign.default.m1.cantDeclareIndependence");
+	}
 
-    private void checkNumberOfGoldTarget(final Model model) {
-        if (!goals.getGoalAmountOfGold().isFinished()) {
-            final int golds = getHumanPlayer(model).getGold();
-            if (golds >= Default_2_mission.TARGET_NUMBER_OF_GOLD) {
-                missionCallBack.showMessage("campaign.default.m2.get5000.done",
-                        "campaign.default.m2.makeArmy");
-                goals.getGoalAmountOfGold().setFinished(true);
-            }
-        }
-    }
+	@Override
+	public void onColonyWasFounded(final ColonyWasFoundEvent event) {
+		if (!goals.getGoalNumberOfColonies().isFinished()) {
+			if (playerHaveMoreOrEqualColonies(event.getModel(), TARGET_NUMBER_OF_COLONIES)) {
+				missionCallBack.showMessage("campaign.default.m2.foundColonies.done", "campaign.default.m2.get5000");
+				goals.getGoalNumberOfColonies().setFinished(true);
+				;
+			}
+		}
+	}
+
+	@Override
+	public void onGoodsWasSoldInEurope(final GoodsWasSoldInEuropeEvent event) {
+		checkNumberOfGoldTarget(event.getModel());
+	}
+
+	@Override
+	public void onTurnStarted(final TurnStartedEvent event) {
+		if (!goals.getGoalMilitaryPower().isFinished()) {
+			if (getNumberOfMilitaryUnits(event.getModel()) >= TARGET_NUMBER_OF_MILITARY_UNITS) {
+				missionCallBack.showMessage("campaign.default.m2.done");
+				goals.getGoalMilitaryPower().setFinished(true);
+			}
+		}
+		checkNumberOfGoldTarget(event.getModel());
+	}
+
+	private void checkNumberOfGoldTarget(final Model model) {
+		if (!goals.getGoalAmountOfGold().isFinished()) {
+			final int golds = getHumanPlayer(model).getGold();
+			if (golds >= TARGET_NUMBER_OF_GOLD) {
+				missionCallBack.showMessage("campaign.default.m2.get5000.done", "campaign.default.m2.makeArmy");
+				goals.getGoalAmountOfGold().setFinished(true);
+			}
+		}
+	}
 }

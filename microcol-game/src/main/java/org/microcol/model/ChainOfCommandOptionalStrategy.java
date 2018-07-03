@@ -16,34 +16,38 @@ import com.google.common.base.Preconditions;
  */
 public class ChainOfCommandOptionalStrategy<T, R> implements Function<T, Optional<R>> {
 
-    private final List<Function<T, R>> filters;
+	private final List<Function<T, R>> filters;
 
-    public ChainOfCommandOptionalStrategy() {
-        filters = new ArrayList<>();
-    }
+	public ChainOfCommandOptionalStrategy() {
+		filters = new ArrayList<>();
+	}
 
-    public ChainOfCommandOptionalStrategy(final List<Function<T, R>> filters) {
-        this.filters = new ArrayList<>(Preconditions.checkNotNull(filters));
-    }
+	public ChainOfCommandOptionalStrategy(final List<Function<T, R>> filters) {
+		this.filters = new ArrayList<>(Preconditions.checkNotNull(filters));
+	}
 
-    /**
-     * Go through all filters first non-null return value is returned otherwise
-     * empty is returned.
-     *
-     * @param t
-     *            required filter input
-     * @return optional result of empty
-     */
-    @Override
-    public Optional<R> apply(final T t) {
-        Preconditions.checkNotNull(t);
-        for (final Function<T, R> filter : filters) {
-            R result = filter.apply(t);
-            if (result != null) {
-                return Optional.of(result);
-            }
-        }
-        return Optional.empty();
-    }
+	void addCommand(final Function<T, R> command) {
+		filters.add(Preconditions.checkNotNull(command));
+	}
+
+	/**
+	 * Go through all filters first non-null return value is returned otherwise
+	 * empty is returned.
+	 *
+	 * @param t
+	 *            required filter input
+	 * @return optional result of empty
+	 */
+	@Override
+	public Optional<R> apply(final T t) {
+		Preconditions.checkNotNull(t);
+		for (final Function<T, R> filter : filters) {
+			R result = filter.apply(t);
+			if (result != null) {
+				return Optional.of(result);
+			}
+		}
+		return Optional.empty();
+	}
 
 }

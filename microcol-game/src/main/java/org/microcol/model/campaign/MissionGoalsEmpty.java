@@ -7,9 +7,9 @@ import java.util.Map;
  */
 public class MissionGoalsEmpty extends MissionGoals {
 
-    @Override
-    void initialize(final Map<String, String> data) {
-        // just empty implementation.
-    }
+	@Override
+	void initialize(final Map<String, String> data) {
+		// just empty implementation.
+	}
 
 }

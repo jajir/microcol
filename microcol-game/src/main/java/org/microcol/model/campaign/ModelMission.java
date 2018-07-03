@@ -21,56 +21,58 @@ import com.google.common.base.Preconditions;
  */
 public class ModelMission {
 
-    private final Campaign campaign;
+	private final Campaign campaign;
 
-    private final CampaignMission campaignMission;
+	private final CampaignMission campaignMission;
 
-    private final Mission<?> mission;
+	private final Mission<?> mission;
 
-    private final Model model;
+	private final Model model;
 
-    ModelMission(final Campaign campaign, final CampaignMission campaignMission,
-            final Mission<?> mission, final Model model) {
-        this.campaign = Preconditions.checkNotNull(campaign);
-        this.campaignMission = Preconditions.checkNotNull(campaignMission);
-        this.mission = Preconditions.checkNotNull(mission);
-        this.model = Preconditions.checkNotNull(model);
-    }
+	ModelMission(final Campaign campaign, final CampaignMission campaignMission, final Mission<?> mission,
+			final Model model) {
+		this.campaign = Preconditions.checkNotNull(campaign);
+		this.campaignMission = Preconditions.checkNotNull(campaignMission);
+		this.mission = Preconditions.checkNotNull(mission);
+		this.model = Preconditions.checkNotNull(model);
+		// TODO following doesn't allows different mission implementation and multiple
+		// conditions.
+		model.addGameOverEvaluator(mission::evaluateGameOver);
+	}
 
-    public ModelPo getModelPo() {
-        final ModelPo out = model.save();
-        out.setCampaign(new CampaignPo());
-        out.getCampaign().setName(campaign.getName().toString());
-        out.getCampaign().setMission(campaignMission.getName());
-        out.getCampaign().setData(mission.saveToMap());
-        return out;
-    }
+	public ModelPo getModelPo() {
+		final ModelPo out = model.save();
+		out.setCampaign(new CampaignPo());
+		out.getCampaign().setName(campaign.getName().toString());
+		out.getCampaign().setMission(campaignMission.getName());
+		out.getCampaign().setData(mission.saveToMap());
+		return out;
+	}
 
-    /**
-     * @return return actual game model
-     */
-    public Model getModel() {
-        return model;
-    }
+	/**
+	 * @return return actual game model
+	 */
+	public Model getModel() {
+		return model;
+	}
 
-    public void addListener(final ModelListener listener) {
-        model.addListener(listener);
-    }
+	public void addListener(final ModelListener listener) {
+		model.addListener(listener);
+	}
 
-    public void startGame(final MissionCallBack missionCallBack) {
-        mission.startMission(model, missionCallBack);
-        model.startGame();
-    }
+	public void startGame(final MissionCallBack missionCallBack) {
+		model.startGame();
+	}
 
-    public void stop() {
-        model.stop();
-    }
+	public void stop() {
+		model.stop();
+	}
 
-    /**
-     * @return the mission
-     */
-    public Mission<?> getMission() {
-        return mission;
-    }
+	/**
+	 * @return the mission
+	 */
+	public Mission<?> getMission() {
+		return mission;
+	}
 
 }

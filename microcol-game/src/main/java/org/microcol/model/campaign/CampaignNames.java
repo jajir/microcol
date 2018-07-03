@@ -5,16 +5,16 @@ package org.microcol.model.campaign;
  *
  */
 public enum CampaignNames implements CampaignName {
-    freePlay,
+	freePlay,
 
-    /**
-     * Default campaign implementation.
-     */
-    defaultCampaign {
-        @Override
-        public String toString() {
-            return "default";
-        }
-    };
+	/**
+	 * Default campaign implementation.
+	 */
+	defaultCampaign {
+		@Override
+		public String toString() {
+			return "default";
+		}
+	};
 
 }
