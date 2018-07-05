@@ -139,7 +139,7 @@ public final class ImageProvider {
 
     public static final String IMG_TREE_2 = "tree-2.png";
 
-    public static final String IMG_TILE_FIELD = "tile-field.png";
+    public static final String IMG_FIELD = "field";
 
     private static final String BASE_PACKAGE = "images";
 

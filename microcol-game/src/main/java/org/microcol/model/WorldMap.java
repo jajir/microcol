@@ -19,6 +19,8 @@ public class WorldMap {
 
     private final Set<Location> trees;
 
+    private final Set<Location> fields;
+
     private final Integer seed;
 
     public WorldMap(final ModelPo gamePo) {
@@ -29,6 +31,7 @@ public class WorldMap {
         Preconditions.checkArgument(maxX >= 1, "Max X (%s) must be positive.", maxX);
         this.terrainMap = ImmutableMap.copyOf(worldMapPo.getTerrainMap());
         this.trees = worldMapPo.getTreeSet();
+        this.fields = worldMapPo.getFieldSet();
         this.seed = Preconditions.checkNotNull(worldMapPo.getSeed(), "Seed value is null");
         verifyThatMapIsComplete();
     }
@@ -74,6 +77,7 @@ public class WorldMap {
                 location);
         final Terrain out = new Terrain(location, getTerrainTypeAt(location));
         out.setHasTrees(trees.contains(location));
+        out.setHasField(fields.contains(location));
         return out;
     }
 
@@ -101,8 +105,15 @@ public class WorldMap {
         gamePo.getMap().setMaxY(maxY);
         gamePo.getMap().setTerrainType(terrainMap);
         gamePo.getMap().setTrees(trees);
+        gamePo.getMap().setFields(fields);
         gamePo.getMap().setSeed(seed);
         gamePo.getMap().setVisibility(new VisibilityPo());
+    }
+    
+    public void plowFiled(final Location at) {
+	Preconditions.checkArgument(getTerrainTypeAt(at).isCanHaveField(), "Terrain '%s' at '%s' can have field.",
+		getTerrainTypeAt(at), at);
+	fields.add(at);
     }
 
     /**

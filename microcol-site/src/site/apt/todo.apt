@@ -98,45 +98,52 @@ Planned releases
   
   * \u2713 Every 11 turns new unit appears in Europe port. It's light version of crosses and religion unrest in Old World.
  
+  * \u2713 Bug, when units can't be accessed and 'next turn' button is disabled forever. 
+  
+  * \u2713 Add item in menu mission goal. There should be some mission description.
+ 
+  * \u2713 Redesign saving loading missions. Use same pattern as for model save & make
+ 
+  * \u2713 Missions definition should'n contain MissionCallBack and Model. than move it's creation to mission controller & remove startMission method.
+ 
+  * \u2713 Animation is blinking at windows os. Unit move was redesigned.
+  
+  * \u2713 Support action to unit - wait.
+  
+  * \u2713 plow field, at the beginning any unit can plow field at 4 moves. add action p
+  
+  * \u2713 When colonist work at field than there should be production booster.
+ 
+  * \u2717 When new areas are revealed than there are glitches in black area.
+ 
+  * \u2713 Add some free space at left side of map. It's difficult to sail around New World.
+ 
  * <<0.7.0>> - Prepare for release
   
-  * \u2717 Right panel allows to select unit.
+  * \u2717 build road, at the beginning any unit can build road at 4 moves. add action r
   
-  * \u2717 Add item in menu mission goal. There should be some mission description.
+  * \u2717 redesign model: unit use class hierarchy, remove unit type, same for terrain. Move outside cargoHold, abstract class bude obsahovat utok a pohyb 
+  
+  * \u2717 Colony building queue and queue editing - simple and ugly version
   
   * \u2717 When unit go to west than is turn to west direction.
  When unit go to to east than turn to east.
  When unit arrive to some place than keep direction where is facing.
  Direction where is unit turn is persisted.
  
-  * \u2717 Redesign game loop, to support parallel animations. Slight changes in water & move animation & scroll to moving unit.
+  * \u2717 Redesign game loop, to support parallel animations. Slight changes in water & move animation & scroll to moving unit. To control constant FPS. Now it's around 60 FPS.
  
   * \u2717 Redesign model events - add some mark to it's name to be able to distinguish them from front-end events.
+  
+  * \u2717 Right panel allows to select unit.
  
   * \u2717 Finish translation
  
   * \u2717 Try to make package including JVM, it will be nice to use openJDK.
  
-  * \u2717 Redesign saving loading missions. Use same pattern as for model save & make
- 
-  * \u2717 Missions definition should'n contain MissionCallBack and Model. than move it's creation to mission controller & remove startMission method.
- 
-  * \u2717 redesign model: unit use class hierarchy, remove unit type, same for terrain. Move outside cargoHold, abstract class bude obsahovat utok a pohyb 
- 
-  * \u2717 Bug, when units can't be accessed and 'next turn' button is disabled forever. 
- 
   * \u2717 
  
  * <<Backlog>> - feature and improvement backlog
-  
-  * \u2717 Right panel allows to select unit.
-  
-  * \u2717 Add item in menu mission goal. There should be some mission description.
-  
-  * \u2717 When unit go to west than is turn to west direction.
- When unit go to to east than turn to east.
- When unit arrive to some place than keep direction where is facing.
- Direction where is unit turn is persisted.  
   
   * \u2717 Colony building queue and queue editing - simple and ugly version
 
@@ -156,8 +163,6 @@ Planned releases
   	* \u2717 release process
   	
   	* \u2717 Documentation publishing (return back to manual process).
-  
-  * \u2717 build road
   
   * \u2717 Disband unit - take care of cargo
   

@@ -20,6 +20,11 @@ public class WorldMapPo extends AbstractMapStore {
      */
     private String[] trees;
 
+    /**
+     * Hold information where are fields to grow crop.
+     */
+    private String[] fields;
+
     private VisibilityPo visibility;
 
     private int maxX;
@@ -50,13 +55,13 @@ public class WorldMapPo extends AbstractMapStore {
         }, maxX, maxY);
     }
 
-    public void setVisibles(final Set<Location> visibleSet) {
-        trees = generateString(loc -> {
-            final boolean isVisible = visibleSet.contains(loc);
-            if (isVisible) {
-                return "-";
+    public void setFields(final Set<Location> fieldSet) {
+        fields = generateString(loc -> {
+            final boolean hasField = fieldSet.contains(loc);
+            if (hasField) {
+                return "f";
             } else {
-                return "#";
+                return "-";
             }
         }, maxX, maxY);
     }
@@ -77,6 +82,18 @@ public class WorldMapPo extends AbstractMapStore {
         if (trees != null) {
             iterate(trees, (location, charCode) -> {
                 if (charCode.equals("t")) {
+                    out.add(location);
+                }
+            });
+        }
+        return out;
+    }
+
+    public Set<Location> getFieldSet() {
+        final Set<Location> out = new HashSet<>();
+        if (fields != null) {
+            iterate(fields, (location, charCode) -> {
+                if (charCode.equals("f")) {
                     out.add(location);
                 }
             });
@@ -140,6 +157,14 @@ public class WorldMapPo extends AbstractMapStore {
      */
     public void setVisibility(VisibilityPo visibility) {
         this.visibility = visibility;
+    }
+
+    public String[] getFields() {
+        return fields;
+    }
+
+    public void setFields(final String[] fields) {
+        this.fields = fields;
     }
 
 }

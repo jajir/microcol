@@ -37,6 +37,7 @@ public class ModelDao {
                 .registerTypeAdapter(ConstructionType.class, new GsonConstructionTypeAdapter())
                 .registerTypeAdapter(GoodType.class, new GsonGoodTypeAdapter())
                 .registerTypeAdapter(TerrainType.class, new GsonTerrainTypeAdapter())
+    			.registerTypeAdapter(UnitActionPo.class, new UnitActionPoAdapter())
                 .registerTypeAdapter(UnitType.class, new GsonUnitTypeAdapter()).setPrettyPrinting()
                 .create();
     }
@@ -163,5 +164,9 @@ public class ModelDao {
         outputStreamWriter.write(str);
         outputStreamWriter.close();
     }
+
+	public Gson getGson() {
+		return gson;
+	}
 
 }

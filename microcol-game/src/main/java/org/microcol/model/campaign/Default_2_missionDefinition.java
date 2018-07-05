@@ -62,7 +62,6 @@ final class Default_2_missionDefinition extends MissionDefinition<Default_2_goal
 			if (playerHaveMoreOrEqualColonies(event.getModel(), TARGET_NUMBER_OF_COLONIES)) {
 				missionCallBack.showMessage("campaign.default.m2.foundColonies.done", "campaign.default.m2.get5000");
 				goals.getGoalNumberOfColonies().setFinished(true);
-				;
 			}
 		}
 	}

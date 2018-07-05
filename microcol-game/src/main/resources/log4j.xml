@@ -38,6 +38,9 @@
 	<logger name="org.microcol.gui.gamepanel.AnimationManager">
 		<level value="DEBUG"/>
 	</logger>
+	<logger name="org.microcol.gui.util.FpsCounter">
+		<level value="info"/>
+	</logger>
 
 	<!-- AI -->
 	<logger name="org.microcol.ai">

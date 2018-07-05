@@ -106,7 +106,6 @@ public class GamePanelView {
         gotoModeCursor = new ImageCursor(imageProvider.getImage(ImageProvider.IMG_CURSOR_GOTO), 1,
                 1);
 
-        // TODO JJ specify canvas size
         canvas.widthProperty().addListener((obj, oldValue, newValue) -> {
             if (newValue.intValue() < PaneCanvas.MAX_CANVAS_SIDE_LENGTH) {
                 visibleArea.setCanvasWidth(newValue.intValue());

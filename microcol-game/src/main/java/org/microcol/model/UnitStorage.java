@@ -11,6 +11,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.microcol.model.store.ModelPo;
+import org.microcol.model.unit.UnitAction;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
@@ -44,9 +45,9 @@ class UnitStorage {
 
     Unit createUnit(final Function<Unit, Cargo> cargoBuilder, final Model model,
             final Function<Unit, Place> placeBuilder, final UnitType unitType, final Player owner,
-            final int availableMoves) {
+            final int availableMoves, final UnitAction unitAction) {
         final Unit unit = new Unit(cargoBuilder, model, idManager.nextId(), placeBuilder, unitType,
-                owner, availableMoves);
+                owner, availableMoves, unitAction);
         units.add(unit);
         return unit;
     }

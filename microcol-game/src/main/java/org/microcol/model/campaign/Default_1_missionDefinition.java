@@ -84,7 +84,7 @@ final class Default_1_missionDefinition extends MissionDefinition<Default_1_goal
 			if (!goals.getGoalFindNewWorld().isFinished()) {
 				final ContinentTool ct = new ContinentTool();
 				final Continents continents = ct.findContinents(event.getModel(), getModel().getCurrentPlayer());
-				final Continent c = continents.getForLocation(Location.of(9, 15))
+				final Continent c = continents.getForLocation(Location.of(19, 15))
 						.orElseThrow(() -> new MicroColException("Continent is not at expected location"));
 				if (event.getUnit().isAtPlaceLocation() && c.getDistance(event.getUnit().getLocation()) < 4) {
 					missionCallBack.showMessage("campaign.default.m1.continentInSight");

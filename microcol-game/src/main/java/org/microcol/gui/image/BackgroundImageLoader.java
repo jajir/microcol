@@ -111,6 +111,8 @@ public class BackgroundImageLoader implements ImageLoader {
                 imageProvider.getImage("type_9_0"));
         imageProvider.registerImage(ImageProvider.IMG_TILE_HIDDEN,
                 imageProvider.getImage("type_10_3"));
+        imageProvider.registerImage(ImageProvider.IMG_FIELD,
+                imageProvider.getImage("type_1_5"));
     }
 
 }

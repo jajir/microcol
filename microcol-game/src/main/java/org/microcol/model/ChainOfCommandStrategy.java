@@ -12,17 +12,21 @@ import com.google.common.base.Preconditions;
  * <p>
  * When input is not processed than {@link IllegalArgumentException} is thrown.
  * </p>
+ * <p>
+ * In many cases it's required multiple parameters. In such case is necessary to
+ * create extra class T encapsulating all input parameters.
+ * </p>
  */
 public class ChainOfCommandStrategy<T, R> implements Function<T, R> {
 
     private final List<Function<T, R>> filters;
 
     public ChainOfCommandStrategy() {
-        filters = new ArrayList<>();
+	filters = new ArrayList<>();
     }
 
     public ChainOfCommandStrategy(final List<Function<T, R>> filters) {
-        this.filters = new ArrayList<>(Preconditions.checkNotNull(filters));
+	this.filters = new ArrayList<>(Preconditions.checkNotNull(filters));
     }
 
     /**
@@ -35,15 +39,14 @@ public class ChainOfCommandStrategy<T, R> implements Function<T, R> {
      */
     @Override
     public R apply(final T t) {
-        Preconditions.checkNotNull(t);
-        for (final Function<T, R> filter : filters) {
-            R result = filter.apply(t);
-            if (result != null) {
-                return result;
-            }
-        }
-        throw new IllegalArgumentException(
-                String.format("Unable to process chain of command input (%s)", t));
+	Preconditions.checkNotNull(t);
+	for (final Function<T, R> filter : filters) {
+	    R result = filter.apply(t);
+	    if (result != null) {
+		return result;
+	    }
+	}
+	throw new IllegalArgumentException(String.format("Unable to process chain of command input (%s)", t));
     }
 
 }

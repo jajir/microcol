@@ -41,19 +41,16 @@ public class RightPanelPresenter {
 		this.display = Preconditions.checkNotNull(display);
 		this.gameModelController = Preconditions.checkNotNull(gameModelController);
 		this.text = Preconditions.checkNotNull(text);
-		display.getNextTurnButton().setText(text.get("nextTurnButton"));
-		display.getNextTurnButton().setDisable(true);
+		display.setNextTurnButtonLabel(text.get("nextTurnButton"));
+		display.setNextTurnButtonDisable(true);
 
 		display.getNextTurnButton().setOnAction(e -> {
 			logger.debug("Next turn button was pressed");
-			display.getNextTurnButton().setDisable(true);
+			display.setNextTurnButtonDisable(true);
 			gameModelController.nextTurn();
 		});
 
-		display.getNextTurnButton().setOnKeyPressed(e -> {
-			keyController.fireEvent(e);
-		});
-
+		//TODO this should be at many places, could it be simplified or moved outside of class?
 		display.getNextTurnButton().setOnMouseEntered(event -> {
 			statusBarMessageController.fireEvent(new StatusBarMessageEvent(text.get("nextTurnButton.desctiption")));
 		});
@@ -84,7 +81,7 @@ public class RightPanelPresenter {
 		logger.debug("Turn started for player {}", event.getPlayer());
 		display.setOnMovePlayer(event.getPlayer());
 		if (event.getPlayer().isHuman()) {
-			display.getNextTurnButton().setDisable(false);
+			display.setNextTurnButtonDisable(false);
 			if (lastFocusedTileEvent != null) {
 				display.refreshView(lastFocusedTileEvent);
 			}
@@ -93,7 +90,7 @@ public class RightPanelPresenter {
 
 	@SuppressWarnings("unused")
 	private void onLanguageWasChanged(final ChangeLanguageEvent event) {
-		display.getNextTurnButton().setText(text.get("nextTurnButton"));
+		display.setNextTurnButtonLabel(text.get("nextTurnButton"));
 		if (gameModelController.isModelReady()) {
 			display.setOnMovePlayer(gameModelController.getModel().getCurrentPlayer());
 		}

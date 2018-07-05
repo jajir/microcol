@@ -25,6 +25,8 @@ public class UnitPo {
     private PlaceCargoSlotPo placeCargoSlot;
 
     private CargoPo cargo = new CargoPo();
+    
+    private UnitActionPo action;
 
     private int availableMoves;
 
@@ -156,5 +158,13 @@ public class UnitPo {
     public void setPlaceCargoSlot(PlaceCargoSlotPo placeCargoSlot) {
         this.placeCargoSlot = placeCargoSlot;
     }
+
+	public UnitActionPo getAction() {
+		return action;
+	}
+
+	public void setAction(UnitActionPo action) {
+		this.action = action;
+	}
 
 }

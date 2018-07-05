@@ -95,6 +95,8 @@ import org.microcol.gui.mainmenu.ExitGameController;
 import org.microcol.gui.mainmenu.MainMenuDevelopment;
 import org.microcol.gui.mainmenu.MainMenuPresenter;
 import org.microcol.gui.mainmenu.MainMenuView;
+import org.microcol.gui.mainmenu.PlowFieldEventController;
+import org.microcol.gui.mainmenu.PlowFieldEventListener;
 import org.microcol.gui.mainmenu.QuitGameController;
 import org.microcol.gui.mainmenu.SelectNextUnitController;
 import org.microcol.gui.mainmenu.ShowGoalsController;
@@ -195,10 +197,12 @@ public class MicroColModule extends AbstractModule {
         bind(ShowTurnReportController.class).in(Singleton.class);
         bind(ShowStatisticsController.class).in(Singleton.class);
         bind(ShowGoalsController.class).in(Singleton.class);
-
+        bind(PlowFieldEventController.class).in(Singleton.class);
+        
         bind(TurnStartedListener.class).asEagerSingleton();
         bind(TileWasSelectedListener.class).asEagerSingleton();
         bind(ShowDefaultCampaignMenuListener.class).asEagerSingleton();
+        bind(PlowFieldEventListener.class).asEagerSingleton();
         
         bind(ModelEventManager.class).in(Singleton.class);
         bind(ExitGameListener.class).asEagerSingleton();

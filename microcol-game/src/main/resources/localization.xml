@@ -31,6 +31,7 @@
 	<entry key="mainMenu.unit.move">Move</entry>
 	<entry key="mainMenu.unit.buildColony">Build Colony</entry>
 	<entry key="mainMenu.unit.nextUnit">Next unit</entry>
+	<entry key="mainMenu.unit.plowFied">Plow field</entry>
 
 	<entry key="mainMenu.preferences">Preferences</entry>
 	<entry key="mainMenu.preferences.language">Language</entry>

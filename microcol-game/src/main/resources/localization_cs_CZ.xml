@@ -31,6 +31,7 @@
 	<entry key="mainMenu.unit.move">Táhnout</entry>
 	<entry key="mainMenu.unit.buildColony">Založit kolonii</entry>
 	<entry key="mainMenu.unit.nextUnit">Další jednotka</entry>
+	<entry key="mainMenu.unit.plowFied">Založit pole</entry>
 
 	<entry key="mainMenu.preferences">Nastavení</entry>
 	<entry key="mainMenu.preferences.language">Jazyk</entry>
