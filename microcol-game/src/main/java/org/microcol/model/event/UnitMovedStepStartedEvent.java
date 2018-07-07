@@ -8,13 +8,16 @@ import org.microcol.model.Unit;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 
-public final class UnitMovedStepEvent extends AbstractModelEvent {
+/**
+ * Event is send when unit move start starts.
+ */
+public final class UnitMovedStepStartedEvent extends AbstractModelEvent {
 
     private final Unit unit;
     private final Location start;
     private final Location end;
 
-    public UnitMovedStepEvent(final Model model, final Unit unit, final Location start,
+    public UnitMovedStepStartedEvent(final Model model, final Unit unit, final Location start,
             final Location end) {
         super(model);
 

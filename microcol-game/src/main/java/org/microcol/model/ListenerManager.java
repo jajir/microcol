@@ -22,7 +22,8 @@ import org.microcol.model.event.UnitAttackedEvent;
 import org.microcol.model.event.UnitEmbarkedEvent;
 import org.microcol.model.event.UnitMoveFinishedEvent;
 import org.microcol.model.event.UnitMoveStartedEvent;
-import org.microcol.model.event.UnitMovedStepEvent;
+import org.microcol.model.event.UnitMovedStepFinishedEvent;
+import org.microcol.model.event.UnitMovedStepStartedEvent;
 import org.microcol.model.event.UnitMovedToHighSeasEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -91,13 +92,22 @@ class ListenerManager {
         executeInSeparateThread(listener -> listener.onTurnStarted(event));
     }
 
-    void fireUnitMovedStep(final Model model, final Unit unit, final Location start,
+    void fireUnitMovedStepStarted(final Model model, final Unit unit, final Location start,
             final Location end) {
-        final UnitMovedStepEvent event = new UnitMovedStepEvent(model, unit, start, end);
+        final UnitMovedStepStartedEvent event = new UnitMovedStepStartedEvent(model, unit, start, end);
 
-        logger.info("Unit moved: {}.", event);
+        logger.info("Unit moved step started: {}.", event);
 
-        executeInSameThread(listener -> listener.onUnitMovedStep(event));
+        executeInSameThread(listener -> listener.onUnitMovedStepStarted(event));
+    }
+
+    void fireUnitMovedStepFinished(final Model model, final Unit unit, final Location start,
+            final Location end) {
+        final UnitMovedStepFinishedEvent event = new UnitMovedStepFinishedEvent(model, unit, start, end);
+
+        logger.info("Unit moved step finished: {}.", event);
+
+        executeInSameThread(listener -> listener.onUnitMovedStepFinished(event));
     }
 
     void fireUnitMovedFinished(final Model model, final Unit unit, final Path path) {

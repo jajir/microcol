@@ -512,8 +512,12 @@ public final class Model {
 	listenerManager.fireTurnStarted(this, player, isFreshStart);
     }
 
-    void fireUnitMovedStep(final Unit unit, final Location start, final Location end) {
-	listenerManager.fireUnitMovedStep(this, unit, start, end);
+    void fireUnitMovedStepStarted(final Unit unit, final Location start, final Location end) {
+	listenerManager.fireUnitMovedStepStarted(this, unit, start, end);
+    }
+
+    void fireUnitMovedStepFinished(final Unit unit, final Location start, final Location end) {
+	listenerManager.fireUnitMovedStepFinished(this, unit, start, end);
     }
 
     void fireUnitMovedToHighSeas(final Unit unit) {

@@ -48,7 +48,8 @@ import org.microcol.gui.event.model.TurnStartedController;
 import org.microcol.gui.event.model.UnitAttackedEventController;
 import org.microcol.gui.event.model.UnitEmbarkedController;
 import org.microcol.gui.event.model.UnitMoveFinishedController;
-import org.microcol.gui.event.model.UnitMovedController;
+import org.microcol.gui.event.model.UnitMovedStepFinishedController;
+import org.microcol.gui.event.model.UnitMovedStepStartedController;
 import org.microcol.gui.event.model.UnitMovedToHighSeasController;
 import org.microcol.gui.gamemenu.CampaignPanelPresenter;
 import org.microcol.gui.gamemenu.CampaignPanelView;
@@ -156,7 +157,8 @@ public class MicroColModule extends AbstractModule {
          * Event controllers.
          */
         bind(ApplicationController.class).in(Singleton.class);
-        bind(UnitMovedController.class).in(Singleton.class);
+        bind(UnitMovedStepStartedController.class).in(Singleton.class);
+        bind(UnitMovedStepFinishedController.class).in(Singleton.class);
         bind(KeyController.class).in(Singleton.class);
         bind(RoundStartedController.class).in(Singleton.class);
         bind(TileWasSelectedController.class).in(Singleton.class);

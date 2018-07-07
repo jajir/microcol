@@ -2,7 +2,7 @@ package org.microcol.gui.gamepanel;
 
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.event.model.GameStartedController;
-import org.microcol.gui.event.model.UnitMovedController;
+import org.microcol.gui.event.model.UnitMovedStepFinishedController;
 import org.microcol.gui.image.GrassCoastMapGenerator;
 import org.microcol.gui.image.HiddenCoastMapGenerator;
 import org.microcol.gui.image.IceCoastMapGenerator;
@@ -38,7 +38,7 @@ public class MapManager {
             final HiddenCoastMapGenerator hiddenCoastMapGenerator,
             final GameModelController gameModelController,
             final GameStartedController gameStartedController, final ImageProvider imageProvider,
-            final UnitMovedController unitMovedController) {
+            final UnitMovedStepFinishedController unitMovedStepFinishedController) {
         this.grassCoastMapGenerator = Preconditions.checkNotNull(grassCoastMapGenerator);
         this.iceCoastMapGenerator = Preconditions.checkNotNull(iceCoastMapGenerator);
         this.hiddenCoastMapGenerator = Preconditions.checkNotNull(hiddenCoastMapGenerator);
@@ -50,14 +50,8 @@ public class MapManager {
             imageRandomProvider = new ImageRandomProvider(imageProvider,
                     gameModelController.getModel().getMap());
         });
-        unitMovedController.addListener(event -> {
+        unitMovedStepFinishedController.addListener(event -> {
             if (event.getUnit().getOwner().isHuman()) {
-                // TODO It's synchronous listener, and still underlying map is
-                // not correctly updated.
-                /*
-                 * It's because move perform sync listener call and later adjust
-                 * visibility. Listeners should be called as last operation.
-                 */
                 hiddenCoastMapGenerator.setMap(gameModelController.getModel().getMap());
             }
         });

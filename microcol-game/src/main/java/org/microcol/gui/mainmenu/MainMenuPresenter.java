@@ -17,7 +17,7 @@ import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.event.model.IndependenceWasDeclaredColntroller;
 import org.microcol.gui.event.model.TurnStartedController;
 import org.microcol.gui.event.model.UnitMoveFinishedController;
-import org.microcol.gui.event.model.UnitMovedController;
+import org.microcol.gui.event.model.UnitMovedStepStartedController;
 import org.microcol.gui.gamepanel.SelectedUnitManager;
 import org.microcol.gui.gamepanel.SelectedUnitWasChangedController;
 import org.microcol.gui.gamepanel.SelectedUnitWasChangedEvent;
@@ -31,7 +31,7 @@ import org.microcol.model.campaign.FreePlayMissionNames;
 import org.microcol.model.event.IndependenceWasDeclaredEvent;
 import org.microcol.model.event.TurnStartedEvent;
 import org.microcol.model.event.UnitMoveFinishedEvent;
-import org.microcol.model.event.UnitMovedStepEvent;
+import org.microcol.model.event.UnitMovedStepStartedEvent;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
@@ -64,7 +64,7 @@ public class MainMenuPresenter {
 	    final EndMoveController endMoveController, final TurnStartedController turnStartedController,
 	    final PersistingDialog persistingDialog, final EuropeDialog europeDialog, final Colonizopedia colonizopedia,
 	    final PreferencesAnimationSpeed preferencesAnimationSpeed, final PreferencesVolume preferencesVolume,
-	    final SelectedUnitManager selectedUnitManager, final UnitMovedController unitMovedStepController,
+	    final SelectedUnitManager selectedUnitManager, final UnitMovedStepStartedController unitMovedStepController,
 	    final UnitMoveFinishedController unitMoveFinishedController,
 	    final SelectedUnitWasChangedController selectedUnitWasChangedController,
 	    final IndependenceWasDeclaredColntroller independenceWasDeclaredColntroller,
@@ -167,7 +167,7 @@ public class MainMenuPresenter {
     }
 
     @SuppressWarnings("unused")
-    private void onUnitMovedStep(final UnitMovedStepEvent event) {
+    private void onUnitMovedStep(final UnitMovedStepStartedEvent event) {
 	// TODO event queue is blocked by animation of move. This method is
 	// called as last method.
 	view.getMenuItemNextUnit().setDisable(true);

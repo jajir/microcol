@@ -145,7 +145,7 @@ public class Colony {
         final Location target = whereCouldMove.get(random.nextInt(whereCouldMove.size()));
         final Location oldLocation = unit.getLocation();
         unit.placeToLocation(target);
-        model.fireUnitMovedStep(unit, oldLocation, target);
+        model.fireUnitMovedStepStarted(unit, oldLocation, target);
     }
 
     /**

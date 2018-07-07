@@ -11,8 +11,10 @@ public class ModelEventManager {
 
     private final RoundStartedController roundStartedController;
 
-    private final UnitMovedController unitMovedController;
-
+    private final UnitMovedStepStartedController unitMovedStepStartedController;
+    
+    private final UnitMovedStepFinishedController unitMovedStepFinishedController;
+    
     private final UnitMoveFinishedController unitMoveFinishedController;
 
     private final GameStartedController gameStartedController;
@@ -37,7 +39,8 @@ public class ModelEventManager {
 
     @Inject
     public ModelEventManager(final RoundStartedController roundStartedController,
-            final UnitMovedController unitMovedController,
+            final UnitMovedStepStartedController unitMovedStepStartedController,
+            final UnitMovedStepFinishedController unitMovedStepFinishedController,
             final GameStartedController gameStartedController,
             final TurnStartedController turnStartedController,
             final DebugRequestController debugRequestController,
@@ -50,7 +53,8 @@ public class ModelEventManager {
             final UnitMovedToHighSeasController unitMovedToHighSeasController,
             final IndependenceWasDeclaredColntroller independenceWasDeclaredColntroller) {
         this.roundStartedController = Preconditions.checkNotNull(roundStartedController);
-        this.unitMovedController = Preconditions.checkNotNull(unitMovedController);
+        this.unitMovedStepStartedController = Preconditions.checkNotNull(unitMovedStepStartedController);
+        this.unitMovedStepFinishedController = Preconditions.checkNotNull(unitMovedStepFinishedController);
         this.gameStartedController = Preconditions.checkNotNull(gameStartedController);
         this.turnStartedController = Preconditions.checkNotNull(turnStartedController);
         this.debugRequestController = Preconditions.checkNotNull(debugRequestController);
@@ -70,8 +74,8 @@ public class ModelEventManager {
         return roundStartedController;
     }
 
-    public UnitMovedController getUnitMovedController() {
-        return unitMovedController;
+    public UnitMovedStepStartedController getUnitMovedStepStartedController() {
+        return unitMovedStepStartedController;
     }
 
     public GameStartedController getGameStartedController() {
@@ -131,6 +135,10 @@ public class ModelEventManager {
      */
     public IndependenceWasDeclaredColntroller getIndependenceWasDeclaredColntroller() {
         return independenceWasDeclaredColntroller;
+    }
+
+    public UnitMovedStepFinishedController getUnitMovedStepFinishedController() {
+        return unitMovedStepFinishedController;
     }
 
 }

@@ -3,11 +3,11 @@ package org.microcol.gui.gamepanel;
 import org.microcol.gui.event.model.ColonyWasCapturedController;
 import org.microcol.gui.event.model.TurnStartedController;
 import org.microcol.gui.event.model.UnitMoveFinishedController;
-import org.microcol.gui.event.model.UnitMovedController;
+import org.microcol.gui.event.model.UnitMovedStepStartedController;
 import org.microcol.model.event.ColonyWasCapturedEvent;
 import org.microcol.model.event.TurnStartedEvent;
 import org.microcol.model.event.UnitMoveFinishedEvent;
-import org.microcol.model.event.UnitMovedStepEvent;
+import org.microcol.model.event.UnitMovedStepStartedEvent;
 
 import com.google.inject.Inject;
 
@@ -22,7 +22,7 @@ public class GamePanelController {
 
     @Inject
     GamePanelController(final TurnStartedController turnStartedController,
-            final UnitMovedController unitMovedStepController,
+            final UnitMovedStepStartedController unitMovedStepController,
             final UnitMoveFinishedController unitMoveFinishedController,
             final ColonyWasCapturedController colonyWasCapturedController) {
         turnStartedController.addListener(this::onTurnStarted);
@@ -41,7 +41,7 @@ public class GamePanelController {
     }
 
     @SuppressWarnings("unused")
-    private void onUnitMovedStep(final UnitMovedStepEvent event) {
+    private void onUnitMovedStep(final UnitMovedStepStartedEvent event) {
         unitIsMoving = true;
     }
 

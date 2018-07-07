@@ -5,7 +5,7 @@ import java.util.Optional;
 import org.microcol.gui.colony.UnitMovedToFieldController;
 import org.microcol.gui.colony.UnitMovedToFieldEvent;
 import org.microcol.gui.event.model.GameModelController;
-import org.microcol.gui.event.model.UnitMovedController;
+import org.microcol.gui.event.model.UnitMovedStepStartedController;
 import org.microcol.gui.event.model.UnitMovedToHighSeasController;
 import org.microcol.gui.mainmenu.SelectNextUnitController;
 import org.microcol.gui.mainmenu.SelectNextUnitEvent;
@@ -40,7 +40,7 @@ public class SelectedUnitManager {
             final TileWasSelectedController tileWasSelectedController,
             final SelectNextUnitController selectNextUnitController,
             final SelectedTileManager selectedTileManager,
-            final UnitMovedController unitMovedController,
+            final UnitMovedStepStartedController unitMovedController,
             final UnitMovedToHighSeasController unitMovedToHighSeasController,
             final UnitMovedToFieldController unitMovedToFieldController,
             final SelectedUnitWasChangedController selectedUnitWasChangedController) {

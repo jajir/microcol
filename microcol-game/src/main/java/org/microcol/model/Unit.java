@@ -398,11 +398,12 @@ public class Unit implements CargoHolder {
 	    model.fireUnitMovedToHighSeas(this);
 	} else {
 	    final Location start = getLocation();
-	    model.fireUnitMovedStep(this, start, moveTo);
+	    model.fireUnitMovedStepStarted(this, start, moveTo);
 	    placeToLocation(moveTo);
 	    owner.revealMapForUnit(this);
 	    // if it's necessary fire event about captured city
 	    tryToCaptureColony(moveTo);
+	    model.fireUnitMovedStepFinished(this, start, moveTo);	    
 	}
     }
 
@@ -466,7 +467,7 @@ public class Unit implements CargoHolder {
 	availableMoves = 0;
 	final Location start = getLocation();
 	placeToLocation(attackAt);
-	model.fireUnitMovedStep(this, start, attackAt);
+	model.fireUnitMovedStepStarted(this, start, attackAt);
 	col.captureColony(owner, this);
     }
 

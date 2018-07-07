@@ -16,7 +16,8 @@ import org.microcol.model.event.UnitAttackedEvent;
 import org.microcol.model.event.UnitEmbarkedEvent;
 import org.microcol.model.event.UnitMoveFinishedEvent;
 import org.microcol.model.event.UnitMoveStartedEvent;
-import org.microcol.model.event.UnitMovedStepEvent;
+import org.microcol.model.event.UnitMovedStepFinishedEvent;
+import org.microcol.model.event.UnitMovedStepStartedEvent;
 import org.microcol.model.event.UnitMovedToHighSeasEvent;
 
 /**
@@ -30,7 +31,9 @@ public interface ModelListener {
 
     void onTurnStarted(TurnStartedEvent event);
 
-    void onUnitMovedStep(UnitMovedStepEvent event);
+    void onUnitMovedStepStarted(UnitMovedStepStartedEvent event);
+
+    void onUnitMovedStepFinished(UnitMovedStepFinishedEvent event);
 
     void onUnitMovedToHighSeas(UnitMovedToHighSeasEvent event);
 

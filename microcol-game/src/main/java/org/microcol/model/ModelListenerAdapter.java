@@ -16,7 +16,8 @@ import org.microcol.model.event.UnitAttackedEvent;
 import org.microcol.model.event.UnitEmbarkedEvent;
 import org.microcol.model.event.UnitMoveFinishedEvent;
 import org.microcol.model.event.UnitMoveStartedEvent;
-import org.microcol.model.event.UnitMovedStepEvent;
+import org.microcol.model.event.UnitMovedStepFinishedEvent;
+import org.microcol.model.event.UnitMovedStepStartedEvent;
 import org.microcol.model.event.UnitMovedToHighSeasEvent;
 
 public class ModelListenerAdapter implements ModelListener {
@@ -37,7 +38,12 @@ public class ModelListenerAdapter implements ModelListener {
     }
 
     @Override
-    public void onUnitMovedStep(final UnitMovedStepEvent event) {
+    public void onUnitMovedStepStarted(final UnitMovedStepStartedEvent event) {
+        // Do nothing.
+    }
+
+    @Override
+    public void onUnitMovedStepFinished(final UnitMovedStepFinishedEvent event) {
         // Do nothing.
     }
 
