@@ -8,6 +8,8 @@ import static org.junit.Assert.assertTrue;
 import java.util.function.Function;
 
 import org.junit.Test;
+import org.microcol.model.unit.UnitAction;
+import org.microcol.model.unit.UnitActionNoAction;
 
 import com.google.common.collect.Lists;
 
@@ -46,6 +48,9 @@ public class UnitTest {
 	
 	@Injectable(value="3")
 	private int availableMoves;
+	
+	@Injectable
+	private UnitAction unitAction = new UnitActionNoAction();
 	
 	@Test
 	public void test_isSameOwner_emptyList() throws Exception {

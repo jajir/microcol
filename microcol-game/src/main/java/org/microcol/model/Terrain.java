@@ -1,9 +1,12 @@
 package org.microcol.model;
 
-import org.microcol.model.TerrainType.Production;
+import java.util.List;
+import java.util.function.Function;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
 
 /**
  * It's countryside definition. It also specify what is on that land.
@@ -17,6 +20,44 @@ public class Terrain {
     private boolean hasTrees;
 
     private boolean hasField;
+
+    /**
+     * List of function that based on terrain properties like trees and field modify
+     * particular good production.
+     *
+     *
+     * TODO don't create function list for each terrain
+     * 
+     * 
+     * TODO pass modifier in constructor
+     */
+    private final List<Function<TerrainProduction, TerrainProduction>> productionsModifiers = Lists.newArrayList(prod -> {
+	if (prod.getTerrain().isHasTrees()) {
+	    if (GoodType.CORN.equals(prod.getGoodType())) {
+		return prod.modify(prod.getProduction() / 3);
+	    }
+	    if (GoodType.LUMBER.equals(prod.getGoodType())) {
+		return prod.modify(7);
+	    }
+	    if (GoodType.FUR.equals(prod.getGoodType())) {
+		return prod.modify(5);
+	    }
+	}
+	return prod;
+    }, prod -> {
+	if (prod.getTerrain().isHasField()) {
+	    if (GoodType.CORN.equals(prod.getGoodType())) {
+		return prod.modify(prod.getProduction() * 2);
+	    }
+	    if (GoodType.LUMBER.equals(prod.getGoodType())) {
+		return prod.modify(prod.getProduction() / 3);
+	    }
+	    if (GoodType.FUR.equals(prod.getGoodType())) {
+		return prod.modify(1);
+	    }
+	}
+	return prod;
+    });
 
     public Terrain(final Location location, final TerrainType terrainType) {
 	this.location = Preconditions.checkNotNull(location);
@@ -38,20 +79,31 @@ public class Terrain {
 	this.hasTrees = hasTrees;
     }
 
-    public int canProduceAmmount(final Production production) {
-	if (isHasTrees()) {
-	    return production.getWithTrees();
-	} else {
-	    return production.getWithoutTrees();
-	}
-    }
-
     public int canProduceAmmount(final GoodType producedGoodType) {
-	return canProduceAmmount(getProductionForGoodType(producedGoodType));
+	return getTerrainProduction(producedGoodType).getProduction();
     }
 
-    private Production getProductionForGoodType(final GoodType producedGoodType) {
-	return terrainType.getProductionForGoodType(producedGoodType).orElse(new Production(producedGoodType, 0, 0));
+    public TerrainProduction getTerrainProduction(final GoodType producedGoodType) {
+	if (terrainType.getBaseProduction(producedGoodType).isPresent()) {
+	    TerrainProduction prod = new TerrainProduction(this, producedGoodType,
+		    terrainType.getBaseProduction(producedGoodType).get().getBase());
+	    for (final Function<TerrainProduction, TerrainProduction> productionModifier : productionsModifiers) {
+		prod = productionModifier.apply(prod);
+	    }
+	    return prod;
+	}
+	return new TerrainProduction(this, producedGoodType, 0);
+    }
+    
+    /**
+     * Get list of production for goods where total production is above 0.
+     *
+     * @return Return list of produces goods and number of produced goods per turn.
+     */
+    public List<TerrainProduction> getProduction() {
+	//NOTE Just good types produced on field could be filtered.
+	return GoodType.GOOD_TYPES.stream().map(goodType -> getTerrainProduction(goodType))
+		.filter(prod -> prod.getProduction() > 0).collect(ImmutableList.toImmutableList());
     }
 
     @Override

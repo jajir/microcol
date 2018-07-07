@@ -6,6 +6,8 @@ import java.util.function.Function;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.microcol.model.unit.UnitAction;
+import org.microcol.model.unit.UnitActionNoAction;
 
 import mockit.Expectations;
 import mockit.Injectable;
@@ -37,6 +39,9 @@ public class UnitColonistTestInCargo {
 	
 	@Injectable(value="3")
 	private int availableMoves;
+	
+	@Injectable
+	private UnitAction unitAction = new UnitActionNoAction();
 	
 	@Mocked
 	private PlaceCargoSlot placeCargoSlot;

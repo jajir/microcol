@@ -9,6 +9,7 @@ import org.microcol.model.store.ColonyPo;
 import org.microcol.model.store.ConstructionPo;
 import org.microcol.model.store.PlaceColonyFieldPo;
 import org.microcol.model.store.PlaceConstructionSlotPo;
+import org.microcol.model.store.UnitActionNoActionPo;
 import org.microcol.model.store.UnitPo;
 
 import com.google.common.base.Preconditions;
@@ -86,6 +87,7 @@ public class ColonyBuilder {
         final UnitPo worker = createUnitByType(unitType);
         final PlaceConstructionSlotPo placeConstructionSlotPo = new PlaceConstructionSlotPo();
         worker.setPlaceConstructionSlot(placeConstructionSlotPo);
+        worker.setAction(new UnitActionNoActionPo());
 
         constructionPo.getSlots().get(position).setWorkerId(worker.getId());
         return this;
@@ -99,6 +101,7 @@ public class ColonyBuilder {
         final UnitPo worker = createUnitByType(unitType);
         final PlaceColonyFieldPo placeColonyFieldPo = new PlaceColonyFieldPo();
         worker.setPlaceColonyField(placeColonyFieldPo);
+        worker.setAction(new UnitActionNoActionPo());
 
         colonyPo.getFieldByDirection(fieldDirection).setWorkerId(worker.getId());
         colonyPo.getFieldByDirection(fieldDirection).setProducedGoodType(producedGoodType);

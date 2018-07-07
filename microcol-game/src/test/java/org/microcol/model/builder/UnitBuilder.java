@@ -11,6 +11,7 @@ import org.microcol.model.store.PlaceCargoSlotPo;
 import org.microcol.model.store.PlaceEuropePortPo;
 import org.microcol.model.store.PlaceHighSeasPo;
 import org.microcol.model.store.PlaceMapPo;
+import org.microcol.model.store.UnitActionNoActionPo;
 import org.microcol.model.store.UnitPo;
 
 import com.google.common.base.Preconditions;
@@ -87,6 +88,7 @@ public class UnitBuilder {
         tmpPo.setOwnerId(
                 Preconditions.checkNotNull(unitPo.getOwnerId(), "Player name was not set"));
         tmpPo.setPlaceCargoSlot(new PlaceCargoSlotPo());
+        tmpPo.setAction(new UnitActionNoActionPo());
         modelPo.addUnit(tmpPo);
         final CargoSlotPo cargoSlotPo = new CargoSlotPo();
         cargoSlotPo.setUnitId(tmpPo.getId());
@@ -95,6 +97,7 @@ public class UnitBuilder {
     }
 
     public UnitPo build() {
+        unitPo.setAction(new UnitActionNoActionPo());
         return unitPo;
     }
 

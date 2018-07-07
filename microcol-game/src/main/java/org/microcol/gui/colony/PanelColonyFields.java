@@ -91,14 +91,12 @@ public class PanelColonyFields extends TitledPanel {
                 .getDirection(Point.of(event.getX(), event.getY()));
         if (direction.isPresent()) {
             final ColonyField colonyField = colony.getColonyFieldInDirection(direction.get());
-            final Terrain terrain = colonyField.getTerrain();
             if (!colonyField.isEmpty()) {
                 contextMenu.getItems().clear();
-                colonyField.getTerrainType().getProductions().stream()
-                        .filter(production -> terrain.canProduceAmmount(production) > 0)
+                colonyField.getTerrain().getProduction().stream()
                         .forEach(production -> {
                             final MenuItem item = new MenuItem(production.getGoodType().name()
-                                    + "   " + terrain.canProduceAmmount(production));
+                                    + "   " + production.getProduction());
                             item.setOnAction(evt -> {
                                 colonyField.setProducedGoodType(production.getGoodType());
                                 colonyDialog.repaint();

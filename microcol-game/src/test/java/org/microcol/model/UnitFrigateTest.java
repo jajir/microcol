@@ -7,6 +7,8 @@ import java.util.function.Function;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.microcol.model.unit.UnitAction;
+import org.microcol.model.unit.UnitActionNoAction;
 
 import com.google.common.base.Preconditions;
 
@@ -40,6 +42,9 @@ public class UnitFrigateTest {
 	
 	@Injectable(value="3")
 	private int availableMoves;
+	
+	@Injectable
+	private UnitAction unitAction = new UnitActionNoAction();
 	
 	@Mocked
 	private PlaceLocation placeMap;

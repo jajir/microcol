@@ -2,6 +2,7 @@ package org.microcol.model.builder;
 
 import org.microcol.model.store.ModelPo;
 import org.microcol.model.store.PlaceEuropePortPo;
+import org.microcol.model.store.UnitActionNoActionPo;
 import org.microcol.model.store.UnitPo;
 
 import com.google.common.base.Preconditions;
@@ -27,6 +28,7 @@ public class EuropeBuilder {
 	public EuropeBuilder addShipToPort(final UnitPo ship) {
 		Preconditions.checkArgument(ship.getType().isShip(), "In Europe port could be just ship.");
 		ship.setPlaceEuropePort(new PlaceEuropePortPo());
+	        ship.setAction(new UnitActionNoActionPo());
 		modelPo.addUnit(ship);
 		return this;
 	}

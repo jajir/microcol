@@ -10,6 +10,7 @@ import org.microcol.model.store.ModelDao;
 import org.microcol.model.store.ModelPo;
 import org.microcol.model.store.PlaceMapPo;
 import org.microcol.model.store.PlayerPo;
+import org.microcol.model.store.UnitActionNoActionPo;
 import org.microcol.model.store.UnitPo;
 
 import com.google.common.base.Preconditions;
@@ -71,6 +72,7 @@ public class ModelBuilder {
         unit.setType(type);
         unit.setPlaceMap(new PlaceMapPo());
         unit.getPlaceMap().setLocation(location);
+        unit.setAction(new UnitActionNoActionPo());
         modelPo.addUnit(unit);
 
         return this;
