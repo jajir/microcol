@@ -47,7 +47,7 @@ public class CampaignPanelPresenter {
 	}
 
 	private void onSelectedMission(final String missionName) {
-		logger.debug("Mission '%s' was selected to play.", missionName);
+		logger.debug("Mission {} was selected to play.", missionName);
 		gameController.startCampaignMission(CampaignNames.defaultCampaign, missionName);
 		mainFramePresenter.showGamePanel();
 	}

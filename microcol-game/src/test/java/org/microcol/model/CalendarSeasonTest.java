@@ -43,16 +43,18 @@ public class CalendarSeasonTest {
 
     @Test
     public void testCreation() {
-        final Calendar calendar = new Calendar(START_YEAR, END_YEAR, turnNo);
-        Assert.assertEquals("Test of startYear failed:", START_YEAR, calendar.getStartYear());
-        Assert.assertEquals("Test of endYear failed:", END_YEAR, calendar.getEndYear());
-        Assert.assertFalse("Test of isFinished() failed:", calendar.isFinished());
-        
-        Assert.assertEquals("Test of currentYear failed:", currentYear, calendar.getCurrentYear());
-        if(season==null){
-            Assert.assertFalse("Test of currentSeason failed:", calendar.getCurrentSeason().isPresent());
-        }else{
-            Assert.assertEquals("Test of currentSeason failed:", season, calendar.getCurrentSeason().get());
-        }
+	final Calendar calendar = new Calendar(START_YEAR, END_YEAR, turnNo);
+	Assert.assertEquals("Test of startYear failed:", START_YEAR, calendar.getStartYear());
+	Assert.assertEquals("Test of endYear failed:", END_YEAR, calendar.getEndYear());
+	Assert.assertFalse("Test of isFinished() failed:", calendar.isFinished());
+
+	Assert.assertEquals("Test of currentYear failed:", currentYear, calendar.getCurrentYear());
+	if (season == null) {
+	    Assert.assertFalse("Test of currentSeason failed:",
+		    calendar.getCurrentSeason().isPresent());
+	} else {
+	    Assert.assertEquals("Test of currentSeason failed:", season,
+		    calendar.getCurrentSeason().get());
+	}
     }
 }

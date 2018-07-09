@@ -9,26 +9,21 @@ public class Default_1_goals extends MissionGoals {
 	@Override
 	void initialize(final Map<String, String> data) {
 		Preconditions.checkNotNull(data);
-		getGoals().add(new GoalProvider.GoalFindNewWorld(data));
-		getGoals().add(new GoalProvider.GoalFoundColony(data));
-		getGoals().add(new GoalProvider.GoalProduceCigars(data));
-		getGoals().add(new GoalProvider.GoalSellCigars(data));
+		getGoals().add(new GoalProvider.GoalNumberOfColonies(data));
+		getGoals().add(new GoalProvider.GoalAmountOfGold(data));
+		getGoals().add(new GoalProvider.GoalMilitaryPower(data));
 	}
 
-	GoalProvider.GoalFindNewWorld getGoalFindNewWorld() {
-		return getByClass(GoalProvider.GoalFindNewWorld.class);
+	GoalProvider.GoalNumberOfColonies getGoalNumberOfColonies() {
+		return getByClass(GoalProvider.GoalNumberOfColonies.class);
 	}
 
-	GoalProvider.GoalFoundColony getGoalFoundColony() {
-		return getByClass(GoalProvider.GoalFoundColony.class);
+	GoalProvider.GoalAmountOfGold getGoalAmountOfGold() {
+		return getByClass(GoalProvider.GoalAmountOfGold.class);
 	}
 
-	GoalProvider.GoalProduceCigars getGoalProduceCigars() {
-		return getByClass(GoalProvider.GoalProduceCigars.class);
-	}
-
-	GoalProvider.GoalSellCigars getGoalSellCigars() {
-		return getByClass(GoalProvider.GoalSellCigars.class);
+	GoalProvider.GoalMilitaryPower getGoalMilitaryPower() {
+		return getByClass(GoalProvider.GoalMilitaryPower.class);
 	}
 
 }

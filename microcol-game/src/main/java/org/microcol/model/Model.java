@@ -64,14 +64,16 @@ public final class Model {
 		construction.getConstructionSlots().forEach(slot -> {
 		    if (!slot.isEmpty()) {
 			final Unit unit = slot.getUnit();
-			Preconditions.checkState(unitStorage.getUnitById(unit.getId()).equals(unit));
+			Preconditions
+				.checkState(unitStorage.getUnitById(unit.getId()).equals(unit));
 		    }
 		});
 	    });
 	});
     }
 
-    Model(final Calendar calendar, final WorldMap map, final ModelPo modelPo, final UnitStorage unitStorage,
+    Model(final Calendar calendar, final WorldMap map, final ModelPo modelPo,
+	    final UnitStorage unitStorage,
 	    final List<Function<Model, GameOverResult>> gameOverEvaluators) {
 	Preconditions.checkNotNull(modelPo);
 	listenerManager = new ListenerManager();
@@ -88,10 +90,12 @@ public final class Model {
 	this.colonies = Lists.newArrayList();
 	modelPo.getColonies().forEach(colonyPo -> {
 	    final Colony col = new Colony(this, colonyPo.getName(),
-		    playerStore.getPlayerByName(colonyPo.getOwnerName()), colonyPo.getLocation(), colony -> {
+		    playerStore.getPlayerByName(colonyPo.getOwnerName()), colonyPo.getLocation(),
+		    colony -> {
 			final List<Construction> constructions = new ArrayList<>();
 			colonyPo.getConstructions().forEach(constructionPo -> {
-			    final Construction c = Construction.build(colony, constructionPo.getType());
+			    final Construction c = Construction.build(colony,
+				    constructionPo.getType());
 			    constructions.add(c);
 			});
 			return constructions;
@@ -113,11 +117,13 @@ public final class Model {
      * It allows to not-define correct visible area in save files.
      */
     private void assureDefaultVisibility() {
-	unitStorage.getUnits().stream().filter(unit -> unit.getOwner().isHuman() && unit.isAtPlaceLocation())
+	unitStorage.getUnits().stream()
+		.filter(unit -> unit.getOwner().isHuman() && unit.isAtPlaceLocation())
 		.forEach(unit -> unit.getOwner().revealMapForUnit(unit));
     }
 
-    public static Model make(final ModelPo modelPo, final List<Function<Model, GameOverResult>> gameOverEvaluators) {
+    public static Model make(final ModelPo modelPo,
+	    final List<Function<Model, GameOverResult>> gameOverEvaluators) {
 	final Calendar calendar = Calendar.make(modelPo.getCalendar());
 	final WorldMap worldMap = new WorldMap(modelPo);
 	final UnitStorage unitStorage = new UnitStorage(IdManager.makeFromModelPo(modelPo));
@@ -127,24 +133,29 @@ public final class Model {
 	/*
 	 * First are loaded units which can hold cargo than which can be held in cargo.
 	 */
-	modelPo.getUnits().stream().filter(unitPo -> unitPo.getType().canHoldCargo()).forEach(unitPo -> {
-	    if (model.tryGetUnitById(unitPo.getId()).isPresent()) {
-		throw new MicroColException(String.format("unit with id %s was alredy loaded", unitPo.getId()));
-	    } else {
-		model.createUnit(model, modelPo, unitPo);
-	    }
-	});
-	modelPo.getUnits().stream().filter(unitPo -> !unitPo.getType().canHoldCargo()).forEach(unitPo -> {
-	    if (model.tryGetUnitById(unitPo.getId()).isPresent()) {
-		throw new MicroColException(String.format("unit with id %s was alredy loaded", unitPo.getId()));
-	    } else {
-		model.createUnit(model, modelPo, unitPo);
-	    }
-	});
+	modelPo.getUnits().stream().filter(unitPo -> unitPo.getType().canHoldCargo())
+		.forEach(unitPo -> {
+		    if (model.tryGetUnitById(unitPo.getId()).isPresent()) {
+			throw new MicroColException(
+				String.format("unit with id %s was alredy loaded", unitPo.getId()));
+		    } else {
+			model.createUnit(model, modelPo, unitPo);
+		    }
+		});
+	modelPo.getUnits().stream().filter(unitPo -> !unitPo.getType().canHoldCargo())
+		.forEach(unitPo -> {
+		    if (model.tryGetUnitById(unitPo.getId()).isPresent()) {
+			throw new MicroColException(
+				String.format("unit with id %s was alredy loaded", unitPo.getId()));
+		    } else {
+			model.createUnit(model, modelPo, unitPo);
+		    }
+		});
 
 	if (modelPo.getUnits().size() != unitStorage.getUnits().size()) {
-	    throw new MicroColException(String.format("In source data in %s units by in model is %s units.",
-		    modelPo.getUnits().size(), unitStorage.getUnits().size()));
+	    throw new MicroColException(
+		    String.format("In source data in %s units by in model is %s units.",
+			    modelPo.getUnits().size(), unitStorage.getUnits().size()));
 	}
 
 	model.checkUnits();
@@ -157,18 +168,20 @@ public final class Model {
 	Preconditions.checkNotNull(player);
 	Preconditions.checkNotNull(unit);
 	Preconditions.checkArgument(unit.isAtPlaceLocation(), "Unit (%s) have to be on map", unit);
-	Preconditions.checkArgument(!unit.getType().isShip(), "Ship Unit (%s) can't found city", unit);
-	Preconditions.checkArgument(!unit.getType().canHoldCargo(), "Unit (%s) that transport cargo, can't found city",
+	Preconditions.checkArgument(!unit.getType().isShip(), "Ship Unit (%s) can't found city",
 		unit);
+	Preconditions.checkArgument(!unit.getType().canHoldCargo(),
+		"Unit (%s) that transport cargo, can't found city", unit);
 	final Location location = unit.getLocation();
-	final Colony col = new Colony(this, colonyNames.getNewColonyName(player), player, location, colony -> {
-	    final List<Construction> constructions = new ArrayList<>();
-	    ConstructionType.NEW_COLONY_CONSTRUCTIONS.forEach(constructionType -> {
-		final Construction c = Construction.build(colony, constructionType);
-		constructions.add(c);
-	    });
-	    return constructions;
-	}, new HashMap<String, Integer>());
+	final Colony col = new Colony(this, colonyNames.getNewColonyName(player), player, location,
+		colony -> {
+		    final List<Construction> constructions = new ArrayList<>();
+		    ConstructionType.NEW_COLONY_CONSTRUCTIONS.forEach(constructionType -> {
+			final Construction c = Construction.build(colony, constructionType);
+			constructions.add(c);
+		    });
+		    return constructions;
+		}, new HashMap<String, Integer>());
 	colonies.add(col);
 	col.placeUnitToProduceFood(unit);
 	listenerManager.fireColonyWasFounded(this, col);
@@ -191,11 +204,12 @@ public final class Model {
 	Preconditions.checkNotNull(king);
 	Preconditions.checkNotNull(king.isComputer(), "king have to be computer player");
 	return unitStorage.createUnit(unit -> new Cargo(unit, UnitType.GALLEON.getSpeed()), this,
-		unit -> new PlaceHighSea(unit, false, 3), UnitType.GALLEON, king, UnitType.GALLEON.getSpeed(),
-		new UnitActionNoAction());
+		unit -> new PlaceHighSea(unit, false, 3), UnitType.GALLEON, king,
+		UnitType.GALLEON.getSpeed(), new UnitActionNoAction());
     }
 
-    public List<TurnEvent> getLocalizedMessages(final Player player, final Function<String, String> messageProvider) {
+    public List<TurnEvent> getLocalizedMessages(final Player player,
+	    final Function<String, String> messageProvider) {
 	return turnEventStore.getLocalizedMessages(player, messageProvider);
     }
 
@@ -220,11 +234,12 @@ public final class Model {
 	Preconditions.checkNotNull(king);
 	Preconditions.checkNotNull(king.isComputer(), "king have to be computer player");
 	Preconditions.checkArgument(loadUnitToShip.getCargo().getEmptyCargoSlot().isPresent(),
-		"Ship (%s) for cargo doesn't have any free slot for expedition force unit.", loadUnitToShip);
+		"Ship (%s) for cargo doesn't have any free slot for expedition force unit.",
+		loadUnitToShip);
 	CargoSlot cargoSlot = loadUnitToShip.getCargo().getEmptyCargoSlot().get();
 	return unitStorage.createUnit(unit -> new Cargo(unit, UnitType.COLONIST.getSpeed()), this,
-		unit -> new PlaceCargoSlot(unit, cargoSlot), UnitType.COLONIST, king, UnitType.COLONIST.getSpeed(),
-		new UnitActionNoAction());
+		unit -> new PlaceCargoSlot(unit, cargoSlot), UnitType.COLONIST, king,
+		UnitType.COLONIST.getSpeed(), new UnitActionNoAction());
     }
 
     /**
@@ -305,7 +320,8 @@ public final class Model {
     }
 
     public Map<Location, Colony> getColoniesAt() {
-	return colonies.stream().collect(ImmutableMap.toImmutableMap(Colony::getLocation, Function.identity()));
+	return colonies.stream()
+		.collect(ImmutableMap.toImmutableMap(Colony::getLocation, Function.identity()));
     }
 
     /**
@@ -327,7 +343,8 @@ public final class Model {
     public Optional<Unit> getNextUnitForCurrentPlayer(final Unit currentUnit) {
 	Preconditions.checkNotNull(currentUnit);
 	Preconditions.checkState(getCurrentPlayer().equals(currentUnit.getOwner()),
-		"current unit (%s) doest belongs to user that is on turn (%s)", currentUnit, getCurrentPlayer());
+		"current unit (%s) doest belongs to user that is on turn (%s)", currentUnit,
+		getCurrentPlayer());
 	return unitStorage.getNextUnitForPlayer(getCurrentPlayer(), currentUnit);
     }
 
@@ -341,7 +358,8 @@ public final class Model {
 
     public Optional<Colony> getColonyAt(final Location location) {
 	Preconditions.checkNotNull(location);
-	return colonies.stream().filter(colony -> colony.getLocation().equals(location)).findFirst();
+	return colonies.stream().filter(colony -> colony.getLocation().equals(location))
+		.findFirst();
     }
 
     public List<Colony> getColonies(final Player owner) {
@@ -371,7 +389,8 @@ public final class Model {
     }
 
     private List<PlayerPo> getSavePlayers() {
-	return playerStore.getPlayers().stream().map(player -> player.save()).collect(ImmutableList.toImmutableList());
+	return playerStore.getPlayers().stream().map(player -> player.save())
+		.collect(ImmutableList.toImmutableList());
     }
 
     private List<ColonyPo> getSaveColonies() {
@@ -512,8 +531,9 @@ public final class Model {
 	listenerManager.fireTurnStarted(this, player, isFreshStart);
     }
 
-    void fireUnitMovedStepStarted(final Unit unit, final Location start, final Location end) {
-	listenerManager.fireUnitMovedStepStarted(this, unit, start, end);
+    void fireUnitMovedStepStarted(final Unit unit, final Location start, final Location end,
+	    final Direction orientation) {
+	listenerManager.fireUnitMovedStepStarted(this, unit, start, end, orientation);
     }
 
     void fireUnitMovedStepFinished(final Unit unit, final Location start, final Location end) {
@@ -544,7 +564,8 @@ public final class Model {
 	return listenerManager.fireBeforeDeclaringIndependence(this, whoDecalareIt);
     }
 
-    void fireColonyWasCaptured(final Model model, final Unit capturingUnit, final Colony capturedColony) {
+    void fireColonyWasCaptured(final Model model, final Unit capturingUnit,
+	    final Colony capturedColony) {
 	listenerManager.fireColonyWasCaptured(model, capturingUnit, capturedColony);
     }
 
@@ -578,7 +599,8 @@ public final class Model {
 
     void destroyColony(final Colony colony) {
 	Preconditions.checkNotNull(colony);
-	getTurnEventStore().add(TurnEventProvider.getColonyWasdestroyed(getCurrentPlayer(), colony));
+	getTurnEventStore()
+		.add(TurnEventProvider.getColonyWasdestroyed(getCurrentPlayer(), colony));
 	colonies.remove(colony);
     }
 

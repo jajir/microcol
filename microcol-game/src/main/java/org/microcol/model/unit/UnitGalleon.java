@@ -11,8 +11,9 @@ import org.microcol.model.UnitType;
 
 public class UnitGalleon extends Unit {
 
-    UnitGalleon(Function<Unit, Cargo> cargoBuilder, Model model, Integer id, Function<Unit, Place> placeBuilder,
-	    UnitType unitType, Player owner, int availableMoves, final UnitAction unitAction) {
+    UnitGalleon(Function<Unit, Cargo> cargoBuilder, Model model, Integer id,
+	    Function<Unit, Place> placeBuilder, UnitType unitType, Player owner, int availableMoves,
+	    final UnitAction unitAction) {
 	super(cargoBuilder, model, id, placeBuilder, unitType, owner, availableMoves, unitAction);
     }
 

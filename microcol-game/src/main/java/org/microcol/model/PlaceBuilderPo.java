@@ -25,7 +25,8 @@ public class PlaceBuilderPo implements Function<Unit, Place> {
                 final UnitPo unitPo = context.getUnitPo();
                 final Unit unit = context.getUnit();
                 if (unitPo.getPlaceMap() != null) {
-                    return new PlaceLocation(unit, unitPo.getPlaceMap().getLocation());
+		    return new PlaceLocation(unit, unitPo.getPlaceMap().getLocation(),
+			    unitPo.getPlaceMap().getOrientation());
                 }
                 return null;
             }, (context) -> {

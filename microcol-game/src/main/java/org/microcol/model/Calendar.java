@@ -23,22 +23,22 @@ public final class Calendar {
      */
     public static enum Season {
 
-        spring("spring"), summer("summer"), autumn("autumn"), winter("winter");
+	spring("spring"), summer("summer"), autumn("autumn"), winter("winter");
 
-        private final String key;
+	private final String key;
 
-        Season(final String key) {
-            this.key = Preconditions.checkNotNull(key);
-        }
+	Season(final String key) {
+	    this.key = Preconditions.checkNotNull(key);
+	}
 
-        /**
-         * Return source key code.
-         *
-         * @return the key
-         */
-        public String getKey() {
-            return key;
-        }
+	/**
+	 * Return source key code.
+	 *
+	 * @return the key
+	 */
+	public String getKey() {
+	    return key;
+	}
 
     }
 
@@ -48,81 +48,82 @@ public final class Calendar {
     private int numberOfPlayedTurns;
 
     Calendar(final int startYear, final int endYear, final int numberOfPlayedTurns) {
-        Preconditions.checkArgument(startYear < endYear,
-                "Start year (%s) must be less than end year (%s).", startYear, endYear);
-        this.startYear = startYear;
-        this.endYear = endYear;
-        this.numberOfPlayedTurns = numberOfPlayedTurns;
+	Preconditions.checkArgument(startYear < endYear,
+		"Start year (%s) must be less than end year (%s).", startYear, endYear);
+	this.startYear = startYear;
+	this.endYear = endYear;
+	this.numberOfPlayedTurns = numberOfPlayedTurns;
     }
 
     static Calendar make(final CalendarPo cal) {
-        return new Calendar(cal.getStartYear(), cal.getEndYear(), cal.getNumberOfPlayedTurns());
+	return new Calendar(cal.getStartYear(), cal.getEndYear(), cal.getNumberOfPlayedTurns());
     }
 
     private int getTurnWhenStartCountsSeasons() {
-        return YEAR_WHEN_START_COUNT_SEASONS - startYear;
+	final int out = YEAR_WHEN_START_COUNT_SEASONS - startYear;
+	return out < 0 ? 0 : out;
     }
 
     public int getStartYear() {
-        return startYear;
+	return startYear;
     }
 
     public int getEndYear() {
-        return endYear;
+	return endYear;
     }
 
     public int getCurrentYear() {
-        if (numberOfPlayedTurns > getTurnWhenStartCountsSeasons()) {
-            return YEAR_WHEN_START_COUNT_SEASONS
-                    + (numberOfPlayedTurns - getTurnWhenStartCountsSeasons()) / 4;
-        } else {
-            return startYear + numberOfPlayedTurns;
-        }
+	if (numberOfPlayedTurns > getTurnWhenStartCountsSeasons()) {
+	    return YEAR_WHEN_START_COUNT_SEASONS
+		    + (numberOfPlayedTurns - getTurnWhenStartCountsSeasons()) / 4;
+	} else {
+	    return startYear + numberOfPlayedTurns;
+	}
     }
 
     public Optional<Season> getCurrentSeason() {
-        if (numberOfPlayedTurns < getTurnWhenStartCountsSeasons()) {
-            return Optional.empty();
-        } else {
-            final int index = (numberOfPlayedTurns - getTurnWhenStartCountsSeasons()) % 4;
-            return Optional.of(Season.values()[index]);
-        }
+	if (numberOfPlayedTurns < getTurnWhenStartCountsSeasons()) {
+	    return Optional.empty();
+	} else {
+	    final int index = (numberOfPlayedTurns - getTurnWhenStartCountsSeasons()) % 4;
+	    return Optional.of(Season.values()[index]);
+	}
     }
 
     boolean isFinished() {
-        return getCurrentYear() >= endYear;
+	return getCurrentYear() >= endYear;
     }
 
     void endRound() {
-        Preconditions.checkState(!isFinished(), "End year (%s) already reached.", endYear);
+	Preconditions.checkState(!isFinished(), "End year (%s) already reached.", endYear);
 
-        numberOfPlayedTurns++;
+	numberOfPlayedTurns++;
     }
 
     public int getYearForTurnNo(int turnNo) {
-        return startYear + turnNo;
+	return startYear + turnNo;
     }
 
     public CalendarPo save() {
-        final CalendarPo out = new CalendarPo();
-        out.setStartYear(startYear);
-        out.setEndYear(endYear);
-        out.setNumberOfPlayedTurns(numberOfPlayedTurns);
-        return out;
+	final CalendarPo out = new CalendarPo();
+	out.setStartYear(startYear);
+	out.setEndYear(endYear);
+	out.setNumberOfPlayedTurns(numberOfPlayedTurns);
+	return out;
     }
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(this).add("startYear", startYear).add("endYear", endYear)
-                .add("currentYear", getCurrentYear())
-                .add("numberOfPlayedTurns", numberOfPlayedTurns).toString();
+	return MoreObjects.toStringHelper(this).add("startYear", startYear).add("endYear", endYear)
+		.add("currentYear", getCurrentYear())
+		.add("numberOfPlayedTurns", numberOfPlayedTurns).toString();
     }
 
     /**
      * @return the numberOfPlayedTurns
      */
     public int getNumberOfPlayedTurns() {
-        return numberOfPlayedTurns;
+	return numberOfPlayedTurns;
     }
 
 }

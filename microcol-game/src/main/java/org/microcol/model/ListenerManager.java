@@ -93,8 +93,9 @@ class ListenerManager {
     }
 
     void fireUnitMovedStepStarted(final Model model, final Unit unit, final Location start,
-            final Location end) {
-        final UnitMovedStepStartedEvent event = new UnitMovedStepStartedEvent(model, unit, start, end);
+            final Location end, final Direction orientation) {
+	final UnitMovedStepStartedEvent event = new UnitMovedStepStartedEvent(model, unit, start,
+		end, orientation);
 
         logger.info("Unit moved step started: {}.", event);
 

@@ -11,7 +11,7 @@ import org.junit.runners.Parameterized.Parameter;
 import org.junit.runners.Parameterized.Parameters;
 
 @RunWith(Parameterized.class)
-public class CalendarCreationTest {
+public class CalendarSeasonsTest {
 
     @Parameters(name = "{index}: startYear = {0}, endYear = {1}")
     public static Collection<Object[]> data() {

@@ -23,16 +23,13 @@ public class MissionImpl<G extends MissionGoals> implements Mission<G> {
 
 	private final MissionName missionName;
 
-	private final Integer orderNo;
-
 	private final MissionDefinition<G> missionDefinition;
 
 	private final CampaignManager campaignManager;
 
-	MissionImpl(final MissionName missionName, final Integer orderNo, MissionDefinition<G> missionDefinition,
+	MissionImpl(final MissionName missionName, MissionDefinition<G> missionDefinition,
 			final ModelPo modelPo, final CampaignManager campaignManager) {
 		this.missionName = Preconditions.checkNotNull(missionName);
-		this.orderNo = Preconditions.checkNotNull(orderNo);
 		this.missionDefinition = Preconditions.checkNotNull(missionDefinition);
 		this.campaignManager = Preconditions.checkNotNull(campaignManager);
 		missionDefinition.getModel().addListener(getMissionDefinition());
@@ -73,7 +70,7 @@ public class MissionImpl<G extends MissionGoals> implements Mission<G> {
 
 	@Override
 	public String toString() {
-		return MoreObjects.toStringHelper(getClass()).add("orderNo", orderNo).add("missionName", missionName)
+		return MoreObjects.toStringHelper(getClass()).add("missionName", missionName)
 				.toString();
 	}
 

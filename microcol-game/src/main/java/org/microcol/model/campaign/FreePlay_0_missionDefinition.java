@@ -10,9 +10,9 @@ import org.microcol.model.event.IndependenceWasDeclaredEvent;
 
 import com.google.common.collect.Lists;
 
-public class FreePlay_1_missionDefinition extends MissionDefinition<MissionGoalsEmpty> {
+public class FreePlay_0_missionDefinition extends MissionDefinition<MissionGoalsEmpty> {
 
-	FreePlay_1_missionDefinition(final MissionCallBack missionCallBack, final Model model,
+	FreePlay_0_missionDefinition(final MissionCallBack missionCallBack, final Model model,
 			final MissionGoalsEmpty goals) {
 		super(missionCallBack, model, goals);
 	}

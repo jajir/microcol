@@ -11,36 +11,52 @@ public class PlaceLocation extends AbstractPlace {
 
     private Location location;
 
-    PlaceLocation(final Unit unit, final Location location) {
-        super(unit);
-        this.location = Preconditions.checkNotNull(location);
+    private Direction orientation;
+
+    PlaceLocation(final Unit unit, final Location location, final Direction orientation) {
+	super(unit);
+	this.location = Preconditions.checkNotNull(location);
+	setOrientation(orientation);
     }
 
     @Override
     public String getName() {
-        return "Location";
+	return "Location";
     }
 
     public Location getLocation() {
-        return location;
+	return location;
     }
 
     public void setLocation(Location location) {
-        this.location = location;
+	this.location = location;
+    }
+
+    public Direction getOrientation() {
+	return orientation;
+    }
+
+    public void setOrientation(final Direction orientation) {
+	if (orientation == null) {
+	    this.orientation = Direction.east;
+	} else {
+	    this.orientation = orientation;
+	}
     }
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(PlaceLocation.class).add("unit id", getUnit().getId())
-                .add("location", location).toString();
+	return MoreObjects.toStringHelper(PlaceLocation.class).add("unit id", getUnit().getId())
+		.add("location", location).add("orientation", orientation).toString();
     }
 
     @Override
     public PlacePo save(final UnitPo unitPo) {
-        final PlaceMapPo out = new PlaceMapPo();
-        out.setLocation(location);
-        unitPo.setPlaceMap(out);
-        return out;
+	final PlaceMapPo out = new PlaceMapPo();
+	out.setLocation(location);
+	out.setOrientation(orientation);
+	unitPo.setPlaceMap(out);
+	return out;
     }
 
 }

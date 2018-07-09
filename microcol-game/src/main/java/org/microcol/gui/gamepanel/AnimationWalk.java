@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.microcol.gui.PathPlanning;
+import org.microcol.model.Direction;
 import org.microcol.model.Location;
 import org.microcol.model.Unit;
 
@@ -25,49 +26,52 @@ public class AnimationWalk implements Animation {
 
     private final List<AnimationWalkParticle> walkParticles;
 
+    private final Direction unitOrientation;
+
     AnimationWalk(final PathPlanning pathPlanning, final Location start, final Location end,
-            final Unit unit, final PaintService paintService,
-            final ExcludePainting excludePainting) {
-        Preconditions.checkNotNull(start);
-        Preconditions.checkNotNull(end);
-        Preconditions.checkNotNull(paintService);
-        Preconditions.checkNotNull(excludePainting);
-        Preconditions.checkNotNull(start.getNeighbors().contains(end),
-                "Start locations '%s' is not neighbors od end location '%s'", start, end);
-        this.unit = Preconditions.checkNotNull(unit);
-        excludePainting.excludeUnit(unit);
-        walkParticles = new ArrayList<>();
-        walkParticles.add(new AnimationWalkParticle(paintService, start, end, pathPlanning));
+	    final Unit unit, final PaintService paintService, final ExcludePainting excludePainting,
+	    final Direction unitOrientation) {
+	Preconditions.checkNotNull(start);
+	Preconditions.checkNotNull(end);
+	Preconditions.checkNotNull(paintService);
+	Preconditions.checkNotNull(excludePainting);
+	Preconditions.checkNotNull(start.getNeighbors().contains(end),
+		"Start locations '%s' is not neighbors od end location '%s'", start, end);
+	this.unit = Preconditions.checkNotNull(unit);
+	this.unitOrientation = Preconditions.checkNotNull(unitOrientation);
+	excludePainting.excludeUnit(unit);
+	walkParticles = new ArrayList<>();
+	walkParticles.add(new AnimationWalkParticle(paintService, start, end, pathPlanning));
     }
 
     @Override
     public void nextStep() {
-        if (!walkParticles.isEmpty() && !walkParticles.get(0).hasNextStep()) {
-            walkParticles.remove(0);
-        }
+	if (!walkParticles.isEmpty() && !walkParticles.get(0).hasNextStep()) {
+	    walkParticles.remove(0);
+	}
     }
 
     /**
      * Provide information if animation should continue.
      * 
-     * @return return <code>true</code> when not all animation was drawn, it
-     *         return <code>false</code> when all animation is done
+     * @return return <code>true</code> when not all animation was drawn, it return
+     *         <code>false</code> when all animation is done
      */
     @Override
     public boolean hasNextStep() {
-        return !walkParticles.isEmpty() && walkParticles.get(0).hasNextStep();
+	return !walkParticles.isEmpty() && walkParticles.get(0).hasNextStep();
     }
 
     @Override
     public void paint(final GraphicsContext graphics, final Area area) {
-        AnimationWalkParticle particle = walkParticles.get(0);
-        particle.paint(graphics, area, unit);
+	final AnimationWalkParticle particle = walkParticles.get(0);
+	particle.paint(graphics, area, unit, unitOrientation);
     }
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(getClass()).add("walkParticles", walkParticles)
-                .add("unit", unit).toString();
+	return MoreObjects.toStringHelper(getClass()).add("walkParticles", walkParticles)
+		.add("unit", unit).toString();
     }
 
 }

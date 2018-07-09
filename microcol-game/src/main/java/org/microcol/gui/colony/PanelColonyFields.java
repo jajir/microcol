@@ -110,8 +110,9 @@ public class PanelColonyFields extends TitledPanel {
 
     @SuppressWarnings("unused")
     private void onMousePressed(final MouseEvent event) {
-        if (contextMenu.isShowing())
-            contextMenu.hide();
+	if (contextMenu.isShowing()) {
+	    contextMenu.hide();
+	}
     }
 
     private void onDragDetected(final MouseEvent event) {

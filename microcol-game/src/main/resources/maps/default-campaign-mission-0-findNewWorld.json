@@ -53,7 +53,8 @@
         "location": {
           "x": 45,
           "y": 15
-        }
+        },
+        "orientation": "west"
       },
       "cargo": {
         "slots": [

@@ -89,12 +89,6 @@ public class BackgroundImageLoader implements ImageLoader {
                 imageProvider.getImage("type_1_4"));
         imageProvider.registerImage(ImageProvider.IMG_TILE_HIGH_SEA,
                 imageProvider.getImage("type_0_0"));
-        imageProvider.registerImage(ImageProvider.IMG_UNIT_SHIP_GALEON,
-                imageProvider.getImage("type_4_5"));
-        imageProvider.registerImage(ImageProvider.IMG_UNIT_SHIP_FRIGATE,
-                imageProvider.getImage("type_5_5"));
-        imageProvider.registerImage(ImageProvider.IMG_UNIT_FREE_COLONIST,
-                imageProvider.getImage("type_2_4"));
         imageProvider.registerImage(ImageProvider.IMG_TILE_TOWN,
                 imageProvider.getImage("type_0_5"));
         imageProvider.registerImage(ImageProvider.IMG_TILE_HILL_1,

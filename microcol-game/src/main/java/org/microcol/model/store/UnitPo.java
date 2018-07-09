@@ -47,7 +47,8 @@ public class UnitPo {
                 .add("placeMap", placeMap).add("placeEuropePort", placeEuropePort)
                 .add("placeHighSeas", placeHighSeas).add("placeCargoSlot", placeCargoSlot)
                 .add("placeConstructionSlot", placeConstructionSlot)
-                .add("placeColonyField", placeColonyField).add("cargo", cargo).add("action", action).toString();
+		.add("placeColonyField", placeColonyField).add("cargo", cargo).add("action", action)
+		.toString();
     }
 
     public Integer getId() {

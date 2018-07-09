@@ -6,24 +6,19 @@ import com.google.common.base.Preconditions;
 
 public class Default_2_goals extends MissionGoals {
 
-	@Override
-	void initialize(final Map<String, String> data) {
-		Preconditions.checkNotNull(data);
-		getGoals().add(new GoalProvider.GoalNumberOfColonies(data));
-		getGoals().add(new GoalProvider.GoalAmountOfGold(data));
-		getGoals().add(new GoalProvider.GoalMilitaryPower(data));
-	}
+    @Override
+    void initialize(final Map<String, String> data) {
+	Preconditions.checkNotNull(data);
+	getGoals().add(new GoalProvider.GoalDeclareIndependence(data));
+	getGoals().add(new GoalProvider.GoalConquerRaf(data));
+    }
 
-	GoalProvider.GoalNumberOfColonies getGoalNumberOfColonies() {
-		return getByClass(GoalProvider.GoalNumberOfColonies.class);
-	}
+    GoalProvider.GoalDeclareIndependence getGoalDeclareIndependence() {
+	return getByClass(GoalProvider.GoalDeclareIndependence.class);
+    }
 
-	GoalProvider.GoalAmountOfGold getGoalAmountOfGold() {
-		return getByClass(GoalProvider.GoalAmountOfGold.class);
-	}
-
-	GoalProvider.GoalMilitaryPower getGoalMilitaryPower() {
-		return getByClass(GoalProvider.GoalMilitaryPower.class);
-	}
+    GoalProvider.GoalConquerRaf getGoalConquerRaf() {
+	return getByClass(GoalProvider.GoalConquerRaf.class);
+    }
 
 }

@@ -1,5 +1,6 @@
 package org.microcol.model.event;
 
+import org.microcol.model.Direction;
 import org.microcol.model.Location;
 import org.microcol.model.Model;
 import org.microcol.model.Player;
@@ -16,37 +17,39 @@ public final class UnitMovedStepStartedEvent extends AbstractModelEvent {
     private final Unit unit;
     private final Location start;
     private final Location end;
+    private final Direction orientation;
 
     public UnitMovedStepStartedEvent(final Model model, final Unit unit, final Location start,
-            final Location end) {
-        super(model);
+	    final Location end, final Direction orientation) {
+	super(model);
 
-        this.unit = Preconditions.checkNotNull(unit);
-        this.start = Preconditions.checkNotNull(start);
-        this.end = Preconditions.checkNotNull(end);
+	this.unit = Preconditions.checkNotNull(unit);
+	this.start = Preconditions.checkNotNull(start);
+	this.end = Preconditions.checkNotNull(end);
+	this.orientation = Preconditions.checkNotNull(orientation);
     }
 
     public Unit getUnit() {
-        return unit;
+	return unit;
     }
 
     public Location getStart() {
-        return start;
+	return start;
     }
 
     public Location getEnd() {
-        return end;
+	return end;
     }
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(this).add("unit", unit).add("start", start)
-                .add("end", end).toString();
+	return MoreObjects.toStringHelper(this).add("unit", unit).add("start", start)
+		.add("end", end).add("orientation", orientation).toString();
     }
 
     /**
-     * Return <code>true</code> when player can see move. Player can see move
-     * when start location or end location is in explored part of world.
+     * Return <code>true</code> when player can see move. Player can see move when
+     * start location or end location is in explored part of world.
      * 
      * @param player
      *            required player
@@ -54,7 +57,11 @@ public final class UnitMovedStepStartedEvent extends AbstractModelEvent {
      *         <code>false</code>
      */
     public boolean canPlayerSeeMove(final Player player) {
-        Preconditions.checkNotNull(player);
-        return player.isVisible(start) || player.isVisible(end);
+	Preconditions.checkNotNull(player);
+	return player.isVisible(start) || player.isVisible(end);
+    }
+
+    public Direction getOrientation() {
+	return orientation;
     }
 }

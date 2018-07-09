@@ -145,7 +145,8 @@ public class Colony {
         final Location target = whereCouldMove.get(random.nextInt(whereCouldMove.size()));
         final Location oldLocation = unit.getLocation();
         unit.placeToLocation(target);
-        model.fireUnitMovedStepStarted(unit, oldLocation, target);
+        //FIXME don't fire event here. Do it in unit. There is no forUnitMoveStepFinished event.
+        model.fireUnitMovedStepStarted(unit, oldLocation, target, unit.getPlaceLocation().getOrientation());
     }
 
     /**

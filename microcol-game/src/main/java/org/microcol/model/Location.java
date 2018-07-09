@@ -8,6 +8,7 @@ import com.google.common.collect.ImmutableList;
 
 public final class Location {
 
+    //TODO it should be enumeration
     public static final Location DIRECTION_NORTH = new Location(0, -1);
     public static final Location DIRECTION_NORTH_EAST = new Location(1, -1);
     public static final Location DIRECTION_EAST = new Location(1, 0);
@@ -57,6 +58,12 @@ public final class Location {
         Preconditions.checkNotNull(location);
 
         return Location.of(x + location.x, y + location.y);
+    }
+
+    public Location sub(final Location location) {
+        Preconditions.checkNotNull(location);
+
+        return Location.of(x - location.x, y - location.y);
     }
 
     public boolean isNeighbor(final Location location) {

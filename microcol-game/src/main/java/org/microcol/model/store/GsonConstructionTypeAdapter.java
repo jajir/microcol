@@ -13,6 +13,7 @@ public class GsonConstructionTypeAdapter extends TypeAdapter<ConstructionType> {
 
     @Override
     public void write(final JsonWriter out, final ConstructionType value) throws IOException {
+	//TODO make it required, remove null check throw exception
         if (value == null) {
             out.nullValue();
             return;

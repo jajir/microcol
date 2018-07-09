@@ -4,10 +4,12 @@ import org.microcol.gui.Point;
 import org.microcol.gui.image.ImageProvider;
 import org.microcol.gui.util.FontService;
 import org.microcol.model.Colony;
+import org.microcol.model.Direction;
 import org.microcol.model.Location;
 import org.microcol.model.Player;
 import org.microcol.model.Terrain;
 import org.microcol.model.Unit;
+import org.microcol.model.UnitType;
 
 import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
@@ -52,7 +54,8 @@ public class PaintService {
     private final Font colonyFont;
 
     @Inject
-    public PaintService(final ImageProvider imageProvider, final MapManager mapManager, final FontService fontService) {
+    public PaintService(final ImageProvider imageProvider, final MapManager mapManager,
+	    final FontService fontService) {
 	this.imageProvider = Preconditions.checkNotNull(imageProvider);
 	this.mapManager = Preconditions.checkNotNull(mapManager);
 	this.colonyFont = fontService.getFont(FontService.FONT_CARDO_REGULAR, 16);
@@ -60,7 +63,7 @@ public class PaintService {
 
     /**
      * Draw unit to tile.
-     * 
+     *
      * @param graphics
      *            required graphics to draw
      * @param point
@@ -69,8 +72,27 @@ public class PaintService {
      *            required unit to draw
      */
     public void paintUnit(final GraphicsContext graphics, final Point point, final Unit unit) {
+	paintUnit(graphics, point, unit, unit.getPlaceLocation().getOrientation());
+    }
+
+    public void paintUnit(final GraphicsContext graphics, final Point point, final Unit unit,
+	    final Direction orientation) {
 	final Point p = point.add(UNIT_IMAGE_POSITION);
-	graphics.drawImage(imageProvider.getUnitImage(unit.getType()), p.getX(), p.getY());
+	// FIXME should not be solved by list of ifs.
+	if (UnitType.GALLEON.equals(unit.getType())) {
+	    if (Direction.west == orientation) {
+		graphics.drawImage(imageProvider.getImage(ImageProvider.IMG_UNIT_SHIP_GALEON_WEST),
+			p.getX(), p.getY());
+	    } else if (Direction.east == orientation) {
+		graphics.drawImage(imageProvider.getImage(ImageProvider.IMG_UNIT_SHIP_GALEON_EAST),
+			p.getX(), p.getY());
+	    } else {
+		throw new IllegalArgumentException(
+			String.format("Invalid orientation '%s' for unit '%s'", orientation, unit));
+	    }
+	} else {
+	    graphics.drawImage(imageProvider.getUnitImage(unit.getType()), p.getX(), p.getY());
+	}
 	painFlagWithAction(graphics, point.add(OWNERS_FLAG_POSITION), unit);
     }
 
@@ -88,27 +110,8 @@ public class PaintService {
 	}
     }
 
-    /**
-     * Draw unit to tile.
-     * 
-     * @param graphics
-     *            required graphics to draw
-     * @param point
-     *            required point of top left corner or tile where to draw unit
-     * @param unit
-     *            required unit to draw
-     * @param flagLeterImageName
-     *            required name of image that will be drawn into unit flag
-     */
-    public void paintUnit(final GraphicsContext graphics, final Point point, final Unit unit,
-	    final String flagLeterImageName) {
-	final Point p = point.add(UNIT_IMAGE_POSITION);
-	graphics.drawImage(imageProvider.getUnitImage(unit.getType()), p.getX(), p.getY());
-	painFlagWithAction(graphics, point.add(OWNERS_FLAG_POSITION), unit);
-	graphics.drawImage(imageProvider.getImage(flagLeterImageName), point.getX() + 23, point.getY());
-    }
-
-    private void painFlagWithAction(final GraphicsContext graphics, final Point point, final Unit unit) {
+    private void painFlagWithAction(final GraphicsContext graphics, final Point point,
+	    final Unit unit) {
 	paintOwnersFlag(graphics, point, unit.getOwner());
 	final String sign = unit.getUnitAction().getType().getSign();
 	if (!Strings.isNullOrEmpty(sign)) {
@@ -130,7 +133,8 @@ public class PaintService {
      * @param player
      *            required player
      */
-    public void paintOwnersFlag(final GraphicsContext graphics, final Point point, final Player player) {
+    public void paintOwnersFlag(final GraphicsContext graphics, final Point point,
+	    final Player player) {
 	graphics.setStroke(Color.LIGHTGREY);
 	graphics.setLineWidth(1.5F);
 	graphics.strokeRect(point.getX(), point.getY(), FLAG_WIDTH, FLAG_HEIGHT);
@@ -174,24 +178,28 @@ public class PaintService {
      * @param isHighlighted
      *            when it's <code>true</code> than tile is highlighted
      */
-    public void paintTerrainOnTile(final GraphicsContext graphics, final Point point, final Location location,
-	    final Terrain terrain, final boolean isHighlighted) {
+    public void paintTerrainOnTile(final GraphicsContext graphics, final Point point,
+	    final Location location, final Terrain terrain, final boolean isHighlighted) {
 	// terrain tile
-	final Image imageBackground = mapManager.getTerrainImage(terrain.getTerrainType(), location);
-	graphics.drawImage(imageBackground, 0, 0, GamePanelView.TILE_WIDTH_IN_PX, GamePanelView.TILE_WIDTH_IN_PX,
-		point.getX(), point.getY(), GamePanelView.TILE_WIDTH_IN_PX, GamePanelView.TILE_WIDTH_IN_PX);
+	final Image imageBackground = mapManager.getTerrainImage(terrain.getTerrainType(),
+		location);
+	graphics.drawImage(imageBackground, 0, 0, GamePanelView.TILE_WIDTH_IN_PX,
+		GamePanelView.TILE_WIDTH_IN_PX, point.getX(), point.getY(),
+		GamePanelView.TILE_WIDTH_IN_PX, GamePanelView.TILE_WIDTH_IN_PX);
 
 	// prechody
 	final Image imageCoast = mapManager.getCoatsImageAt(location);
-	graphics.drawImage(imageCoast, 0, 0, GamePanelView.TILE_WIDTH_IN_PX, GamePanelView.TILE_WIDTH_IN_PX,
-		point.getX(), point.getY(), GamePanelView.TILE_WIDTH_IN_PX, GamePanelView.TILE_WIDTH_IN_PX);
+	graphics.drawImage(imageCoast, 0, 0, GamePanelView.TILE_WIDTH_IN_PX,
+		GamePanelView.TILE_WIDTH_IN_PX, point.getX(), point.getY(),
+		GamePanelView.TILE_WIDTH_IN_PX, GamePanelView.TILE_WIDTH_IN_PX);
 
 	if (terrain.isHasTrees()) {
 	    graphics.drawImage(mapManager.getTreeImage(location), point.getX(), point.getY());
 	}
 
 	if (terrain.isHasField()) {
-	    graphics.drawImage(imageProvider.getImage(ImageProvider.IMG_FIELD), point.getX(), point.getY());
+	    graphics.drawImage(imageProvider.getImage(ImageProvider.IMG_FIELD), point.getX(),
+		    point.getY());
 	}
 	if (isHighlighted) {
 	    graphics.setFill(new Color(0.95, 0.75, 0.90, 0.4F));
@@ -200,8 +208,9 @@ public class PaintService {
 	}
 	final Image hiddenCoast = mapManager.getHiddenImageCoast(location);
 	if (hiddenCoast != null) {
-	    graphics.drawImage(hiddenCoast, 0, 0, GamePanelView.TILE_WIDTH_IN_PX, GamePanelView.TILE_WIDTH_IN_PX,
-		    point.getX(), point.getY(), GamePanelView.TILE_WIDTH_IN_PX, GamePanelView.TILE_WIDTH_IN_PX);
+	    graphics.drawImage(hiddenCoast, 0, 0, GamePanelView.TILE_WIDTH_IN_PX,
+		    GamePanelView.TILE_WIDTH_IN_PX, point.getX(), point.getY(),
+		    GamePanelView.TILE_WIDTH_IN_PX, GamePanelView.TILE_WIDTH_IN_PX);
 	}
     }
 

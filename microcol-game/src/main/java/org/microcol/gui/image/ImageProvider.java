@@ -29,7 +29,7 @@ public final class ImageProvider {
      */
     private final List<ImageLoader> STARTUP_IMAGE_LOADERS = Lists.newArrayList(
             new BackgroundImageLoader(), new GrassCoastImageLoader(), new IceCoastImageLoader(),
-            new HiddenCoastImageLoader());
+            new HiddenCoastImageLoader(), new ImageLoaderUnit());
 
     public final static String BACKGROUND_IMAGE_NAME = "backgroud.png";
 
@@ -81,9 +81,13 @@ public final class ImageProvider {
 
     public static final String IMG_TILE_HIDDEN = "tile-hidden.png";
 
-    public static final String IMG_UNIT_SHIP_GALEON = "tile-ship-galeon.png";
+    public static final String IMG_UNIT_SHIP_GALEON_EAST = "galeon_east";
+
+    public static final String IMG_UNIT_SHIP_GALEON_WEST = "galeon_west";
 
     public static final String IMG_UNIT_SHIP_FRIGATE = "tile-ship-frigate.png";
+
+    public static final String IMG_UNIT_SHIP_FRIGATE_LEFT = "frigate_left";
 
     public static final String IMG_UNIT_FREE_COLONIST = "tile-unit-free-colonist.png";
 
@@ -162,7 +166,7 @@ public final class ImageProvider {
                 .put(TerrainType.HIGH_SEA, getImage(IMG_TILE_HIGH_SEA)).build();
 
         unitImageMap = ImmutableMap.<UnitType, Image>builder()
-                .put(UnitType.GALLEON, getImage(IMG_UNIT_SHIP_GALEON))
+                .put(UnitType.GALLEON, getImage(IMG_UNIT_SHIP_GALEON_EAST))
                 .put(UnitType.FRIGATE, getImage(IMG_UNIT_SHIP_FRIGATE))
                 .put(UnitType.COLONIST, getImage(IMG_UNIT_FREE_COLONIST)).build();
 

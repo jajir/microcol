@@ -13,6 +13,7 @@ public class GsonTerrainTypeAdapter extends TypeAdapter<TerrainType> {
 
     @Override
     public void write(final JsonWriter out, final TerrainType value) throws IOException {
+	//TODO make it required, remove null check throw exception
         if (value == null) {
             out.nullValue();
             return;

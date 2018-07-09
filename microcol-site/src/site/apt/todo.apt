@@ -114,22 +114,36 @@ Planned releases
   
   * \u2713 When colonist work at field than there should be production booster.
  
-  * \u2717 When new areas are revealed than there are glitches in black area.
+  * \u2713 When new areas are revealed than there are glitches in black area.
  
   * \u2713 Add some free space at left side of map. It's difficult to sail around New World.
+  
+  * \u2713 When unit go to west than is turn to west direction.
+ When unit go to to east than turn to east.
+ When unit arrive to some place than keep direction where is facing.
+ Direction where is unit turn is persisted.
+  
+  * \u2717 It's nearly impossible to move with unit in town. When town is founded and one unit is lost outside than it's not possible to move to move with such unit.
+  
+  * \u2717 When game is loaded and focus was at some place e.g. town than screen is not centered at this location.
  
+  * \u2717 Main menu doesn't work when drag pressed mouse instead of simple move.
+  
+  * \u2717 'Next Turn' button is blinking during unit move.
+  
  * <<0.7.0>> - Prepare for release
+  
+  * \u2717 
+  
+  * \u2717 List of default campaign missions should contains some check to know which missions are done.
+  
+  * \u2717 Right panel allows to select unit.
   
   * \u2717 build road, at the beginning any unit can build road at 4 moves. add action r
   
   * \u2717 redesign model: unit use class hierarchy, remove unit type, same for terrain. Move outside cargoHold, abstract class bude obsahovat utok a pohyb 
   
   * \u2717 Colony building queue and queue editing - simple and ugly version
-  
-  * \u2717 When unit go to west than is turn to west direction.
- When unit go to to east than turn to east.
- When unit arrive to some place than keep direction where is facing.
- Direction where is unit turn is persisted.
  
   * \u2717 Redesign game loop, to support parallel animations. Slight changes in water & move animation & scroll to moving unit. To control constant FPS. Now it's around 60 FPS.
  

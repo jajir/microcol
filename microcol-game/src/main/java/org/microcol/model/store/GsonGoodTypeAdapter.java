@@ -13,6 +13,7 @@ public class GsonGoodTypeAdapter extends TypeAdapter<GoodType> {
 
     @Override
     public void write(final JsonWriter out, final GoodType value) throws IOException {
+	//TODO make it required, remove null check throw exception
         if (value == null) {
             out.nullValue();
             return;

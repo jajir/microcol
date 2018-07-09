@@ -80,10 +80,14 @@ public class Unit implements CargoHolder {
 	return owner;
     }
 
-    public Location getLocation() {
+    public PlaceLocation getPlaceLocation() {
 	verifyThatUnitIsAtMap();
 
-	return ((PlaceLocation) place).getLocation();
+	return ((PlaceLocation) place);	
+    }
+    
+    public Location getLocation() {
+	return getPlaceLocation().getLocation();
     }
 
     public int getAvailableMoves() {
@@ -117,7 +121,8 @@ public class Unit implements CargoHolder {
 		    // TODO ships always come from east side of map
 		    final List<Location> locations = model.getHighSea()
 			    .getSuitablePlaceForShipCommingFromEurope(getOwner(), true);
-		    placeToLocation(locations.get(random.nextInt(locations.size())));
+		    placeToLocation(locations.get(random.nextInt(locations.size())),
+			    Direction.west);
 		    model.getTurnEventStore().add(TurnEventProvider.getShipComeHighSeas(owner));
 		}
 	    }
@@ -398,15 +403,42 @@ public class Unit implements CargoHolder {
 	    model.fireUnitMovedToHighSeas(this);
 	} else {
 	    final Location start = getLocation();
-	    model.fireUnitMovedStepStarted(this, start, moveTo);
-	    placeToLocation(moveTo);
+	    final Direction orientation = findOrintationForMove(moveTo);
+	    model.fireUnitMovedStepStarted(this, start, moveTo, orientation);
+	    placeToLocation(moveTo, orientation);
 	    owner.revealMapForUnit(this);
 	    // if it's necessary fire event about captured city
 	    tryToCaptureColony(moveTo);
 	    model.fireUnitMovedStepFinished(this, start, moveTo);	    
 	}
     }
-
+    
+    private Direction findOrintationForMove(final Location moveTo) {
+	// TODO list of ifs is stupid aproach. Refactor it.
+	if (UnitType.GALLEON.equals(type)) {
+	    /*
+	     * Find direction when is moved performed.
+	     */
+	    final Location vector = moveTo.sub(getLocation());
+	    final Direction direction = Direction.valueOf(vector);
+	    if (direction.isOrientedWest()) {
+		return Direction.west;
+	    } else if (direction.isOrientedEast()) {
+		return Direction.east;
+	    } else {
+		/**
+		 * Keep original orientation.
+		 */
+		return getPlaceLocation().getOrientation();
+	    }
+	} else {
+	    /**
+	     * Keep original orientation.
+	     */
+	    return getPlaceLocation().getOrientation();
+	}
+    }
+    
     /**
      * When unit moves or attack than unit could capture colony.
      * 
@@ -467,7 +499,8 @@ public class Unit implements CargoHolder {
 	availableMoves = 0;
 	final Location start = getLocation();
 	placeToLocation(attackAt);
-	model.fireUnitMovedStepStarted(this, start, attackAt);
+	//FIXME use moveOneStep
+	model.fireUnitMovedStepStarted(this, start, attackAt, getDefaultOrintation());
 	col.captureColony(owner, this);
     }
 
@@ -568,10 +601,24 @@ public class Unit implements CargoHolder {
 	place.destroy();
 	place = new PlaceEuropePort(this, Preconditions.checkNotNull(port));
     }
+    
+    /**
+     * Provide orientation where unit facing when is placed to map.
+     *
+     * @return return default orientation value
+     */
+    private Direction getDefaultOrintation() {
+	//TODO it should be unit based.
+	return Direction.east;
+    }
 
     void placeToLocation(final Location target) {
+	placeToLocation(target, getDefaultOrintation());
+    }
+    
+    void placeToLocation(final Location target, final Direction orientation) {
 	place.destroy();
-	place = new PlaceLocation(this, Preconditions.checkNotNull(target));
+	place = new PlaceLocation(this, Preconditions.checkNotNull(target), orientation);
     }
 
     public void placeToHighSeas(final boolean isTravelToEurope) {
@@ -661,7 +708,7 @@ public class Unit implements CargoHolder {
 		"Unit '%s' can't be placed at '%s' because can't move on terrain '%s'", this, location,
 		model.getMap().getTerrainTypeAt(location));
 
-	placeToLocation(location);
+	placeToLocation(location, getDefaultOrintation());
     }
 
     void unload(final Location targetLocation) {
@@ -672,7 +719,7 @@ public class Unit implements CargoHolder {
 
 	// TODO JKA empty all moves and attacks?
 	this.availableMoves = 0;
-	place = new PlaceLocation(this, targetLocation);
+	place = new PlaceLocation(this, targetLocation, getDefaultOrintation());
     }
 
     @Override
@@ -763,5 +810,6 @@ public class Unit implements CargoHolder {
 	    return false;
 	}
     }
+
 
 }
