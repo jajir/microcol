@@ -10,7 +10,7 @@ import com.google.common.base.Preconditions;
  * Colony production statistics. in current moment provide information about all
  * produces or consumed items and warehouse amount of goods.
  */
-public class ColonyProductionStats {
+public final class ColonyProductionStats {
 
     private final Map<GoodType, GoodProductionStats> typeStats = new HashMap<>();
 

@@ -16,7 +16,7 @@ import javafx.scene.input.Dragboard;
 /**
  * Helps to store informations about dragged object and recover them back.
  */
-public class ClipboardWritter {
+public final class ClipboardWritter {
 
     private final ClipboardContent content;
 

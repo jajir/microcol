@@ -6,6 +6,6 @@ import org.microcol.model.event.ColonyWasCapturedEvent;
 /**
  * Control event colony was captured.
  */
-public class ColonyWasCapturedController extends AbstractEventController<ColonyWasCapturedEvent> {
+public final class ColonyWasCapturedController extends AbstractEventController<ColonyWasCapturedEvent> {
 
 }

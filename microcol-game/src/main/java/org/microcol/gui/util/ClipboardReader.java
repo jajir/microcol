@@ -18,7 +18,7 @@ import javafx.scene.input.Dragboard;
 /**
  * Helps to read informations about dragged object.
  */
-public class ClipboardReader {
+public final class ClipboardReader {
 
     final static String KEY_UNIT = "Unit";
 

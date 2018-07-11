@@ -7,6 +7,6 @@ import org.microcol.model.event.RoundStartedEvent;
  * It's called when human user should start play his move.
  * 
  */
-public class RoundStartedController extends AbstractEventController<RoundStartedEvent> {
+public final class RoundStartedController extends AbstractEventController<RoundStartedEvent> {
 
 }

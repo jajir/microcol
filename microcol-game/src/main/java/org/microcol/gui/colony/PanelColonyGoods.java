@@ -20,7 +20,7 @@ import javafx.scene.layout.HBox;
 /**
  * Show list of all available goods.
  */
-public class PanelColonyGoods extends TitledPanel {
+public final class PanelColonyGoods extends TitledPanel {
 
     private final HBox hBox;
 

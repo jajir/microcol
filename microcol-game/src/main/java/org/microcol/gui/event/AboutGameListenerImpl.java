@@ -10,7 +10,7 @@ import com.google.inject.Inject;
 /**
  * Provide about game event listener. Listener open about game dialog.
  */
-public class AboutGameListenerImpl implements Listener<AboutGameEvent> {
+public final class AboutGameListenerImpl implements Listener<AboutGameEvent> {
 
     private final AboutDialog aboutDialog;
 

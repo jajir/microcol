@@ -18,7 +18,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 
-public class MainMenuView {
+public final class MainMenuView {
 
     private final Text text;
 

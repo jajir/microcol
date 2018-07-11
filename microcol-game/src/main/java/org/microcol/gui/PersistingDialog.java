@@ -20,7 +20,7 @@ import javafx.stage.FileChooser;
 /**
  * Provide load and save operations.
  */
-public class PersistingDialog extends AbstractMessageWindow {
+public final class PersistingDialog extends AbstractMessageWindow {
 
     public static final String SAVE_FILE_EXTENSION = "microcol";
 

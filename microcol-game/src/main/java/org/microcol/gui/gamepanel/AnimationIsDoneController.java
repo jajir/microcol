@@ -5,6 +5,6 @@ import org.microcol.gui.util.AbstractEventController;
 /**
  * Control event when all animations are done.
  */
-public class AnimationIsDoneController extends AbstractEventController<AnimationIsDoneEvent> {
+public final class AnimationIsDoneController extends AbstractEventController<AnimationIsDoneEvent> {
 
 }

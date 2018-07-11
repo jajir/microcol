@@ -6,6 +6,6 @@ import org.microcol.model.event.UnitMovedStepFinishedEvent;
 /**
  * Controller allows to listen event when unit finished moving one step.
  */
-public class UnitMovedStepFinishedController extends AbstractEventController<UnitMovedStepFinishedEvent> {
+public final class UnitMovedStepFinishedController extends AbstractEventController<UnitMovedStepFinishedEvent> {
 
 }

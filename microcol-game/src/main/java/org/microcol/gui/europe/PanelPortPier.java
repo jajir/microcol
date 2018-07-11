@@ -24,7 +24,7 @@ import javafx.scene.layout.VBox;
  * Panels shows list of people already recruited. People from this panel could
  * be immediately embark.
  */
-public class PanelPortPier extends TitledPanel {
+public final class PanelPortPier extends TitledPanel {
 
     private final Logger logger = LoggerFactory.getLogger(PanelPortPier.class);
 

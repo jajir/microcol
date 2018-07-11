@@ -19,7 +19,7 @@ import javafx.util.StringConverter;
 /**
  * Allows user to choose how many goods wants to transfer.
  */
-public class ChooseGoodAmount extends AbstractMessageWindow {
+public final class ChooseGoodAmount extends AbstractMessageWindow {
 
     final static int MIN_VALUE = 0;
 

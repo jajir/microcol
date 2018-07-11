@@ -11,7 +11,7 @@ import com.google.inject.Inject;
  * Class connect changing of language to resource bundle. When language is
  * changed than class force {@link Text} to re-load resource bundle.
  */
-public class ChangeLanguageListenerText implements Listener<ChangeLanguageEvent> {
+public final class ChangeLanguageListenerText implements Listener<ChangeLanguageEvent> {
 
     private final Text text;
 

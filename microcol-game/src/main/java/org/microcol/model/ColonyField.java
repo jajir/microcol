@@ -10,7 +10,7 @@ import com.google.common.base.MoreObjects.ToStringHelper;
  * Class represents on field outside colony. When unit is placed here than some
  * good is produces each turn.
  */
-public class ColonyField {
+public final class ColonyField {
 
     private final Model model;
 

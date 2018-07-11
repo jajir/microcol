@@ -8,7 +8,7 @@ import com.google.common.base.Preconditions;
 /**
  * Record statistics for concrete player for specific turn.
  */
-public class TurnPlayerStatistics {
+public final class TurnPlayerStatistics {
 
     private final Player player;
 

@@ -8,7 +8,7 @@ import com.google.common.base.Preconditions;
 /**
  * When mouse is over new tile.
  */
-public class MouseOverTileChangedEvent {
+public final class MouseOverTileChangedEvent {
 
     private final Location mouseOverTileLocaton;
 

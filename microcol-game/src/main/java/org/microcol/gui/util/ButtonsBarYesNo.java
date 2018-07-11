@@ -8,7 +8,7 @@ import javafx.scene.layout.Priority;
 /**
  * Show No/Yes buttons at the bottom of dialog window.
  */
-public class ButtonsBarYesNo extends HBox {
+public final class ButtonsBarYesNo extends HBox {
 
     private final Button buttonYes;
 

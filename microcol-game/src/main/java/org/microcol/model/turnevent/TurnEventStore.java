@@ -13,7 +13,7 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 
-public class TurnEventStore {
+public final class TurnEventStore {
 
     private final ArrayList<TurnEvent> turnEvents = new ArrayList<>();
 

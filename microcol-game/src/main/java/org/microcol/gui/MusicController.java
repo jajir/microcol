@@ -10,7 +10,7 @@ import com.google.inject.Inject;
  * Communicate between GUI and sound and music playing.
  * 
  */
-public class MusicController {
+public final class MusicController {
 
     private final MusicPlayer musicPlayer;
 

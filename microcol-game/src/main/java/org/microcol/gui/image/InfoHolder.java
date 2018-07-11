@@ -3,7 +3,7 @@ package org.microcol.gui.image;
 import org.microcol.model.Location;
 import org.microcol.model.TerrainType;
 
-class InfoHolder {
+public final class InfoHolder {
 
     private final Location loc;
     private final TerrainType tt;

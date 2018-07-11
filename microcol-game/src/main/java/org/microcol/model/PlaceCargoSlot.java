@@ -10,7 +10,7 @@ import com.google.common.base.Preconditions;
 /**
  * 
  */
-public class PlaceCargoSlot extends AbstractPlace {
+public final class PlaceCargoSlot extends AbstractPlace {
 
     private final CargoSlot cargoSlot;
 

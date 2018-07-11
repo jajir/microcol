@@ -63,8 +63,9 @@
 	<entry key="tile.ocean.name">Oceán</entry>
 	<entry key="tile.ocean.description">Široký a pustý oceán</entry>
 	<entry key="statusBar.tile.notExplored">Tato oblast je neprozkoumaná</entry>
-	<entry key="statusBar.tile.start">Toto je: </entry>
+	<entry key="statusBar.tile.start">Toto je </entry>
 	<entry key="statusBar.tile.withUnit">s jednotkami:</entry>
+	<entry key="statusBar.tile.unitCount">s %s jednotkami</entry>
 	<entry key="statusBar.era">Rok</entry>
 	<entry key="statusBar.era.description">Aktuální čas</entry>
 	<entry key="statusBar.gold">Zlato</entry>

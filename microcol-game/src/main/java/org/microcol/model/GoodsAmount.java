@@ -6,7 +6,7 @@ import com.google.common.base.Preconditions;
 /**
  * Immutable class holding some number of goods of same type.
  */
-public class GoodsAmount {
+public final class GoodsAmount {
 
     private final int amount;
 

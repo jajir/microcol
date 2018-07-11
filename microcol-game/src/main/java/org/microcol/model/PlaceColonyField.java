@@ -10,7 +10,7 @@ import com.google.common.base.Preconditions;
 /**
  * Unit is placed at field to work outside of colony.
  */
-public class PlaceColonyField extends AbstractPlace {
+public final class PlaceColonyField extends AbstractPlace {
 
     private final ColonyField colonyField;
 

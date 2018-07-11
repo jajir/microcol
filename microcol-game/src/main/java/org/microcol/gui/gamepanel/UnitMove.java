@@ -11,7 +11,7 @@ import com.google.common.base.Preconditions;
 /**
  * Encapsulate moving unit, move target location and path to it.
  */
-public class UnitMove {
+public final class UnitMove {
 
     private final Unit unit;
 

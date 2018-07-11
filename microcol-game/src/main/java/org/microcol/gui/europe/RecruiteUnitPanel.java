@@ -13,7 +13,7 @@ import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 
-public class RecruiteUnitPanel extends VBox {
+public final class RecruiteUnitPanel extends VBox {
 
     public RecruiteUnitPanel(final UnitType unitType, final ImageProvider imageProvider,
             final GameModelController gameModelController,

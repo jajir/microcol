@@ -17,7 +17,7 @@ import com.google.common.collect.Lists;
 /**
  * Abstract mission. Contain some basic functionality.
  */
-public class MissionImpl<G extends MissionGoals> implements Mission<G> {
+public final class MissionImpl<G extends MissionGoals> implements Mission<G> {
 
 	public final static String GAME_OVER_REASON_ALL_GOALS_ARE_DONE = "gameOverReasonAllGoalsAreDone";
 

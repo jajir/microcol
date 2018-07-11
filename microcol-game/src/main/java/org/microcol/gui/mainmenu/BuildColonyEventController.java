@@ -16,7 +16,7 @@ import com.google.inject.Inject;
  * that there special method {@link #fireEvent()} which can do it.
  * </p>
  */
-public class BuildColonyEventController extends AbstractEventController<BuildColonyEvent> {
+public final class BuildColonyEventController extends AbstractEventController<BuildColonyEvent> {
 
     private final GameModelController gameModelController;
     private final SelectedUnitManager selectedUnitManager;

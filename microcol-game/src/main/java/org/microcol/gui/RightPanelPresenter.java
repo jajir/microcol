@@ -19,7 +19,7 @@ import org.slf4j.LoggerFactory;
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
 
-public class RightPanelPresenter {
+public final class RightPanelPresenter {
 
 	private final Logger logger = LoggerFactory.getLogger(RightPanelPresenter.class);
 

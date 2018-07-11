@@ -131,6 +131,8 @@ Planned releases
   
   * \u2717 'Next Turn' button is blinking during unit move.
   
+  * \u2717 When unit is on the right edge of visible area and windows is resized than ship disappears when edge of window touch it.
+  
  * <<0.7.0>> - Prepare for release
   
   * \u2717 

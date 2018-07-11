@@ -4,7 +4,7 @@ package org.microcol.gui;
  * Class helps to draw when steps ends during move planning.
  * 
  */
-public class StepCounter {
+public final class StepCounter {
 
     private final int maxStepsPerTurn;
 

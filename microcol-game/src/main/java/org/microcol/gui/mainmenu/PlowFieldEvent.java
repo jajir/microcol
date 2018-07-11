@@ -9,7 +9,7 @@ import com.google.common.base.Preconditions;
 /**
  * Front end event.
  */
-public class PlowFieldEvent {
+public final class PlowFieldEvent {
 
     private final Player player;
     private final Unit unit;

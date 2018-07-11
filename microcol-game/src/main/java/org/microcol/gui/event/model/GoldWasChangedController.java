@@ -6,6 +6,6 @@ import org.microcol.model.event.GoldWasChangedEvent;
 /**
  * Allows to detect that amount of gold was changed and manage event listeners.
  */
-public class GoldWasChangedController extends AbstractEventController<GoldWasChangedEvent> {
+public final class GoldWasChangedController extends AbstractEventController<GoldWasChangedEvent> {
 
 }

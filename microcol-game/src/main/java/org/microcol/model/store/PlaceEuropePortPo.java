@@ -2,7 +2,7 @@ package org.microcol.model.store;
 
 import com.google.common.base.MoreObjects;
 
-public class PlaceEuropePortPo extends PlacePo {
+public final class PlaceEuropePortPo extends PlacePo {
 
     private boolean isOnPier = false;
 

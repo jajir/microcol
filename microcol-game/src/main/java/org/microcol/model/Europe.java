@@ -5,7 +5,7 @@ import java.util.List;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 
-public class Europe {
+public final class Europe {
 
     private final EuropePort port;
 

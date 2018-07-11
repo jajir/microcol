@@ -5,7 +5,7 @@ import java.util.Map;
 /**
  * Contains mission goals instances.
  */
-public class GoalProvider {
+public final class GoalProvider {
 
     public static class GoalFindNewWorld extends MissionGoal {
 

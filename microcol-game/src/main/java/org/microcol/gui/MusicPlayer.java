@@ -20,7 +20,7 @@ import org.slf4j.LoggerFactory;
  * Responsible for playing music.
  * 
  */
-public class MusicPlayer {
+public final class MusicPlayer {
 
     private final Logger logger = LoggerFactory.getLogger(MusicPlayer.class);
 

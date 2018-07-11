@@ -8,7 +8,7 @@ import com.google.common.base.Preconditions;
 /**
  * Hold context for processing game over event.
  */
-class GameOverProcessingContext {
+final class GameOverProcessingContext {
 
 	private final GameFinishedEvent event;
 

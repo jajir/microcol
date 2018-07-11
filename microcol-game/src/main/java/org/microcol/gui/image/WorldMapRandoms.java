@@ -14,7 +14,7 @@ import com.google.common.collect.ImmutableMap;
  * For each map location holds pseudo random number. See
  * {@link WorldMap#getSeed()}.
  */
-public class WorldMapRandoms {
+public final class WorldMapRandoms {
 
     /**
      * For each map location holds pseudo random number.

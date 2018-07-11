@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Class helps measure Frame per second rate.
  */
-public class FpsCounter {
+public final class FpsCounter {
 
     private final Logger logger = LoggerFactory.getLogger(FpsCounter.class);
 

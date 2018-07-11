@@ -18,7 +18,7 @@ import javafx.scene.canvas.GraphicsContext;
  * walk from one location to another one.
  *
  */
-public class AnimationWalkParticle {
+public final class AnimationWalkParticle {
 
     private final Location locationFrom;
 

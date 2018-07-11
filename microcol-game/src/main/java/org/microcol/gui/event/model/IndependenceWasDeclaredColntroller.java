@@ -7,7 +7,7 @@ import org.microcol.model.event.IndependenceWasDeclaredEvent;
  * Controls event when player declare independence. It control model fired
  * event.
  */
-public class IndependenceWasDeclaredColntroller
+public final class IndependenceWasDeclaredColntroller
         extends AbstractEventController<IndependenceWasDeclaredEvent> {
 
 }

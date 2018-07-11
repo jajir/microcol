@@ -22,7 +22,7 @@ import javafx.scene.layout.VBox;
 /**
  * Contains image of of type of good.
  */
-public class PanelColonyGood extends VBox {
+public final class PanelColonyGood extends VBox {
 
     private final Label labelAmount;
 

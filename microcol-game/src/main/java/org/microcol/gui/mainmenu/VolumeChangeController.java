@@ -6,6 +6,6 @@ import org.microcol.gui.util.AbstractEventController;
  * Control changed volume event.
  *
  */
-public class VolumeChangeController extends AbstractEventController<VolumeChangeEvent> {
+public final class VolumeChangeController extends AbstractEventController<VolumeChangeEvent> {
 
 }

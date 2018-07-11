@@ -5,6 +5,6 @@ import org.microcol.gui.util.OrderedEventController;
 /**
  * Handle event when player decide to show mission goals.
  */
-public class ShowGoalsController extends OrderedEventController<ShowGoalsEvent> {
+public final class ShowGoalsController extends OrderedEventController<ShowGoalsEvent> {
 
 }

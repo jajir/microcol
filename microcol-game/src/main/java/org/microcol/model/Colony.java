@@ -18,7 +18,7 @@ import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 
-public class Colony {
+public final class Colony {
 
     /**
      * Colony unique name.
@@ -110,6 +110,7 @@ public class Colony {
         return out;
     }
 
+    // TODO player is always the same as capturingUnit.getOwner()
     public void captureColony(final Player player, final Unit capturingUnit) {
         model.getEnemyUnitsAt(player, location).stream()
                 .forEach(unit -> Preconditions.checkState(

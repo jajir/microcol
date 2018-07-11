@@ -38,7 +38,7 @@ import com.google.inject.Inject;
 
 import javafx.scene.control.MenuItem;
 
-public class MainMenuPresenter {
+public final class MainMenuPresenter {
 
     private final MainMenuView view;
 

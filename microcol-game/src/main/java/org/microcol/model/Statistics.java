@@ -12,7 +12,7 @@ import com.google.common.collect.ImmutableList;
 /**
  * Game statistics.
  */
-public class Statistics {
+public final class Statistics {
 
     private final List<TurnPlayerStatistics> turnStatistics = new ArrayList<>();
 

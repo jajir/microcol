@@ -5,7 +5,7 @@ import com.google.common.base.MoreObjects;
 /**
  * Event is send when user choose to select next unit from main menu.
  */
-public class SelectNextUnitEvent {
+public final class SelectNextUnitEvent {
 
     public SelectNextUnitEvent() {
     }

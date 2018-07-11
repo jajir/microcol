@@ -31,7 +31,7 @@ import org.slf4j.LoggerFactory;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 
-class ListenerManager {
+final class ListenerManager {
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
     private final List<ModelListener> listeners;

@@ -3,7 +3,7 @@ package org.microcol.model.store;
 import java.util.ArrayList;
 import java.util.List;
 
-public class StatisticsPo {
+public final class StatisticsPo {
 
     private List<TurnPlayerStatisticsPo> turnStatistics;
 

@@ -8,7 +8,7 @@ import com.google.common.base.Preconditions;
 /**
  * Port is a place where units can load and unload cargo.
  */
-public class EuropePort {
+public final class EuropePort {
 
     private final Model model;
 

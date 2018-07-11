@@ -18,7 +18,7 @@ import org.slf4j.LoggerFactory;
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
 
-public class PanelColonyDockBehaviour extends AbstractPanelDockBehavior {
+public final class PanelColonyDockBehaviour extends AbstractPanelDockBehavior {
 
     final Logger logger = LoggerFactory.getLogger(PanelColonyDockBehaviour.class);
 

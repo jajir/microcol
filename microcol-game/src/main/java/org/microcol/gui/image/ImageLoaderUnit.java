@@ -3,7 +3,7 @@ package org.microcol.gui.image;
 /**
  * Load images for units.
  */
-public class ImageLoaderUnit implements ImageLoader {
+public final class ImageLoaderUnit implements ImageLoader {
 
     @Override
     public void preload(final ImageProvider imageProvider) {

@@ -10,7 +10,7 @@ import com.google.common.base.Preconditions;
 /**
  * Class represents state when unit is in port.
  */
-public class PlaceEuropePort extends AbstractPlace {
+public final class PlaceEuropePort extends AbstractPlace {
 
     private final EuropePort europePort;
 

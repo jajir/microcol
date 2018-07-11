@@ -6,7 +6,7 @@ import java.util.Random;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 
-public class ColonyNames {
+public final class ColonyNames {
 
     private final static String LEXICON = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 

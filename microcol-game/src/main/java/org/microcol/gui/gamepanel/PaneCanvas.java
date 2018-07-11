@@ -15,7 +15,7 @@ import javafx.scene.layout.Pane;
  * when component is read to show some content.
  * </p>
  */
-public class PaneCanvas {
+public final class PaneCanvas {
 
     /**
      * It helps consider if canvas size is reasonable. When canvas side length

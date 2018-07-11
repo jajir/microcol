@@ -8,7 +8,7 @@ import com.google.inject.Inject;
 /**
  * Class just pass changed volume to preferences.
  */
-public class VolumeChangedListenerPreferences {
+public final class VolumeChangedListenerPreferences {
 
     @Inject
     public VolumeChangedListenerPreferences(final VolumeChangeController volumeChangeController,

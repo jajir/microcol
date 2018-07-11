@@ -5,7 +5,7 @@ import java.util.Map;
 /**
  * It's empty mission goals implementation.
  */
-public class MissionGoalsEmpty extends MissionGoals {
+public final class MissionGoalsEmpty extends MissionGoals {
 
 	@Override
 	void initialize(final Map<String, String> data) {

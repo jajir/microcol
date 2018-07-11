@@ -25,7 +25,7 @@ import javafx.scene.text.TextAlignment;
 /**
  * Contains methods for painting particular objects.
  */
-public class PaintService {
+public final class PaintService {
 
     /**
      * Unit's flag width.

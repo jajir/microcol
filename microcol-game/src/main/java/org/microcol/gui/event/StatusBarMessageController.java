@@ -7,6 +7,6 @@ import org.microcol.gui.util.AbstractEventController;
  * message was changed.
  * 
  */
-public class StatusBarMessageController extends AbstractEventController<StatusBarMessageEvent> {
+public final class StatusBarMessageController extends AbstractEventController<StatusBarMessageEvent> {
 
 }

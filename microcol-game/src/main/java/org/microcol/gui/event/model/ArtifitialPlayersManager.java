@@ -17,7 +17,7 @@ import com.google.inject.Inject;
  * Class manage artificial players. It creates them wire them to model events
  * and destroy then.
  */
-public class ArtifitialPlayersManager {
+public final class ArtifitialPlayersManager {
 
     private final AnimationManager animationManager;
 

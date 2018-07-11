@@ -8,7 +8,7 @@ import org.microcol.gui.util.ViewUtil;
  * Dialog is shown when user try to move unit to illegal position. For example
  * ground unit move to ocean.
  */
-public class DialogUnitCantMoveHere extends AbstractWarningDialog {
+public final class DialogUnitCantMoveHere extends AbstractWarningDialog {
 
     public DialogUnitCantMoveHere(final ViewUtil viewUtil, final Text text) {
         super(viewUtil, text, "dialogUnitCantMoveHere.caption");

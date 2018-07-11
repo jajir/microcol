@@ -10,7 +10,7 @@ import com.google.common.base.MoreObjects;
 /**
  * Allows to stop waiting threads until some operation is done.
  */
-public class AnimationLatch {
+public final class AnimationLatch {
 
     private final Logger logger = LoggerFactory.getLogger(AnimationLatch.class);
 

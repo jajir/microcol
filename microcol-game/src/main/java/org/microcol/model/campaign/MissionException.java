@@ -10,7 +10,7 @@ import org.microcol.gui.MicroColException;
  * instead of moving ship to left move to high seas and go to Europe.
  * </p>
  */
-public class MissionException extends MicroColException {
+public final class MissionException extends MicroColException {
 
 	private static final long serialVersionUID = -2975490267252949111L;
 

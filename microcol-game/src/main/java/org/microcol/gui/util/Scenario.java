@@ -2,7 +2,7 @@ package org.microcol.gui.util;
 
 import com.google.common.base.Preconditions;
 
-public class Scenario {
+public final class Scenario {
 
     private final String name;
 

@@ -7,7 +7,7 @@ import com.google.inject.Inject;
  * Events incoming from model are translated to GIU events. This class manage
  * GUI event controllers for model events.
  */
-public class ModelEventManager {
+public final class ModelEventManager {
 
     private final RoundStartedController roundStartedController;
 

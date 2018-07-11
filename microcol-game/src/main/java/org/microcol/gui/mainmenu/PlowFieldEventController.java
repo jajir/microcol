@@ -12,7 +12,7 @@ import com.google.inject.Inject;
 /**
  * Plow field event controller.
  */
-public class PlowFieldEventController extends AbstractEventController<PlowFieldEvent> {
+public final class PlowFieldEventController extends AbstractEventController<PlowFieldEvent> {
 
     private final GameModelController gameModelController;
     private final SelectedUnitManager selectedUnitManager;

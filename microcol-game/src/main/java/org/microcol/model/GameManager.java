@@ -12,7 +12,7 @@ import com.google.common.base.Strings;
 /**
  * Each player performs turns. When all players perform one turn it's one round.
  */
-class GameManager {
+final class GameManager {
 
     private final GameOverEvaluator gameOverEvaluator;
     private final Model model;

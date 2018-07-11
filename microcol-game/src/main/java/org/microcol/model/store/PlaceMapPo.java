@@ -5,7 +5,7 @@ import org.microcol.model.Location;
 
 import com.google.common.base.MoreObjects;
 
-public class PlaceMapPo extends PlacePo {
+public final class PlaceMapPo extends PlacePo {
 
     private Location location;
 

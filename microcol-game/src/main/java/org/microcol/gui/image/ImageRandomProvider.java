@@ -12,7 +12,7 @@ import javafx.scene.image.Image;
  * Based on map seed number compute world map image names. Image names varies
  * e.g. sees contains fish, whale or ripples.
  */
-public class ImageRandomProvider {
+public final class ImageRandomProvider {
 
     private final ImageProvider imageProvider;
 

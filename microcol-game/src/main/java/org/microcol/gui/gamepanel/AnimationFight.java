@@ -6,6 +6,7 @@ import org.microcol.gui.Point;
 import org.microcol.gui.image.ImageProvider;
 import org.microcol.model.Unit;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableMap;
 
@@ -14,7 +15,7 @@ import javafx.scene.canvas.GraphicsContext;
 /**
  * Class animate fight between two adjacent units.
  */
-public class AnimationFight implements Animation {
+public final class AnimationFight implements Animation {
 
     /**
      * Contains mapping of speed to step size.
@@ -58,6 +59,12 @@ public class AnimationFight implements Animation {
         // TODO JJ paint animation just when at least one point is on screen.
         graphics.drawImage(imageProvider.getImage(ImageProvider.IMG_CROSSED_SWORDS), middle.getX(),
                 middle.getY());
+    }
+
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(getClass()).add("attacker", attacker)
+                .add("defender", defender).toString();
     }
 
 }

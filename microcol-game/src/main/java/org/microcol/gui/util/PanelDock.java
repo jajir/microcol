@@ -24,7 +24,7 @@ import javafx.scene.layout.VBox;
 /**
  * Contains ships in port. Good from ships could be loaded/unloaded.
  */
-public class PanelDock extends TitledPanel {
+public final class PanelDock extends TitledPanel {
 
     private final Logger logger = LoggerFactory.getLogger(PanelDock.class);
 

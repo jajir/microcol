@@ -8,7 +8,7 @@ import com.google.common.base.Preconditions;
  * Contains info about focused tile at map.
  *
  */
-public class TileWasSelectedEvent {
+public final class TileWasSelectedEvent {
 
     private final Location location;
 

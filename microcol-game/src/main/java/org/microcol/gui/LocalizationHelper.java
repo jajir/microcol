@@ -11,7 +11,7 @@ import com.google.inject.Inject;
 /**
  * Helps localize messages.
  */
-public class LocalizationHelper {
+public final class LocalizationHelper {
 
     private static final String TERRAIN_PREFIX = "terrain.";
     private static final String TERRAIN_SUFFIX_NAME = ".name";

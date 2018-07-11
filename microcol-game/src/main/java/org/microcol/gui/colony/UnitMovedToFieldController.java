@@ -5,6 +5,6 @@ import org.microcol.gui.util.AbstractEventController;
 /**
  * Control event when unit is moved in outside on some field.
  */
-public class UnitMovedToFieldController extends AbstractEventController<UnitMovedToFieldEvent> {
+public final class UnitMovedToFieldController extends AbstractEventController<UnitMovedToFieldEvent> {
 
 }

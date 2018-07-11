@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-public class PlayerGoodsStatistics {
+public final class PlayerGoodsStatistics {
 
     private final Map<GoodType, Integer> goodAmounts = new HashMap<>();
 

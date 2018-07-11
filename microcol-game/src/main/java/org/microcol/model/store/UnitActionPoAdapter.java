@@ -15,7 +15,7 @@ import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 
-public class UnitActionPoAdapter extends TypeAdapter<UnitActionPo> {
+public final class UnitActionPoAdapter extends TypeAdapter<UnitActionPo> {
 
     private final Logger logger = LoggerFactory.getLogger(UnitActionPoAdapter.class);
 

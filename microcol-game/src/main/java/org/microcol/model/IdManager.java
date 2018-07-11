@@ -13,7 +13,7 @@ import com.google.common.base.Preconditions;
  * int myId = idManager.nextId();
  * </pre>
  */
-public class IdManager {
+public final class IdManager {
 
     private Integer nextId;
 

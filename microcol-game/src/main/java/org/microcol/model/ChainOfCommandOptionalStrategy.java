@@ -14,7 +14,7 @@ import com.google.common.base.Preconditions;
  * When input is not processed than Optional empty object is returned.
  * </p>
  */
-public class ChainOfCommandOptionalStrategy<T, R> implements Function<T, Optional<R>> {
+public final class ChainOfCommandOptionalStrategy<T, R> implements Function<T, Optional<R>> {
 
 	private final List<Function<T, R>> filters;
 

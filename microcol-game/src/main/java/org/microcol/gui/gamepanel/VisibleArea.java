@@ -43,7 +43,7 @@ import com.google.common.base.Preconditions;
  * </p>
  * 
  */
-public class VisibleArea {
+public final class VisibleArea {
     
     private final static int NOT_READY = -1;
 

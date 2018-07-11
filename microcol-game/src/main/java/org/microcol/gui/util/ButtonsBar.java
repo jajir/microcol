@@ -9,7 +9,7 @@ import javafx.scene.layout.Priority;
  * Helps manage button part of dialog containing "OK" button.
  *
  */
-public class ButtonsBar extends HBox {
+public final class ButtonsBar extends HBox {
 
     private final Button buttonOk;
 

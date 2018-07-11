@@ -2,7 +2,7 @@ package org.microcol.model.store;
 
 import java.util.List;
 
-public class TurnEventPo {
+public final class TurnEventPo {
 
     private String playerName;
 

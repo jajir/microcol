@@ -5,6 +5,6 @@ import org.microcol.gui.util.AbstractEventController;
 /**
  * Allows to trigger new game event and manage event listeners.
  */
-public class StartMoveController extends AbstractEventController<StartMoveEvent> {
+public final class StartMoveController extends AbstractEventController<StartMoveEvent> {
 
 }

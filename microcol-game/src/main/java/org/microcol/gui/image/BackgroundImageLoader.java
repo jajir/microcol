@@ -12,7 +12,7 @@ import javafx.scene.image.WritableImage;
  * Load background image, split it into separate tiles ad store then back to
  * image store.
  */
-public class BackgroundImageLoader implements ImageLoader {
+public final class BackgroundImageLoader implements ImageLoader {
 
     /**
      * How many tiles will be loaded in each row.

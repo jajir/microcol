@@ -13,7 +13,7 @@ import org.microcol.model.Unit;
 
 import com.google.common.base.MoreObjects;
 
-public class SimpleAiPlayer extends AbstractRobotPlayer {
+public final class SimpleAiPlayer extends AbstractRobotPlayer {
 
     private final SimpleUnitBehavior simpleUnitBehavior = new SimpleUnitBehavior();
 

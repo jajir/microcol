@@ -8,7 +8,7 @@ import com.google.inject.Inject;
 /**
  * Class just pass changed showing of grid to preferences.
  */
-public class ShowGridListenerPreferences {
+public final class ShowGridListenerPreferences {
 
     @Inject
     public ShowGridListenerPreferences(final ShowGridController showGridController,

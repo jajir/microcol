@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.google.common.base.Preconditions;
 
-public class GameManagerPo {
+public final class GameManagerPo {
 
     // In model players are stored in class 'playerStore's
     private List<PlayerPo> players = new ArrayList<>();

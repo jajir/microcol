@@ -25,7 +25,7 @@ import javafx.scene.layout.Pane;
 /**
  * Show units outside colony.
  */
-public class PanelOutsideColony extends TitledPanel {
+public final class PanelOutsideColony extends TitledPanel {
 
     private final Logger logger = LoggerFactory.getLogger(PanelOutsideColony.class);
 

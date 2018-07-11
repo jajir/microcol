@@ -15,7 +15,7 @@ import com.google.inject.Inject;
 /**
  * Control and preserve state of selected tile.
  */
-public class SelectedTileManager {
+public final class SelectedTileManager {
 
     private final TileWasSelectedController tileWasSelectedController;
 

@@ -14,7 +14,7 @@ import javafx.event.ActionEvent;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 
-public class TurnReportDialog extends AbstractMessageWindow implements TurnReportDialogCallback {
+public final class TurnReportDialog extends AbstractMessageWindow implements TurnReportDialogCallback {
 
     private final GameModelController gameModelController;
 

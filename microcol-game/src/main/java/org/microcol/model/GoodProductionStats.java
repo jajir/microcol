@@ -7,7 +7,7 @@ import com.google.common.base.Preconditions;
  * Hold information about production of some good and about stock in warehouse
  * in one turn.
  */
-public class GoodProductionStats {
+public final class GoodProductionStats {
 
     private final GoodType type;
     private int rowProduction;

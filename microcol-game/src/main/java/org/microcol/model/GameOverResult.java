@@ -6,7 +6,7 @@ import com.google.common.base.Preconditions;
 /**
  * Object holds game over result description.
  */
-public class GameOverResult {
+public final class GameOverResult {
 
     private final String gameOverReason;
 

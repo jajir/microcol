@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
 
-class PathFinder {
+final class PathFinder {
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
     private final Unit unit;

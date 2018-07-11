@@ -2,7 +2,7 @@ package org.microcol.model.store;
 
 import com.google.common.base.MoreObjects;
 
-public class PlaceHighSeasPo extends PlacePo {
+public final class PlaceHighSeasPo extends PlacePo {
 
     private boolean isTravelToEurope;
 

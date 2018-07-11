@@ -12,7 +12,7 @@ import javafx.scene.layout.VBox;
 /**
  * In main area shows basic menu "Start new game".
  */
-public class GameMenuPanelView {
+public final class GameMenuPanelView {
 
     private final Text text;
 

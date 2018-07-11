@@ -3,7 +3,7 @@ package org.microcol.model.campaign;
 /**
  * Game default campaign. It's main game story.
  */
-public class Default_campaign extends AbstractCampaign {
+public final class Default_campaign extends AbstractCampaign {
 
     Default_campaign() {
 	super(CampaignNames.defaultCampaign);

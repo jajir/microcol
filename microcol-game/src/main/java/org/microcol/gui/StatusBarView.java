@@ -7,7 +7,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 
-public class StatusBarView implements StatusBarPresenter.Display {
+public final class StatusBarView implements StatusBarPresenter.Display {
 
     private final HBox statusBar;
 

@@ -8,7 +8,7 @@ import javafx.stage.Stage;
 /**
  * Provide game main stage and provide screen center point.
  */
-public class ViewUtil {
+public final class ViewUtil {
 
     /**
      * All game dialogs, windows and UI features are children of this main

@@ -10,7 +10,7 @@ import com.google.common.base.Preconditions;
  * @param <T>
  *            listener event type
  */
-public class ListenerWrapper<T> {
+public final class ListenerWrapper<T> {
 
     /**
      * It's <code>true</code> when event listeners will be called asynchronously

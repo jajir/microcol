@@ -11,7 +11,7 @@ import com.google.inject.Inject;
  * MicroCol's main panel. Based on commands and events just change between main
  * game panel and game menu.
  */
-public class MainPanelPresenter {
+public final class MainPanelPresenter {
 
     private final MainPanelView view;
 

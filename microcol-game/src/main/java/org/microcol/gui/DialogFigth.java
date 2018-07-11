@@ -21,7 +21,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.text.TextAlignment;
 
-public class DialogFigth extends AbstractMessageWindow {
+public final class DialogFigth extends AbstractMessageWindow {
 
     /**
      * It's <code>true</code> when user choose to fight.

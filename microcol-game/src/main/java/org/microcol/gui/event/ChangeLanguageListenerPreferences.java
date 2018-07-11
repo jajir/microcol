@@ -7,7 +7,7 @@ import org.microcol.gui.util.GamePreferences;
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
 
-public class ChangeLanguageListenerPreferences implements Listener<ChangeLanguageEvent> {
+public final class ChangeLanguageListenerPreferences implements Listener<ChangeLanguageEvent> {
 
     private final GamePreferences gamePreferences;
 

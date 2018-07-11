@@ -2,7 +2,7 @@ package org.microcol.model;
 
 import com.google.common.base.MoreObjects;
 
-public class ConstructionTurnProduction {
+public final class ConstructionTurnProduction {
 
     public final static ConstructionTurnProduction EMPTY = new ConstructionTurnProduction(0, 0, 0);
 

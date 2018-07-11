@@ -1,6 +1,6 @@
 package org.microcol.gui.image;
 
-public class GrassCoastImageLoader extends AbstractCoastImageLoader {
+public final class GrassCoastImageLoader extends AbstractCoastImageLoader {
 
     @Override
     String getTypePrefix() {

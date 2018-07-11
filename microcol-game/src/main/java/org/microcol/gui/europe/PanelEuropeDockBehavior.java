@@ -19,7 +19,7 @@ import org.slf4j.LoggerFactory;
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
 
-public class PanelEuropeDockBehavior extends AbstractPanelDockBehavior {
+public final class PanelEuropeDockBehavior extends AbstractPanelDockBehavior {
 
     final Logger logger = LoggerFactory.getLogger(PanelEuropeDockBehavior.class);
 

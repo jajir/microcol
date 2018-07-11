@@ -5,7 +5,7 @@ import org.microcol.gui.util.AbstractEventController;
 /**
  * Control event send when selected unit is changed.
  */
-public class SelectedUnitWasChangedController
+public final class SelectedUnitWasChangedController
         extends AbstractEventController<SelectedUnitWasChangedEvent> {
 
 }

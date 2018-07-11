@@ -5,7 +5,7 @@ import com.google.common.base.MoreObjects;
 /**
  * Event object for showing mission goals.
  */
-public class ShowGoalsEvent {
+public final class ShowGoalsEvent {
 
     @Override
     public String toString() {

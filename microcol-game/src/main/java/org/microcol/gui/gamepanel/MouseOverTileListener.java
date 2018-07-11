@@ -1,5 +1,7 @@
 package org.microcol.gui.gamepanel;
 
+import java.util.List;
+
 import org.microcol.gui.LocalizationHelper;
 import org.microcol.gui.event.StatusBarMessageController;
 import org.microcol.gui.event.StatusBarMessageEvent;
@@ -9,6 +11,7 @@ import org.microcol.gui.util.Text;
 import org.microcol.model.Location;
 import org.microcol.model.Player;
 import org.microcol.model.TerrainType;
+import org.microcol.model.Unit;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
@@ -16,7 +19,7 @@ import com.google.inject.Inject;
 /**
  * When mouse change tile which is over this class set new status message.
  */
-public class MouseOverTileListener {
+public final class MouseOverTileListener {
 
     private final GameModelController gameModelController;
 
@@ -75,15 +78,22 @@ public class MouseOverTileListener {
         }
         if (player.isVisible(where)) {
             buff.append(text.get("statusBar.tile.start"));
-            buff.append(" ");
             buff.append(localizationHelper.getTerrainName(terrain));
-            buff.append(" ");
-            buff.append(text.get("statusBar.tile.withUnit"));
-            buff.append(" ");
-            gameModelController.getModel().getUnitsAt(where).forEach(ship -> {
-                buff.append(ship.getClass().getSimpleName());
-                buff.append(" ");
-            });
+            final List<Unit> units = gameModelController.getModel().getUnitsAt(where);
+            if (!units.isEmpty()) {
+                if (units.size() > 5) {
+                    buff.append(" ");
+                    buff.append(text.get("statusBar.tile.unitCount", units.size()));
+                } else {
+                    buff.append(" ");
+                    buff.append(text.get("statusBar.tile.withUnit"));
+                    buff.append(" ");
+                    units.forEach(ship -> {
+                        buff.append(ship.getClass().getSimpleName());
+                        buff.append(" ");
+                    });
+                }
+            }
         } else {
             buff.append(text.get("statusBar.tile.notExplored"));
         }

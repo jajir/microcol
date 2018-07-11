@@ -14,7 +14,7 @@ import com.google.common.base.MoreObjects.ToStringHelper;
  * sure order in which conditions will be passed.
  * </p>
  */
-public class OneTimeConditionalEvent<T> {
+public final class OneTimeConditionalEvent<T> {
 
     private Consumer<T> onConditionsPassed;
 

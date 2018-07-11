@@ -30,7 +30,7 @@ import com.google.common.base.Preconditions;
 /**
  * Translate model events to GUI events.
  */
-public class ModelListenerImpl implements ModelListener {
+public final class ModelListenerImpl implements ModelListener {
 
     private final ModelEventManager modelEventManager;
 

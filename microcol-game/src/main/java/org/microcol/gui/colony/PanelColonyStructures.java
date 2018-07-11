@@ -44,7 +44,7 @@ import javafx.scene.text.TextAlignment;
 /**
  * Show building factories and other structures build in colony.
  */
-public class PanelColonyStructures extends TitledPanel {
+public final class PanelColonyStructures extends TitledPanel {
 
     private final Logger logger = LoggerFactory.getLogger(PanelColonyStructures.class);
 

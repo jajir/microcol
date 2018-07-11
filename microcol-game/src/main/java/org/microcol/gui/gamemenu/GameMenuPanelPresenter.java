@@ -20,7 +20,7 @@ import javafx.scene.layout.VBox;
 /**
  * Panel that is visible after game start.
  */
-public class GameMenuPanelPresenter {
+public final class GameMenuPanelPresenter {
 
     private final GameMenuPanelView view;
 

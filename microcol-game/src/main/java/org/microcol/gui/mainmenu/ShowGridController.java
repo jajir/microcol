@@ -6,6 +6,6 @@ import org.microcol.gui.util.AbstractEventController;
  * Control event for show/hide grid event.
  * 
  */
-public class ShowGridController extends AbstractEventController<ShowGridEvent> {
+public final class ShowGridController extends AbstractEventController<ShowGridEvent> {
 
 }

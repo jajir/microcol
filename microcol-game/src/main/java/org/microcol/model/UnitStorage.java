@@ -19,7 +19,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableListMultimap;
 import com.google.common.collect.Multimaps;
 
-class UnitStorage {
+final class UnitStorage {
 
     /**
      * Ordered list of all units.

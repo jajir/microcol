@@ -8,7 +8,7 @@ import javafx.scene.layout.HBox;
 /**
  * Show one turn event with button to mark event as solved.
  */
-public class TurnEventPanel extends HBox {
+public final class TurnEventPanel extends HBox {
 
     TurnEventPanel(final TurnEvent turnEvent) {
         getChildren().add(new Label(turnEvent.getLocalizedMessage()));

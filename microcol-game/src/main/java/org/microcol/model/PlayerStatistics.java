@@ -4,7 +4,7 @@ package org.microcol.model;
  * Object will contain statistics about players including data about economy,
  * demography and military.
  */
-public class PlayerStatistics {
+public final class PlayerStatistics {
 
     private final PlayerGoodsStatistics goodsStatistics = new PlayerGoodsStatistics();
 

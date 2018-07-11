@@ -20,7 +20,7 @@ import javafx.scene.image.Image;
  * Class determine correct border tile for actual game model.
  *
  */
-public class MapManager {
+public final class MapManager {
 
     private final GrassCoastMapGenerator grassCoastMapGenerator;
 

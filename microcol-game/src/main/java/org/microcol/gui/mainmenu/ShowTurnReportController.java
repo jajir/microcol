@@ -5,6 +5,6 @@ import org.microcol.gui.util.OrderedEventController;
 /**
  * Handle event when player decide to show turn report.
  */
-public class ShowTurnReportController extends OrderedEventController<ShowTurnReportEvent> {
+public final class ShowTurnReportController extends OrderedEventController<ShowTurnReportEvent> {
 
 }

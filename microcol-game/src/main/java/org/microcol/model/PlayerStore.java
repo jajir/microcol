@@ -11,7 +11,7 @@ import org.microcol.model.store.ModelPo;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 
-public class PlayerStore {
+public final class PlayerStore {
 
     private final List<Player> players;
 

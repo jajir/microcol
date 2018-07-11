@@ -10,7 +10,7 @@ import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
 
-public class ImageWrapper {
+public final class ImageWrapper {
 
     private final Image tile;
 

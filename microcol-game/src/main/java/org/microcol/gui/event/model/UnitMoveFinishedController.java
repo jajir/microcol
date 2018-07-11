@@ -6,6 +6,6 @@ import org.microcol.model.event.UnitMoveFinishedEvent;
 /**
  * Controller allows to register unit moving listeners and fire events.
  */
-public class UnitMoveFinishedController extends AbstractEventController<UnitMoveFinishedEvent> {
+public final class UnitMoveFinishedController extends AbstractEventController<UnitMoveFinishedEvent> {
 
 }

@@ -9,7 +9,7 @@ import com.google.inject.Inject;
  * When tile is selected this selection is stored to model. It should be later
  * saved.
  */
-public class TileWasSelectedListener {
+public final class TileWasSelectedListener {
 
     private final GameModelController gameModelController;
 

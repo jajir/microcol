@@ -17,7 +17,7 @@ import javafx.scene.control.Button;
 /**
  * Panel that is visible after game start.
  */
-public class CampaignPanelPresenter {
+public final class CampaignPanelPresenter {
 
 	final Logger logger = LoggerFactory.getLogger(getClass());
 

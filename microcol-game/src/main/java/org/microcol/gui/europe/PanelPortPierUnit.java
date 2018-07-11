@@ -12,7 +12,7 @@ import javafx.scene.input.TransferMode;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 
-public class PanelPortPierUnit extends HBox {
+public final class PanelPortPierUnit extends HBox {
 
     public PanelPortPierUnit(final Unit unit, final ImageProvider imageProvider,
             final LocalizationHelper localizationHelper) {

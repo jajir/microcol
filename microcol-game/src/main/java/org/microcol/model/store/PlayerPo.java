@@ -3,7 +3,7 @@ package org.microcol.model.store;
 import java.util.HashMap;
 import java.util.Map;
 
-public class PlayerPo {
+public final class PlayerPo {
 
     private String name;
 

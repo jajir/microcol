@@ -5,7 +5,7 @@ import com.google.common.base.MoreObjects;
 /**
  * Event is used when center view even is fired.
  */
-public class CenterViewEvent {
+public final class CenterViewEvent {
 
     @Override
     public String toString() {

@@ -27,7 +27,7 @@ import com.google.gson.GsonBuilder;
 /**
  * Read whole model from file.
  */
-public class ModelDao {
+public final class ModelDao {
 
     private Logger logger = LoggerFactory.getLogger(ModelDao.class);
 

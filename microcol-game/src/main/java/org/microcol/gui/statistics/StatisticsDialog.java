@@ -25,7 +25,7 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.VBox;
 
-public class StatisticsDialog extends AbstractMessageWindow implements StatisticsDialogCallback {
+public final class StatisticsDialog extends AbstractMessageWindow implements StatisticsDialogCallback {
 
     private final GameModelController gameModelController;
 

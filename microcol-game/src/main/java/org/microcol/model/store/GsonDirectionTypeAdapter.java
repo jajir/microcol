@@ -9,7 +9,7 @@ import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
 
-public class GsonDirectionTypeAdapter extends TypeAdapter<Direction> {
+public final class GsonDirectionTypeAdapter extends TypeAdapter<Direction> {
 
     @Override
     public void write(final JsonWriter out, final Direction value) throws IOException {

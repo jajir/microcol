@@ -6,7 +6,7 @@ import com.google.common.base.Preconditions;
 /**
  * Holds information about price of some good in Europe.
  */
-public class GoodTrade {
+public final class GoodTrade {
 
     private final GoodType goodType;
 

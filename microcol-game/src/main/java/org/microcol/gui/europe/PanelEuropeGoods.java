@@ -21,7 +21,7 @@ import javafx.scene.layout.HBox;
 /**
  * Show list of all available goods.
  */
-public class PanelEuropeGoods extends TitledPanel {
+public final class PanelEuropeGoods extends TitledPanel {
 
     private final Logger logger = LoggerFactory.getLogger(PanelEuropeGoods.class);
 

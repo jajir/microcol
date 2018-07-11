@@ -6,7 +6,7 @@ import com.google.common.base.MoreObjects;
  * Contains information if grid should be displayed.
  *
  */
-public class ShowGridEvent {
+public final class ShowGridEvent {
 
     private final boolean isGridShown;
 

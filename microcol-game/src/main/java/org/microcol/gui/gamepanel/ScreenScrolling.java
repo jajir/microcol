@@ -13,7 +13,7 @@ import com.google.common.base.Preconditions;
  * Class help to draw animation of moving screen. Class compute screen move to
  * target point.
  */
-public class ScreenScrolling {
+public final class ScreenScrolling {
 
     private static final int DEFAULT_SCREEN_SCROLLING_SPEED = 10;
 

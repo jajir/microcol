@@ -4,7 +4,7 @@ import org.microcol.model.store.ConstructionSlotPo;
 
 import com.google.common.base.Preconditions;
 
-public class ConstructionSlot {
+public final class ConstructionSlot {
 
     private final Construction construction;
 

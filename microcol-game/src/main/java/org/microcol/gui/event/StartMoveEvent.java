@@ -1,5 +1,5 @@
 package org.microcol.gui.event;
 
-public class StartMoveEvent {
+public final class StartMoveEvent {
 
 }

@@ -20,7 +20,7 @@ import javafx.beans.property.SimpleBooleanProperty;
  * implementation.
  * </p>
  */
-public class GamePreferences {
+public final class GamePreferences {
 
     private static final String PREFERENCES_LOCALE_LANGUAGE = "locale-language";
     private static final String PREFERENCES_LOCALE_COUNTRY = "locale-country";

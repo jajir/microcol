@@ -8,7 +8,7 @@ import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 
-public class GoodType {
+public final class GoodType {
 
     public final static GoodType CORN = GoodTypeBuilder.make().setName("CORN").setCanBeBought(true)
             .build();

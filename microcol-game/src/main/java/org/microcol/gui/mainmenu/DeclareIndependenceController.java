@@ -5,7 +5,7 @@ import org.microcol.gui.util.AbstractEventController;
 /**
  * Declare independence controller.
  */
-public class DeclareIndependenceController
+public final class DeclareIndependenceController
         extends AbstractEventController<DeclareIndependenceEvent> {
 
 }

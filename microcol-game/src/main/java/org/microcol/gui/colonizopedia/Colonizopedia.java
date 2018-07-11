@@ -10,7 +10,7 @@ import com.google.inject.Inject;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
-public class Colonizopedia extends AbstractMessageWindow {
+public final class Colonizopedia extends AbstractMessageWindow {
 
     @Inject
     public Colonizopedia(final Text text, final ViewUtil viewUtil) {

@@ -5,7 +5,7 @@ import org.microcol.gui.MainPanelPresenter;
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
 
-public class ShowDefaultCampaignMenuListener {
+public final class ShowDefaultCampaignMenuListener {
 
     private final MainPanelPresenter mainPanelPresenter;
 

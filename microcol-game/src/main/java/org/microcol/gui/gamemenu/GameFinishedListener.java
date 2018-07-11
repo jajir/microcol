@@ -9,7 +9,7 @@ import com.google.inject.Inject;
 /**
  * When game finished, it set up visibility of free mission.
  */
-public class GameFinishedListener {
+public final class GameFinishedListener {
 
     private final GameMenuPanelPresenter gameMenuPanelPresenter;
 

@@ -9,7 +9,7 @@ import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
 
-public class GsonTerrainTypeAdapter extends TypeAdapter<TerrainType> {
+public final class GsonTerrainTypeAdapter extends TypeAdapter<TerrainType> {
 
     @Override
     public void write(final JsonWriter out, final TerrainType value) throws IOException {

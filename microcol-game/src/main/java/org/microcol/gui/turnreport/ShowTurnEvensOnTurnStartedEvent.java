@@ -15,7 +15,7 @@ import javafx.application.Platform;
  * When player is on turn than verify if there are any turn events and when they
  * are than show dialog to show them.
  */
-public class ShowTurnEvensOnTurnStartedEvent {
+public final class ShowTurnEvensOnTurnStartedEvent {
 
     private final static Logger logger = LoggerFactory
             .getLogger(ShowTurnEvensOnTurnStartedEvent.class);

@@ -35,7 +35,7 @@ import javafx.scene.paint.Color;
 /**
  * View for main game panel.
  */
-public class GamePanelView {
+public final class GamePanelView {
 
     private final Logger logger = LoggerFactory.getLogger(GamePanelView.class);
 

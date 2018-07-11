@@ -8,7 +8,7 @@ import java.util.Set;
 import org.microcol.model.Location;
 import org.microcol.model.TerrainType;
 
-public class WorldMapPo extends AbstractMapStore {
+public final class WorldMapPo extends AbstractMapStore {
 
     /**
      * Hold tile definitions rows.

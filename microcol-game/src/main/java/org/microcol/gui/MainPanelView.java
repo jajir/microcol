@@ -11,7 +11,7 @@ import javafx.scene.layout.VBox;
 /**
  * MicroCol's main panel. Every game components are in this panel.
  */
-public class MainPanelView {
+public final class MainPanelView {
 
     private final VBox mainBox;
 

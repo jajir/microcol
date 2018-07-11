@@ -5,7 +5,7 @@ import org.microcol.gui.mainmenu.DeclareIndependenceEvent;
 
 import com.google.inject.Inject;
 
-public class DeclareIndependenceListener implements Listener<DeclareIndependenceEvent> {
+public final class DeclareIndependenceListener implements Listener<DeclareIndependenceEvent> {
 
     @Inject
     public DeclareIndependenceListener(final DeclareIndependenceController controller) {

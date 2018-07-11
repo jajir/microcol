@@ -11,7 +11,7 @@ import org.microcol.model.Location;
 
 import com.google.common.base.Preconditions;
 
-public class ColonyPo {
+public final class ColonyPo {
 
     private String name;
 

@@ -5,7 +5,7 @@ import org.microcol.model.store.UnitPo;
 
 import com.google.common.base.Preconditions;
 
-class PlaceBuilderContext {
+final class PlaceBuilderContext {
 
     private final Unit unit;
     private final UnitPo unitPo;

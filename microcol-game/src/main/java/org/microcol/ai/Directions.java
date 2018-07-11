@@ -15,7 +15,7 @@ import com.google.common.base.Preconditions;
  * Helps to navigate unit's in a random way oner map. For each unit suggest
  * direction to move.
  */
-public class Directions {
+public final class Directions {
 
     private final Random random;
     private final Map<Unit, Location> lastDirections;

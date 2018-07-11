@@ -754,7 +754,7 @@ public class Unit implements CargoHolder {
     @Override
     public String toString() {
         return MoreObjects.toStringHelper(this).add("id", id).add("type", type).add("owner", owner)
-                .add("place", place == null ? place : place.getName())
+                .add("place", place == null ? place : place.toString())
                 .add("availableMoves", availableMoves).add("cargo", cargo)
                 .add("unitAction", unitAction).toString();
     }

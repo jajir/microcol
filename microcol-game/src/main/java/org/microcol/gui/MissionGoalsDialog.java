@@ -14,7 +14,7 @@ import javafx.event.ActionEvent;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 
-public class MissionGoalsDialog extends AbstractMessageWindow {
+public final class MissionGoalsDialog extends AbstractMessageWindow {
 
     private final GameModelController gameModelController;
 

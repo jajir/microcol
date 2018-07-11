@@ -9,7 +9,7 @@ import com.google.inject.Inject;
 /**
  * Show statistics dialog on proper event.
  */
-public class ShowStatisticsDialogListener {
+public final class ShowStatisticsDialogListener {
 
     private final StatisticsDialog statisticsDialog;
 

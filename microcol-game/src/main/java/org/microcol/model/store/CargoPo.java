@@ -6,7 +6,7 @@ import java.util.List;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 
-public class CargoPo {
+public final class CargoPo {
 
     private List<CargoSlotPo> slots = new ArrayList<>();
 

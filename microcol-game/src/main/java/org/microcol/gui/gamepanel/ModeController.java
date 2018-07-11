@@ -11,7 +11,7 @@ import com.google.inject.Inject;
  * </ul>
  * 
  */
-public class ModeController {
+public final class ModeController {
 
     private boolean isMoveMode;
 

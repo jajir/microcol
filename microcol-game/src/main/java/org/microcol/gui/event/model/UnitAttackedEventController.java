@@ -6,6 +6,6 @@ import org.microcol.model.event.UnitAttackedEvent;
 /**
  * Control event when unit attack another unit.
  */
-public class UnitAttackedEventController extends AbstractEventController<UnitAttackedEvent> {
+public final class UnitAttackedEventController extends AbstractEventController<UnitAttackedEvent> {
 
 }

@@ -3,7 +3,7 @@ package org.microcol.model.store;
 import org.microcol.model.GoodType;
 import org.microcol.model.Location;
 
-public class ColonyFieldPo {
+public final class ColonyFieldPo {
 
     private Location direction;
 

@@ -12,7 +12,7 @@ import com.google.inject.Inject;
 /**
  * Service help with files for game saves.
  */
-public class PersistingTool {
+public final class PersistingTool {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
 

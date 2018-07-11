@@ -11,7 +11,7 @@ import com.google.common.collect.Lists;
  * It's a place where are units traveling from colonies to Europe and from
  * Europe to colonies.
  */
-public class HighSea {
+public final class HighSea {
 
     private final Model model;
 

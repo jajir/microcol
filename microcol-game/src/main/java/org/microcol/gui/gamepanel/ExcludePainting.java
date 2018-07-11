@@ -15,7 +15,7 @@ import com.google.inject.Inject;
  * When it will be necessary to exclude other object type it should be here.
  * </p>
  */
-public class ExcludePainting {
+public final class ExcludePainting {
 
     /**
      * List of units that will not be animated.

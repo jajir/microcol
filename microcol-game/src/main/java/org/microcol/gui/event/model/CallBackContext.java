@@ -6,7 +6,7 @@ import org.microcol.gui.util.Text;
 
 import com.google.common.base.Preconditions;
 
-public class CallBackContext {
+public final class CallBackContext {
 
     private final DialogMessage dialogMessage;
 

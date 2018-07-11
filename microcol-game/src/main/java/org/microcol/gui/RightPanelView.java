@@ -24,7 +24,7 @@ import javafx.scene.layout.RowConstraints;
  * Draw right panel containing info about selected tile and selected unit.
  *
  */
-public class RightPanelView {
+public final class RightPanelView {
 
     private static final int RIGHT_PANEL_WIDTH = 170;
 

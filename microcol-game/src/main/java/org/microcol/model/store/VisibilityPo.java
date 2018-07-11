@@ -5,7 +5,7 @@ import java.util.Set;
 
 import org.microcol.model.Location;
 
-public class VisibilityPo extends AbstractMapStore {
+public final class VisibilityPo extends AbstractMapStore {
 
     /**
      * Hold information which parts of map are visible.

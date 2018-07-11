@@ -17,7 +17,7 @@ import javafx.scene.canvas.GraphicsContext;
  * Draw walk animation based on predefined path.
  * 
  */
-public class AnimationWalk implements Animation {
+public final class AnimationWalk implements Animation {
 
     /**
      * Moving unit.

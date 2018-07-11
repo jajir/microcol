@@ -7,7 +7,7 @@ import org.microcol.model.store.UnitPo;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 
-public class PlaceLocation extends AbstractPlace {
+public final class PlaceLocation extends AbstractPlace {
 
     private Location location;
 

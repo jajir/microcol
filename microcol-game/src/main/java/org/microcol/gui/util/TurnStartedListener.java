@@ -10,7 +10,7 @@ import com.google.inject.Inject;
 /**
  * When turn when human player is on turn than it store game state to save file.
  */
-public class TurnStartedListener {
+public final class TurnStartedListener {
 
     private final GamePreferences gamePreferences;
 

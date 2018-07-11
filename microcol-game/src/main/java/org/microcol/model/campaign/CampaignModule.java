@@ -10,7 +10,7 @@ import com.google.inject.Singleton;
 /**
  * Campaigns require some classes that survive one model.
  */
-public class CampaignModule extends AbstractModule {
+public final class CampaignModule extends AbstractModule {
 
 	@Override
 	protected void configure() {

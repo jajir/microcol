@@ -18,7 +18,7 @@ import javafx.application.Platform;
  * @param <E>
  *            event object type
  */
-public class AbstractEventController<E> {
+public abstract class AbstractEventController<E> {
 
     private final Logger logger = LoggerFactory.getLogger(AbstractEventController.class);
 

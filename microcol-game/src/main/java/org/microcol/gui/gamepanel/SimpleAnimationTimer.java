@@ -9,7 +9,7 @@ import javafx.animation.AnimationTimer;
 /**
  * Allows to call consume animation repaint event.
  */
-public class SimpleAnimationTimer extends AnimationTimer {
+public final class SimpleAnimationTimer extends AnimationTimer {
 
     private final Consumer<Long> handler;
 

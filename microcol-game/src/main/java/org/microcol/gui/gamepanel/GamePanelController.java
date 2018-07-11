@@ -14,7 +14,7 @@ import com.google.inject.Inject;
 /**
  * 
  */
-public class GamePanelController {
+public final class GamePanelController {
 
     private boolean humanIsOnTurn;
 

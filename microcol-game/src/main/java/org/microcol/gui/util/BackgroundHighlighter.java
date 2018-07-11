@@ -17,7 +17,7 @@ import javafx.scene.paint.Color;
  * Class help highlight panel when mouse is dragged over with some thing that
  * could be dropped.
  */
-public class BackgroundHighlighter {
+public final class BackgroundHighlighter {
 
     private final Region region;
 

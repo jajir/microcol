@@ -2,7 +2,7 @@ package org.microcol.gui.image;
 
 import org.microcol.model.Location;
 
-class Neighbors {
+final class Neighbors {
 
     private final InfoHolder center;
 

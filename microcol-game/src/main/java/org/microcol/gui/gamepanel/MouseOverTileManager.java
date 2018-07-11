@@ -16,7 +16,7 @@ import com.google.inject.Inject;
  * mouse over. This class doesn't handle events.
  * </p>
  */
-public class MouseOverTileManager {
+public final class MouseOverTileManager {
 
     private final MouseOverTileChangedController mouseOverTileChangedController;
 

@@ -22,7 +22,7 @@ import com.google.inject.Inject;
  * different tile. (screen scrolling)
  * </p>
  */
-public class MoveModeSupport {
+public final class MoveModeSupport {
 
     private final Logger logger = LoggerFactory.getLogger(MoveModeSupport.class);
 

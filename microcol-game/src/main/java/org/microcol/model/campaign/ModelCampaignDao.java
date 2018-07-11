@@ -12,7 +12,7 @@ import com.google.inject.Inject;
 /**
  * Load and save model campaign from to file.
  */
-public class ModelCampaignDao {
+public final class ModelCampaignDao {
 
 	private final ModelDao modelDao;
 

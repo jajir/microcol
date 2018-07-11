@@ -1,6 +1,6 @@
 package org.microcol.model.store;
 
-public class TurnPlayerStatisticsPo {
+public final class TurnPlayerStatisticsPo {
 
     private String player;
 

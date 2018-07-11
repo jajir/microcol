@@ -10,7 +10,7 @@ import com.google.inject.Inject;
 
 import javafx.scene.control.Label;
 
-public class DialogColonyWasCaptured extends AbstractWarningDialog {
+public final class DialogColonyWasCaptured extends AbstractWarningDialog {
 
     private final Text text;
 

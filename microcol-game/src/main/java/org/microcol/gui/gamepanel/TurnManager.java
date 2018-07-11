@@ -10,7 +10,7 @@ import org.microcol.model.Unit;
 /**
  * Helps work with all units in one turn.
  */
-public class TurnManager {
+public final class TurnManager {
 
     private final List<Unit> units;
 

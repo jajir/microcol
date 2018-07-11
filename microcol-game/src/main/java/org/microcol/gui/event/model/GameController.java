@@ -18,7 +18,7 @@ import com.google.inject.Inject;
  * Responsible for loading and storing game. Class knows about state of default
  * campaign.
  */
-public class GameController {
+public final class GameController {
 
 	private final GameModelController gameModelController;
 

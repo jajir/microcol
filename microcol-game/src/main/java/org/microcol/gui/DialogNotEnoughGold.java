@@ -9,7 +9,7 @@ import com.google.inject.Inject;
 /**
  * Show simple warning dialog with warning message.
  */
-public class DialogNotEnoughGold extends AbstractWarningDialog {
+public final class DialogNotEnoughGold extends AbstractWarningDialog {
 
     @Inject
     public DialogNotEnoughGold(final ViewUtil viewUtil, final Text text) {

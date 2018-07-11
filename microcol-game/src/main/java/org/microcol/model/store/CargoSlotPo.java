@@ -4,7 +4,7 @@ import org.microcol.model.GoodType;
 
 import com.google.common.base.MoreObjects;
 
-public class CargoSlotPo {
+public final class CargoSlotPo {
 
     /**
      * In this cargo slot could be stored this unit.

@@ -15,7 +15,7 @@ import org.microcol.model.store.UnitPo;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 
-public class PlaceBuilderPo implements Function<Unit, Place> {
+public final class PlaceBuilderPo implements Function<Unit, Place> {
 
     private final ChainOfCommandStrategy<PlaceBuilderContext, Place> placeBuilders = new ChainOfCommandStrategy<PlaceBuilderContext, Place>(
             Lists.newArrayList((context) -> {

@@ -2,7 +2,7 @@ package org.microcol.model.store;
 
 import org.microcol.model.unit.UnitActionType;
 
-public class UnitActionPlowFieldPo implements UnitActionPo {
+public final class UnitActionPlowFieldPo implements UnitActionPo {
 
 	private int remainingTurns;
 

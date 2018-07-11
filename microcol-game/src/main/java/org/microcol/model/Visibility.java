@@ -9,7 +9,7 @@ import com.google.common.base.Preconditions;
 /**
  * Class hold information which map location are explored.
  */
-public class Visibility {
+public final class Visibility {
 
     /**
      * When location is visible that is in this set.

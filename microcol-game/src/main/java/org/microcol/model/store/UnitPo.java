@@ -4,7 +4,7 @@ import org.microcol.model.UnitType;
 
 import com.google.common.base.MoreObjects;
 
-public class UnitPo {
+public final class UnitPo {
 
     private Integer id;
 

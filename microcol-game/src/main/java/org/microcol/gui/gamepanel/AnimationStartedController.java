@@ -5,6 +5,6 @@ import org.microcol.gui.util.AbstractEventController;
 /**
  * Control event when animation started.
  */
-public class AnimationStartedController extends AbstractEventController<AnimationStartedEvent> {
+public final class AnimationStartedController extends AbstractEventController<AnimationStartedEvent> {
 
 }

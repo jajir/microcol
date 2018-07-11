@@ -11,7 +11,7 @@ import com.google.inject.Inject;
  * Class wire up events. Class should not be used. Only after instantiated after
  * application startup.
  */
-public class EventInitializer {
+public final class EventInitializer {
 
     private final Logger logger = LoggerFactory.getLogger(EventInitializer.class);
 

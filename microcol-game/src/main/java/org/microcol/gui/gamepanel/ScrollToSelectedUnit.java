@@ -7,7 +7,7 @@ import com.google.inject.Inject;
  * When selected unit is changed it scroll to newly selected unit if it's
  * necessary.
  */
-public class ScrollToSelectedUnit {
+public final class ScrollToSelectedUnit {
 
     private final GamePanelView gamePanelView;
 

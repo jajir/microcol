@@ -1,6 +1,6 @@
 package org.microcol.model.store;
 
-public class CalendarPo {
+public final class CalendarPo {
 
     private int startYear;
     private int endYear;

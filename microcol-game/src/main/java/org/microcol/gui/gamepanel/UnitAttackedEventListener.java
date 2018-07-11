@@ -10,7 +10,7 @@ import com.google.inject.Inject;
  * Listen when some unit attack another one. When this occurs than it schedule
  * attack animation.
  */
-public class UnitAttackedEventListener {
+public final class UnitAttackedEventListener {
     private final GamePanelView gamePanelView;
 
     @Inject

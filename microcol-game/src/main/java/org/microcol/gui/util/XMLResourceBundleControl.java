@@ -17,7 +17,7 @@ import com.google.common.base.Preconditions;
 /**
  * Class helps to load XML resource bundle to java SE {@link ResourceBundle}.
  */
-public class XMLResourceBundleControl extends ResourceBundle.Control {
+public final class XMLResourceBundleControl extends ResourceBundle.Control {
 
     @Override
     public List<String> getFormats(final String baseName) {

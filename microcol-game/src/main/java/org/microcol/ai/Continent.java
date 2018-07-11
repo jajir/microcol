@@ -15,7 +15,7 @@ import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 
-public class Continent {
+public final class Continent {
 
     private final List<Location> locations = new ArrayList<>();
 

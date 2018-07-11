@@ -23,7 +23,7 @@ import com.google.inject.Inject;
  * Control and preserve state of selected unit. It provide selected unit to move
  * if there is any.
  */
-public class SelectedUnitManager {
+public final class SelectedUnitManager {
 
     private final Logger logger = LoggerFactory.getLogger(SelectedUnitManager.class);
 

@@ -6,7 +6,7 @@ import org.microcol.model.Player;
 import org.microcol.model.TerrainType;
 import org.microcol.model.WorldMap;
 
-public class ContinentTool {
+public final class ContinentTool {
 
     /**
      * Find top 3 continents with biggest military forces in cities owned by

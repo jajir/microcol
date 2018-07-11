@@ -6,7 +6,7 @@ import org.microcol.model.Player;
 /**
  * Class simplify creating of turn events.
  */
-public class TurnEventProvider {
+public final class TurnEventProvider {
 
     private final static String KEY_SHIP_COME_TO_EUROPE = "turnEvent.shipComeToEuropePort";
 

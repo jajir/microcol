@@ -5,7 +5,7 @@ import com.google.common.base.MoreObjects;
 /**
  * Event is send when all animations are done.
  */
-public class AnimationIsDoneEvent {
+public final class AnimationIsDoneEvent {
 
     @Override
     public String toString() {

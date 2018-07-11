@@ -9,12 +9,12 @@ import org.microcol.model.Player;
 import org.microcol.model.Unit;
 import org.microcol.model.UnitType;
 
-public class UnitFrigate extends Unit {
+public final class UnitFrigate extends Unit {
 
     UnitFrigate(Function<Unit, Cargo> cargoBuilder, Model model, Integer id,
-	    Function<Unit, Place> placeBuilder, UnitType unitType, Player owner, int availableMoves,
-	    final UnitAction unitAction) {
-	super(cargoBuilder, model, id, placeBuilder, unitType, owner, availableMoves, unitAction);
+            Function<Unit, Place> placeBuilder, UnitType unitType, Player owner, int availableMoves,
+            final UnitAction unitAction) {
+        super(cargoBuilder, model, id, placeBuilder, unitType, owner, availableMoves, unitAction);
     }
 
 }

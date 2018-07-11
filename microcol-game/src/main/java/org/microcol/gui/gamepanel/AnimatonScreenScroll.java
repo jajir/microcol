@@ -8,7 +8,7 @@ import javafx.scene.canvas.GraphicsContext;
 /**
  * Perform scrolling to some place at map as animation.
  */
-public class AnimatonScreenScroll implements Animation {
+public final class AnimatonScreenScroll implements Animation {
 
     private final ScreenScrolling screenScrolling;
 

@@ -6,6 +6,6 @@ import org.microcol.model.event.UnitMovedStepStartedEvent;
 /**
  * Controller allows to listen event when unit start to move one step.
  */
-public class UnitMovedStepStartedController extends AbstractEventController<UnitMovedStepStartedEvent> {
+public final class UnitMovedStepStartedController extends AbstractEventController<UnitMovedStepStartedEvent> {
 
 }

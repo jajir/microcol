@@ -14,7 +14,7 @@ import javafx.scene.text.Font;
  * Provide fonts. Some fonts have to loaded manually because have to be
  * available from .css files. Some fonts can be created on demand.
  */
-public class FontService {
+public final class FontService {
 
     public static final String FONT_CARDO_REGULAR = "Cardo-Regular";
 

@@ -7,7 +7,7 @@ import org.microcol.model.Location;
 /**
  * Helps to highlight area where use could move in first turn.
  */
-public class OneTurnMoveHighlighter {
+public final class OneTurnMoveHighlighter {
 
     private List<Location> locations;
 

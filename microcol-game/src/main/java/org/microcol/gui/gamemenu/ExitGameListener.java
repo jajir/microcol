@@ -11,7 +11,7 @@ import com.google.inject.Inject;
 /**
  * When user choose to exit game than it show correct show main game menu.
  */
-public class ExitGameListener {
+public final class ExitGameListener {
 
     private final MainPanelPresenter mainPanelPresenter;
 

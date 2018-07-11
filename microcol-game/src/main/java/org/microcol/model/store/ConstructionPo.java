@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.microcol.model.ConstructionType;
 
-public class ConstructionPo {
+public final class ConstructionPo {
 
     private ConstructionType type;
 

@@ -7,7 +7,7 @@ import org.microcol.model.event.UnitMovedToHighSeasEvent;
  * Controller allows to register unit move to high seas listeners and fire
  * events.
  */
-public class UnitMovedToHighSeasController
+public final class UnitMovedToHighSeasController
         extends AbstractEventController<UnitMovedToHighSeasEvent> {
 
 }

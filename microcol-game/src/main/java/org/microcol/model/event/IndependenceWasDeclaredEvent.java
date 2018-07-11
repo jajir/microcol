@@ -9,7 +9,7 @@ import com.google.common.base.Preconditions;
 /**
  * Event is send when player declares independence. Model event.
  */
-public class IndependenceWasDeclaredEvent extends AbstractModelEvent {
+public final class IndependenceWasDeclaredEvent extends AbstractModelEvent {
 
     private final Player whoDecalareIt;
 

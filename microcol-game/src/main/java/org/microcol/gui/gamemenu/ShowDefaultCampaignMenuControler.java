@@ -5,7 +5,7 @@ import org.microcol.gui.util.AbstractEventController;
 /**
  * Controller for event when user choose to show default campaign menu.
  */
-public class ShowDefaultCampaignMenuControler
+public final class ShowDefaultCampaignMenuControler
         extends AbstractEventController<ShowDefaultCampaignMenuEvent> {
 
 }

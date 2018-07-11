@@ -2,7 +2,7 @@ package org.microcol.model;
 
 import com.google.common.base.Preconditions;
 
-class PathFindingNode {
+final class PathFindingNode {
     // Parent of start node is null.
     private PathFindingNode parent;
     private final Location location;

@@ -23,7 +23,7 @@ import javafx.scene.input.KeyCombination;
  * Development menu is not localized.
  * </p>
  */
-public class MainMenuDevelopment {
+public final class MainMenuDevelopment {
 
     private final Logger logger = LoggerFactory.getLogger(MainMenuDevelopment.class);
 

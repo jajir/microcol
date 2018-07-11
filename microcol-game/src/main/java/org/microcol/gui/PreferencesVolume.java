@@ -16,7 +16,7 @@ import javafx.scene.control.Slider;
 import javafx.scene.layout.VBox;
 import javafx.util.StringConverter;
 
-public class PreferencesVolume extends AbstractMessageWindow {
+public final class PreferencesVolume extends AbstractMessageWindow {
 
     private final GamePreferences gamePreferences;
 

@@ -14,7 +14,7 @@ import com.google.inject.Inject;
 /**
  * Process unit moved event. It plan animations.
  */
-public class UnitMovedListener {
+public final class UnitMovedListener {
 
     private final Logger logger = LoggerFactory.getLogger(UnitMovedListener.class);
 

@@ -12,7 +12,7 @@ import com.google.common.base.Preconditions;
 /**
  * Abstract campaign mission. Holds basic info about campaign mission.
  */
-public class DefaultCampaignMission implements CampaignMission {
+public final class DefaultCampaignMission implements CampaignMission {
 
 	private final MissionName missionName;
 

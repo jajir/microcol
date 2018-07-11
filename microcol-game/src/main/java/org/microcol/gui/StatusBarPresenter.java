@@ -15,7 +15,7 @@ import com.google.inject.Inject;
 
 import javafx.scene.control.Label;
 
-public class StatusBarPresenter {
+public final class StatusBarPresenter {
 
     private final StatusBarPresenter.Display display;
 

@@ -1,6 +1,6 @@
 package org.microcol.model;
 
-public class PlayerMilitaryStrength {
+public final class PlayerMilitaryStrength {
 
     private int strength = 0;
 

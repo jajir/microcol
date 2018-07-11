@@ -15,7 +15,7 @@ import com.google.common.collect.ImmutableList;
  * production boosters.
  * </p>
  */
-public class ConstructionType {
+public final class ConstructionType {
 
     private final String name;
     private final int buildCostHammers;

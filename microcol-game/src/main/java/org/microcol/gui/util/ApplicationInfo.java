@@ -11,7 +11,7 @@ import org.microcol.gui.MicroColException;
 /**
  * Class provide actual information about running application.
  */
-public class ApplicationInfo {
+public final class ApplicationInfo {
 
     private final static String DEFAULT_APPLICATION_VERSION = "SNAPSHOT";
 

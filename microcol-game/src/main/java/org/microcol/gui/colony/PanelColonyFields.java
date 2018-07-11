@@ -40,7 +40,7 @@ import javafx.scene.text.TextAlignment;
  * Show 3 x 3 tiles occupied by colony. User can assign worker to work outside
  * of colony.
  */
-public class PanelColonyFields extends TitledPanel {
+public final class PanelColonyFields extends TitledPanel {
 
     private final Logger logger = LoggerFactory.getLogger(PanelColonyFields.class);
 

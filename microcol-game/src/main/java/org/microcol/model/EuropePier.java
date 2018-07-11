@@ -10,7 +10,7 @@ import com.google.common.base.Preconditions;
  * It's place where units stands before they sail to New World. Recruited units
  * appears here.
  */
-public class EuropePier {
+public final class EuropePier {
 
     private final Model model;
 

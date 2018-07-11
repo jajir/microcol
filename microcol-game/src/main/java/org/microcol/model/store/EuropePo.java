@@ -1,5 +1,5 @@
 package org.microcol.model.store;
 
-public class EuropePo {
+public final class EuropePo {
 
 }

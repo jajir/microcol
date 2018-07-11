@@ -6,7 +6,7 @@ import com.google.common.base.MoreObjects;
  * Represents event when user want's to see about game dialog.
  * 
  */
-public class AboutGameEvent {
+public final class AboutGameEvent {
 
     @Override
     public String toString() {

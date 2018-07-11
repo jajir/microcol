@@ -8,7 +8,7 @@ import com.google.inject.Inject;
 /**
  * Class just pass changed animation speed to preferences.
  */
-public class AnimationSpeedChangedListenerPreferences {
+public final class AnimationSpeedChangedListenerPreferences {
 
     @Inject
     public AnimationSpeedChangedListenerPreferences(final AnimationSpeedChangeController controller,

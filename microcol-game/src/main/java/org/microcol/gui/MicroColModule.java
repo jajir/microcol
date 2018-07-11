@@ -123,7 +123,7 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
 
-public class MicroColModule extends AbstractModule {
+public final class MicroColModule extends AbstractModule {
 
     @Override
     protected void configure() {

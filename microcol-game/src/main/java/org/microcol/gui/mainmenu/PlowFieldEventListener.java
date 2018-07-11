@@ -7,7 +7,7 @@ import com.google.inject.Inject;
 /**
  * Front end event.
  */
-public class PlowFieldEventListener {
+public final class PlowFieldEventListener {
 
     @Inject
     PlowFieldEventListener(final PlowFieldEventController plowFieldEventController) {

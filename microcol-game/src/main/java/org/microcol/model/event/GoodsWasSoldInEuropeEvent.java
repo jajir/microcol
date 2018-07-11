@@ -8,7 +8,7 @@ import com.google.common.base.Preconditions;
 /**
  * Event is triggered when player sell goods in Europe port.
  */
-public class GoodsWasSoldInEuropeEvent extends AbstractModelEvent {
+public final class GoodsWasSoldInEuropeEvent extends AbstractModelEvent {
 
     private final GoodsAmount goodsAmount;
 

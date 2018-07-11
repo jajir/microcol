@@ -4,7 +4,7 @@ import org.microcol.gui.util.Text;
 
 import com.google.common.base.Preconditions;
 
-public class ChangeLanguageEvent {
+public final class ChangeLanguageEvent {
 
     private final Text.Language language;
 

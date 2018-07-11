@@ -9,7 +9,7 @@ import com.google.inject.Inject;
 /**
  * When show mission goals event come class show dialog.
  */
-public class MissionGoalsShowListener {
+public final class MissionGoalsShowListener {
 
     private final MissionGoalsDialog missionGoalsDialog;
 

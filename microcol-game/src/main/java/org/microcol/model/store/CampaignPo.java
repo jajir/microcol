@@ -2,7 +2,7 @@ package org.microcol.model.store;
 
 import java.util.Map;
 
-public class CampaignPo {
+public final class CampaignPo {
 
     private String name;
 

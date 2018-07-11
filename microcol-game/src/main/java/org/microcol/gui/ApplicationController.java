@@ -18,7 +18,7 @@ import com.google.inject.Inject;
  * 
  * TODO refactor it, it start's game after application start up.
  */
-public class ApplicationController {
+public final class ApplicationController {
 
 	private final Logger logger = LoggerFactory.getLogger(ApplicationController.class);
 

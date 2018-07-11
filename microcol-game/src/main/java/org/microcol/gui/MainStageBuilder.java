@@ -17,7 +17,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
-public class MainStageBuilder {
+public final class MainStageBuilder {
 
     public static final String STYLE_SHEET_MICROCOL = MainStageBuilder.class
             .getResource("/gui/MicroCol.css").toExternalForm();

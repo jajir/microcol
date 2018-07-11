@@ -24,7 +24,7 @@ import javafx.scene.paint.Color;
 /**
  * Container represents one open or close crate.
  */
-public class PanelDockCrate extends StackPane {
+public final class PanelDockCrate extends StackPane {
 
     private final ImageProvider imageProvider;
 

@@ -14,7 +14,7 @@ import org.microcol.model.Unit;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 
-public class KingPlayer extends AbstractRobotPlayer {
+public final class KingPlayer extends AbstractRobotPlayer {
 
     private final SimpleUnitBehavior simpleUnitBehavior = new SimpleUnitBehavior();
 
@@ -79,6 +79,8 @@ public class KingPlayer extends AbstractRobotPlayer {
             final Optional<List<Location>> oPath = unit.getPath(oLoc.get(), true);
             if (oPath.isPresent() && !oPath.get().isEmpty()) {
                 getModel().moveUnitAsFarAsPossible(unit, Path.of(oPath.get()));
+            } else {
+                simpleUnitBehavior.tryToCaptureColony(getModel(), unit, oLoc.get());
             }
         }
         simpleUnitBehavior.tryToFight(unit);

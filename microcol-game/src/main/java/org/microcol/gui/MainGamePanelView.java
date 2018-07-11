@@ -12,7 +12,7 @@ import javafx.scene.layout.VBox;
 /**
  * Panel hold whole game screen without status bar.
  */
-public class MainGamePanelView {
+public final class MainGamePanelView {
 
     private final VBox box;
 

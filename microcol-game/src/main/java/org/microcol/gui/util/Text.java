@@ -19,7 +19,7 @@ import com.google.inject.Inject;
  * bundles.
  * 
  */
-public class Text {
+public final class Text {
 
     private static final Logger logger = LoggerFactory.getLogger(Text.class);
 
@@ -84,16 +84,20 @@ public class Text {
 
     /**
      * Java swing use in some visual components predefined string values. For
-     * example it's text of cancel button at dialog for choosing file. This
-     * string should be localized and change with language. Proper setting of
-     * this strings is done here.
+     * example it's text of cancel button at dialog for choosing file. This string
+     * should be localized and change with language. Proper setting of this strings
+     * is done here.
      */
     private void setSwingTranslations() {
         SWING_LOCALIZED_MESSAGE_KEYS.forEach(key -> UIManager.put(key, get(key)));
     }
 
-    public String get(final String key) {
-        return bundle.getString(key);
+    public String get(final String key, final Object... args) {
+        if (args.length == 0) {
+            return bundle.getString(key);
+        } else {
+            return String.format(bundle.getString(key), args);
+        }
     }
 
 }

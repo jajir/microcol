@@ -22,7 +22,7 @@ import javafx.application.Platform;
  *
  * TODO change it interface and move to campaign package.
  */
-public class MissionCallBack {
+public final class MissionCallBack {
 
     private final Text text;
 

@@ -12,7 +12,7 @@ import com.google.common.collect.ImmutableMap;
 /**
  * Represents place where colony store goods.
  */
-public class ColonyWarehouse {
+public final class ColonyWarehouse {
 
     private final Logger logger = LoggerFactory.getLogger(ColonyWarehouse.class);
 

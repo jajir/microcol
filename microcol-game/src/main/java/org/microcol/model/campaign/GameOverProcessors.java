@@ -7,7 +7,7 @@ import org.microcol.model.GameOverEvaluator;
 /**
  * Hold functions that properly react on game over game reason.
  */
-public class GameOverProcessors {
+public final class GameOverProcessors {
 
 	/**
 	 * React on game over when user exceed given time.

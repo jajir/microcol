@@ -15,7 +15,7 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 
-public class Construction {
+public final class Construction {
 
     private final ConstructionType type;
 

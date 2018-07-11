@@ -11,7 +11,7 @@ import com.google.inject.Inject;
 /**
  * Connect build colony event and send it to model.
  */
-public class BuildColonyListener {
+public final class BuildColonyListener {
 
     private final GameModelController gameModelController;
 

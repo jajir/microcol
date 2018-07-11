@@ -4,6 +4,6 @@ import org.microcol.gui.util.OrderedEventController;
 
 /**
  */
-public class QuitGameController extends OrderedEventController<QuitGameEvent> {
+public final class QuitGameController extends OrderedEventController<QuitGameEvent> {
 
 }

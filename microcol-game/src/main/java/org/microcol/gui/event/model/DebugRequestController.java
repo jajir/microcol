@@ -6,6 +6,6 @@ import org.microcol.model.event.DebugRequestedEvent;
 /**
  * Allows to process debug information send from game model.
  */
-public class DebugRequestController extends OrderedEventController<DebugRequestedEvent> {
+public final class DebugRequestController extends OrderedEventController<DebugRequestedEvent> {
 
 }

@@ -1,6 +1,6 @@
 package org.microcol.gui.image;
 
-public class IceCoastImageLoader extends AbstractCoastImageLoader {
+public final class IceCoastImageLoader extends AbstractCoastImageLoader {
 
     @Override
     String getTypePrefix() {

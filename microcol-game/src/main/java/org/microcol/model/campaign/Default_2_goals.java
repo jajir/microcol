@@ -4,7 +4,7 @@ import java.util.Map;
 
 import com.google.common.base.Preconditions;
 
-public class Default_2_goals extends MissionGoals {
+public final class Default_2_goals extends MissionGoals {
 
     @Override
     void initialize(final Map<String, String> data) {

@@ -19,7 +19,7 @@ import javafx.scene.layout.HBox;
  * Panels shows ships in seas. Ships are incoming to port or are going to new
  * world.
  */
-public class PanelHighSeas extends TitledPanel {
+public final class PanelHighSeas extends TitledPanel {
 
     private boolean isShownShipsTravelingToEurope;
 

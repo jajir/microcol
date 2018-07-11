@@ -23,7 +23,7 @@ import javafx.scene.layout.VBox;
 /**
  * Show Europe port.
  */
-public class BuyUnitsDialog extends AbstractMessageWindow {
+public final class BuyUnitsDialog extends AbstractMessageWindow {
 
     private final static int MAX_UNITS_IN_ROW = 2;
 

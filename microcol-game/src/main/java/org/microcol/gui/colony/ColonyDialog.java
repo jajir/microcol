@@ -25,7 +25,7 @@ import javafx.scene.layout.VBox;
 /**
  * Show Europe port.
  */
-public class ColonyDialog extends AbstractMessageWindow implements ColonyDialogCallback {
+public final class ColonyDialog extends AbstractMessageWindow implements ColonyDialogCallback {
 
     final Logger logger = LoggerFactory.getLogger(ColonyDialog.class);
 

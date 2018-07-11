@@ -24,7 +24,7 @@ import javafx.scene.layout.VBox;
  * Display one unit description. Panel is placed on the right side of main
  * screen.
  */
-public class UnitsPanel {
+public final class UnitsPanel {
 
     private final ImageProvider imageProvider;
 

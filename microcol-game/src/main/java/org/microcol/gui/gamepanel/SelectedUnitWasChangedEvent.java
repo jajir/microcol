@@ -10,7 +10,7 @@ import com.google.common.base.MoreObjects;
  * Event contains newly selected unit or when no unit is selected than it
  * contains <code>null</code>.
  */
-public class SelectedUnitWasChangedEvent {
+public final class SelectedUnitWasChangedEvent {
 
     private final Unit previousUnit;
 

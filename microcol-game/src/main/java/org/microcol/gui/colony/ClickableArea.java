@@ -17,7 +17,7 @@ import com.google.common.collect.Lists;
  * Holds rectangular areas (fields) in on-screen coordinates. It convert
  * on-screen coordinates to direction of field. Direction is {@link Location}.
  */
-public class ClickableArea {
+public final class ClickableArea {
 
     private final Map<Rectangle, Location> areas;
 

@@ -4,7 +4,7 @@ import org.microcol.model.TerrainType;
 
 import com.google.inject.Inject;
 
-public class IceCoastMapGenerator extends AbstractCoastMapGenerator {
+public final class IceCoastMapGenerator extends AbstractCoastMapGenerator {
 
     @Inject
     IceCoastMapGenerator(ImageProvider imageProvider) {

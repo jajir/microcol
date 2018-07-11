@@ -21,7 +21,7 @@ import javafx.scene.layout.VBox;
 /**
  * Show Europe port.
  */
-public class RecruiteUnitsDialog extends AbstractMessageWindow {
+public final class RecruiteUnitsDialog extends AbstractMessageWindow {
 
     @Inject
     public RecruiteUnitsDialog(final ViewUtil viewUtil, final Text text,

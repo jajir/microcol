@@ -2,7 +2,7 @@ package org.microcol.model.store;
 
 import org.microcol.model.unit.UnitActionType;
 
-public class UnitActionNoActionPo implements UnitActionPo {
+public final class UnitActionNoActionPo implements UnitActionPo {
 
 	@Override
 	public UnitActionType getType() {

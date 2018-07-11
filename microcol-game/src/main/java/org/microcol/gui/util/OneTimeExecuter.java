@@ -15,7 +15,7 @@ import javafx.application.Platform;
  * @param <T>
  *            Consumed object.
  */
-public class OneTimeExecuter<T> {
+public final class OneTimeExecuter<T> {
 
     private final List<Consumer<T>> consumers = new ArrayList<>();
 

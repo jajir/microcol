@@ -7,7 +7,7 @@ import com.google.common.collect.Lists;
 /**
  * Provide methods to read scenarios and load and save game.
  */
-public class PersistentService {
+public final class PersistentService {
 
     /**
      * Define testing game scenarios.

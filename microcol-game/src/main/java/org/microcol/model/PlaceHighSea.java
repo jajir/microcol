@@ -11,7 +11,7 @@ import com.google.common.base.Preconditions;
  * Connect unit and high see between each other.
  * 
  */
-public class PlaceHighSea extends AbstractPlace {
+public final class PlaceHighSea extends AbstractPlace {
 
     /**
      * When it's <code>true</code> than ship travel from colonies to Europe.

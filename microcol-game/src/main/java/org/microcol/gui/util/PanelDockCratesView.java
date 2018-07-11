@@ -6,7 +6,7 @@ import org.microcol.gui.image.ImageProvider;
 
 import javafx.scene.layout.HBox;
 
-public class PanelDockCratesView extends HBox {
+public final class PanelDockCratesView extends HBox {
 
     final static int MAX_NUMBER_OF_CRATES = 6;
 

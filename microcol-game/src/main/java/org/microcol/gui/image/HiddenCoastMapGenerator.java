@@ -6,7 +6,7 @@ import org.microcol.model.Player;
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
 
-public class HiddenCoastMapGenerator extends AbstractCoastMapGenerator {
+public final class HiddenCoastMapGenerator extends AbstractCoastMapGenerator {
 
     private final GameModelController gameModelController;
 

@@ -7,7 +7,7 @@ import org.microcol.model.store.UnitActionPo;
 
 import com.google.common.base.MoreObjects;
 
-public class UnitActionPlowField implements UnitAction {
+public final class UnitActionPlowField implements UnitAction {
 
     private final static int REQUIRED_TURNS_TO_PLOW_FIELD = 4;
 

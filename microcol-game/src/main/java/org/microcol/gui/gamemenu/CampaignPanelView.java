@@ -16,7 +16,7 @@ import javafx.scene.layout.VBox;
 /**
  * In main area shows basic menu "Start new game".
  */
-public class CampaignPanelView implements CampaignPanelPresenter.Display {
+public final class CampaignPanelView implements CampaignPanelPresenter.Display {
 
     private final Text text;
 

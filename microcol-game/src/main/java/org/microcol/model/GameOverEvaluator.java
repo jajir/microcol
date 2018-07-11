@@ -10,7 +10,7 @@ import com.google.common.base.Preconditions;
 /**
  * Evaluate game over conditions.
  */
-public class GameOverEvaluator {
+public final class GameOverEvaluator {
 
 	public final static String REASON_TIME_IS_UP = "TIME_IS_UP";
 

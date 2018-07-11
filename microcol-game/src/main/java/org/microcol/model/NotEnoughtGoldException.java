@@ -2,7 +2,7 @@ package org.microcol.model;
 
 import org.microcol.gui.MicroColException;
 
-public class NotEnoughtGoldException extends MicroColException {
+public final class NotEnoughtGoldException extends MicroColException {
 
     /**
      * 

@@ -8,10 +8,14 @@ import com.google.common.base.Preconditions;
  */
 public enum Direction {
 
-    north(Location.DIRECTION_NORTH), northEast(Location.DIRECTION_NORTH_EAST), east(
-	    Location.DIRECTION_EAST), southEast(Location.DIRECTION_SOUTH_EAST), south(
-		    Location.DIRECTION_SOUTH), southWest(Location.DIRECTION_SOUTH_WEST), west(
-			    Location.DIRECTION_WEST), northWest(Location.DIRECTION_NORTH_WEST);
+    north(Location.DIRECTION_NORTH),
+    northEast(Location.DIRECTION_NORTH_EAST),
+    east(Location.DIRECTION_EAST),
+    southEast(Location.DIRECTION_SOUTH_EAST),
+    south(Location.DIRECTION_SOUTH),
+    southWest(Location.DIRECTION_SOUTH_WEST),
+    west(Location.DIRECTION_WEST),
+    northWest(Location.DIRECTION_NORTH_WEST);
 
     /**
      * Based on given vector it return direction.

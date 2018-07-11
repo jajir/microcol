@@ -6,6 +6,6 @@ import org.microcol.model.event.UnitEmbarkedEvent;
 /**
  * Control event when unit is loaded to cargo of some ship.
  */
-public class UnitEmbarkedController extends AbstractEventController<UnitEmbarkedEvent> {
+public final class UnitEmbarkedController extends AbstractEventController<UnitEmbarkedEvent> {
 
 }

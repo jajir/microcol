@@ -7,7 +7,7 @@ import com.google.common.base.Preconditions;
  * Hold info about status bar message change.
  *
  */
-public class StatusBarMessageEvent {
+public final class StatusBarMessageEvent {
 
     private final static String EMPTY_MESSAGE = "";
 

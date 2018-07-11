@@ -2,7 +2,7 @@ package org.microcol.model.store;
 
 import com.google.gson.annotations.SerializedName;
 
-public class GameModelDao {
+public final class GameModelDao {
 
     public GameModelDao() {
     }

@@ -21,7 +21,7 @@ import javafx.scene.layout.VBox;
 /**
  * Contains image of of type of good.
  */
-public class PanelGood extends VBox {
+public final class PanelGood extends VBox {
 
     private final ImageView imageView;
 

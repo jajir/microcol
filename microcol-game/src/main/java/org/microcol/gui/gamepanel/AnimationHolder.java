@@ -4,7 +4,7 @@ import java.util.function.Consumer;
 
 import com.google.common.base.MoreObjects;
 
-class AnimationHolder {
+final class AnimationHolder {
 
     private final Animation animation;
 

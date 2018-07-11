@@ -13,7 +13,7 @@ import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 
-public class BuyUnitPanel extends VBox {
+public final class BuyUnitPanel extends VBox {
 
     public BuyUnitPanel(final UnitType unitType, final ImageProvider imageProvider,
             final GameModelController gameModelController,

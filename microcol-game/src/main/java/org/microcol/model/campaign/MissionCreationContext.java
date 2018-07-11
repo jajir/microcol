@@ -10,7 +10,7 @@ import com.google.common.base.Preconditions;
  * Holds parameters needed for creation of mission. It simplify parameters
  * passing.
  */
-public class MissionCreationContext {
+public final class MissionCreationContext {
 
 	private final MissionCallBack missionCallBack;
 

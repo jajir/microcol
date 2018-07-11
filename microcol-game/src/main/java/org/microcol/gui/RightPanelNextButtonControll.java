@@ -15,7 +15,7 @@ import com.google.inject.Inject;
  * 
  * TODO UnitMovedFinished is not used correctly
  */
-public class RightPanelNextButtonControll {
+public final class RightPanelNextButtonControll {
 
 	private final RightPanelView rightPanelView;
 

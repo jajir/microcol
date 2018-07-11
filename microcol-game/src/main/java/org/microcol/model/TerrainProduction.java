@@ -5,7 +5,7 @@ import com.google.common.base.Preconditions;
 /**
  * This represents production of one terrain of some goods.
  */
-public class TerrainProduction {
+public final class TerrainProduction {
 
     private final Terrain terrain;
 

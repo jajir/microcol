@@ -17,7 +17,7 @@ import com.google.common.base.Preconditions;
  * create extra class T encapsulating all input parameters.
  * </p>
  */
-public class ChainOfCommandStrategy<T, R> implements Function<T, R> {
+public final class ChainOfCommandStrategy<T, R> implements Function<T, R> {
 
     private final List<Function<T, R>> filters;
 

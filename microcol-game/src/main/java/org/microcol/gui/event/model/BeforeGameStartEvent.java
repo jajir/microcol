@@ -5,7 +5,7 @@ import com.google.common.base.MoreObjects;
 /**
  * Event is triggered before new mission or any other form game is started.
  */
-public class BeforeGameStartEvent {
+public final class BeforeGameStartEvent {
 
     @Override
     public String toString() {

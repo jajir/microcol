@@ -9,7 +9,7 @@ import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
 
-public class GsonUnitTypeAdapter extends TypeAdapter<UnitType> {
+public final class GsonUnitTypeAdapter extends TypeAdapter<UnitType> {
 
     @Override
     public void write(final JsonWriter out, final UnitType value) throws IOException {

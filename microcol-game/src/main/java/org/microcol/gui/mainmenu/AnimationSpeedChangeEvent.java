@@ -4,7 +4,7 @@ package org.microcol.gui.mainmenu;
  * Contains new animation speed value.
  *
  */
-public class AnimationSpeedChangeEvent {
+public final class AnimationSpeedChangeEvent {
 
     private final int animationSpeed;
 

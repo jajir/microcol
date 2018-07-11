@@ -16,7 +16,7 @@ import javafx.scene.control.Slider;
 import javafx.scene.layout.VBox;
 import javafx.util.StringConverter;
 
-public class PreferencesAnimationSpeed extends AbstractMessageWindow {
+public final class PreferencesAnimationSpeed extends AbstractMessageWindow {
 
     private final GamePreferences gamePreferences;
 

@@ -9,7 +9,7 @@ import com.google.inject.Inject;
 /**
  * Bind showTurnReportEvent to turn report dialog.
  */
-public class ShowTurnReportListener {
+public final class ShowTurnReportListener {
 
     private final TurnReportDialog turnReportDialog;
 

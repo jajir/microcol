@@ -1,6 +1,6 @@
 package org.microcol.model.store;
 
-public class ConstructionSlotPo {
+public final class ConstructionSlotPo {
 
     private Integer workerId;
 

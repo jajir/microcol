@@ -15,7 +15,7 @@ import com.google.common.base.Preconditions;
 /**
  * Contains all campaigns objects. Allows to get campaign by it's name.
  */
-public class CampaignManager {
+public final class CampaignManager {
 
 	private final Map<? extends CampaignName, Campaign> campaigns;
 

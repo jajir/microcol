@@ -8,7 +8,7 @@ import com.google.inject.Inject;
 
 import javafx.scene.control.Label;
 
-public class DialogMessage extends AbstractWarningDialog {
+public final class DialogMessage extends AbstractWarningDialog {
 
     @Inject
     public DialogMessage(final ViewUtil viewUtil, final Text text) {

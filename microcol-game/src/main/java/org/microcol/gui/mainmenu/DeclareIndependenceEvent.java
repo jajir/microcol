@@ -5,7 +5,7 @@ import org.microcol.model.Player;
 
 import com.google.common.base.Preconditions;
 
-public class DeclareIndependenceEvent {
+public final class DeclareIndependenceEvent {
 
     private final Model model;
 

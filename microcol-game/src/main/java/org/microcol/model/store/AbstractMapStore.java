@@ -5,7 +5,7 @@ import java.util.function.Function;
 
 import org.microcol.model.Location;
 
-public class AbstractMapStore {
+public abstract class AbstractMapStore {
 
     protected void iterate(final String[] rows, final BiConsumer<Location, String> consumer) {
         for (int y = 1; y < rows.length; y++) {
