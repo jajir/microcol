@@ -5,7 +5,7 @@ import com.google.common.base.MoreObjects;
 /**
  * Event object for showing turn report.
  */
-public class ShowTurnReportEvent {
+public final class ShowTurnReportEvent {
 
     @Override
     public String toString() {

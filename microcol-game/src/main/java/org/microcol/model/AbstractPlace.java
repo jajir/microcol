@@ -9,6 +9,12 @@ abstract class AbstractPlace implements Place {
 
     private final Unit unit;
 
+    /**
+     * Default constructor.
+     *
+     * @param unit
+     *            required unit which is place
+     */
     AbstractPlace(final Unit unit) {
         this.unit = Preconditions.checkNotNull(unit);
     }

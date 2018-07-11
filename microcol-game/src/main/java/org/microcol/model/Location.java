@@ -8,7 +8,7 @@ import com.google.common.collect.ImmutableList;
 
 public final class Location {
 
-    //TODO it should be enumeration
+    // TODO it should be enumeration
     public static final Location DIRECTION_NORTH = new Location(0, -1);
     public static final Location DIRECTION_NORTH_EAST = new Location(1, -1);
     public static final Location DIRECTION_EAST = new Location(1, 0);
@@ -48,10 +48,18 @@ public final class Location {
         return y;
     }
 
+    /**
+     * Return distance between two locations. It use Euclidean distance.
+     *
+     * @param location
+     *            required location
+     * @return distance between two locations
+     */
     public int getDistance(final Location location) {
         Preconditions.checkNotNull(location);
-
-        return Math.abs(x - location.x) + Math.abs(y - location.y);
+        final int diffX = x - location.x;
+        final int diffY = y - location.y;
+        return (int) Math.round(Math.sqrt(diffX * diffX + diffY * diffY));
     }
 
     public Location add(final Location location) {

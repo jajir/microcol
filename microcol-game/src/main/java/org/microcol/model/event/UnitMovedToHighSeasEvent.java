@@ -16,12 +16,25 @@ public final class UnitMovedToHighSeasEvent extends AbstractModelEvent {
      */
     private final Unit unit;
 
+    /**
+     * Default constructor.
+     *
+     * @param model
+     *            required model
+     * @param unit
+     *            required moving unit
+     */
     public UnitMovedToHighSeasEvent(final Model model, final Unit unit) {
         super(model);
 
         this.unit = Preconditions.checkNotNull(unit);
     }
 
+    /**
+     * Return moving unit.
+     *
+     * @return moving unit
+     */
     public Unit getUnit() {
         return unit;
     }

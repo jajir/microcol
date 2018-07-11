@@ -91,6 +91,9 @@ public final class Player {
         out.setDeclaredIndependence(declaredIndependence);
         out.getExtraData().putAll(extraData);
         out.setVisible(new VisibilityPo());
+        if (whosKingThisPlayerIs != null) {
+            out.setWhosKingThisPlayerIs(whosKingThisPlayerIs.getName());
+        }
         visibility.store(out.getVisible(), model.getMap().getMaxX(), model.getMap().getMaxY());
         return out;
     }
@@ -202,8 +205,8 @@ public final class Player {
      * 
      * @param target
      *            required target location
-     * @return return <code>true</code> when it's possible to sail at given
-     *         location otherwise return <code>false</code>.
+     * @return return <code>true</code> when it's possible to sail at given location
+     *         otherwise return <code>false</code>.
      */
     public boolean isPossibleToSailAt(final Location target) {
         final TerrainType t = model.getMap().getTerrainTypeAt(target);
@@ -219,9 +222,8 @@ public final class Player {
      * 
      * @param units
      *            required list of units
-     * @return return <code>false</code> when list contains at least one unit
-     *         which not belongs to this player otherwise return
-     *         <code>true</code>.
+     * @return return <code>false</code> when list contains at least one unit which
+     *         not belongs to this player otherwise return <code>true</code>.
      */
     public boolean isItPlayersUnits(final List<Unit> units) {
         return !units.stream().filter(unit -> !unit.getOwner().equals(this)).findAny().isPresent();

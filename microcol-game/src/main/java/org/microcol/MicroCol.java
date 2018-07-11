@@ -30,7 +30,7 @@ import javafx.stage.Stage;
  */
 public final class MicroCol extends Application {
 
-    private final static Logger logger = LoggerFactory.getLogger(MicroCol.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(MicroCol.class);
 
     /**
      * Main static method.
@@ -46,15 +46,36 @@ public final class MicroCol extends Application {
         }
     }
 
+    /**
+     * Inform if it's clean game start and all settings should be cleaned.
+     *
+     * @return Return <code>true</code> if it's clean start otherwise return false.
+     */
     private static boolean isClean() {
         return Boolean.getBoolean(GamePreferences.SYSTEM_PROPERTY_CLEAN_SETTINGS);
     }
 
+    /**
+     * Functional interface that allows to execute code and just throws optional
+     * exception.
+     */
     @FunctionalInterface
     public interface ExceptionWrapper {
+        /**
+         * Allows to execute some functionality throwing exception.
+         *
+         * @throws BackingStoreException
+         *             backing store exception
+         */
         void consume() throws BackingStoreException;
     }
 
+    /**
+     * Allows to hide exception in called code and don't fail application.
+     *
+     * @param consumer
+     *            required exception wrapper
+     */
     private static void exec(final ExceptionWrapper consumer) {
         try {
             consumer.consume();
@@ -63,8 +84,11 @@ public final class MicroCol extends Application {
         }
     }
 
+    /**
+     * Clean all game setting and preferences.
+     */
     private static void cleanAll() {
-        logger.info("Cleaning all game setting");
+        LOGGER.info("Cleaning all game setting");
         exec(() -> {
             final Preferences gamePref = Preferences.userNodeForPackage(GamePreferences.class);
             gamePref.removeNode();
@@ -78,9 +102,9 @@ public final class MicroCol extends Application {
     }
 
     /**
-     * Method try to set application icon. It use apple native classes. Because
-     * it should be compiled at windows platform apple specific classes are
-     * access by java reflection. For this reason is also exception sunk.
+     * Method try to set application icon. It use apple native classes. Because it
+     * should be compiled at windows platform apple specific classes are access by
+     * java reflection. For this reason is also exception sunk.
      */
     private static void setAppleDockIcon() {
         try {
@@ -105,8 +129,8 @@ public final class MicroCol extends Application {
     /**
      * Provide information if it's apple operation system.
      *
-     * @return return <code>true</code> when it's apple operation system
-     *         otherwise return <code>false</code>
+     * @return return <code>true</code> when it's apple operation system otherwise
+     *         return <code>false</code>
      */
     private static boolean isOSX() {
         final String osName = System.getProperty("os.name");
@@ -130,8 +154,8 @@ public final class MicroCol extends Application {
     }
 
     /**
-     * Initialize guice, connect guice to primary stage and show first
-     * application screen.
+     * Initialize guice, connect guice to primary stage and show first application
+     * screen.
      *
      * @param primaryStage
      *            required primary stage

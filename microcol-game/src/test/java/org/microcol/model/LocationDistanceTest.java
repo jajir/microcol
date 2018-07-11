@@ -23,19 +23,19 @@ public class LocationDistanceTest {
 			{Location.of(3, 2), Location.of( 3,  2),  0},
 			{Location.of(3, 2), Location.of(-3,  2),  6},
 			{Location.of(3, 2), Location.of( 3, -2),  4},
-			{Location.of(3, 2), Location.of(-3, -2), 10},
+			{Location.of(3, 2), Location.of(-3, -2), 7},
 			// [-3, 2]
 			{Location.of(-3, 2), Location.of( 3,  2),  6},
 			{Location.of(-3, 2), Location.of(-3,  2),  0},
-			{Location.of(-3, 2), Location.of( 3, -2), 10},
+			{Location.of(-3, 2), Location.of( 3, -2), 7},
 			{Location.of(-3, 2), Location.of(-3, -2),  4},
 			// [3, -2]
 			{Location.of(3, -2), Location.of( 3,  2),  4},
-			{Location.of(3, -2), Location.of(-3,  2), 10},
+			{Location.of(3, -2), Location.of(-3,  2), 7},
 			{Location.of(3, -2), Location.of( 3, -2),  0},
 			{Location.of(3, -2), Location.of(-3, -2),  6},
 			// [-3, -2]
-			{Location.of(-3, -2), Location.of( 3,  2), 10},
+			{Location.of(-3, -2), Location.of( 3,  2), 7},
 			{Location.of(-3, -2), Location.of(-3,  2),  4},
 			{Location.of(-3, -2), Location.of( 3, -2),  6},
 			{Location.of(-3, -2), Location.of(-3, -2),  0},

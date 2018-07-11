@@ -74,9 +74,9 @@ public class KingPlayer extends AbstractRobotPlayer {
 
     private void performSeekAndDestroy(final Unit unit, final Continents continents) {
         final Optional<Location> oLoc = continents.getContinentWhereIsUnitPlaced(unit)
-                .getClosesEnemyCityToAttack(unit);
+                .getClosesEnemyCityToAttack(unit.getLocation());
         if (oLoc.isPresent()) {
-            Optional<List<Location>> oPath = unit.getPath(oLoc.get(), true);
+            final Optional<List<Location>> oPath = unit.getPath(oLoc.get(), true);
             if (oPath.isPresent() && !oPath.get().isEmpty()) {
                 getModel().moveUnitAsFarAsPossible(unit, Path.of(oPath.get()));
             }
@@ -139,8 +139,7 @@ public class KingPlayer extends AbstractRobotPlayer {
     }
 
     /**
-     * Royal Expedition Forces was send to colonies after declaring
-     * independence.
+     * Royal Expedition Forces was send to colonies after declaring independence.
      * 
      * @return the refWasSend
      */
@@ -149,8 +148,7 @@ public class KingPlayer extends AbstractRobotPlayer {
     }
 
     /**
-     * Royal Expedition Forces was send to colonies after declaring
-     * independence.
+     * Royal Expedition Forces was send to colonies after declaring independence.
      * 
      * @param refWasSend
      *            the refWasSend to set

@@ -42,10 +42,9 @@ public class Continent {
         return contains(unit.getLocation());
     }
 
-    public Optional<Location> getClosesEnemyCityToAttack(final Unit unit) {
-        final Location unitLocation = unit.getLocation();
+    public Optional<Location> getClosesEnemyCityToAttack(final Location unitLocation) {
         return locations.stream().filter(loc -> model.getColoniesAt(loc, enemyPlayer).isPresent())
-                .sorted(Comparator.comparingInt(loc -> -unitLocation.getDistance(loc))).findFirst();
+                .sorted(Comparator.comparingInt(loc -> unitLocation.getDistance(loc))).findFirst();
     }
 
     public List<Location> getLocations() {
@@ -72,7 +71,7 @@ public class Continent {
     /**
      * World map usually have thin continents on the north and south of the map.
      * This two continents should represents Antarctic and Arctic.
-     * 
+     *
      * @return Return <code>true</code> when this continent is par of Arctic or
      *         Antarctic otherwise return <code>false</code>.
      */

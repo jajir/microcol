@@ -52,12 +52,12 @@ public class GameModelController {
      * @param newModel
      *            required game model
      */
-    void setAndStartModel(final ModelMission newModel, final MissionCallBack missionCallBack) {
+    void setAndStartModel(final ModelMission newModel) {
         tryToStopGame();
         modelMission = Preconditions.checkNotNull(newModel);
         artifitialPlayersManager.initRobotPlayers(getModel());
         modelMission.addListener(new ModelListenerImpl(modelEventManager, this));
-        modelMission.startGame(missionCallBack);
+        modelMission.startGame();
         if (getModel().getFocusedField() != null) {
             selectedTileManager.setSelectedTile(getModel().getFocusedField());
         }

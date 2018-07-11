@@ -8,10 +8,16 @@ import javafx.stage.Stage;
 /**
  * Module allows to inject additional properties to guice context.
  */
-public class ExternalModule extends AbstractModule {
+public final class ExternalModule extends AbstractModule {
 
     private final Stage primaryStage;
 
+    /**
+     * Default constructor called from guice.
+     *
+     * @param primaryStage
+     *            required primary stage
+     */
     ExternalModule(final Stage primaryStage) {
         this.primaryStage = Preconditions.checkNotNull(primaryStage, "Primary stage is null.");
     }

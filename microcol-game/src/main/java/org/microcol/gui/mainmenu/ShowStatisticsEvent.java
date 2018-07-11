@@ -5,7 +5,7 @@ import com.google.common.base.MoreObjects;
 /**
  * Event object for showing game statistics.
  */
-public class ShowStatisticsEvent {
+public final class ShowStatisticsEvent {
 
     @Override
     public String toString() {

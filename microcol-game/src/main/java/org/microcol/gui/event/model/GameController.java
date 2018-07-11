@@ -75,7 +75,7 @@ public class GameController {
 
 	private void startMission(final ModelMission modelMission) {
 		beforeGameStartController.fireEvent(new BeforeGameStartEvent());
-		gameModelController.setAndStartModel(modelMission, missionCallBack);
+		gameModelController.setAndStartModel(modelMission);
 	}
 
 	public boolean isDefaultCampaignFinished() {
