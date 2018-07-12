@@ -1,5 +1,7 @@
 package org.microcol.model;
 
+import org.microcol.model.event.ActionEndedEvent;
+import org.microcol.model.event.ActionStartedEvent;
 import org.microcol.model.event.BeforeDeclaringIndependenceEvent;
 import org.microcol.model.event.BeforeEndTurnEvent;
 import org.microcol.model.event.ColonyWasCapturedEvent;
@@ -38,6 +40,24 @@ public interface ModelListener {
     void onUnitMovedToHighSeas(UnitMovedToHighSeasEvent event);
 
     void onUnitMoveStarted(UnitMoveStartedEvent event);
+
+    /**
+     * It's called when some action started. Action is some action that should be
+     * treated as one piece. For example move should be treated as one action even
+     * when it's composed from single one step moves.
+     *
+     * @param event
+     *            required event
+     */
+    void onActionStarted(ActionStartedEvent event);
+
+    /**
+     * It's called when some action ended.
+     *
+     * @param event
+     *            required event
+     */
+    void onActionEnded(ActionEndedEvent event);
 
     /**
      * It's called move is finished. No other move step event could come.

@@ -1,5 +1,7 @@
 package org.microcol.model;
 
+import org.microcol.model.event.ActionEndedEvent;
+import org.microcol.model.event.ActionStartedEvent;
 import org.microcol.model.event.BeforeDeclaringIndependenceEvent;
 import org.microcol.model.event.BeforeEndTurnEvent;
 import org.microcol.model.event.ColonyWasCapturedEvent;
@@ -49,6 +51,16 @@ public class ModelListenerAdapter implements ModelListener {
 
     @Override
     public void onUnitMovedToHighSeas(final UnitMovedToHighSeasEvent event) {
+        // Do nothing.
+    }
+
+    @Override
+    public void onActionStarted(final ActionStartedEvent event) {
+        // Do nothing.
+    }
+
+    @Override
+    public void onActionEnded(final ActionEndedEvent event) {
         // Do nothing.
     }
 

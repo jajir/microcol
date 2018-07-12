@@ -6,6 +6,8 @@ import java.util.concurrent.Executors;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
+import org.microcol.model.event.ActionEndedEvent;
+import org.microcol.model.event.ActionStartedEvent;
 import org.microcol.model.event.BeforeDeclaringIndependenceEvent;
 import org.microcol.model.event.BeforeEndTurnEvent;
 import org.microcol.model.event.ColonyWasCapturedEvent;
@@ -109,6 +111,22 @@ final class ListenerManager {
         logger.info("Unit moved step finished: {}.", event);
 
         executeInSameThread(listener -> listener.onUnitMovedStepFinished(event));
+    }
+
+    void fireActionStarted(final Model model) {
+        final ActionStartedEvent event = new ActionStartedEvent(model);
+
+        logger.info("Action started: {}.", event);
+
+        executeInSameThread(listener -> listener.onActionStarted(event));
+    }
+
+    void fireActionEnded(final Model model) {
+        final ActionEndedEvent event = new ActionEndedEvent(model);
+
+        logger.info("Action ended: {}.", event);
+
+        executeInSameThread(listener -> listener.onActionEnded(event));
     }
 
     void fireUnitMovedFinished(final Model model, final Unit unit, final Path path) {

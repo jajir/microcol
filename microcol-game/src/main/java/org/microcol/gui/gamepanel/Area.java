@@ -43,14 +43,14 @@ public final class Area {
         this.visibleArea = Preconditions.checkNotNull(visibleArea);
 
         /**
-         * Top left corner of visible area in on-screen coordinates. It define
-         * visible area.
+         * Top left corner of visible area in on-screen coordinates. It define visible
+         * area.
          */
         final Point pointTopLeft = visibleArea.getTopLeft();
 
         /**
-         * Bottom right corner of visible area in on-screen coordinates. It
-         * define visible area.
+         * Bottom right corner of visible area in on-screen coordinates. It define
+         * visible area.
          */
         final Point pointBottomRight = visibleArea.getBottomRight();
 
@@ -71,9 +71,19 @@ public final class Area {
         return bottomRight;
     }
 
-    public boolean isVisible(final Location location) {
-        final Point point = Point.of(location);
-        return isVisibleCanvasPoint(point);
+    /**
+     * Verify it unit or it's part is visible and should be drawn. It count with
+     * unit size [1,1].
+     *
+     * @param location
+     *            required location of unit
+     * @return return <code>true</code> when unit is visible otherwise return
+     *         <code>false</code>
+     */
+    public boolean isUnitVisible(final Location location) {
+        final Point point1 = Point.of(location);
+        final Point point2 = Point.of(location.add(Location.of(-1, -1)));
+        return isVisibleCanvasPoint(point1) || isVisibleCanvasPoint(point2);
     }
 
     /**
@@ -103,8 +113,8 @@ public final class Area {
      * 
      * @param point
      *            required point in canvas coordinates
-     * @return return <code>true</code> when point is inside area otherwise
-     *         return <code>false</code>
+     * @return return <code>true</code> when point is inside area otherwise return
+     *         <code>false</code>
      */
     public boolean isVisibleCanvasPoint(final Point point) {
         final Point p1 = visibleArea.getTopLeft();
@@ -118,8 +128,8 @@ public final class Area {
      * 
      * @param point
      *            required point in on screen coordinates
-     * @return return <code>true</code> when point is inside area otherwise
-     *         return <code>false</code>
+     * @return return <code>true</code> when point is inside area otherwise return
+     *         <code>false</code>
      */
     public boolean isVisibleScreenPoint(final Point point) {
         return 0 <= point.getX() && visibleArea.getCanvasWidth() >= point.getX()

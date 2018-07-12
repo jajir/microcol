@@ -37,6 +37,10 @@ public final class ModelEventManager {
 
     private final UnitMovedToHighSeasController unitMovedToHighSeasController;
 
+    private final ActionStartedController actionStartedController;
+
+    private final ActionEndedController actionEndedController;
+
     private final IndependenceWasDeclaredColntroller independenceWasDeclaredColntroller;
 
     @Inject
@@ -54,7 +58,9 @@ public final class ModelEventManager {
             final UnitEmbarkedController unitEmbarkedController,
             final UnitMoveFinishedController unitMoveFinishedController,
             final UnitMovedToHighSeasController unitMovedToHighSeasController,
-            final IndependenceWasDeclaredColntroller independenceWasDeclaredColntroller) {
+            final IndependenceWasDeclaredColntroller independenceWasDeclaredColntroller,
+            final ActionStartedController actionStartedController,
+            final ActionEndedController actionEndedController) {
         this.roundStartedController = Preconditions.checkNotNull(roundStartedController);
         this.unitMovedStepStartedController = Preconditions
                 .checkNotNull(unitMovedStepStartedController);
@@ -74,6 +80,8 @@ public final class ModelEventManager {
                 .checkNotNull(unitMovedToHighSeasController);
         this.independenceWasDeclaredColntroller = Preconditions
                 .checkNotNull(independenceWasDeclaredColntroller);
+        this.actionStartedController = Preconditions.checkNotNull(actionStartedController);
+        this.actionEndedController = Preconditions.checkNotNull(actionEndedController);
     }
 
     public RoundStartedController getRoundStartedController() {
@@ -149,6 +157,14 @@ public final class ModelEventManager {
 
     public ColonyWasFoundController getColonyWasFoundController() {
         return colonyWasFoundController;
+    }
+
+    public ActionStartedController getActionStartedController() {
+        return actionStartedController;
+    }
+
+    public ActionEndedController getActionEndedController() {
+        return actionEndedController;
     }
 
 }

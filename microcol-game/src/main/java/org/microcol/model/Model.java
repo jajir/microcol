@@ -449,12 +449,14 @@ public final class Model {
      *             along whole given path.
      */
     public void moveUnit(final Unit unit, final Path path) {
+        listenerManager.fireActionStarted(this);
         if (listenerManager.fireUnitMoveStarted(this, unit, path)) {
             path.getLocations().forEach(loc -> {
                 unit.moveOneStep(loc);
             });
             listenerManager.fireUnitMovedFinished(this, unit, path);
         }
+        listenerManager.fireActionEnded(this);
     }
 
     /**

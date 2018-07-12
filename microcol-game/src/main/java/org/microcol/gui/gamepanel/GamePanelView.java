@@ -251,7 +251,7 @@ public final class GamePanelView {
         final Player player = gameModelController.getCurrentPlayer();
 
         final Map<Location, List<Unit>> ships2 = ships.entrySet().stream()
-                .filter(entry -> area.isVisible(entry.getKey()))
+                .filter(entry -> area.isUnitVisible(entry.getKey()))
                 .filter(entry -> player.isVisible(entry.getKey()))
                 .collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue()));
 
@@ -267,7 +267,7 @@ public final class GamePanelView {
     private void paintColonies(final GraphicsContext graphics, final Model model, final Area area) {
         final Player player = gameModelController.getCurrentPlayer();
         final Map<Location, Colony> colonies = model.getColoniesAt().entrySet().stream()
-                .filter(entry -> area.isVisible(entry.getKey()))
+                .filter(entry -> area.isUnitVisible(entry.getKey()))
                 .filter(entry -> player.isVisible(entry.getKey()))
                 .collect(Collectors.toMap(entry -> entry.getKey(), entry -> entry.getValue()));
 

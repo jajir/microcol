@@ -4,10 +4,19 @@ import org.microcol.model.TerrainType;
 
 import com.google.inject.Inject;
 
+/**
+ * Register images for ice coast.
+ */
 public final class IceCoastMapGenerator extends AbstractCoastMapGenerator {
 
+    /**
+     * Default constructor.
+     *
+     * @param imageProvider
+     *            required image provider
+     */
     @Inject
-    IceCoastMapGenerator(ImageProvider imageProvider) {
+    IceCoastMapGenerator(final ImageProvider imageProvider) {
         super(imageProvider);
     }
 

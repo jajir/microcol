@@ -32,6 +32,8 @@ import org.microcol.gui.event.ShowGridListenerPreferences;
 import org.microcol.gui.event.StartMoveController;
 import org.microcol.gui.event.StatusBarMessageController;
 import org.microcol.gui.event.VolumeChangedListenerPreferences;
+import org.microcol.gui.event.model.ActionEndedController;
+import org.microcol.gui.event.model.ActionStartedController;
 import org.microcol.gui.event.model.ArtifitialPlayersManager;
 import org.microcol.gui.event.model.BeforeGameStartController;
 import org.microcol.gui.event.model.ColonyWasCapturedController;
@@ -193,6 +195,8 @@ public final class MicroColModule extends AbstractModule {
         bind(UnitMovedToFieldController.class).in(Singleton.class);
         bind(ExitGameController.class).in(Singleton.class);
         bind(BeforeGameStartController.class).in(Singleton.class);
+        bind(ActionStartedController.class).in(Singleton.class);
+        bind(ActionEndedController.class).in(Singleton.class);
         bind(SelectedUnitWasChangedController.class).in(Singleton.class);
         bind(IndependenceWasDeclaredColntroller.class).in(Singleton.class);
         bind(ShowDefaultCampaignMenuControler.class).in(Singleton.class);

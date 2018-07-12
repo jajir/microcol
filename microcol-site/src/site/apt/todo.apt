@@ -127,15 +127,18 @@ Planned releases
   
   * \u2713 It's nearly impossible to move with unit in town. When town is founded and one unit is lost outside than it's not possible to move to move with such unit.
   
+  * \u2713 'Next Turn' button is blinking during unit move. Button 'Next turn' blinking during enemy unit turn.
+  
+  * \u2713 When unit is on the right edge of visible area and windows is resized than ship disappears when edge of window touch it.
+  
   * \u2717 When game is loaded and focus was at some place e.g. town than screen is not centered at this location.
- 
-  * \u2717 Main menu doesn't work when drag pressed mouse instead of simple move.
   
-  * \u2717 'Next Turn' button is blinking during unit move.
-  
-  * \u2717 When unit is on the right edge of visible area and windows is resized than ship disappears when edge of window touch it.
+  * \u2717 Enemy unit is animating event when they are out of visible area.
   
  * <<0.7.0>> - Prepare for release
+ 
+  * \u2717 Main menu doesn't work when drag pressed mouse instead of simple move.
+ It can't be easily solved. There is no such feature in JavaFx.
  
   * \u2717 When focus is transfered by click than don't center at focused unit.
  

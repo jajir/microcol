@@ -4,6 +4,8 @@ import java.util.Optional;
 
 import org.microcol.model.ModelListener;
 import org.microcol.model.Player;
+import org.microcol.model.event.ActionEndedEvent;
+import org.microcol.model.event.ActionStartedEvent;
 import org.microcol.model.event.BeforeDeclaringIndependenceEvent;
 import org.microcol.model.event.BeforeEndTurnEvent;
 import org.microcol.model.event.ColonyWasCapturedEvent;
@@ -164,6 +166,16 @@ public final class ModelListenerImpl implements ModelListener {
     @Override
     public void onBeforeDeclaringIndependence(final BeforeDeclaringIndependenceEvent event) {
         // Front-end doesn't care about this event.
+    }
+
+    @Override
+    public void onActionStarted(ActionStartedEvent event) {
+        modelEventManager.getActionStartedController().fireEvent(event);
+    }
+
+    @Override
+    public void onActionEnded(ActionEndedEvent event) {
+        modelEventManager.getActionEndedController().fireEvent(event);
     }
 
 }
