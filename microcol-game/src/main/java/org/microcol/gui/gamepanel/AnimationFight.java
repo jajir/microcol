@@ -4,7 +4,7 @@ import java.util.Map;
 
 import org.microcol.gui.Point;
 import org.microcol.gui.image.ImageProvider;
-import org.microcol.model.Unit;
+import org.microcol.model.Location;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
@@ -25,18 +25,30 @@ public final class AnimationFight implements Animation {
 
     private int step;
 
-    private final Unit attacker;
+    private final Location attackerLocation;
 
-    private final Unit defender;
+    private final Location defenderLocation;
 
     private final ImageProvider imageProvider;
 
     private final int animationSpeed;
 
-    AnimationFight(final Unit attacker, final Unit defender, final ImageProvider imageProvider,
-            final int animationSpeed) {
-        this.attacker = Preconditions.checkNotNull(attacker);
-        this.defender = Preconditions.checkNotNull(defender);
+    /**
+     * Default constructor.
+     *
+     * @param attackerLocation
+     *            required location of attacking unit
+     * @param defenderLocation
+     *            required location of defending unit
+     * @param imageProvider
+     *            required image provider
+     * @param animationSpeed
+     *            require animation speed from preferences
+     */
+    AnimationFight(final Location attackerLocation, final Location defenderLocation,
+            final ImageProvider imageProvider, final int animationSpeed) {
+        this.attackerLocation = Preconditions.checkNotNull(attackerLocation);
+        this.defenderLocation = Preconditions.checkNotNull(defenderLocation);
         this.imageProvider = Preconditions.checkNotNull(imageProvider);
         this.animationSpeed = animationSpeed;
     }
@@ -53,8 +65,8 @@ public final class AnimationFight implements Animation {
 
     @Override
     public void paint(final GraphicsContext graphics, final Area area) {
-        final Point aPoint = area.convertToPoint(attacker.getLocation());
-        final Point dPoint = area.convertToPoint(defender.getLocation());
+        final Point aPoint = area.convertToPoint(attackerLocation);
+        final Point dPoint = area.convertToPoint(defenderLocation);
         final Point middle = aPoint.add(dPoint.substract(aPoint).divide(2));
         // TODO JJ paint animation just when at least one point is on screen.
         graphics.drawImage(imageProvider.getImage(ImageProvider.IMG_CROSSED_SWORDS), middle.getX(),
@@ -63,8 +75,8 @@ public final class AnimationFight implements Animation {
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(getClass()).add("attacker", attacker)
-                .add("defender", defender).toString();
+        return MoreObjects.toStringHelper(getClass()).add("attackerLocation", attackerLocation)
+                .add("defenderLocation", defenderLocation).toString();
     }
 
 }

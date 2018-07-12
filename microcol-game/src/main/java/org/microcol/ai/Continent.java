@@ -15,14 +15,26 @@ import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 
+/**
+ * Represents continent on map. Continent is connected list of locations.
+ */
 public final class Continent {
 
     private final List<Location> locations = new ArrayList<>();
 
     private final Model model;
 
+    //TODO it is really necessary to have here enemyPlayer?
     private final Player enemyPlayer;
 
+    /**
+     * Default constructor.
+     *
+     * @param model
+     *            required model
+     * @param enemyPlayer
+     *            required enemyPlayer
+     */
     Continent(final Model model, final Player enemyPlayer) {
         this.model = Preconditions.checkNotNull(model);
         this.enemyPlayer = Preconditions.checkNotNull(enemyPlayer);

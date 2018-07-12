@@ -14,7 +14,7 @@ public final class SimpleUnitBehavior {
 
     public void tryToFight(final Unit unit) {
         if (unit.getType().canAttack() && unit.isAtPlaceLocation()
-                && unit.getAvailableMoves() > 0) {
+                && unit.getActionPoints() > 0) {
             /*
              * Following filter stops executing when first location return from tryToAttack
              * true.

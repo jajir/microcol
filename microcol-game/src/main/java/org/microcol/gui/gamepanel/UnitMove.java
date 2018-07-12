@@ -31,7 +31,7 @@ public final class UnitMove {
         if (path == null) {
             return false;
         } else {
-            final int actionPoint = unit.getAvailableMoves();
+            final int actionPoint = unit.getActionPoints();
             return path.size() <= actionPoint;
         }
     }

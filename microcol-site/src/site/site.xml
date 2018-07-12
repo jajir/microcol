@@ -28,6 +28,7 @@
 			<item name="Animation" href="./animation.html" />
 			<item name="Coding" href="./coding.html" />
 			<item name="Rules" href="./rules.html" />
+			<item name="Tests" href="./tests.html" />
 		</menu>
 		<footer>
 			Version: ${project.version}.

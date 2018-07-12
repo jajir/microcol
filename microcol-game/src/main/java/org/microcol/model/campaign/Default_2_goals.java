@@ -8,17 +8,17 @@ public final class Default_2_goals extends MissionGoals {
 
     @Override
     void initialize(final Map<String, String> data) {
-	Preconditions.checkNotNull(data);
-	getGoals().add(new GoalProvider.GoalDeclareIndependence(data));
-	getGoals().add(new GoalProvider.GoalConquerRaf(data));
+        Preconditions.checkNotNull(data);
+        getGoals().add(new GoalProvider.GoalDeclareIndependence(data));
+        getGoals().add(new GoalProvider.GoalConquerRaf(data));
     }
 
     GoalProvider.GoalDeclareIndependence getGoalDeclareIndependence() {
-	return getByClass(GoalProvider.GoalDeclareIndependence.class);
+        return getByClass(GoalProvider.GoalDeclareIndependence.class);
     }
 
     GoalProvider.GoalConquerRaf getGoalConquerRaf() {
-	return getByClass(GoalProvider.GoalConquerRaf.class);
+        return getByClass(GoalProvider.GoalConquerRaf.class);
     }
 
 }

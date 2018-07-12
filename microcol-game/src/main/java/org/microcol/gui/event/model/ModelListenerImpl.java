@@ -144,7 +144,9 @@ public final class ModelListenerImpl implements ModelListener {
 
     @Override
     public void onColonyWasFounded(final ColonyWasFoundEvent event) {
-        // Front-end doesn't care about this event.
+        if (event.getColony().getOwner().isHuman()) {
+            modelEventManager.getColonyWasFoundController().fireEvent(event);
+        }
     }
 
     @Override

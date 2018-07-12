@@ -85,7 +85,7 @@ public final class UnitsPanel {
         if (isUnitOwnedBy(unit, humanPlayer)) {
             sb.append(text.get("unitsPanel.availableMoves"));
             sb.append(" ");
-            sb.append(unit.getAvailableMoves());
+            sb.append(unit.getActionPoints());
             sb.append("\n");
         }
         sb.append(text.get("unitsPanel.owner"));

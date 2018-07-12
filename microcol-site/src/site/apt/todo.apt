@@ -123,7 +123,9 @@ Planned releases
  When unit arrive to some place than keep direction where is facing.
  Direction where is unit turn is persisted.
   
-  * \u2717 It's nearly impossible to move with unit in town. When town is founded and one unit is lost outside than it's not possible to move to move with such unit.
+  * \u2713 Embark and disembark in same turn leads to exception during disembark, because unit doesn't have enough action points.
+  
+  * \u2713 It's nearly impossible to move with unit in town. When town is founded and one unit is lost outside than it's not possible to move to move with such unit.
   
   * \u2717 When game is loaded and focus was at some place e.g. town than screen is not centered at this location.
  
@@ -134,6 +136,14 @@ Planned releases
   * \u2717 When unit is on the right edge of visible area and windows is resized than ship disappears when edge of window touch it.
   
  * <<0.7.0>> - Prepare for release
+ 
+  * \u2717 When focus is transfered by click than don't center at focused unit.
+ 
+  * \u2717 Don't animate and don't wait for movements outside of screen. When kings unit coming to colonies.
+ 
+  * \u2717 When focused unit on in city and instead of moving it city is open and unit moved to colony field than next unit on focused city is not selected and consequently can't be moved.
+ 
+  * \u2717 
   
   * \u2717 
   

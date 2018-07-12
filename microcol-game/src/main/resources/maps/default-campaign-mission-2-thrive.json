@@ -848,6 +848,7 @@
       },
       {
         "name": "Dutch\u0027s King",
+        "whosKingThisPlayerIs": "Dutch",
         "computer": true,
         "gold": 1108,
         "declaredIndependence": false,

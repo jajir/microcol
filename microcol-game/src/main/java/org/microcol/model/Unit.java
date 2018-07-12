@@ -45,20 +45,20 @@ public class Unit implements CargoHolder {
     private final UnitType type;
     private Player owner;
     private Place place;
-    private int availableMoves;
+    private int actionPoints;
     private final Cargo cargo;
     private UnitAction unitAction;
 
     public Unit(final Function<Unit, Cargo> cargoBuilder, final Model model, final Integer id,
             final Function<Unit, Place> placeBuilder, final UnitType unitType, final Player owner,
-            final int availableMoves, final UnitAction unitAction) {
+            final int actionPoints, final UnitAction unitAction) {
         Preconditions.checkNotNull(cargoBuilder, "CargoBuilder is null");
         Preconditions.checkNotNull(placeBuilder, "PlaceBuilder is null");
         this.type = Preconditions.checkNotNull(unitType, "UnitType is null");
         this.owner = Preconditions.checkNotNull(owner);
         this.id = Preconditions.checkNotNull(id, "Id is null");
         this.model = Preconditions.checkNotNull(model, "Model is null");
-        this.availableMoves = availableMoves;
+        this.actionPoints = actionPoints;
         this.cargo = Preconditions.checkNotNull(cargoBuilder.apply(this),
                 "Cargo builder didn't created cargo");
         this.place = Preconditions.checkNotNull(placeBuilder.apply(this),
@@ -79,6 +79,11 @@ public class Unit implements CargoHolder {
         return type;
     }
 
+    /**
+     * Get unit owner.
+     *
+     * @return owner player object
+     */
     public Player getOwner() {
         return owner;
     }
@@ -93,10 +98,13 @@ public class Unit implements CargoHolder {
         return getPlaceLocation().getLocation();
     }
 
-    public int getAvailableMoves() {
-        verifyThatUnitIsAtMap();
-
-        return availableMoves;
+    /**
+     * Get number of available actions points.
+     *
+     * @return available action points.
+     */
+    public int getActionPoints() {
+        return actionPoints;
     }
 
     private void verifyThatUnitIsAtMap() {
@@ -113,7 +121,7 @@ public class Unit implements CargoHolder {
      * It's called before turn starts.
      */
     void startTurn() {
-        availableMoves = type.getSpeed();
+        actionPoints = type.getSpeed();
         if (isAtHighSea()) {
             PlaceHighSea placeHighSea = (PlaceHighSea) place;
             placeHighSea.decreaseRemainingTurns();
@@ -189,7 +197,7 @@ public class Unit implements CargoHolder {
         model.checkGameRunning();
         model.checkCurrentPlayer(owner);
 
-        if (availableMoves == 0) {
+        if (actionPoints == 0) {
             return;
         }
 
@@ -197,7 +205,7 @@ public class Unit implements CargoHolder {
         openSet.add(getLocation());
         Set<Location> closedSet = new HashSet<>();
         Set<Unit> enemies = new HashSet<>();
-        for (int i = 0; i < availableMoves + 1; i++) {
+        for (int i = 0; i < actionPoints + 1; i++) {
             Set<Location> currentSet = new HashSet<>();
             for (Location location : openSet) {
                 for (Location neighbor : location.getNeighbors()) {
@@ -296,7 +304,7 @@ public class Unit implements CargoHolder {
             return false;
         } else {
             final Unit holdedUnit = slot.getUnit().get();
-            return (!inCurrentTurn || holdedUnit.availableMoves > 0)
+            return (!inCurrentTurn || holdedUnit.actionPoints > 0)
                     && holdedUnit.canUnitDisembarkAt(moveToLocation);
         }
     }
@@ -307,7 +315,7 @@ public class Unit implements CargoHolder {
 
     public boolean isPossibleToEmbarkAt(final Location targetLocation, boolean inCurrentTurn) {
         if (isStorable() && getLocation().isNeighbor(targetLocation)
-                && (!inCurrentTurn || availableMoves > 0)
+                && (!inCurrentTurn || actionPoints > 0)
                 && !model.getColonyAt(targetLocation).isPresent()) {
             final List<Unit> units = model.getUnitsAt(targetLocation);
             return isSameOwner(units) && units.stream()
@@ -410,10 +418,10 @@ public class Unit implements CargoHolder {
                 moveTo);
         Preconditions.checkArgument(isPossibleToMoveAt(moveTo),
                 "It's not possible to move at (%s).", moveTo);
-        Preconditions.checkState(availableMoves > 0, "There is not enough avilable moves (%s)",
+        Preconditions.checkState(actionPoints > 0, "There is not enough avilable moves (%s)",
                 this);
 
-        availableMoves--;
+        actionPoints--;
         final TerrainType targetTerrain = model.getMap().getTerrainTypeAt(moveTo);
         if (targetTerrain == TerrainType.HIGH_SEA) {
             placeToHighSeas(true);
@@ -478,7 +486,14 @@ public class Unit implements CargoHolder {
 
     /**
      * This unit attack unit at given location.
-     * 
+     * <p>
+     * Attack is composed from two steps:
+     * </p>
+     * <ul>
+     * <li>Move at attacked place. Show moving one step animation.</li>
+     * <li>Perform attack.</li>
+     * </ul>
+     *
      * @param attackAt
      *            Required attacked location.
      */
@@ -486,22 +501,24 @@ public class Unit implements CargoHolder {
         canAttackValidation(attackAt);
         Preconditions.checkState(!getAttackableUnitsAt(attackAt).isEmpty(),
                 "There is not attackable unit on target location (%s).", attackAt);
+        Preconditions.checkState(getLocation().isNeighbor(attackAt),
+                "Attacked location '%s' should be neighbor of attacking unit '%s'", attackAt, this);
 
-        availableMoves = 0;
+        actionPoints = 0;
         final Unit defender = getAttackableUnitsAt(attackAt).get(0);
         final Unit winner = isWinnerAttacker() ? this : defender;
         if (winner == this) {
             final Unit destroyed = defender;
-            model.destroyUnit(destroyed);
             model.fireUnitAttacked(this, defender, destroyed);
+            model.destroyUnit(destroyed);
             if (owner.getEnemyUnitsAt(attackAt).isEmpty()) {
                 placeToLocation(attackAt);
                 tryToCaptureColony(attackAt);
             }
         } else {
             final Unit destroyed = this;
-            model.destroyUnit(destroyed);
             model.fireUnitAttacked(this, defender, destroyed);
+            model.destroyUnit(destroyed);
         }
     }
 
@@ -514,7 +531,7 @@ public class Unit implements CargoHolder {
         final Colony col = model.getColonyAt(attackAt).orElseThrow(() -> new IllegalStateException(
                 String.format("There are no units to figh of city at '%s'", attackAt)));
 
-        availableMoves = 0;
+        actionPoints = 0;
         final Location start = getLocation();
         placeToLocation(attackAt);
         // FIXME use moveOneStep
@@ -536,7 +553,7 @@ public class Unit implements CargoHolder {
         Preconditions.checkArgument(this.getLocation().isNeighbor(attackAt),
                 "Unit location (%s) is not neighbor to target location (%s).", this.getLocation(),
                 attackAt);
-        Preconditions.checkState(availableMoves > 0, "Unit (%s) cannot attack this turn.", this);
+        Preconditions.checkState(actionPoints > 0, "Unit (%s) cannot attack this turn.", this);
     }
 
     /**
@@ -615,7 +632,7 @@ public class Unit implements CargoHolder {
         // TODO JKA check movement?
         // TODO JKA prazdny naklad?
         place = placeCargoSlot;
-        availableMoves = 0;
+        actionPoints = 0;
         // TODO JKA Move to CargoSlot?
         model.fireUnitEmbarked(this, placeCargoSlot.getCargoSlot());
     }
@@ -740,14 +757,14 @@ public class Unit implements CargoHolder {
 
     void unload(final Location targetLocation) {
         Preconditions.checkNotNull(targetLocation);
-        Preconditions.checkState(availableMoves > 0,
+        Preconditions.checkState(actionPoints > 0,
                 "Unit (%s) need for unload at least on action point", this);
         Preconditions.checkState(isAtCargoSlot(),
                 "This unit (%s) can't be unload, it's not stored.", this);
         // TODO JKA run "standard" unit location checks
 
         // TODO JKA empty all moves and attacks?
-        this.availableMoves = 0;
+        this.actionPoints = 0;
         place = new PlaceLocation(this, targetLocation, getDefaultOrintation());
     }
 
@@ -755,14 +772,14 @@ public class Unit implements CargoHolder {
     public String toString() {
         return MoreObjects.toStringHelper(this).add("id", id).add("type", type).add("owner", owner)
                 .add("place", place == null ? place : place.toString())
-                .add("availableMoves", availableMoves).add("cargo", cargo)
+                .add("availableMoves", actionPoints).add("cargo", cargo)
                 .add("unitAction", unitAction).toString();
     }
 
     UnitPo save() {
         final UnitPo unitPo = new UnitPo();
         unitPo.setId(id);
-        unitPo.setAvailableMoves(availableMoves);
+        unitPo.setAvailableMoves(actionPoints);
         unitPo.setOwnerId(owner.getName());
         unitPo.setType(type);
         unitPo.setCargo(cargo.save());
@@ -814,7 +831,7 @@ public class Unit implements CargoHolder {
         Preconditions.checkState(getSupportedActions().contains(actionType),
                 "Unsupported type '%s' for this unit '%s", unitAction.getType(), this);
         setAction(actionType.make());
-        availableMoves = 0;
+        actionPoints = 0;
     }
 
     public List<UnitActionType> getSupportedActions() {
@@ -833,7 +850,7 @@ public class Unit implements CargoHolder {
     }
 
     public boolean canPlowFiled() {
-        if (getSupportedActions().contains(UnitActionType.plowField) && availableMoves > 0
+        if (getSupportedActions().contains(UnitActionType.plowField) && actionPoints > 0
                 && isAtPlaceLocation()) {
             final TerrainType targetTerrain = model.getMap().getTerrainTypeAt(getLocation());
             return TerrainType.GRASSLAND.equals(targetTerrain)

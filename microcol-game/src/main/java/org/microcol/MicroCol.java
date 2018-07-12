@@ -41,6 +41,7 @@ public final class MicroCol extends Application {
     public static void main(final String[] args) {
         if (isClean()) {
             cleanAll();
+            System.exit(0);
         } else {
             launch(args);
         }

@@ -203,8 +203,8 @@ public final class Model {
     public Unit createCargoShipForKing(final Player king) {
         Preconditions.checkNotNull(king);
         Preconditions.checkNotNull(king.isComputer(), "king have to be computer player");
-        return unitStorage.createUnit(unit -> new Cargo(unit, UnitType.GALLEON.getSpeed()), this,
-                unit -> new PlaceHighSea(unit, false, 3), UnitType.GALLEON, king,
+        return unitStorage.createUnit(unit -> new Cargo(unit, UnitType.GALLEON.getCargoCapacity()),
+                this, unit -> new PlaceHighSea(unit, false, 3), UnitType.GALLEON, king,
                 UnitType.GALLEON.getSpeed(), new UnitActionNoAction());
     }
 
@@ -237,7 +237,7 @@ public final class Model {
                 "Ship (%s) for cargo doesn't have any free slot for expedition force unit.",
                 loadUnitToShip);
         CargoSlot cargoSlot = loadUnitToShip.getCargo().getEmptyCargoSlot().get();
-        return unitStorage.createUnit(unit -> new Cargo(unit, UnitType.COLONIST.getSpeed()), this,
+        return unitStorage.createUnit(unit -> new Cargo(unit, UnitType.COLONIST.getCargoCapacity()), this,
                 unit -> new PlaceCargoSlot(unit, cargoSlot), UnitType.COLONIST, king,
                 UnitType.COLONIST.getSpeed(), new UnitActionNoAction());
     }
@@ -326,7 +326,7 @@ public final class Model {
 
     /**
      * Get colony owned by player at some location.
-     * 
+     *
      * @param location
      *            required location
      * @param owner
@@ -477,7 +477,7 @@ public final class Model {
                  * Check if unit is at place location is reasonable, because unit could in first
                  * step conquer city a be placed inside city.
                  */
-                if (unit.isAtPlaceLocation() && unit.getAvailableMoves() > 0) {
+                if (unit.isAtPlaceLocation() && unit.getActionPoints() > 0) {
                     unit.moveOneStep(loc);
                 }
             });
@@ -656,6 +656,14 @@ public final class Model {
         return statistics;
     }
 
+    /**
+     * Allows to add game over evaluator. When evaluator based on model condition
+     * find out that game is over than return new GameoverResult object instance
+     * otherwise return <code>null</code>.
+     *
+     * @param evaluator
+     *            required evaluator function
+     */
     public void addGameOverEvaluator(final Function<Model, GameOverResult> evaluator) {
         gameManager.addEvaluator(evaluator);
     }

@@ -1,0 +1,76 @@
+ ----
+ Tests cases
+ ----
+
+Test cases
+
+ Aim of following tests are:
+ 
+ * Verify that main game features work.
+ 
+ * Verify that application functionality.
+
+[]
+  
+* Embark and Disembark
+
+ * load file 'test-verify-loading-unloading.microcol'
+
+ * city 'Delf' should be focused and in the center of game view
+
+ * Open city by double clicking at it.
+
+ * Load two units waiting outside of colony to ship
+
+ * verify that untis could be loaded to different cargo slots
+
+ * close city view
+
+ * move with ship to free border
+
+ * verify that it's not possible to udisembark units. (There are no free action points for loaded units)
+
+ * Press 'Next Turn'
+
+ * Unload both units
+
+ * Try to embark untis back. It should not be possible. Verify that both units have 0 action points
+
+ * Press 'Next Turn'
+
+ * Embark both units back to ship. Verify that both units are on ship.
+
+[]
+
+ Done.
+
+* Founding Colony
+
+ * load file 'test-verify-founding-colony.microcol'
+
+ * Verify that view is focused at two units. Each with one available action point.
+
+ * Choose one and press 'b' to build colony.
+
+ * Verify that's  possible to open colony details.
+
+ * Verify that founding colonist is workng at field and produce corn.
+
+ * Verify that's possible to move remaining unit. Outside of colony.
+
+[]
+
+ Done.
+
+* Fight for freedom - win battles
+
+ * Open save 'verify-independence.microcol'.
+ 
+ * Declare independence.
+ 
+ * Wait for king's military units arrival.
+ 
+[]
+
+ Done.
+

@@ -16,21 +16,39 @@ public final class SelectedUnitWasChangedEvent {
 
     private final Unit selectedUnit;
 
+    /**
+     * Default constructor.
+     *
+     * @param previousUnit
+     *            optional previous unit
+     * @param selectedUnit
+     *            optional selected unit
+     */
     SelectedUnitWasChangedEvent(final Unit previousUnit, final Unit selectedUnit) {
         this.previousUnit = previousUnit;
         this.selectedUnit = selectedUnit;
     }
-    
+
+    /**
+     * Is it necessary to scroll screen to newly selected unit?
+     *
+     * @return If it's necessary to scroll to newly selected unit than it return
+     *         <code>true</code> otherwise it return <code>false</code>
+     */
     public boolean isNecesarryToScrool() {
-        if (previousUnit == null) {
-            return selectedUnit != null;
-        } else {
-            if (selectedUnit == null) {
-                return false;
-            } else {
+        if (canScrollAtUnit(selectedUnit)) {
+            if (canScrollAtUnit(previousUnit)) {
                 return !selectedUnit.getLocation().equals(previousUnit.getLocation());
+            } else {
+                return true;
             }
+        } else {
+            return false;
         }
+    }
+
+    private boolean canScrollAtUnit(final Unit unit) {
+        return unit != null && unit.isAtPlaceLocation();
     }
 
     @Override

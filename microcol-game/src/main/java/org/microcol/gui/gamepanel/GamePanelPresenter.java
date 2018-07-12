@@ -22,6 +22,7 @@ import org.microcol.gui.mainmenu.QuitGameController;
 import org.microcol.gui.util.GamePreferences;
 import org.microcol.gui.util.Text;
 import org.microcol.gui.util.ViewUtil;
+import org.microcol.model.CargoSlot;
 import org.microcol.model.Colony;
 import org.microcol.model.Location;
 import org.microcol.model.Unit;
@@ -288,13 +289,18 @@ public final class GamePanelPresenter {
         } else if (movingUnit.isPossibleToEmbarkAt(moveToLocation, true)) {
             // embark
             final Unit toLoad = gameModelController.getModel().getUnitsAt(moveToLocation).get(0);
-            toLoad.getCargo().getSlots().get(0).store(movingUnit);
+            final Optional<CargoSlot> oCargoSlot = toLoad.getCargo().getEmptyCargoSlot();
+            if (oCargoSlot.isPresent()) {
+                oCargoSlot.get().store(movingUnit);
+            }
             // TODO JJ following code is repeated multiple times
             selectedTileManager.setSelectedTile(moveToLocation);
             disableMoveMode();
         } else if (movingUnit.isPossibleToDisembarkAt(moveToLocation, true)) {
             // try to disembark
-            movingUnit.getCargo().getSlots().stream().filter(cargoSlot -> cargoSlot.isLoadedUnit())
+            movingUnit.getCargo().getSlots().stream()
+                    .filter(cargoSlot -> cargoSlot.isLoadedUnit()
+                            && cargoSlot.getUnit().get().getActionPoints() > 0)
                     .forEach(cargoSlot -> cargoSlot.unload(moveToLocation));
             // TODO JJ following code is repeated multiple times
             selectedTileManager.setSelectedTile(moveToLocation);

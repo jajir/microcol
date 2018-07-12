@@ -12,9 +12,9 @@ public final class ModelEventManager {
     private final RoundStartedController roundStartedController;
 
     private final UnitMovedStepStartedController unitMovedStepStartedController;
-    
+
     private final UnitMovedStepFinishedController unitMovedStepFinishedController;
-    
+
     private final UnitMoveFinishedController unitMoveFinishedController;
 
     private final GameStartedController gameStartedController;
@@ -30,6 +30,8 @@ public final class ModelEventManager {
     private final GoldWasChangedController goldWasChangedController;
 
     private final ColonyWasCapturedController colonyWasCapturedController;
+
+    private final ColonyWasFoundController colonyWasFoundController;
 
     private final UnitEmbarkedController unitEmbarkedController;
 
@@ -48,19 +50,23 @@ public final class ModelEventManager {
             final UnitAttackedEventController unitAttackedEventController,
             final GoldWasChangedController goldWasChangedController,
             final ColonyWasCapturedController colonyWasCapturedController,
+            final ColonyWasFoundController colonyWasFoundController,
             final UnitEmbarkedController unitEmbarkedController,
             final UnitMoveFinishedController unitMoveFinishedController,
             final UnitMovedToHighSeasController unitMovedToHighSeasController,
             final IndependenceWasDeclaredColntroller independenceWasDeclaredColntroller) {
         this.roundStartedController = Preconditions.checkNotNull(roundStartedController);
-        this.unitMovedStepStartedController = Preconditions.checkNotNull(unitMovedStepStartedController);
-        this.unitMovedStepFinishedController = Preconditions.checkNotNull(unitMovedStepFinishedController);
+        this.unitMovedStepStartedController = Preconditions
+                .checkNotNull(unitMovedStepStartedController);
+        this.unitMovedStepFinishedController = Preconditions
+                .checkNotNull(unitMovedStepFinishedController);
         this.gameStartedController = Preconditions.checkNotNull(gameStartedController);
         this.turnStartedController = Preconditions.checkNotNull(turnStartedController);
         this.debugRequestController = Preconditions.checkNotNull(debugRequestController);
         this.gameFinishedController = Preconditions.checkNotNull(gameFinishedController);
         this.unitAttackedEventController = Preconditions.checkNotNull(unitAttackedEventController);
         this.goldWasChangedController = Preconditions.checkNotNull(goldWasChangedController);
+        this.colonyWasFoundController = Preconditions.checkNotNull(colonyWasFoundController);
         this.colonyWasCapturedController = Preconditions.checkNotNull(colonyWasCapturedController);
         this.unitEmbarkedController = Preconditions.checkNotNull(unitEmbarkedController);
         this.unitMoveFinishedController = Preconditions.checkNotNull(unitMoveFinishedController);
@@ -139,6 +145,10 @@ public final class ModelEventManager {
 
     public UnitMovedStepFinishedController getUnitMovedStepFinishedController() {
         return unitMovedStepFinishedController;
+    }
+
+    public ColonyWasFoundController getColonyWasFoundController() {
+        return colonyWasFoundController;
     }
 
 }

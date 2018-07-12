@@ -16,18 +16,33 @@ import com.google.common.base.Preconditions;
 
 public final class KingPlayer extends AbstractRobotPlayer {
 
+    public final static String KING_LOST_GAME = "king lost game";
+
+    private final static float KINGS_MILITARY_STREGTH_COEFICIENT = 2F / 3F;
+
+    private final static float KINGS_MILITARY_STREGTH_CAP = 15;
+
+    private final static float KINGS_MILITARY_STREGTH_GAME_OVER = 5;
+
     private final SimpleUnitBehavior simpleUnitBehavior = new SimpleUnitBehavior();
 
     private final Player whosKingThisPlayerIs;
 
     private final ContinentTool continentTool = new ContinentTool();
 
-    private final static float KINGS_MILITARY_STREGTH_COEFICIENT = 2F / 3F;
-
     public KingPlayer(final Model model, final Player player,
             final AnimationManager animationManager) {
         super(model, player, animationManager);
         this.whosKingThisPlayerIs = Preconditions.checkNotNull(player.getWhosKingThisPlayerIs());
+    }
+
+    private boolean isKinngCoquered() {
+        if (isRefWasSend()) {
+            final int miltaryStreng = getPlayer().getPlayerStatistics().getMilitaryStrength()
+                    .getMilitaryStrength();
+            return miltaryStreng < KINGS_MILITARY_STREGTH_GAME_OVER;
+        }
+        return false;
     }
 
     @Override
@@ -41,6 +56,9 @@ public final class KingPlayer extends AbstractRobotPlayer {
         if (whosKingThisPlayerIs.isDeclaredIndependence() && !isRefWasSend()) {
             createRoyalArmyForces();
             setRefWasSend(true);
+        }
+        if (isKinngCoquered()) {
+            getPlayer().getExtraData().put("kingWasConquered", Boolean.TRUE.toString());
         }
     }
 
@@ -136,8 +154,10 @@ public final class KingPlayer extends AbstractRobotPlayer {
     }
 
     private int getKingsMilitaryStrength() {
-        return (int) (whosKingThisPlayerIs.getPlayerStatistics().getMilitaryStrength()
-                .getMilitaryStrength() * KINGS_MILITARY_STREGTH_COEFICIENT);
+        return (int) Math.min(
+                (whosKingThisPlayerIs.getPlayerStatistics().getMilitaryStrength()
+                        .getMilitaryStrength() * KINGS_MILITARY_STREGTH_COEFICIENT),
+                KINGS_MILITARY_STREGTH_CAP);
     }
 
     /**

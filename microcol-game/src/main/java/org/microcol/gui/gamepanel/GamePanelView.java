@@ -151,9 +151,9 @@ public final class GamePanelView {
         final Point from = visibleArea.getTopLeft();
         if (from.distanceSimplified(to) > 0) {
             /**
-             * Following precondition throws exception when scroll planning is
-             * called before canvas was fully initialized. Method could be
-             * called just after canvas full initialization.
+             * Following precondition throws exception when scroll planning is called before
+             * canvas was fully initialized. Method could be called just after canvas full
+             * initialization.
              */
             Preconditions.checkState(visibleArea.isReady(),
                     "screen scroll is called before canvas initialization was finished.");
@@ -237,8 +237,8 @@ public final class GamePanelView {
     /**
      * Draw units.
      * <p>
-     * Methods iterate through all location with ships, select first ship and
-     * draw it.
+     * Methods iterate through all location with ships, select first ship and draw
+     * it.
      * </p>
      * 
      * @param graphics
@@ -347,12 +347,12 @@ public final class GamePanelView {
             }
             paintCursor(graphics, area, mouseOverTileManager.getMouseOverTile().get());
             final List<Location> locations = moveModeSupport.getMoveLocations();
-            final StepCounter stepCounter = new StepCounter(5, selectedUnit.getAvailableMoves());
+            final StepCounter stepCounter = new StepCounter(5, selectedUnit.getActionPoints());
             final List<Point> steps = Lists.transform(locations,
                     location -> area.convertToPoint(location));
             /**
-             * Here could be check if particular step in on screen, but draw few
-             * images outside screen is not big deal.
+             * Here could be check if particular step in on screen, but draw few images
+             * outside screen is not big deal.
              */
             steps.forEach(point -> paintStep(graphics, point, stepCounter,
                     moveModeSupport.getMoveMode()));
@@ -390,8 +390,8 @@ public final class GamePanelView {
     }
 
     public void addFightAnimation(final Unit attacker, final Unit defender) {
-        animationManager.addAnimation(new AnimationFight(attacker, defender, imageProvider,
-                gamePreferences.getAnimationSpeed()));
+        animationManager.addAnimation(new AnimationFight(attacker.getLocation(),
+                defender.getLocation(), imageProvider, gamePreferences.getAnimationSpeed()));
     }
 
     public boolean performFightDialog(final Unit unitAttacker, final Unit unitDefender) {

@@ -26,7 +26,7 @@ public final class TurnManager {
      * some free action points.
      */
     public void tryNext() {
-        if (getFocusedUnit().isPresent() && getFocusedUnit().get().getAvailableMoves() == 0) {
+        if (getFocusedUnit().isPresent() && getFocusedUnit().get().getActionPoints() == 0) {
             pointer++;
             if (pointer >= units.size()) {
                 pointer = 0;

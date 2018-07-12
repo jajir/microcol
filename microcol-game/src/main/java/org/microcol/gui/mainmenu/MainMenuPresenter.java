@@ -219,7 +219,7 @@ public final class MainMenuPresenter {
 	if (isTileContainsMovebleUnit(event)) {
 	    final Unit unit = model.getUnitsAt(event.getLocation()).stream().findFirst()
 		    .orElseThrow(() -> new IllegalStateException("It should not be here"));
-	    return unit.getType().canBuildColony() && unit.getAvailableMoves() > 0;
+	    return unit.getType().canBuildColony() && unit.getActionPoints() > 0;
 	}
 	return false;
     }
@@ -281,7 +281,7 @@ public final class MainMenuPresenter {
     private final BiConsumer<MenuItem, SelectedUnitManager> eval = (menuItem, selectedUnitManager) -> {
 	if (selectedUnitManager.getSelectedUnit().isPresent()) {
 	    final Unit unit = selectedUnitManager.getSelectedUnit().get();
-	    menuItem.setDisable(!unit.getType().canBuildColony() || unit.getAvailableMoves() == 0);
+	    menuItem.setDisable(!unit.getType().canBuildColony() || unit.getActionPoints() == 0);
 	} else {
 	    menuItem.setDisable(true);
 	}

@@ -45,7 +45,7 @@ public final class SimpleAiPlayer extends AbstractRobotPlayer {
     private List<Location> computeMoveLocation(final Unit unit) {
         final List<Location> locations = new ArrayList<>();
         Location lastLocation = unit.getLocation();
-        while (locations.size() < unit.getAvailableMoves()) {
+        while (locations.size() < unit.getActionPoints()) {
             if (isPossibleToAttack(unit, lastLocation)) {
                 return locations;
             }
@@ -90,7 +90,7 @@ public final class SimpleAiPlayer extends AbstractRobotPlayer {
     }
 
     private void tryToEmbark(final Unit unit) {
-        if (unit.isStorable() && unit.isAtPlaceLocation() && unit.getAvailableMoves() > 0) {
+        if (unit.isStorable() && unit.isAtPlaceLocation() && unit.getActionPoints() > 0) {
             unit.getNeighborUnitsWithFreeSlot().stream()
                     .flatMap(u -> u.getCargo().getSlots().stream()).filter(slot -> slot.isEmpty())
                     .findAny().get().store(unit);

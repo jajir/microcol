@@ -131,7 +131,7 @@ public class UnitColonistOnMapTest extends AbstractUnitTest {
 		}};
 		
 		unit.moveOneStep(moveAt);
-		assertEquals(9, unit.getAvailableMoves());
+		assertEquals(9, unit.getActionPoints());
 		assertTrue(unit.isAtPlaceLocation());
 		//TODO assert new location, it's not easy because PlaceLocation is alwais mock.
 	}

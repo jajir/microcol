@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import org.microcol.gui.colony.UnitMovedToFieldController;
 import org.microcol.gui.colony.UnitMovedToFieldEvent;
+import org.microcol.gui.event.model.ColonyWasFoundController;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.event.model.UnitMovedStepStartedController;
 import org.microcol.gui.event.model.UnitMovedToHighSeasController;
@@ -11,6 +12,7 @@ import org.microcol.gui.mainmenu.SelectNextUnitController;
 import org.microcol.gui.mainmenu.SelectNextUnitEvent;
 import org.microcol.model.Location;
 import org.microcol.model.Unit;
+import org.microcol.model.event.ColonyWasFoundEvent;
 import org.microcol.model.event.UnitMovedToHighSeasEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,7 +45,8 @@ public final class SelectedUnitManager {
             final UnitMovedStepStartedController unitMovedController,
             final UnitMovedToHighSeasController unitMovedToHighSeasController,
             final UnitMovedToFieldController unitMovedToFieldController,
-            final SelectedUnitWasChangedController selectedUnitWasChangedController) {
+            final SelectedUnitWasChangedController selectedUnitWasChangedController,
+            final ColonyWasFoundController colonyWasFoundController) {
         this.gameModelController = Preconditions.checkNotNull(gameModelController);
         this.selectedTileManager = Preconditions.checkNotNull(selectedTileManager);
         this.selectedUnitWasChangedController = Preconditions
@@ -57,6 +60,20 @@ public final class SelectedUnitManager {
         });
         unitMovedToHighSeasController.addListener(this::onUnitMovedToHighSeas);
         unitMovedToFieldController.addListener(this::onUnitMovedToField);
+        colonyWasFoundController.addListener(this::onColonyWasFound);
+    }
+
+    private void onColonyWasFound(final ColonyWasFoundEvent event) {
+        if (selectedTileManager.getSelectedTile().isPresent()) {
+            if (event.getColony().getLocation()
+                    .equals(selectedTileManager.getSelectedTile().get())) {
+                // founded colony is at focused location.
+                if (selectedUnit != null && !selectedUnit.isAtPlaceLocation()) {
+                    // verify that selected unit found colony and it's not at map
+                    evaluateLocation(selectedTileManager.getSelectedTile().get());
+                }
+            }
+        }
     }
 
     private void onUnitMovedToField(final UnitMovedToFieldEvent event) {
@@ -94,8 +111,7 @@ public final class SelectedUnitManager {
         } else {
             if (selectedUnit.isAtPlaceLocation()) {
                 /*
-                 * If selected tile is location where is selected unit than do
-                 * nothing
+                 * If selected tile is location where is selected unit than do nothing
                  */
                 if (!selectedUnit.getLocation().equals(location)) {
                     setSelectedUnit(gameModelController.getModel()
@@ -127,7 +143,7 @@ public final class SelectedUnitManager {
     }
 
     public boolean isSelectedUnitMoveable() {
-        return selectedUnit != null && selectedUnit.getAvailableMoves() > 0;
+        return selectedUnit != null && selectedUnit.getActionPoints() > 0;
     }
 
     @Override
