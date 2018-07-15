@@ -7,6 +7,11 @@ import org.microcol.model.Cargo;
  */
 public interface CargoHolder {
 
-    public Cargo getCargo();
+    /**
+     * Provide cargo object.
+     *
+     * @return cargo object.
+     */
+    Cargo getCargo();
 
 }

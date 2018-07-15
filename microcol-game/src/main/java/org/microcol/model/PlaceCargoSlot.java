@@ -8,18 +8,31 @@ import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 
 /**
- * 
+ * Describe state when unit is stored in cargo slot of other unit.
  */
 public final class PlaceCargoSlot extends AbstractPlace {
 
     private final CargoSlot cargoSlot;
 
+    /**
+     * Default constructor.
+     *
+     * @param unitToCargo
+     *            required unti stored int cargo slot
+     * @param cargoSlot
+     *            required cargo slot where is unti stored
+     */
     PlaceCargoSlot(final Unit unitToCargo, final CargoSlot cargoSlot) {
         super(unitToCargo);
         this.cargoSlot = Preconditions.checkNotNull(cargoSlot);
         cargoSlot.unsafeStore(this);
     }
 
+    /**
+     * Get player owning cargo slot.
+     *
+     * @return cargo slot owner
+     */
     public Player getCargoSlotOwner() {
         return cargoSlot.getOwnerPlayer();
     }
@@ -34,10 +47,21 @@ public final class PlaceCargoSlot extends AbstractPlace {
         return "Cargo slot";
     }
 
+    /**
+     * Get cargo slot where is unit stored.
+     *
+     * @return cargo slot object
+     */
     public CargoSlot getCargoSlot() {
         return cargoSlot;
     }
 
+    /**
+     * Get information if unit owning cargo slot is in Europe port.
+     *
+     * @return return <code>true</code> when unit owning cargo slot is in Europe
+     *         port otherwise return <code>false</code>
+     */
     public boolean isOwnerAtEuropePort() {
         return cargoSlot.getHold().getOwner().isAtEuropePort();
     }

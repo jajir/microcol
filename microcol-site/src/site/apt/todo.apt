@@ -137,6 +137,12 @@ Planned releases
   
  * <<0.7.0>> - Prepare for release
  
+  * \u2717 
+ 
+  * \u2717 Path during move is strange. It should be closest path. Now it's funny serpent.
+ 
+  * \u2717 When focused unit is at colony and is moved to field than attempt to move unit leads to exception.
+ 
   * \u2717 Main menu doesn't work when drag pressed mouse instead of simple move.
  It can't be easily solved. There is no such feature in JavaFx.
  
