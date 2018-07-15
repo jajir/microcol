@@ -1,0 +1,4254 @@
+{
+  "calendar": {
+    "startYear": 1490,
+    "endYear": 1800,
+    "numberOfPlayedTurns": 199
+  },
+  "units": [
+    {
+      "id": 3,
+      "type": "GALLEON",
+      "ownerId": "Dutch",
+      "placeMap": {
+        "location": {
+          "x": 20,
+          "y": 11
+        },
+        "orientation": "west"
+      },
+      "cargo": {
+        "slots": [
+          {},
+          {},
+          {},
+          {},
+          {}
+        ]
+      },
+      "action": {
+        "type": "noAction"
+      },
+      "availableMoves": 6
+    },
+    {
+      "id": 0,
+      "type": "COLONIST",
+      "ownerId": "Dutch",
+      "placeColonyField": {},
+      "cargo": {
+        "slots": []
+      },
+      "action": {
+        "type": "noAction"
+      },
+      "availableMoves": 1
+    },
+    {
+      "id": 1,
+      "type": "COLONIST",
+      "ownerId": "Dutch",
+      "placeColonyField": {},
+      "cargo": {
+        "slots": []
+      },
+      "action": {
+        "type": "noAction"
+      },
+      "availableMoves": 1
+    },
+    {
+      "id": 2,
+      "type": "COLONIST",
+      "ownerId": "Dutch",
+      "placeColonyField": {},
+      "cargo": {
+        "slots": []
+      },
+      "action": {
+        "type": "noAction"
+      },
+      "availableMoves": 1
+    },
+    {
+      "id": 4,
+      "type": "COLONIST",
+      "ownerId": "Dutch",
+      "placeConstructionSlot": {},
+      "cargo": {
+        "slots": []
+      },
+      "action": {
+        "type": "noAction"
+      },
+      "availableMoves": 1
+    },
+    {
+      "id": 5,
+      "type": "COLONIST",
+      "ownerId": "Dutch",
+      "placeConstructionSlot": {},
+      "cargo": {
+        "slots": []
+      },
+      "action": {
+        "type": "noAction"
+      },
+      "availableMoves": 1
+    },
+    {
+      "id": 6,
+      "type": "COLONIST",
+      "ownerId": "Dutch",
+      "placeColonyField": {},
+      "cargo": {
+        "slots": []
+      },
+      "action": {
+        "type": "noAction"
+      },
+      "availableMoves": 1
+    },
+    {
+      "id": 7,
+      "type": "COLONIST",
+      "ownerId": "Dutch",
+      "placeColonyField": {},
+      "cargo": {
+        "slots": []
+      },
+      "action": {
+        "type": "noAction"
+      },
+      "availableMoves": 1
+    },
+    {
+      "id": 8,
+      "type": "COLONIST",
+      "ownerId": "Dutch",
+      "placeConstructionSlot": {},
+      "cargo": {
+        "slots": []
+      },
+      "action": {
+        "type": "noAction"
+      },
+      "availableMoves": 1
+    },
+    {
+      "id": 9,
+      "type": "COLONIST",
+      "ownerId": "Dutch",
+      "placeColonyField": {},
+      "cargo": {
+        "slots": []
+      },
+      "action": {
+        "type": "noAction"
+      },
+      "availableMoves": 1
+    },
+    {
+      "id": 10,
+      "type": "COLONIST",
+      "ownerId": "Dutch",
+      "placeColonyField": {},
+      "cargo": {
+        "slots": []
+      },
+      "action": {
+        "type": "noAction"
+      },
+      "availableMoves": 1
+    },
+    {
+      "id": 11,
+      "type": "COLONIST",
+      "ownerId": "Dutch",
+      "placeColonyField": {},
+      "cargo": {
+        "slots": []
+      },
+      "action": {
+        "type": "noAction"
+      },
+      "availableMoves": 1
+    },
+    {
+      "id": 12,
+      "type": "COLONIST",
+      "ownerId": "Dutch",
+      "placeConstructionSlot": {},
+      "cargo": {
+        "slots": []
+      },
+      "action": {
+        "type": "noAction"
+      },
+      "availableMoves": 1
+    },
+    {
+      "id": 13,
+      "type": "COLONIST",
+      "ownerId": "Dutch",
+      "placeColonyField": {},
+      "cargo": {
+        "slots": []
+      },
+      "action": {
+        "type": "noAction"
+      },
+      "availableMoves": 1
+    },
+    {
+      "id": 14,
+      "type": "COLONIST",
+      "ownerId": "Dutch",
+      "placeConstructionSlot": {},
+      "cargo": {
+        "slots": []
+      },
+      "action": {
+        "type": "noAction"
+      },
+      "availableMoves": 1
+    },
+    {
+      "id": 15,
+      "type": "COLONIST",
+      "ownerId": "Dutch",
+      "placeColonyField": {},
+      "cargo": {
+        "slots": []
+      },
+      "action": {
+        "type": "noAction"
+      },
+      "availableMoves": 1
+    },
+    {
+      "id": 16,
+      "type": "COLONIST",
+      "ownerId": "Dutch",
+      "placeColonyField": {},
+      "cargo": {
+        "slots": []
+      },
+      "action": {
+        "type": "noAction"
+      },
+      "availableMoves": 1
+    },
+    {
+      "id": 17,
+      "type": "COLONIST",
+      "ownerId": "Dutch",
+      "placeColonyField": {},
+      "cargo": {
+        "slots": []
+      },
+      "action": {
+        "type": "noAction"
+      },
+      "availableMoves": 1
+    },
+    {
+      "id": 18,
+      "type": "COLONIST",
+      "ownerId": "Dutch",
+      "placeConstructionSlot": {},
+      "cargo": {
+        "slots": []
+      },
+      "action": {
+        "type": "noAction"
+      },
+      "availableMoves": 1
+    },
+    {
+      "id": 19,
+      "type": "COLONIST",
+      "ownerId": "Dutch",
+      "placeColonyField": {},
+      "cargo": {
+        "slots": []
+      },
+      "action": {
+        "type": "noAction"
+      },
+      "availableMoves": 1
+    },
+    {
+      "id": 20,
+      "type": "COLONIST",
+      "ownerId": "Dutch",
+      "placeConstructionSlot": {},
+      "cargo": {
+        "slots": []
+      },
+      "action": {
+        "type": "noAction"
+      },
+      "availableMoves": 1
+    },
+    {
+      "id": 21,
+      "type": "COLONIST",
+      "ownerId": "Dutch",
+      "placeColonyField": {},
+      "cargo": {
+        "slots": []
+      },
+      "action": {
+        "type": "noAction"
+      },
+      "availableMoves": 1
+    },
+    {
+      "id": 22,
+      "type": "COLONIST",
+      "ownerId": "Dutch",
+      "placeColonyField": {},
+      "cargo": {
+        "slots": []
+      },
+      "action": {
+        "type": "noAction"
+      },
+      "availableMoves": 1
+    },
+    {
+      "id": 23,
+      "type": "COLONIST",
+      "ownerId": "Dutch",
+      "placeConstructionSlot": {},
+      "cargo": {
+        "slots": []
+      },
+      "action": {
+        "type": "noAction"
+      },
+      "availableMoves": 1
+    },
+    {
+      "id": 24,
+      "type": "COLONIST",
+      "ownerId": "Dutch",
+      "placeMap": {
+        "location": {
+          "x": 19,
+          "y": 11
+        },
+        "orientation": "east"
+      },
+      "cargo": {
+        "slots": []
+      },
+      "action": {
+        "type": "noAction"
+      },
+      "availableMoves": 1
+    },
+    {
+      "id": 25,
+      "type": "COLONIST",
+      "ownerId": "Dutch",
+      "placeMap": {
+        "location": {
+          "x": 19,
+          "y": 11
+        },
+        "orientation": "east"
+      },
+      "cargo": {
+        "slots": []
+      },
+      "action": {
+        "type": "noAction"
+      },
+      "availableMoves": 1
+    },
+    {
+      "id": 26,
+      "type": "COLONIST",
+      "ownerId": "Dutch",
+      "placeConstructionSlot": {},
+      "cargo": {
+        "slots": []
+      },
+      "action": {
+        "type": "noAction"
+      },
+      "availableMoves": 1
+    }
+  ],
+  "colonies": [
+    {
+      "name": "New Amsterdam",
+      "ownerName": "Dutch",
+      "location": {
+        "x": 25,
+        "y": 14
+      },
+      "colonyFields": [
+        {
+          "direction": {
+            "x": 0,
+            "y": -1
+          },
+          "workerId": 0,
+          "producedGoodType": "TABACCO"
+        },
+        {
+          "direction": {
+            "x": 1,
+            "y": -1
+          }
+        },
+        {
+          "direction": {
+            "x": 1,
+            "y": 0
+          }
+        },
+        {
+          "direction": {
+            "x": 1,
+            "y": 1
+          },
+          "workerId": 2,
+          "producedGoodType": "TABACCO"
+        },
+        {
+          "direction": {
+            "x": 0,
+            "y": 1
+          },
+          "workerId": 13,
+          "producedGoodType": "TABACCO"
+        },
+        {
+          "direction": {
+            "x": -1,
+            "y": 1
+          },
+          "workerId": 1,
+          "producedGoodType": "CORN"
+        },
+        {
+          "direction": {
+            "x": -1,
+            "y": 0
+          },
+          "workerId": 16,
+          "producedGoodType": "CORN"
+        },
+        {
+          "direction": {
+            "x": -1,
+            "y": -1
+          }
+        }
+      ],
+      "constructions": [
+        {
+          "type": "TOWN_HALL",
+          "slots": [
+            {},
+            {},
+            {}
+          ]
+        },
+        {
+          "type": "CARPENTERS_SHOP",
+          "slots": [
+            {},
+            {},
+            {}
+          ]
+        },
+        {
+          "type": "BLACKSMITHS_HOUSE",
+          "slots": [
+            {},
+            {},
+            {}
+          ]
+        },
+        {
+          "type": "TOBACCONISTS_HOUSE",
+          "slots": [
+            {
+              "workerId": 5
+            },
+            {
+              "workerId": 4
+            },
+            {
+              "workerId": 18
+            }
+          ]
+        },
+        {
+          "type": "WEAVERS_HOUSE",
+          "slots": [
+            {},
+            {},
+            {}
+          ]
+        },
+        {
+          "type": "RUM_DISTILLERS_HOUSE",
+          "slots": [
+            {},
+            {},
+            {}
+          ]
+        },
+        {
+          "type": "FUR_TRADERS_HOUSE",
+          "slots": [
+            {},
+            {},
+            {}
+          ]
+        },
+        {
+          "type": "BASIC_WAREHOUSE",
+          "slots": []
+        }
+      ],
+      "colonyWarehouse": {
+        "COAT": 0,
+        "HAMMERS": 0,
+        "FUR": 0,
+        "ORE": 0,
+        "LUMBER": 0,
+        "RUM": 0,
+        "SUGAR": 0,
+        "SILK": 0,
+        "TABACCO": 60,
+        "CORN": 46,
+        "CIGARS": 171,
+        "BELL": 195,
+        "COTTON": 0,
+        "TOOLS": 0
+      }
+    },
+    {
+      "name": "Delft",
+      "ownerName": "Dutch",
+      "location": {
+        "x": 22,
+        "y": 12
+      },
+      "colonyFields": [
+        {
+          "direction": {
+            "x": 0,
+            "y": -1
+          }
+        },
+        {
+          "direction": {
+            "x": 1,
+            "y": -1
+          }
+        },
+        {
+          "direction": {
+            "x": 1,
+            "y": 0
+          },
+          "workerId": 22,
+          "producedGoodType": "TABACCO"
+        },
+        {
+          "direction": {
+            "x": 1,
+            "y": 1
+          },
+          "workerId": 21,
+          "producedGoodType": "TABACCO"
+        },
+        {
+          "direction": {
+            "x": 0,
+            "y": 1
+          },
+          "workerId": 6,
+          "producedGoodType": "TABACCO"
+        },
+        {
+          "direction": {
+            "x": -1,
+            "y": 1
+          },
+          "workerId": 17,
+          "producedGoodType": "CORN"
+        },
+        {
+          "direction": {
+            "x": -1,
+            "y": 0
+          },
+          "workerId": 19,
+          "producedGoodType": "CORN"
+        },
+        {
+          "direction": {
+            "x": -1,
+            "y": -1
+          }
+        }
+      ],
+      "constructions": [
+        {
+          "type": "TOWN_HALL",
+          "slots": [
+            {},
+            {},
+            {}
+          ]
+        },
+        {
+          "type": "CARPENTERS_SHOP",
+          "slots": [
+            {},
+            {},
+            {}
+          ]
+        },
+        {
+          "type": "BLACKSMITHS_HOUSE",
+          "slots": [
+            {},
+            {},
+            {}
+          ]
+        },
+        {
+          "type": "TOBACCONISTS_HOUSE",
+          "slots": [
+            {
+              "workerId": 20
+            },
+            {
+              "workerId": 23
+            },
+            {
+              "workerId": 26
+            }
+          ]
+        },
+        {
+          "type": "WEAVERS_HOUSE",
+          "slots": [
+            {},
+            {},
+            {}
+          ]
+        },
+        {
+          "type": "RUM_DISTILLERS_HOUSE",
+          "slots": [
+            {},
+            {},
+            {}
+          ]
+        },
+        {
+          "type": "FUR_TRADERS_HOUSE",
+          "slots": [
+            {},
+            {},
+            {}
+          ]
+        },
+        {
+          "type": "BASIC_WAREHOUSE",
+          "slots": []
+        }
+      ],
+      "colonyWarehouse": {
+        "COAT": 0,
+        "HAMMERS": 0,
+        "FUR": 0,
+        "ORE": 0,
+        "LUMBER": 0,
+        "RUM": 0,
+        "SUGAR": 0,
+        "SILK": 0,
+        "TABACCO": 54,
+        "CORN": 296,
+        "CIGARS": 120,
+        "BELL": 150,
+        "COTTON": 0,
+        "TOOLS": 0
+      }
+    },
+    {
+      "name": "Haarlem",
+      "ownerName": "Dutch",
+      "location": {
+        "x": 23,
+        "y": 17
+      },
+      "colonyFields": [
+        {
+          "direction": {
+            "x": 0,
+            "y": -1
+          },
+          "workerId": 11,
+          "producedGoodType": "TABACCO"
+        },
+        {
+          "direction": {
+            "x": 1,
+            "y": -1
+          },
+          "workerId": 15,
+          "producedGoodType": "TABACCO"
+        },
+        {
+          "direction": {
+            "x": 1,
+            "y": 0
+          }
+        },
+        {
+          "direction": {
+            "x": 1,
+            "y": 1
+          }
+        },
+        {
+          "direction": {
+            "x": 0,
+            "y": 1
+          }
+        },
+        {
+          "direction": {
+            "x": -1,
+            "y": 1
+          },
+          "workerId": 10,
+          "producedGoodType": "CORN"
+        },
+        {
+          "direction": {
+            "x": -1,
+            "y": 0
+          },
+          "workerId": 7,
+          "producedGoodType": "CORN"
+        },
+        {
+          "direction": {
+            "x": -1,
+            "y": -1
+          },
+          "workerId": 9,
+          "producedGoodType": "TABACCO"
+        }
+      ],
+      "constructions": [
+        {
+          "type": "TOWN_HALL",
+          "slots": [
+            {},
+            {},
+            {}
+          ]
+        },
+        {
+          "type": "CARPENTERS_SHOP",
+          "slots": [
+            {},
+            {},
+            {}
+          ]
+        },
+        {
+          "type": "BLACKSMITHS_HOUSE",
+          "slots": [
+            {},
+            {},
+            {}
+          ]
+        },
+        {
+          "type": "TOBACCONISTS_HOUSE",
+          "slots": [
+            {
+              "workerId": 12
+            },
+            {
+              "workerId": 8
+            },
+            {
+              "workerId": 14
+            }
+          ]
+        },
+        {
+          "type": "WEAVERS_HOUSE",
+          "slots": [
+            {},
+            {},
+            {}
+          ]
+        },
+        {
+          "type": "RUM_DISTILLERS_HOUSE",
+          "slots": [
+            {},
+            {},
+            {}
+          ]
+        },
+        {
+          "type": "FUR_TRADERS_HOUSE",
+          "slots": [
+            {},
+            {},
+            {}
+          ]
+        },
+        {
+          "type": "BASIC_WAREHOUSE",
+          "slots": []
+        }
+      ],
+      "colonyWarehouse": {
+        "COAT": 0,
+        "HAMMERS": 0,
+        "FUR": 0,
+        "ORE": 0,
+        "LUMBER": 0,
+        "RUM": 0,
+        "SUGAR": 0,
+        "SILK": 0,
+        "TABACCO": 30,
+        "CORN": 234,
+        "CIGARS": 153,
+        "BELL": 134,
+        "COTTON": 0,
+        "TOOLS": 0
+      }
+    }
+  ],
+  "turnEvents": [],
+  "map": {
+    "tiles": [
+      "column  :1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0",
+      "row-0001:a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a",
+      "row-0002:~,_,_,t,a,a,a,t,_,_,_,_,_,_,_,_,_,_,_,_,t,t,t,a,a,a,a,_,_,_,t,_,_,_,_,t,_,_,_,_,t,_,_,_,t,_,_,_,t,t",
+      "row-0003:~,_,_,_,t,a,a,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,~",
+      "row-0004:~,_,_,_,_,_,t,_,_,_,_,_,_,_,_,_,g,g,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,~",
+      "row-0005:~,_,_,_,_,_,_,_,_,_,_,_,_,_,_,g,g,g,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,~",
+      "row-0006:~,_,_,_,_,_,_,_,_,_,_,_,_,_,g,g,g,g,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,~",
+      "row-0007:~,_,_,_,_,_,_,_,_,_,_,_,_,_,_,g,g,g,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,~",
+      "row-0008:~,_,_,_,_,_,_,_,_,_,_,_,_,_,_,g,g,g,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,~",
+      "row-0009:~,_,_,_,_,_,_,_,_,_,_,_,_,_,g,g,g,g,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,~",
+      "row-0010:~,_,_,_,_,_,_,_,_,_,_,_,_,m,g,g,g,g,g,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,~",
+      "row-0011:~,_,_,_,_,_,_,_,_,_,_,_,m,g,g,g,g,g,g,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,~",
+      "row-0012:~,_,_,_,_,_,_,_,_,_,_,_,m,g,_,g,g,g,g,g,g,g,g,g,g,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,~",
+      "row-0013:~,_,_,_,_,_,_,_,_,_,_,_,m,h,g,g,p,p,g,h,g,g,g,g,g,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,~",
+      "row-0014:~,_,_,_,_,_,_,_,_,_,_,_,m,h,g,p,g,p,h,h,g,g,g,g,g,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,~",
+      "row-0015:~,_,_,_,_,_,_,_,_,_,_,_,m,h,g,p,g,g,h,g,g,g,g,g,g,g,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,~",
+      "row-0016:~,_,_,_,_,_,_,_,_,_,_,_,m,h,g,g,g,p,p,g,g,g,g,g,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,~",
+      "row-0017:~,_,_,_,_,_,_,_,_,_,_,_,m,h,h,h,p,p,g,h,g,g,g,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,~",
+      "row-0018:~,_,_,_,_,_,_,_,_,_,_,_,m,m,g,g,p,p,g,g,h,g,g,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,~",
+      "row-0019:~,_,_,_,_,_,_,_,_,_,_,_,m,m,g,g,p,g,g,h,g,g,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,~",
+      "row-0020:~,_,_,_,_,_,_,_,_,_,_,_,_,g,g,g,g,g,g,h,g,g,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,~",
+      "row-0021:~,_,_,_,_,_,_,_,_,_,_,_,_,g,g,g,g,g,h,h,g,g,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,~",
+      "row-0022:~,_,_,_,_,_,_,_,_,_,_,_,_,g,g,g,g,h,m,h,g,g,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,~",
+      "row-0023:~,_,_,_,_,_,_,_,_,_,_,_,_,g,g,g,g,h,h,h,g,g,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,~",
+      "row-0024:~,_,_,_,_,_,_,_,_,_,_,_,_,g,g,g,g,g,g,g,g,g,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,~",
+      "row-0025:~,_,_,_,_,_,_,_,_,_,_,_,_,g,g,g,g,g,g,g,g,g,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,~",
+      "row-0026:~,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,~",
+      "row-0027:~,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,~",
+      "row-0028:~,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,t,_,_,_,_,_,_,_,t,_,_,_,_,_,_,_,t,_,_,_,_,_,_,_,t,_,_,_,_,_,~",
+      "row-0029:~,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,_,t,a,t,_,_,_,_,_,t,a,t,_,_,_,_,_,t,a,t,_,_,_,_,_,t,a,t,_,_,_,_,~",
+      "row-0030:a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a,a"
+    ],
+    "trees": [
+      "column  :1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0",
+      "row-0001:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+      "row-0002:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+      "row-0003:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+      "row-0004:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+      "row-0005:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+      "row-0006:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+      "row-0007:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+      "row-0008:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+      "row-0009:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+      "row-0010:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+      "row-0011:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+      "row-0012:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+      "row-0013:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,t,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+      "row-0014:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,t,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+      "row-0015:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,t,t,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+      "row-0016:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,t,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+      "row-0017:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+      "row-0018:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+      "row-0019:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+      "row-0020:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+      "row-0021:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+      "row-0022:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+      "row-0023:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+      "row-0024:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+      "row-0025:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+      "row-0026:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+      "row-0027:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+      "row-0028:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+      "row-0029:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+      "row-0030:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-"
+    ],
+    "fields": [
+      "column  :1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0",
+      "row-0001:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+      "row-0002:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+      "row-0003:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+      "row-0004:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+      "row-0005:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+      "row-0006:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+      "row-0007:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+      "row-0008:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+      "row-0009:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+      "row-0010:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+      "row-0011:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+      "row-0012:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,f,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+      "row-0013:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,f,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+      "row-0014:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,f,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+      "row-0015:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,f,f,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+      "row-0016:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,f,f,f,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+      "row-0017:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,f,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+      "row-0018:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,f,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+      "row-0019:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+      "row-0020:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+      "row-0021:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+      "row-0022:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+      "row-0023:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+      "row-0024:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+      "row-0025:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+      "row-0026:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+      "row-0027:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+      "row-0028:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+      "row-0029:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+      "row-0030:-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-"
+    ],
+    "visibility": {},
+    "maxX": 50,
+    "maxY": 30,
+    "seed": 134
+  },
+  "europe": {},
+  "campaign": {
+    "name": "default",
+    "mission": "thrive",
+    "data": {
+      "militaryPower": "false"
+    }
+  },
+  "focusedField": {
+    "x": 19,
+    "y": 11
+  },
+  "statistics": {
+    "turnStatistics": [
+      {
+        "player": "Dutch",
+        "turnNo": 0,
+        "econonyScore": 0,
+        "militaryScore": 4,
+        "gold": 2108,
+        "score": 2112
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 0,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 1,
+        "econonyScore": 0,
+        "militaryScore": 4,
+        "gold": 2108,
+        "score": 2112
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 1,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 2,
+        "econonyScore": 0,
+        "militaryScore": 4,
+        "gold": 2108,
+        "score": 2112
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 2,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 3,
+        "econonyScore": 0,
+        "militaryScore": 4,
+        "gold": 2108,
+        "score": 2112
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 3,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 4,
+        "econonyScore": 0,
+        "militaryScore": 4,
+        "gold": 2108,
+        "score": 2112
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 4,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 5,
+        "econonyScore": 0,
+        "militaryScore": 4,
+        "gold": 2108,
+        "score": 2112
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 5,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 6,
+        "econonyScore": 5,
+        "militaryScore": 4,
+        "gold": 2108,
+        "score": 2117
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 6,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 7,
+        "econonyScore": 10,
+        "militaryScore": 4,
+        "gold": 2108,
+        "score": 2122
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 7,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 8,
+        "econonyScore": 15,
+        "militaryScore": 4,
+        "gold": 2108,
+        "score": 2127
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 8,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 9,
+        "econonyScore": 20,
+        "militaryScore": 4,
+        "gold": 2108,
+        "score": 2132
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 9,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 10,
+        "econonyScore": 29,
+        "militaryScore": 4,
+        "gold": 2108,
+        "score": 2141
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 10,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 11,
+        "econonyScore": 38,
+        "militaryScore": 4,
+        "gold": 2108,
+        "score": 2150
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 11,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 12,
+        "econonyScore": 47,
+        "militaryScore": 5,
+        "gold": 2108,
+        "score": 2160
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 12,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 13,
+        "econonyScore": 56,
+        "militaryScore": 5,
+        "gold": 2108,
+        "score": 2169
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 13,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 14,
+        "econonyScore": 65,
+        "militaryScore": 5,
+        "gold": 2108,
+        "score": 2178
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 14,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 15,
+        "econonyScore": 74,
+        "militaryScore": 5,
+        "gold": 2108,
+        "score": 2187
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 15,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 16,
+        "econonyScore": 87,
+        "militaryScore": 5,
+        "gold": 2108,
+        "score": 2200
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 16,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 17,
+        "econonyScore": 100,
+        "militaryScore": 5,
+        "gold": 2108,
+        "score": 2213
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 17,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 18,
+        "econonyScore": 113,
+        "militaryScore": 5,
+        "gold": 2108,
+        "score": 2226
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 18,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 19,
+        "econonyScore": 126,
+        "militaryScore": 5,
+        "gold": 2108,
+        "score": 2239
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 19,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 20,
+        "econonyScore": 139,
+        "militaryScore": 5,
+        "gold": 2108,
+        "score": 2252
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 20,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 21,
+        "econonyScore": 152,
+        "militaryScore": 5,
+        "gold": 2108,
+        "score": 2265
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 21,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 22,
+        "econonyScore": 165,
+        "militaryScore": 5,
+        "gold": 2108,
+        "score": 2278
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 22,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 23,
+        "econonyScore": 178,
+        "militaryScore": 6,
+        "gold": 2108,
+        "score": 2292
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 23,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 24,
+        "econonyScore": 192,
+        "militaryScore": 6,
+        "gold": 2108,
+        "score": 2306
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 24,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 25,
+        "econonyScore": 206,
+        "militaryScore": 6,
+        "gold": 2108,
+        "score": 2320
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 25,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 26,
+        "econonyScore": 220,
+        "militaryScore": 6,
+        "gold": 2108,
+        "score": 2334
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 26,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 27,
+        "econonyScore": 234,
+        "militaryScore": 6,
+        "gold": 2108,
+        "score": 2348
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 27,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 28,
+        "econonyScore": 248,
+        "militaryScore": 6,
+        "gold": 2108,
+        "score": 2362
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 28,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 29,
+        "econonyScore": 262,
+        "militaryScore": 6,
+        "gold": 2108,
+        "score": 2376
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 29,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 30,
+        "econonyScore": 267,
+        "militaryScore": 6,
+        "gold": 2108,
+        "score": 2381
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 30,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 31,
+        "econonyScore": 272,
+        "militaryScore": 6,
+        "gold": 2108,
+        "score": 2386
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 31,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 32,
+        "econonyScore": 277,
+        "militaryScore": 6,
+        "gold": 2108,
+        "score": 2391
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 32,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 33,
+        "econonyScore": 282,
+        "militaryScore": 6,
+        "gold": 2108,
+        "score": 2396
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 33,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 34,
+        "econonyScore": 287,
+        "militaryScore": 7,
+        "gold": 2108,
+        "score": 2402
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 34,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 35,
+        "econonyScore": 292,
+        "militaryScore": 7,
+        "gold": 2108,
+        "score": 2407
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 35,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 36,
+        "econonyScore": 297,
+        "militaryScore": 7,
+        "gold": 2108,
+        "score": 2412
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 36,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 37,
+        "econonyScore": 302,
+        "militaryScore": 7,
+        "gold": 2108,
+        "score": 2417
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 37,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 38,
+        "econonyScore": 307,
+        "militaryScore": 7,
+        "gold": 2108,
+        "score": 2422
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 38,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 39,
+        "econonyScore": 312,
+        "militaryScore": 7,
+        "gold": 2108,
+        "score": 2427
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 39,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 40,
+        "econonyScore": 317,
+        "militaryScore": 7,
+        "gold": 2108,
+        "score": 2432
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 40,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 41,
+        "econonyScore": 292,
+        "militaryScore": 7,
+        "gold": 2468,
+        "score": 2767
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 41,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 42,
+        "econonyScore": 297,
+        "militaryScore": 7,
+        "gold": 2468,
+        "score": 2772
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 42,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 43,
+        "econonyScore": 302,
+        "militaryScore": 7,
+        "gold": 2468,
+        "score": 2777
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 43,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 44,
+        "econonyScore": 307,
+        "militaryScore": 7,
+        "gold": 2468,
+        "score": 2782
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 44,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 45,
+        "econonyScore": 312,
+        "militaryScore": 8,
+        "gold": 2468,
+        "score": 2788
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 45,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 46,
+        "econonyScore": 317,
+        "militaryScore": 8,
+        "gold": 2468,
+        "score": 2793
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 46,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 47,
+        "econonyScore": 322,
+        "militaryScore": 8,
+        "gold": 2468,
+        "score": 2798
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 47,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 48,
+        "econonyScore": 327,
+        "militaryScore": 8,
+        "gold": 2468,
+        "score": 2803
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 48,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 49,
+        "econonyScore": 332,
+        "militaryScore": 8,
+        "gold": 2468,
+        "score": 2808
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 49,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 50,
+        "econonyScore": 337,
+        "militaryScore": 8,
+        "gold": 2468,
+        "score": 2813
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 50,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 51,
+        "econonyScore": 345,
+        "militaryScore": 8,
+        "gold": 2468,
+        "score": 2821
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 51,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 52,
+        "econonyScore": 353,
+        "militaryScore": 8,
+        "gold": 2468,
+        "score": 2829
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 52,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 53,
+        "econonyScore": 361,
+        "militaryScore": 8,
+        "gold": 2468,
+        "score": 2837
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 53,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 54,
+        "econonyScore": 369,
+        "militaryScore": 8,
+        "gold": 2468,
+        "score": 2845
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 54,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 55,
+        "econonyScore": 377,
+        "militaryScore": 8,
+        "gold": 2468,
+        "score": 2853
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 55,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 56,
+        "econonyScore": 385,
+        "militaryScore": 9,
+        "gold": 2468,
+        "score": 2862
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 56,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 57,
+        "econonyScore": 393,
+        "militaryScore": 9,
+        "gold": 2468,
+        "score": 2870
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 57,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 58,
+        "econonyScore": 305,
+        "militaryScore": 11,
+        "gold": 820,
+        "score": 1136
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 58,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 59,
+        "econonyScore": 313,
+        "militaryScore": 11,
+        "gold": 820,
+        "score": 1144
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 59,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 60,
+        "econonyScore": 321,
+        "militaryScore": 11,
+        "gold": 820,
+        "score": 1152
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 60,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 61,
+        "econonyScore": 329,
+        "militaryScore": 11,
+        "gold": 820,
+        "score": 1160
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 61,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 62,
+        "econonyScore": 337,
+        "militaryScore": 11,
+        "gold": 820,
+        "score": 1168
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 62,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 63,
+        "econonyScore": 345,
+        "militaryScore": 11,
+        "gold": 820,
+        "score": 1176
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 63,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 64,
+        "econonyScore": 353,
+        "militaryScore": 11,
+        "gold": 820,
+        "score": 1184
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 64,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 65,
+        "econonyScore": 361,
+        "militaryScore": 11,
+        "gold": 820,
+        "score": 1192
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 65,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 66,
+        "econonyScore": 369,
+        "militaryScore": 11,
+        "gold": 820,
+        "score": 1200
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 66,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 67,
+        "econonyScore": 379,
+        "militaryScore": 12,
+        "gold": 820,
+        "score": 1211
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 67,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 68,
+        "econonyScore": 389,
+        "militaryScore": 12,
+        "gold": 820,
+        "score": 1221
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 68,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 69,
+        "econonyScore": 399,
+        "militaryScore": 12,
+        "gold": 820,
+        "score": 1231
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 69,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 70,
+        "econonyScore": 409,
+        "militaryScore": 12,
+        "gold": 820,
+        "score": 1241
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 70,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 71,
+        "econonyScore": 419,
+        "militaryScore": 12,
+        "gold": 820,
+        "score": 1251
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 71,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 72,
+        "econonyScore": 429,
+        "militaryScore": 12,
+        "gold": 820,
+        "score": 1261
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 72,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 73,
+        "econonyScore": 445,
+        "militaryScore": 12,
+        "gold": 820,
+        "score": 1277
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 73,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 74,
+        "econonyScore": 461,
+        "militaryScore": 12,
+        "gold": 820,
+        "score": 1293
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 74,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 75,
+        "econonyScore": 377,
+        "militaryScore": 13,
+        "gold": 620,
+        "score": 1010
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 75,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 76,
+        "econonyScore": 393,
+        "militaryScore": 13,
+        "gold": 620,
+        "score": 1026
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 76,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 77,
+        "econonyScore": 409,
+        "militaryScore": 13,
+        "gold": 620,
+        "score": 1042
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 77,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 78,
+        "econonyScore": 425,
+        "militaryScore": 13,
+        "gold": 620,
+        "score": 1058
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 78,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 79,
+        "econonyScore": 441,
+        "militaryScore": 13,
+        "gold": 620,
+        "score": 1074
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 79,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 80,
+        "econonyScore": 457,
+        "militaryScore": 13,
+        "gold": 620,
+        "score": 1090
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 80,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 81,
+        "econonyScore": 473,
+        "militaryScore": 13,
+        "gold": 620,
+        "score": 1106
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 81,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 82,
+        "econonyScore": 489,
+        "militaryScore": 13,
+        "gold": 620,
+        "score": 1122
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 82,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 83,
+        "econonyScore": 508,
+        "militaryScore": 13,
+        "gold": 620,
+        "score": 1141
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 83,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 84,
+        "econonyScore": 527,
+        "militaryScore": 13,
+        "gold": 620,
+        "score": 1160
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 84,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 85,
+        "econonyScore": 546,
+        "militaryScore": 13,
+        "gold": 620,
+        "score": 1179
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 85,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 86,
+        "econonyScore": 565,
+        "militaryScore": 13,
+        "gold": 620,
+        "score": 1198
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 86,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 87,
+        "econonyScore": 584,
+        "militaryScore": 13,
+        "gold": 620,
+        "score": 1217
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 87,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 88,
+        "econonyScore": 603,
+        "militaryScore": 13,
+        "gold": 620,
+        "score": 1236
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 88,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 89,
+        "econonyScore": 622,
+        "militaryScore": 13,
+        "gold": 620,
+        "score": 1255
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 89,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 90,
+        "econonyScore": 641,
+        "militaryScore": 13,
+        "gold": 620,
+        "score": 1274
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 90,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 91,
+        "econonyScore": 660,
+        "militaryScore": 13,
+        "gold": 620,
+        "score": 1293
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 91,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 92,
+        "econonyScore": 679,
+        "militaryScore": 13,
+        "gold": 620,
+        "score": 1312
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 92,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 93,
+        "econonyScore": 698,
+        "militaryScore": 13,
+        "gold": 620,
+        "score": 1331
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 93,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 94,
+        "econonyScore": 717,
+        "militaryScore": 13,
+        "gold": 620,
+        "score": 1350
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 94,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 95,
+        "econonyScore": 736,
+        "militaryScore": 13,
+        "gold": 620,
+        "score": 1369
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 95,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 96,
+        "econonyScore": 755,
+        "militaryScore": 13,
+        "gold": 620,
+        "score": 1388
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 96,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 97,
+        "econonyScore": 774,
+        "militaryScore": 13,
+        "gold": 620,
+        "score": 1407
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 97,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 98,
+        "econonyScore": 793,
+        "militaryScore": 13,
+        "gold": 620,
+        "score": 1426
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 98,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 99,
+        "econonyScore": 812,
+        "militaryScore": 13,
+        "gold": 620,
+        "score": 1445
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 99,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 100,
+        "econonyScore": 831,
+        "militaryScore": 13,
+        "gold": 620,
+        "score": 1464
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 100,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 101,
+        "econonyScore": 850,
+        "militaryScore": 13,
+        "gold": 620,
+        "score": 1483
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 101,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 102,
+        "econonyScore": 869,
+        "militaryScore": 13,
+        "gold": 620,
+        "score": 1502
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 102,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 103,
+        "econonyScore": 888,
+        "militaryScore": 13,
+        "gold": 620,
+        "score": 1521
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 103,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 104,
+        "econonyScore": 907,
+        "militaryScore": 13,
+        "gold": 620,
+        "score": 1540
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 104,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 105,
+        "econonyScore": 926,
+        "militaryScore": 13,
+        "gold": 620,
+        "score": 1559
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 105,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 106,
+        "econonyScore": 945,
+        "militaryScore": 13,
+        "gold": 620,
+        "score": 1578
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 106,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 107,
+        "econonyScore": 668,
+        "militaryScore": 13,
+        "gold": 4172,
+        "score": 4853
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 107,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 108,
+        "econonyScore": 687,
+        "militaryScore": 13,
+        "gold": 4172,
+        "score": 4872
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 108,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 109,
+        "econonyScore": 706,
+        "militaryScore": 13,
+        "gold": 4172,
+        "score": 4891
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 109,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 110,
+        "econonyScore": 725,
+        "militaryScore": 13,
+        "gold": 4172,
+        "score": 4910
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 110,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 111,
+        "econonyScore": 744,
+        "militaryScore": 13,
+        "gold": 4172,
+        "score": 4929
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 111,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 112,
+        "econonyScore": 763,
+        "militaryScore": 13,
+        "gold": 4172,
+        "score": 4948
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 112,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 113,
+        "econonyScore": 782,
+        "militaryScore": 13,
+        "gold": 4172,
+        "score": 4967
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 113,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 114,
+        "econonyScore": 801,
+        "militaryScore": 13,
+        "gold": 4172,
+        "score": 4986
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 114,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 115,
+        "econonyScore": 820,
+        "militaryScore": 13,
+        "gold": 4172,
+        "score": 5005
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 115,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 116,
+        "econonyScore": 839,
+        "militaryScore": 13,
+        "gold": 4172,
+        "score": 5024
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 116,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 117,
+        "econonyScore": 858,
+        "militaryScore": 13,
+        "gold": 4172,
+        "score": 5043
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 117,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 118,
+        "econonyScore": 877,
+        "militaryScore": 13,
+        "gold": 4172,
+        "score": 5062
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 118,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 119,
+        "econonyScore": 896,
+        "militaryScore": 13,
+        "gold": 4172,
+        "score": 5081
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 119,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 120,
+        "econonyScore": 915,
+        "militaryScore": 13,
+        "gold": 4172,
+        "score": 5100
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 120,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 121,
+        "econonyScore": 934,
+        "militaryScore": 13,
+        "gold": 4172,
+        "score": 5119
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 121,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 122,
+        "econonyScore": 779,
+        "militaryScore": 17,
+        "gold": 660,
+        "score": 1456
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 122,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 123,
+        "econonyScore": 798,
+        "militaryScore": 17,
+        "gold": 660,
+        "score": 1475
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 123,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 124,
+        "econonyScore": 817,
+        "militaryScore": 17,
+        "gold": 660,
+        "score": 1494
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 124,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 125,
+        "econonyScore": 836,
+        "militaryScore": 17,
+        "gold": 660,
+        "score": 1513
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 125,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 126,
+        "econonyScore": 855,
+        "militaryScore": 17,
+        "gold": 660,
+        "score": 1532
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 126,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 127,
+        "econonyScore": 874,
+        "militaryScore": 17,
+        "gold": 660,
+        "score": 1551
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 127,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 128,
+        "econonyScore": 893,
+        "militaryScore": 17,
+        "gold": 660,
+        "score": 1570
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 128,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 129,
+        "econonyScore": 912,
+        "militaryScore": 17,
+        "gold": 660,
+        "score": 1589
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 129,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 130,
+        "econonyScore": 930,
+        "militaryScore": 17,
+        "gold": 660,
+        "score": 1607
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 130,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 131,
+        "econonyScore": 955,
+        "militaryScore": 17,
+        "gold": 660,
+        "score": 1632
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 131,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 132,
+        "econonyScore": 980,
+        "militaryScore": 17,
+        "gold": 660,
+        "score": 1657
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 132,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 133,
+        "econonyScore": 1005,
+        "militaryScore": 17,
+        "gold": 660,
+        "score": 1682
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 133,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 134,
+        "econonyScore": 1030,
+        "militaryScore": 17,
+        "gold": 660,
+        "score": 1707
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 134,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 135,
+        "econonyScore": 1055,
+        "militaryScore": 17,
+        "gold": 660,
+        "score": 1732
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 135,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 136,
+        "econonyScore": 1080,
+        "militaryScore": 17,
+        "gold": 660,
+        "score": 1757
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 136,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 137,
+        "econonyScore": 1105,
+        "militaryScore": 17,
+        "gold": 660,
+        "score": 1782
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 137,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 138,
+        "econonyScore": 938,
+        "militaryScore": 19,
+        "gold": 164,
+        "score": 1121
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 138,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 139,
+        "econonyScore": 963,
+        "militaryScore": 19,
+        "gold": 164,
+        "score": 1146
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 139,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 140,
+        "econonyScore": 988,
+        "militaryScore": 19,
+        "gold": 164,
+        "score": 1171
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 140,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 141,
+        "econonyScore": 1013,
+        "militaryScore": 19,
+        "gold": 164,
+        "score": 1196
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 141,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 142,
+        "econonyScore": 1038,
+        "militaryScore": 19,
+        "gold": 164,
+        "score": 1221
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 142,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 143,
+        "econonyScore": 1063,
+        "militaryScore": 19,
+        "gold": 164,
+        "score": 1246
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 143,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 144,
+        "econonyScore": 1088,
+        "militaryScore": 19,
+        "gold": 164,
+        "score": 1271
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 144,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 145,
+        "econonyScore": 1111,
+        "militaryScore": 19,
+        "gold": 164,
+        "score": 1294
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 145,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 146,
+        "econonyScore": 1134,
+        "militaryScore": 19,
+        "gold": 164,
+        "score": 1317
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 146,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 147,
+        "econonyScore": 1157,
+        "militaryScore": 19,
+        "gold": 164,
+        "score": 1340
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 147,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 148,
+        "econonyScore": 1180,
+        "militaryScore": 19,
+        "gold": 164,
+        "score": 1363
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 148,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 149,
+        "econonyScore": 1203,
+        "militaryScore": 19,
+        "gold": 164,
+        "score": 1386
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 149,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 150,
+        "econonyScore": 1226,
+        "militaryScore": 19,
+        "gold": 164,
+        "score": 1409
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 150,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 151,
+        "econonyScore": 1249,
+        "militaryScore": 19,
+        "gold": 164,
+        "score": 1432
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 151,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 152,
+        "econonyScore": 1272,
+        "militaryScore": 19,
+        "gold": 164,
+        "score": 1455
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 152,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 153,
+        "econonyScore": 1295,
+        "militaryScore": 19,
+        "gold": 164,
+        "score": 1478
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 153,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 154,
+        "econonyScore": 1318,
+        "militaryScore": 19,
+        "gold": 164,
+        "score": 1501
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 154,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 155,
+        "econonyScore": 1341,
+        "militaryScore": 19,
+        "gold": 164,
+        "score": 1524
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 155,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 156,
+        "econonyScore": 1082,
+        "militaryScore": 21,
+        "gold": 748,
+        "score": 1851
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 156,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 157,
+        "econonyScore": 1105,
+        "militaryScore": 21,
+        "gold": 748,
+        "score": 1874
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 157,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 158,
+        "econonyScore": 1128,
+        "militaryScore": 21,
+        "gold": 748,
+        "score": 1897
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 158,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 159,
+        "econonyScore": 1151,
+        "militaryScore": 21,
+        "gold": 748,
+        "score": 1920
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 159,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 160,
+        "econonyScore": 1174,
+        "militaryScore": 21,
+        "gold": 748,
+        "score": 1943
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 160,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 161,
+        "econonyScore": 1197,
+        "militaryScore": 21,
+        "gold": 748,
+        "score": 1966
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 161,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 162,
+        "econonyScore": 1220,
+        "militaryScore": 21,
+        "gold": 748,
+        "score": 1989
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 162,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 163,
+        "econonyScore": 1243,
+        "militaryScore": 21,
+        "gold": 748,
+        "score": 2012
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 163,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 164,
+        "econonyScore": 1269,
+        "militaryScore": 21,
+        "gold": 748,
+        "score": 2038
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 164,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 165,
+        "econonyScore": 1295,
+        "militaryScore": 21,
+        "gold": 748,
+        "score": 2064
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 165,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 166,
+        "econonyScore": 1321,
+        "militaryScore": 21,
+        "gold": 748,
+        "score": 2090
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 166,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 167,
+        "econonyScore": 1347,
+        "militaryScore": 21,
+        "gold": 748,
+        "score": 2116
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 167,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 168,
+        "econonyScore": 1373,
+        "militaryScore": 21,
+        "gold": 748,
+        "score": 2142
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 168,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 169,
+        "econonyScore": 1399,
+        "militaryScore": 21,
+        "gold": 748,
+        "score": 2168
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 169,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 170,
+        "econonyScore": 1425,
+        "militaryScore": 21,
+        "gold": 748,
+        "score": 2194
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 170,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 171,
+        "econonyScore": 1451,
+        "militaryScore": 21,
+        "gold": 748,
+        "score": 2220
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 171,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 172,
+        "econonyScore": 1477,
+        "militaryScore": 21,
+        "gold": 748,
+        "score": 2246
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 172,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 173,
+        "econonyScore": 1203,
+        "militaryScore": 24,
+        "gold": 148,
+        "score": 1375
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 173,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 174,
+        "econonyScore": 1229,
+        "militaryScore": 24,
+        "gold": 148,
+        "score": 1401
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 174,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 175,
+        "econonyScore": 1255,
+        "militaryScore": 24,
+        "gold": 148,
+        "score": 1427
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 175,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 176,
+        "econonyScore": 1281,
+        "militaryScore": 24,
+        "gold": 148,
+        "score": 1453
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 176,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 177,
+        "econonyScore": 1307,
+        "militaryScore": 24,
+        "gold": 148,
+        "score": 1479
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 177,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 178,
+        "econonyScore": 1333,
+        "militaryScore": 24,
+        "gold": 148,
+        "score": 1505
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 178,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 179,
+        "econonyScore": 1359,
+        "militaryScore": 24,
+        "gold": 148,
+        "score": 1531
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 179,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 180,
+        "econonyScore": 1385,
+        "militaryScore": 24,
+        "gold": 148,
+        "score": 1557
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 180,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 181,
+        "econonyScore": 1417,
+        "militaryScore": 24,
+        "gold": 148,
+        "score": 1589
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 181,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 182,
+        "econonyScore": 1449,
+        "militaryScore": 24,
+        "gold": 148,
+        "score": 1621
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 182,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 183,
+        "econonyScore": 1481,
+        "militaryScore": 24,
+        "gold": 148,
+        "score": 1653
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 183,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 184,
+        "econonyScore": 1513,
+        "militaryScore": 24,
+        "gold": 148,
+        "score": 1685
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 184,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 185,
+        "econonyScore": 1545,
+        "militaryScore": 24,
+        "gold": 148,
+        "score": 1717
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 185,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 186,
+        "econonyScore": 1577,
+        "militaryScore": 24,
+        "gold": 148,
+        "score": 1749
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 186,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 187,
+        "econonyScore": 1609,
+        "militaryScore": 24,
+        "gold": 148,
+        "score": 1781
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 187,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 188,
+        "econonyScore": 1641,
+        "militaryScore": 24,
+        "gold": 148,
+        "score": 1813
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 188,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 189,
+        "econonyScore": 1673,
+        "militaryScore": 24,
+        "gold": 148,
+        "score": 1845
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 189,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 190,
+        "econonyScore": 1705,
+        "militaryScore": 24,
+        "gold": 148,
+        "score": 1877
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 190,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 191,
+        "econonyScore": 1359,
+        "militaryScore": 27,
+        "gold": 484,
+        "score": 1870
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 191,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 192,
+        "econonyScore": 1391,
+        "militaryScore": 27,
+        "gold": 484,
+        "score": 1902
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 192,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 193,
+        "econonyScore": 1423,
+        "militaryScore": 27,
+        "gold": 484,
+        "score": 1934
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 193,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 194,
+        "econonyScore": 1455,
+        "militaryScore": 27,
+        "gold": 484,
+        "score": 1966
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 194,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 195,
+        "econonyScore": 1487,
+        "militaryScore": 27,
+        "gold": 484,
+        "score": 1998
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 195,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 196,
+        "econonyScore": 1519,
+        "militaryScore": 27,
+        "gold": 484,
+        "score": 2030
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 196,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 197,
+        "econonyScore": 1551,
+        "militaryScore": 27,
+        "gold": 484,
+        "score": 2062
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 197,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 198,
+        "econonyScore": 1583,
+        "militaryScore": 27,
+        "gold": 484,
+        "score": 2094
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 198,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      },
+      {
+        "player": "Dutch",
+        "turnNo": 199,
+        "econonyScore": 1613,
+        "militaryScore": 27,
+        "gold": 484,
+        "score": 2124
+      },
+      {
+        "player": "Dutch\u0027s King",
+        "turnNo": 199,
+        "econonyScore": 0,
+        "militaryScore": 0,
+        "gold": 1108,
+        "score": 1108
+      }
+    ]
+  },
+  "gameManager": {
+    "players": [
+      {
+        "name": "Dutch",
+        "computer": false,
+        "gold": 484,
+        "declaredIndependence": false,
+        "extraData": {},
+        "visible": {
+          "visible": [
+            "column  :1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0",
+            "row-0001:#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,-,-,-,-,-,-,-,-,-,-",
+            "row-0002:#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,-,-,-,-,-,-,-,-,-,-,-",
+            "row-0003:#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+            "row-0004:#,#,#,#,#,#,#,#,#,#,#,#,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+            "row-0005:#,#,#,#,#,#,#,#,#,#,#,#,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+            "row-0006:#,#,#,#,#,#,#,#,#,#,#,#,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+            "row-0007:#,#,#,#,#,#,#,#,#,#,#,#,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+            "row-0008:#,#,#,#,#,#,#,#,#,#,#,#,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+            "row-0009:#,#,#,#,#,#,#,#,#,#,#,#,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+            "row-0010:#,#,#,#,#,#,#,#,#,#,#,#,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+            "row-0011:#,#,#,#,#,#,#,#,#,#,#,#,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+            "row-0012:#,#,#,#,#,#,#,#,#,#,#,#,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+            "row-0013:#,#,#,#,#,#,#,#,#,#,#,#,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+            "row-0014:#,#,#,#,#,#,#,#,#,#,#,#,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+            "row-0015:#,#,#,#,#,#,#,#,#,#,#,#,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+            "row-0016:#,#,#,#,#,#,#,#,#,#,#,#,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+            "row-0017:#,#,#,#,#,#,#,#,#,#,#,#,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+            "row-0018:#,#,#,#,#,#,#,#,#,#,#,#,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+            "row-0019:#,#,#,#,#,#,#,#,#,#,#,#,#,#,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+            "row-0020:#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+            "row-0021:#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+            "row-0022:#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+            "row-0023:#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+            "row-0024:#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+            "row-0025:#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-,-",
+            "row-0026:#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,-,-,-,-,-,-,-,-,-,-,-",
+            "row-0027:#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,-,-,-,-,-,-,-,-,-,-",
+            "row-0028:#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#",
+            "row-0029:#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#",
+            "row-0030:#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#"
+          ]
+        }
+      },
+      {
+        "name": "Dutch\u0027s King",
+        "computer": true,
+        "gold": 1108,
+        "declaredIndependence": false,
+        "extraData": {},
+        "visible": {
+          "visible": [
+            "column  :1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0",
+            "row-0001:#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#",
+            "row-0002:#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#",
+            "row-0003:#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#",
+            "row-0004:#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#",
+            "row-0005:#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#",
+            "row-0006:#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#",
+            "row-0007:#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#",
+            "row-0008:#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#",
+            "row-0009:#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#",
+            "row-0010:#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#",
+            "row-0011:#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#",
+            "row-0012:#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#",
+            "row-0013:#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#",
+            "row-0014:#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#",
+            "row-0015:#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#",
+            "row-0016:#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#",
+            "row-0017:#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#",
+            "row-0018:#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#",
+            "row-0019:#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#",
+            "row-0020:#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#",
+            "row-0021:#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#",
+            "row-0022:#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#",
+            "row-0023:#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#",
+            "row-0024:#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#",
+            "row-0025:#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#",
+            "row-0026:#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#",
+            "row-0027:#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#",
+            "row-0028:#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#",
+            "row-0029:#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#",
+            "row-0030:#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#,#"
+          ]
+        }
+      }
+    ],
+    "gameStarted": true,
+    "currentPlayer": "Dutch"
+  }
+}
