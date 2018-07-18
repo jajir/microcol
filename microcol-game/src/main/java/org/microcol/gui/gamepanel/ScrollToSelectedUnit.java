@@ -12,17 +12,20 @@ public final class ScrollToSelectedUnit {
     private final GamePanelView gamePanelView;
 
     @Inject
-    public ScrollToSelectedUnit(
-            final SelectedUnitWasChangedController selectedUnitWasChangedController,
+    public ScrollToSelectedUnit(final TileWasSelectedController tileWasSelectedController,
             final GamePanelView gamePanelView) {
         this.gamePanelView = Preconditions.checkNotNull(gamePanelView);
-        selectedUnitWasChangedController.addListener(this::onSelectedUnitWasChanged);
+        tileWasSelectedController.addListener(this::onTileWasSelected);
     }
 
-    private void onSelectedUnitWasChanged(final SelectedUnitWasChangedEvent event) {
-        if (event.isNecesarryToScrool()) {
-            gamePanelView
-                    .planScrollingAnimationToLocation(event.getSelectedUnit().get().getLocation());
+    private void onTileWasSelected(final TileWasSelectedEvent event) {
+        if (ScrollToFocusedTile.smoothScroll
+                .equals(event.getScrollToFocusedTile())) {
+            gamePanelView.planScrollingAnimationToLocation(event.getLocation());
+        } else if (ScrollToFocusedTile.skip
+                .equals(event.getScrollToFocusedTile())) {
+            gamePanelView.skipCenterViewAtLocation(event.getLocation());
         }
     }
+
 }

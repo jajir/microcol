@@ -41,7 +41,7 @@ final class PathFinder {
         }
 
         final List<PathFindingNode> openList = new ArrayList<>();
-        openList.add(new PathFindingNode(null, start, start.getDistance(destination)));
+        openList.add(new PathFindingNode(null, start, start.getDistanceManhattan(destination)));
         final Set<Location> closedSet = new HashSet<>();
         PathFindingNode current = null;
 
@@ -61,7 +61,7 @@ final class PathFinder {
                 if (!closedSet.contains(neighbor) && unit.isPossibleToMoveAt(neighbor)) {
                     final PathFindingNode oldNode = get(openList, neighbor);
                     final PathFindingNode newNode = new PathFindingNode(current, neighbor,
-                            neighbor.getDistance(destination));
+                            neighbor.getDistanceManhattan(destination));
                     if (oldNode == null) {
                         openList.add(newNode);
                     } else {

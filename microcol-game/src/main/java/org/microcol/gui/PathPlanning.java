@@ -112,7 +112,7 @@ public final class PathPlanning {
         }
     }
 
-    public float countStepSize(int from, int to, int speed) {
+    public float countStepSize(final int from, final int to, final int speed) {
         return countStepSize(to - from, speed);
     }
 

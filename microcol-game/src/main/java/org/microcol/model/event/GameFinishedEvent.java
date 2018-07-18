@@ -7,7 +7,8 @@ import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 
 /**
- * Event is send when game is over.
+ * Event is send when game is over. This is send just when game is over because
+ * of game rules not because of players decision.
  */
 public final class GameFinishedEvent extends AbstractModelEvent {
 

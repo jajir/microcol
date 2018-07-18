@@ -104,6 +104,39 @@ GUI - structure and behavior
  
 [game-starting.png] Loading of campaign.
 
+** Unit and tile selecting events
+
+ There are events:
+  
+  * TileWasSelectedEvent - Is fired when new tile is selected by <SelectedTileManager>.
+ Event hold information if screen should smoothly scroll at selected tile or screen should jump at selected tile or do nothing. 
+  
+  * UnitWasSelectedEvent - Holds info about selected tile and selected unit.
+  Is fired by <SelectedUnitManager>. Hold reference to selected unit. Event is fired event when unit is deselected.
+  For example player focus location without any units. 
+
+[]
+
+ This event are raised in following scenarios in following order:
+ 
+ * User click at unit. - When user click than tile should be selected.
+ If there are some unit that could move than first such unit is selected. So called events are: 
+ 
+  [[1]] TileWasSelectedEvent - tile is selected but screen don't center at this tile.
+  
+  [[1]] UnitWasSelectedEvent - just when there is selected unit
+ 
+ * User click at unit with key modifier e.g. &#8984;. - Same as previous case but when tile is selected than screen scroll to put selected tile to the center.
+ 
+ * User choose specific unit from unit at already selected tile - Just event UnitWasSelectedEvent is raised.
+ 
+ * Focused unit is moved to city field. - Class <SelectedUnitManager> should be called and it fire event UnitWasSelectedEvent.
+  When there is another unit that could be selected than this unit is selected otherwise selected unit is set to <null>.
+ 
+ * Focused unit is destroyed. - Tile stay selected but UnitWasSelectedEvent is raised with selected unit set to <null>.
+ 
+[]
+
 ----
 
 

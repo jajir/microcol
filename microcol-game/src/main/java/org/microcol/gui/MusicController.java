@@ -25,7 +25,7 @@ public final class MusicController {
         musicPlayer.setVolume(event.getVolume());
     }
 
-    public void start(int defaultVolume) {
+    public void start(final int defaultVolume) {
         new Thread(() -> musicPlayer.playSound("music/AnnounceMyName_1.wav", defaultVolume))
                 .start();
     }

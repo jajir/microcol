@@ -10,10 +10,13 @@ import mockit.Expectations;
 import mockit.Mocked;
 
 public class ConstructionTest {
+    
+    @Mocked
+    private Model model;
 
 	@Test
 	public void test_getOrderedSlots_noUnits(final @Mocked Colony colony) throws Exception {
-		Construction blacksmith = Construction.build(colony, ConstructionType.BLACKSMITHS_HOUSE);
+		Construction blacksmith = Construction.build(model, colony, ConstructionType.BLACKSMITHS_HOUSE);
 
 		List<ConstructionSlot> slots = blacksmith.getOrderedSlots();
 
@@ -25,7 +28,7 @@ public class ConstructionTest {
 
 	@Test
 	public void test_getOrderedSlots_one_freeColonists(final @Mocked Colony colony, @Mocked final Unit colonist) {
-		Construction blacksmith = Construction.build(colony, ConstructionType.BLACKSMITHS_HOUSE);
+		Construction blacksmith = Construction.build(model, colony, ConstructionType.BLACKSMITHS_HOUSE);
 		blacksmith.placeWorker(1, colonist);
 		new Expectations() {{
 				colonist.getType(); result = UnitType.COLONIST;
@@ -41,7 +44,7 @@ public class ConstructionTest {
 
 	@Test
 	public void test_getOrderedSlots_one_freeColonists_one_ExpertBlacksmith(final @Mocked Colony colony, @Mocked final Unit colonist1, @Mocked final Unit colonist2) {
-		Construction blacksmith = Construction.build(colony, ConstructionType.BLACKSMITHS_HOUSE);
+		Construction blacksmith = Construction.build(model, colony, ConstructionType.BLACKSMITHS_HOUSE);
 		blacksmith.placeWorker(1, colonist1);
 		blacksmith.placeWorker(2, colonist2);
 		new Expectations() {{

@@ -13,6 +13,7 @@ import org.microcol.model.event.ColonyWasFoundEvent;
 import org.microcol.model.event.DebugRequestedEvent;
 import org.microcol.model.event.GameFinishedEvent;
 import org.microcol.model.event.GameStartedEvent;
+import org.microcol.model.event.GameStoppedEvent;
 import org.microcol.model.event.GoldWasChangedEvent;
 import org.microcol.model.event.GoodsWasSoldInEuropeEvent;
 import org.microcol.model.event.IndependenceWasDeclaredEvent;
@@ -24,6 +25,8 @@ import org.microcol.model.event.UnitMoveFinishedEvent;
 import org.microcol.model.event.UnitMoveStartedEvent;
 import org.microcol.model.event.UnitMovedStepFinishedEvent;
 import org.microcol.model.event.UnitMovedStepStartedEvent;
+import org.microcol.model.event.UnitMovedToColonyFieldEvent;
+import org.microcol.model.event.UnitMovedToConstructionEvent;
 import org.microcol.model.event.UnitMovedToHighSeasEvent;
 
 import com.google.common.base.MoreObjects;
@@ -169,13 +172,28 @@ public final class ModelListenerImpl implements ModelListener {
     }
 
     @Override
-    public void onActionStarted(ActionStartedEvent event) {
+    public void onActionStarted(final ActionStartedEvent event) {
         modelEventManager.getActionStartedController().fireEvent(event);
     }
 
     @Override
-    public void onActionEnded(ActionEndedEvent event) {
+    public void onActionEnded(final ActionEndedEvent event) {
         modelEventManager.getActionEndedController().fireEvent(event);
+    }
+
+    @Override
+    public void onGameStopped(final GameStoppedEvent event) {
+        modelEventManager.getGameStoppedController().fireEvent(event);
+    }
+
+    @Override
+    public void onUnitMovedToConstruction(final UnitMovedToConstructionEvent event) {
+        modelEventManager.getUnitMovedToConstructionController().fireEvent(event);
+    }
+
+    @Override
+    public void onUnitMovedToColonyField(final UnitMovedToColonyFieldEvent event) {
+        modelEventManager.getUnitMovedToColonyFieldController().fireEvent(event);
     }
 
 }

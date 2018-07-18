@@ -1,6 +1,5 @@
 package org.microcol.gui;
 
-import org.microcol.gui.event.KeyController;
 import org.microcol.gui.event.StatusBarMessageController;
 import org.microcol.gui.event.StatusBarMessageEvent;
 import org.microcol.gui.event.model.GameModelController;
@@ -33,7 +32,7 @@ public final class RightPanelPresenter {
 
 	@Inject
 	RightPanelPresenter(final RightPanelView display, final GameModelController gameModelController,
-			final KeyController keyController, final TileWasSelectedController tileWasSelectedController,
+			final TileWasSelectedController tileWasSelectedController,
 			final ChangeLanguageController changeLanguangeController, final Text text,
 			final StatusBarMessageController statusBarMessageController,
 			final TurnStartedController turnStartedController,

@@ -20,7 +20,7 @@ public final class UnitAttackedEventListener {
         unitAttackedEventController.addListener(this::onUnitAttacked);
     }
 
-    private void onUnitAttacked(UnitAttackedEvent event) {
+    private void onUnitAttacked(final UnitAttackedEvent event) {
         gamePanelView.addFightAnimation(event.getAttacker(), event.getDefender());
     }
 

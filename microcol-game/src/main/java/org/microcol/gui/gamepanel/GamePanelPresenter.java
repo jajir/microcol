@@ -217,7 +217,12 @@ public final class GamePanelPresenter {
                 switchToNormalMode(location);
             } else {
                 if (e.isPrimaryButtonDown()) {
-                    selectedTileManager.setSelectedTile(location);
+                    if (e.isControlDown() || e.isAltDown()) {
+                        selectedTileManager.setSelectedTile(location,
+                                ScrollToFocusedTile.smoothScroll);
+                    } else {
+                        selectedTileManager.setSelectedTile(location, ScrollToFocusedTile.no);
+                    }
                     if (!tryToSwitchToMoveMode(location)) {
                         tryToOpenColonyDetail(location);
                     }
@@ -294,7 +299,7 @@ public final class GamePanelPresenter {
                 oCargoSlot.get().store(movingUnit);
             }
             // TODO JJ following code is repeated multiple times
-            selectedTileManager.setSelectedTile(moveToLocation);
+            selectedTileManager.setSelectedTile(moveToLocation, ScrollToFocusedTile.smoothScroll);
             disableMoveMode();
         } else if (movingUnit.isPossibleToDisembarkAt(moveToLocation, true)) {
             // try to disembark
@@ -303,7 +308,7 @@ public final class GamePanelPresenter {
                             && cargoSlot.getUnit().get().getActionPoints() > 0)
                     .forEach(cargoSlot -> cargoSlot.unload(moveToLocation));
             // TODO JJ following code is repeated multiple times
-            selectedTileManager.setSelectedTile(moveToLocation);
+            selectedTileManager.setSelectedTile(moveToLocation, ScrollToFocusedTile.smoothScroll);
             disableMoveMode();
         } else if (unitMove.isOneTurnMove()) {
             // user will move
@@ -317,7 +322,7 @@ public final class GamePanelPresenter {
                 if (!path.isEmpty()) {
                     gameModelController.performMove(movingUnit, path);
                 }
-                selectedTileManager.setSelectedTile(moveToLocation);
+                selectedTileManager.setSelectedTile(moveToLocation, ScrollToFocusedTile.smoothScroll);
                 disableMoveMode();
             }
         } else {
@@ -335,7 +340,7 @@ public final class GamePanelPresenter {
     private void fight(final Unit movingUnit, final Location moveToLocation) {
         if (!movingUnit.getType().canAttack()) {
             // TODO JJ consider which tile should have focus
-            selectedTileManager.setSelectedTile(moveToLocation);
+            selectedTileManager.setSelectedTile(moveToLocation, ScrollToFocusedTile.smoothScroll);
             disableMoveMode();
             new DialogUnitCantFightWarning(viewUtil, text);
             return;
@@ -348,7 +353,7 @@ public final class GamePanelPresenter {
                 gameModelController.performFight(movingUnit, targetUnit);
             } else {
                 // User choose to quit fight
-                selectedTileManager.setSelectedTile(moveToLocation);
+                selectedTileManager.setSelectedTile(moveToLocation, ScrollToFocusedTile.smoothScroll);
                 disableMoveMode();
             }
         } else {

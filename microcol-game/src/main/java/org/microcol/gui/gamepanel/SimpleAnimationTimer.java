@@ -18,7 +18,7 @@ public final class SimpleAnimationTimer extends AnimationTimer {
     }
 
     @Override
-    public void handle(long now) {
+    public void handle(final long now) {
         handler.accept(now);
     }
 

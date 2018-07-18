@@ -79,7 +79,7 @@ public final class AnimationManager implements AnimationLock {
      *            optional operation that will be executed when animation is
      *            none
      */
-    void addAnimation(final Animation animation, Consumer<Animation> onAnimationIsDone) {
+    void addAnimation(final Animation animation, final Consumer<Animation> onAnimationIsDone) {
         Preconditions.checkNotNull(animation);
         final AnimationHolder holder = new AnimationHolder(animation, onAnimationIsDone);
         logger.debug("Adding animation {}", animation);

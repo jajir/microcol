@@ -9,6 +9,7 @@ import org.microcol.model.event.ColonyWasFoundEvent;
 import org.microcol.model.event.DebugRequestedEvent;
 import org.microcol.model.event.GameFinishedEvent;
 import org.microcol.model.event.GameStartedEvent;
+import org.microcol.model.event.GameStoppedEvent;
 import org.microcol.model.event.GoldWasChangedEvent;
 import org.microcol.model.event.GoodsWasSoldInEuropeEvent;
 import org.microcol.model.event.IndependenceWasDeclaredEvent;
@@ -20,6 +21,8 @@ import org.microcol.model.event.UnitMoveFinishedEvent;
 import org.microcol.model.event.UnitMoveStartedEvent;
 import org.microcol.model.event.UnitMovedStepFinishedEvent;
 import org.microcol.model.event.UnitMovedStepStartedEvent;
+import org.microcol.model.event.UnitMovedToColonyFieldEvent;
+import org.microcol.model.event.UnitMovedToConstructionEvent;
 import org.microcol.model.event.UnitMovedToHighSeasEvent;
 
 /**
@@ -37,14 +40,36 @@ public interface ModelListener {
 
     void onUnitMovedStepFinished(UnitMovedStepFinishedEvent event);
 
+    /**
+     * It's called when unit move to high seas.
+     *
+     * @param event
+     *            required event
+     */
     void onUnitMovedToHighSeas(UnitMovedToHighSeasEvent event);
+
+    /**
+     * It's called when unit move to colony field.
+     *
+     * @param event
+     *            required event
+     */
+    void onUnitMovedToColonyField(UnitMovedToColonyFieldEvent event);
+
+    /**
+     * It's called when unit move to construction slot in colony.
+     *
+     * @param event
+     *            required event
+     */
+    void onUnitMovedToConstruction(UnitMovedToConstructionEvent event);
 
     void onUnitMoveStarted(UnitMoveStartedEvent event);
 
     /**
-     * It's called when some action started. Action is some action that should be
-     * treated as one piece. For example move should be treated as one action even
-     * when it's composed from single one step moves.
+     * It's called when some action started. Action is some action that should
+     * be treated as one piece. For example move should be treated as one action
+     * even when it's composed from single one step moves.
      *
      * @param event
      *            required event
@@ -76,6 +101,14 @@ public interface ModelListener {
     void onColonyWasFounded(ColonyWasFoundEvent event);
 
     void onColonyWasCaptured(ColonyWasCapturedEvent event);
+
+    /**
+     * Event is raised when game is stopped. This is last event send by model.
+     *
+     * @param event
+     *            required event object
+     */
+    void onGameStopped(GameStoppedEvent event);
 
     void onGameFinished(GameFinishedEvent event);
 

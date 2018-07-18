@@ -31,7 +31,7 @@ public final class SimpleAiPlayer extends AbstractRobotPlayer {
     }
 
     @Override
-    void moveUnit(Unit unit) {
+    void moveUnit(final Unit unit) {
         final List<Location> locations = computeMoveLocation(unit);
 
         if (!locations.isEmpty()) {

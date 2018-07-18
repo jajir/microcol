@@ -24,7 +24,7 @@ public final class ModeController {
         return isMoveMode;
     }
 
-    public void setMoveMode(boolean isMoveMode) {
+    public void setMoveMode(final boolean isMoveMode) {
         this.isMoveMode = isMoveMode;
     }
 

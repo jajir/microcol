@@ -28,8 +28,8 @@ public class ColonyTest {
 			throws Exception {
 		Colony colony = new Colony(model, "Prague", owner, Location.of(2, 2), col -> {
 			List<Construction> list = new ArrayList<>();
-			list.add(Construction.build(col, ConstructionType.BLACKSMITHS_SHOP));
-			list.add(Construction.build(col, ConstructionType.BLACKSMITHS_SHOP));
+			list.add(Construction.build(model, col, ConstructionType.BLACKSMITHS_SHOP));
+			list.add(Construction.build(model, col, ConstructionType.BLACKSMITHS_SHOP));
 			return list;
 		}, new HashMap<String, Integer>());
 
@@ -41,8 +41,8 @@ public class ColonyTest {
 			throws Exception {
 		Colony colony = new Colony(model, "Prague", owner, Location.of(2, 2), col -> {
 			List<Construction> list = new ArrayList<>();
-			list.add(Construction.build(col, ConstructionType.BLACKSMITHS_SHOP));
-			list.add(Construction.build(col, ConstructionType.BLACKSMITHS_HOUSE));
+			list.add(Construction.build(model, col, ConstructionType.BLACKSMITHS_SHOP));
+			list.add(Construction.build(model, col, ConstructionType.BLACKSMITHS_HOUSE));
 			return list;
 		}, new HashMap<String, Integer>());
 
@@ -54,8 +54,8 @@ public class ColonyTest {
 			throws Exception {
 		Colony colony = new Colony(model, "Prague", owner, Location.of(2, 2), col -> {
 			List<Construction> list = new ArrayList<>();
-			list.add(Construction.build(col, ConstructionType.DOCK));
-			list.add(Construction.build(col, ConstructionType.DRYDOCK));
+			list.add(Construction.build(model, col, ConstructionType.DOCK));
+			list.add(Construction.build(model, col, ConstructionType.DRYDOCK));
 			return list;
 		}, new HashMap<String, Integer>());
 

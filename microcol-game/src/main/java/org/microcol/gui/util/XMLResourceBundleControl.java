@@ -53,10 +53,21 @@ public final class XMLResourceBundleControl extends ResourceBundle.Control {
         return null;
     }
 
+    /**
+     * Convert XML source file to resource bundle resource file.
+     */
     private static class XMLResourceBundle extends ResourceBundle {
 
         private Properties props;
 
+        /**
+         * Default constructor just read properties from input stream.
+         *
+         * @param stream
+         *            required input stream
+         * @throws IOException
+         *             is throws when there is some IO operation problems
+         */
         XMLResourceBundle(final InputStream stream) throws IOException {
             props = new Properties();
             props.loadFromXML(stream);

@@ -30,11 +30,11 @@ public final class Construction {
         this.workingSlots = Preconditions.checkNotNull(constructionsSlotBuilder.apply(this));
     }
 
-    static Construction build(final Colony colony, final ConstructionType type) {
+    static Construction build(final Model model, final Colony colony, final ConstructionType type) {
         return new Construction(colony, type, construction -> {
             final List<ConstructionSlot> list = Lists.newArrayList();
             for (int i = 0; i < type.getSlotsForWorkers(); i++) {
-                list.add(new ConstructionSlot(construction));
+                list.add(new ConstructionSlot(model, construction));
             }
             return list;
         });

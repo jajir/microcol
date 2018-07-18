@@ -114,7 +114,7 @@ public final class ClipboardReader {
         return new UnitTransfer(unit, transferFrom);
     }
 
-    private TransferFromCargoSlot tryReadTransferFromCargoSlot(int fromIndex) {
+    private TransferFromCargoSlot tryReadTransferFromCargoSlot(final int fromIndex) {
         if (parts.length < fromIndex + 3) {
             return null;
         }
@@ -131,7 +131,7 @@ public final class ClipboardReader {
                 read(parts[fromIndex + 2]));
     }
 
-    private TransferFromEuropePier tryReadTransferFromEuropePortPier(int fromIndex) {
+    private TransferFromEuropePier tryReadTransferFromEuropePortPier(final int fromIndex) {
         if (parts.length < fromIndex + 1) {
             return null;
         }
@@ -141,7 +141,7 @@ public final class ClipboardReader {
         return new TransferFromEuropePier();
     }
 
-    private TransferFromOutsideColony tryReadTransferFromOutsideColony(int fromIndex) {
+    private TransferFromOutsideColony tryReadTransferFromOutsideColony(final int fromIndex) {
         if (parts.length < fromIndex + 1) {
             return null;
         }
@@ -151,7 +151,7 @@ public final class ClipboardReader {
         return new TransferFromOutsideColony();
     }
 
-    private TransferFromColonyWarehouse tryReadTransferFromColonyWarehouse(int fromIndex) {
+    private TransferFromColonyWarehouse tryReadTransferFromColonyWarehouse(final int fromIndex) {
         if (parts.length < fromIndex + 1) {
             return null;
         }
@@ -161,7 +161,7 @@ public final class ClipboardReader {
         return new TransferFromColonyWarehouse();
     }
 
-    private TransferFromConstructionSlot tryReadTransferFromConstructionSlot(int fromIndex) {
+    private TransferFromConstructionSlot tryReadTransferFromConstructionSlot(final int fromIndex) {
         if (parts.length < fromIndex + 1) {
             return null;
         }
@@ -171,7 +171,7 @@ public final class ClipboardReader {
         return new TransferFromConstructionSlot();
     }
 
-    private TransferFromColonyField tryReadTransferFromColonyField(int fromIndex) {
+    private TransferFromColonyField tryReadTransferFromColonyField(final int fromIndex) {
         if (parts.length < fromIndex + 3) {
             return null;
         }
@@ -182,7 +182,7 @@ public final class ClipboardReader {
                 Location.of(tryRead(parts[fromIndex + 1]), tryRead(parts[fromIndex + 2])));
     }
 
-    private TransferFromEuropeShop tryReadTransferFromEuropeShop(int fromIndex) {
+    private TransferFromEuropeShop tryReadTransferFromEuropeShop(final int fromIndex) {
         if (parts.length < fromIndex + 1) {
             return null;
         }

@@ -57,9 +57,29 @@ public final class Location {
      */
     public int getDistance(final Location location) {
         Preconditions.checkNotNull(location);
+
         final int diffX = x - location.x;
         final int diffY = y - location.y;
         return (int) Math.round(Math.sqrt(diffX * diffX + diffY * diffY));
+    }
+
+    /**
+     * Return distance between two locations. It use Manhattan distance. It's
+     * described at <a href= "https://en.wiktionary.org/wiki/Manhattan_distance"
+     * >https://en.wiktionary.org/wiki/Manhattan_distance</a>.
+     * <p>
+     * This distance is better for path calculations because it nicely work with
+     * integers.
+     * </p>
+     *
+     * @param location
+     *            required location
+     * @return distance between two locations
+     */
+    public int getDistanceManhattan(final Location location) {
+        Preconditions.checkNotNull(location);
+
+        return Math.abs(x - location.x) + Math.abs(y - location.y);
     }
 
     public Location add(final Location location) {

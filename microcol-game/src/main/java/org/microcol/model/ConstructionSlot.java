@@ -5,12 +5,15 @@ import org.microcol.model.store.ConstructionSlotPo;
 import com.google.common.base.Preconditions;
 
 public final class ConstructionSlot {
-
+    
     private final Construction construction;
+    
+    private final Model model;
 
     private PlaceConstructionSlot placeConstruction;
 
-    ConstructionSlot(final Construction construction) {
+    ConstructionSlot(final Model model, final Construction construction) {
+        this.model = Preconditions.checkNotNull(model);
         this.construction = Preconditions.checkNotNull(construction);
     }
 
@@ -23,6 +26,7 @@ public final class ConstructionSlot {
                 String.format("Can't insert placeConstruction (%s) slot (%s) is not empty.",
                         placeConstruction, this));
         this.placeConstruction = placeConstruction;
+        model.fireUnitMovedToConstruction(placeConstruction.getUnit());
     }
 
     Colony getColony() {

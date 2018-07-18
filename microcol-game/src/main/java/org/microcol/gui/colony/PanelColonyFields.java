@@ -60,19 +60,15 @@ public final class PanelColonyFields extends TitledPanel {
 
     private final PaintService paintService;
 
-    private final UnitMovedToFieldController unitMovedToFieldController;
-
     @Inject
     public PanelColonyFields(final ImageProvider imageProvider,
             final GameModelController gameModelController, final ColonyDialogCallback colonyDialog,
-            final PaintService paintService,
-            final UnitMovedToFieldController unitMovedToFieldController) {
+            final PaintService paintService) {
         super("Colony layout", new Label("Colony layout"));
         this.imageProvider = Preconditions.checkNotNull(imageProvider);
         this.gameModelController = Preconditions.checkNotNull(gameModelController);
         this.colonyDialog = Preconditions.checkNotNull(colonyDialog);
         this.paintService = Preconditions.checkNotNull(paintService);
-        this.unitMovedToFieldController = Preconditions.checkNotNull(unitMovedToFieldController);
         final int size = 3 * GamePanelView.TILE_WIDTH_IN_PX;
         canvas = new Canvas(size, size);
         getContentPane().getChildren().add(canvas);
@@ -93,16 +89,15 @@ public final class PanelColonyFields extends TitledPanel {
             final ColonyField colonyField = colony.getColonyFieldInDirection(direction.get());
             if (!colonyField.isEmpty()) {
                 contextMenu.getItems().clear();
-                colonyField.getTerrain().getProduction().stream()
-                        .forEach(production -> {
-                            final MenuItem item = new MenuItem(production.getGoodType().name()
-                                    + "   " + production.getProduction());
-                            item.setOnAction(evt -> {
-                                colonyField.setProducedGoodType(production.getGoodType());
-                                colonyDialog.repaint();
-                            });
-                            contextMenu.getItems().add(item);
-                        });
+                colonyField.getTerrain().getProduction().stream().forEach(production -> {
+                    final MenuItem item = new MenuItem(
+                            production.getGoodType().name() + "   " + production.getProduction());
+                    item.setOnAction(evt -> {
+                        colonyField.setProducedGoodType(production.getGoodType());
+                        colonyDialog.repaint();
+                    });
+                    contextMenu.getItems().add(item);
+                });
                 contextMenu.show(canvas, event.getScreenX(), event.getScreenY());
             }
         }
@@ -110,9 +105,9 @@ public final class PanelColonyFields extends TitledPanel {
 
     @SuppressWarnings("unused")
     private void onMousePressed(final MouseEvent event) {
-	if (contextMenu.isShowing()) {
-	    contextMenu.hide();
-	}
+        if (contextMenu.isShowing()) {
+            contextMenu.hide();
+        }
     }
 
     private void onDragDetected(final MouseEvent event) {
@@ -168,8 +163,6 @@ public final class PanelColonyFields extends TitledPanel {
                         .tryReadUnit((unit, transferFrom) -> {
                             unit.placeToColonyField(colonyField, GoodType.CORN);
                             event.setDropCompleted(true);
-                            unitMovedToFieldController
-                                    .fireEvent(new UnitMovedToFieldEvent(unit, colony));
                             colonyDialog.repaint();
                         });
             }

@@ -7,7 +7,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.microcol.gui.event.model.ColonyWasCapturedController;
 import org.microcol.gui.event.model.GameModelController;
-import org.microcol.gui.event.model.UnitMoveFinishedController;
+import org.microcol.gui.event.model.GameStoppedController;
 import org.microcol.gui.gamepanel.SelectedTileManager;
 import org.microcol.gui.gamepanel.TileWasSelectedController;
 
@@ -24,10 +24,10 @@ public class SelectedTileManagerTest {
     private GameModelController gameModelController;
 
     @Mocked
-    private UnitMoveFinishedController unitMoveFinishedController;
+    private ColonyWasCapturedController colonyWasCapturedController;
 
     @Mocked
-    private ColonyWasCapturedController colonyWasCapturedController;
+    private GameStoppedController gameStoppedController;
 
     @Test
     public void test_getInitialValues() throws Exception {
@@ -36,8 +36,8 @@ public class SelectedTileManagerTest {
 
     @Before
     public void setUp() {
-        viewState = new SelectedTileManager(tileWasSelectedController, unitMoveFinishedController,
-                colonyWasCapturedController);
+        viewState = new SelectedTileManager(tileWasSelectedController, colonyWasCapturedController,
+                gameStoppedController);
     }
 
     @After

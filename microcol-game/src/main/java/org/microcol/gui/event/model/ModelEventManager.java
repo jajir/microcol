@@ -18,6 +18,8 @@ public final class ModelEventManager {
     private final UnitMoveFinishedController unitMoveFinishedController;
 
     private final GameStartedController gameStartedController;
+    
+    private final GameStoppedController gameStoppedController;
 
     private final TurnStartedController turnStartedController;
 
@@ -41,13 +43,19 @@ public final class ModelEventManager {
 
     private final ActionEndedController actionEndedController;
 
+    private final UnitMovedToColonyFieldController unitMovedToColonyFieldController;
+    
+    private final UnitMovedToConstructionController unitMovedToConstructionController;
+
     private final IndependenceWasDeclaredColntroller independenceWasDeclaredColntroller;
+    
 
     @Inject
     public ModelEventManager(final RoundStartedController roundStartedController,
             final UnitMovedStepStartedController unitMovedStepStartedController,
             final UnitMovedStepFinishedController unitMovedStepFinishedController,
             final GameStartedController gameStartedController,
+            final GameStoppedController gameStoppedController,
             final TurnStartedController turnStartedController,
             final DebugRequestController debugRequestController,
             final GameFinishedController gameFinishedController,
@@ -60,13 +68,16 @@ public final class ModelEventManager {
             final UnitMovedToHighSeasController unitMovedToHighSeasController,
             final IndependenceWasDeclaredColntroller independenceWasDeclaredColntroller,
             final ActionStartedController actionStartedController,
-            final ActionEndedController actionEndedController) {
+            final ActionEndedController actionEndedController,
+            final UnitMovedToColonyFieldController unitMovedToColonyFieldController,
+            final UnitMovedToConstructionController unitMovedToConstructionController) {
         this.roundStartedController = Preconditions.checkNotNull(roundStartedController);
         this.unitMovedStepStartedController = Preconditions
                 .checkNotNull(unitMovedStepStartedController);
         this.unitMovedStepFinishedController = Preconditions
                 .checkNotNull(unitMovedStepFinishedController);
         this.gameStartedController = Preconditions.checkNotNull(gameStartedController);
+        this.gameStoppedController = Preconditions.checkNotNull(gameStoppedController);
         this.turnStartedController = Preconditions.checkNotNull(turnStartedController);
         this.debugRequestController = Preconditions.checkNotNull(debugRequestController);
         this.gameFinishedController = Preconditions.checkNotNull(gameFinishedController);
@@ -82,6 +93,10 @@ public final class ModelEventManager {
                 .checkNotNull(independenceWasDeclaredColntroller);
         this.actionStartedController = Preconditions.checkNotNull(actionStartedController);
         this.actionEndedController = Preconditions.checkNotNull(actionEndedController);
+        this.unitMovedToColonyFieldController = Preconditions
+                .checkNotNull(unitMovedToColonyFieldController);
+        this.unitMovedToConstructionController = Preconditions
+                .checkNotNull(unitMovedToConstructionController);
     }
 
     public RoundStartedController getRoundStartedController() {
@@ -165,6 +180,27 @@ public final class ModelEventManager {
 
     public ActionEndedController getActionEndedController() {
         return actionEndedController;
+    }
+
+    /**
+     * @return the gameStoppedController
+     */
+    public GameStoppedController getGameStoppedController() {
+        return gameStoppedController;
+    }
+
+    /**
+     * @return the unitMovedToColonyFieldController
+     */
+    public UnitMovedToColonyFieldController getUnitMovedToColonyFieldController() {
+        return unitMovedToColonyFieldController;
+    }
+
+    /**
+     * @return the unitMovedToConstructionController
+     */
+    public UnitMovedToConstructionController getUnitMovedToConstructionController() {
+        return unitMovedToConstructionController;
     }
 
 }

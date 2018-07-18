@@ -2,17 +2,19 @@ package org.microcol.gui.gamepanel;
 
 import java.util.Optional;
 
-import org.microcol.gui.colony.UnitMovedToFieldController;
-import org.microcol.gui.colony.UnitMovedToFieldEvent;
 import org.microcol.gui.event.model.ColonyWasFoundController;
 import org.microcol.gui.event.model.GameModelController;
+import org.microcol.gui.event.model.GameStoppedController;
 import org.microcol.gui.event.model.UnitMovedStepStartedController;
+import org.microcol.gui.event.model.UnitMovedToColonyFieldController;
 import org.microcol.gui.event.model.UnitMovedToHighSeasController;
 import org.microcol.gui.mainmenu.SelectNextUnitController;
 import org.microcol.gui.mainmenu.SelectNextUnitEvent;
 import org.microcol.model.Location;
 import org.microcol.model.Unit;
 import org.microcol.model.event.ColonyWasFoundEvent;
+import org.microcol.model.event.GameStoppedEvent;
+import org.microcol.model.event.UnitMovedToColonyFieldEvent;
 import org.microcol.model.event.UnitMovedToHighSeasEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,9 +46,10 @@ public final class SelectedUnitManager {
             final SelectedTileManager selectedTileManager,
             final UnitMovedStepStartedController unitMovedController,
             final UnitMovedToHighSeasController unitMovedToHighSeasController,
-            final UnitMovedToFieldController unitMovedToFieldController,
+            final UnitMovedToColonyFieldController unitMovedToFieldController,
             final SelectedUnitWasChangedController selectedUnitWasChangedController,
-            final ColonyWasFoundController colonyWasFoundController) {
+            final ColonyWasFoundController colonyWasFoundController,
+            final GameStoppedController gameStoppedController) {
         this.gameModelController = Preconditions.checkNotNull(gameModelController);
         this.selectedTileManager = Preconditions.checkNotNull(selectedTileManager);
         this.selectedUnitWasChangedController = Preconditions
@@ -55,12 +58,18 @@ public final class SelectedUnitManager {
         selectNextUnitController.addListener(this::onSelectNextUnit);
         unitMovedController.addRunLaterListener(event -> {
             if (event.getUnit().getOwner().isHuman()) {
-                setSelectedUnit(event.getUnit());
+                selectedUnit(event.getUnit());
             }
         });
         unitMovedToHighSeasController.addListener(this::onUnitMovedToHighSeas);
         unitMovedToFieldController.addListener(this::onUnitMovedToField);
         colonyWasFoundController.addListener(this::onColonyWasFound);
+        gameStoppedController.addListener(this::onGameStopped);
+    }
+
+    @SuppressWarnings("unused")
+    private void onGameStopped(final GameStoppedEvent event) {
+        selectedUnit = null;
     }
 
     private void onColonyWasFound(final ColonyWasFoundEvent event) {
@@ -69,21 +78,33 @@ public final class SelectedUnitManager {
                     .equals(selectedTileManager.getSelectedTile().get())) {
                 // founded colony is at focused location.
                 if (selectedUnit != null && !selectedUnit.isAtPlaceLocation()) {
-                    // verify that selected unit found colony and it's not at map
+                    // verify that selected unit found colony and it's not at
+                    // map
                     evaluateLocation(selectedTileManager.getSelectedTile().get());
                 }
             }
         }
     }
 
-    private void onUnitMovedToField(final UnitMovedToFieldEvent event) {
+    private void onUnitMovedToField(final UnitMovedToColonyFieldEvent event) {
         if (event.getUnit().equals(selectedUnit)) {
             unselectUnit();
         }
     }
 
+    public void setSelectedUnit(final Unit unit) {
+        Preconditions.checkNotNull(unit);
+        Preconditions.checkArgument(unit.isAtPlaceLocation());
+        
+        final Unit previousUnit = selectedUnit;
+        selectedUnit = unit;
+        selectedUnitWasChangedController
+                .fireEvent(new SelectedUnitWasChangedEvent(previousUnit, selectedUnit));
+        logger.debug("Selected unit is now: {}", selectedUnit);
+    }
+
     public void unselectUnit() {
-        setSelectedUnit(null);
+        selectedUnit(null);
     }
 
     @SuppressWarnings("unused")
@@ -93,7 +114,7 @@ public final class SelectedUnitManager {
         }
     }
 
-    private void setSelectedUnit(final Unit unit) {
+    private void selectedUnit(final Unit unit) {
         if (unit != null) {
             Preconditions.checkState(unit.isAtPlaceLocation());
         }
@@ -106,19 +127,20 @@ public final class SelectedUnitManager {
 
     private void evaluateLocation(final Location location) {
         if (selectedUnit == null) {
-            setSelectedUnit(
+            selectedUnit(
                     gameModelController.getModel().getFirstSelectableUnitAt(location).orElse(null));
         } else {
             if (selectedUnit.isAtPlaceLocation()) {
                 /*
-                 * If selected tile is location where is selected unit than do nothing
+                 * If selected tile is location where is selected unit than do
+                 * nothing
                  */
                 if (!selectedUnit.getLocation().equals(location)) {
-                    setSelectedUnit(gameModelController.getModel()
-                            .getFirstSelectableUnitAt(location).orElse(null));
+                    selectedUnit(gameModelController.getModel().getFirstSelectableUnitAt(location)
+                            .orElse(null));
                 }
             } else {
-                setSelectedUnit(gameModelController.getModel().getFirstSelectableUnitAt(location)
+                selectedUnit(gameModelController.getModel().getFirstSelectableUnitAt(location)
                         .orElse(null));
             }
         }
@@ -128,13 +150,14 @@ public final class SelectedUnitManager {
     private void onSelectNextUnit(final SelectNextUnitEvent selectNextUnitEvent) {
         Preconditions.checkNotNull(selectNextUnitEvent);
         if (selectedUnit == null) {
-            setSelectedUnit(gameModelController.getModel().getFirstSelectableUnit().orElse(null));
+            selectedUnit(gameModelController.getModel().getFirstSelectableUnit().orElse(null));
         } else {
-            setSelectedUnit(gameModelController.getModel().getNextUnitForCurrentPlayer(selectedUnit)
+            selectedUnit(gameModelController.getModel().getNextUnitForCurrentPlayer(selectedUnit)
                     .orElse(null));
         }
         if (selectedUnit != null) {
-            selectedTileManager.setSelectedTile(selectedUnit.getLocation());
+            selectedTileManager.setSelectedTile(selectedUnit.getLocation(),
+                    ScrollToFocusedTile.smoothScroll);
         }
     }
 

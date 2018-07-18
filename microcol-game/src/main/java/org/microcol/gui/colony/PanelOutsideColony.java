@@ -47,7 +47,7 @@ public final class PanelOutsideColony extends TitledPanel {
     public PanelOutsideColony(final ImageProvider imageProvider,
             final GameModelController gameModelController, final ColonyDialogCallback colonyDialog,
             final DialogDestroyColony dialogDestroyColony,
-            UnitMovedOutsideColonyController unitMovedOutsideColonyController) {
+            final UnitMovedOutsideColonyController unitMovedOutsideColonyController) {
         super("Outside Colony", null);
         this.imageProvider = Preconditions.checkNotNull(imageProvider);
         this.gameModelController = Preconditions.checkNotNull(gameModelController);

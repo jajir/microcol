@@ -9,6 +9,7 @@ import org.microcol.model.event.ColonyWasFoundEvent;
 import org.microcol.model.event.DebugRequestedEvent;
 import org.microcol.model.event.GameFinishedEvent;
 import org.microcol.model.event.GameStartedEvent;
+import org.microcol.model.event.GameStoppedEvent;
 import org.microcol.model.event.GoldWasChangedEvent;
 import org.microcol.model.event.GoodsWasSoldInEuropeEvent;
 import org.microcol.model.event.IndependenceWasDeclaredEvent;
@@ -20,12 +21,19 @@ import org.microcol.model.event.UnitMoveFinishedEvent;
 import org.microcol.model.event.UnitMoveStartedEvent;
 import org.microcol.model.event.UnitMovedStepFinishedEvent;
 import org.microcol.model.event.UnitMovedStepStartedEvent;
+import org.microcol.model.event.UnitMovedToColonyFieldEvent;
+import org.microcol.model.event.UnitMovedToConstructionEvent;
 import org.microcol.model.event.UnitMovedToHighSeasEvent;
 
 public class ModelListenerAdapter implements ModelListener {
 
     @Override
     public void onGameStarted(final GameStartedEvent event) {
+        // Do nothing.
+    }
+
+    @Override
+    public void onGameStopped(final GameStoppedEvent event) {
         // Do nothing.
     }
 
@@ -46,6 +54,16 @@ public class ModelListenerAdapter implements ModelListener {
 
     @Override
     public void onUnitMovedStepFinished(final UnitMovedStepFinishedEvent event) {
+        // Do nothing.
+    }
+
+    @Override
+    public void onUnitMovedToConstruction(final UnitMovedToConstructionEvent event) {
+        // Do nothing.
+    }
+
+    @Override
+    public void onUnitMovedToColonyField(final UnitMovedToColonyFieldEvent event) {
         // Do nothing.
     }
 

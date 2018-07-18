@@ -35,6 +35,7 @@ public final class SelectedUnitWasChangedEvent {
      * @return If it's necessary to scroll to newly selected unit than it return
      *         <code>true</code> otherwise it return <code>false</code>
      */
+    @Deprecated
     public boolean isNecesarryToScrool() {
         if (canScrollAtUnit(selectedUnit)) {
             if (canScrollAtUnit(previousUnit)) {

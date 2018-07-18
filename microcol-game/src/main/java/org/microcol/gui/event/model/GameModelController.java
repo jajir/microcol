@@ -3,6 +3,7 @@ package org.microcol.gui.event.model;
 import java.util.List;
 import java.util.Optional;
 
+import org.microcol.gui.gamepanel.ScrollToFocusedTile;
 import org.microcol.gui.gamepanel.SelectedTileManager;
 import org.microcol.model.GoodTrade;
 import org.microcol.model.GoodType;
@@ -59,7 +60,8 @@ public final class GameModelController {
         modelMission.addListener(new ModelListenerImpl(modelEventManager, this));
         modelMission.startGame();
         if (getModel().getFocusedField() != null) {
-            selectedTileManager.setSelectedTile(getModel().getFocusedField());
+            selectedTileManager.setSelectedTile(getModel().getFocusedField(),
+                    ScrollToFocusedTile.skip);
         }
     }
 

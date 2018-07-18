@@ -5,9 +5,9 @@ import org.microcol.model.Model;
 import com.google.common.base.MoreObjects;
 
 /**
- * Event is send when game start.
+ * Event is send when game is stopped.
  */
-public final class GameStartedEvent extends AbstractModelEvent {
+public final class GameStoppedEvent extends AbstractModelEvent {
 
     /**
      * Constructor just set model.
@@ -15,7 +15,7 @@ public final class GameStartedEvent extends AbstractModelEvent {
      * @param model
      *            required game model
      */
-    public GameStartedEvent(final Model model) {
+    public GameStoppedEvent(final Model model) {
         super(model);
     }
 

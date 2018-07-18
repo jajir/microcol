@@ -145,24 +145,15 @@ public final class PanelColonyStructures extends TitledPanel {
 
     private final GameModelController gameModelController;
 
-    private final ColonyDialogCallback colonyDialog;
-
     private Map<Rectangle, ConstructionSlot> slots;
-
-    private final UnitMovedToConstructionController unitMovedToConstructionController;
 
     @Inject
     public PanelColonyStructures(final LocalizationHelper localizationHelper,
-            final ImageProvider imageProvider, final GameModelController gameModelController,
-            final ColonyDialogCallback colonyDialog,
-            final UnitMovedToConstructionController unitMovedToConstructionController) {
+            final ImageProvider imageProvider, final GameModelController gameModelController) {
         super("Colony Structures", null);
         this.localizationHelper = Preconditions.checkNotNull(localizationHelper);
         this.imageProvider = Preconditions.checkNotNull(imageProvider);
         this.gameModelController = Preconditions.checkNotNull(gameModelController);
-        this.colonyDialog = Preconditions.checkNotNull(colonyDialog);
-        this.unitMovedToConstructionController = Preconditions
-                .checkNotNull(unitMovedToConstructionController);
         canvas = new Canvas(CANVAS_WIDTH, CANVAS_HEIGHT);
         getContentPane().getChildren().add(canvas);
         setMinWidth(CANVAS_WIDTH);
@@ -223,8 +214,6 @@ public final class PanelColonyStructures extends TitledPanel {
                     .tryReadUnit((unit, transferFrom) -> {
                         unit.placeToColonyStructureSlot(slot);
                         event.setDropCompleted(true);
-                        unitMovedToConstructionController.fireEvent(
-                                new UnitMovedToConstructionEvent(unit, colonyDialog.getColony()));
                     });
         }
         event.consume();

@@ -100,7 +100,7 @@ public final class Calendar {
 	numberOfPlayedTurns++;
     }
 
-    public int getYearForTurnNo(int turnNo) {
+    public int getYearForTurnNo(final int turnNo) {
 	return startYear + turnNo;
     }
 

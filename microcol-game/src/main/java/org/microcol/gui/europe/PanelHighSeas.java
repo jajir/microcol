@@ -70,7 +70,7 @@ public final class PanelHighSeas extends TitledPanel {
         }
     }
 
-    private void onDragDropped(DragEvent event) {
+    private void onDragDropped(final DragEvent event) {
         final Dragboard db = event.getDragboard();
         ClipboardReader.make(gameModelController.getModel(), db).readUnit((unit, transferFrom) -> {
             Preconditions.checkState(unit.getType().isShip(),
@@ -97,7 +97,7 @@ public final class PanelHighSeas extends TitledPanel {
      * @param isShownShipsTravelingToEurope
      *            the isShownShipsTravelingToEurope to set
      */
-    public void setShownShipsTravelingToEurope(boolean isShownShipsTravelingToEurope) {
+    public void setShownShipsTravelingToEurope(final boolean isShownShipsTravelingToEurope) {
         this.isShownShipsTravelingToEurope = isShownShipsTravelingToEurope;
     }
 

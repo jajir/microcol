@@ -114,7 +114,7 @@ public final class KingPlayer extends AbstractRobotPlayer {
     }
 
     private Optional<List<Location>> findFasterPathToContinent(final Unit ship,
-            Continent continent) {
+            final Continent continent) {
         return continent.getLocations().stream().map(loc -> ship.getPath(loc, true))
                 .filter(oPath -> oPath.isPresent()).map(oPath -> oPath.get())
                 .sorted((list1, list2) -> list1.size() - list2.size()).findFirst();
@@ -175,7 +175,7 @@ public final class KingPlayer extends AbstractRobotPlayer {
      * @param refWasSend
      *            the refWasSend to set
      */
-    public void setRefWasSend(boolean refWasSend) {
+    public void setRefWasSend(final boolean refWasSend) {
         getPlayer().getExtraData().put("refWasSend", String.valueOf(refWasSend));
     }
 }

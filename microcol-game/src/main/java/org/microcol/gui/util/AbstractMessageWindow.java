@@ -83,6 +83,10 @@ public abstract class AbstractMessageWindow {
         });
     }
 
+    protected boolean isVisibble() {
+        return stageDialog.isShowing();
+    }
+
     protected void onCancelDialog() {
         stageDialog.close();
     }

@@ -20,6 +20,16 @@ public abstract class AbstractTurnEvent implements TurnEvent {
 
     private boolean solved;
 
+    /**
+     * Constructor setting basic fields.
+     *
+     * @param messageKey
+     *            required message localized store key
+     * @param args
+     *            required array of arguments to localized message
+     * @param player
+     *            required player for whom was event generated
+     */
     AbstractTurnEvent(final String messageKey, final Object[] args, final Player player) {
         this.messageKey = Preconditions.checkNotNull(messageKey);
         this.args = Preconditions.checkNotNull(args);
@@ -48,7 +58,7 @@ public abstract class AbstractTurnEvent implements TurnEvent {
     }
 
     @Override
-    public void setSolved(boolean solved) {
+    public void setSolved(final boolean solved) {
         this.solved = solved;
     }
 
@@ -63,7 +73,7 @@ public abstract class AbstractTurnEvent implements TurnEvent {
     }
 
     @Override
-    public void setLocalizedMessage(String localizedMessage) {
+    public void setLocalizedMessage(final String localizedMessage) {
         this.localizedMessage = Preconditions.checkNotNull(localizedMessage);
     }
 

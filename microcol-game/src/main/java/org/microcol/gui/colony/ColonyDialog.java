@@ -1,6 +1,8 @@
 package org.microcol.gui.colony;
 
 import org.microcol.gui.MainStageBuilder;
+import org.microcol.gui.event.model.UnitMovedToColonyFieldController;
+import org.microcol.gui.event.model.UnitMovedToConstructionController;
 import org.microcol.gui.image.ImageProvider;
 import org.microcol.gui.util.AbstractMessageWindow;
 import org.microcol.gui.util.PanelDock;
@@ -53,7 +55,7 @@ public final class ColonyDialog extends AbstractMessageWindow implements ColonyD
             final PanelColonyDockBehaviour panelColonyDockBehaviour,
             final UnitMovedOutsideColonyController unitMovedOutsideColonyController,
             final UnitMovedToConstructionController unitMovedToConstructionController,
-            final UnitMovedToFieldController unitMovedToFieldController) {
+            final UnitMovedToColonyFieldController unitMovedToFieldController) {
         super(viewUtil);
         Preconditions.checkNotNull(imageProvider);
         setTitle(text.get("europeDialog.caption"));
@@ -135,11 +137,13 @@ public final class ColonyDialog extends AbstractMessageWindow implements ColonyD
 
     @Override
     public void repaint() {
-        colonyFields.setColony(colony);
-        goods.repaint();
-        panelDock.repaint();
-        colonyStructures.repaint(colony);
-        panelOutsideColony.setColony(colony);
+        if (isVisibble()) {
+            colonyFields.setColony(colony);
+            goods.repaint();
+            panelDock.repaint();
+            colonyStructures.repaint(colony);
+            panelOutsideColony.setColony(colony);
+        }
     }
 
     @Override

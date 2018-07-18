@@ -94,7 +94,7 @@ public final class Model {
                     colony -> {
                         final List<Construction> constructions = new ArrayList<>();
                         colonyPo.getConstructions().forEach(constructionPo -> {
-                            final Construction c = Construction.build(colony,
+                            final Construction c = Construction.build(this, colony,
                                     constructionPo.getType());
                             constructions.add(c);
                         });
@@ -177,7 +177,7 @@ public final class Model {
                 colony -> {
                     final List<Construction> constructions = new ArrayList<>();
                     ConstructionType.NEW_COLONY_CONSTRUCTIONS.forEach(constructionType -> {
-                        final Construction c = Construction.build(colony, constructionType);
+                        final Construction c = Construction.build(this, colony, constructionType);
                         constructions.add(c);
                     });
                     return constructions;
@@ -284,6 +284,7 @@ public final class Model {
      * Prepare model to be removed from memory.
      */
     public void stop() {
+        listenerManager.fireGameStopped(this);
         listenerManager.removeAllListeners();
     }
 
@@ -550,6 +551,14 @@ public final class Model {
         listenerManager.fireUnitMovedToHighSeas(this, unit);
     }
 
+    void fireUnitMovedToColonyField(final Unit unit) {
+        listenerManager.fireUnitMovedToColonyField(this, unit);
+    }
+
+    void fireUnitMovedToConstruction(final Unit unit) {
+        listenerManager.fireUnitMovedToConstruction(this, unit);
+    }
+
     void fireUnitAttacked(final Unit attacker, final Unit defender, final Unit destroyed) {
         listenerManager.fireUnitAttacked(this, attacker, defender, destroyed);
     }
@@ -606,7 +615,7 @@ public final class Model {
     void destroyColony(final Colony colony) {
         Preconditions.checkNotNull(colony);
         getTurnEventStore()
-                .add(TurnEventProvider.getColonyWasdestroyed(getCurrentPlayer(), colony));
+                .add(TurnEventProvider.getColonyWasDestroyed(getCurrentPlayer(), colony));
         colonies.remove(colony);
     }
 

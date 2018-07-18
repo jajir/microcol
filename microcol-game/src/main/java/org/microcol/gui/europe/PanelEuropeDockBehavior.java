@@ -29,8 +29,8 @@ public final class PanelEuropeDockBehavior extends AbstractPanelDockBehavior {
     private final ChooseGoodAmount chooseGoodAmount;
 
     @Inject
-    PanelEuropeDockBehavior(EuropeDialogCallback europeDialogCallback,
-            GameModelController gameModelController, ImageProvider imageProvider,
+    PanelEuropeDockBehavior(final EuropeDialogCallback europeDialogCallback,
+            final GameModelController gameModelController, final ImageProvider imageProvider,
             final DialogNotEnoughGold dialogNotEnoughGold,
             final ChooseGoodAmount chooseGoodAmount) {
         super(gameModelController, imageProvider);

@@ -131,6 +131,7 @@ public final class ColonyField {
 
     public void setPlaceColonyField(final PlaceColonyField placeColonyField) {
         this.placeColonyField = Preconditions.checkNotNull(placeColonyField);
+        model.fireUnitMovedToColonyField(placeColonyField.getUnit());
     }
 
     void empty(final boolean validate) {

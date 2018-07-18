@@ -140,6 +140,15 @@ public final class GamePanelView {
             paint();
         }
     }
+    
+    public void skipCenterViewAtLocation(final Location location){
+        visibleArea.setOnCanvasReady(ok -> {
+            final Area area = getArea();
+            final Point p = visibleArea.scrollToPoint(area.getCenterToLocation(location));
+            visibleArea.setX(p.getX());
+            visibleArea.setY(p.getY());
+        });
+    }
 
     public void planScrollingAnimationToLocation(final Location location) {
         visibleArea.setOnCanvasReady(state -> {
@@ -296,7 +305,7 @@ public final class GamePanelView {
     }
 
     private void drawNetLine(final GraphicsContext graphics, final Area area, final Location l_1,
-            Location l_2) {
+            final Location l_2) {
         final Point p_1 = area.convertToPoint(l_1).add(-1, -1);
         final Point p_2 = area.convertToPoint(l_2).add(-1, -1);
         graphics.strokeLine(p_1.getX(), p_1.getY(), p_2.getX(), p_2.getY());

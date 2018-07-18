@@ -15,6 +15,7 @@ import org.microcol.model.event.ColonyWasFoundEvent;
 import org.microcol.model.event.DebugRequestedEvent;
 import org.microcol.model.event.GameFinishedEvent;
 import org.microcol.model.event.GameStartedEvent;
+import org.microcol.model.event.GameStoppedEvent;
 import org.microcol.model.event.GoldWasChangedEvent;
 import org.microcol.model.event.GoodsWasSoldInEuropeEvent;
 import org.microcol.model.event.IndependenceWasDeclaredEvent;
@@ -26,6 +27,8 @@ import org.microcol.model.event.UnitMoveFinishedEvent;
 import org.microcol.model.event.UnitMoveStartedEvent;
 import org.microcol.model.event.UnitMovedStepFinishedEvent;
 import org.microcol.model.event.UnitMovedStepStartedEvent;
+import org.microcol.model.event.UnitMovedToColonyFieldEvent;
+import org.microcol.model.event.UnitMovedToConstructionEvent;
 import org.microcol.model.event.UnitMovedToHighSeasEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -76,6 +79,14 @@ final class ListenerManager {
         logger.info("Game started: {}.", event);
 
         listeners.forEach(listener -> listener.onGameStarted(event));
+    }
+
+    void fireGameStopped(final Model model) {
+        final GameStoppedEvent event = new GameStoppedEvent(model);
+
+        logger.info("Game stopped: {}.", event);
+
+        listeners.forEach(listener -> listener.onGameStopped(event));
     }
 
     void fireRoundStarted(final Model model, final Calendar calendar) {
@@ -143,6 +154,22 @@ final class ListenerManager {
         logger.info("Unit moved to high seas: {}.", event);
 
         executeInSameThread(listener -> listener.onUnitMovedToHighSeas(event));
+    }
+
+    void fireUnitMovedToConstruction(final Model model, final Unit unit) {
+        final UnitMovedToConstructionEvent event = new UnitMovedToConstructionEvent(model, unit);
+
+        logger.info("Unit moved to colony construction slot: {}.", event);
+
+        executeInSameThread(listener -> listener.onUnitMovedToConstruction(event));
+    }
+
+    void fireUnitMovedToColonyField(final Model model, final Unit unit) {
+        final UnitMovedToColonyFieldEvent event = new UnitMovedToColonyFieldEvent(model, unit);
+
+        logger.info("Unit moved to colony field: {}.", event);
+
+        executeInSameThread(listener -> listener.onUnitMovedToColonyField(event));
     }
 
     boolean fireBeforeEndTurn(final Model model) {

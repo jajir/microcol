@@ -44,7 +44,7 @@ import com.google.common.base.Preconditions;
  * 
  */
 public final class VisibleArea {
-    
+
     private final static int NOT_READY = -1;
 
     /**
@@ -87,7 +87,7 @@ public final class VisibleArea {
          * Following code force class to compute correct position of top left
          * corner of map.
          */
-        if(isReady()){
+        if (isReady()) {
             setCanvasHeight(canvasHeight);
             setCanvasWidth(canvasWidth);
         }
@@ -119,7 +119,7 @@ public final class VisibleArea {
         this.canvasWidth = newCanvasWidth;
         onVisibleAreaIsReady.setCondition1Passed();
     }
-    
+
     public boolean isReady() {
         return canvasWidth != NOT_READY && canvasHeight != NOT_READY;
     }
@@ -151,11 +151,11 @@ public final class VisibleArea {
         onVisibleAreaIsReady.setCondition2Passed();
     }
 
-    public void setX(int x) {
+    public void setX(final int x) {
         topLeft = Point.of(x, topLeft.getY());
     }
 
-    public void setY(int y) {
+    public void setY(final int y) {
         topLeft = Point.of(topLeft.getX(), y);
     }
 

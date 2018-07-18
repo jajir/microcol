@@ -131,7 +131,7 @@ Planned releases
   
   * \u2713 When unit is on the right edge of visible area and windows is resized than ship disappears when edge of window touch it.
   
-  * \u2717 When game is loaded and focus was at some place e.g. town than screen is not centered at this location.
+  * \u2713 When game is loaded and focus was at some place e.g. town than screen is not centered at this location.
   
   * \u2717 Enemy unit is animating event when they are out of visible area.
   
@@ -151,6 +151,14 @@ Planned releases
   * \u2717 Don't animate and don't wait for movements outside of screen. When kings unit coming to colonies.
  
   * \u2717 When focused unit on in city and instead of moving it city is open and unit moved to colony field than next unit on focused city is not selected and consequently can't be moved.
+ 
+  * \u2717 Describe event tileWasSelected, unitWasSelected and managers and controllers. 
+  
+  * \u2717 
+ 
+  * \u2717 
+  
+  * \u2717 
  
   * \u2717 
   

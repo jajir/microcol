@@ -32,7 +32,7 @@ public final class OneTimeExecuter<T> {
      * @param t
      *            required parameter
      */
-    public void fire(T t) {
+    public void fire(final T t) {
         try {
             lock.lock();
             Preconditions.checkNotNull(t);

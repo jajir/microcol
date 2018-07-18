@@ -36,10 +36,12 @@ public final class RightPanelNextButtonControll {
         actionEndedController.addListener(this::onActionEnded);
     }
 
+    @SuppressWarnings("unused")
     private void onActionStarted(final ActionStartedEvent event) {
         rightPanelView.setNextTurnButtonDisable(true);
     }
 
+    @SuppressWarnings("unused")
     private void onActionEnded(final ActionEndedEvent event) {
         rightPanelView.setNextTurnButtonDisable(false);
     }
