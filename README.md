@@ -13,5 +13,5 @@ Download binary distribution. See tab 'Releases'
  * Than type in root directory:
 ```
 cd microcol-game
-mvn exec:exec 
+mvn compile exec:exec 
 ```
