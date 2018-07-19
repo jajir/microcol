@@ -12,5 +12,6 @@ Download binary distribution. See tab 'Releases'
   
  * Than type in root directory:
 ```
+cd microcol-game
 mvn antrun:run 
 ```
