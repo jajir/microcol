@@ -137,7 +137,7 @@ public final class ColonyDialog extends AbstractMessageWindow implements ColonyD
 
     @Override
     public void repaint() {
-        if (isVisibble()) {
+        if (colony != null) {
             colonyFields.setColony(colony);
             goods.repaint();
             panelDock.repaint();
