@@ -8,7 +8,9 @@ It's simple Colonisation remake.
 ## Binary distribution
 Download binary distribution. See tab 'Releases'
 ## From command line
-You need to download sources. Than type in root directory:
+ * Download sources.
+  
+ * Than type in root directory:
 ```
 mvn antrun:run 
 ```
