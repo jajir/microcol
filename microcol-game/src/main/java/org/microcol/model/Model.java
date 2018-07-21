@@ -173,6 +173,10 @@ public final class Model {
         Preconditions.checkArgument(!unit.getType().canHoldCargo(),
                 "Unit (%s) that transport cargo, can't found city", unit);
         final Location location = unit.getLocation();
+        final Optional<Colony> oColony = getColonyAt(location); 
+        Preconditions.checkArgument(!oColony.isPresent(), "There is already colony '%s' at '%s'",
+                oColony, location);
+        
         final Colony col = new Colony(this, colonyNames.getNewColonyName(player), player, location,
                 colony -> {
                     final List<Construction> constructions = new ArrayList<>();

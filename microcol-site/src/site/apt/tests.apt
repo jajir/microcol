@@ -54,15 +54,20 @@ Test cases
 ** TC-02 Founding Colony
 
  * Load file 'test-verify-founding-colony.microcol'
- Verify that view is focused at two units. Each with one available action point.
+ Verify that view is focused at two units. Each one with one available action point.
 
  * Choose one and press 'b' to build colony.
+ Verify that there is new colony with some name.
 
- * Verify that's  possible to open colony details.
+ * Try to focus second unit (use 'tab').
+ Verify that option build colony is disabled.
+ Verify that plow field is disabled.   
 
- * Verify that founding colonist is working at field and produce corn.
-
- * Verify that's possible to move remaining unit. Outside of colony.
+ * Open colony details.
+ Verify that founding colonist is working at field and produce corn.
+ 
+ * Move unit from outside of colony to filed.
+ Verify that moved unit start produce food.
 
 []
 
