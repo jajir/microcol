@@ -212,7 +212,7 @@ final class ListenerManager {
 
         logger.info("Unit attacked: {}.", event);
 
-        executeInSeparateThread(listener -> listener.onUnitAttacked(event));
+        executeInSameThread(listener -> listener.onUnitAttacked(event));
     }
 
     void fireUnitEmbarked(final Model model, final Unit unit, final CargoSlot slot) {

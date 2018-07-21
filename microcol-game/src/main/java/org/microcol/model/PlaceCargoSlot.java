@@ -57,6 +57,15 @@ public final class PlaceCargoSlot extends AbstractPlace {
     }
 
     /**
+     * Get unit where this cargo slot belongs.
+     *
+     * @return return owner unit
+     */
+    public Unit getOwnerUnit() {
+        return cargoSlot.getOwnerUnit();
+    }
+
+    /**
      * Get information if unit owning cargo slot is in Europe port.
      *
      * @return return <code>true</code> when unit owning cargo slot is in Europe

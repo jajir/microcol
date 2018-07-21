@@ -11,50 +11,56 @@ Test cases
  * Verify that application functionality.
 
 []
+
+* How to run tests
+
+ Download application source codes.
+ Copy content from <microcol-game/src/test/scenarios> to you user's how <~/.microcol>.
+ When you open application you can load any test scenario by 'Load saved game'.
+
+* Test cases
   
-* Embark and Disembark
+** TC-01 Embark and Disembark
 
- * load file 'test-verify-loading-unloading.microcol'
+ * Load file 'test-verify-loading-unloading.microcol'
 
- * city 'Delf' should be focused and in the center of game view
+ * Move ship to [23,13] from colony delfy
 
- * Open city by double clicking at it.
+ * Embark two units waiting outside of colony to ship.
+ Verify that units are be loaded in different cargo slots and are visible in right panel
 
- * Load two units waiting outside of colony to ship
-
- * verify that untis could be loaded to different cargo slots
-
- * close city view
-
- * move with ship to free border
-
- * verify that it's not possible to udisembark units. (There are no free action points for loaded units)
+ * Move with ship few tiles to the right.
+ Verify that it's not possible to disembark units. (There are no free action points for loaded units)
 
  * Press 'Next Turn'
 
- * Unload both units
+ * Unload both units.
+ Verify that there is animations are performed and focus is at disembarked units.
 
- * Try to embark untis back. It should not be possible. Verify that both units have 0 action points
+ * Try to embark units back.
+ Verify that it's not possible.
+ Verify that both units have 0 action points
 
  * Press 'Next Turn'
 
- * Embark both units back to ship. Verify that both units are on ship.
+ * Embark both units back to ship
+ Verify that both units are on ship.
+ Verify that unit are loaded with animation and after moving is focused ship. 
 
 []
 
  Done.
 
-* Founding Colony
+** TC-02 Founding Colony
 
- * load file 'test-verify-founding-colony.microcol'
-
- * Verify that view is focused at two units. Each with one available action point.
+ * Load file 'test-verify-founding-colony.microcol'
+ Verify that view is focused at two units. Each with one available action point.
 
  * Choose one and press 'b' to build colony.
 
  * Verify that's  possible to open colony details.
 
- * Verify that founding colonist is workng at field and produce corn.
+ * Verify that founding colonist is working at field and produce corn.
 
  * Verify that's possible to move remaining unit. Outside of colony.
 
@@ -62,7 +68,7 @@ Test cases
 
  Done.
 
-* Fight for freedom - win battles
+** TC-03 Fight for freedom - win battles
 
  * Open save 'verify-independence.microcol'.
  
@@ -74,3 +80,20 @@ Test cases
 
  Done.
 
+** TC-04 Verify loosing battle
+ 
+ * Open save 'test-verify-loosing-battles.microcol'.
+ 
+ * Press 'Next turn'.
+ 
+ * Verify that blue units move at [22,13]. 
+ 
+ * Press 'Next turn'.
+ 
+ * Verify that blue units attack city, city loose and ship leaves city to random place. 
+ 
+ * Verify that city Delft is not possible to open. 
+
+[]
+
+ Done.

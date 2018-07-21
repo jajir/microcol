@@ -1,7 +1,5 @@
 package org.microcol.gui.gamepanel;
 
-import java.util.LinkedList;
-import java.util.Queue;
 import java.util.function.Consumer;
 
 import org.slf4j.Logger;
@@ -19,15 +17,11 @@ public final class AnimationManager implements AnimationLock {
 
     private final Logger logger = LoggerFactory.getLogger(AnimationManager.class);
 
-    private final Queue<AnimationHolder> animationsQueue = new LinkedList<>();
-
     private final AnimationStartedController animationStartedController;
-    
+
     private final AnimationIsDoneController animationIsDoneController;
 
     private AnimationHolder runningPart;
-
-    private boolean hasNextStep = false;
 
     private final AnimationLatch latch = new AnimationLatch();
 
@@ -39,34 +33,30 @@ public final class AnimationManager implements AnimationLock {
         runningPart = null;
     }
 
-    public boolean hasNextStep() {
-        return hasNextStep;
+    public boolean hasNextStep(final Area area) {
+        while (runningPart != null && runningPart.getAnimation().hasNextStep()
+                && !runningPart.getAnimation().canBePainted(area)) {
+            performStep();
+        }
+        return runningPart != null;
     }
 
-    public void performStep() {
-        Preconditions.checkState(hasNextStep, "Can't perform step when there is no next step.");
+    private void performStep() {
         Preconditions.checkState(runningPart != null, "Actually running animation was lost.");
         runningPart.getAnimation().nextStep();
         if (!runningPart.getAnimation().hasNextStep()) {
             runningPart.runOnAnimationIsDone();
-            if (animationsQueue.isEmpty()) {
-                runningPart = null;
-                hasNextStep = false;
-                latch.unlock();
-                animationIsDoneController.fireEvent(new AnimationIsDoneEvent());
-                logger.debug("You are done, unlocking threads");
-            } else {
-                runningPart = animationsQueue.remove();
-                animationStartedController.fireEvent(new AnimationStartedEvent());
-                Preconditions.checkState(runningPart.getAnimation().hasNextStep(),
-                        "Just started animation should have at least one step.");
-            }
+            runningPart = null;
+            animationIsDoneController.fireEvent(new AnimationIsDoneEvent());
+            logger.debug("You are done, unlocking threads");
+            latch.unlock();
         }
     }
 
-    void paint(final GraphicsContext graphics, final Area area) {
-        Preconditions.checkArgument(hasNextStep, "Can't perform step when there is no next step.");
+    public void paint(final GraphicsContext graphics, final Area area) {
+        Preconditions.checkState(runningPart != null, "Actually running animation was lost.");
         runningPart.getAnimation().paint(graphics, area);
+        performStep();
     }
 
     /**
@@ -81,16 +71,14 @@ public final class AnimationManager implements AnimationLock {
      */
     void addAnimation(final Animation animation, final Consumer<Animation> onAnimationIsDone) {
         Preconditions.checkNotNull(animation);
-        final AnimationHolder holder = new AnimationHolder(animation, onAnimationIsDone);
+        Preconditions.checkState(runningPart == null, "There is still runnign animation '%s'",
+                runningPart);
+        //TODO skip event here all invisible moves
+        runningPart = new AnimationHolder(animation, onAnimationIsDone);
         logger.debug("Adding animation {}", animation);
-        if (runningPart == null) {
-            runningPart = holder;
-            animationStartedController.fireEvent(new AnimationStartedEvent());
-            hasNextStep = holder.getAnimation().hasNextStep();
-            Preconditions.checkState(hasNextStep, "Animation should contain at least one step.");
-        } else {
-            animationsQueue.add(holder);
-        }
+        animationStartedController.fireEvent(new AnimationStartedEvent());
+        Preconditions.checkState(runningPart.getAnimation().hasNextStep(),
+                "Animation should contain at least one step.");
         latch.lock();
     }
 

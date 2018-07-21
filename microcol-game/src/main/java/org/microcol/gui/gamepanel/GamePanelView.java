@@ -210,9 +210,8 @@ public final class GamePanelView {
     }
 
     private void paintAnimation(final GraphicsContext graphics, final Area area) {
-        if (animationManager.hasNextStep()) {
+        if (animationManager.hasNextStep(area)) {
             animationManager.paint(graphics, area);
-            animationManager.performStep();
         }
     }
 

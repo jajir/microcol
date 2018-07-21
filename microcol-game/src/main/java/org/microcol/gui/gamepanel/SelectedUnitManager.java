@@ -14,6 +14,7 @@ import org.microcol.model.Location;
 import org.microcol.model.Unit;
 import org.microcol.model.event.ColonyWasFoundEvent;
 import org.microcol.model.event.GameStoppedEvent;
+import org.microcol.model.event.UnitMovedStepStartedEvent;
 import org.microcol.model.event.UnitMovedToColonyFieldEvent;
 import org.microcol.model.event.UnitMovedToHighSeasEvent;
 import org.slf4j.Logger;
@@ -44,7 +45,7 @@ public final class SelectedUnitManager {
             final TileWasSelectedController tileWasSelectedController,
             final SelectNextUnitController selectNextUnitController,
             final SelectedTileManager selectedTileManager,
-            final UnitMovedStepStartedController unitMovedController,
+            final UnitMovedStepStartedController unitMovedStepStartedController,
             final UnitMovedToHighSeasController unitMovedToHighSeasController,
             final UnitMovedToColonyFieldController unitMovedToFieldController,
             final SelectedUnitWasChangedController selectedUnitWasChangedController,
@@ -56,15 +57,19 @@ public final class SelectedUnitManager {
                 .checkNotNull(selectedUnitWasChangedController);
         tileWasSelectedController.addListener(event -> evaluateLocation(event.getLocation()));
         selectNextUnitController.addListener(this::onSelectNextUnit);
-        unitMovedController.addRunLaterListener(event -> {
-            if (event.getUnit().getOwner().isHuman()) {
-                selectedUnit(event.getUnit());
-            }
-        });
+        unitMovedStepStartedController.addRunLaterListener(this::onUnitMovedStepStarted);
         unitMovedToHighSeasController.addListener(this::onUnitMovedToHighSeas);
         unitMovedToFieldController.addListener(this::onUnitMovedToField);
         colonyWasFoundController.addListener(this::onColonyWasFound);
         gameStoppedController.addListener(this::onGameStopped);
+    }
+
+    private void onUnitMovedStepStarted(final UnitMovedStepStartedEvent event) {
+        if (event.getUnit().getOwner().isHuman()) {
+            if (event.getUnit().isAtPlaceLocation()) {
+                selectedUnit(event.getUnit());
+            }
+        }
     }
 
     @SuppressWarnings("unused")
@@ -95,7 +100,7 @@ public final class SelectedUnitManager {
     public void setSelectedUnit(final Unit unit) {
         Preconditions.checkNotNull(unit);
         Preconditions.checkArgument(unit.isAtPlaceLocation());
-        
+
         final Unit previousUnit = selectedUnit;
         selectedUnit = unit;
         selectedUnitWasChangedController

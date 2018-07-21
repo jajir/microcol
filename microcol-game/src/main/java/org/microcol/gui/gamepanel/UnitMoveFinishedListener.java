@@ -27,7 +27,12 @@ public final class UnitMoveFinishedListener {
     private void onUnitMoveFinished(final UnitMoveFinishedEvent event) {
         if (event.getUnit().getOwner().isHuman()) {
             selectedTileManager.setSelectedTile(event.getTargetLocation(), ScrollToFocusedTile.no);
-            selectedUnitManager.setSelectedUnit(event.getUnit());
+            if (event.getUnit().isAtPlaceLocation()) {
+                selectedUnitManager.setSelectedUnit(event.getUnit());
+            } else if (event.getUnit().isAtCargoSlot()) {
+                selectedUnitManager
+                        .setSelectedUnit(event.getUnit().getPlaceCargoSlot().getOwnerUnit());
+            }
         }
 
     }

@@ -2,7 +2,6 @@ package org.microcol.gui;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -10,8 +9,8 @@ import org.microcol.gui.gamepanel.Animation;
 import org.microcol.gui.gamepanel.AnimationIsDoneController;
 import org.microcol.gui.gamepanel.AnimationManager;
 import org.microcol.gui.gamepanel.AnimationStartedController;
+import org.microcol.gui.gamepanel.Area;
 
-import mockit.Expectations;
 import mockit.Injectable;
 import mockit.Mocked;
 import mockit.StrictExpectations;
@@ -36,95 +35,44 @@ public class AnimationManagerTest {
     @Mocked
     private Animation part2;
 
+    @Mocked
+    private Area area;
+
     @Test
     public void test_constructor() throws Exception {
         assertNotNull(am);
-        assertFalse(am.hasNextStep());
+        assertFalse(am.hasNextStep(area));
     }
 
     @Test(expected = IllegalStateException.class)
     public void test_addiong_one_animation_without_nextStep() throws Exception {
-        new Expectations() {{
-                part1.hasNextStep();result=false;times=1;
-            }};
         am.addAnimation(part1);
 
-        assertFalse(am.hasNextStep());
+        assertFalse(am.hasNextStep(area));
     }
 
     @Test
-    public void test_addiong_one_animation_with_nextStep() throws Exception {
-        new Expectations() {{
-                part1.hasNextStep();result=true;times=1;
-            }};
-        am.addAnimation(part1);
-
-        assertTrue(am.hasNextStep());
-    }
-
-    @Test
-    public void test_one_animation_with_one_step() throws Exception {
+    public void validate_animation_with_1_step_which_canBePainted() throws Exception {
         new StrictExpectations() {{
-                part1.hasNextStep();result=true;times=1;
-                part1.nextStep();times=1;
+                part1.hasNextStep();result=true;times=2;
+                part1.canBePainted(area);result=false;times=1;
+                part1.nextStep();
                 part1.hasNextStep();result=false;times=1;
             }};
         am.addAnimation(part1);
-        assertTrue(am.hasNextStep());
-        am.performStep();
-        assertFalse(am.hasNextStep());
+
+        assertFalse(am.hasNextStep(area));
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test()
     public void test_invalid_perform_step_call() throws Exception {
-        assertFalse(am.hasNextStep());
-        am.performStep();
+        assertFalse(am.hasNextStep(area));
     }
 
-    @Test
-    public void test_two_parts_together() throws Exception {
-        new StrictExpectations() {{
-                part1.hasNextStep();result=true;times=1;
-                part1.nextStep();times=1;
-                part1.hasNextStep();result=false;times=1;
-                
-                part2.hasNextStep();result=true;times=1;
-                part2.nextStep();times=1;
-                part2.hasNextStep();result=false;times=1;
-            }};
-
+    @Test(expected=IllegalStateException.class)
+    public void verify_that_only_one_animation_is_processed() throws Exception {
         am.addAnimation(part1);
         am.addAnimation(part2);
-
-        assertTrue(am.hasNextStep());
-        am.performStep();
-
-        assertTrue(am.hasNextStep());
-        am.performStep();
-
-        assertFalse(am.hasNextStep());
-    }
-
-    @Test
-    public void test_two_parts_one_by_one() throws Exception {
-        new StrictExpectations() {{
-                part1.hasNextStep();result=true;times=1;
-                part1.nextStep();times=1;
-                part1.hasNextStep();result=false;times=1;
-                
-                part2.hasNextStep();result=true;times=1;
-                part2.nextStep();times=1;
-                part2.hasNextStep();result=false;times=1;
-            }};
-        am.addAnimation(part1);
-        assertTrue(am.hasNextStep());
-        am.performStep();
-        assertFalse(am.hasNextStep());
-
-        am.addAnimation(part2);
-        assertTrue(am.hasNextStep());
-        am.performStep();
-        assertFalse(am.hasNextStep());
     }
 
     @Test(expected = NullPointerException.class)

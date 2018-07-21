@@ -145,9 +145,9 @@ public final class Colony {
                 .collect(ImmutableList.toImmutableList());
         final Location target = whereCouldMove.get(random.nextInt(whereCouldMove.size()));
         final Location oldLocation = unit.getLocation();
-        unit.placeToLocation(target);
-        //FIXME don't fire event here. Do it in unit. There is no forUnitMoveStepFinished event.
         model.fireUnitMovedStepStarted(unit, oldLocation, target, unit.getPlaceLocation().getOrientation());
+        unit.placeToLocation(target);
+        model.fireUnitMovedStepFinished(unit, oldLocation, target);
     }
 
     /**

@@ -68,15 +68,26 @@ public final class AnimationFight implements Animation {
         final Point aPoint = area.convertToPoint(attackerLocation);
         final Point dPoint = area.convertToPoint(defenderLocation);
         final Point middle = aPoint.add(dPoint.substract(aPoint).divide(2));
-        // TODO JJ paint animation just when at least one point is on screen.
-        graphics.drawImage(imageProvider.getImage(ImageProvider.IMG_CROSSED_SWORDS), middle.getX(),
-                middle.getY());
+        if (area.isVisibleScreenPoint(aPoint) || area.isVisibleScreenPoint(dPoint)) {
+            graphics.drawImage(imageProvider.getImage(ImageProvider.IMG_CROSSED_SWORDS),
+                    middle.getX(), middle.getY());
+        }
     }
 
     @Override
     public String toString() {
         return MoreObjects.toStringHelper(getClass()).add("attackerLocation", attackerLocation)
                 .add("defenderLocation", defenderLocation).toString();
+    }
+
+    @Override
+    public boolean canBePainted(final Area area) {
+        if (hasNextStep()) {
+            final Point aPoint = area.convertToPoint(attackerLocation);
+            final Point dPoint = area.convertToPoint(defenderLocation);
+            return area.isVisibleScreenPoint(aPoint) || area.isVisibleScreenPoint(dPoint);
+        }
+        return false;
     }
 
 }

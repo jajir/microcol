@@ -37,4 +37,9 @@ public final class AnimatonScreenScroll implements Animation {
                 .toString();
     }
 
+    @Override
+    public boolean canBePainted(final Area area) {
+        return true;
+    }
+
 }

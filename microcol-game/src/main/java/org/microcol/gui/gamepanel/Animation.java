@@ -17,4 +17,6 @@ public interface Animation {
     void nextStep();
 
     void paint(GraphicsContext graphics, Area area);
+
+    boolean canBePainted(Area area);
 }

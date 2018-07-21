@@ -21,6 +21,7 @@ import org.microcol.model.unit.UnitActionType;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
 
 /**
  * All units can attack with muskets except wagon.
@@ -28,14 +29,14 @@ import com.google.common.collect.ImmutableList;
 public class Unit implements CargoHolder {
 
     /**
-     * Unit will see all tiles accessible by it's speed. This define how many tiles
-     * further will unit see.
+     * Unit will see all tiles accessible by it's speed. This define how many
+     * tiles further will unit see.
      */
     private final static int VISIBILITY_INCREASE = 1;
 
     /**
-     * Number is probability than attacker will win. When it's bigger than 0.5 than
-     * attacker will have bigger probability that will win.
+     * Number is probability than attacker will win. When it's bigger than 0.5
+     * than attacker will have bigger probability that will win.
      */
     private final static double PROBABILITY_OF_ATTACKER_WIN = 0.6d;
 
@@ -143,8 +144,8 @@ public class Unit implements CargoHolder {
     }
 
     /**
-     * Verify if it's possible to move at give location. Method doesn't verify if
-     * unit have enough action point is if location is reachable.
+     * Verify if it's possible to move at give location. Method doesn't verify
+     * if unit have enough action point is if location is reachable.
      *
      * @param location
      *            required map location.
@@ -284,8 +285,8 @@ public class Unit implements CargoHolder {
      * 
      * @param targetLocation
      *            required location where should be captured colony
-     * @return Return <code>true</code> when target location contains enemy colony
-     *         without military units to defend it.
+     * @return Return <code>true</code> when target location contains enemy
+     *         colony without military units to defend it.
      */
     public boolean isPossibleToCaptureColonyAt(final Location targetLocation) {
         if (type.canMoveAtTerrain(model.getMap().getTerrainTypeAt(targetLocation))
@@ -347,8 +348,8 @@ public class Unit implements CargoHolder {
     /**
      * Return true when given unit have free cargo slot for unit.
      * 
-     * @return return <code>true</code> when at least one cargo slot is empty and
-     *         could be loaded otherwise return <code>false</code>
+     * @return return <code>true</code> when at least one cargo slot is empty
+     *         and could be loaded otherwise return <code>false</code>
      */
     public boolean isAtLeastOneCargoSlotEmpty() {
         return getType().getCargoCapacity() > 0 && getCargo().getSlots().stream()
@@ -360,8 +361,8 @@ public class Unit implements CargoHolder {
      * 
      * @param units
      *            required {@link List} of units
-     * @return return <code>true</code> when there is not unit in list belonging to
-     *         different owner otherwise return <code>false</code>
+     * @return return <code>true</code> when there is not unit in list belonging
+     *         to different owner otherwise return <code>false</code>
      */
     public boolean isSameOwner(final List<Unit> units) {
         Preconditions.checkNotNull(units);
@@ -418,8 +419,7 @@ public class Unit implements CargoHolder {
                 moveTo);
         Preconditions.checkArgument(isPossibleToMoveAt(moveTo),
                 "It's not possible to move at (%s).", moveTo);
-        Preconditions.checkState(actionPoints > 0, "There is not enough avilable moves (%s)",
-                this);
+        Preconditions.checkState(actionPoints > 0, "There is not enough avilable moves (%s)", this);
 
         actionPoints--;
         final TerrainType targetTerrain = model.getMap().getTerrainTypeAt(moveTo);
@@ -460,7 +460,11 @@ public class Unit implements CargoHolder {
             /**
              * Keep original orientation.
              */
-            return getPlaceLocation().getOrientation();
+            if (isAtPlaceLocation()) {
+                return getPlaceLocation().getOrientation();
+            } else {
+                return getDefaultOrintation();
+            }
         }
     }
 
@@ -755,17 +759,58 @@ public class Unit implements CargoHolder {
         placeToLocation(location, getDefaultOrintation());
     }
 
-    void unload(final Location targetLocation) {
+    void disembark(final Location targetLocation) {
         Preconditions.checkNotNull(targetLocation);
         Preconditions.checkState(actionPoints > 0,
                 "Unit (%s) need for unload at least on action point", this);
         Preconditions.checkState(isAtCargoSlot(),
                 "This unit (%s) can't be unload, it's not stored.", this);
-        // TODO JKA run "standard" unit location checks
+        final TerrainType terrainType = model.getMap().getTerrainTypeAt(targetLocation);
+        Preconditions.checkState(type.getMoveableTerrains().contains(terrainType),
+                "This unit (%s) can't move at target terrain %s.", this, terrainType);
+        final Location startLocation = getPlaceCargoSlot().getOwnerUnit().getLocation();
+        Preconditions.checkState(startLocation.isNeighbor(targetLocation),
+                "Start location '%s' have to neighbobor of target location '%s'", startLocation,
+                targetLocation);
 
-        // TODO JKA empty all moves and attacks?
         this.actionPoints = 0;
-        place = new PlaceLocation(this, targetLocation, getDefaultOrintation());
+
+        final Direction orientation = findOrintationForMove(targetLocation);
+        final Path path = Path.of(Lists.newArrayList(startLocation, targetLocation));
+        if (model.fireUnitMoveStarted(this, path)) {
+            model.fireUnitMovedStepStarted(this, startLocation, targetLocation, orientation);
+            placeToLocation(targetLocation, orientation);
+            owner.revealMapForUnit(this);
+            model.fireUnitMovedStepFinished(this, startLocation, targetLocation);
+            model.fireUnitMovedFinished(this, path);
+        }
+    }
+
+    /**
+     * This put unit to cargo slot from map and paint nice animation of
+     * movement.
+     *
+     * @param placeCargoSlot
+     *            required placeCargoSlot
+     */
+    void embark(final PlaceCargoSlot placeCargoSlot) {
+        Preconditions.checkState(isAtPlaceLocation(), "Unit have to be at map, it's at '%s'",
+                place);
+        Preconditions.checkState(placeCargoSlot.getCargoSlot().getOwnerUnit().isAtPlaceLocation(),
+                "Unit '%s' have to be at map", placeCargoSlot.getCargoSlot().getOwnerUnit());
+        final Location startLocation = getLocation(); 
+        final Location targetLocation = placeCargoSlot.getCargoSlot().getOwnerUnit().getLocation(); 
+        final Direction orientation = findOrintationForMove(targetLocation);
+        final Path path = Path.of(Lists.newArrayList(startLocation, targetLocation));
+        
+        if (model.fireUnitMoveStarted(this, path)) {
+            model.fireUnitMovedStepStarted(this, startLocation, targetLocation, orientation);
+            
+            placeToCargoSlot(placeCargoSlot);
+            
+            model.fireUnitMovedStepFinished(this, startLocation, targetLocation);
+            model.fireUnitMovedFinished(this, path);
+        }
     }
 
     @Override
@@ -792,7 +837,7 @@ public class Unit implements CargoHolder {
         return place;
     }
 
-    private PlaceCargoSlot getPlaceCargoSlot() {
+    public PlaceCargoSlot getPlaceCargoSlot() {
         Preconditions.checkState(isAtCargoSlot(), "Unit have to be in cargo slot");
         return (PlaceCargoSlot) place;
     }

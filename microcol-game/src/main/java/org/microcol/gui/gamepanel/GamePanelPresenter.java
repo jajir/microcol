@@ -296,19 +296,12 @@ public final class GamePanelPresenter {
             final Unit toLoad = gameModelController.getModel().getUnitsAt(moveToLocation).get(0);
             final Optional<CargoSlot> oCargoSlot = toLoad.getCargo().getEmptyCargoSlot();
             if (oCargoSlot.isPresent()) {
-                oCargoSlot.get().store(movingUnit);
+                gameModelController.embark(oCargoSlot.get(), movingUnit);
             }
-            // TODO JJ following code is repeated multiple times
-            selectedTileManager.setSelectedTile(moveToLocation, ScrollToFocusedTile.smoothScroll);
             disableMoveMode();
         } else if (movingUnit.isPossibleToDisembarkAt(moveToLocation, true)) {
             // try to disembark
-            movingUnit.getCargo().getSlots().stream()
-                    .filter(cargoSlot -> cargoSlot.isLoadedUnit()
-                            && cargoSlot.getUnit().get().getActionPoints() > 0)
-                    .forEach(cargoSlot -> cargoSlot.unload(moveToLocation));
-            // TODO JJ following code is repeated multiple times
-            selectedTileManager.setSelectedTile(moveToLocation, ScrollToFocusedTile.smoothScroll);
+            gameModelController.disembark(movingUnit, moveToLocation);
             disableMoveMode();
         } else if (unitMove.isOneTurnMove()) {
             // user will move

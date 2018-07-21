@@ -127,6 +127,16 @@ public final class CargoSlot {
 
     // TODO add validation what in case of embark unit in not in town. see
     // unit.isPossibleToEmbark
+    public void embark(final Unit unit) {
+        Preconditions.checkNotNull(unit);
+        Preconditions.checkState(isEmpty(), "Cargo slot (%s) is already loaded.", this);
+        Preconditions.checkState(getOwnerUnit().getOwner().equals(unit.getOwner()),
+                "Owners must be same (%s - %s).", getOwnerUnit().getOwner(), unit.getOwner());
+        cargoUnit = new PlaceCargoSlot(unit, this);
+        unit.embark(cargoUnit);
+    }
+    
+    //TODO it's not embark, what is that?
     public void store(final Unit unit) {
         Preconditions.checkNotNull(unit);
         Preconditions.checkState(isEmpty(), "Cargo slot (%s) is already loaded.", this);
@@ -282,7 +292,7 @@ public final class CargoSlot {
         }
     }
 
-    public Unit unload(final Location targetLocation) {
+    public Unit disembark(final Location targetLocation) {
         Preconditions.checkNotNull(targetLocation);
         Preconditions.checkState(!isEmpty(), "Cargo slot (%s) is empty.", this);
         Preconditions.checkState(isLoadedUnit(), "Cargo slot (%s) doesn't contains unit.", this);
@@ -291,7 +301,7 @@ public final class CargoSlot {
                 targetLocation);
 
         final Unit unit = cargoUnit.getUnit();
-        unit.unload(targetLocation);
+        unit.disembark(targetLocation);
         cargoUnit = null;
 
         return unit;

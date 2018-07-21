@@ -21,12 +21,14 @@ public final class ChainOfCommandStrategy<T, R> implements Function<T, R> {
 
     private final List<Function<T, R>> filters;
 
-    public ChainOfCommandStrategy() {
-	filters = new ArrayList<>();
-    }
-
+    /**
+     * Constructor initialize chain of commands.
+     *
+     * @param filters
+     *            required list of commands
+     */
     public ChainOfCommandStrategy(final List<Function<T, R>> filters) {
-	this.filters = new ArrayList<>(Preconditions.checkNotNull(filters));
+        this.filters = new ArrayList<>(Preconditions.checkNotNull(filters));
     }
 
     /**
@@ -39,14 +41,15 @@ public final class ChainOfCommandStrategy<T, R> implements Function<T, R> {
      */
     @Override
     public R apply(final T t) {
-	Preconditions.checkNotNull(t);
-	for (final Function<T, R> filter : filters) {
-	    R result = filter.apply(t);
-	    if (result != null) {
-		return result;
-	    }
-	}
-	throw new IllegalArgumentException(String.format("Unable to process chain of command input (%s)", t));
+        Preconditions.checkNotNull(t);
+        for (final Function<T, R> filter : filters) {
+            R result = filter.apply(t);
+            if (result != null) {
+                return result;
+            }
+        }
+        throw new IllegalArgumentException(
+                String.format("Unable to process chain of command input (%s)", t));
     }
 
 }

@@ -440,7 +440,7 @@ public final class Model {
      * <p>
      * Unit have to be on map. Path have to be accessible for unit.
      * </p>
-     * 
+     *
      * @param unit
      *            required moving unit
      * @param path
@@ -451,13 +451,21 @@ public final class Model {
      */
     public void moveUnit(final Unit unit, final Path path) {
         listenerManager.fireActionStarted(this);
-        if (listenerManager.fireUnitMoveStarted(this, unit, path)) {
+        if (fireUnitMoveStarted(unit, path)) {
             path.getLocations().forEach(loc -> {
                 unit.moveOneStep(loc);
             });
-            listenerManager.fireUnitMovedFinished(this, unit, path);
+            fireUnitMovedFinished(unit, path);
         }
         listenerManager.fireActionEnded(this);
+    }
+    
+    boolean fireUnitMoveStarted(final Unit unit, final Path path){
+        return listenerManager.fireUnitMoveStarted(this, unit, path);
+    }
+    
+    void fireUnitMovedFinished(final Unit unit, final Path path){
+        listenerManager.fireUnitMovedFinished(this, unit, path);
     }
 
     /**

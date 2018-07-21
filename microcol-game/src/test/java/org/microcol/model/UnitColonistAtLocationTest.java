@@ -29,7 +29,7 @@ public class UnitColonistAtLocationTest extends AbstractUnitTest {
 	@Test(expected = IllegalStateException.class)
 	public void testPlaceAtMap() throws Exception {
 		makeUnit(cargo, model, 23, placeLocation, unitType, owner, 1);
-		unit.unload(Location.of(12, 12));
+		unit.disembark(Location.of(12, 12));
 	}
 	
 	@Test

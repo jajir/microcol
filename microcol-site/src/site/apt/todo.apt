@@ -133,13 +133,13 @@ Planned releases
   
   * \u2713 When game is loaded and focus was at some place e.g. town than screen is not centered at this location.
   
-  * \u2717 Enemy unit is animating event when they are out of visible area.
+  * \u2713 Enemy unit is animating event when they are out of visible area.
   
  * <<0.7.0>> - Prepare for release
  
   * \u2717 
  
-  * \u2717 Path during move is strange. It should be closest path. Now it's funny serpent.
+  * \u2713 Path during move is strange. It should be closest path. Now it's funny serpent.
  
   * \u2717 When focused unit is at colony and is moved to field than attempt to move unit leads to exception.
  

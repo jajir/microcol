@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.microcol.gui.gamepanel.ScrollToFocusedTile;
 import org.microcol.gui.gamepanel.SelectedTileManager;
+import org.microcol.model.CargoSlot;
 import org.microcol.model.GoodTrade;
 import org.microcol.model.GoodType;
 import org.microcol.model.GoodsAmount;
@@ -133,6 +134,21 @@ public final class GameModelController {
                 getModel().moveUnit(attacker, Path.of(locations.get()));
             }
             attacker.attack(defender.getLocation());
+        }).start();
+    }
+
+    public void disembark(final Unit movingUnit, final Location targetLocation) {
+        new Thread(() -> {
+            movingUnit.getCargo().getSlots().stream()
+                    .filter(cargoSlot -> cargoSlot.isLoadedUnit()
+                            && cargoSlot.getUnit().get().getActionPoints() > 0)
+                    .forEach(cargoSlot -> cargoSlot.disembark(targetLocation));
+        }).start();
+    }
+
+    public void embark(final CargoSlot cargoSlot, final Unit unit) {
+        new Thread(() -> {
+            cargoSlot.embark(unit);
         }).start();
     }
 
