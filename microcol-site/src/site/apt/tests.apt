@@ -102,3 +102,40 @@ Test cases
 []
 
  Done.
+ 
+ 
+** TC-05 Verify default campaign
+
+ * Start game with '-Dclean=true' to clean all played missions.
+ Verify that 'New free play game' is disabled.
+ 
+ * Open 'Play campaign'.
+ Verify that it's possible to play just first mission.
+ 
+ * Use 'Load saved game' and open save 'mission-1-finish.microcol'.
+ 
+ * Open Europe port view with 'e'.
+ 
+ * Sell all cigars loaded in ship, close Europe port view and press 'Next turn'.
+ Verify that mission finish and game menu is shown.
+ Verify that in campaign menu is possible to play second mission.
+ 
+ * Open save 'mission-2-finish.microcol'.
+ 
+ * Press 'Next turn'.
+ Verify that mission finish game menu is shown.
+ Verify that in campaign menu is possible to play third mission.
+ 
+ * Open save 'mission-3-finish.microcol'.
+ 
+ * Attack 'New Amsterodam'.
+ Verify that city was captured.
+
+ * Press 'Next turn' and press it again.
+ Verify that mission finish game menu is shown.
+ Verify that is possible to play 'New free play game'.
+ Verify that in campaign menu is possible to play all missions.
+ 
+[]
+ 
+ Done.

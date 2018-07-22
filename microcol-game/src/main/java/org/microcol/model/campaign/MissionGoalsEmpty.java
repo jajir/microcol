@@ -7,9 +7,16 @@ import java.util.Map;
  */
 public final class MissionGoalsEmpty extends MissionGoals {
 
-	@Override
-	void initialize(final Map<String, String> data) {
-		// just empty implementation.
-	}
+    @Override
+    void initialize(final Map<String, String> data) {
+        // just empty implementation.
+    }
 
+    @Override
+    boolean isAllGoalsDone() {
+        /*
+         * Return false and goals will be always evaluated as not finished.
+         */
+        return false;
+    }
 }

@@ -63,7 +63,7 @@ public final class MainMenuDevelopment {
             menuNewScenario.getItems().add(menuItem);
         });
 
-        developmentMenu.getItems().addAll(checkBoxStopAi, menuNewScenario);
+        developmentMenu.getItems().addAll(checkBoxStopAi);
     }
 
     public Menu getDevelopmentMenu() {
