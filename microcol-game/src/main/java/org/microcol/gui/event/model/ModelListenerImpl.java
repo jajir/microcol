@@ -28,6 +28,7 @@ import org.microcol.model.event.UnitMovedStepStartedEvent;
 import org.microcol.model.event.UnitMovedToColonyFieldEvent;
 import org.microcol.model.event.UnitMovedToConstructionEvent;
 import org.microcol.model.event.UnitMovedToHighSeasEvent;
+import org.microcol.model.event.UnitMovedToLocationEvent;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
@@ -194,6 +195,11 @@ public final class ModelListenerImpl implements ModelListener {
     @Override
     public void onUnitMovedToColonyField(final UnitMovedToColonyFieldEvent event) {
         modelEventManager.getUnitMovedToColonyFieldController().fireEvent(event);
+    }
+
+    @Override
+    public void onUnitMovedToLocation(final UnitMovedToLocationEvent event) {
+        modelEventManager.getUnitMovedToLocationController().fireEvent(event);
     }
 
 }

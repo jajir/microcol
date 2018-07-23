@@ -30,6 +30,7 @@ import org.microcol.model.event.UnitMovedStepStartedEvent;
 import org.microcol.model.event.UnitMovedToColonyFieldEvent;
 import org.microcol.model.event.UnitMovedToConstructionEvent;
 import org.microcol.model.event.UnitMovedToHighSeasEvent;
+import org.microcol.model.event.UnitMovedToLocationEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -162,6 +163,14 @@ final class ListenerManager {
         logger.info("Unit moved to colony construction slot: {}.", event);
 
         executeInSameThread(listener -> listener.onUnitMovedToConstruction(event));
+    }
+
+    void fireUnitMovedToLocation(final Model model, final Unit unit) {
+        final UnitMovedToLocationEvent event = new UnitMovedToLocationEvent(model, unit);
+
+        logger.info("Unit moved to location: {}.", event);
+
+        executeInSameThread(listener -> listener.onUnitMovedToLocation(event));
     }
 
     void fireUnitMovedToColonyField(final Model model, final Unit unit) {

@@ -5,18 +5,24 @@ import java.util.Optional;
 import org.microcol.gui.event.model.ColonyWasFoundController;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.event.model.GameStoppedController;
+import org.microcol.gui.event.model.UnitEmbarkedController;
 import org.microcol.gui.event.model.UnitMovedStepStartedController;
 import org.microcol.gui.event.model.UnitMovedToColonyFieldController;
+import org.microcol.gui.event.model.UnitMovedToConstructionController;
 import org.microcol.gui.event.model.UnitMovedToHighSeasController;
+import org.microcol.gui.event.model.UnitMovedToLocationController;
 import org.microcol.gui.mainmenu.SelectNextUnitController;
 import org.microcol.gui.mainmenu.SelectNextUnitEvent;
 import org.microcol.model.Location;
 import org.microcol.model.Unit;
 import org.microcol.model.event.ColonyWasFoundEvent;
 import org.microcol.model.event.GameStoppedEvent;
+import org.microcol.model.event.UnitEmbarkedEvent;
 import org.microcol.model.event.UnitMovedStepStartedEvent;
 import org.microcol.model.event.UnitMovedToColonyFieldEvent;
+import org.microcol.model.event.UnitMovedToConstructionEvent;
 import org.microcol.model.event.UnitMovedToHighSeasEvent;
+import org.microcol.model.event.UnitMovedToLocationEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -49,6 +55,9 @@ public final class SelectedUnitManager {
             final UnitMovedToHighSeasController unitMovedToHighSeasController,
             final UnitMovedToColonyFieldController unitMovedToFieldController,
             final SelectedUnitWasChangedController selectedUnitWasChangedController,
+            final UnitEmbarkedController unitEmbarkedController,
+            final UnitMovedToConstructionController unitMovedToConstructionController,
+            final UnitMovedToLocationController unitMovedToLocationController,
             final ColonyWasFoundController colonyWasFoundController,
             final GameStoppedController gameStoppedController) {
         this.gameModelController = Preconditions.checkNotNull(gameModelController);
@@ -60,8 +69,26 @@ public final class SelectedUnitManager {
         unitMovedStepStartedController.addRunLaterListener(this::onUnitMovedStepStarted);
         unitMovedToHighSeasController.addListener(this::onUnitMovedToHighSeas);
         unitMovedToFieldController.addListener(this::onUnitMovedToField);
+        unitEmbarkedController.addListener(this::onUnitEmbarked);
+        unitMovedToConstructionController.addListener(this::onUnitMovedToConstruction);
         colonyWasFoundController.addListener(this::onColonyWasFound);
+        unitMovedToLocationController.addListener(this::onUnitMovedToLocation);
         gameStoppedController.addListener(this::onGameStopped);
+    }
+
+    private void onUnitMovedToLocation(final UnitMovedToLocationEvent event) {
+        if (!getSelectedUnit().isPresent() && selectedTileManager.getSelectedTile().isPresent()
+                && selectedTileManager.getSelectedTile().get()
+                        .equals(event.getUnit().getLocation())) {
+            evaluateLocation(event.getUnit().getLocation());
+        }
+    }
+
+    private void onUnitMovedToConstruction(final UnitMovedToConstructionEvent event) {
+        if (event.getUnit().equals(selectedUnit)) {
+            unselectUnit();
+            evaluateLocation(selectedTileManager.getSelectedTile().get());
+        }
     }
 
     private void onUnitMovedStepStarted(final UnitMovedStepStartedEvent event) {
@@ -69,6 +96,13 @@ public final class SelectedUnitManager {
             if (event.getUnit().isAtPlaceLocation()) {
                 selectedUnit(event.getUnit());
             }
+        }
+    }
+
+    private void onUnitEmbarked(final UnitEmbarkedEvent event) {
+        if (event.getUnit().equals(selectedUnit)) {
+            unselectUnit();
+            evaluateLocation(selectedTileManager.getSelectedTile().get());
         }
     }
 
@@ -94,6 +128,7 @@ public final class SelectedUnitManager {
     private void onUnitMovedToField(final UnitMovedToColonyFieldEvent event) {
         if (event.getUnit().equals(selectedUnit)) {
             unselectUnit();
+            evaluateLocation(selectedTileManager.getSelectedTile().get());
         }
     }
 

@@ -24,6 +24,7 @@ import org.microcol.model.event.UnitMovedStepStartedEvent;
 import org.microcol.model.event.UnitMovedToColonyFieldEvent;
 import org.microcol.model.event.UnitMovedToConstructionEvent;
 import org.microcol.model.event.UnitMovedToHighSeasEvent;
+import org.microcol.model.event.UnitMovedToLocationEvent;
 
 /**
  * Evens called from model to registered listeners.
@@ -63,6 +64,14 @@ public interface ModelListener {
      *            required event
      */
     void onUnitMovedToConstruction(UnitMovedToConstructionEvent event);
+
+    /**
+     * It's called when unit move to map location.
+     *
+     * @param event
+     *            required event
+     */
+    void onUnitMovedToLocation(UnitMovedToLocationEvent event);
 
     void onUnitMoveStarted(UnitMoveStartedEvent event);
 

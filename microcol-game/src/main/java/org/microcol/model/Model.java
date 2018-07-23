@@ -571,6 +571,10 @@ public final class Model {
         listenerManager.fireUnitMovedToConstruction(this, unit);
     }
 
+    void fireUnitMovedToLocation(final Unit unit) {
+        listenerManager.fireUnitMovedToLocation(this, unit);
+    }
+
     void fireUnitAttacked(final Unit attacker, final Unit defender, final Unit destroyed) {
         listenerManager.fireUnitAttacked(this, attacker, defender, destroyed);
     }

@@ -24,7 +24,7 @@ public final class PlaceConstructionSlot extends AbstractPlace {
         return "Construction";
     }
 
-    Colony getColony() {
+    public Colony getColony() {
         return constructionSlot.getColony();
     }
 

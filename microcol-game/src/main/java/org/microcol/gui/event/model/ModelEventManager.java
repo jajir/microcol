@@ -45,6 +45,8 @@ public final class ModelEventManager {
 
     private final UnitMovedToColonyFieldController unitMovedToColonyFieldController;
     
+    private final UnitMovedToLocationController unitMovedToLocationController;
+    
     private final UnitMovedToConstructionController unitMovedToConstructionController;
 
     private final IndependenceWasDeclaredColntroller independenceWasDeclaredColntroller;
@@ -70,6 +72,7 @@ public final class ModelEventManager {
             final ActionStartedController actionStartedController,
             final ActionEndedController actionEndedController,
             final UnitMovedToColonyFieldController unitMovedToColonyFieldController,
+            final UnitMovedToLocationController unitMovedToLocationController,
             final UnitMovedToConstructionController unitMovedToConstructionController) {
         this.roundStartedController = Preconditions.checkNotNull(roundStartedController);
         this.unitMovedStepStartedController = Preconditions
@@ -86,6 +89,7 @@ public final class ModelEventManager {
         this.colonyWasFoundController = Preconditions.checkNotNull(colonyWasFoundController);
         this.colonyWasCapturedController = Preconditions.checkNotNull(colonyWasCapturedController);
         this.unitEmbarkedController = Preconditions.checkNotNull(unitEmbarkedController);
+        this.unitMovedToLocationController = Preconditions.checkNotNull(unitMovedToLocationController);
         this.unitMoveFinishedController = Preconditions.checkNotNull(unitMoveFinishedController);
         this.unitMovedToHighSeasController = Preconditions
                 .checkNotNull(unitMovedToHighSeasController);
@@ -201,6 +205,13 @@ public final class ModelEventManager {
      */
     public UnitMovedToConstructionController getUnitMovedToConstructionController() {
         return unitMovedToConstructionController;
+    }
+
+    /**
+     * @return the unitMovedToLocationController
+     */
+    public UnitMovedToLocationController getUnitMovedToLocationController() {
+        return unitMovedToLocationController;
     }
 
 }

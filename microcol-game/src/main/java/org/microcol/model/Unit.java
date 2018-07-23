@@ -661,8 +661,14 @@ public class Unit implements CargoHolder {
     }
 
     void placeToLocation(final Location target, final Direction orientation) {
-        place.destroy();
-        place = new PlaceLocation(this, Preconditions.checkNotNull(target), orientation);
+        if(place instanceof PlaceLocation){
+            place.destroy();
+            place = new PlaceLocation(this, Preconditions.checkNotNull(target), orientation);
+        }else{
+            place.destroy();
+            place = new PlaceLocation(this, Preconditions.checkNotNull(target), orientation);
+            model.fireUnitMovedToLocation(this);
+        }
     }
 
     public void placeToHighSeas(final boolean isTravelToEurope) {
@@ -842,7 +848,7 @@ public class Unit implements CargoHolder {
         return (PlaceCargoSlot) place;
     }
 
-    PlaceConstructionSlot getPlaceConstruction() {
+    public PlaceConstructionSlot getPlaceConstruction() {
         Preconditions.checkState(isAtPlaceConstructionSlot(),
                 "Unit have to be in colony construction");
         return (PlaceConstructionSlot) place;

@@ -24,6 +24,7 @@ import org.microcol.model.event.UnitMovedStepStartedEvent;
 import org.microcol.model.event.UnitMovedToColonyFieldEvent;
 import org.microcol.model.event.UnitMovedToConstructionEvent;
 import org.microcol.model.event.UnitMovedToHighSeasEvent;
+import org.microcol.model.event.UnitMovedToLocationEvent;
 
 public class ModelListenerAdapter implements ModelListener {
 
@@ -59,6 +60,11 @@ public class ModelListenerAdapter implements ModelListener {
 
     @Override
     public void onUnitMovedToConstruction(final UnitMovedToConstructionEvent event) {
+        // Do nothing.
+    }
+
+    @Override
+    public void onUnitMovedToLocation(UnitMovedToLocationEvent event) {
         // Do nothing.
     }
 
