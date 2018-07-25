@@ -4,17 +4,16 @@
  */
 
 .scroll-pane {
-	-fx-background-color: red;
-	-fx-hbar-policy: never;
-	-fx-vbar-policy: as-needed;
-	-fx-padding: 0.0;
-	-fx-focus-traversable: false;
+	-fx-fit-to-width: true;
+	-fx-background-insets: 0;
+	-fx-padding: 0;
 }
 
 .scroll-pane:focused {
-  -fx-background-color: -fx-focus-color,-fx-box-border,-fx-control-inner-background;
-  -fx-background-insets: 0.0,0.0,0.0,0.0;
-  -fx-background-radius: 0.0;
+}
+
+.scroll-pane .selected {
+	 -fx-background-color: #DADADA;
 }
 
 /*
@@ -25,6 +24,6 @@
 }
 
 .unitPanel{
- 	-fx-padding: 20px 0 0 0;
+ 	-fx-padding: 15px 0 10px 0;
 }
 

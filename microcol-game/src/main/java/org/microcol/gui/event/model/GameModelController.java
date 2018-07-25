@@ -81,10 +81,6 @@ public final class GameModelController {
         return modelMission.getModel();
     }
 
-    public void captureColonyAt(final Unit movingUnit, final Location moveToLocation) {
-        new Thread(() -> movingUnit.captureColony(moveToLocation)).start();
-    }
-
     public boolean isModelReady() {
         return modelMission != null;
     }

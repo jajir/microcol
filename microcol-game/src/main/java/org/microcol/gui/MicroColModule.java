@@ -77,6 +77,7 @@ import org.microcol.gui.gamepanel.MouseOverTileChangedController;
 import org.microcol.gui.gamepanel.MouseOverTileListener;
 import org.microcol.gui.gamepanel.MouseOverTileManager;
 import org.microcol.gui.gamepanel.MoveModeSupport;
+import org.microcol.gui.gamepanel.OneTurnMoveHighlighter;
 import org.microcol.gui.gamepanel.PaintService;
 import org.microcol.gui.gamepanel.PaneCanvas;
 import org.microcol.gui.gamepanel.ScrollToSelectedUnit;
@@ -238,6 +239,7 @@ public final class MicroColModule extends AbstractModule {
         // gui.gamepanel package binding
         bind(GamePanelView.class).in(Singleton.class);
         bind(GamePanelPresenter.class).asEagerSingleton();
+        bind(OneTurnMoveHighlighter.class).in(Singleton.class);
         bind(SelectedTileManager.class).in(Singleton.class);
         bind(MoveModeSupport.class).in(Singleton.class);
         bind(MouseOverTileListener.class).asEagerSingleton();

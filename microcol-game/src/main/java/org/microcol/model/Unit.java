@@ -526,23 +526,6 @@ public class Unit implements CargoHolder {
         }
     }
 
-    public void captureColony(final Location attackAt) {
-        canAttackValidation(attackAt);
-
-        Preconditions.checkState(getAttackableUnitsAt(attackAt).isEmpty(),
-                "Colony can't be captured, there not attackable unit on target location (%s).",
-                attackAt);
-        final Colony col = model.getColonyAt(attackAt).orElseThrow(() -> new IllegalStateException(
-                String.format("There are no units to figh of city at '%s'", attackAt)));
-
-        actionPoints = 0;
-        final Location start = getLocation();
-        placeToLocation(attackAt);
-        // FIXME use moveOneStep
-        model.fireUnitMovedStepStarted(this, start, attackAt, getDefaultOrintation());
-        col.captureColony(owner, this);
-    }
-
     private void canAttackValidation(final Location attackAt) {
         verifyThatUnitIsAtMap();
 

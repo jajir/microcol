@@ -64,8 +64,10 @@ public final class GamePanelPresenter {
     private final MouseOverTileManager mouseOverTileManager;
 
     private final ModeController modeController;
-    
+
     private final VisibleArea visibleArea;
+
+    private final OneTurnMoveHighlighter oneTurnMoveHighlighter;
 
     @Inject
     public GamePanelPresenter(final GamePanelView gamePanelView,
@@ -80,9 +82,8 @@ public final class GamePanelPresenter {
             final Text text, final ColonyWasCapturedController colonyWasCapturedController,
             final MouseOverTileManager mouseOverTileManager, final ModeController modeController,
             final SelectedUnitManager selectedUnitManager,
-            final GamePanelController gamePanelController,
-            final VisibleArea visibleArea,
-            final PaneCanvas paneCanvas) {
+            final GamePanelController gamePanelController, final VisibleArea visibleArea,
+            final PaneCanvas paneCanvas, final OneTurnMoveHighlighter oneTurnMoveHighlighter) {
         this.gameModelController = Preconditions.checkNotNull(gameModelController);
         this.gamePreferences = gamePreferences;
         this.gamePanelView = Preconditions.checkNotNull(gamePanelView);
@@ -96,6 +97,7 @@ public final class GamePanelPresenter {
         this.modeController = Preconditions.checkNotNull(modeController);
         this.selectedUnitManager = Preconditions.checkNotNull(selectedUnitManager);
         this.visibleArea = Preconditions.checkNotNull(visibleArea);
+        this.oneTurnMoveHighlighter = Preconditions.checkNotNull(oneTurnMoveHighlighter);
 
         startMoveController.addListener(event -> swithToMoveMode());
 
@@ -188,10 +190,9 @@ public final class GamePanelPresenter {
                 "to move mode could be switched just when some tile is selected.");
         final List<Unit> units = gameModelController.getCurrentPlayer()
                 .getUnitsAt(selectedTileManager.getSelectedTile().get());
-        // TODO JJ Filter unit that have enough action points
         Preconditions.checkState(!units.isEmpty(), "there are some moveable units");
-        final Unit unit = units.get(0);
-        gamePanelView.startMoveUnit(unit);
+        final Unit unit = selectedUnitManager.getSelectedUnit().get();
+        oneTurnMoveHighlighter.setLocations(unit.getAvailableLocations());
         logger.debug("Switching '" + unit + "' to go mode.");
         gamePanelView.setMoveModeOn();
     }
@@ -285,12 +286,10 @@ public final class GamePanelPresenter {
         final UnitMove unitMove = new UnitMove(movingUnit, moveToLocation);
         if (movingUnit.isPossibleToCaptureColonyAt(moveToLocation)) {
             // use can capture target colony
-            gameModelController.captureColonyAt(movingUnit, moveToLocation);
-            disableMoveMode();
+            gameModelController.performMove(movingUnit, unitMove.getPath());
         } else if (movingUnit.isPossibleToAttackAt(moveToLocation)) {
             // fight
             fight(movingUnit, moveToLocation);
-            disableMoveMode();
         } else if (movingUnit.isPossibleToEmbarkAt(moveToLocation, true)) {
             // embark
             final Unit toLoad = gameModelController.getModel().getUnitsAt(moveToLocation).get(0);
@@ -298,31 +297,34 @@ public final class GamePanelPresenter {
             if (oCargoSlot.isPresent()) {
                 gameModelController.embark(oCargoSlot.get(), movingUnit);
             }
-            disableMoveMode();
         } else if (movingUnit.isPossibleToDisembarkAt(moveToLocation, true)) {
             // try to disembark
             gameModelController.disembark(movingUnit, moveToLocation);
-            disableMoveMode();
         } else if (unitMove.isOneTurnMove()) {
             // user will move
             if (!unitMove.getPath().isEmpty()) {
                 gameModelController.performMove(movingUnit, unitMove.getPath());
             }
-            disableMoveMode();
         } else if (movingUnit.isPossibleToGoToPort(moveToLocation)) {
             if (movingUnit.getPath(moveToLocation).isPresent()) {
                 final List<Location> path = movingUnit.getPath(moveToLocation).get();
                 if (!path.isEmpty()) {
                     gameModelController.performMove(movingUnit, path);
                 }
-                selectedTileManager.setSelectedTile(moveToLocation, ScrollToFocusedTile.smoothScroll);
-                disableMoveMode();
+                selectedTileManager.setSelectedTile(moveToLocation,
+                        ScrollToFocusedTile.smoothScroll);
+            } else {
+                /*
+                 * This is case when user try to move to place where it's not
+                 * possible. Form example ship can't move at ground.
+                 */
+                return;
             }
         } else {
             logger.error("It's not possible to determine correct operation");
             new DialogUnitCantMoveHere(viewUtil, text);
-            disableMoveMode();
         }
+        disableMoveMode();
     }
 
     private void disableMoveMode() {
@@ -346,7 +348,8 @@ public final class GamePanelPresenter {
                 gameModelController.performFight(movingUnit, targetUnit);
             } else {
                 // User choose to quit fight
-                selectedTileManager.setSelectedTile(moveToLocation, ScrollToFocusedTile.smoothScroll);
+                selectedTileManager.setSelectedTile(moveToLocation,
+                        ScrollToFocusedTile.smoothScroll);
                 disableMoveMode();
             }
         } else {

@@ -16,6 +16,11 @@ import com.google.common.base.Preconditions;
  * In many cases it's required multiple parameters. In such case is necessary to
  * create extra class T encapsulating all input parameters.
  * </p>
+ *
+ * @param <T>
+ *            function input parameter
+ * @param <R>
+ *            returned object
  */
 public final class ChainOfCommandStrategy<T, R> implements Function<T, R> {
 

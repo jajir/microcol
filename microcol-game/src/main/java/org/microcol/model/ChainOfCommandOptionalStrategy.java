@@ -13,15 +13,22 @@ import com.google.common.base.Preconditions;
  * <p>
  * When input is not processed than Optional empty object is returned.
  * </p>
+ *
+ * @param <T>
+ *            function input parameter
+ * @param <R>
+ *            returned object
  */
 public final class ChainOfCommandOptionalStrategy<T, R> implements Function<T, Optional<R>> {
 
     private final List<Function<T, R>> filters;
 
-    public ChainOfCommandOptionalStrategy() {
-        filters = new ArrayList<>();
-    }
-
+    /**
+     * Constructor from list of functions.
+     *
+     * @param filters
+     *            required list of filters
+     */
     public ChainOfCommandOptionalStrategy(final List<Function<T, R>> filters) {
         this.filters = new ArrayList<>(Preconditions.checkNotNull(filters));
     }

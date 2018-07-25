@@ -5,7 +5,6 @@ import static org.junit.Assert.assertFalse;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.microcol.gui.event.model.ColonyWasCapturedController;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.event.model.GameStoppedController;
 import org.microcol.gui.gamepanel.SelectedTileManager;
@@ -24,9 +23,6 @@ public class SelectedTileManagerTest {
     private GameModelController gameModelController;
 
     @Mocked
-    private ColonyWasCapturedController colonyWasCapturedController;
-
-    @Mocked
     private GameStoppedController gameStoppedController;
 
     @Test
@@ -36,7 +32,7 @@ public class SelectedTileManagerTest {
 
     @Before
     public void setUp() {
-        viewState = new SelectedTileManager(tileWasSelectedController, colonyWasCapturedController,
+        viewState = new SelectedTileManager(tileWasSelectedController, 
                 gameStoppedController);
     }
 

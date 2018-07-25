@@ -50,7 +50,6 @@ public final class ModelMission {
          * following doesn't allows different mission implementation and multiple
          * conditions.
          */
-        // TODO try to refactore it
         model.addGameOverEvaluator(mission::evaluateGameOver);
     }
 

@@ -86,7 +86,7 @@ public final class GamePanelView {
             final MouseOverTileManager mouseOverTileManager,
             final AnimationManager animationManager, final ModeController modeController,
             final ExcludePainting excludePainting, final DialogFigth dialogFigth,
-            final VisibleArea visibleArea, final PaneCanvas paneCanvas) {
+            final VisibleArea visibleArea, final PaneCanvas paneCanvas, final OneTurnMoveHighlighter oneTurnMoveHighlighter) {
         this.gameModelController = Preconditions.checkNotNull(gameModelController);
         this.pathPlanning = Preconditions.checkNotNull(pathPlanning);
         this.imageProvider = Preconditions.checkNotNull(imageProvider);
@@ -102,7 +102,7 @@ public final class GamePanelView {
         this.dialogFigth = Preconditions.checkNotNull(dialogFigth);
         this.visibleArea = Preconditions.checkNotNull(visibleArea);
         this.canvas = Preconditions.checkNotNull(paneCanvas);
-        oneTurnMoveHighlighter = new OneTurnMoveHighlighter();
+        this.oneTurnMoveHighlighter = Preconditions.checkNotNull(oneTurnMoveHighlighter);
         gotoModeCursor = new ImageCursor(imageProvider.getImage(ImageProvider.IMG_CURSOR_GOTO), 1,
                 1);
 
@@ -380,10 +380,6 @@ public final class GamePanelView {
         final Image image = imageProvider
                 .getImage(moveMode.getImageForStep(stepCounter.canMakeMoveInSameTurn(1)));
         graphics.drawImage(image, point.getX(), point.getY());
-    }
-
-    public void startMoveUnit(final Unit ship) {
-        oneTurnMoveHighlighter.setLocations(ship.getAvailableLocations());
     }
 
     public void setMoveModeOff() {

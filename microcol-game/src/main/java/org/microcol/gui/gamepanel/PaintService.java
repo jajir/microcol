@@ -78,7 +78,7 @@ public final class PaintService {
     public void paintUnit(final GraphicsContext graphics, final Point point, final Unit unit,
             final Direction orientation) {
         final Point p = point.add(UNIT_IMAGE_POSITION);
-        // FIXME should not be solved by list of ifs.
+        // TODO should not be solved by list of ifs.
         if (UnitType.GALLEON.equals(unit.getType())) {
             if (Direction.west == orientation) {
                 graphics.drawImage(imageProvider.getImage(ImageProvider.IMG_UNIT_SHIP_GALEON_WEST),

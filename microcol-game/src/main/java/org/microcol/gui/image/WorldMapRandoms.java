@@ -21,10 +21,16 @@ public final class WorldMapRandoms {
      */
     private final Map<Location, Integer> randoms;
 
+    /**
+     * Constructor from world map.
+     *
+     * @param map
+     *            required world map
+     */
     public WorldMapRandoms(final WorldMap map) {
+        Preconditions.checkNotNull(map);
         final Map<Location, Integer> tmp = new HashMap<>();
         final Random random = new Random(map.getSeed());
-        // TODO this iteration could be done on list of locations ;-)
         for (int x = 1; x <= map.getMaxX(); x++) {
             for (int y = 1; y <= map.getMaxY(); y++) {
                 tmp.put(Location.of(x, y), random.nextInt());
@@ -33,6 +39,14 @@ public final class WorldMapRandoms {
         randoms = ImmutableMap.copyOf(tmp);
     }
 
+    /**
+     * For each place at map return unique pseudo random number. This number is
+     * same for map and location.
+     *
+     * @param location
+     *            required location
+     * @return unique pseudo random number
+     */
     public Integer getRandomAt(final Location location) {
         return randoms.get(Preconditions.checkNotNull(location));
     }

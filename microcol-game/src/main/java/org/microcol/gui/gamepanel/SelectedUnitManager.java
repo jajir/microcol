@@ -135,7 +135,12 @@ public final class SelectedUnitManager {
     public void setSelectedUnit(final Unit unit) {
         Preconditions.checkNotNull(unit);
         Preconditions.checkArgument(unit.isAtPlaceLocation());
-
+        if (unit.equals(selectedUnit)) {
+            /**
+             * If unit is already selected than skip method.
+             */
+            return;
+        }
         final Unit previousUnit = selectedUnit;
         selectedUnit = unit;
         selectedUnitWasChangedController
