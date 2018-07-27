@@ -29,6 +29,9 @@
 	<logger name="org.microcol.gui">
 		<level value="INFO"/>
 	</logger>
+	<logger name="org.microcol.gui.MicroColModule">
+		<level value="DEBUG"/>
+	</logger>
 	<logger name="org.microcol.model.store">
 		<level value="WARN"/>
 	</logger>

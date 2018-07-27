@@ -13,7 +13,14 @@ import com.google.common.collect.ImmutableList;
  */
 public final class UnitActionConverter {
 
-    private static ChainOfCommandStrategy<UnitActionPo, UnitAction> convertor = new ChainOfCommandStrategy<>(
+    /**
+     * Private constructor. To prevent user from instantiate it.
+     */
+    private UnitActionConverter() {
+    }
+
+    private static ChainOfCommandStrategy<UnitActionPo, UnitAction>
+            convertor = new ChainOfCommandStrategy<>(
             ImmutableList.of(po -> {
                 if (UnitActionType.noAction.equals(po.getType())) {
                     return new UnitActionNoAction();
@@ -28,6 +35,13 @@ public final class UnitActionConverter {
                 return null;
             }));
 
+    /**
+     * Convert persistent object to correct model object.
+     *
+     * @param unitActionPo
+     *            required persistent object
+     * @return model object
+     */
     public static UnitAction convert(final UnitActionPo unitActionPo) {
         Preconditions.checkNotNull(unitActionPo, "unitActionPo is null");
         return convertor.apply(unitActionPo);

@@ -14,10 +14,6 @@ import com.google.inject.Inject;
 
 /**
  * Enable and disable 'Next turn' button based on running animation.
- *
- * TODO Animation is stored from multiple parts so button blinks.
- * 
- * TODO UnitMovedFinished is not used correctly
  */
 public final class RightPanelNextButtonControll {
 

@@ -131,7 +131,9 @@ public class Unit implements CargoHolder {
                     model.getEurope().getPort().placeShipToPort(this);
                     model.getTurnEventStore().add(TurnEventProvider.getShipComeEuropePort(owner));
                 } else {
-                    // TODO ships always come from east side of map
+                    /*
+                     * Ships always come from east side of map. 
+                     */
                     final List<Location> locations = model.getHighSea()
                             .getSuitablePlaceForShipCommingFromEurope(getOwner(), true);
                     placeToLocation(locations.get(random.nextInt(locations.size())),

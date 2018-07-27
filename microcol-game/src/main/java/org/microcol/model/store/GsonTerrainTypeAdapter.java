@@ -6,27 +6,20 @@ import org.microcol.model.TerrainType;
 
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
 
+/**
+ * Allows to read and write terrain type from json.
+ */
 public final class GsonTerrainTypeAdapter extends TypeAdapter<TerrainType> {
 
     @Override
     public void write(final JsonWriter out, final TerrainType value) throws IOException {
-	//TODO make it required, remove null check throw exception
-        if (value == null) {
-            out.nullValue();
-            return;
-        }
         out.value(value.name());
     }
 
     @Override
     public TerrainType read(final JsonReader reader) throws IOException {
-        if (reader.peek() == JsonToken.NULL) {
-            reader.nextNull();
-            return null;
-        }
         return TerrainType.valueOf(reader.nextString());
     }
 

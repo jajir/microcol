@@ -125,23 +125,37 @@ public final class CargoSlot {
         cargoUnit = unit;
     }
 
-    // TODO add validation what in case of embark unit in not in town. see
-    // unit.isPossibleToEmbark
+    /**
+     * Allows to embark unit from place location to cargo store. It command move
+     * animation and than embark unit.
+     *
+     * @param unit
+     *            required unit
+     */
     public void embark(final Unit unit) {
         Preconditions.checkNotNull(unit);
         Preconditions.checkState(isEmpty(), "Cargo slot (%s) is already loaded.", this);
         Preconditions.checkState(getOwnerUnit().getOwner().equals(unit.getOwner()),
                 "Owners must be same (%s - %s).", getOwnerUnit().getOwner(), unit.getOwner());
+
+        Preconditions.checkArgument(unit.isAtPlaceLocation(), "Unit have to be placed at map.");
         cargoUnit = new PlaceCargoSlot(unit, this);
         unit.embark(cargoUnit);
     }
-    
-    //TODO it's not embark, what is that?
+
+    /**
+     * This simply put some other unit to cargo store. It should not be used for
+     * unit at map.
+     *
+     * @param unit
+     *            required unit
+     */
     public void store(final Unit unit) {
         Preconditions.checkNotNull(unit);
         Preconditions.checkState(isEmpty(), "Cargo slot (%s) is already loaded.", this);
         Preconditions.checkState(getOwnerUnit().getOwner().equals(unit.getOwner()),
                 "Owners must be same (%s - %s).", getOwnerUnit().getOwner(), unit.getOwner());
+
         cargoUnit = new PlaceCargoSlot(unit, this);
         unit.placeToCargoSlot(cargoUnit);
     }

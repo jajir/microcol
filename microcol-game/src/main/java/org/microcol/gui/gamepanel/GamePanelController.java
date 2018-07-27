@@ -4,16 +4,19 @@ import org.microcol.gui.event.model.ColonyWasCapturedController;
 import org.microcol.gui.event.model.TurnStartedController;
 import org.microcol.gui.event.model.UnitMoveFinishedController;
 import org.microcol.gui.event.model.UnitMovedStepStartedController;
+import org.microcol.gui.util.Listener;
 import org.microcol.model.event.ColonyWasCapturedEvent;
 import org.microcol.model.event.TurnStartedEvent;
 import org.microcol.model.event.UnitMoveFinishedEvent;
 import org.microcol.model.event.UnitMovedStepStartedEvent;
 
+import com.google.common.eventbus.Subscribe;
 import com.google.inject.Inject;
 
 /**
  * 
  */
+@Listener
 public final class GamePanelController {
 
     private boolean humanIsOnTurn;
@@ -36,6 +39,7 @@ public final class GamePanelController {
         unitIsMoving = false;
     }
 
+    @Subscribe
     private void onTurnStarted(final TurnStartedEvent event) {
         humanIsOnTurn = event.getPlayer().isHuman();
     }

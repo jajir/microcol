@@ -37,7 +37,7 @@ public final class Player {
     private final Map<String, Object> extraData = new HashMap<>();
 
     private final Visibility visibility;
-
+    
     private Player(final String name, final boolean computer, final int initialGold,
             final Model model, final boolean declaredIndependence,
             final Player whosKingThisPlayerIs, final Map<String, Object> extraData,

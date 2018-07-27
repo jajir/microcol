@@ -48,10 +48,10 @@ public final class StatusBarPresenter {
         roundStartedController.addRunLaterListener(event -> {
             setYearText(display.getLabelEra(), event.getCalendar());
         });
-        changeLanguangeController.addListener(this::onChangeLanguange);
         goldWasChangedController.addRunLaterListener(event -> {
             setGoldText(display.getLabelGold(), event.getNewValue());
         });
+        changeLanguangeController.addListener(this::onChangeLanguange);
         display.getLabelEra().setOnMouseEntered(event -> {
             statusBarMessageController
                     .fireEvent(new StatusBarMessageEvent(text.get("statusBar.era.description")));

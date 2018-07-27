@@ -25,7 +25,6 @@ import org.microcol.gui.gamepanel.TileWasSelectedController;
 import org.microcol.gui.gamepanel.TileWasSelectedEvent;
 import org.microcol.gui.util.Text;
 import org.microcol.model.Colony;
-import org.microcol.model.Model;
 import org.microcol.model.Unit;
 import org.microcol.model.campaign.CampaignNames;
 import org.microcol.model.campaign.FreePlayMissionNames;
@@ -44,10 +43,6 @@ public final class MainMenuPresenter {
     private final MainMenuView view;
 
     private final SelectedUnitManager selectedUnitManager;
-
-    private boolean isFocusedMoveableUnit = false;
-
-    public boolean isTileFocused = false;
 
     private final GameModelController gameModelController;
 
@@ -187,8 +182,6 @@ public final class MainMenuPresenter {
 
     @SuppressWarnings("unused")
     private void onUnitMovedStep(final UnitMovedStepStartedEvent event) {
-        // TODO event queue is blocked by animation of move. This method is
-        // called as last method.
         view.getMenuItemNextUnit().setDisable(true);
     }
 
@@ -214,22 +207,8 @@ public final class MainMenuPresenter {
      */
     private void onFocusedTileEvent(final TileWasSelectedEvent event) {
         view.getMenuItemCenterView().setDisable(false);
-        isTileFocused = true;
-        if (isTileContainsMovebleUnit(event)) {
-            view.getMenuItemMove().setDisable(false);
-            isFocusedMoveableUnit = true;
-        } else {
-            view.getMenuItemMove().setDisable(true);
-            isFocusedMoveableUnit = false;
-        }
+        view.getMenuItemMove().setDisable(true);
         setBuildColony();
-    }
-
-    // TODO use selectedUnitController
-    private boolean isTileContainsMovebleUnit(final TileWasSelectedEvent event) {
-        final Model model = gameModelController.getModel();
-        final Optional<Unit> unit = model.getUnitsAt(event.getLocation()).stream().findFirst();
-        return unit.isPresent() && unit.get().getOwner().equals(model.getCurrentPlayer());
     }
 
     @SuppressWarnings("unused")
@@ -244,11 +223,11 @@ public final class MainMenuPresenter {
 
     private void onTurnStartedEvent(final TurnStartedEvent event) {
         if (event.getPlayer().isHuman()) {
-            if (isTileFocused) {
-                view.getMenuItemCenterView().setDisable(false);
-            }
-            if (isFocusedMoveableUnit) {
+            view.getMenuItemCenterView().setDisable(false);
+            if (selectedUnitManager.isSelectedUnitMoveable()) {
                 view.getMenuItemMove().setDisable(false);
+            }else{
+                view.getMenuItemMove().setDisable(true);                
             }
             view.getMenuItemExitGame().setDisable(false);
             view.getMenuItemSaveGame().setDisable(false);

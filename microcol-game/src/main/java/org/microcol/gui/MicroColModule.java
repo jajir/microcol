@@ -33,7 +33,6 @@ import org.microcol.gui.event.VolumeChangedListenerPreferences;
 import org.microcol.gui.event.model.ActionEndedController;
 import org.microcol.gui.event.model.ActionStartedController;
 import org.microcol.gui.event.model.ArtifitialPlayersManager;
-import org.microcol.gui.event.model.BeforeGameStartController;
 import org.microcol.gui.event.model.ColonyWasCapturedController;
 import org.microcol.gui.event.model.ColonyWasFoundController;
 import org.microcol.gui.event.model.DebugRequestController;
@@ -46,7 +45,6 @@ import org.microcol.gui.event.model.IndependenceWasDeclaredColntroller;
 import org.microcol.gui.event.model.MissionCallBack;
 import org.microcol.gui.event.model.ModelEventManager;
 import org.microcol.gui.event.model.RoundStartedController;
-import org.microcol.gui.event.model.TurnStartedController;
 import org.microcol.gui.event.model.UnitAttackedEventController;
 import org.microcol.gui.event.model.UnitEmbarkedController;
 import org.microcol.gui.event.model.UnitMoveFinishedController;
@@ -120,21 +118,36 @@ import org.microcol.gui.turnreport.TurnReportDialog;
 import org.microcol.gui.util.ApplicationInfo;
 import org.microcol.gui.util.FontService;
 import org.microcol.gui.util.GamePreferences;
+import org.microcol.gui.util.Listener;
 import org.microcol.gui.util.PersistentService;
 import org.microcol.gui.util.PersistingTool;
 import org.microcol.gui.util.Text;
 import org.microcol.gui.util.TurnStartedListener;
 import org.microcol.gui.util.ViewUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import com.google.common.eventbus.EventBus;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
+import com.google.inject.matcher.Matchers;
+import com.google.inject.spi.ProvisionListener;
 
 public final class MicroColModule extends AbstractModule {
+
+    private final Logger LOGGER = LoggerFactory.getLogger(MicroColModule.class);
+
+    private final EventBus eventBus;
+
+    public MicroColModule() {
+        eventBus = new EventBus("microCol");
+    }
 
     @Override
     protected void configure() {
 
+        bind(EventBus.class).toInstance(eventBus);
         bind(MainStageBuilder.class).in(Singleton.class);
         bind(StatusBarMessageController.class).in(Singleton.class);
 
@@ -174,7 +187,6 @@ public final class MicroColModule extends AbstractModule {
         bind(StartMoveController.class).in(Singleton.class);
         bind(GameStartedController.class).in(Singleton.class);
         bind(GameStoppedController.class).in(Singleton.class);
-        bind(TurnStartedController.class).in(Singleton.class);
         bind(VolumeChangeController.class).in(Singleton.class);
         bind(AnimationSpeedChangeController.class).in(Singleton.class);
         bind(ShowGridController.class).in(Singleton.class);
@@ -200,7 +212,6 @@ public final class MicroColModule extends AbstractModule {
         bind(UnitMovedToLocationController.class).in(Singleton.class);
         bind(UnitMovedToColonyFieldController.class).in(Singleton.class);
         bind(ExitGameController.class).in(Singleton.class);
-        bind(BeforeGameStartController.class).in(Singleton.class);
         bind(ActionStartedController.class).in(Singleton.class);
         bind(ActionEndedController.class).in(Singleton.class);
         bind(SelectedUnitWasChangedController.class).in(Singleton.class);
@@ -212,20 +223,20 @@ public final class MicroColModule extends AbstractModule {
         bind(ShowStatisticsController.class).in(Singleton.class);
         bind(ShowGoalsController.class).in(Singleton.class);
         bind(PlowFieldEventController.class).in(Singleton.class);
-        
+
         bind(TurnStartedListener.class).asEagerSingleton();
         bind(TileWasSelectedListener.class).asEagerSingleton();
         bind(ShowDefaultCampaignMenuListener.class).asEagerSingleton();
         bind(PlowFieldEventListener.class).asEagerSingleton();
-        
+
         bind(ModelEventManager.class).in(Singleton.class);
         bind(ExitGameListener.class).asEagerSingleton();
         bind(GameFinishedListener.class).asEagerSingleton();
         bind(ShowTurnReportListener.class).asEagerSingleton();
-        
+
         bind(TurnReportDialog.class).in(Singleton.class);
         bind(ShowTurnEvensOnTurnStartedEvent.class).asEagerSingleton();
-        
+
         bind(StatisticsDialog.class).in(Singleton.class);
         bind(ShowStatisticsDialogListener.class).asEagerSingleton();
         bind(MissionGoalsShowListener.class).asEagerSingleton();
@@ -274,7 +285,7 @@ public final class MicroColModule extends AbstractModule {
         bind(RightPanelView.class).in(Singleton.class);
         bind(RightPanelPresenter.class).asEagerSingleton();
         bind(RightPanelNextButtonControll.class).asEagerSingleton();
-        
+
         bind(UnitsPanel.class).in(Singleton.class);
         bind(PersistingDialog.class).in(Singleton.class);
 
@@ -325,6 +336,18 @@ public final class MicroColModule extends AbstractModule {
 
         bind(EventInitializer.class).in(Singleton.class);
         bind(PersistingTool.class).in(Singleton.class);
+
+        bindListener(Matchers.any(), new ProvisionListener() {
+
+            @Override
+            public <T> void onProvision(ProvisionInvocation<T> provision) {
+                final T instance = provision.provision();
+                if (instance.getClass().isAnnotationPresent(Listener.class)) {
+                    eventBus.register(instance);
+                    LOGGER.debug("Registering listener class '{}'", instance.getClass().getName());
+                }
+            }
+        });
     }
 
     @Provides

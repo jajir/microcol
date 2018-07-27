@@ -28,7 +28,7 @@ public interface UnitAction {
      *         returned.
      */
     default boolean isNoAction() {
-	return false;
+        return false;
     }
 
     /**
@@ -42,7 +42,7 @@ public interface UnitAction {
 
     /**
      * Get unit action type.
-     * 
+     *
      * @return Return unit action type.
      */
     UnitActionType getType();

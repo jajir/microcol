@@ -66,7 +66,7 @@ public final class SelectedUnitManager {
                 .checkNotNull(selectedUnitWasChangedController);
         tileWasSelectedController.addListener(event -> evaluateLocation(event.getLocation()));
         selectNextUnitController.addListener(this::onSelectNextUnit);
-        unitMovedStepStartedController.addRunLaterListener(this::onUnitMovedStepStarted);
+        unitMovedStepStartedController.addListener(this::onUnitMovedStepStarted);
         unitMovedToHighSeasController.addListener(this::onUnitMovedToHighSeas);
         unitMovedToFieldController.addListener(this::onUnitMovedToField);
         unitEmbarkedController.addListener(this::onUnitEmbarked);

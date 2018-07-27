@@ -32,6 +32,7 @@ import org.microcol.model.event.UnitMovedToLocationEvent;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
+import com.google.common.eventbus.EventBus;
 
 /**
  * Translate model events to GUI events.
@@ -41,11 +42,14 @@ public final class ModelListenerImpl implements ModelListener {
     private final ModelEventManager modelEventManager;
 
     private final GameModelController gameModelController;
+    
+    private final EventBus eventBus;
 
     public ModelListenerImpl(final ModelEventManager modelEventManager,
-            final GameModelController gameModelController) {
+            final GameModelController gameModelController, final EventBus eventBus) {
         this.modelEventManager = Preconditions.checkNotNull(modelEventManager);
         this.gameModelController = Preconditions.checkNotNull(gameModelController);
+        this.eventBus = Preconditions.checkNotNull(eventBus);
     }
 
     @Override
@@ -58,6 +62,7 @@ public final class ModelListenerImpl implements ModelListener {
     @Override
     public void onTurnStarted(final TurnStartedEvent event) {
         modelEventManager.getTurnStartedController().fireEvent(event);
+        eventBus.post(event);
     }
 
     @Override

@@ -19,6 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
+import com.google.common.eventbus.EventBus;
 import com.google.inject.Inject;
 
 /**
@@ -36,16 +37,19 @@ public final class GameModelController {
     private final SelectedTileManager selectedTileManager;
 
     private final ArtifitialPlayersManager artifitialPlayersManager;
+    
+    private final EventBus eventBus;
 
     private ModelMission modelMission = null;
 
     @Inject
     public GameModelController(final ModelEventManager modelEventManager,
             final SelectedTileManager selectedTileManager,
-            final ArtifitialPlayersManager artifitialPlayersManager) {
+            final ArtifitialPlayersManager artifitialPlayersManager, final EventBus eventBus) {
         this.modelEventManager = Preconditions.checkNotNull(modelEventManager);
         this.selectedTileManager = Preconditions.checkNotNull(selectedTileManager);
         this.artifitialPlayersManager = Preconditions.checkNotNull(artifitialPlayersManager);
+        this.eventBus = Preconditions.checkNotNull(eventBus);
     }
 
     /**
@@ -58,7 +62,7 @@ public final class GameModelController {
         tryToStopGame();
         modelMission = Preconditions.checkNotNull(newModel);
         artifitialPlayersManager.initRobotPlayers(getModel());
-        modelMission.addListener(new ModelListenerImpl(modelEventManager, this));
+        modelMission.addListener(new ModelListenerImpl(modelEventManager, this, eventBus));
         modelMission.startGame();
         if (getModel().getFocusedField() != null) {
             selectedTileManager.setSelectedTile(getModel().getFocusedField(),

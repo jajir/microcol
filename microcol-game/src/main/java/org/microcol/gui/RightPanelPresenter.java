@@ -20,87 +20,88 @@ import com.google.inject.Inject;
 
 public final class RightPanelPresenter {
 
-	private final Logger logger = LoggerFactory.getLogger(RightPanelPresenter.class);
+    private final Logger logger = LoggerFactory.getLogger(RightPanelPresenter.class);
 
-	private final GameModelController gameModelController;
+    private final GameModelController gameModelController;
 
-	private final Text text;
+    private final Text text;
 
-	private final RightPanelView display;
+    private final RightPanelView display;
 
-	private TileWasSelectedEvent lastFocusedTileEvent;
+    private TileWasSelectedEvent lastFocusedTileEvent;
 
-	@Inject
-	RightPanelPresenter(final RightPanelView display, final GameModelController gameModelController,
-			final TileWasSelectedController tileWasSelectedController,
-			final ChangeLanguageController changeLanguangeController, final Text text,
-			final StatusBarMessageController statusBarMessageController,
-			final TurnStartedController turnStartedController,
-			final SelectedUnitWasChangedController selectedUnitWasChangedController) {
-		this.display = Preconditions.checkNotNull(display);
-		this.gameModelController = Preconditions.checkNotNull(gameModelController);
-		this.text = Preconditions.checkNotNull(text);
-		display.setNextTurnButtonLabel(text.get("nextTurnButton"));
-		display.setNextTurnButtonDisable(true);
+    @Inject
+    RightPanelPresenter(final RightPanelView display, final GameModelController gameModelController,
+            final TileWasSelectedController tileWasSelectedController,
+            final ChangeLanguageController changeLanguangeController, final Text text,
+            final StatusBarMessageController statusBarMessageController,
+            final TurnStartedController turnStartedController,
+            final SelectedUnitWasChangedController selectedUnitWasChangedController) {
+        this.display = Preconditions.checkNotNull(display);
+        this.gameModelController = Preconditions.checkNotNull(gameModelController);
+        this.text = Preconditions.checkNotNull(text);
+        display.setNextTurnButtonLabel(text.get("nextTurnButton"));
+        display.setNextTurnButtonDisable(true);
 
-		display.getNextTurnButton().setOnAction(e -> {
-			logger.debug("Next turn button was pressed");
-			display.setNextTurnButtonDisable(true);
-			gameModelController.nextTurn();
-		});
+        display.getNextTurnButton().setOnAction(e -> {
+            logger.debug("Next turn button was pressed");
+            display.setNextTurnButtonDisable(true);
+            gameModelController.nextTurn();
+        });
 
-		//TODO this should be at many places, could it be simplified or moved outside of class?
-		display.getNextTurnButton().setOnMouseEntered(event -> {
-			statusBarMessageController.fireEvent(new StatusBarMessageEvent(text.get("nextTurnButton.desctiption")));
-		});
+        display.getNextTurnButton().setOnMouseEntered(event -> {
+            statusBarMessageController
+                    .fireEvent(new StatusBarMessageEvent(text.get("nextTurnButton.desctiption")));
+        });
 
-		display.getBox().setOnMouseEntered(e -> {
-			statusBarMessageController.fireEvent(new StatusBarMessageEvent(text.get("rightPanel.description")));
-		});
+        display.getBox().setOnMouseEntered(e -> {
+            statusBarMessageController
+                    .fireEvent(new StatusBarMessageEvent(text.get("rightPanel.description")));
+        });
 
-		changeLanguangeController.addListener(this::onLanguageWasChanged);
-		tileWasSelectedController.addRunLaterListener(this::onFocusedTile);
-		turnStartedController.addRunLaterListener(this::onTurnStarted);
-		selectedUnitWasChangedController.addRunLaterListener(this::onSelectedUnitWasChanged);
-	}
+        changeLanguangeController.addListener(this::onLanguageWasChanged);
+        tileWasSelectedController.addRunLaterListener(this::onFocusedTile);
+        turnStartedController.addRunLaterListener(this::onTurnStarted);
+        selectedUnitWasChangedController.addRunLaterListener(this::onSelectedUnitWasChanged);
+    }
 
-	private void onSelectedUnitWasChanged(final SelectedUnitWasChangedEvent event) {
-		if (lastFocusedTileEvent == null) {
-			if (event.getSelectedUnit().isPresent()) {
-				display.refreshView(event.getSelectedUnit().get().getLocation());
-			} else {
-				display.cleanView();
-			}
-		} else {
-			display.refreshView(lastFocusedTileEvent.getLocation());
-		}
-	}
+    private void onSelectedUnitWasChanged(final SelectedUnitWasChangedEvent event) {
+        if (lastFocusedTileEvent == null) {
+            if (event.getSelectedUnit().isPresent()) {
+                display.refreshView(event.getSelectedUnit().get().getLocation());
+            } else {
+                display.cleanView();
+            }
+        } else {
+            display.refreshView(lastFocusedTileEvent.getLocation());
+        }
+    }
 
-	private void onTurnStarted(final TurnStartedEvent event) {
-		logger.debug("Turn started for player {}", event.getPlayer());
-		display.setOnMovePlayer(event.getPlayer());
-		if (event.getPlayer().isHuman()) {
-			display.setNextTurnButtonDisable(false);
-			if (lastFocusedTileEvent != null) {
-				display.refreshView(lastFocusedTileEvent);
-			}
-		}
-	}
+    private void onTurnStarted(final TurnStartedEvent event) {
+        logger.debug("Turn started for player {}", event.getPlayer());
+        display.setOnMovePlayer(event.getPlayer());
+        if (event.getPlayer().isHuman()) {
+            display.setNextTurnButtonDisable(false);
+            if (lastFocusedTileEvent != null) {
+                display.refreshView(lastFocusedTileEvent);
+            }
+        }
+    }
 
-	@SuppressWarnings("unused")
-	private void onLanguageWasChanged(final ChangeLanguageEvent event) {
-		display.setNextTurnButtonLabel(text.get("nextTurnButton"));
-		if (gameModelController.isModelReady()) {
-			display.setOnMovePlayer(gameModelController.getModel().getCurrentPlayer());
-		}
-		if (lastFocusedTileEvent != null && gameModelController.isModelReady()) {
-			display.refreshView(lastFocusedTileEvent);
-		}
-	}
+    @SuppressWarnings("unused")
+    private void onLanguageWasChanged(final ChangeLanguageEvent event) {
+        display.setNextTurnButtonLabel(text.get("nextTurnButton"));
+        if (gameModelController.isModelReady()) {
+            display.setOnMovePlayer(gameModelController.getModel().getCurrentPlayer());
+        }
+        if (lastFocusedTileEvent != null && gameModelController.isModelReady()) {
+            display.refreshView(lastFocusedTileEvent);
+        }
+    }
 
-	private void onFocusedTile(final TileWasSelectedEvent event) {
-		lastFocusedTileEvent = event;
-		display.refreshView(event);
-	}
+    private void onFocusedTile(final TileWasSelectedEvent event) {
+        lastFocusedTileEvent = event;
+        display.refreshView(event);
+    }
 
 }

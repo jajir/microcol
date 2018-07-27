@@ -160,7 +160,6 @@ public final class PaintService {
                 break;
             }
         }
-        // TODO JJ vyzkouset na win, jak kresleni ramecku funguje
         graphics.fillRect(point.getX() + 1, point.getY() + 1, FLAG_WIDTH - 2, FLAG_HEIGHT - 2);
     }
 
