@@ -6,12 +6,13 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.microcol.gui.event.model.GameModelController;
-import org.microcol.gui.event.model.GameStoppedController;
 import org.microcol.gui.gamepanel.SelectedTileManager;
 import org.microcol.gui.gamepanel.TileWasSelectedController;
+import org.microcol.gui.util.Listener;
 
 import mockit.Mocked;
 
+@Listener
 public class SelectedTileManagerTest {
 
     private SelectedTileManager viewState;
@@ -22,9 +23,6 @@ public class SelectedTileManagerTest {
     @Mocked
     private GameModelController gameModelController;
 
-    @Mocked
-    private GameStoppedController gameStoppedController;
-
     @Test
     public void test_getInitialValues() throws Exception {
         assertFalse(viewState.getSelectedTile().isPresent());
@@ -32,8 +30,7 @@ public class SelectedTileManagerTest {
 
     @Before
     public void setUp() {
-        viewState = new SelectedTileManager(tileWasSelectedController, 
-                gameStoppedController);
+        viewState = new SelectedTileManager(tileWasSelectedController);
     }
 
     @After

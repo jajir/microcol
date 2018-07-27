@@ -20,6 +20,8 @@ public final class TurnEventProvider {
 
     private static final String KEY_NEW_UNIT_RELIGION = "turnEvent.newUnitIsInEurope";
 
+    private static final String KEY_NEW_UNIT_IN_COLONY = "turnEvent.newUnitIsInColony";
+
     /**
      * Hidden default constructor.
      */
@@ -99,6 +101,17 @@ public final class TurnEventProvider {
      */
     public static TurnEvent getNewUnitInEurope(final Player player) {
         return new SimpleTurnEvent(KEY_NEW_UNIT_RELIGION, new Object[0], player);
+    }
+
+    /**
+     * Get new turn event when new unit appears in colony.
+     *
+     * @param player
+     *            required owner of new unit
+     * @return turn event object
+     */
+    public static TurnEvent getNewUnitInColony(final Player player) {
+        return new SimpleTurnEvent(KEY_NEW_UNIT_IN_COLONY, new Object[0], player);
     }
 
 }

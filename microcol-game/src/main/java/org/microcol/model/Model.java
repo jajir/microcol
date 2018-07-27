@@ -261,6 +261,15 @@ public final class Model {
             }
         }, unitType, owner, unitType.getSpeed(), new UnitActionNoAction());
     }
+    
+    void addUnitOutSideColony(final Colony colony) {
+        unitStorage.createUnit(unit -> new Cargo(unit, UnitType.COLONIST.getCargoCapacity()), this,
+                unit -> {
+                    return new PlaceLocation(unit, colony.getLocation(),
+                            unit.getDefaultOrintation());
+                }, UnitType.COLONIST, colony.getOwner(), UnitType.COLONIST.getSpeed(),
+                new UnitActionNoAction());
+    }
 
     public boolean isGameStarted() {
         return gameManager.isStarted();

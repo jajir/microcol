@@ -636,7 +636,7 @@ public class Unit implements CargoHolder {
      *
      * @return return default orientation value
      */
-    private Direction getDefaultOrintation() {
+    Direction getDefaultOrintation() {
         // TODO it should be unit based.
         return Direction.east;
     }

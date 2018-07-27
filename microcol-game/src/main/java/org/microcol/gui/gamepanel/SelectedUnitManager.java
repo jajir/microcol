@@ -2,17 +2,10 @@ package org.microcol.gui.gamepanel;
 
 import java.util.Optional;
 
-import org.microcol.gui.event.model.ColonyWasFoundController;
 import org.microcol.gui.event.model.GameModelController;
-import org.microcol.gui.event.model.GameStoppedController;
-import org.microcol.gui.event.model.UnitEmbarkedController;
-import org.microcol.gui.event.model.UnitMovedStepStartedController;
-import org.microcol.gui.event.model.UnitMovedToColonyFieldController;
-import org.microcol.gui.event.model.UnitMovedToConstructionController;
-import org.microcol.gui.event.model.UnitMovedToHighSeasController;
-import org.microcol.gui.event.model.UnitMovedToLocationController;
 import org.microcol.gui.mainmenu.SelectNextUnitController;
 import org.microcol.gui.mainmenu.SelectNextUnitEvent;
+import org.microcol.gui.util.Listener;
 import org.microcol.model.Location;
 import org.microcol.model.Unit;
 import org.microcol.model.event.ColonyWasFoundEvent;
@@ -28,12 +21,14 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
+import com.google.common.eventbus.Subscribe;
 import com.google.inject.Inject;
 
 /**
  * Control and preserve state of selected unit. It provide selected unit to move
  * if there is any.
  */
+@Listener
 public final class SelectedUnitManager {
 
     private final Logger logger = LoggerFactory.getLogger(SelectedUnitManager.class);
@@ -51,31 +46,16 @@ public final class SelectedUnitManager {
             final TileWasSelectedController tileWasSelectedController,
             final SelectNextUnitController selectNextUnitController,
             final SelectedTileManager selectedTileManager,
-            final UnitMovedStepStartedController unitMovedStepStartedController,
-            final UnitMovedToHighSeasController unitMovedToHighSeasController,
-            final UnitMovedToColonyFieldController unitMovedToFieldController,
-            final SelectedUnitWasChangedController selectedUnitWasChangedController,
-            final UnitEmbarkedController unitEmbarkedController,
-            final UnitMovedToConstructionController unitMovedToConstructionController,
-            final UnitMovedToLocationController unitMovedToLocationController,
-            final ColonyWasFoundController colonyWasFoundController,
-            final GameStoppedController gameStoppedController) {
+            final SelectedUnitWasChangedController selectedUnitWasChangedController) {
         this.gameModelController = Preconditions.checkNotNull(gameModelController);
         this.selectedTileManager = Preconditions.checkNotNull(selectedTileManager);
         this.selectedUnitWasChangedController = Preconditions
                 .checkNotNull(selectedUnitWasChangedController);
         tileWasSelectedController.addListener(event -> evaluateLocation(event.getLocation()));
         selectNextUnitController.addListener(this::onSelectNextUnit);
-        unitMovedStepStartedController.addListener(this::onUnitMovedStepStarted);
-        unitMovedToHighSeasController.addListener(this::onUnitMovedToHighSeas);
-        unitMovedToFieldController.addListener(this::onUnitMovedToField);
-        unitEmbarkedController.addListener(this::onUnitEmbarked);
-        unitMovedToConstructionController.addListener(this::onUnitMovedToConstruction);
-        colonyWasFoundController.addListener(this::onColonyWasFound);
-        unitMovedToLocationController.addListener(this::onUnitMovedToLocation);
-        gameStoppedController.addListener(this::onGameStopped);
     }
 
+    @Subscribe
     private void onUnitMovedToLocation(final UnitMovedToLocationEvent event) {
         if (!getSelectedUnit().isPresent() && selectedTileManager.getSelectedTile().isPresent()
                 && selectedTileManager.getSelectedTile().get()
@@ -84,6 +64,7 @@ public final class SelectedUnitManager {
         }
     }
 
+    @Subscribe
     private void onUnitMovedToConstruction(final UnitMovedToConstructionEvent event) {
         if (event.getUnit().equals(selectedUnit)) {
             unselectUnit();
@@ -91,6 +72,7 @@ public final class SelectedUnitManager {
         }
     }
 
+    @Subscribe
     private void onUnitMovedStepStarted(final UnitMovedStepStartedEvent event) {
         if (event.getUnit().getOwner().isHuman()) {
             if (event.getUnit().isAtPlaceLocation()) {
@@ -99,6 +81,23 @@ public final class SelectedUnitManager {
         }
     }
 
+    @Subscribe
+    private void onUnitMovedToField(final UnitMovedToColonyFieldEvent event) {
+        if (event.getUnit().equals(selectedUnit)) {
+            unselectUnit();
+            evaluateLocation(selectedTileManager.getSelectedTile().get());
+        }
+    }
+
+    @Subscribe
+    private void onUnitMovedToHighSeas(
+            @SuppressWarnings("unused") final UnitMovedToHighSeasEvent event) {
+        if (selectedTileManager.getSelectedTile().isPresent()) {
+            evaluateLocation(selectedTileManager.getSelectedTile().get());
+        }
+    }
+
+    @Subscribe
     private void onUnitEmbarked(final UnitEmbarkedEvent event) {
         if (event.getUnit().equals(selectedUnit)) {
             unselectUnit();
@@ -106,11 +105,7 @@ public final class SelectedUnitManager {
         }
     }
 
-    @SuppressWarnings("unused")
-    private void onGameStopped(final GameStoppedEvent event) {
-        selectedUnit = null;
-    }
-
+    @Subscribe
     private void onColonyWasFound(final ColonyWasFoundEvent event) {
         if (selectedTileManager.getSelectedTile().isPresent()) {
             if (event.getColony().getLocation()
@@ -125,11 +120,9 @@ public final class SelectedUnitManager {
         }
     }
 
-    private void onUnitMovedToField(final UnitMovedToColonyFieldEvent event) {
-        if (event.getUnit().equals(selectedUnit)) {
-            unselectUnit();
-            evaluateLocation(selectedTileManager.getSelectedTile().get());
-        }
+    @Subscribe
+    private void onGameStopped(@SuppressWarnings("unused") final GameStoppedEvent event) {
+        selectedUnit = null;
     }
 
     public void setSelectedUnit(final Unit unit) {
@@ -150,13 +143,6 @@ public final class SelectedUnitManager {
 
     public void unselectUnit() {
         selectedUnit(null);
-    }
-
-    @SuppressWarnings("unused")
-    private void onUnitMovedToHighSeas(final UnitMovedToHighSeasEvent event) {
-        if (selectedTileManager.getSelectedTile().isPresent()) {
-            evaluateLocation(selectedTileManager.getSelectedTile().get());
-        }
     }
 
     private void selectedUnit(final Unit unit) {

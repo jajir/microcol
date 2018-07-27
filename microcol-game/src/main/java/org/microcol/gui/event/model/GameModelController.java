@@ -32,8 +32,6 @@ public final class GameModelController {
 
     private final static Logger logger = LoggerFactory.getLogger(GameModelController.class);
 
-    private final ModelEventManager modelEventManager;
-
     private final SelectedTileManager selectedTileManager;
 
     private final ArtifitialPlayersManager artifitialPlayersManager;
@@ -43,10 +41,8 @@ public final class GameModelController {
     private ModelMission modelMission = null;
 
     @Inject
-    public GameModelController(final ModelEventManager modelEventManager,
-            final SelectedTileManager selectedTileManager,
+    public GameModelController(final SelectedTileManager selectedTileManager,
             final ArtifitialPlayersManager artifitialPlayersManager, final EventBus eventBus) {
-        this.modelEventManager = Preconditions.checkNotNull(modelEventManager);
         this.selectedTileManager = Preconditions.checkNotNull(selectedTileManager);
         this.artifitialPlayersManager = Preconditions.checkNotNull(artifitialPlayersManager);
         this.eventBus = Preconditions.checkNotNull(eventBus);
@@ -62,7 +58,7 @@ public final class GameModelController {
         tryToStopGame();
         modelMission = Preconditions.checkNotNull(newModel);
         artifitialPlayersManager.initRobotPlayers(getModel());
-        modelMission.addListener(new ModelListenerImpl(modelEventManager, this, eventBus));
+        modelMission.addListener(new ModelListenerImpl(this, eventBus));
         modelMission.startGame();
         if (getModel().getFocusedField() != null) {
             selectedTileManager.setSelectedTile(getModel().getFocusedField(),

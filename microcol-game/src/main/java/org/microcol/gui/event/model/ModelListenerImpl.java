@@ -39,15 +39,12 @@ import com.google.common.eventbus.EventBus;
  */
 public final class ModelListenerImpl implements ModelListener {
 
-    private final ModelEventManager modelEventManager;
-
     private final GameModelController gameModelController;
-    
+
     private final EventBus eventBus;
 
-    public ModelListenerImpl(final ModelEventManager modelEventManager,
-            final GameModelController gameModelController, final EventBus eventBus) {
-        this.modelEventManager = Preconditions.checkNotNull(modelEventManager);
+    public ModelListenerImpl(final GameModelController gameModelController,
+            final EventBus eventBus) {
         this.gameModelController = Preconditions.checkNotNull(gameModelController);
         this.eventBus = Preconditions.checkNotNull(eventBus);
     }
@@ -55,50 +52,48 @@ public final class ModelListenerImpl implements ModelListener {
     @Override
     public String toString() {
         return MoreObjects.toStringHelper(this.getClass())
-                .add("modelEventManager", modelEventManager)
                 .add("gameModelController", gameModelController).toString();
     }
 
     @Override
     public void onTurnStarted(final TurnStartedEvent event) {
-        modelEventManager.getTurnStartedController().fireEvent(event);
         eventBus.post(event);
     }
 
     @Override
     public void onUnitMovedStepStarted(final UnitMovedStepStartedEvent event) {
         if (event.canPlayerSeeMove(gameModelController.getCurrentPlayer())) {
-            modelEventManager.getUnitMovedStepStartedController().fireEvent(event);
+            eventBus.post(event);
         }
     }
 
     @Override
     public void onUnitMovedStepFinished(final UnitMovedStepFinishedEvent event) {
         if (event.canPlayerSeeMove(gameModelController.getCurrentPlayer())) {
-            modelEventManager.getUnitMovedStepFinishedController().fireEvent(event);
+            eventBus.post(event);
         }
     }
 
     @Override
     public void onUnitMovedToHighSeas(final UnitMovedToHighSeasEvent event) {
         if (event.getUnit().getOwner().equals(gameModelController.getCurrentPlayer())) {
-            modelEventManager.getUnitMovedToHighSeasController().fireEvent(event);
+            eventBus.post(event);
         }
     }
 
     @Override
     public void onUnitMoveFinished(final UnitMoveFinishedEvent event) {
-        modelEventManager.getUnitMoveFinishedController().fireEvent(event);
+        eventBus.post(event);
     }
 
     @Override
     public void onRoundStarted(final RoundStartedEvent event) {
-        modelEventManager.getRoundStartedController().fireEvent(event);
+        eventBus.post(event);
     }
 
     @Override
     public void onGameStarted(final GameStartedEvent event) {
-        modelEventManager.getGameStartedController().fireEvent(event);
+        eventBus.post(event);
         final Optional<Player> human = event.getModel().getPlayers().stream()
                 .filter(player -> player.isHuman()).findAny();
         if (human.isPresent()) {
@@ -109,37 +104,37 @@ public final class ModelListenerImpl implements ModelListener {
 
     @Override
     public void onGameFinished(final GameFinishedEvent event) {
-        modelEventManager.getGameFinishedController().fireEvent(event);
+        eventBus.post(event);
     }
 
     @Override
     public void onDebugRequested(final DebugRequestedEvent event) {
-        modelEventManager.getDebugRequestController().fireEvent(event);
+        eventBus.post(event);
     }
 
     @Override
     public void onUnitAttacked(final UnitAttackedEvent event) {
-        modelEventManager.getUnitAttackedEventController().fireEvent(event);
+        eventBus.post(event);
     }
 
     @Override
     public void onGoldWasChanged(final GoldWasChangedEvent event) {
         if (event.getPlayer().isHuman()) {
-            modelEventManager.getGoldWasChangedController().fireEvent(event);
+            eventBus.post(event);
         }
     }
 
     @Override
     public void onColonyWasCaptured(final ColonyWasCapturedEvent event) {
         if (event.getCapturedColony().getOwner().isHuman()) {
-            modelEventManager.getColonyWasCapturedController().fireEvent(event);
+            eventBus.post(event);
         }
     }
 
     @Override
     public void onUnitEmbarked(final UnitEmbarkedEvent event) {
         if (event.getUnit().getOwner().isHuman()) {
-            modelEventManager.getUnitEmbarkController().fireEvent(event);
+            eventBus.post(event);
         }
     }
 
@@ -156,7 +151,7 @@ public final class ModelListenerImpl implements ModelListener {
     @Override
     public void onColonyWasFounded(final ColonyWasFoundEvent event) {
         if (event.getColony().getOwner().isHuman()) {
-            modelEventManager.getColonyWasFoundController().fireEvent(event);
+            eventBus.post(event);
         }
     }
 
@@ -168,7 +163,7 @@ public final class ModelListenerImpl implements ModelListener {
     @Override
     public void onIndependenceWasDeclared(final IndependenceWasDeclaredEvent event) {
         if (event.getWhoDecalareIt().isHuman()) {
-            modelEventManager.getIndependenceWasDeclaredColntroller().fireEvent(event);
+            eventBus.post(event);
         }
     }
 
@@ -179,32 +174,32 @@ public final class ModelListenerImpl implements ModelListener {
 
     @Override
     public void onActionStarted(final ActionStartedEvent event) {
-        modelEventManager.getActionStartedController().fireEvent(event);
+        eventBus.post(event);
     }
 
     @Override
     public void onActionEnded(final ActionEndedEvent event) {
-        modelEventManager.getActionEndedController().fireEvent(event);
+        eventBus.post(event);
     }
 
     @Override
     public void onGameStopped(final GameStoppedEvent event) {
-        modelEventManager.getGameStoppedController().fireEvent(event);
+        eventBus.post(event);
     }
 
     @Override
     public void onUnitMovedToConstruction(final UnitMovedToConstructionEvent event) {
-        modelEventManager.getUnitMovedToConstructionController().fireEvent(event);
+        eventBus.post(event);
     }
 
     @Override
     public void onUnitMovedToColonyField(final UnitMovedToColonyFieldEvent event) {
-        modelEventManager.getUnitMovedToColonyFieldController().fireEvent(event);
+        eventBus.post(event);
     }
 
     @Override
     public void onUnitMovedToLocation(final UnitMovedToLocationEvent event) {
-        modelEventManager.getUnitMovedToLocationController().fireEvent(event);
+        eventBus.post(event);
     }
 
 }

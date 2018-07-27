@@ -3,18 +3,22 @@ package org.microcol.gui;
 import org.microcol.gui.event.StatusBarMessageController;
 import org.microcol.gui.event.StatusBarMessageEvent;
 import org.microcol.gui.event.model.GameModelController;
-import org.microcol.gui.event.model.GoldWasChangedController;
-import org.microcol.gui.event.model.RoundStartedController;
 import org.microcol.gui.mainmenu.ChangeLanguageController;
 import org.microcol.gui.mainmenu.ChangeLanguageEvent;
+import org.microcol.gui.util.Listener;
 import org.microcol.gui.util.Text;
 import org.microcol.model.Calendar;
+import org.microcol.model.event.GoldWasChangedEvent;
+import org.microcol.model.event.RoundStartedEvent;
 
 import com.google.common.base.Preconditions;
+import com.google.common.eventbus.Subscribe;
 import com.google.inject.Inject;
 
+import javafx.application.Platform;
 import javafx.scene.control.Label;
 
+@Listener
 public final class StatusBarPresenter {
 
     private final StatusBarPresenter.Display display;
@@ -35,21 +39,13 @@ public final class StatusBarPresenter {
     @Inject
     public StatusBarPresenter(final StatusBarPresenter.Display display,
             final StatusBarMessageController statusBarMessageController,
-            final RoundStartedController roundStartedController,
-            final ChangeLanguageController changeLanguangeController,
-            final GoldWasChangedController goldWasChangedController, final Text text,
+            final ChangeLanguageController changeLanguangeController, final Text text,
             final GameModelController gameModelController) {
         this.display = Preconditions.checkNotNull(display);
         this.text = Preconditions.checkNotNull(text);
         this.gameModelController = Preconditions.checkNotNull(gameModelController);
         statusBarMessageController.addRunLaterListener(event -> {
             display.getStatusBarDescription().setText(event.getStatusMessage());
-        });
-        roundStartedController.addRunLaterListener(event -> {
-            setYearText(display.getLabelEra(), event.getCalendar());
-        });
-        goldWasChangedController.addRunLaterListener(event -> {
-            setGoldText(display.getLabelGold(), event.getNewValue());
         });
         changeLanguangeController.addListener(this::onChangeLanguange);
         display.getLabelEra().setOnMouseEntered(event -> {
@@ -64,6 +60,20 @@ public final class StatusBarPresenter {
             statusBarMessageController
                     .fireEvent(new StatusBarMessageEvent(text.get("statusBar.status.description")));
         });
+    }
+
+    @Subscribe
+    private void onRoundStarted(final RoundStartedEvent event) {
+        Platform.runLater(() -> {
+            setYearText(display.getLabelEra(), event.getCalendar());
+        });
+    }
+ 
+    @Subscribe
+    private void onGoldChange(final GoldWasChangedEvent event){
+        Platform.runLater(() -> {
+            setGoldText(display.getLabelGold(), event.getNewValue());
+        });        
     }
 
     @SuppressWarnings("unused")

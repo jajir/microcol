@@ -12,6 +12,7 @@ import org.microcol.model.TerrainType;
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
 
+import javafx.application.Platform;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
@@ -158,21 +159,23 @@ public final class RightPanelView {
         sb.append(text.get("unitsPanel.currentUser"));
         sb.append(" ");
         sb.append(player.getName());
-        labelOnMove.setText(sb.toString());
+        Platform.runLater(() -> {
+            labelOnMove.setText(sb.toString());
+        });
     }
 
     public Button getNextTurnButton() {
         return nextTurnButton;
     }
-    
-    public void setNextTurnButtonDisable(final boolean disabled){ 
+
+    public void setNextTurnButtonDisable(final boolean disabled) {
         nextTurnButton.setDisable(disabled);
     }
-    
-    public void setNextTurnButtonLabel(final String text){ 
+
+    public void setNextTurnButtonLabel(final String text) {
         nextTurnButton.setText(text);
     }
-    
+
     public GridPane getBox() {
         return gridPane;
     }

@@ -1,20 +1,21 @@
 package org.microcol.gui;
 
-import org.microcol.gui.event.model.ActionEndedController;
-import org.microcol.gui.event.model.ActionStartedController;
 import org.microcol.gui.gamepanel.AnimationIsDoneController;
 import org.microcol.gui.gamepanel.AnimationIsDoneEvent;
 import org.microcol.gui.gamepanel.AnimationStartedController;
 import org.microcol.gui.gamepanel.AnimationStartedEvent;
+import org.microcol.gui.util.Listener;
 import org.microcol.model.event.ActionEndedEvent;
 import org.microcol.model.event.ActionStartedEvent;
 
 import com.google.common.base.Preconditions;
+import com.google.common.eventbus.Subscribe;
 import com.google.inject.Inject;
 
 /**
  * Enable and disable 'Next turn' button based on running animation.
  */
+@Listener
 public final class RightPanelNextButtonControll {
 
     private final RightPanelView rightPanelView;
@@ -22,22 +23,20 @@ public final class RightPanelNextButtonControll {
     @Inject
     RightPanelNextButtonControll(final AnimationStartedController animationStartedController,
             final AnimationIsDoneController animationIsDoneController,
-            final RightPanelView rightPanelView,
-            final ActionStartedController actionStartedController,
-            final ActionEndedController actionEndedController) {
+            final RightPanelView rightPanelView) {
         this.rightPanelView = Preconditions.checkNotNull(rightPanelView);
         animationStartedController.addListener(this::onAnimationStarted);
         animationIsDoneController.addListener(this::onAnimationIsDone);
-        actionStartedController.addListener(this::onActionStarted);
-        actionEndedController.addListener(this::onActionEnded);
     }
 
     @SuppressWarnings("unused")
+    @Subscribe
     private void onActionStarted(final ActionStartedEvent event) {
         rightPanelView.setNextTurnButtonDisable(true);
     }
 
     @SuppressWarnings("unused")
+    @Subscribe
     private void onActionEnded(final ActionEndedEvent event) {
         rightPanelView.setNextTurnButtonDisable(false);
     }

@@ -3,21 +3,23 @@ package org.microcol.gui;
 import org.microcol.gui.event.StatusBarMessageController;
 import org.microcol.gui.event.StatusBarMessageEvent;
 import org.microcol.gui.event.model.GameModelController;
-import org.microcol.gui.event.model.TurnStartedController;
 import org.microcol.gui.gamepanel.SelectedUnitWasChangedController;
 import org.microcol.gui.gamepanel.SelectedUnitWasChangedEvent;
 import org.microcol.gui.gamepanel.TileWasSelectedController;
 import org.microcol.gui.gamepanel.TileWasSelectedEvent;
 import org.microcol.gui.mainmenu.ChangeLanguageController;
 import org.microcol.gui.mainmenu.ChangeLanguageEvent;
+import org.microcol.gui.util.Listener;
 import org.microcol.gui.util.Text;
 import org.microcol.model.event.TurnStartedEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
+import com.google.common.eventbus.Subscribe;
 import com.google.inject.Inject;
 
+@Listener
 public final class RightPanelPresenter {
 
     private final Logger logger = LoggerFactory.getLogger(RightPanelPresenter.class);
@@ -35,7 +37,6 @@ public final class RightPanelPresenter {
             final TileWasSelectedController tileWasSelectedController,
             final ChangeLanguageController changeLanguangeController, final Text text,
             final StatusBarMessageController statusBarMessageController,
-            final TurnStartedController turnStartedController,
             final SelectedUnitWasChangedController selectedUnitWasChangedController) {
         this.display = Preconditions.checkNotNull(display);
         this.gameModelController = Preconditions.checkNotNull(gameModelController);
@@ -61,7 +62,6 @@ public final class RightPanelPresenter {
 
         changeLanguangeController.addListener(this::onLanguageWasChanged);
         tileWasSelectedController.addRunLaterListener(this::onFocusedTile);
-        turnStartedController.addRunLaterListener(this::onTurnStarted);
         selectedUnitWasChangedController.addRunLaterListener(this::onSelectedUnitWasChanged);
     }
 
@@ -77,6 +77,7 @@ public final class RightPanelPresenter {
         }
     }
 
+    @Subscribe
     private void onTurnStarted(final TurnStartedEvent event) {
         logger.debug("Turn started for player {}", event.getPlayer());
         display.setOnMovePlayer(event.getPlayer());

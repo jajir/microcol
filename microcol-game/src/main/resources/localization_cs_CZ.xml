@@ -191,6 +191,7 @@ jestli klesne na nulu, osadnicí začnou umírat hlady. Vyrob 30 doutníků.</en
 	<entry key="turnEvent.famineWillPlagueColony">Blíží se hladomor ve městě %s. V příštím tahu začnou umírat kolonisté.</entry>
 	<entry key="turnEvent.colonyWasDestroyed">Kolonie %s byla zničena.</entry>
 	<entry key="turnEvent.newUnitIsInEurope">Díky náboženskému neklidu ve starém světě se další kolonista rozhodl zkusit štěstí v novém světě, čeká v evropském přístavu.</entry>
+	<entry key="turnEvent.newUnitIsInColony">V kolonii se objevila nová jednotka.</entry>
 	
 	<entry key="statistics.title">Statistiky</entry>
 	<entry key="statistics.caption">Statistiky</entry>

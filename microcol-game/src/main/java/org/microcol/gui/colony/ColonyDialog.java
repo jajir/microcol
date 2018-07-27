@@ -1,18 +1,20 @@
 package org.microcol.gui.colony;
 
 import org.microcol.gui.MainStageBuilder;
-import org.microcol.gui.event.model.UnitMovedToColonyFieldController;
-import org.microcol.gui.event.model.UnitMovedToConstructionController;
 import org.microcol.gui.image.ImageProvider;
 import org.microcol.gui.util.AbstractMessageWindow;
+import org.microcol.gui.util.Listener;
 import org.microcol.gui.util.PanelDock;
 import org.microcol.gui.util.Text;
 import org.microcol.gui.util.ViewUtil;
 import org.microcol.model.Colony;
+import org.microcol.model.event.UnitMovedToColonyFieldEvent;
+import org.microcol.model.event.UnitMovedToConstructionEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
+import com.google.common.eventbus.Subscribe;
 import com.google.inject.Inject;
 
 import javafx.beans.property.BooleanProperty;
@@ -27,6 +29,7 @@ import javafx.scene.layout.VBox;
 /**
  * Show Europe port.
  */
+@Listener
 public final class ColonyDialog extends AbstractMessageWindow implements ColonyDialogCallback {
 
     final Logger logger = LoggerFactory.getLogger(ColonyDialog.class);
@@ -53,9 +56,7 @@ public final class ColonyDialog extends AbstractMessageWindow implements ColonyD
             final PanelColonyStructures panelColonyStructures,
             final PanelOutsideColony panelOutsideColony, final PanelColonyGoods panelColonyGoods,
             final PanelColonyDockBehaviour panelColonyDockBehaviour,
-            final UnitMovedOutsideColonyController unitMovedOutsideColonyController,
-            final UnitMovedToConstructionController unitMovedToConstructionController,
-            final UnitMovedToColonyFieldController unitMovedToFieldController) {
+            final UnitMovedOutsideColonyController unitMovedOutsideColonyController) {
         super(viewUtil);
         Preconditions.checkNotNull(imageProvider);
         setTitle(text.get("europeDialog.caption"));
@@ -123,8 +124,18 @@ public final class ColonyDialog extends AbstractMessageWindow implements ColonyD
             }
         });
         unitMovedOutsideColonyController.addListener(event -> repaint());
-        unitMovedToConstructionController.addListener(event -> repaint());
-        unitMovedToFieldController.addListener(event -> repaint());
+    }
+    
+    @SuppressWarnings("unused")
+    @Subscribe
+    private void onUnitMovedToConstruction(final UnitMovedToConstructionEvent event){
+        repaint();
+    }
+    
+    @SuppressWarnings("unused")
+    @Subscribe
+    private void onUnitMovedToField(final UnitMovedToColonyFieldEvent event){
+        repaint();        
     }
 
     public void showColony(final Colony colony) {

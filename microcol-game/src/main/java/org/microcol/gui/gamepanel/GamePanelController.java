@@ -1,9 +1,5 @@
 package org.microcol.gui.gamepanel;
 
-import org.microcol.gui.event.model.ColonyWasCapturedController;
-import org.microcol.gui.event.model.TurnStartedController;
-import org.microcol.gui.event.model.UnitMoveFinishedController;
-import org.microcol.gui.event.model.UnitMovedStepStartedController;
 import org.microcol.gui.util.Listener;
 import org.microcol.model.event.ColonyWasCapturedEvent;
 import org.microcol.model.event.TurnStartedEvent;
@@ -24,18 +20,12 @@ public final class GamePanelController {
     private boolean unitIsMoving;
 
     @Inject
-    GamePanelController(final TurnStartedController turnStartedController,
-            final UnitMovedStepStartedController unitMovedStepController,
-            final UnitMoveFinishedController unitMoveFinishedController,
-            final ColonyWasCapturedController colonyWasCapturedController) {
-        turnStartedController.addListener(this::onTurnStarted);
-        unitMovedStepController.addListener(this::onUnitMovedStep);
-        unitMoveFinishedController.addListener(this::onUnitMovedFinished);
-        colonyWasCapturedController.addListener(this::onColonyWasCaptured);
+    GamePanelController() {
     }
 
-    @SuppressWarnings("unused")
-    private void onColonyWasCaptured(final ColonyWasCapturedEvent event) {
+    @Subscribe
+    private void onColonyWasCaptured(
+            @SuppressWarnings("unused") final ColonyWasCapturedEvent event) {
         unitIsMoving = false;
     }
 
@@ -44,13 +34,15 @@ public final class GamePanelController {
         humanIsOnTurn = event.getPlayer().isHuman();
     }
 
-    @SuppressWarnings("unused")
-    private void onUnitMovedStep(final UnitMovedStepStartedEvent event) {
+    @Subscribe
+    private void onUnitMovedStepStarted(
+            @SuppressWarnings("unused") final UnitMovedStepStartedEvent event) {
         unitIsMoving = true;
     }
 
-    @SuppressWarnings("unused")
-    private void onUnitMovedFinished(final UnitMoveFinishedEvent event) {
+    @Subscribe
+    private void onUnitMovedFinished(
+            @SuppressWarnings("unused") final UnitMoveFinishedEvent event) {
         unitIsMoving = false;
     }
 

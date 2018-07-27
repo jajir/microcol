@@ -1,14 +1,16 @@
 package org.microcol.gui.gamepanel;
 
-import org.microcol.gui.event.model.UnitMoveFinishedController;
+import org.microcol.gui.util.Listener;
 import org.microcol.model.event.UnitMoveFinishedEvent;
 
 import com.google.common.base.Preconditions;
+import com.google.common.eventbus.Subscribe;
 import com.google.inject.Inject;
 
 /**
  * Process unit moved event. It plan animations.
  */
+@Listener
 public final class UnitMoveFinishedListener {
 
     private final SelectedTileManager selectedTileManager;
@@ -16,14 +18,13 @@ public final class UnitMoveFinishedListener {
     private final SelectedUnitManager selectedUnitManager;
 
     @Inject
-    public UnitMoveFinishedListener(final UnitMoveFinishedController unitMoveFinishedController,
-            final SelectedTileManager selectedTileManager,
+    public UnitMoveFinishedListener(final SelectedTileManager selectedTileManager,
             final SelectedUnitManager selectedUnitManager) {
         this.selectedTileManager = Preconditions.checkNotNull(selectedTileManager);
         this.selectedUnitManager = Preconditions.checkNotNull(selectedUnitManager);
-        unitMoveFinishedController.addListener(this::onUnitMoveFinished);
     }
 
+    @Subscribe
     private void onUnitMoveFinished(final UnitMoveFinishedEvent event) {
         if (event.getUnit().getOwner().isHuman()) {
             selectedTileManager.setSelectedTile(event.getTargetLocation(), ScrollToFocusedTile.no);

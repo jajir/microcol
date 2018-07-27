@@ -21,6 +21,11 @@ import com.google.common.collect.ImmutableList;
 public final class Colony {
 
     /**
+     * When this level is reached than new colonist appears.
+     */
+    private final static int FOOD_LEVEL_TO_FREE_COLONIST = 400;
+
+    /**
      * Colony unique name.
      */
     private String name;
@@ -145,7 +150,8 @@ public final class Colony {
                 .collect(ImmutableList.toImmutableList());
         final Location target = whereCouldMove.get(random.nextInt(whereCouldMove.size()));
         final Location oldLocation = unit.getLocation();
-        model.fireUnitMovedStepStarted(unit, oldLocation, target, unit.getPlaceLocation().getOrientation());
+        model.fireUnitMovedStepStarted(unit, oldLocation, target,
+                unit.getPlaceLocation().getOrientation());
         unit.placeToLocation(target);
         model.fireUnitMovedStepFinished(unit, oldLocation, target);
     }
@@ -194,6 +200,7 @@ public final class Colony {
         colonyFields.forEach(field -> field.produce(colonyWarehouse));
         constructions.forEach(construction -> construction.produce(this, getColonyWarehouse()));
         eatFood();
+        optionalyProduceColonist();
     }
 
     private void eatFood() {
@@ -212,6 +219,18 @@ public final class Colony {
                 model.getTurnEventStore()
                         .add(TurnEventProvider.getFamineWillPlagueColony(owner, this));
             }
+        }
+    }
+
+    /**
+     * If there is more food than some limit than new colonist will appears
+     * outside of colony.
+     */
+    private void optionalyProduceColonist() {
+        if (colonyWarehouse.getGoodAmmount(GoodType.CORN) >= FOOD_LEVEL_TO_FREE_COLONIST) {
+            colonyWarehouse.removeFromWarehouse(GoodType.CORN, FOOD_LEVEL_TO_FREE_COLONIST);
+            model.addUnitOutSideColony(this);
+            model.getTurnEventStore().add(TurnEventProvider.getNewUnitInColony(getOwner()));
         }
     }
 
@@ -357,7 +376,7 @@ public final class Colony {
         return force;
     }
 
-    //TODO counting of stats should move to separate classes.
+    // TODO counting of stats should move to separate classes.
     /**
      * Get production statistics per turn.
      *

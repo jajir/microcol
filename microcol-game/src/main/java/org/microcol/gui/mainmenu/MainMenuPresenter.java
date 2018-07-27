@@ -14,15 +14,12 @@ import org.microcol.gui.event.StartMoveController;
 import org.microcol.gui.event.StartMoveEvent;
 import org.microcol.gui.event.model.GameController;
 import org.microcol.gui.event.model.GameModelController;
-import org.microcol.gui.event.model.IndependenceWasDeclaredColntroller;
-import org.microcol.gui.event.model.TurnStartedController;
-import org.microcol.gui.event.model.UnitMoveFinishedController;
-import org.microcol.gui.event.model.UnitMovedStepStartedController;
 import org.microcol.gui.gamepanel.SelectedUnitManager;
 import org.microcol.gui.gamepanel.SelectedUnitWasChangedController;
 import org.microcol.gui.gamepanel.SelectedUnitWasChangedEvent;
 import org.microcol.gui.gamepanel.TileWasSelectedController;
 import org.microcol.gui.gamepanel.TileWasSelectedEvent;
+import org.microcol.gui.util.Listener;
 import org.microcol.gui.util.Text;
 import org.microcol.model.Colony;
 import org.microcol.model.Unit;
@@ -34,10 +31,12 @@ import org.microcol.model.event.UnitMoveFinishedEvent;
 import org.microcol.model.event.UnitMovedStepStartedEvent;
 
 import com.google.common.base.Preconditions;
+import com.google.common.eventbus.Subscribe;
 import com.google.inject.Inject;
 
 import javafx.scene.control.MenuItem;
 
+@Listener
 public final class MainMenuPresenter {
 
     private final MainMenuView view;
@@ -62,17 +61,12 @@ public final class MainMenuPresenter {
             final TileWasSelectedController tileWasSelectedController,
             final GameController gameController, final GameModelController gameModelController,
             final StartMoveController startMoveController,
-            final EndMoveController endMoveController,
-            final TurnStartedController turnStartedController,
-            final PersistingDialog persistingDialog, final EuropeDialog europeDialog,
-            final Colonizopedia colonizopedia,
+            final EndMoveController endMoveController, final PersistingDialog persistingDialog,
+            final EuropeDialog europeDialog, final Colonizopedia colonizopedia,
             final PreferencesAnimationSpeed preferencesAnimationSpeed,
             final PreferencesVolume preferencesVolume,
             final SelectedUnitManager selectedUnitManager,
-            final UnitMovedStepStartedController unitMovedStepController,
-            final UnitMoveFinishedController unitMoveFinishedController,
             final SelectedUnitWasChangedController selectedUnitWasChangedController,
-            final IndependenceWasDeclaredColntroller independenceWasDeclaredColntroller,
             final ShowTurnReportController showTurnReportController,
             final ShowStatisticsController showStatisticsController,
             final ShowGoalsController showGoalsController,
@@ -133,19 +127,14 @@ public final class MainMenuPresenter {
             view.updateLanguage();
         });
         tileWasSelectedController.addRunLaterListener(event -> onFocusedTileEvent(event));
-        turnStartedController.addRunLaterListener(this::onTurnStartedEvent);
-        independenceWasDeclaredColntroller.addListener(this::onIndependenceWasDeclared);
         quitGameController.addListener(this::onGameFinihedEvent);
         endMoveController.addRunLaterListener(this::onEndMoveEvent);
-        unitMovedStepController.addRunLaterListener(this::onUnitMovedStep);
-        unitMoveFinishedController.addRunLaterListener(this::unitMoveFinishedController);
         exitGameController.addListener(this::onExitGame);
         selectedUnitWasChangedController.addRunLaterListener(this::onSelectedUnitChanged);
         initialSetting();
     }
 
-    @SuppressWarnings("unused")
-    private void onExitGame(final ExitGameEvent event) {
+    private void onExitGame(@SuppressWarnings("unused") final ExitGameEvent event) {
         view.getMenuItemExitGame().setDisable(true);
         view.getMenuItemSaveGame().setDisable(true);
         view.getMenuItemCenterView().setDisable(true);
@@ -175,23 +164,24 @@ public final class MainMenuPresenter {
         view.getMenuItemGoals().setDisable(true);
     }
 
-    @SuppressWarnings("unused")
-    private void onIndependenceWasDeclared(final IndependenceWasDeclaredEvent event) {
+    @Subscribe
+    private void onIndependenceWasDeclared(
+            @SuppressWarnings("unused") final IndependenceWasDeclaredEvent event) {
         view.getMenuItemDeclareIndependence().setDisable(true);
     }
 
-    @SuppressWarnings("unused")
-    private void onUnitMovedStep(final UnitMovedStepStartedEvent event) {
+    @Subscribe
+    private void onUnitMovedStep(
+            @SuppressWarnings("unused") final UnitMovedStepStartedEvent event) {
         view.getMenuItemNextUnit().setDisable(true);
     }
 
-    @SuppressWarnings("unused")
-    private void unitMoveFinishedController(final UnitMoveFinishedEvent event) {
+    @Subscribe
+    private void onUnitMoveFinished(@SuppressWarnings("unused") final UnitMoveFinishedEvent event) {
         view.getMenuItemNextUnit().setDisable(false);
     }
 
-    @SuppressWarnings("unused")
-    void onEndMoveEvent(final EndMoveEvent event) {
+    void onEndMoveEvent(@SuppressWarnings("unused") final EndMoveEvent event) {
         if (selectedUnitManager.isSelectedUnitMoveable()) {
             view.getMenuItemMove().setDisable(false);
         } else {
@@ -211,8 +201,7 @@ public final class MainMenuPresenter {
         setBuildColony();
     }
 
-    @SuppressWarnings("unused")
-    private void onGameFinihedEvent(final QuitGameEvent exitGameEvent) {
+    private void onGameFinihedEvent(@SuppressWarnings("unused") final QuitGameEvent exitGameEvent) {
         view.getMenuItemEurope().setDisable(true);
         view.getMenuItemTurnReport().setDisable(true);
         view.getMenuItemStatistics().setDisable(true);
@@ -221,13 +210,14 @@ public final class MainMenuPresenter {
         view.getMenuItemBuildColony().setDisable(true);
     }
 
+    @Subscribe
     private void onTurnStartedEvent(final TurnStartedEvent event) {
         if (event.getPlayer().isHuman()) {
             view.getMenuItemCenterView().setDisable(false);
             if (selectedUnitManager.isSelectedUnitMoveable()) {
                 view.getMenuItemMove().setDisable(false);
-            }else{
-                view.getMenuItemMove().setDisable(true);                
+            } else {
+                view.getMenuItemMove().setDisable(true);
             }
             view.getMenuItemExitGame().setDisable(false);
             view.getMenuItemSaveGame().setDisable(false);
@@ -253,8 +243,8 @@ public final class MainMenuPresenter {
         setPlowFiled();
     }
 
-    @SuppressWarnings("unused")
-    private void onSelectedUnitChanged(final SelectedUnitWasChangedEvent event) {
+    private void onSelectedUnitChanged(
+            @SuppressWarnings("unused") final SelectedUnitWasChangedEvent event) {
         setBuildColony();
         setMoveUnit();
         setPlowFiled();

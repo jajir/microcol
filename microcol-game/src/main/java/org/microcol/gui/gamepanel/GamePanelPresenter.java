@@ -13,28 +13,31 @@ import org.microcol.gui.event.EndMoveEvent;
 import org.microcol.gui.event.KeyController;
 import org.microcol.gui.event.StartMoveController;
 import org.microcol.gui.event.StartMoveEvent;
-import org.microcol.gui.event.model.ColonyWasCapturedController;
 import org.microcol.gui.event.model.GameModelController;
-import org.microcol.gui.event.model.GameStartedController;
 import org.microcol.gui.mainmenu.CenterViewController;
 import org.microcol.gui.mainmenu.CenterViewEvent;
 import org.microcol.gui.mainmenu.QuitGameController;
 import org.microcol.gui.util.GamePreferences;
+import org.microcol.gui.util.Listener;
 import org.microcol.gui.util.Text;
 import org.microcol.gui.util.ViewUtil;
 import org.microcol.model.CargoSlot;
 import org.microcol.model.Colony;
 import org.microcol.model.Location;
 import org.microcol.model.Unit;
+import org.microcol.model.event.ColonyWasCapturedEvent;
+import org.microcol.model.event.GameStartedEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
+import com.google.common.eventbus.Subscribe;
 import com.google.inject.Inject;
 
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 
+@Listener
 public final class GamePanelPresenter {
 
     private final Logger logger = LoggerFactory.getLogger(GamePanelPresenter.class);
@@ -61,6 +64,8 @@ public final class GamePanelPresenter {
 
     private final Text text;
 
+    private final DialogColonyWasCaptured dialogColonyWasCaptured;
+
     private final MouseOverTileManager mouseOverTileManager;
 
     private final ModeController modeController;
@@ -73,20 +78,19 @@ public final class GamePanelPresenter {
     public GamePanelPresenter(final GamePanelView gamePanelView,
             final DialogColonyWasCaptured dialogColonyWasCaptured,
             final GameModelController gameModelController, final KeyController keyController,
-            final GameStartedController gameStartedController,
             final GamePreferences gamePreferences, final CenterViewController centerViewController,
             final QuitGameController quitGameController,
             final SelectedTileManager selectedTileManager, final ViewUtil viewUtil,
             final StartMoveController startMoveController,
             final EndMoveController endMoveController, final ColonyDialog colonyDialog,
-            final Text text, final ColonyWasCapturedController colonyWasCapturedController,
             final MouseOverTileManager mouseOverTileManager, final ModeController modeController,
-            final SelectedUnitManager selectedUnitManager,
+            final SelectedUnitManager selectedUnitManager, final Text text,
             final GamePanelController gamePanelController, final VisibleArea visibleArea,
             final PaneCanvas paneCanvas, final OneTurnMoveHighlighter oneTurnMoveHighlighter) {
         this.gameModelController = Preconditions.checkNotNull(gameModelController);
         this.gamePreferences = gamePreferences;
         this.gamePanelView = Preconditions.checkNotNull(gamePanelView);
+        this.dialogColonyWasCaptured = Preconditions.checkNotNull(dialogColonyWasCaptured);
         this.selectedTileManager = Preconditions.checkNotNull(selectedTileManager);
         this.viewUtil = Preconditions.checkNotNull(viewUtil);
         this.startMoveController = Preconditions.checkNotNull(startMoveController);
@@ -141,14 +145,18 @@ public final class GamePanelPresenter {
             }
         });
 
-        gameStartedController
-                .addListener(event -> visibleArea.setMaxMapSize(event.getModel().getMap()));
-
         centerViewController.addListener(this::onCenterView);
         quitGameController.addListener(event -> gamePanelView.stopTimer());
-        colonyWasCapturedController.addRunLaterListener(event -> {
-            dialogColonyWasCaptured.showAndWait(event);
-        });
+    }
+
+    @Subscribe
+    private void onColonyWasCaptured(final ColonyWasCapturedEvent event) {
+        dialogColonyWasCaptured.showAndWait(event);
+    }
+
+    @Subscribe
+    private void onGameStarted(final GameStartedEvent event) {
+        visibleArea.setMaxMapSize(event.getModel().getMap());
     }
 
     @SuppressWarnings("unused")
