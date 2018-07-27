@@ -37,7 +37,7 @@ public interface UnitAction {
      * @return Return unit action persistent object.
      */
     default UnitActionPo save() {
-	return new UnitActionNoActionPo();
+        return new UnitActionNoActionPo();
     }
 
     /**
@@ -56,7 +56,7 @@ public interface UnitAction {
      *            required unit
      */
     default void startTurn(final Model model, final Unit unit) {
-	// by default it do nothing.
+        // by default it do nothing.
     }
 
 }
