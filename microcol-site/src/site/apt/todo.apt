@@ -139,7 +139,13 @@ Planned releases
  
   * \u2713 When number of food in colony reach 400 than all food disappears and colonist will appears outside of colony.  
   
- * <<0.7.0>> - Prepare for release
+ * <<0.7.0>> - Buildings & ore economy
+ 
+  * \u2717 Allows to produce hammers.
+   Add button that allows to define building queue.
+   Building should support building new constructions.
+ 
+  * \u2717 
  
   * \u2717 
  
