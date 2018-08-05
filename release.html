@@ -104,7 +104,13 @@
 <div class="source"><pre class="prettyprint">git add --all
 git commit -m &quot;rel-x.y.0&quot;
 git push</pre></div></li></ol>
-<p>TODO add guide when branch x.y.2 already exists and version x.y.3 should be released.</p></div></div></div>
+<p>TODO add guide when branch x.y.2 already exists and version x.y.3 should be released.</p></div></div>
+<div class="section">
+<h3><a name="How_to_publish_documentation"></a>How to publish documentation</h3>
+<p>Documentation is stored at github in extra branch called <i>gh-pages</i>. To publish new version of documentation it's enough to commit it to <i>gh-pages</i> branch. It could be done automatically.</p>
+<p>Navigate to directory to <i>microcol-site</i> and type:</p>
+<div class="source"><pre class="prettyprint">mvn com.github.github:site-maven-plugin:0.12:site </pre></div>
+<p>Than after few minutes new site version should be uploaded at <a class="externalLink" href="https://jajir.github.io/microcol/">https://jajir.github.io/microcol/</a>.</p></div></div>
         </div>
       </div>
     </div>
