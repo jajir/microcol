@@ -4,7 +4,7 @@
  
 How to make release
 
- Release methodology and how to make it guide.
+ Here is describe how to make release and publish release artefacts.
 
 * Release versioning
  
@@ -31,6 +31,8 @@ How to make release
  * Installed java 1.8.
  
  * Installed graphviz. It could be verified by running <./dot>. It's required by plant UML diagrams maven plugin.
+ 
+ * All test are passing.
 
 ** Release steps
 
@@ -92,7 +94,40 @@ git push
 
  TODO add guide when branch x.y.2 already exists and version x.y.3 should be released.
 
+* How to publish documentation
 
+ Documentation is stored at github in extra branch called <gh-pages>.
+ To publish new version of documentation it's enough to commit it to <gh-pages> branch.
+ It could be donein a few easy steps.
+
+ [[1]] Verify settings.xml
  
+ In your home directory is file ~/.m2/settings.xml. If file doesn't exist crate new one. Edit server section:
  
++----+
+<servers>
+	...
+	<server>
+		<id>github</id>
+		<username>user</username>
+		<password>s!cr!t</password>
+	</server>
+	...
+</servers>
++----+
+ 
+ This setting provide user name and password for github account.
+
+
+ [[1]] Navigate to directory to <microcol-site> and type:
+ 
++----+
+mvn clean site-deploy
++----+
+
+ Than after few minutes new site version should be uploaded at {{{https://jajir.github.io/microcol/}https://jajir.github.io/microcol/}}.
+
+ [[1]] Go to {{{https://jajir.github.io/microcol/}https://jajir.github.io/microcol/}} and verify that there is latest version.
+ 
+[]
     
