@@ -21,17 +21,19 @@
 		<menu name="MicroCol">
 			<item name="Index" href="./index.html" />
 			<item name="Manifest" href="./manifest.html" />
-			<item name="ToDo" href="./todo.html" />
+			<item name="Rules" href="./rules.html" />
 			<item name="Change log" href="./change-log.html" />
+		</menu>
+		<menu name="Development">
+			<item name="Development" href="./development.html" />
+			<item name="ToDo" href="./todo.html" />
 			<item name="Release" href="./release.html" />
 			<item name="GUI" href="./gui.html" />
 			<item name="Animation" href="./animation.html" />
 			<item name="Coding" href="./coding.html" />
-			<item name="Rules" href="./rules.html" />
 			<item name="Tests" href="./tests.html" />
 		</menu>
 		<footer>
-			Version: ${project.version}.
 		</footer>
 	</body>
 </project>

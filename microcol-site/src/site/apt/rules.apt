@@ -2,9 +2,9 @@
  Rules
  ----
 
-Notes to rules
+MicroCol rules
 
- Rules implementation details
+ Rules implementation details. There just sume sules.
 
 * Colony production
 
@@ -16,5 +16,10 @@ Notes to rules
  
  * When building have occupied two slots with free colonist and expert than experts works as a first.
  Just when there is enough goods to continue free colonist works.  
+ 
+ * When there are more than 400 food in colony at the end of turn than 400 food will disappears and new colonist appears in colony.  
+
+[]
+ 
  
   

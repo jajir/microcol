@@ -1,0 +1,143 @@
+ ----
+ Development
+ ----
+
+MicroCol development
+
+ Development documentation is at 
+ {{{https://jajir.github.io/microcol/microcol-game/}https://jajir.github.io/microcol/microcol-game/}},
+ various reports are at {{{https://jajir.github.io/microcol/microcol-game/project-reports.html}https://jajir.github.io/microcol/microcol-game/project-reports.html}}. 
+
+* How to start development
+ 
+** Checkout project source code
+ 
+ Go to directory where MicroCol source code will be stored and execute at command line:
+ 
++----+
+git clone https://github.com/jajir/microcol.git
++----+
+
+ Now directory <microcol> should appears with source code.
+ 
+
+** Project structure
+ 
+ Main project directory <microcol> will contain following projects:
+ 
+ * <microcol-dist> - project build distribution packages.
+ 
+ * <microcol-game> - Game itself.
+ 
+ * <microcol-site> - This documentation.
+ 
+[]
+
+ Each project is maven module with same name.
+
+** Import to Eclipse
+ 
+ From main menu select "File" --> "Import". Select option "Existing maven projects". Importing wizard should appear. In field "Root directory" select previously created <microcol> directory. Click to "Finish". Now all maven modules should be imported. 
+
+** Run game from command line
+ 
+ This guide is useful when you just need start game for testing purposes.
+ For running from command line is used {{{http://www.mojohaus.org/exec-maven-plugin/}maven exec plugin}}.
+ To compile whole game and start it go to directory <microcol-game> and execute:
+ 
++----+
+mvn compile exec:exec
++----+
+ 
+** Clean all settings
+
+ Sometimes it's useful to clean all game setting and achievements. Execute:
+ 
++----+
+mvn exec:exec -Dclean=true
++----+
+
+ Information about cleaning should appears in log and game should not start.
+ 
+** Development mode
+ 
+ When you want to run MicroCol from command line in development mode run this:
+  
++----+
+mvn exec:exec -Ddevelopment=true
++----+
+
+* Use development mode
+
+ To run application with enabled some additional development features start application with VM argument <-Ddevelopment=true>.
+  
+Project infrastructure
+
+ * Source code repository: {{{https://github.com/jajir/microcol}github.com/jajir/microcol}}
+ 
+ * Bug reporting system: {{{https://github.com/jajir/microcol/issues}github.com/jajir/microcol/issues}}
+ 
+ * Continuous integration: {{{https://travis-ci.org/jajir/microcol}travis-ci.org/jajir/microcol}}
+
+ * Documentation: {{{https://microcol.sourceforge.io/}microcol.sourceforge.io}}
+ 
+ * Sourceforge project: {{{https://sourceforge.net/projects/microcol/}sourceforge.net/projects/microcol/}}
+ 
+ * Binaries download: {{{https://sourceforge.net/projects/microcol/files/}sourceforge.net/projects/microcol/files/}} 
+ 
+[]
+
+Generating images
+
+ Most of game images are stored in file <src/main/resources/images/background.png>.
+ This file is generated from file <scr/graphics/background.svg>.
+ Here is described how to produce final png file from svg sources file.
+ 
+ First download {{{https://inkscape.org/en/}inkscape}} version 0.92. Than:
+ 
+ [[1]] Open <scr/graphics/background.svg>.
+ If you'll need to adjust images enable layer <description> which contains information about tiles.
+ Each tile contains boundary.
+ These empty boundary area is required because without it tiles will interfere each other in final png.  
+ 
+ [[1]] Zoom screen to seen in top left corner blue sea and in bottom right corner yellow square. 
+ 
+ [[1]] Choose "Select and transform tool" with shortcut F1. Select visible area from top left blue sea to bottom right yellow square.
+ Verify that boundary area of yellow square is selected. 
+ 
+ [[1]] Open "Export PNG image" and select tab "Selection". 
+ 
+ [[1]] Width and height should be counted from class <BackgroundImageLoader> See constants EXPECTED_IMAGE_WIDTH and EXPECTED_IMAGE_HEIGHT.
+ This values should be placed in fields width and height.
+ DPI will counted accordingly to entered values.    
+ 
+ [[1]] Select filename <src/main/resources/images/background.png>.
+ 
+ [[1]] Press "Export".
+
+[]
+ 
+ Compile application and start it. Verify that there are no exception is logs.
+
+UML Diagrams - plant UML
+
+ Before generating UML diagrams graphviz have to be installed.
+ For UML diagrams are used plant UML diagrams.
+ Diagrams are generated from plain text source files located at <./src/main/plantuml/>.
+ Images are generated during site generating process to directory <./target/site/>.
+ Images could be generated manually by:
+
++----+
+mvn plantuml:generate
++----+
+ 
+Useful links
+
+ * PlantUML online editor is at {{http://sujoyu.github.io/plantuml-previewer/}}.
+ 
+ * PlantUML language specification is at {{http://plantuml.com/sitemap-language-specification}}.   
+ 
+ * Loading animations: {{{http://loading.io}http://loading.io}}.
+ 
+[]
+
