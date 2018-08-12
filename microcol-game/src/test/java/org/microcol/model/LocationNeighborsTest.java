@@ -16,7 +16,7 @@ public class LocationNeighborsTest {
 	@Parameters(name = "{index}: {0}, neighbors = {1}")
 	public static Collection<Object[]> data() {
 		return Arrays.asList(new Object[][] {
-			{Location.of(0, 0),  Location.DIRECTIONS},
+			{Location.of(0, 0),  Direction.getVectors()},
 			{Location.of(1, 1), Arrays.asList(
 				Location.of(1, 0),
 				Location.of(2, 0),

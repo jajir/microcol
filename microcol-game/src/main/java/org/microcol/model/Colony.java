@@ -52,7 +52,7 @@ public final class Colony {
         this.owner = Preconditions.checkNotNull(owner, "owner is null");
         this.location = Preconditions.checkNotNull(location);
         colonyFields = new ArrayList<>();
-        Location.DIRECTIONS.forEach(loc -> colonyFields.add(new ColonyField(model, loc, this)));
+        Direction.getVectors().forEach(loc -> colonyFields.add(new ColonyField(model, loc, this)));
         this.constructions = Preconditions.checkNotNull(constructionsBuilder.apply(this));
         colonyWarehouse = new ColonyWarehouse(this, initialGoodAmounts);
         checkConstructions();

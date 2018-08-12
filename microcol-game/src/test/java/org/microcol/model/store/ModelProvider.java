@@ -1,6 +1,7 @@
 package org.microcol.model.store;
 
 import org.microcol.model.ConstructionType;
+import org.microcol.model.Direction;
 import org.microcol.model.GoodType;
 import org.microcol.model.Location;
 import org.microcol.model.Model;
@@ -30,8 +31,8 @@ public class ModelProvider {
 					.setWorker(ConstructionType.RUM_DISTILLERS_HOUSE, 0, UnitType.COLONIST)
 					.setWorker(ConstructionType.CARPENTERS_SHOP, 0, UnitType.COLONIST)
 					.setWorker(ConstructionType.TOWN_HALL, 2, UnitType.COLONIST)
-					.setWorker(Location.DIRECTION_NORTH_EAST, UnitType.COLONIST, GoodType.CORN)
-					.setWorker(Location.DIRECTION_SOUTH_WEST, UnitType.COLONIST, GoodType.CORN)
+					.setWorker(Direction.northEast.getVector(), UnitType.COLONIST, GoodType.CORN)
+					.setWorker(Direction.southWest.getVector(), UnitType.COLONIST, GoodType.CORN)
 					.setGood(GoodType.CIGARS, 33)
 					.setGood(GoodType.COAT, 100)
 					.setGood(GoodType.CORN, 75)

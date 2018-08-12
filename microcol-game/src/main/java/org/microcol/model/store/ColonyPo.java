@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.microcol.gui.MicroColException;
 import org.microcol.model.ConstructionType;
+import org.microcol.model.Direction;
 import org.microcol.model.Location;
 
 import com.google.common.base.Preconditions;
@@ -26,7 +27,7 @@ public final class ColonyPo {
     private Map<String, Integer> colonyWarehouse = new HashMap<>();
 
     public ColonyPo() {
-        Location.DIRECTIONS.forEach(direction -> {
+        Direction.getVectors().forEach(direction -> {
             final ColonyFieldPo colonyFieldPo = new ColonyFieldPo();
             colonyFieldPo.setDirection(direction);
             colonyFields.add(colonyFieldPo);

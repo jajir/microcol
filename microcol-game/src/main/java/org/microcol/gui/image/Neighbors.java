@@ -1,5 +1,6 @@
 package org.microcol.gui.image;
 
+import org.microcol.model.Direction;
 import org.microcol.model.Location;
 
 final class Neighbors {
@@ -24,14 +25,14 @@ final class Neighbors {
      */
     Neighbors(final Location location, final AbstractCoastMapGenerator generator) {
         center = new InfoHolder(location, generator);
-        north = new InfoHolder(location.add(Location.DIRECTION_NORTH), generator);
-        northEast = new InfoHolder(location.add(Location.DIRECTION_NORTH_EAST), generator);
-        east = new InfoHolder(location.add(Location.DIRECTION_EAST), generator);
-        southEast = new InfoHolder(location.add(Location.DIRECTION_SOUTH_EAST), generator);
-        south = new InfoHolder(location.add(Location.DIRECTION_SOUTH), generator);
-        southWest = new InfoHolder(location.add(Location.DIRECTION_SOUTH_WEST), generator);
-        west = new InfoHolder(location.add(Location.DIRECTION_WEST), generator);
-        nortWest = new InfoHolder(location.add(Location.DIRECTION_NORTH_WEST), generator);
+        north = new InfoHolder(location.add(Direction.north.getVector()), generator);
+        northEast = new InfoHolder(location.add(Direction.northEast.getVector()), generator);
+        east = new InfoHolder(location.add(Direction.east.getVector()), generator);
+        southEast = new InfoHolder(location.add(Direction.southEast.getVector()), generator);
+        south = new InfoHolder(location.add(Direction.south.getVector()), generator);
+        southWest = new InfoHolder(location.add(Direction.southWest.getVector()), generator);
+        west = new InfoHolder(location.add(Direction.west.getVector()), generator);
+        nortWest = new InfoHolder(location.add(Direction.northWest.getVector()), generator);
     }
 
     /**

@@ -1,5 +1,6 @@
 package org.microcol.ai;
 
+import org.microcol.model.Direction;
 import org.microcol.model.Location;
 import org.microcol.model.Model;
 import org.microcol.model.Player;
@@ -42,7 +43,7 @@ public final class ContinentTool {
     }
 
     private void tryToAdd(final Location location, final WorldMap map, final Continent continent) {
-        Location.DIRECTIONS.forEach(direction -> {
+        Direction.getVectors().forEach(direction -> {
             final Location loc = location.add(direction);
             if (map.isValid(loc)) {
                 final TerrainType terrainType = map.getTerrainTypeAt(loc);
