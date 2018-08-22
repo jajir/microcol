@@ -4,7 +4,7 @@
 
 	<appender name="stdout" class="org.apache.log4j.ConsoleAppender">
 		<layout class="org.apache.log4j.PatternLayout">
-			<param name="ConversionPattern" value="%d{HH:mm:ss.SSS} [%t] %-5p - %m --> %l%n"/>
+			<param name="ConversionPattern" value="%style{%d{ISO8601}}{black} %highlight{%-5level }[%style{%t}{bright,blue}] %style{%C{1.}}{bright,yellow}: %msg%n%throwable"/>
 		</layout>
 		<filter class="org.apache.log4j.varia.LevelMatchFilter">
 			<param name="LevelToMatch" value="WARN"/>

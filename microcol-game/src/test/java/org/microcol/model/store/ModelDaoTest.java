@@ -1,11 +1,10 @@
 package org.microcol.model.store;
 
 import static org.junit.Assert.*;
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
-import org.junit.After;
-import org.junit.Before;
+
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -16,9 +15,8 @@ import com.google.gson.GsonBuilder;
  */
 public class ModelDaoTest {
 
-    private Logger logger = Logger.getLogger(ModelDaoTest.class);
 
-    private final Logger modelDaoLogger = Logger.getLogger(ModelDao.class);
+    private final Logger logger = LoggerFactory.getLogger(ModelDaoTest.class);
 
     @Test
     public void test_simple_gson() throws Exception {
@@ -30,13 +28,13 @@ public class ModelDaoTest {
         String str;
 
         str = gson.toJson(new String[] { "a", "b", "c" });
-        logger.debug(str);
+        logger.info(str);
 
         str = gson.toJson(new Character[] { 'a', 'b', 'b' });
-        logger.debug(str);
+        logger.info(str);
 
         str = gson.toJson(gameModel);
-        logger.debug(str);
+        logger.info(str);
     }
 
     @Test
@@ -63,20 +61,6 @@ public class ModelDaoTest {
 
         ModelDao modelDao = new ModelDao();
         modelDao.saveToFile("target/test.json", modelPo);
-    }
-
-    private Level level;
-
-    @Before
-    public void before() {
-        level = modelDaoLogger.getLevel();
-        modelDaoLogger.setLevel(Level.DEBUG);
-        logger.setLevel(Level.DEBUG);
-    }
-
-    @After
-    public void after() {
-        modelDaoLogger.setLevel(level);
     }
 
 }
