@@ -1,0 +1,39 @@
+ ----
+ Events
+ ----
+
+Events
+
+ There are events fired by user interface and fired by game model.
+ Events are dispatched by <com.google.common.eventbus.EventBus>. 
+ In class <org.microcol.gui.event.modelModelListenerImpl> are handled events from model process like:
+ 
++----+
+@Override
+public void onTurnStarted(final TurnStartedEvent event) {
+    eventBus.post(event);
+}
++----+
+
+ Events from game model are send to user interface.
+ Anywhere in user interface code event could be consumed like:
+
++----+
+@Subscribe
+private void onTurnStarted(final TurnStartedEvent event) {
+	// Do something
+} 
++----+
+
+ When Class that wants to consume some event have be to marked with annotation <org.microcol.gui.util.Listener>:
+
++----+
+import org.microcol.gui.util.Listener;
+ 
+@Listener
+public final class TurnStartedListener {
+}
++----+
+
+ Events produced on user interface are directly inserted to EventBus instance.
+ Thread that post event also handle the event. 
