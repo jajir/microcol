@@ -53,7 +53,11 @@ public final class GamePanelController {
      * @return the mouseEnabled
      */
     public boolean isMouseEnabled() {
-        return humanIsOnTurn && !unitIsMoving;
+        return humanIsOnTurn;
+    }
+    
+    public boolean isUnitMoving() {
+        return unitIsMoving;
     }
 
 }

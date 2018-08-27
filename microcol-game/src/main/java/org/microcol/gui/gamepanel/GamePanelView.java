@@ -56,6 +56,8 @@ public final class GamePanelView {
     private final SelectedUnitManager selectedUnitManager;
 
     private final AnimationManager animationManager;
+    
+    private final ScrollingManager scrollingManager;
 
     private final ExcludePainting excludePainting;
 
@@ -84,9 +86,10 @@ public final class GamePanelView {
             final SelectedUnitManager selectedUnitManager, final MoveModeSupport moveModeSupport,
             final PaintService paintService, final GamePreferences gamePreferences,
             final MouseOverTileManager mouseOverTileManager,
-            final AnimationManager animationManager, final ModeController modeController,
-            final ExcludePainting excludePainting, final DialogFigth dialogFigth,
-            final VisibleArea visibleArea, final PaneCanvas paneCanvas, final OneTurnMoveHighlighter oneTurnMoveHighlighter) {
+            final AnimationManager animationManager, final ScrollingManager scrollingManager,
+            final ModeController modeController, final ExcludePainting excludePainting,
+            final DialogFigth dialogFigth, final VisibleArea visibleArea,
+            final PaneCanvas paneCanvas, final OneTurnMoveHighlighter oneTurnMoveHighlighter) {
         this.gameModelController = Preconditions.checkNotNull(gameModelController);
         this.pathPlanning = Preconditions.checkNotNull(pathPlanning);
         this.imageProvider = Preconditions.checkNotNull(imageProvider);
@@ -97,6 +100,7 @@ public final class GamePanelView {
         this.gamePreferences = Preconditions.checkNotNull(gamePreferences);
         this.mouseOverTileManager = Preconditions.checkNotNull(mouseOverTileManager);
         this.animationManager = Preconditions.checkNotNull(animationManager);
+        this.scrollingManager = Preconditions.checkNotNull(scrollingManager);
         this.modeController = Preconditions.checkNotNull(modeController);
         this.excludePainting = Preconditions.checkNotNull(excludePainting);
         this.dialogFigth = Preconditions.checkNotNull(dialogFigth);
@@ -156,7 +160,7 @@ public final class GamePanelView {
         });
     }
 
-    private void planScrollingAnimationToPoint(final Point to) {
+    public void planScrollingAnimationToPoint(final Point to) {
         final Point from = visibleArea.getTopLeft();
         if (from.distanceSimplified(to) > 0) {
             /**
@@ -166,7 +170,7 @@ public final class GamePanelView {
              */
             Preconditions.checkState(visibleArea.isReady(),
                     "screen scroll is called before canvas initialization was finished.");
-            animationManager.addAnimation(
+            scrollingManager.addAnimation(
                     new AnimatonScreenScroll(new ScreenScrolling(pathPlanning, from, to)));
         }
     }
@@ -213,6 +217,7 @@ public final class GamePanelView {
         if (animationManager.hasNextStep(area)) {
             animationManager.paint(graphics, area);
         }
+        scrollingManager.paint();
     }
 
     /**

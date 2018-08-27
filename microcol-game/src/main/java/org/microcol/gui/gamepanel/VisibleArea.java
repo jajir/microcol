@@ -65,6 +65,7 @@ public final class VisibleArea {
     /**
      * Define map size.
      */
+    //FIXME optional should not be here.
     private Optional<Point> maxMapSize = Optional.empty();
 
     /**

@@ -42,8 +42,7 @@ public final class UnitMovedListener {
                 new AnimationWalk(pathPlanning, event.getStart(), event.getEnd(), event.getUnit(),
                         paintService, excludePainting, event.getOrientation()),
                 animation -> excludePainting.includeUnit(event.getUnit()));
-        animationManager.waitWhileRunning();
-        logger.info("Walk animation was completed.");
+        logger.info("Animation was added.");
     }
 
 }

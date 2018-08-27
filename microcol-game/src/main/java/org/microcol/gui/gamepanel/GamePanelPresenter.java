@@ -71,6 +71,8 @@ public final class GamePanelPresenter {
     private final ModeController modeController;
 
     private final VisibleArea visibleArea;
+    
+    private final GamePanelController gamePanelController;
 
     private final OneTurnMoveHighlighter oneTurnMoveHighlighter;
 
@@ -100,6 +102,7 @@ public final class GamePanelPresenter {
         this.mouseOverTileManager = Preconditions.checkNotNull(mouseOverTileManager);
         this.modeController = Preconditions.checkNotNull(modeController);
         this.selectedUnitManager = Preconditions.checkNotNull(selectedUnitManager);
+        this.gamePanelController = Preconditions.checkNotNull(gamePanelController);
         this.visibleArea = Preconditions.checkNotNull(visibleArea);
         this.oneTurnMoveHighlighter = Preconditions.checkNotNull(oneTurnMoveHighlighter);
 
@@ -118,22 +121,22 @@ public final class GamePanelPresenter {
             if (KeyCode.ENTER == e.getCode()) {
                 onKeyPressed_enter();
             }
-            logger.debug("Pressed key: '" + e.getCode().getName() + "' has code '"
+            logger.info("Pressed key: '" + e.getCode().getName() + "' has code '"
                     + e.getCharacter() + "', modifiers '" + e.getCode().isModifierKey() + "'");
         });
 
         paneCanvas.getCanvas().setOnMousePressed(e -> {
-            if (gamePanelController.isMouseEnabled()) {
+            if (gamePanelController.isMouseEnabled() && !gamePanelController.isUnitMoving()) {
                 onMousePressed(e);
             }
         });
         paneCanvas.getCanvas().setOnMouseReleased(e -> {
-            if (gamePanelController.isMouseEnabled()) {
+            if (gamePanelController.isMouseEnabled() && !gamePanelController.isUnitMoving()) {
                 onMouseReleased();
             }
         });
         paneCanvas.getCanvas().setOnMouseMoved(e -> {
-            if (gamePanelController.isMouseEnabled()) {
+            if (gamePanelController.isMouseEnabled() && !gamePanelController.isUnitMoving()) {
                 onMouseMoved(e);
             }
             lastMousePosition = Optional.of(Point.of(e.getX(), e.getY()));
@@ -148,7 +151,7 @@ public final class GamePanelPresenter {
         centerViewController.addListener(this::onCenterView);
         quitGameController.addListener(event -> gamePanelView.stopTimer());
     }
-
+    
     @Subscribe
     private void onColonyWasCaptured(final ColonyWasCapturedEvent event) {
         dialogColonyWasCaptured.showAndWait(event);
@@ -257,7 +260,7 @@ public final class GamePanelPresenter {
                 final Point delta = lastMousePosition.get().substract(currentPosition);
                 visibleArea.addDeltaToTopLeftPoint(delta);
             }
-            if (modeController.isMoveMode()) {
+            if (modeController.isMoveMode() && !gamePanelController.isUnitMoving()) {
                 final Point currentPosition = Point.of(e.getX(), e.getY());
                 final Location loc = gamePanelView.getArea().convertToLocation(currentPosition);
                 mouseOverTileManager.setMouseOverTile(loc);

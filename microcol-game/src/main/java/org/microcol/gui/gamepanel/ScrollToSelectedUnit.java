@@ -26,6 +26,7 @@ public final class ScrollToSelectedUnit {
                 .equals(event.getScrollToFocusedTile())) {
             gamePanelView.skipCenterViewAtLocation(event.getLocation());
         }
+        // Enum value ScrollToFocusedTile.skip is skipped.
     }
 
 }

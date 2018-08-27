@@ -58,6 +58,7 @@ import org.microcol.gui.gamepanel.OneTurnMoveHighlighter;
 import org.microcol.gui.gamepanel.PaintService;
 import org.microcol.gui.gamepanel.PaneCanvas;
 import org.microcol.gui.gamepanel.ScrollToSelectedUnit;
+import org.microcol.gui.gamepanel.ScrollingManager;
 import org.microcol.gui.gamepanel.SelectedTileManager;
 import org.microcol.gui.gamepanel.SelectedUnitManager;
 import org.microcol.gui.gamepanel.SelectedUnitWasChangedController;
@@ -137,6 +138,8 @@ public final class MicroColModule extends AbstractModule {
         bind(LocalizationHelper.class).in(Singleton.class);
         bind(PersistentService.class).in(Singleton.class);
         bind(AnimationManager.class).in(Singleton.class);
+        bind(ScrollingManager.class).in(Singleton.class);
+        bind(WasdController.class).in(Singleton.class);
         bind(MapManager.class).in(Singleton.class);
         bind(GrassCoastMapGenerator.class).in(Singleton.class);
         bind(IceCoastMapGenerator.class).in(Singleton.class);

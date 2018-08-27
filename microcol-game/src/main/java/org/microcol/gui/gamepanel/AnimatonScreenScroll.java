@@ -1,45 +1,35 @@
 package org.microcol.gui.gamepanel;
 
+import org.microcol.gui.Point;
+
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
-
-import javafx.scene.canvas.GraphicsContext;
 
 /**
  * Perform scrolling to some place at map as animation.
  */
-public final class AnimatonScreenScroll implements Animation {
+public final class AnimatonScreenScroll {
 
     private final ScreenScrolling screenScrolling;
 
     AnimatonScreenScroll(final ScreenScrolling screenScrolling) {
         this.screenScrolling = Preconditions.checkNotNull(screenScrolling);
     }
-    
-    @Override
+
     public boolean hasNextStep() {
         return screenScrolling.isNextPointAvailable();
     }
 
-    @Override
-    public void nextStep() {
-        // nothing to do
-    }
-
-    @Override
-    public void paint(final GraphicsContext graphics, final Area area) {
-        area.scrollToPoint(screenScrolling.getNextPoint());
+    public void paint(final VisibleArea visibleArea) {
+        final Point point = screenScrolling.getNextPoint();
+        visibleArea.setX(point.getX());
+        visibleArea.setY(point.getY());
     }
 
     @Override
     public String toString() {
         return MoreObjects.toStringHelper(getClass()).add("screenScrolling", screenScrolling)
                 .toString();
-    }
-
-    @Override
-    public boolean canBePainted(final Area area) {
-        return true;
     }
 
 }

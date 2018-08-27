@@ -18,10 +18,14 @@ public final class MainPanelPresenter {
     private final MainPanelView view;
 
     @Inject
-    public MainPanelPresenter(final MainPanelView view, final KeyController keyController) {
+    public MainPanelPresenter(final MainPanelView view, final KeyController keyController, final WasdController wasdController) {
         this.view = Preconditions.checkNotNull(view);
         view.getBox().setOnKeyPressed(e -> {
+            wasdController.onKeyPressed(e);
             keyController.fireEvent(e);
+        });
+        view.getBox().setOnKeyReleased(e -> {
+            wasdController.onKeyReleased(e);
         });
     }
 

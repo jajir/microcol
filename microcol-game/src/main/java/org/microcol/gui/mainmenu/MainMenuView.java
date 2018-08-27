@@ -132,7 +132,7 @@ public final class MainMenuView {
         menuItemTurnReport.disableProperty().setValue(false);
 
         menuItemStatistics = new MenuItem();
-        menuItemStatistics.setAccelerator(new KeyCodeCombination(KeyCode.A));
+        menuItemStatistics.setAccelerator(new KeyCodeCombination(KeyCode.R));
         menuItemStatistics.disableProperty().setValue(false);
 
         menuItemGoals = new MenuItem();
