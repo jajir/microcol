@@ -121,7 +121,7 @@ public final class GamePanelPresenter {
             if (KeyCode.ENTER == e.getCode()) {
                 onKeyPressed_enter();
             }
-            logger.info("Pressed key: '" + e.getCode().getName() + "' has code '"
+            logger.debug("Pressed key: '" + e.getCode().getName() + "' has code '"
                     + e.getCharacter() + "', modifiers '" + e.getCode().isModifierKey() + "'");
         });
 

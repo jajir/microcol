@@ -1,13 +1,19 @@
 package org.microcol.gui;
 
+import java.util.List;
+import java.util.Optional;
+
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.gamepanel.TileWasSelectedEvent;
 import org.microcol.gui.image.ImageProvider;
 import org.microcol.gui.util.Text;
+import org.microcol.model.Colony;
 import org.microcol.model.Location;
 import org.microcol.model.Model;
 import org.microcol.model.Player;
+import org.microcol.model.Terrain;
 import org.microcol.model.TerrainType;
+import org.microcol.model.Unit;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
@@ -16,7 +22,6 @@ import javafx.application.Platform;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.RowConstraints;
@@ -33,7 +38,7 @@ public final class RightPanelView {
 
     private final Text text;
 
-    private final ImageView tileImage;
+    private final TilePainter tileImage;
 
     private final Label labelOnMove;
 
@@ -54,12 +59,13 @@ public final class RightPanelView {
     @Inject
     public RightPanelView(final ImageProvider imageProvider, final Text text,
             final UnitsPanel unitsPanel, final LocalizationHelper localizationHelper,
-            final GameModelController gameModelController) {
+            final GameModelController gameModelController, final TilePainter tileImage) {
         this.imageProvider = Preconditions.checkNotNull(imageProvider);
         this.text = Preconditions.checkNotNull(text);
         this.unitsPanel = Preconditions.checkNotNull(unitsPanel);
         this.localizationHelper = Preconditions.checkNotNull(localizationHelper);
         this.gameModelController = Preconditions.checkNotNull(gameModelController);
+        this.tileImage = Preconditions.checkNotNull(tileImage);
 
         gridPane = new GridPane();
         gridPane.setId("rightPanel");
@@ -72,8 +78,7 @@ public final class RightPanelView {
         gridPane.add(labelOnMove, 0, 0, 2, 1);
 
         // Y=1
-        tileImage = new ImageView();
-        gridPane.add(tileImage, 0, 1);
+        gridPane.add(tileImage.getCanvas(), 0, 1);
 
         tileName = new Label();
         gridPane.add(tileName, 1, 1);
@@ -105,7 +110,7 @@ public final class RightPanelView {
     void cleanView() {
         unitsPanel.clear();
         tileName.setText("");
-        tileImage.setImage(null);
+        tileImage.clear();
     }
 
     public void refreshView(final Location location) {
@@ -113,14 +118,20 @@ public final class RightPanelView {
         StringBuilder sb = new StringBuilder(200);
         unitsPanel.clear();
         if (isDiscovered(location)) {
-            tileImage.setImage(imageProvider.getTerrainImage(getTerrainTypeAt(location)));
+            tileImage.setTerrain(getTerrainAt(location), location);
             sb.append(localizationHelper.getTerrainName(getTerrainTypeAt(location)));
             sb.append("");
             sb.append("\n");
             sb.append("Move cost: 1");
-            if (getModel().getUnitsAt(location).isEmpty()) {
+            final Optional<Colony> oColony = getModel().getColonyAt(location);
+            if (oColony.isPresent()) {
+                tileImage.paintColony(oColony.get());
+            }
+            final List<Unit> units = getModel().getUnitsAt(location);
+            if (units.isEmpty()) {
                 unitsLabel.setText("");
             } else {
+                tileImage.paintUnit(units);
                 /**
                  * Current player is not same as human player. For purposes of
                  * this method it will be sufficient.
@@ -142,11 +153,15 @@ public final class RightPanelView {
         return gameModelController.getModel().getMap().getTerrainAt(location).getTerrainType();
     }
 
+    private Terrain getTerrainAt(final Location location) {
+        return gameModelController.getModel().getMap().getTerrainAt(location);
+    }
+
     /**
      * If user already explored selected tile.
-     * 
+     *
      * @param location
-     *            required locaton
+     *            required location
      * @return return <code>true</code> when selected location was already
      *         discovered otherwise return <code>false</code>.
      */
