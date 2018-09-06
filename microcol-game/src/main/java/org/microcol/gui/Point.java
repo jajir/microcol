@@ -10,6 +10,8 @@ import com.google.common.base.MoreObjects;
  */
 public final class Point {
 
+    public static final Point CENTER = Point.of(0, 0);
+
     /**
      * On screen X coordinate.
      */

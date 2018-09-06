@@ -5,7 +5,6 @@ import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.image.ImageProvider;
 import org.microcol.gui.util.BackgroundHighlighter;
 import org.microcol.gui.util.ClipboardReader;
-import org.microcol.gui.util.ClipboardWritter;
 import org.microcol.gui.util.TitledPanel;
 import org.microcol.model.Colony;
 import org.slf4j.Logger;
@@ -14,13 +13,10 @@ import org.slf4j.LoggerFactory;
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
 
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
 
 /**
  * Show units outside colony.
@@ -69,16 +65,9 @@ public final class PanelOutsideColony extends TitledPanel {
         this.colony = colony;
         panelUnits.getChildren().clear();
         colony.getUnitsOutSideColony().forEach(unit -> {
-            final Image image = imageProvider.getUnitImage(unit.getType());
-            final ImageView imageView = new ImageView(image);
-            Pane paneImage = new Pane(imageView);
-            paneImage.setOnDragDetected(mouseEvent -> {
-                final Dragboard db = imageView.startDragAndDrop(TransferMode.MOVE);
-                ClipboardWritter.make(db).addImage(image).addTransferFromOutsideColony()
-                        .addUnit(unit).build();
-                mouseEvent.consume();
-            });
-            panelUnits.getChildren().add(paneImage);
+            final PanelUnitWithContextMenu paneImage = new PanelUnitWithContextMenu(imageProvider,
+                    unit, colony, colonyDialog);
+            panelUnits.getChildren().add(paneImage.getPane());
         });
     }
 

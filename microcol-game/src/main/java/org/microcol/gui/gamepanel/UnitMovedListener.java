@@ -2,6 +2,7 @@ package org.microcol.gui.gamepanel;
 
 import org.microcol.gui.PathPlanning;
 import org.microcol.gui.util.Listener;
+import org.microcol.gui.util.PaintService;
 import org.microcol.model.event.UnitMovedStepStartedEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

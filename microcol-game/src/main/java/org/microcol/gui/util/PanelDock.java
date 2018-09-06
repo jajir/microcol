@@ -65,7 +65,7 @@ public final class PanelDock extends TitledPanel {
         panelDockBehavior.getUnitsInPort().forEach(unit -> {
             final ToggleButton toggleButtonShip = new ToggleButton();
             final BackgroundImage myBI = new BackgroundImage(
-                    imageProvider.getUnitImage(unit.getType()), BackgroundRepeat.NO_REPEAT,
+                    imageProvider.getUnitImage(unit), BackgroundRepeat.NO_REPEAT,
                     BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT);
             toggleButtonShip.getStyleClass().add("paneShip");
             toggleButtonShip.setBackground(new Background(myBI));

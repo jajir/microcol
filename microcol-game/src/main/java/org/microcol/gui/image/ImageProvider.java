@@ -6,11 +6,14 @@ import java.util.List;
 import java.util.Map;
 
 import org.microcol.gui.MicroColException;
-import org.microcol.model.GoodsAmount;
+import org.microcol.model.ChainOfCommandStrategy;
+import org.microcol.model.Direction;
 import org.microcol.model.GoodType;
+import org.microcol.model.GoodsAmount;
 import org.microcol.model.TerrainType;
 import org.microcol.model.Unit;
 import org.microcol.model.UnitType;
+import org.microcol.model.unit.UnitFreeColonist;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
@@ -89,7 +92,15 @@ public final class ImageProvider {
 
     public static final String IMG_UNIT_SHIP_FRIGATE_LEFT = "frigate_left";
 
-    public static final String IMG_UNIT_FREE_COLONIST = "tile-unit-free-colonist.png";
+    public static final String IMG_UNIT_FREE_COLONIST = "free-colonist";
+
+    public static final String IMG_UNIT_FREE_COLONIST_MOUNTED = "free-colonist-mounted";
+
+    public static final String IMG_UNIT_FREE_COLONIST_TOOLS = "free-colonist-tools";
+
+    public static final String IMG_UNIT_FREE_COLONIST_MUSKETS = "free-colonist-muskets";
+
+    public static final String IMG_UNIT_FREE_COLONIST_MOUNTED_MUSKETS = "free-colonist-mounted-muskets";
 
     public static final String IMG_TILE_MODE_MOVE = "tile-mode-move.png";
 
@@ -154,6 +165,49 @@ public final class ImageProvider {
     private final Map<UnitType, Image> unitImageMap;
 
     private final Map<GoodType, Image> goodTypeImageMap;
+    
+    private final ChainOfCommandStrategy<UnitImageRequest, Image> unitImageResolver = new ChainOfCommandStrategy<UnitImageRequest, Image>(
+            Lists.newArrayList(request -> {
+                if (UnitType.GALLEON == request.getUnitType()) {
+                    if (Direction.west == request.getOrientation()) {
+                        return getImage(ImageProvider.IMG_UNIT_SHIP_GALEON_WEST);
+                    } else if (Direction.east == request.getOrientation()) {
+                        return getImage(ImageProvider.IMG_UNIT_SHIP_GALEON_EAST);
+                    }
+                }
+                return null;
+            }, request -> {
+                if (UnitType.COLONIST == request.getUnitType()) {
+                    if (request.getUnit() instanceof UnitFreeColonist) {
+                        final UnitFreeColonist fc = (UnitFreeColonist) request.getUnit();
+                        if (fc.isMounted()) {
+                            if (fc.isHoldingGuns()) {
+                                return getImage(
+                                        ImageProvider.IMG_UNIT_FREE_COLONIST_MOUNTED_MUSKETS);
+                            } else {
+                                return getImage(ImageProvider.IMG_UNIT_FREE_COLONIST_MOUNTED);
+                            }
+                        } else {
+                            if (fc.isHoldingGuns()) {
+                                return getImage(ImageProvider.IMG_UNIT_FREE_COLONIST_MUSKETS);
+                            } else if (fc.isHoldingTools()) {
+                                return getImage(ImageProvider.IMG_UNIT_FREE_COLONIST_TOOLS);
+                            } else {
+                                return getImage(ImageProvider.IMG_UNIT_FREE_COLONIST);
+                            }
+                        }
+                    } else {
+                        throw new IllegalStateException(
+                                "Colonist in not instace of UnitFreeColonist class");
+                    }
+                }                
+                return null;
+            }, request -> {
+                if (UnitType.FRIGATE == request.getUnitType()) {
+                    return getImage(IMG_UNIT_SHIP_FRIGATE);
+                }
+                return null;
+            }));
 
     public ImageProvider() {
         images = new HashMap<>();
@@ -168,7 +222,8 @@ public final class ImageProvider {
         unitImageMap = ImmutableMap.<UnitType, Image>builder()
                 .put(UnitType.GALLEON, getImage(IMG_UNIT_SHIP_GALEON_EAST))
                 .put(UnitType.FRIGATE, getImage(IMG_UNIT_SHIP_FRIGATE))
-                .put(UnitType.COLONIST, getImage(IMG_UNIT_FREE_COLONIST)).build();
+                .put(UnitType.COLONIST, getImage(IMG_UNIT_FREE_COLONIST))
+                .build();
 
         goodTypeImageMap = ImmutableMap.<GoodType, Image>builder()
                 .put(GoodType.CORN, getImage(IMG_GOOD_CORN))
@@ -265,7 +320,11 @@ public final class ImageProvider {
 
     /**
      * For specific unit type find corresponding image.
-     * 
+     * <p>
+     * Should be used just in cases when it's impossible to get unit instance.
+     * For example for drawing units to buy in Europe.
+     * </p>
+     *
      * @param unitType
      *            required unit type
      * @return image representing ship image
@@ -275,6 +334,19 @@ public final class ImageProvider {
     }
 
     /**
+     * For specific unit instance and orientation return appropriate image.
+     *
+     * @param unit
+     *            required unit
+     * @param orientation
+     *            required orientation of unit
+     * @return unit image instance
+     */
+    public Image getUnitImage(final Unit unit, final Direction orientation) {
+        return unitImageResolver.apply(new UnitImageRequest(unit, orientation));
+    }
+    
+    /**
      * For specific unit find corresponding image.
      * 
      * @param unit
@@ -282,7 +354,11 @@ public final class ImageProvider {
      * @return image representing ship image
      */
     public Image getUnitImage(final Unit unit) {
-        return unitImageMap.get(unit.getType());
+        if (unit.isAtPlaceLocation()) {
+            return getUnitImage(unit, unit.getPlaceLocation().getOrientation());
+        } else {
+            return getUnitImage(unit, Direction.east);
+        }
     }
 
     /**
@@ -306,5 +382,5 @@ public final class ImageProvider {
     public Image getGoodTypeImage(final GoodsAmount goodsAmount) {
         return goodTypeImageMap.get(goodsAmount.getGoodType());
     }
-
+    
 }

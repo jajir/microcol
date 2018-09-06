@@ -115,7 +115,7 @@ public final class PlaceBuilderPo implements Function<Unit, Place> {
                         holdingUnit = oHoldingUnit.get();
                     } else {
                         // lets create this unit
-                        holdingUnit = model.createUnit(model, modelPo, holdingUnitPo);
+                        holdingUnit = model.createUnit(modelPo, holdingUnitPo);
                     }
                     final PlaceCargoSlot placeCargoSlot = new PlaceCargoSlot(unit,
                             holdingUnit.getCargo().getSlotByIndex(slotIndex));

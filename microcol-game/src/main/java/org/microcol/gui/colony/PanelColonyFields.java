@@ -5,10 +5,10 @@ import java.util.Optional;
 import org.microcol.gui.Point;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.gamepanel.GamePanelView;
-import org.microcol.gui.gamepanel.PaintService;
 import org.microcol.gui.image.ImageProvider;
 import org.microcol.gui.util.ClipboardReader;
 import org.microcol.gui.util.ClipboardWritter;
+import org.microcol.gui.util.PaintService;
 import org.microcol.gui.util.TitledPanel;
 import org.microcol.model.Colony;
 import org.microcol.model.ColonyField;
@@ -196,7 +196,7 @@ public final class PanelColonyFields extends TitledPanel {
         final Point point = Point.of(colonyField.getDirection()).add(centre);
         paintService.paintTerrainOnTile(gc, point, colonyField.getLocation(), terrain, false);
         if (!colonyField.isEmpty()) {
-            gc.drawImage(imageProvider.getUnitImage(colonyField.getUnit().getType()), point.getX(),
+            gc.drawImage(imageProvider.getUnitImage(colonyField.getUnit()), point.getX(),
                     point.getY());
             // TODO on ocean show fish
             gc.drawImage(imageProvider.getGoodTypeImage(colonyField.getProducedGoodType()),

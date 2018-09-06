@@ -41,6 +41,7 @@ public final class Model {
     private Location focusedField;
     private final TurnEventStore turnEventStore;
     private final Statistics statistics;
+    private final UnitFactory unitFactory;
 
     /**
      * Verify that all units are in unit storage and that all units from unit
@@ -100,7 +101,8 @@ public final class Model {
                     }, colonyPo.getColonyWarehouse());
             colonies.add(col);
         });
-
+        
+        unitFactory = new UnitFactory();
         this.unitStorage = Preconditions.checkNotNull(unitStorage);
 
         gameManager = GameManager.make(this, modelPo, gameOverEvaluators, playerStore);
@@ -137,7 +139,7 @@ public final class Model {
                         throw new MicroColException(
                                 String.format("unit with id %s was alredy loaded", unitPo.getId()));
                     } else {
-                        model.createUnit(model, modelPo, unitPo);
+                        model.createUnit(modelPo, unitPo);
                     }
                 });
         modelPo.getUnits().stream().filter(unitPo -> !unitPo.getType().canHoldCargo())
@@ -146,7 +148,7 @@ public final class Model {
                         throw new MicroColException(
                                 String.format("unit with id %s was alredy loaded", unitPo.getId()));
                     } else {
-                        model.createUnit(model, modelPo, unitPo);
+                        model.createUnit(modelPo, unitPo);
                     }
                 });
 
@@ -189,12 +191,12 @@ public final class Model {
         listenerManager.fireColonyWasFounded(this, col);
     }
 
-    Unit createUnit(final Model model, final ModelPo modelPo, final UnitPo unitPo) {
-        final Unit out = Unit.make(model, modelPo, unitPo);
-        model.unitStorage.addUnit(out);
-        return out;
+    Unit createUnit(final ModelPo modelPo, final UnitPo unitPo) {
+        final Unit unit = unitFactory.createUnit(this, modelPo, unitPo);
+        unitStorage.addUnit(unit);
+        return unit;
     }
-
+    
     /**
      * Create cargo ship for king and put it to high seas in direction to colonies.
      * 
@@ -631,7 +633,7 @@ public final class Model {
     /**
      * @return the playerStore
      */
-    PlayerStore getPlayerStore() {
+    public PlayerStore getPlayerStore() {
         return playerStore;
     }
 

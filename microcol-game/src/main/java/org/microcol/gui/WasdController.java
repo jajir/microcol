@@ -53,7 +53,7 @@ public class WasdController {
     }
 
     public Point getDiff() {
-        Point out = Point.of(0, 0);
+        Point out = Point.CENTER;
         if (w) {
             out = out.add(0, -DIFF);
         }

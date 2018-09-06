@@ -1,13 +1,16 @@
 package org.microcol.gui.colony;
 
 import org.microcol.gui.MainStageBuilder;
+import org.microcol.gui.Point;
 import org.microcol.gui.image.ImageProvider;
 import org.microcol.gui.util.AbstractMessageWindow;
 import org.microcol.gui.util.Listener;
+import org.microcol.gui.util.PaintService;
 import org.microcol.gui.util.PanelDock;
 import org.microcol.gui.util.Text;
 import org.microcol.gui.util.ViewUtil;
 import org.microcol.model.Colony;
+import org.microcol.model.Unit;
 import org.microcol.model.event.UnitMovedToColonyFieldEvent;
 import org.microcol.model.event.UnitMovedToConstructionEvent;
 import org.slf4j.Logger;
@@ -19,6 +22,8 @@ import com.google.inject.Inject;
 
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
@@ -44,6 +49,8 @@ public final class ColonyDialog extends AbstractMessageWindow implements ColonyD
 
     private final PanelDock panelDock;
 
+    private final PaintService paintService;
+
     private final PanelOutsideColony panelOutsideColony;
 
     private final BooleanProperty propertyShiftWasPressed;
@@ -56,8 +63,10 @@ public final class ColonyDialog extends AbstractMessageWindow implements ColonyD
             final PanelColonyStructures panelColonyStructures,
             final PanelOutsideColony panelOutsideColony, final PanelColonyGoods panelColonyGoods,
             final PanelColonyDockBehaviour panelColonyDockBehaviour,
-            final UnitMovedOutsideColonyController unitMovedOutsideColonyController) {
+            final UnitMovedOutsideColonyController unitMovedOutsideColonyController,
+            final PaintService paintService) {
         super(viewUtil);
+        this.paintService = Preconditions.checkNotNull(paintService);
         Preconditions.checkNotNull(imageProvider);
         setTitle(text.get("europeDialog.caption"));
 
@@ -125,17 +134,17 @@ public final class ColonyDialog extends AbstractMessageWindow implements ColonyD
         });
         unitMovedOutsideColonyController.addListener(event -> repaint());
     }
-    
+
     @SuppressWarnings("unused")
     @Subscribe
-    private void onUnitMovedToConstruction(final UnitMovedToConstructionEvent event){
+    private void onUnitMovedToConstruction(final UnitMovedToConstructionEvent event) {
         repaint();
     }
-    
+
     @SuppressWarnings("unused")
     @Subscribe
-    private void onUnitMovedToField(final UnitMovedToColonyFieldEvent event){
-        repaint();        
+    private void onUnitMovedToField(final UnitMovedToColonyFieldEvent event) {
+        repaint();
     }
 
     public void showColony(final Colony colony) {
@@ -144,6 +153,12 @@ public final class ColonyDialog extends AbstractMessageWindow implements ColonyD
         goods.setColony(colony);
         repaint();
         showAndWait();
+    }
+
+    @Override
+    public void paintUnit(final Canvas canvas, final Unit unit) {
+        final GraphicsContext graphics = canvas.getGraphicsContext2D();
+        paintService.paintUnit(graphics, Point.CENTER, unit);
     }
 
     @Override

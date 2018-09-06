@@ -75,7 +75,7 @@ public final class MapManager {
         }
     }
 
-    Image getTerrainImage(final TerrainType terrainType, final Location location) {
+    public Image getTerrainImage(final TerrainType terrainType, final Location location) {
         final Image image = imageRandomProvider.getTerrainImage(terrainType, location);
         if (image == null) {
             return imageProvider.getTerrainImage(terrainType);

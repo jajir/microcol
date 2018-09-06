@@ -21,7 +21,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.text.TextAlignment;
 
-public final class DialogFigth extends AbstractMessageWindow {
+public final class DialogFight extends AbstractMessageWindow {
 
     /**
      * It's <code>true</code> when user choose to fight.
@@ -55,7 +55,7 @@ public final class DialogFigth extends AbstractMessageWindow {
      *            required game preferences
      */
     @Inject
-    public DialogFigth(final Text text, final ViewUtil viewUtil, final ImageProvider imageProvider,
+    public DialogFight(final Text text, final ViewUtil viewUtil, final ImageProvider imageProvider,
             final LocalizationHelper localizationHelper, final GamePreferences gamePreferences) {
         super(viewUtil);
         this.localizationHelper = Preconditions.checkNotNull(localizationHelper);
@@ -139,10 +139,10 @@ public final class DialogFigth extends AbstractMessageWindow {
      */
     public boolean showAndWait(final Unit unitAttacker, final Unit unitDefender) {
         defenderLabelName.setText(localizationHelper.getUnitName(unitDefender.getType()));
-        defenderImageView.setImage(imageProvider.getUnitImage(unitDefender.getType()));
+        defenderImageView.setImage(imageProvider.getUnitImage(unitDefender));
 
         attackerLabelName.setText(localizationHelper.getUnitName(unitDefender.getType()));
-        attackerImageView.setImage(imageProvider.getUnitImage(unitDefender.getType()));
+        attackerImageView.setImage(imageProvider.getUnitImage(unitDefender));
 
         showAndWait();
         return userChooseFight;

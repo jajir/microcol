@@ -10,12 +10,13 @@ import java.util.Random;
 import java.util.Set;
 import java.util.function.Function;
 
-import org.microcol.model.store.ModelPo;
 import org.microcol.model.store.UnitPo;
 import org.microcol.model.turnevent.TurnEventProvider;
 import org.microcol.model.unit.CargoHolder;
+import org.microcol.model.unit.HaveHorses;
+import org.microcol.model.unit.HoldGuns;
+import org.microcol.model.unit.HoldTools;
 import org.microcol.model.unit.UnitAction;
-import org.microcol.model.unit.UnitActionConverter;
 import org.microcol.model.unit.UnitActionType;
 
 import com.google.common.base.MoreObjects;
@@ -26,7 +27,7 @@ import com.google.common.collect.Lists;
 /**
  * All units can attack with muskets except wagon.
  */
-public class Unit implements CargoHolder {
+public abstract class Unit implements CargoHolder {
 
     /**
      * Unit will see all tiles accessible by it's speed. This define how many
@@ -47,9 +48,11 @@ public class Unit implements CargoHolder {
     private Player owner;
     private Place place;
     private int actionPoints;
+    // TODO move cargo functionality to separate unit child class
     private final Cargo cargo;
     private UnitAction unitAction;
 
+    @Deprecated
     public Unit(final Function<Unit, Cargo> cargoBuilder, final Model model, final Integer id,
             final Function<Unit, Place> placeBuilder, final UnitType unitType, final Player owner,
             final int actionPoints, final UnitAction unitAction) {
@@ -67,13 +70,26 @@ public class Unit implements CargoHolder {
         setAction(unitAction);
     }
 
-    public static Unit make(final Model model, final ModelPo modelPo, final UnitPo unitPo) {
-        final PlaceBuilderPo placeBuilderModelPo = new PlaceBuilderPo(unitPo, modelPo, model);
-        return new Unit(
-                unit -> new Cargo(unit, unit.getType().getCargoCapacity(), unitPo.getCargo()),
-                model, unitPo.getId(), placeBuilderModelPo, unitPo.getType(),
-                model.getPlayerStore().getPlayerByName(unitPo.getOwnerId()),
-                unitPo.getAvailableMoves(), UnitActionConverter.convert(unitPo.getAction()));
+    /**
+     * Get list of terrain types at which unit can move.
+     *
+     * @return list terrain types
+     */
+    public List<TerrainType> getMoveableTerrainTypes() {
+        // TODO use this method instead of type.
+        return type.getMoveableTerrains();
+    }
+
+    public boolean canMount() {
+        return this instanceof HaveHorses;
+    }
+
+    public boolean canHoldGuns() {
+        return this instanceof HoldGuns;
+    }
+
+    public boolean canHoldTools() {
+        return this instanceof HoldTools;
     }
 
     public UnitType getType() {
@@ -132,7 +148,7 @@ public class Unit implements CargoHolder {
                     model.getTurnEventStore().add(TurnEventProvider.getShipComeEuropePort(owner));
                 } else {
                     /*
-                     * Ships always come from east side of map. 
+                     * Ships always come from east side of map.
                      */
                     final List<Location> locations = model.getHighSea()
                             .getSuitablePlaceForShipCommingFromEurope(getOwner(), true);
@@ -646,10 +662,10 @@ public class Unit implements CargoHolder {
     }
 
     void placeToLocation(final Location target, final Direction orientation) {
-        if(place instanceof PlaceLocation){
+        if (place instanceof PlaceLocation) {
             place.destroy();
             place = new PlaceLocation(this, Preconditions.checkNotNull(target), orientation);
-        }else{
+        } else {
             place.destroy();
             place = new PlaceLocation(this, Preconditions.checkNotNull(target), orientation);
             model.fireUnitMovedToLocation(this);
@@ -789,16 +805,16 @@ public class Unit implements CargoHolder {
                 place);
         Preconditions.checkState(placeCargoSlot.getCargoSlot().getOwnerUnit().isAtPlaceLocation(),
                 "Unit '%s' have to be at map", placeCargoSlot.getCargoSlot().getOwnerUnit());
-        final Location startLocation = getLocation(); 
-        final Location targetLocation = placeCargoSlot.getCargoSlot().getOwnerUnit().getLocation(); 
+        final Location startLocation = getLocation();
+        final Location targetLocation = placeCargoSlot.getCargoSlot().getOwnerUnit().getLocation();
         final Direction orientation = findOrintationForMove(targetLocation);
         final Path path = Path.of(Lists.newArrayList(startLocation, targetLocation));
-        
+
         if (model.fireUnitMoveStarted(this, path)) {
             model.fireUnitMovedStepStarted(this, startLocation, targetLocation, orientation);
-            
+
             placeToCargoSlot(placeCargoSlot);
-            
+
             model.fireUnitMovedStepFinished(this, startLocation, targetLocation);
             model.fireUnitMovedFinished(this, path);
         }
@@ -812,7 +828,7 @@ public class Unit implements CargoHolder {
                 .add("unitAction", unitAction).toString();
     }
 
-    UnitPo save() {
+    public UnitPo save() {
         final UnitPo unitPo = new UnitPo();
         unitPo.setId(id);
         unitPo.setAvailableMoves(actionPoints);
@@ -895,6 +911,13 @@ public class Unit implements CargoHolder {
         } else {
             return false;
         }
+    }
+
+    /**
+     * @return the model
+     */
+    protected Model getModel() {
+        return model;
     }
 
 }

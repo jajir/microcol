@@ -89,7 +89,7 @@ public final class PanelHighSeas extends TitledPanel {
                         isShownShipsTravelingToEurope)
                 .forEach(unit -> {
                     shipsContainer.getChildren()
-                            .add(new ImageView(imageProvider.getUnitImage(unit.getType())));
+                            .add(new ImageView(imageProvider.getUnitImage(unit)));
                 });
     }
 

@@ -94,7 +94,7 @@ public final class PanelDockCrate extends StackPane {
             } else if (cargoSlot.isLoadedUnit()) {
                 final Unit cargoUnit = cargoSlot.getUnit().get();
                 labelAmount.setText("");
-                cargoImage.setImage(imageProvider.getUnitImage(cargoUnit.getType()));
+                cargoImage.setImage(imageProvider.getUnitImage(cargoUnit));
             }
         }
     }

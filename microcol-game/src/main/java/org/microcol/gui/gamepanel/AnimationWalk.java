@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.microcol.gui.PathPlanning;
 import org.microcol.gui.Point;
+import org.microcol.gui.util.PaintService;
 import org.microcol.model.Direction;
 import org.microcol.model.Location;
 import org.microcol.model.Unit;

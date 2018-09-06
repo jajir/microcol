@@ -1,15 +1,15 @@
-package org.microcol.gui.gamepanel;
+package org.microcol.gui.util;
 
 import org.microcol.gui.Point;
+import org.microcol.gui.gamepanel.GamePanelView;
+import org.microcol.gui.gamepanel.MapManager;
 import org.microcol.gui.image.ImageProvider;
-import org.microcol.gui.util.FontService;
 import org.microcol.model.Colony;
 import org.microcol.model.Direction;
 import org.microcol.model.Location;
 import org.microcol.model.Player;
 import org.microcol.model.Terrain;
 import org.microcol.model.Unit;
-import org.microcol.model.UnitType;
 
 import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
@@ -78,21 +78,7 @@ public final class PaintService {
     public void paintUnit(final GraphicsContext graphics, final Point point, final Unit unit,
             final Direction orientation) {
         final Point p = point.add(UNIT_IMAGE_POSITION);
-        // TODO should not be solved by list of ifs.
-        if (UnitType.GALLEON.equals(unit.getType())) {
-            if (Direction.west == orientation) {
-                graphics.drawImage(imageProvider.getImage(ImageProvider.IMG_UNIT_SHIP_GALEON_WEST),
-                        p.getX(), p.getY());
-            } else if (Direction.east == orientation) {
-                graphics.drawImage(imageProvider.getImage(ImageProvider.IMG_UNIT_SHIP_GALEON_EAST),
-                        p.getX(), p.getY());
-            } else {
-                throw new IllegalArgumentException(
-                        String.format("Invalid orientation '%s' for unit '%s'", orientation, unit));
-            }
-        } else {
-            graphics.drawImage(imageProvider.getUnitImage(unit.getType()), p.getX(), p.getY());
-        }
+        graphics.drawImage(imageProvider.getUnitImage(unit, orientation), p.getX(), p.getY());
         painFlagWithAction(graphics, point.add(OWNERS_FLAG_POSITION), unit);
     }
 

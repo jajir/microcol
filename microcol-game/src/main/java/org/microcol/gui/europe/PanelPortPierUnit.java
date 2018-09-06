@@ -16,7 +16,7 @@ public final class PanelPortPierUnit extends HBox {
 
     public PanelPortPierUnit(final Unit unit, final ImageProvider imageProvider,
             final LocalizationHelper localizationHelper) {
-        final Image image = imageProvider.getUnitImage(unit.getType());
+        final Image image = imageProvider.getUnitImage(unit);
         final ImageView imageIcon = new ImageView(image);
         Pane paneImage = new Pane(imageIcon);
         paneImage.setOnDragDetected(e -> {

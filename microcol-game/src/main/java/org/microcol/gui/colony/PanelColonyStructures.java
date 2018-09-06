@@ -246,7 +246,7 @@ public final class PanelColonyStructures extends TitledPanel {
                 slots.put(Rectangle.ofPointAndSize(topLeftCorner, square), constructionSlot);
                 paintWorkerContainer(gc, topLeftCorner);
                 if (!constructionSlot.isEmpty()) {
-                    gc.drawImage(imageProvider.getUnitImage(constructionSlot.getUnit().getType()),
+                    gc.drawImage(imageProvider.getUnitImage(constructionSlot.getUnit()),
                             topLeftCorner.getX(), topLeftCorner.getY());
                 }
                 cx.incrementAndGet();

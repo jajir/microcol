@@ -114,7 +114,7 @@ public final class Terrain {
      */
     public void setHasTrees(final boolean hasTrees) {
         Preconditions.checkArgument(terrainType.isCanHaveTree() || !hasTrees,
-                "this terrain type (%s) can't have trees.", terrainType);
+                "this terrain type (%s) at (%s) can't have trees.", terrainType, location);
         this.hasTrees = hasTrees;
     }
 
@@ -192,7 +192,7 @@ public final class Terrain {
      */
     public void setHasField(final boolean hasField) {
         Preconditions.checkArgument(terrainType.isCanHaveField() || !hasField,
-                "this terrain type (%s) can't have field.", terrainType);
+                "this terrain type (%s) at (%s) can't have field.", terrainType, location);
         this.hasField = hasField;
     }
 

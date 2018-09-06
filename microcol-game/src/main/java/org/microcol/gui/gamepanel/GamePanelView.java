@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import org.microcol.gui.DialogFigth;
+import org.microcol.gui.DialogFight;
 import org.microcol.gui.PathPlanning;
 import org.microcol.gui.Point;
 import org.microcol.gui.StepCounter;
@@ -13,6 +13,7 @@ import org.microcol.gui.gamepanel.MoveModeSupport.MoveMode;
 import org.microcol.gui.image.ImageProvider;
 import org.microcol.gui.util.FpsCounter;
 import org.microcol.gui.util.GamePreferences;
+import org.microcol.gui.util.PaintService;
 import org.microcol.model.Colony;
 import org.microcol.model.Location;
 import org.microcol.model.Model;
@@ -77,7 +78,7 @@ public final class GamePanelView {
 
     private final ModeController modeController;
 
-    private final DialogFigth dialogFigth;
+    private final DialogFight dialogFigth;
 
     @Inject
     public GamePanelView(final GameModelController gameModelController,
@@ -88,7 +89,7 @@ public final class GamePanelView {
             final MouseOverTileManager mouseOverTileManager,
             final AnimationManager animationManager, final ScrollingManager scrollingManager,
             final ModeController modeController, final ExcludePainting excludePainting,
-            final DialogFigth dialogFigth, final VisibleArea visibleArea,
+            final DialogFight dialogFigth, final VisibleArea visibleArea,
             final PaneCanvas paneCanvas, final OneTurnMoveHighlighter oneTurnMoveHighlighter) {
         this.gameModelController = Preconditions.checkNotNull(gameModelController);
         this.pathPlanning = Preconditions.checkNotNull(pathPlanning);

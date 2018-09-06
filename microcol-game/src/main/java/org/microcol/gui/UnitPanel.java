@@ -52,7 +52,7 @@ public class UnitPanel {
 
     private HBox makeUnitImage(final Player humanPlayer, final Unit unit) {
         HBox box = new HBox();
-        box.getChildren().add(new ImageView(imageProvider.getUnitImage(unit.getType())));
+        box.getChildren().add(new ImageView(imageProvider.getUnitImage(unit)));
         box.getChildren().add(makeUnitDescription(humanPlayer, unit));
         return box;
     }

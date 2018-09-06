@@ -96,7 +96,7 @@ public abstract class AbstractPanelDockBehavior implements PanelDockBehavior {
         if (cargoSlot != null) {
             if (cargoSlot.getUnit().isPresent()) {
                 final Image cargoImage = imageProvider
-                        .getUnitImage(cargoSlot.getUnit().get().getType());
+                        .getUnitImage(cargoSlot.getUnit().get());
                 ClipboardWritter.make(node.startDragAndDrop(TransferMode.MOVE, TransferMode.LINK))
                         .addImage(cargoImage)
                         .addTransferFromUnit(cargoSlot.getOwnerUnit(), cargoSlot)

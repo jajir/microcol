@@ -4,6 +4,10 @@ import org.microcol.model.UnitType;
 
 import com.google.common.base.MoreObjects;
 
+/**
+ * Persistent object for unit. All unit hierarchy is stored into this object
+ * with discriminator {@link UnitType}.
+ */
 public final class UnitPo {
 
     private Integer id;
@@ -25,10 +29,16 @@ public final class UnitPo {
     private PlaceCargoSlotPo placeCargoSlot;
 
     private CargoPo cargo = new CargoPo();
-    
+
     private UnitActionPo action;
 
     private int availableMoves;
+
+    private int tools;
+
+    private boolean holdingGuns;
+
+    private boolean mounted;
 
     public static UnitPo make(final Integer id, final UnitType type, final String ownerId,
             final CargoPo cargo) {
@@ -47,8 +57,8 @@ public final class UnitPo {
                 .add("placeMap", placeMap).add("placeEuropePort", placeEuropePort)
                 .add("placeHighSeas", placeHighSeas).add("placeCargoSlot", placeCargoSlot)
                 .add("placeConstructionSlot", placeConstructionSlot)
-		.add("placeColonyField", placeColonyField).add("cargo", cargo).add("action", action)
-		.toString();
+                .add("placeColonyField", placeColonyField).add("cargo", cargo).add("action", action)
+                .toString();
     }
 
     public Integer getId() {
@@ -160,12 +170,57 @@ public final class UnitPo {
         this.placeCargoSlot = placeCargoSlot;
     }
 
-	public UnitActionPo getAction() {
-		return action;
-	}
+    public UnitActionPo getAction() {
+        return action;
+    }
 
-	public void setAction(UnitActionPo action) {
-		this.action = action;
-	}
+    public void setAction(UnitActionPo action) {
+        this.action = action;
+    }
+
+    /**
+     * @return the tools
+     */
+    public int getTools() {
+        return tools;
+    }
+
+    /**
+     * @param tools
+     *            the tools to set
+     */
+    public void setTools(int tools) {
+        this.tools = tools;
+    }
+
+    /**
+     * @return the holdingGuns
+     */
+    public boolean isHoldingGuns() {
+        return holdingGuns;
+    }
+
+    /**
+     * @param holdingGuns
+     *            the holdingGuns to set
+     */
+    public void setHoldingGuns(boolean holdingGuns) {
+        this.holdingGuns = holdingGuns;
+    }
+
+    /**
+     * @return the mounted
+     */
+    public boolean isMounted() {
+        return mounted;
+    }
+
+    /**
+     * @param mounted
+     *            the mounted to set
+     */
+    public void setMounted(boolean mounted) {
+        this.mounted = mounted;
+    }
 
 }
