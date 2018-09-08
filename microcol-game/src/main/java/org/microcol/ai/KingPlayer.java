@@ -10,6 +10,7 @@ import org.microcol.model.Model;
 import org.microcol.model.Path;
 import org.microcol.model.Player;
 import org.microcol.model.Unit;
+import org.microcol.model.UnitWithCargo;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
@@ -78,13 +79,16 @@ public final class KingPlayer extends AbstractRobotPlayer {
     }
 
     private void performMoveUnit(final Unit unit, final Continents continents) {
-        if (!unit.getCargo().isEmpty()) {
-            if (isPossibleToDisembark(unit)) {
-                disembarkUnit(unit);
-            } else {
-                tryToReachSomeContinent(unit, continents.getContinentsToAttack());
-                if (isPossibleToDisembark(unit)) {
-                    disembarkUnit(unit);
+        if (unit.canHoldCargo()) {
+            final UnitWithCargo unitWithCargo = (UnitWithCargo) unit;
+            if (!unitWithCargo.getCargo().isEmpty()) {
+                if (isPossibleToDisembark(unitWithCargo)) {
+                    disembarkUnit(unitWithCargo);
+                } else {
+                    tryToReachSomeContinent(unitWithCargo, continents.getContinentsToAttack());
+                    if (isPossibleToDisembark(unitWithCargo)) {
+                        disembarkUnit(unitWithCargo);
+                    }
                 }
             }
         }
@@ -120,8 +124,8 @@ public final class KingPlayer extends AbstractRobotPlayer {
                 .sorted((list1, list2) -> list1.size() - list2.size()).findFirst();
     }
 
-    private void disembarkUnit(final Unit ship) {
-        final Location location = canDisembartAt(ship).get(0);
+    private void disembarkUnit(final UnitWithCargo ship) {
+        final Location location = canDisembarkAt(ship).get(0);
         ship.getCargo().getSlots().forEach(slot -> {
             if (slot.isLoadedUnit()) {
                 slot.disembark(location);
@@ -129,11 +133,11 @@ public final class KingPlayer extends AbstractRobotPlayer {
         });
     }
 
-    private boolean isPossibleToDisembark(final Unit ship) {
-        return !canDisembartAt(ship).isEmpty();
+    private boolean isPossibleToDisembark(final UnitWithCargo ship) {
+        return !canDisembarkAt(ship).isEmpty();
     }
 
-    private List<Location> canDisembartAt(final Unit ship) {
+    private List<Location> canDisembarkAt(final UnitWithCargo ship) {
         return ship.getLocation().getNeighbors().stream()
                 .filter(loc -> ship.isPossibleToDisembarkAt(loc, true))
                 .collect(Collectors.toList());
@@ -141,7 +145,7 @@ public final class KingPlayer extends AbstractRobotPlayer {
 
     private void createRoyalArmyForces() {
         int militaryForceToDeploy = getKingsMilitaryStrength();
-        Unit cargoShip = null;
+        UnitWithCargo cargoShip = null;
         while (militaryForceToDeploy > 0) {
             // create unit, is there ship to load it in? if no, crate new and
             // load it
@@ -161,7 +165,8 @@ public final class KingPlayer extends AbstractRobotPlayer {
     }
 
     /**
-     * Royal Expedition Forces was send to colonies after declaring independence.
+     * Royal Expedition Forces was send to colonies after declaring
+     * independence.
      * 
      * @return the refWasSend
      */
@@ -170,7 +175,8 @@ public final class KingPlayer extends AbstractRobotPlayer {
     }
 
     /**
-     * Royal Expedition Forces was send to colonies after declaring independence.
+     * Royal Expedition Forces was send to colonies after declaring
+     * independence.
      * 
      * @param refWasSend
      *            the refWasSend to set

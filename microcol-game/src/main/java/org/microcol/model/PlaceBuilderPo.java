@@ -25,8 +25,8 @@ public final class PlaceBuilderPo implements Function<Unit, Place> {
                 final UnitPo unitPo = context.getUnitPo();
                 final Unit unit = context.getUnit();
                 if (unitPo.getPlaceMap() != null) {
-		    return new PlaceLocation(unit, unitPo.getPlaceMap().getLocation(),
-			    unitPo.getPlaceMap().getOrientation());
+                    return new PlaceLocation(unit, unitPo.getPlaceMap().getLocation(),
+                            unitPo.getPlaceMap().getOrientation());
                 }
                 return null;
             }, (context) -> {
@@ -101,7 +101,6 @@ public final class PlaceBuilderPo implements Function<Unit, Place> {
                  */
                 final UnitPo unitPo = context.getUnitPo();
                 final Unit unit = context.getUnit();
-                final Model model = context.getModel();
                 final ModelPo modelPo = context.getModelPo();
                 if (unitPo.getPlaceCargoSlot() != null) {
                     // find unit in which cargo should be unit placed
@@ -109,14 +108,7 @@ public final class PlaceBuilderPo implements Function<Unit, Place> {
                     final Integer idUnitInCargo = unitPo.getId();
                     final Integer slotIndex = getSlotId(idUnitInCargo);
                     final UnitPo holdingUnitPo = modelPo.getUnitWithUnitInCargo(idUnitInCargo);
-                    Unit holdingUnit = null;
-                    Optional<Unit> oHoldingUnit = model.tryGetUnitById(holdingUnitPo.getId());
-                    if (oHoldingUnit.isPresent()) {
-                        holdingUnit = oHoldingUnit.get();
-                    } else {
-                        // lets create this unit
-                        holdingUnit = model.createUnit(modelPo, holdingUnitPo);
-                    }
+                    final UnitWithCargo holdingUnit = getHoldingUnit(holdingUnitPo);
                     final PlaceCargoSlot placeCargoSlot = new PlaceCargoSlot(unit,
                             holdingUnit.getCargo().getSlotByIndex(slotIndex));
                     return placeCargoSlot;
@@ -144,6 +136,20 @@ public final class PlaceBuilderPo implements Function<Unit, Place> {
             index++;
         }
         throw new MicroColException(String.format("unable to find slot for (%s)", idUnitInCargo));
+    }
+
+    private UnitWithCargo getHoldingUnit(final UnitPo holdingUnitPo) {
+        Unit holdingUnit = null;
+        final Optional<Unit> oHoldingUnit = model.tryGetUnitById(holdingUnitPo.getId());
+        if (oHoldingUnit.isPresent()) {
+            holdingUnit = oHoldingUnit.get();
+        } else {
+            // lets create this unit
+            holdingUnit = model.createUnit(modelPo, holdingUnitPo);
+        }
+        Preconditions.checkState(holdingUnit.canHoldCargo(),
+                "holding unit (%s) should be able to hold cargo.", holdingUnit);
+        return (UnitWithCargo) holdingUnit;
     }
 
     /*

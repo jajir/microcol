@@ -6,6 +6,7 @@ import java.util.List;
 import org.microcol.gui.event.StartMoveController;
 import org.microcol.gui.event.StartMoveEvent;
 import org.microcol.gui.image.ImageProvider;
+import org.microcol.gui.util.UnitUtil;
 import org.microcol.model.Location;
 import org.microcol.model.Unit;
 import org.slf4j.Logger;
@@ -33,6 +34,8 @@ public final class MoveModeSupport {
     private final SelectedUnitManager selectedUnitManager;
 
     private final ModeController modeController;
+
+    private final UnitUtil unitUtil;
 
     private List<Location> moveLocations;
 
@@ -90,13 +93,15 @@ public final class MoveModeSupport {
             final StartMoveController startMoveController,
             final SelectedTileManager selectedTileManager,
             final MouseOverTileManager mouseOverTileManager,
-            final SelectedUnitManager selectedUnitManager, final ModeController modeController) {
+            final SelectedUnitManager selectedUnitManager, final ModeController modeController,
+            final UnitUtil unitUtil) {
         mouseOverTileChangedController.addListener(this::onMouseOverTileChanged);
         startMoveController.addListener(this::onStartMove);
         this.selectedTileManager = Preconditions.checkNotNull(selectedTileManager);
         this.mouseOverTileManager = Preconditions.checkNotNull(mouseOverTileManager);
         this.selectedUnitManager = Preconditions.checkNotNull(selectedUnitManager);
         this.modeController = Preconditions.checkNotNull(modeController);
+        this.unitUtil = Preconditions.checkNotNull(unitUtil);
         moveLocations = Lists.newArrayList();
     }
 
@@ -140,12 +145,12 @@ public final class MoveModeSupport {
                     movingUnit.getPath(moveToLocation, true).orElse(Collections.emptyList()));
             moveLocations.add(moveToLocation);
             moveMode = MoveMode.FIGHT;
-        } else if (movingUnit.isPossibleToEmbarkAt(moveToLocation, true)) {
+        } else if (movingUnit.isPossibleToEmbarkAt(moveToLocation)) {
             // embark
             moveLocations = movingUnit.getPath(moveToLocation)
                     .orElse(Lists.newArrayList(moveToLocation));
             moveMode = MoveMode.ANCHOR;
-        } else if (movingUnit.isPossibleToDisembarkAt(moveToLocation, true)) {
+        } else if (unitUtil.isPossibleToDisembarkAt(movingUnit, moveToLocation)) {
             moveLocations = movingUnit.getPath(moveToLocation)
                     .orElse(Lists.newArrayList(moveToLocation));
             moveMode = MoveMode.ANCHOR;

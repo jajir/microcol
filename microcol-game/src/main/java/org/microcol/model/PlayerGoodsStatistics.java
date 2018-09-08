@@ -33,12 +33,15 @@ public final class PlayerGoodsStatistics {
     }
 
     void addUnitData(final Unit unit) {
-        unit.getCargo().getSlots().forEach(slot -> {
-            if (slot.isLoadedGood()) {
-                final GoodsAmount amount = slot.getGoods().get();
-                addGoods(amount.getGoodType(), amount.getAmount());
-            }
-        });
+        if (unit.canHoldCargo()) {
+            final UnitWithCargo unitWithCargo = (UnitWithCargo) unit;
+            unitWithCargo.getCargo().getSlots().forEach(slot -> {
+                if (slot.isLoadedGood()) {
+                    final GoodsAmount amount = slot.getGoods().get();
+                    addGoods(amount.getGoodType(), amount.getAmount());
+                }
+            });
+        }
     }
 
     void addEntry(final Entry<GoodType, Integer> entry) {

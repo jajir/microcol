@@ -5,6 +5,7 @@ import org.microcol.gui.util.Text;
 import org.microcol.model.CargoSlot;
 import org.microcol.model.Player;
 import org.microcol.model.Unit;
+import org.microcol.model.UnitWithCargo;
 
 import com.google.common.base.Preconditions;
 
@@ -38,8 +39,8 @@ public class UnitPanel {
 
         box.getStyleClass().add("unitPanel");
         box.getChildren().add(makeUnitImage(humanPlayer, unit));
-        if (isUnitOwnedBy(unit, humanPlayer) && unit.getType().getCargoCapacity() > 0) {
-            box.getChildren().add(makeGoodsPanel(unit));
+        if (isUnitOwnedBy(unit, humanPlayer) && unit.canHoldCargo()) {
+            box.getChildren().add(makeGoodsPanel((UnitWithCargo)unit));
         }
         if (selected) {
             box.getStyleClass().add("selected");
@@ -87,7 +88,7 @@ public class UnitPanel {
         }
     }
 
-    private HBox makeGoodsPanel(final Unit unit) {
+    private HBox makeGoodsPanel(final UnitWithCargo unit) {
         HBox box = new HBox();
         box.getStylesheets().add(MainStageBuilder.STYLE_SHEET_RIGHT_PANEL_VIEW);
         if (unit.getCargo().isEmpty()) {

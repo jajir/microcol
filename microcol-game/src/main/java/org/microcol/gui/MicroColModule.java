@@ -103,6 +103,7 @@ import org.microcol.gui.util.PersistentService;
 import org.microcol.gui.util.PersistingTool;
 import org.microcol.gui.util.Text;
 import org.microcol.gui.util.TurnStartedListener;
+import org.microcol.gui.util.UnitUtil;
 import org.microcol.gui.util.ViewUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -130,6 +131,7 @@ public final class MicroColModule extends AbstractModule {
         bind(EventBus.class).toInstance(eventBus);
         bind(MainStageBuilder.class).in(Singleton.class);
         bind(StatusBarMessageController.class).in(Singleton.class);
+        bind(UnitUtil.class).in(Singleton.class);        
 
         bind(GamePreferences.class).in(Singleton.class);
         bind(PathPlanning.class).in(Singleton.class);

@@ -12,7 +12,6 @@ import java.util.function.Function;
 
 import org.microcol.model.store.UnitPo;
 import org.microcol.model.turnevent.TurnEventProvider;
-import org.microcol.model.unit.CargoHolder;
 import org.microcol.model.unit.HaveHorses;
 import org.microcol.model.unit.HoldGuns;
 import org.microcol.model.unit.HoldTools;
@@ -27,7 +26,7 @@ import com.google.common.collect.Lists;
 /**
  * All units can attack with muskets except wagon.
  */
-public abstract class Unit implements CargoHolder {
+public abstract class Unit {
 
     /**
      * Unit will see all tiles accessible by it's speed. This define how many
@@ -48,23 +47,17 @@ public abstract class Unit implements CargoHolder {
     private Player owner;
     private Place place;
     private int actionPoints;
-    // TODO move cargo functionality to separate unit child class
-    private final Cargo cargo;
     private UnitAction unitAction;
 
-    @Deprecated
-    public Unit(final Function<Unit, Cargo> cargoBuilder, final Model model, final Integer id,
-            final Function<Unit, Place> placeBuilder, final UnitType unitType, final Player owner,
-            final int actionPoints, final UnitAction unitAction) {
-        Preconditions.checkNotNull(cargoBuilder, "CargoBuilder is null");
+    public Unit(final Model model, final Integer id, final Function<Unit, Place> placeBuilder,
+            final UnitType unitType, final Player owner, final int actionPoints,
+            final UnitAction unitAction) {
         Preconditions.checkNotNull(placeBuilder, "PlaceBuilder is null");
         this.type = Preconditions.checkNotNull(unitType, "UnitType is null");
         this.owner = Preconditions.checkNotNull(owner);
         this.id = Preconditions.checkNotNull(id, "Id is null");
         this.model = Preconditions.checkNotNull(model, "Model is null");
         this.actionPoints = actionPoints;
-        this.cargo = Preconditions.checkNotNull(cargoBuilder.apply(this),
-                "Cargo builder didn't created cargo");
         this.place = Preconditions.checkNotNull(placeBuilder.apply(this),
                 "Place builder didn't created cargo");
         setAction(unitAction);
@@ -127,11 +120,6 @@ public abstract class Unit implements CargoHolder {
     private void verifyThatUnitIsAtMap() {
         Preconditions.checkState(isAtPlaceLocation(),
                 "Unit have to be at map. Unit (%s) is at (%s)", this, place);
-    }
-
-    @Override
-    public Cargo getCargo() {
-        return cargo;
     }
 
     /**
@@ -236,9 +224,10 @@ public abstract class Unit implements CargoHolder {
                             } else {
                                 enemies.addAll(eee);
                             }
-                        } else if (isPossibleToDisembarkAt(neighbor, true)) {
+                        } else if (canHoldCargo()
+                                && ((UnitWithCargo) this).isPossibleToDisembarkAt(neighbor, true)) {
                             currentSet.add(neighbor);
-                        } else if (isPossibleToEmbarkAt(neighbor, true)) {
+                        } else if (isPossibleToEmbarkAt(neighbor)) {
                             currentSet.add(neighbor);
                         }
                     }
@@ -279,17 +268,6 @@ public abstract class Unit implements CargoHolder {
                 .collect(ImmutableList.toImmutableList());
     }
 
-    public boolean isPossibleToDisembarkAt(final Location targetLocation, boolean inCurrentTurn) {
-        Preconditions.checkNotNull(targetLocation);
-        if (getLocation().isNeighbor(targetLocation) && getType().getCargoCapacity() > 0) {
-            return getCargo().getSlots().stream().filter(
-                    cargoSlot -> canCargoDisembark(cargoSlot, targetLocation, inCurrentTurn))
-                    .findAny().isPresent();
-        } else {
-            return false;
-        }
-    }
-
     public boolean isPossibleToGoToPort(final Location moveToLocation) {
         if (model.getColoniesAt(moveToLocation, owner).isPresent()) {
             return true;
@@ -317,30 +295,23 @@ public abstract class Unit implements CargoHolder {
         return false;
     }
 
-    private boolean canCargoDisembark(final CargoSlot slot, final Location moveToLocation,
-            boolean inCurrentTurn) {
-        if (slot.isEmpty() || slot.isLoadedGood()) {
-            return false;
-        } else {
-            final Unit holdedUnit = slot.getUnit().get();
-            return (!inCurrentTurn || holdedUnit.actionPoints > 0)
-                    && holdedUnit.canUnitDisembarkAt(moveToLocation);
-        }
-    }
-
-    private boolean canUnitDisembarkAt(final Location targeLocation) {
+    protected boolean canUnitDisembarkAt(final Location targeLocation) {
         return getType().canMoveAtTerrain(model.getMap().getTerrainTypeAt(targeLocation));
     }
 
-    public boolean isPossibleToEmbarkAt(final Location targetLocation, boolean inCurrentTurn) {
-        if (isStorable() && getLocation().isNeighbor(targetLocation)
-                && (!inCurrentTurn || actionPoints > 0)
+    public boolean isPossibleToEmbarkAt(final Location targetLocation) {
+        return getFirstUnitToEmbarkAt(targetLocation).isPresent();
+    }
+    
+    public Optional<UnitWithCargo> getFirstUnitToEmbarkAt(final Location targetLocation) {
+        if (isStorable() && getLocation().isNeighbor(targetLocation) && actionPoints > 0
                 && !model.getColonyAt(targetLocation).isPresent()) {
             final List<Unit> units = model.getUnitsAt(targetLocation);
-            return isSameOwner(units) && units.stream()
-                    .filter(unit -> unit.isAtLeastOneCargoSlotEmpty()).findAny().isPresent();
+            return units.stream().filter(unit -> unit.canHoldCargo())
+                    .map(unit -> (UnitWithCargo) unit).filter(unit -> unit.getOwner().equals(owner))
+                    .filter(unit -> unit.isAtLeastOneCargoSlotEmpty()).findFirst();
         } else {
-            return false;
+            return Optional.empty();
         }
     }
 
@@ -364,17 +335,6 @@ public abstract class Unit implements CargoHolder {
     }
 
     /**
-     * Return true when given unit have free cargo slot for unit.
-     * 
-     * @return return <code>true</code> when at least one cargo slot is empty
-     *         and could be loaded otherwise return <code>false</code>
-     */
-    public boolean isAtLeastOneCargoSlotEmpty() {
-        return getType().getCargoCapacity() > 0 && getCargo().getSlots().stream()
-                .filter(cargoSlot -> cargoSlot.isEmpty()).findAny().isPresent();
-    }
-
-    /**
      * Verify that all units belongs to same owner.
      * 
      * @param units
@@ -393,13 +353,14 @@ public abstract class Unit implements CargoHolder {
      *
      * @return list of units with at least one cargo slot free
      */
-    public List<Unit> getNeighborUnitsWithFreeSlot() {
+    public List<UnitWithCargo> getNeighborUnitsWithFreeSlot() {
         verifyThatUnitIsAtMap();
 
         return getLocation().getNeighbors().stream()
                 .flatMap(neighbor -> owner.getUnitsAt(neighbor).stream())
-                .filter(unit -> unit != this).filter(unit -> unit.getCargo().getSlots().stream()
-                        .filter(slot -> slot.isEmpty()).findAny().isPresent())
+                .filter(unit -> unit != this && unit.canHoldCargo())
+                .map(unit -> (UnitWithCargo) unit).filter(unit -> unit.getCargo().getSlots()
+                        .stream().filter(slot -> slot.isEmpty()).findAny().isPresent())
                 .collect(ImmutableList.toImmutableList());
     }
 
@@ -824,7 +785,7 @@ public abstract class Unit implements CargoHolder {
     public String toString() {
         return MoreObjects.toStringHelper(this).add("id", id).add("type", type).add("owner", owner)
                 .add("place", place == null ? place : place.toString())
-                .add("availableMoves", actionPoints).add("cargo", cargo)
+                .add("availableMoves", actionPoints)
                 .add("unitAction", unitAction).toString();
     }
 
@@ -834,7 +795,6 @@ public abstract class Unit implements CargoHolder {
         unitPo.setAvailableMoves(actionPoints);
         unitPo.setOwnerId(owner.getName());
         unitPo.setType(type);
-        unitPo.setCargo(cargo.save());
         unitPo.setAction(unitAction.save());
         place.save(unitPo);
         return unitPo;
@@ -899,6 +859,10 @@ public abstract class Unit implements CargoHolder {
 
     public UnitAction getUnitAction() {
         return unitAction;
+    }
+    
+    public boolean canHoldCargo() {
+        return this instanceof UnitWithCargo;
     }
 
     public boolean canPlowFiled() {

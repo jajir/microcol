@@ -14,6 +14,7 @@ import org.microcol.model.Place;
 import org.microcol.model.Player;
 import org.microcol.model.Unit;
 import org.microcol.model.UnitType;
+import org.microcol.model.UnitWithCargo;
 import org.microcol.model.store.UnitPo;
 
 import com.google.common.base.Preconditions;
@@ -21,7 +22,7 @@ import com.google.common.base.Preconditions;
 /**
  * Unit Free Colonist.
  */
-public final class UnitFreeColonist extends Unit implements HoldTools, HoldGuns, HaveHorses {
+public final class UnitFreeColonist extends UnitWithCargo implements HoldTools, HoldGuns, HaveHorses {
 
     public final static int REQUIRED_HORSES_FOR_MOUNTED_UNIT = 50;
 

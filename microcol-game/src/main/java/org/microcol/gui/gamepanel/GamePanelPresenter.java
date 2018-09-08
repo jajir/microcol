@@ -20,11 +20,13 @@ import org.microcol.gui.mainmenu.QuitGameController;
 import org.microcol.gui.util.GamePreferences;
 import org.microcol.gui.util.Listener;
 import org.microcol.gui.util.Text;
+import org.microcol.gui.util.UnitUtil;
 import org.microcol.gui.util.ViewUtil;
 import org.microcol.model.CargoSlot;
 import org.microcol.model.Colony;
 import org.microcol.model.Location;
 import org.microcol.model.Unit;
+import org.microcol.model.UnitWithCargo;
 import org.microcol.model.event.ColonyWasCapturedEvent;
 import org.microcol.model.event.GameStartedEvent;
 import org.slf4j.Logger;
@@ -71,8 +73,10 @@ public final class GamePanelPresenter {
     private final ModeController modeController;
 
     private final VisibleArea visibleArea;
-    
+
     private final GamePanelController gamePanelController;
+
+    private final UnitUtil unitUtil;
 
     private final OneTurnMoveHighlighter oneTurnMoveHighlighter;
 
@@ -88,7 +92,8 @@ public final class GamePanelPresenter {
             final MouseOverTileManager mouseOverTileManager, final ModeController modeController,
             final SelectedUnitManager selectedUnitManager, final Text text,
             final GamePanelController gamePanelController, final VisibleArea visibleArea,
-            final PaneCanvas paneCanvas, final OneTurnMoveHighlighter oneTurnMoveHighlighter) {
+            final PaneCanvas paneCanvas, final OneTurnMoveHighlighter oneTurnMoveHighlighter,
+            final UnitUtil unitUtil) {
         this.gameModelController = Preconditions.checkNotNull(gameModelController);
         this.gamePreferences = gamePreferences;
         this.gamePanelView = Preconditions.checkNotNull(gamePanelView);
@@ -105,6 +110,7 @@ public final class GamePanelPresenter {
         this.gamePanelController = Preconditions.checkNotNull(gamePanelController);
         this.visibleArea = Preconditions.checkNotNull(visibleArea);
         this.oneTurnMoveHighlighter = Preconditions.checkNotNull(oneTurnMoveHighlighter);
+        this.unitUtil = Preconditions.checkNotNull(unitUtil);
 
         startMoveController.addListener(event -> swithToMoveMode());
 
@@ -151,7 +157,7 @@ public final class GamePanelPresenter {
         centerViewController.addListener(this::onCenterView);
         quitGameController.addListener(event -> gamePanelView.stopTimer());
     }
-    
+
     @Subscribe
     private void onColonyWasCaptured(final ColonyWasCapturedEvent event) {
         dialogColonyWasCaptured.showAndWait(event);
@@ -301,16 +307,18 @@ public final class GamePanelPresenter {
         } else if (movingUnit.isPossibleToAttackAt(moveToLocation)) {
             // fight
             fight(movingUnit, moveToLocation);
-        } else if (movingUnit.isPossibleToEmbarkAt(moveToLocation, true)) {
+        } else if (movingUnit.isPossibleToEmbarkAt(moveToLocation)) {
             // embark
-            final Unit toLoad = gameModelController.getModel().getUnitsAt(moveToLocation).get(0);
-            final Optional<CargoSlot> oCargoSlot = toLoad.getCargo().getEmptyCargoSlot();
+            final Optional<UnitWithCargo> oEmbartAtUnit = movingUnit
+                    .getFirstUnitToEmbarkAt(moveToLocation);
+            final Optional<CargoSlot> oCargoSlot = oEmbartAtUnit.get().getCargo()
+                    .getEmptyCargoSlot();
             if (oCargoSlot.isPresent()) {
                 gameModelController.embark(oCargoSlot.get(), movingUnit);
             }
-        } else if (movingUnit.isPossibleToDisembarkAt(moveToLocation, true)) {
+        } else if (unitUtil.isPossibleToDisembarkAt(movingUnit, moveToLocation)) {
             // try to disembark
-            gameModelController.disembark(movingUnit, moveToLocation);
+            gameModelController.disembark((UnitWithCargo) movingUnit, moveToLocation);
         } else if (unitMove.isOneTurnMove()) {
             // user will move
             if (!unitMove.getPath().isEmpty()) {

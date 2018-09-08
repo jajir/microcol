@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import org.microcol.gui.image.ImageProvider;
 import org.microcol.model.Unit;
+import org.microcol.model.UnitWithCargo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -60,7 +61,7 @@ public final class PanelDock extends TitledPanel {
 
     public void repaint() {
         panelShips.getChildren().clear();
-        Optional<Unit> selectedUnit = getSelectedShip();
+        Optional<UnitWithCargo> selectedUnit = getSelectedShip();
         toggleGroup.selectToggle(null);
         panelDockBehavior.getUnitsInPort().forEach(unit -> {
             final ToggleButton toggleButtonShip = new ToggleButton();
@@ -82,11 +83,11 @@ public final class PanelDock extends TitledPanel {
         panelCratesController.setCratesForShip(getSelectedShip().get());
     }
 
-    private Optional<Unit> getSelectedShip() {
+    private Optional<UnitWithCargo> getSelectedShip() {
         if (toggleGroup.getSelectedToggle() == null) {
             return Optional.empty();
         }
-        return Optional.of((Unit) toggleGroup.getSelectedToggle().getUserData());
+        return Optional.of((UnitWithCargo) toggleGroup.getSelectedToggle().getUserData());
     }
 
     /**

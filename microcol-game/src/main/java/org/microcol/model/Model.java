@@ -204,11 +204,12 @@ public final class Model {
      *            required king player
      * @return created unit
      */
-    public Unit createCargoShipForKing(final Player king) {
+    public UnitWithCargo createCargoShipForKing(final Player king) {
         Preconditions.checkNotNull(king);
         Preconditions.checkNotNull(king.isComputer(), "king have to be computer player");
-        return unitStorage.createUnit(unit -> new Cargo(unit, UnitType.GALLEON.getCargoCapacity()),
-                this, unit -> new PlaceHighSea(unit, false, 3), UnitType.GALLEON, king,
+        return (UnitWithCargo) unitStorage.createUnit(
+                unit -> new Cargo(unit, UnitType.GALLEON.getCargoCapacity()), this,
+                unit -> new PlaceHighSea(unit, false, 3), UnitType.GALLEON, king,
                 UnitType.GALLEON.getSpeed(), new UnitActionNoAction());
     }
 
@@ -234,7 +235,7 @@ public final class Model {
      *            required ship that will hold cargo
      * @return created unit
      */
-    public Unit createRoyalExpeditionForceUnit(final Player king, final Unit loadUnitToShip) {
+    public Unit createRoyalExpeditionForceUnit(final Player king, final UnitWithCargo loadUnitToShip) {
         Preconditions.checkNotNull(king);
         Preconditions.checkNotNull(king.isComputer(), "king have to be computer player");
         Preconditions.checkArgument(loadUnitToShip.getCargo().getEmptyCargoSlot().isPresent(),
@@ -533,12 +534,15 @@ public final class Model {
 
     void destroyUnit(final Unit unit) {
         Preconditions.checkNotNull(unit, "Unit is null");
-        unit.getCargo().getSlots().stream().forEach(cargoSlot -> {
-            if (cargoSlot.isLoadedUnit()) {
-                final Unit u = cargoSlot.getUnit().get();
-                destroyUnit(u);
-            }
-        });
+        if (unit.canHoldCargo()) {
+            final UnitWithCargo unitWithCargo = (UnitWithCargo) unit;
+            unitWithCargo.getCargo().getSlots().stream().forEach(cargoSlot -> {
+                if (cargoSlot.isLoadedUnit()) {
+                    final Unit u = cargoSlot.getUnit().get();
+                    destroyUnit(u);
+                }
+            });
+        }
         unitStorage.remove(unit);
     }
 

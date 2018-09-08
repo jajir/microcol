@@ -14,6 +14,7 @@ import org.microcol.model.Model;
 import org.microcol.model.Path;
 import org.microcol.model.Player;
 import org.microcol.model.Unit;
+import org.microcol.model.UnitWithCargo;
 import org.microcol.model.campaign.ModelMission;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -133,7 +134,7 @@ public final class GameModelController {
         }).start();
     }
 
-    public void disembark(final Unit movingUnit, final Location targetLocation) {
+    public void disembark(final UnitWithCargo movingUnit, final Location targetLocation) {
         new Thread(() -> {
             movingUnit.getCargo().getSlots().stream()
                     .filter(cargoSlot -> cargoSlot.isLoadedUnit()

@@ -10,6 +10,7 @@ import org.microcol.model.GoodType;
 import org.microcol.model.Location;
 import org.microcol.model.Model;
 import org.microcol.model.Unit;
+import org.microcol.model.UnitWithCargo;
 
 import com.google.common.base.Preconditions;
 
@@ -437,7 +438,9 @@ public final class ClipboardReader {
 
         TransferFromCargoSlot(final Unit unit, final int cargoSlotIndex) {
             this.sourceUnit = unit;
-            cargoSlot = unit.getCargo().getSlotByIndex(cargoSlotIndex);
+            Preconditions.checkArgument(unit.canHoldCargo(), "Unit (%s) can't hold cargo.", unit);
+            final UnitWithCargo unitWithCargo = (UnitWithCargo) unit;
+            cargoSlot = unitWithCargo.getCargo().getSlotByIndex(cargoSlotIndex);
         }
 
         public Unit getSourceUnit() {

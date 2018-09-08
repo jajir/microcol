@@ -2,7 +2,7 @@ package org.microcol.gui.util;
 
 import org.microcol.gui.image.ImageProvider;
 import org.microcol.model.CargoSlot;
-import org.microcol.model.Unit;
+import org.microcol.model.UnitWithCargo;
 
 import com.google.common.base.Preconditions;
 
@@ -20,7 +20,7 @@ public final class PanelDockCratesController {
         return panelCratesView;
     }
 
-    final void setCratesForShip(final Unit unit) {
+    final void setCratesForShip(final UnitWithCargo unit) {
         Preconditions.checkNotNull(unit);
         final int maxNumberOfCrates = unit.getType().getCargoCapacity();
         for (int i = 0; i < PanelDockCratesView.MAX_NUMBER_OF_CRATES; i++) {
