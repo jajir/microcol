@@ -12,3 +12,5 @@ buildNumber.properties
 .classpath
 .checkstyle
 *~
+.idea
+*.iml
