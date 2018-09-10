@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.microcol.model.unit.UnitWithCargo;
+
 public final class PlayerGoodsStatistics {
 
     private final Map<GoodType, Integer> goodAmounts = new HashMap<>();

@@ -3,7 +3,6 @@ package org.microcol.model.unit;
 import java.util.Optional;
 import java.util.function.Function;
 
-import org.microcol.model.Cargo;
 import org.microcol.model.CargoSlot;
 import org.microcol.model.Colony;
 import org.microcol.model.ColonyField;
@@ -14,7 +13,6 @@ import org.microcol.model.Place;
 import org.microcol.model.Player;
 import org.microcol.model.Unit;
 import org.microcol.model.UnitType;
-import org.microcol.model.UnitWithCargo;
 import org.microcol.model.store.UnitPo;
 
 import com.google.common.base.Preconditions;
@@ -22,7 +20,7 @@ import com.google.common.base.Preconditions;
 /**
  * Unit Free Colonist.
  */
-public final class UnitFreeColonist extends UnitWithCargo implements HoldTools, HoldGuns, HaveHorses {
+public final class UnitFreeColonist extends Unit {
 
     public final static int REQUIRED_HORSES_FOR_MOUNTED_UNIT = 50;
 
@@ -36,11 +34,15 @@ public final class UnitFreeColonist extends UnitWithCargo implements HoldTools, 
 
     private boolean mounted;
 
-    public UnitFreeColonist(Function<Unit, Cargo> cargoBuilder, Model model, Integer id,
-            Function<Unit, Place> placeBuilder, UnitType unitType, Player owner, int availableMoves,
-            final UnitAction unitAction, final int tools, final boolean holdingGuns,
-            final boolean mounted) {
-        super(cargoBuilder, model, id, placeBuilder, unitType, owner, availableMoves, unitAction);
+    public UnitFreeColonist(Model model, Integer id, Function<Unit, Place> placeBuilder,
+            Player owner, int availableMoves, final UnitAction unitAction) {
+        this(model, id, placeBuilder, owner, availableMoves, unitAction, 0, false, false);
+    }
+
+    public UnitFreeColonist(Model model, Integer id, Function<Unit, Place> placeBuilder,
+            Player owner, int availableMoves, final UnitAction unitAction, final int tools,
+            final boolean holdingGuns, final boolean mounted) {
+        super(model, id, placeBuilder, owner, availableMoves, unitAction);
         this.tools = tools;
         this.holdingGuns = holdingGuns;
         this.mounted = mounted;
@@ -65,6 +67,11 @@ public final class UnitFreeColonist extends UnitWithCargo implements HoldTools, 
     public void placeToColonyStructureSlot(final ConstructionSlot structureSlot) {
         unequipAll();
         super.placeToColonyStructureSlot(structureSlot);
+    }
+
+    @Override
+    public UnitType getType() {
+        return UnitType.COLONIST;
     }
 
     private void unequipAll() {
@@ -157,7 +164,6 @@ public final class UnitFreeColonist extends UnitWithCargo implements HoldTools, 
     /**
      * @return the tools
      */
-    @Override
     public int getTools() {
         return tools;
     }
@@ -173,7 +179,6 @@ public final class UnitFreeColonist extends UnitWithCargo implements HoldTools, 
     /**
      * @return the holdingGuns
      */
-    @Override
     public boolean isHoldingGuns() {
         return holdingGuns;
     }
@@ -189,7 +194,6 @@ public final class UnitFreeColonist extends UnitWithCargo implements HoldTools, 
     /**
      * @return the mounted
      */
-    @Override
     public boolean isMounted() {
         return mounted;
     }

@@ -16,6 +16,8 @@ import org.microcol.model.turnevent.TurnEvent;
 import org.microcol.model.turnevent.TurnEventProvider;
 import org.microcol.model.turnevent.TurnEventStore;
 import org.microcol.model.unit.UnitActionNoAction;
+import org.microcol.model.unit.UnitFactory;
+import org.microcol.model.unit.UnitWithCargo;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
@@ -242,6 +244,7 @@ public final class Model {
                 "Ship (%s) for cargo doesn't have any free slot for expedition force unit.",
                 loadUnitToShip);
         CargoSlot cargoSlot = loadUnitToShip.getCargo().getEmptyCargoSlot().get();
+        //TODO it's about creating colonist and still it needs to define cargo
         return unitStorage.createUnit(unit -> new Cargo(unit, UnitType.COLONIST.getCargoCapacity()), this,
                 unit -> new PlaceCargoSlot(unit, cargoSlot), UnitType.COLONIST, king,
                 UnitType.COLONIST.getSpeed(), new UnitActionNoAction());

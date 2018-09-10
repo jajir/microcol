@@ -25,8 +25,9 @@ public final class ImageLoaderUnit implements ImageLoader {
                 imageProvider.getImage("type_2_6"));
         imageProvider.registerImage(ImageProvider.IMG_UNIT_FREE_COLONIST_MUSKETS,
                 imageProvider.getImage("type_6_6"));
-        imageProvider.registerImage(ImageProvider.IMG_UNIT_FREE_COLONIST_MOUNTED_MUSKETS,
-                imageProvider.getImage("type_5_6"));
+
+        imageProvider.registerImage(ImageProvider.IMG_UNIT_WAGON,
+                imageProvider.getImage("type_1_6"));
 
     }
 

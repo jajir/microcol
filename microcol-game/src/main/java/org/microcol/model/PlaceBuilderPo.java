@@ -11,6 +11,7 @@ import org.microcol.model.store.ConstructionPo;
 import org.microcol.model.store.ConstructionSlotPo;
 import org.microcol.model.store.ModelPo;
 import org.microcol.model.store.UnitPo;
+import org.microcol.model.unit.UnitWithCargo;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
@@ -120,7 +121,7 @@ public final class PlaceBuilderPo implements Function<Unit, Place> {
     private final ModelPo modelPo;
     private final Model model;
 
-    PlaceBuilderPo(final UnitPo unitPo, final ModelPo modelPo, final Model model) {
+    public PlaceBuilderPo(final UnitPo unitPo, final ModelPo modelPo, final Model model) {
         this.unitPo = Preconditions.checkNotNull(unitPo);
         this.modelPo = Preconditions.checkNotNull(modelPo);
         this.model = Preconditions.checkNotNull(model);

@@ -18,8 +18,8 @@ import com.google.common.collect.ImmutableList;
 public final class ConstructionType {
 
     private final String name;
-    private final int buildCostHammers;
-    private final int buildCostTools;
+    private final int requiredHammers;
+    private final int requiredTools;
     private final ConstructionType upgradeTo;
 
     /**
@@ -61,215 +61,215 @@ public final class ConstructionType {
     private final int requiredColonyPopulation;
 
     public final static ConstructionType TOWN_HALL = ConstructionTypeBuilder.make()
-            .setName("TOWN_HALL").setBuildCostHammers(0).setBuildCostTools(0)
+            .setName("TOWN_HALL").setRequiredHammers(0).setRequiredTools(0)
             .setProduce(GoodType.BELL).setProductionPerTurn(3).setBaseProductionPerTurn(1)
             .setSlotsForWorkers(3).setUpgradeTo(null).setRequiredColonyPopulation(1).build();
 
     public final static ConstructionType LUMBER_MILL = ConstructionTypeBuilder.make()
-            .setName("LUMBER_MILL").setBuildCostHammers(52).setBuildCostTools(0)
+            .setName("LUMBER_MILL").setRequiredHammers(52).setRequiredTools(0)
             .setConsumed(GoodType.LUMBER).setProduce(GoodType.HAMMERS).setProductionPerTurn(6)
             .setBaseProductionPerTurn(0).setSlotsForWorkers(3).setUpgradeTo(null)
             .setRequiredColonyPopulation(3).build();
 
     public final static ConstructionType CARPENTERS_SHOP = ConstructionTypeBuilder.make()
-            .setName("CARPENTERS_SHOP").setBuildCostHammers(0).setBuildCostTools(0)
+            .setName("CARPENTERS_SHOP").setRequiredHammers(0).setRequiredTools(0)
             .setConsumed(GoodType.LUMBER).setProduce(GoodType.HAMMERS).setProductionPerTurn(6)
             .setBaseProductionPerTurn(0).setSlotsForWorkers(3).setUpgradeTo(LUMBER_MILL)
             .setRequiredColonyPopulation(1).build();
 
     public final static ConstructionType IRON_WORKS = ConstructionTypeBuilder.make()
-            .setName("IRON_WORKS").setBuildCostHammers(240).setBuildCostTools(100)
+            .setName("IRON_WORKS").setRequiredHammers(240).setRequiredTools(100)
             .setConsumed(GoodType.ORE).setProduce(GoodType.TOOLS).setProductionPerTurn(9)
             .setBaseProductionPerTurn(0).setProductionRation(3 / 2F).setSlotsForWorkers(3)
             .setUpgradeTo(null).setRequiredColonyPopulation(8).build();
 
     public final static ConstructionType BLACKSMITHS_SHOP = ConstructionTypeBuilder.make()
-            .setName("BLACKSMITHS_SHOP").setBuildCostHammers(64).setBuildCostTools(20)
+            .setName("BLACKSMITHS_SHOP").setRequiredHammers(64).setRequiredTools(20)
             .setConsumed(GoodType.ORE).setProduce(GoodType.TOOLS).setProductionPerTurn(5)
             .setBaseProductionPerTurn(0).setSlotsForWorkers(3).setUpgradeTo(IRON_WORKS)
             .setRequiredColonyPopulation(4).build();
 
     public final static ConstructionType BLACKSMITHS_HOUSE = ConstructionTypeBuilder.make()
-            .setName("BLACKSMITHS_HOUSE").setBuildCostHammers(0).setBuildCostTools(0)
+            .setName("BLACKSMITHS_HOUSE").setRequiredHammers(0).setRequiredTools(0)
             .setConsumed(GoodType.ORE).setProduce(GoodType.TOOLS).setProductionPerTurn(3)
             .setBaseProductionPerTurn(0).setSlotsForWorkers(3).setUpgradeTo(BLACKSMITHS_SHOP)
             .setRequiredColonyPopulation(1).build();
 
     public final static ConstructionType FORTRESS = ConstructionTypeBuilder.make()
-            .setName("FORTRESS").setBuildCostHammers(320).setBuildCostTools(200).setProduce(null)
+            .setName("FORTRESS").setRequiredHammers(320).setRequiredTools(200).setProduce(null)
             .setProductionPerTurn(0).setBaseProductionPerTurn(0).setSlotsForWorkers(0)
             .setUpgradeTo(null).setRequiredColonyPopulation(8).build();
 
     public final static ConstructionType FORT = ConstructionTypeBuilder.make().setName("FORT")
-            .setBuildCostHammers(120).setBuildCostTools(100).setProduce(null)
+            .setRequiredHammers(120).setRequiredTools(100).setProduce(null)
             .setProductionPerTurn(0).setBaseProductionPerTurn(0).setSlotsForWorkers(0)
             .setUpgradeTo(FORTRESS).setRequiredColonyPopulation(40).build();
 
     public final static ConstructionType STOCKADE = ConstructionTypeBuilder.make()
-            .setName("STOCKADE").setBuildCostHammers(64).setBuildCostTools(0).setProduce(null)
+            .setName("STOCKADE").setRequiredHammers(64).setRequiredTools(0).setProduce(null)
             .setProductionPerTurn(0).setBaseProductionPerTurn(0).setSlotsForWorkers(0)
             .setUpgradeTo(FORT).setRequiredColonyPopulation(3).build();
 
     public final static ConstructionType CIGAR_FACTORY = ConstructionTypeBuilder.make()
-            .setName("CIGAR_FACTORY").setBuildCostHammers(160).setBuildCostTools(100)
+            .setName("CIGAR_FACTORY").setRequiredHammers(160).setRequiredTools(100)
             .setConsumed(GoodType.TOBACCO).setProduce(GoodType.CIGARS).setProductionPerTurn(8)
             .setBaseProductionPerTurn(0).setSlotsForWorkers(3).setUpgradeTo(null)
             .setRequiredColonyPopulation(8).build();
 
     public final static ConstructionType TOBACCONISTS_SHOP = ConstructionTypeBuilder.make()
-            .setName("TOBACCONISTS_SHOP").setBuildCostHammers(64).setBuildCostTools(20)
+            .setName("TOBACCONISTS_SHOP").setRequiredHammers(64).setRequiredTools(20)
             .setConsumed(GoodType.TOBACCO).setProduce(GoodType.CIGARS).setProductionPerTurn(6)
             .setBaseProductionPerTurn(0).setSlotsForWorkers(3).setUpgradeTo(CIGAR_FACTORY)
             .setRequiredColonyPopulation(4).build();
 
     public final static ConstructionType TOBACCONISTS_HOUSE = ConstructionTypeBuilder.make()
-            .setName("TOBACCONISTS_HOUSE").setBuildCostHammers(0).setBuildCostTools(0)
+            .setName("TOBACCONISTS_HOUSE").setRequiredHammers(0).setRequiredTools(0)
             .setConsumed(GoodType.TOBACCO).setProduce(GoodType.CIGARS).setSlotsForWorkers(3)
             .setProductionPerTurn(3).setBaseProductionPerTurn(0).setUpgradeTo(TOBACCONISTS_SHOP)
             .setRequiredColonyPopulation(1).build();
 
     public final static ConstructionType TEXTILE_MILL = ConstructionTypeBuilder.make()
-            .setName("TEXTILE_MILL").setBuildCostHammers(160).setBuildCostTools(100)
+            .setName("TEXTILE_MILL").setRequiredHammers(160).setRequiredTools(100)
             .setConsumed(GoodType.COTTON).setProduce(GoodType.SILK).setProductionPerTurn(8)
             .setBaseProductionPerTurn(0).setSlotsForWorkers(3).setUpgradeTo(null)
             .setRequiredColonyPopulation(8).build();
 
     public final static ConstructionType WEAVERS_SHOP = ConstructionTypeBuilder.make()
-            .setName("WEAVERS_SHOP").setBuildCostHammers(64).setBuildCostTools(20)
+            .setName("WEAVERS_SHOP").setRequiredHammers(64).setRequiredTools(20)
             .setConsumed(GoodType.COTTON).setProduce(GoodType.SILK).setProductionPerTurn(6)
             .setBaseProductionPerTurn(0).setSlotsForWorkers(3).setUpgradeTo(TEXTILE_MILL)
             .setRequiredColonyPopulation(4).build();
 
     public final static ConstructionType WEAVERS_HOUSE = ConstructionTypeBuilder.make()
-            .setName("WEAVERS_HOUSE").setBuildCostHammers(0).setBuildCostTools(0)
+            .setName("WEAVERS_HOUSE").setRequiredHammers(0).setRequiredTools(0)
             .setConsumed(GoodType.COTTON).setProduce(GoodType.SILK).setProductionPerTurn(3)
             .setBaseProductionPerTurn(0).setSlotsForWorkers(3).setUpgradeTo(WEAVERS_SHOP)
             .setRequiredColonyPopulation(1).build();
 
     public final static ConstructionType RUM_FACTORY = ConstructionTypeBuilder.make()
-            .setName("RUM_FACTORY").setBuildCostHammers(160).setBuildCostTools(100)
+            .setName("RUM_FACTORY").setRequiredHammers(160).setRequiredTools(100)
             .setConsumed(GoodType.SUGAR).setProduce(GoodType.RUM).setProductionPerTurn(8)
             .setBaseProductionPerTurn(0).setSlotsForWorkers(3).setUpgradeTo(null)
             .setRequiredColonyPopulation(8).build();
 
     public final static ConstructionType RUM_DISTILLERY = ConstructionTypeBuilder.make()
-            .setName("RUM_DISTILLERY").setBuildCostHammers(64).setBuildCostTools(20)
+            .setName("RUM_DISTILLERY").setRequiredHammers(64).setRequiredTools(20)
             .setConsumed(GoodType.SUGAR).setProduce(GoodType.RUM).setProductionPerTurn(6)
             .setBaseProductionPerTurn(0).setSlotsForWorkers(3).setUpgradeTo(RUM_FACTORY)
             .setRequiredColonyPopulation(4).build();
 
     public final static ConstructionType RUM_DISTILLERS_HOUSE = ConstructionTypeBuilder.make()
-            .setName("RUM_DISTILLERS_HOUSE").setBuildCostHammers(0).setBuildCostTools(0)
+            .setName("RUM_DISTILLERS_HOUSE").setRequiredHammers(0).setRequiredTools(0)
             .setConsumed(GoodType.SUGAR).setProduce(GoodType.RUM).setProductionPerTurn(3)
             .setBaseProductionPerTurn(0).setSlotsForWorkers(3).setUpgradeTo(RUM_DISTILLERY)
             .setRequiredColonyPopulation(1).build();
 
     public final static ConstructionType FUR_FACTORY = ConstructionTypeBuilder.make()
-            .setName("FUR_FACTORY").setBuildCostHammers(160).setBuildCostTools(100)
+            .setName("FUR_FACTORY").setRequiredHammers(160).setRequiredTools(100)
             .setConsumed(GoodType.FUR).setProduce(GoodType.COAT).setProductionPerTurn(8)
             .setBaseProductionPerTurn(0).setSlotsForWorkers(3).setUpgradeTo(null)
             .setRequiredColonyPopulation(6).build();
 
     public final static ConstructionType FUR_TRADING_POST = ConstructionTypeBuilder.make()
-            .setName("FUR_TRADING_POST").setBuildCostHammers(56).setBuildCostTools(20)
+            .setName("FUR_TRADING_POST").setRequiredHammers(56).setRequiredTools(20)
             .setConsumed(GoodType.FUR).setProduce(GoodType.COAT).setProductionPerTurn(6)
             .setBaseProductionPerTurn(0).setSlotsForWorkers(3).setUpgradeTo(FUR_FACTORY)
             .setRequiredColonyPopulation(3).build();
 
     public final static ConstructionType FUR_TRADERS_HOUSE = ConstructionTypeBuilder.make()
-            .setName("FUR_TRADERS_HOUSE").setBuildCostHammers(0).setBuildCostTools(0)
+            .setName("FUR_TRADERS_HOUSE").setRequiredHammers(0).setRequiredTools(0)
             .setConsumed(GoodType.FUR).setProduce(GoodType.COAT).setProductionPerTurn(3)
             .setBaseProductionPerTurn(0).setSlotsForWorkers(3).setUpgradeTo(FUR_TRADING_POST)
             .setRequiredColonyPopulation(1).build();
 
     public final static ConstructionType ARSENAL = ConstructionTypeBuilder.make().setName("ARSENAL")
-            .setBuildCostHammers(240).setBuildCostTools(100).setConsumed(GoodType.TOOLS)
+            .setRequiredHammers(240).setRequiredTools(100).setConsumed(GoodType.TOOLS)
             .setProduce(GoodType.MUSKET).setProductionPerTurn(8).setBaseProductionPerTurn(0)
             .setSlotsForWorkers(3).setUpgradeTo(null).setRequiredColonyPopulation(8).build();
 
     public final static ConstructionType MAGAZINE = ConstructionTypeBuilder.make()
-            .setName("MAGAZINE").setBuildCostHammers(120).setBuildCostTools(50)
+            .setName("MAGAZINE").setRequiredHammers(120).setRequiredTools(50)
             .setConsumed(GoodType.TOOLS).setProduce(GoodType.MUSKET).setProductionPerTurn(6)
             .setBaseProductionPerTurn(0).setSlotsForWorkers(3).setUpgradeTo(ARSENAL)
             .setRequiredColonyPopulation(8).build();
 
     public final static ConstructionType ARMORY = ConstructionTypeBuilder.make().setName("ARMORY")
-            .setBuildCostHammers(52).setBuildCostTools(0).setConsumed(GoodType.TOOLS)
+            .setRequiredHammers(52).setRequiredTools(0).setConsumed(GoodType.TOOLS)
             .setProduce(GoodType.MUSKET).setProductionPerTurn(3).setBaseProductionPerTurn(0)
             .setSlotsForWorkers(3).setUpgradeTo(MAGAZINE).setRequiredColonyPopulation(1).build();
 
     public final static ConstructionType SHIPYARD = ConstructionTypeBuilder.make()
-            .setName("SHIPYARD").setBuildCostHammers(240).setBuildCostTools(100).setProduce(null)
+            .setName("SHIPYARD").setRequiredHammers(240).setRequiredTools(100).setProduce(null)
             .setProductionPerTurn(0).setBaseProductionPerTurn(0).setSlotsForWorkers(0)
             .setUpgradeTo(null).setRequiredColonyPopulation(8).build();
 
     public final static ConstructionType DRYDOCK = ConstructionTypeBuilder.make().setName("DRYDOCK")
-            .setBuildCostHammers(80).setBuildCostTools(50).setProduce(null).setProductionPerTurn(0)
+            .setRequiredHammers(80).setRequiredTools(50).setProduce(null).setProductionPerTurn(0)
             .setBaseProductionPerTurn(0).setSlotsForWorkers(0).setUpgradeTo(SHIPYARD)
             .setRequiredColonyPopulation(6).build();
 
     public final static ConstructionType DOCK = ConstructionTypeBuilder.make().setName("DOCK")
-            .setBuildCostHammers(52).setBuildCostTools(0).setProduce(null).setProductionPerTurn(0)
+            .setRequiredHammers(52).setRequiredTools(0).setProduce(null).setProductionPerTurn(0)
             .setBaseProductionPerTurn(0).setSlotsForWorkers(0).setUpgradeTo(DRYDOCK)
             .setRequiredColonyPopulation(1).build();
 
     public final static ConstructionType UNIVERSITY = ConstructionTypeBuilder.make()
-            .setName("UNIVERSITY").setBuildCostHammers(200).setBuildCostTools(100).setProduce(null)
+            .setName("UNIVERSITY").setRequiredHammers(200).setRequiredTools(100).setProduce(null)
             .setProductionPerTurn(0).setBaseProductionPerTurn(0).setSlotsForWorkers(3)
             .setUpgradeTo(null).setRequiredColonyPopulation(10).build();
 
     public final static ConstructionType COLLEGE = ConstructionTypeBuilder.make().setName("COLLEGE")
-            .setBuildCostHammers(160).setBuildCostTools(50).setProduce(null).setProductionPerTurn(0)
+            .setRequiredHammers(160).setRequiredTools(50).setProduce(null).setProductionPerTurn(0)
             .setBaseProductionPerTurn(0).setSlotsForWorkers(3).setUpgradeTo(UNIVERSITY)
             .setRequiredColonyPopulation(8).build();
 
     public final static ConstructionType SCHOOLHOUSE = ConstructionTypeBuilder.make()
-            .setName("SCHOOLHOUSE").setBuildCostHammers(64).setBuildCostTools(0).setProduce(null)
+            .setName("SCHOOLHOUSE").setRequiredHammers(64).setRequiredTools(0).setProduce(null)
             .setProductionPerTurn(0).setBaseProductionPerTurn(0).setSlotsForWorkers(3)
             .setUpgradeTo(COLLEGE).setRequiredColonyPopulation(4).build();
 
     public final static ConstructionType WAREHOUSE_EXPANSION = ConstructionTypeBuilder.make()
-            .setName("WAREHOUSE_EXPANSION").setBuildCostHammers(80).setBuildCostTools(20)
+            .setName("WAREHOUSE_EXPANSION").setRequiredHammers(80).setRequiredTools(20)
             .setProduce(null).setProductionPerTurn(0).setBaseProductionPerTurn(0)
             .setSlotsForWorkers(0).setUpgradeTo(null).setRequiredColonyPopulation(1).build();
 
     public final static ConstructionType WAREHOUSE = ConstructionTypeBuilder.make()
-            .setName("WAREHOUSE").setBuildCostHammers(80).setBuildCostTools(0).setProduce(null)
+            .setName("WAREHOUSE").setRequiredHammers(80).setRequiredTools(0).setProduce(null)
             .setProductionPerTurn(0).setBaseProductionPerTurn(0).setSlotsForWorkers(0)
             .setUpgradeTo(WAREHOUSE_EXPANSION).setRequiredColonyPopulation(1).build();
 
     public final static ConstructionType BASIC_WAREHOUSE = ConstructionTypeBuilder.make()
-            .setName("BASIC_WAREHOUSE").setBuildCostHammers(0).setBuildCostTools(0).setProduce(null)
+            .setName("BASIC_WAREHOUSE").setRequiredHammers(0).setRequiredTools(0).setProduce(null)
             .setProductionPerTurn(0).setBaseProductionPerTurn(0).setSlotsForWorkers(0)
             .setUpgradeTo(WAREHOUSE).setRequiredColonyPopulation(1).build();
 
     public final static ConstructionType STABLES = ConstructionTypeBuilder.make().setName("STABLES")
-            .setBuildCostHammers(64).setBuildCostTools(0).setProduce(null).setProductionPerTurn(0)
+            .setRequiredHammers(64).setRequiredTools(0).setProduce(null).setProductionPerTurn(0)
             .setBaseProductionPerTurn(0).setSlotsForWorkers(0).setUpgradeTo(null)
             .setRequiredColonyPopulation(1).build();
 
     public final static ConstructionType CATHEDRAL = ConstructionTypeBuilder.make()
-            .setName("CATHEDRAL").setBuildCostHammers(176).setBuildCostTools(100)
+            .setName("CATHEDRAL").setRequiredHammers(176).setRequiredTools(100)
             .setProduce(GoodType.CROSS).setProductionPerTurn(3).setBaseProductionPerTurn(1)
             .setSlotsForWorkers(0).setUpgradeTo(null).setRequiredColonyPopulation(8).build();
 
     public final static ConstructionType CHURCH = ConstructionTypeBuilder.make().setName("CHURCH")
-            .setBuildCostHammers(52).setBuildCostTools(100).setProduce(GoodType.CROSS)
+            .setRequiredHammers(52).setRequiredTools(100).setProduce(GoodType.CROSS)
             .setProductionPerTurn(3).setBaseProductionPerTurn(1).setSlotsForWorkers(3)
             .setUpgradeTo(CATHEDRAL).setRequiredColonyPopulation(3).build();
 
     public final static ConstructionType NEWSPAPER = ConstructionTypeBuilder.make()
-            .setName("NEWSPAPER").setBuildCostHammers(120).setBuildCostTools(50)
+            .setName("NEWSPAPER").setRequiredHammers(120).setRequiredTools(50)
             .setProduce(GoodType.BELL).setProductionPerTurn(6).setBaseProductionPerTurn(0)
             .setSlotsForWorkers(0).setUpgradeTo(null).setRequiredColonyPopulation(4).build();
 
     public final static ConstructionType PRINTING_PRESS = ConstructionTypeBuilder.make()
-            .setName("PRINTING_PRESS").setBuildCostHammers(80).setBuildCostTools(0)
+            .setName("PRINTING_PRESS").setRequiredHammers(80).setRequiredTools(0)
             .setProduce(GoodType.BELL).setProductionPerTurn(9).setBaseProductionPerTurn(0)
             .setSlotsForWorkers(0).setUpgradeTo(NEWSPAPER).setRequiredColonyPopulation(1).build();
 
     public final static ConstructionType CUSTOM_HOUSE = ConstructionTypeBuilder.make()
-            .setName("CUSTOM_HOUSE").setBuildCostHammers(160).setBuildCostTools(50).setProduce(null)
+            .setName("CUSTOM_HOUSE").setRequiredHammers(160).setRequiredTools(50).setProduce(null)
             .setProductionPerTurn(0).setBaseProductionPerTurn(0).setSlotsForWorkers(0)
             .setUpgradeTo(null).setRequiredColonyPopulation(0).build();
 
@@ -342,8 +342,8 @@ public final class ConstructionType {
     private static class ConstructionTypeBuilder {
 
         private String name;
-        private int buildCostHammers;
-        private int buildCostTools;
+        private int requiredHammers;
+        private int requiredTools;
         private ConstructionType upgradeTo;
         private GoodType produce;
         private GoodType consumed;
@@ -358,7 +358,7 @@ public final class ConstructionType {
         }
 
         private ConstructionType build() {
-            return new ConstructionType(name, buildCostHammers, buildCostTools, upgradeTo, produce,
+            return new ConstructionType(name, requiredHammers, requiredTools, upgradeTo, produce,
                     consumed, productionPerTurn, baseProductionPerTurn, productionRatio,
                     slotsForWorkers, requiredColonyPopulation);
         }
@@ -368,13 +368,13 @@ public final class ConstructionType {
             return this;
         }
 
-        private ConstructionTypeBuilder setBuildCostHammers(final int buildCostHammers) {
-            this.buildCostHammers = buildCostHammers;
+        private ConstructionTypeBuilder setRequiredHammers(final int buildCostHammers) {
+            this.requiredHammers = buildCostHammers;
             return this;
         }
 
-        private ConstructionTypeBuilder setBuildCostTools(final int buildCostTools) {
-            this.buildCostTools = buildCostTools;
+        private ConstructionTypeBuilder setRequiredTools(final int buildCostTools) {
+            this.requiredTools = buildCostTools;
             return this;
         }
 
@@ -421,14 +421,14 @@ public final class ConstructionType {
 
     }
 
-    private ConstructionType(final String name, final int buildCostHammers,
-            final int buildCostTools, final ConstructionType upgradeTo, final GoodType produce,
+    private ConstructionType(final String name, final int requiredHammers,
+            final int requiredTools, final ConstructionType upgradeTo, final GoodType produce,
             final GoodType consumed, final int productionPerTurn, final int baseProductionPerTurn,
             final float productionRatio, final int slotsForWorkers,
             final int requiredColonyPopulation) {
         this.name = Preconditions.checkNotNull(name);
-        this.buildCostHammers = buildCostHammers;
-        this.buildCostTools = buildCostTools;
+        this.requiredHammers = requiredHammers;
+        this.requiredTools = requiredTools;
         this.upgradeTo = upgradeTo;
         this.produce = produce;
         this.consumed = consumed;
@@ -467,7 +467,7 @@ public final class ConstructionType {
      *         return <code>false</code>.
      */
     public boolean isBuildFromFounding() {
-        return buildCostHammers == 0 && buildCostTools == 0;
+        return requiredHammers == 0 && requiredTools == 0;
     }
 
     @Override
@@ -475,12 +475,12 @@ public final class ConstructionType {
         return MoreObjects.toStringHelper(ConstructionType.class).add("name", name).toString();
     }
 
-    public int getBuildCostHammers() {
-        return buildCostHammers;
+    public int getRequiredHammers() {
+        return requiredHammers;
     }
 
-    public int getBuildCostTools() {
-        return buildCostTools;
+    public int getRequiredTools() {
+        return requiredTools;
     }
 
     public Optional<ConstructionType> getUpgradeTo() {
@@ -532,7 +532,7 @@ public final class ConstructionType {
     }
 
     public boolean canBeConstructed() {
-        return buildCostHammers > 0 && buildCostTools > 0;
+        return requiredHammers > 0 && requiredTools > 0;
     }
 
     public int getRequiredColonyPopulation() {

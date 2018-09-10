@@ -1,6 +1,5 @@
 package org.microcol.gui.gamepanel;
 
-import java.util.Optional;
 import java.util.function.Consumer;
 
 import org.microcol.gui.Point;
@@ -65,8 +64,7 @@ public final class VisibleArea {
     /**
      * Define map size.
      */
-    //FIXME optional should not be here.
-    private Optional<Point> maxMapSize = Optional.empty();
+    private Point maxMapSize = null;
 
     /**
      * Extra one time listener called when canvas height is set.
@@ -82,7 +80,7 @@ public final class VisibleArea {
 
     public void setMaxMapSize(final WorldMap worldMap) {
         Preconditions.checkNotNull(worldMap);
-        maxMapSize = Optional.of(Point.of(Location.of(worldMap.getMaxX(), worldMap.getMaxY())));
+        maxMapSize = Point.of(Location.of(worldMap.getMaxX(), worldMap.getMaxY()));
         topLeft = Point.of(0, 0);
         /**
          * Following code force class to compute correct position of top left
@@ -99,18 +97,18 @@ public final class VisibleArea {
     }
 
     public void setCanvasWidth(final int newCanvasWidth) {
-        if (maxMapSize.isPresent()) {
-            if (newCanvasWidth > maxMapSize.get().getX()) {
+        if (maxMapSize != null) {
+            if (newCanvasWidth > maxMapSize.getX()) {
                 /**
                  * Visible area is greater than map. Map should be centered.
                  */
-                final int x = -(newCanvasWidth - maxMapSize.get().getX()) / 2;
+                final int x = -(newCanvasWidth - maxMapSize.getX()) / 2;
                 topLeft = Point.of(x, topLeft.getY());
             } else {
                 /**
                  * whole map can't fit canvas
                  */
-                final int toGrow = maxMapSize.get().getX() - canvasWidth;
+                final int toGrow = maxMapSize.getX() - canvasWidth;
                 final int toGrowLeft = topLeft.getX();
                 final int deltaGrow = newCanvasWidth - canvasWidth;
                 final int x = (int) (deltaGrow * ((float) toGrowLeft / toGrow));
@@ -130,18 +128,18 @@ public final class VisibleArea {
     }
 
     public void setCanvasHeight(final int newCanvasHeight) {
-        if (maxMapSize.isPresent()) {
-            if (newCanvasHeight > maxMapSize.get().getY()) {
+        if (maxMapSize != null) {
+            if (newCanvasHeight > maxMapSize.getY()) {
                 /**
                  * Visible area is greater than map. Map should be centered.
                  */
-                final int y = -(newCanvasHeight - maxMapSize.get().getY()) / 2;
+                final int y = -(newCanvasHeight - maxMapSize.getY()) / 2;
                 topLeft = Point.of(topLeft.getX(), y);
             } else {
                 /**
                  * whole map can't fit canvas
                  */
-                final int toGrow = maxMapSize.get().getY() - canvasHeight;
+                final int toGrow = maxMapSize.getY() - canvasHeight;
                 final int toGrowLeft = topLeft.getY();
                 final int deltaGrow = newCanvasHeight - canvasHeight;
                 final int y = (int) (deltaGrow * ((float) toGrowLeft / toGrow));
@@ -172,18 +170,18 @@ public final class VisibleArea {
         int x = topLeft.getX();
         int y = topLeft.getY();
 
-        if (canvasWidth < maxMapSize.get().getX()) {
+        if (canvasWidth < maxMapSize.getX()) {
             /**
              * X could be adjusted
              */
-            x = adjust(delta.getX(), topLeft.getX(), maxMapSize.get().getX(), canvasWidth);
+            x = adjust(delta.getX(), topLeft.getX(), maxMapSize.getX(), canvasWidth);
         }
 
-        if (canvasHeight < maxMapSize.get().getY()) {
+        if (canvasHeight < maxMapSize.getY()) {
             /**
              * Y could be adjusted
              */
-            y = adjust(delta.getY(), topLeft.getY(), maxMapSize.get().getY(), canvasHeight);
+            y = adjust(delta.getY(), topLeft.getY(), maxMapSize.getY(), canvasHeight);
         }
 
         topLeft = Point.of(x, y);
@@ -224,25 +222,23 @@ public final class VisibleArea {
     /**
      * Help to scroll screen to some place. It normalize top left screen corner.
      * Prevent screen to scroll outside of visible area.
-     * 
+     *
      * @param newTopLeftScreenCorner
      *            required position of new top left screen corner
      * @return normalized top left screen corner
      */
     public Point scrollToPoint(final Point newTopLeftScreenCorner) {
         final Point delta = newTopLeftScreenCorner.substract(topLeft);
-        if (maxMapSize.isPresent()) {
-            return Point.of(
-                    adjustToLess(delta.getX(), topLeft.getX(), maxMapSize.get().getX(),
-                            canvasWidth),
-                    adjustToLess(delta.getY(), topLeft.getY(), maxMapSize.get().getY(),
-                            canvasHeight));
-        } else {
+        if (maxMapSize == null) {
             return Point.of(
                     adjustToLess(delta.getX(), topLeft.getX(), PaneCanvas.MAX_CANVAS_SIDE_LENGTH,
                             canvasWidth),
                     adjustToLess(delta.getY(), topLeft.getY(), PaneCanvas.MAX_CANVAS_SIDE_LENGTH,
                             canvasHeight));
+        } else {
+            return Point.of(
+                    adjustToLess(delta.getX(), topLeft.getX(), maxMapSize.getX(), canvasWidth),
+                    adjustToLess(delta.getY(), topLeft.getY(), maxMapSize.getY(), canvasHeight));
         }
     }
 

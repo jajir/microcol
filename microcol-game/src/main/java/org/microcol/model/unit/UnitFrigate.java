@@ -8,14 +8,18 @@ import org.microcol.model.Place;
 import org.microcol.model.Player;
 import org.microcol.model.Unit;
 import org.microcol.model.UnitType;
-import org.microcol.model.UnitWithCargo;
 
 public final class UnitFrigate extends UnitWithCargo {
 
     public UnitFrigate(Function<Unit, Cargo> cargoBuilder, Model model, Integer id,
-            Function<Unit, Place> placeBuilder, UnitType unitType, Player owner, int availableMoves,
+            Function<Unit, Place> placeBuilder, Player owner, int availableMoves,
             final UnitAction unitAction) {
-        super(cargoBuilder, model, id, placeBuilder, unitType, owner, availableMoves, unitAction);
+        super(cargoBuilder, model, id, placeBuilder, owner, availableMoves, unitAction);
+    }
+
+    @Override
+    public UnitType getType() {
+        return UnitType.FRIGATE;
     }
 
 }

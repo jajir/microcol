@@ -15,7 +15,7 @@ public final class Cargo {
     private final Unit owner;
     private final List<CargoSlot> slots;
 
-    Cargo(final Unit owner, final int capacity, final CargoPo cargoPo) {
+    public Cargo(final Unit owner, final int capacity, final CargoPo cargoPo) {
         this.owner = Preconditions.checkNotNull(owner);
 
         final ImmutableList.Builder<CargoSlot> builder = ImmutableList.builder();
@@ -41,7 +41,7 @@ public final class Cargo {
         this.slots = builder.build();
     }
 
-    CargoPo save() {
+    public CargoPo save() {
         final CargoPo out = new CargoPo();
         slots.forEach(cargoSlot -> {
             out.getSlots().add(cargoSlot.save());

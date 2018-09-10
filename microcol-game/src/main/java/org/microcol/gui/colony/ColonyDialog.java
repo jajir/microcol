@@ -64,7 +64,7 @@ public final class ColonyDialog extends AbstractMessageWindow implements ColonyD
             final PanelOutsideColony panelOutsideColony, final PanelColonyGoods panelColonyGoods,
             final PanelColonyDockBehaviour panelColonyDockBehaviour,
             final UnitMovedOutsideColonyController unitMovedOutsideColonyController,
-            final PaintService paintService) {
+            final PanelQueueSummary panelQueueSummary, final PaintService paintService) {
         super(viewUtil);
         this.paintService = Preconditions.checkNotNull(paintService);
         Preconditions.checkNotNull(imageProvider);
@@ -81,8 +81,11 @@ public final class ColonyDialog extends AbstractMessageWindow implements ColonyD
         colonyFields = Preconditions.checkNotNull(panelColonyFields);
         colonyStructures = Preconditions.checkNotNull(panelColonyStructures);
 
+        final VBox boxFields = new VBox();
+        boxFields.getChildren().addAll(colonyFields, panelQueueSummary);
+
         final HBox mapAndBuildings = new HBox();
-        mapAndBuildings.getChildren().addAll(colonyStructures, colonyFields);
+        mapAndBuildings.getChildren().addAll(colonyStructures, boxFields);
 
         /**
          * Row 2

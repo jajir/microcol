@@ -1,14 +1,16 @@
-package org.microcol.model;
+package org.microcol.model.unit;
 
 import java.util.function.Function;
 
+import org.microcol.model.Cargo;
+import org.microcol.model.ChainOfCommandStrategy;
+import org.microcol.model.Model;
+import org.microcol.model.Place;
+import org.microcol.model.PlaceBuilderPo;
+import org.microcol.model.Unit;
+import org.microcol.model.UnitType;
 import org.microcol.model.store.ModelPo;
 import org.microcol.model.store.UnitPo;
-import org.microcol.model.unit.UnitActionConverter;
-import org.microcol.model.unit.UnitCreateRequest;
-import org.microcol.model.unit.UnitFreeColonist;
-import org.microcol.model.unit.UnitFrigate;
-import org.microcol.model.unit.UnitGalleon;
 
 import com.google.common.collect.Lists;
 
@@ -33,12 +35,16 @@ public class UnitFactory {
                     return makeFrigate(request);
                 }
                 return null;
+            }, request -> {
+                if (UnitType.WAGON == request.getUnitType()) {
+                    return makeWagon(request);
+                }
+                return null;
             }));
 
     private Unit makeFreeColonist(final UnitCreateRequest request) {
-        final UnitFreeColonist out = new UnitFreeColonist(request.getCargoBuilder(),
-                request.getModel(), request.getUnitId(), request.getPlaceBuilder(),
-                request.getUnitType(), request.getOwner(), request.getAvailableMoves(),
+        final UnitFreeColonist out = new UnitFreeColonist(request.getModel(), request.getUnitId(),
+                request.getPlaceBuilder(), request.getOwner(), request.getAvailableMoves(),
                 request.getAction(), request.getTools(), request.isHoldingGuns(),
                 request.isMounted());
         return out;
@@ -46,15 +52,22 @@ public class UnitFactory {
 
     private Unit makeGalleon(final UnitCreateRequest request) {
         final UnitGalleon out = new UnitGalleon(request.getCargoBuilder(), request.getModel(),
-                request.getUnitId(), request.getPlaceBuilder(), request.getUnitType(),
-                request.getOwner(), request.getAvailableMoves(), request.getAction());
+                request.getUnitId(), request.getPlaceBuilder(), request.getOwner(),
+                request.getAvailableMoves(), request.getAction());
         return out;
     }
 
     private Unit makeFrigate(final UnitCreateRequest request) {
         final UnitFrigate out = new UnitFrigate(request.getCargoBuilder(), request.getModel(),
-                request.getUnitId(), request.getPlaceBuilder(), request.getUnitType(),
-                request.getOwner(), request.getAvailableMoves(), request.getAction());
+                request.getUnitId(), request.getPlaceBuilder(), request.getOwner(),
+                request.getAvailableMoves(), request.getAction());
+        return out;
+    }
+
+    private Unit makeWagon(final UnitCreateRequest request) {
+        final UnitWagon out = new UnitWagon(request.getCargoBuilder(), request.getModel(),
+                request.getUnitId(), request.getPlaceBuilder(), request.getOwner(),
+                request.getAvailableMoves(), request.getAction());
         return out;
     }
 

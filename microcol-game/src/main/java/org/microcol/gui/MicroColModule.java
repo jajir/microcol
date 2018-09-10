@@ -8,6 +8,8 @@ import org.microcol.gui.colony.PanelColonyFields;
 import org.microcol.gui.colony.PanelColonyGoods;
 import org.microcol.gui.colony.PanelColonyStructures;
 import org.microcol.gui.colony.PanelOutsideColony;
+import org.microcol.gui.colony.QueueDialog;
+import org.microcol.gui.colony.PanelQueueSummary;
 import org.microcol.gui.colony.UnitMovedOutsideColonyController;
 import org.microcol.gui.europe.BuyUnitsDialog;
 import org.microcol.gui.europe.ChooseGoodAmount;
@@ -263,6 +265,8 @@ public final class MicroColModule extends AbstractModule {
         bind(PanelOutsideColony.class).in(Singleton.class);
         bind(PanelColonyGoods.class).in(Singleton.class);
         bind(PanelColonyDockBehaviour.class).in(Singleton.class);
+        bind(PanelQueueSummary.class).in(Singleton.class);
+        bind(QueueDialog.class).in(Singleton.class);
 
         /**
          * Europe dialog

@@ -9,9 +9,13 @@ import org.microcol.model.Player;
 import org.microcol.model.Unit;
 import org.microcol.model.UnitType;
 
-public final class UnitGalleon extends UnitWithCargo {
+/**
+ * Represents unit that hold cargo and travel at land. Unit can't hold another
+ * unit in cargo.
+ */
+public final class UnitWagon extends UnitWithCargo {
 
-    public UnitGalleon(Function<Unit, Cargo> cargoBuilder, Model model, Integer id,
+    public UnitWagon(Function<Unit, Cargo> cargoBuilder, Model model, Integer id,
             Function<Unit, Place> placeBuilder, Player owner, int availableMoves,
             final UnitAction unitAction) {
         super(cargoBuilder, model, id, placeBuilder, owner, availableMoves, unitAction);
@@ -19,7 +23,7 @@ public final class UnitGalleon extends UnitWithCargo {
 
     @Override
     public UnitType getType() {
-        return UnitType.GALLEON;
+        return UnitType.WAGON;
     }
 
 }

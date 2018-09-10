@@ -1,30 +1,34 @@
-package org.microcol.model;
+package org.microcol.model.unit;
 
 import java.util.function.Function;
 
+import org.microcol.model.Cargo;
+import org.microcol.model.CargoSlot;
+import org.microcol.model.Location;
+import org.microcol.model.Model;
+import org.microcol.model.Place;
+import org.microcol.model.Player;
+import org.microcol.model.Unit;
 import org.microcol.model.store.UnitPo;
-import org.microcol.model.unit.CargoHolder;
-import org.microcol.model.unit.UnitAction;
 
 import com.google.common.base.Preconditions;
 
 /**
  * Abstract class for unit with cargo.
  */
-public abstract class UnitWithCargo extends Unit implements CargoHolder {
+public abstract class UnitWithCargo extends Unit {
 
     private final Cargo cargo;
 
     public UnitWithCargo(final Function<Unit, Cargo> cargoBuilder, final Model model,
-            final Integer id, final Function<Unit, Place> placeBuilder, final UnitType unitType,
-            final Player owner, final int actionPoints, final UnitAction unitAction) {
-        super(model, id, placeBuilder, unitType, owner, actionPoints, unitAction);
+            final Integer id, final Function<Unit, Place> placeBuilder, final Player owner,
+            final int actionPoints, final UnitAction unitAction) {
+        super(model, id, placeBuilder, owner, actionPoints, unitAction);
         Preconditions.checkNotNull(cargoBuilder, "CargoBuilder is null");
         this.cargo = Preconditions.checkNotNull(cargoBuilder.apply(this),
                 "Cargo builder didn't created cargo");
     }
 
-    @Override
     public Cargo getCargo() {
         return cargo;
     }

@@ -102,6 +102,8 @@ public final class ImageProvider {
 
     public static final String IMG_UNIT_FREE_COLONIST_MOUNTED_MUSKETS = "free-colonist-mounted-muskets";
 
+    public static final String IMG_UNIT_WAGON = "wagon";
+
     public static final String IMG_TILE_MODE_MOVE = "tile-mode-move.png";
 
     public static final String IMG_CROSSED_SWORDS = "crossed-swords.png";

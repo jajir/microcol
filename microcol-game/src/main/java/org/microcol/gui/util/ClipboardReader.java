@@ -10,7 +10,7 @@ import org.microcol.model.GoodType;
 import org.microcol.model.Location;
 import org.microcol.model.Model;
 import org.microcol.model.Unit;
-import org.microcol.model.UnitWithCargo;
+import org.microcol.model.unit.UnitWithCargo;
 
 import com.google.common.base.Preconditions;
 
