@@ -1,104 +1,47 @@
 package org.microcol.model
 
-import com.google.common.base.MoreObjects
-import com.google.common.base.Preconditions
+import kotlin.math.abs
+import kotlin.math.round
+import kotlin.math.sqrt
 
-class Location private constructor(val x: Int, val y: Int) {
+data class Location private constructor(val x: Int, val y: Int) {
+    operator fun plus(location: Location) = Location.of(x + location.x, y + location.y)
 
-    val neighbors: List<Location>
-        get() = Direction.getVectors()
-                .map { direction -> add(direction) }
+    // Tohle tu nechávám pouze protože to je v API a nechce se mi to teď všude měnit.
+    fun add(location: Location) = this + location
 
-    val isDirection: Boolean
+    // WTF CO TO JE?
+    operator fun minus(location: Location) = Location.of(x - location.x, y - location.y)
+
+    // Tohle tu nechávám pouze protože to je v API a nechce se mi to teď všude měnit.
+    fun sub(location: Location) = this - location
+
+    fun isNeighbor(location: Location) = if (equals(location)) false else abs(x - location.x) <= 1 && abs(y - location.y) <= 1
+
+    val neighbors
+        get() = Direction.getVectors().map { direction -> add(direction) }
+
+    // WTF CO TO JE?
+    val isDirection
         get() = Direction.getVectors().contains(this)
 
-    /**
-     * Return distance between two locations. It use Euclidean distance.
-     *
-     * @param location
-     * required location
-     * @return distance between two locations
-     */
     fun getDistance(location: Location): Int {
-        Preconditions.checkNotNull(location)
+        val (diffX, diffY) = this - location
+        val tmp = (diffX * diffX + diffY * diffY).toDouble()
 
-        val diffX = x - location.x
-        val diffY = y - location.y
-        return Math.round(Math.sqrt((diffX * diffX + diffY * diffY).toDouble())).toInt()
+        return round(sqrt(tmp)).toInt()
     }
 
-    /**
-     * Return distance between two locations. It use Manhattan distance. It's
-     * described at [https://en.wiktionary.org/wiki/Manhattan_distance](https://en.wiktionary.org/wiki/Manhattan_distance).
-     *
-     *
-     * This distance is better for path calculations because it nicely work with
-     * integers.
-     *
-     *
-     * @param location
-     * required location
-     * @return distance between two locations
-     */
-    fun getDistanceManhattan(location: Location): Int {
-        Preconditions.checkNotNull(location)
+    fun getDistanceManhattan(location: Location) = abs(x - location.x) + abs(y - location.y)
 
-        return Math.abs(x - location.x) + Math.abs(y - location.y)
-    }
+    override fun hashCode() = x + (y shl Integer.SIZE / 2)
 
-    fun add(location: Location): Location {
-        Preconditions.checkNotNull(location)
-
-        return Location.of(x + location.x, y + location.y)
-    }
-
-    fun sub(location: Location): Location {
-        Preconditions.checkNotNull(location)
-
-        return Location.of(x - location.x, y - location.y)
-    }
-
-    fun isNeighbor(location: Location): Boolean {
-        Preconditions.checkNotNull(location)
-
-        return if (equals(location)) {
-            false
-        } else Math.abs(x - location.x) <= 1 && Math.abs(y - location.y) <= 1
-
-    }
-
-    override fun hashCode(): Int {
-        return x + (y shl Integer.SIZE / 2)
-    }
-
-    override fun equals(`object`: Any?): Boolean {
-        if (`object` == null) {
-            return false
-        }
-
-        if (`object` !is Location) {
-            return false
-        }
-
-        val location = `object` as Location?
-
-        return x == location!!.x && y == location.y
-    }
-
-    override fun toString(): String {
-        return MoreObjects.toStringHelper(this).add("x", x).add("y", y).toString()
-    }
-
+    // TAKHLE SE DĚLAJÍ STATICKÉ METODY
     companion object {
-
-        /**
-         * Minimal map x-axe value.
-         */
+        // TOHLE TU VŮBEC NEMÁ BÝT
         const val MAP_MIN_X = 1
 
-        /**
-         * Minimal map y-axe value.
-         */
+        // TOHLE TU VŮBEC NEMÁ BÝT
         const val MAP_MIN_Y = 1
 
         @JvmStatic
