@@ -1,12 +1,15 @@
 package org.microcol.gui.colony;
 
+import java.util.Optional;
+
 import org.microcol.gui.DialogDestroyColony;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.image.ImageProvider;
 import org.microcol.gui.util.BackgroundHighlighter;
-import org.microcol.gui.util.ClipboardReader;
+import org.microcol.gui.util.ClipboardEval;
 import org.microcol.gui.util.TitledPanel;
 import org.microcol.model.Colony;
+import org.microcol.model.Unit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -79,30 +82,31 @@ public final class PanelOutsideColony extends TitledPanel {
     }
 
     private boolean isItUnit(final Dragboard db) {
-        return ClipboardReader.make(gameModelController.getModel(), db).getUnit().isPresent();
+        return ClipboardEval.make(gameModelController.getModel(), db).getUnit().isPresent();
     }
 
     private void onDragDropped(final DragEvent event) {
         logger.debug("Object was dropped on panel outside colony.");
-        final Dragboard db = event.getDragboard();
-        ClipboardReader.make(gameModelController.getModel(), db)
-                .tryReadUnit((unit, transferFrom) -> {
-                    if (colony.isLastUnitIncolony(unit)) {
-                        if (dialogDestroyColony.showWaitAndReturnIfYesWasSelected()) {
-                            unit.placeToMap(colony.getLocation());
-                            unitMovedOutsideColonyController
-                                    .fireEvent(new UnitMovedOutsideColonyEvent(unit, colony));
-                            colonyDialog.close();
-                        }
-                    } else {
-                        unit.placeToMap(colony.getLocation());
-                        unitMovedOutsideColonyController
-                                .fireEvent(new UnitMovedOutsideColonyEvent(unit, colony));
-                    }
-                    event.acceptTransferModes(TransferMode.MOVE);
-                    event.setDropCompleted(true);
-                    event.consume();
-                });
+        final Optional<Unit> oUnit = ClipboardEval
+                .make(gameModelController.getModel(), event.getDragboard()).getUnit();
+        if (oUnit.isPresent()) {
+            final Unit unit = oUnit.get();
+            if (colony.isLastUnitIncolony(unit)) {
+                if (dialogDestroyColony.showWaitAndReturnIfYesWasSelected()) {
+                    unit.placeToMap(colony.getLocation());
+                    unitMovedOutsideColonyController
+                            .fireEvent(new UnitMovedOutsideColonyEvent(unit, colony));
+                    colonyDialog.close();
+                }
+            } else {
+                unit.placeToMap(colony.getLocation());
+                unitMovedOutsideColonyController
+                        .fireEvent(new UnitMovedOutsideColonyEvent(unit, colony));
+            }
+            event.acceptTransferModes(TransferMode.MOVE);
+            event.setDropCompleted(true);
+            event.consume();
+        }
     }
 
 }

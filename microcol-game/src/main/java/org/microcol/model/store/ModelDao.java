@@ -36,7 +36,8 @@ public final class ModelDao {
     public ModelDao() {
 	gson = new GsonBuilder()
 		.registerTypeAdapter(ConstructionType.class, new GsonConstructionTypeAdapter())
-		.registerTypeAdapter(GoodType.class, new GsonGoodTypeAdapter())
+                .registerTypeAdapter(GoodType.class, new GsonGoodTypeAdapter())
+                .registerTypeAdapter(QueueItemType.class, new GsonQueueItemTypeAdapter())
 		.registerTypeAdapter(TerrainType.class, new GsonTerrainTypeAdapter())
 		.registerTypeAdapter(UnitActionPo.class, new UnitActionPoAdapter())
 		.registerTypeAdapter(UnitType.class, new GsonUnitTypeAdapter())

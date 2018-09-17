@@ -1,13 +1,16 @@
 package org.microcol.gui.europe;
 
+import java.util.Optional;
+
 import org.microcol.gui.LocalizationHelper;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.image.ImageProvider;
 import org.microcol.gui.util.BackgroundHighlighter;
-import org.microcol.gui.util.ClipboardReader;
-import org.microcol.gui.util.ClipboardReader.TransferFromEuropePier;
+import org.microcol.gui.util.ClipboardEval;
+import org.microcol.gui.util.From;
 import org.microcol.gui.util.Text;
 import org.microcol.gui.util.TitledPanel;
+import org.microcol.model.Unit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -74,22 +77,21 @@ public final class PanelPortPier extends TitledPanel {
 
     private void onDragDropped(final DragEvent event) {
         logger.debug("Object was dropped on ship cargo slot.");
-        ClipboardReader.make(gameModelController.getModel(), event.getDragboard())
-                .readUnit((draggedUnit, transferFrom) -> {
-                    draggedUnit.placeToEuropePortPier();
-                    europeDialog.repaintAfterGoodMoving();
-                    event.acceptTransferModes(TransferMode.MOVE);
-                    event.setDropCompleted(true);
-                    event.consume();
-                });
+        final Optional<Unit> oUnit = ClipboardEval
+                .make(gameModelController.getModel(), event.getDragboard()).getUnit();
+        if (oUnit.isPresent()) {
+            oUnit.get().placeToEuropePortPier();
+            europeDialog.repaintAfterGoodMoving();
+            event.acceptTransferModes(TransferMode.MOVE);
+            event.setDropCompleted(true);
+            event.consume();
+        }
     }
 
     private boolean isItCorrectObject(final Dragboard db) {
-        return ClipboardReader.make(gameModelController.getModel(), db)
+        return ClipboardEval.make(gameModelController.getModel(), db)
                 .filterUnit(unit -> !unit.getType().isShip())
-                .filterTransferFrom(oTransferFrom -> oTransferFrom.isPresent()
-                        && !(oTransferFrom.get() instanceof TransferFromEuropePier))
-                .getUnit().isPresent();
+                .filterFrom(from -> From.VALUE_FROM_EUROPE_PORT_PIER == from).getUnit().isPresent();
     }
 
 }

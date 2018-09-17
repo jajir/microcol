@@ -15,7 +15,11 @@ public final class GsonUnitTypeAdapter extends TypeAdapter<UnitType> {
 
     @Override
     public void write(final JsonWriter out, final UnitType value) throws IOException {
-        out.value(value.name());
+        if (value == null) {
+            out.nullValue();
+        } else {
+            out.value(value.name());
+        }
     }
 
     @Override

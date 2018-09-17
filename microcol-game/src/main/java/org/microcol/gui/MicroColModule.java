@@ -1,5 +1,7 @@
 package org.microcol.gui;
 
+import org.microcol.gui.buildingqueue.QueueController;
+import org.microcol.gui.buildingqueue.QueueDialog;
 import org.microcol.gui.colonizopedia.Colonizopedia;
 import org.microcol.gui.colony.ColonyDialog;
 import org.microcol.gui.colony.ColonyDialogCallback;
@@ -8,7 +10,6 @@ import org.microcol.gui.colony.PanelColonyFields;
 import org.microcol.gui.colony.PanelColonyGoods;
 import org.microcol.gui.colony.PanelColonyStructures;
 import org.microcol.gui.colony.PanelOutsideColony;
-import org.microcol.gui.colony.QueueDialog;
 import org.microcol.gui.colony.PanelQueueSummary;
 import org.microcol.gui.colony.UnitMovedOutsideColonyController;
 import org.microcol.gui.europe.BuyUnitsDialog;
@@ -267,6 +268,7 @@ public final class MicroColModule extends AbstractModule {
         bind(PanelColonyDockBehaviour.class).in(Singleton.class);
         bind(PanelQueueSummary.class).in(Singleton.class);
         bind(QueueDialog.class).in(Singleton.class);
+        bind(QueueController.class).in(Singleton.class);
 
         /**
          * Europe dialog

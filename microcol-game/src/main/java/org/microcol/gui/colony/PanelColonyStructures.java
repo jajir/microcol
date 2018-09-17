@@ -11,7 +11,7 @@ import org.microcol.gui.Rectangle;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.gamepanel.GamePanelView;
 import org.microcol.gui.image.ImageProvider;
-import org.microcol.gui.util.ClipboardReader;
+import org.microcol.gui.util.ClipboardEval;
 import org.microcol.gui.util.ClipboardWritter;
 import org.microcol.gui.util.TitledPanel;
 import org.microcol.model.Colony;
@@ -209,8 +209,7 @@ public final class PanelColonyStructures extends TitledPanel {
         final Optional<ConstructionSlot> loc = findConstructionSlot(point);
         if (loc.isPresent() && loc.get().isEmpty()) {
             ConstructionSlot slot = loc.get();
-            final Dragboard db = event.getDragboard();
-            ClipboardReader.make(gameModelController.getModel(), db)
+            ClipboardEval.make(gameModelController.getModel(), event.getDragboard())
                     .tryReadUnit((unit, transferFrom) -> {
                         unit.placeToColonyStructureSlot(slot);
                         event.setDropCompleted(true);

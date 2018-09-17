@@ -23,6 +23,8 @@ public final class ColonyPo {
     private List<ColonyFieldPo> colonyFields = new ArrayList<>();
 
     private List<ConstructionPo> constructions = new ArrayList<>();
+    
+    private List<ColonyBuildingQueueItemPo> buildingQueue = new ArrayList<>();
 
     private Map<String, Integer> colonyWarehouse = new HashMap<>();
 
@@ -138,6 +140,20 @@ public final class ColonyPo {
      */
     public void setColonyWarehouse(final Map<String, Integer> colonyWarehouse) {
         this.colonyWarehouse = colonyWarehouse;
+    }
+
+    /**
+     * @return the buildingQueue
+     */
+    public List<ColonyBuildingQueueItemPo> getBuildingQueue() {
+        return buildingQueue;
+    }
+
+    /**
+     * @param buildingQueue the buildingQueue to set
+     */
+    public void setBuildingQueue(List<ColonyBuildingQueueItemPo> buildingQueue) {
+        this.buildingQueue = buildingQueue;
     }
 
 }

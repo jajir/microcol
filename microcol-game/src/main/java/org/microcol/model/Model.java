@@ -11,6 +11,7 @@ import org.microcol.gui.MicroColException;
 import org.microcol.model.store.ColonyPo;
 import org.microcol.model.store.ModelPo;
 import org.microcol.model.store.PlayerPo;
+import org.microcol.model.store.QueueItemType;
 import org.microcol.model.store.UnitPo;
 import org.microcol.model.turnevent.TurnEvent;
 import org.microcol.model.turnevent.TurnEventProvider;
@@ -90,6 +91,21 @@ public final class Model {
 
         this.colonies = Lists.newArrayList();
         modelPo.getColonies().forEach(colonyPo -> {
+            final List<ColonyBuildingItemProgress<?>> buildingQueue = new ArrayList<>();
+            colonyPo.getBuildingQueue().forEach(itemPo -> {
+                if (itemPo.getType() == QueueItemType.CONSTRUCTION) {
+                    ColonyBuildingItemProgressConstruction item = new ColonyBuildingItemProgressConstruction(
+                            new ColonyBuildingItemConstruction(itemPo.getConstructionType()),
+                            itemPo.getId());
+                    item.setBuildHammers(itemPo.getBuildHammers());
+                    buildingQueue.add(item);
+                } else if (itemPo.getType() == QueueItemType.UNIT) {
+                    ColonyBuildingItemProgressUnit item = new ColonyBuildingItemProgressUnit(
+                            new ColonyBuildingItemUnit(itemPo.getUnitType()), itemPo.getId());
+                    item.setBuildHammers(itemPo.getBuildHammers());
+                    buildingQueue.add(item);
+                }
+            });
             final Colony col = new Colony(this, colonyPo.getName(),
                     playerStore.getPlayerByName(colonyPo.getOwnerName()), colonyPo.getLocation(),
                     colony -> {
@@ -100,7 +116,7 @@ public final class Model {
                             constructions.add(c);
                         });
                         return constructions;
-                    }, colonyPo.getColonyWarehouse());
+                    }, colonyPo.getColonyWarehouse(), buildingQueue);
             colonies.add(col);
         });
         
@@ -166,7 +182,7 @@ public final class Model {
     }
 
     public void buildColony(final Player player, final Unit unit) {
-        // TODO move method to colony store
+        // TODO move as static factory to Colony class
         Preconditions.checkNotNull(player);
         Preconditions.checkNotNull(unit);
         Preconditions.checkArgument(unit.isAtPlaceLocation(), "Unit (%s) have to be on map", unit);
@@ -187,7 +203,7 @@ public final class Model {
                         constructions.add(c);
                     });
                     return constructions;
-                }, new HashMap<String, Integer>());
+                }, new HashMap<String, Integer>(), new ArrayList<>());
         colonies.add(col);
         col.placeUnitToProduceFood(unit);
         listenerManager.fireColonyWasFounded(this, col);

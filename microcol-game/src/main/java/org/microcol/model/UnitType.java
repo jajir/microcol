@@ -206,7 +206,10 @@ public final class UnitType {
             .setRequiredHammers(100)
             .build();
 
-    public static final List<UnitType> UNIT_TYPES = ImmutableList.of(COLONIST, FRIGATE, GALLEON);
+    /**
+     * List of all available unit types.
+     */
+    public static final List<UnitType> UNIT_TYPES = ImmutableList.of(COLONIST, FRIGATE, GALLEON, WAGON);
 
     private static final Map<String, UnitType> UNIT_TYPES_BY_NAME = UNIT_TYPES.stream()
             .collect(ImmutableMap.toImmutableMap(UnitType::name, Function.identity()));

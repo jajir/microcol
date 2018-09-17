@@ -41,7 +41,7 @@ public final class BackgroundHighlighter {
         background = region.getBackground();
         if (shoudlByHighlighted.apply(event.getDragboard())) {
             region.setBackground(new Background(
-                    new BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY)));
+                    new BackgroundFill(Color.BURLYWOOD, CornerRadii.EMPTY, Insets.EMPTY)));
         }
     }
 

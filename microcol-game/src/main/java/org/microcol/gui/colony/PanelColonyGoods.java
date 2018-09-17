@@ -3,11 +3,14 @@ package org.microcol.gui.colony;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.image.ImageProvider;
 import org.microcol.gui.util.BackgroundHighlighter;
-import org.microcol.gui.util.ClipboardReader;
+import org.microcol.gui.util.ClipboardEval;
+import org.microcol.gui.util.From;
 import org.microcol.gui.util.TitledPanel;
+import org.microcol.model.CargoSlot;
 import org.microcol.model.Colony;
 import org.microcol.model.ColonyWarehouse;
 import org.microcol.model.GoodType;
+import org.microcol.model.GoodsAmount;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
@@ -75,24 +78,22 @@ public final class PanelColonyGoods extends TitledPanel {
     }
 
     private void onDragDropped(final DragEvent event) {
-        final Dragboard db = event.getDragboard();
-        ClipboardReader.make(gameModelController.getModel(), db)
-                .tryReadGood((goodAmount, transferFrom) -> {
-                    if (transferFrom.isPresent() && transferFrom
-                            .get() instanceof ClipboardReader.TransferFromCargoSlot) {
-                        final ClipboardReader.TransferFromCargoSlot fromCargoSlot = (ClipboardReader.TransferFromCargoSlot) transferFrom
-                                .get();
-                        colonyWarehouse.moveToWarehouse(goodAmount.getGoodType(),
-                                goodAmount.getAmount(), fromCargoSlot.getCargoSlot());
-                        event.setDropCompleted(true);
-                        colonyDialog.repaint();
-                    }
-                    event.consume();
-                });
+        final ClipboardEval eval = ClipboardEval
+                .make(gameModelController.getModel(), event.getDragboard())
+                .filterFrom(from -> From.VALUE_FROM_UNIT == from);
+        if (eval.getGoodAmount().isPresent() && eval.getCargoSlot().isPresent()) {
+            final GoodsAmount goodAmount = eval.getGoodAmount().get();
+            final CargoSlot fromCargoSlot = eval.getCargoSlot().get();
+            colonyWarehouse.moveToWarehouse(goodAmount.getGoodType(), goodAmount.getAmount(),
+                    fromCargoSlot);
+            event.setDropCompleted(true);
+            colonyDialog.repaint();
+        }
+        event.consume();
     }
 
     private boolean isItGoodAmount(final Dragboard db) {
-        return ClipboardReader.make(gameModelController.getModel(), db).getGoods().isPresent();
+        return ClipboardEval.make(gameModelController.getModel(), db).getGoodAmount().isPresent();
     }
 
 }

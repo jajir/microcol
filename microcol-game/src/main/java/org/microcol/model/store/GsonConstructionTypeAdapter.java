@@ -15,7 +15,11 @@ public final class GsonConstructionTypeAdapter extends TypeAdapter<ConstructionT
 
     @Override
     public void write(final JsonWriter out, final ConstructionType value) throws IOException {
-        out.value(value.name());
+        if (value == null) {
+            out.nullValue();
+        } else {
+            out.value(value.name());
+        }
     }
 
     @Override

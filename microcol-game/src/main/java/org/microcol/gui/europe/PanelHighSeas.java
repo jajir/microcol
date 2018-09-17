@@ -1,10 +1,13 @@
 package org.microcol.gui.europe;
 
+import java.util.Optional;
+
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.image.ImageProvider;
 import org.microcol.gui.util.BackgroundHighlighter;
-import org.microcol.gui.util.ClipboardReader;
+import org.microcol.gui.util.ClipboardEval;
 import org.microcol.gui.util.TitledPanel;
+import org.microcol.model.Unit;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
@@ -63,7 +66,7 @@ public final class PanelHighSeas extends TitledPanel {
 
     private boolean isItCorrectObject(final Dragboard db) {
         if (!isShownShipsTravelingToEurope && db.hasString()) {
-            return ClipboardReader.make(gameModelController.getModel(), db)
+            return ClipboardEval.make(gameModelController.getModel(), db)
                     .filterUnit(unit -> unit.getType().isShip()).getUnit().isPresent();
         } else {
             return false;
@@ -71,8 +74,10 @@ public final class PanelHighSeas extends TitledPanel {
     }
 
     private void onDragDropped(final DragEvent event) {
-        final Dragboard db = event.getDragboard();
-        ClipboardReader.make(gameModelController.getModel(), db).readUnit((unit, transferFrom) -> {
+        final Optional<Unit> oUnit = ClipboardEval
+                .make(gameModelController.getModel(), event.getDragboard()).getUnit();
+        if (oUnit.isPresent()) {
+            final Unit unit = oUnit.get();
             Preconditions.checkState(unit.getType().isShip(),
                     "Only ships could be send to high seas");
             unit.placeToHighSeas(false);
@@ -80,7 +85,7 @@ public final class PanelHighSeas extends TitledPanel {
             event.acceptTransferModes(TransferMode.MOVE);
             event.setDropCompleted(true);
             event.consume();
-        });
+        }
     }
 
     private void showShips() {

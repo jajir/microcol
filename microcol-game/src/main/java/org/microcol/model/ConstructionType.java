@@ -1,5 +1,6 @@
 package org.microcol.model;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -101,9 +102,9 @@ public final class ConstructionType {
             .setUpgradeTo(null).setRequiredColonyPopulation(8).build();
 
     public final static ConstructionType FORT = ConstructionTypeBuilder.make().setName("FORT")
-            .setRequiredHammers(120).setRequiredTools(100).setProduce(null)
-            .setProductionPerTurn(0).setBaseProductionPerTurn(0).setSlotsForWorkers(0)
-            .setUpgradeTo(FORTRESS).setRequiredColonyPopulation(40).build();
+            .setRequiredHammers(120).setRequiredTools(100).setProduce(null).setProductionPerTurn(0)
+            .setBaseProductionPerTurn(0).setSlotsForWorkers(0).setUpgradeTo(FORTRESS)
+            .setRequiredColonyPopulation(40).build();
 
     public final static ConstructionType STOCKADE = ConstructionTypeBuilder.make()
             .setName("STOCKADE").setRequiredHammers(64).setRequiredTools(0).setProduce(null)
@@ -165,22 +166,42 @@ public final class ConstructionType {
             .setRequiredColonyPopulation(1).build();
 
     public final static ConstructionType FUR_FACTORY = ConstructionTypeBuilder.make()
-            .setName("FUR_FACTORY").setRequiredHammers(160).setRequiredTools(100)
-            .setConsumed(GoodType.FUR).setProduce(GoodType.COAT).setProductionPerTurn(8)
-            .setBaseProductionPerTurn(0).setSlotsForWorkers(3).setUpgradeTo(null)
-            .setRequiredColonyPopulation(6).build();
-
-    public final static ConstructionType FUR_TRADING_POST = ConstructionTypeBuilder.make()
-            .setName("FUR_TRADING_POST").setRequiredHammers(56).setRequiredTools(20)
-            .setConsumed(GoodType.FUR).setProduce(GoodType.COAT).setProductionPerTurn(6)
-            .setBaseProductionPerTurn(0).setSlotsForWorkers(3).setUpgradeTo(FUR_FACTORY)
-            .setRequiredColonyPopulation(3).build();
+            .setName("FUR_FACTORY")
+            .setRequiredHammers(160)
+            .setRequiredTools(100)
+            .setConsumed(GoodType.FUR)
+            .setProduce(GoodType.COAT)
+            .setProductionPerTurn(8)
+            .setBaseProductionPerTurn(0)
+            .setSlotsForWorkers(3)
+            .setUpgradeTo(null)
+            .setRequiredColonyPopulation(6)
+            .build();
 
     public final static ConstructionType FUR_TRADERS_HOUSE = ConstructionTypeBuilder.make()
-            .setName("FUR_TRADERS_HOUSE").setRequiredHammers(0).setRequiredTools(0)
-            .setConsumed(GoodType.FUR).setProduce(GoodType.COAT).setProductionPerTurn(3)
-            .setBaseProductionPerTurn(0).setSlotsForWorkers(3).setUpgradeTo(FUR_TRADING_POST)
-            .setRequiredColonyPopulation(1).build();
+            .setName("FUR_TRADERS_HOUSE")
+            .setRequiredHammers(0)
+            .setRequiredTools(0)
+            .setConsumed(GoodType.FUR)
+            .setProduce(GoodType.COAT)
+            .setProductionPerTurn(3)
+            .setBaseProductionPerTurn(0).setSlotsForWorkers(3)
+            .setUpgradeTo(FUR_FACTORY)
+            .setRequiredColonyPopulation(1)
+            .build();
+    
+    public final static ConstructionType FUR_TRADING_POST = ConstructionTypeBuilder.make()
+            .setName("FUR_TRADING_POST")
+            .setRequiredHammers(56)
+            .setRequiredTools(20)
+            .setConsumed(GoodType.FUR)
+            .setProduce(GoodType.COAT)
+            .setProductionPerTurn(6)
+            .setBaseProductionPerTurn(0)
+            .setSlotsForWorkers(3)
+            .setUpgradeTo(FUR_TRADERS_HOUSE)
+            .setRequiredColonyPopulation(3)
+            .build();
 
     public final static ConstructionType ARSENAL = ConstructionTypeBuilder.make().setName("ARSENAL")
             .setRequiredHammers(240).setRequiredTools(100).setConsumed(GoodType.TOOLS)
@@ -421,9 +442,9 @@ public final class ConstructionType {
 
     }
 
-    private ConstructionType(final String name, final int requiredHammers,
-            final int requiredTools, final ConstructionType upgradeTo, final GoodType produce,
-            final GoodType consumed, final int productionPerTurn, final int baseProductionPerTurn,
+    private ConstructionType(final String name, final int requiredHammers, final int requiredTools,
+            final ConstructionType upgradeTo, final GoodType produce, final GoodType consumed,
+            final int productionPerTurn, final int baseProductionPerTurn,
             final float productionRatio, final int slotsForWorkers,
             final int requiredColonyPopulation) {
         this.name = Preconditions.checkNotNull(name);
@@ -489,6 +510,34 @@ public final class ConstructionType {
         } else {
             return Optional.of(upgradeTo);
         }
+    }
+    
+    /**
+     * Return list of construction type that could be builded from this. This
+     * type is always included as first.
+     *
+     * @return Return list of construction types representing upgrading queue.
+     */
+    public List<ConstructionType> getUpgradeChain() {
+        final List<ConstructionType> out = new ArrayList<>();
+        ConstructionType tmp = this;
+        out.add(tmp);
+        while (tmp.getUpgradeTo().isPresent()) {
+            tmp = tmp.getUpgradeTo().get();
+            out.add(tmp);
+        }
+        return ImmutableList.copyOf(out);
+    }
+
+    /**
+     * Get construction that could be upgraded to this construction type.
+     *
+     * @return required construction type
+     */
+    public Optional<ConstructionType> getUpgradeFrom() {
+        return ALL.stream().filter(
+                type -> type.getUpgradeTo().isPresent() && type.getUpgradeTo().get() == this)
+                .findFirst();
     }
 
     public Optional<GoodType> getProduce() {

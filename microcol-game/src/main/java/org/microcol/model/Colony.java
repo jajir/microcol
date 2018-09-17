@@ -40,13 +40,16 @@ public final class Colony {
 
     private final ColonyWarehouse colonyWarehouse;
 
+    private final ColonyBuildingQueue colonyBuildingQueue;
+
     private final Model model;
 
     private final Random random = new Random();
 
     public Colony(final Model model, final String name, final Player owner, final Location location,
             final Function<Colony, List<Construction>> constructionsBuilder,
-            final Map<String, Integer> initialGoodAmounts) {
+            final Map<String, Integer> initialGoodAmounts,
+            final List<ColonyBuildingItemProgress<?>> buildingQueue) {
         this.model = Preconditions.checkNotNull(model);
         this.name = Preconditions.checkNotNull(name);
         this.owner = Preconditions.checkNotNull(owner, "owner is null");
@@ -55,6 +58,7 @@ public final class Colony {
         Direction.getVectors().forEach(loc -> colonyFields.add(new ColonyField(model, loc, this)));
         this.constructions = Preconditions.checkNotNull(constructionsBuilder.apply(this));
         colonyWarehouse = new ColonyWarehouse(this, initialGoodAmounts);
+        colonyBuildingQueue = new ColonyBuildingQueue(this, buildingQueue);
         checkConstructions();
     }
 
@@ -112,6 +116,7 @@ public final class Colony {
         out.setColonyFields(saveColonyFields());
         out.setColonyWarehouse(colonyWarehouse.save());
         out.setConstructions(saveCostructions());
+        out.setBuildingQueue(colonyBuildingQueue.save());
         return out;
     }
 
@@ -447,5 +452,12 @@ public final class Colony {
                 .filter(construction -> construction.getType().getProduce().isPresent()
                         && construction.getType().getProduce().get().equals(goodType))
                 .findAny();
+    }
+
+    /**
+     * @return the colonyBuildingQueue
+     */
+    public ColonyBuildingQueue getColonyBuildingQueue() {
+        return colonyBuildingQueue;
     }
 }

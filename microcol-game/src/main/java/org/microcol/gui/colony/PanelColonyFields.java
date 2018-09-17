@@ -6,7 +6,7 @@ import org.microcol.gui.Point;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.gamepanel.GamePanelView;
 import org.microcol.gui.image.ImageProvider;
-import org.microcol.gui.util.ClipboardReader;
+import org.microcol.gui.util.ClipboardEval;
 import org.microcol.gui.util.ClipboardWritter;
 import org.microcol.gui.util.PaintService;
 import org.microcol.gui.util.TitledPanel;
@@ -15,6 +15,7 @@ import org.microcol.model.ColonyField;
 import org.microcol.model.GoodType;
 import org.microcol.model.Location;
 import org.microcol.model.Terrain;
+import org.microcol.model.Unit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -158,13 +159,13 @@ public final class PanelColonyFields extends TitledPanel {
         if (loc.isPresent() && loc.get().isDirection()) {
             final ColonyField colonyField = colony.getColonyFieldInDirection(loc.get());
             if (colonyField.isEmpty()) {
-                final Dragboard db = event.getDragboard();
-                ClipboardReader.make(gameModelController.getModel(), db)
-                        .tryReadUnit((unit, transferFrom) -> {
-                            unit.placeToColonyField(colonyField, GoodType.CORN);
-                            event.setDropCompleted(true);
-                            colonyDialog.repaint();
-                        });
+                final Optional<Unit> oUnit = ClipboardEval
+                        .make(gameModelController.getModel(), event.getDragboard()).getUnit();
+                if (oUnit.isPresent()) {
+                    oUnit.get().placeToColonyField(colonyField, GoodType.CORN);
+                    event.setDropCompleted(true);
+                    colonyDialog.repaint();
+                }
             }
             logger.debug("was clicked at: " + loc.get());
         }
@@ -173,7 +174,7 @@ public final class PanelColonyFields extends TitledPanel {
 
     private boolean isItUnit(final Dragboard db) {
         logger.debug("Drag over unit id '" + db.getString() + "'.");
-        return ClipboardReader.make(gameModelController.getModel(), db).getUnit().isPresent();
+        return ClipboardEval.make(gameModelController.getModel(), db).getUnit().isPresent();
     }
 
     public void setColony(final Colony colony) {

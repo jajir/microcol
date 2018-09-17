@@ -182,6 +182,8 @@ jestli klesne na nulu, osadnicí začnou umírat hlady. Vyrob 30 doutníků.</en
 	<entry key="europe.recruit">Recruit</entry>
 	<entry key="europe.buy">Buy</entry>
 	
+	<entry key="buildingQueueDialog.caption">Building queue</entry>
+	
 	<entry key="turnReport.title">Turn Report</entry>
 	<entry key="turnReport.caption">Turn Report</entry>
 	<entry key="turnReport.noEvents">There are no events.</entry>

@@ -55,6 +55,8 @@ public final class ColonyDialog extends AbstractMessageWindow implements ColonyD
 
     private final BooleanProperty propertyShiftWasPressed;
 
+    private final PanelQueueSummary panelQueueSummary;
+
     Colony colony;
 
     @Inject
@@ -81,6 +83,7 @@ public final class ColonyDialog extends AbstractMessageWindow implements ColonyD
         colonyFields = Preconditions.checkNotNull(panelColonyFields);
         colonyStructures = Preconditions.checkNotNull(panelColonyStructures);
 
+        this.panelQueueSummary = Preconditions.checkNotNull(panelQueueSummary);
         final VBox boxFields = new VBox();
         boxFields.getChildren().addAll(colonyFields, panelQueueSummary);
 
@@ -172,6 +175,7 @@ public final class ColonyDialog extends AbstractMessageWindow implements ColonyD
             panelDock.repaint();
             colonyStructures.repaint(colony);
             panelOutsideColony.setColony(colony);
+            panelQueueSummary.repaint();
         }
     }
 

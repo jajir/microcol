@@ -1,14 +1,13 @@
 package org.microcol.gui.colony;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.microcol.gui.europe.ChooseGoodAmount;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.image.ImageProvider;
 import org.microcol.gui.util.AbstractPanelDockBehavior;
-import org.microcol.gui.util.ClipboardReader;
-import org.microcol.gui.util.ClipboardReader.TransferFrom;
+import org.microcol.gui.util.ClipboardEval;
+import org.microcol.gui.util.From;
 import org.microcol.model.CargoSlot;
 import org.microcol.model.GoodsAmount;
 import org.microcol.model.Unit;
@@ -40,26 +39,29 @@ public final class PanelColonyDockBehaviour extends AbstractPanelDockBehavior {
     }
 
     @Override
-    public void consumeGoods(final CargoSlot cargoSlot, final GoodsAmount goodsAmount,
-            final Optional<TransferFrom> transferFrom, final boolean specialOperatonWasSelected) {
+    public void consumeGoods(final CargoSlot targetCargoSlot,
+            final boolean specialOperatonWasSelected, final ClipboardEval eval) {
+
+        final GoodsAmount goodsAmount = eval.getGoodAmount().get();
+        final From transferFrom = eval.getFrom().get();
 
         GoodsAmount tmp = goodsAmount;
+
         logger.debug("wasShiftPressed " + colonyDialogCallback.getPropertyShiftWasPressed().get());
         if (specialOperatonWasSelected) {
             // synchronously get information about transfered amount
-            chooseGoodAmount.init(cargoSlot.maxPossibleGoodsToMoveHere(
+            chooseGoodAmount.init(targetCargoSlot.maxPossibleGoodsToMoveHere(
                     CargoSlot.MAX_CARGO_SLOT_CAPACITY, goodsAmount.getAmount()));
             tmp = new GoodsAmount(goodsAmount.getGoodType(), chooseGoodAmount.getActualValue());
             if (tmp.isZero()) {
                 return;
             }
         }
-        // TODO following code doesn't look readable
-        if (transferFrom.get() instanceof ClipboardReader.TransferFromColonyWarehouse) {
-            cargoSlot.storeFromColonyWarehouse(tmp, colonyDialogCallback.getColony());
-        } else if (transferFrom.get() instanceof ClipboardReader.TransferFromCargoSlot) {
-            cargoSlot.storeFromCargoSlot(tmp,
-                    ((ClipboardReader.TransferFromCargoSlot) transferFrom.get()).getCargoSlot());
+
+        if (From.VALUE_FROM_COLONY_WAREHOUSE == transferFrom) {
+            targetCargoSlot.storeFromColonyWarehouse(tmp, colonyDialogCallback.getColony());
+        } else if (From.VALUE_FROM_UNIT == transferFrom) {
+            targetCargoSlot.storeFromCargoSlot(tmp, eval.getCargoSlot().get());
         } else {
             throw new IllegalArgumentException(
                     "Unsupported source transfer '" + transferFrom + "'");
@@ -69,7 +71,7 @@ public final class PanelColonyDockBehaviour extends AbstractPanelDockBehavior {
     }
 
     @Override
-    public void consumeUnit(final Unit unit, final Optional<TransferFrom> transferFrom) {
+    public void consumeUnit(final Unit unit, final From transferFrom) {
         colonyDialogCallback.repaint();
     }
 

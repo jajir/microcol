@@ -4,7 +4,8 @@ import org.microcol.gui.DialogNotEnoughGold;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.image.ImageProvider;
 import org.microcol.gui.util.BackgroundHighlighter;
-import org.microcol.gui.util.ClipboardReader;
+import org.microcol.gui.util.ClipboardEval;
+import org.microcol.gui.util.From;
 import org.microcol.gui.util.TitledPanel;
 import org.microcol.model.GoodType;
 import org.slf4j.Logger;
@@ -68,27 +69,22 @@ public final class PanelEuropeGoods extends TitledPanel {
     private void onDragDropped(final DragEvent event) {
         logger.debug("Object was dropped on panel goods.");
         final Dragboard db = event.getDragboard();
-        ClipboardReader.make(gameModelController.getModel(), db)
-                .tryReadGood((goodAmount, transferFrom) -> {
-                    if (transferFrom.isPresent() && transferFrom
-                            .get() instanceof ClipboardReader.TransferFromCargoSlot) {
-                        final ClipboardReader.TransferFromCargoSlot fromCargo = (ClipboardReader.TransferFromCargoSlot) transferFrom
-                                .get();
-                        gameModelController.getModel().sellGoods(fromCargo.getCargoSlot(),
-                                goodAmount);
-                        europeDialogCallback.repaint();
-                    }
-                    event.setDropCompleted(true);
-                    event.consume();
-                });
+        final ClipboardEval eval = ClipboardEval.make(gameModelController.getModel(), db)
+                .filterFrom(transferFrom -> From.VALUE_FROM_UNIT == transferFrom);
+        if (eval.getCargoSlot().isPresent() && eval.getGoodAmount().isPresent()) {
+            gameModelController.getModel().sellGoods(eval.getCargoSlot().get(),
+                    eval.getGoodAmount().get());
+            europeDialogCallback.repaint();
+        }
+        event.setDropCompleted(true);
+        event.consume();
     }
 
     private boolean isItGoodAmount(final Dragboard db) {
         logger.debug("Drag over unit id '" + db.getString() + "'.");
-        return ClipboardReader.make(gameModelController.getModel(), db)
-                .filterTransferFrom(transferFrom -> transferFrom.isPresent()
-                        && transferFrom.get() instanceof ClipboardReader.TransferFromCargoSlot)
-                .getGoods().isPresent();
+        return ClipboardEval.make(gameModelController.getModel(), db)
+                .filterFrom(transferFrom -> From.VALUE_FROM_UNIT == transferFrom).getGoodAmount()
+                .isPresent();
     }
 
 }
