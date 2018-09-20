@@ -58,7 +58,7 @@ public final class Colony {
         Direction.getVectors().forEach(loc -> colonyFields.add(new ColonyField(model, loc, this)));
         this.constructions = Preconditions.checkNotNull(constructionsBuilder.apply(this));
         colonyWarehouse = new ColonyWarehouse(this, initialGoodAmounts);
-        colonyBuildingQueue = new ColonyBuildingQueue(this, buildingQueue);
+        colonyBuildingQueue = new ColonyBuildingQueue(model, this, buildingQueue);
         checkConstructions();
     }
 
@@ -206,6 +206,7 @@ public final class Colony {
         constructions.forEach(construction -> construction.produce(this, getColonyWarehouse()));
         eatFood();
         optionalyProduceColonist();
+        colonyBuildingQueue.startTurn();
     }
 
     private void eatFood() {
@@ -291,6 +292,15 @@ public final class Colony {
                 .filter(colonyFiled -> colonyFiled.getDirection().equals(fieldDirection)).findAny()
                 .orElseThrow(() -> new IllegalStateException(String.format(
                         "Field directiond (%s) is not in colony (%s)", fieldDirection, this)));
+    }
+
+    void createConstruction(final ConstructionType constructionType) {
+        if (constructionType.getUpgradeFrom().isPresent()) {
+            final ConstructionType alreadyHave = constructionType.getUpgradeFrom().get();
+            getConstructionByType(alreadyHave).upgrade();
+        } else {
+            constructions.add(Construction.build(model, this, constructionType));
+        }
     }
 
     public String getName() {

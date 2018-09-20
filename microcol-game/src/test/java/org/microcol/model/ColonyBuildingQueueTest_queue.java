@@ -20,6 +20,8 @@ public class ColonyBuildingQueueTest_queue {
 
     private @Mocked Colony colony;
 
+    private @Mocked Model model;
+
     private ArrayList<ColonyBuildingItemProgress<?>> initialBuildingQueue = new ArrayList<>();
 
     @Test
@@ -54,7 +56,7 @@ public class ColonyBuildingQueueTest_queue {
 
     @Before
     public void setup() {
-        queue = new ColonyBuildingQueue(colony, initialBuildingQueue);
+        queue = new ColonyBuildingQueue(model, colony, initialBuildingQueue);
     }
 
 }

@@ -20,7 +20,15 @@ public abstract class ColonyBuildingItemProgress<I extends ColonyBuildingItem> {
         this.id = id;
         visible = true;
     }
-    
+
+    public void addHammers(final int hammers) {
+        buildHammers += hammers;
+    }
+
+    public boolean isHammersProvided() {
+        return buildHammers >= getRequiredHammers();
+    }
+
     public String getName() {
         return item.getName();
     }

@@ -1,5 +1,7 @@
 package org.microcol.model.campaign;
 
+import java.util.Map;
+
 import org.microcol.gui.MicroColException;
 import org.microcol.gui.event.model.MissionCallBack;
 import org.microcol.model.Model;
@@ -32,6 +34,10 @@ public abstract class MissionDefinition<G extends MissionGoals>
      */
     public G getGoals() {
         return goals;
+    }
+    
+    public void save(final Map<String, String> out){
+        goals.save(out);
     }
 
     protected boolean isFirstTurn(final Model model) {

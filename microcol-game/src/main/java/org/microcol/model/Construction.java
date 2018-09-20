@@ -17,7 +17,7 @@ import com.google.common.collect.Lists;
 
 public final class Construction {
 
-    private final ConstructionType type;
+    private ConstructionType type;
 
     private final List<ConstructionSlot> workingSlots;
 
@@ -49,6 +49,11 @@ public final class Construction {
 
     Colony getColony() {
         return colony;
+    }
+
+    void upgrade() {
+        type = type.getUpgradeTo().orElseThrow(() -> new IllegalStateException(
+                String.format("Colony '%s' can't be upgraded", this)));
     }
 
     void verifyNumberOfUnitsOptionallyDestroyColony() {

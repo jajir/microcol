@@ -3,9 +3,11 @@ package org.microcol.model;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
 
 import org.microcol.model.store.ColonyBuildingQueueItemPo;
 import org.microcol.model.store.QueueItemType;
+import org.microcol.model.unit.UnitActionNoAction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,10 +43,13 @@ public class ColonyBuildingQueue {
 
     private final Colony colony;
 
+    private final Model model;
+
     private final List<ColonyBuildingItemProgress<?>> buildingQueue;
 
-    ColonyBuildingQueue(final Colony colony,
+    ColonyBuildingQueue(final Model model, final Colony colony,
             final List<ColonyBuildingItemProgress<?>> buildingQueue) {
+        this.model = Preconditions.checkNotNull(model);
         this.colony = Preconditions.checkNotNull(colony);
         this.buildingQueue = new ArrayList<>();
         this.buildingQueue.addAll(buildingQueue);
@@ -55,6 +60,23 @@ public class ColonyBuildingQueue {
             return Optional.empty();
         } else {
             return Optional.of(buildingQueue.get(0));
+        }
+    }
+
+    public Optional<BuildingStatus<ColonyBuildingItem>> getActuallyBuildingStat() {
+        if (getActualyBuilding().isPresent()) {
+            final ColonyBuildingItem pok = getActualyBuilding().get().getItem();
+            final int alreadyHaveHammers = colony.getColonyWarehouse()
+                    .getGoodAmmount(GoodType.HAMMERS);
+            final int productionHammers = colony.getGoodsStats().getStatsByType(GoodType.HAMMERS)
+                    .getNetProduction();
+            final int alreadyHaveTools = colony.getColonyWarehouse().getGoodAmmount(GoodType.TOOLS);
+            final int productionTools = colony.getGoodsStats().getStatsByType(GoodType.TOOLS)
+                    .getNetProduction();
+            return Optional.of(new BuildingStatus<ColonyBuildingItem>(pok, alreadyHaveHammers,
+                    productionHammers, alreadyHaveTools, productionTools));
+        } else {
+            return Optional.empty();
         }
     }
 
@@ -216,6 +238,48 @@ public class ColonyBuildingQueue {
                     out.add(itemPo);
                 });
         return out;
+    }
+
+    void startTurn() {
+        if (getActualyBuilding().isPresent()) {
+            final int wasDone = colony.getColonyWarehouse().getGoodAmmount(GoodType.HAMMERS);
+            final ColonyBuildingItemProgress<?> item = getActualyBuilding().get();
+            colony.getColonyWarehouse().setGoodsToZero(GoodType.HAMMERS);
+            item.addHammers(wasDone);
+            if (item.isHammersProvided()) {
+                // check if there is enough tools
+                if (colony.getColonyWarehouse().getGoodAmmount(GoodType.TOOLS) >= item
+                        .getRequiredTools()) {
+                    colony.getColonyWarehouse().addToWarehouse(GoodType.TOOLS,
+                            -item.getRequiredTools());
+                    if (item.getItem() instanceof ColonyBuildingItemUnit) {
+                        final ColonyBuildingItemUnit i = (ColonyBuildingItemUnit) item.getItem();
+                        createUnit(i.getUnitType());
+                    } else if (item.getItem() instanceof ColonyBuildingItemConstruction) {
+                        final ColonyBuildingItemConstruction i = (ColonyBuildingItemConstruction) item
+                                .getItem();
+                        colony.createConstruction(i.getConstructionType());
+                    } else {
+                        throw new IllegalArgumentException(
+                                String.format("Unknown class '%s'.", item.getItem()));
+                    }
+                    // remove actually builded item
+                    buildingQueue.remove(0);
+                } else {
+                    // TODO send notification to player, there are missing tools
+                }
+            }
+        }
+    }
+
+    private void createUnit(final UnitType unitType) {
+        final Function<Unit, Cargo> cargoBuilder = unit -> new Cargo(unit,
+                unitType.getCargoCapacity());
+        final Function<Unit, Place> placeBuilder = unit -> new PlaceLocation(unit,
+                colony.getLocation(), unit.getDefaultOrintation());
+
+        model.getUnitStorage().createUnit(cargoBuilder, model, placeBuilder, unitType,
+                colony.getOwner(), unitType.getSpeed(), new UnitActionNoAction());
     }
 
 }

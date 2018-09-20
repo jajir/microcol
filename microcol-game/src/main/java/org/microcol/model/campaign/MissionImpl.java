@@ -22,7 +22,7 @@ import com.google.common.collect.Lists;
 public final class MissionImpl<G extends MissionGoals> implements Mission<G> {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(MissionImpl.class);
-    
+
     public final static String GAME_OVER_REASON_ALL_GOALS_ARE_DONE = "gameOverReasonAllGoalsAreDone";
 
     private final MissionName missionName;
@@ -102,8 +102,7 @@ public final class MissionImpl<G extends MissionGoals> implements Mission<G> {
     @Override
     public Map<String, String> saveToMap() {
         final Map<String, String> out = new HashMap<String, String>();
-        // TODO call it directly
-        missionDefinition.goals.save(out);
+        missionDefinition.save(out);
         return out;
     }
 

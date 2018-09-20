@@ -214,7 +214,7 @@ public final class Model {
         unitStorage.addUnit(unit);
         return unit;
     }
-    
+
     /**
      * Create cargo ship for king and put it to high seas in direction to colonies.
      * 
@@ -725,6 +725,13 @@ public final class Model {
      */
     public void addGameOverEvaluator(final Function<Model, GameOverResult> evaluator) {
         gameManager.addEvaluator(evaluator);
+    }
+
+    /**
+     * @return the unitStorage
+     */
+    UnitStorage getUnitStorage() {
+        return unitStorage;
     }
 
 }
