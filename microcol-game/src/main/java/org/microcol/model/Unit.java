@@ -61,11 +61,13 @@ public abstract class Unit {
 
     /**
      * Get list of terrain types at which unit can move.
+     * <p>
+     * This method is better than unitType method getMoveableTerrains().
+     * </p>
      *
      * @return list terrain types
      */
     public List<TerrainType> getMoveableTerrainTypes() {
-        // TODO use this method instead of type.
         return getType().getMoveableTerrains();
     }
 
@@ -87,7 +89,7 @@ public abstract class Unit {
      * @return unit type
      */
     abstract public UnitType getType();
-    
+
     /**
      * Get unit owner.
      *
@@ -120,12 +122,22 @@ public abstract class Unit {
         Preconditions.checkState(isAtPlaceLocation(),
                 "Unit have to be at map. Unit (%s) is at (%s)", this, place);
     }
+    
+    /**
+     * Get number of action point in each turn. Generally should be called this
+     * method because speed could change depending on unit status.
+     *
+     * @return Return number of action point per turn.
+     */
+    public int getSpeed() {
+        return getType().getSpeed();
+    }
 
     /**
      * It's called before turn starts.
      */
     void startTurn() {
-        actionPoints = getType().getSpeed();
+        actionPoints = getSpeed();
         if (isAtHighSea()) {
             PlaceHighSea placeHighSea = (PlaceHighSea) place;
             placeHighSea.decreaseRemainingTurns();
@@ -250,7 +262,7 @@ public abstract class Unit {
         Preconditions.checkState(isAtPlaceLocation(),
                 "Visible location can be determined just when unit is on map. Unit is at '%s'",
                 place.getName());
-        int maxMoves = getType().getSpeed() + VISIBILITY_INCREASE;
+        int maxMoves = getSpeed() + VISIBILITY_INCREASE;
         Map<Location, Integer> movePrice = new HashMap<>();
         movePrice.put(getLocation(), maxMoves);
         while (maxMoves > 0) {
@@ -301,7 +313,7 @@ public abstract class Unit {
     public boolean isPossibleToEmbarkAt(final Location targetLocation) {
         return getFirstUnitToEmbarkAt(targetLocation).isPresent();
     }
-    
+
     public Optional<UnitWithCargo> getFirstUnitToEmbarkAt(final Location targetLocation) {
         if (isStorable() && getLocation().isNeighbor(targetLocation) && actionPoints > 0
                 && !model.getColonyAt(targetLocation).isPresent()) {
@@ -719,7 +731,8 @@ public abstract class Unit {
         Preconditions.checkNotNull(location);
         Preconditions.checkState(!isAtEuropePort(), "Unit can't skip from europe port to map");
         Preconditions.checkState(!isAtEuropePier(), "Unit can't skip from europe port pier to map");
-        Preconditions.checkState(getType().canMoveAtTerrain(model.getMap().getTerrainTypeAt(location)),
+        Preconditions.checkState(
+                getType().canMoveAtTerrain(model.getMap().getTerrainTypeAt(location)),
                 "Unit '%s' can't be placed at '%s' because can't move on terrain '%s'", this,
                 location, model.getMap().getTerrainTypeAt(location));
 
@@ -822,7 +835,13 @@ public abstract class Unit {
         return id;
     }
 
-    public int getMilitaryStrenght() {
+    /**
+     * Get basic unit military strength. It could be overridden in unit specific
+     * classes.
+     *
+     * @return Return military strength.
+     */
+    public double getMilitaryStrenght() {
         return 1;
     }
 
@@ -858,7 +877,7 @@ public abstract class Unit {
     public UnitAction getUnitAction() {
         return unitAction;
     }
-    
+
     public boolean canHoldCargo() {
         return this instanceof UnitWithCargo;
     }

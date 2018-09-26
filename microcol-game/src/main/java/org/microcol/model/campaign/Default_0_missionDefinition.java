@@ -101,7 +101,7 @@ final class Default_0_missionDefinition extends MissionDefinition<Default_0_goal
         if (isFirstTurn(getModel())) {
             final Player human = getHumanPlayer(getModel());
             final Unit ship = findFirstShip(getModel(), human);
-            if (ship.getActionPoints() == ship.getType().getSpeed()) {
+            if (ship.getActionPoints() == ship.getSpeed()) {
                 missionCallBack.showMessage("campaign.default.m0.moveUnitBeforeEndTurn");
             }
         }

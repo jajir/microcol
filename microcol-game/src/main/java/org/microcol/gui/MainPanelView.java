@@ -41,7 +41,7 @@ public final class MainPanelView {
     }
 
     public void showGameMenu() {
-        showBox(gameMenuPanelView.getBox());
+        showBox(gameMenuPanelView.getPanel());
     }
 
     private void showBox(final VBox box) {

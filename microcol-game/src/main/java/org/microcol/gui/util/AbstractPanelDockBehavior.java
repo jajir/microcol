@@ -39,10 +39,10 @@ public abstract class AbstractPanelDockBehavior implements PanelDockBehavior {
         final Dragboard db = event.getDragboard();
         final ClipboardEval eval = ClipboardEval.make(gameModelController.getModel(), db)
                 .filterUnit(unit -> !unit.getType().isShip());
-        if (eval.getCargoSlot().isPresent() && eval.getGoodAmount().isPresent()) {
+        if (eval.getGoodAmount().isPresent()) {
             consumeGoods(targetCargoSlot, event.getTransferMode().equals(TransferMode.LINK), eval);
         } else if (eval.getUnit().isPresent()) {
-            consumeUnit(eval.getUnit().get(), eval.getFrom().get());
+            consumeUnit(targetCargoSlot, eval.getUnit().get(), eval.getFrom().get());
         }
         event.acceptTransferModes(TransferMode.ANY);
         event.setDropCompleted(true);
@@ -67,12 +67,14 @@ public abstract class AbstractPanelDockBehavior implements PanelDockBehavior {
      * Method is called when unit is stored in new cargo store and UI have to
      * repainted.
      * 
+     * @param targetCargoSlot
+     *            required target cargo slot where will be unit stored
      * @param unit
      *            transfered unit
      * @param transferFrom
      *            required place from is goods transfered
      */
-    public abstract void consumeUnit(Unit unit, From transferFrom);
+    public abstract void consumeUnit(CargoSlot targetCargoSlot, Unit unit, From transferFrom);
 
     @Override
     public void onDragDetected(final CargoSlot cargoSlot, final MouseEvent event, final Node node) {
@@ -98,8 +100,8 @@ public abstract class AbstractPanelDockBehavior implements PanelDockBehavior {
     @Override
     public boolean isCorrectObject(final CargoSlot cargoSlot, final Dragboard db) {
         logger.debug("Drag over unit id '" + db.getString() + "'.");
-        return !ClipboardEval.make(gameModelController.getModel(), db)
+        return ClipboardEval.make(gameModelController.getModel(), db)
                 .filterUnit(unit -> !unit.getType().isShip() && cargoSlot.isEmpty())
-                .filterGoods(goods -> canBeGoodsTransfered(cargoSlot, goods)).isEmpty();
+                .filterGoods(goods -> canBeGoodsTransfered(cargoSlot, goods)).isNotEmpty();
     }
 }

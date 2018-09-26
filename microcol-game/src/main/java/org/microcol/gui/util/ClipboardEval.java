@@ -123,7 +123,11 @@ public class ClipboardEval extends ClipboardParser {
     }
 
     public boolean isEmpty() {
-        return (get(KEY_GOODS) == null && get(KEY_UNIT_ID) == null) || getFrom() == null;
+        return (get(KEY_GOODS) == null && get(KEY_UNIT_ID) == null) || !getFrom().isPresent();
+    }
+
+    public boolean isNotEmpty() {
+        return !isEmpty();
     }
 
     public Optional<Unit> getUnit() {

@@ -38,12 +38,9 @@ public final class Terrain {
      * particular good production.
      *
      *
-     * TODO don't create function list for each terrain
-     *
-     *
-     * TODO pass modifier in constructor
+     * TODO consider moving to terrain type.
      */
-    private final List<Function<TerrainProduction, TerrainProduction>> productionsModifiers = Lists
+    private final static List<Function<TerrainProduction, TerrainProduction>> PRODICTION_MOODIFIERS = Lists
             .newArrayList(prod -> {
                 if (prod.getTerrain().isHasTrees()) {
                     if (GoodType.CORN.equals(prod.getGoodType())) {
@@ -140,7 +137,7 @@ public final class Terrain {
         if (terrainType.getBaseProduction(producedGoodType).isPresent()) {
             TerrainProduction prod = new TerrainProduction(this, producedGoodType,
                     terrainType.getBaseProduction(producedGoodType).get().getBase());
-            for (final Function<TerrainProduction, TerrainProduction> pm : productionsModifiers) {
+            for (final Function<TerrainProduction, TerrainProduction> pm : PRODICTION_MOODIFIERS) {
                 prod = pm.apply(prod);
             }
             return prod;

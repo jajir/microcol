@@ -67,15 +67,41 @@ public final class ConstructionType {
             .setSlotsForWorkers(3).setUpgradeTo(null).setRequiredColonyPopulation(1).build();
 
     public final static ConstructionType LUMBER_MILL = ConstructionTypeBuilder.make()
-            .setName("LUMBER_MILL").setRequiredHammers(52).setRequiredTools(0)
-            .setConsumed(GoodType.LUMBER).setProduce(GoodType.HAMMERS).setProductionPerTurn(6)
-            .setBaseProductionPerTurn(0).setSlotsForWorkers(3).setUpgradeTo(null)
-            .setRequiredColonyPopulation(3).build();
+            .setName("LUMBER_MILL")
+            .setRequiredHammers(200)
+            .setRequiredTools(100)
+            .setConsumed(GoodType.LUMBER)
+            .setProduce(GoodType.HAMMERS)
+            .setProductionPerTurn(6)
+            .setBaseProductionPerTurn(0)
+            .setSlotsForWorkers(3)
+            .setUpgradeTo(null)
+            .setRequiredColonyPopulation(3)
+            .build();
 
     public final static ConstructionType CARPENTERS_SHOP = ConstructionTypeBuilder.make()
-            .setName("CARPENTERS_SHOP").setRequiredHammers(0).setRequiredTools(0)
-            .setConsumed(GoodType.LUMBER).setProduce(GoodType.HAMMERS).setProductionPerTurn(6)
-            .setBaseProductionPerTurn(0).setSlotsForWorkers(3).setUpgradeTo(LUMBER_MILL)
+            .setName("CARPENTERS_SHOP")
+            .setRequiredHammers(52)
+            .setRequiredTools(0)
+            .setConsumed(GoodType.LUMBER)
+            .setProduce(GoodType.HAMMERS)
+            .setProductionPerTurn(6)
+            .setBaseProductionPerTurn(0)
+            .setSlotsForWorkers(3)
+            .setUpgradeTo(LUMBER_MILL)
+            .setRequiredColonyPopulation(3)
+            .build();
+
+    public final static ConstructionType CARPENTERS_STAND = ConstructionTypeBuilder.make()
+            .setName("CARPENTERS_STAND")
+            .setRequiredHammers(0)
+            .setRequiredTools(0)
+            .setConsumed(GoodType.LUMBER)
+            .setProduce(GoodType.HAMMERS)
+            .setProductionPerTurn(3)
+            .setBaseProductionPerTurn(0)
+            .setSlotsForWorkers(3)
+            .setUpgradeTo(CARPENTERS_SHOP)
             .setRequiredColonyPopulation(1).build();
 
     public final static ConstructionType IRON_WORKS = ConstructionTypeBuilder.make()
@@ -220,19 +246,40 @@ public final class ConstructionType {
             .setSlotsForWorkers(3).setUpgradeTo(MAGAZINE).setRequiredColonyPopulation(1).build();
 
     public final static ConstructionType SHIPYARD = ConstructionTypeBuilder.make()
-            .setName("SHIPYARD").setRequiredHammers(240).setRequiredTools(100).setProduce(null)
-            .setProductionPerTurn(0).setBaseProductionPerTurn(0).setSlotsForWorkers(0)
-            .setUpgradeTo(null).setRequiredColonyPopulation(8).build();
+            .setName("SHIPYARD")
+            .setRequiredHammers(240)
+            .setRequiredTools(100)
+            .setProduce(null)
+            .setProductionPerTurn(0)
+            .setBaseProductionPerTurn(0)
+            .setSlotsForWorkers(0)
+            .setUpgradeTo(null)
+            .setRequiredColonyPopulation(8)
+            .build();
 
-    public final static ConstructionType DRYDOCK = ConstructionTypeBuilder.make().setName("DRYDOCK")
-            .setRequiredHammers(80).setRequiredTools(50).setProduce(null).setProductionPerTurn(0)
-            .setBaseProductionPerTurn(0).setSlotsForWorkers(0).setUpgradeTo(SHIPYARD)
-            .setRequiredColonyPopulation(6).build();
+    public final static ConstructionType DRYDOCK = ConstructionTypeBuilder.make()
+            .setName("DRYDOCK")
+            .setRequiredHammers(80)
+            .setRequiredTools(50)
+            .setProduce(null)
+            .setProductionPerTurn(0)
+            .setBaseProductionPerTurn(0)
+            .setSlotsForWorkers(0)
+            .setUpgradeTo(SHIPYARD)
+            .setRequiredColonyPopulation(6)
+            .build();
 
-    public final static ConstructionType DOCK = ConstructionTypeBuilder.make().setName("DOCK")
-            .setRequiredHammers(52).setRequiredTools(0).setProduce(null).setProductionPerTurn(0)
-            .setBaseProductionPerTurn(0).setSlotsForWorkers(0).setUpgradeTo(DRYDOCK)
-            .setRequiredColonyPopulation(1).build();
+    public final static ConstructionType DOCK = ConstructionTypeBuilder.make()
+            .setName("DOCK")
+            .setRequiredHammers(52)
+            .setRequiredTools(0)
+            .setProduce(null)
+            .setProductionPerTurn(0)
+            .setBaseProductionPerTurn(0)
+            .setSlotsForWorkers(0)
+            .setUpgradeTo(DRYDOCK)
+            .setRequiredColonyPopulation(1)
+            .build();
 
     public final static ConstructionType UNIVERSITY = ConstructionTypeBuilder.make()
             .setName("UNIVERSITY").setRequiredHammers(200).setRequiredTools(100).setProduce(null)
@@ -259,7 +306,7 @@ public final class ConstructionType {
             .setProductionPerTurn(0).setBaseProductionPerTurn(0).setSlotsForWorkers(0)
             .setUpgradeTo(WAREHOUSE_EXPANSION).setRequiredColonyPopulation(1).build();
 
-    public final static ConstructionType BASIC_WAREHOUSE = ConstructionTypeBuilder.make()
+    public final static ConstructionType WAREHOUSE_BASIC = ConstructionTypeBuilder.make()
             .setName("BASIC_WAREHOUSE").setRequiredHammers(0).setRequiredTools(0).setProduce(null)
             .setProductionPerTurn(0).setBaseProductionPerTurn(0).setSlotsForWorkers(0)
             .setUpgradeTo(WAREHOUSE).setRequiredColonyPopulation(1).build();
@@ -295,12 +342,13 @@ public final class ConstructionType {
             .setUpgradeTo(null).setRequiredColonyPopulation(0).build();
 
     public final static List<ConstructionType> ALL = ImmutableList.of(TOWN_HALL, LUMBER_MILL,
-            CARPENTERS_SHOP, IRON_WORKS, BLACKSMITHS_SHOP, BLACKSMITHS_HOUSE, FORTRESS, FORT,
-            STOCKADE, CIGAR_FACTORY, TOBACCONISTS_SHOP, TOBACCONISTS_HOUSE, TEXTILE_MILL,
-            WEAVERS_SHOP, WEAVERS_HOUSE, RUM_FACTORY, RUM_DISTILLERY, RUM_DISTILLERS_HOUSE,
-            FUR_FACTORY, FUR_TRADING_POST, FUR_TRADERS_HOUSE, ARSENAL, MAGAZINE, ARMORY, SHIPYARD,
-            DRYDOCK, DOCK, UNIVERSITY, COLLEGE, SCHOOLHOUSE, WAREHOUSE_EXPANSION, WAREHOUSE,
-            BASIC_WAREHOUSE, STABLES, CATHEDRAL, CHURCH, NEWSPAPER, PRINTING_PRESS, CUSTOM_HOUSE);
+            CARPENTERS_SHOP, CARPENTERS_STAND, IRON_WORKS, BLACKSMITHS_SHOP, BLACKSMITHS_HOUSE,
+            FORTRESS, FORT, STOCKADE, CIGAR_FACTORY, TOBACCONISTS_SHOP, TOBACCONISTS_HOUSE,
+            TEXTILE_MILL, WEAVERS_SHOP, WEAVERS_HOUSE, RUM_FACTORY, RUM_DISTILLERY,
+            RUM_DISTILLERS_HOUSE, FUR_FACTORY, FUR_TRADING_POST, FUR_TRADERS_HOUSE, ARSENAL,
+            MAGAZINE, ARMORY, SHIPYARD, DRYDOCK, DOCK, UNIVERSITY, COLLEGE, SCHOOLHOUSE,
+            WAREHOUSE_EXPANSION, WAREHOUSE, WAREHOUSE_BASIC, STABLES, CATHEDRAL, CHURCH, NEWSPAPER,
+            PRINTING_PRESS, CUSTOM_HOUSE);
 
     /**
      * List of construction types that are in all newly builded colonies.
@@ -310,7 +358,7 @@ public final class ConstructionType {
             .collect(ImmutableList.toImmutableList());
 
     public final static List<ConstructionType> WAREHOUSES = ImmutableList.of(WAREHOUSE_EXPANSION,
-            WAREHOUSE, BASIC_WAREHOUSE);
+            WAREHOUSE, WAREHOUSE_BASIC);
 
     public static final List<GoodType> SOURCE_1 = GoodType.GOOD_TYPES.stream()
             .filter(goodType -> !isProducedGoodType(goodType))
@@ -524,6 +572,24 @@ public final class ConstructionType {
         out.add(tmp);
         while (tmp.getUpgradeTo().isPresent()) {
             tmp = tmp.getUpgradeTo().get();
+            out.add(tmp);
+        }
+        return ImmutableList.copyOf(out);
+    }
+    
+    /**
+     * Return list of construction type that was builded to build this type.
+     * This type is always included as first.
+     *
+     * @return Return list of construction types representing required upgrading
+     *         queue.
+     */
+    public List<ConstructionType> getUpgradeFromChain() {
+        final List<ConstructionType> out = new ArrayList<>();
+        ConstructionType tmp = this;
+        out.add(tmp);
+        while (tmp.getUpgradeFrom().isPresent()) {
+            tmp = tmp.getUpgradeFrom().get();
             out.add(tmp);
         }
         return ImmutableList.copyOf(out);

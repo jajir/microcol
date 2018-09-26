@@ -18,6 +18,9 @@ import org.slf4j.LoggerFactory;
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
 
+/**
+ * Define behavior of ship cargo slot.
+ */
 public final class PanelEuropeDockBehavior extends AbstractPanelDockBehavior {
 
     final Logger logger = LoggerFactory.getLogger(PanelEuropeDockBehavior.class);
@@ -77,7 +80,9 @@ public final class PanelEuropeDockBehavior extends AbstractPanelDockBehavior {
     }
 
     @Override
-    public void consumeUnit(final Unit unit, final From transferFrom) {
+    public void consumeUnit(final CargoSlot targetCargoSlot, final Unit unit,
+            final From transferFrom) {
+        targetCargoSlot.store(unit);
         europeDialogCallback.repaintAfterGoodMoving();
     }
 

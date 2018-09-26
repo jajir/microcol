@@ -8,10 +8,14 @@ import java.util.List;
 import java.util.function.Function;
 
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import mockit.Mocked;
 
 public class ColonyTest {
+    
+    private final Logger logger = LoggerFactory.getLogger(getClass());
 
     private @Mocked Model model;
 
@@ -22,6 +26,13 @@ public class ColonyTest {
         Colony colony = makeColony(col -> new ArrayList<Construction>());
 
         assertNotNull(colony);
+    }
+    
+    @Test
+    public void show_construction_in_new_colony() throws Exception {
+        ConstructionType.NEW_COLONY_CONSTRUCTIONS.forEach(type -> {
+            logger.info(type.name());
+        });
     }
 
     @Test(expected = IllegalStateException.class)

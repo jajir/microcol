@@ -48,23 +48,32 @@ public final class PanelColonyStructures extends TitledPanel {
 
     private final Logger logger = LoggerFactory.getLogger(PanelColonyStructures.class);
 
-    private final static int COLUMN_1 = 90;
-    private final static int COLUMN_2 = 250;
-    private final static int COLUMN_3 = 410;
+    private final static int COLUMN_WIDTH = 120;
+
+    private final static int COLUMN_1 = 60;
+    private final static int COLUMN_2 = COLUMN_1 + COLUMN_WIDTH;
+    private final static int COLUMN_3 = COLUMN_2 + COLUMN_WIDTH;
+    private final static int COLUMN_4 = COLUMN_3 + COLUMN_WIDTH;
+
+    private final static int ROW_HEIGHT = 74;
 
     private final static int ROW_1 = 10;
-    private final static int ROW_2 = 100;
-    private final static int ROW_3 = 190;
+    private final static int ROW_2 = ROW_1 + ROW_HEIGHT;
+    private final static int ROW_3 = ROW_2 + ROW_HEIGHT;
+    private final static int ROW_4 = ROW_3 + ROW_HEIGHT;
 
     private final static int PRODUCTION_TEXT_X = 0;
-    private final static int PRODUCTION_TEXT_Y = 65;
+    private final static int PRODUCTION_TEXT_Y = 0;
 
     private final static Point PRODUCTION_TEXT = Point.of(PRODUCTION_TEXT_X, PRODUCTION_TEXT_Y);
 
-    private final static int SLOT_POSITION_SLOT_GAP = 3;
+    private final static int SLOT_POSITION_SLOT_GAP = -10;
 
     private final static int SLOT_POSITION_WIDTH = GamePanelView.TILE_WIDTH_IN_PX
             + SLOT_POSITION_SLOT_GAP;
+
+    private final static Point SLOT_SIZE = Point.of(GamePanelView.TILE_WIDTH_IN_PX,
+            GamePanelView.TILE_WIDTH_IN_PX);
 
     private final static int SLOT_POSITION_TOTAL_WIDTH = 3 * GamePanelView.TILE_WIDTH_IN_PX
             + 2 * SLOT_POSITION_SLOT_GAP;
@@ -82,14 +91,15 @@ public final class PanelColonyStructures extends TitledPanel {
     private final static Map<ConstructionType, Point> constructionPlaces = ImmutableMap
             .<ConstructionType, Point>builder()
             .put(ConstructionType.TOWN_HALL, Point.of(COLUMN_2, ROW_1))
-            .put(ConstructionType.LUMBER_MILL, Point.of(COLUMN_1, ROW_3))
-            .put(ConstructionType.CARPENTERS_SHOP, Point.of(COLUMN_1, ROW_3))
-            .put(ConstructionType.IRON_WORKS, Point.of(COLUMN_2, ROW_3))
-            .put(ConstructionType.BLACKSMITHS_SHOP, Point.of(COLUMN_2, ROW_3))
-            .put(ConstructionType.BLACKSMITHS_HOUSE, Point.of(COLUMN_2, ROW_3))
-            .put(ConstructionType.FORTRESS, Point.of(COLUMN_1, ROW_1))
-            .put(ConstructionType.FORT, Point.of(COLUMN_1, ROW_1))
-            .put(ConstructionType.STOCKADE, Point.of(COLUMN_1, ROW_1))
+            .put(ConstructionType.LUMBER_MILL, Point.of(COLUMN_4, ROW_3))
+            .put(ConstructionType.CARPENTERS_SHOP, Point.of(COLUMN_4, ROW_3))
+            .put(ConstructionType.CARPENTERS_STAND, Point.of(COLUMN_4, ROW_3))
+            .put(ConstructionType.IRON_WORKS, Point.of(COLUMN_2, ROW_4))
+            .put(ConstructionType.BLACKSMITHS_SHOP, Point.of(COLUMN_2, ROW_4))
+            .put(ConstructionType.BLACKSMITHS_HOUSE, Point.of(COLUMN_2, ROW_4))
+            .put(ConstructionType.FORTRESS, Point.of(COLUMN_4, ROW_4))
+            .put(ConstructionType.FORT, Point.of(COLUMN_4, ROW_4))
+            .put(ConstructionType.STOCKADE, Point.of(COLUMN_4, ROW_4))
             .put(ConstructionType.CIGAR_FACTORY, Point.of(COLUMN_2, ROW_2))
             .put(ConstructionType.TOBACCONISTS_SHOP, Point.of(COLUMN_2, ROW_2))
             .put(ConstructionType.TOBACCONISTS_HOUSE, Point.of(COLUMN_2, ROW_2))
@@ -113,7 +123,7 @@ public final class PanelColonyStructures extends TitledPanel {
             .put(ConstructionType.SCHOOLHOUSE, Point.of(10, 10))
             .put(ConstructionType.WAREHOUSE_EXPANSION, Point.of(COLUMN_1, ROW_1))
             .put(ConstructionType.WAREHOUSE, Point.of(COLUMN_1, ROW_1))
-            .put(ConstructionType.BASIC_WAREHOUSE, Point.of(COLUMN_1, ROW_1))
+            .put(ConstructionType.WAREHOUSE_BASIC, Point.of(COLUMN_1, ROW_1))
             .put(ConstructionType.STABLES, Point.of(10, 10))
             .put(ConstructionType.CATHEDRAL, Point.of(COLUMN_3, ROW_1))
             .put(ConstructionType.CHURCH, Point.of(COLUMN_3, ROW_1))
@@ -226,32 +236,34 @@ public final class PanelColonyStructures extends TitledPanel {
     void repaint(final Colony colony) {
         slots = new HashMap<>();
         final GraphicsContext gc = canvas.getGraphicsContext2D();
-        final Point square = Point.of(GamePanelView.TILE_WIDTH_IN_PX,
-                GamePanelView.TILE_WIDTH_IN_PX);
         gc.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
         colony.getConstructions().forEach(construction -> {
-            final Point position = constructionPlaces.get(construction.getType());
-            Preconditions.checkNotNull(position, String
-                    .format("There is no defined position for construction type '%s'", position));
-            final String name = localizationHelper.getConstructionTypeName(construction.getType());
-            gc.setTextAlign(TextAlignment.CENTER);
-            gc.setTextBaseline(VPos.CENTER);
-            gc.setFill(Color.BLACK);
-            gc.fillText(name, position.getX(), position.getY());
-            gc.setStroke(Color.DARKGRAY);
-            final AtomicInteger cx = new AtomicInteger(0);
-            construction.getConstructionSlots().forEach(constructionSlot -> {
-                final Point topLeftCorner = position.add(SLOT_POSITIONS[cx.get()]);
-                slots.put(Rectangle.ofPointAndSize(topLeftCorner, square), constructionSlot);
-                paintWorkerContainer(gc, topLeftCorner);
-                if (!constructionSlot.isEmpty()) {
-                    gc.drawImage(imageProvider.getUnitImage(constructionSlot.getUnit()),
-                            topLeftCorner.getX(), topLeftCorner.getY());
-                }
-                cx.incrementAndGet();
-            });
-            paintProduction(gc, position, colony, construction);
+            paintConstruction(gc, colony, construction);
         });
+    }
+
+    private void paintConstruction(final GraphicsContext gc, final Colony colony,
+            final Construction construction) {
+        final Point position = constructionPlaces.get(construction.getType());
+        Preconditions.checkNotNull(position,
+                String.format("There is no defined position for construction type '%s'", position));
+        final String name = localizationHelper.getConstructionTypeName(construction.getType());
+        gc.setTextAlign(TextAlignment.CENTER);
+        gc.setTextBaseline(VPos.CENTER);
+        gc.setFill(Color.BLACK);
+        gc.fillText(name, position.getX(), position.getY());
+        gc.setStroke(Color.DARKGRAY);
+        final AtomicInteger cx = new AtomicInteger(0);
+        construction.getConstructionSlots().forEach(constructionSlot -> {
+            final Point topLeftCorner = position.add(SLOT_POSITIONS[cx.get()]);
+            slots.put(Rectangle.ofPointAndSize(topLeftCorner, SLOT_SIZE), constructionSlot);
+            if (!constructionSlot.isEmpty()) {
+                gc.drawImage(imageProvider.getUnitImage(constructionSlot.getUnit()),
+                        topLeftCorner.getX(), topLeftCorner.getY());
+            }
+            cx.incrementAndGet();
+        });
+        paintProduction(gc, position, colony, construction);
     }
 
     private void paintProduction(final GraphicsContext gc, final Point point, final Colony colony,
@@ -295,11 +307,6 @@ public final class PanelColonyStructures extends TitledPanel {
         final Text theText = new Text(text);
         theText.setFont(gc.getFont());
         return theText.getBoundsInLocal().getWidth();
-    }
-
-    private void paintWorkerContainer(final GraphicsContext gc, final Point point) {
-        gc.strokeRect(point.getX(), point.getY(), GamePanelView.TILE_WIDTH_IN_PX,
-                GamePanelView.TILE_WIDTH_IN_PX);
     }
 
 }

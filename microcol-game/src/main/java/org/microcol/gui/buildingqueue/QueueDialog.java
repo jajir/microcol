@@ -18,6 +18,7 @@ public class QueueDialog extends AbstractMessageWindow {
     private final PanelQueueBuildingQueue panelQueueBuildingQueue;
     private final PanelQueueConstructions panelQueueConstructions;
     private final PanelQueueUnits panelQueueUnits;
+    private final ColonyDialogCallback colonyDialogCallback;
 
     @Inject
     QueueDialog(final ViewUtil viewUtil, final Text text,
@@ -32,6 +33,7 @@ public class QueueDialog extends AbstractMessageWindow {
         this.panelQueueBuildingQueue = Preconditions.checkNotNull(panelQueueBuildingQueue);
         this.panelQueueConstructions = Preconditions.checkNotNull(panelQueueConstructions);
         this.panelQueueUnits = Preconditions.checkNotNull(panelQueueUnits);
+        this.colonyDialogCallback = Preconditions.checkNotNull(colonyDialogCallback);
 
         final HBox panelWithQueues = new HBox();
         panelWithQueues.getChildren().addAll(panelQueueUnits, panelQueueBuildingQueue,
@@ -58,6 +60,12 @@ public class QueueDialog extends AbstractMessageWindow {
     public void showColony() {
         repaint();
         showAndWait();
+    }
+
+    @Override
+    public void close() {
+        super.close();
+        colonyDialogCallback.repaint();
     }
 
 }

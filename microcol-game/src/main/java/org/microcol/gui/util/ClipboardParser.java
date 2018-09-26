@@ -1,5 +1,6 @@
 package org.microcol.gui.util;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
@@ -9,6 +10,7 @@ import org.microcol.model.GoodsAmount;
 import org.microcol.model.Model;
 import org.microcol.model.Unit;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Splitter;
 
@@ -27,11 +29,16 @@ public class ClipboardParser implements Clipboard {
         return new ClipboardParser(db);
     }
 
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(getClass()).add("map", map).toString();
+    }
+
     protected ClipboardParser(final Dragboard db) {
         this.originalString = getString(db);
-        map = Splitter.on(RECORD_SEPARATOR).trimResults().omitEmptyStrings()
+        map = new HashMap<>(Splitter.on(RECORD_SEPARATOR).trimResults().omitEmptyStrings()
                 .withKeyValueSeparator(Splitter.on(SEPARATOR).limit(2).trimResults())
-                .split(originalString);
+                .split(originalString));
         Preconditions.checkNotNull(db);
     }
 

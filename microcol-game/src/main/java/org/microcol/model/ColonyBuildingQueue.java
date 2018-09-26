@@ -114,7 +114,7 @@ public class ColonyBuildingQueue {
      * @return Return list building items.
      */
     public List<ColonyBuildingItemUnit> getBuildigItemsUnit() {
-        return UnitType.UNIT_TYPES.stream().filter(type -> type.canBeBuildInColony())
+        return UnitType.UNIT_TYPES.stream().filter(type -> canUnitBeBuild(type))
                 .map(type -> new ColonyBuildingItemUnit(type))
                 .collect(ImmutableList.toImmutableList());
     }
@@ -125,12 +125,17 @@ public class ColonyBuildingQueue {
      * @return Return list building items.
      */
     public List<ColonyBuildingItemConstruction> getBuildigItemsConstruction() {
-        return ConstructionType.ALL.stream().filter(type -> canBeBuild(type))
+        return ConstructionType.ALL.stream().filter(type -> canConstructionBeBuild(type))
                 .map(type -> new ColonyBuildingItemConstruction(type))
                 .collect(ImmutableList.toImmutableList());
     }
 
-    private boolean canBeBuild(final ConstructionType type) {
+    private boolean canUnitBeBuild(final UnitType unitType) {
+        return unitType.canBeBuildInColony()
+                && unitType.getCanByBuildInColony().apply(model, colony);
+    }
+
+    private boolean canConstructionBeBuild(final ConstructionType type) {
         final boolean isAlreadyBuilded = type.getUpgradeChain().stream()
                 .filter(t -> colony.isContainsConstructionByType(t)).findAny().isPresent();
         if (isAlreadyBuilded) {

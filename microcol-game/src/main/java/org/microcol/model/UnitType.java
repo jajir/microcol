@@ -2,6 +2,7 @@ package org.microcol.model;
 
 import java.util.List;
 import java.util.Map;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
@@ -83,6 +84,7 @@ public final class UnitType {
     private final int cargoCapacity;
     private final boolean storable;
     private final int europePrice;
+    private final BiFunction<Model, Colony, Boolean> canByBuildInColony;
 
     /**
      * Here is good type in which production is unit exceptional. When it's
@@ -166,6 +168,9 @@ public final class UnitType {
             .setCanPlowField(false)
             .setRequiredTools(40)
             .setRequiredHammers(0)
+            .setCanByBuildInColony((model, colony) -> {
+                return colony.wasConstructionBuilded(ConstructionType.LUMBER_MILL);
+            })
             .build();
 
     public static final UnitType MASTER_BLACKSMITH = UnitType.make()
@@ -192,6 +197,9 @@ public final class UnitType {
             .setEuropePrice(DEFAULT_FRIGATE_EUROPE_PRICE)
             .setRequiredTools(100)
             .setRequiredHammers(100)
+            .setCanByBuildInColony((model, colony) -> {
+                return colony.wasConstructionBuilded(ConstructionType.DRYDOCK);
+            })
             .build();
 
     public static final UnitType GALLEON = UnitType.make()
@@ -204,6 +212,9 @@ public final class UnitType {
             .setEuropePrice(DEFAULT_GALLEON_EUROPE_PRICE)
             .setRequiredTools(100)
             .setRequiredHammers(100)
+            .setCanByBuildInColony((model, colony) -> {
+                return colony.wasConstructionBuilded(ConstructionType.DRYDOCK);
+            })
             .build();
 
     /**
@@ -233,6 +244,7 @@ public final class UnitType {
         private boolean canCutTrees = false;
         private Integer requiredTools = null;
         private Integer requiredHammers = null;
+        private BiFunction<Model, Colony, Boolean> canByBuildInColony = null;
         
         /**
          * Method that build final unit type and return it.
@@ -243,7 +255,7 @@ public final class UnitType {
             return new UnitType(name, moveableTerrains, speed, attackableUnitTypeFilter,
                     cargoCapacity, storable, europePrice, expertInProducing,
                     expertProductionModifier, canPlowField, canBuildRoad, canCutTrees,
-                    requiredTools, requiredHammers);
+                    requiredTools, requiredHammers, canByBuildInColony);
         }
 
         /**
@@ -393,6 +405,14 @@ public final class UnitType {
             return this;
         }
 
+        /**
+         * @param canByBuildInColony the canByBuildInColony to set
+         */
+        UnitTypeBuilder setCanByBuildInColony(BiFunction<Model, Colony, Boolean> canByBuildInColony) {
+            this.canByBuildInColony = canByBuildInColony;
+            return this;
+        }
+
     }
 
     /**
@@ -426,13 +446,17 @@ public final class UnitType {
      *            optional number of tools required to build unit
      * @param requiredHammers
      *            optional number of hammers required to build unit
+     * @param canByBuildInColony
+     *            optional function defining rules which have to be met to be
+     *            able to build unit in colony. When it's <code>null</code> than
+     *            it's never possible to build unit in colony.
      */
     UnitType(final String name, final List<TerrainType> moveableTerrains, final int speed,
             final Predicate<UnitType> attackableUnitTypeFilter, final int cargoCapacity,
             final boolean storable, final int europePrice, final GoodType expertInProducing,
             final float expertProductionModifier, final boolean canPlowField,
             final boolean canBuildRoad, final boolean canCutTrees, final Integer requiredTools,
-            final Integer requiredHammers) {
+            final Integer requiredHammers, final BiFunction<Model, Colony, Boolean> canByBuildInColony) {
         this.name = Preconditions.checkNotNull(name);
         this.moveableTerrains = Preconditions.checkNotNull(moveableTerrains);
         this.speed = speed;
@@ -447,6 +471,7 @@ public final class UnitType {
         this.canCutTrees = canCutTrees;
         this.requiredTools = requiredTools;
         this.requiredHammers = requiredHammers;
+        this.canByBuildInColony = canByBuildInColony;
     }
 
     /**
@@ -691,6 +716,17 @@ public final class UnitType {
      */
     public boolean canBeBuildInColony() {
         return requiredTools != null && requiredHammers != null;
+    }
+
+    /**
+     * @return the canByBuildInColony
+     */
+    public BiFunction<Model, Colony, Boolean> getCanByBuildInColony() {
+        if (canByBuildInColony == null) {
+            return (model, colony) -> false;
+        } else {
+            return canByBuildInColony;
+        }
     }
  
 }

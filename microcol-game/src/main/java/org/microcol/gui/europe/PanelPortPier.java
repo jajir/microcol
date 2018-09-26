@@ -91,7 +91,9 @@ public final class PanelPortPier extends TitledPanel {
     private boolean isItCorrectObject(final Dragboard db) {
         return ClipboardEval.make(gameModelController.getModel(), db)
                 .filterUnit(unit -> !unit.getType().isShip())
-                .filterFrom(from -> From.VALUE_FROM_EUROPE_PORT_PIER == from).getUnit().isPresent();
+                .filterFrom(from -> From.VALUE_FROM_EUROPE_PORT_PIER != from
+                        && From.VALUE_FROM_EUROPE_SHOP != from)
+                .isNotEmpty();
     }
 
 }

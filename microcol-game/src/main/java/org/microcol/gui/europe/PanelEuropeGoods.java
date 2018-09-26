@@ -83,8 +83,7 @@ public final class PanelEuropeGoods extends TitledPanel {
     private boolean isItGoodAmount(final Dragboard db) {
         logger.debug("Drag over unit id '" + db.getString() + "'.");
         return ClipboardEval.make(gameModelController.getModel(), db)
-                .filterFrom(transferFrom -> From.VALUE_FROM_UNIT == transferFrom).getGoodAmount()
-                .isPresent();
+                .filterFrom(from -> From.VALUE_FROM_UNIT == from).isNotEmpty();
     }
 
 }

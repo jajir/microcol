@@ -85,6 +85,32 @@ public final class UnitFreeColonist extends Unit {
             unequipWithHorses();
         }
     }
+    
+    @Override
+    public int getSpeed() {
+        if (isMounted()) {
+            return 5;
+        }else{
+            return 1;
+        }
+    }
+    
+    @Override
+    public double getMilitaryStrenght() {
+        if (isMounted()) {
+            if (isHoldingGuns()) {
+                return 2;
+            }else{
+                return 1.5;
+            }
+        }else{
+            if (isHoldingGuns()) {
+                return 1.5;
+            }else{
+                return 1;
+            }
+        }
+    }
 
     public void equipWithHorses() {
         final Colony colony = verifyThatUnitIsOutsideColony();

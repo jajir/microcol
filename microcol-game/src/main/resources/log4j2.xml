@@ -49,6 +49,5 @@
 		<logger name="org.microcol.ai" level="info" additivity="false">
             <AppenderRef ref="ConsoleAppender" />
 		</logger>
-
     </Loggers>
 </Configuration>

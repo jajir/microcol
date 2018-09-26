@@ -21,14 +21,14 @@ public final class BackgroundHighlighter {
 
     private final Region region;
 
-    private final Function<Dragboard, Boolean> shoudlByHighlighted;
+    private final Function<Dragboard, Boolean> shoudlBeHighlighted;
 
     private Background background;
 
     public BackgroundHighlighter(final Region region,
             final Function<Dragboard, Boolean> shoudlByHighlighted) {
         this.region = Preconditions.checkNotNull(region);
-        this.shoudlByHighlighted = Preconditions.checkNotNull(shoudlByHighlighted);
+        this.shoudlBeHighlighted = Preconditions.checkNotNull(shoudlByHighlighted);
     }
 
     /**
@@ -39,7 +39,7 @@ public final class BackgroundHighlighter {
      */
     public void onDragEntered(final DragEvent event) {
         background = region.getBackground();
-        if (shoudlByHighlighted.apply(event.getDragboard())) {
+        if (shoudlBeHighlighted.apply(event.getDragboard())) {
             region.setBackground(new Background(
                     new BackgroundFill(Color.BURLYWOOD, CornerRadii.EMPTY, Insets.EMPTY)));
         }

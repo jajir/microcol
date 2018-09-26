@@ -69,7 +69,7 @@ public final class GameMenuPanelPresenter {
     }
 
     public VBox getBox() {
-        return view.getBox();
+        return view.getPanel();
     }
 
 }

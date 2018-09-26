@@ -82,6 +82,9 @@ public class UnitFactory {
                 UnitActionConverter.convert(unitPo.getAction()), unitPo.getAvailableMoves());
         unitCreateRequest.setCargoBuilder(
                 unit -> new Cargo(unit, unit.getType().getCargoCapacity(), unitPo.getCargo()));
+        unitCreateRequest.setHoldingGuns(unitPo.isHoldingGuns());
+        unitCreateRequest.setMounted(unitPo.isMounted());
+        unitCreateRequest.setTools(unitPo.getTools());
 
         return unitResolver.apply(unitCreateRequest);
     }

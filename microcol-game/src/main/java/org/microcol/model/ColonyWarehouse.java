@@ -94,7 +94,7 @@ public final class ColonyWarehouse {
         if (goodType == GoodType.CORN) {
             return 200;
         }
-        if (constructionType.equals(ConstructionType.BASIC_WAREHOUSE)) {
+        if (constructionType.equals(ConstructionType.WAREHOUSE_BASIC)) {
             return 100;
         } else if (constructionType.equals(ConstructionType.WAREHOUSE)) {
             return 200;

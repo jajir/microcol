@@ -271,6 +271,21 @@ public final class Colony {
     }
 
     public boolean isContainsConstructionByType(final ConstructionType constructionType) {
+        return constructions.stream().map(construction -> construction.getType())
+                .filter(type -> type.getUpgradeFromChain().contains(constructionType)).findAny()
+                .isPresent();
+    }
+
+    /**
+     * Investigate in construction type is builded or was builded and
+     * construction was upgraded.
+     *
+     * @param constructionType
+     *            required construction type
+     * @return Return <code>true</code> when construction type is builded or was
+     *         builded and was upgraded otherwise return <code>false</code>.
+     */
+    public boolean wasConstructionBuilded(final ConstructionType constructionType) {
         return constructions.stream()
                 .filter(construction -> construction.getType().equals(constructionType)).findAny()
                 .isPresent();
@@ -379,7 +394,7 @@ public final class Colony {
 
     // TODO move statistic read-only method to statistics class.
     public int getMilitaryForce() {
-        int force = 0;
+        double force = 0;
         // count units outside colony
         for (final Unit unit : model.getUnitsAt(owner, location)) {
             force += unit.getMilitaryStrenght();
@@ -388,7 +403,7 @@ public final class Colony {
         for (final Unit unit : getUnitsInColony()) {
             force += unit.getMilitaryStrenght();
         }
-        return force;
+        return (int)force;
     }
 
     // TODO counting of stats should move to separate classes.
