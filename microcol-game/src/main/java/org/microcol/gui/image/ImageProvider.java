@@ -32,7 +32,7 @@ public final class ImageProvider {
      */
     private final List<ImageLoader> STARTUP_IMAGE_LOADERS = Lists.newArrayList(
             new BackgroundImageLoader(), new GrassCoastImageLoader(), new IceCoastImageLoader(),
-            new HiddenCoastImageLoader(), new ImageLoaderUnit(), new ImageLoaderGoogs());
+            new HiddenCoastImageLoader(), new ImageLoaderUnit(), new ImageLoaderGoods());
 
     public final static String BACKGROUND_IMAGE_NAME = "backgroud.png";
 
