@@ -4,9 +4,11 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.microcol.gui.MicroColException;
 import org.microcol.model.ChainOfCommandStrategy;
+import org.microcol.model.ConstructionType;
 import org.microcol.model.Direction;
 import org.microcol.model.GoodType;
 import org.microcol.model.GoodsAmount;
@@ -32,7 +34,8 @@ public final class ImageProvider {
      */
     private final List<ImageLoader> STARTUP_IMAGE_LOADERS = Lists.newArrayList(
             new BackgroundImageLoader(), new GrassCoastImageLoader(), new IceCoastImageLoader(),
-            new HiddenCoastImageLoader(), new ImageLoaderUnit(), new ImageLoaderGoods());
+            new HiddenCoastImageLoader(), new ImageLoaderUnit(), new ImageLoaderGoods(),
+            new ImageLoaderBuilding());
 
     public final static String BACKGROUND_IMAGE_NAME = "backgroud.png";
 
@@ -268,6 +271,16 @@ public final class ImageProvider {
             images.put(name, img);
         }
         return img;
+    }
+    
+    // TODO remove optional
+    public Optional<Image> getConstructionImage(final ConstructionType constructionType) {
+        final String key = "building_" + constructionType.name();
+        if (images.containsKey(key)) {
+            return Optional.of(images.get(key));
+        } else {
+            return Optional.empty();
+        }
     }
 
     /**

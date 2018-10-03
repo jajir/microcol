@@ -28,8 +28,7 @@ public final class UnitMovedListener {
     private final AnimationManager animationManager;
 
     @Inject
-    public UnitMovedListener(
-            final PaintService paintService, final ExcludePainting excludePainting,
+    public UnitMovedListener(final PaintService paintService, final ExcludePainting excludePainting,
             final PathPlanning pathPlanning, final AnimationManager animationManager) {
         this.paintService = Preconditions.checkNotNull(paintService);
         this.excludePainting = Preconditions.checkNotNull(excludePainting);
@@ -43,6 +42,10 @@ public final class UnitMovedListener {
                 new AnimationWalk(pathPlanning, event.getStart(), event.getEnd(), event.getUnit(),
                         paintService, excludePainting, event.getOrientation()),
                 animation -> excludePainting.includeUnit(event.getUnit()));
+        /*
+         * Hold thread until animation is fully drawn.
+         */
+        animationManager.waitWhileRunning();
         logger.info("Animation was added.");
     }
 

@@ -247,12 +247,17 @@ public final class PanelColonyStructures extends TitledPanel {
         final Point position = constructionPlaces.get(construction.getType());
         Preconditions.checkNotNull(position,
                 String.format("There is no defined position for construction type '%s'", position));
-        final String name = localizationHelper.getConstructionTypeName(construction.getType());
-        gc.setTextAlign(TextAlignment.CENTER);
-        gc.setTextBaseline(VPos.CENTER);
-        gc.setFill(Color.BLACK);
-        gc.fillText(name, position.getX(), position.getY());
-        gc.setStroke(Color.DARKGRAY);
+        final Optional<Image> oImage = imageProvider.getConstructionImage(construction.getType());
+        if (oImage.isPresent()) {
+            gc.drawImage(oImage.get(), position.getX(), position.getY());
+        } else {
+            final String name = localizationHelper.getConstructionTypeName(construction.getType());
+            gc.setTextAlign(TextAlignment.CENTER);
+            gc.setTextBaseline(VPos.CENTER);
+            gc.setFill(Color.BLACK);
+            gc.fillText(name, position.getX(), position.getY());
+            gc.setStroke(Color.DARKGRAY);
+        }
         final AtomicInteger cx = new AtomicInteger(0);
         construction.getConstructionSlots().forEach(constructionSlot -> {
             final Point topLeftCorner = position.add(SLOT_POSITIONS[cx.get()]);
