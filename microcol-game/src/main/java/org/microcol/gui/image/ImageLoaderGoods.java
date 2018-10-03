@@ -7,7 +7,15 @@ public final class ImageLoaderGoods implements ImageLoader {
 
     @Override
     public void preload(final ImageProvider imageProvider) {
+        imageProvider.registerImage(ImageProvider.IMG_GOOD_GOODS,
+                imageProvider.getImage("type_11_5"));
 
+        imageProvider.registerImage(ImageProvider.IMG_GOOD_HORSE,
+                imageProvider.getImage("type_7_6"));
+        imageProvider.registerImage(ImageProvider.IMG_GOOD_CIGARS,
+                imageProvider.getImage("type_8_6"));
+        imageProvider.registerImage(ImageProvider.IMG_GOOD_RUM,
+                imageProvider.getImage("type_9_6"));
         imageProvider.registerImage(ImageProvider.IMG_GOOD_TOBACCO,
                 imageProvider.getImage("type_10_6"));
         imageProvider.registerImage(ImageProvider.IMG_GOOD_ORE,

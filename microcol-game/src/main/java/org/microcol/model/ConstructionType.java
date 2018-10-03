@@ -311,9 +311,14 @@ public final class ConstructionType {
             .setProductionPerTurn(0).setBaseProductionPerTurn(0).setSlotsForWorkers(0)
             .setUpgradeTo(WAREHOUSE).setRequiredColonyPopulation(1).build();
 
+    public final static ConstructionType LARGE_STABLES = ConstructionTypeBuilder.make().setName("LARGE_STABLES")
+            .setRequiredHammers(149).setRequiredTools(80).setProduce(null).setProductionPerTurn(0)
+            .setBaseProductionPerTurn(0).setSlotsForWorkers(0).setUpgradeTo(null)
+            .setRequiredColonyPopulation(1).build();
+
     public final static ConstructionType STABLES = ConstructionTypeBuilder.make().setName("STABLES")
             .setRequiredHammers(64).setRequiredTools(0).setProduce(null).setProductionPerTurn(0)
-            .setBaseProductionPerTurn(0).setSlotsForWorkers(0).setUpgradeTo(null)
+            .setBaseProductionPerTurn(0).setSlotsForWorkers(0).setUpgradeTo(LARGE_STABLES)
             .setRequiredColonyPopulation(1).build();
 
     public final static ConstructionType CATHEDRAL = ConstructionTypeBuilder.make()
@@ -325,6 +330,15 @@ public final class ConstructionType {
             .setRequiredHammers(52).setRequiredTools(100).setProduce(GoodType.CROSS)
             .setProductionPerTurn(3).setBaseProductionPerTurn(1).setSlotsForWorkers(3)
             .setUpgradeTo(CATHEDRAL).setRequiredColonyPopulation(3).build();
+
+    public final static ConstructionType CHAPEL = ConstructionTypeBuilder.make().setName("CHAPEL")
+            .setProduce(GoodType.CROSS)
+            .setProductionPerTurn(1)
+            .setBaseProductionPerTurn(1)
+            .setSlotsForWorkers(3)
+            .setUpgradeTo(CHURCH)
+            .setRequiredColonyPopulation(3)
+            .build();
 
     public final static ConstructionType NEWSPAPER = ConstructionTypeBuilder.make()
             .setName("NEWSPAPER").setRequiredHammers(120).setRequiredTools(50)
@@ -347,8 +361,8 @@ public final class ConstructionType {
             TEXTILE_MILL, WEAVERS_SHOP, WEAVERS_HOUSE, RUM_FACTORY, RUM_DISTILLERY,
             RUM_DISTILLERS_HOUSE, FUR_FACTORY, FUR_TRADING_POST, FUR_TRADERS_HOUSE, ARSENAL,
             MAGAZINE, ARMORY, SHIPYARD, DRYDOCK, DOCK, UNIVERSITY, COLLEGE, SCHOOLHOUSE,
-            WAREHOUSE_EXPANSION, WAREHOUSE, WAREHOUSE_BASIC, STABLES, CATHEDRAL, CHURCH, NEWSPAPER,
-            PRINTING_PRESS, CUSTOM_HOUSE);
+            WAREHOUSE_EXPANSION, WAREHOUSE, WAREHOUSE_BASIC, STABLES, LARGE_STABLES, CHAPEL,
+            CATHEDRAL, CHURCH, NEWSPAPER, PRINTING_PRESS, CUSTOM_HOUSE);
 
     /**
      * List of construction types that are in all newly builded colonies.
