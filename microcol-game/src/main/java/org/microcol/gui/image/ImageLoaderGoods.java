@@ -7,6 +7,10 @@ public final class ImageLoaderGoods implements ImageLoader {
 
     @Override
     public void preload(final ImageProvider imageProvider) {
+        imageProvider.registerImage(ImageProvider.IMG_GOOD_BELL,
+                imageProvider.getImage("type_9_5"));
+        imageProvider.registerImage(ImageProvider.IMG_GOOD_CROSS,
+                imageProvider.getImage("type_10_5"));
         imageProvider.registerImage(ImageProvider.IMG_GOOD_GOODS,
                 imageProvider.getImage("type_11_5"));
 
