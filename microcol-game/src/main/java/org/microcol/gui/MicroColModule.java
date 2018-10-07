@@ -2,7 +2,7 @@ package org.microcol.gui;
 
 import org.microcol.gui.buildingqueue.QueueController;
 import org.microcol.gui.buildingqueue.QueueDialog;
-import org.microcol.gui.colonizopedia.Colonizopedia;
+import org.microcol.gui.colonizopedia.ColonizopediaDialog;
 import org.microcol.gui.colony.ColonyDialog;
 import org.microcol.gui.colony.ColonyDialogCallback;
 import org.microcol.gui.colony.PanelColonyDockBehaviour;
@@ -13,7 +13,7 @@ import org.microcol.gui.colony.PanelOutsideColony;
 import org.microcol.gui.colony.PanelQueueSummary;
 import org.microcol.gui.colony.UnitMovedOutsideColonyController;
 import org.microcol.gui.europe.BuyUnitsDialog;
-import org.microcol.gui.europe.ChooseGoodAmount;
+import org.microcol.gui.europe.ChooseGoodAmountDialog;
 import org.microcol.gui.europe.EuropeDialog;
 import org.microcol.gui.europe.EuropeDialogCallback;
 import org.microcol.gui.europe.PanelEuropeDockBehavior;
@@ -108,6 +108,7 @@ import org.microcol.gui.util.Text;
 import org.microcol.gui.util.TurnStartedListener;
 import org.microcol.gui.util.UnitUtil;
 import org.microcol.gui.util.ViewUtil;
+import org.microcol.i18n.I18n;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -134,7 +135,7 @@ public final class MicroColModule extends AbstractModule {
         bind(EventBus.class).toInstance(eventBus);
         bind(MainStageBuilder.class).in(Singleton.class);
         bind(StatusBarMessageController.class).in(Singleton.class);
-        bind(UnitUtil.class).in(Singleton.class);        
+        bind(UnitUtil.class).in(Singleton.class);
 
         bind(GamePreferences.class).in(Singleton.class);
         bind(PathPlanning.class).in(Singleton.class);
@@ -156,7 +157,7 @@ public final class MicroColModule extends AbstractModule {
          */
         bind(AboutDialog.class).in(Singleton.class);
         bind(DialogDestroyColony.class).in(Singleton.class);
-        bind(ChooseGoodAmount.class).in(Singleton.class);
+        bind(ChooseGoodAmountDialog.class).in(Singleton.class);
         bind(DialogMessage.class).in(Singleton.class);
         bind(MissionCallBack.class).in(Singleton.class);
 
@@ -285,7 +286,7 @@ public final class MicroColModule extends AbstractModule {
         /**
          * Rest of UI
          */
-        bind(Colonizopedia.class).in(Singleton.class);
+        bind(ColonizopediaDialog.class).in(Singleton.class);
         bind(PreferencesVolume.class).in(Singleton.class);
         bind(PreferencesAnimationSpeed.class).in(Singleton.class);
 
@@ -324,6 +325,14 @@ public final class MicroColModule extends AbstractModule {
     @Singleton
     Text makeText(final GamePreferences gamePreferences) {
         return new Text(gamePreferences.getLocale());
+    }
+
+    @Provides
+    @Singleton
+    I18n makeI18n(final GamePreferences gamePreferences) {
+        return I18n.builder().setVerifyThatAllEnumKeysAreDefined(true)
+                .setVerifyThatAllKeysInResourceBundleHaveConstant(true)
+                .setDefaultLocale(gamePreferences.getLocale()).build();
     }
 
 }

@@ -19,9 +19,9 @@ import org.microcol.gui.mainmenu.CenterViewEvent;
 import org.microcol.gui.mainmenu.QuitGameController;
 import org.microcol.gui.util.GamePreferences;
 import org.microcol.gui.util.Listener;
-import org.microcol.gui.util.Text;
 import org.microcol.gui.util.UnitUtil;
 import org.microcol.gui.util.ViewUtil;
+import org.microcol.i18n.I18n;
 import org.microcol.model.CargoSlot;
 import org.microcol.model.Colony;
 import org.microcol.model.Location;
@@ -64,7 +64,7 @@ public final class GamePanelPresenter {
 
     private final ColonyDialog colonyDialog;
 
-    private final Text text;
+    private final I18n i18n;
 
     private final DialogColonyWasCaptured dialogColonyWasCaptured;
 
@@ -90,7 +90,7 @@ public final class GamePanelPresenter {
             final StartMoveController startMoveController,
             final EndMoveController endMoveController, final ColonyDialog colonyDialog,
             final MouseOverTileManager mouseOverTileManager, final ModeController modeController,
-            final SelectedUnitManager selectedUnitManager, final Text text,
+            final SelectedUnitManager selectedUnitManager, final I18n i18n,
             final GamePanelController gamePanelController, final VisibleArea visibleArea,
             final PaneCanvas paneCanvas, final OneTurnMoveHighlighter oneTurnMoveHighlighter,
             final UnitUtil unitUtil) {
@@ -103,7 +103,7 @@ public final class GamePanelPresenter {
         this.startMoveController = Preconditions.checkNotNull(startMoveController);
         this.endMoveController = Preconditions.checkNotNull(endMoveController);
         this.colonyDialog = Preconditions.checkNotNull(colonyDialog);
-        this.text = Preconditions.checkNotNull(text);
+        this.i18n = Preconditions.checkNotNull(i18n);
         this.mouseOverTileManager = Preconditions.checkNotNull(mouseOverTileManager);
         this.modeController = Preconditions.checkNotNull(modeController);
         this.selectedUnitManager = Preconditions.checkNotNull(selectedUnitManager);
@@ -341,7 +341,7 @@ public final class GamePanelPresenter {
             }
         } else {
             logger.error("It's not possible to determine correct operation");
-            new DialogUnitCantMoveHere(viewUtil, text);
+            new DialogUnitCantMoveHere(viewUtil, i18n);
         }
         disableMoveMode();
     }
@@ -356,7 +356,7 @@ public final class GamePanelPresenter {
             // TODO JJ consider which tile should have focus
             selectedTileManager.setSelectedTile(moveToLocation, ScrollToFocusedTile.smoothScroll);
             disableMoveMode();
-            new DialogUnitCantFightWarning(viewUtil, text);
+            new DialogUnitCantFightWarning(viewUtil, i18n);
             return;
         }
         final Unit targetUnit = gameModelController.getModel().getUnitsAt(moveToLocation).get(0);

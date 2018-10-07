@@ -6,7 +6,7 @@ import java.util.function.BiConsumer;
 import org.microcol.gui.PersistingDialog;
 import org.microcol.gui.PreferencesAnimationSpeed;
 import org.microcol.gui.PreferencesVolume;
-import org.microcol.gui.colonizopedia.Colonizopedia;
+import org.microcol.gui.colonizopedia.ColonizopediaDialog;
 import org.microcol.gui.europe.EuropeDialog;
 import org.microcol.gui.event.EndMoveController;
 import org.microcol.gui.event.EndMoveEvent;
@@ -62,7 +62,7 @@ public final class MainMenuPresenter {
             final GameController gameController, final GameModelController gameModelController,
             final StartMoveController startMoveController,
             final EndMoveController endMoveController, final PersistingDialog persistingDialog,
-            final EuropeDialog europeDialog, final Colonizopedia colonizopedia,
+            final EuropeDialog europeDialog, final ColonizopediaDialog colonizopedia,
             final PreferencesAnimationSpeed preferencesAnimationSpeed,
             final PreferencesVolume preferencesVolume,
             final SelectedUnitManager selectedUnitManager,

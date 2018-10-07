@@ -2,7 +2,7 @@ package org.microcol.gui.colony;
 
 import java.util.List;
 
-import org.microcol.gui.europe.ChooseGoodAmount;
+import org.microcol.gui.europe.ChooseGoodAmountDialog;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.image.ImageProvider;
 import org.microcol.gui.util.AbstractPanelDockBehavior;
@@ -25,12 +25,12 @@ public final class PanelColonyDockBehaviour extends AbstractPanelDockBehavior {
     final Logger logger = LoggerFactory.getLogger(PanelColonyDockBehaviour.class);
 
     private final ColonyDialogCallback colonyDialogCallback;
-    private final ChooseGoodAmount chooseGoodAmount;
+    private final ChooseGoodAmountDialog chooseGoodAmount;
 
     @Inject
     PanelColonyDockBehaviour(final ColonyDialogCallback colonyDialogCallback,
             final GameModelController gameModelController, final ImageProvider imageProvider,
-            final ChooseGoodAmount chooseGoodAmount) {
+            final ChooseGoodAmountDialog chooseGoodAmount) {
         super(gameModelController, imageProvider);
         this.colonyDialogCallback = Preconditions.checkNotNull(colonyDialogCallback);
         this.chooseGoodAmount = Preconditions.checkNotNull(chooseGoodAmount);

@@ -47,8 +47,6 @@
 	<entry key="mainMenu.help.colonizopedia">Colonizopedia</entry>
 
 	<entry key="aboutDialog.caption">O MicroCol</entry>
-	<entry key="dialog.ok">Ok</entry>
-	<entry key="dialog.cancel">Cancel</entry>
 	<entry key="rightPanel.description">Zde se zobrazí informace o vybraném panelu případně o jednotkách </entry>
 	<entry key="unitsPanel.description">Zde se zobrazí informace o vybraném panelu případně o jednotkách </entry>
 	<entry key="unitsPanel.unexplored">Neprozkoumáno</entry>
@@ -75,9 +73,6 @@
 	<entry key="statusBar.season.summer">Léto</entry>
 	<entry key="statusBar.season.autumn">Podzim</entry>
 	<entry key="statusBar.season.winter">Zima</entry>
-	
-	<entry key="dialogAbout.caption">O MicroCol</entry>
-	<entry key="dialogAbout.version">Verze :</entry>
 
 	<entry key="startPanel.buttonContinue">Pokračovat v naposledy hrané hře</entry>
 	<entry key="startPanel.buttonLoadSave">Nahrát hru</entry>
@@ -127,14 +122,6 @@ jestli klesne na nulu, osadnicí začnou umírat hlady. Vyrob 30 doutníků.</en
 	<entry key="campaign.default.m2.portIsClosed">Od této chvíle už nemůžeš jezdit do Evropy. Zdá se, že se král hodně zlobí.</entry>
 	<entry key="campaign.default.m2.done1">Sláva. Podařilo se to porazit královké vojsko.</entry>
 	<entry key="campaign.default.m2.done2">Zde tvoje cesta končí. Pro svůj mladý národ jsi vydobyl svobodu. Všechny oběti položené k dosažení vznešeného cíle se mnohokrát vrátili.</entry>
-
-	<entry key="preferencesVolume.caption">Hlasitost</entry>
-	<entry key="preferencesVolume.low">Potichu</entry>
-	<entry key="preferencesVolume.high">Nahlas</entry>
-
-	<entry key="preferencesAnimationSpeed.caption">Rychlost animací</entry>
-	<entry key="preferencesAnimationSpeed.fast">Vysoká</entry>
-	<entry key="preferencesAnimationSpeed.slow">Nízká</entry>
 
 	<entry key="chooseGoodAmount.caption">Kolik chcete převést?</entry>
 	<entry key="chooseGoodAmount.zero">Nic</entry>
@@ -205,32 +192,6 @@ jestli klesne na nulu, osadnicí začnou umírat hlady. Vyrob 30 doutníků.</en
 	
 	<entry key="missionGoals.title">Cíle mise</entry>
 	<entry key="missionGoals.caption">Cíle mise</entry>
-	
-	<entry key="dialogFight.title">Útok</entry>
-	<entry key="dialogFight.attacker">Útočník</entry>
-	<entry key="dialogFight.defender">Obránce</entry>
-	<entry key="dialogFight.buttonFight">Bojovat</entry>
-	<entry key="dialogFight.buttonCancel">Zpět</entry>
-	<entry key="dialogFight.hideOption">Zašktněte toto pole, pokud příště už náhled před bojem nebude potřebovat. Zapnout a vypnout lze náhled před bojem z nastavení v hlavním menu.</entry>
-	
-	<entry key="dialogUnitCantFightWarning.caption">Tato jednotka neumí bojovat.</entry>
-	
-	<entry key="dialogNotEnoughGold.caption">K dokončení operace nemáte dost zlata.</entry>
-
-	<entry key="dialogIndependenceWasDeclared.caption">Vyhlásil jsi nezávislot. Nýní se připrav na útok královské armády.</entry>
-
-	<entry key="dialogUnitCantMoveHere.caption">Sem neni možné jednotku přesunout.</entry>
-
-	<entry key="dialogGameOver.caption">Konec hry.</entry>
-	<entry key="dialogGameOver.allColoniesAreLost">Ztratil jsi všechny kolonie.</entry>
-	<entry key="dialogGameOver.timeIsUp">Nepodařilo se ti dosáhnout svobody před rokem 1800. V cestě za svobodou jsi selhal..</entry>
-
-	<entry key="dialogDestroyColony.caption">Opravdu si přejete zrušit kolonii?</entry>
-	<entry key="dialogDestroyColony.question">Opravdu si přejete zrušit kolonii? Když kolonii opustíte s poslední jednotkou tak bude kolonie zrušena.</entry>
-	
-	<entry key="dialogColonyWasCaptured.caption">Kolonie byla obsazena</entry>
-	<entry key="dialogColonyWasCaptured.text1">Dobyl jsi kolonii '</entry>
-	<entry key="dialogColonyWasCaptured.text2">'. Je to velký úspěch.</entry>
 
 	<entry key="FileChooser.cancelButtonText">Zrušit</entry>
 	<entry key="FileChooser.fileDateHeaderText">Datum úpravy</entry>
@@ -242,11 +203,6 @@ jestli klesne na nulu, osadnicí začnou umírat hlady. Vyrob 30 doutníků.</en
 	<entry key="FileChooser.newFolderButtonText">Vytvořit složku</entry>
 	<entry key="FileChooser.filesOfTypeLabelText">Formát souboru:</entry>
 	<entry key="FileChooser.saveDialogFileNameLabelText">Uložit jako:</entry>
-	
-	<entry key="saveGameDialog.title">Uložit hru</entry>
-	<entry key="loadGameDialog.title">Nahrát hru</entry>
-	
-	<entry key="colonizopedia.title">Colonizopedia</entry>
 	
 	<entry key="construction.TOWN_HALL.name">Radnice</entry>
 	<entry key="construction.LUMBER_MILL.name">Tesař</entry>

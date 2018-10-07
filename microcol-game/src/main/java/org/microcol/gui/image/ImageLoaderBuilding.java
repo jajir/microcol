@@ -11,7 +11,7 @@ import javafx.scene.image.WritableImage;
 /**
  * Load building images.
  * 
- * FIXME make abstract common predecessor for this class and for
+ * TODO make abstract common predecessor for this class and for
  * BackgroundImageLoader
  */
 public final class ImageLoaderBuilding implements ImageLoader {
@@ -33,7 +33,7 @@ public final class ImageLoaderBuilding implements ImageLoader {
      */
     private final static int BACKGROUND_IMAGE_TILE_BORDER_IN_PX = 0;
 
-    private final static int TILE_WIDTH = 60;
+    private final static int TILE_WIDTH = 70;
 
     /**
      * Total with of tiles with border in background image;

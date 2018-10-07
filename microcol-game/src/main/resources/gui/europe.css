@@ -1,0 +1,51 @@
+/*
+ * File contains definition of dialogs.
+ */
+
+.label-title {
+	-fx-font-size: 24;	
+}
+
+/*
+ * Right panel
+ */
+.buttons{
+	-fx-alignment: top-right;
+	-fx-padding: 20 0 0 0;	
+}
+
+.unit-icon{
+	-fx-max-width: 30;
+}
+
+.port-pier-container{
+	/*
+	-fx-background-color: red;
+	 */
+	-fx-padding: 0 40 22 0;
+	-fx-alignment: top-right;
+}
+
+.panel-port-pier{
+	-fx-min-width: 240;
+	/*
+	-fx-background-color: blue;
+	-fx-padding: 0 40 30 0;
+	-fx-alignment: top-right;
+	 */
+}
+
+.ships-container{
+	-fx-min-width: 80;
+}
+
+.to-new-world{
+	-fx-padding: 0 0 60 0;
+}
+
+.panel-dock {
+	/*
+	-fx-background-color: yellow;	
+	 */
+	-fx-padding: 0 0 20 0;
+}

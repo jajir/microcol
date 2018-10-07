@@ -3,12 +3,14 @@ package org.microcol.gui.statistics;
 import java.util.List;
 import java.util.function.Function;
 
+import org.microcol.gui.Dialog;
 import org.microcol.gui.MainStageBuilder;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.util.AbstractMessageWindow;
 import org.microcol.gui.util.ButtonsBar;
 import org.microcol.gui.util.Text;
 import org.microcol.gui.util.ViewUtil;
+import org.microcol.i18n.I18n;
 import org.microcol.model.Calendar;
 import org.microcol.model.TurnPlayerStatistics;
 
@@ -25,7 +27,8 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.VBox;
 
-public final class StatisticsDialog extends AbstractMessageWindow implements StatisticsDialogCallback {
+public final class StatisticsDialog extends AbstractMessageWindow
+        implements StatisticsDialogCallback {
 
     private final GameModelController gameModelController;
 
@@ -34,9 +37,9 @@ public final class StatisticsDialog extends AbstractMessageWindow implements Sta
     private final TabPane chartPanel;
 
     @Inject
-    StatisticsDialog(final ViewUtil viewUtil, final Text text,
+    StatisticsDialog(final ViewUtil viewUtil, final Text text, final I18n i18n,
             final GameModelController gameModelController) {
-        super(viewUtil);
+        super(viewUtil, i18n);
         this.gameModelController = Preconditions.checkNotNull(gameModelController);
         this.text = Preconditions.checkNotNull(text);
         setTitle(text.get("statistics.title"));
@@ -45,7 +48,7 @@ public final class StatisticsDialog extends AbstractMessageWindow implements Sta
 
         final VBox mainPanel = new VBox();
 
-        final ButtonsBar buttonsBar = new ButtonsBar(text.get("dialog.ok"));
+        final ButtonsBar buttonsBar = new ButtonsBar(i18n.get(Dialog.ok));
         buttonsBar.getButtonOk().setOnAction(this::onClose);
 
         chartPanel = new TabPane();
@@ -88,11 +91,10 @@ public final class StatisticsDialog extends AbstractMessageWindow implements Sta
         chartPanel.getTabs().add(tab);
     }
 
-    private Node createChartScore(final List<TurnPlayerStatistics> stats,
-            final Calendar calendar) {
+    private Node createChartScore(final List<TurnPlayerStatistics> stats, final Calendar calendar) {
         final LineChart<Number, Number> lineChart = makeLineChart(calendar, "statistics.score");
-        lineChart.getData().add(
-                initSerie(stats, stat -> stat.getScore(), "statistics.score", calendar));
+        lineChart.getData()
+                .add(initSerie(stats, stat -> stat.getScore(), "statistics.score", calendar));
 
         return lineChart;
     }

@@ -5,6 +5,7 @@ import org.microcol.gui.util.AbstractMessageWindow;
 import org.microcol.gui.util.ButtonsBar;
 import org.microcol.gui.util.Text;
 import org.microcol.gui.util.ViewUtil;
+import org.microcol.i18n.I18n;
 import org.microcol.model.campaign.MissionGoals;
 
 import com.google.common.base.Preconditions;
@@ -23,9 +24,9 @@ public final class MissionGoalsDialog extends AbstractMessageWindow {
     private final VBox goalsPanel;
 
     @Inject
-    MissionGoalsDialog(final ViewUtil viewUtil, final Text text,
+    MissionGoalsDialog(final ViewUtil viewUtil, final Text text, final I18n i18n,
             final GameModelController gameModelController) {
-        super(viewUtil);
+        super(viewUtil, i18n);
         this.gameModelController = Preconditions.checkNotNull(gameModelController);
         this.text = Preconditions.checkNotNull(text);
         setTitle(text.get("missionGoals.title"));
@@ -34,7 +35,7 @@ public final class MissionGoalsDialog extends AbstractMessageWindow {
 
         final VBox mainPanel = new VBox();
 
-        final ButtonsBar buttonsBar = new ButtonsBar(text.get("dialog.ok"));
+        final ButtonsBar buttonsBar = new ButtonsBar(i18n.get(Dialog.ok));
         buttonsBar.getButtonOk().setOnAction(this::onClose);
 
         goalsPanel = new VBox();

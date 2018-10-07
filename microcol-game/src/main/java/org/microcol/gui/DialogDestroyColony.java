@@ -1,8 +1,8 @@
 package org.microcol.gui;
 
 import org.microcol.gui.util.AbstractYesNoDialog;
-import org.microcol.gui.util.Text;
 import org.microcol.gui.util.ViewUtil;
+import org.microcol.i18n.I18n;
 
 import com.google.inject.Inject;
 
@@ -14,10 +14,10 @@ import javafx.scene.control.Label;
 public final class DialogDestroyColony extends AbstractYesNoDialog {
 
     @Inject
-    DialogDestroyColony(final ViewUtil viewUtil, final Text text) {
-        super(viewUtil, text, text.get("dialogDestroyColony.caption"));
+    DialogDestroyColony(final ViewUtil viewUtil, final I18n i18n) {
+        super(viewUtil, i18n, i18n.get(Dialog.destroyColony_caption));
 
-        getContext().getChildren().add(new Label(text.get("dialogDestroyColony.question")));
+        getContext().getChildren().add(new Label(i18n.get(Dialog.destroyColony_question)));
     }
 
     boolean isSelectedContinue() {

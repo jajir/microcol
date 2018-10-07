@@ -48,21 +48,21 @@ public final class PanelColonyStructures extends TitledPanel {
 
     private final Logger logger = LoggerFactory.getLogger(PanelColonyStructures.class);
 
-    private final static int COLUMN_WIDTH = 120;
+    private final static int COLUMN_WIDTH = 130;
 
-    private final static int COLUMN_1 = 60;
+    private final static int COLUMN_1 = 25;
     private final static int COLUMN_2 = COLUMN_1 + COLUMN_WIDTH;
     private final static int COLUMN_3 = COLUMN_2 + COLUMN_WIDTH;
     private final static int COLUMN_4 = COLUMN_3 + COLUMN_WIDTH;
 
     private final static int ROW_HEIGHT = 74;
 
-    private final static int ROW_1 = 10;
+    private final static int ROW_1 = 20;
     private final static int ROW_2 = ROW_1 + ROW_HEIGHT;
     private final static int ROW_3 = ROW_2 + ROW_HEIGHT;
     private final static int ROW_4 = ROW_3 + ROW_HEIGHT;
 
-    private final static int PRODUCTION_TEXT_X = 0;
+    private final static int PRODUCTION_TEXT_X = 30;
     private final static int PRODUCTION_TEXT_Y = 0;
 
     private final static Point PRODUCTION_TEXT = Point.of(PRODUCTION_TEXT_X, PRODUCTION_TEXT_Y);
@@ -78,7 +78,7 @@ public final class PanelColonyStructures extends TitledPanel {
     private final static int SLOT_POSITION_TOTAL_WIDTH = 3 * GamePanelView.TILE_WIDTH_IN_PX
             + 2 * SLOT_POSITION_SLOT_GAP;
 
-    private final static int SLOT_POSITION_START = -SLOT_POSITION_TOTAL_WIDTH / 2;
+    private final static int SLOT_POSITION_START = -SLOT_POSITION_TOTAL_WIDTH / 2 + 50;
 
     private final static Point[] SLOT_POSITIONS = new Point[] { Point.of(SLOT_POSITION_START, 10),
             Point.of(SLOT_POSITION_START + SLOT_POSITION_WIDTH, 10),

@@ -1,8 +1,8 @@
 package org.microcol.gui;
 
 import org.microcol.gui.util.AbstractWarningDialog;
-import org.microcol.gui.util.Text;
 import org.microcol.gui.util.ViewUtil;
+import org.microcol.i18n.I18n;
 import org.microcol.model.event.ColonyWasCapturedEvent;
 
 import com.google.common.base.Preconditions;
@@ -12,12 +12,12 @@ import javafx.scene.control.Label;
 
 public final class DialogColonyWasCaptured extends AbstractWarningDialog {
 
-    private final Text text;
+    private final I18n i18n;
 
     @Inject
-    public DialogColonyWasCaptured(final ViewUtil viewUtil, final Text text) {
-        super(viewUtil, text, text.get(KEY_DIALOG_OK), text.get("dialogColonyWasCaptured.caption"));
-        this.text = Preconditions.checkNotNull(text);
+    public DialogColonyWasCaptured(final ViewUtil viewUtil, final I18n i18n) {
+        super(viewUtil, i18n, Dialog.colonyWasCaptured_caption);
+        this.i18n = Preconditions.checkNotNull(i18n);
     }
 
     @Override
@@ -28,8 +28,8 @@ public final class DialogColonyWasCaptured extends AbstractWarningDialog {
 
     public void showAndWait(final ColonyWasCapturedEvent event) {
         getContext().getChildren().clear();
-        getContext().getChildren().add(new Label(text.get("dialogColonyWasCaptured.text1")
-                + event.getCapturedColony().getName() + text.get("dialogColonyWasCaptured.text2")));
+        getContext().getChildren().add(new Label(i18n.get(Dialog.colonyWasCaptured_text1)
+                + event.getCapturedColony().getName() + i18n.get(Dialog.colonyWasCaptured_text2)));
         super.showAndWait();
     }
 

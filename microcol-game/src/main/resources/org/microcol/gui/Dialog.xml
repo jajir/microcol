@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE properties [
+<!ELEMENT properties ( comment?, entry* ) >
+<!ATTLIST properties version CDATA #FIXED "1.0">
+<!ELEMENT comment (#PCDATA) >
+<!ELEMENT entry (#PCDATA) >
+<!ATTLIST entry key CDATA #REQUIRED>
+]>
+
+<properties>
+	<comment>Define keys for Europe dialog</comment>
+
+	<entry key="ok">Ok</entry>
+	<entry key="cancel">Cancel</entry>
+	
+	<entry key="fight_title">Fight Advisor</entry>
+	<entry key="fight_attacker">Attacker</entry>
+	<entry key="fight_defender">Defender</entry>
+	<entry key="fight_buttonFight">Fight</entry>
+	<entry key="fight_buttonCancel">Cancel</entry>
+	<entry key="fight_hideOption">Check this when you don't want to see this Fight Advisor next time. Fight Advisor could be enabled/disabled from Main Menu 'Preferences'"</entry>
+	
+	<entry key="unitCantFightWarning_caption">This unit can't fight.</entry>
+	
+	<entry key="notEnoughGold_caption">You don't have enough gold.</entry>
+	
+	<entry key="independenceWasDeclared_caption">You declared independence. Now get ready for Royal army.</entry>
+
+	<entry key="unitCantMoveHere_caption">I't not possible to move unit here.</entry>
+
+	<entry key="gameOver_caption">Game over.</entry>
+	<entry key="gameOver_allColoniesAreLost">You lost all colonies.</entry>
+	<entry key="gameOver_timeIsUp">You didn't reach freedom before year 1800. You failed to reach freedom.</entry>
+
+	<entry key="destroyColony_caption">Do you want do destroy colony?</entry>
+	<entry key="destroyColony_question">When you leave colony with last unit than colony will be destroyed.</entry>
+
+	<entry key="colonyWasCaptured_caption">You captured colony</entry>
+	<entry key="colonyWasCaptured_text1">You captured colony '</entry>
+	<entry key="colonyWasCaptured_text2">'. Congratulation.</entry>
+
+	<entry key="about_caption">About MicroCol</entry>
+	<entry key="about_version">Version :</entry>
+	
+	<entry key="saveGame_title">Save game</entry>
+	<entry key="loadGame_title">Load game</entry>
+
+</properties>

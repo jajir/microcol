@@ -1,5 +1,8 @@
 package org.microcol.gui.util;
 
+import org.microcol.gui.Loc;
+import org.microcol.i18n.I18n;
+
 import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -13,8 +16,8 @@ public final class ButtonsBar extends HBox {
 
     private final Button buttonOk;
 
-    public ButtonsBar(final Text text) {
-        this(text.get(AbstractMessageWindow.KEY_DIALOG_OK));
+    public ButtonsBar(final I18n i18n) {
+        this(i18n.get(Loc.ok));
     }
 
     public ButtonsBar(final String buttonOkLabel) {

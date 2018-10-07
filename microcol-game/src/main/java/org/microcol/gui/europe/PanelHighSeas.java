@@ -6,7 +6,12 @@ import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.image.ImageProvider;
 import org.microcol.gui.util.BackgroundHighlighter;
 import org.microcol.gui.util.ClipboardEval;
+import org.microcol.gui.util.JavaFxComponent;
+import org.microcol.gui.util.Repaintable;
 import org.microcol.gui.util.TitledPanel;
+import org.microcol.gui.util.UpdatableLanguage;
+import org.microcol.i18n.I18n;
+import org.microcol.i18n.MessageKeyResource;
 import org.microcol.model.Unit;
 
 import com.google.common.base.Preconditions;
@@ -17,12 +22,14 @@ import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Region;
 
 /**
  * Panels shows ships in seas. Ships are incoming to port or are going to new
  * world.
  */
-public final class PanelHighSeas extends TitledPanel {
+public final class PanelHighSeas<T extends Enum<T> & MessageKeyResource>
+        implements JavaFxComponent, Repaintable, UpdatableLanguage {
 
     private boolean isShownShipsTravelingToEurope;
 
@@ -34,24 +41,36 @@ public final class PanelHighSeas extends TitledPanel {
 
     private final GameModelController gameModelController;
 
+    private final TitledPanel titledPanel;
+
+    private T titleKey;
+
     @Inject
     public PanelHighSeas(final EuropeDialogCallback europeDialog, final ImageProvider imageProvider,
             final GameModelController gameModelController) {
-        super();
         this.europeDialog = Preconditions.checkNotNull(europeDialog);
         this.imageProvider = Preconditions.checkNotNull(imageProvider);
         this.gameModelController = Preconditions.checkNotNull(gameModelController);
-        minHeightProperty().set(80);
+
         shipsContainer = new HBox();
-        getChildren().add(shipsContainer);
-        final BackgroundHighlighter backgroundHighlighter = new BackgroundHighlighter(this,
-                this::isItCorrectObject);
-        setOnDragEntered(backgroundHighlighter::onDragEntered);
-        setOnDragExited(backgroundHighlighter::onDragExited);
-        setOnDragOver(this::onDragOver);
-        setOnDragDropped(this::onDragDropped);
+        final BackgroundHighlighter backgroundHighlighter = new BackgroundHighlighter(
+                shipsContainer, this::isItCorrectObject);
+        shipsContainer.setOnDragEntered(backgroundHighlighter::onDragEntered);
+        shipsContainer.setOnDragExited(backgroundHighlighter::onDragExited);
+        shipsContainer.setOnDragOver(this::onDragOver);
+        shipsContainer.setOnDragDropped(this::onDragDropped);
+        shipsContainer.minHeightProperty().set(60);
+
+        titledPanel = new TitledPanel();
+        titledPanel.getStyleClass().add("ships-container");
+        titledPanel.getChildren().add(shipsContainer);
     }
 
+    public void addStyle(final String style) {
+        titledPanel.getStyleClass().add(style);
+    }
+
+    @Override
     public void repaint() {
         shipsContainer.getChildren().clear();
         showShips();
@@ -104,6 +123,24 @@ public final class PanelHighSeas extends TitledPanel {
      */
     public void setShownShipsTravelingToEurope(final boolean isShownShipsTravelingToEurope) {
         this.isShownShipsTravelingToEurope = isShownShipsTravelingToEurope;
+    }
+
+    @Override
+    public Region getContent() {
+        return titledPanel;
+    }
+
+    @Override
+    public void updateLanguage(final I18n i18n) {
+        titledPanel.setTitle(i18n.get(titleKey));
+    }
+
+    /**
+     * @param titleKey
+     *            the titleKey to set
+     */
+    public void setTitleKey(T titleKey) {
+        this.titleKey = Preconditions.checkNotNull(titleKey);
     }
 
 }

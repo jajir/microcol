@@ -6,7 +6,11 @@ import org.microcol.gui.image.ImageProvider;
 import org.microcol.gui.util.BackgroundHighlighter;
 import org.microcol.gui.util.ClipboardEval;
 import org.microcol.gui.util.From;
+import org.microcol.gui.util.JavaFxComponent;
+import org.microcol.gui.util.Repaintable;
 import org.microcol.gui.util.TitledPanel;
+import org.microcol.gui.util.UpdatableLanguage;
+import org.microcol.i18n.I18n;
 import org.microcol.model.GoodType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,15 +22,18 @@ import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Region;
 
 /**
  * Show list of all available goods.
  */
-public final class PanelEuropeGoods extends TitledPanel {
+public final class PanelEuropeGoods implements JavaFxComponent, UpdatableLanguage, Repaintable {
 
     private final Logger logger = LoggerFactory.getLogger(PanelEuropeGoods.class);
 
-    private final HBox hBox;
+    private final HBox mainPanel;
+
+    private final TitledPanel titledPanel;
 
     private final GameModelController gameModelController;
 
@@ -36,27 +43,34 @@ public final class PanelEuropeGoods extends TitledPanel {
     public PanelEuropeGoods(final EuropeDialogCallback europeDialogCallback,
             final GameModelController gameModelController, final ImageProvider imageProvider,
             final DialogNotEnoughGold dialogNotEnoughGold) {
-        super("zbozi");
         this.gameModelController = Preconditions.checkNotNull(gameModelController);
         this.europeDialogCallback = Preconditions.checkNotNull(europeDialogCallback);
-        hBox = new HBox();
+        mainPanel = new HBox();
         GoodType.BUYABLE_GOOD_TYPES.forEach(goodType -> {
-            hBox.getChildren().add(new PanelGood(goodType, imageProvider, gameModelController,
+            mainPanel.getChildren().add(new PanelGood(goodType, imageProvider, gameModelController,
                     dialogNotEnoughGold));
         });
-        getContentPane().getChildren().add(hBox);
-        final BackgroundHighlighter backgroundHighlighter = new BackgroundHighlighter(this,
+        final BackgroundHighlighter backgroundHighlighter = new BackgroundHighlighter(mainPanel,
                 this::isItGoodAmount);
-        setOnDragEntered(backgroundHighlighter::onDragEntered);
-        setOnDragExited(backgroundHighlighter::onDragExited);
-        setOnDragOver(this::onDragOver);
-        setOnDragDropped(this::onDragDropped);
+        mainPanel.setOnDragEntered(backgroundHighlighter::onDragEntered);
+        mainPanel.setOnDragExited(backgroundHighlighter::onDragExited);
+        mainPanel.setOnDragOver(this::onDragOver);
+        mainPanel.setOnDragDropped(this::onDragDropped);
+        
+        titledPanel = new TitledPanel();
+        titledPanel.getContentPane().getChildren().add(mainPanel);
     }
 
+    @Override
     public void repaint() {
-        hBox.getChildren().forEach(node -> {
+        mainPanel.getChildren().forEach(node -> {
             ((PanelGood) node).replain();
         });
+    }
+
+    @Override
+    public void updateLanguage(final I18n i18n) {
+        titledPanel.setTitle(i18n.get(Europe.goodsPanelTitle));
     }
 
     private void onDragOver(final DragEvent event) {
@@ -84,6 +98,11 @@ public final class PanelEuropeGoods extends TitledPanel {
         logger.debug("Drag over unit id '" + db.getString() + "'.");
         return ClipboardEval.make(gameModelController.getModel(), db)
                 .filterFrom(from -> From.VALUE_FROM_UNIT == from).isNotEmpty();
+    }
+
+    @Override
+    public Region getContent() {
+        return titledPanel;
     }
 
 }

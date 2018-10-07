@@ -28,13 +28,13 @@ public final class PanelEuropeDockBehavior extends AbstractPanelDockBehavior {
     private final EuropeDialogCallback europeDialogCallback;
     private final GameModelController gameModelController;
     private final DialogNotEnoughGold dialogNotEnoughGold;
-    private final ChooseGoodAmount chooseGoodAmount;
+    private final ChooseGoodAmountDialog chooseGoodAmount;
 
     @Inject
     PanelEuropeDockBehavior(final EuropeDialogCallback europeDialogCallback,
             final GameModelController gameModelController, final ImageProvider imageProvider,
             final DialogNotEnoughGold dialogNotEnoughGold,
-            final ChooseGoodAmount chooseGoodAmount) {
+            final ChooseGoodAmountDialog chooseGoodAmount) {
         super(gameModelController, imageProvider);
         this.europeDialogCallback = Preconditions.checkNotNull(europeDialogCallback);
         this.gameModelController = Preconditions.checkNotNull(gameModelController);

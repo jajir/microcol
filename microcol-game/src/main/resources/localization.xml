@@ -47,8 +47,6 @@
 	<entry key="mainMenu.help.colonizopedia">Colonizopedia</entry>
 
 	<entry key="aboutDialog.caption">About MicroCol</entry>
-	<entry key="dialog.ok">Ok</entry>
-	<entry key="dialog.cancel">Cancel</entry>
 	<entry key="rightPanel.description">Here will be information about selected tile and units on it</entry>
 	<entry key="unitsPanel.description">Here will be information about selected tile and units on it</entry>
 	<entry key="unitsPanel.unexplored">Unknown</entry>
@@ -75,9 +73,6 @@
 	<entry key="statusBar.season.summer">Summer</entry>
 	<entry key="statusBar.season.autumn">Autumn</entry>
 	<entry key="statusBar.season.winter">Winter</entry>
-
-	<entry key="dialogAbout.caption">About MicroCol</entry>
-	<entry key="dialogAbout.version">Version :</entry>
 
 	<entry key="startPanel.buttonContinue">Continue in last played game</entry>
 	<entry key="startPanel.buttonLoadSave">Load saved game</entry>
@@ -127,14 +122,6 @@ jestli klesne na nulu, osadnicí začnou umírat hlady. Vyrob 30 doutníků.</en
 	<entry key="campaign.default.m2.portIsClosed">Od této chvíle už nemůžeš jezdit do Evropy. Zdá se, že se král hodně zlobí.</entry>
 	<entry key="campaign.default.m2.done1">Sláva. Podařilo se to porazit královké vojsko.</entry>
 	<entry key="campaign.default.m2.done2">Zde tvoje cesta končí. Pro svůj mladý národ jsi vydobyl svobodu. Všechny oběti položené k dosažení vznešeného cíle se mnohokrát vrátili.</entry>
-	
-	<entry key="preferencesVolume.caption">Volume</entry>
-	<entry key="preferencesVolume.low">Low</entry>
-	<entry key="preferencesVolume.high">High</entry>
-
-	<entry key="preferencesAnimationSpeed.caption">Animation speed</entry>
-	<entry key="preferencesAnimationSpeed.fast">Fast</entry>
-	<entry key="preferencesAnimationSpeed.slow">Slow</entry>
 
 	<entry key="chooseGoodAmount.caption">How many would you like to transfer?</entry>
 	<entry key="chooseGoodAmount.zero">Nothing</entry>
@@ -205,32 +192,6 @@ jestli klesne na nulu, osadnicí začnou umírat hlady. Vyrob 30 doutníků.</en
 	
 	<entry key="missionGoals.title">Mission Goals</entry>
 	<entry key="missionGoals.caption">Mission Goals</entry>
-
-	<entry key="dialogFight.title">Fight Advisor</entry>
-	<entry key="dialogFight.attacker">Attacker</entry>
-	<entry key="dialogFight.defender">Defender</entry>
-	<entry key="dialogFight.buttonFight">Fight</entry>
-	<entry key="dialogFight.buttonCancel">Cancel</entry>
-	<entry key="dialogFight.hideOption">Check this when you don't want to see this Fight Advisor next time. Fight Advisor could be enabled/disabled from Main Menu 'Preferences'"</entry>
-	
-	<entry key="dialogUnitCantFightWarning.caption">This unit can't fight.</entry>
-	
-	<entry key="dialogNotEnoughGold.caption">You don't have enough gold.</entry>
-	
-	<entry key="dialogIndependenceWasDeclared.caption">You declared independence. Now get ready for Royal army.</entry>
-
-	<entry key="dialogUnitCantMoveHere.caption">I't not possible to move unit here.</entry>
-
-	<entry key="dialogGameOver.caption">Game over.</entry>
-	<entry key="dialogGameOver.allColoniesAreLost">You lost all colonies.</entry>
-	<entry key="dialogGameOver.timeIsUp">You didn't reach freedom before year 1800. You failed to reach freedom.</entry>
-
-	<entry key="dialogDestroyColony.caption">Do you want do destroy colony?</entry>
-	<entry key="dialogDestroyColony.question">When you leave colony with last unit than colony will be destroyed.</entry>
-
-	<entry key="dialogColonyWasCaptured.caption">You captured colony</entry>
-	<entry key="dialogColonyWasCaptured.text1">You captured colony '</entry>
-	<entry key="dialogColonyWasCaptured.text2">'. Congratulation.</entry>
 	
 	<entry key="FileChooser.cancelButtonText">Cancel</entry>
 	<entry key="FileChooser.fileDateHeaderText">Date modified</entry>
@@ -242,11 +203,6 @@ jestli klesne na nulu, osadnicí začnou umírat hlady. Vyrob 30 doutníků.</en
 	<entry key="FileChooser.newFolderButtonText">New Folder</entry>
 	<entry key="FileChooser.filesOfTypeLabelText">File Format:</entry>
 	<entry key="FileChooser.saveDialogFileNameLabelText">Save As:</entry>
-	
-	<entry key="saveGameDialog.title">Save game</entry>
-	<entry key="loadGameDialog.title">Load game</entry>
-	
-	<entry key="colonizopedia.title">Colonizopedia</entry>
 	
 	<entry key="construction.TOWN_HALL.name">Town Hall</entry>
 	<entry key="construction.LUMBER_MILL.name">Lumber Mill</entry>

@@ -1,8 +1,8 @@
 package org.microcol.gui;
 
 import org.microcol.gui.util.AbstractWarningDialog;
-import org.microcol.gui.util.Text;
 import org.microcol.gui.util.ViewUtil;
+import org.microcol.i18n.I18n;
 
 /**
  * Dialog is shown when user try to move unit to illegal position. For example
@@ -10,8 +10,8 @@ import org.microcol.gui.util.ViewUtil;
  */
 public final class DialogUnitCantMoveHere extends AbstractWarningDialog {
 
-    public DialogUnitCantMoveHere(final ViewUtil viewUtil, final Text text) {
-        super(viewUtil, text, "dialogUnitCantMoveHere.caption");
+    public DialogUnitCantMoveHere(final ViewUtil viewUtil, final I18n i18n) {
+        super(viewUtil, i18n, Dialog.unitCantMoveHere_caption);
         showAndWait();
     }
 

@@ -58,7 +58,7 @@ public final class PaintService {
             final FontService fontService) {
         this.imageProvider = Preconditions.checkNotNull(imageProvider);
         this.mapManager = Preconditions.checkNotNull(mapManager);
-        this.colonyFont = fontService.getFont(FontService.FONT_CARDO_REGULAR, 16);
+        this.colonyFont = fontService.getDefault(16);
     }
 
     /**

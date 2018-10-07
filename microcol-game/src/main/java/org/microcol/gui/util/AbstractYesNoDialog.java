@@ -1,5 +1,7 @@
 package org.microcol.gui.util;
 
+import org.microcol.i18n.I18n;
+
 import javafx.scene.layout.VBox;
 
 public abstract class AbstractYesNoDialog extends AbstractMessageWindow {
@@ -8,15 +10,15 @@ public abstract class AbstractYesNoDialog extends AbstractMessageWindow {
 
     private boolean isSelectedYes = false;
 
-    public AbstractYesNoDialog(final ViewUtil viewUtil, final Text text,
+    public AbstractYesNoDialog(final ViewUtil viewUtil, final I18n i18ns,
             final String dialogCaption) {
-        super(viewUtil);
+        super(viewUtil, i18ns);
         setTitle(dialogCaption);
 
         /**
          * Buttons
          */
-        final ButtonsBarYesNo buttonsBar = new ButtonsBarYesNo(text);
+        final ButtonsBarYesNo buttonsBar = new ButtonsBarYesNo(i18ns);
         buttonsBar.getButtonYes().setOnAction(e -> {
             isSelectedYes = true;
             close();

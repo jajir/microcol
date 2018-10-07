@@ -4,7 +4,7 @@
 
 .root{
 	-fx-padding: 30 30 15 30;
-	-fx-background-color: white;
+	-fx-font-family: Tillana;
 }
 
 #caption{
@@ -16,5 +16,7 @@
 }
 
 .cratePanel{
-	-fx-padding: 2 2 2 2;
+	-fx-min-width: 49;
+	-fx-min-height: 49;
+	-fx-padding: 2.0 2.0 2.0 2.0;
 }

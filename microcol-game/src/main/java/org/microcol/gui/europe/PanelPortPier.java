@@ -4,12 +4,15 @@ import java.util.Optional;
 
 import org.microcol.gui.LocalizationHelper;
 import org.microcol.gui.event.model.GameModelController;
+import org.microcol.gui.gamepanel.GamePanelView;
 import org.microcol.gui.image.ImageProvider;
 import org.microcol.gui.util.BackgroundHighlighter;
 import org.microcol.gui.util.ClipboardEval;
 import org.microcol.gui.util.From;
-import org.microcol.gui.util.Text;
-import org.microcol.gui.util.TitledPanel;
+import org.microcol.gui.util.JavaFxComponent;
+import org.microcol.gui.util.Repaintable;
+import org.microcol.gui.util.UpdatableLanguage;
+import org.microcol.i18n.I18n;
 import org.microcol.model.Unit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,17 +20,17 @@ import org.slf4j.LoggerFactory;
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
 
-import javafx.scene.control.Label;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 
 /**
  * Panels shows list of people already recruited. People from this panel could
  * be immediately embark.
  */
-public final class PanelPortPier extends TitledPanel {
+public final class PanelPortPier implements JavaFxComponent, UpdatableLanguage, Repaintable {
 
     private final Logger logger = LoggerFactory.getLogger(PanelPortPier.class);
 
@@ -39,33 +42,40 @@ public final class PanelPortPier extends TitledPanel {
 
     private final LocalizationHelper localizationHelper;
 
-    private final VBox panelUnits;
+    private final Pane panelUnits;
 
     @Inject
     public PanelPortPier(final GameModelController gameModelController,
-            final EuropeDialogCallback europeDialogCallback, final Text text,
-            final ImageProvider imageProvider, final LocalizationHelper localizationHelper) {
-        super(text.get("europe.pier"), new Label(text.get("europe.pier")));
+            final EuropeDialogCallback europeDialogCallback, final ImageProvider imageProvider,
+            final LocalizationHelper localizationHelper) {
         this.gameModelController = Preconditions.checkNotNull(gameModelController);
         this.europeDialog = Preconditions.checkNotNull(europeDialogCallback);
         this.imageProvider = Preconditions.checkNotNull(imageProvider);
         this.localizationHelper = Preconditions.checkNotNull(localizationHelper);
-        panelUnits = new VBox();
-        getContentPane().getChildren().add(panelUnits);
-        final BackgroundHighlighter backgroundHighlighter = new BackgroundHighlighter(this,
+        panelUnits = new HBox();
+        panelUnits.getStyleClass().add("panel-port-pier");
+        final BackgroundHighlighter backgroundHighlighter = new BackgroundHighlighter(panelUnits,
                 this::isItCorrectObject);
-        setOnDragEntered(backgroundHighlighter::onDragEntered);
-        setOnDragExited(backgroundHighlighter::onDragExited);
-        setOnDragOver(this::onDragOver);
-        setOnDragDropped(this::onDragDropped);
+        panelUnits.setOnDragEntered(backgroundHighlighter::onDragEntered);
+        panelUnits.setOnDragExited(backgroundHighlighter::onDragExited);
+        panelUnits.setOnDragOver(this::onDragOver);
+        panelUnits.setOnDragDropped(this::onDragDropped);
+        panelUnits.setMinHeight(GamePanelView.TILE_WIDTH_IN_PX);
+
     }
 
-    void repaint() {
+    @Override
+    public void repaint() {
         panelUnits.getChildren().clear();
         gameModelController.getModel().getEurope().getPier()
                 .getUnits(gameModelController.getCurrentPlayer())
                 .forEach(unit -> panelUnits.getChildren()
                         .add(new PanelPortPierUnit(unit, imageProvider, localizationHelper)));
+    }
+
+    @Override
+    public void updateLanguage(final I18n i18n) {
+        // panelUnits.setTitle(i18n.get(Europe.europePier));
     }
 
     private void onDragOver(final DragEvent event) {
@@ -94,6 +104,11 @@ public final class PanelPortPier extends TitledPanel {
                 .filterFrom(from -> From.VALUE_FROM_EUROPE_PORT_PIER != from
                         && From.VALUE_FROM_EUROPE_SHOP != from)
                 .isNotEmpty();
+    }
+
+    @Override
+    public Pane getContent() {
+        return panelUnits;
     }
 
 }

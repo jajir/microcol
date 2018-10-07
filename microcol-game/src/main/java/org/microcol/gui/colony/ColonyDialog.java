@@ -1,5 +1,6 @@
 package org.microcol.gui.colony;
 
+import org.microcol.gui.Dialog;
 import org.microcol.gui.MainStageBuilder;
 import org.microcol.gui.Point;
 import org.microcol.gui.image.ImageProvider;
@@ -9,6 +10,7 @@ import org.microcol.gui.util.PaintService;
 import org.microcol.gui.util.PanelDock;
 import org.microcol.gui.util.Text;
 import org.microcol.gui.util.ViewUtil;
+import org.microcol.i18n.I18n;
 import org.microcol.model.Colony;
 import org.microcol.model.Unit;
 import org.microcol.model.event.UnitMovedToColonyFieldEvent;
@@ -60,14 +62,14 @@ public final class ColonyDialog extends AbstractMessageWindow implements ColonyD
     Colony colony;
 
     @Inject
-    public ColonyDialog(final ViewUtil viewUtil, final Text text, final ImageProvider imageProvider,
-            final PanelColonyFields panelColonyFields,
+    public ColonyDialog(final ViewUtil viewUtil, final Text text, final I18n i18n,
+            final ImageProvider imageProvider, final PanelColonyFields panelColonyFields,
             final PanelColonyStructures panelColonyStructures,
             final PanelOutsideColony panelOutsideColony, final PanelColonyGoods panelColonyGoods,
             final PanelColonyDockBehaviour panelColonyDockBehaviour,
             final UnitMovedOutsideColonyController unitMovedOutsideColonyController,
             final PanelQueueSummary panelQueueSummary, final PaintService paintService) {
-        super(viewUtil);
+        super(viewUtil, i18n);
         this.paintService = Preconditions.checkNotNull(paintService);
         Preconditions.checkNotNull(imageProvider);
         setTitle(text.get("europeDialog.caption"));
@@ -101,7 +103,8 @@ public final class ColonyDialog extends AbstractMessageWindow implements ColonyD
         this.panelOutsideColony = Preconditions.checkNotNull(panelOutsideColony);
 
         final HBox managementRow = new HBox();
-        managementRow.getChildren().addAll(panelProductionSummary, panelDock, panelOutsideColony);
+        managementRow.getChildren().addAll(panelProductionSummary, panelDock.getContent(),
+                panelOutsideColony);
 
         /**
          * Good row - 3
@@ -111,7 +114,7 @@ public final class ColonyDialog extends AbstractMessageWindow implements ColonyD
         /**
          * Last row 4
          */
-        final Button buttonOk = new Button(text.get("dialog.ok"));
+        final Button buttonOk = new Button(i18n.get(Dialog.ok));
         buttonOk.setOnAction(e -> {
             close();
         });

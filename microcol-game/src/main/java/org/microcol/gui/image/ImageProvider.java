@@ -35,7 +35,7 @@ public final class ImageProvider {
     private final List<ImageLoader> STARTUP_IMAGE_LOADERS = Lists.newArrayList(
             new BackgroundImageLoader(), new GrassCoastImageLoader(), new IceCoastImageLoader(),
             new HiddenCoastImageLoader(), new ImageLoaderUnit(), new ImageLoaderGoods(),
-            new ImageLoaderBuilding());
+            new ImageLoaderBuilding(), new ImageLoaderExtra());
 
     public final static String BACKGROUND_IMAGE_NAME = "backgroud.png";
 
@@ -162,6 +162,8 @@ public final class ImageProvider {
     public static final String IMG_FIELD = "field";
 
     private static final String BASE_PACKAGE = "images";
+
+    public static final String IMG_EUROPE = "europe";
 
     private final Map<String, Image> images;
 

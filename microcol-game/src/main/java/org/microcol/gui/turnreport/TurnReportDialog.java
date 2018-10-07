@@ -1,11 +1,13 @@
 package org.microcol.gui.turnreport;
 
+import org.microcol.gui.Dialog;
 import org.microcol.gui.MainStageBuilder;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.util.AbstractMessageWindow;
 import org.microcol.gui.util.ButtonsBar;
 import org.microcol.gui.util.Text;
 import org.microcol.gui.util.ViewUtil;
+import org.microcol.i18n.I18n;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
@@ -14,7 +16,8 @@ import javafx.event.ActionEvent;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 
-public final class TurnReportDialog extends AbstractMessageWindow implements TurnReportDialogCallback {
+public final class TurnReportDialog extends AbstractMessageWindow
+        implements TurnReportDialogCallback {
 
     private final GameModelController gameModelController;
 
@@ -23,9 +26,9 @@ public final class TurnReportDialog extends AbstractMessageWindow implements Tur
     private final VBox turnEventsPanel;
 
     @Inject
-    TurnReportDialog(final ViewUtil viewUtil, final Text text,
+    TurnReportDialog(final ViewUtil viewUtil, final Text text, final I18n i18n,
             final GameModelController gameModelController) {
-        super(viewUtil);
+        super(viewUtil, i18n);
         this.gameModelController = Preconditions.checkNotNull(gameModelController);
         this.text = Preconditions.checkNotNull(text);
         setTitle(text.get("turnReport.title"));
@@ -34,7 +37,7 @@ public final class TurnReportDialog extends AbstractMessageWindow implements Tur
 
         final VBox mainPanel = new VBox();
 
-        final ButtonsBar buttonsBar = new ButtonsBar(text.get("dialog.ok"));
+        final ButtonsBar buttonsBar = new ButtonsBar(i18n.get(Dialog.ok));
         buttonsBar.getButtonOk().setOnAction(this::onClose);
 
         turnEventsPanel = new VBox();

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE properties [
+<!ELEMENT properties ( comment?, entry* ) >
+<!ATTLIST properties version CDATA #FIXED "1.0">
+<!ELEMENT comment (#PCDATA) >
+<!ELEMENT entry (#PCDATA) >
+<!ATTLIST entry key CDATA #REQUIRED>
+]>
+
+<properties>
+	<comment>Define keys for Europe dialog</comment>
+
+	<entry key="title">Evropa</entry>
+	<entry key="shipsTravelingToNewWorld">Lodě plující do nového světa</entry>
+	<entry key="shipsTravelingToEurope">Lodě plující do Evropy</entry>
+	<entry key="pier">Molo</entry>
+	<entry key="recruit">Najmout</entry>
+	<entry key="buy">Koupit</entry>
+	<entry key="buyUnitDialog_title">Koupit jednotku</entry>
+	<entry key="buyUnitDialog_buttonBuyUnit">Koupit za</entry>
+	<entry key="goodsPanelTitle">Zboží</entry>
+	<entry key="europePier">Molo</entry>
+	<entry key="recruitUnitDialogTitle">Přispět na cestu</entry>
+	<entry key="recruitUnitDialogButton">Přispět</entry>
+
+</properties>
