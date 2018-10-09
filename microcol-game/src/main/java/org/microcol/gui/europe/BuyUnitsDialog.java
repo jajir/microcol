@@ -27,7 +27,7 @@ public final class BuyUnitsDialog extends AbstractMessageWindow {
 
     private final static int MAX_UNITS_IN_ROW = 2;
 
-    private final EuropeDialogCallback europeDialogCallback;
+    private final EuropeCallback europeDialogCallback;
 
     private final Label labelCaption;
 
@@ -35,7 +35,7 @@ public final class BuyUnitsDialog extends AbstractMessageWindow {
     public BuyUnitsDialog(final ViewUtil viewUtil, final I18n i18n,
             final ImageProvider imageProvider, final GameModelController gameModelController,
             final LocalizationHelper localizationHelper,
-            final EuropeDialogCallback europeDialogCallback,
+            final EuropeCallback europeDialogCallback,
             final DialogNotEnoughGold dialogNotEnoughGold) {
         super(viewUtil, i18n);
         this.europeDialogCallback = Preconditions.checkNotNull(europeDialogCallback);

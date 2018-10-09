@@ -36,7 +36,7 @@ public final class PanelPortPier implements JavaFxComponent, UpdatableLanguage, 
 
     private final GameModelController gameModelController;
 
-    private final EuropeDialogCallback europeDialog;
+    private final EuropeCallback europeDialog;
 
     private final ImageProvider imageProvider;
 
@@ -46,7 +46,7 @@ public final class PanelPortPier implements JavaFxComponent, UpdatableLanguage, 
 
     @Inject
     public PanelPortPier(final GameModelController gameModelController,
-            final EuropeDialogCallback europeDialogCallback, final ImageProvider imageProvider,
+            final EuropeCallback europeDialogCallback, final ImageProvider imageProvider,
             final LocalizationHelper localizationHelper) {
         this.gameModelController = Preconditions.checkNotNull(gameModelController);
         this.europeDialog = Preconditions.checkNotNull(europeDialogCallback);

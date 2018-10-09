@@ -25,13 +25,13 @@ public final class PanelEuropeDockBehavior extends AbstractPanelDockBehavior {
 
     final Logger logger = LoggerFactory.getLogger(PanelEuropeDockBehavior.class);
 
-    private final EuropeDialogCallback europeDialogCallback;
+    private final EuropeCallback europeDialogCallback;
     private final GameModelController gameModelController;
     private final DialogNotEnoughGold dialogNotEnoughGold;
     private final ChooseGoodAmountDialog chooseGoodAmount;
 
     @Inject
-    PanelEuropeDockBehavior(final EuropeDialogCallback europeDialogCallback,
+    PanelEuropeDockBehavior(final EuropeCallback europeDialogCallback,
             final GameModelController gameModelController, final ImageProvider imageProvider,
             final DialogNotEnoughGold dialogNotEnoughGold,
             final ChooseGoodAmountDialog chooseGoodAmount) {

@@ -33,7 +33,7 @@ public final class PanelHighSeas<T extends Enum<T> & MessageKeyResource>
 
     private boolean isShownShipsTravelingToEurope;
 
-    private final EuropeDialogCallback europeDialog;
+    private final EuropeCallback europeDialog;
 
     private final HBox shipsContainer;
 
@@ -46,7 +46,7 @@ public final class PanelHighSeas<T extends Enum<T> & MessageKeyResource>
     private T titleKey;
 
     @Inject
-    public PanelHighSeas(final EuropeDialogCallback europeDialog, final ImageProvider imageProvider,
+    public PanelHighSeas(final EuropeCallback europeDialog, final ImageProvider imageProvider,
             final GameModelController gameModelController) {
         this.europeDialog = Preconditions.checkNotNull(europeDialog);
         this.imageProvider = Preconditions.checkNotNull(imageProvider);

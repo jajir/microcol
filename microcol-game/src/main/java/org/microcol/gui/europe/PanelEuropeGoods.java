@@ -37,10 +37,10 @@ public final class PanelEuropeGoods implements JavaFxComponent, UpdatableLanguag
 
     private final GameModelController gameModelController;
 
-    private final EuropeDialogCallback europeDialogCallback;
+    private final EuropeCallback europeDialogCallback;
 
     @Inject
-    public PanelEuropeGoods(final EuropeDialogCallback europeDialogCallback,
+    public PanelEuropeGoods(final EuropeCallback europeDialogCallback,
             final GameModelController gameModelController, final ImageProvider imageProvider,
             final DialogNotEnoughGold dialogNotEnoughGold) {
         this.gameModelController = Preconditions.checkNotNull(gameModelController);

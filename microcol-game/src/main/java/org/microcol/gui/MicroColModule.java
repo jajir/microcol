@@ -15,7 +15,7 @@ import org.microcol.gui.colony.UnitMovedOutsideColonyController;
 import org.microcol.gui.europe.BuyUnitsDialog;
 import org.microcol.gui.europe.ChooseGoodAmountDialog;
 import org.microcol.gui.europe.EuropeDialog;
-import org.microcol.gui.europe.EuropeDialogCallback;
+import org.microcol.gui.europe.EuropeCallback;
 import org.microcol.gui.europe.PanelEuropeDockBehavior;
 import org.microcol.gui.europe.PanelEuropeGoods;
 import org.microcol.gui.europe.PanelHighSeas;
@@ -275,7 +275,7 @@ public final class MicroColModule extends AbstractModule {
          * Europe dialog
          */
         bind(EuropeDialog.class).in(Singleton.class);
-        bind(EuropeDialogCallback.class).to(EuropeDialog.class).in(Singleton.class);
+        bind(EuropeCallback.class).to(EuropeDialog.class).in(Singleton.class);
         bind(PanelHighSeas.class);
         bind(PanelPortPier.class).in(Singleton.class);
         bind(PanelEuropeGoods.class).in(Singleton.class);
