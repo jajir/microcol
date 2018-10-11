@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE properties [
+<!ELEMENT properties ( comment?, entry* ) >
+<!ATTLIST properties version CDATA #FIXED "1.0">
+<!ELEMENT comment (#PCDATA) >
+<!ELEMENT entry (#PCDATA) >
+<!ATTLIST entry key CDATA #REQUIRED>
+]>
+
+<properties>
+	<comment>Define keys for main game menu</comment>
+
+	<entry key="buttonContinue">Pokračovat v naposledy hrané hře</entry>
+	<entry key="buttonLoadSave">Nahrát hru</entry>
+	<entry key="buttonPlayCampaign">Spustit kampaň</entry>
+	<entry key="buttonFreeGame">Nová neomezená hra</entry>
+	<entry key="buttonExitMicroCol">Ukončit hru</entry>
+
+</properties>

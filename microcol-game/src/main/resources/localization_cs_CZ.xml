@@ -74,12 +74,6 @@
 	<entry key="statusBar.season.autumn">Podzim</entry>
 	<entry key="statusBar.season.winter">Zima</entry>
 
-	<entry key="startPanel.buttonContinue">Pokračovat v naposledy hrané hře</entry>
-	<entry key="startPanel.buttonLoadSave">Nahrát hru</entry>
-	<entry key="startPanel.buttonPlayCampaign">Spustit kampaň</entry>
-	<entry key="startPanel.buttonFreeGame">Nová neomezená hra</entry>
-	<entry key="startPanel.buttonExitMicroCol">Ukončit hru</entry>
-
 	<entry key="campaignPanel.buttonBack">Zpět</entry>
 	<entry key="campaignPanel.default.findNewWorld">Kde je Nový Svět?</entry>
 	<entry key="campaignPanel.default.buildArmy">Armáda</entry>

@@ -1,18 +1,20 @@
 package org.microcol.gui;
 
 import org.microcol.gui.gamepanel.PaneCanvas;
+import org.microcol.gui.util.JavaFxComponent;
 
 import com.google.inject.Inject;
 
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 
 /**
  * Panel hold whole game screen without status bar.
  */
-public final class MainGamePanelView {
+public final class MainGamePanelView implements JavaFxComponent {
 
     private final VBox box;
 
@@ -34,7 +36,8 @@ public final class MainGamePanelView {
         box.getChildren().addAll(hBox, statusBar.getStatusBar());
     }
 
-    public VBox getBox() {
+    @Override
+    public Region getContent() {
         return box;
     }
 

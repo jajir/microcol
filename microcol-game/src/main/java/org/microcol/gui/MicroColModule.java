@@ -14,8 +14,8 @@ import org.microcol.gui.colony.PanelQueueSummary;
 import org.microcol.gui.colony.UnitMovedOutsideColonyController;
 import org.microcol.gui.europe.BuyUnitsDialog;
 import org.microcol.gui.europe.ChooseGoodAmountDialog;
-import org.microcol.gui.europe.EuropeDialog;
 import org.microcol.gui.europe.EuropeCallback;
+import org.microcol.gui.europe.EuropeDialog;
 import org.microcol.gui.europe.PanelEuropeDockBehavior;
 import org.microcol.gui.europe.PanelEuropeGoods;
 import org.microcol.gui.europe.PanelHighSeas;
@@ -36,8 +36,11 @@ import org.microcol.gui.event.VolumeChangedListenerPreferences;
 import org.microcol.gui.event.model.ArtifitialPlayersManager;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.event.model.MissionCallBack;
-import org.microcol.gui.gamemenu.CampaignPanelPresenter;
-import org.microcol.gui.gamemenu.CampaignPanelView;
+import org.microcol.gui.gamemenu.BackgroundPanel;
+import org.microcol.gui.gamemenu.ButtonsPanelPresenter;
+import org.microcol.gui.gamemenu.ButtonsPanelView;
+import org.microcol.gui.gamemenu.CampaignMenuPanelPresenter;
+import org.microcol.gui.gamemenu.CampaignMenuPanelView;
 import org.microcol.gui.gamemenu.ExitGameListener;
 import org.microcol.gui.gamemenu.GameFinishedListener;
 import org.microcol.gui.gamemenu.GameMenuPanelPresenter;
@@ -237,9 +240,13 @@ public final class MicroColModule extends AbstractModule {
         bind(GameMenuPanelView.class).in(Singleton.class);
         bind(GameMenuPanelPresenter.class).asEagerSingleton();
 
-        bind(CampaignPanelView.class).in(Singleton.class);
-        bind(CampaignPanelPresenter.Display.class).to(CampaignPanelView.class).in(Singleton.class);
-        bind(CampaignPanelPresenter.class).asEagerSingleton();
+        bind(ButtonsPanelView.class).in(Singleton.class);
+        bind(ButtonsPanelPresenter.class).asEagerSingleton();
+        bind(BackgroundPanel.class).in(Singleton.class);
+
+        bind(CampaignMenuPanelView.class).in(Singleton.class);
+        bind(CampaignMenuPanelPresenter.Display.class).to(CampaignMenuPanelView.class).in(Singleton.class);
+        bind(CampaignMenuPanelPresenter.class).asEagerSingleton();
 
         bind(StatusBarView.class).in(Singleton.class);
         bind(StatusBarPresenter.Display.class).to(StatusBarView.class).in(Singleton.class);

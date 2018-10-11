@@ -2,6 +2,7 @@ package org.microcol.gui.gamemenu;
 
 import java.util.function.Consumer;
 
+import org.microcol.gui.util.JavaFxComponent;
 import org.microcol.gui.util.Text;
 import org.microcol.model.campaign.Campaign;
 import org.microcol.model.campaign.CampaignManager;
@@ -11,12 +12,13 @@ import com.google.inject.Inject;
 
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 
 /**
  * In main area shows basic menu "Start new game".
  */
-public final class CampaignPanelView implements CampaignPanelPresenter.Display {
+public final class CampaignMenuPanelView implements CampaignMenuPanelPresenter.Display, JavaFxComponent {
 
     private final Text text;
 
@@ -29,7 +31,7 @@ public final class CampaignPanelView implements CampaignPanelPresenter.Display {
     private Consumer<String> onSelectedMission;
 
     @Inject
-    CampaignPanelView(final Text text, final CampaignManager campaignManager) {
+    CampaignMenuPanelView(final Text text, final CampaignManager campaignManager) {
         this.text = Preconditions.checkNotNull(text);
         this.campaignManager = Preconditions.checkNotNull(campaignManager);
         box = new VBox();
@@ -65,8 +67,9 @@ public final class CampaignPanelView implements CampaignPanelPresenter.Display {
     private void setLocalizedText() {
         buttonBack.setText(text.get("campaignPanel.buttonBack"));
     }
-
-    public VBox getBox() {
+    
+    @Override
+    public Region getContent() {
         return box;
     }
 

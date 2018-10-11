@@ -3,6 +3,24 @@
  * 
  */
  
+.main-title {
+	-fx-font-size: 24;
+	-fx-translate-x: -200; 	
+	-fx-translate-y: -200;
+}
+
+.game-menu{
+	-fx-translate-x: -140;
+	-fx-translate-y: 100;
+}
+
+.game-menu-inner {
+	-fx-spacing: 10;
+}
+
+/**
+ */
+
 /* disable focused border on component */
 .scroll-pane:focused {
   -fx-background-color: -fx-focus-color,-fx-box-border,-fx-control-inner-background;

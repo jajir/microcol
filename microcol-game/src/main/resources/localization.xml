@@ -74,12 +74,6 @@
 	<entry key="statusBar.season.autumn">Autumn</entry>
 	<entry key="statusBar.season.winter">Winter</entry>
 
-	<entry key="startPanel.buttonContinue">Continue in last played game</entry>
-	<entry key="startPanel.buttonLoadSave">Load saved game</entry>
-	<entry key="startPanel.buttonPlayCampaign">Play campaign</entry>
-	<entry key="startPanel.buttonFreeGame">New free play game</entry>
-	<entry key="startPanel.buttonExitMicroCol">Quit MicroCol</entry>
-
 	<entry key="campaignPanel.buttonBack">Back</entry>
 	<entry key="campaignPanel.default.findNewWorld">New World</entry>
 	<entry key="campaignPanel.default.buildArmy">Build an army</entry>

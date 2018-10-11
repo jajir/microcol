@@ -165,6 +165,8 @@ public final class ImageProvider {
 
     public static final String IMG_EUROPE = "europe";
 
+    public static final String IMG_SUNSET = "sunset";
+
     private final Map<String, Image> images;
 
     private final Map<TerrainType, Image> terrainMap;

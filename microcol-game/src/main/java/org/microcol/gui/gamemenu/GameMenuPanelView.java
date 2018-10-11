@@ -1,106 +1,36 @@
 package org.microcol.gui.gamemenu;
 
-import org.microcol.gui.util.Text;
+import org.microcol.gui.util.JavaFxComponent;
 
-import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
 
-import javafx.geometry.Pos;
-import javafx.scene.control.Button;
-import javafx.scene.layout.VBox;
+import javafx.scene.control.Label;
+import javafx.scene.layout.Region;
+import javafx.scene.layout.StackPane;
 
 /**
- * In main area shows basic menu "Start new game".
+ * In main area shows game welcome page.
  */
-public final class GameMenuPanelView {
+public final class GameMenuPanelView implements JavaFxComponent {
 
-    private final Text text;
-
-    private final Button buttonContinue;
-
-    private final Button buttonLoadSave;
-
-    private final Button buttonPlayCampaign;
-
-    private final Button buttonStartFreeGame;
-
-    private final Button buttonExitMicroCol;
-
-    private final VBox box;
+    private final StackPane mainPanel;
 
     @Inject
-    GameMenuPanelView(final Text text) {
-        this.text = Preconditions.checkNotNull(text);
-        box = new VBox();
-        box.setStyle("-fx-pref-width: 100000; -fx-pref-height: 100000;");
-        box.setAlignment(Pos.CENTER);
-        buttonContinue = new Button();
-        buttonLoadSave = new Button();
-        buttonPlayCampaign = new Button();
-        buttonStartFreeGame = new Button();
-        buttonExitMicroCol = new Button();
-        box.getChildren().add(buttonContinue);
-        box.getChildren().add(buttonLoadSave);
-        box.getChildren().add(buttonPlayCampaign);
-        box.getChildren().add(buttonStartFreeGame);
-        box.getChildren().add(buttonExitMicroCol);
-        setLocalizedText();
+    GameMenuPanelView(final ButtonsPanelView buttonsPanelView,
+            final BackgroundPanel backgroundPanel) {
+        final Label title = new Label("MicroCol");
+        title.getStyleClass().add("main-title");
+
+        mainPanel = new StackPane();
+        mainPanel.setStyle("-fx-pref-width: 100000; -fx-pref-height: 100000;");
+        mainPanel.getChildren().add(backgroundPanel.getContent());
+        mainPanel.getChildren().add(buttonsPanelView.getContent());
+        mainPanel.getChildren().add(title);
     }
 
-    void setContinueEnabled(final boolean isEnabled) {
-        buttonContinue.setDisable(!isEnabled);
-    }
-
-    void setFreeGameEnabled(final boolean isEnabled) {
-        buttonStartFreeGame.setDisable(!isEnabled);
-    }
-
-    public void updateLanguage() {
-        setLocalizedText();
-    }
-
-    private void setLocalizedText() {
-        buttonContinue.setText(text.get("startPanel.buttonContinue"));
-        buttonLoadSave.setText(text.get("startPanel.buttonLoadSave"));
-        buttonPlayCampaign.setText(text.get("startPanel.buttonPlayCampaign"));
-        buttonStartFreeGame.setText(text.get("startPanel.buttonFreeGame"));
-        buttonExitMicroCol.setText(text.get("startPanel.buttonExitMicroCol"));
-    }
-
-    public Button getButtonStartFreeGame() {
-        return buttonStartFreeGame;
-    }
-
-    public VBox getPanel() {
-        return box;
-    }
-
-    /**
-     * @return the buttonContinue
-     */
-    public Button getButtonContinue() {
-        return buttonContinue;
-    }
-
-    /**
-     * @return the buttonLoadSave
-     */
-    public Button getButtonLoadSave() {
-        return buttonLoadSave;
-    }
-
-    /**
-     * @return the buttonPlayCampaign
-     */
-    public Button getButtonPlayCampaign() {
-        return buttonPlayCampaign;
-    }
-
-    /**
-     * @return the buttonExitMicroCol
-     */
-    public Button getButtonExitMicroCol() {
-        return buttonExitMicroCol;
+    @Override
+    public Region getContent() {
+        return mainPanel;
     }
 
 }

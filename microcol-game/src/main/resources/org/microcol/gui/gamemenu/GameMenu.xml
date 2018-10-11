@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE properties [
+<!ELEMENT properties ( comment?, entry* ) >
+<!ATTLIST properties version CDATA #FIXED "1.0">
+<!ELEMENT comment (#PCDATA) >
+<!ELEMENT entry (#PCDATA) >
+<!ATTLIST entry key CDATA #REQUIRED>
+]>
+
+<properties>
+	<comment>Define keys for Europe dialog</comment>
+
+	<entry key="buttonContinue">Continue in last played game</entry>
+	<entry key="buttonLoadSave">Load saved game</entry>
+	<entry key="buttonPlayCampaign">Play campaign</entry>
+	<entry key="buttonFreeGame">New free play game</entry>
+	<entry key="buttonExitMicroCol">Quit MicroCol</entry>
+
+</properties>

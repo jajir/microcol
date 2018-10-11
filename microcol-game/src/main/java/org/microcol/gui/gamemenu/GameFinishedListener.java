@@ -13,10 +13,10 @@ import com.google.inject.Inject;
 @Listener
 public final class GameFinishedListener {
 
-    private final GameMenuPanelPresenter gameMenuPanelPresenter;
+    private final ButtonsPanelPresenter gameMenuPanelPresenter;
 
     @Inject
-    GameFinishedListener(final GameMenuPanelPresenter gameMenuPanelPresenter) {
+    GameFinishedListener(final ButtonsPanelPresenter gameMenuPanelPresenter) {
         this.gameMenuPanelPresenter = Preconditions.checkNotNull(gameMenuPanelPresenter);
     }
 

@@ -17,7 +17,7 @@ import javafx.scene.control.Button;
 /**
  * Panel that is visible after game start.
  */
-public final class CampaignPanelPresenter {
+public final class CampaignMenuPanelPresenter {
 
 	final Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -36,7 +36,7 @@ public final class CampaignPanelPresenter {
 	}
 
 	@Inject
-	public CampaignPanelPresenter(final CampaignPanelPresenter.Display display,
+	public CampaignMenuPanelPresenter(final CampaignMenuPanelPresenter.Display display,
 			final ChangeLanguageController changeLanguageController, final MainPanelPresenter mainFramePresenter,
 			final GameController gameController) {
 		this.mainFramePresenter = Preconditions.checkNotNull(mainFramePresenter);
