@@ -209,9 +209,10 @@ public final class MainMenuView {
                 menuItemShowGrid, menuItemShowFightAdvisor);
 
         menuBar = new MenuBar();
-        menuBar.getMenus().addAll(menuGame, menuView, menuUnit, menuPrefereces);
+        menuBar.getMenus().addAll(menuGame, menuView, menuUnit);
         if (gamePreferences.isDevelopment()) {
-            menuBar.getMenus().add(mainMenuDevelopment.getDevelopmentMenu());
+            //TODO remove development menu entirely
+//            menuBar.getMenus().add(mainMenuDevelopment.getDevelopmentMenu());
         }
 
         menuItemColonizopedia = new MenuItem();

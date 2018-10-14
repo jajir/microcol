@@ -1,9 +1,12 @@
 package org.microcol.gui;
 
 import org.microcol.gui.europe.EuropeScrollPanel;
-import org.microcol.gui.gamemenu.CampaignMenuPanelView;
-import org.microcol.gui.gamemenu.GameMenuPanelView;
+import org.microcol.gui.gamemenu.CampaignMenuPanel;
+import org.microcol.gui.gamemenu.GameMenuPanel;
+import org.microcol.gui.gamemenu.SettingMenuPanel;
 import org.microcol.gui.util.JavaFxComponent;
+import org.microcol.gui.util.UpdatableLanguage;
+import org.microcol.i18n.I18n;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
@@ -14,34 +17,36 @@ import javafx.scene.layout.VBox;
 /**
  * MicroCol's main panel. Every game components are in this panel.
  */
-public final class MainPanelView implements JavaFxComponent {
+public final class MainPanelView implements JavaFxComponent, UpdatableLanguage {
 
     private final VBox mainBox;
 
     private final MainGamePanelView mainGamePanelView;
 
-    private final GameMenuPanelView gameMenuPanelView;
+    private final GameMenuPanel gameMenuPanelView;
 
-    private final CampaignMenuPanelView campaignMenuPanelView;
+    private final CampaignMenuPanel campaignMenuPanel;
 
     private final EuropeScrollPanel europeScrollPanel;
 
+    private final SettingMenuPanel settingMenuPanel;
+
     @Inject
     public MainPanelView(final MainGamePanelView mainGamePanelView,
-            final GameMenuPanelView gameMenuPanelView,
-            final CampaignMenuPanelView campaignMenuPanelView,
-            final EuropeScrollPanel europeScrollPanel) {
+            final GameMenuPanel gameMenuPanelView, final CampaignMenuPanel campaignMenuPanel,
+            final EuropeScrollPanel europeScrollPanel, final SettingMenuPanel settingMenuPanel) {
         mainBox = new VBox();
         this.mainGamePanelView = Preconditions.checkNotNull(mainGamePanelView);
         this.gameMenuPanelView = Preconditions.checkNotNull(gameMenuPanelView);
-        this.campaignMenuPanelView = Preconditions.checkNotNull(campaignMenuPanelView);
+        this.campaignMenuPanel = Preconditions.checkNotNull(campaignMenuPanel);
         this.europeScrollPanel = Preconditions.checkNotNull(europeScrollPanel);
+        this.settingMenuPanel = Preconditions.checkNotNull(settingMenuPanel);
         showGameMenu();
     }
 
     public void showDefaultCampaignMenu() {
-        campaignMenuPanelView.refresh();
-        showBox(campaignMenuPanelView.getContent());
+        campaignMenuPanel.refresh();
+        showBox(campaignMenuPanel.getContent());
     }
 
     public void showGamePanel() {
@@ -50,6 +55,10 @@ public final class MainPanelView implements JavaFxComponent {
 
     public void showGameMenu() {
         showBox(gameMenuPanelView.getContent());
+    }
+
+    public void showGameSetting() {
+        showBox(settingMenuPanel.getContent());
     }
 
     public void showEurope() {
@@ -68,6 +77,16 @@ public final class MainPanelView implements JavaFxComponent {
 
     public VBox getBox() {
         return mainBox;
+    }
+
+    @Override
+    public void updateLanguage(final I18n i18n) {
+//        mainGamePanelView.
+//        gameMenuPanelView
+//        campaignMenuPanel
+        europeScrollPanel.updateLanguage(i18n);
+        settingMenuPanel.updateLanguage(i18n);
+        
     }
 
 }

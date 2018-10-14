@@ -13,6 +13,7 @@ import org.microcol.model.campaign.Campaign;
 import org.microcol.model.campaign.CampaignManager;
 
 import com.google.common.base.Preconditions;
+import com.google.common.eventbus.EventBus;
 import com.google.inject.Inject;
 
 import javafx.event.ActionEvent;
@@ -33,6 +34,8 @@ public final class ButtonsPanelPresenter {
 
     private final CampaignManager campaignManager;
 
+    private final EventBus eventBus;
+
     @Inject
     public ButtonsPanelPresenter(final ButtonsPanelView view,
             final ApplicationController applicationController,
@@ -41,21 +44,28 @@ public final class ButtonsPanelPresenter {
             final GamePreferences gamePreferences, final PersistingTool persistingTool,
             final GameController gameController, final CampaignManager campaignManager,
             final ShowDefaultCampaignMenuControler showDefaultCampaignMenuControler,
-            final I18n i18n) {
+            final EventBus eventBus, final I18n i18n) {
         this.view = Preconditions.checkNotNull(view);
         this.gamePreferences = Preconditions.checkNotNull(gamePreferences);
         this.persistingTool = Preconditions.checkNotNull(persistingTool);
         this.gameController = Preconditions.checkNotNull(gameController);
         this.campaignManager = Preconditions.checkNotNull(campaignManager);
+        this.eventBus = Preconditions.checkNotNull(eventBus);
         view.getButtonContinue().setOnAction(this::onGameContinue);
         view.getButtonLoadSave().setOnAction(event -> persistingDialog.loadModel());
         view.getButtonPlayCampaign().setOnAction(event -> showDefaultCampaignMenuControler
                 .fireEvent(new ShowDefaultCampaignMenuEvent()));
         view.getButtonExitMicroCol()
                 .setOnAction(event -> exitGameController.fireEvent(new QuitGameEvent()));
+        view.getButtonSetting().setOnAction(this::onSetting);
         view.getButtonStartFreeGame().setOnAction(e -> applicationController.startNewFreeGame());
         changeLanguageController.addListener(listener -> view.updateLanguage(i18n));
         refresh();
+    }
+
+    @SuppressWarnings("unused")
+    private void onSetting(final ActionEvent event) {
+        eventBus.post(new ShowGameSettingEvent());
     }
 
     @SuppressWarnings("unused")

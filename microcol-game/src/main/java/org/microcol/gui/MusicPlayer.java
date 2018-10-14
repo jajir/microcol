@@ -27,12 +27,12 @@ public final class MusicPlayer {
     /**
      * Minimal volume value.
      */
-    static final int MIN_VOLUME = 0;
+    public static final int MIN_VOLUME = 0;
 
     /**
      * Maximal volume value.
      */
-    static final int MAX_VOLUME = 100;
+    public static final int MAX_VOLUME = 100;
 
     private final static int BUFFER_SIZE = 128000;
 

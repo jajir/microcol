@@ -36,17 +36,21 @@ import org.microcol.gui.event.VolumeChangedListenerPreferences;
 import org.microcol.gui.event.model.ArtifitialPlayersManager;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.event.model.MissionCallBack;
-import org.microcol.gui.gamemenu.BackgroundPanel;
 import org.microcol.gui.gamemenu.ButtonsPanelPresenter;
 import org.microcol.gui.gamemenu.ButtonsPanelView;
 import org.microcol.gui.gamemenu.CampaignMenuPanelPresenter;
 import org.microcol.gui.gamemenu.CampaignMenuPanelView;
 import org.microcol.gui.gamemenu.ExitGameListener;
 import org.microcol.gui.gamemenu.GameFinishedListener;
-import org.microcol.gui.gamemenu.GameMenuPanelPresenter;
-import org.microcol.gui.gamemenu.GameMenuPanelView;
+import org.microcol.gui.gamemenu.GameMenuPanel;
+import org.microcol.gui.gamemenu.SettingAnimationSpeedPresenter;
+import org.microcol.gui.gamemenu.SettingButtonsPresenter;
+import org.microcol.gui.gamemenu.SettingLanguagePresenter;
+import org.microcol.gui.gamemenu.SettingShowGridPresenter;
+import org.microcol.gui.gamemenu.SettingVolumePresenter;
 import org.microcol.gui.gamemenu.ShowDefaultCampaignMenuControler;
 import org.microcol.gui.gamemenu.ShowDefaultCampaignMenuListener;
+import org.microcol.gui.gamemenu.ShowGameSettingListener;
 import org.microcol.gui.gamepanel.AnimationIsDoneController;
 import org.microcol.gui.gamepanel.AnimationManager;
 import org.microcol.gui.gamepanel.AnimationStartedController;
@@ -87,7 +91,6 @@ import org.microcol.gui.mainmenu.MainMenuDevelopment;
 import org.microcol.gui.mainmenu.MainMenuPresenter;
 import org.microcol.gui.mainmenu.MainMenuView;
 import org.microcol.gui.mainmenu.PlowFieldEventController;
-import org.microcol.gui.mainmenu.PlowFieldEventListener;
 import org.microcol.gui.mainmenu.QuitGameController;
 import org.microcol.gui.mainmenu.SelectNextUnitController;
 import org.microcol.gui.mainmenu.ShowGoalsController;
@@ -198,7 +201,11 @@ public final class MicroColModule extends AbstractModule {
         bind(TurnStartedListener.class).asEagerSingleton();
         bind(TileWasSelectedListener.class).asEagerSingleton();
         bind(ShowDefaultCampaignMenuListener.class).asEagerSingleton();
-        bind(PlowFieldEventListener.class).asEagerSingleton();
+        bind(ShowGameSettingListener.class).asEagerSingleton();
+        bind(SettingLanguagePresenter.class).asEagerSingleton();
+        bind(SettingShowGridPresenter.class).asEagerSingleton();
+        bind(SettingAnimationSpeedPresenter.class).asEagerSingleton();
+        bind(SettingVolumePresenter.class).asEagerSingleton();
 
         bind(ExitGameListener.class).asEagerSingleton();
         bind(GameFinishedListener.class).asEagerSingleton();
@@ -237,15 +244,15 @@ public final class MicroColModule extends AbstractModule {
         bind(UnitMovedListener.class).asEagerSingleton();
         bind(ScrollToSelectedUnit.class).asEagerSingleton();
 
-        bind(GameMenuPanelView.class).in(Singleton.class);
-        bind(GameMenuPanelPresenter.class).asEagerSingleton();
+        bind(GameMenuPanel.class).in(Singleton.class);
+        bind(SettingButtonsPresenter.class).asEagerSingleton();
 
         bind(ButtonsPanelView.class).in(Singleton.class);
         bind(ButtonsPanelPresenter.class).asEagerSingleton();
-        bind(BackgroundPanel.class).in(Singleton.class);
 
         bind(CampaignMenuPanelView.class).in(Singleton.class);
-        bind(CampaignMenuPanelPresenter.Display.class).to(CampaignMenuPanelView.class).in(Singleton.class);
+        bind(CampaignMenuPanelPresenter.Display.class).to(CampaignMenuPanelView.class)
+                .in(Singleton.class);
         bind(CampaignMenuPanelPresenter.class).asEagerSingleton();
 
         bind(StatusBarView.class).in(Singleton.class);

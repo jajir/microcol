@@ -19,37 +19,37 @@ import javafx.scene.control.Button;
  */
 public final class CampaignMenuPanelPresenter {
 
-	final Logger logger = LoggerFactory.getLogger(getClass());
+    final Logger logger = LoggerFactory.getLogger(getClass());
 
-	private final GameController gameController;
+    private final GameController gameController;
 
-	private final MainPanelPresenter mainFramePresenter;
+    private final MainPanelPresenter mainFramePresenter;
 
-	public interface Display {
+    public interface Display {
 
-		void updateLanguage();
+        void updateLanguage();
 
-		Button getButtonBack();
+        Button getButtonBack();
 
-		void setOnSelectedMission(final Consumer<String> onSelectedMission);
+        void setOnSelectedMission(final Consumer<String> onSelectedMission);
 
-	}
+    }
 
-	@Inject
-	public CampaignMenuPanelPresenter(final CampaignMenuPanelPresenter.Display display,
-			final ChangeLanguageController changeLanguageController, final MainPanelPresenter mainFramePresenter,
-			final GameController gameController) {
-		this.mainFramePresenter = Preconditions.checkNotNull(mainFramePresenter);
-		this.gameController = Preconditions.checkNotNull(gameController);
-		changeLanguageController.addListener(listener -> display.updateLanguage());
-		display.getButtonBack().setOnAction(event -> mainFramePresenter.showGameMenu());
-		display.setOnSelectedMission(this::onSelectedMission);
-	}
+    @Inject
+    public CampaignMenuPanelPresenter(final CampaignMenuPanelPresenter.Display display,
+            final ChangeLanguageController changeLanguageController,
+            final MainPanelPresenter mainFramePresenter, final GameController gameController) {
+        this.mainFramePresenter = Preconditions.checkNotNull(mainFramePresenter);
+        this.gameController = Preconditions.checkNotNull(gameController);
+        changeLanguageController.addListener(listener -> display.updateLanguage());
+        display.getButtonBack().setOnAction(event -> mainFramePresenter.showGameMenu());
+        display.setOnSelectedMission(this::onSelectedMission);
+    }
 
-	private void onSelectedMission(final String missionName) {
-		logger.debug("Mission {} was selected to play.", missionName);
-		gameController.startCampaignMission(CampaignNames.defaultCampaign, missionName);
-		mainFramePresenter.showGamePanel();
-	}
+    private void onSelectedMission(final String missionName) {
+        logger.debug("Mission {} was selected to play.", missionName);
+        gameController.startCampaignMission(CampaignNames.defaultCampaign, missionName);
+        mainFramePresenter.showGamePanel();
+    }
 
 }

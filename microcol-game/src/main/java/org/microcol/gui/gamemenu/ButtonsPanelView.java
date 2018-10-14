@@ -6,9 +6,7 @@ import org.microcol.i18n.I18n;
 
 import com.google.inject.Inject;
 
-import javafx.geometry.Pos;
 import javafx.scene.control.Button;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 
@@ -25,9 +23,11 @@ public final class ButtonsPanelView implements JavaFxComponent, UpdatableLanguag
 
     private final Button buttonStartFreeGame;
 
+    private final Button buttonSetting;
+
     private final Button buttonExitMicroCol;
 
-    private final VBox mainBox;
+    private final VBox buttonsBox;
 
     @Inject
     ButtonsPanelView(final I18n i18n) {
@@ -35,24 +35,17 @@ public final class ButtonsPanelView implements JavaFxComponent, UpdatableLanguag
         buttonLoadSave = new Button();
         buttonPlayCampaign = new Button();
         buttonStartFreeGame = new Button();
+        buttonSetting = new Button();
         buttonExitMicroCol = new Button();
-        final VBox buttonsBox = new VBox();
+        buttonsBox = new VBox();
         buttonsBox.getStyleClass().add("game-menu-inner");
         buttonsBox.getChildren().add(buttonContinue);
         buttonsBox.getChildren().add(buttonLoadSave);
         buttonsBox.getChildren().add(buttonPlayCampaign);
         buttonsBox.getChildren().add(buttonStartFreeGame);
+        buttonsBox.getChildren().add(buttonSetting);
         buttonsBox.getChildren().add(buttonExitMicroCol);
 
-        mainBox = new VBox();
-        mainBox.setAlignment(Pos.CENTER);
-        
-        final HBox box = new HBox();
-        box.getStyleClass().add("game-menu");
-        box.setAlignment(Pos.CENTER);
-
-        box.getChildren().add(buttonsBox);
-        mainBox.getChildren().add(box);
         updateLanguage(i18n);
     }
 
@@ -70,6 +63,7 @@ public final class ButtonsPanelView implements JavaFxComponent, UpdatableLanguag
         buttonLoadSave.setText(i18n.get(GameMenu.buttonLoadSave));
         buttonPlayCampaign.setText(i18n.get(GameMenu.buttonPlayCampaign));
         buttonStartFreeGame.setText(i18n.get(GameMenu.buttonFreeGame));
+        buttonSetting.setText(i18n.get(GameMenu.buttonSetting));
         buttonExitMicroCol.setText(i18n.get(GameMenu.buttonExitMicroCol));
     }
 
@@ -79,7 +73,7 @@ public final class ButtonsPanelView implements JavaFxComponent, UpdatableLanguag
 
     @Override
     public Region getContent() {
-        return mainBox;
+        return buttonsBox;
     }
 
     /**
@@ -108,6 +102,13 @@ public final class ButtonsPanelView implements JavaFxComponent, UpdatableLanguag
      */
     public Button getButtonExitMicroCol() {
         return buttonExitMicroCol;
+    }
+
+    /**
+     * @return the buttonSetting
+     */
+    public Button getButtonSetting() {
+        return buttonSetting;
     }
 
 }

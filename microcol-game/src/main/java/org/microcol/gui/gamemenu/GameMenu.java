@@ -8,7 +8,22 @@ import org.microcol.i18n.ResourceBundleFormat;
 
 public enum GameMenu implements MessageKeyResource {
 
-    buttonContinue, buttonLoadSave, buttonPlayCampaign, buttonFreeGame, buttonExitMicroCol;
+    mainMenu,
+    buttonContinue,
+    buttonLoadSave,
+    buttonPlayCampaign,
+    buttonFreeGame,
+    buttonExitMicroCol,
+    buttonSetting,
+    settingTitle,
+    buttonBack,
+    campaignTitle,
+    settingLanguage,
+    settingLanguageCz,
+    settingLanguageEn,
+    settingShowGrid,
+    settingShowFightAdvisor
+    ;
 
     @Override
     public ResourceBundle.Control getResourceBundleControl() {

@@ -11,10 +11,21 @@
 <properties>
 	<comment>Define keys for main game menu</comment>
 
+	<entry key="mainMenu">MicroCol</entry>
 	<entry key="buttonContinue">Pokračovat v naposledy hrané hře</entry>
 	<entry key="buttonLoadSave">Nahrát hru</entry>
 	<entry key="buttonPlayCampaign">Spustit kampaň</entry>
 	<entry key="buttonFreeGame">Nová neomezená hra</entry>
 	<entry key="buttonExitMicroCol">Ukončit hru</entry>
+	<entry key="settingTitle">MicroCol -> Nastavení</entry>
+	<entry key="buttonSetting">Nastavení</entry>
+	<entry key="buttonBack">Zpět</entry>
+	<entry key="campaignTitle">MicroCol -> Kampaň</entry>
+	<entry key="settingLanguage">Jazyk: </entry>
+	<entry key="settingLanguageCz">Česky</entry>
+	<entry key="settingLanguageEn">Anglicky</entry>
+	<entry key="settingShowGrid">Zobrazit síť</entry>
+	<entry key="settingShowFightAdvisor">Použít náhled před bojem</entry>
+    
 
 </properties>

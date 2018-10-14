@@ -21,6 +21,7 @@ import org.microcol.gui.gamepanel.TileWasSelectedController;
 import org.microcol.gui.gamepanel.TileWasSelectedEvent;
 import org.microcol.gui.util.Listener;
 import org.microcol.gui.util.Text;
+import org.microcol.i18n.I18n;
 import org.microcol.model.Colony;
 import org.microcol.model.Unit;
 import org.microcol.model.campaign.CampaignNames;
@@ -70,7 +71,7 @@ public final class MainMenuPresenter {
             final ShowTurnReportController showTurnReportController,
             final ShowStatisticsController showStatisticsController,
             final ShowGoalsController showGoalsController,
-            final PlowFieldEventController plowFieldEventController) {
+            final PlowFieldEventController plowFieldEventController, final I18n i18n) {
         this.view = Preconditions.checkNotNull(view);
         this.selectedUnitManager = Preconditions.checkNotNull(selectedUnitManager);
         this.gameModelController = Preconditions.checkNotNull(gameModelController);
@@ -90,9 +91,9 @@ public final class MainMenuPresenter {
                 .setOnAction(actionEvent -> gameEventController.fireEvent(new AboutGameEvent()));
         view.getMenuItemColonizopedia().setOnAction(event -> colonizopedia.showAndWait());
         view.getRbMenuItemlanguageCz().setOnAction(actionEvent -> changeLanguageController
-                .fireEvent(new ChangeLanguageEvent(Text.Language.cz)));
+                .fireEvent(new ChangeLanguageEvent(Text.Language.cz, i18n)));
         view.getRbMenuItemlanguageEn().setOnAction(actionEvent -> changeLanguageController
-                .fireEvent(new ChangeLanguageEvent(Text.Language.en)));
+                .fireEvent(new ChangeLanguageEvent(Text.Language.en, i18n)));
         view.getMenuItemVolume()
                 .setOnAction(actionEvent -> preferencesVolume.resetAndShowAndWait());
         view.getMenuItemAnimationSpeed()
