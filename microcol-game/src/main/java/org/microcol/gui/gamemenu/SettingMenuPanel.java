@@ -20,6 +20,7 @@ public class SettingMenuPanel implements JavaFxComponent, UpdatableLanguage {
             final I18n i18n) {
         this.menuHolderPanel = Preconditions.checkNotNull(menuHolderPanel);
         this.settingButtons = Preconditions.checkNotNull(settingButtons);
+        menuHolderPanel.getContent().getStylesheets().add(GameMenuPanel.STYLE_SHEET_GAME_MENU);
         menuHolderPanel.setMenuPanel(settingButtons.getContent());
         updateLanguage(i18n);
     }

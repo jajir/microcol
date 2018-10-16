@@ -3,11 +3,11 @@ package org.microcol.gui.mainmenu;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 
+import org.microcol.gui.MainPanelPresenter;
 import org.microcol.gui.PersistingDialog;
 import org.microcol.gui.PreferencesAnimationSpeed;
 import org.microcol.gui.PreferencesVolume;
 import org.microcol.gui.colonizopedia.ColonizopediaDialog;
-import org.microcol.gui.europe.EuropeDialog;
 import org.microcol.gui.event.EndMoveController;
 import org.microcol.gui.event.EndMoveEvent;
 import org.microcol.gui.event.StartMoveController;
@@ -63,7 +63,7 @@ public final class MainMenuPresenter {
             final GameController gameController, final GameModelController gameModelController,
             final StartMoveController startMoveController,
             final EndMoveController endMoveController, final PersistingDialog persistingDialog,
-            final EuropeDialog europeDialog, final ColonizopediaDialog colonizopedia,
+            final ColonizopediaDialog colonizopedia,
             final PreferencesAnimationSpeed preferencesAnimationSpeed,
             final PreferencesVolume preferencesVolume,
             final SelectedUnitManager selectedUnitManager,
@@ -71,7 +71,8 @@ public final class MainMenuPresenter {
             final ShowTurnReportController showTurnReportController,
             final ShowStatisticsController showStatisticsController,
             final ShowGoalsController showGoalsController,
-            final PlowFieldEventController plowFieldEventController, final I18n i18n) {
+            final PlowFieldEventController plowFieldEventController,
+            final MainPanelPresenter mainPanelPresenter, final I18n i18n) {
         this.view = Preconditions.checkNotNull(view);
         this.selectedUnitManager = Preconditions.checkNotNull(selectedUnitManager);
         this.gameModelController = Preconditions.checkNotNull(gameModelController);
@@ -98,7 +99,8 @@ public final class MainMenuPresenter {
                 .setOnAction(actionEvent -> preferencesVolume.resetAndShowAndWait());
         view.getMenuItemAnimationSpeed()
                 .setOnAction(event -> preferencesAnimationSpeed.resetAndShowAndWait());
-        view.getMenuItemEurope().setOnAction(event -> europeDialog.show());
+        // view.getMenuItemEurope().setOnAction(event -> europeDialog.show());
+        view.getMenuItemEurope().setOnAction(event -> mainPanelPresenter.showEurope());
         view.getMenuItemShowGrid().setOnAction(ectionEvent -> showGridController
                 .fireEvent(new ShowGridEvent(view.getMenuItemShowGrid().isSelected())));
         view.getMenuItemBuildColony().setOnAction(event -> buildColonyEventController.fireEvent());

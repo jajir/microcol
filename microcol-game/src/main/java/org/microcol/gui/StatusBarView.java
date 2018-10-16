@@ -1,13 +1,17 @@
 package org.microcol.gui;
 
+import org.microcol.gui.util.JavaFxComponent;
+
 import com.google.inject.Inject;
 
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 
-public final class StatusBarView implements StatusBarPresenter.Display {
+//FIXME remove Display interface
+public final class StatusBarView implements StatusBarPresenter.Display, JavaFxComponent {
 
     private final HBox statusBar;
 
@@ -45,12 +49,13 @@ public final class StatusBarView implements StatusBarPresenter.Display {
         return labelEra;
     }
 
-    public HBox getStatusBar() {
-        return statusBar;
-    }
-
     @Override
     public Label getLabelGold() {
         return labelGold;
+    }
+
+    @Override
+    public Region getContent() {
+        return statusBar;
     }
 }

@@ -2,6 +2,12 @@
  * File contains definition of dialogs.
  */
 
+.game-menu-holder{
+	-fx-min-height: 480;
+	-fx-min-width: 720;
+	-fx-background-color: white;
+}
+
 .label-title {
 	-fx-font-size: 24;	
 }

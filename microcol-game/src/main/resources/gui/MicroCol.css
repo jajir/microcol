@@ -3,28 +3,6 @@
  * 
  */
  
-.main-title {
-	-fx-font-size: 32;
-	-fx-min-width: 500;
-	-fx-min-height: 80;
-	-fx-translate-x: -100; 	
-	-fx-translate-y: -260;
-}
-
-.game-menu-holder{
-	-fx-translate-x: -100;
-	-fx-translate-y: 20;
-	-fx-min-height: 400;
-	-fx-min-width: 500;
-}
-
-.game-menu-holder .label-slider {
-	-fx-padding: 0 20 0 0;
-}
-
-.game-menu-inner {
-	-fx-spacing: 10;
-}
 
 /**
  */
@@ -45,6 +23,7 @@
 	-fx-pref-height: 100000;
 }
 
+
 #statusBar #description{
  	-fx-border-style: solid inside;
  	-fx-border-color: lightgrey ;
@@ -53,10 +32,6 @@
 
 #statusBar #description .label{
 	-fx-padding: 0 5px 0 5px;
-}
-
-.root {
-	 -fx-font-family: Tillana;
 }
 
 #statusBar #labelGold{
@@ -68,6 +43,10 @@
 
 #statusBar #labelEra{
 	-fx-padding: 0 5px 0 5px;
+}
+
+.root {
+	 -fx-font-family: Tillana;
 }
 
 /*

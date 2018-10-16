@@ -56,6 +56,10 @@ public final class MainPanelPresenter {
         view.showGameMenu();
     }
 
+    public void showEurope() {
+        view.showEurope();
+    }
+
     public void showGameSetting() {
         view.showGameSetting();
     }

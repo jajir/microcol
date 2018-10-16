@@ -33,8 +33,8 @@ public class BackgroundPanel2 extends BackgroundPanel {
     }
 
     @Override
-    void paint(final GraphicsContext gc) {
-        final Image image = imageProvider.getImage(ImageProvider.IMG_SUNSET);
+    public void paint(final GraphicsContext gc) {
+        final Image image = getImageProvider().getImage(ImageProvider.IMG_SUNSET);
         final Point sunset = Point.of(image.getWidth(), image.getHeight());
         final Point canvas = Point.of(getCanvas().getWidth(), getCanvas().getHeight());
         final Point diff = canvas.substract(sunset).divide(2);

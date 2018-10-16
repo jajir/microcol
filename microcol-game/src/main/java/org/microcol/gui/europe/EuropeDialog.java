@@ -19,9 +19,6 @@ import javafx.scene.input.KeyEvent;
  */
 public final class EuropeDialog extends AbstractMessageWindow implements EuropeCallback {
 
-    private static final String STYLE_SHEET_EUROPE = EuropeDialog.class
-            .getResource("/gui/europe.css").toExternalForm();
-
     private final Logger logger = LoggerFactory.getLogger(EuropeDialog.class);
 
     final EuropePanel europePanel;
@@ -33,7 +30,7 @@ public final class EuropeDialog extends AbstractMessageWindow implements EuropeC
         setTitle(i18n.getMessage(Europe.title));
 
         init(europePanel.getContent());
-        addStyleSheet(STYLE_SHEET_EUROPE);
+        addStyleSheet(EuropeMenuPanel.STYLE_SHEET_EUROPE);
         getScene().getStylesheets().add(MainStageBuilder.STYLE_SHEET_MICROCOL);
 
         /**

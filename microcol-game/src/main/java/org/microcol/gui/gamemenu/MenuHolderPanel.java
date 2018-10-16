@@ -14,6 +14,7 @@ import javafx.scene.layout.VBox;
 
 /**
  * In main area shows game welcome page.
+ * TODO combine it with CenteredPage.
  */
 public final class MenuHolderPanel implements JavaFxComponent {
 

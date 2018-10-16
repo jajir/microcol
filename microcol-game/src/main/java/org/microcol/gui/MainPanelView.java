@@ -1,6 +1,6 @@
 package org.microcol.gui;
 
-import org.microcol.gui.europe.EuropeScrollPanel;
+import org.microcol.gui.europe.EuropeMenuPanel;
 import org.microcol.gui.gamemenu.CampaignMenuPanel;
 import org.microcol.gui.gamemenu.GameMenuPanel;
 import org.microcol.gui.gamemenu.SettingMenuPanel;
@@ -27,19 +27,19 @@ public final class MainPanelView implements JavaFxComponent, UpdatableLanguage {
 
     private final CampaignMenuPanel campaignMenuPanel;
 
-    private final EuropeScrollPanel europeScrollPanel;
+    private final EuropeMenuPanel europeMenuPanel;
 
     private final SettingMenuPanel settingMenuPanel;
 
     @Inject
     public MainPanelView(final MainGamePanelView mainGamePanelView,
             final GameMenuPanel gameMenuPanelView, final CampaignMenuPanel campaignMenuPanel,
-            final EuropeScrollPanel europeScrollPanel, final SettingMenuPanel settingMenuPanel) {
+            final EuropeMenuPanel europeMenuPanel, final SettingMenuPanel settingMenuPanel) {
         mainBox = new VBox();
         this.mainGamePanelView = Preconditions.checkNotNull(mainGamePanelView);
         this.gameMenuPanelView = Preconditions.checkNotNull(gameMenuPanelView);
         this.campaignMenuPanel = Preconditions.checkNotNull(campaignMenuPanel);
-        this.europeScrollPanel = Preconditions.checkNotNull(europeScrollPanel);
+        this.europeMenuPanel = Preconditions.checkNotNull(europeMenuPanel);
         this.settingMenuPanel = Preconditions.checkNotNull(settingMenuPanel);
         showGameMenu();
     }
@@ -62,7 +62,7 @@ public final class MainPanelView implements JavaFxComponent, UpdatableLanguage {
     }
 
     public void showEurope() {
-        showBox(europeScrollPanel.getContent());
+        showBox(europeMenuPanel.getContent());
     }
 
     private void showBox(final Region box) {
@@ -84,7 +84,7 @@ public final class MainPanelView implements JavaFxComponent, UpdatableLanguage {
 //        mainGamePanelView.
 //        gameMenuPanelView
 //        campaignMenuPanel
-        europeScrollPanel.updateLanguage(i18n);
+        europeMenuPanel.updateLanguage(i18n);
         settingMenuPanel.updateLanguage(i18n);
         
     }

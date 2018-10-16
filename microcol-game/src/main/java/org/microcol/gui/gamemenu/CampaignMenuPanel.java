@@ -16,10 +16,10 @@ public class CampaignMenuPanel implements JavaFxComponent {
 
     @Inject
     CampaignMenuPanel(final CampaignMenuPanelView campaignMenuPanelView,
-            final MenuHolderPanel menuHolderPanel,
-            final I18n i18n) {
+            final MenuHolderPanel menuHolderPanel, final I18n i18n) {
         this.menuPanel = Preconditions.checkNotNull(menuHolderPanel);
         this.campaignMenuPanelView = Preconditions.checkNotNull(campaignMenuPanelView);
+        menuHolderPanel.getContent().getStylesheets().add(GameMenuPanel.STYLE_SHEET_GAME_MENU);
         menuHolderPanel.setMenuPanel(campaignMenuPanelView.getContent());
         menuHolderPanel.setTitle(i18n.get(GameMenu.campaignTitle));
     }
