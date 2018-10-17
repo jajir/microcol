@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE properties [
+<!ELEMENT properties ( comment?, entry* ) >
+<!ATTLIST properties version CDATA #FIXED "1.0">
+<!ELEMENT comment (#PCDATA) >
+<!ELEMENT entry (#PCDATA) >
+<!ATTLIST entry key CDATA #REQUIRED>
+]>
+
+<properties>
+	<comment>Define keys for Europe dialog</comment>
+
+	<entry key="corn">Jídlo</entry>
+	<entry key="sugar">Cukrová třtina</entry>
+	<entry key="tobacco">Tabák</entry>
+	<entry key="cotton">Bavlna</entry>
+	<entry key="fur">Kožešiny</entry>
+	<entry key="lumber">Dříví</entry>
+	<entry key="ore">Železná ruda</entry>
+	<entry key="silver">Stříbro</entry>
+	<entry key="horse">Koně</entry>
+	<entry key="rum">Rum</entry>
+	<entry key="cigars">Doutníky</entry>
+	<entry key="silk">Hedvábí</entry>
+	<entry key="coat">Kabáty</entry>
+	<entry key="goods">Tretky</entry>
+	<entry key="tools">Nářadí</entry>
+	<entry key="musket">Muškety</entry>
+	<entry key="hammers">Kladiva</entry>
+	<entry key="cross">Náboženská svooboda</entry>
+	<entry key="bell">Zvony svobody</entry>
+
+</properties>

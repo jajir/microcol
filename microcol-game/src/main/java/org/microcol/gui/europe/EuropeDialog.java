@@ -19,7 +19,7 @@ import javafx.scene.input.KeyEvent;
  */
 public final class EuropeDialog extends AbstractMessageWindow implements EuropeCallback {
 
-    private final Logger logger = LoggerFactory.getLogger(EuropeDialog.class);
+    private final static Logger logger = LoggerFactory.getLogger(EuropeDialog.class);
 
     final EuropePanel europePanel;
 

@@ -2,7 +2,8 @@ package org.microcol.gui.europe;
 
 import java.util.Optional;
 
-import org.microcol.gui.LocalizationHelper;
+import org.microcol.gui.event.StatusBarMessageController;
+import org.microcol.gui.event.StatusBarMessageEvent;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.gamepanel.GamePanelView;
 import org.microcol.gui.image.ImageProvider;
@@ -22,6 +23,7 @@ import com.google.inject.Inject;
 
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -40,18 +42,21 @@ public final class PanelPortPier implements JavaFxComponent, UpdatableLanguage, 
 
     private final ImageProvider imageProvider;
 
-    private final LocalizationHelper localizationHelper;
+    private final StatusBarMessageController statusBarMessageController;
+
+    private final I18n i18n;
 
     private final Pane panelUnits;
 
     @Inject
     public PanelPortPier(final GameModelController gameModelController,
             final EuropeCallback europeDialogCallback, final ImageProvider imageProvider,
-            final LocalizationHelper localizationHelper) {
+            final StatusBarMessageController statusBarMessageController, final I18n i18n) {
         this.gameModelController = Preconditions.checkNotNull(gameModelController);
         this.europeDialog = Preconditions.checkNotNull(europeDialogCallback);
         this.imageProvider = Preconditions.checkNotNull(imageProvider);
-        this.localizationHelper = Preconditions.checkNotNull(localizationHelper);
+        this.statusBarMessageController = Preconditions.checkNotNull(statusBarMessageController);
+        this.i18n = Preconditions.checkNotNull(i18n);
         panelUnits = new HBox();
         panelUnits.getStyleClass().add("panel-port-pier");
         final BackgroundHighlighter backgroundHighlighter = new BackgroundHighlighter(panelUnits,
@@ -61,16 +66,25 @@ public final class PanelPortPier implements JavaFxComponent, UpdatableLanguage, 
         panelUnits.setOnDragOver(this::onDragOver);
         panelUnits.setOnDragDropped(this::onDragDropped);
         panelUnits.setMinHeight(GamePanelView.TILE_WIDTH_IN_PX);
+        panelUnits.setOnMouseEntered(this::onMouseEntered);
+        panelUnits.setOnMouseExited(this::onMouseExited);
+    }
 
+    private void onMouseEntered(@SuppressWarnings("unused") final MouseEvent event) {
+        statusBarMessageController
+                .fireEvent(new StatusBarMessageEvent(i18n.get(Europe.statusBarPier)));
+    }
+
+    private void onMouseExited(@SuppressWarnings("unused") final MouseEvent event) {
+        statusBarMessageController.fireEvent(new StatusBarMessageEvent(null));
     }
 
     @Override
     public void repaint() {
         panelUnits.getChildren().clear();
         gameModelController.getModel().getEurope().getPier()
-                .getUnits(gameModelController.getCurrentPlayer())
-                .forEach(unit -> panelUnits.getChildren()
-                        .add(new PanelPortPierUnit(unit, imageProvider, localizationHelper)));
+                .getUnits(gameModelController.getCurrentPlayer()).forEach(unit -> panelUnits
+                        .getChildren().add(new PanelPortPierUnit(unit, imageProvider)));
     }
 
     @Override

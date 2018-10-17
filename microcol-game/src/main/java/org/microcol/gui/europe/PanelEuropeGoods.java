@@ -1,6 +1,10 @@
 package org.microcol.gui.europe;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.microcol.gui.DialogNotEnoughGold;
+import org.microcol.gui.event.StatusBarMessageController;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.image.ImageProvider;
 import org.microcol.gui.util.BackgroundHighlighter;
@@ -39,16 +43,21 @@ public final class PanelEuropeGoods implements JavaFxComponent, UpdatableLanguag
 
     private final EuropeCallback europeDialogCallback;
 
+    private final List<PanelGood> panelGoods = new ArrayList<>();
+
     @Inject
     public PanelEuropeGoods(final EuropeCallback europeDialogCallback,
             final GameModelController gameModelController, final ImageProvider imageProvider,
-            final DialogNotEnoughGold dialogNotEnoughGold) {
+            final DialogNotEnoughGold dialogNotEnoughGold,
+            final StatusBarMessageController statusBarMessageController, final I18n i18n) {
         this.gameModelController = Preconditions.checkNotNull(gameModelController);
         this.europeDialogCallback = Preconditions.checkNotNull(europeDialogCallback);
         mainPanel = new HBox();
         GoodType.BUYABLE_GOOD_TYPES.forEach(goodType -> {
-            mainPanel.getChildren().add(new PanelGood(goodType, imageProvider, gameModelController,
-                    dialogNotEnoughGold));
+            final PanelGood panelGood = new PanelGood(goodType, imageProvider, gameModelController,
+                    dialogNotEnoughGold, statusBarMessageController, i18n);
+            panelGoods.add(panelGood);
+            mainPanel.getChildren().add(panelGood.getContent());
         });
         final BackgroundHighlighter backgroundHighlighter = new BackgroundHighlighter(mainPanel,
                 this::isItGoodAmount);
@@ -56,16 +65,14 @@ public final class PanelEuropeGoods implements JavaFxComponent, UpdatableLanguag
         mainPanel.setOnDragExited(backgroundHighlighter::onDragExited);
         mainPanel.setOnDragOver(this::onDragOver);
         mainPanel.setOnDragDropped(this::onDragDropped);
-        
+
         titledPanel = new TitledPanel();
         titledPanel.getContentPane().getChildren().add(mainPanel);
     }
 
     @Override
     public void repaint() {
-        mainPanel.getChildren().forEach(node -> {
-            ((PanelGood) node).replain();
-        });
+        panelGoods.forEach(PanelGood::repaint);
     }
 
     @Override

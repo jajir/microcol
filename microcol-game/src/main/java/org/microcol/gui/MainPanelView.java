@@ -63,6 +63,7 @@ public final class MainPanelView implements JavaFxComponent, UpdatableLanguage {
 
     public void showEurope() {
         showBox(europeMenuPanel.getContent());
+        europeMenuPanel.repaint();
     }
 
     private void showBox(final Region box) {

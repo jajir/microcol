@@ -23,5 +23,10 @@
 	<entry key="europePier">Molo</entry>
 	<entry key="recruitUnitDialogTitle">Přispět na cestu</entry>
 	<entry key="recruitUnitDialogButton">Přispět</entry>
+	<entry key="statusBarEuropeDock">Evropský přístav, zde mohou být lodě nakládány a vykládány</entry>
+	<entry key="statusBarShipsToNewWorld">Lodě plující do nového světa</entry>
+	<entry key="statusBarShipsToEurope">Lodě plující do Evropy</entry>
+	<entry key="statusBarPier">Přístavní molo, zde budou jednotky čekající na cesty do Nového světa</entry>
+	<entry key="goodsToSell">Prodej zboží {0} za {1} zlata nebo za {2} zlata nakup.</entry>
 
 </properties>

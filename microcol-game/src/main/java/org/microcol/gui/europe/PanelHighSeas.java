@@ -2,6 +2,8 @@ package org.microcol.gui.europe;
 
 import java.util.Optional;
 
+import org.microcol.gui.event.StatusBarMessageController;
+import org.microcol.gui.event.StatusBarMessageEvent;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.image.ImageProvider;
 import org.microcol.gui.util.BackgroundHighlighter;
@@ -20,6 +22,7 @@ import com.google.inject.Inject;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
@@ -43,14 +46,23 @@ public final class PanelHighSeas<T extends Enum<T> & MessageKeyResource>
 
     private final TitledPanel titledPanel;
 
+    private final StatusBarMessageController statusBarMessageController;
+
+    private final I18n i18n;
+
     private T titleKey;
+
+    private T onMouseEnteredKey;
 
     @Inject
     public PanelHighSeas(final EuropeCallback europeDialog, final ImageProvider imageProvider,
-            final GameModelController gameModelController) {
+            final GameModelController gameModelController,
+            final StatusBarMessageController statusBarMessageController, final I18n i18n) {
         this.europeDialog = Preconditions.checkNotNull(europeDialog);
         this.imageProvider = Preconditions.checkNotNull(imageProvider);
         this.gameModelController = Preconditions.checkNotNull(gameModelController);
+        this.statusBarMessageController = Preconditions.checkNotNull(statusBarMessageController);
+        this.i18n = Preconditions.checkNotNull(i18n);
 
         shipsContainer = new HBox();
         final BackgroundHighlighter backgroundHighlighter = new BackgroundHighlighter(
@@ -64,6 +76,19 @@ public final class PanelHighSeas<T extends Enum<T> & MessageKeyResource>
         titledPanel = new TitledPanel();
         titledPanel.getStyleClass().add("ships-container");
         titledPanel.getChildren().add(shipsContainer);
+        titledPanel.setOnMouseEntered(this::onMouseEntered);
+        titledPanel.setOnMouseExited(this::onMouseExited);
+    }
+
+    private void onMouseEntered(@SuppressWarnings("unused") final MouseEvent event) {
+        if (onMouseEnteredKey != null) {
+            statusBarMessageController
+                    .fireEvent(new StatusBarMessageEvent(i18n.get(onMouseEnteredKey)));
+        }
+    }
+
+    private void onMouseExited(@SuppressWarnings("unused") final MouseEvent event) {
+        statusBarMessageController.fireEvent(new StatusBarMessageEvent(null));
     }
 
     public void addStyle(final String style) {
@@ -141,6 +166,14 @@ public final class PanelHighSeas<T extends Enum<T> & MessageKeyResource>
      */
     public void setTitleKey(T titleKey) {
         this.titleKey = Preconditions.checkNotNull(titleKey);
+    }
+
+    /**
+     * @param onMouseOverKey
+     *            the onMouseOverKey to set
+     */
+    public void setOnMouseEnteredKey(T onMouseOverKey) {
+        this.onMouseEnteredKey = Preconditions.checkNotNull(onMouseOverKey);
     }
 
 }

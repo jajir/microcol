@@ -1,12 +1,18 @@
 package org.microcol.gui.europe;
 
 import org.microcol.gui.DialogNotEnoughGold;
+import org.microcol.gui.GoodsTypeName;
+import org.microcol.gui.event.StatusBarMessageController;
+import org.microcol.gui.event.StatusBarMessageEvent;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.image.ImageProvider;
 import org.microcol.gui.util.ClipboardWritter;
-import org.microcol.model.GoodsAmount;
+import org.microcol.gui.util.JavaFxComponent;
+import org.microcol.gui.util.Repaintable;
+import org.microcol.i18n.I18n;
 import org.microcol.model.GoodTrade;
 import org.microcol.model.GoodType;
+import org.microcol.model.GoodsAmount;
 
 import com.google.common.base.Preconditions;
 
@@ -16,12 +22,15 @@ import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 
 /**
  * Contains image of of type of good.
  */
-public final class PanelGood extends VBox {
+public final class PanelGood implements JavaFxComponent, Repaintable {
+
+    private final VBox mainPanel;
 
     private final ImageView imageView;
 
@@ -33,21 +42,42 @@ public final class PanelGood extends VBox {
 
     private final DialogNotEnoughGold dialogNotEnoughGold;
 
+    private final StatusBarMessageController statusBarMessageController;
+
+    private final I18n i18n;
+
     public PanelGood(final GoodType goodType, final ImageProvider imageProvider,
             final GameModelController gameModelController,
-            final DialogNotEnoughGold dialogNotEnoughGold) {
+            final DialogNotEnoughGold dialogNotEnoughGold,
+            final StatusBarMessageController statusBarMessageController, final I18n i18n) {
         this.goodType = Preconditions.checkNotNull(goodType);
         this.gameModelController = Preconditions.checkNotNull(gameModelController);
         this.dialogNotEnoughGold = Preconditions.checkNotNull(dialogNotEnoughGold);
+        this.statusBarMessageController = Preconditions.checkNotNull(statusBarMessageController);
+        this.i18n = Preconditions.checkNotNull(i18n);
         imageView = new ImageView(imageProvider.getGoodTypeImage(goodType));
-        Pane paneImage = new Pane(imageView);
+        mainPanel = new VBox();
+        final Pane paneImage = new Pane(imageView);
         paneImage.setOnDragDetected(this::onDragDetected);
         labelPrice = new Label();
-        getChildren().addAll(paneImage, labelPrice);
+        mainPanel.getChildren().addAll(paneImage, labelPrice);
+        mainPanel.setOnMouseEntered(this::onMouseEntered);
+        mainPanel.setOnMouseExited(this::onMouseExited);
+    }
+
+    private void onMouseEntered(@SuppressWarnings("unused") final MouseEvent event) {
+        final GoodTrade goodTrade = getGoodTrade();
+        statusBarMessageController.fireEvent(new StatusBarMessageEvent(
+                i18n.get(Europe.goodsToSell, i18n.get(GoodsTypeName.getNameForGoodType(goodType)),
+                        goodTrade.getSellPrice(), goodTrade.getBuyPrice())));
+    }
+
+    private void onMouseExited(@SuppressWarnings("unused") final MouseEvent event) {
+        statusBarMessageController.fireEvent(new StatusBarMessageEvent(null));
     }
 
     private void onDragDetected(final MouseEvent event) {
-        final Dragboard db = this.startDragAndDrop(TransferMode.MOVE, TransferMode.LINK);
+        final Dragboard db = mainPanel.startDragAndDrop(TransferMode.MOVE, TransferMode.LINK);
         final GoodsAmount goodAmount = gameModelController.getMaxBuyableGoodsAmount(goodType);
         if (goodAmount.isZero()) {
             dialogNotEnoughGold.showAndWait();
@@ -58,10 +88,19 @@ public final class PanelGood extends VBox {
         event.consume();
     }
 
-    public void replain() {
-        final GoodTrade goodTrade = gameModelController.getModel().getEurope()
-                .getGoodTradeForType(goodType);
+    @Override
+    public void repaint() {
+        final GoodTrade goodTrade = getGoodTrade();
         labelPrice.setText(goodTrade.getSellPrice() + "/" + goodTrade.getBuyPrice());
+    }
+
+    private GoodTrade getGoodTrade() {
+        return gameModelController.getModel().getEurope().getGoodTradeForType(goodType);
+    }
+
+    @Override
+    public Region getContent() {
+        return mainPanel;
     }
 
 }

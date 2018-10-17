@@ -23,5 +23,10 @@
 	<entry key="europePier">Pier</entry>
 	<entry key="recruitUnitDialogTitle">Recruite unit</entry>
 	<entry key="recruitUnitDialogButton">Pay</entry>
+	<entry key="statusBarEuropeDock">Europe dock, ships could be loaded with goods and units.</entry>
+	<entry key="statusBarShipsToNewWorld">Ships heading to New World</entry>
+	<entry key="statusBarShipsToEurope">Ships heading to Europe</entry>
+	<entry key="statusBarPier">Pier, there will be units waiting for travel to New World.</entry>
+	<entry key="goodsToSell">Sell goods {0} for {1} gold or buy it for {2} gold.</entry>
 
 </properties>

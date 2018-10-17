@@ -5,6 +5,7 @@ import org.microcol.i18n.I18n;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
+import com.google.inject.name.Named;
 
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
@@ -22,7 +23,7 @@ public class ContentWithStatusBar implements JavaFxComponent, UpdatableLanguage 
     private final VBox mainBox;
 
     @Inject
-    ContentWithStatusBar(final StatusBarView statusBar) {
+    ContentWithStatusBar(final @Named("Europe") StatusBarView statusBar) {
         this.statusBar = Preconditions.checkNotNull(statusBar);
         mainBox = new VBox();
         mainBox.setId("mainPanel");

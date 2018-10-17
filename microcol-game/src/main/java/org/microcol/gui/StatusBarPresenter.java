@@ -21,23 +21,14 @@ import javafx.scene.control.Label;
 @Listener
 public final class StatusBarPresenter {
 
-    private final StatusBarPresenter.Display display;
+    private final StatusBarView display;
 
     private final GameModelController gameModelController;
 
     private final Text text;
 
-    public interface Display {
-
-        Label getStatusBarDescription();
-
-        Label getLabelEra();
-
-        Label getLabelGold();
-    }
-
     @Inject
-    public StatusBarPresenter(final StatusBarPresenter.Display display,
+    public StatusBarPresenter(final StatusBarView display,
             final StatusBarMessageController statusBarMessageController,
             final ChangeLanguageController changeLanguangeController, final Text text,
             final GameModelController gameModelController) {

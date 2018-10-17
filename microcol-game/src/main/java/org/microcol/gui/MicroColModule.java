@@ -15,7 +15,7 @@ import org.microcol.gui.colony.UnitMovedOutsideColonyController;
 import org.microcol.gui.europe.BuyUnitsDialog;
 import org.microcol.gui.europe.ChooseGoodAmountDialog;
 import org.microcol.gui.europe.EuropeCallback;
-import org.microcol.gui.europe.EuropeDialog;
+import org.microcol.gui.europe.EuropeMenuPanelPresenter;
 import org.microcol.gui.europe.PanelEuropeDockBehavior;
 import org.microcol.gui.europe.PanelEuropeGoods;
 import org.microcol.gui.europe.PanelHighSeas;
@@ -123,6 +123,7 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
 import com.google.inject.matcher.Matchers;
+import com.google.inject.name.Names;
 import com.google.inject.spi.ProvisionListener;
 
 public final class MicroColModule extends AbstractModule {
@@ -255,9 +256,11 @@ public final class MicroColModule extends AbstractModule {
                 .in(Singleton.class);
         bind(CampaignMenuPanelPresenter.class).asEagerSingleton();
 
-        bind(StatusBarView.class).in(Singleton.class);
-        bind(StatusBarPresenter.Display.class).to(StatusBarView.class).in(Singleton.class);
-        bind(StatusBarPresenter.class).asEagerSingleton();
+        bind(StatusBarView.class).annotatedWith(Names.named("GamePanel")).to(StatusBarView.class).asEagerSingleton();
+        bind(StatusBarView.class).annotatedWith(Names.named("Europe")).to(StatusBarView.class).asEagerSingleton();
+        
+        bind(StatusBarPresenter.class).annotatedWith(Names.named("GamePanel")).toProvider(StatusBarPresenterProvider_GamePanel.class).asEagerSingleton();
+        bind(StatusBarPresenter.class).annotatedWith(Names.named("Europe")).toProvider(StatusBarPresenterProvider_Europe.class).asEagerSingleton();
 
         bind(MainMenuView.class).in(Singleton.class);
         bind(MainMenuPresenter.class).asEagerSingleton();
@@ -288,8 +291,8 @@ public final class MicroColModule extends AbstractModule {
         /**
          * Europe dialog
          */
-        bind(EuropeDialog.class).in(Singleton.class);
-        bind(EuropeCallback.class).to(EuropeDialog.class).in(Singleton.class);
+        bind(EuropeCallback.class).to(EuropeMenuPanelPresenter.class).in(Singleton.class);
+        bind(EuropeMenuPanelPresenter.class).asEagerSingleton();
         bind(PanelHighSeas.class);
         bind(PanelPortPier.class).in(Singleton.class);
         bind(PanelEuropeGoods.class).in(Singleton.class);

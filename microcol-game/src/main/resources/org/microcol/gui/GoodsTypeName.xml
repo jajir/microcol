@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE properties [
+<!ELEMENT properties ( comment?, entry* ) >
+<!ATTLIST properties version CDATA #FIXED "1.0">
+<!ELEMENT comment (#PCDATA) >
+<!ELEMENT entry (#PCDATA) >
+<!ATTLIST entry key CDATA #REQUIRED>
+]>
+
+<properties>
+	<comment>Define keys for Europe dialog</comment>
+
+	<entry key="corn">Corn</entry>
+	<entry key="sugar">Sugar cane</entry>
+	<entry key="tobacco">Tobacco</entry>
+	<entry key="cotton">Cotton</entry>
+	<entry key="fur">Fur</entry>
+	<entry key="lumber">Lumber</entry>
+	<entry key="ore">Ore</entry>
+	<entry key="silver">Silver</entry>
+	<entry key="horse">Horse</entry>
+	<entry key="rum">Rum</entry>
+	<entry key="cigars">Cigars</entry>
+	<entry key="silk">Silk</entry>
+	<entry key="coat">Coats</entry>
+	<entry key="goods">Goods</entry>
+	<entry key="tools">Tools</entry>
+	<entry key="musket">Musket</entry>
+	<entry key="hammers">Hammers</entry>
+	<entry key="cross">Crosses</entry>
+	<entry key="bell">Bell of liberty</entry>
+
+</properties>

@@ -3,13 +3,16 @@
  */
 
 .game-menu-holder{
-	-fx-min-height: 480;
-	-fx-min-width: 720;
-	-fx-background-color: white;
+	-fx-min-width: 800;
 }
 
 .label-title {
-	-fx-font-size: 24;	
+	-fx-font-size: 32;	
+}
+
+.main-panel{
+	-fx-min-width: 800;
+	-fx-padding: 10 10 20 30;	
 }
 
 /*

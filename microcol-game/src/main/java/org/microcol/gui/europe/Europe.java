@@ -19,7 +19,12 @@ public enum Europe implements MessageKeyResource {
     goodsPanelTitle,
     europePier,
     recruitUnitDialogTitle,
-    recruitUnitDialogButton;
+    recruitUnitDialogButton,
+    statusBarEuropeDock,
+    statusBarShipsToNewWorld,
+    statusBarShipsToEurope,
+    statusBarPier,
+    goodsToSell;
 
     @Override
     public ResourceBundle.Control getResourceBundleControl() {

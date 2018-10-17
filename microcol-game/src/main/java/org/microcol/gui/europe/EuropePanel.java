@@ -1,6 +1,8 @@
 package org.microcol.gui.europe;
 
 import org.microcol.gui.Loc;
+import org.microcol.gui.event.StatusBarMessageController;
+import org.microcol.gui.event.StatusBarMessageEvent;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.gamepanel.GamePanelView;
 import org.microcol.gui.image.ImageProvider;
@@ -64,7 +66,8 @@ public final class EuropePanel implements JavaFxComponent, UpdatableLanguage, Re
             final PanelHighSeas<Europe> shipsTravelingToEurope, final PanelPortPier panelPortPier,
             final RecruiteUnitsDialog recruiteUnitsDialog, final BuyUnitsDialog buyUnitsDialog,
             final PanelEuropeDockBehavior panelEuropeDockBehavior,
-            final PanelEuropeGoods panelEuropeGoods, final EuropeCallback europeCallback) {
+            final PanelEuropeGoods panelEuropeGoods, final EuropeCallback europeCallback,
+            final StatusBarMessageController statusBarMessageController, final I18n i18n) {
         propertyShiftWasPressed = new SimpleBooleanProperty(false);
         Preconditions.checkNotNull(imageProvider);
         Preconditions.checkNotNull(gameModelController);
@@ -76,13 +79,21 @@ public final class EuropePanel implements JavaFxComponent, UpdatableLanguage, Re
         this.shipsTravelingToEurope = Preconditions.checkNotNull(shipsTravelingToEurope);
         this.shipsTravelingToEurope.setShownShipsTravelingToEurope(true);
         this.shipsTravelingToEurope.setTitleKey(Europe.shipsTravelingToEurope);
+        this.shipsTravelingToEurope.setOnMouseEnteredKey(Europe.statusBarShipsToEurope);
         this.shipsTravelingToEurope.addStyle("to-europe");
         this.shipsTravelingToNewWorld = Preconditions.checkNotNull(shipsTravelingToNewWorld);
         this.shipsTravelingToNewWorld.setShownShipsTravelingToEurope(false);
         this.shipsTravelingToNewWorld.setTitleKey(Europe.shipsTravelingToNewWorld);
+        this.shipsTravelingToNewWorld.setOnMouseEnteredKey(Europe.statusBarShipsToNewWorld);
         this.shipsTravelingToNewWorld.addStyle("to-new-world");
 
         europeDock = new PanelDock(imageProvider, panelEuropeDockBehavior);
+        europeDock.getContent().setOnMouseEntered(e -> {
+            statusBarMessageController
+                    .fireEvent(new StatusBarMessageEvent(i18n.get(Europe.statusBarEuropeDock)));
+        });
+        europeDock.getContent().setOnMouseExited(
+                event -> statusBarMessageController.fireEvent(new StatusBarMessageEvent(null)));
         final VBox panelLeft = new VBox();
         panelLeft.getChildren().addAll(shipsTravelingToEurope.getContent(),
                 shipsTravelingToNewWorld.getContent(), europeDock.getContent());
@@ -125,9 +136,10 @@ public final class EuropePanel implements JavaFxComponent, UpdatableLanguage, Re
         final BackgroundImage europeImage = new BackgroundImage(
                 imageProvider.getImage(ImageProvider.IMG_EUROPE), BackgroundRepeat.NO_REPEAT,
                 BackgroundRepeat.NO_REPEAT,
-                new BackgroundPosition(Side.RIGHT, 0, false, Side.TOP, 80, false),
+                new BackgroundPosition(Side.RIGHT, 0, false, Side.TOP, 68, false),
                 BackgroundSize.DEFAULT);
         mainPanel = new VBox();
+        mainPanel.getStyleClass().add("main-panel");
         mainPanel.getChildren().addAll(labelTitle, panelScenery, panelGoods.getContent());
         mainPanel.setBackground(new Background(europeImage));
     }

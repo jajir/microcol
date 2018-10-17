@@ -1,6 +1,5 @@
 package org.microcol.gui.europe;
 
-import org.microcol.gui.LocalizationHelper;
 import org.microcol.gui.image.ImageProvider;
 import org.microcol.gui.util.ClipboardWritter;
 import org.microcol.model.Unit;
@@ -13,8 +12,7 @@ import javafx.scene.layout.Pane;
 
 public final class PanelPortPierUnit extends HBox {
 
-    public PanelPortPierUnit(final Unit unit, final ImageProvider imageProvider,
-            final LocalizationHelper localizationHelper) {
+    public PanelPortPierUnit(final Unit unit, final ImageProvider imageProvider) {
         final Image image = imageProvider.getUnitImage(unit);
         final ImageView imageIcon = new ImageView(image);
         final Pane paneImage = new Pane(imageIcon);

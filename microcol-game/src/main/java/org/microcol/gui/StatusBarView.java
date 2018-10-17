@@ -10,8 +10,12 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 
-//FIXME remove Display interface
-public final class StatusBarView implements StatusBarPresenter.Display, JavaFxComponent {
+//FIXME status bar should behave as separate class hierarchy
+/*
+ * In should initialize presenter from here as @inject.
+ * StatusBarMessageEvent will contain target to distinguish different status bars from each other.  
+ */
+public final class StatusBarView implements JavaFxComponent {
 
     private final HBox statusBar;
 
@@ -39,17 +43,14 @@ public final class StatusBarView implements StatusBarPresenter.Display, JavaFxCo
         statusBar.setId("statusBar");
     }
 
-    @Override
     public Label getStatusBarDescription() {
         return statusBarDescription;
     }
 
-    @Override
     public Label getLabelEra() {
         return labelEra;
     }
 
-    @Override
     public Label getLabelGold() {
         return labelGold;
     }

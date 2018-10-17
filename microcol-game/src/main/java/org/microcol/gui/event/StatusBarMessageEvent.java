@@ -1,7 +1,6 @@
 package org.microcol.gui.event;
 
 import com.google.common.base.MoreObjects;
-import com.google.common.base.Preconditions;
 
 /**
  * Hold info about status bar message change.
@@ -29,11 +28,10 @@ public final class StatusBarMessageEvent {
      * Text in parameter will be in status bar.
      * 
      * @param statusMessage
-     *            required status message
+     *            optional status message
      */
     public StatusBarMessageEvent(final String statusMessage) {
-        this.statusMessage = Preconditions.checkNotNull(statusMessage);
-        Preconditions.checkArgument(!statusMessage.isEmpty(), "status message can't be empty");
+        this.statusMessage = statusMessage;
     }
 
     @Override
