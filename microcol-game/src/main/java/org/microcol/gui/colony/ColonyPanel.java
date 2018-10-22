@@ -4,7 +4,7 @@ import org.microcol.gui.Dialog;
 import org.microcol.gui.MainStageBuilder;
 import org.microcol.gui.Point;
 import org.microcol.gui.image.ImageProvider;
-import org.microcol.gui.util.AbstractMessageWindow;
+import org.microcol.gui.util.JavaFxComponent;
 import org.microcol.gui.util.Listener;
 import org.microcol.gui.util.PaintService;
 import org.microcol.gui.util.PanelDock;
@@ -31,15 +31,19 @@ import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 
 /**
  * Show Europe port.
  */
 @Listener
-public final class ColonyDialog extends AbstractMessageWindow implements ColonyDialogCallback {
+public final class ColonyPanel implements ColonyDialogCallback, JavaFxComponent {
 
-    private final static Logger logger = LoggerFactory.getLogger(ColonyDialog.class);
+    private final static Logger logger = LoggerFactory.getLogger(ColonyPanel.class);
+
+    private final Pane mainPanel;
 
     private final Label colonyName;
 
@@ -62,17 +66,18 @@ public final class ColonyDialog extends AbstractMessageWindow implements ColonyD
     Colony colony;
 
     @Inject
-    public ColonyDialog(final ViewUtil viewUtil, final Text text, final I18n i18n,
+    public ColonyPanel(final ViewUtil viewUtil, final Text text, final I18n i18n,
             final ImageProvider imageProvider, final PanelColonyFields panelColonyFields,
             final PanelColonyStructures panelColonyStructures,
             final PanelOutsideColony panelOutsideColony, final PanelColonyGoods panelColonyGoods,
             final PanelColonyDockBehaviour panelColonyDockBehaviour,
             final UnitMovedOutsideColonyController unitMovedOutsideColonyController,
             final PanelQueueSummary panelQueueSummary, final PaintService paintService) {
-        super(viewUtil, i18n);
+        // super(viewUtil, i18n);
         this.paintService = Preconditions.checkNotNull(paintService);
         Preconditions.checkNotNull(imageProvider);
-        setTitle(text.get("europeDialog.caption"));
+        mainPanel = new Pane();
+        // setTitle(text.get("europeDialog.caption"));
 
         /**
          * Row 0
@@ -122,20 +127,19 @@ public final class ColonyDialog extends AbstractMessageWindow implements ColonyD
 
         final VBox mainPanel = new VBox();
         mainPanel.getChildren().addAll(colonyName, mapAndBuildings, managementRow, goods, buttonOk);
-        init(mainPanel);
-        getScene().getStylesheets().add(MainStageBuilder.STYLE_SHEET_MICROCOL);
+        mainPanel.getStylesheets().add(MainStageBuilder.STYLE_SHEET_MICROCOL);
 
         /**
-         * TODO there is a bug, keyboard events are not send during dragging.
-         * TODO copy of this code is in EuropeDialog
+         * TODO there is a bug, keyboard events are not send during dragging. TODO copy
+         * of this code is in EuropeDialog
          */
         propertyShiftWasPressed = new SimpleBooleanProperty(false);
-        getScene().addEventFilter(KeyEvent.KEY_RELEASED, event -> {
+        mainPanel.addEventFilter(KeyEvent.KEY_RELEASED, event -> {
             if (event.getCode() == KeyCode.SHIFT) {
                 propertyShiftWasPressed.set(false);
             }
         });
-        getScene().addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+        mainPanel.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
             logger.debug("wasShiftPressed " + event);
             if (event.getCode() == KeyCode.SHIFT) {
                 propertyShiftWasPressed.set(true);
@@ -161,7 +165,6 @@ public final class ColonyDialog extends AbstractMessageWindow implements ColonyD
         colonyName.setText("Colony: " + colony.getName());
         goods.setColony(colony);
         repaint();
-        showAndWait();
     }
 
     @Override
@@ -190,5 +193,16 @@ public final class ColonyDialog extends AbstractMessageWindow implements ColonyD
     @Override
     public BooleanProperty getPropertyShiftWasPressed() {
         return propertyShiftWasPressed;
+    }
+
+    @Override
+    public void close() {
+        // FIXME Auto-generated method stub
+//        mainPanelView.showGamePanel();
+    }
+
+    @Override
+    public Region getContent() {
+        return mainPanel;
     }
 }

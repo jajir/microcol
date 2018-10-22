@@ -10,11 +10,6 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 
-//FIXME status bar should behave as separate class hierarchy
-/*
- * In should initialize presenter from here as @inject.
- * StatusBarMessageEvent will contain target to distinguish different status bars from each other.  
- */
 public final class StatusBarView implements JavaFxComponent {
 
     private final HBox statusBar;

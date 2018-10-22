@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.gamepanel.TileWasSelectedEvent;
 import org.microcol.gui.image.ImageProvider;
+import org.microcol.gui.util.JavaFxComponent;
 import org.microcol.gui.util.Text;
 import org.microcol.model.Colony;
 import org.microcol.model.Location;
@@ -30,7 +31,7 @@ import javafx.scene.layout.RowConstraints;
  * Draw right panel containing info about selected tile and selected unit.
  *
  */
-public final class RightPanelView {
+public final class RightPanelView implements JavaFxComponent {
 
     private static final int RIGHT_PANEL_WIDTH = 170;
 
@@ -133,8 +134,8 @@ public final class RightPanelView {
             } else {
                 tileImage.paintUnit(units);
                 /**
-                 * Current player is not same as human player. For purposes of
-                 * this method it will be sufficient.
+                 * Current player is not same as human player. For purposes of this method it
+                 * will be sufficient.
                  */
                 unitsPanel.setUnits(getModel().getCurrentPlayer(), getModel().getUnitsAt(location));
             }
@@ -191,7 +192,8 @@ public final class RightPanelView {
         nextTurnButton.setText(text);
     }
 
-    public GridPane getBox() {
+    @Override
+    public GridPane getContent() {
         return gridPane;
     }
 

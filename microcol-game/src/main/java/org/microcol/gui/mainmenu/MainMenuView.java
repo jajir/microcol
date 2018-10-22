@@ -1,8 +1,11 @@
 package org.microcol.gui.mainmenu;
 
 import org.microcol.gui.util.GamePreferences;
+import org.microcol.gui.util.JavaFxComponent;
 import org.microcol.gui.util.Text;
 import org.microcol.gui.util.Text.Language;
+import org.microcol.gui.util.UpdatableLanguage;
+import org.microcol.i18n.I18n;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
@@ -18,7 +21,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 
-public final class MainMenuView {
+public final class MainMenuView implements JavaFxComponent, UpdatableLanguage {
 
     private final Text text;
 
@@ -83,8 +86,7 @@ public final class MainMenuView {
     private final Menu menuHelp;
 
     @Inject
-    public MainMenuView(final GamePreferences gamePreferences, final Text text,
-            final MainMenuDevelopment mainMenuDevelopment) {
+    public MainMenuView(final GamePreferences gamePreferences, final I18n i18n, final Text text) {
         this.text = Preconditions.checkNotNull(text);
 
         /**
@@ -211,8 +213,8 @@ public final class MainMenuView {
         menuBar = new MenuBar();
         menuBar.getMenus().addAll(menuGame, menuView, menuUnit);
         if (gamePreferences.isDevelopment()) {
-            //TODO remove development menu entirely
-//            menuBar.getMenus().add(mainMenuDevelopment.getDevelopmentMenu());
+            // TODO remove development menu entirely
+            // menuBar.getMenus().add(mainMenuDevelopment.getDevelopmentMenu());
         }
 
         menuItemColonizopedia = new MenuItem();
@@ -256,10 +258,11 @@ public final class MainMenuView {
             menuHelp.getItems().addAll(menuItemAbout);
             menuBar.getMenus().add(menuHelp);
         }
-        updateLanguage();
+        updateLanguage(i18n);
     }
 
-    public void updateLanguage() {
+    @Override
+    public void updateLanguage(final I18n i18n) {
         /**
          * Game
          */
@@ -362,7 +365,8 @@ public final class MainMenuView {
         return menuItemEurope;
     }
 
-    public MenuBar getMenuBar() {
+    @Override
+    public MenuBar getContent() {
         return menuBar;
     }
 

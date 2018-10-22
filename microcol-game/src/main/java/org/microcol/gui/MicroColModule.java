@@ -87,7 +87,6 @@ import org.microcol.gui.mainmenu.CenterViewController;
 import org.microcol.gui.mainmenu.ChangeLanguageController;
 import org.microcol.gui.mainmenu.DeclareIndependenceController;
 import org.microcol.gui.mainmenu.ExitGameController;
-import org.microcol.gui.mainmenu.MainMenuDevelopment;
 import org.microcol.gui.mainmenu.MainMenuPresenter;
 import org.microcol.gui.mainmenu.MainMenuView;
 import org.microcol.gui.mainmenu.PlowFieldEventController;
@@ -255,16 +254,12 @@ public final class MicroColModule extends AbstractModule {
         bind(CampaignMenuPanelPresenter.Display.class).to(CampaignMenuPanelView.class)
                 .in(Singleton.class);
         bind(CampaignMenuPanelPresenter.class).asEagerSingleton();
-
-        bind(StatusBarView.class).annotatedWith(Names.named("GamePanel")).to(StatusBarView.class).asEagerSingleton();
-        bind(StatusBarView.class).annotatedWith(Names.named("Europe")).to(StatusBarView.class).asEagerSingleton();
         
-        bind(StatusBarPresenter.class).annotatedWith(Names.named("GamePanel")).toProvider(StatusBarPresenterProvider_GamePanel.class).asEagerSingleton();
-        bind(StatusBarPresenter.class).annotatedWith(Names.named("Europe")).toProvider(StatusBarPresenterProvider_Europe.class).asEagerSingleton();
+        bind(StatusBar.class).annotatedWith(Names.named("GamePanel")).to(StatusBar.class).asEagerSingleton();
+        bind(StatusBar.class).annotatedWith(Names.named("Europe")).to(StatusBar.class).asEagerSingleton();
 
         bind(MainMenuView.class).in(Singleton.class);
         bind(MainMenuPresenter.class).asEagerSingleton();
-        bind(MainMenuDevelopment.class).in(Singleton.class);
 
         bind(RightPanelView.class).in(Singleton.class);
         bind(RightPanelPresenter.class).asEagerSingleton();

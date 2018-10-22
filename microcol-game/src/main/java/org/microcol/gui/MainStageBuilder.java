@@ -2,7 +2,6 @@ package org.microcol.gui;
 
 import java.awt.Rectangle;
 
-import org.microcol.gui.mainmenu.MainMenuView;
 import org.microcol.gui.mainmenu.QuitGameController;
 import org.microcol.gui.mainmenu.QuitGameEvent;
 import org.microcol.gui.util.GamePreferences;
@@ -28,8 +27,6 @@ public final class MainStageBuilder {
     public static final String STYLE_SHEET_RIGHT_PANEL_VIEW = MainStageBuilder.class
             .getResource("/gui/rightPanelView.css").toExternalForm();
 
-    private final MainMenuView mainMenuView;
-
     private final MainPanelView mainPanelView;
 
     private final QuitGameController exitGameController;
@@ -39,10 +36,9 @@ public final class MainStageBuilder {
     private final Text text;
 
     @Inject
-    public MainStageBuilder(final MainMenuView mainMenuView, final MainPanelView mainPanelView,
+    public MainStageBuilder(final MainPanelView mainPanelView,
             final QuitGameController exitGameController, final GamePreferences gamePreferences,
             final Text text) {
-        this.mainMenuView = Preconditions.checkNotNull(mainMenuView);
         this.mainPanelView = Preconditions.checkNotNull(mainPanelView);
         this.exitGameController = Preconditions.checkNotNull(exitGameController);
         this.gamePreferences = Preconditions.checkNotNull(gamePreferences);
@@ -94,7 +90,6 @@ public final class MainStageBuilder {
         final VBox mainBox = new VBox();
         final Scene scene = new Scene(mainBox);
         scene.getStylesheets().add(STYLE_SHEET_MICROCOL);
-        mainBox.getChildren().add(mainMenuView.getMenuBar());
         mainBox.getChildren().add(mainPanelView.getBox());
 
         primaryStage.setScene(scene);
@@ -105,8 +100,8 @@ public final class MainStageBuilder {
      *
      * @param rectangle
      *            required rectangle
-     * @return Return <code>true</code> when whole rectangle is on screen
-     *         otherwise return <code>false</code>.
+     * @return Return <code>true</code> when whole rectangle is on screen otherwise
+     *         return <code>false</code>.
      */
     private boolean isOnScreen(final Rectangle rectangle) {
         final Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();

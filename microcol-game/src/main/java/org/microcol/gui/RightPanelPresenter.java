@@ -8,9 +8,9 @@ import org.microcol.gui.gamepanel.SelectedUnitWasChangedEvent;
 import org.microcol.gui.gamepanel.TileWasSelectedController;
 import org.microcol.gui.gamepanel.TileWasSelectedEvent;
 import org.microcol.gui.mainmenu.ChangeLanguageController;
-import org.microcol.gui.mainmenu.ChangeLanguageEvent;
 import org.microcol.gui.util.Listener;
 import org.microcol.gui.util.Text;
+import org.microcol.i18n.I18n;
 import org.microcol.model.event.TurnStartedEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,12 +55,11 @@ public final class RightPanelPresenter {
                     .fireEvent(new StatusBarMessageEvent(text.get("nextTurnButton.desctiption")));
         });
 
-        display.getBox().setOnMouseEntered(e -> {
+        display.getContent().setOnMouseEntered(e -> {
             statusBarMessageController
                     .fireEvent(new StatusBarMessageEvent(text.get("rightPanel.description")));
         });
 
-        changeLanguangeController.addListener(this::onLanguageWasChanged);
         tileWasSelectedController.addRunLaterListener(this::onFocusedTile);
         selectedUnitWasChangedController.addRunLaterListener(this::onSelectedUnitWasChanged);
     }
@@ -88,9 +87,8 @@ public final class RightPanelPresenter {
             }
         }
     }
-
-    @SuppressWarnings("unused")
-    private void onLanguageWasChanged(final ChangeLanguageEvent event) {
+    
+    public void updateLanguage(final I18n i18n) {
         display.setNextTurnButtonLabel(text.get("nextTurnButton"));
         if (gameModelController.isModelReady()) {
             display.setOnMovePlayer(gameModelController.getModel().getCurrentPlayer());

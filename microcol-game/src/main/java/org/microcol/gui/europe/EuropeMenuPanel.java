@@ -1,5 +1,6 @@
 package org.microcol.gui.europe;
 
+import org.microcol.gui.StatusBar;
 import org.microcol.gui.util.CenteredPage;
 import org.microcol.gui.util.ContentWithStatusBar;
 import org.microcol.gui.util.JavaFxComponent;
@@ -10,6 +11,7 @@ import org.microcol.i18n.I18n;
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import com.google.inject.name.Named;
 
 import javafx.scene.layout.Region;
 
@@ -25,6 +27,7 @@ public class EuropeMenuPanel implements JavaFxComponent, UpdatableLanguage, Repa
 
     @Inject
     EuropeMenuPanel(final EuropePanel europePanel, final CenteredPage centeredPage,
+            final @Named("Europe") StatusBar statusBar,
             final ContentWithStatusBar contentWithStatusBar,
             final EuropeBackground europeBackground, final I18n i18n) {
         this.contentWithStatusBar = Preconditions.checkNotNull(contentWithStatusBar);
@@ -33,6 +36,7 @@ public class EuropeMenuPanel implements JavaFxComponent, UpdatableLanguage, Repa
         centeredPage.setBackground(europeBackground);
         centeredPage.setMainPanel(europePanel);
         contentWithStatusBar.setContent(centeredPage);
+        contentWithStatusBar.setStatusBar(statusBar);
 
         updateLanguage(i18n);
     }
@@ -51,5 +55,5 @@ public class EuropeMenuPanel implements JavaFxComponent, UpdatableLanguage, Repa
     public void repaint() {
         europePanel.repaint();
     }
-    
+
 }

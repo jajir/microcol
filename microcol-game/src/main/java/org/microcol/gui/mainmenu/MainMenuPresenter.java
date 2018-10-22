@@ -126,9 +126,6 @@ public final class MainMenuPresenter {
         /**
          * Following section define visibility of menu items.
          */
-        changeLanguageController.addListener(event -> {
-            view.updateLanguage();
-        });
         tileWasSelectedController.addRunLaterListener(event -> onFocusedTileEvent(event));
         quitGameController.addListener(this::onGameFinihedEvent);
         endMoveController.addRunLaterListener(this::onEndMoveEvent);

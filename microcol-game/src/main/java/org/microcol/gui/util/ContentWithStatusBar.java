@@ -1,11 +1,10 @@
 package org.microcol.gui.util;
 
-import org.microcol.gui.StatusBarView;
+import org.microcol.gui.StatusBar;
 import org.microcol.i18n.I18n;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
-import com.google.inject.name.Named;
 
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
@@ -16,25 +15,36 @@ import javafx.scene.layout.VBox;
  */
 public class ContentWithStatusBar implements JavaFxComponent, UpdatableLanguage {
 
-    private final StatusBarView statusBar;
+    private StatusBar statusBar;
 
     private JavaFxComponent content;
 
     private final VBox mainBox;
 
     @Inject
-    ContentWithStatusBar(final @Named("Europe") StatusBarView statusBar) {
-        this.statusBar = Preconditions.checkNotNull(statusBar);
+    ContentWithStatusBar() {
         mainBox = new VBox();
         mainBox.setId("mainPanel");
-        mainBox.getChildren().add(statusBar.getContent());
+    }
+
+    public void setStatusBar(final StatusBar statusBar) {
+        this.statusBar = Preconditions.checkNotNull(statusBar);
+        initComponent();
     }
 
     public void setContent(final JavaFxComponent content) {
         this.content = Preconditions.checkNotNull(content);
+        initComponent();
+    }
+
+    private void initComponent() {
         mainBox.getChildren().clear();
-        mainBox.getChildren().add(content.getContent());
-        mainBox.getChildren().add(statusBar.getContent());
+        if (content != null) {
+            mainBox.getChildren().add(content.getContent());
+        }
+        if (statusBar != null) {
+            mainBox.getChildren().add(statusBar.getContent());
+        }
     }
 
     @Override
