@@ -7,7 +7,6 @@ import org.microcol.gui.DialogColonyWasCaptured;
 import org.microcol.gui.DialogUnitCantFightWarning;
 import org.microcol.gui.DialogUnitCantMoveHere;
 import org.microcol.gui.Point;
-import org.microcol.gui.colony.ColonyDialog;
 import org.microcol.gui.event.EndMoveController;
 import org.microcol.gui.event.EndMoveEvent;
 import org.microcol.gui.event.KeyController;
@@ -17,6 +16,8 @@ import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.mainmenu.CenterViewController;
 import org.microcol.gui.mainmenu.CenterViewEvent;
 import org.microcol.gui.mainmenu.QuitGameController;
+import org.microcol.gui.mainscreen.Screen;
+import org.microcol.gui.mainscreen.ShowScreenEvent;
 import org.microcol.gui.util.GamePreferences;
 import org.microcol.gui.util.Listener;
 import org.microcol.gui.util.UnitUtil;
@@ -33,6 +34,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
+import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import com.google.inject.Inject;
 
@@ -62,7 +64,7 @@ public final class GamePanelPresenter {
 
     private final EndMoveController endMoveController;
 
-    private final ColonyDialog colonyDialog;
+    private final EventBus eventBus;
 
     private final I18n i18n;
 
@@ -88,7 +90,7 @@ public final class GamePanelPresenter {
             final QuitGameController quitGameController,
             final SelectedTileManager selectedTileManager, final ViewUtil viewUtil,
             final StartMoveController startMoveController,
-            final EndMoveController endMoveController, final ColonyDialog colonyDialog,
+            final EndMoveController endMoveController, final EventBus eventBus,
             final MouseOverTileManager mouseOverTileManager, final ModeController modeController,
             final SelectedUnitManager selectedUnitManager, final I18n i18n,
             final GamePanelController gamePanelController, final VisibleArea visibleArea,
@@ -102,7 +104,7 @@ public final class GamePanelPresenter {
         this.viewUtil = Preconditions.checkNotNull(viewUtil);
         this.startMoveController = Preconditions.checkNotNull(startMoveController);
         this.endMoveController = Preconditions.checkNotNull(endMoveController);
-        this.colonyDialog = Preconditions.checkNotNull(colonyDialog);
+        this.eventBus = Preconditions.checkNotNull(eventBus);
         this.i18n = Preconditions.checkNotNull(i18n);
         this.mouseOverTileManager = Preconditions.checkNotNull(mouseOverTileManager);
         this.modeController = Preconditions.checkNotNull(modeController);
@@ -198,7 +200,7 @@ public final class GamePanelPresenter {
                 .getColoniesAt(currentLocation);
         if (oColony.isPresent()) {
             // show colony details
-            colonyDialog.showColony(oColony.get());
+            eventBus.post(new ShowScreenEvent(Screen.COLONY, oColony.get()));
         }
     }
 

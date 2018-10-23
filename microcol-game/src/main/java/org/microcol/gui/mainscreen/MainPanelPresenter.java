@@ -1,12 +1,16 @@
-package org.microcol.gui;
+package org.microcol.gui.mainscreen;
 
+import org.microcol.gui.WasdController;
 import org.microcol.gui.event.KeyController;
 import org.microcol.gui.event.model.BeforeGameStartEvent;
 import org.microcol.gui.mainmenu.ChangeLanguageController;
 import org.microcol.gui.mainmenu.ChangeLanguageEvent;
 import org.microcol.gui.util.Listener;
+import org.microcol.model.ChainOfCommandStrategy;
+import org.microcol.model.Colony;
 
 import com.google.common.base.Preconditions;
+import com.google.common.collect.Lists;
 import com.google.common.eventbus.Subscribe;
 import com.google.inject.Inject;
 
@@ -18,6 +22,33 @@ import com.google.inject.Inject;
 public final class MainPanelPresenter {
 
     private final MainPanelView view;
+
+    private final ChainOfCommandStrategy<ShowScreenEvent, String> screenResolver = new ChainOfCommandStrategy<ShowScreenEvent, String>(
+            Lists.newArrayList(event -> {
+                if (Screen.COLONY == event.getScreen()) {
+                    showColony(event.getContext());
+                    return "OK";
+                }
+                return null;
+            }, event -> {
+                if (Screen.EUROPE == event.getScreen()) {
+                    showEurope();
+                    return "OK";
+                }
+                return null;
+            }, event -> {
+                if (Screen.GAME_MENU == event.getScreen()) {
+                    showGameMenu();
+                    return "OK";
+                }
+                return null;
+            }, event -> {
+                if (Screen.GAME == event.getScreen()) {
+                    showGamePanel();
+                    return "OK";
+                }
+                return null;
+            }));
 
     @Inject
     public MainPanelPresenter(final MainPanelView view, final KeyController keyController,
@@ -34,6 +65,11 @@ public final class MainPanelPresenter {
         changeLanguageController.addListener(this::onChangeLanguage);
     }
 
+    @Subscribe
+    private void onShowScreen(final ShowScreenEvent event) {
+        screenResolver.apply(event);
+    }
+
     private void onChangeLanguage(final ChangeLanguageEvent event) {
         view.updateLanguage(event.getI18n());
     }
@@ -48,20 +84,24 @@ public final class MainPanelPresenter {
         view.showDefaultCampaignMenu();
     }
 
-    public void showGamePanel() {
+    private void showGamePanel() {
         view.showGamePanel();
     }
 
-    public void showGameMenu() {
+    private void showGameMenu() {
         view.showGameMenu();
     }
 
-    public void showEurope() {
+    private void showEurope() {
         view.showEurope();
     }
 
     public void showGameSetting() {
         view.showGameSetting();
+    }
+
+    private void showColony(final Colony colony) {
+        view.showColony(colony);
     }
 
 }

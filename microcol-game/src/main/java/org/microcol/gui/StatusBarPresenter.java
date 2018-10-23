@@ -70,7 +70,6 @@ public final class StatusBarPresenter implements UpdatableLanguage {
         });
     }
 
-    @SuppressWarnings("unused")
     @Override
     public void updateLanguage(final I18n i18n) {
         if (gameModelController.isModelReady()) {

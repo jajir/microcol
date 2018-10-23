@@ -33,7 +33,6 @@ public abstract class AbstractBackgroundPanel implements JavaFxComponent, Repain
         mainPanel.heightProperty().addListener((old, v1, v2) -> repaint());
         canvas.widthProperty().bind(mainPanel.widthProperty());
         canvas.heightProperty().bind(mainPanel.heightProperty());
-        repaint();
     }
 
     @Override

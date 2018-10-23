@@ -3,8 +3,9 @@ package org.microcol.gui;
 import org.microcol.gui.buildingqueue.QueueController;
 import org.microcol.gui.buildingqueue.QueueDialog;
 import org.microcol.gui.colonizopedia.ColonizopediaDialog;
-import org.microcol.gui.colony.ColonyDialog;
 import org.microcol.gui.colony.ColonyDialogCallback;
+import org.microcol.gui.colony.ColonyMenuPanelPresenter;
+import org.microcol.gui.colony.ColonyPanel;
 import org.microcol.gui.colony.PanelColonyDockBehaviour;
 import org.microcol.gui.colony.PanelColonyFields;
 import org.microcol.gui.colony.PanelColonyGoods;
@@ -97,6 +98,8 @@ import org.microcol.gui.mainmenu.ShowGridController;
 import org.microcol.gui.mainmenu.ShowStatisticsController;
 import org.microcol.gui.mainmenu.ShowTurnReportController;
 import org.microcol.gui.mainmenu.VolumeChangeController;
+import org.microcol.gui.mainscreen.MainPanelPresenter;
+import org.microcol.gui.mainscreen.MainPanelView;
 import org.microcol.gui.statistics.ShowStatisticsDialogListener;
 import org.microcol.gui.statistics.StatisticsDialog;
 import org.microcol.gui.turnreport.ShowTurnEvensOnTurnStartedEvent;
@@ -254,9 +257,13 @@ public final class MicroColModule extends AbstractModule {
         bind(CampaignMenuPanelPresenter.Display.class).to(CampaignMenuPanelView.class)
                 .in(Singleton.class);
         bind(CampaignMenuPanelPresenter.class).asEagerSingleton();
-        
-        bind(StatusBar.class).annotatedWith(Names.named("GamePanel")).to(StatusBar.class).asEagerSingleton();
-        bind(StatusBar.class).annotatedWith(Names.named("Europe")).to(StatusBar.class).asEagerSingleton();
+
+        bind(StatusBar.class).annotatedWith(Names.named("GamePanel")).to(StatusBar.class)
+                .asEagerSingleton();
+        bind(StatusBar.class).annotatedWith(Names.named("Europe")).to(StatusBar.class)
+        .asEagerSingleton();
+        bind(StatusBar.class).annotatedWith(Names.named("Colony")).to(StatusBar.class)
+        .asEagerSingleton();
 
         bind(MainMenuView.class).in(Singleton.class);
         bind(MainMenuPresenter.class).asEagerSingleton();
@@ -272,8 +279,8 @@ public final class MicroColModule extends AbstractModule {
         /**
          * Colony dialog
          */
-        bind(ColonyDialog.class).in(Singleton.class);
-        bind(ColonyDialogCallback.class).to(ColonyDialog.class).in(Singleton.class);
+        bind(ColonyPanel.class).in(Singleton.class);
+        bind(ColonyDialogCallback.class).to(ColonyMenuPanelPresenter.class).in(Singleton.class);
         bind(PanelColonyFields.class).in(Singleton.class);
         bind(PanelColonyStructures.class).in(Singleton.class);
         bind(PanelOutsideColony.class).in(Singleton.class);

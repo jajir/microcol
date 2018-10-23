@@ -45,6 +45,7 @@ public final class PanelColonyGoods extends TitledPanel {
             hBox.getChildren()
                     .add(new PanelColonyGood(imageProvider.getGoodTypeImage(goodType), goodType));
         });
+        getStyleClass().add("panel-colony-goods");
 
         final BackgroundHighlighter backgroundHighlighter = new BackgroundHighlighter(this,
                 this::isItGoodAmount);

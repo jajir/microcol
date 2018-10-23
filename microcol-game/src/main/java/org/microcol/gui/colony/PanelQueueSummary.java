@@ -34,6 +34,7 @@ public class PanelQueueSummary extends TitledPanel {
         box.setOnMouseClicked(this::onMouseClicked);
         box.getChildren().add(mainPanel);
         getContentPane().getChildren().add(box);
+        getStyleClass().add("queue-summary");
     }
 
     private void onMouseClicked(@SuppressWarnings("unused") final MouseEvent event) {

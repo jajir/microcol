@@ -3,7 +3,6 @@ package org.microcol.gui.mainmenu;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 
-import org.microcol.gui.MainPanelPresenter;
 import org.microcol.gui.PersistingDialog;
 import org.microcol.gui.PreferencesAnimationSpeed;
 import org.microcol.gui.PreferencesVolume;
@@ -19,6 +18,8 @@ import org.microcol.gui.gamepanel.SelectedUnitWasChangedController;
 import org.microcol.gui.gamepanel.SelectedUnitWasChangedEvent;
 import org.microcol.gui.gamepanel.TileWasSelectedController;
 import org.microcol.gui.gamepanel.TileWasSelectedEvent;
+import org.microcol.gui.mainscreen.Screen;
+import org.microcol.gui.mainscreen.ShowScreenEvent;
 import org.microcol.gui.util.Listener;
 import org.microcol.gui.util.Text;
 import org.microcol.i18n.I18n;
@@ -32,6 +33,7 @@ import org.microcol.model.event.UnitMoveFinishedEvent;
 import org.microcol.model.event.UnitMovedStepStartedEvent;
 
 import com.google.common.base.Preconditions;
+import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import com.google.inject.Inject;
 
@@ -71,8 +73,8 @@ public final class MainMenuPresenter {
             final ShowTurnReportController showTurnReportController,
             final ShowStatisticsController showStatisticsController,
             final ShowGoalsController showGoalsController,
-            final PlowFieldEventController plowFieldEventController,
-            final MainPanelPresenter mainPanelPresenter, final I18n i18n) {
+            final PlowFieldEventController plowFieldEventController, final EventBus eventBus,
+            final I18n i18n) {
         this.view = Preconditions.checkNotNull(view);
         this.selectedUnitManager = Preconditions.checkNotNull(selectedUnitManager);
         this.gameModelController = Preconditions.checkNotNull(gameModelController);
@@ -100,7 +102,8 @@ public final class MainMenuPresenter {
         view.getMenuItemAnimationSpeed()
                 .setOnAction(event -> preferencesAnimationSpeed.resetAndShowAndWait());
         // view.getMenuItemEurope().setOnAction(event -> europeDialog.show());
-        view.getMenuItemEurope().setOnAction(event -> mainPanelPresenter.showEurope());
+        view.getMenuItemEurope()
+                .setOnAction(event -> eventBus.post(new ShowScreenEvent(Screen.EUROPE)));
         view.getMenuItemShowGrid().setOnAction(ectionEvent -> showGridController
                 .fireEvent(new ShowGridEvent(view.getMenuItemShowGrid().isSelected())));
         view.getMenuItemBuildColony().setOnAction(event -> buildColonyEventController.fireEvent());

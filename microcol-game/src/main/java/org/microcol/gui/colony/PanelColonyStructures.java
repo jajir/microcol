@@ -167,6 +167,7 @@ public final class PanelColonyStructures extends TitledPanel {
         this.imageProvider = Preconditions.checkNotNull(imageProvider);
         this.gameModelController = Preconditions.checkNotNull(gameModelController);
         canvas = new Canvas(CANVAS_WIDTH, CANVAS_HEIGHT);
+        getStyleClass().add("colony-structures");
         getContentPane().getChildren().add(canvas);
         setMinWidth(CANVAS_WIDTH);
         setMinHeight(CANVAS_HEIGHT);

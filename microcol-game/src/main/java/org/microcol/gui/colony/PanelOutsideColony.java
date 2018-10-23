@@ -62,6 +62,7 @@ public final class PanelOutsideColony extends TitledPanel {
         setOnDragExited(backgroundHighlighter::onDragExited);
         setOnDragDropped(this::onDragDropped);
         setOnDragOver(this::onDragOver);
+        getStyleClass().add("outside");
     }
 
     public void setColony(final Colony colony) {

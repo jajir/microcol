@@ -8,8 +8,7 @@ import org.microcol.gui.util.JavaFxComponent;
 import org.microcol.gui.util.Listener;
 import org.microcol.gui.util.PaintService;
 import org.microcol.gui.util.PanelDock;
-import org.microcol.gui.util.Text;
-import org.microcol.gui.util.ViewUtil;
+import org.microcol.gui.util.UpdatableLanguage;
 import org.microcol.i18n.I18n;
 import org.microcol.model.Colony;
 import org.microcol.model.Unit;
@@ -31,7 +30,6 @@ import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 
@@ -39,11 +37,11 @@ import javafx.scene.layout.VBox;
  * Show Europe port.
  */
 @Listener
-public final class ColonyPanel implements ColonyDialogCallback, JavaFxComponent {
+public final class ColonyPanel implements JavaFxComponent, UpdatableLanguage {
 
     private final static Logger logger = LoggerFactory.getLogger(ColonyPanel.class);
 
-    private final Pane mainPanel;
+    private final VBox mainPanel;
 
     private final Label colonyName;
 
@@ -63,26 +61,25 @@ public final class ColonyPanel implements ColonyDialogCallback, JavaFxComponent 
 
     private final PanelQueueSummary panelQueueSummary;
 
-    Colony colony;
+    private Colony colony;
 
     @Inject
-    public ColonyPanel(final ViewUtil viewUtil, final Text text, final I18n i18n,
-            final ImageProvider imageProvider, final PanelColonyFields panelColonyFields,
+    public ColonyPanel(final I18n i18n, final ImageProvider imageProvider,
+            final PanelColonyFields panelColonyFields,
             final PanelColonyStructures panelColonyStructures,
             final PanelOutsideColony panelOutsideColony, final PanelColonyGoods panelColonyGoods,
             final PanelColonyDockBehaviour panelColonyDockBehaviour,
             final UnitMovedOutsideColonyController unitMovedOutsideColonyController,
-            final PanelQueueSummary panelQueueSummary, final PaintService paintService) {
-        // super(viewUtil, i18n);
+            final PanelQueueSummary panelQueueSummary, final PaintService paintService,
+            final ColonyDialogCallback colonyDialogCallback) {
         this.paintService = Preconditions.checkNotNull(paintService);
         Preconditions.checkNotNull(imageProvider);
-        mainPanel = new Pane();
-        // setTitle(text.get("europeDialog.caption"));
 
         /**
          * Row 0
          */
         colonyName = new Label("Colony: ");
+        colonyName.getStyleClass().add("label-title");
 
         /**
          * Row 1
@@ -121,17 +118,17 @@ public final class ColonyPanel implements ColonyDialogCallback, JavaFxComponent 
          */
         final Button buttonOk = new Button(i18n.get(Dialog.ok));
         buttonOk.setOnAction(e -> {
-            close();
+            colonyDialogCallback.close();
         });
         buttonOk.requestFocus();
 
-        final VBox mainPanel = new VBox();
+        mainPanel = new VBox();
         mainPanel.getChildren().addAll(colonyName, mapAndBuildings, managementRow, goods, buttonOk);
         mainPanel.getStylesheets().add(MainStageBuilder.STYLE_SHEET_MICROCOL);
 
         /**
-         * TODO there is a bug, keyboard events are not send during dragging. TODO copy
-         * of this code is in EuropeDialog
+         * TODO there is a bug, keyboard events are not send during dragging.
+         * TODO copy of this code is in EuropeDialog
          */
         propertyShiftWasPressed = new SimpleBooleanProperty(false);
         mainPanel.addEventFilter(KeyEvent.KEY_RELEASED, event -> {
@@ -167,13 +164,11 @@ public final class ColonyPanel implements ColonyDialogCallback, JavaFxComponent 
         repaint();
     }
 
-    @Override
     public void paintUnit(final Canvas canvas, final Unit unit) {
         final GraphicsContext graphics = canvas.getGraphicsContext2D();
         paintService.paintUnit(graphics, Point.CENTER, unit);
     }
 
-    @Override
     public void repaint() {
         if (colony != null) {
             colonyFields.setColony(colony);
@@ -185,24 +180,24 @@ public final class ColonyPanel implements ColonyDialogCallback, JavaFxComponent 
         }
     }
 
-    @Override
     public Colony getColony() {
         return colony;
     }
 
-    @Override
     public BooleanProperty getPropertyShiftWasPressed() {
         return propertyShiftWasPressed;
     }
 
-    @Override
     public void close() {
-        // FIXME Auto-generated method stub
-//        mainPanelView.showGamePanel();
     }
 
     @Override
     public Region getContent() {
         return mainPanel;
+    }
+
+    @Override
+    public void updateLanguage(final I18n i18n) {
+        // FIXME Auto-generated method stub
     }
 }

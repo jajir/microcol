@@ -70,9 +70,11 @@ public final class PanelDock implements JavaFxComponent, UpdatableLanguage, Repa
         panelShips.setMinHeight(GamePanelView.TILE_WIDTH_IN_PX);
         
         mainPanel = new VBox(panelShips, panelCratesController.getPanelCratesView());
-        mainPanel.getStyleClass().add("panel-dock");
         
         titledPanel = new TitledPanel();
+        //FIXME
+        titledPanel.setTitle("Dock");
+        titledPanel.getStyleClass().add("panel-dock");
         titledPanel.getContentPane().getChildren().add(mainPanel);
     }
 

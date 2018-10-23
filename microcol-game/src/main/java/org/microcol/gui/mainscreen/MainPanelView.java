@@ -1,6 +1,6 @@
-package org.microcol.gui;
+package org.microcol.gui.mainscreen;
 
-import org.microcol.gui.colony.ColonyPanel;
+import org.microcol.gui.colony.ColonyMenuPanel;
 import org.microcol.gui.europe.EuropeMenuPanel;
 import org.microcol.gui.gamemenu.CampaignMenuPanel;
 import org.microcol.gui.gamemenu.GameMenuPanel;
@@ -9,6 +9,7 @@ import org.microcol.gui.gamepanel.GamePanelMain;
 import org.microcol.gui.util.JavaFxComponent;
 import org.microcol.gui.util.UpdatableLanguage;
 import org.microcol.i18n.I18n;
+import org.microcol.model.Colony;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
@@ -29,7 +30,7 @@ public final class MainPanelView implements JavaFxComponent, UpdatableLanguage {
 
     private final CampaignMenuPanel campaignMenuPanel;
 
-    private final ColonyPanel colonyPanel;
+    private final ColonyMenuPanel colonyPanel;
 
     private final EuropeMenuPanel europeMenuPanel;
 
@@ -38,7 +39,7 @@ public final class MainPanelView implements JavaFxComponent, UpdatableLanguage {
     @Inject
     public MainPanelView(final GamePanelMain gamePanelMain, final GameMenuPanel gameMenuPanelView,
             final CampaignMenuPanel campaignMenuPanel, final EuropeMenuPanel europeMenuPanel,
-            final SettingMenuPanel settingMenuPanel, final ColonyPanel colonyPanel) {
+            final SettingMenuPanel settingMenuPanel, final ColonyMenuPanel colonyPanel) {
         mainBox = new VBox();
         this.gamePanelMain = Preconditions.checkNotNull(gamePanelMain);
         this.gameMenuPanelView = Preconditions.checkNotNull(gameMenuPanelView);
@@ -54,11 +55,11 @@ public final class MainPanelView implements JavaFxComponent, UpdatableLanguage {
         showBox(campaignMenuPanel.getContent());
     }
 
-    public void showGamePanel() {
+    void showGamePanel() {
         showBox(gamePanelMain.getContent());
     }
 
-    public void showGameMenu() {
+    void showGameMenu() {
         showBox(gameMenuPanelView.getContent());
     }
 
@@ -66,14 +67,14 @@ public final class MainPanelView implements JavaFxComponent, UpdatableLanguage {
         showBox(settingMenuPanel.getContent());
     }
 
-    public void showEurope() {
+    void showEurope() {
         showBox(europeMenuPanel.getContent());
         europeMenuPanel.repaint();
     }
 
-    public void showColony() {
+    public void showColony(final Colony colony) {
+        colonyPanel.setColony(colony);
         showBox(colonyPanel.getContent());
-        colonyPanel.repaint();
     }
 
     private void showBox(final Region box) {

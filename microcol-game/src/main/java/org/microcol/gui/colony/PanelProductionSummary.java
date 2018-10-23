@@ -11,6 +11,7 @@ public final class PanelProductionSummary extends TitledPanel {
 
     public PanelProductionSummary() {
         super("Production summary", new Label("Production summary"));
+        getStyleClass().add("production-summary");
     }
 
 }

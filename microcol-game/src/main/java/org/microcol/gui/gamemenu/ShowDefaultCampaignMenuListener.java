@@ -1,6 +1,6 @@
 package org.microcol.gui.gamemenu;
 
-import org.microcol.gui.MainPanelPresenter;
+import org.microcol.gui.mainscreen.MainPanelPresenter;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;

@@ -1,10 +1,12 @@
 package org.microcol.gui.europe;
 
-import org.microcol.gui.MainPanelView;
+import org.microcol.gui.mainscreen.Screen;
+import org.microcol.gui.mainscreen.ShowScreenEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
+import com.google.common.eventbus.EventBus;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
@@ -17,14 +19,14 @@ public class EuropeMenuPanelPresenter implements EuropeCallback {
 
     private final static Logger logger = LoggerFactory.getLogger(EuropeMenuPanelPresenter.class);
 
-    private final MainPanelView mainPanelView;
+    private final EventBus eventBus;
 
     private final EuropePanel europePanel;
 
     @Inject
-    EuropeMenuPanelPresenter(final EuropeMenuPanel europeMenuPanel,
-            final MainPanelView mainPanelView, final EuropePanel europePanel) {
-        this.mainPanelView = Preconditions.checkNotNull(mainPanelView);
+    EuropeMenuPanelPresenter(final EuropeMenuPanel europeMenuPanel, final EventBus eventBus,
+            final EuropePanel europePanel) {
+        this.eventBus = Preconditions.checkNotNull(eventBus);
         this.europePanel = Preconditions.checkNotNull(europePanel);
         europeMenuPanel.getContent().addEventFilter(KeyEvent.KEY_PRESSED, this::onKeyPressed);
     }
@@ -53,6 +55,6 @@ public class EuropeMenuPanelPresenter implements EuropeCallback {
 
     @Override
     public void close() {
-        mainPanelView.showGamePanel();
+        eventBus.post(new ShowScreenEvent(Screen.GAME));
     }
 }

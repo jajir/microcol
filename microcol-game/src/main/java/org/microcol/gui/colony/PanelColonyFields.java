@@ -81,6 +81,7 @@ public final class PanelColonyFields extends TitledPanel {
         contextMenu.getStyleClass().add("popup");
         contextMenu.setAutoHide(true);
         canvas.setOnContextMenuRequested(this::onContextMenuRequested);
+        getStyleClass().add("colony-fields");
     }
 
     private void onContextMenuRequested(final ContextMenuEvent event) {

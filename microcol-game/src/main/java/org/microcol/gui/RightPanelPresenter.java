@@ -7,7 +7,6 @@ import org.microcol.gui.gamepanel.SelectedUnitWasChangedController;
 import org.microcol.gui.gamepanel.SelectedUnitWasChangedEvent;
 import org.microcol.gui.gamepanel.TileWasSelectedController;
 import org.microcol.gui.gamepanel.TileWasSelectedEvent;
-import org.microcol.gui.mainmenu.ChangeLanguageController;
 import org.microcol.gui.util.Listener;
 import org.microcol.gui.util.Text;
 import org.microcol.i18n.I18n;
@@ -34,8 +33,7 @@ public final class RightPanelPresenter {
 
     @Inject
     RightPanelPresenter(final RightPanelView display, final GameModelController gameModelController,
-            final TileWasSelectedController tileWasSelectedController,
-            final ChangeLanguageController changeLanguangeController, final Text text,
+            final TileWasSelectedController tileWasSelectedController, final Text text,
             final StatusBarMessageController statusBarMessageController,
             final SelectedUnitWasChangedController selectedUnitWasChangedController) {
         this.display = Preconditions.checkNotNull(display);
@@ -87,7 +85,8 @@ public final class RightPanelPresenter {
             }
         }
     }
-    
+
+    @SuppressWarnings("unused")
     public void updateLanguage(final I18n i18n) {
         display.setNextTurnButtonLabel(text.get("nextTurnButton"));
         if (gameModelController.isModelReady()) {

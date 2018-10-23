@@ -1,0 +1,64 @@
+/*
+ * JavaFx setting for Colony.
+ * 
+ */
+.label-title {
+	-fx-font-size: 32;	
+}
+
+.colony-structures{
+	-fx-padding: 0 30 30 0;
+	-fx-background-image: url("../images/colony-structures.png");
+	-fx-background-position: 0 30;
+	-fx-background-repeat: no-repeat ;
+}
+
+.queue-summary{
+	-fx-pref-width: 145;
+	-fx-pref-height: 145;
+	-fx-padding: 0 0 30 0;
+	-fx-background-image: url("../images/colony-building-queue.png");
+	-fx-background-position: 0 30;
+	-fx-background-repeat: no-repeat ;
+}
+
+.colony-fields{
+	-fx-pref-width: 145;
+	-fx-padding: 0 10 30 0;
+	-fx-background-image: url("../images/colony-fields.png");
+	-fx-background-position: 3 30;
+	-fx-background-repeat: no-repeat ;
+}
+
+.production-summary{
+	-fx-pref-width: 230;
+	-fx-padding: 0 30 0 0;
+	-fx-background-image: url("../images/colony-production-summary.png");
+	-fx-background-position: 0 30;
+	-fx-background-repeat: no-repeat ;
+}
+
+.panel-dock{
+	-fx-pref-width: 200;
+	-fx-padding: 0 30 0 0;
+	-fx-background-image: url("../images/colony-dock.png");
+	-fx-background-position: 0 30;
+	-fx-background-repeat: no-repeat ;
+}
+
+.outside{
+	-fx-pref-width: 200;
+	-fx-pref-height: 130;
+	-fx-padding: 0 0 0 0;
+	-fx-background-image: url("../images/colony-outside.png");
+	-fx-background-position: 0 30;
+	-fx-background-repeat: no-repeat ;
+}
+
+.panel-colony-goods{
+	-fx-pref-width: 740;
+	-fx-padding: 0 0 30 0;
+	-fx-background-image: url("../images/colony-goods.png");
+	-fx-background-position: 0 25;
+	-fx-background-repeat: no-repeat ;
+}
