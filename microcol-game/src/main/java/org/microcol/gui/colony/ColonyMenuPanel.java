@@ -2,6 +2,7 @@ package org.microcol.gui.colony;
 
 import org.microcol.gui.StatusBar;
 import org.microcol.gui.europe.EuropeDialog;
+import org.microcol.gui.event.StatusBarMessageEvent.Source;
 import org.microcol.gui.util.CenteredPage;
 import org.microcol.gui.util.ContentWithStatusBar;
 import org.microcol.gui.util.JavaFxComponent;
@@ -32,6 +33,7 @@ public class ColonyMenuPanel implements JavaFxComponent, UpdatableLanguage {
             final ColonyBackground colonyBackground, final I18n i18n) {
         this.contentWithStatusBar = Preconditions.checkNotNull(contentWithStatusBar);
         this.colonyPanel = Preconditions.checkNotNull(colonyPanel);
+        statusBar.setShowEventsFromSource(Source.COLONY);
 
         centeredPage.getContent().getStylesheets().add(STYLE_SHEET_COLONY);
         centeredPage.setBackground(colonyBackground);

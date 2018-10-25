@@ -1,13 +1,19 @@
 package org.microcol.gui.colony;
 
+import org.microcol.gui.GoodsTypeName;
+import org.microcol.gui.event.StatusBarMessageEvent;
+import org.microcol.gui.event.StatusBarMessageEvent.Source;
 import org.microcol.gui.util.ClipboardWritter;
+import org.microcol.gui.util.JavaFxComponent;
+import org.microcol.i18n.I18n;
 import org.microcol.model.Colony;
 import org.microcol.model.ColonyProductionStats;
-import org.microcol.model.GoodsAmount;
 import org.microcol.model.GoodProductionStats;
 import org.microcol.model.GoodType;
+import org.microcol.model.GoodsAmount;
 
 import com.google.common.base.Preconditions;
+import com.google.common.eventbus.EventBus;
 
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -17,12 +23,13 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 
 /**
  * Contains image of of type of good.
  */
-public final class PanelColonyGood extends VBox {
+public final class PanelColonyGood implements JavaFxComponent {
 
     private final Label labelAmount;
 
@@ -34,18 +41,40 @@ public final class PanelColonyGood extends VBox {
 
     private final ImageView imageView;
 
+    private final EventBus eventBus;
+
     private Colony colony;
 
-    public PanelColonyGood(final Image image, final GoodType goodType) {
+    private final I18n i18n;
+
+    private final VBox mainPanel;
+
+    public PanelColonyGood(final Image image, final GoodType goodType, final EventBus eventBus,
+            final I18n i18n) {
         this.goodType = Preconditions.checkNotNull(goodType);
         this.image = Preconditions.checkNotNull(image);
+        this.eventBus = Preconditions.checkNotNull(eventBus);
+        this.i18n = Preconditions.checkNotNull(i18n);
         imageView = new ImageView(image);
         final Pane paneImage = new Pane(imageView);
         paneImage.setOnDragDetected(this::onDragDetected);
         labelAmount = new Label();
         labelDiff = new Label();
-        HBox hlabels = new HBox(labelAmount, labelDiff);
-        getChildren().addAll(paneImage, hlabels);
+        final HBox hlabels = new HBox(labelAmount, labelDiff);
+        mainPanel = new VBox();
+        mainPanel.getChildren().add(paneImage);
+        mainPanel.getChildren().add(hlabels);
+        mainPanel.setOnMouseEntered(this::onMouseEntered);
+        mainPanel.setOnMouseExited(this::onMouseExited);
+    }
+
+    private void onMouseEntered(@SuppressWarnings("unused") final MouseEvent event) {
+        eventBus.post(new StatusBarMessageEvent(i18n.get(GoodsTypeName.getNameForGoodType(goodType))
+                + i18n.get(org.microcol.gui.colony.Colony.goods), Source.COLONY));
+    }
+
+    private void onMouseExited(@SuppressWarnings("unused") final MouseEvent event) {
+        eventBus.post(new StatusBarMessageEvent(Source.COLONY));
     }
 
     private void onDragDetected(final MouseEvent event) {
@@ -86,6 +115,11 @@ public final class PanelColonyGood extends VBox {
             labelDiff.setText("");
         }
 
+    }
+
+    @Override
+    public Region getContent() {
+        return mainPanel;
     };
 
 }

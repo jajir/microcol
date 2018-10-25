@@ -8,6 +8,7 @@ import org.microcol.gui.gamepanel.GamePanelView;
 import org.microcol.gui.image.ImageProvider;
 import org.microcol.gui.util.ClipboardEval;
 import org.microcol.gui.util.ClipboardWritter;
+import org.microcol.gui.util.JavaFxComponent;
 import org.microcol.gui.util.PaintService;
 import org.microcol.gui.util.TitledPanel;
 import org.microcol.model.Colony;
@@ -26,7 +27,6 @@ import javafx.geometry.VPos;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.ContextMenu;
-import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
 import javafx.scene.input.ContextMenuEvent;
@@ -34,6 +34,7 @@ import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
+import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 import javafx.scene.text.TextAlignment;
 
@@ -41,7 +42,7 @@ import javafx.scene.text.TextAlignment;
  * Show 3 x 3 tiles occupied by colony. User can assign worker to work outside
  * of colony.
  */
-public final class PanelColonyFields extends TitledPanel {
+public final class PanelColonyFields implements JavaFxComponent {
 
     private final Logger logger = LoggerFactory.getLogger(PanelColonyFields.class);
 
@@ -60,28 +61,33 @@ public final class PanelColonyFields extends TitledPanel {
     private final ContextMenu contextMenu;
 
     private final PaintService paintService;
+    
+    private final TitledPanel mainPanel;
 
     @Inject
     public PanelColonyFields(final ImageProvider imageProvider,
             final GameModelController gameModelController, final ColonyDialogCallback colonyDialog,
             final PaintService paintService) {
-        super("Colony layout", new Label("Colony layout"));
         this.imageProvider = Preconditions.checkNotNull(imageProvider);
         this.gameModelController = Preconditions.checkNotNull(gameModelController);
         this.colonyDialog = Preconditions.checkNotNull(colonyDialog);
         this.paintService = Preconditions.checkNotNull(paintService);
         final int size = 3 * GamePanelView.TILE_WIDTH_IN_PX;
+        
         canvas = new Canvas(size, size);
-        getContentPane().getChildren().add(canvas);
         canvas.setOnDragOver(this::onDragOver);
         canvas.setOnDragDropped(this::onDragDropped);
         canvas.setOnDragDetected(this::onDragDetected);
         canvas.setOnMousePressed(this::onMousePressed);
+        canvas.setOnContextMenuRequested(this::onContextMenuRequested);
+        
         contextMenu = new ContextMenu();
         contextMenu.getStyleClass().add("popup");
         contextMenu.setAutoHide(true);
-        canvas.setOnContextMenuRequested(this::onContextMenuRequested);
-        getStyleClass().add("colony-fields");
+        
+        mainPanel = new  TitledPanel("Colony layout");
+        mainPanel.getContentPane().getChildren().add(canvas);
+        mainPanel.getStyleClass().add("colony-fields");
     }
 
     private void onContextMenuRequested(final ContextMenuEvent event) {
@@ -209,6 +215,11 @@ public final class PanelColonyFields extends TitledPanel {
             gc.fillText("x " + colonyField.getProducedGoodsAmmount(), point.getX() + 10,
                     point.getY() + 28);
         }
+    }
+
+    @Override
+    public Region getContent() {
+        return mainPanel;
     }
 
 }

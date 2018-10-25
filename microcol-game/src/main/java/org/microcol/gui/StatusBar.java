@@ -1,5 +1,6 @@
 package org.microcol.gui;
 
+import org.microcol.gui.event.StatusBarMessageEvent.Source;
 import org.microcol.gui.util.JavaFxComponent;
 import org.microcol.gui.util.UpdatableLanguage;
 import org.microcol.i18n.I18n;
@@ -14,7 +15,7 @@ public class StatusBar implements JavaFxComponent, UpdatableLanguage {
     private final StatusBarPresenter statusBarPresenter;
 
     private final StatusBarView statusBarView;
-
+    
     @Inject
     public StatusBar(final StatusBarView statusBarView,
             final StatusBarPresenter statusBarPresenter) {
@@ -31,6 +32,14 @@ public class StatusBar implements JavaFxComponent, UpdatableLanguage {
     @Override
     public void updateLanguage(I18n i18n) {
         statusBarPresenter.updateLanguage(i18n);
+    }
+
+    /**
+     * @param showEventsFromSource
+     *            the showEventsFromSource to set
+     */
+    public void setShowEventsFromSource(final Source showEventsFromSource) {
+        statusBarPresenter.setShowEventsFromSource(showEventsFromSource);
     }
 
 }

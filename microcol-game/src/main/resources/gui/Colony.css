@@ -14,9 +14,9 @@
 }
 
 .queue-summary{
-	-fx-pref-width: 145;
-	-fx-pref-height: 145;
-	-fx-padding: 0 0 30 0;
+	-fx-pref-width: 240;
+	-fx-pref-height: 160;
+	-fx-padding: 0 0 30 8;
 	-fx-background-image: url("../images/colony-building-queue.png");
 	-fx-background-position: 0 30;
 	-fx-background-repeat: no-repeat ;
@@ -24,7 +24,7 @@
 
 .colony-fields{
 	-fx-pref-width: 145;
-	-fx-padding: 0 10 30 0;
+	-fx-padding: 0 10 30 8;
 	-fx-background-image: url("../images/colony-fields.png");
 	-fx-background-position: 3 30;
 	-fx-background-repeat: no-repeat ;
@@ -47,17 +47,17 @@
 }
 
 .outside{
-	-fx-pref-width: 200;
+	-fx-pref-width: 300;
 	-fx-pref-height: 130;
-	-fx-padding: 0 0 0 0;
+	-fx-padding: 0 10 0 10;
 	-fx-background-image: url("../images/colony-outside.png");
 	-fx-background-position: 0 30;
 	-fx-background-repeat: no-repeat ;
 }
 
 .panel-colony-goods{
-	-fx-pref-width: 740;
-	-fx-padding: 0 0 30 0;
+	-fx-pref-width: 750;
+	-fx-padding: 0 0 30 15;
 	-fx-background-image: url("../images/colony-goods.png");
 	-fx-background-position: 0 25;
 	-fx-background-repeat: no-repeat ;

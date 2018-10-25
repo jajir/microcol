@@ -2,8 +2,8 @@ package org.microcol.gui.europe;
 
 import java.util.Optional;
 
-import org.microcol.gui.event.StatusBarMessageController;
 import org.microcol.gui.event.StatusBarMessageEvent;
+import org.microcol.gui.event.StatusBarMessageEvent.Source;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.gamepanel.GamePanelView;
 import org.microcol.gui.image.ImageProvider;
@@ -19,6 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
+import com.google.common.eventbus.EventBus;
 import com.google.inject.Inject;
 
 import javafx.scene.input.DragEvent;
@@ -42,7 +43,7 @@ public final class PanelPortPier implements JavaFxComponent, UpdatableLanguage, 
 
     private final ImageProvider imageProvider;
 
-    private final StatusBarMessageController statusBarMessageController;
+    private final EventBus eventBus;
 
     private final I18n i18n;
 
@@ -51,11 +52,11 @@ public final class PanelPortPier implements JavaFxComponent, UpdatableLanguage, 
     @Inject
     public PanelPortPier(final GameModelController gameModelController,
             final EuropeCallback europeDialogCallback, final ImageProvider imageProvider,
-            final StatusBarMessageController statusBarMessageController, final I18n i18n) {
+            final EventBus eventBus, final I18n i18n) {
         this.gameModelController = Preconditions.checkNotNull(gameModelController);
         this.europeDialog = Preconditions.checkNotNull(europeDialogCallback);
         this.imageProvider = Preconditions.checkNotNull(imageProvider);
-        this.statusBarMessageController = Preconditions.checkNotNull(statusBarMessageController);
+        this.eventBus = Preconditions.checkNotNull(eventBus);
         this.i18n = Preconditions.checkNotNull(i18n);
         panelUnits = new HBox();
         panelUnits.getStyleClass().add("panel-port-pier");
@@ -71,12 +72,11 @@ public final class PanelPortPier implements JavaFxComponent, UpdatableLanguage, 
     }
 
     private void onMouseEntered(@SuppressWarnings("unused") final MouseEvent event) {
-        statusBarMessageController
-                .fireEvent(new StatusBarMessageEvent(i18n.get(Europe.statusBarPier)));
+        eventBus.post(new StatusBarMessageEvent(i18n.get(Europe.statusBarPier), Source.EUROPE));
     }
 
     private void onMouseExited(@SuppressWarnings("unused") final MouseEvent event) {
-        statusBarMessageController.fireEvent(new StatusBarMessageEvent(null));
+        eventBus.post(new StatusBarMessageEvent(Source.EUROPE));
     }
 
     @Override

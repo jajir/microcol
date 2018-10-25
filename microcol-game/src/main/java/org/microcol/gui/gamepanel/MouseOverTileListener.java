@@ -3,8 +3,8 @@ package org.microcol.gui.gamepanel;
 import java.util.List;
 
 import org.microcol.gui.LocalizationHelper;
-import org.microcol.gui.event.StatusBarMessageController;
 import org.microcol.gui.event.StatusBarMessageEvent;
+import org.microcol.gui.event.StatusBarMessageEvent.Source;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.util.GamePreferences;
 import org.microcol.gui.util.Text;
@@ -14,6 +14,7 @@ import org.microcol.model.TerrainType;
 import org.microcol.model.Unit;
 
 import com.google.common.base.Preconditions;
+import com.google.common.eventbus.EventBus;
 import com.google.inject.Inject;
 
 /**
@@ -23,7 +24,7 @@ public final class MouseOverTileListener {
 
     private final GameModelController gameModelController;
 
-    private final StatusBarMessageController statusBarMessageController;
+    private final EventBus eventBus;
 
     private final LocalizationHelper localizationHelper;
 
@@ -35,11 +36,10 @@ public final class MouseOverTileListener {
     public MouseOverTileListener(
             final MouseOverTileChangedController mouseOverTileChangedController,
             final GameModelController gameModelController,
-            final StatusBarMessageController statusBarMessageController,
             final LocalizationHelper localizationHelper, final GamePreferences gamePreferences,
-            final Text text) {
+            final EventBus eventBus, final Text text) {
         this.gameModelController = Preconditions.checkNotNull(gameModelController);
-        this.statusBarMessageController = Preconditions.checkNotNull(statusBarMessageController);
+        this.eventBus = Preconditions.checkNotNull(eventBus);
         this.localizationHelper = Preconditions.checkNotNull(localizationHelper);
         this.gamePreferences = Preconditions.checkNotNull(gamePreferences);
         this.text = Preconditions.checkNotNull(text);
@@ -54,7 +54,7 @@ public final class MouseOverTileListener {
             final Player player = gameModelController.getCurrentPlayer();
             setStatusMessageForTile(player, terrain, event.getMouseOverTileLocaton());
         } else {
-            statusBarMessageController.fireEvent(new StatusBarMessageEvent());
+            eventBus.post(new StatusBarMessageEvent(Source.GAME));
         }
     }
 
@@ -97,6 +97,6 @@ public final class MouseOverTileListener {
         } else {
             buff.append(text.get("statusBar.tile.notExplored"));
         }
-        statusBarMessageController.fireEvent(new StatusBarMessageEvent(buff.toString()));
+        eventBus.post(new StatusBarMessageEvent(buff.toString(), Source.GAME));
     }
 }

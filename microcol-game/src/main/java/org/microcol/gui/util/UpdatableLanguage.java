@@ -28,7 +28,7 @@ public interface UpdatableLanguage {
      * @param i18n
      *            required internationalization service
      */
-    default void tryToUpdateCompoonent(final JavaFxComponent component, final I18n i18n) {
+    default void tryToUpdateComponent(final JavaFxComponent component, final I18n i18n) {
         Preconditions.checkNotNull(component);
         if (component instanceof UpdatableLanguage) {
             ((UpdatableLanguage) component).updateLanguage(i18n);

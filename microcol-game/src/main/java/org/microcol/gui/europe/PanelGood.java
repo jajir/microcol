@@ -2,8 +2,8 @@ package org.microcol.gui.europe;
 
 import org.microcol.gui.DialogNotEnoughGold;
 import org.microcol.gui.GoodsTypeName;
-import org.microcol.gui.event.StatusBarMessageController;
 import org.microcol.gui.event.StatusBarMessageEvent;
+import org.microcol.gui.event.StatusBarMessageEvent.Source;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.image.ImageProvider;
 import org.microcol.gui.util.ClipboardWritter;
@@ -15,6 +15,7 @@ import org.microcol.model.GoodType;
 import org.microcol.model.GoodsAmount;
 
 import com.google.common.base.Preconditions;
+import com.google.common.eventbus.EventBus;
 
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
@@ -42,18 +43,18 @@ public final class PanelGood implements JavaFxComponent, Repaintable {
 
     private final DialogNotEnoughGold dialogNotEnoughGold;
 
-    private final StatusBarMessageController statusBarMessageController;
+    private final EventBus eventBus;
 
     private final I18n i18n;
 
     public PanelGood(final GoodType goodType, final ImageProvider imageProvider,
             final GameModelController gameModelController,
-            final DialogNotEnoughGold dialogNotEnoughGold,
-            final StatusBarMessageController statusBarMessageController, final I18n i18n) {
+            final DialogNotEnoughGold dialogNotEnoughGold, final EventBus eventBus,
+            final I18n i18n) {
         this.goodType = Preconditions.checkNotNull(goodType);
         this.gameModelController = Preconditions.checkNotNull(gameModelController);
         this.dialogNotEnoughGold = Preconditions.checkNotNull(dialogNotEnoughGold);
-        this.statusBarMessageController = Preconditions.checkNotNull(statusBarMessageController);
+        this.eventBus = Preconditions.checkNotNull(eventBus);
         this.i18n = Preconditions.checkNotNull(i18n);
         imageView = new ImageView(imageProvider.getGoodTypeImage(goodType));
         mainPanel = new VBox();
@@ -67,13 +68,14 @@ public final class PanelGood implements JavaFxComponent, Repaintable {
 
     private void onMouseEntered(@SuppressWarnings("unused") final MouseEvent event) {
         final GoodTrade goodTrade = getGoodTrade();
-        statusBarMessageController.fireEvent(new StatusBarMessageEvent(
+        eventBus.post(new StatusBarMessageEvent(
                 i18n.get(Europe.goodsToSell, i18n.get(GoodsTypeName.getNameForGoodType(goodType)),
-                        goodTrade.getSellPrice(), goodTrade.getBuyPrice())));
+                        goodTrade.getSellPrice(), goodTrade.getBuyPrice()),
+                Source.EUROPE));
     }
 
     private void onMouseExited(@SuppressWarnings("unused") final MouseEvent event) {
-        statusBarMessageController.fireEvent(new StatusBarMessageEvent(null));
+        eventBus.post(new StatusBarMessageEvent(Source.EUROPE));
     }
 
     private void onDragDetected(final MouseEvent event) {

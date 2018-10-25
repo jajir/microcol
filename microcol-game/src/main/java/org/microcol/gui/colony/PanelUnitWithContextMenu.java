@@ -3,6 +3,8 @@ package org.microcol.gui.colony;
 import org.microcol.gui.gamepanel.GamePanelView;
 import org.microcol.gui.image.ImageProvider;
 import org.microcol.gui.util.ClipboardWritter;
+import org.microcol.gui.util.JavaFxComponent;
+import org.microcol.gui.util.Repaintable;
 import org.microcol.model.Colony;
 import org.microcol.model.GoodType;
 import org.microcol.model.Unit;
@@ -19,10 +21,11 @@ import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.Region;
 
-public class PanelUnitWithContextMenu {
+public class PanelUnitWithContextMenu implements JavaFxComponent, Repaintable {
 
-    private final Pane pane;
+    private final Pane mainPane;
 
     private final Unit unit;
 
@@ -42,16 +45,16 @@ public class PanelUnitWithContextMenu {
 
         canvas = new Canvas(GamePanelView.TILE_WIDTH_IN_PX, GamePanelView.TILE_WIDTH_IN_PX);
         repaint();
-        pane = new Pane(canvas);
-        pane.setOnDragDetected(mouseEvent -> {
+        mainPane = new Pane(canvas);
+        mainPane.setOnDragDetected(mouseEvent -> {
             final Image image = imageProvider.getUnitImage(unit);
-            final Dragboard db = pane.startDragAndDrop(TransferMode.MOVE);
+            final Dragboard db = mainPane.startDragAndDrop(TransferMode.MOVE);
             ClipboardWritter.make(db).addImage(image).addTransferFromOutsideColony().addUnit(unit)
                     .build();
             mouseEvent.consume();
         });
-        pane.setOnContextMenuRequested(this::onContextMenuRequested);
-        pane.setOnMousePressed(this::onMousePressed);
+        mainPane.setOnContextMenuRequested(this::onContextMenuRequested);
+        mainPane.setOnMousePressed(this::onMousePressed);
 
         contextMenu = new ContextMenu();
     }
@@ -115,10 +118,11 @@ public class PanelUnitWithContextMenu {
                 }
             }
         }
-        contextMenu.show(pane, event.getScreenX(), event.getScreenY());
+        contextMenu.show(mainPane, event.getScreenX(), event.getScreenY());
         repaint();
     }
 
+    @Override
     public void repaint() {
         colonyDialogCallbback.paintUnit(canvas, unit);
     }
@@ -133,7 +137,8 @@ public class PanelUnitWithContextMenu {
     /**
      * @return the pane
      */
-    public Pane getPane() {
-        return pane;
+    @Override
+    public Region getContent() {
+        return mainPane;
     }
 }

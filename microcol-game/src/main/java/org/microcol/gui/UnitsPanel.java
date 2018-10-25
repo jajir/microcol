@@ -2,8 +2,8 @@ package org.microcol.gui;
 
 import java.util.List;
 
-import org.microcol.gui.event.StatusBarMessageController;
 import org.microcol.gui.event.StatusBarMessageEvent;
+import org.microcol.gui.event.StatusBarMessageEvent.Source;
 import org.microcol.gui.gamepanel.SelectedUnitManager;
 import org.microcol.gui.image.ImageProvider;
 import org.microcol.gui.util.Text;
@@ -11,6 +11,7 @@ import org.microcol.model.Player;
 import org.microcol.model.Unit;
 
 import com.google.common.base.Preconditions;
+import com.google.common.eventbus.EventBus;
 import com.google.inject.Inject;
 
 import javafx.application.Platform;
@@ -35,8 +36,7 @@ public final class UnitsPanel {
     private final VBox box;
 
     @Inject
-    public UnitsPanel(final ImageProvider imageProvider,
-            final StatusBarMessageController statusBarMessageController,
+    public UnitsPanel(final ImageProvider imageProvider, final EventBus eventBus,
             final LocalizationHelper localizationHelper, final Text text,
             final SelectedUnitManager selectedUnitManager) {
         this.imageProvider = Preconditions.checkNotNull(imageProvider);
@@ -45,8 +45,8 @@ public final class UnitsPanel {
         this.selectedUnitManager = Preconditions.checkNotNull(selectedUnitManager);
         box = new VBox();
         box.setOnMouseEntered(e -> {
-            statusBarMessageController
-                    .fireEvent(new StatusBarMessageEvent(text.get("unitsPanel.description")));
+            eventBus.post(
+                    new StatusBarMessageEvent(text.get("unitsPanel.description"), Source.GAME));
         });
         box.getStyleClass().add("scroll-pane");
     }

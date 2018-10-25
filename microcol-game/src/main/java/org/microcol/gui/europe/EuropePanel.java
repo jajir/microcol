@@ -1,8 +1,8 @@
 package org.microcol.gui.europe;
 
 import org.microcol.gui.Loc;
-import org.microcol.gui.event.StatusBarMessageController;
 import org.microcol.gui.event.StatusBarMessageEvent;
+import org.microcol.gui.event.StatusBarMessageEvent.Source;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.gamepanel.GamePanelView;
 import org.microcol.gui.image.ImageProvider;
@@ -13,6 +13,7 @@ import org.microcol.gui.util.UpdatableLanguage;
 import org.microcol.i18n.I18n;
 
 import com.google.common.base.Preconditions;
+import com.google.common.eventbus.EventBus;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
@@ -67,7 +68,7 @@ public final class EuropePanel implements JavaFxComponent, UpdatableLanguage, Re
             final RecruiteUnitsDialog recruiteUnitsDialog, final BuyUnitsDialog buyUnitsDialog,
             final PanelEuropeDockBehavior panelEuropeDockBehavior,
             final PanelEuropeGoods panelEuropeGoods, final EuropeCallback europeCallback,
-            final StatusBarMessageController statusBarMessageController, final I18n i18n) {
+            final EventBus eventBus, final I18n i18n) {
         propertyShiftWasPressed = new SimpleBooleanProperty(false);
         Preconditions.checkNotNull(imageProvider);
         Preconditions.checkNotNull(gameModelController);
@@ -89,11 +90,11 @@ public final class EuropePanel implements JavaFxComponent, UpdatableLanguage, Re
 
         europeDock = new PanelDock(imageProvider, panelEuropeDockBehavior);
         europeDock.getContent().setOnMouseEntered(e -> {
-            statusBarMessageController
-                    .fireEvent(new StatusBarMessageEvent(i18n.get(Europe.statusBarEuropeDock)));
+            eventBus.post(
+                    new StatusBarMessageEvent(i18n.get(Europe.statusBarEuropeDock), Source.EUROPE));
         });
-        europeDock.getContent().setOnMouseExited(
-                event -> statusBarMessageController.fireEvent(new StatusBarMessageEvent(null)));
+        europeDock.getContent()
+                .setOnMouseExited(event -> eventBus.post(new StatusBarMessageEvent(Source.EUROPE)));
         final VBox panelLeft = new VBox();
         panelLeft.getChildren().addAll(shipsTravelingToEurope.getContent(),
                 shipsTravelingToNewWorld.getContent(), europeDock.getContent());

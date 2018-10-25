@@ -89,10 +89,10 @@ public final class ColonyPanel implements JavaFxComponent, UpdatableLanguage {
 
         this.panelQueueSummary = Preconditions.checkNotNull(panelQueueSummary);
         final VBox boxFields = new VBox();
-        boxFields.getChildren().addAll(colonyFields, panelQueueSummary);
+        boxFields.getChildren().addAll(colonyFields.getContent(), panelQueueSummary.getContent());
 
         final HBox mapAndBuildings = new HBox();
-        mapAndBuildings.getChildren().addAll(colonyStructures, boxFields);
+        mapAndBuildings.getChildren().addAll(colonyStructures.getContent(), boxFields);
 
         /**
          * Row 2
@@ -105,8 +105,8 @@ public final class ColonyPanel implements JavaFxComponent, UpdatableLanguage {
         this.panelOutsideColony = Preconditions.checkNotNull(panelOutsideColony);
 
         final HBox managementRow = new HBox();
-        managementRow.getChildren().addAll(panelProductionSummary, panelDock.getContent(),
-                panelOutsideColony);
+        managementRow.getChildren().addAll(panelProductionSummary.getContent(),
+                panelDock.getContent(), panelOutsideColony.getContent());
 
         /**
          * Good row - 3
@@ -123,7 +123,8 @@ public final class ColonyPanel implements JavaFxComponent, UpdatableLanguage {
         buttonOk.requestFocus();
 
         mainPanel = new VBox();
-        mainPanel.getChildren().addAll(colonyName, mapAndBuildings, managementRow, goods, buttonOk);
+        mainPanel.getChildren().addAll(colonyName, mapAndBuildings, managementRow,
+                goods.getContent(), buttonOk);
         mainPanel.getStylesheets().add(MainStageBuilder.STYLE_SHEET_MICROCOL);
 
         /**

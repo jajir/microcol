@@ -1,7 +1,7 @@
 package org.microcol.gui;
 
-import org.microcol.gui.event.StatusBarMessageController;
 import org.microcol.gui.event.StatusBarMessageEvent;
+import org.microcol.gui.event.StatusBarMessageEvent.Source;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.util.Listener;
 import org.microcol.gui.util.Text;
@@ -12,6 +12,7 @@ import org.microcol.model.event.GoldWasChangedEvent;
 import org.microcol.model.event.RoundStartedEvent;
 
 import com.google.common.base.Preconditions;
+import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import com.google.inject.Inject;
 
@@ -25,34 +26,48 @@ public final class StatusBarPresenter implements UpdatableLanguage {
 
     private final Text text;
 
-    private final StatusBarMessageController statusBarMessageController;
+    private final EventBus eventBus;
 
     private StatusBarView statusBarView;
 
+    private Source showEventsFromSource;
+
     @Inject
-    public StatusBarPresenter(final StatusBarMessageController statusBarMessageController,
-            final Text text, final GameModelController gameModelController) {
+    public StatusBarPresenter(final EventBus eventBus, final Text text,
+            final GameModelController gameModelController) {
         this.text = Preconditions.checkNotNull(text);
-        this.statusBarMessageController = Preconditions.checkNotNull(statusBarMessageController);
+        this.eventBus = Preconditions.checkNotNull(eventBus);
         this.gameModelController = Preconditions.checkNotNull(gameModelController);
-        statusBarMessageController.addRunLaterListener(event -> {
+    }
+
+    @Subscribe
+    private void onStatusBarMessageChange(final StatusBarMessageEvent event) {
+        Preconditions.checkNotNull(showEventsFromSource,
+                "It's not defined which events should be shown in status bar.");
+        if (showEventsFromSource == event.getSource()) {
             statusBarView.getStatusBarDescription().setText(event.getStatusMessage());
-        });
+        }
     }
 
     void setStatusBarView(final StatusBarView statusBarView) {
         this.statusBarView = Preconditions.checkNotNull(statusBarView);
         statusBarView.getLabelEra().setOnMouseEntered(event -> {
-            statusBarMessageController
-                    .fireEvent(new StatusBarMessageEvent(text.get("statusBar.era.description")));
+            Preconditions.checkNotNull(showEventsFromSource,
+                    "It's not defined which events should be shown in status bar.");
+            eventBus.post(new StatusBarMessageEvent(text.get("statusBar.era.description"),
+                    showEventsFromSource));
         });
         statusBarView.getLabelGold().setOnMouseEntered(event -> {
-            statusBarMessageController
-                    .fireEvent(new StatusBarMessageEvent(text.get("statusBar.gold.description")));
+            Preconditions.checkNotNull(showEventsFromSource,
+                    "It's not defined which events should be shown in status bar.");
+            eventBus.post(new StatusBarMessageEvent(text.get("statusBar.gold.description"),
+                    showEventsFromSource));
         });
         statusBarView.getStatusBarDescription().setOnMouseEntered(event -> {
-            statusBarMessageController
-                    .fireEvent(new StatusBarMessageEvent(text.get("statusBar.status.description")));
+            Preconditions.checkNotNull(showEventsFromSource,
+                    "It's not defined which events should be shown in status bar.");
+            eventBus.post(new StatusBarMessageEvent(text.get("statusBar.status.description"),
+                    showEventsFromSource));
         });
     }
 
@@ -96,6 +111,14 @@ public final class StatusBarPresenter implements UpdatableLanguage {
     private void setGoldText(final Label labelGold, final int gold) {
         Preconditions.checkNotNull(labelGold);
         labelGold.setText(text.get("statusBar.gold") + " " + gold);
+    }
+
+    /**
+     * @param showEventsFromSource
+     *            the showEventsFromSource to set
+     */
+    void setShowEventsFromSource(final Source showEventsFromSource) {
+        this.showEventsFromSource = Preconditions.checkNotNull(showEventsFromSource);
     }
 
 }

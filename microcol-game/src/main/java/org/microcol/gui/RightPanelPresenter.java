@@ -1,7 +1,7 @@
 package org.microcol.gui;
 
-import org.microcol.gui.event.StatusBarMessageController;
 import org.microcol.gui.event.StatusBarMessageEvent;
+import org.microcol.gui.event.StatusBarMessageEvent.Source;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.gamepanel.SelectedUnitWasChangedController;
 import org.microcol.gui.gamepanel.SelectedUnitWasChangedEvent;
@@ -15,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
+import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import com.google.inject.Inject;
 
@@ -34,7 +35,7 @@ public final class RightPanelPresenter {
     @Inject
     RightPanelPresenter(final RightPanelView display, final GameModelController gameModelController,
             final TileWasSelectedController tileWasSelectedController, final Text text,
-            final StatusBarMessageController statusBarMessageController,
+            final EventBus eventBus,
             final SelectedUnitWasChangedController selectedUnitWasChangedController) {
         this.display = Preconditions.checkNotNull(display);
         this.gameModelController = Preconditions.checkNotNull(gameModelController);
@@ -49,13 +50,13 @@ public final class RightPanelPresenter {
         });
 
         display.getNextTurnButton().setOnMouseEntered(event -> {
-            statusBarMessageController
-                    .fireEvent(new StatusBarMessageEvent(text.get("nextTurnButton.desctiption")));
+            eventBus.post(
+                    new StatusBarMessageEvent(text.get("nextTurnButton.desctiption"), Source.GAME));
         });
 
         display.getContent().setOnMouseEntered(e -> {
-            statusBarMessageController
-                    .fireEvent(new StatusBarMessageEvent(text.get("rightPanel.description")));
+            eventBus.post(
+                    new StatusBarMessageEvent(text.get("rightPanel.description"), Source.GAME));
         });
 
         tileWasSelectedController.addRunLaterListener(this::onFocusedTile);

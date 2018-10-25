@@ -3,6 +3,7 @@ package org.microcol.gui.colony;
 import java.util.Optional;
 
 import org.microcol.gui.buildingqueue.QueueDialog;
+import org.microcol.gui.util.JavaFxComponent;
 import org.microcol.gui.util.TitledPanel;
 import org.microcol.model.BuildingStatus;
 import org.microcol.model.ColonyBuildingItem;
@@ -12,29 +13,32 @@ import com.google.inject.Inject;
 
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 
-public class PanelQueueSummary extends TitledPanel {
+public class PanelQueueSummary implements JavaFxComponent {
 
     private final QueueDialog queueDialogCallback;
 
     private final ColonyDialogCallback colonyDialogCallback;
 
-    private final VBox mainPanel;
+    private final TitledPanel mainPanel;
+
+    private final VBox mainVbox;
 
     @Inject
     public PanelQueueSummary(final ColonyDialogCallback colonyDialogCallback,
             final QueueDialog queueDialog) {
-        super("Building queue");
         this.queueDialogCallback = Preconditions.checkNotNull(queueDialog);
         this.colonyDialogCallback = Preconditions.checkNotNull(colonyDialogCallback);
-        mainPanel = new VBox();
-        mainPanel.getChildren().add(new Label("Cool"));
+        mainVbox = new VBox();
+        mainVbox.getChildren().add(new Label("Cool"));
         final VBox box = new VBox();
         box.setOnMouseClicked(this::onMouseClicked);
-        box.getChildren().add(mainPanel);
-        getContentPane().getChildren().add(box);
-        getStyleClass().add("queue-summary");
+        box.getChildren().add(mainVbox);
+        mainPanel = new TitledPanel("Building queue");
+        mainPanel.getContentPane().getChildren().add(box);
+        mainPanel.getStyleClass().add("queue-summary");
     }
 
     private void onMouseClicked(@SuppressWarnings("unused") final MouseEvent event) {
@@ -44,27 +48,32 @@ public class PanelQueueSummary extends TitledPanel {
     public void repaint() {
         final Optional<BuildingStatus<ColonyBuildingItem>> oStats = colonyDialogCallback.getColony()
                 .getColonyBuildingQueue().getActuallyBuildingStat();
-        mainPanel.getChildren().clear();
+        mainVbox.getChildren().clear();
         if (oStats.isPresent()) {
             final BuildingStatus<ColonyBuildingItem> stats = oStats.get();
-            mainPanel.getChildren().add(new Label("Building " + stats.getName()));
+            mainVbox.getChildren().add(new Label("Building " + stats.getName()));
             if (stats.getTurnsToComplete().isPresent()) {
-                mainPanel.getChildren()
+                mainVbox.getChildren()
                         .add(new Label("Turns to complete " + stats.getTurnsToComplete()));
             } else {
-                mainPanel.getChildren().add(new Label("Noot will be completed."));
+                mainVbox.getChildren().add(new Label("Noot will be completed."));
             }
-            mainPanel.getChildren()
+            mainVbox.getChildren()
                     .add(new Label("Hammers, there are (" + stats.getHammers().getAlreadyHave()
                             + " + " + stats.getHammers().getBuildPerTurn() + ") of "
                             + stats.getHammers().getRequired()));
-            mainPanel.getChildren()
+            mainVbox.getChildren()
                     .add(new Label("Tools, there are (" + stats.getTools().getAlreadyHave() + " + "
                             + stats.getTools().getBuildPerTurn() + ") of "
                             + stats.getTools().getRequired()));
         } else {
-            mainPanel.getChildren().add(new Label("V kolonii se nic nestavi"));
+            mainVbox.getChildren().add(new Label("V kolonii se nic nestavi"));
         }
+    }
+
+    @Override
+    public Region getContent() {
+        return mainPanel;
     }
 
 }

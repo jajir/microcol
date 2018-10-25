@@ -2,6 +2,7 @@ package org.microcol.gui.gamepanel;
 
 import org.microcol.gui.RightPanel;
 import org.microcol.gui.StatusBar;
+import org.microcol.gui.event.StatusBarMessageEvent.Source;
 import org.microcol.gui.mainmenu.MainMenuView;
 import org.microcol.gui.util.JavaFxComponent;
 import org.microcol.gui.util.UpdatableLanguage;
@@ -28,22 +29,24 @@ public class GamePanelMain implements JavaFxComponent, UpdatableLanguage {
     private final StatusBar statusBar;
 
     private final RightPanel rightPanel;
-    
+
     @Inject
     GamePanelMain(final MainMenuView mainMenuView, final @Named("GamePanel") StatusBar statusBar,
             final RightPanel rightPanel, final PaneCanvas paneCanvas) {
         this.mainMenuView = Preconditions.checkNotNull(mainMenuView);
         this.statusBar = Preconditions.checkNotNull(statusBar);
         this.rightPanel = Preconditions.checkNotNull(rightPanel);
-        HBox hBox = new HBox();
-        hBox.setId("mainBox");
-
-        Pane rightPane = new Pane();
+        this.statusBar.setShowEventsFromSource(Source.GAME);
+        
+        final Pane rightPane = new Pane();
         rightPane.setId("rightPanel");
-        Label l2 = new Label("blue right panel");
+        final Label l2 = new Label("blue right panel");
         rightPane.getChildren().add(l2);
 
-        hBox.getChildren().addAll(paneCanvas.getCanvasPane(), rightPanel.getContent());
+        final HBox hBox = new HBox();
+        hBox.setId("mainBox");
+        hBox.getChildren().add(paneCanvas.getCanvasPane());
+        hBox.getChildren().add(rightPanel.getContent());
 
         box = new VBox();
         box.setId("mainPanel");

@@ -2,8 +2,8 @@ package org.microcol.gui.europe;
 
 import java.util.Optional;
 
-import org.microcol.gui.event.StatusBarMessageController;
 import org.microcol.gui.event.StatusBarMessageEvent;
+import org.microcol.gui.event.StatusBarMessageEvent.Source;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.image.ImageProvider;
 import org.microcol.gui.util.BackgroundHighlighter;
@@ -17,6 +17,7 @@ import org.microcol.i18n.MessageKeyResource;
 import org.microcol.model.Unit;
 
 import com.google.common.base.Preconditions;
+import com.google.common.eventbus.EventBus;
 import com.google.inject.Inject;
 
 import javafx.scene.image.ImageView;
@@ -46,7 +47,7 @@ public final class PanelHighSeas<T extends Enum<T> & MessageKeyResource>
 
     private final TitledPanel titledPanel;
 
-    private final StatusBarMessageController statusBarMessageController;
+    private final EventBus eventBus;
 
     private final I18n i18n;
 
@@ -56,12 +57,12 @@ public final class PanelHighSeas<T extends Enum<T> & MessageKeyResource>
 
     @Inject
     public PanelHighSeas(final EuropeCallback europeDialog, final ImageProvider imageProvider,
-            final GameModelController gameModelController,
-            final StatusBarMessageController statusBarMessageController, final I18n i18n) {
+            final GameModelController gameModelController, final EventBus eventBus,
+            final I18n i18n) {
         this.europeDialog = Preconditions.checkNotNull(europeDialog);
         this.imageProvider = Preconditions.checkNotNull(imageProvider);
         this.gameModelController = Preconditions.checkNotNull(gameModelController);
-        this.statusBarMessageController = Preconditions.checkNotNull(statusBarMessageController);
+        this.eventBus = Preconditions.checkNotNull(eventBus);
         this.i18n = Preconditions.checkNotNull(i18n);
 
         shipsContainer = new HBox();
@@ -82,13 +83,12 @@ public final class PanelHighSeas<T extends Enum<T> & MessageKeyResource>
 
     private void onMouseEntered(@SuppressWarnings("unused") final MouseEvent event) {
         if (onMouseEnteredKey != null) {
-            statusBarMessageController
-                    .fireEvent(new StatusBarMessageEvent(i18n.get(onMouseEnteredKey)));
+            eventBus.post(new StatusBarMessageEvent(i18n.get(onMouseEnteredKey), Source.EUROPE));
         }
     }
 
     private void onMouseExited(@SuppressWarnings("unused") final MouseEvent event) {
-        statusBarMessageController.fireEvent(new StatusBarMessageEvent(null));
+        eventBus.post(new StatusBarMessageEvent(Source.EUROPE));
     }
 
     public void addStyle(final String style) {

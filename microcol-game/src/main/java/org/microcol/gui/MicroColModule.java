@@ -32,7 +32,6 @@ import org.microcol.gui.event.EventInitializer;
 import org.microcol.gui.event.KeyController;
 import org.microcol.gui.event.ShowGridListenerPreferences;
 import org.microcol.gui.event.StartMoveController;
-import org.microcol.gui.event.StatusBarMessageController;
 import org.microcol.gui.event.VolumeChangedListenerPreferences;
 import org.microcol.gui.event.model.ArtifitialPlayersManager;
 import org.microcol.gui.event.model.GameModelController;
@@ -143,7 +142,6 @@ public final class MicroColModule extends AbstractModule {
 
         bind(EventBus.class).toInstance(eventBus);
         bind(MainStageBuilder.class).in(Singleton.class);
-        bind(StatusBarMessageController.class).in(Singleton.class);
         bind(UnitUtil.class).in(Singleton.class);
 
         bind(GamePreferences.class).in(Singleton.class);

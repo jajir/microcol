@@ -54,7 +54,7 @@ public class ContentWithStatusBar implements JavaFxComponent, UpdatableLanguage 
 
     @Override
     public void updateLanguage(final I18n i18n) {
-        tryToUpdateCompoonent(content, i18n);
+        tryToUpdateComponent(content, i18n);
     }
 
 }

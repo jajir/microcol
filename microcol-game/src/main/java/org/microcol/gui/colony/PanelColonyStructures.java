@@ -13,6 +13,7 @@ import org.microcol.gui.gamepanel.GamePanelView;
 import org.microcol.gui.image.ImageProvider;
 import org.microcol.gui.util.ClipboardEval;
 import org.microcol.gui.util.ClipboardWritter;
+import org.microcol.gui.util.JavaFxComponent;
 import org.microcol.gui.util.TitledPanel;
 import org.microcol.model.Colony;
 import org.microcol.model.ColonyProductionStats;
@@ -37,6 +38,7 @@ import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
+import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
@@ -44,7 +46,7 @@ import javafx.scene.text.TextAlignment;
 /**
  * Show building factories and other structures build in colony.
  */
-public final class PanelColonyStructures extends TitledPanel {
+public final class PanelColonyStructures implements JavaFxComponent {
 
     private final Logger logger = LoggerFactory.getLogger(PanelColonyStructures.class);
 
@@ -158,24 +160,27 @@ public final class PanelColonyStructures extends TitledPanel {
     private final GameModelController gameModelController;
 
     private Map<Rectangle, ConstructionSlot> slots;
+    
+    private final TitledPanel mainPanel;
 
     @Inject
     public PanelColonyStructures(final LocalizationHelper localizationHelper,
             final ImageProvider imageProvider, final GameModelController gameModelController) {
-        super("Colony Structures", null);
         this.localizationHelper = Preconditions.checkNotNull(localizationHelper);
         this.imageProvider = Preconditions.checkNotNull(imageProvider);
         this.gameModelController = Preconditions.checkNotNull(gameModelController);
         canvas = new Canvas(CANVAS_WIDTH, CANVAS_HEIGHT);
-        getStyleClass().add("colony-structures");
-        getContentPane().getChildren().add(canvas);
-        setMinWidth(CANVAS_WIDTH);
-        setMinHeight(CANVAS_HEIGHT);
         canvas.setOnDragEntered(this::onDragEntered);
         canvas.setOnDragExited(this::onDragExited);
         canvas.setOnDragOver(this::onDragOver);
         canvas.setOnDragDropped(this::onDragDropped);
         canvas.setOnDragDetected(this::onDragDetected);
+        
+        mainPanel = new TitledPanel("Colony Structures");
+        mainPanel.getStyleClass().add("colony-structures");
+        mainPanel.getContentPane().getChildren().add(canvas);
+        mainPanel.setMinWidth(CANVAS_WIDTH);
+        mainPanel.setMinHeight(CANVAS_HEIGHT);
     }
 
     private void onDragDetected(final MouseEvent event) {
@@ -315,6 +320,11 @@ public final class PanelColonyStructures extends TitledPanel {
         final Text theText = new Text(text);
         theText.setFont(gc.getFont());
         return theText.getBoundsInLocal().getWidth();
+    }
+
+    @Override
+    public Region getContent() {
+        return mainPanel;
     }
 
 }

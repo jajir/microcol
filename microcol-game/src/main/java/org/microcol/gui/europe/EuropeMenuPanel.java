@@ -1,6 +1,7 @@
 package org.microcol.gui.europe;
 
 import org.microcol.gui.StatusBar;
+import org.microcol.gui.event.StatusBarMessageEvent.Source;
 import org.microcol.gui.util.CenteredPage;
 import org.microcol.gui.util.ContentWithStatusBar;
 import org.microcol.gui.util.JavaFxComponent;
@@ -24,7 +25,7 @@ public class EuropeMenuPanel implements JavaFxComponent, UpdatableLanguage, Repa
     private final ContentWithStatusBar contentWithStatusBar;
 
     private final EuropePanel europePanel;
-
+    
     @Inject
     EuropeMenuPanel(final EuropePanel europePanel, final CenteredPage centeredPage,
             final @Named("Europe") StatusBar statusBar,
@@ -32,6 +33,8 @@ public class EuropeMenuPanel implements JavaFxComponent, UpdatableLanguage, Repa
             final EuropeBackground europeBackground, final I18n i18n) {
         this.contentWithStatusBar = Preconditions.checkNotNull(contentWithStatusBar);
         this.europePanel = Preconditions.checkNotNull(europePanel);
+        statusBar.setShowEventsFromSource(Source.EUROPE);
+        
         centeredPage.getContent().getStylesheets().add(STYLE_SHEET_EUROPE);
         centeredPage.setBackground(europeBackground);
         centeredPage.setMainPanel(europePanel);

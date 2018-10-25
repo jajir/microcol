@@ -1,11 +1,15 @@
 package org.microcol.gui.colony;
 
+import java.util.List;
+
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.image.ImageProvider;
 import org.microcol.gui.util.BackgroundHighlighter;
 import org.microcol.gui.util.ClipboardEval;
 import org.microcol.gui.util.From;
+import org.microcol.gui.util.JavaFxComponent;
 import org.microcol.gui.util.TitledPanel;
+import org.microcol.i18n.I18n;
 import org.microcol.model.CargoSlot;
 import org.microcol.model.Colony;
 import org.microcol.model.ColonyWarehouse;
@@ -13,17 +17,20 @@ import org.microcol.model.GoodType;
 import org.microcol.model.GoodsAmount;
 
 import com.google.common.base.Preconditions;
+import com.google.common.collect.ImmutableList;
+import com.google.common.eventbus.EventBus;
 import com.google.inject.Inject;
 
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Region;
 
 /**
  * Show list of all available goods.
  */
-public final class PanelColonyGoods extends TitledPanel {
+public final class PanelColonyGoods implements JavaFxComponent {
 
     private final HBox hBox;
 
@@ -31,44 +38,45 @@ public final class PanelColonyGoods extends TitledPanel {
 
     private final ColonyDialogCallback colonyDialog;
 
+    private final List<PanelColonyGood> panelColonyGoods;
+
+    private final TitledPanel mainPanel;
+
     private ColonyWarehouse colonyWarehouse;
 
     @Inject
     public PanelColonyGoods(final GameModelController gameModelController,
-            final ImageProvider imageProvider, final ColonyDialogCallback colonyDialog) {
-        super("zbozi");
+            final ImageProvider imageProvider, final ColonyDialogCallback colonyDialog,
+            final EventBus eventBus, final I18n i18n) {
         this.gameModelController = Preconditions.checkNotNull(gameModelController);
         this.colonyDialog = Preconditions.checkNotNull(colonyDialog);
         hBox = new HBox();
-        getContentPane().getChildren().add(hBox);
-        GoodType.BUYABLE_GOOD_TYPES.forEach(goodType -> {
-            hBox.getChildren()
-                    .add(new PanelColonyGood(imageProvider.getGoodTypeImage(goodType), goodType));
-        });
-        getStyleClass().add("panel-colony-goods");
+        mainPanel = new TitledPanel("zbozi");
+        mainPanel.getContentPane().getChildren().add(hBox);
+        panelColonyGoods = GoodType.BUYABLE_GOOD_TYPES.stream().map(goodType -> {
+            final PanelColonyGood out = new PanelColonyGood(
+                    imageProvider.getGoodTypeImage(goodType), goodType, eventBus, i18n);
+            hBox.getChildren().add(out.getContent());
+            return out;
+        }).collect(ImmutableList.toImmutableList());
+        mainPanel.getStyleClass().add("panel-colony-goods");
 
-        final BackgroundHighlighter backgroundHighlighter = new BackgroundHighlighter(this,
+        final BackgroundHighlighter backgroundHighlighter = new BackgroundHighlighter(mainPanel,
                 this::isItGoodAmount);
-        setOnDragEntered(backgroundHighlighter::onDragEntered);
-        setOnDragExited(backgroundHighlighter::onDragExited);
+        mainPanel.setOnDragEntered(backgroundHighlighter::onDragEntered);
+        mainPanel.setOnDragExited(backgroundHighlighter::onDragExited);
 
-        setOnDragOver(this::onDragOver);
-        setOnDragDropped(this::onDragDropped);
+        mainPanel.setOnDragOver(this::onDragOver);
+        mainPanel.setOnDragDropped(this::onDragDropped);
     }
 
     public void setColony(final Colony colony) {
         colonyWarehouse = Preconditions.checkNotNull(colony).getColonyWarehouse();
-        hBox.getChildren().forEach(node -> {
-            final PanelColonyGood panelColonyGood = (PanelColonyGood) node;
-            panelColonyGood.setColony(colony);
-        });
+        panelColonyGoods.forEach(panelColonyGood -> panelColonyGood.setColony(colony));
     }
 
     public void repaint() {
-        hBox.getChildren().forEach(node -> {
-            final PanelColonyGood panelColonyGood = (PanelColonyGood) node;
-            panelColonyGood.repaint();
-        });
+        panelColonyGoods.forEach(panelColonyGood -> panelColonyGood.repaint());
     };
 
     private void onDragOver(final DragEvent event) {
@@ -95,6 +103,11 @@ public final class PanelColonyGoods extends TitledPanel {
 
     private boolean isItGoodAmount(final Dragboard db) {
         return ClipboardEval.make(gameModelController.getModel(), db).getGoodAmount().isPresent();
+    }
+
+    @Override
+    public Region getContent() {
+        return mainPanel;
     }
 
 }

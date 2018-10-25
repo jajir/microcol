@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.microcol.gui.DialogNotEnoughGold;
-import org.microcol.gui.event.StatusBarMessageController;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.image.ImageProvider;
 import org.microcol.gui.util.BackgroundHighlighter;
@@ -20,6 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
+import com.google.common.eventbus.EventBus;
 import com.google.inject.Inject;
 
 import javafx.scene.input.DragEvent;
@@ -48,14 +48,14 @@ public final class PanelEuropeGoods implements JavaFxComponent, UpdatableLanguag
     @Inject
     public PanelEuropeGoods(final EuropeCallback europeDialogCallback,
             final GameModelController gameModelController, final ImageProvider imageProvider,
-            final DialogNotEnoughGold dialogNotEnoughGold,
-            final StatusBarMessageController statusBarMessageController, final I18n i18n) {
+            final DialogNotEnoughGold dialogNotEnoughGold, final EventBus eventBus,
+            final I18n i18n) {
         this.gameModelController = Preconditions.checkNotNull(gameModelController);
         this.europeDialogCallback = Preconditions.checkNotNull(europeDialogCallback);
         mainPanel = new HBox();
         GoodType.BUYABLE_GOOD_TYPES.forEach(goodType -> {
             final PanelGood panelGood = new PanelGood(goodType, imageProvider, gameModelController,
-                    dialogNotEnoughGold, statusBarMessageController, i18n);
+                    dialogNotEnoughGold, eventBus, i18n);
             panelGoods.add(panelGood);
             mainPanel.getChildren().add(panelGood.getContent());
         });

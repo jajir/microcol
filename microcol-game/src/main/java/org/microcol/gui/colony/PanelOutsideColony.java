@@ -7,6 +7,7 @@ import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.image.ImageProvider;
 import org.microcol.gui.util.BackgroundHighlighter;
 import org.microcol.gui.util.ClipboardEval;
+import org.microcol.gui.util.JavaFxComponent;
 import org.microcol.gui.util.TitledPanel;
 import org.microcol.model.Colony;
 import org.microcol.model.Unit;
@@ -20,11 +21,12 @@ import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Region;
 
 /**
  * Show units outside colony.
  */
-public final class PanelOutsideColony extends TitledPanel {
+public final class PanelOutsideColony implements JavaFxComponent {
 
     private final Logger logger = LoggerFactory.getLogger(PanelOutsideColony.class);
 
@@ -40,6 +42,8 @@ public final class PanelOutsideColony extends TitledPanel {
 
     private final UnitMovedOutsideColonyController unitMovedOutsideColonyController;
 
+    private final TitledPanel mainPanel;
+
     private Colony colony;
 
     @Inject
@@ -47,7 +51,6 @@ public final class PanelOutsideColony extends TitledPanel {
             final GameModelController gameModelController, final ColonyDialogCallback colonyDialog,
             final DialogDestroyColony dialogDestroyColony,
             final UnitMovedOutsideColonyController unitMovedOutsideColonyController) {
-        super("Outside Colony", null);
         this.imageProvider = Preconditions.checkNotNull(imageProvider);
         this.gameModelController = Preconditions.checkNotNull(gameModelController);
         this.colonyDialog = Preconditions.checkNotNull(colonyDialog);
@@ -55,14 +58,16 @@ public final class PanelOutsideColony extends TitledPanel {
         this.unitMovedOutsideColonyController = Preconditions
                 .checkNotNull(unitMovedOutsideColonyController);
         panelUnits = new HBox();
-        getContentPane().getChildren().add(panelUnits);
-        final BackgroundHighlighter backgroundHighlighter = new BackgroundHighlighter(this,
+
+        mainPanel = new TitledPanel("Outside Colony");
+        final BackgroundHighlighter backgroundHighlighter = new BackgroundHighlighter(mainPanel,
                 this::isItUnit);
-        setOnDragEntered(backgroundHighlighter::onDragEntered);
-        setOnDragExited(backgroundHighlighter::onDragExited);
-        setOnDragDropped(this::onDragDropped);
-        setOnDragOver(this::onDragOver);
-        getStyleClass().add("outside");
+        mainPanel.getContentPane().getChildren().add(panelUnits);
+        mainPanel.setOnDragEntered(backgroundHighlighter::onDragEntered);
+        mainPanel.setOnDragExited(backgroundHighlighter::onDragExited);
+        mainPanel.setOnDragDropped(this::onDragDropped);
+        mainPanel.setOnDragOver(this::onDragOver);
+        mainPanel.getStyleClass().add("outside");
     }
 
     public void setColony(final Colony colony) {
@@ -71,7 +76,7 @@ public final class PanelOutsideColony extends TitledPanel {
         colony.getUnitsOutSideColony().forEach(unit -> {
             final PanelUnitWithContextMenu paneImage = new PanelUnitWithContextMenu(imageProvider,
                     unit, colony, colonyDialog);
-            panelUnits.getChildren().add(paneImage.getPane());
+            panelUnits.getChildren().add(paneImage.getContent());
         });
     }
 
@@ -108,6 +113,11 @@ public final class PanelOutsideColony extends TitledPanel {
             event.setDropCompleted(true);
             event.consume();
         }
+    }
+
+    @Override
+    public Region getContent() {
+        return mainPanel;
     }
 
 }
