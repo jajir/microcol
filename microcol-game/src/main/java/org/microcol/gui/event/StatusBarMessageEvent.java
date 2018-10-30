@@ -8,7 +8,6 @@ import com.google.common.base.Preconditions;
  * <p>
  * Class should not be directly used as event. Just subclasses should be called.
  * </p>
- * FIXME use eventBus FIXME remove depreciated constructors
  */
 public final class StatusBarMessageEvent {
 

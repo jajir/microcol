@@ -70,7 +70,7 @@ public final class PanelColonyGood implements JavaFxComponent {
 
     private void onMouseEntered(@SuppressWarnings("unused") final MouseEvent event) {
         eventBus.post(new StatusBarMessageEvent(i18n.get(GoodsTypeName.getNameForGoodType(goodType))
-                + i18n.get(org.microcol.gui.colony.Colony.goods), Source.COLONY));
+                + i18n.get(ColonyMsg.goods), Source.COLONY));
     }
 
     private void onMouseExited(@SuppressWarnings("unused") final MouseEvent event) {

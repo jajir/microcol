@@ -6,7 +6,7 @@ import org.microcol.i18n.MessageKeyResource;
 import org.microcol.i18n.ResourceBundleControlBuilder;
 import org.microcol.i18n.ResourceBundleFormat;
 
-public enum Colony implements MessageKeyResource {
+public enum ColonyMsg implements MessageKeyResource {
 
     goods;
 

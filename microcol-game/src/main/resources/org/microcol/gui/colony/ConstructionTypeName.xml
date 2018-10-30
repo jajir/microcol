@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE properties [
+<!ELEMENT properties ( comment?, entry* ) >
+<!ATTLIST properties version CDATA #FIXED "1.0">
+<!ELEMENT comment (#PCDATA) >
+<!ELEMENT entry (#PCDATA) >
+<!ATTLIST entry key CDATA #REQUIRED>
+]>
+
+<properties>
+	<comment>Define constructio type names</comment>
+
+	<entry key="townHall">Town Hall</entry>
+	<entry key="lubmerMill">Lumber Mill</entry>
+	<entry key="carpenterShop">Carpenter Shop</entry>
+	<entry key="carpenterStand">Carpenter Stand</entry>
+	<entry key="ironWorks">Iron Works</entry>
+	<entry key="blacksmithShop">Blacksmith shop</entry>
+	<entry key="blacksmithHouse">Blacksmith house</entry>
+	<entry key="fortress">Fortress</entry>
+	<entry key="fort">Fort</entry>
+	<entry key="stockade">Stockade</entry>
+	<entry key="cigarFactory">Cigar factory</entry>
+	<entry key="tobacconistShop">Tobacconist Shop</entry>
+	<entry key="tobacconistHouse">Tobacconist House</entry>
+	<entry key="textilMill">Textil mill</entry>
+	<entry key="weaversShop">Weavers Shop</entry>
+	<entry key="weaversHouse">Weavers House</entry>
+	<entry key="rumFactory">Rum Factory</entry>
+	<entry key="rumDistillery">Rum Distillery</entry>
+	<entry key="rumDistillersHouse">Rum Distiller House</entry>
+	<entry key="furFactory">Fur Factory</entry>
+	<entry key="furTradersHouse">Fur Trader's House</entry>
+	<entry key="furTradingPost">Fur Trader's Post</entry>
+	<entry key="arsenal">Arsenal</entry>
+	<entry key="magazine">Magazine</entry>
+	<entry key="armory">Armory</entry>
+	<entry key="shipyard">Shipyard</entry>
+	<entry key="drydock">Drydock</entry>
+	<entry key="dock">Dock</entry>
+	<entry key="university">University</entry>
+	<entry key="college">College</entry>
+	<entry key="schoolhouse">Schoolhouse</entry>
+	<entry key="warehouseExpansion">Warehouse Expansion</entry>
+	<entry key="warehouse">Warehouse</entry>
+	<entry key="warehouseBasic">Basic Warehouse</entry>
+	<entry key="largeStables">Large Stables</entry>
+	<entry key="stables">Stables</entry>
+	<entry key="cathedral">Cathedral</entry>
+	<entry key="church">Church</entry>
+	<entry key="chapel">Chapel</entry>
+	<entry key="newspaper">News Paper</entry>
+	<entry key="printingPress">Printing Press</entry>
+	<entry key="customHouse">Custom House</entry>
+
+</properties>

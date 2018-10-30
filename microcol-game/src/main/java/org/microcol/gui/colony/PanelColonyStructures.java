@@ -1,6 +1,8 @@
 package org.microcol.gui.colony;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -8,6 +10,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.microcol.gui.LocalizationHelper;
 import org.microcol.gui.Point;
 import org.microcol.gui.Rectangle;
+import org.microcol.gui.event.StatusBarMessageEvent;
+import org.microcol.gui.event.StatusBarMessageEvent.Source;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.gamepanel.GamePanelView;
 import org.microcol.gui.image.ImageProvider;
@@ -15,6 +19,7 @@ import org.microcol.gui.util.ClipboardEval;
 import org.microcol.gui.util.ClipboardWritter;
 import org.microcol.gui.util.JavaFxComponent;
 import org.microcol.gui.util.TitledPanel;
+import org.microcol.i18n.I18n;
 import org.microcol.model.Colony;
 import org.microcol.model.ColonyProductionStats;
 import org.microcol.model.Construction;
@@ -28,6 +33,7 @@ import org.slf4j.LoggerFactory;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.eventbus.EventBus;
 import com.google.inject.Inject;
 
 import javafx.geometry.VPos;
@@ -50,19 +56,23 @@ public final class PanelColonyStructures implements JavaFxComponent {
 
     private final Logger logger = LoggerFactory.getLogger(PanelColonyStructures.class);
 
-    private final static int COLUMN_WIDTH = 130;
+    private final static int COLUMN_WIDTH = 100;
+
+    private final static int COLUMN_GAP = 30;
 
     private final static int COLUMN_1 = 25;
-    private final static int COLUMN_2 = COLUMN_1 + COLUMN_WIDTH;
-    private final static int COLUMN_3 = COLUMN_2 + COLUMN_WIDTH;
-    private final static int COLUMN_4 = COLUMN_3 + COLUMN_WIDTH;
+    private final static int COLUMN_2 = COLUMN_1 + COLUMN_WIDTH + COLUMN_GAP;
+    private final static int COLUMN_3 = COLUMN_2 + COLUMN_WIDTH + COLUMN_GAP;
+    private final static int COLUMN_4 = COLUMN_3 + COLUMN_WIDTH + COLUMN_GAP;
 
-    private final static int ROW_HEIGHT = 74;
+    private final static int ROW_HEIGHT = 64;
+
+    private final static int ROW_GAP = 10;
 
     private final static int ROW_1 = 20;
-    private final static int ROW_2 = ROW_1 + ROW_HEIGHT;
-    private final static int ROW_3 = ROW_2 + ROW_HEIGHT;
-    private final static int ROW_4 = ROW_3 + ROW_HEIGHT;
+    private final static int ROW_2 = ROW_1 + ROW_HEIGHT + ROW_GAP;
+    private final static int ROW_3 = ROW_2 + ROW_HEIGHT + ROW_GAP;
+    private final static int ROW_4 = ROW_3 + ROW_HEIGHT + ROW_GAP;
 
     private final static int PRODUCTION_TEXT_X = 30;
     private final static int PRODUCTION_TEXT_Y = 0;
@@ -87,8 +97,7 @@ public final class PanelColonyStructures implements JavaFxComponent {
             Point.of(SLOT_POSITION_START + 2 * SLOT_POSITION_WIDTH, 10) };
 
     /**
-     * Following structure define position of constructions images on colony
-     * map.
+     * Following structure define position of constructions images on colony map.
      */
     private final static Map<ConstructionType, Point> constructionPlaces = ImmutableMap
             .<ConstructionType, Point>builder()
@@ -160,27 +169,44 @@ public final class PanelColonyStructures implements JavaFxComponent {
     private final GameModelController gameModelController;
 
     private Map<Rectangle, ConstructionSlot> slots;
-    
+
     private final TitledPanel mainPanel;
+
+    private final List<ColonyStructure> structures;
+
+    private final I18n i18n;
+
+    private final EventBus eventBus;
 
     @Inject
     public PanelColonyStructures(final LocalizationHelper localizationHelper,
-            final ImageProvider imageProvider, final GameModelController gameModelController) {
+            final ImageProvider imageProvider, final GameModelController gameModelController,
+            final EventBus eventBus, final I18n i18n) {
         this.localizationHelper = Preconditions.checkNotNull(localizationHelper);
         this.imageProvider = Preconditions.checkNotNull(imageProvider);
         this.gameModelController = Preconditions.checkNotNull(gameModelController);
+        this.eventBus = Preconditions.checkNotNull(eventBus);
+        this.i18n = Preconditions.checkNotNull(i18n);
+        structures = new ArrayList<>();
         canvas = new Canvas(CANVAS_WIDTH, CANVAS_HEIGHT);
         canvas.setOnDragEntered(this::onDragEntered);
         canvas.setOnDragExited(this::onDragExited);
         canvas.setOnDragOver(this::onDragOver);
         canvas.setOnDragDropped(this::onDragDropped);
         canvas.setOnDragDetected(this::onDragDetected);
-        
+        canvas.setOnMouseMoved(this::onMouseMoved);
+
         mainPanel = new TitledPanel("Colony Structures");
         mainPanel.getStyleClass().add("colony-structures");
         mainPanel.getContentPane().getChildren().add(canvas);
         mainPanel.setMinWidth(CANVAS_WIDTH);
         mainPanel.setMinHeight(CANVAS_HEIGHT);
+    }
+
+    private void onMouseMoved(final MouseEvent event) {
+        structures.forEach(structure -> {
+            structure.evaluateMouseMove(event);
+        });
     }
 
     private void onDragDetected(final MouseEvent event) {
@@ -245,8 +271,21 @@ public final class PanelColonyStructures implements JavaFxComponent {
         slots = new HashMap<>();
         final GraphicsContext gc = canvas.getGraphicsContext2D();
         gc.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+        structures.clear();
         colony.getConstructions().forEach(construction -> {
             paintConstruction(gc, colony, construction);
+            final Point position = constructionPlaces.get(construction.getType());
+            final ColonyStructure colonyStructure = new ColonyStructure(position,
+                    Point.of(COLUMN_WIDTH, ROW_HEIGHT));
+            colonyStructure.setOnMouseEntered(event -> {
+                eventBus.post(new StatusBarMessageEvent(
+                        i18n.get(ConstructionTypeName.getNameForType(construction.getType())),
+                        Source.COLONY));
+            });
+            colonyStructure.setOnMouseExited(event -> {
+                eventBus.post(new StatusBarMessageEvent(Source.COLONY));
+            });
+            structures.add(colonyStructure);
         });
     }
 

@@ -199,6 +199,6 @@ public final class ColonyPanel implements JavaFxComponent, UpdatableLanguage {
 
     @Override
     public void updateLanguage(final I18n i18n) {
-        // FIXME Auto-generated method stub
+        panelDock.updateLanguage(i18n);
     }
 }
