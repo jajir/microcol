@@ -72,7 +72,6 @@ public final class PanelDock implements JavaFxComponent, UpdatableLanguage, Repa
         mainPanel = new VBox(panelShips, panelCratesController.getPanelCratesView());
         
         titledPanel = new TitledPanel();
-        //FIXME
         titledPanel.setTitle("Dock");
         titledPanel.getStyleClass().add("panel-dock");
         titledPanel.getContentPane().getChildren().add(mainPanel);
