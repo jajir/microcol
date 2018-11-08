@@ -2,13 +2,13 @@ package org.microcol.gui.gamemenu;
 
 import org.microcol.gui.PathPlanning;
 import org.microcol.gui.Preferences;
-import org.microcol.gui.mainmenu.AnimationSpeedChangeController;
 import org.microcol.gui.mainmenu.AnimationSpeedChangeEvent;
 import org.microcol.gui.util.JavaFxComponent;
 import org.microcol.gui.util.UpdatableLanguage;
 import org.microcol.i18n.I18n;
 
 import com.google.common.base.Preconditions;
+import com.google.common.eventbus.EventBus;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
@@ -27,12 +27,12 @@ public class SettingAnimationSpeedView implements JavaFxComponent, UpdatableLang
 
     private Slider slider;
 
-    private final AnimationSpeedChangeController controller;
+    private final EventBus eventBus;
 
     @Inject
-    public SettingAnimationSpeedView(final AnimationSpeedChangeController controller,
+    public SettingAnimationSpeedView(final EventBus eventBus,
             final I18n i18n) {
-        this.controller = Preconditions.checkNotNull(controller);
+        this.eventBus = Preconditions.checkNotNull(eventBus);
 
         label = new Label();
         label.getStyleClass().add("label-slider");
@@ -63,7 +63,7 @@ public class SettingAnimationSpeedView implements JavaFxComponent, UpdatableLang
              * Every small change is send to listeners. It allows change sound
              * or music immediately.
              */
-            controller.fireEvent(new AnimationSpeedChangeEvent(newValue.intValue()));
+            eventBus.post(new AnimationSpeedChangeEvent(newValue.intValue()));
         });
         slider.setLabelFormatter(new StringConverter<Double>() {
             @Override

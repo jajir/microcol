@@ -3,9 +3,7 @@ package org.microcol.gui;
 import org.microcol.gui.event.StatusBarMessageEvent;
 import org.microcol.gui.event.StatusBarMessageEvent.Source;
 import org.microcol.gui.event.model.GameModelController;
-import org.microcol.gui.gamepanel.SelectedUnitWasChangedController;
 import org.microcol.gui.gamepanel.SelectedUnitWasChangedEvent;
-import org.microcol.gui.gamepanel.TileWasSelectedController;
 import org.microcol.gui.gamepanel.TileWasSelectedEvent;
 import org.microcol.gui.util.Listener;
 import org.microcol.gui.util.Text;
@@ -26,21 +24,15 @@ public final class RightPanelPresenter {
 
     private final GameModelController gameModelController;
 
-    private final Text text;
-
     private final RightPanelView display;
 
     private TileWasSelectedEvent lastFocusedTileEvent;
 
     @Inject
     RightPanelPresenter(final RightPanelView display, final GameModelController gameModelController,
-            final TileWasSelectedController tileWasSelectedController, final Text text,
-            final EventBus eventBus,
-            final SelectedUnitWasChangedController selectedUnitWasChangedController) {
+            final Text text, final EventBus eventBus) {
         this.display = Preconditions.checkNotNull(display);
         this.gameModelController = Preconditions.checkNotNull(gameModelController);
-        this.text = Preconditions.checkNotNull(text);
-        display.setNextTurnButtonLabel(text.get("nextTurnButton"));
         display.setNextTurnButtonDisable(true);
 
         display.getNextTurnButton().setOnAction(e -> {
@@ -59,10 +51,9 @@ public final class RightPanelPresenter {
                     new StatusBarMessageEvent(text.get("rightPanel.description"), Source.GAME));
         });
 
-        tileWasSelectedController.addRunLaterListener(this::onFocusedTile);
-        selectedUnitWasChangedController.addRunLaterListener(this::onSelectedUnitWasChanged);
     }
 
+    @Subscribe
     private void onSelectedUnitWasChanged(final SelectedUnitWasChangedEvent event) {
         if (lastFocusedTileEvent == null) {
             if (event.getSelectedUnit().isPresent()) {
@@ -89,7 +80,6 @@ public final class RightPanelPresenter {
 
     @SuppressWarnings("unused")
     public void updateLanguage(final I18n i18n) {
-        display.setNextTurnButtonLabel(text.get("nextTurnButton"));
         if (gameModelController.isModelReady()) {
             display.setOnMovePlayer(gameModelController.getModel().getCurrentPlayer());
         }
@@ -98,6 +88,7 @@ public final class RightPanelPresenter {
         }
     }
 
+    @Subscribe
     private void onFocusedTile(final TileWasSelectedEvent event) {
         lastFocusedTileEvent = event;
         display.refreshView(event);

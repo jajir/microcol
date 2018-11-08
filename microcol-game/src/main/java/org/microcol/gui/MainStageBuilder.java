@@ -2,13 +2,13 @@ package org.microcol.gui;
 
 import java.awt.Rectangle;
 
-import org.microcol.gui.mainmenu.QuitGameController;
 import org.microcol.gui.mainmenu.QuitGameEvent;
 import org.microcol.gui.mainscreen.MainPanelView;
 import org.microcol.gui.util.GamePreferences;
 import org.microcol.gui.util.Text;
 
 import com.google.common.base.Preconditions;
+import com.google.common.eventbus.EventBus;
 import com.google.inject.Inject;
 
 import javafx.geometry.Rectangle2D;
@@ -28,9 +28,9 @@ public final class MainStageBuilder {
     public static final String STYLE_SHEET_RIGHT_PANEL_VIEW = MainStageBuilder.class
             .getResource("/gui/rightPanelView.css").toExternalForm();
 
-    private final MainPanelView mainPanelView;
+    private final EventBus eventBus;
 
-    private final QuitGameController exitGameController;
+    private final MainPanelView mainPanelView;
 
     private final GamePreferences gamePreferences;
 
@@ -38,11 +38,10 @@ public final class MainStageBuilder {
 
     @Inject
     public MainStageBuilder(final MainPanelView mainPanelView,
-            final QuitGameController exitGameController, final GamePreferences gamePreferences,
-            final Text text) {
+            final GamePreferences gamePreferences, final EventBus eventBus, final Text text) {
         this.mainPanelView = Preconditions.checkNotNull(mainPanelView);
-        this.exitGameController = Preconditions.checkNotNull(exitGameController);
         this.gamePreferences = Preconditions.checkNotNull(gamePreferences);
+        this.eventBus = Preconditions.checkNotNull(eventBus);
         this.text = Preconditions.checkNotNull(text);
     }
 
@@ -55,7 +54,7 @@ public final class MainStageBuilder {
     public void buildPrimaryStage(final Stage primaryStage) {
         primaryStage.setTitle(text.get("game.title"));
         primaryStage.setOnCloseRequest(event -> {
-            exitGameController.fireEvent(new QuitGameEvent());
+            eventBus.post(new QuitGameEvent());
         });
         primaryStage.xProperty().addListener((object, oldValue, newValue) -> {
             final Rectangle rectangle = gamePreferences.getMainFramePosition();
@@ -101,8 +100,8 @@ public final class MainStageBuilder {
      *
      * @param rectangle
      *            required rectangle
-     * @return Return <code>true</code> when whole rectangle is on screen otherwise
-     *         return <code>false</code>.
+     * @return Return <code>true</code> when whole rectangle is on screen
+     *         otherwise return <code>false</code>.
      */
     private boolean isOnScreen(final Rectangle rectangle) {
         final Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();

@@ -3,9 +3,9 @@ package org.microcol.gui.gamepanel;
 import java.util.Collections;
 import java.util.List;
 
-import org.microcol.gui.event.StartMoveController;
 import org.microcol.gui.event.StartMoveEvent;
 import org.microcol.gui.image.ImageProvider;
+import org.microcol.gui.util.Listener;
 import org.microcol.gui.util.UnitUtil;
 import org.microcol.model.Location;
 import org.microcol.model.Unit;
@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
+import com.google.common.eventbus.Subscribe;
 import com.google.inject.Inject;
 
 /**
@@ -23,6 +24,7 @@ import com.google.inject.Inject;
  * different tile. (screen scrolling)
  * </p>
  */
+@Listener
 public final class MoveModeSupport {
 
     private final Logger logger = LoggerFactory.getLogger(MoveModeSupport.class);
@@ -89,14 +91,11 @@ public final class MoveModeSupport {
     }
 
     @Inject
-    public MoveModeSupport(final MouseOverTileChangedController mouseOverTileChangedController,
-            final StartMoveController startMoveController,
+    public MoveModeSupport(
             final SelectedTileManager selectedTileManager,
             final MouseOverTileManager mouseOverTileManager,
             final SelectedUnitManager selectedUnitManager, final ModeController modeController,
             final UnitUtil unitUtil) {
-        mouseOverTileChangedController.addListener(this::onMouseOverTileChanged);
-        startMoveController.addListener(this::onStartMove);
         this.selectedTileManager = Preconditions.checkNotNull(selectedTileManager);
         this.mouseOverTileManager = Preconditions.checkNotNull(mouseOverTileManager);
         this.selectedUnitManager = Preconditions.checkNotNull(selectedUnitManager);
@@ -105,11 +104,13 @@ public final class MoveModeSupport {
         moveLocations = Lists.newArrayList();
     }
 
+    @Subscribe
     @SuppressWarnings("unused")
     private void onStartMove(final StartMoveEvent event) {
         recountPath();
     }
 
+    @Subscribe
     private void onMouseOverTileChanged(final MouseOverTileChangedEvent mouseOverTileChangedEvent) {
         Preconditions.checkNotNull(mouseOverTileChangedEvent);
         logger.debug("Recounting path: " + mouseOverTileChangedEvent);

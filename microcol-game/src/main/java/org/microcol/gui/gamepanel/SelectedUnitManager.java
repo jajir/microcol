@@ -3,7 +3,6 @@ package org.microcol.gui.gamepanel;
 import java.util.Optional;
 
 import org.microcol.gui.event.model.GameModelController;
-import org.microcol.gui.mainmenu.SelectNextUnitController;
 import org.microcol.gui.mainmenu.SelectNextUnitEvent;
 import org.microcol.gui.util.Listener;
 import org.microcol.model.Location;
@@ -21,6 +20,7 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
+import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import com.google.inject.Inject;
 
@@ -37,22 +37,21 @@ public final class SelectedUnitManager {
 
     private final SelectedTileManager selectedTileManager;
 
-    private final SelectedUnitWasChangedController selectedUnitWasChangedController;
+    private final EventBus eventBus;
 
     private Unit selectedUnit;
 
     @Inject
     public SelectedUnitManager(final GameModelController gameModelController,
-            final TileWasSelectedController tileWasSelectedController,
-            final SelectNextUnitController selectNextUnitController,
-            final SelectedTileManager selectedTileManager,
-            final SelectedUnitWasChangedController selectedUnitWasChangedController) {
+            final SelectedTileManager selectedTileManager, final EventBus eventBus) {
         this.gameModelController = Preconditions.checkNotNull(gameModelController);
         this.selectedTileManager = Preconditions.checkNotNull(selectedTileManager);
-        this.selectedUnitWasChangedController = Preconditions
-                .checkNotNull(selectedUnitWasChangedController);
-        tileWasSelectedController.addListener(event -> evaluateLocation(event.getLocation()));
-        selectNextUnitController.addListener(this::onSelectNextUnit);
+        this.eventBus = Preconditions.checkNotNull(eventBus);
+    }
+
+    @Subscribe
+    private void onTileWasSelected(TileWasSelectedEvent event) {
+        evaluateLocation(event.getLocation());
     }
 
     @Subscribe
@@ -136,8 +135,7 @@ public final class SelectedUnitManager {
         }
         final Unit previousUnit = selectedUnit;
         selectedUnit = unit;
-        selectedUnitWasChangedController
-                .fireEvent(new SelectedUnitWasChangedEvent(previousUnit, selectedUnit));
+        eventBus.post(new SelectedUnitWasChangedEvent(previousUnit, selectedUnit));
         logger.debug("Selected unit is now: {}", selectedUnit);
     }
 
@@ -151,8 +149,7 @@ public final class SelectedUnitManager {
         }
         final Unit previousUnit = selectedUnit;
         selectedUnit = unit;
-        selectedUnitWasChangedController
-                .fireEvent(new SelectedUnitWasChangedEvent(previousUnit, selectedUnit));
+        eventBus.post(new SelectedUnitWasChangedEvent(previousUnit, selectedUnit));
         logger.debug("Selected unit is now: {}", selectedUnit);
     }
 
@@ -178,6 +175,7 @@ public final class SelectedUnitManager {
         logger.debug("Selected unit at {} is now: {}", location, selectedUnit);
     }
 
+    @Subscribe
     private void onSelectNextUnit(final SelectNextUnitEvent selectNextUnitEvent) {
         Preconditions.checkNotNull(selectNextUnitEvent);
         if (selectedUnit == null) {

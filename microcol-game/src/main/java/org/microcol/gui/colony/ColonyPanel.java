@@ -69,7 +69,6 @@ public final class ColonyPanel implements JavaFxComponent, UpdatableLanguage {
             final PanelColonyStructures panelColonyStructures,
             final PanelOutsideColony panelOutsideColony, final PanelColonyGoods panelColonyGoods,
             final PanelColonyDockBehaviour panelColonyDockBehaviour,
-            final UnitMovedOutsideColonyController unitMovedOutsideColonyController,
             final PanelQueueSummary panelQueueSummary, final PaintService paintService,
             final ColonyDialogCallback colonyDialogCallback) {
         this.paintService = Preconditions.checkNotNull(paintService);
@@ -143,7 +142,11 @@ public final class ColonyPanel implements JavaFxComponent, UpdatableLanguage {
                 propertyShiftWasPressed.set(true);
             }
         });
-        unitMovedOutsideColonyController.addListener(event -> repaint());
+    }
+    
+    @Subscribe
+    private void onUnitMovedOutsideColony(@SuppressWarnings("unused") final UnitMovedOutsideColonyEvent event){
+        repaint();
     }
 
     @SuppressWarnings("unused")

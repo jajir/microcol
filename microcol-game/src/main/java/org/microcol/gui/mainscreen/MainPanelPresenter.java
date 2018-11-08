@@ -1,9 +1,7 @@
 package org.microcol.gui.mainscreen;
 
 import org.microcol.gui.WasdController;
-import org.microcol.gui.event.KeyController;
 import org.microcol.gui.event.model.BeforeGameStartEvent;
-import org.microcol.gui.mainmenu.ChangeLanguageController;
 import org.microcol.gui.mainmenu.ChangeLanguageEvent;
 import org.microcol.gui.util.Listener;
 import org.microcol.model.ChainOfCommandStrategy;
@@ -17,6 +15,10 @@ import com.google.inject.Inject;
 /**
  * MicroCol's main panel. Based on commands and events just change between main
  * game panel and game menu.
+ * <p>
+ * WASD control could be in game panel, but sometimes event are not correctly
+ * catch by game panel.
+ * </p>
  */
 @Listener
 public final class MainPanelPresenter {
@@ -51,18 +53,14 @@ public final class MainPanelPresenter {
             }));
 
     @Inject
-    public MainPanelPresenter(final MainPanelView view, final KeyController keyController,
-            final WasdController wasdController,
-            final ChangeLanguageController changeLanguageController) {
+    public MainPanelPresenter(final MainPanelView view, final WasdController wasdController) {
         this.view = Preconditions.checkNotNull(view);
         view.getBox().setOnKeyPressed(e -> {
             wasdController.onKeyPressed(e);
-            keyController.fireEvent(e);
         });
         view.getBox().setOnKeyReleased(e -> {
             wasdController.onKeyReleased(e);
         });
-        changeLanguageController.addListener(this::onChangeLanguage);
     }
 
     @Subscribe
@@ -70,6 +68,7 @@ public final class MainPanelPresenter {
         screenResolver.apply(event);
     }
 
+    @Subscribe
     private void onChangeLanguage(final ChangeLanguageEvent event) {
         view.updateLanguage(event.getI18n());
     }

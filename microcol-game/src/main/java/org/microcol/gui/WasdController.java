@@ -1,11 +1,15 @@
 package org.microcol.gui;
 
+import com.google.inject.Singleton;
+
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 
 /**
- * Class holds status of pressed moving keys.
+ * Class holds status of pressed moving keys. Class define moving increment and
+ * try to make illusion of smooth scrolling.
  */
+@Singleton
 public class WasdController {
 
     private final static int DIFF = 4;

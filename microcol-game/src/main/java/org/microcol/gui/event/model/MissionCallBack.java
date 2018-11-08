@@ -3,14 +3,15 @@ package org.microcol.gui.event.model;
 import java.util.function.Consumer;
 
 import org.microcol.gui.DialogMessage;
-import org.microcol.gui.gamepanel.AnimationIsDoneController;
 import org.microcol.gui.gamepanel.AnimationIsDoneEvent;
+import org.microcol.gui.util.Listener;
 import org.microcol.gui.util.OneTimeExecuter;
 import org.microcol.gui.util.Text;
 import org.microcol.model.Model;
 
 import com.google.common.base.Preconditions;
 import com.google.common.eventbus.EventBus;
+import com.google.common.eventbus.Subscribe;
 import com.google.inject.Inject;
 
 import javafx.application.Platform;
@@ -22,6 +23,7 @@ import javafx.application.Platform;
  *
  * TODO change it interface and move to campaign package.
  */
+@Listener
 public final class MissionCallBack {
 
     private final Text text;
@@ -36,16 +38,15 @@ public final class MissionCallBack {
 
     @Inject
     MissionCallBack(final Text text, final DialogMessage dialogMessage,
-            final AnimationIsDoneController animationIsDoneController,
             final GameModelController gameModelController, final EventBus eventBus) {
         this.text = Preconditions.checkNotNull(text);
         this.gameModelController = Preconditions.checkNotNull(gameModelController);
         this.dialogMessage = Preconditions.checkNotNull(dialogMessage);
         this.eventBus = Preconditions.checkNotNull(eventBus);
-        animationIsDoneController.addListener(this::onAnimationIsDone);
     }
 
     @SuppressWarnings("unused")
+    @Subscribe
     private void onAnimationIsDone(final AnimationIsDoneEvent event) {
         executor.fire(gameModelController.getModel());
     }

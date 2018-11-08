@@ -1,6 +1,5 @@
 package org.microcol.gui.gamemenu;
 
-import org.microcol.gui.europe.EuropeDialog;
 import org.microcol.gui.util.JavaFxComponent;
 import org.microcol.i18n.I18n;
 
@@ -14,7 +13,7 @@ import javafx.scene.layout.Region;
  */
 public final class GameMenuPanel implements JavaFxComponent {
 
-    public static final String STYLE_SHEET_GAME_MENU = EuropeDialog.class
+    public static final String STYLE_SHEET_GAME_MENU = GameMenuPanel.class
             .getResource("/gui/GameMenu.css").toExternalForm();
 
     private final MenuHolderPanel menuHolderPanel;

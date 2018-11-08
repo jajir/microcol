@@ -8,6 +8,7 @@ import org.microcol.model.event.GameStoppedEvent;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
+import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import com.google.inject.Inject;
 
@@ -17,13 +18,13 @@ import com.google.inject.Inject;
 @Listener
 public final class SelectedTileManager {
 
-    private final TileWasSelectedController tileWasSelectedController;
+    private final EventBus eventBus;
 
     private Location selectedTile;
 
     @Inject
-    public SelectedTileManager(final TileWasSelectedController tileWasSelectedController) {
-        this.tileWasSelectedController = Preconditions.checkNotNull(tileWasSelectedController);
+    public SelectedTileManager(final EventBus eventBus) {
+        this.eventBus = Preconditions.checkNotNull(eventBus);
         selectedTile = null;
     }
 
@@ -52,8 +53,7 @@ public final class SelectedTileManager {
     private void setForcelySelectedTile(final Location newlySelectedTile,
             final ScrollToFocusedTile scrollToFocusedTile) {
         Preconditions.checkNotNull(newlySelectedTile);
-        tileWasSelectedController
-                .fireEvent(new TileWasSelectedEvent(newlySelectedTile, scrollToFocusedTile));
+        eventBus.post(new TileWasSelectedEvent(newlySelectedTile, scrollToFocusedTile));
         this.selectedTile = newlySelectedTile;
     }
 

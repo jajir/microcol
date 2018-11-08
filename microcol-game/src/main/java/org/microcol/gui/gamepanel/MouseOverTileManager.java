@@ -2,10 +2,12 @@ package org.microcol.gui.gamepanel;
 
 import java.util.Optional;
 
+import org.microcol.gui.util.Listener;
 import org.microcol.model.Location;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
+import com.google.common.eventbus.EventBus;
 import com.google.inject.Inject;
 
 /**
@@ -16,9 +18,10 @@ import com.google.inject.Inject;
  * mouse over. This class doesn't handle events.
  * </p>
  */
+@Listener
 public final class MouseOverTileManager {
 
-    private final MouseOverTileChangedController mouseOverTileChangedController;
+    private final EventBus eventBus;
 
     private Location mouseOverTile;
 
@@ -29,10 +32,8 @@ public final class MouseOverTileManager {
      *            required mouse over tile changed
      */
     @Inject
-    public MouseOverTileManager(
-            final MouseOverTileChangedController mouseOverTileChangedController) {
-        this.mouseOverTileChangedController = Preconditions
-                .checkNotNull(mouseOverTileChangedController);
+    public MouseOverTileManager(final EventBus eventBus) {
+        this.eventBus = Preconditions.checkNotNull(eventBus);
         mouseOverTile = null;
     }
 
@@ -50,12 +51,11 @@ public final class MouseOverTileManager {
         Preconditions.checkNotNull(newMouseOverTile);
         if (mouseOverTile == null) {
             mouseOverTile = newMouseOverTile;
-            mouseOverTileChangedController.fireEvent(new MouseOverTileChangedEvent(mouseOverTile));
+            eventBus.post(new MouseOverTileChangedEvent(mouseOverTile));
         } else {
             if (!mouseOverTile.equals(newMouseOverTile)) {
                 this.mouseOverTile = newMouseOverTile;
-                mouseOverTileChangedController
-                        .fireEvent(new MouseOverTileChangedEvent(mouseOverTile));
+                eventBus.post(new MouseOverTileChangedEvent(mouseOverTile));
             }
         }
     }

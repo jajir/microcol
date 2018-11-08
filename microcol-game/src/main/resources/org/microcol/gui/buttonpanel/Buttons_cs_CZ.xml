@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE properties [
+<!ELEMENT properties ( comment?, entry* ) >
+<!ATTLIST properties version CDATA #FIXED "1.0">
+<!ELEMENT comment (#PCDATA) >
+<!ELEMENT entry (#PCDATA) >
+<!ATTLIST entry key CDATA #REQUIRED>
+]>
+
+<properties>
+	<comment>Define keys for Europe dialog</comment>
+	
+	<entry key="buttonStatistics">Statistiky - jak se daří. (R)</entry>
+	<entry key="buttonCenter">Najít místo jehož detaily jsou v pravém panelu. (C)</entry>
+	<entry key="buttonTurnReport">Upozornění na důležité události. (T)</entry>
+	<entry key="buttonGoals">Cíle ve hře. (G)</entry>
+	<entry key="buttonHelp">Nápověda - Colonizopedie. (H)</entry>
+	<entry key="buttonExit">Opustit hru a jít do hlavní nabídky</entry>
+	<entry key="buttonNextTurn">Další tah</entry>
+	<entry key="buttonEurope">Evropský přístav. (E)</entry>
+	
+</properties>

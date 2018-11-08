@@ -2,6 +2,8 @@ package org.microcol.gui;
 
 import org.microcol.gui.buildingqueue.QueueController;
 import org.microcol.gui.buildingqueue.QueueDialog;
+import org.microcol.gui.buttonpanel.ButtonPanelController;
+import org.microcol.gui.buttonpanel.NextTurnListener;
 import org.microcol.gui.colonizopedia.ColonizopediaDialog;
 import org.microcol.gui.colony.ColonyDialogCallback;
 import org.microcol.gui.colony.ColonyMenuPanelPresenter;
@@ -12,7 +14,6 @@ import org.microcol.gui.colony.PanelColonyGoods;
 import org.microcol.gui.colony.PanelColonyStructures;
 import org.microcol.gui.colony.PanelOutsideColony;
 import org.microcol.gui.colony.PanelQueueSummary;
-import org.microcol.gui.colony.UnitMovedOutsideColonyController;
 import org.microcol.gui.europe.BuyUnitsDialog;
 import org.microcol.gui.europe.ChooseGoodAmountDialog;
 import org.microcol.gui.europe.EuropeCallback;
@@ -28,10 +29,8 @@ import org.microcol.gui.event.BuildColonyListener;
 import org.microcol.gui.event.ChangeLanguageListenerPreferences;
 import org.microcol.gui.event.ChangeLanguageListenerText;
 import org.microcol.gui.event.DeclareIndependenceListener;
-import org.microcol.gui.event.EventInitializer;
-import org.microcol.gui.event.KeyController;
+import org.microcol.gui.event.QuitGameListener;
 import org.microcol.gui.event.ShowGridListenerPreferences;
-import org.microcol.gui.event.StartMoveController;
 import org.microcol.gui.event.VolumeChangedListenerPreferences;
 import org.microcol.gui.event.model.ArtifitialPlayersManager;
 import org.microcol.gui.event.model.GameModelController;
@@ -48,19 +47,15 @@ import org.microcol.gui.gamemenu.SettingButtonsPresenter;
 import org.microcol.gui.gamemenu.SettingLanguagePresenter;
 import org.microcol.gui.gamemenu.SettingShowGridPresenter;
 import org.microcol.gui.gamemenu.SettingVolumePresenter;
-import org.microcol.gui.gamemenu.ShowDefaultCampaignMenuControler;
 import org.microcol.gui.gamemenu.ShowDefaultCampaignMenuListener;
 import org.microcol.gui.gamemenu.ShowGameSettingListener;
-import org.microcol.gui.gamepanel.AnimationIsDoneController;
 import org.microcol.gui.gamepanel.AnimationManager;
-import org.microcol.gui.gamepanel.AnimationStartedController;
 import org.microcol.gui.gamepanel.ExcludePainting;
 import org.microcol.gui.gamepanel.GamePanelController;
 import org.microcol.gui.gamepanel.GamePanelPresenter;
 import org.microcol.gui.gamepanel.GamePanelView;
 import org.microcol.gui.gamepanel.MapManager;
 import org.microcol.gui.gamepanel.ModeController;
-import org.microcol.gui.gamepanel.MouseOverTileChangedController;
 import org.microcol.gui.gamepanel.MouseOverTileListener;
 import org.microcol.gui.gamepanel.MouseOverTileManager;
 import org.microcol.gui.gamepanel.MoveModeSupport;
@@ -70,8 +65,6 @@ import org.microcol.gui.gamepanel.ScrollToSelectedUnit;
 import org.microcol.gui.gamepanel.ScrollingManager;
 import org.microcol.gui.gamepanel.SelectedTileManager;
 import org.microcol.gui.gamepanel.SelectedUnitManager;
-import org.microcol.gui.gamepanel.SelectedUnitWasChangedController;
-import org.microcol.gui.gamepanel.TileWasSelectedController;
 import org.microcol.gui.gamepanel.TileWasSelectedListener;
 import org.microcol.gui.gamepanel.UnitAttackedEventListener;
 import org.microcol.gui.gamepanel.UnitMoveFinishedListener;
@@ -80,23 +73,8 @@ import org.microcol.gui.gamepanel.VisibleArea;
 import org.microcol.gui.image.GrassCoastMapGenerator;
 import org.microcol.gui.image.IceCoastMapGenerator;
 import org.microcol.gui.image.ImageProvider;
-import org.microcol.gui.mainmenu.AboutGameEventController;
-import org.microcol.gui.mainmenu.AnimationSpeedChangeController;
-import org.microcol.gui.mainmenu.BuildColonyEventController;
-import org.microcol.gui.mainmenu.CenterViewController;
-import org.microcol.gui.mainmenu.ChangeLanguageController;
-import org.microcol.gui.mainmenu.DeclareIndependenceController;
-import org.microcol.gui.mainmenu.ExitGameController;
 import org.microcol.gui.mainmenu.MainMenuPresenter;
 import org.microcol.gui.mainmenu.MainMenuView;
-import org.microcol.gui.mainmenu.PlowFieldEventController;
-import org.microcol.gui.mainmenu.QuitGameController;
-import org.microcol.gui.mainmenu.SelectNextUnitController;
-import org.microcol.gui.mainmenu.ShowGoalsController;
-import org.microcol.gui.mainmenu.ShowGridController;
-import org.microcol.gui.mainmenu.ShowStatisticsController;
-import org.microcol.gui.mainmenu.ShowTurnReportController;
-import org.microcol.gui.mainmenu.VolumeChangeController;
 import org.microcol.gui.mainscreen.MainPanelPresenter;
 import org.microcol.gui.mainscreen.MainPanelView;
 import org.microcol.gui.statistics.ShowStatisticsDialogListener;
@@ -152,13 +130,19 @@ public final class MicroColModule extends AbstractModule {
         bind(PersistentService.class).in(Singleton.class);
         bind(AnimationManager.class).in(Singleton.class);
         bind(ScrollingManager.class).in(Singleton.class);
-        bind(WasdController.class).in(Singleton.class);
         bind(MapManager.class).in(Singleton.class);
         bind(GrassCoastMapGenerator.class).in(Singleton.class);
         bind(IceCoastMapGenerator.class).in(Singleton.class);
         bind(FontService.class).asEagerSingleton();
         bind(ApplicationInfo.class).in(Singleton.class);
 
+        
+        /**
+         * PanelButtons
+         */
+        bind(NextTurnListener.class).asEagerSingleton();
+        bind(ButtonPanelController.class).asEagerSingleton();
+        
         /**
          * Dialogs
          */
@@ -172,32 +156,8 @@ public final class MicroColModule extends AbstractModule {
          * Event controllers.
          */
         bind(ApplicationController.class).in(Singleton.class);
-        bind(KeyController.class).in(Singleton.class);
-        bind(TileWasSelectedController.class).in(Singleton.class);
-        bind(AboutGameEventController.class).in(Singleton.class);
-        bind(ChangeLanguageController.class).in(Singleton.class);
-        bind(StartMoveController.class).in(Singleton.class);
-        bind(VolumeChangeController.class).in(Singleton.class);
-        bind(AnimationSpeedChangeController.class).in(Singleton.class);
-        bind(ShowGridController.class).in(Singleton.class);
-        bind(CenterViewController.class).in(Singleton.class);
-        bind(QuitGameController.class).in(Singleton.class);
-        bind(MouseOverTileChangedController.class).in(Singleton.class);
-        bind(DeclareIndependenceController.class).in(Singleton.class);
-        bind(BuildColonyEventController.class).in(Singleton.class);
-        bind(SelectNextUnitController.class).in(Singleton.class);
-        bind(AnimationIsDoneController.class).in(Singleton.class);
-        bind(AnimationStartedController.class).in(Singleton.class);
-        bind(UnitMovedOutsideColonyController.class).in(Singleton.class);
-        bind(ExitGameController.class).in(Singleton.class);
-        bind(SelectedUnitWasChangedController.class).in(Singleton.class);
-        bind(ShowDefaultCampaignMenuControler.class).in(Singleton.class);
         bind(GameModelController.class).in(Singleton.class);
         bind(ArtifitialPlayersManager.class).in(Singleton.class);
-        bind(ShowTurnReportController.class).in(Singleton.class);
-        bind(ShowStatisticsController.class).in(Singleton.class);
-        bind(ShowGoalsController.class).in(Singleton.class);
-        bind(PlowFieldEventController.class).in(Singleton.class);
 
         bind(TurnStartedListener.class).asEagerSingleton();
         bind(TileWasSelectedListener.class).asEagerSingleton();
@@ -304,8 +264,6 @@ public final class MicroColModule extends AbstractModule {
          * Rest of UI
          */
         bind(ColonizopediaDialog.class).in(Singleton.class);
-        bind(PreferencesVolume.class).in(Singleton.class);
-        bind(PreferencesAnimationSpeed.class).in(Singleton.class);
 
         /**
          * Load events manually
@@ -322,7 +280,7 @@ public final class MicroColModule extends AbstractModule {
         bind(MusicPlayer.class).in(Singleton.class);
         bind(MusicController.class).in(Singleton.class);
 
-        bind(EventInitializer.class).in(Singleton.class);
+        bind(QuitGameListener.class).asEagerSingleton();
         bind(PersistingTool.class).in(Singleton.class);
 
         bindListener(Matchers.any(), new ProvisionListener() {

@@ -7,10 +7,11 @@ import static org.junit.Assert.assertTrue;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.microcol.gui.gamepanel.MouseOverTileChangedController;
 import org.microcol.gui.gamepanel.MouseOverTileChangedEvent;
 import org.microcol.gui.gamepanel.MouseOverTileManager;
 import org.microcol.model.Location;
+
+import com.google.common.eventbus.EventBus;
 
 import mockit.Expectations;
 import mockit.Mocked;
@@ -19,7 +20,7 @@ public class MouseOverTileManagerTest {
 
 	private MouseOverTileManager viewState;
 
-	private @Mocked MouseOverTileChangedController motcController;
+	private @Mocked EventBus eventBus;
 
 	@Test
 	public void test_getInitialValues() throws Exception {
@@ -30,7 +31,7 @@ public class MouseOverTileManagerTest {
 	public void test_setMouseOverTile() throws Exception {
 		Location loc = Location.of(10, 23);
 		new Expectations() {{
-			motcController.fireEvent(new MouseOverTileChangedEvent(loc));
+			eventBus.post(new MouseOverTileChangedEvent(loc));
 		}};
 		viewState.setMouseOverTile(loc);
 
@@ -42,7 +43,7 @@ public class MouseOverTileManagerTest {
 	public void test_setMouseOverTile_moreThanOnce() throws Exception {
 		Location loc = Location.of(10, 23);
 		new Expectations() {{
-			motcController.fireEvent(new MouseOverTileChangedEvent(loc));
+		    eventBus.post(new MouseOverTileChangedEvent(loc));
 		}};
 		viewState.setMouseOverTile(loc);
 		viewState.setMouseOverTile(loc);
@@ -57,8 +58,8 @@ public class MouseOverTileManagerTest {
 		Location loc1 = Location.of(10, 23);
 		Location loc2 = Location.of(3, 7);
 		new Expectations() {{
-			motcController.fireEvent(new MouseOverTileChangedEvent(loc1));
-			motcController.fireEvent(new MouseOverTileChangedEvent(loc2));
+		    eventBus.post(new MouseOverTileChangedEvent(loc1));
+		    eventBus.post(new MouseOverTileChangedEvent(loc2));
 		}};
 		viewState.setMouseOverTile(loc1);
 		viewState.setMouseOverTile(loc2);
@@ -69,7 +70,7 @@ public class MouseOverTileManagerTest {
 
 	@Before
 	public void setUp() {
-		viewState = new MouseOverTileManager(motcController);
+		viewState = new MouseOverTileManager(eventBus);
 	}
 
 	@After

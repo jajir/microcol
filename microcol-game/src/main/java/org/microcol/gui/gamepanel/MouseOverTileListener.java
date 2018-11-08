@@ -7,6 +7,7 @@ import org.microcol.gui.event.StatusBarMessageEvent;
 import org.microcol.gui.event.StatusBarMessageEvent.Source;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.util.GamePreferences;
+import org.microcol.gui.util.Listener;
 import org.microcol.gui.util.Text;
 import org.microcol.model.Location;
 import org.microcol.model.Player;
@@ -15,11 +16,13 @@ import org.microcol.model.Unit;
 
 import com.google.common.base.Preconditions;
 import com.google.common.eventbus.EventBus;
+import com.google.common.eventbus.Subscribe;
 import com.google.inject.Inject;
 
 /**
  * When mouse change tile which is over this class set new status message.
  */
+@Listener
 public final class MouseOverTileListener {
 
     private final GameModelController gameModelController;
@@ -34,7 +37,6 @@ public final class MouseOverTileListener {
 
     @Inject
     public MouseOverTileListener(
-            final MouseOverTileChangedController mouseOverTileChangedController,
             final GameModelController gameModelController,
             final LocalizationHelper localizationHelper, final GamePreferences gamePreferences,
             final EventBus eventBus, final Text text) {
@@ -43,10 +45,9 @@ public final class MouseOverTileListener {
         this.localizationHelper = Preconditions.checkNotNull(localizationHelper);
         this.gamePreferences = Preconditions.checkNotNull(gamePreferences);
         this.text = Preconditions.checkNotNull(text);
-        mouseOverTileChangedController.addListener(this::onMouseOverTileChanged);
-
     }
 
+    @Subscribe
     private void onMouseOverTileChanged(final MouseOverTileChangedEvent event) {
         if (gameModelController.getModel().getMap().isValid(event.getMouseOverTileLocaton())) {
             final TerrainType terrain = gameModelController.getModel().getMap()

@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.gamepanel.TileWasSelectedEvent;
+import org.microcol.gui.image.ImageLoaderButtons;
 import org.microcol.gui.image.ImageProvider;
 import org.microcol.gui.util.JavaFxComponent;
 import org.microcol.gui.util.Text;
@@ -20,9 +21,15 @@ import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
 
 import javafx.application.Platform;
+import javafx.geometry.Side;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundPosition;
+import javafx.scene.layout.BackgroundRepeat;
+import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.RowConstraints;
@@ -99,9 +106,17 @@ public final class RightPanelView implements JavaFxComponent {
         gridPane.add(scrollPaneGamePanel, 0, 3, 2, 1);
 
         // Y=4
+        final BackgroundImage nextButtonImage = new BackgroundImage(
+                imageProvider.getImage(ImageLoaderButtons.BUTTON_NEXT_TURN),
+                BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT,
+                new BackgroundPosition(Side.RIGHT, 0.5, true, Side.TOP, 0.5, true),
+                BackgroundSize.DEFAULT);
+
         nextTurnButton = new Button();
         nextTurnButton.setId("nextTurnButton");
-        gridPane.add(nextTurnButton, 0, 4, 2, 1);
+        nextTurnButton.setBackground(new Background(nextButtonImage));
+//        gridPane.add(nextTurnButton, 0, 4, 2, 1);
+        //FIXME remove next turn button
     }
 
     public void refreshView(final TileWasSelectedEvent event) {
@@ -134,8 +149,8 @@ public final class RightPanelView implements JavaFxComponent {
             } else {
                 tileImage.paintUnit(units);
                 /**
-                 * Current player is not same as human player. For purposes of this method it
-                 * will be sufficient.
+                 * Current player is not same as human player. For purposes of
+                 * this method it will be sufficient.
                  */
                 unitsPanel.setUnits(getModel().getCurrentPlayer(), getModel().getUnitsAt(location));
             }

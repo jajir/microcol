@@ -1,7 +1,6 @@
 package org.microcol.gui.colony;
 
 import org.microcol.gui.StatusBar;
-import org.microcol.gui.europe.EuropeDialog;
 import org.microcol.gui.event.StatusBarMessageEvent.Source;
 import org.microcol.gui.util.CenteredPage;
 import org.microcol.gui.util.ContentWithStatusBar;
@@ -20,7 +19,7 @@ import javafx.scene.layout.Region;
 @Singleton
 public class ColonyMenuPanel implements JavaFxComponent, UpdatableLanguage {
 
-    public static final String STYLE_SHEET_COLONY = EuropeDialog.class
+    public static final String STYLE_SHEET_COLONY = ColonyMenuPanel.class
             .getResource("/gui/Colony.css").toExternalForm();
 
     private final ContentWithStatusBar contentWithStatusBar;

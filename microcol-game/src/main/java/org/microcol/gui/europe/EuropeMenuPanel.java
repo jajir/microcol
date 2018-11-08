@@ -19,7 +19,7 @@ import javafx.scene.layout.Region;
 @Singleton
 public class EuropeMenuPanel implements JavaFxComponent, UpdatableLanguage, Repaintable {
 
-    public static final String STYLE_SHEET_EUROPE = EuropeDialog.class
+    public static final String STYLE_SHEET_EUROPE = EuropeMenuPanel.class
             .getResource("/gui/Europe.css").toExternalForm();
 
     private final ContentWithStatusBar contentWithStatusBar;

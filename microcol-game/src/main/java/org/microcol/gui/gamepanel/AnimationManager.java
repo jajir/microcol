@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
+import com.google.common.eventbus.EventBus;
 import com.google.inject.Inject;
 
 import javafx.scene.canvas.GraphicsContext;
@@ -17,19 +18,15 @@ public final class AnimationManager implements AnimationLock {
 
     private final Logger logger = LoggerFactory.getLogger(AnimationManager.class);
 
-    private final AnimationStartedController animationStartedController;
-
-    private final AnimationIsDoneController animationIsDoneController;
+    private final EventBus eventBus;
 
     private AnimationHolder runningPart;
 
     private final AnimationLatch latch = new AnimationLatch();
 
     @Inject
-    public AnimationManager(final AnimationStartedController animationStartedController,
-            final AnimationIsDoneController animationIsDoneController) {
-        this.animationStartedController = Preconditions.checkNotNull(animationStartedController);
-        this.animationIsDoneController = Preconditions.checkNotNull(animationIsDoneController);
+    public AnimationManager(final EventBus eventBus) {
+        this.eventBus = Preconditions.checkNotNull(eventBus);
         runningPart = null;
     }
 
@@ -47,7 +44,7 @@ public final class AnimationManager implements AnimationLock {
         if (!runningPart.getAnimation().hasNextStep()) {
             runningPart.runOnAnimationIsDone();
             runningPart = null;
-            animationIsDoneController.fireEvent(new AnimationIsDoneEvent());
+            eventBus.post(new AnimationIsDoneEvent());
             logger.debug("You are done, unlocking threads");
             latch.unlock();
         }
@@ -76,7 +73,7 @@ public final class AnimationManager implements AnimationLock {
         //TODO skip event here all invisible moves
         runningPart = new AnimationHolder(animation, onAnimationIsDone);
         logger.debug("Adding animation {}", animation);
-        animationStartedController.fireEvent(new AnimationStartedEvent());
+        eventBus.post(new AnimationStartedEvent());
         Preconditions.checkState(runningPart.getAnimation().hasNextStep(),
                 "Animation should contain at least one step.");
         latch.lock();

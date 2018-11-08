@@ -15,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
+import com.google.common.eventbus.EventBus;
 import com.google.inject.Inject;
 
 import javafx.scene.input.DragEvent;
@@ -40,7 +41,7 @@ public final class PanelOutsideColony implements JavaFxComponent {
 
     private final DialogDestroyColony dialogDestroyColony;
 
-    private final UnitMovedOutsideColonyController unitMovedOutsideColonyController;
+    private final EventBus eventBus;
 
     private final TitledPanel mainPanel;
 
@@ -49,14 +50,12 @@ public final class PanelOutsideColony implements JavaFxComponent {
     @Inject
     public PanelOutsideColony(final ImageProvider imageProvider,
             final GameModelController gameModelController, final ColonyDialogCallback colonyDialog,
-            final DialogDestroyColony dialogDestroyColony,
-            final UnitMovedOutsideColonyController unitMovedOutsideColonyController) {
+            final DialogDestroyColony dialogDestroyColony, final EventBus eventBus) {
         this.imageProvider = Preconditions.checkNotNull(imageProvider);
         this.gameModelController = Preconditions.checkNotNull(gameModelController);
         this.colonyDialog = Preconditions.checkNotNull(colonyDialog);
         this.dialogDestroyColony = Preconditions.checkNotNull(dialogDestroyColony);
-        this.unitMovedOutsideColonyController = Preconditions
-                .checkNotNull(unitMovedOutsideColonyController);
+        this.eventBus = Preconditions.checkNotNull(eventBus);
         panelUnits = new HBox();
 
         mainPanel = new TitledPanel("Outside Colony");
@@ -100,14 +99,12 @@ public final class PanelOutsideColony implements JavaFxComponent {
             if (colony.isLastUnitIncolony(unit)) {
                 if (dialogDestroyColony.showWaitAndReturnIfYesWasSelected()) {
                     unit.placeToMap(colony.getLocation());
-                    unitMovedOutsideColonyController
-                            .fireEvent(new UnitMovedOutsideColonyEvent(unit, colony));
+                    eventBus.post(new UnitMovedOutsideColonyEvent(unit, colony));
                     colonyDialog.close();
                 }
             } else {
                 unit.placeToMap(colony.getLocation());
-                unitMovedOutsideColonyController
-                        .fireEvent(new UnitMovedOutsideColonyEvent(unit, colony));
+                eventBus.post(new UnitMovedOutsideColonyEvent(unit, colony));
             }
             event.acceptTransferModes(TransferMode.MOVE);
             event.setDropCompleted(true);

@@ -3,10 +3,10 @@ package org.microcol.gui.gamemenu;
 import org.microcol.gui.ApplicationController;
 import org.microcol.gui.PersistingDialog;
 import org.microcol.gui.event.model.GameController;
-import org.microcol.gui.mainmenu.ChangeLanguageController;
-import org.microcol.gui.mainmenu.QuitGameController;
+import org.microcol.gui.mainmenu.ChangeLanguageEvent;
 import org.microcol.gui.mainmenu.QuitGameEvent;
 import org.microcol.gui.util.GamePreferences;
+import org.microcol.gui.util.Listener;
 import org.microcol.gui.util.PersistingTool;
 import org.microcol.i18n.I18n;
 import org.microcol.model.campaign.Campaign;
@@ -14,6 +14,7 @@ import org.microcol.model.campaign.CampaignManager;
 
 import com.google.common.base.Preconditions;
 import com.google.common.eventbus.EventBus;
+import com.google.common.eventbus.Subscribe;
 import com.google.inject.Inject;
 
 import javafx.event.ActionEvent;
@@ -22,6 +23,7 @@ import javafx.scene.layout.Region;
 /**
  * Panel that is visible after game start.
  */
+@Listener
 public final class ButtonsPanelPresenter {
 
     private final ButtonsPanelView view;
@@ -34,33 +36,37 @@ public final class ButtonsPanelPresenter {
 
     private final CampaignManager campaignManager;
 
+    private final I18n i18n;
+
     private final EventBus eventBus;
 
     @Inject
     public ButtonsPanelPresenter(final ButtonsPanelView view,
             final ApplicationController applicationController,
-            final ChangeLanguageController changeLanguageController,
-            final QuitGameController exitGameController, final PersistingDialog persistingDialog,
-            final GamePreferences gamePreferences, final PersistingTool persistingTool,
-            final GameController gameController, final CampaignManager campaignManager,
-            final ShowDefaultCampaignMenuControler showDefaultCampaignMenuControler,
-            final EventBus eventBus, final I18n i18n) {
+            final PersistingDialog persistingDialog, final GamePreferences gamePreferences,
+            final PersistingTool persistingTool, final GameController gameController,
+            final CampaignManager campaignManager, final EventBus eventBus, final I18n i18n) {
         this.view = Preconditions.checkNotNull(view);
         this.gamePreferences = Preconditions.checkNotNull(gamePreferences);
         this.persistingTool = Preconditions.checkNotNull(persistingTool);
         this.gameController = Preconditions.checkNotNull(gameController);
         this.campaignManager = Preconditions.checkNotNull(campaignManager);
         this.eventBus = Preconditions.checkNotNull(eventBus);
+        this.i18n = Preconditions.checkNotNull(i18n);
         view.getButtonContinue().setOnAction(this::onGameContinue);
         view.getButtonLoadSave().setOnAction(event -> persistingDialog.loadModel());
-        view.getButtonPlayCampaign().setOnAction(event -> showDefaultCampaignMenuControler
-                .fireEvent(new ShowDefaultCampaignMenuEvent()));
-        view.getButtonExitMicroCol()
-                .setOnAction(event -> exitGameController.fireEvent(new QuitGameEvent()));
+        view.getButtonPlayCampaign()
+                .setOnAction(event -> eventBus.post(new ShowDefaultCampaignMenuEvent()));
+        view.getButtonExitMicroCol().setOnAction(event -> eventBus.post(new QuitGameEvent()));
         view.getButtonSetting().setOnAction(this::onSetting);
         view.getButtonStartFreeGame().setOnAction(e -> applicationController.startNewFreeGame());
-        changeLanguageController.addListener(listener -> view.updateLanguage(i18n));
         refresh();
+    }
+
+    @Subscribe
+    private void onChangeLanguageEvent(
+            @SuppressWarnings("unused") final ChangeLanguageEvent event) {
+        view.updateLanguage(i18n);
     }
 
     @SuppressWarnings("unused")

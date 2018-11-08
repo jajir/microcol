@@ -7,8 +7,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.gamepanel.SelectedTileManager;
-import org.microcol.gui.gamepanel.TileWasSelectedController;
 import org.microcol.gui.util.Listener;
+
+import com.google.common.eventbus.EventBus;
 
 import mockit.Mocked;
 
@@ -18,7 +19,7 @@ public class SelectedTileManagerTest {
     private SelectedTileManager viewState;
 
     @Mocked
-    private TileWasSelectedController tileWasSelectedController;
+    private EventBus eventBus;
 
     @Mocked
     private GameModelController gameModelController;
@@ -30,7 +31,7 @@ public class SelectedTileManagerTest {
 
     @Before
     public void setUp() {
-        viewState = new SelectedTileManager(tileWasSelectedController);
+        viewState = new SelectedTileManager(eventBus);
     }
 
     @After

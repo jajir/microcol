@@ -2,13 +2,13 @@ package org.microcol.gui.gamemenu;
 
 import org.microcol.gui.MusicPlayer;
 import org.microcol.gui.Preferences;
-import org.microcol.gui.mainmenu.VolumeChangeController;
 import org.microcol.gui.mainmenu.VolumeChangeEvent;
 import org.microcol.gui.util.JavaFxComponent;
 import org.microcol.gui.util.UpdatableLanguage;
 import org.microcol.i18n.I18n;
 
 import com.google.common.base.Preconditions;
+import com.google.common.eventbus.EventBus;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
@@ -27,11 +27,11 @@ public class SettingVolumeView implements JavaFxComponent, UpdatableLanguage {
 
     private Slider slider;
 
-    private final VolumeChangeController volumeChangeController;
+    private final EventBus eventBus;
 
     @Inject
-    public SettingVolumeView(final VolumeChangeController volumeChangeController, final I18n i18n) {
-        this.volumeChangeController = Preconditions.checkNotNull(volumeChangeController);
+    public SettingVolumeView(final EventBus eventBus, final I18n i18n) {
+        this.eventBus = Preconditions.checkNotNull(eventBus);
         label = new Label();
         label.getStyleClass().add("label-slider");
         
@@ -56,7 +56,7 @@ public class SettingVolumeView implements JavaFxComponent, UpdatableLanguage {
         slider.setShowTickMarks(false);
         slider.setBlockIncrement(10);
         slider.valueProperty().addListener((obj, oldValue, newValue) -> {
-            volumeChangeController.fireEvent(new VolumeChangeEvent(newValue.intValue()));
+            eventBus.post(new VolumeChangeEvent(newValue.intValue()));
         });
         slider.setLabelFormatter(new StringConverter<Double>() {
             @Override

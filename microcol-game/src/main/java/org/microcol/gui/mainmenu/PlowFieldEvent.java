@@ -1,5 +1,7 @@
 package org.microcol.gui.mainmenu;
 
+import org.microcol.gui.event.model.GameModelController;
+import org.microcol.gui.gamepanel.SelectedUnitManager;
 import org.microcol.model.Player;
 import org.microcol.model.Unit;
 
@@ -13,6 +15,16 @@ public final class PlowFieldEvent {
 
     private final Player player;
     private final Unit unit;
+
+    public static PlowFieldEvent make(final GameModelController gameModelController,
+            final SelectedUnitManager selectedUnitManager) {
+        final Player player = gameModelController.getCurrentPlayer();
+        final Unit unit = selectedUnitManager.getSelectedUnit()
+                .orElseThrow(() -> new IllegalStateException(
+                        "Plow field event can't be invoked when no unit is selected."));
+        Preconditions.checkArgument(unit.canPlowFiled(), "Unit can't plow field.");
+        return new PlowFieldEvent(player, unit);
+    }
 
     PlowFieldEvent(final Player player, final Unit unit) {
         this.player = Preconditions.checkNotNull(player);

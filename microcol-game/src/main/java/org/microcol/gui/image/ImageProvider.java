@@ -16,26 +16,32 @@ import org.microcol.model.TerrainType;
 import org.microcol.model.Unit;
 import org.microcol.model.UnitType;
 import org.microcol.model.unit.UnitFreeColonist;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
+import com.google.inject.Singleton;
 
 import javafx.scene.image.Image;
 
 /**
  * Provide image instances.
  */
+@Singleton
 public final class ImageProvider {
+
+    private final Logger LOGGER = LoggerFactory.getLogger(ImageProvider.class);
 
     /**
      * Allows to register image loaders. It's ordered list of loaders.
      */
     private final List<ImageLoader> STARTUP_IMAGE_LOADERS = Lists.newArrayList(
-            new BackgroundImageLoader(), new GrassCoastImageLoader(), new IceCoastImageLoader(),
+            new ImageLoaderBackground(), new GrassCoastImageLoader(), new IceCoastImageLoader(),
             new HiddenCoastImageLoader(), new ImageLoaderUnit(), new ImageLoaderGoods(),
-            new ImageLoaderBuilding(), new ImageLoaderExtra());
+            new ImageLoaderBuilding(), new ImageLoaderButtons(), new ImageLoaderExtra());
 
     public final static String BACKGROUND_IMAGE_NAME = "backgroud.png";
 
@@ -174,7 +180,7 @@ public final class ImageProvider {
     private final Map<UnitType, Image> unitImageMap;
 
     private final Map<GoodType, Image> goodTypeImageMap;
-    
+
     private final ChainOfCommandStrategy<UnitImageRequest, Image> unitImageResolver = new ChainOfCommandStrategy<UnitImageRequest, Image>(
             Lists.newArrayList(request -> {
                 if (UnitType.GALLEON == request.getUnitType()) {
@@ -209,7 +215,7 @@ public final class ImageProvider {
                         throw new IllegalStateException(
                                 "Colonist in not instace of UnitFreeColonist class");
                     }
-                }                
+                }
                 return null;
             }, request -> {
                 if (UnitType.FRIGATE == request.getUnitType()) {
@@ -219,6 +225,7 @@ public final class ImageProvider {
             }));
 
     public ImageProvider() {
+        LOGGER.info("Loading image provider");
         images = new HashMap<>();
         STARTUP_IMAGE_LOADERS.forEach(loader -> loader.preload(this));
         terrainMap = ImmutableMap.<TerrainType, Image>builder()
@@ -231,8 +238,7 @@ public final class ImageProvider {
         unitImageMap = ImmutableMap.<UnitType, Image>builder()
                 .put(UnitType.GALLEON, getImage(IMG_UNIT_SHIP_GALEON_EAST))
                 .put(UnitType.FRIGATE, getImage(IMG_UNIT_SHIP_FRIGATE))
-                .put(UnitType.COLONIST, getImage(IMG_UNIT_FREE_COLONIST))
-                .build();
+                .put(UnitType.COLONIST, getImage(IMG_UNIT_FREE_COLONIST)).build();
 
         goodTypeImageMap = ImmutableMap.<GoodType, Image>builder()
                 .put(GoodType.CORN, getImage(IMG_GOOD_CORN))
@@ -276,7 +282,7 @@ public final class ImageProvider {
         }
         return img;
     }
-    
+
     // TODO remove optional
     public Optional<Image> getConstructionImage(final ConstructionType constructionType) {
         final String key = "building_" + constructionType.name();
@@ -364,7 +370,7 @@ public final class ImageProvider {
     public Image getUnitImage(final Unit unit, final Direction orientation) {
         return unitImageResolver.apply(new UnitImageRequest(unit, orientation));
     }
-    
+
     /**
      * For specific unit find corresponding image.
      * 
@@ -401,5 +407,5 @@ public final class ImageProvider {
     public Image getGoodTypeImage(final GoodsAmount goodsAmount) {
         return goodTypeImageMap.get(goodsAmount.getGoodType());
     }
-    
+
 }

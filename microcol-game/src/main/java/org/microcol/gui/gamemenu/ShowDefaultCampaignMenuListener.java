@@ -1,22 +1,23 @@
 package org.microcol.gui.gamemenu;
 
 import org.microcol.gui.mainscreen.MainPanelPresenter;
+import org.microcol.gui.util.Listener;
 
 import com.google.common.base.Preconditions;
+import com.google.common.eventbus.Subscribe;
 import com.google.inject.Inject;
 
+@Listener
 public final class ShowDefaultCampaignMenuListener {
 
     private final MainPanelPresenter mainPanelPresenter;
 
     @Inject
-    public ShowDefaultCampaignMenuListener(
-            final ShowDefaultCampaignMenuControler showDefaultCampaignMenuControler,
-            final MainPanelPresenter mainPanelPresenter) {
+    public ShowDefaultCampaignMenuListener(final MainPanelPresenter mainPanelPresenter) {
         this.mainPanelPresenter = Preconditions.checkNotNull(mainPanelPresenter);
-        showDefaultCampaignMenuControler.addListener(this::onShowDefaultCampaignMenu);
     }
 
+    @Subscribe
     @SuppressWarnings("unused")
     private void onShowDefaultCampaignMenu(final ShowDefaultCampaignMenuEvent event) {
         mainPanelPresenter.showDefaultCampaignMenu();

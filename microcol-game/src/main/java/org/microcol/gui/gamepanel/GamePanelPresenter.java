@@ -7,15 +7,15 @@ import org.microcol.gui.DialogColonyWasCaptured;
 import org.microcol.gui.DialogUnitCantFightWarning;
 import org.microcol.gui.DialogUnitCantMoveHere;
 import org.microcol.gui.Point;
-import org.microcol.gui.event.EndMoveController;
 import org.microcol.gui.event.EndMoveEvent;
-import org.microcol.gui.event.KeyController;
-import org.microcol.gui.event.StartMoveController;
 import org.microcol.gui.event.StartMoveEvent;
 import org.microcol.gui.event.model.GameModelController;
-import org.microcol.gui.mainmenu.CenterViewController;
+import org.microcol.gui.mainmenu.AboutGameEvent;
 import org.microcol.gui.mainmenu.CenterViewEvent;
-import org.microcol.gui.mainmenu.QuitGameController;
+import org.microcol.gui.mainmenu.QuitGameEvent;
+import org.microcol.gui.mainmenu.ShowGoalsEvent;
+import org.microcol.gui.mainmenu.ShowStatisticsEvent;
+import org.microcol.gui.mainmenu.ShowTurnReportEvent;
 import org.microcol.gui.mainscreen.Screen;
 import org.microcol.gui.mainscreen.ShowScreenEvent;
 import org.microcol.gui.util.GamePreferences;
@@ -39,6 +39,7 @@ import com.google.common.eventbus.Subscribe;
 import com.google.inject.Inject;
 
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 
 @Listener
@@ -59,10 +60,6 @@ public final class GamePanelPresenter {
     private final SelectedUnitManager selectedUnitManager;
 
     private final ViewUtil viewUtil;
-
-    private final StartMoveController startMoveController;
-
-    private final EndMoveController endMoveController;
 
     private final EventBus eventBus;
 
@@ -85,25 +82,19 @@ public final class GamePanelPresenter {
     @Inject
     public GamePanelPresenter(final GamePanelView gamePanelView,
             final DialogColonyWasCaptured dialogColonyWasCaptured,
-            final GameModelController gameModelController, final KeyController keyController,
-            final GamePreferences gamePreferences, final CenterViewController centerViewController,
-            final QuitGameController quitGameController,
+            final GameModelController gameModelController, final GamePreferences gamePreferences,
             final SelectedTileManager selectedTileManager, final ViewUtil viewUtil,
-            final StartMoveController startMoveController,
-            final EndMoveController endMoveController, final EventBus eventBus,
-            final MouseOverTileManager mouseOverTileManager, final ModeController modeController,
-            final SelectedUnitManager selectedUnitManager, final I18n i18n,
-            final GamePanelController gamePanelController, final VisibleArea visibleArea,
-            final PaneCanvas paneCanvas, final OneTurnMoveHighlighter oneTurnMoveHighlighter,
-            final UnitUtil unitUtil) {
+            final EventBus eventBus, final MouseOverTileManager mouseOverTileManager,
+            final ModeController modeController, final SelectedUnitManager selectedUnitManager,
+            final I18n i18n, final GamePanelController gamePanelController,
+            final VisibleArea visibleArea, final PaneCanvas paneCanvas,
+            final OneTurnMoveHighlighter oneTurnMoveHighlighter, final UnitUtil unitUtil) {
         this.gameModelController = Preconditions.checkNotNull(gameModelController);
         this.gamePreferences = gamePreferences;
         this.gamePanelView = Preconditions.checkNotNull(gamePanelView);
         this.dialogColonyWasCaptured = Preconditions.checkNotNull(dialogColonyWasCaptured);
         this.selectedTileManager = Preconditions.checkNotNull(selectedTileManager);
         this.viewUtil = Preconditions.checkNotNull(viewUtil);
-        this.startMoveController = Preconditions.checkNotNull(startMoveController);
-        this.endMoveController = Preconditions.checkNotNull(endMoveController);
         this.eventBus = Preconditions.checkNotNull(eventBus);
         this.i18n = Preconditions.checkNotNull(i18n);
         this.mouseOverTileManager = Preconditions.checkNotNull(mouseOverTileManager);
@@ -113,25 +104,6 @@ public final class GamePanelPresenter {
         this.visibleArea = Preconditions.checkNotNull(visibleArea);
         this.oneTurnMoveHighlighter = Preconditions.checkNotNull(oneTurnMoveHighlighter);
         this.unitUtil = Preconditions.checkNotNull(unitUtil);
-
-        startMoveController.addListener(event -> swithToMoveMode());
-
-        keyController.addListener(e -> {
-            /**
-             * Escape
-             */
-            if (KeyCode.ESCAPE == e.getCode()) {
-                onKeyPressed_escape();
-            }
-            /**
-             * Enter
-             */
-            if (KeyCode.ENTER == e.getCode()) {
-                onKeyPressed_enter();
-            }
-            logger.debug("Pressed key: '" + e.getCode().getName() + "' has code '"
-                    + e.getCharacter() + "', modifiers '" + e.getCode().isModifierKey() + "'");
-        });
 
         paneCanvas.getCanvas().setOnMousePressed(e -> {
             if (gamePanelController.isMouseEnabled() && !gamePanelController.isUnitMoving()) {
@@ -155,9 +127,53 @@ public final class GamePanelPresenter {
                 lastMousePosition = Optional.of(Point.of(e.getX(), e.getY()));
             }
         });
+    }
 
-        centerViewController.addListener(this::onCenterView);
-        quitGameController.addListener(event -> gamePanelView.stopTimer());
+    @Subscribe
+    private void onStartMove(@SuppressWarnings("unused") final StartMoveEvent event) {
+        swithToMoveMode();
+    }
+
+    @Subscribe
+    private void onKeyEvent(final KeyEvent event) {
+        /**
+         * Escape
+         */
+        if (KeyCode.ESCAPE == event.getCode()) {
+            onKeyPressed_escape();
+        }
+        /**
+         * Enter
+         */
+        if (KeyCode.ENTER == event.getCode()) {
+            onKeyPressed_enter();
+        }
+        
+        if (KeyCode.R == event.getCode()) {
+            eventBus.post(new ShowStatisticsEvent());
+        }
+        if (KeyCode.C == event.getCode()) {
+            eventBus.post(new CenterViewEvent());
+        }
+        if (KeyCode.T == event.getCode()) {
+            eventBus.post(new ShowTurnReportEvent());
+        }
+        if (KeyCode.G == event.getCode()) {
+            eventBus.post(new ShowGoalsEvent());
+        }
+        if (KeyCode.H == event.getCode()) {
+            eventBus.post(new AboutGameEvent());
+        }
+        if (KeyCode.E == event.getCode()) {
+            eventBus.post(new ShowScreenEvent(Screen.EUROPE));
+        }
+        logger.debug("Pressed key: '" + event.getCode().getName() + "' has code '"
+                + event.getCharacter() + "', modifiers '" + event.getCode().isModifierKey() + "'");
+    }
+
+    @Subscribe
+    private void onQuitGame(@SuppressWarnings("unused") final QuitGameEvent event) {
+        gamePanelView.stopTimer();
     }
 
     @Subscribe
@@ -170,6 +186,7 @@ public final class GamePanelPresenter {
         visibleArea.setMaxMapSize(event.getModel().getMap());
     }
 
+    @Subscribe
     @SuppressWarnings("unused")
     private void onCenterView(final CenterViewEvent event) {
         logger.debug("Center view event");
@@ -188,7 +205,7 @@ public final class GamePanelPresenter {
     private boolean tryToSwitchToMoveMode(final Location currentLocation) {
         Preconditions.checkNotNull(currentLocation);
         if (selectedUnitManager.isSelectedUnitMoveable()) {
-            startMoveController.fireEvent(new StartMoveEvent());
+            eventBus.post(new StartMoveEvent());
             return true;
         }
         return false;
@@ -350,7 +367,7 @@ public final class GamePanelPresenter {
 
     private void disableMoveMode() {
         gamePanelView.setMoveModeOff();
-        endMoveController.fireEvent(new EndMoveEvent());
+        eventBus.post(new EndMoveEvent());
     }
 
     private void fight(final Unit movingUnit, final Location moveToLocation) {
