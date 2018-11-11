@@ -1,4 +1,4 @@
-package org.microcol.gui.colony;
+package org.microcol.gui.gamemenu;
 
 import org.microcol.gui.GuiColors;
 import org.microcol.gui.Point;
@@ -12,53 +12,48 @@ import org.microcol.gui.util.background.ThreeStripesPref.StripeDef;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
-import com.google.inject.Singleton;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 
-@Singleton
-public class ColonyBackground extends AbstractBackground {
+public class GameMenuBackground extends AbstractBackground {
 
-    private final static String IMG_TOP1 = "colony-top1.png";
-    private final static String IMG_TOP2 = "colony-top2.png";
-    private final static String IMG_BOTTOM = "colony-bottom.png";
-    private final static String IMG_CENTER = "colony.png";
+    private final static String IMG_TOP = "sunset-top-line.png";
 
-    private final Image imageTop1;
-    private final Image imageTop2;
+    private final static String IMG_BOTTOM = "sunset-bottom-line.png";
+
+    private final Image imageTop;
+
     private final Image imageBottom;
+
     private final Image imageCenter;
 
     private final ThreeStripesPainter threeStripesPainter;
-    
-    private final ImageStripePainter top1ImageStripePainter;
-    private final ImageStripePainter top2ImageStripePainter;
+
+    private final ImageStripePainter topImageStripePainter;
+
     private final ImageStripePainter bottomImageStripePainter;
-    
+
     @Inject
-    public ColonyBackground(final ImageProvider imageProvider) {
+    public GameMenuBackground(final ImageProvider imageProvider) {
         super(imageProvider);
-        imageTop1 = Preconditions.checkNotNull(imageProvider.getImage(IMG_TOP1));
-        imageTop2 = Preconditions.checkNotNull(imageProvider.getImage(IMG_TOP2));
+        imageTop = Preconditions.checkNotNull(imageProvider.getImage(IMG_TOP));
         imageBottom = Preconditions.checkNotNull(imageProvider.getImage(IMG_BOTTOM));
-        imageCenter = Preconditions.checkNotNull(imageProvider.getImage(IMG_CENTER));
+        imageCenter = Preconditions.checkNotNull(imageProvider.getImage(ImageProvider.IMG_SUNSET));
         final ThreeStripesPref pref = ThreeStripesPref.build()
-                .setTopStripe(StripeDef.of(-280, GuiColors.SKY))
-                .setCenterStripe(StripeDef.of(30, GuiColors.GRASS))
-                .setBottomStripe(StripeDef.of(290, GuiColors.GROUND)).setCenterStripeHeight(460)
+                .setTopStripe(StripeDef.of(-240, GuiColors.SKY))
+                .setCenterStripe(StripeDef.of(30, GuiColors.OCEAN))
+                .setBottomStripe(StripeDef.of(270, GuiColors.GRASS)).setCenterStripeHeight(440)
                 .make();
         this.threeStripesPainter = new ThreeStripesPainter(pref);
 
         final Point centerImageSize = Point.of(imageCenter.getWidth(), imageCenter.getHeight());
-        top1ImageStripePainter = new ImageStripePainter(ImageStripePref.build().setImage(imageTop1)
-                .setCenterGap(centerImageSize.getX() - 10).setVerticalShift(-287).make());
-        top2ImageStripePainter = new ImageStripePainter(ImageStripePref.build().setImage(imageTop2)
-                .setCenterGap(centerImageSize.getX() - 10).setVerticalShift(-280).make());
+        topImageStripePainter = new ImageStripePainter(ImageStripePref.build().setImage(imageTop)
+                .setCenterGap(centerImageSize.getX() - 10).setVerticalShift(-258).make());
         bottomImageStripePainter = new ImageStripePainter(
                 ImageStripePref.build().setImage(imageBottom)
-                        .setCenterGap(centerImageSize.getX() - 10).setVerticalShift(246).make());
+                        .setCenterGap(centerImageSize.getX() - 10).setVerticalShift(230).make());
     }
 
     @Override
@@ -70,8 +65,7 @@ public class ColonyBackground extends AbstractBackground {
         final Point centerImageSize = Point.of(imageCenter.getWidth(), imageCenter.getHeight());
         paintBackground(gc, canvasSize, Color.WHITE);
         threeStripesPainter.paint(gc, canvasSize);
-        top1ImageStripePainter.paintLeft(gc, canvasSize);
-        top2ImageStripePainter.paintRight(gc, canvasSize);
+        topImageStripePainter.paint(gc, canvasSize);
         bottomImageStripePainter.paint(gc, canvasSize);
         final Point diff = canvasSize.substract(centerImageSize).divide(2);
         gc.drawImage(imageCenter, diff.getX(), diff.getY());

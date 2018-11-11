@@ -25,7 +25,7 @@ public final class MenuHolderPanel implements JavaFxComponent {
     private final HBox box;
 
     @Inject
-    MenuHolderPanel(final BackgroundPanel2 backgroundPanel) {
+    MenuHolderPanel(final GameMenuBackground backgroundPanel) {
         title = new Label("[not defined]");
         title.getStyleClass().add("main-title");
 

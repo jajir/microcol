@@ -8,7 +8,6 @@ import org.microcol.gui.image.ImageProvider;
 import org.microcol.gui.util.BackgroundHighlighter;
 import org.microcol.gui.util.ClipboardEval;
 import org.microcol.gui.util.JavaFxComponent;
-import org.microcol.gui.util.TitledPanel;
 import org.microcol.model.Colony;
 import org.microcol.model.Unit;
 import org.slf4j.Logger;
@@ -43,7 +42,7 @@ public final class PanelOutsideColony implements JavaFxComponent {
 
     private final EventBus eventBus;
 
-    private final TitledPanel mainPanel;
+    private final TmpPanel mainPanel;
 
     private Colony colony;
 
@@ -58,7 +57,7 @@ public final class PanelOutsideColony implements JavaFxComponent {
         this.eventBus = Preconditions.checkNotNull(eventBus);
         panelUnits = new HBox();
 
-        mainPanel = new TitledPanel("Outside Colony");
+        mainPanel = new TmpPanel();
         final BackgroundHighlighter backgroundHighlighter = new BackgroundHighlighter(mainPanel,
                 this::isItUnit);
         mainPanel.getContentPane().getChildren().add(panelUnits);

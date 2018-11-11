@@ -1,7 +1,9 @@
-package org.microcol.gui.util;
+package org.microcol.gui.util.background;
 
 import org.microcol.gui.Point;
 import org.microcol.gui.image.ImageProvider;
+import org.microcol.gui.util.JavaFxComponent;
+import org.microcol.gui.util.Repaintable;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
@@ -15,7 +17,7 @@ import javafx.scene.paint.Color;
 /**
  * Abstract component for drawing background image.
  */
-public abstract class AbstractBackgroundPanel implements JavaFxComponent, Repaintable {
+public abstract class AbstractBackground implements JavaFxComponent, Repaintable {
 
     private final Pane mainPanel;
 
@@ -24,7 +26,7 @@ public abstract class AbstractBackgroundPanel implements JavaFxComponent, Repain
     private final ImageProvider imageProvider;
 
     @Inject
-    public AbstractBackgroundPanel(final ImageProvider imageProvider) {
+    public AbstractBackground(final ImageProvider imageProvider) {
         this.imageProvider = Preconditions.checkNotNull(imageProvider);
         mainPanel = new Pane();
         canvas = new Canvas();
@@ -70,6 +72,22 @@ public abstract class AbstractBackgroundPanel implements JavaFxComponent, Repain
      */
     protected ImageProvider getImageProvider() {
         return imageProvider;
+    }
+
+    /**
+     * Paint background of some area with solid color.
+     *
+     * @param gc
+     *            required
+     * @param areaSize
+     *            required area size
+     * @param color
+     *            required color
+     */
+    protected void paintBackground(final GraphicsContext gc, final Point areaSize,
+            final Color color) {
+        gc.setFill(color);
+        gc.fillRect(0, 0, areaSize.getX(), areaSize.getY());
     }
 
 }

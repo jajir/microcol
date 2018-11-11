@@ -1,6 +1,5 @@
 package org.microcol.gui.colony;
 
-import org.microcol.gui.Dialog;
 import org.microcol.gui.MainStageBuilder;
 import org.microcol.gui.Point;
 import org.microcol.gui.image.ImageProvider;
@@ -25,13 +24,11 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.StackPane;
 
 /**
  * Show Europe port.
@@ -41,7 +38,7 @@ public final class ColonyPanel implements JavaFxComponent, UpdatableLanguage {
 
     private final static Logger logger = LoggerFactory.getLogger(ColonyPanel.class);
 
-    private final VBox mainPanel;
+    private final StackPane mainPanel;
 
     private final Label colonyName;
 
@@ -59,71 +56,40 @@ public final class ColonyPanel implements JavaFxComponent, UpdatableLanguage {
 
     private final BooleanProperty propertyShiftWasPressed;
 
-    private final PanelQueueSummary panelQueueSummary;
+    private final PanelBuildingQueue panelBuildingQueue;
+    
+    private final I18n i18n;
 
     private Colony colony;
 
     @Inject
-    public ColonyPanel(final I18n i18n, final ImageProvider imageProvider,
-            final PanelColonyFields panelColonyFields,
+    public ColonyPanel(final ImageProvider imageProvider, final PanelColonyFields panelColonyFields,
             final PanelColonyStructures panelColonyStructures,
             final PanelOutsideColony panelOutsideColony, final PanelColonyGoods panelColonyGoods,
             final PanelColonyDockBehaviour panelColonyDockBehaviour,
-            final PanelQueueSummary panelQueueSummary, final PaintService paintService,
-            final ColonyDialogCallback colonyDialogCallback) {
+            final PanelBuildingQueue panelBuildingQueue, final PaintService paintService,
+            final I18n i18n) {
         this.paintService = Preconditions.checkNotNull(paintService);
         Preconditions.checkNotNull(imageProvider);
-
-        /**
-         * Row 0
-         */
-        colonyName = new Label("Colony: ");
+        this.colonyFields = Preconditions.checkNotNull(panelColonyFields);
+        this.colonyStructures = Preconditions.checkNotNull(panelColonyStructures);
+        this.panelBuildingQueue = Preconditions.checkNotNull(panelBuildingQueue);
+        this.panelDock = new PanelDock(imageProvider,
+                Preconditions.checkNotNull(panelColonyDockBehaviour));
+        this.goods = Preconditions.checkNotNull(panelColonyGoods);
+        this.panelOutsideColony = Preconditions.checkNotNull(panelOutsideColony);
+        this.i18n = Preconditions.checkNotNull(i18n);
+        colonyName = new Label();
         colonyName.getStyleClass().add("label-title");
 
-        /**
-         * Row 1
-         */
-        colonyFields = Preconditions.checkNotNull(panelColonyFields);
-        colonyStructures = Preconditions.checkNotNull(panelColonyStructures);
-
-        this.panelQueueSummary = Preconditions.checkNotNull(panelQueueSummary);
-        final VBox boxFields = new VBox();
-        boxFields.getChildren().addAll(colonyFields.getContent(), panelQueueSummary.getContent());
-
-        final HBox mapAndBuildings = new HBox();
-        mapAndBuildings.getChildren().addAll(colonyStructures.getContent(), boxFields);
-
-        /**
-         * Row 2
-         */
-        final PanelProductionSummary panelProductionSummary = new PanelProductionSummary();
-
-        panelDock = new PanelDock(imageProvider,
-                Preconditions.checkNotNull(panelColonyDockBehaviour));
-
-        this.panelOutsideColony = Preconditions.checkNotNull(panelOutsideColony);
-
-        final HBox managementRow = new HBox();
-        managementRow.getChildren().addAll(panelProductionSummary.getContent(),
-                panelDock.getContent(), panelOutsideColony.getContent());
-
-        /**
-         * Good row - 3
-         */
-        goods = Preconditions.checkNotNull(panelColonyGoods);
-
-        /**
-         * Last row 4
-         */
-        final Button buttonOk = new Button(i18n.get(Dialog.ok));
-        buttonOk.setOnAction(e -> {
-            colonyDialogCallback.close();
-        });
-        buttonOk.requestFocus();
-
-        mainPanel = new VBox();
-        mainPanel.getChildren().addAll(colonyName, mapAndBuildings, managementRow,
-                goods.getContent(), buttonOk);
+        mainPanel = new StackPane();
+        mainPanel.getChildren().add(colonyName);
+        mainPanel.getChildren().add(panelDock.getContent());
+        mainPanel.getChildren().add(panelOutsideColony.getContent());
+        mainPanel.getChildren().add(colonyFields.getContent());
+        mainPanel.getChildren().add(panelBuildingQueue.getContent());
+        mainPanel.getChildren().add(colonyStructures.getContent());
+        mainPanel.getChildren().add(goods.getContent());
         mainPanel.getStylesheets().add(MainStageBuilder.STYLE_SHEET_MICROCOL);
 
         /**
@@ -143,9 +109,10 @@ public final class ColonyPanel implements JavaFxComponent, UpdatableLanguage {
             }
         });
     }
-    
+
     @Subscribe
-    private void onUnitMovedOutsideColony(@SuppressWarnings("unused") final UnitMovedOutsideColonyEvent event){
+    private void onUnitMovedOutsideColony(
+            @SuppressWarnings("unused") final UnitMovedOutsideColonyEvent event) {
         repaint();
     }
 
@@ -163,7 +130,7 @@ public final class ColonyPanel implements JavaFxComponent, UpdatableLanguage {
 
     public void showColony(final Colony colony) {
         this.colony = Preconditions.checkNotNull(colony);
-        colonyName.setText("Colony: " + colony.getName());
+        colonyName.setText(i18n.get(ColonyMsg.colony) + colony.getName());
         goods.setColony(colony);
         repaint();
     }
@@ -180,7 +147,7 @@ public final class ColonyPanel implements JavaFxComponent, UpdatableLanguage {
             panelDock.repaint();
             colonyStructures.repaint(colony);
             panelOutsideColony.setColony(colony);
-            panelQueueSummary.repaint();
+            panelBuildingQueue.repaint();
         }
     }
 

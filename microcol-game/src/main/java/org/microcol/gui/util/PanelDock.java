@@ -2,7 +2,7 @@ package org.microcol.gui.util;
 
 import java.util.Optional;
 
-import org.microcol.gui.gamepanel.GamePanelView;
+import org.microcol.gui.colony.TmpPanel;
 import org.microcol.gui.image.ImageProvider;
 import org.microcol.i18n.I18n;
 import org.microcol.model.Unit;
@@ -49,7 +49,7 @@ public final class PanelDock implements JavaFxComponent, UpdatableLanguage, Repa
 
     private final VBox mainPanel;
 
-    private final TitledPanel titledPanel;
+    private final TmpPanel titledPanel;
 
     @Inject
     public PanelDock(final ImageProvider imageProvider, final PanelDockBehavior panelDockBehavior) {
@@ -67,12 +67,11 @@ public final class PanelDock implements JavaFxComponent, UpdatableLanguage, Repa
         });
 
         panelShips = new HBox();
-        panelShips.setMinHeight(GamePanelView.TILE_WIDTH_IN_PX);
+        panelShips.getStyleClass().add("ships");
         
         mainPanel = new VBox(panelShips, panelCratesController.getPanelCratesView());
         
-        titledPanel = new TitledPanel();
-        titledPanel.setTitle("Dock");
+        titledPanel = new TmpPanel();
         titledPanel.getStyleClass().add("panel-dock");
         titledPanel.getContentPane().getChildren().add(mainPanel);
     }
@@ -100,7 +99,6 @@ public final class PanelDock implements JavaFxComponent, UpdatableLanguage, Repa
 
     @Override
     public void updateLanguage(final I18n i18n) {
-        titledPanel.setTitle(i18n.get(Util.panelDockTitle));
     }
 
     public void repaintCurrectShipsCrates() {

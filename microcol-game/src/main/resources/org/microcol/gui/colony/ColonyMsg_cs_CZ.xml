@@ -12,5 +12,6 @@
 	<comment>Define keys for Europe dialog</comment>
 
 	<entry key="goods"> ve skladu</entry>
+	<entry key="colony">Kolonie: </entry>
 
 </properties>

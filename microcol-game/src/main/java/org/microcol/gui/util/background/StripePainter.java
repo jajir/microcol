@@ -1,10 +1,14 @@
-package org.microcol.gui.gamemenu;
+package org.microcol.gui.util.background;
 
 import com.google.common.base.Preconditions;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
+/**
+ * Paint color stripe.
+ *
+ */
 public class StripePainter {
 
     private final GraphicsContext gc;

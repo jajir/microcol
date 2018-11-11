@@ -13,7 +13,7 @@ import org.microcol.gui.colony.PanelColonyFields;
 import org.microcol.gui.colony.PanelColonyGoods;
 import org.microcol.gui.colony.PanelColonyStructures;
 import org.microcol.gui.colony.PanelOutsideColony;
-import org.microcol.gui.colony.PanelQueueSummary;
+import org.microcol.gui.colony.PanelBuildingQueue;
 import org.microcol.gui.europe.BuyUnitsDialog;
 import org.microcol.gui.europe.ChooseGoodAmountDialog;
 import org.microcol.gui.europe.EuropeCallback;
@@ -244,7 +244,7 @@ public final class MicroColModule extends AbstractModule {
         bind(PanelOutsideColony.class).in(Singleton.class);
         bind(PanelColonyGoods.class).in(Singleton.class);
         bind(PanelColonyDockBehaviour.class).in(Singleton.class);
-        bind(PanelQueueSummary.class).in(Singleton.class);
+        bind(PanelBuildingQueue.class).in(Singleton.class);
         bind(QueueDialog.class).in(Singleton.class);
         bind(QueueController.class).in(Singleton.class);
 

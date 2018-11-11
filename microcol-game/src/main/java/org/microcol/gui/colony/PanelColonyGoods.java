@@ -8,7 +8,6 @@ import org.microcol.gui.util.BackgroundHighlighter;
 import org.microcol.gui.util.ClipboardEval;
 import org.microcol.gui.util.From;
 import org.microcol.gui.util.JavaFxComponent;
-import org.microcol.gui.util.TitledPanel;
 import org.microcol.i18n.I18n;
 import org.microcol.model.CargoSlot;
 import org.microcol.model.Colony;
@@ -40,7 +39,7 @@ public final class PanelColonyGoods implements JavaFxComponent {
 
     private final List<PanelColonyGood> panelColonyGoods;
 
-    private final TitledPanel mainPanel;
+    private final TmpPanel mainPanel;
 
     private ColonyWarehouse colonyWarehouse;
 
@@ -51,7 +50,7 @@ public final class PanelColonyGoods implements JavaFxComponent {
         this.gameModelController = Preconditions.checkNotNull(gameModelController);
         this.colonyDialog = Preconditions.checkNotNull(colonyDialog);
         hBox = new HBox();
-        mainPanel = new TitledPanel("zbozi");
+        mainPanel = new TmpPanel();
         mainPanel.getContentPane().getChildren().add(hBox);
         panelColonyGoods = GoodType.BUYABLE_GOOD_TYPES.stream().map(goodType -> {
             final PanelColonyGood out = new PanelColonyGood(

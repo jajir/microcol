@@ -4,7 +4,6 @@ import java.util.Optional;
 
 import org.microcol.gui.buildingqueue.QueueDialog;
 import org.microcol.gui.util.JavaFxComponent;
-import org.microcol.gui.util.TitledPanel;
 import org.microcol.model.BuildingStatus;
 import org.microcol.model.ColonyBuildingItem;
 
@@ -16,18 +15,18 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 
-public class PanelQueueSummary implements JavaFxComponent {
+public class PanelBuildingQueue implements JavaFxComponent {
 
     private final QueueDialog queueDialogCallback;
 
     private final ColonyDialogCallback colonyDialogCallback;
 
-    private final TitledPanel mainPanel;
+    private final TmpPanel mainPanel;
 
     private final VBox mainVbox;
 
     @Inject
-    public PanelQueueSummary(final ColonyDialogCallback colonyDialogCallback,
+    public PanelBuildingQueue(final ColonyDialogCallback colonyDialogCallback,
             final QueueDialog queueDialog) {
         this.queueDialogCallback = Preconditions.checkNotNull(queueDialog);
         this.colonyDialogCallback = Preconditions.checkNotNull(colonyDialogCallback);
@@ -36,9 +35,9 @@ public class PanelQueueSummary implements JavaFxComponent {
         final VBox box = new VBox();
         box.setOnMouseClicked(this::onMouseClicked);
         box.getChildren().add(mainVbox);
-        mainPanel = new TitledPanel("Building queue");
+        mainPanel = new TmpPanel();
         mainPanel.getContentPane().getChildren().add(box);
-        mainPanel.getStyleClass().add("queue-summary");
+        mainPanel.getStyleClass().add("building-queue");
     }
 
     private void onMouseClicked(@SuppressWarnings("unused") final MouseEvent event) {

@@ -8,7 +8,8 @@ import org.microcol.i18n.ResourceBundleFormat;
 
 public enum ColonyMsg implements MessageKeyResource {
 
-    goods;
+    goods,
+    colony;
 
     @Override
     public ResourceBundle.Control getResourceBundleControl() {

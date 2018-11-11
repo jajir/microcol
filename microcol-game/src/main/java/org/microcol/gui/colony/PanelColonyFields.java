@@ -10,7 +10,6 @@ import org.microcol.gui.util.ClipboardEval;
 import org.microcol.gui.util.ClipboardWritter;
 import org.microcol.gui.util.JavaFxComponent;
 import org.microcol.gui.util.PaintService;
-import org.microcol.gui.util.TitledPanel;
 import org.microcol.model.Colony;
 import org.microcol.model.ColonyField;
 import org.microcol.model.GoodType;
@@ -62,7 +61,7 @@ public final class PanelColonyFields implements JavaFxComponent {
 
     private final PaintService paintService;
     
-    private final TitledPanel mainPanel;
+    private final TmpPanel mainPanel;
 
     @Inject
     public PanelColonyFields(final ImageProvider imageProvider,
@@ -85,7 +84,7 @@ public final class PanelColonyFields implements JavaFxComponent {
         contextMenu.getStyleClass().add("popup");
         contextMenu.setAutoHide(true);
         
-        mainPanel = new  TitledPanel("Colony layout");
+        mainPanel = new  TmpPanel();
         mainPanel.getContentPane().getChildren().add(canvas);
         mainPanel.getStyleClass().add("colony-fields");
     }

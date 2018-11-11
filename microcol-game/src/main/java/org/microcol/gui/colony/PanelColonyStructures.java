@@ -18,7 +18,6 @@ import org.microcol.gui.image.ImageProvider;
 import org.microcol.gui.util.ClipboardEval;
 import org.microcol.gui.util.ClipboardWritter;
 import org.microcol.gui.util.JavaFxComponent;
-import org.microcol.gui.util.TitledPanel;
 import org.microcol.i18n.I18n;
 import org.microcol.model.Colony;
 import org.microcol.model.ColonyProductionStats;
@@ -170,7 +169,7 @@ public final class PanelColonyStructures implements JavaFxComponent {
 
     private Map<Rectangle, ConstructionSlot> slots;
 
-    private final TitledPanel mainPanel;
+    private final TmpPanel mainPanel;
 
     private final List<ColonyStructure> structures;
 
@@ -196,7 +195,7 @@ public final class PanelColonyStructures implements JavaFxComponent {
         canvas.setOnDragDetected(this::onDragDetected);
         canvas.setOnMouseMoved(this::onMouseMoved);
 
-        mainPanel = new TitledPanel("Colony Structures");
+        mainPanel = new TmpPanel();
         mainPanel.getStyleClass().add("colony-structures");
         mainPanel.getContentPane().getChildren().add(canvas);
         mainPanel.setMinWidth(CANVAS_WIDTH);

@@ -1,19 +1,18 @@
-package org.microcol.gui.colony;
+package org.microcol.gui.util.background;
 
 import org.microcol.gui.Point;
 import org.microcol.gui.image.ImageProvider;
-import org.microcol.gui.util.AbstractBackgroundPanel;
 
 import com.google.common.base.Preconditions;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 
-public class BackgroundImage extends AbstractBackgroundPanel {
+public abstract class AbstractBackgroundImage extends AbstractBackground {
 
     private final String imageName;
 
-    public BackgroundImage(ImageProvider imageProvider, final String imageName) {
+    public AbstractBackgroundImage(ImageProvider imageProvider, final String imageName) {
         super(imageProvider);
         this.imageName = Preconditions.checkNotNull(imageName);
     }
