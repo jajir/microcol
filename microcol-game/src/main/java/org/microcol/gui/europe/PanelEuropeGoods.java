@@ -68,6 +68,7 @@ public final class PanelEuropeGoods implements JavaFxComponent, UpdatableLanguag
 
         titledPanel = new TitledPanel();
         titledPanel.getContentPane().getChildren().add(mainPanel);
+        titledPanel.getStyleClass().add("goods");
     }
 
     @Override

@@ -2,59 +2,61 @@
  * File contains definition of dialogs.
  */
 
-.game-menu-holder{
-	-fx-min-width: 800;
-}
-
 .label-title {
 	-fx-font-size: 32;	
+	-fx-pref-width: 600;
+	-fx-max-width: 600;
+	-fx-translate-x: -150;
+	-fx-translate-y: -250;
 }
 
-.main-panel{
-	-fx-min-width: 800;
-	-fx-padding: 10 10 20 30;	
-}
-
-/*
- * Right panel
- */
 .buttons{
 	-fx-alignment: top-right;
-	-fx-padding: 20 0 0 0;	
+	-fx-translate-x: 10;
+	-fx-translate-y: -130;	
 }
 
 .unit-icon{
 	-fx-max-width: 30;
 }
 
-.port-pier-container{
-	/*
-	-fx-background-color: red;
-	 */
-	-fx-padding: 0 40 22 0;
-	-fx-alignment: top-right;
-}
-
-.panel-port-pier{
-	-fx-min-width: 240;
-	/*
-	-fx-background-color: blue;
-	-fx-padding: 0 40 30 0;
-	-fx-alignment: top-right;
-	 */
-}
-
 .ships-container{
 	-fx-min-width: 80;
 }
 
+.to-europe{
+	-fx-pref-width: 600;
+	-fx-max-width: 600;
+	-fx-min-height: 40;
+	-fx-translate-x: -150;
+	-fx-translate-y: -140;	
+}
+
 .to-new-world{
-	-fx-padding: 0 0 60 0;
+	-fx-pref-width: 600;
+	-fx-max-width: 600;
+	-fx-min-height: 40;
+	-fx-translate-x: -150;
+	-fx-translate-y: -40;	
 }
 
 .panel-dock {
-	/*
-	-fx-background-color: yellow;	
-	 */
-	-fx-padding: 0 0 20 0;
+	-fx-pref-width: 300;
+	-fx-max-width: 300;
+	-fx-translate-x: -300;
+	-fx-translate-y: 230;
 }
+
+.panel-port-pier{
+	-fx-min-width: 300;
+	-fx-max-width: 300;
+	-fx-min-height: 40;
+	-fx-translate-x: 70;
+	-fx-translate-y: 250;	
+}
+
+.goods{
+	-fx-translate-x: 0;
+	-fx-translate-y: 330;
+}
+

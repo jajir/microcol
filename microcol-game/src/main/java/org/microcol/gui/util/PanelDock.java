@@ -69,7 +69,7 @@ public final class PanelDock implements JavaFxComponent, UpdatableLanguage, Repa
         panelShips = new HBox();
         panelShips.getStyleClass().add("ships");
         
-        mainPanel = new VBox(panelShips, panelCratesController.getPanelCratesView());
+        mainPanel = new VBox(panelShips, panelCratesController.getContent());
         
         titledPanel = new TmpPanel();
         titledPanel.getStyleClass().add("panel-dock");

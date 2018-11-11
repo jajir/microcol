@@ -46,8 +46,8 @@ public final class PanelDockCrate extends StackPane {
 
         crateImage = new ImageView();
         crateImage.getStyleClass().add("crate");
-        crateImage.setFitWidth(40);
-        crateImage.setFitHeight(40);
+        crateImage.setFitWidth(GamePanelView.TILE_WIDTH_IN_PX);
+        crateImage.setFitHeight(GamePanelView.TILE_WIDTH_IN_PX);
         crateImage.setPreserveRatio(true);
 
         cargoImage = new ImageView();

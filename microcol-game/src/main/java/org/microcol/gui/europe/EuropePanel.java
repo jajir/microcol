@@ -4,7 +4,6 @@ import org.microcol.gui.Loc;
 import org.microcol.gui.event.StatusBarMessageEvent;
 import org.microcol.gui.event.StatusBarMessageEvent.Source;
 import org.microcol.gui.event.model.GameModelController;
-import org.microcol.gui.gamepanel.GamePanelView;
 import org.microcol.gui.image.ImageProvider;
 import org.microcol.gui.util.JavaFxComponent;
 import org.microcol.gui.util.PanelDock;
@@ -19,17 +18,11 @@ import com.google.inject.Singleton;
 
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
-import javafx.geometry.Side;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundImage;
-import javafx.scene.layout.BackgroundPosition;
-import javafx.scene.layout.BackgroundRepeat;
-import javafx.scene.layout.BackgroundSize;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
 /**
@@ -38,7 +31,7 @@ import javafx.scene.layout.VBox;
 @Singleton
 public final class EuropePanel implements JavaFxComponent, UpdatableLanguage, Repaintable {
 
-    private final VBox mainPanel;
+    private final StackPane mainPanel;
 
     private final Label labelTitle;
 
@@ -95,9 +88,6 @@ public final class EuropePanel implements JavaFxComponent, UpdatableLanguage, Re
         });
         europeDock.getContent()
                 .setOnMouseExited(event -> eventBus.post(new StatusBarMessageEvent(Source.EUROPE)));
-        final VBox panelLeft = new VBox();
-        panelLeft.getChildren().addAll(shipsTravelingToEurope.getContent(),
-                shipsTravelingToNewWorld.getContent(), europeDock.getContent());
 
         recruiteButton = new Button();
         recruiteButton.setOnAction(event -> recruiteUnitsDialog.showAndWait());
@@ -117,32 +107,17 @@ public final class EuropePanel implements JavaFxComponent, UpdatableLanguage, Re
         // TODO add recruiteButton,
         panelButtons.getChildren().addAll(buyButton, buttonOk);
 
-        final VBox panelRight = new VBox();
-        panelRight.getStyleClass().add("right-panel");
-        VBox.setVgrow(panelRight, Priority.ALWAYS);
-        HBox.setHgrow(panelRight, Priority.ALWAYS);
-
-        final HBox portPierContainer = new HBox(panelPortPier.getContent());
-        portPierContainer.setMinWidth(GamePanelView.TILE_WIDTH_IN_PX * 3);
-        portPierContainer.setMinHeight(GamePanelView.TILE_WIDTH_IN_PX);
-        portPierContainer.getStyleClass().add("port-pier-container");
-
-        panelRight.getChildren().addAll(panelButtons, portPierContainer);
-
-        final HBox panelScenery = new HBox();
-        panelScenery.getChildren().addAll(panelLeft, panelRight);
-
         this.panelGoods = Preconditions.checkNotNull(panelEuropeGoods);
 
-        final BackgroundImage europeImage = new BackgroundImage(
-                imageProvider.getImage(ImageProvider.IMG_EUROPE), BackgroundRepeat.NO_REPEAT,
-                BackgroundRepeat.NO_REPEAT,
-                new BackgroundPosition(Side.RIGHT, 0, false, Side.TOP, 68, false),
-                BackgroundSize.DEFAULT);
-        mainPanel = new VBox();
+        mainPanel = new StackPane();
         mainPanel.getStyleClass().add("main-panel");
-        mainPanel.getChildren().addAll(labelTitle, panelScenery, panelGoods.getContent());
-        mainPanel.setBackground(new Background(europeImage));
+        mainPanel.getChildren().add(labelTitle);
+        mainPanel.getChildren().add(panelButtons);
+        mainPanel.getChildren().add(shipsTravelingToNewWorld.getContent());
+        mainPanel.getChildren().add(shipsTravelingToEurope.getContent());
+        mainPanel.getChildren().add(panelPortPier.getContent());
+        mainPanel.getChildren().add(europeDock.getContent());
+        mainPanel.getChildren().add(panelGoods.getContent());
     }
 
     @Override

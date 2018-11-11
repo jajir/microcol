@@ -16,7 +16,7 @@ public final class PanelDockCratesController {
                 panelDockBehavior);
     }
 
-    PanelDockCratesView getPanelCratesView() {
+    PanelDockCratesView getContent() {
         return panelCratesView;
     }
 
