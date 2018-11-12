@@ -13,22 +13,8 @@
 	-fx-pref-width: 45px;
 	-fx-pref-height: 45px;
 }
+
 .paneShip:selected{
 	-fx-border-color: lightblue ;
 	-fx-border-width: 2;
-}
-
-.nextTurnButton{
-	-fx-min-height: 50px;
-	-fx-min-width: 50px;
-}
-
-.buttonPanel {
-	-fx-padding: 10 150 0 0;
-	-fx-alignment: center;
-}
-
-.buttonPanel .button {
-	-fx-min-height: 50px;
-	-fx-min-width: 50px;
 }

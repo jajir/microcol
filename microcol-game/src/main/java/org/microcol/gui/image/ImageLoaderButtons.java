@@ -21,6 +21,20 @@ public final class ImageLoaderButtons extends AbstractTiledImageLoader {
     public final static String BUTTON_NEXT_TURN = "button_next_turn";
     public final static String BUTTON_EUROPE = "button_europe";
 
+    /**
+     * Row 2
+     */
+    public final static String BUTTON_MOVE = "button_move";
+    public final static String BUTTON_CUT_TREE = "button_cut_tree";
+    public final static String BUTTON_BUILD_CITY = "button_build_city";
+    public final static String BUTTON_BUILD_ROAD = "button_build_road";
+
+    /**
+     * Row 3
+     */
+    public final static String BUTTON_PLOW_FIELD = "button_plow_field";
+    public final static String BUTTON_BUY = "button_buy";
+
     private final static String IMAGE_NAME = "buttons.png";
 
     private final static String IMAGE_PREFIX = "button_";
@@ -52,6 +66,20 @@ public final class ImageLoaderButtons extends AbstractTiledImageLoader {
                 imageProvider.getImage(getImagePrefix() + "2_1"));
         imageProvider.registerImage(BUTTON_EUROPE,
                 imageProvider.getImage(getImagePrefix() + "3_1"));
+
+        imageProvider.registerImage(BUTTON_MOVE,
+                imageProvider.getImage(getImagePrefix() + "0_2"));
+        imageProvider.registerImage(BUTTON_CUT_TREE,
+                imageProvider.getImage(getImagePrefix() + "3_2"));
+        imageProvider.registerImage(BUTTON_BUILD_CITY,
+                imageProvider.getImage(getImagePrefix() + "2_2"));
+        imageProvider.registerImage(BUTTON_BUILD_ROAD,
+                imageProvider.getImage(getImagePrefix() + "3_2"));
+
+        imageProvider.registerImage(BUTTON_PLOW_FIELD,
+                imageProvider.getImage(getImagePrefix() + "0_3"));
+        imageProvider.registerImage(BUTTON_BUY,
+                imageProvider.getImage(getImagePrefix() + "1_3"));
     }
 
 }

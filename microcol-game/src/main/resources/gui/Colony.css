@@ -33,40 +33,40 @@
 }
 
 .colony-structures{
-	-fx-pref-width: 500;
 	-fx-max-width: 500;
-	-fx-pref-height: 323;
+	-fx-max-height: 323;
 	-fx-background-repeat: no-repeat ;
 	-fx-translate-x: -140;
 	-fx-translate-y: 90;
 }
 
 .colony-fields{
-	-fx-pref-width: 150;
-	-fx-pref-height: 150;
+	-fx-max-width: 150;
+	-fx-max-height: 150;
 	-fx-padding: 4 0 0 4;
 	-fx-background-image: url("../images/colony-fields.png");
 	-fx-background-repeat: no-repeat ;
-	-fx-translate-x: 513;
-	-fx-translate-y: 90;
+	-fx-translate-x: 245;
+	-fx-translate-y: 10;
 }
 
 .building-queue{
-	-fx-pref-width: 240;
-	-fx-pref-height: 160;
+	-fx-max-width: 240;
+	-fx-max-height: 160;
 	-fx-padding: 4 0 0 4;
 	-fx-background-image: url("../images/colony-building-queue.png");
 	-fx-background-repeat: no-repeat ;
-	-fx-translate-x: 510;
-	-fx-translate-y: 250;
+	-fx-translate-x: 280;
+	-fx-translate-y: 200;
 }
 
 .panel-colony-goods{
 	-fx-pref-width: 750;
+	-fx-max-width: 750;
 	-fx-pref-height: 80;
 	-fx-max-height: 80;
 	-fx-translate-x: 20;
-	-fx-translate-y: 325;
+	-fx-translate-y: 330;
 }
 
 .diffPositive {

@@ -12,14 +12,14 @@ import com.google.inject.Singleton;
 
 @Singleton
 @Listener
-public class ButtonPanelController {
+public class ButtonsPanelController {
     
-    private final Logger LOGGER = LoggerFactory.getLogger(ButtonPanelController.class);
+    private final Logger LOGGER = LoggerFactory.getLogger(ButtonsPanelController.class);
 
-    private final ButtonPanel buttonPanel;
+    private final ButtonsPanel buttonPanel;
 
     @Inject
-    ButtonPanelController(final ButtonPanel buttonPanel) {
+    ButtonsPanelController(final ButtonsPanel buttonPanel) {
         this.buttonPanel = Preconditions.checkNotNull(buttonPanel);
     }
 

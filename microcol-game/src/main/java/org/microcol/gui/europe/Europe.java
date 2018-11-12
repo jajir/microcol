@@ -24,7 +24,9 @@ public enum Europe implements MessageKeyResource {
     statusBarShipsToNewWorld,
     statusBarShipsToEurope,
     statusBarPier,
-    goodsToSell;
+    goodsToSell,
+    buttonClose,
+    buttonBuyUnit;
 
     @Override
     public ResourceBundle.Control getResourceBundleControl() {

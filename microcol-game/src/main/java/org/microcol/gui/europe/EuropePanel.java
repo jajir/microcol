@@ -1,6 +1,5 @@
 package org.microcol.gui.europe;
 
-import org.microcol.gui.Loc;
 import org.microcol.gui.event.StatusBarMessageEvent;
 import org.microcol.gui.event.StatusBarMessageEvent.Source;
 import org.microcol.gui.event.model.GameModelController;
@@ -18,12 +17,9 @@ import com.google.inject.Singleton;
 
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
 
 /**
  * Panel with Europe port.
@@ -47,20 +43,13 @@ public final class EuropePanel implements JavaFxComponent, UpdatableLanguage, Re
 
     private final BooleanProperty propertyShiftWasPressed;
 
-    private final Button recruiteButton;
-
-    private final Button buyButton;
-
-    private final Button buttonOk;
-
     @Inject
     public EuropePanel(final ImageProvider imageProvider,
             final GameModelController gameModelController,
             final PanelHighSeas<Europe> shipsTravelingToNewWorld,
             final PanelHighSeas<Europe> shipsTravelingToEurope, final PanelPortPier panelPortPier,
-            final RecruiteUnitsDialog recruiteUnitsDialog, final BuyUnitsDialog buyUnitsDialog,
             final PanelEuropeDockBehavior panelEuropeDockBehavior,
-            final PanelEuropeGoods panelEuropeGoods, final EuropeCallback europeCallback,
+            final PanelEuropeGoods panelEuropeGoods, final EuropeButtonsPanel europeButtonsPanel,
             final EventBus eventBus, final I18n i18n) {
         propertyShiftWasPressed = new SimpleBooleanProperty(false);
         Preconditions.checkNotNull(imageProvider);
@@ -89,43 +78,22 @@ public final class EuropePanel implements JavaFxComponent, UpdatableLanguage, Re
         europeDock.getContent()
                 .setOnMouseExited(event -> eventBus.post(new StatusBarMessageEvent(Source.EUROPE)));
 
-        recruiteButton = new Button();
-        recruiteButton.setOnAction(event -> recruiteUnitsDialog.showAndWait());
-
-        buyButton = new Button();
-        buyButton.setOnAction(event -> buyUnitsDialog.showAndWait());
-
-        buttonOk = new Button();
-        buttonOk.setOnAction(e -> {
-            europeCallback.close();
-        });
-        buttonOk.requestFocus();
-
-        final VBox panelButtons = new VBox();
-        panelButtons.getStyleClass().add("buttons");
-        VBox.setVgrow(panelButtons, Priority.ALWAYS);
-        // TODO add recruiteButton,
-        panelButtons.getChildren().addAll(buyButton, buttonOk);
-
         this.panelGoods = Preconditions.checkNotNull(panelEuropeGoods);
 
         mainPanel = new StackPane();
         mainPanel.getStyleClass().add("main-panel");
         mainPanel.getChildren().add(labelTitle);
-        mainPanel.getChildren().add(panelButtons);
         mainPanel.getChildren().add(shipsTravelingToNewWorld.getContent());
         mainPanel.getChildren().add(shipsTravelingToEurope.getContent());
         mainPanel.getChildren().add(panelPortPier.getContent());
         mainPanel.getChildren().add(europeDock.getContent());
         mainPanel.getChildren().add(panelGoods.getContent());
+        mainPanel.getChildren().add(europeButtonsPanel.getContent());
     }
 
     @Override
     public void updateLanguage(final I18n i18n) {
         labelTitle.setText(i18n.get(Europe.title));
-        recruiteButton.setText(i18n.get(Europe.recruit));
-        buyButton.setText(i18n.get(Europe.buy));
-        buttonOk.setText(i18n.get(Loc.ok));
         shipsTravelingToNewWorld.updateLanguage(i18n);
         shipsTravelingToEurope.updateLanguage(i18n);
         panelGoods.updateLanguage(i18n);

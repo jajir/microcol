@@ -4,7 +4,6 @@
 
 .label-title {
 	-fx-font-size: 32;	
-	-fx-pref-width: 600;
 	-fx-max-width: 600;
 	-fx-translate-x: -150;
 	-fx-translate-y: -250;
@@ -25,38 +24,37 @@
 }
 
 .to-europe{
-	-fx-pref-width: 600;
 	-fx-max-width: 600;
-	-fx-min-height: 40;
+	-fx-max-height: 40;
 	-fx-translate-x: -150;
 	-fx-translate-y: -140;	
 }
 
 .to-new-world{
-	-fx-pref-width: 600;
 	-fx-max-width: 600;
-	-fx-min-height: 40;
+	-fx-max-height: 40;
 	-fx-translate-x: -150;
 	-fx-translate-y: -40;	
 }
 
 .panel-dock {
-	-fx-pref-width: 300;
 	-fx-max-width: 300;
+	-fx-max-height: 100;
 	-fx-translate-x: -300;
 	-fx-translate-y: 230;
 }
 
 .panel-port-pier{
-	-fx-min-width: 300;
 	-fx-max-width: 300;
-	-fx-min-height: 40;
-	-fx-translate-x: 70;
-	-fx-translate-y: 250;	
+	-fx-max-height: 40;
+	-fx-translate-x: 52;
+	-fx-translate-y: 230;	
 }
 
 .goods{
+	-fx-max-width: 600;
+	-fx-max-height: 100;
 	-fx-translate-x: 0;
-	-fx-translate-y: 330;
+	-fx-translate-y: 310;
 }
 

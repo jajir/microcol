@@ -90,7 +90,7 @@ public final class MainStageBuilder {
         final VBox mainBox = new VBox();
         final Scene scene = new Scene(mainBox);
         scene.getStylesheets().add(STYLE_SHEET_MICROCOL);
-        mainBox.getChildren().add(mainPanelView.getBox());
+        mainBox.getChildren().add(mainPanelView.getContent());
 
         primaryStage.setScene(scene);
     }

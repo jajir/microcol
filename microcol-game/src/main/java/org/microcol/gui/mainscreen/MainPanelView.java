@@ -87,10 +87,6 @@ public final class MainPanelView implements JavaFxComponent, UpdatableLanguage {
         return mainBox;
     }
 
-    public VBox getBox() {
-        return mainBox;
-    }
-
     @Override
     public void updateLanguage(final I18n i18n) {
         // mainGamePanelView.

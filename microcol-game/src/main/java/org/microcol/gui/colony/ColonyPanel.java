@@ -57,7 +57,7 @@ public final class ColonyPanel implements JavaFxComponent, UpdatableLanguage {
     private final BooleanProperty propertyShiftWasPressed;
 
     private final PanelBuildingQueue panelBuildingQueue;
-    
+
     private final I18n i18n;
 
     private Colony colony;
@@ -68,7 +68,7 @@ public final class ColonyPanel implements JavaFxComponent, UpdatableLanguage {
             final PanelOutsideColony panelOutsideColony, final PanelColonyGoods panelColonyGoods,
             final PanelColonyDockBehaviour panelColonyDockBehaviour,
             final PanelBuildingQueue panelBuildingQueue, final PaintService paintService,
-            final I18n i18n) {
+            final ColonyButtonsPanel colonyButtonsPanel, final I18n i18n) {
         this.paintService = Preconditions.checkNotNull(paintService);
         Preconditions.checkNotNull(imageProvider);
         this.colonyFields = Preconditions.checkNotNull(panelColonyFields);
@@ -90,6 +90,7 @@ public final class ColonyPanel implements JavaFxComponent, UpdatableLanguage {
         mainPanel.getChildren().add(panelBuildingQueue.getContent());
         mainPanel.getChildren().add(colonyStructures.getContent());
         mainPanel.getChildren().add(goods.getContent());
+        mainPanel.getChildren().add(colonyButtonsPanel.getContent());
         mainPanel.getStylesheets().add(MainStageBuilder.STYLE_SHEET_MICROCOL);
 
         /**

@@ -55,10 +55,10 @@ public final class MainPanelPresenter {
     @Inject
     public MainPanelPresenter(final MainPanelView view, final WasdController wasdController) {
         this.view = Preconditions.checkNotNull(view);
-        view.getBox().setOnKeyPressed(e -> {
+        view.getContent().setOnKeyPressed(e -> {
             wasdController.onKeyPressed(e);
         });
-        view.getBox().setOnKeyReleased(e -> {
+        view.getContent().setOnKeyReleased(e -> {
             wasdController.onKeyReleased(e);
         });
     }

@@ -2,7 +2,7 @@ package org.microcol.gui.gamepanel;
 
 import org.microcol.gui.RightPanel;
 import org.microcol.gui.StatusBar;
-import org.microcol.gui.buttonpanel.ButtonPanel;
+import org.microcol.gui.buttonpanel.ButtonsPanel;
 import org.microcol.gui.event.StatusBarMessageEvent.Source;
 import org.microcol.gui.mainmenu.MainMenuView;
 import org.microcol.gui.util.JavaFxComponent;
@@ -37,7 +37,7 @@ public class GamePanelMain implements JavaFxComponent, UpdatableLanguage {
 
     private final RightPanel rightPanel;
     
-    private final StackPane stackPane;
+    private final StackPane mainPanel;
     
     //TODO move it to controller
     private final EventBus eventBus;
@@ -45,7 +45,7 @@ public class GamePanelMain implements JavaFxComponent, UpdatableLanguage {
     @Inject
     GamePanelMain(final MainMenuView mainMenuView, final @Named("GamePanel") StatusBar statusBar,
             final RightPanel rightPanel, final PaneCanvas paneCanvas,
-            final ButtonPanel buttonPanel, final EventBus eventBus) {
+            final ButtonsPanel buttonPanel, final EventBus eventBus) {
         this.mainMenuView = Preconditions.checkNotNull(mainMenuView);
         this.statusBar = Preconditions.checkNotNull(statusBar);
         this.rightPanel = Preconditions.checkNotNull(rightPanel);
@@ -69,11 +69,11 @@ public class GamePanelMain implements JavaFxComponent, UpdatableLanguage {
         mainBox.getChildren().add(hBox);
         mainBox.getChildren().add(statusBar.getContent());
         
-        stackPane = new StackPane();
-        stackPane.getStylesheets().add(STYLE_SHEET_GAME_PANEL);
-        stackPane.getChildren().add(mainBox);
-        stackPane.getChildren().add(buttonPanel.getContent());
-        stackPane.setOnKeyPressed(this::onKeyPressed);
+        mainPanel = new StackPane();
+        mainPanel.getStylesheets().add(STYLE_SHEET_GAME_PANEL);
+        mainPanel.getChildren().add(mainBox);
+        mainPanel.getChildren().add(buttonPanel.getContent());
+        mainPanel.setOnKeyPressed(this::onKeyPressed);
     }
     
     private void onKeyPressed(final KeyEvent event){
@@ -89,7 +89,7 @@ public class GamePanelMain implements JavaFxComponent, UpdatableLanguage {
 
     @Override
     public Region getContent() {
-        return stackPane;
+        return mainPanel;
     }
 
 }

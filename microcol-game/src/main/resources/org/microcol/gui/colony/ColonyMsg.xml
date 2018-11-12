@@ -13,5 +13,6 @@
 
 	<entry key="goods"> in warehouse</entry>
 	<entry key="colony">Colony: </entry>
+	<entry key="buttonClose">Close colony. Return back to main world view.</entry>
 
 </properties>
