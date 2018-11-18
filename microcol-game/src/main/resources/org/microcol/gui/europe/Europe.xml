@@ -29,6 +29,6 @@
 	<entry key="statusBarPier">Pier, there will be units waiting for travel to New World.</entry>
 	<entry key="goodsToSell">Sell goods {0} for {1} gold or buy it for {2} gold.</entry>
 	<entry key="buttonClose">Close Europe port. Return back to main world view.</entry>
-	<entry key="buttonBuyUnit">Recruit new unit.</entry>
+	<entry key="buttonBuyUnit">Buy new unit.</entry>
 
 </properties>

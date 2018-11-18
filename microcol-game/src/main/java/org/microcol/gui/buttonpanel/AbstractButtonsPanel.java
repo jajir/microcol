@@ -12,6 +12,7 @@ import com.google.common.base.Preconditions;
 import com.google.common.eventbus.EventBus;
 
 import javafx.geometry.Side;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundImage;
@@ -74,6 +75,15 @@ public class AbstractButtonsPanel implements JavaFxComponent {
     @Override
     public Region getContent() {
         return mainPanel;
+    }
+
+    protected boolean isContaining(final Node node) {
+        return buttonPanel.getChildren().stream().filter(n -> n.equals(node)).findFirst()
+                .isPresent();
+    }
+
+    protected void remove(final Node node) {
+        buttonPanel.getChildren().remove(node);
     }
 
     /**

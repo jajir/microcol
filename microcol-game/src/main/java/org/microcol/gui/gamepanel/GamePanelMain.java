@@ -2,7 +2,7 @@ package org.microcol.gui.gamepanel;
 
 import org.microcol.gui.RightPanel;
 import org.microcol.gui.StatusBar;
-import org.microcol.gui.buttonpanel.ButtonsPanel;
+import org.microcol.gui.buttonpanel.ButtonsGamePanel;
 import org.microcol.gui.event.StatusBarMessageEvent.Source;
 import org.microcol.gui.mainmenu.MainMenuView;
 import org.microcol.gui.util.JavaFxComponent;
@@ -45,7 +45,7 @@ public class GamePanelMain implements JavaFxComponent, UpdatableLanguage {
     @Inject
     GamePanelMain(final MainMenuView mainMenuView, final @Named("GamePanel") StatusBar statusBar,
             final RightPanel rightPanel, final PaneCanvas paneCanvas,
-            final ButtonsPanel buttonPanel, final EventBus eventBus) {
+            final ButtonsGamePanel buttonGamePanel, final EventBus eventBus) {
         this.mainMenuView = Preconditions.checkNotNull(mainMenuView);
         this.statusBar = Preconditions.checkNotNull(statusBar);
         this.rightPanel = Preconditions.checkNotNull(rightPanel);
@@ -72,7 +72,7 @@ public class GamePanelMain implements JavaFxComponent, UpdatableLanguage {
         mainPanel = new StackPane();
         mainPanel.getStylesheets().add(STYLE_SHEET_GAME_PANEL);
         mainPanel.getChildren().add(mainBox);
-        mainPanel.getChildren().add(buttonPanel.getContent());
+        mainPanel.getChildren().add(buttonGamePanel.getContent());
         mainPanel.setOnKeyPressed(this::onKeyPressed);
     }
     

@@ -69,16 +69,16 @@ public final class MainMenuPresenter {
                 actionEvent -> eventBus.post(new ChangeLanguageEvent(Text.Language.en, i18n)));
         view.getMenuItemEurope()
                 .setOnAction(event -> eventBus.post(new ShowScreenEvent(Screen.EUROPE)));
-        view.getMenuItemBuildColony().setOnAction(event -> eventBus
-                .post(BuildColonyEvent.make(gameModelController, selectedUnitManager)));
+//        view.getMenuItemBuildColony().setOnAction(event -> eventBus
+//                .post(BuildColonyEvent.make(gameModelController, selectedUnitManager)));
         view.getMenuItemMove().setOnAction(ectionEvent -> {
 //            startMoveController.fireEvent(new StartMoveEvent());
             view.getMenuItemMove().setDisable(true);
         });
-        view.getMenuItemDeclareIndependence().setOnAction(event -> {
-            eventBus.post(new DeclareIndependenceEvent(gameModelController.getModel(),
-                    gameModelController.getCurrentPlayer()));
-        });
+//        view.getMenuItemDeclareIndependence().setOnAction(event -> {
+//            eventBus.post(new DeclareIndependenceEvent(gameModelController.getModel(),
+//                    gameModelController.getCurrentPlayer()));
+//        });
         view.getMenuItemCenterView().setOnAction(event -> eventBus.post(new CenterViewEvent()));
         view.getMenuItemNextUnit().setOnAction(event -> eventBus.post(new SelectNextUnitEvent()));
         view.getMenuItemTurnReport().setOnAction(event -> eventBus.post(new ShowTurnReportEvent()));

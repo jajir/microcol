@@ -19,5 +19,9 @@
 	<entry key="buttonExit">Leave game and go to game menu.</entry>
 	<entry key="buttonNextTurn">Next turn</entry>
 	<entry key="buttonEurope">Europe port. (E)</entry>
+	<entry key="buttonMove">Move unit. (M)</entry>
+	<entry key="buttonPlowField">Plow field. (P)</entry>
+	<entry key="buttonBuildColony">Build new colony. (B)</entry>
+	<entry key="buttonDeclareIndependence">Declare independence.</entry>
 
 </properties>

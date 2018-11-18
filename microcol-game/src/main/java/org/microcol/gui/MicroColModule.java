@@ -30,6 +30,7 @@ import org.microcol.gui.event.BuildColonyListener;
 import org.microcol.gui.event.ChangeLanguageListenerPreferences;
 import org.microcol.gui.event.ChangeLanguageListenerText;
 import org.microcol.gui.event.DeclareIndependenceListener;
+import org.microcol.gui.event.PlowFieldEventListener;
 import org.microcol.gui.event.QuitGameListener;
 import org.microcol.gui.event.ShowGridListenerPreferences;
 import org.microcol.gui.event.VolumeChangedListenerPreferences;
@@ -185,7 +186,7 @@ public final class MicroColModule extends AbstractModule {
         bind(MainPanelView.class).in(Singleton.class);
         bind(MainPanelPresenter.class).in(Singleton.class);
 
-        // gui.gamepanel package binding
+        //Game panel
         bind(GamePanelView.class).in(Singleton.class);
         bind(GamePanelPresenter.class).asEagerSingleton();
         bind(OneTurnMoveHighlighter.class).in(Singleton.class);
@@ -228,7 +229,6 @@ public final class MicroColModule extends AbstractModule {
 
         bind(RightPanelView.class).in(Singleton.class);
         bind(RightPanelPresenter.class).asEagerSingleton();
-        bind(RightPanelNextButtonControll.class).asEagerSingleton();
         bind(TilePainter.class).in(Singleton.class);
 
         bind(UnitsPanel.class).in(Singleton.class);
@@ -276,6 +276,7 @@ public final class MicroColModule extends AbstractModule {
         bind(AnimationSpeedChangedListenerPreferences.class).asEagerSingleton();
         bind(ShowGridListenerPreferences.class).asEagerSingleton();
         bind(DeclareIndependenceListener.class).asEagerSingleton();
+        bind(PlowFieldEventListener.class).asEagerSingleton();
         bind(BuildColonyListener.class).in(Singleton.class);
 
         bind(MusicPlayer.class).in(Singleton.class);

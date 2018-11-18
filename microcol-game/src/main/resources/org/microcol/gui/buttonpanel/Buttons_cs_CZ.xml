@@ -19,5 +19,9 @@
 	<entry key="buttonExit">Opustit hru a jít do hlavní nabídky</entry>
 	<entry key="buttonNextTurn">Další tah</entry>
 	<entry key="buttonEurope">Evropský přístav. (E)</entry>
+	<entry key="buttonMove">Hýbnout jednotkou. (M)</entry>
+	<entry key="buttonPlowField">Zůrodnit pole a vybudovat pole. (P)</entry>
+	<entry key="buttonBuildColony">Vybudovat novou kolonii. (B)</entry>
+	<entry key="buttonDeclareIndependence">Vyhlásit nezávislost na králi.</entry>
 	
 </properties>

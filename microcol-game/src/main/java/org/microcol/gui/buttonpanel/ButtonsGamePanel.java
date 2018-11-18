@@ -1,10 +1,14 @@
 package org.microcol.gui.buttonpanel;
 
+import org.microcol.gui.event.PlowFieldEvent;
+import org.microcol.gui.event.StartMoveEvent;
 import org.microcol.gui.event.StatusBarMessageEvent.Source;
 import org.microcol.gui.image.ImageLoaderButtons;
 import org.microcol.gui.image.ImageProvider;
 import org.microcol.gui.mainmenu.AboutGameEvent;
+import org.microcol.gui.mainmenu.BuildColonyEvent;
 import org.microcol.gui.mainmenu.CenterViewEvent;
+import org.microcol.gui.mainmenu.DeclareIndependenceEvent;
 import org.microcol.gui.mainmenu.ExitGameEvent;
 import org.microcol.gui.mainmenu.ShowGoalsEvent;
 import org.microcol.gui.mainmenu.ShowStatisticsEvent;
@@ -17,10 +21,11 @@ import com.google.common.eventbus.EventBus;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 
 @Singleton
-public class ButtonsPanel extends AbstractButtonsPanel {
+public class ButtonsGamePanel extends AbstractButtonsPanel {
 
     private final Button buttonCenter;
     private final Button buttonHelp;
@@ -32,8 +37,16 @@ public class ButtonsPanel extends AbstractButtonsPanel {
     private final Button buttonNextTurn;
     private final Button buttonEurope;
 
+    /**
+     * Unit related buttons
+     */
+    private final Button buttonMove;
+    private final Button buttonPlowField;
+    private final Button buttonBuildColony;
+    private final Button buttonDeclareIndependence;
+
     @Inject
-    ButtonsPanel(final ImageProvider imageProvider, final EventBus eventBus, final I18n i18n) {
+    ButtonsGamePanel(final ImageProvider imageProvider, final EventBus eventBus, final I18n i18n) {
         super(imageProvider, eventBus, Source.GAME, i18n);
 
         buttonCenter = makeButon(ImageLoaderButtons.BUTTON_CENTER, Buttons.buttonCenter);
@@ -57,6 +70,17 @@ public class ButtonsPanel extends AbstractButtonsPanel {
             buttonNextTurn.setDisable(true);
             eventBus.post(new NextTurnEvent());
         });
+        buttonMove = makeButon(ImageLoaderButtons.BUTTON_MOVE, Buttons.buttonMove);
+        buttonMove.setOnAction(event -> eventBus.post(new StartMoveEvent()));
+        buttonPlowField = makeButon(ImageLoaderButtons.BUTTON_PLOW_FIELD, Buttons.buttonPlowField);
+        buttonPlowField.setOnAction(event -> eventBus.post(new PlowFieldEvent()));
+        buttonBuildColony = makeButon(ImageLoaderButtons.BUTTON_BUILD_COLONY,
+                Buttons.buttonBuildColony);
+        buttonBuildColony.setOnAction(event -> eventBus.post(new BuildColonyEvent()));
+        buttonDeclareIndependence = makeButon(ImageLoaderButtons.BUTTON_PLOW_FIELD,
+                Buttons.buttonDeclareIndependence);
+        buttonDeclareIndependence
+                .setOnAction(event -> eventBus.post(new DeclareIndependenceEvent()));
 
         getButtonPanel().getChildren().add(buttonStatistics);
         getButtonPanel().getChildren().add(buttonCenter);
@@ -66,6 +90,34 @@ public class ButtonsPanel extends AbstractButtonsPanel {
         getButtonPanel().getChildren().add(buttonEurope);
         getButtonPanel().getChildren().add(buttonExit);
         getButtonPanel().getChildren().add(buttonNextTurn);
+    }
+
+    public void setVisibleButtonMove(final boolean isVisible) {
+        setVisibleNode(buttonMove, isVisible);
+    }
+
+    public void setVisibleButtonPlowField(final boolean isVisible) {
+        setVisibleNode(buttonPlowField, isVisible);
+    }
+
+    public void setVisibleButtonBuildColony(final boolean isVisible) {
+        setVisibleNode(buttonBuildColony, isVisible);
+    }
+
+    public void setVisibleButtonDeclareIndependence(final boolean isVisible) {
+        setVisibleNode(buttonDeclareIndependence, isVisible);
+    }
+
+    protected void setVisibleNode(final Node node, final boolean isVisible) {
+        if (isContaining(node)) {
+            if (!isVisible) {
+                remove(node);
+            }
+        } else {
+            if (isVisible) {
+                getButtonPanel().getChildren().add(0, node);
+            }
+        }
     }
 
     /**

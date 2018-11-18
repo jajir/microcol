@@ -21,27 +21,18 @@
 		<logger name="org.microcol.model" level="info" additivity="false">
 			<AppenderRef ref="ConsoleAppender" />
 		</logger>
-	
-		<!-- GUI -->
-		<logger name="org.microcol.gui" level="info" additivity="false">
-            <AppenderRef ref="ConsoleAppender" />
-		</logger>
-		<logger name="org.microcol.gui.MicroColModule" level="debug" additivity="false">
-            <AppenderRef ref="ConsoleAppender" />
-		</logger>
 		<logger name="org.microcol.model.store" level="warn" additivity="false">
             <AppenderRef ref="ConsoleAppender" />
 		</logger>
-		<logger name="org.microcol.gui.util.AbstractEventController" level="info" additivity="false">
-            <AppenderRef ref="ConsoleAppender" />
-		</logger>
-		<logger name="org.microcol.gui.gamepanel.AnimationManager" level="debug" additivity="false">
+	
+		<!-- GUI -->
+		<logger name="org.microcol.gui.MicroColModule" level="debug" additivity="false">
             <AppenderRef ref="ConsoleAppender" />
 		</logger>
 		<logger name="org.microcol.gui.gamemenu.CampaignPanelPresenter" level="debug" additivity="false">
             <AppenderRef ref="ConsoleAppender" />
 		</logger>
-		<logger name="org.microcol.gui.util.FpsCounter" level="info" additivity="false">
+		<logger name="org.microcol.gui.buttonpanel" level="debug" additivity="false">
             <AppenderRef ref="ConsoleAppender" />
 		</logger>
 	

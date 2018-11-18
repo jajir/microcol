@@ -2,38 +2,37 @@ package org.microcol.gui.event;
 
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.gamepanel.SelectedUnitManager;
-import org.microcol.gui.mainmenu.BuildColonyEvent;
 import org.microcol.gui.util.Listener;
-import org.microcol.model.Player;
 import org.microcol.model.Unit;
+import org.microcol.model.unit.UnitActionType;
 
 import com.google.common.base.Preconditions;
 import com.google.common.eventbus.Subscribe;
 import com.google.inject.Inject;
 
 /**
- * Connect build colony event and send it to model.
+ * Front end event.
  */
 @Listener
-public final class BuildColonyListener {
+public final class PlowFieldEventListener {
 
-    private final GameModelController gameModelController;
-    private final SelectedUnitManager selectedUnitManager;
+    final GameModelController gameModelController;
+    final SelectedUnitManager selectedUnitManager;
 
     @Inject
-    public BuildColonyListener(final GameModelController gameModelController,
+    PlowFieldEventListener(final GameModelController gameModelController,
             final SelectedUnitManager selectedUnitManager) {
         this.gameModelController = Preconditions.checkNotNull(gameModelController);
         this.selectedUnitManager = Preconditions.checkNotNull(selectedUnitManager);
     }
 
     @Subscribe
-    private void onBuildColony(@SuppressWarnings("unused") final BuildColonyEvent event) {
-        final Player player = gameModelController.getCurrentPlayer();
+    private void onPlowField(@SuppressWarnings("unused") final PlowFieldEvent event) {
         final Unit unit = selectedUnitManager.getSelectedUnit()
                 .orElseThrow(() -> new IllegalStateException(
-                        "Build colony event can't be invoked when no unit is selected."));
-        gameModelController.getModel().buildColony(player, unit);
+                        "Plow field event can't be invoked when no unit is selected."));
+        Preconditions.checkArgument(unit.canPlowFiled(), "Unit can't plow field.");
+        unit.setAction(UnitActionType.plowField);
     }
 
 }

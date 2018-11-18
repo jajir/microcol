@@ -24,7 +24,7 @@ public class SettingButtonsPresenter {
 
     @Subscribe
     private void onChangeLanguage(final ChangeLanguageEvent event) {
-        //FIXME remove i18n from event.
+        // FIXME remove i18n from event.
         settingButtons.updateLanguage(event.getI18n());
     }
 

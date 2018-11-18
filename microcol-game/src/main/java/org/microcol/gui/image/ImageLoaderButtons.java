@@ -26,7 +26,7 @@ public final class ImageLoaderButtons extends AbstractTiledImageLoader {
      */
     public final static String BUTTON_MOVE = "button_move";
     public final static String BUTTON_CUT_TREE = "button_cut_tree";
-    public final static String BUTTON_BUILD_CITY = "button_build_city";
+    public final static String BUTTON_BUILD_COLONY = "button_build_colony";
     public final static String BUTTON_BUILD_ROAD = "button_build_road";
 
     /**
@@ -71,7 +71,7 @@ public final class ImageLoaderButtons extends AbstractTiledImageLoader {
                 imageProvider.getImage(getImagePrefix() + "0_2"));
         imageProvider.registerImage(BUTTON_CUT_TREE,
                 imageProvider.getImage(getImagePrefix() + "3_2"));
-        imageProvider.registerImage(BUTTON_BUILD_CITY,
+        imageProvider.registerImage(BUTTON_BUILD_COLONY,
                 imageProvider.getImage(getImagePrefix() + "2_2"));
         imageProvider.registerImage(BUTTON_BUILD_ROAD,
                 imageProvider.getImage(getImagePrefix() + "3_2"));

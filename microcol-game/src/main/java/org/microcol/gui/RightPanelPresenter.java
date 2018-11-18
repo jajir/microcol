@@ -33,18 +33,6 @@ public final class RightPanelPresenter {
             final Text text, final EventBus eventBus) {
         this.display = Preconditions.checkNotNull(display);
         this.gameModelController = Preconditions.checkNotNull(gameModelController);
-        display.setNextTurnButtonDisable(true);
-
-        display.getNextTurnButton().setOnAction(e -> {
-            logger.debug("Next turn button was pressed");
-            display.setNextTurnButtonDisable(true);
-            gameModelController.nextTurn();
-        });
-
-        display.getNextTurnButton().setOnMouseEntered(event -> {
-            eventBus.post(
-                    new StatusBarMessageEvent(text.get("nextTurnButton.desctiption"), Source.GAME));
-        });
 
         display.getContent().setOnMouseEntered(e -> {
             eventBus.post(
@@ -71,7 +59,6 @@ public final class RightPanelPresenter {
         logger.debug("Turn started for player {}", event.getPlayer());
         display.setOnMovePlayer(event.getPlayer());
         if (event.getPlayer().isHuman()) {
-            display.setNextTurnButtonDisable(false);
             if (lastFocusedTileEvent != null) {
                 display.refreshView(lastFocusedTileEvent);
             }

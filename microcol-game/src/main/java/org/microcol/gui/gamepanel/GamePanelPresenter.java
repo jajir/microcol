@@ -8,11 +8,14 @@ import org.microcol.gui.DialogUnitCantFightWarning;
 import org.microcol.gui.DialogUnitCantMoveHere;
 import org.microcol.gui.Point;
 import org.microcol.gui.event.EndMoveEvent;
+import org.microcol.gui.event.PlowFieldEvent;
 import org.microcol.gui.event.StartMoveEvent;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.mainmenu.AboutGameEvent;
+import org.microcol.gui.mainmenu.BuildColonyEvent;
 import org.microcol.gui.mainmenu.CenterViewEvent;
 import org.microcol.gui.mainmenu.QuitGameEvent;
+import org.microcol.gui.mainmenu.SelectNextUnitEvent;
 import org.microcol.gui.mainmenu.ShowGoalsEvent;
 import org.microcol.gui.mainmenu.ShowStatisticsEvent;
 import org.microcol.gui.mainmenu.ShowTurnReportEvent;
@@ -148,7 +151,7 @@ public final class GamePanelPresenter {
         if (KeyCode.ENTER == event.getCode()) {
             onKeyPressed_enter();
         }
-        
+
         if (KeyCode.R == event.getCode()) {
             eventBus.post(new ShowStatisticsEvent());
         }
@@ -166,6 +169,18 @@ public final class GamePanelPresenter {
         }
         if (KeyCode.E == event.getCode()) {
             eventBus.post(new ShowScreenEvent(Screen.EUROPE));
+        }
+        if (KeyCode.M == event.getCode()) {
+            eventBus.post(new StartMoveEvent());
+        }
+        if (KeyCode.P == event.getCode()) {
+            eventBus.post(new PlowFieldEvent());
+        }
+        if (KeyCode.B == event.getCode()) {
+            eventBus.post(new BuildColonyEvent());
+        }
+        if (KeyCode.TAB == event.getCode()) {
+            eventBus.post(new SelectNextUnitEvent());
         }
         logger.debug("Pressed key: '" + event.getCode().getName() + "' has code '"
                 + event.getCharacter() + "', modifiers '" + event.getCode().isModifierKey() + "'");
@@ -235,7 +250,10 @@ public final class GamePanelPresenter {
 
     private void onKeyPressed_escape() {
         if (modeController.isMoveMode()) {
-            disableMoveMode();
+            Preconditions.checkArgument(modeController.isMoveMode(),
+                    "switch to move mode was called from move mode");
+            final Unit movingUnit = selectedUnitManager.getSelectedUnit().get();
+            disableMoveMode(movingUnit);
         }
     }
 
@@ -311,14 +329,14 @@ public final class GamePanelPresenter {
         final Location moveFromLocation = selectedTileManager.getSelectedTile().get();
         logger.debug(
                 "Switching to normal mode, from " + moveFromLocation + " to " + moveToLocation);
+        final Unit movingUnit = selectedUnitManager.getSelectedUnit().get();
         if (moveFromLocation.equals(moveToLocation)) {
-            disableMoveMode();
+            disableMoveMode(movingUnit);
             // it's a click? is there a colony?
             tryToOpenColonyDetail(moveToLocation);
             return;
         }
         // TODO don't call selectedTileManager.setSelectedTile
-        final Unit movingUnit = selectedUnitManager.getSelectedUnit().get();
         final UnitMove unitMove = new UnitMove(movingUnit, moveToLocation);
         if (movingUnit.isPossibleToCaptureColonyAt(moveToLocation)) {
             // use can capture target colony
@@ -362,19 +380,19 @@ public final class GamePanelPresenter {
             logger.error("It's not possible to determine correct operation");
             new DialogUnitCantMoveHere(viewUtil, i18n);
         }
-        disableMoveMode();
+        disableMoveMode(movingUnit);
     }
 
-    private void disableMoveMode() {
+    private void disableMoveMode(final Unit movingUnit) {
         gamePanelView.setMoveModeOff();
-        eventBus.post(new EndMoveEvent());
+        eventBus.post(new EndMoveEvent(movingUnit));
     }
 
     private void fight(final Unit movingUnit, final Location moveToLocation) {
         if (!movingUnit.getType().canAttack()) {
             // TODO JJ consider which tile should have focus
             selectedTileManager.setSelectedTile(moveToLocation, ScrollToFocusedTile.smoothScroll);
-            disableMoveMode();
+            disableMoveMode(movingUnit);
             new DialogUnitCantFightWarning(viewUtil, i18n);
             return;
         }
@@ -382,17 +400,17 @@ public final class GamePanelPresenter {
         if (gamePreferences.getShowFightAdvisorProperty().get()) {
             if (gamePanelView.performFightDialog(movingUnit, targetUnit)) {
                 // User choose to fight
-                disableMoveMode();
+                disableMoveMode(movingUnit);
                 gameModelController.performFight(movingUnit, targetUnit);
             } else {
                 // User choose to quit fight
                 selectedTileManager.setSelectedTile(moveToLocation,
                         ScrollToFocusedTile.smoothScroll);
-                disableMoveMode();
+                disableMoveMode(movingUnit);
             }
         } else {
             // implicit fight
-            disableMoveMode();
+            disableMoveMode(movingUnit);
             gameModelController.performFight(movingUnit, targetUnit);
         }
     }

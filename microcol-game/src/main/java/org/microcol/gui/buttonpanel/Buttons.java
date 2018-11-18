@@ -15,7 +15,12 @@ public enum Buttons implements MessageKeyResource {
     buttonHelp,
     buttonExit,
     buttonNextTurn,
-    buttonEurope;
+    buttonEurope,
+    buttonMove,
+    buttonPlowField,
+    buttonBuildColony,
+    buttonDeclareIndependence
+    ;
     
     @Override
     public ResourceBundle.Control getResourceBundleControl() {
