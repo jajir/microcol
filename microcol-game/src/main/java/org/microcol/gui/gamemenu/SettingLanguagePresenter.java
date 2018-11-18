@@ -1,6 +1,6 @@
 package org.microcol.gui.gamemenu;
 
-import org.microcol.gui.mainmenu.ChangeLanguageEvent;
+import org.microcol.gui.event.ChangeLanguageEvent;
 import org.microcol.gui.util.Text;
 import org.microcol.i18n.I18n;
 

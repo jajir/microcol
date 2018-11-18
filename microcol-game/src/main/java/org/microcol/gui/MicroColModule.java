@@ -45,7 +45,6 @@ import org.microcol.gui.gamemenu.ExitGameListener;
 import org.microcol.gui.gamemenu.GameFinishedListener;
 import org.microcol.gui.gamemenu.GameMenuPanel;
 import org.microcol.gui.gamemenu.SettingAnimationSpeedPresenter;
-import org.microcol.gui.gamemenu.SettingButtonsPresenter;
 import org.microcol.gui.gamemenu.SettingLanguagePresenter;
 import org.microcol.gui.gamemenu.SettingShowGridPresenter;
 import org.microcol.gui.gamemenu.SettingVolumePresenter;
@@ -75,8 +74,6 @@ import org.microcol.gui.gamepanel.VisibleArea;
 import org.microcol.gui.image.GrassCoastMapGenerator;
 import org.microcol.gui.image.IceCoastMapGenerator;
 import org.microcol.gui.image.ImageProvider;
-import org.microcol.gui.mainmenu.MainMenuPresenter;
-import org.microcol.gui.mainmenu.MainMenuView;
 import org.microcol.gui.mainscreen.MainPanelPresenter;
 import org.microcol.gui.mainscreen.MainPanelView;
 import org.microcol.gui.statistics.ShowStatisticsDialogListener;
@@ -207,7 +204,6 @@ public final class MicroColModule extends AbstractModule {
         bind(ScrollToSelectedUnit.class).asEagerSingleton();
 
         bind(GameMenuPanel.class).in(Singleton.class);
-        bind(SettingButtonsPresenter.class).asEagerSingleton();
 
         bind(ButtonsPanelView.class).in(Singleton.class);
         bind(ButtonsPanelPresenter.class).asEagerSingleton();
@@ -223,9 +219,6 @@ public final class MicroColModule extends AbstractModule {
                 .asEagerSingleton();
         bind(StatusBar.class).annotatedWith(Names.named("Colony")).to(StatusBar.class)
                 .asEagerSingleton();
-
-        bind(MainMenuView.class).in(Singleton.class);
-        bind(MainMenuPresenter.class).asEagerSingleton();
 
         bind(RightPanelView.class).in(Singleton.class);
         bind(RightPanelPresenter.class).asEagerSingleton();

@@ -2,8 +2,8 @@ package org.microcol.gui.gamepanel;
 
 import java.util.Optional;
 
+import org.microcol.gui.event.SelectNextUnitEvent;
 import org.microcol.gui.event.model.GameModelController;
-import org.microcol.gui.mainmenu.SelectNextUnitEvent;
 import org.microcol.gui.util.Listener;
 import org.microcol.model.Location;
 import org.microcol.model.Unit;

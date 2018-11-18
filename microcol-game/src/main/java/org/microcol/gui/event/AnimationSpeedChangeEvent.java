@@ -1,4 +1,4 @@
-package org.microcol.gui.mainmenu;
+package org.microcol.gui.event;
 
 /**
  * Contains new animation speed value.

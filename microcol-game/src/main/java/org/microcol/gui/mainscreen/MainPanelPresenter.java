@@ -1,8 +1,8 @@
 package org.microcol.gui.mainscreen;
 
 import org.microcol.gui.WasdController;
+import org.microcol.gui.event.ChangeLanguageEvent;
 import org.microcol.gui.event.model.BeforeGameStartEvent;
-import org.microcol.gui.mainmenu.ChangeLanguageEvent;
 import org.microcol.gui.util.Listener;
 import org.microcol.model.ChainOfCommandStrategy;
 import org.microcol.model.Colony;

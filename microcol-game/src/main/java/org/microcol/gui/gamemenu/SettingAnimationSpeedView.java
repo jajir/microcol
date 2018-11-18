@@ -2,7 +2,7 @@ package org.microcol.gui.gamemenu;
 
 import org.microcol.gui.PathPlanning;
 import org.microcol.gui.Preferences;
-import org.microcol.gui.mainmenu.AnimationSpeedChangeEvent;
+import org.microcol.gui.event.AnimationSpeedChangeEvent;
 import org.microcol.gui.util.JavaFxComponent;
 import org.microcol.gui.util.UpdatableLanguage;
 import org.microcol.i18n.I18n;

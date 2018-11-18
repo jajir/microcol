@@ -1,6 +1,6 @@
 package org.microcol.gui.turnreport;
 
-import org.microcol.gui.mainmenu.ShowTurnReportEvent;
+import org.microcol.gui.event.ShowTurnReportEvent;
 import org.microcol.gui.util.Listener;
 
 import com.google.common.base.Preconditions;

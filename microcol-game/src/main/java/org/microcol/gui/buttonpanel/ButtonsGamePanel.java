@@ -1,18 +1,18 @@
 package org.microcol.gui.buttonpanel;
 
+import org.microcol.gui.event.AboutGameEvent;
+import org.microcol.gui.event.BuildColonyEvent;
+import org.microcol.gui.event.CenterViewEvent;
+import org.microcol.gui.event.DeclareIndependenceEvent;
+import org.microcol.gui.event.ExitGameEvent;
 import org.microcol.gui.event.PlowFieldEvent;
+import org.microcol.gui.event.ShowGoalsEvent;
+import org.microcol.gui.event.ShowStatisticsEvent;
+import org.microcol.gui.event.ShowTurnReportEvent;
 import org.microcol.gui.event.StartMoveEvent;
 import org.microcol.gui.event.StatusBarMessageEvent.Source;
 import org.microcol.gui.image.ImageLoaderButtons;
 import org.microcol.gui.image.ImageProvider;
-import org.microcol.gui.mainmenu.AboutGameEvent;
-import org.microcol.gui.mainmenu.BuildColonyEvent;
-import org.microcol.gui.mainmenu.CenterViewEvent;
-import org.microcol.gui.mainmenu.DeclareIndependenceEvent;
-import org.microcol.gui.mainmenu.ExitGameEvent;
-import org.microcol.gui.mainmenu.ShowGoalsEvent;
-import org.microcol.gui.mainmenu.ShowStatisticsEvent;
-import org.microcol.gui.mainmenu.ShowTurnReportEvent;
 import org.microcol.gui.mainscreen.Screen;
 import org.microcol.gui.mainscreen.ShowScreenEvent;
 import org.microcol.i18n.I18n;

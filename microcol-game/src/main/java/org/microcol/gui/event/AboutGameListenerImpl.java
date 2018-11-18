@@ -1,7 +1,6 @@
 package org.microcol.gui.event;
 
 import org.microcol.gui.AboutDialog;
-import org.microcol.gui.mainmenu.AboutGameEvent;
 import org.microcol.gui.util.Listener;
 
 import com.google.common.base.Preconditions;

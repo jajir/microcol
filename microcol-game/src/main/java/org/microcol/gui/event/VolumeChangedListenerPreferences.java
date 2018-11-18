@@ -1,6 +1,5 @@
 package org.microcol.gui.event;
 
-import org.microcol.gui.mainmenu.VolumeChangeEvent;
 import org.microcol.gui.util.GamePreferences;
 import org.microcol.gui.util.Listener;
 

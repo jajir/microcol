@@ -2,10 +2,10 @@ package org.microcol.gui.buttonpanel;
 
 import java.util.Optional;
 
+import org.microcol.gui.event.DeclareIndependenceEvent;
 import org.microcol.gui.event.EndMoveEvent;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.gamepanel.SelectedUnitWasChangedEvent;
-import org.microcol.gui.mainmenu.DeclareIndependenceEvent;
 import org.microcol.gui.util.Listener;
 import org.microcol.model.Colony;
 import org.microcol.model.Terrain;

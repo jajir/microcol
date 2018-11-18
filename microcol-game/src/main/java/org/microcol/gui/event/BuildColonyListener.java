@@ -2,7 +2,6 @@ package org.microcol.gui.event;
 
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.gamepanel.SelectedUnitManager;
-import org.microcol.gui.mainmenu.BuildColonyEvent;
 import org.microcol.gui.util.Listener;
 import org.microcol.model.Player;
 import org.microcol.model.Unit;

@@ -1,6 +1,5 @@
 package org.microcol.gui.event;
 
-import org.microcol.gui.mainmenu.ChangeLanguageEvent;
 import org.microcol.gui.util.Listener;
 import org.microcol.gui.util.Text;
 import org.microcol.i18n.I18n;

@@ -4,7 +4,6 @@ import org.microcol.gui.RightPanel;
 import org.microcol.gui.StatusBar;
 import org.microcol.gui.buttonpanel.ButtonsGamePanel;
 import org.microcol.gui.event.StatusBarMessageEvent.Source;
-import org.microcol.gui.mainmenu.MainMenuView;
 import org.microcol.gui.util.JavaFxComponent;
 import org.microcol.gui.util.UpdatableLanguage;
 import org.microcol.i18n.I18n;
@@ -31,22 +30,19 @@ public class GamePanelMain implements JavaFxComponent, UpdatableLanguage {
 
     private final VBox mainBox;
 
-    private final MainMenuView mainMenuView;
-
     private final StatusBar statusBar;
 
     private final RightPanel rightPanel;
-    
+
     private final StackPane mainPanel;
-    
-    //TODO move it to controller
+
+    // TODO move it to controller
     private final EventBus eventBus;
 
     @Inject
-    GamePanelMain(final MainMenuView mainMenuView, final @Named("GamePanel") StatusBar statusBar,
-            final RightPanel rightPanel, final PaneCanvas paneCanvas,
-            final ButtonsGamePanel buttonGamePanel, final EventBus eventBus) {
-        this.mainMenuView = Preconditions.checkNotNull(mainMenuView);
+    GamePanelMain(final @Named("GamePanel") StatusBar statusBar, final RightPanel rightPanel,
+            final PaneCanvas paneCanvas, final ButtonsGamePanel buttonGamePanel,
+            final EventBus eventBus) {
         this.statusBar = Preconditions.checkNotNull(statusBar);
         this.rightPanel = Preconditions.checkNotNull(rightPanel);
         this.statusBar.setShowEventsFromSource(Source.GAME);
@@ -64,25 +60,22 @@ public class GamePanelMain implements JavaFxComponent, UpdatableLanguage {
 
         mainBox = new VBox();
         mainBox.setId("mainPanel");
-        //FIXME remove mainMenuView
-//        mainBox.getChildren().add(mainMenuView.getContent());
         mainBox.getChildren().add(hBox);
         mainBox.getChildren().add(statusBar.getContent());
-        
+
         mainPanel = new StackPane();
         mainPanel.getStylesheets().add(STYLE_SHEET_GAME_PANEL);
         mainPanel.getChildren().add(mainBox);
         mainPanel.getChildren().add(buttonGamePanel.getContent());
         mainPanel.setOnKeyPressed(this::onKeyPressed);
     }
-    
-    private void onKeyPressed(final KeyEvent event){
+
+    private void onKeyPressed(final KeyEvent event) {
         eventBus.post(event);
     }
 
     @Override
     public void updateLanguage(final I18n i18n) {
-        mainMenuView.updateLanguage(i18n);
         statusBar.updateLanguage(i18n);
         rightPanel.updateLanguage(i18n);
     }

@@ -1,4 +1,4 @@
-package org.microcol.gui.mainmenu;
+package org.microcol.gui.event;
 
 import com.google.common.base.MoreObjects;
 

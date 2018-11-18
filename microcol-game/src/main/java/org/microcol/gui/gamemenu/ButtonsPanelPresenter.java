@@ -2,9 +2,9 @@ package org.microcol.gui.gamemenu;
 
 import org.microcol.gui.ApplicationController;
 import org.microcol.gui.PersistingDialog;
+import org.microcol.gui.event.ChangeLanguageEvent;
+import org.microcol.gui.event.QuitGameEvent;
 import org.microcol.gui.event.model.GameController;
-import org.microcol.gui.mainmenu.ChangeLanguageEvent;
-import org.microcol.gui.mainmenu.QuitGameEvent;
 import org.microcol.gui.util.GamePreferences;
 import org.microcol.gui.util.Listener;
 import org.microcol.gui.util.PersistingTool;

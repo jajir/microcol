@@ -2,8 +2,8 @@ package org.microcol.gui.gamemenu;
 
 import java.util.function.Consumer;
 
+import org.microcol.gui.event.ChangeLanguageEvent;
 import org.microcol.gui.event.model.GameController;
-import org.microcol.gui.mainmenu.ChangeLanguageEvent;
 import org.microcol.gui.mainscreen.Screen;
 import org.microcol.gui.mainscreen.ShowScreenEvent;
 import org.microcol.gui.util.Listener;

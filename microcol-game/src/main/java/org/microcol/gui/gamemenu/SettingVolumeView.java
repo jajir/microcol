@@ -2,7 +2,7 @@ package org.microcol.gui.gamemenu;
 
 import org.microcol.gui.MusicPlayer;
 import org.microcol.gui.Preferences;
-import org.microcol.gui.mainmenu.VolumeChangeEvent;
+import org.microcol.gui.event.VolumeChangeEvent;
 import org.microcol.gui.util.JavaFxComponent;
 import org.microcol.gui.util.UpdatableLanguage;
 import org.microcol.i18n.I18n;

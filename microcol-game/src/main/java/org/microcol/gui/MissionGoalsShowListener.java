@@ -1,6 +1,6 @@
 package org.microcol.gui;
 
-import org.microcol.gui.mainmenu.ShowGoalsEvent;
+import org.microcol.gui.event.ShowGoalsEvent;
 import org.microcol.gui.util.Listener;
 
 import com.google.common.base.Preconditions;

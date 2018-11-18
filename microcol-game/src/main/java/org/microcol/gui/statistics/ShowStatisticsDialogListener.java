@@ -1,6 +1,6 @@
 package org.microcol.gui.statistics;
 
-import org.microcol.gui.mainmenu.ShowStatisticsEvent;
+import org.microcol.gui.event.ShowStatisticsEvent;
 import org.microcol.gui.util.Listener;
 
 import com.google.common.base.Preconditions;

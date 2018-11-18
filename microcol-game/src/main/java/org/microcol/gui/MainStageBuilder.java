@@ -2,7 +2,7 @@ package org.microcol.gui;
 
 import java.awt.Rectangle;
 
-import org.microcol.gui.mainmenu.QuitGameEvent;
+import org.microcol.gui.event.QuitGameEvent;
 import org.microcol.gui.mainscreen.MainPanelView;
 import org.microcol.gui.util.GamePreferences;
 import org.microcol.gui.util.Text;

@@ -1,7 +1,6 @@
 package org.microcol.gui.event;
 
 import org.microcol.gui.event.model.GameModelController;
-import org.microcol.gui.mainmenu.DeclareIndependenceEvent;
 import org.microcol.gui.util.Listener;
 import org.microcol.model.Player;
 

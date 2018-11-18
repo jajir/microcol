@@ -1,12 +1,11 @@
-package org.microcol.gui.mainmenu;
+package org.microcol.gui.event;
 
 import com.google.common.base.MoreObjects;
 
 /**
- * Event object for exit game. Exactly it means leave currently played game and
- * skip to game menu.
+ * Event object for showing turn report.
  */
-public final class ExitGameEvent {
+public final class ShowTurnReportEvent {
 
     @Override
     public String toString() {

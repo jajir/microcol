@@ -1,7 +1,7 @@
 package org.microcol.gui.gamemenu;
 
+import org.microcol.gui.event.ExitGameEvent;
 import org.microcol.gui.event.model.GameController;
-import org.microcol.gui.mainmenu.ExitGameEvent;
 import org.microcol.gui.mainscreen.Screen;
 import org.microcol.gui.mainscreen.ShowScreenEvent;
 import org.microcol.gui.util.Listener;

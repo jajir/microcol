@@ -1,6 +1,6 @@
 package org.microcol.gui.gamemenu;
 
-import org.microcol.gui.mainmenu.ShowGridEvent;
+import org.microcol.gui.event.ShowGridEvent;
 
 import com.google.common.eventbus.EventBus;
 import com.google.inject.Inject;

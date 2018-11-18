@@ -1,4 +1,4 @@
-package org.microcol.gui.mainmenu;
+package org.microcol.gui.event;
 
 import org.microcol.gui.util.Text;
 import org.microcol.i18n.I18n;
