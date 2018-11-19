@@ -2,7 +2,7 @@ package org.microcol.gui.mainscreen;
 
 import com.google.common.base.Preconditions;
 
-public class ShowScreenEvent<T> {
+public class ShowScreenEvent {
 
     private final Screen screen;
 

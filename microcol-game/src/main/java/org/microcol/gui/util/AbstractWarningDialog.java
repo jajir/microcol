@@ -7,7 +7,7 @@ import org.microcol.i18n.MessageKeyResource;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 
-public abstract class AbstractWarningDialog<T extends Enum<T> & MessageKeyResource>
+public abstract class AbstractWarningDialog
         extends AbstractMessageWindow {
 
     /**
