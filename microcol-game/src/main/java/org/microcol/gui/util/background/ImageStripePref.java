@@ -28,6 +28,7 @@ public class ImageStripePref {
         /**
          * @param image
          *            the image to set
+         * @return image stripe builder
          */
         public ImageStripeBuilder setImage(Image image) {
             this.image = image;
@@ -37,6 +38,7 @@ public class ImageStripePref {
         /**
          * @param centerGap
          *            the centerGap to set
+         * @return image stripe builder
          */
         public ImageStripeBuilder setCenterGap(int centerGap) {
             this.centerGap = centerGap;
@@ -46,6 +48,7 @@ public class ImageStripePref {
         /**
          * @param verticalShift
          *            the verticalShift to set
+         * @return image stripe builder
          */
         public ImageStripeBuilder setVerticalShift(int verticalShift) {
             this.verticalShift = verticalShift;

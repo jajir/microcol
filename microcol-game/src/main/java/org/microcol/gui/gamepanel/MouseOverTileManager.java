@@ -12,11 +12,6 @@ import com.google.inject.Inject;
 
 /**
  * Produce mouse over tile events and holds tile which is mouse over.
- * <p>
- * Don't move functionality from this class to class
- * {@link MouseOverTileChangedController}. This class hold location which is
- * mouse over. This class doesn't handle events.
- * </p>
  */
 @Listener
 public final class MouseOverTileManager {
@@ -28,8 +23,8 @@ public final class MouseOverTileManager {
     /**
      * Default constructor
      * 
-     * @param mouseOverTileChangedController
-     *            required mouse over tile changed
+     * @param eventBus
+     *            required event bus that allows to fire new event
      */
     @Inject
     public MouseOverTileManager(final EventBus eventBus) {

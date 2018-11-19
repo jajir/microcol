@@ -7,7 +7,8 @@ import org.microcol.i18n.MessageKeyResource;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 
-public abstract class AbstractWarningDialog extends AbstractMessageWindow {
+public abstract class AbstractWarningDialog<T extends Enum<T> & MessageKeyResource>
+        extends AbstractMessageWindow {
 
     /**
      * Vertical box where user can place it's context.
@@ -36,10 +37,13 @@ public abstract class AbstractWarningDialog extends AbstractMessageWindow {
      * 
      * @param viewUtil
      *            required utility class for showing dialog
-     * @param text
+     * @param i18n
      *            required localization tool
      * @param messageKey
      *            required message key
+     * @param <T>
+     *            required enumeration class extended from base message resource
+     *            class
      */
     public <T extends Enum<T> & MessageKeyResource> AbstractWarningDialog(final ViewUtil viewUtil,
             final I18n i18n, final T messageKey) {

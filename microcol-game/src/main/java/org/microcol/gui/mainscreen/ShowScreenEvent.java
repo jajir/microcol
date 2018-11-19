@@ -2,7 +2,7 @@ package org.microcol.gui.mainscreen;
 
 import com.google.common.base.Preconditions;
 
-public class ShowScreenEvent {
+public class ShowScreenEvent<T> {
 
     private final Screen screen;
 
@@ -19,6 +19,8 @@ public class ShowScreenEvent {
 
     /**
      * @return the context
+     * @param <T>
+     *            type of even screen context
      */
     @SuppressWarnings("unchecked")
     public <T> T getContext() {

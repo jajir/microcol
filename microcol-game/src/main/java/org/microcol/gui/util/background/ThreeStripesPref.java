@@ -39,6 +39,7 @@ public class ThreeStripesPref {
         /**
          * @param topStripe
          *            the topStripe to set
+         * @return builder itself
          */
         public ThreeStripesPrefBuilder setTopStripe(StripeDef topStripe) {
             this.topStripe = topStripe;
@@ -48,6 +49,7 @@ public class ThreeStripesPref {
         /**
          * @param bottomStripe
          *            the bottomStripe to set
+         * @return builder itself
          */
         public ThreeStripesPrefBuilder setBottomStripe(StripeDef bottomStripe) {
             this.bottomStripe = bottomStripe;
@@ -57,6 +59,7 @@ public class ThreeStripesPref {
         /**
          * @param centerStripe
          *            the centerStripe to set
+         * @return builder itself
          */
         public ThreeStripesPrefBuilder setCenterStripe(StripeDef centerStripe) {
             this.centerStripe = centerStripe;
@@ -66,6 +69,7 @@ public class ThreeStripesPref {
         /**
          * @param centerStripeHeight
          *            the centerStripeHeight to set
+         * @return builder itself
          */
         public ThreeStripesPrefBuilder setCenterStripeHeight(int centerStripeHeight) {
             this.centerStripeHeight = centerStripeHeight;
