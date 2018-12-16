@@ -21,16 +21,16 @@ import com.google.inject.Singleton;
 
 @Singleton
 @Listener
-public class ButtonsPanelController {
+public class ButtonsGamePanelController {
 
-    private final Logger LOGGER = LoggerFactory.getLogger(ButtonsPanelController.class);
+    private final Logger LOGGER = LoggerFactory.getLogger(ButtonsGamePanelController.class);
 
     private final GameModelController gameModelController;
 
     private final ButtonsGamePanel buttonGamePanel;
 
     @Inject
-    ButtonsPanelController(final ButtonsGamePanel buttonGamePanel,
+    ButtonsGamePanelController(final ButtonsGamePanel buttonGamePanel,
             final GameModelController gameModelController) {
         this.buttonGamePanel = Preconditions.checkNotNull(buttonGamePanel);
         this.gameModelController = Preconditions.checkNotNull(gameModelController);

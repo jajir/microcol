@@ -8,16 +8,40 @@ Planned releases
   
  * <<0.7.0>> - Buildings & ore economy
  
-  * \u2717 Allows to produce hammers.
+  * \u2713 Support WASD screen scrolling.
+ 
+  * \u2713 Replace main menu with icons at the top of screen.
+ 
+  * \u2713 Finish event processing redesign, remove controllers.
+
+  * \u2713 Colony and Europe views are redesigned.
+ 
+  * \u2713 Allows to produce hammers.
    Add button that allows to define building queue.
-   Building should support building new constructions.
+   Building can be upgraded.
+   
+  * \u2713 Colony building queue and queue editing - simple and ugly version
+   
+  * \u2713 Right panel allows to select unit.
+  
+  * \u2713 Show colony and Europe full screen not as dialog.  
+  
+  * \u2713 Right panel allows to select unit.
  
-  * \u2717 Support WASD screen scrolling.
- 
+  * \u2717 
+  
+  * \u2717 
+   
   * \u2717 
  
   * \u2717 
+  
+  * \u2717 
  
+  * \u2717 
+  
+  * \u2717 
+
   * \u2717 
  
   * \u2717 When focused unit is at colony and is moved to field than attempt to move unit leads to exception.
@@ -33,19 +57,7 @@ Planned releases
  
   * \u2717 Describe event tileWasSelected, unitWasSelected and managers and controllers. 
   
-  * \u2717 
- 
-  * \u2717 
-  
-  * \u2717 
- 
-  * \u2717 
-  
-  * \u2717 
-  
   * \u2717 List of default campaign missions should contains some check to know which missions are done.
-  
-  * \u2717 Right panel allows to select unit.
   
   * \u2717 build road, at the beginning any unit can build road at 4 moves. add action r
   
@@ -56,22 +68,16 @@ Planned releases
   * \u2717 Redesign game loop, to support parallel animations. Slight changes in water & move animation & scroll to moving unit. To control constant FPS. Now it's around 60 FPS.
  
   * \u2717 Redesign model events - add some mark to it's name to be able to distinguish them from front-end events.
-  
-  * \u2717 Right panel allows to select unit.
  
   * \u2717 Finish translation
  
   * \u2717 Try to make package including JVM, it will be nice to use openJDK.
  
-  * \u2717 
- 
  * <<Backlog>> - feature and improvement backlog
-  
-  * \u2717 Colony building queue and queue editing - simple and ugly version
+ 
+  * \u2717 
 
   * \u2717 Add unit wagon, can't fight, capture colony, can transport goods
-
-  * \u2717 Improve UI
      
   * \u2717 colonist unit equipped with (20) tool can plow field.
   Depending on unit expertise in a few turns field will be created and 20 tools will be destroyed.
@@ -91,8 +97,6 @@ Planned releases
   * \u2717 Colony name editing
   
   * \u2717 Colony name generator
-  
-  * \u2717 Don't show colony as dialog, show it at full screen.  
   
   * \u2717 Add mouse over hints to colony. Add hint to optional 'Control' key during dragging.  
   
@@ -146,6 +150,11 @@ Planned releases
   
 []
 
-
  
+Notes:
+
+  * \u2717 Main menu doesn't work when drag pressed mouse instead of simple move.
+ It can't be easily solved. There is no such feature in JavaFx.
+
+[] 
     

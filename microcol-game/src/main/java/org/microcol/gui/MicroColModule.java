@@ -2,7 +2,7 @@ package org.microcol.gui;
 
 import org.microcol.gui.buildingqueue.QueueController;
 import org.microcol.gui.buildingqueue.QueueDialog;
-import org.microcol.gui.buttonpanel.ButtonsPanelController;
+import org.microcol.gui.buttonpanel.ButtonsGamePanelController;
 import org.microcol.gui.buttonpanel.NextTurnListener;
 import org.microcol.gui.colonizopedia.ColonizopediaDialog;
 import org.microcol.gui.colony.ColonyDialogCallback;
@@ -45,6 +45,7 @@ import org.microcol.gui.gamemenu.ExitGameListener;
 import org.microcol.gui.gamemenu.GameFinishedListener;
 import org.microcol.gui.gamemenu.GameMenuPanel;
 import org.microcol.gui.gamemenu.SettingAnimationSpeedPresenter;
+import org.microcol.gui.gamemenu.SettingButtonsPresenter;
 import org.microcol.gui.gamemenu.SettingLanguagePresenter;
 import org.microcol.gui.gamemenu.SettingShowGridPresenter;
 import org.microcol.gui.gamemenu.SettingVolumePresenter;
@@ -139,7 +140,7 @@ public final class MicroColModule extends AbstractModule {
          * PanelButtons
          */
         bind(NextTurnListener.class).asEagerSingleton();
-        bind(ButtonsPanelController.class).asEagerSingleton();
+        bind(ButtonsGamePanelController.class).asEagerSingleton();
 
         /**
          * Dialogs
@@ -149,6 +150,7 @@ public final class MicroColModule extends AbstractModule {
         bind(ChooseGoodAmountDialog.class).in(Singleton.class);
         bind(DialogMessage.class).in(Singleton.class);
         bind(MissionCallBack.class).in(Singleton.class);
+        bind(SettingButtonsPresenter.class).asEagerSingleton();
 
         /**
          * Event controllers.

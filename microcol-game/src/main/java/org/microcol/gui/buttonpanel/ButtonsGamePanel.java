@@ -121,59 +121,10 @@ public class ButtonsGamePanel extends AbstractButtonsPanel {
     }
 
     /**
-     * @return the buttonCenter
-     */
-    public Button getButtonCenter() {
-        return buttonCenter;
-    }
-
-    /**
-     * @return the buttonHelp
-     */
-    public Button getButtonHelp() {
-        return buttonHelp;
-    }
-
-    /**
-     * @return the buttonStatistics
-     */
-    public Button getButtonStatistics() {
-        return buttonStatistics;
-    }
-
-    /**
-     * @return the buttonExit
-     */
-    public Button getButtonExit() {
-        return buttonExit;
-    }
-
-    /**
-     * @return the buttonGoals
-     */
-    public Button getButtonGoals() {
-        return buttonGoals;
-    }
-
-    /**
-     * @return the buttonTurnReport
-     */
-    public Button getButtonTurnReport() {
-        return buttonTurnReport;
-    }
-
-    /**
      * @return the buttonNextTurn
      */
     public Button getButtonNextTurn() {
         return buttonNextTurn;
-    }
-
-    /**
-     * @return the buttonEurope
-     */
-    public Button getButtonEurope() {
-        return buttonEurope;
     }
 
 }
