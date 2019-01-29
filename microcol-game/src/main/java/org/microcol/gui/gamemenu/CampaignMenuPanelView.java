@@ -3,7 +3,7 @@ package org.microcol.gui.gamemenu;
 import java.util.function.Consumer;
 
 import org.microcol.gui.util.JavaFxComponent;
-import org.microcol.gui.util.Text;
+import org.microcol.i18n.I18n;
 import org.microcol.model.campaign.Campaign;
 import org.microcol.model.campaign.CampaignManager;
 
@@ -20,20 +20,20 @@ import javafx.scene.layout.VBox;
 public final class CampaignMenuPanelView
         implements CampaignMenuPanelPresenter.Display, JavaFxComponent {
 
-    private final Text text;
-
     private final CampaignManager campaignManager;
 
     private final Button buttonBack;
 
     private final VBox box;
 
+    private final I18n i18n;
+
     private Consumer<String> onSelectedMission;
 
     @Inject
-    CampaignMenuPanelView(final Text text, final CampaignManager campaignManager) {
-        this.text = Preconditions.checkNotNull(text);
+    CampaignMenuPanelView(final CampaignManager campaignManager, final I18n i18n) {
         this.campaignManager = Preconditions.checkNotNull(campaignManager);
+        this.i18n = Preconditions.checkNotNull(i18n);
         box = new VBox();
         box.getStyleClass().add("game-menu-inner");
         buttonBack = new Button();
@@ -45,8 +45,8 @@ public final class CampaignMenuPanelView
         box.getChildren().clear();
         final Campaign campaign = campaignManager.getDefaultCampain();
         campaign.getMissions().forEach(mission -> {
-            final Button missionButton = new Button(text.get(
-                    "campaignPanel." + campaign.getName().toString() + "." + mission.getName()));
+            final Button missionButton = new Button(
+                    i18n.get(GameMenu.get(campaign.getName(), mission.getName())));
             missionButton.setDisable(!campaign.isMissionEnabled(mission));
             missionButton.setOnAction(event -> onSelectedMission(mission.getName()));
             box.getChildren().add(missionButton);
@@ -64,7 +64,7 @@ public final class CampaignMenuPanelView
     }
 
     private void setLocalizedText() {
-        buttonBack.setText(text.get("campaignPanel.buttonBack"));
+        buttonBack.setText(i18n.get(GameMenu.campaignPanelButtonBack));
     }
 
     @Override

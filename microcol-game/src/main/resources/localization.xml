@@ -74,11 +74,6 @@
 	<entry key="statusBar.season.autumn">Autumn</entry>
 	<entry key="statusBar.season.winter">Winter</entry>
 
-	<entry key="campaignPanel.buttonBack">Back</entry>
-	<entry key="campaignPanel.default.findNewWorld">New World</entry>
-	<entry key="campaignPanel.default.buildArmy">Build an army</entry>
-	<entry key="campaignPanel.default.thrive">Thrive</entry>
-
 	<entry key="campaign.default.m0.g1">Find Now World to found new colony. Try to look at left part of map.</entry>
 	<entry key="campaign.default.m0.g2">Disembark at New World and found new colony.</entry>
 	<entry key="campaign.default.m0.g3">Produce 30 cigars.</entry>

@@ -10,6 +10,8 @@ import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import com.google.common.base.MoreObjects;
+
 /**
  * Internationalization service. Class should be initialized via builder:
  * 
@@ -84,6 +86,12 @@ public class I18n {
         this.verifyThatAllKeysInResourceBundleHaveConstant = verifyThatAllKeyDefinitionsHaveConstant;
         init(defaultLocale);
     }
+    
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(I18n.class).add("currentLocale", currentLocale)
+                .toString();
+    }
 
     public static Builder builder() {
         return new Builder();
@@ -95,6 +103,10 @@ public class I18n {
         } else {
             init(locale);
         }
+    }
+    
+    public Locale getCurrentLocale(){
+        return currentLocale;
     }
 
     private void init(final Locale locale) {

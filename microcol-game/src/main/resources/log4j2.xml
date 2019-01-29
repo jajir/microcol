@@ -29,7 +29,7 @@
 		<logger name="org.microcol.gui.MicroColModule" level="debug" additivity="false">
             <AppenderRef ref="ConsoleAppender" />
 		</logger>
-		<logger name="org.microcol.gui.gamemenu.CampaignPanelPresenter" level="debug" additivity="false">
+		<logger name="org.microcol.gui.gamemenu" level="debug" additivity="false">
             <AppenderRef ref="ConsoleAppender" />
 		</logger>
 		<logger name="org.microcol.gui.buttonpanel" level="debug" additivity="false">

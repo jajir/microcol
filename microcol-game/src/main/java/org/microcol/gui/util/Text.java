@@ -92,6 +92,7 @@ public final class Text {
         SWING_LOCALIZED_MESSAGE_KEYS.forEach(key -> UIManager.put(key, get(key)));
     }
 
+    @Deprecated
     public String get(final String key, final Object... args) {
         if (args.length == 0) {
             return bundle.getString(key);

@@ -26,6 +26,10 @@
 	<entry key="settingLanguageEn">Anglicky</entry>
 	<entry key="settingShowGrid">Zobrazit síť</entry>
 	<entry key="settingShowFightAdvisor">Použít náhled před bojem</entry>
-    
+	<entry key="campaignPanelButtonBack">Zpět</entry>
+	<entry key="campaignPanel_default_findNewWorld">Kde je Nový Svět?</entry>
+	<entry key="campaignPanel_default_buildArmy">Armáda</entry>
+	<entry key="campaignPanel_default_thrive">Rozkvět</entry>
+
 
 </properties>

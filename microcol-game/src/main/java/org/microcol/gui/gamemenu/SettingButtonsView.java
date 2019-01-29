@@ -3,6 +3,8 @@ package org.microcol.gui.gamemenu;
 import org.microcol.gui.util.JavaFxComponent;
 import org.microcol.gui.util.UpdatableLanguage;
 import org.microcol.i18n.I18n;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
@@ -14,6 +16,8 @@ import javafx.scene.layout.VBox;
 
 @Singleton
 public class SettingButtonsView implements JavaFxComponent, UpdatableLanguage {
+
+    private final Logger logger = LoggerFactory.getLogger(SettingButtonsView.class);
 
     private final Button buttonBack;
 
@@ -36,7 +40,7 @@ public class SettingButtonsView implements JavaFxComponent, UpdatableLanguage {
         this.settingShowFightAdvisorView = Preconditions.checkNotNull(settingShowFightAdvisorView);
         this.settingVolumeView = Preconditions.checkNotNull(settingVolumeView);
         this.settingAnimationSpeedView = Preconditions.checkNotNull(settingAnimationSpeedView);
-        
+
         buttonBack = new Button();
 
         buttonsBox = new VBox();
@@ -58,6 +62,7 @@ public class SettingButtonsView implements JavaFxComponent, UpdatableLanguage {
 
     @Override
     public void updateLanguage(final I18n i18n) {
+        logger.debug("Current language is: {}", i18n);
         buttonBack.setText(i18n.get(GameMenu.buttonBack));
         this.settingLanguageView.updateLanguage(i18n);
         this.settingShowGridView.updateLanguage(i18n);

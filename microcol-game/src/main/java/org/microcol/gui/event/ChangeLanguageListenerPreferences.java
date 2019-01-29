@@ -19,7 +19,7 @@ public final class ChangeLanguageListenerPreferences {
 
     @Subscribe
     public void onEvent(final ChangeLanguageEvent event) {
-        gamePreferences.setLanguage(event.getLanguage().getLocale());
+        gamePreferences.setLanguage(event.getCurrentLocale());
     }
 
 }

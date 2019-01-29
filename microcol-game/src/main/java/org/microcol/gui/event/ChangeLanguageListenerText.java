@@ -26,6 +26,10 @@ public final class ChangeLanguageListenerText {
     }
 
     @Subscribe
+    @Deprecated
+    /**
+     * Remove when text is removed.
+     */
     public void onChangeLanguage(final ChangeLanguageEvent event) {
         text.setLocale(event.getLanguage().getLocale());
         i18n.setLocale(event.getLanguage().getLocale());

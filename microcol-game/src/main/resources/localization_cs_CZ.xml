@@ -74,11 +74,6 @@
 	<entry key="statusBar.season.autumn">Podzim</entry>
 	<entry key="statusBar.season.winter">Zima</entry>
 
-	<entry key="campaignPanel.buttonBack">Zpět</entry>
-	<entry key="campaignPanel.default.findNewWorld">Kde je Nový Svět?</entry>
-	<entry key="campaignPanel.default.buildArmy">Armáda</entry>
-	<entry key="campaignPanel.default.thrive">Rozkvět</entry>
-
 	<entry key="campaign.default.m0.g1">Najdi nový svět. Jeď lodí doleva, tam asi bude země.</entry>
 	<entry key="campaign.default.m0.g2">Vyloď se a zolož kolonii.</entry>
 	<entry key="campaign.default.m0.g3">Vyprodukuj 30 doutníků.</entry>
