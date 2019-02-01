@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE properties [
+<!ELEMENT properties ( comment?, entry* ) >
+<!ATTLIST properties version CDATA #FIXED "1.0">
+<!ELEMENT comment (#PCDATA) >
+<!ELEMENT entry (#PCDATA) >
+<!ATTLIST entry key CDATA #REQUIRED>
+]>
+
+<properties>
+	<comment>Define names for terrain types.</comment>
+
+	<entry key="OCEAN_name">Oceán</entry>
+	<entry key="OCEAN_description">Nekonečný studený oceán</entry>
+	<entry key="GRASSLAND_name">Zelená země</entry>
+	<entry key="GRASSLAND_description">Úrodné zelené pláně</entry>
+	<entry key="TUNDRA_name">Tundra</entry>
+	<entry key="TUNDRA_description">Široká mrazivá pustina</entry>
+	<entry key="ARCTIC_name">Arktika</entry>
+	<entry key="ARCTIC_description">Arktická pustina</entry>
+	<entry key="HIGH_SEA_name">Daleké moře</entry>
+	<entry key="HIGH_SEA_description">Obrovské vodní masy odělující Evropu a kolonie</entry>
+	<entry key="PRAIRIE_name">Prérie</entry>
+	<entry key="PRAIRIE_description">Velké a rozlehlé planiny divokého západu.</entry>
+	<entry key="MOUNTAIN_name">Hory</entry>
+	<entry key="MOUNTAIN_description">Vysoké a nebezpečné hory</entry>
+	<entry key="HILL_name">Kopce</entry>
+	<entry key="HILL_description">Krásná velmi úrodná kopcovitá krajina krajina.</entry>
+
+</properties>

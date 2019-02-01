@@ -4,7 +4,6 @@ import org.microcol.gui.event.StatusBarMessageEvent;
 import org.microcol.gui.event.StatusBarMessageEvent.Source;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.util.Listener;
-import org.microcol.gui.util.Text;
 import org.microcol.gui.util.UpdatableLanguage;
 import org.microcol.i18n.I18n;
 import org.microcol.model.Calendar;
@@ -24,7 +23,7 @@ public final class StatusBarPresenter implements UpdatableLanguage {
 
     private final GameModelController gameModelController;
 
-    private final Text text;
+    private final I18n i18n;
 
     private final EventBus eventBus;
 
@@ -33,9 +32,9 @@ public final class StatusBarPresenter implements UpdatableLanguage {
     private Source showEventsFromSource;
 
     @Inject
-    public StatusBarPresenter(final EventBus eventBus, final Text text,
+    public StatusBarPresenter(final EventBus eventBus, final I18n text,
             final GameModelController gameModelController) {
-        this.text = Preconditions.checkNotNull(text);
+        this.i18n = Preconditions.checkNotNull(text);
         this.eventBus = Preconditions.checkNotNull(eventBus);
         this.gameModelController = Preconditions.checkNotNull(gameModelController);
     }
@@ -54,19 +53,19 @@ public final class StatusBarPresenter implements UpdatableLanguage {
         statusBarView.getLabelEra().setOnMouseEntered(event -> {
             Preconditions.checkNotNull(showEventsFromSource,
                     "It's not defined which events should be shown in status bar.");
-            eventBus.post(new StatusBarMessageEvent(text.get("statusBar.era.description"),
+            eventBus.post(new StatusBarMessageEvent(i18n.get(Loc.statusBar_era_description),
                     showEventsFromSource));
         });
         statusBarView.getLabelGold().setOnMouseEntered(event -> {
             Preconditions.checkNotNull(showEventsFromSource,
                     "It's not defined which events should be shown in status bar.");
-            eventBus.post(new StatusBarMessageEvent(text.get("statusBar.gold.description"),
+            eventBus.post(new StatusBarMessageEvent(i18n.get(Loc.statusBar_gold_description),
                     showEventsFromSource));
         });
         statusBarView.getStatusBarDescription().setOnMouseEntered(event -> {
             Preconditions.checkNotNull(showEventsFromSource,
                     "It's not defined which events should be shown in status bar.");
-            eventBus.post(new StatusBarMessageEvent(text.get("statusBar.status.description"),
+            eventBus.post(new StatusBarMessageEvent(i18n.get(Loc.statusBar_status_description),
                     showEventsFromSource));
         });
     }
@@ -100,17 +99,16 @@ public final class StatusBarPresenter implements UpdatableLanguage {
     private void setYearText(final Label labelEra, final Calendar calendar) {
         Preconditions.checkNotNull(labelEra);
         Preconditions.checkNotNull(calendar);
-        String date = text.get("statusBar.era") + " " + calendar.getCurrentYear() + " AD";
+        String date = i18n.get(Loc.statusBar_era) + " " + calendar.getCurrentYear() + " AD";
         if (calendar.getCurrentSeason().isPresent()) {
-            date += " "
-                    + text.get("statusBar.season." + calendar.getCurrentSeason().get().getKey());
+            date += " " + i18n.get(Loc.getTerrainDescription(calendar.getCurrentSeason().get()));
         }
         labelEra.setText(date);
     }
 
     private void setGoldText(final Label labelGold, final int gold) {
         Preconditions.checkNotNull(labelGold);
-        labelGold.setText(text.get("statusBar.gold") + " " + gold);
+        labelGold.setText(i18n.get(Loc.statusBar_gold) + " " + gold);
     }
 
     /**

@@ -4,7 +4,6 @@ import org.microcol.gui.Dialog;
 import org.microcol.gui.MainStageBuilder;
 import org.microcol.gui.colony.ColonyDialogCallback;
 import org.microcol.gui.util.AbstractMessageWindow;
-import org.microcol.gui.util.Text;
 import org.microcol.gui.util.ViewUtil;
 import org.microcol.i18n.I18n;
 
@@ -23,13 +22,13 @@ public class QueueDialog extends AbstractMessageWindow {
     private final ColonyDialogCallback colonyDialogCallback;
 
     @Inject
-    QueueDialog(final ViewUtil viewUtil, final Text text, final I18n i18n,
+    QueueDialog(final ViewUtil viewUtil, final I18n i18n,
             final ColonyDialogCallback colonyDialogCallback,
             final PanelQueueBuildingQueue panelQueueBuildingQueue,
             final PanelQueueConstructions panelQueueConstructions,
             final PanelQueueUnits panelQueueUnits) {
         super(viewUtil, i18n);
-        setTitle(text.get("buildingQueueDialog.caption"));
+        setTitle(i18n.get(Dialog.buildingQueueDialog_caption));
 
         Preconditions.checkNotNull(colonyDialogCallback);
         this.panelQueueBuildingQueue = Preconditions.checkNotNull(panelQueueBuildingQueue);

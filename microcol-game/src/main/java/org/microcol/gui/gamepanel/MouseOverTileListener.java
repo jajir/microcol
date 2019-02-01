@@ -2,13 +2,14 @@ package org.microcol.gui.gamepanel;
 
 import java.util.List;
 
+import org.microcol.gui.Loc;
 import org.microcol.gui.LocalizationHelper;
 import org.microcol.gui.event.StatusBarMessageEvent;
 import org.microcol.gui.event.StatusBarMessageEvent.Source;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.util.GamePreferences;
 import org.microcol.gui.util.Listener;
-import org.microcol.gui.util.Text;
+import org.microcol.i18n.I18n;
 import org.microcol.model.Location;
 import org.microcol.model.Player;
 import org.microcol.model.TerrainType;
@@ -32,19 +33,19 @@ public final class MouseOverTileListener {
     private final LocalizationHelper localizationHelper;
 
     private final GamePreferences gamePreferences;
-
-    private final Text text;
+    
+    private final I18n i18n;
 
     @Inject
     public MouseOverTileListener(
             final GameModelController gameModelController,
             final LocalizationHelper localizationHelper, final GamePreferences gamePreferences,
-            final EventBus eventBus, final Text text) {
+            final EventBus eventBus, final I18n i18n) {
         this.gameModelController = Preconditions.checkNotNull(gameModelController);
         this.eventBus = Preconditions.checkNotNull(eventBus);
         this.localizationHelper = Preconditions.checkNotNull(localizationHelper);
         this.gamePreferences = Preconditions.checkNotNull(gamePreferences);
-        this.text = Preconditions.checkNotNull(text);
+        this.i18n = Preconditions.checkNotNull(i18n);
     }
 
     @Subscribe
@@ -78,16 +79,16 @@ public final class MouseOverTileListener {
             buff.append(") ");
         }
         if (player.isVisible(where)) {
-            buff.append(text.get("statusBar.tile.start"));
+            buff.append(i18n.get(Loc.statusBar_tile_start));
             buff.append(localizationHelper.getTerrainName(terrain));
             final List<Unit> units = gameModelController.getModel().getUnitsAt(where);
             if (!units.isEmpty()) {
                 if (units.size() > 5) {
                     buff.append(" ");
-                    buff.append(text.get("statusBar.tile.unitCount", units.size()));
+                    buff.append(i18n.get(Loc.statusBar_tile_unitCount, units.size()));
                 } else {
                     buff.append(" ");
-                    buff.append(text.get("statusBar.tile.withUnit"));
+                    buff.append(i18n.get(Loc.statusBar_tile_withUnit));
                     buff.append(" ");
                     units.forEach(ship -> {
                         buff.append(ship.getClass().getSimpleName());
@@ -96,7 +97,7 @@ public final class MouseOverTileListener {
                 }
             }
         } else {
-            buff.append(text.get("statusBar.tile.notExplored"));
+            buff.append(i18n.get(Loc.statusBar_tile_notExplored));
         }
         eventBus.post(new StatusBarMessageEvent(buff.toString(), Source.GAME));
     }

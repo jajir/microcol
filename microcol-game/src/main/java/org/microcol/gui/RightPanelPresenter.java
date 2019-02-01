@@ -6,7 +6,6 @@ import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.gamepanel.SelectedUnitWasChangedEvent;
 import org.microcol.gui.gamepanel.TileWasSelectedEvent;
 import org.microcol.gui.util.Listener;
-import org.microcol.gui.util.Text;
 import org.microcol.i18n.I18n;
 import org.microcol.model.event.TurnStartedEvent;
 import org.slf4j.Logger;
@@ -30,13 +29,13 @@ public final class RightPanelPresenter {
 
     @Inject
     RightPanelPresenter(final RightPanelView display, final GameModelController gameModelController,
-            final Text text, final EventBus eventBus) {
+            final I18n i18n, final EventBus eventBus) {
         this.display = Preconditions.checkNotNull(display);
         this.gameModelController = Preconditions.checkNotNull(gameModelController);
 
         display.getContent().setOnMouseEntered(e -> {
             eventBus.post(
-                    new StatusBarMessageEvent(text.get("rightPanel.description"), Source.GAME));
+                    new StatusBarMessageEvent(i18n.get(Loc.rightPanel_description), Source.GAME));
         });
 
     }

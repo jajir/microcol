@@ -4,11 +4,11 @@ import java.util.List;
 import java.util.function.Function;
 
 import org.microcol.gui.Dialog;
+import org.microcol.gui.Loc;
 import org.microcol.gui.MainStageBuilder;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.util.AbstractMessageWindow;
 import org.microcol.gui.util.ButtonsBar;
-import org.microcol.gui.util.Text;
 import org.microcol.gui.util.ViewUtil;
 import org.microcol.i18n.I18n;
 import org.microcol.model.Calendar;
@@ -32,19 +32,19 @@ public final class StatisticsDialog extends AbstractMessageWindow
 
     private final GameModelController gameModelController;
 
-    private final Text text;
+    private final I18n i18n;
 
     private final TabPane chartPanel;
 
     @Inject
-    StatisticsDialog(final ViewUtil viewUtil, final Text text, final I18n i18n,
+    StatisticsDialog(final ViewUtil viewUtil, final I18n i18n,
             final GameModelController gameModelController) {
         super(viewUtil, i18n);
         this.gameModelController = Preconditions.checkNotNull(gameModelController);
-        this.text = Preconditions.checkNotNull(text);
-        setTitle(text.get("statistics.title"));
+        this.i18n = Preconditions.checkNotNull(i18n);
+        setTitle(i18n.get(Loc.statistics_title));
 
-        final Label labelCaption = new Label(text.get("statistics.caption"));
+        final Label labelCaption = new Label(i18n.get(Loc.statistics_caption));
 
         final VBox mainPanel = new VBox();
 
@@ -92,26 +92,26 @@ public final class StatisticsDialog extends AbstractMessageWindow
     }
 
     private Node createChartScore(final List<TurnPlayerStatistics> stats, final Calendar calendar) {
-        final LineChart<Number, Number> lineChart = makeLineChart(calendar, "statistics.score");
+        final LineChart<Number, Number> lineChart = makeLineChart(calendar, Loc.statistics_score);
         lineChart.getData()
-                .add(initSerie(stats, stat -> stat.getScore(), "statistics.score", calendar));
+                .add(initSerie(stats, stat -> stat.getScore(), Loc.statistics_score, calendar));
 
         return lineChart;
     }
 
     private Node createChartWealth(final List<TurnPlayerStatistics> stats,
             final Calendar calendar) {
-        final LineChart<Number, Number> lineChart = makeLineChart(calendar, "statistics.wealth");
+        final LineChart<Number, Number> lineChart = makeLineChart(calendar, Loc.statistics_wealth);
         lineChart.getData().add(
-                initSerie(stats, stat -> stat.getEcononyScore(), "statistics.wealth", calendar));
+                initSerie(stats, stat -> stat.getEcononyScore(), Loc.statistics_wealth, calendar));
 
         return lineChart;
     }
 
     private Node createChartGold(final List<TurnPlayerStatistics> stats, final Calendar calendar) {
-        final LineChart<Number, Number> lineChart = makeLineChart(calendar, "statistics.gold");
+        final LineChart<Number, Number> lineChart = makeLineChart(calendar, Loc.statistics_gold);
         lineChart.getData()
-                .add(initSerie(stats, stat -> stat.getGold(), "statistics.gold", calendar));
+                .add(initSerie(stats, stat -> stat.getGold(), Loc.statistics_gold, calendar));
 
         return lineChart;
     }
@@ -119,32 +119,32 @@ public final class StatisticsDialog extends AbstractMessageWindow
     private Node createChartMilitaryPower(final List<TurnPlayerStatistics> stats,
             final Calendar calendar) {
         final LineChart<Number, Number> lineChart = makeLineChart(calendar,
-                "statistics.militaryPower");
+                Loc.statistics_militaryPower);
         lineChart.getData().add(initSerie(stats, stat -> stat.getMilitaryScore(),
-                "statistics.militaryPower", calendar));
+                Loc.statistics_militaryPower, calendar));
 
         return lineChart;
     }
 
     private final LineChart<Number, Number> makeLineChart(final Calendar calendar,
-            final String yAxisMessageKey) {
+            final Loc yAxisMessageKey) {
         final NumberAxis xAxis = new NumberAxis();
         final NumberAxis yAxis = new NumberAxis();
 
         xAxis.setAutoRanging(false);
         xAxis.setLowerBound(calendar.getStartYear());
         xAxis.setUpperBound(calendar.getCurrentYear() + 2);
-        xAxis.setLabel(text.get("statistics.year"));
-        yAxis.setLabel(text.get(yAxisMessageKey));
+        xAxis.setLabel(i18n.get(Loc.statistics_year));
+        yAxis.setLabel(i18n.get(yAxisMessageKey));
 
         return new LineChart<Number, Number>(xAxis, yAxis);
     }
 
     private XYChart.Series<Number, Number> initSerie(final List<TurnPlayerStatistics> stats,
-            final Function<TurnPlayerStatistics, Integer> statFunction, final String messageKey,
+            final Function<TurnPlayerStatistics, Integer> statFunction, final Loc messageKey,
             final Calendar calendar) {
         XYChart.Series<Number, Number> series = new XYChart.Series<>();
-        series.setName(text.get(messageKey));
+        series.setName(i18n.get(messageKey));
         stats.forEach(stat -> series.getData().add(new XYChart.Data<Number, Number>(
                 calendar.getYearForTurnNo(stat.getTurnNo()), statFunction.apply(stat))));
         return series;

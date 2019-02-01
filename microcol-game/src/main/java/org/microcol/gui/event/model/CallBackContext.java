@@ -3,7 +3,8 @@ package org.microcol.gui.event.model;
 import org.microcol.gui.DialogMessage;
 import org.microcol.gui.mainscreen.Screen;
 import org.microcol.gui.mainscreen.ShowScreenEvent;
-import org.microcol.gui.util.Text;
+import org.microcol.i18n.I18n;
+import org.microcol.i18n.MessageKeyResource;
 
 import com.google.common.base.Preconditions;
 import com.google.common.eventbus.EventBus;
@@ -14,17 +15,17 @@ public final class CallBackContext {
 
     private final EventBus eventBus;
 
-    private final Text text;
+    private final I18n text;
 
     public CallBackContext(final DialogMessage dialogMessage, final EventBus eventBus,
-            final Text text) {
+            final I18n text) {
         this.dialogMessage = Preconditions.checkNotNull(dialogMessage);
         this.eventBus = Preconditions.checkNotNull(eventBus);
         this.text = Preconditions.checkNotNull(text);
     }
 
-    public void showMessage(final String... messageKeys) {
-        for (final String messageKey : messageKeys) {
+    public <T extends Enum<T> & MessageKeyResource> void showMessage(final T... messageKeys) {
+        for (final T messageKey : messageKeys) {
             dialogMessage.setText(text.get(messageKey));
             dialogMessage.showAndWait();
         }

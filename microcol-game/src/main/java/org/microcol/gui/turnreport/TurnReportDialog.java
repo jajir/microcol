@@ -1,11 +1,11 @@
 package org.microcol.gui.turnreport;
 
 import org.microcol.gui.Dialog;
+import org.microcol.gui.Loc;
 import org.microcol.gui.MainStageBuilder;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.util.AbstractMessageWindow;
 import org.microcol.gui.util.ButtonsBar;
-import org.microcol.gui.util.Text;
 import org.microcol.gui.util.ViewUtil;
 import org.microcol.i18n.I18n;
 
@@ -21,19 +21,19 @@ public final class TurnReportDialog extends AbstractMessageWindow
 
     private final GameModelController gameModelController;
 
-    private final Text text;
+    private final I18n i18n;
 
     private final VBox turnEventsPanel;
 
     @Inject
-    TurnReportDialog(final ViewUtil viewUtil, final Text text, final I18n i18n,
+    TurnReportDialog(final ViewUtil viewUtil, final I18n i18n,
             final GameModelController gameModelController) {
         super(viewUtil, i18n);
         this.gameModelController = Preconditions.checkNotNull(gameModelController);
-        this.text = Preconditions.checkNotNull(text);
-        setTitle(text.get("turnReport.title"));
+        this.i18n = Preconditions.checkNotNull(i18n);
+        setTitle(i18n.get(Loc.turnReport_title));
 
-        final Label labelCaption = new Label(text.get("turnReport.caption"));
+        final Label labelCaption = new Label(i18n.get(Loc.turnReport_caption));
 
         final VBox mainPanel = new VBox();
 
@@ -53,11 +53,11 @@ public final class TurnReportDialog extends AbstractMessageWindow
         turnEventsPanel.getChildren().clear();
         if (gameModelController.getModel()
                 .isTurnEventsMessagesEmpty(gameModelController.getCurrentPlayer())) {
-            turnEventsPanel.getChildren().add(new Label(text.get("turnReport.noEvents")));
+            turnEventsPanel.getChildren().add(new Label(i18n.get(Loc.turnReport_noEvents)));
         } else {
             gameModelController.getModel()
                     .getTurnEventsLocalizedMessages(gameModelController.getCurrentPlayer(),
-                            key -> text.get(key))
+                            key -> i18n.get(key))
                     .forEach(turnEvent -> turnEventsPanel.getChildren()
                             .add(new TurnEventPanel(turnEvent)));
         }

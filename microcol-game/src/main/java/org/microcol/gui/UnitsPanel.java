@@ -6,7 +6,7 @@ import org.microcol.gui.event.StatusBarMessageEvent;
 import org.microcol.gui.event.StatusBarMessageEvent.Source;
 import org.microcol.gui.gamepanel.SelectedUnitManager;
 import org.microcol.gui.image.ImageProvider;
-import org.microcol.gui.util.Text;
+import org.microcol.i18n.I18n;
 import org.microcol.model.Player;
 import org.microcol.model.Unit;
 
@@ -29,7 +29,7 @@ public final class UnitsPanel {
 
     private final LocalizationHelper localizationHelper;
 
-    private final Text text;
+    private final I18n i18n;
 
     private final SelectedUnitManager selectedUnitManager;
 
@@ -37,16 +37,16 @@ public final class UnitsPanel {
 
     @Inject
     public UnitsPanel(final ImageProvider imageProvider, final EventBus eventBus,
-            final LocalizationHelper localizationHelper, final Text text,
+            final LocalizationHelper localizationHelper, final I18n i18n,
             final SelectedUnitManager selectedUnitManager) {
         this.imageProvider = Preconditions.checkNotNull(imageProvider);
         this.localizationHelper = Preconditions.checkNotNull(localizationHelper);
-        this.text = Preconditions.checkNotNull(text);
+        this.i18n = Preconditions.checkNotNull(i18n);
         this.selectedUnitManager = Preconditions.checkNotNull(selectedUnitManager);
         box = new VBox();
         box.setOnMouseEntered(e -> {
             eventBus.post(
-                    new StatusBarMessageEvent(text.get("unitsPanel.description"), Source.GAME));
+                    new StatusBarMessageEvent(i18n.get(Loc.unitsPanel_description), Source.GAME));
         });
         box.getStyleClass().add("scroll-pane");
     }
@@ -62,7 +62,7 @@ public final class UnitsPanel {
             for (final Unit unit : units) {
                 final boolean selected = selectedUnitManager.getSelectedUnit().isPresent()
                         && selectedUnitManager.getSelectedUnit().get().equals(unit);
-                final UnitPanel unitPanel = new UnitPanel(imageProvider, text, localizationHelper,
+                final UnitPanel unitPanel = new UnitPanel(imageProvider, i18n, localizationHelper,
                         humanPlayer, unit, selected);
                 box.getChildren().add(unitPanel.getBox());
                 unitPanel.setOnMouseClicked(event -> {

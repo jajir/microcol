@@ -7,7 +7,7 @@ import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.gamepanel.TileWasSelectedEvent;
 import org.microcol.gui.image.ImageProvider;
 import org.microcol.gui.util.JavaFxComponent;
-import org.microcol.gui.util.Text;
+import org.microcol.i18n.I18n;
 import org.microcol.model.Colony;
 import org.microcol.model.Location;
 import org.microcol.model.Model;
@@ -36,7 +36,7 @@ public final class RightPanelView implements JavaFxComponent {
 
     private final ImageProvider imageProvider;
 
-    private final Text text;
+    private final I18n i18n;
 
     private final TilePainter tileImage;
 
@@ -55,11 +55,11 @@ public final class RightPanelView implements JavaFxComponent {
     private final GameModelController gameModelController;
 
     @Inject
-    public RightPanelView(final ImageProvider imageProvider, final Text text,
+    public RightPanelView(final ImageProvider imageProvider, final I18n i18n,
             final UnitsPanel unitsPanel, final LocalizationHelper localizationHelper,
             final GameModelController gameModelController, final TilePainter tileImage) {
         this.imageProvider = Preconditions.checkNotNull(imageProvider);
-        this.text = Preconditions.checkNotNull(text);
+        this.i18n = Preconditions.checkNotNull(i18n);
         this.unitsPanel = Preconditions.checkNotNull(unitsPanel);
         this.localizationHelper = Preconditions.checkNotNull(localizationHelper);
         this.gameModelController = Preconditions.checkNotNull(gameModelController);
@@ -135,7 +135,7 @@ public final class RightPanelView implements JavaFxComponent {
             }
         } else {
             tileImage.setImage(imageProvider.getImage(ImageProvider.IMG_TILE_HIDDEN));
-            sb.append(text.get("unitsPanel.unexplored"));
+            sb.append(i18n.get(Loc.unitsPanel_unexplored));
         }
         tileName.setText(sb.toString());
     }
@@ -166,7 +166,7 @@ public final class RightPanelView implements JavaFxComponent {
 
     public void setOnMovePlayer(final Player player) {
         StringBuilder sb = new StringBuilder(200);
-        sb.append(text.get("unitsPanel.currentUser"));
+        sb.append(i18n.get(Loc.unitsPanel_currentUser));
         sb.append(" ");
         sb.append(player.getName());
         Platform.runLater(() -> {

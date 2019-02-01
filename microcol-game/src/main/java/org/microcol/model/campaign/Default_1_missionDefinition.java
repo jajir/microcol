@@ -33,7 +33,7 @@ final class Default_1_missionDefinition extends MissionDefinition<Default_1_goal
                     if (MissionImpl.GAME_OVER_REASON_ALL_GOALS_ARE_DONE
                             .equals(context.getEvent().getGameOverResult().getGameOverReason())) {
                         context.getMissionCallBack().executeOnFrontEnd(callBackContext -> {
-                            callBackContext.showMessage("campaign.default.m1.done");
+                            callBackContext.showMessage(Missions.default_m1_done);
                             callBackContext.goToGameMenu();
                         });
                         return "ok";
@@ -45,23 +45,23 @@ final class Default_1_missionDefinition extends MissionDefinition<Default_1_goal
     @Override
     public void onGameStarted(final GameStartedEvent event) {
         if (isFirstTurn(event.getModel())) {
-            missionCallBack.showMessage("campaign.default.m1.start",
-                    "campaign.default.m1.foundColonies");
+            missionCallBack.showMessage(Missions.default_m1_start,
+                    Missions.default_m1_foundColonies);
         }
     }
 
     @Override
     public void onBeforeDeclaringIndependence(final BeforeDeclaringIndependenceEvent event) {
         event.stopEventExecution();
-        missionCallBack.showMessage("campaign.default.m0.cantDeclareIndependence");
+        missionCallBack.showMessage(Missions.default_m0_cantDeclareIndependence);
     }
 
     @Override
     public void onColonyWasFounded(final ColonyWasFoundEvent event) {
         if (!goals.getGoalNumberOfColonies().isFinished()) {
             if (playerHaveMoreOrEqualColonies(event.getModel(), TARGET_NUMBER_OF_COLONIES)) {
-                missionCallBack.showMessage("campaign.default.m1.foundColonies.done",
-                        "campaign.default.m1.get5000");
+                missionCallBack.showMessage(Missions.default_m1_foundColonies_done,
+                        Missions.default_m1_get5000);
                 goals.getGoalNumberOfColonies().setFinished(true);
             }
         }
@@ -76,7 +76,7 @@ final class Default_1_missionDefinition extends MissionDefinition<Default_1_goal
     public void onTurnStarted(final TurnStartedEvent event) {
         if (!goals.getGoalMilitaryPower().isFinished()) {
             if (getNumberOfMilitaryUnits(event.getModel()) >= TARGET_NUMBER_OF_MILITARY_UNITS) {
-                missionCallBack.showMessage("campaign.default.m1.makeArmy.done");
+                missionCallBack.showMessage(Missions.default_m1_makeArmy_done);
                 goals.getGoalMilitaryPower().setFinished(true);
             }
         }
@@ -87,8 +87,8 @@ final class Default_1_missionDefinition extends MissionDefinition<Default_1_goal
         if (!goals.getGoalAmountOfGold().isFinished()) {
             final int golds = getHumanPlayer(model).getGold();
             if (golds >= TARGET_NUMBER_OF_GOLD) {
-                missionCallBack.showMessage("campaign.default.m1.get5000.done",
-                        "campaign.default.m1.makeArmy");
+                missionCallBack.showMessage(Missions.default_m1_get5000_done,
+                        Missions.default_m1_makeArmy);
                 goals.getGoalAmountOfGold().setFinished(true);
             }
         }

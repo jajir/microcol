@@ -31,7 +31,8 @@ public final class TurnEventStore {
      */
     public TurnEventStore(final ModelPo modelPo, final PlayerStore playerStore) {
         modelPo.getTurnEvents().forEach(turnEventPo -> {
-            final SimpleTurnEvent event = new SimpleTurnEvent(turnEventPo.getMessageKey(),
+            final SimpleTurnEvent event = new SimpleTurnEvent(
+                    TurnEvents.valueOf(turnEventPo.getMessageKey()),
                     turnEventPo.getArgs().toArray(),
                     playerStore.getPlayerByName(turnEventPo.getPlayerName()));
             event.setSolved(turnEventPo.isSolved());
@@ -73,7 +74,7 @@ public final class TurnEventStore {
      * @return list of localized turn event messages for given player
      */
     public List<TurnEvent> getLocalizedMessages(final Player player,
-            final Function<String, String> messageProvider) {
+            final Function<TurnEvents, String> messageProvider) {
         Preconditions.checkNotNull(messageProvider);
         final List<TurnEvent> out = getForPlayer(player);
         out.forEach(turnEvent -> setLocalizedMessage(turnEvent, messageProvider));
@@ -90,7 +91,7 @@ public final class TurnEventStore {
      *            required localized message provider
      */
     public void setLocalizedMessage(final TurnEvent turnEvent,
-            final Function<String, String> messageProvider) {
+            final Function<TurnEvents, String> messageProvider) {
         final String template = messageProvider.apply(turnEvent.getMessageKey());
         turnEvent.setLocalizedMessage(String.format(template, turnEvent.getArgs()));
     }
@@ -111,7 +112,7 @@ public final class TurnEventStore {
         return turnEvents.stream().map(turnEvent -> {
             final TurnEventPo po = new TurnEventPo();
             po.setArgs(Lists.newArrayList(turnEvent.getArgs()));
-            po.setMessageKey(turnEvent.getMessageKey());
+            po.setMessageKey(turnEvent.getMessageKey().name());
             po.setPlayerName(turnEvent.getPlayer().getName());
             po.setSolved(turnEvent.isSolved());
             return po;

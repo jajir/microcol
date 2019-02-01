@@ -10,7 +10,6 @@
 
 <properties>
 	<comment>Test data for RBCPTest.java</comment>
-	<entry key="game.title">MicroCol</entry>
 	
 	<entry key="mainMenu.game">Game</entry>
 	<entry key="mainMenu.game.declareIndependence">Declare Independence</entry>
@@ -47,96 +46,15 @@
 	<entry key="mainMenu.help.colonizopedia">Colonizopedia</entry>
 
 	<entry key="aboutDialog.caption">About MicroCol</entry>
-	<entry key="rightPanel.description">Here will be information about selected tile and units on it</entry>
-	<entry key="unitsPanel.description">Here will be information about selected tile and units on it</entry>
-	<entry key="unitsPanel.unexplored">Unknown</entry>
-	<entry key="unitsPanel.units">Units:</entry>
-	<entry key="unitsPanel.availableMoves">Moves:</entry>
-	<entry key="unitsPanel.owner">Owner:</entry>
-	<entry key="unitsPanel.currentUser">On move:</entry>
-	<entry key="unitsPanel.with">With:</entry>
-	<entry key="unitsPanel.empty">No goods</entry>
 	<entry key="nextTurnButton">Next turn</entry>
 	<entry key="nextTurnButton.desctiption">Perform next turn, other players will move</entry>
 	<entry key="tile.ocean.name">Ocean</entry>
 	<entry key="tile.ocean.description">Wide ocean, where you can travel fast and safe</entry>
-	<entry key="statusBar.tile.notExplored">This area is still hidden</entry>
-	<entry key="statusBar.tile.start">This is </entry>
-	<entry key="statusBar.tile.withUnit">with: </entry>
-	<entry key="statusBar.tile.unitCount">with %s units</entry>
-	<entry key="statusBar.era">Year</entry>
-	<entry key="statusBar.era.description">Current year</entry>
-	<entry key="statusBar.gold">Gold</entry>
-	<entry key="statusBar.gold.description">How many golden coins do you have.</entry>
-	<entry key="statusBar.status.description">Here will by simple help message</entry>
-	<entry key="statusBar.season.spring">Spring</entry>
-	<entry key="statusBar.season.summer">Summer</entry>
-	<entry key="statusBar.season.autumn">Autumn</entry>
-	<entry key="statusBar.season.winter">Winter</entry>
-
-	<entry key="campaign.default.m0.g1">Find Now World to found new colony. Try to look at left part of map.</entry>
-	<entry key="campaign.default.m0.g2">Disembark at New World and found new colony.</entry>
-	<entry key="campaign.default.m0.g3">Produce 30 cigars.</entry>
-	<entry key="campaign.default.m0.g4">Sell cigars in Europe.</entry>
-	<entry key="campaign.default.m0.start">Find Now World to found new colony. Try to drag ship to the right part of map.</entry>
-	<entry key="campaign.default.m0.cantMoveToHighSeas">You should not go back Europe. You come from there to find new world. New world should on the West.</entry>
-	<entry key="campaign.default.m0.pressNextTurn">Ship can't move in this turn more. Ship don't have any action points. You can check it in right panel where are ship's details. Now press 'Next Turn' button.</entry>
-	<entry key="campaign.default.m0.moveUnitBeforeEndTurn">First turn with ship Try to find New World.</entry>
-	<entry key="campaign.default.m0.continentInSight">You found New World. Now lets sail close at try to disembark. Your next task is to found new colony.</entry>
-	<entry key="campaign.default.m0.firstColonyWasFounded">Great. You found new colony. Now it's on you how it will thrive.</entry>
-	<entry key="campaign.default.m0.produce100cigars">Otevři kliknutím detail kolonie a začni pěstovat tabák a vyrábět z něj cigarety.
-Jednoho osadníka myší rozmísti na pole aby pěstoval tabák.
-Dalšiho pošlí do města vyrábět z tabáku cigarety. Pozor na množství jídla ve městě,
-jestli klesne na nulu, osadnicí začnou umírat hlady. Vyrob 30 doutníků.</entry>
-	<entry key="campaign.default.m0.sellCigarsInEuropePort">Konečně. Už máš potřebné množství doutníků. Vezmi je na loď, odvez do Evropy a prodej.</entry>
-	<entry key="campaign.default.m0.cigarsWasSold">Výborně. Podařilo se ti prodat těžce získané doutníky.</entry>
-	<entry key="campaign.default.m0.gameOver">Congratulations. Your first mission is successfully finished.</entry>
-	<entry key="campaign.default.m0.cantDeclareIndependence">You can't declare independence. Declaring of independence upset your King. King will try to conquer colonies back by force. You are not strong enough to fight with king.</entry>
-	<entry key="campaign.default.m1.g1">Found three colonies.</entry>
-	<entry key="campaign.default.m1.g2">Make 5000 gold, you can sell goods in Europe.</entry>
-	<entry key="campaign.default.m1.g3">Raise army.</entry>
-	<entry key="campaign.default.m1.start">You found first colony, now you have to build proud and wealth nations.</entry>
-	<entry key="campaign.default.m1.foundColonies">Now you'll need more colonies. Buy some colonist and found at least 3 colonies.</entry>
-	<entry key="campaign.default.m1.foundColonies.done">Perfect. Now you have enought colonies.</entry>
-	<entry key="campaign.default.m1.get5000">You'll need lot of gold. Gain 5000 gold from business with Europe.</entry>
-	<entry key="campaign.default.m1.get5000.done">Great. Now you have 5000 gold.</entry>
-	<entry key="campaign.default.m1.makeArmy">Now make and army. You'l need at least 15 colonits. Colonists will fight for you.</entry>
-	<entry key="campaign.default.m1.makeArmy.done">Great, you have army.</entry>
-	<entry key="campaign.default.m1.done">Fantastic. You did well. Now continue to next mission.</entry>
-	<entry key="campaign.default.m2.g1">Declare independence.</entry>
-	<entry key="campaign.default.m2.g2">Conquer king's army.</entry>
-	<entry key="campaign.default.m2.start">Podařilo se ti dojít daleko. Nyní más bohatou a silnou společnost. Posledni krok je získání nezávislostí.</entry>
-	<entry key="campaign.default.m2.declareIndependence">První krok je, že musíš vyhlásit nezávislost. S tím optarně. Počitej, že se král hodně naštve a pošle na tebe silné vojsko s jediním cílem - zničit tě.</entry>
-	<entry key="campaign.default.m2.declareIndependence.done">Tak. Teď jsi se vydal na nevratnou cestu k válce a k nezávislosti. Co nevidět přijede silné expediční vojsko. Připrav se.</entry>
-	<entry key="campaign.default.m2.portIsClosed">Od této chvíle už nemůžeš jezdit do Evropy. Zdá se, že se král hodně zlobí.</entry>
-	<entry key="campaign.default.m2.done1">Sláva. Podařilo se to porazit královké vojsko.</entry>
-	<entry key="campaign.default.m2.done2">Zde tvoje cesta končí. Pro svůj mladý národ jsi vydobyl svobodu. Všechny oběti položené k dosažení vznešeného cíle se mnohokrát vrátili.</entry>
 
 	<entry key="chooseGoodAmount.caption">How many would you like to transfer?</entry>
 	<entry key="chooseGoodAmount.zero">Nothing</entry>
 	<entry key="chooseGoodAmount.everything">Everything</entry>
 	<entry key="chooseGoodAmount.selectedAmount">Selected amount: </entry>
-
-	<entry key="terrain.OCEAN.name">Ocean</entry>
-	<entry key="terrain.OCEAN.description">Wild nice ocean</entry>
-	<entry key="terrain.GRASSLAND.name">Grass land</entry>
-	<entry key="terrain.GRASSLAND.description">Grass land</entry>
-	<entry key="terrain.TUNDRA.name">Tundra</entry>
-	<entry key="terrain.TUNDRA.description">Cold tundra</entry>
-	<entry key="terrain.ARCTIC.name">Arctic</entry>
-	<entry key="terrain.ARCTIC.description">Cold freezing wasteland</entry>
-	<entry key="terrain.HIGH_SEA.name">High Sea</entry>
-	<entry key="terrain.HIGH_SEA.description">Huge water mass between Europe and colonies</entry>
-	<entry key="terrain.PRAIRIE.name">Prairie</entry>
-	<entry key="terrain.PRAIRIE.description">Big plains known as prairie are fertile and rich.</entry>
-	<entry key="terrain.MOUNTAIN.name">Mountains</entry>
-	<entry key="terrain.MOUNTAIN.description">Huge and dangerous mountains</entry>
-	<entry key="terrain.HILL.name">Hill</entry>
-	<entry key="terrain.HILL.description">Nice and small hills makes landscape more pleasant </entry>
-
-	<entry key="unit.FRIGATE.name">Frigate</entry>
-	<entry key="unit.GALLEON.name">Galleon</entry>
-	<entry key="unit.COLONIST.name">Free Colonist</entry>
 
 	<entry key="europeDialog.caption">European Port</entry>
 	
@@ -158,30 +76,6 @@ jestli klesne na nulu, osadnicí začnou umírat hlady. Vyrob 30 doutníků.</en
 	<entry key="europe.recruit">Recruit</entry>
 	<entry key="europe.buy">Buy</entry>
 	
-	<entry key="buildingQueueDialog.caption">Building queue</entry>
-	
-	<entry key="turnReport.title">Turn Report</entry>
-	<entry key="turnReport.caption">Turn Report</entry>
-	<entry key="turnReport.noEvents">There are no events.</entry>
-	<entry key="turnEvent.shipComeToEuropePort">Ship come to European port.</entry>
-	<entry key="turnEvent.shipComeToHighSeas">Ship arrived from Europe and waiting for next command.</entry>
-	<entry key="turnEvent.faminePlagueColony">Famine plague colony %s. Colonists are dying.</entry>
-	<entry key="turnEvent.famineWillPlagueColony">Famine is coming in colony %s. in next turn colonist will die.</entry>
-	<entry key="turnEvent.colonyWasDestroyed">Colony %s was destroyed.</entry>
-	<entry key="turnEvent.newUnitIsInEurope">Because of religion unrest in Europe new colonist decide to emigrate. Now is waiting in Europe.</entry>
-	<entry key="turnEvent.newUnitIsInColony">There is a new unit in colony.</entry>
-
-	<entry key="statistics.title">Statistics</entry>
-	<entry key="statistics.caption">Statistics</entry>
-	<entry key="statistics.year">Year</entry>
-	<entry key="statistics.gold">Gold</entry>
-	<entry key="statistics.militaryPower">Military power</entry>
-	<entry key="statistics.wealth">Wealth</entry>
-	<entry key="statistics.score">Score</entry>
-	
-	<entry key="missionGoals.title">Mission Goals</entry>
-	<entry key="missionGoals.caption">Mission Goals</entry>
-	
 	<entry key="FileChooser.cancelButtonText">Cancel</entry>
 	<entry key="FileChooser.fileDateHeaderText">Date modified</entry>
 	<entry key="FileChooser.openButtonText">Load</entry>
@@ -192,46 +86,5 @@ jestli klesne na nulu, osadnicí začnou umírat hlady. Vyrob 30 doutníků.</en
 	<entry key="FileChooser.newFolderButtonText">New Folder</entry>
 	<entry key="FileChooser.filesOfTypeLabelText">File Format:</entry>
 	<entry key="FileChooser.saveDialogFileNameLabelText">Save As:</entry>
-	
-	<entry key="construction.TOWN_HALL.name">Town Hall</entry>
-	<entry key="construction.LUMBER_MILL.name">Lumber Mill</entry>
-	<entry key="construction.CARPENTERS_SHOP.name">Carpenter’s Shop</entry>
-	<entry key="construction.CARPENTERS_STAND.name">Carpenter's Stand</entry>
-	<entry key="construction.IRON_WORKS.name">Iron Works</entry>
-	<entry key="construction.BLACKSMITHS_SHOP.name">Blacksmith’s Shop</entry>
-	<entry key="construction.BLACKSMITHS_HOUSE.name">Blacksmith’s House</entry>
-	<entry key="construction.FORTRESS.name">Fortress</entry>
-	<entry key="construction.FORT.name">Fort</entry>
-	<entry key="construction.STOCKADE.name">Stockade</entry>
-	<entry key="construction.CIGAR_FACTORY.name">Cigar Factory</entry>
-	<entry key="construction.TOBACCONISTS_SHOP.name">Tobacconist’s Shop</entry>
-	<entry key="construction.TOBACCONISTS_HOUSE.name">Tobacconist’s House</entry>
-	<entry key="construction.TEXTILE_MILL.name">Textile Mill</entry>
-	<entry key="construction.WEAVERS_SHOP.name">Weaver’s Shop</entry>
-	<entry key="construction.WEAVERS_HOUSE.name">Weaver’s House</entry>
-	<entry key="construction.RUM_FACTORY.name">Rum Factory</entry>
-	<entry key="construction.RUM_DISTILLERY.name">Rum Distillery</entry>
-	<entry key="construction.RUM_DISTILLERS_HOUSE.name">Rum Distiller’s House</entry>
-	<entry key="construction.FUR_FACTORY.name">Fur Factory</entry>
-	<entry key="construction.FUR_TRADING_POST.name">Fur Trading Post</entry>
-	<entry key="construction.FUR_TRADERS_HOUSE.name">Fur Trader’s House</entry>
-	<entry key="construction.ARSENAL.name">Arsenal</entry>
-	<entry key="construction.MAGAZINE.name">Magazine</entry>
-	<entry key="construction.ARMORY.name">Armory</entry>
-	<entry key="construction.SHIPYARD.name">Shipyard</entry>
-	<entry key="construction.DRYDOCK.name">Drydock</entry>
-	<entry key="construction.DOCK.name">Dock</entry>
-	<entry key="construction.UNIVERSITY.name">University</entry>
-	<entry key="construction.COLLEGE.name">College</entry>
-	<entry key="construction.SCHOOLHOUSE.name">Schoolhouse</entry>
-	<entry key="construction.WAREHOUSE_EXPANSION.name">Warehouse Expansion</entry>
-	<entry key="construction.WAREHOUSE.name">Warehouse</entry>
-	<entry key="construction.BASIC_WAREHOUSE.name">Small warehouse</entry>
-	<entry key="construction.STABLES.name">Stables</entry>
-	<entry key="construction.CATHEDRAL.name">Cathedral</entry>
-	<entry key="construction.CHURCH.name">Church</entry>
-	<entry key="construction.NEWSPAPER.name">Newspaper</entry>
-	<entry key="construction.PRINTING_PRESS.name">Printing Press</entry>
-	<entry key="construction.CUSTOM_HOUSE.name">Custom House</entry>
 		
 </properties>

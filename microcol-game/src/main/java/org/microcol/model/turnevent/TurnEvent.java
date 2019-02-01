@@ -35,7 +35,7 @@ public interface TurnEvent {
      *
      * @return message key in resource bundle
      */
-    String getMessageKey();
+    TurnEvents getMessageKey();
 
     /**
      * Return localized message.

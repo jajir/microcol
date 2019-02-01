@@ -5,7 +5,7 @@ import java.awt.Rectangle;
 import org.microcol.gui.event.QuitGameEvent;
 import org.microcol.gui.mainscreen.MainPanelView;
 import org.microcol.gui.util.GamePreferences;
-import org.microcol.gui.util.Text;
+import org.microcol.i18n.I18n;
 
 import com.google.common.base.Preconditions;
 import com.google.common.eventbus.EventBus;
@@ -34,15 +34,15 @@ public final class MainStageBuilder {
 
     private final GamePreferences gamePreferences;
 
-    private final Text text;
+    private final I18n i18n;
 
     @Inject
     public MainStageBuilder(final MainPanelView mainPanelView,
-            final GamePreferences gamePreferences, final EventBus eventBus, final Text text) {
+            final GamePreferences gamePreferences, final EventBus eventBus, final I18n i18n) {
         this.mainPanelView = Preconditions.checkNotNull(mainPanelView);
         this.gamePreferences = Preconditions.checkNotNull(gamePreferences);
         this.eventBus = Preconditions.checkNotNull(eventBus);
-        this.text = Preconditions.checkNotNull(text);
+        this.i18n = Preconditions.checkNotNull(i18n);
     }
 
     /**
@@ -52,7 +52,7 @@ public final class MainStageBuilder {
      *            required primary stage
      */
     public void buildPrimaryStage(final Stage primaryStage) {
-        primaryStage.setTitle(text.get("game.title"));
+        primaryStage.setTitle(i18n.get(Loc.gameTitle));
         primaryStage.setOnCloseRequest(event -> {
             eventBus.post(new QuitGameEvent());
         });

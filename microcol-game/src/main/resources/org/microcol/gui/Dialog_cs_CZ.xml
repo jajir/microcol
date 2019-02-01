@@ -45,5 +45,10 @@
 	
 	<entry key="saveGame_title">Uložit hru</entry>
 	<entry key="loadGame_title">Nahrát hru</entry>
+	
+	<entry key="missionGoals_title">Cíle mise</entry>
+	<entry key="missionGoals_caption">Cíle mise</entry>
+	
+	<entry key="buildingQueueDialog_caption">Plánování stavby</entry>
 
 </properties>

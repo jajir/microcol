@@ -6,7 +6,8 @@ import org.microcol.gui.DialogMessage;
 import org.microcol.gui.gamepanel.AnimationIsDoneEvent;
 import org.microcol.gui.util.Listener;
 import org.microcol.gui.util.OneTimeExecuter;
-import org.microcol.gui.util.Text;
+import org.microcol.i18n.I18n;
+import org.microcol.i18n.MessageKeyResource;
 import org.microcol.model.Model;
 
 import com.google.common.base.Preconditions;
@@ -26,7 +27,7 @@ import javafx.application.Platform;
 @Listener
 public final class MissionCallBack {
 
-    private final Text text;
+    private final I18n i18n;
 
     private final DialogMessage dialogMessage;
 
@@ -37,9 +38,9 @@ public final class MissionCallBack {
     private final OneTimeExecuter<Model> executor = new OneTimeExecuter<>();
 
     @Inject
-    MissionCallBack(final Text text, final DialogMessage dialogMessage,
+    MissionCallBack(final I18n i18n, final DialogMessage dialogMessage,
             final GameModelController gameModelController, final EventBus eventBus) {
-        this.text = Preconditions.checkNotNull(text);
+        this.i18n = Preconditions.checkNotNull(i18n);
         this.gameModelController = Preconditions.checkNotNull(gameModelController);
         this.dialogMessage = Preconditions.checkNotNull(dialogMessage);
         this.eventBus = Preconditions.checkNotNull(eventBus);
@@ -51,10 +52,10 @@ public final class MissionCallBack {
         executor.fire(gameModelController.getModel());
     }
 
-    public void showMessage(final String... messageKeys) {
+    public <T extends Enum<T> & MessageKeyResource> void showMessage(final T... messageKeys) {
         Platform.runLater(() -> {
-            for (final String messageKey : messageKeys) {
-                dialogMessage.setText(text.get(messageKey));
+            for (final T messageKey : messageKeys) {
+                dialogMessage.setText(i18n.get(messageKey));
                 dialogMessage.showAndWait();
             }
         });
@@ -68,7 +69,7 @@ public final class MissionCallBack {
      */
     public void executeOnFrontEnd(final Consumer<CallBackContext> consumer) {
         Preconditions.checkNotNull(consumer);
-        final CallBackContext callBackContext = new CallBackContext(dialogMessage, eventBus, text);
+        final CallBackContext callBackContext = new CallBackContext(dialogMessage, eventBus, i18n);
         Platform.runLater(() -> {
             consumer.accept(callBackContext);
         });

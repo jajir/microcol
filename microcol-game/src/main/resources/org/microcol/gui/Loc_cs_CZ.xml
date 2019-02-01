@@ -12,5 +12,43 @@
 	<comment>Define keys for Europe dialog</comment>
 
 	<entry key="ok">Ok</entry>
+	<entry key="gameTitle">MicroCol</entry>
+
+	<entry key="statusBar_tile_notExplored">Tato oblast je neprozkoumaná</entry>
+	<entry key="statusBar_tile_start">Toto je </entry>
+	<entry key="statusBar_tile_withUnit">s jednotkami:</entry>
+	<entry key="statusBar_tile_unitCount">s %s jednotkami</entry>
+	<entry key="statusBar_era">Rok</entry>
+	<entry key="statusBar_era_description">Aktuální čas</entry>
+	<entry key="statusBar_gold">Zlato</entry>
+	<entry key="statusBar_gold_description">Počet zlatých mincí, které máš.</entry>
+	<entry key="statusBar_status_description">Zde se ukáže stručná nápověda</entry>
+	<entry key="statusBar_season_spring">Jaro</entry>
+	<entry key="statusBar_season_summer">Léto</entry>
+	<entry key="statusBar_season_autumn">Podzim</entry>
+	<entry key="statusBar_season_winter">Zima</entry>
+
+	<entry key="unitsPanel_description">Zde se zobrazí informace o vybraném panelu případně o jednotkách </entry>
+	<entry key="unitsPanel_unexplored">Neprozkoumáno</entry>
+	<entry key="unitsPanel_units">Jednotky:</entry>
+	<entry key="unitsPanel_availableMoves">Tahů:</entry>
+	<entry key="unitsPanel_owner">Vlastník:</entry>
+	<entry key="unitsPanel_currentUser">Táhne:</entry>
+	<entry key="unitsPanel_with">S:</entry>
+	<entry key="unitsPanel_empty">Zádné zboží</entry>
+	
+	<entry key="rightPanel_description">Zde se zobrazí informace o vybraném panelu případně o jednotkách </entry>
+
+	<entry key="turnReport_title">Důležité události</entry>
+	<entry key="turnReport_caption">Důležité události</entry>
+	<entry key="turnReport_noEvents">Žádné důležité události.</entry>
+
+	<entry key="statistics_title">Statistiky</entry>
+	<entry key="statistics_caption">Statistiky</entry>
+	<entry key="statistics_year">Rok</entry>
+	<entry key="statistics_gold">Zlato</entry>
+	<entry key="statistics_militaryPower">Vojenská síla</entry>
+	<entry key="statistics_wealth">Bohatství</entry>
+	<entry key="statistics_score">Score</entry>
 
 </properties>

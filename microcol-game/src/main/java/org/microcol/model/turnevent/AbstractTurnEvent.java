@@ -10,7 +10,7 @@ import com.google.common.base.Preconditions;
  */
 public abstract class AbstractTurnEvent implements TurnEvent {
 
-    private final String messageKey;
+    private final TurnEvents messageKey;
 
     private final Object[] args;
 
@@ -30,7 +30,7 @@ public abstract class AbstractTurnEvent implements TurnEvent {
      * @param player
      *            required player for whom was event generated
      */
-    AbstractTurnEvent(final String messageKey, final Object[] args, final Player player) {
+    AbstractTurnEvent(final TurnEvents messageKey, final Object[] args, final Player player) {
         this.messageKey = Preconditions.checkNotNull(messageKey);
         this.args = Preconditions.checkNotNull(args);
         this.player = Preconditions.checkNotNull(player);
@@ -63,7 +63,7 @@ public abstract class AbstractTurnEvent implements TurnEvent {
     }
 
     @Override
-    public String getMessageKey() {
+    public TurnEvents getMessageKey() {
         return messageKey;
     }
 

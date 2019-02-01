@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE properties [
+<!ELEMENT properties ( comment?, entry* ) >
+<!ATTLIST properties version CDATA #FIXED "1.0">
+<!ELEMENT comment (#PCDATA) >
+<!ELEMENT entry (#PCDATA) >
+<!ATTLIST entry key CDATA #REQUIRED>
+]>
+
+<properties>
+	<comment>Define messages for missions.</comment>
+
+	<entry key="default_m0_g1">Najdi nový svět. Jeď lodí doleva, tam asi bude země.</entry>
+	<entry key="default_m0_g2">Vyloď se a zolož kolonii.</entry>
+	<entry key="default_m0_g3">Vyprodukuj 30 doutníků.</entry>
+	<entry key="default_m0_g4">Prodej doutníky v Evropě.</entry>
+	<entry key="default_m0_start">Najděte nový svět, kde založíte kolonii. Jeď lodí doleva, tam asi bude země.</entry>
+	<entry key="default_m0_cantMoveToHighSeas">Nemůžeš se vrátit do Evropy odkuď jsi přijel. Zkus najít nový svět, pravděpodobně bude ležet na západě.</entry>
+	<entry key="default_m0_pressNextTurn">Tento tah už neni monžné s lodí dál hýbat. Loď nemá dost bodů na pohyb. Stav bodů je vidět v panelu naprvo, kde jsou detaily lodě. Pro další tah stiskni 'Další tah'</entry>
+	<entry key="default_m0_moveUnitBeforeEndTurn">Nejprve táhni lodí, zkus najít nový svět.</entry>
+	<entry key="default_m0_continentInSight">Nový Svět už je na dohled. Priraž s loďí a vyloď jednotky. Založ novou kolonii.</entry>
+	<entry key="default_m0_firstColonyWasFounded">Výborně. Podařilo se ti založit novou kolonii. Teď je na tobě, jak bude dál rozkvétat.</entry>
+	<entry key="default_m0_produce100cigars">Otevři kliknutím detail kolonie a začni pěstovat tabák a vyrábět z něj doutníky.
+Jednoho osadníka myší umísti na pole aby pěstoval tabák.
+Dalšího pošli do města vyrábět z tabáku cigarety. Pozor na množství jídla ve městě,
+jestli klesne na nulu, osadnicí začnou umírat hlady. Vyrob 30 doutníků.</entry>
+	<entry key="default_m0_sellCigarsInEuropePort">Konečně. Už máš potřebné množství doutníků. Vezmi je na loď, odvez do Evropy a prodej.</entry>
+	<entry key="default_m0_cigarsWasSold">Výborně. Podařilo se ti prodat těžce získané doutníky.</entry>
+	<entry key="default_m0_gameOver">Gratuluji. Podařilo se ti splnit první misi.</entry>
+	<entry key="default_m0_cantDeclareIndependence">Ještě nemůžeš vyhlásit nezávislost. Vyhlášení nezávislosti hodně pozlobí krále. Jakmile se o tom krále dozví, pokusí se získat kolonie silou zpět. Ještě nemáš dost síly se ubránit.</entry>
+	<entry key="default_m1_g1">Založ tři kolonie.</entry>
+	<entry key="default_m1_g2">Vydělej 5000 zlata.</entry>
+	<entry key="default_m1_g3">Vybuduj silnou armádu.</entry>
+	<entry key="default_m1_start">Máš první kolonii. Nyní musiš vybudovat bohatství.</entry>
+	<entry key="default_m1_foundColonies">Budeš potřebovat další kolonie. Za prodané zboží kup další kolonisty a založ tři města.</entry>
+	<entry key="default_m1_foundColonies_done">Skvělé. Nyní máš tři kolonie.</entry>
+	<entry key="default_m1_get5000">Teď budeš potřebovat zlato. Hodně zlata. Zprodeje zboží v Evrope získej 5000 zlata.</entry>
+	<entry key="default_m1_get5000_done">Výborně už máš 5000 zlata.</entry>
+	<entry key="default_m1_makeArmy">Teď bude potřeba vybudovat armádu. Budeš potřebovat nejméně 15 kolonistů. Kolonisti budou za tebe bojovat.</entry>
+	<entry key="default_m1_makeArmy_done">Skvělé, vybudoval jsi armádu.</entry>
+	<entry key="default_m1_done">Skvělé. Vedeš si dobře. Teď hurá do další mise.</entry>
+	<entry key="default_m2_g1">Declare independence.</entry>
+	<entry key="default_m2_g2">Conquer king's army.</entry>
+	<entry key="default_m2_start">Podařilo se ti dojít daleko. Nyní más bohatou a silnou společnost. Posledni krok je získání nezávislostí.</entry>
+	<entry key="default_m2_declareIndependence">První krok je, že musíš vyhlásit nezávislost. S tím optarně. Počitej, že se král hodně naštve a pošle na tebe silné vojsko s jediním cílem - zničit tě.</entry>
+	<entry key="default_m2_declareIndependence_done">Tak, teď jsi se vydal na nevratnou cestu k válce a k nezávislosti. Co nevidět přijede silné expediční vojsko. Připrav se.</entry>
+	<entry key="default_m2_portIsClosed">Od této chvíle už nemůžeš jezdit do Evropy. Zdá se, že se král hodně zlobí.</entry>
+	<entry key="default_m2_done1">Sláva. Podařilo se to porazit královké vojsko.</entry>
+	<entry key="default_m2_done2">Zde tvoje cesta končí. Pro svůj mladý národ jsi vydobyl svobodu. Všechny oběti položené k dosažení vznešeného cíle se mnohokrát vrátili.</entry>
+
+</properties>

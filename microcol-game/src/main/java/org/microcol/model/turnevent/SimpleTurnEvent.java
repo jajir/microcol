@@ -17,7 +17,7 @@ public final class SimpleTurnEvent extends AbstractTurnEvent {
      * @param player
      *            required player
      */
-    SimpleTurnEvent(final String messageKey, final Object[] args, final Player player) {
+    SimpleTurnEvent(final TurnEvents messageKey, final Object[] args, final Player player) {
         super(messageKey, args, player);
     }
 

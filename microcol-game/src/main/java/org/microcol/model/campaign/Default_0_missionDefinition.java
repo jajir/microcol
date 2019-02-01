@@ -42,7 +42,7 @@ final class Default_0_missionDefinition extends MissionDefinition<Default_0_goal
                     if (MissionImpl.GAME_OVER_REASON_ALL_GOALS_ARE_DONE
                             .equals(context.getEvent().getGameOverResult().getGameOverReason())) {
                         missionCallBack.executeOnFrontEnd(callBackContext -> {
-                            callBackContext.showMessage("campaign.default.m0.gameOver");
+                            callBackContext.showMessage(Missions.default_m0_gameOver);
                             callBackContext.goToGameMenu();
                         });
                         return "ok";
@@ -57,13 +57,13 @@ final class Default_0_missionDefinition extends MissionDefinition<Default_0_goal
          * Disable declaring of independence.
          */
         event.stopEventExecution();
-        missionCallBack.showMessage("campaign.default.m0.cantDeclareIndependence");
+        missionCallBack.showMessage(Missions.default_m0_cantDeclareIndependence);
     }
 
     @Override
     public void onGameStarted(final GameStartedEvent event) {
         if (isFirstTurn(event.getModel())) {
-            missionCallBack.showMessage("campaign.default.m0.start");
+            missionCallBack.showMessage(Missions.default_m0_start);
         }
     }
 
@@ -72,14 +72,14 @@ final class Default_0_missionDefinition extends MissionDefinition<Default_0_goal
         if (!isPlayerHaveAnyColony(event.getModel())
                 && isAnyLocationAtHighSeas(event.getModel(), event.getPath())) {
             event.stopEventExecution();
-            missionCallBack.showMessage("campaign.default.m0.cantMoveToHighSeas");
+            missionCallBack.showMessage(Missions.default_m0_cantMoveToHighSeas);
         }
     }
 
     @Override
     public void onUnitMoveFinished(final UnitMoveFinishedEvent event) {
         if (isFirstTurn(event.getModel()) && event.getUnit().getActionPoints() == 0) {
-            missionCallBack.showMessage("campaign.default.m0.pressNextTurn");
+            missionCallBack.showMessage(Missions.default_m0_pressNextTurn);
         } else {
             if (!goals.getGoalFindNewWorld().isFinished()) {
                 final ContinentTool ct = new ContinentTool();
@@ -89,7 +89,7 @@ final class Default_0_missionDefinition extends MissionDefinition<Default_0_goal
                         () -> new MicroColException("Continent is not at expected location"));
                 if (event.getUnit().isAtPlaceLocation()
                         && c.getDistance(event.getUnit().getLocation()) < 4) {
-                    missionCallBack.showMessage("campaign.default.m0.continentInSight");
+                    missionCallBack.showMessage(Missions.default_m0_continentInSight);
                     goals.getGoalFindNewWorld().setFinished(true);
                 }
             }
@@ -102,7 +102,7 @@ final class Default_0_missionDefinition extends MissionDefinition<Default_0_goal
             final Player human = getHumanPlayer(getModel());
             final Unit ship = findFirstShip(getModel(), human);
             if (ship.getActionPoints() == ship.getSpeed()) {
-                missionCallBack.showMessage("campaign.default.m0.moveUnitBeforeEndTurn");
+                missionCallBack.showMessage(Missions.default_m0_moveUnitBeforeEndTurn);
             }
         }
     }
@@ -115,7 +115,7 @@ final class Default_0_missionDefinition extends MissionDefinition<Default_0_goal
                 final Player human = getHumanPlayer(getModel());
                 if (human.getPlayerStatistics().getGoodsStatistics()
                         .getGoodsAmount(GoodType.CIGARS) >= TRAGET_AMOUNT_OF_CIGARS) {
-                    missionCallBack.showMessage("campaign.default.m0.sellCigarsInEuropePort");
+                    missionCallBack.showMessage(Missions.default_m0_sellCigarsInEuropePort);
                     goals.getGoalProduceCigars().setFinished(true);
                 }
 
@@ -131,7 +131,7 @@ final class Default_0_missionDefinition extends MissionDefinition<Default_0_goal
         }
         if (goals.getGoalSellCigars().getWasSold() >= TRAGET_AMOUNT_OF_CIGARS) {
             goals.getGoalSellCigars().setFinished(true);
-            missionCallBack.showMessage("campaign.default.m0.cigarsWasSold");
+            missionCallBack.showMessage(Missions.default_m0_cigarsWasSold);
         }
     }
 
@@ -139,8 +139,8 @@ final class Default_0_missionDefinition extends MissionDefinition<Default_0_goal
     public void onColonyWasFounded(final ColonyWasFoundEvent event) {
         if (isPlayerHaveAnyColony(event.getModel())) {
             goals.getGoalFoundColony().setFinished(true);
-            missionCallBack.showMessage("campaign.default.m0.firstColonyWasFounded",
-                    "campaign.default.m0.produce100cigars");
+            missionCallBack.showMessage(Missions.default_m0_firstColonyWasFounded,
+                    Missions.default_m0_produce100cigars);
         }
     }
 

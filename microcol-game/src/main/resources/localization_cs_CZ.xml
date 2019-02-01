@@ -10,7 +10,6 @@
 
 <properties>
 	<comment>Test data for RBCPTest.java</comment>
-	<entry key="game.title">MicroCol</entry>
 	
 	<entry key="mainMenu.game">Hra</entry>
 	<entry key="mainMenu.game.declareIndependence">Vyhlásit nezávislost</entry>
@@ -47,96 +46,15 @@
 	<entry key="mainMenu.help.colonizopedia">Colonizopedia</entry>
 
 	<entry key="aboutDialog.caption">O MicroCol</entry>
-	<entry key="rightPanel.description">Zde se zobrazí informace o vybraném panelu případně o jednotkách </entry>
-	<entry key="unitsPanel.description">Zde se zobrazí informace o vybraném panelu případně o jednotkách </entry>
-	<entry key="unitsPanel.unexplored">Neprozkoumáno</entry>
-	<entry key="unitsPanel.units">Jednotky:</entry>
-	<entry key="unitsPanel.availableMoves">Tahů:</entry>
-	<entry key="unitsPanel.owner">Vlastník:</entry>
-	<entry key="unitsPanel.currentUser">Táhne:</entry>
-	<entry key="unitsPanel.with">S:</entry>
-	<entry key="unitsPanel.empty">Zádné zboží</entry>
 	<entry key="nextTurnButton">Další tah</entry>
 	<entry key="nextTurnButton.desctiption">Provede další tah, kdy táhnou ostatní hráči</entry>
 	<entry key="tile.ocean.name">Oceán</entry>
 	<entry key="tile.ocean.description">Široký a pustý oceán</entry>
-	<entry key="statusBar.tile.notExplored">Tato oblast je neprozkoumaná</entry>
-	<entry key="statusBar.tile.start">Toto je </entry>
-	<entry key="statusBar.tile.withUnit">s jednotkami:</entry>
-	<entry key="statusBar.tile.unitCount">s %s jednotkami</entry>
-	<entry key="statusBar.era">Rok</entry>
-	<entry key="statusBar.era.description">Aktuální čas</entry>
-	<entry key="statusBar.gold">Zlato</entry>
-	<entry key="statusBar.gold.description">Počet zlatých mincí, které máš.</entry>
-	<entry key="statusBar.status.description">Zde se ukáže stručná nápověda</entry>
-	<entry key="statusBar.season.spring">Jaro</entry>
-	<entry key="statusBar.season.summer">Léto</entry>
-	<entry key="statusBar.season.autumn">Podzim</entry>
-	<entry key="statusBar.season.winter">Zima</entry>
-
-	<entry key="campaign.default.m0.g1">Najdi nový svět. Jeď lodí doleva, tam asi bude země.</entry>
-	<entry key="campaign.default.m0.g2">Vyloď se a zolož kolonii.</entry>
-	<entry key="campaign.default.m0.g3">Vyprodukuj 30 doutníků.</entry>
-	<entry key="campaign.default.m0.g4">Prodej doutníky v Evropě.</entry>
-	<entry key="campaign.default.m0.start">Najděte nový svět, kde založíte kolonii. Jeď lodí doleva, tam asi bude země.</entry>
-	<entry key="campaign.default.m0.cantMoveToHighSeas">Nemůžeš se vrátit do Evropy odkuď jsi přijel. Zkus najít nový svět, pravděpodobně bude ležet na západě.</entry>
-	<entry key="campaign.default.m0.pressNextTurn">Tento tah už neni monžné s lodí dál hýbat. Loď nemá dost bodů na pohyb. Stav bodů je vidět v panelu naprvo, kde jsou detaily lodě. Pro další tah stiskni 'Další tah'</entry>
-	<entry key="campaign.default.m0.moveUnitBeforeEndTurn">Nejprve táhni lodí, zkus najít nový svět.</entry>
-	<entry key="campaign.default.m0.continentInSight">Nový Svět už je na dohled. Priraž s loďí a vyloď jednotky. Založ novou kolonii.</entry>
-	<entry key="campaign.default.m0.firstColonyWasFounded">Výborně. Podařilo se ti založit novou kolonii. Teď je na tobě, jak bude dál rozkvétat.</entry>
-	<entry key="campaign.default.m0.produce100cigars">Otevři kliknutím detail kolonie a začni pěstovat tabák a vyrábět z něj doutníky.
-Jednoho osadníka myší umísti na pole aby pěstoval tabák.
-Dalšího pošli do města vyrábět z tabáku cigarety. Pozor na množství jídla ve městě,
-jestli klesne na nulu, osadnicí začnou umírat hlady. Vyrob 30 doutníků.</entry>
-	<entry key="campaign.default.m0.sellCigarsInEuropePort">Konečně. Už máš potřebné množství doutníků. Vezmi je na loď, odvez do Evropy a prodej.</entry>
-	<entry key="campaign.default.m0.cigarsWasSold">Výborně. Podařilo se ti prodat těžce získané doutníky.</entry>
-	<entry key="campaign.default.m0.gameOver">Gratuluji. Podařilo se ti splnit první misi.</entry>
-	<entry key="campaign.default.m0.cantDeclareIndependence">Ještě nemůžeš vyhlásit nezávislost. Vyhlášení nezávislosti hodně pozlobí krále. Jakmile se o tom krále dozví, pokusí se získat kolonie silou zpět. Ještě nemáš dost síly se ubránit.</entry>
-	<entry key="campaign.default.m1.g1">Založ tři kolonie.</entry>
-	<entry key="campaign.default.m1.g2">Vydělej 5000 zlata.</entry>
-	<entry key="campaign.default.m1.g3">Vybuduj silnou armádu.</entry>
-	<entry key="campaign.default.m1.start">Máš první kolonii. Nyní musiš vybudovat bohatství.</entry>
-	<entry key="campaign.default.m1.foundColonies">Budeš potřebovat další kolonie. Za prodané zboží kup další kolonisty a založ tři města.</entry>
-	<entry key="campaign.default.m1.foundColonies.done">Skvělé. Nyní máš tři kolonie.</entry>
-	<entry key="campaign.default.m1.get5000">Teď budeš potřebovat zlato. Hodně zlata. Zprodeje zboží v Evrope získej 5000 zlata.</entry>
-	<entry key="campaign.default.m1.get5000.done">Výborně už máš 5000 zlata.</entry>
-	<entry key="campaign.default.m1.makeArmy">Teď bude potřeba vybudovat armádu. Budeš potřebovat nejméně 15 kolonistů. Kolonisti budou za tebe bojovat.</entry>
-	<entry key="campaign.default.m1.makeArmy.done">Skvělé, vybudoval jsi armádu.</entry>
-	<entry key="campaign.default.m1.done">Skvělé. Vedeš si dobře. Teď hurá do další mise.</entry>
-	<entry key="campaign.default.m2.g1">Declare independence.</entry>
-	<entry key="campaign.default.m2.g2">Conquer king's army.</entry>
-	<entry key="campaign.default.m2.start">Podařilo se ti dojít daleko. Nyní más bohatou a silnou společnost. Posledni krok je získání nezávislostí.</entry>
-	<entry key="campaign.default.m2.declareIndependence">První krok je, že musíš vyhlásit nezávislost. S tím optarně. Počitej, že se král hodně naštve a pošle na tebe silné vojsko s jediním cílem - zničit tě.</entry>
-	<entry key="campaign.default.m2.declareIndependence.done">Tak, teď jsi se vydal na nevratnou cestu k válce a k nezávislosti. Co nevidět přijede silné expediční vojsko. Připrav se.</entry>
-	<entry key="campaign.default.m2.portIsClosed">Od této chvíle už nemůžeš jezdit do Evropy. Zdá se, že se král hodně zlobí.</entry>
-	<entry key="campaign.default.m2.done1">Sláva. Podařilo se to porazit královké vojsko.</entry>
-	<entry key="campaign.default.m2.done2">Zde tvoje cesta končí. Pro svůj mladý národ jsi vydobyl svobodu. Všechny oběti položené k dosažení vznešeného cíle se mnohokrát vrátili.</entry>
 
 	<entry key="chooseGoodAmount.caption">Kolik chcete převést?</entry>
 	<entry key="chooseGoodAmount.zero">Nic</entry>
 	<entry key="chooseGoodAmount.everything">Všechno</entry>
 	<entry key="chooseGoodAmount.selectedAmount">Vybráno: </entry>
-
-	<entry key="terrain.OCEAN.name">Oceán</entry>
-	<entry key="terrain.OCEAN.description">Nekonečný studený oceán</entry>
-	<entry key="terrain.GRASSLAND.name">Zelená země</entry>
-	<entry key="terrain.GRASSLAND.description">Úrodné zelené pláně</entry>
-	<entry key="terrain.TUNDRA.name">Tundra</entry>
-	<entry key="terrain.TUNDRA.description">Široká mrazivá pustina</entry>
-	<entry key="terrain.ARCTIC.name">Arktika</entry>
-	<entry key="terrain.ARCTIC.description">Arktická pustina</entry>
-	<entry key="terrain.HIGH_SEA.name">Daleké moře</entry>
-	<entry key="terrain.HIGH_SEA.description">Obrovské vodní masy odělující Evropu a kolonie</entry>
-	<entry key="terrain.PRAIRIE.name">Prérie</entry>
-	<entry key="terrain.PRAIRIE.description">Velké a rozlehlé planiny divokého západu.</entry>
-	<entry key="terrain.MOUNTAIN.name">Hory</entry>
-	<entry key="terrain.MOUNTAIN.description">Vysoké a nebezpečné hory</entry>
-	<entry key="terrain.HILL.name">Kopce</entry>
-	<entry key="terrain.HILL.description">Krásná velmi úrodná kopcovitá krajina krajina.</entry>
-
-	<entry key="unit.FRIGATE.name">Frigata</entry>
-	<entry key="unit.GALLEON.name">Galeona</entry>
-	<entry key="unit.COLONIST.name">Svobodný kolonista</entry>
 
 	<entry key="europeDialog.caption">Evropský přístav</entry>
 	
@@ -158,30 +76,6 @@ jestli klesne na nulu, osadnicí začnou umírat hlady. Vyrob 30 doutníků.</en
 	<entry key="europe.recruit">Najmout</entry>
 	<entry key="europe.buy">Koupit</entry>
 	
-	<entry key="buildingQueueDialog.caption">Plánování stavby</entry>
-	
-	<entry key="turnReport.title">Důležité události</entry>
-	<entry key="turnReport.caption">Důležité události</entry>
-	<entry key="turnReport.noEvents">Žádné důležité události.</entry>
-	<entry key="turnEvent.shipComeToEuropePort">Loď prijela do Evropského přístavu, nenech ji dlouho čekat.</entry>
-	<entry key="turnEvent.shipComeToHighSeas">Loď se vrátila z Evrop zpět.</entry>
-	<entry key="turnEvent.faminePlagueColony">Hladomor řádí v kolonii %s. V kolonii umírají kolonisté.</entry>
-	<entry key="turnEvent.famineWillPlagueColony">Blíží se hladomor ve městě %s. V příštím tahu začnou umírat kolonisté.</entry>
-	<entry key="turnEvent.colonyWasDestroyed">Kolonie %s byla zničena.</entry>
-	<entry key="turnEvent.newUnitIsInEurope">Díky náboženskému neklidu ve starém světě se další kolonista rozhodl zkusit štěstí v novém světě, čeká v evropském přístavu.</entry>
-	<entry key="turnEvent.newUnitIsInColony">V kolonii se objevila nová jednotka.</entry>
-	
-	<entry key="statistics.title">Statistiky</entry>
-	<entry key="statistics.caption">Statistiky</entry>
-	<entry key="statistics.year">Rok</entry>
-	<entry key="statistics.gold">Zlato</entry>
-	<entry key="statistics.militaryPower">Vojenská síla</entry>
-	<entry key="statistics.wealth">Bohatství</entry>
-	<entry key="statistics.score">Score</entry>
-	
-	<entry key="missionGoals.title">Cíle mise</entry>
-	<entry key="missionGoals.caption">Cíle mise</entry>
-
 	<entry key="FileChooser.cancelButtonText">Zrušit</entry>
 	<entry key="FileChooser.fileDateHeaderText">Datum úpravy</entry>
 	<entry key="FileChooser.openButtonText">Nahrát</entry>
@@ -192,46 +86,5 @@ jestli klesne na nulu, osadnicí začnou umírat hlady. Vyrob 30 doutníků.</en
 	<entry key="FileChooser.newFolderButtonText">Vytvořit složku</entry>
 	<entry key="FileChooser.filesOfTypeLabelText">Formát souboru:</entry>
 	<entry key="FileChooser.saveDialogFileNameLabelText">Uložit jako:</entry>
-	
-	<entry key="construction.TOWN_HALL.name">Radnice</entry>
-	<entry key="construction.LUMBER_MILL.name">Tesař</entry>
-	<entry key="construction.CARPENTERS_SHOP.name">Pila</entry>
-	<entry key="construction.CARPENTERS_STAND.name">Malá pila</entry>
-	<entry key="construction.IRON_WORKS.name">Huť</entry>
-	<entry key="construction.BLACKSMITHS_SHOP.name">Velké Kovářství</entry>
-	<entry key="construction.BLACKSMITHS_HOUSE.name">Kovář</entry>
-	<entry key="construction.FORTRESS.name">Pevnost</entry>
-	<entry key="construction.FORT.name">Opevnění</entry>
-	<entry key="construction.STOCKADE.name">Palisáda</entry>
-	<entry key="construction.CIGAR_FACTORY.name">Továrna na cigarety</entry>
-	<entry key="construction.TOBACCONISTS_SHOP.name">Balírna doutníků</entry>
-	<entry key="construction.TOBACCONISTS_HOUSE.name">Balič doutníků</entry>
-	<entry key="construction.TEXTILE_MILL.name">Textilní továrna</entry>
-	<entry key="construction.WEAVERS_SHOP.name">Tkalcovna</entry>
-	<entry key="construction.WEAVERS_HOUSE.name">Tkadlec</entry>
-	<entry key="construction.RUM_FACTORY.name">Továrna na rum</entry>
-	<entry key="construction.RUM_DISTILLERY.name">Palírna</entry>
-	<entry key="construction.RUM_DISTILLERS_HOUSE.name">Malá palírna</entry>
-	<entry key="construction.FUR_FACTORY.name">Továrna na kožešiny</entry>
-	<entry key="construction.FUR_TRADING_POST.name">Kožešnictví</entry>
-	<entry key="construction.FUR_TRADERS_HOUSE.name">Kožešník</entry>
-	<entry key="construction.ARSENAL.name">Zbrojovka</entry>
-	<entry key="construction.MAGAZINE.name">Sklad střeliva</entry>
-	<entry key="construction.ARMORY.name">Zbrojnice</entry>
-	<entry key="construction.SHIPYARD.name">Loděnice</entry>
-	<entry key="construction.DRYDOCK.name">Suchý dok</entry>
-	<entry key="construction.DOCK.name">Dok</entry>
-	<entry key="construction.UNIVERSITY.name">Univerzita</entry>
-	<entry key="construction.COLLEGE.name">Střední škola</entry>
-	<entry key="construction.SCHOOLHOUSE.name">Škola</entry>
-	<entry key="construction.WAREHOUSE_EXPANSION.name">Rozšířený sklad</entry>
-	<entry key="construction.WAREHOUSE.name">Sklad</entry>
-	<entry key="construction.BASIC_WAREHOUSE.name">Malý sklad</entry>
-	<entry key="construction.STABLES.name">Stáj</entry>
-	<entry key="construction.CATHEDRAL.name">Katedrála</entry>
-	<entry key="construction.CHURCH.name">Kostel</entry>
-	<entry key="construction.NEWSPAPER.name">Tiskárny</entry>
-	<entry key="construction.PRINTING_PRESS.name">Tiskařský stroj</entry>
-	<entry key="construction.CUSTOM_HOUSE.name">Celnice</entry>
 	
 </properties>

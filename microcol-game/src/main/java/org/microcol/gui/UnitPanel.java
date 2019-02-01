@@ -1,7 +1,7 @@
 package org.microcol.gui;
 
 import org.microcol.gui.image.ImageProvider;
-import org.microcol.gui.util.Text;
+import org.microcol.i18n.I18n;
 import org.microcol.model.CargoSlot;
 import org.microcol.model.Player;
 import org.microcol.model.Unit;
@@ -26,15 +26,15 @@ public class UnitPanel {
 
     private final LocalizationHelper localizationHelper;
 
-    private final Text text;
+    private final I18n i18n;
 
     private final VBox box = new VBox();
 
-    public UnitPanel(final ImageProvider imageProvider, final Text text,
+    public UnitPanel(final ImageProvider imageProvider, final I18n i18n,
             final LocalizationHelper localizationHelper, final Player humanPlayer, final Unit unit,
             final boolean selected) {
         this.imageProvider = Preconditions.checkNotNull(imageProvider);
-        this.text = Preconditions.checkNotNull(text);
+        this.i18n = Preconditions.checkNotNull(i18n);
         this.localizationHelper = Preconditions.checkNotNull(localizationHelper);
 
         box.getStyleClass().add("unitPanel");
@@ -64,12 +64,12 @@ public class UnitPanel {
         sb.append(localizationHelper.getUnitName(unit.getType()));
         sb.append("\n");
         if (isUnitOwnedBy(unit, humanPlayer)) {
-            sb.append(text.get("unitsPanel.availableMoves"));
+            sb.append(i18n.get(Loc.unitsPanel_availableMoves));
             sb.append(" ");
             sb.append(unit.getActionPoints());
             sb.append("\n");
         }
-        sb.append(text.get("unitsPanel.owner"));
+        sb.append(i18n.get(Loc.unitsPanel_owner));
         sb.append(" ");
         sb.append(unit.getOwner().getName());
         box.getChildren().add(new Label(sb.toString()));
@@ -92,9 +92,9 @@ public class UnitPanel {
         HBox box = new HBox();
         box.getStylesheets().add(MainStageBuilder.STYLE_SHEET_RIGHT_PANEL_VIEW);
         if (unit.getCargo().isEmpty()) {
-            box.getChildren().add(new Label(text.get("unitsPanel.empty")));
+            box.getChildren().add(new Label(i18n.get(Loc.unitsPanel_empty)));
         } else {
-            box.getChildren().add(new Label(text.get("unitsPanel.with")));
+            box.getChildren().add(new Label(i18n.get(Loc.unitsPanel_with)));
             unit.getCargo().getSlots().stream().filter(cargoSlot -> !cargoSlot.isEmpty())
                     .forEach(cargoSlot -> {
                         final ImageView imageView = getImageViewForCargoSlot(cargoSlot);

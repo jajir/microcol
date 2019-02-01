@@ -3,7 +3,6 @@ package org.microcol.gui;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.util.AbstractMessageWindow;
 import org.microcol.gui.util.ButtonsBar;
-import org.microcol.gui.util.Text;
 import org.microcol.gui.util.ViewUtil;
 import org.microcol.i18n.I18n;
 import org.microcol.model.campaign.MissionGoals;
@@ -19,19 +18,19 @@ public final class MissionGoalsDialog extends AbstractMessageWindow {
 
     private final GameModelController gameModelController;
 
-    private final Text text;
+    private final I18n i18n;
 
     private final VBox goalsPanel;
 
     @Inject
-    MissionGoalsDialog(final ViewUtil viewUtil, final Text text, final I18n i18n,
+    MissionGoalsDialog(final ViewUtil viewUtil, final I18n i18n,
             final GameModelController gameModelController) {
         super(viewUtil, i18n);
         this.gameModelController = Preconditions.checkNotNull(gameModelController);
-        this.text = Preconditions.checkNotNull(text);
-        setTitle(text.get("missionGoals.title"));
+        this.i18n = Preconditions.checkNotNull(i18n);
+        setTitle(i18n.get((Dialog.missionGoals_title)));
 
-        final Label labelCaption = new Label(text.get("missionGoals.caption"));
+        final Label labelCaption = new Label(i18n.get(Dialog.missionGoals_caption));
 
         final VBox mainPanel = new VBox();
 
@@ -50,7 +49,7 @@ public final class MissionGoalsDialog extends AbstractMessageWindow {
         goalsPanel.getChildren().clear();
         final MissionGoals goals = gameModelController.getModelMission().getMission().getGoals();
         goals.getGoals().forEach(goal -> {
-            String str = text.get(goal.getDescriptionKey()) + " ";
+            String str = i18n.get(goal.getDescriptionKey()) + " ";
             if (goal.isFinished()) {
                 str += "Done";
             } else {

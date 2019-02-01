@@ -27,8 +27,8 @@ final class Default_2_missionDefinition extends MissionDefinition<Default_2_goal
                     if (MissionImpl.GAME_OVER_REASON_ALL_GOALS_ARE_DONE
                             .equals(context.getEvent().getGameOverResult().getGameOverReason())) {
                         missionCallBack.executeOnFrontEnd(callBackContext -> {
-                            callBackContext.showMessage("campaign.default.m2.done1",
-                                    "campaign.default.m2.done2");
+                            callBackContext.showMessage(Missions.default_m2_done1,
+                                    Missions.default_m2_done2);
                             callBackContext.goToGameMenu();
                         });
                         return "ok";
@@ -55,16 +55,16 @@ final class Default_2_missionDefinition extends MissionDefinition<Default_2_goal
     @Override
     public void onGameStarted(final GameStartedEvent event) {
         if (isFirstTurn(getModel())) {
-            missionCallBack.showMessage("campaign.default.m2.start",
-                    "campaign.default.m2.declareIndependence");
+            missionCallBack.showMessage(Missions.default_m1_start,
+                    Missions.default_m2_declareIndependence);
         }
     }
 
     @Override
     public void onIndependenceWasDeclared(final IndependenceWasDeclaredEvent event) {
         if (!getGoals().getGoalDeclareIndependence().isFinished()) {
-            missionCallBack.showMessage("campaign.default.m2.declareIndependence.done",
-                    "campaign.default.m2.portIsClosed");
+            missionCallBack.showMessage(Missions.default_m2_declareIndependence_done,
+                    Missions.default_m2_portIsClosed);
             getGoals().getGoalDeclareIndependence().setFinished(true);
         }
     }

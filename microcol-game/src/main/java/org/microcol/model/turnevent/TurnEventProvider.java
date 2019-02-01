@@ -8,20 +8,6 @@ import org.microcol.model.Player;
  */
 public final class TurnEventProvider {
 
-    private static final String KEY_SHIP_COME_TO_EUROPE = "turnEvent.shipComeToEuropePort";
-
-    private static final String KEY_SHIP_COME_TO_HIGHSEAS = "turnEvent.shipComeToHighSeas";
-
-    private static final String KEY_FAMINE_PLAGUE_COLONY = "turnEvent.faminePlagueColony";
-
-    private static final String KEY_FAMINE_WILL_PLAGUE_COLONY = "turnEvent.famineWillPlagueColony";
-
-    private static final String KEY_COLONY_WAS_DESTORYED = "turnEvent.colonyWasDestroyed";
-
-    private static final String KEY_NEW_UNIT_RELIGION = "turnEvent.newUnitIsInEurope";
-
-    private static final String KEY_NEW_UNIT_IN_COLONY = "turnEvent.newUnitIsInColony";
-
     /**
      * Hidden default constructor.
      */
@@ -36,7 +22,7 @@ public final class TurnEventProvider {
      * @return turn event object
      */
     public static TurnEvent getShipComeEuropePort(final Player player) {
-        return new SimpleTurnEvent(KEY_SHIP_COME_TO_EUROPE, new Object[0], player);
+        return new SimpleTurnEvent(TurnEvents.shipComeToEuropePort, new Object[0], player);
     }
 
     /**
@@ -47,7 +33,7 @@ public final class TurnEventProvider {
      * @return turn event object
      */
     public static TurnEvent getShipComeHighSeas(final Player player) {
-        return new SimpleTurnEvent(KEY_SHIP_COME_TO_HIGHSEAS, new Object[0], player);
+        return new SimpleTurnEvent(TurnEvents.shipComeToHighSeas, new Object[0], player);
     }
 
     /**
@@ -60,7 +46,7 @@ public final class TurnEventProvider {
      * @return turn event object
      */
     public static TurnEvent getFaminePlagueColony(final Player player, final Colony colony) {
-        return new SimpleTurnEvent(KEY_FAMINE_PLAGUE_COLONY, new Object[] {colony.getName() },
+        return new SimpleTurnEvent(TurnEvents.faminePlagueColony, new Object[] { colony.getName() },
                 player);
     }
 
@@ -74,8 +60,8 @@ public final class TurnEventProvider {
      * @return turn event object
      */
     public static TurnEvent getFamineWillPlagueColony(final Player player, final Colony colony) {
-        return new SimpleTurnEvent(KEY_FAMINE_WILL_PLAGUE_COLONY, new Object[] {colony.getName() },
-                player);
+        return new SimpleTurnEvent(TurnEvents.famineWillPlagueColony,
+                new Object[] { colony.getName() }, player);
     }
 
     /**
@@ -88,7 +74,7 @@ public final class TurnEventProvider {
      * @return turn event object
      */
     public static TurnEvent getColonyWasDestroyed(final Player player, final Colony colony) {
-        return new SimpleTurnEvent(KEY_COLONY_WAS_DESTORYED, new Object[] {colony.getName() },
+        return new SimpleTurnEvent(TurnEvents.colonyWasDestroyed, new Object[] { colony.getName() },
                 player);
     }
 
@@ -100,7 +86,7 @@ public final class TurnEventProvider {
      * @return turn event object
      */
     public static TurnEvent getNewUnitInEurope(final Player player) {
-        return new SimpleTurnEvent(KEY_NEW_UNIT_RELIGION, new Object[0], player);
+        return new SimpleTurnEvent(TurnEvents.newUnitIsInEurope, new Object[0], player);
     }
 
     /**
@@ -111,7 +97,7 @@ public final class TurnEventProvider {
      * @return turn event object
      */
     public static TurnEvent getNewUnitInColony(final Player player) {
-        return new SimpleTurnEvent(KEY_NEW_UNIT_IN_COLONY, new Object[0], player);
+        return new SimpleTurnEvent(TurnEvents.newUnitIsInColony, new Object[0], player);
     }
 
 }

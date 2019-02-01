@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE properties [
+<!ELEMENT properties ( comment?, entry* ) >
+<!ATTLIST properties version CDATA #FIXED "1.0">
+<!ELEMENT comment (#PCDATA) >
+<!ELEMENT entry (#PCDATA) >
+<!ATTLIST entry key CDATA #REQUIRED>
+]>
+
+<properties>
+	<comment>Define keys for turn events.</comment>
+	
+	<entry key="shipComeToEuropePort">Ship come to European port.</entry>
+	<entry key="shipComeToHighSeas">Ship arrived from Europe and waiting for next command.</entry>
+	<entry key="faminePlagueColony">Famine plague colony %s. Colonists are dying.</entry>
+	<entry key="famineWillPlagueColony">Famine is coming in colony %s. in next turn colonist will die.</entry>
+	<entry key="colonyWasDestroyed">Colony %s was destroyed.</entry>
+	<entry key="newUnitIsInEurope">Because of religion unrest in Europe new colonist decide to emigrate. Now is waiting in Europe.</entry>
+	<entry key="newUnitIsInColony">There is a new unit in colony.</entry>
+
+</properties>

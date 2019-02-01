@@ -19,6 +19,7 @@ import com.google.inject.Inject;
  * bundles.
  * 
  */
+@Deprecated
 public final class Text {
 
     private static final Logger logger = LoggerFactory.getLogger(Text.class);

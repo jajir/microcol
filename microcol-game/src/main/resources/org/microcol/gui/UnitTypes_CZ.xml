@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE properties [
+<!ELEMENT properties ( comment?, entry* ) >
+<!ATTLIST properties version CDATA #FIXED "1.0">
+<!ELEMENT comment (#PCDATA) >
+<!ELEMENT entry (#PCDATA) >
+<!ATTLIST entry key CDATA #REQUIRED>
+]>
+
+<properties>
+	<comment>Define messages for unit types.</comment>
+
+	<entry key="FRIGATE_name">Frigata</entry>
+	<entry key="GALLEON_name">Galeona</entry>
+	<entry key="COLONIST_name">Svobodný kolonista</entry>
+
+</properties>
