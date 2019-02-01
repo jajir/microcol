@@ -24,6 +24,7 @@ public final class CallBackContext {
         this.text = Preconditions.checkNotNull(text);
     }
 
+    @SuppressWarnings("unchecked")
     public <T extends Enum<T> & MessageKeyResource> void showMessage(final T... messageKeys) {
         for (final T messageKey : messageKeys) {
             dialogMessage.setText(text.get(messageKey));

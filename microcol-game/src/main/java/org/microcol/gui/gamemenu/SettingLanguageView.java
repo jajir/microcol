@@ -2,7 +2,7 @@ package org.microcol.gui.gamemenu;
 
 import org.microcol.gui.util.GamePreferences;
 import org.microcol.gui.util.JavaFxComponent;
-import org.microcol.gui.util.Text.Language;
+import org.microcol.gui.util.Language;
 import org.microcol.gui.util.UpdatableLanguage;
 import org.microcol.i18n.I18n;
 

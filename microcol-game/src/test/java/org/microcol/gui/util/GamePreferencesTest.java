@@ -9,7 +9,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.microcol.gui.util.GamePreferences;
-import org.microcol.gui.util.Text.Language;
 
 public class GamePreferencesTest {
 

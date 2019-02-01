@@ -76,15 +76,4 @@
 	<entry key="europe.recruit">Recruit</entry>
 	<entry key="europe.buy">Buy</entry>
 	
-	<entry key="FileChooser.cancelButtonText">Cancel</entry>
-	<entry key="FileChooser.fileDateHeaderText">Date modified</entry>
-	<entry key="FileChooser.openButtonText">Load</entry>
-	<entry key="FileChooser.saveButtonText">Save</entry>
-	<entry key="FileChooser.saveDialogTitleText">Save game</entry>
-	<entry key="FileChooser.openDialogTitleText">Load game</entry>
-	<entry key="FileChooser.newFolderTitleText">New Folder</entry>
-	<entry key="FileChooser.newFolderButtonText">New Folder</entry>
-	<entry key="FileChooser.filesOfTypeLabelText">File Format:</entry>
-	<entry key="FileChooser.saveDialogFileNameLabelText">Save As:</entry>
-		
 </properties>

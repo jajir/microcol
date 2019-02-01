@@ -27,8 +27,8 @@ import org.microcol.gui.europe.RecruiteUnitsDialog;
 import org.microcol.gui.event.AboutGameListenerImpl;
 import org.microcol.gui.event.AnimationSpeedChangedListenerPreferences;
 import org.microcol.gui.event.BuildColonyListener;
+import org.microcol.gui.event.ChangeLanguageListenerFileChooser;
 import org.microcol.gui.event.ChangeLanguageListenerPreferences;
-import org.microcol.gui.event.ChangeLanguageListenerText;
 import org.microcol.gui.event.DeclareIndependenceListener;
 import org.microcol.gui.event.PlowFieldEventListener;
 import org.microcol.gui.event.QuitGameListener;
@@ -89,7 +89,6 @@ import org.microcol.gui.util.Listener;
 import org.microcol.gui.util.PaintService;
 import org.microcol.gui.util.PersistentService;
 import org.microcol.gui.util.PersistingTool;
-import org.microcol.gui.util.Text;
 import org.microcol.gui.util.TurnStartedListener;
 import org.microcol.gui.util.UnitUtil;
 import org.microcol.gui.util.ViewUtil;
@@ -266,7 +265,7 @@ public final class MicroColModule extends AbstractModule {
          */
         bind(AboutGameListenerImpl.class).asEagerSingleton();
         bind(ChangeLanguageListenerPreferences.class).asEagerSingleton();
-        bind(ChangeLanguageListenerText.class).asEagerSingleton();
+        bind(ChangeLanguageListenerFileChooser.class).asEagerSingleton();
         bind(VolumeChangedListenerPreferences.class).asEagerSingleton();
         bind(AnimationSpeedChangedListenerPreferences.class).asEagerSingleton();
         bind(ShowGridListenerPreferences.class).asEagerSingleton();
@@ -291,12 +290,6 @@ public final class MicroColModule extends AbstractModule {
                 }
             }
         });
-    }
-
-    @Provides
-    @Singleton
-    Text makeText(final GamePreferences gamePreferences) {
-        return new Text(gamePreferences.getLocale());
     }
 
     @Provides

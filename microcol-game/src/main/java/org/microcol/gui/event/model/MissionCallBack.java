@@ -52,6 +52,7 @@ public final class MissionCallBack {
         executor.fire(gameModelController.getModel());
     }
 
+    @SuppressWarnings("unchecked")
     public <T extends Enum<T> & MessageKeyResource> void showMessage(final T... messageKeys) {
         Platform.runLater(() -> {
             for (final T messageKey : messageKeys) {

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE properties [
+<!ELEMENT properties ( comment?, entry* ) >
+<!ATTLIST properties version CDATA #FIXED "1.0">
+<!ELEMENT comment (#PCDATA) >
+<!ELEMENT entry (#PCDATA) >
+<!ATTLIST entry key CDATA #REQUIRED>
+]>
+
+<properties>
+	<comment>Define keys for FileChooser dialog</comment>
+
+	<entry key="cancelButtonText">Cancel</entry>
+	<entry key="fileDateHeaderText">Date modified</entry>
+	<entry key="openButtonText">Load</entry>
+	<entry key="saveButtonText">Save</entry>
+	<entry key="saveDialogTitleText">Save game</entry>
+	<entry key="openDialogTitleText">Load game</entry>
+	<entry key="newFolderTitleText">New Folder</entry>
+	<entry key="newFolderButtonText">New Folder</entry>
+	<entry key="filesOfTypeLabelText">File Format:</entry>
+	<entry key="saveDialogFileNameLabelText">Save As:</entry>
+
+</properties>

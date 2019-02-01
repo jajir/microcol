@@ -2,7 +2,6 @@ package org.microcol.gui.event;
 
 import java.util.Locale;
 
-import org.microcol.gui.util.Text;
 import org.microcol.i18n.I18n;
 
 import com.google.common.base.MoreObjects;
@@ -15,22 +14,17 @@ public final class ChangeLanguageEvent {
 
     private final I18n i18n;
 
-    private final Text.Language language;
-
-    public ChangeLanguageEvent(final Text.Language language, final I18n i18n) {
-        this.language = Preconditions.checkNotNull(language);
+    //TODO use here Language enum
+    public ChangeLanguageEvent(final Locale currentLocale, final I18n i18n) {
         this.i18n = Preconditions.checkNotNull(i18n);
-        i18n.setLocale(language.getLocale());
+        Preconditions.checkNotNull(currentLocale);
+        i18n.setLocale(currentLocale);
     }
 
     @Override
     public String toString() {
         return MoreObjects.toStringHelper(ChangeLanguageEvent.class).add("i18n", i18n)
-                .add("language", language).toString();
-    }
-
-    public Text.Language getLanguage() {
-        return language;
+                .add("currentLocale", i18n.getCurrentLocale()).toString();
     }
     
     public Locale getCurrentLocale(){

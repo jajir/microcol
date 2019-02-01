@@ -116,9 +116,9 @@ public final class GamePreferences {
         return new Locale(language, country);
     }
 
-    public Text.Language getLanguage() {
-        final Optional<Text.Language> lang = Text.Language.resolve(getLocale());
-        return lang.orElse(Text.Language.en);
+    public Language getLanguage() {
+        final Optional<Language> lang = Language.resolve(getLocale());
+        return lang.orElse(Language.en);
     }
 
     public void setVolume(final int volume) {

@@ -76,15 +76,4 @@
 	<entry key="europe.recruit">Najmout</entry>
 	<entry key="europe.buy">Koupit</entry>
 	
-	<entry key="FileChooser.cancelButtonText">Zrušit</entry>
-	<entry key="FileChooser.fileDateHeaderText">Datum úpravy</entry>
-	<entry key="FileChooser.openButtonText">Nahrát</entry>
-	<entry key="FileChooser.saveButtonText">Uložit</entry>
-	<entry key="FileChooser.saveDialogTitleText">Uložit hru</entry>
-	<entry key="FileChooser.openDialogTitleText">Nahrát hru</entry>
-	<entry key="FileChooser.newFolderTitleText">Vytvořit složku</entry>
-	<entry key="FileChooser.newFolderButtonText">Vytvořit složku</entry>
-	<entry key="FileChooser.filesOfTypeLabelText">Formát souboru:</entry>
-	<entry key="FileChooser.saveDialogFileNameLabelText">Uložit jako:</entry>
-	
 </properties>

@@ -29,7 +29,7 @@ public class ModelProvider {
 					.setLocation(Location.of(5, 4))
 					.setDefaultConstructions()
 					.setWorker(ConstructionType.RUM_DISTILLERS_HOUSE, 0, UnitType.COLONIST)
-					.setWorker(ConstructionType.CARPENTERS_SHOP, 0, UnitType.COLONIST)
+					.setWorker(ConstructionType.CARPENTERS_STAND, 0, UnitType.COLONIST)
 					.setWorker(ConstructionType.TOWN_HALL, 2, UnitType.COLONIST)
 					.setWorker(Direction.northEast.getVector(), UnitType.COLONIST, GoodType.CORN)
 					.setWorker(Direction.southWest.getVector(), UnitType.COLONIST, GoodType.CORN)

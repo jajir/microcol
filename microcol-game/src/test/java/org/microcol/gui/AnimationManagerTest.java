@@ -11,6 +11,7 @@ import org.microcol.gui.gamepanel.Area;
 
 import com.google.common.eventbus.EventBus;
 
+import mockit.Injectable;
 import mockit.Mocked;
 import mockit.StrictExpectations;
 import mockit.Tested;
@@ -25,7 +26,7 @@ public class AnimationManagerTest {
     @Mocked
     private Animation part1;
 
-    @Mocked
+    @Injectable
     private EventBus eventBus;
 
     @Mocked
