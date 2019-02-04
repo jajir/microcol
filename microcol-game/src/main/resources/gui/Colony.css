@@ -71,10 +71,10 @@
 
 .diffPositive {
 	-fx-text-fill: green;
-	-fx-padding: 0 0 0 5px;
+	-fx-padding: 0 0 0 0px;
 }
 
 .diffNegative {
 	-fx-text-fill: red;	
-	-fx-padding: 0 0 0 5px;
+	-fx-padding: 0 0 0 0px;
 }

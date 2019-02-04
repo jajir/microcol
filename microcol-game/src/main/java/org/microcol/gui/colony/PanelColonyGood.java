@@ -15,6 +15,7 @@ import org.microcol.model.GoodsAmount;
 import com.google.common.base.Preconditions;
 import com.google.common.eventbus.EventBus;
 
+import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -61,6 +62,7 @@ public final class PanelColonyGood implements JavaFxComponent {
         labelAmount = new Label();
         labelDiff = new Label();
         final HBox hlabels = new HBox(labelAmount, labelDiff);
+        hlabels.setAlignment(Pos.CENTER);
         mainPanel = new VBox();
         mainPanel.getChildren().add(paneImage);
         mainPanel.getChildren().add(hlabels);
@@ -114,7 +116,6 @@ public final class PanelColonyGood implements JavaFxComponent {
             labelDiff.getStyleClass().clear();
             labelDiff.setText("");
         }
-
     }
 
     @Override
