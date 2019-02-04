@@ -19,6 +19,8 @@ import com.google.common.eventbus.Subscribe;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
+import javafx.application.Platform;
+
 @Singleton
 @Listener
 public class ButtonsGamePanelController {
@@ -53,14 +55,16 @@ public class ButtonsGamePanelController {
     @Subscribe
     private void onSelectedUnitWasChanged(final SelectedUnitWasChangedEvent event) {
         LOGGER.debug("Selected unit was changed " + event.getSelectedUnit());
-        if (event.getSelectedUnit().isPresent()) {
-            final Unit unit = event.getSelectedUnit().get();
-            evaluateAllButtonsForSelectedUnit(unit);
-        } else {
-            buttonGamePanel.setVisibleButtonMove(false);
-            buttonGamePanel.setVisibleButtonBuildColony(false);
-            buttonGamePanel.setVisibleButtonPlowField(false);
-        }
+        Platform.runLater(() -> {
+            if (event.getSelectedUnit().isPresent()) {
+                final Unit unit = event.getSelectedUnit().get();
+                evaluateAllButtonsForSelectedUnit(unit);
+            } else {
+                buttonGamePanel.setVisibleButtonMove(false);
+                buttonGamePanel.setVisibleButtonBuildColony(false);
+                buttonGamePanel.setVisibleButtonPlowField(false);
+            }
+        });
     }
 
     @Subscribe

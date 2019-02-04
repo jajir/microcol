@@ -27,12 +27,14 @@ Planned releases
   * \u2713 Show colony and Europe full screen not as dialog.  
   
   * \u2713 Right panel allows to select unit.
- 
-  * \u2717 
   
-  * \u2717 
+  * \u2713 Colony building queue and queue editing - simple and ugly version
    
-  * \u2717 
+  * \u2717 redesign model: unit use class hierarchy, remove unit type, same for terrain. Move outside cargoHold, abstract class will contain attack and move 
+ 
+  * \uD83D\uDC1B When focused unit is placed outside colony and unit is moved to field than attempt to move unit leads to exception.
+ 
+  * \uD83D\uDC1B Main menu doesn't work when drag pressed mouse instead of simple move. It can't be easily solved. There is no such feature in JavaFx. Menu was redesigned without JavaFX.
  
   * \u2717 
   
@@ -42,16 +44,13 @@ Planned releases
   
   * \u2717 
 
-  * \u2717 
+  * \u2717  
+  
+  * \u2717 Finish translation
  
-  * \u2717 When focused unit is at colony and is moved to field than attempt to move unit leads to exception.
+  * \uD83D\uDC1B When focus is transfered by click than don't center at focused unit.
  
-  * \u2717 Main menu doesn't work when drag pressed mouse instead of simple move.
- It can't be easily solved. There is no such feature in JavaFx.
- 
-  * \u2717 When focus is transfered by click than don't center at focused unit.
- 
-  * \u2717 Don't animate and don't wait for movements outside of screen. When kings unit coming to colonies.
+  * \uD83D\uDC1B Don't animate and don't wait for movements outside of screen. When kings unit coming to colonies.
  
   * \u2717 When focused unit on in city and instead of moving it city is open and unit moved to colony field than next unit on focused city is not selected and consequently can't be moved.
  
@@ -60,16 +59,10 @@ Planned releases
   * \u2717 List of default campaign missions should contains some check to know which missions are done.
   
   * \u2717 build road, at the beginning any unit can build road at 4 moves. add action r
-  
-  * \u2717 redesign model: unit use class hierarchy, remove unit type, same for terrain. Move outside cargoHold, abstract class bude obsahovat utok a pohyb 
-  
-  * \u2717 Colony building queue and queue editing - simple and ugly version
  
   * \u2717 Redesign game loop, to support parallel animations. Slight changes in water & move animation & scroll to moving unit. To control constant FPS. Now it's around 60 FPS.
  
   * \u2717 Redesign model events - add some mark to it's name to be able to distinguish them from front-end events.
- 
-  * \u2717 Finish translation
  
   * \u2717 Try to make package including JVM, it will be nice to use openJDK.
  
@@ -81,6 +74,8 @@ Planned releases
      
   * \u2717 colonist unit equipped with (20) tool can plow field.
   Depending on unit expertise in a few turns field will be created and 20 tools will be destroyed.
+  
+  * \uD83D\uDC1B When unit is selected from right menu than correct unit is not highlighted in main game area. Or it's not possible to verify, because just one unit type is there. 
   
   * \u2717 Documentation update
   	
