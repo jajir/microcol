@@ -20,7 +20,7 @@
 		<!-- default values for exec plugin properties -->
 		<development>false</development>
 		<clean>false</clean>
-		
+
 		<testfx.version>4.0.15-alpha</testfx.version>
 	</properties>
 
@@ -52,6 +52,13 @@
 			<groupId>org.junit.platform</groupId>
 			<artifactId>junit-platform-launcher</artifactId>
 			<version>1.1.0</version>
+			<scope>test</scope>
+		</dependency>
+		<!-- Monocle is required for headless tests. -->
+		<dependency>
+			<groupId>org.testfx</groupId>
+			<artifactId>openjfx-monocle</artifactId>
+			<version>8u76-b04</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
