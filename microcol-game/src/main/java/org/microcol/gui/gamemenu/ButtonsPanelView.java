@@ -36,6 +36,7 @@ public final class ButtonsPanelView implements JavaFxComponent, UpdatableLanguag
         buttonPlayCampaign = new Button();
         buttonStartFreeGame = new Button();
         buttonSetting = new Button();
+        buttonSetting.setId("buttonSetting");
         buttonExitMicroCol = new Button();
         buttonsBox = new VBox();
         buttonsBox.getStyleClass().add("game-menu-inner");

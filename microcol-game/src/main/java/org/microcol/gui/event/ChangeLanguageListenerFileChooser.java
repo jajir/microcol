@@ -22,6 +22,9 @@ public final class ChangeLanguageListenerFileChooser {
      * example it's text of cancel button at dialog for choosing file. This
      * string should be localized and change with language. Proper setting of
      * this strings is done here.
+     *
+     * @param event
+     *            required event
      */
     @Subscribe
     public void onEvent(final ChangeLanguageEvent event) {

@@ -32,11 +32,11 @@ Planned releases
    
   * \u2717 redesign model: unit use class hierarchy, remove unit type, same for terrain. Move outside cargoHold, abstract class will contain attack and move 
  
+  * \u2717 Add tests for UI. Test at least game menu screens. 
+ 
   * \uD83D\uDC1B When focused unit is placed outside colony and unit is moved to field than attempt to move unit leads to exception.
  
   * \uD83D\uDC1B Main menu doesn't work when drag pressed mouse instead of simple move. It can't be easily solved. There is no such feature in JavaFx. Menu was redesigned without JavaFX.
- 
-  * \u2717 
   
   * \u2717 
  

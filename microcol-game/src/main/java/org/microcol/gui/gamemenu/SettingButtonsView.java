@@ -17,6 +17,8 @@ import javafx.scene.layout.VBox;
 @Singleton
 public class SettingButtonsView implements JavaFxComponent, UpdatableLanguage {
 
+    public static final String BUTTON_BACK_ID = "buttonBack";
+    
     private final Logger logger = LoggerFactory.getLogger(SettingButtonsView.class);
 
     private final Button buttonBack;
@@ -42,6 +44,7 @@ public class SettingButtonsView implements JavaFxComponent, UpdatableLanguage {
         this.settingAnimationSpeedView = Preconditions.checkNotNull(settingAnimationSpeedView);
 
         buttonBack = new Button();
+        buttonBack.setId(BUTTON_BACK_ID);
 
         buttonsBox = new VBox();
         buttonsBox.getStyleClass().add("game-menu-inner");
