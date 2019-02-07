@@ -18,6 +18,10 @@ import javafx.scene.layout.Region;
 @Singleton
 public class SettingLanguageView implements JavaFxComponent, UpdatableLanguage {
 
+    public static final String RB_CZECH_ID = "rbCzech";
+
+    public static final String RB_ENGLISH_ID = "rbEnglish";
+    
     private final HBox mainPanel;
 
     private final ToggleGroup toggleGroup;
@@ -34,10 +38,12 @@ public class SettingLanguageView implements JavaFxComponent, UpdatableLanguage {
         toggleGroup = new ToggleGroup();
 
         rbCzech = new RadioButton();
+        rbCzech.setId(RB_CZECH_ID);
         rbCzech.setToggleGroup(toggleGroup);
         rbCzech.setSelected(gamePreferences.getLanguage().equals(Language.cz));
 
         rbEnglish = new RadioButton();
+        rbEnglish.setId(RB_ENGLISH_ID);
         rbEnglish.setToggleGroup(toggleGroup);
         rbEnglish.setSelected(gamePreferences.getLanguage().equals(Language.en));
 

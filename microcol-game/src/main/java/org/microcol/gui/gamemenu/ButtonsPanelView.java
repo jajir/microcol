@@ -14,6 +14,8 @@ import javafx.scene.layout.VBox;
  * In main area shows basic menu "Start new game".
  */
 public final class ButtonsPanelView implements JavaFxComponent, UpdatableLanguage {
+    
+    public static final String BUTTON_SETTING_ID = "buttonSetting";
 
     private final Button buttonContinue;
 
@@ -36,7 +38,7 @@ public final class ButtonsPanelView implements JavaFxComponent, UpdatableLanguag
         buttonPlayCampaign = new Button();
         buttonStartFreeGame = new Button();
         buttonSetting = new Button();
-        buttonSetting.setId("buttonSetting");
+        buttonSetting.setId(BUTTON_SETTING_ID);
         buttonExitMicroCol = new Button();
         buttonsBox = new VBox();
         buttonsBox.getStyleClass().add("game-menu-inner");

@@ -13,10 +13,11 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
 /**
- * In main area shows game welcome page.
- * TODO combine it with CenteredPage.
+ * In main area shows game welcome page. TODO combine it with CenteredPage.
  */
 public final class MenuHolderPanel implements JavaFxComponent {
+
+    public static final String MAIN_TITLE_ID = "main-title";
 
     private final StackPane mainPanel;
 
@@ -27,7 +28,8 @@ public final class MenuHolderPanel implements JavaFxComponent {
     @Inject
     MenuHolderPanel(final GameMenuBackground backgroundPanel) {
         title = new Label("[not defined]");
-        title.getStyleClass().add("main-title");
+        title.getStyleClass().add(MAIN_TITLE_ID);
+        title.setId(MAIN_TITLE_ID);
 
         box = new HBox();
         box.getStyleClass().add("game-menu-holder");
