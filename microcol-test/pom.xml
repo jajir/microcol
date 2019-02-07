@@ -121,6 +121,8 @@
 					</dependency>
 				</dependencies>
 				<configuration>
+					<useFile>false</useFile>
+					<trimStackTrace>false</trimStackTrace>
 					<excludes>
 						<exclude>org/microcol/integration/**.java</exclude>
 					</excludes>
