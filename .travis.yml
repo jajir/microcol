@@ -1,6 +1,8 @@
 language: java
 jdk:
 - oraclejdk8
+services:
+  - xvfb
 sudo: false
 install:
 - mvn install -DskipTests=true -Dmaven.javadoc.skip=true -Dtravis-ci=true -B -V -e
