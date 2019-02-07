@@ -48,6 +48,12 @@ public final class GamePreferences {
 
     private static final String SYSTEM_PROPERTY_DEVELOPMENT = "development";
 
+    /**
+     * Default value is false. When it's set to 'false' than sound in game is
+     * disabled.
+     */
+    private static final String SYSTEM_PROPERTY_SOUND_ENABLED = "soundEnabled";
+
     public static final String SYSTEM_PROPERTY_CLEAN_SETTINGS = "clean";
 
     private final Preferences preferences = Preferences.userNodeForPackage(GamePreferences.class);
@@ -75,6 +81,10 @@ public final class GamePreferences {
 
     public boolean isDevelopment() {
         return Boolean.valueOf(System.getProperty(SYSTEM_PROPERTY_DEVELOPMENT, "false"));
+    }
+
+    public boolean isSoundEnabled() {
+        return Boolean.valueOf(System.getProperty(SYSTEM_PROPERTY_SOUND_ENABLED, "true"));
     }
 
     public void setMainFramePosition(final Rectangle bounds) {

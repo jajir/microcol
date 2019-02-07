@@ -7,7 +7,7 @@ sudo: false
 install:
 - mvn install -DskipTests=true -Dmaven.javadoc.skip=true -Dtravis-ci=true -B -V -e
 script:
-- mvn clean verify site -Dtravis-ci=true -Djava.awt.headless=true -Dtestfx.robot=glass -Dtestfx.headless=true -Dprism.order=sw -Dprism.text=t2k -Dtestfx.setup.timeout=2500 -B -V -e
+- mvn clean verify site -Dtravis-ci=true -Djava.awt.headless=true -Dtestfx.robot=glass -Dtestfx.headless=true -Dprism.order=sw -Dprism.text=t2k -Dtestfx.setup.timeout=2500 -DsoundEnabled=false -B -V -e
 addons:
   apt:
     packages:
