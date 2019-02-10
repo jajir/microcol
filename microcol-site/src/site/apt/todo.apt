@@ -46,6 +46,14 @@ Planned releases
 
   * \u2717  
   
+  * \u2717 
+ 
+  * \u2717 
+  
+  * \u2717 Automatize at least some test cases. Use {{{https://github.com/TestFX/TestFX}TestFx}}. 
+
+  * \u2717 Make game main game setting configurable in UI tests.   
+  
   * \u2717 Finish translation
  
   * \uD83D\uDC1B When focus is transfered by click than don't center at focused unit.

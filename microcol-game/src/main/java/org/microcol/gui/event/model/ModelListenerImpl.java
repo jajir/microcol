@@ -140,7 +140,7 @@ public final class ModelListenerImpl implements ModelListener {
 
     @Override
     public void onUnitMoveStarted(final UnitMoveStartedEvent event) {
-        // Front-end doesn't care about this event.
+        eventBus.post(event);
     }
 
     @Override

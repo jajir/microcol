@@ -10,6 +10,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
 import org.junit.jupiter.api.Assertions;
@@ -48,7 +49,7 @@ import org.testfx.util.WaitForAsyncUtils;
 import com.google.common.base.Preconditions;
 
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
+import javafx.scene.control.Labeled;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.input.MouseButton;
@@ -148,71 +149,92 @@ public class StartMicrocolTest {
 	clickOnButtonWithId(robot, ButtonsPanelView.BUTTON_LOAD_ID);
 	moveMouseAtLocation(robot, Location.of(22, 12));
 	dragMouseAtLocation(robot, Location.of(24, 11));
-	Thread.sleep(1000 * 8);
+//	Thread.sleep(1000 * 8);
     }
 
     @Test
     void TC_01_embark_disembark(final FxRobot robot) throws Exception {
 	verifyMainScreen();
-	clickOnButtonWithId(robot, ButtonsPanelView.BUTTON_LOAD_ID);
 
-	moveMouseAtLocation(robot, Location.of(20, 16));
+	// load predefined game
+	loadPreparedGame(robot);
+
+	// go at main game panel
 	openColonyAt(robot, Location.of(22, 12), "Delft");
 
-	// Select units to drag to ship.
-	final NodeFinder nodeFinder = FxAssert.assertContext().getNodeFinder();
+	// Verify that there is just one ship in port
+	assertEquals(1, getUnitsInPort().size(), String
+		.format("Expected numebr of shipd is '1' but really there is '%s' ships.", getUnitsInPort().size()));
 
-	final Set<ToggleButton> ships = nodeFinder.lookup("." + PanelDock.SHIP_IN_PORT_STYLE).queryAll();
-	ships.forEach(i -> {
-	    System.out.println(i);
-	    robot.clickOn(i);
-	});
+	// Select first ship to drag to ship.
+	robot.clickOn(getUnitsInPort().get(0));
 
-	// TODO verify that there is exactly one ship.
-	final Set<StackPane> cratesSet = nodeFinder.lookup("." + PanelDockCrate.CRATE_CLASS).queryAll();
-	cratesSet.forEach(i -> {
-	    System.out.println(i);
-	});
-	final List<StackPane> crates = new ArrayList<StackPane>(cratesSet);
+	// drag first units to crate 0
+	robot.drag(getUnitsAtPier().get(0), MouseButton.PRIMARY).dropTo(getListOfCrates().get(0))
+		.release(MouseButton.PRIMARY);
 
-	// drag units
-	robot.drag(getUnitsAtPier().get(0), MouseButton.PRIMARY).dropTo(crates.get(0)).release(MouseButton.PRIMARY);
-	robot.drag(getUnitsAtPier().get(0), MouseButton.PRIMARY).dropTo(crates.get(1)).release(MouseButton.PRIMARY);
-	// click at ship at port.
-	// verify that doesn't contains any cargo.
-	final Button buttonClose = nodeFinder.lookup("#" + ColonyButtonsPanel.CLOSE_BUTTON_ID).queryButton();
-	assertNotNull(buttonClose);
-	robot.clickOn(buttonClose);
+	// drag second units to crate 1
+	robot.drag(getUnitsAtPier().get(0), MouseButton.PRIMARY).dropTo(getListOfCrates().get(1))
+		.release(MouseButton.PRIMARY);
 
-	// move ship at [24,12]
+	// return back to main game screen.
+	buttonCloseClick(robot);
+
+	// move ship few tiles to the right
 	moveMouseAtLocation(robot, Location.of(22, 12));
 	dragMouseAtLocation(robot, Location.of(24, 11));
+	waitWhileMoving();
 
-	System.out.println("cekani 3 sec");
-	Thread.sleep(1000 * 3);
-	// pockat dokud lod nedojede
-	WaitForAsyncUtils.waitForFxEvents();
-
-	// TODO press next turn.
+	// press next turn.
 	buttonNextTurnClick(robot);
 
-	// Disembark units
+	// disembark units
 	moveMouseAtLocation(robot, Location.of(24, 11));
 	dragMouseAtLocation(robot, Location.of(24, 12));
-//	System.out.println("cekani 2 sec");
-//	Thread.sleep(1000 * 2);
 
-	//Whole shid disembark at once
-//	moveMouseAtLocation(robot, Location.of(24, 11));
-//	dragMouseAtLocation(robot, Location.of(24, 12));
+	// TODO verify that units are at expected location.
+	// Thread.sleep(1000 * 8);
+    }
 
-	Thread.sleep(1000 * 8);
+    private void loadPreparedGame(final FxRobot robot) {
+	clickOnButtonWithId(robot, ButtonsPanelView.BUTTON_LOAD_ID);
+	// try to find next turn button, when it's not there than game was not loaded.
+	getButtoonById(ButtonsGamePanel.BUTTON_NEXT_TURN_ID);
+    }
+
+    private List<ToggleButton> getUnitsInPort() {
+	final String cssClass = "." + PanelDock.SHIP_IN_PORT_STYLE;
+	final Set<ToggleButton> ships = getNodeFinder().lookup(cssClass).queryAll();
+	return new ArrayList<ToggleButton>(ships);
+    }
+
+    private List<StackPane> getListOfCrates() {
+	final String cssClass = "." + PanelDockCrate.CRATE_CLASS;
+	final Set<StackPane> cratesSet = getNodeFinder().lookup(cssClass).queryAll();
+	return new ArrayList<StackPane>(cratesSet);
+    }
+
+    /**
+     * Wait until next turn button is available again. Unavailable next turn button
+     * meant that there is some animation in progress.
+     * 
+     * @throws Exception
+     */
+    private void waitWhileMoving() throws Exception {
+	WaitForAsyncUtils.waitFor(10, TimeUnit.SECONDS, () -> {
+	    final NodeFinder nodeFinder = FxAssert.assertContext().getNodeFinder();
+	    final Button buttonNextTurn = nodeFinder.lookup("#" + ButtonsGamePanel.BUTTON_NEXT_TURN_ID).queryButton();
+	    return !buttonNextTurn.isDisabled();
+	});
+    }
+
+    private void buttonCloseClick(final FxRobot robot) {
+	final Button buttonNextTurn = getButtoonById(ColonyButtonsPanel.CLOSE_BUTTON_ID);
+	robot.clickOn(buttonNextTurn);
     }
 
     private void buttonNextTurnClick(final FxRobot robot) {
-	final NodeFinder nodeFinder = FxAssert.assertContext().getNodeFinder();
-	final Button buttonNextTurn = nodeFinder.lookup("#" + ButtonsGamePanel.BUTTON_NEXT_TURN_ID).queryButton();
-	assertNotNull(buttonNextTurn);
+	final Button buttonNextTurn = getButtoonById(ButtonsGamePanel.BUTTON_NEXT_TURN_ID);
 	robot.clickOn(buttonNextTurn);
     }
 
@@ -220,23 +242,16 @@ public class StartMicrocolTest {
     private List<Pane> getUnitsAtPier() {
 	final NodeFinder nodeFinder = FxAssert.assertContext().getNodeFinder();
 	final Set<Pane> unitsSet = nodeFinder.lookup("." + PanelUnitWithContextMenu.UNIT_AT_PIER_STYLE).queryAll();
-	unitsSet.forEach(i -> {
-	    System.out.println(i);
-	});
 	return new ArrayList<Pane>(unitsSet);
     }
 
     private void openColonyAt(final FxRobot robot, final Location colonyLocation, final String expectedNamePart) {
 	moveMouseAtLocation(robot, colonyLocation);
 	robot.clickOn(MouseButton.PRIMARY);
-	final String id = "#" + ColonyPanel.COLONY_NAME_ID;
-	FxAssert.verifyThat(id, obj -> {
-	    final Label label = (Label) obj;
-	    logger.info("Colony name: " + label.getText());
-	    assertTrue(label.getText().contains(expectedNamePart),
-		    String.format("Text '%s' should appear in colony name '%s'", expectedNamePart, label.getText()));
-	    return true;
-	});
+	final Labeled labeled = getLabeledById(ColonyPanel.COLONY_NAME_ID);
+	logger.info("Colony name: " + labeled.getText());
+	assertTrue(labeled.getText().contains(expectedNamePart),
+		String.format("Text '%s' should appear in colony name '%s'", expectedNamePart, labeled.getText()));
     }
 
     private void moveMouseAtLocation(final FxRobot robot, final Location location) {
@@ -256,14 +271,10 @@ public class StartMicrocolTest {
     }
 
     private void verifyThatStatusBarContains(final String string) {
-	final String id = "#" + StatusBarView.STATUS_BAR_LABEL_ID;
-	FxAssert.verifyThat(id, obj -> {
-	    final Label label = (Label) obj;
-	    logger.info("Status bar: " + label.getText());
-	    assertTrue(label.getText().contains(string),
-		    String.format("Text '%s' should appear in status bar text '%s'", string, label.getText()));
-	    return true;
-	});
+	final Labeled label = getLabeledById(StatusBarView.STATUS_BAR_LABEL_ID);
+	logger.info("Status bar: " + label.getText());
+	assertTrue(label.getText().contains(string),
+		String.format("Text '%s' should appear in status bar text '%s'", string, label.getText()));
     }
 
     private void verifyThatTileIsVisible(final Location location) {
@@ -271,26 +282,23 @@ public class StartMicrocolTest {
     }
 
     private Area getArea() {
-	final GamePanelView gamePanelView = getClass(GamePanelView.class);
+	final GamePanelView gamePanelView = getClassFromGuice(GamePanelView.class);
 	return gamePanelView.getArea();
     }
 
-    private <T> T getClass(final Class<T> clazz) {
+    private <T> T getClassFromGuice(final Class<T> clazz) {
 	final T t = microCol.getInjector().getInstance(clazz);
 	return Preconditions.checkNotNull(t);
     }
 
-    private void verifyRadioButton(final String buttonId, boolean expectedIsSelected) {
+    private void verifyRadioButton(final String buttonId, boolean isExpectedSelected) {
 	final String id = "#" + buttonId;
-	FxAssert.verifyThat(id, obj -> {
-	    final RadioButton rb = (RadioButton) obj;
-	    if (expectedIsSelected) {
-		assertTrue(rb.isSelected());
-	    } else {
-		assertFalse(rb.isSelected());
-	    }
-	    return true;
-	});
+	final RadioButton rb = getNodeFinder().lookup(id).queryAs(RadioButton.class);
+	if (isExpectedSelected) {
+	    assertTrue(rb.isSelected());
+	} else {
+	    assertFalse(rb.isSelected());
+	}
     }
 
     private void openSetting(final FxRobot robot) {
@@ -321,11 +329,27 @@ public class StartMicrocolTest {
 
     private void verifyMainTitle(final Consumer<String> validation) {
 	final String id = "#" + MenuHolderPanel.MAIN_TITLE_ID;
-	FxAssert.verifyThat(id, obj -> {
-	    final Label mainTitle = (Label) obj;
-	    validation.accept(mainTitle.getText());
-	    return true;
-	});
+	final Labeled labeled = getNodeFinder().lookup(id).queryLabeled();
+	assertNotNull(labeled, String.format("There is no element with id '%s'", MenuHolderPanel.MAIN_TITLE_ID));
+	validation.accept(labeled.getText());
+    }
+
+    private Labeled getLabeledById(final String cssId) {
+	final String id = "#" + cssId;
+	final Labeled label = getNodeFinder().lookup(id).queryLabeled();
+	assertNotNull(label, String.format("unable to find labeled by id '%s'", cssId));
+	return label;
+    }
+
+    private Button getButtoonById(final String cssId) {
+	final String id = "#" + cssId;
+	final Button label = getNodeFinder().lookup(id).queryButton();
+	assertNotNull(label, String.format("unable to find button by id '%s'", cssId));
+	return label;
+    }
+
+    private NodeFinder getNodeFinder() {
+	return FxAssert.assertContext().getNodeFinder();
     }
 
 }

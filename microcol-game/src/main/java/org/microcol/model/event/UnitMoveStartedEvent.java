@@ -9,7 +9,7 @@ import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 
 /**
- * Event is send when movement is finished. Event contains movement description.
+ * Event is send when movement is started. Event contains movement description.
  */
 public final class UnitMoveStartedEvent extends AbstractStoppableEvent {
 

@@ -11,6 +11,8 @@ import org.microcol.model.Colony;
 import org.microcol.model.Terrain;
 import org.microcol.model.Unit;
 import org.microcol.model.event.TurnStartedEvent;
+import org.microcol.model.event.UnitMoveFinishedEvent;
+import org.microcol.model.event.UnitMoveStartedEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -51,6 +53,17 @@ public class ButtonsGamePanelController {
         LOGGER.debug("Unit move finished");
         evaluateAllButtonsForSelectedUnit(event.getMovedUnit());
     }
+    
+    @Subscribe
+    private void onUnitMoveStarted(final UnitMoveStartedEvent event) {
+        buttonGamePanel.getButtonNextTurn().setDisable(true);
+    }
+    
+    @Subscribe
+    private void onUnitMoveFinished(final UnitMoveFinishedEvent event) {
+        buttonGamePanel.getButtonNextTurn().setDisable(false);
+    }
+    
 
     @Subscribe
     private void onSelectedUnitWasChanged(final SelectedUnitWasChangedEvent event) {
