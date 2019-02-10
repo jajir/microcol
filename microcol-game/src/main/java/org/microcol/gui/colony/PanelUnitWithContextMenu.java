@@ -24,6 +24,8 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 
 public class PanelUnitWithContextMenu implements JavaFxComponent, Repaintable {
+    
+    public final static String UNIT_AT_PIER_STYLE = "unitInPort";
 
     private final Pane mainPane;
 
@@ -46,6 +48,7 @@ public class PanelUnitWithContextMenu implements JavaFxComponent, Repaintable {
         canvas = new Canvas(GamePanelView.TILE_WIDTH_IN_PX, GamePanelView.TILE_WIDTH_IN_PX);
         repaint();
         mainPane = new Pane(canvas);
+        mainPane.getStyleClass().add(UNIT_AT_PIER_STYLE);
         mainPane.setOnDragDetected(mouseEvent -> {
             final Image image = imageProvider.getUnitImage(unit);
             final Dragboard db = mainPane.startDragAndDrop(TransferMode.MOVE);

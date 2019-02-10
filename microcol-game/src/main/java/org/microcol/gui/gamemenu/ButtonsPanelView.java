@@ -16,6 +16,16 @@ import javafx.scene.layout.VBox;
 public final class ButtonsPanelView implements JavaFxComponent, UpdatableLanguage {
     
     public static final String BUTTON_SETTING_ID = "buttonSetting";
+    
+    public static final String BUTTON_CONTINUE_ID = "buttonContinue";
+    
+    public static final String BUTTON_LOAD_ID = "buttonLoad";
+    
+    public static final String BUTTON_PLAY_CAMPAIGN_ID = "buttonCampaign";
+    
+    public static final String BUTTON_START_FREE_GAME_ID = "buttonStartFreeGame";
+    
+    public static final String BUTTON_EXIT_ID = "buttonExit";
 
     private final Button buttonContinue;
 
@@ -34,12 +44,17 @@ public final class ButtonsPanelView implements JavaFxComponent, UpdatableLanguag
     @Inject
     ButtonsPanelView(final I18n i18n) {
         buttonContinue = new Button();
+        buttonContinue.setId(BUTTON_CONTINUE_ID);
         buttonLoadSave = new Button();
+        buttonLoadSave.setId(BUTTON_LOAD_ID);
         buttonPlayCampaign = new Button();
+        buttonPlayCampaign.setId(BUTTON_PLAY_CAMPAIGN_ID);
         buttonStartFreeGame = new Button();
+        buttonStartFreeGame.setId(BUTTON_START_FREE_GAME_ID);
         buttonSetting = new Button();
         buttonSetting.setId(BUTTON_SETTING_ID);
         buttonExitMicroCol = new Button();
+        buttonExitMicroCol.setId(BUTTON_EXIT_ID);
         buttonsBox = new VBox();
         buttonsBox.getStyleClass().add("game-menu-inner");
         buttonsBox.getChildren().add(buttonContinue);

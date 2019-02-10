@@ -25,6 +25,8 @@ import javafx.scene.paint.Color;
  * Container represents one open or close crate.
  */
 public final class PanelDockCrate extends StackPane {
+    
+    public final static String CRATE_CLASS = "cratePanel";
 
     private final ImageProvider imageProvider;
 
@@ -65,7 +67,7 @@ public final class PanelDockCrate extends StackPane {
         setOnDragDropped(this::onDragDropped);
 
         this.getChildren().addAll(crateImage, labelAmount);
-        getStyleClass().add("cratePanel");
+        getStyleClass().add(CRATE_CLASS);
     }
 
     public void setIsClosed(final boolean isClosed) {

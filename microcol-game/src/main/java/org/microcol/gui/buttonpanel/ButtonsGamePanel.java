@@ -26,6 +26,8 @@ import javafx.scene.control.Button;
 
 @Singleton
 public class ButtonsGamePanel extends AbstractButtonsPanel {
+    
+    public final static String BUTTON_NEXT_TURN_ID = "nextTurn";
 
     private final Button buttonCenter;
     private final Button buttonHelp;
@@ -66,6 +68,7 @@ public class ButtonsGamePanel extends AbstractButtonsPanel {
         buttonEurope = makeButon(ImageLoaderButtons.BUTTON_EUROPE, Buttons.buttonEurope);
         buttonEurope.setOnAction(event -> eventBus.post(new ShowScreenEvent(Screen.EUROPE)));
         buttonNextTurn = makeButon(ImageLoaderButtons.BUTTON_NEXT_TURN, Buttons.buttonNextTurn);
+        buttonNextTurn.setId(BUTTON_NEXT_TURN_ID);
         buttonNextTurn.setOnAction(event -> {
             buttonNextTurn.setDisable(true);
             eventBus.post(new NextTurnEvent());

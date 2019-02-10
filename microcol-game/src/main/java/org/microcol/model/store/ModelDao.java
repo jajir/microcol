@@ -155,8 +155,8 @@ public final class ModelDao {
 
     private void internalSaveModel(final String fileName, final ModelPo modelPo) throws IOException {
 	final String str = gson.toJson(modelPo);
-	if (logger.isDebugEnabled()) {
-	    logger.debug(str);
+	if (logger.isTraceEnabled()) {
+	    logger.trace(str);
 	}
 	final OutputStreamWriter outputStreamWriter = new OutputStreamWriter(new FileOutputStream(fileName),
 		StandardCharsets.UTF_8);

@@ -17,6 +17,8 @@ import javafx.scene.control.Button;
 @Singleton
 public class ColonyButtonsPanel extends AbstractButtonsPanel {
 
+    public static final String CLOSE_BUTTON_ID = "closeButtonId";
+
     private final Button buttonClose;
 
     @Inject
@@ -25,6 +27,7 @@ public class ColonyButtonsPanel extends AbstractButtonsPanel {
         super(imageProvider, eventBus, Source.COLONY, i18n);
 
         buttonClose = makeButon(ImageLoaderButtons.BUTTON_EXIT, ColonyMsg.buttonClose);
+        buttonClose.setId(CLOSE_BUTTON_ID);
         buttonClose.setOnAction(evnt -> eventBus.post(new ShowScreenEvent(Screen.GAME)));
 
         getButtonPanel().getChildren().add(buttonClose);

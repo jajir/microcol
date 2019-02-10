@@ -10,6 +10,8 @@ import org.microcol.model.PlaceLocation;
 import org.microcol.model.TerrainType;
 import org.microcol.model.UnitType;
 import org.microcol.model.unit.UnitActionType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -21,6 +23,9 @@ import mockit.Mocked;
  */
 public class UnitStoreTest {
 
+    private final Logger logger = LoggerFactory.getLogger(UnitStoreTest.class);
+
+    
     @Mocked
     private PlaceLocation placeLocation;
 
@@ -35,7 +40,7 @@ public class UnitStoreTest {
     public void test_storeUnit_noAction() throws Exception {
 	final String json = gson.toJson(makeUnit());
 
-	System.out.println(json);
+	logger.info(json);
 
 	UnitPo u = gson.fromJson(json, UnitPo.class);
 

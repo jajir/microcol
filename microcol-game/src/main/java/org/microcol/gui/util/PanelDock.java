@@ -37,6 +37,8 @@ public final class PanelDock implements JavaFxComponent, UpdatableLanguage, Repa
 
     private final Logger logger = LoggerFactory.getLogger(PanelDock.class);
 
+    public static final String SHIP_IN_PORT_STYLE = "paneShip";
+
     private final ImageProvider imageProvider;
 
     private final PanelDockCratesController panelCratesController;
@@ -68,9 +70,9 @@ public final class PanelDock implements JavaFxComponent, UpdatableLanguage, Repa
 
         panelShips = new HBox();
         panelShips.getStyleClass().add("ships");
-        
+
         mainPanel = new VBox(panelShips, panelCratesController.getContent());
-        
+
         titledPanel = new TmpPanel();
         titledPanel.getStyleClass().add("panel-dock");
         titledPanel.getContentPane().getChildren().add(mainPanel);
@@ -86,7 +88,7 @@ public final class PanelDock implements JavaFxComponent, UpdatableLanguage, Repa
             final BackgroundImage myBI = new BackgroundImage(imageProvider.getUnitImage(unit),
                     BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT,
                     BackgroundPosition.CENTER, BackgroundSize.DEFAULT);
-            toggleButtonShip.getStyleClass().add("paneShip");
+            toggleButtonShip.getStyleClass().add(SHIP_IN_PORT_STYLE);
             toggleButtonShip.setBackground(new Background(myBI));
             toggleButtonShip.setToggleGroup(toggleGroup);
             toggleButtonShip.setUserData(unit);

@@ -22,15 +22,23 @@ Test cases
   
 ** TC-01 Embark and Disembark
 
- * Load file 'test-verify-loading-unloading.microcol'
+ * Load file 'test-verify-loading-unloading.microcol'.
 
- * Move ship to [23,13] from colony delfy
+ * Move ship from colony Delfy at [22,12].
+
+ * Open colony detail.
+ 
+ * Verify that there are one ship in port and two units on pier.
+ 
+ * Click at ship. Verify that doesn't contains any cargo. 
 
  * Embark two units waiting outside of colony to ship.
- Verify that units are be loaded in different cargo slots and are visible in right panel
+ Verify that units are be loaded in different cargo slots.
 
- * Move with ship few tiles to the right.
- Verify that it's not possible to disembark units. (There are no free action points for loaded units)
+ * Close colony. Verify that embarked units are visible in right panel.
+
+ * Move with ship few tiles to the right at [24,12].
+ Verify that it's not possible to disembark units (There are no free action points for loaded units).
 
  * Press 'Next Turn'
 
@@ -39,11 +47,11 @@ Test cases
 
  * Try to embark units back.
  Verify that it's not possible.
- Verify that both units have 0 action points
+ Verify that both units have 0 action points.
 
- * Press 'Next Turn'
+ * Press 'Next Turn'.
 
- * Embark both units back to ship
+ * Embark both units back to ship.
  Verify that both units are on ship.
  Verify that unit are loaded with animation and after moving is focused ship. 
 

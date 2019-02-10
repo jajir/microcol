@@ -46,7 +46,7 @@ public final class GamePreferences {
      */
     private static final int DEFAULT_ANIMATION_SPEED = 3;
 
-    private static final String SYSTEM_PROPERTY_DEVELOPMENT = "development";
+    public static final String SYSTEM_PROPERTY_DEVELOPMENT = "development";
 
     /**
      * Default value is false. When it's set to 'false' than sound in game is

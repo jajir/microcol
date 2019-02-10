@@ -12,6 +12,8 @@ import javafx.scene.layout.Region;
 
 public final class StatusBarView implements JavaFxComponent {
 
+    public static final String STATUS_BAR_LABEL_ID = "statusBarLabel";
+
     private final HBox statusBar;
 
     private final Label statusBarDescription;
@@ -23,7 +25,8 @@ public final class StatusBarView implements JavaFxComponent {
     @Inject
     public StatusBarView() {
         statusBarDescription = new Label();
-        Pane pane = new Pane(statusBarDescription);
+        statusBarDescription.setId(STATUS_BAR_LABEL_ID);
+        final Pane pane = new Pane(statusBarDescription);
         pane.setId("description");
         HBox.setHgrow(pane, Priority.ALWAYS);
 

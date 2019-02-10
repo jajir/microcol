@@ -36,6 +36,8 @@ import javafx.scene.layout.StackPane;
 @Listener
 public final class ColonyPanel implements JavaFxComponent, UpdatableLanguage {
 
+    public static final String COLONY_NAME_ID = "colonyName";
+    
     private final static Logger logger = LoggerFactory.getLogger(ColonyPanel.class);
 
     private final StackPane mainPanel;
@@ -80,6 +82,7 @@ public final class ColonyPanel implements JavaFxComponent, UpdatableLanguage {
         this.panelOutsideColony = Preconditions.checkNotNull(panelOutsideColony);
         this.i18n = Preconditions.checkNotNull(i18n);
         colonyName = new Label();
+        colonyName.setId(COLONY_NAME_ID);
         colonyName.getStyleClass().add("label-title");
 
         mainPanel = new StackPane();

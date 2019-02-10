@@ -95,6 +95,10 @@ public final class Point {
         return new Point(x + addX, y + addY);
     }
 
+    public Point add(final double addX, final double addY) {
+        return new Point(x + (int)addX, y + (int)addY);
+    }
+
     public Point add(final Point point) {
         return new Point(x + point.getX(), y + point.getY());
     }

@@ -5,46 +5,40 @@ import java.nio.file.Path;
 import java.util.Locale;
 
 import org.microcol.gui.event.model.GameController;
-import org.microcol.gui.util.AbstractMessageWindow;
 import org.microcol.gui.util.PersistingTool;
-import org.microcol.gui.util.ViewUtil;
-import org.microcol.i18n.I18n;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
 
-import javafx.stage.FileChooser;
-
 /**
- * Provide load and save operations.
+ * Perform load and save operations. When it's necessary it shows system file
+ * dialog.
  */
-public final class PersistingDialog extends AbstractMessageWindow {
+public class PersistingDialog {
 
     public static final String SAVE_FILE_EXTENSION = "microcol";
 
     private final Logger logger = LoggerFactory.getLogger(PersistingDialog.class);
 
-    private final I18n i18n;
+    private final FileSelectingService fileSelectingService;
 
     private final GameController gameController;
 
     private final PersistingTool persistingTool;
 
     @Inject
-    public PersistingDialog(final ViewUtil viewUtil, final I18n i18n,
-            final GameController gameController, final PersistingTool persistingTool) {
-        super(viewUtil, i18n);
-        this.i18n = Preconditions.checkNotNull(i18n);
+    public PersistingDialog(final GameController gameController,
+            final PersistingTool persistingTool, final FileSelectingService fileSelectingService) {
         this.gameController = Preconditions.checkNotNull(gameController);
         this.persistingTool = Preconditions.checkNotNull(persistingTool);
+        this.fileSelectingService = Preconditions.checkNotNull(fileSelectingService);
     }
 
     public void saveModel() {
-        final FileChooser fileChooser = prepareFileChooser(Dialog.saveGame_title);
-        fileChooser.setInitialFileName(persistingTool.getSuggestedSaveFileName());
-        final File saveFile = fileChooser.showSaveDialog(getViewUtil().getPrimaryStage());
+        final File saveFile = fileSelectingService.saveFile(persistingTool.getRootSaveDirectory(),
+                persistingTool.getSuggestedSaveFileName());
         if (saveFile == null) {
             logger.debug("User didn't select any file to save game");
         } else {
@@ -53,23 +47,12 @@ public final class PersistingDialog extends AbstractMessageWindow {
     }
 
     public void loadModel() {
-        final FileChooser fileChooser = prepareFileChooser(Dialog.loadGame_title);
-        final File saveFile = fileChooser.showOpenDialog(getViewUtil().getPrimaryStage());
+        final File saveFile = fileSelectingService.loadFile(persistingTool.getRootSaveDirectory());
         if (saveFile == null) {
             logger.debug("User didn't select any file to load game");
         } else {
             loadFromFile(saveFile);
         }
-    }
-
-    private FileChooser prepareFileChooser(final Dialog caption) {
-        final FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle(i18n.get(caption));
-        fileChooser.setInitialDirectory(persistingTool.getRootSaveDirectory());
-        fileChooser.getExtensionFilters()
-                .add(new FileChooser.ExtensionFilter("MicroCol data files", "*.microcol"));
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("All Images", "*.*"));
-        return fileChooser;
     }
 
     private void saveModelToFile(final File targetFile) {
@@ -117,7 +100,7 @@ public final class PersistingDialog extends AbstractMessageWindow {
     }
 
     private void loadModelFromFile(final File sourceFile) {
-        gameController.startModelFromFile(sourceFile);
+        gameController.loadModelFromFile(sourceFile);
     }
 
 }

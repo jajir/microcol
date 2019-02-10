@@ -16,6 +16,8 @@ import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import com.google.inject.Inject;
 
+import javafx.application.Platform;
+
 @Listener
 public final class RightPanelPresenter {
 
@@ -42,15 +44,17 @@ public final class RightPanelPresenter {
 
     @Subscribe
     private void onSelectedUnitWasChanged(final SelectedUnitWasChangedEvent event) {
-        if (lastFocusedTileEvent == null) {
-            if (event.getSelectedUnit().isPresent()) {
-                display.refreshView(event.getSelectedUnit().get().getLocation());
+        Platform.runLater(() -> {
+            if (lastFocusedTileEvent == null) {
+                if (event.getSelectedUnit().isPresent()) {
+                    display.refreshView(event.getSelectedUnit().get().getLocation());
+                } else {
+                    display.cleanView();
+                }
             } else {
-                display.cleanView();
+                display.refreshView(lastFocusedTileEvent.getLocation());
             }
-        } else {
-            display.refreshView(lastFocusedTileEvent.getLocation());
-        }
+        });
     }
 
     @Subscribe
@@ -77,7 +81,9 @@ public final class RightPanelPresenter {
     @Subscribe
     private void onFocusedTile(final TileWasSelectedEvent event) {
         lastFocusedTileEvent = event;
-        display.refreshView(event);
+        Platform.runLater(() -> {
+            display.refreshView(event);
+        });
     }
 
 }
