@@ -60,12 +60,14 @@ public final class RightPanelPresenter {
     @Subscribe
     private void onTurnStarted(final TurnStartedEvent event) {
         logger.debug("Turn started for player {}", event.getPlayer());
-        display.setOnMovePlayer(event.getPlayer());
-        if (event.getPlayer().isHuman()) {
-            if (lastFocusedTileEvent != null) {
-                display.refreshView(lastFocusedTileEvent);
+        Platform.runLater(() -> {
+            display.setOnMovePlayer(event.getPlayer());
+            if (event.getPlayer().isHuman()) {
+                if (lastFocusedTileEvent != null) {
+                    display.refreshView(lastFocusedTileEvent);
+                }
             }
-        }
+        });
     }
 
     @SuppressWarnings("unused")
