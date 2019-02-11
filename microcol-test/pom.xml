@@ -128,6 +128,10 @@
 				<configuration>
 					<useFile>false</useFile>
 					<trimStackTrace>false</trimStackTrace>
+					<printSummary>true</printSummary>
+					<properties>
+						<includeTags>ci</includeTags>
+					</properties>
 					<excludes>
 						<exclude>org/microcol/integration/**.java</exclude>
 					</excludes>

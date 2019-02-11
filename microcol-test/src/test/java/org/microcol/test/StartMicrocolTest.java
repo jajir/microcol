@@ -14,6 +14,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.microcol.MicroCol;
@@ -29,6 +30,7 @@ import org.microcol.gui.gamemenu.MenuHolderPanel;
 import org.microcol.gui.gamemenu.SettingButtonsView;
 import org.microcol.gui.gamemenu.SettingLanguageView;
 import org.microcol.gui.gamepanel.Area;
+import org.microcol.gui.gamepanel.CursorService;
 import org.microcol.gui.gamepanel.GamePanelView;
 import org.microcol.gui.util.GamePreferences;
 import org.microcol.gui.util.PanelDock;
@@ -75,6 +77,7 @@ public class StartMicrocolTest {
     private Stage stage;
 
     @Start
+    @Tag("ci")
     private void start(final Stage primaryStage) throws Exception {
 	logger.info("Starting MicroCol");
 	this.stage = primaryStage;
@@ -83,11 +86,13 @@ public class StartMicrocolTest {
 	    FileSelectingService fileSelectingService = Mockito.mock(FileSelectingService.class);
 	    Mockito.when(fileSelectingService.loadFile(Mockito.any(File.class))).thenReturn(verifyLoadingUnloading);
 	    binder.bind(FileSelectingService.class).toInstance(fileSelectingService);
+	    binder.bind(CursorService.class).toInstance(new CursorServiceNoOpp());
 	});
 	microCol.start(primaryStage);
     }
 
     @Test
+    @Tag("ci")
     void verify_that_test_files_exists() {
 	assertTrue(verifyLoadingUnloading.exists(),
 		String.format("File '%s' doesn't exists", verifyLoadingUnloading.getAbsoluteFile()));
@@ -96,6 +101,7 @@ public class StartMicrocolTest {
     }
 
     @Test
+    @Tag("ci")
     void verify_exception_is_throws_when_object_isnt_exists(final FxRobot robot) throws Exception {
 	Assertions.assertThrows(EmptyNodeQueryException.class, () -> {
 	    FxAssert.verifyThat(BUTTON_SETTING_ID_NOT_EXISTING, obj -> {
@@ -105,6 +111,7 @@ public class StartMicrocolTest {
     }
 
     @Test
+    @Tag("ci")
     void verify_setting_page_is_available(final FxRobot robot) throws Exception {
 	verifyMainScreen();
 	openSetting(robot);
@@ -114,6 +121,7 @@ public class StartMicrocolTest {
     }
 
     @Test
+    @Tag("ci")
     void verify_language_is_changed_immediatelly(final FxRobot robot) throws Exception {
 	verifyMainScreen();
 	openSetting(robot);
@@ -139,6 +147,7 @@ public class StartMicrocolTest {
     }
 
     @Test
+    @Tag("ci")
     void verify_moving_with_unit(final FxRobot robot) throws Exception {
 	// TODO move with ship. make from this TC
 	// TODO verify, selecting moving unit from right panel.

@@ -27,8 +27,6 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 
-import javafx.scene.Cursor;
-import javafx.scene.ImageCursor;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
@@ -46,7 +44,7 @@ public final class GamePanelView {
 
     private final ImageProvider imageProvider;
 
-    private final Cursor gotoModeCursor;
+    private final CursorService cursorService;
 
     private final GameModelController gameModelController;
 
@@ -57,7 +55,7 @@ public final class GamePanelView {
     private final SelectedUnitManager selectedUnitManager;
 
     private final AnimationManager animationManager;
-    
+
     private final ScrollingManager scrollingManager;
 
     private final ExcludePainting excludePainting;
@@ -90,7 +88,8 @@ public final class GamePanelView {
             final AnimationManager animationManager, final ScrollingManager scrollingManager,
             final ModeController modeController, final ExcludePainting excludePainting,
             final DialogFight dialogFigth, final VisibleArea visibleArea,
-            final PaneCanvas paneCanvas, final OneTurnMoveHighlighter oneTurnMoveHighlighter) {
+            final PaneCanvas paneCanvas, final OneTurnMoveHighlighter oneTurnMoveHighlighter,
+            final CursorService cursorService) {
         this.gameModelController = Preconditions.checkNotNull(gameModelController);
         this.pathPlanning = Preconditions.checkNotNull(pathPlanning);
         this.imageProvider = Preconditions.checkNotNull(imageProvider);
@@ -108,8 +107,7 @@ public final class GamePanelView {
         this.visibleArea = Preconditions.checkNotNull(visibleArea);
         this.canvas = Preconditions.checkNotNull(paneCanvas);
         this.oneTurnMoveHighlighter = Preconditions.checkNotNull(oneTurnMoveHighlighter);
-        gotoModeCursor = new ImageCursor(imageProvider.getImage(ImageProvider.IMG_CURSOR_GOTO), 1,
-                1);
+        this.cursorService = Preconditions.checkNotNull(cursorService);
 
         canvas.widthProperty().addListener((obj, oldValue, newValue) -> {
             if (newValue.intValue() < PaneCanvas.MAX_CANVAS_SIDE_LENGTH) {
@@ -145,8 +143,8 @@ public final class GamePanelView {
             paint();
         }
     }
-    
-    public void skipCenterViewAtLocation(final Location location){
+
+    public void skipCenterViewAtLocation(final Location location) {
         visibleArea.setOnCanvasReady(ok -> {
             final Area area = getArea();
             final Point p = visibleArea.scrollToPoint(area.getCenterToLocation(location));
@@ -165,9 +163,9 @@ public final class GamePanelView {
         final Point from = visibleArea.getTopLeft();
         if (from.distanceSimplified(to) > 0) {
             /**
-             * Following precondition throws exception when scroll planning is called before
-             * canvas was fully initialized. Method could be called just after canvas full
-             * initialization.
+             * Following precondition throws exception when scroll planning is
+             * called before canvas was fully initialized. Method could be
+             * called just after canvas full initialization.
              */
             Preconditions.checkState(visibleArea.isReady(),
                     "screen scroll is called before canvas initialization was finished.");
@@ -251,8 +249,8 @@ public final class GamePanelView {
     /**
      * Draw units.
      * <p>
-     * Methods iterate through all location with ships, select first ship and draw
-     * it.
+     * Methods iterate through all location with ships, select first ship and
+     * draw it.
      * </p>
      * 
      * @param graphics
@@ -365,8 +363,8 @@ public final class GamePanelView {
             final List<Point> steps = Lists.transform(locations,
                     location -> area.convertToPoint(location));
             /**
-             * Here could be check if particular step in on screen, but draw few images
-             * outside screen is not big deal.
+             * Here could be check if particular step in on screen, but draw few
+             * images outside screen is not big deal.
              */
             steps.forEach(point -> paintStep(graphics, point, stepCounter,
                     moveModeSupport.getMoveMode()));
@@ -390,12 +388,12 @@ public final class GamePanelView {
 
     public void setMoveModeOff() {
         oneTurnMoveHighlighter.setLocations(null);
-        canvas.getCanvas().setCursor(Cursor.DEFAULT);
+        cursorService.setDefaultCursor(canvas.getCanvas());
         modeController.setMoveMode(false);
     }
 
     public void setMoveModeOn() {
-        canvas.getCanvas().setCursor(gotoModeCursor);
+        cursorService.setMoveCursor(canvas.getCanvas());
         modeController.setMoveMode(true);
     }
 
