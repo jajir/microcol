@@ -25,6 +25,7 @@ import org.microcol.gui.buttonpanel.ButtonsGamePanel;
 import org.microcol.gui.colony.ColonyButtonsPanel;
 import org.microcol.gui.colony.ColonyPanel;
 import org.microcol.gui.colony.PanelUnitWithContextMenu;
+import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.gamemenu.ButtonsPanelView;
 import org.microcol.gui.gamemenu.MenuHolderPanel;
 import org.microcol.gui.gamemenu.SettingButtonsView;
@@ -36,6 +37,7 @@ import org.microcol.gui.util.GamePreferences;
 import org.microcol.gui.util.PanelDock;
 import org.microcol.gui.util.PanelDockCrate;
 import org.microcol.model.Location;
+import org.microcol.model.Model;
 import org.mockito.Mockito;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -197,12 +199,16 @@ public class StartMicrocolTest {
 	// press next turn.
 	buttonNextTurnClick(robot);
 
+	// verify that there are no ship
+	assertEquals(0, getModel().getUnitsAt(Location.of(24, 12)).size());
+
 	// disembark units
 	moveMouseAtLocation(robot, Location.of(24, 11));
 	dragMouseAtLocation(robot, Location.of(24, 12));
+	waitWhileMoving();
 
-	// TODO verify that units are at expected location.
-	// Thread.sleep(1000 * 8);
+	// verify that units are at expected location.
+	assertEquals(2, getModel().getUnitsAt(Location.of(24, 12)).size());
     }
 
     private void loadPreparedGame(final FxRobot robot) {
@@ -298,6 +304,11 @@ public class StartMicrocolTest {
     private <T> T getClassFromGuice(final Class<T> clazz) {
 	final T t = microCol.getInjector().getInstance(clazz);
 	return Preconditions.checkNotNull(t);
+    }
+
+    private Model getModel() {
+	final GameModelController gameModelController = getClassFromGuice(GameModelController.class);
+	return gameModelController.getModel();
     }
 
     private void verifyRadioButton(final String buttonId, boolean isExpectedSelected) {
