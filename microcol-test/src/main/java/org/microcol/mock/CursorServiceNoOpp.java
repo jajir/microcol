@@ -1,4 +1,4 @@
-package org.microcol.test;
+package org.microcol.mock;
 
 import org.microcol.gui.gamepanel.CursorService;
 
