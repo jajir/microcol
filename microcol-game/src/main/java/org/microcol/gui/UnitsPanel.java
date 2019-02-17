@@ -68,7 +68,6 @@ public final class UnitsPanel {
                 unitPanel.setOnMouseClicked(event -> {
                     selectedUnitManager.setSelectedUnit(unit);
                 });
-
             }
             box.getChildren().add(new Label(""));
             box.getStylesheets().add(MainStageBuilder.STYLE_SHEET_RIGHT_PANEL_VIEW);

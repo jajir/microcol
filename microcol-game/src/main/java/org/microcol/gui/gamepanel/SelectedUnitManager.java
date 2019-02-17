@@ -124,6 +124,7 @@ public final class SelectedUnitManager {
         selectedUnit = null;
     }
 
+    // TODO following two methods seems too similar. Merge then
     public void setSelectedUnit(final Unit unit) {
         Preconditions.checkNotNull(unit);
         Preconditions.checkArgument(unit.isAtPlaceLocation());
@@ -133,6 +134,17 @@ public final class SelectedUnitManager {
              */
             return;
         }
+        forcelySetSelectedUnit(unit);
+    }
+
+    private void selectedUnit(final Unit unit) {
+        if (unit != null) {
+            Preconditions.checkState(unit.isAtPlaceLocation());
+        }
+        forcelySetSelectedUnit(unit);
+    }
+
+    private void forcelySetSelectedUnit(final Unit unit) {
         final Unit previousUnit = selectedUnit;
         selectedUnit = unit;
         eventBus.post(new SelectedUnitWasChangedEvent(previousUnit, selectedUnit));
@@ -140,17 +152,7 @@ public final class SelectedUnitManager {
     }
 
     public void unselectUnit() {
-        selectedUnit(null);
-    }
-
-    private void selectedUnit(final Unit unit) {
-        if (unit != null) {
-            Preconditions.checkState(unit.isAtPlaceLocation());
-        }
-        final Unit previousUnit = selectedUnit;
-        selectedUnit = unit;
-        eventBus.post(new SelectedUnitWasChangedEvent(previousUnit, selectedUnit));
-        logger.debug("Selected unit is now: {}", selectedUnit);
+        forcelySetSelectedUnit(null);
     }
 
     private void evaluateLocation(final Location location) {

@@ -1,16 +1,17 @@
 package org.microcol.page;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import org.microcol.gui.Point;
 import org.microcol.gui.StatusBarView;
 import org.microcol.gui.buttonpanel.ButtonsGamePanel;
-import org.microcol.gui.colony.ColonyPanel;
 import org.microcol.gui.gamepanel.GamePanelView;
 import org.microcol.model.Location;
-import org.microcol.test.AbstractMicroColTest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testfx.api.FxAssert;
@@ -18,16 +19,19 @@ import org.testfx.robot.Motion;
 import org.testfx.service.finder.NodeFinder;
 import org.testfx.util.WaitForAsyncUtils;
 
+import com.google.common.collect.Lists;
+
 import javafx.scene.control.Button;
 import javafx.scene.control.Labeled;
 import javafx.scene.input.MouseButton;
+import javafx.scene.layout.VBox;
 
 public class GamePage extends AbstractScreen {
 
     protected final static Point TILE_CENTER = Point.of(GamePanelView.TILE_WIDTH_IN_PX, GamePanelView.TILE_WIDTH_IN_PX)
 	    .divide(2);
 
-    private final Logger logger = LoggerFactory.getLogger(AbstractMicroColTest.class);
+    private final Logger logger = LoggerFactory.getLogger(GamePage.class);
 
     public static GamePage of(final TestContext context) {
 	return new GamePage(context);
@@ -35,6 +39,7 @@ public class GamePage extends AbstractScreen {
 
     private GamePage(final TestContext context) {
 	super(context);
+	WaitForAsyncUtils.waitForFxEvents();
     }
 
     public void moveMouseAtLocation(final Location location) {
@@ -67,13 +72,22 @@ public class GamePage extends AbstractScreen {
 	assertTrue(getContext().getArea().isLocationVisible(location));
     }
 
-    public void openColonyAt(final Location colonyLocation, final String expectedNamePart) {
+    public void buttonNextTurnClick() {
+	final Button buttonNextTurn = getButtoonById(ButtonsGamePanel.BUTTON_NEXT_TURN_ID);
+	getRobot().clickOn(buttonNextTurn);
+    }
+
+    public DialogMessagePage buttonDeclareIndependenceClick() {
+	final Button buttonNextTurn = getButtoonById(ButtonsGamePanel.BUTTON_DECLARE_INDEPENDENCE_ID);
+	getRobot().clickOn(buttonNextTurn);
+	WaitForAsyncUtils.waitForFxEvents();
+	return DialogMessagePage.of(getContext());
+    }
+
+    public ColonyScreen openColonyAt(final Location colonyLocation, final String expectedNamePart) {
 	moveMouseAtLocation(colonyLocation);
 	getRobot().clickOn(MouseButton.PRIMARY);
-	final Labeled labeled = getLabeledById(ColonyPanel.COLONY_NAME_ID);
-	logger.info("Colony name: " + labeled.getText());
-	assertTrue(labeled.getText().contains(expectedNamePart),
-		String.format("Text '%s' should appear in colony name '%s'", expectedNamePart, labeled.getText()));
+	return ColonyScreen.of(getContext(), expectedNamePart);
     }
 
     /**
@@ -88,6 +102,23 @@ public class GamePage extends AbstractScreen {
 	    final Button buttonNextTurn = nodeFinder.lookup("#" + ButtonsGamePanel.BUTTON_NEXT_TURN_ID).queryButton();
 	    return !buttonNextTurn.isDisabled();
 	});
+    }
+
+    public void verifyNumberOfUnitInRightPanel(int expectedUnitsInRightPanel) {
+	final List<VBox> set = getListOfUnitsInRightPanel();
+	assertNotNull(set);
+	assertEquals(expectedUnitsInRightPanel, set.size(),
+		String.format("Expected number of unit in right panel is '%s' but there are '%s'",
+			expectedUnitsInRightPanel, set.size()));
+    }
+
+    public RightPanelUnit getRightPanelUnit(final int unitIndexInRightPanel) {
+	final VBox unitBox = getListOfUnitsInRightPanel().get(unitIndexInRightPanel);
+	return RightPanelUnit.of(getContext(), unitBox);
+    }
+
+    private List<VBox> getListOfUnitsInRightPanel() {
+	return Lists.newArrayList(getNodeFinder().lookup(".unitPanel").queryAllAs(VBox.class));
     }
 
 }

@@ -7,8 +7,8 @@ import org.microcol.model.Unit;
 import com.google.common.base.MoreObjects;
 
 /**
- * Event contains newly selected unit or when no unit is selected than it
- * contains <code>null</code>.
+ * Event contains newly selected unit and previously selected unit. Both of then
+ * could be <code>null</code>.
  */
 public final class SelectedUnitWasChangedEvent {
 
@@ -27,29 +27,6 @@ public final class SelectedUnitWasChangedEvent {
     SelectedUnitWasChangedEvent(final Unit previousUnit, final Unit selectedUnit) {
         this.previousUnit = previousUnit;
         this.selectedUnit = selectedUnit;
-    }
-
-    /**
-     * Is it necessary to scroll screen to newly selected unit?
-     *
-     * @return If it's necessary to scroll to newly selected unit than it return
-     *         <code>true</code> otherwise it return <code>false</code>
-     */
-    @Deprecated
-    public boolean isNecesarryToScrool() {
-        if (canScrollAtUnit(selectedUnit)) {
-            if (canScrollAtUnit(previousUnit)) {
-                return !selectedUnit.getLocation().equals(previousUnit.getLocation());
-            } else {
-                return true;
-            }
-        } else {
-            return false;
-        }
-    }
-
-    private boolean canScrollAtUnit(final Unit unit) {
-        return unit != null && unit.isAtPlaceLocation();
     }
 
     @Override

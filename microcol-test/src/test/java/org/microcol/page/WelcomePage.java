@@ -3,6 +3,7 @@ package org.microcol.page;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.microcol.gui.gamemenu.ButtonsPanelView;
+import org.testfx.util.WaitForAsyncUtils;
 
 public class WelcomePage extends AbstractMenuScreen {
 
@@ -12,6 +13,7 @@ public class WelcomePage extends AbstractMenuScreen {
 
     WelcomePage(final TestContext context) {
 	super(context);
+	WaitForAsyncUtils.waitForFxEvents();
 	verifyMainScreen();
     }
 

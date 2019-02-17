@@ -43,6 +43,12 @@ public class ColonyMenuPanel implements JavaFxComponent, UpdatableLanguage {
         updateLanguage(i18n);
     }
 
+    /**
+     * Show given colony.
+     *
+     * @param colony
+     *            required colony object
+     */
     public void setColony(final Colony colony) {
         colonyPanel.showColony(colony);
         colonyPanel.repaint();

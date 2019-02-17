@@ -7,6 +7,7 @@ import org.microcol.gui.gamepanel.CursorService;
 import org.microcol.gui.gamepanel.GamePanelView;
 import org.microcol.gui.util.GamePreferences;
 import org.microcol.mock.CursorServiceNoOpp;
+import org.microcol.model.Model;
 import org.microcol.page.TestContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,8 +39,8 @@ public abstract class AbstractMicroColTest {
      * @param primaryStage required primary stage
      * @throws Exception
      */
-    protected void initialize(final Stage primaryStage) throws Exception {
-	logger.info("Starting MicroCol");
+    protected void initialize(final Stage primaryStage, final Class<?> clazz) throws Exception {
+	logger.info("Starting MicroCol UI test " + clazz.getName());
 	System.setProperty(GamePreferences.SYSTEM_PROPERTY_DEVELOPMENT, Boolean.TRUE.toString());
 	final MicroCol microCol = new MicroCol(binder -> {
 	    binder.bind(CursorService.class).toInstance(new CursorServiceNoOpp());
@@ -70,6 +71,10 @@ public abstract class AbstractMicroColTest {
 
     protected NodeFinder getNodeFinder() {
 	return FxAssert.assertContext().getNodeFinder();
+    }
+
+    protected Model getModel() {
+	return getContext().getModel();
     }
 
 }

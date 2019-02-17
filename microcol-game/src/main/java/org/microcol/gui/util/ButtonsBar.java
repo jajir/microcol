@@ -14,6 +14,8 @@ import javafx.scene.layout.Priority;
  */
 public final class ButtonsBar extends HBox {
 
+    public static final String BUTTON_OK_ID = "buttonOk";
+
     private final Button buttonOk;
 
     public ButtonsBar(final I18n i18n) {
@@ -23,7 +25,7 @@ public final class ButtonsBar extends HBox {
     public ButtonsBar(final String buttonOkLabel) {
         buttonOk = new Button(buttonOkLabel);
         buttonOk.requestFocus();
-        buttonOk.setId("buttonOk");
+        buttonOk.setId(BUTTON_OK_ID);
         final Pane spacer = new Pane();
         HBox.setHgrow(spacer, Priority.ALWAYS);
         setId("buttonPane");

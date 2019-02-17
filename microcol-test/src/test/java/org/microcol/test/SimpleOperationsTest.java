@@ -35,7 +35,7 @@ public class SimpleOperationsTest extends AbstractMicroColTest {
 
     @Start
     void start(final Stage primaryStage) throws Exception {
-	initialize(primaryStage);
+	initialize(primaryStage, getClass());
     }
 
     @Override

@@ -40,7 +40,7 @@ public class UnitPanel {
         box.getStyleClass().add("unitPanel");
         box.getChildren().add(makeUnitImage(humanPlayer, unit));
         if (isUnitOwnedBy(unit, humanPlayer) && unit.canHoldCargo()) {
-            box.getChildren().add(makeGoodsPanel((UnitWithCargo)unit));
+            box.getChildren().add(makeGoodsPanel((UnitWithCargo) unit));
         }
         if (selected) {
             box.getStyleClass().add("selected");
@@ -59,20 +59,23 @@ public class UnitPanel {
     }
 
     private Region makeUnitDescription(final Player humanPlayer, final Unit unit) {
-        VBox box = new VBox();
-        final StringBuilder sb = new StringBuilder(200);
-        sb.append(localizationHelper.getUnitName(unit.getType()));
-        sb.append("\n");
+        final VBox box = new VBox();
+
+        final Label labelUnitType = new Label(localizationHelper.getUnitName(unit.getType()));
+        labelUnitType.getStyleClass().add("unitType");
+        box.getChildren().add(labelUnitType);
+
         if (isUnitOwnedBy(unit, humanPlayer)) {
-            sb.append(i18n.get(Loc.unitsPanel_availableMoves));
-            sb.append(" ");
-            sb.append(unit.getActionPoints());
-            sb.append("\n");
+            final Label labelMoves = new Label(
+                    i18n.get(Loc.unitsPanel_availableMoves) + " " + unit.getActionPoints());
+            labelMoves.getStyleClass().add("unitMoves");
+            box.getChildren().add(labelMoves);
         }
-        sb.append(i18n.get(Loc.unitsPanel_owner));
-        sb.append(" ");
-        sb.append(unit.getOwner().getName());
-        box.getChildren().add(new Label(sb.toString()));
+
+        final Label labelOwner = new Label(
+                i18n.get(Loc.unitsPanel_owner) + " " + unit.getOwner().getName());
+        labelOwner.getStyleClass().add("unitOwner");
+        box.getChildren().add(labelOwner);
         return box;
     }
 

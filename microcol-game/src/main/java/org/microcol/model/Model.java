@@ -406,6 +406,12 @@ public final class Model {
                 .collect(ImmutableList.toImmutableList());
     }
 
+    public Optional<Colony> getColonyByName(final String colonyName) {
+        Preconditions.checkNotNull(colonyName);
+        return colonies.stream().filter(colony -> colonyName.equalsIgnoreCase(colony.getName()))
+                .findAny();
+    }
+
     public List<Unit> getUnitsAt(final Location location) {
         return unitStorage.getUnitsAt(location);
     }

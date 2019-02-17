@@ -53,31 +53,30 @@ public class ButtonsGamePanelController {
         LOGGER.debug("Unit move finished");
         evaluateAllButtonsForSelectedUnit(event.getMovedUnit());
     }
-    
+
     @Subscribe
     private void onUnitMoveStarted(final UnitMoveStartedEvent event) {
         buttonGamePanel.getButtonNextTurn().setDisable(true);
     }
-    
+
     @Subscribe
     private void onUnitMoveFinished(final UnitMoveFinishedEvent event) {
         buttonGamePanel.getButtonNextTurn().setDisable(false);
     }
-    
 
     @Subscribe
     private void onSelectedUnitWasChanged(final SelectedUnitWasChangedEvent event) {
         LOGGER.debug("Selected unit was changed " + event.getSelectedUnit());
-        Platform.runLater(() -> {
-            if (event.getSelectedUnit().isPresent()) {
-                final Unit unit = event.getSelectedUnit().get();
-                evaluateAllButtonsForSelectedUnit(unit);
-            } else {
+        if (event.getSelectedUnit().isPresent()) {
+            final Unit unit = event.getSelectedUnit().get();
+            evaluateAllButtonsForSelectedUnit(unit);
+        } else {
+            Platform.runLater(() -> {
                 buttonGamePanel.setVisibleButtonMove(false);
                 buttonGamePanel.setVisibleButtonBuildColony(false);
                 buttonGamePanel.setVisibleButtonPlowField(false);
-            }
-        });
+            });
+        }
     }
 
     @Subscribe
