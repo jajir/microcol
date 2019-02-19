@@ -42,8 +42,11 @@
     <li><a href="todo.html" title="ToDo"><span class="none"></span>ToDo</a></li>
     <li><a href="release.html" title="Release"><span class="none"></span>Release</a></li>
     <li><a href="gui.html" title="GUI"><span class="none"></span>GUI</a></li>
+    <li><a href="events.html" title="Events"><span class="none"></span>Events</a></li>
     <li><a href="animation.html" title="Animation"><span class="none"></span>Animation</a></li>
+    <li><a href="units.html" title="Units"><span class="none"></span>Units</a></li>
     <li><a href="coding.html" title="Coding"><span class="none"></span>Coding</a></li>
+    <li><a href="screen-flow.html" title="Screen Flow"><span class="none"></span>Screen Flow</a></li>
     <li><a href="tests.html" title="Tests"><span class="none"></span>Tests</a></li>
 </ul>
           <hr />
@@ -61,7 +64,79 @@
 <h2><a name="Change_log"></a>Change log</h2>
 <p>Context of made releases.</p>
 <ul>
-<li>0.5.1 - Bugfixing
+<li><b>0.6.0</b> - First game campaign.
+<ul>
+<li>Add &quot;Continue in last played game&quot; button, at start of each turn game save game to file.</li>
+<li>Adjust main menu to offer free game after user finished default campaign.</li>
+<li>Support missions and campaigns. Game should support campaign and missions. There will be one campaign with simple missions:</li>
+<li>Add exit game menu item.</li>
+<li>First dialog is shown after animation is done. </li>
+<li>Try to move more than allowed number of moves in one move leads to blocking UI. </li>
+<li>After move is selected unit preserved</li>
+<li>Dialog box 'About' containing application version from pom.xml </li>
+<li>Add event onBeforeMove, this event should be possible to cancel.</li>
+<li>Game could be started from command line even in development mode. See documentation. </li>
+<li>Support start logic as described in GUI.
+<ul>
+<li>Find land and found colony.
+<ul>
+<li>Find New World.</li>
+<li>Found colony.</li>
+<li>Produce 100 Cigars. </li>
+<li>Sell cigars in Europe.</li></ul></li>
+<li>Produce first food and sell it in Europe.
+<ul>
+<li>Found 3 colonies </li>
+<li>Gain 5000 gold</li>
+<li>Build an army (15 units)</li></ul></li>
+<li>Declare independence and conquer Royal Expedition Forces.
+<ul>
+<li>Declare independence. </li>
+<li>Defeat royal expeditions forces.</li></ul></li></ul></li>
+<li>Bug: Game finished event comes to UI in non-EDT thread.</li>
+<li>Turn notifications should be added at least:
+<ul>
+<li>Colony is plagued by famine. </li>
+<li>Colony will be plagued by famine. </li>
+<li>Ship come to Europe port. </li>
+<li>Ship return from Europe. </li>
+<li>Colony is destroyed. </li></ul></li>
+<li>End game statistics &amp; turn report. Count for each player:
+<ul>
+<li>Military power.</li>
+<li>Economical colonies value.</li>
+<li>Number of units.</li>
+<li>Overall score.</li></ul></li>
+<li>Bug: During unit move is next turn button enabled</li>
+<li>Bug: When game is loaded started is also execute next turn methods on model.</li>
+<li>Support application start parameter --clean to clean all setting. It will be useful for testing. </li>
+<li>Colonist in colony eats 2 foods per turn.</li>
+<li>Colony is plagued by famine.</li>
+<li>Bug: Centering dialog based is not correct. Dialog blink at incorrect position and than appears at correct place.</li>
+<li>Bug: When first mission is played until the end and next mission starts there are visible achievements from previous mission.</li>
+<li>Bug: When next unit is selected than screen should scroll at this unit. </li>
+<li>Calendar should slow down turns later in game. Split year into spring, summer, autumn and winter.</li>
+<li>Every 11 turns new unit appears in Europe port. It's light version of crosses and religion unrest in Old World.</li>
+<li>Bug: Sometimes units can't be accessed and 'next turn' button is disabled forever. </li>
+<li>Add item in menu mission goal. There should be some mission description.</li>
+<li>Redesign saving loading missions. Use same pattern as for model save &amp; make</li>
+<li>Bug: Missions definition should'n contain MissionCallBack and Model. than move it's creation to mission controller &amp; remove startMission method.</li>
+<li>Bug: Animation is blinking at windows OS. Unit move was redesigned.</li>
+<li>Support action to unit - wait.</li>
+<li>plow field, at the beginning any unit can plow field at 4 moves. add action p</li>
+<li>When colonist work at field than there should be production booster.</li>
+<li>Bug: When new areas are revealed than there are glitches in black area.</li>
+<li>Add some free space at left side of map. It's difficult to sail around New World.</li>
+<li>When unit go to west than is turn to west direction. When unit go to to east than turn to east. When unit arrive to some place than keep direction where is facing. Direction where is unit turn is persisted.</li>
+<li>Bug: Embark and disembark in same turn leads to exception during disembark, because unit doesn't have enough action points.</li>
+<li>Bug: It's nearly impossible to move with unit in town. When town is founded and one unit is lost outside than it's not possible to move to move with such unit.</li>
+<li>Bug: 'Next Turn' button is blinking during unit move. Button 'Next turn' blinking during enemy unit turn.</li>
+<li>Bug: When unit is on the right edge of visible area and windows is resized than ship disappears when edge of window touch it.</li>
+<li>Bug: When game is loaded and focus was at some place e.g. town than screen is not centered at this location.</li>
+<li>Bug: Enemy unit is animating event when they are out of visible area.</li>
+<li>Bug: Path during move is strange. It should be closest path. Now it look like funny serpent.</li>
+<li>When number of food in colony reach 400 than all food disappears and colonist will appears outside of colony. </li></ul></li>
+<li><b>0.5.1</b> - Bugfixing
 <ul>
 <li>Corrected bug in last scenario.</li>
 <li>Localization was improved, class Localize was removed.</li>
@@ -76,7 +151,7 @@
 <li>Focused unit is without available action points to move. User press next turn when user is on turn again unit still seems without actions point. Select another unit and back helps. </li>
 <li>When ship is in port and user try to move another ground unit there than ground unit is embark instead of moving to colony. </li>
 <li>Game over scenario daesn't work. </li></ul></li>
-<li>0.5.0 - Make first game smoother
+<li><b>0.5.0</b> - Make first game smoother
 <ul>
 <li>Colony UI improvements 
 <ul>
@@ -107,7 +182,7 @@
 <li>When selected unit outside of colony is move to field than attempt to open colony throws exception. </li>
 <li>When colony is conquered place unit to field to produce food.</li>
 <li>New game leads to disabled mouse.</li></ul></li></ul></li>
-<li>0.4.0 - game should be playable from start till the end
+<li><b>0.4.0</b> - game should be playable from start till the end
 <ul>
 <li>Trees are supported on map</li>
 <li>Europe port, including
@@ -131,7 +206,7 @@
 <li>Allow to load predefined scenarios from class path.</li>
 <li>Send REF (with aggressive behavior)</li>
 <li>game end by conquering REF</li></ul></li>
-<li>0.3.0 - first game entities are implemented
+<li><b>0.3.0</b> - first game entities are implemented
 <ul>
 <li>Land is added. </li>
 <li>Simple map containing first land.</li>
@@ -144,7 +219,7 @@
 <li>Maven site should be published after each travis-ci build</li>
 <li>Grid could be enabled/disabled by 'g' and from preferences menu</li>
 <li>Move 'm' could be accessible from menu &quot;unit&quot; -&gt; &quot;move&quot;. Menu option will be disabled when focused tile is not movable</li></ul></li>
-<li>0.2.0 - game project structure was outlined
+<li><b>0.2.0</b> - game project structure was outlined
 <ul>
 <li>first game map - just empty ocean</li>
 <li>one ship controlled by user</li>
@@ -155,7 +230,7 @@
 <li>user's ship control</li>
 <li>basic game domain model</li>
 <li>enemy ship control</li></ul></li>
-<li>0.1.0 - project setup version
+<li><b>0.1.0</b> - project setup version
 <ul>
 <li>setup project infrastructure git repository, ci, publishing documentation ...</li>
 <li>create binary distribution</li>

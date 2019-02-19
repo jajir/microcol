@@ -42,8 +42,11 @@
     <li class="active"><a href="#"><span class="none"></span>ToDo</a></li>
     <li><a href="release.html" title="Release"><span class="none"></span>Release</a></li>
     <li><a href="gui.html" title="GUI"><span class="none"></span>GUI</a></li>
+    <li><a href="events.html" title="Events"><span class="none"></span>Events</a></li>
     <li><a href="animation.html" title="Animation"><span class="none"></span>Animation</a></li>
+    <li><a href="units.html" title="Units"><span class="none"></span>Units</a></li>
     <li><a href="coding.html" title="Coding"><span class="none"></span>Coding</a></li>
+    <li><a href="screen-flow.html" title="Screen Flow"><span class="none"></span>Screen Flow</a></li>
     <li><a href="tests.html" title="Tests"><span class="none"></span>Tests</a></li>
 </ul>
           <hr />
@@ -61,113 +64,46 @@
 <h2><a name="Planned_releases"></a>Planned releases</h2>
 <p>MicroCol backlog. List of functionalities for upcoming releases.</p>
 <ul>
-<li><b>0.6.0</b> - First game campaign.
-<ul>
-<li>&#x2713; Support game in progress, at start of each turn persist played game and save it to preferences.</li>
-<li>&#x2713; Adjust main menu to offer free game after user finished missions.</li>
-<li>&#x2713; Support mission and campaign. Game should support campaign and missions. There will be one campaign with simple missions:</li>
-<li>&#x2713; Add exit game menu item.</li>
-<li>&#x2713; First dialog is shown after animation is done. </li>
-<li>&#x2713; Try to move more than allowed number of moves in one move leads to blocking UI. </li>
-<li>&#x2713; After move is selected unit preserved</li>
-<li>&#x2713; Dialog box 'About' containing application version from pom.xml </li>
-<li>&#x2713; Add event onBeforeMove, this event should be possible to cancel.</li>
-<li>&#x2713; Game could be started from command line even in development mode. See documentation. </li>
-<li>&#x2713; Support start logic as described in GUI.
-<ul>
-<li>&#x2713; Find land and found colony.
-<ul>
-<li>&#x2713; Find New World.</li>
-<li>&#x2713; Found colony.</li>
-<li>&#x2713; Produce 100 Cigars. </li>
-<li>&#x2713; Sell cigars in Europe.</li></ul></li>
-<li>&#x2713; Produce first food and sell it in Europe.
-<ul>
-<li>&#x2713; Found 3 colonies </li>
-<li>&#x2713; Gain 5000 gold</li>
-<li>&#x2713; Build an army (15 units)</li></ul></li>
-<li>&#x2713; Declare independence and conquer Royal Expedition Forces.
-<ul>
-<li>&#x2713; Declare independence. </li>
-<li>&#x2713; Defeat royal expeditions forces.</li></ul></li></ul></li>
-<li>&#x2713; Game finished event comes to UI in non-EDT thread.</li>
-<li>&#x2713; Turn notifications should be added at least:
-<ul>
-<li>&#x2713; Colony is plagued by famine. </li>
-<li>&#x2713; Colony will be plagued by famine. </li>
-<li>&#x2713; Ship come to Europe port. </li>
-<li>&#x2713; Ship return from Europe. </li>
-<li>&#x2713; Colony is destroyed. </li></ul></li>
-<li>&#x2713; End game statistics &amp; turn report. Count for each player:
-<ul>
-<li>&#x2713; Military power.</li>
-<li>&#x2713; Economical colonies value.</li>
-<li>&#x2713; Number of units.</li>
-<li>&#x2713; Overall score.</li></ul></li>
-<li>&#x2713; During unit move is next turn button enabled</li>
-<li>&#x2713; When game is loaded than don't execute next turn methods on model.</li>
-<li>&#x2713; Support application start parameter --clean to clean all setting. It will be useful for testing. </li>
-<li>&#x2713; Colonist in colony eats 2 foods per turn.</li>
-<li>&#x2713; Colony is plagued by famine.</li>
-<li>&#x2713; Centering dialog based is not correct. Dialog blink at incorrect position and than appears at correct place.</li>
-<li>&#x2713; When first mission is played until the end than next mission run will keep mission setting like achievements.</li>
-<li>&#x2713; When next unit is selected than screen should scroll at this unit. </li>
-<li>&#x2713; Calendar should slow down turns later in game. Split year into spring, summer, autumn and winter.</li>
-<li>&#x2713; Every 11 turns new unit appears in Europe port. It's light version of crosses and religion unrest in Old World.</li>
-<li>&#x2713; Bug, when units can't be accessed and 'next turn' button is disabled forever. </li>
-<li>&#x2713; Add item in menu mission goal. There should be some mission description.</li>
-<li>&#x2713; Redesign saving loading missions. Use same pattern as for model save &amp; make</li>
-<li>&#x2713; Missions definition should'n contain MissionCallBack and Model. than move it's creation to mission controller &amp; remove startMission method.</li>
-<li>&#x2713; Animation is blinking at windows os. Unit move was redesigned.</li>
-<li>&#x2713; Support action to unit - wait.</li>
-<li>&#x2713; plow field, at the beginning any unit can plow field at 4 moves. add action p</li>
-<li>&#x2713; When colonist work at field than there should be production booster.</li>
-<li>&#x2713; When new areas are revealed than there are glitches in black area.</li>
-<li>&#x2713; Add some free space at left side of map. It's difficult to sail around New World.</li>
-<li>&#x2713; When unit go to west than is turn to west direction. When unit go to to east than turn to east. When unit arrive to some place than keep direction where is facing. Direction where is unit turn is persisted.</li>
-<li>&#x2713; Embark and disembark in same turn leads to exception during disembark, because unit doesn't have enough action points.</li>
-<li>&#x2713; It's nearly impossible to move with unit in town. When town is founded and one unit is lost outside than it's not possible to move to move with such unit.</li>
-<li>&#x2713; 'Next Turn' button is blinking during unit move. Button 'Next turn' blinking during enemy unit turn.</li>
-<li>&#x2713; When unit is on the right edge of visible area and windows is resized than ship disappears when edge of window touch it.</li>
-<li>&#x2713; When game is loaded and focus was at some place e.g. town than screen is not centered at this location.</li>
-<li>&#x2713; Enemy unit is animating event when they are out of visible area.</li>
-<li>&#x2713; Path during move is strange. It should be closest path. Now it's funny serpent.</li>
-<li>&#x2713; When number of food in colony reach 400 than all food disappears and colonist will appears outside of colony. </li></ul></li>
 <li><b>0.7.0</b> - Buildings &amp; ore economy
 <ul>
-<li>&#x2717; Allows to produce hammers. Add button that allows to define building queue. Building should support building new constructions.</li>
+<li>&#x2713; Support WASD screen scrolling.</li>
+<li>&#x2713; Replace main menu with icons at the top of screen.</li>
+<li>&#x2713; Finish event processing redesign, remove controllers.</li>
+<li>&#x2713; Colony and Europe views are redesigned.</li>
+<li>&#x2713; Allows to produce hammers. Add button that allows to define building queue. Building can be upgraded.</li>
+<li>&#x2713; Colony building queue and queue editing - simple and ugly version</li>
+<li>&#x2713; Right panel allows to select unit.</li>
+<li>&#x2713; Show colony and Europe full screen not as dialog. </li>
+<li>&#x2713; Right panel allows to select unit.</li>
+<li>&#x2713; Colony building queue and queue editing - simple and ugly version</li>
+<li>&#x2717; redesign model: unit use class hierarchy, remove unit type, same for terrain. Move outside cargoHold, abstract class will contain attack and move </li>
+<li>&#x2717; Add tests for UI. Test at least game menu screens. </li>
+<li>&#x1f41b; When focused unit is placed outside colony and unit is moved to field than attempt to move unit leads to exception.</li>
+<li>&#x1f41b; Main menu doesn't work when drag pressed mouse instead of simple move. It can't be easily solved. There is no such feature in JavaFx. Menu was redesigned without JavaFX.</li>
 <li>&#x2717; </li>
 <li>&#x2717; </li>
 <li>&#x2717; </li>
 <li>&#x2717; </li>
-<li>&#x2717; When focused unit is at colony and is moved to field than attempt to move unit leads to exception.</li>
-<li>&#x2717; Main menu doesn't work when drag pressed mouse instead of simple move. It can't be easily solved. There is no such feature in JavaFx.</li>
-<li>&#x2717; When focus is transfered by click than don't center at focused unit.</li>
-<li>&#x2717; Don't animate and don't wait for movements outside of screen. When kings unit coming to colonies.</li>
+<li>&#x2717; </li>
+<li>&#x2717; </li>
+<li>&#x2717; Automatize at least some test cases. Use <a class="externalLink" href="https://github.com/TestFX/TestFX">TestFx</a>. </li>
+<li>&#x2717; Make game main game setting configurable in UI tests. </li>
+<li>&#x2717; Finish translation</li>
+<li>&#x1f41b; When focus is transfered by click than don't center at focused unit.</li>
+<li>&#x1f41b; Don't animate and don't wait for movements outside of screen. When kings unit coming to colonies.</li>
 <li>&#x2717; When focused unit on in city and instead of moving it city is open and unit moved to colony field than next unit on focused city is not selected and consequently can't be moved.</li>
 <li>&#x2717; Describe event tileWasSelected, unitWasSelected and managers and controllers. </li>
-<li>&#x2717; </li>
-<li>&#x2717; </li>
-<li>&#x2717; </li>
-<li>&#x2717; </li>
-<li>&#x2717; </li>
 <li>&#x2717; List of default campaign missions should contains some check to know which missions are done.</li>
-<li>&#x2717; Right panel allows to select unit.</li>
 <li>&#x2717; build road, at the beginning any unit can build road at 4 moves. add action r</li>
-<li>&#x2717; redesign model: unit use class hierarchy, remove unit type, same for terrain. Move outside cargoHold, abstract class bude obsahovat utok a pohyb </li>
-<li>&#x2717; Colony building queue and queue editing - simple and ugly version</li>
 <li>&#x2717; Redesign game loop, to support parallel animations. Slight changes in water &amp; move animation &amp; scroll to moving unit. To control constant FPS. Now it's around 60 FPS.</li>
 <li>&#x2717; Redesign model events - add some mark to it's name to be able to distinguish them from front-end events.</li>
-<li>&#x2717; Right panel allows to select unit.</li>
-<li>&#x2717; Finish translation</li>
-<li>&#x2717; Try to make package including JVM, it will be nice to use openJDK.</li>
-<li>&#x2717; </li></ul></li>
+<li>&#x2717; Try to make package including JVM, it will be nice to use openJDK.</li></ul></li>
 <li><b>Backlog</b> - feature and improvement backlog
 <ul>
-<li>&#x2717; Colony building queue and queue editing - simple and ugly version</li>
+<li>&#x2717; </li>
 <li>&#x2717; Add unit wagon, can't fight, capture colony, can transport goods</li>
-<li>&#x2717; Improve UI</li>
 <li>&#x2717; colonist unit equipped with (20) tool can plow field. Depending on unit expertise in a few turns field will be created and 20 tools will be destroyed.</li>
+<li>&#x1f41b; When unit is selected from right menu than correct unit is not highlighted in main game area. Or it's not possible to verify, because just one unit type is there. </li>
 <li>&#x2717; Documentation update
 <ul>
 <li>&#x2717; Review release process description.</li>
@@ -177,7 +113,6 @@
 <li>&#x2717; Disband unit - take care of cargo</li>
 <li>&#x2717; Colony name editing</li>
 <li>&#x2717; Colony name generator</li>
-<li>&#x2717; Don't show colony as dialog, show it at full screen. </li>
 <li>&#x2717; Add mouse over hints to colony. Add hint to optional 'Control' key during dragging. </li>
 <li>&#x2717; Don't show Europe as dialog, show it at full screen. </li>
 <li>&#x2717; Add mouse over hints to Europe. </li>
@@ -204,6 +139,10 @@
 <li>ugly graphics</li>
 <li>Documentation</li>
 <li>languages en/cz</li></ul></li></ul></div>
+<div class="section">
+<h2><a name="Notes:"></a>Notes:</h2>
+<ul>
+<li>&#x2717; Main menu doesn't work when drag pressed mouse instead of simple move. It can't be easily solved. There is no such feature in JavaFx.</li></ul></div>
         </div>
       </div>
     </div>

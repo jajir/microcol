@@ -42,8 +42,11 @@
     <li><a href="todo.html" title="ToDo"><span class="none"></span>ToDo</a></li>
     <li class="active"><a href="#"><span class="none"></span>Release</a></li>
     <li><a href="gui.html" title="GUI"><span class="none"></span>GUI</a></li>
+    <li><a href="events.html" title="Events"><span class="none"></span>Events</a></li>
     <li><a href="animation.html" title="Animation"><span class="none"></span>Animation</a></li>
+    <li><a href="units.html" title="Units"><span class="none"></span>Units</a></li>
     <li><a href="coding.html" title="Coding"><span class="none"></span>Coding</a></li>
+    <li><a href="screen-flow.html" title="Screen Flow"><span class="none"></span>Screen Flow</a></li>
     <li><a href="tests.html" title="Tests"><span class="none"></span>Tests</a></li>
 </ul>
           <hr />
@@ -78,7 +81,8 @@
 <h4><a name="Release_prerequisite"></a>Release prerequisite</h4>
 <ul>
 <li>Installed java 1.8.</li>
-<li>Installed graphviz. It could be verified by running <i>./dot</i>. It's required by plant UML diagrams maven plugin.</li></ul></div>
+<li>Installed graphviz. It could be verified by running <i>./dot</i>. It's required by plant UML diagrams maven plugin.</li>
+<li>All test are passing.</li></ul></div>
 <div class="section">
 <h4><a name="Release_steps"></a>Release steps</h4>
 <p>Following guide is useful when new minor or major change should be released. Guide suppose releasing version <i>x.y.0</i>. </p>
@@ -107,10 +111,24 @@ git push</pre></div></li></ol>
 <p>TODO add guide when branch x.y.2 already exists and version x.y.3 should be released.</p></div></div>
 <div class="section">
 <h3><a name="How_to_publish_documentation"></a>How to publish documentation</h3>
-<p>Documentation is stored at github in extra branch called <i>gh-pages</i>. To publish new version of documentation it's enough to commit it to <i>gh-pages</i> branch. It could be done automatically.</p>
-<p>Navigate to directory to <i>microcol-site</i> and type:</p>
-<div class="source"><pre class="prettyprint">mvn com.github.github:site-maven-plugin:0.12:site </pre></div>
-<p>Than after few minutes new site version should be uploaded at <a class="externalLink" href="https://jajir.github.io/microcol/">https://jajir.github.io/microcol/</a>.</p></div></div>
+<p>Documentation is stored at github in extra branch called <i>gh-pages</i>. To publish new version of documentation it's enough to commit it to <i>gh-pages</i> branch. It could be donein a few easy steps.</p>
+<ol style="list-style-type: decimal">
+<li>Verify settings.xml
+<p>In your home directory is file ~/.m2/settings.xml. If file doesn't exist crate new one. Edit server section:</p>
+<div class="source"><pre class="prettyprint">&lt;servers&gt;
+        ...
+        &lt;server&gt;
+                &lt;id&gt;github&lt;/id&gt;
+                &lt;username&gt;user&lt;/username&gt;
+                &lt;password&gt;s!cr!t&lt;/password&gt;
+        &lt;/server&gt;
+        ...
+&lt;/servers&gt;</pre></div>
+<p>This setting provide user name and password for github account.</p></li>
+<li>Navigate to directory to <i>microcol-site</i> and type:
+<div class="source"><pre class="prettyprint">mvn clean site-deploy</pre></div>
+<p>Than after few minutes new site version should be uploaded at <a class="externalLink" href="https://jajir.github.io/microcol/">https://jajir.github.io/microcol/</a>.</p></li>
+<li>Go to <a class="externalLink" href="https://jajir.github.io/microcol/">https://jajir.github.io/microcol/</a> and verify that there is latest version.</li></ol></div></div>
         </div>
       </div>
     </div>

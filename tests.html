@@ -42,8 +42,11 @@
     <li><a href="todo.html" title="ToDo"><span class="none"></span>ToDo</a></li>
     <li><a href="release.html" title="Release"><span class="none"></span>Release</a></li>
     <li><a href="gui.html" title="GUI"><span class="none"></span>GUI</a></li>
+    <li><a href="events.html" title="Events"><span class="none"></span>Events</a></li>
     <li><a href="animation.html" title="Animation"><span class="none"></span>Animation</a></li>
+    <li><a href="units.html" title="Units"><span class="none"></span>Units</a></li>
     <li><a href="coding.html" title="Coding"><span class="none"></span>Coding</a></li>
+    <li><a href="screen-flow.html" title="Screen Flow"><span class="none"></span>Screen Flow</a></li>
     <li class="active"><a href="#"><span class="none"></span>Tests</a></li>
 </ul>
           <hr />
@@ -71,15 +74,19 @@
 <div class="section">
 <h4><a name="TC-01_Embark_and_Disembark"></a>TC-01 Embark and Disembark</h4>
 <ul>
-<li>Load file 'test-verify-loading-unloading.microcol'</li>
-<li>Move ship to [23,13] from colony delfy</li>
-<li>Embark two units waiting outside of colony to ship. Verify that units are be loaded in different cargo slots and are visible in right panel</li>
-<li>Move with ship few tiles to the right. Verify that it's not possible to disembark units. (There are no free action points for loaded units)</li>
+<li>Load file 'test-verify-loading-unloading.microcol'.</li>
+<li>Move ship from colony Delfy at [22,12].</li>
+<li>Open colony detail.</li>
+<li>Verify that there are one ship in port and two units on pier.</li>
+<li>Click at ship. Verify that doesn't contains any cargo. </li>
+<li>Embark two units waiting outside of colony to ship. Verify that units are be loaded in different cargo slots.</li>
+<li>Close colony. Verify that embarked units are visible in right panel.</li>
+<li>Move with ship few tiles to the right at [24,12]. Verify that it's not possible to disembark units (There are no free action points for loaded units).</li>
 <li>Press 'Next Turn'</li>
 <li>Unload both units. Verify that there is animations are performed and focus is at disembarked units.</li>
-<li>Try to embark units back. Verify that it's not possible. Verify that both units have 0 action points</li>
-<li>Press 'Next Turn'</li>
-<li>Embark both units back to ship Verify that both units are on ship. Verify that unit are loaded with animation and after moving is focused ship. </li></ul>
+<li>Try to embark units back. Verify that it's not possible. Verify that both units have 0 action points.</li>
+<li>Press 'Next Turn'.</li>
+<li>Embark both units back to ship. Verify that both units are on ship. Verify that unit are loaded with animation and after moving is focused ship. </li></ul>
 <p>Done.</p></div>
 <div class="section">
 <h4><a name="TC-02_Founding_Colony"></a>TC-02 Founding Colony</h4>

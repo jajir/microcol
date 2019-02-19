@@ -42,8 +42,11 @@
     <li><a href="todo.html" title="ToDo"><span class="none"></span>ToDo</a></li>
     <li><a href="release.html" title="Release"><span class="none"></span>Release</a></li>
     <li><a href="gui.html" title="GUI"><span class="none"></span>GUI</a></li>
+    <li><a href="events.html" title="Events"><span class="none"></span>Events</a></li>
     <li><a href="animation.html" title="Animation"><span class="none"></span>Animation</a></li>
+    <li><a href="units.html" title="Units"><span class="none"></span>Units</a></li>
     <li><a href="coding.html" title="Coding"><span class="none"></span>Coding</a></li>
+    <li><a href="screen-flow.html" title="Screen Flow"><span class="none"></span>Screen Flow</a></li>
     <li><a href="tests.html" title="Tests"><span class="none"></span>Tests</a></li>
 </ul>
           <hr />
@@ -104,51 +107,26 @@
 <li>Sourceforge project: <a class="externalLink" href="https://sourceforge.net/projects/microcol/">sourceforge.net/projects/microcol/</a></li>
 <li>Binaries download: <a class="externalLink" href="https://sourceforge.net/projects/microcol/files/">sourceforge.net/projects/microcol/files/</a> </li></ul></div>
 <div class="section">
-<h2><a name="Generating_images"></a>Generating images</h2>
-<p>Most of game images are stored in file <i>src/main/resources/images/background.png</i>. This file is generated from file <i>scr/graphics/background.svg</i>. Here is described how to produce final png file from svg sources file.</p>
-<p>First download <a class="externalLink" href="https://inkscape.org/en/">inkscape</a> version 0.92. Than:</p>
+<h2><a name="Working_with_images"></a>Working with images</h2>
+<p>Most of game images are stored in file <i>src/main/resources/images/background.png</i>. This file is generated from file <i>scr/graphics/background.svg</i>. All images in game should be edited with <a class="externalLink" href="https://inkscape.org/en/">inkscape</a> version 0.92.</p>
+<div class="section">
+<h3><a name="Editing_with_background.svg"></a>Editing with background.svg</h3>
+<p>Open <i>scr/graphics/background.svg</i> in Inkspace. Look at layer <i>description</i>. In this layer is description of each tile. It's useful to have <i>description</i> layer visible during editing. </p>
+<p>All image tiles are separated by <i>Guides</i>. Between each tiles is small space. This space prevent tiles from influencing each other during exporting in png.</p></div>
+<div class="section">
+<h3><a name="Exporting_images"></a>Exporting images</h3>
+<p>Here is described how to produce final png file from svg sources file.</p>
+<p>How to export images:</p>
 <ol style="list-style-type: decimal">
-<li>Open <i>scr/graphics/background.svg</i>. If you'll need to adjust images enable layer <i>description</i> which contains information about tiles. Each tile contains boundary. These empty boundary area is required because without it tiles will interfere each other in final png. </li>
-<li>Zoom screen to seen in top left corner blue sea and in bottom right corner yellow square. </li>
-<li>Choose &quot;Select and transform tool&quot; with shortcut F1. Select visible area from top left blue sea to bottom right yellow square. Verify that boundary area of yellow square is selected. </li>
+<li>Open <i>scr/graphics/background.svg</i>. And perform image editing.</li>
+<li>Hide layer <i>description</i>.</li>
+<li>Zoom and center document and make all tiles visible at screen.</li>
+<li>Choose &quot;Select and transform tool&quot; with shortcut F1. Select all visible tiles. Selected area should contain in top left corner blue sea and bottom right corner should contain yellow square.</li>
 <li>Open &quot;Export PNG image&quot; and select tab &quot;Selection&quot;. </li>
 <li>Width and height should be counted from class <i>BackgroundImageLoader</i> See constants EXPECTED_IMAGE_WIDTH and EXPECTED_IMAGE_HEIGHT. This values should be placed in fields width and height. DPI will counted accordingly to entered values. </li>
 <li>Select filename <i>src/main/resources/images/background.png</i>.</li>
 <li>Press &quot;Export&quot;.</li></ol>
-<p>Compile application and start it. Verify that there are no exception is logs.</p></div>
-<div class="section">
-<h2><a name="How_to_publish_this_documentation"></a>How to publish this documentation</h2>
-<p>This documentation is published at <a class="externalLink" href="https://microcol.sourceforge.io/">microcol.sourceforge.io</a>.</p>
-<p>Here is described how to propagate changes in documentation to sourceforge site. procedure required shell account at sourceforge with access to project <i>microcol</i>. Replace [user] with correct user name. </p>
-<ol style="list-style-type: decimal">
-<li>Verify settings.xml
-<p>In your home directory is file ~/.m2/settings.xml. If file doesn't exist crate new one. Edit server section:</p>
-<div class="source"><pre class="prettyprint">&lt;servers&gt;
-        ...
-        &lt;server&gt;
-                &lt;id&gt;microcol.sf.net&lt;/id&gt;
-                &lt;username&gt;[user]&lt;/username&gt;
-                &lt;password&gt;s!cr!t&lt;/password&gt;
-        &lt;/server&gt;
-        ...
-&lt;/servers&gt;</pre></div>
-<p>This setting provide user name and password for ssh account at sourceforge server. New site documentation will be uploaded to this server.</p></li>
-<li>Delete previous version of documentation
-<div class="source"><pre class="prettyprint">ssh -t [user],microcol@shell.sourceforge.net create
-cd /home/project-web/microcol/htdocs/
-rm -rf *
-exit</pre></div></li>
-<li>Generate new version of documentation
-<p>following command upload documentation to <i>/home/project-web/microcol/htdocs/microcol-site</i></p>
-<div class="source"><pre class="prettyprint">mvn clean site-deploy</pre></div></li>
-<li>Move documentation
-<p>Documentation was generate to directory <i>microcol-site</i>. It have to be moved to root directory.</p>
-<div class="source"><pre class="prettyprint">ssh -t [user],microcol-2@shell.sourceforge.net
-cd /home/project-web/microcol/htdocs/
-mv microcol-site/* .
-exit</pre></div></li>
-<li>Verify results
-<p>Verify that new documentation version is at <a class="externalLink" href="https://microcol.sourceforge.io/">microcol.sourceforge.io</a>.</p></li></ol></div>
+<p>Compile application and start it. Verify that there are no exception is logs.</p></div></div>
 <div class="section">
 <h2><a name="UML_Diagrams_-_plant_UML"></a>UML Diagrams - plant UML</h2>
 <p>Before generating UML diagrams graphviz have to be installed. For UML diagrams are used plant UML diagrams. Diagrams are generated from plain text source files located at <i>./src/main/plantuml/</i>. Images are generated during site generating process to directory <i>./target/site/</i>. Images could be generated manually by:</p>
@@ -157,6 +135,7 @@ exit</pre></div></li>
 <h2><a name="Useful_links"></a>Useful links</h2>
 <ul>
 <li>PlantUML online editor is at <a class="externalLink" href="http://sujoyu.github.io/plantuml-previewer/">http://sujoyu.github.io/plantuml-previewer/</a>.</li>
+<li>Another PlantUML online editor is at <a class="externalLink" href="https://www.planttext.com">https://www.planttext.com</a>.</li>
 <li>PlantUML language specification is at <a class="externalLink" href="http://plantuml.com/sitemap-language-specification">http://plantuml.com/sitemap-language-specification</a>. </li>
 <li>Loading animations: <a class="externalLink" href="http://loading.io">http://loading.io</a>.</li></ul></div>
         </div>
