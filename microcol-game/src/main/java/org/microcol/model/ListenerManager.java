@@ -20,6 +20,7 @@ import org.microcol.model.event.GoldWasChangedEvent;
 import org.microcol.model.event.GoodsWasSoldInEuropeEvent;
 import org.microcol.model.event.IndependenceWasDeclaredEvent;
 import org.microcol.model.event.RoundStartedEvent;
+import org.microcol.model.event.TurnFinishedEvent;
 import org.microcol.model.event.TurnStartedEvent;
 import org.microcol.model.event.UnitAttackedEvent;
 import org.microcol.model.event.UnitEmbarkedEvent;
@@ -104,6 +105,14 @@ final class ListenerManager {
         logger.info("Turn started: {}.", event);
 
         executeInSeparateThread(listener -> listener.onTurnStarted(event));
+    }
+
+    void fireTurnFinished(final Model model, final Player player) {
+        final TurnFinishedEvent event = new TurnFinishedEvent(model, player);
+
+        logger.info("Turn finished: {}.", event);
+
+        executeInSameThread(listener -> listener.onTurnFinished(event));
     }
 
     void fireUnitMovedStepStarted(final Model model, final Unit unit, final Location start,

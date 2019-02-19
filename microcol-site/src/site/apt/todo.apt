@@ -30,9 +30,9 @@ Planned releases
   
   * \u2713 Colony building queue and queue editing - simple and ugly version
    
-  * \u2717 redesign model: unit use class hierarchy, remove unit type, same for terrain. Move outside cargoHold, abstract class will contain attack and move 
+  * \u2713 redesign model: unit use class hierarchy, remove unit type, same for terrain. Move outside cargoHold, abstract class will contain attack and move 
  
-  * \u2717 Add tests for UI. Test at least game menu screens. 
+  * \u2713 Automatize at least some test cases. Use {{{https://github.com/TestFX/TestFX}TestFx}}. 
  
   * \uD83D\uDC1B When focused unit is placed outside colony and unit is moved to field than attempt to move unit leads to exception.
  
@@ -48,9 +48,7 @@ Planned releases
   
   * \u2717 
  
-  * \u2717 
-  
-  * \u2717 Automatize at least some test cases. Use {{{https://github.com/TestFX/TestFX}TestFx}}. 
+  * \u2717 Add TurnFinished event. Translate it to UI event disableUI and enableUI. Use this events for disabling game top menu and right menu. Describe Events in diagram. 
 
   * \u2717 Make game main game setting configurable in UI tests.   
   

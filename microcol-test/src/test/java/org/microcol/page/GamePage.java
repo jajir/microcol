@@ -9,8 +9,8 @@ import java.util.concurrent.TimeUnit;
 
 import org.microcol.gui.Point;
 import org.microcol.gui.StatusBarView;
-import org.microcol.gui.buttonpanel.ButtonsGamePanel;
 import org.microcol.gui.gamepanel.GamePanelView;
+import org.microcol.gui.gamepanel.buttonpanel.ButtonsGamePanel;
 import org.microcol.model.Location;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

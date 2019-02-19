@@ -2,7 +2,6 @@ package org.microcol.gui;
 
 import org.microcol.gui.buildingqueue.QueueController;
 import org.microcol.gui.buildingqueue.QueueDialog;
-import org.microcol.gui.buttonpanel.ButtonsGamePanelController;
 import org.microcol.gui.buttonpanel.NextTurnListener;
 import org.microcol.gui.colonizopedia.ColonizopediaDialog;
 import org.microcol.gui.colony.ColonyDialogCallback;
@@ -72,6 +71,7 @@ import org.microcol.gui.gamepanel.UnitAttackedEventListener;
 import org.microcol.gui.gamepanel.UnitMoveFinishedListener;
 import org.microcol.gui.gamepanel.UnitMovedListener;
 import org.microcol.gui.gamepanel.VisibleArea;
+import org.microcol.gui.gamepanel.buttonpanel.ButtonsGamePanelController;
 import org.microcol.gui.image.GrassCoastMapGenerator;
 import org.microcol.gui.image.IceCoastMapGenerator;
 import org.microcol.gui.image.ImageProvider;

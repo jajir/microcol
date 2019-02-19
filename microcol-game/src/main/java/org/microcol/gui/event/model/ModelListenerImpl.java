@@ -18,6 +18,7 @@ import org.microcol.model.event.GoldWasChangedEvent;
 import org.microcol.model.event.GoodsWasSoldInEuropeEvent;
 import org.microcol.model.event.IndependenceWasDeclaredEvent;
 import org.microcol.model.event.RoundStartedEvent;
+import org.microcol.model.event.TurnFinishedEvent;
 import org.microcol.model.event.TurnStartedEvent;
 import org.microcol.model.event.UnitAttackedEvent;
 import org.microcol.model.event.UnitEmbarkedEvent;
@@ -199,6 +200,11 @@ public final class ModelListenerImpl implements ModelListener {
 
     @Override
     public void onUnitMovedToLocation(final UnitMovedToLocationEvent event) {
+        eventBus.post(event);
+    }
+
+    @Override
+    public void onTurnFinished(final TurnFinishedEvent event) {
         eventBus.post(event);
     }
 

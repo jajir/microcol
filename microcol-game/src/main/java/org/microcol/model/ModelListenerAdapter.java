@@ -14,6 +14,7 @@ import org.microcol.model.event.GoldWasChangedEvent;
 import org.microcol.model.event.GoodsWasSoldInEuropeEvent;
 import org.microcol.model.event.IndependenceWasDeclaredEvent;
 import org.microcol.model.event.RoundStartedEvent;
+import org.microcol.model.event.TurnFinishedEvent;
 import org.microcol.model.event.TurnStartedEvent;
 import org.microcol.model.event.UnitAttackedEvent;
 import org.microcol.model.event.UnitEmbarkedEvent;
@@ -150,6 +151,11 @@ public class ModelListenerAdapter implements ModelListener {
 
     @Override
     public void onBeforeDeclaringIndependence(final BeforeDeclaringIndependenceEvent event) {
+        // Do nothing.
+    }
+
+    @Override
+    public void onTurnFinished(final TurnFinishedEvent event) {
         // Do nothing.
     }
 }

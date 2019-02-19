@@ -42,10 +42,10 @@ final class GameManager {
             return playerStore.getPlayerByName(playerName);
         }
     }
-    
-	void addEvaluator(final Function<Model, GameOverResult> evaluator) {
-		gameOverEvaluator.addEvaluator(evaluator);
-	}
+
+    void addEvaluator(final Function<Model, GameOverResult> evaluator) {
+        gameOverEvaluator.addEvaluator(evaluator);
+    }
 
     boolean isStarted() {
         return started;
@@ -89,7 +89,7 @@ final class GameManager {
         currentPlayer.startTurn();
         model.fireTurnStarted(currentPlayer, true);
         model.getStatistics().countNextTurn(model);
-        
+
     }
 
     /**
@@ -103,9 +103,18 @@ final class GameManager {
         model.fireTurnStarted(currentPlayer, false);
     }
 
+    /**
+     * Finish current players turn and start of next player. Ordering of players
+     * should be:
+     * <ul>
+     * <li>human</li>
+     * <li>AI</li>
+     * <li>Natives</li>
+     * </ul>
+     */
     void endTurn() {
         checkGameRunning();
-        // TODO JJ ordering of players should be human, AI, Natives
+        model.fireTurnFinished(currentPlayer);
         final int index = model.getPlayers().indexOf(currentPlayer);
         if (index < model.getPlayers().size() - 1) {
             currentPlayer = model.getPlayers().get(index + 1);
@@ -127,5 +136,5 @@ final class GameManager {
             }
         }
     }
-    
+
 }

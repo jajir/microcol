@@ -594,6 +594,10 @@ public final class Model {
         listenerManager.fireTurnStarted(this, player, isFreshStart);
     }
 
+    void fireTurnFinished(final Player player) {
+        listenerManager.fireTurnFinished(this, player);
+    }
+
     void fireUnitMovedStepStarted(final Unit unit, final Location start, final Location end,
             final Direction orientation) {
         listenerManager.fireUnitMovedStepStarted(this, unit, start, end, orientation);

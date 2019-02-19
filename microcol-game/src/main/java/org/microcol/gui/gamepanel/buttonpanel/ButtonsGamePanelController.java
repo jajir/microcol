@@ -1,7 +1,8 @@
-package org.microcol.gui.buttonpanel;
+package org.microcol.gui.gamepanel.buttonpanel;
 
 import java.util.Optional;
 
+import org.microcol.gui.buttonpanel.NextTurnEvent;
 import org.microcol.gui.event.DeclareIndependenceEvent;
 import org.microcol.gui.event.EndMoveEvent;
 import org.microcol.gui.event.model.GameModelController;
@@ -39,12 +40,18 @@ public class ButtonsGamePanelController {
         this.buttonGamePanel = Preconditions.checkNotNull(buttonGamePanel);
         this.gameModelController = Preconditions.checkNotNull(gameModelController);
     }
+    
+    @Subscribe
+    private void onNextTurn(final NextTurnEvent event) {
+        LOGGER.debug("Next turn was triggered");
+        buttonGamePanel.disableAllButtons();
+    }
 
     @Subscribe
     private void onTurnStarted(final TurnStartedEvent event) {
         LOGGER.debug("Turn started for player {}", event.getPlayer());
         if (event.getPlayer().isHuman()) {
-            buttonGamePanel.getButtonNextTurn().setDisable(false);
+            buttonGamePanel.enableAllButtons();
         }
     }
 
@@ -56,12 +63,12 @@ public class ButtonsGamePanelController {
 
     @Subscribe
     private void onUnitMoveStarted(final UnitMoveStartedEvent event) {
-        buttonGamePanel.getButtonNextTurn().setDisable(true);
+        buttonGamePanel.disableAllButtons();
     }
 
     @Subscribe
     private void onUnitMoveFinished(final UnitMoveFinishedEvent event) {
-        buttonGamePanel.getButtonNextTurn().setDisable(false);
+        buttonGamePanel.enableAllButtons();
     }
 
     @Subscribe

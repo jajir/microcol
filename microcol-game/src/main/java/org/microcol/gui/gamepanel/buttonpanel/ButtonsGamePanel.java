@@ -1,5 +1,8 @@
-package org.microcol.gui.buttonpanel;
+package org.microcol.gui.gamepanel.buttonpanel;
 
+import org.microcol.gui.buttonpanel.AbstractButtonsPanel;
+import org.microcol.gui.buttonpanel.Buttons;
+import org.microcol.gui.buttonpanel.NextTurnEvent;
 import org.microcol.gui.event.AboutGameEvent;
 import org.microcol.gui.event.BuildColonyEvent;
 import org.microcol.gui.event.CenterViewEvent;
@@ -127,6 +130,31 @@ public class ButtonsGamePanel extends AbstractButtonsPanel {
         getButtonPanel().getChildren().add(buttonEurope);
         getButtonPanel().getChildren().add(buttonExit);
         getButtonPanel().getChildren().add(buttonNextTurn);
+    }
+
+    public void disableAllButtons() {
+        setDisable(true);
+    }
+
+    public void enableAllButtons() {
+        setDisable(false);
+    }
+    
+    private void setDisable(final boolean disable) {
+        buttonCenter.setDisable(disable);
+        buttonHelp.setDisable(disable);
+        buttonStatistics.setDisable(disable);
+        buttonExit.setDisable(disable);
+        
+        buttonGoals.setDisable(disable);
+        buttonTurnReport.setDisable(disable);
+        buttonNextTurn.setDisable(disable);
+        buttonEurope.setDisable(disable);
+        
+        buttonMove.setDisable(disable);
+        buttonPlowField.setDisable(disable);
+        buttonBuildColony.setDisable(disable);
+        buttonDeclareIndependence.setDisable(disable);
     }
 
     public void setVisibleButtonMove(final boolean isVisible) {
