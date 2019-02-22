@@ -96,7 +96,7 @@ final class ListenerManager {
 
         logger.info("Round started: {}.", event);
 
-        executeInSeparateThread(listener -> listener.onRoundStarted(event));
+        executeInSameThread(listener -> listener.onRoundStarted(event));
     }
 
     void fireTurnStarted(final Model model, final Player player, final boolean isFreshStart) {

@@ -66,7 +66,7 @@ public class TC_01_embark_disembark_test extends AbstractMicroColTest {
 	gamePage.dragMouseAtLocation(Location.of(24, 11));
 
 	// press next turn.
-	gamePage.buttonNextTurnClick();
+	gamePage.nextTurn();
 
 	// verify that there are no ship
 	assertEquals(0, getModel().getUnitsAt(Location.of(24, 12)).size());
@@ -79,7 +79,7 @@ public class TC_01_embark_disembark_test extends AbstractMicroColTest {
 	assertEquals(2, getModel().getUnitsAt(Location.of(24, 12)).size());
 
 	// press next turn.
-	gamePage.buttonNextTurnClick();
+	gamePage.nextTurn();
 	
 	//embark units
 	gamePage.moveMouseAtLocation(Location.of(24, 12));

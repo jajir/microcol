@@ -17,9 +17,24 @@
             <AppenderRef ref="ConsoleAppender" />
         </Root>
         
-		<!-- TEST -->
+		<logger name="org.microcol.gui.gamepanel.buttonpanel" level="debug" additivity="false">
+			<AppenderRef ref="ConsoleAppender" />
+		</logger>
+		<logger name="org.microcol.gui.StatusBarPresenter" level="debug" additivity="false">
+			<AppenderRef ref="ConsoleAppender" />
+		</logger>
+		<logger name="org.microcol.gui.event.model.GameModelController" level="debug" additivity="false">
+			<AppenderRef ref="ConsoleAppender" />
+		</logger>
+        
+		<!-- MODEL -->
 		<logger name="org.microcol.model" level="debug" additivity="false">
 			<AppenderRef ref="ConsoleAppender" />
+		</logger>
+	
+		<!-- AI -->
+		<logger name="org.microcol.ai" level="debug" additivity="false">
+            <AppenderRef ref="ConsoleAppender" />
 		</logger>
     </Loggers>
 </Configuration>

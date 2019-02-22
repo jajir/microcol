@@ -55,18 +55,18 @@ public class TC_03_declare_independence_test extends AbstractMicroColTest {
 	dialogMessagePage.close();
 
 	gamePage = GamePage.of(getContext());
-	gamePage.buttonNextTurnClick();
-	gamePage.buttonNextTurnClick();
-	gamePage.buttonNextTurnClick();
-	gamePage.buttonNextTurnClick();
-	gamePage.buttonNextTurnClick();
-	gamePage.buttonNextTurnClick();
-	gamePage.buttonNextTurnClick();
+	gamePage.nextTurn();
+	gamePage.nextTurn();
+	gamePage.nextTurn();
+	gamePage.nextTurn();
+	gamePage.nextTurn();
+	gamePage.nextTurn();
+	gamePage.nextTurn();
 
-	verifyThatThereAreKingsUnitAtMap();
+	assertThatThereAreKingsUnitAtMap();
     }
 
-    private void verifyThatThereAreKingsUnitAtMap() {
+    private void assertThatThereAreKingsUnitAtMap() {
 	final long count = getModel().getAllUnits().stream().filter(unit -> unit.getOwner().getName().contains("King"))
 		.filter(unit -> unit.isAtPlaceLocation()).count();
 	logger.info("Number of enemy ships at map: " + count);

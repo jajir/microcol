@@ -9,6 +9,8 @@ import org.microcol.i18n.I18n;
 import org.microcol.model.Calendar;
 import org.microcol.model.event.GoldWasChangedEvent;
 import org.microcol.model.event.RoundStartedEvent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
 import com.google.common.eventbus.EventBus;
@@ -20,6 +22,8 @@ import javafx.scene.control.Label;
 
 @Listener
 public final class StatusBarPresenter implements UpdatableLanguage {
+
+    private final Logger logger = LoggerFactory.getLogger(StatusBarPresenter.class);
 
     private final GameModelController gameModelController;
 
@@ -44,6 +48,7 @@ public final class StatusBarPresenter implements UpdatableLanguage {
         Preconditions.checkNotNull(showEventsFromSource,
                 "It's not defined which events should be shown in status bar.");
         if (showEventsFromSource == event.getSource()) {
+            logger.debug("Setting text at status bar '{}'", event.getStatusMessage());
             statusBarView.getStatusBarDescription().setText(event.getStatusMessage());
         }
     }

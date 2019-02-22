@@ -42,7 +42,7 @@ public class GamePage extends AbstractScreen {
 	WaitForAsyncUtils.waitForFxEvents();
     }
 
-    public void moveMouseAtLocation(final Location location) {
+    public void moveMouseAtLocation(final Location location) throws Exception {
 	verifyThatTileIsVisible(location);
 	final Point p = getContext().getArea().convertToPoint(location)
 		.add(getPrimaryStage().getX(), getPrimaryStage().getY()).add(TILE_CENTER);
@@ -64,27 +64,28 @@ public class GamePage extends AbstractScreen {
     private void verifyThatStatusBarContains(final String string) {
 	final Labeled label = getLabeledById(StatusBarView.STATUS_BAR_LABEL_ID);
 	logger.info("Status bar: " + label.getText());
-	assertTrue(label.getText().contains(string),
-		String.format("Text '%s' should appear in status bar text '%s'", string, label.getText()));
+	assertTrue(label.getText().contains(string), String.format(
+		"Text '%s' should appear in status bar. But status bar contains text '%s'.", string, label.getText()));
     }
 
-    public void verifyThatTileIsVisible(final Location location) {
+    public void verifyThatTileIsVisible(final Location location) throws Exception {
 	assertTrue(getContext().getArea().isLocationVisible(location));
     }
 
-    public void buttonNextTurnClick() {
+    public void nextTurn() throws Exception {
 	final Button buttonNextTurn = getButtoonById(ButtonsGamePanel.BUTTON_NEXT_TURN_ID);
 	getRobot().clickOn(buttonNextTurn);
+	waitWhileMoving();
     }
 
-    public DialogMessagePage buttonDeclareIndependenceClick() {
+    public DialogMessagePage buttonDeclareIndependenceClick() throws Exception {
 	final Button buttonNextTurn = getButtoonById(ButtonsGamePanel.BUTTON_DECLARE_INDEPENDENCE_ID);
 	getRobot().clickOn(buttonNextTurn);
 	WaitForAsyncUtils.waitForFxEvents();
 	return DialogMessagePage.of(getContext());
     }
 
-    public ColonyScreen openColonyAt(final Location colonyLocation, final String expectedNamePart) {
+    public ColonyScreen openColonyAt(final Location colonyLocation, final String expectedNamePart) throws Exception {
 	moveMouseAtLocation(colonyLocation);
 	getRobot().clickOn(MouseButton.PRIMARY);
 	return ColonyScreen.of(getContext(), expectedNamePart);
@@ -97,7 +98,7 @@ public class GamePage extends AbstractScreen {
      * @throws Exception
      */
     public void waitWhileMoving() throws Exception {
-	WaitForAsyncUtils.waitFor(10, TimeUnit.SECONDS, () -> {
+	WaitForAsyncUtils.waitFor(60, TimeUnit.SECONDS, () -> {
 	    final NodeFinder nodeFinder = FxAssert.assertContext().getNodeFinder();
 	    final Button buttonNextTurn = nodeFinder.lookup("#" + ButtonsGamePanel.BUTTON_NEXT_TURN_ID).queryButton();
 	    return !buttonNextTurn.isDisabled();

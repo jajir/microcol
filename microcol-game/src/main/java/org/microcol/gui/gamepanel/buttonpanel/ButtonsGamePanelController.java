@@ -28,7 +28,7 @@ import javafx.application.Platform;
 @Listener
 public class ButtonsGamePanelController {
 
-    private final Logger LOGGER = LoggerFactory.getLogger(ButtonsGamePanelController.class);
+    private final static Logger LOGGER = LoggerFactory.getLogger(ButtonsGamePanelController.class);
 
     private final GameModelController gameModelController;
 
@@ -40,7 +40,7 @@ public class ButtonsGamePanelController {
         this.buttonGamePanel = Preconditions.checkNotNull(buttonGamePanel);
         this.gameModelController = Preconditions.checkNotNull(gameModelController);
     }
-    
+
     @Subscribe
     private void onNextTurn(final NextTurnEvent event) {
         LOGGER.debug("Next turn was triggered");
@@ -49,7 +49,7 @@ public class ButtonsGamePanelController {
 
     @Subscribe
     private void onTurnStarted(final TurnStartedEvent event) {
-        LOGGER.debug("Turn started for player {}", event.getPlayer());
+        LOGGER.debug("Turn started event {}", event);
         if (event.getPlayer().isHuman()) {
             buttonGamePanel.enableAllButtons();
         }
@@ -63,12 +63,16 @@ public class ButtonsGamePanelController {
 
     @Subscribe
     private void onUnitMoveStarted(final UnitMoveStartedEvent event) {
-        buttonGamePanel.disableAllButtons();
+        if (event.getUnit().getOwner().isHuman()) {
+            buttonGamePanel.disableAllButtons();
+        }
     }
 
     @Subscribe
     private void onUnitMoveFinished(final UnitMoveFinishedEvent event) {
-        buttonGamePanel.enableAllButtons();
+        if (event.getUnit().getOwner().isHuman()) {
+            buttonGamePanel.enableAllButtons();
+        }
     }
 
     @Subscribe

@@ -19,6 +19,8 @@ import org.microcol.gui.image.ImageProvider;
 import org.microcol.gui.mainscreen.Screen;
 import org.microcol.gui.mainscreen.ShowScreenEvent;
 import org.microcol.i18n.I18n;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.eventbus.EventBus;
 import com.google.inject.Inject;
@@ -30,6 +32,8 @@ import javafx.scene.control.Button;
 
 @Singleton
 public class ButtonsGamePanel extends AbstractButtonsPanel {
+
+    private final static Logger LOGGER = LoggerFactory.getLogger(ButtonsGamePanel.class);
 
     public final static String BUTTON_NEXT_TURN_ID = "nextTurn";
 
@@ -133,10 +137,12 @@ public class ButtonsGamePanel extends AbstractButtonsPanel {
     }
 
     public void disableAllButtons() {
+        LOGGER.debug("Disabling buttons bar");
         setDisable(true);
     }
 
     public void enableAllButtons() {
+        LOGGER.debug("Enabling buttons bar");
         setDisable(false);
     }
     
