@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 import java.util.function.Consumer;
 
-import org.microcol.gui.gamemenu.MenuHolderPanel;
+import org.microcol.gui.screen.menu.MenuHolderPanel;
 
 import javafx.scene.control.Labeled;
 

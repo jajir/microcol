@@ -1,5 +1,6 @@
 package org.microcol.gui;
 
+import org.microcol.gui.dialog.ConstructionTypes;
 import org.microcol.i18n.I18n;
 import org.microcol.model.ConstructionType;
 import org.microcol.model.TerrainType;

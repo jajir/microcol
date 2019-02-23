@@ -1,6 +1,6 @@
 package org.microcol.mock;
 
-import org.microcol.gui.gamepanel.CursorService;
+import org.microcol.gui.screen.game.gamepanel.CursorService;
 
 import javafx.scene.Node;
 

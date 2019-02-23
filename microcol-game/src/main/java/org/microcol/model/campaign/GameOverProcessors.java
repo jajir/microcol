@@ -2,7 +2,7 @@ package org.microcol.model.campaign;
 
 import java.util.function.Function;
 
-import org.microcol.gui.Dialog;
+import org.microcol.gui.dialog.Dialog;
 import org.microcol.model.GameOverEvaluator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

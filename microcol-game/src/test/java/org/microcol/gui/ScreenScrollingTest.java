@@ -5,7 +5,7 @@ import static org.junit.Assert.assertNotNull;
 
 import org.junit.Test;
 import org.microcol.gui.PathPlanning.WhatToDoWithPointInPath;
-import org.microcol.gui.gamepanel.ScreenScrolling;
+import org.microcol.gui.screen.game.gamepanel.ScreenScrolling;
 
 import mockit.Expectations;
 import mockit.Mocked;

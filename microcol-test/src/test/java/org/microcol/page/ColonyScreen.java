@@ -7,9 +7,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import org.microcol.gui.colony.ColonyButtonsPanel;
-import org.microcol.gui.colony.ColonyPanel;
-import org.microcol.gui.colony.PanelUnitWithContextMenu;
+import org.microcol.gui.screen.colony.ColonyButtonsPanel;
+import org.microcol.gui.screen.colony.ColonyPanel;
+import org.microcol.gui.screen.colony.PanelUnitWithContextMenu;
 import org.microcol.gui.util.PanelDock;
 import org.microcol.gui.util.PanelDockCrate;
 import org.microcol.model.Colony;

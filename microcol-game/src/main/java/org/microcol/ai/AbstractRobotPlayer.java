@@ -2,7 +2,7 @@ package org.microcol.ai;
 
 import java.util.function.Consumer;
 
-import org.microcol.gui.gamepanel.AnimationLock;
+import org.microcol.gui.screen.game.gamepanel.AnimationLock;
 import org.microcol.model.Model;
 import org.microcol.model.ModelListenerAdapter;
 import org.microcol.model.Player;

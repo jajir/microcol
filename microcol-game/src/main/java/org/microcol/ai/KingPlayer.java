@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import org.microcol.gui.gamepanel.AnimationManager;
+import org.microcol.gui.screen.game.gamepanel.AnimationManager;
 import org.microcol.model.Location;
 import org.microcol.model.Model;
 import org.microcol.model.Path;

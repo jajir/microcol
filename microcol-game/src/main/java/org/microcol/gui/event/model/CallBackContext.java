@@ -1,8 +1,8 @@
 package org.microcol.gui.event.model;
 
-import org.microcol.gui.DialogMessage;
-import org.microcol.gui.mainscreen.Screen;
-import org.microcol.gui.mainscreen.ShowScreenEvent;
+import org.microcol.gui.dialog.DialogMessage;
+import org.microcol.gui.screen.Screen;
+import org.microcol.gui.screen.ShowScreenEvent;
 import org.microcol.i18n.I18n;
 import org.microcol.i18n.MessageKeyResource;
 

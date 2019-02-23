@@ -1,28 +1,12 @@
 package org.microcol.gui;
 
-import org.microcol.gui.buildingqueue.QueueController;
-import org.microcol.gui.buildingqueue.QueueDialog;
 import org.microcol.gui.buttonpanel.NextTurnListener;
-import org.microcol.gui.colonizopedia.ColonizopediaDialog;
-import org.microcol.gui.colony.ColonyDialogCallback;
-import org.microcol.gui.colony.ColonyMenuPanelPresenter;
-import org.microcol.gui.colony.ColonyPanel;
-import org.microcol.gui.colony.PanelBuildingQueue;
-import org.microcol.gui.colony.PanelColonyDockBehaviour;
-import org.microcol.gui.colony.PanelColonyFields;
-import org.microcol.gui.colony.PanelColonyGoods;
-import org.microcol.gui.colony.PanelColonyStructures;
-import org.microcol.gui.colony.PanelOutsideColony;
-import org.microcol.gui.europe.BuyUnitsDialog;
-import org.microcol.gui.europe.ChooseGoodAmountDialog;
-import org.microcol.gui.europe.EuropeButtonsPanelController;
-import org.microcol.gui.europe.EuropeCallback;
-import org.microcol.gui.europe.EuropeMenuPanelPresenter;
-import org.microcol.gui.europe.PanelEuropeDockBehavior;
-import org.microcol.gui.europe.PanelEuropeGoods;
-import org.microcol.gui.europe.PanelHighSeas;
-import org.microcol.gui.europe.PanelPortPier;
-import org.microcol.gui.europe.RecruiteUnitsDialog;
+import org.microcol.gui.dialog.AboutDialog;
+import org.microcol.gui.dialog.ApplicationController;
+import org.microcol.gui.dialog.DialogDestroyColony;
+import org.microcol.gui.dialog.DialogMessage;
+import org.microcol.gui.dialog.MissionGoalsShowListener;
+import org.microcol.gui.dialog.PersistingDialog;
 import org.microcol.gui.event.AboutGameListenerImpl;
 import org.microcol.gui.event.AnimationSpeedChangedListenerPreferences;
 import org.microcol.gui.event.BuildColonyListener;
@@ -36,52 +20,78 @@ import org.microcol.gui.event.VolumeChangedListenerPreferences;
 import org.microcol.gui.event.model.ArtifitialPlayersManager;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.event.model.MissionCallBack;
-import org.microcol.gui.gamemenu.ButtonsPanelPresenter;
-import org.microcol.gui.gamemenu.ButtonsPanelView;
-import org.microcol.gui.gamemenu.CampaignMenuPanelPresenter;
-import org.microcol.gui.gamemenu.CampaignMenuPanelView;
-import org.microcol.gui.gamemenu.ExitGameListener;
-import org.microcol.gui.gamemenu.GameFinishedListener;
-import org.microcol.gui.gamemenu.GameMenuPanel;
-import org.microcol.gui.gamemenu.SettingAnimationSpeedPresenter;
-import org.microcol.gui.gamemenu.SettingButtonsPresenter;
-import org.microcol.gui.gamemenu.SettingLanguagePresenter;
-import org.microcol.gui.gamemenu.SettingShowGridPresenter;
-import org.microcol.gui.gamemenu.SettingVolumePresenter;
-import org.microcol.gui.gamemenu.ShowDefaultCampaignMenuListener;
-import org.microcol.gui.gamemenu.ShowGameSettingListener;
-import org.microcol.gui.gamepanel.AnimationManager;
-import org.microcol.gui.gamepanel.ExcludePainting;
-import org.microcol.gui.gamepanel.GamePanelController;
-import org.microcol.gui.gamepanel.GamePanelPresenter;
-import org.microcol.gui.gamepanel.GamePanelView;
-import org.microcol.gui.gamepanel.MapManager;
-import org.microcol.gui.gamepanel.ModeController;
-import org.microcol.gui.gamepanel.MouseOverTileListener;
-import org.microcol.gui.gamepanel.MouseOverTileManager;
-import org.microcol.gui.gamepanel.MoveModeSupport;
-import org.microcol.gui.gamepanel.OneTurnMoveHighlighter;
-import org.microcol.gui.gamepanel.PaneCanvas;
-import org.microcol.gui.gamepanel.ScrollToSelectedUnit;
-import org.microcol.gui.gamepanel.ScrollingManager;
-import org.microcol.gui.gamepanel.SelectedTileManager;
-import org.microcol.gui.gamepanel.SelectedUnitManager;
-import org.microcol.gui.gamepanel.TileWasSelectedListener;
-import org.microcol.gui.gamepanel.UnitAttackedEventListener;
-import org.microcol.gui.gamepanel.UnitMoveFinishedListener;
-import org.microcol.gui.gamepanel.UnitMovedListener;
-import org.microcol.gui.gamepanel.VisibleArea;
-import org.microcol.gui.gamepanel.buttonpanel.ButtonsGamePanelController;
 import org.microcol.gui.image.GrassCoastMapGenerator;
 import org.microcol.gui.image.IceCoastMapGenerator;
 import org.microcol.gui.image.ImageProvider;
-import org.microcol.gui.mainscreen.MainPanelPresenter;
-import org.microcol.gui.mainscreen.MainPanelView;
-import org.microcol.gui.statistics.ShowStatisticsDialogListener;
-import org.microcol.gui.statistics.StatisticsDialog;
-import org.microcol.gui.turnreport.ShowTurnEvensOnTurnStartedEvent;
-import org.microcol.gui.turnreport.ShowTurnReportListener;
-import org.microcol.gui.turnreport.TurnReportDialog;
+import org.microcol.gui.screen.MainPanelPresenter;
+import org.microcol.gui.screen.MainPanelView;
+import org.microcol.gui.screen.campaign.ScreenCampaignPresenter;
+import org.microcol.gui.screen.campaign.ScreenCampaignView;
+import org.microcol.gui.screen.colonizopedia.ColonizopediaDialog;
+import org.microcol.gui.screen.colony.ColonyDialogCallback;
+import org.microcol.gui.screen.colony.ColonyPanel;
+import org.microcol.gui.screen.colony.PanelBuildingQueue;
+import org.microcol.gui.screen.colony.PanelColonyDockBehaviour;
+import org.microcol.gui.screen.colony.PanelColonyFields;
+import org.microcol.gui.screen.colony.PanelColonyGoods;
+import org.microcol.gui.screen.colony.PanelColonyStructures;
+import org.microcol.gui.screen.colony.PanelOutsideColony;
+import org.microcol.gui.screen.colony.ScreenColonyPresenter;
+import org.microcol.gui.screen.colony.buildingqueue.QueueController;
+import org.microcol.gui.screen.colony.buildingqueue.QueueDialog;
+import org.microcol.gui.screen.europe.BuyUnitsDialog;
+import org.microcol.gui.screen.europe.ChooseGoodAmountDialog;
+import org.microcol.gui.screen.europe.EuropeButtonsPanelController;
+import org.microcol.gui.screen.europe.EuropeCallback;
+import org.microcol.gui.screen.europe.PanelEuropeDockBehavior;
+import org.microcol.gui.screen.europe.PanelEuropeGoods;
+import org.microcol.gui.screen.europe.PanelHighSeas;
+import org.microcol.gui.screen.europe.PanelPortPier;
+import org.microcol.gui.screen.europe.RecruiteUnitsDialog;
+import org.microcol.gui.screen.europe.ScreenEuropePresenter;
+import org.microcol.gui.screen.game.ScreenGamePresenter;
+import org.microcol.gui.screen.game.components.ButtonsGamePanelController;
+import org.microcol.gui.screen.game.components.RightPanelPresenter;
+import org.microcol.gui.screen.game.components.RightPanelView;
+import org.microcol.gui.screen.game.components.StatusBar;
+import org.microcol.gui.screen.game.gamepanel.AnimationManager;
+import org.microcol.gui.screen.game.gamepanel.ExcludePainting;
+import org.microcol.gui.screen.game.gamepanel.GamePanelController;
+import org.microcol.gui.screen.game.gamepanel.GamePanelPresenter;
+import org.microcol.gui.screen.game.gamepanel.GamePanelView;
+import org.microcol.gui.screen.game.gamepanel.MapManager;
+import org.microcol.gui.screen.game.gamepanel.ModeController;
+import org.microcol.gui.screen.game.gamepanel.MouseOverTileListener;
+import org.microcol.gui.screen.game.gamepanel.MouseOverTileManager;
+import org.microcol.gui.screen.game.gamepanel.MoveModeSupport;
+import org.microcol.gui.screen.game.gamepanel.OneTurnMoveHighlighter;
+import org.microcol.gui.screen.game.gamepanel.PaneCanvas;
+import org.microcol.gui.screen.game.gamepanel.ScrollToSelectedUnit;
+import org.microcol.gui.screen.game.gamepanel.ScrollingManager;
+import org.microcol.gui.screen.game.gamepanel.SelectedTileManager;
+import org.microcol.gui.screen.game.gamepanel.SelectedUnitManager;
+import org.microcol.gui.screen.game.gamepanel.TileWasSelectedListener;
+import org.microcol.gui.screen.game.gamepanel.UnitAttackedEventListener;
+import org.microcol.gui.screen.game.gamepanel.UnitMoveFinishedListener;
+import org.microcol.gui.screen.game.gamepanel.UnitMovedListener;
+import org.microcol.gui.screen.game.gamepanel.VisibleArea;
+import org.microcol.gui.screen.menu.ButtonsPanelPresenter;
+import org.microcol.gui.screen.menu.ButtonsPanelView;
+import org.microcol.gui.screen.menu.ExitGameListener;
+import org.microcol.gui.screen.menu.GameFinishedListener;
+import org.microcol.gui.screen.menu.ScreenMenu;
+import org.microcol.gui.screen.setting.SettingAnimationSpeedPresenter;
+import org.microcol.gui.screen.setting.SettingButtonsPresenter;
+import org.microcol.gui.screen.setting.SettingLanguagePresenter;
+import org.microcol.gui.screen.setting.SettingShowGridPresenter;
+import org.microcol.gui.screen.setting.SettingVolumePresenter;
+import org.microcol.gui.screen.setting.ShowDefaultCampaignMenuListener;
+import org.microcol.gui.screen.setting.ShowGameSettingListener;
+import org.microcol.gui.screen.statistics.ShowStatisticsDialogListener;
+import org.microcol.gui.screen.statistics.StatisticsDialog;
+import org.microcol.gui.screen.turnreport.ShowTurnEvensOnTurnStartedEvent;
+import org.microcol.gui.screen.turnreport.ShowTurnReportListener;
+import org.microcol.gui.screen.turnreport.TurnReportDialog;
 import org.microcol.gui.util.ApplicationInfo;
 import org.microcol.gui.util.FontService;
 import org.microcol.gui.util.GamePreferences;
@@ -184,7 +194,7 @@ public final class MicroColModule extends AbstractModule {
         bind(MainPanelView.class).in(Singleton.class);
         bind(MainPanelPresenter.class).in(Singleton.class);
 
-        //Game panel
+        // Game panel
         bind(GamePanelView.class).in(Singleton.class);
         bind(GamePanelPresenter.class).asEagerSingleton();
         bind(OneTurnMoveHighlighter.class).in(Singleton.class);
@@ -204,15 +214,15 @@ public final class MicroColModule extends AbstractModule {
         bind(UnitMovedListener.class).asEagerSingleton();
         bind(ScrollToSelectedUnit.class).asEagerSingleton();
 
-        bind(GameMenuPanel.class).in(Singleton.class);
+        bind(ScreenMenu.class).in(Singleton.class);
 
         bind(ButtonsPanelView.class).in(Singleton.class);
         bind(ButtonsPanelPresenter.class).asEagerSingleton();
 
-        bind(CampaignMenuPanelView.class).in(Singleton.class);
-        bind(CampaignMenuPanelPresenter.Display.class).to(CampaignMenuPanelView.class)
+        bind(ScreenCampaignView.class).in(Singleton.class);
+        bind(ScreenCampaignPresenter.Display.class).to(ScreenCampaignView.class)
                 .in(Singleton.class);
-        bind(CampaignMenuPanelPresenter.class).asEagerSingleton();
+        bind(ScreenCampaignPresenter.class).asEagerSingleton();
 
         bind(StatusBar.class).annotatedWith(Names.named("GamePanel")).to(StatusBar.class)
                 .asEagerSingleton();
@@ -229,10 +239,15 @@ public final class MicroColModule extends AbstractModule {
         bind(PersistingDialog.class).in(Singleton.class);
 
         /**
+         * Generic screen
+         */
+        bind(ScreenGamePresenter.class).asEagerSingleton();
+
+        /**
          * Colony dialog
          */
         bind(ColonyPanel.class).in(Singleton.class);
-        bind(ColonyDialogCallback.class).to(ColonyMenuPanelPresenter.class).in(Singleton.class);
+        bind(ColonyDialogCallback.class).to(ScreenColonyPresenter.class).in(Singleton.class);
         bind(PanelColonyFields.class).in(Singleton.class);
         bind(PanelColonyStructures.class).in(Singleton.class);
         bind(PanelOutsideColony.class).in(Singleton.class);
@@ -245,8 +260,8 @@ public final class MicroColModule extends AbstractModule {
         /**
          * Europe dialog
          */
-        bind(EuropeCallback.class).to(EuropeMenuPanelPresenter.class).in(Singleton.class);
-        bind(EuropeMenuPanelPresenter.class).asEagerSingleton();
+        bind(EuropeCallback.class).to(ScreenEuropePresenter.class).in(Singleton.class);
+        bind(ScreenEuropePresenter.class).asEagerSingleton();
         bind(EuropeButtonsPanelController.class).asEagerSingleton();
         bind(PanelHighSeas.class);
         bind(PanelPortPier.class).in(Singleton.class);

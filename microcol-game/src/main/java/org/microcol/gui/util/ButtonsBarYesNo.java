@@ -1,7 +1,7 @@
 package org.microcol.gui.util;
 
-import org.microcol.gui.Dialog;
 import org.microcol.gui.Loc;
+import org.microcol.gui.dialog.Dialog;
 import org.microcol.i18n.I18n;
 
 import javafx.scene.control.Button;

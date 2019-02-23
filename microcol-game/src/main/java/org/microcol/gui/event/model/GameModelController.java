@@ -3,8 +3,8 @@ package org.microcol.gui.event.model;
 import java.util.List;
 import java.util.Optional;
 
-import org.microcol.gui.gamepanel.ScrollToFocusedTile;
-import org.microcol.gui.gamepanel.SelectedTileManager;
+import org.microcol.gui.screen.game.gamepanel.ScrollToFocusedTile;
+import org.microcol.gui.screen.game.gamepanel.SelectedTileManager;
 import org.microcol.model.CargoSlot;
 import org.microcol.model.GoodTrade;
 import org.microcol.model.GoodType;

@@ -2,7 +2,7 @@ package org.microcol.gui;
 
 import java.util.List;
 
-import org.microcol.gui.gamepanel.GamePanelView;
+import org.microcol.gui.screen.game.gamepanel.GamePanelView;
 import org.microcol.gui.util.PaintService;
 import org.microcol.model.Colony;
 import org.microcol.model.Location;
@@ -43,11 +43,11 @@ public class TilePainter {
         paintService.paintColony(canvas.getGraphicsContext2D(), Point.CENTER, colony, true);
     }
 
-    void setImage(final Image image) {
+    public void setImage(final Image image) {
         canvas.getGraphicsContext2D().drawImage(image, 0, 0);
     }
 
-    void clear() {
+    public void clear() {
         final GraphicsContext g = canvas.getGraphicsContext2D();
         g.setFill(new Color(0, 0, 0, 0.34));
         g.fillRect(0, 0, GamePanelView.TILE_WIDTH_IN_PX, GamePanelView.TILE_WIDTH_IN_PX);

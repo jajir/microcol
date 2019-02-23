@@ -3,7 +3,7 @@ package org.microcol.gui;
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
-import org.microcol.gui.gamepanel.GamePanelView;
+import org.microcol.gui.screen.game.gamepanel.GamePanelView;
 import org.microcol.model.Location;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

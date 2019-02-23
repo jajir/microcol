@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.microcol.gui.FileSelectingService;
-import org.microcol.gui.gamemenu.SettingLanguageView;
+import org.microcol.gui.screen.setting.SettingLanguageView;
 import org.microcol.model.Location;
 import org.microcol.page.GamePage;
 import org.microcol.page.SettingPage;

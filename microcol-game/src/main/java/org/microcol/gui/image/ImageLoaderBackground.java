@@ -1,6 +1,6 @@
 package org.microcol.gui.image;
 
-import org.microcol.gui.gamepanel.GamePanelView;
+import org.microcol.gui.screen.game.gamepanel.GamePanelView;
 
 /**
  * Load background image, split it into separate tiles ad store then back to

@@ -1,8 +1,8 @@
 package org.microcol.gui.util;
 
-import org.microcol.gui.colony.PanelColonyDockBehaviour;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.image.ImageProvider;
+import org.microcol.gui.screen.colony.PanelColonyDockBehaviour;
 import org.microcol.model.CargoSlot;
 import org.microcol.model.Unit;
 import org.slf4j.Logger;

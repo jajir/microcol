@@ -3,7 +3,7 @@ package org.microcol.ai;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.microcol.gui.gamepanel.AnimationManager;
+import org.microcol.gui.screen.game.gamepanel.AnimationManager;
 import org.microcol.model.Location;
 import org.microcol.model.Model;
 import org.microcol.model.Path;

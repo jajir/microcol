@@ -9,9 +9,9 @@ import java.util.prefs.Preferences;
 
 import javax.imageio.ImageIO;
 
-import org.microcol.gui.ApplicationController;
 import org.microcol.gui.MainStageBuilder;
 import org.microcol.gui.MicroColModule;
+import org.microcol.gui.dialog.ApplicationController;
 import org.microcol.gui.util.GamePreferences;
 import org.microcol.model.campaign.CampaignManager;
 import org.microcol.model.campaign.CampaignModule;

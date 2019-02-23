@@ -2,6 +2,7 @@ package org.microcol.gui;
 
 import java.io.File;
 
+import org.microcol.gui.dialog.Dialog;
 import org.microcol.gui.util.AbstractMessageWindow;
 import org.microcol.gui.util.ViewUtil;
 import org.microcol.i18n.I18n;

@@ -7,8 +7,8 @@ import static org.junit.Assert.assertTrue;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.microcol.gui.gamepanel.MouseOverTileChangedEvent;
-import org.microcol.gui.gamepanel.MouseOverTileManager;
+import org.microcol.gui.screen.game.gamepanel.MouseOverTileChangedEvent;
+import org.microcol.gui.screen.game.gamepanel.MouseOverTileManager;
 import org.microcol.model.Location;
 
 import com.google.common.eventbus.EventBus;

@@ -1,9 +1,9 @@
 package org.microcol.gui.buttonpanel;
 
-import org.microcol.gui.colony.ColonyMenuPanel;
 import org.microcol.gui.event.StatusBarMessageEvent;
 import org.microcol.gui.event.StatusBarMessageEvent.Source;
 import org.microcol.gui.image.ImageProvider;
+import org.microcol.gui.screen.colony.ScreenColony;
 import org.microcol.gui.util.JavaFxComponent;
 import org.microcol.i18n.I18n;
 import org.microcol.i18n.MessageKeyResource;
@@ -29,7 +29,7 @@ import javafx.scene.layout.VBox;
  */
 public class AbstractButtonsPanel implements JavaFxComponent {
 
-    public static final String STYLE_SHEET_BUTTONS_PANEL = ColonyMenuPanel.class
+    public static final String STYLE_SHEET_BUTTONS_PANEL = ScreenColony.class
             .getResource("/gui/ButtonsPanel.css").toExternalForm();
 
     private final Source source;

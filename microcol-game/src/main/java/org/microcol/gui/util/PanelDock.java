@@ -2,8 +2,8 @@ package org.microcol.gui.util;
 
 import java.util.Optional;
 
-import org.microcol.gui.colony.TmpPanel;
 import org.microcol.gui.image.ImageProvider;
+import org.microcol.gui.screen.colony.TmpPanel;
 import org.microcol.i18n.I18n;
 import org.microcol.model.Unit;
 import org.microcol.model.unit.UnitWithCargo;

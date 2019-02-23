@@ -1,9 +1,9 @@
 package org.microcol.gui.util;
 
 import org.microcol.gui.Point;
-import org.microcol.gui.gamepanel.GamePanelView;
-import org.microcol.gui.gamepanel.MapManager;
 import org.microcol.gui.image.ImageProvider;
+import org.microcol.gui.screen.game.gamepanel.GamePanelView;
+import org.microcol.gui.screen.game.gamepanel.MapManager;
 import org.microcol.model.Colony;
 import org.microcol.model.Direction;
 import org.microcol.model.Location;

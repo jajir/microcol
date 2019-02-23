@@ -1,6 +1,6 @@
 package org.microcol.gui.util;
 
-import org.microcol.gui.StatusBar;
+import org.microcol.gui.screen.game.components.StatusBar;
 import org.microcol.i18n.I18n;
 
 import com.google.common.base.Preconditions;

@@ -6,7 +6,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.microcol.gui.event.model.GameModelController;
-import org.microcol.gui.gamepanel.SelectedTileManager;
+import org.microcol.gui.screen.game.gamepanel.SelectedTileManager;
 import org.microcol.gui.util.Listener;
 
 import com.google.common.eventbus.EventBus;

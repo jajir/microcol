@@ -1,7 +1,7 @@
 package org.microcol.page;
 
-import org.microcol.gui.gamemenu.SettingButtonsView;
-import org.microcol.gui.gamemenu.SettingLanguageView;
+import org.microcol.gui.screen.setting.SettingButtonsView;
+import org.microcol.gui.screen.setting.SettingLanguageView;
 
 public class SettingPage extends AbstractMenuScreen {
 

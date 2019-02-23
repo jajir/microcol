@@ -2,8 +2,8 @@ package org.microcol.page;
 
 import org.microcol.MicroCol;
 import org.microcol.gui.event.model.GameModelController;
-import org.microcol.gui.gamepanel.Area;
-import org.microcol.gui.gamepanel.GamePanelView;
+import org.microcol.gui.screen.game.gamepanel.Area;
+import org.microcol.gui.screen.game.gamepanel.GamePanelView;
 import org.microcol.model.Model;
 import org.testfx.api.FxRobot;
 

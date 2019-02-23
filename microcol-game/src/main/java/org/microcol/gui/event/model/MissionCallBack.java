@@ -2,8 +2,8 @@ package org.microcol.gui.event.model;
 
 import java.util.function.Consumer;
 
-import org.microcol.gui.DialogMessage;
-import org.microcol.gui.gamepanel.AnimationIsDoneEvent;
+import org.microcol.gui.dialog.DialogMessage;
+import org.microcol.gui.screen.game.gamepanel.AnimationIsDoneEvent;
 import org.microcol.gui.util.Listener;
 import org.microcol.gui.util.OneTimeExecuter;
 import org.microcol.i18n.I18n;

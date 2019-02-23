@@ -1,6 +1,6 @@
 package org.microcol.gui.image;
 
-import org.microcol.gui.gamepanel.GamePanelView;
+import org.microcol.gui.screen.game.gamepanel.GamePanelView;
 
 import com.google.common.base.Preconditions;
 

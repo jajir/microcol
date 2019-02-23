@@ -1,7 +1,7 @@
 package org.microcol.gui;
 import static org.junit.Assert.*;
 import org.junit.Test;
-import org.microcol.gui.gamepanel.MouseOverTileChangedEvent;
+import org.microcol.gui.screen.game.gamepanel.MouseOverTileChangedEvent;
 import org.microcol.model.Location;
 
 public class MouseOverTileChangedEventTest {

@@ -3,7 +3,7 @@ package org.microcol.model.campaign;
 import java.util.List;
 import java.util.function.Function;
 
-import org.microcol.gui.Dialog;
+import org.microcol.gui.dialog.Dialog;
 import org.microcol.gui.event.model.MissionCallBack;
 import org.microcol.model.Model;
 import org.microcol.model.event.GameFinishedEvent;

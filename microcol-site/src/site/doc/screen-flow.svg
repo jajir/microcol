@@ -464,8 +464,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.5"
-     inkscape:cx="-210.82352"
-     inkscape:cy="658.44337"
+     inkscape:cx="341.17648"
+     inkscape:cy="1058.4434"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="true"
@@ -545,34 +545,12 @@
          id="text890"
          y="17.291918"
          x="-16.414394"
-         style="font-style:normal;font-weight:normal;font-size:7.05555534px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         style="font-style:normal;font-weight:normal;font-size:7.05555556px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;-inkscape-font-specification:'sans-serif, Normal';font-stretch:normal;font-variant:normal;text-anchor:start;text-align:start;writing-mode:lr;font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;"
          xml:space="preserve"><tspan
-           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.05555534px;line-height:121.00000381%;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0.00264583px;writing-mode:lr-tb;text-anchor:start;stroke-width:0.26458332px"
-           y="17.291918"
-           x="-16.414394"
-           id="tspan888"
-           sodipodi:role="line">Welcome</tspan><tspan
-           id="tspan892"
-           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.05555534px;line-height:121.00000381%;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0.00264583px;writing-mode:lr-tb;text-anchor:start;stroke-width:0.26458332px"
-           y="26.111361"
-           x="-16.414394"
-           sodipodi:role="line">Screen</tspan></text>
-      <text
-         id="text890-2"
-         y="17.291918"
-         x="-16.414394"
-         style="font-style:normal;font-weight:normal;font-size:7.05555534px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-         xml:space="preserve"><tspan
-           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.05555534px;line-height:121.00000381%;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0.00264583px;writing-mode:lr-tb;text-anchor:start;stroke-width:0.26458332px"
-           y="17.291918"
-           x="-16.414394"
-           id="tspan888-1"
-           sodipodi:role="line">Welcome</tspan><tspan
-           id="tspan892-9"
-           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.05555534px;line-height:121.00000381%;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0.00264583px;writing-mode:lr-tb;text-anchor:start;stroke-width:0.26458332px"
-           y="26.111361"
-           x="-16.414394"
-           sodipodi:role="line">Screen</tspan></text>
+           sodipodi:role="line"
+           id="tspan968">Game</tspan><tspan
+           sodipodi:role="line"
+           id="tspan970">Menu</tspan></text>
     </g>
     <g
        id="g1335"
@@ -862,37 +840,31 @@
            x="-95.740601"
            sodipodi:role="line">Screen</tspan></text>
     </g>
-    <g
-       id="g1341"
+    <rect
+       style="opacity:0.98999999;fill:#ffb13b;fill-opacity:1;fill-rule:evenodd;stroke:#ff9015;stroke-width:2.64583325;stroke-linecap:butt;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="rect821-3-9-2"
+       width="52.916668"
+       height="26.458334"
+       x="-26.45834"
+       y="85.082664"
+       rx="7"
+       ry="7"
+       inkscape:export-filename="/Users/jan/Documents/repo/github/microcol/microcol-site/src/site/resources/screen-flow.png"
        inkscape:export-xdpi="43.279999"
-       inkscape:export-ydpi="43.279999"
-       inkscape:export-filename="/Users/jan/Documents/repo/github/microcol/microcol-site/src/site/resources/screen-flow.png">
-      <rect
-         ry="7"
-         rx="7"
-         y="85.082664"
-         x="-26.45834"
-         height="26.458334"
-         width="52.916668"
-         id="rect821-3-9-2"
-         style="opacity:0.98999999;fill:#ffb13b;fill-opacity:1;fill-rule:evenodd;stroke:#ff9015;stroke-width:2.64583325;stroke-linecap:butt;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
-      <text
-         id="text890-2-1-9-5"
-         y="96.53244"
-         x="-20.156773"
-         style="font-style:normal;font-weight:normal;font-size:7.05555534px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-         xml:space="preserve"><tspan
-           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.05555534px;line-height:121.00000381%;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0.00264583px;writing-mode:lr-tb;text-anchor:start;stroke-width:0.26458332px"
-           y="96.53244"
-           x="-20.156773"
-           id="tspan888-1-6-1-39"
-           sodipodi:role="line">Game main</tspan><tspan
-           id="tspan892-9-3-7-6"
-           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.05555534px;line-height:121.00000381%;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0.00264583px;writing-mode:lr-tb;text-anchor:start;stroke-width:0.26458332px"
-           y="105.35188"
-           x="-20.156773"
-           sodipodi:role="line">Screen</tspan></text>
-    </g>
+       inkscape:export-ydpi="43.279999" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:7.05555556px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;-inkscape-font-specification:'sans-serif, Normal';font-stretch:normal;font-variant:normal;text-anchor:start;text-align:start;writing-mode:lr;font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;"
+       x="-20.156773"
+       y="96.53244"
+       id="text890-2-1-9-5"
+       inkscape:export-filename="/Users/jan/Documents/repo/github/microcol/microcol-site/src/site/resources/screen-flow.png"
+       inkscape:export-xdpi="43.279999"
+       inkscape:export-ydpi="43.279999"><tspan
+         sodipodi:role="line"
+         id="tspan992">Game</tspan><tspan
+         sodipodi:role="line"
+         id="tspan994">Screen</tspan></text>
     <path
        style="opacity:0.98999999;fill:#ffb13b;fill-opacity:1;fill-rule:evenodd;stroke:#ff9015;stroke-width:2.80260324;stroke-linecap:butt;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        id="path1255"

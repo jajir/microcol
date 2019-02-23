@@ -5,9 +5,9 @@ import static org.junit.Assert.assertNotNull;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.microcol.gui.gamepanel.Animation;
-import org.microcol.gui.gamepanel.AnimationManager;
-import org.microcol.gui.gamepanel.Area;
+import org.microcol.gui.screen.game.gamepanel.Animation;
+import org.microcol.gui.screen.game.gamepanel.AnimationManager;
+import org.microcol.gui.screen.game.gamepanel.Area;
 
 import com.google.common.eventbus.EventBus;
 

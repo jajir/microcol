@@ -4,8 +4,8 @@ import java.util.List;
 
 import org.microcol.gui.event.StatusBarMessageEvent;
 import org.microcol.gui.event.StatusBarMessageEvent.Source;
-import org.microcol.gui.gamepanel.SelectedUnitManager;
 import org.microcol.gui.image.ImageProvider;
+import org.microcol.gui.screen.game.gamepanel.SelectedUnitManager;
 import org.microcol.i18n.I18n;
 import org.microcol.model.Player;
 import org.microcol.model.Unit;
