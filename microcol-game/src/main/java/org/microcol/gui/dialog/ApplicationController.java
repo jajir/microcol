@@ -2,7 +2,7 @@ package org.microcol.gui.dialog;
 
 import org.microcol.gui.MusicController;
 import org.microcol.gui.event.model.GameController;
-import org.microcol.gui.util.GamePreferences;
+import org.microcol.gui.preferences.GamePreferences;
 import org.microcol.model.campaign.CampaignNames;
 import org.microcol.model.campaign.FreePlayMissionNames;
 import org.slf4j.Logger;

@@ -65,8 +65,15 @@ public class ScreenGame implements JavaFxComponent, UpdatableLanguage {
         mainPanel.getChildren().add(buttonGamePanel.getContent());
     }
 
-    void setOnKeyPressed(EventHandler<? super KeyEvent> value) {
-        mainPanel.setOnKeyPressed(value);
+    /**
+     * it's called when key is pressed on game screen. Event is send to guice
+     * event bus.
+     *
+     * @param event
+     *            required key event
+     */
+    void setOnKeyPressed(EventHandler<? super KeyEvent> event) {
+        mainPanel.setOnKeyPressed(event);
     }
 
     @Override

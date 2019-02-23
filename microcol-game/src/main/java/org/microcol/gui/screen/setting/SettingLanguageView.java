@@ -1,7 +1,7 @@
 package org.microcol.gui.screen.setting;
 
+import org.microcol.gui.preferences.GamePreferences;
 import org.microcol.gui.screen.menu.GameMenu;
-import org.microcol.gui.util.GamePreferences;
 import org.microcol.gui.util.JavaFxComponent;
 import org.microcol.gui.util.Language;
 import org.microcol.gui.util.UpdatableLanguage;

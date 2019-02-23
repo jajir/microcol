@@ -19,9 +19,9 @@ import org.microcol.gui.event.ShowStatisticsEvent;
 import org.microcol.gui.event.ShowTurnReportEvent;
 import org.microcol.gui.event.StartMoveEvent;
 import org.microcol.gui.event.model.GameModelController;
+import org.microcol.gui.preferences.GamePreferences;
 import org.microcol.gui.screen.Screen;
 import org.microcol.gui.screen.ShowScreenEvent;
-import org.microcol.gui.util.GamePreferences;
 import org.microcol.gui.util.Listener;
 import org.microcol.gui.util.UnitUtil;
 import org.microcol.gui.util.ViewUtil;
@@ -179,6 +179,7 @@ public final class GamePanelPresenter {
         if (KeyCode.B == event.getCode()) {
             eventBus.post(new BuildColonyEvent());
         }
+
         if (KeyCode.TAB == event.getCode()) {
             eventBus.post(new SelectNextUnitEvent());
         }

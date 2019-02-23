@@ -3,9 +3,9 @@ package org.microcol.test;
 import org.junit.jupiter.api.BeforeEach;
 import org.microcol.MicroCol;
 import org.microcol.gui.Point;
+import org.microcol.gui.preferences.GamePreferences;
 import org.microcol.gui.screen.game.gamepanel.CursorService;
 import org.microcol.gui.screen.game.gamepanel.GamePanelView;
-import org.microcol.gui.util.GamePreferences;
 import org.microcol.mock.CursorServiceNoOpp;
 import org.microcol.model.Model;
 import org.microcol.page.TestContext;
@@ -27,6 +27,15 @@ public abstract class AbstractMicroColTest {
     private final Logger logger = LoggerFactory.getLogger(AbstractMicroColTest.class);
 
     private TestContext context;
+
+    AbstractMicroColTest() {
+	/*
+	 * Following code rewrite user home directory where is stored MicroCol game
+	 * saves and configuration file. It allows to set special configuration for
+	 * tests.
+	 */
+	System.setProperty("user.home", "src/test/scenarios/");
+    }
 
     @BeforeEach
     void pred(final FxRobot robot) {

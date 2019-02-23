@@ -7,7 +7,7 @@ import org.microcol.gui.LocalizationHelper;
 import org.microcol.gui.event.StatusBarMessageEvent;
 import org.microcol.gui.event.StatusBarMessageEvent.Source;
 import org.microcol.gui.event.model.GameModelController;
-import org.microcol.gui.util.GamePreferences;
+import org.microcol.gui.preferences.GamePreferences;
 import org.microcol.gui.util.Listener;
 import org.microcol.i18n.I18n;
 import org.microcol.model.Location;

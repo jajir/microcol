@@ -8,7 +8,6 @@ import org.microcol.gui.dialog.DialogMessage;
 import org.microcol.gui.dialog.MissionGoalsShowListener;
 import org.microcol.gui.dialog.PersistingDialog;
 import org.microcol.gui.event.AboutGameListenerImpl;
-import org.microcol.gui.event.AnimationSpeedChangedListenerPreferences;
 import org.microcol.gui.event.BuildColonyListener;
 import org.microcol.gui.event.ChangeLanguageListenerFileChooser;
 import org.microcol.gui.event.ChangeLanguageListenerPreferences;
@@ -16,13 +15,13 @@ import org.microcol.gui.event.DeclareIndependenceListener;
 import org.microcol.gui.event.PlowFieldEventListener;
 import org.microcol.gui.event.QuitGameListener;
 import org.microcol.gui.event.ShowGridListenerPreferences;
-import org.microcol.gui.event.VolumeChangedListenerPreferences;
 import org.microcol.gui.event.model.ArtifitialPlayersManager;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.event.model.MissionCallBack;
 import org.microcol.gui.image.GrassCoastMapGenerator;
 import org.microcol.gui.image.IceCoastMapGenerator;
 import org.microcol.gui.image.ImageProvider;
+import org.microcol.gui.preferences.GamePreferences;
 import org.microcol.gui.screen.MainPanelPresenter;
 import org.microcol.gui.screen.MainPanelView;
 import org.microcol.gui.screen.campaign.ScreenCampaignPresenter;
@@ -57,6 +56,7 @@ import org.microcol.gui.screen.game.components.StatusBar;
 import org.microcol.gui.screen.game.gamepanel.AnimationManager;
 import org.microcol.gui.screen.game.gamepanel.ExcludePainting;
 import org.microcol.gui.screen.game.gamepanel.GamePanelController;
+import org.microcol.gui.screen.game.gamepanel.GamePanelKeyListener;
 import org.microcol.gui.screen.game.gamepanel.GamePanelPresenter;
 import org.microcol.gui.screen.game.gamepanel.GamePanelView;
 import org.microcol.gui.screen.game.gamepanel.MapManager;
@@ -94,7 +94,6 @@ import org.microcol.gui.screen.turnreport.ShowTurnReportListener;
 import org.microcol.gui.screen.turnreport.TurnReportDialog;
 import org.microcol.gui.util.ApplicationInfo;
 import org.microcol.gui.util.FontService;
-import org.microcol.gui.util.GamePreferences;
 import org.microcol.gui.util.Listener;
 import org.microcol.gui.util.PaintService;
 import org.microcol.gui.util.PersistentService;
@@ -242,6 +241,7 @@ public final class MicroColModule extends AbstractModule {
          * Generic screen
          */
         bind(ScreenGamePresenter.class).asEagerSingleton();
+        bind(GamePanelKeyListener.class).asEagerSingleton();
 
         /**
          * Colony dialog
@@ -281,8 +281,6 @@ public final class MicroColModule extends AbstractModule {
         bind(AboutGameListenerImpl.class).asEagerSingleton();
         bind(ChangeLanguageListenerPreferences.class).asEagerSingleton();
         bind(ChangeLanguageListenerFileChooser.class).asEagerSingleton();
-        bind(VolumeChangedListenerPreferences.class).asEagerSingleton();
-        bind(AnimationSpeedChangedListenerPreferences.class).asEagerSingleton();
         bind(ShowGridListenerPreferences.class).asEagerSingleton();
         bind(DeclareIndependenceListener.class).asEagerSingleton();
         bind(PlowFieldEventListener.class).asEagerSingleton();

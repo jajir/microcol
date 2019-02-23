@@ -34,15 +34,15 @@ public final class ModelDao {
     private final Gson gson;
 
     public ModelDao() {
-	gson = new GsonBuilder()
-		.registerTypeAdapter(ConstructionType.class, new GsonConstructionTypeAdapter())
+        gson = new GsonBuilder()
+                .registerTypeAdapter(ConstructionType.class, new GsonConstructionTypeAdapter())
                 .registerTypeAdapter(GoodType.class, new GsonGoodTypeAdapter())
                 .registerTypeAdapter(QueueItemType.class, new GsonQueueItemTypeAdapter())
-		.registerTypeAdapter(TerrainType.class, new GsonTerrainTypeAdapter())
-		.registerTypeAdapter(UnitActionPo.class, new UnitActionPoAdapter())
-		.registerTypeAdapter(UnitType.class, new GsonUnitTypeAdapter())
-		.registerTypeAdapter(Direction.class, new GsonDirectionTypeAdapter())
-		.setPrettyPrinting().create();
+                .registerTypeAdapter(TerrainType.class, new GsonTerrainTypeAdapter())
+                .registerTypeAdapter(UnitActionPo.class, new UnitActionPoAdapter())
+                .registerTypeAdapter(UnitType.class, new GsonUnitTypeAdapter())
+                .registerTypeAdapter(Direction.class, new GsonDirectionTypeAdapter())
+                .setPrettyPrinting().create();
     }
 
     /**
@@ -53,12 +53,12 @@ public final class ModelDao {
      * @return loaded model persistent object
      */
     public ModelPo loadPredefinedModel(final String fileName) {
-	logger.debug("Starting to read from class path ({})", fileName);
-	try {
-	    return internalLoadPredefinedModel(fileName);
-	} catch (FileNotFoundException e) {
-	    throw new MicroColException(e.getMessage(), e);
-	}
+        logger.debug("Starting to read from class path ({})", fileName);
+        try {
+            return internalLoadPredefinedModel(fileName);
+        } catch (FileNotFoundException e) {
+            throw new MicroColException(e.getMessage(), e);
+        }
     }
 
     /**
@@ -69,8 +69,8 @@ public final class ModelDao {
      * @return loaded model as persistent objects
      */
     public ModelPo loadModelFromFile(final String fileName) {
-	Preconditions.checkNotNull(fileName);
-	return loadModelFromFile(new File(fileName));
+        Preconditions.checkNotNull(fileName);
+        return loadModelFromFile(new File(fileName));
     }
 
     /**
@@ -81,27 +81,16 @@ public final class ModelDao {
      * @return loaded model persistent object
      */
     public ModelPo loadModelFromFile(final File file) {
-	Preconditions.checkNotNull(file, "File is null");
-	Preconditions.checkArgument(file.exists(), "File '%s' doesn't exists.", file.getAbsolutePath());
-	Preconditions.checkArgument(file.isFile());
-	logger.debug("Starting to read from class path ({})", file.getAbsolutePath());
-	FileInputStream fis = null;
-	try {
-	    try {
-		fis = new FileInputStream(file);
-		return internalLoadModel(fis);
-	    } catch (FileNotFoundException e) {
-		throw new MicroColException(e.getMessage(), e);
-	    }
-	} finally {
-	    try {
-		if (fis != null) {
-		    fis.close();
-		}
-	    } catch (IOException e) {
-		throw new MicroColException(e.getMessage(), e);
-	    }
-	}
+        Preconditions.checkNotNull(file, "File is null");
+        Preconditions.checkArgument(file.exists(), "File '%s' doesn't exists.",
+                file.getAbsolutePath());
+        Preconditions.checkArgument(file.isFile());
+        logger.debug("Starting to read from class path ({})", file.getAbsolutePath());
+        try (final FileInputStream fis = new FileInputStream(file)) {
+            return internalLoadModel(fis);
+        } catch (IOException e) {
+            throw new MicroColException(e.getMessage(), e);
+        }
     }
 
     /**
@@ -114,58 +103,45 @@ public final class ModelDao {
      * @return loaded world map
      */
     public WorldMap loadPredefinedWorldMap(final String fileName) {
-	try {
-	    return new WorldMap(internalLoadPredefinedModel(fileName));
-	} catch (FileNotFoundException e) {
-	    throw new MicroColException(e.getMessage(), e);
-	}
+        try {
+            return new WorldMap(internalLoadPredefinedModel(fileName));
+        } catch (FileNotFoundException e) {
+            throw new MicroColException(e.getMessage(), e);
+        }
     }
 
-    private ModelPo internalLoadPredefinedModel(final String fileName) throws FileNotFoundException {
-	InputStream is = null;
-	try {
-	    is = WorldMap.class.getResourceAsStream(fileName);
-	    Preconditions.checkArgument(is != null, "input stream for file (%s) is null", fileName);
-	    return internalLoadModel(is);
-	} finally {
-	    try {
-		if (is != null) {
-		    is.close();
-		}
-	    } catch (IOException e) {
-		throw new MicroColException(e.getMessage(), e);
-	    }
-	}
+    private ModelPo internalLoadPredefinedModel(final String fileName)
+            throws FileNotFoundException {
+        try (final InputStream is = WorldMap.class.getResourceAsStream(fileName)) {
+            Preconditions.checkArgument(is != null, "input stream for file (%s) is null", fileName);
+            return internalLoadModel(is);
+        } catch (IOException e) {
+            throw new MicroColException(e.getMessage(), e);
+        }
     }
 
     private ModelPo internalLoadModel(final InputStream is) throws FileNotFoundException {
-	Preconditions.checkArgument(is != null, "input stream is null");
-	final ModelPo loaded = gson.fromJson(new InputStreamReader(is, StandardCharsets.UTF_8), ModelPo.class);
-
-	return loaded;
+        Preconditions.checkArgument(is != null, "input stream is null");
+        final ModelPo loaded = gson.fromJson(new InputStreamReader(is, StandardCharsets.UTF_8),
+                ModelPo.class);
+        return loaded;
     }
 
     public void saveToFile(final String fileName, final ModelPo modelPo) {
-	try {
-	    internalSaveModel(fileName, modelPo);
-	} catch (IOException e) {
-	    throw new MicroColException(e.getMessage(), e);
-	}
-    }
-
-    private void internalSaveModel(final String fileName, final ModelPo modelPo) throws IOException {
-	final String str = gson.toJson(modelPo);
-	if (logger.isTraceEnabled()) {
-	    logger.trace(str);
-	}
-	final OutputStreamWriter outputStreamWriter = new OutputStreamWriter(new FileOutputStream(fileName),
-		StandardCharsets.UTF_8);
-	outputStreamWriter.write(str);
-	outputStreamWriter.close();
+        final String str = gson.toJson(modelPo);
+        if (logger.isTraceEnabled()) {
+            logger.trace(str);
+        }
+        try (final OutputStreamWriter outputStreamWriter = new OutputStreamWriter(
+                new FileOutputStream(fileName), StandardCharsets.UTF_8);) {
+            outputStreamWriter.write(str);
+        } catch (IOException e) {
+            throw new MicroColException(e.getMessage(), e);
+        }
     }
 
     public Gson getGson() {
-	return gson;
+        return gson;
     }
 
 }

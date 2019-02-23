@@ -58,7 +58,7 @@ public final class GameController {
     }
 
     public void loadModelFromFile(final File sourceFile) {
-        startMission(modelCampaignDao.loadFromFile(sourceFile.getAbsolutePath(), missionCallBack));
+        startMission(modelCampaignDao.loadFromFile(sourceFile, missionCallBack));
     }
 
     public void startCampaignMission(final CampaignName campaignName, final String missionName) {

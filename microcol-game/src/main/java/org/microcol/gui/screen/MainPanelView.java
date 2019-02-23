@@ -90,6 +90,7 @@ public final class MainPanelView implements JavaFxComponent, UpdatableLanguage {
 
     @Override
     public void updateLanguage(final I18n i18n) {
+        //TODO notify other screens about change of language 
         // mainGamePanelView.
         // campaignMenuPanel
         screenGame.updateLanguage(i18n);

@@ -1,6 +1,7 @@
 package org.microcol.gui.util;
 
 import org.microcol.gui.event.model.GameController;
+import org.microcol.gui.preferences.GamePreferences;
 import org.microcol.model.event.TurnStartedEvent;
 
 import com.google.common.base.Preconditions;

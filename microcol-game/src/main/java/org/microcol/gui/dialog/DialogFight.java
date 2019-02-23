@@ -2,8 +2,8 @@ package org.microcol.gui.dialog;
 
 import org.microcol.gui.LocalizationHelper;
 import org.microcol.gui.image.ImageProvider;
+import org.microcol.gui.preferences.GamePreferences;
 import org.microcol.gui.util.AbstractMessageWindow;
-import org.microcol.gui.util.GamePreferences;
 import org.microcol.gui.util.ViewUtil;
 import org.microcol.i18n.I18n;
 import org.microcol.model.Unit;

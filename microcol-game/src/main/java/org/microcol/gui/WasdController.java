@@ -23,6 +23,10 @@ public class WasdController {
     private boolean d;
 
     public void onKeyPressed(final KeyEvent event) {
+        if (event.isControlDown()) {
+            return;
+        }
+
         if (KeyCode.W == event.getCode()) {
             w = true;
         }

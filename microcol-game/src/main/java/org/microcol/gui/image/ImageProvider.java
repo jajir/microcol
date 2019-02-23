@@ -283,7 +283,13 @@ public final class ImageProvider {
         return img;
     }
 
-    // TODO remove optional
+    /**
+     * For given construction type find image.
+     *
+     * @param constructionType
+     *            required construction type.
+     * @return construction image or empty optional
+     */
     public Optional<Image> getConstructionImage(final ConstructionType constructionType) {
         final String key = "building_" + constructionType.name();
         if (images.containsKey(key)) {

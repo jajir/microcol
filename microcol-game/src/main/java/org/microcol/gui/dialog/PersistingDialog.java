@@ -8,6 +8,7 @@ import org.microcol.gui.FileSelectingService;
 import org.microcol.gui.MicroColException;
 import org.microcol.gui.event.model.GameController;
 import org.microcol.gui.util.PersistingTool;
+import org.microcol.model.Model;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,9 +39,9 @@ public class PersistingDialog {
         this.fileSelectingService = Preconditions.checkNotNull(fileSelectingService);
     }
 
-    public void saveModel() {
+    public void saveModel(final Model model) {
         final File saveFile = fileSelectingService.saveFile(persistingTool.getRootSaveDirectory(),
-                persistingTool.getSuggestedSaveFileName());
+                persistingTool.getSuggestedSaveFileName(model));
         if (saveFile == null) {
             logger.debug("User didn't select any file to save game");
         } else {
@@ -69,6 +70,13 @@ public class PersistingDialog {
         loadModelFromFile(file);
     }
 
+    /**
+     * Add correct file extension to file.
+     *
+     * @param targetFile
+     *            required file
+     * @return corrected file
+     */
     private File correctFileNameExtension(final File targetFile) {
         Preconditions.checkNotNull(targetFile);
         final Path path = targetFile.toPath();

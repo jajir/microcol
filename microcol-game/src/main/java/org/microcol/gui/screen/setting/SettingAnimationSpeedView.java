@@ -2,16 +2,14 @@ package org.microcol.gui.screen.setting;
 
 import org.microcol.gui.PathPlanning;
 import org.microcol.gui.Preferences;
-import org.microcol.gui.event.AnimationSpeedChangeEvent;
 import org.microcol.gui.util.JavaFxComponent;
 import org.microcol.gui.util.UpdatableLanguage;
 import org.microcol.i18n.I18n;
 
-import com.google.common.base.Preconditions;
-import com.google.common.eventbus.EventBus;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
+import javafx.beans.property.DoubleProperty;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.layout.HBox;
@@ -25,19 +23,25 @@ public class SettingAnimationSpeedView implements JavaFxComponent, UpdatableLang
 
     private final Label label;
 
-    private Slider slider;
-
-    private final EventBus eventBus;
+    private final Slider slider;
 
     @Inject
-    public SettingAnimationSpeedView(final EventBus eventBus,
-            final I18n i18n) {
-        this.eventBus = Preconditions.checkNotNull(eventBus);
-
+    public SettingAnimationSpeedView(final I18n i18n) {
         label = new Label();
         label.getStyleClass().add("label-slider");
 
+        slider = new Slider();
+        slider.setMin(PathPlanning.ANIMATION_SPEED_MIN_VALUE);
+        slider.setMax(PathPlanning.ANIMATION_SPEED_MAX_VALUE - 1);
+        slider.setSnapToTicks(true);
+        slider.setMajorTickUnit(1);
+        slider.setMinorTickCount(0);
+        slider.setShowTickLabels(true);
+        slider.setShowTickMarks(false);
+
         mainPanel = new HBox();
+        mainPanel.getChildren().add(label);
+        mainPanel.getChildren().add(slider);
 
         updateLanguage(i18n);
     }
@@ -48,23 +52,8 @@ public class SettingAnimationSpeedView implements JavaFxComponent, UpdatableLang
     }
 
     @Override
-    public void updateLanguage(I18n i18n) {
+    public void updateLanguage(final I18n i18n) {
         label.setText(i18n.get(Preferences.animationSpeed_caption));
-        slider = new Slider();
-        slider.setMin(PathPlanning.ANIMATION_SPEED_MIN_VALUE);
-        slider.setMax(PathPlanning.ANIMATION_SPEED_MAX_VALUE - 1);
-        slider.setSnapToTicks(true);
-        slider.setMajorTickUnit(1);
-        slider.setMinorTickCount(0);
-        slider.setShowTickLabels(true);
-        slider.setShowTickMarks(false);
-        slider.valueProperty().addListener((obj, oldValue, newValue) -> {
-            /*
-             * Every small change is send to listeners. It allows change sound
-             * or music immediately.
-             */
-            eventBus.post(new AnimationSpeedChangeEvent(newValue.intValue()));
-        });
         slider.setLabelFormatter(new StringConverter<Double>() {
             @Override
             public String toString(final Double value) {
@@ -82,10 +71,10 @@ public class SettingAnimationSpeedView implements JavaFxComponent, UpdatableLang
                 return null;
             }
         });
-
-        mainPanel.getChildren().clear();
-        mainPanel.getChildren().add(label);
-        mainPanel.getChildren().add(slider);
+    }
+    
+    public DoubleProperty getAnimationSpeedValueProperty() {
+        return slider.valueProperty();
     }
 
 }

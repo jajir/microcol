@@ -6,7 +6,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.microcol.gui.util.GamePreferences;
+import org.microcol.gui.preferences.GamePreferences;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

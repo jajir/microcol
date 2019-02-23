@@ -2,7 +2,7 @@ package org.microcol.gui;
 
 import java.util.Map;
 
-import org.microcol.gui.util.GamePreferences;
+import org.microcol.gui.preferences.GamePreferences;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableMap;

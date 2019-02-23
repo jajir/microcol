@@ -1,0 +1,18 @@
+{
+  "mainFramePosition": {
+    "x": 100,
+    "y": 100,
+    "width": 800,
+    "height": 600
+  },
+  "mainFrameState": 0,
+  "locale": {
+    "country": "US",
+    "language": "en"
+  },
+  "volume": 0,
+  "animationSpeed": 1,
+  "showGrid": false,
+  "showFightAdvisor": true,
+  "gameInProgressSaveFile": "true"
+}
