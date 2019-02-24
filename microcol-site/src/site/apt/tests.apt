@@ -74,8 +74,8 @@ Test cases
  * Open colony details.
  Verify that founding colonist is working at field and produce corn.
  
- * Move unit from outside of colony to filed.
- Verify that moved unit start produce food.
+ * Move unit from to colony filed.
+ Verify that moved unit started to produce food.
 
 []
 

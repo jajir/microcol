@@ -169,17 +169,25 @@ public final class Colony {
      *            required unit
      */
     void placeUnitToProduceFood(final Unit unit) {
-        final Optional<Integer> oMaxCornProduction = colonyFields.stream().filter(f -> f.isEmpty())
-                .map(f -> f.getGoodTypeProduction(GoodType.CORN)).max(Comparator.naturalOrder());
-        if (oMaxCornProduction.isPresent()) {
-            final List<ColonyField> fields = colonyFields.stream().filter(f -> f.isEmpty())
-                    .collect(ImmutableList.toImmutableList());
-            Preconditions.checkState(!fields.isEmpty(), "Filed can't be empty");
-            final ColonyField field = fields.get(random.nextInt(fields.size()));
-            unit.placeToColonyField(field, GoodType.CORN);
-        } else {
-            unit.placeToLocation(location);
-        }
+        final List<ColonyField> fields = getEmptyFieldsWithMaxCornProduction();
+        Preconditions.checkState(!fields.isEmpty(), "There are no empty field in colony");
+        final ColonyField field = fields.get(random.nextInt(fields.size()));
+        unit.placeToColonyField(field, GoodType.CORN);
+    }
+
+    /**
+     * Get list of empty fields with maximal corn production. At all returned
+     * field could be place unit and start producing food.
+     *
+     * @return list of colony fields
+     */
+    List<ColonyField> getEmptyFieldsWithMaxCornProduction() {
+        final Integer max = colonyFields.stream().filter(f -> f.isEmpty())
+                .map(f -> f.getGoodTypeProduction(GoodType.CORN)).max(Comparator.naturalOrder())
+                .orElse(-1);
+        return colonyFields.stream()
+                .filter(f -> f.isEmpty() && f.getGoodTypeProduction(GoodType.CORN) == max)
+                .collect(ImmutableList.toImmutableList());
     }
 
     private List<ColonyFieldPo> saveColonyFields() {
@@ -403,7 +411,7 @@ public final class Colony {
         for (final Unit unit : getUnitsInColony()) {
             force += unit.getMilitaryStrenght();
         }
-        return (int)force;
+        return (int) force;
     }
 
     // TODO counting of stats should move to separate classes.

@@ -1,10 +1,13 @@
 package org.microcol.test;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 import java.io.File;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.microcol.gui.FileSelectingService;
+import org.microcol.model.GoodType;
 import org.microcol.model.Location;
 import org.microcol.page.ColonyScreen;
 import org.microcol.page.GamePage;
@@ -56,14 +59,31 @@ public class TC_02_founding_colony_test extends AbstractMicroColTest {
 
 	// found colony by pressing key 'b'
 	robot.press(KeyCode.B).sleep(10).release(KeyCode.B);
+	WaitForAsyncUtils.waitForFxEvents();
+
+	// verify that option build colony is not here
+	gamePage.verifyThatBuildColonyButtonInHidden();
 
 	// verify that one unit was moved into city
 	gamePage.verifyNumberOfUnitInRightPanel(1);
 	gamePage.getRightPanelUnit(0).assertFreeActionPoints(1);
 
-	// verify city
+	// open colony and verify city name
 	final ColonyScreen colonyScreen = gamePage.openColonyAt(Location.of(19, 11), "Leiden");
+
+	// verify that on filed is exactly one unit, the one that founded colony
 	colonyScreen.verifyNumberOfUnitsOnFields(1);
+
+	// verify that action net production is.
+	colonyScreen.verifyThatProductionIs(GoodType.CORN, 2);
+
+	colonyScreen.verifyNumberOfUnitsAtPier(1);
+
+	int cornProduction = colonyScreen.moveUnitFromPietToEmptyField(0);
+
+	// unit will placed at field with production 4 or 3 randomly.
+	assertTrue(cornProduction >= 3 && cornProduction <= 4,
+		String.format("Unexpected corn production '%s'", cornProduction));
     }
 
 }

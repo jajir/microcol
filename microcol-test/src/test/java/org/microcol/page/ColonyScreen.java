@@ -9,14 +9,22 @@ import java.util.Set;
 
 import org.microcol.gui.screen.colony.ColonyButtonsPanel;
 import org.microcol.gui.screen.colony.ColonyPanel;
+import org.microcol.gui.screen.colony.PanelColonyFields;
 import org.microcol.gui.screen.colony.PanelUnitWithContextMenu;
+import org.microcol.gui.screen.game.gamepanel.GamePanelView;
 import org.microcol.gui.util.PanelDock;
 import org.microcol.gui.util.PanelDockCrate;
 import org.microcol.model.Colony;
+import org.microcol.model.ColonyField;
+import org.microcol.model.GoodProductionStats;
+import org.microcol.model.GoodType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testfx.service.finder.NodeFinder;
+import org.testfx.util.WaitForAsyncUtils;
 
+import javafx.geometry.Bounds;
+import javafx.geometry.Point2D;
 import javafx.scene.control.Button;
 import javafx.scene.control.Labeled;
 import javafx.scene.control.ToggleButton;
@@ -66,8 +74,14 @@ public class ColonyScreen extends AbstractScreen {
 
     public void verifyNumberOfShipsInPort(final int expectedNumberOfShipsInPort) {
 	assertEquals(expectedNumberOfShipsInPort, getUnitsInPort().size(),
-		String.format("Expected numeber of shipd is '%s' but really there is '%s' ships.",
+		String.format("Expected numeber of ships is '%s' but really there is '%s' ships.",
 			expectedNumberOfShipsInPort, getUnitsInPort().size()));
+    }
+
+    public void verifyNumberOfUnitsAtPier(final int expectedNumberOfUnitsAtPier) {
+	assertEquals(expectedNumberOfUnitsAtPier, getUnitsAtPier().size(),
+		String.format("Expected numeber of units is '%s' but really there is '%s' units.",
+			expectedNumberOfUnitsAtPier, getUnitsAtPier().size()));
     }
 
     public void dragUnitFromPierToShipCargoSlot(final int unitIndexInPier, final int cargoSlotIndex) {
@@ -98,4 +112,37 @@ public class ColonyScreen extends AbstractScreen {
 	final Set<StackPane> cratesSet = getNodeFinder().lookup(cssClass).queryAll();
 	return new ArrayList<StackPane>(cratesSet);
     }
+
+    public void verifyThatProductionIs(final GoodType goodType, final Integer expectedAmount) {
+	final GoodProductionStats stats = colony.getGoodsStats().getStatsByType(goodType);
+	assertEquals(expectedAmount, Integer.valueOf(stats.getNetProduction()));
+    }
+
+    /**
+     * Drag unit from pier to random empty field.
+     *
+     * @param indexOfUnitAtPier which unit will be dragged
+     * @return net production of corn at newly occupied field
+     */
+    public int moveUnitFromPietToEmptyField(final int indexOfUnitAtPier) {
+	final ColonyField colonyField = colony.getColonyFields().stream()
+		.filter(field -> field.isEmpty() && field.getGoodTypeProduction(GoodType.CORN) > 0).findAny().get();
+	getRobot().drag(getUnitsAtPier().get(indexOfUnitAtPier), MouseButton.PRIMARY)
+		.dropTo(findPlaceOfField(colonyField)).release(MouseButton.PRIMARY);
+	WaitForAsyncUtils.waitForFxEvents();
+	return colony.getGoodsStats().getStatsByType(GoodType.CORN).getNetProduction();
+    }
+
+    private Point2D findPlaceOfField(final ColonyField colonyField) {
+	final PanelColonyFields panelColonyFields = getContext().getClassFromGuice(PanelColonyFields.class);
+	final Bounds boundsInScreen = panelColonyFields.getContent()
+		.localToScreen(panelColonyFields.getContent().getBoundsInLocal());
+
+	final double x = boundsInScreen.getMinX()
+		+ (colonyField.getDirection().getX() + 1) * GamePanelView.TILE_WIDTH_IN_PX + TILE_CENTER.getX();
+	final double y = boundsInScreen.getMinY()
+		+ (colonyField.getDirection().getY() + 1) * GamePanelView.TILE_WIDTH_IN_PX + TILE_CENTER.getY();
+	return new Point2D(x, y);
+    }
+
 }

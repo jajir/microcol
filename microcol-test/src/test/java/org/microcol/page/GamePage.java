@@ -1,6 +1,7 @@
 package org.microcol.page;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -14,9 +15,7 @@ import org.microcol.gui.screen.game.gamepanel.GamePanelView;
 import org.microcol.model.Location;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.testfx.api.FxAssert;
 import org.testfx.robot.Motion;
-import org.testfx.service.finder.NodeFinder;
 import org.testfx.util.WaitForAsyncUtils;
 
 import com.google.common.collect.Lists;
@@ -99,8 +98,8 @@ public class GamePage extends AbstractScreen {
      */
     public void waitWhileMoving() throws Exception {
 	WaitForAsyncUtils.waitFor(60, TimeUnit.SECONDS, () -> {
-	    final NodeFinder nodeFinder = FxAssert.assertContext().getNodeFinder();
-	    final Button buttonNextTurn = nodeFinder.lookup("#" + ButtonsGamePanel.BUTTON_NEXT_TURN_ID).queryButton();
+	    final Button buttonNextTurn = getNodeFinder().lookup("#" + ButtonsGamePanel.BUTTON_NEXT_TURN_ID)
+		    .queryButton();
 	    return !buttonNextTurn.isDisabled();
 	});
     }
@@ -120,6 +119,10 @@ public class GamePage extends AbstractScreen {
 
     private List<VBox> getListOfUnitsInRightPanel() {
 	return Lists.newArrayList(getNodeFinder().lookup(".unitPanel").queryAllAs(VBox.class));
+    }
+
+    public void verifyThatBuildColonyButtonInHidden() {
+	assertFalse(getNodeFinder().lookup("#buildColony").tryQuery().isPresent());
     }
 
 }

@@ -17,7 +17,7 @@ import com.google.common.base.Preconditions;
  * Player model class. Class doesn't perform itself it just provide methods to
  * implement players behavior somewhere else.
  */
-public final class Player {
+public class Player {
 
     private final Model model;
 

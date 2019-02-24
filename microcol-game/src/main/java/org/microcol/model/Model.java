@@ -30,7 +30,7 @@ import com.google.common.collect.Lists;
 /**
  * Game model.
  */
-public final class Model {
+public class Model {
 
     private final ColonyNames colonyNames;
     private final ListenerManager listenerManager;

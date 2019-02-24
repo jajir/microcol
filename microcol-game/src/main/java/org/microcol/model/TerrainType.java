@@ -57,7 +57,7 @@ public final class TerrainType {
 
     public final static TerrainType SWAMP = TerrainType.make().setName("SWAMP").setCode("w").setCanHaveTree(true)
 	    .setSea(false).setMoveCost(1).setMoveCostWithTree(2).setDefenseBonus(0).setDefenseBonusWithTree(50)
-	    .setProduction(GoodType.CORN).setBase(3).build().setProduction(GoodType.SUGAR).setBase(3).build()
+	    .setProduction(GoodType.CORN).setBase(2).build().setProduction(GoodType.SUGAR).setBase(3).build()
 	    .setProduction(GoodType.TOBACCO).setBase(1).build().setProduction(GoodType.LUMBER).setBase(4).build()
 	    .build();
 
