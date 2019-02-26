@@ -46,7 +46,7 @@ public class TC_03_declare_independence_test extends AbstractMicroColTest {
 	GamePage gamePage = WelcomePage.of(getContext()).loadGame();
 
 	// declare independence
-	final DialogMessagePage dialogMessagePage = gamePage.buttonDeclareIndependenceClick();
+	final DialogMessagePage dialogMessagePage = gamePage.declareIndependence();
 
 	// close first dialog
 	dialogMessagePage.close();

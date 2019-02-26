@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 import org.microcol.gui.Point;
 import org.microcol.gui.screen.game.components.ButtonsGamePanel;
@@ -41,7 +42,7 @@ public class GamePage extends AbstractScreen {
 	WaitForAsyncUtils.waitForFxEvents();
     }
 
-    public void moveMouseAtLocation(final Location location) throws Exception {
+    public void moveMouseAtLocation(final Location location) {
 	verifyThatTileIsVisible(location);
 	final Point p = getContext().getArea().convertToPoint(location)
 		.add(getPrimaryStage().getX(), getPrimaryStage().getY()).add(TILE_CENTER);
@@ -67,7 +68,7 @@ public class GamePage extends AbstractScreen {
 		"Text '%s' should appear in status bar. But status bar contains text '%s'.", string, label.getText()));
     }
 
-    public void verifyThatTileIsVisible(final Location location) throws Exception {
+    public void verifyThatTileIsVisible(final Location location) {
 	assertTrue(getContext().getArea().isLocationVisible(location));
     }
 
@@ -77,11 +78,18 @@ public class GamePage extends AbstractScreen {
 	waitWhileMoving();
     }
 
-    public DialogMessagePage buttonDeclareIndependenceClick() throws Exception {
+    public DialogMessagePage declareIndependence() throws Exception {
 	final Button buttonNextTurn = getButtoonById(ButtonsGamePanel.BUTTON_DECLARE_INDEPENDENCE_ID);
 	getRobot().clickOn(buttonNextTurn);
 	WaitForAsyncUtils.waitForFxEvents();
 	return DialogMessagePage.of(getContext());
+    }
+
+    public DialogTurnReport openTurnReport() throws Exception {
+	final Button buttonNextTurn = getButtoonById(ButtonsGamePanel.BUTTON_TURN_REPORT_ID);
+	getRobot().clickOn(buttonNextTurn);
+	WaitForAsyncUtils.waitForFxEvents();
+	return DialogTurnReport.of(getContext());
     }
 
     public ColonyScreen openColonyAt(final Location colonyLocation, final String expectedNamePart) throws Exception {
@@ -90,13 +98,21 @@ public class GamePage extends AbstractScreen {
 	return ColonyScreen.of(getContext(), expectedNamePart);
     }
 
+    public GamePage verifyThatItsNotPossibleToOpenColonyAt(final Location colonyLocation) {
+	moveMouseAtLocation(colonyLocation);
+	getRobot().clickOn(MouseButton.PRIMARY);
+	verifyThatStatusBarContains(String.valueOf(colonyLocation.getX()));
+	verifyThatStatusBarContains(String.valueOf(colonyLocation.getY()));
+	return this;
+    }
+
     /**
      * Wait until next turn button is available again. Unavailable next turn button
      * meant that there is some animation in progress.
      * 
      * @throws Exception
      */
-    public void waitWhileMoving() throws Exception {
+    public void waitWhileMoving() throws TimeoutException {
 	WaitForAsyncUtils.waitFor(60, TimeUnit.SECONDS, () -> {
 	    final Button buttonNextTurn = getNodeFinder().lookup("#" + ButtonsGamePanel.BUTTON_NEXT_TURN_ID)
 		    .queryButton();

@@ -74,7 +74,7 @@ Test cases
  * Open colony details.
  Verify that founding colonist is working at field and produce corn.
  
- * Move unit from to colony filed.
+ * Move unit to colony field.
  Verify that moved unit started to produce food.
 
 []
@@ -86,6 +86,8 @@ Test cases
  * Open save 'verify-independence.microcol'.
  
  * Declare independence.
+ 
+ * Verify that there are two dialog messages.
  
  * Wait for king's military units arrival.
  
@@ -103,9 +105,17 @@ Test cases
  
  * Press 'Next turn'.
  
+ * Verify that turn dialog was shown.
+ 
+ * Verify that message about lost city is shown.
+ 
  * Verify that blue units attack city, city loose and ship leaves city to random place. 
  
- * Verify that city Delft is not possible to open. 
+ * Verify that city Delft is not possible to open.
+
+ * Open Turn Dialog again.
+ 
+ * Verify that message about lost city is shown.
 
 []
 

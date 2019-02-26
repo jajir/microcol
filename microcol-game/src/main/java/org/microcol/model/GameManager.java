@@ -120,6 +120,7 @@ final class GameManager {
         checkGameRunning();
         LOGGER.debug("End turn was called, current player is {}", currentPlayer);
         model.fireTurnFinished(currentPlayer);
+        model.getTurnEventStore().clearTurnEventsForPlayer(currentPlayer);
         final int index = model.getPlayers().indexOf(currentPlayer);
         if (index < model.getPlayers().size() - 1) {
             currentPlayer = model.getPlayers().get(index + 1);
@@ -133,7 +134,6 @@ final class GameManager {
                 started = false;
             } else {
                 currentPlayer = model.getPlayers().get(0);
-                model.getTurnEventStore().clearAllTurnEvents();
                 model.getStatistics().countNextTurn(model);
                 model.fireRoundStarted();
                 currentPlayer.startTurn();

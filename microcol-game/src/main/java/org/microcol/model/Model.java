@@ -393,6 +393,12 @@ public class Model {
     public Optional<Unit> getFirstSelectableUnitAt(final Location location) {
         return unitStorage.getFirstSelectableUnitAt(getCurrentPlayer(), location);
     }
+    
+    public List<Unit> getMoveableUnitAtOwnedBy(final Location location, final Player player) {
+        return unitStorage.getUnitsAt(location).stream()
+                .filter(unit -> unit.getActionPoints() > 0 && unit.getOwner().equals(player))
+                .collect(ImmutableList.toImmutableList());
+    }
 
     public Optional<Colony> getColonyAt(final Location location) {
         Preconditions.checkNotNull(location);

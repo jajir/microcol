@@ -40,7 +40,10 @@ public class SettingDao {
         Preconditions.checkArgument(file.isFile());
         logger.debug("Starting to read from class path ({})", file.getAbsolutePath());
         try (final FileInputStream fis = new FileInputStream(file)) {
-            return gson.fromJson(new InputStreamReader(fis, StandardCharsets.UTF_8), Setting.class);
+            return Preconditions.checkNotNull(
+                    gson.fromJson(new InputStreamReader(fis, StandardCharsets.UTF_8),
+                            Setting.class),
+                    String.format("File '%s' was not loaded.", file.getAbsolutePath()));
         } catch (IOException e) {
             throw new MicroColException(e.getMessage(), e);
         }

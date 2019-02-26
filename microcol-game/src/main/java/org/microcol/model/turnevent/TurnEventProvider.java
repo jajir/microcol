@@ -79,6 +79,20 @@ public final class TurnEventProvider {
     }
 
     /**
+     * Get new turn event when new colony was lost. Some other player conquer it.
+     *
+     * @param player
+     *            required owner of lost colony
+     * @param colony
+     *            required destroyed colony name
+     * @return turn event object
+     */
+    public static TurnEvent getColonyWasLost(final Player player, final Colony colony) {
+        return new SimpleTurnEvent(TurnEvents.colonyWasLost, new Object[] { colony.getName() },
+                player);
+    }
+
+    /**
      * Get new turn event when new unit appears at Europe.
      *
      * @param player

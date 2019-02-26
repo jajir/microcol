@@ -97,10 +97,10 @@ public final class TurnEventStore {
     }
 
     /**
-     * Clear all event. Should be called when player press 'Next turn'.
+     * Clear event for given player. Should be called when player press 'Next turn'.
      */
-    public void clearAllTurnEvents() {
-        turnEvents.clear();
+    public void clearTurnEventsForPlayer(final Player player) {
+        turnEvents.removeIf(event->event.getPlayer().equals(player));
     }
 
     /**

@@ -12,6 +12,7 @@ public final class TurnEventPanel extends HBox {
 
     TurnEventPanel(final TurnEvent turnEvent) {
         getChildren().add(new Label(turnEvent.getLocalizedMessage()));
+        getStyleClass().add("turn-event");
     }
 
 }

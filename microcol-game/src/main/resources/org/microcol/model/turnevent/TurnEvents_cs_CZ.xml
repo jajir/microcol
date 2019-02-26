@@ -18,5 +18,6 @@
 	<entry key="colonyWasDestroyed">Kolonie %s byla zničena.</entry>
 	<entry key="newUnitIsInEurope">Díky náboženskému neklidu ve starém světě se další kolonista rozhodl zkusit štěstí v novém světě, čeká v evropském přístavu.</entry>
 	<entry key="newUnitIsInColony">V kolonii se objevila nová jednotka.</entry>
+	<entry key="colonyWasLost">Přišel jsi o kolonii %s.</entry>
 
 </properties>

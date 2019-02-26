@@ -18,5 +18,6 @@
 	<entry key="colonyWasDestroyed">Colony %s was destroyed.</entry>
 	<entry key="newUnitIsInEurope">Because of religion unrest in Europe new colonist decide to emigrate. Now is waiting in Europe.</entry>
 	<entry key="newUnitIsInColony">There is a new unit in colony.</entry>
+	<entry key="colonyWasLost">Colony %s was lost.</entry>
 
 </properties>

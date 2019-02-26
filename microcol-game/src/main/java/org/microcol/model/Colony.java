@@ -136,7 +136,11 @@ public final class Colony {
                 .filter(slot -> !slot.isEmpty()).forEach(slot -> slot.getUnit().takeOver(player)));
 
         placeUnitToProduceFood(capturingUnit);
-
+        
+        if (owner.isHuman()) {
+            model.getTurnEventStore().add(TurnEventProvider.getColonyWasLost(owner, this));
+        }
+        
         owner = player;
         model.fireColonyWasCaptured(model, capturingUnit, this);
     }

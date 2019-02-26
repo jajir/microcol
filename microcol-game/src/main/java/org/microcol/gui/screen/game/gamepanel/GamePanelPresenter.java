@@ -220,13 +220,16 @@ public final class GamePanelPresenter {
 
     private boolean tryToSwitchToMoveMode(final Location currentLocation) {
         Preconditions.checkNotNull(currentLocation);
-        if (selectedUnitManager.isSelectedUnitMoveable()) {
+        final List<Unit> availableUnits = gameModelController.getModel()
+                .getMoveableUnitAtOwnedBy(currentLocation, gameModelController.getCurrentPlayer());
+        if (availableUnits.isEmpty()) {
+            return false;
+        } else {
             eventBus.post(new StartMoveEvent());
             return true;
         }
-        return false;
     }
-
+    
     private void tryToOpenColonyDetail(final Location currentLocation) {
         Preconditions.checkNotNull(currentLocation);
         final Optional<Colony> oColony = gameModelController.getCurrentPlayer()
@@ -242,7 +245,8 @@ public final class GamePanelPresenter {
                 "to move mode could be switched just when some tile is selected.");
         final List<Unit> units = gameModelController.getCurrentPlayer()
                 .getUnitsAt(selectedTileManager.getSelectedTile().get());
-        Preconditions.checkState(!units.isEmpty(), "there are some moveable units");
+        Preconditions.checkState(!units.isEmpty(),
+                "There is no moveable unit or other entity to interact with.");
         final Unit unit = selectedUnitManager.getSelectedUnit().get();
         oneTurnMoveHighlighter.setLocations(unit.getAvailableLocations());
         logger.debug("Switching '" + unit + "' to go mode.");
