@@ -28,7 +28,7 @@ import javafx.stage.Stage;
 @ExtendWith(ApplicationExtension.class)
 public class TC_04_loosing_battle_test extends AbstractMicroColTest {
 
-    private final static File saveFile = new File("src/test/scenarios/test-verify-loosing-battles.microcol");
+    private final static File testFileName = new File("src/test/scenarios/test-verify-loosing-battles.microcol");
 
     @Start
     private void start(final Stage primaryStage) throws Exception {
@@ -38,7 +38,7 @@ public class TC_04_loosing_battle_test extends AbstractMicroColTest {
     @Override
     protected void bind(Binder binder) {
 	FileSelectingService fileSelectingService = Mockito.mock(FileSelectingService.class);
-	Mockito.when(fileSelectingService.loadFile(Mockito.any(File.class))).thenReturn(saveFile);
+	Mockito.when(fileSelectingService.loadFile(Mockito.any(File.class))).thenReturn(testFileName);
 	binder.bind(FileSelectingService.class).toInstance(fileSelectingService);
     }
 

@@ -1,47 +1,57 @@
 package org.microcol.model;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.microcol.model.store.ModelDao;
 
 import com.google.gson.JsonSyntaxException;
 
 public class ModelDaoTest {
-	
-	private ModelDao dao;
-	
-	@Test(expected = JsonSyntaxException.class)
-	public void test_invalid_file_format() {
-		dao.loadPredefinedModel("/maps/test-map-invalid-0x0.json");
-	}
 
-	@Test(expected = IllegalArgumentException.class)
-	public void test_load_missingFile() {
-		dao.loadPredefinedModel("/maps/test-map-missing-0x0.json");
-	}
+    private ModelDao dao;
 
-	@Test(expected = NullPointerException.class)
-	public void testValidLocationNull() {
-		WorldMap map = dao.loadPredefinedWorldMap("/maps/test-map-ocean-10x10.json");
+    @Test
+    public void test_invalid_file_format() {
+        assertThrows(JsonSyntaxException.class, () -> {
+            dao.loadPredefinedModel("/maps/test-map-invalid-0x0.json");
+        });
+    }
 
-		map.isValid((Location) null);
-	}
+    @Test
+    public void test_load_missingFile() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            dao.loadPredefinedModel("/maps/test-map-missing-0x0.json");
+        });
+    }
 
-	@Test(expected = NullPointerException.class)
-	public void testValidPathNull() {
-		WorldMap map = dao.loadPredefinedWorldMap("/maps/test-map-ocean-10x10.json");
+    @Test
+    public void testValidLocationNull() {
+        WorldMap map = dao.loadPredefinedWorldMap("/maps/test-map-ocean-10x10.json");
 
-		map.isValid((Path) null);
-	}
-	
-	@Before
-	public void before() {
-		dao = new ModelDao();
-	}
+        assertThrows(NullPointerException.class, () -> {
+            map.isValid((Location) null);
+        });
+    }
 
-	@After
-	public void after(){
-		dao = null;
-	}
+    @Test
+    public void testValidPathNull() {
+        WorldMap map = dao.loadPredefinedWorldMap("/maps/test-map-ocean-10x10.json");
+
+        assertThrows(NullPointerException.class, () -> {
+            map.isValid((Path) null);
+        });
+    }
+
+    @BeforeEach
+    public void before() {
+        dao = new ModelDao();
+    }
+
+    @AfterEach
+    public void after() {
+        dao = null;
+    }
 }

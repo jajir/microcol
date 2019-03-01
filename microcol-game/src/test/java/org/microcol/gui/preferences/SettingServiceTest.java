@@ -1,6 +1,6 @@
 package org.microcol.gui.preferences;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
@@ -9,9 +9,8 @@ import static org.mockito.Mockito.when;
 
 import java.io.File;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.microcol.gui.util.PersistingTool;
 
 import com.google.common.io.Files;
@@ -21,14 +20,14 @@ import com.google.common.io.Files;
  */
 public class SettingServiceTest extends AbstractPreferencesTest {
 
-    //Tested object
+    // Tested object
     private SettingService settingService;
 
     private final SettingDao settingDao = mock(SettingDao.class);
 
     private final PersistingTool persistingTool = mock(PersistingTool.class);
 
-    @Test
+    @org.junit.jupiter.api.Test
     public void verify_that_update_save_changes() throws Exception {
         final Setting setting = createSetting();
         when(persistingTool.getRootSaveDirectory()).thenReturn(Files.createTempDir());
@@ -43,12 +42,12 @@ public class SettingServiceTest extends AbstractPreferencesTest {
         assertEquals(Integer.valueOf(231), setting.getAnimationSpeed());
     }
 
-    @Before
+    @BeforeEach
     public void before() {
         settingService = new SettingService(settingDao, persistingTool);
     }
 
-    @After
+    @AfterEach
     public void after() {
         settingService = null;
     }

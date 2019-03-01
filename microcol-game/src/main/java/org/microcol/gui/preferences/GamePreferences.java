@@ -20,7 +20,7 @@ import javafx.beans.property.SimpleBooleanProperty;
  * implementation.
  * </p>
  */
-public final class GamePreferences {
+public class GamePreferences {
 
     /**
      * When there are no value in preferences than this value is used.

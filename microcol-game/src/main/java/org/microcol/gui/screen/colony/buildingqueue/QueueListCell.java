@@ -2,7 +2,7 @@ package org.microcol.gui.screen.colony.buildingqueue;
 
 import org.microcol.gui.image.ImageProvider;
 import org.microcol.gui.util.BackgroundHighlighter;
-import org.microcol.gui.util.Clipboard;
+import org.microcol.gui.util.ClipboardConst;
 import org.microcol.gui.util.ClipboardParser;
 import org.microcol.gui.util.ClipboardWritter;
 import org.microcol.gui.util.From;
@@ -78,21 +78,21 @@ public class QueueListCell extends ListCell<ColonyBuildingItemProgress<?>> {
         final ClipboardParser parser = ClipboardParser.make(event.getDragboard());
         final From from = parser.getFrom().get();
         if (from == From.VALUE_FROM_BUILDING_QUEUE_CONSTRUCTION) {
-            parser.get(Clipboard.KEY_CONSTRUCTION_TYPE);
+            parser.get(ClipboardConst.KEY_CONSTRUCTION_TYPE);
             queueController.addBeforeItem(
-                    ConstructionType.valueOf(parser.get(Clipboard.KEY_CONSTRUCTION_TYPE)),
+                    ConstructionType.valueOf(parser.get(ClipboardConst.KEY_CONSTRUCTION_TYPE)),
                     item.getId());
             event.acceptTransferModes(TransferMode.MOVE);
             event.setDropCompleted(true);
             event.consume();
         } else if (from == From.VALUE_FROM_BUILDING_QUEUE_UNIT) {
-            queueController.addBeforeItem(UnitType.valueOf(parser.get(Clipboard.KEY_UNIT_TYPE)),
+            queueController.addBeforeItem(UnitType.valueOf(parser.get(ClipboardConst.KEY_UNIT_TYPE)),
                     item.getId());
             event.acceptTransferModes(TransferMode.MOVE);
             event.setDropCompleted(true);
             event.consume();
         } else if (from == From.VALUE_FROM_BUILDING_QUEUE) {
-            int movingItemId = parser.getInt(Clipboard.KEY_INDEX);
+            int movingItemId = parser.getInt(ClipboardConst.KEY_INDEX);
             queueController.moveItem(movingItemId, item.getId());
             event.acceptTransferModes(TransferMode.MOVE);
             event.setDropCompleted(true);
@@ -106,7 +106,7 @@ public class QueueListCell extends ListCell<ColonyBuildingItemProgress<?>> {
         final Image image = imageProvider.getUnitImage(UnitType.COLONIST);
         final Dragboard db = node.startDragAndDrop(TransferMode.MOVE);
         ClipboardWritter.make(db).addImage(image).fromBuildingQueue(item.getConstructionType())
-                .addKeyValue(Clipboard.KEY_INDEX, item.getId()).build();
+                .addKeyValue(ClipboardConst.KEY_INDEX, item.getId()).build();
         mouseEvent.consume();
     }
 
@@ -115,7 +115,7 @@ public class QueueListCell extends ListCell<ColonyBuildingItemProgress<?>> {
         final Image image = imageProvider.getUnitImage(UnitType.COLONIST);
         final Dragboard db = node.startDragAndDrop(TransferMode.MOVE);
         ClipboardWritter.make(db).addImage(image).fromBuildingQueue(item.getUnitType())
-                .addKeyValue(Clipboard.KEY_INDEX, item.getId()).build();
+                .addKeyValue(ClipboardConst.KEY_INDEX, item.getId()).build();
         mouseEvent.consume();
     }
 

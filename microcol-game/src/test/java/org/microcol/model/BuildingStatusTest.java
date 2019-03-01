@@ -1,19 +1,17 @@
 package org.microcol.model;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
-import org.junit.Test;
-
-import mockit.Expectations;
-import mockit.Mocked;
+import org.junit.jupiter.api.Test;
 
 public class BuildingStatusTest {
 
-    private @Mocked ColonyBuildingItem item;
+    private ColonyBuildingItem item = mock(ColonyBuildingItem.class);
 
     @Test
     public void test_constructor() throws Exception {
-        mock(200, 100);
+        recordMock(200, 100);
         final BuildingStatus<ColonyBuildingItem> stats = new BuildingStatus<ColonyBuildingItem>(
                 item, 50, 10, 12, 3);
 
@@ -32,7 +30,7 @@ public class BuildingStatusTest {
 
     @Test
     public void test_constructor_neverFinish() throws Exception {
-        mock(200, 100);
+        recordMock(200, 100);
         final BuildingStatus<ColonyBuildingItem> stats = new BuildingStatus<ColonyBuildingItem>(
                 item, 50, 10, 12, 0);
 
@@ -49,15 +47,9 @@ public class BuildingStatusTest {
         assertFalse(stats.getTurnsToComplete().isPresent());
     }
 
-    private void mock(final int requiredHammers, final int requiredTools) {
-        new Expectations() {
-            {
-                item.getRequiredHammers();
-                result = requiredHammers;
-                item.getRequiredTools();
-                result = requiredTools;
-            }
-        };
+    private void recordMock(final int requiredHammers, final int requiredTools) {
+        when(item.getRequiredHammers()).thenReturn(requiredHammers);
+        when(item.getRequiredTools()).thenReturn(requiredTools);
     }
 
 }

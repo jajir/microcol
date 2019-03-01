@@ -1,19 +1,27 @@
 package org.microcol.model;
 
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import org.junit.jupiter.api.Test;
 
 public class ListenerManagerTest {
-	@Test(expected = NullPointerException.class)
-	public void testAddListenerNull() {
-		final ListenerManager listenerManager = new ListenerManager();
+    
+    @Test
+    public void testAddListenerNull() {
+        final ListenerManager listenerManager = new ListenerManager();
 
-		listenerManager.addListener(null);
-	}
+        assertThrows(NullPointerException.class, () -> {
+            listenerManager.addListener(null);
+        });
+    }
 
-	@Test(expected = NullPointerException.class)
-	public void testRemoveListenerNull() {
-		final ListenerManager listenerManager = new ListenerManager();
+    @Test
+    public void testRemoveListenerNull() {
+        final ListenerManager listenerManager = new ListenerManager();
 
-		listenerManager.removeListener(null);
-	}
+        assertThrows(NullPointerException.class, () -> {
+            listenerManager.removeListener(null);
+        });
+    }
+    
 }

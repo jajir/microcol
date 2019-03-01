@@ -12,7 +12,7 @@ import com.google.common.base.Preconditions;
  * provide access to {@link VisibleArea} class. Class works with point and
  * location.
  */
-public final class Area {
+public class Area {
 
     /**
      * Point which have x and y set to {@link GamePanelView#TILE_WIDTH_IN_PX}.

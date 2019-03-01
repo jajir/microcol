@@ -1,6 +1,6 @@
 package org.microcol.model;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 import java.util.ArrayList;
@@ -9,9 +9,9 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -156,7 +156,7 @@ public class ColonyMockitoTest {
 
         final List<ColonyField> out = colony.getEmptyFieldsWithMaxCornProduction();
 
-        assertEquals("There should not be any field.", 0, out.size());
+        assertEquals(0, out.size(), "There should not be any field.");
     }
 
     /**
@@ -195,23 +195,22 @@ public class ColonyMockitoTest {
             final int expectedConsumed) {
         final GoodProductionStats cornStats = colony.getGoodsStats().getStatsByType(GoodType.CORN);
         logger.debug("Corn stats: " + cornStats);
-        System.out.println(cornStats);
-        assertEquals(
+        assertEquals(expectedRowProduction, cornStats.getRowProduction(),
                 String.format("Corn row production was expected '%s' but is '%s'.",
-                        expectedRowProduction, cornStats.getRowProduction()),
-                expectedRowProduction, cornStats.getRowProduction());
-        assertEquals(String.format("Corn consumed was expected '%s' but is '%s'.", expectedConsumed,
-                cornStats.getConsumed()), expectedConsumed, cornStats.getConsumed());
+                        expectedRowProduction, cornStats.getRowProduction()));
+        assertEquals(expectedConsumed, cornStats.getConsumed(),
+                String.format("Corn consumed was expected '%s' but is '%s'.", expectedConsumed,
+                        cornStats.getConsumed()));
     }
 
-    @Before
+    @BeforeEach
     public void before() {
         model = mock(Model.class);
         map = mock(WorldMap.class);
         owner = mock(Player.class);
     }
 
-    @After
+    @AfterEach
     public void after() {
         model = null;
         owner = null;

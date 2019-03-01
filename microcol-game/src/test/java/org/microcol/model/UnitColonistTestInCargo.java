@@ -1,42 +1,43 @@
 package org.microcol.model;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
-import org.junit.Before;
-import org.junit.Test;
-
-import mockit.Expectations;
-import mockit.Mocked;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class UnitColonistTestInCargo extends AbstractUnitFreeColonistTest {
 
-    @Mocked
-    private PlaceCargoSlot placeCargoSlot;
+    private PlaceCargoSlot placeCargoSlot = mock(PlaceCargoSlot.class);
 
-    @Mocked
-    private Cargo cargo;
+    private final CargoSlot cargoSlot = mock(CargoSlot.class);
 
     @Test
     public void test_placeToEuropePortPier() throws Exception {
-        new Expectations() {{
-                placeCargoSlot.isOwnerAtEuropePort(); result = true;
-            }};
+        when(placeCargoSlot.isOwnerAtEuropePort()).thenReturn(true);
+        when(placeCargoSlot.getCargoSlot()).thenReturn(cargoSlot);
+        doNothing().when(cargoSlot).empty();
 
         unit.placeToEuropePortPier();
 
         assertTrue(unit.isAtEuropePier());
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test
     public void test_placeToEuropePortPier_holding_unit_is_not_in_europe_port() throws Exception {
-        new Expectations() {{
-                placeCargoSlot.isOwnerAtEuropePort();
-                result = false;
-            }};
-        unit.placeToEuropePortPier();
+        when(placeCargoSlot.isOwnerAtEuropePort()).thenReturn(false);
+
+        final IllegalStateException exception = assertThrows(IllegalStateException.class, () -> {
+            unit.placeToEuropePortPier();
+        });
+
+        assertEquals("Holding unit is not at europe port, cant be placed to port pier.",
+                exception.getMessage());
     }
 
-    @Before
+    @BeforeEach
     public void setup() {
         makeColonist(model, 4, placeCargoSlot, owner, 3);
     }

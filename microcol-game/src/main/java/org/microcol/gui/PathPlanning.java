@@ -17,7 +17,7 @@ import com.google.inject.Inject;
  * @author jan
  *
  */
-public final class PathPlanning {
+public class PathPlanning {
 
     private final GamePreferences gamePreferences;
 

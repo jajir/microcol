@@ -3,7 +3,7 @@ package org.microcol.gui.util;
 /**
  * Define keys an values transfered dragging of some object.
  */
-public interface Clipboard {
+public interface ClipboardConst {
 
     static final String KEY_FROM = "From";
     static final String KEY_UNIT_TYPE = "UnitType";

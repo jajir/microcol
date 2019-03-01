@@ -1,31 +1,32 @@
 package org.microcol.model;
 
-import org.junit.Assert;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.jupiter.api.Test;
 
 public class CalendarTest {
-    
+
     @Test
     public void testEndRoundPositive() {
         final Calendar calendar = createCalendar(1590, 1593);
 
         calendar.endRound();
-        Assert.assertEquals(1590, calendar.getStartYear());
-        Assert.assertEquals(1593, calendar.getEndYear());
-        Assert.assertEquals(1591, calendar.getCurrentYear());
-        Assert.assertFalse(calendar.isFinished());
+        assertEquals(1590, calendar.getStartYear());
+        assertEquals(1593, calendar.getEndYear());
+        assertEquals(1591, calendar.getCurrentYear());
+        assertFalse(calendar.isFinished());
 
         calendar.endRound();
-        Assert.assertEquals(1590, calendar.getStartYear());
-        Assert.assertEquals(1593, calendar.getEndYear());
-        Assert.assertEquals(1592, calendar.getCurrentYear());
-        Assert.assertFalse(calendar.isFinished());
+        assertEquals(1590, calendar.getStartYear());
+        assertEquals(1593, calendar.getEndYear());
+        assertEquals(1592, calendar.getCurrentYear());
+        assertFalse(calendar.isFinished());
 
         calendar.endRound();
-        Assert.assertEquals(1590, calendar.getStartYear());
-        Assert.assertEquals(1593, calendar.getEndYear());
-        Assert.assertEquals(1593, calendar.getCurrentYear());
-        Assert.assertTrue(calendar.isFinished());
+        assertEquals(1590, calendar.getStartYear());
+        assertEquals(1593, calendar.getEndYear());
+        assertEquals(1593, calendar.getCurrentYear());
+        assertTrue(calendar.isFinished());
     }
 
     @Test
@@ -33,30 +34,34 @@ public class CalendarTest {
         final Calendar calendar = createCalendar(-1593, -1590);
 
         calendar.endRound();
-        Assert.assertEquals(-1593, calendar.getStartYear());
-        Assert.assertEquals(-1590, calendar.getEndYear());
-        Assert.assertEquals(-1592, calendar.getCurrentYear());
-        Assert.assertFalse(calendar.isFinished());
+        assertEquals(-1593, calendar.getStartYear());
+        assertEquals(-1590, calendar.getEndYear());
+        assertEquals(-1592, calendar.getCurrentYear());
+        assertFalse(calendar.isFinished());
 
         calendar.endRound();
-        Assert.assertEquals(-1593, calendar.getStartYear());
-        Assert.assertEquals(-1590, calendar.getEndYear());
-        Assert.assertEquals(-1591, calendar.getCurrentYear());
-        Assert.assertFalse(calendar.isFinished());
+        assertEquals(-1593, calendar.getStartYear());
+        assertEquals(-1590, calendar.getEndYear());
+        assertEquals(-1591, calendar.getCurrentYear());
+        assertFalse(calendar.isFinished());
 
         calendar.endRound();
-        Assert.assertEquals(-1593, calendar.getStartYear());
-        Assert.assertEquals(-1590, calendar.getEndYear());
-        Assert.assertEquals(-1590, calendar.getCurrentYear());
-        Assert.assertTrue(calendar.isFinished());
+        assertEquals(-1593, calendar.getStartYear());
+        assertEquals(-1590, calendar.getEndYear());
+        assertEquals(-1590, calendar.getCurrentYear());
+        assertTrue(calendar.isFinished());
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test()
     public void testEndRoundException() {
-        final Calendar calendar = createCalendar(1590, 1591);
+        final IllegalStateException exception = assertThrows(IllegalStateException.class, () -> {
+            final Calendar calendar = createCalendar(1590, 1591);
 
-        calendar.endRound();
-        calendar.endRound();
+            calendar.endRound();
+            calendar.endRound();
+        });
+
+        assertEquals("End year (1591) already reached.", exception.getMessage());
     }
 
     private Calendar createCalendar(final int startYear, final int endYear) {

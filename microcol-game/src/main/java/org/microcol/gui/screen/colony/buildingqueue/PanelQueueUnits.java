@@ -3,7 +3,7 @@ package org.microcol.gui.screen.colony.buildingqueue;
 import org.microcol.gui.image.ImageProvider;
 import org.microcol.gui.screen.colony.ColonyDialogCallback;
 import org.microcol.gui.util.BackgroundHighlighter;
-import org.microcol.gui.util.Clipboard;
+import org.microcol.gui.util.ClipboardConst;
 import org.microcol.gui.util.ClipboardParser;
 import org.microcol.gui.util.From;
 import org.microcol.gui.util.TitledPanel;
@@ -59,7 +59,7 @@ public class PanelQueueUnits extends TitledPanel {
     private void onDragDropped(final DragEvent event) {
         final ClipboardParser parser = ClipboardParser.make(event.getDragboard());
         if (parser.getFrom().get() == From.VALUE_FROM_BUILDING_QUEUE) {
-            int removingItemId = parser.getInt(Clipboard.KEY_INDEX);
+            int removingItemId = parser.getInt(ClipboardConst.KEY_INDEX);
             queueController.removeItemById(removingItemId);
             event.acceptTransferModes(TransferMode.MOVE);
             event.setDropCompleted(true);

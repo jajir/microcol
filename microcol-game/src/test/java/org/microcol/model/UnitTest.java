@@ -1,17 +1,12 @@
 package org.microcol.model;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.*;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 import com.google.common.collect.Lists;
-
-import mockit.Expectations;
-import mockit.Injectable;
-import mockit.Mocked;
 
 /**
  * Verify basic unit operations.
@@ -21,8 +16,11 @@ import mockit.Mocked;
  */
 public class UnitTest extends AbstractUnitFreeColonistTest {
 
-    @Mocked
-    private PlaceEuropePier placeEuropePier;
+    private final PlaceEuropePier placeEuropePier = mock(PlaceEuropePier.class);
+    
+    private final Unit u1 = mock(Unit.class);
+    
+    private final Unit u2 = mock(Unit.class);
 
     @Test
     public void test_isSameOwner_emptyList() throws Exception {
@@ -36,17 +34,13 @@ public class UnitTest extends AbstractUnitFreeColonistTest {
     }
 
     @Test
-    public void test_isSameOwner_oneUnit_different(final @Injectable Unit u1) throws Exception {
+    public void test_isSameOwner_oneUnit_different() throws Exception {
         makeColonist(model, 4, placeEuropePier, owner, 10);
         
         assertNotNull(unit);
         assertNotNull(u1);
-        new Expectations() {
-            {
-                u1.getOwner();
-                result = null;
-            }
-        };
+        
+        when(u1.getOwner()).thenReturn(null);
 
         boolean ret = unit.isSameOwner(Lists.newArrayList(u1));
 
@@ -54,17 +48,12 @@ public class UnitTest extends AbstractUnitFreeColonistTest {
     }
 
     @Test
-    public void test_isSameOwner_oneUnit_sameOwner(final @Injectable Unit u1) throws Exception {
+    public void test_isSameOwner_oneUnit_sameOwner() throws Exception {
         makeColonist(model, 4, placeEuropePier, owner, 10);
 
         assertNotNull(unit);
         assertNotNull(u1);
-        new Expectations() {
-            {
-                u1.getOwner();
-                result = owner;
-            }
-        };
+        when(u1.getOwner()).thenReturn(owner);
 
         boolean ret = unit.isSameOwner(Lists.newArrayList(u1));
 
@@ -72,20 +61,13 @@ public class UnitTest extends AbstractUnitFreeColonistTest {
     }
 
     @Test
-    public void test_isSameOwner_twoUnit_bothSameOwner(final @Injectable Unit u1,
-            final @Injectable Unit u2) throws Exception {
+    public void test_isSameOwner_twoUnit_bothSameOwner() throws Exception {
         makeColonist(model, 4, placeEuropePier, owner, 10);
 
         assertNotNull(unit);
         assertNotNull(u1);
-        new Expectations() {
-            {
-                u1.getOwner();
-                result = owner;
-                u2.getOwner();
-                result = owner;
-            }
-        };
+        when(u1.getOwner()).thenReturn(owner);
+        when(u2.getOwner()).thenReturn(owner);
 
         boolean ret = unit.isSameOwner(Lists.newArrayList(u1, u2));
 
@@ -93,20 +75,13 @@ public class UnitTest extends AbstractUnitFreeColonistTest {
     }
 
     @Test
-    public void test_isSameOwner_twoUnit_secondIsDifferentOwner(final @Injectable Unit u1,
-            final @Injectable Unit u2) throws Exception {
+    public void test_isSameOwner_twoUnit_secondIsDifferentOwner() throws Exception {
         makeColonist(model, 4, placeEuropePier, owner, 10);
 
         assertNotNull(unit);
         assertNotNull(u1);
-        new Expectations() {
-            {
-                u1.getOwner();
-                result = owner;
-                u2.getOwner();
-                result = null;
-            }
-        };
+        when(u1.getOwner()).thenReturn(owner);
+        when(u2.getOwner()).thenReturn(null);
 
         boolean ret = unit.isSameOwner(Lists.newArrayList(u1, u2));
 

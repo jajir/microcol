@@ -1,49 +1,34 @@
 package org.microcol.model;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.params.provider.Arguments.arguments;
 
-import java.util.Arrays;
-import java.util.Collection;
+import java.util.stream.Stream;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-import org.junit.runners.Parameterized.Parameter;
-import org.junit.runners.Parameterized.Parameters;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
-@RunWith(Parameterized.class)
 public class GoodTradeTest {
-	
-	@Parameters(name = "{index}: sellPrice = {0}, buyPrice = {1}, availableGold = {2}, expectedAmount = {3}")
-	public static Collection<Object[]> data() {
-		return Arrays.asList(new Object[][] {
-			// [0, 0, 0, 0]
-			{9, 12, 10000, 100},
-			{9, 12, 120, 10},
-			{9, 12, 131, 10},
-		});
-	}
 
-	@Parameter(0)
-	public int sellPrice;
+    static Stream<Arguments> dataProvider() {
+        return Stream.of(
+                // [0, 0, 0, 0]
+                arguments(9, 12, 10000, 100),
+                arguments(9, 12, 120, 10),
+                arguments(9, 12, 131, 10));
+    }
 
-	@Parameter(1)
-	public int buyPrice;
+    @ParameterizedTest(name = "{index}: sellPrice = {0}, buyPrice = {1}, availableGold = {2}, expectedAmount = {3}")
+    @MethodSource("dataProvider")
+    public void test_getAvailableAmountFor(final int sellPrice, final int buyPrice,
+            final int availableGold, final int expectedAmount) throws Exception {
+        final GoodTrade gt = new GoodTrade(GoodType.CIGARS, sellPrice, buyPrice);
 
-	@Parameter(2)
-	public int availableGold;
+        final GoodsAmount ga = gt.getAvailableAmountFor(availableGold);
 
-	@Parameter(3)
-	public int expectedAmount;
-			
-	@Test
-	public void test_getAvailableAmountFor() throws Exception {
-		GoodTrade gt = new GoodTrade(GoodType.CIGARS, sellPrice, buyPrice);
-		
-		GoodsAmount ga = gt.getAvailableAmountFor(availableGold);
-		
-		assertEquals(GoodType.CIGARS, ga.getGoodType());
-		assertEquals(expectedAmount, ga.getAmount());
-	}
-	
+        assertEquals(GoodType.CIGARS, ga.getGoodType());
+        assertEquals(expectedAmount, ga.getAmount());
+    }
+
 }

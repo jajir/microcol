@@ -1,13 +1,13 @@
 package org.microcol.gui.preferences;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import com.google.common.io.Files;
 
@@ -44,12 +44,12 @@ public class SettingDaoTest extends AbstractPreferencesTest {
                 .forEach(System.out::println);
     }
 
-    @Before
+    @BeforeEach
     public void before() {
         settingDao = new SettingDao();
     }
 
-    @After
+    @AfterEach
     public void after() {
         settingDao = null;
     }

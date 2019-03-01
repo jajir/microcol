@@ -24,14 +24,13 @@ public class ClipboardEval extends ClipboardParser {
 
     private final Model model;
 
-    private ClipboardEval(final Model model, final Dragboard db) {
-        super(db);
+    private ClipboardEval(final Model model, final String originalString) {
+        super(originalString);
         this.model = Preconditions.checkNotNull(model);
-        Preconditions.checkNotNull(db);
     }
 
     public static ClipboardEval make(final Model model, final Dragboard db) {
-        return new ClipboardEval(model, db);
+        return new ClipboardEval(model, db.getString());
     }
 
     public ClipboardEval filterFrom(final Predicate<From> evalFrom) {

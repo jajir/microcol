@@ -8,7 +8,7 @@ import com.google.common.base.MoreObjects;
  * Persistent object for unit. All unit hierarchy is stored into this object
  * with discriminator {@link UnitType}.
  */
-public final class UnitPo {
+public class UnitPo {
 
     private Integer id;
 

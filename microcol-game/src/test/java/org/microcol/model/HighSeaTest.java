@@ -1,50 +1,58 @@
 package org.microcol.model;
 
-import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.List;
 
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import com.google.common.collect.Lists;
 
-import mockit.Expectations;
-import mockit.Injectable;
-import mockit.Mocked;
-import mockit.Tested;
-
 public class HighSeaTest {
 
-	@Tested
-	private HighSea highSea;
+    private HighSea highSea;
 
-	@Injectable
-	private Model model;
+    private final Model model = mock(Model.class);
 
-	@Test
-	public void test_getHighSeasAll(@Mocked Unit unit1, @Mocked PlaceHighSea placeHighSea1) throws Exception {
-		new Expectations() {{
-			model.getAllUnits(); result=Lists.newArrayList(unit1);
-			unit1.getPlace(); result=placeHighSea1;
-		}};
-		List<PlaceHighSea> ret = highSea.getHighSeasAll();
+    private final Unit unit1 = mock(Unit.class);
+    private final PlaceHighSea placeHighSea1 = mock(PlaceHighSea.class);
+    private final Unit unit2 = mock(Unit.class);
+    private final PlaceHighSea placeHighSea2 = mock(PlaceHighSea.class);
 
-		assertNotNull(ret);
-		assertEquals(1, ret.size());
-	}
+    @Test
+    public void test_getHighSeasAll() throws Exception {
+        when(model.getAllUnits()).thenReturn(Lists.newArrayList(unit1));
+        when(unit1.getPlace()).thenReturn(placeHighSea1);
 
-	@Test
-	public void test_getHighSeasAll_two(@Mocked Unit unit1, @Mocked PlaceHighSea placeHighSea1,
-			@Mocked Unit unit2, @Mocked PlaceHighSea placeHighSea2) throws Exception {
-		new Expectations() {{
-			model.getAllUnits(); result=Lists.newArrayList(unit1, unit2);
-			unit1.getPlace(); result=placeHighSea1;
-			unit2.getPlace(); result=placeHighSea2;
-		}};
-		List<PlaceHighSea> ret = highSea.getHighSeasAll();
+        List<PlaceHighSea> ret = highSea.getHighSeasAll();
 
-		assertNotNull(ret);
-		assertEquals(2, ret.size());
-	}
+        assertNotNull(ret);
+        assertEquals(1, ret.size());
+    }
+
+    @Test
+    public void test_getHighSeasAll_two() throws Exception {
+        when(model.getAllUnits()).thenReturn(Lists.newArrayList(unit1, unit2));
+        when(unit1.getPlace()).thenReturn(placeHighSea1);
+        when(unit2.getPlace()).thenReturn(placeHighSea2);
+
+        List<PlaceHighSea> ret = highSea.getHighSeasAll();
+
+        assertNotNull(ret);
+        assertEquals(2, ret.size());
+    }
+
+    @BeforeEach
+    public void startUp() {
+        highSea = new HighSea(model);
+    }
+
+    @AfterEach
+    public void tearDown() {
+        highSea = null;
+    }
 
 }

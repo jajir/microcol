@@ -24,10 +24,10 @@ import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 
 @ExtendWith(ApplicationExtension.class)
-public class TC_02_founding_colony_test extends AbstractMicroColTest {
+public class TC_05_moving_goods_test extends AbstractMicroColTest {
 
     private final static File testFileName = new File(
-	    "src/test/scenarios/test-verify-founding-colony.microcol");
+	    "src/test/scenarios/T05-moving-goods.microcol");
 
     @Start
     private void start(final Stage primaryStage) throws Exception {
@@ -42,7 +42,7 @@ public class TC_02_founding_colony_test extends AbstractMicroColTest {
     }
 
     @Test
-    void TC_02_embark_disembark(final FxRobot robot) throws Exception {
+    void TC_05_moving_goods(final FxRobot robot) throws Exception {
 	// open MicroCol and load defined game
 	GamePage gamePage = WelcomePage.of(getContext()).loadGame();
 	WaitForAsyncUtils.waitForFxEvents();

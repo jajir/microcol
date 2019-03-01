@@ -1,28 +1,25 @@
 package org.microcol.model;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import org.junit.Before;
-import org.junit.Test;
-
-import mockit.Expectations;
-import mockit.Mocked;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class ColonyBuildingQueueTest_queue {
 
     private ColonyBuildingQueue queue;
 
-    private @Mocked Colony colony;
+    private final Colony colony = mock(Colony.class);
 
-    private @Mocked Model model;
+    private final Model model = mock(Model.class);
 
-    private ArrayList<ColonyBuildingItemProgress<?>> initialBuildingQueue = new ArrayList<>();
+    private final ArrayList<ColonyBuildingItemProgress<?>> initialBuildingQueue = new ArrayList<>();
 
     @Test
     public void test_that_buildingQueue_isReady() throws Exception {
@@ -31,20 +28,16 @@ public class ColonyBuildingQueueTest_queue {
 
     @Test
     public void test_that_getBuildigItemsConstruction_is_builded_correctly() throws Exception {
-        new Expectations() {
-            {
-                colony.isContainsConstructionByType(ConstructionType.FUR_TRADING_POST);
-                result = true;
-            }
-        };
+        when(colony.isContainsConstructionByType(ConstructionType.FUR_TRADING_POST))
+                .thenReturn(true);
 
         final List<ColonyBuildingItemConstruction> list = queue.getBuildigItemsConstruction();
-        assertFalse("Building should not be in list because is already builded.",
-                getByType(list, ConstructionType.FUR_TRADING_POST).isPresent());
-        assertTrue("Building should be in list because is already builded.",
-                getByType(list, ConstructionType.FUR_TRADERS_HOUSE).isPresent());
-        assertFalse("Building should not be in list because required building is not builded.",
-                getByType(list, ConstructionType.FUR_FACTORY).isPresent());
+        assertFalse(getByType(list, ConstructionType.FUR_TRADING_POST).isPresent(),
+                "Building should not be in list because is already builded.");
+        assertTrue(getByType(list, ConstructionType.FUR_TRADERS_HOUSE).isPresent(),
+                "Building should be in list because is already builded.");
+        assertFalse(getByType(list, ConstructionType.FUR_FACTORY).isPresent(),
+                "Building should not be in list because required building is not builded.");
     }
 
     private Optional<ColonyBuildingItemConstruction> getByType(
@@ -54,9 +47,14 @@ public class ColonyBuildingQueueTest_queue {
                 .findFirst();
     }
 
-    @Before
+    @BeforeEach
     public void setup() {
         queue = new ColonyBuildingQueue(model, colony, initialBuildingQueue);
+    }
+
+    @AfterEach
+    public void tearDown() {
+        queue = null;
     }
 
 }

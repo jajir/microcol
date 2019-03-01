@@ -120,9 +120,58 @@ Test cases
 []
 
  Done.
+
+** TC-05 Moving goods
+
+ Test verify moving goods between ship and colony warehouse.
+
+ * Not yet finished.
+
+[]
+
+ Done.
+
+** TC-06 Buying goods
+
+ Test verify buying and selling goods in Europe port.
+
+ * Not yet finished.
+
+[]
+
+ Done.
+
+** TC-07 Sending ships to New World
+
+ Test verify sending units to new world and back.
+
+ * Not yet finished.
+
+[]
+
+ Done.
+
+** TC-08 Conquer all colonies
+
+ Test verify that game correctly finish when all enemy units are destroyed.
+
+ * Not yet finished.
+
+[]
+
+ Done.
+
+** TC-09 Lost all colonies
+
+ Test verify that game correctly finish when player lost all colonies.
+
+ * Not yet finished.
+
+[]
+
+ Done.
  
- 
-** TC-05 Verify default campaign
+** TC-20 Verify default campaign
 
  * Start game with '-Dclean=true' to clean all played missions.
  Verify that 'New free play game' is disabled.

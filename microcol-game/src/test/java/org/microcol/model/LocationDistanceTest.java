@@ -1,59 +1,53 @@
 package org.microcol.model;
 
-import java.util.Arrays;
-import java.util.Collection;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.params.provider.Arguments.arguments;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-import org.junit.runners.Parameterized.Parameter;
-import org.junit.runners.Parameterized.Parameters;
+import java.util.stream.Stream;
 
-@RunWith(Parameterized.class)
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
+
 public class LocationDistanceTest {
-	@Parameters(name = "{index}: location1 = {0}, location2 = {1}, expected = {2}")
-	public static Collection<Object[]> data() {
-		return Arrays.asList(new Object[][] {
-			// [0, 0]
-			{Location.of( 0,  0), Location.of( 0,  0), 0},
-			// [1, 1]
-			{Location.of( 1,  1), Location.of( 1,  1), 0},
-			// [3, 2]
-			{Location.of(3, 2), Location.of( 3,  2),  0},
-			{Location.of(3, 2), Location.of(-3,  2),  6},
-			{Location.of(3, 2), Location.of( 3, -2),  4},
-			{Location.of(3, 2), Location.of(-3, -2), 7},
-			// [-3, 2]
-			{Location.of(-3, 2), Location.of( 3,  2),  6},
-			{Location.of(-3, 2), Location.of(-3,  2),  0},
-			{Location.of(-3, 2), Location.of( 3, -2), 7},
-			{Location.of(-3, 2), Location.of(-3, -2),  4},
-			// [3, -2]
-			{Location.of(3, -2), Location.of( 3,  2),  4},
-			{Location.of(3, -2), Location.of(-3,  2), 7},
-			{Location.of(3, -2), Location.of( 3, -2),  0},
-			{Location.of(3, -2), Location.of(-3, -2),  6},
-			// [-3, -2]
-			{Location.of(-3, -2), Location.of( 3,  2), 7},
-			{Location.of(-3, -2), Location.of(-3,  2),  4},
-			{Location.of(-3, -2), Location.of( 3, -2),  6},
-			{Location.of(-3, -2), Location.of(-3, -2),  0},
-		});
-	}
 
-	@Parameter(0)
-	public Location location1;
+    static Stream<Arguments> dataProvider() {
+        return Stream.of(
 
-	@Parameter(1)
-	public Location location2;
+                // [0, 0]
+                arguments(Location.of(0, 0), Location.of(0, 0), 0),
+                // [1, 1]
+                arguments(Location.of(1, 1), Location.of(1, 1), 0),
+                // [3, 2]
+                arguments(Location.of(3, 2), Location.of(3, 2), 0),
+                arguments(Location.of(3, 2), Location.of(-3, 2), 6),
+                arguments(Location.of(3, 2), Location.of(3, -2), 4),
+                arguments(Location.of(3, 2), Location.of(-3, -2), 7),
+                // [-3, 2]
+                arguments(Location.of(-3, 2), Location.of(3, 2), 6),
+                arguments(Location.of(-3, 2), Location.of(-3, 2), 0),
+                arguments(Location.of(-3, 2), Location.of(3, -2), 7),
+                arguments(Location.of(-3, 2), Location.of(-3, -2), 4),
+                // [3, -2]
+                arguments(Location.of(3, -2), Location.of(3, 2), 4),
+                arguments(Location.of(3, -2), Location.of(-3, 2), 7),
+                arguments(Location.of(3, -2), Location.of(3, -2), 0),
+                arguments(Location.of(3, -2), Location.of(-3, -2), 6),
+                // [-3, -2]
+                arguments(Location.of(-3, -2), Location.of(3, 2), 7),
+                arguments(Location.of(-3, -2), Location.of(-3, 2), 4),
+                arguments(Location.of(-3, -2), Location.of(3, -2), 6),
+                arguments(Location.of(-3, -2), Location.of(-3, -2), 0));
 
-	@Parameter(2)
-	public int expected;
+    }
 
-	@Test
-	public void testDistance() {
-		Assert.assertEquals("Test of location1 and location2 failed.", expected, location1.getDistance(location2));
-		Assert.assertEquals("Test of location2 and location1 failed.", expected, location2.getDistance(location1));
-	}
+    @ParameterizedTest(name = "{index}: location1 = {0}, location2 = {1}, expected = {2}")
+    @MethodSource("dataProvider")
+    public void testDistance(final Location location1, final Location location2,
+            final int expected) {
+        assertEquals(expected, location1.getDistance(location2),
+                "Test of location1 and location2 failed.");
+        assertEquals(expected, location2.getDistance(location1),
+                "Test of location2 and location1 failed.");
+    }
 }

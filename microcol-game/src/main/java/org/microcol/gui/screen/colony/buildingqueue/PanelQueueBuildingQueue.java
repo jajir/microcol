@@ -2,7 +2,7 @@ package org.microcol.gui.screen.colony.buildingqueue;
 
 import org.microcol.gui.image.ImageProvider;
 import org.microcol.gui.util.BackgroundHighlighter;
-import org.microcol.gui.util.Clipboard;
+import org.microcol.gui.util.ClipboardConst;
 import org.microcol.gui.util.ClipboardParser;
 import org.microcol.gui.util.From;
 import org.microcol.gui.util.TitledPanel;
@@ -86,19 +86,19 @@ public class PanelQueueBuildingQueue extends TitledPanel {
         final ClipboardParser parser = ClipboardParser.make(db);
         final From from = parser.getFrom().get();
         if (from == From.VALUE_FROM_BUILDING_QUEUE_CONSTRUCTION) {
-            parser.get(Clipboard.KEY_CONSTRUCTION_TYPE);
+            parser.get(ClipboardConst.KEY_CONSTRUCTION_TYPE);
             queueController.addAtEnd(
-                    ConstructionType.valueOf(parser.get(Clipboard.KEY_CONSTRUCTION_TYPE)));
+                    ConstructionType.valueOf(parser.get(ClipboardConst.KEY_CONSTRUCTION_TYPE)));
             event.acceptTransferModes(TransferMode.MOVE);
             event.setDropCompleted(true);
             event.consume();
         } else if (from == From.VALUE_FROM_BUILDING_QUEUE_UNIT) {
-            queueController.addAtEnd(UnitType.valueOf(parser.get(Clipboard.KEY_UNIT_TYPE)));
+            queueController.addAtEnd(UnitType.valueOf(parser.get(ClipboardConst.KEY_UNIT_TYPE)));
             event.acceptTransferModes(TransferMode.MOVE);
             event.setDropCompleted(true);
             event.consume();
         } else if (from == From.VALUE_FROM_BUILDING_QUEUE) {
-            int movingItemId = parser.getInt(Clipboard.KEY_INDEX);
+            int movingItemId = parser.getInt(ClipboardConst.KEY_INDEX);
             queueController.moveItemAtTheEnd(movingItemId);
             event.acceptTransferModes(TransferMode.MOVE);
             event.setDropCompleted(true);

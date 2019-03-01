@@ -1,39 +1,28 @@
 package org.microcol.gui;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.microcol.gui.screen.game.gamepanel.Animation;
 import org.microcol.gui.screen.game.gamepanel.AnimationManager;
 import org.microcol.gui.screen.game.gamepanel.Area;
 
 import com.google.common.eventbus.EventBus;
 
-import mockit.Injectable;
-import mockit.Mocked;
-import mockit.StrictExpectations;
-import mockit.Tested;
-import mockit.integration.junit4.JMockit;
-
-@RunWith(JMockit.class)
 public class AnimationManagerTest {
 
-    @Tested(availableDuringSetup = true)
     private AnimationManager am;
 
-    @Mocked
-    private Animation part1;
+    private final Animation part1 = mock(Animation.class);
 
-    @Injectable
-    private EventBus eventBus;
+    private final EventBus eventBus = mock(EventBus.class);
 
-    @Mocked
-    private Animation part2;
+    private final Animation part2 = mock(Animation.class);
 
-    @Mocked
-    private Area area;
+    private final Area area = mock(Area.class);
 
     @Test
     public void test_constructor() throws Exception {
@@ -41,21 +30,19 @@ public class AnimationManagerTest {
         assertFalse(am.hasNextStep(area));
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test
     public void test_addiong_one_animation_without_nextStep() throws Exception {
-        am.addAnimation(part1);
+        when(part1.hasNextStep()).thenReturn(false);
 
-        assertFalse(am.hasNextStep(area));
+        assertThrows(IllegalStateException.class, () -> {
+            am.addAnimation(part1);
+        });
     }
 
     @Test
     public void validate_animation_with_1_step_which_canBePainted() throws Exception {
-        new StrictExpectations() {{
-                part1.hasNextStep();result=true;times=2;
-                part1.canBePainted(area);result=false;times=1;
-                part1.nextStep();
-                part1.hasNextStep();result=false;times=1;
-            }};
+        when(part1.hasNextStep()).thenReturn(true, true, false);
+        when(part1.canBePainted(area)).thenReturn(false);
         am.addAnimation(part1);
 
         assertFalse(am.hasNextStep(area));
@@ -66,16 +53,33 @@ public class AnimationManagerTest {
         assertFalse(am.hasNextStep(area));
     }
 
-    @Test(expected=IllegalStateException.class)
+    @Test
     public void verify_that_only_one_animation_is_processed() throws Exception {
+        when(part1.hasNextStep()).thenReturn(true);
         am.addAnimation(part1);
-        am.addAnimation(part2);
+
+        assertThrows(IllegalStateException.class, () -> {
+            am.addAnimation(part2);
+        });
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void test_addAnimationPart_verify_than_null_is_not_allowed() throws Exception {
         AnimationManager am = new AnimationManager(eventBus);
-        am.addAnimation(null);
+
+        assertThrows(NullPointerException.class, () -> {
+            am.addAnimation(null);
+        });
+    }
+
+    @BeforeEach
+    public void startUp() {
+        am = new AnimationManager(eventBus);
+    }
+
+    @AfterEach
+    public void tearDown() {
+        am = null;
     }
 
 }

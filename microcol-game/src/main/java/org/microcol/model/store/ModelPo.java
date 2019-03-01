@@ -7,7 +7,7 @@ import org.microcol.model.Location;
 
 import com.google.common.base.Preconditions;
 
-public final class ModelPo {
+public class ModelPo {
 
     private CalendarPo calendar = new CalendarPo();
 

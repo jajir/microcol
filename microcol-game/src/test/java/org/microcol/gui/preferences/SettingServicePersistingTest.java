@@ -1,13 +1,12 @@
 package org.microcol.gui.preferences;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.microcol.gui.util.PersistingTool;
 
 import com.google.common.io.Files;
@@ -33,13 +32,13 @@ public class SettingServicePersistingTest {
         assertNotNull(settingService.load().getLocale());
     }
 
-    @Before
+    @BeforeEach
     public void setup() {
         settingDao = new SettingDao();
         settingService = new SettingService(settingDao, persistingTool);
     }
 
-    @After
+    @AfterEach
     public void tearDown() {
         settingService = null;
         settingDao = null;

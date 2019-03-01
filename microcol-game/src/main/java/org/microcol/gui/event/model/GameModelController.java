@@ -29,7 +29,7 @@ import com.google.inject.Inject;
  * There is one class instance in runtime.
  * </p>
  */
-public final class GameModelController {
+public class GameModelController {
 
     private final static Logger logger = LoggerFactory.getLogger(GameModelController.class);
 

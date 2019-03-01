@@ -18,7 +18,7 @@ import com.google.common.collect.ImmutableList;
 /**
  * Represents continent on map. Continent is connected list of locations.
  */
-public final class Continent {
+public class Continent {
 
     private final List<Location> locations = new ArrayList<>();
 

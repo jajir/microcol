@@ -26,7 +26,7 @@ public class TC_03_declare_independence_test extends AbstractMicroColTest {
 
     private final Logger logger = LoggerFactory.getLogger(TC_03_declare_independence_test.class);
 
-    private final static File verifyLoadingUnloading = new File("src/test/scenarios/verify-independence.microcol");
+    private final static File testFileName = new File("src/test/scenarios/verify-independence.microcol");
 
     @Start
     private void start(final Stage primaryStage) throws Exception {
@@ -36,7 +36,7 @@ public class TC_03_declare_independence_test extends AbstractMicroColTest {
     @Override
     protected void bind(Binder binder) {
 	FileSelectingService fileSelectingService = Mockito.mock(FileSelectingService.class);
-	Mockito.when(fileSelectingService.loadFile(Mockito.any(File.class))).thenReturn(verifyLoadingUnloading);
+	Mockito.when(fileSelectingService.loadFile(Mockito.any(File.class))).thenReturn(testFileName);
 	binder.bind(FileSelectingService.class).toInstance(fileSelectingService);
     }
 

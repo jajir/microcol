@@ -1,54 +1,43 @@
 package org.microcol.model;
 
-import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.List;
 import java.util.function.Function;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.microcol.model.unit.UnitAction;
 import org.microcol.model.unit.UnitActionNoAction;
 import org.microcol.model.unit.UnitFrigate;
 
 import com.google.common.base.Preconditions;
 
-import mockit.Expectations;
-import mockit.Injectable;
-import mockit.Mocked;
-import mockit.Tested;
-
 public class UnitFrigateTest {
 
-    @Tested
     private UnitFrigate unit;
 
-    @Injectable
-    private Function<Unit, Cargo> cargoProvider;
+    @SuppressWarnings("unchecked")
+    private final Function<Unit, Cargo> cargoProvider = mock(Function.class);
 
-    @Injectable
-    private Model model;
+    private final Model model = mock(Model.class);
 
-    @Injectable(value = "4")
-    private Integer id;
+    private final Integer id = 4;
 
-    @Injectable
-    private Function<Unit, Place> placeBuilder;
+    @SuppressWarnings("unchecked")
+    private final Function<Unit, Place> placeBuilder = mock(Function.class);
 
-    @Injectable
-    private Player owner;
+    private final Player owner = mock(Player.class);
 
-    @Injectable(value = "3")
-    private int availableMoves;
+    private final int availableMoves = 3;
 
-    @Injectable
-    private UnitAction unitAction = new UnitActionNoAction();
+    private final UnitAction unitAction = new UnitActionNoAction();
 
-    @Mocked
-    private PlaceLocation placeMap;
+    private final PlaceLocation placeMap = mock(PlaceLocation.class);
 
-    @Mocked
-    private Cargo cargo;
+    private final Cargo cargo = mock(Cargo.class);
 
     @Test
     public void test_verifyThatUnitCouldBePlacedIntoHighseas() throws Exception {
@@ -57,16 +46,16 @@ public class UnitFrigateTest {
         assertTrue(unit.isAtHighSea());
     }
 
-    @Test(expected = IllegalStateException.class)
+    @Test
     public void test_placeToEuropePortPier() throws Exception {
-        unit.placeToEuropePortPier();
+        assertThrows(IllegalStateException.class, () -> {
+            unit.placeToEuropePortPier();
+        });
     }
 
     @Test
     public void test_visibleArea_visibility_1() throws Exception {
-        new Expectations() {{
-                placeMap.getLocation(); result = Location.of(30, 30);
-            }};
+        when(placeMap.getLocation()).thenReturn(Location.of(30, 30));
 
         final List<Location> visible = unit.getVisibleLocations();
 
@@ -74,15 +63,21 @@ public class UnitFrigateTest {
         assertEquals(121, visible.size());
     }
 
-    @Before
+    @BeforeEach
     public void setup() {
         /*
          * Following expectations will be used for unit constructor
          */
-        new Expectations() {{
-                cargoProvider.apply((Unit) any); result = cargo;
-                placeBuilder.apply((Unit) any); result = placeMap;
-            }};
+        when(cargoProvider.apply((Unit) any())).thenReturn(cargo);
+        when(placeBuilder.apply((Unit) any())).thenReturn(placeMap);
+
+        unit = new UnitFrigate(cargoProvider, model, id, placeBuilder, owner, availableMoves,
+                unitAction);
+    }
+
+    @AfterEach
+    public void tearDown() {
+        unit = null;
     }
 
 }

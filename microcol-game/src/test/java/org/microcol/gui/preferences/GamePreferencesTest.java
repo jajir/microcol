@@ -1,14 +1,14 @@
 package org.microcol.gui.preferences;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.util.Locale;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.microcol.gui.util.Language;
 
 public class GamePreferencesTest extends AbstractPreferencesTest {
@@ -36,19 +36,21 @@ public class GamePreferencesTest extends AbstractPreferencesTest {
         assertEquals(Language.en, gamePreferences.getLanguage());
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void test_setLocale_locale_is_required() throws Exception {
-        gamePreferences.setLanguage(null);
+        assertThrows(NullPointerException.class, () -> {
+            gamePreferences.setLanguage(null);
+        });
     }
 
-    @Before
+    @BeforeEach
     public void setup() {
         setting = createSetting();
         when(settingService.load()).thenReturn(setting);
         gamePreferences = new GamePreferences(settingService);
     }
 
-    @After
+    @AfterEach
     public void tearDown() {
         setting = null;
         gamePreferences = null;

@@ -23,7 +23,7 @@ import javafx.stage.Stage;
 @ExtendWith(ApplicationExtension.class)
 public class TC_01_embark_disembark_test extends AbstractMicroColTest {
 
-    private final static File verifyLoadingUnloading = new File(
+    private final static File testFileName = new File(
 	    "src/test/scenarios/test-verify-loading-unloading.microcol");
 
     @Start
@@ -34,7 +34,7 @@ public class TC_01_embark_disembark_test extends AbstractMicroColTest {
     @Override
     protected void bind(Binder binder) {
 	FileSelectingService fileSelectingService = Mockito.mock(FileSelectingService.class);
-	Mockito.when(fileSelectingService.loadFile(Mockito.any(File.class))).thenReturn(verifyLoadingUnloading);
+	Mockito.when(fileSelectingService.loadFile(Mockito.any(File.class))).thenReturn(testFileName);
 	binder.bind(FileSelectingService.class).toInstance(fileSelectingService);
     }
 

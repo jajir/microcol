@@ -1,23 +1,20 @@
 package org.microcol.model;
 
-import org.junit.After;
+import static org.mockito.Mockito.mock;
+
+import org.junit.jupiter.api.AfterEach;
 import org.microcol.model.unit.UnitActionNoAction;
 import org.microcol.model.unit.UnitFreeColonist;
-
-import mockit.Mocked;
 
 public abstract class AbstractUnitFreeColonistTest {
 
     protected Unit unit;
 
-    @Mocked
-    protected Model model;
+    protected Model model = mock(Model.class);
 
-    @Mocked
-    protected Player owner;
+    protected Player owner = mock(Player.class);
 
-    @Mocked
-    protected WorldMap worldMap;
+    protected WorldMap worldMap = mock(WorldMap.class);
 
     protected void makeColonist(final Model model, final int id, final Place place,
             final Player owner, final int availableMoves) {
@@ -25,7 +22,7 @@ public abstract class AbstractUnitFreeColonistTest {
                 new UnitActionNoAction(), 0, false, false);
     }
 
-    @After
+    @AfterEach
     public void tearDown() {
         unit = null;
     }

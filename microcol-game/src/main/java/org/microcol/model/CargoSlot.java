@@ -7,7 +7,7 @@ import org.microcol.model.store.CargoSlotPo;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 
-public final class CargoSlot {
+public class CargoSlot {
 
     /**
      * It's maximum number of tools that can be put into cargo slot.

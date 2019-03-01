@@ -18,7 +18,7 @@ import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 
-public final class Colony {
+public class Colony {
 
     /**
      * When this level is reached than new colonist appears.

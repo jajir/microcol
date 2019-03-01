@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+import javax.annotation.Nullable;
+
 import org.microcol.gui.MicroColException;
 import org.microcol.model.GoodType;
 import org.microcol.model.GoodsAmount;
@@ -13,20 +15,21 @@ import org.microcol.model.Unit;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Splitter;
+import com.google.common.collect.Maps;
 
-import javafx.scene.input.Dragboard;
+import javafx.scene.input.Clipboard;
 
 /**
  * Classes working with clipboard data should extends this abstract class.
  */
-public class ClipboardParser implements Clipboard {
+public class ClipboardParser implements ClipboardConst {
 
     private final String originalString;
 
     private final Map<String, String> map;
 
-    public static ClipboardParser make(final Dragboard db) {
-        return new ClipboardParser(db);
+    public static ClipboardParser make(final Clipboard db) {
+        return new ClipboardParser(db.getString());
     }
 
     @Override
@@ -34,19 +37,15 @@ public class ClipboardParser implements Clipboard {
         return MoreObjects.toStringHelper(getClass()).add("map", map).toString();
     }
 
-    protected ClipboardParser(final Dragboard db) {
-        this.originalString = getString(db);
-        map = new HashMap<>(Splitter.on(RECORD_SEPARATOR).trimResults().omitEmptyStrings()
-                .withKeyValueSeparator(Splitter.on(SEPARATOR).limit(2).trimResults())
-                .split(originalString));
-        Preconditions.checkNotNull(db);
-    }
-
-    private String getString(final Dragboard db) {
-        if (db.getString() == null) {
-            return "";
+    protected ClipboardParser(final @Nullable String originalString) {
+        if (originalString == null) {
+            this.originalString = "";
+            this.map = Maps.newHashMap();
         } else {
-            return db.getString();
+            this.originalString = Preconditions.checkNotNull(originalString);
+            this.map = new HashMap<>(Splitter.on(RECORD_SEPARATOR).trimResults().omitEmptyStrings()
+                    .withKeyValueSeparator(Splitter.on(SEPARATOR).limit(2).trimResults())
+                    .split(originalString));
         }
     }
 

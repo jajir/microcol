@@ -1,46 +1,38 @@
 package org.microcol.model;
 
-import java.util.Arrays;
-import java.util.Collection;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.params.provider.Arguments.arguments;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-import org.junit.runners.Parameterized.Parameter;
-import org.junit.runners.Parameterized.Parameters;
+import java.util.stream.Stream;
 
-@RunWith(Parameterized.class)
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
+
 public class LocationHashCodeTest {
-	@Parameters(name = "{index}: location = {0}, expected = {1}")
-	public static Collection<Object[]> data() {
-		return Arrays.asList(new Object[][] {
-			{Location.of( 0,  0),       0},
-			{Location.of( 1,  0),       1},
-			{Location.of(-1,  0),      -1},
-			{Location.of( 0,  1),   65536},
-			{Location.of( 0, -1),  -65536},
-			{Location.of( 1,  1),   65537},
-			{Location.of(-1, -1),  -65537},
-			{Location.of( 2,  3),  196610},
-			{Location.of(-2,  3),  196606},
-			{Location.of( 2, -3), -196606},
-			{Location.of(-2, -3), -196610},
-			{Location.of( 3,  2),  131075},
-			{Location.of(-3,  2),  131069},
-			{Location.of( 3, -2), -131069},
-			{Location.of(-3, -2), -131075},
-		});
-	}
 
-	@Parameter(0)
-	public Location location;
+    static Stream<Arguments> dataProvider() {
+        return Stream.of(
+                arguments(Location.of(0, 0), 0),
+                arguments(Location.of(1, 0), 1),
+                arguments(Location.of(-1, 0), -1),
+                arguments(Location.of(0, 1), 65536),
+                arguments(Location.of(0, -1), -65536),
+                arguments(Location.of(1, 1), 65537),
+                arguments(Location.of(-1, -1), -65537),
+                arguments(Location.of(2, 3), 196610),
+                arguments(Location.of(-2, 3), 196606),
+                arguments(Location.of(2, -3), -196606),
+                arguments(Location.of(-2, -3), -196610),
+                arguments(Location.of(3, 2), 131075),
+                arguments(Location.of(-3, 2), 131069),
+                arguments(Location.of(3, -2), -131069),
+                arguments(Location.of(-3, -2), -131075));
+    }
 
-	@Parameter(1)
-	public int expected;
-
-	@Test
-	public void testHashCode() {
-		Assert.assertEquals(expected, location.hashCode());
-	}
+    @ParameterizedTest(name = "{index}: location = {0}, expected = {1}")
+    @MethodSource("dataProvider")
+    public void testHashCode(final Location location, final int expected) {
+        assertEquals(expected, location.hashCode());
+    }
 }

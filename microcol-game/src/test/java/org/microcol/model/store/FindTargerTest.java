@@ -1,8 +1,8 @@
 package org.microcol.model.store;
 
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.microcol.ai.ContinentTool;
 import org.microcol.ai.Continents;
 import org.microcol.model.Model;

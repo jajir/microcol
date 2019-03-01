@@ -1,31 +1,34 @@
 package org.microcol.model;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.mockito.Mockito.*;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import mockit.Mocked;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class UnitStorageTest {
 
     private UnitStorage unitStorage;
 
-    @Mocked
-    private Unit unit;
+    private final Unit unit = mock(Unit.class);
 
-    private @Mocked IdManager idManager;
+    private final IdManager idManager = mock(IdManager.class);
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void test_addUnit_nullUnit() throws Exception {
-        unitStorage.addUnit(null);
+        assertThrows(NullPointerException.class, () -> {
+            unitStorage.addUnit(null);
+        });
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void test_addUnit_unitWasAlreadyInserted() throws Exception {
         unitStorage.addUnit(unit);
-        unitStorage.addUnit(unit);
+        assertThrows(IllegalArgumentException.class, () -> {
+            unitStorage.addUnit(unit);
+        });
     }
 
     @Test
@@ -42,9 +45,14 @@ public class UnitStorageTest {
         assertEquals(1, unitStorage.getUnits().size());
     }
 
-    @Before
+    @BeforeEach
     public void setup() {
         unitStorage = new UnitStorage(idManager);
+    }
+
+    @AfterEach
+    public void tearDown() {
+        unitStorage = null;
     }
 
 }

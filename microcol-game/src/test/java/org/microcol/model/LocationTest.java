@@ -1,17 +1,23 @@
 package org.microcol.model;
 
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import org.junit.jupiter.api.Test;
 
 public class LocationTest {
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void testAddNull() {
-	Location.of(5, 5).add(null);
+        assertThrows(NullPointerException.class, () -> {
+            Location.of(5, 5).add(null);
+        });
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void testNeighborNull() {
-	Location.of(5, 5).isNeighbor(null);
+        assertThrows(NullPointerException.class, () -> {
+            Location.of(5, 5).isNeighbor(null);
+        });
     }
 
 }
