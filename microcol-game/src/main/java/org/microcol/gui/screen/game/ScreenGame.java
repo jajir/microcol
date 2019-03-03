@@ -1,9 +1,9 @@
 package org.microcol.gui.screen.game;
 
-import org.microcol.gui.event.StatusBarMessageEvent.Source;
 import org.microcol.gui.screen.game.components.ButtonsGamePanel;
 import org.microcol.gui.screen.game.components.RightPanel;
 import org.microcol.gui.screen.game.components.StatusBar;
+import org.microcol.gui.screen.game.components.StatusBarMessageEvent.Source;
 import org.microcol.gui.screen.game.gamepanel.PaneCanvas;
 import org.microcol.gui.util.JavaFxComponent;
 import org.microcol.gui.util.UpdatableLanguage;

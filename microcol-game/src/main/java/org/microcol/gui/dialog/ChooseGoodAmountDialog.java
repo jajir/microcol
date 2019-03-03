@@ -1,7 +1,8 @@
-package org.microcol.gui.screen.europe;
+package org.microcol.gui.dialog;
 
 import java.util.function.Function;
 
+import org.microcol.gui.screen.europe.ChooseGoodAmount;
 import org.microcol.gui.util.AbstractMessageWindow;
 import org.microcol.gui.util.ButtonsBar;
 import org.microcol.gui.util.ViewUtil;

@@ -3,6 +3,7 @@ package org.microcol.test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -86,7 +87,7 @@ public class TC_04_loosing_battle_test extends AbstractMicroColTest {
     private void verifyThatEscapedShipIsAtExpectedPlace() {
 	final List<Location> locations = Lists.newArrayList(Location.of(21, 11), Location.of(22, 11),
 		Location.of(23, 11));
-	final List<Unit> units = Lists.newArrayList();
+	final List<Unit> units = new ArrayList<>();
 	locations.forEach(loc -> units.addAll(getModel().getUnitsAt(loc)));
 	final List<Unit> dutchUnits = units.stream().filter(unit -> unit.getOwner().isHuman())
 		.collect(Collectors.toList());

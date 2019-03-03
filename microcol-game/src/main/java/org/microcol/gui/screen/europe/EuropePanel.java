@@ -1,9 +1,9 @@
 package org.microcol.gui.screen.europe;
 
-import org.microcol.gui.event.StatusBarMessageEvent;
-import org.microcol.gui.event.StatusBarMessageEvent.Source;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.image.ImageProvider;
+import org.microcol.gui.screen.game.components.StatusBarMessageEvent;
+import org.microcol.gui.screen.game.components.StatusBarMessageEvent.Source;
 import org.microcol.gui.util.JavaFxComponent;
 import org.microcol.gui.util.PanelDock;
 import org.microcol.gui.util.Repaintable;
@@ -70,7 +70,7 @@ public final class EuropePanel implements JavaFxComponent, UpdatableLanguage, Re
         this.shipsTravelingToNewWorld.setOnMouseEnteredKey(Europe.statusBarShipsToNewWorld);
         this.shipsTravelingToNewWorld.addStyle("to-new-world");
 
-        europeDock = new PanelDock(imageProvider, panelEuropeDockBehavior);
+        europeDock = new PanelDock(imageProvider, panelEuropeDockBehavior, i18n, eventBus);
         europeDock.getContent().setOnMouseEntered(e -> {
             eventBus.post(
                     new StatusBarMessageEvent(i18n.get(Europe.statusBarEuropeDock), Source.EUROPE));

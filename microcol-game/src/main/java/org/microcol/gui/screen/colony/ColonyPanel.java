@@ -17,6 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
+import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import com.google.inject.Inject;
 
@@ -70,14 +71,14 @@ public final class ColonyPanel implements JavaFxComponent, UpdatableLanguage {
             final PanelOutsideColony panelOutsideColony, final PanelColonyGoods panelColonyGoods,
             final PanelColonyDockBehaviour panelColonyDockBehaviour,
             final PanelBuildingQueue panelBuildingQueue, final PaintService paintService,
-            final ColonyButtonsPanel colonyButtonsPanel, final I18n i18n) {
+            final ColonyButtonsPanel colonyButtonsPanel, final I18n i18n, final EventBus eventBus) {
         this.paintService = Preconditions.checkNotNull(paintService);
         Preconditions.checkNotNull(imageProvider);
         this.colonyFields = Preconditions.checkNotNull(panelColonyFields);
         this.colonyStructures = Preconditions.checkNotNull(panelColonyStructures);
         this.panelBuildingQueue = Preconditions.checkNotNull(panelBuildingQueue);
         this.panelDock = new PanelDock(imageProvider,
-                Preconditions.checkNotNull(panelColonyDockBehaviour));
+                Preconditions.checkNotNull(panelColonyDockBehaviour), i18n, eventBus);
         this.goods = Preconditions.checkNotNull(panelColonyGoods);
         this.panelOutsideColony = Preconditions.checkNotNull(panelOutsideColony);
         this.i18n = Preconditions.checkNotNull(i18n);

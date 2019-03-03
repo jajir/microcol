@@ -46,7 +46,13 @@ public enum Loc implements MessageKeyResource {
     statistics_gold,
     statistics_militaryPower,
     statistics_wealth,
-    statistics_score
+    statistics_score,
+    no_2_7p,
+    no_3_7p,
+    no_4_7p,
+    no_5_7p,
+    and,
+    withColony,
     ;
 
     private final static String SEASON_PREFIX = "statusBar_season_";

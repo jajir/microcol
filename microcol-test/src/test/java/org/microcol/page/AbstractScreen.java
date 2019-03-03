@@ -2,6 +2,10 @@ package org.microcol.page;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+
 import org.microcol.MicroCol;
 import org.microcol.gui.Point;
 import org.microcol.gui.screen.game.gamepanel.GamePanelView;
@@ -13,6 +17,7 @@ import org.testfx.util.WaitForAsyncUtils;
 
 import com.google.common.base.Preconditions;
 
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Labeled;
 import javafx.stage.Stage;
@@ -70,6 +75,11 @@ public abstract class AbstractScreen {
 	final Button label = getNodeFinder().lookup(id).queryButton();
 	assertNotNull(label, String.format("unable to find button by id '%s'", cssId));
 	return label;
+    }
+    
+    protected <T extends Node> List<T> getListOfNodes(final String cssClass) {
+	final Set<T> cratesSet = getNodeFinder().lookup(cssClass).queryAll();
+	return new ArrayList<T>(cratesSet);
     }
 
 }

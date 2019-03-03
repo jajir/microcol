@@ -1,8 +1,8 @@
 package org.microcol.gui.screen.colony;
 
 import org.microcol.gui.GoodsTypeName;
-import org.microcol.gui.event.StatusBarMessageEvent;
-import org.microcol.gui.event.StatusBarMessageEvent.Source;
+import org.microcol.gui.screen.game.components.StatusBarMessageEvent;
+import org.microcol.gui.screen.game.components.StatusBarMessageEvent.Source;
 import org.microcol.gui.util.ClipboardWritter;
 import org.microcol.gui.util.JavaFxComponent;
 import org.microcol.i18n.I18n;
@@ -32,6 +32,8 @@ import javafx.scene.layout.VBox;
  */
 public final class PanelColonyGood implements JavaFxComponent {
 
+    public static final String IMAGE_GOODS_CLASS = "imageGoods";
+
     private final Label labelAmount;
 
     private final Label labelDiff;
@@ -59,6 +61,7 @@ public final class PanelColonyGood implements JavaFxComponent {
         imageView = new ImageView(image);
         final Pane paneImage = new Pane(imageView);
         paneImage.setOnDragDetected(this::onDragDetected);
+        paneImage.getStyleClass().add(IMAGE_GOODS_CLASS);
         labelAmount = new Label();
         labelDiff = new Label();
         final HBox hlabels = new HBox(labelAmount, labelDiff);
@@ -71,8 +74,9 @@ public final class PanelColonyGood implements JavaFxComponent {
     }
 
     private void onMouseEntered(@SuppressWarnings("unused") final MouseEvent event) {
-        eventBus.post(new StatusBarMessageEvent(i18n.get(GoodsTypeName.getNameForGoodType(goodType))
-                + i18n.get(ColonyMsg.goods), Source.COLONY));
+        eventBus.post(new StatusBarMessageEvent(
+                i18n.get(GoodsTypeName.getNameForGoodType(goodType)) + i18n.get(ColonyMsg.goods),
+                Source.COLONY));
     }
 
     private void onMouseExited(@SuppressWarnings("unused") final MouseEvent event) {
@@ -87,6 +91,8 @@ public final class PanelColonyGood implements JavaFxComponent {
             ClipboardWritter.make(db).addImage(image).addTransferFromColonyWarehouse()
                     .addGoodAmount(new GoodsAmount(goodType, amount)).build();
         }
+        eventBus.post(
+                new StatusBarMessageEvent(i18n.get(ColonyMsg.adjustAmountOfGoods), Source.COLONY));
         event.consume();
     }
 

@@ -14,9 +14,9 @@
 	<entry key="ok">Ok</entry>
 	<entry key="gameTitle">MicroCol</entry>
 
-	<entry key="statusBar_tile_notExplored">Tato oblast je neprozkoumaná</entry>
-	<entry key="statusBar_tile_start">Toto je </entry>
-	<entry key="statusBar_tile_withUnit">s jednotkami:</entry>
+	<entry key="statusBar_tile_notExplored">Tato oblast je neprozkoumaná.</entry>
+	<entry key="statusBar_tile_start">Zde je </entry>
+	<entry key="statusBar_tile_withUnit">s</entry>
 	<entry key="statusBar_tile_unitCount">s %s jednotkami</entry>
 	<entry key="statusBar_era">Rok</entry>
 	<entry key="statusBar_era_description">Aktuální čas</entry>
@@ -50,5 +50,12 @@
 	<entry key="statistics_militaryPower">Vojenská síla</entry>
 	<entry key="statistics_wealth">Bohatství</entry>
 	<entry key="statistics_score">Score</entry>
+
+	<entry key="no_2_7p">dvěmi</entry>
+	<entry key="no_3_7p">třemi</entry>
+	<entry key="no_4_7p">čtyřmi</entry>
+	<entry key="no_5_7p">pěti</entry>
+	<entry key="and">a</entry>
+	<entry key="withColony">kolonií</entry>
 
 </properties>

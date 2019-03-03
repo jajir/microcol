@@ -2,10 +2,10 @@ package org.microcol.gui.screen.europe;
 
 import java.util.Optional;
 
-import org.microcol.gui.event.StatusBarMessageEvent;
-import org.microcol.gui.event.StatusBarMessageEvent.Source;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.image.ImageProvider;
+import org.microcol.gui.screen.game.components.StatusBarMessageEvent;
+import org.microcol.gui.screen.game.components.StatusBarMessageEvent.Source;
 import org.microcol.gui.screen.game.gamepanel.GamePanelView;
 import org.microcol.gui.util.BackgroundHighlighter;
 import org.microcol.gui.util.ClipboardEval;

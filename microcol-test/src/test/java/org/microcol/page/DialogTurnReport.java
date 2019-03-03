@@ -1,8 +1,6 @@
 package org.microcol.page;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,8 +8,6 @@ import java.util.Set;
 
 import org.microcol.gui.screen.turnreport.TurnEventPanel;
 import org.testfx.util.WaitForAsyncUtils;
-
-import com.google.common.collect.Lists;
 
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -54,7 +50,7 @@ public class DialogTurnReport extends AbstractScreen {
     }
 
     public void verifyThatAtLeastOneEventMessageContains(final String expectedMessagePart) {
-	final List<String> messages = Lists.newArrayList();
+	final List<String> messages = new ArrayList<>();
 	for (final TurnEventPanel eventPane : getEventPanels()) {
 	    final Label label = (Label) eventPane.getChildren().get(0);
 	    final String strLabel = label.getText();

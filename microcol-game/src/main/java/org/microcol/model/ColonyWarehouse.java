@@ -57,10 +57,20 @@ public class ColonyWarehouse {
         return colony.getWarehouseType();
     }
 
+    @Deprecated
     public void addToWarehouse(final GoodType goodType, final int amount) {
         goodAmounts.put(goodType, getGoodAmmount(goodType) + amount);
     }
 
+    public void addToWarehouse(final GoodsAmount goodsAmount) {
+        addToWarehouse(goodsAmount.getGoodType(), goodsAmount.getAmount());
+    }
+
+    public void moveToWarehouse(final GoodsAmount goodsAmount, final CargoSlot fromCargoSlot) {
+        moveToWarehouse(goodsAmount.getGoodType(), goodsAmount.getAmount(), fromCargoSlot);
+    }
+
+    @Deprecated
     public void moveToWarehouse(final GoodType goodType, final int amount,
             final CargoSlot fromCargoSlot) {
         Preconditions.checkNotNull(goodType);
@@ -76,6 +86,11 @@ public class ColonyWarehouse {
         goodAmounts.put(goodType, newAmount);
     }
 
+    public void removeFromWarehouse(final GoodsAmount goodsAmount) {
+        removeFromWarehouse(goodsAmount.getGoodType(), goodsAmount.getAmount());
+    }
+
+    @Deprecated
     public void removeFromWarehouse(final GoodType goodType, final int ammount) {
         Preconditions.checkArgument(ammount >= 0, "amount can't less than 0");
         final Integer newAmount = getGoodAmmount(goodType) - ammount;

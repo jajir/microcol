@@ -1,19 +1,21 @@
 package org.microcol.gui.util;
 
 import org.microcol.gui.image.ImageProvider;
+import org.microcol.i18n.I18n;
 import org.microcol.model.CargoSlot;
 import org.microcol.model.unit.UnitWithCargo;
 
 import com.google.common.base.Preconditions;
+import com.google.common.eventbus.EventBus;
 
 public final class PanelDockCratesController {
 
     private final PanelDockCratesView panelCratesView;
 
     PanelDockCratesController(final ImageProvider imageProvider,
-            final PanelDockBehavior panelDockBehavior) {
+            final PanelDockBehavior panelDockBehavior, final I18n i18n, final EventBus eventBus) {
         this.panelCratesView = new PanelDockCratesView(Preconditions.checkNotNull(imageProvider),
-                panelDockBehavior);
+                panelDockBehavior, i18n, eventBus);
     }
 
     PanelDockCratesView getContent() {

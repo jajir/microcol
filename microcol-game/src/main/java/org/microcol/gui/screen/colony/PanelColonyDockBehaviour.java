@@ -2,9 +2,9 @@ package org.microcol.gui.screen.colony;
 
 import java.util.List;
 
+import org.microcol.gui.dialog.ChooseGoodAmountDialog;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.image.ImageProvider;
-import org.microcol.gui.screen.europe.ChooseGoodAmountDialog;
 import org.microcol.gui.util.AbstractPanelDockBehavior;
 import org.microcol.gui.util.ClipboardEval;
 import org.microcol.gui.util.From;

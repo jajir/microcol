@@ -1,9 +1,8 @@
 package org.microcol.gui.screen.game.components;
 
 import org.microcol.gui.Loc;
-import org.microcol.gui.event.StatusBarMessageEvent;
-import org.microcol.gui.event.StatusBarMessageEvent.Source;
 import org.microcol.gui.event.model.GameModelController;
+import org.microcol.gui.screen.game.components.StatusBarMessageEvent.Source;
 import org.microcol.gui.screen.game.gamepanel.SelectedUnitWasChangedEvent;
 import org.microcol.gui.screen.game.gamepanel.TileWasSelectedEvent;
 import org.microcol.gui.util.Listener;

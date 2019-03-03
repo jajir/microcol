@@ -1,11 +1,11 @@
 package org.microcol.model;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
-import com.google.common.collect.Lists;
 
 /**
  * It's a place where are units traveling from colonies to Europe and from
@@ -38,7 +38,7 @@ public final class HighSea {
         final int range = map.getMaxY() / 4;
         final int start = range;
         final int stop = start + range * 2;
-        final List<Location> out = Lists.newArrayList();
+        final List<Location> out = new ArrayList<>();
         for (int indexY = start; indexY <= stop; indexY++) {
             out.add(findFirstSuitableLocation(player, countFromEast, indexY));
         }

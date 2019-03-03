@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
+import com.google.common.eventbus.EventBus;
 import com.google.inject.Inject;
 
 import javafx.scene.control.ToggleButton;
@@ -54,10 +55,12 @@ public final class PanelDock implements JavaFxComponent, UpdatableLanguage, Repa
     private final TmpPanel titledPanel;
 
     @Inject
-    public PanelDock(final ImageProvider imageProvider, final PanelDockBehavior panelDockBehavior) {
+    public PanelDock(final ImageProvider imageProvider, final PanelDockBehavior panelDockBehavior,
+            final I18n i18n, final EventBus eventBus) {
         this.imageProvider = Preconditions.checkNotNull(imageProvider);
         this.panelDockBehavior = Preconditions.checkNotNull(panelDockBehavior);
-        panelCratesController = new PanelDockCratesController(imageProvider, panelDockBehavior);
+        panelCratesController = new PanelDockCratesController(imageProvider, panelDockBehavior,
+                i18n, eventBus);
 
         toggleGroup = new ToggleGroup();
         toggleGroup.selectedToggleProperty().addListener((object, oldValue, newValue) -> {

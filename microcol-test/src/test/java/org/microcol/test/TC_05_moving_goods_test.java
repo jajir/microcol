@@ -3,13 +3,20 @@ package org.microcol.test;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.File;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.microcol.gui.FileSelectingService;
+import org.microcol.model.CargoSlot;
 import org.microcol.model.GoodType;
 import org.microcol.model.Location;
+import org.microcol.model.Unit;
+import org.microcol.model.UnitType;
+import org.microcol.model.unit.UnitGalleon;
 import org.microcol.page.ColonyScreen;
+import org.microcol.page.DialogChooseNumberOfGoods;
 import org.microcol.page.GamePage;
 import org.microcol.page.WelcomePage;
 import org.mockito.Mockito;
@@ -20,14 +27,12 @@ import org.testfx.util.WaitForAsyncUtils;
 
 import com.google.inject.Binder;
 
-import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 
 @ExtendWith(ApplicationExtension.class)
 public class TC_05_moving_goods_test extends AbstractMicroColTest {
 
-    private final static File testFileName = new File(
-	    "src/test/scenarios/T05-moving-goods.microcol");
+    private final static File testFileName = new File("src/test/scenarios/T05-moving-goods.microcol");
 
     @Start
     private void start(final Stage primaryStage) throws Exception {
@@ -35,7 +40,7 @@ public class TC_05_moving_goods_test extends AbstractMicroColTest {
     }
 
     @Override
-    protected void bind(Binder binder) {
+    protected void bind(final Binder binder) {
 	FileSelectingService fileSelectingService = Mockito.mock(FileSelectingService.class);
 	Mockito.when(fileSelectingService.loadFile(Mockito.any(File.class))).thenReturn(testFileName);
 	binder.bind(FileSelectingService.class).toInstance(fileSelectingService);
@@ -47,43 +52,71 @@ public class TC_05_moving_goods_test extends AbstractMicroColTest {
 	GamePage gamePage = WelcomePage.of(getContext()).loadGame();
 	WaitForAsyncUtils.waitForFxEvents();
 
-	// Verify that location is visible at screen
-	gamePage.verifyThatTileIsVisible(Location.of(19, 11));
+	// Open colony Delft
+	final ColonyScreen colonyScreen = gamePage.openColonyAt(Location.of(22, 12), "Delft");
 
-	// verify that there are two units
-	gamePage.verifyNumberOfUnitInRightPanel(2);
+	// Select ship from port by clicking at it.
+	colonyScreen.selectUnitFromPort(0);
 
-	// verify that both units have 1 free action point
-	gamePage.getRightPanelUnit(0).assertFreeActionPoints(1);
-	gamePage.getRightPanelUnit(1).assertFreeActionPoints(1);
+	// Drag food from first warehouse slot to first ship's cargo slot
+	colonyScreen.dragGoodsFromWarehouseToShipCargoSlot(0, 0);
 
-	// found colony by pressing key 'b'
-	robot.press(KeyCode.B).sleep(10).release(KeyCode.B);
-	WaitForAsyncUtils.waitForFxEvents();
+	// Verify that 100 corn was transferred.
+	verifyThatGoodsInShip(0, GoodType.CORN, 100);
 
-	// verify that option build colony is not here
-	gamePage.verifyThatBuildColonyButtonInHidden();
+	// Drag tobacco from third warehouse slot to second ship's cargo slot
+	colonyScreen.dragGoodsFromWarehouseToShipCargoSlot(2, 1);
 
-	// verify that one unit was moved into city
-	gamePage.verifyNumberOfUnitInRightPanel(1);
-	gamePage.getRightPanelUnit(0).assertFreeActionPoints(1);
+	// Verify that 54 tobacco was transferred.
+	verifyThatGoodsInShip(1, GoodType.TOBACCO, 54);
 
-	// open colony and verify city name
-	final ColonyScreen colonyScreen = gamePage.openColonyAt(Location.of(19, 11), "Leiden");
+	// Drag food from first warehouse slot to first ship's cargo slot. Ship's cargo
+	// slot is already full.
+	colonyScreen.dragGoodsFromWarehouseToShipCargoSlot(0, 0);
 
-	// verify that on filed is exactly one unit, the one that founded colony
-	colonyScreen.verifyNumberOfUnitsOnFields(1);
+	// Verify that still just 100 corn is in cargo.
+	verifyThatGoodsInShip(0, GoodType.CORN, 100);
 
-	// verify that action net production is.
-	colonyScreen.verifyThatProductionIs(GoodType.CORN, 2);
+	// Drag 100 corn to third cargo slot, press control during dragging
+	final DialogChooseNumberOfGoods dialog = colonyScreen
+		.dragGoodsFromWarehouseToShipCargoSlotWithPressedControll(0, 2);
 
-	colonyScreen.verifyNumberOfUnitsAtPier(1);
+	// Select that just 47 corn will be transferred.
+	dialog.selectValueAtSlider(47);
 
-	int cornProduction = colonyScreen.moveUnitFromPietToEmptyField(0);
+	// Close dialog for choosing transferred amount.
+	dialog.close();
 
-	// unit will placed at field with production 4 or 3 randomly.
-	assertTrue(cornProduction >= 3 && cornProduction <= 4,
-		String.format("Unexpected corn production '%s'", cornProduction));
+	// Verify that just 47 corn was transferred.
+	verifyThatGoodsInShip(2, GoodType.CORN, 47);
+
+	// Drag corn from ship cargo slot to warehouse, press control during dragging.
+	final DialogChooseNumberOfGoods dialog2 = colonyScreen
+		.dragGoodsFromShipCargoSlotToWarehouseWithPressedControll(0, 0);
+
+	// Select that just 77 goods will be transfered
+	dialog2.selectValueAtSlider(77);
+
+	// Close dialog
+	dialog2.close();
+
+	// Verify that just 23 corn is in first cargo slot.
+	verifyThatGoodsInShip(0, GoodType.CORN, 23);
+
+    }
+
+    private void verifyThatGoodsInShip(final int cargoSlotIndex, final GoodType expectedGoodsType,
+	    final int expectedNumberOfGoods) {
+	final List<Unit> ships = getModel().getUnitsAt(Location.of(22, 12)).stream()
+		.filter(unit -> unit.getType().equals(UnitType.GALLEON)).collect(Collectors.toList());
+
+	assertEquals(1, ships.size());
+	final UnitGalleon galleon = (UnitGalleon) ships.get(0);
+	final CargoSlot cargoSlot = galleon.getCargo().getSlotByIndex(cargoSlotIndex);
+
+	assertTrue(cargoSlot.getGoods().isPresent(), "Cargo slot should not be empty");
+	assertEquals(expectedGoodsType, cargoSlot.getGoods().get().getGoodType());
+	assertEquals(expectedNumberOfGoods, cargoSlot.getGoods().get().getAmount());
     }
 
 }

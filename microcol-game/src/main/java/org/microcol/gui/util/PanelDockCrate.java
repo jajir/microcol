@@ -1,12 +1,17 @@
 package org.microcol.gui.util;
 
 import org.microcol.gui.image.ImageProvider;
+import org.microcol.gui.screen.colony.ColonyMsg;
+import org.microcol.gui.screen.game.components.StatusBarMessageEvent;
+import org.microcol.gui.screen.game.components.StatusBarMessageEvent.Source;
 import org.microcol.gui.screen.game.gamepanel.GamePanelView;
+import org.microcol.i18n.I18n;
 import org.microcol.model.CargoSlot;
 import org.microcol.model.GoodsAmount;
 import org.microcol.model.Unit;
 
 import com.google.common.base.Preconditions;
+import com.google.common.eventbus.EventBus;
 
 import javafx.geometry.Insets;
 import javafx.scene.control.Label;
@@ -25,8 +30,12 @@ import javafx.scene.paint.Color;
  * Container represents one open or close crate.
  */
 public final class PanelDockCrate extends StackPane {
-    
+
     public final static String CRATE_CLASS = "cratePanel";
+
+    private final I18n i18n;
+
+    private final EventBus eventBus;
 
     private final ImageProvider imageProvider;
 
@@ -42,9 +51,12 @@ public final class PanelDockCrate extends StackPane {
 
     private final PanelDockBehavior panelDockBehavior;
 
-    PanelDockCrate(final ImageProvider imageProvider, final PanelDockBehavior panelDockBehavior) {
+    PanelDockCrate(final ImageProvider imageProvider, final PanelDockBehavior panelDockBehavior,
+            final I18n i18n, final EventBus eventBus) {
         this.imageProvider = Preconditions.checkNotNull(imageProvider);
         this.panelDockBehavior = Preconditions.checkNotNull(panelDockBehavior);
+        this.i18n = Preconditions.checkNotNull(i18n);
+        this.eventBus = Preconditions.checkNotNull(eventBus);
 
         crateImage = new ImageView();
         crateImage.getStyleClass().add("crate");
@@ -132,6 +144,10 @@ public final class PanelDockCrate extends StackPane {
     }
 
     private void onDragDetected(final MouseEvent event) {
+        if (cargoSlot.getGoods().isPresent()) {
+            eventBus.post(new StatusBarMessageEvent(i18n.get(ColonyMsg.adjustAmountOfGoods),
+                    Source.COLONY));
+        }
         panelDockBehavior.onDragDetected(cargoSlot, event, this);
     }
 

@@ -1,6 +1,5 @@
 package org.microcol.gui.screen.game.gamepanel;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.microcol.gui.PathPlanning;
@@ -21,9 +20,7 @@ public final class ScreenScrolling {
 
     public ScreenScrolling(final PathPlanning pathPlanning, final Point from, final Point to) {
         Preconditions.checkNotNull(pathPlanning);
-        stepsToDo = new ArrayList<>();
-        pathPlanning.paintPathWithStepsLimit(from, to, point -> stepsToDo.add(point),
-                DEFAULT_SCREEN_SCROLLING_SPEED);
+        stepsToDo = pathPlanning.paintPathWithStepsLimit(from, to, DEFAULT_SCREEN_SCROLLING_SPEED);
         Preconditions.checkArgument(!stepsToDo.isEmpty(), "There are no steps to scroll");
     }
 

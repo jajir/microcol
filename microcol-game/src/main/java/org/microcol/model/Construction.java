@@ -13,7 +13,6 @@ import org.microcol.model.store.ConstructionSlotPo;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
 
 public final class Construction {
 
@@ -32,7 +31,7 @@ public final class Construction {
 
     static Construction build(final Model model, final Colony colony, final ConstructionType type) {
         return new Construction(colony, type, construction -> {
-            final List<ConstructionSlot> list = Lists.newArrayList();
+            final List<ConstructionSlot> list = new ArrayList<>();
             for (int i = 0; i < type.getSlotsForWorkers(); i++) {
                 list.add(new ConstructionSlot(model, construction));
             }

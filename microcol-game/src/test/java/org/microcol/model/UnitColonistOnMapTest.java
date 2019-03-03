@@ -2,6 +2,8 @@ package org.microcol.model;
 
 import static org.mockito.Mockito.*;
 
+import java.util.ArrayList;
+
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -141,7 +143,7 @@ public class UnitColonistOnMapTest extends AbstractUnitFreeColonistTest {
         when(model.getMap()).thenReturn(worldMap);
         when(worldMap.isValid(moveAt)).thenReturn(true);
         when(worldMap.getTerrainTypeAt(moveAt)).thenReturn(TerrainType.GRASSLAND);
-        when(owner.getEnemyUnitsAt(moveAt)).thenReturn(Lists.newArrayList());
+        when(owner.getEnemyUnitsAt(moveAt)).thenReturn(new ArrayList<>());
 
         final IllegalStateException exception = assertThrows(IllegalStateException.class, () -> {
             unit.moveOneStep(moveAt);
@@ -160,7 +162,7 @@ public class UnitColonistOnMapTest extends AbstractUnitFreeColonistTest {
         when(model.getMap()).thenReturn(worldMap);
         when(worldMap.isValid(moveAt)).thenReturn(true);
         when(worldMap.getTerrainTypeAt(moveAt)).thenReturn(TerrainType.GRASSLAND);
-        when(owner.getEnemyUnitsAt(moveAt)).thenReturn(Lists.newArrayList());
+        when(owner.getEnemyUnitsAt(moveAt)).thenReturn(new ArrayList<>());
 
         unit.moveOneStep(moveAt);
         assertEquals(9, unit.getActionPoints());

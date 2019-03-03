@@ -2,6 +2,8 @@ package org.microcol.model;
 
 import static org.mockito.Mockito.*;
 
+import java.util.ArrayList;
+
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -28,7 +30,7 @@ public class UnitTest extends AbstractUnitFreeColonistTest {
 
         assertEquals(4, unit.getId());
 
-        boolean ret = unit.isSameOwner(Lists.newArrayList());
+        boolean ret = unit.isSameOwner(new ArrayList<>());
 
         assertTrue(ret);
     }

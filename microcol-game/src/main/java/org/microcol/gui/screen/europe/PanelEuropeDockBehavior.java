@@ -2,6 +2,7 @@ package org.microcol.gui.screen.europe;
 
 import java.util.List;
 
+import org.microcol.gui.dialog.ChooseGoodAmountDialog;
 import org.microcol.gui.dialog.DialogNotEnoughGold;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.image.ImageProvider;

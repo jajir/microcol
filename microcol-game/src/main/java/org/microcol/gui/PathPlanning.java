@@ -1,5 +1,7 @@
 package org.microcol.gui;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import org.microcol.gui.preferences.GamePreferences;
@@ -13,9 +15,6 @@ import com.google.inject.Inject;
  * <p>
  * animation speed 0 is faster and {@link #ANIMATION_SPEED_MAX_VALUE} is slower.
  * </p>
- * 
- * @author jan
- *
  */
 public class PathPlanning {
 
@@ -47,13 +46,14 @@ public class PathPlanning {
 
     /**
      * Allows to define step operation.
-     * 
-     * @author jan
-     *
      */
     public interface WhatToDoWithPointInPath {
         void pathPoint(Point point);
     }
+
+    // TODO remove useless interface WhatToDoWithPointInPath
+    // TODO return list of points
+    // TODO rename methods pain to count
 
     /**
      * Draw steps between two map points. It use naive algorithm. <i>y = ax +
@@ -132,6 +132,14 @@ public class PathPlanning {
                 speed);
         Preconditions.checkArgument(speed < ANIMATION_SPEED_MAX_VALUE, "speed '%s' is to high",
                 speed);
+    }
+
+    public List<Point> paintPathWithStepsLimit(final Point tileFrom, final Point tileTo,
+            final int howManyStepsShouldBeDone) {
+        final List<Point> out = new ArrayList<>();
+        paintPathWithStepsLimit(tileFrom, tileTo, point -> out.add(point),
+                howManyStepsShouldBeDone);
+        return out;
     }
 
     /**

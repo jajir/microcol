@@ -14,5 +14,6 @@
 	<entry key="goods"> in warehouse</entry>
 	<entry key="colony">Colony: </entry>
 	<entry key="buttonClose">Close colony. Return back to main world view.</entry>
+	<entry key="adjustAmountOfGoods">For adjusting amount of transfered goods press and hold key Control (or Ctrl) ⌃.</entry>
 
 </properties>

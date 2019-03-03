@@ -1,11 +1,11 @@
 package org.microcol.gui.screen.colony;
 
 import org.microcol.gui.buttonpanel.AbstractButtonsPanel;
-import org.microcol.gui.event.StatusBarMessageEvent.Source;
 import org.microcol.gui.image.ImageLoaderButtons;
 import org.microcol.gui.image.ImageProvider;
 import org.microcol.gui.screen.Screen;
 import org.microcol.gui.screen.ShowScreenEvent;
+import org.microcol.gui.screen.game.components.StatusBarMessageEvent.Source;
 import org.microcol.i18n.I18n;
 
 import com.google.common.eventbus.EventBus;

@@ -10,7 +10,10 @@ public enum ColonyMsg implements MessageKeyResource {
 
     goods,
     colony,
-    buttonClose;
+    buttonClose,
+    adjustAmountOfGoods,
+    
+    ;
 
     @Override
     public ResourceBundle.Control getResourceBundleControl() {

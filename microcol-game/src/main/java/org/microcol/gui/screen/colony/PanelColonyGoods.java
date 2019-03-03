@@ -2,6 +2,7 @@ package org.microcol.gui.screen.colony;
 
 import java.util.List;
 
+import org.microcol.gui.dialog.ChooseGoodAmountDialog;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.image.ImageProvider;
 import org.microcol.gui.util.BackgroundHighlighter;
@@ -41,14 +42,18 @@ public final class PanelColonyGoods implements JavaFxComponent {
 
     private final TmpPanel mainPanel;
 
+    private final ChooseGoodAmountDialog chooseGoodAmount;
+
     private ColonyWarehouse colonyWarehouse;
 
     @Inject
     public PanelColonyGoods(final GameModelController gameModelController,
             final ImageProvider imageProvider, final ColonyDialogCallback colonyDialog,
-            final EventBus eventBus, final I18n i18n) {
+            final ChooseGoodAmountDialog chooseGoodAmount, final EventBus eventBus,
+            final I18n i18n) {
         this.gameModelController = Preconditions.checkNotNull(gameModelController);
         this.colonyDialog = Preconditions.checkNotNull(colonyDialog);
+        this.chooseGoodAmount = Preconditions.checkNotNull(chooseGoodAmount);
         hBox = new HBox();
         mainPanel = new TmpPanel();
         mainPanel.getContentPane().getChildren().add(hBox);
@@ -90,14 +95,24 @@ public final class PanelColonyGoods implements JavaFxComponent {
                 .make(gameModelController.getModel(), event.getDragboard())
                 .filterFrom(from -> From.VALUE_FROM_UNIT == from);
         if (eval.getGoodAmount().isPresent() && eval.getCargoSlot().isPresent()) {
-            final GoodsAmount goodAmount = eval.getGoodAmount().get();
+            final GoodsAmount originalGoodsAmount = eval.getGoodAmount().get();
             final CargoSlot fromCargoSlot = eval.getCargoSlot().get();
-            colonyWarehouse.moveToWarehouse(goodAmount.getGoodType(), goodAmount.getAmount(),
+
+            final GoodsAmount goodsAmount = adjustedAmount(originalGoodsAmount,
+                    event.getTransferMode().equals(TransferMode.LINK));
+
+            colonyWarehouse.moveToWarehouse(goodsAmount.getGoodType(), goodsAmount.getAmount(),
                     fromCargoSlot);
             event.setDropCompleted(true);
             colonyDialog.repaint();
         }
         event.consume();
+    }
+
+    private GoodsAmount adjustedAmount(final GoodsAmount originalAmount,
+            final boolean specialOperationWasSelected) {
+        chooseGoodAmount.init(originalAmount.getAmount());
+        return new GoodsAmount(originalAmount.getGoodType(), chooseGoodAmount.getActualValue());
     }
 
     private boolean isItGoodAmount(final Dragboard db) {

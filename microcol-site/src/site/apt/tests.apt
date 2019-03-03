@@ -125,15 +125,49 @@ Test cases
 
  Test verify moving goods between ship and colony warehouse.
 
- * Not yet finished.
+ * Open game file 'T05-moving-goods.microcol'.
+ 
+ * Open colony Delft.
+ 
+ * Select ship from port by clicking at it.
+ 
+ * Drag food from first warehouse slot to first ship's cargo slot
+ 
+ * Verify that 100 corn was transferred.
+ 
+ * Drag food from warehouse to first ship's cargo slot
+ 
+ * Drag tobacco from third warehouse slot to second ship's cargo slot
+ 
+ * Verify that 54 tobacco was transferred.
+ 
+ * Drag food from first warehouse slot to first ship's cargo slot. Ship's cargo slot is already full. 
+ 
+ * Verify that still just 100 corn is in cargo. Verify that no cargo was transferred.
+ 
+ * Drag 100 corn to third cargo slot, press control during dragging
+ 
+ * Select that just 47 corn will be transferred.
+ 
+ * Close dialog for choosing transferred amount.
+ 
+ * Verify that just 47 corn was transferred.
+ 
+ * Drag corn from ship cargo slot to warehouse, press control during dragging.
+ 
+ * At dialog for selecting amount of transferred goods select value 77.
+ 
+ * Close dialog.
+ 
+ * Verify that just 23 corn is in first cargo slot, 77 items was transferred.
 
 []
 
  Done.
 
-** TC-06 Buying goods
+** TC-06 Buy and sell goods
 
- Test verify buying and selling goods in Europe port.
+ Verify thats possible to buy and sell goods in Europe port.
 
  * Not yet finished.
 

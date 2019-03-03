@@ -23,6 +23,7 @@ import com.google.common.collect.Lists;
 
 import javafx.scene.control.Button;
 import javafx.scene.control.Labeled;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.VBox;
 
@@ -104,6 +105,19 @@ public class GamePage extends AbstractScreen {
 	verifyThatStatusBarContains(String.valueOf(colonyLocation.getX()));
 	verifyThatStatusBarContains(String.valueOf(colonyLocation.getY()));
 	return this;
+    }
+
+    public EuropePortScreen openEuroperPort() {
+	final Button buttonNextTurn = getButtoonById(ButtonsGamePanel.BUTTON_EUROPE_ID);
+	getRobot().clickOn(buttonNextTurn);
+	WaitForAsyncUtils.waitForFxEvents();
+	return EuropePortScreen.of(getContext());
+    }
+
+    public EuropePortScreen openEuroperPortByPressingKey() {
+	getRobot().press(KeyCode.E).sleep(200, TimeUnit.MILLISECONDS).release(KeyCode.E);
+	WaitForAsyncUtils.waitForFxEvents();
+	return EuropePortScreen.of(getContext());
     }
 
     /**

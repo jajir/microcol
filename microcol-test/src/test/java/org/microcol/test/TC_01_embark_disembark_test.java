@@ -59,7 +59,7 @@ public class TC_01_embark_disembark_test extends AbstractMicroColTest {
 	colonyScreen.dragUnitFromPierToShipCargoSlot(0, 1);
 
 	// return back to main game screen.
-	gamePage = colonyScreen.buttonCloseClick();
+	gamePage = colonyScreen.close();
 
 	// move ship few tiles to the right
 	gamePage.moveMouseAtLocation(Location.of(22, 12));

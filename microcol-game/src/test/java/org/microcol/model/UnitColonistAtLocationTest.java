@@ -2,6 +2,8 @@ package org.microcol.model;
 
 import static org.mockito.Mockito.*;
 
+import java.util.ArrayList;
+
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -44,7 +46,7 @@ public class UnitColonistAtLocationTest extends AbstractUnitFreeColonistTest {
         when(model.getMap()).thenReturn(worldMap);
         when(worldMap.isValid(loc)).thenReturn(true);
         when(worldMap.getTerrainTypeAt(loc)).thenReturn(TerrainType.GRASSLAND);
-        when(owner.getEnemyUnitsAt(loc)).thenReturn(Lists.newArrayList());
+        when(owner.getEnemyUnitsAt(loc)).thenReturn(new ArrayList<>());
 
         assertTrue(unit.isPossibleToMoveAt(loc));
     }

@@ -1,5 +1,6 @@
 package org.microcol.gui.screen.game.gamepanel;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -101,7 +102,7 @@ public final class MoveModeSupport {
         this.selectedUnitManager = Preconditions.checkNotNull(selectedUnitManager);
         this.modeController = Preconditions.checkNotNull(modeController);
         this.unitUtil = Preconditions.checkNotNull(unitUtil);
-        moveLocations = Lists.newArrayList();
+        moveLocations = new ArrayList<>();
     }
 
     @Subscribe
@@ -164,7 +165,7 @@ public final class MoveModeSupport {
     }
 
     private void noMove() {
-        moveLocations = Lists.newArrayList();
+        moveLocations = new ArrayList<>();
         moveMode = MoveMode.MOVE;
     }
 

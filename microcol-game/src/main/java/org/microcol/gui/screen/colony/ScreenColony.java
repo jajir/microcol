@@ -1,7 +1,7 @@
 package org.microcol.gui.screen.colony;
 
-import org.microcol.gui.event.StatusBarMessageEvent.Source;
 import org.microcol.gui.screen.game.components.StatusBar;
+import org.microcol.gui.screen.game.components.StatusBarMessageEvent.Source;
 import org.microcol.gui.util.CenteredPage;
 import org.microcol.gui.util.ContentWithStatusBar;
 import org.microcol.gui.util.JavaFxComponent;

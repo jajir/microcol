@@ -2,36 +2,43 @@ package org.microcol.gui;
 
 import static org.mockito.Mockito.*;
 
+import java.util.List;
+
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import org.microcol.gui.PathPlanning.WhatToDoWithPointInPath;
 import org.microcol.gui.screen.game.gamepanel.ScreenScrolling;
+
+import com.google.common.collect.Lists;
 
 public class ScreenScrollingTest {
 
     private final PathPlanning pathPlanning = mock(PathPlanning.class);
 
+    private final List<Point> stepsToDo = Lists.newArrayList(Point.of(11, 11), Point.of(12, 12));
+
     @Test
     public void test_constructor_pathPlanningIsNull() throws Exception {
-        assertThrows(NullPointerException.class, ()->{
+        assertThrows(NullPointerException.class, () -> {
             new ScreenScrolling(null, Point.of(10, 10), Point.of(30, 10));
         });
     }
 
-    // TODO is it possible to write test as positive?
-    // FIXME test is not correct. ScreenScrolling can't be instantiated
-    // TODO probably remove WhatToDoWithPointInPath
     @Test
     public void test_constructor() throws Exception {
-        doNothing().when(pathPlanning).paintPathWithStepsLimit(eq(Point.of(10, 10)),
-                eq(Point.of(30, 10)), (WhatToDoWithPointInPath) any(), eq(10));
+        when(pathPlanning.paintPathWithStepsLimit(Point.of(10, 10), Point.of(15, 15), 10))
+                .thenReturn(stepsToDo);
 
-        assertThrows(IllegalArgumentException.class, ()->{
-        new ScreenScrolling(pathPlanning, Point.of(10, 10),
-                Point.of(30, 10));
-        });
+        final ScreenScrolling ret = new ScreenScrolling(pathPlanning, Point.of(10, 10),
+                Point.of(15, 15));
+
+        // Verify sequence of processing points.
+        assertTrue(ret.isNextPointAvailable());
+        assertEquals(Point.of(11, 11), ret.getNextPoint());
+        assertTrue(ret.isNextPointAvailable());
+        assertEquals(Point.of(12, 12), ret.getNextPoint());
+        assertFalse(ret.isNextPointAvailable());
     }
 
 }

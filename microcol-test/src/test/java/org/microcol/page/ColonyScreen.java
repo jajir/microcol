@@ -1,7 +1,6 @@
 package org.microcol.page;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,6 +9,7 @@ import java.util.Set;
 import org.microcol.gui.screen.colony.ColonyButtonsPanel;
 import org.microcol.gui.screen.colony.ColonyPanel;
 import org.microcol.gui.screen.colony.PanelColonyFields;
+import org.microcol.gui.screen.colony.PanelColonyGood;
 import org.microcol.gui.screen.colony.PanelUnitWithContextMenu;
 import org.microcol.gui.screen.game.gamepanel.GamePanelView;
 import org.microcol.gui.util.PanelDock;
@@ -28,6 +28,7 @@ import javafx.geometry.Point2D;
 import javafx.scene.control.Button;
 import javafx.scene.control.Labeled;
 import javafx.scene.control.ToggleButton;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
@@ -55,7 +56,7 @@ public class ColonyScreen extends AbstractScreen {
 		String.format("Text '%s' should appear in colony name '%s'", expectedNamePart, labeled.getText()));
     }
 
-    public GamePage buttonCloseClick() {
+    public GamePage close() {
 	final Button buttonNextTurn = getButtoonById(ColonyButtonsPanel.CLOSE_BUTTON_ID);
 	getRobot().clickOn(buttonNextTurn);
 	return GamePage.of(getContext());
@@ -89,6 +90,32 @@ public class ColonyScreen extends AbstractScreen {
 		.dropTo(getListOfCrates().get(cargoSlotIndex)).release(MouseButton.PRIMARY);
     }
 
+    public DialogChooseNumberOfGoods dragGoodsFromWarehouseToShipCargoSlotWithPressedControll(
+	    final int goodsIndexInWarehouse, final int cargoSlotIndex) {
+	getRobot().press(KeyCode.CONTROL);
+	dragGoodsFromWarehouseToShipCargoSlot(goodsIndexInWarehouse, cargoSlotIndex);
+	getRobot().release(KeyCode.CONTROL);
+	return DialogChooseNumberOfGoods.of(getContext());
+    }
+
+    public void dragGoodsFromWarehouseToShipCargoSlot(final int goodsIndexInWarehouse, final int cargoSlotIndex) {
+	getRobot().drag(getListOfGoodsInWarehouse().get(goodsIndexInWarehouse), MouseButton.PRIMARY)
+		.dropTo(getListOfCrates().get(cargoSlotIndex)).release(MouseButton.PRIMARY);
+    }
+
+    public DialogChooseNumberOfGoods dragGoodsFromShipCargoSlotToWarehouseWithPressedControll(final int cargoSlotIndex,
+	    final int goodsIndexInWarehouse) {
+	getRobot().press(KeyCode.CONTROL);
+	dragGoodsFromShipCargoSlotToWarehouse(goodsIndexInWarehouse, cargoSlotIndex);
+	getRobot().release(KeyCode.CONTROL);
+	return DialogChooseNumberOfGoods.of(getContext());
+    }
+
+    public void dragGoodsFromShipCargoSlotToWarehouse(final int cargoSlotIndex, final int goodsIndexInWarehouse) {
+	getRobot().drag(getListOfCrates().get(cargoSlotIndex), MouseButton.PRIMARY)
+		.dropTo(getListOfGoodsInWarehouse().get(goodsIndexInWarehouse)).release(MouseButton.PRIMARY);
+    }
+
     public ColonyScreen verifyNumberOfUnitsOnFields(final Integer expectedumberOfUnitsAtFields) {
 	final Integer unitsInColony = colony.getColonyFields().stream().mapToInt(field -> field.isEmpty() ? 0 : 1)
 		.sum();
@@ -109,6 +136,12 @@ public class ColonyScreen extends AbstractScreen {
 
     private List<StackPane> getListOfCrates() {
 	final String cssClass = "." + PanelDockCrate.CRATE_CLASS;
+	final Set<StackPane> cratesSet = getNodeFinder().lookup(cssClass).queryAll();
+	return new ArrayList<StackPane>(cratesSet);
+    }
+
+    private List<StackPane> getListOfGoodsInWarehouse() {
+	final String cssClass = "." + PanelColonyGood.IMAGE_GOODS_CLASS;
 	final Set<StackPane> cratesSet = getNodeFinder().lookup(cssClass).queryAll();
 	return new ArrayList<StackPane>(cratesSet);
     }

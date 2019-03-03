@@ -10,7 +10,7 @@ Planned releases
  
   * \u2713 Support WASD screen scrolling.
  
-  * \u2713 Replace main menu with icons at the top of screen.
+  * \u2713 Replace main menu with icons. Icons will be at the top of screen.
  
   * \u2713 Finish event processing redesign, remove controllers.
 
@@ -26,55 +26,68 @@ Planned releases
   
   * \u2713 Show colony and Europe full screen not as dialog.  
   
-  * \u2713 Right panel allows to select unit.
-  
-  * \u2713 Colony building queue and queue editing - simple and ugly version
-   
-  * \u2713 redesign model: unit use class hierarchy, remove unit type, same for terrain. Move outside cargoHold, abstract class will contain attack and move 
+  * \u2713 Redesign game model: unit use class hierarchy, remove unit type, same for terrain.
+  Move outside cargoHold, abstract class will contain attack and move 
  
   * \u2713 Automatize at least some test cases. Use {{{https://github.com/TestFX/TestFX}TestFx}}. 
+
+  * \u2713 Make game main game setting configurable in UI tests.   
+
+  * \u2713 Improve status bar description. Add some easy to understand description of land, colony and units.  
+  
+  * \u2713 When goods is transferred suggest pressing of key 'control' in status bar.
+  It should be called "Control (or Ctrl) ⌃". 
+  It should be there during moving goods from and to ship and during buying and selling goods.
  
   * \uD83D\uDC1B When focused unit is placed outside colony and unit is moved to field than attempt to move unit leads to exception.
  
-  * \uD83D\uDC1B Main menu doesn't work when drag pressed mouse instead of simple move. It can't be easily solved. There is no such feature in JavaFx. Menu was redesigned without JavaFX.
+  * \uD83D\uDC1B Main menu doesn't work when drag pressed mouse instead of simple move. 
+  It can't be easily solved.
+  There is no such feature in JavaFx.
+  Menu was redesigned without JavaFX.
+ 
+  * \uD83D\uDC1B In some cases turn events are lost. It's corrected in model.   
+ 
+  * \uD83D\uDC1B Don't animate and don't wait for units moving outside of screen.
+  When kings unit coming to colonies.
   
   * \u2717 
  
   * \u2717 
   
   * \u2717 
-
-  * \u2717  
-  
-  * \u2717 
  
-  * \u2717 Add TurnFinished event. Translate it to UI event disableUI and enableUI. Use this events for disabling game top menu and right menu. Describe Events in diagram. 
-
-  * \u2717 Make game main game setting configurable in UI tests.   
-  
-  * \u2717 Finish translation
+  * \uD83D\uDC1B Dialog for choosing amount of transfered goods is not shown always.
+ 
+  * \uD83D\uDC1B Focused unit is in colony. Than colony is open and focused unit is placed to field.
+  Than colony is closed. Now it's not possible to move any unit in colony, because there is no selected unit.  
+  When focused unit is moved to colony field than next unit from colony should be focused. 
+ 
+  * \uD83D\uDC1B Declare independence button show just when player have some military power and at least three colonies. 
+ 
+  * \uD83D\uDC1B Action 'plow field' is offered when unit is placed in colony.
  
   * \uD83D\uDC1B When focus is transfered by click than don't center at focused unit.
  
-  * \uD83D\uDC1B Don't animate and don't wait for movements outside of screen. When kings unit coming to colonies.
- 
-  * \u2717 When focused unit on in city and instead of moving it city is open and unit moved to colony field than next unit on focused city is not selected and consequently can't be moved.
- 
-  * \u2717 Describe event tileWasSelected, unitWasSelected and managers and controllers. 
+ * <<Backlog>> - feature and improvement backlog
+    
+  * \u2717 Build simple Civilizopedia. Ideally some HTML page with generated content. 
   
-  * \u2717 List of default campaign missions should contains some check to know which missions are done.
+  * \u2717 Improve campaign screen. List of default campaign missions should contains some check to know which missions are done.
+ 
+  * \u2717 Add TurnFinished event. Translate it to UI event disableUI and enableUI. Use this events for disabling game top menu and right menu. Describe Events in diagram. 
+ 
+  * \u2717 Improve documentation. Describe event tileWasSelected, unitWasSelected and managers and controllers. 
   
   * \u2717 build road, at the beginning any unit can build road at 4 moves. add action r
  
   * \u2717 Redesign game loop, to support parallel animations. Slight changes in water & move animation & scroll to moving unit. To control constant FPS. Now it's around 60 FPS.
+  
+  * \u2717 Finish translation
  
   * \u2717 Redesign model events - add some mark to it's name to be able to distinguish them from front-end events.
  
-  * \u2717 Try to make package including JVM, it will be nice to use openJDK.
- 
- * <<Backlog>> - feature and improvement backlog
- 
-  * \u2717 
+  * \u2717 Try to make package including JVM, it will be nice to use openJDK and Java 11
 
   * \u2717 Add unit wagon, can't fight, capture colony, can transport goods
      
@@ -154,7 +167,7 @@ Planned releases
  
 Notes:
 
-  * \u2717 Main menu doesn't work when drag pressed mouse instead of simple move.
+  * \u2717 Original JavaFx Main menu doesn't work when drag pressed mouse instead of simple move.
  It can't be easily solved. There is no such feature in JavaFx.
 
 [] 

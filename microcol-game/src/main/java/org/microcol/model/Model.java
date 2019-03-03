@@ -25,7 +25,6 @@ import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Lists;
 
 /**
  * Game model.
@@ -90,7 +89,7 @@ public class Model {
 
         colonyNames = new ColonyNames(this);
 
-        this.colonies = Lists.newArrayList();
+        this.colonies = new ArrayList<>();
         modelPo.getColonies().forEach(colonyPo -> {
             final List<ColonyBuildingItemProgress<?>> buildingQueue = new ArrayList<>();
             colonyPo.getBuildingQueue().forEach(itemPo -> {

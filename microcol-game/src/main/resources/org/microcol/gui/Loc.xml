@@ -51,4 +51,11 @@
 	<entry key="statistics_wealth">Wealth</entry>
 	<entry key="statistics_score">Score</entry>
 
+	<entry key="no_2_7p">two</entry>
+	<entry key="no_3_7p">three</entry>
+	<entry key="no_4_7p">four</entry>
+	<entry key="no_5_7p">five</entry>
+	<entry key="and">and</entry>
+	<entry key="withColony">with colony</entry>
+
 </properties>

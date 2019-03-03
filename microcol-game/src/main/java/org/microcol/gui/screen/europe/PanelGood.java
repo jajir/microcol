@@ -2,10 +2,10 @@ package org.microcol.gui.screen.europe;
 
 import org.microcol.gui.GoodsTypeName;
 import org.microcol.gui.dialog.DialogNotEnoughGold;
-import org.microcol.gui.event.StatusBarMessageEvent;
-import org.microcol.gui.event.StatusBarMessageEvent.Source;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.image.ImageProvider;
+import org.microcol.gui.screen.game.components.StatusBarMessageEvent;
+import org.microcol.gui.screen.game.components.StatusBarMessageEvent.Source;
 import org.microcol.gui.util.ClipboardWritter;
 import org.microcol.gui.util.JavaFxComponent;
 import org.microcol.gui.util.Repaintable;
