@@ -30,7 +30,7 @@ public class StatusBarMessageServiceTest {
 
     private final I18n i18n = I18n.builder().setVerifyThatAllEnumKeysAreDefined(true)
             .setVerifyThatAllKeysInResourceBundleHaveConstant(true)
-            .setDefaultLocale(new Locale("cs_CZ")).build();
+            .setDefaultLocale(new Locale("cs", "CZ")).build();
 
     private final GamePreferences gamePreferences = mock(GamePreferences.class);
 
