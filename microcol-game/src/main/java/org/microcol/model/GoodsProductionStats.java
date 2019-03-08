@@ -7,9 +7,9 @@ import com.google.common.base.Preconditions;
  * Hold information about production of some good and about stock in warehouse
  * in one turn.
  */
-public final class GoodProductionStats {
+public final class GoodsProductionStats {
 
-    private final GoodType type;
+    private final GoodsType type;
     private int rowProduction;
     private int consumed;
 
@@ -20,7 +20,7 @@ public final class GoodProductionStats {
 
     private int inWarehouseBefore;
 
-    GoodProductionStats(final GoodType type) {
+    GoodsProductionStats(final GoodsType type) {
         this.type = Preconditions.checkNotNull(type);
     }
 
@@ -116,7 +116,7 @@ public final class GoodProductionStats {
     /**
      * @return the type
      */
-    public GoodType getType() {
+    public GoodsType getType() {
         return type;
     }
 

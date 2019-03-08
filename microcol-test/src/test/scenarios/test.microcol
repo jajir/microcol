@@ -318,7 +318,7 @@
             "y": -1
           },
           "workerId": 1,
-          "producedGoodType": "TABACCO"
+          "producedGoodsType": "TABACCO"
         },
         {
           "direction": {
@@ -338,7 +338,7 @@
             "y": 1
           },
           "workerId": 7,
-          "producedGoodType": "TABACCO"
+          "producedGoodsType": "TABACCO"
         },
         {
           "direction": {
@@ -346,7 +346,7 @@
             "y": 1
           },
           "workerId": 2,
-          "producedGoodType": "TABACCO"
+          "producedGoodsType": "TABACCO"
         },
         {
           "direction": {
@@ -354,7 +354,7 @@
             "y": 1
           },
           "workerId": 8,
-          "producedGoodType": "CORN"
+          "producedGoodsType": "CORN"
         },
         {
           "direction": {
@@ -362,7 +362,7 @@
             "y": 0
           },
           "workerId": 0,
-          "producedGoodType": "CORN"
+          "producedGoodsType": "CORN"
         },
         {
           "direction": {
@@ -470,7 +470,7 @@
             "y": -1
           },
           "workerId": 13,
-          "producedGoodType": "TABACCO"
+          "producedGoodsType": "TABACCO"
         },
         {
           "direction": {
@@ -478,7 +478,7 @@
             "y": -1
           },
           "workerId": 15,
-          "producedGoodType": "TABACCO"
+          "producedGoodsType": "TABACCO"
         },
         {
           "direction": {
@@ -504,7 +504,7 @@
             "y": 1
           },
           "workerId": 12,
-          "producedGoodType": "CORN"
+          "producedGoodsType": "CORN"
         },
         {
           "direction": {
@@ -512,7 +512,7 @@
             "y": 0
           },
           "workerId": 9,
-          "producedGoodType": "CORN"
+          "producedGoodsType": "CORN"
         },
         {
           "direction": {
@@ -520,7 +520,7 @@
             "y": -1
           },
           "workerId": 10,
-          "producedGoodType": "TABACCO"
+          "producedGoodsType": "TABACCO"
         }
       ],
       "constructions": [
@@ -640,7 +640,7 @@
             "y": 1
           },
           "workerId": 16,
-          "producedGoodType": "CORN"
+          "producedGoodsType": "CORN"
         },
         {
           "direction": {
@@ -648,7 +648,7 @@
             "y": 1
           },
           "workerId": 17,
-          "producedGoodType": "CORN"
+          "producedGoodsType": "CORN"
         },
         {
           "direction": {
@@ -656,7 +656,7 @@
             "y": 1
           },
           "workerId": 19,
-          "producedGoodType": "TABACCO"
+          "producedGoodsType": "TABACCO"
         },
         {
           "direction": {

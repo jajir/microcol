@@ -70,7 +70,8 @@ public final class EuropePanel implements JavaFxComponent, UpdatableLanguage, Re
         this.shipsTravelingToNewWorld.setOnMouseEnteredKey(Europe.statusBarShipsToNewWorld);
         this.shipsTravelingToNewWorld.addStyle("to-new-world");
 
-        europeDock = new PanelDock(imageProvider, panelEuropeDockBehavior, i18n, eventBus);
+        europeDock = new PanelDock(imageProvider, panelEuropeDockBehavior, i18n, eventBus,
+                Source.EUROPE);
         europeDock.getContent().setOnMouseEntered(e -> {
             eventBus.post(
                     new StatusBarMessageEvent(i18n.get(Europe.statusBarEuropeDock), Source.EUROPE));

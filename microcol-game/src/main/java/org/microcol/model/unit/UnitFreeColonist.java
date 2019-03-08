@@ -7,7 +7,8 @@ import org.microcol.model.CargoSlot;
 import org.microcol.model.Colony;
 import org.microcol.model.ColonyField;
 import org.microcol.model.ConstructionSlot;
-import org.microcol.model.GoodType;
+import org.microcol.model.Goods;
+import org.microcol.model.GoodsType;
 import org.microcol.model.Model;
 import org.microcol.model.Place;
 import org.microcol.model.Player;
@@ -58,9 +59,10 @@ public final class UnitFreeColonist extends Unit {
     }
 
     @Override
-    public void placeToColonyField(final ColonyField colonyField, final GoodType producedGoodType) {
+    public void placeToColonyField(final ColonyField colonyField,
+            final GoodsType producedGoodsType) {
         unequipAll();
-        super.placeToColonyField(colonyField, producedGoodType);
+        super.placeToColonyField(colonyField, producedGoodsType);
     }
 
     @Override
@@ -85,28 +87,28 @@ public final class UnitFreeColonist extends Unit {
             unequipWithHorses();
         }
     }
-    
+
     @Override
     public int getSpeed() {
         if (isMounted()) {
             return 5;
-        }else{
+        } else {
             return 1;
         }
     }
-    
+
     @Override
     public double getMilitaryStrenght() {
         if (isMounted()) {
             if (isHoldingGuns()) {
                 return 2;
-            }else{
+            } else {
                 return 1.5;
             }
-        }else{
+        } else {
             if (isHoldingGuns()) {
                 return 1.5;
-            }else{
+            } else {
                 return 1;
             }
         }
@@ -114,47 +116,47 @@ public final class UnitFreeColonist extends Unit {
 
     public void equipWithHorses() {
         final Colony colony = verifyThatUnitIsOutsideColony();
-        final int horses = colony.getColonyWarehouse().getGoodAmmount(GoodType.HORSE);
+        final int horses = colony.getColonyWarehouse().getGoods(GoodsType.HORSE).getAmount();
         Preconditions.checkState(horses >= REQUIRED_HORSES_FOR_MOUNTED_UNIT,
                 "In colony (%s) is not enought horses to mount unit on them", colony);
         if (isHoldingTools()) {
             unequipWithTools();
         }
-        colony.getColonyWarehouse().removeFromWarehouse(GoodType.HORSE,
-                REQUIRED_HORSES_FOR_MOUNTED_UNIT);
+        colony.getColonyWarehouse()
+                .removeGoods(Goods.of(GoodsType.HORSE, REQUIRED_HORSES_FOR_MOUNTED_UNIT));
         mounted = true;
     }
 
     public void unequipWithHorses() {
         final Colony colony = verifyThatUnitIsOutsideColony();
-        colony.getColonyWarehouse().addToWarehouse(GoodType.HORSE,
-                REQUIRED_HORSES_FOR_MOUNTED_UNIT);
+        colony.getColonyWarehouse()
+                .addGoods(Goods.of(GoodsType.HORSE, REQUIRED_HORSES_FOR_MOUNTED_UNIT));
         mounted = false;
     }
 
     public void equipWithMuskets() {
         final Colony colony = verifyThatUnitIsOutsideColony();
-        final int muskets = colony.getColonyWarehouse().getGoodAmmount(GoodType.MUSKET);
+        final int muskets = colony.getColonyWarehouse().getGoods(GoodsType.MUSKET).getAmount();
         Preconditions.checkState(muskets >= REQUIRED_MUSKETS_FOR_ARMED_UNIT,
                 "In colony (%s) is not enought muskets to arm unit with them", colony);
         if (isHoldingTools()) {
             unequipWithTools();
         }
-        colony.getColonyWarehouse().removeFromWarehouse(GoodType.MUSKET,
-                REQUIRED_MUSKETS_FOR_ARMED_UNIT);
+        colony.getColonyWarehouse()
+                .removeGoods(Goods.of(GoodsType.MUSKET, REQUIRED_MUSKETS_FOR_ARMED_UNIT));
         holdingGuns = true;
     }
 
     public void unequipWithMuskets() {
         final Colony colony = verifyThatUnitIsOutsideColony();
-        colony.getColonyWarehouse().addToWarehouse(GoodType.MUSKET,
-                REQUIRED_MUSKETS_FOR_ARMED_UNIT);
+        colony.getColonyWarehouse()
+                .addGoods(Goods.of(GoodsType.MUSKET, REQUIRED_MUSKETS_FOR_ARMED_UNIT));
         holdingGuns = false;
     }
 
     public void equipWithTools() {
         final Colony colony = verifyThatUnitIsOutsideColony();
-        final int totalTools = colony.getColonyWarehouse().getGoodAmmount(GoodType.TOOLS);
+        final int totalTools = colony.getColonyWarehouse().getGoods(GoodsType.TOOLS).getAmount();
         Preconditions.checkState(totalTools > 0, "In colony (%s) is not ane tools", colony);
         if (isHoldingGuns()) {
             unequipWithMuskets();
@@ -163,13 +165,13 @@ public final class UnitFreeColonist extends Unit {
             unequipWithHorses();
         }
         final int removeTools = Math.min(totalTools, MAXIMAL_NUMBER_OF_TOOLS);
-        colony.getColonyWarehouse().removeFromWarehouse(GoodType.TOOLS, removeTools);
+        colony.getColonyWarehouse().removeGoods(Goods.of(GoodsType.TOOLS, removeTools));
         tools = removeTools;
     }
 
     public void unequipWithTools() {
         final Colony colony = verifyThatUnitIsOutsideColony();
-        colony.getColonyWarehouse().addToWarehouse(GoodType.TOOLS, tools);
+        colony.getColonyWarehouse().addGoods(Goods.of(GoodsType.TOOLS, tools));
         tools = 0;
     }
 

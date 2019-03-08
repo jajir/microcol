@@ -24,7 +24,7 @@ import org.microcol.model.ColonyProductionStats;
 import org.microcol.model.Construction;
 import org.microcol.model.ConstructionSlot;
 import org.microcol.model.ConstructionType;
-import org.microcol.model.GoodProductionStats;
+import org.microcol.model.GoodsProductionStats;
 import org.microcol.model.Unit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -322,8 +322,8 @@ public final class PanelColonyStructures implements JavaFxComponent {
         if (construction.getType().getProduce().isPresent()) {
 
             final ColonyProductionStats colonyStats = colony.getGoodsStats();
-            final GoodProductionStats goodsStats = colonyStats
-                    .getStatsByType(construction.getProducedGoodType().get());
+            final GoodsProductionStats goodsStats = colonyStats
+                    .getStatsByType(construction.getProducedGoodsType().get());
 
             String toWrite = "";
 
@@ -338,7 +338,7 @@ public final class PanelColonyStructures implements JavaFxComponent {
                 gc.fillText(toWrite, prod.getX(), prod.getY());
                 final double width = getTextWidth(gc, toWrite);
                 gc.drawImage(
-                        imageProvider.getGoodTypeImage(construction.getType().getProduce().get()),
+                        imageProvider.getGoodsTypeImage(construction.getType().getProduce().get()),
                         prod.getX() - width / 2 - GOOD_ICON_WIDTH, prod.getY() - 10,
                         GOOD_ICON_WIDTH, GOOD_ICON_WIDTH);
             }

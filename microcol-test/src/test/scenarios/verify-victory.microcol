@@ -660,7 +660,7 @@
             "y": 0
           },
           "workerId": 55,
-          "producedGoodType": "CORN"
+          "producedGoodsType": "CORN"
         },
         {
           "direction": {
@@ -686,7 +686,7 @@
             "y": 0
           },
           "workerId": 5,
-          "producedGoodType": "CORN"
+          "producedGoodsType": "CORN"
         },
         {
           "direction": {
@@ -824,7 +824,7 @@
             "y": 0
           },
           "workerId": 19,
-          "producedGoodType": "CORN"
+          "producedGoodsType": "CORN"
         },
         {
           "direction": {
@@ -968,7 +968,7 @@
             "y": -1
           },
           "workerId": 12,
-          "producedGoodType": "CORN"
+          "producedGoodsType": "CORN"
         }
       ],
       "constructions": [
@@ -1100,7 +1100,7 @@
             "y": 0
           },
           "workerId": 25,
-          "producedGoodType": "CORN"
+          "producedGoodsType": "CORN"
         },
         {
           "direction": {

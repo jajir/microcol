@@ -1,16 +1,18 @@
 package org.microcol.gui.screen.colony;
 
 import org.microcol.gui.GoodsTypeName;
+import org.microcol.gui.Loc;
 import org.microcol.gui.screen.game.components.StatusBarMessageEvent;
 import org.microcol.gui.screen.game.components.StatusBarMessageEvent.Source;
 import org.microcol.gui.util.ClipboardWritter;
 import org.microcol.gui.util.JavaFxComponent;
 import org.microcol.i18n.I18n;
+import org.microcol.model.CargoSlot;
 import org.microcol.model.Colony;
 import org.microcol.model.ColonyProductionStats;
-import org.microcol.model.GoodProductionStats;
-import org.microcol.model.GoodType;
-import org.microcol.model.GoodsAmount;
+import org.microcol.model.Goods;
+import org.microcol.model.GoodsProductionStats;
+import org.microcol.model.GoodsType;
 
 import com.google.common.base.Preconditions;
 import com.google.common.eventbus.EventBus;
@@ -38,7 +40,7 @@ public final class PanelColonyGood implements JavaFxComponent {
 
     private final Label labelDiff;
 
-    private final GoodType goodType;
+    private final GoodsType goodsType;
 
     private final Image image;
 
@@ -52,9 +54,9 @@ public final class PanelColonyGood implements JavaFxComponent {
 
     private final VBox mainPanel;
 
-    public PanelColonyGood(final Image image, final GoodType goodType, final EventBus eventBus,
+    public PanelColonyGood(final Image image, final GoodsType goodsType, final EventBus eventBus,
             final I18n i18n) {
-        this.goodType = Preconditions.checkNotNull(goodType);
+        this.goodsType = Preconditions.checkNotNull(goodsType);
         this.image = Preconditions.checkNotNull(image);
         this.eventBus = Preconditions.checkNotNull(eventBus);
         this.i18n = Preconditions.checkNotNull(i18n);
@@ -75,7 +77,7 @@ public final class PanelColonyGood implements JavaFxComponent {
 
     private void onMouseEntered(@SuppressWarnings("unused") final MouseEvent event) {
         eventBus.post(new StatusBarMessageEvent(
-                i18n.get(GoodsTypeName.getNameForGoodType(goodType)) + i18n.get(ColonyMsg.goods),
+                i18n.get(GoodsTypeName.getNameForGoodsType(goodsType)) + i18n.get(ColonyMsg.goods),
                 Source.COLONY));
     }
 
@@ -85,14 +87,14 @@ public final class PanelColonyGood implements JavaFxComponent {
 
     private void onDragDetected(final MouseEvent event) {
         Preconditions.checkNotNull(colony.getColonyWarehouse());
-        final int amount = colony.getColonyWarehouse().getTransferableGoodsAmount(goodType);
-        if (amount > 0) {
+        final Goods couldBemoved = colony.getColonyWarehouse().getTransferableGoods(goodsType,
+                CargoSlot.MAX_CARGO_SLOT_CAPACITY);
+        if (couldBemoved.isNotZero()) {
             Dragboard db = imageView.startDragAndDrop(TransferMode.MOVE, TransferMode.LINK);
             ClipboardWritter.make(db).addImage(image).addTransferFromColonyWarehouse()
-                    .addGoodAmount(new GoodsAmount(goodType, amount)).build();
+                    .addGoods(couldBemoved).build();
         }
-        eventBus.post(
-                new StatusBarMessageEvent(i18n.get(ColonyMsg.adjustAmountOfGoods), Source.COLONY));
+        eventBus.post(new StatusBarMessageEvent(i18n.get(Loc.adjustAmountOfGoods), Source.COLONY));
         event.consume();
     }
 
@@ -102,7 +104,7 @@ public final class PanelColonyGood implements JavaFxComponent {
 
     public void repaint() {
         ColonyProductionStats stats = colony.getGoodsStats();
-        GoodProductionStats goodsStats = stats.getStatsByType(goodType);
+        GoodsProductionStats goodsStats = stats.getStatsByType(goodsType);
 
         String txt = String.valueOf(goodsStats.getInWarehouseBefore());
         labelAmount.setText(txt);

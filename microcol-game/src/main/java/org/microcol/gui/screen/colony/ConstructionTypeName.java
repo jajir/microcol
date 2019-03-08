@@ -59,14 +59,14 @@ public enum ConstructionTypeName implements MessageKeyResource {
     printingPress(ConstructionType.PRINTING_PRESS),
     customHouse(ConstructionType.CUSTOM_HOUSE);
 
-    private final ConstructionType goodType;
+    private final ConstructionType goodsType;
 
-    ConstructionTypeName(final ConstructionType goodType) {
-        this.goodType = Preconditions.checkNotNull(goodType);
+    ConstructionTypeName(final ConstructionType goodsType) {
+        this.goodsType = Preconditions.checkNotNull(goodsType);
     }
 
-    public static ConstructionTypeName getNameForType(final ConstructionType goodType) {
-        return Arrays.stream(values()).filter(gtName -> gtName.goodType == goodType).findFirst()
+    public static ConstructionTypeName getNameForType(final ConstructionType goodsType) {
+        return Arrays.stream(values()).filter(gtName -> gtName.goodsType == goodsType).findFirst()
                 .orElseThrow((() -> new IllegalArgumentException()));
     }
 

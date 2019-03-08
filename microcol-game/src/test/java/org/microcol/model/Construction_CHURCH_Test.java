@@ -20,14 +20,15 @@ public class Construction_CHURCH_Test extends AbstractConstructionTest {
         when(slot1.isEmpty()).thenReturn(true);
         when(slot2.isEmpty()).thenReturn(true);
         when(slot3.isEmpty()).thenReturn(true);
-        when(slot1.getProductionModifier(GoodType.CROSS))
+        when(slot1.getProductionModifier(GoodsType.CROSS))
                 .thenThrow(new RuntimeException("Should not be called."));
 
-        final ConstructionTurnProduction ret = construction.getProduction(0);
+        final ConstructionTurnProduction ret = construction
+                .getProduction(Goods.of(GoodsType.CROSS));
 
-        assertEquals(0, ret.getConsumedGoods());
-        assertEquals(1, ret.getProducedGoods());
-        assertEquals(0, ret.getBlockedGoods());
+        assertEquals(Goods.of(GoodsType.CROSS, 0), ret.getConsumedGoods());
+        assertEquals(Goods.of(GoodsType.CROSS, 1), ret.getProducedGoods());
+        assertEquals(Goods.of(GoodsType.CROSS, 0), ret.getBlockedGoods());
     }
 
     @Test
@@ -35,13 +36,14 @@ public class Construction_CHURCH_Test extends AbstractConstructionTest {
         when(slot1.isEmpty()).thenReturn(false);
         when(slot2.isEmpty()).thenReturn(true);
         when(slot3.isEmpty()).thenReturn(true);
-        when(slot1.getProductionModifier(GoodType.CROSS)).thenReturn(1F);
+        when(slot1.getProductionModifier(GoodsType.CROSS)).thenReturn(1F);
 
-        final ConstructionTurnProduction ret = construction.getProduction(0);
+        final ConstructionTurnProduction ret = construction
+                .getProduction(Goods.of(GoodsType.CROSS));
 
-        assertEquals(0, ret.getConsumedGoods());
-        assertEquals(4, ret.getProducedGoods());
-        assertEquals(0, ret.getBlockedGoods());
+        assertEquals(Goods.of(GoodsType.CROSS, 0), ret.getConsumedGoods());
+        assertEquals(Goods.of(GoodsType.CROSS, 4), ret.getProducedGoods());
+        assertEquals(Goods.of(GoodsType.CROSS, 0), ret.getBlockedGoods());
     }
 
     @Test
@@ -49,13 +51,14 @@ public class Construction_CHURCH_Test extends AbstractConstructionTest {
         when(slot1.isEmpty()).thenReturn(false);
         when(slot2.isEmpty()).thenReturn(true);
         when(slot3.isEmpty()).thenReturn(true);
-        when(slot1.getProductionModifier(GoodType.CROSS)).thenReturn(1F);
+        when(slot1.getProductionModifier(GoodsType.CROSS)).thenReturn(1F);
 
-        final ConstructionTurnProduction ret = construction.getProduction(3);
+        final ConstructionTurnProduction ret = construction
+                .getProduction(Goods.of(GoodsType.CROSS));
 
-        assertEquals(0, ret.getConsumedGoods());
-        assertEquals(4, ret.getProducedGoods());
-        assertEquals(0, ret.getBlockedGoods());
+        assertEquals(Goods.of(GoodsType.CROSS, 0), ret.getConsumedGoods());
+        assertEquals(Goods.of(GoodsType.CROSS, 4), ret.getProducedGoods());
+        assertEquals(Goods.of(GoodsType.CROSS, 0), ret.getBlockedGoods());
     }
 
     @Test
@@ -63,13 +66,14 @@ public class Construction_CHURCH_Test extends AbstractConstructionTest {
         when(slot1.isEmpty()).thenReturn(true);
         when(slot2.isEmpty()).thenReturn(true);
         when(slot3.isEmpty()).thenReturn(false);
-        when(slot3.getProductionModifier(GoodType.CROSS)).thenReturn(1F);
+        when(slot3.getProductionModifier(GoodsType.CROSS)).thenReturn(1F);
 
-        final ConstructionTurnProduction ret = construction.getProduction(3);
+        final ConstructionTurnProduction ret = construction
+                .getProduction(Goods.of(GoodsType.CROSS));
 
-        assertEquals(0, ret.getConsumedGoods());
-        assertEquals(4, ret.getProducedGoods());
-        assertEquals(0, ret.getBlockedGoods());
+        assertEquals(Goods.of(GoodsType.CROSS, 0), ret.getConsumedGoods());
+        assertEquals(Goods.of(GoodsType.CROSS, 4), ret.getProducedGoods());
+        assertEquals(Goods.of(GoodsType.CROSS, 0), ret.getBlockedGoods());
     }
 
     @BeforeEach

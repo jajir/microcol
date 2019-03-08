@@ -23,7 +23,7 @@ public class Cargo {
             final CargoSlotPo cargoSlotPo = cargoPo.getSlotAt(i);
             if (cargoSlotPo != null && cargoSlotPo.containsGood()) {
                 builder.add(new CargoSlot(this,
-                        new GoodsAmount(cargoSlotPo.getGoodType(), cargoSlotPo.getAmount())));
+                        new Goods(cargoSlotPo.getGoodsType(), cargoSlotPo.getAmount())));
             } else {
                 builder.add(new CargoSlot(this));
             }

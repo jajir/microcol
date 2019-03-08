@@ -6,9 +6,9 @@ import java.util.Optional;
 import org.microcol.gui.screen.game.gamepanel.ScrollToFocusedTile;
 import org.microcol.gui.screen.game.gamepanel.SelectedTileManager;
 import org.microcol.model.CargoSlot;
-import org.microcol.model.GoodTrade;
-import org.microcol.model.GoodType;
-import org.microcol.model.GoodsAmount;
+import org.microcol.model.GoodsTrade;
+import org.microcol.model.GoodsType;
+import org.microcol.model.Goods;
 import org.microcol.model.Location;
 import org.microcol.model.Model;
 import org.microcol.model.Path;
@@ -91,9 +91,9 @@ public class GameModelController {
                 .orElseThrow(() -> new IllegalStateException("There is no human player"));
     }
 
-    public GoodsAmount getMaxBuyableGoodsAmount(final GoodType goodType) {
-        final GoodTrade goodTrade = getModel().getEurope().getGoodTradeForType(goodType);
-        return goodTrade.getAvailableAmountFor(getCurrentPlayer().getGold());
+    public Goods getMaxBuyableGoods(final GoodsType goodsType) {
+        final GoodsTrade goodsTrade = getModel().getEurope().getGoodsTradeForType(goodsType);
+        return goodsTrade.getAvailableAmountFor(getCurrentPlayer().getGold());
     }
 
     /**

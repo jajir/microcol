@@ -9,18 +9,18 @@ public final class TerrainProduction {
 
     private final Terrain terrain;
 
-    private final GoodType goodType;
+    private final GoodsType goodsType;
 
     private final int production;
 
-    TerrainProduction(final Terrain terrain, final GoodType goodType, final int production) {
+    TerrainProduction(final Terrain terrain, final GoodsType goodsType, final int production) {
 	this.terrain = Preconditions.checkNotNull(terrain);
-	this.goodType = Preconditions.checkNotNull(goodType);
+	this.goodsType = Preconditions.checkNotNull(goodsType);
 	this.production = Preconditions.checkNotNull(production);
     }
     
     public TerrainProduction modify(int newProduction) {
-	return new TerrainProduction(terrain, goodType, newProduction);
+	return new TerrainProduction(terrain, goodsType, newProduction);
     }
 
     public Terrain getTerrain() {
@@ -31,8 +31,8 @@ public final class TerrainProduction {
 	return production;
     }
 
-    public GoodType getGoodType() {
-	return goodType;
+    public GoodsType getGoodsType() {
+	return goodsType;
     }
 
 }

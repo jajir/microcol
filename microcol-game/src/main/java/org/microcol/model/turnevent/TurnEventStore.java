@@ -60,7 +60,7 @@ public final class TurnEventStore {
      *            required turn event object.
      */
     public void add(final TurnEvent turnEvent) {
-        Preconditions.checkNotNull(turnEvent);
+        Preconditions.checkNotNull(turnEvent, "Turn event is null");
         turnEvents.add(turnEvent);
     }
 

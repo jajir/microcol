@@ -2,7 +2,7 @@ package org.microcol.gui.util;
 
 import org.microcol.model.CargoSlot;
 import org.microcol.model.ConstructionType;
-import org.microcol.model.GoodsAmount;
+import org.microcol.model.Goods;
 import org.microcol.model.Location;
 import org.microcol.model.Unit;
 import org.microcol.model.UnitType;
@@ -44,10 +44,10 @@ public final class ClipboardWritter implements ClipboardConst {
         return this;
     }
 
-    public ClipboardWritter addGoodAmount(final GoodsAmount goodsAmount) {
-        Preconditions.checkState(goodsAmount != null, "Goods amount is null.");
-        addKeyValue(KEY_GOODS, goodsAmount.getGoodType().name());
-        addKeyValue(KEY_GOODS_AMOUNT, goodsAmount.getAmount());
+    public ClipboardWritter addGoods(final Goods goods) {
+        Preconditions.checkState(goods != null, "Goods is null.");
+        addKeyValue(KEY_GOODS, goods.getType().name());
+        addKeyValue(KEY_GOODS_AMOUNT, goods.getAmount());
         return this;
     }
 

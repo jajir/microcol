@@ -70,7 +70,7 @@ public abstract class AbstractScreen {
 	return label;
     }
 
-    protected Button getButtoonById(final String cssId) {
+    protected Button getButtonById(final String cssId) {
 	final String id = "#" + cssId;
 	final Button label = getNodeFinder().lookup(id).queryButton();
 	assertNotNull(label, String.format("unable to find button by id '%s'", cssId));

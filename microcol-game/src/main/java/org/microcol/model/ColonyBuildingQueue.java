@@ -66,12 +66,13 @@ public class ColonyBuildingQueue {
     public Optional<BuildingStatus<ColonyBuildingItem>> getActuallyBuildingStat() {
         if (getActualyBuilding().isPresent()) {
             final ColonyBuildingItem pok = getActualyBuilding().get().getItem();
-            final int alreadyHaveHammers = colony.getColonyWarehouse()
-                    .getGoodAmmount(GoodType.HAMMERS);
-            final int productionHammers = colony.getGoodsStats().getStatsByType(GoodType.HAMMERS)
+            final int alreadyHaveHammers = colony.getColonyWarehouse().getGoods(GoodsType.HAMMERS)
+                    .getAmount();
+            final int productionHammers = colony.getGoodsStats().getStatsByType(GoodsType.HAMMERS)
                     .getNetProduction();
-            final int alreadyHaveTools = colony.getColonyWarehouse().getGoodAmmount(GoodType.TOOLS);
-            final int productionTools = colony.getGoodsStats().getStatsByType(GoodType.TOOLS)
+            final int alreadyHaveTools = colony.getColonyWarehouse().getGoods(GoodsType.TOOLS)
+                    .getAmount();
+            final int productionTools = colony.getGoodsStats().getStatsByType(GoodsType.TOOLS)
                     .getNetProduction();
             return Optional.of(new BuildingStatus<ColonyBuildingItem>(pok, alreadyHaveHammers,
                     productionHammers, alreadyHaveTools, productionTools));
@@ -247,16 +248,16 @@ public class ColonyBuildingQueue {
 
     void startTurn() {
         if (getActualyBuilding().isPresent()) {
-            final int wasDone = colony.getColonyWarehouse().getGoodAmmount(GoodType.HAMMERS);
+            final int wasDone = colony.getColonyWarehouse().getGoods(GoodsType.HAMMERS).getAmount();
             final ColonyBuildingItemProgress<?> item = getActualyBuilding().get();
-            colony.getColonyWarehouse().setGoodsToZero(GoodType.HAMMERS);
+            colony.getColonyWarehouse().setGoodsToZero(GoodsType.HAMMERS);
             item.addHammers(wasDone);
             if (item.isHammersProvided()) {
                 // check if there is enough tools
-                if (colony.getColonyWarehouse().getGoodAmmount(GoodType.TOOLS) >= item
+                if (colony.getColonyWarehouse().getGoods(GoodsType.TOOLS).getAmount() >= item
                         .getRequiredTools()) {
-                    colony.getColonyWarehouse().addToWarehouse(GoodType.TOOLS,
-                            -item.getRequiredTools());
+                    colony.getColonyWarehouse()
+                            .removeGoods(Goods.of(GoodsType.TOOLS, item.getRequiredTools()));
                     if (item.getItem() instanceof ColonyBuildingItemUnit) {
                         final ColonyBuildingItemUnit i = (ColonyBuildingItemUnit) item.getItem();
                         createUnit(i.getUnitType());

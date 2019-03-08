@@ -6,9 +6,9 @@ import com.google.common.base.Preconditions;
 /**
  * Holds information about price of some good in Europe.
  */
-public final class GoodTrade {
+public final class GoodsTrade {
 
-    private final GoodType goodType;
+    private final GoodsType goodsType;
 
     /**
      * Player could sell goods for this price.
@@ -20,8 +20,8 @@ public final class GoodTrade {
      */
     private int buyPrice;
 
-    GoodTrade(final GoodType goodType, final int sellPrice, final int buyPrice) {
-        this.goodType = Preconditions.checkNotNull(goodType);
+    GoodsTrade(final GoodsType goodsType, final int sellPrice, final int buyPrice) {
+        this.goodsType = Preconditions.checkNotNull(goodsType);
         this.sellPrice = sellPrice;
         this.buyPrice = buyPrice;
     }
@@ -33,8 +33,8 @@ public final class GoodTrade {
      *            required gold
      * @return Return goods amount which could be bought
      */
-    public GoodsAmount getAvailableAmountFor(final int availableGold) {
-        return new GoodsAmount(goodType,
+    public Goods getAvailableAmountFor(final int availableGold) {
+        return new Goods(goodsType,
                 Math.min(availableGold / buyPrice, CargoSlot.MAX_CARGO_SLOT_CAPACITY));
     }
 
@@ -46,8 +46,8 @@ public final class GoodTrade {
         this.sellPrice = sellPrice;
     }
 
-    public GoodType getGoodType() {
-        return goodType;
+    public GoodsType getGoodsType() {
+        return goodsType;
     }
 
     public int getBuyPrice() {
@@ -60,7 +60,7 @@ public final class GoodTrade {
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(this).add("buyPrice", buyPrice).add("goodType", goodType)
+        return MoreObjects.toStringHelper(this).add("buyPrice", buyPrice).add("goodsType", goodsType)
                 .add("sellPrice", sellPrice).toString();
     }
 

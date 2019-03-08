@@ -13,15 +13,15 @@ public final class Europe {
 
     private final Model model;
 
-    private final List<GoodTrade> goodTrades = ImmutableList.of(new GoodTrade(GoodType.CORN, 0, 8),
-            new GoodTrade(GoodType.SUGAR, 3, 5), new GoodTrade(GoodType.TOBACCO, 3, 5),
-            new GoodTrade(GoodType.COTTON, 3, 5), new GoodTrade(GoodType.FUR, 0, 8),
-            new GoodTrade(GoodType.LUMBER, 0, 8), new GoodTrade(GoodType.ORE, 0, 8),
-            new GoodTrade(GoodType.SILVER, 0, 8), new GoodTrade(GoodType.HORSE, 0, 8),
-            new GoodTrade(GoodType.RUM, 11, 12), new GoodTrade(GoodType.CIGARS, 11, 12),
-            new GoodTrade(GoodType.SILK, 11, 12), new GoodTrade(GoodType.COAT, 9, 10),
-            new GoodTrade(GoodType.GOODS, 2, 3), new GoodTrade(GoodType.TOOLS, 1, 2),
-            new GoodTrade(GoodType.MUSKET, 2, 3));
+    private final List<GoodsTrade> goodsTrades = ImmutableList.of(new GoodsTrade(GoodsType.CORN, 0, 8),
+            new GoodsTrade(GoodsType.SUGAR, 3, 5), new GoodsTrade(GoodsType.TOBACCO, 3, 5),
+            new GoodsTrade(GoodsType.COTTON, 3, 5), new GoodsTrade(GoodsType.FUR, 0, 8),
+            new GoodsTrade(GoodsType.LUMBER, 0, 8), new GoodsTrade(GoodsType.ORE, 0, 8),
+            new GoodsTrade(GoodsType.SILVER, 0, 8), new GoodsTrade(GoodsType.HORSE, 0, 8),
+            new GoodsTrade(GoodsType.RUM, 11, 12), new GoodsTrade(GoodsType.CIGARS, 11, 12),
+            new GoodsTrade(GoodsType.SILK, 11, 12), new GoodsTrade(GoodsType.COAT, 9, 10),
+            new GoodsTrade(GoodsType.GOODS, 2, 3), new GoodsTrade(GoodsType.TOOLS, 1, 2),
+            new GoodsTrade(GoodsType.MUSKET, 2, 3));
 
     Europe(final Model model) {
         this.model = Preconditions.checkNotNull(model);
@@ -29,8 +29,8 @@ public final class Europe {
         pier = new EuropePier(this.model);
     }
 
-    public GoodTrade getGoodTradeForType(final GoodType goodType) {
-        return goodTrades.stream().filter(goodTrade -> goodTrade.getGoodType().equals(goodType))
+    public GoodsTrade getGoodsTradeForType(final GoodsType goodsType) {
+        return goodsTrades.stream().filter(goodsTrade -> goodsTrade.getGoodsType().equals(goodsType))
                 .findAny().get();
     }
 

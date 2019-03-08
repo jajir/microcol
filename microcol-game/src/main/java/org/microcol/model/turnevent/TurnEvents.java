@@ -20,6 +20,7 @@ public enum TurnEvents implements MessageKeyResource {
     newUnitIsInEurope,
     newUnitIsInColony,
     colonyWasLost,
+    goodsWasThrowsAway,
     
 
     ;

@@ -18,7 +18,7 @@ public class JsonResourceBundle extends ResourceBundle {
     private Properties props;
 
     JsonResourceBundle(final InputStream stream) throws IOException {
-        // TODO use in a static way
+        // TODO use in a static way, don't use new instance in each bundle
         final Gson gson = new GsonBuilder().create();
         props = new Properties();
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(stream))) {

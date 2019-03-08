@@ -11,7 +11,7 @@ import com.google.common.collect.Lists;
 /**
  * It's countryside definition. It also specify what is on that land.
  */
-public final class Terrain {
+public class Terrain {
 
     private static final int FOOD_TREE_FACTOR = 3;
 
@@ -43,26 +43,26 @@ public final class Terrain {
     private final static List<Function<TerrainProduction, TerrainProduction>> PRODICTION_MOODIFIERS = Lists
             .newArrayList(prod -> {
                 if (prod.getTerrain().isHasTrees()) {
-                    if (GoodType.CORN.equals(prod.getGoodType())) {
+                    if (GoodsType.CORN.equals(prod.getGoodsType())) {
                         return prod.modify(prod.getProduction() / FOOD_TREE_FACTOR);
                     }
-                    if (GoodType.LUMBER.equals(prod.getGoodType())) {
+                    if (GoodsType.LUMBER.equals(prod.getGoodsType())) {
                         return prod.modify(TREE_NOMINAL_PRODUCTION);
                     }
-                    if (GoodType.FUR.equals(prod.getGoodType())) {
+                    if (GoodsType.FUR.equals(prod.getGoodsType())) {
                         return prod.modify(FURS_NOMINAL_PRODUCTION);
                     }
                 }
                 return prod;
             }, prod -> {
                 if (prod.getTerrain().isHasField()) {
-                    if (GoodType.CORN.equals(prod.getGoodType())) {
+                    if (GoodsType.CORN.equals(prod.getGoodsType())) {
                         return prod.modify(prod.getProduction() * FOOD_FIELD_FACTOR);
                     }
-                    if (GoodType.LUMBER.equals(prod.getGoodType())) {
+                    if (GoodsType.LUMBER.equals(prod.getGoodsType())) {
                         return prod.modify(prod.getProduction() / TREE_AT_FIELD_FACTOR);
                     }
-                    if (GoodType.FUR.equals(prod.getGoodType())) {
+                    if (GoodsType.FUR.equals(prod.getGoodsType())) {
                         return prod.modify(FURS_AT_FIELD_NOMINAL_PRODUCTION);
                     }
                 }
@@ -118,31 +118,31 @@ public final class Terrain {
     /**
      * Get information how much goods could be produced at this terrain.
      *
-     * @param producedGoodType
+     * @param producedGoodsType
      *            required good type
      * @return return number how much could be produces here
      */
-    public int canProduceAmmount(final GoodType producedGoodType) {
-        return getTerrainProduction(producedGoodType).getProduction();
+    public int canProduceAmmount(final GoodsType producedGoodsType) {
+        return getTerrainProduction(producedGoodsType).getProduction();
     }
 
     /**
      * Return object holding production of some specific goods at this location.
      *
-     * @param producedGoodType
+     * @param producedGoodsType
      *            required goods type
      * @return production at this specific terrain
      */
-    public TerrainProduction getTerrainProduction(final GoodType producedGoodType) {
-        if (terrainType.getBaseProduction(producedGoodType).isPresent()) {
-            TerrainProduction prod = new TerrainProduction(this, producedGoodType,
-                    terrainType.getBaseProduction(producedGoodType).get().getBase());
+    public TerrainProduction getTerrainProduction(final GoodsType producedGoodsType) {
+        if (terrainType.getBaseProduction(producedGoodsType).isPresent()) {
+            TerrainProduction prod = new TerrainProduction(this, producedGoodsType,
+                    terrainType.getBaseProduction(producedGoodsType).get().getBase());
             for (final Function<TerrainProduction, TerrainProduction> pm : PRODICTION_MOODIFIERS) {
                 prod = pm.apply(prod);
             }
             return prod;
         }
-        return new TerrainProduction(this, producedGoodType, 0);
+        return new TerrainProduction(this, producedGoodsType, 0);
     }
 
     /**
@@ -152,7 +152,7 @@ public final class Terrain {
      */
     public List<TerrainProduction> getProduction() {
         // NOTE Just good types produced on field could be filtered.
-        return GoodType.GOOD_TYPES.stream().map(goodType -> getTerrainProduction(goodType))
+        return GoodsType.GOOD_TYPES.stream().map(goodsType -> getTerrainProduction(goodsType))
                 .filter(prod -> prod.getProduction() > 0).collect(ImmutableList.toImmutableList());
     }
 

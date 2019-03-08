@@ -74,20 +74,20 @@ public class GamePage extends AbstractScreen {
     }
 
     public void nextTurn() throws Exception {
-	final Button buttonNextTurn = getButtoonById(ButtonsGamePanel.BUTTON_NEXT_TURN_ID);
+	final Button buttonNextTurn = getButtonById(ButtonsGamePanel.BUTTON_NEXT_TURN_ID);
 	getRobot().clickOn(buttonNextTurn);
 	waitWhileMoving();
     }
 
     public DialogMessagePage declareIndependence() throws Exception {
-	final Button buttonNextTurn = getButtoonById(ButtonsGamePanel.BUTTON_DECLARE_INDEPENDENCE_ID);
+	final Button buttonNextTurn = getButtonById(ButtonsGamePanel.BUTTON_DECLARE_INDEPENDENCE_ID);
 	getRobot().clickOn(buttonNextTurn);
 	WaitForAsyncUtils.waitForFxEvents();
 	return DialogMessagePage.of(getContext());
     }
 
     public DialogTurnReport openTurnReport() throws Exception {
-	final Button buttonNextTurn = getButtoonById(ButtonsGamePanel.BUTTON_TURN_REPORT_ID);
+	final Button buttonNextTurn = getButtonById(ButtonsGamePanel.BUTTON_TURN_REPORT_ID);
 	getRobot().clickOn(buttonNextTurn);
 	WaitForAsyncUtils.waitForFxEvents();
 	return DialogTurnReport.of(getContext());
@@ -108,7 +108,7 @@ public class GamePage extends AbstractScreen {
     }
 
     public EuropePortScreen openEuroperPort() {
-	final Button buttonNextTurn = getButtoonById(ButtonsGamePanel.BUTTON_EUROPE_ID);
+	final Button buttonNextTurn = getButtonById(ButtonsGamePanel.BUTTON_EUROPE_ID);
 	getRobot().clickOn(buttonNextTurn);
 	WaitForAsyncUtils.waitForFxEvents();
 	return EuropePortScreen.of(getContext());

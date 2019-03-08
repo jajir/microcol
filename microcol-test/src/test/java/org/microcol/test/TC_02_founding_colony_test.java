@@ -7,7 +7,7 @@ import java.io.File;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.microcol.gui.FileSelectingService;
-import org.microcol.model.GoodType;
+import org.microcol.model.GoodsType;
 import org.microcol.model.Location;
 import org.microcol.page.ColonyScreen;
 import org.microcol.page.GamePage;
@@ -75,7 +75,7 @@ public class TC_02_founding_colony_test extends AbstractMicroColTest {
 	colonyScreen.verifyNumberOfUnitsOnFields(1);
 
 	// verify that action net production is.
-	colonyScreen.verifyThatProductionIs(GoodType.CORN, 2);
+	colonyScreen.verifyThatProductionIs(GoodsType.CORN, 2);
 
 	colonyScreen.verifyNumberOfUnitsAtPier(1);
 

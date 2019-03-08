@@ -59,7 +59,7 @@ public class ColonyMockitoTest {
         final ColonyField colonyField = colony.getColonyFields().get(0);
         mockFileds();
 
-        assertEquals(3, colonyField.getGoodTypeProduction(GoodType.CORN));
+        assertEquals(3, colonyField.getGoodsTypeProduction(GoodsType.CORN));
         assertEquals(TerrainType.OCEAN, colonyField.getTerrainType());
     }
 
@@ -75,7 +75,7 @@ public class ColonyMockitoTest {
 
         // place unit at ocean field, and define unit type
         when(unit.getType()).thenReturn(UnitType.COLONIST);
-        PlaceColonyField place = new PlaceColonyField(unit, colonyField, GoodType.CORN);
+        PlaceColonyField place = new PlaceColonyField(unit, colonyField, GoodsType.CORN);
         colonyField.setPlaceColonyField(place);
 
         assertFalse(colonyField.isEmpty());
@@ -105,7 +105,7 @@ public class ColonyMockitoTest {
 
         // place unit at ocean field, and define unit type
         when(unit.getType()).thenReturn(UnitType.COLONIST);
-        PlaceColonyField place = new PlaceColonyField(unit, colonyField, GoodType.CORN);
+        PlaceColonyField place = new PlaceColonyField(unit, colonyField, GoodsType.CORN);
         colonyField.setPlaceColonyField(place);
 
         final List<ColonyField> out = colony.getEmptyFieldsWithMaxCornProduction();
@@ -127,7 +127,7 @@ public class ColonyMockitoTest {
 
         // place unit at ocean field, and define unit type
         when(unit.getType()).thenReturn(UnitType.COLONIST);
-        PlaceColonyField place = new PlaceColonyField(unit, colonyFieldEast, GoodType.CORN);
+        PlaceColonyField place = new PlaceColonyField(unit, colonyFieldEast, GoodsType.CORN);
         colonyFieldEast.setPlaceColonyField(place);
         colonyFieldWest.setPlaceColonyField(place);
 
@@ -149,7 +149,7 @@ public class ColonyMockitoTest {
         when(unit.getType()).thenReturn(UnitType.COLONIST);
         Direction.getAll().forEach(direction -> {
             final ColonyField field = colony.getColonyFieldInDirection(direction.getVector());
-            PlaceColonyField place = new PlaceColonyField(unit, field, GoodType.CORN);
+            PlaceColonyField place = new PlaceColonyField(unit, field, GoodsType.CORN);
             field.setPlaceColonyField(place);
             assertFalse(field.isEmpty());
         });
@@ -193,7 +193,7 @@ public class ColonyMockitoTest {
 
     private void verifyCornProduction(final Colony colony, final int expectedRowProduction,
             final int expectedConsumed) {
-        final GoodProductionStats cornStats = colony.getGoodsStats().getStatsByType(GoodType.CORN);
+        final GoodsProductionStats cornStats = colony.getGoodsStats().getStatsByType(GoodsType.CORN);
         logger.debug("Corn stats: " + cornStats);
         assertEquals(expectedRowProduction, cornStats.getRowProduction(),
                 String.format("Corn row production was expected '%s' but is '%s'.",

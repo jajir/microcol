@@ -239,16 +239,16 @@ public class Player {
         model.fireGoldWasChanged(this, oldValue, newGoldValue);
     }
 
-    public void buy(final GoodsAmount goodAmount) {
-        int price = goodAmount.getAmount()
-                * model.getEurope().getGoodTradeForType(goodAmount.getGoodType()).getBuyPrice();
+    public void buy(final Goods goods) {
+        int price = goods.getAmount()
+                * model.getEurope().getGoodsTradeForType(goods.getType()).getBuyPrice();
         verifyAvailibilityOFGold(price);
         setGold(getGold() - price);
     }
 
-    public void sell(final GoodsAmount goodAmount) {
-        int price = goodAmount.getAmount()
-                * model.getEurope().getGoodTradeForType(goodAmount.getGoodType()).getBuyPrice();
+    public void sell(final Goods goods) {
+        int price = goods.getAmount()
+                * model.getEurope().getGoodsTradeForType(goods.getType()).getBuyPrice();
         setGold(getGold() + price);
     }
 

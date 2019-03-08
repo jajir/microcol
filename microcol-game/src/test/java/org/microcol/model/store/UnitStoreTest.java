@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 import org.microcol.model.ConstructionType;
-import org.microcol.model.GoodType;
+import org.microcol.model.GoodsType;
 import org.microcol.model.Location;
 import org.microcol.model.TerrainType;
 import org.microcol.model.UnitType;
@@ -24,7 +24,7 @@ public class UnitStoreTest {
 
     private final Gson gson = new GsonBuilder()
 	    .registerTypeAdapter(ConstructionType.class, new GsonConstructionTypeAdapter())
-	    .registerTypeAdapter(GoodType.class, new GsonGoodTypeAdapter())
+	    .registerTypeAdapter(GoodsType.class, new GsonGoodsTypeAdapter())
 	    .registerTypeAdapter(TerrainType.class, new GsonTerrainTypeAdapter())
 	    .registerTypeAdapter(UnitType.class, new GsonUnitTypeAdapter())
 	    .registerTypeAdapter(UnitActionPo.class, new UnitActionPoAdapter()).setPrettyPrinting().create();

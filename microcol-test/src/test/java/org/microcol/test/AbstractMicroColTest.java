@@ -1,5 +1,9 @@
 package org.microcol.test;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.microcol.MicroCol;
 import org.microcol.gui.Point;
@@ -7,7 +11,11 @@ import org.microcol.gui.preferences.GamePreferences;
 import org.microcol.gui.screen.game.gamepanel.CursorService;
 import org.microcol.gui.screen.game.gamepanel.GamePanelView;
 import org.microcol.mock.CursorServiceNoOpp;
+import org.microcol.model.CargoSlot;
+import org.microcol.model.Goods;
 import org.microcol.model.Model;
+import org.microcol.model.Player;
+import org.microcol.model.unit.UnitWithCargo;
 import org.microcol.page.TestContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,7 +46,7 @@ public abstract class AbstractMicroColTest {
     }
 
     @BeforeEach
-    void pred(final FxRobot robot) {
+    void beforeEachTest(final FxRobot robot) {
 	getContext().setRobot(robot);
     }
 
@@ -84,6 +92,24 @@ public abstract class AbstractMicroColTest {
 
     protected Model getModel() {
 	return getContext().getModel();
+    }
+
+    protected Player getHumanPlayer() {
+	return getModel().getPlayers().stream().filter(player -> player.isHuman()).findAny()
+		.orElseThrow(() -> new IllegalStateException("There is no human player in game model."));
+    }
+
+    protected void verifyNumberOfGoodsInShip(final UnitWithCargo ship, final int cargoSlotIndex,
+	    final Goods expectedGoods) {
+	final CargoSlot cargoSlot = ship.getCargo().getSlotByIndex(cargoSlotIndex);
+
+	if (expectedGoods.isZero()) {
+	    assertFalse(cargoSlot.getGoods().isPresent(), "Cargo slot should be empty");
+	} else {
+	    assertTrue(cargoSlot.getGoods().isPresent(), "Cargo slot should not be empty");
+	    assertEquals(expectedGoods.getType(), cargoSlot.getGoods().get().getType());
+	    assertEquals(expectedGoods.getAmount(), cargoSlot.getGoods().get().getAmount());
+	}
     }
 
 }

@@ -5,7 +5,7 @@ import java.util.function.BiConsumer;
 import java.util.function.Predicate;
 
 import org.microcol.model.CargoSlot;
-import org.microcol.model.GoodsAmount;
+import org.microcol.model.Goods;
 import org.microcol.model.Model;
 import org.microcol.model.Unit;
 import org.microcol.model.unit.UnitWithCargo;
@@ -66,9 +66,9 @@ public class ClipboardEval extends ClipboardParser {
      *            keep otherwise will be removed.
      * @return return parsing result
      */
-    public ClipboardEval filterGoods(final Predicate<GoodsAmount> filter) {
-        if (getFrom().isPresent() && getGoodAmount().isPresent()) {
-            if (!filter.test(getGoodAmount().get())) {
+    public ClipboardEval filterGoods(final Predicate<Goods> filter) {
+        if (getFrom().isPresent() && getGoods().isPresent()) {
+            if (!filter.test(getGoods().get())) {
                 removeKey(KEY_GOODS);
             }
         }
@@ -104,16 +104,16 @@ public class ClipboardEval extends ClipboardParser {
         return Optional.empty();
     }
 
-    public ClipboardEval tryReadGood(final BiConsumer<GoodsAmount, From> consumer) {
-        if (getFrom().isPresent() && getGoodAmount().isPresent()) {
-            consumer.accept(getGoodAmount().get(), getFrom().get());
+    public ClipboardEval tryReadGood(final BiConsumer<Goods, From> consumer) {
+        if (getFrom().isPresent() && getGoods().isPresent()) {
+            consumer.accept(getGoods().get(), getFrom().get());
         }
         return this;
     }
 
-    public ClipboardEval readGood(final BiConsumer<GoodsAmount, From> consumer) {
-        if (getFrom().isPresent() && getGoodAmount().isPresent()) {
-            consumer.accept(getGoodAmount().get(), getFrom().get());
+    public ClipboardEval readGood(final BiConsumer<Goods, From> consumer) {
+        if (getFrom().isPresent() && getGoods().isPresent()) {
+            consumer.accept(getGoods().get(), getFrom().get());
             return this;
         } else {
             throw new IllegalStateException(

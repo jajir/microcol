@@ -1,6 +1,7 @@
 package org.microcol.gui.screen.europe;
 
 import org.microcol.gui.GoodsTypeName;
+import org.microcol.gui.Loc;
 import org.microcol.gui.dialog.DialogNotEnoughGold;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.image.ImageProvider;
@@ -10,9 +11,9 @@ import org.microcol.gui.util.ClipboardWritter;
 import org.microcol.gui.util.JavaFxComponent;
 import org.microcol.gui.util.Repaintable;
 import org.microcol.i18n.I18n;
-import org.microcol.model.GoodTrade;
-import org.microcol.model.GoodType;
-import org.microcol.model.GoodsAmount;
+import org.microcol.model.Goods;
+import org.microcol.model.GoodsTrade;
+import org.microcol.model.GoodsType;
 
 import com.google.common.base.Preconditions;
 import com.google.common.eventbus.EventBus;
@@ -35,7 +36,7 @@ public final class PanelGood implements JavaFxComponent, Repaintable {
 
     private final ImageView imageView;
 
-    private final GoodType goodType;
+    private final GoodsType goodsType;
 
     private final GameModelController gameModelController;
 
@@ -47,30 +48,31 @@ public final class PanelGood implements JavaFxComponent, Repaintable {
 
     private final I18n i18n;
 
-    public PanelGood(final GoodType goodType, final ImageProvider imageProvider,
+    public PanelGood(final GoodsType goodsType, final ImageProvider imageProvider,
             final GameModelController gameModelController,
             final DialogNotEnoughGold dialogNotEnoughGold, final EventBus eventBus,
             final I18n i18n) {
-        this.goodType = Preconditions.checkNotNull(goodType);
+        this.goodsType = Preconditions.checkNotNull(goodsType);
         this.gameModelController = Preconditions.checkNotNull(gameModelController);
         this.dialogNotEnoughGold = Preconditions.checkNotNull(dialogNotEnoughGold);
         this.eventBus = Preconditions.checkNotNull(eventBus);
         this.i18n = Preconditions.checkNotNull(i18n);
-        imageView = new ImageView(imageProvider.getGoodTypeImage(goodType));
-        mainPanel = new VBox();
+        imageView = new ImageView(imageProvider.getGoodsTypeImage(goodsType));
         final Pane paneImage = new Pane(imageView);
         paneImage.setOnDragDetected(this::onDragDetected);
         labelPrice = new Label();
+        mainPanel = new VBox();
+        mainPanel.getStyleClass().add("panelGoods");
         mainPanel.getChildren().addAll(paneImage, labelPrice);
         mainPanel.setOnMouseEntered(this::onMouseEntered);
         mainPanel.setOnMouseExited(this::onMouseExited);
     }
 
     private void onMouseEntered(@SuppressWarnings("unused") final MouseEvent event) {
-        final GoodTrade goodTrade = getGoodTrade();
+        final GoodsTrade goodsTrade = getGoodsTrade();
         eventBus.post(new StatusBarMessageEvent(
-                i18n.get(Europe.goodsToSell, i18n.get(GoodsTypeName.getNameForGoodType(goodType)),
-                        goodTrade.getSellPrice(), goodTrade.getBuyPrice()),
+                i18n.get(Europe.goodsToSell, i18n.get(GoodsTypeName.getNameForGoodsType(goodsType)),
+                        goodsTrade.getSellPrice(), goodsTrade.getBuyPrice()),
                 Source.EUROPE));
     }
 
@@ -80,24 +82,26 @@ public final class PanelGood implements JavaFxComponent, Repaintable {
 
     private void onDragDetected(final MouseEvent event) {
         final Dragboard db = mainPanel.startDragAndDrop(TransferMode.MOVE, TransferMode.LINK);
-        final GoodsAmount goodAmount = gameModelController.getMaxBuyableGoodsAmount(goodType);
-        if (goodAmount.isZero()) {
+        final Goods goods = gameModelController.getMaxBuyableGoods(goodsType);
+        if (goods.isZero()) {
             dialogNotEnoughGold.showAndWait();
         } else {
+            eventBus.post(new StatusBarMessageEvent(i18n.get(Loc.adjustAmountOfGoods),
+                    Source.EUROPE));
             ClipboardWritter.make(db).addImage(imageView.getImage()).addTransferFromEuropeShop()
-                    .addGoodAmount(goodAmount).build();
+                    .addGoods(goods).build();
         }
         event.consume();
     }
 
     @Override
     public void repaint() {
-        final GoodTrade goodTrade = getGoodTrade();
-        labelPrice.setText(goodTrade.getSellPrice() + "/" + goodTrade.getBuyPrice());
+        final GoodsTrade goodsTrade = getGoodsTrade();
+        labelPrice.setText(goodsTrade.getSellPrice() + "/" + goodsTrade.getBuyPrice());
     }
 
-    private GoodTrade getGoodTrade() {
-        return gameModelController.getModel().getEurope().getGoodTradeForType(goodType);
+    private GoodsTrade getGoodsTrade() {
+        return gameModelController.getModel().getEurope().getGoodsTradeForType(goodsType);
     }
 
     @Override

@@ -6,7 +6,7 @@ import org.microcol.i18n.MessageKeyResource;
 import org.microcol.i18n.ResourceBundleControlBuilder;
 import org.microcol.i18n.ResourceBundleFormat;
 
-public enum ChooseGoodAmount implements MessageKeyResource {
+public enum ChooseGoods implements MessageKeyResource {
 
     caption, zero, everything, selectedAmount;
 

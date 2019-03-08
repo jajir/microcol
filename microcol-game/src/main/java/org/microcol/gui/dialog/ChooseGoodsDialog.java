@@ -2,11 +2,12 @@ package org.microcol.gui.dialog;
 
 import java.util.function.Function;
 
-import org.microcol.gui.screen.europe.ChooseGoodAmount;
+import org.microcol.gui.screen.europe.ChooseGoods;
 import org.microcol.gui.util.AbstractMessageWindow;
 import org.microcol.gui.util.ButtonsBar;
 import org.microcol.gui.util.ViewUtil;
 import org.microcol.i18n.I18n;
+import org.microcol.model.Goods;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
@@ -20,11 +21,11 @@ import javafx.util.StringConverter;
 /**
  * Allows user to choose how many goods wants to transfer.
  */
-public final class ChooseGoodAmountDialog extends AbstractMessageWindow {
+public final class ChooseGoodsDialog extends AbstractMessageWindow {
 
     final static int MIN_VALUE = 0;
 
-    private int actualValue;
+    private Goods actualValue;
 
     private final Slider slider;
 
@@ -37,7 +38,7 @@ public final class ChooseGoodAmountDialog extends AbstractMessageWindow {
     private final Label labelCaption;
 
     @Inject
-    public ChooseGoodAmountDialog(final ViewUtil viewUtil, final I18n i18n) {
+    public ChooseGoodsDialog(final ViewUtil viewUtil, final I18n i18n) {
         super(viewUtil, i18n);
         this.i18n = Preconditions.checkNotNull(i18n);
 
@@ -62,7 +63,7 @@ public final class ChooseGoodAmountDialog extends AbstractMessageWindow {
 
         slider.valueProperty().addListener((obj, oldValue, newValue) -> {
             labelValue.setText(String.valueOf(newValue.intValue()));
-            actualValue = newValue.intValue();
+            actualValue = Goods.of(actualValue.getType(), newValue.intValue());
         });
 
         final ButtonsBar buttonsBar = new ButtonsBar(i18n);
@@ -74,37 +75,37 @@ public final class ChooseGoodAmountDialog extends AbstractMessageWindow {
         root.getChildren().addAll(labelCaption, boxActualValue, slider, buttonsBar);
     }
 
-    public void init(final int maximalNumberToTransfer) {
-        actualValue = maximalNumberToTransfer;
-        this.maximalNumberToTransfer = maximalNumberToTransfer;
-        slider.setMax(maximalNumberToTransfer);
-        slider.setValue(maximalNumberToTransfer);
+    public void init(final Goods maximalGoodsToTransfer) {
+        actualValue = maximalGoodsToTransfer;
+        this.maximalNumberToTransfer = maximalGoodsToTransfer.getAmount();
+        slider.setMax(maximalGoodsToTransfer.getAmount());
+        slider.setValue(maximalGoodsToTransfer.getAmount());
         showAndWait();
     }
 
     @Override
     protected void onCancelDialog() {
-        actualValue = 0;
+        actualValue = Goods.of(actualValue.getType());
         super.onCancelDialog();
     }
 
     @Override
     public void updateLanguage(final I18n i18n) {
-        setTitle(i18n.get(ChooseGoodAmount.caption));
-        labelCaption.setText(i18n.get(ChooseGoodAmount.caption));
-        labelActualValue.setText(i18n.get(ChooseGoodAmount.selectedAmount));
+        setTitle(i18n.get(ChooseGoods.caption));
+        labelCaption.setText(i18n.get(ChooseGoods.caption));
+        labelActualValue.setText(i18n.get(ChooseGoods.selectedAmount));
     }
 
-    public int getActualValue() {
+    public Goods getActualValue() {
         return actualValue;
     }
 
     private String converToString(final Double value) {
         int v = value.intValue();
         if (MIN_VALUE == value) {
-            return i18n.get(ChooseGoodAmount.zero);
+            return i18n.get(ChooseGoods.zero);
         } else if (maximalNumberToTransfer == value) {
-            return i18n.get(ChooseGoodAmount.everything);
+            return i18n.get(ChooseGoods.everything);
         } else if (v % 10 == 0) {
             return String.valueOf(v);
         }

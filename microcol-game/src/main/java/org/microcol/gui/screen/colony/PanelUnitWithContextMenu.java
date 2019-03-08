@@ -6,7 +6,7 @@ import org.microcol.gui.util.ClipboardWritter;
 import org.microcol.gui.util.JavaFxComponent;
 import org.microcol.gui.util.Repaintable;
 import org.microcol.model.Colony;
-import org.microcol.model.GoodType;
+import org.microcol.model.GoodsType;
 import org.microcol.model.Unit;
 import org.microcol.model.unit.UnitFreeColonist;
 
@@ -74,7 +74,7 @@ public class PanelUnitWithContextMenu implements JavaFxComponent, Repaintable {
                 });
                 contextMenu.getItems().add(menuItem);
             } else {
-                final int muskets = colony.getColonyWarehouse().getGoodAmmount(GoodType.MUSKET);
+                final int muskets = colony.getColonyWarehouse().getGoods(GoodsType.MUSKET).getAmount();
                 if (UnitFreeColonist.REQUIRED_MUSKETS_FOR_ARMED_UNIT <= muskets) {
                     final MenuItem menuItem = new MenuItem("Equip with muskets");
                     menuItem.setOnAction(evt -> {
@@ -92,7 +92,7 @@ public class PanelUnitWithContextMenu implements JavaFxComponent, Repaintable {
                 });
                 contextMenu.getItems().add(menuItem);
             } else {
-                final int horses = colony.getColonyWarehouse().getGoodAmmount(GoodType.HORSE);
+                final int horses = colony.getColonyWarehouse().getGoods(GoodsType.HORSE).getAmount();
                 if (UnitFreeColonist.REQUIRED_MUSKETS_FOR_ARMED_UNIT <= horses) {
                     final MenuItem menuItem = new MenuItem("Mount horses");
                     menuItem.setOnAction(evt -> {
@@ -110,7 +110,7 @@ public class PanelUnitWithContextMenu implements JavaFxComponent, Repaintable {
                 });
                 contextMenu.getItems().add(menuItem);
             } else {
-                final int tools = colony.getColonyWarehouse().getGoodAmmount(GoodType.TOOLS);
+                final int tools = colony.getColonyWarehouse().getGoods(GoodsType.TOOLS).getAmount();
                 if (tools > 0) {
                     final MenuItem menuItem = new MenuItem("Equip with tools");
                     menuItem.setOnAction(evt -> {

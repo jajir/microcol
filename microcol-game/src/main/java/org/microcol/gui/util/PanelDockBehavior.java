@@ -3,7 +3,7 @@ package org.microcol.gui.util;
 import java.util.List;
 
 import org.microcol.model.CargoSlot;
-import org.microcol.model.GoodsAmount;
+import org.microcol.model.Goods;
 import org.microcol.model.Unit;
 
 import javafx.scene.Node;
@@ -60,9 +60,9 @@ public interface PanelDockBehavior {
      */
     boolean isCorrectObject(CargoSlot cargoSlot, Dragboard db);
 
-    default boolean canBeGoodsTransfered(final CargoSlot cargoSlot, final GoodsAmount goodsAmount) {
+    default boolean canBeGoodsTransfered(final CargoSlot cargoSlot, final Goods goods) {
         if (cargoSlot.getGoods().isPresent()) {
-            return cargoSlot.getGoods().get().getGoodType().equals(goodsAmount.getGoodType());
+            return cargoSlot.getGoods().get().getType().equals(goods.getType());
         } else {
             return true;
         }

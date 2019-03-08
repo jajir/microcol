@@ -1,6 +1,6 @@
 package org.microcol.model.event;
 
-import org.microcol.model.GoodsAmount;
+import org.microcol.model.Goods;
 import org.microcol.model.Model;
 
 import com.google.common.base.Preconditions;
@@ -10,18 +10,18 @@ import com.google.common.base.Preconditions;
  */
 public final class GoodsWasSoldInEuropeEvent extends AbstractModelEvent {
 
-    private final GoodsAmount goodsAmount;
+    private final Goods goods;
 
-    public GoodsWasSoldInEuropeEvent(final Model model, final GoodsAmount goodsAmount) {
+    public GoodsWasSoldInEuropeEvent(final Model model, final Goods goods) {
         super(model);
-        this.goodsAmount = Preconditions.checkNotNull(goodsAmount);
+        this.goods = Preconditions.checkNotNull(goods);
     }
 
     /**
-     * @return the goodsAmount
+     * @return the goods
      */
-    public GoodsAmount getGoodsAmount() {
-        return goodsAmount;
+    public Goods getGoods() {
+        return goods;
     }
 
 }

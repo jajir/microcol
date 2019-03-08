@@ -18,111 +18,124 @@ public class ColonyWarehouse {
 
     private final Colony colony;
 
-    private final Map<GoodType, Integer> goodAmounts;
+    private final Map<GoodsType, Integer> warehouse;
 
-    ColonyWarehouse(final Colony colony, final Map<String, Integer> initialGoodAmounts) {
+    ColonyWarehouse(final Colony colony, final Map<String, Integer> initialGoods) {
         this.colony = colony;
-        Preconditions.checkNotNull(initialGoodAmounts);
-        this.goodAmounts = new HashMap<>();
-        initialGoodAmounts
-                .forEach((goodName, amount) -> goodAmounts.put(GoodType.valueOf(goodName), amount));
+        Preconditions.checkNotNull(initialGoods);
+        this.warehouse = new HashMap<>();
+        initialGoods
+                .forEach((goodName, amount) -> warehouse.put(GoodsType.valueOf(goodName), amount));
     }
 
     Map<String, Integer> save() {
-        return goodAmounts.entrySet().stream().collect(ImmutableMap
+        return warehouse.entrySet().stream().collect(ImmutableMap
                 .toImmutableMap(entry -> entry.getKey().name(), entry -> entry.getValue()));
     }
 
-    public Integer getGoodAmmount(final GoodType goodType) {
-        Preconditions.checkNotNull(goodType, "GoodType is null");
-        Integer amount = goodAmounts.get(goodType);
-        if (amount == null) {
-            return 0;
+    public Goods getGoods(final GoodsType goodsType) {
+        Preconditions.checkNotNull(goodsType, "GoodsType is null");
+        if (warehouse.get(goodsType) == null) {
+            return Goods.of(goodsType);
+        } else {
+            return Goods.of(goodsType, warehouse.get(goodsType));
         }
-        return amount;
     }
 
-    public Integer getTransferableGoodsAmount(final GoodType goodType) {
-        final Integer amount = goodAmounts.get(goodType);
-        if (amount == null) {
-            return 0;
+    /**
+     * For given goods type return man goods that could be moved with given
+     * limit.
+     *
+     * @param goodsType
+     *            required goods type
+     * @param limit
+     *            max transferable goods amount
+     * @return really available transferable goods
+     */
+    public Goods getTransferableGoods(final GoodsType goodsType, final int limit) {
+        final Goods goods = getGoods(goodsType);
+        if (goods.getAmount() > limit) {
+            return Goods.of(goodsType, limit);
+        } else {
+            return goods;
         }
-        if (amount > 100) {
-            return 100;
-        }
-        return amount;
     }
 
     private ConstructionType getConstructionType() {
         return colony.getWarehouseType();
     }
 
-    @Deprecated
-    public void addToWarehouse(final GoodType goodType, final int amount) {
-        goodAmounts.put(goodType, getGoodAmmount(goodType) + amount);
+    public void addGoods(final Goods goods) {
+        Preconditions.checkNotNull(goods);
+        setGoods(getGoods(goods.getType()).add(goods));
     }
 
-    public void addToWarehouse(final GoodsAmount goodsAmount) {
-        addToWarehouse(goodsAmount.getGoodType(), goodsAmount.getAmount());
-    }
-
-    public void moveToWarehouse(final GoodsAmount goodsAmount, final CargoSlot fromCargoSlot) {
-        moveToWarehouse(goodsAmount.getGoodType(), goodsAmount.getAmount(), fromCargoSlot);
-    }
-
-    @Deprecated
-    public void moveToWarehouse(final GoodType goodType, final int amount,
-            final CargoSlot fromCargoSlot) {
-        Preconditions.checkNotNull(goodType);
+    public void moveToWarehouse(final Goods goods, final CargoSlot fromCargoSlot) {
+        Preconditions.checkNotNull(goods);
         Preconditions.checkNotNull(fromCargoSlot);
-        Preconditions.checkArgument(amount >= 0, "amount can't less than 0");
-        final Integer newAmount = getGoodAmmount(goodType) + amount;
-        final int limit = getMaxStorageSpace(goodType, getConstructionType());
-        if (newAmount > limit) {
-            logger.warn(String.format("Good (%s) ammount (%s) exceed warehouse limit (%s)",
-                    goodType.name(), newAmount, limit));
-        }
-        fromCargoSlot.removeCargo(goodType, amount);
-        goodAmounts.put(goodType, newAmount);
+
+        Preconditions.checkArgument(fromCargoSlot.getGoods().isPresent());
+        Preconditions
+                .checkArgument(goods.getType().equals(fromCargoSlot.getGoods().get().getType()));
+        Preconditions
+                .checkArgument(fromCargoSlot.getGoods().get().getAmount() >= goods.getAmount());
+
+        addGoods(goods);
+        fromCargoSlot.removeCargo(goods);
     }
 
-    public void removeFromWarehouse(final GoodsAmount goodsAmount) {
-        removeFromWarehouse(goodsAmount.getGoodType(), goodsAmount.getAmount());
+    public void removeGoods(final Goods goods) {
+        Preconditions.checkNotNull(goods);
+        final Goods current = getGoods(goods.getType());
+        Preconditions.checkArgument(goods.getAmount() <= current.getAmount(),
+                "Can't remove %s of %s, because in warehouse is currently just %s of %s",
+                goods.getAmount(), goods.getType(), current.getAmount(), goods.getType());
+        setGoods(current.substract(goods));
     }
 
-    @Deprecated
-    public void removeFromWarehouse(final GoodType goodType, final int ammount) {
-        Preconditions.checkArgument(ammount >= 0, "amount can't less than 0");
-        final Integer newAmount = getGoodAmmount(goodType) - ammount;
-        final int limit = 0;
-        Preconditions.checkArgument(newAmount >= limit,
-                "Good (%s) ammount (%s) can't be less than warehjouse limit (%s)", goodType.name(),
-                newAmount, limit);
-        goodAmounts.put(goodType, newAmount);
+    void setGoodsToZero(final GoodsType goodsType) {
+        setGoods(Goods.of(goodsType));
     }
 
-    void setGoodsToZero(final GoodType goodType) {
-        removeFromWarehouse(goodType, getGoodAmmount(goodType));
+    private void setGoods(final Goods goods) {
+        Preconditions.checkNotNull(goods);
+        Preconditions.checkArgument(
+                goods.getAmount() <= getStorageCapacity(goods.getType()).getAmount(),
+                "%s can't be stored because storage limit for %s is %s", goods.getAmount(),
+                goods.getType(), getStorageCapacity(goods.getType()));
+        logger.debug("Setting goods to {}", goods);
+        warehouse.put(goods.getType(), goods.getAmount());
     }
 
-    int getMaxStorageSpace(final GoodType goodType, final ConstructionType constructionType) {
-        if (goodType == GoodType.CORN) {
-            return 200;
-        }
-        if (constructionType.equals(ConstructionType.WAREHOUSE_BASIC)) {
-            return 100;
-        } else if (constructionType.equals(ConstructionType.WAREHOUSE)) {
-            return 200;
-        } else if (constructionType.equals(ConstructionType.WAREHOUSE_EXPANSION)) {
-            return 300;
+    Goods getStorageCapacity(final GoodsType goodsType) {
+        return Goods.of(goodsType, getStorageCapacity(goodsType, getConstructionType()));
+    }
+
+    int getStorageCapacity(final GoodsType goodsType, final ConstructionType constructionType) {
+        Preconditions.checkNotNull(goodsType);
+        Preconditions.checkNotNull(constructionType);
+        if (GoodsType.BUYABLE_GOOD_TYPES.contains(goodsType)) {
+            if (goodsType == GoodsType.CORN) {
+                return 200;
+            }
+            if (constructionType.equals(ConstructionType.WAREHOUSE_BASIC)) {
+                return 100;
+            } else if (constructionType.equals(ConstructionType.WAREHOUSE)) {
+                return 200;
+            } else if (constructionType.equals(ConstructionType.WAREHOUSE_EXPANSION)) {
+                return 300;
+            } else {
+                throw new IllegalStateException(
+                        String.format("Unable to get maximum storage for construction type (%s)",
+                                constructionType));
+            }
         } else {
-            throw new IllegalStateException(String.format(
-                    "Unable to get maximum storage for construction type (%s)", constructionType));
+            return Integer.MAX_VALUE;
         }
     }
 
     void saveStatisticsTo(final PlayerGoodsStatistics statistics) {
-        goodAmounts.entrySet().forEach(statistics::addEntry);
+        warehouse.entrySet().forEach(statistics::addEntry);
     }
 
 }

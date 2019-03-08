@@ -57,8 +57,8 @@ public class Model {
          */
         colonies.forEach(colony -> {
             colony.getColonyFields().forEach(colonyfield -> {
-                if (!colonyfield.isEmpty()) {
-                    final Unit unit = colonyfield.getUnit();
+                if (colonyfield.getUnit().isPresent()) {
+                    final Unit unit = colonyfield.getUnit().get();
                     Preconditions.checkState(unitStorage.getUnitById(unit.getId()).equals(unit));
                 }
             });
@@ -392,7 +392,7 @@ public class Model {
     public Optional<Unit> getFirstSelectableUnitAt(final Location location) {
         return unitStorage.getFirstSelectableUnitAt(getCurrentPlayer(), location);
     }
-    
+
     public List<Unit> getMoveableUnitAtOwnedBy(final Location location, final Player player) {
         return unitStorage.getUnitsAt(location).stream()
                 .filter(unit -> unit.getActionPoints() > 0 && unit.getOwner().equals(player))
@@ -582,9 +582,9 @@ public class Model {
         unitStorage.remove(unit);
     }
 
-    public void sellGoods(final CargoSlot cargoSlot, final GoodsAmount goodsAmount) {
-        cargoSlot.sellAndEmpty(goodsAmount);
-        listenerManager.fireGoodsWasSoldInEurope(this, goodsAmount);
+    public void sellGoods(final CargoSlot cargoSlot, final Goods goods) {
+        cargoSlot.sellAndEmpty(goods);
+        listenerManager.fireGoodsWasSoldInEurope(this, goods);
     }
 
     void fireGameStarted() {
@@ -718,6 +718,10 @@ public class Model {
      */
     TurnEventStore getTurnEventStore() {
         return turnEventStore;
+    }
+
+    public void addTurnEvent(final TurnEvent turnEvent) {
+        getTurnEventStore().add(turnEvent);
     }
 
     public List<TurnEvent> getTurnEventsLocalizedMessages(final Player player,

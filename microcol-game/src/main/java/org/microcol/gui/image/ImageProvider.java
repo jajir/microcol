@@ -10,8 +10,8 @@ import org.microcol.gui.MicroColException;
 import org.microcol.model.ChainOfCommandStrategy;
 import org.microcol.model.ConstructionType;
 import org.microcol.model.Direction;
-import org.microcol.model.GoodType;
-import org.microcol.model.GoodsAmount;
+import org.microcol.model.GoodsType;
+import org.microcol.model.Goods;
 import org.microcol.model.TerrainType;
 import org.microcol.model.Unit;
 import org.microcol.model.UnitType;
@@ -179,7 +179,7 @@ public final class ImageProvider {
 
     private final Map<UnitType, Image> unitImageMap;
 
-    private final Map<GoodType, Image> goodTypeImageMap;
+    private final Map<GoodsType, Image> goodsTypeImageMap;
 
     private final ChainOfCommandStrategy<UnitImageRequest, Image> unitImageResolver = new ChainOfCommandStrategy<UnitImageRequest, Image>(
             Lists.newArrayList(request -> {
@@ -240,26 +240,26 @@ public final class ImageProvider {
                 .put(UnitType.FRIGATE, getImage(IMG_UNIT_SHIP_FRIGATE))
                 .put(UnitType.COLONIST, getImage(IMG_UNIT_FREE_COLONIST)).build();
 
-        goodTypeImageMap = ImmutableMap.<GoodType, Image>builder()
-                .put(GoodType.CORN, getImage(IMG_GOOD_CORN))
-                .put(GoodType.BELL, getImage(IMG_GOOD_BELL))
-                .put(GoodType.HAMMERS, getImage(IMG_GOOD_HAMMER))
-                .put(GoodType.CROSS, getImage(IMG_GOOD_CROSS))
-                .put(GoodType.SUGAR, getImage(IMG_GOOD_SUGAR))
-                .put(GoodType.TOBACCO, getImage(IMG_GOOD_TOBACCO))
-                .put(GoodType.COTTON, getImage(IMG_GOOD_COTTON))
-                .put(GoodType.FUR, getImage(IMG_GOOD_FUR))
-                .put(GoodType.LUMBER, getImage(IMG_GOOD_LUMBER))
-                .put(GoodType.ORE, getImage(IMG_GOOD_ORE))
-                .put(GoodType.SILVER, getImage(IMG_GOOD_SILVER))
-                .put(GoodType.HORSE, getImage(IMG_GOOD_HORSE))
-                .put(GoodType.RUM, getImage(IMG_GOOD_RUM))
-                .put(GoodType.CIGARS, getImage(IMG_GOOD_CIGARS))
-                .put(GoodType.SILK, getImage(IMG_GOOD_SILK))
-                .put(GoodType.COAT, getImage(IMG_GOOD_COAT))
-                .put(GoodType.GOODS, getImage(IMG_GOOD_GOODS))
-                .put(GoodType.TOOLS, getImage(IMG_GOOD_TOOLS))
-                .put(GoodType.MUSKET, getImage(IMG_GOOD_MUSKET)).build();
+        goodsTypeImageMap = ImmutableMap.<GoodsType, Image>builder()
+                .put(GoodsType.CORN, getImage(IMG_GOOD_CORN))
+                .put(GoodsType.BELL, getImage(IMG_GOOD_BELL))
+                .put(GoodsType.HAMMERS, getImage(IMG_GOOD_HAMMER))
+                .put(GoodsType.CROSS, getImage(IMG_GOOD_CROSS))
+                .put(GoodsType.SUGAR, getImage(IMG_GOOD_SUGAR))
+                .put(GoodsType.TOBACCO, getImage(IMG_GOOD_TOBACCO))
+                .put(GoodsType.COTTON, getImage(IMG_GOOD_COTTON))
+                .put(GoodsType.FUR, getImage(IMG_GOOD_FUR))
+                .put(GoodsType.LUMBER, getImage(IMG_GOOD_LUMBER))
+                .put(GoodsType.ORE, getImage(IMG_GOOD_ORE))
+                .put(GoodsType.SILVER, getImage(IMG_GOOD_SILVER))
+                .put(GoodsType.HORSE, getImage(IMG_GOOD_HORSE))
+                .put(GoodsType.RUM, getImage(IMG_GOOD_RUM))
+                .put(GoodsType.CIGARS, getImage(IMG_GOOD_CIGARS))
+                .put(GoodsType.SILK, getImage(IMG_GOOD_SILK))
+                .put(GoodsType.COAT, getImage(IMG_GOOD_COAT))
+                .put(GoodsType.GOODS, getImage(IMG_GOOD_GOODS))
+                .put(GoodsType.TOOLS, getImage(IMG_GOOD_TOOLS))
+                .put(GoodsType.MUSKET, getImage(IMG_GOOD_MUSKET)).build();
     }
 
     public List<String> getTileNames() {
@@ -395,23 +395,23 @@ public final class ImageProvider {
     /**
      * For specific good type find corresponding image.
      * 
-     * @param goodType
+     * @param goodsType
      *            required good type
      * @return image representing good type
      */
-    public Image getGoodTypeImage(final GoodType goodType) {
-        return goodTypeImageMap.get(goodType);
+    public Image getGoodsTypeImage(final GoodsType goodsType) {
+        return goodsTypeImageMap.get(goodsType);
     }
 
     /**
      * For specific good amount find corresponding image.
      * 
-     * @param goodsAmount
+     * @param goods
      *            required good amount
      * @return image representing good type
      */
-    public Image getGoodTypeImage(final GoodsAmount goodsAmount) {
-        return goodTypeImageMap.get(goodsAmount.getGoodType());
+    public Image getGoodsTypeImage(final Goods goods) {
+        return goodsTypeImageMap.get(goods.getType());
     }
 
 }

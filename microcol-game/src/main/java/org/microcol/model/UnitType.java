@@ -90,7 +90,7 @@ public final class UnitType {
      * Here is good type in which production is unit exceptional. When it's
      * <code>null</code> than unit is not expert on producing any type of goods.
      */
-    private final GoodType expertInProducing;
+    private final GoodsType expertInProducing;
 
     /**
      * Production multiplier on basic good production.
@@ -149,7 +149,7 @@ public final class UnitType {
             .setCargoCapacity(0)
             .setStorable(true)
             .setEuropePrice(DEFAULT_ORE_MINER_EUROPE_PRICE)
-            .setExpertise(GoodType.ORE, 2.0F)
+            .setExpertise(GoodsType.ORE, 2.0F)
             .setCanBuildRoad(true)
             .setCanCutTrees(true)
             .setCanPlowField(true)
@@ -181,7 +181,7 @@ public final class UnitType {
             .setCargoCapacity(0)
             .setStorable(true)
             .setEuropePrice(DEFAULT_MASTER_BLACKSMITH_EUROPE_PRICE)
-            .setExpertise(GoodType.TOOLS, 2.0F)
+            .setExpertise(GoodsType.TOOLS, 2.0F)
             .setCanBuildRoad(true)
             .setCanCutTrees(true)
             .setCanPlowField(true)
@@ -237,7 +237,7 @@ public final class UnitType {
         private Predicate<UnitType> attackableUnitTypeFilter;
         private boolean storable;
         private int europePrice;
-        private GoodType expertInProducing;
+        private GoodsType expertInProducing;
         private float expertProductionModifier;
         private boolean canPlowField = false;
         private boolean canBuildRoad = false;
@@ -353,7 +353,7 @@ public final class UnitType {
          *            Required if there is some production modifiers.
          * @return return unit type builder object
          */
-        UnitTypeBuilder setExpertise(final GoodType newExpertInProducing,
+        UnitTypeBuilder setExpertise(final GoodsType newExpertInProducing,
                 final float newExpertProductionModifier) {
             this.expertInProducing = newExpertInProducing;
             this.expertProductionModifier = newExpertProductionModifier;
@@ -453,7 +453,7 @@ public final class UnitType {
      */
     UnitType(final String name, final List<TerrainType> moveableTerrains, final int speed,
             final Predicate<UnitType> attackableUnitTypeFilter, final int cargoCapacity,
-            final boolean storable, final int europePrice, final GoodType expertInProducing,
+            final boolean storable, final int europePrice, final GoodsType expertInProducing,
             final float expertProductionModifier, final boolean canPlowField,
             final boolean canBuildRoad, final boolean canCutTrees, final Integer requiredTools,
             final Integer requiredHammers, final BiFunction<Model, Colony, Boolean> canByBuildInColony) {
@@ -625,12 +625,12 @@ public final class UnitType {
     /**
      * How much more of given goods type could unit produce.
      *
-     * @param goodType
+     * @param goodsType
      *            required good type
      * @return goods type related production modifier
      */
-    public float getProductionModifier(final GoodType goodType) {
-        if (goodType.equals(expertInProducing)) {
+    public float getProductionModifier(final GoodsType goodsType) {
+        if (goodsType.equals(expertInProducing)) {
             return expertProductionModifier;
         } else {
             return DEFAULT_PRODUCTION_MODIFIER;

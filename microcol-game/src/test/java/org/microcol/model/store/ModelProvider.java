@@ -2,7 +2,7 @@ package org.microcol.model.store;
 
 import org.microcol.model.ConstructionType;
 import org.microcol.model.Direction;
-import org.microcol.model.GoodType;
+import org.microcol.model.GoodsType;
 import org.microcol.model.Location;
 import org.microcol.model.Model;
 import org.microcol.model.UnitType;
@@ -31,11 +31,11 @@ public class ModelProvider {
 					.setWorker(ConstructionType.RUM_DISTILLERS_HOUSE, 0, UnitType.COLONIST)
 					.setWorker(ConstructionType.CARPENTERS_STAND, 0, UnitType.COLONIST)
 					.setWorker(ConstructionType.TOWN_HALL, 2, UnitType.COLONIST)
-					.setWorker(Direction.northEast.getVector(), UnitType.COLONIST, GoodType.CORN)
-					.setWorker(Direction.southWest.getVector(), UnitType.COLONIST, GoodType.CORN)
-					.setGood(GoodType.CIGARS, 33)
-					.setGood(GoodType.COAT, 100)
-					.setGood(GoodType.CORN, 75)
+					.setWorker(Direction.northEast.getVector(), UnitType.COLONIST, GoodsType.CORN)
+					.setWorker(Direction.southWest.getVector(), UnitType.COLONIST, GoodsType.CORN)
+					.setGood(GoodsType.CIGARS, 33)
+					.setGood(GoodsType.COAT, 100)
+					.setGood(GoodsType.CORN, 75)
 					.build()
 				.build()
 			.addUnit(UnitType.GALLEON, "Dutch", Location.of(5, 4))
@@ -70,11 +70,11 @@ public class ModelProvider {
 					.setUnitToEuropePortPier().build())
 			.getEuropeBuilder()
 			.addShipToPort(builder.makeUnitBuilder().setType(UnitType.GALLEON).setLocation(Location.of(2, 2))
-					.setPlayerName("Dutch").addCargoGood(GoodType.COTTON, 100)
+					.setPlayerName("Dutch").addCargoGood(GoodsType.COTTON, 100)
 					.addCargoUnit(UnitType.COLONIST).build())
 			.addShipToPort(builder.makeUnitBuilder().setType(UnitType.FRIGATE).setLocation(Location.of(2, 2))
-					.setPlayerName("Dutch").addCargoGood(GoodType.CIGARS, 100).addCargoGood(GoodType.RUM, 100)
-					.addCargoGood(GoodType.SILVER, 100).build())
+					.setPlayerName("Dutch").addCargoGood(GoodsType.CIGARS, 100).addCargoGood(GoodsType.RUM, 100)
+					.addCargoGood(GoodsType.SILVER, 100).build())
 			.build()
 			.startGame("Dutch");
 
@@ -108,7 +108,7 @@ public class ModelProvider {
 			 */
 			.getEuropeBuilder()
 			.addShipToPort(builder.makeUnitBuilder().setType(UnitType.GALLEON).setLocation(Location.of(2, 2))
-					.setPlayerName("Dutch").addCargoGood(GoodType.COTTON, 100)
+					.setPlayerName("Dutch").addCargoGood(GoodsType.COTTON, 100)
 					.addCargoUnit(UnitType.COLONIST).build())
 			.build()
 	                .startGame("Dutch");

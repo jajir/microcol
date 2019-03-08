@@ -19,10 +19,13 @@ public final class BuyUnitPanel extends VBox {
             final GameModelController gameModelController,
             final LocalizationHelper localizationHelper, final I18n i18n,
             final BuyUnitsDialog buyUnitsDialog, final DialogNotEnoughGold dialogNotEnoughGold) {
+        getStyleClass().add("unitPanel");
         final ImageView image = new ImageView(imageProvider.getUnitImage(unitType));
         final Label labelName = new Label(localizationHelper.getUnitName(unitType));
+        labelName.getStyleClass().add("name");
         final Button buttonBuy = new Button(
                 i18n.get(Europe.buyUnitDialog_buttonBuyUnit) + " " + unitType.getEuropePrice());
+        buttonBuy.getStyleClass().add("buttonBuy");
         buttonBuy.setOnAction(event -> {
             try {
                 gameModelController.getCurrentPlayer().buy(unitType);

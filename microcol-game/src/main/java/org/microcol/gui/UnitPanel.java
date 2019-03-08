@@ -87,7 +87,7 @@ public class UnitPanel {
         if (cargoSlot.isLoadedUnit()) {
             return new ImageView(imageProvider.getUnitImage(cargoSlot.getUnit().get()));
         } else {
-            return new ImageView(imageProvider.getGoodTypeImage(cargoSlot.getGoods().get()));
+            return new ImageView(imageProvider.getGoodsTypeImage(cargoSlot.getGoods().get()));
         }
     }
 

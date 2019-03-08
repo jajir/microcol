@@ -6,43 +6,43 @@ import java.util.ResourceBundle;
 import org.microcol.i18n.MessageKeyResource;
 import org.microcol.i18n.ResourceBundleControlBuilder;
 import org.microcol.i18n.ResourceBundleFormat;
-import org.microcol.model.GoodType;
+import org.microcol.model.GoodsType;
 
 import com.google.common.base.Preconditions;
 
 /**
- * Convert {@link GoodType} to localized goods names.
+ * Convert {@link GoodsType} to localized goods names.
  */
 public enum GoodsTypeName implements MessageKeyResource {
 
-    corn(GoodType.CORN),
-    sugar(GoodType.SUGAR),
-    tobacco(GoodType.TOBACCO),
-    cotton(GoodType.COTTON),
-    fur(GoodType.FUR),
-    lumber(GoodType.LUMBER),
-    ore(GoodType.ORE),
-    silver(GoodType.SILVER),
-    horse(GoodType.HORSE),
-    rum(GoodType.RUM),
-    cigars(GoodType.CIGARS),
-    silk(GoodType.SILK),
-    coat(GoodType.COAT),
-    goods(GoodType.GOODS),
-    tools(GoodType.TOOLS),
-    musket(GoodType.MUSKET),
-    hammers(GoodType.HAMMERS),
-    cross(GoodType.CROSS),
-    bell(GoodType.BELL);
+    corn(GoodsType.CORN),
+    sugar(GoodsType.SUGAR),
+    tobacco(GoodsType.TOBACCO),
+    cotton(GoodsType.COTTON),
+    fur(GoodsType.FUR),
+    lumber(GoodsType.LUMBER),
+    ore(GoodsType.ORE),
+    silver(GoodsType.SILVER),
+    horse(GoodsType.HORSE),
+    rum(GoodsType.RUM),
+    cigars(GoodsType.CIGARS),
+    silk(GoodsType.SILK),
+    coat(GoodsType.COAT),
+    goods(GoodsType.GOODS),
+    tools(GoodsType.TOOLS),
+    musket(GoodsType.MUSKET),
+    hammers(GoodsType.HAMMERS),
+    cross(GoodsType.CROSS),
+    bell(GoodsType.BELL);
     
-    private final GoodType goodType;
+    private final GoodsType goodsType;
 
-    GoodsTypeName(final GoodType goodType) {
-        this.goodType = Preconditions.checkNotNull(goodType);
+    GoodsTypeName(final GoodsType goodsType) {
+        this.goodsType = Preconditions.checkNotNull(goodsType);
     }
 
-    public static GoodsTypeName getNameForGoodType(final GoodType goodType) {
-        return Arrays.stream(values()).filter(gtName -> gtName.goodType == goodType).findFirst()
+    public static GoodsTypeName getNameForGoodsType(final GoodsType goodsType) {
+        return Arrays.stream(values()).filter(gtName -> gtName.goodsType == goodsType).findFirst()
                 .orElseThrow((() -> new IllegalArgumentException()));
     }
 

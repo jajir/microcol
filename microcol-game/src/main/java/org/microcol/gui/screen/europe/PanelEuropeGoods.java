@@ -3,6 +3,7 @@ package org.microcol.gui.screen.europe;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.microcol.gui.dialog.ChooseGoodsDialog;
 import org.microcol.gui.dialog.DialogNotEnoughGold;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.image.ImageProvider;
@@ -14,7 +15,8 @@ import org.microcol.gui.util.Repaintable;
 import org.microcol.gui.util.TitledPanel;
 import org.microcol.gui.util.UpdatableLanguage;
 import org.microcol.i18n.I18n;
-import org.microcol.model.GoodType;
+import org.microcol.model.GoodsType;
+import org.microcol.model.Goods;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -45,22 +47,25 @@ public final class PanelEuropeGoods implements JavaFxComponent, UpdatableLanguag
 
     private final List<PanelGood> panelGoods = new ArrayList<>();
 
+    private final ChooseGoodsDialog chooseGoods;
+
     @Inject
     public PanelEuropeGoods(final EuropeCallback europeDialogCallback,
             final GameModelController gameModelController, final ImageProvider imageProvider,
-            final DialogNotEnoughGold dialogNotEnoughGold, final EventBus eventBus,
-            final I18n i18n) {
+            final DialogNotEnoughGold dialogNotEnoughGold, final ChooseGoodsDialog chooseGoods,
+            final EventBus eventBus, final I18n i18n) {
         this.gameModelController = Preconditions.checkNotNull(gameModelController);
         this.europeDialogCallback = Preconditions.checkNotNull(europeDialogCallback);
+        this.chooseGoods = Preconditions.checkNotNull(chooseGoods);
         mainPanel = new HBox();
-        GoodType.BUYABLE_GOOD_TYPES.forEach(goodType -> {
-            final PanelGood panelGood = new PanelGood(goodType, imageProvider, gameModelController,
+        GoodsType.BUYABLE_GOOD_TYPES.forEach(goodsType -> {
+            final PanelGood panelGood = new PanelGood(goodsType, imageProvider, gameModelController,
                     dialogNotEnoughGold, eventBus, i18n);
             panelGoods.add(panelGood);
             mainPanel.getChildren().add(panelGood.getContent());
         });
         final BackgroundHighlighter backgroundHighlighter = new BackgroundHighlighter(mainPanel,
-                this::isItGoodAmount);
+                this::isItGoods);
         mainPanel.setOnDragEntered(backgroundHighlighter::onDragEntered);
         mainPanel.setOnDragExited(backgroundHighlighter::onDragExited);
         mainPanel.setOnDragOver(this::onDragOver);
@@ -82,7 +87,7 @@ public final class PanelEuropeGoods implements JavaFxComponent, UpdatableLanguag
     }
 
     private void onDragOver(final DragEvent event) {
-        if (isItGoodAmount(event.getDragboard())) {
+        if (isItGoods(event.getDragboard())) {
             event.acceptTransferModes(TransferMode.ANY);
             event.consume();
         }
@@ -93,16 +98,25 @@ public final class PanelEuropeGoods implements JavaFxComponent, UpdatableLanguag
         final Dragboard db = event.getDragboard();
         final ClipboardEval eval = ClipboardEval.make(gameModelController.getModel(), db)
                 .filterFrom(transferFrom -> From.VALUE_FROM_UNIT == transferFrom);
-        if (eval.getCargoSlot().isPresent() && eval.getGoodAmount().isPresent()) {
-            gameModelController.getModel().sellGoods(eval.getCargoSlot().get(),
-                    eval.getGoodAmount().get());
+        final boolean specialOperatonWasSelected = event.getTransferMode()
+                .equals(TransferMode.LINK);
+        if (eval.getCargoSlot().isPresent() && eval.getGoods().isPresent()) {
+
+            Goods goodsToSell = eval.getGoods().get();
+            if (specialOperatonWasSelected) {
+                // synchronously get information about transfered amount
+                chooseGoods.init(goodsToSell);
+                goodsToSell = chooseGoods.getActualValue();
+            }
+
+            gameModelController.getModel().sellGoods(eval.getCargoSlot().get(), goodsToSell);
             europeDialogCallback.repaint();
         }
         event.setDropCompleted(true);
         event.consume();
     }
 
-    private boolean isItGoodAmount(final Dragboard db) {
+    private boolean isItGoods(final Dragboard db) {
         logger.debug("Drag over unit id '" + db.getString() + "'.");
         return ClipboardEval.make(gameModelController.getModel(), db)
                 .filterFrom(from -> From.VALUE_FROM_UNIT == from).isNotEmpty();

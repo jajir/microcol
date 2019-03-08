@@ -1,13 +1,13 @@
 package org.microcol.gui.util;
 
+import org.microcol.gui.Loc;
 import org.microcol.gui.image.ImageProvider;
-import org.microcol.gui.screen.colony.ColonyMsg;
 import org.microcol.gui.screen.game.components.StatusBarMessageEvent;
 import org.microcol.gui.screen.game.components.StatusBarMessageEvent.Source;
 import org.microcol.gui.screen.game.gamepanel.GamePanelView;
 import org.microcol.i18n.I18n;
 import org.microcol.model.CargoSlot;
-import org.microcol.model.GoodsAmount;
+import org.microcol.model.Goods;
 import org.microcol.model.Unit;
 
 import com.google.common.base.Preconditions;
@@ -51,12 +51,15 @@ public final class PanelDockCrate extends StackPane {
 
     private final PanelDockBehavior panelDockBehavior;
 
+    private final Source source;
+
     PanelDockCrate(final ImageProvider imageProvider, final PanelDockBehavior panelDockBehavior,
-            final I18n i18n, final EventBus eventBus) {
+            final I18n i18n, final EventBus eventBus, final Source source) {
         this.imageProvider = Preconditions.checkNotNull(imageProvider);
         this.panelDockBehavior = Preconditions.checkNotNull(panelDockBehavior);
         this.i18n = Preconditions.checkNotNull(i18n);
         this.eventBus = Preconditions.checkNotNull(eventBus);
+        this.source = Preconditions.checkNotNull(source);
 
         crateImage = new ImageView();
         crateImage.getStyleClass().add("crate");
@@ -102,9 +105,9 @@ public final class PanelDockCrate extends StackPane {
             hideCargo();
         } else {
             if (cargoSlot.isLoadedGood()) {
-                final GoodsAmount goodaAmount = cargoSlot.getGoods().get();
+                final Goods goodaAmount = cargoSlot.getGoods().get();
                 labelAmount.setText(String.valueOf(goodaAmount.getAmount()));
-                cargoImage.setImage(imageProvider.getGoodTypeImage(goodaAmount.getGoodType()));
+                cargoImage.setImage(imageProvider.getGoodsTypeImage(goodaAmount.getType()));
             } else if (cargoSlot.isLoadedUnit()) {
                 final Unit cargoUnit = cargoSlot.getUnit().get();
                 labelAmount.setText("");
@@ -145,8 +148,8 @@ public final class PanelDockCrate extends StackPane {
 
     private void onDragDetected(final MouseEvent event) {
         if (cargoSlot.getGoods().isPresent()) {
-            eventBus.post(new StatusBarMessageEvent(i18n.get(ColonyMsg.adjustAmountOfGoods),
-                    Source.COLONY));
+            eventBus.post(
+                    new StatusBarMessageEvent(i18n.get(Loc.adjustAmountOfGoods), source));
         }
         panelDockBehavior.onDragDetected(cargoSlot, event, this);
     }

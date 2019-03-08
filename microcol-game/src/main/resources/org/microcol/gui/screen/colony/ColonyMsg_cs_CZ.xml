@@ -14,6 +14,5 @@
 	<entry key="goods"> ve skladu</entry>
 	<entry key="colony">Kolonie: </entry>
 	<entry key="buttonClose">Zavřít detail kolonie a vrátit se zpět na hlavní mapu.</entry>
-	<entry key="adjustAmountOfGoods">Pro bližší úpravu množství přenášeného zboží podrž klávesu Control (nebo Ctrl) ⌃.</entry>
 
 </properties>

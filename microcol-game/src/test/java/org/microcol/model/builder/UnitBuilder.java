@@ -1,6 +1,6 @@
 package org.microcol.model.builder;
 
-import org.microcol.model.GoodType;
+import org.microcol.model.GoodsType;
 import org.microcol.model.IdManager;
 import org.microcol.model.Location;
 import org.microcol.model.Player;
@@ -73,9 +73,9 @@ public class UnitBuilder {
         return this;
     }
 
-    public UnitBuilder addCargoGood(final GoodType goodType, final int amount) {
+    public UnitBuilder addCargoGood(final GoodsType goodsType, final int amount) {
         final CargoSlotPo cargoSlotPo = new CargoSlotPo();
-        cargoSlotPo.setGoodType(goodType);
+        cargoSlotPo.setGoodsType(goodsType);
         cargoSlotPo.setAmount(amount);
         unitPo.getCargo().getSlots().add(cargoSlotPo);
         return this;

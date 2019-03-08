@@ -8,7 +8,7 @@ import org.microcol.ai.ContinentTool;
 import org.microcol.ai.Continents;
 import org.microcol.gui.MicroColException;
 import org.microcol.gui.event.model.MissionCallBack;
-import org.microcol.model.GoodType;
+import org.microcol.model.GoodsType;
 import org.microcol.model.Location;
 import org.microcol.model.Model;
 import org.microcol.model.Path;
@@ -114,7 +114,7 @@ final class Default_0_missionDefinition extends MissionDefinition<Default_0_goal
                 // verify cigars producing
                 final Player human = getHumanPlayer(getModel());
                 if (human.getPlayerStatistics().getGoodsStatistics()
-                        .getGoodsAmount(GoodType.CIGARS) >= TRAGET_AMOUNT_OF_CIGARS) {
+                        .getGoods(GoodsType.CIGARS) >= TRAGET_AMOUNT_OF_CIGARS) {
                     missionCallBack.showMessage(Missions.default_m0_sellCigarsInEuropePort);
                     goals.getGoalProduceCigars().setFinished(true);
                 }
@@ -125,9 +125,9 @@ final class Default_0_missionDefinition extends MissionDefinition<Default_0_goal
 
     @Override
     public void onGoodsWasSoldInEurope(final GoodsWasSoldInEuropeEvent event) {
-        if (event.getGoodsAmount().getGoodType() == GoodType.CIGARS) {
+        if (event.getGoods().getType() == GoodsType.CIGARS) {
             goals.getGoalSellCigars().setWasSold(
-                    goals.getGoalSellCigars().getWasSold() + event.getGoodsAmount().getAmount());
+                    goals.getGoalSellCigars().getWasSold() + event.getGoods().getAmount());
         }
         if (goals.getGoalSellCigars().getWasSold() >= TRAGET_AMOUNT_OF_CIGARS) {
             goals.getGoalSellCigars().setFinished(true);

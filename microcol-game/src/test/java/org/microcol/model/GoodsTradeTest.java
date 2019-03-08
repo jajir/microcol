@@ -9,7 +9,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-public class GoodTradeTest {
+public class GoodsTradeTest {
 
     static Stream<Arguments> dataProvider() {
         return Stream.of(
@@ -23,11 +23,11 @@ public class GoodTradeTest {
     @MethodSource("dataProvider")
     public void test_getAvailableAmountFor(final int sellPrice, final int buyPrice,
             final int availableGold, final int expectedAmount) throws Exception {
-        final GoodTrade gt = new GoodTrade(GoodType.CIGARS, sellPrice, buyPrice);
+        final GoodsTrade gt = new GoodsTrade(GoodsType.CIGARS, sellPrice, buyPrice);
 
-        final GoodsAmount ga = gt.getAvailableAmountFor(availableGold);
+        final Goods ga = gt.getAvailableAmountFor(availableGold);
 
-        assertEquals(GoodType.CIGARS, ga.getGoodType());
+        assertEquals(GoodsType.CIGARS, ga.getType());
         assertEquals(expectedAmount, ga.getAmount());
     }
 

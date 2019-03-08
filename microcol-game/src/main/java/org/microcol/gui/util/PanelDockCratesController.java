@@ -1,6 +1,7 @@
 package org.microcol.gui.util;
 
 import org.microcol.gui.image.ImageProvider;
+import org.microcol.gui.screen.game.components.StatusBarMessageEvent.Source;
 import org.microcol.i18n.I18n;
 import org.microcol.model.CargoSlot;
 import org.microcol.model.unit.UnitWithCargo;
@@ -13,9 +14,10 @@ public final class PanelDockCratesController {
     private final PanelDockCratesView panelCratesView;
 
     PanelDockCratesController(final ImageProvider imageProvider,
-            final PanelDockBehavior panelDockBehavior, final I18n i18n, final EventBus eventBus) {
+            final PanelDockBehavior panelDockBehavior, final I18n i18n, final EventBus eventBus,
+            final Source source) {
         this.panelCratesView = new PanelDockCratesView(Preconditions.checkNotNull(imageProvider),
-                panelDockBehavior, i18n, eventBus);
+                panelDockBehavior, i18n, eventBus, source);
     }
 
     PanelDockCratesView getContent() {

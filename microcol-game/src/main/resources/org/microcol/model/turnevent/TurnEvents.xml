@@ -19,5 +19,6 @@
 	<entry key="newUnitIsInEurope">Because of religion unrest in Europe new colonist decide to emigrate. Now is waiting in Europe.</entry>
 	<entry key="newUnitIsInColony">There is a new unit in colony.</entry>
 	<entry key="colonyWasLost">Colony %s was lost.</entry>
+	<entry key="goodsWasThrowsAway">%s of %s goods was throws away because there is no space left in colony %s warehouse.</entry>
 
 </properties>

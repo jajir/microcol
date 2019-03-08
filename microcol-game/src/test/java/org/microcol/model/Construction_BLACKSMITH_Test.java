@@ -20,14 +20,15 @@ public class Construction_BLACKSMITH_Test extends AbstractConstructionTest {
         when(slot1.isEmpty()).thenReturn(true);
         when(slot2.isEmpty()).thenReturn(true);
         when(slot3.isEmpty()).thenReturn(true);
-        when(slot1.getProductionModifier(GoodType.TOOLS))
+        when(slot1.getProductionModifier(GoodsType.TOOLS))
                 .thenThrow(new RuntimeException("Should not be called."));
 
-        final ConstructionTurnProduction ret = construction.getProduction(0);
+        final ConstructionTurnProduction ret = construction
+                .getProduction(Goods.of(GoodsType.ORE, 0));
 
-        assertEquals(0, ret.getConsumedGoods());
-        assertEquals(0, ret.getProducedGoods());
-        assertEquals(0, ret.getBlockedGoods());
+        assertEquals(Goods.of(GoodsType.ORE, 0), ret.getConsumedGoods());
+        assertEquals(Goods.of(GoodsType.TOOLS, 0), ret.getProducedGoods());
+        assertEquals(Goods.of(GoodsType.TOOLS, 0), ret.getBlockedGoods());
     }
 
     @Test
@@ -35,13 +36,14 @@ public class Construction_BLACKSMITH_Test extends AbstractConstructionTest {
         when(slot1.isEmpty()).thenReturn(false);
         when(slot2.isEmpty()).thenReturn(true);
         when(slot3.isEmpty()).thenReturn(true);
-        when(slot1.getProductionModifier(GoodType.TOOLS)).thenReturn(1F);
+        when(slot1.getProductionModifier(GoodsType.TOOLS)).thenReturn(1F);
 
-        final ConstructionTurnProduction ret = construction.getProduction(0);
+        final ConstructionTurnProduction ret = construction
+                .getProduction(Goods.of(GoodsType.ORE, 0));
 
-        assertEquals(0, ret.getConsumedGoods());
-        assertEquals(0, ret.getProducedGoods());
-        assertEquals(5, ret.getBlockedGoods());
+        assertEquals(Goods.of(GoodsType.ORE, 0), ret.getConsumedGoods());
+        assertEquals(Goods.of(GoodsType.TOOLS, 0), ret.getProducedGoods());
+        assertEquals(Goods.of(GoodsType.TOOLS, 5), ret.getBlockedGoods());
     }
 
     @Test
@@ -49,13 +51,14 @@ public class Construction_BLACKSMITH_Test extends AbstractConstructionTest {
         when(slot1.isEmpty()).thenReturn(false);
         when(slot2.isEmpty()).thenReturn(true);
         when(slot3.isEmpty()).thenReturn(true);
-        when(slot1.getProductionModifier(GoodType.TOOLS)).thenReturn(1F);
+        when(slot1.getProductionModifier(GoodsType.TOOLS)).thenReturn(1F);
 
-        final ConstructionTurnProduction ret = construction.getProduction(3);
+        final ConstructionTurnProduction ret = construction
+                .getProduction(Goods.of(GoodsType.ORE, 3));
 
-        assertEquals(3, ret.getConsumedGoods());
-        assertEquals(3, ret.getProducedGoods());
-        assertEquals(2, ret.getBlockedGoods());
+        assertEquals(Goods.of(GoodsType.ORE, 3), ret.getConsumedGoods());
+        assertEquals(Goods.of(GoodsType.TOOLS, 3), ret.getProducedGoods());
+        assertEquals(Goods.of(GoodsType.TOOLS, 2), ret.getBlockedGoods());
     }
 
     @Test
@@ -64,13 +67,14 @@ public class Construction_BLACKSMITH_Test extends AbstractConstructionTest {
         when(slot1.isEmpty()).thenReturn(true);
         when(slot2.isEmpty()).thenReturn(true);
         when(slot3.isEmpty()).thenReturn(false);
-        when(slot3.getProductionModifier(GoodType.TOOLS)).thenReturn(1F);
+        when(slot3.getProductionModifier(GoodsType.TOOLS)).thenReturn(1F);
 
-        final ConstructionTurnProduction ret = construction.getProduction(3);
+        final ConstructionTurnProduction ret = construction
+                .getProduction(Goods.of(GoodsType.ORE, 3));
 
-        assertEquals(3, ret.getConsumedGoods());
-        assertEquals(3, ret.getProducedGoods());
-        assertEquals(2, ret.getBlockedGoods());
+        assertEquals(Goods.of(GoodsType.ORE, 3), ret.getConsumedGoods());
+        assertEquals(Goods.of(GoodsType.TOOLS, 3), ret.getProducedGoods());
+        assertEquals(Goods.of(GoodsType.TOOLS, 2), ret.getBlockedGoods());
     }
 
     @BeforeEach

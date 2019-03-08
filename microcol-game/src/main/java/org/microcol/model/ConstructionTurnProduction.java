@@ -4,16 +4,15 @@ import com.google.common.base.MoreObjects;
 
 public final class ConstructionTurnProduction {
 
-    public final static ConstructionTurnProduction EMPTY = new ConstructionTurnProduction(0, 0, 0);
+    //TODO should be optional. in some cases it's not existing.
+    private final Goods consumedGoods;
 
-    private final int consumedGoods;
+    private final Goods producedGoods;
 
-    private final int producedGoods;
+    private final Goods blockedGoods;
 
-    private final int blockedGoods;
-
-    ConstructionTurnProduction(final int consumedGoods, final int producedGoods,
-            final int blockedGoods) {
+    ConstructionTurnProduction(final Goods consumedGoods, final Goods producedGoods,
+            final Goods blockedGoods) {
         this.consumedGoods = consumedGoods;
         this.producedGoods = producedGoods;
         this.blockedGoods = blockedGoods;
@@ -28,21 +27,21 @@ public final class ConstructionTurnProduction {
     /**
      * @return the consumedGoods
      */
-    public int getConsumedGoods() {
+    public Goods getConsumedGoods() {
         return consumedGoods;
     }
 
     /**
      * @return the producedGoods
      */
-    public int getProducedGoods() {
+    public Goods getProducedGoods() {
         return producedGoods;
     }
 
     /**
      * @return the blockedGoods
      */
-    public int getBlockedGoods() {
+    public Goods getBlockedGoods() {
         return blockedGoods;
     }
 

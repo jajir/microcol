@@ -28,7 +28,7 @@ public class CargoSlotTest {
     private final ColonyWarehouse warehouse = mock(ColonyWarehouse.class);
 
     @Test
-    public void test_storeFromCargoSlot_null_goodAmount() throws Exception {
+    public void test_storeFromCargoSlot_null_goods() throws Exception {
         assertThrows(NullPointerException.class, () -> {
             slot.storeFromCargoSlot(null, sourceCargoSlot);
         });
@@ -37,7 +37,7 @@ public class CargoSlotTest {
     @Test()
     public void test_storeFromCargoSlot_null_sourceCargoSlot() throws Exception {
         assertThrows(NullPointerException.class, () -> {
-            slot.storeFromCargoSlot(new GoodsAmount(GoodType.CORN, 100), null);
+            slot.storeFromCargoSlot(new Goods(GoodsType.CORN, 100), null);
         });
     }
 
@@ -49,7 +49,7 @@ public class CargoSlotTest {
 
         final IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
                 () -> {
-                    slot.storeFromCargoSlot(new GoodsAmount(GoodType.CORN, 100), sourceCargoSlot);
+                    slot.storeFromCargoSlot(new Goods(GoodsType.CORN, 100), sourceCargoSlot);
                 });
 
         assertTrue(
@@ -68,7 +68,7 @@ public class CargoSlotTest {
 
         final IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
                 () -> {
-                    slot.storeFromCargoSlot(new GoodsAmount(GoodType.CORN, 100), sourceCargoSlot);
+                    slot.storeFromCargoSlot(new Goods(GoodsType.CORN, 100), sourceCargoSlot);
                 });
 
         assertTrue(
@@ -86,7 +86,7 @@ public class CargoSlotTest {
 
         final IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
                 () -> {
-                    slot.storeFromCargoSlot(new GoodsAmount(GoodType.CORN, 13), sourceCargoSlot);
+                    slot.storeFromCargoSlot(new Goods(GoodsType.CORN, 13), sourceCargoSlot);
                 });
 
         assertTrue(exception.getMessage().contains("Source cargo slot doesn't contains any good"),
@@ -94,17 +94,16 @@ public class CargoSlotTest {
     }
 
     @Test()
-    public void test_storeFromCargoSlot_transferred_goodType_isDifferent_from_source()
+    public void test_storeFromCargoSlot_transferred_goodsType_isDifferent_from_source()
             throws Exception {
         when(cargo.getOwner()).thenReturn(ownerUnit);
         when(ownerUnit.getOwner()).thenReturn(player);
         when(sourceCargoSlot.getOwnerPlayer()).thenReturn(player);
-        when(sourceCargoSlot.getGoods())
-                .thenReturn(Optional.of(new GoodsAmount(GoodType.CIGARS, 13)));
+        when(sourceCargoSlot.getGoods()).thenReturn(Optional.of(new Goods(GoodsType.CIGARS, 13)));
 
         final IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
                 () -> {
-                    slot.storeFromCargoSlot(new GoodsAmount(GoodType.CORN, 13), sourceCargoSlot);
+                    slot.storeFromCargoSlot(new Goods(GoodsType.CORN, 13), sourceCargoSlot);
                 });
 
         assertTrue(
@@ -118,25 +117,24 @@ public class CargoSlotTest {
         when(cargo.getOwner()).thenReturn(ownerUnit);
         when(ownerUnit.getOwner()).thenReturn(player);
         when(sourceCargoSlot.getOwnerPlayer()).thenReturn(player);
-        when(sourceCargoSlot.getGoods())
-                .thenReturn(Optional.of(new GoodsAmount(GoodType.CORN, 13)));
+        when(sourceCargoSlot.getGoods()).thenReturn(Optional.of(new Goods(GoodsType.CORN, 13)));
 
-        slot.storeFromCargoSlot(new GoodsAmount(GoodType.CORN, 13), sourceCargoSlot);
+        slot.storeFromCargoSlot(new Goods(GoodsType.CORN, 13), sourceCargoSlot);
 
         assertFalse(slot.isEmpty());
         assertTrue(slot.isLoadedGood());
-        assertEquals(GoodType.CORN, slot.getGoods().get().getGoodType());
+        assertEquals(GoodsType.CORN, slot.getGoods().get().getType());
         assertEquals(13, slot.getGoods().get().getAmount());
     }
 
     @Test()
-    public void test_storeFromCargoSlot_transferred_goodType_isDifferent_from_alreadyStored()
+    public void test_storeFromCargoSlot_transferred_goodsType_isDifferent_from_alreadyStored()
             throws Exception {
-        slot = new CargoSlot(cargo, new GoodsAmount(GoodType.CIGARS, 13));
+        slot = new CargoSlot(cargo, new Goods(GoodsType.CIGARS, 13));
 
         final IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
                 () -> {
-                    slot.storeFromCargoSlot(new GoodsAmount(GoodType.CORN, 13), sourceCargoSlot);
+                    slot.storeFromCargoSlot(new Goods(GoodsType.CORN, 13), sourceCargoSlot);
                 });
 
         assertTrue(
@@ -148,43 +146,41 @@ public class CargoSlotTest {
     @Test
     public void test_storeFromCargoSlot_transfered_good_is_added_to_already_stored_1()
             throws Exception {
-        slot = new CargoSlot(cargo, new GoodsAmount(GoodType.CORN, 30));
+        slot = new CargoSlot(cargo, new Goods(GoodsType.CORN, 30));
 
         when(cargo.getOwner()).thenReturn(ownerUnit);
         when(ownerUnit.getOwner()).thenReturn(player);
         when(sourceCargoSlot.getOwnerPlayer()).thenReturn(player);
-        when(sourceCargoSlot.getGoods())
-                .thenReturn(Optional.of(new GoodsAmount(GoodType.CORN, 13)));
+        when(sourceCargoSlot.getGoods()).thenReturn(Optional.of(new Goods(GoodsType.CORN, 13)));
 
-        slot.storeFromCargoSlot(new GoodsAmount(GoodType.CORN, 13), sourceCargoSlot);
+        slot.storeFromCargoSlot(new Goods(GoodsType.CORN, 13), sourceCargoSlot);
 
         assertFalse(slot.isEmpty());
         assertTrue(slot.isLoadedGood());
-        assertEquals(GoodType.CORN, slot.getGoods().get().getGoodType());
+        assertEquals(GoodsType.CORN, slot.getGoods().get().getType());
         assertEquals(43, slot.getGoods().get().getAmount());
 
-        verify(sourceCargoSlot).removeGoodsAmount(13);
+        verify(sourceCargoSlot).removeCargo(Goods.of(GoodsType.CORN, 13));
     }
 
     @Test
     public void test_storeFromCargoSlot_transfered_good_is_added_to_already_stored_2()
             throws Exception {
-        slot = new CargoSlot(cargo, new GoodsAmount(GoodType.CORN, 30));
+        slot = new CargoSlot(cargo, new Goods(GoodsType.CORN, 30));
 
         when(cargo.getOwner()).thenReturn(ownerUnit);
         when(ownerUnit.getOwner()).thenReturn(player);
         when(sourceCargoSlot.getOwnerPlayer()).thenReturn(player);
-        when(sourceCargoSlot.getGoods())
-                .thenReturn(Optional.of(new GoodsAmount(GoodType.CORN, 13)));
+        when(sourceCargoSlot.getGoods()).thenReturn(Optional.of(new Goods(GoodsType.CORN, 13)));
 
-        slot.storeFromCargoSlot(new GoodsAmount(GoodType.CORN, 80), sourceCargoSlot);
+        slot.storeFromCargoSlot(new Goods(GoodsType.CORN, 80), sourceCargoSlot);
 
         assertFalse(slot.isEmpty());
         assertTrue(slot.isLoadedGood());
-        assertEquals(GoodType.CORN, slot.getGoods().get().getGoodType());
+        assertEquals(GoodsType.CORN, slot.getGoods().get().getType());
         assertEquals(43, slot.getGoods().get().getAmount());
 
-        verify(sourceCargoSlot).removeGoodsAmount(13);
+        verify(sourceCargoSlot).removeCargo(Goods.of(GoodsType.CORN, 13));
     }
 
     @Test
@@ -224,7 +220,7 @@ public class CargoSlotTest {
     @Test()
     public void test_storeFromColonyWarehouse_colony_cant_be_null() throws Exception {
         assertThrows(NullPointerException.class, () -> {
-            slot.storeFromColonyWarehouse(new GoodsAmount(GoodType.SILK, 10), null);
+            slot.storeFromColonyWarehouse(new Goods(GoodsType.SILK, 10), null);
         });
     }
 
@@ -236,7 +232,7 @@ public class CargoSlotTest {
 
         final IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
                 () -> {
-                    slot.storeFromColonyWarehouse(new GoodsAmount(GoodType.SILK, 10), colony);
+                    slot.storeFromColonyWarehouse(new Goods(GoodsType.SILK, 10), colony);
                 });
 
         assertTrue(exception.getMessage().contains(
@@ -254,7 +250,7 @@ public class CargoSlotTest {
 
         final IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
                 () -> {
-                    slot.storeFromColonyWarehouse(new GoodsAmount(GoodType.SILK, 10), colony);
+                    slot.storeFromColonyWarehouse(new Goods(GoodsType.SILK, 10), colony);
                 });
 
         assertTrue(
@@ -270,13 +266,13 @@ public class CargoSlotTest {
         when(ownerUnit.getOwner()).thenReturn(player);
         when(colony.getOwner()).thenReturn(player);
         when(colony.getColonyWarehouse()).thenReturn(warehouse);
-        when(warehouse.getGoodAmmount(GoodType.SILK)).thenReturn(9);
+        when(warehouse.getGoods(GoodsType.SILK)).thenReturn(Goods.of(GoodsType.SILK, 9));
 
-        slot.storeFromColonyWarehouse(new GoodsAmount(GoodType.SILK, 10), colony);
+        slot.storeFromColonyWarehouse(new Goods(GoodsType.SILK, 10), colony);
 
         assertFalse(slot.isEmpty());
         assertTrue(slot.isLoadedGood());
-        assertEquals(GoodType.SILK, slot.getGoods().get().getGoodType());
+        assertEquals(GoodsType.SILK, slot.getGoods().get().getType());
         assertEquals(9, slot.getGoods().get().getAmount());
     }
 
@@ -286,26 +282,26 @@ public class CargoSlotTest {
         when(ownerUnit.getOwner()).thenReturn(player);
         when(colony.getOwner()).thenReturn(player);
         when(colony.getColonyWarehouse()).thenReturn(warehouse);
-        when(warehouse.getGoodAmmount(GoodType.SILK)).thenReturn(120);
+        when(warehouse.getGoods(GoodsType.SILK)).thenReturn(Goods.of(GoodsType.SILK, 120));
 
-        slot.storeFromColonyWarehouse(new GoodsAmount(GoodType.SILK, 10), colony);
+        slot.storeFromColonyWarehouse(new Goods(GoodsType.SILK, 10), colony);
 
         assertFalse(slot.isEmpty());
         assertTrue(slot.isLoadedGood());
-        assertEquals(GoodType.SILK, slot.getGoods().get().getGoodType());
+        assertEquals(GoodsType.SILK, slot.getGoods().get().getType());
         assertEquals(10, slot.getGoods().get().getAmount());
 
-        verify(warehouse).removeFromWarehouse(GoodType.SILK, 10);
+        verify(warehouse).removeGoods(Goods.of(GoodsType.SILK, 10));
     }
 
     @Test()
-    public void test_storeFromColonyWarehouse_transferred_goodType_isDifferent_from_alreadyStored()
+    public void test_storeFromColonyWarehouse_transferred_goodsType_isDifferent_from_alreadyStored()
             throws Exception {
-        slot = new CargoSlot(cargo, new GoodsAmount(GoodType.ORE, 22));
+        slot = new CargoSlot(cargo, new Goods(GoodsType.ORE, 22));
 
         final IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
                 () -> {
-                    slot.storeFromColonyWarehouse(new GoodsAmount(GoodType.SILK, 10), colony);
+                    slot.storeFromColonyWarehouse(new Goods(GoodsType.SILK, 10), colony);
                 });
 
         assertTrue(
@@ -317,43 +313,129 @@ public class CargoSlotTest {
     @Test
     public void test_storeFromColonyWarehouse_transfered_good_is_added_to_already_stored()
             throws Exception {
-        slot = new CargoSlot(cargo, new GoodsAmount(GoodType.SILK, 22));
+        slot = new CargoSlot(cargo, new Goods(GoodsType.SILK, 22));
 
         when(cargo.getOwner()).thenReturn(ownerUnit);
         when(ownerUnit.getOwner()).thenReturn(player);
         when(colony.getOwner()).thenReturn(player);
         when(colony.getColonyWarehouse()).thenReturn(warehouse);
-        when(warehouse.getGoodAmmount(GoodType.SILK)).thenReturn(120);
+        when(warehouse.getGoods(GoodsType.SILK)).thenReturn(Goods.of(GoodsType.SILK, 120));
 
-        slot.storeFromColonyWarehouse(new GoodsAmount(GoodType.SILK, 10), colony);
+        slot.storeFromColonyWarehouse(new Goods(GoodsType.SILK, 10), colony);
 
-        verify(warehouse).removeFromWarehouse(GoodType.SILK, 10);
+        verify(warehouse).removeGoods(Goods.of(GoodsType.SILK, 10));
 
         assertFalse(slot.isEmpty());
         assertTrue(slot.isLoadedGood());
-        assertEquals(GoodType.SILK, slot.getGoods().get().getGoodType());
+        assertEquals(GoodsType.SILK, slot.getGoods().get().getType());
         assertEquals(32, slot.getGoods().get().getAmount());
     }
 
     @Test
     public void test_storeFromColonyWarehouse_transfered_good_is_added_to_already_stored_2()
             throws Exception {
-        slot = new CargoSlot(cargo, new GoodsAmount(GoodType.SILK, 66));
+        slot = new CargoSlot(cargo, new Goods(GoodsType.SILK, 66));
 
         when(cargo.getOwner()).thenReturn(ownerUnit);
         when(ownerUnit.getOwner()).thenReturn(player);
         when(colony.getOwner()).thenReturn(player);
         when(colony.getColonyWarehouse()).thenReturn(warehouse);
-        when(warehouse.getGoodAmmount(GoodType.SILK)).thenReturn(120);
+        when(warehouse.getGoods(GoodsType.SILK)).thenReturn(Goods.of(GoodsType.SILK, 120));
 
-        slot.storeFromColonyWarehouse(new GoodsAmount(GoodType.SILK, 50), colony);
+        slot.storeFromColonyWarehouse(new Goods(GoodsType.SILK, 50), colony);
 
-        verify(warehouse).removeFromWarehouse(GoodType.SILK, 34);
+        verify(warehouse).removeGoods(Goods.of(GoodsType.SILK, 34));
         assertFalse(slot.isEmpty());
         assertTrue(slot.isLoadedGood());
-        assertEquals(GoodType.SILK, slot.getGoods().get().getGoodType());
+        assertEquals(GoodsType.SILK, slot.getGoods().get().getType());
         assertEquals(100, slot.getGoods().get().getAmount());
     }
+
+    @Test
+    void test_removeCargo_null() throws Exception {
+        assertThrows(NullPointerException.class, () -> slot.removeCargo(null));
+    }
+
+    @Test
+    void test_removeCargo_noGoods() throws Exception {
+        final IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> slot.removeCargo(Goods.of(GoodsType.CIGARS, 56)));
+
+        assertEquals(
+                "Cargo slot (CargoSlot{cargoUnit=null, cargoGoods=null}) doesn't contains any good.",
+                exception.getMessage());
+    }
+
+    @Test
+    void test_removeCargo_storedGoodsHaveDifferentType() throws Exception {
+        slot.addGoods(Goods.of(GoodsType.CORN, 56));
+        final IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> slot.removeCargo(Goods.of(GoodsType.CIGARS, 56)));
+
+        assertEquals(
+                "Cargo (CargoSlot{cargoUnit=null, cargoGoods=Goods{GoodsType=CORN, amount=56}}) doesn't contains same type as was transfered (GoodsType{name=CIGARS}).",
+                exception.getMessage());
+    }
+
+    @Test
+    void test_removeCargo_notEnoughtGoodsToRemove() throws Exception {
+        slot.addGoods(Goods.of(GoodsType.CORN, 56));
+        final IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> slot.removeCargo(Goods.of(GoodsType.CORN, 100)));
+
+        assertEquals(
+                "Can't remove more amount (100) than is stored (CargoSlot{cargoUnit=null, cargoGoods=Goods{GoodsType=CORN, amount=56}}).",
+                exception.getMessage());
+    }
+
+    @Test
+    void test_removeCargo_removeAll() throws Exception {
+        slot.addGoods(Goods.of(GoodsType.CORN, 56));
+        slot.removeCargo(Goods.of(GoodsType.CORN, 56));
+
+        assertTrue(slot.isEmpty());
+        assertFalse(slot.isLoadedGood());
+        assertFalse(slot.isLoadedUnit());
+    }
+
+    @Test
+    void test_removeCargo_removePart() throws Exception {
+        slot.addGoods(Goods.of(GoodsType.CORN, 56));
+        slot.removeCargo(Goods.of(GoodsType.CORN, 16));
+
+        assertFalse(slot.isEmpty());
+        assertTrue(slot.isLoadedGood());
+        assertFalse(slot.isLoadedUnit());
+        assertEquals(40, slot.getGoods().get().getAmount());
+    }
+    
+    @Test
+    void test_getAvailableCapacity_empty_slot() throws Exception {
+        assertEquals(100, slot.getAvailableCapacity());
+    }
+    
+    @Test
+    void test_getAvailableCapacity_contains_56_corn() throws Exception {
+        slot.addGoods(Goods.of(GoodsType.CORN, 56));
+        
+        assertEquals(44, slot.getAvailableCapacity());
+    }
+    
+    @Test
+    void test_getAvailableCapacity_contains_100_corn() throws Exception {
+        slot.addGoods(Goods.of(GoodsType.CORN, 100));
+        
+        assertEquals(0, slot.getAvailableCapacity());
+    }
+    
+    @Test
+    void test_getAvailableCapacity_contains_unit() throws Exception {
+        final PlaceCargoSlot placeCargoSlot = mock(PlaceCargoSlot.class);
+        slot.unsafeStore(placeCargoSlot);
+        
+        assertEquals(0, slot.getAvailableCapacity());
+    }
+    
 
     @BeforeEach
     public void startUp() {

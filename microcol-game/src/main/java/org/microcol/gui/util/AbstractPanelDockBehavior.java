@@ -39,7 +39,7 @@ public abstract class AbstractPanelDockBehavior implements PanelDockBehavior {
         final Dragboard db = event.getDragboard();
         final ClipboardEval eval = ClipboardEval.make(gameModelController.getModel(), db)
                 .filterUnit(unit -> !unit.getType().isShip());
-        if (eval.getGoodAmount().isPresent()) {
+        if (eval.getGoods().isPresent()) {
             consumeGoods(targetCargoSlot, event.getTransferMode().equals(TransferMode.LINK), eval);
         } else if (eval.getUnit().isPresent()) {
             consumeUnit(targetCargoSlot, eval.getUnit().get(), eval.getFrom().get());
@@ -87,11 +87,11 @@ public abstract class AbstractPanelDockBehavior implements PanelDockBehavior {
                         .addUnit(cargoSlot.getUnit().get()).build();
             } else if (cargoSlot.getGoods().isPresent()) {
                 final Image cargoImage = imageProvider
-                        .getGoodTypeImage(cargoSlot.getGoods().get().getGoodType());
+                        .getGoodsTypeImage(cargoSlot.getGoods().get().getType());
                 ClipboardWritter.make(node.startDragAndDrop(TransferMode.MOVE, TransferMode.LINK))
                         .addImage(cargoImage)
                         .addTransferFromUnit(cargoSlot.getOwnerUnit(), cargoSlot)
-                        .addGoodAmount(cargoSlot.getGoods().get()).build();
+                        .addGoods(cargoSlot.getGoods().get()).build();
             }
         }
         event.consume();

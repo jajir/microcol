@@ -48,16 +48,16 @@ public class Colony {
 
     public Colony(final Model model, final String name, final Player owner, final Location location,
             final Function<Colony, List<Construction>> constructionsBuilder,
-            final Map<String, Integer> initialGoodAmounts,
+            final Map<String, Integer> initialGoods,
             final List<ColonyBuildingItemProgress<?>> buildingQueue) {
         this.model = Preconditions.checkNotNull(model);
         this.name = Preconditions.checkNotNull(name);
         this.owner = Preconditions.checkNotNull(owner, "owner is null");
         this.location = Preconditions.checkNotNull(location);
         colonyFields = new ArrayList<>();
-        Direction.getVectors().forEach(loc -> colonyFields.add(new ColonyField(model, loc, this)));
+        Direction.getAll().forEach(loc -> colonyFields.add(new ColonyField(model, loc, this)));
         this.constructions = Preconditions.checkNotNull(constructionsBuilder.apply(this));
-        colonyWarehouse = new ColonyWarehouse(this, initialGoodAmounts);
+        colonyWarehouse = new ColonyWarehouse(this, initialGoods);
         colonyBuildingQueue = new ColonyBuildingQueue(model, this, buildingQueue);
         checkConstructions();
     }
@@ -82,16 +82,16 @@ public class Colony {
             }
         });
 
-        final Map<GoodType, Long> l2 = constructions.stream()
+        final Map<GoodsType, Long> l2 = constructions.stream()
                 .filter(construction -> construction.getType().getProduce().isPresent())
                 .collect(Collectors.groupingBy(
                         construction -> construction.getType().getProduce().get(),
                         Collectors.counting()));
-        l2.forEach((goodType, count) -> {
+        l2.forEach((goodsType, count) -> {
             if (count != 1) {
                 throw new IllegalStateException(
                         String.format("Good type type '%s' is prodecen in more than one building",
-                                goodType.name()));
+                                goodsType.name()));
             }
         });
 
@@ -131,16 +131,16 @@ public class Colony {
         model.getEnemyUnitsAt(player, location).stream().filter(unit -> !unit.getType().isShip())
                 .forEach(unit -> unit.takeOver(player));
         colonyFields.stream().filter(field -> !field.isEmpty())
-                .forEach(field -> field.getUnit().takeOver(player));
+                .forEach(field -> field.getUnit().get().takeOver(player));
         constructions.forEach(construction -> construction.getConstructionSlots().stream()
                 .filter(slot -> !slot.isEmpty()).forEach(slot -> slot.getUnit().takeOver(player)));
 
         placeUnitToProduceFood(capturingUnit);
-        
+
         if (owner.isHuman()) {
             model.getTurnEventStore().add(TurnEventProvider.getColonyWasLost(owner, this));
         }
-        
+
         owner = player;
         model.fireColonyWasCaptured(model, capturingUnit, this);
     }
@@ -176,7 +176,7 @@ public class Colony {
         final List<ColonyField> fields = getEmptyFieldsWithMaxCornProduction();
         Preconditions.checkState(!fields.isEmpty(), "There are no empty field in colony");
         final ColonyField field = fields.get(random.nextInt(fields.size()));
-        unit.placeToColonyField(field, GoodType.CORN);
+        unit.placeToColonyField(field, GoodsType.CORN);
     }
 
     /**
@@ -187,10 +187,10 @@ public class Colony {
      */
     List<ColonyField> getEmptyFieldsWithMaxCornProduction() {
         final Integer max = colonyFields.stream().filter(f -> f.isEmpty())
-                .map(f -> f.getGoodTypeProduction(GoodType.CORN)).max(Comparator.naturalOrder())
+                .map(f -> f.getGoodsTypeProduction(GoodsType.CORN)).max(Comparator.naturalOrder())
                 .orElse(-1);
         return colonyFields.stream()
-                .filter(f -> f.isEmpty() && f.getGoodTypeProduction(GoodType.CORN) == max)
+                .filter(f -> f.isEmpty() && f.getGoodsTypeProduction(GoodsType.CORN) == max)
                 .collect(ImmutableList.toImmutableList());
     }
 
@@ -214,23 +214,23 @@ public class Colony {
      * </ul>
      */
     public void startTurn() {
-        colonyFields.forEach(field -> field.produce(colonyWarehouse));
-        constructions.forEach(construction -> construction.produce(this, getColonyWarehouse()));
+        colonyFields.forEach(field -> field.countTurnProduction(colonyWarehouse));
+        constructions.forEach(construction -> construction.countTurnProduction(this, getColonyWarehouse()));
         eatFood();
         optionalyProduceColonist();
         colonyBuildingQueue.startTurn();
     }
 
     private void eatFood() {
-        final int alreadyHaveFood = colonyWarehouse.getGoodAmmount(GoodType.CORN);
+        final int alreadyHaveFood = colonyWarehouse.getGoods(GoodsType.CORN).getAmount();
         if (alreadyHaveFood < getRequiredFoodPerTurn()) {
             // famine plague colony message
             model.getTurnEventStore().add(TurnEventProvider.getFaminePlagueColony(owner, this));
             killOneRandomUnit();
-            colonyWarehouse.setGoodsToZero(GoodType.CORN);
+            colonyWarehouse.setGoodsToZero(GoodsType.CORN);
         } else {
-            colonyWarehouse.removeFromWarehouse(GoodType.CORN, getRequiredFoodPerTurn());
-            final int willHaveFood = getGoodsStats().getStatsByType(GoodType.CORN)
+            colonyWarehouse.removeGoods(Goods.of(GoodsType.CORN, getRequiredFoodPerTurn()));
+            final int willHaveFood = getGoodsStats().getStatsByType(GoodsType.CORN)
                     .getInWarehouseAfter();
             if (willHaveFood < 0) {
                 // warn famine will plague colony
@@ -245,8 +245,8 @@ public class Colony {
      * outside of colony.
      */
     private void optionalyProduceColonist() {
-        if (colonyWarehouse.getGoodAmmount(GoodType.CORN) >= FOOD_LEVEL_TO_FREE_COLONIST) {
-            colonyWarehouse.removeFromWarehouse(GoodType.CORN, FOOD_LEVEL_TO_FREE_COLONIST);
+        if (colonyWarehouse.getGoods(GoodsType.CORN).getAmount() >= FOOD_LEVEL_TO_FREE_COLONIST) {
+            colonyWarehouse.removeGoods(Goods.of(GoodsType.CORN, FOOD_LEVEL_TO_FREE_COLONIST));
             model.addUnitOutSideColony(this);
             model.getTurnEventStore().add(TurnEventProvider.getNewUnitInColony(getOwner()));
         }
@@ -316,7 +316,7 @@ public class Colony {
         Preconditions.checkArgument(fieldDirection.isDirection(),
                 String.format("Direction (%s) is  not known", fieldDirection));
         return colonyFields.stream()
-                .filter(colonyFiled -> colonyFiled.getDirection().equals(fieldDirection)).findAny()
+                .filter(colonyFiled -> colonyFiled.getDirection().getVector().equals(fieldDirection)).findAny()
                 .orElseThrow(() -> new IllegalStateException(String.format(
                         "Field directiond (%s) is not in colony (%s)", fieldDirection, this)));
     }
@@ -370,8 +370,8 @@ public class Colony {
             });
         });
         colonyFields.forEach(field -> {
-            if (!field.isEmpty()) {
-                out.add(field.getUnit());
+            if (field.getUnit().isPresent()) {
+                out.add(field.getUnit().get());
             }
         });
         return ImmutableList.copyOf(out);
@@ -427,67 +427,68 @@ public class Colony {
     public ColonyProductionStats getGoodsStats() {
         final ColonyProductionStats out = new ColonyProductionStats();
         // set initial warehouse stack
-        GoodType.GOOD_TYPES.forEach(goodType -> {
-            GoodProductionStats goodsStats = out.getStatsByType(goodType);
-            goodsStats.setInWarehouseBefore(colonyWarehouse.getGoodAmmount(goodType));
+        GoodsType.GOOD_TYPES.forEach(goodsType -> {
+            GoodsProductionStats goodsStats = out.getStatsByType(goodsType);
+            goodsStats.setInWarehouseBefore(colonyWarehouse.getGoods(goodsType).getAmount());
         });
 
         // get production from all fields
         colonyFields.forEach(field -> {
-            if (!field.isEmpty()) {
-                GoodProductionStats goodsStats = out.getStatsByType(field.getProducedGoodType());
-                goodsStats.addRowProduction(field.getProducedGoodsAmmount());
+            if (field.getProduction().isPresent()) {
+                final Goods production = field.getProduction().get();
+                final GoodsProductionStats goodsStats = out.getStatsByType(production.getType());
+                goodsStats.addRowProduction(production.getAmount());
             }
         });
 
-        out.getStatsByType(GoodType.CORN).addConsumed(getRequiredFoodPerTurn());
+        out.getStatsByType(GoodsType.CORN).addConsumed(getRequiredFoodPerTurn());
 
         // get production from town factories that doesn't consume any sources
-        ConstructionType.SOURCE_1.forEach(goodType -> {
-            getConstructionProducing(goodType).ifPresent(con -> {
-                GoodProductionStats goodsStats = out.getStatsByType(goodType);
-                ConstructionTurnProduction turnProd = con.getProduction(0);
-                goodsStats.setRowProduction(turnProd.getProducedGoods());
+        ConstructionType.SOURCE_1.forEach(goodsType -> {
+            getConstructionProducing(goodsType).ifPresent(con -> {
+                GoodsProductionStats goodsStats = out.getStatsByType(goodsType);
+                ConstructionTurnProduction turnProd = con.getProduction(Goods.of(goodsType));
+                goodsStats.setRowProduction(turnProd.getProducedGoods().getAmount());
             });
         });
 
         // get production from town factories that consume some primary sources
-        ConstructionType.SOURCE_2.forEach(goodType -> {
-            computeSecondaryProduction(out, goodType);
+        ConstructionType.SOURCE_2.forEach(goodsType -> {
+            computeSecondaryProduction(out, goodsType);
         });
 
         // get production from town factories that consume secondary sources
-        ConstructionType.SOURCE_3.forEach(goodType -> {
-            computeSecondaryProduction(out, goodType);
+        ConstructionType.SOURCE_3.forEach(goodsType -> {
+            computeSecondaryProduction(out, goodsType);
         });
 
         return out;
     }
 
     private void computeSecondaryProduction(final ColonyProductionStats out,
-            final GoodType goodTypeProduced) {
-        if (getConstructionProducing(goodTypeProduced).isPresent()) {
-            final Construction producedAt = getConstructionProducing(goodTypeProduced).get();
-            GoodProductionStats goodProdStats = out.getStatsByType(goodTypeProduced);
-            GoodType goodTypeConsumed = producedAt.getType().getConsumed().get();
-            GoodProductionStats goodConsumedStats = out.getStatsByType(goodTypeConsumed);
+            final GoodsType goodsTypeProduced) {
+        if (getConstructionProducing(goodsTypeProduced).isPresent()) {
+            final Construction producedAt = getConstructionProducing(goodsTypeProduced).get();
+            GoodsProductionStats goodProdStats = out.getStatsByType(goodsTypeProduced);
+            GoodsType goodsTypeConsumed = producedAt.getType().getConsumed().get();
+            GoodsProductionStats goodConsumedStats = out.getStatsByType(goodsTypeConsumed);
 
             Preconditions.checkState(goodConsumedStats.getConsumed() == 0,
                     "good type was already computed, good was already consumed.");
             int numberOfavailableInputGoods = goodConsumedStats.getInWarehouseAfter();
 
-            ConstructionTurnProduction turnProd = producedAt
-                    .getProduction(numberOfavailableInputGoods);
-            goodConsumedStats.addConsumed(turnProd.getConsumedGoods());
-            goodProdStats.setRowProduction(turnProd.getProducedGoods());
-            goodProdStats.setBlockedProduction(turnProd.getBlockedGoods());
+            final ConstructionTurnProduction turnProd = producedAt
+                    .getProduction(Goods.of(goodsTypeConsumed,numberOfavailableInputGoods));
+            goodConsumedStats.addConsumed(turnProd.getConsumedGoods().getAmount());
+            goodProdStats.setRowProduction(turnProd.getProducedGoods().getAmount());
+            goodProdStats.setBlockedProduction(turnProd.getBlockedGoods().getAmount());
         }
     }
 
-    private Optional<Construction> getConstructionProducing(final GoodType goodType) {
+    private Optional<Construction> getConstructionProducing(final GoodsType goodsType) {
         return constructions.stream()
                 .filter(construction -> construction.getType().getProduce().isPresent()
-                        && construction.getType().getProduce().get().equals(goodType))
+                        && construction.getType().getProduce().get().equals(goodsType))
                 .findAny();
     }
 

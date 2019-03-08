@@ -1,6 +1,7 @@
 package org.microcol.model.turnevent;
 
 import org.microcol.model.Colony;
+import org.microcol.model.Goods;
 import org.microcol.model.Player;
 
 /**
@@ -79,7 +80,8 @@ public final class TurnEventProvider {
     }
 
     /**
-     * Get new turn event when new colony was lost. Some other player conquer it.
+     * Get new turn event when new colony was lost. Some other player conquer
+     * it.
      *
      * @param player
      *            required owner of lost colony
@@ -112,6 +114,22 @@ public final class TurnEventProvider {
      */
     public static TurnEvent getNewUnitInColony(final Player player) {
         return new SimpleTurnEvent(TurnEvents.newUnitIsInColony, new Object[0], player);
+    }
+
+    /**
+     * Get new turn event when some goods is throws away because of limited free
+     * space warehouse.
+     *
+     * @param player
+     *            required owner of new unit
+     * @param goods
+     *            define lost goods type and amount
+     * @return turn event object
+     */
+    public static TurnEvent getGoodsWasThrowsAway(final Player player, final Goods goods,
+            final Colony colony) {
+        return new SimpleTurnEvent(TurnEvents.goodsWasThrowsAway,
+                new Object[] { goods.getAmount(), goods.getType(), colony.getName() }, player);
     }
 
 }

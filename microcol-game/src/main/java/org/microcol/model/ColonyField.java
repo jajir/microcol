@@ -1,10 +1,13 @@
 package org.microcol.model;
 
+import java.util.Optional;
+
 import org.microcol.model.store.ColonyFieldPo;
+import org.microcol.model.turnevent.TurnEventProvider;
 
 import com.google.common.base.MoreObjects;
-import com.google.common.base.Preconditions;
 import com.google.common.base.MoreObjects.ToStringHelper;
+import com.google.common.base.Preconditions;
 
 /**
  * Class represents on field outside colony. When unit is placed here than some
@@ -16,33 +19,31 @@ public final class ColonyField {
 
     private final Colony colony;
 
-    private final Location direction;
+    private final Direction direction;
 
     private PlaceColonyField placeColonyField;
 
-    ColonyField(final Model model, final Location location, final Colony colony) {
+    ColonyField(final Model model, final Direction direction, final Colony colony) {
         this.model = Preconditions.checkNotNull(model);
-        this.direction = Preconditions.checkNotNull(location);
+        this.direction = Preconditions.checkNotNull(direction);
         this.colony = Preconditions.checkNotNull(colony);
-        Preconditions.checkArgument(location.isDirection(),
-                "Field location (%s) is not a valid direction", location);
     }
 
     ColonyFieldPo save() {
         final ColonyFieldPo out = new ColonyFieldPo();
-        out.setDirection(direction);
-        if (!isEmpty()) {
-            out.setWorkerId(getUnit().getId());
-            out.setProducedGoodType(getProducedGoodType());
+        out.setDirection(direction.getVector());
+        if (getProduction().isPresent()) {
+            out.setWorkerId(getUnit().get().getId());
+            out.setProducedGoodsType(getProduction().get().getType());
         }
         return out;
     }
 
-    public boolean canProduce(final GoodType goodType) {
-        return getTerrainType().canProduce(goodType);
+    public boolean canProduce(final GoodsType goodsType) {
+        return getTerrainType().canProduce(goodsType);
     }
 
-    public Location getDirection() {
+    public Direction getDirection() {
         return direction;
     }
 
@@ -64,7 +65,7 @@ public final class ColonyField {
      * @return location where is colony field at map
      */
     public Location getLocation() {
-        return colony.getLocation().add(direction);
+        return colony.getLocation().add(direction.getVector());
     }
 
     private WorldMap getMap() {
@@ -80,10 +81,10 @@ public final class ColonyField {
         final ToStringHelper toStringHelper = MoreObjects.toStringHelper(ColonyField.class)
                 .add("direction", direction).add("colonyLocation", colony.getLocation())
                 .add("colonyName", getColonyName());
-        if (isEmpty()) {
+        if (getUnit().isPresent()) {
             toStringHelper.addValue("isEmpty");
         } else {
-            toStringHelper.add("unitId", getUnit().getId());
+            toStringHelper.add("unitId", getUnit().get().getId());
         }
         return toStringHelper.toString();
     }
@@ -92,28 +93,41 @@ public final class ColonyField {
         return placeColonyField == null;
     }
 
-    public Unit getUnit() {
-        Preconditions.checkState(!isEmpty(), "There is no assigned unit");
-        return placeColonyField.getUnit();
+    /**
+     * Get turn production. It's empty when no unit is assigned here.
+     * 
+     * @return production at this colony field per turn
+     */
+    public Optional<Goods> getProduction() {
+        if (placeColonyField == null) {
+            return Optional.empty();
+        } else {
+            final GoodsType producing = placeColonyField.getProducedGoodsType();
+            return Optional.of(Goods.of(producing, getTerrain().canProduceAmmount(producing)));
+        }
     }
 
-    public GoodType getProducedGoodType() {
-        return placeColonyField == null ? null : placeColonyField.getProducedGoodType();
+    /**
+     * Get unit producing some raw source. When there is no unit empty is
+     * returned.
+     * 
+     * @return optional unit
+     */
+    public Optional<Unit> getUnit() {
+        if (placeColonyField == null) {
+            return Optional.empty();
+        } else {
+            return Optional.of(placeColonyField.getUnit());
+        }
     }
 
-    public int getGoodTypeProduction(final GoodType goodType) {
-        return getTerrain().canProduceAmmount(goodType);
+    public int getGoodsTypeProduction(final GoodsType goodsType) {
+        return getTerrain().canProduceAmmount(goodsType);
     }
 
-    public int getProducedGoodsAmmount() {
+    public void setProducedGoodsType(final GoodsType producedGoodsType) {
         Preconditions.checkNotNull(placeColonyField, "There in no unit placed at field");
-        final GoodType producing = placeColonyField.getProducedGoodType();
-        return getTerrain().canProduceAmmount(producing);
-    }
-
-    public void setProducedGoodType(final GoodType producedGoodType) {
-        Preconditions.checkNotNull(placeColonyField, "There in no unit placed at field");
-        placeColonyField.setProducedGoodType(producedGoodType);
+        placeColonyField.setProducedGoodsType(producedGoodsType);
     }
 
     /**
@@ -122,11 +136,31 @@ public final class ColonyField {
      * @param colonyWarehouse
      *            required colony warehouse
      */
-    public void produce(final ColonyWarehouse colonyWarehouse) {
-        if (isEmpty()) {
-            return;
+    public void countTurnProduction(final ColonyWarehouse colonyWarehouse) {
+        Preconditions.checkNotNull(colonyWarehouse);
+        if (getProduction().isPresent()) {
+            final Goods production = getProduction().get();
+            final Goods inWarehouse = colonyWarehouse.getGoods(production.getType());
+            final Goods warehouseTotalCapacity = colonyWarehouse
+                    .getStorageCapacity(production.getType());
+            if (inWarehouse.isGreaterOrEqualsThan(warehouseTotalCapacity)) {
+                // All production will be throws away
+                model.addTurnEvent(TurnEventProvider.getGoodsWasThrowsAway(colony.getOwner(),
+                        production, colony));
+            } else {
+                final Goods warehouseCapacity = warehouseTotalCapacity.substract(inWarehouse);
+                if (warehouseCapacity.isGreaterOrEqualsThan(production)) {
+                    // All production could be stored.
+                    colonyWarehouse.addGoods(production);
+                } else {
+                    // There is no space for produced goods.
+                    final Goods throwsAwayGoods = production.substract(warehouseCapacity);
+                    model.addTurnEvent(TurnEventProvider.getGoodsWasThrowsAway(colony.getOwner(),
+                            throwsAwayGoods, colony));
+                    colonyWarehouse.addGoods(warehouseCapacity);
+                }
+            }
         }
-        colonyWarehouse.addToWarehouse(getProducedGoodType(), getProducedGoodsAmmount());
     }
 
     public void setPlaceColonyField(final PlaceColonyField placeColonyField) {

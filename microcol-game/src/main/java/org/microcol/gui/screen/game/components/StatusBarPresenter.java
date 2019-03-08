@@ -31,7 +31,7 @@ public final class StatusBarPresenter implements UpdatableLanguage {
 
     private final EventBus eventBus;
 
-    private StatusBarView statusBarView;
+    private StatusBarView view;
 
     private Source showEventsFromSource;
 
@@ -49,12 +49,12 @@ public final class StatusBarPresenter implements UpdatableLanguage {
                 "It's not defined which events should be shown in status bar.");
         if (showEventsFromSource == event.getSource()) {
             logger.debug("Setting text at status bar '{}'", event.getStatusMessage());
-            statusBarView.getStatusBarDescription().setText(event.getStatusMessage());
+            view.getStatusBarDescription().setText(event.getStatusMessage());
         }
     }
 
     void setStatusBarView(final StatusBarView statusBarView) {
-        this.statusBarView = Preconditions.checkNotNull(statusBarView);
+        this.view = Preconditions.checkNotNull(statusBarView);
         statusBarView.getLabelEra().setOnMouseEntered(event -> {
             Preconditions.checkNotNull(showEventsFromSource,
                     "It's not defined which events should be shown in status bar.");
@@ -78,27 +78,26 @@ public final class StatusBarPresenter implements UpdatableLanguage {
     @Subscribe
     private void onRoundStarted(final RoundStartedEvent event) {
         Platform.runLater(() -> {
-            setYearText(statusBarView.getLabelEra(), event.getCalendar());
+            setYearText(view.getLabelEra(), event.getCalendar());
         });
     }
 
     @Subscribe
     private void onGoldChange(final GoldWasChangedEvent event) {
         Platform.runLater(() -> {
-            setGoldText(statusBarView.getLabelGold(), event.getNewValue());
+            setGoldText(event.getNewValue());
         });
     }
 
     @Override
     public void updateLanguage(final I18n i18n) {
         if (gameModelController.isModelReady()) {
-            setYearText(statusBarView.getLabelEra(), gameModelController.getModel().getCalendar());
-            setGoldText(statusBarView.getLabelGold(),
-                    gameModelController.getHumanPlayer().getGold());
+            setYearText(view.getLabelEra(), gameModelController.getModel().getCalendar());
+            setGoldText(gameModelController.getHumanPlayer().getGold());
         } else {
-            setGoldText(statusBarView.getLabelGold(), 0);
+            setGoldText(0);
         }
-        statusBarView.getStatusBarDescription().setText("");
+        view.getStatusBarDescription().setText("");
     }
 
     private void setYearText(final Label labelEra, final Calendar calendar) {
@@ -111,9 +110,8 @@ public final class StatusBarPresenter implements UpdatableLanguage {
         labelEra.setText(date);
     }
 
-    private void setGoldText(final Label labelGold, final int gold) {
-        Preconditions.checkNotNull(labelGold);
-        labelGold.setText(i18n.get(Loc.statusBar_gold) + " " + gold);
+    private void setGoldText(final int gold) {
+        getLabelGold().setText(i18n.get(Loc.statusBar_gold) + " " + gold);
     }
 
     /**
@@ -122,6 +120,10 @@ public final class StatusBarPresenter implements UpdatableLanguage {
      */
     void setShowEventsFromSource(final Source showEventsFromSource) {
         this.showEventsFromSource = Preconditions.checkNotNull(showEventsFromSource);
+    }
+
+    private Label getLabelGold() {
+        return Preconditions.checkNotNull(view.getLabelGold(), "Label gold in null");
     }
 
 }

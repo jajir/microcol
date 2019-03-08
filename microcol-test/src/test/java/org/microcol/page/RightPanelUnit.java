@@ -10,7 +10,7 @@ import javafx.scene.layout.VBox;
 /**
  * Object allows to test one unit shown in right panel.
  */
-public class RightPanelUnit extends AbstractScreen {
+public class RightPanelUnit extends AbstractPageComponent {
 
     private final VBox unitBox;
 

@@ -198,7 +198,7 @@ public final class PlaceBuilderPo implements Function<Unit, Place> {
                 final ColonyField colonyField = colony
                         .getColonyFieldInDirection(constructionPo.getDirection());
                 PlaceColonyField out = new PlaceColonyField(unit, colonyField,
-                        constructionPo.getProducedGoodType());
+                        constructionPo.getProducedGoodsType());
                 colonyField.setPlaceColonyField(out);
                 return out;
             }

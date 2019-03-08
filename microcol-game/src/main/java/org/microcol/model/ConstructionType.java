@@ -27,13 +27,13 @@ public final class ConstructionType {
      * Good type that is produced. When construction doesn't produce any goods
      * than it's null.
      */
-    private final GoodType produce;
+    private final GoodsType produce;
 
     /**
      * Good type that is consumed during production. When construction doesn't
      * consume any goods than it's null.
      */
-    private final GoodType consumed;
+    private final GoodsType consumed;
 
     /**
      * How many goods is produces when one slot is occupied by on free colonist.
@@ -63,15 +63,15 @@ public final class ConstructionType {
 
     public final static ConstructionType TOWN_HALL = ConstructionTypeBuilder.make()
             .setName("TOWN_HALL").setRequiredHammers(0).setRequiredTools(0)
-            .setProduce(GoodType.BELL).setProductionPerTurn(3).setBaseProductionPerTurn(1)
+            .setProduce(GoodsType.BELL).setProductionPerTurn(3).setBaseProductionPerTurn(1)
             .setSlotsForWorkers(3).setUpgradeTo(null).setRequiredColonyPopulation(1).build();
 
     public final static ConstructionType LUMBER_MILL = ConstructionTypeBuilder.make()
             .setName("LUMBER_MILL")
             .setRequiredHammers(200)
             .setRequiredTools(100)
-            .setConsumed(GoodType.LUMBER)
-            .setProduce(GoodType.HAMMERS)
+            .setConsumed(GoodsType.LUMBER)
+            .setProduce(GoodsType.HAMMERS)
             .setProductionPerTurn(6)
             .setBaseProductionPerTurn(0)
             .setSlotsForWorkers(3)
@@ -83,8 +83,8 @@ public final class ConstructionType {
             .setName("CARPENTERS_SHOP")
             .setRequiredHammers(52)
             .setRequiredTools(0)
-            .setConsumed(GoodType.LUMBER)
-            .setProduce(GoodType.HAMMERS)
+            .setConsumed(GoodsType.LUMBER)
+            .setProduce(GoodsType.HAMMERS)
             .setProductionPerTurn(6)
             .setBaseProductionPerTurn(0)
             .setSlotsForWorkers(3)
@@ -96,8 +96,8 @@ public final class ConstructionType {
             .setName("CARPENTERS_STAND")
             .setRequiredHammers(0)
             .setRequiredTools(0)
-            .setConsumed(GoodType.LUMBER)
-            .setProduce(GoodType.HAMMERS)
+            .setConsumed(GoodsType.LUMBER)
+            .setProduce(GoodsType.HAMMERS)
             .setProductionPerTurn(3)
             .setBaseProductionPerTurn(0)
             .setSlotsForWorkers(3)
@@ -106,19 +106,19 @@ public final class ConstructionType {
 
     public final static ConstructionType IRON_WORKS = ConstructionTypeBuilder.make()
             .setName("IRON_WORKS").setRequiredHammers(240).setRequiredTools(100)
-            .setConsumed(GoodType.ORE).setProduce(GoodType.TOOLS).setProductionPerTurn(9)
+            .setConsumed(GoodsType.ORE).setProduce(GoodsType.TOOLS).setProductionPerTurn(9)
             .setBaseProductionPerTurn(0).setProductionRation(3 / 2F).setSlotsForWorkers(3)
             .setUpgradeTo(null).setRequiredColonyPopulation(8).build();
 
     public final static ConstructionType BLACKSMITHS_SHOP = ConstructionTypeBuilder.make()
             .setName("BLACKSMITHS_SHOP").setRequiredHammers(64).setRequiredTools(20)
-            .setConsumed(GoodType.ORE).setProduce(GoodType.TOOLS).setProductionPerTurn(5)
+            .setConsumed(GoodsType.ORE).setProduce(GoodsType.TOOLS).setProductionPerTurn(5)
             .setBaseProductionPerTurn(0).setSlotsForWorkers(3).setUpgradeTo(IRON_WORKS)
             .setRequiredColonyPopulation(4).build();
 
     public final static ConstructionType BLACKSMITHS_HOUSE = ConstructionTypeBuilder.make()
             .setName("BLACKSMITHS_HOUSE").setRequiredHammers(0).setRequiredTools(0)
-            .setConsumed(GoodType.ORE).setProduce(GoodType.TOOLS).setProductionPerTurn(3)
+            .setConsumed(GoodsType.ORE).setProduce(GoodsType.TOOLS).setProductionPerTurn(3)
             .setBaseProductionPerTurn(0).setSlotsForWorkers(3).setUpgradeTo(BLACKSMITHS_SHOP)
             .setRequiredColonyPopulation(1).build();
 
@@ -139,55 +139,55 @@ public final class ConstructionType {
 
     public final static ConstructionType CIGAR_FACTORY = ConstructionTypeBuilder.make()
             .setName("CIGAR_FACTORY").setRequiredHammers(160).setRequiredTools(100)
-            .setConsumed(GoodType.TOBACCO).setProduce(GoodType.CIGARS).setProductionPerTurn(8)
+            .setConsumed(GoodsType.TOBACCO).setProduce(GoodsType.CIGARS).setProductionPerTurn(8)
             .setBaseProductionPerTurn(0).setSlotsForWorkers(3).setUpgradeTo(null)
             .setRequiredColonyPopulation(8).build();
 
     public final static ConstructionType TOBACCONISTS_SHOP = ConstructionTypeBuilder.make()
             .setName("TOBACCONISTS_SHOP").setRequiredHammers(64).setRequiredTools(20)
-            .setConsumed(GoodType.TOBACCO).setProduce(GoodType.CIGARS).setProductionPerTurn(6)
+            .setConsumed(GoodsType.TOBACCO).setProduce(GoodsType.CIGARS).setProductionPerTurn(6)
             .setBaseProductionPerTurn(0).setSlotsForWorkers(3).setUpgradeTo(CIGAR_FACTORY)
             .setRequiredColonyPopulation(4).build();
 
     public final static ConstructionType TOBACCONISTS_HOUSE = ConstructionTypeBuilder.make()
             .setName("TOBACCONISTS_HOUSE").setRequiredHammers(0).setRequiredTools(0)
-            .setConsumed(GoodType.TOBACCO).setProduce(GoodType.CIGARS).setSlotsForWorkers(3)
+            .setConsumed(GoodsType.TOBACCO).setProduce(GoodsType.CIGARS).setSlotsForWorkers(3)
             .setProductionPerTurn(3).setBaseProductionPerTurn(0).setUpgradeTo(TOBACCONISTS_SHOP)
             .setRequiredColonyPopulation(1).build();
 
     public final static ConstructionType TEXTILE_MILL = ConstructionTypeBuilder.make()
             .setName("TEXTILE_MILL").setRequiredHammers(160).setRequiredTools(100)
-            .setConsumed(GoodType.COTTON).setProduce(GoodType.SILK).setProductionPerTurn(8)
+            .setConsumed(GoodsType.COTTON).setProduce(GoodsType.SILK).setProductionPerTurn(8)
             .setBaseProductionPerTurn(0).setSlotsForWorkers(3).setUpgradeTo(null)
             .setRequiredColonyPopulation(8).build();
 
     public final static ConstructionType WEAVERS_SHOP = ConstructionTypeBuilder.make()
             .setName("WEAVERS_SHOP").setRequiredHammers(64).setRequiredTools(20)
-            .setConsumed(GoodType.COTTON).setProduce(GoodType.SILK).setProductionPerTurn(6)
+            .setConsumed(GoodsType.COTTON).setProduce(GoodsType.SILK).setProductionPerTurn(6)
             .setBaseProductionPerTurn(0).setSlotsForWorkers(3).setUpgradeTo(TEXTILE_MILL)
             .setRequiredColonyPopulation(4).build();
 
     public final static ConstructionType WEAVERS_HOUSE = ConstructionTypeBuilder.make()
             .setName("WEAVERS_HOUSE").setRequiredHammers(0).setRequiredTools(0)
-            .setConsumed(GoodType.COTTON).setProduce(GoodType.SILK).setProductionPerTurn(3)
+            .setConsumed(GoodsType.COTTON).setProduce(GoodsType.SILK).setProductionPerTurn(3)
             .setBaseProductionPerTurn(0).setSlotsForWorkers(3).setUpgradeTo(WEAVERS_SHOP)
             .setRequiredColonyPopulation(1).build();
 
     public final static ConstructionType RUM_FACTORY = ConstructionTypeBuilder.make()
             .setName("RUM_FACTORY").setRequiredHammers(160).setRequiredTools(100)
-            .setConsumed(GoodType.SUGAR).setProduce(GoodType.RUM).setProductionPerTurn(8)
+            .setConsumed(GoodsType.SUGAR).setProduce(GoodsType.RUM).setProductionPerTurn(8)
             .setBaseProductionPerTurn(0).setSlotsForWorkers(3).setUpgradeTo(null)
             .setRequiredColonyPopulation(8).build();
 
     public final static ConstructionType RUM_DISTILLERY = ConstructionTypeBuilder.make()
             .setName("RUM_DISTILLERY").setRequiredHammers(64).setRequiredTools(20)
-            .setConsumed(GoodType.SUGAR).setProduce(GoodType.RUM).setProductionPerTurn(6)
+            .setConsumed(GoodsType.SUGAR).setProduce(GoodsType.RUM).setProductionPerTurn(6)
             .setBaseProductionPerTurn(0).setSlotsForWorkers(3).setUpgradeTo(RUM_FACTORY)
             .setRequiredColonyPopulation(4).build();
 
     public final static ConstructionType RUM_DISTILLERS_HOUSE = ConstructionTypeBuilder.make()
             .setName("RUM_DISTILLERS_HOUSE").setRequiredHammers(0).setRequiredTools(0)
-            .setConsumed(GoodType.SUGAR).setProduce(GoodType.RUM).setProductionPerTurn(3)
+            .setConsumed(GoodsType.SUGAR).setProduce(GoodsType.RUM).setProductionPerTurn(3)
             .setBaseProductionPerTurn(0).setSlotsForWorkers(3).setUpgradeTo(RUM_DISTILLERY)
             .setRequiredColonyPopulation(1).build();
 
@@ -195,8 +195,8 @@ public final class ConstructionType {
             .setName("FUR_FACTORY")
             .setRequiredHammers(160)
             .setRequiredTools(100)
-            .setConsumed(GoodType.FUR)
-            .setProduce(GoodType.COAT)
+            .setConsumed(GoodsType.FUR)
+            .setProduce(GoodsType.COAT)
             .setProductionPerTurn(8)
             .setBaseProductionPerTurn(0)
             .setSlotsForWorkers(3)
@@ -208,8 +208,8 @@ public final class ConstructionType {
             .setName("FUR_TRADERS_HOUSE")
             .setRequiredHammers(0)
             .setRequiredTools(0)
-            .setConsumed(GoodType.FUR)
-            .setProduce(GoodType.COAT)
+            .setConsumed(GoodsType.FUR)
+            .setProduce(GoodsType.COAT)
             .setProductionPerTurn(3)
             .setBaseProductionPerTurn(0).setSlotsForWorkers(3)
             .setUpgradeTo(FUR_FACTORY)
@@ -220,8 +220,8 @@ public final class ConstructionType {
             .setName("FUR_TRADING_POST")
             .setRequiredHammers(56)
             .setRequiredTools(20)
-            .setConsumed(GoodType.FUR)
-            .setProduce(GoodType.COAT)
+            .setConsumed(GoodsType.FUR)
+            .setProduce(GoodsType.COAT)
             .setProductionPerTurn(6)
             .setBaseProductionPerTurn(0)
             .setSlotsForWorkers(3)
@@ -230,19 +230,19 @@ public final class ConstructionType {
             .build();
 
     public final static ConstructionType ARSENAL = ConstructionTypeBuilder.make().setName("ARSENAL")
-            .setRequiredHammers(240).setRequiredTools(100).setConsumed(GoodType.TOOLS)
-            .setProduce(GoodType.MUSKET).setProductionPerTurn(8).setBaseProductionPerTurn(0)
+            .setRequiredHammers(240).setRequiredTools(100).setConsumed(GoodsType.TOOLS)
+            .setProduce(GoodsType.MUSKET).setProductionPerTurn(8).setBaseProductionPerTurn(0)
             .setSlotsForWorkers(3).setUpgradeTo(null).setRequiredColonyPopulation(8).build();
 
     public final static ConstructionType MAGAZINE = ConstructionTypeBuilder.make()
             .setName("MAGAZINE").setRequiredHammers(120).setRequiredTools(50)
-            .setConsumed(GoodType.TOOLS).setProduce(GoodType.MUSKET).setProductionPerTurn(6)
+            .setConsumed(GoodsType.TOOLS).setProduce(GoodsType.MUSKET).setProductionPerTurn(6)
             .setBaseProductionPerTurn(0).setSlotsForWorkers(3).setUpgradeTo(ARSENAL)
             .setRequiredColonyPopulation(8).build();
 
     public final static ConstructionType ARMORY = ConstructionTypeBuilder.make().setName("ARMORY")
-            .setRequiredHammers(52).setRequiredTools(0).setConsumed(GoodType.TOOLS)
-            .setProduce(GoodType.MUSKET).setProductionPerTurn(3).setBaseProductionPerTurn(0)
+            .setRequiredHammers(52).setRequiredTools(0).setConsumed(GoodsType.TOOLS)
+            .setProduce(GoodsType.MUSKET).setProductionPerTurn(3).setBaseProductionPerTurn(0)
             .setSlotsForWorkers(3).setUpgradeTo(MAGAZINE).setRequiredColonyPopulation(1).build();
 
     public final static ConstructionType SHIPYARD = ConstructionTypeBuilder.make()
@@ -323,16 +323,16 @@ public final class ConstructionType {
 
     public final static ConstructionType CATHEDRAL = ConstructionTypeBuilder.make()
             .setName("CATHEDRAL").setRequiredHammers(176).setRequiredTools(100)
-            .setProduce(GoodType.CROSS).setProductionPerTurn(3).setBaseProductionPerTurn(1)
+            .setProduce(GoodsType.CROSS).setProductionPerTurn(3).setBaseProductionPerTurn(1)
             .setSlotsForWorkers(0).setUpgradeTo(null).setRequiredColonyPopulation(8).build();
 
     public final static ConstructionType CHURCH = ConstructionTypeBuilder.make().setName("CHURCH")
-            .setRequiredHammers(52).setRequiredTools(100).setProduce(GoodType.CROSS)
+            .setRequiredHammers(52).setRequiredTools(100).setProduce(GoodsType.CROSS)
             .setProductionPerTurn(3).setBaseProductionPerTurn(1).setSlotsForWorkers(3)
             .setUpgradeTo(CATHEDRAL).setRequiredColonyPopulation(3).build();
 
     public final static ConstructionType CHAPEL = ConstructionTypeBuilder.make().setName("CHAPEL")
-            .setProduce(GoodType.CROSS)
+            .setProduce(GoodsType.CROSS)
             .setProductionPerTurn(1)
             .setBaseProductionPerTurn(1)
             .setSlotsForWorkers(3)
@@ -342,12 +342,12 @@ public final class ConstructionType {
 
     public final static ConstructionType NEWSPAPER = ConstructionTypeBuilder.make()
             .setName("NEWSPAPER").setRequiredHammers(120).setRequiredTools(50)
-            .setProduce(GoodType.BELL).setProductionPerTurn(6).setBaseProductionPerTurn(0)
+            .setProduce(GoodsType.BELL).setProductionPerTurn(6).setBaseProductionPerTurn(0)
             .setSlotsForWorkers(0).setUpgradeTo(null).setRequiredColonyPopulation(4).build();
 
     public final static ConstructionType PRINTING_PRESS = ConstructionTypeBuilder.make()
             .setName("PRINTING_PRESS").setRequiredHammers(80).setRequiredTools(0)
-            .setProduce(GoodType.BELL).setProductionPerTurn(9).setBaseProductionPerTurn(0)
+            .setProduce(GoodsType.BELL).setProductionPerTurn(9).setBaseProductionPerTurn(0)
             .setSlotsForWorkers(0).setUpgradeTo(NEWSPAPER).setRequiredColonyPopulation(1).build();
 
     public final static ConstructionType CUSTOM_HOUSE = ConstructionTypeBuilder.make()
@@ -374,49 +374,49 @@ public final class ConstructionType {
     public final static List<ConstructionType> WAREHOUSES = ImmutableList.of(WAREHOUSE_EXPANSION,
             WAREHOUSE, WAREHOUSE_BASIC);
 
-    public static final List<GoodType> SOURCE_1 = GoodType.GOOD_TYPES.stream()
-            .filter(goodType -> !isProducedGoodType(goodType))
+    public static final List<GoodsType> SOURCE_1 = GoodsType.GOOD_TYPES.stream()
+            .filter(goodsType -> !isProducedGoodsType(goodsType))
             .collect(ImmutableList.toImmutableList());
 
-    public static final List<GoodType> SOURCE_2 = GoodType.GOOD_TYPES.stream().filter(
-            goodType -> !SOURCE_1.contains(goodType) && isProducedFromAny(goodType, SOURCE_1))
+    public static final List<GoodsType> SOURCE_2 = GoodsType.GOOD_TYPES.stream().filter(
+            goodsType -> !SOURCE_1.contains(goodsType) && isProducedFromAny(goodsType, SOURCE_1))
             .collect(ImmutableList.toImmutableList());
 
-    public static final List<GoodType> SOURCE_3 = GoodType.GOOD_TYPES.stream().filter(
-            goodType -> !SOURCE_2.contains(goodType) && isProducedFromAny(goodType, SOURCE_2))
+    public static final List<GoodsType> SOURCE_3 = GoodsType.GOOD_TYPES.stream().filter(
+            goodsType -> !SOURCE_2.contains(goodsType) && isProducedFromAny(goodsType, SOURCE_2))
             .collect(ImmutableList.toImmutableList());
 
     /**
      * It's secondary good type source just when good type is produces by some
      * facility without any additional inputs.
      * 
-     * @param goodType
+     * @param goodsType
      *            required good type
      * @return if it's secondary good type source
      */
-    private static boolean isProducedGoodType(final GoodType goodType) {
+    private static boolean isProducedGoodsType(final GoodsType goodsType) {
         return ALL.stream()
                 .filter(construction -> construction.getProduce().isPresent()
-                        && construction.getProduce().get().equals(goodType)
+                        && construction.getProduce().get().equals(goodsType)
                         && construction.getConsumed().isPresent())
                 .findAny().isPresent();
     }
 
-    private static boolean isProducedFromAny(final GoodType goodType,
-            final List<GoodType> goodTypes) {
+    private static boolean isProducedFromAny(final GoodsType goodsType,
+            final List<GoodsType> goodsTypes) {
         return ALL.stream()
                 .filter(construction -> construction.getProduce().isPresent()
-                        && construction.getProduce().get().equals(goodType)
+                        && construction.getProduce().get().equals(goodsType)
                         && construction.getConsumed().isPresent()
-                        && goodTypes.contains(construction.getConsumed().get()))
+                        && goodsTypes.contains(construction.getConsumed().get()))
                 .findAny().isPresent();
     }
 
     public static ConstructionType valueOf(final String strName) {
-        final Optional<ConstructionType> oGoodType = ALL.stream()
+        final Optional<ConstructionType> oGoodsType = ALL.stream()
                 .filter(type -> type.name().equals(strName)).findFirst();
-        if (oGoodType.isPresent()) {
-            return oGoodType.get();
+        if (oGoodsType.isPresent()) {
+            return oGoodsType.get();
         } else {
             throw new IllegalArgumentException("There is no such type '" + strName + "'");
         }
@@ -428,8 +428,8 @@ public final class ConstructionType {
         private int requiredHammers;
         private int requiredTools;
         private ConstructionType upgradeTo;
-        private GoodType produce;
-        private GoodType consumed;
+        private GoodsType produce;
+        private GoodsType consumed;
         private int productionPerTurn;
         private int baseProductionPerTurn = 0;
         private float productionRatio = 1F;
@@ -471,12 +471,12 @@ public final class ConstructionType {
             return this;
         }
 
-        private ConstructionTypeBuilder setProduce(final GoodType produce) {
+        private ConstructionTypeBuilder setProduce(final GoodsType produce) {
             this.produce = produce;
             return this;
         }
 
-        private ConstructionTypeBuilder setConsumed(final GoodType consumed) {
+        private ConstructionTypeBuilder setConsumed(final GoodsType consumed) {
             this.consumed = consumed;
             return this;
         }
@@ -505,7 +505,7 @@ public final class ConstructionType {
     }
 
     private ConstructionType(final String name, final int requiredHammers, final int requiredTools,
-            final ConstructionType upgradeTo, final GoodType produce, final GoodType consumed,
+            final ConstructionType upgradeTo, final GoodsType produce, final GoodsType consumed,
             final int productionPerTurn, final int baseProductionPerTurn,
             final float productionRatio, final int slotsForWorkers,
             final int requiredColonyPopulation) {
@@ -620,7 +620,7 @@ public final class ConstructionType {
                 .findFirst();
     }
 
-    public Optional<GoodType> getProduce() {
+    public Optional<GoodsType> getProduce() {
         if (produce == null) {
             return Optional.empty();
         } else {
@@ -628,7 +628,7 @@ public final class ConstructionType {
         }
     }
 
-    public Optional<GoodType> getConsumed() {
+    public Optional<GoodsType> getConsumed() {
         if (consumed == null) {
             return Optional.empty();
         } else {

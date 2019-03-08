@@ -2,7 +2,7 @@ package org.microcol.gui.screen.europe;
 
 import java.util.List;
 
-import org.microcol.gui.dialog.ChooseGoodAmountDialog;
+import org.microcol.gui.dialog.ChooseGoodsDialog;
 import org.microcol.gui.dialog.DialogNotEnoughGold;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.image.ImageProvider;
@@ -10,7 +10,7 @@ import org.microcol.gui.util.AbstractPanelDockBehavior;
 import org.microcol.gui.util.ClipboardEval;
 import org.microcol.gui.util.From;
 import org.microcol.model.CargoSlot;
-import org.microcol.model.GoodsAmount;
+import org.microcol.model.Goods;
 import org.microcol.model.NotEnoughtGoldException;
 import org.microcol.model.Unit;
 import org.slf4j.Logger;
@@ -29,18 +29,18 @@ public final class PanelEuropeDockBehavior extends AbstractPanelDockBehavior {
     private final EuropeCallback europeDialogCallback;
     private final GameModelController gameModelController;
     private final DialogNotEnoughGold dialogNotEnoughGold;
-    private final ChooseGoodAmountDialog chooseGoodAmount;
+    private final ChooseGoodsDialog chooseGoods;
 
     @Inject
     PanelEuropeDockBehavior(final EuropeCallback europeDialogCallback,
             final GameModelController gameModelController, final ImageProvider imageProvider,
             final DialogNotEnoughGold dialogNotEnoughGold,
-            final ChooseGoodAmountDialog chooseGoodAmount) {
+            final ChooseGoodsDialog chooseGoods) {
         super(gameModelController, imageProvider);
         this.europeDialogCallback = Preconditions.checkNotNull(europeDialogCallback);
         this.gameModelController = Preconditions.checkNotNull(gameModelController);
         this.dialogNotEnoughGold = Preconditions.checkNotNull(dialogNotEnoughGold);
-        this.chooseGoodAmount = Preconditions.checkNotNull(chooseGoodAmount);
+        this.chooseGoods = Preconditions.checkNotNull(chooseGoods);
     }
 
     @Override
@@ -52,15 +52,15 @@ public final class PanelEuropeDockBehavior extends AbstractPanelDockBehavior {
     @Override
     public void consumeGoods(final CargoSlot targetCargoSlot,
             final boolean specialOperatonWasSelected, final ClipboardEval eval) {
-        final GoodsAmount goodsAmount = eval.getGoodAmount().get();
+        final Goods goods = eval.getGoods().get();
         final From transferFrom = eval.getFrom().get();
-
-        GoodsAmount tmp = goodsAmount;
+        //FIXME this is horrible code.
+        
+        Goods tmp = goods;
         logger.debug("wasShiftPressed " + europeDialogCallback.getPropertyShiftWasPressed().get());
         if (specialOperatonWasSelected) {
-            chooseGoodAmount.init(targetCargoSlot.maxPossibleGoodsToMoveHere(
-                    CargoSlot.MAX_CARGO_SLOT_CAPACITY, goodsAmount.getAmount()));
-            tmp = new GoodsAmount(goodsAmount.getGoodType(), chooseGoodAmount.getActualValue());
+            chooseGoods.init(targetCargoSlot.maxPossibleGoodsToMoveHere(goods));
+            tmp = chooseGoods.getActualValue();
             if (tmp.isZero()) {
                 return;
             }

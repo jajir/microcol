@@ -3,7 +3,7 @@ package org.microcol.gui;
 import org.microcol.gui.buttonpanel.NextTurnListener;
 import org.microcol.gui.dialog.AboutDialog;
 import org.microcol.gui.dialog.ApplicationController;
-import org.microcol.gui.dialog.ChooseGoodAmountDialog;
+import org.microcol.gui.dialog.ChooseGoodsDialog;
 import org.microcol.gui.dialog.DialogDestroyColony;
 import org.microcol.gui.dialog.DialogMessage;
 import org.microcol.gui.dialog.MissionGoalsShowListener;
@@ -155,7 +155,7 @@ public final class MicroColModule extends AbstractModule {
          */
         bind(AboutDialog.class).in(Singleton.class);
         bind(DialogDestroyColony.class).in(Singleton.class);
-        bind(ChooseGoodAmountDialog.class).in(Singleton.class);
+        bind(ChooseGoodsDialog.class).in(Singleton.class);
         bind(DialogMessage.class).in(Singleton.class);
         bind(MissionCallBack.class).in(Singleton.class);
         bind(SettingButtonsPresenter.class).asEagerSingleton();

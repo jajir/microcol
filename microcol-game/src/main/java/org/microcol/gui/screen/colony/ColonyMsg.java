@@ -11,8 +11,6 @@ public enum ColonyMsg implements MessageKeyResource {
     goods,
     colony,
     buttonClose,
-    adjustAmountOfGoods,
-    
     ;
 
     @Override

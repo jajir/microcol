@@ -12,14 +12,14 @@ import com.google.common.base.Preconditions;
  */
 public final class ColonyProductionStats {
 
-    private final Map<GoodType, GoodProductionStats> typeStats = new HashMap<>();
+    private final Map<GoodsType, GoodsProductionStats> typeStats = new HashMap<>();
 
-    public GoodProductionStats getStatsByType(final GoodType goodType) {
-        Preconditions.checkNotNull(goodType);
-        GoodProductionStats out = typeStats.get(goodType);
+    public GoodsProductionStats getStatsByType(final GoodsType goodsType) {
+        Preconditions.checkNotNull(goodsType);
+        GoodsProductionStats out = typeStats.get(goodsType);
         if (out == null) {
-            out = new GoodProductionStats(goodType);
-            typeStats.put(goodType, out);
+            out = new GoodsProductionStats(goodsType);
+            typeStats.put(goodsType, out);
         }
         return out;
     }

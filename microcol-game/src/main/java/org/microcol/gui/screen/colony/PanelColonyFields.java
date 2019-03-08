@@ -12,7 +12,8 @@ import org.microcol.gui.util.JavaFxComponent;
 import org.microcol.gui.util.PaintService;
 import org.microcol.model.Colony;
 import org.microcol.model.ColonyField;
-import org.microcol.model.GoodType;
+import org.microcol.model.Goods;
+import org.microcol.model.GoodsType;
 import org.microcol.model.Location;
 import org.microcol.model.Terrain;
 import org.microcol.model.Unit;
@@ -60,7 +61,7 @@ public final class PanelColonyFields implements JavaFxComponent {
     private final ContextMenu contextMenu;
 
     private final PaintService paintService;
-    
+
     private final TmpPanel mainPanel;
 
     @Inject
@@ -72,19 +73,19 @@ public final class PanelColonyFields implements JavaFxComponent {
         this.colonyDialog = Preconditions.checkNotNull(colonyDialog);
         this.paintService = Preconditions.checkNotNull(paintService);
         final int size = 3 * GamePanelView.TILE_WIDTH_IN_PX;
-        
+
         canvas = new Canvas(size, size);
         canvas.setOnDragOver(this::onDragOver);
         canvas.setOnDragDropped(this::onDragDropped);
         canvas.setOnDragDetected(this::onDragDetected);
         canvas.setOnMousePressed(this::onMousePressed);
         canvas.setOnContextMenuRequested(this::onContextMenuRequested);
-        
+
         contextMenu = new ContextMenu();
         contextMenu.getStyleClass().add("popup");
         contextMenu.setAutoHide(true);
-        
-        mainPanel = new  TmpPanel();
+
+        mainPanel = new TmpPanel();
         mainPanel.getContentPane().getChildren().add(canvas);
         mainPanel.getStyleClass().add("colony-fields");
     }
@@ -98,9 +99,9 @@ public final class PanelColonyFields implements JavaFxComponent {
                 contextMenu.getItems().clear();
                 colonyField.getTerrain().getProduction().stream().forEach(production -> {
                     final MenuItem item = new MenuItem(
-                            production.getGoodType().name() + "   " + production.getProduction());
+                            production.getGoodsType().name() + "   " + production.getProduction());
                     item.setOnAction(evt -> {
-                        colonyField.setProducedGoodType(production.getGoodType());
+                        colonyField.setProducedGoodsType(production.getGoodsType());
                         colonyDialog.repaint();
                     });
                     contextMenu.getItems().add(item);
@@ -124,10 +125,11 @@ public final class PanelColonyFields implements JavaFxComponent {
         if (loc.isPresent()) {
             final ColonyField colonyField = colony.getColonyFieldInDirection(loc.get());
             if (!colonyField.isEmpty()) {
-                final Image image = imageProvider.getUnitImage(colonyField.getUnit());
+                final Unit unit = colonyField.getUnit().get();
+                final Image image = imageProvider.getUnitImage(unit);
                 final Dragboard db = canvas.startDragAndDrop(TransferMode.MOVE);
                 ClipboardWritter.make(db).addImage(image).addTransferFromColonyField(loc.get())
-                        .addUnit(colonyField.getUnit()).build();
+                        .addUnit(unit).build();
                 event.consume();
             }
         }
@@ -168,7 +170,7 @@ public final class PanelColonyFields implements JavaFxComponent {
                 final Optional<Unit> oUnit = ClipboardEval
                         .make(gameModelController.getModel(), event.getDragboard()).getUnit();
                 if (oUnit.isPresent()) {
-                    oUnit.get().placeToColonyField(colonyField, GoodType.CORN);
+                    oUnit.get().placeToColonyField(colonyField, GoodsType.CORN);
                     event.setDropCompleted(true);
                     colonyDialog.repaint();
                 }
@@ -200,19 +202,20 @@ public final class PanelColonyFields implements JavaFxComponent {
     private void paintColonyField(final GraphicsContext gc, final ColonyField colonyField) {
         final Terrain terrain = colonyField.getTerrain();
         final Point centre = Point.of(1, 1).multiply(GamePanelView.TILE_WIDTH_IN_PX);
-        final Point point = Point.of(colonyField.getDirection()).add(centre);
+        final Point point = Point.of(colonyField.getDirection().getVector()).add(centre);
         paintService.paintTerrainOnTile(gc, point, colonyField.getLocation(), terrain, false);
         if (!colonyField.isEmpty()) {
-            gc.drawImage(imageProvider.getUnitImage(colonyField.getUnit()), point.getX(),
+            final Goods production = colonyField.getProduction().get();
+            final Unit unit = colonyField.getUnit().get();
+            gc.drawImage(imageProvider.getUnitImage(unit), point.getX(),
                     point.getY());
             // TODO on ocean show fish
-            gc.drawImage(imageProvider.getGoodTypeImage(colonyField.getProducedGoodType()),
-                    point.getX(), point.getY(), 25, 25);
+            gc.drawImage(imageProvider.getGoodsTypeImage(production.getType()), point.getX(),
+                    point.getY(), 25, 25);
             gc.setTextAlign(TextAlignment.CENTER);
             gc.setTextBaseline(VPos.CENTER);
             gc.setFill(Color.BLACK);
-            gc.fillText("x " + colonyField.getProducedGoodsAmmount(), point.getX() + 10,
-                    point.getY() + 28);
+            gc.fillText("x " + production.getAmount(), point.getX() + 10, point.getY() + 28);
         }
     }
 

@@ -272,8 +272,8 @@ final class ListenerManager {
         listeners.forEach(listener -> listener.onGoldWasChanged(event));
     }
 
-    void fireGoodsWasSoldInEurope(final Model model, final GoodsAmount goodsAmount) {
-        final GoodsWasSoldInEuropeEvent event = new GoodsWasSoldInEuropeEvent(model, goodsAmount);
+    void fireGoodsWasSoldInEurope(final Model model, final Goods goods) {
+        final GoodsWasSoldInEuropeEvent event = new GoodsWasSoldInEuropeEvent(model, goods);
 
         logger.info("Goods was sold in Europe: {}.", event);
 

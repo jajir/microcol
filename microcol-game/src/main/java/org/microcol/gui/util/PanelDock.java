@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import org.microcol.gui.image.ImageProvider;
 import org.microcol.gui.screen.colony.TmpPanel;
+import org.microcol.gui.screen.game.components.StatusBarMessageEvent.Source;
 import org.microcol.i18n.I18n;
 import org.microcol.model.Unit;
 import org.microcol.model.unit.UnitWithCargo;
@@ -36,6 +37,9 @@ import javafx.scene.layout.VBox;
  */
 public final class PanelDock implements JavaFxComponent, UpdatableLanguage, Repaintable {
 
+    // FIXME make it abstract, create two instances for Colony and Europe and
+    // inject them with guice
+
     private final Logger logger = LoggerFactory.getLogger(PanelDock.class);
 
     public static final String SHIP_IN_PORT_STYLE = "paneShip";
@@ -56,11 +60,11 @@ public final class PanelDock implements JavaFxComponent, UpdatableLanguage, Repa
 
     @Inject
     public PanelDock(final ImageProvider imageProvider, final PanelDockBehavior panelDockBehavior,
-            final I18n i18n, final EventBus eventBus) {
+            final I18n i18n, final EventBus eventBus, final Source source) {
         this.imageProvider = Preconditions.checkNotNull(imageProvider);
         this.panelDockBehavior = Preconditions.checkNotNull(panelDockBehavior);
         panelCratesController = new PanelDockCratesController(imageProvider, panelDockBehavior,
-                i18n, eventBus);
+                i18n, eventBus, source);
 
         toggleGroup = new ToggleGroup();
         toggleGroup.selectedToggleProperty().addListener((object, oldValue, newValue) -> {

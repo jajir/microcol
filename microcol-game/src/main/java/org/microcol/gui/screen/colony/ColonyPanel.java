@@ -3,6 +3,7 @@ package org.microcol.gui.screen.colony;
 import org.microcol.gui.MainStageBuilder;
 import org.microcol.gui.Point;
 import org.microcol.gui.image.ImageProvider;
+import org.microcol.gui.screen.game.components.StatusBarMessageEvent.Source;
 import org.microcol.gui.util.JavaFxComponent;
 import org.microcol.gui.util.Listener;
 import org.microcol.gui.util.PaintService;
@@ -78,7 +79,7 @@ public final class ColonyPanel implements JavaFxComponent, UpdatableLanguage {
         this.colonyStructures = Preconditions.checkNotNull(panelColonyStructures);
         this.panelBuildingQueue = Preconditions.checkNotNull(panelBuildingQueue);
         this.panelDock = new PanelDock(imageProvider,
-                Preconditions.checkNotNull(panelColonyDockBehaviour), i18n, eventBus);
+                Preconditions.checkNotNull(panelColonyDockBehaviour), i18n, eventBus, Source.COLONY);
         this.goods = Preconditions.checkNotNull(panelColonyGoods);
         this.panelOutsideColony = Preconditions.checkNotNull(panelOutsideColony);
         this.i18n = Preconditions.checkNotNull(i18n);

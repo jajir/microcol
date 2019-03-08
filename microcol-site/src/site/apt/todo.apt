@@ -50,14 +50,16 @@ Planned releases
  
   * \uD83D\uDC1B Don't animate and don't wait for units moving outside of screen.
   When kings unit coming to colonies.
-  
-  * \u2717 
- 
-  * \u2717 
-  
-  * \u2717 
  
   * \uD83D\uDC1B Dialog for choosing amount of transfered goods is not shown always.
+  
+  * \u2717 
+ 
+  * \u2717 
+  
+  * \u2717 
+ 
+  * \uD83D\uDC1B When goods produced in turn exceed warehouse capacity than exceed goods should be thrown away and turn event generated. 
  
   * \uD83D\uDC1B Focused unit is in colony. Than colony is open and focused unit is placed to field.
   Than colony is closed. Now it's not possible to move any unit in colony, because there is no selected unit.  
@@ -113,8 +115,6 @@ Planned releases
   * \u2717 Colony name generator
   
   * \u2717 Add mouse over hints to colony. Add hint to optional 'Control' key during dragging.  
-  
-  * \u2717 Don't show Europe as dialog, show it at full screen.  
   
   * \u2717 Add mouse over hints to Europe.  
   

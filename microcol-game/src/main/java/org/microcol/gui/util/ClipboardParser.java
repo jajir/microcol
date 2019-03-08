@@ -7,8 +7,8 @@ import java.util.Optional;
 import javax.annotation.Nullable;
 
 import org.microcol.gui.MicroColException;
-import org.microcol.model.GoodType;
-import org.microcol.model.GoodsAmount;
+import org.microcol.model.GoodsType;
+import org.microcol.model.Goods;
 import org.microcol.model.Model;
 import org.microcol.model.Unit;
 
@@ -66,13 +66,13 @@ public class ClipboardParser implements ClipboardConst {
         map.remove(key);
     }
 
-    public Optional<GoodsAmount> getGoodAmount() {
+    public Optional<Goods> getGoods() {
         if (get(KEY_GOODS) == null) {
             return Optional.empty();
         } else {
-            final GoodType goodType = GoodType.valueOf(get(KEY_GOODS));
+            final GoodsType goodsType = GoodsType.valueOf(get(KEY_GOODS));
             final int amount = getInt(KEY_GOODS_AMOUNT);
-            return Optional.of(new GoodsAmount(goodType, amount));
+            return Optional.of(new Goods(goodsType, amount));
         }
     }
 

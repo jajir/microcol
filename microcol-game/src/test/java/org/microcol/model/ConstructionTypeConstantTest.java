@@ -11,16 +11,16 @@ public class ConstructionTypeConstantTest {
 
     @Test
     public void test_soource_levest_are_computed_correctly() throws Exception {
-        assertEquals(GoodType.GOOD_TYPES.size(), ConstructionType.SOURCE_1.size()
+        assertEquals(GoodsType.GOOD_TYPES.size(), ConstructionType.SOURCE_1.size()
                 + ConstructionType.SOURCE_2.size() + ConstructionType.SOURCE_3.size());
 
-        assertTrue(ConstructionType.SOURCE_1.contains(GoodType.BELL));
-        assertTrue(ConstructionType.SOURCE_1.contains(GoodType.CROSS));
+        assertTrue(ConstructionType.SOURCE_1.contains(GoodsType.BELL));
+        assertTrue(ConstructionType.SOURCE_1.contains(GoodsType.CROSS));
 
-        assertTrue(ConstructionType.SOURCE_2.contains(GoodType.TOOLS));
-        assertTrue(ConstructionType.SOURCE_2.contains(GoodType.RUM));
+        assertTrue(ConstructionType.SOURCE_2.contains(GoodsType.TOOLS));
+        assertTrue(ConstructionType.SOURCE_2.contains(GoodsType.RUM));
 
-        assertTrue(ConstructionType.SOURCE_3.contains(GoodType.MUSKET));
+        assertTrue(ConstructionType.SOURCE_3.contains(GoodsType.MUSKET));
     }
 
     @Test

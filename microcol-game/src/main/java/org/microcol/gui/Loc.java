@@ -53,6 +53,7 @@ public enum Loc implements MessageKeyResource {
     no_5_7p,
     and,
     withColony,
+    adjustAmountOfGoods,
     ;
 
     private final static String SEASON_PREFIX = "statusBar_season_";

@@ -677,7 +677,7 @@ public abstract class Unit {
         structureSlot.set((PlaceConstructionSlot) place);
     }
 
-    public void placeToColonyField(final ColonyField colonyField, final GoodType producedGoodType) {
+    public void placeToColonyField(final ColonyField colonyField, final GoodsType producedGoodsType) {
         Preconditions.checkNotNull(colonyField);
         Preconditions.checkState(!isAtEuropePort(), "Unit can't skip from europe port to map");
         Preconditions.checkState(!isAtEuropePier(), "Unit can't skip from europe port pier to map");
@@ -690,7 +690,7 @@ public abstract class Unit {
         } else {
             place.destroy();
         }
-        place = new PlaceColonyField(this, colonyField, producedGoodType);
+        place = new PlaceColonyField(this, colonyField, producedGoodsType);
         colonyField.setPlaceColonyField((PlaceColonyField) place);
     }
 

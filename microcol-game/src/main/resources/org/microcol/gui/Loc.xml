@@ -57,5 +57,6 @@
 	<entry key="no_5_7p">five</entry>
 	<entry key="and">and</entry>
 	<entry key="withColony">with colony</entry>
+	<entry key="adjustAmountOfGoods">For adjusting amount of transfered goods press and hold key Control (or Ctrl) ⌃.</entry>
 
 </properties>

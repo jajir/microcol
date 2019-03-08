@@ -69,7 +69,7 @@ public final class Construction {
         return type;
     }
 
-    public Optional<GoodType> getProducedGoodType() {
+    public Optional<GoodsType> getProducedGoodsType() {
         return type.getProduce();
     }
 
@@ -112,11 +112,12 @@ public final class Construction {
                 .collect(Collectors.toList());
     }
 
-    ConstructionTurnProduction getProduction(final int sourceGoodAmount) {
-        Preconditions.checkArgument(sourceGoodAmount >= 0,
-                "sourceGoodAmount can't be smaller than 0.");
+    //TODO when construction doesn't consume goods second parameter is useless
+    //TODO add test and redesign it to Goods class
+    ConstructionTurnProduction getProduction(final Goods sourceGoods) {
+        Preconditions.checkNotNull(sourceGoods);
         if (getType().getProduce().isPresent()) {
-            final GoodType producedGoodType = getType().getProduce().get();
+            final GoodsType producedGoodsType = getType().getProduce().get();
             /*
              * Consumption per turn is always 0. Even when there are base
              * production like crosses. Base production doesn't consume any
@@ -127,11 +128,11 @@ public final class Construction {
             int productioPerTurnBlocked = 0;
             for (final ConstructionSlot slot : getConstructionSlots()) {
                 if (!slot.isEmpty()) {
-                    float multiplier = slot.getProductionModifier(producedGoodType);
+                    float multiplier = slot.getProductionModifier(producedGoodsType);
                     final int tmpProd = (int) (getType().getProductionPerTurn() * multiplier);
                     final int tmpCons = getType().getConsumptionPerTurn();
 
-                    final int canBeconsumed = sourceGoodAmount - consumptionPerTurn;
+                    final int canBeconsumed = sourceGoods.getAmount() - consumptionPerTurn;
 
                     if (tmpCons <= canBeconsumed) {
                         productionPerTurn += tmpProd;
@@ -145,33 +146,39 @@ public final class Construction {
                     }
                 }
             }
-            return new ConstructionTurnProduction(consumptionPerTurn, productionPerTurn,
-                    productioPerTurnBlocked);
+            return new ConstructionTurnProduction(
+                    Goods.of(sourceGoods.getType(), consumptionPerTurn),
+                    Goods.of(getType().getProduce().get(), productionPerTurn),
+                    Goods.of(getType().getProduce().get(), productioPerTurnBlocked));
         } else {
-            return ConstructionTurnProduction.EMPTY;
+            return new ConstructionTurnProduction(
+                    Goods.of(sourceGoods.getType(), 0),
+                    Goods.of(getType().getProduce().get(), 0),
+                    Goods.of(getType().getProduce().get(), 0));
         }
     }
 
     /**
-     * Method should be called once per turn. It produce resources on field.
+     * Method should be called once per turn. It produce resources in construction.
      *
      * @param colony
      *            required colony where is warehouse and construction placed
      * @param warehouse
      *            required colony warehouse
      */
-    public void produce(final Colony colony, final ColonyWarehouse warehouse) {
-        getType().getProduce().ifPresent(producedGoodType -> {
+    public void countTurnProduction(final Colony colony, final ColonyWarehouse warehouse) {
+        getType().getProduce().ifPresent(producedGoodsType -> {
             if (getType().getConsumed().isPresent()) {
-                final GoodType consumedGoodsType = getType().getConsumed().get();
-                final int availableGoodsSource = warehouse.getGoodAmmount(consumedGoodsType);
-                ConstructionTurnProduction prod = getProduction(availableGoodsSource);
-                warehouse.addToWarehouse(consumedGoodsType, -prod.getConsumedGoods());
-                warehouse.addToWarehouse(producedGoodType, prod.getProducedGoods());
+                final GoodsType consumedGoodsType = getType().getConsumed().get();
+                final Goods availableGoodsSource = warehouse.getGoods(consumedGoodsType);
+                final ConstructionTurnProduction prod = getProduction(availableGoodsSource);
+                warehouse.removeGoods(prod.getConsumedGoods());
+                //TODO following could be impossible, warehouse could be full.
+                warehouse.addGoods(prod.getProducedGoods());
             } else {
-                final int availableGoodsSource = warehouse.getGoodAmmount(producedGoodType);
-                ConstructionTurnProduction prod = getProduction(availableGoodsSource);
-                warehouse.addToWarehouse(producedGoodType, prod.getProducedGoods());
+                final Goods availableGoodsSource = warehouse.getGoods(producedGoodsType);
+                final ConstructionTurnProduction prod = getProduction(availableGoodsSource);
+                warehouse.addGoods(prod.getProducedGoods());
             }
         });
     }
