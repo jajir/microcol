@@ -16,74 +16,71 @@ import com.google.common.collect.Lists;
 public class Construction_CHURCH_Test extends AbstractConstructionTest {
 
     @Test
+    public void test_getProduction_consumption() throws Exception {
+        final IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> construction.getProduction(Goods.of(GoodsType.ORE)));
+
+        assertEquals("This construction doesn't consume anything.", exception.getMessage());
+    }
+
+    @Test
     public void test_getProduction_no_workers() throws Exception {
-        when(slot1.isEmpty()).thenReturn(true);
-        when(slot2.isEmpty()).thenReturn(true);
-        when(slot3.isEmpty()).thenReturn(true);
-        when(slot1.getProductionModifier(GoodsType.CROSS))
-                .thenThrow(new RuntimeException("Should not be called."));
+        when(slot1.getProduction()).thenReturn(empty());
+        when(slot2.getProduction()).thenReturn(empty());
+        when(slot3.getProduction()).thenReturn(empty());
 
-        final ConstructionTurnProduction ret = construction
-                .getProduction(Goods.of(GoodsType.CROSS));
+        final ConstructionTurnProduction ret = construction.getProduction();
 
-        assertEquals(Goods.of(GoodsType.CROSS, 0), ret.getConsumedGoods());
-        assertEquals(Goods.of(GoodsType.CROSS, 1), ret.getProducedGoods());
-        assertEquals(Goods.of(GoodsType.CROSS, 0), ret.getBlockedGoods());
+        assertFalse(ret.getConsumedGoods().isPresent());
+        assertTrue(ret.getProducedGoods().isPresent());
+        assertFalse(ret.getBlockedGoods().isPresent());
+        assertEquals(Goods.of(GoodsType.CROSS, 0), ret.getProducedGoods().get());
     }
 
     @Test
     public void test_getProduction_1_worker() throws Exception {
-        when(slot1.isEmpty()).thenReturn(false);
-        when(slot2.isEmpty()).thenReturn(true);
-        when(slot3.isEmpty()).thenReturn(true);
-        when(slot1.getProductionModifier(GoodsType.CROSS)).thenReturn(1F);
+        when(slot1.getProduction()).thenReturn(empty());
+        when(slot2.getProduction()).thenReturn(full());
+        when(slot3.getProduction()).thenReturn(empty());
 
-        final ConstructionTurnProduction ret = construction
-                .getProduction(Goods.of(GoodsType.CROSS));
+        final ConstructionTurnProduction ret = construction.getProduction();
 
-        assertEquals(Goods.of(GoodsType.CROSS, 0), ret.getConsumedGoods());
-        assertEquals(Goods.of(GoodsType.CROSS, 4), ret.getProducedGoods());
-        assertEquals(Goods.of(GoodsType.CROSS, 0), ret.getBlockedGoods());
+        assertFalse(ret.getConsumedGoods().isPresent());
+        assertTrue(ret.getProducedGoods().isPresent());
+        assertFalse(ret.getBlockedGoods().isPresent());
+        assertEquals(Goods.of(GoodsType.CROSS, 5), ret.getProducedGoods().get());
     }
 
     @Test
-    public void test_getProduction_1_worker_limitedSource() throws Exception {
-        when(slot1.isEmpty()).thenReturn(false);
-        when(slot2.isEmpty()).thenReturn(true);
-        when(slot3.isEmpty()).thenReturn(true);
-        when(slot1.getProductionModifier(GoodsType.CROSS)).thenReturn(1F);
+    public void test_getProduction_2_worker() throws Exception {
+        when(slot1.getProduction()).thenReturn(full());
+        when(slot2.getProduction()).thenReturn(empty());
+        when(slot3.getProduction()).thenReturn(full());
 
-        final ConstructionTurnProduction ret = construction
-                .getProduction(Goods.of(GoodsType.CROSS));
+        final ConstructionTurnProduction ret = construction.getProduction();
 
-        assertEquals(Goods.of(GoodsType.CROSS, 0), ret.getConsumedGoods());
-        assertEquals(Goods.of(GoodsType.CROSS, 4), ret.getProducedGoods());
-        assertEquals(Goods.of(GoodsType.CROSS, 0), ret.getBlockedGoods());
+        assertFalse(ret.getConsumedGoods().isPresent());
+        assertTrue(ret.getProducedGoods().isPresent());
+        assertFalse(ret.getBlockedGoods().isPresent());
+        assertEquals(Goods.of(GoodsType.CROSS, 10), ret.getProducedGoods().get());
     }
 
-    @Test
-    public void test_getProduction_2_worker_limitedSource() throws Exception {
-        when(slot1.isEmpty()).thenReturn(true);
-        when(slot2.isEmpty()).thenReturn(true);
-        when(slot3.isEmpty()).thenReturn(false);
-        when(slot3.getProductionModifier(GoodsType.CROSS)).thenReturn(1F);
+    private ConstructionTurnProduction empty() {
+        return new ConstructionTurnProduction(null, Goods.of(GoodsType.CROSS, 0), null);
+    }
 
-        final ConstructionTurnProduction ret = construction
-                .getProduction(Goods.of(GoodsType.CROSS));
-
-        assertEquals(Goods.of(GoodsType.CROSS, 0), ret.getConsumedGoods());
-        assertEquals(Goods.of(GoodsType.CROSS, 4), ret.getProducedGoods());
-        assertEquals(Goods.of(GoodsType.CROSS, 0), ret.getBlockedGoods());
+    private ConstructionTurnProduction full() {
+        return new ConstructionTurnProduction(null, Goods.of(GoodsType.CROSS, 5), null);
     }
 
     @BeforeEach
-    public void setup() {
-        construction = new Construction(colony, ConstructionType.CHURCH,
+    void setup() {
+        construction = new Construction(model, colony, ConstructionType.CHURCH,
                 construction -> Lists.newArrayList(slot1, slot2, slot3));
     }
 
     @AfterEach
-    public void tearDown() {
+    void tearDown() {
         construction = null;
     }
 

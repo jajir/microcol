@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.List;
 
-import org.microcol.gui.util.PanelDock;
+import org.microcol.gui.util.AbstractPanelDock;
 import org.microcol.gui.util.PanelDockCrate;
 import org.testfx.util.WaitForAsyncUtils;
 
@@ -27,7 +27,7 @@ public class PageComponentPanelDock extends AbstractPageComponent {
     }
 
     public List<ToggleButton> getUnitsInPort() {
-	return getListOfNodes("." + PanelDock.SHIP_IN_PORT_STYLE);
+	return getListOfNodes("." + AbstractPanelDock.SHIP_IN_PORT_STYLE);
     }
 
     public void verifyNumberOfShipsInPort(final int expectedNumberOfShipsInPort) {

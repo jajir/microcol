@@ -2,6 +2,8 @@ package org.microcol.model;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.function.Consumer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,6 +28,21 @@ public class ColonyWarehouse {
         this.warehouse = new HashMap<>();
         initialGoods
                 .forEach((goodName, amount) -> warehouse.put(GoodsType.valueOf(goodName), amount));
+        validation();
+    }
+
+    /**
+     * Verify that no goods exceed warehouse capacity.
+     */
+    private void validation() {
+        for (final Entry<GoodsType, Integer> entry : warehouse.entrySet()) {
+            final GoodsType type = entry.getKey();
+            final Integer amount = entry.getValue();
+            final Goods capacity = getStorageCapacity(type);
+            Preconditions.checkArgument(amount <= capacity.getAmount(),
+                    "Can't create warehouse with %s of %s goods because capacity is %s", amount,
+                    type, capacity.getAmount());
+        }
     }
 
     Map<String, Integer> save() {
@@ -82,6 +99,38 @@ public class ColonyWarehouse {
 
         addGoods(goods);
         fromCargoSlot.removeCargo(goods);
+    }
+
+    /**
+     * Add goods to warehouse. When inserted goods exceed warehouse capacity
+     * than remaining goods is throws away.
+     * 
+     * @param goods
+     *            required goods
+     * @param thrownAwayGoodsConsumer
+     *            optional consumer which is called when some goods is throws
+     *            away.
+     * @return throws away goods. When no goods was thrown away than it returns
+     *         goods with 0 amount
+     */
+    public Goods addGoodsWithThrowingAway(final Goods goods,
+            final Consumer<Goods> thrownAwayGoodsConsumer) {
+        Preconditions.checkNotNull(goods);
+        final GoodsType goodsType = goods.getType();
+        final Goods remainingCapacity = getStorageCapacity(goodsType)
+                .substract(getGoods(goodsType));
+        if (remainingCapacity.isGreaterOrEqualsThan(goods)) {
+            // goods fit to warehouse.
+            addGoods(goods);
+            return Goods.of(goods.getType());
+        } else {
+            final Goods thrownAway = goods.substract(remainingCapacity);
+            addGoods(remainingCapacity);
+            if (thrownAwayGoodsConsumer != null) {
+                thrownAwayGoodsConsumer.accept(thrownAway);
+            }
+            return thrownAway;
+        }
     }
 
     public void removeGoods(final Goods goods) {

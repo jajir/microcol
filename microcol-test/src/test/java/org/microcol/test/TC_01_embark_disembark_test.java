@@ -24,7 +24,7 @@ import javafx.stage.Stage;
 public class TC_01_embark_disembark_test extends AbstractMicroColTest {
 
     private final static File testFileName = new File(
-	    "src/test/scenarios/test-verify-loading-unloading.microcol");
+	    "src/test/scenarios/T01-loading-unloading.microcol");
 
     @Start
     private void start(final Stage primaryStage) throws Exception {
@@ -66,7 +66,7 @@ public class TC_01_embark_disembark_test extends AbstractMicroColTest {
 	gamePage.dragMouseAtLocation(Location.of(24, 11));
 
 	// press next turn.
-	gamePage.nextTurn();
+	gamePage.nextTurnCloseDialogs();
 
 	// verify that there are no ship
 	assertEquals(0, getModel().getUnitsAt(Location.of(24, 12)).size());
@@ -79,7 +79,7 @@ public class TC_01_embark_disembark_test extends AbstractMicroColTest {
 	assertEquals(2, getModel().getUnitsAt(Location.of(24, 12)).size());
 
 	// press next turn.
-	gamePage.nextTurn();
+	gamePage.nextTurnCloseDialogs();
 	
 	//embark units
 	gamePage.moveMouseAtLocation(Location.of(24, 12));

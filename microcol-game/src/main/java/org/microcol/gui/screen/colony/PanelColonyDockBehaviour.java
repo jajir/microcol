@@ -44,34 +44,28 @@ public final class PanelColonyDockBehaviour extends AbstractPanelDockBehavior {
     @Override
     public void consumeGoods(final CargoSlot targetCargoSlot,
             final boolean specialOperatonWasSelected, final ClipboardEval eval) {
-
-        final Goods transferedGoods = eval.getGoods().get();
-        final From transferFrom = eval.getFrom().get();
-
-        Goods tmp = transferedGoods;
-
         logger.debug("wasShiftPressed " + colonyDialogCallback.getPropertyShiftWasPressed().get());
-        // FIXME this is horrible code.
-        if (specialOperatonWasSelected) {
-            // synchronously get information about transfered amount
-            chooseGoods
-                    .init(targetCargoSlot.maxPossibleGoodsToMoveHere(transferedGoods));
-            tmp = chooseGoods.getActualValue();
-            if (tmp.isZero()) {
-                return;
-            }
+        Goods transferedGoods = eval.getGoods().get();
+        transferedGoods = chooseGoods(transferedGoods, specialOperatonWasSelected, targetCargoSlot);
+        if (transferedGoods.isZero()) {
+            return;
         }
-
+        final From transferFrom = eval.getFrom().get();
         if (From.VALUE_FROM_COLONY_WAREHOUSE == transferFrom) {
-            targetCargoSlot.storeFromColonyWarehouse(tmp, colonyDialogCallback.getColony());
+            targetCargoSlot.storeFromColonyWarehouse(transferedGoods,
+                    colonyDialogCallback.getColony());
         } else if (From.VALUE_FROM_UNIT == transferFrom) {
-            targetCargoSlot.storeFromCargoSlot(tmp, eval.getCargoSlot().get());
+            targetCargoSlot.storeFromCargoSlot(transferedGoods, eval.getCargoSlot().get());
         } else {
             throw new IllegalArgumentException(
                     "Unsupported source transfer '" + transferFrom + "'");
         }
-
         colonyDialogCallback.repaint();
+    }
+
+    private Goods chooseGoods(final Goods goods, final boolean specialOperatonWasSelected,
+            final CargoSlot targetCargoSlot) {
+        return chooseGoods(chooseGoods, goods, specialOperatonWasSelected, targetCargoSlot.maxPossibleGoodsToMoveHere(goods));
     }
 
     @Override

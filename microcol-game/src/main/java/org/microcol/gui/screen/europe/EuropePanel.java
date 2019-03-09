@@ -1,11 +1,10 @@
 package org.microcol.gui.screen.europe;
 
 import org.microcol.gui.event.model.GameModelController;
-import org.microcol.gui.image.ImageProvider;
 import org.microcol.gui.screen.game.components.StatusBarMessageEvent;
 import org.microcol.gui.screen.game.components.StatusBarMessageEvent.Source;
+import org.microcol.gui.util.AbstractPanelDock;
 import org.microcol.gui.util.JavaFxComponent;
-import org.microcol.gui.util.PanelDock;
 import org.microcol.gui.util.Repaintable;
 import org.microcol.gui.util.UpdatableLanguage;
 import org.microcol.i18n.I18n;
@@ -31,7 +30,7 @@ public final class EuropePanel implements JavaFxComponent, UpdatableLanguage, Re
 
     private final Label labelTitle;
 
-    private final PanelDock europeDock;
+    private final AbstractPanelDock europeDock;
 
     private final PanelHighSeas<Europe> shipsTravelingToNewWorld;
 
@@ -44,17 +43,15 @@ public final class EuropePanel implements JavaFxComponent, UpdatableLanguage, Re
     private final BooleanProperty propertyShiftWasPressed;
 
     @Inject
-    public EuropePanel(final ImageProvider imageProvider,
-            final GameModelController gameModelController,
+    public EuropePanel(final GameModelController gameModelController,
             final PanelHighSeas<Europe> shipsTravelingToNewWorld,
             final PanelHighSeas<Europe> shipsTravelingToEurope, final PanelPortPier panelPortPier,
-            final PanelEuropeDockBehavior panelEuropeDockBehavior,
             final PanelEuropeGoods panelEuropeGoods, final EuropeButtonsPanel europeButtonsPanel,
-            final EventBus eventBus, final I18n i18n) {
+            final EventBus eventBus, final I18n i18n, final PanelDockEurope panelDockEurope) {
         propertyShiftWasPressed = new SimpleBooleanProperty(false);
-        Preconditions.checkNotNull(imageProvider);
         Preconditions.checkNotNull(gameModelController);
         this.panelPortPier = Preconditions.checkNotNull(panelPortPier);
+        this.europeDock = Preconditions.checkNotNull(panelDockEurope);
 
         labelTitle = new Label();
         labelTitle.getStyleClass().add("label-title");
@@ -70,8 +67,6 @@ public final class EuropePanel implements JavaFxComponent, UpdatableLanguage, Re
         this.shipsTravelingToNewWorld.setOnMouseEnteredKey(Europe.statusBarShipsToNewWorld);
         this.shipsTravelingToNewWorld.addStyle("to-new-world");
 
-        europeDock = new PanelDock(imageProvider, panelEuropeDockBehavior, i18n, eventBus,
-                Source.EUROPE);
         europeDock.getContent().setOnMouseEntered(e -> {
             eventBus.post(
                     new StatusBarMessageEvent(i18n.get(Europe.statusBarEuropeDock), Source.EUROPE));

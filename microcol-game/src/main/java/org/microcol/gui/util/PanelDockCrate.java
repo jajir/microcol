@@ -147,11 +147,18 @@ public final class PanelDockCrate extends StackPane {
     }
 
     private void onDragDetected(final MouseEvent event) {
-        if (cargoSlot.getGoods().isPresent()) {
-            eventBus.post(
-                    new StatusBarMessageEvent(i18n.get(Loc.adjustAmountOfGoods), source));
+        if (cargoSlot == null) {
+            /*
+             * It's closed cargo slot, because ship is not selected or doesn't
+             * contain so many slots.
+             */
+        } else {
+            if (cargoSlot.getGoods().isPresent()) {
+                eventBus.post(new StatusBarMessageEvent(i18n.get(Loc.adjustAmountOfGoods), source));
+            }
+            panelDockBehavior.onDragDetected(cargoSlot, event, this);
         }
-        panelDockBehavior.onDragDetected(cargoSlot, event, this);
+        event.consume();
     }
 
     private boolean isCorrectObject(final Dragboard db) {

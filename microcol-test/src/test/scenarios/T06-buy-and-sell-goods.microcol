@@ -768,7 +768,7 @@
         "SILK": 0,
         "TABACCO": 60,
         "CORN": 131,
-        "CIGARS": 171,
+        "CIGARS": 71,
         "BELL": 279,
         "COTTON": 0,
         "TOOLS": 0
@@ -905,8 +905,8 @@
         "SUGAR": 0,
         "SILK": 0,
         "TABACCO": 54,
-        "CORN": 380,
-        "CIGARS": 171,
+        "CORN": 180,
+        "CIGARS": 71,
         "BELL": 235,
         "COTTON": 0,
         "TOOLS": 0
@@ -1043,8 +1043,8 @@
         "SUGAR": 0,
         "SILK": 0,
         "TABACCO": 30,
-        "CORN": 318,
-        "CIGARS": 180,
+        "CORN": 118,
+        "CIGARS": 80,
         "BELL": 219,
         "COTTON": 0,
         "TOOLS": 0
@@ -1181,8 +1181,8 @@
         "SUGAR": 0,
         "SILK": 0,
         "TABACCO": 0,
-        "CORN": 224,
-        "CIGARS": 180,
+        "CORN": 124,
+        "CIGARS": 80,
         "BELL": 85,
         "COTTON": 0,
         "TOOLS": 0

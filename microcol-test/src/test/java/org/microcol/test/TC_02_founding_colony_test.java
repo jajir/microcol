@@ -27,7 +27,7 @@ import javafx.stage.Stage;
 public class TC_02_founding_colony_test extends AbstractMicroColTest {
 
     private final static File testFileName = new File(
-	    "src/test/scenarios/test-verify-founding-colony.microcol");
+	    "src/test/scenarios/T02-founding-colony.microcol");
 
     @Start
     private void start(final Stage primaryStage) throws Exception {

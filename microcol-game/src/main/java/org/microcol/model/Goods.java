@@ -48,6 +48,14 @@ public final class Goods {
         return new Goods(goodsType, amount + goods.getAmount());
     }
 
+    public Goods multiply(final float multiplier) {
+        return new Goods(goodsType, (int) (amount * multiplier));
+    }
+
+    public Goods divide(final float divisor) {
+        return new Goods(goodsType, (int) (amount / divisor));
+    }
+
     public boolean isZero() {
         return amount == 0;
     }
@@ -64,10 +72,14 @@ public final class Goods {
     }
 
     public boolean isGreaterThan(final Goods goods) {
+        Preconditions.checkArgument(goodsType.equals(goods.getType()),
+                "Substracted goods have differet type (%s) from current one (%s)", goods, this);
         return amount > goods.amount;
     }
 
     public boolean isGreaterOrEqualsThan(final Goods goods) {
+        Preconditions.checkArgument(goodsType.equals(goods.getType()),
+                "Substracted goods have differet type (%s) from current one (%s)", goods, this);
         return amount >= goods.amount;
     }
 

@@ -215,7 +215,8 @@ public class Colony {
      */
     public void startTurn() {
         colonyFields.forEach(field -> field.countTurnProduction(colonyWarehouse));
-        constructions.forEach(construction -> construction.countTurnProduction(this, getColonyWarehouse()));
+        constructions.forEach(
+                construction -> construction.countTurnProduction(this, getColonyWarehouse()));
         eatFood();
         optionalyProduceColonist();
         colonyBuildingQueue.startTurn();
@@ -315,9 +316,9 @@ public class Colony {
         Preconditions.checkNotNull(fieldDirection, "Field direction is null");
         Preconditions.checkArgument(fieldDirection.isDirection(),
                 String.format("Direction (%s) is  not known", fieldDirection));
-        return colonyFields.stream()
-                .filter(colonyFiled -> colonyFiled.getDirection().getVector().equals(fieldDirection)).findAny()
-                .orElseThrow(() -> new IllegalStateException(String.format(
+        return colonyFields.stream().filter(
+                colonyFiled -> colonyFiled.getDirection().getVector().equals(fieldDirection))
+                .findAny().orElseThrow(() -> new IllegalStateException(String.format(
                         "Field directiond (%s) is not in colony (%s)", fieldDirection, this)));
     }
 
@@ -447,8 +448,8 @@ public class Colony {
         ConstructionType.SOURCE_1.forEach(goodsType -> {
             getConstructionProducing(goodsType).ifPresent(con -> {
                 GoodsProductionStats goodsStats = out.getStatsByType(goodsType);
-                ConstructionTurnProduction turnProd = con.getProduction(Goods.of(goodsType));
-                goodsStats.setRowProduction(turnProd.getProducedGoods().getAmount());
+                ConstructionTurnProduction turnProd = con.getProduction();
+                goodsStats.setRowProduction(turnProd.getProducedGoods().get().getAmount());
             });
         });
 
@@ -478,10 +479,14 @@ public class Colony {
             int numberOfavailableInputGoods = goodConsumedStats.getInWarehouseAfter();
 
             final ConstructionTurnProduction turnProd = producedAt
-                    .getProduction(Goods.of(goodsTypeConsumed,numberOfavailableInputGoods));
-            goodConsumedStats.addConsumed(turnProd.getConsumedGoods().getAmount());
-            goodProdStats.setRowProduction(turnProd.getProducedGoods().getAmount());
-            goodProdStats.setBlockedProduction(turnProd.getBlockedGoods().getAmount());
+                    .getProduction(Goods.of(goodsTypeConsumed, numberOfavailableInputGoods));
+            goodConsumedStats.addConsumed(turnProd.getConsumedGoods().get().getAmount());
+            goodProdStats.setRowProduction(turnProd.getProducedGoods().get().getAmount());
+            if (turnProd.getBlockedGoods().isPresent()) {
+                goodProdStats.setBlockedProduction(turnProd.getBlockedGoods().get().getAmount());
+            } else {
+                goodProdStats.setBlockedProduction(0);
+            }
         }
     }
 

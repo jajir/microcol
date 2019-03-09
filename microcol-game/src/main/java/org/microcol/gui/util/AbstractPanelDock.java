@@ -13,7 +13,6 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
 import com.google.common.eventbus.EventBus;
-import com.google.inject.Inject;
 
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
@@ -35,12 +34,9 @@ import javafx.scene.layout.VBox;
  * in colonies.
  * </p>
  */
-public final class PanelDock implements JavaFxComponent, UpdatableLanguage, Repaintable {
+public abstract class AbstractPanelDock implements JavaFxComponent, UpdatableLanguage, Repaintable {
 
-    // FIXME make it abstract, create two instances for Colony and Europe and
-    // inject them with guice
-
-    private final Logger logger = LoggerFactory.getLogger(PanelDock.class);
+    private final Logger logger = LoggerFactory.getLogger(AbstractPanelDock.class);
 
     public static final String SHIP_IN_PORT_STYLE = "paneShip";
 
@@ -58,8 +54,7 @@ public final class PanelDock implements JavaFxComponent, UpdatableLanguage, Repa
 
     private final TmpPanel titledPanel;
 
-    @Inject
-    public PanelDock(final ImageProvider imageProvider, final PanelDockBehavior panelDockBehavior,
+    public AbstractPanelDock(final ImageProvider imageProvider, final PanelDockBehavior panelDockBehavior,
             final I18n i18n, final EventBus eventBus, final Source source) {
         this.imageProvider = Preconditions.checkNotNull(imageProvider);
         this.panelDockBehavior = Preconditions.checkNotNull(panelDockBehavior);

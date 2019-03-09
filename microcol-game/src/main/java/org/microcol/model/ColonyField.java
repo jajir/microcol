@@ -140,26 +140,10 @@ public final class ColonyField {
         Preconditions.checkNotNull(colonyWarehouse);
         if (getProduction().isPresent()) {
             final Goods production = getProduction().get();
-            final Goods inWarehouse = colonyWarehouse.getGoods(production.getType());
-            final Goods warehouseTotalCapacity = colonyWarehouse
-                    .getStorageCapacity(production.getType());
-            if (inWarehouse.isGreaterOrEqualsThan(warehouseTotalCapacity)) {
-                // All production will be throws away
+            colonyWarehouse.addGoodsWithThrowingAway(production, thrownAwayGoods -> {
                 model.addTurnEvent(TurnEventProvider.getGoodsWasThrowsAway(colony.getOwner(),
-                        production, colony));
-            } else {
-                final Goods warehouseCapacity = warehouseTotalCapacity.substract(inWarehouse);
-                if (warehouseCapacity.isGreaterOrEqualsThan(production)) {
-                    // All production could be stored.
-                    colonyWarehouse.addGoods(production);
-                } else {
-                    // There is no space for produced goods.
-                    final Goods throwsAwayGoods = production.substract(warehouseCapacity);
-                    model.addTurnEvent(TurnEventProvider.getGoodsWasThrowsAway(colony.getOwner(),
-                            throwsAwayGoods, colony));
-                    colonyWarehouse.addGoods(warehouseCapacity);
-                }
-            }
+                        thrownAwayGoods, colony));
+            });
         }
     }
 

@@ -2,12 +2,10 @@ package org.microcol.gui.screen.colony;
 
 import org.microcol.gui.MainStageBuilder;
 import org.microcol.gui.Point;
-import org.microcol.gui.image.ImageProvider;
-import org.microcol.gui.screen.game.components.StatusBarMessageEvent.Source;
+import org.microcol.gui.util.AbstractPanelDock;
 import org.microcol.gui.util.JavaFxComponent;
 import org.microcol.gui.util.Listener;
 import org.microcol.gui.util.PaintService;
-import org.microcol.gui.util.PanelDock;
 import org.microcol.gui.util.UpdatableLanguage;
 import org.microcol.i18n.I18n;
 import org.microcol.model.Colony;
@@ -39,7 +37,7 @@ import javafx.scene.layout.StackPane;
 public final class ColonyPanel implements JavaFxComponent, UpdatableLanguage {
 
     public static final String COLONY_NAME_ID = "colonyName";
-    
+
     private final static Logger logger = LoggerFactory.getLogger(ColonyPanel.class);
 
     private final StackPane mainPanel;
@@ -52,7 +50,7 @@ public final class ColonyPanel implements JavaFxComponent, UpdatableLanguage {
 
     private final PanelColonyGoods goods;
 
-    private final PanelDock panelDock;
+    private final AbstractPanelDock panelDock;
 
     private final PaintService paintService;
 
@@ -67,19 +65,17 @@ public final class ColonyPanel implements JavaFxComponent, UpdatableLanguage {
     private Colony colony;
 
     @Inject
-    public ColonyPanel(final ImageProvider imageProvider, final PanelColonyFields panelColonyFields,
+    public ColonyPanel(final PanelColonyFields panelColonyFields,
             final PanelColonyStructures panelColonyStructures,
             final PanelOutsideColony panelOutsideColony, final PanelColonyGoods panelColonyGoods,
-            final PanelColonyDockBehaviour panelColonyDockBehaviour,
             final PanelBuildingQueue panelBuildingQueue, final PaintService paintService,
-            final ColonyButtonsPanel colonyButtonsPanel, final I18n i18n, final EventBus eventBus) {
+            final ColonyButtonsPanel colonyButtonsPanel, final I18n i18n, final EventBus eventBus,
+            final PanelDockColony panelDockColony) {
         this.paintService = Preconditions.checkNotNull(paintService);
-        Preconditions.checkNotNull(imageProvider);
         this.colonyFields = Preconditions.checkNotNull(panelColonyFields);
         this.colonyStructures = Preconditions.checkNotNull(panelColonyStructures);
         this.panelBuildingQueue = Preconditions.checkNotNull(panelBuildingQueue);
-        this.panelDock = new PanelDock(imageProvider,
-                Preconditions.checkNotNull(panelColonyDockBehaviour), i18n, eventBus, Source.COLONY);
+        this.panelDock = Preconditions.checkNotNull(panelDockColony);
         this.goods = Preconditions.checkNotNull(panelColonyGoods);
         this.panelOutsideColony = Preconditions.checkNotNull(panelOutsideColony);
         this.i18n = Preconditions.checkNotNull(i18n);

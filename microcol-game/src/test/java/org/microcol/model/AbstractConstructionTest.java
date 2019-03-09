@@ -15,6 +15,8 @@ public abstract class AbstractConstructionTest {
 
     protected final Colony colony = mock(Colony.class);
 
+    protected final Model model = mock(Model.class);
+
     protected Construction construction;
 
 }

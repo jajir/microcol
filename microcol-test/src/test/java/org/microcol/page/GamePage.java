@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
@@ -73,10 +74,24 @@ public class GamePage extends AbstractScreen {
 	assertTrue(getContext().getArea().isLocationVisible(location));
     }
 
-    public void nextTurn() throws Exception {
+    public Optional<DialogTurnReport> nextTurn() throws Exception {
 	final Button buttonNextTurn = getButtonById(ButtonsGamePanel.BUTTON_NEXT_TURN_ID);
 	getRobot().clickOn(buttonNextTurn);
 	waitWhileMoving();
+	WaitForAsyncUtils.waitForFxEvents();
+	if (isButtonOkVisible()) {
+	    return Optional.of(DialogTurnReport.of(getContext()));
+	} else {
+	    return Optional.empty();
+	}
+    }
+
+    public void nextTurnCloseDialogs() throws Exception {
+	final Optional<DialogTurnReport> oTurnEvents = nextTurn();
+	if (oTurnEvents.isPresent()) {
+	    final DialogTurnReport dialog = oTurnEvents.get();
+	    dialog.close();
+	}
     }
 
     public DialogMessagePage declareIndependence() throws Exception {

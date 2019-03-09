@@ -1,9 +1,11 @@
 package org.microcol.gui.util;
 
+import org.microcol.gui.dialog.ChooseGoodsDialog;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.image.ImageProvider;
 import org.microcol.gui.screen.colony.PanelColonyDockBehaviour;
 import org.microcol.model.CargoSlot;
+import org.microcol.model.Goods;
 import org.microcol.model.Unit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -104,4 +106,15 @@ public abstract class AbstractPanelDockBehavior implements PanelDockBehavior {
                 .filterUnit(unit -> !unit.getType().isShip() && cargoSlot.isEmpty())
                 .filterGoods(goods -> canBeGoodsTransfered(cargoSlot, goods)).isNotEmpty();
     }
+
+    protected Goods chooseGoods(final ChooseGoodsDialog chooseGoods, final Goods goods,
+            final boolean specialOperatonWasSelected, final Goods maxPossibleGoods) {
+        if (specialOperatonWasSelected) {
+            chooseGoods.init(maxPossibleGoods);
+            return chooseGoods.getActualValue();
+        } else {
+            return goods;
+        }
+    }
+
 }

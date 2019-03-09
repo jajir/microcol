@@ -23,7 +23,7 @@ import javafx.scene.control.Labeled;
 import javafx.stage.Stage;
 
 public abstract class AbstractScreen {
-    
+
     protected final static Point TILE_CENTER = Point.of(GamePanelView.TILE_WIDTH_IN_PX, GamePanelView.TILE_WIDTH_IN_PX)
 	    .divide(2);
 
@@ -76,7 +76,11 @@ public abstract class AbstractScreen {
 	assertNotNull(label, String.format("unable to find button by id '%s'", cssId));
 	return label;
     }
-    
+
+    protected boolean isButtonOkVisible() {
+	return getNodeFinder().lookup("#buttonOk").tryQuery().isPresent();
+    }
+
     protected <T extends Node> List<T> getListOfNodes(final String cssClass) {
 	final Set<T> cratesSet = getNodeFinder().lookup(cssClass).queryAll();
 	return new ArrayList<T>(cratesSet);

@@ -1,10 +1,12 @@
 package org.microcol.test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
@@ -19,7 +21,6 @@ import org.mockito.Mockito;
 import org.testfx.api.FxRobot;
 import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
-import org.testfx.util.WaitForAsyncUtils;
 
 import com.google.common.collect.Lists;
 import com.google.inject.Binder;
@@ -29,7 +30,7 @@ import javafx.stage.Stage;
 @ExtendWith(ApplicationExtension.class)
 public class TC_04_loosing_battle_test extends AbstractMicroColTest {
 
-    private final static File testFileName = new File("src/test/scenarios/test-verify-loosing-battles.microcol");
+    private final static File testFileName = new File("src/test/scenarios/T04-loosing-battles.microcol");
 
     @Start
     private void start(final Stage primaryStage) throws Exception {
@@ -48,16 +49,16 @@ public class TC_04_loosing_battle_test extends AbstractMicroColTest {
 	// open MicroCol and load defined game
 	GamePage gamePage = WelcomePage.of(getContext()).loadGame();
 
-	gamePage.nextTurn();
-	gamePage.nextTurn();
+	gamePage.nextTurnCloseDialogs();
 
-	WaitForAsyncUtils.waitForFxEvents();
+	final Optional<DialogTurnReport> oDialog = gamePage.nextTurn();
 
-	// turn report is shown and contain info about lost colony
-	final DialogTurnReport dialogTurnReport = DialogTurnReport.of(getContext());
+	// verify that turn report is shown
+	assertTrue(oDialog.isPresent());
+	final DialogTurnReport dialogTurnReport = oDialog.get();
 
 	// verify that this event is in turn report.
-	dialogTurnReport.verifyNumberOfEvents(1);
+	dialogTurnReport.verifyNumberOfEvents(2);
 
 	// Verify that at least one event contains information about lost colony.
 	dialogTurnReport.verifyThatAtLeastOneEventMessageContains("Colony Delft was lost.");
@@ -75,7 +76,7 @@ public class TC_04_loosing_battle_test extends AbstractMicroColTest {
 	final DialogTurnReport dialogTurnReport2 = gamePage.openTurnReport();
 
 	// verify that this event is in turn report.
-	dialogTurnReport2.verifyNumberOfEvents(1);
+	dialogTurnReport2.verifyNumberOfEvents(2);
 
 	// Verify that at least one event contains information about lost colony.
 	dialogTurnReport2.verifyThatAtLeastOneEventMessageContains("was lost.");
