@@ -30,39 +30,28 @@ public class ConstructionType {
     private final ConstructionType upgradeTo;
 
     /**
-     * Good type that is produced. When construction doesn't produce any goods
-     * than it's null.
+     * How many goods is produces per turn per one working place occupied by one
+     * free colonist.
+     * <p>
+     * Could be null. When construction not producing any goods.
+     * </p>
      */
-    private final GoodsType produce;
+    private final Goods productionPerTurn;
 
     /**
-     * Good type that is consumed during production. When construction doesn't
-     * consume any goods than it's null.
+     * How many goods is consumed per turn per one working place occupied by one
+     * free colonist.
+     * <p>
+     * Could be null. When construction not consuming any goods.
+     * </p>
      */
-    private final GoodsType consumed;
-
-    /**
-     * How many goods is produces when one slot is occupied by on free colonist.
-     */
-    private final int productionPerTurn;
+    private final Goods consumptionPerTurn;
 
     /**
      * Basic production per turn. For example one bell is produced in each
      * colony each turn event when no unit is in construction.
      */
-    private final int baseProductionPerTurn;
-
-    /**
-     * Construction production ratio. When building consume goods to produce
-     * goods than this is production ration defined:
-     * 
-     * <pre>
-     * consumptionPerTurn * productionRatio = productionPerTurn
-     * </pre>
-     * 
-     * Value of consumptionPerTurn is be computed. //TODO change it to property.
-     */
-    private final float productionRatio;
+    private final Goods baseProductionPerTurn;
 
     private final int slotsForWorkers;
     private final int requiredColonyPopulation;
@@ -103,17 +92,10 @@ public class ConstructionType {
             .setRequiredColonyPopulation(4).build();
 
     public final static ConstructionType BLACKSMITHS_HOUSE = ConstructionTypeBuilder.make()
-            .setName("BLACKSMITHS_HOUSE")
-            .setRequiredHammers(0)
-            .setRequiredTools(0)
-            .setConsumed(GoodsType.ORE)
-            .setProduce(GoodsType.TOOLS)
-            .setProductionPerTurn(3)
-            .setBaseProductionPerTurn(0)
-            .setSlotsForWorkers(3)
-            .setUpgradeTo(BLACKSMITHS_SHOP)
-            .setRequiredColonyPopulation(1)
-            .build();
+            .setName("BLACKSMITHS_HOUSE").setRequiredHammers(0).setRequiredTools(0)
+            .setConsumed(GoodsType.ORE).setProduce(GoodsType.TOOLS).setProductionPerTurn(3)
+            .setBaseProductionPerTurn(0).setSlotsForWorkers(3).setUpgradeTo(BLACKSMITHS_SHOP)
+            .setRequiredColonyPopulation(1).build();
 
     public final static ConstructionType FORTRESS = ConstructionTypeBuilder.make()
             .setName("FORTRESS").setRequiredHammers(320).setRequiredTools(200).setProduce(null)
@@ -369,6 +351,12 @@ public class ConstructionType {
         }
     }
 
+    /**
+     * Builder for construction type.
+     * 
+     * 
+     * TODO Add production/consumption per turn remove produce, consumed ...
+     */
     private static class ConstructionTypeBuilder {
 
         private String name;
@@ -460,11 +448,28 @@ public class ConstructionType {
         this.requiredHammers = requiredHammers;
         this.requiredTools = requiredTools;
         this.upgradeTo = upgradeTo;
-        this.produce = produce;
-        this.consumed = consumed;
-        this.productionPerTurn = productionPerTurn;
-        this.baseProductionPerTurn = baseProductionPerTurn;
-        this.productionRatio = productionRatio;
+
+        if (produce == null) {
+            this.productionPerTurn = null;
+        } else {
+            this.productionPerTurn = Goods.of(produce, productionPerTurn);
+        }
+
+        if (consumed == null) {
+            consumptionPerTurn = null;
+        } else {
+            Preconditions.checkArgument(this.productionPerTurn != null,
+                    "When consumption is defined than production have to be.");
+            this.consumptionPerTurn = Goods.of(consumed,
+                    (int) (productionPerTurn / productionRatio));
+        }
+
+        if (baseProductionPerTurn != 0) {
+            this.baseProductionPerTurn = Goods.of(this.productionPerTurn.getType(),
+                    baseProductionPerTurn);
+        } else {
+            this.baseProductionPerTurn = null;
+        }
         this.slotsForWorkers = slotsForWorkers;
         this.requiredColonyPopulation = requiredColonyPopulation;
     }
@@ -567,42 +572,62 @@ public class ConstructionType {
                 .findFirst();
     }
 
-    //TODO remove it, it's duplicated 
+    /**
+     * Get produced goods type.
+     * <p>
+     * Later it should be depreciated and replaced by
+     * {@link #getProductionPerTurn()}.
+     * </p>
+     * 
+     * @return produced goods types
+     */
     public Optional<GoodsType> getProduce() {
-        if (produce == null) {
+        if (productionPerTurn == null) {
             return Optional.empty();
         } else {
-            return Optional.of(produce);
-        }
-    }
-
-    //TODO remove it, it's duplicated 
-    public Optional<GoodsType> getConsumed() {
-        if (consumed == null) {
-            return Optional.empty();
-        } else {
-            return Optional.of(consumed);
+            return Optional.of(productionPerTurn.getType());
         }
     }
 
     public Optional<Goods> getProductionPerTurn() {
-        if (produce == null) {
+        if (productionPerTurn == null) {
             return Optional.empty();
         } else {
-            return Optional.of(Goods.of(produce, productionPerTurn));
+            return Optional.of(productionPerTurn);
+        }
+    }
+
+    /**
+     * Get consumed goods type.
+     * <p>
+     * Later it should be depreciated and replaced by
+     * {@link #getConsumptionPerTurn()}.
+     * </p>
+     * 
+     * @return consumed goods types
+     */
+    public Optional<GoodsType> getConsumed() {
+        if (consumptionPerTurn == null) {
+            return Optional.empty();
+        } else {
+            return Optional.of(consumptionPerTurn.getType());
         }
     }
 
     public Optional<Goods> getConsumptionPerTurn() {
-        if (consumed == null) {
+        if (consumptionPerTurn == null) {
             return Optional.empty();
         } else {
-            return Optional.of(new Goods(consumed, (int) (productionPerTurn / productionRatio)));
+            return Optional.of(consumptionPerTurn);
         }
     }
 
     public int getBaseProductionPerTurn() {
-        return baseProductionPerTurn;
+        if (baseProductionPerTurn == null) {
+            return 0;
+        } else {
+            return baseProductionPerTurn.getAmount();
+        }
     }
 
     public int getSlotsForWorkers() {
@@ -621,8 +646,23 @@ public class ConstructionType {
         return requiredColonyPopulation;
     }
 
+    /**
+     * Construction production ratio. When building consume goods to produce
+     * goods than this is production ration defined:
+     * 
+     * <pre>
+     * consumptionPerTurn * productionRatio = productionPerTurn
+     * </pre>
+     * 
+     * @return Consumption ratio. When construction doesn't consume anything
+     *         than return 1.
+     */
     public float getProductionRatio() {
-        return productionRatio;
+        if (consumptionPerTurn == null) {
+            return 1;
+        } else {
+            return productionPerTurn.getAmount() / (float) consumptionPerTurn.getAmount();
+        }
     }
 
 }

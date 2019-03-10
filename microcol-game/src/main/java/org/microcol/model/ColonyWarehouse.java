@@ -8,6 +8,7 @@ import java.util.function.Consumer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableMap;
 
@@ -29,6 +30,12 @@ public class ColonyWarehouse {
         initialGoods
                 .forEach((goodName, amount) -> warehouse.put(GoodsType.valueOf(goodName), amount));
         validation();
+    }
+
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(ColonyWarehouse.class)
+                .add("Colony name", colony.getName()).toString();
     }
 
     /**

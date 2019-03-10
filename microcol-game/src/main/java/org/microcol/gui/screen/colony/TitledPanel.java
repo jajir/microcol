@@ -15,15 +15,15 @@ import javafx.scene.layout.VBox;
  * 
  * TODO replace it with simple content. Remove UpdatableLanguage
  */
-public class TmpPanel extends VBox implements UpdatableLanguage {
+public class TitledPanel extends VBox implements UpdatableLanguage {
 
     private final HBox contentPane;
 
-    public TmpPanel() {
+    public TitledPanel() {
         this(null);
     }
 
-    public TmpPanel(final Node content) {
+    public TitledPanel(final Node content) {
         contentPane = new HBox();
         if (content != null) {
             content.getStyleClass().add("bordered-titled-content");

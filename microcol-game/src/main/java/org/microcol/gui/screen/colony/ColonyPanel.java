@@ -2,7 +2,6 @@ package org.microcol.gui.screen.colony;
 
 import org.microcol.gui.MainStageBuilder;
 import org.microcol.gui.Point;
-import org.microcol.gui.util.AbstractPanelDock;
 import org.microcol.gui.util.JavaFxComponent;
 import org.microcol.gui.util.Listener;
 import org.microcol.gui.util.PaintService;
@@ -16,7 +15,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
-import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import com.google.inject.Inject;
 
@@ -50,7 +48,7 @@ public final class ColonyPanel implements JavaFxComponent, UpdatableLanguage {
 
     private final PanelColonyGoods goods;
 
-    private final AbstractPanelDock panelDock;
+    private final PanelDockColony panelDock;
 
     private final PaintService paintService;
 
@@ -69,7 +67,7 @@ public final class ColonyPanel implements JavaFxComponent, UpdatableLanguage {
             final PanelColonyStructures panelColonyStructures,
             final PanelOutsideColony panelOutsideColony, final PanelColonyGoods panelColonyGoods,
             final PanelBuildingQueue panelBuildingQueue, final PaintService paintService,
-            final ColonyButtonsPanel colonyButtonsPanel, final I18n i18n, final EventBus eventBus,
+            final ColonyButtonsPanel colonyButtonsPanel, final I18n i18n,
             final PanelDockColony panelDockColony) {
         this.paintService = Preconditions.checkNotNull(paintService);
         this.colonyFields = Preconditions.checkNotNull(panelColonyFields);
@@ -130,6 +128,12 @@ public final class ColonyPanel implements JavaFxComponent, UpdatableLanguage {
         repaint();
     }
 
+    /**
+     * Method should show given colony.
+     * 
+     * @param colony
+     *            required colony to show
+     */
     public void showColony(final Colony colony) {
         this.colony = Preconditions.checkNotNull(colony);
         colonyName.setText(i18n.get(ColonyMsg.colony) + colony.getName());

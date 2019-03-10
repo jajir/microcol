@@ -54,19 +54,19 @@ Planned releases
   * \uD83D\uDC1B Dialog for choosing amount of transfered goods is not shown always.
  
   * \uD83D\uDC1B When goods produced in turn exceed warehouse capacity than exceed goods should be thrown away and turn event generated. 
-  
-  * \u2717 
- 
-  * \u2717 
-  
-  * \u2717 Add turn event that there will be famine in colony.
-  
-  * \u2717 Improve turn report about throws away goods. It's not correct Czech sentence.  
  
   * \uD83D\uDC1B When open game and open colony A then no cargo slots are show.
   When open colony B than cargo slots are there event if there is no ship. It's not correct.
   When colony is open and doesn't contains any ships then no cargo slots should be visible.
   When colony contains at least one ship then first ship should be selected with cargo slots.
+  
+  * \u2717 
+ 
+  * \u2717 
+  
+  * \u2717 Improve turn report about throws away goods. It's not correct Czech sentence.  
+  
+  * \uD83D\uDC1B Turn event that famine will come in colony is not shown.
  
   * \uD83D\uDC1B Focused unit is in colony. Than colony is open and focused unit is placed to field.
   Than colony is closed. Now it's not possible to move any unit in colony, because there is no selected unit.  

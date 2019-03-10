@@ -1,6 +1,6 @@
 package org.microcol.test;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.File;
 
@@ -13,7 +13,6 @@ import org.microcol.page.WelcomePage;
 import org.mockito.Mockito;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.testfx.api.FxRobot;
 import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
 
@@ -41,7 +40,7 @@ public class TC_03_declare_independence_test extends AbstractMicroColTest {
     }
 
     @Test
-    void TC_03_declare_independence(final FxRobot robot) throws Exception {
+    void TC_03_declare_independence() throws Exception {
 	// open MicroCol and load defined game
 	GamePage gamePage = WelcomePage.of(getContext()).loadGame();
 

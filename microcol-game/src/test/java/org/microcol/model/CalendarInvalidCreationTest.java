@@ -13,7 +13,7 @@ public class CalendarInvalidCreationTest {
     public void testInvalidCreation(final int startYear, final int endYear) {
         final IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
                 () -> {
-                    new Calendar(startYear, startYear, 0);
+                    new Calendar(startYear, endYear, 0);
                 });
 
         // verify that exception contains expected message

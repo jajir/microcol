@@ -23,8 +23,7 @@ public class PlaceColonyField extends AbstractPlace {
             final GoodsType producedGoodsType) {
         super(unit);
         this.colonyField = Preconditions.checkNotNull(colonyField);
-        // TODO call setProducedGoodsType because of validations
-        this.producedGoodsType = producedGoodsType;
+        setProducedGoodsType(producedGoodsType);
     }
 
     @Override

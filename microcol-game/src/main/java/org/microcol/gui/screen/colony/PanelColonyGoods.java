@@ -40,7 +40,7 @@ public final class PanelColonyGoods implements JavaFxComponent {
 
     private final List<PanelColonyGood> panelColonyGoods;
 
-    private final TmpPanel mainPanel;
+    private final TitledPanel mainPanel;
 
     private final ChooseGoodsDialog chooseGoods;
 
@@ -54,7 +54,7 @@ public final class PanelColonyGoods implements JavaFxComponent {
         this.colonyDialog = Preconditions.checkNotNull(colonyDialog);
         this.chooseGoods = Preconditions.checkNotNull(chooseGoods);
         hBox = new HBox();
-        mainPanel = new TmpPanel();
+        mainPanel = new TitledPanel();
         mainPanel.getContentPane().getChildren().add(hBox);
         panelColonyGoods = GoodsType.BUYABLE_GOOD_TYPES.stream().map(goodsType -> {
             final PanelColonyGood out = new PanelColonyGood(

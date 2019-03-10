@@ -169,7 +169,7 @@ public final class PanelColonyStructures implements JavaFxComponent {
 
     private Map<Rectangle, ConstructionSlot> slots;
 
-    private final TmpPanel mainPanel;
+    private final TitledPanel mainPanel;
 
     private final List<ColonyStructure> structures;
 
@@ -195,7 +195,7 @@ public final class PanelColonyStructures implements JavaFxComponent {
         canvas.setOnDragDetected(this::onDragDetected);
         canvas.setOnMouseMoved(this::onMouseMoved);
 
-        mainPanel = new TmpPanel();
+        mainPanel = new TitledPanel();
         mainPanel.getStyleClass().add("colony-structures");
         mainPanel.getContentPane().getChildren().add(canvas);
         mainPanel.setMinWidth(CANVAS_WIDTH);

@@ -1,4 +1,4 @@
-package org.microcol.gui.util;
+package org.microcol.gui.dock;
 
 import java.util.List;
 

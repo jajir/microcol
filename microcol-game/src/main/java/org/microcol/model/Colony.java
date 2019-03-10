@@ -265,6 +265,7 @@ public class Colony {
                 .sum();
     }
 
+    // TODO should return list of UnitsWithCargo
     public List<Unit> getUnitsInPort() {
         return model.getUnitsAt(location).stream().filter(unit -> unit.getType().canHoldCargo())
                 .collect(ImmutableList.toImmutableList());

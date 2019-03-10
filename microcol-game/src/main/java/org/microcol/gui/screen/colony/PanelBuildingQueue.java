@@ -21,7 +21,7 @@ public class PanelBuildingQueue implements JavaFxComponent {
 
     private final ColonyDialogCallback colonyDialogCallback;
 
-    private final TmpPanel mainPanel;
+    private final TitledPanel mainPanel;
 
     private final VBox mainVbox;
 
@@ -35,7 +35,7 @@ public class PanelBuildingQueue implements JavaFxComponent {
         final VBox box = new VBox();
         box.setOnMouseClicked(this::onMouseClicked);
         box.getChildren().add(mainVbox);
-        mainPanel = new TmpPanel();
+        mainPanel = new TitledPanel();
         mainPanel.getContentPane().getChildren().add(box);
         mainPanel.getStyleClass().add("building-queue");
     }

@@ -65,10 +65,13 @@ public final class PanelColonyGood implements JavaFxComponent {
         paneImage.setOnDragDetected(this::onDragDetected);
         paneImage.getStyleClass().add(IMAGE_GOODS_CLASS);
         labelAmount = new Label();
+        labelAmount.getStyleClass().add("amount");
         labelDiff = new Label();
+        labelDiff.getStyleClass().add("diff");
         final HBox hlabels = new HBox(labelAmount, labelDiff);
         hlabels.setAlignment(Pos.CENTER);
         mainPanel = new VBox();
+        mainPanel.getStyleClass().add("warehouseGoods");
         mainPanel.getChildren().add(paneImage);
         mainPanel.getChildren().add(hlabels);
         mainPanel.setOnMouseEntered(this::onMouseEntered);

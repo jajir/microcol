@@ -44,7 +44,7 @@ public final class ModelCampaignDao {
                 .getMisssionByName(modelPo.getCampaign().getMission());
         final Mission<?> mission = campaignMission.makeMission(missionCallBack, model, modelPo,
                 campaignManager);
-        return new ModelMission(campaign, campaignMission, (MissionImpl<?>) mission, model);
+        return new ModelMission(campaign, campaignMission, mission, model);
     }
 
     private CampaignName resolve(final String name) {

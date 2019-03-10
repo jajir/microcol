@@ -30,6 +30,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 
 public class ColonyScreen extends AbstractScreen {
 
@@ -92,7 +93,7 @@ public class ColonyScreen extends AbstractScreen {
     }
 
     public void dragGoodsFromWarehouseToShipCargoSlot(final int goodsIndexInWarehouse, final int cargoSlotIndex) {
-	getRobot().drag(getListOfGoodsInWarehouse().get(goodsIndexInWarehouse), MouseButton.PRIMARY)
+	getRobot().drag(getListOfGoodsImagesInWarehouse().get(goodsIndexInWarehouse), MouseButton.PRIMARY)
 		.dropTo(getListOfCrates().get(cargoSlotIndex)).release(MouseButton.PRIMARY);
     }
 
@@ -106,7 +107,7 @@ public class ColonyScreen extends AbstractScreen {
 
     public void dragGoodsFromShipCargoSlotToWarehouse(final int cargoSlotIndex, final int goodsIndexInWarehouse) {
 	getRobot().drag(getListOfCrates().get(cargoSlotIndex), MouseButton.PRIMARY)
-		.dropTo(getListOfGoodsInWarehouse().get(goodsIndexInWarehouse)).release(MouseButton.PRIMARY);
+		.dropTo(getListOfGoodsImagesInWarehouse().get(goodsIndexInWarehouse)).release(MouseButton.PRIMARY);
     }
 
     public ColonyScreen verifyNumberOfUnitsOnFields(final Integer expectedumberOfUnitsAtFields) {
@@ -131,7 +132,7 @@ public class ColonyScreen extends AbstractScreen {
 	return pageComponentPanelDock.getListOfCrates();
     }
 
-    private List<StackPane> getListOfGoodsInWarehouse() {
+    private List<StackPane> getListOfGoodsImagesInWarehouse() {
 	final String cssClass = "." + PanelColonyGood.IMAGE_GOODS_CLASS;
 	final Set<StackPane> cratesSet = getNodeFinder().lookup(cssClass).queryAll();
 	return new ArrayList<StackPane>(cratesSet);
@@ -163,11 +164,27 @@ public class ColonyScreen extends AbstractScreen {
 		.localToScreen(panelColonyFields.getContent().getBoundsInLocal());
 
 	final Location loc = colonyField.getDirection().getVector();
-	final double x = boundsInScreen.getMinX()
-		+ (loc.getX() + 1) * GamePanelView.TILE_WIDTH_IN_PX + TILE_CENTER.getX();
-	final double y = boundsInScreen.getMinY()
-		+ (loc.getY() + 1) * GamePanelView.TILE_WIDTH_IN_PX + TILE_CENTER.getY();
+	final double x = boundsInScreen.getMinX() + (loc.getX() + 1) * GamePanelView.TILE_WIDTH_IN_PX
+		+ TILE_CENTER.getX();
+	final double y = boundsInScreen.getMinY() + (loc.getY() + 1) * GamePanelView.TILE_WIDTH_IN_PX
+		+ TILE_CENTER.getY();
 	return new Point2D(x, y);
+    }
+
+    private VBox getGoodsPanel(final int indexOfGoodsInWarehouse) {
+	final List<VBox> goodsPanels = getListOfNodes(".warehouseGoods");
+	return goodsPanels.get(indexOfGoodsInWarehouse);
+    }
+
+    public ColonyScreen verifyNumberOfGoodsInWrehouse(final int indexOfGoodsInWarehouse,
+	    final int expectedGoodsAmount) {
+	final VBox goods = getGoodsPanel(indexOfGoodsInWarehouse);
+	final String amountStr = getNodeFinder().from(goods).lookup(".amount").queryLabeled().getText();
+	final int amount = Integer.valueOf(amountStr);
+	assertEquals(expectedGoodsAmount, amount,
+		String.format("In warehouse at position %s was expected %s goods but there is %s goods",
+			indexOfGoodsInWarehouse, expectedGoodsAmount, amount));
+	return this;
     }
 
 }

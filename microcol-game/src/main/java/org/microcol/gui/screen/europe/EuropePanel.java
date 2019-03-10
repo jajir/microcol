@@ -3,7 +3,6 @@ package org.microcol.gui.screen.europe;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.screen.game.components.StatusBarMessageEvent;
 import org.microcol.gui.screen.game.components.StatusBarMessageEvent.Source;
-import org.microcol.gui.util.AbstractPanelDock;
 import org.microcol.gui.util.JavaFxComponent;
 import org.microcol.gui.util.Repaintable;
 import org.microcol.gui.util.UpdatableLanguage;
@@ -30,7 +29,7 @@ public final class EuropePanel implements JavaFxComponent, UpdatableLanguage, Re
 
     private final Label labelTitle;
 
-    private final AbstractPanelDock europeDock;
+    private final PanelDockEurope europeDock;
 
     private final PanelHighSeas<Europe> shipsTravelingToNewWorld;
 

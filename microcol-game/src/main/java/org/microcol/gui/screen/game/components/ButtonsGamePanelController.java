@@ -41,6 +41,7 @@ public class ButtonsGamePanelController {
         this.gameModelController = Preconditions.checkNotNull(gameModelController);
     }
 
+    @SuppressWarnings("unused")
     @Subscribe
     private void onNextTurn(final NextTurnEvent event) {
         LOGGER.debug("Next turn was triggered");

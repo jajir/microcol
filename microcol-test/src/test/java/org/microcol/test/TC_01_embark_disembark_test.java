@@ -1,6 +1,6 @@
 package org.microcol.test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.File;
 
@@ -12,7 +12,6 @@ import org.microcol.page.ColonyScreen;
 import org.microcol.page.GamePage;
 import org.microcol.page.WelcomePage;
 import org.mockito.Mockito;
-import org.testfx.api.FxRobot;
 import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
 
@@ -39,7 +38,7 @@ public class TC_01_embark_disembark_test extends AbstractMicroColTest {
     }
 
     @Test
-    void TC_01_embark_disembark(final FxRobot robot) throws Exception {
+    void TC_01_embark_disembark() throws Exception {
 	//open MicroCol and load defined game 
 	GamePage gamePage = WelcomePage.of(getContext()).loadGame();
 

@@ -42,7 +42,7 @@ public final class PanelOutsideColony implements JavaFxComponent {
 
     private final EventBus eventBus;
 
-    private final TmpPanel mainPanel;
+    private final TitledPanel mainPanel;
 
     private Colony colony;
 
@@ -57,7 +57,7 @@ public final class PanelOutsideColony implements JavaFxComponent {
         this.eventBus = Preconditions.checkNotNull(eventBus);
         panelUnits = new HBox();
 
-        mainPanel = new TmpPanel();
+        mainPanel = new TitledPanel();
         final BackgroundHighlighter backgroundHighlighter = new BackgroundHighlighter(mainPanel,
                 this::isItUnit);
         mainPanel.getContentPane().getChildren().add(panelUnits);

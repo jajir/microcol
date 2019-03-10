@@ -4,8 +4,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.List;
 
-import org.microcol.gui.util.AbstractPanelDock;
-import org.microcol.gui.util.PanelDockCrate;
+import org.microcol.gui.dock.AbstractPanelDock;
+import org.microcol.gui.dock.PanelCratePresenter;
 import org.testfx.util.WaitForAsyncUtils;
 
 import javafx.scene.control.ToggleButton;
@@ -42,7 +42,7 @@ public class PageComponentPanelDock extends AbstractPageComponent {
      * @return list of crates
      */
     public List<StackPane> getListOfCrates() {
-	return getListOfNodes("." + PanelDockCrate.CRATE_CLASS);
+	return getListOfNodes("." + PanelCratePresenter.CRATE_CLASS);
     }
 
 }

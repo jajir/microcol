@@ -1,5 +1,6 @@
 package org.microcol.test;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
@@ -56,7 +57,7 @@ public class SimpleOperationsTest extends AbstractMicroColTest {
 
     @Test
     @Tag("ci")
-    void verify_exception_is_throws_when_object_isnt_exists(final FxRobot robot) throws Exception {
+    void verify_exception_is_throws_when_object_isnt_exists() throws Exception {
 	Assertions.assertThrows(EmptyNodeQueryException.class, () -> {
 	    FxAssert.verifyThat(BUTTON_SETTING_ID_NOT_EXISTING, obj -> {
 		return true;
@@ -66,7 +67,7 @@ public class SimpleOperationsTest extends AbstractMicroColTest {
 
     @Test
     @Tag("ci")
-    void verify_setting_page_is_available(final FxRobot robot) throws Exception {
+    void verify_setting_page_is_available() throws Exception {
 	SettingPage settingPage = WelcomePage.of(getContext()).openSetting();
 
 	settingPage.goBack().verifyMainScreen();
@@ -75,6 +76,7 @@ public class SimpleOperationsTest extends AbstractMicroColTest {
     @Test
     @Tag("ci")
     void verify_language_is_changed_immediatelly(final FxRobot robot) throws Exception {
+	assertNotNull(robot);
 	SettingPage settingPage = WelcomePage.of(getContext()).openSetting();
 
 	// verify that english is selected
@@ -102,7 +104,7 @@ public class SimpleOperationsTest extends AbstractMicroColTest {
 
     @Test
     @Tag("ci")
-    void verify_moving_with_unit(final FxRobot robot) throws Exception {
+    void verify_moving_with_unit() throws Exception {
 	// TODO move with ship. make from this TC
 	// TODO verify, selecting moving unit from right panel.
 	// TODO verify moving with ship at land

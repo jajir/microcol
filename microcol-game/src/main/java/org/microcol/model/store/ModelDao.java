@@ -2,7 +2,6 @@ package org.microcol.model.store;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -54,11 +53,7 @@ public final class ModelDao {
      */
     public ModelPo loadPredefinedModel(final String fileName) {
         logger.debug("Starting to read from class path ({})", fileName);
-        try {
-            return internalLoadPredefinedModel(fileName);
-        } catch (FileNotFoundException e) {
-            throw new MicroColException(e.getMessage(), e);
-        }
+        return internalLoadPredefinedModel(fileName);
     }
 
     /**
@@ -103,15 +98,10 @@ public final class ModelDao {
      * @return loaded world map
      */
     public WorldMap loadPredefinedWorldMap(final String fileName) {
-        try {
-            return new WorldMap(internalLoadPredefinedModel(fileName));
-        } catch (FileNotFoundException e) {
-            throw new MicroColException(e.getMessage(), e);
-        }
+        return new WorldMap(internalLoadPredefinedModel(fileName));
     }
 
-    private ModelPo internalLoadPredefinedModel(final String fileName)
-            throws FileNotFoundException {
+    private ModelPo internalLoadPredefinedModel(final String fileName) {
         try (final InputStream is = WorldMap.class.getResourceAsStream(fileName)) {
             Preconditions.checkArgument(is != null, "input stream for file (%s) is null", fileName);
             return internalLoadModel(is);
@@ -120,7 +110,7 @@ public final class ModelDao {
         }
     }
 
-    private ModelPo internalLoadModel(final InputStream is) throws FileNotFoundException {
+    private ModelPo internalLoadModel(final InputStream is) {
         Preconditions.checkArgument(is != null, "input stream is null");
         final ModelPo loaded = gson.fromJson(new InputStreamReader(is, StandardCharsets.UTF_8),
                 ModelPo.class);

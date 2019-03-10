@@ -430,6 +430,7 @@ public abstract class Unit {
 
     private Direction findOrintationForMove(final Location moveTo) {
         // TODO list of ifs is stupid aproach. Refactor it.
+        // TODO Should use class hierarchy.
         if (UnitType.GALLEON.equals(getType())) {
             /*
              * Find direction when is moved performed.

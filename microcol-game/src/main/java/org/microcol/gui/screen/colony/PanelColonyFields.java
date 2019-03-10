@@ -62,7 +62,7 @@ public final class PanelColonyFields implements JavaFxComponent {
 
     private final PaintService paintService;
 
-    private final TmpPanel mainPanel;
+    private final TitledPanel mainPanel;
 
     @Inject
     public PanelColonyFields(final ImageProvider imageProvider,
@@ -85,7 +85,7 @@ public final class PanelColonyFields implements JavaFxComponent {
         contextMenu.getStyleClass().add("popup");
         contextMenu.setAutoHide(true);
 
-        mainPanel = new TmpPanel();
+        mainPanel = new TitledPanel();
         mainPanel.getContentPane().getChildren().add(canvas);
         mainPanel.getStyleClass().add("colony-fields");
     }

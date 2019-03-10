@@ -20,7 +20,6 @@ import org.microcol.page.DialogChooseNumberOfGoods;
 import org.microcol.page.GamePage;
 import org.microcol.page.WelcomePage;
 import org.mockito.Mockito;
-import org.testfx.api.FxRobot;
 import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
 import org.testfx.util.WaitForAsyncUtils;
@@ -47,7 +46,7 @@ public class TC_05_moving_goods_test extends AbstractMicroColTest {
     }
 
     @Test
-    void TC_05_moving_goods(final FxRobot robot) throws Exception {
+    void TC_05_moving_goods() throws Exception {
 	// open MicroCol and load defined game
 	GamePage gamePage = WelcomePage.of(getContext()).loadGame();
 	WaitForAsyncUtils.waitForFxEvents();
@@ -106,7 +105,7 @@ public class TC_05_moving_goods_test extends AbstractMicroColTest {
     }
 
     @Test
-    void TC_05_moving_goods_without_pressed_control(final FxRobot robot) throws Exception {
+    void TC_05_moving_goods_without_pressed_control() throws Exception {
 	// open MicroCol and load defined game
 	GamePage gamePage = WelcomePage.of(getContext()).loadGame();
 	WaitForAsyncUtils.waitForFxEvents();
@@ -151,7 +150,7 @@ public class TC_05_moving_goods_test extends AbstractMicroColTest {
     }
 
     @Test
-    void TC_05_mooving_to_warehouse_more_than_limit(final FxRobot robot) throws Exception {
+    void TC_05_mooving_to_warehouse_more_than_limit() throws Exception {
 	// open MicroCol and load defined game
 	GamePage gamePage = WelcomePage.of(getContext()).loadGame();
 	WaitForAsyncUtils.waitForFxEvents();

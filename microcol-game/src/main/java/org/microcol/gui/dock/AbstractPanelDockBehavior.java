@@ -1,9 +1,12 @@
-package org.microcol.gui.util;
+package org.microcol.gui.dock;
 
 import org.microcol.gui.dialog.ChooseGoodsDialog;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.image.ImageProvider;
 import org.microcol.gui.screen.colony.PanelColonyDockBehaviour;
+import org.microcol.gui.util.ClipboardEval;
+import org.microcol.gui.util.ClipboardWritter;
+import org.microcol.gui.util.From;
 import org.microcol.model.CargoSlot;
 import org.microcol.model.Goods;
 import org.microcol.model.Unit;

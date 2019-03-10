@@ -18,7 +18,6 @@ import org.microcol.page.EuropePortScreen;
 import org.microcol.page.GamePage;
 import org.microcol.page.WelcomePage;
 import org.mockito.Mockito;
-import org.testfx.api.FxRobot;
 import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
 import org.testfx.util.WaitForAsyncUtils;
@@ -45,7 +44,7 @@ public class TC_06_buy_and_sell_goods_test extends AbstractMicroColTest {
     }
 
     @Test
-    void TC_06_moving_goods(final FxRobot robot) throws Exception {
+    void TC_06_moving_goods() throws Exception {
 	// open MicroCol and load defined game
 	GamePage gamePage = WelcomePage.of(getContext()).loadGame();
 	WaitForAsyncUtils.waitForFxEvents();
@@ -105,14 +104,10 @@ public class TC_06_buy_and_sell_goods_test extends AbstractMicroColTest {
 
 	// Close Europe port
 	gamePage = europePort.close();
-
-	// TODO add test cases - buy goods and move it to already occupied cargo slot.
-
-	// TODO transfer goods without pressed control.
     }
 
     @Test
-    void TC_06_moving_goods_guy_to_same_cargo_slot(final FxRobot robot) throws Exception {
+    void TC_06_moving_goods_buy_cargo_and_move_it_to_occupied_cargo_slot() throws Exception {
 	// open MicroCol and load defined game
 	GamePage gamePage = WelcomePage.of(getContext()).loadGame();
 	WaitForAsyncUtils.waitForFxEvents();
