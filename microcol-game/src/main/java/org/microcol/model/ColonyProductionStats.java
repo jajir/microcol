@@ -2,6 +2,8 @@ package org.microcol.model;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.function.BiConsumer;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
@@ -22,6 +24,16 @@ public final class ColonyProductionStats {
             typeStats.put(goodsType, out);
         }
         return out;
+    }
+
+    public void forEach(final BiConsumer<GoodsType, GoodsProductionStats> consumer) {
+        Preconditions.checkNotNull(consumer, "Consumer can't null");
+        for (final Entry<GoodsType, GoodsProductionStats> entry : typeStats.entrySet()) {
+            final GoodsType goodsType = entry.getKey();
+            final GoodsProductionStats stats = entry.getValue();
+            consumer.accept(goodsType, stats);
+        }
+
     }
 
     @Override

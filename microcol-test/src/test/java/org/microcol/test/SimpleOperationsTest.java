@@ -102,14 +102,15 @@ public class SimpleOperationsTest extends AbstractMicroColTest {
 	settingPage.goBack().verifyMainScreen();
     }
 
+    /**
+     * Just such very simple test could run at CI. More complicated test fail in
+     * headless mode.
+     * 
+     * @throws Exception
+     */
     @Test
     @Tag("ci")
     void verify_moving_with_unit() throws Exception {
-	// TODO move with ship. make from this TC
-	// TODO verify, selecting moving unit from right panel.
-	// TODO verify moving with ship at land
-	// TODO verify moving with normal unit at see.
-	// TODO verify that action points could be exhausted.
 	final GamePage gamePage = WelcomePage.of(getContext()).loadGame();
 
 	gamePage.moveMouseAtLocation(Location.of(22, 12));

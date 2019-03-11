@@ -54,9 +54,6 @@ public class TC_05_moving_goods_test extends AbstractMicroColTest {
 	// Open colony Delft
 	final ColonyScreen colonyScreen = gamePage.openColonyAt(Location.of(22, 12), "Delft");
 
-	// Select ship from port by clicking at it.
-	colonyScreen.selectUnitFromPort(0);
-
 	// Drag food from first warehouse slot to first ship's cargo slot
 	colonyScreen.dragGoodsFromWarehouseToShipCargoSlot(0, 0);
 
@@ -113,9 +110,6 @@ public class TC_05_moving_goods_test extends AbstractMicroColTest {
 	// Open colony Delft
 	final ColonyScreen colonyScreen = gamePage.openColonyAt(Location.of(22, 12), "Delft");
 
-	// Select ship from port by clicking at it.
-	colonyScreen.selectUnitFromPort(0);
-
 	// Drag food from first warehouse slot to first ship's cargo slot
 	colonyScreen.dragGoodsFromWarehouseToShipCargoSlot(0, 0);
 
@@ -158,9 +152,6 @@ public class TC_05_moving_goods_test extends AbstractMicroColTest {
 	// Open colony Delft
 	ColonyScreen colonyScreen = gamePage.openColonyAt(Location.of(22, 12), "Delft");
 
-	// Select ship from port by clicking at it.
-	colonyScreen.selectUnitFromPort(0);
-
 	// Drag food from first warehouse slot to first ship's cargo slot
 	colonyScreen.dragGoodsFromWarehouseToShipCargoSlot(0, 0);
 
@@ -177,10 +168,6 @@ public class TC_05_moving_goods_test extends AbstractMicroColTest {
 
 	// Open colony Delft
 	colonyScreen = gamePage.openColonyAt(Location.of(22, 12), "Delft");
-
-	// Select ship from port by clicking at it.
-	// TODO after correcting showing cargo it should be enabled
-//	colonyScreen.selectUnitFromPort(0);
 
 	// Drag corn from ship cargo slot to warehouse
 	colonyScreen.dragGoodsFromShipCargoSlotToWarehouse(0, 0);

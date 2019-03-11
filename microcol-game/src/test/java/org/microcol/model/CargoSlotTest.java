@@ -265,7 +265,7 @@ public class CargoSlotTest {
         when(cargo.getOwner()).thenReturn(ownerUnit);
         when(ownerUnit.getOwner()).thenReturn(player);
         when(colony.getOwner()).thenReturn(player);
-        when(colony.getColonyWarehouse()).thenReturn(warehouse);
+        when(colony.getWarehouse()).thenReturn(warehouse);
         when(warehouse.getGoods(GoodsType.SILK)).thenReturn(Goods.of(GoodsType.SILK, 9));
 
         slot.storeFromColonyWarehouse(new Goods(GoodsType.SILK, 10), colony);
@@ -281,7 +281,7 @@ public class CargoSlotTest {
         when(cargo.getOwner()).thenReturn(ownerUnit);
         when(ownerUnit.getOwner()).thenReturn(player);
         when(colony.getOwner()).thenReturn(player);
-        when(colony.getColonyWarehouse()).thenReturn(warehouse);
+        when(colony.getWarehouse()).thenReturn(warehouse);
         when(warehouse.getGoods(GoodsType.SILK)).thenReturn(Goods.of(GoodsType.SILK, 120));
 
         slot.storeFromColonyWarehouse(new Goods(GoodsType.SILK, 10), colony);
@@ -318,7 +318,7 @@ public class CargoSlotTest {
         when(cargo.getOwner()).thenReturn(ownerUnit);
         when(ownerUnit.getOwner()).thenReturn(player);
         when(colony.getOwner()).thenReturn(player);
-        when(colony.getColonyWarehouse()).thenReturn(warehouse);
+        when(colony.getWarehouse()).thenReturn(warehouse);
         when(warehouse.getGoods(GoodsType.SILK)).thenReturn(Goods.of(GoodsType.SILK, 120));
 
         slot.storeFromColonyWarehouse(new Goods(GoodsType.SILK, 10), colony);
@@ -339,7 +339,7 @@ public class CargoSlotTest {
         when(cargo.getOwner()).thenReturn(ownerUnit);
         when(ownerUnit.getOwner()).thenReturn(player);
         when(colony.getOwner()).thenReturn(player);
-        when(colony.getColonyWarehouse()).thenReturn(warehouse);
+        when(colony.getWarehouse()).thenReturn(warehouse);
         when(warehouse.getGoods(GoodsType.SILK)).thenReturn(Goods.of(GoodsType.SILK, 120));
 
         slot.storeFromColonyWarehouse(new Goods(GoodsType.SILK, 50), colony);

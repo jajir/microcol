@@ -13,6 +13,7 @@ import org.microcol.model.CargoSlot;
 import org.microcol.model.Goods;
 import org.microcol.model.NotEnoughtGoldException;
 import org.microcol.model.Unit;
+import org.microcol.model.unit.UnitWithCargo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -43,7 +44,7 @@ public final class PanelEuropeDockBehavior extends AbstractPanelDockBehavior {
     }
 
     @Override
-    public List<Unit> getUnitsInPort() {
+    public List<UnitWithCargo> getUnitsInPort() {
         return gameModelController.getModel().getEurope().getPort()
                 .getShipsInPort(gameModelController.getCurrentPlayer());
     }

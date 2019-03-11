@@ -89,8 +89,8 @@ public final class PanelColonyGood implements JavaFxComponent {
     }
 
     private void onDragDetected(final MouseEvent event) {
-        Preconditions.checkNotNull(colony.getColonyWarehouse());
-        final Goods couldBemoved = colony.getColonyWarehouse().getTransferableGoods(goodsType,
+        Preconditions.checkNotNull(colony.getWarehouse());
+        final Goods couldBemoved = colony.getWarehouse().getTransferableGoods(goodsType,
                 CargoSlot.MAX_CARGO_SLOT_CAPACITY);
         if (couldBemoved.isNotZero()) {
             Dragboard db = imageView.startDragAndDrop(TransferMode.MOVE, TransferMode.LINK);
@@ -106,13 +106,13 @@ public final class PanelColonyGood implements JavaFxComponent {
     }
 
     public void repaint() {
-        ColonyProductionStats stats = colony.getGoodsStats();
-        GoodsProductionStats goodsStats = stats.getStatsByType(goodsType);
+        final ColonyProductionStats stats = colony.getGoodsStats();
+        final GoodsProductionStats goodsStats = stats.getStatsByType(goodsType);
 
         String txt = String.valueOf(goodsStats.getInWarehouseBefore());
         labelAmount.setText(txt);
 
-        int diff = goodsStats.getInWarehouseAfter() - goodsStats.getInWarehouseBefore();
+        final int diff = goodsStats.getDiff();
         if (diff > 0) {
             txt = "+" + diff;
             labelDiff.getStyleClass().clear();

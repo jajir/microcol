@@ -11,6 +11,7 @@ import org.microcol.gui.util.From;
 import org.microcol.model.CargoSlot;
 import org.microcol.model.Goods;
 import org.microcol.model.Unit;
+import org.microcol.model.unit.UnitWithCargo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,7 +38,7 @@ public final class PanelColonyDockBehaviour extends AbstractPanelDockBehavior {
     }
 
     @Override
-    public List<Unit> getUnitsInPort() {
+    public List<UnitWithCargo> getUnitsInPort() {
         return colonyDialogCallback.getColony().getUnitsInPort();
     }
 

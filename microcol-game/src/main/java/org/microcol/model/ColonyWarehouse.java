@@ -153,7 +153,7 @@ public class ColonyWarehouse {
         setGoods(Goods.of(goodsType));
     }
 
-    private void setGoods(final Goods goods) {
+    void setGoods(final Goods goods) {
         Preconditions.checkNotNull(goods);
         Preconditions.checkArgument(
                 goods.getAmount() <= getStorageCapacity(goods.getType()).getAmount(),

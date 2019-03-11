@@ -74,7 +74,7 @@ public final class PanelColonyGoods implements JavaFxComponent {
     }
 
     public void setColony(final Colony colony) {
-        colonyWarehouse = Preconditions.checkNotNull(colony).getColonyWarehouse();
+        colonyWarehouse = Preconditions.checkNotNull(colony).getWarehouse();
         panelColonyGoods.forEach(panelColonyGood -> panelColonyGood.setColony(colony));
     }
 

@@ -245,7 +245,7 @@ public class CargoSlot {
                 "Source colony warehouse and target cargo slots doesn't belongs to same user (%s) (%s).",
                 getOwnerPlayer(), colony.getOwner());
 
-        final ColonyWarehouse warehouse = colony.getColonyWarehouse();
+        final ColonyWarehouse warehouse = colony.getWarehouse();
         final Goods warehouseGoods = warehouse.getGoods(transferredGoods.getType());
 
         final Goods toTransfer = maxPossibleGoodsToMoveHere(warehouseGoods, transferredGoods);

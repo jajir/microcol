@@ -72,8 +72,6 @@ public class TC_07_producing_gooods_test extends AbstractMicroColTest {
 	// Open colony Delft at [22,12].
 	colonyScreen = gamePage.openColonyAt(Location.of(22, 12), "Delft");
 
-//	Thread.sleep(1000 * 10);
-
 	// Verify number of corn is 185.
 	colonyScreen.verifyNumberOfGoodsInWrehouse(0, 185);
 

@@ -3,6 +3,8 @@ package org.microcol.model;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.microcol.model.unit.UnitWithCargo;
+
 import com.google.common.base.Preconditions;
 
 /**
@@ -16,10 +18,12 @@ public final class EuropePort {
         this.model = Preconditions.checkNotNull(model);
     }
 
-    public List<Unit> getShipsInPort(final Player player) {
-        return model.getAllUnits().stream().filter(unit -> unit.isAtEuropePort())
+    public List<UnitWithCargo> getShipsInPort(final Player player) {
+        return model.getAllUnits().stream()
+                .filter(unit -> unit.isAtEuropePort())
                 .filter(unit -> unit.getOwner().equals(player))
                 .filter(unit -> ((PlaceEuropePort) unit.getPlace()).getEuropePort().equals(this))
+                .map(unit -> (UnitWithCargo) unit)
                 .collect(Collectors.toList());
     }
 

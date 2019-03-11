@@ -48,9 +48,6 @@ public class TC_01_embark_disembark_test extends AbstractMicroColTest {
 	// Verify that there is just one ship in port
 	colonyScreen.verifyNumberOfShipsInPort(1);
 
-	// Select first ship in port.
-	colonyScreen.selectUnitFromPort(0);
-
 	// drag first units to crate 0
 	colonyScreen.dragUnitFromPierToShipCargoSlot(0, 0);
 
@@ -73,7 +70,7 @@ public class TC_01_embark_disembark_test extends AbstractMicroColTest {
 	// disembark units
 	gamePage.moveMouseAtLocation(Location.of(24, 11));
 	gamePage.dragMouseAtLocation(Location.of(24, 12));
-
+	
 	// verify that units are at expected location.
 	assertEquals(2, getModel().getUnitsAt(Location.of(24, 12)).size());
 

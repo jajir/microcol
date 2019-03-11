@@ -699,7 +699,7 @@ public abstract class Unit {
         final Optional<Colony> oColony = getColony();
         if (oColony.isPresent()) {
             final Colony colony = oColony.get();
-            if (colony.getUnitsInColony().size() == 1) {
+            if (colony.getUnitsInsideColony().size() == 1) {
                 return colony.equals(colonyWhereWillBeUnitPlaced);
             }
         }

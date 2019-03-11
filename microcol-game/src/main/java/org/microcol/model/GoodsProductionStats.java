@@ -37,6 +37,21 @@ public final class GoodsProductionStats {
     }
 
     /**
+     * Return change of amount after next turn.
+     * <p>
+     * If it's negative than next turn amount goods will be lower.
+     * </p>
+     * <p>
+     * If it's positive than next turn amount goods will be higher.
+     * </p>
+     *
+     * @return Difference between next run amount of goods and current turn.
+     */
+    public int getDiff() {
+        return getInWarehouseAfter() - getInWarehouseBefore();
+    }
+
+    /**
      * @return the rowProduction
      */
     public int getRowProduction() {

@@ -13,6 +13,7 @@ import org.microcol.model.store.ColonyFieldPo;
 import org.microcol.model.store.ColonyPo;
 import org.microcol.model.store.ConstructionPo;
 import org.microcol.model.turnevent.TurnEventProvider;
+import org.microcol.model.unit.UnitWithCargo;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
@@ -23,7 +24,7 @@ public class Colony {
     /**
      * When this level is reached than new colonist appears.
      */
-    private final static int FOOD_LEVEL_TO_FREE_COLONIST = 400;
+    private final static int FOOD_LEVEL_TO_FREE_COLONIST = 200;
 
     /**
      * Colony unique name.
@@ -38,7 +39,7 @@ public class Colony {
 
     private final List<Construction> constructions;
 
-    private final ColonyWarehouse colonyWarehouse;
+    private final ColonyWarehouse warehouse;
 
     private final ColonyBuildingQueue colonyBuildingQueue;
 
@@ -57,7 +58,7 @@ public class Colony {
         colonyFields = new ArrayList<>();
         Direction.getAll().forEach(loc -> colonyFields.add(new ColonyField(model, loc, this)));
         this.constructions = Preconditions.checkNotNull(constructionsBuilder.apply(this));
-        colonyWarehouse = new ColonyWarehouse(this, initialGoods);
+        warehouse = new ColonyWarehouse(this, initialGoods);
         colonyBuildingQueue = new ColonyBuildingQueue(model, this, buildingQueue);
         checkConstructions();
     }
@@ -114,7 +115,7 @@ public class Colony {
         out.setOwnerName(owner.getName());
         out.setLocation(location);
         out.setColonyFields(saveColonyFields());
-        out.setColonyWarehouse(colonyWarehouse.save());
+        out.setColonyWarehouse(warehouse.save());
         out.setConstructions(saveCostructions());
         out.setBuildingQueue(colonyBuildingQueue.save());
         return out;
@@ -214,61 +215,72 @@ public class Colony {
      * </ul>
      */
     public void startTurn() {
-        colonyFields.forEach(field -> field.countTurnProduction(colonyWarehouse));
-        constructions.forEach(
-                construction -> construction.countTurnProduction(this, getColonyWarehouse()));
-        eatFood();
-        optionalyProduceColonist();
-        colonyBuildingQueue.startTurn();
+        eatFoodAndOptionallyMakeNewColonist();
+        // from now colony could be destroyed by famine.
+        if (isValid()) {
+            final ColonyProductionStats colonyStats = getGoodsStats();
+            colonyStats.forEach((goodsType, stats) -> {
+                if (GoodsType.CORN.equals(goodsType)) {
+                    return;
+                }
+                warehouse.addGoodsWithThrowingAway(Goods.of(goodsType, stats.getDiff()),
+                        thrownAwayGoods -> {
+                            model.addTurnEvent(TurnEventProvider.getGoodsWasThrowsAway(owner,
+                                    thrownAwayGoods, this));
+                        });
+            });
+            colonyBuildingQueue.startTurn();
+        }
     }
 
-    private void eatFood() {
-        final int alreadyHaveFood = colonyWarehouse.getGoods(GoodsType.CORN).getAmount();
-        if (alreadyHaveFood < getRequiredFoodPerTurn()) {
-            // famine plague colony message
-            model.getTurnEventStore().add(TurnEventProvider.getFaminePlagueColony(owner, this));
-            killOneRandomUnit();
-            colonyWarehouse.setGoodsToZero(GoodsType.CORN);
-        } else {
-            colonyWarehouse.removeGoods(Goods.of(GoodsType.CORN, getRequiredFoodPerTurn()));
-            final int willHaveFood = getGoodsStats().getStatsByType(GoodsType.CORN)
-                    .getInWarehouseAfter();
-            if (willHaveFood < 0) {
-                // warn famine will plague colony
-                model.getTurnEventStore()
-                        .add(TurnEventProvider.getFamineWillPlagueColony(owner, this));
+    private void eatFoodAndOptionallyMakeNewColonist() {
+        boolean nextTurn = true;
+        while (nextTurn && isValid()) {
+            final ColonyProductionStats stats = getGoodsStats();
+            final GoodsProductionStats cornStats = stats.getStatsByType(GoodsType.CORN);
+            if (cornStats.getInWarehouseAfter() < 0) {
+                killOneRandomUnit();
+            } else {
+                if (cornStats.getInWarehouseAfter() >= FOOD_LEVEL_TO_FREE_COLONIST) {
+                    produceNewColonist();
+                    warehouse.setGoods(Goods.of(GoodsType.CORN,
+                            cornStats.getInWarehouseAfter() - FOOD_LEVEL_TO_FREE_COLONIST));
+                } else {
+                    warehouse.addGoodsWithThrowingAway(
+                            Goods.of(GoodsType.CORN, cornStats.getDiff()), thrownAwayGoods -> {
+                                model.addTurnEvent(TurnEventProvider.getGoodsWasThrowsAway(owner,
+                                        thrownAwayGoods, this));
+                            });
+                }
+                nextTurn = false;
             }
         }
+
     }
 
     /**
-     * If there is more food than some limit than new colonist will appears
-     * outside of colony.
+     * New colonist will appears outside of colony.
      */
-    private void optionalyProduceColonist() {
-        if (colonyWarehouse.getGoods(GoodsType.CORN).getAmount() >= FOOD_LEVEL_TO_FREE_COLONIST) {
-            colonyWarehouse.removeGoods(Goods.of(GoodsType.CORN, FOOD_LEVEL_TO_FREE_COLONIST));
-            model.addUnitOutSideColony(this);
-            model.getTurnEventStore().add(TurnEventProvider.getNewUnitInColony(getOwner()));
-        }
+    private void produceNewColonist() {
+        model.addUnitOutSideColony(this);
+        model.getTurnEventStore().add(TurnEventProvider.getNewUnitInColony(getOwner()));
     }
 
     private void killOneRandomUnit() {
-        int index = random.nextInt(getUnitsInColony().size());
-        final Unit u = getUnitsInColony().get(index);
+        int index = random.nextInt(getUnitsInsideColony().size());
+        final Unit u = getUnitsInsideColony().get(index);
         u.getPlace().destroy();
         model.destroyUnit(u);
     }
 
     public Integer getRequiredFoodPerTurn() {
-        return getUnitsInColony().stream().mapToInt(unit -> unit.getType().getAteFoodPerTurn())
+        return getUnitsInsideColony().stream().mapToInt(unit -> unit.getType().getAteFoodPerTurn())
                 .sum();
     }
 
-    // TODO should return list of UnitsWithCargo
-    public List<Unit> getUnitsInPort() {
+    public List<UnitWithCargo> getUnitsInPort() {
         return model.getUnitsAt(location).stream().filter(unit -> unit.getType().canHoldCargo())
-                .collect(ImmutableList.toImmutableList());
+                .map(unit -> (UnitWithCargo) unit).collect(ImmutableList.toImmutableList());
     }
 
     public List<Unit> getUnitsOutSideColony() {
@@ -358,11 +370,11 @@ public class Colony {
         return constructions;
     }
 
-    public ColonyWarehouse getColonyWarehouse() {
-        return colonyWarehouse;
+    public ColonyWarehouse getWarehouse() {
+        return warehouse;
     }
 
-    List<Unit> getUnitsInColony() {
+    List<Unit> getUnitsInsideColony() {
         final List<Unit> out = new ArrayList<>();
         constructions.forEach(construction -> {
             construction.getConstructionSlots().forEach(slot -> {
@@ -381,7 +393,7 @@ public class Colony {
 
     public boolean isLastUnitIncolony(final Unit unit) {
         Preconditions.checkNotNull(unit);
-        final List<Unit> unitsInColony = getUnitsInColony();
+        final List<Unit> unitsInColony = getUnitsInsideColony();
         if (unitsInColony.size() > 1) {
             return false;
         } else if (unitsInColony.size() == 1) {
@@ -397,7 +409,7 @@ public class Colony {
      * Verify number of units in colony and when it's 0 than destroy colony.
      */
     void verifyNumberOfUnitsOptionallyDestroyColony() {
-        if (getUnitsInColony().isEmpty()) {
+        if (getUnitsInsideColony().isEmpty()) {
             model.destroyColony(this);
         }
     }
@@ -414,13 +426,12 @@ public class Colony {
             force += unit.getMilitaryStrenght();
         }
         // count units in colony
-        for (final Unit unit : getUnitsInColony()) {
+        for (final Unit unit : getUnitsInsideColony()) {
             force += unit.getMilitaryStrenght();
         }
         return (int) force;
     }
 
-    // TODO counting of stats should move to separate classes.
     /**
      * Get production statistics per turn.
      *
@@ -431,7 +442,7 @@ public class Colony {
         // set initial warehouse stack
         GoodsType.GOOD_TYPES.forEach(goodsType -> {
             GoodsProductionStats goodsStats = out.getStatsByType(goodsType);
-            goodsStats.setInWarehouseBefore(colonyWarehouse.getGoods(goodsType).getAmount());
+            goodsStats.setInWarehouseBefore(warehouse.getGoods(goodsType).getAmount());
         });
 
         // get production from all fields

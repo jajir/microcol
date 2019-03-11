@@ -10,8 +10,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.microcol.gui.FileSelectingService;
 import org.microcol.model.GoodsType;
 import org.microcol.model.Goods;
-import org.microcol.model.Unit;
 import org.microcol.model.unit.UnitGalleon;
+import org.microcol.model.unit.UnitWithCargo;
 import org.microcol.page.BuyUnitScreen;
 import org.microcol.page.DialogChooseNumberOfGoods;
 import org.microcol.page.EuropePortScreen;
@@ -66,9 +66,6 @@ public class TC_06_buy_and_sell_goods_test extends AbstractMicroColTest {
 
 	// Verify that there is exactly 1 ship in port.
 	europePort.verifyNumberOfShipsInPort(1);
-
-	// Select ship by clicking at it.
-	europePort.selectUnitFromPort(0);
 
 	// Verify that ship is empty.
 	verifyThatGoodsInShip(0, Goods.of(GoodsType.CORN, 0));
@@ -130,9 +127,6 @@ public class TC_06_buy_and_sell_goods_test extends AbstractMicroColTest {
 	// Verify that there is exactly 1 ship in port.
 	europePort.verifyNumberOfShipsInPort(1);
 
-	// Select ship by clicking at it.
-	europePort.selectUnitFromPort(0);
-
 	// Verify that ship is empty.
 	verifyThatGoodsInShip(0, Goods.of(GoodsType.CORN, 0));
 
@@ -160,7 +154,7 @@ public class TC_06_buy_and_sell_goods_test extends AbstractMicroColTest {
     }
 
     private void verifyThatGoodsInShip(final int cargoSlotIndex, final Goods expectedGoods) {
-	final List<Unit> ships = getModel().getEurope().getPort().getShipsInPort(getHumanPlayer());
+	final List<UnitWithCargo> ships = getModel().getEurope().getPort().getShipsInPort(getHumanPlayer());
 	assertEquals(1, ships.size());
 	final UnitGalleon galleon = (UnitGalleon) ships.get(0);
 

@@ -11,7 +11,7 @@ public final class PlayerGoodsStatistics {
     private final Map<GoodsType, Integer> goods = new HashMap<>();
 
     void addColonyData(final Colony colony) {
-        colony.getColonyWarehouse().saveStatisticsTo(this);
+        colony.getWarehouse().saveStatisticsTo(this);
     }
 
     /**

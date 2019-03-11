@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.microcol.model.CargoSlot;
 import org.microcol.model.Goods;
-import org.microcol.model.Unit;
+import org.microcol.model.unit.UnitWithCargo;
 
 import javafx.scene.Node;
 import javafx.scene.input.DragEvent;
@@ -21,7 +21,7 @@ public interface PanelDockBehavior {
      * 
      * @return list of units
      */
-    List<Unit> getUnitsInPort();
+    List<UnitWithCargo> getUnitsInPort();
 
     /**
      * Drag on crate was dropped. It's called when mouse with some content is

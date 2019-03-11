@@ -60,7 +60,7 @@ public abstract class AbstractPanelDock implements JavaFxComponent, UpdatableLan
             final Optional<UnitWithCargo> oSelectedShip = getSelectedShip();
             view.unselectShip();
             panelDockBehavior.getUnitsInPort().forEach(unit -> {
-                view.addShip((UnitWithCargo) unit);
+                view.addShip(unit);
             });
             view.selectShip(oSelectedShip);
         }
