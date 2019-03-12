@@ -246,11 +246,15 @@ public class Colony {
                     warehouse.setGoods(Goods.of(GoodsType.CORN,
                             cornStats.getInWarehouseAfter() - FOOD_LEVEL_TO_FREE_COLONIST));
                 } else {
-                    warehouse.addGoodsWithThrowingAway(
-                            Goods.of(GoodsType.CORN, cornStats.getDiff()), thrownAwayGoods -> {
-                                model.addTurnEvent(TurnEventProvider.getGoodsWasThrowsAway(owner,
-                                        thrownAwayGoods, this));
-                            });
+                    if (cornStats.getDiff() < 0) {
+                        warehouse.removeGoods(Goods.of(GoodsType.CORN, -cornStats.getDiff()));
+                    } else {
+                        warehouse.addGoodsWithThrowingAway(
+                                Goods.of(GoodsType.CORN, cornStats.getDiff()), thrownAwayGoods -> {
+                                    model.addTurnEvent(TurnEventProvider
+                                            .getGoodsWasThrowsAway(owner, thrownAwayGoods, this));
+                                });
+                    }
                 }
                 nextTurn = false;
             }

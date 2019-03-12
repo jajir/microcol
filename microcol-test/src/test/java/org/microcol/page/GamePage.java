@@ -108,7 +108,7 @@ public class GamePage extends AbstractScreen {
 	return DialogTurnReport.of(getContext());
     }
 
-    public ColonyScreen openColonyAt(final Location colonyLocation, final String expectedNamePart) throws Exception {
+    public ColonyScreen openColonyAt(final Location colonyLocation, final String expectedNamePart) {
 	moveMouseAtLocation(colonyLocation);
 	getRobot().clickOn(MouseButton.PRIMARY);
 	return ColonyScreen.of(getContext(), expectedNamePart);
