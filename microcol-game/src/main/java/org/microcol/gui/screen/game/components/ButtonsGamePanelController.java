@@ -6,9 +6,11 @@ import org.microcol.gui.buttonpanel.NextTurnEvent;
 import org.microcol.gui.event.DeclareIndependenceEvent;
 import org.microcol.gui.event.EndMoveEvent;
 import org.microcol.gui.event.model.GameModelController;
+import org.microcol.gui.screen.game.gamepanel.SelectedUnitManager;
 import org.microcol.gui.screen.game.gamepanel.SelectedUnitWasChangedEvent;
 import org.microcol.gui.util.Listener;
 import org.microcol.model.Colony;
+import org.microcol.model.Model;
 import org.microcol.model.Terrain;
 import org.microcol.model.Unit;
 import org.microcol.model.event.TurnStartedEvent;
@@ -22,8 +24,6 @@ import com.google.common.eventbus.Subscribe;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
-import javafx.application.Platform;
-
 @Singleton
 @Listener
 public class ButtonsGamePanelController {
@@ -32,27 +32,40 @@ public class ButtonsGamePanelController {
 
     private final GameModelController gameModelController;
 
-    private final ButtonsGamePanel buttonGamePanel;
+    private final SelectedUnitManager selectedUnitManager;
+
+    private final ButtonsGamePanel view;
 
     @Inject
     ButtonsGamePanelController(final ButtonsGamePanel buttonGamePanel,
-            final GameModelController gameModelController) {
-        this.buttonGamePanel = Preconditions.checkNotNull(buttonGamePanel);
+            final GameModelController gameModelController,
+            final SelectedUnitManager selectedUnitManager) {
+        this.view = Preconditions.checkNotNull(buttonGamePanel);
         this.gameModelController = Preconditions.checkNotNull(gameModelController);
+        this.selectedUnitManager = Preconditions.checkNotNull(selectedUnitManager);
     }
 
     @SuppressWarnings("unused")
     @Subscribe
     private void onNextTurn(final NextTurnEvent event) {
         LOGGER.debug("Next turn was triggered");
-        buttonGamePanel.disableAllButtons();
+        view.disableAllButtons();
     }
 
     @Subscribe
     private void onTurnStarted(final TurnStartedEvent event) {
         LOGGER.debug("Turn started event {}", event);
         if (event.getPlayer().isHuman()) {
-            buttonGamePanel.enableAllButtons();
+            view.enableAllButtons();
+            if (selectedUnitManager.getSelectedUnit().isPresent()) {
+                final Unit unit = selectedUnitManager.getSelectedUnit().get();
+                evaluateAllButtonsForSelectedUnit(unit);
+            } else {
+                view.setVisibleButtonMove(false);
+                view.setVisibleButtonBuildColony(false);
+                view.setVisibleButtonPlowField(false);
+
+            }
         }
     }
 
@@ -65,14 +78,14 @@ public class ButtonsGamePanelController {
     @Subscribe
     private void onUnitMoveStarted(final UnitMoveStartedEvent event) {
         if (event.getUnit().getOwner().isHuman()) {
-            buttonGamePanel.disableAllButtons();
+            view.disableAllButtons();
         }
     }
 
     @Subscribe
     private void onUnitMoveFinished(final UnitMoveFinishedEvent event) {
         if (event.getUnit().getOwner().isHuman()) {
-            buttonGamePanel.enableAllButtons();
+            view.enableAllButtons();
         }
     }
 
@@ -83,18 +96,16 @@ public class ButtonsGamePanelController {
             final Unit unit = event.getSelectedUnit().get();
             evaluateAllButtonsForSelectedUnit(unit);
         } else {
-            Platform.runLater(() -> {
-                buttonGamePanel.setVisibleButtonMove(false);
-                buttonGamePanel.setVisibleButtonBuildColony(false);
-                buttonGamePanel.setVisibleButtonPlowField(false);
-            });
+            view.setVisibleButtonMove(false);
+            view.setVisibleButtonBuildColony(false);
+            view.setVisibleButtonPlowField(false);
         }
     }
 
     @Subscribe
     private void onIndependenceWasDeclared(
             @SuppressWarnings("unused") final DeclareIndependenceEvent event) {
-        buttonGamePanel.setVisibleButtonDeclareIndependence(false);
+        view.setVisibleButtonDeclareIndependence(false);
     }
 
     private void evaluateAllButtonsForSelectedUnit(final Unit unit) {
@@ -105,36 +116,42 @@ public class ButtonsGamePanelController {
     }
 
     private void evaluateMoveButton(final Unit unit) {
-        buttonGamePanel.setVisibleButtonMove(unit.getActionPoints() > 0);
+        view.setVisibleButtonMove(unit.getActionPoints() > 0);
     }
 
     private void evaluateDeclareIndependenceButton() {
-        buttonGamePanel.setVisibleButtonDeclareIndependence(
-                !gameModelController.getCurrentPlayer().isDeclaredIndependence());
+        view.setVisibleButtonDeclareIndependence(
+                gameModelController.getCurrentPlayer().isPossibleToDecalareIndependence());
     }
 
     private void evaluatePlowField(final Unit unit) {
-        if (unit.canPlowFiled()) {
-            final Terrain terrain = gameModelController.getModel().getMap()
-                    .getTerrainAt(unit.getLocation());
-            buttonGamePanel.setVisibleButtonPlowField(!terrain.isHasField());
-        } else {
-            buttonGamePanel.setVisibleButtonPlowField(false);
+        if (getModel().getColonyAt(unit.getLocation()).isPresent()) {
+            view.setVisibleButtonPlowField(false);
+            return;
         }
+        if (!unit.canPlowFiled()) {
+            view.setVisibleButtonPlowField(false);
+            return;
+        }
+        final Terrain terrain = getModel().getMap().getTerrainAt(unit.getLocation());
+        view.setVisibleButtonPlowField(!terrain.isHasField());
     }
 
     private void evaluateBuildColony(final Unit unit) {
-        if (unit.getType().canBuildColony()) {
-            final Optional<Colony> oColony = gameModelController.getModel()
-                    .getColonyAt(unit.getLocation());
-            if (oColony.isPresent()) {
-                buttonGamePanel.setVisibleButtonBuildColony(false);
-            } else {
-                buttonGamePanel.setVisibleButtonBuildColony(unit.getActionPoints() > 0);
-            }
-        } else {
-            buttonGamePanel.setVisibleButtonBuildColony(false);
+        if (!unit.getType().canBuildColony()) {
+            view.setVisibleButtonBuildColony(false);
+            return;
         }
+        final Optional<Colony> oColony = getModel().getColonyAt(unit.getLocation());
+        if (oColony.isPresent()) {
+            view.setVisibleButtonBuildColony(false);
+        } else {
+            view.setVisibleButtonBuildColony(unit.getActionPoints() > 0);
+        }
+    }
+
+    private Model getModel() {
+        return gameModelController.getModel();
     }
 
 }

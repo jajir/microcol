@@ -221,45 +221,50 @@ public class Colony {
             final ColonyProductionStats colonyStats = getGoodsStats();
             colonyStats.forEach((goodsType, stats) -> {
                 if (GoodsType.CORN.equals(goodsType)) {
+                    if (stats.getInWarehouseAfter() < 0) {
+                        model.addTurnEvent(
+                                TurnEventProvider.getFamineWillPlagueColony(owner, this));
+                    }
                     return;
                 }
-                warehouse.addGoodsWithThrowingAway(Goods.of(goodsType, stats.getDiff()),
-                        thrownAwayGoods -> {
-                            model.addTurnEvent(TurnEventProvider.getGoodsWasThrowsAway(owner,
-                                    thrownAwayGoods, this));
-                        });
+                if (stats.getDiff() > 0) {
+                    warehouse.addGoodsWithThrowingAway(Goods.of(goodsType, stats.getDiff()),
+                            thrownAwayGoods -> {
+                                model.addTurnEvent(TurnEventProvider.getGoodsWasThrowsAway(owner,
+                                        thrownAwayGoods, this));
+                            });
+
+                } else {
+                    warehouse.removeGoods(Goods.of(goodsType, -stats.getDiff()));
+                }
             });
             colonyBuildingQueue.startTurn();
         }
     }
 
     private void eatFoodAndOptionallyMakeNewColonist() {
-        boolean nextTurn = true;
-        while (nextTurn && isValid()) {
-            final ColonyProductionStats stats = getGoodsStats();
-            final GoodsProductionStats cornStats = stats.getStatsByType(GoodsType.CORN);
-            if (cornStats.getInWarehouseAfter() < 0) {
-                killOneRandomUnit();
+        final ColonyProductionStats stats = getGoodsStats();
+        final GoodsProductionStats cornStats = stats.getStatsByType(GoodsType.CORN);
+        if (cornStats.getInWarehouseAfter() < 0) {
+            killOneRandomUnit();
+            warehouse.setGoods(Goods.of(GoodsType.CORN, 0));
+        } else {
+            if (cornStats.getInWarehouseAfter() >= FOOD_LEVEL_TO_FREE_COLONIST) {
+                produceNewColonist();
+                warehouse.setGoods(Goods.of(GoodsType.CORN,
+                        cornStats.getInWarehouseAfter() - FOOD_LEVEL_TO_FREE_COLONIST));
             } else {
-                if (cornStats.getInWarehouseAfter() >= FOOD_LEVEL_TO_FREE_COLONIST) {
-                    produceNewColonist();
-                    warehouse.setGoods(Goods.of(GoodsType.CORN,
-                            cornStats.getInWarehouseAfter() - FOOD_LEVEL_TO_FREE_COLONIST));
+                if (cornStats.getDiff() < 0) {
+                    warehouse.removeGoods(Goods.of(GoodsType.CORN, -cornStats.getDiff()));
                 } else {
-                    if (cornStats.getDiff() < 0) {
-                        warehouse.removeGoods(Goods.of(GoodsType.CORN, -cornStats.getDiff()));
-                    } else {
-                        warehouse.addGoodsWithThrowingAway(
-                                Goods.of(GoodsType.CORN, cornStats.getDiff()), thrownAwayGoods -> {
-                                    model.addTurnEvent(TurnEventProvider
-                                            .getGoodsWasThrowsAway(owner, thrownAwayGoods, this));
-                                });
-                    }
+                    warehouse.addGoodsWithThrowingAway(
+                            Goods.of(GoodsType.CORN, cornStats.getDiff()), thrownAwayGoods -> {
+                                model.addTurnEvent(TurnEventProvider.getGoodsWasThrowsAway(owner,
+                                        thrownAwayGoods, this));
+                            });
                 }
-                nextTurn = false;
             }
         }
-
     }
 
     /**
@@ -267,7 +272,7 @@ public class Colony {
      */
     private void produceNewColonist() {
         model.addUnitOutSideColony(this);
-        model.getTurnEventStore().add(TurnEventProvider.getNewUnitInColony(getOwner()));
+        model.getTurnEventStore().add(TurnEventProvider.getNewUnitInColony(getOwner(), this));
     }
 
     private void killOneRandomUnit() {
@@ -275,6 +280,7 @@ public class Colony {
         final Unit u = getUnitsInsideColony().get(index);
         u.getPlace().destroy();
         model.destroyUnit(u);
+        model.addTurnEvent(TurnEventProvider.getFaminePlagueColony(getOwner(), this));
     }
 
     public Integer getRequiredFoodPerTurn() {

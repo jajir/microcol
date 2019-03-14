@@ -16,8 +16,6 @@ import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import com.google.inject.Inject;
 
-import javafx.application.Platform;
-
 @Listener
 public final class RightPanelPresenter {
 
@@ -44,30 +42,26 @@ public final class RightPanelPresenter {
 
     @Subscribe
     private void onSelectedUnitWasChanged(final SelectedUnitWasChangedEvent event) {
-        Platform.runLater(() -> {
-            if (lastFocusedTileEvent == null) {
-                if (event.getSelectedUnit().isPresent()) {
-                    display.refreshView(event.getSelectedUnit().get().getLocation());
-                } else {
-                    display.cleanView();
-                }
+        if (lastFocusedTileEvent == null) {
+            if (event.getSelectedUnit().isPresent()) {
+                display.refreshView(event.getSelectedUnit().get().getLocation());
             } else {
-                display.refreshView(lastFocusedTileEvent.getLocation());
+                display.cleanView();
             }
-        });
+        } else {
+            display.refreshView(lastFocusedTileEvent.getLocation());
+        }
     }
 
     @Subscribe
     private void onTurnStarted(final TurnStartedEvent event) {
         logger.debug("Turn started for player {}", event.getPlayer());
-        Platform.runLater(() -> {
-            display.setOnMovePlayer(event.getPlayer());
-            if (event.getPlayer().isHuman()) {
-                if (lastFocusedTileEvent != null) {
-                    display.refreshView(lastFocusedTileEvent);
-                }
+        display.setOnMovePlayer(event.getPlayer());
+        if (event.getPlayer().isHuman()) {
+            if (lastFocusedTileEvent != null) {
+                display.refreshView(lastFocusedTileEvent);
             }
-        });
+        }
     }
 
     @SuppressWarnings("unused")
@@ -83,9 +77,13 @@ public final class RightPanelPresenter {
     @Subscribe
     private void onFocusedTile(final TileWasSelectedEvent event) {
         lastFocusedTileEvent = event;
-        Platform.runLater(() -> {
-            display.refreshView(event);
-        });
+        display.refreshView(event);
+    }
+
+    //FIXME should not be better to react o event?
+    public void refresh() {
+        display.refreshView(lastFocusedTileEvent);
+
     }
 
 }

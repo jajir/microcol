@@ -1,6 +1,5 @@
 package org.microcol.gui;
 
-import java.util.Arrays;
 import java.util.ResourceBundle;
 
 import org.microcol.i18n.MessageKeyResource;
@@ -8,42 +7,74 @@ import org.microcol.i18n.ResourceBundleControlBuilder;
 import org.microcol.i18n.ResourceBundleFormat;
 import org.microcol.model.GoodsType;
 
-import com.google.common.base.Preconditions;
-
 /**
  * Convert {@link GoodsType} to localized goods names.
  */
 public enum GoodsTypeName implements MessageKeyResource {
+    /*
+     * Declension - 1 case - Nominative - singular
+     */
+    corn,
+    sugar,
+    tobacco,
+    cotton,
+    fur,
+    lumber,
+    ore,
+    silver,
+    horse,
+    rum,
+    cigars,
+    silk,
+    coat,
+    goods,
+    tools,
+    musket,
+    hammers,
+    cross,
+    bell,
 
-    corn(GoodsType.CORN),
-    sugar(GoodsType.SUGAR),
-    tobacco(GoodsType.TOBACCO),
-    cotton(GoodsType.COTTON),
-    fur(GoodsType.FUR),
-    lumber(GoodsType.LUMBER),
-    ore(GoodsType.ORE),
-    silver(GoodsType.SILVER),
-    horse(GoodsType.HORSE),
-    rum(GoodsType.RUM),
-    cigars(GoodsType.CIGARS),
-    silk(GoodsType.SILK),
-    coat(GoodsType.COAT),
-    goods(GoodsType.GOODS),
-    tools(GoodsType.TOOLS),
-    musket(GoodsType.MUSKET),
-    hammers(GoodsType.HAMMERS),
-    cross(GoodsType.CROSS),
-    bell(GoodsType.BELL);
-    
-    private final GoodsType goodsType;
+    /*
+     * Declension - 2 case - Accusative - singular
+     * 
+     * 
+     * Was not needed.
+     */
 
-    GoodsTypeName(final GoodsType goodsType) {
-        this.goodsType = Preconditions.checkNotNull(goodsType);
+    /*
+     * Declension - 2 case - genitiv - plurar
+     */
+    corn_dc2_pl,
+    sugar_dc2_pl,
+    tobacco_dc2_pl,
+    cotton_dc2_pl,
+    fur_dc2_pl,
+    lumber_dc2_pl,
+    ore_dc2_pl,
+    silver_dc2_pl,
+    horse_dc2_pl,
+    rum_dc2_pl,
+    cigars_dc2_pl,
+    silk_dc2_pl,
+    coat_dc2_pl,
+    goods_dc2_pl,
+    tools_dc2_pl,
+    musket_dc2_pl,
+    hammers_dc2_pl,
+    cross_dc2_pl,
+    bell_dc2_pl,
+
+    ;
+
+    public static GoodsTypeName getKey(final GoodsType goodsType, final int declensionCase,
+            final boolean singular) {
+        final String key = goodsType.name().toLowerCase() + "_dc" + declensionCase + "_"
+                + (singular ? "sg" : "pl");
+        return valueOf(key);
     }
 
     public static GoodsTypeName getNameForGoodsType(final GoodsType goodsType) {
-        return Arrays.stream(values()).filter(gtName -> gtName.goodsType == goodsType).findFirst()
-                .orElseThrow((() -> new IllegalArgumentException()));
+        return valueOf(goodsType.name().toLowerCase());
     }
 
     @Override

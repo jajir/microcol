@@ -389,7 +389,7 @@
       "id": 23,
       "type": "COLONIST",
       "ownerId": "Dutch",
-      "placeColonyField": {},
+      "placeConstructionSlot": {},
       "cargo": {
         "slots": []
       },
@@ -499,7 +499,7 @@
             "y": -1
           },
           "workerId": 0,
-          "producedGoodsType": "TABACCO"
+          "producedGoodsType": "TOBACCO"
         },
         {
           "direction": {
@@ -519,7 +519,7 @@
             "y": 1
           },
           "workerId": 2,
-          "producedGoodsType": "TABACCO"
+          "producedGoodsType": "TOBACCO"
         },
         {
           "direction": {
@@ -527,7 +527,7 @@
             "y": 1
           },
           "workerId": 13,
-          "producedGoodsType": "TABACCO"
+          "producedGoodsType": "TOBACCO"
         },
         {
           "direction": {
@@ -632,7 +632,7 @@
         "RUM": 0,
         "SUGAR": 0,
         "SILK": 0,
-        "TABACCO": 60,
+        "TOBACCO": 60,
         "MUSKET": 0,
         "CROSS": 0,
         "CORN": 46,
@@ -669,7 +669,7 @@
             "y": 0
           },
           "workerId": 22,
-          "producedGoodsType": "TABACCO"
+          "producedGoodsType": "TOBACCO"
         },
         {
           "direction": {
@@ -677,7 +677,7 @@
             "y": 1
           },
           "workerId": 21,
-          "producedGoodsType": "TABACCO"
+          "producedGoodsType": "TOBACCO"
         },
         {
           "direction": {
@@ -685,7 +685,7 @@
             "y": 1
           },
           "workerId": 6,
-          "producedGoodsType": "TABACCO"
+          "producedGoodsType": "TOBACCO"
         },
         {
           "direction": {
@@ -693,7 +693,7 @@
             "y": 1
           },
           "workerId": 17,
-          "producedGoodsType": "TABACCO"
+          "producedGoodsType": "TOBACCO"
         },
         {
           "direction": {
@@ -701,22 +701,22 @@
             "y": 0
           },
           "workerId": 19,
-          "producedGoodsType": "TABACCO"
+          "producedGoodsType": "TOBACCO"
         },
         {
           "direction": {
             "x": -1,
             "y": -1
-          },
-          "workerId": 23,
-          "producedGoodsType": "CORN"
+          }
         }
       ],
       "constructions": [
         {
           "type": "TOWN_HALL",
           "slots": [
-            {},
+            {
+              "workerId": 23
+            },
             {},
             {}
           ]
@@ -790,7 +790,7 @@
         "RUM": 0,
         "SUGAR": 0,
         "SILK": 0,
-        "TABACCO": 90,
+        "TOBACCO": 90,
         "MUSKET": 0,
         "CROSS": 0,
         "CORN": 3,
@@ -815,7 +815,7 @@
             "y": -1
           },
           "workerId": 11,
-          "producedGoodsType": "TABACCO"
+          "producedGoodsType": "TOBACCO"
         },
         {
           "direction": {
@@ -823,7 +823,7 @@
             "y": -1
           },
           "workerId": 15,
-          "producedGoodsType": "TABACCO"
+          "producedGoodsType": "TOBACCO"
         },
         {
           "direction": {
@@ -865,7 +865,7 @@
             "y": -1
           },
           "workerId": 9,
-          "producedGoodsType": "TABACCO"
+          "producedGoodsType": "TOBACCO"
         }
       ],
       "constructions": [
@@ -948,7 +948,7 @@
         "RUM": 0,
         "SUGAR": 0,
         "SILK": 0,
-        "TABACCO": 30,
+        "TOBACCO": 30,
         "MUSKET": 0,
         "CROSS": 0,
         "CORN": 134,
@@ -961,22 +961,6 @@
     }
   ],
   "turnEvents": [
-    {
-      "playerName": "Dutch",
-      "args": [],
-      "messageKey": "newUnitIsInColony",
-      "solved": false
-    },
-    {
-      "playerName": "Dutch",
-      "args": [
-        9.0,
-        "CIGARS",
-        "Haarlem"
-      ],
-      "messageKey": "goodsWasThrowsAway",
-      "solved": false
-    }
   ],
   "map": {
     "tiles": [

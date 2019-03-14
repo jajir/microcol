@@ -126,8 +126,12 @@ public class ButtonsGamePanel extends AbstractButtonsPanel {
                 .setOnAction(event -> eventBus.post(new DeclareIndependenceEvent()));
         buttonDeclareIndependence.setId(BUTTON_DECLARE_INDEPENDENCE_ID);
 
-        getButtonPanel().getChildren().add(buttonStatistics);
+        getButtonPanel().getChildren().add(buttonBuildColony);
+        getButtonPanel().getChildren().add(buttonPlowField);
+        getButtonPanel().getChildren().add(buttonMove);
+        getButtonPanel().getChildren().add(buttonDeclareIndependence);
         getButtonPanel().getChildren().add(buttonCenter);
+        getButtonPanel().getChildren().add(buttonStatistics);
         getButtonPanel().getChildren().add(buttonTurnReport);
         getButtonPanel().getChildren().add(buttonGoals);
         getButtonPanel().getChildren().add(buttonHelp);
@@ -145,18 +149,18 @@ public class ButtonsGamePanel extends AbstractButtonsPanel {
         LOGGER.debug("Enabling buttons bar");
         setDisable(false);
     }
-    
+
     private void setDisable(final boolean disable) {
         buttonCenter.setDisable(disable);
         buttonHelp.setDisable(disable);
         buttonStatistics.setDisable(disable);
         buttonExit.setDisable(disable);
-        
+
         buttonGoals.setDisable(disable);
         buttonTurnReport.setDisable(disable);
         buttonNextTurn.setDisable(disable);
         buttonEurope.setDisable(disable);
-        
+
         buttonMove.setDisable(disable);
         buttonPlowField.setDisable(disable);
         buttonBuildColony.setDisable(disable);
@@ -180,19 +184,17 @@ public class ButtonsGamePanel extends AbstractButtonsPanel {
     }
 
     protected void setVisibleNode(final Node node, final boolean isVisible) {
-        if (isContaining(node)) {
-            if (!isVisible) {
-                Platform.runLater(() -> {
+        Platform.runLater(() -> {
+            if (isContaining(node)) {
+                if (!isVisible) {
                     remove(node);
-                });
-            }
-        } else {
-            if (isVisible) {
-                Platform.runLater(() -> {
+                }
+            } else {
+                if (isVisible) {
                     getButtonPanel().getChildren().add(0, node);
-                });
+                }
             }
-        }
+        });
     }
 
     /**

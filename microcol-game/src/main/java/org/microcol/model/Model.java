@@ -16,7 +16,6 @@ import org.microcol.model.store.UnitPo;
 import org.microcol.model.turnevent.TurnEvent;
 import org.microcol.model.turnevent.TurnEventProvider;
 import org.microcol.model.turnevent.TurnEventStore;
-import org.microcol.model.turnevent.TurnEvents;
 import org.microcol.model.unit.UnitActionNoAction;
 import org.microcol.model.unit.UnitFactory;
 import org.microcol.model.unit.UnitWithCargo;
@@ -233,9 +232,8 @@ public class Model {
                 UnitType.GALLEON.getSpeed(), new UnitActionNoAction());
     }
 
-    public List<TurnEvent> getLocalizedMessages(final Player player,
-            final Function<TurnEvents, String> messageProvider) {
-        return turnEventStore.getLocalizedMessages(player, messageProvider);
+    public List<TurnEvent> getLocalizedMessages(final Player player) {
+        return turnEventStore.getLocalizedMessages(player);
     }
 
     public boolean isValid(final Path path) {
@@ -724,9 +722,8 @@ public class Model {
         getTurnEventStore().add(turnEvent);
     }
 
-    public List<TurnEvent> getTurnEventsLocalizedMessages(final Player player,
-            final Function<TurnEvents, String> messageProvider) {
-        return turnEventStore.getLocalizedMessages(player, messageProvider);
+    public List<TurnEvent> getTurnEventsLocalizedMessages(final Player player) {
+        return turnEventStore.getLocalizedMessages(player);
     }
 
     public boolean isTurnEventsMessagesEmpty(final Player player) {

@@ -31,4 +31,25 @@
 	<entry key="cross">Náboženská svooboda</entry>
 	<entry key="bell">Zvony svobody</entry>
 
+	<!-- Declension - 2 case - genitiv - plurar -->
+	<entry key="corn_dc2_pl">jídla</entry>
+	<entry key="sugar_dc2_pl">cukrová třtiny</entry>
+	<entry key="tobacco_dc2_pl">tabáku</entry>
+	<entry key="cotton_dc2_pl">bavlny</entry>
+	<entry key="fur_dc2_pl">kožešin</entry>
+	<entry key="lumber_dc2_pl">dříví</entry>
+	<entry key="ore_dc2_pl">železné rudy</entry>
+	<entry key="silver_dc2_pl">stříbra</entry>
+	<entry key="horse_dc2_pl">koní</entry>
+	<entry key="rum_dc2_pl">rumu</entry>
+	<entry key="cigars_dc2_pl">doutníků</entry>
+	<entry key="silk_dc2_pl">hedvábí</entry>
+	<entry key="coat_dc2_pl">kabátů</entry>
+	<entry key="goods_dc2_pl">tretek</entry>
+	<entry key="tools_dc2_pl">nářadí</entry>
+	<entry key="musket_dc2_pl">mušket</entry>
+	<entry key="hammers_dc2_pl">kladiv</entry>
+	<entry key="cross_dc2_pl">náboženské svobody</entry>
+	<entry key="bell_dc2_pl">zvonů svobody</entry>
+
 </properties>

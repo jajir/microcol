@@ -1,4 +1,4 @@
-package org.microcol.model.turnevent;
+package org.microcol.gui.screen.turnreport;
 
 import java.util.ResourceBundle;
 
@@ -20,7 +20,10 @@ public enum TurnEvents implements MessageKeyResource {
     newUnitIsInEurope,
     newUnitIsInColony,
     colonyWasLost,
-    goodsWasThrowsAway,
+    goodsWasThrowsAway1,
+    goodsWasThrowsAway2,
+    goodsWasThrowsAway3,
+    goodsWasThrowsAway4,
     
 
     ;

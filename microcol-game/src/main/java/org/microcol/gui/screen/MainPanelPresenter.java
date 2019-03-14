@@ -4,6 +4,7 @@ import org.microcol.gui.WasdController;
 import org.microcol.gui.event.ChangeLanguageEvent;
 import org.microcol.gui.event.model.BeforeGameStartEvent;
 import org.microcol.gui.util.Listener;
+import org.microcol.i18n.I18n;
 import org.microcol.model.ChainOfCommandStrategy;
 import org.microcol.model.Colony;
 
@@ -11,6 +12,7 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.google.common.eventbus.Subscribe;
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
 
 /**
  * MicroCol's main panel. Based on commands and events just change between main
@@ -21,9 +23,12 @@ import com.google.inject.Inject;
  * </p>
  */
 @Listener
+@Singleton
 public final class MainPanelPresenter {
 
     private final MainPanelView view;
+    
+    private final I18n i18n;
 
     private final ChainOfCommandStrategy<ShowScreenEvent, String> screenResolver = new ChainOfCommandStrategy<ShowScreenEvent, String>(
             Lists.newArrayList(event -> {
@@ -53,8 +58,10 @@ public final class MainPanelPresenter {
             }));
 
     @Inject
-    public MainPanelPresenter(final MainPanelView view, final WasdController wasdController) {
+    public MainPanelPresenter(final MainPanelView view, final WasdController wasdController,
+            final I18n i18n) {
         this.view = Preconditions.checkNotNull(view);
+        this.i18n = Preconditions.checkNotNull(i18n);
         view.getContent().setOnKeyPressed(e -> {
             wasdController.onKeyPressed(e);
         });
@@ -68,9 +75,10 @@ public final class MainPanelPresenter {
         screenResolver.apply(event);
     }
 
+    @SuppressWarnings("unused")
     @Subscribe
     private void onChangeLanguage(final ChangeLanguageEvent event) {
-        view.updateLanguage(event.getI18n());
+        view.updateLanguage(i18n);
     }
 
     @SuppressWarnings("unused")

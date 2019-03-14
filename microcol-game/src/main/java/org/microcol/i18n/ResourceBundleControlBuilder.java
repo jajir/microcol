@@ -19,7 +19,7 @@ public class ResourceBundleControlBuilder {
         return this;
     }
 
-    public ResourceBundleControlBuilder addResourceBundleTzpe(
+    public ResourceBundleControlBuilder addResourceBundleType(
             final AbstractResourceBundleType resourceBundleType) {
         resourceBundleTypes.add(Objects.requireNonNull(resourceBundleType));
         return this;

@@ -12,6 +12,7 @@ import java.nio.charset.StandardCharsets;
 import org.microcol.gui.MicroColException;
 import org.microcol.model.ConstructionType;
 import org.microcol.model.Direction;
+import org.microcol.model.Goods;
 import org.microcol.model.GoodsType;
 import org.microcol.model.TerrainType;
 import org.microcol.model.UnitType;
@@ -41,6 +42,7 @@ public final class ModelDao {
                 .registerTypeAdapter(UnitActionPo.class, new UnitActionPoAdapter())
                 .registerTypeAdapter(UnitType.class, new GsonUnitTypeAdapter())
                 .registerTypeAdapter(Direction.class, new GsonDirectionTypeAdapter())
+                .registerTypeAdapter(Goods.class, new GsonGoodsAdapter())
                 .setPrettyPrinting().create();
     }
 

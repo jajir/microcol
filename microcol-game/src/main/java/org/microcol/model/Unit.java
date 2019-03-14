@@ -153,7 +153,7 @@ public abstract class Unit {
                             .getSuitablePlaceForShipCommingFromEurope(getOwner(), true);
                     placeToLocation(locations.get(random.nextInt(locations.size())),
                             Direction.west);
-                    model.getTurnEventStore().add(TurnEventProvider.getShipComeHighSeas(owner));
+                    model.getTurnEventStore().add(TurnEventProvider.getShipComeToHighSeas(owner));
                 }
             }
         }

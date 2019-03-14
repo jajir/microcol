@@ -35,7 +35,7 @@ public class TC_09_famine_destroy_colony_test extends AbstractMicroColTest {
     }
 
     @Test
-    void TC_08_famine_destroy_colony() throws Exception {
+    void TC_09_famine_destroy_colony() throws Exception {
 	// open MicroCol and load defined game
 	GamePage gamePage = WelcomePage.of(getContext()).loadGame();
 
@@ -59,6 +59,18 @@ public class TC_09_famine_destroy_colony_test extends AbstractMicroColTest {
 	// Perform next turn and ignore turn events dialog.
 	gamePage.nextTurnCloseDialogs();
 
+	// Perform next turn and ignore turn events dialog.
+	gamePage.nextTurnCloseDialogs();
+
+	// Perform next turn and ignore turn events dialog.
+	gamePage.nextTurnCloseDialogs();
+
+	// Perform next turn and ignore turn events dialog.
+	gamePage.nextTurnCloseDialogs();
+
+	// Perform next turn and ignore turn events dialog.
+	gamePage.nextTurnCloseDialogs();
+	
 	// Verify colony doesn't exists anymore.
 	gamePage.verifyThatItsNotPossibleToOpenColonyAt(Location.of(22, 12));
 

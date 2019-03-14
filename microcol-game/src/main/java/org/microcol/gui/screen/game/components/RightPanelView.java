@@ -104,7 +104,9 @@ public final class RightPanelView implements JavaFxComponent {
     }
 
     public void refreshView(final TileWasSelectedEvent event) {
-        refreshView(event.getLocation());
+        if (event != null) {
+            refreshView(event.getLocation());
+        }
     }
 
     void cleanView() {
@@ -142,7 +144,11 @@ public final class RightPanelView implements JavaFxComponent {
             tileImage.setImage(imageProvider.getImage(ImageProvider.IMG_TILE_HIDDEN));
             sb.append(i18n.get(Loc.unitsPanel_unexplored));
         }
-        tileName.setText(sb.toString());
+        setTitleText(sb.toString());
+    }
+
+    private void setTitleText(final String title) {
+        Platform.runLater(() -> tileName.setText(title));
     }
 
     private Model getModel() {

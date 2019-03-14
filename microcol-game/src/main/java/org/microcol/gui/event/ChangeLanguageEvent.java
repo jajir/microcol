@@ -1,8 +1,6 @@
 package org.microcol.gui.event;
 
-import java.util.Locale;
-
-import org.microcol.i18n.I18n;
+import org.microcol.gui.util.Language;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
@@ -12,30 +10,20 @@ import com.google.common.base.Preconditions;
  */
 public final class ChangeLanguageEvent {
 
-    private final I18n i18n;
+    private Language language;
 
-    //TODO use here Language enum
-    public ChangeLanguageEvent(final Locale currentLocale, final I18n i18n) {
-        this.i18n = Preconditions.checkNotNull(i18n);
-        Preconditions.checkNotNull(currentLocale);
-        i18n.setLocale(currentLocale);
+    public ChangeLanguageEvent(final Language currentLanguage) {
+        this.language = Preconditions.checkNotNull(currentLanguage);
     }
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(ChangeLanguageEvent.class).add("i18n", i18n)
-                .add("currentLocale", i18n.getCurrentLocale()).toString();
-    }
-    
-    public Locale getCurrentLocale(){
-        return i18n.getCurrentLocale();
+        return MoreObjects.toStringHelper(ChangeLanguageEvent.class).add("language", language)
+                .toString();
     }
 
-    /**
-     * @return the i18n
-     */
-    public I18n getI18n() {
-        return i18n;
+    public Language getLanguage() {
+        return language;
     }
 
 }

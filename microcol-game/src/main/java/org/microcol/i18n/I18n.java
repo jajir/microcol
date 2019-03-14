@@ -1,6 +1,5 @@
 package org.microcol.i18n;
 
-import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Locale;
@@ -138,7 +137,7 @@ public class I18n {
 
     public <T extends Enum<T> & MessageKeyResource> String getMessage(final T messageKeyEnum,
             final Object... arguments) {
-        return MessageFormat.format(getRawMessage(messageKeyEnum), arguments);
+        return String.format(getRawMessage(messageKeyEnum), arguments);
     }
 
     public <T extends Enum<T> & MessageKeyResource> String get(final T messageKeyEnum,

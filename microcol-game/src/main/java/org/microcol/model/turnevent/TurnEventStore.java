@@ -2,8 +2,8 @@ package org.microcol.model.turnevent;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Function;
 
+import org.microcol.model.ChainOfCommandStrategy;
 import org.microcol.model.Player;
 import org.microcol.model.PlayerStore;
 import org.microcol.model.store.ModelPo;
@@ -21,6 +21,13 @@ public final class TurnEventStore {
 
     private final ArrayList<TurnEvent> turnEvents = new ArrayList<>();
 
+    private final ChainOfCommandStrategy<TurnEventPo, TurnEvent> turnEventResolver = new ChainOfCommandStrategy<>(
+            Lists.newArrayList(TurnEventColonyWasDestroyed::tryLoad,
+                    TurnEventColonyWasLost::tryLoad, TurnEventFaminePlagueColony::tryLoad,
+                    TurnEventFamineWillPlagueColony::tryLoad, TurnEventGoodsWasThrownAway::tryLoad,
+                    TurnEventNewUnitInColony::tryLoad, TurnEventNewUnitInEurope::tryLoad,
+                    TurnEventShipComeToEuropePort::tryLoad, TurnEventShipComeToHighSeas::tryLoad));
+
     /**
      * Constructor that create event from persistent model.
      *
@@ -30,14 +37,20 @@ public final class TurnEventStore {
      *            required players store
      */
     public TurnEventStore(final ModelPo modelPo, final PlayerStore playerStore) {
-        modelPo.getTurnEvents().forEach(turnEventPo -> {
-            final SimpleTurnEvent event = new SimpleTurnEvent(
-                    TurnEvents.valueOf(turnEventPo.getMessageKey()),
-                    turnEventPo.getArgs().toArray(),
-                    playerStore.getPlayerByName(turnEventPo.getPlayerName()));
-            event.setSolved(turnEventPo.isSolved());
-            turnEvents.add(event);
-        });
+        modelPo.getTurnEvents()
+                .forEach(turnEventPo -> turnEvents.add(turnEventResolver.apply(turnEventPo)));
+    }
+
+    /**
+     * Save turn events to persistent model.
+     *
+     * @return list of objects to persistent model
+     */
+    public List<TurnEventPo> save() {
+        return turnEvents.stream()
+                .map(turnEvent -> Preconditions.checkNotNull(turnEvent.save(),
+                        "Turn even {} was saved to null object", turnEvent))
+                .collect(ImmutableList.toImmutableList());
     }
 
     /**
@@ -49,7 +62,8 @@ public final class TurnEventStore {
      * @return list of turn event for given player
      */
     public List<TurnEvent> getForPlayer(final Player player) {
-        return turnEvents.stream().filter(turnEvent -> turnEvent.getPlayer().equals(player))
+        return turnEvents.stream()
+                .filter(turnEvent -> turnEvent.getPlayerName().equals(player.getName()))
                 .collect(ImmutableList.toImmutableList());
     }
 
@@ -65,58 +79,22 @@ public final class TurnEventStore {
     }
 
     /**
-     * Get list of localized turn event for specific player.
+     * Get list of turn events for specific player.
      *
      * @param player
      *            required player
-     * @param messageProvider
-     *            required localized message provider
-     * @return list of localized turn event messages for given player
+     * @return list of event messages for given player
      */
-    public List<TurnEvent> getLocalizedMessages(final Player player,
-            final Function<TurnEvents, String> messageProvider) {
-        Preconditions.checkNotNull(messageProvider);
-        final List<TurnEvent> out = getForPlayer(player);
-        out.forEach(turnEvent -> setLocalizedMessage(turnEvent, messageProvider));
-        return out;
+    public List<TurnEvent> getLocalizedMessages(final Player player) {
+        return getForPlayer(player);
     }
 
     /**
-     * Utility method that combine message key, message arguments and message
-     * provider.
-     *
-     * @param turnEvent
-     *            required turn event
-     * @param messageProvider
-     *            required localized message provider
-     */
-    public void setLocalizedMessage(final TurnEvent turnEvent,
-            final Function<TurnEvents, String> messageProvider) {
-        final String template = messageProvider.apply(turnEvent.getMessageKey());
-        turnEvent.setLocalizedMessage(String.format(template, turnEvent.getArgs()));
-    }
-
-    /**
-     * Clear event for given player. Should be called when player press 'Next turn'.
+     * Clear event for given player. Should be called when player press 'Next
+     * turn'.
      */
     public void clearTurnEventsForPlayer(final Player player) {
-        turnEvents.removeIf(event->event.getPlayer().equals(player));
-    }
-
-    /**
-     * Save turn events to persistent model.
-     *
-     * @return list of objects to persistent model
-     */
-    public List<TurnEventPo> save() {
-        return turnEvents.stream().map(turnEvent -> {
-            final TurnEventPo po = new TurnEventPo();
-            po.setArgs(Lists.newArrayList(turnEvent.getArgs()));
-            po.setMessageKey(turnEvent.getMessageKey().name());
-            po.setPlayerName(turnEvent.getPlayer().getName());
-            po.setSolved(turnEvent.isSolved());
-            return po;
-        }).collect(ImmutableList.toImmutableList());
+        turnEvents.removeIf(event -> event.getPlayerName().equals(player.getName()));
     }
 
 }

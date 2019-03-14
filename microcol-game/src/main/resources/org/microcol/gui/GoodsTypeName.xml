@@ -31,4 +31,25 @@
 	<entry key="cross">Crosses</entry>
 	<entry key="bell">Bell of liberty</entry>
 
+	<!-- Declension - 2 case - genitiv - plurar, it's -->
+	<entry key="corn_dc2_pl">Corn</entry>
+	<entry key="sugar_dc2_pl">Sugar cane</entry>
+	<entry key="tobacco_dc2_pl">Tobacco</entry>
+	<entry key="cotton_dc2_pl">Cottons</entry>
+	<entry key="fur_dc2_pl">Furs</entry>
+	<entry key="lumber_dc2_pl">Lumber</entry>
+	<entry key="ore_dc2_pl">Ore</entry>
+	<entry key="silver_dc2_pl">Silvers</entry>
+	<entry key="horse_dc2_pl">Horses</entry>
+	<entry key="rum_dc2_pl">Rum</entry>
+	<entry key="cigars_dc2_pl">Cigars</entry>
+	<entry key="silk_dc2_pl">Silk</entry>
+	<entry key="coat_dc2_pl">Coats</entry>
+	<entry key="goods_dc2_pl">Goods</entry>
+	<entry key="tools_dc2_pl">Tools</entry>
+	<entry key="musket_dc2_pl">Muskets</entry>
+	<entry key="hammers_dc2_pl">Hammers</entry>
+	<entry key="cross_dc2_pl">Crosses</entry>
+	<entry key="bell_dc2_pl">Bells of liberty</entry>
+
 </properties>

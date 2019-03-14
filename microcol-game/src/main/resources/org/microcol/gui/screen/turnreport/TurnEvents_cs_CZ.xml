@@ -17,8 +17,11 @@
 	<entry key="famineWillPlagueColony">Blíží se hladomor ve městě %s. V příštím tahu začnou umírat kolonisté.</entry>
 	<entry key="colonyWasDestroyed">Kolonie %s byla zničena.</entry>
 	<entry key="newUnitIsInEurope">Díky náboženskému neklidu ve starém světě se další kolonista rozhodl zkusit štěstí v novém světě, čeká v evropském přístavu.</entry>
-	<entry key="newUnitIsInColony">V kolonii se objevila nová jednotka.</entry>
+	<entry key="newUnitIsInColony">V kolonii %s se objevila nová jednotka.</entry>
 	<entry key="colonyWasLost">Přišel jsi o kolonii %s.</entry>
-	<entry key="goodsWasThrowsAway">%s zboží %s se muselo vyhodit, protože ve skladu v kolonii %s už není místo.</entry>
+	<entry key="goodsWasThrowsAway1">V kolonii %s došlo místo, proto se muselo %s kusů %s vyhodit.</entry>
+	<entry key="goodsWasThrowsAway2">V kolonii %s došlo místo, proto se musel jeden %s vyhodit.</entry>
+	<entry key="goodsWasThrowsAway3">V kolonii %s došlo místo, proto se musela jedna %s vyhodit.</entry>
+	<entry key="goodsWasThrowsAway4">V kolonii %s došlo místo, proto se muselo jedno %s vyhodit.</entry>
 
 </properties>

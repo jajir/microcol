@@ -34,6 +34,8 @@ Planned releases
   * \u2713 Make game main game setting configurable in UI tests.   
 
   * \u2713 Improve status bar description. Add some easy to understand description of land, colony and units.  
+    
+  * \u2713 Improve turn report about throws away goods. It's not correct Czech sentence.  
   
   * \u2713 When goods is transferred suggest pressing of key 'control' in status bar.
   It should be called "Control (or Ctrl) ⌃". 
@@ -60,23 +62,17 @@ Planned releases
   When colony is open and doesn't contains any ships then no cargo slots should be visible.
   When colony contains at least one ship then first ship should be selected with cargo slots.
   
-  * \u2717 
- 
-  * \u2717 
-  
-  * \u2717 Improve turn report about throws away goods. It's not correct Czech sentence.  
-  
   * \uD83D\uDC1B Turn event that famine will come in colony is not shown.
  
   * \uD83D\uDC1B Focused unit is in colony. Than colony is open and focused unit is placed to field.
   Than colony is closed. Now it's not possible to move any unit in colony, because there is no selected unit.  
   When focused unit is moved to colony field than next unit from colony should be focused. 
  
-  * \uD83D\uDC1B Declare independence button show just when player have some military power and at least three colonies. 
- 
   * \uD83D\uDC1B Action 'plow field' is offered when unit is placed in colony.
  
-  * \uD83D\uDC1B When focus is transfered by click than don't center at focused unit.
+  * \uD83D\uDC1B Declare independence button show just when player have least three colonies and date is after 1700 AD.  
+ 
+  * \uD83D\uDC1B When focus is transfered by tab then screen don't center at focused unit.
  
  * <<Backlog>> - feature and improvement backlog
     

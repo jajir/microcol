@@ -23,7 +23,7 @@ public final class TurnEventProvider {
      * @return turn event object
      */
     public static TurnEvent getShipComeEuropePort(final Player player) {
-        return new SimpleTurnEvent(TurnEvents.shipComeToEuropePort, new Object[0], player);
+        return new TurnEventShipComeToEuropePort(player.getName());
     }
 
     /**
@@ -33,8 +33,8 @@ public final class TurnEventProvider {
      *            required owner of ship
      * @return turn event object
      */
-    public static TurnEvent getShipComeHighSeas(final Player player) {
-        return new SimpleTurnEvent(TurnEvents.shipComeToHighSeas, new Object[0], player);
+    public static TurnEvent getShipComeToHighSeas(final Player player) {
+        return new TurnEventShipComeToHighSeas(player.getName());
     }
 
     /**
@@ -47,8 +47,7 @@ public final class TurnEventProvider {
      * @return turn event object
      */
     public static TurnEvent getFaminePlagueColony(final Player player, final Colony colony) {
-        return new SimpleTurnEvent(TurnEvents.faminePlagueColony, new Object[] { colony.getName() },
-                player);
+        return new TurnEventFaminePlagueColony(player.getName(), colony.getName());
     }
 
     /**
@@ -61,8 +60,7 @@ public final class TurnEventProvider {
      * @return turn event object
      */
     public static TurnEvent getFamineWillPlagueColony(final Player player, final Colony colony) {
-        return new SimpleTurnEvent(TurnEvents.famineWillPlagueColony,
-                new Object[] { colony.getName() }, player);
+        return new TurnEventFamineWillPlagueColony(player.getName(), colony.getName());
     }
 
     /**
@@ -75,8 +73,7 @@ public final class TurnEventProvider {
      * @return turn event object
      */
     public static TurnEvent getColonyWasDestroyed(final Player player, final Colony colony) {
-        return new SimpleTurnEvent(TurnEvents.colonyWasDestroyed, new Object[] { colony.getName() },
-                player);
+        return new TurnEventColonyWasDestroyed(player.getName(), colony.getName());
     }
 
     /**
@@ -90,8 +87,7 @@ public final class TurnEventProvider {
      * @return turn event object
      */
     public static TurnEvent getColonyWasLost(final Player player, final Colony colony) {
-        return new SimpleTurnEvent(TurnEvents.colonyWasLost, new Object[] { colony.getName() },
-                player);
+        return new TurnEventColonyWasLost(player.getName(), colony.getName());
     }
 
     /**
@@ -102,7 +98,7 @@ public final class TurnEventProvider {
      * @return turn event object
      */
     public static TurnEvent getNewUnitInEurope(final Player player) {
-        return new SimpleTurnEvent(TurnEvents.newUnitIsInEurope, new Object[0], player);
+        return new TurnEventNewUnitInEurope(player.getName());
     }
 
     /**
@@ -112,8 +108,8 @@ public final class TurnEventProvider {
      *            required owner of new unit
      * @return turn event object
      */
-    public static TurnEvent getNewUnitInColony(final Player player) {
-        return new SimpleTurnEvent(TurnEvents.newUnitIsInColony, new Object[0], player);
+    public static TurnEvent getNewUnitInColony(final Player player, final Colony colony) {
+        return new TurnEventNewUnitInColony(player.getName(), colony.getName());
     }
 
     /**
@@ -128,8 +124,7 @@ public final class TurnEventProvider {
      */
     public static TurnEvent getGoodsWasThrowsAway(final Player player, final Goods goods,
             final Colony colony) {
-        return new SimpleTurnEvent(TurnEvents.goodsWasThrowsAway,
-                new Object[] { goods.getAmount(), goods.getType(), colony.getName() }, player);
+        return new TurnEventGoodsWasThrownAway(player.getName(), colony.getName(), goods);
     }
 
 }

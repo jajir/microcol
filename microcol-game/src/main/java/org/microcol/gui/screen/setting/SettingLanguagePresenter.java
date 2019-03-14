@@ -12,10 +12,14 @@ public class SettingLanguagePresenter {
     @Inject
     SettingLanguagePresenter(final SettingLanguageView settingLanguageView, final EventBus eventBus,
             final I18n i18n) {
-        settingLanguageView.getRbCzech().setOnAction(actionEvent -> eventBus
-                .post(new ChangeLanguageEvent(Language.cz.getLocale(), i18n)));
-        settingLanguageView.getRbEnglish().setOnAction(actionEvent -> eventBus
-                .post(new ChangeLanguageEvent(Language.en.getLocale(), i18n)));
+        settingLanguageView.getRbCzech().setOnAction(actionEvent -> {
+            i18n.setLocale(Language.cz.getLocale());
+            eventBus.post(new ChangeLanguageEvent(Language.cz));
+        });
+        settingLanguageView.getRbEnglish().setOnAction(actionEvent -> {
+            i18n.setLocale(Language.en.getLocale());
+            eventBus.post(new ChangeLanguageEvent(Language.en));
+        });
     }
 
 }

@@ -2,7 +2,7 @@
   "calendar": {
     "startYear": 1490,
     "endYear": 1800,
-    "numberOfPlayedTurns": 266
+    "numberOfPlayedTurns": 700
   },
   "units": [
     {
@@ -639,7 +639,7 @@
             "y": -1
           },
           "workerId": 0,
-          "producedGoodsType": "TABACCO"
+          "producedGoodsType": "TOBACCO"
         },
         {
           "direction": {
@@ -659,7 +659,7 @@
             "y": 1
           },
           "workerId": 2,
-          "producedGoodsType": "TABACCO"
+          "producedGoodsType": "TOBACCO"
         },
         {
           "direction": {
@@ -667,7 +667,7 @@
             "y": 1
           },
           "workerId": 13,
-          "producedGoodsType": "TABACCO"
+          "producedGoodsType": "TOBACCO"
         },
         {
           "direction": {
@@ -769,7 +769,7 @@
         "RUM": 0,
         "SUGAR": 0,
         "SILK": 0,
-        "TABACCO": 60,
+        "TOBACCO": 60,
         "CORN": 46,
         "CIGARS": 95,
         "BELL": 262,
@@ -803,7 +803,7 @@
             "y": 0
           },
           "workerId": 22,
-          "producedGoodsType": "TABACCO"
+          "producedGoodsType": "TOBACCO"
         },
         {
           "direction": {
@@ -811,7 +811,7 @@
             "y": 1
           },
           "workerId": 21,
-          "producedGoodsType": "TABACCO"
+          "producedGoodsType": "TOBACCO"
         },
         {
           "direction": {
@@ -819,7 +819,7 @@
             "y": 1
           },
           "workerId": 6,
-          "producedGoodsType": "TABACCO"
+          "producedGoodsType": "TOBACCO"
         },
         {
           "direction": {
@@ -921,7 +921,7 @@
         "RUM": 0,
         "SUGAR": 0,
         "SILK": 0,
-        "TABACCO": 54,
+        "TOBACCO": 54,
         "CORN": 196,
         "CIGARS": 95,
         "BELL": 217,
@@ -943,7 +943,7 @@
             "y": -1
           },
           "workerId": 11,
-          "producedGoodsType": "TABACCO"
+          "producedGoodsType": "TOBACCO"
         },
         {
           "direction": {
@@ -951,7 +951,7 @@
             "y": -1
           },
           "workerId": 15,
-          "producedGoodsType": "TABACCO"
+          "producedGoodsType": "TOBACCO"
         },
         {
           "direction": {
@@ -993,7 +993,7 @@
             "y": -1
           },
           "workerId": 9,
-          "producedGoodsType": "TABACCO"
+          "producedGoodsType": "TOBACCO"
         }
       ],
       "constructions": [
@@ -1073,7 +1073,7 @@
         "RUM": 0,
         "SUGAR": 0,
         "SILK": 0,
-        "TABACCO": 30,
+        "TOBACCO": 30,
         "CORN": 134,
         "CIGARS": 84,
         "BELL": 201,
@@ -1113,7 +1113,7 @@
             "y": 1
           },
           "workerId": 30,
-          "producedGoodsType": "TABACCO"
+          "producedGoodsType": "TOBACCO"
         },
         {
           "direction": {
@@ -1121,7 +1121,7 @@
             "y": 1
           },
           "workerId": 29,
-          "producedGoodsType": "TABACCO"
+          "producedGoodsType": "TOBACCO"
         },
         {
           "direction": {
@@ -1145,7 +1145,7 @@
             "y": -1
           },
           "workerId": 31,
-          "producedGoodsType": "TABACCO"
+          "producedGoodsType": "TOBACCO"
         }
       ],
       "constructions": [
@@ -1225,7 +1225,7 @@
         "RUM": 0,
         "SUGAR": 0,
         "SILK": 0,
-        "TABACCO": 0,
+        "TOBACCO": 0,
         "CORN": 140,
         "CIGARS": 94,
         "BELL": 67,

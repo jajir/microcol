@@ -196,10 +196,6 @@ public final class SelectedUnitManager {
         return Optional.ofNullable(selectedUnit);
     }
 
-    public boolean isSelectedUnitMoveable() {
-        return selectedUnit != null && selectedUnit.getActionPoints() > 0;
-    }
-
     @Override
     public String toString() {
         return MoreObjects.toStringHelper(getClass()).add("selectedUnit", selectedUnit).toString();

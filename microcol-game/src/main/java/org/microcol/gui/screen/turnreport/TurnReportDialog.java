@@ -24,13 +24,16 @@ public final class TurnReportDialog extends AbstractMessageWindow
     private final I18n i18n;
 
     private final VBox turnEventsPanel;
+    
+    private final TeService teService;
 
     @Inject
     TurnReportDialog(final ViewUtil viewUtil, final I18n i18n,
-            final GameModelController gameModelController) {
+            final GameModelController gameModelController, final TeService teService) {
         super(viewUtil, i18n);
         this.gameModelController = Preconditions.checkNotNull(gameModelController);
         this.i18n = Preconditions.checkNotNull(i18n);
+        this.teService = Preconditions.checkNotNull(teService);
         setTitle(i18n.get(Loc.turnReport_title));
 
         final Label labelCaption = new Label(i18n.get(Loc.turnReport_caption));
@@ -55,11 +58,8 @@ public final class TurnReportDialog extends AbstractMessageWindow
                 .isTurnEventsMessagesEmpty(gameModelController.getCurrentPlayer())) {
             turnEventsPanel.getChildren().add(new Label(i18n.get(Loc.turnReport_noEvents)));
         } else {
-            gameModelController.getModel()
-                    .getTurnEventsLocalizedMessages(gameModelController.getCurrentPlayer(),
-                            key -> i18n.get(key))
-                    .forEach(turnEvent -> turnEventsPanel.getChildren()
-                            .add(new TurnEventPanel(turnEvent)));
+            teService.getMessages().forEach(turnEvent -> turnEventsPanel.getChildren()
+                    .add(new TurnEventPanel(turnEvent)));
         }
     }
 

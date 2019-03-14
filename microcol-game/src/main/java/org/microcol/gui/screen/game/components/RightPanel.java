@@ -12,7 +12,7 @@ import javafx.scene.layout.Region;
 public class RightPanel implements JavaFxComponent, UpdatableLanguage {
 
     private final RightPanelView rightPanelView;
-    
+
     private final RightPanelPresenter rightPanelPresenter;
 
     @Inject
@@ -30,6 +30,10 @@ public class RightPanel implements JavaFxComponent, UpdatableLanguage {
     @Override
     public Region getContent() {
         return rightPanelView.getContent();
+    }
+
+    public void refresh() {
+        rightPanelPresenter.refresh();
     }
 
 }

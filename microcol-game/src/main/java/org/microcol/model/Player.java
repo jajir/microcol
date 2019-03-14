@@ -19,6 +19,10 @@ import com.google.common.base.Preconditions;
  */
 public class Player {
 
+    public static final int CANT_DECLARE_INDEPENDENCE_BEFORE_YEAR = 1700;
+
+    public static final int REQUIRED_NUMBER_OF_COLONYES = 3;
+
     private final Model model;
 
     private final String name;
@@ -37,7 +41,7 @@ public class Player {
     private final Map<String, Object> extraData = new HashMap<>();
 
     private final Visibility visibility;
-    
+
     private Player(final String name, final boolean computer, final int initialGold,
             final Model model, final boolean declaredIndependence,
             final Player whosKingThisPlayerIs, final Map<String, Object> extraData,
@@ -205,8 +209,8 @@ public class Player {
      * 
      * @param target
      *            required target location
-     * @return return <code>true</code> when it's possible to sail at given location
-     *         otherwise return <code>false</code>.
+     * @return return <code>true</code> when it's possible to sail at given
+     *         location otherwise return <code>false</code>.
      */
     public boolean isPossibleToSailAt(final Location target) {
         final TerrainType t = model.getMap().getTerrainTypeAt(target);
@@ -222,8 +226,9 @@ public class Player {
      * 
      * @param units
      *            required list of units
-     * @return return <code>false</code> when list contains at least one unit which
-     *         not belongs to this player otherwise return <code>true</code>.
+     * @return return <code>false</code> when list contains at least one unit
+     *         which not belongs to this player otherwise return
+     *         <code>true</code>.
      */
     public boolean isItPlayersUnits(final List<Unit> units) {
         return !units.stream().filter(unit -> !unit.getOwner().equals(this)).findAny().isPresent();
@@ -274,11 +279,28 @@ public class Player {
     }
 
     public void declareIndependence() {
-        Preconditions.checkState(!declaredIndependence, "Independence was already declared");
+        Preconditions.checkState(isPossibleToDecalareIndependence(),
+                "It's not possible to declare independence");
         if (model.fireBeforeDeclaringIndependence(this)) {
             declaredIndependence = true;
             model.fireIndependenceWasDeclared(this);
         }
+    }
+
+    public boolean isPossibleToDecalareIndependence() {
+        if (isDeclaredIndependence()) {
+            // Already was declared.
+            return false;
+        }
+        if (model.getCalendar().getCurrentYear() < CANT_DECLARE_INDEPENDENCE_BEFORE_YEAR) {
+            // Too early to declare independence.
+            return false;
+        }
+        if (model.getColonies(this).size() < REQUIRED_NUMBER_OF_COLONYES) {
+            // Not enough colonies.
+            return false;
+        }
+        return true;
     }
 
     /**

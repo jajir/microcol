@@ -84,6 +84,7 @@ public class ScreenGame implements JavaFxComponent, UpdatableLanguage {
 
     @Override
     public Region getContent() {
+        rightPanel.refresh();
         return mainPanel;
     }
 

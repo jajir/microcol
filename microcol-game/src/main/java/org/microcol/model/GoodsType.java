@@ -16,7 +16,7 @@ public final class GoodsType {
     public final static GoodsType SUGAR = GoodsTypeBuilder.make().setName("SUGAR")
             .setCanBeBought(true).build();
 
-    public final static GoodsType TOBACCO = GoodsTypeBuilder.make().setName("TABACCO")
+    public final static GoodsType TOBACCO = GoodsTypeBuilder.make().setName("TOBACCO")
             .setCanBeBought(true).build();
 
     public final static GoodsType COTTON = GoodsTypeBuilder.make().setName("COTTON")
