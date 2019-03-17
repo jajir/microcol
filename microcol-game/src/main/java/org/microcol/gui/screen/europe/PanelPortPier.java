@@ -1,12 +1,13 @@
 package org.microcol.gui.screen.europe;
 
+import static org.microcol.gui.Tile.TILE_WIDTH_IN_PX;
+
 import java.util.Optional;
 
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.image.ImageProvider;
 import org.microcol.gui.screen.game.components.StatusBarMessageEvent;
 import org.microcol.gui.screen.game.components.StatusBarMessageEvent.Source;
-import org.microcol.gui.screen.game.gamepanel.GamePanelView;
 import org.microcol.gui.util.BackgroundHighlighter;
 import org.microcol.gui.util.ClipboardEval;
 import org.microcol.gui.util.From;
@@ -66,7 +67,7 @@ public final class PanelPortPier implements JavaFxComponent, UpdatableLanguage, 
         panelUnits.setOnDragExited(backgroundHighlighter::onDragExited);
         panelUnits.setOnDragOver(this::onDragOver);
         panelUnits.setOnDragDropped(this::onDragDropped);
-        panelUnits.setMinHeight(GamePanelView.TILE_WIDTH_IN_PX);
+        panelUnits.setMinHeight(TILE_WIDTH_IN_PX);
         panelUnits.setOnMouseEntered(this::onMouseEntered);
         panelUnits.setOnMouseExited(this::onMouseExited);
     }

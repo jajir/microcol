@@ -5,7 +5,7 @@ import org.microcol.gui.screen.game.components.ButtonsGamePanel;
 import org.microcol.gui.screen.game.components.RightPanel;
 import org.microcol.gui.screen.game.components.StatusBar;
 import org.microcol.gui.screen.game.components.StatusBarMessageEvent.Source;
-import org.microcol.gui.screen.game.gamepanel.PaneCanvas;
+import org.microcol.gui.screen.game.gamepanel.GamePanelComponent;
 import org.microcol.i18n.I18n;
 
 import com.google.common.base.Preconditions;
@@ -30,6 +30,8 @@ public class ScreenGame implements GameScreen {
 
     private final VBox mainBox;
 
+    private final GamePanelComponent gamePanelComponents;
+
     private final StatusBar statusBar;
 
     private final RightPanel rightPanel;
@@ -38,9 +40,10 @@ public class ScreenGame implements GameScreen {
 
     @Inject
     ScreenGame(final @Named("GamePanel") StatusBar statusBar, final RightPanel rightPanel,
-            final PaneCanvas paneCanvas, final ButtonsGamePanel buttonGamePanel) {
+            final ButtonsGamePanel buttonGamePanel, final GamePanelComponent gamePanelComponents) {
         this.statusBar = Preconditions.checkNotNull(statusBar);
         this.rightPanel = Preconditions.checkNotNull(rightPanel);
+        this.gamePanelComponents = Preconditions.checkNotNull(gamePanelComponents);
         this.statusBar.setShowEventsFromSource(Source.GAME);
 
         final Pane rightPane = new Pane();
@@ -50,7 +53,7 @@ public class ScreenGame implements GameScreen {
 
         final HBox hBox = new HBox();
         hBox.setId("mainBox");
-        hBox.getChildren().add(paneCanvas.getCanvasPane());
+        hBox.getChildren().add(gamePanelComponents.getContent());
         hBox.getChildren().add(rightPanel.getContent());
 
         mainBox = new VBox();
@@ -65,14 +68,23 @@ public class ScreenGame implements GameScreen {
     }
 
     /**
-     * it's called when key is pressed on game screen. Event is send to guice
-     * event bus.
+     * it's called when key is pressed on game screen.
      *
      * @param event
      *            required key event
      */
     void setOnKeyPressed(EventHandler<? super KeyEvent> event) {
         mainPanel.setOnKeyPressed(event);
+    }
+
+    /**
+     * it's called when key is release on game screen.
+     *
+     * @param event
+     *            required key event
+     */
+    void setOnKeyReleased(EventHandler<? super KeyEvent> event) {
+        mainPanel.setOnKeyReleased(event);
     }
 
     @Override
@@ -89,12 +101,12 @@ public class ScreenGame implements GameScreen {
 
     @Override
     public void beforeShow() {
-        // FIXME start stop animation timer
+        gamePanelComponents.beforeShow();
     }
 
     @Override
     public void beforeHide() {
-        // FIXME start stop animation timer
+        gamePanelComponents.beforeHide();
     }
 
 }

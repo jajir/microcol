@@ -5,6 +5,7 @@ import org.microcol.gui.dialog.AboutDialog;
 import org.microcol.gui.dialog.ApplicationController;
 import org.microcol.gui.dialog.ChooseGoodsDialog;
 import org.microcol.gui.dialog.DialogDestroyColony;
+import org.microcol.gui.dialog.DialogFight;
 import org.microcol.gui.dialog.DialogMessage;
 import org.microcol.gui.dialog.MissionGoalsShowListener;
 import org.microcol.gui.dialog.PersistingDialog;
@@ -56,9 +57,8 @@ import org.microcol.gui.screen.game.components.StatusBar;
 import org.microcol.gui.screen.game.gamepanel.AnimationManager;
 import org.microcol.gui.screen.game.gamepanel.ExcludePainting;
 import org.microcol.gui.screen.game.gamepanel.GamePanelController;
-import org.microcol.gui.screen.game.gamepanel.GamePanelKeyListener;
+import org.microcol.gui.screen.game.gamepanel.GamePanelMouseListener;
 import org.microcol.gui.screen.game.gamepanel.GamePanelPresenter;
-import org.microcol.gui.screen.game.gamepanel.GamePanelView;
 import org.microcol.gui.screen.game.gamepanel.MapManager;
 import org.microcol.gui.screen.game.gamepanel.ModeController;
 import org.microcol.gui.screen.game.gamepanel.MouseOverTileListener;
@@ -147,6 +147,7 @@ public final class MicroColModule extends AbstractModule {
          */
         bind(NextTurnListener.class).asEagerSingleton();
         bind(ButtonsGamePanelController.class).asEagerSingleton();
+        bind(DialogFight.class).asEagerSingleton();
 
         /**
          * Dialogs
@@ -190,8 +191,8 @@ public final class MicroColModule extends AbstractModule {
         bind(MainPanelPresenter.class).in(Singleton.class);
 
         // Game panel
-        bind(GamePanelView.class).in(Singleton.class);
         bind(GamePanelPresenter.class).asEagerSingleton();
+        bind(GamePanelMouseListener.class).asEagerSingleton();
         bind(OneTurnMoveHighlighter.class).in(Singleton.class);
         bind(SelectedTileManager.class).in(Singleton.class);
         bind(MoveModeSupport.class).in(Singleton.class);
@@ -236,7 +237,6 @@ public final class MicroColModule extends AbstractModule {
          * Generic screen
          */
         bind(ScreenGamePresenter.class).asEagerSingleton();
-        bind(GamePanelKeyListener.class).asEagerSingleton();
 
         /**
          * Colony dialog

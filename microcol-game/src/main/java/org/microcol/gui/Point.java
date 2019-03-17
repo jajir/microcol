@@ -1,6 +1,7 @@
 package org.microcol.gui;
 
-import org.microcol.gui.screen.game.gamepanel.GamePanelView;
+import static org.microcol.gui.Tile.TILE_WIDTH_IN_PX;
+
 import org.microcol.model.Location;
 
 import com.google.common.base.MoreObjects;
@@ -61,7 +62,7 @@ public final class Point {
     }
 
     public Location toLocation() {
-        final Point p = divide(GamePanelView.TILE_WIDTH_IN_PX).add(Location.MAP_MIN_X,
+        final Point p = divide(TILE_WIDTH_IN_PX).add(Location.MAP_MIN_X,
                 Location.MAP_MIN_Y);
         return Location.of(p.getX(), p.getY());
     }
@@ -73,8 +74,8 @@ public final class Point {
      */
     public Location toLocationCeilUp() {
         final Point p = Point
-                .of((int) Math.ceil(getX() / (float) GamePanelView.TILE_WIDTH_IN_PX),
-                        (int) Math.ceil(getY() / (float) GamePanelView.TILE_WIDTH_IN_PX))
+                .of((int) Math.ceil(getX() / (float) TILE_WIDTH_IN_PX),
+                        (int) Math.ceil(getY() / (float) TILE_WIDTH_IN_PX))
                 .add(Location.MAP_MIN_X, Location.MAP_MIN_Y);
         return Location.of(p.getX(), p.getY());
     }
@@ -88,7 +89,7 @@ public final class Point {
     }
 
     public static Point of(final Location location) {
-        return Point.of(location.getX(), location.getY()).multiply(GamePanelView.TILE_WIDTH_IN_PX);
+        return Point.of(location.getX(), location.getY()).multiply(TILE_WIDTH_IN_PX);
     }
 
     public Point add(final int addX, final int addY) {

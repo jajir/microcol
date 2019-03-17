@@ -283,7 +283,7 @@
             "y": 1
           },
           "workerId": 2,
-          "producedGoodType": "TABACCO"
+          "producedGoodsType": "TOBACCO"
         },
         {
           "direction": {
@@ -291,7 +291,7 @@
             "y": 1
           },
           "workerId": 1,
-          "producedGoodType": "TABACCO"
+          "producedGoodsType": "TOBACCO"
         },
         {
           "direction": {
@@ -299,7 +299,7 @@
             "y": 0
           },
           "workerId": 0,
-          "producedGoodType": "CORN"
+          "producedGoodsType": "CORN"
         },
         {
           "direction": {
@@ -383,7 +383,7 @@
         "RUM": 0,
         "SUGAR": 0,
         "SILK": 0,
-        "TABACCO": 18,
+        "TOBACCO": 18,
         "CORN": 34,
         "HORSE":100,
         "CIGARS": 54,
@@ -431,7 +431,7 @@
             "y": 1
           },
           "workerId": 6,
-          "producedGoodType": "CORN"
+          "producedGoodsType": "CORN"
         },
         {
           "direction": {
@@ -523,7 +523,7 @@
         "RUM": 0,
         "SUGAR": 0,
         "SILK": 0,
-        "TABACCO": 0,
+        "TOBACCO": 0,
         "CORN": 144,
         "CIGARS": 0,
         "BELL": 72,
@@ -545,7 +545,7 @@
             "y": -1
           },
           "workerId": 11,
-          "producedGoodType": "TABACCO"
+          "producedGoodsType": "TOBACCO"
         },
         {
           "direction": {
@@ -577,7 +577,7 @@
             "y": 1
           },
           "workerId": 10,
-          "producedGoodType": "CORN"
+          "producedGoodsType": "CORN"
         },
         {
           "direction": {
@@ -585,7 +585,7 @@
             "y": 0
           },
           "workerId": 7,
-          "producedGoodType": "CORN"
+          "producedGoodsType": "CORN"
         },
         {
           "direction": {
@@ -593,7 +593,7 @@
             "y": -1
           },
           "workerId": 9,
-          "producedGoodType": "TABACCO"
+          "producedGoodsType": "TOBACCO"
         }
       ],
       "constructions": [
@@ -671,8 +671,8 @@
         "RUM": 0,
         "SUGAR": 0,
         "SILK": 0,
-        "TABACCO": 30,
-        "CORN": 206,
+        "TOBACCO": 30,
+        "CORN": 140,
         "CIGARS": 48,
         "BELL": 56,
         "COTTON": 0,
@@ -681,12 +681,6 @@
     }
   ],
   "turnEvents": [
-    {
-      "playerName": "Dutch",
-      "args": [],
-      "messageKey": "turnEvent.shipComeToEuropePort",
-      "solved": false
-    }
   ],
   "map": {
     "tiles": [

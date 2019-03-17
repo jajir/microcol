@@ -14,10 +14,10 @@ import com.google.inject.Inject;
 @Listener
 public final class UnitAttackedEventListener {
     
-    private final GamePanelView gamePanelView;
+    private final GamePanelPainter gamePanelView;
 
     @Inject
-    public UnitAttackedEventListener(final GamePanelView gamePanelView) {
+    public UnitAttackedEventListener(final GamePanelPainter gamePanelView) {
         this.gamePanelView = Preconditions.checkNotNull(gamePanelView);
     }
 

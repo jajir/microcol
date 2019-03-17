@@ -50,7 +50,7 @@ public final class AnimationWalk implements Animation {
         this.unitOrientation = Preconditions.checkNotNull(unitOrientation);
         excludePainting.excludeUnit(unit);
 
-        final Point from = Point.of(0, 0);
+        final Point from = Point.CENTER;
         final Point to = Point.of(Location.of(locationTo.getX() - locationFrom.getX(),
                 locationTo.getY() - locationFrom.getY()));
         partialPath = pathPlanningService.getPathLimitSpeed(from, to);

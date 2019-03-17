@@ -44,12 +44,18 @@ import com.google.common.base.Preconditions;
  */
 public class VisibleArea {
 
+    /**
+     * It helps consider if canvas size is reasonable. When canvas side length
+     * is bigger than this it's not correct size.
+     */
+    public final static int MAX_CANVAS_SIDE_LENGTH = 10000;
+
     private final static int NOT_READY = -1;
 
     /**
      * It's position of top left corner of canvas on game map.
      */
-    private Point topLeft = Point.of(0, 0);
+    private Point topLeft = Point.CENTER;
 
     /**
      * Define canvas width.
@@ -81,7 +87,7 @@ public class VisibleArea {
     public void setMaxMapSize(final WorldMap worldMap) {
         Preconditions.checkNotNull(worldMap);
         maxMapSize = Point.of(Location.of(worldMap.getMaxX(), worldMap.getMaxY()));
-        topLeft = Point.of(0, 0);
+        topLeft = Point.CENTER;
         /**
          * Following code force class to compute correct position of top left
          * corner of map.
@@ -231,9 +237,9 @@ public class VisibleArea {
         final Point delta = newTopLeftScreenCorner.substract(topLeft);
         if (maxMapSize == null) {
             return Point.of(
-                    adjustToLess(delta.getX(), topLeft.getX(), PaneCanvas.MAX_CANVAS_SIDE_LENGTH,
+                    adjustToLess(delta.getX(), topLeft.getX(), MAX_CANVAS_SIDE_LENGTH,
                             canvasWidth),
-                    adjustToLess(delta.getY(), topLeft.getY(), PaneCanvas.MAX_CANVAS_SIDE_LENGTH,
+                    adjustToLess(delta.getY(), topLeft.getY(), MAX_CANVAS_SIDE_LENGTH,
                             canvasHeight));
         } else {
             return Point.of(

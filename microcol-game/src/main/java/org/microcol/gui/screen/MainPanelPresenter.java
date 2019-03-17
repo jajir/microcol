@@ -1,6 +1,5 @@
 package org.microcol.gui.screen;
 
-import org.microcol.gui.WasdController;
 import org.microcol.gui.event.ChangeLanguageEvent;
 import org.microcol.gui.screen.campaign.ScreenCampaign;
 import org.microcol.gui.screen.colony.ScreenColony;
@@ -39,23 +38,17 @@ public final class MainPanelPresenter {
     private GameScreen shownScreen;
 
     @Inject
-    public MainPanelPresenter(final MainPanelView view, final WasdController wasdController,
-            final I18n i18n, final ScreenGame screenGame, final ScreenMenu screenMenu,
+    public MainPanelPresenter(final MainPanelView view, final I18n i18n,
+            final ScreenGame screenGame, final ScreenMenu screenMenu,
             final ScreenCampaign screenCampaign, final ScreenEurope screenEurope,
             final ScreenSetting screenSetting, final ScreenColony screenColony) {
         this.view = Preconditions.checkNotNull(view);
         this.i18n = Preconditions.checkNotNull(i18n);
-        
+
         /*
          * Wasd controlled is used just in game screen. In game screen wasd
          * controlled doesn't obtain key events.
          */
-        view.getContent().setOnKeyPressed(e -> {
-            wasdController.onKeyPressed(e);
-        });
-        view.getContent().setOnKeyReleased(e -> {
-            wasdController.onKeyReleased(e);
-        });
         screenResolver = new ChainOfCommandStrategy<ShowScreenEvent, GameScreen>(
                 Lists.newArrayList(event -> {
                     if (Screen.COLONY == event.getScreen()) {

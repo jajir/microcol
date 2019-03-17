@@ -1,5 +1,7 @@
 package org.microcol.gui.screen.colony;
 
+import static org.microcol.gui.Tile.TILE_SIZE;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -7,7 +9,6 @@ import java.util.Optional;
 
 import org.microcol.gui.Point;
 import org.microcol.gui.Rectangle;
-import org.microcol.gui.screen.game.gamepanel.GamePanelView;
 import org.microcol.model.Location;
 
 import com.google.common.base.MoreObjects;
@@ -23,15 +24,10 @@ public final class ClickableArea {
 
     public ClickableArea() {
         areas = new HashMap<>();
-        final Point square = Point.of(GamePanelView.TILE_WIDTH_IN_PX,
-                GamePanelView.TILE_WIDTH_IN_PX);
-        final Point shift = Point.of(GamePanelView.TILE_WIDTH_IN_PX,
-                GamePanelView.TILE_WIDTH_IN_PX);
-        final Location center = Location.of(0, 0);
-        final List<Location> locs = Lists.newArrayList(center.getNeighbors());
+        final List<Location> locs = Lists.newArrayList(Location.CENTER.getNeighbors());
         locs.forEach(loc -> {
-            final Point p = Point.of(loc).add(shift);
-            Rectangle rect = Rectangle.ofPointAndSize(p, square);
+            final Point p = Point.of(loc).add(TILE_SIZE);
+            Rectangle rect = Rectangle.ofPointAndSize(p, TILE_SIZE);
             areas.put(rect, loc);
         });
     }

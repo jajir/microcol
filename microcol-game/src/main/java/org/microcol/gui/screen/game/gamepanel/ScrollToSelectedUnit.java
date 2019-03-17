@@ -13,10 +13,10 @@ import com.google.inject.Inject;
 @Listener
 public final class ScrollToSelectedUnit {
 
-    private final GamePanelView gamePanelView;
+    private final GamePanelPainter gamePanelView;
 
     @Inject
-    public ScrollToSelectedUnit(final GamePanelView gamePanelView) {
+    public ScrollToSelectedUnit(final GamePanelPainter gamePanelView) {
         this.gamePanelView = Preconditions.checkNotNull(gamePanelView);
     }
 

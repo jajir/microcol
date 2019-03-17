@@ -2,6 +2,7 @@ package org.microcol.gui.background;
 
 import org.microcol.gui.Point;
 import org.microcol.gui.image.ImageProvider;
+import org.microcol.gui.util.CanvasComponent;
 import org.microcol.gui.util.JavaFxComponent;
 import org.microcol.gui.util.Repaintable;
 
@@ -10,7 +11,6 @@ import com.google.inject.Inject;
 
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 
@@ -19,27 +19,21 @@ import javafx.scene.paint.Color;
  */
 public abstract class AbstractBackground implements JavaFxComponent, Repaintable {
 
-    private final Pane mainPanel;
-
-    private final Canvas canvas;
+    private final CanvasComponent canvasComponent;
 
     private final ImageProvider imageProvider;
 
     @Inject
     public AbstractBackground(final ImageProvider imageProvider) {
         this.imageProvider = Preconditions.checkNotNull(imageProvider);
-        mainPanel = new Pane();
-        canvas = new Canvas();
-        mainPanel.getChildren().add(canvas);
-        mainPanel.widthProperty().addListener((old, v1, v2) -> repaint());
-        mainPanel.heightProperty().addListener((old, v1, v2) -> repaint());
-        canvas.widthProperty().bind(mainPanel.widthProperty());
-        canvas.heightProperty().bind(mainPanel.heightProperty());
+        canvasComponent = new CanvasComponent();
+        canvasComponent.getContent().widthProperty().addListener((old, v1, v2) -> repaint());
+        canvasComponent.getContent().heightProperty().addListener((old, v1, v2) -> repaint());
     }
 
     @Override
     public void repaint() {
-        final GraphicsContext gc = canvas.getGraphicsContext2D();
+        final GraphicsContext gc = canvasComponent.getCanvas().getGraphicsContext2D();
         paint(gc);
     }
 
@@ -57,14 +51,14 @@ public abstract class AbstractBackground implements JavaFxComponent, Repaintable
 
     @Override
     public Region getContent() {
-        return mainPanel;
+        return canvasComponent.getContent();
     }
 
     /**
      * @return the canvas
      */
     protected Canvas getCanvas() {
-        return canvas;
+        return canvasComponent.getCanvas();
     }
 
     /**

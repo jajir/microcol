@@ -17,8 +17,6 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 
-//FIXME main screen schedule animation with new scheduler.
-//FIXME right panel rewrite with run later.
 public class GameMenuBackground extends AbstractAnimatedBackground {
 
     private final static String IMG_TOP = "sunset-top-line.png";
@@ -81,6 +79,16 @@ public class GameMenuBackground extends AbstractAnimatedBackground {
         final Point size = Point.of(480, 270).divide(2).divide(3);
         final Point p = diff.add(moving.getNext(), -20);
         gc.drawImage(bird, p.getX(), p.getY(), size.getX(), size.getY());
+    }
+
+    @Override
+    public void beforeHide() {
+        super.beforeHide();
+    }
+
+    @Override
+    public void beforeShow() {
+        super.beforeShow();
     }
 
 }

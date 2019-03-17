@@ -1,36 +1,25 @@
-package org.microcol.gui.screen.game.gamepanel;
+package org.microcol.gui.util;
 
 import com.google.inject.Inject;
-import com.google.inject.Singleton;
 
 import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.Region;
 
 /**
  * Composed component from Pane and canvas. It insert resizable canvas into
  * pane. When pane change size than canvas size is accordingly adjusted. It's
  * necessary because canvas can't be sized in css.
- * <p>
- * Component support onReady method which allows to do some graphical work just
- * when component is read to show some content.
- * </p>
  */
-@Singleton
-public final class PaneCanvas {
-
-    /**
-     * It helps consider if canvas size is reasonable. When canvas side length
-     * is bigger than this it's not correct size.
-     */
-    public final static int MAX_CANVAS_SIDE_LENGTH = 10000;
+public final class CanvasComponent implements JavaFxComponent {
 
     private final Pane canvasPane;
 
     private final Canvas canvas;
 
     @Inject
-    public PaneCanvas() {
+    public CanvasComponent() {
         canvas = new Canvas();
 
         canvasPane = new Pane();
@@ -62,6 +51,11 @@ public final class PaneCanvas {
      */
     public Canvas getCanvas() {
         return canvas;
+    }
+
+    @Override
+    public Region getContent() {
+        return canvasPane;
     }
 
 }

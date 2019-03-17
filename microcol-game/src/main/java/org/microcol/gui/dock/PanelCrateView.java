@@ -1,7 +1,8 @@
 package org.microcol.gui.dock;
 
+import static org.microcol.gui.Tile.TILE_WIDTH_IN_PX;
+
 import org.microcol.gui.image.ImageProvider;
-import org.microcol.gui.screen.game.gamepanel.GamePanelView;
 import org.microcol.gui.util.JavaFxComponent;
 import org.microcol.model.CargoSlot;
 import org.microcol.model.Goods;
@@ -40,14 +41,14 @@ public class PanelCrateView implements JavaFxComponent {
 
         crateImage = new ImageView();
         crateImage.getStyleClass().add("crate");
-        crateImage.setFitWidth(GamePanelView.TILE_WIDTH_IN_PX);
-        crateImage.setFitHeight(GamePanelView.TILE_WIDTH_IN_PX);
+        crateImage.setFitWidth(TILE_WIDTH_IN_PX);
+        crateImage.setFitHeight(TILE_WIDTH_IN_PX);
         crateImage.setPreserveRatio(true);
 
         cargoImage = new ImageView();
         cargoImage.getStyleClass().add("cargo");
-        cargoImage.setFitWidth(GamePanelView.TILE_WIDTH_IN_PX);
-        cargoImage.setFitHeight(GamePanelView.TILE_WIDTH_IN_PX);
+        cargoImage.setFitWidth(TILE_WIDTH_IN_PX);
+        cargoImage.setFitHeight(TILE_WIDTH_IN_PX);
         cargoImage.setPreserveRatio(true);
 
         labelAmount = new Label(" ");

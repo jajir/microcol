@@ -14,7 +14,6 @@ import com.google.common.base.Preconditions;
 import com.google.common.eventbus.EventBus;
 import com.google.inject.Inject;
 
-import javafx.application.Platform;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
@@ -52,26 +51,22 @@ public final class UnitsPanel {
     }
 
     public void clear() {
-        Platform.runLater(() -> {
-            box.getChildren().clear();
-        });
+        box.getChildren().clear();
     }
 
     public void setUnits(final Player humanPlayer, final List<Unit> units) {
-        Platform.runLater(() -> {
-            for (final Unit unit : units) {
-                final boolean selected = selectedUnitManager.getSelectedUnit().isPresent()
-                        && selectedUnitManager.getSelectedUnit().get().equals(unit);
-                final UnitPanel unitPanel = new UnitPanel(imageProvider, i18n, localizationHelper,
-                        humanPlayer, unit, selected);
-                box.getChildren().add(unitPanel.getBox());
-                unitPanel.setOnMouseClicked(event -> {
-                    selectedUnitManager.setSelectedUnit(unit);
-                });
-            }
-            box.getChildren().add(new Label(""));
-            box.getStylesheets().add(MainStageBuilder.STYLE_SHEET_RIGHT_PANEL_VIEW);
-        });
+        for (final Unit unit : units) {
+            final boolean selected = selectedUnitManager.getSelectedUnit().isPresent()
+                    && selectedUnitManager.getSelectedUnit().get().equals(unit);
+            final UnitPanel unitPanel = new UnitPanel(imageProvider, i18n, localizationHelper,
+                    humanPlayer, unit, selected);
+            box.getChildren().add(unitPanel.getBox());
+            unitPanel.setOnMouseClicked(event -> {
+                selectedUnitManager.setSelectedUnit(unit);
+            });
+        }
+        box.getChildren().add(new Label(""));
+        box.getStylesheets().add(MainStageBuilder.STYLE_SHEET_RIGHT_PANEL_VIEW);
     }
 
     public Node getNode() {

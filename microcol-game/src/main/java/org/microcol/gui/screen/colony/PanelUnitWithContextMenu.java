@@ -1,7 +1,8 @@
 package org.microcol.gui.screen.colony;
 
+import static org.microcol.gui.Tile.TILE_WIDTH_IN_PX;
+
 import org.microcol.gui.image.ImageProvider;
-import org.microcol.gui.screen.game.gamepanel.GamePanelView;
 import org.microcol.gui.util.ClipboardWritter;
 import org.microcol.gui.util.JavaFxComponent;
 import org.microcol.gui.util.Repaintable;
@@ -45,7 +46,7 @@ public class PanelUnitWithContextMenu implements JavaFxComponent, Repaintable {
         this.colony = Preconditions.checkNotNull(colony);
         this.colonyDialogCallbback = Preconditions.checkNotNull(colonyDialog);
 
-        canvas = new Canvas(GamePanelView.TILE_WIDTH_IN_PX, GamePanelView.TILE_WIDTH_IN_PX);
+        canvas = new Canvas(TILE_WIDTH_IN_PX, TILE_WIDTH_IN_PX);
         repaint();
         mainPane = new Pane(canvas);
         mainPane.getStyleClass().add(UNIT_AT_PIER_STYLE);

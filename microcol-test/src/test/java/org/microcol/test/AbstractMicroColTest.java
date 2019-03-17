@@ -6,10 +6,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.microcol.MicroCol;
-import org.microcol.gui.Point;
 import org.microcol.gui.preferences.GamePreferences;
 import org.microcol.gui.screen.game.gamepanel.CursorService;
-import org.microcol.gui.screen.game.gamepanel.GamePanelView;
 import org.microcol.mock.CursorServiceNoOpp;
 import org.microcol.model.CargoSlot;
 import org.microcol.model.Goods;
@@ -29,9 +27,6 @@ import javafx.stage.Stage;
 
 public abstract class AbstractMicroColTest {
 
-    protected final static Point TILE_CENTER = Point.of(GamePanelView.TILE_WIDTH_IN_PX, GamePanelView.TILE_WIDTH_IN_PX)
-	    .divide(2);
-
     private final Logger logger = LoggerFactory.getLogger(AbstractMicroColTest.class);
 
     private TestContext context;
@@ -46,10 +41,10 @@ public abstract class AbstractMicroColTest {
     }
 
     @BeforeEach
-    void beforeEachTest(final FxRobot robot) {
+    void beforeEach(final FxRobot robot) {
 	getContext().setRobot(robot);
     }
-
+    
     /**
      * Method that initialize MicroCol game.
      * 

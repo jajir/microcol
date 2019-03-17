@@ -3,20 +3,11 @@ package org.microcol.gui.screen.game.gamepanel;
 import java.util.List;
 import java.util.Optional;
 
-import org.microcol.gui.Point;
 import org.microcol.gui.dialog.DialogColonyWasCaptured;
 import org.microcol.gui.dialog.DialogUnitCantFightWarning;
 import org.microcol.gui.dialog.DialogUnitCantMoveHere;
-import org.microcol.gui.event.AboutGameEvent;
-import org.microcol.gui.event.BuildColonyEvent;
 import org.microcol.gui.event.CenterViewEvent;
 import org.microcol.gui.event.EndMoveEvent;
-import org.microcol.gui.event.PlowFieldEvent;
-import org.microcol.gui.event.QuitGameEvent;
-import org.microcol.gui.event.SelectNextUnitEvent;
-import org.microcol.gui.event.ShowGoalsEvent;
-import org.microcol.gui.event.ShowStatisticsEvent;
-import org.microcol.gui.event.ShowTurnReportEvent;
 import org.microcol.gui.event.StartMoveEvent;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.preferences.GamePreferences;
@@ -41,10 +32,6 @@ import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import com.google.inject.Inject;
 
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
-
 @Listener
 public final class GamePanelPresenter {
 
@@ -54,9 +41,7 @@ public final class GamePanelPresenter {
 
     private final GameModelController gameModelController;
 
-    private final GamePanelView gamePanelView;
-
-    private Optional<Point> lastMousePosition = Optional.empty();
+    private final GamePanelPainter gamePanelView;
 
     private final SelectedTileManager selectedTileManager;
 
@@ -70,128 +55,44 @@ public final class GamePanelPresenter {
 
     private final DialogColonyWasCaptured dialogColonyWasCaptured;
 
-    private final MouseOverTileManager mouseOverTileManager;
-
     private final ModeController modeController;
 
     private final VisibleArea visibleArea;
 
-    private final GamePanelController gamePanelController;
-
     private final UnitUtil unitUtil;
+
+    private final MoveModeController moveModeController;
 
     private final OneTurnMoveHighlighter oneTurnMoveHighlighter;
 
     @Inject
-    public GamePanelPresenter(final GamePanelView gamePanelView,
+    public GamePanelPresenter(final GamePanelPainter gamePanelPainter,
             final DialogColonyWasCaptured dialogColonyWasCaptured,
             final GameModelController gameModelController, final GamePreferences gamePreferences,
             final SelectedTileManager selectedTileManager, final ViewUtil viewUtil,
-            final EventBus eventBus, final MouseOverTileManager mouseOverTileManager,
-            final ModeController modeController, final SelectedUnitManager selectedUnitManager,
-            final I18n i18n, final GamePanelController gamePanelController,
-            final VisibleArea visibleArea, final PaneCanvas paneCanvas,
-            final OneTurnMoveHighlighter oneTurnMoveHighlighter, final UnitUtil unitUtil) {
+            final EventBus eventBus, final ModeController modeController,
+            final SelectedUnitManager selectedUnitManager, final I18n i18n,
+            final VisibleArea visibleArea, final OneTurnMoveHighlighter oneTurnMoveHighlighter,
+            final UnitUtil unitUtil, final MoveModeController moveModeController) {
         this.gameModelController = Preconditions.checkNotNull(gameModelController);
         this.gamePreferences = gamePreferences;
-        this.gamePanelView = Preconditions.checkNotNull(gamePanelView);
+        this.gamePanelView = Preconditions.checkNotNull(gamePanelPainter);
         this.dialogColonyWasCaptured = Preconditions.checkNotNull(dialogColonyWasCaptured);
         this.selectedTileManager = Preconditions.checkNotNull(selectedTileManager);
         this.viewUtil = Preconditions.checkNotNull(viewUtil);
         this.eventBus = Preconditions.checkNotNull(eventBus);
         this.i18n = Preconditions.checkNotNull(i18n);
-        this.mouseOverTileManager = Preconditions.checkNotNull(mouseOverTileManager);
         this.modeController = Preconditions.checkNotNull(modeController);
         this.selectedUnitManager = Preconditions.checkNotNull(selectedUnitManager);
-        this.gamePanelController = Preconditions.checkNotNull(gamePanelController);
         this.visibleArea = Preconditions.checkNotNull(visibleArea);
         this.oneTurnMoveHighlighter = Preconditions.checkNotNull(oneTurnMoveHighlighter);
         this.unitUtil = Preconditions.checkNotNull(unitUtil);
-
-        paneCanvas.getCanvas().setOnMousePressed(e -> {
-            if (gamePanelController.isMouseEnabled() && !gamePanelController.isUnitMoving()) {
-                onMousePressed(e);
-            }
-        });
-        paneCanvas.getCanvas().setOnMouseReleased(e -> {
-            if (gamePanelController.isMouseEnabled() && !gamePanelController.isUnitMoving()) {
-                onMouseReleased();
-            }
-        });
-        paneCanvas.getCanvas().setOnMouseMoved(e -> {
-            if (gamePanelController.isMouseEnabled() && !gamePanelController.isUnitMoving()) {
-                onMouseMoved(e);
-            }
-            lastMousePosition = Optional.of(Point.of(e.getX(), e.getY()));
-        });
-        paneCanvas.getCanvas().setOnMouseDragged(e -> {
-            if (gamePanelController.isMouseEnabled()) {
-                onMouseDragged(e);
-                lastMousePosition = Optional.of(Point.of(e.getX(), e.getY()));
-            }
-        });
+        this.moveModeController = Preconditions.checkNotNull(moveModeController);
     }
 
     @Subscribe
     private void onStartMove(@SuppressWarnings("unused") final StartMoveEvent event) {
         swithToMoveMode();
-    }
-
-    @Subscribe
-    private void onKeyEvent(final KeyEvent event) {
-        /**
-         * Escape
-         */
-        if (KeyCode.ESCAPE == event.getCode()) {
-            onKeyPressed_escape();
-        }
-        /**
-         * Enter
-         */
-        if (KeyCode.ENTER == event.getCode()) {
-            onKeyPressed_enter();
-        }
-
-        if (KeyCode.R == event.getCode()) {
-            eventBus.post(new ShowStatisticsEvent());
-        }
-        if (KeyCode.C == event.getCode()) {
-            eventBus.post(new CenterViewEvent());
-        }
-        if (KeyCode.T == event.getCode()) {
-            eventBus.post(new ShowTurnReportEvent());
-        }
-        if (KeyCode.G == event.getCode()) {
-            eventBus.post(new ShowGoalsEvent());
-        }
-        if (KeyCode.H == event.getCode()) {
-            eventBus.post(new AboutGameEvent());
-        }
-        if (KeyCode.E == event.getCode()) {
-            eventBus.post(new ShowScreenEvent(Screen.EUROPE));
-        }
-        if (KeyCode.M == event.getCode()) {
-            eventBus.post(new StartMoveEvent());
-        }
-        if (KeyCode.P == event.getCode()) {
-            eventBus.post(new PlowFieldEvent());
-        }
-        if (KeyCode.B == event.getCode()) {
-            eventBus.post(new BuildColonyEvent());
-        }
-
-        if (KeyCode.TAB == event.getCode()) {
-            eventBus.post(new SelectNextUnitEvent());
-        }
-        
-        //FIXME add wasd here.
-        logger.debug("Pressed key: '" + event.getCode().getName() + "' has code '"
-                + event.getCharacter() + "', modifiers '" + event.getCode().isModifierKey() + "'");
-    }
-
-    @Subscribe
-    private void onQuitGame(@SuppressWarnings("unused") final QuitGameEvent event) {
-        gamePanelView.stopTimer();
     }
 
     @Subscribe
@@ -220,19 +121,7 @@ public final class GamePanelPresenter {
         });
     }
 
-    private boolean tryToSwitchToMoveMode(final Location currentLocation) {
-        Preconditions.checkNotNull(currentLocation);
-        final List<Unit> availableUnits = gameModelController.getModel()
-                .getMoveableUnitAtOwnedBy(currentLocation, gameModelController.getCurrentPlayer());
-        if (availableUnits.isEmpty()) {
-            return false;
-        } else {
-            eventBus.post(new StartMoveEvent());
-            return true;
-        }
-    }
-    
-    private void tryToOpenColonyDetail(final Location currentLocation) {
+    public void tryToOpenColonyDetail(final Location currentLocation) {
         Preconditions.checkNotNull(currentLocation);
         final Optional<Colony> oColony = gameModelController.getCurrentPlayer()
                 .getColoniesAt(currentLocation);
@@ -252,76 +141,7 @@ public final class GamePanelPresenter {
         final Unit unit = selectedUnitManager.getSelectedUnit().get();
         oneTurnMoveHighlighter.setLocations(unit.getAvailableLocations());
         logger.debug("Switching '" + unit + "' to go mode.");
-        gamePanelView.setMoveModeOn();
-    }
-
-    private void onKeyPressed_escape() {
-        if (modeController.isMoveMode()) {
-            Preconditions.checkArgument(modeController.isMoveMode(),
-                    "switch to move mode was called from move mode");
-            final Unit movingUnit = selectedUnitManager.getSelectedUnit().get();
-            disableMoveMode(movingUnit);
-        }
-    }
-
-    private void onKeyPressed_enter() {
-        if (modeController.isMoveMode()) {
-            switchToNormalMode(mouseOverTileManager.getMouseOverTile().get());
-        }
-    }
-
-    private void onMousePressed(final MouseEvent e) {
-        final Point pressedAt = Point.of(e.getX(), e.getY());
-        final Location location = gamePanelView.getArea().convertToLocation(pressedAt);
-        if (gameModelController.getModel().getMap().isValid(location)) {
-            logger.debug("location of mouse: " + location);
-            if (modeController.isMoveMode()) {
-                switchToNormalMode(location);
-            } else {
-                if (e.isPrimaryButtonDown()) {
-                    if (e.isControlDown() || e.isAltDown()) {
-                        selectedTileManager.setSelectedTile(location,
-                                ScrollToFocusedTile.smoothScroll);
-                    } else {
-                        selectedTileManager.setSelectedTile(location, ScrollToFocusedTile.no);
-                    }
-                    if (!tryToSwitchToMoveMode(location)) {
-                        tryToOpenColonyDetail(location);
-                    }
-                }
-            }
-        } else {
-            logger.debug("invalid mouse location: " + location);
-        }
-    }
-
-    private void onMouseReleased() {
-        if (modeController.isMoveMode() && lastMousePosition.isPresent()) {
-            final Location loc = gamePanelView.getArea().convertToLocation(lastMousePosition.get());
-            switchToNormalMode(loc);
-        }
-
-    }
-
-    private void onMouseDragged(final MouseEvent e) {
-        if (lastMousePosition.isPresent()) {
-            if (e.isSecondaryButtonDown()) {
-                final Point currentPosition = Point.of(e.getX(), e.getY());
-                final Point delta = lastMousePosition.get().substract(currentPosition);
-                visibleArea.addDeltaToTopLeftPoint(delta);
-            }
-            if (modeController.isMoveMode() && !gamePanelController.isUnitMoving()) {
-                final Point currentPosition = Point.of(e.getX(), e.getY());
-                final Location loc = gamePanelView.getArea().convertToLocation(currentPosition);
-                mouseOverTileManager.setMouseOverTile(loc);
-            }
-        }
-    }
-
-    private void onMouseMoved(final MouseEvent e) {
-        final Point currentPosition = Point.of(e.getX(), e.getY());
-        final Location loc = gamePanelView.getArea().convertToLocation(currentPosition);
-        mouseOverTileManager.setMouseOverTile(loc);
+        moveModeController.setMoveModeOn();
     }
 
     /**
@@ -330,7 +150,7 @@ public final class GamePanelPresenter {
      * @param moveToLocation
      *            required target location
      */
-    private void switchToNormalMode(final Location moveToLocation) {
+    public void switchToNormalMode(final Location moveToLocation) {
         Preconditions.checkArgument(modeController.isMoveMode(),
                 "switch to move mode was called from move mode");
         final Location moveFromLocation = selectedTileManager.getSelectedTile().get();
@@ -389,8 +209,8 @@ public final class GamePanelPresenter {
         disableMoveMode(movingUnit);
     }
 
-    private void disableMoveMode(final Unit movingUnit) {
-        gamePanelView.setMoveModeOff();
+    public void disableMoveMode(final Unit movingUnit) {
+        moveModeController.setMoveModeOff();
         eventBus.post(new EndMoveEvent(movingUnit));
     }
 

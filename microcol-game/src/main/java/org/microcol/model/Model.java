@@ -10,7 +10,6 @@ import java.util.function.Function;
 import org.microcol.gui.MicroColException;
 import org.microcol.model.store.ColonyPo;
 import org.microcol.model.store.ModelPo;
-import org.microcol.model.store.PlayerPo;
 import org.microcol.model.store.QueueItemType;
 import org.microcol.model.store.UnitPo;
 import org.microcol.model.turnevent.TurnEvent;
@@ -182,7 +181,6 @@ public class Model {
     }
 
     public void buildColony(final Player player, final Unit unit) {
-        // TODO move as static factory to Colony class
         Preconditions.checkNotNull(player);
         Preconditions.checkNotNull(unit);
         Preconditions.checkArgument(unit.isAtPlaceLocation(), "Unit (%s) have to be on map", unit);
@@ -423,20 +421,13 @@ public class Model {
         map.save(out);
         unitStorage.save(out);
         out.setCalendar(calendar.save());
-        // TODO move to same method to game manager
-        out.getGameManager().setPlayers(getSavePlayers());
-        out.getGameManager().setGameStarted(gameManager.isStarted());
-        out.getGameManager().setCurrentPlayer(gameManager.getCurrentPlayer().getName());
+        gameManager.save(out);
+        playerStore.save(out);
         out.setColonies(getSaveColonies());
         out.setFocusedField(focusedField);
         out.setTurnEvents(turnEventStore.save());
         out.setStatistics(statistics.save());
         return out;
-    }
-
-    private List<PlayerPo> getSavePlayers() {
-        return playerStore.getPlayers().stream().map(player -> player.save())
-                .collect(ImmutableList.toImmutableList());
     }
 
     private List<ColonyPo> getSaveColonies() {

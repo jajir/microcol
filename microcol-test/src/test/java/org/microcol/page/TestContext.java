@@ -3,7 +3,7 @@ package org.microcol.page;
 import org.microcol.MicroCol;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.screen.game.gamepanel.Area;
-import org.microcol.gui.screen.game.gamepanel.GamePanelView;
+import org.microcol.gui.screen.game.gamepanel.GamePanelPainter;
 import org.microcol.model.Model;
 import org.testfx.api.FxRobot;
 
@@ -47,7 +47,7 @@ public class TestContext {
     }
 
     public Area getArea() {
-	final GamePanelView gamePanelView = getClassFromGuice(GamePanelView.class);
+	final GamePanelPainter gamePanelView = getClassFromGuice(GamePanelPainter.class);
 	return gamePanelView.getArea();
     }
 

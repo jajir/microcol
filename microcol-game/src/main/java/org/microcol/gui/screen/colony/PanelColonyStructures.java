@@ -1,5 +1,7 @@
 package org.microcol.gui.screen.colony;
 
+import static org.microcol.gui.Tile.TILE_WIDTH_IN_PX;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -14,7 +16,6 @@ import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.image.ImageProvider;
 import org.microcol.gui.screen.game.components.StatusBarMessageEvent;
 import org.microcol.gui.screen.game.components.StatusBarMessageEvent.Source;
-import org.microcol.gui.screen.game.gamepanel.GamePanelView;
 import org.microcol.gui.util.ClipboardEval;
 import org.microcol.gui.util.ClipboardWritter;
 import org.microcol.gui.util.JavaFxComponent;
@@ -81,13 +82,13 @@ public final class PanelColonyStructures implements JavaFxComponent {
 
     private final static int SLOT_POSITION_SLOT_GAP = -10;
 
-    private final static int SLOT_POSITION_WIDTH = GamePanelView.TILE_WIDTH_IN_PX
+    private final static int SLOT_POSITION_WIDTH = TILE_WIDTH_IN_PX
             + SLOT_POSITION_SLOT_GAP;
 
-    private final static Point SLOT_SIZE = Point.of(GamePanelView.TILE_WIDTH_IN_PX,
-            GamePanelView.TILE_WIDTH_IN_PX);
+    private final static Point SLOT_SIZE = Point.of(TILE_WIDTH_IN_PX,
+            TILE_WIDTH_IN_PX);
 
-    private final static int SLOT_POSITION_TOTAL_WIDTH = 3 * GamePanelView.TILE_WIDTH_IN_PX
+    private final static int SLOT_POSITION_TOTAL_WIDTH = 3 * TILE_WIDTH_IN_PX
             + 2 * SLOT_POSITION_SLOT_GAP;
 
     private final static int SLOT_POSITION_START = -SLOT_POSITION_TOTAL_WIDTH / 2 + 50;

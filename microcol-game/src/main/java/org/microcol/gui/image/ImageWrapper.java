@@ -1,6 +1,6 @@
 package org.microcol.gui.image;
 
-import org.microcol.gui.screen.game.gamepanel.GamePanelView;
+import static org.microcol.gui.Tile.TILE_WIDTH_IN_PX;
 
 import com.google.common.base.Preconditions;
 
@@ -29,7 +29,7 @@ public final class ImageWrapper {
     public ImageWrapper getImageReverseRows() {
         return getImageTransform(this, (pixelWriter, pixelReader, x, y) -> {
             final Color color = pixelReader.getColor(x, y);
-            pixelWriter.setColor(GamePanelView.TILE_WIDTH_IN_PX - x - 1, y, color);
+            pixelWriter.setColor(TILE_WIDTH_IN_PX - x - 1, y, color);
         });
     }
 
@@ -45,12 +45,11 @@ public final class ImageWrapper {
         PixelReader pixelReaderB = wrapper.get().getPixelReader();
 
         // process from source to destination pixel by pixel
-        WritableImage writableImage = new WritableImage(GamePanelView.TILE_WIDTH_IN_PX,
-                GamePanelView.TILE_WIDTH_IN_PX);
+        WritableImage writableImage = new WritableImage(TILE_WIDTH_IN_PX, TILE_WIDTH_IN_PX);
         PixelWriter pixelWriter = writableImage.getPixelWriter();
 
-        for (int y = 0; y < GamePanelView.TILE_WIDTH_IN_PX; y++) {
-            for (int x = 0; x < GamePanelView.TILE_WIDTH_IN_PX; x++) {
+        for (int y = 0; y < TILE_WIDTH_IN_PX; y++) {
+            for (int x = 0; x < TILE_WIDTH_IN_PX; x++) {
                 final Color colorA = pixelReaderA.getColor(x, y);
                 final Color colorB = pixelReaderB.getColor(x, y);
                 if (colorA.getOpacity() < colorB.getOpacity()) {
@@ -68,8 +67,8 @@ public final class ImageWrapper {
             final Tranform tranform) {
         PixelReader pixelReader = tileWrapper.get().getPixelReader();
 
-        int width = GamePanelView.TILE_WIDTH_IN_PX;
-        int height = GamePanelView.TILE_WIDTH_IN_PX;
+        int width = TILE_WIDTH_IN_PX;
+        int height = TILE_WIDTH_IN_PX;
 
         // process from source to destination pixel by pixel
         WritableImage writableImage = new WritableImage(width, height);

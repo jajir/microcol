@@ -1,11 +1,12 @@
 package org.microcol.gui.screen.colony;
 
+import static org.microcol.gui.Tile.TILE_WIDTH_IN_PX;
+
 import java.util.Optional;
 
 import org.microcol.gui.Point;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.image.ImageProvider;
-import org.microcol.gui.screen.game.gamepanel.GamePanelView;
 import org.microcol.gui.util.ClipboardEval;
 import org.microcol.gui.util.ClipboardWritter;
 import org.microcol.gui.util.JavaFxComponent;
@@ -72,7 +73,7 @@ public final class PanelColonyFields implements JavaFxComponent {
         this.gameModelController = Preconditions.checkNotNull(gameModelController);
         this.colonyDialog = Preconditions.checkNotNull(colonyDialog);
         this.paintService = Preconditions.checkNotNull(paintService);
-        final int size = 3 * GamePanelView.TILE_WIDTH_IN_PX;
+        final int size = 3 * TILE_WIDTH_IN_PX;
 
         canvas = new Canvas(size, size);
         canvas.setOnDragOver(this::onDragOver);
@@ -192,8 +193,7 @@ public final class PanelColonyFields implements JavaFxComponent {
 
     private void paint(final GraphicsContext gc) {
         colony.getColonyFields().forEach(colonyField -> paintColonyField(gc, colonyField));
-        final Point colonyPoint = Point.of(GamePanelView.TILE_WIDTH_IN_PX,
-                GamePanelView.TILE_WIDTH_IN_PX);
+        final Point colonyPoint = Point.of(TILE_WIDTH_IN_PX, TILE_WIDTH_IN_PX);
         paintService.paintTerrainOnTile(gc, colonyPoint, colony.getLocation(),
                 gameModelController.getModel().getMap().getTerrainAt(colony.getLocation()), false);
         paintService.paintColony(gc, colonyPoint, colony, false);
@@ -201,14 +201,13 @@ public final class PanelColonyFields implements JavaFxComponent {
 
     private void paintColonyField(final GraphicsContext gc, final ColonyField colonyField) {
         final Terrain terrain = colonyField.getTerrain();
-        final Point centre = Point.of(1, 1).multiply(GamePanelView.TILE_WIDTH_IN_PX);
+        final Point centre = Point.of(1, 1).multiply(TILE_WIDTH_IN_PX);
         final Point point = Point.of(colonyField.getDirection().getVector()).add(centre);
         paintService.paintTerrainOnTile(gc, point, colonyField.getLocation(), terrain, false);
         if (!colonyField.isEmpty()) {
             final Goods production = colonyField.getProduction().get();
             final Unit unit = colonyField.getUnit().get();
-            gc.drawImage(imageProvider.getUnitImage(unit), point.getX(),
-                    point.getY());
+            gc.drawImage(imageProvider.getUnitImage(unit), point.getX(), point.getY());
             gc.drawImage(imageProvider.getGoodsTypeImage(production.getType()), point.getX(),
                     point.getY(), 25, 25);
             gc.setTextAlign(TextAlignment.CENTER);

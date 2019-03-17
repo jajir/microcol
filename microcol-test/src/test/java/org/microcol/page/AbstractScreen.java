@@ -7,8 +7,6 @@ import java.util.List;
 import java.util.Set;
 
 import org.microcol.MicroCol;
-import org.microcol.gui.Point;
-import org.microcol.gui.screen.game.gamepanel.GamePanelView;
 import org.microcol.model.Model;
 import org.testfx.api.FxAssert;
 import org.testfx.api.FxRobot;
@@ -23,9 +21,6 @@ import javafx.scene.control.Labeled;
 import javafx.stage.Stage;
 
 public abstract class AbstractScreen {
-
-    protected final static Point TILE_CENTER = Point.of(GamePanelView.TILE_WIDTH_IN_PX, GamePanelView.TILE_WIDTH_IN_PX)
-	    .divide(2);
 
     private final TestContext context;
 

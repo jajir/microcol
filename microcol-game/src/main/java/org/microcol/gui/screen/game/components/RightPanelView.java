@@ -102,7 +102,14 @@ public final class RightPanelView implements JavaFxComponent {
 
         // Y=4
     }
-    // FIXME change view in JavaFX thread. Platform.runLater
+
+    void cleanView() {
+        Platform.runLater(() -> {
+            unitsPanel.clear();
+            tileName.setText("");
+        });
+        tileImage.clear();
+    }
 
     public void refreshView(final TileWasSelectedEvent event) {
         if (event != null) {
@@ -110,46 +117,49 @@ public final class RightPanelView implements JavaFxComponent {
         }
     }
 
-    void cleanView() {
-        unitsPanel.clear();
-        tileName.setText("");
-        tileImage.clear();
-    }
-
     public void refreshView(final Location location) {
         Preconditions.checkNotNull(location);
-        StringBuilder sb = new StringBuilder(200);
-        unitsPanel.clear();
-        if (isDiscovered(location)) {
-            tileImage.setTerrain(getTerrainAt(location), location);
-            sb.append(localizationHelper.getTerrainName(getTerrainTypeAt(location)));
-            sb.append("");
-            sb.append("\n");
-            sb.append("Move cost: 1");
-            final Optional<Colony> oColony = getModel().getColonyAt(location);
-            if (oColony.isPresent()) {
-                tileImage.paintColony(oColony.get());
-            }
-            final List<Unit> units = getModel().getUnitsAt(location);
-            if (units.isEmpty()) {
-                unitsLabel.setText("");
+        Platform.runLater(() -> {
+            final StringBuilder sb = new StringBuilder(200);
+            unitsPanel.clear();
+            if (isDiscovered(location)) {
+                tileImage.setTerrain(getTerrainAt(location), location);
+                sb.append(localizationHelper.getTerrainName(getTerrainTypeAt(location)));
+                sb.append("");
+                sb.append("\n");
+                sb.append("Move cost: 1");
+                final Optional<Colony> oColony = getModel().getColonyAt(location);
+                if (oColony.isPresent()) {
+                    tileImage.paintColony(oColony.get());
+                }
+                final List<Unit> units = getModel().getUnitsAt(location);
+                if (units.isEmpty()) {
+                    unitsLabel.setText("");
+                } else {
+                    tileImage.paintUnit(units);
+                    /**
+                     * Current player is not same as human player. For purposes
+                     * of this method it will be sufficient.
+                     */
+                    unitsPanel.setUnits(getModel().getCurrentPlayer(),
+                            getModel().getUnitsAt(location));
+                }
             } else {
-                tileImage.paintUnit(units);
-                /**
-                 * Current player is not same as human player. For purposes of
-                 * this method it will be sufficient.
-                 */
-                unitsPanel.setUnits(getModel().getCurrentPlayer(), getModel().getUnitsAt(location));
+                tileImage.setImage(imageProvider.getImage(ImageProvider.IMG_TILE_HIDDEN));
+                sb.append(i18n.get(Loc.unitsPanel_unexplored));
             }
-        } else {
-            tileImage.setImage(imageProvider.getImage(ImageProvider.IMG_TILE_HIDDEN));
-            sb.append(i18n.get(Loc.unitsPanel_unexplored));
-        }
-        setTitleText(sb.toString());
+            tileName.setText(sb.toString());
+        });
     }
 
-    private void setTitleText(final String title) {
-        Platform.runLater(() -> tileName.setText(title));
+    public void setOnMovePlayer(final Player player) {
+        StringBuilder sb = new StringBuilder(200);
+        sb.append(i18n.get(Loc.unitsPanel_currentUser));
+        sb.append(" ");
+        sb.append(player.getName());
+        Platform.runLater(() -> {
+            labelOnMove.setText(sb.toString());
+        });
     }
 
     private Model getModel() {
@@ -157,11 +167,11 @@ public final class RightPanelView implements JavaFxComponent {
     }
 
     private TerrainType getTerrainTypeAt(final Location location) {
-        return gameModelController.getModel().getMap().getTerrainAt(location).getTerrainType();
+        return getModel().getMap().getTerrainAt(location).getTerrainType();
     }
 
     private Terrain getTerrainAt(final Location location) {
-        return gameModelController.getModel().getMap().getTerrainAt(location);
+        return getModel().getMap().getTerrainAt(location);
     }
 
     /**
@@ -174,16 +184,6 @@ public final class RightPanelView implements JavaFxComponent {
      */
     private boolean isDiscovered(final Location location) {
         return gameModelController.getHumanPlayer().isVisible(location);
-    }
-
-    public void setOnMovePlayer(final Player player) {
-        StringBuilder sb = new StringBuilder(200);
-        sb.append(i18n.get(Loc.unitsPanel_currentUser));
-        sb.append(" ");
-        sb.append(player.getName());
-        Platform.runLater(() -> {
-            labelOnMove.setText(sb.toString());
-        });
     }
 
     @Override

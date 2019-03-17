@@ -1,6 +1,6 @@
 package org.microcol.gui.preferences;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -8,10 +8,14 @@ import java.nio.charset.Charset;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.io.Files;
 
 public class SettingDaoTest extends AbstractPreferencesTest {
+
+    private final Logger logger = LoggerFactory.getLogger(SettingDaoTest.class);
 
     private SettingDao settingDao;
 
@@ -41,7 +45,7 @@ public class SettingDaoTest extends AbstractPreferencesTest {
 
     private void printOutStoredSetting() throws IOException {
         Files.newReader(SETTING_FILE, Charset.defaultCharset()).lines()
-                .forEach(System.out::println);
+                .forEach(logger::debug);
     }
 
     @BeforeEach

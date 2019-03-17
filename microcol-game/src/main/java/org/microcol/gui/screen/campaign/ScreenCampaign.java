@@ -36,7 +36,6 @@ public class ScreenCampaign extends AbstractScreenMenu implements GameScreen {
     @Override
     public void updateLanguage(final I18n i18n) {
         campaignMenuPanelView.updateLanguage(i18n);
-        System.out.println("prasopers " + i18n.get(GameMenu.campaignTitle));
         menuHolderPanel.setTitle(i18n.get(GameMenu.campaignTitle));
     }
 

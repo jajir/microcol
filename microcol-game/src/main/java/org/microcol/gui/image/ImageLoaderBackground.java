@@ -1,6 +1,6 @@
 package org.microcol.gui.image;
 
-import org.microcol.gui.screen.game.gamepanel.GamePanelView;
+import static org.microcol.gui.Tile.TILE_WIDTH_IN_PX;
 
 /**
  * Load background image, split it into separate tiles ad store then back to
@@ -14,7 +14,7 @@ public final class ImageLoaderBackground extends AbstractTiledImageLoader {
 
     ImageLoaderBackground() {
         super(TileImageParams.makeBuilder().setTileWidthCount(12).setTileHeightCount(8)
-                .setTileBorderWidth(9).setTileWidth(GamePanelView.TILE_WIDTH_IN_PX).build(),
+                .setTileBorderWidth(9).setTileWidth(TILE_WIDTH_IN_PX).build(),
                 IMAGE_NAME, IMAGE_PREFIX);
     }
 

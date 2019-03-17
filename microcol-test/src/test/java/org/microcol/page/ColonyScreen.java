@@ -1,6 +1,9 @@
 package org.microcol.page;
 
+
 import static org.junit.jupiter.api.Assertions.*;
+import static org.microcol.gui.Tile.TILE_CENTER;
+import static org.microcol.gui.Tile.TILE_WIDTH_IN_PX;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +14,6 @@ import org.microcol.gui.screen.colony.ColonyPanel;
 import org.microcol.gui.screen.colony.PanelColonyFields;
 import org.microcol.gui.screen.colony.PanelColonyGood;
 import org.microcol.gui.screen.colony.PanelUnitWithContextMenu;
-import org.microcol.gui.screen.game.gamepanel.GamePanelView;
 import org.microcol.model.Colony;
 import org.microcol.model.ColonyField;
 import org.microcol.model.GoodsProductionStats;
@@ -164,9 +166,9 @@ public class ColonyScreen extends AbstractScreen {
 		.localToScreen(panelColonyFields.getContent().getBoundsInLocal());
 
 	final Location loc = colonyField.getDirection().getVector();
-	final double x = boundsInScreen.getMinX() + (loc.getX() + 1) * GamePanelView.TILE_WIDTH_IN_PX
+	final double x = boundsInScreen.getMinX() + (loc.getX() + 1) * TILE_WIDTH_IN_PX
 		+ TILE_CENTER.getX();
-	final double y = boundsInScreen.getMinY() + (loc.getY() + 1) * GamePanelView.TILE_WIDTH_IN_PX
+	final double y = boundsInScreen.getMinY() + (loc.getY() + 1) * TILE_WIDTH_IN_PX
 		+ TILE_CENTER.getY();
 	return new Point2D(x, y);
     }

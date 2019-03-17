@@ -1,8 +1,8 @@
 package org.microcol.gui.util;
 
 import org.microcol.gui.Point;
+import org.microcol.gui.Tile;
 import org.microcol.gui.image.ImageProvider;
-import org.microcol.gui.screen.game.gamepanel.GamePanelView;
 import org.microcol.gui.screen.game.gamepanel.MapManager;
 import org.microcol.model.Colony;
 import org.microcol.model.Direction;
@@ -169,15 +169,13 @@ public final class PaintService {
         // terrain tile
         final Image imageBackground = mapManager.getTerrainImage(terrain.getTerrainType(),
                 location);
-        graphics.drawImage(imageBackground, 0, 0, GamePanelView.TILE_WIDTH_IN_PX,
-                GamePanelView.TILE_WIDTH_IN_PX, point.getX(), point.getY(),
-                GamePanelView.TILE_WIDTH_IN_PX, GamePanelView.TILE_WIDTH_IN_PX);
+        graphics.drawImage(imageBackground, 0, 0, Tile.TILE_WIDTH_IN_PX, Tile.TILE_WIDTH_IN_PX, point.getX(),
+                point.getY(), Tile.TILE_WIDTH_IN_PX, Tile.TILE_WIDTH_IN_PX);
 
         // prechody
         final Image imageCoast = mapManager.getCoatsImageAt(location);
-        graphics.drawImage(imageCoast, 0, 0, GamePanelView.TILE_WIDTH_IN_PX,
-                GamePanelView.TILE_WIDTH_IN_PX, point.getX(), point.getY(),
-                GamePanelView.TILE_WIDTH_IN_PX, GamePanelView.TILE_WIDTH_IN_PX);
+        graphics.drawImage(imageCoast, 0, 0, Tile.TILE_WIDTH_IN_PX, Tile.TILE_WIDTH_IN_PX, point.getX(),
+                point.getY(), Tile.TILE_WIDTH_IN_PX, Tile.TILE_WIDTH_IN_PX);
 
         if (terrain.isHasTrees()) {
             graphics.drawImage(mapManager.getTreeImage(location), point.getX(), point.getY());
@@ -189,14 +187,12 @@ public final class PaintService {
         }
         if (isHighlighted) {
             graphics.setFill(new Color(0.95, 0.75, 0.90, 0.4F));
-            graphics.fillRect(point.getX(), point.getY(), GamePanelView.TILE_WIDTH_IN_PX,
-                    GamePanelView.TILE_WIDTH_IN_PX);
+            graphics.fillRect(point.getX(), point.getY(), Tile.TILE_WIDTH_IN_PX, Tile.TILE_WIDTH_IN_PX);
         }
         final Image hiddenCoast = mapManager.getHiddenImageCoast(location);
         if (hiddenCoast != null) {
-            graphics.drawImage(hiddenCoast, 0, 0, GamePanelView.TILE_WIDTH_IN_PX,
-                    GamePanelView.TILE_WIDTH_IN_PX, point.getX(), point.getY(),
-                    GamePanelView.TILE_WIDTH_IN_PX, GamePanelView.TILE_WIDTH_IN_PX);
+            graphics.drawImage(hiddenCoast, 0, 0, Tile.TILE_WIDTH_IN_PX, Tile.TILE_WIDTH_IN_PX, point.getX(),
+                    point.getY(), Tile.TILE_WIDTH_IN_PX, Tile.TILE_WIDTH_IN_PX);
         }
     }
 

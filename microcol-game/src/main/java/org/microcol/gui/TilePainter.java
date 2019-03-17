@@ -1,8 +1,9 @@
 package org.microcol.gui;
 
+import static org.microcol.gui.Tile.TILE_WIDTH_IN_PX;
+
 import java.util.List;
 
-import org.microcol.gui.screen.game.gamepanel.GamePanelView;
 import org.microcol.gui.util.PaintService;
 import org.microcol.model.Colony;
 import org.microcol.model.Location;
@@ -26,7 +27,7 @@ public class TilePainter {
     @Inject
     public TilePainter(final PaintService paintService) {
         this.paintService = Preconditions.checkNotNull(paintService);
-        canvas = new Canvas(GamePanelView.TILE_WIDTH_IN_PX, GamePanelView.TILE_WIDTH_IN_PX);
+        canvas = new Canvas(TILE_WIDTH_IN_PX, TILE_WIDTH_IN_PX);
     }
 
     public void setTerrain(final Terrain terrain, final Location location) {
@@ -50,7 +51,7 @@ public class TilePainter {
     public void clear() {
         final GraphicsContext g = canvas.getGraphicsContext2D();
         g.setFill(new Color(0, 0, 0, 0.34));
-        g.fillRect(0, 0, GamePanelView.TILE_WIDTH_IN_PX, GamePanelView.TILE_WIDTH_IN_PX);
+        g.fillRect(0, 0, TILE_WIDTH_IN_PX, TILE_WIDTH_IN_PX);
     }
 
     /**

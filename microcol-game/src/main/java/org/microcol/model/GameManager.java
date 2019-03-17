@@ -142,4 +142,9 @@ final class GameManager {
         }
     }
 
+    void save(final ModelPo modelPo) {
+        modelPo.getGameManager().setGameStarted(isStarted());
+        modelPo.getGameManager().setCurrentPlayer(getCurrentPlayer().getName());
+    }
+
 }

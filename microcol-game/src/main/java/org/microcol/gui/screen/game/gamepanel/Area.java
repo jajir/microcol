@@ -1,5 +1,7 @@
 package org.microcol.gui.screen.game.gamepanel;
 
+import static org.microcol.gui.Tile.*;
+
 import org.microcol.gui.Point;
 import org.microcol.model.Location;
 import org.microcol.model.WorldMap;
@@ -13,12 +15,6 @@ import com.google.common.base.Preconditions;
  * location.
  */
 public class Area {
-
-    /**
-     * Point which have x and y set to {@link GamePanelView#TILE_WIDTH_IN_PX}.
-     */
-    private static final Point TILE = Point.of(GamePanelView.TILE_WIDTH_IN_PX,
-            GamePanelView.TILE_WIDTH_IN_PX);
 
     /**
      * Locations in world of top left corner of visible area.
@@ -94,7 +90,7 @@ public class Area {
      * @return point coordinates that could be directly used to draw on canvas
      */
     public Point convertToPoint(final Location location) {
-        return Point.of(location).substract(visibleArea.getTopLeft()).substract(TILE);
+        return Point.of(location).substract(visibleArea.getTopLeft()).substract(TILE_SIZE);
     }
 
     /**

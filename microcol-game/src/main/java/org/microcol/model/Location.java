@@ -9,6 +9,11 @@ import com.google.common.collect.ImmutableList;
 public final class Location {
 
     /**
+     * Center location at [0,0].
+     */
+    public static final Location CENTER = of(0, 0);
+
+    /**
      * Minimal map x-axe value.
      */
     public static final int MAP_MIN_X = 1;

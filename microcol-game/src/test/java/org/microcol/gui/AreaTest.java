@@ -1,13 +1,12 @@
 package org.microcol.gui;
 
 import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.microcol.gui.Tile.TILE_WIDTH_IN_PX;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 import org.microcol.gui.screen.game.gamepanel.Area;
-import org.microcol.gui.screen.game.gamepanel.GamePanelView;
 import org.microcol.gui.screen.game.gamepanel.VisibleArea;
 import org.microcol.model.Location;
 import org.microcol.model.WorldMap;
@@ -45,8 +44,8 @@ public class AreaTest {
 
     @Test
     public void test_getCenterAreaTo_middle_of_map() throws Exception {
-        final Area area = makeArea(222, 222, 800, 600, 100 * GamePanelView.TILE_WIDTH_IN_PX,
-                100 * GamePanelView.TILE_WIDTH_IN_PX);
+        final Area area = makeArea(222, 222, 800, 600, 100 * TILE_WIDTH_IN_PX,
+                100 * TILE_WIDTH_IN_PX);
 
         when(visibleArea.getCanvasWidth()).thenReturn(800);
         when(visibleArea.getCanvasHeight()).thenReturn(600);

@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.microcol.gui.Tile.TILE_CENTER;
 
 import java.util.List;
 import java.util.Optional;
@@ -13,7 +14,6 @@ import java.util.concurrent.TimeoutException;
 import org.microcol.gui.Point;
 import org.microcol.gui.screen.game.components.ButtonsGamePanel;
 import org.microcol.gui.screen.game.components.StatusBarView;
-import org.microcol.gui.screen.game.gamepanel.GamePanelView;
 import org.microcol.model.Location;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,9 +29,6 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.layout.VBox;
 
 public class GamePage extends AbstractScreen {
-
-    protected final static Point TILE_CENTER = Point.of(GamePanelView.TILE_WIDTH_IN_PX, GamePanelView.TILE_WIDTH_IN_PX)
-	    .divide(2);
 
     private final Logger logger = LoggerFactory.getLogger(GamePage.class);
 
