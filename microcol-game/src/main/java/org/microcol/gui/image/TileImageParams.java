@@ -3,6 +3,11 @@ package org.microcol.gui.image;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 
+/**
+ * Images are not stored one per file but multiple images is in one file. PNG
+ * file is split into square images. Class describe position and sizes of images
+ * in main big image.
+ */
 class TileImageParams {
 
     /**
@@ -35,8 +40,7 @@ class TileImageParams {
         private int tileWidth;
 
         TileImageParams build() {
-            return new TileImageParams(tileWidthCount, tileHeightCount,
-                    tileBorderWidth, tileWidth);
+            return new TileImageParams(tileWidthCount, tileHeightCount, tileBorderWidth, tileWidth);
         }
 
         /**
@@ -61,8 +65,7 @@ class TileImageParams {
          * @param tileBorderWidth
          *            the backgroundImageTileBorderInPx to set
          */
-        public TileImageParamsBuilder setTileBorderWidth(
-                int tileBorderWidth) {
+        public TileImageParamsBuilder setTileBorderWidth(int tileBorderWidth) {
             this.tileBorderWidth = tileBorderWidth;
             return this;
         }
@@ -81,8 +84,8 @@ class TileImageParams {
         return new TileImageParamsBuilder();
     }
 
-    TileImageParams(final int tileWidthCount, final int tileHeightCount,
-            final int tileBorderWidth, final int tileWidth) {
+    TileImageParams(final int tileWidthCount, final int tileHeightCount, final int tileBorderWidth,
+            final int tileWidth) {
         Preconditions.checkArgument(tileWidthCount != 0, "Parameter tileWidthCount can't be 0");
         Preconditions.checkArgument(tileHeightCount != 0, "Parameter tileHeightCount can't be 0");
         Preconditions.checkArgument(tileWidth != 0, "Parameter tileWidth can't be 0");
@@ -96,8 +99,7 @@ class TileImageParams {
     public String toString() {
         return MoreObjects.toStringHelper(TileImageParams.class)
                 .add("tileWidthCount", tileWidthCount).add("tileHeightCount", tileHeightCount)
-                .add("tileBorderWidth", tileBorderWidth)
-                .add("tileWidth", tileWidth).toString();
+                .add("tileBorderWidth", tileBorderWidth).add("tileWidth", tileWidth).toString();
     }
 
     /**

@@ -35,8 +35,8 @@ public abstract class MissionDefinition<G extends MissionGoals>
     public G getGoals() {
         return goals;
     }
-    
-    public void save(final Map<String, String> out){
+
+    public void save(final Map<String, String> out) {
         goals.save(out);
     }
 
@@ -57,10 +57,8 @@ public abstract class MissionDefinition<G extends MissionGoals>
         return getNumberOfMilitaryUnitsForPlayer(getHumanPlayer(model));
     }
 
-    // TODO this info should be provided by player object itself.
     protected int getNumberOfMilitaryUnitsForPlayer(final Player player) {
-        return (int) player.getAllUnits().stream().filter(unit -> unit.getType().canAttack())
-                .count();
+        return player.getNumberOfMilitaryUnits();
     }
 
 }

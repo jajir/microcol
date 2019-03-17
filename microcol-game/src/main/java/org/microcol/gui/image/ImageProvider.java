@@ -339,6 +339,21 @@ public final class ImageProvider {
     }
 
     /**
+     * Allow to register image under new name. Image will be accessible under
+     * both names. Image is physically still just one.
+     * 
+     * @param newImageName
+     *            required new image name
+     * @param imageName
+     *            required old image name
+     */
+    public void registerImage(final String newImageName, final String imageName) {
+        Preconditions.checkNotNull(newImageName);
+        final Image image = getImage(imageName);
+        registerImage(newImageName, image);
+    }
+
+    /**
      * For specific terrain type find corresponding image.
      * 
      * @param terrain

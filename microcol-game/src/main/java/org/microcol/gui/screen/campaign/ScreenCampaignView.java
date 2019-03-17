@@ -4,6 +4,7 @@ import java.util.function.Consumer;
 
 import org.microcol.gui.screen.menu.GameMenu;
 import org.microcol.gui.util.JavaFxComponent;
+import org.microcol.gui.util.UpdatableLanguage;
 import org.microcol.i18n.I18n;
 import org.microcol.model.campaign.Campaign;
 import org.microcol.model.campaign.CampaignManager;
@@ -19,7 +20,7 @@ import javafx.scene.layout.VBox;
  * In main area shows basic menu "Start new game".
  */
 public final class ScreenCampaignView
-        implements ScreenCampaignPresenter.Display, JavaFxComponent {
+        implements ScreenCampaignPresenter.Display, JavaFxComponent, UpdatableLanguage {
 
     private final CampaignManager campaignManager;
 
@@ -38,7 +39,6 @@ public final class ScreenCampaignView
         box = new VBox();
         box.getStyleClass().add("game-menu-inner");
         buttonBack = new Button();
-        setLocalizedText();
         refresh();
     }
 
@@ -57,15 +57,6 @@ public final class ScreenCampaignView
 
     private void onSelectedMission(final String missionName) {
         onSelectedMission.accept(missionName);
-    }
-
-    @Override
-    public void updateLanguage() {
-        setLocalizedText();
-    }
-
-    private void setLocalizedText() {
-        buttonBack.setText(i18n.get(GameMenu.campaignPanelButtonBack));
     }
 
     @Override
@@ -88,6 +79,11 @@ public final class ScreenCampaignView
     @Override
     public void setOnSelectedMission(final Consumer<String> onSelectedMission) {
         this.onSelectedMission = onSelectedMission;
+    }
+
+    @Override
+    public void updateLanguage(I18n i18n) {
+        buttonBack.setText(i18n.get(GameMenu.campaignPanelButtonBack));
     }
 
 }

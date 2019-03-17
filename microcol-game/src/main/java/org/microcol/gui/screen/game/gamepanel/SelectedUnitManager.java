@@ -124,7 +124,6 @@ public final class SelectedUnitManager {
         selectedUnit = null;
     }
 
-    // TODO following two methods seems too similar. Merge then
     public void setSelectedUnit(final Unit unit) {
         Preconditions.checkNotNull(unit);
         Preconditions.checkArgument(unit.isAtPlaceLocation());

@@ -1,67 +1,60 @@
 package org.microcol.gui.screen.menu;
 
+import org.microcol.gui.screen.ScreenLifeCycle;
+import org.microcol.gui.util.CenteredPage;
 import org.microcol.gui.util.JavaFxComponent;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
 
-import javafx.geometry.Pos;
-import javafx.scene.control.Label;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
 
 /**
- * In main area shows game welcome page. TODO combine it with CenteredPage.
+ * In main area shows game welcome page.
  */
-public final class MenuHolderPanel implements JavaFxComponent {
+public final class MenuHolderPanel implements JavaFxComponent, ScreenLifeCycle {
 
     public static final String MAIN_TITLE_ID = "main-title";
 
-    private final StackPane mainPanel;
+    private final TitledPage titledPage;
 
-    private final Label title;
+    private final CenteredPage centeredPage;
 
-    private final HBox box;
+    private final GameMenuBackground background;
 
     @Inject
-    MenuHolderPanel(final GameMenuBackground backgroundPanel) {
-        title = new Label("[not defined]");
-        title.getStyleClass().add(MAIN_TITLE_ID);
-        title.setId(MAIN_TITLE_ID);
+    MenuHolderPanel(final GameMenuBackground background, final TitledPage titledPage,
+            final CenteredPage centeredPages) {
+        this.background = Preconditions.checkNotNull(background);
+        this.centeredPage = Preconditions.checkNotNull(centeredPages);
+        this.titledPage = Preconditions.checkNotNull(titledPage);
 
-        box = new HBox();
-        box.getStyleClass().add("game-menu-holder");
-
-        final HBox inner = new HBox();
-        inner.setAlignment(Pos.CENTER);
-        inner.getChildren().add(box);
-
-        final VBox outerBox = new VBox();
-        outerBox.setAlignment(Pos.CENTER);
-        outerBox.getChildren().add(inner);
-
-        mainPanel = new StackPane();
-        mainPanel.setStyle("-fx-pref-width: 100000; -fx-pref-height: 100000;");
-        mainPanel.getChildren().add(backgroundPanel.getContent());
-        mainPanel.getChildren().add(title);
-        mainPanel.getChildren().add(outerBox);
+        centeredPages.setBackground(background);
+        centeredPages.setMainPanel(titledPage);
     }
 
-    public void setMenuPanel(final Region menuPanel) {
+    public void setMenuPanel(final JavaFxComponent menuPanel) {
         Preconditions.checkNotNull(menuPanel);
-        box.getChildren().clear();
-        box.getChildren().add(menuPanel);
+        titledPage.setContent(menuPanel);
     }
 
     public void setTitle(final String menuTitle) {
-        title.setText(menuTitle);
+        titledPage.setTitle(menuTitle);
     }
 
     @Override
     public Region getContent() {
-        return mainPanel;
+        return centeredPage.getContent();
+    }
+
+    @Override
+    public void beforeShow() {
+        background.beforeShow();
+    }
+
+    @Override
+    public void beforeHide() {
+        background.beforeHide();
     }
 
 }

@@ -13,8 +13,24 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
 /**
- * Component paint background and one centered panel. MainPanel will be centered
- * and have css class 'game-menu-holder'.
+ * Component paint background and one centered panel. Panel is centered
+ * horizontally and vertically MainPanel will be centered and have css class
+ * 'game-menu-holder'.
+ * <p>
+ * Centered page should be set:
+ * </p>
+ * 
+ * <pre>
+ * centeredPage.setBackground(colonyBackground);
+ * centeredPage.setMainPanel(colonyPanel);
+ * </pre>
+ * <p>
+ * And finally just use centered page
+ * </p>
+ * 
+ * <pre>
+ * someOtherPanel.getChildren().add(centeredPage.getContent());
+ * </pre>
  */
 public class CenteredPage implements JavaFxComponent, UpdatableLanguage {
 

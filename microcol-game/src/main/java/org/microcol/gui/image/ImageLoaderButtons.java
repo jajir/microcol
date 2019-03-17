@@ -49,37 +49,23 @@ public final class ImageLoaderButtons extends AbstractTiledImageLoader {
     public void preload(final ImageProvider imageProvider) {
         super.preload(imageProvider);
 
-        imageProvider.registerImage(BUTTON_CENTER,
-                imageProvider.getImage(getImagePrefix() + "0_0"));
-        imageProvider.registerImage(BUTTON_HELP,
-                imageProvider.getImage(getImagePrefix() + "1_0"));
-        imageProvider.registerImage(BUTTON_STATISTICS,
-                imageProvider.getImage(getImagePrefix() + "2_0"));
-        imageProvider.registerImage(BUTTON_EXIT,
-                imageProvider.getImage(getImagePrefix() + "3_0"));
+        imageProvider.registerImage(BUTTON_CENTER, getImagePrefix() + "0_0");
+        imageProvider.registerImage(BUTTON_HELP, getImagePrefix() + "1_0");
+        imageProvider.registerImage(BUTTON_STATISTICS, getImagePrefix() + "2_0");
+        imageProvider.registerImage(BUTTON_EXIT, getImagePrefix() + "3_0");
 
-        imageProvider.registerImage(BUTTON_GOALS,
-                imageProvider.getImage(getImagePrefix() + "0_1"));
-        imageProvider.registerImage(BUTTON_TURN_REPORT,
-                imageProvider.getImage(getImagePrefix() + "1_1"));
-        imageProvider.registerImage(BUTTON_NEXT_TURN,
-                imageProvider.getImage(getImagePrefix() + "2_1"));
-        imageProvider.registerImage(BUTTON_EUROPE,
-                imageProvider.getImage(getImagePrefix() + "3_1"));
+        imageProvider.registerImage(BUTTON_GOALS, getImagePrefix() + "0_1");
+        imageProvider.registerImage(BUTTON_TURN_REPORT, getImagePrefix() + "1_1");
+        imageProvider.registerImage(BUTTON_NEXT_TURN, getImagePrefix() + "2_1");
+        imageProvider.registerImage(BUTTON_EUROPE, getImagePrefix() + "3_1");
 
-        imageProvider.registerImage(BUTTON_MOVE,
-                imageProvider.getImage(getImagePrefix() + "0_2"));
-        imageProvider.registerImage(BUTTON_CUT_TREE,
-                imageProvider.getImage(getImagePrefix() + "3_2"));
-        imageProvider.registerImage(BUTTON_BUILD_COLONY,
-                imageProvider.getImage(getImagePrefix() + "2_2"));
-        imageProvider.registerImage(BUTTON_BUILD_ROAD,
-                imageProvider.getImage(getImagePrefix() + "3_2"));
+        imageProvider.registerImage(BUTTON_MOVE, getImagePrefix() + "0_2");
+        imageProvider.registerImage(BUTTON_CUT_TREE, getImagePrefix() + "3_2");
+        imageProvider.registerImage(BUTTON_BUILD_COLONY, getImagePrefix() + "2_2");
+        imageProvider.registerImage(BUTTON_BUILD_ROAD, getImagePrefix() + "3_2");
 
-        imageProvider.registerImage(BUTTON_PLOW_FIELD,
-                imageProvider.getImage(getImagePrefix() + "0_3"));
-        imageProvider.registerImage(BUTTON_BUY,
-                imageProvider.getImage(getImagePrefix() + "1_3"));
+        imageProvider.registerImage(BUTTON_PLOW_FIELD, getImagePrefix() + "0_3");
+        imageProvider.registerImage(BUTTON_BUY, getImagePrefix() + "1_3");
     }
 
 }

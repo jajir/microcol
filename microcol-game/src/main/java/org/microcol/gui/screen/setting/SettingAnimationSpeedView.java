@@ -1,8 +1,8 @@
 package org.microcol.gui.screen.setting;
 
-import org.microcol.gui.PathPlanning;
 import org.microcol.gui.Preferences;
 import org.microcol.gui.util.JavaFxComponent;
+import org.microcol.gui.util.PathPlanningService;
 import org.microcol.gui.util.UpdatableLanguage;
 import org.microcol.i18n.I18n;
 
@@ -31,8 +31,8 @@ public class SettingAnimationSpeedView implements JavaFxComponent, UpdatableLang
         label.getStyleClass().add("label-slider");
 
         slider = new Slider();
-        slider.setMin(PathPlanning.ANIMATION_SPEED_MIN_VALUE);
-        slider.setMax(PathPlanning.ANIMATION_SPEED_MAX_VALUE - 1);
+        slider.setMin(PathPlanningService.ANIMATION_SPEED_MIN_VALUE);
+        slider.setMax(PathPlanningService.ANIMATION_SPEED_MAX_VALUE - 1);
         slider.setSnapToTicks(true);
         slider.setMajorTickUnit(1);
         slider.setMinorTickCount(0);
@@ -57,10 +57,10 @@ public class SettingAnimationSpeedView implements JavaFxComponent, UpdatableLang
         slider.setLabelFormatter(new StringConverter<Double>() {
             @Override
             public String toString(final Double value) {
-                if (PathPlanning.ANIMATION_SPEED_MIN_VALUE == value) {
+                if (PathPlanningService.ANIMATION_SPEED_MIN_VALUE == value) {
                     return i18n.get(Preferences.animationSpeed_slow);
                 }
-                if (PathPlanning.ANIMATION_SPEED_MAX_VALUE - 1 == value) {
+                if (PathPlanningService.ANIMATION_SPEED_MAX_VALUE - 1 == value) {
                     return i18n.get(Preferences.animationSpeed_fast);
                 }
                 return null;
@@ -72,7 +72,7 @@ public class SettingAnimationSpeedView implements JavaFxComponent, UpdatableLang
             }
         });
     }
-    
+
     public DoubleProperty getAnimationSpeedValueProperty() {
         return slider.valueProperty();
     }

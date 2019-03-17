@@ -1,39 +1,54 @@
 package org.microcol.gui.screen.campaign;
 
 import org.microcol.gui.screen.AbstractScreenMenu;
+import org.microcol.gui.screen.GameScreen;
 import org.microcol.gui.screen.menu.GameMenu;
 import org.microcol.gui.screen.menu.MenuHolderPanel;
-import org.microcol.gui.util.JavaFxComponent;
 import org.microcol.i18n.I18n;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
 
 import javafx.scene.layout.Region;
 
-public class ScreenCampaign extends AbstractScreenMenu implements JavaFxComponent {
+@Singleton
+public class ScreenCampaign extends AbstractScreenMenu implements GameScreen {
 
-    private final MenuHolderPanel menuPanel;
+    private final MenuHolderPanel menuHolderPanel;
 
     private final ScreenCampaignView campaignMenuPanelView;
 
     @Inject
     ScreenCampaign(final ScreenCampaignView campaignMenuPanelView,
-            final MenuHolderPanel menuHolderPanel, final I18n i18n) {
-        this.menuPanel = Preconditions.checkNotNull(menuHolderPanel);
+            final MenuHolderPanel menuPanel) {
+        this.menuHolderPanel = Preconditions.checkNotNull(menuPanel);
         this.campaignMenuPanelView = Preconditions.checkNotNull(campaignMenuPanelView);
-        menuHolderPanel.getContent().getStylesheets().add(STYLE_SHEET_GAME_MENU);
-        menuHolderPanel.setMenuPanel(campaignMenuPanelView.getContent());
-        menuHolderPanel.setTitle(i18n.get(GameMenu.campaignTitle));
+        menuPanel.getContent().getStylesheets().add(STYLE_SHEET_GAME_MENU);
+        menuPanel.setMenuPanel(campaignMenuPanelView);
     }
 
     @Override
     public Region getContent() {
-        return menuPanel.getContent();
+        return menuHolderPanel.getContent();
     }
 
-    public void refresh() {
+    @Override
+    public void updateLanguage(final I18n i18n) {
+        campaignMenuPanelView.updateLanguage(i18n);
+        System.out.println("prasopers " + i18n.get(GameMenu.campaignTitle));
+        menuHolderPanel.setTitle(i18n.get(GameMenu.campaignTitle));
+    }
+
+    @Override
+    public void beforeShow() {
+        menuHolderPanel.beforeShow();
         campaignMenuPanelView.refresh();
+    }
+
+    @Override
+    public void beforeHide() {
+        menuHolderPanel.beforeHide();
     }
 
 }

@@ -11,20 +11,14 @@ import org.microcol.model.Colony;
 import org.microcol.model.Unit;
 import org.microcol.model.event.UnitMovedToColonyFieldEvent;
 import org.microcol.model.event.UnitMovedToConstructionEvent;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
 import com.google.common.eventbus.Subscribe;
 import com.google.inject.Inject;
 
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Label;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 
@@ -35,8 +29,6 @@ import javafx.scene.layout.StackPane;
 public final class ColonyPanel implements JavaFxComponent, UpdatableLanguage {
 
     public static final String COLONY_NAME_ID = "colonyName";
-
-    private final static Logger logger = LoggerFactory.getLogger(ColonyPanel.class);
 
     private final StackPane mainPanel;
 
@@ -53,8 +45,6 @@ public final class ColonyPanel implements JavaFxComponent, UpdatableLanguage {
     private final PaintService paintService;
 
     private final PanelOutsideColony panelOutsideColony;
-
-    private final BooleanProperty propertyShiftWasPressed;
 
     private final PanelBuildingQueue panelBuildingQueue;
 
@@ -91,23 +81,6 @@ public final class ColonyPanel implements JavaFxComponent, UpdatableLanguage {
         mainPanel.getChildren().add(goods.getContent());
         mainPanel.getChildren().add(colonyButtonsPanel.getContent());
         mainPanel.getStylesheets().add(MainStageBuilder.STYLE_SHEET_MICROCOL);
-
-        /**
-         * TODO there is a bug, keyboard events are not send during dragging.
-         * TODO copy of this code is in EuropeDialog
-         */
-        propertyShiftWasPressed = new SimpleBooleanProperty(false);
-        mainPanel.addEventFilter(KeyEvent.KEY_RELEASED, event -> {
-            if (event.getCode() == KeyCode.SHIFT) {
-                propertyShiftWasPressed.set(false);
-            }
-        });
-        mainPanel.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
-            logger.debug("wasShiftPressed " + event);
-            if (event.getCode() == KeyCode.SHIFT) {
-                propertyShiftWasPressed.set(true);
-            }
-        });
     }
 
     @Subscribe
@@ -159,10 +132,6 @@ public final class ColonyPanel implements JavaFxComponent, UpdatableLanguage {
 
     public Colony getColony() {
         return colony;
-    }
-
-    public BooleanProperty getPropertyShiftWasPressed() {
-        return propertyShiftWasPressed;
     }
 
     public void close() {

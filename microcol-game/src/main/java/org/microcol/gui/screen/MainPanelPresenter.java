@@ -2,11 +2,15 @@ package org.microcol.gui.screen;
 
 import org.microcol.gui.WasdController;
 import org.microcol.gui.event.ChangeLanguageEvent;
-import org.microcol.gui.event.model.BeforeGameStartEvent;
+import org.microcol.gui.screen.campaign.ScreenCampaign;
+import org.microcol.gui.screen.colony.ScreenColony;
+import org.microcol.gui.screen.europe.ScreenEurope;
+import org.microcol.gui.screen.game.ScreenGame;
+import org.microcol.gui.screen.menu.ScreenMenu;
+import org.microcol.gui.screen.setting.ScreenSetting;
 import org.microcol.gui.util.Listener;
 import org.microcol.i18n.I18n;
 import org.microcol.model.ChainOfCommandStrategy;
-import org.microcol.model.Colony;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
@@ -27,88 +31,95 @@ import com.google.inject.Singleton;
 public final class MainPanelPresenter {
 
     private final MainPanelView view;
-    
+
     private final I18n i18n;
 
-    private final ChainOfCommandStrategy<ShowScreenEvent, String> screenResolver = new ChainOfCommandStrategy<ShowScreenEvent, String>(
-            Lists.newArrayList(event -> {
-                if (Screen.COLONY == event.getScreen()) {
-                    showColony(event.getContext());
-                    return "OK";
-                }
-                return null;
-            }, event -> {
-                if (Screen.EUROPE == event.getScreen()) {
-                    showEurope();
-                    return "OK";
-                }
-                return null;
-            }, event -> {
-                if (Screen.GAME_MENU == event.getScreen()) {
-                    showGameMenu();
-                    return "OK";
-                }
-                return null;
-            }, event -> {
-                if (Screen.GAME == event.getScreen()) {
-                    showGamePanel();
-                    return "OK";
-                }
-                return null;
-            }));
+    private final ChainOfCommandStrategy<ShowScreenEvent, GameScreen> screenResolver;
+
+    private GameScreen shownScreen;
 
     @Inject
     public MainPanelPresenter(final MainPanelView view, final WasdController wasdController,
-            final I18n i18n) {
+            final I18n i18n, final ScreenGame screenGame, final ScreenMenu screenMenu,
+            final ScreenCampaign screenCampaign, final ScreenEurope screenEurope,
+            final ScreenSetting screenSetting, final ScreenColony screenColony) {
         this.view = Preconditions.checkNotNull(view);
         this.i18n = Preconditions.checkNotNull(i18n);
+        
+        /*
+         * Wasd controlled is used just in game screen. In game screen wasd
+         * controlled doesn't obtain key events.
+         */
         view.getContent().setOnKeyPressed(e -> {
             wasdController.onKeyPressed(e);
         });
         view.getContent().setOnKeyReleased(e -> {
             wasdController.onKeyReleased(e);
         });
+        screenResolver = new ChainOfCommandStrategy<ShowScreenEvent, GameScreen>(
+                Lists.newArrayList(event -> {
+                    if (Screen.COLONY == event.getScreen()) {
+                        screenColony.setColony(event.getContext());
+                        return screenColony;
+                    }
+                    return null;
+                }, event -> {
+                    if (Screen.EUROPE == event.getScreen()) {
+                        return screenEurope;
+                    }
+                    return null;
+                }, event -> {
+                    if (Screen.CAMPAIGN == event.getScreen()) {
+                        return screenCampaign;
+                    }
+                    return null;
+                }, event -> {
+                    if (Screen.SETTING == event.getScreen()) {
+                        return screenSetting;
+                    }
+                    return null;
+                }, event -> {
+                    if (Screen.MENU == event.getScreen()) {
+                        return screenMenu;
+                    }
+                    return null;
+                }, event -> {
+                    if (Screen.GAME == event.getScreen()) {
+                        return screenGame;
+                    }
+                    return null;
+                }));
+        view.showScreen(screenMenu);
+
     }
 
     @Subscribe
     private void onShowScreen(final ShowScreenEvent event) {
-        screenResolver.apply(event);
+        final GameScreen screen = screenResolver.apply(event);
+        beforeHide(shownScreen);
+        beforeShow(screen);
+        view.showScreen(screen);
+        shownScreen = screen;
+    }
+
+    private void beforeShow(final GameScreen screen) {
+        if (screen == null) {
+            return;
+        }
+        screen.beforeShow();
+    }
+
+    private void beforeHide(final GameScreen screen) {
+        if (screen == null) {
+            return;
+        }
+        screen.beforeHide();
     }
 
     @SuppressWarnings("unused")
     @Subscribe
     private void onChangeLanguage(final ChangeLanguageEvent event) {
         view.updateLanguage(i18n);
-    }
-
-    @SuppressWarnings("unused")
-    @Subscribe
-    private void onBeforeGameStartEvent(final BeforeGameStartEvent event) {
-        view.showScreenGame();
-    }
-
-    public void showDefaultCampaignMenu() {
-        view.showScreenCampaign();
-    }
-
-    private void showGamePanel() {
-        view.showScreenGame();
-    }
-
-    private void showGameMenu() {
-        view.showSceenMenu();
-    }
-
-    private void showEurope() {
-        view.showScreenEurope();
-    }
-
-    public void showGameSetting() {
-        view.showScreenSetting();
-    }
-
-    private void showColony(final Colony colony) {
-        view.showScreenColony(colony);
     }
 
 }

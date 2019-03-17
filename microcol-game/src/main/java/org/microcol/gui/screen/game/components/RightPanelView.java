@@ -102,6 +102,7 @@ public final class RightPanelView implements JavaFxComponent {
 
         // Y=4
     }
+    // FIXME change view in JavaFX thread. Platform.runLater
 
     public void refreshView(final TileWasSelectedEvent event) {
         if (event != null) {

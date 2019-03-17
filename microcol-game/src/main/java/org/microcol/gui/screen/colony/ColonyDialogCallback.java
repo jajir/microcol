@@ -3,7 +3,6 @@ package org.microcol.gui.screen.colony;
 import org.microcol.model.Colony;
 import org.microcol.model.Unit;
 
-import javafx.beans.property.BooleanProperty;
 import javafx.scene.canvas.Canvas;
 
 /**
@@ -16,8 +15,6 @@ public interface ColonyDialogCallback {
     void close();
 
     Colony getColony();
-
-    BooleanProperty getPropertyShiftWasPressed();
 
     void paintUnit(Canvas canvas, Unit unit);
 }

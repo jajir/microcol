@@ -84,10 +84,13 @@ public class Colony {
         });
 
         final Map<GoodsType, Long> l2 = constructions.stream()
-                .filter(construction -> construction.getType().getProduce().isPresent())
-                .collect(Collectors.groupingBy(
-                        construction -> construction.getType().getProduce().get(),
-                        Collectors.counting()));
+                .filter(construction -> construction.getType().getProductionPerTurn().isPresent())
+                .collect(
+                        Collectors
+                                .groupingBy(
+                                        construction -> construction.getType()
+                                                .getProductionPerTurn().get().getType(),
+                                        Collectors.counting()));
         l2.forEach((goodsType, count) -> {
             if (count != 1) {
                 throw new IllegalStateException(
@@ -121,8 +124,8 @@ public class Colony {
         return out;
     }
 
-    // TODO player is always the same as capturingUnit.getOwner()
-    public void captureColony(final Player player, final Unit capturingUnit) {
+    public void captureColony(final Unit capturingUnit) {
+        final Player player = capturingUnit.getOwner();
         model.getEnemyUnitsAt(player, location).stream()
                 .forEach(unit -> Preconditions.checkState(
                         !unit.getType().canAttack() || unit.getType().isShip(),
@@ -428,7 +431,12 @@ public class Colony {
         return model.isExists(this);
     }
 
-    // TODO move statistic read-only method to statistics class.
+    /**
+     * Compute military strength of colony. Method just sum up strength of all
+     * units in colony.
+     * 
+     * @return Return military power of colony
+     */
     public int getMilitaryForce() {
         double force = 0;
         // count units outside colony
@@ -493,7 +501,8 @@ public class Colony {
         if (getConstructionProducing(goodsTypeProduced).isPresent()) {
             final Construction producedAt = getConstructionProducing(goodsTypeProduced).get();
             GoodsProductionStats goodProdStats = out.getStatsByType(goodsTypeProduced);
-            GoodsType goodsTypeConsumed = producedAt.getType().getConsumed().get();
+            GoodsType goodsTypeConsumed = producedAt.getType().getConsumptionPerTurn().get()
+                    .getType();
             GoodsProductionStats goodConsumedStats = out.getStatsByType(goodsTypeConsumed);
 
             Preconditions.checkState(goodConsumedStats.getConsumed() == 0,
@@ -514,8 +523,9 @@ public class Colony {
 
     private Optional<Construction> getConstructionProducing(final GoodsType goodsType) {
         return constructions.stream()
-                .filter(construction -> construction.getType().getProduce().isPresent()
-                        && construction.getType().getProduce().get().equals(goodsType))
+                .filter(construction -> construction.getType().getProductionPerTurn().isPresent()
+                        && construction.getType().getProductionPerTurn().get().getType()
+                                .equals(goodsType))
                 .findAny();
     }
 

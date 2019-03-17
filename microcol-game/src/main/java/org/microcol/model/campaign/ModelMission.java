@@ -10,10 +10,9 @@ import com.google.common.base.Preconditions;
 /**
  * Encapsulate game model and campaign and missions.
  *
- * TODO review following documentations
  * <p>
  * All commands to model goes through mission. Mission decide if move of game
- * decision is legal. When player's move than mission can stop it by throwing
+ * decision is valid. When player move than mission can stop it by throwing
  * exception
  * </p>
  *
@@ -47,8 +46,8 @@ public final class ModelMission {
         this.mission = Preconditions.checkNotNull(mission);
         this.model = Preconditions.checkNotNull(model);
         /*
-         * following doesn't allows different mission implementation and multiple
-         * conditions.
+         * following doesn't allows different mission implementation and
+         * multiple conditions.
          */
         model.addGameOverEvaluator(mission::evaluateGameOver);
     }

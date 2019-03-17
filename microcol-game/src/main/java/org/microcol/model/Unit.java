@@ -122,7 +122,7 @@ public abstract class Unit {
         Preconditions.checkState(isAtPlaceLocation(),
                 "Unit have to be at map. Unit (%s) is at (%s)", this, place);
     }
-    
+
     /**
      * Get number of action point in each turn. Generally should be called this
      * method because speed could change depending on unit status.
@@ -203,15 +203,22 @@ public abstract class Unit {
     }
 
     public List<Location> getAvailableLocations() {
-        // TODO JKA IMPLEMENTATION FOR STORED UNIT?
-
-        List<Location> locations = new ArrayList<>();
-        aaa(locations, null);
-
+        Preconditions.checkArgument(isAtPlaceLocation(), "Unit have to at map");
+        final List<Location> locations = new ArrayList<>();
+        findLocations(locations, null);
         return ImmutableList.copyOf(locations);
     }
 
-    private void aaa(final List<Location> availableLocations, final List<Unit> attackableTargets) {
+    /**
+     * Find all reachable locations. It implements Dijkstra's algorithm.
+     *
+     * @param availableLocations
+     *            optional list that will contains list of reachable locations
+     * @param attackableTargets
+     *            optional list that will contain all reachable enemies.
+     */
+    private void findLocations(final List<Location> availableLocations,
+            final List<Unit> attackableTargets) {
         model.checkGameRunning();
         model.checkCurrentPlayer(owner);
 
@@ -470,7 +477,7 @@ public abstract class Unit {
         if (oColony.isPresent()) {
             final Colony col = oColony.get();
             if (!col.getOwner().equals(owner)) {
-                col.captureColony(owner, this);
+                col.captureColony(this);
             }
         }
     }
@@ -597,21 +604,15 @@ public abstract class Unit {
      *            required place cargo slot
      */
     void placeToCargoSlot(final PlaceCargoSlot placeCargoSlot) {
-        // TODO could be called on last unit in colony
-        // Verify that only moving in slots is available.
-        if (isAtCargoSlot() && !getPlaceCargoSlot().getCargoSlotOwner()
-                .equals(placeCargoSlot.getCargoSlotOwner())) {
-            throw new IllegalStateException(
-                    String.format("This unit (%s) cannot be stored.", this));
-        }
+        Preconditions.checkNotNull(placeCargoSlot, "Place cargo slot is null");
+        Preconditions.checkArgument(!isAtCargoSlot(), "Unit %s is already in cargo slot", this);
+        Preconditions.checkArgument(owner.equals(placeCargoSlot.getCargoSlotOwner()),
+                "Cargo slot belongs to different player %s than unit %s",
+                placeCargoSlot.getCargoSlotOwner(), owner);
         // remove from previous place
         place.destroy();
-        // TODO JKA check adjacent location, why?
-        // TODO JKA check movement?
-        // TODO JKA prazdny naklad?
         place = placeCargoSlot;
         actionPoints = 0;
-        // TODO JKA Move to CargoSlot?
         model.fireUnitEmbarked(this, placeCargoSlot.getCargoSlot());
     }
 
@@ -678,7 +679,8 @@ public abstract class Unit {
         structureSlot.set((PlaceConstructionSlot) place);
     }
 
-    public void placeToColonyField(final ColonyField colonyField, final GoodsType producedGoodsType) {
+    public void placeToColonyField(final ColonyField colonyField,
+            final GoodsType producedGoodsType) {
         Preconditions.checkNotNull(colonyField);
         Preconditions.checkState(!isAtEuropePort(), "Unit can't skip from europe port to map");
         Preconditions.checkState(!isAtEuropePier(), "Unit can't skip from europe port pier to map");

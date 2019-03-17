@@ -183,6 +183,8 @@ public final class GamePanelPresenter {
         if (KeyCode.TAB == event.getCode()) {
             eventBus.post(new SelectNextUnitEvent());
         }
+        
+        //FIXME add wasd here.
         logger.debug("Pressed key: '" + event.getCode().getName() + "' has code '"
                 + event.getCharacter() + "', modifiers '" + event.getCode().isModifierKey() + "'");
     }
@@ -341,7 +343,6 @@ public final class GamePanelPresenter {
             tryToOpenColonyDetail(moveToLocation);
             return;
         }
-        // TODO don't call selectedTileManager.setSelectedTile
         final UnitMove unitMove = new UnitMove(movingUnit, moveToLocation);
         if (movingUnit.isPossibleToCaptureColonyAt(moveToLocation)) {
             // use can capture target colony
@@ -395,14 +396,13 @@ public final class GamePanelPresenter {
 
     private void fight(final Unit movingUnit, final Location moveToLocation) {
         if (!movingUnit.getType().canAttack()) {
-            // TODO JJ consider which tile should have focus
             selectedTileManager.setSelectedTile(moveToLocation, ScrollToFocusedTile.smoothScroll);
             disableMoveMode(movingUnit);
             new DialogUnitCantFightWarning(viewUtil, i18n);
             return;
         }
         final Unit targetUnit = gameModelController.getModel().getUnitsAt(moveToLocation).get(0);
-        if (gamePreferences.getShowFightAdvisorProperty().get()) {
+        if (gamePreferences.isShowFightAdvisor()) {
             if (gamePanelView.performFightDialog(movingUnit, targetUnit)) {
                 // User choose to fight
                 disableMoveMode(movingUnit);

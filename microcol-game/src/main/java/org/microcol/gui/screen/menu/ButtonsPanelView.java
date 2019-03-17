@@ -42,7 +42,7 @@ public final class ButtonsPanelView implements JavaFxComponent, UpdatableLanguag
     private final VBox buttonsBox;
 
     @Inject
-    ButtonsPanelView(final I18n i18n) {
+    ButtonsPanelView() {
         buttonContinue = new Button();
         buttonContinue.setId(BUTTON_CONTINUE_ID);
         buttonLoadSave = new Button();
@@ -63,8 +63,6 @@ public final class ButtonsPanelView implements JavaFxComponent, UpdatableLanguag
         buttonsBox.getChildren().add(buttonStartFreeGame);
         buttonsBox.getChildren().add(buttonSetting);
         buttonsBox.getChildren().add(buttonExitMicroCol);
-
-        updateLanguage(i18n);
     }
 
     void setContinueEnabled(final boolean isEnabled) {

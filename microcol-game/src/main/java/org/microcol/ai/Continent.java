@@ -24,9 +24,6 @@ public class Continent {
 
     private final Model model;
 
-    //TODO it is really necessary to have here enemyPlayer?
-    private final Player enemyPlayer;
-
     /**
      * Default constructor.
      *
@@ -37,7 +34,6 @@ public class Continent {
      */
     Continent(final Model model, final Player enemyPlayer) {
         this.model = Preconditions.checkNotNull(model);
-        this.enemyPlayer = Preconditions.checkNotNull(enemyPlayer);
     }
 
     public void add(final Location location) {
@@ -54,7 +50,8 @@ public class Continent {
         return contains(unit.getLocation());
     }
 
-    public Optional<Location> getClosesEnemyCityToAttack(final Location unitLocation) {
+    public Optional<Location> getClosesEnemyCityToAttack(final Location unitLocation,
+            final Player enemyPlayer) {
         return locations.stream().filter(loc -> model.getColoniesAt(loc, enemyPlayer).isPresent())
                 .sorted(Comparator.comparingInt(loc -> unitLocation.getDistance(loc))).findFirst();
     }
@@ -68,7 +65,14 @@ public class Continent {
                 .findFirst().get().getDistance(location);
     }
 
-    public int getColonyWeight() {
+    /**
+     * Return score how much interesting to conquer is this continent.
+     * 
+     * @param enemyPlayer
+     *            required player to attack
+     * @return score
+     */
+    public int getColonyWeight(final Player enemyPlayer) {
         int out = 0;
         for (final Location loc : locations) {
             Optional<Colony> oColony = model.getColoniesAt(loc, enemyPlayer);
@@ -100,8 +104,7 @@ public class Continent {
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(Continents.class).add("weight", getColonyWeight())
-                .add("locations", locations).toString();
+        return MoreObjects.toStringHelper(Continents.class).add("locations", locations).toString();
     }
 
 }

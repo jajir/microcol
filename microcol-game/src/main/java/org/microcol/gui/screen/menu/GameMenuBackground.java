@@ -2,7 +2,7 @@ package org.microcol.gui.screen.menu;
 
 import org.microcol.gui.GuiColors;
 import org.microcol.gui.Point;
-import org.microcol.gui.background.AbstractBackground;
+import org.microcol.gui.background.AbstractAnimatedBackground;
 import org.microcol.gui.background.ImageStripePainter;
 import org.microcol.gui.background.ImageStripePref;
 import org.microcol.gui.background.ThreeStripesPainter;
@@ -17,7 +17,9 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 
-public class GameMenuBackground extends AbstractBackground {
+//FIXME main screen schedule animation with new scheduler.
+//FIXME right panel rewrite with run later.
+public class GameMenuBackground extends AbstractAnimatedBackground {
 
     private final static String IMG_TOP = "sunset-top-line.png";
 
@@ -29,11 +31,15 @@ public class GameMenuBackground extends AbstractBackground {
 
     private final Image imageCenter;
 
+    private final Image bird;
+
     private final ThreeStripesPainter threeStripesPainter;
 
     private final ImageStripePainter topImageStripePainter;
 
     private final ImageStripePainter bottomImageStripePainter;
+
+    private final ScaleLinear moving = new ScaleLinear(-400, 800);
 
     @Inject
     public GameMenuBackground(final ImageProvider imageProvider) {
@@ -41,6 +47,7 @@ public class GameMenuBackground extends AbstractBackground {
         imageTop = Preconditions.checkNotNull(imageProvider.getImage(IMG_TOP));
         imageBottom = Preconditions.checkNotNull(imageProvider.getImage(IMG_BOTTOM));
         imageCenter = Preconditions.checkNotNull(imageProvider.getImage(ImageProvider.IMG_SUNSET));
+        bird = Preconditions.checkNotNull(imageProvider.getImage("bird.png"));
         final ThreeStripesPref pref = ThreeStripesPref.build()
                 .setTopStripe(StripeDef.of(-240, GuiColors.SKY))
                 .setCenterStripe(StripeDef.of(30, GuiColors.OCEAN))
@@ -69,6 +76,11 @@ public class GameMenuBackground extends AbstractBackground {
         bottomImageStripePainter.paint(gc, canvasSize);
         final Point diff = canvasSize.substract(centerImageSize).divide(2);
         gc.drawImage(imageCenter, diff.getX(), diff.getY());
+
+        // Paint animations, original size 480 × 270
+        final Point size = Point.of(480, 270).divide(2).divide(3);
+        final Point p = diff.add(moving.getNext(), -20);
+        gc.drawImage(bird, p.getX(), p.getY(), size.getX(), size.getY());
     }
 
 }

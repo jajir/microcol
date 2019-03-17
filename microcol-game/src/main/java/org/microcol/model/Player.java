@@ -125,6 +125,11 @@ public class Player {
     public List<Unit> getAllUnits() {
         return model.getUnitsOwnedBy(this, true);
     }
+    
+    public int getNumberOfMilitaryUnits() {
+        return (int) getAllUnits().stream().filter(unit -> unit.getType().canAttack())
+                .count();
+    }
 
     public Map<Location, List<Unit>> getUnitsAt() {
         return model.getUnitsAt(this);

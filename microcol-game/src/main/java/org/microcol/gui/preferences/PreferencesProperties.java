@@ -6,6 +6,7 @@ import com.google.common.eventbus.EventBus;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 
 /**
@@ -19,6 +20,8 @@ public class PreferencesProperties {
 
     private final SimpleIntegerProperty volumeProperty;
 
+    private final SimpleBooleanProperty showFightAdvisorProperty;
+
     @Inject
     PreferencesProperties(final GamePreferences gamePreferences, final EventBus eventBus) {
         animationSpeedProperty = new SimpleIntegerProperty(gamePreferences.getAnimationSpeed());
@@ -31,6 +34,12 @@ public class PreferencesProperties {
             gamePreferences.setVolume(newValue.intValue());
             eventBus.post(new VolumeChangeEvent(newValue.intValue()));
         });
+
+        showFightAdvisorProperty = new SimpleBooleanProperty();
+        showFightAdvisorProperty.setValue(gamePreferences.isShowFightAdvisor());
+        showFightAdvisorProperty.addListener((object, old, newValue) -> {
+            gamePreferences.setShowFightAdvisor(newValue);
+        });
     }
 
     public SimpleIntegerProperty getAnimationSpeedProperty() {
@@ -39,6 +48,10 @@ public class PreferencesProperties {
 
     public SimpleIntegerProperty getVolumeProperty() {
         return volumeProperty;
+    }
+
+    public SimpleBooleanProperty getShowFightAdvisorProperty() {
+        return showFightAdvisorProperty;
     }
 
 }

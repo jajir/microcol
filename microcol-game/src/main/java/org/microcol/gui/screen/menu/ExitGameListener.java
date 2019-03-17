@@ -30,7 +30,7 @@ public final class ExitGameListener {
     @SuppressWarnings("unused")
     @Subscribe
     private void onExitGame(final ExitGameEvent event) {
-        eventBus.post(new ShowScreenEvent(Screen.GAME_MENU));
+        eventBus.post(new ShowScreenEvent(Screen.MENU));
         gameController.stopGame();
     }
 

@@ -5,13 +5,11 @@ import java.util.Locale;
 import java.util.Optional;
 import java.util.prefs.Preferences;
 
-import org.microcol.gui.PathPlanning;
 import org.microcol.gui.util.Language;
+import org.microcol.gui.util.PathPlanningService;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
-
-import javafx.beans.property.SimpleBooleanProperty;
 
 /**
  * Manage game preferences.
@@ -52,18 +50,11 @@ public class GamePreferences {
 
     public static final String SYSTEM_PROPERTY_CLEAN_SETTINGS = "clean";
 
-    //TODO move it outside of this class.
-    private final SimpleBooleanProperty showFightAdvisorProperty = new SimpleBooleanProperty();
-
     private final SettingService settingService;
 
     @Inject
     public GamePreferences(final SettingService settingService) {
         this.settingService = Preconditions.checkNotNull(settingService);
-        showFightAdvisorProperty.setValue(settingService.load().isShowFightAdvisor());
-        showFightAdvisorProperty.addListener((object, old, newValue) -> {
-            settingService.update(setting -> setting.setShowFightAdvisor(newValue));
-        });
     }
 
     /**
@@ -127,8 +118,16 @@ public class GamePreferences {
         return settingService.load().getVolume();
     }
 
+    public void setShowFightAdvisor(final boolean showFightAdvisor) {
+        settingService.update(setting -> setting.setShowFightAdvisor(showFightAdvisor));
+    }
+
+    public boolean isShowFightAdvisor() {
+        return settingService.load().isShowFightAdvisor();
+    }
+
     public void setAnimationSpeed(final int animationSpeed) {
-        PathPlanning.checkSpeed(animationSpeed);
+        PathPlanningService.checkSpeed(animationSpeed);
         settingService.update(setting -> setting.setAnimationSpeed(animationSpeed));
     }
 
@@ -150,10 +149,6 @@ public class GamePreferences {
 
     public Optional<String> getGameInProgressSaveFile() {
         return Optional.ofNullable(settingService.load().getGameInProgressSaveFile());
-    }
-
-    public SimpleBooleanProperty getShowFightAdvisorProperty() {
-        return showFightAdvisorProperty;
     }
 
 }

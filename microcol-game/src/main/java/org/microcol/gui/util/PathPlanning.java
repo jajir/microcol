@@ -1,12 +1,11 @@
-package org.microcol.gui;
+package org.microcol.gui.util;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.microcol.gui.preferences.GamePreferences;
+import org.microcol.gui.Point;
 
-import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableMap;
 import com.google.inject.Inject;
 
@@ -18,18 +17,6 @@ import com.google.inject.Inject;
  */
 public class PathPlanning {
 
-    private final GamePreferences gamePreferences;
-
-    /**
-     * Minimal value of animation speed.
-     */
-    public static final int ANIMATION_SPEED_MIN_VALUE = 0;
-
-    /**
-     * Maximal value of animation speed.
-     */
-    public static final int ANIMATION_SPEED_MAX_VALUE = 5;
-
     /**
      * Contains mapping of speed to step size.
      */
@@ -37,44 +24,23 @@ public class PathPlanning {
             0.05F, 3, 0.08F, 4, 0.15F);
 
     @Inject
-    public PathPlanning(final GamePreferences gamePreferences) {
-        this.gamePreferences = Preconditions.checkNotNull(gamePreferences);
-        Preconditions.checkArgument(
-                SPEED_FUNCTION.size() == ANIMATION_SPEED_MAX_VALUE - ANIMATION_SPEED_MIN_VALUE,
-                "Animation speed finction is not well defined. It's shorter or longer that required size");
+    public PathPlanning() {
     }
 
     /**
-     * Allows to define step operation.
-     */
-    public interface WhatToDoWithPointInPath {
-        void pathPoint(Point point);
-    }
-
-    // TODO remove useless interface WhatToDoWithPointInPath
-    // TODO return list of points
-    // TODO rename methods pain to count
-
-    /**
-     * Draw steps between two map points. It use naive algorithm. <i>y = ax +
-     * b</i>
-     * 
+     * Compute path and limit number of point by length of step.
+     *
      * @param tileFrom
-     *            required tile from
+     *            required point from
      * @param tileTo
-     *            required tile to
-     * @param whatToDoWithPointInPath
-     *            required function that's executed with each found point to
-     *            visit
+     *            required point to
+     * @param speed
+     *            how many points is walked in each step
+     * @return
      */
-    public void paintPath(final Point tileFrom, final Point tileTo,
-            final WhatToDoWithPointInPath whatToDoWithPointInPath) {
-        paintPathWithSpeed(tileFrom, tileTo, whatToDoWithPointInPath,
-                gamePreferences.getAnimationSpeed());
-    }
-
-    public void paintPathWithSpeed(final Point tileFrom, final Point tileTo,
-            final WhatToDoWithPointInPath whatToDoWithPointInPath, final int speed) {
+    public List<Point> getPathLimitSpeed(final Point tileFrom, final Point tileTo,
+            final int speed) {
+        final List<Point> out = new ArrayList<>();
         final int diff = Math.abs(tileTo.getY() - tileFrom.getY())
                 - Math.abs(tileTo.getX() - tileFrom.getX());
         if (diff < 0) {
@@ -84,13 +50,13 @@ public class PathPlanning {
                 final float increment = countStepSize(tileFrom.getX(), tileTo.getX(), speed);
                 for (double x = tileFrom.getX(); x <= tileTo.getX(); x += increment) {
                     int y = (int) Math.round(a * x + b);
-                    addPoint(tileFrom, whatToDoWithPointInPath, Point.of((int) x, y));
+                    addPoint(tileFrom, out, Point.of((int) x, y));
                 }
             } else {
                 final float increment = countStepSize(tileFrom.getX(), tileTo.getX(), speed);
                 for (double x = tileFrom.getX(); x >= tileTo.getX(); x += increment) {
                     int y = (int) Math.round(a * x + b);
-                    addPoint(tileFrom, whatToDoWithPointInPath, Point.of((int) x, y));
+                    addPoint(tileFrom, out, Point.of((int) x, y));
                 }
             }
         } else if (!tileFrom.equals(tileTo)) {
@@ -100,65 +66,44 @@ public class PathPlanning {
                 final float increment = countStepSize(tileFrom.getY(), tileTo.getY(), speed);
                 for (double y = tileFrom.getY(); y <= tileTo.getY(); y += increment) {
                     int x = (int) Math.round(a * y + b);
-                    addPoint(tileFrom, whatToDoWithPointInPath, Point.of(x, (int) y));
+                    addPoint(tileFrom, out, Point.of(x, (int) y));
                 }
             } else {
                 final float increment = countStepSize(tileFrom.getY(), tileTo.getY(), speed);
                 for (double y = tileFrom.getY(); y >= tileTo.getY(); y += increment) {
                     int x = (int) Math.round(a * y + b);
-                    addPoint(tileFrom, whatToDoWithPointInPath, Point.of(x, (int) y));
+                    addPoint(tileFrom, out, Point.of(x, (int) y));
                 }
             }
         }
+        return out;
     }
 
-    public float countStepSize(final int from, final int to, final int speed) {
-        return countStepSize(to - from, speed);
-    }
-
-    public float countStepSize(final int diff, final int speed) {
+    float countStepSize(final int from, final int to, final int speed) {
+        final int diff = to - from;
         final int sign = (int) Math.signum(diff);
         final int diffAbs = Math.abs(diff);
         return sign * countPositiveStepSize(diffAbs, speed);
     }
 
     private float countPositiveStepSize(final int diffAbs, final int speed) {
-        PathPlanning.checkSpeed(speed);
         return SPEED_FUNCTION.get(speed) * diffAbs;
     }
 
-    public static void checkSpeed(final int speed) {
-        Preconditions.checkArgument(speed >= ANIMATION_SPEED_MIN_VALUE, "speed '%s' is to low",
-                speed);
-        Preconditions.checkArgument(speed < ANIMATION_SPEED_MAX_VALUE, "speed '%s' is to high",
-                speed);
-    }
-
-    public List<Point> paintPathWithStepsLimit(final Point tileFrom, final Point tileTo,
-            final int howManyStepsShouldBeDone) {
-        final List<Point> out = new ArrayList<>();
-        paintPathWithStepsLimit(tileFrom, tileTo, point -> out.add(point),
-                howManyStepsShouldBeDone);
-        return out;
-    }
-
     /**
-     * Draw steps between two map points. It use naive algorithm. <i>y = ax +
-     * b</i>
+     * Get path between two points. It use naive algorithm. <i>y = ax + b</i>
      * 
      * @param tileFrom
      *            required tile from
      * @param tileTo
      *            required tile to
-     * @param whatToDoWithPointInPath
-     *            required function that's executed with each found point to
-     *            visit
      * @param howManyStepsShouldBeDone
      *            required how many steps should be done to reach target
+     * @return Return list of point.
      */
-    public void paintPathWithStepsLimit(final Point tileFrom, final Point tileTo,
-            final WhatToDoWithPointInPath whatToDoWithPointInPath,
+    public List<Point> getPathLimitSteps(final Point tileFrom, final Point tileTo,
             final int howManyStepsShouldBeDone) {
+        final List<Point> out = new ArrayList<>();
         final int diff = Math.abs(tileTo.getY() - tileFrom.getY())
                 - Math.abs(tileTo.getX() - tileFrom.getX());
         if (diff < 0) {
@@ -169,14 +114,14 @@ public class PathPlanning {
                         howManyStepsShouldBeDone);
                 for (int x = tileFrom.getX(); x <= tileTo.getX(); x += increment) {
                     int y = Math.round(a * x + b);
-                    addPoint(tileFrom, whatToDoWithPointInPath, Point.of(x, y));
+                    addPoint(tileFrom, out, Point.of(x, y));
                 }
             } else {
                 final int increment = getStepSize(tileFrom.getX(), tileTo.getX(),
                         howManyStepsShouldBeDone);
                 for (int x = tileFrom.getX(); x >= tileTo.getX(); x += increment) {
                     int y = Math.round(a * x + b);
-                    addPoint(tileFrom, whatToDoWithPointInPath, Point.of(x, y));
+                    addPoint(tileFrom, out, Point.of(x, y));
                 }
             }
         } else if (!tileFrom.equals(tileTo)) {
@@ -187,17 +132,18 @@ public class PathPlanning {
                         howManyStepsShouldBeDone);
                 for (int y = tileFrom.getY(); y <= tileTo.getY(); y += increment) {
                     int x = Math.round(a * y + b);
-                    addPoint(tileFrom, whatToDoWithPointInPath, Point.of(x, y));
+                    addPoint(tileFrom, out, Point.of(x, y));
                 }
             } else {
                 final int increment = getStepSize(tileFrom.getY(), tileTo.getY(),
                         howManyStepsShouldBeDone);
                 for (int y = tileFrom.getY(); y >= tileTo.getY(); y += increment) {
                     int x = Math.round(a * y + b);
-                    addPoint(tileFrom, whatToDoWithPointInPath, Point.of(x, y));
+                    addPoint(tileFrom, out, Point.of(x, y));
                 }
             }
         }
+        return out;
     }
 
     private int getStepSize(final int from, final int to, final int howManyStepsShouldBeDone) {
@@ -208,21 +154,9 @@ public class PathPlanning {
         return stepSize;
     }
 
-    /**
-     * Pass found location to callBack function. Just when start point is equals
-     * to found call back function is not called.
-     * 
-     * @param tileFrom
-     *            required from location
-     * @param whatToDoWithPointInPath
-     *            required call back function
-     * @param pointToAdd
-     *            required to location
-     */
-    private void addPoint(final Point tileFrom,
-            final WhatToDoWithPointInPath whatToDoWithPointInPath, final Point pointToAdd) {
+    private void addPoint(final Point tileFrom, final List<Point> out, final Point pointToAdd) {
         if (!tileFrom.equals(pointToAdd)) {
-            whatToDoWithPointInPath.pathPoint(pointToAdd);
+            out.add(pointToAdd);
         }
     }
 

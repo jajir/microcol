@@ -4,16 +4,18 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import org.microcol.gui.PathPlanning;
 import org.microcol.gui.Point;
 import org.microcol.gui.StepCounter;
 import org.microcol.gui.dialog.DialogFight;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.image.ImageProvider;
 import org.microcol.gui.preferences.GamePreferences;
+import org.microcol.gui.screen.ScreenLifeCycle;
 import org.microcol.gui.screen.game.gamepanel.MoveModeSupport.MoveMode;
+import org.microcol.gui.util.AnimationScheduler;
 import org.microcol.gui.util.FpsCounter;
 import org.microcol.gui.util.PaintService;
+import org.microcol.gui.util.PathPlanning;
 import org.microcol.model.Colony;
 import org.microcol.model.Location;
 import org.microcol.model.Model;
@@ -34,7 +36,7 @@ import javafx.scene.paint.Color;
 /**
  * View for main game panel.
  */
-public final class GamePanelView {
+public final class GamePanelView implements ScreenLifeCycle {
 
     private final Logger logger = LoggerFactory.getLogger(GamePanelView.class);
 
@@ -77,6 +79,8 @@ public final class GamePanelView {
     private final ModeController modeController;
 
     private final DialogFight dialogFigth;
+
+    private final AnimationScheduler animationScheduler;
 
     @Inject
     public GamePanelView(final GameModelController gameModelController,
@@ -126,7 +130,11 @@ public final class GamePanelView {
         /**
          * Following class main define animation loop.
          */
-        new SimpleAnimationTimer(this::onNextGameTick).start();
+        final GraphicsContext gc = canvas.getCanvas().getGraphicsContext2D();
+        animationScheduler = new AnimationScheduler(gc, gcontex -> paintFrame(gcontex));
+
+        // FIXME remove it.
+        animationScheduler.start();
     }
 
     public void stopTimer() {
@@ -137,10 +145,10 @@ public final class GamePanelView {
      * Smallest game time interval. In ideal case it have time to draw world on
      * screen.
      */
-    @SuppressWarnings("unused")
-    private void onNextGameTick(final Long now) {
+    private void paintFrame(final GraphicsContext gc) {
         if (gameModelController.isModelReady()) {
-            paint();
+            logger.debug("painting: " + visibleArea);
+            paint(gc);
         }
     }
 
@@ -175,22 +183,10 @@ public final class GamePanelView {
     }
 
     /**
-     * It's called to redraw whole game. It should be called each game tick.
-     */
-    private void paint() {
-        logger.debug("painting: " + visibleArea);
-        paint(canvas.getCanvas().getGraphicsContext2D());
-    }
-
-    /**
      * Paint everything.
      */
     private void paint(final GraphicsContext g) {
         final Area area = getArea();
-        // TODO JJ get background color from css style
-        g.setFill(Color.valueOf("#ececec"));
-        g.fillRect(0, 0, visibleArea.getCanvasWidth(), visibleArea.getCanvasHeight());
-
         paintTerrain(g, area);
         paintGrid(g, area);
         paintSelectedTile(g, area);
@@ -409,6 +405,16 @@ public final class GamePanelView {
 
     public Area getArea() {
         return new Area(visibleArea, gameModelController.getModel().getMap());
+    }
+
+    @Override
+    public void beforeShow() {
+        animationScheduler.pause();
+    }
+
+    @Override
+    public void beforeHide() {
+        animationScheduler.start();
     }
 
 }

@@ -42,8 +42,8 @@ public final class ModelDao {
                 .registerTypeAdapter(UnitActionPo.class, new UnitActionPoAdapter())
                 .registerTypeAdapter(UnitType.class, new GsonUnitTypeAdapter())
                 .registerTypeAdapter(Direction.class, new GsonDirectionTypeAdapter())
-                .registerTypeAdapter(Goods.class, new GsonGoodsAdapter())
-                .setPrettyPrinting().create();
+                .registerTypeAdapter(Goods.class, new GsonGoodsAdapter()).setPrettyPrinting()
+                .create();
     }
 
     /**
@@ -53,21 +53,14 @@ public final class ModelDao {
      *            required file name on class path
      * @return loaded model persistent object
      */
-    public ModelPo loadPredefinedModel(final String fileName) {
+    public ModelPo loadFromClassPath(final String fileName) {
         logger.debug("Starting to read from class path ({})", fileName);
-        return internalLoadPredefinedModel(fileName);
-    }
-
-    /**
-     * load persistent model from file.
-     *
-     * @param fileName
-     *            required file name
-     * @return loaded model as persistent objects
-     */
-    public ModelPo loadModelFromFile(final String fileName) {
-        Preconditions.checkNotNull(fileName);
-        return loadModelFromFile(new File(fileName));
+        try (final InputStream is = WorldMap.class.getResourceAsStream(fileName)) {
+            Preconditions.checkArgument(is != null, "input stream for file (%s) is null", fileName);
+            return internalLoadModel(is);
+        } catch (IOException e) {
+            throw new MicroColException(e.getMessage(), e);
+        }
     }
 
     /**
@@ -77,7 +70,7 @@ public final class ModelDao {
      *            required file object
      * @return loaded model persistent object
      */
-    public ModelPo loadModelFromFile(final File file) {
+    public ModelPo loadFromFile(final File file) {
         Preconditions.checkNotNull(file, "File is null");
         Preconditions.checkArgument(file.exists(), "File '%s' doesn't exists.",
                 file.getAbsolutePath());
@@ -85,28 +78,6 @@ public final class ModelDao {
         logger.debug("Starting to read from class path ({})", file.getAbsolutePath());
         try (final FileInputStream fis = new FileInputStream(file)) {
             return internalLoadModel(fis);
-        } catch (IOException e) {
-            throw new MicroColException(e.getMessage(), e);
-        }
-    }
-
-    /**
-     * Load predefined world map stored on class path.
-     *
-     * TODO it's called just from test. Move it there.
-     *
-     * @param fileName
-     *            required file name on class path
-     * @return loaded world map
-     */
-    public WorldMap loadPredefinedWorldMap(final String fileName) {
-        return new WorldMap(internalLoadPredefinedModel(fileName));
-    }
-
-    private ModelPo internalLoadPredefinedModel(final String fileName) {
-        try (final InputStream is = WorldMap.class.getResourceAsStream(fileName)) {
-            Preconditions.checkArgument(is != null, "input stream for file (%s) is null", fileName);
-            return internalLoadModel(is);
         } catch (IOException e) {
             throw new MicroColException(e.getMessage(), e);
         }
@@ -130,10 +101,6 @@ public final class ModelDao {
         } catch (IOException e) {
             throw new MicroColException(e.getMessage(), e);
         }
-    }
-
-    public Gson getGson() {
-        return gson;
     }
 
 }

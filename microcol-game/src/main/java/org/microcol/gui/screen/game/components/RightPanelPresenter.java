@@ -80,7 +80,11 @@ public final class RightPanelPresenter {
         display.refreshView(event);
     }
 
-    //FIXME should not be better to react o event?
+    /**
+     * Refresh could be replace be event than game screen is about to open.
+     * Event is not goods because refresh should come as first before showing
+     * whole screen.
+     */
     public void refresh() {
         display.refreshView(lastFocusedTileEvent);
 

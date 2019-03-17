@@ -5,6 +5,6 @@ package org.microcol.gui.screen;
  */
 public enum Screen {
 
-    GAME_MENU, GAME, COLONY, EUROPE;
+    MENU, CAMPAIGN, SETTING, GAME, COLONY, EUROPE;
 
 }

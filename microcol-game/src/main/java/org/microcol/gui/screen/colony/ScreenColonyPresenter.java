@@ -11,7 +11,6 @@ import com.google.common.base.Preconditions;
 import com.google.common.eventbus.EventBus;
 import com.google.inject.Inject;
 
-import javafx.beans.property.BooleanProperty;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -51,11 +50,6 @@ public class ScreenColonyPresenter implements ColonyDialogCallback {
     @Override
     public Colony getColony() {
         return colonyPanel.getColony();
-    }
-
-    @Override
-    public BooleanProperty getPropertyShiftWasPressed() {
-        return colonyPanel.getPropertyShiftWasPressed();
     }
 
     @Override

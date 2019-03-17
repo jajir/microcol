@@ -72,7 +72,7 @@ public class ContinentTest {
 
     @Test
     public void test_findClosestCityToAttack_location_in_not_atContinent() throws Exception {
-        final Optional<Location> oLoc = continent.getClosesEnemyCityToAttack(Location.of(1, 1));
+        final Optional<Location> oLoc = continent.getClosesEnemyCityToAttack(Location.of(1, 1), enemyPlayer);
 
         assertNotNull(oLoc);
         assertFalse(oLoc.isPresent());
@@ -80,7 +80,7 @@ public class ContinentTest {
 
     @Test
     public void test_findClosestCityToAttack_no_enemy_cities() throws Exception {
-        final Optional<Location> oLoc = continent.getClosesEnemyCityToAttack(Location.of(22, 13));
+        final Optional<Location> oLoc = continent.getClosesEnemyCityToAttack(Location.of(22, 13), enemyPlayer);
 
         assertNotNull(oLoc);
         assertFalse(oLoc.isPresent());
@@ -90,7 +90,7 @@ public class ContinentTest {
     public void test_findClosestCityToAttack_one_city() throws Exception {
         when(model.getColoniesAt(CITY_1, enemyPlayer)).thenReturn(Optional.of(enemyColony));
 
-        final Optional<Location> oLoc = continent.getClosesEnemyCityToAttack(Location.of(22, 13));
+        final Optional<Location> oLoc = continent.getClosesEnemyCityToAttack(Location.of(22, 13), enemyPlayer);
 
         assertNotNull(oLoc);
         assertTrue(oLoc.isPresent());
@@ -102,7 +102,7 @@ public class ContinentTest {
         when(model.getColoniesAt(CITY_1, enemyPlayer)).thenReturn(Optional.of(enemyColony));
         when(model.getColoniesAt(CITY_2, enemyPlayer)).thenReturn(Optional.of(enemyColony));
 
-        final Optional<Location> oLoc = continent.getClosesEnemyCityToAttack(Location.of(23, 14));
+        final Optional<Location> oLoc = continent.getClosesEnemyCityToAttack(Location.of(23, 14), enemyPlayer);
 
         assertNotNull(oLoc);
         assertTrue(oLoc.isPresent());
@@ -114,7 +114,7 @@ public class ContinentTest {
         when(model.getColoniesAt(CITY_1, enemyPlayer)).thenReturn(Optional.of(enemyColony));
         when(model.getColoniesAt(CITY_2, enemyPlayer)).thenReturn(Optional.of(enemyColony));
 
-        final Optional<Location> oLoc = continent.getClosesEnemyCityToAttack(Location.of(22, 13));
+        final Optional<Location> oLoc = continent.getClosesEnemyCityToAttack(Location.of(22, 13), enemyPlayer);
 
         assertNotNull(oLoc);
         assertTrue(oLoc.isPresent());

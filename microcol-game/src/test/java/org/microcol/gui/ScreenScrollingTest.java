@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.microcol.gui.screen.game.gamepanel.ScreenScrolling;
+import org.microcol.gui.util.PathPlanning;
 
 import com.google.common.collect.Lists;
 
@@ -27,7 +28,7 @@ public class ScreenScrollingTest {
 
     @Test
     public void test_constructor() throws Exception {
-        when(pathPlanning.paintPathWithStepsLimit(Point.of(10, 10), Point.of(15, 15), 10))
+        when(pathPlanning.getPathLimitSteps(Point.of(10, 10), Point.of(15, 15), 10))
                 .thenReturn(stepsToDo);
 
         final ScreenScrolling ret = new ScreenScrolling(pathPlanning, Point.of(10, 10),

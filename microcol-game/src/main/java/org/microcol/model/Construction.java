@@ -74,7 +74,11 @@ public class Construction {
     }
 
     public Optional<GoodsType> getProducedGoodsType() {
-        return type.getProduce();
+        if (type.getProductionPerTurn().isPresent()) {
+            return Optional.of(type.getProductionPerTurn().get().getType());
+        } else {
+            return Optional.empty();
+        }
     }
 
     @Override
@@ -122,9 +126,9 @@ public class Construction {
      * @return construction production statistics per turn
      */
     ConstructionTurnProduction getProduction() {
-        Preconditions.checkArgument(getType().getProduce().isPresent(),
+        Preconditions.checkArgument(getType().getProductionPerTurn().isPresent(),
                 "This construction doesn't produce anything.");
-        Preconditions.checkArgument(!getType().getConsumed().isPresent(),
+        Preconditions.checkArgument(!getType().getConsumptionPerTurn().isPresent(),
                 "This construction consume something. Construction: %s", this);
         ConstructionTurnProduction out = ConstructionTurnProduction.EMPTY;
         for (final ConstructionSlot slot : getConstructionSlots()) {
@@ -145,9 +149,9 @@ public class Construction {
      */
     ConstructionTurnProduction getProduction(final Goods sourceGoods) {
         Preconditions.checkNotNull(sourceGoods);
-        Preconditions.checkArgument(getType().getProduce().isPresent(),
+        Preconditions.checkArgument(getType().getProductionPerTurn().isPresent(),
                 "This construction doesn't produce anything.");
-        Preconditions.checkArgument(getType().getConsumed().isPresent(),
+        Preconditions.checkArgument(getType().getConsumptionPerTurn().isPresent(),
                 "This construction doesn't consume anything.");
         Goods remaining = sourceGoods;
         ConstructionTurnProduction out = ConstructionTurnProduction.EMPTY;
@@ -169,11 +173,11 @@ public class Construction {
      *            required colony warehouse
      */
     public void countTurnProduction(final Colony colony, final ColonyWarehouse warehouse) {
-        getType().getProduce().ifPresent(producedGoodsType -> {
-            if (getType().getConsumed().isPresent()) {
-                final GoodsType consumedGoods = getType().getConsumed().get();
+        getType().getProductionPerTurn().ifPresent(producedGoodsType -> {
+            if (getType().getConsumptionPerTurn().isPresent()) {
+                final Goods consumedGoods = getType().getConsumptionPerTurn().get();
                 final ConstructionTurnProduction prod = getProduction(
-                        warehouse.getGoods(consumedGoods));
+                        warehouse.getGoods(consumedGoods.getType()));
                 warehouse.removeGoods(prod.getConsumedGoods().get());
                 warehouse.addGoodsWithThrowingAway(prod.getProducedGoods().get(),
                         thrownAwayGoods -> {

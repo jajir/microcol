@@ -24,6 +24,7 @@ import org.microcol.model.ColonyProductionStats;
 import org.microcol.model.Construction;
 import org.microcol.model.ConstructionSlot;
 import org.microcol.model.ConstructionType;
+import org.microcol.model.Goods;
 import org.microcol.model.GoodsProductionStats;
 import org.microcol.model.Unit;
 import org.slf4j.Logger;
@@ -319,7 +320,7 @@ public final class PanelColonyStructures implements JavaFxComponent {
 
     private void paintProduction(final GraphicsContext gc, final Point point, final Colony colony,
             final Construction construction) {
-        if (construction.getType().getProduce().isPresent()) {
+        if (construction.getType().getProductionPerTurn().isPresent()) {
 
             final ColonyProductionStats colonyStats = colony.getGoodsStats();
             final GoodsProductionStats goodsStats = colonyStats
@@ -335,10 +336,11 @@ public final class PanelColonyStructures implements JavaFxComponent {
             }
             if (!Strings.isNullOrEmpty(toWrite)) {
                 final Point prod = point.add(PRODUCTION_TEXT);
+                final Goods produced = construction.getType().getProductionPerTurn().get();
                 gc.fillText(toWrite, prod.getX(), prod.getY());
                 final double width = getTextWidth(gc, toWrite);
                 gc.drawImage(
-                        imageProvider.getGoodsTypeImage(construction.getType().getProduce().get()),
+                        imageProvider.getGoodsTypeImage(produced.getType()),
                         prod.getX() - width / 2 - GOOD_ICON_WIDTH, prod.getY() - 10,
                         GOOD_ICON_WIDTH, GOOD_ICON_WIDTH);
             }

@@ -11,9 +11,8 @@ import java.util.stream.Stream;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.microcol.model.store.ModelDao;
 
-public class WorldMapInvalidPathTest {
+public class WorldMapInvalidPathTest  extends AbstractMapTest{
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][] {});
     }
@@ -29,8 +28,7 @@ public class WorldMapInvalidPathTest {
     @ParameterizedTest(name = "{index}: fileName = {0}, locations = {1}")
     @MethodSource("dataProvider")
     public void testInalidPath(final String fileName, List<Location> locations) {
-        ModelDao dao = new ModelDao();
-        WorldMap map = dao.loadPredefinedWorldMap(fileName);
+        WorldMap map = loadPredefinedWorldMap(fileName);
 
         final Path path = Path.of(locations);
 

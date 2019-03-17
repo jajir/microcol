@@ -209,7 +209,6 @@ public final class PanelColonyFields implements JavaFxComponent {
             final Unit unit = colonyField.getUnit().get();
             gc.drawImage(imageProvider.getUnitImage(unit), point.getX(),
                     point.getY());
-            // TODO on ocean show fish
             gc.drawImage(imageProvider.getGoodsTypeImage(production.getType()), point.getX(),
                     point.getY(), 25, 25);
             gc.setTextAlign(TextAlignment.CENTER);

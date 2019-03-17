@@ -55,7 +55,7 @@ public class ModelBuilder {
 
     public ModelBuilder setMap(final String fileName) {
         final ModelDao modelDao = new ModelDao();
-        modelPo = modelDao.loadPredefinedModel(fileName);
+        modelPo = modelDao.loadFromClassPath(fileName);
         return this;
     }
 

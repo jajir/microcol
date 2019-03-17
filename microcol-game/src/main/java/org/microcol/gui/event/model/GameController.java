@@ -2,6 +2,8 @@ package org.microcol.gui.event.model;
 
 import java.io.File;
 
+import org.microcol.gui.screen.Screen;
+import org.microcol.gui.screen.ShowScreenEvent;
 import org.microcol.model.campaign.Campaign;
 import org.microcol.model.campaign.CampaignManager;
 import org.microcol.model.campaign.CampaignMission;
@@ -78,7 +80,7 @@ public final class GameController {
     }
 
     private void startMission(final ModelMission modelMission) {
-        eventBus.post(new BeforeGameStartEvent());
+        eventBus.post(new ShowScreenEvent(Screen.GAME));
         gameModelController.setAndStartModel(modelMission);
     }
 

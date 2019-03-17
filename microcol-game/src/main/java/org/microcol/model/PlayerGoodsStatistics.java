@@ -17,8 +17,6 @@ public final class PlayerGoodsStatistics {
     /**
      * Economy value is counted as simple sum of all goods.
      *
-     * TODO create something meaningful
-     *
      * @return economy value of players
      */
     public int getEconomyValue() {

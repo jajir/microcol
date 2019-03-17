@@ -1,7 +1,5 @@
 package org.microcol.model;
 
-import java.util.Optional;
-
 import org.microcol.model.store.ConstructionSlotPo;
 
 import com.google.common.base.Preconditions;
@@ -69,8 +67,9 @@ public class ConstructionSlot {
         if (isEmpty()) {
             return 0;
         } else {
-            if (getProducedType().isPresent()) {
-                return getUnit().getType().getProductionModifier(getProducedType().get());
+            if (getConstructionType().getProductionPerTurn().isPresent()) {
+                final Goods productionPerTurn = getConstructionType().getProductionPerTurn().get();
+                return getUnit().getType().getProductionModifier(productionPerTurn.getType());
             } else {
                 return 0;
             }
@@ -88,16 +87,16 @@ public class ConstructionSlot {
     public ConstructionTurnProduction getProduction(final Goods sourceGoods) {
         final ConstructionType type = construction.getType();
 
-        Preconditions.checkArgument(type.getProduce().isPresent(),
+        Preconditions.checkArgument(type.getProductionPerTurn().isPresent(),
                 "Method can't count production when construction doesn't produce any goods.");
-        Preconditions.checkArgument(type.getConsumed().isPresent(),
+        Preconditions.checkArgument(type.getConsumptionPerTurn().isPresent(),
                 "Methods can't be called when production doesn't consume any goods.");
         Preconditions.checkArgument(sourceGoods != null,
                 "Source goods is required, but it's null.");
 
         if (isEmpty()) {
-            return new ConstructionTurnProduction(Goods.of(type.getConsumed().get()),
-                    Goods.of(type.getProduce().get()), null);
+            return new ConstructionTurnProduction(type.getConsumptionPerTurn().get().getEmpty(),
+                    type.getProductionPerTurn().get().getEmpty(), null);
         } else {
             // construction consume goods
             final Goods turnProduction = type.getProductionPerTurn().get()
@@ -124,22 +123,22 @@ public class ConstructionSlot {
      * Return production of slot per turn. Work just in case when production
      * doesn't consume any other goods.
      * 
-     * @return
+     * @return Return production for slot which do not consume any goods.
      */
     public ConstructionTurnProduction getProduction() {
         final ConstructionType type = construction.getType();
-        Preconditions.checkArgument(type.getProduce().isPresent(),
+        Preconditions.checkArgument(type.getProductionPerTurn().isPresent(),
                 "Construction doesn't produce any goods.");
-        Preconditions.checkArgument(!type.getConsumed().isPresent(),
+        Preconditions.checkArgument(!type.getConsumptionPerTurn().isPresent(),
                 "Construction consume some goods.");
         final Goods turnProduction = type.getProductionPerTurn().get();
         return new ConstructionTurnProduction(null,
                 turnProduction.multiply(getProductionModifier()), null);
 
     }
-
-    private Optional<GoodsType> getProducedType() {
-        return construction.getType().getProduce();
+    
+    private ConstructionType getConstructionType() {
+        return construction.getType();
     }
 
     public boolean isValid() {

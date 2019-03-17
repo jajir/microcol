@@ -1,12 +1,11 @@
 package org.microcol.model;
 
 import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
 
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 import com.google.common.collect.Lists;
 
@@ -19,11 +18,15 @@ import com.google.common.collect.Lists;
 public class UnitTest extends AbstractUnitFreeColonistTest {
 
     private final PlaceEuropePier placeEuropePier = mock(PlaceEuropePier.class);
-    
+
     private final Unit u1 = mock(Unit.class);
-    
+
     private final Unit u2 = mock(Unit.class);
 
+    private final  Player player = mock(Player.class);
+
+    private final PlaceLocation placeLocation = mock(PlaceLocation.class);
+    
     @Test
     public void test_isSameOwner_emptyList() throws Exception {
         makeColonist(model, 4, placeEuropePier, owner, 10);
@@ -38,10 +41,10 @@ public class UnitTest extends AbstractUnitFreeColonistTest {
     @Test
     public void test_isSameOwner_oneUnit_different() throws Exception {
         makeColonist(model, 4, placeEuropePier, owner, 10);
-        
+
         assertNotNull(unit);
         assertNotNull(u1);
-        
+
         when(u1.getOwner()).thenReturn(null);
 
         boolean ret = unit.isSameOwner(Lists.newArrayList(u1));
@@ -88,6 +91,48 @@ public class UnitTest extends AbstractUnitFreeColonistTest {
         boolean ret = unit.isSameOwner(Lists.newArrayList(u1, u2));
 
         assertFalse(ret);
+    }
+
+    @Test
+    public void test_placeToCargoSlot_place_is_required() throws Exception {
+        assertThrows(NullPointerException.class, () -> unit.placeToCargoSlot(null));
+    }
+
+    @Test
+    public void test_placeToCargoSlot_is_already_in_cargoSlot() throws Exception {
+        final PlaceCargoSlot placeSlot1 = mock(PlaceCargoSlot.class);
+        final PlaceCargoSlot placeSlot2 = mock(PlaceCargoSlot.class);
+        makeColonist(model, 4, placeSlot1, owner, 10);
+
+        assertThrows(IllegalArgumentException.class, () -> unit.placeToCargoSlot(placeSlot2));
+    }
+
+    @Test
+    public void test_placeToCargoSlot_unit_have_different_owner_than_cargo_slot() throws Exception {
+        final PlaceCargoSlot placeCargoSlot = mock(PlaceCargoSlot.class);
+        makeColonist(model, 4, placeLocation, owner, 10);
+        when(placeCargoSlot.getCargoSlotOwner()).thenReturn(player);
+
+        final IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> unit.placeToCargoSlot(placeCargoSlot));
+
+        assertTrue(exception.getMessage().contains("Cargo slot belongs to different player"));
+    }
+
+    @Test
+    public void test_placeToCargoSlot_unit_was_at_location() throws Exception {
+        final PlaceCargoSlot placeCargoSlot = mock(PlaceCargoSlot.class);
+        final CargoSlot cargoSlot = mock(CargoSlot.class);
+        makeColonist(model, 4, placeLocation, owner, 10);
+        when(placeCargoSlot.getCargoSlotOwner()).thenReturn(owner);
+        when(placeCargoSlot.getCargoSlot()).thenReturn(cargoSlot);
+
+        unit.placeToCargoSlot(placeCargoSlot);
+
+        assertTrue(unit.isAtCargoSlot());
+        assertEquals(0, unit.getActionPoints());
+        verify(placeLocation, times(1)).destroy();
+        verify(model, times(1)).fireUnitEmbarked(unit, cargoSlot);
     }
 
 }

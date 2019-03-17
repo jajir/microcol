@@ -22,4 +22,6 @@ public class ScreenGamePresenter {
         eventBus.post(event);
     }
 
+    // FIXME general game key shortcuts should be here.
+
 }

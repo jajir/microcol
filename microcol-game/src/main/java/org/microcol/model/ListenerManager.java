@@ -12,7 +12,6 @@ import org.microcol.model.event.BeforeDeclaringIndependenceEvent;
 import org.microcol.model.event.BeforeEndTurnEvent;
 import org.microcol.model.event.ColonyWasCapturedEvent;
 import org.microcol.model.event.ColonyWasFoundEvent;
-import org.microcol.model.event.DebugRequestedEvent;
 import org.microcol.model.event.GameFinishedEvent;
 import org.microcol.model.event.GameStartedEvent;
 import org.microcol.model.event.GameStoppedEvent;
@@ -304,12 +303,6 @@ final class ListenerManager {
         logger.info("Game finished: {}.", event);
 
         listeners.forEach(listener -> listener.onGameFinished(event));
-    }
-
-    void fireDebugRequested(final Model model, final List<Location> locations) {
-        final DebugRequestedEvent event = new DebugRequestedEvent(model, locations);
-
-        listeners.forEach(listener -> listener.onDebugRequested(event));
     }
 
     private void executeInSeparateThread(Consumer<ModelListener> action) {

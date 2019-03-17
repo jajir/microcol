@@ -1,12 +1,11 @@
 package org.microcol.gui.screen.game;
 
+import org.microcol.gui.screen.GameScreen;
 import org.microcol.gui.screen.game.components.ButtonsGamePanel;
 import org.microcol.gui.screen.game.components.RightPanel;
 import org.microcol.gui.screen.game.components.StatusBar;
 import org.microcol.gui.screen.game.components.StatusBarMessageEvent.Source;
 import org.microcol.gui.screen.game.gamepanel.PaneCanvas;
-import org.microcol.gui.util.JavaFxComponent;
-import org.microcol.gui.util.UpdatableLanguage;
 import org.microcol.i18n.I18n;
 
 import com.google.common.base.Preconditions;
@@ -24,7 +23,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
 @Singleton
-public class ScreenGame implements JavaFxComponent, UpdatableLanguage {
+public class ScreenGame implements GameScreen {
 
     public static final String STYLE_SHEET_GAME_PANEL = ScreenGame.class
             .getResource("/gui/GamePanel.css").toExternalForm();
@@ -86,6 +85,16 @@ public class ScreenGame implements JavaFxComponent, UpdatableLanguage {
     public Region getContent() {
         rightPanel.refresh();
         return mainPanel;
+    }
+
+    @Override
+    public void beforeShow() {
+        // FIXME start stop animation timer
+    }
+
+    @Override
+    public void beforeHide() {
+        // FIXME start stop animation timer
     }
 
 }

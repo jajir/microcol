@@ -2,21 +2,18 @@ package org.microcol.gui.screen.menu;
 
 import org.microcol.gui.dialog.ApplicationController;
 import org.microcol.gui.dialog.PersistingDialog;
-import org.microcol.gui.event.ChangeLanguageEvent;
 import org.microcol.gui.event.QuitGameEvent;
 import org.microcol.gui.event.model.GameController;
 import org.microcol.gui.preferences.GamePreferences;
-import org.microcol.gui.screen.setting.ShowDefaultCampaignMenuEvent;
-import org.microcol.gui.screen.setting.ShowGameSettingEvent;
+import org.microcol.gui.screen.Screen;
+import org.microcol.gui.screen.ShowScreenEvent;
 import org.microcol.gui.util.Listener;
 import org.microcol.gui.util.PersistingTool;
-import org.microcol.i18n.I18n;
 import org.microcol.model.campaign.Campaign;
 import org.microcol.model.campaign.CampaignManager;
 
 import com.google.common.base.Preconditions;
 import com.google.common.eventbus.EventBus;
-import com.google.common.eventbus.Subscribe;
 import com.google.inject.Inject;
 
 import javafx.event.ActionEvent;
@@ -38,8 +35,6 @@ public final class ButtonsPanelPresenter {
 
     private final CampaignManager campaignManager;
 
-    private final I18n i18n;
-
     private final EventBus eventBus;
 
     @Inject
@@ -47,33 +42,26 @@ public final class ButtonsPanelPresenter {
             final ApplicationController applicationController,
             final PersistingDialog persistingDialog, final GamePreferences gamePreferences,
             final PersistingTool persistingTool, final GameController gameController,
-            final CampaignManager campaignManager, final EventBus eventBus, final I18n i18n) {
+            final CampaignManager campaignManager, final EventBus eventBus) {
         this.view = Preconditions.checkNotNull(view);
         this.gamePreferences = Preconditions.checkNotNull(gamePreferences);
         this.persistingTool = Preconditions.checkNotNull(persistingTool);
         this.gameController = Preconditions.checkNotNull(gameController);
         this.campaignManager = Preconditions.checkNotNull(campaignManager);
         this.eventBus = Preconditions.checkNotNull(eventBus);
-        this.i18n = Preconditions.checkNotNull(i18n);
         view.getButtonContinue().setOnAction(this::onGameContinue);
         view.getButtonLoadSave().setOnAction(event -> persistingDialog.loadModel());
         view.getButtonPlayCampaign()
-                .setOnAction(event -> eventBus.post(new ShowDefaultCampaignMenuEvent()));
+                .setOnAction(event -> eventBus.post(new ShowScreenEvent(Screen.CAMPAIGN)));
         view.getButtonExitMicroCol().setOnAction(event -> eventBus.post(new QuitGameEvent()));
         view.getButtonSetting().setOnAction(this::onSetting);
         view.getButtonStartFreeGame().setOnAction(e -> applicationController.startNewFreeGame());
         refresh();
     }
 
-    @Subscribe
-    private void onChangeLanguageEvent(
-            @SuppressWarnings("unused") final ChangeLanguageEvent event) {
-        view.updateLanguage(i18n);
-    }
-
     @SuppressWarnings("unused")
     private void onSetting(final ActionEvent event) {
-        eventBus.post(new ShowGameSettingEvent());
+        eventBus.post(new ShowScreenEvent(Screen.SETTING));
     }
 
     @SuppressWarnings("unused")

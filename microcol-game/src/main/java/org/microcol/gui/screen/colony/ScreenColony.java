@@ -1,11 +1,10 @@
 package org.microcol.gui.screen.colony;
 
+import org.microcol.gui.screen.GameScreen;
 import org.microcol.gui.screen.game.components.StatusBar;
 import org.microcol.gui.screen.game.components.StatusBarMessageEvent.Source;
 import org.microcol.gui.util.CenteredPage;
 import org.microcol.gui.util.ContentWithStatusBar;
-import org.microcol.gui.util.JavaFxComponent;
-import org.microcol.gui.util.UpdatableLanguage;
 import org.microcol.i18n.I18n;
 import org.microcol.model.Colony;
 
@@ -17,7 +16,7 @@ import com.google.inject.name.Named;
 import javafx.scene.layout.Region;
 
 @Singleton
-public class ScreenColony implements JavaFxComponent, UpdatableLanguage {
+public class ScreenColony implements GameScreen {
 
     public static final String STYLE_SHEET_COLONY = ScreenColony.class
             .getResource("/gui/Colony.css").toExternalForm();
@@ -29,7 +28,7 @@ public class ScreenColony implements JavaFxComponent, UpdatableLanguage {
     @Inject
     ScreenColony(final ColonyPanel colonyPanel, final @Named("Colony") StatusBar statusBar,
             final CenteredPage centeredPage, final ContentWithStatusBar contentWithStatusBar,
-            final ColonyBackground colonyBackground, final I18n i18n) {
+            final ColonyBackground colonyBackground) {
         this.contentWithStatusBar = Preconditions.checkNotNull(contentWithStatusBar);
         this.colonyPanel = Preconditions.checkNotNull(colonyPanel);
         statusBar.setShowEventsFromSource(Source.COLONY);
@@ -39,8 +38,6 @@ public class ScreenColony implements JavaFxComponent, UpdatableLanguage {
         centeredPage.setMainPanel(colonyPanel);
         contentWithStatusBar.setContent(centeredPage);
         contentWithStatusBar.setStatusBar(statusBar);
-
-        updateLanguage(i18n);
     }
 
     /**
@@ -62,6 +59,16 @@ public class ScreenColony implements JavaFxComponent, UpdatableLanguage {
     @Override
     public Region getContent() {
         return contentWithStatusBar.getContent();
+    }
+
+    @Override
+    public void beforeShow() {
+        // Intentionally do nothing.
+    }
+
+    @Override
+    public void beforeHide() {
+        // Intentionally do nothing.
     }
 
 }

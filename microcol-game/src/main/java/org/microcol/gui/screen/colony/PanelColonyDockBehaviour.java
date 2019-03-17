@@ -45,7 +45,6 @@ public final class PanelColonyDockBehaviour extends AbstractPanelDockBehavior {
     @Override
     public void consumeGoods(final CargoSlot targetCargoSlot,
             final boolean specialOperatonWasSelected, final ClipboardEval eval) {
-        logger.debug("wasShiftPressed " + colonyDialogCallback.getPropertyShiftWasPressed().get());
         Goods transferedGoods = eval.getGoods().get();
         transferedGoods = chooseGoods(transferedGoods, specialOperatonWasSelected, targetCargoSlot);
         if (transferedGoods.isZero()) {

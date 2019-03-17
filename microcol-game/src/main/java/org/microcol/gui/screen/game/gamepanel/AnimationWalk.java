@@ -1,11 +1,10 @@
 package org.microcol.gui.screen.game.gamepanel;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import org.microcol.gui.PathPlanning;
 import org.microcol.gui.Point;
 import org.microcol.gui.util.PaintService;
+import org.microcol.gui.util.PathPlanningService;
 import org.microcol.model.Direction;
 import org.microcol.model.Location;
 import org.microcol.model.Unit;
@@ -33,11 +32,11 @@ public final class AnimationWalk implements Animation {
     /**
      * Contains locations for move between two tiles.
      */
-    private final List<Point> partialPath = new ArrayList<>();
+    private final List<Point> partialPath;
 
     private final Direction unitOrientation;
 
-    AnimationWalk(final PathPlanning pathPlanning, final Location locationFrom,
+    AnimationWalk(final PathPlanningService pathPlanningService, final Location locationFrom,
             final Location locationTo, final Unit unit, final PaintService paintService,
             final ExcludePainting excludePainting, final Direction unitOrientation) {
         this.locationFrom = Preconditions.checkNotNull(locationFrom);
@@ -54,7 +53,7 @@ public final class AnimationWalk implements Animation {
         final Point from = Point.of(0, 0);
         final Point to = Point.of(Location.of(locationTo.getX() - locationFrom.getX(),
                 locationTo.getY() - locationFrom.getY()));
-        pathPlanning.paintPath(from, to, point -> partialPath.add(point));
+        partialPath = pathPlanningService.getPathLimitSpeed(from, to);
 
     }
 

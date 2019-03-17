@@ -71,7 +71,7 @@ public class GoodsTest {
                 () -> corn1.substract(corn2));
 
         assertEquals(
-                "Substracted goods have differet type (Goods{GoodsType=TABACCO, amount=5}) from current one (Goods{GoodsType=CORN, amount=34})",
+                "Substracted goods have differet type (Goods{GoodsType=TOBACCO, amount=5}) from current one (Goods{GoodsType=CORN, amount=34})",
                 exception.getMessage());
     }
 
@@ -99,7 +99,7 @@ public class GoodsTest {
                 () -> corn1.add(corn2));
 
         assertEquals(
-                "Added goods have differet type (Goods{GoodsType=TABACCO, amount=5}) from current one (Goods{GoodsType=CORN, amount=34})",
+                "Added goods have differet type (Goods{GoodsType=TOBACCO, amount=5}) from current one (Goods{GoodsType=CORN, amount=34})",
                 exception.getMessage());
     }
 

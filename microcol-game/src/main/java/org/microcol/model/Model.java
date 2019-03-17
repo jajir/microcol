@@ -261,7 +261,6 @@ public class Model {
                 "Ship (%s) for cargo doesn't have any free slot for expedition force unit.",
                 loadUnitToShip);
         CargoSlot cargoSlot = loadUnitToShip.getCargo().getEmptyCargoSlot().get();
-        // TODO it's about creating colonist and still it needs to define cargo
         return unitStorage.createUnit(unit -> new Cargo(unit, UnitType.COLONIST.getCargoCapacity()),
                 this, unit -> new PlaceCargoSlot(unit, cargoSlot), UnitType.COLONIST, king,
                 UnitType.COLONIST.getSpeed(), new UnitActionNoAction());
@@ -653,11 +652,6 @@ public class Model {
 
     void fireGameFinished(final GameOverResult gameOverResult) {
         listenerManager.fireGameFinished(this, gameOverResult);
-    }
-
-    // TODO JKA Temporary solution
-    public void requestDebug(final List<Location> locations) {
-        listenerManager.fireDebugRequested(this, locations);
     }
 
     public Europe getEurope() {

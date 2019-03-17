@@ -33,7 +33,7 @@ public final class CallBackContext {
     }
 
     public void goToGameMenu() {
-        eventBus.post(new ShowScreenEvent(Screen.GAME_MENU));
+        eventBus.post(new ShowScreenEvent(Screen.MENU));
     }
 
 }

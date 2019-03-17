@@ -31,7 +31,7 @@ public class IdManagerTest {
 
     @Test
     public void start_from_modelPo() throws Exception {
-        ModelPo modelPo = modelDao.loadPredefinedModel("/maps/test-idManager.microcol");
+        ModelPo modelPo = modelDao.loadFromClassPath("/maps/test-idManager.microcol");
 
         IdManager idm = IdManager.makeFromModelPo(modelPo);
 

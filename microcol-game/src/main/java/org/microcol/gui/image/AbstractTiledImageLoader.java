@@ -28,6 +28,19 @@ public abstract class AbstractTiledImageLoader implements ImageLoader {
         this.imagePrefix = Preconditions.checkNotNull(imagePrefix);
     }
 
+    /**
+     * Load main big image. Verify it's size. And split it into smaller tiles.
+     * This tiles will be available under names:
+     * 
+     * <pre>
+     * imagePrefix + xPosition + "_" + yPosition
+     * </pre>
+     * 
+     * For example <i>building_5_0</i> or <i>building_3_4</i>
+     * <p>
+     * This method should be overridden and called.
+     * </p>
+     */
     @Override
     public void preload(final ImageProvider imageProvider) {
         final Image img = ImageProvider.getRawImage(imageName);
@@ -44,8 +57,9 @@ public abstract class AbstractTiledImageLoader implements ImageLoader {
                 final String name = imagePrefix + x + "_" + y;
                 final PixelReader reader = img.getPixelReader();
                 final WritableImage tile = new WritableImage(reader,
-                        x * params.getTileWidthIncludingBorder(), y * params.getTileWidthIncludingBorder(),
-                        params.getTileWidth(), params.getTileWidth());
+                        x * params.getTileWidthIncludingBorder(),
+                        y * params.getTileWidthIncludingBorder(), params.getTileWidth(),
+                        params.getTileWidth());
                 imageProvider.registerImage(name, tile);
             }
         }

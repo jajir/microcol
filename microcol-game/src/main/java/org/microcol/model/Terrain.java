@@ -36,11 +36,8 @@ public class Terrain {
     /**
      * List of function that based on terrain properties like trees and field modify
      * particular good production.
-     *
-     *
-     * TODO consider moving to terrain type.
      */
-    private final static List<Function<TerrainProduction, TerrainProduction>> PRODICTION_MOODIFIERS = Lists
+    private final static List<Function<TerrainProduction, TerrainProduction>> PRODUCTION_MODIFIERS = Lists
             .newArrayList(prod -> {
                 if (prod.getTerrain().isHasTrees()) {
                     if (GoodsType.CORN.equals(prod.getGoodsType())) {
@@ -137,7 +134,7 @@ public class Terrain {
         if (terrainType.getBaseProduction(producedGoodsType).isPresent()) {
             TerrainProduction prod = new TerrainProduction(this, producedGoodsType,
                     terrainType.getBaseProduction(producedGoodsType).get().getBase());
-            for (final Function<TerrainProduction, TerrainProduction> pm : PRODICTION_MOODIFIERS) {
+            for (final Function<TerrainProduction, TerrainProduction> pm : PRODUCTION_MODIFIERS) {
                 prod = pm.apply(prod);
             }
             return prod;

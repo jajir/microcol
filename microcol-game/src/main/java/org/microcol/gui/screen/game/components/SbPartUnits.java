@@ -34,7 +34,6 @@ public class SbPartUnits extends SbPart {
 
     private String getUnitsNumber(final long count) {
         if (count > 5) {
-            // TODO it should be different in czech and english.
             return count + ".";
         } else {
             final Loc loc = Loc.valueOf("no_" + count + "_7p");

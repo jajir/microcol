@@ -1,6 +1,6 @@
 package org.microcol.gui.screen.setting;
 
-import org.microcol.gui.preferences.GamePreferences;
+import org.microcol.gui.preferences.PreferencesProperties;
 import org.microcol.gui.screen.menu.GameMenu;
 import org.microcol.gui.util.JavaFxComponent;
 import org.microcol.gui.util.UpdatableLanguage;
@@ -21,11 +21,12 @@ public class SettingShowFightAdvisorView implements JavaFxComponent, UpdatableLa
     private final CheckBox checkBox;
 
     @Inject
-    public SettingShowFightAdvisorView(final GamePreferences gamePreferences, final I18n i18n) {
+    public SettingShowFightAdvisorView(final PreferencesProperties preferencesProperties,
+            final I18n i18n) {
 
         checkBox = new CheckBox();
-        checkBox.setSelected(gamePreferences.getShowFightAdvisorProperty().get());
-        gamePreferences.getShowFightAdvisorProperty()
+        checkBox.setSelected(preferencesProperties.getShowFightAdvisorProperty().get());
+        preferencesProperties.getShowFightAdvisorProperty()
                 .bindBidirectional(checkBox.selectedProperty());
 
         mainPanel = new HBox();

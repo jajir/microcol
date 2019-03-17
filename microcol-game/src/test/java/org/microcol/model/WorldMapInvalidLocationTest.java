@@ -8,9 +8,8 @@ import java.util.stream.Stream;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.microcol.model.store.ModelDao;
 
-public class WorldMapInvalidLocationTest {
+public class WorldMapInvalidLocationTest extends AbstractMapTest {
 
     static Stream<Arguments> dataProvider() {
         return Stream.of(arguments("/maps/test-map-ocean-10x10.json", Location.of(0, 0)),
@@ -26,8 +25,7 @@ public class WorldMapInvalidLocationTest {
     @ParameterizedTest(name = "{index}: fileName = {0}, location = {1}")
     @MethodSource("dataProvider")
     public void testInvalidLocation(final String fileName, final Location location) {
-        final ModelDao dao = new ModelDao();
-        final WorldMap map = dao.loadPredefinedWorldMap(fileName);
+        final WorldMap map = loadPredefinedWorldMap(fileName);
 
         assertFalse(map.isValid(location));
     }

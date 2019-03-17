@@ -10,7 +10,6 @@ import org.microcol.model.event.BeforeDeclaringIndependenceEvent;
 import org.microcol.model.event.BeforeEndTurnEvent;
 import org.microcol.model.event.ColonyWasCapturedEvent;
 import org.microcol.model.event.ColonyWasFoundEvent;
-import org.microcol.model.event.DebugRequestedEvent;
 import org.microcol.model.event.GameFinishedEvent;
 import org.microcol.model.event.GameStartedEvent;
 import org.microcol.model.event.GameStoppedEvent;
@@ -105,11 +104,6 @@ public final class ModelListenerImpl implements ModelListener {
 
     @Override
     public void onGameFinished(final GameFinishedEvent event) {
-        eventBus.post(event);
-    }
-
-    @Override
-    public void onDebugRequested(final DebugRequestedEvent event) {
         eventBus.post(event);
     }
 

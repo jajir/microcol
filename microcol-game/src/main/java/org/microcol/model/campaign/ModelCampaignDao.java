@@ -27,12 +27,12 @@ public final class ModelCampaignDao {
     }
 
     public ModelMission loadFromFile(final File file, final MissionCallBack missionCallBack) {
-        return makeFromModelPo(modelDao.loadModelFromFile(file), missionCallBack);
+        return makeFromModelPo(modelDao.loadFromFile(file), missionCallBack);
     }
 
     public ModelMission loadFromClassPath(final String fileName,
             final MissionCallBack missionCallBack) {
-        return makeFromModelPo(modelDao.loadPredefinedModel(fileName), missionCallBack);
+        return makeFromModelPo(modelDao.loadFromClassPath(fileName), missionCallBack);
     }
 
     private ModelMission makeFromModelPo(final ModelPo modelPo,

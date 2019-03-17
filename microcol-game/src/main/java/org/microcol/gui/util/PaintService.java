@@ -150,7 +150,8 @@ public final class PaintService {
     }
 
     /**
-     * Paint one tile on game space.
+     * Paint one tile on game space. Including additional symbols and pictures
+     * like fish.
      * 
      * @param graphics
      *            required graphics where will be tile drawn

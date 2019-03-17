@@ -2,7 +2,7 @@ package org.microcol.gui.dialog;
 
 import org.microcol.gui.LocalizationHelper;
 import org.microcol.gui.image.ImageProvider;
-import org.microcol.gui.preferences.GamePreferences;
+import org.microcol.gui.preferences.PreferencesProperties;
 import org.microcol.gui.util.AbstractMessageWindow;
 import org.microcol.gui.util.ViewUtil;
 import org.microcol.i18n.I18n;
@@ -57,7 +57,8 @@ public final class DialogFight extends AbstractMessageWindow {
      */
     @Inject
     public DialogFight(final I18n i18n, final ViewUtil viewUtil, final ImageProvider imageProvider,
-            final LocalizationHelper localizationHelper, final GamePreferences gamePreferences) {
+            final LocalizationHelper localizationHelper,
+            final PreferencesProperties preferencesProperties) {
         super(viewUtil, i18n);
         this.localizationHelper = Preconditions.checkNotNull(localizationHelper);
         this.imageProvider = Preconditions.checkNotNull(imageProvider);
@@ -120,13 +121,13 @@ public final class DialogFight extends AbstractMessageWindow {
         // Cancel and OK buttons
         final Button buttonCancel = new Button(i18n.get(Dialog.fight_buttonCancel));
         buttonCancel.setOnAction(
-                e -> onClickCancel(checkBoxShowNextTime.isSelected(), gamePreferences));
+                e -> onClickCancel(checkBoxShowNextTime.isSelected(), preferencesProperties));
         root.add(buttonCancel, 0, 10);
 
         final Button buttonFight = new Button(i18n.get(Dialog.fight_buttonFight));
         buttonFight.requestFocus();
-        buttonFight
-                .setOnAction(e -> onClickFight(checkBoxShowNextTime.isSelected(), gamePreferences));
+        buttonFight.setOnAction(
+                e -> onClickFight(checkBoxShowNextTime.isSelected(), preferencesProperties));
         root.add(buttonFight, 2, 10);
     }
 
@@ -150,19 +151,19 @@ public final class DialogFight extends AbstractMessageWindow {
     }
 
     private void onClickCancel(final boolean isCheckBoxShowNextTimeSelected,
-            final GamePreferences gamePreferences) {
+            final PreferencesProperties preferencesProperties) {
         userChooseFight = false;
         if (isCheckBoxShowNextTimeSelected) {
-            gamePreferences.getShowFightAdvisorProperty().set(false);
+            preferencesProperties.getShowFightAdvisorProperty().set(false);
         }
         close();
     }
 
     private void onClickFight(final boolean isCheckBoxShowNextTimeSelected,
-            final GamePreferences gamePreferences) {
+            final PreferencesProperties preferencesProperties) {
         userChooseFight = true;
         if (isCheckBoxShowNextTimeSelected) {
-            gamePreferences.getShowFightAdvisorProperty().set(false);
+            preferencesProperties.getShowFightAdvisorProperty().set(false);
         }
         close();
     }

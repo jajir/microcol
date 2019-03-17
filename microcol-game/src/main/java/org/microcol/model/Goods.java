@@ -64,6 +64,15 @@ public final class Goods {
         return amount != 0;
     }
 
+    /**
+     * Return empty goods.
+     *
+     * @return Return goods with amount 0.
+     */
+    public Goods getEmpty() {
+        return new Goods(goodsType, 0);
+    }
+
     public Goods substract(final Goods goods) {
         Preconditions.checkNotNull(goods);
         Preconditions.checkArgument(goodsType.equals(goods.getType()),

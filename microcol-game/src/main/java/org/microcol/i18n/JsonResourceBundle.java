@@ -18,7 +18,10 @@ public class JsonResourceBundle extends ResourceBundle {
     private Properties props;
 
     JsonResourceBundle(final InputStream stream) {
-        // TODO use in a static way, don't use new instance in each bundle
+        /*
+         * Gson is instantiated in each resource bundle. It's speed and memory
+         * overhead.
+         */
         final Gson gson = new GsonBuilder().create();
         props = new Properties();
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(stream))) {

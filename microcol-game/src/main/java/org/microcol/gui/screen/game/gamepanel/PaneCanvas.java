@@ -1,6 +1,7 @@
 package org.microcol.gui.screen.game.gamepanel;
 
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
 
 import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.scene.canvas.Canvas;
@@ -15,6 +16,7 @@ import javafx.scene.layout.Pane;
  * when component is read to show some content.
  * </p>
  */
+@Singleton
 public final class PaneCanvas {
 
     /**

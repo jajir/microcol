@@ -16,6 +16,10 @@ import org.junit.jupiter.api.Test;
 
 public class ConstructionSlotTest {
 
+    private final Optional<Goods> PRODUCTION = Optional.of(Goods.of(GoodsType.TOOLS, 5));
+
+    private final Optional<Goods> CONSUMPTION = Optional.of(Goods.of(GoodsType.ORE, 5));
+
     private Model model = mock(Model.class);
 
     private Unit unit = mock(Unit.class);
@@ -39,7 +43,7 @@ public class ConstructionSlotTest {
     void test_getProductionModifier_noProducedType() throws Exception {
         slot.set(placeConstructionSlot);
         when(construction.getType()).thenReturn(constructionType);
-        when(constructionType.getProduce()).thenReturn(Optional.empty());
+        when(constructionType.getProductionPerTurn()).thenReturn(Optional.empty());
 
         assertEquals(0, slot.getProductionModifier());
     }
@@ -47,8 +51,9 @@ public class ConstructionSlotTest {
     @Test
     void test_getProductionModifier_different_expertise_than_produced() throws Exception {
         slot.set(placeConstructionSlot);
+        Optional<Goods> altProduction = Optional.of(Goods.of(GoodsType.RUM, 10));
         when(construction.getType()).thenReturn(constructionType);
-        when(constructionType.getProduce()).thenReturn(Optional.of(GoodsType.RUM));
+        when(constructionType.getProductionPerTurn()).thenReturn(altProduction);
         when(placeConstructionSlot.getUnit()).thenReturn(unit);
         when(unit.getType()).thenReturn(UnitType.MASTER_BLACKSMITH);
 
@@ -59,7 +64,7 @@ public class ConstructionSlotTest {
     void test_getProductionModifier_with_expert() throws Exception {
         slot.set(placeConstructionSlot);
         when(construction.getType()).thenReturn(constructionType);
-        when(constructionType.getProduce()).thenReturn(Optional.of(GoodsType.TOOLS));
+        when(constructionType.getProductionPerTurn()).thenReturn(PRODUCTION);
         when(placeConstructionSlot.getUnit()).thenReturn(unit);
         when(unit.getType()).thenReturn(UnitType.MASTER_BLACKSMITH);
 
@@ -67,9 +72,9 @@ public class ConstructionSlotTest {
     }
 
     @Test
-    void test_getProduction_noConsumption_constriction_doesnt_produce_any_goods() throws Exception {
+    void test_getProduction_noConsumption_construction_doesnt_produce_any_goods() throws Exception {
         when(construction.getType()).thenReturn(constructionType);
-        when(constructionType.getProduce()).thenReturn(Optional.empty());
+        when(constructionType.getProductionPerTurn()).thenReturn(Optional.empty());
 
         final IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
                 () -> slot.getProduction());
@@ -78,10 +83,12 @@ public class ConstructionSlotTest {
     }
 
     @Test
-    void test_getProduction_noConsumption_constriction_consume_goods() throws Exception {
+    void test_getProduction_noConsumption_construction_consume_goods() throws Exception {
+        final Optional<Goods> altProduction = Optional.of(Goods.of(GoodsType.RUM, 0));
+        final Optional<Goods> altConsumption = Optional.of(Goods.of(GoodsType.SUGAR, 0));
         when(construction.getType()).thenReturn(constructionType);
-        when(constructionType.getProduce()).thenReturn(Optional.of(GoodsType.RUM));
-        when(constructionType.getConsumed()).thenReturn(Optional.of(GoodsType.SUGAR));
+        when(constructionType.getProductionPerTurn()).thenReturn(altProduction);
+        when(constructionType.getConsumptionPerTurn()).thenReturn(altConsumption);
 
         final IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
                 () -> slot.getProduction());
@@ -93,8 +100,7 @@ public class ConstructionSlotTest {
     void test_getProduction_noConsumption_noUnit() throws Exception {
         final Optional<Goods> production = Optional.of(Goods.of(GoodsType.BELL, 5));
         when(construction.getType()).thenReturn(constructionType);
-        when(constructionType.getProduce()).thenReturn(Optional.of(GoodsType.BELL));
-        when(constructionType.getConsumed()).thenReturn(Optional.empty());
+        when(constructionType.getConsumptionPerTurn()).thenReturn(Optional.empty());
         when(constructionType.getProductionPerTurn()).thenReturn(production);
 
         final ConstructionTurnProduction ret = slot.getProduction();
@@ -112,8 +118,7 @@ public class ConstructionSlotTest {
     void test_getProduction_noConsumption_withFreeColonist() throws Exception {
         final Optional<Goods> production = Optional.of(Goods.of(GoodsType.BELL, 5));
         when(construction.getType()).thenReturn(constructionType);
-        when(constructionType.getProduce()).thenReturn(Optional.of(GoodsType.BELL));
-        when(constructionType.getConsumed()).thenReturn(Optional.empty());
+        when(constructionType.getConsumptionPerTurn()).thenReturn(Optional.empty());
         when(constructionType.getProductionPerTurn()).thenReturn(production);
         mockUnitForProductionModifier(UnitType.COLONIST);
 
@@ -132,8 +137,7 @@ public class ConstructionSlotTest {
     void test_getProduction_noConsumption_with_oreExpertMiner() throws Exception {
         final Optional<Goods> production = Optional.of(Goods.of(GoodsType.ORE, 5));
         when(construction.getType()).thenReturn(constructionType);
-        when(constructionType.getProduce()).thenReturn(Optional.of(GoodsType.ORE));
-        when(constructionType.getConsumed()).thenReturn(Optional.empty());
+        when(constructionType.getConsumptionPerTurn()).thenReturn(Optional.empty());
         when(constructionType.getProductionPerTurn()).thenReturn(production);
         mockUnitForProductionModifier(UnitType.EXPERT_ORE_MINER);
 
@@ -149,13 +153,9 @@ public class ConstructionSlotTest {
 
     @Test
     void test_getProduction_withConsumption_with_noUnit() throws Exception {
-        final Optional<Goods> production = Optional.of(Goods.of(GoodsType.ORE, 5));
         when(construction.getType()).thenReturn(constructionType);
-        when(constructionType.getProduce()).thenReturn(Optional.of(GoodsType.TOOLS));
-        when(constructionType.getProductionPerTurn()).thenReturn(production);
-        when(constructionType.getConsumed()).thenReturn(Optional.of(GoodsType.ORE));
-        when(constructionType.getConsumptionPerTurn())
-                .thenReturn(Optional.of(Goods.of(GoodsType.ORE, 5)));
+        when(constructionType.getProductionPerTurn()).thenReturn(PRODUCTION);
+        when(constructionType.getConsumptionPerTurn()).thenReturn(CONSUMPTION);
 
         final ConstructionTurnProduction ret = slot.getProduction(Goods.of(GoodsType.ORE, 78));
 
@@ -171,13 +171,9 @@ public class ConstructionSlotTest {
 
     @Test
     void test_getProduction_withConsumption_with_freeColonist() throws Exception {
-        final Optional<Goods> production = Optional.of(Goods.of(GoodsType.TOOLS, 5));
         when(construction.getType()).thenReturn(constructionType);
-        when(constructionType.getProduce()).thenReturn(Optional.of(GoodsType.TOOLS));
-        when(constructionType.getProductionPerTurn()).thenReturn(production);
-        when(constructionType.getConsumed()).thenReturn(Optional.of(GoodsType.ORE));
-        when(constructionType.getConsumptionPerTurn())
-                .thenReturn(Optional.of(Goods.of(GoodsType.ORE, 5)));
+        when(constructionType.getProductionPerTurn()).thenReturn(PRODUCTION);
+        when(constructionType.getConsumptionPerTurn()).thenReturn(CONSUMPTION);
         mockUnitForProductionModifier(UnitType.COLONIST);
 
         final ConstructionTurnProduction ret = slot.getProduction(Goods.of(GoodsType.ORE, 78));
@@ -195,13 +191,9 @@ public class ConstructionSlotTest {
     @Test
     void test_getProduction_withConsumption_with_freeColonist_notEnoughResources()
             throws Exception {
-        final Optional<Goods> production = Optional.of(Goods.of(GoodsType.TOOLS, 5));
         when(construction.getType()).thenReturn(constructionType);
-        when(constructionType.getProduce()).thenReturn(Optional.of(GoodsType.TOOLS));
-        when(constructionType.getProductionPerTurn()).thenReturn(production);
-        when(constructionType.getConsumed()).thenReturn(Optional.of(GoodsType.ORE));
-        when(constructionType.getConsumptionPerTurn())
-                .thenReturn(Optional.of(Goods.of(GoodsType.ORE, 5)));
+        when(constructionType.getProductionPerTurn()).thenReturn(PRODUCTION);
+        when(constructionType.getConsumptionPerTurn()).thenReturn(CONSUMPTION);
         when(constructionType.getProductionRatio()).thenReturn(1F);
         mockUnitForProductionModifier(UnitType.COLONIST);
 
@@ -221,13 +213,9 @@ public class ConstructionSlotTest {
 
     @Test
     void test_getProduction_withConsumption_with_masterBlacksmith() throws Exception {
-        final Optional<Goods> production = Optional.of(Goods.of(GoodsType.TOOLS, 5));
         when(construction.getType()).thenReturn(constructionType);
-        when(constructionType.getProduce()).thenReturn(Optional.of(GoodsType.TOOLS));
-        when(constructionType.getProductionPerTurn()).thenReturn(production);
-        when(constructionType.getConsumed()).thenReturn(Optional.of(GoodsType.ORE));
-        when(constructionType.getConsumptionPerTurn())
-                .thenReturn(Optional.of(Goods.of(GoodsType.ORE, 5)));
+        when(constructionType.getProductionPerTurn()).thenReturn(PRODUCTION);
+        when(constructionType.getConsumptionPerTurn()).thenReturn(CONSUMPTION);
         mockUnitForProductionModifier(UnitType.MASTER_BLACKSMITH);
 
         final ConstructionTurnProduction ret = slot.getProduction(Goods.of(GoodsType.ORE, 78));
@@ -245,13 +233,9 @@ public class ConstructionSlotTest {
     @Test
     void test_getProduction_withConsumption_with_masterBlacksmith_notEnoughResources()
             throws Exception {
-        final Optional<Goods> production = Optional.of(Goods.of(GoodsType.TOOLS, 5));
         when(construction.getType()).thenReturn(constructionType);
-        when(constructionType.getProduce()).thenReturn(Optional.of(GoodsType.TOOLS));
-        when(constructionType.getProductionPerTurn()).thenReturn(production);
-        when(constructionType.getConsumed()).thenReturn(Optional.of(GoodsType.ORE));
-        when(constructionType.getConsumptionPerTurn())
-                .thenReturn(Optional.of(Goods.of(GoodsType.ORE, 5)));
+        when(constructionType.getProductionPerTurn()).thenReturn(PRODUCTION);
+        when(constructionType.getConsumptionPerTurn()).thenReturn(CONSUMPTION);
         when(constructionType.getProductionRatio()).thenReturn(1F);
         mockUnitForProductionModifier(UnitType.MASTER_BLACKSMITH);
 

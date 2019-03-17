@@ -85,7 +85,8 @@ public final class KingPlayer extends AbstractRobotPlayer {
                 if (isPossibleToDisembark(unitWithCargo)) {
                     disembarkUnit(unitWithCargo);
                 } else {
-                    tryToReachSomeContinent(unitWithCargo, continents.getContinentsToAttack());
+                    tryToReachSomeContinent(unitWithCargo,
+                            continents.getContinentsToAttack(whosKingThisPlayerIs));
                     if (isPossibleToDisembark(unitWithCargo)) {
                         disembarkUnit(unitWithCargo);
                     }
@@ -96,7 +97,7 @@ public final class KingPlayer extends AbstractRobotPlayer {
 
     private void performSeekAndDestroy(final Unit unit, final Continents continents) {
         final Optional<Location> oLoc = continents.getContinentWhereIsUnitPlaced(unit)
-                .getClosesEnemyCityToAttack(unit.getLocation());
+                .getClosesEnemyCityToAttack(unit.getLocation(), whosKingThisPlayerIs);
         if (oLoc.isPresent()) {
             final Optional<List<Location>> oPath = unit.getPath(oLoc.get(), true);
             if (oPath.isPresent() && !oPath.get().isEmpty()) {
