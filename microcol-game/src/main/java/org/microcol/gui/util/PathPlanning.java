@@ -11,9 +11,6 @@ import com.google.inject.Inject;
 
 /**
  * Class contains methods for computing path for units.
- * <p>
- * animation speed 0 is faster and {@link #ANIMATION_SPEED_MAX_VALUE} is slower.
- * </p>
  */
 public class PathPlanning {
 
@@ -36,7 +33,7 @@ public class PathPlanning {
      *            required point to
      * @param speed
      *            how many points is walked in each step
-     * @return
+     * @return Return path of list of points.
      */
     public List<Point> getPathLimitSpeed(final Point tileFrom, final Point tileTo,
             final int speed) {

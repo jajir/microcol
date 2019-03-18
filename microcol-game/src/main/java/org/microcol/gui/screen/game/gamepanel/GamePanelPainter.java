@@ -118,6 +118,9 @@ public final class GamePanelPainter {
 
     /**
      * Paint everything.
+     * 
+     * @param g
+     *            required graphics context
      */
     public void paint(final GraphicsContext g) {
         final Area area = getArea();

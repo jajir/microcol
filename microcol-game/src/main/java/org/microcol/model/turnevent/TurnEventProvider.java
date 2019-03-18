@@ -106,6 +106,8 @@ public final class TurnEventProvider {
      *
      * @param player
      *            required owner of new unit
+     * @param colony
+     *            required colony
      * @return turn event object
      */
     public static TurnEvent getNewUnitInColony(final Player player, final Colony colony) {
@@ -120,6 +122,8 @@ public final class TurnEventProvider {
      *            required owner of new unit
      * @param goods
      *            define lost goods type and amount
+     * @param colony
+     *            required colony
      * @return turn event object
      */
     public static TurnEvent getGoodsWasThrowsAway(final Player player, final Goods goods,

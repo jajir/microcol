@@ -92,6 +92,9 @@ public final class TurnEventStore {
     /**
      * Clear event for given player. Should be called when player press 'Next
      * turn'.
+     *
+     * @param player
+     *            required payer whose turn event will be deleted
      */
     public void clearTurnEventsForPlayer(final Player player) {
         turnEvents.removeIf(event -> event.getPlayerName().equals(player.getName()));

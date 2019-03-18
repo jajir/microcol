@@ -52,7 +52,7 @@ public final class DialogFight extends AbstractMessageWindow {
      *            required image provider
      * @param localizationHelper
      *            required localization helper
-     * @param gamePreferences
+     * @param preferencesProperties
      *            required game preferences
      */
     @Inject

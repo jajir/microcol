@@ -59,6 +59,11 @@ public final class GamePaintService {
      * 
      * @param graphics
      *            required {@link GraphicsContext}
+     * @param area
+     *            required visible area description
+     * @param oneTurnMoveHighlighter
+     *            required service that helps highlight possible move fo current
+     *            turn
      */
     public void paintTerrain(final GraphicsContext graphics, final Area area,
             final OneTurnMoveHighlighter oneTurnMoveHighlighter) {
@@ -74,9 +79,8 @@ public final class GamePaintService {
                             oneTurnMoveHighlighter.isItHighlighted(location));
                 } else {
                     final Image imageHidden = imageProvider.getImage(ImageProvider.IMG_TILE_HIDDEN);
-                    graphics.drawImage(imageHidden, 0, 0, TILE_WIDTH_IN_PX,
-                            TILE_WIDTH_IN_PX, point.getX(), point.getY(),
-                            TILE_WIDTH_IN_PX, TILE_WIDTH_IN_PX);
+                    graphics.drawImage(imageHidden, 0, 0, TILE_WIDTH_IN_PX, TILE_WIDTH_IN_PX,
+                            point.getX(), point.getY(), TILE_WIDTH_IN_PX, TILE_WIDTH_IN_PX);
                 }
             }
         }
@@ -91,8 +95,13 @@ public final class GamePaintService {
      * 
      * @param graphics
      *            required {@link GraphicsContext}
-     * @param game
-     *            required {@link Game}
+     * @param model
+     *            required game model
+     * @param area
+     *            visible area description
+     * @param excludePainting
+     *            required service that will provide list of excluded locations
+     *            and units
      */
     public void paintUnits(final GraphicsContext graphics, final Model model, final Area area,
             final ExcludePainting excludePainting) {
@@ -188,6 +197,10 @@ public final class GamePaintService {
      *            required {@link GraphicsContext}
      * @param point
      *            required point where to draw image
+     * @param stepCounter
+     *            required step counter
+     * @param moveMode
+     *            required move mode definition
      */
     public void paintStep(final GraphicsContext graphics, final Point point,
             final StepCounter stepCounter, final MoveMode moveMode) {
