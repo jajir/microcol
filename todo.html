@@ -67,39 +67,42 @@
 <li><b>0.7.0</b> - Buildings &amp; ore economy
 <ul>
 <li>&#x2713; Support WASD screen scrolling.</li>
-<li>&#x2713; Replace main menu with icons at the top of screen.</li>
+<li>&#x2713; Replace main menu with icons. Icons will be at the top of screen.</li>
 <li>&#x2713; Finish event processing redesign, remove controllers.</li>
 <li>&#x2713; Colony and Europe views are redesigned.</li>
 <li>&#x2713; Allows to produce hammers. Add button that allows to define building queue. Building can be upgraded.</li>
 <li>&#x2713; Colony building queue and queue editing - simple and ugly version</li>
 <li>&#x2713; Right panel allows to select unit.</li>
 <li>&#x2713; Show colony and Europe full screen not as dialog. </li>
-<li>&#x2713; Right panel allows to select unit.</li>
-<li>&#x2713; Colony building queue and queue editing - simple and ugly version</li>
-<li>&#x2713; redesign model: unit use class hierarchy, remove unit type, same for terrain. Move outside cargoHold, abstract class will contain attack and move </li>
+<li>&#x2713; Redesign game model: unit use class hierarchy, remove unit type, same for terrain. Move outside cargoHold, abstract class will contain attack and move </li>
 <li>&#x2713; Automatize at least some test cases. Use <a class="externalLink" href="https://github.com/TestFX/TestFX">TestFx</a>. </li>
+<li>&#x2713; Make game main game setting configurable in UI tests. </li>
+<li>&#x2713; Improve status bar description. Add some easy to understand description of land, colony and units. </li>
+<li>&#x2713; Improve turn report about throws away goods. It's not correct Czech sentence. </li>
+<li>&#x2713; When goods is transferred suggest pressing of key 'control' in status bar. It should be called &quot;Control (or Ctrl) &#x2303;&quot;. It should be there during moving goods from and to ship and during buying and selling goods.</li>
 <li>&#x1f41b; When focused unit is placed outside colony and unit is moved to field than attempt to move unit leads to exception.</li>
 <li>&#x1f41b; Main menu doesn't work when drag pressed mouse instead of simple move. It can't be easily solved. There is no such feature in JavaFx. Menu was redesigned without JavaFX.</li>
-<li>&#x2717; </li>
-<li>&#x2717; </li>
-<li>&#x2717; </li>
-<li>&#x2717; </li>
-<li>&#x2717; </li>
-<li>&#x2717; Add TurnFinished event. Translate it to UI event disableUI and enableUI. Use this events for disabling game top menu and right menu. Describe Events in diagram. </li>
-<li>&#x2717; Make game main game setting configurable in UI tests. </li>
-<li>&#x2717; Finish translation</li>
-<li>&#x1f41b; When focus is transfered by click than don't center at focused unit.</li>
-<li>&#x1f41b; Don't animate and don't wait for movements outside of screen. When kings unit coming to colonies.</li>
-<li>&#x2717; When focused unit on in city and instead of moving it city is open and unit moved to colony field than next unit on focused city is not selected and consequently can't be moved.</li>
-<li>&#x2717; Describe event tileWasSelected, unitWasSelected and managers and controllers. </li>
-<li>&#x2717; List of default campaign missions should contains some check to know which missions are done.</li>
-<li>&#x2717; build road, at the beginning any unit can build road at 4 moves. add action r</li>
-<li>&#x2717; Redesign game loop, to support parallel animations. Slight changes in water &amp; move animation &amp; scroll to moving unit. To control constant FPS. Now it's around 60 FPS.</li>
-<li>&#x2717; Redesign model events - add some mark to it's name to be able to distinguish them from front-end events.</li>
-<li>&#x2717; Try to make package including JVM, it will be nice to use openJDK.</li></ul></li>
+<li>&#x1f41b; In some cases turn events are lost. It's corrected in model. </li>
+<li>&#x1f41b; Don't animate and don't wait for units moving outside of screen. When kings unit coming to colonies.</li>
+<li>&#x1f41b; Dialog for choosing amount of transfered goods is not shown always.</li>
+<li>&#x1f41b; When goods produced in turn exceed warehouse capacity than exceed goods should be thrown away and turn event generated. </li>
+<li>&#x1f41b; When open game and open colony A then no cargo slots are show. When open colony B than cargo slots are there event if there is no ship. It's not correct. When colony is open and doesn't contains any ships then no cargo slots should be visible. When colony contains at least one ship then first ship should be selected with cargo slots.</li>
+<li>&#x1f41b; Turn event that famine will come in colony is not shown.</li>
+<li>&#x1f41b; Focused unit is in colony. Than colony is open and focused unit is placed to field. Than colony is closed. Now it's not possible to move any unit in colony, because there is no selected unit. When focused unit is moved to colony field than next unit from colony should be focused. </li>
+<li>&#x1f41b; Action 'plow field' is offered when unit is placed in colony.</li>
+<li>&#x1f41b; Declare independence button show just when player have least three colonies and date is after 1700 AD. </li>
+<li>&#x1f41b; When focus is transfered by tab then screen don't center at focused unit.</li></ul></li>
 <li><b>Backlog</b> - feature and improvement backlog
 <ul>
-<li>&#x2717; </li>
+<li>&#x2717; Build simple Civilizopedia. Ideally some HTML page with generated content. </li>
+<li>&#x2717; Improve campaign screen. List of default campaign missions should contains some check to know which missions are done.</li>
+<li>&#x2717; Add TurnFinished event. Translate it to UI event disableUI and enableUI. Use this events for disabling game top menu and right menu. Describe Events in diagram. </li>
+<li>&#x2717; Improve documentation. Describe event tileWasSelected, unitWasSelected and managers and controllers. </li>
+<li>&#x2717; build road, at the beginning any unit can build road at 4 moves. add action r</li>
+<li>&#x2717; Redesign game loop, to support parallel animations. Slight changes in water &amp; move animation &amp; scroll to moving unit. To control constant FPS. Now it's around 60 FPS.</li>
+<li>&#x2717; Finish translation</li>
+<li>&#x2717; Redesign model events - add some mark to it's name to be able to distinguish them from front-end events.</li>
+<li>&#x2717; Try to make package including JVM, it will be nice to use openJDK and Java 11</li>
 <li>&#x2717; Add unit wagon, can't fight, capture colony, can transport goods</li>
 <li>&#x2717; colonist unit equipped with (20) tool can plow field. Depending on unit expertise in a few turns field will be created and 20 tools will be destroyed.</li>
 <li>&#x1f41b; When unit is selected from right menu than correct unit is not highlighted in main game area. Or it's not possible to verify, because just one unit type is there. </li>
@@ -113,7 +116,6 @@
 <li>&#x2717; Colony name editing</li>
 <li>&#x2717; Colony name generator</li>
 <li>&#x2717; Add mouse over hints to colony. Add hint to optional 'Control' key during dragging. </li>
-<li>&#x2717; Don't show Europe as dialog, show it at full screen. </li>
 <li>&#x2717; Add mouse over hints to Europe. </li>
 <li>&#x2717; Prepare names for colonies for each nationalities</li>
 <li>&#x2717; Add nationality bonuses</li>
@@ -141,7 +143,7 @@
 <div class="section">
 <h2><a name="Notes:"></a>Notes:</h2>
 <ul>
-<li>&#x2717; Main menu doesn't work when drag pressed mouse instead of simple move. It can't be easily solved. There is no such feature in JavaFx.</li></ul></div>
+<li>&#x2717; Original JavaFx Main menu doesn't work when drag pressed mouse instead of simple move. It can't be easily solved. There is no such feature in JavaFx.</li></ul></div>
         </div>
       </div>
     </div>

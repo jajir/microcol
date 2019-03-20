@@ -95,13 +95,14 @@
 <li>Choose one and press 'b' to build colony. Verify that there is new colony with some name.</li>
 <li>Try to focus second unit (use 'tab'). Verify that option build colony is disabled. Verify that plow field is disabled. </li>
 <li>Open colony details. Verify that founding colonist is working at field and produce corn.</li>
-<li>Move unit from outside of colony to filed. Verify that moved unit start produce food.</li></ul>
+<li>Move unit to colony field. Verify that moved unit started to produce food.</li></ul>
 <p>Done.</p></div>
 <div class="section">
 <h4><a name="TC-03_Fight_for_freedom_-_win_battles"></a>TC-03 Fight for freedom - win battles</h4>
 <ul>
 <li>Open save 'verify-independence.microcol'.</li>
 <li>Declare independence.</li>
+<li>Verify that there are two dialog messages.</li>
 <li>Wait for king's military units arrival.</li></ul>
 <p>Done.</p></div>
 <div class="section">
@@ -111,11 +112,62 @@
 <li>Press 'Next turn'.</li>
 <li>Verify that blue units move at [22,13]. </li>
 <li>Press 'Next turn'.</li>
+<li>Verify that turn dialog was shown.</li>
+<li>Verify that message about lost city is shown.</li>
 <li>Verify that blue units attack city, city loose and ship leaves city to random place. </li>
-<li>Verify that city Delft is not possible to open. </li></ul>
+<li>Verify that city Delft is not possible to open.</li>
+<li>Open Turn Dialog again.</li>
+<li>Verify that message about lost city is shown.</li></ul>
 <p>Done.</p></div>
 <div class="section">
-<h4><a name="TC-05_Verify_default_campaign"></a>TC-05 Verify default campaign</h4>
+<h4><a name="TC-05_Moving_goods"></a>TC-05 Moving goods</h4>
+<p>Test verify moving goods between ship and colony warehouse.</p>
+<ul>
+<li>Open game file 'T05-moving-goods.microcol'.</li>
+<li>Open colony Delft.</li>
+<li>Select ship from port by clicking at it.</li>
+<li>Drag food from first warehouse slot to first ship's cargo slot</li>
+<li>Verify that 100 corn was transferred.</li>
+<li>Drag food from warehouse to first ship's cargo slot</li>
+<li>Drag tobacco from third warehouse slot to second ship's cargo slot</li>
+<li>Verify that 54 tobacco was transferred.</li>
+<li>Drag food from first warehouse slot to first ship's cargo slot. Ship's cargo slot is already full. </li>
+<li>Verify that still just 100 corn is in cargo. Verify that no cargo was transferred.</li>
+<li>Drag 100 corn to third cargo slot, press control during dragging</li>
+<li>Select that just 47 corn will be transferred.</li>
+<li>Close dialog for choosing transferred amount.</li>
+<li>Verify that just 47 corn was transferred.</li>
+<li>Drag corn from ship cargo slot to warehouse, press control during dragging.</li>
+<li>At dialog for selecting amount of transferred goods select value 77.</li>
+<li>Close dialog.</li>
+<li>Verify that just 23 corn is in first cargo slot, 77 items was transferred.</li></ul>
+<p>Done.</p></div>
+<div class="section">
+<h4><a name="TC-06_Buy_and_sell_goods"></a>TC-06 Buy and sell goods</h4>
+<p>Verify thats possible to buy and sell goods in Europe port.</p>
+<ul>
+<li>Not yet finished.</li></ul>
+<p>Done.</p></div>
+<div class="section">
+<h4><a name="TC-07_Sending_ships_to_New_World"></a>TC-07 Sending ships to New World</h4>
+<p>Test verify sending units to new world and back.</p>
+<ul>
+<li>Not yet finished.</li></ul>
+<p>Done.</p></div>
+<div class="section">
+<h4><a name="TC-08_Conquer_all_colonies"></a>TC-08 Conquer all colonies</h4>
+<p>Test verify that game correctly finish when all enemy units are destroyed.</p>
+<ul>
+<li>Not yet finished.</li></ul>
+<p>Done.</p></div>
+<div class="section">
+<h4><a name="TC-09_Lost_all_colonies"></a>TC-09 Lost all colonies</h4>
+<p>Test verify that game correctly finish when player lost all colonies.</p>
+<ul>
+<li>Not yet finished.</li></ul>
+<p>Done.</p></div>
+<div class="section">
+<h4><a name="TC-20_Verify_default_campaign"></a>TC-20 Verify default campaign</h4>
 <ul>
 <li>Start game with '-Dclean=true' to clean all played missions. Verify that 'New free play game' is disabled.</li>
 <li>Open 'Play campaign'. Verify that it's possible to play just first mission.</li>

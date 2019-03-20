@@ -62,6 +62,8 @@
         <div id="bodyColumn"  class="span10" >
 <div class="section">
 <h2><a name="Events"></a>Events</h2>
+<div class="section">
+<h3><a name="Event_processing_in_GUI"></a>Event processing in GUI</h3>
 <p>There are events fired by user interface and fired by game model. Events are dispatched by <i>com.google.common.eventbus.EventBus</i>. In class <i>org.microcol.gui.event.modelModelListenerImpl</i> are handled events from model process like:</p>
 <div class="source"><pre class="prettyprint">@Override
 public void onTurnStarted(final TurnStartedEvent event) {
@@ -78,7 +80,16 @@ private void onTurnStarted(final TurnStartedEvent event) {
 @Listener
 public final class TurnStartedListener {
 }</pre></div>
-<p>Events produced on user interface are directly inserted to EventBus instance. Thread that post event also handle the event. </p></div>
+<p>Events produced on user interface are directly inserted to EventBus instance. Thread that post event also handle the event.</p></div>
+<div class="section">
+<h3><a name="Model"></a>Model</h3>
+<div class="section">
+<h4><a name="First_not_working_attempt"></a>First not working attempt</h4>
+<p>Originally was model meant as single threaded. It quickly led to problem like this:</p><img src="model-single-threaded.png" alt="Single threaded model." />
+<p>It's clear that it's not working because sequence of events is broken. Event that on turn is AI comes to UI after event that on turn is Player.</p></div>
+<div class="section">
+<h4><a name="Final_solution"></a>Final solution</h4>
+<p>Events from model should be fired in a new threads. Model should be called is the same thread. It should be called is same thread from UI and event from AI. It's mainly because consistency. When model call start in new thread than next model call could reach it in inconsistent state. </p></div></div></div>
         </div>
       </div>
     </div>
