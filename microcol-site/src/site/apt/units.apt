@@ -4,8 +4,7 @@
 
  Unit class is pretty complex. Current class diagram is following:
 
-[unit-class-diagram.png] Unit class diagram.
+[unit-hierarchy.png] Unit class diagram.
  
- All missing units are extended from <Free Colonist>.
- Yellow interfaces <Have Cargo>, <Hold Tools> allows to put feature implementation to one place.
+ Rest of ground units are extended from <Free Colonist>.
  

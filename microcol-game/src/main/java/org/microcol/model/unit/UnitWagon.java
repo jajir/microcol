@@ -26,4 +26,9 @@ public final class UnitWagon extends UnitWithCargo {
         return UnitType.WAGON;
     }
 
+    @Override
+    public boolean isShip() {
+        return false;
+    }
+
 }

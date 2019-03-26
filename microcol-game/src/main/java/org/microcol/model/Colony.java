@@ -291,6 +291,7 @@ public class Colony {
                 .sum();
     }
 
+    // TODO return list of ship abstract class
     public List<UnitWithCargo> getUnitsInPort() {
         return model.getUnitsAt(location).stream().filter(unit -> unit.getType().canHoldCargo())
                 .map(unit -> (UnitWithCargo) unit).collect(ImmutableList.toImmutableList());

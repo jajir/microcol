@@ -9,7 +9,7 @@ import org.microcol.model.Player;
 import org.microcol.model.Unit;
 import org.microcol.model.UnitType;
 
-public final class UnitFrigate extends UnitWithCargo {
+public final class UnitFrigate extends Ship {
 
     public UnitFrigate(Function<Unit, Cargo> cargoBuilder, Model model, Integer id,
             Function<Unit, Place> placeBuilder, Player owner, int availableMoves,

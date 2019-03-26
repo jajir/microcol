@@ -21,7 +21,7 @@ import com.google.common.base.Preconditions;
 /**
  * Unit Free Colonist.
  */
-public final class UnitFreeColonist extends Unit {
+public final class UnitFreeColonist extends CanMount {
 
     public final static int REQUIRED_HORSES_FOR_MOUNTED_UNIT = 50;
 

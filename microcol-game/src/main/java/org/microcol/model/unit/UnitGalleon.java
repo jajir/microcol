@@ -9,7 +9,7 @@ import org.microcol.model.Player;
 import org.microcol.model.Unit;
 import org.microcol.model.UnitType;
 
-public final class UnitGalleon extends UnitWithCargo {
+public final class UnitGalleon extends Ship {
 
     public UnitGalleon(Function<Unit, Cargo> cargoBuilder, Model model, Integer id,
             Function<Unit, Place> placeBuilder, Player owner, int availableMoves,

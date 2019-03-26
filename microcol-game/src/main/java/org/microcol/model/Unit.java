@@ -25,7 +25,7 @@ import com.google.common.collect.Lists;
 /**
  * All units can attack with muskets except wagon.
  */
-public abstract class Unit {
+public abstract class Unit implements UnitI {
 
     /**
      * Unit will see all tiles accessible by it's speed. This define how many
@@ -82,7 +82,7 @@ public abstract class Unit {
     public boolean canHoldTools() {
         return this instanceof UnitFreeColonist;
     }
-
+    
     /**
      * Get unit type.
      *
