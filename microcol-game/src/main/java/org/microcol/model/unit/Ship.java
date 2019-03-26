@@ -18,7 +18,7 @@ public abstract class Ship extends UnitWithCargo {
             final UnitAction unitAction) {
         super(cargoBuilder, model, id, placeBuilder, owner, actionPoints, unitAction);
     }
-    
+
     @Override
     public boolean isShip() {
         return true;

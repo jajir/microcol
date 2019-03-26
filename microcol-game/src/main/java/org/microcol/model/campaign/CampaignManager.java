@@ -19,6 +19,7 @@ public final class CampaignManager {
 
     private final Map<? extends CampaignName, Campaign> campaigns;
 
+    // TODO use json in home directory
     private final Preferences preferences = Preferences.userNodeForPackage(CampaignManager.class);
 
     CampaignManager(final List<Campaign> campaigns) {

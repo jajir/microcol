@@ -13,7 +13,7 @@ import org.microcol.model.store.ColonyFieldPo;
 import org.microcol.model.store.ColonyPo;
 import org.microcol.model.store.ConstructionPo;
 import org.microcol.model.turnevent.TurnEventProvider;
-import org.microcol.model.unit.UnitWithCargo;
+import org.microcol.model.unit.Ship;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
@@ -291,10 +291,9 @@ public class Colony {
                 .sum();
     }
 
-    // TODO return list of ship abstract class
-    public List<UnitWithCargo> getUnitsInPort() {
-        return model.getUnitsAt(location).stream().filter(unit -> unit.getType().canHoldCargo())
-                .map(unit -> (UnitWithCargo) unit).collect(ImmutableList.toImmutableList());
+    public List<Ship> getUnitsInPort() {
+        return model.getUnitsAt(location).stream().filter(unit -> unit.getType().isShip())
+                .map(unit -> (Ship) unit).collect(ImmutableList.toImmutableList());
     }
 
     public List<Unit> getUnitsOutSideColony() {

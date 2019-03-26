@@ -14,10 +14,6 @@ import com.google.inject.Inject;
 /**
  * Control application state. It start or load new game. It control content of
  * main application screen.
- * 
- * 
- * 
- * TODO refactor it, it start's game after application start up.
  */
 public final class ApplicationController {
 
@@ -40,7 +36,7 @@ public final class ApplicationController {
     /**
      * It's called only once per application life.
      */
-    public void startApplication() {
+    public void startMusic() {
         logger.debug("Application started.");
         musicController.start(gamePreferences.getVolume());
     }

@@ -3,6 +3,8 @@ package org.microcol.model.unit;
 import java.util.function.Function;
 
 import org.microcol.model.Cargo;
+import org.microcol.model.Direction;
+import org.microcol.model.Location;
 import org.microcol.model.Model;
 import org.microcol.model.Place;
 import org.microcol.model.Player;
@@ -21,5 +23,20 @@ public final class UnitGalleon extends Ship {
     public UnitType getType() {
         return UnitType.GALLEON;
     }
-
+    
+    @Override
+    protected Direction findOrintationForMove(Location moveTo) {
+        final Location vector = moveTo.sub(getLocation());
+        final Direction direction = Direction.valueOf(vector);
+        if (direction.isOrientedWest()) {
+            return Direction.west;
+        } else if (direction.isOrientedEast()) {
+            return Direction.east;
+        } else {
+            /**
+             * Keep original orientation.
+             */
+            return getPlaceLocation().getOrientation();
+        }
+    }
 }

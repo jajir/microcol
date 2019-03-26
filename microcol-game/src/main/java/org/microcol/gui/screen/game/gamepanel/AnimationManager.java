@@ -12,7 +12,8 @@ import com.google.inject.Inject;
 import javafx.scene.canvas.GraphicsContext;
 
 /**
- * Hold and manage planned animation steps.
+ * Hold and manage planned animation steps. Animation steps are skipped when
+ * they are not visible to plyer.
  */
 public final class AnimationManager implements AnimationLock {
 
@@ -70,7 +71,6 @@ public final class AnimationManager implements AnimationLock {
         Preconditions.checkNotNull(animation);
         Preconditions.checkState(runningPart == null, "There is still runnign animation '%s'",
                 runningPart);
-        //TODO skip event here all invisible moves
         runningPart = new AnimationHolder(animation, onAnimationIsDone);
         logger.debug("Adding animation {}", animation);
         eventBus.post(new AnimationStartedEvent());

@@ -1,7 +1,9 @@
 package org.microcol.model.unit;
 
+import java.util.List;
 import java.util.function.Function;
 
+import org.microcol.model.AbstractUnit;
 import org.microcol.model.Cargo;
 import org.microcol.model.CargoSlot;
 import org.microcol.model.Location;
@@ -12,11 +14,12 @@ import org.microcol.model.Unit;
 import org.microcol.model.store.UnitPo;
 
 import com.google.common.base.Preconditions;
+import com.google.common.collect.ImmutableList;
 
 /**
  * Abstract class for unit with cargo.
  */
-public abstract class UnitWithCargo extends Unit {
+public abstract class UnitWithCargo extends AbstractUnit {
 
     private final Cargo cargo;
 
@@ -71,6 +74,10 @@ public abstract class UnitWithCargo extends Unit {
             return (!inCurrentTurn || holdedUnit.getActionPoints() > 0)
                     && holdedUnit.canUnitDisembarkAt(moveToLocation);
         }
+    }
+    
+    protected List<UnitActionType> getSupportedActions(){
+        return ImmutableList.of(UnitActionType.noAction);
     }
 
 }

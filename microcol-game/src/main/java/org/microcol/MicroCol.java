@@ -185,7 +185,7 @@ public final class MicroCol extends Application {
             mainStageBuilder.buildPrimaryStage(primaryStage);
             final ApplicationController applicationController = injector
                     .getInstance(ApplicationController.class);
-            primaryStage.setOnShowing(e -> applicationController.startApplication());
+            primaryStage.setOnShowing(e -> applicationController.startMusic());
             primaryStage.show();
         } catch (Exception e) {
             e.printStackTrace();

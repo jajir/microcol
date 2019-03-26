@@ -32,7 +32,7 @@ public final class PlowFieldEventListener {
                 .orElseThrow(() -> new IllegalStateException(
                         "Plow field event can't be invoked when no unit is selected."));
         Preconditions.checkArgument(unit.canPlowFiled(), "Unit can't plow field.");
-        unit.setAction(UnitActionType.plowField);
+        unit.setActionType(UnitActionType.plowField);
     }
 
 }

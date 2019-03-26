@@ -99,7 +99,7 @@ public final class PaintService {
     private void painFlagWithAction(final GraphicsContext graphics, final Point point,
             final Unit unit) {
         paintOwnersFlag(graphics, point, unit.getOwner());
-        final String sign = unit.getUnitAction().getType().getSign();
+        final String sign = unit.getAction().getType().getSign();
         if (!Strings.isNullOrEmpty(sign)) {
             graphics.setFont(colonyFont);
             graphics.setTextAlign(TextAlignment.CENTER);
