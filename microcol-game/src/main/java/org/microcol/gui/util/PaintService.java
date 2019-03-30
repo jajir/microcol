@@ -124,7 +124,7 @@ public final class PaintService {
         graphics.setStroke(Color.LIGHTGREY);
         graphics.setLineWidth(1.5F);
         graphics.strokeRect(point.getX(), point.getY(), FLAG_WIDTH, FLAG_HEIGHT);
-        // TODO move colors to player.
+        // TODO move colors to player's nationality
         if (player.isHuman()) {
             graphics.setFill(Color.YELLOW);
         } else {

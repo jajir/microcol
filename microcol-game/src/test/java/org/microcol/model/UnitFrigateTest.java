@@ -24,6 +24,8 @@ public class UnitFrigateTest {
 
     private final Model model = mock(Model.class);
 
+    private final WorldMap map = mock(WorldMap.class);
+
     private final Integer id = 4;
 
     @SuppressWarnings("unchecked")
@@ -41,6 +43,9 @@ public class UnitFrigateTest {
 
     @Test
     public void test_verifyThatUnitCouldBePlacedIntoHighseas() throws Exception {
+        when(placeMap.getLocation()).thenReturn(Location.of(30, 30));
+        when(model.getMap()).thenReturn(map);
+        when(map.getMaxX()).thenReturn(40);
         unit.placeToHighSeas(true);
 
         assertTrue(unit.isAtHighSea());

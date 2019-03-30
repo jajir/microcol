@@ -2,13 +2,17 @@ package org.microcol.model.campaign;
 
 import org.microcol.model.Model;
 import org.microcol.model.ModelListener;
-import org.microcol.model.store.CampaignPo;
-import org.microcol.model.store.ModelPo;
+import org.microcol.model.campaign.po.GameModelPo;
 
 import com.google.common.base.Preconditions;
 
 /**
- * Encapsulate game model and campaign and missions.
+ * Encapsulate whole game model. It put together:
+ * <ul>
+ * <li>model - main model with units, world map, ...</li>
+ * <li>campaign</li>
+ * <li>mission state - what was done by player</li>
+ * </ul>
  *
  * <p>
  * All commands to model goes through mission. Mission decide if move of game
@@ -17,7 +21,7 @@ import com.google.common.base.Preconditions;
  * </p>
  *
  */
-public final class ModelMission {
+public final class GameModel {
 
     private final Campaign campaign;
 
@@ -39,17 +43,12 @@ public final class ModelMission {
      * @param model
      *            required game model
      */
-    ModelMission(final Campaign campaign, final CampaignMission campaignMission,
+    GameModel(final Campaign campaign, final CampaignMission campaignMission,
             final Mission<?> mission, final Model model) {
         this.campaign = Preconditions.checkNotNull(campaign);
         this.campaignMission = Preconditions.checkNotNull(campaignMission);
         this.mission = Preconditions.checkNotNull(mission);
         this.model = Preconditions.checkNotNull(model);
-        /*
-         * following doesn't allows different mission implementation and
-         * multiple conditions.
-         */
-        model.addGameOverEvaluator(mission::evaluateGameOver);
     }
 
     /**
@@ -57,12 +56,12 @@ public final class ModelMission {
      *
      * @return Return model persistent object
      */
-    public ModelPo getModelPo() {
-        final ModelPo out = model.save();
-        out.setCampaign(new CampaignPo());
-        out.getCampaign().setName(campaign.getName().toString());
-        out.getCampaign().setMission(campaignMission.getName());
-        out.getCampaign().setData(mission.saveToMap());
+    public GameModelPo getModelPo() {
+        final GameModelPo out = new GameModelPo();
+        out.setModel(model.save());
+        out.setCampaignName(campaign.getName().toString());
+        out.setMissionName(campaignMission.getName());
+        out.setData(mission.saveGoals());
         return out;
     }
 
@@ -97,11 +96,8 @@ public final class ModelMission {
         model.stop();
     }
 
-    /**
-     * @return the mission
-     */
-    public Mission<?> getMission() {
-        return mission;
+    public MissionGoals getMissionGoals() {
+        return mission.getGoals();
     }
 
 }

@@ -23,7 +23,7 @@ import javafx.stage.Stage;
 public class TC_01_embark_disembark_test extends AbstractMicroColTest {
 
     private final static File testFileName = new File(
-	    "src/test/scenarios/T01-loading-unloading.microcol");
+	    "src/test/scenarios/T01-embark-disembark.microcol");
 
     @Start
     private void start(final Stage primaryStage) throws Exception {

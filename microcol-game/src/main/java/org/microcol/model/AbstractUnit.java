@@ -668,7 +668,8 @@ public abstract class AbstractUnit implements Unit {
     @Override
     public void placeToHighSeas(final boolean isTravelToEurope) {
         Preconditions.checkArgument(getType().isShip(), "Only ships could be placed to high sea.");
-        Preconditions.checkArgument(isAtPlaceLocation(), "Unit %s have to at map.", this);
+        Preconditions.checkArgument(isAtPlaceLocation() || isAtEuropePort(),
+                "Unit %s have to at map or in Europe port.", this);
         final int requiredTurns = countRequiredTurnsToSail(isTravelToEurope);
         place.destroy();
         place = new PlaceHighSea(this, isTravelToEurope, requiredTurns);

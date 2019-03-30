@@ -2,6 +2,8 @@ package org.microcol.model.campaign;
 
 import java.util.List;
 
+import org.microcol.model.campaign.store.CampaignPo;
+
 /**
  * Campaign interface.
  */
@@ -43,5 +45,9 @@ public interface Campaign {
      *         otherwise return <code>false</code>.
      */
     boolean isMissionEnabled(CampaignMission mission);
+
+    void load(CampaignPo campaignPo);
+
+    CampaignPo save();
 
 }

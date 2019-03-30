@@ -19,7 +19,7 @@ import org.microcol.gui.event.QuitGameListener;
 import org.microcol.gui.event.ShowGridListenerPreferences;
 import org.microcol.gui.event.model.ArtifitialPlayersManager;
 import org.microcol.gui.event.model.GameModelController;
-import org.microcol.gui.event.model.MissionCallBack;
+import org.microcol.gui.event.model.MissionEventListener;
 import org.microcol.gui.image.GrassCoastMapGenerator;
 import org.microcol.gui.image.IceCoastMapGenerator;
 import org.microcol.gui.image.ImageProvider;
@@ -156,7 +156,7 @@ public final class MicroColModule extends AbstractModule {
         bind(DialogDestroyColony.class).in(Singleton.class);
         bind(ChooseGoodsDialog.class).in(Singleton.class);
         bind(DialogMessage.class).in(Singleton.class);
-        bind(MissionCallBack.class).in(Singleton.class);
+        bind(MissionEventListener.class).asEagerSingleton();
         bind(SettingButtonsPresenter.class).asEagerSingleton();
 
         /**

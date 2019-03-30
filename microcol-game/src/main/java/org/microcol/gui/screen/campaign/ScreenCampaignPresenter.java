@@ -7,6 +7,7 @@ import org.microcol.gui.screen.Screen;
 import org.microcol.gui.screen.ShowScreenEvent;
 import org.microcol.gui.util.Listener;
 import org.microcol.model.campaign.CampaignNames;
+import org.microcol.model.campaign.Default_missionNames;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -45,10 +46,11 @@ public final class ScreenCampaignPresenter {
                 .setOnAction(event -> eventBus.post(new ShowScreenEvent(Screen.MENU)));
         display.setOnSelectedMission(this::onSelectedMission);
     }
-    
+
     private void onSelectedMission(final String missionName) {
         logger.debug("Mission {} was selected to play.", missionName);
-        gameController.startCampaignMission(CampaignNames.defaultCampaign, missionName);
+        final Default_missionNames name = Default_missionNames.valueOf(missionName);
+        gameController.startCampaignMission(CampaignNames.defaultCampaign, name);
         eventBus.post(new ShowScreenEvent(Screen.GAME));
     }
 

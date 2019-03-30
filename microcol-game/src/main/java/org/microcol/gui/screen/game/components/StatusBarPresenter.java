@@ -91,7 +91,7 @@ public final class StatusBarPresenter implements UpdatableLanguage {
 
     @Override
     public void updateLanguage(final I18n i18n) {
-        if (gameModelController.isModelReady()) {
+        if (gameModelController.isGameModelReady()) {
             setYearText(view.getLabelEra(), gameModelController.getModel().getCalendar());
             setGoldText(gameModelController.getHumanPlayer().getGold());
         } else {

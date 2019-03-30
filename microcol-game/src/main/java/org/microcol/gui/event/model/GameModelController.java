@@ -14,7 +14,7 @@ import org.microcol.model.Model;
 import org.microcol.model.Path;
 import org.microcol.model.Player;
 import org.microcol.model.Unit;
-import org.microcol.model.campaign.ModelMission;
+import org.microcol.model.campaign.GameModel;
 import org.microcol.model.unit.UnitWithCargo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,7 +39,7 @@ public class GameModelController {
     
     private final EventBus eventBus;
 
-    private ModelMission modelMission = null;
+    private GameModel gameModel = null;
 
     @Inject
     public GameModelController(final SelectedTileManager selectedTileManager,
@@ -55,12 +55,12 @@ public class GameModelController {
      * @param newModel
      *            required game model
      */
-    void setAndStartModel(final ModelMission newModel) {
+    void setAndStartModel(final GameModel newModel) {
         tryToStopGame();
-        modelMission = Preconditions.checkNotNull(newModel);
+        gameModel = Preconditions.checkNotNull(newModel);
         artifitialPlayersManager.initRobotPlayers(getModel());
-        modelMission.addListener(new ModelListenerImpl(this, eventBus));
-        modelMission.startGame();
+        gameModel.addListener(new ModelListenerImpl(this, eventBus));
+        gameModel.startGame();
         if (getModel().getFocusedField() != null) {
             selectedTileManager.setSelectedTile(getModel().getFocusedField(),
                     ScrollToFocusedTile.skip);
@@ -78,12 +78,12 @@ public class GameModelController {
      *             when there is no running model
      */
     public Model getModel() {
-        Preconditions.checkState(modelMission != null, "Model is not ready");
-        return modelMission.getModel();
+        Preconditions.checkState(gameModel != null, "Model is not ready");
+        return gameModel.getModel();
     }
 
-    public boolean isModelReady() {
-        return modelMission != null;
+    public boolean isGameModelReady() {
+        return gameModel != null;
     }
 
     public Player getCurrentPlayer() {
@@ -107,10 +107,10 @@ public class GameModelController {
     }
 
     private void tryToStopGame() {
-        if (modelMission != null) {
+        if (gameModel != null) {
             artifitialPlayersManager.destroyRobotPlayers();
-            modelMission.stop();
-            modelMission = null;
+            gameModel.stop();
+            gameModel = null;
         }
     }
 
@@ -165,13 +165,13 @@ public class GameModelController {
     /**
      * @return the modelCapgaign
      */
-    public ModelMission getModelMission() {
-        return modelMission;
+    public GameModel getGameModel() {
+        return gameModel;
     }
 
     public void stop() {
         tryToStopGame();
-        modelMission = null;
+        gameModel = null;
     }
 
 }

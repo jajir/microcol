@@ -1,4 +1,10 @@
 {
+  "campaignName": "freePlay",
+  "missionName": "freePlay",
+  "goalData": {
+    "findNewWorld": "false"
+  },
+  "model": {
   "calendar": {
     "startYear": 1490,
     "endYear": 1800,
@@ -4219,4 +4225,5 @@
     "gameStarted": true,
     "currentPlayer": "Dutch"
   }
+}
 }

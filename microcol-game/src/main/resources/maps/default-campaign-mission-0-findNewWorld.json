@@ -1,4 +1,11 @@
 {
+  "campaignName": "default",
+  "missionName": "findNewWorld",
+  "data": {
+    "conquerRaf": "false",
+    "declareIndependence": "false"
+  },
+  "model": {
   "calendar": {
     "startYear": 1490,
     "endYear": 1800,
@@ -164,4 +171,5 @@
     "x": 45,
     "y": 15
   }
+}
 }

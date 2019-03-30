@@ -48,7 +48,7 @@ public final class MissionGoalsDialog extends AbstractMessageWindow {
 
     public void repaint() {
         goalsPanel.getChildren().clear();
-        final MissionGoals goals = gameModelController.getModelMission().getMission().getGoals();
+        final MissionGoals goals = gameModelController.getGameModel().getMissionGoals();
         goals.getGoals().forEach(goal -> {
             String str = i18n.get(goal.getDescriptionKey()) + " ";
             if (goal.isFinished()) {

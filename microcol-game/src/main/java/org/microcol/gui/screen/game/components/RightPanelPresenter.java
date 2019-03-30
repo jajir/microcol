@@ -66,10 +66,10 @@ public final class RightPanelPresenter {
 
     @SuppressWarnings("unused")
     public void updateLanguage(final I18n i18n) {
-        if (gameModelController.isModelReady()) {
+        if (gameModelController.isGameModelReady()) {
             display.setOnMovePlayer(gameModelController.getModel().getCurrentPlayer());
         }
-        if (lastFocusedTileEvent != null && gameModelController.isModelReady()) {
+        if (lastFocusedTileEvent != null && gameModelController.isGameModelReady()) {
             display.refreshView(lastFocusedTileEvent);
         }
     }

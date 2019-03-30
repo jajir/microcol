@@ -10,10 +10,10 @@ import org.slf4j.LoggerFactory;
 /**
  * Hold functions that properly react on game over game reason.
  */
-public final class GameOverProcessors {
+final class GameOverProcessors {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(GameOverProcessors.class);
-    
+
     /**
      * React on game over when user exceed given time.
      */
@@ -21,10 +21,7 @@ public final class GameOverProcessors {
         if (GameOverEvaluator.REASON_TIME_IS_UP
                 .equals(context.getEvent().getGameOverResult().getGameOverReason())) {
             LOGGER.info("Game over, time is up.");
-            context.getMissionCallBack().executeOnFrontEnd(callBackContext -> {
-                callBackContext.showMessage(Dialog.gameOver_timeIsUp);
-                callBackContext.goToGameMenu();
-            });
+            context.fireEvent(new EventFinishMission(Dialog.gameOver_timeIsUp));
             return "ok";
         }
         return null;
@@ -34,10 +31,7 @@ public final class GameOverProcessors {
         if (GameOverEvaluator.REASON_NO_COLONIES
                 .equals(context.getEvent().getGameOverResult().getGameOverReason())) {
             LOGGER.info("Game over, no colonies.");
-            context.getMissionCallBack().executeOnFrontEnd(callBackContext -> {
-                callBackContext.showMessage(Dialog.gameOver_allColoniesAreLost);
-                callBackContext.goToGameMenu();
-            });
+            context.fireEvent(new EventFinishMission(Dialog.gameOver_allColoniesAreLost));
             return "ok";
         }
         return null;

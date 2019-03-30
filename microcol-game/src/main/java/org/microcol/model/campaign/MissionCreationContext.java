@@ -1,47 +1,61 @@
 package org.microcol.model.campaign;
 
-import org.microcol.gui.event.model.MissionCallBack;
+import java.util.Map;
+
 import org.microcol.model.Model;
-import org.microcol.model.store.ModelPo;
+import org.microcol.model.campaign.po.GameModelPo;
 
 import com.google.common.base.Preconditions;
+import com.google.common.eventbus.EventBus;
 
 /**
  * Holds parameters needed for creation of mission. It simplify parameters
  * passing.
  */
-public final class MissionCreationContext {
+final class MissionCreationContext {
 
-	private final MissionCallBack missionCallBack;
+    private final EventBus eventBus;
 
-	private final Model model;
+    private final Model model;
 
-	private final ModelPo modelPo;
+    private final GameModelPo gameModelPo;
 
-	private final CampaignManager campaignManager;
+    private final CampaignManager campaignManager;
 
-	public MissionCreationContext(final MissionCallBack missionCallBack, final Model model, final ModelPo modelPo,
-			final CampaignManager campaignManager) {
-		this.missionCallBack = Preconditions.checkNotNull(missionCallBack);
-		this.model = Preconditions.checkNotNull(model);
-		this.modelPo = Preconditions.checkNotNull(modelPo);
-		this.campaignManager = Preconditions.checkNotNull(campaignManager);
-	}
+    private final CampaignMission campaignMission;
 
-	public MissionCallBack getMissionCallBack() {
-		return missionCallBack;
-	}
+    MissionCreationContext(final EventBus eventBus, final Model model,
+            final GameModelPo gameModelPo, final CampaignManager campaignManager,
+            final CampaignMission campaignMission) {
+        this.eventBus = Preconditions.checkNotNull(eventBus);
+        this.model = Preconditions.checkNotNull(model);
+        this.gameModelPo = Preconditions.checkNotNull(gameModelPo);
+        this.campaignManager = Preconditions.checkNotNull(campaignManager);
+        this.campaignMission = Preconditions.checkNotNull(campaignMission);
+    }
 
-	public Model getModel() {
-		return model;
-	}
+    public EventBus getEventBus() {
+        return eventBus;
+    }
 
-	public ModelPo getModelPo() {
-		return modelPo;
-	}
+    public Model getModel() {
+        return model;
+    }
 
-	public CampaignManager getCampaignManager() {
-		return campaignManager;
-	}
+    public GameModelPo getModelPo() {
+        return gameModelPo;
+    }
+
+    public CampaignManager getCampaignManager() {
+        return campaignManager;
+    }
+
+    public CampaignMission getCampaignMission() {
+        return campaignMission;
+    }
+
+    public final Map<String, String> getGoalData() {
+        return gameModelPo.getGoalData();
+    }
 
 }

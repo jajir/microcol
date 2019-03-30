@@ -31,12 +31,6 @@ public abstract class MissionGoal {
         data.put(name, String.valueOf(finished));
     }
 
-    protected boolean getBoolean(final Map<String, String> data, final String key) {
-        Preconditions.checkNotNull(data, "data is null");
-        Preconditions.checkNotNull(key, "key is null");
-        return Boolean.parseBoolean(data.get(key));
-    }
-
     protected Integer getInt(final Map<String, String> data, final String key) {
         Preconditions.checkNotNull(data, "data is null");
         Preconditions.checkNotNull(key, "key is null");

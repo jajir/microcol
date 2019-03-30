@@ -21,8 +21,6 @@ public class ModelPo {
 
     private EuropePo europe = new EuropePo();
 
-    private CampaignPo campaign = new CampaignPo();
-
     private Location focusedField;
     
     private StatisticsPo statistics = new StatisticsPo();
@@ -101,21 +99,6 @@ public class ModelPo {
      */
     public void setEurope(EuropePo europe) {
         this.europe = europe;
-    }
-
-    /**
-     * @return the campaign
-     */
-    public CampaignPo getCampaign() {
-        return campaign;
-    }
-
-    /**
-     * @param campaign
-     *            the campaign to set
-     */
-    public void setCampaign(CampaignPo campaign) {
-        this.campaign = campaign;
     }
 
     /**

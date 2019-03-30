@@ -4,10 +4,9 @@ import java.util.Map;
 
 import com.google.common.base.Preconditions;
 
-public final class Default_2_goals extends MissionGoals {
+final class Default_2_goals extends MissionGoals {
 
-    @Override
-    void initialize(final Map<String, String> data) {
+    Default_2_goals(final Map<String, String> data) {
         Preconditions.checkNotNull(data);
         getGoals().add(new GoalProvider.GoalDeclareIndependence(data));
         getGoals().add(new GoalProvider.GoalConquerRaf(data));

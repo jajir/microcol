@@ -6,8 +6,8 @@ import org.microcol.i18n.MessageKeyResource;
 import org.microcol.i18n.ResourceBundleControlBuilder;
 import org.microcol.i18n.ResourceBundleFormat;
 
-public enum Missions implements MessageKeyResource {
-    
+enum Missions implements MessageKeyResource {
+
     default_m0_g1,
     default_m0_g2,
     default_m0_g3,
@@ -41,9 +41,8 @@ public enum Missions implements MessageKeyResource {
     default_m2_declareIndependence_done,
     default_m2_portIsClosed,
     default_m2_done1,
-    default_m2_done2,
-    ;
-    
+    default_m2_done2,;
+
     @Override
     public ResourceBundle.Control getResourceBundleControl() {
         return new ResourceBundleControlBuilder().setPredefinedFormat(ResourceBundleFormat.xml)

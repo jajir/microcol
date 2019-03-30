@@ -4,7 +4,7 @@ import org.microcol.gui.MusicController;
 import org.microcol.gui.event.model.GameController;
 import org.microcol.gui.preferences.GamePreferences;
 import org.microcol.model.campaign.CampaignNames;
-import org.microcol.model.campaign.FreePlayMissionNames;
+import org.microcol.model.campaign.FreePlay_missionNames;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -46,7 +46,7 @@ public final class ApplicationController {
      */
     public void startNewFreeGame() {
         logger.debug("Start new default game.");
-        gameController.startCampaignMission(CampaignNames.freePlay, FreePlayMissionNames.freePlay);
+        gameController.startCampaignMission(CampaignNames.freePlay, FreePlay_missionNames.freePlay);
     }
 
 }
