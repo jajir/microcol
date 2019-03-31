@@ -5,6 +5,7 @@ import java.awt.Rectangle;
 import org.microcol.gui.event.QuitGameEvent;
 import org.microcol.gui.preferences.GamePreferences;
 import org.microcol.gui.screen.MainPanelView;
+import org.microcol.gui.screen.ShowScreenEvent;
 import org.microcol.i18n.I18n;
 
 import com.google.common.base.Preconditions;
@@ -91,7 +92,9 @@ public final class MainStageBuilder {
         final Scene scene = new Scene(mainBox);
         scene.getStylesheets().add(STYLE_SHEET_MICROCOL);
         mainBox.getChildren().add(mainPanelView.getContent());
-
+        
+        eventBus.post( new ShowScreenEvent(org.microcol.gui.screen.Screen.MENU));
+        
         primaryStage.setScene(scene);
     }
 

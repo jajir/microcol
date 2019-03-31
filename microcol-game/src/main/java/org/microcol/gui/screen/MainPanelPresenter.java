@@ -82,8 +82,6 @@ public final class MainPanelPresenter {
                     }
                     return null;
                 }));
-        view.showScreen(screenMenu);
-
     }
 
     @Subscribe
