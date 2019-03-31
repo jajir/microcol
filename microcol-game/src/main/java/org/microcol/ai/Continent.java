@@ -5,7 +5,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
-import org.microcol.model.Colony;
 import org.microcol.model.Location;
 import org.microcol.model.Model;
 import org.microcol.model.Player;
@@ -66,22 +65,18 @@ public class Continent {
     }
 
     /**
-     * Return score how much interesting to conquer is this continent.
+     * Return score how much interesting to conquer is this continent. Score is
+     * sum of military force of all colonies.
      * 
      * @param enemyPlayer
      *            required player to attack
      * @return score
      */
-    public int getColonyWeight(final Player enemyPlayer) {
-        int out = 0;
-        for (final Location loc : locations) {
-            Optional<Colony> oColony = model.getColoniesAt(loc, enemyPlayer);
-            if (oColony.isPresent()) {
-                Colony col = oColony.get();
-                out += col.getMilitaryForce();
-            }
-        }
-        return out;
+    public int getMilitaryImportance(final Player enemyPlayer) {
+        return locations
+                .stream().map(loc -> model.getColoniesAt(loc, enemyPlayer)
+                        .map(col -> col.getMilitaryForce()).orElse(0))
+                .mapToInt(Integer::intValue).sum();
     }
 
     /**

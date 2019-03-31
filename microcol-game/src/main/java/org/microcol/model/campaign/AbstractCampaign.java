@@ -8,6 +8,7 @@ import java.util.Optional;
 import org.microcol.model.campaign.store.CampaignMissionPo;
 import org.microcol.model.campaign.store.CampaignPo;
 
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 
@@ -41,6 +42,12 @@ abstract class AbstractCampaign implements Campaign {
                 .filter(mission -> mission.getMissionName().equals(missionName)).findAny();
         return oMission.orElseThrow(() -> new IllegalArgumentException(
                 String.format("There is no mission for missio name '%s'", missionName)));
+    }
+
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(AbstractCampaign.class).add("name", name)
+                .add("missions", missions).toString();
     }
 
     /*
@@ -96,10 +103,12 @@ abstract class AbstractCampaign implements Campaign {
     @Override
     public CampaignPo save() {
         final CampaignPo out = new CampaignPo();
+        out.setName(name.toString());
         missions.forEach(mission -> {
             final CampaignMissionPo m = new CampaignMissionPo();
             m.setName(mission.getName());
             m.setWasFinished(mission.isFinished());
+            out.getMissions().add(m);
         });
         return out;
     }

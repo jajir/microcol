@@ -63,7 +63,7 @@ public class ContinentTest {
     protected Player enemyPlayer = mock(Player.class);
 
     protected Colony enemyColony = mock(Colony.class);
-
+    
     @Test
     public void test_verify_that_cities_are_at_continent() throws Exception {
         assertTrue(continent.contains(CITY_1));
@@ -119,6 +119,15 @@ public class ContinentTest {
         assertNotNull(oLoc);
         assertTrue(oLoc.isPresent());
         assertEquals(CITY_1, oLoc.get());
+    }
+    
+    @Test
+    void test_getMilitaryImportance() throws Exception {
+        when(model.getColoniesAt(CITY_1, enemyPlayer)).thenReturn(Optional.of(enemyColony));
+        when(model.getColoniesAt(CITY_2, enemyPlayer)).thenReturn(Optional.of(enemyColony));
+        when(enemyColony.getMilitaryForce()).thenReturn(7, 4);
+        
+        assertEquals(11, continent.getMilitaryImportance(enemyPlayer));
     }
 
     @BeforeEach

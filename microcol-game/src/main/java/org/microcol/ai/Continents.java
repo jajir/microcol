@@ -27,9 +27,9 @@ public final class Continents {
     }
 
     List<Continent> getContinentsToAttack(final Player enemyPlayer) {
-        return continents.stream().filter(continents -> continents.getColonyWeight(enemyPlayer) > 0)
+        return continents.stream().filter(continents -> continents.getMilitaryImportance(enemyPlayer) > 0)
                 .sorted(Comparator
-                        .comparingInt(continent -> continent.getColonyWeight(enemyPlayer)))
+                        .comparingInt(continent -> continent.getMilitaryImportance(enemyPlayer)))
                 .limit(3).collect(ImmutableList.toImmutableList());
     }
 

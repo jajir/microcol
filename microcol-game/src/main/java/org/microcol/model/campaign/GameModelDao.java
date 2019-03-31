@@ -1,8 +1,11 @@
 package org.microcol.model.campaign;
 
 import java.io.File;
+import java.util.List;
+import java.util.function.Function;
 
 import org.microcol.gui.MicroColException;
+import org.microcol.model.GameOverResult;
 import org.microcol.model.Model;
 import org.microcol.model.campaign.po.GameModelPo;
 import org.microcol.model.campaign.po.GameModelPoDao;
@@ -41,15 +44,20 @@ public final class GameModelDao {
     }
 
     private GameModel makeFromModelPo(final GameModelPo gameModelPo, final EventBus eventBus) {
-        final Model model = Model.make(gameModelPo.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+        final ExternalGameOver makeGameOver = new ExternalGameOver(
+                MissionImpl.GAME_OVER_REASON_ALL_GOALS_ARE_DONE);
+        final List<Function<Model, GameOverResult>> evaluators = MissionImpl
+                .getPredefinedGameOverEvaluators();
+        evaluators.add(makeGameOver);
+        final Model model = Model.make(gameModelPo.getModel(), evaluators);
+
         final Campaign campaign = campaignManager
                 .getCampaignByName(resolve(gameModelPo.getCampaignName()));
         final CampaignMission campaignMission = campaign
                 .getMisssionByName(gameModelPo.getMissionName());
 
         final MissionCreationContext context = new MissionCreationContext(eventBus, model,
-                gameModelPo, campaignManager, campaignMission);
+                gameModelPo, campaignManager, campaignMission, makeGameOver);
         final Mission<?> mission = missionFactoryManager.make(campaignMission.getMissionName(),
                 context);
         return new GameModel(campaign, campaignMission, mission, model);

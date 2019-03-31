@@ -1,4 +1,9 @@
 {
+  "campaignName": "default",
+  "missionName": "thrive",
+  "goalData": {
+  },
+  "model": {
   "calendar": {
     "startYear": 1630,
     "endYear": 1800,
@@ -889,4 +894,5 @@
     "gameStarted": true,
     "currentPlayer": "Dutch"
   }
+}
 }

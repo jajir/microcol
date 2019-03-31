@@ -46,12 +46,17 @@ public final class MissionEventListener {
 
     @Subscribe
     private void onFinishMission(final EventFinishMission event) {
-        onShowMessages(event);
-        goToGameMenu();
+        Platform.runLater(() -> {
+            event.getMessages().forEach(messageKey -> {
+                dialogMessage.setText(i18n.get(messageKey));
+                dialogMessage.showAndWait();
+            });
+            goToGameMenu();
+        });
     }
 
     private void goToGameMenu() {
-        eventBus.post(new ShowScreenEvent(Screen.MENU));
+        eventBus.post(new ShowScreenEvent(Screen.CAMPAIGN));
     }
 
     public EventBus getEventBus() {

@@ -22,9 +22,12 @@ abstract class AbstractMission<G extends MissionGoals> {
 
     private final EventBus eventBus;
 
+    private final ExternalGameOver externalGameOver;
+
     AbstractMission(final MissionCreationContext context, final G goals) {
         this.eventBus = Preconditions.checkNotNull(context.getEventBus());
         this.model = Preconditions.checkNotNull(context.getModel());
+        this.externalGameOver = Preconditions.checkNotNull(context.getExternalGameOver());
         this.goals = Preconditions.checkNotNull(goals);
         gameOverEvaluator = new GameOverEvaluator(eventBus, this::prepareProcessors,
                 context.getCampaignMission(), context.getCampaignManager());
@@ -40,6 +43,16 @@ abstract class AbstractMission<G extends MissionGoals> {
 
     public void onGameFinished(final GameFinishedEvent event) {
         gameOverEvaluator.onGameFinished(event);
+    }
+
+    /**
+     * When all goals are finished than method ends game with reason
+     * {@link MissionImpl#GAME_OVER_REASON_ALL_GOALS_ARE_DONE}.
+     */
+    void onTurnStarted() {
+        if (getGoals().isAllGoalsDone()) {
+            externalGameOver.setStopGame();
+        }
     }
 
     /**

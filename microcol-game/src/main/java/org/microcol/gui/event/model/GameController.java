@@ -74,8 +74,8 @@ public final class GameController {
     }
 
     private void startMission(final GameModel gameMode) {
-        eventBus.post(new ShowScreenEvent(Screen.GAME));
         gameModelController.setAndStartModel(gameMode);
+        eventBus.post(new ShowScreenEvent(Screen.GAME));
     }
 
     public boolean isDefaultCampaignFinished() {

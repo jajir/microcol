@@ -30,6 +30,7 @@ final class Default_2_mission extends AbstractMission<Default_2_goals> {
     }
 
     public void onTurnStarted(final TurnStartedEvent event) {
+        super.onTurnStarted();
         Player p = event.getModel().getPlayerByName("Dutch's King");
         /**
          * When King is conquered than sent this property in his data to true.

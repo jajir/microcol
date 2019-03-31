@@ -32,7 +32,7 @@ public class CampaignsDao {
 
     private final String saveDir;
 
-    private final Gson gson = new GsonBuilder().create();
+    private final Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
     @Inject
     CampaignsDao(final PersistingTool persistingTool) {

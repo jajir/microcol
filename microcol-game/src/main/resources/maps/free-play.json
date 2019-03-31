@@ -1,4 +1,9 @@
 {
+  "campaignName": "freePlay",
+  "missionName": "freePlay",
+  "goalData": {
+  },
+  "model": {
   "calendar": {
     "startYear": 1490,
     "endYear": 1800,
@@ -177,4 +182,5 @@
     "x": 45,
     "y": 15
   }
+}
 }

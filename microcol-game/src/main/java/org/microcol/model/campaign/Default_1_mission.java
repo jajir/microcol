@@ -64,6 +64,7 @@ final class Default_1_mission extends AbstractMission<Default_1_goals> {
     }
 
     public void onTurnStarted(final TurnStartedEvent event) {
+        super.onTurnStarted();
         if (!getGoals().getGoalMilitaryPower().isFinished()) {
             if (getNumberOfMilitaryUnits(event.getModel()) >= TARGET_NUMBER_OF_MILITARY_UNITS) {
                 fireEvent(new EventShowMessages(Missions.default_m1_makeArmy_done));

@@ -4,7 +4,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Locale;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -85,7 +84,7 @@ public class I18n {
         this.verifyThatAllKeysInResourceBundleHaveConstant = verifyThatAllKeyDefinitionsHaveConstant;
         init(defaultLocale);
     }
-    
+
     @Override
     public String toString() {
         return MoreObjects.toStringHelper(I18n.class).add("currentLocale", currentLocale)
@@ -103,8 +102,8 @@ public class I18n {
             init(locale);
         }
     }
-    
-    public Locale getCurrentLocale(){
+
+    public Locale getCurrentLocale() {
         return currentLocale;
     }
 
@@ -115,24 +114,29 @@ public class I18n {
 
     public <T extends Enum<T> & MessageKeyResource> String getRawMessage(final T messageKeyEnum) {
         Objects.requireNonNull(messageKeyEnum, "Message key enum can't be null");
-        final String baseName = messageKeyEnum.getClass().getCanonicalName();
         final String messageKey = messageKeyEnum.toString();
+        return getRourceBundle(messageKeyEnum).getString(messageKey);
+    }
 
-        final Optional<ResourceBundle> oResourceBundle = resourceBundlesManager
-                .getCachedBundle(baseName, currentLocale);
-        if (oResourceBundle.isPresent()) {
-            return oResourceBundle.get().getString(messageKey);
-        } else {
-            final ResourceBundle resourceBundle = resourceBundlesManager.init(baseName,
-                    currentLocale, messageKeyEnum.getResourceBundleControl());
-            if (verifyThatAllEnumKeysAreDefined) {
-                verifyThatAllEnumKeysAreDefined(messageKeyEnum, resourceBundle);
-            }
-            if (verifyThatAllKeysInResourceBundleHaveConstant) {
-                verifyThatAllKeysInResourceBundleHaveConstant(messageKeyEnum, resourceBundle);
-            }
-            return resourceBundle.getString(messageKey);
+    private <T extends Enum<T> & MessageKeyResource> ResourceBundle getRourceBundle(
+            final T messageKeyResource) {
+        final String baseName = messageKeyResource.getClass().getCanonicalName();
+        return resourceBundlesManager.getCachedBundle(baseName, currentLocale)
+                .orElseGet(() -> initResourceBundle(messageKeyResource));
+    }
+
+    private <T extends Enum<T> & MessageKeyResource> ResourceBundle initResourceBundle(
+            final T messageKeyResource) {
+        final String baseName = messageKeyResource.getClass().getCanonicalName();
+        final ResourceBundle resourceBundle = resourceBundlesManager.init(baseName, currentLocale,
+                messageKeyResource.getResourceBundleControl());
+        if (verifyThatAllEnumKeysAreDefined) {
+            verifyThatAllEnumKeysAreDefined(messageKeyResource, resourceBundle);
         }
+        if (verifyThatAllKeysInResourceBundleHaveConstant) {
+            verifyThatAllKeysInResourceBundleHaveConstant(messageKeyResource, resourceBundle);
+        }
+        return resourceBundle;
     }
 
     public <T extends Enum<T> & MessageKeyResource> String getMessage(final T messageKeyEnum,

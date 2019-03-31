@@ -96,6 +96,7 @@ final class Default_0_mission extends AbstractMission<Default_0_goals> {
     }
 
     public void onTurnStarted() {
+        super.onTurnStarted();
         if (getGoals().getGoalFoundColony().isFinished()) {
             if (!getGoals().getGoalProduceCigars().isFinished()) {
                 // verify cigars producing

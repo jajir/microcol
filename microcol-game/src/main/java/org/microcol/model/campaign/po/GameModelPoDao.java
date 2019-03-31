@@ -67,7 +67,10 @@ public final class GameModelPoDao {
         logger.debug("Starting to read from class path ({})", fileName);
         try (final InputStream is = WorldMap.class.getResourceAsStream(fileName)) {
             Preconditions.checkArgument(is != null, "input stream for file (%s) is null", fileName);
-            return internalLoadModel(is);
+            final GameModelPo loaded = gson
+                    .fromJson(new InputStreamReader(is, StandardCharsets.UTF_8), GameModelPo.class);
+            Preconditions.checkNotNull(loaded, "Unable to load data from class path %s", fileName);
+            return loaded;
         } catch (IOException e) {
             throw new MicroColException(e.getMessage(), e);
         }
@@ -87,17 +90,15 @@ public final class GameModelPoDao {
         Preconditions.checkArgument(file.isFile());
         logger.debug("Starting to read from class path ({})", file.getAbsolutePath());
         try (final FileInputStream fis = new FileInputStream(file)) {
-            return internalLoadModel(fis);
+            Preconditions.checkArgument(fis != null, "input stream is null");
+            final GameModelPo loaded = gson.fromJson(
+                    new InputStreamReader(fis, StandardCharsets.UTF_8), GameModelPo.class);
+            Preconditions.checkNotNull(loaded, "Unable to load data from file %s",
+                    file.getAbsolutePath());
+            return loaded;
         } catch (IOException e) {
             throw new MicroColException(e.getMessage(), e);
         }
-    }
-
-    private GameModelPo internalLoadModel(final InputStream is) {
-        Preconditions.checkArgument(is != null, "input stream is null");
-        final GameModelPo loaded = gson.fromJson(new InputStreamReader(is, StandardCharsets.UTF_8),
-                GameModelPo.class);
-        return loaded;
     }
 
     public void saveToFile(final String fileName, final GameModelPo gameModelPo) {

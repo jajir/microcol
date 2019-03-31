@@ -140,6 +140,8 @@ public class Model {
 
     public static Model make(final ModelPo modelPo,
             final List<Function<Model, GameOverResult>> gameOverEvaluators) {
+        Preconditions.checkNotNull(modelPo, "Persistent model is null");
+        Preconditions.checkNotNull(gameOverEvaluators, "Game over evaluators are null");
         final Calendar calendar = Calendar.make(modelPo.getCalendar());
         final WorldMap worldMap = new WorldMap(modelPo);
         final UnitStorage unitStorage = new UnitStorage(IdManager.makeFromModelPo(modelPo));

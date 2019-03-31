@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import com.google.common.base.MoreObjects;
+
 /**
  * Base campaign persistent object. Holds info if campaign was finished of not.
  * Closer informations about particular game should be stored in game model.
@@ -17,6 +19,12 @@ public class CampaignPo {
     public Optional<CampaignMissionPo> getMissionByName(final String missionName) {
         return getMissions().stream().filter(mission -> missionName.equals(mission.getName()))
                 .findFirst();
+    }
+
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(CampaignPo.class).add("name", name)
+                .add("missions", missions).toString();
     }
 
     public String getName() {

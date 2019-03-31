@@ -27,7 +27,7 @@
 	<entry key="statusBarShipsToNewWorld">Lodě plující do nového světa</entry>
 	<entry key="statusBarShipsToEurope">Lodě plující do Evropy</entry>
 	<entry key="statusBarPier">Přístavní molo, zde budou jednotky čekající na cesty do Nového světa</entry>
-	<entry key="goodsToSell">Prodej zboží {0} za {1} zlata nebo za {2} zlata nakup.</entry>
+	<entry key="goodsToSell">Prodej zboží %s za %s zlata nebo za %s zlata nakup.</entry>
 	<entry key="buttonClose">Zavřít evropský přístav a vrátit se zpět na hlavní mapu.</entry>
 	<entry key="buttonBuyUnit">Koupit novou jednotku.</entry>
 
