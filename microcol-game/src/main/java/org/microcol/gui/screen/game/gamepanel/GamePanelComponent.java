@@ -64,7 +64,7 @@ public final class GamePanelComponent implements ScreenLifeCycle, JavaFxComponen
          * Following class main define animation loop.
          */
         final GraphicsContext gc = canvasComponent.getCanvas().getGraphicsContext2D();
-        animationScheduler = new AnimationScheduler(gc, gcontex -> paintFrame(gcontex));
+        animationScheduler = new AnimationScheduler(gc, this::paintFrame);
     }
 
     /**

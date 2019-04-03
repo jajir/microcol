@@ -87,14 +87,11 @@ public class Continent {
      *         Antarctic otherwise return <code>false</code>.
      */
     public boolean isMapBorder() {
-        if (locations.stream().filter(loc -> loc.getY() == 1).findAny().isPresent()) {
-            return true;
-        }
-        if (locations.stream().filter(loc -> loc.getY() == model.getMap().getMaxY() - 1).findAny()
-                .isPresent()) {
-            return true;
-        }
-        return false;
+        return locations.stream().filter(this::isLocationBorder).findAny().isPresent();
+    }
+
+    private boolean isLocationBorder(final Location location) {
+        return location.getY() == 1 || location.getY() == model.getMap().getMaxY() - 1;
     }
 
     @Override

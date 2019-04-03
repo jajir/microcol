@@ -26,8 +26,9 @@ import org.microcol.gui.image.ImageProvider;
 import org.microcol.gui.preferences.GamePreferences;
 import org.microcol.gui.screen.MainPanelPresenter;
 import org.microcol.gui.screen.MainPanelView;
+import org.microcol.gui.screen.campaign.CampaignPresenter;
+import org.microcol.gui.screen.campaign.CampaignView;
 import org.microcol.gui.screen.campaign.ScreenCampaignPresenter;
-import org.microcol.gui.screen.campaign.ScreenCampaignView;
 import org.microcol.gui.screen.colonizopedia.ColonizopediaDialog;
 import org.microcol.gui.screen.colony.ColonyDialogCallback;
 import org.microcol.gui.screen.colony.ColonyPanel;
@@ -79,6 +80,7 @@ import org.microcol.gui.screen.menu.ButtonsPanelView;
 import org.microcol.gui.screen.menu.ExitGameListener;
 import org.microcol.gui.screen.menu.GameFinishedListener;
 import org.microcol.gui.screen.menu.ScreenMenu;
+import org.microcol.gui.screen.setting.ScreenSettingPresenter;
 import org.microcol.gui.screen.setting.SettingAnimationSpeedPresenter;
 import org.microcol.gui.screen.setting.SettingButtonsPresenter;
 import org.microcol.gui.screen.setting.SettingLanguagePresenter;
@@ -214,10 +216,9 @@ public final class MicroColModule extends AbstractModule {
         bind(ButtonsPanelView.class).in(Singleton.class);
         bind(ButtonsPanelPresenter.class).asEagerSingleton();
 
-        bind(ScreenCampaignView.class).in(Singleton.class);
-        bind(ScreenCampaignPresenter.Display.class).to(ScreenCampaignView.class)
-                .in(Singleton.class);
-        bind(ScreenCampaignPresenter.class).asEagerSingleton();
+        bind(CampaignView.class).in(Singleton.class);
+        bind(CampaignPresenter.Display.class).to(CampaignView.class).in(Singleton.class);
+        bind(CampaignPresenter.class).asEagerSingleton();
 
         bind(StatusBar.class).annotatedWith(Names.named("GamePanel")).to(StatusBar.class)
                 .asEagerSingleton();
@@ -237,6 +238,8 @@ public final class MicroColModule extends AbstractModule {
          * Generic screen
          */
         bind(ScreenGamePresenter.class).asEagerSingleton();
+        bind(ScreenSettingPresenter.class).asEagerSingleton();
+        bind(ScreenCampaignPresenter.class).asEagerSingleton();
 
         /**
          * Colony dialog

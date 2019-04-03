@@ -17,10 +17,10 @@ public class ScreenCampaign extends AbstractScreenMenu implements GameScreen {
 
     private final MenuHolderPanel menuHolderPanel;
 
-    private final ScreenCampaignView campaignMenuPanelView;
+    private final CampaignView campaignMenuPanelView;
 
     @Inject
-    ScreenCampaign(final ScreenCampaignView campaignMenuPanelView,
+    ScreenCampaign(final CampaignView campaignMenuPanelView,
             final MenuHolderPanel menuPanel) {
         this.menuHolderPanel = Preconditions.checkNotNull(menuPanel);
         this.campaignMenuPanelView = Preconditions.checkNotNull(campaignMenuPanelView);

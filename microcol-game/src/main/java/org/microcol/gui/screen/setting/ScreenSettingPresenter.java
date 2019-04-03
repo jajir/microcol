@@ -1,4 +1,4 @@
-package org.microcol.gui.screen.campaign;
+package org.microcol.gui.screen.setting;
 
 import org.microcol.gui.screen.Screen;
 import org.microcol.gui.screen.ShowScreenEvent;
@@ -12,14 +12,14 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 
 @Singleton
-public class ScreenCampaignPresenter {
+public class ScreenSettingPresenter {
 
     private final EventBus eventBus;
 
     @Inject
-    ScreenCampaignPresenter(final ScreenCampaign screenCampaign, final EventBus eventBus) {
+    ScreenSettingPresenter(final ScreenSetting screenSetting, final EventBus eventBus) {
         this.eventBus = Preconditions.checkNotNull(eventBus);
-        screenCampaign.getContent().setOnKeyPressed(this::onKeyPressed);
+        screenSetting.getContent().setOnKeyPressed(this::onKeyPressed);
     }
 
     private void onKeyPressed(final KeyEvent event) {

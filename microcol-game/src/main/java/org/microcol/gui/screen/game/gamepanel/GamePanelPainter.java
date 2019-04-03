@@ -1,7 +1,5 @@
 package org.microcol.gui.screen.game.gamepanel;
 
-import java.util.List;
-
 import org.microcol.gui.Point;
 import org.microcol.gui.StepCounter;
 import org.microcol.gui.dialog.DialogFight;
@@ -13,7 +11,6 @@ import org.microcol.model.Location;
 import org.microcol.model.Unit;
 
 import com.google.common.base.Preconditions;
-import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 
 import javafx.scene.canvas.GraphicsContext;
@@ -167,16 +164,14 @@ public final class GamePanelPainter {
             }
             gamePaintService.paintCursor(graphics, area,
                     mouseOverTileManager.getMouseOverTile().get());
-            final List<Location> locations = moveModeSupport.getMoveLocations();
             final StepCounter stepCounter = new StepCounter(5, selectedUnit.getActionPoints());
-            final List<Point> steps = Lists.transform(locations,
-                    location -> area.convertToPoint(location));
             /**
              * Here could be check if particular step in on screen, but draw few
              * images outside screen is not big deal.
              */
-            steps.forEach(point -> gamePaintService.paintStep(graphics, point, stepCounter,
-                    moveModeSupport.getMoveMode()));
+            moveModeSupport.getMoveLocations().stream().map(area::convertToPoint)
+                    .forEach(point -> gamePaintService.paintStep(graphics, point, stepCounter,
+                            moveModeSupport.getMoveMode()));
         }
     }
 

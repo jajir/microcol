@@ -19,8 +19,8 @@ import javafx.scene.layout.VBox;
 /**
  * In main area shows basic menu "Start new game".
  */
-public final class ScreenCampaignView
-        implements ScreenCampaignPresenter.Display, JavaFxComponent, UpdatableLanguage {
+public final class CampaignView
+        implements CampaignPresenter.Display, JavaFxComponent, UpdatableLanguage {
 
     private final CampaignManager campaignManager;
 
@@ -33,7 +33,7 @@ public final class ScreenCampaignView
     private Consumer<String> onSelectedMission;
 
     @Inject
-    ScreenCampaignView(final CampaignManager campaignManager, final I18n i18n) {
+    CampaignView(final CampaignManager campaignManager, final I18n i18n) {
         this.campaignManager = Preconditions.checkNotNull(campaignManager);
         this.i18n = Preconditions.checkNotNull(i18n);
         box = new VBox();

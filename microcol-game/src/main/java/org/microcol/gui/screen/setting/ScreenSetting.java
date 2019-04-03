@@ -40,12 +40,12 @@ public class ScreenSetting extends AbstractScreenMenu implements GameScreen {
 
     @Override
     public void beforeShow() {
-        // Intentionally do nothing.
+        menuHolderPanel.beforeShow();
     }
 
     @Override
     public void beforeHide() {
-        // Intentionally do nothing.
+        menuHolderPanel.beforeHide();
     }
 
 }
