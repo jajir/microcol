@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE properties [
+<!ELEMENT properties ( comment?, entry* ) >
+<!ATTLIST properties version CDATA #FIXED "1.0">
+<!ELEMENT comment (#PCDATA) >
+<!ELEMENT entry (#PCDATA) >
+<!ATTLIST entry key CDATA #REQUIRED>
+]>
+
+<properties>
+	<comment>Define keys for FileChooser dialog</comment>
+
+	<entry key="cancelButtonText">Zrušit</entry>
+	<entry key="fileDateHeaderText">Datum úpravy</entry>
+	<entry key="openButtonText">Nahrát</entry>
+	<entry key="saveButtonText">Uložit</entry>
+	<entry key="saveDialogTitleText">Uložit hru</entry>
+	<entry key="openDialogTitleText">Nahrát hru</entry>
+	<entry key="newFolderTitleText">Vytvořit složku</entry>
+	<entry key="newFolderButtonText">Vytvořit složku</entry>
+	<entry key="filesOfTypeLabelText">Formát souboru:</entry>
+	<entry key="saveDialogFileNameLabelText">Uložit jako:</entry>
+
+</properties>

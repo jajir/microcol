@@ -10,23 +10,24 @@ import java.util.function.Function;
 import org.microcol.gui.MicroColException;
 import org.microcol.model.store.ColonyPo;
 import org.microcol.model.store.ModelPo;
-import org.microcol.model.store.PlayerPo;
+import org.microcol.model.store.QueueItemType;
 import org.microcol.model.store.UnitPo;
 import org.microcol.model.turnevent.TurnEvent;
 import org.microcol.model.turnevent.TurnEventProvider;
 import org.microcol.model.turnevent.TurnEventStore;
 import org.microcol.model.unit.UnitActionNoAction;
+import org.microcol.model.unit.UnitFactory;
+import org.microcol.model.unit.UnitWithCargo;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Lists;
 
 /**
  * Game model.
  */
-public final class Model {
+public class Model {
 
     private final ColonyNames colonyNames;
     private final ListenerManager listenerManager;
@@ -41,6 +42,7 @@ public final class Model {
     private Location focusedField;
     private final TurnEventStore turnEventStore;
     private final Statistics statistics;
+    private final UnitFactory unitFactory;
 
     /**
      * Verify that all units are in unit storage and that all units from unit
@@ -48,13 +50,13 @@ public final class Model {
      */
     private void checkUnits() {
         /*
-         * It has to be checked. Because of unit could be hold just in colony field and
-         * not in unit storage.
+         * It has to be checked. Because of unit could be hold just in colony
+         * field and not in unit storage.
          */
         colonies.forEach(colony -> {
             colony.getColonyFields().forEach(colonyfield -> {
-                if (!colonyfield.isEmpty()) {
-                    final Unit unit = colonyfield.getUnit();
+                if (colonyfield.getUnit().isPresent()) {
+                    final Unit unit = colonyfield.getUnit().get();
                     Preconditions.checkState(unitStorage.getUnitById(unit.getId()).equals(unit));
                 }
             });
@@ -85,8 +87,23 @@ public final class Model {
 
         colonyNames = new ColonyNames(this);
 
-        this.colonies = Lists.newArrayList();
+        this.colonies = new ArrayList<>();
         modelPo.getColonies().forEach(colonyPo -> {
+            final List<ColonyBuildingItemProgress<?>> buildingQueue = new ArrayList<>();
+            colonyPo.getBuildingQueue().forEach(itemPo -> {
+                if (itemPo.getType() == QueueItemType.CONSTRUCTION) {
+                    ColonyBuildingItemProgressConstruction item = new ColonyBuildingItemProgressConstruction(
+                            new ColonyBuildingItemConstruction(itemPo.getConstructionType()),
+                            itemPo.getId());
+                    item.setBuildHammers(itemPo.getBuildHammers());
+                    buildingQueue.add(item);
+                } else if (itemPo.getType() == QueueItemType.UNIT) {
+                    ColonyBuildingItemProgressUnit item = new ColonyBuildingItemProgressUnit(
+                            new ColonyBuildingItemUnit(itemPo.getUnitType()), itemPo.getId());
+                    item.setBuildHammers(itemPo.getBuildHammers());
+                    buildingQueue.add(item);
+                }
+            });
             final Colony col = new Colony(this, colonyPo.getName(),
                     playerStore.getPlayerByName(colonyPo.getOwnerName()), colonyPo.getLocation(),
                     colony -> {
@@ -97,10 +114,11 @@ public final class Model {
                             constructions.add(c);
                         });
                         return constructions;
-                    }, colonyPo.getColonyWarehouse());
+                    }, colonyPo.getColonyWarehouse(), buildingQueue);
             colonies.add(col);
         });
 
+        unitFactory = new UnitFactory();
         this.unitStorage = Preconditions.checkNotNull(unitStorage);
 
         gameManager = GameManager.make(this, modelPo, gameOverEvaluators, playerStore);
@@ -111,8 +129,8 @@ public final class Model {
     }
 
     /**
-     * For each unit owned by human on assure that visible are is really revealed.
-     * It allows to not-define correct visible area in save files.
+     * For each unit owned by human on assure that visible are is really
+     * revealed. It allows to not-define correct visible area in save files.
      */
     private void assureDefaultVisibility() {
         unitStorage.getUnits().stream()
@@ -122,6 +140,8 @@ public final class Model {
 
     public static Model make(final ModelPo modelPo,
             final List<Function<Model, GameOverResult>> gameOverEvaluators) {
+        Preconditions.checkNotNull(modelPo, "Persistent model is null");
+        Preconditions.checkNotNull(gameOverEvaluators, "Game over evaluators are null");
         final Calendar calendar = Calendar.make(modelPo.getCalendar());
         final WorldMap worldMap = new WorldMap(modelPo);
         final UnitStorage unitStorage = new UnitStorage(IdManager.makeFromModelPo(modelPo));
@@ -129,7 +149,8 @@ public final class Model {
         final Model model = new Model(calendar, worldMap, modelPo, unitStorage, gameOverEvaluators);
 
         /*
-         * First are loaded units which can hold cargo than which can be held in cargo.
+         * First are loaded units which can hold cargo than which can be held in
+         * cargo.
          */
         modelPo.getUnits().stream().filter(unitPo -> unitPo.getType().canHoldCargo())
                 .forEach(unitPo -> {
@@ -137,7 +158,7 @@ public final class Model {
                         throw new MicroColException(
                                 String.format("unit with id %s was alredy loaded", unitPo.getId()));
                     } else {
-                        model.createUnit(model, modelPo, unitPo);
+                        model.createUnit(modelPo, unitPo);
                     }
                 });
         modelPo.getUnits().stream().filter(unitPo -> !unitPo.getType().canHoldCargo())
@@ -146,7 +167,7 @@ public final class Model {
                         throw new MicroColException(
                                 String.format("unit with id %s was alredy loaded", unitPo.getId()));
                     } else {
-                        model.createUnit(model, modelPo, unitPo);
+                        model.createUnit(modelPo, unitPo);
                     }
                 });
 
@@ -162,7 +183,6 @@ public final class Model {
     }
 
     public void buildColony(final Player player, final Unit unit) {
-        // TODO move method to colony store
         Preconditions.checkNotNull(player);
         Preconditions.checkNotNull(unit);
         Preconditions.checkArgument(unit.isAtPlaceLocation(), "Unit (%s) have to be on map", unit);
@@ -171,10 +191,10 @@ public final class Model {
         Preconditions.checkArgument(!unit.getType().canHoldCargo(),
                 "Unit (%s) that transport cargo, can't found city", unit);
         final Location location = unit.getLocation();
-        final Optional<Colony> oColony = getColonyAt(location); 
+        final Optional<Colony> oColony = getColonyAt(location);
         Preconditions.checkArgument(!oColony.isPresent(), "There is already colony '%s' at '%s'",
                 oColony, location);
-        
+
         final Colony col = new Colony(this, colonyNames.getNewColonyName(player), player, location,
                 colony -> {
                     final List<Construction> constructions = new ArrayList<>();
@@ -183,36 +203,37 @@ public final class Model {
                         constructions.add(c);
                     });
                     return constructions;
-                }, new HashMap<String, Integer>());
+                }, new HashMap<String, Integer>(), new ArrayList<>());
         colonies.add(col);
         col.placeUnitToProduceFood(unit);
         listenerManager.fireColonyWasFounded(this, col);
     }
 
-    Unit createUnit(final Model model, final ModelPo modelPo, final UnitPo unitPo) {
-        final Unit out = Unit.make(model, modelPo, unitPo);
-        model.unitStorage.addUnit(out);
-        return out;
+    Unit createUnit(final ModelPo modelPo, final UnitPo unitPo) {
+        final Unit unit = unitFactory.createUnit(this, modelPo, unitPo);
+        unitStorage.addUnit(unit);
+        return unit;
     }
 
     /**
-     * Create cargo ship for king and put it to high seas in direction to colonies.
+     * Create cargo ship for king and put it to high seas in direction to
+     * colonies.
      * 
      * @param king
      *            required king player
      * @return created unit
      */
-    public Unit createCargoShipForKing(final Player king) {
+    public UnitWithCargo createCargoShipForKing(final Player king) {
         Preconditions.checkNotNull(king);
         Preconditions.checkNotNull(king.isComputer(), "king have to be computer player");
-        return unitStorage.createUnit(unit -> new Cargo(unit, UnitType.GALLEON.getCargoCapacity()),
-                this, unit -> new PlaceHighSea(unit, false, 3), UnitType.GALLEON, king,
+        return (UnitWithCargo) unitStorage.createUnit(
+                unit -> new Cargo(unit, UnitType.GALLEON.getCargoCapacity()), this,
+                unit -> new PlaceHighSea(unit, false, 3), UnitType.GALLEON, king,
                 UnitType.GALLEON.getSpeed(), new UnitActionNoAction());
     }
 
-    public List<TurnEvent> getLocalizedMessages(final Player player,
-            final Function<String, String> messageProvider) {
-        return turnEventStore.getLocalizedMessages(player, messageProvider);
+    public List<TurnEvent> getLocalizedMessages(final Player player) {
+        return turnEventStore.getLocalizedMessages(player);
     }
 
     public boolean isValid(final Path path) {
@@ -232,15 +253,16 @@ public final class Model {
      *            required ship that will hold cargo
      * @return created unit
      */
-    public Unit createRoyalExpeditionForceUnit(final Player king, final Unit loadUnitToShip) {
+    public Unit createRoyalExpeditionForceUnit(final Player king,
+            final UnitWithCargo loadUnitToShip) {
         Preconditions.checkNotNull(king);
         Preconditions.checkNotNull(king.isComputer(), "king have to be computer player");
         Preconditions.checkArgument(loadUnitToShip.getCargo().getEmptyCargoSlot().isPresent(),
                 "Ship (%s) for cargo doesn't have any free slot for expedition force unit.",
                 loadUnitToShip);
         CargoSlot cargoSlot = loadUnitToShip.getCargo().getEmptyCargoSlot().get();
-        return unitStorage.createUnit(unit -> new Cargo(unit, UnitType.COLONIST.getCargoCapacity()), this,
-                unit -> new PlaceCargoSlot(unit, cargoSlot), UnitType.COLONIST, king,
+        return unitStorage.createUnit(unit -> new Cargo(unit, UnitType.COLONIST.getCargoCapacity()),
+                this, unit -> new PlaceCargoSlot(unit, cargoSlot), UnitType.COLONIST, king,
                 UnitType.COLONIST.getSpeed(), new UnitActionNoAction());
     }
 
@@ -261,7 +283,7 @@ public final class Model {
             }
         }, unitType, owner, unitType.getSpeed(), new UnitActionNoAction());
     }
-    
+
     void addUnitOutSideColony(final Colony colony) {
         unitStorage.createUnit(unit -> new Cargo(unit, UnitType.COLONIST.getCargoCapacity()), this,
                 unit -> {
@@ -368,6 +390,12 @@ public final class Model {
         return unitStorage.getFirstSelectableUnitAt(getCurrentPlayer(), location);
     }
 
+    public List<Unit> getMoveableUnitAtOwnedBy(final Location location, final Player player) {
+        return unitStorage.getUnitsAt(location).stream()
+                .filter(unit -> unit.getActionPoints() > 0 && unit.getOwner().equals(player))
+                .collect(ImmutableList.toImmutableList());
+    }
+
     public Optional<Colony> getColonyAt(final Location location) {
         Preconditions.checkNotNull(location);
         return colonies.stream().filter(colony -> colony.getLocation().equals(location))
@@ -380,6 +408,12 @@ public final class Model {
                 .collect(ImmutableList.toImmutableList());
     }
 
+    public Optional<Colony> getColonyByName(final String colonyName) {
+        Preconditions.checkNotNull(colonyName);
+        return colonies.stream().filter(colony -> colonyName.equalsIgnoreCase(colony.getName()))
+                .findAny();
+    }
+
     public List<Unit> getUnitsAt(final Location location) {
         return unitStorage.getUnitsAt(location);
     }
@@ -389,20 +423,13 @@ public final class Model {
         map.save(out);
         unitStorage.save(out);
         out.setCalendar(calendar.save());
-        // TODO move to same method to game manager
-        out.getGameManager().setPlayers(getSavePlayers());
-        out.getGameManager().setGameStarted(gameManager.isStarted());
-        out.getGameManager().setCurrentPlayer(gameManager.getCurrentPlayer().getName());
+        gameManager.save(out);
+        playerStore.save(out);
         out.setColonies(getSaveColonies());
         out.setFocusedField(focusedField);
         out.setTurnEvents(turnEventStore.save());
         out.setStatistics(statistics.save());
         return out;
-    }
-
-    private List<PlayerPo> getSavePlayers() {
-        return playerStore.getPlayers().stream().map(player -> player.save())
-                .collect(ImmutableList.toImmutableList());
     }
 
     private List<ColonyPo> getSaveColonies() {
@@ -417,9 +444,10 @@ public final class Model {
      * @param player
      *            required player's object
      * @param includeStored
-     *            if it's <code>true</code> than list will contains all units holds
-     *            in cargo in colonies and units in Europe port. When it's
-     *            <code>false</code> than result contain just unit visible on map.
+     *            if it's <code>true</code> than list will contains all units
+     *            holds in cargo in colonies and units in Europe port. When it's
+     *            <code>false</code> than result contain just unit visible on
+     *            map.
      * @return return list of units
      */
     List<Unit> getUnitsOwnedBy(final Player player, final boolean includeStored) {
@@ -457,8 +485,8 @@ public final class Model {
      * @param path
      *            required path
      * @throws IllegalStateException
-     *             It's thrown when unit doesn't have enough action points to move
-     *             along whole given path.
+     *             It's thrown when unit doesn't have enough action points to
+     *             move along whole given path.
      */
     public void moveUnit(final Unit unit, final Path path) {
         listenerManager.fireActionStarted(this);
@@ -470,18 +498,18 @@ public final class Model {
         }
         listenerManager.fireActionEnded(this);
     }
-    
-    boolean fireUnitMoveStarted(final Unit unit, final Path path){
+
+    boolean fireUnitMoveStarted(final Unit unit, final Path path) {
         return listenerManager.fireUnitMoveStarted(this, unit, path);
     }
-    
-    void fireUnitMovedFinished(final Unit unit, final Path path){
+
+    void fireUnitMovedFinished(final Unit unit, final Path path) {
         listenerManager.fireUnitMovedFinished(this, unit, path);
     }
 
     /**
-     * Move selected unit on defined path. Unit will walk along path as far as it
-     * will be possible. How far unit move depends on terrain and number of
+     * Move selected unit on defined path. Unit will walk along path as far as
+     * it will be possible. How far unit move depends on terrain and number of
      * available action points.
      * <p>
      * Unit have to be on map. Path have to available for unit.
@@ -496,8 +524,9 @@ public final class Model {
         if (listenerManager.fireUnitMoveStarted(this, unit, path)) {
             path.getLocations().forEach(loc -> {
                 /*
-                 * Check if unit is at place location is reasonable, because unit could in first
-                 * step conquer city a be placed inside city.
+                 * Check if unit is at place location is reasonable, because
+                 * unit could in first step conquer city a be placed inside
+                 * city.
                  */
                 if (unit.isAtPlaceLocation() && unit.getActionPoints() > 0) {
                     unit.moveOneStep(loc);
@@ -531,18 +560,21 @@ public final class Model {
 
     void destroyUnit(final Unit unit) {
         Preconditions.checkNotNull(unit, "Unit is null");
-        unit.getCargo().getSlots().stream().forEach(cargoSlot -> {
-            if (cargoSlot.isLoadedUnit()) {
-                final Unit u = cargoSlot.getUnit().get();
-                destroyUnit(u);
-            }
-        });
+        if (unit.canHoldCargo()) {
+            final UnitWithCargo unitWithCargo = (UnitWithCargo) unit;
+            unitWithCargo.getCargo().getSlots().stream().forEach(cargoSlot -> {
+                if (cargoSlot.isLoadedUnit()) {
+                    final Unit u = cargoSlot.getUnit().get();
+                    destroyUnit(u);
+                }
+            });
+        }
         unitStorage.remove(unit);
     }
 
-    public void sellGoods(final CargoSlot cargoSlot, final GoodsAmount goodsAmount) {
-        cargoSlot.sellAndEmpty(goodsAmount);
-        listenerManager.fireGoodsWasSoldInEurope(this, goodsAmount);
+    public void sellGoods(final CargoSlot cargoSlot, final Goods goods) {
+        cargoSlot.sellAndEmpty(goods);
+        listenerManager.fireGoodsWasSoldInEurope(this, goods);
     }
 
     void fireGameStarted() {
@@ -555,6 +587,10 @@ public final class Model {
 
     void fireTurnStarted(final Player player, final boolean isFreshStart) {
         listenerManager.fireTurnStarted(this, player, isFreshStart);
+    }
+
+    void fireTurnFinished(final Player player) {
+        listenerManager.fireTurnFinished(this, player);
     }
 
     void fireUnitMovedStepStarted(final Unit unit, final Location start, final Location end,
@@ -611,11 +647,6 @@ public final class Model {
         listenerManager.fireGameFinished(this, gameOverResult);
     }
 
-    // TODO JKA Temporary solution
-    public void requestDebug(final List<Location> locations) {
-        listenerManager.fireDebugRequested(this, locations);
-    }
-
     public Europe getEurope() {
         return europe;
     }
@@ -631,7 +662,7 @@ public final class Model {
     /**
      * @return the playerStore
      */
-    PlayerStore getPlayerStore() {
+    public PlayerStore getPlayerStore() {
         return playerStore;
     }
 
@@ -674,9 +705,12 @@ public final class Model {
         return turnEventStore;
     }
 
-    public List<TurnEvent> getTurnEventsLocalizedMessages(final Player player,
-            final Function<String, String> messageProvider) {
-        return turnEventStore.getLocalizedMessages(player, messageProvider);
+    public void addTurnEvent(final TurnEvent turnEvent) {
+        getTurnEventStore().add(turnEvent);
+    }
+
+    public List<TurnEvent> getTurnEventsLocalizedMessages(final Player player) {
+        return turnEventStore.getLocalizedMessages(player);
     }
 
     public boolean isTurnEventsMessagesEmpty(final Player player) {
@@ -691,15 +725,22 @@ public final class Model {
     }
 
     /**
-     * Allows to add game over evaluator. When evaluator based on model condition
-     * find out that game is over than return new GameoverResult object instance
-     * otherwise return <code>null</code>.
+     * Allows to add game over evaluator. When evaluator based on model
+     * condition find out that game is over than return new GameoverResult
+     * object instance otherwise return <code>null</code>.
      *
      * @param evaluator
      *            required evaluator function
      */
     public void addGameOverEvaluator(final Function<Model, GameOverResult> evaluator) {
         gameManager.addEvaluator(evaluator);
+    }
+
+    /**
+     * @return the unitStorage
+     */
+    UnitStorage getUnitStorage() {
+        return unitStorage;
     }
 
 }

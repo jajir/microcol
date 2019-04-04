@@ -1,36 +1,37 @@
 package org.microcol.model.campaign;
 
-import org.microcol.gui.event.model.MissionCallBack;
 import org.microcol.model.event.GameFinishedEvent;
 
 import com.google.common.base.Preconditions;
+import com.google.common.eventbus.EventBus;
 
 /**
  * Hold context for processing game over event.
  */
 final class GameOverProcessingContext {
 
-	private final GameFinishedEvent event;
+    private final GameFinishedEvent event;
 
-	private final MissionCallBack missionCallBack;
+    private final EventBus eventBus;
 
-	GameOverProcessingContext(final GameFinishedEvent event, final MissionCallBack missionCallBack) {
-		this.event = Preconditions.checkNotNull(event);
-		this.missionCallBack = Preconditions.checkNotNull(missionCallBack);
-	}
+    GameOverProcessingContext(final GameFinishedEvent event, final EventBus eventBus) {
+        this.event = Preconditions.checkNotNull(event);
+        this.eventBus = Preconditions.checkNotNull(eventBus);
+    }
 
-	/**
-	 * @return the event
-	 */
-	public GameFinishedEvent getEvent() {
-		return event;
-	}
+    protected void fireEvent(final Object event) {
+        getEventBus().post(event);
+    }
 
-	/**
-	 * @return the missionCallBack
-	 */
-	public MissionCallBack getMissionCallBack() {
-		return missionCallBack;
-	}
+    private EventBus getEventBus() {
+        return eventBus;
+    }
+
+    /**
+     * @return the event
+     */
+    public GameFinishedEvent getEvent() {
+        return event;
+    }
 
 }

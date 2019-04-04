@@ -2,7 +2,7 @@ package org.microcol.ai;
 
 import java.util.function.Consumer;
 
-import org.microcol.gui.gamepanel.AnimationLock;
+import org.microcol.gui.screen.game.gamepanel.AnimationLock;
 import org.microcol.model.Model;
 import org.microcol.model.ModelListenerAdapter;
 import org.microcol.model.Player;
@@ -45,9 +45,18 @@ public abstract class AbstractRobotPlayer {
         logger.info("Robot player started.");
     }
 
+    /**
+     * It's called when turn started.
+     *
+     * @param event
+     *            required event
+     */
     private void onTurnStarted(final TurnStartedEvent event) {
         if (event.getPlayer().equals(player)) {
+            logger.debug("AI player '{}' starts turn.", player.getName());
             turn(event.getPlayer());
+            logger.debug("AI player '{}' finished turn.", player.getName());
+            player.endTurn();
         }
     }
 
@@ -74,8 +83,6 @@ public abstract class AbstractRobotPlayer {
         player.getUnits().stream().filter(unit -> unit.isAtPlaceLocation())
                 .forEach(unit -> move(unit));
         animationLock.waitWhileRunning();
-        logger.info("Robot finish move for player {}", player);
-        player.endTurn();
     }
 
     private void move(final Unit unit) {

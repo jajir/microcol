@@ -1,10 +1,10 @@
 package org.microcol.model;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.microcol.model.store.ModelDao;
 import org.microcol.model.store.ModelPo;
 
@@ -19,21 +19,26 @@ public class IdManagerTest {
         assertEquals(0, idm.nextId());
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void start_from_invalid_value() throws Exception {
-        new IdManager(-1);
+        final IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> {
+                    new IdManager(-1);
+                });
+
+        assertEquals("lastUsedId have to by equals or greater than 0.", exception.getMessage());
     }
 
     @Test
     public void start_from_modelPo() throws Exception {
-        ModelPo modelPo = modelDao.loadPredefinedModel("/maps/test-idManager.microcol");
+        ModelPo modelPo = modelDao.loadFromClassPath("/maps/test-idManager.microcol");
 
         IdManager idm = IdManager.makeFromModelPo(modelPo);
 
         assertNotNull(idm);
         assertEquals(4, idm.nextId());
     }
-    
+
     @Test
     public void test_sequence() throws Exception {
         IdManager idm = new IdManager(6);
@@ -44,12 +49,12 @@ public class IdManagerTest {
         assertEquals(9, idm.nextId());
     }
 
-    @Before
+    @BeforeEach
     public void setup() {
         modelDao = new ModelDao();
     }
 
-    @After
+    @AfterEach
     public void tearDown() {
         modelDao = null;
 

@@ -1,0 +1,10 @@
+ ----
+ Units class structure
+ ----
+
+ Unit class is pretty complex. Current class diagram is following:
+
+[unit-hierarchy.png] Unit class diagram.
+ 
+ Rest of ground units are extended from <Free Colonist>.
+ 

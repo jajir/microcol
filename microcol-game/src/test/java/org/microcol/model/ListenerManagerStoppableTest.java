@@ -1,22 +1,23 @@
 package org.microcol.model;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import org.junit.Test;
-import org.microcol.model.event.UnitMoveStartedEvent;
+import static org.mockito.Mockito.*;
 
-import mockit.Mocked;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+import org.microcol.model.event.UnitMoveStartedEvent;
 
 /**
  * Verify that stoppable events are correctly processed.
  */
 public class ListenerManagerStoppableTest {
 
-    private @Mocked Unit unit;
+    private final Unit unit = mock(Unit.class);
 
-    private @Mocked Path path;
+    private final Path path = mock(Path.class);
 
-    private @Mocked Model model;
+    private final Model model = mock(Model.class);
 
     @Test
     public void verify_1_event_notStopping() throws Exception {

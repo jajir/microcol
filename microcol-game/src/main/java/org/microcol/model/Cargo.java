@@ -10,12 +10,12 @@ import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 
-public final class Cargo {
+public class Cargo {
 
     private final Unit owner;
     private final List<CargoSlot> slots;
 
-    Cargo(final Unit owner, final int capacity, final CargoPo cargoPo) {
+    public Cargo(final Unit owner, final int capacity, final CargoPo cargoPo) {
         this.owner = Preconditions.checkNotNull(owner);
 
         final ImmutableList.Builder<CargoSlot> builder = ImmutableList.builder();
@@ -23,7 +23,7 @@ public final class Cargo {
             final CargoSlotPo cargoSlotPo = cargoPo.getSlotAt(i);
             if (cargoSlotPo != null && cargoSlotPo.containsGood()) {
                 builder.add(new CargoSlot(this,
-                        new GoodsAmount(cargoSlotPo.getGoodType(), cargoSlotPo.getAmount())));
+                        new Goods(cargoSlotPo.getGoodsType(), cargoSlotPo.getAmount())));
             } else {
                 builder.add(new CargoSlot(this));
             }
@@ -41,7 +41,7 @@ public final class Cargo {
         this.slots = builder.build();
     }
 
-    CargoPo save() {
+    public CargoPo save() {
         final CargoPo out = new CargoPo();
         slots.forEach(cargoSlot -> {
             out.getSlots().add(cargoSlot.save());

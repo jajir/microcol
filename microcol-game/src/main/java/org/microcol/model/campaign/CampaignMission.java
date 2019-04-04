@@ -1,59 +1,57 @@
 package org.microcol.model.campaign;
 
-import org.microcol.gui.event.model.MissionCallBack;
-import org.microcol.model.Model;
-import org.microcol.model.store.ModelPo;
+import com.google.common.base.MoreObjects;
+import com.google.common.base.Preconditions;
 
 /**
- * Holds campaign mission definition. Also works as abstract factory for
- * mission.
+ * Abstract campaign mission. Holds basic info about campaign mission.
  */
-public interface CampaignMission {
+public final class CampaignMission {
 
-	/**
-	 * @return the name
-	 */
-	String getName();
+    private final MissionName missionName;
 
-	/**
-	 * Get mission name definition object.
-	 *
-	 * @return mission name object
-	 */
-	MissionName getMissionName();
+    private final Integer orderNo;
 
-	/**
-	 * Get file at class path where is model definition file.
-	 *
-	 * @return mission definition file
-	 */
-	String getClassPathFile();
+    private boolean isFinished;
 
-	/**
-	 * @return the orderNo
-	 */
-	Integer getOrderNo();
+    CampaignMission(final MissionName missionName, final Integer orderNo) {
+        this.missionName = Preconditions.checkNotNull(missionName);
+        this.orderNo = Preconditions.checkNotNull(orderNo);
+        setFinished(false);
+    }
 
-	/**
-	 * Inform if player finished this mission.
-	 *
-	 * @return return <code>true</code> when user already finished this mission
-	 *         otherwise return <code>false</code>.
-	 */
-	boolean isFinished();
+    public String getName() {
+        return missionName.getName();
+    }
 
-	/**
-	 * Allows to set if campaign mission is finished.
-	 *
-	 * @param isFinished
-	 *            if campaign is finished it's <code>true</code> otherwise it's
-	 *            <code>false</code>
-	 */
-	void setFinished(boolean isFinished);
+    public Integer getOrderNo() {
+        return orderNo;
+    }
 
-	/**
-	 * It's concrete mission factory.
-	 */
-	Mission<?> makeMission(final MissionCallBack missionCallBack, final Model model, final ModelPo modelPo, final CampaignManager campaignManager);
+    public boolean isFinished() {
+        return isFinished;
+    }
+
+    /**
+     * @param isFinished
+     *            the isFinished to set
+     */
+    public void setFinished(boolean isFinished) {
+        this.isFinished = isFinished;
+    }
+
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(getClass()).add("name", missionName.getName())
+                .add("isFinished", isFinished).add("orderNo", orderNo).toString();
+    }
+
+    public String getClassPathFile() {
+        return missionName.getClassPathFile();
+    }
+
+    public MissionName getMissionName() {
+        return missionName;
+    }
 
 }

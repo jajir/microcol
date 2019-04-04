@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.microcol.gui.MicroColException;
 import org.microcol.model.ConstructionType;
+import org.microcol.model.Direction;
 import org.microcol.model.Location;
 
 import com.google.common.base.Preconditions;
@@ -22,11 +23,13 @@ public final class ColonyPo {
     private List<ColonyFieldPo> colonyFields = new ArrayList<>();
 
     private List<ConstructionPo> constructions = new ArrayList<>();
+    
+    private List<ColonyBuildingQueueItemPo> buildingQueue = new ArrayList<>();
 
     private Map<String, Integer> colonyWarehouse = new HashMap<>();
 
     public ColonyPo() {
-        Location.DIRECTIONS.forEach(direction -> {
+        Direction.getVectors().forEach(direction -> {
             final ColonyFieldPo colonyFieldPo = new ColonyFieldPo();
             colonyFieldPo.setDirection(direction);
             colonyFields.add(colonyFieldPo);
@@ -137,6 +140,20 @@ public final class ColonyPo {
      */
     public void setColonyWarehouse(final Map<String, Integer> colonyWarehouse) {
         this.colonyWarehouse = colonyWarehouse;
+    }
+
+    /**
+     * @return the buildingQueue
+     */
+    public List<ColonyBuildingQueueItemPo> getBuildingQueue() {
+        return buildingQueue;
+    }
+
+    /**
+     * @param buildingQueue the buildingQueue to set
+     */
+    public void setBuildingQueue(List<ColonyBuildingQueueItemPo> buildingQueue) {
+        this.buildingQueue = buildingQueue;
     }
 
 }

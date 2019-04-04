@@ -1,11 +1,16 @@
 language: java
 jdk:
-- oraclejdk8
+  - oraclejdk8
+services:
+  - xvfb
 sudo: false
+before_install:
+  # We need GraphViz to draw diagrams:
+  - "sudo apt-get install graphviz"
 install:
-- mvn install -DskipTests=true -Dmaven.javadoc.skip=true -Dtravis-ci=true -B -V
+  - mvn initialize -B -V -e
 script:
-- mvn clean verify site -Dtravis-ci=true -B -V
+  - mvn clean site -Dtravis-ci=true -Djava.awt.headless=true -Dtestfx.robot=glass -Dtestfx.headless=true -Dprism.order=sw -Dprism.text=t2k -Dtestfx.setup.timeout=2500 -DsoundEnabled=false -B -V -e
 addons:
   apt:
     packages:
@@ -16,5 +21,5 @@ env:
 
 branches:
   only:
-  - master
-  - develop
+    - master
+    - develop

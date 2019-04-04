@@ -2,7 +2,8 @@ package org.microcol.gui.util;
 
 import java.io.File;
 
-import org.microcol.gui.event.model.GameModelController;
+import org.microcol.model.Calendar;
+import org.microcol.model.Model;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,7 +13,7 @@ import com.google.inject.Inject;
 /**
  * Service help with files for game saves.
  */
-public final class PersistingTool {
+public class PersistingTool {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -24,11 +25,8 @@ public final class PersistingTool {
 
     private final static String AUTOSAVE_FILE_NAME = "autosave.microcol";
 
-    private final GameModelController gameModelController;
-
     @Inject
-    public PersistingTool(final GameModelController gameModelController) {
-        this.gameModelController = Preconditions.checkNotNull(gameModelController);
+    public PersistingTool() {
     }
 
     /**
@@ -57,16 +55,33 @@ public final class PersistingTool {
         return getRootSaveDirectory().toPath().resolve(AUTOSAVE_FILE_NAME).toFile();
     }
 
-    public String getSuggestedSaveFileName() {
-        Preconditions.checkState(gameModelController.isModelReady(),
-                "Can't suggest file name when model is not ready");
+    /**
+     * Provide file name that should store current model state.
+     *
+     * @param model
+     *            required model
+     * @return suggested file name
+     */
+    public String getSuggestedSaveFileName(final Model model) {
+        Preconditions.checkNotNull(model);
+        return prepareFileName(model.getCurrentPlayer().getName(), model.getCalendar());
+    }
 
-        String str = gameModelController.getCurrentPlayer().getName() + "-"
-                + gameModelController.getModel().getCalendar().getCurrentYear();
+    private String prepareFileName(final String playerName, final Calendar calendar) {
+        final StringBuilder buff = new StringBuilder();
 
-        str = str.replaceAll("[^a-zA-Z0-9\\.\\-]", "_") + EXTENSION;
+        buff.append(playerName);
+        buff.append('-');
+        buff.append(calendar.getCurrentYear());
 
-        return str;
+        if (calendar.getCurrentSeason().isPresent()) {
+            buff.append('-');
+            buff.append(calendar.getCurrentSeason().get().name());
+        }
+
+        buff.append(EXTENSION);
+
+        return buff.toString();
     }
 
 }

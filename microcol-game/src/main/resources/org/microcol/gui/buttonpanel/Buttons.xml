@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE properties [
+<!ELEMENT properties ( comment?, entry* ) >
+<!ATTLIST properties version CDATA #FIXED "1.0">
+<!ELEMENT comment (#PCDATA) >
+<!ELEMENT entry (#PCDATA) >
+<!ATTLIST entry key CDATA #REQUIRED>
+]>
+
+<properties>
+	<comment>Define keys for Europe dialog</comment>
+
+	<entry key="buttonStatistics">Statistics. (R)</entry>
+	<entry key="buttonCenter">Find focused place. (C)</entry>
+	<entry key="buttonTurnReport">Turn report. Some important events from previous turn. (T)</entry>
+	<entry key="buttonGoals">Game goals. (G)</entry>
+	<entry key="buttonHelp">Colonizopedia - guide. (H)</entry>
+	<entry key="buttonExit">Leave game and go to game menu.</entry>
+	<entry key="buttonNextTurn">Next turn</entry>
+	<entry key="buttonEurope">Europe port. (E)</entry>
+	<entry key="buttonMove">Move unit. (M)</entry>
+	<entry key="buttonPlowField">Plow field. (P)</entry>
+	<entry key="buttonBuildColony">Build new colony. (B)</entry>
+	<entry key="buttonDeclareIndependence">Declare independence.</entry>
+
+</properties>

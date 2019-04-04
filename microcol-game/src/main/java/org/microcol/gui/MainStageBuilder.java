@@ -2,13 +2,14 @@ package org.microcol.gui;
 
 import java.awt.Rectangle;
 
-import org.microcol.gui.mainmenu.MainMenuView;
-import org.microcol.gui.mainmenu.QuitGameController;
-import org.microcol.gui.mainmenu.QuitGameEvent;
-import org.microcol.gui.util.GamePreferences;
-import org.microcol.gui.util.Text;
+import org.microcol.gui.event.QuitGameEvent;
+import org.microcol.gui.preferences.GamePreferences;
+import org.microcol.gui.screen.MainPanelView;
+import org.microcol.gui.screen.ShowScreenEvent;
+import org.microcol.i18n.I18n;
 
 import com.google.common.base.Preconditions;
+import com.google.common.eventbus.EventBus;
 import com.google.inject.Inject;
 
 import javafx.geometry.Rectangle2D;
@@ -28,25 +29,21 @@ public final class MainStageBuilder {
     public static final String STYLE_SHEET_RIGHT_PANEL_VIEW = MainStageBuilder.class
             .getResource("/gui/rightPanelView.css").toExternalForm();
 
-    private final MainMenuView mainMenuView;
+    private final EventBus eventBus;
 
     private final MainPanelView mainPanelView;
 
-    private final QuitGameController exitGameController;
-
     private final GamePreferences gamePreferences;
 
-    private final Text text;
+    private final I18n i18n;
 
     @Inject
-    public MainStageBuilder(final MainMenuView mainMenuView, final MainPanelView mainPanelView,
-            final QuitGameController exitGameController, final GamePreferences gamePreferences,
-            final Text text) {
-        this.mainMenuView = Preconditions.checkNotNull(mainMenuView);
+    public MainStageBuilder(final MainPanelView mainPanelView,
+            final GamePreferences gamePreferences, final EventBus eventBus, final I18n i18n) {
         this.mainPanelView = Preconditions.checkNotNull(mainPanelView);
-        this.exitGameController = Preconditions.checkNotNull(exitGameController);
         this.gamePreferences = Preconditions.checkNotNull(gamePreferences);
-        this.text = Preconditions.checkNotNull(text);
+        this.eventBus = Preconditions.checkNotNull(eventBus);
+        this.i18n = Preconditions.checkNotNull(i18n);
     }
 
     /**
@@ -56,9 +53,9 @@ public final class MainStageBuilder {
      *            required primary stage
      */
     public void buildPrimaryStage(final Stage primaryStage) {
-        primaryStage.setTitle(text.get("game.title"));
+        primaryStage.setTitle(i18n.get(Loc.gameTitle));
         primaryStage.setOnCloseRequest(event -> {
-            exitGameController.fireEvent(new QuitGameEvent());
+            eventBus.post(new QuitGameEvent());
         });
         primaryStage.xProperty().addListener((object, oldValue, newValue) -> {
             final Rectangle rectangle = gamePreferences.getMainFramePosition();
@@ -94,9 +91,10 @@ public final class MainStageBuilder {
         final VBox mainBox = new VBox();
         final Scene scene = new Scene(mainBox);
         scene.getStylesheets().add(STYLE_SHEET_MICROCOL);
-        mainBox.getChildren().add(mainMenuView.getMenuBar());
-        mainBox.getChildren().add(mainPanelView.getBox());
-
+        mainBox.getChildren().add(mainPanelView.getContent());
+        
+        eventBus.post( new ShowScreenEvent(org.microcol.gui.screen.Screen.MENU));
+        
         primaryStage.setScene(scene);
     }
 

@@ -1,0 +1,44 @@
+@startuml
+autoactivate on
+
+'title "Messages - Sequence Diagram"
+
+actor Player
+participant UI
+participant model
+participant AI
+
+Player -> UI : Next turn
+
+UI -> model : model.endTurn()
+
+model -> model : Choose next player to turn.\nIt's AI.
+return send event about started turn
+
+model -> AI : send EventTurnStarted(AI)
+note left : Event is send to first listener
+
+AI -> AI : Perform moves with units\n or other things
+return AI finish all moves
+
+AI -> model : model.endTurn() for AI
+
+model -> model : Choose next player to turn.\n It's Player.
+return send event about started turn
+
+model -> UI : send EventTurnStarted(Player)
+return
+
+return model.endTurn() for AI is done
+
+return return from send EventTurnStarted(AI)
+
+model -> UI : send EventTurnStarted(AI)
+note right : Event is send to second listener
+return
+
+return return from model.endTurn()
+
+return NextTurn is done
+
+@enduml

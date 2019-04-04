@@ -10,7 +10,7 @@ import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableMap;
 
-public final class WorldMap {
+public class WorldMap {
 
     private final int maxX;
     private final int maxY;

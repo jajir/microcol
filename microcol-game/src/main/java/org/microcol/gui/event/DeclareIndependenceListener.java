@@ -1,20 +1,28 @@
 package org.microcol.gui.event;
 
-import org.microcol.gui.mainmenu.DeclareIndependenceController;
-import org.microcol.gui.mainmenu.DeclareIndependenceEvent;
+import org.microcol.gui.event.model.GameModelController;
+import org.microcol.gui.util.Listener;
+import org.microcol.model.Player;
 
+import com.google.common.base.Preconditions;
+import com.google.common.eventbus.Subscribe;
 import com.google.inject.Inject;
 
-public final class DeclareIndependenceListener implements Listener<DeclareIndependenceEvent> {
+@Listener
+public final class DeclareIndependenceListener {
+
+    private final GameModelController gameModelController;
 
     @Inject
-    public DeclareIndependenceListener(final DeclareIndependenceController controller) {
-        controller.addListener(this);
+    public DeclareIndependenceListener(final GameModelController gameModelController) {
+        this.gameModelController = Preconditions.checkNotNull(gameModelController);
+
     }
 
-    @Override
-    public void onEvent(final DeclareIndependenceEvent event) {
-        event.getCurrentPlayer().declareIndependence();
+    @Subscribe
+    public void onEvent(@SuppressWarnings("unused") final DeclareIndependenceEvent event) {
+        final Player currentPlayer = gameModelController.getCurrentPlayer();
+        currentPlayer.declareIndependence();
     }
 
 }

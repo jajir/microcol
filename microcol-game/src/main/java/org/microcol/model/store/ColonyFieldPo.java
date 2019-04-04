@@ -1,6 +1,6 @@
 package org.microcol.model.store;
 
-import org.microcol.model.GoodType;
+import org.microcol.model.GoodsType;
 import org.microcol.model.Location;
 
 public final class ColonyFieldPo {
@@ -9,7 +9,7 @@ public final class ColonyFieldPo {
 
     private Integer workerId;
 
-    private GoodType producedGoodType;
+    private GoodsType producedGoodsType;
 
     /**
      * @return the direction
@@ -42,18 +42,18 @@ public final class ColonyFieldPo {
     }
 
     /**
-     * @return the producedGoodType
+     * @return the producedGoodsType
      */
-    public GoodType getProducedGoodType() {
-        return producedGoodType;
+    public GoodsType getProducedGoodsType() {
+        return producedGoodsType;
     }
 
     /**
-     * @param producedGoodType
-     *            the producedGoodType to set
+     * @param producedGoodsType
+     *            the producedGoodsType to set
      */
-    public void setProducedGoodType(GoodType producedGoodType) {
-        this.producedGoodType = producedGoodType;
+    public void setProducedGoodsType(GoodsType producedGoodsType) {
+        this.producedGoodsType = producedGoodsType;
     }
 
 }

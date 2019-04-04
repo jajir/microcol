@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE properties [
+<!ELEMENT properties ( comment?, entry* ) >
+<!ATTLIST properties version CDATA #FIXED "1.0">
+<!ELEMENT comment (#PCDATA) >
+<!ELEMENT entry (#PCDATA) >
+<!ATTLIST entry key CDATA #REQUIRED>
+]>
+
+<properties>
+	<comment>Define keys for Europe dialog</comment>
+	
+	<entry key="ok">Ok</entry>
+	<entry key="cancel">Cancel</entry>
+
+	<entry key="fight_title">Útok</entry>
+	<entry key="fight_attacker">Útočník</entry>
+	<entry key="fight_defender">Obránce</entry>
+	<entry key="fight_buttonFight">Bojovat</entry>
+	<entry key="fight_buttonCancel">Zpět</entry>
+	<entry key="fight_hideOption">Zašktněte toto pole, pokud příště už náhled před bojem nebude potřebovat. Zapnout a vypnout lze náhled před bojem z nastavení v hlavním menu.</entry>
+	
+	<entry key="unitCantFightWarning_caption">Tato jednotka neumí bojovat.</entry>
+	
+	<entry key="notEnoughGold_caption">K dokončení operace nemáte dost zlata.</entry>
+
+	<entry key="independenceWasDeclared_caption">Vyhlásil jsi nezávislot. Nýní se připrav na útok královské armády.</entry>
+
+	<entry key="unitCantMoveHere_caption">Sem neni možné jednotku přesunout.</entry>
+
+	<entry key="gameOver_caption">Konec hry.</entry>
+	<entry key="gameOver_allColoniesAreLost">Ztratil jsi všechny kolonie.</entry>
+	<entry key="gameOver_timeIsUp">Nepodařilo se ti dosáhnout svobody před rokem 1800. V cestě za svobodou jsi selhal..</entry>
+
+	<entry key="destroyColony_caption">Opravdu si přejete zrušit kolonii?</entry>
+	<entry key="destroyColony_question">Opravdu si přejete zrušit kolonii? Když kolonii opustíte s poslední jednotkou tak bude kolonie zrušena.</entry>
+	
+	<entry key="colonyWasCaptured_caption">Kolonie byla obsazena</entry>
+	<entry key="colonyWasCaptured_text1">Dobyl jsi kolonii '</entry>
+	<entry key="colonyWasCaptured_text2">'. Je to velký úspěch.</entry>
+	
+	<entry key="about_caption">O MicroCol</entry>
+	<entry key="about_version">Verze :</entry>
+	
+	<entry key="saveGame_title">Uložit hru</entry>
+	<entry key="loadGame_title">Nahrát hru</entry>
+	
+	<entry key="missionGoals_title">Cíle mise</entry>
+	<entry key="missionGoals_caption">Cíle mise</entry>
+	
+	<entry key="buildingQueueDialog_caption">Plánování stavby</entry>
+
+</properties>

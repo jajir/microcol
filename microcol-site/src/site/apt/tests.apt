@@ -22,15 +22,23 @@ Test cases
   
 ** TC-01 Embark and Disembark
 
- * Load file 'test-verify-loading-unloading.microcol'
+ * Load file 'test-verify-loading-unloading.microcol'.
 
- * Move ship to [23,13] from colony delfy
+ * Move ship from colony Delfy at [22,12].
+
+ * Open colony detail.
+ 
+ * Verify that there are one ship in port and two units on pier.
+ 
+ * Click at ship. Verify that doesn't contains any cargo. 
 
  * Embark two units waiting outside of colony to ship.
- Verify that units are be loaded in different cargo slots and are visible in right panel
+ Verify that units are be loaded in different cargo slots.
 
- * Move with ship few tiles to the right.
- Verify that it's not possible to disembark units. (There are no free action points for loaded units)
+ * Close colony. Verify that embarked units are visible in right panel.
+
+ * Move with ship few tiles to the right at [24,12].
+ Verify that it's not possible to disembark units (There are no free action points for loaded units).
 
  * Press 'Next Turn'
 
@@ -39,11 +47,11 @@ Test cases
 
  * Try to embark units back.
  Verify that it's not possible.
- Verify that both units have 0 action points
+ Verify that both units have 0 action points.
 
- * Press 'Next Turn'
+ * Press 'Next Turn'.
 
- * Embark both units back to ship
+ * Embark both units back to ship.
  Verify that both units are on ship.
  Verify that unit are loaded with animation and after moving is focused ship. 
 
@@ -66,8 +74,8 @@ Test cases
  * Open colony details.
  Verify that founding colonist is working at field and produce corn.
  
- * Move unit from outside of colony to filed.
- Verify that moved unit start produce food.
+ * Move unit to colony field.
+ Verify that moved unit started to produce food.
 
 []
 
@@ -78,6 +86,8 @@ Test cases
  * Open save 'verify-independence.microcol'.
  
  * Declare independence.
+ 
+ * Verify that there are two dialog messages.
  
  * Wait for king's military units arrival.
  
@@ -95,16 +105,107 @@ Test cases
  
  * Press 'Next turn'.
  
+ * Verify that turn dialog was shown.
+ 
+ * Verify that message about lost city is shown.
+ 
  * Verify that blue units attack city, city loose and ship leaves city to random place. 
  
- * Verify that city Delft is not possible to open. 
+ * Verify that city Delft is not possible to open.
+
+ * Open Turn Dialog again.
+ 
+ * Verify that message about lost city is shown.
+
+[]
+
+ Done.
+
+** TC-05 Moving goods
+
+ Test verify moving goods between ship and colony warehouse.
+
+ * Open game file 'T05-moving-goods.microcol'.
+ 
+ * Open colony Delft.
+ 
+ * Select ship from port by clicking at it.
+ 
+ * Drag food from first warehouse slot to first ship's cargo slot
+ 
+ * Verify that 100 corn was transferred.
+ 
+ * Drag food from warehouse to first ship's cargo slot
+ 
+ * Drag tobacco from third warehouse slot to second ship's cargo slot
+ 
+ * Verify that 54 tobacco was transferred.
+ 
+ * Drag food from first warehouse slot to first ship's cargo slot. Ship's cargo slot is already full. 
+ 
+ * Verify that still just 100 corn is in cargo. Verify that no cargo was transferred.
+ 
+ * Drag 100 corn to third cargo slot, press control during dragging
+ 
+ * Select that just 47 corn will be transferred.
+ 
+ * Close dialog for choosing transferred amount.
+ 
+ * Verify that just 47 corn was transferred.
+ 
+ * Drag corn from ship cargo slot to warehouse, press control during dragging.
+ 
+ * At dialog for selecting amount of transferred goods select value 77.
+ 
+ * Close dialog.
+ 
+ * Verify that just 23 corn is in first cargo slot, 77 items was transferred.
+
+[]
+
+ Done.
+
+** TC-06 Buy and sell goods
+
+ Verify thats possible to buy and sell goods in Europe port.
+
+ * Not yet finished.
+
+[]
+
+ Done.
+
+** TC-07 Sending ships to New World
+
+ Test verify sending units to new world and back.
+
+ * Not yet finished.
+
+[]
+
+ Done.
+
+** TC-08 Conquer all colonies
+
+ Test verify that game correctly finish when all enemy units are destroyed.
+
+ * Not yet finished.
+
+[]
+
+ Done.
+
+** TC-09 Lost all colonies
+
+ Test verify that game correctly finish when player lost all colonies.
+
+ * Not yet finished.
 
 []
 
  Done.
  
- 
-** TC-05 Verify default campaign
+** TC-20 Verify default campaign
 
  * Start game with '-Dclean=true' to clean all played missions.
  Verify that 'New free play game' is disabled.

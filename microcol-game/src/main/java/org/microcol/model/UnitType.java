@@ -2,6 +2,7 @@ package org.microcol.model;
 
 import java.util.List;
 import java.util.Map;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
@@ -21,7 +22,7 @@ import com.google.common.collect.ImmutableMap;
  * </p>
  */
 public final class UnitType {
-
+    
     /**
      * Default production of all goods in default case.
      */
@@ -83,12 +84,13 @@ public final class UnitType {
     private final int cargoCapacity;
     private final boolean storable;
     private final int europePrice;
+    private final BiFunction<Model, Colony, Boolean> canByBuildInColony;
 
     /**
      * Here is good type in which production is unit exceptional. When it's
      * <code>null</code> than unit is not expert on producing any type of goods.
      */
-    private final GoodType expertInProducing;
+    private final GoodsType expertInProducing;
 
     /**
      * Production multiplier on basic good production.
@@ -115,6 +117,16 @@ public final class UnitType {
      * it's <code>true</code> when unit could cut down trees.
      */
     private final boolean canCutTrees;
+    
+    /**
+     * How many tools is required to build unit.
+     */
+    private final Integer requiredTools;
+    
+    /**
+     * How many hammers is required to build unit.
+     */
+    private final Integer requiredHammers;
 
     public static final UnitType COLONIST = UnitType.make()
             .setName("COLONIST")
@@ -137,10 +149,28 @@ public final class UnitType {
             .setCargoCapacity(0)
             .setStorable(true)
             .setEuropePrice(DEFAULT_ORE_MINER_EUROPE_PRICE)
-            .setExpertise(GoodType.ORE, 2.0F)
+            .setExpertise(GoodsType.ORE, 2.0F)
             .setCanBuildRoad(true)
             .setCanCutTrees(true)
             .setCanPlowField(true)
+            .build();
+
+    public static final UnitType WAGON = UnitType.make()
+            .setName("WAGON")
+            .setMoveableTerrains(TerrainType.UNIT_CAN_WALK_AT)
+            .setSpeed(1)
+            .setAttackableUnitTypeFilter(UNIT_TYPE_CANT_ATTACK)
+            .setCargoCapacity(2)
+            .setStorable(false)
+            .setEuropePrice(0)
+            .setCanBuildRoad(false)
+            .setCanCutTrees(false)
+            .setCanPlowField(false)
+            .setRequiredTools(40)
+            .setRequiredHammers(0)
+            .setCanByBuildInColony((model, colony) -> {
+                return colony.wasConstructionBuilded(ConstructionType.LUMBER_MILL);
+            })
             .build();
 
     public static final UnitType MASTER_BLACKSMITH = UnitType.make()
@@ -151,7 +181,7 @@ public final class UnitType {
             .setCargoCapacity(0)
             .setStorable(true)
             .setEuropePrice(DEFAULT_MASTER_BLACKSMITH_EUROPE_PRICE)
-            .setExpertise(GoodType.TOOLS, 2.0F)
+            .setExpertise(GoodsType.TOOLS, 2.0F)
             .setCanBuildRoad(true)
             .setCanCutTrees(true)
             .setCanPlowField(true)
@@ -165,6 +195,11 @@ public final class UnitType {
             .setCargoCapacity(1)
             .setStorable(false)
             .setEuropePrice(DEFAULT_FRIGATE_EUROPE_PRICE)
+            .setRequiredTools(100)
+            .setRequiredHammers(100)
+            .setCanByBuildInColony((model, colony) -> {
+                return colony.wasConstructionBuilded(ConstructionType.DRYDOCK);
+            })
             .build();
 
     public static final UnitType GALLEON = UnitType.make()
@@ -175,9 +210,17 @@ public final class UnitType {
             .setCargoCapacity(DEFAULT_GALLEON_CARGO_CAPACITY)
             .setStorable(false)
             .setEuropePrice(DEFAULT_GALLEON_EUROPE_PRICE)
+            .setRequiredTools(100)
+            .setRequiredHammers(100)
+            .setCanByBuildInColony((model, colony) -> {
+                return colony.wasConstructionBuilded(ConstructionType.DRYDOCK);
+            })
             .build();
 
-    public static final List<UnitType> UNIT_TYPES = ImmutableList.of(COLONIST, FRIGATE, GALLEON);
+    /**
+     * List of all available unit types.
+     */
+    public static final List<UnitType> UNIT_TYPES = ImmutableList.of(COLONIST, FRIGATE, GALLEON, WAGON);
 
     private static final Map<String, UnitType> UNIT_TYPES_BY_NAME = UNIT_TYPES.stream()
             .collect(ImmutableMap.toImmutableMap(UnitType::name, Function.identity()));
@@ -194,11 +237,14 @@ public final class UnitType {
         private Predicate<UnitType> attackableUnitTypeFilter;
         private boolean storable;
         private int europePrice;
-        private GoodType expertInProducing;
+        private GoodsType expertInProducing;
         private float expertProductionModifier;
         private boolean canPlowField = false;
         private boolean canBuildRoad = false;
         private boolean canCutTrees = false;
+        private Integer requiredTools = null;
+        private Integer requiredHammers = null;
+        private BiFunction<Model, Colony, Boolean> canByBuildInColony = null;
         
         /**
          * Method that build final unit type and return it.
@@ -208,7 +254,8 @@ public final class UnitType {
         UnitType build() {
             return new UnitType(name, moveableTerrains, speed, attackableUnitTypeFilter,
                     cargoCapacity, storable, europePrice, expertInProducing,
-                    expertProductionModifier, canPlowField, canBuildRoad, canCutTrees);
+                    expertProductionModifier, canPlowField, canBuildRoad, canCutTrees,
+                    requiredTools, requiredHammers, canByBuildInColony);
         }
 
         /**
@@ -306,7 +353,7 @@ public final class UnitType {
          *            Required if there is some production modifiers.
          * @return return unit type builder object
          */
-        UnitTypeBuilder setExpertise(final GoodType newExpertInProducing,
+        UnitTypeBuilder setExpertise(final GoodsType newExpertInProducing,
                 final float newExpertProductionModifier) {
             this.expertInProducing = newExpertInProducing;
             this.expertProductionModifier = newExpertProductionModifier;
@@ -317,7 +364,7 @@ public final class UnitType {
          * @param canPlowField
          *            the canPlowField to set
          */
-        UnitTypeBuilder setCanPlowField(boolean canPlowField) {
+        UnitTypeBuilder setCanPlowField(final boolean canPlowField) {
             this.canPlowField = canPlowField;
             return this;
         }
@@ -326,7 +373,7 @@ public final class UnitType {
          * @param canBuildRoad
          *            the canBuildRoad to set
          */
-        UnitTypeBuilder setCanBuildRoad(boolean canBuildRoad) {
+        UnitTypeBuilder setCanBuildRoad(final boolean canBuildRoad) {
             this.canBuildRoad = canBuildRoad;
             return this;
         }
@@ -335,8 +382,34 @@ public final class UnitType {
          * @param canCutTrees
          *            the canCutTrees to set
          */
-        UnitTypeBuilder setCanCutTrees(boolean canCutTrees) {
+        UnitTypeBuilder setCanCutTrees(final boolean canCutTrees) {
             this.canCutTrees = canCutTrees;
+            return this;
+        }
+
+        /**
+         * @param requiredTools
+         *            the requiredTools to set
+         */
+        UnitTypeBuilder setRequiredTools(final Integer requiredTools) {
+            this.requiredTools = requiredTools;
+            return this;
+        }
+
+        /**
+         * @param requiredHammers
+         *            the requiredHammers to set
+         */
+        UnitTypeBuilder setRequiredHammers(final Integer requiredHammers) {
+            this.requiredHammers = requiredHammers;
+            return this;
+        }
+
+        /**
+         * @param canByBuildInColony the canByBuildInColony to set
+         */
+        UnitTypeBuilder setCanByBuildInColony(BiFunction<Model, Colony, Boolean> canByBuildInColony) {
+            this.canByBuildInColony = canByBuildInColony;
             return this;
         }
 
@@ -369,12 +442,21 @@ public final class UnitType {
      *            required if unit could build road
      * @param canCutTrees
      *            required if unit could cut down trees
+     * @param requiredTools
+     *            optional number of tools required to build unit
+     * @param requiredHammers
+     *            optional number of hammers required to build unit
+     * @param canByBuildInColony
+     *            optional function defining rules which have to be met to be
+     *            able to build unit in colony. When it's <code>null</code> than
+     *            it's never possible to build unit in colony.
      */
     UnitType(final String name, final List<TerrainType> moveableTerrains, final int speed,
             final Predicate<UnitType> attackableUnitTypeFilter, final int cargoCapacity,
-            final boolean storable, final int europePrice, final GoodType expertInProducing,
+            final boolean storable, final int europePrice, final GoodsType expertInProducing,
             final float expertProductionModifier, final boolean canPlowField,
-            final boolean canBuildRoad, final boolean canCutTrees) {
+            final boolean canBuildRoad, final boolean canCutTrees, final Integer requiredTools,
+            final Integer requiredHammers, final BiFunction<Model, Colony, Boolean> canByBuildInColony) {
         this.name = Preconditions.checkNotNull(name);
         this.moveableTerrains = Preconditions.checkNotNull(moveableTerrains);
         this.speed = speed;
@@ -387,6 +469,9 @@ public final class UnitType {
         this.canPlowField = canPlowField;
         this.canBuildRoad = canBuildRoad;
         this.canCutTrees = canCutTrees;
+        this.requiredTools = requiredTools;
+        this.requiredHammers = requiredHammers;
+        this.canByBuildInColony = canByBuildInColony;
     }
 
     /**
@@ -540,12 +625,12 @@ public final class UnitType {
     /**
      * How much more of given goods type could unit produce.
      *
-     * @param goodType
+     * @param goodsType
      *            required good type
      * @return goods type related production modifier
      */
-    public float getProductionModifier(final GoodType goodType) {
-        if (goodType.equals(expertInProducing)) {
+    public float getProductionModifier(final GoodsType goodsType) {
+        if (goodsType.equals(expertInProducing)) {
             return expertProductionModifier;
         } else {
             return DEFAULT_PRODUCTION_MODIFIER;
@@ -608,4 +693,40 @@ public final class UnitType {
     public boolean isCanCutTrees() {
         return canCutTrees;
     }
+
+    /**
+     * @return the requiredTools
+     */
+    public Integer getRequiredTools() {
+        return requiredTools;
+    }
+
+    /**
+     * @return the requiredHammers
+     */
+    public Integer getRequiredHammers() {
+        return requiredHammers;
+    }
+    
+    /**
+     * Get information if unit could be build in colony lumber mill.
+     *
+     * @return return <code>true</code> when unit could be build in colony
+     *         lumber mill otherwise return <code>false</code>
+     */
+    public boolean canBeBuildInColony() {
+        return requiredTools != null && requiredHammers != null;
+    }
+
+    /**
+     * @return the canByBuildInColony
+     */
+    public BiFunction<Model, Colony, Boolean> getCanByBuildInColony() {
+        if (canByBuildInColony == null) {
+            return (model, colony) -> false;
+        } else {
+            return canByBuildInColony;
+        }
+    }
+ 
 }

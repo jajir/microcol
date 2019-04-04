@@ -1,0 +1,60 @@
+/*
+ * File contains definition of dialogs.
+ */
+
+.label-title {
+	-fx-font-size: 32;	
+	-fx-max-width: 600;
+	-fx-translate-x: -150;
+	-fx-translate-y: -250;
+}
+
+.buttons{
+	-fx-alignment: top-right;
+	-fx-translate-x: 10;
+	-fx-translate-y: -130;	
+}
+
+.unit-icon{
+	-fx-max-width: 30;
+}
+
+.ships-container{
+	-fx-min-width: 80;
+}
+
+.to-europe{
+	-fx-max-width: 600;
+	-fx-max-height: 40;
+	-fx-translate-x: -150;
+	-fx-translate-y: -140;	
+}
+
+.to-new-world{
+	-fx-max-width: 600;
+	-fx-max-height: 40;
+	-fx-translate-x: -150;
+	-fx-translate-y: -40;	
+}
+
+.panel-dock {
+	-fx-max-width: 300;
+	-fx-max-height: 100;
+	-fx-translate-x: -300;
+	-fx-translate-y: 230;
+}
+
+.panel-port-pier{
+	-fx-max-width: 300;
+	-fx-max-height: 40;
+	-fx-translate-x: 52;
+	-fx-translate-y: 230;	
+}
+
+.goods{
+	-fx-max-width: 600;
+	-fx-max-height: 100;
+	-fx-translate-x: 0;
+	-fx-translate-y: 310;
+}
+

@@ -9,17 +9,19 @@ import java.util.prefs.Preferences;
 
 import javax.imageio.ImageIO;
 
-import org.microcol.gui.ApplicationController;
 import org.microcol.gui.MainStageBuilder;
 import org.microcol.gui.MicroColModule;
-import org.microcol.gui.util.GamePreferences;
+import org.microcol.gui.dialog.ApplicationController;
+import org.microcol.gui.preferences.GamePreferences;
 import org.microcol.model.campaign.CampaignManager;
 import org.microcol.model.campaign.CampaignModule;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.base.Preconditions;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import com.google.inject.Module;
 
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -31,6 +33,18 @@ import javafx.stage.Stage;
 public final class MicroCol extends Application {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MicroCol.class);
+
+    private final Module overridenModule;
+
+    private Injector injector;
+
+    public MicroCol() {
+        this(new ClassesForMocking());
+    }
+
+    public MicroCol(final Module overridenModule) {
+        this.overridenModule = Preconditions.checkNotNull(overridenModule);
+    }
 
     /**
      * Main static method.
@@ -50,7 +64,8 @@ public final class MicroCol extends Application {
     /**
      * Inform if it's clean game start and all settings should be cleaned.
      *
-     * @return Return <code>true</code> if it's clean start otherwise return false.
+     * @return Return <code>true</code> if it's clean start otherwise return
+     *         false.
      */
     private static boolean isClean() {
         return Boolean.getBoolean(GamePreferences.SYSTEM_PROPERTY_CLEAN_SETTINGS);
@@ -103,9 +118,9 @@ public final class MicroCol extends Application {
     }
 
     /**
-     * Method try to set application icon. It use apple native classes. Because it
-     * should be compiled at windows platform apple specific classes are access by
-     * java reflection. For this reason is also exception sunk.
+     * Method try to set application icon. It use apple native classes. Because
+     * it should be compiled at windows platform apple specific classes are
+     * access by java reflection. For this reason is also exception sunk.
      */
     private static void setAppleDockIcon() {
         try {
@@ -130,8 +145,8 @@ public final class MicroCol extends Application {
     /**
      * Provide information if it's apple operation system.
      *
-     * @return return <code>true</code> when it's apple operation system otherwise
-     *         return <code>false</code>
+     * @return return <code>true</code> when it's apple operation system
+     *         otherwise return <code>false</code>
      */
     private static boolean isOSX() {
         final String osName = System.getProperty("os.name");
@@ -155,21 +170,22 @@ public final class MicroCol extends Application {
     }
 
     /**
-     * Initialize guice, connect guice to primary stage and show first application
-     * screen.
+     * Initialize guice, connect guice to primary stage and show first
+     * application screen.
      *
      * @param primaryStage
      *            required primary stage
      */
     private void initializeMicrocol(final Stage primaryStage) {
         try {
-            final Injector injector = Guice.createInjector(com.google.inject.Stage.PRODUCTION,
-                    new MicroColModule(), new ExternalModule(primaryStage), new CampaignModule());
+            injector = Guice.createInjector(com.google.inject.Stage.PRODUCTION,
+                    new MicroColModule(), new ExternalModule(primaryStage), new CampaignModule(),
+                    overridenModule);
             final MainStageBuilder mainStageBuilder = injector.getInstance(MainStageBuilder.class);
             mainStageBuilder.buildPrimaryStage(primaryStage);
             final ApplicationController applicationController = injector
                     .getInstance(ApplicationController.class);
-            primaryStage.setOnShowing(e -> applicationController.startApplication());
+            primaryStage.setOnShowing(e -> applicationController.startMusic());
             primaryStage.show();
         } catch (Exception e) {
             e.printStackTrace();
@@ -178,6 +194,10 @@ public final class MicroCol extends Application {
              */
             System.exit(1);
         }
+    }
+
+    public Injector getInjector() {
+        return Preconditions.checkNotNull(injector, "Guice injector is null");
     }
 
 }

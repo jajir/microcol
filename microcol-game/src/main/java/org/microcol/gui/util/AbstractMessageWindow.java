@@ -1,6 +1,7 @@
 package org.microcol.gui.util;
 
 import org.microcol.gui.MainStageBuilder;
+import org.microcol.i18n.I18n;
 
 import com.google.common.base.Preconditions;
 
@@ -14,15 +15,11 @@ import javafx.stage.StageStyle;
 /**
  * Simplify any dialog or message window.
  */
-public abstract class AbstractMessageWindow {
+public abstract class AbstractMessageWindow implements UpdatableLanguage {
 
     private final static double OFFSCREEN_X = 10000;
 
     private final static double OFFSCREEN_Y = 10000;
-
-    protected final static String KEY_DIALOG_OK = "dialog.ok";
-
-    protected final static String KEY_DIALOG_CANCEL = "dialog.cancel";
 
     private final ViewUtil viewUtil;
 
@@ -30,18 +27,23 @@ public abstract class AbstractMessageWindow {
 
     private Scene scene;
 
-    public AbstractMessageWindow(final ViewUtil viewUtil) {
-        this.viewUtil = Preconditions.checkNotNull(viewUtil);
-        stageDialog = new Stage(StageStyle.UNDECORATED);
-        initInternal();
-    }
+    private final I18n i18n;
 
-    private void initInternal() {
+    public AbstractMessageWindow(final ViewUtil viewUtil, final I18n i18n) {
+        this.viewUtil = Preconditions.checkNotNull(viewUtil);
+        this.i18n = Preconditions.checkNotNull(i18n);
+        stageDialog = new Stage(StageStyle.UNDECORATED);
         stageDialog.initModality(Modality.WINDOW_MODAL);
         stageDialog.initOwner(viewUtil.getPrimaryStage());
     }
 
+    @Override
+    public void updateLanguage(final I18n i18n) {
+
+    }
+
     public void showAndWait() {
+        updateLanguage(i18n);
         /**
          * Following code show dialog centered to parent window.
          * <p>
@@ -81,6 +83,10 @@ public abstract class AbstractMessageWindow {
                 onCancelDialog();
             }
         });
+    }
+
+    public void addStyleSheet(final String styleSheet) {
+        scene.getStylesheets().add(styleSheet);
     }
 
     protected void onCancelDialog() {

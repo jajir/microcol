@@ -3,18 +3,19 @@ package org.microcol.gui.event.model;
 import java.util.List;
 import java.util.Optional;
 
-import org.microcol.gui.gamepanel.ScrollToFocusedTile;
-import org.microcol.gui.gamepanel.SelectedTileManager;
+import org.microcol.gui.screen.game.gamepanel.ScrollToFocusedTile;
+import org.microcol.gui.screen.game.gamepanel.SelectedTileManager;
 import org.microcol.model.CargoSlot;
-import org.microcol.model.GoodTrade;
-import org.microcol.model.GoodType;
-import org.microcol.model.GoodsAmount;
+import org.microcol.model.GoodsTrade;
+import org.microcol.model.GoodsType;
+import org.microcol.model.Goods;
 import org.microcol.model.Location;
 import org.microcol.model.Model;
 import org.microcol.model.Path;
 import org.microcol.model.Player;
 import org.microcol.model.Unit;
-import org.microcol.model.campaign.ModelMission;
+import org.microcol.model.campaign.GameModel;
+import org.microcol.model.unit.UnitWithCargo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,7 +29,7 @@ import com.google.inject.Inject;
  * There is one class instance in runtime.
  * </p>
  */
-public final class GameModelController {
+public class GameModelController {
 
     private final static Logger logger = LoggerFactory.getLogger(GameModelController.class);
 
@@ -38,7 +39,7 @@ public final class GameModelController {
     
     private final EventBus eventBus;
 
-    private ModelMission modelMission = null;
+    private GameModel gameModel = null;
 
     @Inject
     public GameModelController(final SelectedTileManager selectedTileManager,
@@ -54,12 +55,12 @@ public final class GameModelController {
      * @param newModel
      *            required game model
      */
-    void setAndStartModel(final ModelMission newModel) {
+    void setAndStartModel(final GameModel newModel) {
         tryToStopGame();
-        modelMission = Preconditions.checkNotNull(newModel);
+        gameModel = Preconditions.checkNotNull(newModel);
         artifitialPlayersManager.initRobotPlayers(getModel());
-        modelMission.addListener(new ModelListenerImpl(this, eventBus));
-        modelMission.startGame();
+        gameModel.addListener(new ModelListenerImpl(this, eventBus));
+        gameModel.startGame();
         if (getModel().getFocusedField() != null) {
             selectedTileManager.setSelectedTile(getModel().getFocusedField(),
                     ScrollToFocusedTile.skip);
@@ -77,12 +78,12 @@ public final class GameModelController {
      *             when there is no running model
      */
     public Model getModel() {
-        Preconditions.checkState(modelMission != null, "Model is not ready");
-        return modelMission.getModel();
+        Preconditions.checkState(gameModel != null, "Model is not ready");
+        return gameModel.getModel();
     }
 
-    public boolean isModelReady() {
-        return modelMission != null;
+    public boolean isGameModelReady() {
+        return gameModel != null;
     }
 
     public Player getCurrentPlayer() {
@@ -90,9 +91,9 @@ public final class GameModelController {
                 .orElseThrow(() -> new IllegalStateException("There is no human player"));
     }
 
-    public GoodsAmount getMaxBuyableGoodsAmount(final GoodType goodType) {
-        final GoodTrade goodTrade = getModel().getEurope().getGoodTradeForType(goodType);
-        return goodTrade.getAvailableAmountFor(getCurrentPlayer().getGold());
+    public Goods getMaxBuyableGoods(final GoodsType goodsType) {
+        final GoodsTrade goodsTrade = getModel().getEurope().getGoodsTradeForType(goodsType);
+        return goodsTrade.getAvailableAmountFor(getCurrentPlayer().getGold());
     }
 
     /**
@@ -106,10 +107,10 @@ public final class GameModelController {
     }
 
     private void tryToStopGame() {
-        if (modelMission != null) {
+        if (gameModel != null) {
             artifitialPlayersManager.destroyRobotPlayers();
-            modelMission.stop();
-            modelMission = null;
+            gameModel.stop();
+            gameModel = null;
         }
     }
 
@@ -133,7 +134,7 @@ public final class GameModelController {
         }).start();
     }
 
-    public void disembark(final Unit movingUnit, final Location targetLocation) {
+    public void disembark(final UnitWithCargo movingUnit, final Location targetLocation) {
         new Thread(() -> {
             movingUnit.getCargo().getSlots().stream()
                     .filter(cargoSlot -> cargoSlot.isLoadedUnit()
@@ -164,13 +165,13 @@ public final class GameModelController {
     /**
      * @return the modelCapgaign
      */
-    public ModelMission getModelMission() {
-        return modelMission;
+    public GameModel getGameModel() {
+        return gameModel;
     }
 
     public void stop() {
         tryToStopGame();
-        modelMission = null;
+        gameModel = null;
     }
 
 }

@@ -12,7 +12,6 @@ import org.microcol.model.event.BeforeDeclaringIndependenceEvent;
 import org.microcol.model.event.BeforeEndTurnEvent;
 import org.microcol.model.event.ColonyWasCapturedEvent;
 import org.microcol.model.event.ColonyWasFoundEvent;
-import org.microcol.model.event.DebugRequestedEvent;
 import org.microcol.model.event.GameFinishedEvent;
 import org.microcol.model.event.GameStartedEvent;
 import org.microcol.model.event.GameStoppedEvent;
@@ -20,6 +19,7 @@ import org.microcol.model.event.GoldWasChangedEvent;
 import org.microcol.model.event.GoodsWasSoldInEuropeEvent;
 import org.microcol.model.event.IndependenceWasDeclaredEvent;
 import org.microcol.model.event.RoundStartedEvent;
+import org.microcol.model.event.TurnFinishedEvent;
 import org.microcol.model.event.TurnStartedEvent;
 import org.microcol.model.event.UnitAttackedEvent;
 import org.microcol.model.event.UnitEmbarkedEvent;
@@ -95,7 +95,7 @@ final class ListenerManager {
 
         logger.info("Round started: {}.", event);
 
-        executeInSeparateThread(listener -> listener.onRoundStarted(event));
+        executeInSameThread(listener -> listener.onRoundStarted(event));
     }
 
     void fireTurnStarted(final Model model, final Player player, final boolean isFreshStart) {
@@ -104,6 +104,14 @@ final class ListenerManager {
         logger.info("Turn started: {}.", event);
 
         executeInSeparateThread(listener -> listener.onTurnStarted(event));
+    }
+
+    void fireTurnFinished(final Model model, final Player player) {
+        final TurnFinishedEvent event = new TurnFinishedEvent(model, player);
+
+        logger.info("Turn finished: {}.", event);
+
+        executeInSameThread(listener -> listener.onTurnFinished(event));
     }
 
     void fireUnitMovedStepStarted(final Model model, final Unit unit, final Location start,
@@ -263,8 +271,8 @@ final class ListenerManager {
         listeners.forEach(listener -> listener.onGoldWasChanged(event));
     }
 
-    void fireGoodsWasSoldInEurope(final Model model, final GoodsAmount goodsAmount) {
-        final GoodsWasSoldInEuropeEvent event = new GoodsWasSoldInEuropeEvent(model, goodsAmount);
+    void fireGoodsWasSoldInEurope(final Model model, final Goods goods) {
+        final GoodsWasSoldInEuropeEvent event = new GoodsWasSoldInEuropeEvent(model, goods);
 
         logger.info("Goods was sold in Europe: {}.", event);
 
@@ -295,12 +303,6 @@ final class ListenerManager {
         logger.info("Game finished: {}.", event);
 
         listeners.forEach(listener -> listener.onGameFinished(event));
-    }
-
-    void fireDebugRequested(final Model model, final List<Location> locations) {
-        final DebugRequestedEvent event = new DebugRequestedEvent(model, locations);
-
-        listeners.forEach(listener -> listener.onDebugRequested(event));
     }
 
     private void executeInSeparateThread(Consumer<ModelListener> action) {

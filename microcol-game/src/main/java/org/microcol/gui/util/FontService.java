@@ -1,11 +1,15 @@
 package org.microcol.gui.util;
 
+import java.net.URL;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.microcol.gui.MainStageBuilder;
+import org.microcol.gui.MicroColException;
 
 import com.google.common.base.Preconditions;
+import com.google.common.collect.ImmutableList;
 import com.google.inject.Inject;
 
 import javafx.scene.text.Font;
@@ -16,49 +20,52 @@ import javafx.scene.text.Font;
  */
 public final class FontService {
 
-    public static final String FONT_CARDO_REGULAR = "Cardo-Regular";
+    private static final String FONT_DIRECTORY = "/fonts/";
 
-    public static final String FONT_CARDO_BOLD = "Cardo-Bold";
+    public static final String FONT_CARDO_REGULAR = "Cardo/Cardo-Regular.ttf";
 
-    public static final String FONT_CARDO_ITALIC = "Cardo-Italic";
+    public static final String FONT_CARDO_BOLD = "Cardo/Cardo-Bold.ttf";
 
-    private static final int SIZE_10 = 10;
+    public static final String FONT_CARDO_ITALIC = "Cardo/Cardo-Italic.ttf";
 
-    private static final int SIZE_12 = 12;
+    public static final String FONT_BILBO_REGULAR = "Bilbo/Bilbo-Regular.ttf";
 
-    private static final int SIZE_14 = 14;
+    public static final String FONT_TILLANA_REGULAR = "Tillana/Tillana-Regular.ttf";
 
-    private static final int SIZE_16 = 16;
+    private static final List<Integer> SIZES = ImmutableList.of(10, 12, 14, 16);
 
     private final Map<String, Font> fonts = new HashMap<>();
 
     /**
-     * Default constructor.
+     * Default constructor. All font used in .css should be loaded here.
      */
     @Inject
     public FontService() {
-        load("/font/Cardo-Bold.ttf", SIZE_10, FONT_CARDO_BOLD);
-        load("/font/Cardo-Italic.ttf", SIZE_10, FONT_CARDO_ITALIC);
-        load("/font/Cardo-Regular.ttf", SIZE_10, FONT_CARDO_REGULAR);
-        load("/font/Cardo-Regular.ttf", SIZE_12, FONT_CARDO_REGULAR);
-        load("/font/Cardo-Regular.ttf", SIZE_14, FONT_CARDO_REGULAR);
-        load("/font/Cardo-Regular.ttf", SIZE_16, FONT_CARDO_REGULAR);
+        load(FONT_CARDO_BOLD, 10);
+        load(FONT_CARDO_ITALIC, 10);
+
+        SIZES.forEach(size -> load(FONT_CARDO_REGULAR, size));
+        SIZES.forEach(size -> load(FONT_BILBO_REGULAR, size));
+        SIZES.forEach(size -> load(FONT_TILLANA_REGULAR, size));
     }
 
     /**
-     * Allows to load from specific file font. It's supposed that path point to font
-     * specification.
+     * Allows to load from specific file font. It's supposed that path point to
+     * font specification.
+     * <p>
+     * When font is loaded than could be used even in .css files.
+     * </p>
      *
-     * @param path
+     * @param relativePath
      *            required path for font definition file
-     * @param size
-     *            required font size
-     * @param name
-     *            required font family name
      */
-    private void load(final String path, final double size, final String name) {
-        addFont(name, size,
-                Font.loadFont(MainStageBuilder.class.getResource(path).toExternalForm(), size));
+    private void load(final String relativePath, final double size) {
+        final String path = FONT_DIRECTORY + relativePath;
+        final URL fontURL = MainStageBuilder.class.getResource(path);
+        if (fontURL == null) {
+            throw new MicroColException(String.format("Unable to find font at '%s'", path));
+        }
+        addFont(relativePath, size, Font.loadFont(fontURL.toExternalForm(), size));
     }
 
     /**
@@ -107,6 +114,17 @@ public final class FontService {
         Preconditions.checkState(out != null, "Unable to find font '%s' with size '%s'", name,
                 size);
         return out;
+    }
+
+    /**
+     * Most of game UI should be painted with this font.
+     *
+     * @param size
+     *            required font size
+     * @return font instance
+     */
+    public Font getDefault(final double size) {
+        return getFont(FONT_BILBO_REGULAR, size);
     }
 
 }

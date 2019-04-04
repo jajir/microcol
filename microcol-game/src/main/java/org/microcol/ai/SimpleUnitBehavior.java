@@ -43,7 +43,7 @@ public final class SimpleUnitBehavior {
             final Optional<Colony> oColony = model.getColonyAt(location);
             Preconditions.checkState(oColony.isPresent(), "Colony wasn't fount at '%s'", location);
             final Colony colony = oColony.get();
-            colony.captureColony(unit.getOwner(), unit);
+            colony.captureColony(unit);
         }
     }
 }

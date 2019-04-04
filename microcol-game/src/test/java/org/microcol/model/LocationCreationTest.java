@@ -1,40 +1,33 @@
 package org.microcol.model;
 
-import java.util.Arrays;
-import java.util.Collection;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.params.provider.Arguments.arguments;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-import org.junit.runners.Parameterized.Parameter;
-import org.junit.runners.Parameterized.Parameters;
+import java.util.stream.Stream;
 
-@RunWith(Parameterized.class)
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
+
 public class LocationCreationTest {
-	@Parameters(name = "{index}: x = {0}, y = {1}")
-	public static Collection<Object[]> data() {
-		return Arrays.asList(new Object[][] {
-			{ 0,  0},
-			{ 1,  1},
-			{ 2,  3},
-			{-2,  3},
-			{ 2, -3},
-			{-2, -3},
-		});
-	}
 
-	@Parameter(0)
-	public int x;
+    static Stream<Arguments> dataProvider() {
+        return Stream.of(
+                arguments(0, 0),
+                arguments(1, 1),
+                arguments(2, 3),
+                arguments(-2, 3),
+                arguments(2, -3),
+                arguments(-2, -3)
+            );
+    }
 
-	@Parameter(1)
-	public int y;
+    @ParameterizedTest(name = "{index}: fileName = {0}, location = {1}")
+    @MethodSource("dataProvider")
+    public void testCreation(final int x, final int y) {
+        final Location location = Location.of(x, y);
 
-	@Test
-	public void testCreation() {
-		final Location location = Location.of(x, y);
-
-		Assert.assertEquals("Test of X-axis failed:", x, location.getX());
-		Assert.assertEquals("Test of Y-axis failed:", y, location.getY());
-	}
+        assertEquals(x, location.getX(), "Test of X-axis failed:");
+        assertEquals(y, location.getY(), "Test of Y-axis failed:");
+    }
 }

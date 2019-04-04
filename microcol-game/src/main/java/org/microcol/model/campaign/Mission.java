@@ -2,20 +2,20 @@ package org.microcol.model.campaign;
 
 import java.util.Map;
 
-import org.microcol.model.GameOverResult;
-import org.microcol.model.Model;
+interface Mission<G extends MissionGoals> {
 
-public interface Mission<G extends MissionGoals> {
+    /**
+     * Get mission goals.
+     *
+     * @return mission goals
+     */
+    G getGoals();
 
-	/**
-	 * Get mission goals.
-	 *
-	 * @return mission goals
-	 */
-	G getGoals();
-
-	Map<String, String> saveToMap();
-
-	GameOverResult evaluateGameOver(final Model model);
+    /**
+     * Save state of mission goals to map. Map could be easily stored in file.
+     * 
+     * @return map
+     */
+    Map<String, String> saveGoals();
 
 }

@@ -6,7 +6,6 @@ import org.microcol.model.event.BeforeDeclaringIndependenceEvent;
 import org.microcol.model.event.BeforeEndTurnEvent;
 import org.microcol.model.event.ColonyWasCapturedEvent;
 import org.microcol.model.event.ColonyWasFoundEvent;
-import org.microcol.model.event.DebugRequestedEvent;
 import org.microcol.model.event.GameFinishedEvent;
 import org.microcol.model.event.GameStartedEvent;
 import org.microcol.model.event.GameStoppedEvent;
@@ -14,6 +13,7 @@ import org.microcol.model.event.GoldWasChangedEvent;
 import org.microcol.model.event.GoodsWasSoldInEuropeEvent;
 import org.microcol.model.event.IndependenceWasDeclaredEvent;
 import org.microcol.model.event.RoundStartedEvent;
+import org.microcol.model.event.TurnFinishedEvent;
 import org.microcol.model.event.TurnStartedEvent;
 import org.microcol.model.event.UnitAttackedEvent;
 import org.microcol.model.event.UnitEmbarkedEvent;
@@ -129,11 +129,6 @@ public class ModelListenerAdapter implements ModelListener {
     }
 
     @Override
-    public void onDebugRequested(final DebugRequestedEvent event) {
-        // Do nothing.
-    }
-
-    @Override
     public void onUnitMoveStarted(final UnitMoveStartedEvent event) {
         // Do nothing.
     }
@@ -150,6 +145,11 @@ public class ModelListenerAdapter implements ModelListener {
 
     @Override
     public void onBeforeDeclaringIndependence(final BeforeDeclaringIndependenceEvent event) {
+        // Do nothing.
+    }
+
+    @Override
+    public void onTurnFinished(final TurnFinishedEvent event) {
         // Do nothing.
     }
 }

@@ -1,10 +1,11 @@
 package org.microcol.gui;
 
 import org.microcol.gui.image.ImageProvider;
-import org.microcol.gui.util.Text;
+import org.microcol.i18n.I18n;
 import org.microcol.model.CargoSlot;
 import org.microcol.model.Player;
 import org.microcol.model.Unit;
+import org.microcol.model.unit.UnitWithCargo;
 
 import com.google.common.base.Preconditions;
 
@@ -25,21 +26,21 @@ public class UnitPanel {
 
     private final LocalizationHelper localizationHelper;
 
-    private final Text text;
+    private final I18n i18n;
 
     private final VBox box = new VBox();
 
-    public UnitPanel(final ImageProvider imageProvider, final Text text,
+    public UnitPanel(final ImageProvider imageProvider, final I18n i18n,
             final LocalizationHelper localizationHelper, final Player humanPlayer, final Unit unit,
             final boolean selected) {
         this.imageProvider = Preconditions.checkNotNull(imageProvider);
-        this.text = Preconditions.checkNotNull(text);
+        this.i18n = Preconditions.checkNotNull(i18n);
         this.localizationHelper = Preconditions.checkNotNull(localizationHelper);
 
         box.getStyleClass().add("unitPanel");
         box.getChildren().add(makeUnitImage(humanPlayer, unit));
-        if (isUnitOwnedBy(unit, humanPlayer) && unit.getType().getCargoCapacity() > 0) {
-            box.getChildren().add(makeGoodsPanel(unit));
+        if (isUnitOwnedBy(unit, humanPlayer) && unit.canHoldCargo()) {
+            box.getChildren().add(makeGoodsPanel((UnitWithCargo) unit));
         }
         if (selected) {
             box.getStyleClass().add("selected");
@@ -52,26 +53,29 @@ public class UnitPanel {
 
     private HBox makeUnitImage(final Player humanPlayer, final Unit unit) {
         HBox box = new HBox();
-        box.getChildren().add(new ImageView(imageProvider.getUnitImage(unit.getType())));
+        box.getChildren().add(new ImageView(imageProvider.getUnitImage(unit)));
         box.getChildren().add(makeUnitDescription(humanPlayer, unit));
         return box;
     }
 
     private Region makeUnitDescription(final Player humanPlayer, final Unit unit) {
-        VBox box = new VBox();
-        final StringBuilder sb = new StringBuilder(200);
-        sb.append(localizationHelper.getUnitName(unit.getType()));
-        sb.append("\n");
+        final VBox box = new VBox();
+
+        final Label labelUnitType = new Label(localizationHelper.getUnitName(unit.getType()));
+        labelUnitType.getStyleClass().add("unitType");
+        box.getChildren().add(labelUnitType);
+
         if (isUnitOwnedBy(unit, humanPlayer)) {
-            sb.append(text.get("unitsPanel.availableMoves"));
-            sb.append(" ");
-            sb.append(unit.getActionPoints());
-            sb.append("\n");
+            final Label labelMoves = new Label(
+                    i18n.get(Loc.unitsPanel_availableMoves) + " " + unit.getActionPoints());
+            labelMoves.getStyleClass().add("unitMoves");
+            box.getChildren().add(labelMoves);
         }
-        sb.append(text.get("unitsPanel.owner"));
-        sb.append(" ");
-        sb.append(unit.getOwner().getName());
-        box.getChildren().add(new Label(sb.toString()));
+
+        final Label labelOwner = new Label(
+                i18n.get(Loc.unitsPanel_owner) + " " + unit.getOwner().getName());
+        labelOwner.getStyleClass().add("unitOwner");
+        box.getChildren().add(labelOwner);
         return box;
     }
 
@@ -83,17 +87,17 @@ public class UnitPanel {
         if (cargoSlot.isLoadedUnit()) {
             return new ImageView(imageProvider.getUnitImage(cargoSlot.getUnit().get()));
         } else {
-            return new ImageView(imageProvider.getGoodTypeImage(cargoSlot.getGoods().get()));
+            return new ImageView(imageProvider.getGoodsTypeImage(cargoSlot.getGoods().get()));
         }
     }
 
-    private HBox makeGoodsPanel(final Unit unit) {
+    private HBox makeGoodsPanel(final UnitWithCargo unit) {
         HBox box = new HBox();
         box.getStylesheets().add(MainStageBuilder.STYLE_SHEET_RIGHT_PANEL_VIEW);
         if (unit.getCargo().isEmpty()) {
-            box.getChildren().add(new Label(text.get("unitsPanel.empty")));
+            box.getChildren().add(new Label(i18n.get(Loc.unitsPanel_empty)));
         } else {
-            box.getChildren().add(new Label(text.get("unitsPanel.with")));
+            box.getChildren().add(new Label(i18n.get(Loc.unitsPanel_with)));
             unit.getCargo().getSlots().stream().filter(cargoSlot -> !cargoSlot.isEmpty())
                     .forEach(cargoSlot -> {
                         final ImageView imageView = getImageViewForCargoSlot(cargoSlot);

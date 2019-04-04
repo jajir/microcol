@@ -7,7 +7,7 @@ import org.microcol.model.Location;
 
 import com.google.common.base.Preconditions;
 
-public final class ModelPo {
+public class ModelPo {
 
     private CalendarPo calendar = new CalendarPo();
 
@@ -20,8 +20,6 @@ public final class ModelPo {
     private WorldMapPo map = new WorldMapPo();
 
     private EuropePo europe = new EuropePo();
-
-    private CampaignPo campaign = new CampaignPo();
 
     private Location focusedField;
     
@@ -101,21 +99,6 @@ public final class ModelPo {
      */
     public void setEurope(EuropePo europe) {
         this.europe = europe;
-    }
-
-    /**
-     * @return the campaign
-     */
-    public CampaignPo getCampaign() {
-        return campaign;
-    }
-
-    /**
-     * @param campaign
-     *            the campaign to set
-     */
-    public void setCampaign(CampaignPo campaign) {
-        this.campaign = campaign;
     }
 
     /**

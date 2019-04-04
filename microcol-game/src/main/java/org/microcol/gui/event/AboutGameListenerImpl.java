@@ -1,28 +1,27 @@
 package org.microcol.gui.event;
 
-import org.microcol.gui.AboutDialog;
-import org.microcol.gui.mainmenu.AboutGameEvent;
-import org.microcol.gui.mainmenu.AboutGameEventController;
+import org.microcol.gui.dialog.AboutDialog;
+import org.microcol.gui.util.Listener;
 
 import com.google.common.base.Preconditions;
+import com.google.common.eventbus.Subscribe;
 import com.google.inject.Inject;
 
 /**
  * Provide about game event listener. Listener open about game dialog.
  */
-public final class AboutGameListenerImpl implements Listener<AboutGameEvent> {
+@Listener
+public final class AboutGameListenerImpl {
 
     private final AboutDialog aboutDialog;
 
     @Inject
-    public AboutGameListenerImpl(final AboutGameEventController gameEventController,
-            final AboutDialog aboutDialog) {
-        gameEventController.addListener(this);
+    public AboutGameListenerImpl(final AboutDialog aboutDialog) {
         this.aboutDialog = Preconditions.checkNotNull(aboutDialog);
     }
 
-    @Override
-    public void onEvent(final AboutGameEvent event) {
+    @Subscribe
+    public void onAboutGame(@SuppressWarnings("unused") final AboutGameEvent event) {
         aboutDialog.showAndWait();
     }
 

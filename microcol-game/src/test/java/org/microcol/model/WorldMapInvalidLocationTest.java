@@ -1,43 +1,32 @@
 package org.microcol.model;
 
-import java.util.Arrays;
-import java.util.Collection;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.params.provider.Arguments.arguments;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-import org.junit.runners.Parameterized.Parameter;
-import org.junit.runners.Parameterized.Parameters;
-import org.microcol.model.store.ModelDao;
+import java.util.stream.Stream;
 
-@RunWith(Parameterized.class)
-public class WorldMapInvalidLocationTest {
-	@Parameters(name = "{index}: fileName = {0}, location = {1}")
-	public static Collection<Object[]> data() {
-		return Arrays.asList(new Object[][] {
-			{"/maps/test-map-ocean-10x10.json", Location.of( 0,  0)},
-			{"/maps/test-map-ocean-10x10.json", Location.of( 0,  5)},
-			{"/maps/test-map-ocean-10x10.json", Location.of( 5,  0)},
-			{"/maps/test-map-ocean-10x10.json", Location.of(11,  5)},
-			{"/maps/test-map-ocean-10x10.json", Location.of( 5, 11)},
-			{"/maps/test-map-ocean-10x10.json", Location.of(11, 11)},
-			{"/maps/test-map-ocean-10x10.json", Location.of(-1, -1)},
-			{"/maps/test-map-ocean-10x10.json", Location.of(-5, -5)},
-		});
-	}
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
-	@Parameter(0)
-	public String fileName;
+public class WorldMapInvalidLocationTest extends AbstractMapTest {
 
-	@Parameter(1)
-	public Location location;
+    static Stream<Arguments> dataProvider() {
+        return Stream.of(arguments("/maps/test-map-ocean-10x10.json", Location.of(0, 0)),
+                arguments("/maps/test-map-ocean-10x10.json", Location.of(0, 5)),
+                arguments("/maps/test-map-ocean-10x10.json", Location.of(5, 0)),
+                arguments("/maps/test-map-ocean-10x10.json", Location.of(11, 5)),
+                arguments("/maps/test-map-ocean-10x10.json", Location.of(5, 11)),
+                arguments("/maps/test-map-ocean-10x10.json", Location.of(11, 11)),
+                arguments("/maps/test-map-ocean-10x10.json", Location.of(-1, -1)),
+                arguments("/maps/test-map-ocean-10x10.json", Location.of(-5, -5)));
+    }
 
-	@Test
-	public void testInvalidLocation() {
-		final ModelDao dao = new ModelDao();
-		final WorldMap map = dao.loadPredefinedWorldMap(fileName);
+    @ParameterizedTest(name = "{index}: fileName = {0}, location = {1}")
+    @MethodSource("dataProvider")
+    public void testInvalidLocation(final String fileName, final Location location) {
+        final WorldMap map = loadPredefinedWorldMap(fileName);
 
-		Assert.assertFalse(map.isValid(location));
-	}
+        assertFalse(map.isValid(location));
+    }
 }

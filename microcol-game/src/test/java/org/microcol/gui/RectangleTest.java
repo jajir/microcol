@@ -1,47 +1,34 @@
 package org.microcol.gui;
 
-import java.util.Arrays;
-import java.util.Collection;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.params.provider.Arguments.arguments;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-import org.junit.runners.Parameterized.Parameter;
-import org.junit.runners.Parameterized.Parameters;
+import java.util.stream.Stream;
+
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import com.google.common.base.Preconditions;
 
-@RunWith(Parameterized.class)
 public class RectangleTest {
-	
-	@Parameters(name = "{index}: Reactangle={0}, Point (x = {1}, y = {2}) should be inside {3} rectangle")
-	public static Collection<Object[]> data() {
-		return Arrays.asList(new Object[][] {
-			{ Rectangle.of(Point.of(10, 10), Point.of(30, 30)), 0, 0, Boolean.FALSE },
-			{ Rectangle.of(Point.of(10, 10), Point.of(30, 30)), 100, 100, Boolean.FALSE },
-			{ Rectangle.of(Point.of(10, 10), Point.of(30, 30)), 10, 10, Boolean.TRUE },
-			{ Rectangle.of(Point.of(10, 10), Point.of(30, 30)), 20, 20, Boolean.TRUE }
-		});
-	}
-	
-	@Parameter(0)
-	public Rectangle rectangle;
 
-	@Parameter(1)
-	public int x;
+    static Stream<Arguments> dataProvider() {
+        return Stream.of(
+                arguments(Rectangle.of(Point.of(10, 10), Point.of(30, 30)), 0, 0, Boolean.FALSE),
+                arguments(Rectangle.of(Point.of(10, 10), Point.of(30, 30)), 100, 100,
+                        Boolean.FALSE),
+                arguments(Rectangle.of(Point.of(10, 10), Point.of(30, 30)), 10, 10, Boolean.TRUE),
+                arguments(Rectangle.of(Point.of(10, 10), Point.of(30, 30)), 20, 20, Boolean.TRUE));
+    }
 
-	@Parameter(2)
-	public int y;
-	
-	@Parameter(3)
-	public boolean shouldBeIn;
-	
-	@Test
-	public void testName() throws Exception {
-		Preconditions.checkNotNull(rectangle);
-		Preconditions.checkNotNull(shouldBeIn);
-		assertEquals(shouldBeIn, rectangle.isIn(Point.of(x, y)));
-	}
+    @ParameterizedTest(name = "{index}: Reactangle={0}, Point (x = {1}, y = {2}) should be inside {3} rectangle")
+    @MethodSource("dataProvider")
+    public void testName(final Rectangle rectangle, final int x, final int y,
+            final boolean shouldBeIn) throws Exception {
+        Preconditions.checkNotNull(rectangle);
+        Preconditions.checkNotNull(shouldBeIn);
+        assertEquals(shouldBeIn, rectangle.isIn(Point.of(x, y)));
+    }
 
 }

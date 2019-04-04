@@ -1,47 +1,43 @@
 package org.microcol.model;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.microcol.model.store.ModelDao;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import org.junit.jupiter.api.Test;
 
 import com.google.gson.JsonSyntaxException;
 
-public class ModelDaoTest {
-	
-	private ModelDao dao;
-	
-	@Test(expected = JsonSyntaxException.class)
-	public void test_invalid_file_format() {
-		dao.loadPredefinedModel("/maps/test-map-invalid-0x0.json");
-	}
+public class ModelDaoTest extends AbstractMapTest {
 
-	@Test(expected = IllegalArgumentException.class)
-	public void test_load_missingFile() {
-		dao.loadPredefinedModel("/maps/test-map-missing-0x0.json");
-	}
+    @Test
+    public void test_invalid_file_format() {
+        assertThrows(JsonSyntaxException.class, () -> {
+            getDao().loadFromClassPath("/maps/test-map-invalid-0x0.json");
+        });
+    }
 
-	@Test(expected = NullPointerException.class)
-	public void testValidLocationNull() {
-		WorldMap map = dao.loadPredefinedWorldMap("/maps/test-map-ocean-10x10.json");
+    @Test
+    public void test_load_missingFile() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            getDao().loadFromClassPath("/maps/test-map-missing-0x0.json");
+        });
+    }
 
-		map.isValid((Location) null);
-	}
+    @Test
+    public void testValidLocationNull() {
+        WorldMap map = loadPredefinedWorldMap("/maps/test-map-ocean-10x10.json");
 
-	@Test(expected = NullPointerException.class)
-	public void testValidPathNull() {
-		WorldMap map = dao.loadPredefinedWorldMap("/maps/test-map-ocean-10x10.json");
+        assertThrows(NullPointerException.class, () -> {
+            map.isValid((Location) null);
+        });
+    }
 
-		map.isValid((Path) null);
-	}
-	
-	@Before
-	public void before() {
-		dao = new ModelDao();
-	}
+    @Test
+    public void testValidPathNull() {
+        WorldMap map = loadPredefinedWorldMap("/maps/test-map-ocean-10x10.json");
 
-	@After
-	public void after(){
-		dao = null;
-	}
+        assertThrows(NullPointerException.class, () -> {
+            map.isValid((Path) null);
+        });
+    }
+
 }

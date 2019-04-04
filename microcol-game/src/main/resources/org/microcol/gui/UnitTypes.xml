@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE properties [
+<!ELEMENT properties ( comment?, entry* ) >
+<!ATTLIST properties version CDATA #FIXED "1.0">
+<!ELEMENT comment (#PCDATA) >
+<!ELEMENT entry (#PCDATA) >
+<!ATTLIST entry key CDATA #REQUIRED>
+]>
+
+<properties>
+	<comment>Define keys for Europe dialog</comment>
+
+	<entry key="FRIGATE_name">Frigate</entry>
+	<entry key="FRIGATE_name_7">Frigate</entry>
+	<entry key="GALLEON_name">Galleon</entry>
+	<entry key="GALLEON_name_7">Galleon</entry>
+	<entry key="GALLEON_name_7pl">Galleons</entry>
+	<entry key="COLONIST_name">Free Colonist</entry>
+	<entry key="COLONIST_name_7">Free Colonist</entry>
+	<entry key="COLONIST_name_7pl">Free Colonists</entry>
+
+</properties>

@@ -10,7 +10,7 @@ import com.google.common.base.Preconditions;
 /**
  * Unit is placed in some construction slot.
  */
-public final class PlaceConstructionSlot extends AbstractPlace {
+public class PlaceConstructionSlot extends AbstractPlace {
 
     private final ConstructionSlot constructionSlot;
 

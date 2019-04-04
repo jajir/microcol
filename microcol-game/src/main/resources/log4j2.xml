@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN" monitorInterval="30">
+    <Properties>
+        <Property name="LOG_PATTERN">
+            %highlight{%d{yyyy-MM-dd HH:mm:ss.SSS} %5p --- [%25.25t] %-40.40c{1.} : %m%n%ex}{FATAL=red, ERROR=red, WARN=blue, INFO=cyan, DEBUG=green, TRACE=blue}
+        </Property>
+    </Properties>
+    
+    <Appenders>
+        <Console name="ConsoleAppender" target="SYSTEM_OUT" follow="true">
+            <PatternLayout pattern="${LOG_PATTERN}"/>
+        </Console>
+    </Appenders>
+    
+    <Loggers>
+        <Root level="info">
+            <AppenderRef ref="ConsoleAppender" />
+        </Root>
+        
+		<!-- MODEL -->
+		<logger name="org.microcol.model" level="info" additivity="false">
+			<AppenderRef ref="ConsoleAppender" />
+		</logger>
+		<logger name="org.microcol.model.store" level="warn" additivity="false">
+            <AppenderRef ref="ConsoleAppender" />
+		</logger>
+	
+		<!-- GUI -->
+		<logger name="org.microcol.gui.MicroColModule" level="debug" additivity="false">
+            <AppenderRef ref="ConsoleAppender" />
+		</logger>
+		<logger name="org.microcol.gui.gamemenu" level="debug" additivity="false">
+            <AppenderRef ref="ConsoleAppender" />
+		</logger>
+		<logger name="org.microcol.gui.buttonpanel" level="debug" additivity="false">
+            <AppenderRef ref="ConsoleAppender" />
+		</logger>
+		<logger name="org.microcol.gui.screen.menu.AnimationScheduler" level="debug" additivity="false">
+            <AppenderRef ref="ConsoleAppender" />
+		</logger>
+		
+	
+		<!-- AI -->
+		<logger name="org.microcol.ai" level="info" additivity="false">
+            <AppenderRef ref="ConsoleAppender" />
+		</logger>
+    </Loggers>
+</Configuration>

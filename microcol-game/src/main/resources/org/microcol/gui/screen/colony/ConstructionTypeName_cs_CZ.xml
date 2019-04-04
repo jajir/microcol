@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE properties [
+<!ELEMENT properties ( comment?, entry* ) >
+<!ATTLIST properties version CDATA #FIXED "1.0">
+<!ELEMENT comment (#PCDATA) >
+<!ELEMENT entry (#PCDATA) >
+<!ATTLIST entry key CDATA #REQUIRED>
+]>
+
+<properties>
+	<comment>Define constructio type names</comment>
+
+	<entry key="townHall">Radnice</entry>
+	<entry key="lubmerMill">Velká pila</entry>
+	<entry key="carpenterShop">Truhlářství</entry>
+	<entry key="carpenterStand">Malé truhlářství</entry>
+	<entry key="ironWorks">Kovářská manufaktura</entry>
+	<entry key="blacksmithShop">Kovářství</entry>
+	<entry key="blacksmithHouse">Malé kovářství</entry>
+	<entry key="fortress">Pevnost</entry>
+	<entry key="fort">Opevnění</entry>
+	<entry key="stockade">Obraný val</entry>
+	<entry key="cigarFactory">Továrna na doutníky</entry>
+	<entry key="tobacconistShop">Výrobce doutníků</entry>
+	<entry key="tobacconistHouse">Malý výrobce doutníků</entry>
+	<entry key="textilMill">Textilní továrna</entry>
+	<entry key="weaversShop">Tkalcovství</entry>
+	<entry key="weaversHouse">Malé tkalcovství</entry>
+	<entry key="rumFactory">Továrna na rum</entry>
+	<entry key="rumDistillery">Palírna rumu</entry>
+	<entry key="rumDistillersHouse">Malá palírna rumu</entry>
+	<entry key="furFactory">Továrna na kůže</entry>
+	<entry key="furTradersHouse">Kožedělný obchod</entry>
+	<entry key="furTradingPost">Kožedělec</entry>
+	<entry key="arsenal">Velká zbrojnice</entry>
+	<entry key="magazine">Zbrojnice</entry>
+	<entry key="armory">Malá zbrojnice</entry>
+	<entry key="shipyard">Velký dok</entry>
+	<entry key="drydock">Suchý dok</entry>
+	<entry key="dock">Dok</entry>
+	<entry key="university">Univerzita</entry>
+	<entry key="college">Střední škola</entry>
+	<entry key="schoolhouse">Zákaldní skola</entry>
+	<entry key="warehouseExpansion">Velké sklady</entry>
+	<entry key="warehouse">Sklady</entry>
+	<entry key="warehouseBasic">Základní sklad</entry>
+	<entry key="largeStables">Velké stáje</entry>
+	<entry key="stables">Stáje</entry>
+	<entry key="cathedral">Katedrála</entry>
+	<entry key="church">Kostel</entry>
+	<entry key="chapel">Kaple</entry>
+	<entry key="newspaper">Tiskarna novin</entry>
+	<entry key="printingPress">Tiskařský stroj</entry>
+	<entry key="customHouse">Celní úřad</entry>
+
+</properties>

@@ -1,0 +1,63 @@
+ ----
+ Events
+ ----
+
+Events
+
+* Event processing in GUI
+
+ There are events fired by user interface and fired by game model.
+ Events are dispatched by <com.google.common.eventbus.EventBus>. 
+ In class <org.microcol.gui.event.modelModelListenerImpl> are handled events from model process like:
+ 
++----+
+@Override
+public void onTurnStarted(final TurnStartedEvent event) {
+    eventBus.post(event);
+}
++----+
+
+ Events from game model are send to user interface.
+ Anywhere in user interface code event could be consumed like:
+
++----+
+@Subscribe
+private void onTurnStarted(final TurnStartedEvent event) {
+	// Do something
+} 
++----+
+
+ When Class that wants to consume some event have be to marked with annotation <org.microcol.gui.util.Listener>:
+
++----+
+import org.microcol.gui.util.Listener;
+ 
+@Listener
+public final class TurnStartedListener {
+}
++----+
+
+ Events produced on user interface are directly inserted to EventBus instance.
+ Thread that post event also handle the event.
+ 
+* Model
+
+** First not working attempt
+
+ Originally was model meant as single threaded. It quickly led to problem like this:
+ 
+[model-single-threaded.png] Single threaded model.
+
+ It's clear that it's not working because sequence of events is broken.
+ Event that on turn is AI comes to UI after event that on turn is Player.
+  
+** Final solution
+ 
+ Events from model should be fired in a new threads.
+ Model should be called is the same thread.
+ It should be called is same thread from UI and event from AI.
+ It's mainly because consistency.
+ When model call start in new thread than next model call could reach it in inconsistent state.   
+ 
+ 
+  

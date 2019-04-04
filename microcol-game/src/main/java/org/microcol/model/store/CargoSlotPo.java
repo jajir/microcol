@@ -1,6 +1,6 @@
 package org.microcol.model.store;
 
-import org.microcol.model.GoodType;
+import org.microcol.model.GoodsType;
 
 import com.google.common.base.MoreObjects;
 
@@ -13,16 +13,16 @@ public final class CargoSlotPo {
 
     private Integer amount;
 
-    private GoodType goodType;
+    private GoodsType goodsType;
 
     @Override
     public String toString() {
         return MoreObjects.toStringHelper(CargoPo.class).add("unitId", unitId).add("amount", amount)
-                .add("goodType", goodType).toString();
+                .add("goodsType", goodsType).toString();
     }
 
     public boolean containsGood() {
-        return goodType != null && amount != null;
+        return goodsType != null && amount != null;
     }
 
     /**
@@ -56,18 +56,18 @@ public final class CargoSlotPo {
     }
 
     /**
-     * @return the goodType
+     * @return the goodsType
      */
-    public GoodType getGoodType() {
-        return goodType;
+    public GoodsType getGoodsType() {
+        return goodsType;
     }
 
     /**
-     * @param goodType
-     *            the goodType to set
+     * @param goodsType
+     *            the goodsType to set
      */
-    public void setGoodType(GoodType goodType) {
-        this.goodType = goodType;
+    public void setGoodsType(GoodsType goodsType) {
+        this.goodsType = goodsType;
     }
 
 }

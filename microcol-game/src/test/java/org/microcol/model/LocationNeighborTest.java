@@ -1,68 +1,61 @@
 package org.microcol.model;
 
-import java.util.Arrays;
-import java.util.Collection;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.params.provider.Arguments.arguments;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-import org.junit.runners.Parameterized.Parameter;
-import org.junit.runners.Parameterized.Parameters;
+import java.util.stream.Stream;
 
-@RunWith(Parameterized.class)
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
+
 public class LocationNeighborTest {
-	@Parameters(name = "{index}: location1 = {0}, location2 = {1}")
-	public static Collection<Object[]> data() {
-		return Arrays.asList(new Object[][] {
-			// [0, 0]
-			{Location.of(0, 0),  Location.of(-1, -1)},
-			{Location.of(0, 0),  Location.of( 0, -1)},
-			{Location.of(0, 0),  Location.of( 1, -1)},
-			{Location.of(0, 0),  Location.of(-1,  0)},
-			{Location.of(0, 0),  Location.of( 1,  0)},
-			{Location.of(0, 0),  Location.of(-1,  1)},
-			{Location.of(0, 0),  Location.of( 0,  1)},
-			{Location.of(0, 0),  Location.of( 1,  1)},
-			// [1, 1]
-			{Location.of(1, 1),  Location.of(0, 0)},
-			{Location.of(1, 1),  Location.of(1, 0)},
-			{Location.of(1, 1),  Location.of(2, 0)},
-			{Location.of(1, 1),  Location.of(0, 1)},
-			{Location.of(1, 1),  Location.of(2, 1)},
-			{Location.of(1, 1),  Location.of(0, 2)},
-			{Location.of(1, 1),  Location.of(1, 2)},
-			{Location.of(1, 1),  Location.of(2, 2)},
-			// [5, 5]
-			{Location.of(5, 5),  Location.of(4, 4)},
-			{Location.of(5, 5),  Location.of(5, 4)},
-			{Location.of(5, 5),  Location.of(6, 4)},
-			{Location.of(5, 5),  Location.of(4, 5)},
-			{Location.of(5, 5),  Location.of(6, 5)},
-			{Location.of(5, 5),  Location.of(4, 6)},
-			{Location.of(5, 5),  Location.of(5, 6)},
-			{Location.of(5, 5),  Location.of(6, 6)},
-			// [-5, -5]
-			{Location.of(-5, -5),  Location.of(-4, -4)},
-			{Location.of(-5, -5),  Location.of(-5, -4)},
-			{Location.of(-5, -5),  Location.of(-6, -4)},
-			{Location.of(-5, -5),  Location.of(-4, -5)},
-			{Location.of(-5, -5),  Location.of(-6, -5)},
-			{Location.of(-5, -5),  Location.of(-4, -6)},
-			{Location.of(-5, -5),  Location.of(-5, -6)},
-			{Location.of(-5, -5),  Location.of(-6, -6)},
-		});
-	}
 
-	@Parameter(0)
-	public Location location1;
+    static Stream<Arguments> dataProvider() {
+        return Stream.of(
+                // [0, 0]
+                arguments(Location.of(0, 0), Location.of(-1, -1)),
+                arguments(Location.of(0, 0), Location.of(0, -1)),
+                arguments(Location.of(0, 0), Location.of(1, -1)),
+                arguments(Location.of(0, 0), Location.of(-1, 0)),
+                arguments(Location.of(0, 0), Location.of(1, 0)),
+                arguments(Location.of(0, 0), Location.of(-1, 1)),
+                arguments(Location.of(0, 0), Location.of(0, 1)),
+                arguments(Location.of(0, 0), Location.of(1, 1)),
+                // [1, 1]
+                arguments(Location.of(1, 1), Location.of(0, 0)),
+                arguments(Location.of(1, 1), Location.of(1, 0)),
+                arguments(Location.of(1, 1), Location.of(2, 0)),
+                arguments(Location.of(1, 1), Location.of(0, 1)),
+                arguments(Location.of(1, 1), Location.of(2, 1)),
+                arguments(Location.of(1, 1), Location.of(0, 2)),
+                arguments(Location.of(1, 1), Location.of(1, 2)),
+                arguments(Location.of(1, 1), Location.of(2, 2)),
+                // [5, 5]
+                arguments(Location.of(5, 5), Location.of(4, 4)),
+                arguments(Location.of(5, 5), Location.of(5, 4)),
+                arguments(Location.of(5, 5), Location.of(6, 4)),
+                arguments(Location.of(5, 5), Location.of(4, 5)),
+                arguments(Location.of(5, 5), Location.of(6, 5)),
+                arguments(Location.of(5, 5), Location.of(4, 6)),
+                arguments(Location.of(5, 5), Location.of(5, 6)),
+                arguments(Location.of(5, 5), Location.of(6, 6)),
+                // [-5, -5]
+                arguments(Location.of(-5, -5), Location.of(-4, -4)),
+                arguments(Location.of(-5, -5), Location.of(-5, -4)),
+                arguments(Location.of(-5, -5), Location.of(-6, -4)),
+                arguments(Location.of(-5, -5), Location.of(-4, -5)),
+                arguments(Location.of(-5, -5), Location.of(-6, -5)),
+                arguments(Location.of(-5, -5), Location.of(-4, -6)),
+                arguments(Location.of(-5, -5), Location.of(-5, -6)),
+                arguments(Location.of(-5, -5), Location.of(-6, -6)));
 
-	@Parameter(1)
-	public Location location2;
+    }
 
-	@Test
-	public void testNeighbor() {
-		Assert.assertTrue("Test of location1 and location2 failed.", location1.isNeighbor(location2));
-		Assert.assertTrue("Test of location2 and location1 failed.", location2.isNeighbor(location1));
-	}
+    @ParameterizedTest(name = "{index}: location1 = {0}, location2 = {1}")
+    @MethodSource("dataProvider")
+    public void testNeighbor(final Location location1, final Location location2) {
+        assertTrue(location1.isNeighbor(location2), "Test of location1 and location2 failed.");
+        assertTrue(location2.isNeighbor(location1), "Test of location2 and location1 failed.");
+    }
 }

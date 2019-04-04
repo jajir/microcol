@@ -7,9 +7,11 @@ import java.util.Set;
 
 import org.microcol.gui.MicroColException;
 import org.microcol.model.store.ModelPo;
+import org.microcol.model.store.PlayerPo;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
+import com.google.common.collect.ImmutableList;
 
 public final class PlayerStore {
 
@@ -64,6 +66,15 @@ public final class PlayerStore {
     public String toString() {
         return MoreObjects.toStringHelper(this).add("hashcode", hashCode())
                 .add("players", players.size()).toString();
+    }
+
+    void save(final ModelPo modelPo) {
+        modelPo.getGameManager().setPlayers(getSavePlayers());
+    }
+
+    private List<PlayerPo> getSavePlayers() {
+        return players.stream().map(player -> player.save())
+                .collect(ImmutableList.toImmutableList());
     }
 
 }

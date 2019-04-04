@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE properties [
+<!ELEMENT properties ( comment?, entry* ) >
+<!ATTLIST properties version CDATA #FIXED "1.0">
+<!ELEMENT comment (#PCDATA) >
+<!ELEMENT entry (#PCDATA) >
+<!ATTLIST entry key CDATA #REQUIRED>
+]>
+
+<properties>
+	<comment>Define keys for Europe dialog</comment>
+
+	<entry key="mainMenu">MicroCol</entry>
+	<entry key="buttonContinue">Continue in last played game</entry>
+	<entry key="buttonLoadSave">Load saved game</entry>
+	<entry key="buttonPlayCampaign">Play campaign</entry>
+	<entry key="buttonFreeGame">New free play game</entry>
+	<entry key="buttonExitMicroCol">Quit MicroCol</entry>
+	<entry key="settingTitle">MicroCol -> Setting</entry>
+	<entry key="buttonSetting">Setting</entry>
+	<entry key="buttonBack">Back</entry>
+	<entry key="campaignTitle">MicroCol -> Campaign</entry>
+	<entry key="settingLanguage">Language: </entry>
+	<entry key="settingLanguageCz">Czech</entry>
+	<entry key="settingLanguageEn">English</entry>
+	<entry key="settingShowGrid">Show Grid</entry>
+	<entry key="settingShowFightAdvisor">Use Fight Advisor</entry>
+	
+	<entry key="campaignPanelButtonBack">Back</entry>
+	<entry key="campaignPanel_default_findNewWorld">New World</entry>
+	<entry key="campaignPanel_default_buildArmy">Build an army</entry>
+	<entry key="campaignPanel_default_thrive">Thrive</entry>
+	
+
+</properties>

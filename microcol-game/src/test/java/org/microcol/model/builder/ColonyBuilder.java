@@ -1,7 +1,7 @@
 package org.microcol.model.builder;
 
 import org.microcol.model.ConstructionType;
-import org.microcol.model.GoodType;
+import org.microcol.model.GoodsType;
 import org.microcol.model.IdManager;
 import org.microcol.model.Location;
 import org.microcol.model.UnitType;
@@ -94,7 +94,7 @@ public class ColonyBuilder {
     }
 
     public ColonyBuilder setWorker(final Location fieldDirection, final UnitType unitType,
-            final GoodType producedGoodType) {
+            final GoodsType producedGoodsType) {
         Preconditions.checkNotNull(fieldDirection);
         Preconditions.checkNotNull(unitType);
 
@@ -104,16 +104,16 @@ public class ColonyBuilder {
         worker.setAction(new UnitActionNoActionPo());
 
         colonyPo.getFieldByDirection(fieldDirection).setWorkerId(worker.getId());
-        colonyPo.getFieldByDirection(fieldDirection).setProducedGoodType(producedGoodType);
+        colonyPo.getFieldByDirection(fieldDirection).setProducedGoodsType(producedGoodsType);
         return this;
     }
 
-    public ColonyBuilder setGood(final GoodType goodType, final Integer amount) {
-        Preconditions.checkNotNull(goodType);
+    public ColonyBuilder setGood(final GoodsType goodsType, final Integer amount) {
+        Preconditions.checkNotNull(goodsType);
         Preconditions.checkNotNull(amount);
-        Preconditions.checkArgument(!colonyPo.getColonyWarehouse().containsKey(goodType.name()),
-                "Good type (%s) was alredy defined.", goodType.name());
-        colonyPo.getColonyWarehouse().put(goodType.name(), amount);
+        Preconditions.checkArgument(!colonyPo.getColonyWarehouse().containsKey(goodsType.name()),
+                "Good type (%s) was alredy defined.", goodsType.name());
+        colonyPo.getColonyWarehouse().put(goodsType.name(), amount);
         return this;
     }
 

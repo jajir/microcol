@@ -3,6 +3,10 @@
  * 
  */
  
+
+/**
+ */
+
 /* disable focused border on component */
 .scroll-pane:focused {
   -fx-background-color: -fx-focus-color,-fx-box-border,-fx-control-inner-background;
@@ -10,14 +14,6 @@
   -fx-background-radius: 0.0;
 }
 
-#mainBox{
-}
-
-
-#canvas{
-	-fx-pref-width: 100000;
-	-fx-pref-height: 100000;
-}
 
 #statusBar #description{
  	-fx-border-style: solid inside;
@@ -27,10 +23,6 @@
 
 #statusBar #description .label{
 	-fx-padding: 0 5px 0 5px;
-}
-
-.root {
-	 -fx-font-family: Cardo;
 }
 
 #statusBar #labelGold{
@@ -44,44 +36,22 @@
 	-fx-padding: 0 5px 0 5px;
 }
 
-/*
- * Titled panel 
- */
+.root {
+	 -fx-font-family: Tillana;
+}
+
 .label {
-	/**
-  -fx-font: 28px Vivaldi;
-	 */ 
 }
 
 .bordered-titled-title {
-  -fx-background-color: lightgrey;
-  -fx-translate-y: -13;
+  -fx-padding: 10 0 0 0;
 }
 
 .bordered-titled-border {
   -fx-content-display: top;
-  -fx-border-insets: 20 15 15 15;
+  /*
   -fx-background-color: lightgrey;
-  -fx-border-color: black;
-  -fx-border-width: 1;
-}
-
-.bordered-titled-content {
-  -fx-padding: 26 10 10 10;
-}
-
-/*
- * Ship pane 
- */
-.paneShip{
-	-fx-fit-to-height: 45px;
-	-fx-fit-to-width: 45px;
-	-fx-pref-width: 45px;
-	-fx-pref-height: 45px;
-}
-.paneShip:selected{
-	-fx-border-color: lightblue ;
-	-fx-border-width: 2;
+   */
 }
 
 /* I don't know if it's not a bug. Popup background is about 100px bigger than real size of menu items.
@@ -99,15 +69,15 @@
   -fx-background-color: blue;	
 }
 
-.diffPositive {
-	-fx-text-fill: green;
-	-fx-padding: 0 0 0 5px;
+.cratePanel{
+	-fx-min-width: 50;
+	-fx-max-width: 50;
+	-fx-min-height: 50;
+	-fx-max-width: 50;
 }
 
-.diffNegative {
-	-fx-text-fill: red;	
-	-fx-padding: 0 0 0 5px;
+.paneShip{
+	-fx-min-width: 50;
 }
-
 
 

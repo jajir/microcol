@@ -10,7 +10,7 @@ import com.google.common.base.Preconditions;
 /**
  * This place say that unit in Europe port pier.
  */
-public final class PlaceEuropePier extends AbstractPlace {
+public class PlaceEuropePier extends AbstractPlace {
 
     PlaceEuropePier(final Unit unit) {
         super(unit);

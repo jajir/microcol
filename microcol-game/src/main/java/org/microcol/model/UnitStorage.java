@@ -12,6 +12,8 @@ import java.util.stream.Collectors;
 
 import org.microcol.model.store.ModelPo;
 import org.microcol.model.unit.UnitAction;
+import org.microcol.model.unit.UnitCreateRequest;
+import org.microcol.model.unit.UnitFactory;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
@@ -19,7 +21,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableListMultimap;
 import com.google.common.collect.Multimaps;
 
-final class UnitStorage {
+public final class UnitStorage {
 
     /**
      * Ordered list of all units.
@@ -28,9 +30,12 @@ final class UnitStorage {
 
     private final IdManager idManager;
 
+    private final UnitFactory unitFactory;
+
     UnitStorage(final IdManager idManager) {
         this.idManager = Preconditions.checkNotNull(idManager);
         this.units = new ArrayList<>();
+        this.unitFactory = new UnitFactory();
     }
 
     void addUnit(final Unit unit) {
@@ -46,8 +51,12 @@ final class UnitStorage {
     Unit createUnit(final Function<Unit, Cargo> cargoBuilder, final Model model,
             final Function<Unit, Place> placeBuilder, final UnitType unitType, final Player owner,
             final int availableMoves, final UnitAction unitAction) {
-        final Unit unit = new Unit(cargoBuilder, model, idManager.nextId(), placeBuilder, unitType,
-                owner, availableMoves, unitAction);
+
+        final UnitCreateRequest unitCreateRequest = new UnitCreateRequest(model, placeBuilder,
+                idManager.nextId(), unitType, owner, unitAction, availableMoves);
+        unitCreateRequest.setCargoBuilder(cargoBuilder);
+        
+        final Unit unit = unitFactory.createUnit(unitCreateRequest);
         units.add(unit);
         return unit;
     }
@@ -208,8 +217,8 @@ final class UnitStorage {
         Preconditions.checkNotNull(currentPlayer, "Player is null");
 
         return units.stream().filter(unit -> currentPlayer.equals(unit.getOwner()))
-                .filter(unit -> unit.isAtPlaceLocation())
-                .filter(unit -> unit.getActionPoints() > 0).findFirst();
+                .filter(unit -> unit.isAtPlaceLocation()).filter(unit -> unit.getActionPoints() > 0)
+                .findFirst();
     }
 
     /**

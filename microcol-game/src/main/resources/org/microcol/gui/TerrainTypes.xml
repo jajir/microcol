@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE properties [
+<!ELEMENT properties ( comment?, entry* ) >
+<!ATTLIST properties version CDATA #FIXED "1.0">
+<!ELEMENT comment (#PCDATA) >
+<!ELEMENT entry (#PCDATA) >
+<!ATTLIST entry key CDATA #REQUIRED>
+]>
+
+<properties>
+	<comment>Define names for terrain types.</comment>
+
+	<entry key="OCEAN_name">Ocean</entry>
+	<entry key="OCEAN_description">Wild nice ocean</entry>
+	<entry key="GRASSLAND_name">Grass land</entry>
+	<entry key="GRASSLAND_description">Grass land</entry>
+	<entry key="TUNDRA_name">Tundra</entry>
+	<entry key="TUNDRA_description">Cold tundra</entry>
+	<entry key="ARCTIC_name">Arctic</entry>
+	<entry key="ARCTIC_description">Cold freezing wasteland</entry>
+	<entry key="HIGH_SEA_name">High Sea</entry>
+	<entry key="HIGH_SEA_description">Huge water mass between Europe and colonies</entry>
+	<entry key="PRAIRIE_name">Prairie</entry>
+	<entry key="PRAIRIE_description">Big plains known as prairie are fertile and rich.</entry>
+	<entry key="MOUNTAIN_name">Mountains</entry>
+	<entry key="MOUNTAIN_description">Huge and dangerous mountains</entry>
+	<entry key="HILL_name">Hill</entry>
+	<entry key="HILL_description">Nice and small hills makes landscape more pleasant </entry>
+
+</properties>

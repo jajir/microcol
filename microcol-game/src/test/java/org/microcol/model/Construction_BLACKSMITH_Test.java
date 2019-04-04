@@ -1,111 +1,121 @@
 package org.microcol.model;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.when;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import com.google.common.collect.Lists;
-
-import mockit.Expectations;
-import mockit.Mocked;
 
 /**
  * Test construct blacksmith shop and try to produce goods. Tests verify that
  * number of consumed, produced and blocked goods are correct.
  */
-public class Construction_BLACKSMITH_Test {
-	
-	private @Mocked ConstructionSlot slot1;
+public class Construction_BLACKSMITH_Test extends AbstractConstructionTest {
 
-	private @Mocked ConstructionSlot slot2;
+    @Test
+    public void test_getProduction_noConsumption() throws Exception {
+        final IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> construction.getProduction());
 
-	private @Mocked ConstructionSlot slot3;
+        assertTrue(exception.getMessage().contains("This construction consume something."));
+    }
 
-	private @Mocked Colony colony;
-	
-	private Construction blacksmith;
-	
-	@Test
-	public void test_getProduction_no_workers() throws Exception {
-		
-		new Expectations() {{
-			slot1.isEmpty(); result = true; times = 1;
-			slot2.isEmpty(); result = true; times = 1;
-			slot3.isEmpty(); result = true; times = 1;
-			slot1.getProductionModifier(GoodType.TOOLS); result = 1; times = 0; // force test to fail when it's called
-		}};
+    @Test
+    public void test_getProduction_no_workers() throws Exception {
+        final Goods source = Goods.of(GoodsType.ORE, 73);
+        when(slot1.getProduction(source)).thenReturn(empty());
+        when(slot2.getProduction(source)).thenReturn(empty());
+        when(slot3.getProduction(source)).thenReturn(empty());
 
-		ConstructionTurnProduction ret = blacksmith.getProduction(0);
-		
-		assertEquals(0, ret.getConsumedGoods());
-		assertEquals(0, ret.getProducedGoods());
-		assertEquals(0, ret.getBlockedGoods());
-	}
-	
-	
-	@Test
-	public void test_getProduction_1_worker() throws Exception {
+        final ConstructionTurnProduction ret = construction.getProduction(source);
 
-		new Expectations() {{
-			slot1.isEmpty(); result = false;
-			slot2.isEmpty(); result = true;
-			slot3.isEmpty(); result = true;
-			slot1.getProductionModifier(GoodType.TOOLS); result = 1; times = 1;
-		}};
+        assertTrue(ret.getConsumedGoods().isPresent());
+        assertTrue(ret.getProducedGoods().isPresent());
+        assertFalse(ret.getBlockedGoods().isPresent());
+        assertEquals(Goods.of(GoodsType.ORE, 0), ret.getConsumedGoods().get());
+        assertEquals(Goods.of(GoodsType.TOOLS, 0), ret.getProducedGoods().get());
+    }
 
-		ConstructionTurnProduction ret = blacksmith.getProduction(0);
-		
-		assertEquals(0, ret.getConsumedGoods());
-		assertEquals(0, ret.getProducedGoods());
-		assertEquals(5, ret.getBlockedGoods());
-	}
-	
-	@Test
-	public void test_getProduction_1_worker_limitedSource() throws Exception {
-		
-		new Expectations() {{
-			slot1.isEmpty(); result = false;
-			slot2.isEmpty(); result = true;
-			slot3.isEmpty(); result = true;
-			slot1.getProductionModifier(GoodType.TOOLS); result = 1; times = 1;
-		}};
+    @Test
+    public void test_getProduction_1_worker() throws Exception {
+        final Goods source = Goods.of(GoodsType.ORE, 73);
+        when(slot1.getProduction(source)).thenReturn(empty());
+        when(slot2.getProduction(source)).thenReturn(full());
+        when(slot3.getProduction(source)).thenReturn(empty());
 
-		ConstructionTurnProduction ret = blacksmith.getProduction(3);
-		
-		assertEquals(3, ret.getConsumedGoods());
-		assertEquals(3, ret.getProducedGoods());
-		assertEquals(2, ret.getBlockedGoods());
-	}
-	
-	@Test
-	public void test_getProduction_2_worker_limitedSource(
-			) throws Exception {
-		
-		new Expectations() {{
-			slot1.isEmpty(); result = true;
-			slot2.isEmpty(); result = true;
-			slot3.isEmpty(); result = false;
-			slot3.getProductionModifier(GoodType.TOOLS); result = 1; times = 1;
-		}};
+        final ConstructionTurnProduction ret = construction.getProduction(source);
 
-		ConstructionTurnProduction ret = blacksmith.getProduction(3);
-		
-		assertEquals(3, ret.getConsumedGoods());
-		assertEquals(3, ret.getProducedGoods());
-		assertEquals(2, ret.getBlockedGoods());
-	}
-	
-	@Before
-	public void setup() {
-		blacksmith = new Construction(colony, ConstructionType.BLACKSMITHS_SHOP,
-				construction -> Lists.newArrayList(slot1, slot2, slot3));
-	}
-	
-	@After
-	public void tearDown() {
-		blacksmith = null;
-	}
-	
+        assertTrue(ret.getConsumedGoods().isPresent());
+        assertTrue(ret.getProducedGoods().isPresent());
+        assertFalse(ret.getBlockedGoods().isPresent());
+        assertEquals(Goods.of(GoodsType.ORE, 5), ret.getConsumedGoods().get());
+        assertEquals(Goods.of(GoodsType.TOOLS, 5), ret.getProducedGoods().get());
+    }
+
+    @Test
+    public void test_getProduction_1_worker_limitedSource() throws Exception {
+        final Goods source = Goods.of(GoodsType.ORE, 2);
+        when(slot1.getProduction(source)).thenReturn(empty());
+        when(slot2.getProduction(source)).thenReturn(empty());
+        when(slot3.getProduction(source)).thenReturn(part());
+
+        final ConstructionTurnProduction ret = construction.getProduction(source);
+
+        assertTrue(ret.getConsumedGoods().isPresent());
+        assertTrue(ret.getProducedGoods().isPresent());
+        assertTrue(ret.getBlockedGoods().isPresent());
+        assertEquals(Goods.of(GoodsType.ORE, 2), ret.getConsumedGoods().get());
+        assertEquals(Goods.of(GoodsType.TOOLS, 2), ret.getProducedGoods().get());
+        assertEquals(Goods.of(GoodsType.TOOLS, 3), ret.getBlockedGoods().get());
+    }
+
+    @Test
+    public void test_getProduction_2_worker_limitedSource() throws Exception {
+        final Goods source = Goods.of(GoodsType.ORE, 7);
+        when(slot1.getProduction(source)).thenReturn(empty());
+        when(slot2.getProduction(source)).thenReturn(full());
+        when(slot3.getProduction(source)).thenReturn(part());
+
+        final ConstructionTurnProduction ret = construction.getProduction(source);
+
+        assertTrue(ret.getConsumedGoods().isPresent());
+        assertTrue(ret.getProducedGoods().isPresent());
+        assertTrue(ret.getBlockedGoods().isPresent());
+        assertEquals(Goods.of(GoodsType.ORE, 7), ret.getConsumedGoods().get());
+        assertEquals(Goods.of(GoodsType.TOOLS, 7), ret.getProducedGoods().get());
+        assertEquals(Goods.of(GoodsType.TOOLS, 3), ret.getBlockedGoods().get());
+    }
+
+    ConstructionTurnProduction empty() {
+        return new ConstructionTurnProduction(Goods.of(GoodsType.ORE, 0),
+                Goods.of(GoodsType.TOOLS, 0), null);
+    }
+
+    ConstructionTurnProduction part() {
+        return new ConstructionTurnProduction(Goods.of(GoodsType.ORE, 2),
+                Goods.of(GoodsType.TOOLS, 2), Goods.of(GoodsType.TOOLS, 3));
+    }
+
+    ConstructionTurnProduction full() {
+        return new ConstructionTurnProduction(Goods.of(GoodsType.ORE, 5),
+                Goods.of(GoodsType.TOOLS, 5), null);
+    }
+
+    @BeforeEach
+    public void beforeEach() {
+        construction = new Construction(model, colony, ConstructionType.BLACKSMITHS_SHOP,
+                construction -> Lists.newArrayList(slot1, slot2, slot3));
+    }
+
+    @AfterEach
+    public void afterEach() {
+        construction = null;
+    }
+
 }

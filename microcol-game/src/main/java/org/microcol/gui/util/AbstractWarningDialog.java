@@ -1,24 +1,27 @@
 package org.microcol.gui.util;
 
+import org.microcol.gui.Loc;
+import org.microcol.i18n.I18n;
+import org.microcol.i18n.MessageKeyResource;
+
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 
-public abstract class AbstractWarningDialog extends AbstractMessageWindow {
+public abstract class AbstractWarningDialog
+        extends AbstractMessageWindow {
 
     /**
      * Vertical box where user can place it's context.
      */
     private final VBox context = new VBox();
 
-    public AbstractWarningDialog(final ViewUtil viewUtil, final String buttonOkLabel,
-            final String dialogCaption) {
-        super(viewUtil);
-        setTitle(dialogCaption);
+    private AbstractWarningDialog(final ViewUtil viewUtil, final I18n i18n) {
+        super(viewUtil, i18n);
 
         /**
          * Buttons
          */
-        final ButtonsBar buttonsBar = new ButtonsBar(buttonOkLabel);
+        final ButtonsBar buttonsBar = new ButtonsBar(i18n.get(Loc.ok));
         buttonsBar.getButtonOk().setOnAction(e -> {
             close();
         });
@@ -34,21 +37,20 @@ public abstract class AbstractWarningDialog extends AbstractMessageWindow {
      * 
      * @param viewUtil
      *            required utility class for showing dialog
-     * @param text
+     * @param i18n
      *            required localization tool
      * @param messageKey
      *            required message key
+     * @param <T>
+     *            required enumeration class extended from base message resource
+     *            class
      */
-    public AbstractWarningDialog(final ViewUtil viewUtil, final Text text,
-            final String messageKey) {
-        this(viewUtil, text.get(KEY_DIALOG_OK), text.get(messageKey));
-        context.getChildren().add(new Label(text.get(messageKey)));
-    }
-
-    public AbstractWarningDialog(final ViewUtil viewUtil, final Text text, final String caption,
-            final String message) {
-        this(viewUtil, text.get(KEY_DIALOG_OK), caption);
-        context.getChildren().add(new Label(message));
+    public <T extends Enum<T> & MessageKeyResource> AbstractWarningDialog(final ViewUtil viewUtil,
+            final I18n i18n, final T messageKey) {
+        this(viewUtil, i18n);
+        final String dialogCaption = i18n.get(messageKey);
+        setTitle(dialogCaption);
+        context.getChildren().add(new Label(dialogCaption));
     }
 
     /**

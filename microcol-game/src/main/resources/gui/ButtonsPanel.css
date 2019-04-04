@@ -1,0 +1,21 @@
+/**
+ * Define top buttons panel.
+ */
+ 
+.buttonPanel {
+	-fx-padding: 10 150 0 0;
+	-fx-alignment: center;
+}
+
+/**
+ * It force parent component to resize to full screen and allows buttons panel to stick at the top of the screen.
+ */
+.buttons-panel-container {
+	-fx-pref-width: 100000;
+	-fx-pref-height: 100000;
+}
+
+.buttonPanel .button {
+	-fx-min-height: 50px;
+	-fx-min-width: 50px;
+}

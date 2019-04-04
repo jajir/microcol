@@ -6,8 +6,8 @@ import org.microcol.model.store.UnitActionNoActionPo;
 import org.microcol.model.store.UnitActionPo;
 
 /**
- * Unit could be send to perform some activity that is longer than one turn such
- * state will be stored in untit's activity.
+ * Unit could be send to perform some activity that is longer than one turn. This
+ * state will be stored in untit's activity. There are actions:
  * <ul>
  * <li>Fortify</li>
  * <li>Wait one turn</li>

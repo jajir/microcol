@@ -1,16 +1,16 @@
 package org.microcol.model.store;
 
-import java.util.List;
+import org.microcol.model.Goods;
 
 public final class TurnEventPo {
 
     private String playerName;
 
-    private List<Object> args;
+    private String type;
 
-    private String messageKey;
+    private Goods goods;
 
-    private boolean solved;
+    private String colonyName;
 
     /**
      * @return the playerName
@@ -27,49 +27,28 @@ public final class TurnEventPo {
         this.playerName = playerName;
     }
 
-    /**
-     * @return the args
-     */
-    public List<Object> getArgs() {
-        return args;
+    public String getType() {
+        return type;
     }
 
-    /**
-     * @param args
-     *            the args to set
-     */
-    public void setArgs(List<Object> args) {
-        this.args = args;
+    public void setType(String type) {
+        this.type = type;
     }
 
-    /**
-     * @return the messageKey
-     */
-    public String getMessageKey() {
-        return messageKey;
+    public Goods getGoods() {
+        return goods;
     }
 
-    /**
-     * @param messageKey
-     *            the messageKey to set
-     */
-    public void setMessageKey(String messageKey) {
-        this.messageKey = messageKey;
+    public void setGoods(Goods goods) {
+        this.goods = goods;
     }
 
-    /**
-     * @return the solved
-     */
-    public boolean isSolved() {
-        return solved;
+    public String getColonyName() {
+        return colonyName;
     }
 
-    /**
-     * @param solved
-     *            the solved to set
-     */
-    public void setSolved(boolean solved) {
-        this.solved = solved;
+    public void setColonyName(String colonyName) {
+        this.colonyName = colonyName;
     }
 
 }

@@ -5,7 +5,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
-import org.microcol.model.Colony;
 import org.microcol.model.Location;
 import org.microcol.model.Model;
 import org.microcol.model.Player;
@@ -18,14 +17,11 @@ import com.google.common.collect.ImmutableList;
 /**
  * Represents continent on map. Continent is connected list of locations.
  */
-public final class Continent {
+public class Continent {
 
     private final List<Location> locations = new ArrayList<>();
 
     private final Model model;
-
-    //TODO it is really necessary to have here enemyPlayer?
-    private final Player enemyPlayer;
 
     /**
      * Default constructor.
@@ -37,7 +33,6 @@ public final class Continent {
      */
     Continent(final Model model, final Player enemyPlayer) {
         this.model = Preconditions.checkNotNull(model);
-        this.enemyPlayer = Preconditions.checkNotNull(enemyPlayer);
     }
 
     public void add(final Location location) {
@@ -54,7 +49,8 @@ public final class Continent {
         return contains(unit.getLocation());
     }
 
-    public Optional<Location> getClosesEnemyCityToAttack(final Location unitLocation) {
+    public Optional<Location> getClosesEnemyCityToAttack(final Location unitLocation,
+            final Player enemyPlayer) {
         return locations.stream().filter(loc -> model.getColoniesAt(loc, enemyPlayer).isPresent())
                 .sorted(Comparator.comparingInt(loc -> unitLocation.getDistance(loc))).findFirst();
     }
@@ -68,16 +64,19 @@ public final class Continent {
                 .findFirst().get().getDistance(location);
     }
 
-    public int getColonyWeight() {
-        int out = 0;
-        for (final Location loc : locations) {
-            Optional<Colony> oColony = model.getColoniesAt(loc, enemyPlayer);
-            if (oColony.isPresent()) {
-                Colony col = oColony.get();
-                out += col.getMilitaryForce();
-            }
-        }
-        return out;
+    /**
+     * Return score how much interesting to conquer is this continent. Score is
+     * sum of military force of all colonies.
+     * 
+     * @param enemyPlayer
+     *            required player to attack
+     * @return score
+     */
+    public int getMilitaryImportance(final Player enemyPlayer) {
+        return locations
+                .stream().map(loc -> model.getColoniesAt(loc, enemyPlayer)
+                        .map(col -> col.getMilitaryForce()).orElse(0))
+                .mapToInt(Integer::intValue).sum();
     }
 
     /**
@@ -88,20 +87,16 @@ public final class Continent {
      *         Antarctic otherwise return <code>false</code>.
      */
     public boolean isMapBorder() {
-        if (locations.stream().filter(loc -> loc.getY() == 1).findAny().isPresent()) {
-            return true;
-        }
-        if (locations.stream().filter(loc -> loc.getY() == model.getMap().getMaxY() - 1).findAny()
-                .isPresent()) {
-            return true;
-        }
-        return false;
+        return locations.stream().filter(this::isLocationBorder).findAny().isPresent();
+    }
+
+    private boolean isLocationBorder(final Location location) {
+        return location.getY() == 1 || location.getY() == model.getMap().getMaxY() - 1;
     }
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(Continents.class).add("weight", getColonyWeight())
-                .add("locations", locations).toString();
+        return MoreObjects.toStringHelper(Continents.class).add("locations", locations).toString();
     }
 
 }

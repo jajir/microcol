@@ -1,82 +1,45 @@
 package org.microcol.model;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
-import java.util.function.Function;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.microcol.model.unit.UnitAction;
-import org.microcol.model.unit.UnitActionNoAction;
+public class UnitColonistTestInCargo extends AbstractUnitFreeColonistTest {
 
-import mockit.Expectations;
-import mockit.Injectable;
-import mockit.Mocked;
-import mockit.Tested;
+    private PlaceCargoSlot placeCargoSlot = mock(PlaceCargoSlot.class);
 
-public class UnitColonistTestInCargo {
+    private final CargoSlot cargoSlot = mock(CargoSlot.class);
 
-	@Tested
-	private Unit unit;
-	
-	@Injectable
-	private Function<Unit, Cargo> cargoProvider;
-	
-	@Injectable
-	private Model model;
-	
-	@Injectable(value="4")
-	private Integer id;
-	
-	@Injectable
-	private Function<Unit, Place> placeBuilder;
-	
-	@Injectable
-	private UnitType unitType;
-	
-	@Injectable
-	private Player owner;
-	
-	@Injectable(value="3")
-	private int availableMoves;
-	
-	@Injectable
-	private UnitAction unitAction = new UnitActionNoAction();
-	
-	@Mocked
-	private PlaceCargoSlot placeCargoSlot;
+    @Test
+    public void test_placeToEuropePortPier() throws Exception {
+        when(placeCargoSlot.isOwnerAtEuropePort()).thenReturn(true);
+        when(placeCargoSlot.getCargoSlot()).thenReturn(cargoSlot);
+        doNothing().when(cargoSlot).empty();
 
-	@Mocked
-	private Cargo cargo;
-	
-	@Test
-	public void test_placeToEuropePortPier() throws Exception {
-		new Expectations() {{
-			placeCargoSlot.isOwnerAtEuropePort(); result = true;
-		}};
-		
-		unit.placeToEuropePortPier();
+        unit.placeToEuropePortPier();
 
-		assertTrue(unit.isAtEuropePier());
-	}
-	
-	@Test(expected = IllegalStateException.class)
-	public void test_placeToEuropePortPier_holding_unit_is_not_in_europe_port() throws Exception {
-		new Expectations() {{
-			placeCargoSlot.isOwnerAtEuropePort(); result = false;
-		}};
-		unit.placeToEuropePortPier();
-	}
-	
-	@Before
-	public void setup() {
-		/*
-		 * Following expectations will be used for unit constructor
-		 */
-		new Expectations() {{
-			cargoProvider.apply((Unit)any); result = cargo;
-			placeBuilder.apply((Unit)any); result = placeCargoSlot;
-		}};
-	}
+        assertTrue(unit.isAtEuropePier());
+    }
+
+    @Test
+    public void test_placeToEuropePortPier_holding_unit_is_not_in_europe_port() throws Exception {
+        when(placeCargoSlot.isOwnerAtEuropePort()).thenReturn(false);
+
+        final IllegalStateException exception = assertThrows(IllegalStateException.class, () -> {
+            unit.placeToEuropePortPier();
+        });
+
+        assertEquals("Holding unit is not at europe port, cant be placed to port pier.",
+                exception.getMessage());
+    }
+
+    @BeforeEach
+    public void setup() {
+        makeColonist(model, 4, placeCargoSlot, owner, 3);
+    }
 
 }

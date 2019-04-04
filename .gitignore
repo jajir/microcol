@@ -11,4 +11,7 @@ buildNumber.properties
 .settings/
 .classpath
 .checkstyle
+microcol-test/src/test/scenarios/.microcol/autosave.microcol
 *~
+.idea
+*.iml

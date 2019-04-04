@@ -38,58 +38,58 @@ public final class TerrainType {
 
     public final static TerrainType GRASSLAND = TerrainType.make().setName("GRASSLAND").setCode("g")
 	    .setCanHaveTree(true).setSea(false).setMoveCost(1).setMoveCostWithTree(2).setDefenseBonus(0)
-	    .setDefenseBonusWithTree(50).setProduction(GoodType.CORN).setBase(4).build().setProduction(GoodType.SUGAR)
-	    .setBase(1).build().setProduction(GoodType.TOBACCO).setBase(3).build().setProduction(GoodType.COTTON)
-	    .setBase(2).build().setProduction(GoodType.FUR).setBase(3).build().setProduction(GoodType.LUMBER).setBase(3)
+	    .setDefenseBonusWithTree(50).setProduction(GoodsType.CORN).setBase(4).build().setProduction(GoodsType.SUGAR)
+	    .setBase(1).build().setProduction(GoodsType.TOBACCO).setBase(3).build().setProduction(GoodsType.COTTON)
+	    .setBase(2).build().setProduction(GoodsType.FUR).setBase(3).build().setProduction(GoodsType.LUMBER).setBase(3)
 	    .build().build();
 
     public final static TerrainType PRAIRIE = TerrainType.make().setName("PRAIRIE").setCode("p").setCanHaveTree(true)
 	    .setSea(false).setMoveCost(1).setMoveCostWithTree(2).setDefenseBonus(0).setDefenseBonusWithTree(50)
-	    .setProduction(GoodType.CORN).setBase(4).build().setProduction(GoodType.TOBACCO).setBase(2).build()
-	    .setProduction(GoodType.COTTON).setBase(3).build().setProduction(GoodType.FUR).setBase(3).build()
-	    .setProduction(GoodType.LUMBER).setBase(1).build().build();
+	    .setProduction(GoodsType.CORN).setBase(4).build().setProduction(GoodsType.TOBACCO).setBase(2).build()
+	    .setProduction(GoodsType.COTTON).setBase(3).build().setProduction(GoodsType.FUR).setBase(3).build()
+	    .setProduction(GoodsType.LUMBER).setBase(1).build().build();
 
     public final static TerrainType SAVANNAH = TerrainType.make().setName("SAVANNAH").setCode("s").setCanHaveTree(true)
 	    .setSea(false).setMoveCost(1).setMoveCostWithTree(2).setDefenseBonus(0).setDefenseBonusWithTree(50)
-	    .setProduction(GoodType.CORN).setBase(4).build().setProduction(GoodType.SUGAR).setBase(3).build()
-	    .setProduction(GoodType.TOBACCO).setBase(3).build().setProduction(GoodType.COTTON).setBase(3).build()
-	    .setProduction(GoodType.FUR).setBase(4).build().setProduction(GoodType.LUMBER).setBase(6).build().build();
+	    .setProduction(GoodsType.CORN).setBase(4).build().setProduction(GoodsType.SUGAR).setBase(3).build()
+	    .setProduction(GoodsType.TOBACCO).setBase(3).build().setProduction(GoodsType.COTTON).setBase(3).build()
+	    .setProduction(GoodsType.FUR).setBase(4).build().setProduction(GoodsType.LUMBER).setBase(6).build().build();
 
     public final static TerrainType SWAMP = TerrainType.make().setName("SWAMP").setCode("w").setCanHaveTree(true)
 	    .setSea(false).setMoveCost(1).setMoveCostWithTree(2).setDefenseBonus(0).setDefenseBonusWithTree(50)
-	    .setProduction(GoodType.CORN).setBase(3).build().setProduction(GoodType.SUGAR).setBase(3).build()
-	    .setProduction(GoodType.TOBACCO).setBase(1).build().setProduction(GoodType.LUMBER).setBase(4).build()
+	    .setProduction(GoodsType.CORN).setBase(2).build().setProduction(GoodsType.SUGAR).setBase(3).build()
+	    .setProduction(GoodsType.TOBACCO).setBase(1).build().setProduction(GoodsType.LUMBER).setBase(4).build()
 	    .build();
 
     public final static TerrainType DESERT = TerrainType.make().setName("DESERT").setCode("d").setCanHaveTree(true)
 	    .setSea(false).setMoveCost(1).setMoveCostWithTree(2).setDefenseBonus(0).setDefenseBonusWithTree(50)
-	    .setProduction(GoodType.CORN).setBase(2).build().setProduction(GoodType.TOBACCO).setBase(1).build()
-	    .setProduction(GoodType.COTTON).setBase(1).build().setProduction(GoodType.FUR).setBase(2).build()
-	    .setProduction(GoodType.LUMBER).setBase(6).build().setProduction(GoodType.ORE).setBase(2).build().build();
+	    .setProduction(GoodsType.CORN).setBase(2).build().setProduction(GoodsType.TOBACCO).setBase(1).build()
+	    .setProduction(GoodsType.COTTON).setBase(1).build().setProduction(GoodsType.FUR).setBase(2).build()
+	    .setProduction(GoodsType.LUMBER).setBase(6).build().setProduction(GoodsType.ORE).setBase(2).build().build();
 
     public final static TerrainType TUNDRA = TerrainType.make().setName("TUNDRA").setCode("t").setCanHaveTree(false)
 	    .setSea(false).setMoveCost(2).setMoveCostWithTree(2).setDefenseBonus(0).setDefenseBonusWithTree(0)
-	    .setProduction(GoodType.CORN).setBase(3).build().setProduction(GoodType.FUR).setBase(5).build()
-	    .setProduction(GoodType.LUMBER).setBase(2).build().setProduction(GoodType.ORE).setBase(2).build().build();
+	    .setProduction(GoodsType.CORN).setBase(3).build().setProduction(GoodsType.FUR).setBase(5).build()
+	    .setProduction(GoodsType.LUMBER).setBase(2).build().setProduction(GoodsType.ORE).setBase(2).build().build();
 
     public final static TerrainType ARCTIC = TerrainType.make().setName("ARCTIC").setCode("a").setCanHaveTree(false)
 	    .setSea(false).setMoveCost(2).setMoveCostWithTree(2).setDefenseBonus(0).setDefenseBonusWithTree(0).build();
 
     public final static TerrainType HILL = TerrainType.make().setName("HILL").setCode("h").setCanHaveTree(false)
 	    .setSea(false).setMoveCost(1).setMoveCostWithTree(2).setDefenseBonus(0).setDefenseBonusWithTree(50)
-	    .setProduction(GoodType.CORN).setBase(2).build().setProduction(GoodType.ORE).setBase(4).build().build();
+	    .setProduction(GoodsType.CORN).setBase(2).build().setProduction(GoodsType.ORE).setBase(4).build().build();
 
     public final static TerrainType MOUNTAIN = TerrainType.make().setName("MOUNTAIN").setCode("m").setCanHaveTree(false)
 	    .setSea(false).setMoveCost(1).setMoveCostWithTree(2).setDefenseBonus(0).setDefenseBonusWithTree(50)
-	    .setProduction(GoodType.ORE).setBase(3).build().setProduction(GoodType.SILVER).setBase(1).build().build();
+	    .setProduction(GoodsType.ORE).setBase(3).build().setProduction(GoodsType.SILVER).setBase(1).build().build();
 
     public final static TerrainType HIGH_SEA = TerrainType.make().setName("HIGH_SEA").setCode("~").setCanHaveTree(false)
 	    .setSea(true).setMoveCost(1).setMoveCostWithTree(1).setDefenseBonus(0).setDefenseBonusWithTree(0)
-	    .setProduction(GoodType.CORN).setBase(3).build().build();
+	    .setProduction(GoodsType.CORN).setBase(3).build().build();
 
     public final static TerrainType OCEAN = TerrainType.make().setName("OCEAN").setCode("_").setCanHaveTree(false)
 	    .setSea(true).setMoveCost(1).setMoveCostWithTree(1).setDefenseBonus(0).setDefenseBonusWithTree(0)
-	    .setProduction(GoodType.CORN).setBase(3).build().build();
+	    .setProduction(GoodsType.CORN).setBase(3).build().build();
 
     public final static List<TerrainType> TERRAINS = ImmutableList.of(GRASSLAND, PRAIRIE, SAVANNAH, SWAMP, DESERT,
 	    TUNDRA, ARCTIC, HILL, MOUNTAIN, OCEAN, HIGH_SEA);
@@ -179,8 +179,8 @@ public final class TerrainType {
 	    return this;
 	}
 
-	ProductionBuilder setProduction(final GoodType goodType) {
-	    return new ProductionBuilder(this, goodType);
+	ProductionBuilder setProduction(final GoodsType goodsType) {
+	    return new ProductionBuilder(this, goodsType);
 	}
 
 	void addProduction(final Production production) {
@@ -192,17 +192,17 @@ public final class TerrainType {
 
     public static class Production {
 
-	private final GoodType goodType;
+	private final GoodsType goodsType;
 
 	private final int base;
 
-	Production(final GoodType goodType, final int base) {
-	    this.goodType = Preconditions.checkNotNull(goodType);
+	Production(final GoodsType goodsType, final int base) {
+	    this.goodsType = Preconditions.checkNotNull(goodsType);
 	    this.base = base;
 	}
 
-	public GoodType getGoodType() {
-	    return goodType;
+	public GoodsType getGoodsType() {
+	    return goodsType;
 	}
 
 	public int getBase() {
@@ -211,7 +211,7 @@ public final class TerrainType {
 
 	@Override
 	public int hashCode() {
-	    return goodType.hashCode();
+	    return goodsType.hashCode();
 	}
 
 	@Override
@@ -224,14 +224,14 @@ public final class TerrainType {
 	    }
 	    if (obj instanceof Production) {
 		final Production other = (Production) obj;
-		return goodType.equals(other.goodType);
+		return goodsType.equals(other.goodsType);
 	    }
 	    return false;
 	}
 
 	@Override
 	public String toString() {
-	    return MoreObjects.toStringHelper(Production.class).add("goodType", goodType).add("base", base).toString();
+	    return MoreObjects.toStringHelper(Production.class).add("goodsType", goodsType).add("base", base).toString();
 	}
 
     }
@@ -240,13 +240,13 @@ public final class TerrainType {
 
 	private final TerrainTypeBuilder terrainBuilder;
 
-	private final GoodType goodType;
+	private final GoodsType goodsType;
 
 	private int base = NO_VALUE;
 
-	ProductionBuilder(final TerrainTypeBuilder terrainBuilder, final GoodType goodType) {
+	ProductionBuilder(final TerrainTypeBuilder terrainBuilder, final GoodsType goodsType) {
 	    this.terrainBuilder = Preconditions.checkNotNull(terrainBuilder);
-	    this.goodType = Preconditions.checkNotNull(goodType);
+	    this.goodsType = Preconditions.checkNotNull(goodsType);
 	}
 
 	ProductionBuilder setBase(final int base) {
@@ -256,9 +256,9 @@ public final class TerrainType {
 
 	TerrainTypeBuilder build() {
 	    if (base == NO_VALUE) {
-		throw new IllegalStateException(String.format("Base production is not defined for '%s'", goodType));
+		throw new IllegalStateException(String.format("Base production is not defined for '%s'", goodsType));
 	    }
-	    terrainBuilder.addProduction(new Production(goodType, base));
+	    terrainBuilder.addProduction(new Production(goodsType, base));
 	    return terrainBuilder;
 	}
 
@@ -364,13 +364,13 @@ public final class TerrainType {
 	return defenseBonusWithTree;
     }
 
-    public boolean canProduce(final GoodType goodType) {
-	return productions.stream().map(Production::getGoodType).filter(goodType1 -> goodType1.equals(goodType))
+    public boolean canProduce(final GoodsType goodsType) {
+	return productions.stream().map(Production::getGoodsType).filter(goodsType1 -> goodsType1.equals(goodsType))
 		.findAny().isPresent();
     }
 
-    public Optional<Production> getBaseProduction(final GoodType goodType) {
-	return productions.stream().filter(production -> production.getGoodType().equals(goodType)).findAny();
+    public Optional<Production> getBaseProduction(final GoodsType goodsType) {
+	return productions.stream().filter(production -> production.getGoodsType().equals(goodsType)).findAny();
     }
 
     public String getCode() {

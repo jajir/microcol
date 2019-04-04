@@ -1,26 +1,13 @@
 package org.microcol.model.turnevent;
 
 import org.microcol.model.Colony;
+import org.microcol.model.Goods;
 import org.microcol.model.Player;
 
 /**
  * Class simplify creating of turn events.
  */
 public final class TurnEventProvider {
-
-    private static final String KEY_SHIP_COME_TO_EUROPE = "turnEvent.shipComeToEuropePort";
-
-    private static final String KEY_SHIP_COME_TO_HIGHSEAS = "turnEvent.shipComeToHighSeas";
-
-    private static final String KEY_FAMINE_PLAGUE_COLONY = "turnEvent.faminePlagueColony";
-
-    private static final String KEY_FAMINE_WILL_PLAGUE_COLONY = "turnEvent.famineWillPlagueColony";
-
-    private static final String KEY_COLONY_WAS_DESTORYED = "turnEvent.colonyWasDestroyed";
-
-    private static final String KEY_NEW_UNIT_RELIGION = "turnEvent.newUnitIsInEurope";
-
-    private static final String KEY_NEW_UNIT_IN_COLONY = "turnEvent.newUnitIsInColony";
 
     /**
      * Hidden default constructor.
@@ -36,7 +23,7 @@ public final class TurnEventProvider {
      * @return turn event object
      */
     public static TurnEvent getShipComeEuropePort(final Player player) {
-        return new SimpleTurnEvent(KEY_SHIP_COME_TO_EUROPE, new Object[0], player);
+        return new TurnEventShipComeToEuropePort(player.getName());
     }
 
     /**
@@ -46,8 +33,8 @@ public final class TurnEventProvider {
      *            required owner of ship
      * @return turn event object
      */
-    public static TurnEvent getShipComeHighSeas(final Player player) {
-        return new SimpleTurnEvent(KEY_SHIP_COME_TO_HIGHSEAS, new Object[0], player);
+    public static TurnEvent getShipComeToHighSeas(final Player player) {
+        return new TurnEventShipComeToHighSeas(player.getName());
     }
 
     /**
@@ -60,8 +47,7 @@ public final class TurnEventProvider {
      * @return turn event object
      */
     public static TurnEvent getFaminePlagueColony(final Player player, final Colony colony) {
-        return new SimpleTurnEvent(KEY_FAMINE_PLAGUE_COLONY, new Object[] {colony.getName() },
-                player);
+        return new TurnEventFaminePlagueColony(player.getName(), colony.getName());
     }
 
     /**
@@ -74,8 +60,7 @@ public final class TurnEventProvider {
      * @return turn event object
      */
     public static TurnEvent getFamineWillPlagueColony(final Player player, final Colony colony) {
-        return new SimpleTurnEvent(KEY_FAMINE_WILL_PLAGUE_COLONY, new Object[] {colony.getName() },
-                player);
+        return new TurnEventFamineWillPlagueColony(player.getName(), colony.getName());
     }
 
     /**
@@ -88,8 +73,21 @@ public final class TurnEventProvider {
      * @return turn event object
      */
     public static TurnEvent getColonyWasDestroyed(final Player player, final Colony colony) {
-        return new SimpleTurnEvent(KEY_COLONY_WAS_DESTORYED, new Object[] {colony.getName() },
-                player);
+        return new TurnEventColonyWasDestroyed(player.getName(), colony.getName());
+    }
+
+    /**
+     * Get new turn event when new colony was lost. Some other player conquer
+     * it.
+     *
+     * @param player
+     *            required owner of lost colony
+     * @param colony
+     *            required destroyed colony name
+     * @return turn event object
+     */
+    public static TurnEvent getColonyWasLost(final Player player, final Colony colony) {
+        return new TurnEventColonyWasLost(player.getName(), colony.getName());
     }
 
     /**
@@ -100,7 +98,7 @@ public final class TurnEventProvider {
      * @return turn event object
      */
     public static TurnEvent getNewUnitInEurope(final Player player) {
-        return new SimpleTurnEvent(KEY_NEW_UNIT_RELIGION, new Object[0], player);
+        return new TurnEventNewUnitInEurope(player.getName());
     }
 
     /**
@@ -108,10 +106,29 @@ public final class TurnEventProvider {
      *
      * @param player
      *            required owner of new unit
+     * @param colony
+     *            required colony
      * @return turn event object
      */
-    public static TurnEvent getNewUnitInColony(final Player player) {
-        return new SimpleTurnEvent(KEY_NEW_UNIT_IN_COLONY, new Object[0], player);
+    public static TurnEvent getNewUnitInColony(final Player player, final Colony colony) {
+        return new TurnEventNewUnitInColony(player.getName(), colony.getName());
+    }
+
+    /**
+     * Get new turn event when some goods is throws away because of limited free
+     * space warehouse.
+     *
+     * @param player
+     *            required owner of new unit
+     * @param goods
+     *            define lost goods type and amount
+     * @param colony
+     *            required colony
+     * @return turn event object
+     */
+    public static TurnEvent getGoodsWasThrowsAway(final Player player, final Goods goods,
+            final Colony colony) {
+        return new TurnEventGoodsWasThrownAway(player.getName(), colony.getName(), goods);
     }
 
 }

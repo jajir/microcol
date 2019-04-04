@@ -1,0 +1,20 @@
+
+#canvas{
+	-fx-pref-width: 100000;
+	-fx-pref-height: 100000;
+}
+
+/*
+ * Ship pane 
+ */
+.paneShip{
+	-fx-fit-to-height: 45px;
+	-fx-fit-to-width: 45px;
+	-fx-pref-width: 45px;
+	-fx-pref-height: 45px;
+}
+
+.paneShip:selected{
+	-fx-border-color: lightblue ;
+	-fx-border-width: 2;
+}

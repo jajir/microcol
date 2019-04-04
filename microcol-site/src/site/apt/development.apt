@@ -87,23 +87,36 @@ Project infrastructure
  
 []
 
-Generating images
+Working with images
 
  Most of game images are stored in file <src/main/resources/images/background.png>.
  This file is generated from file <scr/graphics/background.svg>.
+ All images in game should be edited with {{{https://inkscape.org/en/}inkscape}} version 0.92.
+
+* Editing with background.svg
+ 
+ Open <scr/graphics/background.svg> in Inkspace.
+ Look at layer <description>. In this layer is description of each tile.
+ It's useful to have <description> layer visible during editing. 
+
+ All image tiles are separated by <Guides>. Between each tiles is small space.
+ This space prevent tiles from influencing each other during exporting in png.
+
+* Exporting images
+
  Here is described how to produce final png file from svg sources file.
  
- First download {{{https://inkscape.org/en/}inkscape}} version 0.92. Than:
+ How to export images:
  
- [[1]] Open <scr/graphics/background.svg>.
- If you'll need to adjust images enable layer <description> which contains information about tiles.
- Each tile contains boundary.
- These empty boundary area is required because without it tiles will interfere each other in final png.  
+ [[1]] Open <scr/graphics/background.svg>. And perform image editing.
  
- [[1]] Zoom screen to seen in top left corner blue sea and in bottom right corner yellow square. 
+ [[1]] Hide layer <description>.
  
- [[1]] Choose "Select and transform tool" with shortcut F1. Select visible area from top left blue sea to bottom right yellow square.
- Verify that boundary area of yellow square is selected. 
+ [[1]] Zoom and center document and make all tiles visible at screen.
+ 
+ [[1]] Choose "Select and transform tool" with shortcut F1.
+ Select all visible tiles.
+ Selected area should contain in top left corner blue sea and bottom right corner should contain yellow square.
  
  [[1]] Open "Export PNG image" and select tab "Selection". 
  
@@ -134,6 +147,8 @@ mvn plantuml:generate
 Useful links
 
  * PlantUML online editor is at {{http://sujoyu.github.io/plantuml-previewer/}}.
+
+ * Another PlantUML online editor is at {{https://www.planttext.com}}.
  
  * PlantUML language specification is at {{http://plantuml.com/sitemap-language-specification}}.   
  

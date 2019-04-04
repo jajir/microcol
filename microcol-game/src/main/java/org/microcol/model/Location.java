@@ -8,15 +8,10 @@ import com.google.common.collect.ImmutableList;
 
 public final class Location {
 
-    // TODO it should be enumeration
-    public static final Location DIRECTION_NORTH = new Location(0, -1);
-    public static final Location DIRECTION_NORTH_EAST = new Location(1, -1);
-    public static final Location DIRECTION_EAST = new Location(1, 0);
-    public static final Location DIRECTION_SOUTH_EAST = new Location(1, 1);
-    public static final Location DIRECTION_SOUTH = new Location(0, 1);
-    public static final Location DIRECTION_SOUTH_WEST = new Location(-1, 1);
-    public static final Location DIRECTION_WEST = new Location(-1, 0);
-    public static final Location DIRECTION_NORTH_WEST = new Location(-1, -1);
+    /**
+     * Center location at [0,0].
+     */
+    public static final Location CENTER = of(0, 0);
 
     /**
      * Minimal map x-axe value.
@@ -27,10 +22,6 @@ public final class Location {
      * Minimal map y-axe value.
      */
     public static final int MAP_MIN_Y = 1;
-
-    public static final List<Location> DIRECTIONS = ImmutableList.of(DIRECTION_NORTH,
-            DIRECTION_NORTH_EAST, DIRECTION_EAST, DIRECTION_SOUTH_EAST, DIRECTION_SOUTH,
-            DIRECTION_SOUTH_WEST, DIRECTION_WEST, DIRECTION_NORTH_WEST);
 
     private final int x;
     private final int y;
@@ -105,7 +96,7 @@ public final class Location {
     }
 
     public List<Location> getNeighbors() {
-        return DIRECTIONS.stream().map(direction -> add(direction))
+        return Direction.getVectors().stream().map(direction -> add(direction))
                 .collect(ImmutableList.toImmutableList());
     }
 
@@ -135,7 +126,7 @@ public final class Location {
     }
 
     public boolean isDirection() {
-        return DIRECTIONS.contains(this);
+        return Direction.getVectors().contains(this);
     }
 
     public static Location of(final int x, final int y) {

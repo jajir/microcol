@@ -10,7 +10,7 @@ import com.google.common.base.Preconditions;
 /**
  * Describe state when unit is stored in cargo slot of other unit.
  */
-public final class PlaceCargoSlot extends AbstractPlace {
+public class PlaceCargoSlot extends AbstractPlace {
 
     private final CargoSlot cargoSlot;
 

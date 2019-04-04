@@ -3,7 +3,7 @@ package org.microcol.ai;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.microcol.gui.gamepanel.AnimationManager;
+import org.microcol.gui.screen.game.gamepanel.AnimationManager;
 import org.microcol.model.Location;
 import org.microcol.model.Model;
 import org.microcol.model.Path;
@@ -17,12 +17,12 @@ public final class SimpleAiPlayer extends AbstractRobotPlayer {
 
     private final SimpleUnitBehavior simpleUnitBehavior = new SimpleUnitBehavior();
 
-    private final Directions unitDirections;
+    private final UnitMoveNavigator unitDirections;
 
     public SimpleAiPlayer(final Model model, final Player player,
             final AnimationManager animationManager) {
         super(model, player, animationManager);
-        unitDirections = new Directions();
+        unitDirections = new UnitMoveNavigator();
     }
 
     @Override
@@ -49,7 +49,7 @@ public final class SimpleAiPlayer extends AbstractRobotPlayer {
             if (isPossibleToAttack(unit, lastLocation)) {
                 return locations;
             }
-            final Location newLocation = lastLocation.add(unitDirections.getLastDirection(unit));
+            final Location newLocation = lastLocation.add(unitDirections.getLastVector(unit));
             if (canMoveAt(unit, newLocation)) {
                 locations.add(newLocation);
                 lastLocation = newLocation;

@@ -1,16 +1,19 @@
 package org.microcol.gui.util;
 
-import javafx.geometry.Pos;
+import org.microcol.i18n.I18n;
+
 import javafx.scene.Node;
 import javafx.scene.control.Label;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 
 /**
  * Show panel with simple border and title. Title is places in top border line.
  */
-public class TitledPanel extends StackPane {
+public class TitledPanel extends VBox implements UpdatableLanguage {
 
-    private final StackPane contentPane;
+    private final HBox contentPane;
 
     private final Label title;
 
@@ -24,11 +27,10 @@ public class TitledPanel extends StackPane {
 
     public TitledPanel(final String titleString, final Node content) {
         title = new Label();
-        setTitle(titleString);
         title.getStyleClass().add("bordered-titled-title");
-        StackPane.setAlignment(title, Pos.TOP_CENTER);
+        setTitle(titleString);
 
-        contentPane = new StackPane();
+        contentPane = new HBox();
         if (content != null) {
             content.getStyleClass().add("bordered-titled-content");
             contentPane.getChildren().add(content);
@@ -37,11 +39,16 @@ public class TitledPanel extends StackPane {
         getChildren().addAll(title, contentPane);
     }
 
-    public void setTitle(final String titleString) {
-        title.setText(" " + titleString + " ");
+    @Override
+    public void updateLanguage(final I18n i18n) {
+
     }
 
-    public StackPane getContentPane() {
+    public void setTitle(final String titleString) {
+        title.setText(titleString);
+    }
+
+    public Pane getContentPane() {
         return contentPane;
     }
 

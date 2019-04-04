@@ -1,40 +1,30 @@
 package org.microcol.model;
 
-import java.util.Arrays;
-import java.util.Collection;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.params.provider.Arguments.arguments;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-import org.junit.runners.Parameterized.Parameter;
-import org.junit.runners.Parameterized.Parameters;
-import org.microcol.model.store.ModelDao;
+import java.util.stream.Stream;
 
-@RunWith(Parameterized.class)
-public class WorldMapValidLocationTest {
-	@Parameters(name = "{index}: fileName = {0}, location = {1}")
-	public static Collection<Object[]> data() {
-		return Arrays.asList(new Object[][] {
-			{"/maps/test-map-ocean-10x10.json", Location.of( 1,  1)},
-			{"/maps/test-map-ocean-10x10.json", Location.of(10,  1)},
-			{"/maps/test-map-ocean-10x10.json", Location.of(10, 10)},
-			{"/maps/test-map-ocean-10x10.json", Location.of( 1, 10)},
-			{"/maps/test-map-ocean-10x10.json", Location.of( 5,  5)},
-		});
-	}
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
-	@Parameter(0)
-	public String fileName;
+public class WorldMapValidLocationTest  extends AbstractMapTest{
 
-	@Parameter(1)
-	public Location location;
+    static Stream<Arguments> dataProvider() {
+        return Stream.of(
+                arguments("/maps/test-map-ocean-10x10.json", Location.of(1, 1)),
+                arguments("/maps/test-map-ocean-10x10.json", Location.of(10, 1)),
+                arguments("/maps/test-map-ocean-10x10.json", Location.of(10, 10)),
+                arguments("/maps/test-map-ocean-10x10.json", Location.of(1, 10)),
+                arguments("/maps/test-map-ocean-10x10.json", Location.of(5, 5)));
+    }
 
-	@Test
-	public void testValidLocation() {
-		final ModelDao dao = new ModelDao();
-		final WorldMap map = dao.loadPredefinedWorldMap(fileName);
+    @ParameterizedTest(name = "{index}: fileName = {0}, location = {1}")
+    @MethodSource("dataProvider")
+    public void testValidLocation(final String fileName, final Location location) {
+        final WorldMap map = loadPredefinedWorldMap(fileName);
 
-		Assert.assertTrue(map.isValid(location));
-	}
+        assertTrue(map.isValid(location));
+    }
 }

@@ -9,12 +9,17 @@ import org.microcol.model.Player;
 import org.microcol.model.Unit;
 import org.microcol.model.UnitType;
 
-public final class UnitFrigate extends Unit {
+public final class UnitFrigate extends Ship {
 
-    UnitFrigate(Function<Unit, Cargo> cargoBuilder, Model model, Integer id,
-            Function<Unit, Place> placeBuilder, UnitType unitType, Player owner, int availableMoves,
+    public UnitFrigate(Function<Unit, Cargo> cargoBuilder, Model model, Integer id,
+            Function<Unit, Place> placeBuilder, Player owner, int availableMoves,
             final UnitAction unitAction) {
-        super(cargoBuilder, model, id, placeBuilder, unitType, owner, availableMoves, unitAction);
+        super(cargoBuilder, model, id, placeBuilder, owner, availableMoves, unitAction);
+    }
+
+    @Override
+    public UnitType getType() {
+        return UnitType.FRIGATE;
     }
 
 }

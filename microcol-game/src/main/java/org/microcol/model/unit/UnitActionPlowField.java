@@ -59,7 +59,7 @@ public final class UnitActionPlowField implements UnitAction {
         remainingTurns--;
         if (remainingTurns == 0) {
             model.getMap().plowFiled(unit.getLocation());
-            unit.setAction(UnitActionType.noAction);
+            unit.setActionType(UnitActionType.noAction);
         }
     }
 

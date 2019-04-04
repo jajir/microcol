@@ -10,21 +10,24 @@ import com.google.common.base.Preconditions;
 /**
  * Unit is placed at field to work outside of colony.
  */
-public final class PlaceColonyField extends AbstractPlace {
+public class PlaceColonyField extends AbstractPlace {
 
     private final ColonyField colonyField;
 
     /**
      * What type of goods is produced on this field.
      */
-    private GoodType producedGoodType;
+    private GoodsType producedGoodsType;
 
     public PlaceColonyField(final Unit unit, final ColonyField colonyField,
-            final GoodType producedGoodType) {
+            final GoodsType producedGoodsType) {
         super(unit);
+        Preconditions.checkNotNull(colonyField, "Colonu field is null, for unit id %s",
+                unit.getId());
+        Preconditions.checkNotNull(producedGoodsType, "Produced goods type is null, for unit id %s",
+                unit.getId());
         this.colonyField = Preconditions.checkNotNull(colonyField);
-        // TODO call setProducedGoodType because of validations
-        this.producedGoodType = producedGoodType;
+        setProducedGoodsType(producedGoodsType);
     }
 
     @Override
@@ -53,17 +56,17 @@ public final class PlaceColonyField extends AbstractPlace {
         return colonyField.getColony();
     }
 
-    public GoodType getProducedGoodType() {
-        return producedGoodType;
+    public GoodsType getProducedGoodsType() {
+        return producedGoodsType;
     }
 
-    public void setProducedGoodType(final GoodType producedGoodType) {
-        Preconditions.checkNotNull(producedGoodType);
-        Preconditions.checkArgument(colonyField.canProduce(producedGoodType),
-                "Given good (%s) can't be produced at (%s)", producedGoodType.name(),
+    public void setProducedGoodsType(final GoodsType producedGoodsType) {
+        Preconditions.checkNotNull(producedGoodsType);
+        Preconditions.checkArgument(colonyField.canProduce(producedGoodsType),
+                "Given good (%s) can't be produced at (%s)", producedGoodsType.name(),
                 colonyField.getTerrainType().name());
 
-        this.producedGoodType = producedGoodType;
+        this.producedGoodsType = producedGoodsType;
     }
 
     @Override

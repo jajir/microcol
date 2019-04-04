@@ -1,4 +1,9 @@
 {
+  "campaignName": "default",
+  "missionName": "buildArmy",
+  "goalData": {
+  },
+  "model": {
   "calendar": {
     "startYear": 1490,
     "endYear": 1800,
@@ -146,7 +151,7 @@
             "y": 1
           },
           "workerId": 2,
-          "producedGoodType": "TABACCO"
+          "producedGoodsType": "TOBACCO"
         },
         {
           "direction": {
@@ -154,7 +159,7 @@
             "y": 1
           },
           "workerId": 1,
-          "producedGoodType": "TABACCO"
+          "producedGoodsType": "TOBACCO"
         },
         {
           "direction": {
@@ -162,7 +167,7 @@
             "y": 0
           },
           "workerId": 0,
-          "producedGoodType": "CORN"
+          "producedGoodsType": "CORN"
         },
         {
           "direction": {
@@ -246,7 +251,7 @@
         "RUM": 0,
         "SUGAR": 0,
         "SILK": 0,
-        "TABACCO": 18,
+        "TOBACCO": 18,
         "CORN": 196,
         "CIGARS": 42,
         "BELL": 36,
@@ -256,12 +261,6 @@
     }
   ],
   "turnEvents": [
-    {
-      "playerName": "Dutch",
-      "args": [],
-      "messageKey": "turnEvent.shipComeToEuropePort",
-      "solved": false
-    }
   ],
   "map": {
     "tiles": [
@@ -470,4 +469,5 @@
     "gameStarted": true,
     "currentPlayer": "Dutch"
   }
+}
 }

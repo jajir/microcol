@@ -2,13 +2,13 @@ package org.microcol.model.campaign;
 
 import java.util.List;
 import java.util.Map;
-import java.util.function.BiConsumer;
+import java.util.Optional;
 import java.util.function.Function;
-import java.util.prefs.BackingStoreException;
-import java.util.prefs.Preferences;
 import java.util.stream.Collectors;
 
-import org.microcol.gui.MicroColException;
+import org.microcol.model.campaign.store.CampaignPo;
+import org.microcol.model.campaign.store.CampaignsDao;
+import org.microcol.model.campaign.store.CampaignsPo;
 
 import com.google.common.base.Preconditions;
 
@@ -17,59 +17,55 @@ import com.google.common.base.Preconditions;
  */
 public final class CampaignManager {
 
-	private final Map<? extends CampaignName, Campaign> campaigns;
+    private final Map<? extends CampaignName, Campaign> campaigns;
 
-	private final Preferences preferences = Preferences.userNodeForPackage(CampaignManager.class);
+    private final CampaignsDao campaignsDao;
 
-	CampaignManager(final List<Campaign> campaigns) {
-		this.campaigns = Preconditions.checkNotNull(campaigns).stream()
-				.collect(Collectors.toMap(c -> c.getName(), Function.identity()));
-		loadMissionStateFromPreferences();
-	}
+    CampaignManager(final List<Campaign> campaigns, final CampaignsDao campaignsDao) {
+        this.campaignsDao = Preconditions.checkNotNull(campaignsDao);
+        this.campaigns = Preconditions.checkNotNull(campaigns).stream()
+                .collect(Collectors.toMap(c -> c.getName(), Function.identity()));
+        loadMissionStateFromPreferences();
+    }
 
-	private void loadMissionStateFromPreferences() {
-		wentThroughMissions((key, mission) -> {
-			mission.setFinished(preferences.getBoolean(key, false));
-		});
-	}
+    private void loadMissionStateFromPreferences() {
+        final CampaignsPo campaignsPo = campaignsDao.load();
+        campaigns.forEach((name, campaign) -> {
+            final Optional<CampaignPo> oCampaignPo = campaignsPo
+                    .getCampaignByName(campaign.getName().toString());
+            campaign.load(oCampaignPo.orElse(new CampaignPo()));
+        });
+    }
 
-	void saveMissionState() {
-		wentThroughMissions((key, mission) -> {
-			preferences.putBoolean(key, mission.isFinished());
-			mission.setFinished(preferences.getBoolean(key, false));
-		});
-		try {
-			preferences.flush();
-		} catch (BackingStoreException e) {
-			throw new MicroColException(e.getMessage(), e);
-		}
-	}
+    void saveMissionState() {
+        final CampaignsPo campaignsPo = new CampaignsPo();
+        campaigns.forEach((name, campaign) -> {
+            campaignsPo.getCampaigns().add(campaign.save());
+        });
+        campaignsDao.save(campaignsPo);
+    }
 
-	private void wentThroughMissions(final BiConsumer<String, CampaignMission> consumer) {
-		campaigns.forEach((name, campaign) -> {
-			campaign.getMissions().forEach(
-					mission -> consumer.accept(campaign.getName() + "." + mission.getName() + ".isFinished", mission));
-		});
-	}
+    /**
+     * Get campaign by it's name.
+     *
+     * @param name
+     *            required campaign name
+     * @param <C>
+     *            class providing campaign name
+     * @return campaign object
+     */
+    public <C extends CampaignName> Campaign getCampaignByName(final C name) {
+        Preconditions.checkNotNull(name, "Campaign name is null");
+        final Campaign out = campaigns.get(name);
+        if (out == null) {
+            throw new IllegalArgumentException(
+                    String.format("There is no campaign for name '%s'", name));
+        }
+        return out;
+    }
 
-	/**
-	 * Get campaign by it's name.
-	 *
-	 * @param name
-	 *            required campaign name
-	 * @return campaign object
-	 */
-	public <C extends CampaignName> Campaign getCampaignByName(final C name) {
-		Preconditions.checkNotNull(name, "Campaign name is null");
-		final Campaign out = campaigns.get(name);
-		if (out == null) {
-			throw new IllegalArgumentException(String.format("There is no campaign for name '%s'", name));
-		}
-		return out;
-	}
-
-	public Campaign getDefaultCampain() {
-		return getCampaignByName(CampaignNames.defaultCampaign);
-	}
+    public Campaign getDefaultCampain() {
+        return getCampaignByName(CampaignNames.defaultCampaign);
+    }
 
 }

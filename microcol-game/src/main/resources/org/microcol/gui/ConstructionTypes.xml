@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE properties [
+<!ELEMENT properties ( comment?, entry* ) >
+<!ATTLIST properties version CDATA #FIXED "1.0">
+<!ELEMENT comment (#PCDATA) >
+<!ELEMENT entry (#PCDATA) >
+<!ATTLIST entry key CDATA #REQUIRED>
+]>
+
+<properties>
+	<comment>Define messages for construction types.</comment>
+	
+	<entry key="TOWN_HALL_name">Town Hall</entry>
+	<entry key="LUMBER_MILL_name">Lumber Mill</entry>
+	<entry key="CARPENTERS_SHOP_name">Carpenter’s Shop</entry>
+	<entry key="CARPENTERS_STAND_name">Carpenter's Stand</entry>
+	<entry key="IRON_WORKS_name">Iron Works</entry>
+	<entry key="BLACKSMITHS_SHOP_name">Blacksmith’s Shop</entry>
+	<entry key="BLACKSMITHS_HOUSE_name">Blacksmith’s House</entry>
+	<entry key="FORTRESS_name">Fortress</entry>
+	<entry key="FORT_name">Fort</entry>
+	<entry key="STOCKADE_name">Stockade</entry>
+	<entry key="CIGAR_FACTORY_name">Cigar Factory</entry>
+	<entry key="TOBACCONISTS_SHOP_name">Tobacconist’s Shop</entry>
+	<entry key="TOBACCONISTS_HOUSE_name">Tobacconist’s House</entry>
+	<entry key="TEXTILE_MILL_name">Textile Mill</entry>
+	<entry key="WEAVERS_SHOP_name">Weaver’s Shop</entry>
+	<entry key="WEAVERS_HOUSE_name">Weaver’s House</entry>
+	<entry key="RUM_FACTORY_name">Rum Factory</entry>
+	<entry key="RUM_DISTILLERY_name">Rum Distillery</entry>
+	<entry key="RUM_DISTILLERS_HOUSE_name">Rum Distiller’s House</entry>
+	<entry key="FUR_FACTORY_name">Fur Factory</entry>
+	<entry key="FUR_TRADING_POST_name">Fur Trading Post</entry>
+	<entry key="FUR_TRADERS_HOUSE_name">Fur Trader’s House</entry>
+	<entry key="ARSENAL_name">Arsenal</entry>
+	<entry key="MAGAZINE_name">Magazine</entry>
+	<entry key="ARMORY_name">Armory</entry>
+	<entry key="SHIPYARD_name">Shipyard</entry>
+	<entry key="DRYDOCK_name">Drydock</entry>
+	<entry key="DOCK_name">Dock</entry>
+	<entry key="UNIVERSITY_name">University</entry>
+	<entry key="COLLEGE_name">College</entry>
+	<entry key="SCHOOLHOUSE_name">Schoolhouse</entry>
+	<entry key="WAREHOUSE_EXPANSION_name">Warehouse Expansion</entry>
+	<entry key="WAREHOUSE_name">Warehouse</entry>
+	<entry key="BASIC_WAREHOUSE_name">Small warehouse</entry>
+	<entry key="STABLES_name">Stables</entry>
+	<entry key="CATHEDRAL_name">Cathedral</entry>
+	<entry key="CHURCH_name">Church</entry>
+	<entry key="NEWSPAPER_name">Newspaper</entry>
+	<entry key="PRINTING_PRESS_name">Printing Press</entry>
+	<entry key="CUSTOM_HOUSE_name">Custom House</entry>
+
+</properties>

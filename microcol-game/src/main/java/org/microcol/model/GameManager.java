@@ -5,6 +5,8 @@ import java.util.Optional;
 import java.util.function.Function;
 
 import org.microcol.model.store.ModelPo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
@@ -13,6 +15,8 @@ import com.google.common.base.Strings;
  * Each player performs turns. When all players perform one turn it's one round.
  */
 final class GameManager {
+
+    private final static Logger LOGGER = LoggerFactory.getLogger(GameManager.class);
 
     private final GameOverEvaluator gameOverEvaluator;
     private final Model model;
@@ -42,10 +46,10 @@ final class GameManager {
             return playerStore.getPlayerByName(playerName);
         }
     }
-    
-	void addEvaluator(final Function<Model, GameOverResult> evaluator) {
-		gameOverEvaluator.addEvaluator(evaluator);
-	}
+
+    void addEvaluator(final Function<Model, GameOverResult> evaluator) {
+        gameOverEvaluator.addEvaluator(evaluator);
+    }
 
     boolean isStarted() {
         return started;
@@ -89,7 +93,7 @@ final class GameManager {
         currentPlayer.startTurn();
         model.fireTurnStarted(currentPlayer, true);
         model.getStatistics().countNextTurn(model);
-        
+
     }
 
     /**
@@ -103,9 +107,20 @@ final class GameManager {
         model.fireTurnStarted(currentPlayer, false);
     }
 
+    /**
+     * Finish current players turn and start of next player. Ordering of players
+     * should be:
+     * <ul>
+     * <li>human</li>
+     * <li>AI</li>
+     * <li>Natives</li>
+     * </ul>
+     */
     void endTurn() {
         checkGameRunning();
-        // TODO JJ ordering of players should be human, AI, Natives
+        LOGGER.debug("End turn was called, current player is {}", currentPlayer);
+        model.fireTurnFinished(currentPlayer);
+        model.getTurnEventStore().clearTurnEventsForPlayer(currentPlayer);
         final int index = model.getPlayers().indexOf(currentPlayer);
         if (index < model.getPlayers().size() - 1) {
             currentPlayer = model.getPlayers().get(index + 1);
@@ -119,7 +134,6 @@ final class GameManager {
                 started = false;
             } else {
                 currentPlayer = model.getPlayers().get(0);
-                model.getTurnEventStore().clearAllTurnEvents();
                 model.getStatistics().countNextTurn(model);
                 model.fireRoundStarted();
                 currentPlayer.startTurn();
@@ -127,5 +141,10 @@ final class GameManager {
             }
         }
     }
-    
+
+    void save(final ModelPo modelPo) {
+        modelPo.getGameManager().setGameStarted(isStarted());
+        modelPo.getGameManager().setCurrentPlayer(getCurrentPlayer().getName());
+    }
+
 }

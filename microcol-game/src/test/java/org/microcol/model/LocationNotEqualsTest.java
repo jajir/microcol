@@ -1,39 +1,30 @@
 package org.microcol.model;
 
-import java.util.Arrays;
-import java.util.Collection;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.params.provider.Arguments.arguments;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-import org.junit.runners.Parameterized.Parameter;
-import org.junit.runners.Parameterized.Parameters;
+import java.util.stream.Stream;
 
-@RunWith(Parameterized.class)
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
+
 public class LocationNotEqualsTest {
-	
-	@Parameters(name = "{index}: location = {0}, object = {1}")
-	public static Collection<Object[]> data() {
-		return Arrays.asList(new Object[][] {
-			{Location.of(2, 3), null},
-			{Location.of(2, 3), 10},
-			{Location.of(2, 3), "test"},
-			{Location.of(2, 3), Location.of( 3,  2)},
-			{Location.of(2, 3), Location.of(-2,  3)},
-			{Location.of(2, 3), Location.of( 2, -3)},
-			{Location.of(2, 3), Location.of(-2, -3)},
-		});
-	}
 
-	@Parameter(0)
-	public Location location;
+    static Stream<Arguments> dataProvider() {
+        return Stream.of(
+                arguments(Location.of(2, 3), null),
+                arguments(Location.of(2, 3), 10),
+                arguments(Location.of(2, 3), "test"),
+                arguments(Location.of(2, 3), Location.of(3, 2)),
+                arguments(Location.of(2, 3), Location.of(-2, 3)),
+                arguments(Location.of(2, 3), Location.of(2, -3)),
+                arguments(Location.of(2, 3), Location.of(-2, -3)));
+    }
 
-	@Parameter(1)
-	public Object object;
-
-	@Test
-	public void testNotEquals() {
-		Assert.assertFalse(location.equals(object));
-	}
+    @ParameterizedTest(name = "{index}: location = {0}, object = {1}")
+    @MethodSource("dataProvider")
+    public void testNotEquals(final Location location, final Object object) {
+        assertFalse(location.equals(object));
+    }
 }

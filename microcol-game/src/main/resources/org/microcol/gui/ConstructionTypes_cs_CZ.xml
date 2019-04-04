@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE properties [
+<!ELEMENT properties ( comment?, entry* ) >
+<!ATTLIST properties version CDATA #FIXED "1.0">
+<!ELEMENT comment (#PCDATA) >
+<!ELEMENT entry (#PCDATA) >
+<!ATTLIST entry key CDATA #REQUIRED>
+]>
+
+<properties>
+	<comment>Define messages for construction types.</comment>
+	
+	<entry key="TOWN_HALL_name">Radnice</entry>
+	<entry key="LUMBER_MILL_name">Tesař</entry>
+	<entry key="CARPENTERS_SHOP_name">Pila</entry>
+	<entry key="CARPENTERS_STAND_name">Malá pila</entry>
+	<entry key="IRON_WORKS_name">Huť</entry>
+	<entry key="BLACKSMITHS_SHOP_name">Velké Kovářství</entry>
+	<entry key="BLACKSMITHS_HOUSE_name">Kovář</entry>
+	<entry key="FORTRESS_name">Pevnost</entry>
+	<entry key="FORT_name">Opevnění</entry>
+	<entry key="STOCKADE_name">Palisáda</entry>
+	<entry key="CIGAR_FACTORY_name">Továrna na cigarety</entry>
+	<entry key="TOBACCONISTS_SHOP_name">Balírna doutníků</entry>
+	<entry key="TOBACCONISTS_HOUSE_name">Balič doutníků</entry>
+	<entry key="TEXTILE_MILL_name">Textilní továrna</entry>
+	<entry key="WEAVERS_SHOP_name">Tkalcovna</entry>
+	<entry key="WEAVERS_HOUSE_name">Tkadlec</entry>
+	<entry key="RUM_FACTORY_name">Továrna na rum</entry>
+	<entry key="RUM_DISTILLERY_name">Palírna</entry>
+	<entry key="RUM_DISTILLERS_HOUSE_name">Malá palírna</entry>
+	<entry key="FUR_FACTORY_name">Továrna na kožešiny</entry>
+	<entry key="FUR_TRADING_POST_name">Kožešnictví</entry>
+	<entry key="FUR_TRADERS_HOUSE_name">Kožešník</entry>
+	<entry key="ARSENAL_name">Zbrojovka</entry>
+	<entry key="MAGAZINE_name">Sklad střeliva</entry>
+	<entry key="ARMORY_name">Zbrojnice</entry>
+	<entry key="SHIPYARD_name">Loděnice</entry>
+	<entry key="DRYDOCK_name">Suchý dok</entry>
+	<entry key="DOCK_name">Dok</entry>
+	<entry key="UNIVERSITY_name">Univerzita</entry>
+	<entry key="COLLEGE_name">Střední škola</entry>
+	<entry key="SCHOOLHOUSE_name">Škola</entry>
+	<entry key="WAREHOUSE_EXPANSION_name">Rozšířený sklad</entry>
+	<entry key="WAREHOUSE_name">Sklad</entry>
+	<entry key="BASIC_WAREHOUSE_name">Malý sklad</entry>
+	<entry key="STABLES_name">Stáj</entry>
+	<entry key="CATHEDRAL_name">Katedrála</entry>
+	<entry key="CHURCH_name">Kostel</entry>
+	<entry key="NEWSPAPER_name">Tiskárny</entry>
+	<entry key="PRINTING_PRESS_name">Tiskařský stroj</entry>
+	<entry key="CUSTOM_HOUSE_name">Celnice</entry>
+
+</properties>

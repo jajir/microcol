@@ -29,8 +29,11 @@
 			<item name="ToDo" href="./todo.html" />
 			<item name="Release" href="./release.html" />
 			<item name="GUI" href="./gui.html" />
+			<item name="Events" href="./events.html" />
 			<item name="Animation" href="./animation.html" />
+			<item name="Units" href="./units.html" />
 			<item name="Coding" href="./coding.html" />
+			<item name="Screen Flow" href="./screen-flow.html" />
 			<item name="Tests" href="./tests.html" />
 		</menu>
 		<footer>

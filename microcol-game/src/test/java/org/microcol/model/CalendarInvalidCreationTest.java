@@ -1,34 +1,22 @@
 package org.microcol.model;
 
-import java.util.Arrays;
-import java.util.Collection;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-import org.junit.runners.Parameterized.Parameter;
-import org.junit.runners.Parameterized.Parameters;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
-@RunWith(Parameterized.class)
 public class CalendarInvalidCreationTest {
-	@Parameters(name = "{index}: startYear = {0}, endYear = {1}")
-	public static Collection<Object[]> data() {
-		return Arrays.asList(new Object[][] {
-			{ 1750,  1590},
-			{ 1590,  1590},
-			{-1590, -1750},
-			{-1590, -1590},
-		});
-	}
 
-	@Parameter(0)
-	public int startYear;
+    @ParameterizedTest(name = "{index}: startYear = {0}, endYear = {1}")
+    @CsvSource({ "1750, 1590", "1590, 1590", "-1590, -1750", "-1590, -1590" })
+    public void testInvalidCreation(final int startYear, final int endYear) {
+        final IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> {
+                    new Calendar(startYear, endYear, 0);
+                });
 
-	@Parameter(1)
-	public int endYear;
-
-	@Test(expected = IllegalArgumentException.class)
-	public void testInvalidCreation() {
-		new Calendar(startYear, startYear, 0);
-	}
+        // verify that exception contains expected message
+        assertTrue(exception.getMessage().contains("must be less than end year"));
+    }
 }

@@ -1,29 +1,36 @@
 package org.microcol.model;
 
-import org.junit.Test;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.jupiter.api.Test;
 
 public class TerrainTest {
-	
-	@Test
-	public void test_setHasTrees() {
-		assertTrue(TerrainType.GRASSLAND.isCanHaveTree());
 
-		Terrain t = new Terrain(Location.of(1, 1), TerrainType.GRASSLAND);
-		assertFalse(t.isHasTrees());
+    @Test
+    public void test_setHasTrees() {
+        assertTrue(TerrainType.GRASSLAND.isCanHaveTree());
 
-		t.setHasTrees(true);
-		assertTrue(t.isHasTrees());
-	}
+        final Terrain t = new Terrain(Location.of(1, 1), TerrainType.GRASSLAND);
+        assertFalse(t.isHasTrees());
 
-	@Test(expected = IllegalArgumentException.class)
-	public void test_setHasTrees_varify_that_terrainTypeDoesntSupportTrees() {
-		assertFalse(TerrainType.ARCTIC.isCanHaveTree());
+        t.setHasTrees(true);
+        assertTrue(t.isHasTrees());
+    }
 
-		Terrain t = new Terrain(Location.of(1, 1), TerrainType.ARCTIC);
-		assertFalse(t.isHasTrees());
+    @Test
+    public void test_setHasTrees_varify_that_terrainTypeDoesntSupportTrees() {
+        assertFalse(TerrainType.ARCTIC.isCanHaveTree());
 
-		t.setHasTrees(true);
-	}
+        final Terrain t = new Terrain(Location.of(1, 1), TerrainType.ARCTIC);
+        assertFalse(t.isHasTrees());
+
+        final IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> {
+                    t.setHasTrees(true);
+                });
+
+        assertTrue(exception.getMessage().contains("can't have trees."),
+                String.format("Invalid exception message '%s'.", exception.getMessage()));
+    }
 
 }
