@@ -12,7 +12,8 @@ import javafx.scene.layout.StackPane;
 
 /**
  * Provide centered content panel with title. Content panel is usually used for
- * menu.
+ * menu. Content of title page will be encapsulated in panel with css
+ * 'titled-content'.
  */
 public final class TitledPage implements JavaFxComponent {
 
@@ -28,10 +29,9 @@ public final class TitledPage implements JavaFxComponent {
     TitledPage() {
         title = new Label("[not defined]");
         title.getStyleClass().add(MAIN_TITLE_ID);
-        title.setId(MAIN_TITLE_ID);
 
         box = new HBox();
-        box.getStyleClass().add("game-menu-holder");
+        box.getStyleClass().add("titled-content");
 
         mainPanel = new StackPane();
         mainPanel.getChildren().add(title);

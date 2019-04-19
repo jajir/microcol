@@ -7,6 +7,9 @@ import org.microcol.gui.dialog.DialogNotEnoughGold;
 import org.microcol.gui.dock.AbstractPanelDockBehavior;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.image.ImageProvider;
+import org.microcol.gui.screen.Screen;
+import org.microcol.gui.screen.ShowScreenEvent;
+import org.microcol.gui.screen.market.ScreenMarketBuyContext;
 import org.microcol.gui.util.ClipboardEval;
 import org.microcol.gui.util.From;
 import org.microcol.model.CargoSlot;
@@ -18,6 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
+import com.google.common.eventbus.EventBus;
 import com.google.inject.Inject;
 
 /**
@@ -30,17 +34,20 @@ public final class PanelEuropeDockBehavior extends AbstractPanelDockBehavior {
     private final EuropeCallback europeDialogCallback;
     private final GameModelController gameModelController;
     private final DialogNotEnoughGold dialogNotEnoughGold;
-    private final ChooseGoodsDialog chooseGoods;
+    private final ChooseGoodsDialog chooseGoodsDialog;
+    private final EventBus eventBus;
 
     @Inject
     PanelEuropeDockBehavior(final EuropeCallback europeDialogCallback,
             final GameModelController gameModelController, final ImageProvider imageProvider,
-            final DialogNotEnoughGold dialogNotEnoughGold, final ChooseGoodsDialog chooseGoods) {
+            final DialogNotEnoughGold dialogNotEnoughGold,
+            final ChooseGoodsDialog chooseGoodsDialog, final EventBus eventBus) {
         super(gameModelController, imageProvider);
         this.europeDialogCallback = Preconditions.checkNotNull(europeDialogCallback);
         this.gameModelController = Preconditions.checkNotNull(gameModelController);
         this.dialogNotEnoughGold = Preconditions.checkNotNull(dialogNotEnoughGold);
-        this.chooseGoods = Preconditions.checkNotNull(chooseGoods);
+        this.chooseGoodsDialog = Preconditions.checkNotNull(chooseGoodsDialog);
+        this.eventBus = Preconditions.checkNotNull(eventBus);
     }
 
     @Override
@@ -53,31 +60,43 @@ public final class PanelEuropeDockBehavior extends AbstractPanelDockBehavior {
     public void consumeGoods(final CargoSlot targetCargoSlot,
             final boolean specialOperatonWasSelected, final ClipboardEval eval) {
         logger.debug("wasShiftPressed " + europeDialogCallback.getPropertyShiftWasPressed().get());
-        Goods goods = eval.getGoods().get();
-        goods = chooseGoods(goods, specialOperatonWasSelected, targetCargoSlot);
+
+        final Goods goods = eval.getGoods().get();
         if (goods.isZero()) {
             return;
         }
+
+        final Goods maxPossibleGoods = targetCargoSlot.maxPossibleGoodsToMoveHere(goods);
         final From transferFrom = eval.getFrom().get();
+
         if (From.VALUE_FROM_EUROPE_SHOP == transferFrom) {
-            try {
-                targetCargoSlot.storeFromEuropePort(goods);
-            } catch (NotEnoughtGoldException e) {
-                dialogNotEnoughGold.showAndWait();
+            if (specialOperatonWasSelected) {
+                eventBus.post(new ShowScreenEvent(Screen.MARKET_BUY,
+                        new ScreenMarketBuyContext(maxPossibleGoods, targetCargoSlot)));
+                return;
+            } else {
+                try {
+                    targetCargoSlot.buyAndStoreFromEuropePort(maxPossibleGoods);
+                } catch (NotEnoughtGoldException e) {
+                    dialogNotEnoughGold.showAndWait();
+                }
             }
         } else if (From.VALUE_FROM_UNIT == transferFrom) {
-            targetCargoSlot.storeFromCargoSlot(goods, eval.getCargoSlot().get());
+            final CargoSlot sourceCargoSlot = eval.getCargoSlot().get();
+            // transfer between cargo slots
+            if (specialOperatonWasSelected) {
+                chooseGoodsDialog.init(goods);
+                targetCargoSlot.storeFromCargoSlot(chooseGoodsDialog.getActualValue(),
+                        sourceCargoSlot);
+            } else {
+                targetCargoSlot.storeFromCargoSlot(goods, sourceCargoSlot);
+            }
         } else {
             throw new IllegalArgumentException(
                     "Unsupported source transfer '" + transferFrom + "'");
         }
-        europeDialogCallback.repaintAfterGoodMoving();
-    }
 
-    private Goods chooseGoods(final Goods goods, final boolean specialOperatonWasSelected,
-            final CargoSlot targetCargoSlot) {
-        return chooseGoods(chooseGoods, goods, specialOperatonWasSelected,
-                targetCargoSlot.maxPossibleGoodsToMoveHere(goods));
+        europeDialogCallback.repaintAfterGoodMoving();
     }
 
     @Override

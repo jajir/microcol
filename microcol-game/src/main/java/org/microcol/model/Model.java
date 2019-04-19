@@ -209,6 +209,10 @@ public class Model {
         listenerManager.fireColonyWasFounded(this, col);
     }
 
+    public int getKingsTaxForPlayer(final Player subduedPlayer) {
+        return playerStore.getKingsTaxForPlayer(subduedPlayer);
+    }
+
     Unit createUnit(final ModelPo modelPo, final UnitPo unitPo) {
         final Unit unit = unitFactory.createUnit(this, modelPo, unitPo);
         unitStorage.addUnit(unit);

@@ -8,6 +8,8 @@ import org.microcol.gui.screen.campaign.ScreenCampaign;
 import org.microcol.gui.screen.colony.ScreenColony;
 import org.microcol.gui.screen.europe.ScreenEurope;
 import org.microcol.gui.screen.game.ScreenGame;
+import org.microcol.gui.screen.market.ScreenMarketBuy;
+import org.microcol.gui.screen.market.ScreenMarketSell;
 import org.microcol.gui.screen.menu.ScreenMenu;
 import org.microcol.gui.screen.setting.ScreenSetting;
 import org.microcol.gui.util.JavaFxComponent;
@@ -36,7 +38,9 @@ public final class MainPanelView implements JavaFxComponent, UpdatableLanguage {
     @Inject
     public MainPanelView(final ScreenGame screenGame, final ScreenMenu screenMenu,
             final ScreenCampaign screenCampaign, final ScreenEurope screenEurope,
-            final ScreenSetting screenSetting, final ScreenColony screenColony, final I18n i18n) {
+            final ScreenSetting screenSetting, final ScreenColony screenColony,
+            final ScreenMarketBuy screenMarketBuy, final ScreenMarketSell screenMarketSell,
+            final I18n i18n) {
         mainBox = new VBox();
         screens.add(Preconditions.checkNotNull(screenGame));
         screens.add(Preconditions.checkNotNull(screenMenu));
@@ -44,6 +48,8 @@ public final class MainPanelView implements JavaFxComponent, UpdatableLanguage {
         screens.add(Preconditions.checkNotNull(screenEurope));
         screens.add(Preconditions.checkNotNull(screenSetting));
         screens.add(Preconditions.checkNotNull(screenColony));
+        screens.add(Preconditions.checkNotNull(screenMarketBuy));
+        screens.add(Preconditions.checkNotNull(screenMarketSell));
         updateLanguage(i18n);
     }
 

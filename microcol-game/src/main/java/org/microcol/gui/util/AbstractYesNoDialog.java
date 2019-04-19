@@ -30,7 +30,7 @@ public abstract class AbstractYesNoDialog extends AbstractMessageWindow {
         buttonsBar.getButtonYes().requestFocus();
 
         final VBox root = new VBox();
-        root.getChildren().addAll(context, buttonsBar);
+        root.getChildren().addAll(context, buttonsBar.getContent());
         init(root);
     }
 

@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.File;
 
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.microcol.gui.FileSelectingService;
@@ -26,8 +27,7 @@ import javafx.stage.Stage;
 @ExtendWith(ApplicationExtension.class)
 public class TC_02_founding_colony_test extends AbstractMicroColTest {
 
-    private final static File testFileName = new File(
-	    "src/test/scenarios/T02-founding-colony.microcol");
+    private final static File testFileName = new File("src/test/scenarios/T02-founding-colony.microcol");
 
     @Start
     private void start(final Stage primaryStage) throws Exception {
@@ -42,6 +42,7 @@ public class TC_02_founding_colony_test extends AbstractMicroColTest {
     }
 
     @Test
+    @Tag("local")
     void TC_02_embark_disembark(final FxRobot robot) throws Exception {
 	// open MicroCol and load defined game
 	GamePage gamePage = WelcomePage.of(getContext()).loadGame();

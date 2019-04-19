@@ -6,9 +6,9 @@ import java.util.Optional;
 import org.microcol.gui.screen.game.gamepanel.ScrollToFocusedTile;
 import org.microcol.gui.screen.game.gamepanel.SelectedTileManager;
 import org.microcol.model.CargoSlot;
+import org.microcol.model.Goods;
 import org.microcol.model.GoodsTrade;
 import org.microcol.model.GoodsType;
-import org.microcol.model.Goods;
 import org.microcol.model.Location;
 import org.microcol.model.Model;
 import org.microcol.model.Path;
@@ -36,7 +36,7 @@ public class GameModelController {
     private final SelectedTileManager selectedTileManager;
 
     private final ArtifitialPlayersManager artifitialPlayersManager;
-    
+
     private final EventBus eventBus;
 
     private GameModel gameModel = null;
@@ -82,6 +82,10 @@ public class GameModelController {
         return gameModel.getModel();
     }
 
+    public int getKingsTaxPercentage() {
+        return getModel().getKingsTaxForPlayer(getCurrentPlayer());
+    }
+
     public boolean isGameModelReady() {
         return gameModel != null;
     }
@@ -94,6 +98,10 @@ public class GameModelController {
     public Goods getMaxBuyableGoods(final GoodsType goodsType) {
         final GoodsTrade goodsTrade = getModel().getEurope().getGoodsTradeForType(goodsType);
         return goodsTrade.getAvailableAmountFor(getCurrentPlayer().getGold());
+    }
+
+    public GoodsTrade getEuropeGoodsTradeForType(final GoodsType goodsType) {
+        return getModel().getEurope().getGoodsTradeForType(goodsType);
     }
 
     /**

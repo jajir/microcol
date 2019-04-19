@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE properties [
+<!ELEMENT properties ( comment?, entry* ) >
+<!ATTLIST properties version CDATA #FIXED "1.0">
+<!ELEMENT comment (#PCDATA) >
+<!ELEMENT entry (#PCDATA) >
+<!ATTLIST entry key CDATA #REQUIRED>
+]>
+
+<properties>
+	<comment>Define keys for Market</comment>
+
+	<entry key="title">Trh s </entry>
+	<entry key="titleBuy">Nákup na trhu s </entry>
+	<entry key="titleSell">Prodej na trhu s </entry>
+	<entry key="buying">Kupuješ</entry>
+	<entry key="howMuch">Kolik kusů chceš koupit?</entry>
+	<entry key="howMuchSell">Kolik kusů chceš prodat?</entry>
+	<entry key="pricePerPiece">Cena za jeden kus ...</entry>
+	<entry key="selected">Chceš koupit %s kusů, za  ...</entry>
+	<entry key="selectedSell">Chceš prodat %s kusů, za  ...</entry>
+	<entry key="tax">Královská daň je %s%%. To je ...</entry>
+	<entry key="total">Celkem to bude ...</entry>
+	<entry key="totalSell">Celkem dostaneš ...</entry>
+	<entry key="price">%s zlatých</entry>
+	<entry key="buttonBuy">Koupit</entry>
+	<entry key="buttonSell">Prodat</entry>
+	<entry key="buttonCancel">Zpět</entry>
+
+</properties>

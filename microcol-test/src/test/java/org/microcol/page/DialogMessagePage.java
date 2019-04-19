@@ -2,7 +2,7 @@ package org.microcol.page;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import org.microcol.gui.util.ButtonsBar;
+import org.microcol.gui.util.ButtonBarOk;
 import org.testfx.util.WaitForAsyncUtils;
 
 import javafx.scene.control.Button;
@@ -29,7 +29,7 @@ public class DialogMessagePage extends AbstractScreen {
     }
 
     public Button getButtonOk() {
-	return getNodeFinder().lookup("#" + ButtonsBar.BUTTON_OK_ID).queryAs(Button.class);
+	return getNodeFinder().lookup("#" + ButtonBarOk.BUTTON_OK_ID).queryAs(Button.class);
     }
 
 }

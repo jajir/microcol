@@ -110,13 +110,13 @@ public abstract class AbstractPanelDockBehavior implements PanelDockBehavior {
                 .filterGoods(goods -> canBeGoodsTransfered(cargoSlot, goods)).isNotEmpty();
     }
 
-    protected Goods chooseGoods(final ChooseGoodsDialog chooseGoods, final Goods goods,
+    protected Goods chooseGoods(final ChooseGoodsDialog chooseGoods, 
             final boolean specialOperatonWasSelected, final Goods maxPossibleGoods) {
         if (specialOperatonWasSelected) {
             chooseGoods.init(maxPossibleGoods);
             return chooseGoods.getActualValue();
         } else {
-            return goods;
+            return maxPossibleGoods;
         }
     }
 

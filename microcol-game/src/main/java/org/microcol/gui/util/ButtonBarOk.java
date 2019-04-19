@@ -7,33 +7,40 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 
 /**
- * Helps manage button part of dialog containing "OK" button.
- *
+ * Component containing one button. By default with text 'Ok'.
  */
-public final class ButtonsBar extends HBox {
+public class ButtonBarOk implements JavaFxComponent {
 
     public static final String BUTTON_OK_ID = "buttonOk";
 
+    private final HBox mainBox = new HBox();
+
     private final Button buttonOk;
 
-    public ButtonsBar(final I18n i18n) {
+    public ButtonBarOk(final I18n i18n) {
         this(i18n.get(Loc.ok));
     }
 
-    public ButtonsBar(final String buttonOkLabel) {
+    public ButtonBarOk(final String buttonOkLabel) {
         buttonOk = new Button(buttonOkLabel);
         buttonOk.requestFocus();
         buttonOk.setId(BUTTON_OK_ID);
         final Pane spacer = new Pane();
         HBox.setHgrow(spacer, Priority.ALWAYS);
-        setId("buttonPane");
-        getChildren().addAll(spacer, buttonOk);
+        mainBox.setId("buttonPane");
+        mainBox.getChildren().addAll(spacer, buttonOk);
     }
 
     public Button getButtonOk() {
         return buttonOk;
+    }
+
+    @Override
+    public Region getContent() {
+        return mainBox;
     }
 
 }

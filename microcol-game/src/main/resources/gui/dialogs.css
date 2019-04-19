@@ -20,3 +20,16 @@
 	-fx-min-height: 49;
 	-fx-padding: 2.0 2.0 2.0 2.0;
 }
+
+.dialog-with-man {
+	-fx-min-width: 505;
+	-fx-max-width: 505;
+	-fx-min-height: 380;
+	-fx-max-height: 380;
+	-fx-background-image: url("../images/dialog-petr.png");
+	-fx-background-repeat: no-repeat ;
+}
+
+.dialog-with-man .label{
+	-fx-padding: 20 200 20 30
+}

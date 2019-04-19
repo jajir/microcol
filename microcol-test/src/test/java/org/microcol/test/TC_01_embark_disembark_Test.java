@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.File;
 
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.microcol.gui.FileSelectingService;
@@ -38,6 +39,7 @@ public class TC_01_embark_disembark_test extends AbstractMicroColTest {
     }
 
     @Test
+    @Tag("local")
     void TC_01_embark_disembark() throws Exception {
 	//open MicroCol and load defined game 
 	GamePage gamePage = WelcomePage.of(getContext()).loadGame();

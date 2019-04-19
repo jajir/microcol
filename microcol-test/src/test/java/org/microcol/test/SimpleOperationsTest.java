@@ -46,9 +46,9 @@ public class SimpleOperationsTest extends AbstractMicroColTest {
 	binder.bind(FileSelectingService.class).toInstance(fileSelectingService);
     }
 
-    @Test
     @Tag("ci")
-    void verify_that_test_files_exists() {
+    @Test
+    public void verify_that_test_files_exists() {
 	assertTrue(verifyLoadingUnloading.exists(),
 		String.format("File '%s' doesn't exists", verifyLoadingUnloading.getAbsoluteFile()));
 	assertTrue(verifyLoadingUnloading.isFile(),
@@ -57,7 +57,7 @@ public class SimpleOperationsTest extends AbstractMicroColTest {
 
     @Test
     @Tag("ci")
-    void verify_exception_is_throws_when_object_isnt_exists() throws Exception {
+    public void verify_exception_is_throws_when_object_isnt_exists() throws Exception {
 	Assertions.assertThrows(EmptyNodeQueryException.class, () -> {
 	    FxAssert.verifyThat(BUTTON_SETTING_ID_NOT_EXISTING, obj -> {
 		return true;
@@ -67,7 +67,7 @@ public class SimpleOperationsTest extends AbstractMicroColTest {
 
     @Test
     @Tag("ci")
-    void verify_setting_page_is_available() throws Exception {
+    public void verify_setting_page_is_available() throws Exception {
 	SettingPage settingPage = WelcomePage.of(getContext()).openSetting();
 
 	settingPage.goBack().verifyMainScreen();
@@ -75,7 +75,7 @@ public class SimpleOperationsTest extends AbstractMicroColTest {
 
     @Test
     @Tag("ci")
-    void verify_language_is_changed_immediatelly(final FxRobot robot) throws Exception {
+    public void verify_language_is_changed_immediatelly(final FxRobot robot) throws Exception {
 	assertNotNull(robot);
 	SettingPage settingPage = WelcomePage.of(getContext()).openSetting();
 
@@ -110,7 +110,7 @@ public class SimpleOperationsTest extends AbstractMicroColTest {
      */
     @Test
     @Tag("ci")
-    void verify_moving_with_unit() throws Exception {
+    public void verify_moving_with_unit() throws Exception {
 	final GamePage gamePage = WelcomePage.of(getContext()).loadGame();
 
 	gamePage.moveMouseAtLocation(Location.of(22, 12));

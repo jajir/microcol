@@ -5,7 +5,7 @@ import java.util.List;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 
-public final class Europe {
+public class Europe {
 
     private final EuropePort port;
 
@@ -13,11 +13,11 @@ public final class Europe {
 
     private final Model model;
 
-    private final List<GoodsTrade> goodsTrades = ImmutableList.of(new GoodsTrade(GoodsType.CORN, 0, 8),
+    private final List<GoodsTrade> goodsTrades = ImmutableList.of(new GoodsTrade(GoodsType.CORN, 2, 4),
             new GoodsTrade(GoodsType.SUGAR, 3, 5), new GoodsTrade(GoodsType.TOBACCO, 3, 5),
-            new GoodsTrade(GoodsType.COTTON, 3, 5), new GoodsTrade(GoodsType.FUR, 0, 8),
-            new GoodsTrade(GoodsType.LUMBER, 0, 8), new GoodsTrade(GoodsType.ORE, 0, 8),
-            new GoodsTrade(GoodsType.SILVER, 0, 8), new GoodsTrade(GoodsType.HORSE, 0, 8),
+            new GoodsTrade(GoodsType.COTTON, 3, 5), new GoodsTrade(GoodsType.FUR, 4, 8),
+            new GoodsTrade(GoodsType.LUMBER, 3, 8), new GoodsTrade(GoodsType.ORE, 4, 8),
+            new GoodsTrade(GoodsType.SILVER, 3, 20), new GoodsTrade(GoodsType.HORSE, 2, 5),
             new GoodsTrade(GoodsType.RUM, 11, 12), new GoodsTrade(GoodsType.CIGARS, 11, 12),
             new GoodsTrade(GoodsType.SILK, 11, 12), new GoodsTrade(GoodsType.COAT, 9, 10),
             new GoodsTrade(GoodsType.GOODS, 2, 3), new GoodsTrade(GoodsType.TOOLS, 1, 2),

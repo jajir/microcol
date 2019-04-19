@@ -14,8 +14,6 @@ import javafx.scene.layout.Region;
  */
 public final class MenuHolderPanel implements JavaFxComponent, ScreenLifeCycle {
 
-    public static final String MAIN_TITLE_ID = "main-title";
-
     private final TitledPage titledPage;
 
     private final CenteredPage centeredPage;

@@ -75,6 +75,7 @@ import org.microcol.gui.screen.game.gamepanel.UnitAttackedEventListener;
 import org.microcol.gui.screen.game.gamepanel.UnitMoveFinishedListener;
 import org.microcol.gui.screen.game.gamepanel.UnitMovedListener;
 import org.microcol.gui.screen.game.gamepanel.VisibleArea;
+import org.microcol.gui.screen.market.ScreenMarketPresenter;
 import org.microcol.gui.screen.menu.ButtonsPanelPresenter;
 import org.microcol.gui.screen.menu.ButtonsPanelView;
 import org.microcol.gui.screen.menu.ExitGameListener;
@@ -267,6 +268,7 @@ public final class MicroColModule extends AbstractModule {
         bind(RecruiteUnitsDialog.class).in(Singleton.class);
         bind(BuyUnitsDialog.class).in(Singleton.class);
         bind(PanelEuropeDockBehavior.class).in(Singleton.class);
+        bind(ScreenMarketPresenter.class).asEagerSingleton();
 
         /**
          * Rest of UI

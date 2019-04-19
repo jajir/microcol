@@ -173,6 +173,10 @@ public final class ImageProvider {
 
     public static final String IMG_SUNSET = "sunset";
 
+    public static final String IMG_MARKET = "market";
+    
+    public final static String IMG_DIALOG_PETR = "dialog-petr.png";
+    
     private final Map<String, Image> images;
 
     private final Map<TerrainType, Image> terrainMap;

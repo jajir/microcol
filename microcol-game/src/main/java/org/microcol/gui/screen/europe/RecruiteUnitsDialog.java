@@ -5,7 +5,7 @@ import org.microcol.gui.dialog.DialogNotEnoughGold;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.image.ImageProvider;
 import org.microcol.gui.util.AbstractMessageWindow;
-import org.microcol.gui.util.ButtonsBar;
+import org.microcol.gui.util.ButtonBarOk;
 import org.microcol.gui.util.ViewUtil;
 import org.microcol.i18n.I18n;
 import org.microcol.model.UnitType;
@@ -50,12 +50,12 @@ public final class RecruiteUnitsDialog extends AbstractMessageWindow {
                     gridWithUnits.getChildren().add(buyUnitPanel);
                 });
 
-        final ButtonsBar buttonBar = new ButtonsBar(i18n);
+        final ButtonBarOk buttonBar = new ButtonBarOk(i18n);
         buttonBar.getButtonOk().setOnAction(e -> {
             close();
         });
 
-        root.getChildren().addAll(labelCaption, gridWithUnits, buttonBar);
+        root.getChildren().addAll(labelCaption, gridWithUnits, buttonBar.getContent());
     }
 
     @Override

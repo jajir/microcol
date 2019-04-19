@@ -1,22 +1,23 @@
 package org.microcol.test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.File;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.microcol.gui.FileSelectingService;
-import org.microcol.model.GoodsType;
 import org.microcol.model.Goods;
+import org.microcol.model.GoodsType;
 import org.microcol.model.Location;
 import org.microcol.model.Unit;
 import org.microcol.model.UnitType;
 import org.microcol.model.unit.UnitGalleon;
 import org.microcol.page.ColonyScreen;
-import org.microcol.page.DialogChooseNumberOfGoods;
+import org.microcol.page.DialogChooseGoodsAmount;
 import org.microcol.page.GamePage;
 import org.microcol.page.WelcomePage;
 import org.mockito.Mockito;
@@ -46,6 +47,7 @@ public class TC_05_moving_goods_test extends AbstractMicroColTest {
     }
 
     @Test
+    @Tag("local")
     void TC_05_moving_goods() throws Exception {
 	// open MicroCol and load defined game
 	GamePage gamePage = WelcomePage.of(getContext()).loadGame();
@@ -74,27 +76,27 @@ public class TC_05_moving_goods_test extends AbstractMicroColTest {
 	verifyThatGoodsInShip(0, Goods.of(GoodsType.CORN, 100));
 
 	// Drag 100 corn to third cargo slot, press control during dragging
-	final DialogChooseNumberOfGoods dialog = colonyScreen
-		.dragGoodsFromWarehouseToShipCargoSlotWithPressedControll(0, 2);
+	final DialogChooseGoodsAmount dialog = colonyScreen.dragGoodsFromWarehouseToShipCargoSlotWithPressedControll(0,
+		2);
 
 	// Select that just 47 corn will be transferred.
 	dialog.selectValueAtSlider(47);
 
 	// Close dialog for choosing transferred amount.
-	dialog.close();
+	dialog.clickOnOk();
 
 	// Verify that just 47 corn was transferred.
 	verifyThatGoodsInShip(2, Goods.of(GoodsType.CORN, 47));
 
 	// Drag corn from ship cargo slot to warehouse, press control during dragging.
-	final DialogChooseNumberOfGoods dialog2 = colonyScreen
-		.dragGoodsFromShipCargoSlotToWarehouseWithPressedControll(0, 0);
+	final DialogChooseGoodsAmount dialog2 = colonyScreen.dragGoodsFromShipCargoSlotToWarehouseWithPressedControll(0,
+		0);
 
 	// Select that just 77 goods will be transfered
 	dialog2.selectValueAtSlider(77);
 
 	// Close dialog
-	dialog2.close();
+	dialog2.clickOnOk();
 
 	// Verify that just 23 corn is in first cargo slot.
 	verifyThatGoodsInShip(0, Goods.of(GoodsType.CORN, 23));
@@ -102,6 +104,7 @@ public class TC_05_moving_goods_test extends AbstractMicroColTest {
     }
 
     @Test
+    @Tag("local")
     void TC_05_moving_goods_without_pressed_control() throws Exception {
 	// open MicroCol and load defined game
 	GamePage gamePage = WelcomePage.of(getContext()).loadGame();

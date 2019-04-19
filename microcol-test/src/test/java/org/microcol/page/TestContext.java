@@ -1,6 +1,6 @@
 package org.microcol.page;
 
-import org.microcol.MicroCol;
+import org.microcol.MicroColApplication;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.screen.game.gamepanel.Area;
 import org.microcol.gui.screen.game.gamepanel.GamePanelPainter;
@@ -17,23 +17,23 @@ import javafx.stage.Stage;
  */
 public class TestContext {
 
-    private final MicroCol microCol;
+    private final MicroColApplication microCol;
 
     private final Stage primaryStage;
-    
-    private FxRobot robot; 
 
-    public TestContext(final MicroCol microCol, final Stage primaryStage) {
+    private FxRobot robot;
+
+    public TestContext(final MicroColApplication microCol, final Stage primaryStage) {
 	this.microCol = Preconditions.checkNotNull(microCol);
 	this.primaryStage = Preconditions.checkNotNull(primaryStage);
     }
 
-    public MicroCol getMicroCol() {
-        return microCol;
+    public MicroColApplication getMicroCol() {
+	return microCol;
     }
 
     public Stage getPrimaryStage() {
-        return primaryStage;
+	return primaryStage;
     }
 
     public <T> T getClassFromGuice(final Class<T> clazz) {
@@ -52,11 +52,11 @@ public class TestContext {
     }
 
     public FxRobot getRobot() {
-        return robot;
+	return robot;
     }
 
     public void setRobot(FxRobot robot) {
-        this.robot = Preconditions.checkNotNull(robot);
+	this.robot = Preconditions.checkNotNull(robot);
     }
-    
+
 }

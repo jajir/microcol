@@ -9,13 +9,14 @@ import org.microcol.model.Location;
 import org.microcol.model.Model;
 import org.microcol.model.Path;
 import org.microcol.model.Player;
+import org.microcol.model.PlayerKing;
 import org.microcol.model.Unit;
 import org.microcol.model.unit.UnitWithCargo;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 
-public final class KingPlayer extends AbstractRobotPlayer {
+public final class KingRobotPlayer extends AbstractRobotPlayer {
 
     public final static String KING_LOST_GAME = "king lost game";
 
@@ -31,10 +32,10 @@ public final class KingPlayer extends AbstractRobotPlayer {
 
     private final ContinentTool continentTool = new ContinentTool();
 
-    public KingPlayer(final Model model, final Player player,
+    public KingRobotPlayer(final Model model, final PlayerKing playerKing,
             final AnimationManager animationManager) {
-        super(model, player, animationManager);
-        this.whosKingThisPlayerIs = Preconditions.checkNotNull(player.getWhosKingThisPlayerIs());
+        super(model, playerKing, animationManager);
+        this.whosKingThisPlayerIs = Preconditions.checkNotNull(playerKing.getWhosKingThisPlayerIs());
     }
 
     private boolean isKinngCoquered() {

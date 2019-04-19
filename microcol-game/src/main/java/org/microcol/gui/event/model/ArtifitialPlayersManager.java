@@ -4,11 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.microcol.ai.AbstractRobotPlayer;
-import org.microcol.ai.KingPlayer;
+import org.microcol.ai.KingRobotPlayer;
 import org.microcol.ai.SimpleAiPlayer;
 import org.microcol.gui.screen.game.gamepanel.AnimationManager;
 import org.microcol.model.Model;
 import org.microcol.model.Player;
+import org.microcol.model.PlayerKing;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
@@ -30,9 +31,10 @@ public final class ArtifitialPlayersManager {
 
     void initRobotPlayers(final Model model) {
         players = new ArrayList<>();
-        model.getPlayers().stream().filter(player -> player.isKing()).forEach(player -> {
-            players.add(new KingPlayer(model, player, animationManager));
-        });
+        model.getPlayers().stream().filter(player -> player.isKing())
+                .map(player -> (PlayerKing) player).forEach(player -> {
+                    players.add(new KingRobotPlayer(model, player, animationManager));
+                });
         model.getPlayers().stream().filter(player -> isOpponent(player)).forEach(player -> {
             players.add(new SimpleAiPlayer(model, player, animationManager));
         });

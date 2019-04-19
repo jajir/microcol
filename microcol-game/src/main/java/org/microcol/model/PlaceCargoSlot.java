@@ -78,7 +78,7 @@ public class PlaceCargoSlot extends AbstractPlace {
     @Override
     public String toString() {
         return MoreObjects.toStringHelper(PlaceCargoSlot.class).add("unit id", getUnit().getId())
-                .add("owner", cargoSlot.getOwnerPlayer()).toString();
+                .add("ownerName", cargoSlot.getOwnerPlayer().getName()).toString();
     }
 
     @Override

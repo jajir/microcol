@@ -5,17 +5,19 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.io.File;
 import java.util.List;
 
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.microcol.gui.FileSelectingService;
-import org.microcol.model.GoodsType;
 import org.microcol.model.Goods;
+import org.microcol.model.GoodsType;
 import org.microcol.model.unit.UnitGalleon;
 import org.microcol.model.unit.UnitWithCargo;
 import org.microcol.page.BuyUnitScreen;
-import org.microcol.page.DialogChooseNumberOfGoods;
 import org.microcol.page.EuropePortScreen;
 import org.microcol.page.GamePage;
+import org.microcol.page.ScreenMarketBuy;
+import org.microcol.page.ScreenMarketSell;
 import org.microcol.page.WelcomePage;
 import org.mockito.Mockito;
 import org.testfx.framework.junit5.ApplicationExtension;
@@ -44,6 +46,7 @@ public class TC_06_buy_and_sell_goods_test extends AbstractMicroColTest {
     }
 
     @Test
+    @Tag("local")
     void TC_06_moving_goods() throws Exception {
 	// open MicroCol and load defined game
 	GamePage gamePage = WelcomePage.of(getContext()).loadGame();
@@ -74,36 +77,37 @@ public class TC_06_buy_and_sell_goods_test extends AbstractMicroColTest {
 	 * Buy food, with pressed control, limit food to 63, verify that food is in
 	 * cargo slot.
 	 */
-	DialogChooseNumberOfGoods dialogChooseNumberOfGoods = europePort
+	ScreenMarketBuy screenMarketBuy = europePort
 		.buyGoodsAndMoveItToCargoSlotWithPressedControl(0, 0);
-	dialogChooseNumberOfGoods.selectValueAtSlider(63);
-	dialogChooseNumberOfGoods.close();
+	screenMarketBuy.selectValueAtSlider(63);
+	screenMarketBuy.clickOnBuy();
 
 	// Verify that in first cargo slot is 63 corn.
 	verifyThatGoodsInShip(0, Goods.of(GoodsType.CORN, 63));
 
 	// Verify that amount of gold dropped.
-	europePort.assertGold(94496);
+	europePort.assertGold(94748);
 
 	/*
 	 * Sell food with pressed control, sell just 27 food, verify that 26 remains in
 	 * cargo slot.
 	 */
-	dialogChooseNumberOfGoods = europePort.sellGoodsWithPressedControl(0, 0);
-	dialogChooseNumberOfGoods.selectValueAtSlider(27);
-	dialogChooseNumberOfGoods.close();
+	ScreenMarketSell screenMarketSell = europePort.sellGoodsWithPressedControl(0, 0);
+	screenMarketSell.selectValueAtSlider(27);
+	screenMarketSell.clickOnSell();
 
 	// Verify that in first cargo slot is 36 corn.
 	verifyThatGoodsInShip(0, Goods.of(GoodsType.CORN, 36));
 
 	// Verify that amount of gold raised.
-	europePort.assertGold(94712);
+	europePort.assertGold(94802);
 
 	// Close Europe port
 	gamePage = europePort.close();
     }
 
     @Test
+    @Tag("local")
     void TC_06_moving_goods_buy_cargo_and_move_it_to_occupied_cargo_slot() throws Exception {
 	// open MicroCol and load defined game
 	GamePage gamePage = WelcomePage.of(getContext()).loadGame();
@@ -137,7 +141,7 @@ public class TC_06_buy_and_sell_goods_test extends AbstractMicroColTest {
 	verifyThatGoodsInShip(0, Goods.of(GoodsType.CORN, 100));
 
 	// Verify that amount of gold dropped.
-	europePort.assertGold(94200);
+	europePort.assertGold(94600);
 
 	// Buy another 100 of corn and move it into first cargo slot.
 	europePort.buyGoodsAndMoveItToCargoSlot(0, 0);
@@ -147,7 +151,7 @@ public class TC_06_buy_and_sell_goods_test extends AbstractMicroColTest {
 
 	// More than 100 goods can't be in one cargo slot.
 	// Verify that amount of gold is not changed from previous state.
-	europePort.assertGold(94200);
+	europePort.assertGold(94600);
 
 	// Close Europe port
 	gamePage = europePort.close();

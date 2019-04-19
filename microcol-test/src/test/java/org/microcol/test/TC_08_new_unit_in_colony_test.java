@@ -2,6 +2,7 @@ package org.microcol.test;
 
 import java.io.File;
 
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.microcol.gui.FileSelectingService;
@@ -35,6 +36,7 @@ public class TC_08_new_unit_in_colony_test extends AbstractMicroColTest {
     }
 
     @Test
+    @Tag("local")
     void TC_08_new_unit_in_colony() throws Exception {
 	// open MicroCol and load defined game
 	GamePage gamePage = WelcomePage.of(getContext()).loadGame();

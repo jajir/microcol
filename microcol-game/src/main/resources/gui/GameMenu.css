@@ -11,14 +11,14 @@
 	-fx-translate-y: -260;
 }
 
-.game-menu-holder{
+.titled-content {
 	-fx-translate-x: -100;
 	-fx-translate-y: 20;
 	-fx-min-height: 400;
 	-fx-min-width: 500;
 }
 
-.game-menu-holder .label-slider {
+.titled-content .label-slider {
 	-fx-padding: 0 20 0 0;
 }
 

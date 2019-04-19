@@ -3,7 +3,7 @@ package org.microcol.gui.dialog;
 import org.microcol.gui.MainStageBuilder;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.util.AbstractMessageWindow;
-import org.microcol.gui.util.ButtonsBar;
+import org.microcol.gui.util.ButtonBarOk;
 import org.microcol.gui.util.ViewUtil;
 import org.microcol.i18n.I18n;
 import org.microcol.model.campaign.MissionGoals;
@@ -35,12 +35,12 @@ public final class MissionGoalsDialog extends AbstractMessageWindow {
 
         final VBox mainPanel = new VBox();
 
-        final ButtonsBar buttonsBar = new ButtonsBar(i18n.get(Dialog.ok));
+        final ButtonBarOk buttonsBar = new ButtonBarOk(i18n);
         buttonsBar.getButtonOk().setOnAction(this::onClose);
 
         goalsPanel = new VBox();
 
-        mainPanel.getChildren().addAll(labelCaption, goalsPanel, buttonsBar);
+        mainPanel.getChildren().addAll(labelCaption, goalsPanel, buttonsBar.getContent());
 
         init(mainPanel);
         getScene().getStylesheets().add(MainStageBuilder.STYLE_SHEET_MICROCOL);

@@ -169,20 +169,31 @@ public class CargoSlot {
      *            required good amount will
      * @return how much of goods was transferred
      */
-    public Goods storeFromEuropePort(final Goods goods) {
+    public Goods buyAndStoreFromEuropePort(final Goods goods) {
         Preconditions.checkNotNull(goods);
         verifyThatItCouldStored(goods);
-
         if (getGoods().isPresent()) {
-            final Goods coudBeTransfered = getGoods().get().substract(goods);
-            if (coudBeTransfered.isNotZero()) {
-                addGoods(coudBeTransfered);
-                getOwnerPlayer().buy(coudBeTransfered);
+            final Goods storedGoods = getGoods().get();
+            final Goods maxGoods = storedGoods.setAmount(MAX_CARGO_SLOT_CAPACITY);
+            final Goods freeGoods = maxGoods.substract(storedGoods);
+            if (freeGoods.isZero()) {
+                // no space to store
+                return storedGoods.setAmount(0);
             }
-            return coudBeTransfered;
+            if (freeGoods.isGreaterOrEqualsThan(goods)) {
+                // all could be stored
+                getOwnerPlayer().buyGoods(goods);
+                addGoods(goods);
+                return goods;
+            } else {
+                // just part will be stored
+                getOwnerPlayer().buyGoods(freeGoods);
+                addGoods(freeGoods);
+                return freeGoods;
+            }
         } else {
+            getOwnerPlayer().buyGoods(goods);
             addGoods(goods);
-            getOwnerPlayer().buy(goods);
             return goods;
         }
     }
@@ -192,9 +203,12 @@ public class CargoSlot {
         Preconditions.checkState(!isEmpty(), "Cargo slot (%s) is already empty.", this);
         Preconditions.checkState(getGoods().isPresent(), "Cargo slot (%s) doesn't contains goods.",
                 this);
-        Preconditions.checkState(getGoods().get().getType().equals(goods.getType()),
+        Preconditions.checkArgument(getGoods().get().getType().equals(goods.getType()),
                 "Cargo slot (%s) doesn't contains correct goods type.", this);
-        getOwnerPlayer().sell(goods);
+        Preconditions.checkArgument(getGoods().get().isGreaterOrEqualsThan(goods),
+                "Attempt to sell more goods %s than is stored in %s", goods, this);
+
+        getOwnerPlayer().sellGoods(goods);
         cargoGoods = cargoGoods.substract(goods);
         if (cargoGoods.isZero()) {
             cargoGoods = null;

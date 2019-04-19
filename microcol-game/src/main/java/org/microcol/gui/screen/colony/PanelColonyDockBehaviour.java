@@ -40,7 +40,7 @@ public final class PanelColonyDockBehaviour extends AbstractPanelDockBehavior {
     @SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
     public List<UnitWithCargo> getUnitsInPort() {
-        return (List)colonyDialogCallback.getColony().getUnitsInPort();
+        return (List) colonyDialogCallback.getColony().getUnitsInPort();
     }
 
     @Override
@@ -66,7 +66,8 @@ public final class PanelColonyDockBehaviour extends AbstractPanelDockBehavior {
 
     private Goods chooseGoods(final Goods goods, final boolean specialOperatonWasSelected,
             final CargoSlot targetCargoSlot) {
-        return chooseGoods(chooseGoods, goods, specialOperatonWasSelected, targetCargoSlot.maxPossibleGoodsToMoveHere(goods));
+        return chooseGoods(chooseGoods, specialOperatonWasSelected,
+                targetCargoSlot.maxPossibleGoodsToMoveHere(goods));
     }
 
     @Override

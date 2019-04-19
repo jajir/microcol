@@ -67,6 +67,27 @@
 		</dependency>
 	</dependencies>
 
+	<profiles>
+		<profile>
+			<id>ci</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<properties>
+				<testedTags>ci</testedTags>
+			</properties>
+		</profile>
+		<profile>
+			<id>local</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<properties>
+				<testedTags>ci, local</testedTags>
+			</properties>
+		</profile>
+	</profiles>
+
 	<build>
 		<pluginManagement>
 			<plugins>
@@ -112,15 +133,14 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
 				<configuration>
-					<useFile>false</useFile>
-					<trimStackTrace>false</trimStackTrace>
+					<forkCount>1</forkCount>
+					<reuseForks>false</reuseForks>
+					<useFile>true</useFile>
+					<trimStackTrace>true</trimStackTrace>
 					<printSummary>true</printSummary>
 					<properties>
-						<includeTags>ci</includeTags>
+						<includeTags>${testedTags}</includeTags>
 					</properties>
-					<excludes>
-						<exclude>org/microcol/integration/**.java</exclude>
-					</excludes>
 				</configuration>
 			</plugin>
 			<!-- disable maven site default generating -->

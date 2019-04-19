@@ -1,6 +1,5 @@
 package org.microcol.page;
 
-
 import static org.junit.jupiter.api.Assertions.*;
 import static org.microcol.gui.Tile.TILE_CENTER;
 import static org.microcol.gui.Tile.TILE_WIDTH_IN_PX;
@@ -86,12 +85,12 @@ public class ColonyScreen extends AbstractScreen {
 		.dropTo(getListOfCrates().get(cargoSlotIndex)).release(MouseButton.PRIMARY);
     }
 
-    public DialogChooseNumberOfGoods dragGoodsFromWarehouseToShipCargoSlotWithPressedControll(
+    public DialogChooseGoodsAmount dragGoodsFromWarehouseToShipCargoSlotWithPressedControll(
 	    final int goodsIndexInWarehouse, final int cargoSlotIndex) {
 	getRobot().press(KeyCode.CONTROL);
 	dragGoodsFromWarehouseToShipCargoSlot(goodsIndexInWarehouse, cargoSlotIndex);
 	getRobot().release(KeyCode.CONTROL);
-	return DialogChooseNumberOfGoods.of(getContext());
+	return DialogChooseGoodsAmount.of(getContext());
     }
 
     public void dragGoodsFromWarehouseToShipCargoSlot(final int goodsIndexInWarehouse, final int cargoSlotIndex) {
@@ -99,12 +98,12 @@ public class ColonyScreen extends AbstractScreen {
 		.dropTo(getListOfCrates().get(cargoSlotIndex)).release(MouseButton.PRIMARY);
     }
 
-    public DialogChooseNumberOfGoods dragGoodsFromShipCargoSlotToWarehouseWithPressedControll(final int cargoSlotIndex,
+    public DialogChooseGoodsAmount dragGoodsFromShipCargoSlotToWarehouseWithPressedControll(final int cargoSlotIndex,
 	    final int goodsIndexInWarehouse) {
 	getRobot().press(KeyCode.CONTROL);
 	dragGoodsFromShipCargoSlotToWarehouse(goodsIndexInWarehouse, cargoSlotIndex);
 	getRobot().release(KeyCode.CONTROL);
-	return DialogChooseNumberOfGoods.of(getContext());
+	return DialogChooseGoodsAmount.of(getContext());
     }
 
     public void dragGoodsFromShipCargoSlotToWarehouse(final int cargoSlotIndex, final int goodsIndexInWarehouse) {
@@ -166,10 +165,8 @@ public class ColonyScreen extends AbstractScreen {
 		.localToScreen(panelColonyFields.getContent().getBoundsInLocal());
 
 	final Location loc = colonyField.getDirection().getVector();
-	final double x = boundsInScreen.getMinX() + (loc.getX() + 1) * TILE_WIDTH_IN_PX
-		+ TILE_CENTER.getX();
-	final double y = boundsInScreen.getMinY() + (loc.getY() + 1) * TILE_WIDTH_IN_PX
-		+ TILE_CENTER.getY();
+	final double x = boundsInScreen.getMinX() + (loc.getX() + 1) * TILE_WIDTH_IN_PX + TILE_CENTER.getX();
+	final double y = boundsInScreen.getMinY() + (loc.getY() + 1) * TILE_WIDTH_IN_PX + TILE_CENTER.getY();
 	return new Point2D(x, y);
     }
 

@@ -64,6 +64,28 @@ public enum GoodsTypeName implements MessageKeyResource {
     cross_dc2_pl,
     bell_dc2_pl,
 
+    /*
+     * Declension - 4 case - akuzativ - plurar
+     */
+    corn_dc7_pl,
+    sugar_dc7_pl,
+    tobacco_dc7_pl,
+    cotton_dc7_pl,
+    fur_dc7_pl,
+    lumber_dc7_pl,
+    ore_dc7_pl,
+    silver_dc7_pl,
+    horse_dc7_pl,
+    rum_dc7_pl,
+    cigars_dc7_pl,
+    silk_dc7_pl,
+    coat_dc7_pl,
+    goods_dc7_pl,
+    tools_dc7_pl,
+    musket_dc7_pl,
+    hammers_dc7_pl,
+    cross_dc7_pl,
+    bell_dc7_pl,
     ;
 
     public static GoodsTypeName getKey(final GoodsType goodsType, final int declensionCase,

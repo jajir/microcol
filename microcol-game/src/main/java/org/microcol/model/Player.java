@@ -17,7 +17,7 @@ import com.google.common.base.Preconditions;
  * Player model class. Class doesn't perform itself it just provide methods to
  * implement players behavior somewhere else.
  */
-public class Player {
+public abstract class Player {
 
     public static final int CANT_DECLARE_INDEPENDENCE_BEFORE_YEAR = 1700;
 
@@ -29,11 +29,6 @@ public class Player {
 
     private final boolean computer;
 
-    /**
-     * If it's not null than it's king player.
-     */
-    private final Player whosKingThisPlayerIs;
-
     private boolean declaredIndependence;
 
     private int gold;
@@ -42,31 +37,32 @@ public class Player {
 
     private final Visibility visibility;
 
-    private Player(final String name, final boolean computer, final int initialGold,
+    protected Player(final String name, final boolean computer, final int initialGold,
             final Model model, final boolean declaredIndependence,
-            final Player whosKingThisPlayerIs, final Map<String, Object> extraData,
-            Set<Location> visible) {
+            final Map<String, Object> extraData, Set<Location> visible) {
         this.model = Preconditions.checkNotNull(model);
         this.name = Preconditions.checkNotNull(name);
         this.computer = computer;
         this.gold = initialGold;
         this.declaredIndependence = declaredIndependence;
-        this.whosKingThisPlayerIs = whosKingThisPlayerIs;
         this.extraData.putAll(Preconditions.checkNotNull(extraData));
         this.visibility = new Visibility(Preconditions.checkNotNull(visible, "Visible is null"));
     }
 
-    public static Player make(final PlayerPo player, final Model model,
+    public static Player make(final PlayerPo playerPo, final Model model,
             final PlayerStore playerStore) {
-        Player subdued = null;
-        if (player.getWhosKingThisPlayerIs() != null) {
-            subdued = playerStore.getPlayerByName(player.getWhosKingThisPlayerIs());
+        Preconditions.checkNotNull(playerPo.getVisible(), "Visible is null during creating '%s'",
+                playerPo.getName());
+        if (playerPo.getWhosKingThisPlayerIs() == null) {
+            return new PlayerHuman(playerPo.getName(), playerPo.isComputer(), playerPo.getGold(),
+                    model, playerPo.isDeclaredIndependence(), playerPo.getExtraData(),
+                    playerPo.getVisible().getVisibilitySet());
+        } else {
+            final Player subdued = playerStore.getPlayerByName(playerPo.getWhosKingThisPlayerIs());
+            return new PlayerKing(playerPo.getName(), playerPo.isComputer(), playerPo.getGold(),
+                    model, playerPo.isDeclaredIndependence(), subdued, playerPo.getExtraData(),
+                    playerPo.getVisible().getVisibilitySet(), playerPo.getKingsTaxPercentage());
         }
-        Preconditions.checkNotNull(player.getVisible(), "Visible is null during creating '%s'",
-                player.getName());
-        return new Player(player.getName(), player.isComputer(), player.getGold(), model,
-                player.isDeclaredIndependence(), subdued, player.getExtraData(),
-                player.getVisible().getVisibilitySet());
     }
 
     public boolean isVisible(final Location location) {
@@ -95,9 +91,6 @@ public class Player {
         out.setDeclaredIndependence(declaredIndependence);
         out.getExtraData().putAll(extraData);
         out.setVisible(new VisibilityPo());
-        if (whosKingThisPlayerIs != null) {
-            out.setWhosKingThisPlayerIs(whosKingThisPlayerIs.getName());
-        }
         visibility.store(out.getVisible(), model.getMap().getMaxX(), model.getMap().getMaxY());
         return out;
     }
@@ -115,7 +108,7 @@ public class Player {
     }
 
     public boolean isKing() {
-        return whosKingThisPlayerIs != null;
+        return this instanceof PlayerKing;
     }
 
     public List<Unit> getUnits() {
@@ -125,10 +118,9 @@ public class Player {
     public List<Unit> getAllUnits() {
         return model.getUnitsOwnedBy(this, true);
     }
-    
+
     public int getNumberOfMilitaryUnits() {
-        return (int) getAllUnits().stream().filter(unit -> unit.getType().canAttack())
-                .count();
+        return (int) getAllUnits().stream().filter(unit -> unit.getType().canAttack()).count();
     }
 
     public Map<Location, List<Unit>> getUnitsAt() {
@@ -197,7 +189,7 @@ public class Player {
             return false;
         }
 
-        Player player = (Player) object;
+        final Player player = (Player) object;
 
         return name.equals(player.name) && computer == player.computer;
     }
@@ -244,22 +236,32 @@ public class Player {
     }
 
     public void setGold(final int newGoldValue) {
+        Preconditions.checkArgument(newGoldValue >= 0, "New gold value '%s' is less than zero",
+                newGoldValue);
         final int oldValue = gold;
         this.gold = newGoldValue;
         model.fireGoldWasChanged(this, oldValue, newGoldValue);
     }
 
-    public void buy(final Goods goods) {
-        int price = goods.getAmount()
+    public void buyGoods(final Goods goods) {
+        Preconditions.checkNotNull(goods);
+        float initialPrice = goods.getAmount()
                 * model.getEurope().getGoodsTradeForType(goods.getType()).getBuyPrice();
+        int price = (int) (initialPrice + getKingsTaxFor(initialPrice));
         verifyAvailibilityOFGold(price);
         setGold(getGold() - price);
     }
 
-    public void sell(final Goods goods) {
-        int price = goods.getAmount()
-                * model.getEurope().getGoodsTradeForType(goods.getType()).getBuyPrice();
+    public void sellGoods(final Goods goods) {
+        Preconditions.checkNotNull(goods);
+        float initialPrice = goods.getAmount()
+                * model.getEurope().getGoodsTradeForType(goods.getType()).getSellPrice();
+        int price = (int) (initialPrice - getKingsTaxFor(initialPrice));
         setGold(getGold() + price);
+    }
+
+    private float getKingsTaxFor(final float initialPrice) {
+        return model.getKingsTaxForPlayer(this) * initialPrice / 100F;
     }
 
     public void buy(final UnitType unitType) {
@@ -306,13 +308,6 @@ public class Player {
             return false;
         }
         return true;
-    }
-
-    /**
-     * @return the whosKingThisPlayerIs
-     */
-    public Player getWhosKingThisPlayerIs() {
-        return whosKingThisPlayerIs;
     }
 
     /**

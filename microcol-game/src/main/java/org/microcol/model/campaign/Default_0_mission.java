@@ -49,12 +49,12 @@ final class Default_0_mission extends AbstractMission<Default_0_goals> {
          * Disable declaring of independence.
          */
         event.stopEventExecution();
-        fireEvent(new EventShowMessages(Missions.default_m0_cantDeclareIndependence));
+        fireEvent(new EventShowDialogWithMan(Missions.default_m0_cantDeclareIndependence));
     }
 
     public void onGameStarted(final GameStartedEvent event) {
         if (isFirstTurn(event.getModel())) {
-            fireEvent(new EventShowMessages(Missions.default_m0_start));
+            fireEvent(new EventShowDialogWithMan(Missions.default_m0_start));
         }
     }
 
@@ -62,7 +62,7 @@ final class Default_0_mission extends AbstractMission<Default_0_goals> {
         if (!isPlayerHaveAnyColony(event.getModel())
                 && isPathAtHighSeas(event.getModel(), event.getPath())) {
             event.stopEventExecution();
-            fireEvent(new EventShowMessages(Missions.default_m0_cantMoveToHighSeas));
+            fireEvent(new EventShowDialogWithMan(Missions.default_m0_cantMoveToHighSeas));
         }
     }
 

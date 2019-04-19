@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.microcol.MicroCol;
+import org.microcol.MicroColApplication;
 import org.microcol.gui.preferences.GamePreferences;
 import org.microcol.gui.screen.game.gamepanel.CursorService;
 import org.microcol.mock.CursorServiceNoOpp;
@@ -54,7 +54,7 @@ public abstract class AbstractMicroColTest {
     protected void initialize(final Stage primaryStage, final Class<?> clazz) throws Exception {
 	logger.info("Starting MicroCol UI test " + clazz.getName());
 	System.setProperty(GamePreferences.SYSTEM_PROPERTY_DEVELOPMENT, Boolean.TRUE.toString());
-	final MicroCol microCol = new MicroCol(binder -> {
+	final MicroColApplication microCol = new MicroColApplication(binder -> {
 	    binder.bind(CursorService.class).toInstance(new CursorServiceNoOpp());
 	    bind(binder);
 	});
@@ -69,32 +69,32 @@ public abstract class AbstractMicroColTest {
      */
     abstract protected void bind(final Binder binder);
 
-    protected MicroCol getMicroCol() {
+    public MicroColApplication getMicroCol() {
 	return context.getMicroCol();
     }
 
-    protected Stage getPrimaryStage() {
+    public Stage getPrimaryStage() {
 	return context.getPrimaryStage();
     }
 
-    protected TestContext getContext() {
+    public TestContext getContext() {
 	return context;
     }
 
-    protected NodeFinder getNodeFinder() {
+    public NodeFinder getNodeFinder() {
 	return FxAssert.assertContext().getNodeFinder();
     }
 
-    protected Model getModel() {
+    public Model getModel() {
 	return getContext().getModel();
     }
 
-    protected Player getHumanPlayer() {
+    public Player getHumanPlayer() {
 	return getModel().getPlayers().stream().filter(player -> player.isHuman()).findAny()
 		.orElseThrow(() -> new IllegalStateException("There is no human player in game model."));
     }
 
-    protected void verifyNumberOfGoodsInShip(final UnitWithCargo ship, final int cargoSlotIndex,
+    public void verifyNumberOfGoodsInShip(final UnitWithCargo ship, final int cargoSlotIndex,
 	    final Goods expectedGoods) {
 	final CargoSlot cargoSlot = ship.getCargo().getSlotByIndex(cargoSlotIndex);
 

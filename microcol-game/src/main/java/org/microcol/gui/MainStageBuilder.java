@@ -92,9 +92,9 @@ public final class MainStageBuilder {
         final Scene scene = new Scene(mainBox);
         scene.getStylesheets().add(STYLE_SHEET_MICROCOL);
         mainBox.getChildren().add(mainPanelView.getContent());
-        
-        eventBus.post( new ShowScreenEvent(org.microcol.gui.screen.Screen.MENU));
-        
+
+        eventBus.post(new ShowScreenEvent(org.microcol.gui.screen.Screen.MENU));
+
         primaryStage.setScene(scene);
     }
 
