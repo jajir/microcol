@@ -10,7 +10,7 @@ before_install:
 install:
   - mvn initialize -B -V -e
 script:
-  - mvn clean site -Dtravis-ci=true -Djava.awt.headless=true -Dtestfx.robot=glass -Dtestfx.headless=true -Dprism.order=sw -Dprism.text=t2k -Dtestfx.setup.timeout=2500 -DsoundEnabled=false -B -V -e
+  - mvn clean site -Dtravis-ci=true -Djava.awt.headless=true -Dtestfx.robot=glass -Dtestfx.headless=true -Dprism.order=sw -Dprism.text=t2k -Dtestfx.setup.timeout=2500 -DsoundEnabled=false -B -V -e -P ci
 addons:
   apt:
     packages:
