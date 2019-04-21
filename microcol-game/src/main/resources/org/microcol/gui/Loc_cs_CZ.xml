@@ -43,14 +43,6 @@
 	<entry key="turnReport_caption">Důležité události</entry>
 	<entry key="turnReport_noEvents">Žádné důležité události.</entry>
 
-	<entry key="statistics_title">Statistiky</entry>
-	<entry key="statistics_caption">Statistiky</entry>
-	<entry key="statistics_year">Rok</entry>
-	<entry key="statistics_gold">Zlato</entry>
-	<entry key="statistics_militaryPower">Vojenská síla</entry>
-	<entry key="statistics_wealth">Bohatství</entry>
-	<entry key="statistics_score">Score</entry>
-
 	<entry key="no_2_7p">dvěmi</entry>
 	<entry key="no_3_7p">třemi</entry>
 	<entry key="no_4_7p">čtyřmi</entry>

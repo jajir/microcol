@@ -455,6 +455,36 @@
          d="M 8.7185878,4.0337352 -2.2072895,0.01601326 8.7185884,-4.0017078 c -1.7454984,2.3720609 -1.7354408,5.6174519 -6e-7,8.035443 z"
          transform="matrix(-0.3,0,0,-0.3,0.69,0)" />
     </marker>
+    <marker
+       inkscape:stockid="Arrow2Sstart"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="Arrow2Sstart-9"
+       style="overflow:visible"
+       inkscape:isstock="true">
+      <path
+         inkscape:connector-curvature="0"
+         id="path1417-7"
+         style="fill:#ff9015;fill-opacity:1;fill-rule:evenodd;stroke:#ff9015;stroke-width:0.625;stroke-linejoin:round;stroke-opacity:1"
+         d="M 8.7185878,4.0337352 -2.2072895,0.01601326 8.7185884,-4.0017078 c -1.7454984,2.3720609 -1.7354408,5.6174519 -6e-7,8.035443 z"
+         transform="matrix(0.3,0,0,0.3,-0.69,0)" />
+    </marker>
+    <marker
+       inkscape:stockid="Arrow2Send"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="Arrow2Send-5"
+       style="overflow:visible"
+       inkscape:isstock="true">
+      <path
+         inkscape:connector-curvature="0"
+         id="path1420-5"
+         style="fill:#ff9015;fill-opacity:1;fill-rule:evenodd;stroke:#ff9015;stroke-width:0.625;stroke-linejoin:round;stroke-opacity:1"
+         d="M 8.7185878,4.0337352 -2.2072895,0.01601326 8.7185884,-4.0017078 c -1.7454984,2.3720609 -1.7354408,5.6174519 -6e-7,8.035443 z"
+         transform="matrix(-0.3,0,0,-0.3,0.69,0)" />
+    </marker>
   </defs>
   <sodipodi:namedview
      id="base"
@@ -463,15 +493,15 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.5"
-     inkscape:cx="341.17648"
-     inkscape:cy="1058.4434"
+     inkscape:zoom="0.35355339"
+     inkscape:cx="327.45065"
+     inkscape:cy="444.71757"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="true"
-     inkscape:window-width="1600"
+     inkscape:window-width="1596"
      inkscape:window-height="1005"
-     inkscape:window-x="80"
+     inkscape:window-x="84"
      inkscape:window-y="1"
      inkscape:window-maximized="1"
      inkscape:snap-global="false"
@@ -518,7 +548,8 @@
   <g
      inkscape:label="Layer 1"
      inkscape:groupmode="layer"
-     id="layer1">
+     id="layer1"
+     style="display:inline">
     <image
        y="25.008335"
        x="230.71666"
@@ -545,12 +576,16 @@
          id="text890"
          y="17.291918"
          x="-16.414394"
-         style="font-style:normal;font-weight:normal;font-size:7.05555556px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;-inkscape-font-specification:'sans-serif, Normal';font-stretch:normal;font-variant:normal;text-anchor:start;text-align:start;writing-mode:lr;font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.05555534px;line-height:125%;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
          xml:space="preserve"><tspan
            sodipodi:role="line"
-           id="tspan968">Game</tspan><tspan
+           id="tspan968"
+           x="-16.414394"
+           y="17.291918">Game</tspan><tspan
            sodipodi:role="line"
-           id="tspan970">Menu</tspan></text>
+           id="tspan970"
+           x="-16.414394"
+           y="26.111362">Menu</tspan></text>
     </g>
     <g
        id="g1335"
@@ -854,7 +889,7 @@
        inkscape:export-ydpi="43.279999" />
     <text
        xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:7.05555556px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;-inkscape-font-specification:'sans-serif, Normal';font-stretch:normal;font-variant:normal;text-anchor:start;text-align:start;writing-mode:lr;font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.05555534px;line-height:125%;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        x="-20.156773"
        y="96.53244"
        id="text890-2-1-9-5"
@@ -862,9 +897,13 @@
        inkscape:export-xdpi="43.279999"
        inkscape:export-ydpi="43.279999"><tspan
          sodipodi:role="line"
-         id="tspan992">Game</tspan><tspan
+         id="tspan992"
+         x="-20.156773"
+         y="96.53244">Game</tspan><tspan
          sodipodi:role="line"
-         id="tspan994">Screen</tspan></text>
+         id="tspan994"
+         x="-20.156773"
+         y="105.35188">Screen</tspan></text>
     <path
        style="opacity:0.98999999;fill:#ffb13b;fill-opacity:1;fill-rule:evenodd;stroke:#ff9015;stroke-width:2.80260324;stroke-linecap:butt;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        id="path1255"
@@ -882,7 +921,7 @@
        inkscape:export-filename="/Users/jan/Documents/repo/github/microcol/microcol-site/src/site/resources/screen-flow.png" />
     <path
        style="fill:none;fill-rule:evenodd;stroke:#ff9015;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker1722)"
-       d="m -0.37417732,-40.133781 0,28.437476"
+       d="m -0.37417732,-40.133781 v 28.437476"
        id="path1385"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc"
@@ -890,7 +929,7 @@
        inkscape:export-ydpi="43.279999"
        inkscape:export-filename="/Users/jan/Documents/repo/github/microcol/microcol-site/src/site/resources/screen-flow.png" />
     <path
-       style="fill:none;fill-rule:evenodd;stroke:#ff9015;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker1718);marker-start:url(#marker1714)"
+       style="fill:none;fill-rule:evenodd;stroke:#ff9015;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-start:url(#marker1714);marker-end:url(#marker1718)"
        d="M -1.1225321,42.126463 V 70.563941"
        id="path1385-1"
        inkscape:connector-curvature="0"
@@ -899,7 +938,7 @@
        inkscape:export-ydpi="43.279999"
        inkscape:export-filename="/Users/jan/Documents/repo/github/microcol/microcol-site/src/site/resources/screen-flow.png" />
     <path
-       style="fill:none;fill-rule:evenodd;stroke:#ff9015;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#Arrow2Send);marker-start:url(#Arrow2Sstart)"
+       style="fill:none;fill-rule:evenodd;stroke:#ff9015;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-start:url(#Arrow2Sstart);marker-end:url(#Arrow2Send)"
        d="m -0.37417723,122.20041 v 28.43748"
        id="path1385-8"
        inkscape:connector-curvature="0"
@@ -947,6 +986,42 @@
        style="fill:none;fill-rule:evenodd;stroke:#ff9015;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-start:url(#marker1714-7-42-7-2);marker-end:url(#marker1718-2-7-3-8)"
        d="M 70.908334,77.591653 35.983333,43.333343"
        id="path1385-1-1-3-0-9"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cc"
+       inkscape:export-xdpi="43.279999"
+       inkscape:export-ydpi="43.279999"
+       inkscape:export-filename="/Users/jan/Documents/repo/github/microcol/microcol-site/src/site/resources/screen-flow.png" />
+    <g
+       id="g4093"
+       transform="translate(-13.229167,25.4)"
+       inkscape:export-filename="/Users/jan/Documents/repo/github/microcol/microcol-site/src/site/resources/screen-flow.png"
+       inkscape:export-xdpi="43.279999"
+       inkscape:export-ydpi="43.279999">
+      <rect
+         ry="7"
+         rx="7"
+         y="216.03751"
+         x="-12.435418"
+         height="26.458334"
+         width="52.916668"
+         id="rect821-3-9-0-9"
+         style="opacity:0.98999999;fill:#ffb13b;fill-opacity:1;fill-rule:evenodd;stroke:#ff9015;stroke-width:2.64583325;stroke-linecap:butt;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+      <text
+         id="text890-2-1-9-1-6"
+         y="230.81726"
+         x="1.803638"
+         style="font-style:normal;font-weight:normal;font-size:7.05555534px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         xml:space="preserve"><tspan
+           id="tspan892-9-3-7-9-8"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.05555534px;line-height:121.00000381%;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0.00264583px;writing-mode:lr-tb;text-anchor:start;stroke-width:0.26458332px"
+           y="230.81726"
+           x="1.803638"
+           sodipodi:role="line">Market</tspan></text>
+    </g>
+    <path
+       style="display:inline;fill:none;fill-rule:evenodd;stroke:#ff9015;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-start:url(#Arrow2Sstart-9);marker-end:url(#Arrow2Send-5)"
+       d="m 0,203.93543 v 28.43748"
+       id="path1385-8-2"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc"
        inkscape:export-xdpi="43.279999"

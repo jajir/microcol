@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE properties [
+<!ELEMENT properties ( comment?, entry* ) >
+<!ATTLIST properties version CDATA #FIXED "1.0">
+<!ELEMENT comment (#PCDATA) >
+<!ELEMENT entry (#PCDATA) >
+<!ATTLIST entry key CDATA #REQUIRED>
+]>
+
+<properties>
+	<comment>Define keys for Statistics</comment>
+
+	<entry key="title">Statistics</entry>
+	<entry key="titleGold">Gold</entry>
+	<entry key="titleMilitary">Military</entry>
+	<entry key="titleWealth">Wealth</entry>
+	<entry key="titleScore">Score</entry>
+	<entry key="titleIndex">Index</entry>
+	<entry key="buttonCancel">Back</entry>
+
+	<entry key="statistics_year">Year</entry>
+
+</properties>

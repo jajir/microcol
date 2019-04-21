@@ -45,8 +45,7 @@ public abstract class AbstractBackground implements JavaFxComponent, Repaintable
      */
     public void paint(final GraphicsContext gc) {
         final Point canvas = Point.of(getCanvas().getWidth(), getCanvas().getHeight());
-        gc.setFill(Color.WHITE);
-        gc.fillRect(0, 0, canvas.getX(), canvas.getY());
+        paintBackground(gc, canvas, Color.WHITE);
     }
 
     @Override

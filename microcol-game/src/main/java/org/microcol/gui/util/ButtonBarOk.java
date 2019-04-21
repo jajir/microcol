@@ -20,6 +20,13 @@ public class ButtonBarOk implements JavaFxComponent {
 
     private final Button buttonOk;
 
+    /**
+     * Created button bat with untitled button.
+     */
+    public ButtonBarOk() {
+        this("[not set]");
+    }
+
     public ButtonBarOk(final I18n i18n) {
         this(i18n.get(Loc.ok));
     }
@@ -32,6 +39,10 @@ public class ButtonBarOk implements JavaFxComponent {
         HBox.setHgrow(spacer, Priority.ALWAYS);
         mainBox.setId("buttonPane");
         mainBox.getChildren().addAll(spacer, buttonOk);
+    }
+
+    public void setButtonText(final String text) {
+        buttonOk.setText(text);
     }
 
     public Button getButtonOk() {

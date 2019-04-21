@@ -10,7 +10,6 @@ import org.microcol.gui.event.DeclareIndependenceEvent;
 import org.microcol.gui.event.ExitGameEvent;
 import org.microcol.gui.event.PlowFieldEvent;
 import org.microcol.gui.event.ShowGoalsEvent;
-import org.microcol.gui.event.ShowStatisticsEvent;
 import org.microcol.gui.event.ShowTurnReportEvent;
 import org.microcol.gui.event.StartMoveEvent;
 import org.microcol.gui.image.ImageLoaderButtons;
@@ -89,7 +88,7 @@ public class ButtonsGamePanel extends AbstractButtonsPanel {
         buttonHelp.setId(BUTTON_HELP_ID);
         buttonStatistics = makeButon(ImageLoaderButtons.BUTTON_STATISTICS,
                 Buttons.buttonStatistics);
-        buttonStatistics.setOnAction(event -> eventBus.post(new ShowStatisticsEvent()));
+        buttonStatistics.setOnAction(event -> eventBus.post(new ShowScreenEvent(Screen.STATISTICS)));
         buttonStatistics.setId(BUTTON_STATISTICS_ID);
         buttonExit = makeButon(ImageLoaderButtons.BUTTON_EXIT, Buttons.buttonExit);
         buttonExit.setOnAction(event -> eventBus.post(new ExitGameEvent()));

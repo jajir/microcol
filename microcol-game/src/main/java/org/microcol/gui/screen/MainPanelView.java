@@ -12,6 +12,7 @@ import org.microcol.gui.screen.market.ScreenMarketBuy;
 import org.microcol.gui.screen.market.ScreenMarketSell;
 import org.microcol.gui.screen.menu.ScreenMenu;
 import org.microcol.gui.screen.setting.ScreenSetting;
+import org.microcol.gui.screen.statistics.ScreenStatistics;
 import org.microcol.gui.util.JavaFxComponent;
 import org.microcol.gui.util.UpdatableLanguage;
 import org.microcol.i18n.I18n;
@@ -40,7 +41,7 @@ public final class MainPanelView implements JavaFxComponent, UpdatableLanguage {
             final ScreenCampaign screenCampaign, final ScreenEurope screenEurope,
             final ScreenSetting screenSetting, final ScreenColony screenColony,
             final ScreenMarketBuy screenMarketBuy, final ScreenMarketSell screenMarketSell,
-            final I18n i18n) {
+            final ScreenStatistics screenStatistics, final I18n i18n) {
         mainBox = new VBox();
         screens.add(Preconditions.checkNotNull(screenGame));
         screens.add(Preconditions.checkNotNull(screenMenu));
@@ -50,6 +51,7 @@ public final class MainPanelView implements JavaFxComponent, UpdatableLanguage {
         screens.add(Preconditions.checkNotNull(screenColony));
         screens.add(Preconditions.checkNotNull(screenMarketBuy));
         screens.add(Preconditions.checkNotNull(screenMarketSell));
+        screens.add(Preconditions.checkNotNull(screenStatistics));
         updateLanguage(i18n);
     }
 

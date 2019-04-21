@@ -8,7 +8,6 @@ import org.microcol.gui.event.CenterViewEvent;
 import org.microcol.gui.event.PlowFieldEvent;
 import org.microcol.gui.event.SelectNextUnitEvent;
 import org.microcol.gui.event.ShowGoalsEvent;
-import org.microcol.gui.event.ShowStatisticsEvent;
 import org.microcol.gui.event.ShowTurnReportEvent;
 import org.microcol.gui.event.StartMoveEvent;
 import org.microcol.gui.event.model.GameModelController;
@@ -83,7 +82,7 @@ public class ScreenGamePresenter {
         }
 
         if (KeyCode.R == event.getCode()) {
-            eventBus.post(new ShowStatisticsEvent());
+            eventBus.post(new ShowScreenEvent(Screen.STATISTICS));
         }
         if (KeyCode.C == event.getCode()) {
             eventBus.post(new CenterViewEvent());
