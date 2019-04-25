@@ -56,13 +56,13 @@ public class TC_03_declare_independence_test extends AbstractMicroColTest {
 	dialogMessagePage.close();
 
 	gamePage = GamePage.of(getContext());
-	gamePage.nextTurnCloseDialogs();
-	gamePage.nextTurnCloseDialogs();
-	gamePage.nextTurnCloseDialogs();
-	gamePage.nextTurnCloseDialogs();
-	gamePage.nextTurnCloseDialogs();
-	gamePage.nextTurnCloseDialogs();
-	gamePage.nextTurnCloseDialogs();
+	gamePage.nextTurnAndCloseDialogs();
+	gamePage.nextTurnAndCloseDialogs();
+	gamePage.nextTurnAndCloseDialogs();
+	gamePage.nextTurnAndCloseDialogs();
+	gamePage.nextTurnAndCloseDialogs();
+	gamePage.nextTurnAndCloseDialogs();
+	gamePage.nextTurnAndCloseDialogs();
 
 	assertThatThereAreKingsUnitAtMap();
     }

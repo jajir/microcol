@@ -45,25 +45,25 @@ public class TC_08_new_unit_in_colony_test extends AbstractMicroColTest {
 	verifyCornInColony(gamePage, 167);
 
 	// Perform next turn and ignore turn events dialog.
-	gamePage.nextTurnCloseDialogs();
+	gamePage.nextTurnAndCloseDialogs();
 
 	// Verify that in colony is 176 food.
 	verifyCornInColony(gamePage, 176);
 
 	// Perform next turn and ignore turn events dialog.
-	gamePage.nextTurnCloseDialogs();
+	gamePage.nextTurnAndCloseDialogs();
 
 	// Verify that in colony is 185 food.
 	verifyCornInColony(gamePage, 185);
 
 	// Perform next turn and ignore turn events dialog.
-	gamePage.nextTurnCloseDialogs();
+	gamePage.nextTurnAndCloseDialogs();
 
 	// Verify that in colony is 194 food.
 	verifyCornInColony(gamePage, 194);
 
 	// Perform next turn and ignore turn events dialog.
-	gamePage.nextTurnCloseDialogs();
+	gamePage.nextTurnAndCloseDialogs();
 
 	// Verify that in colony is 3 food.
 	verifyCornInColony(gamePage, 3);

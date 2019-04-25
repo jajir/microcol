@@ -13,13 +13,13 @@ import javafx.scene.control.Slider;
 /**
  * Object allows to test one unit shown in right panel.
  */
-public class AbastractScreenMarket extends AbstractScreen {
+public class AbstractScreenMarket extends AbstractScreen {
 
-    public static AbastractScreenMarket of(final TestContext context) {
-	return new AbastractScreenMarket(context);
+    public static AbstractScreenMarket of(final TestContext context) {
+	return new AbstractScreenMarket(context);
     }
 
-    protected AbastractScreenMarket(final TestContext context) {
+    protected AbstractScreenMarket(final TestContext context) {
 	super(context);
     }
 

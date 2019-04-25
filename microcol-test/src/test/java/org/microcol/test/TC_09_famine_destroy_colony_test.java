@@ -45,7 +45,7 @@ public class TC_09_famine_destroy_colony_test extends AbstractMicroColTest {
 	verifyCornInColony(gamePage, 3);
 
 	// Perform next turn and ignore turn events dialog.
-	gamePage.nextTurnCloseDialogs();
+	gamePage.nextTurnAndCloseDialogs();
 
 	/*
 	 * From now on, can't verify number of corn in colony. Unit whom die because of
@@ -53,25 +53,25 @@ public class TC_09_famine_destroy_colony_test extends AbstractMicroColTest {
 	 */
 	
 	// Perform next turn and ignore turn events dialog.
-	gamePage.nextTurnCloseDialogs();
+	gamePage.nextTurnAndCloseDialogs();
 
 	// Perform next turn and ignore turn events dialog.
-	gamePage.nextTurnCloseDialogs();
+	gamePage.nextTurnAndCloseDialogs();
 
 	// Perform next turn and ignore turn events dialog.
-	gamePage.nextTurnCloseDialogs();
+	gamePage.nextTurnAndCloseDialogs();
 
 	// Perform next turn and ignore turn events dialog.
-	gamePage.nextTurnCloseDialogs();
+	gamePage.nextTurnAndCloseDialogs();
 
 	// Perform next turn and ignore turn events dialog.
-	gamePage.nextTurnCloseDialogs();
+	gamePage.nextTurnAndCloseDialogs();
 
 	// Perform next turn and ignore turn events dialog.
-	gamePage.nextTurnCloseDialogs();
+	gamePage.nextTurnAndCloseDialogs();
 
 	// Perform next turn and ignore turn events dialog.
-	gamePage.nextTurnCloseDialogs();
+	gamePage.nextTurnAndCloseDialogs();
 	
 	// Verify colony doesn't exists anymore.
 	gamePage.verifyThatItsNotPossibleToOpenColonyAt(Location.of(22, 12));

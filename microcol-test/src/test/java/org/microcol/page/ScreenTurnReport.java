@@ -16,14 +16,14 @@ import javafx.scene.input.MouseButton;
 /**
  * Object allows to test one unit shown in right panel.
  */
-public class DialogTurnReport extends AbstractScreen {
+public class ScreenTurnReport extends AbstractScreen {
 
-    public static DialogTurnReport of(final TestContext context) {
-	return new DialogTurnReport(context);
+    public static ScreenTurnReport of(final TestContext context) {
+	return new ScreenTurnReport(context);
 
     }
 
-    private DialogTurnReport(final TestContext context) {
+    private ScreenTurnReport(final TestContext context) {
 	super(context);
 	assertNotNull(getButtonOk());
     }

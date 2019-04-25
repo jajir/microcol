@@ -88,9 +88,8 @@ import org.microcol.gui.screen.setting.SettingLanguagePresenter;
 import org.microcol.gui.screen.setting.SettingShowGridPresenter;
 import org.microcol.gui.screen.setting.SettingVolumePresenter;
 import org.microcol.gui.screen.statistics.ScreenStatisticsPresenter;
+import org.microcol.gui.screen.turnreport.ScreenTurnReportPresenter;
 import org.microcol.gui.screen.turnreport.ShowTurnEvensOnTurnStartedEvent;
-import org.microcol.gui.screen.turnreport.ShowTurnReportListener;
-import org.microcol.gui.screen.turnreport.TurnReportDialog;
 import org.microcol.gui.util.ApplicationInfo;
 import org.microcol.gui.util.FontService;
 import org.microcol.gui.util.Listener;
@@ -177,9 +176,7 @@ public final class MicroColModule extends AbstractModule {
 
         bind(ExitGameListener.class).asEagerSingleton();
         bind(GameFinishedListener.class).asEagerSingleton();
-        bind(ShowTurnReportListener.class).asEagerSingleton();
 
-        bind(TurnReportDialog.class).in(Singleton.class);
         bind(ShowTurnEvensOnTurnStartedEvent.class).asEagerSingleton();
 
         bind(MissionGoalsShowListener.class).asEagerSingleton();
@@ -268,6 +265,7 @@ public final class MicroColModule extends AbstractModule {
         bind(ScreenMarketPresenter.class).asEagerSingleton();
 
         bind(ScreenStatisticsPresenter.class).asEagerSingleton();
+        bind(ScreenTurnReportPresenter.class).asEagerSingleton();
         
         /**
          * Rest of UI

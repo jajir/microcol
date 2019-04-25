@@ -28,7 +28,7 @@ public class Helper_TC07_Test {
 	listener.getSummary().getFailures().forEach(fail -> {
 	    System.err.println(fail.getTestIdentifier());
 	});
-	if (listener.getSummary().getFailures().size() > 0) {
+	if (listener.getSummary().getTotalFailureCount() > 0) {
 	    fail("There are failed test");
 	}
     }

@@ -10,6 +10,7 @@ import org.microcol.gui.screen.market.ScreenMarketSell;
 import org.microcol.gui.screen.menu.ScreenMenu;
 import org.microcol.gui.screen.setting.ScreenSetting;
 import org.microcol.gui.screen.statistics.ScreenStatistics;
+import org.microcol.gui.screen.turnreport.ScreenTurnReport;
 import org.microcol.gui.util.Listener;
 import org.microcol.i18n.I18n;
 import org.microcol.model.ChainOfCommandStrategy;
@@ -46,7 +47,7 @@ public final class MainPanelPresenter {
             final ScreenCampaign screenCampaign, final ScreenEurope screenEurope,
             final ScreenSetting screenSetting, final ScreenColony screenColony,
             final ScreenMarketBuy screenMarketBuy, final ScreenMarketSell screenMarketSell,
-            final ScreenStatistics screenStatistics) {
+            final ScreenStatistics screenStatistics, final ScreenTurnReport screenTurnReport) {
         this.view = Preconditions.checkNotNull(view);
         this.i18n = Preconditions.checkNotNull(i18n);
 
@@ -101,6 +102,11 @@ public final class MainPanelPresenter {
                 }, event -> {
                     if (Screen.STATISTICS == event.getScreen()) {
                         return screenStatistics;
+                    }
+                    return null;
+                }, event -> {
+                    if (Screen.TURN_REPORT == event.getScreen()) {
+                        return screenTurnReport;
                     }
                     return null;
                 }));

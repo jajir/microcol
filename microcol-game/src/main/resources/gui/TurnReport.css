@@ -6,29 +6,18 @@
 	-fx-font-size: 32;
 	-fx-min-width: 420;
 	-fx-min-height: 80;
-	-fx-translate-x: 120;
+	-fx-translate-x: -20;
 	-fx-translate-y: -260;
 }
 
 .titled-content {
 	-fx-translate-x: -25;
-	-fx-translate-y: 25;
+	-fx-translate-y: -10;
 	-fx-min-height: 310;
 	-fx-min-width: 420;
 	-fx-padding: 10;
 }
 
-.left {
-	-fx-translate-x: -10;
-	-fx-translate-y: -120;
-}
-
-.right {
-	-fx-translate-x: 90;
-	-fx-translate-y: 25;
-}
-
-.indexTitle {
-	-fx-font-size: 32;
-	-fx-padding: 0 0 50 0;
+#buttonPane {
+	-fx-padding: 80 0 0 0;
 }

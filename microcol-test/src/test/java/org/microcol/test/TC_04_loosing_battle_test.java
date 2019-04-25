@@ -15,7 +15,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.microcol.gui.FileSelectingService;
 import org.microcol.model.Location;
 import org.microcol.model.Unit;
-import org.microcol.page.DialogTurnReport;
+import org.microcol.page.ScreenTurnReport;
 import org.microcol.page.GamePage;
 import org.microcol.page.WelcomePage;
 import org.mockito.Mockito;
@@ -50,13 +50,13 @@ public class TC_04_loosing_battle_test extends AbstractMicroColTest {
 	// open MicroCol and load defined game
 	GamePage gamePage = WelcomePage.of(getContext()).loadGame();
 
-	gamePage.nextTurnCloseDialogs();
+	gamePage.nextTurnAndCloseDialogs();
 
-	final Optional<DialogTurnReport> oDialog = gamePage.nextTurn();
+	final Optional<ScreenTurnReport> oDialog = gamePage.nextTurn();
 
 	// verify that turn report is shown
 	assertTrue(oDialog.isPresent());
-	final DialogTurnReport dialogTurnReport = oDialog.get();
+	final ScreenTurnReport dialogTurnReport = oDialog.get();
 
 	// verify that this event is in turn report.
 	dialogTurnReport.verifyNumberOfEvents(2);
@@ -74,7 +74,7 @@ public class TC_04_loosing_battle_test extends AbstractMicroColTest {
 	verifyThatEscapedShipIsAtExpectedPlace();
 
 	// open turn dialog again
-	final DialogTurnReport dialogTurnReport2 = gamePage.openTurnReport();
+	final ScreenTurnReport dialogTurnReport2 = gamePage.openTurnReport();
 
 	// verify that this event is in turn report.
 	dialogTurnReport2.verifyNumberOfEvents(2);

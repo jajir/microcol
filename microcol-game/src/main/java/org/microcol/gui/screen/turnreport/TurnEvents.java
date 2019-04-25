@@ -12,6 +12,9 @@ import org.microcol.i18n.ResourceBundleFormat;
  */
 public enum TurnEvents implements MessageKeyResource {
 
+    /*
+     * Turn events texts.
+     */
     shipComeToEuropePort,
     shipComeToHighSeas,
     faminePlagueColony,
@@ -25,7 +28,11 @@ public enum TurnEvents implements MessageKeyResource {
     goodsWasThrowsAway3,
     goodsWasThrowsAway4,
     
-
+    /*
+     * Rest of resources.
+     */
+    buttonBack;
+    
     ;
 
     @Override

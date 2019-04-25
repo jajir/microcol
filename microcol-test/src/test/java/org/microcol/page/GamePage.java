@@ -71,22 +71,22 @@ public class GamePage extends AbstractScreen {
 	assertTrue(getContext().getArea().isLocationVisible(location));
     }
 
-    public Optional<DialogTurnReport> nextTurn() throws Exception {
+    public Optional<ScreenTurnReport> nextTurn() throws Exception {
 	final Button buttonNextTurn = getButtonById(ButtonsGamePanel.BUTTON_NEXT_TURN_ID);
 	getRobot().clickOn(buttonNextTurn);
 	waitWhileMoving();
 	WaitForAsyncUtils.waitForFxEvents();
 	if (isButtonOkVisible()) {
-	    return Optional.of(DialogTurnReport.of(getContext()));
+	    return Optional.of(ScreenTurnReport.of(getContext()));
 	} else {
 	    return Optional.empty();
 	}
     }
 
-    public void nextTurnCloseDialogs() throws Exception {
-	final Optional<DialogTurnReport> oTurnEvents = nextTurn();
+    public void nextTurnAndCloseDialogs() throws Exception {
+	final Optional<ScreenTurnReport> oTurnEvents = nextTurn();
 	if (oTurnEvents.isPresent()) {
-	    final DialogTurnReport dialog = oTurnEvents.get();
+	    final ScreenTurnReport dialog = oTurnEvents.get();
 	    dialog.close();
 	}
     }
@@ -98,11 +98,11 @@ public class GamePage extends AbstractScreen {
 	return DialogMessagePage.of(getContext());
     }
 
-    public DialogTurnReport openTurnReport() throws Exception {
+    public ScreenTurnReport openTurnReport() throws Exception {
 	final Button buttonNextTurn = getButtonById(ButtonsGamePanel.BUTTON_TURN_REPORT_ID);
 	getRobot().clickOn(buttonNextTurn);
 	WaitForAsyncUtils.waitForFxEvents();
-	return DialogTurnReport.of(getContext());
+	return ScreenTurnReport.of(getContext());
     }
 
     public ColonyScreen openColonyAt(final Location colonyLocation, final String expectedNamePart) {
@@ -139,10 +139,16 @@ public class GamePage extends AbstractScreen {
      * @throws Exception
      */
     public void waitWhileMoving() throws TimeoutException {
+	final String id = ButtonsGamePanel.BUTTON_NEXT_TURN_ID;
 	WaitForAsyncUtils.waitFor(60, TimeUnit.SECONDS, () -> {
-	    final Button buttonNextTurn = getNodeFinder().lookup("#" + ButtonsGamePanel.BUTTON_NEXT_TURN_ID)
-		    .queryButton();
-	    return !buttonNextTurn.isDisabled();
+	    // button could be hidden, because turn report page could be shown.
+	    if (isCssIdVisible(id)) {
+		final Button buttonNextTurn = getButtonById(id);
+		return !buttonNextTurn.isDisabled();
+	    } else {
+		// immediately stop waiting.
+		return true;
+	    }
 	});
     }
 

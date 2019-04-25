@@ -73,7 +73,12 @@ public abstract class AbstractScreen {
     }
 
     protected boolean isButtonOkVisible() {
-	return getNodeFinder().lookup("#buttonOk").tryQuery().isPresent();
+	return isCssIdVisible("buttonOk");
+    }
+
+    protected boolean isCssIdVisible(final String cssId) {
+	final String id = "#" + cssId;
+	return getNodeFinder().lookup(id).tryQuery().isPresent();
     }
 
     protected <T extends Node> List<T> getListOfNodes(final String cssClass) {

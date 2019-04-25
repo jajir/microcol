@@ -11,7 +11,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.microcol.gui.FileSelectingService;
 import org.microcol.model.Location;
 import org.microcol.page.ColonyScreen;
-import org.microcol.page.DialogTurnReport;
+import org.microcol.page.ScreenTurnReport;
 import org.microcol.page.GamePage;
 import org.microcol.page.WelcomePage;
 import org.mockito.Mockito;
@@ -49,12 +49,12 @@ public class TC_10_famine_will_plague_colony_test extends AbstractMicroColTest {
 	verifyCornInColony(gamePage, 6);
 	
 	// Perform next turn and ignore turn events dialog.
-	Optional<DialogTurnReport> oTurnDialog = gamePage.nextTurn();
+	Optional<ScreenTurnReport> oTurnDialog = gamePage.nextTurn();
 	
 	//Verify that turn event dialog is shown.
 	assertTrue(oTurnDialog.isPresent());
 	
-	DialogTurnReport dialogTurnReport = oTurnDialog.get();
+	ScreenTurnReport dialogTurnReport = oTurnDialog.get();
 	
 	dialogTurnReport.verifyThatAtLeastOneEventMessageContains("Famine is coming in colony Delft. In next turn colonist will die.");
 

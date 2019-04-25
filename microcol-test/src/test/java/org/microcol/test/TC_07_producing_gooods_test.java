@@ -54,7 +54,7 @@ public class TC_07_producing_gooods_test extends AbstractMicroColTest {
 	gamePage = colonyScreen.close();
 
 	// Perform next turn and ignore turn events dialog.
-	gamePage.nextTurnCloseDialogs();
+	gamePage.nextTurnAndCloseDialogs();
 
 	// Open colony Delft at [22,12].
 	colonyScreen = gamePage.openColonyAt(Location.of(22, 12), "Delft");
@@ -69,7 +69,7 @@ public class TC_07_producing_gooods_test extends AbstractMicroColTest {
 	gamePage = colonyScreen.close();
 
 	// Perform next turn and ignore turn events dialog.
-	gamePage.nextTurnCloseDialogs();
+	gamePage.nextTurnAndCloseDialogs();
 
 	// Open colony Delft at [22,12].
 	colonyScreen = gamePage.openColonyAt(Location.of(22, 12), "Delft");

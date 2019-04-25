@@ -23,5 +23,7 @@
 	<entry key="goodsWasThrowsAway2"> In colony is not enough space in warehouse, because of that 1 goods %s was throws away.</entry>
 	<entry key="goodsWasThrowsAway3"> In colony is not enough space in warehouse, because of that 1 goods %s was throws away.</entry>
 	<entry key="goodsWasThrowsAway4"> In colony is not enough space in warehouse, because of that 1 goods %s was throws away.</entry>
+	
+	<entry key="buttonBack">Back</entry>
 
 </properties>

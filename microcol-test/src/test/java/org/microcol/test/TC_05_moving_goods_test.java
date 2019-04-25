@@ -163,11 +163,11 @@ public class TC_05_moving_goods_test extends AbstractMicroColTest {
 
 	gamePage = colonyScreen.close();
 
-	gamePage.nextTurnCloseDialogs();
+	gamePage.nextTurnAndCloseDialogs();
 
-	gamePage.nextTurnCloseDialogs();
+	gamePage.nextTurnAndCloseDialogs();
 
-	gamePage.nextTurnCloseDialogs();
+	gamePage.nextTurnAndCloseDialogs();
 
 	// Open colony Delft
 	colonyScreen = gamePage.openColonyAt(Location.of(22, 12), "Delft");
