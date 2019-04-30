@@ -9,7 +9,6 @@ import org.microcol.gui.event.CenterViewEvent;
 import org.microcol.gui.event.DeclareIndependenceEvent;
 import org.microcol.gui.event.ExitGameEvent;
 import org.microcol.gui.event.PlowFieldEvent;
-import org.microcol.gui.event.ShowGoalsEvent;
 import org.microcol.gui.event.StartMoveEvent;
 import org.microcol.gui.image.ImageLoaderButtons;
 import org.microcol.gui.image.ImageProvider;
@@ -87,17 +86,19 @@ public class ButtonsGamePanel extends AbstractButtonsPanel {
         buttonHelp.setId(BUTTON_HELP_ID);
         buttonStatistics = makeButon(ImageLoaderButtons.BUTTON_STATISTICS,
                 Buttons.buttonStatistics);
-        buttonStatistics.setOnAction(event -> eventBus.post(new ShowScreenEvent(Screen.STATISTICS)));
+        buttonStatistics
+                .setOnAction(event -> eventBus.post(new ShowScreenEvent(Screen.STATISTICS)));
         buttonStatistics.setId(BUTTON_STATISTICS_ID);
         buttonExit = makeButon(ImageLoaderButtons.BUTTON_EXIT, Buttons.buttonExit);
         buttonExit.setOnAction(event -> eventBus.post(new ExitGameEvent()));
         buttonExit.setId(BUTTON_EXIT_ID);
         buttonGoals = makeButon(ImageLoaderButtons.BUTTON_GOALS, Buttons.buttonGoals);
-        buttonGoals.setOnAction(event -> eventBus.post(new ShowGoalsEvent()));
+        buttonGoals.setOnAction(event -> eventBus.post(new ShowScreenEvent(Screen.GOALS)));
         buttonGoals.setId(BUTTON_GOALS_ID);
         buttonTurnReport = makeButon(ImageLoaderButtons.BUTTON_TURN_REPORT,
                 Buttons.buttonTurnReport);
-        buttonTurnReport.setOnAction(event -> eventBus.post(new ShowScreenEvent(Screen.TURN_REPORT)));
+        buttonTurnReport
+                .setOnAction(event -> eventBus.post(new ShowScreenEvent(Screen.TURN_REPORT)));
         buttonTurnReport.setId(BUTTON_TURN_REPORT_ID);
         buttonEurope = makeButon(ImageLoaderButtons.BUTTON_EUROPE, Buttons.buttonEurope);
         buttonEurope.setOnAction(event -> eventBus.post(new ShowScreenEvent(Screen.EUROPE)));
@@ -132,7 +133,7 @@ public class ButtonsGamePanel extends AbstractButtonsPanel {
         getButtonPanel().getChildren().add(buttonStatistics);
         getButtonPanel().getChildren().add(buttonTurnReport);
         getButtonPanel().getChildren().add(buttonGoals);
-        getButtonPanel().getChildren().add(buttonHelp);
+        // getButtonPanel().getChildren().add(buttonHelp);
         getButtonPanel().getChildren().add(buttonEurope);
         getButtonPanel().getChildren().add(buttonExit);
         getButtonPanel().getChildren().add(buttonNextTurn);

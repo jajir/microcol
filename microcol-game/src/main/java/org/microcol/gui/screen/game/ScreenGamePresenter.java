@@ -7,7 +7,6 @@ import org.microcol.gui.event.BuildColonyEvent;
 import org.microcol.gui.event.CenterViewEvent;
 import org.microcol.gui.event.PlowFieldEvent;
 import org.microcol.gui.event.SelectNextUnitEvent;
-import org.microcol.gui.event.ShowGoalsEvent;
 import org.microcol.gui.event.StartMoveEvent;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.screen.Screen;
@@ -90,7 +89,7 @@ public class ScreenGamePresenter {
             eventBus.post(new ShowScreenEvent(Screen.TURN_REPORT));
         }
         if (KeyCode.G == event.getCode()) {
-            eventBus.post(new ShowGoalsEvent());
+            eventBus.post(new ShowScreenEvent(Screen.GOALS));
         }
         if (KeyCode.H == event.getCode()) {
             eventBus.post(new AboutGameEvent());

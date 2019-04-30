@@ -7,7 +7,6 @@ import org.microcol.gui.dialog.ChooseGoodsDialog;
 import org.microcol.gui.dialog.DialogDestroyColony;
 import org.microcol.gui.dialog.DialogFight;
 import org.microcol.gui.dialog.DialogMessage;
-import org.microcol.gui.dialog.MissionGoalsShowListener;
 import org.microcol.gui.dialog.PersistingDialog;
 import org.microcol.gui.event.AboutGameListenerImpl;
 import org.microcol.gui.event.BuildColonyListener;
@@ -75,6 +74,7 @@ import org.microcol.gui.screen.game.gamepanel.UnitAttackedEventListener;
 import org.microcol.gui.screen.game.gamepanel.UnitMoveFinishedListener;
 import org.microcol.gui.screen.game.gamepanel.UnitMovedListener;
 import org.microcol.gui.screen.game.gamepanel.VisibleArea;
+import org.microcol.gui.screen.goals.ScreenGoalsPresenter;
 import org.microcol.gui.screen.market.ScreenMarketPresenter;
 import org.microcol.gui.screen.menu.ButtonsPanelPresenter;
 import org.microcol.gui.screen.menu.ButtonsPanelView;
@@ -179,8 +179,6 @@ public final class MicroColModule extends AbstractModule {
 
         bind(ShowTurnEvensOnTurnStartedEvent.class).asEagerSingleton();
 
-        bind(MissionGoalsShowListener.class).asEagerSingleton();
-
         /**
          * Initialize MVP classes
          */
@@ -266,6 +264,7 @@ public final class MicroColModule extends AbstractModule {
 
         bind(ScreenStatisticsPresenter.class).asEagerSingleton();
         bind(ScreenTurnReportPresenter.class).asEagerSingleton();
+        bind(ScreenGoalsPresenter.class).asEagerSingleton();
         
         /**
          * Rest of UI

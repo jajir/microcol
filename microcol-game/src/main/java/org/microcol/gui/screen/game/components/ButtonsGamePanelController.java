@@ -64,7 +64,6 @@ public class ButtonsGamePanelController {
                 view.setVisibleButtonMove(false);
                 view.setVisibleButtonBuildColony(false);
                 view.setVisibleButtonPlowField(false);
-
             }
         }
     }
@@ -100,6 +99,7 @@ public class ButtonsGamePanelController {
             view.setVisibleButtonBuildColony(false);
             view.setVisibleButtonPlowField(false);
         }
+        evaluateDeclareIndependenceButton();
     }
 
     @Subscribe

@@ -1,6 +1,7 @@
-package org.microcol.gui.dialog;
+package org.microcol.gui.screen.goals;
 
 import org.microcol.gui.MainStageBuilder;
+import org.microcol.gui.dialog.Dialog;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.util.AbstractMessageWindow;
 import org.microcol.gui.util.ButtonBarOk;
@@ -15,7 +16,7 @@ import javafx.event.ActionEvent;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 
-public final class MissionGoalsDialog extends AbstractMessageWindow {
+public final class MissionGoalsPanel extends AbstractMessageWindow {
 
     private final GameModelController gameModelController;
 
@@ -24,7 +25,7 @@ public final class MissionGoalsDialog extends AbstractMessageWindow {
     private final VBox goalsPanel;
 
     @Inject
-    MissionGoalsDialog(final ViewUtil viewUtil, final I18n i18n,
+    MissionGoalsPanel(final ViewUtil viewUtil, final I18n i18n,
             final GameModelController gameModelController) {
         super(viewUtil, i18n);
         this.gameModelController = Preconditions.checkNotNull(gameModelController);
