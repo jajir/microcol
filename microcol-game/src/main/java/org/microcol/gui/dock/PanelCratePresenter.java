@@ -21,8 +21,6 @@ import javafx.scene.layout.Region;
  */
 public final class PanelCratePresenter implements JavaFxComponent {
 
-    public final static String CRATE_CLASS = "cratePanel";
-
     private final I18n i18n;
 
     private final EventBus eventBus;

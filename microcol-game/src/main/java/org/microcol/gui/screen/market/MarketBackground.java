@@ -37,7 +37,6 @@ public class MarketBackground extends AbstractAnimatedBackground {
 
     @Inject
     public MarketBackground(final ImageProvider imageProvider) {
-        super(imageProvider);
         imageTop = Preconditions.checkNotNull(imageProvider.getImage(IMG_TOP));
         imageBottom = Preconditions.checkNotNull(imageProvider.getImage(IMG_BOTTOM));
         imageCenter = Preconditions.checkNotNull(imageProvider.getImage(ImageProvider.IMG_MARKET));

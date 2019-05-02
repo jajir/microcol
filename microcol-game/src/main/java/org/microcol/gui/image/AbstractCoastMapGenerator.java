@@ -457,8 +457,4 @@ public abstract class AbstractCoastMapGenerator {
         return isVoid(ttNortWest) ? "0" : "b";
     }
 
-    protected WorldMap getMap() {
-        return map;
-    }
-
 }

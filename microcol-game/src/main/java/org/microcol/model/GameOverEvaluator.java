@@ -51,10 +51,6 @@ public final class GameOverEvaluator {
         return null;
     };
 
-    void addEvaluator(final Function<Model, GameOverResult> evaluator) {
-        conditions.addCommand(evaluator);
-    }
-
     @Override
     public String toString() {
         return MoreObjects.toStringHelper(this).add("hashcode", hashCode()).toString();

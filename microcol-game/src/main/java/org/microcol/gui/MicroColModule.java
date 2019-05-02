@@ -95,7 +95,6 @@ import org.microcol.gui.util.FontService;
 import org.microcol.gui.util.Listener;
 import org.microcol.gui.util.PaintService;
 import org.microcol.gui.util.PathPlanning;
-import org.microcol.gui.util.PersistentService;
 import org.microcol.gui.util.PersistingTool;
 import org.microcol.gui.util.TurnStartedListener;
 import org.microcol.gui.util.UnitUtil;
@@ -134,7 +133,6 @@ public final class MicroColModule extends AbstractModule {
         bind(ImageProvider.class).in(Singleton.class);
         bind(ViewUtil.class).in(Singleton.class);
         bind(LocalizationHelper.class).in(Singleton.class);
-        bind(PersistentService.class).in(Singleton.class);
         bind(AnimationManager.class).in(Singleton.class);
         bind(ScrollingManager.class).in(Singleton.class);
         bind(MapManager.class).in(Singleton.class);
@@ -303,6 +301,7 @@ public final class MicroColModule extends AbstractModule {
 
     @Provides
     @Singleton
+    @SuppressWarnings("ucd")
     I18n makeI18n(final GamePreferences gamePreferences) {
         return I18n.builder().setVerifyThatAllEnumKeysAreDefined(true)
                 .setVerifyThatAllKeysInResourceBundleHaveConstant(true)

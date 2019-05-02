@@ -3,21 +3,15 @@ package org.microcol.gui.screen.turnreport;
 import static org.microcol.model.GoodsType.BELL;
 import static org.microcol.model.GoodsType.CIGARS;
 import static org.microcol.model.GoodsType.COAT;
-import static org.microcol.model.GoodsType.CORN;
 import static org.microcol.model.GoodsType.COTTON;
 import static org.microcol.model.GoodsType.CROSS;
-import static org.microcol.model.GoodsType.FUR;
 import static org.microcol.model.GoodsType.GOODS;
-import static org.microcol.model.GoodsType.HAMMERS;
 import static org.microcol.model.GoodsType.HORSE;
-import static org.microcol.model.GoodsType.LUMBER;
 import static org.microcol.model.GoodsType.MUSKET;
 import static org.microcol.model.GoodsType.ORE;
 import static org.microcol.model.GoodsType.RUM;
-import static org.microcol.model.GoodsType.SILVER;
 import static org.microcol.model.GoodsType.SUGAR;
 import static org.microcol.model.GoodsType.TOBACCO;
-import static org.microcol.model.GoodsType.TOOLS;
 
 import java.util.List;
 import java.util.function.Function;
@@ -43,8 +37,8 @@ public class TeProcessorGoodsWasThrownAway extends AbstractTeProcessor
 
     final static List<GoodsType> feminine = ImmutableList.of(SUGAR, COTTON, ORE, GOODS, MUSKET);
 
-    final static List<GoodsType> neuter = ImmutableList.of(CORN, FUR, LUMBER, SILVER, COTTON, TOOLS,
-            HAMMERS);
+//    final static List<GoodsType> neuter = ImmutableList.of(CORN, FUR, LUMBER, SILVER, COTTON, TOOLS,
+//            HAMMERS);
 
     @Inject
     TeProcessorGoodsWasThrownAway(final I18n i18n) {

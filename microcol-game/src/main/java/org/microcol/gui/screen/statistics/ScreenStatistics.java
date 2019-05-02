@@ -21,15 +21,11 @@ public class ScreenStatistics extends AbstractScreenMenu implements GameScreen {
 
     private final StatisticsView statisticsView;
 
-    private final I18n i18n;
-
     public static final String STYLE_SHEET_STATISTICS = ScreenMenu.class
             .getResource("/gui/Statistics.css").toExternalForm();
 
     @Inject
-    ScreenStatistics(final I18n i18n, final StatisticsPanel statisticsPanel,
-            final StatisticsView statisticsView) {
-        this.i18n = Preconditions.checkNotNull(i18n);
+    ScreenStatistics(final StatisticsPanel statisticsPanel, final StatisticsView statisticsView) {
         this.statisticsView = Preconditions.checkNotNull(statisticsView);
         statisticsView.getContent().getStylesheets().add(STYLE_SHEET_STATISTICS);
         this.statisticsPanel = Preconditions.checkNotNull(statisticsPanel);
@@ -49,10 +45,6 @@ public class ScreenStatistics extends AbstractScreenMenu implements GameScreen {
     @Override
     public void beforeHide() {
         statisticsView.beforeHide();
-    }
-
-    protected I18n getI18n() {
-        return i18n;
     }
 
     @Override

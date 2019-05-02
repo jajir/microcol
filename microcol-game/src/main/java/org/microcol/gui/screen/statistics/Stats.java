@@ -8,7 +8,6 @@ import org.microcol.i18n.ResourceBundleFormat;
 
 public enum Stats implements MessageKeyResource {
 
-    title,
     titleGold,
     titleMilitary,
     titleWealth,

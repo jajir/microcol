@@ -59,8 +59,6 @@ public final class ImageProvider {
 
     public static final String IMG_ICON_STEPS_FIGHT_TURN_25x25 = "icon-steps-fight-turn-25x25.png";
 
-    public static final String IMG_SPLASH_SCREEN = "splash-screen.png";
-
     public static final String IMG_TILE_OCEAN_1 = "tile-ocean-1.png";
 
     public static final String IMG_TILE_OCEAN_2 = "tile-ocean-2.png";
@@ -112,8 +110,6 @@ public final class ImageProvider {
     public static final String IMG_UNIT_FREE_COLONIST_MOUNTED_MUSKETS = "free-colonist-mounted-muskets";
 
     public static final String IMG_UNIT_WAGON = "wagon";
-
-    public static final String IMG_TILE_MODE_MOVE = "tile-mode-move.png";
 
     public static final String IMG_CROSSED_SWORDS = "crossed-swords.png";
 

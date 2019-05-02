@@ -82,16 +82,6 @@ public class ClipboardEval extends ClipboardParser {
         return this;
     }
 
-    public ClipboardEval readUnit(final BiConsumer<Unit, From> consumer) {
-        if (getFrom().isPresent() && getUnit(model).isPresent()) {
-            consumer.accept(getUnit(model).get(), getFrom().get());
-            return this;
-        } else {
-            throw new IllegalStateException(
-                    "Unable to read unit from string '" + getOriginalString() + "'");
-        }
-    }
-
     public Optional<CargoSlot> getCargoSlot() {
         if (getFrom().isPresent()) {
             final Optional<Unit> oFromUnit = getUnit(model, KEY_SOURCE_UNIT_ID);
@@ -102,23 +92,6 @@ public class ClipboardEval extends ClipboardParser {
             }
         }
         return Optional.empty();
-    }
-
-    public ClipboardEval tryReadGood(final BiConsumer<Goods, From> consumer) {
-        if (getFrom().isPresent() && getGoods().isPresent()) {
-            consumer.accept(getGoods().get(), getFrom().get());
-        }
-        return this;
-    }
-
-    public ClipboardEval readGood(final BiConsumer<Goods, From> consumer) {
-        if (getFrom().isPresent() && getGoods().isPresent()) {
-            consumer.accept(getGoods().get(), getFrom().get());
-            return this;
-        } else {
-            throw new IllegalStateException(
-                    "Unable to read good from string '" + getOriginalString() + "'");
-        }
     }
 
     public boolean isEmpty() {

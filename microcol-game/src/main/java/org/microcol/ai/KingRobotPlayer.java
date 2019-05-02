@@ -18,8 +18,6 @@ import com.google.common.base.Preconditions;
 
 public final class KingRobotPlayer extends AbstractRobotPlayer {
 
-    public final static String KING_LOST_GAME = "king lost game";
-
     private final static float KINGS_MILITARY_STREGTH_COEFICIENT = 2F / 3F;
 
     private final static float KINGS_MILITARY_STREGTH_CAP = 15;

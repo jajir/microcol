@@ -14,13 +14,9 @@
 	<entry key="title">Europe</entry>
 	<entry key="shipsTravelingToNewWorld">Ships traveling to New World</entry>
 	<entry key="shipsTravelingToEurope">Ships traveling to Europe</entry>
-	<entry key="pier">Pier</entry>
-	<entry key="recruit">Recruit</entry>
-	<entry key="buy">Buy</entry>
 	<entry key="buyUnitDialog_title">Buy unit</entry>
 	<entry key="buyUnitDialog_buttonBuyUnit">Buy for</entry>
 	<entry key="goodsPanelTitle">Goods</entry>
-	<entry key="europePier">Pier</entry>
 	<entry key="recruitUnitDialogTitle">Recruite unit</entry>
 	<entry key="recruitUnitDialogButton">Pay</entry>
 	<entry key="statusBarEuropeDock">Europe dock, ships could be loaded with goods and units.</entry>

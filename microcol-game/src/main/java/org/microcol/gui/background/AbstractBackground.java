@@ -1,12 +1,10 @@
 package org.microcol.gui.background;
 
 import org.microcol.gui.Point;
-import org.microcol.gui.image.ImageProvider;
 import org.microcol.gui.util.CanvasComponent;
 import org.microcol.gui.util.JavaFxComponent;
 import org.microcol.gui.util.Repaintable;
 
-import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
 
 import javafx.scene.canvas.Canvas;
@@ -21,11 +19,8 @@ public abstract class AbstractBackground implements JavaFxComponent, Repaintable
 
     private final CanvasComponent canvasComponent;
 
-    private final ImageProvider imageProvider;
-
     @Inject
-    public AbstractBackground(final ImageProvider imageProvider) {
-        this.imageProvider = Preconditions.checkNotNull(imageProvider);
+    public AbstractBackground() {
         canvasComponent = new CanvasComponent();
         canvasComponent.getContent().widthProperty().addListener((old, v1, v2) -> repaint());
         canvasComponent.getContent().heightProperty().addListener((old, v1, v2) -> repaint());
@@ -58,13 +53,6 @@ public abstract class AbstractBackground implements JavaFxComponent, Repaintable
      */
     protected Canvas getCanvas() {
         return canvasComponent.getCanvas();
-    }
-
-    /**
-     * @return the imageProvider
-     */
-    protected ImageProvider getImageProvider() {
-        return imageProvider;
     }
 
     /**

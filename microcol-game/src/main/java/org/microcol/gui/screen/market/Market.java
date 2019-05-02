@@ -8,10 +8,8 @@ import org.microcol.i18n.ResourceBundleFormat;
 
 public enum Market implements MessageKeyResource {
 
-    title,
     titleBuy,
     titleSell,
-    buying,
     howMuch,
     howMuchSell,
     pricePerPiece,

@@ -23,7 +23,6 @@ public class StatisticsBackground extends AbstractAnimatedBackground {
 
     @Inject
     public StatisticsBackground(final ImageProvider imageProvider) {
-        super(imageProvider);
         this.imagePaper = Preconditions.checkNotNull(imageProvider.getImage(IMG_PAPER));
         backgroundPainter = new RepeatingBackgroundPainter(
                 Preconditions.checkNotNull(imageProvider.getImage(IMG_BACKGROUND)));

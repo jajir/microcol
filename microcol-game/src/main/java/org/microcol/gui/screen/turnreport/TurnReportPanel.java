@@ -55,9 +55,6 @@ public final class TurnReportPanel implements GameScreen {
         mainPanel.getStylesheets().add(MainStageBuilder.STYLE_SHEET_MICROCOL);
     }
 
-    public void repaint() {
-    }
-
     @SuppressWarnings("unused")
     private void onClose(final ActionEvent event) {
         eventBus.post(new ShowScreenEvent(Screen.GAME));

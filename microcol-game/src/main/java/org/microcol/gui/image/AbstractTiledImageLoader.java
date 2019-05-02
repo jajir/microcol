@@ -13,8 +13,6 @@ import javafx.scene.image.WritableImage;
  */
 public abstract class AbstractTiledImageLoader implements ImageLoader {
 
-    public final static String IMAGE_NAME = "buildings.png";
-
     private final TileImageParams params;
 
     private final String imageName;

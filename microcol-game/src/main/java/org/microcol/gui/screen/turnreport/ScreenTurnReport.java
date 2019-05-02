@@ -21,15 +21,11 @@ public class ScreenTurnReport extends AbstractScreenMenu implements GameScreen {
 
     private final TurnReportView turnReportView;
 
-    private final I18n i18n;
-
     public static final String STYLE_SHEET_TURN_REPORT = ScreenMenu.class
             .getResource("/gui/TurnReport.css").toExternalForm();
 
     @Inject
-    ScreenTurnReport(final I18n i18n, final TurnReportPanel turnReportPanel,
-            final TurnReportView turnReportView) {
-        this.i18n = Preconditions.checkNotNull(i18n);
+    ScreenTurnReport(final TurnReportPanel turnReportPanel, final TurnReportView turnReportView) {
         this.turnReportView = Preconditions.checkNotNull(turnReportView);
         turnReportView.getContent().getStylesheets().add(STYLE_SHEET_TURN_REPORT);
         this.turnReportPanel = Preconditions.checkNotNull(turnReportPanel);
@@ -49,10 +45,6 @@ public class ScreenTurnReport extends AbstractScreenMenu implements GameScreen {
     @Override
     public void beforeHide() {
         turnReportView.beforeHide();
-    }
-
-    protected I18n getI18n() {
-        return i18n;
     }
 
     @Override

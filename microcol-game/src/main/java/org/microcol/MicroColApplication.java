@@ -1,7 +1,5 @@
 package org.microcol;
 
-import java.util.prefs.BackingStoreException;
-
 import org.fxmisc.cssfx.CSSFX;
 import org.microcol.gui.MainStageBuilder;
 import org.microcol.gui.MicroColModule;
@@ -35,24 +33,10 @@ public final class MicroColApplication extends Application {
     }
 
     /**
-     * Functional interface that allows to execute code and just throws optional
-     * exception.
-     */
-    @FunctionalInterface
-    public interface ExceptionWrapper {
-        /**
-         * Allows to execute some functionality throwing exception.
-         *
-         * @throws BackingStoreException
-         *             backing store exception
-         */
-        void consume() throws BackingStoreException;
-    }
-
-    /**
      * Java FX application entry point.
      */
     @Override
+    @SuppressWarnings("ucd")
     public void start(final Stage primaryStage) throws Exception {
         Platform.runLater(() -> initializeMicrocol(primaryStage));
     }

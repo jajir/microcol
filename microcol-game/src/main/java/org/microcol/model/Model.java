@@ -236,14 +236,6 @@ public class Model {
                 UnitType.GALLEON.getSpeed(), new UnitActionNoAction());
     }
 
-    public List<TurnEvent> getLocalizedMessages(final Player player) {
-        return turnEventStore.getLocalizedMessages(player);
-    }
-
-    public boolean isValid(final Path path) {
-        return map.isValid(path);
-    }
-
     public boolean isValid(final Location location) {
         return map.isValid(location);
     }
@@ -726,18 +718,6 @@ public class Model {
      */
     public Statistics getStatistics() {
         return statistics;
-    }
-
-    /**
-     * Allows to add game over evaluator. When evaluator based on model
-     * condition find out that game is over than return new GameoverResult
-     * object instance otherwise return <code>null</code>.
-     *
-     * @param evaluator
-     *            required evaluator function
-     */
-    public void addGameOverEvaluator(final Function<Model, GameOverResult> evaluator) {
-        gameManager.addEvaluator(evaluator);
     }
 
     /**

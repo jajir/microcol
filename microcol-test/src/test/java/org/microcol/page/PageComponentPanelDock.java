@@ -4,8 +4,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.List;
 
-import org.microcol.gui.dock.AbstractPanelDock;
-import org.microcol.gui.dock.PanelCratePresenter;
+import org.microcol.gui.dock.PanelCrateView;
+import org.microcol.gui.dock.PanelDockView;
 import org.testfx.util.WaitForAsyncUtils;
 
 import javafx.scene.control.ToggleButton;
@@ -27,7 +27,7 @@ public class PageComponentPanelDock extends AbstractPageComponent {
     }
 
     public List<ToggleButton> getUnitsInPort() {
-	return getListOfNodes("." + AbstractPanelDock.SHIP_IN_PORT_STYLE);
+	return getListOfNodes("." + PanelDockView.SHIP_IN_PORT_STYLE);
     }
 
     public void verifyNumberOfShipsInPort(final int expectedNumberOfShipsInPort) {
@@ -42,7 +42,7 @@ public class PageComponentPanelDock extends AbstractPageComponent {
      * @return list of crates
      */
     public List<StackPane> getListOfCrates() {
-	return getListOfNodes("." + PanelCratePresenter.CRATE_CLASS);
+	return getListOfNodes("." + PanelCrateView.CRATE_CLASS);
     }
 
 }

@@ -1,9 +1,5 @@
 package org.microcol.gui.image;
 
-import com.google.common.base.Preconditions;
-
-import javafx.scene.image.Image;
-
 /**
  * Define all map tiles.
  * <p>
@@ -101,21 +97,6 @@ public abstract class AbstractCoastImageLoader implements ImageLoader {
 
     private ImageWrapper getImg(final ImageProvider imageProvider, final String name) {
         return ImageWrapper.of(imageProvider.getImage(name));
-    }
-
-    /**
-     * Get tile image for it's code.
-     * 
-     * @param imageProvider
-     *            required image provider object
-     * @param code
-     *            required tile code.
-     * @return When there is tile image for given code image is returned when
-     *         there is not image for code <code>null</code> is returned.
-     */
-    public Image getImage(final ImageProvider imageProvider, final String code) {
-        Preconditions.checkNotNull(code);
-        return imageProvider.getImage(code);
     }
 
     private ImageWrapper getImgInRow(final ImageProvider imageProvider, final String count) {

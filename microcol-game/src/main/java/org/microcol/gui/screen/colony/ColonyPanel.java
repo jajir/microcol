@@ -134,9 +134,6 @@ public final class ColonyPanel implements JavaFxComponent, UpdatableLanguage {
         return colony;
     }
 
-    public void close() {
-    }
-
     @Override
     public Region getContent() {
         return mainPanel;

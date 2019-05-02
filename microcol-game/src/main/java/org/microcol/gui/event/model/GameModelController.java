@@ -162,14 +162,6 @@ public class GameModelController {
         new Thread(() -> getModel().endTurn()).start();
     }
 
-    public void suspendAi() {
-        artifitialPlayersManager.suspendAi();
-    }
-
-    public void resumeAi() {
-        artifitialPlayersManager.resumeAi();
-    }
-
     /**
      * @return the modelCapgaign
      */

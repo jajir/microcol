@@ -49,12 +49,4 @@ public final class ArtifitialPlayersManager {
         players = null;
     }
 
-    public void suspendAi() {
-        players.forEach(player -> player.suspend());
-    }
-
-    public void resumeAi() {
-        players.forEach(player -> player.resume());
-    }
-
 }

@@ -2,7 +2,7 @@ package org.microcol.gui.screen.game;
 
 import org.microcol.gui.WasdController;
 import org.microcol.gui.dialog.PersistingDialog;
-import org.microcol.gui.event.AboutGameEvent;
+import org.microcol.gui.event.ShowHelpEvent;
 import org.microcol.gui.event.BuildColonyEvent;
 import org.microcol.gui.event.CenterViewEvent;
 import org.microcol.gui.event.PlowFieldEvent;
@@ -92,7 +92,7 @@ public class ScreenGamePresenter {
             eventBus.post(new ShowScreenEvent(Screen.GOALS));
         }
         if (KeyCode.H == event.getCode()) {
-            eventBus.post(new AboutGameEvent());
+            eventBus.post(new ShowHelpEvent());
         }
         if (KeyCode.E == event.getCode()) {
             eventBus.post(new ShowScreenEvent(Screen.EUROPE));

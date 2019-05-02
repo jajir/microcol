@@ -11,10 +11,8 @@
 <properties>
 	<comment>Define keys for Market</comment>
 
-	<entry key="title">Market with </entry>
 	<entry key="titleBuy">Buy on market with </entry>
 	<entry key="titleSell">Sell on market with </entry>
-	<entry key="buying">You are buying</entry>
 	<entry key="howMuch">How many pieces do you want to buy?</entry>
 	<entry key="howMuchSell">How many pieces do you want to sell?</entry>
 	<entry key="pricePerPiece">Price per piece is ...</entry>

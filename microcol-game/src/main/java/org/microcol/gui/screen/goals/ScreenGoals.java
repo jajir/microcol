@@ -21,14 +21,11 @@ public class ScreenGoals extends AbstractScreenMenu implements GameScreen {
 
     private final GoalsView goalsView;
 
-    private final I18n i18n;
-
-    public static final String STYLE_SHEET_GOALS = ScreenMenu.class
-            .getResource("/gui/Goals.css").toExternalForm();
+    public static final String STYLE_SHEET_GOALS = ScreenMenu.class.getResource("/gui/Goals.css")
+            .toExternalForm();
 
     @Inject
-    ScreenGoals(final I18n i18n, final GoalsPanel goalsPanel, final GoalsView goalsView) {
-        this.i18n = Preconditions.checkNotNull(i18n);
+    ScreenGoals(final GoalsPanel goalsPanel, final GoalsView goalsView) {
         this.goalsView = Preconditions.checkNotNull(goalsView);
         goalsView.getContent().getStylesheets().add(STYLE_SHEET_GOALS);
         this.goalsPanel = Preconditions.checkNotNull(goalsPanel);
@@ -48,10 +45,6 @@ public class ScreenGoals extends AbstractScreenMenu implements GameScreen {
     @Override
     public void beforeHide() {
         goalsView.beforeHide();
-    }
-
-    protected I18n getI18n() {
-        return i18n;
     }
 
     @Override

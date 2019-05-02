@@ -75,6 +75,7 @@ public final class GamePanelComponent implements ScreenLifeCycle, JavaFxComponen
         if (gameModelController.isGameModelReady()) {
             logger.debug("painting: " + visibleArea);
             gamePanelPainter.paint(gc);
+            fpsCounter.screenWasPainted();
         }
     }
 

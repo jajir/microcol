@@ -39,7 +39,6 @@ public class ColonyBackground extends AbstractBackground {
     
     @Inject
     public ColonyBackground(final ImageProvider imageProvider) {
-        super(imageProvider);
         imageTop1 = Preconditions.checkNotNull(imageProvider.getImage(IMG_TOP1));
         imageTop2 = Preconditions.checkNotNull(imageProvider.getImage(IMG_TOP2));
         imageBottom = Preconditions.checkNotNull(imageProvider.getImage(IMG_BOTTOM));

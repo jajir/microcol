@@ -3,7 +3,7 @@ package org.microcol.gui.screen.game.components;
 import org.microcol.gui.buttonpanel.AbstractButtonsPanel;
 import org.microcol.gui.buttonpanel.Buttons;
 import org.microcol.gui.buttonpanel.NextTurnEvent;
-import org.microcol.gui.event.AboutGameEvent;
+import org.microcol.gui.event.ShowHelpEvent;
 import org.microcol.gui.event.BuildColonyEvent;
 import org.microcol.gui.event.CenterViewEvent;
 import org.microcol.gui.event.DeclareIndependenceEvent;
@@ -82,7 +82,7 @@ public class ButtonsGamePanel extends AbstractButtonsPanel {
         buttonCenter.setOnAction(event -> eventBus.post(new CenterViewEvent()));
         buttonCenter.setId(BUTTON_CENTER_ID);
         buttonHelp = makeButon(ImageLoaderButtons.BUTTON_HELP, Buttons.buttonHelp);
-        buttonHelp.setOnAction(event -> eventBus.post(new AboutGameEvent()));
+        buttonHelp.setOnAction(event -> eventBus.post(new ShowHelpEvent()));
         buttonHelp.setId(BUTTON_HELP_ID);
         buttonStatistics = makeButon(ImageLoaderButtons.BUTTON_STATISTICS,
                 Buttons.buttonStatistics);

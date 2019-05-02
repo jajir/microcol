@@ -53,20 +53,4 @@ public class PathPlanningService {
                 speed);
     }
 
-    /**
-     * Get path between two points. It use naive algorithm. <i>y = ax + b</i>
-     * 
-     * @param tileFrom
-     *            required tile from
-     * @param tileTo
-     *            required tile to
-     * @param howManyStepsShouldBeDone
-     *            required how many steps should be done to reach target
-     * @return Return list of point.
-     */
-    public List<Point> getPathLimitSteps(final Point tileFrom, final Point tileTo,
-            final int howManyStepsShouldBeDone) {
-        return pathPlanning.getPathLimitSteps(tileFrom, tileTo, howManyStepsShouldBeDone);
-    }
-
 }

@@ -11,10 +11,8 @@
 <properties>
 	<comment>Define keys for Market</comment>
 
-	<entry key="title">Trh s </entry>
 	<entry key="titleBuy">Nákup na trhu s </entry>
 	<entry key="titleSell">Prodej na trhu s </entry>
-	<entry key="buying">Kupuješ</entry>
 	<entry key="howMuch">Kolik kusů chceš koupit?</entry>
 	<entry key="howMuchSell">Kolik kusů chceš prodat?</entry>
 	<entry key="pricePerPiece">Cena za jeden kus ...</entry>

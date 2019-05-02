@@ -32,6 +32,7 @@ public final class ChangeLanguageListenerFileChooser {
      *            required event
      */
     @Subscribe
+    @SuppressWarnings("ucd")
     public void onEvent(final ChangeLanguageEvent event) {
         for (final FileChooser val : FileChooser.values()) {
             final String key = PREFIX + val.name();

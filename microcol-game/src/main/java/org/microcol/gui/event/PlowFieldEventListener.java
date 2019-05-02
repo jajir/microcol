@@ -1,6 +1,5 @@
 package org.microcol.gui.event;
 
-import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.screen.game.gamepanel.SelectedUnitManager;
 import org.microcol.gui.util.Listener;
 import org.microcol.model.Unit;
@@ -16,13 +15,10 @@ import com.google.inject.Inject;
 @Listener
 public final class PlowFieldEventListener {
 
-    final GameModelController gameModelController;
     final SelectedUnitManager selectedUnitManager;
 
     @Inject
-    PlowFieldEventListener(final GameModelController gameModelController,
-            final SelectedUnitManager selectedUnitManager) {
-        this.gameModelController = Preconditions.checkNotNull(gameModelController);
+    PlowFieldEventListener(final SelectedUnitManager selectedUnitManager) {
         this.selectedUnitManager = Preconditions.checkNotNull(selectedUnitManager);
     }
 

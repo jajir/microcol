@@ -64,17 +64,6 @@ public abstract class AbstractRobotPlayer {
         model.removeListener(modelAdapter);
     }
 
-    public void suspend() {
-        running = false;
-    }
-
-    public void resume() {
-        running = true;
-        if (model.isGameRunning() && model.getCurrentPlayer().isComputer()) {
-            turn(model.getCurrentPlayer());
-        }
-    }
-
     private void turn(final Player player) {
         if (!running) {
             return;

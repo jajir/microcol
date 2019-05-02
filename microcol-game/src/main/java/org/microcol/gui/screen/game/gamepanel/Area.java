@@ -159,15 +159,4 @@ public class Area {
         return visibleArea.scrollToPoint(newScreenCenterPoint.substract(screenCenter));
     }
 
-    /**
-     * Allows to jump with view at selected point at map.
-     *
-     * @param point
-     *            required point in map coordinates.
-     */
-    public void jumpToPoint(final Point point) {
-        visibleArea.setX(point.getX());
-        visibleArea.setY(point.getY());
-    }
-
 }

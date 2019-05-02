@@ -40,27 +40,12 @@ public final class GameController {
         this.eventBus = Preconditions.checkNotNull(eventBus);
     }
 
-    /**
-     * Allows to start testing scenario. In production mode it's blocked.
-     *
-     * @param fileName
-     *            required class path related file name
-     */
-    public void startTestScenario(final String fileName) {
-        startMission(gameModelDao.loadFromClassPath(fileName, eventBus));
-    }
-
     public void writeModelToFile(final File targetFile) {
         gameModelDao.saveToFile(targetFile.getAbsolutePath(), gameModelController.getGameModel());
     }
 
     public void loadModelFromFile(final File sourceFile) {
         startMission(gameModelDao.loadFromFile(sourceFile, eventBus));
-    }
-
-    public void startCampaignMission(final CampaignName campaignName, final String missionName) {
-        final Campaign campaign = campaignManager.getCampaignByName(campaignName);
-        startCampaignMission(campaign.getMisssionByName(missionName));
     }
 
     public void startCampaignMission(final CampaignName campaignName,

@@ -36,7 +36,6 @@ public class EuropeBackground extends AbstractBackground {
 
     @Inject
     public EuropeBackground(final ImageProvider imageProvider) {
-        super(imageProvider);
         imageLeft = Preconditions.checkNotNull(imageProvider.getImage(IMG_LEFT));
         imageRight = Preconditions.checkNotNull(imageProvider.getImage(IMG_RIGHT));
         imageCenter = Preconditions.checkNotNull(imageProvider.getImage(IMG_CENTER));

@@ -21,7 +21,8 @@ public final class AboutGameListenerImpl {
     }
 
     @Subscribe
-    public void onAboutGame(@SuppressWarnings("unused") final AboutGameEvent event) {
+    @SuppressWarnings("ucd")
+    private void onAboutGame(@SuppressWarnings("unused") final ShowHelpEvent event) {
         aboutDialog.showAndWait();
     }
 

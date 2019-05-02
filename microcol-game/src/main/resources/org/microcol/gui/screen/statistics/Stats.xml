@@ -11,7 +11,6 @@
 <properties>
 	<comment>Define keys for Statistics</comment>
 
-	<entry key="title">Statistics</entry>
 	<entry key="titleGold">Gold</entry>
 	<entry key="titleMilitary">Military</entry>
 	<entry key="titleWealth">Wealth</entry>
