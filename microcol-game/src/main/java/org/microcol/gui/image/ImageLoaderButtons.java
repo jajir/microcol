@@ -46,26 +46,26 @@ public final class ImageLoaderButtons extends AbstractTiledImageLoader {
     }
 
     @Override
-    public void preload(final ImageProvider imageProvider) {
-        super.preload(imageProvider);
+    public void preload(final ImageCache imageCache) {
+        super.preload(imageCache);
 
-        imageProvider.registerImage(BUTTON_CENTER, getImagePrefix() + "0_0");
-        imageProvider.registerImage(BUTTON_HELP, getImagePrefix() + "1_0");
-        imageProvider.registerImage(BUTTON_STATISTICS, getImagePrefix() + "2_0");
-        imageProvider.registerImage(BUTTON_EXIT, getImagePrefix() + "3_0");
+        imageCache.registerImage(BUTTON_CENTER, getImagePrefix() + "0_0");
+        imageCache.registerImage(BUTTON_HELP, getImagePrefix() + "1_0");
+        imageCache.registerImage(BUTTON_STATISTICS, getImagePrefix() + "2_0");
+        imageCache.registerImage(BUTTON_EXIT, getImagePrefix() + "3_0");
 
-        imageProvider.registerImage(BUTTON_GOALS, getImagePrefix() + "0_1");
-        imageProvider.registerImage(BUTTON_TURN_REPORT, getImagePrefix() + "1_1");
-        imageProvider.registerImage(BUTTON_NEXT_TURN, getImagePrefix() + "2_1");
-        imageProvider.registerImage(BUTTON_EUROPE, getImagePrefix() + "3_1");
+        imageCache.registerImage(BUTTON_GOALS, getImagePrefix() + "0_1");
+        imageCache.registerImage(BUTTON_TURN_REPORT, getImagePrefix() + "1_1");
+        imageCache.registerImage(BUTTON_NEXT_TURN, getImagePrefix() + "2_1");
+        imageCache.registerImage(BUTTON_EUROPE, getImagePrefix() + "3_1");
 
-        imageProvider.registerImage(BUTTON_MOVE, getImagePrefix() + "0_2");
-        imageProvider.registerImage(BUTTON_CUT_TREE, getImagePrefix() + "3_2");
-        imageProvider.registerImage(BUTTON_BUILD_COLONY, getImagePrefix() + "2_2");
-        imageProvider.registerImage(BUTTON_BUILD_ROAD, getImagePrefix() + "3_2");
+        imageCache.registerImage(BUTTON_MOVE, getImagePrefix() + "0_2");
+        imageCache.registerImage(BUTTON_CUT_TREE, getImagePrefix() + "3_2");
+        imageCache.registerImage(BUTTON_BUILD_COLONY, getImagePrefix() + "2_2");
+        imageCache.registerImage(BUTTON_BUILD_ROAD, getImagePrefix() + "3_2");
 
-        imageProvider.registerImage(BUTTON_PLOW_FIELD, getImagePrefix() + "0_3");
-        imageProvider.registerImage(BUTTON_BUY, getImagePrefix() + "1_3");
+        imageCache.registerImage(BUTTON_PLOW_FIELD, getImagePrefix() + "0_3");
+        imageCache.registerImage(BUTTON_BUY, getImagePrefix() + "1_3");
     }
 
 }

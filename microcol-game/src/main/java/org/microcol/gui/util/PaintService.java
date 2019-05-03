@@ -2,6 +2,7 @@ package org.microcol.gui.util;
 
 import org.microcol.gui.Point;
 import org.microcol.gui.Tile;
+import org.microcol.gui.image.ImageLoaderTerrain;
 import org.microcol.gui.image.ImageProvider;
 import org.microcol.gui.screen.game.gamepanel.MapManager;
 import org.microcol.model.Colony;
@@ -85,7 +86,7 @@ public final class PaintService {
     public void paintColony(final GraphicsContext graphics, final Point point, final Colony colony,
             final boolean drawColonyName) {
         final Point p = point.add(UNIT_IMAGE_POSITION);
-        graphics.drawImage(imageProvider.getImage(ImageProvider.IMG_TILE_TOWN), p.getX(), p.getY());
+        graphics.drawImage(imageProvider.getImage(ImageLoaderTerrain.IMG_TILE_TOWN), p.getX(), p.getY());
         if (drawColonyName) {
             paintOwnersFlag(graphics, point.add(OWNERS_FLAG_POSITION), colony.getOwner());
             graphics.setFont(colonyFont);
@@ -182,7 +183,7 @@ public final class PaintService {
         }
 
         if (terrain.isHasField()) {
-            graphics.drawImage(imageProvider.getImage(ImageProvider.IMG_FIELD), point.getX(),
+            graphics.drawImage(imageProvider.getImage(ImageLoaderTerrain.IMG_FIELD), point.getX(),
                     point.getY());
         }
         if (isHighlighted) {

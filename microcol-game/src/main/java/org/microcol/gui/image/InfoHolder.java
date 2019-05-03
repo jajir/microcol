@@ -16,12 +16,24 @@ public final class InfoHolder {
      *
      * @param loc
      *            required terrain type location
-     * @param generator
+     * @param terrainMapUtil
      *            required abstract map generator
      */
-    public InfoHolder(final Location loc, final AbstractCoastMapGenerator generator) {
+    public InfoHolder(final Location loc, final TerrainMapUtil terrainMapUtil) {
+        this(loc, terrainMapUtil.getTerrainTypeAt(loc));
+    }
+
+    /**
+     * Default constructor.
+     *
+     * @param loc
+     *            required terrain type location
+     * @param terrainType
+     *            required terrain type
+     */
+    public InfoHolder(final Location loc, final TerrainType terrainType) {
         this.loc = loc;
-        this.tt = generator.getTerrainTypeAt(loc);
+        this.tt = terrainType;
     }
 
     /**

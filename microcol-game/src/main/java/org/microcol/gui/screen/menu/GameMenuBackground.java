@@ -8,6 +8,7 @@ import org.microcol.gui.background.ImageStripePref;
 import org.microcol.gui.background.ThreeStripesPainter;
 import org.microcol.gui.background.ThreeStripesPref;
 import org.microcol.gui.background.ThreeStripesPref.StripeDef;
+import org.microcol.gui.image.ImageLoaderExtra;
 import org.microcol.gui.image.ImageProvider;
 
 import com.google.common.base.Preconditions;
@@ -43,7 +44,8 @@ public class GameMenuBackground extends AbstractAnimatedBackground {
     public GameMenuBackground(final ImageProvider imageProvider) {
         imageTop = Preconditions.checkNotNull(imageProvider.getImage(IMG_TOP));
         imageBottom = Preconditions.checkNotNull(imageProvider.getImage(IMG_BOTTOM));
-        imageCenter = Preconditions.checkNotNull(imageProvider.getImage(ImageProvider.IMG_SUNSET));
+        imageCenter = Preconditions
+                .checkNotNull(imageProvider.getImage(ImageLoaderExtra.IMG_SUNSET));
         bird = Preconditions.checkNotNull(imageProvider.getImage("bird.png"));
         final ThreeStripesPref pref = ThreeStripesPref.build()
                 .setTopStripe(StripeDef.of(-240, GuiColors.SKY))

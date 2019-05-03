@@ -19,9 +19,6 @@ import org.microcol.gui.event.ShowGridListenerPreferences;
 import org.microcol.gui.event.model.ArtifitialPlayersManager;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.event.model.MissionEventListener;
-import org.microcol.gui.image.GrassCoastMapGenerator;
-import org.microcol.gui.image.IceCoastMapGenerator;
-import org.microcol.gui.image.ImageProvider;
 import org.microcol.gui.preferences.GamePreferences;
 import org.microcol.gui.screen.MainPanelPresenter;
 import org.microcol.gui.screen.MainPanelView;
@@ -132,14 +129,11 @@ public final class MicroColModule extends AbstractModule {
 
         bind(GamePreferences.class).in(Singleton.class);
         bind(PathPlanning.class).in(Singleton.class);
-        bind(ImageProvider.class).in(Singleton.class);
         bind(ViewUtil.class).in(Singleton.class);
         bind(LocalizationHelper.class).in(Singleton.class);
         bind(AnimationManager.class).in(Singleton.class);
         bind(ScrollingManager.class).in(Singleton.class);
         bind(MapManager.class).in(Singleton.class);
-        bind(GrassCoastMapGenerator.class).in(Singleton.class);
-        bind(IceCoastMapGenerator.class).in(Singleton.class);
         bind(FontService.class).asEagerSingleton();
         bind(ApplicationInfo.class).in(Singleton.class);
 
@@ -267,7 +261,7 @@ public final class MicroColModule extends AbstractModule {
         bind(ScreenStatisticsPresenter.class).asEagerSingleton();
         bind(ScreenTurnReportPresenter.class).asEagerSingleton();
         bind(ScreenGoalsPresenter.class).asEagerSingleton();
-        
+
         /**
          * Rest of UI
          */

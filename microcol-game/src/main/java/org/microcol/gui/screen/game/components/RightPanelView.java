@@ -9,6 +9,7 @@ import org.microcol.gui.MainStageBuilder;
 import org.microcol.gui.TilePainter;
 import org.microcol.gui.UnitsPanel;
 import org.microcol.gui.event.model.GameModelController;
+import org.microcol.gui.image.ImageLoaderTerrain;
 import org.microcol.gui.image.ImageProvider;
 import org.microcol.gui.screen.game.gamepanel.TileWasSelectedEvent;
 import org.microcol.gui.util.JavaFxComponent;
@@ -145,7 +146,7 @@ public final class RightPanelView implements JavaFxComponent {
                             getModel().getUnitsAt(location));
                 }
             } else {
-                tileImage.setImage(imageProvider.getImage(ImageProvider.IMG_TILE_HIDDEN));
+                tileImage.setImage(imageProvider.getImage(ImageLoaderTerrain.IMG_TILE_HIDDEN));
                 sb.append(i18n.get(Loc.unitsPanel_unexplored));
             }
             tileName.setText(sb.toString());

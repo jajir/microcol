@@ -4,6 +4,7 @@ import org.fxmisc.cssfx.CSSFX;
 import org.microcol.gui.MainStageBuilder;
 import org.microcol.gui.MicroColModule;
 import org.microcol.gui.dialog.ApplicationController;
+import org.microcol.gui.image.ModuleImages;
 import org.microcol.model.campaign.CampaignModule;
 
 import com.google.common.base.Preconditions;
@@ -52,8 +53,8 @@ public final class MicroColApplication extends Application {
         try {
             CSSFX.start();
             injector = Guice.createInjector(com.google.inject.Stage.PRODUCTION,
-                    new MicroColModule(), new ExternalModule(primaryStage), new CampaignModule(),
-                    overridenModule);
+                    new MicroColModule(), new ModuleImages(), new ExternalModule(primaryStage),
+                    new CampaignModule(), overridenModule);
             final MainStageBuilder mainStageBuilder = injector.getInstance(MainStageBuilder.class);
             mainStageBuilder.buildPrimaryStage(primaryStage);
             final ApplicationController applicationController = injector

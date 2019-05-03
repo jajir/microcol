@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 import org.microcol.gui.Point;
 import org.microcol.gui.StepCounter;
 import org.microcol.gui.event.model.GameModelController;
+import org.microcol.gui.image.ImageLoaderTerrain;
 import org.microcol.gui.image.ImageProvider;
 import org.microcol.gui.preferences.GamePreferences;
 import org.microcol.gui.screen.game.gamepanel.MoveModeSupport.MoveMode;
@@ -78,7 +79,7 @@ public final class GamePaintService {
                     paintService.paintTerrainOnTile(graphics, point, location, terrain,
                             oneTurnMoveHighlighter.isItHighlighted(location));
                 } else {
-                    final Image imageHidden = imageProvider.getImage(ImageProvider.IMG_TILE_HIDDEN);
+                    final Image imageHidden = imageProvider.getImage(ImageLoaderTerrain.IMG_TILE_HIDDEN);
                     graphics.drawImage(imageHidden, 0, 0, TILE_WIDTH_IN_PX, TILE_WIDTH_IN_PX,
                             point.getX(), point.getY(), TILE_WIDTH_IN_PX, TILE_WIDTH_IN_PX);
                 }

@@ -5,7 +5,6 @@ import java.util.Map;
 
 import org.microcol.model.ChainOfCommandOptionalStrategy;
 import org.microcol.model.Location;
-import org.microcol.model.TerrainType;
 import org.microcol.model.WorldMap;
 
 import com.google.common.base.Preconditions;
@@ -156,6 +155,8 @@ public abstract class AbstractCoastMapGenerator {
 
     private WorldMap map;
 
+    private TerrainMapUtil terrainMapUtil;
+
     protected AbstractCoastMapGenerator(final ImageProvider imageProvider) {
         this.imageProvider = Preconditions.checkNotNull(imageProvider);
     }
@@ -170,6 +171,7 @@ public abstract class AbstractCoastMapGenerator {
 
     public void setMap(final WorldMap map) {
         this.map = Preconditions.checkNotNull(map);
+        this.terrainMapUtil = new TerrainMapUtil(map);
         mapTiles.clear();
 
         for (int y = 1; y <= map.getMaxLocationY(); y++) {
@@ -198,7 +200,7 @@ public abstract class AbstractCoastMapGenerator {
          * Null can be returned, for example when analyzing arctic borders at
          * land border tile.
          */
-        final Neighbors nei = new Neighbors(location, this);
+        final Neighbors nei = new Neighbors(location, terrainMapUtil);
         return terrainImageResolvers.apply(nei).orElse(null);
     }
 
@@ -381,32 +383,6 @@ public abstract class AbstractCoastMapGenerator {
     private void preconditionItsVoid(final InfoHolder infoHolder) {
         Preconditions.checkArgument(isVoid(infoHolder), "Invalid location '%s' it is not void",
                 infoHolder.loc());
-    }
-
-    /**
-     * Even when location is out of map it will say correct terrain type. For
-     * locations outside of map it will return closest terrain type at map.
-     * 
-     * @param location
-     *            required location that will be examined
-     * @return terrain type at given location
-     */
-    protected TerrainType getTerrainTypeAt(final Location location) {
-        Preconditions.checkNotNull(location);
-        Location shifted = location;
-        if (shifted.getX() < 1) {
-            shifted = Location.of(1, shifted.getY());
-        }
-        if (shifted.getX() > map.getMaxLocationX()) {
-            shifted = Location.of(map.getMaxLocationX(), shifted.getY());
-        }
-        if (shifted.getY() < 1) {
-            shifted = Location.of(shifted.getX(), 1);
-        }
-        if (shifted.getY() > map.getMaxLocationY()) {
-            shifted = Location.of(shifted.getX(), map.getMaxLocationY());
-        }
-        return map.getTerrainTypeAt(shifted);
     }
 
     /**

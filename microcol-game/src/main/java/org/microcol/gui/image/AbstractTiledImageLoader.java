@@ -40,15 +40,15 @@ public abstract class AbstractTiledImageLoader implements ImageLoader {
      * </p>
      */
     @Override
-    public void preload(final ImageProvider imageProvider) {
-        final Image img = ImageProvider.getRawImage(imageName);
+    public void preload(final ImageCache imageCache) {
+        final Image img = ImageCache.getRawImage(imageName);
         Preconditions.checkState(img.getWidth() == params.getExpectedImageWidth(),
                 "Image width is %s but expected is %s.", String.valueOf(img.getWidth()),
                 params.getExpectedImageWidth());
         Preconditions.checkState(img.getHeight() == params.getExpectedImageHeight(),
                 "Image height is %s but expected is %s.", String.valueOf(img.getHeight()),
                 params.getExpectedImageHeight());
-        imageProvider.registerImage(imageName, img);
+        imageCache.registerImage(imageName, img);
 
         for (int y = 0; y < params.getTileHeightCount(); y++) {
             for (int x = 0; x < params.getTileWidthCount(); x++) {
@@ -58,7 +58,7 @@ public abstract class AbstractTiledImageLoader implements ImageLoader {
                         x * params.getTileWidthIncludingBorder(),
                         y * params.getTileWidthIncludingBorder(), params.getTileWidth(),
                         params.getTileWidth());
-                imageProvider.registerImage(name, tile);
+                imageCache.registerImage(name, tile);
             }
         }
     }

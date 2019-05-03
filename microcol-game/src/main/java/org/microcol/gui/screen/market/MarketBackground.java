@@ -8,6 +8,7 @@ import org.microcol.gui.background.ImageStripePref;
 import org.microcol.gui.background.ThreeStripesPainter;
 import org.microcol.gui.background.ThreeStripesPref;
 import org.microcol.gui.background.ThreeStripesPref.StripeDef;
+import org.microcol.gui.image.ImageLoaderExtra;
 import org.microcol.gui.image.ImageProvider;
 
 import com.google.common.base.Preconditions;
@@ -39,7 +40,7 @@ public class MarketBackground extends AbstractAnimatedBackground {
     public MarketBackground(final ImageProvider imageProvider) {
         imageTop = Preconditions.checkNotNull(imageProvider.getImage(IMG_TOP));
         imageBottom = Preconditions.checkNotNull(imageProvider.getImage(IMG_BOTTOM));
-        imageCenter = Preconditions.checkNotNull(imageProvider.getImage(ImageProvider.IMG_MARKET));
+        imageCenter = Preconditions.checkNotNull(imageProvider.getImage(ImageLoaderExtra.IMG_MARKET));
         final ThreeStripesPref pref = ThreeStripesPref.build()
                 .setTopStripe(StripeDef.of(-215, GuiColors.SKY))
                 .setCenterStripe(StripeDef.of(-130, GuiColors.OCEAN))
