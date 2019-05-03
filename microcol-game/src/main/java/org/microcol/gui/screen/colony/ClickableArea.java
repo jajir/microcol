@@ -1,14 +1,11 @@
 package org.microcol.gui.screen.colony;
 
-import static org.microcol.gui.Tile.TILE_SIZE;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
 import org.microcol.gui.Point;
-import org.microcol.gui.Rectangle;
 import org.microcol.model.Location;
 
 import com.google.common.base.MoreObjects;
@@ -20,16 +17,17 @@ import com.google.common.collect.Lists;
  */
 public final class ClickableArea {
 
-    private final Map<Rectangle, Location> areas;
+    private final Map<ColonyFieldTile, Location> areas;
 
     public ClickableArea() {
         areas = new HashMap<>();
         final List<Location> locs = Lists.newArrayList(Location.CENTER.getNeighbors());
-        locs.forEach(loc -> {
-            final Point p = Point.of(loc).add(TILE_SIZE);
-            Rectangle rect = Rectangle.ofPointAndSize(p, TILE_SIZE);
-            areas.put(rect, loc);
-        });
+        locs.forEach(this::addDirection);
+    }
+
+    private void addDirection(final Location loc) {
+        final ColonyFieldTile colonyFieldTile = ColonyFieldTile.ofLocation(loc);
+        areas.put(colonyFieldTile, loc);
     }
 
     public Optional<Location> getDirection(final Point point) {

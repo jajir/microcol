@@ -92,24 +92,24 @@ public final class PanelColonyFields implements JavaFxComponent {
     }
 
     private void onContextMenuRequested(final ContextMenuEvent event) {
-        final Optional<Location> direction = clickableArea
-                .getDirection(Point.of(event.getX(), event.getY()));
-        if (direction.isPresent()) {
-            final ColonyField colonyField = colony.getColonyFieldInDirection(direction.get());
-            if (!colonyField.isEmpty()) {
-                contextMenu.getItems().clear();
-                colonyField.getTerrain().getProduction().stream().forEach(production -> {
-                    final MenuItem item = new MenuItem(
-                            production.getGoodsType().name() + "   " + production.getProduction());
-                    item.setOnAction(evt -> {
-                        colonyField.setProducedGoodsType(production.getGoodsType());
-                        colonyDialog.repaint();
-                    });
-                    contextMenu.getItems().add(item);
-                });
-                contextMenu.show(canvas, event.getScreenX(), event.getScreenY());
-            }
-        }
+        clickableArea.getDirection(Point.of(event.getX(), event.getY()))
+                .map(loc -> colony.getColonyFieldInDirection(loc)).filter(ColonyField::isNotEmpty)
+                .ifPresent(colonyField -> showContextMenuAtColonyField(colonyField, event));
+    }
+
+    private void showContextMenuAtColonyField(final ColonyField colonyField,
+            final ContextMenuEvent event) {
+        contextMenu.getItems().clear();
+        colonyField.getTerrain().getProduction().stream().forEach(production -> {
+            final MenuItem item = new MenuItem(
+                    production.getGoodsType().name() + "   " + production.getProduction());
+            item.setOnAction(evt -> {
+                colonyField.setProducedGoodsType(production.getGoodsType());
+                colonyDialog.repaint();
+            });
+            contextMenu.getItems().add(item);
+        });
+        contextMenu.show(canvas, event.getScreenX(), event.getScreenY());
     }
 
     @SuppressWarnings("unused")
@@ -121,64 +121,60 @@ public final class PanelColonyFields implements JavaFxComponent {
 
     private void onDragDetected(final MouseEvent event) {
         logger.debug("Drag detected");
-        final Point point = Point.of(event.getX(), event.getY());
-        final Optional<Location> loc = clickableArea.getDirection(point);
-        if (loc.isPresent()) {
-            final ColonyField colonyField = colony.getColonyFieldInDirection(loc.get());
-            if (!colonyField.isEmpty()) {
-                final Unit unit = colonyField.getUnit().get();
-                final Image image = imageProvider.getUnitImage(unit);
-                final Dragboard db = canvas.startDragAndDrop(TransferMode.MOVE);
-                ClipboardWritter.make(db).addImage(image).addTransferFromColonyField(loc.get())
-                        .addUnit(unit).build();
-                event.consume();
-            }
-        }
+        final Optional<Location> oLoc = clickableArea
+                .getDirection(Point.of(event.getX(), event.getY()));
+        oLoc.map(loc -> colony.getColonyFieldInDirection(loc)).filter(ColonyField::isNotEmpty)
+                .ifPresent(colonyField -> {
+                    dragStartedAtColonyField(colonyField, oLoc.get());
+                    event.consume();
+                });
+    }
+
+    private void dragStartedAtColonyField(final ColonyField colonyField, final Location direction) {
+        final Unit unit = colonyField.getUnit().get();
+        final Image image = imageProvider.getUnitImage(unit);
+        final Dragboard db = canvas.startDragAndDrop(TransferMode.MOVE);
+        ClipboardWritter.make(db).addImage(image).addTransferFromColonyField(direction)
+                .addUnit(unit).build();
     }
 
     private void onDragOver(final DragEvent event) {
         logger.debug("Drag Over");
         if (isItUnit(event.getDragboard())) {
-            final Point point = Point.of(event.getX(), event.getY());
-            final Optional<Location> loc = clickableArea.getDirection(point);
-            if (canFieldAcceptDraggedUnit(loc)) {
+            final Optional<Location> oLoc = clickableArea
+                    .getDirection(Point.of(event.getX(), event.getY()));
+            if (canFieldAcceptDraggedUnit(oLoc)) {
                 event.acceptTransferModes(TransferMode.MOVE);
                 event.consume();
                 return;
             }
+
         }
         event.acceptTransferModes(TransferMode.NONE);
         event.consume();
     }
 
-    private boolean canFieldAcceptDraggedUnit(final Optional<Location> loc) {
-        if (loc.isPresent() && loc.get().isDirection()) {
-            final ColonyField colonyField = colony.getColonyFieldInDirection(loc.get());
-            if (colonyField.isEmpty()) {
-                return true;
-            }
-        }
-        return false;
+    private boolean canFieldAcceptDraggedUnit(final Optional<Location> oLoc) {
+        return oLoc.map(loc -> loc.isDirection() ? loc : null)
+                .map(loc -> colony.getColonyFieldInDirection(loc).isEmpty()).orElse(false);
     }
 
     private void onDragDropped(final DragEvent event) {
         logger.debug("Drag dropped");
-        final Point point = Point.of(event.getX(), event.getY());
-        final Optional<Location> loc = clickableArea.getDirection(point);
-        if (loc.isPresent() && loc.get().isDirection()) {
-            final ColonyField colonyField = colony.getColonyFieldInDirection(loc.get());
-            if (colonyField.isEmpty()) {
-                final Optional<Unit> oUnit = ClipboardEval
-                        .make(gameModelController.getModel(), event.getDragboard()).getUnit();
-                if (oUnit.isPresent()) {
-                    oUnit.get().placeToColonyField(colonyField, GoodsType.CORN);
+        clickableArea.getDirection(Point.of(event.getX(), event.getY()))
+                .filter(Location::isDirection).map(loc -> colony.getColonyFieldInDirection(loc))
+                .filter(ColonyField::isEmpty)
+                .ifPresent(colonyField -> dragDropped(colonyField, event));
+        event.consume();
+    }
+
+    private void dragDropped(final ColonyField colonyField, final DragEvent event) {
+        ClipboardEval.make(gameModelController.getModel(), event.getDragboard()).getUnit()
+                .ifPresent(unit -> {
+                    unit.placeToColonyField(colonyField, GoodsType.CORN);
                     event.setDropCompleted(true);
                     colonyDialog.repaint();
-                }
-            }
-            logger.debug("was clicked at: " + loc.get());
-        }
-        event.consume();
+                });
     }
 
     private boolean isItUnit(final Dragboard db) {
@@ -201,8 +197,9 @@ public final class PanelColonyFields implements JavaFxComponent {
 
     private void paintColonyField(final GraphicsContext gc, final ColonyField colonyField) {
         final Terrain terrain = colonyField.getTerrain();
-        final Point centre = Point.of(1, 1).multiply(TILE_WIDTH_IN_PX);
-        final Point point = Point.of(colonyField.getDirection().getVector()).add(centre);
+        final ColonyFieldTile colonyFieldTile = ColonyFieldTile
+                .ofDirection(colonyField.getDirection());
+        final Point point = colonyFieldTile.getTopLeftCorner();
         paintService.paintTerrainOnTile(gc, point, colonyField.getLocation(), terrain, false);
         if (!colonyField.isEmpty()) {
             final Goods production = colonyField.getProduction().get();

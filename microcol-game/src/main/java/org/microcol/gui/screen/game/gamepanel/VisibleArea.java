@@ -3,8 +3,8 @@ package org.microcol.gui.screen.game.gamepanel;
 import java.util.function.Consumer;
 
 import org.microcol.gui.Point;
+import org.microcol.gui.Tile;
 import org.microcol.gui.util.OneTimeConditionalEvent;
-import org.microcol.model.Location;
 import org.microcol.model.WorldMap;
 
 import com.google.common.base.MoreObjects;
@@ -48,7 +48,7 @@ public class VisibleArea {
      * It helps consider if canvas size is reasonable. When canvas side length
      * is bigger than this it's not correct size.
      */
-    public final static int MAX_CANVAS_SIDE_LENGTH = 10000;
+    final static int MAX_CANVAS_SIDE_LENGTH = 10000;
 
     private final static int NOT_READY = -1;
 
@@ -84,9 +84,9 @@ public class VisibleArea {
                 .add("maxMapSize", maxMapSize).toString();
     }
 
-    public void setMaxMapSize(final WorldMap worldMap) {
+    public void setWorldMap(final WorldMap worldMap) {
         Preconditions.checkNotNull(worldMap);
-        maxMapSize = Point.of(Location.of(worldMap.getMaxX(), worldMap.getMaxY()));
+        maxMapSize = Tile.ofLocation(worldMap.getMaxLocation()).getBottomRightCorner();
         topLeft = Point.CENTER;
         /**
          * Following code force class to compute correct position of top left
@@ -172,7 +172,7 @@ public class VisibleArea {
         return topLeft.add(canvasWidth, canvasHeight);
     }
 
-    public void addDeltaToTopLeftPoint(final Point delta) {
+    void addDeltaToTopLeftPoint(final Point delta) {
         int x = topLeft.getX();
         int y = topLeft.getY();
 
@@ -237,8 +237,7 @@ public class VisibleArea {
         final Point delta = newTopLeftScreenCorner.substract(topLeft);
         if (maxMapSize == null) {
             return Point.of(
-                    adjustToLess(delta.getX(), topLeft.getX(), MAX_CANVAS_SIDE_LENGTH,
-                            canvasWidth),
+                    adjustToLess(delta.getX(), topLeft.getX(), MAX_CANVAS_SIDE_LENGTH, canvasWidth),
                     adjustToLess(delta.getY(), topLeft.getY(), MAX_CANVAS_SIDE_LENGTH,
                             canvasHeight));
         } else {
@@ -254,6 +253,10 @@ public class VisibleArea {
      */
     public void setOnCanvasReady(final Consumer<String> onCanvasReady) {
         onVisibleAreaIsReady.setOnConditionsPassed(onCanvasReady);
+    }
+
+    public Point getMaxMapSize() {
+        return maxMapSize;
     }
 
 }

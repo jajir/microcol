@@ -128,10 +128,14 @@ public final class GamePanelPainter {
         gamePaintService.paintUnits(g, gameModelController.getModel(), area, excludePainting);
         paintSteps(g, area);
         paintAnimation(g, area);
-        if (gameModelController.getCurrentPlayer().isComputer()) {
+        System.out.println("painting " + gameModelController.getCurrentPlayer());
+        if (!gameModelController.getCurrentPlayer().isHuman()) {
             /**
              * If move computer that make game field darker.
              */
+            System.out.println("blur");
+            // FIXME on-screeen coordinates are converted to location and back
+            // FIXME it's not really shown, because next turn is done in second
             final Point topLeftPoint = area.convertToPoint(area.getTopLeft());
             final Point bottomRightPoint = area
                     .convertToPoint(area.getBottomRight().add(Location.of(1, 1)));

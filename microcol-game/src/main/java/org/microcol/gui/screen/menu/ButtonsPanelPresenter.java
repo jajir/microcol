@@ -27,7 +27,11 @@ public final class ButtonsPanelPresenter {
 
     private final ButtonsPanelView view;
 
+    private final SecretOption secretOption;
+
     private final GamePreferences gamePreferences;
+
+    private final PersistingDialog persistingDialog;
 
     private final PersistingTool persistingTool;
 
@@ -42,21 +46,35 @@ public final class ButtonsPanelPresenter {
             final ApplicationController applicationController,
             final PersistingDialog persistingDialog, final GamePreferences gamePreferences,
             final PersistingTool persistingTool, final GameController gameController,
-            final CampaignManager campaignManager, final EventBus eventBus) {
+            final CampaignManager campaignManager, final SecretOption secretOption,
+            final EventBus eventBus) {
         this.view = Preconditions.checkNotNull(view);
         this.gamePreferences = Preconditions.checkNotNull(gamePreferences);
+        this.persistingDialog = Preconditions.checkNotNull(persistingDialog);
         this.persistingTool = Preconditions.checkNotNull(persistingTool);
         this.gameController = Preconditions.checkNotNull(gameController);
         this.campaignManager = Preconditions.checkNotNull(campaignManager);
+        this.secretOption = Preconditions.checkNotNull(secretOption);
         this.eventBus = Preconditions.checkNotNull(eventBus);
         view.getButtonContinue().setOnAction(this::onGameContinue);
-        view.getButtonLoadSave().setOnAction(event -> persistingDialog.loadModel());
+        view.getButtonLoad().setOnAction(this::onLoadWasPressed);
         view.getButtonPlayCampaign()
                 .setOnAction(event -> eventBus.post(new ShowScreenEvent(Screen.CAMPAIGN)));
         view.getButtonExitMicroCol().setOnAction(event -> eventBus.post(new QuitGameEvent()));
         view.getButtonSetting().setOnAction(this::onSetting);
         view.getButtonStartFreeGame().setOnAction(e -> applicationController.startNewFreeGame());
         refresh();
+    }
+
+    @SuppressWarnings("unused")
+    private void onLoadWasPressed(final ActionEvent event) {
+        if (persistingDialog.loadFromSavedGames()) {
+            if (secretOption.isEnabled()) {
+                eventBus.post(new ShowScreenEvent(Screen.EDITOR));
+            } else {
+                eventBus.post(new ShowScreenEvent(Screen.GAME));
+            }
+        }
     }
 
     @SuppressWarnings("unused")
@@ -67,6 +85,7 @@ public final class ButtonsPanelPresenter {
     @SuppressWarnings("unused")
     private void onGameContinue(final ActionEvent actionEvent) {
         gameController.loadModelFromFile(persistingTool.getAutoSaveFile());
+        eventBus.post(new ShowScreenEvent(Screen.GAME));
     }
 
     public void refresh() {

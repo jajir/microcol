@@ -152,5 +152,5 @@ public final class GamePanelMouseListener {
         final Location loc = gamePanelView.getArea().convertToLocation(currentPosition);
         mouseOverTileManager.setMouseOverTile(loc);
     }
-
+    
 }

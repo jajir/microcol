@@ -1,8 +1,7 @@
 package org.microcol.gui.screen.game.gamepanel;
 
-import static org.microcol.gui.Tile.*;
-
 import org.microcol.gui.Point;
+import org.microcol.gui.Tile;
 import org.microcol.model.Location;
 import org.microcol.model.WorldMap;
 
@@ -50,13 +49,13 @@ public class Area {
          */
         final Point pointBottomRight = visibleArea.getBottomRight();
 
-        final Location p1 = pointTopLeft.toLocation();
-        final Location p2 = pointBottomRight.toLocationCeilUp();
+        final Location p1 = Tile.of(pointTopLeft).toLocation();
+        final Location p2 = Tile.of(pointBottomRight).toLocation().sub(Location.of(-1, -1));
 
         topLeft = Location.of(Math.max(Location.MAP_MIN_X, p1.getX()),
                 Math.max(Location.MAP_MIN_Y, p1.getY()));
-        bottomRight = Location.of(Math.min(p2.getX(), worldMap.getMaxX()),
-                Math.min(p2.getY(), worldMap.getMaxY()));
+        bottomRight = Location.of(Math.min(p2.getX(), worldMap.getMaxLocationX()),
+                Math.min(p2.getY(), worldMap.getMaxLocationY()));
     }
 
     public Location getTopLeft() {
@@ -77,20 +76,23 @@ public class Area {
      *         <code>false</code>
      */
     public boolean isLocationVisible(final Location location) {
-        final Point point1 = Point.of(location);
-        final Point point2 = Point.of(location.add(Location.of(-1, -1)));
-        return isVisibleCanvasPoint(point1) || isVisibleCanvasPoint(point2);
+        final Tile tile = Tile.ofLocation(location);
+        return isVisibleCanvasPoint(tile.getBottomRightCorner())
+                || isVisibleCanvasPoint(tile.getTopLeftCorner());
     }
 
     /**
      * Convert given location to canvas coordinates.
+     * <p>
+     * Method doesn't validate if point is on screen or outside of screen.
+     * </p>
      * 
      * @param location
      *            required on map location
      * @return point coordinates that could be directly used to draw on canvas
      */
     public Point convertToPoint(final Location location) {
-        return Point.of(location).substract(visibleArea.getTopLeft()).substract(TILE_SIZE);
+        return Tile.ofLocation(location).getTopLeftCorner().substract(visibleArea.getTopLeft());
     }
 
     /**
@@ -101,7 +103,7 @@ public class Area {
      * @return return map location
      */
     public Location convertToLocation(final Point point) {
-        return point.add(visibleArea.getTopLeft()).toLocation();
+        return Tile.of(point.add(visibleArea.getTopLeft())).toLocation();
     }
 
     /**
@@ -147,7 +149,7 @@ public class Area {
      * @return position of top left corner of view
      */
     public Point getCenterToLocation(final Location location) {
-        final Point newScreenCenterPoint = Point.of(location);
+        final Point newScreenCenterPoint = Tile.ofLocation(location).getTopLeftCorner();
         /**
          * Put new point in the center of screen.
          */

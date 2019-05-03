@@ -49,12 +49,20 @@ public class PersistingDialog {
         }
     }
 
-    public void loadModel() {
+    /**
+     * Show file dialog to player and allows him to choose file to load.
+     * 
+     * @return return <code>true</code> when player choose dome file otherwise
+     *         return <code>false</code>.
+     */
+    public boolean loadFromSavedGames() {
         final File saveFile = fileSelectingService.loadFile(persistingTool.getRootSaveDirectory());
         if (saveFile == null) {
             logger.debug("User didn't select any file to load game");
+            return false;
         } else {
             loadFromFile(saveFile);
+            return true;
         }
     }
 

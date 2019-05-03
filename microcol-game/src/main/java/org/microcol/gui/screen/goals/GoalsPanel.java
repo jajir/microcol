@@ -26,6 +26,8 @@ public final class GoalsPanel implements GameScreen {
 
     private final static String KING_SEAL_IMAGE_NAME = "kings-seal.png";
 
+    private final static String KING_SEAL_SHADOW_IMAGE_NAME = "kings-seal-shadow.png";
+
     private final GameModelController gameModelController;
 
     private final I18n i18n;
@@ -40,6 +42,8 @@ public final class GoalsPanel implements GameScreen {
 
     private final Image imageKingsSeal;
 
+    private final Image imageKingsSealShadow;
+
     @Inject
     GoalsPanel(final I18n i18n, final EventBus eventBus,
             final GameModelController gameModelController, final ImageProvider imageProvider) {
@@ -47,6 +51,7 @@ public final class GoalsPanel implements GameScreen {
         this.i18n = Preconditions.checkNotNull(i18n);
         this.eventBus = Preconditions.checkNotNull(eventBus);
         this.imageKingsSeal = imageProvider.getImage(KING_SEAL_IMAGE_NAME);
+        this.imageKingsSealShadow = imageProvider.getImage(KING_SEAL_SHADOW_IMAGE_NAME);
 
         buttonsBar.getButtonOk().setOnAction(this::onClose);
         mainPanel.getChildren().addAll(goalsPanel, buttonsBar.getContent());
@@ -67,8 +72,7 @@ public final class GoalsPanel implements GameScreen {
         if (goal.isFinished()) {
             row.getChildren().add(new ImageView(imageKingsSeal));
         }else {
-            final Label label = new Label(i18n.get(Goals.notYetDone));
-            row.getChildren().add(label);
+            row.getChildren().add(new ImageView(imageKingsSealShadow));
         }
         goalsPanel.getChildren().add(row);
     }

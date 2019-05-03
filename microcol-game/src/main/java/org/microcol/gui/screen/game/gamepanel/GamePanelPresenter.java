@@ -102,7 +102,7 @@ public final class GamePanelPresenter {
 
     @Subscribe
     private void onGameStarted(final GameStartedEvent event) {
-        visibleArea.setMaxMapSize(event.getModel().getMap());
+        visibleArea.setWorldMap(event.getModel().getMap());
     }
 
     @Subscribe

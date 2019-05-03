@@ -91,7 +91,7 @@ public abstract class Player {
         out.setDeclaredIndependence(declaredIndependence);
         out.getExtraData().putAll(extraData);
         out.setVisible(new VisibilityPo());
-        visibility.store(out.getVisible(), model.getMap().getMaxX(), model.getMap().getMaxY());
+        visibility.store(out.getVisible(), model.getMap().getMaxLocationX(), model.getMap().getMaxLocationY());
         return out;
     }
 

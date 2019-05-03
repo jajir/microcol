@@ -40,6 +40,7 @@ import org.microcol.gui.screen.colony.PanelOutsideColony;
 import org.microcol.gui.screen.colony.ScreenColonyPresenter;
 import org.microcol.gui.screen.colony.buildingqueue.QueueController;
 import org.microcol.gui.screen.colony.buildingqueue.QueueDialog;
+import org.microcol.gui.screen.editor.ScreenEditorPresenter;
 import org.microcol.gui.screen.europe.BuyUnitsDialog;
 import org.microcol.gui.screen.europe.EuropeButtonsPanelController;
 import org.microcol.gui.screen.europe.EuropeCallback;
@@ -81,6 +82,7 @@ import org.microcol.gui.screen.menu.ButtonsPanelView;
 import org.microcol.gui.screen.menu.ExitGameListener;
 import org.microcol.gui.screen.menu.GameFinishedListener;
 import org.microcol.gui.screen.menu.ScreenMenu;
+import org.microcol.gui.screen.menu.ScreenMenuPresenter;
 import org.microcol.gui.screen.setting.ScreenSettingPresenter;
 import org.microcol.gui.screen.setting.SettingAnimationSpeedPresenter;
 import org.microcol.gui.screen.setting.SettingButtonsPresenter;
@@ -231,6 +233,8 @@ public final class MicroColModule extends AbstractModule {
         bind(ScreenGamePresenter.class).asEagerSingleton();
         bind(ScreenSettingPresenter.class).asEagerSingleton();
         bind(ScreenCampaignPresenter.class).asEagerSingleton();
+        bind(ScreenEditorPresenter.class).asEagerSingleton();
+        bind(ScreenMenuPresenter.class).asEagerSingleton();
 
         /**
          * Colony dialog

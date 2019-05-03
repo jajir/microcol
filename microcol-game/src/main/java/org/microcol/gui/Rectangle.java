@@ -18,10 +18,6 @@ public final class Rectangle {
         this.bottomRightCorner = Preconditions.checkNotNull(bottomRightCorner);
     }
 
-    public static Rectangle of(final Point topLeftCorner, final Point bottomRightCorner) {
-        return new Rectangle(topLeftCorner, bottomRightCorner);
-    }
-
     public static Rectangle ofPointAndSize(final Point topLeftCorner, final Point size) {
         return new Rectangle(topLeftCorner, topLeftCorner.add(size));
     }

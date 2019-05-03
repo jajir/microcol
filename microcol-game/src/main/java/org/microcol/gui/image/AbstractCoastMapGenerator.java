@@ -172,8 +172,8 @@ public abstract class AbstractCoastMapGenerator {
         this.map = Preconditions.checkNotNull(map);
         mapTiles.clear();
 
-        for (int y = 1; y <= map.getMaxY(); y++) {
-            for (int x = 1; x <= map.getMaxX(); x++) {
+        for (int y = 1; y <= map.getMaxLocationY(); y++) {
+            for (int x = 1; x <= map.getMaxLocationX(); x++) {
                 final Location loc = Location.of(x, y);
                 final String code = getTileCode(loc);
                 if (code != null && !NO_IMAGE.equals(code)) {
@@ -397,14 +397,14 @@ public abstract class AbstractCoastMapGenerator {
         if (shifted.getX() < 1) {
             shifted = Location.of(1, shifted.getY());
         }
-        if (shifted.getX() > map.getMaxX()) {
-            shifted = Location.of(map.getMaxX(), shifted.getY());
+        if (shifted.getX() > map.getMaxLocationX()) {
+            shifted = Location.of(map.getMaxLocationX(), shifted.getY());
         }
         if (shifted.getY() < 1) {
             shifted = Location.of(shifted.getX(), 1);
         }
-        if (shifted.getY() > map.getMaxY()) {
-            shifted = Location.of(shifted.getX(), map.getMaxY());
+        if (shifted.getY() > map.getMaxLocationY()) {
+            shifted = Location.of(shifted.getX(), map.getMaxLocationY());
         }
         return map.getTerrainTypeAt(shifted);
     }

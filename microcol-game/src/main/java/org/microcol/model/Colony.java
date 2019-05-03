@@ -338,6 +338,7 @@ public class Colony {
                 .getType();
     }
 
+    // FIXME change location to direction.
     public ColonyField getColonyFieldInDirection(final Location fieldDirection) {
         Preconditions.checkNotNull(fieldDirection, "Field direction is null");
         Preconditions.checkArgument(fieldDirection.isDirection(),

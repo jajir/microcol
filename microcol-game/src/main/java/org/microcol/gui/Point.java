@@ -1,9 +1,5 @@
 package org.microcol.gui;
 
-import static org.microcol.gui.Tile.TILE_WIDTH_IN_PX;
-
-import org.microcol.model.Location;
-
 import com.google.common.base.MoreObjects;
 
 /**
@@ -61,25 +57,6 @@ public final class Point {
         return MoreObjects.toStringHelper(this).add("x", x).add("y", y).toString();
     }
 
-    public Location toLocation() {
-        final Point p = divide(TILE_WIDTH_IN_PX).add(Location.MAP_MIN_X,
-                Location.MAP_MIN_Y);
-        return Location.of(p.getX(), p.getY());
-    }
-
-    /**
-     * This count location of bottom right corner.
-     * 
-     * @return return bottom right corner of location when this point belongs
-     */
-    public Location toLocationCeilUp() {
-        final Point p = Point
-                .of((int) Math.ceil(getX() / (float) TILE_WIDTH_IN_PX),
-                        (int) Math.ceil(getY() / (float) TILE_WIDTH_IN_PX))
-                .add(Location.MAP_MIN_X, Location.MAP_MIN_Y);
-        return Location.of(p.getX(), p.getY());
-    }
-
     public static Point of(final int x, final int y) {
         return new Point(x, y);
     }
@@ -88,16 +65,12 @@ public final class Point {
         return new Point((int) x, (int) y);
     }
 
-    public static Point of(final Location location) {
-        return Point.of(location.getX(), location.getY()).multiply(TILE_WIDTH_IN_PX);
-    }
-
     public Point add(final int addX, final int addY) {
         return new Point(x + addX, y + addY);
     }
 
     public Point add(final double addX, final double addY) {
-        return new Point(x + (int)addX, y + (int)addY);
+        return new Point(x + (int) addX, y + (int) addY);
     }
 
     public Point add(final Point point) {

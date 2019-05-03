@@ -691,7 +691,7 @@ public abstract class AbstractUnit implements Unit {
     private int countRequiredTurnsToSail(final boolean isTravelToEurope) {
         if (isTravelToEurope) {
             int x = getLocation().getX();
-            if (x < getModel().getMap().getMaxX() / 2) {
+            if (x < getModel().getMap().getMaxLocationX() / 2) {
                 return TRAVEL_TO_EUROPE_FROM_WEST;
             } else {
                 return TRAVEL_TO_EUROPE;

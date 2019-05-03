@@ -45,7 +45,7 @@ public class UnitFrigateTest {
     public void test_verifyThatUnitCouldBePlacedIntoHighseas() throws Exception {
         when(placeMap.getLocation()).thenReturn(Location.of(30, 30));
         when(model.getMap()).thenReturn(map);
-        when(map.getMaxX()).thenReturn(40);
+        when(map.getMaxLocationX()).thenReturn(40);
         unit.placeToHighSeas(true);
 
         assertTrue(unit.isAtHighSea());

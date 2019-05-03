@@ -91,7 +91,7 @@ public class Continent {
     }
 
     private boolean isLocationBorder(final Location location) {
-        return location.getY() == 1 || location.getY() == model.getMap().getMaxY() - 1;
+        return location.getY() == 1 || location.getY() == model.getMap().getMaxLocationY() - 1;
     }
 
     @Override

@@ -3,6 +3,7 @@ package org.microcol.gui.screen.game.gamepanel;
 import java.util.List;
 
 import org.microcol.gui.Point;
+import org.microcol.gui.Tile;
 import org.microcol.gui.util.PaintService;
 import org.microcol.gui.util.PathPlanningService;
 import org.microcol.model.Direction;
@@ -51,8 +52,9 @@ public final class AnimationWalk implements Animation {
         excludePainting.excludeUnit(unit);
 
         final Point from = Point.CENTER;
-        final Point to = Point.of(Location.of(locationTo.getX() - locationFrom.getX(),
-                locationTo.getY() - locationFrom.getY()));
+        final Location diff = locationTo.sub(locationFrom);
+        final Point to = Tile.ofLocation(Location.of(diff.getX(), diff.getY()))
+                .getBottomRightCorner();
         partialPath = pathPlanningService.getPathLimitSpeed(from, to);
 
     }

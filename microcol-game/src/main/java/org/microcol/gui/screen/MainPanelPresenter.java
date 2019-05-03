@@ -3,6 +3,7 @@ package org.microcol.gui.screen;
 import org.microcol.gui.event.ChangeLanguageEvent;
 import org.microcol.gui.screen.campaign.ScreenCampaign;
 import org.microcol.gui.screen.colony.ScreenColony;
+import org.microcol.gui.screen.editor.ScreenEditor;
 import org.microcol.gui.screen.europe.ScreenEurope;
 import org.microcol.gui.screen.game.ScreenGame;
 import org.microcol.gui.screen.goals.ScreenGoals;
@@ -49,7 +50,7 @@ public final class MainPanelPresenter {
             final ScreenSetting screenSetting, final ScreenColony screenColony,
             final ScreenMarketBuy screenMarketBuy, final ScreenMarketSell screenMarketSell,
             final ScreenStatistics screenStatistics, final ScreenTurnReport screenTurnReport,
-            final ScreenGoals screenGoals) {
+            final ScreenEditor screenEditor, final ScreenGoals screenGoals) {
         this.view = Preconditions.checkNotNull(view);
         this.i18n = Preconditions.checkNotNull(i18n);
 
@@ -114,6 +115,11 @@ public final class MainPanelPresenter {
                 }, event -> {
                     if (Screen.GOALS == event.getScreen()) {
                         return screenGoals;
+                    }
+                    return null;
+                }, event -> {
+                    if (Screen.EDITOR == event.getScreen()) {
+                        return screenEditor;
                     }
                     return null;
                 }));

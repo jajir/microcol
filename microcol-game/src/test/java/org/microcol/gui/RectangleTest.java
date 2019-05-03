@@ -15,16 +15,19 @@ public class RectangleTest {
 
     static Stream<Arguments> dataProvider() {
         return Stream.of(
-                arguments(Rectangle.of(Point.of(10, 10), Point.of(30, 30)), 0, 0, Boolean.FALSE),
-                arguments(Rectangle.of(Point.of(10, 10), Point.of(30, 30)), 100, 100,
+                arguments(Rectangle.ofPointAndSize(Point.of(10, 10), Point.of(20, 20)), 0, 0,
                         Boolean.FALSE),
-                arguments(Rectangle.of(Point.of(10, 10), Point.of(30, 30)), 10, 10, Boolean.TRUE),
-                arguments(Rectangle.of(Point.of(10, 10), Point.of(30, 30)), 20, 20, Boolean.TRUE));
+                arguments(Rectangle.ofPointAndSize(Point.of(10, 10), Point.of(20, 20)), 100, 100,
+                        Boolean.FALSE),
+                arguments(Rectangle.ofPointAndSize(Point.of(10, 10), Point.of(20, 20)), 10, 10,
+                        Boolean.TRUE),
+                arguments(Rectangle.ofPointAndSize(Point.of(10, 10), Point.of(20, 20)), 20, 20,
+                        Boolean.TRUE));
     }
 
     @ParameterizedTest(name = "{index}: Reactangle={0}, Point (x = {1}, y = {2}) should be inside {3} rectangle")
     @MethodSource("dataProvider")
-    public void testName(final Rectangle rectangle, final int x, final int y,
+    public void test_isIn(final Rectangle rectangle, final int x, final int y,
             final boolean shouldBeIn) throws Exception {
         Preconditions.checkNotNull(rectangle);
         Preconditions.checkNotNull(shouldBeIn);

@@ -2,13 +2,11 @@ package org.microcol.gui.event.model;
 
 import java.io.File;
 
-import org.microcol.gui.screen.Screen;
-import org.microcol.gui.screen.ShowScreenEvent;
 import org.microcol.model.campaign.Campaign;
 import org.microcol.model.campaign.CampaignManager;
+import org.microcol.model.campaign.CampaignMission;
 import org.microcol.model.campaign.CampaignName;
 import org.microcol.model.campaign.CampaignNames;
-import org.microcol.model.campaign.CampaignMission;
 import org.microcol.model.campaign.GameModel;
 import org.microcol.model.campaign.GameModelDao;
 import org.microcol.model.campaign.MissionName;
@@ -60,7 +58,6 @@ public final class GameController {
 
     private void startMission(final GameModel gameMode) {
         gameModelController.setAndStartModel(gameMode);
-        eventBus.post(new ShowScreenEvent(Screen.GAME));
     }
 
     public boolean isDefaultCampaignFinished() {
