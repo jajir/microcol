@@ -338,14 +338,19 @@ public class Colony {
                 .getType();
     }
 
-    // FIXME change location to direction.
-    public ColonyField getColonyFieldInDirection(final Location fieldDirection) {
+    /**
+     * Get colony in direction. All fields are identified by direction in which
+     * it lies.
+     *
+     * @param fieldDirection
+     *            required filed direction
+     * @return return colony field
+     */
+    public ColonyField getColonyFieldInDirection(final Direction fieldDirection) {
         Preconditions.checkNotNull(fieldDirection, "Field direction is null");
-        Preconditions.checkArgument(fieldDirection.isDirection(),
-                String.format("Direction (%s) is  not known", fieldDirection));
-        return colonyFields.stream().filter(
-                colonyFiled -> colonyFiled.getDirection().getVector().equals(fieldDirection))
-                .findAny().orElseThrow(() -> new IllegalStateException(String.format(
+        return colonyFields.stream()
+                .filter(colonyFiled -> colonyFiled.getDirection().equals(fieldDirection)).findAny()
+                .orElseThrow(() -> new IllegalStateException(String.format(
                         "Field directiond (%s) is not in colony (%s)", fieldDirection, this)));
     }
 

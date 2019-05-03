@@ -10,6 +10,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.microcol.gui.Point;
+import org.microcol.model.Direction;
 import org.microcol.model.Location;
 
 public class ClickableAreaTest {
@@ -27,22 +28,22 @@ public class ClickableAreaTest {
                 /*
                  * Visible locations
                  */
-                arguments(Point.of(15, 15), Optional.of(Location.of(-1, -1))),
-                arguments(Point.of(60, 15), Optional.of(Location.of(0, -1))),
-                arguments(Point.of(105, 15), Optional.of(Location.of(1, -1))),
-                arguments(Point.of(15, 60), Optional.of(Location.of(-1, 0))),
+                arguments(Point.of(15, 15), Optional.of(Direction.northWest)),
+                arguments(Point.of(60, 15), Optional.of(Direction.north)),
+                arguments(Point.of(105, 15), Optional.of(Direction.northEast)),
+                arguments(Point.of(15, 60), Optional.of(Direction.west)),
                 arguments(Point.of(60, 60), Optional.empty()),
-                arguments(Point.of(105, 60), Optional.of(Location.of(1, 0))),
-                arguments(Point.of(15, 105), Optional.of(Location.of(-1, 1))),
-                arguments(Point.of(105, 105), Optional.of(Location.of(1, 1))),
-                arguments(Point.of(60, 105), Optional.of(Location.of(0, 1))));
+                arguments(Point.of(105, 60), Optional.of(Direction.east)),
+                arguments(Point.of(15, 105), Optional.of(Direction.southWest)),
+                arguments(Point.of(105, 105), Optional.of(Direction.southEast)),
+                arguments(Point.of(60, 105), Optional.of(Direction.south)));
     }
 
     @ParameterizedTest(name = "{index}: location = {0}, isVisible= {1}")
     @MethodSource("dataProvider_for_isLocationVisible")
     public void test_isLocationVisible(final Point point, final Optional<Location> oLocation)
             throws Exception {
-        Optional<Location> oRet = clickableArea.getDirection(point);
+        Optional<Direction> oRet = clickableArea.getDirection(point);
 
         assertEquals(oLocation, oRet);
     }

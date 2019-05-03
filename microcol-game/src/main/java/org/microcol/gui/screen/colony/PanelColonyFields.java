@@ -13,9 +13,9 @@ import org.microcol.gui.util.JavaFxComponent;
 import org.microcol.gui.util.PaintService;
 import org.microcol.model.Colony;
 import org.microcol.model.ColonyField;
+import org.microcol.model.Direction;
 import org.microcol.model.Goods;
 import org.microcol.model.GoodsType;
-import org.microcol.model.Location;
 import org.microcol.model.Terrain;
 import org.microcol.model.Unit;
 import org.slf4j.Logger;
@@ -121,7 +121,7 @@ public final class PanelColonyFields implements JavaFxComponent {
 
     private void onDragDetected(final MouseEvent event) {
         logger.debug("Drag detected");
-        final Optional<Location> oLoc = clickableArea
+        final Optional<Direction> oLoc = clickableArea
                 .getDirection(Point.of(event.getX(), event.getY()));
         oLoc.map(loc -> colony.getColonyFieldInDirection(loc)).filter(ColonyField::isNotEmpty)
                 .ifPresent(colonyField -> {
@@ -130,18 +130,19 @@ public final class PanelColonyFields implements JavaFxComponent {
                 });
     }
 
-    private void dragStartedAtColonyField(final ColonyField colonyField, final Location direction) {
+    private void dragStartedAtColonyField(final ColonyField colonyField,
+            final Direction direction) {
         final Unit unit = colonyField.getUnit().get();
         final Image image = imageProvider.getUnitImage(unit);
         final Dragboard db = canvas.startDragAndDrop(TransferMode.MOVE);
-        ClipboardWritter.make(db).addImage(image).addTransferFromColonyField(direction)
+        ClipboardWritter.make(db).addImage(image).addTransferFromColonyField(direction.getVector())
                 .addUnit(unit).build();
     }
 
     private void onDragOver(final DragEvent event) {
         logger.debug("Drag Over");
         if (isItUnit(event.getDragboard())) {
-            final Optional<Location> oLoc = clickableArea
+            final Optional<Direction> oLoc = clickableArea
                     .getDirection(Point.of(event.getX(), event.getY()));
             if (canFieldAcceptDraggedUnit(oLoc)) {
                 event.acceptTransferModes(TransferMode.MOVE);
@@ -154,16 +155,14 @@ public final class PanelColonyFields implements JavaFxComponent {
         event.consume();
     }
 
-    private boolean canFieldAcceptDraggedUnit(final Optional<Location> oLoc) {
-        return oLoc.map(loc -> loc.isDirection() ? loc : null)
-                .map(loc -> colony.getColonyFieldInDirection(loc).isEmpty()).orElse(false);
+    private boolean canFieldAcceptDraggedUnit(final Optional<Direction> oLoc) {
+        return oLoc.map(loc -> colony.getColonyFieldInDirection(loc).isEmpty()).orElse(false);
     }
 
     private void onDragDropped(final DragEvent event) {
         logger.debug("Drag dropped");
         clickableArea.getDirection(Point.of(event.getX(), event.getY()))
-                .filter(Location::isDirection).map(loc -> colony.getColonyFieldInDirection(loc))
-                .filter(ColonyField::isEmpty)
+                .map(loc -> colony.getColonyFieldInDirection(loc)).filter(ColonyField::isEmpty)
                 .ifPresent(colonyField -> dragDropped(colonyField, event));
         event.consume();
     }

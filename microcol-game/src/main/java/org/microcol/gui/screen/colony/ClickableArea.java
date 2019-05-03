@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.microcol.gui.Point;
+import org.microcol.model.Direction;
 import org.microcol.model.Location;
 
 import com.google.common.base.MoreObjects;
@@ -13,7 +14,8 @@ import com.google.common.collect.Lists;
 
 /**
  * Holds rectangular areas (fields) in on-screen coordinates. It convert
- * on-screen coordinates to direction of field. Direction is {@link Location}.
+ * on-screen canvas coordinates to direction of field. Direction is
+ * {@link Location}.
  */
 public final class ClickableArea {
 
@@ -30,9 +32,10 @@ public final class ClickableArea {
         areas.put(colonyFieldTile, loc);
     }
 
-    public Optional<Location> getDirection(final Point point) {
+    public Optional<Direction> getDirection(final Point point) {
         return areas.entrySet().stream().filter(entry -> entry.getKey().isIn(point))
-                .map(entry -> entry.getValue()).findAny();
+                .map(entry -> entry.getValue()).map(location -> Direction.valueOf(location))
+                .findAny();
     }
 
     @Override

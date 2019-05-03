@@ -69,7 +69,7 @@ public class ColonyTest {
         final Colony colony = makeDefaultColony();
         mockFileds();
         final ColonyField colonyField = colony
-                .getColonyFieldInDirection(Direction.north.getVector());
+                .getColonyFieldInDirection(Direction.north);
 
         verifyCornProduction(colony, 0, 0);
 
@@ -101,7 +101,7 @@ public class ColonyTest {
         mockFileds();
 
         final ColonyField colonyField = colony
-                .getColonyFieldInDirection(Direction.east.getVector());
+                .getColonyFieldInDirection(Direction.east);
 
         // place unit at ocean field, and define unit type
         when(unit.getType()).thenReturn(UnitType.COLONIST);
@@ -121,9 +121,9 @@ public class ColonyTest {
         mockFileds();
 
         final ColonyField colonyFieldEast = colony
-                .getColonyFieldInDirection(Direction.east.getVector());
+                .getColonyFieldInDirection(Direction.east);
         final ColonyField colonyFieldWest = colony
-                .getColonyFieldInDirection(Direction.west.getVector());
+                .getColonyFieldInDirection(Direction.west);
 
         // place unit at ocean field, and define unit type
         when(unit.getType()).thenReturn(UnitType.COLONIST);
@@ -148,7 +148,7 @@ public class ColonyTest {
         // place unit at all fields
         when(unit.getType()).thenReturn(UnitType.COLONIST);
         Direction.getAll().forEach(direction -> {
-            final ColonyField field = colony.getColonyFieldInDirection(direction.getVector());
+            final ColonyField field = colony.getColonyFieldInDirection(direction);
             PlaceColonyField place = new PlaceColonyField(unit, field, GoodsType.CORN);
             field.setPlaceColonyField(place);
             assertFalse(field.isEmpty());

@@ -195,8 +195,8 @@ public final class PlaceBuilderPo implements Function<Unit, Place> {
                 Preconditions.checkState(oColony.isPresent(), "Colony at (%s) is not in model",
                         colonyPo.getLocation());
                 final Colony colony = oColony.get();
-                final ColonyField colonyField = colony
-                        .getColonyFieldInDirection(constructionPo.getDirection());
+                final Direction direction = Direction.valueOf(constructionPo.getDirection());
+                final ColonyField colonyField = colony.getColonyFieldInDirection(direction);
                 PlaceColonyField out = new PlaceColonyField(unit, colonyField,
                         constructionPo.getProducedGoodsType());
                 colonyField.setPlaceColonyField(out);
