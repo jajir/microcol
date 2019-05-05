@@ -64,7 +64,7 @@ public final class TurnReportPanel implements GameScreen {
     public void beforeShow() {
         turnEventsPanel.getChildren().clear();
         if (gameModelController.getModel()
-                .isTurnEventsMessagesEmpty(gameModelController.getCurrentPlayer())) {
+                .isTurnEventsMessagesEmpty(gameModelController.getHumanPlayer())) {
             turnEventsPanel.getChildren().add(new Label(i18n.get(Loc.turnReport_noEvents)));
         } else {
             teService.getMessages().forEach(

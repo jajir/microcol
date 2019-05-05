@@ -84,7 +84,7 @@ public final class PanelPortPier implements JavaFxComponent, UpdatableLanguage, 
     public void repaint() {
         panelUnits.getChildren().clear();
         gameModelController.getModel().getEurope().getPier()
-                .getUnits(gameModelController.getCurrentPlayer()).forEach(unit -> panelUnits
+                .getUnits(gameModelController.getHumanPlayer()).forEach(unit -> panelUnits
                         .getChildren().add(new PanelPortPierUnit(unit, imageProvider)));
     }
 

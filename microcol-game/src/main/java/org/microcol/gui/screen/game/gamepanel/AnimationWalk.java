@@ -19,7 +19,7 @@ import javafx.scene.canvas.GraphicsContext;
  * Draw walk animation based on predefined path. It animate just neighbors step.
  * 
  */
-public final class AnimationWalk implements Animation {
+final class AnimationWalk implements Animation {
 
     private final PaintService paintService;
 
@@ -51,7 +51,7 @@ public final class AnimationWalk implements Animation {
         this.unitOrientation = Preconditions.checkNotNull(unitOrientation);
         excludePainting.excludeUnit(unit);
 
-        final Point from = Point.CENTER;
+        final Point from = Point.ZERO;
         final Location diff = locationTo.sub(locationFrom);
         final Point to = Tile.ofLocation(Location.of(diff.getX(), diff.getY()))
                 .getBottomRightCorner();
@@ -75,8 +75,8 @@ public final class AnimationWalk implements Animation {
     public void paint(final GraphicsContext graphics, final Area area) {
         boolean wasNotPainted = true;
         while (hasNextStep() && wasNotPainted) {
-            final Point point = partialPath.get(0).add(area.convertToPoint(locationFrom));
-            if (area.isVisibleScreenPoint(point)) {
+            final Point point = partialPath.get(0).add(area.convertToCanvasPoint(locationFrom));
+            if (area.isVisibleCanvasPoint(point)) {
                 paintService.paintUnit(graphics, point, unit, unitOrientation);
                 wasNotPainted = false;
             }
@@ -94,8 +94,8 @@ public final class AnimationWalk implements Animation {
     @Override
     public boolean canBePainted(final Area area) {
         if (hasNextStep()) {
-            final Point point = partialPath.get(0).add(area.convertToPoint(locationFrom));
-            return area.isVisibleScreenPoint(point);
+            final Point point = partialPath.get(0).add(area.convertToCanvasPoint(locationFrom));
+            return area.isVisibleCanvasPoint(point);
         }
         return false;
     }

@@ -28,7 +28,7 @@ public final class BuildColonyListener {
 
     @Subscribe
     private void onBuildColony(@SuppressWarnings("unused") final BuildColonyEvent event) {
-        final Player player = gameModelController.getCurrentPlayer();
+        final Player player = gameModelController.getHumanPlayer();
         final Unit unit = selectedUnitManager.getSelectedUnit()
                 .orElseThrow(() -> new IllegalStateException(
                         "Build colony event can't be invoked when no unit is selected."));

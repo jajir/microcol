@@ -150,7 +150,7 @@ public final class SelectedUnitManager {
         logger.debug("Selected unit is now: {}", selectedUnit);
     }
 
-    public void unselectUnit() {
+    private void unselectUnit() {
         forcelySetSelectedUnit(null);
     }
 

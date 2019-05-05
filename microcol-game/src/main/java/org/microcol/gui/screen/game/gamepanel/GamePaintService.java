@@ -35,7 +35,7 @@ import javafx.scene.paint.Color;
  * UI.
  */
 @Singleton
-public final class GamePaintService {
+final class GamePaintService {
 
     private final ImageProvider imageProvider;
 
@@ -63,23 +63,28 @@ public final class GamePaintService {
      * @param area
      *            required visible area description
      * @param oneTurnMoveHighlighter
-     *            required service that helps highlight possible move fo current
-     *            turn
+     *            required service that helps highlight possible move for
+     *            current turn
+     * @param coord
+     *            required object holding information about canvas in world map
+     *            coordinates (Location)
      */
     public void paintTerrain(final GraphicsContext graphics, final Area area,
-            final OneTurnMoveHighlighter oneTurnMoveHighlighter) {
-        final Player player = gameModelController.getCurrentPlayer();
-        for (int i = area.getTopLeft().getX(); i <= area.getBottomRight().getX(); i++) {
-            for (int j = area.getTopLeft().getY(); j <= area.getBottomRight().getY(); j++) {
+            final OneTurnMoveHighlighter oneTurnMoveHighlighter,
+            final CanvasInMapCoordinates coord) {
+        final Player player = gameModelController.getHumanPlayer();
+        for (int i = coord.getTopLeft().getX(); i <= coord.getBottomRight().getX(); i++) {
+            for (int j = coord.getTopLeft().getY(); j <= coord.getBottomRight().getY(); j++) {
                 final Location location = Location.of(i, j);
-                final Point point = area.convertToPoint(location);
+                final Point point = area.convertToCanvasPoint(location);
                 if (player.isVisible(location)) {
                     final Terrain terrain = gameModelController.getModel().getMap()
                             .getTerrainAt(location);
                     paintService.paintTerrainOnTile(graphics, point, location, terrain,
                             oneTurnMoveHighlighter.isItHighlighted(location));
                 } else {
-                    final Image imageHidden = imageProvider.getImage(ImageLoaderTerrain.IMG_TILE_HIDDEN);
+                    final Image imageHidden = imageProvider
+                            .getImage(ImageLoaderTerrain.IMG_TILE_HIDDEN);
                     graphics.drawImage(imageHidden, 0, 0, TILE_WIDTH_IN_PX, TILE_WIDTH_IN_PX,
                             point.getX(), point.getY(), TILE_WIDTH_IN_PX, TILE_WIDTH_IN_PX);
                 }
@@ -107,7 +112,7 @@ public final class GamePaintService {
     public void paintUnits(final GraphicsContext graphics, final Model model, final Area area,
             final ExcludePainting excludePainting) {
         final Map<Location, List<Unit>> ships = model.getUnitsAt();
-        final Player player = gameModelController.getCurrentPlayer();
+        final Player player = gameModelController.getHumanPlayer();
 
         final Map<Location, List<Unit>> ships2 = ships.entrySet().stream()
                 .filter(entry -> area.isLocationVisible(entry.getKey()))
@@ -116,7 +121,7 @@ public final class GamePaintService {
 
         ships2.forEach((location, list) -> {
             final Unit unit = list.stream().findFirst().get();
-            final Point point = area.convertToPoint(location);
+            final Point point = area.convertToCanvasPoint(location);
             if (excludePainting.isUnitIncluded(unit)) {
                 paintService.paintUnit(graphics, point, unit);
             }
@@ -124,31 +129,32 @@ public final class GamePaintService {
     }
 
     public void paintColonies(final GraphicsContext graphics, final Model model, final Area area) {
-        final Player player = gameModelController.getCurrentPlayer();
+        final Player player = gameModelController.getHumanPlayer();
         final Map<Location, Colony> colonies = model.getColoniesAt().entrySet().stream()
                 .filter(entry -> area.isLocationVisible(entry.getKey()))
                 .filter(entry -> player.isVisible(entry.getKey()))
                 .collect(Collectors.toMap(entry -> entry.getKey(), entry -> entry.getValue()));
 
         colonies.forEach((location, colony) -> {
-            final Point point = area.convertToPoint(location);
+            final Point point = area.convertToCanvasPoint(location);
             paintService.paintColony(graphics, point, colony, true);
         });
 
     }
 
-    public void paintGrid(final GraphicsContext graphics, final Area area) {
+    public void paintGrid(final GraphicsContext graphics, final Area area,
+            final CanvasInMapCoordinates coord) {
         if (gamePreferences.isGridShown()) {
             graphics.setStroke(Color.LIGHTGREY);
             graphics.setLineWidth(1);
-            for (int i = area.getTopLeft().getX(); i <= area.getBottomRight().getX(); i++) {
-                final Location l_1 = Location.of(i, area.getTopLeft().getY());
-                final Location l_2 = Location.of(i, area.getBottomRight().getY() + 1);
+            for (int i = coord.getTopLeft().getX(); i <= coord.getBottomRight().getX(); i++) {
+                final Location l_1 = Location.of(i, coord.getTopLeft().getY());
+                final Location l_2 = Location.of(i, coord.getBottomRight().getY() + 1);
                 drawNetLine(graphics, area, l_1, l_2);
             }
-            for (int j = area.getTopLeft().getY(); j <= area.getBottomRight().getY(); j++) {
-                final Location l_1 = Location.of(area.getTopLeft().getX(), j);
-                final Location l_2 = Location.of(area.getBottomRight().getX() + 1, j);
+            for (int j = coord.getTopLeft().getY(); j <= coord.getBottomRight().getY(); j++) {
+                final Location l_1 = Location.of(coord.getTopLeft().getX(), j);
+                final Location l_2 = Location.of(coord.getBottomRight().getX() + 1, j);
                 drawNetLine(graphics, area, l_1, l_2);
             }
         }
@@ -156,8 +162,8 @@ public final class GamePaintService {
 
     private void drawNetLine(final GraphicsContext graphics, final Area area, final Location l_1,
             final Location l_2) {
-        final Point p_1 = area.convertToPoint(l_1).add(-1, -1);
-        final Point p_2 = area.convertToPoint(l_2).add(-1, -1);
+        final Point p_1 = area.convertToCanvasPoint(l_1).add(-1, -1);
+        final Point p_2 = area.convertToCanvasPoint(l_2).add(-1, -1);
         graphics.strokeLine(p_1.getX(), p_1.getY(), p_2.getX(), p_2.getY());
     }
 
@@ -182,7 +188,7 @@ public final class GamePaintService {
      */
     public void paintCursor(final GraphicsContext graphics, final Area area,
             final Location location) {
-        final Point p = area.convertToPoint(location);
+        final Point p = area.convertToCanvasPoint(location);
         graphics.strokeLine(p.getX(), p.getY(), p.getX() + TILE_WIDTH_IN_PX, p.getY());
         graphics.strokeLine(p.getX(), p.getY(), p.getX(), p.getY() + TILE_WIDTH_IN_PX);
         graphics.strokeLine(p.getX() + TILE_WIDTH_IN_PX, p.getY(), p.getX() + TILE_WIDTH_IN_PX,

@@ -64,7 +64,7 @@ public class WorldMap {
     }
 
     public Location getMaxLocation() {
-        return Location.of(maxX, maxX);
+        return Location.of(maxX, maxY);
     }
 
     public TerrainType getTerrainTypeAt(final Location location) {

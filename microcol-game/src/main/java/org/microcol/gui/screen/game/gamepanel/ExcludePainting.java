@@ -27,15 +27,15 @@ public final class ExcludePainting {
         excludeUnits = new HashSet<>();
     }
 
-    public void excludeUnit(final Unit unit) {
+    void excludeUnit(final Unit unit) {
         excludeUnits.add(Preconditions.checkNotNull(unit));
     }
 
-    public void includeUnit(final Unit unit) {
+    void includeUnit(final Unit unit) {
         excludeUnits.remove(Preconditions.checkNotNull(unit));
     }
 
-    public boolean isUnitIncluded(final Unit unit) {
+    boolean isUnitIncluded(final Unit unit) {
         return !excludeUnits.contains(Preconditions.checkNotNull(unit));
     }
 

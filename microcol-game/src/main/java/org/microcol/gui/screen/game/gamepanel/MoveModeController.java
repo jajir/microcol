@@ -10,7 +10,7 @@ import javafx.scene.canvas.Canvas;
  * View for main game panel.
  */
 @Singleton
-public final class MoveModeController {
+final class MoveModeController {
 
     private final GamePanelComponent gamePanelComponent;
 
@@ -31,13 +31,13 @@ public final class MoveModeController {
         this.cursorService = Preconditions.checkNotNull(cursorService);
     }
 
-    public void setMoveModeOff() {
+    void setMoveModeOff() {
         oneTurnMoveHighlighter.setLocations(null);
         cursorService.setDefaultCursor(getCanvas());
         modeController.setMoveMode(false);
     }
 
-    public void setMoveModeOn() {
+    void setMoveModeOn() {
         cursorService.setMoveCursor(getCanvas());
         modeController.setMoveMode(true);
     }

@@ -114,7 +114,7 @@ public final class StatisticsPanel implements GameScreen {
             return;
         }
         final List<TurnPlayerStatistics> stats = gameModelController.getModel().getStatistics()
-                .getStatsForPlayer(gameModelController.getCurrentPlayer());
+                .getStatsForPlayer(gameModelController.getHumanPlayer());
         final Calendar calendar = gameModelController.getModel().getCalendar();
         chartPanel.getChildren().clear();
         if (KEY_GOLD.equals(newValue.getUserData())) {

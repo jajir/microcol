@@ -71,7 +71,6 @@ import org.microcol.gui.screen.game.gamepanel.TileWasSelectedListener;
 import org.microcol.gui.screen.game.gamepanel.UnitAttackedEventListener;
 import org.microcol.gui.screen.game.gamepanel.UnitMoveFinishedListener;
 import org.microcol.gui.screen.game.gamepanel.UnitMovedListener;
-import org.microcol.gui.screen.game.gamepanel.VisibleArea;
 import org.microcol.gui.screen.goals.ScreenGoalsPresenter;
 import org.microcol.gui.screen.market.ScreenMarketPresenter;
 import org.microcol.gui.screen.menu.ButtonsPanelPresenter;
@@ -193,7 +192,6 @@ public final class MicroColModule extends AbstractModule {
         bind(SelectedUnitManager.class).in(Singleton.class);
         bind(ExcludePainting.class).in(Singleton.class);
         bind(GamePanelController.class).in(Singleton.class);
-        bind(VisibleArea.class).in(Singleton.class);
         bind(UnitMoveFinishedListener.class).asEagerSingleton();
         bind(UnitMovedListener.class).asEagerSingleton();
         bind(ScrollToSelectedUnit.class).asEagerSingleton();

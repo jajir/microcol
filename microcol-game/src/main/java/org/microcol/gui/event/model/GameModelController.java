@@ -14,6 +14,7 @@ import org.microcol.model.Model;
 import org.microcol.model.Path;
 import org.microcol.model.Player;
 import org.microcol.model.Unit;
+import org.microcol.model.WorldMap;
 import org.microcol.model.campaign.GameModel;
 import org.microcol.model.unit.UnitWithCargo;
 import org.slf4j.Logger;
@@ -82,22 +83,25 @@ public class GameModelController {
         return gameModel.getModel();
     }
 
+    public WorldMap getMap() {
+        return gameModel.getModel().getMap();
+    }
+
     public int getKingsTaxPercentage() {
-        return getModel().getKingsTaxForPlayer(getCurrentPlayer());
+        return getModel().getKingsTaxForPlayer(getHumanPlayer());
     }
 
     public boolean isGameModelReady() {
         return gameModel != null;
     }
 
-    public Player getCurrentPlayer() {
-        return getModel().getPlayers().stream().filter(Player::isHuman).findFirst()
-                .orElseThrow(() -> new IllegalStateException("There is no human player"));
+    public Player getRealCurrentPlayer() {
+        return gameModel.getModel().getCurrentPlayer();
     }
 
     public Goods getMaxBuyableGoods(final GoodsType goodsType) {
         final GoodsTrade goodsTrade = getModel().getEurope().getGoodsTradeForType(goodsType);
-        return goodsTrade.getAvailableAmountFor(getCurrentPlayer().getGold());
+        return goodsTrade.getAvailableAmountFor(getHumanPlayer().getGold());
     }
 
     public GoodsTrade getEuropeGoodsTradeForType(final GoodsType goodsType) {
@@ -105,13 +109,13 @@ public class GameModelController {
     }
 
     /**
-     * Get human player, even in not on turn.
+     * Get human player, even if human player if is not on turn.
      * 
      * @return return human player
      */
     public Player getHumanPlayer() {
-        // It use getCurrentPLaye implementation which is not correct.
-        return getCurrentPlayer();
+        return getModel().getPlayers().stream().filter(Player::isHuman).findFirst()
+                .orElseThrow(() -> new IllegalStateException("There is no human player"));
     }
 
     private void tryToStopGame() {

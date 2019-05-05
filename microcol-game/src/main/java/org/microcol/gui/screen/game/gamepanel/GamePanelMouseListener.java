@@ -37,7 +37,7 @@ public final class GamePanelMouseListener {
 
     private final ModeController modeController;
 
-    private final VisibleArea visibleArea;
+    private final VisibleAreaService visibleArea;
 
     private final GamePanelController gamePanelController;
 
@@ -50,7 +50,7 @@ public final class GamePanelMouseListener {
             final GameModelController gameModelController,
             final SelectedTileManager selectedTileManager, final EventBus eventBus,
             final MouseOverTileManager mouseOverTileManager, final ModeController modeController,
-            final GamePanelController gamePanelController, final VisibleArea visibleArea,
+            final GamePanelController gamePanelController, final VisibleAreaService visibleArea,
             final GamePanelComponent gamePanelComponent,
             final GamePanelPresenter gamePanelPresenter) {
         this.gameModelController = Preconditions.checkNotNull(gameModelController);
@@ -90,7 +90,7 @@ public final class GamePanelMouseListener {
     private boolean tryToSwitchToMoveMode(final Location currentLocation) {
         Preconditions.checkNotNull(currentLocation);
         final List<Unit> availableUnits = gameModelController.getModel()
-                .getMoveableUnitAtOwnedBy(currentLocation, gameModelController.getCurrentPlayer());
+                .getMoveableUnitAtOwnedBy(currentLocation, gameModelController.getHumanPlayer());
         if (availableUnits.isEmpty()) {
             return false;
         } else {

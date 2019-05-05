@@ -22,7 +22,7 @@ public final class OneTurnMoveHighlighter {
         this.locations = locations;
     }
 
-    public boolean isItHighlighted(final Location location) {
+    boolean isItHighlighted(final Location location) {
         return locations != null && locations.contains(location);
     }
 

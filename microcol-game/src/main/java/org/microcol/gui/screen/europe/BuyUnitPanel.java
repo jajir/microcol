@@ -28,7 +28,7 @@ public final class BuyUnitPanel extends VBox {
         buttonBuy.getStyleClass().add("buttonBuy");
         buttonBuy.setOnAction(event -> {
             try {
-                gameModelController.getCurrentPlayer().buy(unitType);
+                gameModelController.getHumanPlayer().buy(unitType);
                 buyUnitsDialog.closeAndRepaint();
             } catch (NotEnoughtGoldException e) {
                 dialogNotEnoughGold.showAndWait();

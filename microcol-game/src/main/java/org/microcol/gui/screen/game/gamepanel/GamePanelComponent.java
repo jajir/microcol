@@ -31,7 +31,7 @@ public final class GamePanelComponent implements ScreenLifeCycle, JavaFxComponen
 
     private final FpsCounter fpsCounter;
 
-    private final VisibleArea visibleArea;
+    private final VisibleAreaService visibleArea;
 
     private final GamePanelPainter gamePanelPainter;
 
@@ -39,7 +39,7 @@ public final class GamePanelComponent implements ScreenLifeCycle, JavaFxComponen
 
     @Inject
     public GamePanelComponent(final GameModelController gameModelController,
-            final VisibleArea visibleArea, final CanvasComponent paneCanvas,
+            final VisibleAreaService visibleArea, final CanvasComponent paneCanvas,
             final GamePanelPainter gamePanelPainter) {
         this.gameModelController = Preconditions.checkNotNull(gameModelController);
         this.visibleArea = Preconditions.checkNotNull(visibleArea);
@@ -47,12 +47,12 @@ public final class GamePanelComponent implements ScreenLifeCycle, JavaFxComponen
         this.gamePanelPainter = Preconditions.checkNotNull(gamePanelPainter);
 
         canvasComponent.widthProperty().addListener((obj, oldValue, newValue) -> {
-            if (newValue.intValue() < VisibleArea.MAX_CANVAS_SIDE_LENGTH) {
+            if (newValue.intValue() < VisibleAreaService.MAX_CANVAS_SIDE_LENGTH) {
                 visibleArea.setCanvasWidth(newValue.intValue());
             }
         });
         canvasComponent.heightProperty().addListener((obj, oldValue, newValue) -> {
-            if (newValue.intValue() < VisibleArea.MAX_CANVAS_SIDE_LENGTH) {
+            if (newValue.intValue() < VisibleAreaService.MAX_CANVAS_SIDE_LENGTH) {
                 visibleArea.setCanvasHeight(newValue.intValue());
             }
         });

@@ -57,7 +57,7 @@ public final class GamePanelPresenter {
 
     private final ModeController modeController;
 
-    private final VisibleArea visibleArea;
+    private final VisibleAreaService visibleArea;
 
     private final UnitUtil unitUtil;
 
@@ -72,7 +72,7 @@ public final class GamePanelPresenter {
             final SelectedTileManager selectedTileManager, final ViewUtil viewUtil,
             final EventBus eventBus, final ModeController modeController,
             final SelectedUnitManager selectedUnitManager, final I18n i18n,
-            final VisibleArea visibleArea, final OneTurnMoveHighlighter oneTurnMoveHighlighter,
+            final VisibleAreaService visibleArea, final OneTurnMoveHighlighter oneTurnMoveHighlighter,
             final UnitUtil unitUtil, final MoveModeController moveModeController) {
         this.gameModelController = Preconditions.checkNotNull(gameModelController);
         this.gamePreferences = gamePreferences;
@@ -102,7 +102,7 @@ public final class GamePanelPresenter {
 
     @Subscribe
     private void onGameStarted(final GameStartedEvent event) {
-        visibleArea.setWorldMap(event.getModel().getMap());
+        visibleArea.setWorldMap(event.getModel().getMap().getMaxLocation());
     }
 
     @Subscribe
@@ -121,9 +121,9 @@ public final class GamePanelPresenter {
         });
     }
 
-    public void tryToOpenColonyDetail(final Location currentLocation) {
+    void tryToOpenColonyDetail(final Location currentLocation) {
         Preconditions.checkNotNull(currentLocation);
-        final Optional<Colony> oColony = gameModelController.getCurrentPlayer()
+        final Optional<Colony> oColony = gameModelController.getHumanPlayer()
                 .getColoniesAt(currentLocation);
         if (oColony.isPresent()) {
             // show colony details
@@ -134,7 +134,7 @@ public final class GamePanelPresenter {
     private void swithToMoveMode() {
         Preconditions.checkArgument(selectedTileManager.getSelectedTile().isPresent(),
                 "to move mode could be switched just when some tile is selected.");
-        final List<Unit> units = gameModelController.getCurrentPlayer()
+        final List<Unit> units = gameModelController.getHumanPlayer()
                 .getUnitsAt(selectedTileManager.getSelectedTile().get());
         Preconditions.checkState(!units.isEmpty(),
                 "There is no moveable unit or other entity to interact with.");

@@ -121,7 +121,7 @@ public class ButtonsGamePanelController {
 
     private void evaluateDeclareIndependenceButton() {
         view.setVisibleButtonDeclareIndependence(
-                gameModelController.getCurrentPlayer().isPossibleToDecalareIndependence());
+                gameModelController.getHumanPlayer().isPossibleToDecalareIndependence());
     }
 
     private void evaluatePlowField(final Unit unit) {

@@ -7,7 +7,10 @@ import com.google.common.base.MoreObjects;
  */
 public final class Point {
 
-    public static final Point CENTER = Point.of(0, 0);
+    /**
+     * Point at zero [0,0].
+     */
+    public static final Point ZERO = Point.of(0, 0);
 
     /**
      * On screen X coordinate.
@@ -83,6 +86,14 @@ public final class Point {
 
     public Point multiply(final int factor) {
         return new Point(x * factor, y * factor);
+    }
+
+    public boolean isGreaterOrEqualsThan(final Point point) {
+        return x >= point.x && y >= point.y;
+    }
+
+    public boolean isSmallerOrEqualsThan(final Point point) {
+        return x <= point.x && y <= point.y;
     }
 
     /**

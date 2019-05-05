@@ -43,11 +43,11 @@ public final class ShowTurnEvensOnTurnStartedEvent {
     }
 
     private boolean isCorrectPlayer(final TurnStartedEvent event) {
-        return gameModelController.getCurrentPlayer().equals(event.getPlayer());
+        return gameModelController.getHumanPlayer().equals(event.getPlayer());
     }
 
     private boolean isEventsEmpty() {
         return gameModelController.getModel()
-                .isTurnEventsMessagesEmpty(gameModelController.getCurrentPlayer());
+                .isTurnEventsMessagesEmpty(gameModelController.getHumanPlayer());
     }
 }

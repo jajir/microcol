@@ -53,7 +53,7 @@ public class TeService {
 
     public List<TeItemSimple> getMessages() {
         final List<TurnEvent> turnEvents = getModel()
-                .getTurnEventsLocalizedMessages(gameModelController.getCurrentPlayer());
+                .getTurnEventsLocalizedMessages(gameModelController.getHumanPlayer());
         return turnEvents.stream().map(turnEvent -> turnEventResolver.apply(turnEvent))
                 .collect(ImmutableList.toImmutableList());
     }

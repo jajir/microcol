@@ -14,7 +14,7 @@ public final class TileWasSelectedEvent {
 
     private final ScrollToFocusedTile scrollToFocusedTile;
 
-    public TileWasSelectedEvent(final Location location,
+    TileWasSelectedEvent(final Location location,
             final ScrollToFocusedTile scrollToFocusedTile) {
         this.location = Preconditions.checkNotNull(location);
         this.scrollToFocusedTile = Preconditions.checkNotNull(scrollToFocusedTile);

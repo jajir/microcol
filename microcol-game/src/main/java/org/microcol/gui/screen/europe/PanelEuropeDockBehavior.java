@@ -53,7 +53,7 @@ public final class PanelEuropeDockBehavior extends AbstractPanelDockBehavior {
     @Override
     public List<UnitWithCargo> getUnitsInPort() {
         return gameModelController.getModel().getEurope().getPort()
-                .getShipsInPort(gameModelController.getCurrentPlayer());
+                .getShipsInPort(gameModelController.getHumanPlayer());
     }
 
     @Override

@@ -31,17 +31,17 @@ public class TilePainter {
     }
 
     public void setTerrain(final Terrain terrain, final Location location) {
-        paintService.paintTerrainOnTile(canvas.getGraphicsContext2D(), Point.CENTER, location,
+        paintService.paintTerrainOnTile(canvas.getGraphicsContext2D(), Point.ZERO, location,
                 terrain, false);
     }
 
     public void paintUnit(final List<Unit> units) {
         final Unit unit = units.stream().findFirst().get();
-        paintService.paintUnit(canvas.getGraphicsContext2D(), Point.CENTER, unit);
+        paintService.paintUnit(canvas.getGraphicsContext2D(), Point.ZERO, unit);
     }
 
     public void paintColony(final Colony colony) {
-        paintService.paintColony(canvas.getGraphicsContext2D(), Point.CENTER, colony, true);
+        paintService.paintColony(canvas.getGraphicsContext2D(), Point.ZERO, colony, true);
     }
 
     public void setImage(final Image image) {

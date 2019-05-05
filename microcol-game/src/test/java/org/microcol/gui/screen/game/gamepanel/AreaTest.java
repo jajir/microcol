@@ -1,49 +1,83 @@
 package org.microcol.gui.screen.game.gamepanel;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
+import java.util.stream.Stream;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.params.provider.Arguments.arguments;
+
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.microcol.gui.Point;
+import org.microcol.gui.Tile;
+import org.microcol.gui.screen.game.gamepanel.Area;
+import org.microcol.gui.screen.game.gamepanel.VisibleAreaService;
 import org.microcol.model.Location;
-import org.microcol.model.WorldMap;
 
+/**
+ * Tests for {@link Area}.
+ */
 public class AreaTest {
 
-    private final VisibleArea visibleArea = mock(VisibleArea.class);
-
-    private final WorldMap worldMap = mock(WorldMap.class);
-
-    private Area area;
+    private final VisibleAreaService visibleArea = mock(VisibleAreaService.class);
 
     @Test
-    public void test_constructor() throws Exception {
-        assertEquals(Location.of(1, 2), area.getTopLeft());
-        assertEquals(Location.of(4, 5), area.getBottomRight());
+    public void test_isLocationVisible() throws Exception {
+        final Area area = makeArea(222, 222, 800, 600);
+        final Location loc = Location.of(12, 4);
+        final Tile tile = Tile.ofLocation(loc);
+        when(visibleArea.isVisibleMapPoint(tile.getTopLeftCorner())).thenReturn(true);
+        when(visibleArea.isVisibleMapPoint(tile.getBottomRightCorner())).thenReturn(true);
+        
+        assertTrue(area.isLocationVisible(loc));
     }
 
     @Test
-    public void test_convertToLocation() throws Exception {
-        assertEquals(Location.of(2, 2), area.convertToLocation(Point.of(23, 23)));
-        assertEquals(Location.of(8, 8), area.convertToLocation(Point.of(300, 300)));
+    public void test_getCenterToLocation_middle_of_map() throws Exception {
+        final Area area = makeArea(222, 222, 800, 600);
+
+        when(visibleArea.getCanvasSize()).thenReturn(Point.of(800, 600));
+        when(visibleArea.computeNewTopLeftConnerOfCanvas(Point.of(1805, 1905)))
+                .thenReturn(Point.of(1351, 1451));
+
+        Point po = area.getCenterToLocation(Location.of(50, 50));
+
+        assertNotNull(po);
+        assertEquals(1351, po.getX());
+        assertEquals(1451, po.getY());
     }
 
-    @BeforeEach
-    private void beforeEach() {
-        when(visibleArea.getTopLeft()).thenReturn(Point.of(30, 50));
-        when(visibleArea.getBottomRight()).thenReturn(Point.of(130, 150));
-        when(worldMap.getMaxLocationX()).thenReturn(70);
-        when(worldMap.getMaxLocationY()).thenReturn(80);
-
-        area = new Area(visibleArea, worldMap);
+    static Stream<Arguments> dataProvider_for_convertToPoint() {
+        return Stream.of(arguments(Location.of(10, 10), Point.of(183, 183)),
+                arguments(Location.of(23, 19), Point.of(768, 588)),
+                arguments(Location.of(-1, -1), Point.of(-312, -312)));
     }
 
-    @AfterEach
-    private void afterEach() {
-        area = null;
+    @ParameterizedTest(name = "{index}: locatin = {0} is converted to point = {1}")
+    @MethodSource("dataProvider_for_convertToPoint")
+    public void test_convertToPoint(final Location loc, final Point expectedPoint)
+            throws Exception {
+        final Area area = makeArea(222, 222, 800, 600);
+
+        final Point ret = area.convertToCanvasPoint(loc);
+
+        assertEquals(expectedPoint, ret);
+    }
+
+    private Area makeArea(final int viewTopLeftCornerX, final int viewTopLeftCornerY,
+            final int viewWidth, final int viewHeight) {
+        final Point topLeft = Point.of(viewTopLeftCornerX, viewTopLeftCornerY);
+        final Point bottomRight = topLeft.add(viewWidth, viewHeight);
+
+        when(visibleArea.getTopLeft()).thenReturn(topLeft);
+        when(visibleArea.getBottomRight()).thenReturn(bottomRight);
+
+        final Area out = new Area(visibleArea);
+        assertNotNull(out);
+        return out;
     }
 
 }

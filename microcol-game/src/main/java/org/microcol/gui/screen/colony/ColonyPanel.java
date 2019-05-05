@@ -116,7 +116,7 @@ public final class ColonyPanel implements JavaFxComponent, UpdatableLanguage {
 
     public void paintUnit(final Canvas canvas, final Unit unit) {
         final GraphicsContext graphics = canvas.getGraphicsContext2D();
-        paintService.paintUnit(graphics, Point.CENTER, unit);
+        paintService.paintUnit(graphics, Point.ZERO, unit);
     }
 
     public void repaint() {

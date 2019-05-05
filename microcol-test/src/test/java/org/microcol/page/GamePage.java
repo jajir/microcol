@@ -43,7 +43,7 @@ public class GamePage extends AbstractScreen {
 
     public void moveMouseAtLocation(final Location location) {
 	verifyThatTileIsVisible(location);
-	final Point p = getContext().getArea().convertToPoint(location)
+	final Point p = getContext().getArea().convertToCanvasPoint(location)
 		.add(getPrimaryStage().getX(), getPrimaryStage().getY()).add(TILE_CENTER);
 	getRobot().moveTo(p.getX(), p.getY(), Motion.DEFAULT);
 	verifyThatStatusBarContains(String.valueOf(location.getX()));
@@ -52,7 +52,7 @@ public class GamePage extends AbstractScreen {
 
     public void dragMouseAtLocation(final Location location) throws Exception {
 	verifyThatTileIsVisible(location);
-	final Point p = getContext().getArea().convertToPoint(location)
+	final Point p = getContext().getArea().convertToCanvasPoint(location)
 		.add(getPrimaryStage().getX(), getPrimaryStage().getY()).add(TILE_CENTER);
 	getRobot().drag(MouseButton.PRIMARY).drag(p.getX(), p.getY()).release(MouseButton.PRIMARY);
 	waitWhileMoving();
