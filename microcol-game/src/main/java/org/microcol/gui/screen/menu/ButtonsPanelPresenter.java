@@ -1,7 +1,7 @@
 package org.microcol.gui.screen.menu;
 
 import org.microcol.gui.dialog.ApplicationController;
-import org.microcol.gui.dialog.PersistingDialog;
+import org.microcol.gui.dialog.PersistingService;
 import org.microcol.gui.event.QuitGameEvent;
 import org.microcol.gui.event.model.GameController;
 import org.microcol.gui.preferences.GamePreferences;
@@ -31,7 +31,7 @@ public final class ButtonsPanelPresenter {
 
     private final GamePreferences gamePreferences;
 
-    private final PersistingDialog persistingDialog;
+    private final PersistingService persistingService;
 
     private final PersistingTool persistingTool;
 
@@ -44,13 +44,13 @@ public final class ButtonsPanelPresenter {
     @Inject
     public ButtonsPanelPresenter(final ButtonsPanelView view,
             final ApplicationController applicationController,
-            final PersistingDialog persistingDialog, final GamePreferences gamePreferences,
+            final PersistingService persistingService, final GamePreferences gamePreferences,
             final PersistingTool persistingTool, final GameController gameController,
             final CampaignManager campaignManager, final SecretOption secretOption,
             final EventBus eventBus) {
         this.view = Preconditions.checkNotNull(view);
         this.gamePreferences = Preconditions.checkNotNull(gamePreferences);
-        this.persistingDialog = Preconditions.checkNotNull(persistingDialog);
+        this.persistingService = Preconditions.checkNotNull(persistingService);
         this.persistingTool = Preconditions.checkNotNull(persistingTool);
         this.gameController = Preconditions.checkNotNull(gameController);
         this.campaignManager = Preconditions.checkNotNull(campaignManager);
@@ -68,13 +68,7 @@ public final class ButtonsPanelPresenter {
 
     @SuppressWarnings("unused")
     private void onLoadWasPressed(final ActionEvent event) {
-        if (persistingDialog.loadFromSavedGames()) {
-            if (secretOption.isEnabled()) {
-                eventBus.post(new ShowScreenEvent(Screen.EDITOR));
-            } else {
-                eventBus.post(new ShowScreenEvent(Screen.GAME));
-            }
-        }
+        persistingService.loadFromSavedGames(secretOption.isEnabled());
     }
 
     @SuppressWarnings("unused")

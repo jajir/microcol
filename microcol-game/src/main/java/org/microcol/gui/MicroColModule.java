@@ -7,7 +7,7 @@ import org.microcol.gui.dialog.ChooseGoodsDialog;
 import org.microcol.gui.dialog.DialogDestroyColony;
 import org.microcol.gui.dialog.DialogFight;
 import org.microcol.gui.dialog.DialogMessage;
-import org.microcol.gui.dialog.PersistingDialog;
+import org.microcol.gui.dialog.PersistingService;
 import org.microcol.gui.event.AboutGameListenerImpl;
 import org.microcol.gui.event.BuildColonyListener;
 import org.microcol.gui.event.ChangeLanguageListenerFileChooser;
@@ -217,7 +217,7 @@ public final class MicroColModule extends AbstractModule {
         bind(TilePainter.class).in(Singleton.class);
 
         bind(UnitsPanel.class).in(Singleton.class);
-        bind(PersistingDialog.class).in(Singleton.class);
+        bind(PersistingService.class).in(Singleton.class);
 
         /**
          * Generic screen

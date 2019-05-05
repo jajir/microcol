@@ -7,23 +7,26 @@ import java.util.Locale;
 import org.microcol.gui.FileSelectingService;
 import org.microcol.gui.MicroColException;
 import org.microcol.gui.event.model.GameController;
+import org.microcol.gui.screen.Screen;
+import org.microcol.gui.screen.ShowScreenEvent;
 import org.microcol.gui.util.PersistingTool;
 import org.microcol.model.Model;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
+import com.google.common.eventbus.EventBus;
 import com.google.inject.Inject;
 
 /**
  * Perform load and save operations. When it's necessary it shows system file
  * dialog.
  */
-public class PersistingDialog {
+public class PersistingService {
 
     public static final String SAVE_FILE_EXTENSION = "microcol";
 
-    private final Logger logger = LoggerFactory.getLogger(PersistingDialog.class);
+    private final Logger logger = LoggerFactory.getLogger(PersistingService.class);
 
     private final FileSelectingService fileSelectingService;
 
@@ -31,11 +34,14 @@ public class PersistingDialog {
 
     private final PersistingTool persistingTool;
 
+    private final EventBus eventBus;
+
     @Inject
-    public PersistingDialog(final GameController gameController,
+    public PersistingService(final GameController gameController, final EventBus eventBus,
             final PersistingTool persistingTool, final FileSelectingService fileSelectingService) {
         this.gameController = Preconditions.checkNotNull(gameController);
         this.persistingTool = Preconditions.checkNotNull(persistingTool);
+        this.eventBus = Preconditions.checkNotNull(eventBus);
         this.fileSelectingService = Preconditions.checkNotNull(fileSelectingService);
     }
 
@@ -52,17 +58,20 @@ public class PersistingDialog {
     /**
      * Show file dialog to player and allows him to choose file to load.
      * 
-     * @return return <code>true</code> when player choose dome file otherwise
-     *         return <code>false</code>.
+     * @param isSecretOptionEnabled
+     *            it's <code>true</code> when player press secret option
      */
-    public boolean loadFromSavedGames() {
+    public void loadFromSavedGames(boolean isSecretOptionEnabled) {
         final File saveFile = fileSelectingService.loadFile(persistingTool.getRootSaveDirectory());
         if (saveFile == null) {
             logger.debug("User didn't select any file to load game");
-            return false;
         } else {
-            loadFromFile(saveFile);
-            return true;
+            if (isSecretOptionEnabled) {
+                eventBus.post(new ShowScreenEvent(Screen.EDITOR, saveFile));
+            } else {
+                loadFromFile(saveFile);
+                eventBus.post(new ShowScreenEvent(Screen.GAME));
+            }
         }
     }
 

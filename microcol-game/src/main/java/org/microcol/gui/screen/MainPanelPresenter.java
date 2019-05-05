@@ -119,6 +119,7 @@ public final class MainPanelPresenter {
                     return null;
                 }, event -> {
                     if (Screen.EDITOR == event.getScreen()) {
+                        screenEditor.loadSaveFile(event.getContext());
                         return screenEditor;
                     }
                     return null;

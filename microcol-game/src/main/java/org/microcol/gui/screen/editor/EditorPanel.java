@@ -10,6 +10,10 @@ public class EditorPanel implements GameScreen {
 
     private final VBox mainPanel = new VBox();
 
+    public EditorPanel() {
+        // TODO Auto-generated constructor stub
+    }
+
     @Override
     public Region getContent() {
         return mainPanel;
@@ -18,19 +22,19 @@ public class EditorPanel implements GameScreen {
     @Override
     public void beforeShow() {
         // TODO Auto-generated method stub
-        
+
     }
 
     @Override
     public void beforeHide() {
         // TODO Auto-generated method stub
-        
+
     }
 
     @Override
     public void updateLanguage(I18n i18n) {
         // TODO Auto-generated method stub
-        
+
     }
 
 }

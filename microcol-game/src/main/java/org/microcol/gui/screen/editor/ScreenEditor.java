@@ -1,5 +1,7 @@
 package org.microcol.gui.screen.editor;
 
+import java.io.File;
+
 import org.microcol.gui.screen.GameScreen;
 import org.microcol.i18n.I18n;
 
@@ -7,8 +9,6 @@ import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
-import javafx.event.EventHandler;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 
@@ -22,33 +22,22 @@ public class ScreenEditor implements GameScreen {
 
     private final EditorPanel editorPanel;
 
+    private final ModelService modelService;
+
     @Inject
-    ScreenEditor(final TerrainPanel terrainPanel, final EditorPanel editorPanel) {
+    ScreenEditor(final TerrainPanel terrainPanel, final ModelService modelService,
+            final EditorPanel editorPanel) {
         this.editorPanel = Preconditions.checkNotNull(editorPanel);
+        this.modelService = Preconditions.checkNotNull(modelService);
 
         mainPanel.getStylesheets().add(STYLE_SHEET_EDITOR);
         mainPanel.getChildren().add(editorPanel.getContent());
         mainPanel.getChildren().add(terrainPanel.getContent());
     }
 
-    /**
-     * it's called when key is pressed on game screen.
-     *
-     * @param event
-     *            required key event
-     */
-    void setOnKeyPressed(EventHandler<? super KeyEvent> event) {
-        mainPanel.setOnKeyPressed(event);
-    }
-
-    /**
-     * it's called when key is release on game screen.
-     *
-     * @param event
-     *            required key event
-     */
-    void setOnKeyReleased(EventHandler<? super KeyEvent> event) {
-        mainPanel.setOnKeyReleased(event);
+    public void loadSaveFile(final File file) {
+        Preconditions.checkNotNull(file);
+        modelService.load(file);
     }
 
     @Override

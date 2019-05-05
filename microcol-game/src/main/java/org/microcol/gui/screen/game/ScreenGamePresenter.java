@@ -1,7 +1,7 @@
 package org.microcol.gui.screen.game;
 
 import org.microcol.gui.WasdController;
-import org.microcol.gui.dialog.PersistingDialog;
+import org.microcol.gui.dialog.PersistingService;
 import org.microcol.gui.event.ShowHelpEvent;
 import org.microcol.gui.event.BuildColonyEvent;
 import org.microcol.gui.event.CenterViewEvent;
@@ -40,7 +40,7 @@ public class ScreenGamePresenter {
 
     private final ModeController modeController;
 
-    private final PersistingDialog persistingDialog;
+    private final PersistingService persistingService;
 
     private final GamePanelPresenter gamePanelPresenter;
 
@@ -50,7 +50,7 @@ public class ScreenGamePresenter {
     
     @Inject
     ScreenGamePresenter(final ScreenGame screenGame, final EventBus eventBus, final MouseOverTileManager mouseOverTileManager, final ModeController modeController,
-            final SelectedUnitManager selectedUnitManager, final PersistingDialog persistingDialog,
+            final SelectedUnitManager selectedUnitManager, final PersistingService persistingService,
             final GamePanelPresenter gamePanelPresenter,
             final GameModelController gameModelController, final WasdController wasdController) {
         this.eventBus = Preconditions.checkNotNull(eventBus);
@@ -58,7 +58,7 @@ public class ScreenGamePresenter {
         this.modeController = Preconditions.checkNotNull(modeController);
         this.selectedUnitManager = Preconditions.checkNotNull(selectedUnitManager);
         this.gamePanelPresenter = Preconditions.checkNotNull(gamePanelPresenter);
-        this.persistingDialog = Preconditions.checkNotNull(persistingDialog);
+        this.persistingService = Preconditions.checkNotNull(persistingService);
         this.gameModelController = Preconditions.checkNotNull(gameModelController);
         this.wasdController = Preconditions.checkNotNull(wasdController);
         screenGame.setOnKeyPressed(this::onKeyPressed);
@@ -107,7 +107,7 @@ public class ScreenGamePresenter {
             eventBus.post(new BuildColonyEvent());
         }
         if (KeyCode.S == event.getCode() & event.isControlDown()) {
-            persistingDialog.saveModel(gameModelController.getModel());
+            persistingService.saveModel(gameModelController.getModel());
         }
 
         if (KeyCode.TAB == event.getCode()) {
