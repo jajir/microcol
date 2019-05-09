@@ -107,12 +107,12 @@ class VisibleAreaService {
     }
 
     public void setCanvasWidth(final int newCanvasWidth) {
-        canvasArea.setCanvasWidth(newCanvasWidth, getMaxMapSize().getX());
+        canvasArea.setCanvasWidth(newCanvasWidth, getMapSize().getX());
         onVisibleAreaIsReady.setCondition1Passed();
     }
 
     public void setCanvasHeight(final int newCanvasHeight) {
-        canvasArea.setCanvasHeight(newCanvasHeight, getMaxMapSize().getY());
+        canvasArea.setCanvasHeight(newCanvasHeight, getMapSize().getY());
         onVisibleAreaIsReady.setCondition2Passed();
     }
 
@@ -121,7 +121,7 @@ class VisibleAreaService {
     }
 
     public void setTopLeftPosionOfCanvas(final Point newTopLeft) {
-        canvasArea.setTopLeft(newTopLeft, getMaxMapSize());
+        canvasArea.setTopLeft(newTopLeft, getMapSize());
     }
 
     /**
@@ -146,7 +146,7 @@ class VisibleAreaService {
      * @return normalized top left screen corner
      */
     Point computeNewTopLeftConnerOfCanvas(final Point newTopLeftCanvasCorner) {
-        return canvasArea.computeNewTopLeftConnerOfCanvas(newTopLeftCanvasCorner, getMaxMapSize());
+        return canvasArea.computeNewTopLeftConnerOfCanvas(newTopLeftCanvasCorner, getMapSize());
     }
 
     void addDeltaToTopLeftPoint(final Point delta) {
@@ -162,7 +162,7 @@ class VisibleAreaService {
         onVisibleAreaIsReady.setOnConditionsPassed(onCanvasReady);
     }
 
-    Point getMaxMapSize() {
+    Point getMapSize() {
         if (maxMapSize == null) {
             return MAX_CANVAS_SIZE;
         }
@@ -170,10 +170,10 @@ class VisibleAreaService {
     }
 
     /**
-     * Verify that given point is in area.
+     * Verify that given point is in canvas. Point is in map coordinates.
      * 
      * @param point
-     *            required point in canvas coordinates
+     *            required point in map coordinates
      * @return return <code>true</code> when point is inside area otherwise
      *         return <code>false</code>
      */
@@ -184,15 +184,28 @@ class VisibleAreaService {
     }
 
     /**
-     * Verify that given point is in area.
+     * Verify that given canvas point is visible.
      * 
      * @param point
-     *            required point in on screen coordinates
+     *            required point in canvas (on screen) coordinates
      * @return return <code>true</code> when point is inside area otherwise
      *         return <code>false</code>
      */
     boolean isVisibleCanvasPoint(final Point point) {
         final Rectangle canvas = Rectangle.ofPointAndSize(Point.ZERO, canvasArea.getCanvasSize());
+        return canvas.isIn(point);
+    }
+
+    /**
+     * Verify that given point is valid point on map.
+     *
+     * @param point
+     *            required point
+     * @return return <code>true</code> when point is on map otherwise return
+     *         <code>false</code>.
+     */
+    boolean isMapPointValid(final Point point) {
+        final Rectangle canvas = Rectangle.ofPointAndSize(Point.ZERO, getMapSize());
         return canvas.isIn(point);
     }
 

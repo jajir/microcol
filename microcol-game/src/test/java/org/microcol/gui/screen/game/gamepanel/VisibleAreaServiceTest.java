@@ -24,9 +24,9 @@ public class VisibleAreaServiceTest {
         final VisibleAreaService visibleArea = new VisibleAreaService();
         visibleArea.setWorldMap(Location.of(79, 77));
 
-        assertNotNull(visibleArea.getMaxMapSize());
-        assertEquals(3555, visibleArea.getMaxMapSize().getX());
-        assertEquals(3465, visibleArea.getMaxMapSize().getY());
+        assertNotNull(visibleArea.getMapSize());
+        assertEquals(3555, visibleArea.getMapSize().getX());
+        assertEquals(3465, visibleArea.getMapSize().getY());
         assertEquals(Point.of(0, 0), visibleArea.getTopLeft());
         assertEquals(Point.of(-1, -1), visibleArea.getCanvasSize());
     }
@@ -39,9 +39,9 @@ public class VisibleAreaServiceTest {
         visibleArea.setCanvasHeight(600);
         visibleArea.setWorldMap(Location.of(79, 77));
 
-        assertNotNull(visibleArea.getMaxMapSize());
-        assertEquals(3555, visibleArea.getMaxMapSize().getX());
-        assertEquals(3465, visibleArea.getMaxMapSize().getY());
+        assertNotNull(visibleArea.getMapSize());
+        assertEquals(3555, visibleArea.getMapSize().getX());
+        assertEquals(3465, visibleArea.getMapSize().getY());
         assertEquals(Point.of(0, 0), visibleArea.getTopLeft());
         assertEquals(Point.of(800, 600), visibleArea.getCanvasSize());
     }
@@ -54,9 +54,9 @@ public class VisibleAreaServiceTest {
         visibleArea.setCanvasHeight(600);
         visibleArea.setWorldMap(Location.of(10, 10));
 
-        assertNotNull(visibleArea.getMaxMapSize());
-        assertEquals(450, visibleArea.getMaxMapSize().getX());
-        assertEquals(450, visibleArea.getMaxMapSize().getY());
+        assertNotNull(visibleArea.getMapSize());
+        assertEquals(450, visibleArea.getMapSize().getX());
+        assertEquals(450, visibleArea.getMapSize().getY());
         assertEquals(Point.of(-175, -75), visibleArea.getTopLeft());
         assertEquals(Point.of(800, 600), visibleArea.getCanvasSize());
     }
@@ -66,7 +66,7 @@ public class VisibleAreaServiceTest {
         visibleArea.setCanvasWidth(800);
         visibleArea.setCanvasHeight(600);
 
-        assertNotNull(visibleArea.getMaxMapSize());
+        assertNotNull(visibleArea.getMapSize());
         assertEquals(Point.of(-175, -75), visibleArea.getTopLeft());
         assertEquals(Point.of(800, 600), visibleArea.getCanvasSize());
     }
@@ -76,7 +76,7 @@ public class VisibleAreaServiceTest {
         visibleArea.setCanvasWidth(160);
         visibleArea.setCanvasHeight(120);
 
-        assertNotNull(visibleArea.getMaxMapSize());
+        assertNotNull(visibleArea.getMapSize());
         assertEquals(Point.of(0, 0), visibleArea.getTopLeft());
         assertEquals(Point.of(160, 120), visibleArea.getCanvasSize());
     }
@@ -93,7 +93,7 @@ public class VisibleAreaServiceTest {
 
         visibleArea.setTopLeftPosionOfCanvas(Point.of(10, 10));
 
-        assertNotNull(visibleArea.getMaxMapSize());
+        assertNotNull(visibleArea.getMapSize());
         assertEquals(Point.of(10, 10), visibleArea.getTopLeft());
         assertEquals(Point.of(160, 120), visibleArea.getCanvasSize());
     }
@@ -106,7 +106,7 @@ public class VisibleAreaServiceTest {
 
         visibleArea.setTopLeftPosionOfCanvas(Point.of(-10, -10));
 
-        assertNotNull(visibleArea.getMaxMapSize());
+        assertNotNull(visibleArea.getMapSize());
         assertEquals(Point.of(0, 0), visibleArea.getTopLeft());
         assertEquals(Point.of(160, 120), visibleArea.getCanvasSize());
     }
@@ -118,7 +118,7 @@ public class VisibleAreaServiceTest {
 
         visibleArea.setTopLeftPosionOfCanvas(Point.of(290, 330));
 
-        assertNotNull(visibleArea.getMaxMapSize());
+        assertNotNull(visibleArea.getMapSize());
         assertEquals(Point.of(290, 330), visibleArea.getTopLeft());
         assertEquals(Point.of(160, 120), visibleArea.getCanvasSize());
     }
@@ -130,7 +130,7 @@ public class VisibleAreaServiceTest {
 
         visibleArea.setTopLeftPosionOfCanvas(Point.of(291, 331));
 
-        assertNotNull(visibleArea.getMaxMapSize());
+        assertNotNull(visibleArea.getMapSize());
         assertEquals(Point.of(290, 330), visibleArea.getTopLeft());
         assertEquals(Point.of(160, 120), visibleArea.getCanvasSize());
     }
@@ -142,7 +142,7 @@ public class VisibleAreaServiceTest {
 
         visibleArea.setTopLeftPosionOfCanvas(Point.of(450, 450));
 
-        assertNotNull(visibleArea.getMaxMapSize());
+        assertNotNull(visibleArea.getMapSize());
         assertEquals(Point.of(290, 330), visibleArea.getTopLeft());
         assertEquals(Point.of(160, 120), visibleArea.getCanvasSize());
     }
@@ -154,7 +154,7 @@ public class VisibleAreaServiceTest {
 
         visibleArea.setTopLeftPosionOfCanvas(Point.of(451, 451));
 
-        assertNotNull(visibleArea.getMaxMapSize());
+        assertNotNull(visibleArea.getMapSize());
         assertEquals(Point.of(290, 330), visibleArea.getTopLeft());
         assertEquals(Point.of(160, 120), visibleArea.getCanvasSize());
     }
@@ -191,14 +191,32 @@ public class VisibleAreaServiceTest {
         assertFalse(visibleArea.isVisibleCanvasPoint(Point.of(161, 121)));
     }
 
+    @Test
+    public void test_isMapPointValid() throws Exception {
+        visibleArea.setCanvasWidth(160);
+        visibleArea.setCanvasHeight(120);
+        visibleArea.setTopLeftPosionOfCanvas(Point.of(30, 50));
+
+        assertTrue(visibleArea.isMapPointValid(Point.ZERO));
+        assertTrue(visibleArea.isMapPointValid(Point.of(450, 450)));
+        assertTrue(visibleArea.isMapPointValid(Point.of(200, 200)));
+        assertFalse(visibleArea.isMapPointValid(Point.of(-1, -1)));
+        assertFalse(visibleArea.isMapPointValid(Point.of(451, 451)));
+    }
+
+    @Test
+    public void test_isMapPointValid_null() throws Exception {
+        assertThrows(NullPointerException.class, () -> visibleArea.isMapPointValid(null));
+    }
+
     @BeforeEach
     private void beforeEach() {
         visibleArea = new VisibleAreaService();
         visibleArea.setWorldMap(Location.of(10, 10));
 
-        assertNotNull(visibleArea.getMaxMapSize());
-        assertEquals(450, visibleArea.getMaxMapSize().getX());
-        assertEquals(450, visibleArea.getMaxMapSize().getY());
+        assertNotNull(visibleArea.getMapSize());
+        assertEquals(450, visibleArea.getMapSize().getX());
+        assertEquals(450, visibleArea.getMapSize().getY());
         assertEquals(Point.of(0, 0), visibleArea.getTopLeft());
         assertEquals(CanvasArea.NOT_READY, visibleArea.getCanvasSize());
     }

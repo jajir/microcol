@@ -45,6 +45,10 @@ public class Tile {
         return topLeftCorner;
     }
 
+    public Tile div(final int factor) {
+        return new Tile(topLeftCorner.divide(factor));
+    }
+
     public Point getBottomRightCorner() {
         return topLeftCorner.add(TILE_SIZE);
     }

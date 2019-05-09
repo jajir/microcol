@@ -16,6 +16,10 @@ public class Area {
 
     private final VisibleAreaService visibleArea;
 
+    static Area of(final VisibleAreaService visibleArea) {
+        return new Area(visibleArea);
+    }
+
     /**
      * @param visibleArea
      *            required visible area on screen

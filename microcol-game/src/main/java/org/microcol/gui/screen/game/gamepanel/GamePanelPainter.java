@@ -51,6 +51,8 @@ public final class GamePanelPainter {
 
     private final DialogFight dialogFigth;
 
+    private final AnimationClouds animationClouds;
+
     private final GamePaintService gamePaintService;
 
     @Inject
@@ -63,7 +65,7 @@ public final class GamePanelPainter {
             final ModeController modeController, final ExcludePainting excludePainting,
             final DialogFight dialogFigth, final VisibleAreaService visibleArea,
             final OneTurnMoveHighlighter oneTurnMoveHighlighter,
-            final GamePaintService gamePaintService) {
+            final AnimationClouds animationClouds, final GamePaintService gamePaintService) {
         this.gameModelController = Preconditions.checkNotNull(gameModelController);
         this.pathPlanning = Preconditions.checkNotNull(pathPlanning);
         this.imageProvider = Preconditions.checkNotNull(imageProvider);
@@ -79,6 +81,7 @@ public final class GamePanelPainter {
         this.dialogFigth = Preconditions.checkNotNull(dialogFigth);
         this.visibleAreaService = Preconditions.checkNotNull(visibleArea);
         this.oneTurnMoveHighlighter = Preconditions.checkNotNull(oneTurnMoveHighlighter);
+        this.animationClouds = Preconditions.checkNotNull(animationClouds);
         this.gamePaintService = Preconditions.checkNotNull(gamePaintService);
 
     }
@@ -128,6 +131,7 @@ public final class GamePanelPainter {
         gamePaintService.paintUnits(g, gameModelController.getModel(), area, excludePainting);
         paintSteps(g, area);
         paintAnimation(g, area);
+        animationClouds.paint(g);
         if (gameModelController.getRealCurrentPlayer().isComputer()) {
             /**
              * If move computer that make game field darker.
