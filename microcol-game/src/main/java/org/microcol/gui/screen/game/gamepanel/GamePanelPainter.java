@@ -12,6 +12,7 @@ import org.microcol.model.Unit;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
+import com.google.inject.name.Named;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
@@ -55,6 +56,8 @@ public final class GamePanelPainter {
 
     private final GamePaintService gamePaintService;
 
+    private final MapManager mapManager;
+
     @Inject
     public GamePanelPainter(final GameModelController gameModelController,
             final PathPlanning pathPlanning, final ImageProvider imageProvider,
@@ -63,9 +66,10 @@ public final class GamePanelPainter {
             final GamePreferences gamePreferences, final MouseOverTileManager mouseOverTileManager,
             final AnimationManager animationManager, final ScrollingManager scrollingManager,
             final ModeController modeController, final ExcludePainting excludePainting,
-            final DialogFight dialogFigth, final VisibleAreaService visibleArea,
+            final DialogFight dialogFigth, final @Named("game") VisibleAreaService visibleArea,
             final OneTurnMoveHighlighter oneTurnMoveHighlighter,
-            final AnimationClouds animationClouds, final GamePaintService gamePaintService) {
+            final AnimationClouds animationClouds, final GamePaintService gamePaintService,
+            final MapManager mapManager) {
         this.gameModelController = Preconditions.checkNotNull(gameModelController);
         this.pathPlanning = Preconditions.checkNotNull(pathPlanning);
         this.imageProvider = Preconditions.checkNotNull(imageProvider);
@@ -83,6 +87,7 @@ public final class GamePanelPainter {
         this.oneTurnMoveHighlighter = Preconditions.checkNotNull(oneTurnMoveHighlighter);
         this.animationClouds = Preconditions.checkNotNull(animationClouds);
         this.gamePaintService = Preconditions.checkNotNull(gamePaintService);
+        this.mapManager = Preconditions.checkNotNull(mapManager);
 
     }
 
@@ -119,12 +124,16 @@ public final class GamePanelPainter {
      * 
      * @param g
      *            required graphics context
+     * @param gameTick
+     *            required long representing how many game ticks was already
+     *            done. It allows to time animations.
      */
-    void paint(final GraphicsContext g) {
+    void paint(final GraphicsContext g, final long currentGameTick) {
         final Area area = getArea();
         final CanvasInMapCoordinates canvasInMapCoordinates = CanvasInMapCoordinates
-                .make(visibleAreaService, gameModelController.getMap());
-        gamePaintService.paintTerrain(g, area, oneTurnMoveHighlighter, canvasInMapCoordinates);
+                .make(visibleAreaService, gameModelController.getMapSize());
+        gamePaintService.paintTerrain(g, area, oneTurnMoveHighlighter, canvasInMapCoordinates,
+                currentGameTick);
         gamePaintService.paintGrid(g, area, canvasInMapCoordinates);
         gamePaintService.paintSelectedTile(g, area, selectedTileManager.getSelectedTile());
         gamePaintService.paintColonies(g, gameModelController.getModel(), area);
@@ -132,6 +141,7 @@ public final class GamePanelPainter {
         paintSteps(g, area);
         paintAnimation(g, area);
         animationClouds.paint(g);
+        mapManager.gameTickUpdate(currentGameTick);
         if (gameModelController.getRealCurrentPlayer().isComputer()) {
             /**
              * If move computer that make game field darker.

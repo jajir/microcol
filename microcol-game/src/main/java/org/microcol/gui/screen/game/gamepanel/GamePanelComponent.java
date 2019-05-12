@@ -12,9 +12,9 @@ import org.slf4j.LoggerFactory;
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import com.google.inject.name.Named;
 
 import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.layout.Region;
 
 /**
@@ -31,7 +31,7 @@ public final class GamePanelComponent implements ScreenLifeCycle, JavaFxComponen
 
     private final FpsCounter fpsCounter;
 
-    private final VisibleAreaService visibleArea;
+    private final VisibleAreaService visibleAreaService;
 
     private final GamePanelPainter gamePanelPainter;
 
@@ -39,21 +39,21 @@ public final class GamePanelComponent implements ScreenLifeCycle, JavaFxComponen
 
     @Inject
     public GamePanelComponent(final GameModelController gameModelController,
-            final VisibleAreaService visibleArea, final CanvasComponent paneCanvas,
-            final GamePanelPainter gamePanelPainter) {
+            final @Named("game") VisibleAreaService visibleAreaService,
+            final CanvasComponent paneCanvas, final GamePanelPainter gamePanelPainter) {
         this.gameModelController = Preconditions.checkNotNull(gameModelController);
-        this.visibleArea = Preconditions.checkNotNull(visibleArea);
+        this.visibleAreaService = Preconditions.checkNotNull(visibleAreaService);
         this.canvasComponent = Preconditions.checkNotNull(paneCanvas);
         this.gamePanelPainter = Preconditions.checkNotNull(gamePanelPainter);
 
         canvasComponent.widthProperty().addListener((obj, oldValue, newValue) -> {
             if (newValue.intValue() < VisibleAreaService.MAX_CANVAS_SIDE_LENGTH) {
-                visibleArea.setCanvasWidth(newValue.intValue());
+                visibleAreaService.setCanvasWidth(newValue.intValue());
             }
         });
         canvasComponent.heightProperty().addListener((obj, oldValue, newValue) -> {
             if (newValue.intValue() < VisibleAreaService.MAX_CANVAS_SIDE_LENGTH) {
-                visibleArea.setCanvasHeight(newValue.intValue());
+                visibleAreaService.setCanvasHeight(newValue.intValue());
             }
         });
 
@@ -63,18 +63,17 @@ public final class GamePanelComponent implements ScreenLifeCycle, JavaFxComponen
         /**
          * Following class main define animation loop.
          */
-        final GraphicsContext gc = canvasComponent.getCanvas().getGraphicsContext2D();
-        animationScheduler = new AnimationScheduler(gc, this::paintFrame);
+        animationScheduler = new AnimationScheduler(this::paintFrame);
     }
 
     /**
      * Smallest game time interval. In ideal case it have time to draw world on
      * screen.
      */
-    private void paintFrame(final GraphicsContext gc) {
+    private void paintFrame(final Long tick) {
         if (gameModelController.isGameModelReady()) {
-            logger.debug("painting: " + visibleArea);
-            gamePanelPainter.paint(gc);
+            logger.debug("painting: " + visibleAreaService);
+            gamePanelPainter.paint(canvasComponent.getGraphicsContext2D(), tick);
             fpsCounter.screenWasPainted();
         }
     }

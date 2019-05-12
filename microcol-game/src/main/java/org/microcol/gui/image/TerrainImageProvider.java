@@ -28,6 +28,11 @@ public class TerrainImageProvider {
                 .put(TerrainType.OCEAN, imageCache.getImage(ImageLoaderTerrain.IMG_TILE_OCEAN_1))
                 .put(TerrainType.TUNDRA, imageCache.getImage(ImageLoaderTerrain.IMG_TILE_TUNDRA_1))
                 .put(TerrainType.ARCTIC, imageCache.getImage(ImageLoaderTerrain.IMG_TILE_ARCTIC_1))
+                .put(TerrainType.MOUNTAIN,
+                        imageCache.getImage(ImageLoaderTerrain.IMG_TILE_MOUNTAIN_2))
+                .put(TerrainType.HILL, imageCache.getImage(ImageLoaderTerrain.IMG_TILE_HILL_1))
+                .put(TerrainType.PRAIRIE,
+                        imageCache.getImage(ImageLoaderTerrain.IMG_TILE_PRAIRIE_1))
                 .put(TerrainType.HIGH_SEA,
                         imageCache.getImage(ImageLoaderTerrain.IMG_TILE_HIGH_SEA))
                 .build();
@@ -41,6 +46,7 @@ public class TerrainImageProvider {
      * @return image representing terrain image
      */
     public Image getTerrainImage(final TerrainType terrain) {
+        Preconditions.checkNotNull(terrain);
         return terrainMap.get(terrain);
     }
 

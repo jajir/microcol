@@ -20,9 +20,9 @@ public class VisibleAreaServiceTest {
     private VisibleAreaService visibleArea;
 
     @Test
-    public void test_setWorldMap_canvas_is_not_ready() throws Exception {
+    public void test_setMapSize_canvas_is_not_ready() throws Exception {
         final VisibleAreaService visibleArea = new VisibleAreaService();
-        visibleArea.setWorldMap(Location.of(79, 77));
+        visibleArea.setMapSize(Location.of(79, 77));
 
         assertNotNull(visibleArea.getMapSize());
         assertEquals(3555, visibleArea.getMapSize().getX());
@@ -32,12 +32,12 @@ public class VisibleAreaServiceTest {
     }
 
     @Test
-    @DisplayName("test setWorldMap canvas is ready and map is greater than canvas")
-    public void test_setWorldMap_canvas_is_ready_and_map_is_greater_than_canvas() throws Exception {
+    @DisplayName("test setMapSize canvas is ready and map is greater than canvas")
+    public void test_setMapSize_canvas_is_ready_and_map_is_greater_than_canvas() throws Exception {
         final VisibleAreaService visibleArea = new VisibleAreaService();
         visibleArea.setCanvasWidth(800);
         visibleArea.setCanvasHeight(600);
-        visibleArea.setWorldMap(Location.of(79, 77));
+        visibleArea.setMapSize(Location.of(79, 77));
 
         assertNotNull(visibleArea.getMapSize());
         assertEquals(3555, visibleArea.getMapSize().getX());
@@ -47,12 +47,12 @@ public class VisibleAreaServiceTest {
     }
 
     @Test
-    @DisplayName("test setWorldMap canvas is ready and map is smaller than canvas")
-    public void test_setWorldMap_canvas_is_ready_and_map_is_smaller_than_canvas() throws Exception {
+    @DisplayName("test setMapSize canvas is ready and map is smaller than canvas")
+    public void test_setMapSize_canvas_is_ready_and_map_is_smaller_than_canvas() throws Exception {
         final VisibleAreaService visibleArea = new VisibleAreaService();
         visibleArea.setCanvasWidth(800);
         visibleArea.setCanvasHeight(600);
-        visibleArea.setWorldMap(Location.of(10, 10));
+        visibleArea.setMapSize(Location.of(10, 10));
 
         assertNotNull(visibleArea.getMapSize());
         assertEquals(450, visibleArea.getMapSize().getX());
@@ -212,7 +212,7 @@ public class VisibleAreaServiceTest {
     @BeforeEach
     private void beforeEach() {
         visibleArea = new VisibleAreaService();
-        visibleArea.setWorldMap(Location.of(10, 10));
+        visibleArea.setMapSize(Location.of(10, 10));
 
         assertNotNull(visibleArea.getMapSize());
         assertEquals(450, visibleArea.getMapSize().getX());

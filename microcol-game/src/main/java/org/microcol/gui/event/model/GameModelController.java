@@ -86,6 +86,10 @@ public class GameModelController {
     public WorldMap getMap() {
         return gameModel.getModel().getMap();
     }
+    
+    public Location getMapSize() {
+        return getMap().getMapSize();
+    }
 
     public int getKingsTaxPercentage() {
         return getModel().getKingsTaxForPlayer(getHumanPlayer());

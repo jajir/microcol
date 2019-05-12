@@ -15,9 +15,9 @@ public final class ImageLoaderTerrain extends AbstractTiledImageLoader {
 
     public static final String IMG_TILE_OCEAN_1 = "tile-ocean-1.png";
 
-    public static final String IMG_TILE_OCEAN_2 = "tile-ocean-2.png";
+    public static final String IMG_TILE_OCEAN_WITH_RIPPLE = "tile-ocean-2.png";
 
-    public static final String IMG_TILE_OCEAN_3 = "tile-ocean-3.png";
+    public static final String IMG_TILE_OCEAN_WITH_WHALE = "tile-ocean-3.png";
 
     public static final String IMG_TILE_TUNDRA_1 = "tile-tundra-1.png";
 
@@ -68,8 +68,8 @@ public final class ImageLoaderTerrain extends AbstractTiledImageLoader {
         imageCache.registerImage(IMG_TREE_1, "type_3_4");
         imageCache.registerImage(IMG_TREE_2, "type_4_4");
         imageCache.registerImage(IMG_TILE_OCEAN_1, "type_5_0");
-        imageCache.registerImage(IMG_TILE_OCEAN_2, "type_6_0");
-        imageCache.registerImage(IMG_TILE_OCEAN_3, "type_7_0");
+        imageCache.registerImage(IMG_TILE_OCEAN_WITH_RIPPLE, "type_6_0");
+        imageCache.registerImage(IMG_TILE_OCEAN_WITH_WHALE, "type_7_0");
         imageCache.registerImage(IMG_TILE_GRASSLAND, "type_1_0");
         imageCache.registerImage(IMG_TILE_TUNDRA_1, "type_3_0");
         imageCache.registerImage(IMG_TILE_TUNDRA_2, "type_4_0");

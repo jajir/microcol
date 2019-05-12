@@ -25,24 +25,25 @@ public class ScreenEditor implements GameScreen {
     private final ModelService modelService;
 
     @Inject
-    ScreenEditor(final TerrainPanel terrainPanel, final ModelService modelService,
+    ScreenEditor(final EditorRightPanel rightPanel, final ModelService modelService,
             final EditorPanel editorPanel) {
         this.editorPanel = Preconditions.checkNotNull(editorPanel);
         this.modelService = Preconditions.checkNotNull(modelService);
 
         mainPanel.getStylesheets().add(STYLE_SHEET_EDITOR);
         mainPanel.getChildren().add(editorPanel.getContent());
-        mainPanel.getChildren().add(terrainPanel.getContent());
+        mainPanel.getChildren().add(rightPanel.getContent());
+        mainPanel.setFocusTraversable(true);
     }
 
-    public void loadSaveFile(final File file) {
+    public void loadFile(final File file) {
         Preconditions.checkNotNull(file);
         modelService.load(file);
     }
 
     @Override
     public void updateLanguage(final I18n i18n) {
-        editorPanel.updateLanguage(i18n);
+        // Do nothing.
     }
 
     @Override

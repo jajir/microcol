@@ -5,3 +5,8 @@ Define view of game editor.
 	-fx-pref-width: 100000;
 	-fx-pref-height: 100000;
 }
+
+.right {
+	-fx-background-color: gray;
+	-fx-min-width: 70;
+}

@@ -37,6 +37,7 @@ import org.microcol.gui.screen.colony.PanelOutsideColony;
 import org.microcol.gui.screen.colony.ScreenColonyPresenter;
 import org.microcol.gui.screen.colony.buildingqueue.QueueController;
 import org.microcol.gui.screen.colony.buildingqueue.QueueDialog;
+import org.microcol.gui.screen.editor.EditorMouseListener;
 import org.microcol.gui.screen.editor.ScreenEditorPresenter;
 import org.microcol.gui.screen.europe.BuyUnitsDialog;
 import org.microcol.gui.screen.europe.EuropeButtonsPanelController;
@@ -57,7 +58,6 @@ import org.microcol.gui.screen.game.gamepanel.ExcludePainting;
 import org.microcol.gui.screen.game.gamepanel.GamePanelController;
 import org.microcol.gui.screen.game.gamepanel.GamePanelMouseListener;
 import org.microcol.gui.screen.game.gamepanel.GamePanelPresenter;
-import org.microcol.gui.screen.game.gamepanel.MapManager;
 import org.microcol.gui.screen.game.gamepanel.ModeController;
 import org.microcol.gui.screen.game.gamepanel.MouseOverTileListener;
 import org.microcol.gui.screen.game.gamepanel.MouseOverTileManager;
@@ -71,6 +71,7 @@ import org.microcol.gui.screen.game.gamepanel.TileWasSelectedListener;
 import org.microcol.gui.screen.game.gamepanel.UnitAttackedEventListener;
 import org.microcol.gui.screen.game.gamepanel.UnitMoveFinishedListener;
 import org.microcol.gui.screen.game.gamepanel.UnitMovedListener;
+import org.microcol.gui.screen.game.gamepanel.VisibleAreaService;
 import org.microcol.gui.screen.goals.ScreenGoalsPresenter;
 import org.microcol.gui.screen.market.ScreenMarketPresenter;
 import org.microcol.gui.screen.menu.ButtonsPanelPresenter;
@@ -132,7 +133,6 @@ public final class MicroColModule extends AbstractModule {
         bind(LocalizationHelper.class).in(Singleton.class);
         bind(AnimationManager.class).in(Singleton.class);
         bind(ScrollingManager.class).in(Singleton.class);
-        bind(MapManager.class).in(Singleton.class);
         bind(FontService.class).asEagerSingleton();
         bind(ApplicationInfo.class).in(Singleton.class);
 
@@ -178,24 +178,6 @@ public final class MicroColModule extends AbstractModule {
         bind(MainPanelView.class).in(Singleton.class);
         bind(MainPanelPresenter.class).in(Singleton.class);
 
-        // Game panel
-        bind(GamePanelPresenter.class).asEagerSingleton();
-        bind(GamePanelMouseListener.class).asEagerSingleton();
-        bind(OneTurnMoveHighlighter.class).in(Singleton.class);
-        bind(SelectedTileManager.class).in(Singleton.class);
-        bind(MoveModeSupport.class).in(Singleton.class);
-        bind(MouseOverTileListener.class).asEagerSingleton();
-        bind(PaintService.class).in(Singleton.class);
-        bind(UnitAttackedEventListener.class).asEagerSingleton();
-        bind(MouseOverTileManager.class).in(Singleton.class);
-        bind(ModeController.class).in(Singleton.class);
-        bind(SelectedUnitManager.class).in(Singleton.class);
-        bind(ExcludePainting.class).in(Singleton.class);
-        bind(GamePanelController.class).in(Singleton.class);
-        bind(UnitMoveFinishedListener.class).asEagerSingleton();
-        bind(UnitMovedListener.class).asEagerSingleton();
-        bind(ScrollToSelectedUnit.class).asEagerSingleton();
-
         bind(ScreenMenu.class).in(Singleton.class);
 
         bind(ButtonsPanelView.class).in(Singleton.class);
@@ -214,18 +196,12 @@ public final class MicroColModule extends AbstractModule {
 
         bind(RightPanelView.class).in(Singleton.class);
         bind(RightPanelPresenter.class).asEagerSingleton();
-        bind(TilePainter.class).in(Singleton.class);
 
         bind(UnitsPanel.class).in(Singleton.class);
         bind(PersistingService.class).in(Singleton.class);
 
-        /**
-         * Generic screen
-         */
-        bind(ScreenGamePresenter.class).asEagerSingleton();
         bind(ScreenSettingPresenter.class).asEagerSingleton();
         bind(ScreenCampaignPresenter.class).asEagerSingleton();
-        bind(ScreenEditorPresenter.class).asEagerSingleton();
         bind(ScreenMenuPresenter.class).asEagerSingleton();
 
         /**
@@ -259,6 +235,37 @@ public final class MicroColModule extends AbstractModule {
         bind(ScreenStatisticsPresenter.class).asEagerSingleton();
         bind(ScreenTurnReportPresenter.class).asEagerSingleton();
         bind(ScreenGoalsPresenter.class).asEagerSingleton();
+
+        /**
+         * Game screen.
+         */
+        bind(ScreenGamePresenter.class).asEagerSingleton();
+        bind(VisibleAreaService.class).annotatedWith(Names.named("game"))
+                .toInstance(new VisibleAreaService());
+        bind(GamePanelPresenter.class).asEagerSingleton();
+        bind(GamePanelMouseListener.class).asEagerSingleton();
+        bind(OneTurnMoveHighlighter.class).in(Singleton.class);
+        bind(SelectedTileManager.class).in(Singleton.class);
+        bind(MoveModeSupport.class).in(Singleton.class);
+        bind(MouseOverTileListener.class).asEagerSingleton();
+        bind(PaintService.class).in(Singleton.class);
+        bind(UnitAttackedEventListener.class).asEagerSingleton();
+        bind(MouseOverTileManager.class).in(Singleton.class);
+        bind(ModeController.class).in(Singleton.class);
+        bind(SelectedUnitManager.class).in(Singleton.class);
+        bind(ExcludePainting.class).in(Singleton.class);
+        bind(GamePanelController.class).in(Singleton.class);
+        bind(UnitMoveFinishedListener.class).asEagerSingleton();
+        bind(UnitMovedListener.class).asEagerSingleton();
+        bind(ScrollToSelectedUnit.class).asEagerSingleton();
+
+        /**
+         * Game editor.
+         */
+        bind(ScreenEditorPresenter.class).asEagerSingleton();
+        bind(VisibleAreaService.class).annotatedWith(Names.named("editor"))
+                .toInstance(new VisibleAreaService());
+        bind(EditorMouseListener.class).asEagerSingleton();
 
         /**
          * Rest of UI

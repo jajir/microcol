@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import com.google.common.base.Preconditions;
 import com.google.common.eventbus.EventBus;
 import com.google.inject.Inject;
+import com.google.inject.name.Named;
 
 /**
  * Hold and manage planned animation steps.
@@ -27,7 +28,7 @@ public final class ScrollingManager {
 
     @Inject
     public ScrollingManager(final EventBus eventBus, final WasdController wasdController,
-            final VisibleAreaService visibleArea) {
+            final @Named("game") VisibleAreaService visibleArea) {
         this.eventBus = Preconditions.checkNotNull(eventBus);
         this.wasdController = Preconditions.checkNotNull(wasdController);
         this.visibleArea = Preconditions.checkNotNull(visibleArea);

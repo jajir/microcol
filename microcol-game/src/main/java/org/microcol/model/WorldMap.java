@@ -63,7 +63,13 @@ public class WorldMap {
         return maxY;
     }
 
-    public Location getMaxLocation() {
+    /**
+     * Return map size. Valid map location will be from 1 up to getMapSize()
+     * Including x and y values of {@link #getMapSize()}
+     * 
+     * @return
+     */
+    public Location getMapSize() {
         return Location.of(maxX, maxY);
     }
 

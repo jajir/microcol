@@ -2,14 +2,13 @@ package org.microcol.gui.screen.game.gamepanel;
 
 import org.microcol.gui.Tile;
 import org.microcol.model.Location;
-import org.microcol.model.WorldMap;
 
 import com.google.common.base.MoreObjects;
 
 /**
  * holds canvas in world map coordinates (Location).
  */
-class CanvasInMapCoordinates {
+public class CanvasInMapCoordinates {
 
     /**
      * Locations in world of top left corner of visible area.
@@ -21,15 +20,14 @@ class CanvasInMapCoordinates {
      */
     private final Location bottomRight;
 
-    static CanvasInMapCoordinates make(final VisibleAreaService visibleArea,
-            final WorldMap worldMap) {
+    public static CanvasInMapCoordinates make(final VisibleAreaService visibleArea,
+            final Location mapSize) {
         final Location lTopLeft = Tile.of(visibleArea.getTopLeft()).toLocation();
         final Location lBottomRight = Tile.of(visibleArea.getBottomRight()).toLocation();
         final Location topLeft = Location.of(Math.max(Location.MAP_MIN_X, lTopLeft.getX()),
                 Math.max(Location.MAP_MIN_Y, lTopLeft.getY()));
-        final Location bottomRight = Location.of(
-                Math.min(lBottomRight.getX(), worldMap.getMaxLocationX()),
-                Math.min(lBottomRight.getY(), worldMap.getMaxLocationY()));
+        final Location bottomRight = Location.of(Math.min(lBottomRight.getX(), mapSize.getX()),
+                Math.min(lBottomRight.getY(), mapSize.getY()));
         return new CanvasInMapCoordinates(topLeft, bottomRight);
     }
 
@@ -44,11 +42,11 @@ class CanvasInMapCoordinates {
                 .add("bottomRight", bottomRight).toString();
     }
 
-    protected Location getTopLeft() {
+    public Location getTopLeft() {
         return topLeft;
     }
 
-    protected Location getBottomRight() {
+    public Location getBottomRight() {
         return bottomRight;
     }
 

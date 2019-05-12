@@ -1,5 +1,11 @@
 package org.microcol.gui.image;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
+import java.util.function.BiConsumer;
+
+import org.microcol.gui.util.AnimationScheduler;
 import org.microcol.model.Location;
 import org.microcol.model.TerrainType;
 import org.microcol.model.WorldMap;
@@ -14,6 +20,15 @@ import javafx.scene.image.Image;
  */
 public final class ImageRandomProvider {
 
+    private final static int INITIAL_PROBABILITY_OR_RIPPLE = 51;
+    private final static int INITIAL_RIPPLE_TTL_IN_SEC = 7;
+    private final static int PROBABILITY_OR_RIPPLE = INITIAL_PROBABILITY_OR_RIPPLE
+            * AnimationScheduler.FPS * 7;
+
+    private final Map<Location, TileAnimation> tileAnimations = new HashMap<>();
+
+    private final Random random = new Random();
+
     private final ImageProvider imageProvider;
 
     private final WorldMapRandoms mapRandoms;
@@ -22,20 +37,82 @@ public final class ImageRandomProvider {
         this.imageProvider = Preconditions.checkNotNull(imageProvider);
         Preconditions.checkNotNull(worldMap);
         mapRandoms = new WorldMapRandoms(worldMap);
+        initRipples(worldMap);
     }
 
-    public Image getTerrainImage(final TerrainType terrainType, final Location location) {
-        if (TerrainType.OCEAN.equals(terrainType)) {
-            final Integer rnd = mapRandoms.getRandomAt(location);
-            if (rnd % 11 == 0) {
-                return imageProvider.getImage(ImageLoaderTerrain.IMG_TILE_OCEAN_2);
+    private void initRipples(final WorldMap worldMap) {
+        forEachLocation(worldMap, this::initRippleAtLocation);
+    }
+
+    /**
+     * Each game tick this should be called. It check that all tile animation
+     * are running. When it's necessary it starts another tile animation;
+     *
+     * @param worldMap
+     *            required world map
+     * @param currentGameTick
+     *            required current game tick
+     */
+    public void updateRipples(final WorldMap worldMap, final long currentGameTick) {
+        forEachLocation(worldMap,
+                (map, location) -> updateRippleAtLocation(worldMap, location, currentGameTick));
+    }
+
+    private void initRippleAtLocation(final WorldMap worldMap, final Location location) {
+        if (TerrainType.OCEAN.equals(worldMap.getTerrainTypeAt(location))) {
+            if (random.nextInt(INITIAL_PROBABILITY_OR_RIPPLE) == 0) {
+                tileAnimations.put(location,
+                        TileAnimation.makeForSeconds(0, random.nextInt(INITIAL_RIPPLE_TTL_IN_SEC)));
+            }
+        }
+    }
+
+    private void updateRippleAtLocation(final WorldMap worldMap, final Location location,
+            final long currentGameTick) {
+        if (TerrainType.OCEAN.equals(worldMap.getTerrainTypeAt(location))) {
+            final TileAnimation anim = tileAnimations.get(location);
+            if (anim == null) {
+                if (random.nextInt(PROBABILITY_OR_RIPPLE) == 0) {
+                    tileAnimations.put(location,
+                            TileAnimation.makeForSeconds(currentGameTick, 10 + random.nextInt(12)));
+                }
             } else {
-                if (rnd % 63 == 0) {
-                    return imageProvider.getImage(ImageLoaderTerrain.IMG_TILE_OCEAN_3);
-                } else {
-                    return imageProvider.getImage(ImageLoaderTerrain.IMG_TILE_OCEAN_1);
+                if (anim.isDone(currentGameTick)) {
+                    tileAnimations.remove(location);
                 }
             }
+        }
+    }
+
+    private void forEachLocation(final WorldMap map,
+            final BiConsumer<WorldMap, Location> consumer) {
+        for (int y = 1; y <= map.getMapSize().getY(); y++) {
+            for (int x = 1; x <= map.getMapSize().getX(); x++) {
+                final Location location = Location.of(x, y);
+                consumer.accept(map, location);
+            }
+        }
+    }
+
+    public Image getTerrainImage(final TerrainType terrainType, final Location location,
+            final long currentGameTick) {
+        if (TerrainType.OCEAN.equals(terrainType)) {
+            final Integer rnd = mapRandoms.getRandomAt(location);
+            if (rnd % 63 == 0) {
+                return imageProvider.getImage(ImageLoaderTerrain.IMG_TILE_OCEAN_WITH_WHALE);
+            } else {
+                final TileAnimation anim = tileAnimations.get(location);
+                if (anim != null) {
+                    if (anim.isDone(currentGameTick)) {
+                        tileAnimations.remove(location);
+                    } else {
+                        return imageProvider
+                                .getImage(ImageLoaderTerrain.IMG_TILE_OCEAN_WITH_RIPPLE);
+                    }
+                }
+                return imageProvider.getImage(ImageLoaderTerrain.IMG_TILE_OCEAN_1);
+            }
+
         }
         if (TerrainType.MOUNTAIN.equals(terrainType)) {
             final Integer rnd = mapRandoms.getRandomAt(location);

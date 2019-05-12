@@ -1,40 +1,85 @@
 package org.microcol.gui.screen.editor;
 
-import org.microcol.gui.screen.GameScreen;
-import org.microcol.i18n.I18n;
+import org.microcol.gui.screen.ScreenLifeCycle;
+import org.microcol.gui.screen.game.gamepanel.GamePanelComponent;
+import org.microcol.gui.screen.game.gamepanel.VisibleAreaService;
+import org.microcol.gui.util.AnimationScheduler;
+import org.microcol.gui.util.CanvasComponent;
+import org.microcol.gui.util.JavaFxComponent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import com.google.common.base.Preconditions;
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
+import com.google.inject.name.Named;
+
+import javafx.scene.canvas.Canvas;
 import javafx.scene.layout.Region;
-import javafx.scene.layout.VBox;
 
-public class EditorPanel implements GameScreen {
+/**
+ * Panel with canvas containing edited game model.
+ */
+@Singleton
+public class EditorPanel implements ScreenLifeCycle, JavaFxComponent {
 
-    private final VBox mainPanel = new VBox();
+    private final Logger logger = LoggerFactory.getLogger(GamePanelComponent.class);
 
-    public EditorPanel() {
-        // TODO Auto-generated constructor stub
+    private final CanvasComponent canvasComponent = new CanvasComponent();
+
+    private final EditorPaintingService editorPaintingService;
+
+    private final AnimationScheduler animationScheduler;
+
+    @Inject
+    public EditorPanel(final @Named("editor") VisibleAreaService visibleAreaService,
+            final EditorPaintingService editorPaintingService) {
+        this.editorPaintingService = Preconditions.checkNotNull(editorPaintingService);
+
+        canvasComponent.widthProperty().addListener((obj, oldValue, newValue) -> {
+            if (newValue.intValue() < VisibleAreaService.MAX_CANVAS_SIDE_LENGTH) {
+                visibleAreaService.setCanvasWidth(newValue.intValue());
+            }
+        });
+        canvasComponent.heightProperty().addListener((obj, oldValue, newValue) -> {
+            if (newValue.intValue() < VisibleAreaService.MAX_CANVAS_SIDE_LENGTH) {
+                visibleAreaService.setCanvasHeight(newValue.intValue());
+            }
+        });
+
+        /**
+         * Following class main define animation loop.
+         */
+        animationScheduler = new AnimationScheduler(this::paintFrame);
+    }
+
+    /**
+     * Smallest game time interval. In ideal case it have time to draw world on
+     * screen.
+     */
+    private void paintFrame(final Long tick) {
+        editorPaintingService.paint(canvasComponent.getGraphicsContext2D());
+        logger.debug("painting editor");
     }
 
     @Override
     public Region getContent() {
-        return mainPanel;
+        return canvasComponent.getContent();
     }
 
     @Override
     public void beforeShow() {
-        // TODO Auto-generated method stub
+        animationScheduler.start();
 
     }
 
     @Override
     public void beforeHide() {
-        // TODO Auto-generated method stub
-
+        animationScheduler.pause();
     }
 
-    @Override
-    public void updateLanguage(I18n i18n) {
-        // TODO Auto-generated method stub
-
+    Canvas getCanvas() {
+        return canvasComponent.getCanvas();
     }
 
 }

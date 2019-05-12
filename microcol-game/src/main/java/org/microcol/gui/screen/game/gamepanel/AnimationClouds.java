@@ -10,6 +10,7 @@ import org.microcol.model.event.GameStartedEvent;
 import com.google.common.base.Preconditions;
 import com.google.common.eventbus.Subscribe;
 import com.google.inject.Inject;
+import com.google.inject.name.Named;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -28,7 +29,7 @@ public class AnimationClouds {
     private double position;
 
     @Inject
-    AnimationClouds(final VisibleAreaService visibleAreaService,
+    AnimationClouds(final @Named("game") VisibleAreaService visibleAreaService,
             final ImageProvider imageProvider) {
         this.visibleAreaService = Preconditions.checkNotNull(visibleAreaService);
         cloudImage = imageProvider.getImage("cloud-1.png");
@@ -36,7 +37,7 @@ public class AnimationClouds {
 
     @Subscribe
     private void onGameStarted(final GameStartedEvent event) {
-        final Location maxMap = event.getModel().getMap().getMaxLocation();
+        final Location maxMap = event.getModel().getMap().getMapSize();
         final Point p = Tile.ofLocation(maxMap).getTopLeftCorner();
         position = initPosition(p);
     }

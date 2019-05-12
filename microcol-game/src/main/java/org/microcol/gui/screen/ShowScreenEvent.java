@@ -2,6 +2,9 @@ package org.microcol.gui.screen;
 
 import com.google.common.base.Preconditions;
 
+/**
+ * Event holding screen information that should be shown.
+ */
 public class ShowScreenEvent {
 
     private final Screen screen;

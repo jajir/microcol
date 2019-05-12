@@ -30,8 +30,8 @@ public class WorldMapCreationTest {
         gamePo.setMap(mapPo);
         final WorldMap map = new WorldMap(gamePo);
 
-        assertEquals(maxX, map.getMaxLocationX(), "Test of maxX failed.");
-        assertEquals(maxY, map.getMaxLocationY(), "Test of maxY failed.");
+        assertEquals(maxX, map.getMapSize().getX(), "Test of maxX failed.");
+        assertEquals(maxY, map.getMapSize().getY(), "Test of maxY failed.");
         assertEquals(seed, map.getSeed(), "Test of seed failed.");
     }
 }

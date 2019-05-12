@@ -6,7 +6,6 @@ import java.util.Optional;
 import org.microcol.gui.Loc;
 import org.microcol.gui.LocalizationHelper;
 import org.microcol.gui.MainStageBuilder;
-import org.microcol.gui.TilePainter;
 import org.microcol.gui.UnitsPanel;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.image.ImageLoaderTerrain;
@@ -118,6 +117,7 @@ public final class RightPanelView implements JavaFxComponent {
         }
     }
 
+    // FIXME use PaintService, instead of tilePainter, or move tilePainter here
     public void refreshView(final Location location) {
         Preconditions.checkNotNull(location);
         Platform.runLater(() -> {

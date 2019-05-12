@@ -86,7 +86,8 @@ public final class PaintService {
     public void paintColony(final GraphicsContext graphics, final Point point, final Colony colony,
             final boolean drawColonyName) {
         final Point p = point.add(UNIT_IMAGE_POSITION);
-        graphics.drawImage(imageProvider.getImage(ImageLoaderTerrain.IMG_TILE_TOWN), p.getX(), p.getY());
+        graphics.drawImage(imageProvider.getImage(ImageLoaderTerrain.IMG_TILE_TOWN), p.getX(),
+                p.getY());
         if (drawColonyName) {
             paintOwnersFlag(graphics, point.add(OWNERS_FLAG_POSITION), colony.getOwner());
             graphics.setFont(colonyFont);
@@ -164,19 +165,23 @@ public final class PaintService {
      *            required terrain object
      * @param isHighlighted
      *            when it's <code>true</code> than tile is highlighted
+     * @param gameTick
+     *            required long representing how many game ticks was already
+     *            done. It allows to time animations.
      */
     public void paintTerrainOnTile(final GraphicsContext graphics, final Point point,
-            final Location location, final Terrain terrain, final boolean isHighlighted) {
+            final Location location, final Terrain terrain, final boolean isHighlighted,
+            final long gameTick) {
         // terrain tile
-        final Image imageBackground = mapManager.getTerrainImage(terrain.getTerrainType(),
-                location);
-        graphics.drawImage(imageBackground, 0, 0, Tile.TILE_WIDTH_IN_PX, Tile.TILE_WIDTH_IN_PX, point.getX(),
-                point.getY(), Tile.TILE_WIDTH_IN_PX, Tile.TILE_WIDTH_IN_PX);
+        final Image imageBackground = mapManager.getTerrainImage(terrain.getTerrainType(), location,
+                gameTick);
+        graphics.drawImage(imageBackground, 0, 0, Tile.TILE_WIDTH_IN_PX, Tile.TILE_WIDTH_IN_PX,
+                point.getX(), point.getY(), Tile.TILE_WIDTH_IN_PX, Tile.TILE_WIDTH_IN_PX);
 
         // prechody
         final Image imageCoast = mapManager.getCoatsImageAt(location);
-        graphics.drawImage(imageCoast, 0, 0, Tile.TILE_WIDTH_IN_PX, Tile.TILE_WIDTH_IN_PX, point.getX(),
-                point.getY(), Tile.TILE_WIDTH_IN_PX, Tile.TILE_WIDTH_IN_PX);
+        graphics.drawImage(imageCoast, 0, 0, Tile.TILE_WIDTH_IN_PX, Tile.TILE_WIDTH_IN_PX,
+                point.getX(), point.getY(), Tile.TILE_WIDTH_IN_PX, Tile.TILE_WIDTH_IN_PX);
 
         if (terrain.isHasTrees()) {
             graphics.drawImage(mapManager.getTreeImage(location), point.getX(), point.getY());
@@ -188,13 +193,19 @@ public final class PaintService {
         }
         if (isHighlighted) {
             graphics.setFill(new Color(0.95, 0.75, 0.90, 0.4F));
-            graphics.fillRect(point.getX(), point.getY(), Tile.TILE_WIDTH_IN_PX, Tile.TILE_WIDTH_IN_PX);
+            graphics.fillRect(point.getX(), point.getY(), Tile.TILE_WIDTH_IN_PX,
+                    Tile.TILE_WIDTH_IN_PX);
         }
         final Image hiddenCoast = mapManager.getHiddenImageCoast(location);
         if (hiddenCoast != null) {
-            graphics.drawImage(hiddenCoast, 0, 0, Tile.TILE_WIDTH_IN_PX, Tile.TILE_WIDTH_IN_PX, point.getX(),
-                    point.getY(), Tile.TILE_WIDTH_IN_PX, Tile.TILE_WIDTH_IN_PX);
+            graphics.drawImage(hiddenCoast, 0, 0, Tile.TILE_WIDTH_IN_PX, Tile.TILE_WIDTH_IN_PX,
+                    point.getX(), point.getY(), Tile.TILE_WIDTH_IN_PX, Tile.TILE_WIDTH_IN_PX);
         }
+    }
+
+    public void paintTerrainOnTile(final GraphicsContext graphics, final Point point,
+            final Location location, final Terrain terrain, final boolean isHighlighted) {
+        paintTerrainOnTile(graphics, point, location, terrain, isHighlighted, 0);
     }
 
 }

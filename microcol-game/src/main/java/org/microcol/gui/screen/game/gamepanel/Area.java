@@ -24,7 +24,7 @@ public class Area {
      * @param visibleArea
      *            required visible area on screen
      */
-    Area(final VisibleAreaService visibleArea) {
+    public Area(final VisibleAreaService visibleArea) {
         this.visibleArea = Preconditions.checkNotNull(visibleArea);
     }
 
@@ -64,7 +64,7 @@ public class Area {
      *            required on-screen point
      * @return return map location
      */
-    Location convertToLocation(final Point point) {
+    public Location convertToLocation(final Point point) {
         return Tile.of(point.add(visibleArea.getTopLeft())).toLocation();
     }
 

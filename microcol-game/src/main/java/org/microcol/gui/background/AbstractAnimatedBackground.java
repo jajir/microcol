@@ -17,8 +17,7 @@ public abstract class AbstractAnimatedBackground extends AbstractBackground
 
     public AbstractAnimatedBackground() {
         super();
-        final GraphicsContext gc = getCanvas().getGraphicsContext2D();
-        animationScheduler = new AnimationScheduler(gc, gcontex -> paint(gcontex));
+        animationScheduler = new AnimationScheduler(gcontex -> repaint());
     }
 
     /**

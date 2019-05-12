@@ -10,7 +10,6 @@ import org.microcol.model.Location;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
-import com.google.inject.Singleton;
 
 /**
  * User see some area where is game map drawn this area is called canvas. Class
@@ -44,13 +43,12 @@ import com.google.inject.Singleton;
  * </p>
  * 
  */
-@Singleton
-class VisibleAreaService {
+public class VisibleAreaService {
 
     /**
      * Maximal reasonable canvas size.
      */
-    final static int MAX_CANVAS_SIDE_LENGTH = 10000;
+    public final static int MAX_CANVAS_SIDE_LENGTH = 10000;
 
     /**
      * It helps consider if canvas size is reasonable. When canvas side length
@@ -88,9 +86,16 @@ class VisibleAreaService {
                 .add("maxMapSize", maxMapSize).toString();
     }
 
-    public void setWorldMap(final Location worldMaxLocation) {
-        Preconditions.checkNotNull(worldMaxLocation);
-        maxMapSize = Tile.ofLocation(worldMaxLocation).getBottomRightCorner();
+    /**
+     * When world map size change than this should be called because it will
+     * prevent user scroll outside of map.
+     *
+     * @param worldSize
+     *            required world map size
+     */
+    public void setMapSize(final Location worldSize) {
+        Preconditions.checkNotNull(worldSize);
+        maxMapSize = Tile.ofLocation(worldSize).getBottomRightCorner();
         canvasArea.setTopLeft(Point.ZERO, MAX_CANVAS_SIZE);
         /**
          * Following code force class to compute correct position of top left
@@ -149,7 +154,7 @@ class VisibleAreaService {
         return canvasArea.computeNewTopLeftConnerOfCanvas(newTopLeftCanvasCorner, getMapSize());
     }
 
-    void addDeltaToTopLeftPoint(final Point delta) {
+    public void addDeltaToTopLeftPoint(final Point delta) {
         final Point newTopLeft = canvasArea.getTopLeft().add(delta);
         setTopLeftPosionOfCanvas(newTopLeft);
     }

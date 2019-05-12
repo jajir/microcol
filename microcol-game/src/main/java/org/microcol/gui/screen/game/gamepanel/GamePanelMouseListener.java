@@ -16,6 +16,7 @@ import com.google.common.base.Preconditions;
 import com.google.common.eventbus.EventBus;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import com.google.inject.name.Named;
 
 import javafx.scene.input.MouseEvent;
 
@@ -50,7 +51,7 @@ public final class GamePanelMouseListener {
             final GameModelController gameModelController,
             final SelectedTileManager selectedTileManager, final EventBus eventBus,
             final MouseOverTileManager mouseOverTileManager, final ModeController modeController,
-            final GamePanelController gamePanelController, final VisibleAreaService visibleArea,
+            final GamePanelController gamePanelController, final @Named("game") VisibleAreaService visibleArea,
             final GamePanelComponent gamePanelComponent,
             final GamePanelPresenter gamePanelPresenter) {
         this.gameModelController = Preconditions.checkNotNull(gameModelController);

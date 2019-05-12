@@ -21,7 +21,7 @@ import javafx.scene.image.Image;
  * </p>
  */
 @Singleton
-public final class ImageCache {
+public class ImageCache {
 
     private static final String BASE_PACKAGE = "images";
 
@@ -48,6 +48,9 @@ public final class ImageCache {
         Image img = images.get(name);
         if (img == null) {
             img = ImageCache.getRawImage(name);
+            if (img == null) {
+                throw new IllegalStateException(String.format("cant't lod image %s", name));
+            }
             images.put(name, img);
         }
         return img;

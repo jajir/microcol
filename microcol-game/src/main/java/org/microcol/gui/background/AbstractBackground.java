@@ -28,7 +28,7 @@ public abstract class AbstractBackground implements JavaFxComponent, Repaintable
 
     @Override
     public void repaint() {
-        final GraphicsContext gc = canvasComponent.getCanvas().getGraphicsContext2D();
+        final GraphicsContext gc = canvasComponent.getGraphicsContext2D();
         paint(gc);
     }
 

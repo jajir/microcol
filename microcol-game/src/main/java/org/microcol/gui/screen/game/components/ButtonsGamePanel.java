@@ -34,25 +34,25 @@ public class ButtonsGamePanel extends AbstractButtonsPanel {
 
     public final static String BUTTON_NEXT_TURN_ID = "nextTurn";
 
-    public final static String BUTTON_HELP_ID = "help";
+    private final static String BUTTON_HELP_ID = "help";
 
-    public final static String BUTTON_CENTER_ID = "center";
+    private final static String BUTTON_CENTER_ID = "center";
 
-    public final static String BUTTON_STATISTICS_ID = "statistics";
+    private final static String BUTTON_STATISTICS_ID = "statistics";
 
-    public final static String BUTTON_EXIT_ID = "exit";
+    private final static String BUTTON_EXIT_ID = "exit";
 
-    public final static String BUTTON_GOALS_ID = "goals";
+    private final static String BUTTON_GOALS_ID = "goals";
 
     public final static String BUTTON_TURN_REPORT_ID = "turnReport";
 
     public final static String BUTTON_EUROPE_ID = "europe";
 
-    public final static String BUTTON_MOVE_ID = "move";
+    private final static String BUTTON_MOVE_ID = "move";
 
-    public final static String BUTTON_PLOW_FIELD_ID = "plowField";
+    private final static String BUTTON_PLOW_FIELD_ID = "plowField";
 
-    public final static String BUTTON_BUILD_COLONY_ID = "buildColony";
+    private final static String BUTTON_BUILD_COLONY_ID = "buildColony";
 
     public final static String BUTTON_DECLARE_INDEPENDENCE_ID = "declareIndependence";
 
@@ -139,12 +139,12 @@ public class ButtonsGamePanel extends AbstractButtonsPanel {
         getButtonPanel().getChildren().add(buttonNextTurn);
     }
 
-    public void disableAllButtons() {
+    void disableAllButtons() {
         LOGGER.debug("Disabling buttons bar");
         setDisable(true);
     }
 
-    public void enableAllButtons() {
+    void enableAllButtons() {
         LOGGER.debug("Enabling buttons bar");
         setDisable(false);
     }
@@ -182,7 +182,7 @@ public class ButtonsGamePanel extends AbstractButtonsPanel {
         setVisibleNode(buttonDeclareIndependence, isVisible);
     }
 
-    protected void setVisibleNode(final Node node, final boolean isVisible) {
+    private void setVisibleNode(final Node node, final boolean isVisible) {
         Platform.runLater(() -> {
             if (isContaining(node)) {
                 if (!isVisible) {

@@ -13,6 +13,10 @@ import com.google.common.collect.ImmutableMap;
 /**
  * For each map location holds pseudo random number. See
  * {@link WorldMap#getSeed()}.
+ * <p>
+ * it's nice and easy way how to show random elements always on a same place for
+ * one map.
+ * </p>
  */
 public final class WorldMapRandoms {
 

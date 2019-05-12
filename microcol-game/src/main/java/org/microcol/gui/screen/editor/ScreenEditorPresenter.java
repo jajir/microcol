@@ -16,9 +16,13 @@ public class ScreenEditorPresenter {
 
     private final EventBus eventBus;
 
+    private final ModelService modelService;
+
     @Inject
-    ScreenEditorPresenter(final ScreenEditor screenEditor, final EventBus eventBus) {
+    ScreenEditorPresenter(final ScreenEditor screenEditor, final EventBus eventBus,
+            final ModelService modelService) {
         this.eventBus = Preconditions.checkNotNull(eventBus);
+        this.modelService = Preconditions.checkNotNull(modelService);
         screenEditor.getContent().setOnKeyPressed(this::onKeyPressed);
     }
 
@@ -28,6 +32,10 @@ public class ScreenEditorPresenter {
          */
         if (KeyCode.ESCAPE == event.getCode()) {
             eventBus.post(new ShowScreenEvent(Screen.MENU));
+        }
+
+        if (KeyCode.S == event.getCode() && event.isControlDown()) {
+            modelService.save();
         }
     }
 

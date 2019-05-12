@@ -68,10 +68,13 @@ final class GamePaintService {
      * @param coord
      *            required object holding information about canvas in world map
      *            coordinates (Location)
+     * @param gameTick
+     *            required long representing how many game ticks was already
+     *            done. It allows to time animations.
      */
     public void paintTerrain(final GraphicsContext graphics, final Area area,
-            final OneTurnMoveHighlighter oneTurnMoveHighlighter,
-            final CanvasInMapCoordinates coord) {
+            final OneTurnMoveHighlighter oneTurnMoveHighlighter, final CanvasInMapCoordinates coord,
+            final long gameTick) {
         final Player player = gameModelController.getHumanPlayer();
         for (int i = coord.getTopLeft().getX(); i <= coord.getBottomRight().getX(); i++) {
             for (int j = coord.getTopLeft().getY(); j <= coord.getBottomRight().getY(); j++) {
@@ -81,7 +84,7 @@ final class GamePaintService {
                     final Terrain terrain = gameModelController.getModel().getMap()
                             .getTerrainAt(location);
                     paintService.paintTerrainOnTile(graphics, point, location, terrain,
-                            oneTurnMoveHighlighter.isItHighlighted(location));
+                            oneTurnMoveHighlighter.isItHighlighted(location), gameTick);
                 } else {
                     final Image imageHidden = imageProvider
                             .getImage(ImageLoaderTerrain.IMG_TILE_HIDDEN);

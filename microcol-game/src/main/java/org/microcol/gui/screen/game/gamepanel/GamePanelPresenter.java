@@ -31,6 +31,7 @@ import com.google.common.base.Preconditions;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import com.google.inject.Inject;
+import com.google.inject.name.Named;
 
 @Listener
 public final class GamePanelPresenter {
@@ -72,7 +73,7 @@ public final class GamePanelPresenter {
             final SelectedTileManager selectedTileManager, final ViewUtil viewUtil,
             final EventBus eventBus, final ModeController modeController,
             final SelectedUnitManager selectedUnitManager, final I18n i18n,
-            final VisibleAreaService visibleArea, final OneTurnMoveHighlighter oneTurnMoveHighlighter,
+            final @Named("game") VisibleAreaService visibleArea, final OneTurnMoveHighlighter oneTurnMoveHighlighter,
             final UnitUtil unitUtil, final MoveModeController moveModeController) {
         this.gameModelController = Preconditions.checkNotNull(gameModelController);
         this.gamePreferences = gamePreferences;
@@ -102,7 +103,7 @@ public final class GamePanelPresenter {
 
     @Subscribe
     private void onGameStarted(final GameStartedEvent event) {
-        visibleArea.setWorldMap(event.getModel().getMap().getMaxLocation());
+        visibleArea.setMapSize(event.getModel().getMap().getMapSize());
     }
 
     @Subscribe
