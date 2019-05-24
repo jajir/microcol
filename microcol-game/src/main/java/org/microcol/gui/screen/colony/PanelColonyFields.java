@@ -22,7 +22,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
+import com.google.common.eventbus.EventBus;
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
 
 import javafx.geometry.VPos;
 import javafx.scene.canvas.Canvas;
@@ -36,6 +38,7 @@ import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.Region;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.TextAlignment;
 
@@ -43,6 +46,7 @@ import javafx.scene.text.TextAlignment;
  * Show 3 x 3 tiles occupied by colony. User can assign worker to work outside
  * of colony.
  */
+@Singleton
 public final class PanelColonyFields implements JavaFxComponent {
 
     private final Logger logger = LoggerFactory.getLogger(PanelColonyFields.class);
@@ -55,24 +59,24 @@ public final class PanelColonyFields implements JavaFxComponent {
 
     private final GameModelController gameModelController;
 
-    private final ColonyDialogCallback colonyDialog;
-
     private final ClickableArea clickableArea = new ClickableArea();
 
     private final ContextMenu contextMenu;
 
     private final PaintService paintService;
 
-    private final TitledPanel mainPanel;
+    private final EventBus eventBus;
+
+    private final VBox mainPanel = new VBox();
 
     @Inject
-    public PanelColonyFields(final ImageProvider imageProvider,
-            final GameModelController gameModelController, final ColonyDialogCallback colonyDialog,
-            final PaintService paintService) {
+    PanelColonyFields(final ImageProvider imageProvider,
+            final GameModelController gameModelController, final PaintService paintService,
+            final EventBus eventBus) {
         this.imageProvider = Preconditions.checkNotNull(imageProvider);
         this.gameModelController = Preconditions.checkNotNull(gameModelController);
-        this.colonyDialog = Preconditions.checkNotNull(colonyDialog);
         this.paintService = Preconditions.checkNotNull(paintService);
+        this.eventBus = Preconditions.checkNotNull(eventBus);
         final int size = 3 * TILE_WIDTH_IN_PX;
 
         canvas = new Canvas(size, size);
@@ -86,8 +90,7 @@ public final class PanelColonyFields implements JavaFxComponent {
         contextMenu.getStyleClass().add("popup");
         contextMenu.setAutoHide(true);
 
-        mainPanel = new TitledPanel();
-        mainPanel.getContentPane().getChildren().add(canvas);
+        mainPanel.getChildren().add(canvas);
         mainPanel.getStyleClass().add("colony-fields");
     }
 
@@ -105,7 +108,7 @@ public final class PanelColonyFields implements JavaFxComponent {
                     production.getGoodsType().name() + "   " + production.getProduction());
             item.setOnAction(evt -> {
                 colonyField.setProducedGoodsType(production.getGoodsType());
-                colonyDialog.repaint();
+                eventBus.post(new RepaintColonyEvent());
             });
             contextMenu.getItems().add(item);
         });
@@ -172,7 +175,7 @@ public final class PanelColonyFields implements JavaFxComponent {
                 .ifPresent(unit -> {
                     unit.placeToColonyField(colonyField, GoodsType.CORN);
                     event.setDropCompleted(true);
-                    colonyDialog.repaint();
+                    eventBus.post(new RepaintColonyEvent());
                 });
     }
 
@@ -203,7 +206,7 @@ public final class PanelColonyFields implements JavaFxComponent {
         if (!colonyField.isEmpty()) {
             final Goods production = colonyField.getProduction().get();
             final Unit unit = colonyField.getUnit().get();
-            gc.drawImage(imageProvider.getUnitImage(unit), point.getX(), point.getY());
+            paintService.paintUnitWithoutFlag(gc, point, unit);
             gc.drawImage(imageProvider.getGoodsTypeImage(production.getType()), point.getX(),
                     point.getY(), 25, 25);
             gc.setTextAlign(TextAlignment.CENTER);

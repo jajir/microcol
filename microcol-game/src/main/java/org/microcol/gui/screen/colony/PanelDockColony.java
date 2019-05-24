@@ -11,7 +11,7 @@ import com.google.inject.Singleton;
  * crates.
  */
 @Singleton
-public class PanelDockColony extends AbstractPanelDock {
+class PanelDockColony extends AbstractPanelDock {
 
     @Inject
     public PanelDockColony(final ImageProvider imageProvider,

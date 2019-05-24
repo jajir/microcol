@@ -22,7 +22,7 @@ import com.google.inject.name.Named;
  * Holds edited game model and provide basic operations with this model.
  */
 @Singleton
-public class ModelService {
+class ModelService {
 
     private final GameModelPoDao gameModelPoDao;
 
@@ -65,7 +65,7 @@ public class ModelService {
                 .collect(Collectors.toSet());
     }
 
-    WorldMapPo getMap() {
+    private WorldMapPo getMap() {
         return getModelPo().getMap();
     }
 
@@ -76,7 +76,7 @@ public class ModelService {
     /**
      * Save currently loaded game model.
      */
-    public void save() {
+    void save() {
         gameModelPoDao.saveToFile(file.getAbsolutePath(), gameModelPo);
     }
 

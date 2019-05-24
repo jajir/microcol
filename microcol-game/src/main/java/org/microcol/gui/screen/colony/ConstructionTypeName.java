@@ -13,9 +13,8 @@ import com.google.common.base.Preconditions;
 /**
  * Map {@link ConstructionType} to enumeration value,
  */
-public enum ConstructionTypeName implements MessageKeyResource {
+enum ConstructionTypeName implements MessageKeyResource {
 
-    
     townHall(ConstructionType.TOWN_HALL),
     lubmerMill(ConstructionType.LUMBER_MILL),
     carpenterShop(ConstructionType.CARPENTERS_SHOP),

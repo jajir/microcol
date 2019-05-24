@@ -48,7 +48,7 @@ public final class MusicPlayer {
      * @param defaultVolume
      *            required default volume
      */
-    public void playSound(final String filename, final int defaultVolume) {
+    void playSound(final String filename, final int defaultVolume) {
         final AudioInputStream audioStream = getAudioInputStream(filename);
         final AudioFormat audioFormat = audioStream.getFormat();
 
@@ -103,7 +103,7 @@ public final class MusicPlayer {
         volumeControll.setValue(volumeControll.getMinimum() + volume / step);
     }
 
-    public void stop() {
+    void stop() {
         run = false;
     }
 

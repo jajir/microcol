@@ -12,7 +12,7 @@ import org.microcol.gui.screen.colony.ColonyButtonsPanel;
 import org.microcol.gui.screen.colony.ColonyPanel;
 import org.microcol.gui.screen.colony.PanelColonyFields;
 import org.microcol.gui.screen.colony.PanelColonyGood;
-import org.microcol.gui.screen.colony.PanelUnitWithContextMenu;
+import org.microcol.gui.screen.colony.PanelOutsideColonyUnit;
 import org.microcol.model.Colony;
 import org.microcol.model.ColonyField;
 import org.microcol.model.GoodsProductionStats;
@@ -125,7 +125,7 @@ public class ColonyScreen extends AbstractScreen {
      */
     private List<Pane> getUnitsAtPier() {
 	final NodeFinder nodeFinder = getNodeFinder();
-	final Set<Pane> unitsSet = nodeFinder.lookup("." + PanelUnitWithContextMenu.UNIT_AT_PIER_STYLE).queryAll();
+	final Set<Pane> unitsSet = nodeFinder.lookup("." + PanelOutsideColonyUnit.UNIT_AT_PIER_STYLE).queryAll();
 	return new ArrayList<Pane>(unitsSet);
     }
 

@@ -37,13 +37,13 @@ import com.google.common.eventbus.EventBus;
 /**
  * Translate model events to GUI events.
  */
-public final class ModelListenerImpl implements ModelListener {
+final class ModelListenerImpl implements ModelListener {
 
     private final GameModelController gameModelController;
 
     private final EventBus eventBus;
 
-    public ModelListenerImpl(final GameModelController gameModelController,
+    ModelListenerImpl(final GameModelController gameModelController,
             final EventBus eventBus) {
         this.gameModelController = Preconditions.checkNotNull(gameModelController);
         this.eventBus = Preconditions.checkNotNull(eventBus);

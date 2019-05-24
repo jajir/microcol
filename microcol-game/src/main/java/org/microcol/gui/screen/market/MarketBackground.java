@@ -18,7 +18,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 
-public class MarketBackground extends AbstractAnimatedBackground {
+class MarketBackground extends AbstractAnimatedBackground {
 
     private final static String IMG_TOP = "market-top.png";
 
@@ -37,7 +37,7 @@ public class MarketBackground extends AbstractAnimatedBackground {
     private final ImageStripePainter bottomImageStripePainter;
 
     @Inject
-    public MarketBackground(final ImageProvider imageProvider) {
+    MarketBackground(final ImageProvider imageProvider) {
         imageTop = Preconditions.checkNotNull(imageProvider.getImage(IMG_TOP));
         imageBottom = Preconditions.checkNotNull(imageProvider.getImage(IMG_BOTTOM));
         imageCenter = Preconditions.checkNotNull(imageProvider.getImage(ImageLoaderExtra.IMG_MARKET));

@@ -34,7 +34,7 @@ public abstract class AbstractRobotPlayer {
 
     private boolean running;
 
-    public AbstractRobotPlayer(final Model model, final Player player,
+    AbstractRobotPlayer(final Model model, final Player player,
             final AnimationLock animationLock) {
         this.model = Preconditions.checkNotNull(model);
         this.player = Preconditions.checkNotNull(player);

@@ -18,7 +18,7 @@ public final class Continents {
 
     private final List<Continent> continents = new ArrayList<>();
 
-    public void add(final Continent continent) {
+    void add(final Continent continent) {
         continents.add(continent);
     }
 

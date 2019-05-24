@@ -16,7 +16,7 @@ import javafx.scene.layout.HBox;
  */
 public final class PanelDockCratesPresenter implements JavaFxComponent {
 
-    public final static int MAX_NUMBER_OF_CRATES = 6;
+    private final static int MAX_NUMBER_OF_CRATES = 6;
 
     private final PanelDockCratesView panelCratesView;
 

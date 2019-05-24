@@ -49,6 +49,7 @@ public final class TurnReportPanel implements GameScreen {
         buttonsBar.getButtonOk().setOnAction(this::onClose);
 
         turnEventsPanel = new VBox();
+        turnEventsPanel.getStyleClass().add("turnEventPanel");
 
         mainPanel.getChildren().addAll(turnEventsPanel, buttonsBar.getContent());
 

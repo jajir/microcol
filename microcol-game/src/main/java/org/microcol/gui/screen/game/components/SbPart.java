@@ -4,7 +4,7 @@ import org.microcol.i18n.I18n;
 
 import com.google.common.base.Preconditions;
 
-public abstract class SbPart {
+abstract class SbPart {
 
     private final I18n i18n;
 

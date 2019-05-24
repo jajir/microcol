@@ -109,6 +109,10 @@ public class Construction {
         return ImmutableList.copyOf(workingSlots);
     }
 
+    public Optional<ConstructionSlot> getFirstEmptySlot() {
+        return workingSlots.stream().filter(slot -> slot.isEmpty()).findAny();
+    }
+
     ConstructionSlot getSlotAt(final int index) {
         return workingSlots.get(index);
     }

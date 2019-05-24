@@ -11,7 +11,7 @@ import com.google.common.base.Preconditions;
  * Represents tile of colony field. It use on screen coordinates. Top left tile
  * starts at point [0,0].
  */
-public class ColonyFieldTile {
+class ColonyFieldTile {
 
     /**
      * It should be added to direction to get map location.
@@ -20,11 +20,11 @@ public class ColonyFieldTile {
 
     private final Tile tile;
 
-    public static ColonyFieldTile ofDirection(final Direction direction) {
+    static ColonyFieldTile ofDirection(final Direction direction) {
         return ofLocation(direction.getVector());
     }
 
-    public static ColonyFieldTile ofLocation(final Location direction) {
+    static ColonyFieldTile ofLocation(final Location direction) {
         final Tile tile = Tile.ofLocation(direction.add(SHIFT));
         return new ColonyFieldTile(tile);
     }
@@ -33,11 +33,11 @@ public class ColonyFieldTile {
         this.tile = Preconditions.checkNotNull(tile);
     }
 
-    public Point getTopLeftCorner() {
+    Point getTopLeftCorner() {
         return tile.getTopLeftCorner();
     }
 
-    public boolean isIn(final Point point) {
+    boolean isIn(final Point point) {
         return tile.isIn(point);
     }
 

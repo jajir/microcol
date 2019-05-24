@@ -33,7 +33,7 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
-public final class StatisticsPanel implements GameScreen {
+final class StatisticsPanel implements GameScreen {
 
     private final static String KEY_GOLD = "gold";
     private final static String KEY_MILITARY = "military";

@@ -3,7 +3,7 @@ package org.microcol.gui.screen.game.components;
 import org.microcol.gui.Loc;
 import org.microcol.i18n.I18n;
 
-public class SbPartColony extends SbPart {
+class SbPartColony extends SbPart {
 
     private final String colonyName;
 

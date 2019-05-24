@@ -21,7 +21,7 @@ public class PanelBuildingQueue implements JavaFxComponent {
 
     private final ColonyDialogCallback colonyDialogCallback;
 
-    private final TitledPanel mainPanel;
+    private final VBox mainPanel = new VBox();
 
     private final VBox mainVbox;
 
@@ -32,11 +32,8 @@ public class PanelBuildingQueue implements JavaFxComponent {
         this.colonyDialogCallback = Preconditions.checkNotNull(colonyDialogCallback);
         mainVbox = new VBox();
         mainVbox.getChildren().add(new Label("Cool"));
-        final VBox box = new VBox();
-        box.setOnMouseClicked(this::onMouseClicked);
-        box.getChildren().add(mainVbox);
-        mainPanel = new TitledPanel();
-        mainPanel.getContentPane().getChildren().add(box);
+        mainPanel.setOnMouseClicked(this::onMouseClicked);
+        mainPanel.getChildren().add(mainVbox);
         mainPanel.getStyleClass().add("building-queue");
     }
 
@@ -44,7 +41,7 @@ public class PanelBuildingQueue implements JavaFxComponent {
         queueDialogCallback.showColony();
     }
 
-    public void repaint() {
+    void repaint() {
         final Optional<BuildingStatus<ColonyBuildingItem>> oStats = colonyDialogCallback.getColony()
                 .getColonyBuildingQueue().getActuallyBuildingStat();
         mainVbox.getChildren().clear();

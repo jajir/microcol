@@ -1,14 +1,11 @@
 package org.microcol.gui.screen.colony;
 
 import org.microcol.gui.MainStageBuilder;
-import org.microcol.gui.Point;
 import org.microcol.gui.util.JavaFxComponent;
 import org.microcol.gui.util.Listener;
-import org.microcol.gui.util.PaintService;
 import org.microcol.gui.util.UpdatableLanguage;
 import org.microcol.i18n.I18n;
 import org.microcol.model.Colony;
-import org.microcol.model.Unit;
 import org.microcol.model.event.UnitMovedToColonyFieldEvent;
 import org.microcol.model.event.UnitMovedToConstructionEvent;
 
@@ -16,8 +13,6 @@ import com.google.common.base.Preconditions;
 import com.google.common.eventbus.Subscribe;
 import com.google.inject.Inject;
 
-import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
@@ -42,8 +37,6 @@ public final class ColonyPanel implements JavaFxComponent, UpdatableLanguage {
 
     private final PanelDockColony panelDock;
 
-    private final PaintService paintService;
-
     private final PanelOutsideColony panelOutsideColony;
 
     private final PanelBuildingQueue panelBuildingQueue;
@@ -56,10 +49,9 @@ public final class ColonyPanel implements JavaFxComponent, UpdatableLanguage {
     public ColonyPanel(final PanelColonyFields panelColonyFields,
             final PanelColonyStructures panelColonyStructures,
             final PanelOutsideColony panelOutsideColony, final PanelColonyGoods panelColonyGoods,
-            final PanelBuildingQueue panelBuildingQueue, final PaintService paintService,
+            final PanelBuildingQueue panelBuildingQueue,
             final ColonyButtonsPanel colonyButtonsPanel, final I18n i18n,
             final PanelDockColony panelDockColony) {
-        this.paintService = Preconditions.checkNotNull(paintService);
         this.colonyFields = Preconditions.checkNotNull(panelColonyFields);
         this.colonyStructures = Preconditions.checkNotNull(panelColonyStructures);
         this.panelBuildingQueue = Preconditions.checkNotNull(panelBuildingQueue);
@@ -101,31 +93,33 @@ public final class ColonyPanel implements JavaFxComponent, UpdatableLanguage {
         repaint();
     }
 
+    @SuppressWarnings("unused")
+    @Subscribe
+    private void onRepainColonyEvent(final RepaintColonyEvent event) {
+        repaint();
+    }
+
     /**
      * Method should show given colony.
      * 
      * @param colony
      *            required colony to show
      */
-    public void showColony(final Colony colony) {
+    void showColony(final Colony colony) {
         this.colony = Preconditions.checkNotNull(colony);
         colonyName.setText(i18n.get(ColonyMsg.colony) + colony.getName());
         goods.setColony(colony);
         repaint();
     }
 
-    public void paintUnit(final Canvas canvas, final Unit unit) {
-        final GraphicsContext graphics = canvas.getGraphicsContext2D();
-        paintService.paintUnit(graphics, Point.ZERO, unit);
-    }
-
-    public void repaint() {
+    void repaint() {
         if (colony != null) {
             colonyFields.setColony(colony);
             goods.repaint();
             panelDock.repaint();
             colonyStructures.repaint(colony);
             panelOutsideColony.setColony(colony);
+            panelOutsideColony.repaint();
             panelBuildingQueue.repaint();
         }
     }

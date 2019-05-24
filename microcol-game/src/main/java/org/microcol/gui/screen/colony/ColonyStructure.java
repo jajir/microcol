@@ -9,7 +9,7 @@ import com.google.common.base.Preconditions;
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
 
-public class ColonyStructure {
+class ColonyStructure {
 
     private final Point leftTopCorner;
 
@@ -37,7 +37,7 @@ public class ColonyStructure {
         this.onMouseExited = Preconditions.checkNotNull(onMouseExited);
     }
 
-    public void evaluateMouseMove(final MouseEvent event) {
+    void evaluateMouseMove(final MouseEvent event) {
         if (onMouseEntered != null) {
             final Rectangle rectangle = Rectangle.ofPointAndSize(leftTopCorner, size);
             final Point point = Point.of(event.getX(), event.getY());

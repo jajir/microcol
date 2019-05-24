@@ -21,7 +21,7 @@ import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
 import javafx.util.Callback;
 
-public class PanelQueueBuildingQueue extends TitledPanel {
+class PanelQueueBuildingQueue extends TitledPanel {
 
     private final QueueController queueController;
 

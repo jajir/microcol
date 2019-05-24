@@ -2,18 +2,21 @@ package org.microcol.gui.screen.colony;
 
 import static org.microcol.gui.Tile.TILE_WIDTH_IN_PX;
 
+import org.microcol.gui.Point;
 import org.microcol.gui.image.ImageProvider;
 import org.microcol.gui.util.ClipboardWritter;
 import org.microcol.gui.util.JavaFxComponent;
-import org.microcol.gui.util.Repaintable;
+import org.microcol.gui.util.PaintService;
 import org.microcol.model.Colony;
 import org.microcol.model.GoodsType;
 import org.microcol.model.Unit;
 import org.microcol.model.unit.UnitFreeColonist;
 
 import com.google.common.base.Preconditions;
+import com.google.common.eventbus.EventBus;
 
 import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
@@ -24,8 +27,8 @@ import javafx.scene.input.TransferMode;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 
-public class PanelUnitWithContextMenu implements JavaFxComponent, Repaintable {
-    
+public class PanelOutsideColonyUnit implements JavaFxComponent {
+
     public final static String UNIT_AT_PIER_STYLE = "unitInPort";
 
     private final Pane mainPane;
@@ -36,15 +39,18 @@ public class PanelUnitWithContextMenu implements JavaFxComponent, Repaintable {
 
     private final ContextMenu contextMenu;
 
-    private final ColonyDialogCallback colonyDialogCallbback;
+    private final PaintService paintService;
+
+    private final EventBus eventBus;
 
     private final Canvas canvas;
 
-    public PanelUnitWithContextMenu(final ImageProvider imageProvider, final Unit unit,
-            final Colony colony, final ColonyDialogCallback colonyDialog) {
-        this.unit = Preconditions.checkNotNull(unit);
+    PanelOutsideColonyUnit(final ImageProvider imageProvider, final EventBus eventBus,
+            final PaintService paintService, final Colony colony, final Unit unit) {
+        this.eventBus = Preconditions.checkNotNull(eventBus);
+        this.paintService = Preconditions.checkNotNull(paintService);
         this.colony = Preconditions.checkNotNull(colony);
-        this.colonyDialogCallbback = Preconditions.checkNotNull(colonyDialog);
+        this.unit = Preconditions.checkNotNull(unit);
 
         canvas = new Canvas(TILE_WIDTH_IN_PX, TILE_WIDTH_IN_PX);
         repaint();
@@ -71,7 +77,7 @@ public class PanelUnitWithContextMenu implements JavaFxComponent, Repaintable {
                 final MenuItem menuItem = new MenuItem("Unload muskets");
                 menuItem.setOnAction(evt -> {
                     fc.unequipWithMuskets();
-                    colonyDialogCallbback.repaint();
+                    eventBus.post(new RepaintColonyEvent());
                 });
                 contextMenu.getItems().add(menuItem);
             } else {
@@ -80,7 +86,7 @@ public class PanelUnitWithContextMenu implements JavaFxComponent, Repaintable {
                     final MenuItem menuItem = new MenuItem("Equip with muskets");
                     menuItem.setOnAction(evt -> {
                         fc.equipWithMuskets();
-                        colonyDialogCallbback.repaint();
+                        eventBus.post(new RepaintColonyEvent());
                     });
                     contextMenu.getItems().add(menuItem);
                 }
@@ -89,7 +95,7 @@ public class PanelUnitWithContextMenu implements JavaFxComponent, Repaintable {
                 final MenuItem menuItem = new MenuItem("Dismount horses");
                 menuItem.setOnAction(evt -> {
                     fc.unequipWithHorses();
-                    colonyDialogCallbback.repaint();
+                    eventBus.post(new RepaintColonyEvent());
                 });
                 contextMenu.getItems().add(menuItem);
             } else {
@@ -98,7 +104,7 @@ public class PanelUnitWithContextMenu implements JavaFxComponent, Repaintable {
                     final MenuItem menuItem = new MenuItem("Mount horses");
                     menuItem.setOnAction(evt -> {
                         fc.equipWithHorses();
-                        colonyDialogCallbback.repaint();
+                        eventBus.post(new RepaintColonyEvent());
                     });
                     contextMenu.getItems().add(menuItem);
                 }
@@ -107,7 +113,8 @@ public class PanelUnitWithContextMenu implements JavaFxComponent, Repaintable {
                 final MenuItem menuItem = new MenuItem("Unload tools");
                 menuItem.setOnAction(evt -> {
                     fc.unequipWithTools();
-                    colonyDialogCallbback.repaint();
+                    eventBus.post(new RepaintColonyEvent());
+                    eventBus.post(new RepaintColonyEvent());
                 });
                 contextMenu.getItems().add(menuItem);
             } else {
@@ -116,7 +123,7 @@ public class PanelUnitWithContextMenu implements JavaFxComponent, Repaintable {
                     final MenuItem menuItem = new MenuItem("Equip with tools");
                     menuItem.setOnAction(evt -> {
                         fc.equipWithTools();
-                        colonyDialogCallbback.repaint();
+                        eventBus.post(new RepaintColonyEvent());
                     });
                     contextMenu.getItems().add(menuItem);
                 }
@@ -126,9 +133,9 @@ public class PanelUnitWithContextMenu implements JavaFxComponent, Repaintable {
         repaint();
     }
 
-    @Override
-    public void repaint() {
-        colonyDialogCallbback.paintUnit(canvas, unit);
+    private void repaint() {
+        final GraphicsContext graphics = canvas.getGraphicsContext2D();
+        paintService.paintUnitWithoutFlag(graphics, Point.ZERO, unit);
     }
 
     @SuppressWarnings("unused")

@@ -19,10 +19,10 @@
 	<entry key="newUnitIsInEurope">Because of religion unrest in Europe new colonist decide to emigrate. Now is waiting in Europe.</entry>
 	<entry key="newUnitIsInColony">There is a new unit in colony.</entry>
 	<entry key="colonyWasLost">Colony %s was lost.</entry>
-	<entry key="goodsWasThrowsAway1"> In colony is not enough space in warehouse, because of that %s goods %s was throws away.</entry>
-	<entry key="goodsWasThrowsAway2"> In colony is not enough space in warehouse, because of that 1 goods %s was throws away.</entry>
-	<entry key="goodsWasThrowsAway3"> In colony is not enough space in warehouse, because of that 1 goods %s was throws away.</entry>
-	<entry key="goodsWasThrowsAway4"> In colony is not enough space in warehouse, because of that 1 goods %s was throws away.</entry>
+	<entry key="goodsWasThrowsAway1">In colony is not enough space in warehouse, because of that %s goods %s was throws away.</entry>
+	<entry key="goodsWasThrowsAway2">In colony is not enough space in warehouse, because of that 1 goods %s was throws away.</entry>
+	<entry key="goodsWasThrowsAway3">In colony is not enough space in warehouse, because of that 1 goods %s was throws away.</entry>
+	<entry key="goodsWasThrowsAway4">In colony is not enough space in warehouse, because of that 1 goods %s was throws away.</entry>
 	
 	<entry key="buttonBack">Back</entry>
 

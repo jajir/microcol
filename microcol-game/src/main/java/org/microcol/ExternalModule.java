@@ -8,7 +8,7 @@ import javafx.stage.Stage;
 /**
  * Module allows to inject additional properties to guice context.
  */
-public final class ExternalModule extends AbstractModule {
+final class ExternalModule extends AbstractModule {
 
     private final Stage primaryStage;
 

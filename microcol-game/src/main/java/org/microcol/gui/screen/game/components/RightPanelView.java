@@ -117,7 +117,6 @@ public final class RightPanelView implements JavaFxComponent {
         }
     }
 
-    // FIXME use PaintService, instead of tilePainter, or move tilePainter here
     public void refreshView(final Location location) {
         Preconditions.checkNotNull(location);
         Platform.runLater(() -> {

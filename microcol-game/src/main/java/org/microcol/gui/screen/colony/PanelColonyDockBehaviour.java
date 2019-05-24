@@ -14,6 +14,7 @@ import org.microcol.model.Unit;
 import org.microcol.model.unit.UnitWithCargo;
 
 import com.google.common.base.Preconditions;
+import com.google.common.eventbus.EventBus;
 import com.google.inject.Inject;
 
 /**
@@ -21,14 +22,17 @@ import com.google.inject.Inject;
  */
 public final class PanelColonyDockBehaviour extends AbstractPanelDockBehavior {
 
+    private final EventBus eventBus;
     private final ColonyDialogCallback colonyDialogCallback;
     private final ChooseGoodsDialog chooseGoods;
 
     @Inject
-    PanelColonyDockBehaviour(final ColonyDialogCallback colonyDialogCallback,
+    PanelColonyDockBehaviour(final EventBus eventBus,
+            final ColonyDialogCallback colonyDialogCallback,
             final GameModelController gameModelController, final ImageProvider imageProvider,
             final ChooseGoodsDialog chooseGoods) {
         super(gameModelController, imageProvider);
+        this.eventBus = Preconditions.checkNotNull(eventBus);
         this.colonyDialogCallback = Preconditions.checkNotNull(colonyDialogCallback);
         this.chooseGoods = Preconditions.checkNotNull(chooseGoods);
     }
@@ -57,7 +61,7 @@ public final class PanelColonyDockBehaviour extends AbstractPanelDockBehavior {
             throw new IllegalArgumentException(
                     "Unsupported source transfer '" + transferFrom + "'");
         }
-        colonyDialogCallback.repaint();
+        eventBus.post(new RepaintColonyEvent());
     }
 
     private Goods chooseGoods(final Goods goods, final boolean specialOperatonWasSelected,
@@ -70,7 +74,7 @@ public final class PanelColonyDockBehaviour extends AbstractPanelDockBehavior {
     public void consumeUnit(final CargoSlot targetCargoSlot, final Unit unit,
             final From transferFrom) {
         targetCargoSlot.store(unit);
-        colonyDialogCallback.repaint();
+        eventBus.post(new RepaintColonyEvent());
     }
 
 }

@@ -11,7 +11,7 @@ import javafx.scene.image.WritableImage;
  * tiles which fill bigger one. Tiles are squares with optional borders.
  *
  */
-public abstract class AbstractTiledImageLoader implements ImageLoader {
+abstract class AbstractTiledImageLoader implements ImageLoader {
 
     private final TileImageParams params;
 

@@ -20,7 +20,7 @@ import javafx.scene.layout.VBox;
 /**
  * Display one unit from selected tile.
  */
-public class UnitPanel {
+class UnitPanel {
 
     private final ImageProvider imageProvider;
 
@@ -30,7 +30,7 @@ public class UnitPanel {
 
     private final VBox box = new VBox();
 
-    public UnitPanel(final ImageProvider imageProvider, final I18n i18n,
+    UnitPanel(final ImageProvider imageProvider, final I18n i18n,
             final LocalizationHelper localizationHelper, final Player humanPlayer, final Unit unit,
             final boolean selected) {
         this.imageProvider = Preconditions.checkNotNull(imageProvider);

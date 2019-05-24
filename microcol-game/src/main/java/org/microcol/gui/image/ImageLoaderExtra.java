@@ -21,13 +21,15 @@ public final class ImageLoaderExtra implements ImageLoader {
 
     public final static String DIALOG_PETR_IMAGE_FILE = "dialog-petr.png";
 
+    public final static String COLONY_FRAME = "colony-frame.png";
+
     @Override
     public void preload(final ImageCache imageCache) {
         imageCache.registerImage(IMG_EUROPE, imageCache.getImage(EUROPE_IMAGE_NAME));
         imageCache.registerImage(IMG_SUNSET, imageCache.getImage(SUNSET_IMAGE_FILE));
         imageCache.registerImage(IMG_MARKET, imageCache.getImage(MARKET_IMAGE_FILE));
         imageCache.registerImage(IMG_DIALOG_PETR, imageCache.getImage(DIALOG_PETR_IMAGE_FILE));
-
+        imageCache.getImage(COLONY_FRAME);
     }
 
 }

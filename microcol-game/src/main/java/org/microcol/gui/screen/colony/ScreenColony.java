@@ -18,7 +18,7 @@ import javafx.scene.layout.Region;
 @Singleton
 public class ScreenColony implements GameScreen {
 
-    public static final String STYLE_SHEET_COLONY = ScreenColony.class
+    private static final String STYLE_SHEET_COLONY = ScreenColony.class
             .getResource("/gui/Colony.css").toExternalForm();
 
     private final ContentWithStatusBar contentWithStatusBar;

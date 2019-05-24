@@ -10,9 +10,9 @@ import org.microcol.model.Unit;
 
 import com.google.common.base.Preconditions;
 
-public final class SimpleUnitBehavior {
+final class SimpleUnitBehavior {
 
-    public void tryToFight(final Unit unit) {
+    void tryToFight(final Unit unit) {
         if (unit.getType().canAttack() && unit.isAtPlaceLocation()
                 && unit.getActionPoints() > 0) {
             /*
@@ -35,7 +35,7 @@ public final class SimpleUnitBehavior {
         return false;
     }
 
-    public void tryToCaptureColony(final Model model, final Unit unit, final Location location) {
+    void tryToCaptureColony(final Model model, final Unit unit, final Location location) {
         Preconditions.checkState(unit.getLocation().isNeighbor(location),
                 String.format("Unit '%s' sould try to conquer city in neighbor and city is at '%s'",
                         unit, location));

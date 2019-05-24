@@ -18,7 +18,7 @@ import javafx.scene.layout.Pane;
 /**
  * Small panel containing one unit type that could be build in colony.
  */
-public class ConstructionDraggablePanel {
+class ConstructionDraggablePanel {
 
     private final ColonyBuildingItemConstruction colonyBuildingItemConstruction;
 

@@ -21,7 +21,7 @@ import javafx.scene.layout.Region;
  * Panel with canvas containing edited game model.
  */
 @Singleton
-public class EditorPanel implements ScreenLifeCycle, JavaFxComponent {
+class EditorPanel implements ScreenLifeCycle, JavaFxComponent {
 
     private final Logger logger = LoggerFactory.getLogger(GamePanelComponent.class);
 
@@ -32,7 +32,7 @@ public class EditorPanel implements ScreenLifeCycle, JavaFxComponent {
     private final AnimationScheduler animationScheduler;
 
     @Inject
-    public EditorPanel(final @Named("editor") VisibleAreaService visibleAreaService,
+    EditorPanel(final @Named("editor") VisibleAreaService visibleAreaService,
             final EditorPaintingService editorPaintingService) {
         this.editorPaintingService = Preconditions.checkNotNull(editorPaintingService);
 
@@ -57,6 +57,7 @@ public class EditorPanel implements ScreenLifeCycle, JavaFxComponent {
      * Smallest game time interval. In ideal case it have time to draw world on
      * screen.
      */
+    @SuppressWarnings("unused")
     private void paintFrame(final Long tick) {
         editorPaintingService.paint(canvasComponent.getGraphicsContext2D());
         logger.debug("painting editor");

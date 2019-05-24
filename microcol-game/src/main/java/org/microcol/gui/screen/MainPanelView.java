@@ -63,7 +63,7 @@ public final class MainPanelView implements JavaFxComponent, UpdatableLanguage {
         updateLanguage(i18n);
     }
 
-    public void showScreen(final GameScreen screen) {
+    void showScreen(final GameScreen screen) {
         showBox(screen.getContent());
     }
 

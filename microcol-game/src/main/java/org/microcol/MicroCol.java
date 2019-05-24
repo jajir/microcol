@@ -62,7 +62,7 @@ public final class MicroCol {
      * exception.
      */
     @FunctionalInterface
-    public interface ExceptionWrapper {
+    interface ExceptionWrapper {
         /**
          * Allows to execute some functionality throwing exception.
          *

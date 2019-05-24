@@ -33,4 +33,12 @@ public final class Rectangle {
                 .add("bottomRightCorner", bottomRightCorner).toString();
     }
 
+    public Point getTopLeftCorner() {
+        return topLeftCorner;
+    }
+
+    public Point getSize() {
+        return bottomRightCorner.substract(topLeftCorner);
+    }
+
 }

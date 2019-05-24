@@ -17,11 +17,11 @@ import com.google.common.collect.Lists;
  * on-screen canvas coordinates to direction of field. Direction is
  * {@link Location}.
  */
-public final class ClickableArea {
+final class ClickableArea {
 
     private final Map<ColonyFieldTile, Location> areas;
 
-    public ClickableArea() {
+    ClickableArea() {
         areas = new HashMap<>();
         final List<Location> locs = Lists.newArrayList(Location.CENTER.getNeighbors());
         locs.forEach(this::addDirection);
@@ -32,7 +32,7 @@ public final class ClickableArea {
         areas.put(colonyFieldTile, loc);
     }
 
-    public Optional<Direction> getDirection(final Point point) {
+    Optional<Direction> getDirection(final Point point) {
         return areas.entrySet().stream().filter(entry -> entry.getKey().isIn(point))
                 .map(entry -> entry.getValue()).map(location -> Direction.valueOf(location))
                 .findAny();

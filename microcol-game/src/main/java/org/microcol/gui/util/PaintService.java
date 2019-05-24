@@ -78,9 +78,19 @@ public final class PaintService {
 
     public void paintUnit(final GraphicsContext graphics, final Point point, final Unit unit,
             final Direction orientation) {
+        paintUnitWithoutFlag(graphics, point, unit, orientation);
+        painFlagWithAction(graphics, point.add(OWNERS_FLAG_POSITION), unit);
+    }
+    
+    public void paintUnitWithoutFlag(final GraphicsContext graphics, final Point point,
+            final Unit unit) {
+        paintUnitWithoutFlag(graphics, point, unit, unit.getDefaultOrintation());
+    }
+
+    public void paintUnitWithoutFlag(final GraphicsContext graphics, final Point point,
+            final Unit unit, final Direction orientation) {
         final Point p = point.add(UNIT_IMAGE_POSITION);
         graphics.drawImage(imageProvider.getUnitImage(unit, orientation), p.getX(), p.getY());
-        painFlagWithAction(graphics, point.add(OWNERS_FLAG_POSITION), unit);
     }
 
     public void paintColony(final GraphicsContext graphics, final Point point, final Colony colony,

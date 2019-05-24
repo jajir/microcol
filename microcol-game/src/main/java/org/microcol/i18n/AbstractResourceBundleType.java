@@ -3,11 +3,11 @@ package org.microcol.i18n;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
-public abstract class AbstractResourceBundleType {
+abstract class AbstractResourceBundleType {
 
     private final String code;
 
-    public AbstractResourceBundleType(final String code) {
+    AbstractResourceBundleType(final String code) {
         this.code = Objects.requireNonNull(code);
     }
 

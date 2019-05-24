@@ -29,7 +29,7 @@ public enum UnitTypes implements MessageKeyResource {
 
     private static final String UNIT_SUFFIX_NAME_7pl = "_name_7pl";
 
-    public static UnitTypes getUnitName(final UnitType unitType) {
+    static UnitTypes getUnitName(final UnitType unitType) {
         final String key = unitType.name() + UNIT_SUFFIX_NAME;
         return valueOf(key);
     }

@@ -18,6 +18,11 @@
 	-fx-padding: 10;
 }
 
+.turnEventPanel .label{
+	-fx-max-width: 420;
+	-fx-wrap-text: true;
+}
+
 #buttonPane {
 	-fx-padding: 80 0 0 0;
 }

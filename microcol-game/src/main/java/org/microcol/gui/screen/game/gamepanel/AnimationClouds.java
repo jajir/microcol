@@ -20,7 +20,7 @@ import javafx.scene.image.Image;
  * cloud went out from map than process repeat again.
  */
 @Listener
-public class AnimationClouds {
+class AnimationClouds {
 
     private final static double MOVE_STEP = 0.5D;
     private final VisibleAreaService visibleAreaService;

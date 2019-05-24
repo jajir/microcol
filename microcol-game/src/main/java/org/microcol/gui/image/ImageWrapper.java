@@ -10,7 +10,7 @@ import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
 
-public final class ImageWrapper {
+final class ImageWrapper {
 
     private final Image tile;
 
@@ -18,7 +18,7 @@ public final class ImageWrapper {
         this.tile = Preconditions.checkNotNull(tile);
     }
 
-    public final static ImageWrapper of(final Image tile) {
+    final static ImageWrapper of(final Image tile) {
         return new ImageWrapper(tile);
     }
 
@@ -40,7 +40,7 @@ public final class ImageWrapper {
         });
     }
 
-    public ImageWrapper addImage(final ImageWrapper wrapper) {
+    ImageWrapper addImage(final ImageWrapper wrapper) {
         PixelReader pixelReaderA = get().getPixelReader();
         PixelReader pixelReaderB = wrapper.get().getPixelReader();
 
@@ -92,7 +92,7 @@ public final class ImageWrapper {
 
     }
 
-    public Image get() {
+    Image get() {
         return tile;
     }
 

@@ -15,7 +15,7 @@ public final class HighSea {
 
     private final Model model;
 
-    public HighSea(final Model model) {
+    HighSea(final Model model) {
         this.model = Preconditions.checkNotNull(model);
     }
 

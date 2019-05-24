@@ -3,11 +3,13 @@ package org.microcol.gui.screen.colony.buildingqueue;
 import org.microcol.gui.MainStageBuilder;
 import org.microcol.gui.dialog.Dialog;
 import org.microcol.gui.screen.colony.ColonyDialogCallback;
+import org.microcol.gui.screen.colony.RepaintColonyEvent;
 import org.microcol.gui.util.AbstractMessageWindow;
 import org.microcol.gui.util.ViewUtil;
 import org.microcol.i18n.I18n;
 
 import com.google.common.base.Preconditions;
+import com.google.common.eventbus.EventBus;
 import com.google.inject.Inject;
 
 import javafx.scene.control.Button;
@@ -16,13 +18,13 @@ import javafx.scene.layout.VBox;
 
 public class QueueDialog extends AbstractMessageWindow {
 
+    private final EventBus eventBus;
     private final PanelQueueBuildingQueue panelQueueBuildingQueue;
     private final PanelQueueConstructions panelQueueConstructions;
     private final PanelQueueUnits panelQueueUnits;
-    private final ColonyDialogCallback colonyDialogCallback;
 
     @Inject
-    QueueDialog(final ViewUtil viewUtil, final I18n i18n,
+    QueueDialog(final ViewUtil viewUtil, final I18n i18n, final EventBus eventBus,
             final ColonyDialogCallback colonyDialogCallback,
             final PanelQueueBuildingQueue panelQueueBuildingQueue,
             final PanelQueueConstructions panelQueueConstructions,
@@ -32,9 +34,9 @@ public class QueueDialog extends AbstractMessageWindow {
 
         Preconditions.checkNotNull(colonyDialogCallback);
         this.panelQueueBuildingQueue = Preconditions.checkNotNull(panelQueueBuildingQueue);
+        this.eventBus = Preconditions.checkNotNull(eventBus);
         this.panelQueueConstructions = Preconditions.checkNotNull(panelQueueConstructions);
         this.panelQueueUnits = Preconditions.checkNotNull(panelQueueUnits);
-        this.colonyDialogCallback = Preconditions.checkNotNull(colonyDialogCallback);
 
         final HBox panelWithQueues = new HBox();
         panelWithQueues.getChildren().addAll(panelQueueUnits, panelQueueBuildingQueue,
@@ -66,7 +68,7 @@ public class QueueDialog extends AbstractMessageWindow {
     @Override
     public void close() {
         super.close();
-        colonyDialogCallback.repaint();
+        eventBus.post(new RepaintColonyEvent());
     }
 
 }

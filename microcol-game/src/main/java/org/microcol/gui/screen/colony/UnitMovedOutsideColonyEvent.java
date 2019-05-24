@@ -6,7 +6,7 @@ import org.microcol.model.Unit;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 
-public final class UnitMovedOutsideColonyEvent {
+final class UnitMovedOutsideColonyEvent {
 
     private final Unit unit;
 

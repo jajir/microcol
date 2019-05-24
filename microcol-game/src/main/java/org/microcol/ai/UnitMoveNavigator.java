@@ -15,7 +15,7 @@ import com.google.common.base.Preconditions;
 /**
  * Helps unit to keep one chosen direction of move.
  */
-public final class UnitMoveNavigator {
+final class UnitMoveNavigator {
 
     private final Random random;
 
@@ -34,7 +34,7 @@ public final class UnitMoveNavigator {
      *            required unit
      * @return direction of move
      */
-    public Location getLastVector(final Unit unit) {
+    Location getLastVector(final Unit unit) {
         return getLastDirection(unit).getVector();
     }
 
@@ -53,7 +53,7 @@ public final class UnitMoveNavigator {
      * @param unit
      *            required unit
      */
-    public void resetDirection(final Unit unit) {
+    void resetDirection(final Unit unit) {
         if (lastDirections.containsKey(unit)) {
             final Direction lastDirection = lastDirections.get(unit);
             final List<Direction> directions = new ArrayList<>(Direction.getAll());
