@@ -91,6 +91,30 @@
 		</dependency>
 	</dependencies>
 
+	<profiles>
+		<profile>
+			<!-- This profile is just for running sass maven plugin on local. -->
+			<!-- Plugin should not be executed in regular build because it change -->
+			<!-- source files in src/main/resources. -->
+			<!-- Plugin should not be executed on CI, because of node.js dependency. -->
+			<!-- Start it: mvn sass:watch -Psass -->
+			<id>sass</id>
+			<build>
+				<plugins>
+					<!-- sass:update-stylesheets & sass:watch -->
+					<plugin>
+						<groupId>nl.geodienstencentrum.maven</groupId>
+						<artifactId>sass-maven-plugin</artifactId>
+						<version>3.7.2</version>
+						<configuration>
+							<destination>src/main/resources/gui/</destination>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+
 	<build>
 		<pluginManagement>
 			<plugins>

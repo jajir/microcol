@@ -3,78 +3,145 @@
  * 
  */
 .label-title {
-	-fx-font-size: 32;
-	-fx-min-width: 600;
-	-fx-translate-x: -90;
-	-fx-translate-y: -300;
+  -fx-font-size: 32;
+  -fx-min-width: 600;
+  -fx-translate-x: -90;
+  -fx-translate-y: -300;
 }
 
 .panel-dock {
-	-fx-min-width: 250;
-	-fx-max-width: 200;
-	-fx-pref-height: 200;
-	-fx-max-height: 200;
-	-fx-translate-x: -85;
-	-fx-translate-y: -89;
+  -fx-min-width: 250;
+  -fx-max-width: 200;
+  -fx-pref-height: 200;
+  -fx-max-height: 200;
+  -fx-translate-x: -85;
+  -fx-translate-y: -89;
 }
 
 .panel-dock .ships {
-	-fx-pref-height: 50;
-	-fx-padding: 0 0 30 0;	
+  -fx-pref-height: 50;
+  -fx-padding: 0 0 30 0;
 }
 
-.outside{
-	-fx-pref-width: 280;
-	-fx-max-width: 280;
-	-fx-pref-height: 50;
-	-fx-max-height: 50;
-	-fx-translate-x: 250;
-	-fx-translate-y: -192;
-	/* -fx-background-color: yellow; */
+.outside {
+  -fx-pref-width: 280;
+  -fx-max-width: 280;
+  -fx-pref-height: 50;
+  -fx-max-height: 50;
+  -fx-translate-x: 250;
+  -fx-translate-y: -192;
+  /* -fx-background-color: yellow; */
 }
 
-.colony-structures{
-	-fx-max-width: 300;
-	-fx-max-height: 500;
-	-fx-translate-x: -170;
-	-fx-translate-y: 70;
+.colony-structures {
+  -fx-pref-width: 800;
+  -fx-max-width: 800;
+  -fx-max-height: 500;
+  -fx-translate-x: -200;
+  -fx-translate-y: 70;
 }
 
-.colony-fields{
-	-fx-max-width: 150;
-	-fx-max-height: 150;
-	-fx-padding: 4 0 0 4;
-	-fx-background-image: url("../images/colony-fields.png");
-	-fx-background-repeat: no-repeat ;
-	-fx-translate-x: 180;
-	-fx-translate-y: -65;
+.colony-fields {
+  -fx-max-width: 150;
+  -fx-max-height: 150;
+  -fx-padding: 4 0 0 4;
+  -fx-background-image: url("../images/colony-fields.png");
+  -fx-background-repeat: no-repeat;
+  -fx-translate-x: 180;
+  -fx-translate-y: -65;
 }
 
-.building-queue{	
-	-fx-max-width: 240;
-	-fx-max-height: 160;
-	-fx-padding: 4 0 0 4;
-	-fx-background-image: url("../images/colony-building-queue.png");
-	-fx-background-repeat: no-repeat ;
-	-fx-translate-x: 222;
-	-fx-translate-y: 225;
+.building-queue {
+  -fx-max-width: 240;
+  -fx-max-height: 160;
+  -fx-padding: 4 0 0 4;
+  -fx-background-image: url("../images/colony-building-queue.png");
+  -fx-background-repeat: no-repeat;
+  -fx-translate-x: 222;
+  -fx-translate-y: 225;
 }
 
-.panel-colony-goods{
-	-fx-pref-width: 750;
-	-fx-max-width: 750;
-	-fx-pref-height: 80;
-	-fx-max-height: 80;
-	-fx-translate-x: 20;
-	-fx-translate-y: 350;
+.panel-colony-goods {
+  -fx-pref-width: 750;
+  -fx-max-width: 750;
+  -fx-pref-height: 80;
+  -fx-max-height: 80;
+  -fx-translate-x: 20;
+  -fx-translate-y: 350;
 }
 
 .diffPositive {
-	-fx-text-fill: green;
-	-fx-padding: 0 0 0 0px;
+  -fx-text-fill: green;
+  -fx-padding: 0 0 0 0px;
 }
 
 .diffNegative {
-	-fx-text-fill: red;	
-	-fx-padding: 0 0 0 0px;
+  -fx-text-fill: red;
+  -fx-padding: 0 0 0 0px;
 }
+
+.constructionPane {
+  -fx-pref-width: 100;
+  -fx-max-width: 100;
+  -fx-pref-height: 135;
+  -fx-max-height: 135;
+  -fx-background-image: url("../images/colony-frame.png");
+  -fx-background-repeat: no-repeat;
+}
+
+#id_warehouse {
+  -fx-translate-x: -150;
+  -fx-translate-y: -145;
+}
+
+#id_town_hall {
+  -fx-translate-x: -20;
+  -fx-translate-y: -145;
+}
+
+#id_church {
+  -fx-translate-x: 110;
+  -fx-translate-y: -145;
+}
+
+#id_weaver {
+  -fx-translate-x: -150;
+  -fx-translate-y: 1;
+}
+
+#id_tobacco {
+  -fx-translate-x: -20;
+  -fx-translate-y: 1;
+}
+
+#id_rum {
+  -fx-translate-x: 110;
+  -fx-translate-y: 1;
+}
+
+#id_school {
+  -fx-translate-x: 240;
+  -fx-translate-y: 1;
+}
+
+#id_armory {
+  -fx-translate-x: -150;
+  -fx-translate-y: 147;
+}
+
+#id_blacksmith {
+  -fx-translate-x: -20;
+  -fx-translate-y: 147;
+}
+
+#id_fur {
+  -fx-translate-x: 110;
+  -fx-translate-y: 147;
+}
+
+#id_carpenter {
+  -fx-translate-x: 240;
+  -fx-translate-y: 147;
+}
+
+/*# sourceMappingURL=Colony.css.map */

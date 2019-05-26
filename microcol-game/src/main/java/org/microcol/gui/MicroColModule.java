@@ -31,7 +31,6 @@ import org.microcol.gui.screen.colony.ColonyPanel;
 import org.microcol.gui.screen.colony.PanelBuildingQueue;
 import org.microcol.gui.screen.colony.PanelColonyDockBehaviour;
 import org.microcol.gui.screen.colony.PanelColonyGoods;
-import org.microcol.gui.screen.colony.PanelColonyStructures;
 import org.microcol.gui.screen.colony.ScreenColonyPresenter;
 import org.microcol.gui.screen.colony.buildingqueue.QueueController;
 import org.microcol.gui.screen.colony.buildingqueue.QueueDialog;
@@ -207,7 +206,6 @@ public final class MicroColModule extends AbstractModule {
          */
         bind(ColonyPanel.class).in(Singleton.class);
         bind(ColonyDialogCallback.class).to(ScreenColonyPresenter.class).in(Singleton.class);
-        bind(PanelColonyStructures.class).in(Singleton.class);
         bind(PanelColonyGoods.class).in(Singleton.class);
         bind(PanelColonyDockBehaviour.class).in(Singleton.class);
         bind(PanelBuildingQueue.class).in(Singleton.class);

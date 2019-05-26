@@ -15,3 +15,4 @@ microcol-test/src/test/scenarios/.microcol/autosave.microcol
 *~
 .idea
 *.iml
+*.css.map

@@ -10,10 +10,11 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.microcol.gui.MicroColException;
 import org.microcol.gui.Point;
 import org.microcol.gui.Rectangle;
-import org.microcol.gui.image.ImageLoaderExtra;
 import org.microcol.gui.image.ImageProvider;
 import org.microcol.gui.screen.game.components.StatusBarMessageEvent;
 import org.microcol.gui.screen.game.components.StatusBarMessageEvent.Source;
+import org.microcol.gui.util.ClipboardEval;
+import org.microcol.gui.util.ClipboardWritter;
 import org.microcol.gui.util.JavaFxComponent;
 import org.microcol.i18n.I18n;
 import org.microcol.model.ColonyProductionStats;
@@ -21,23 +22,36 @@ import org.microcol.model.Construction;
 import org.microcol.model.ConstructionSlot;
 import org.microcol.model.Goods;
 import org.microcol.model.GoodsProductionStats;
+import org.microcol.model.Model;
+import org.microcol.model.Unit;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
 import com.google.common.eventbus.EventBus;
 
+import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import javafx.scene.input.DragEvent;
+import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.input.TransferMode;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 
 /**
- * It's responsible for painting construction.
+ * Panel with construction.
  */
 class PanelConstruction implements JavaFxComponent {
-    // FIXME it will be panel with construction.
+
+    private final Logger logger = LoggerFactory.getLogger(PanelConstruction.class);
+
+    private final static int CANVAS_WIDTH = 100;
+    private final static int CANVAS_HEIGHT = 135;
+
     private final static int GOOD_ICON_WIDTH = 30;
 
     /*
@@ -67,65 +81,69 @@ class PanelConstruction implements JavaFxComponent {
             Point.of(SLOT_POSITION_X_START + SLOT_POSITION_WIDTH, SLOT_POSITION_Y),
             Point.of(SLOT_POSITION_X_START + 2 * SLOT_POSITION_WIDTH, SLOT_POSITION_Y) };
 
+    private final EventBus eventBus;
+    private final I18n i18n;
+    private final Canvas canvas = new Canvas(CANVAS_WIDTH, CANVAS_HEIGHT);
     private final StackPane mainPane = new StackPane();
     private final Construction construction;
     private final ColonyProductionStats colonyStats;
     private final ImageProvider imageProvider;
-    private final Rectangle positionAndSize;
     private final Map<Rectangle, ConstructionSlot> slots = new HashMap<>();
-    private final ColonyStructure colonyStructure;
+    private final Model model;
 
     PanelConstruction(final ImageProvider imageProvider, final EventBus eventBus, final I18n i18n,
             final Construction construction, final ColonyProductionStats colonyStats,
-            final Rectangle positionAndSize) {
+            final Model model) {
         this.imageProvider = Preconditions.checkNotNull(imageProvider);
+        this.eventBus = Preconditions.checkNotNull(eventBus);
+        this.i18n = Preconditions.checkNotNull(i18n);
         this.construction = Preconditions.checkNotNull(construction);
         this.colonyStats = Preconditions.checkNotNull(colonyStats);
-        this.positionAndSize = Preconditions.checkNotNull(positionAndSize);
-        colonyStructure = new ColonyStructure(getPosition(), positionAndSize.getSize());
-        colonyStructure.setOnMouseEntered(event -> {
-            eventBus.post(new StatusBarMessageEvent(
-                    i18n.get(ConstructionTypeName.getNameForType(construction.getType())),
-                    Source.COLONY));
-        });
-        colonyStructure.setOnMouseExited(event -> {
-            eventBus.post(new StatusBarMessageEvent(Source.COLONY));
-        });
+        this.model = Preconditions.checkNotNull(model);
         mainPane.getStyleClass().add("constructionPane");
+        mainPane.setOnMouseEntered(this::onMouseEntered);
+        mainPane.setOnMouseExited(this::onMouseExited);
+        mainPane.getChildren().add(canvas);
+        mainPane.setOnDragOver(this::onDragOver);
+        mainPane.setOnDragDropped(this::onDragDropped);
+        mainPane.setOnDragDetected(this::onDragDetected);
     }
 
-    void evaluateMouseMove(final MouseEvent event) {
-        colonyStructure.evaluateMouseMove(event);
+    void setCssId(final String id) {
+        mainPane.setId(id);
     }
 
-    Optional<ConstructionSlot> findConstructionSlot(final Point point) {
+    private void onMouseEntered(@SuppressWarnings("unused") final MouseEvent event) {
+        eventBus.post(new StatusBarMessageEvent(
+                i18n.get(ConstructionTypeName.getNameForType(construction.getType())),
+                Source.COLONY));
+    }
+
+    private void onMouseExited(@SuppressWarnings("unused") final MouseEvent event) {
+        eventBus.post(new StatusBarMessageEvent(Source.COLONY));
+    }
+
+    private Optional<ConstructionSlot> findConstructionSlot(final Point point) {
         return slots.entrySet().stream().filter(entry -> entry.getKey().isIn(point))
                 .map(entry -> entry.getValue()).findAny();
     }
 
-    Optional<Construction> findConstruction(final Point point) {
-        return positionAndSize.isIn(point) ? Optional.of(construction) : Optional.empty();
-    }
-
-    void paint(final GraphicsContext gc) {
-        paintConstruction(gc, colonyStats, construction);
+    void paint() {
+        paintConstruction(canvas.getGraphicsContext2D(), colonyStats, construction);
     }
 
     private void paintConstruction(final GraphicsContext gc,
             final ColonyProductionStats colonyStats, final Construction construction) {
-        Preconditions.checkNotNull(getPosition(), String
-                .format("There is no defined position for construction type '%s'", getPosition()));
-        final Image imageFrame = imageProvider.getImage(ImageLoaderExtra.COLONY_FRAME);
-        gc.drawImage(imageFrame, getPosition().getX(), getPosition().getY());
+        // gc.setFill(Color.BLANCHEDALMOND);
+        // gc.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
         final Image image = imageProvider.getConstructionImage(construction.getType())
                 .orElseThrow(() -> new MicroColException(
                         String.format("Unable to find image for %s", construction)));
-        gc.drawImage(image, getPosition().getX() + CONSTRUCTION_X,
-                getPosition().getY() + CONSTRUCTION_Y);
+        gc.drawImage(image, CONSTRUCTION_X, +CONSTRUCTION_Y);
 
         final AtomicInteger cx = new AtomicInteger(0);
         construction.getConstructionSlots().forEach(constructionSlot -> {
-            final Point topLeftCorner = getPosition().add(SLOT_POSITIONS[cx.get()]);
+            final Point topLeftCorner = SLOT_POSITIONS[cx.get()];
             slots.put(Rectangle.ofPointAndSize(topLeftCorner, SLOT_SIZE), constructionSlot);
             if (!constructionSlot.isEmpty()) {
                 gc.drawImage(imageProvider.getUnitImage(constructionSlot.getUnit()),
@@ -133,11 +151,11 @@ class PanelConstruction implements JavaFxComponent {
             }
             cx.incrementAndGet();
         });
-        paintProduction(gc, getPosition(), colonyStats, construction);
+        paintProduction(gc, colonyStats, construction);
     }
 
-    private void paintProduction(final GraphicsContext gc, final Point point,
-            final ColonyProductionStats colonyStats, final Construction construction) {
+    private void paintProduction(final GraphicsContext gc, final ColonyProductionStats colonyStats,
+            final Construction construction) {
         if (construction.getType().getProductionPerTurn().isPresent()) {
 
             final GoodsProductionStats goodsStats = colonyStats
@@ -152,13 +170,13 @@ class PanelConstruction implements JavaFxComponent {
                 toWrite += "lost " + goodsStats.getBlockedProduction();
             }
             if (!Strings.isNullOrEmpty(toWrite)) {
-                final Point prod = point.add(PRODUCTION_TEXT);
                 final Goods produced = construction.getType().getProductionPerTurn().get();
-                gc.fillText(toWrite, prod.getX(), prod.getY());
+                gc.fillText(toWrite, PRODUCTION_TEXT.getX(), PRODUCTION_TEXT.getY());
                 final double width = getTextWidth(gc, toWrite);
                 gc.drawImage(imageProvider.getGoodsTypeImage(produced.getType()),
-                        prod.getX() - width / 2 - GOOD_ICON_WIDTH, prod.getY() + GOODS_ICON_SHIFT_Y,
-                        GOOD_ICON_WIDTH, GOOD_ICON_WIDTH);
+                        PRODUCTION_TEXT.getX() - width / 2 - GOOD_ICON_WIDTH,
+                        PRODUCTION_TEXT.getY() + GOODS_ICON_SHIFT_Y, GOOD_ICON_WIDTH,
+                        GOOD_ICON_WIDTH);
             }
         }
     }
@@ -178,8 +196,54 @@ class PanelConstruction implements JavaFxComponent {
         return theText.getBoundsInLocal().getWidth();
     }
 
-    private Point getPosition() {
-        return positionAndSize.getTopLeftCorner();
+    private void onDragOver(final DragEvent event) {
+        logger.debug("Drag Over");
+        final Point point = Point.of(event.getX(), event.getY());
+        final Optional<ConstructionSlot> loc = findConstructionSlot(point);
+        if (loc.isPresent() && loc.get().isEmpty()) {
+            event.acceptTransferModes(TransferMode.MOVE);
+            logger.debug("was clicked at: " + loc.get());
+        } else {
+            event.acceptTransferModes(TransferMode.MOVE);
+        }
+        event.consume();
+    }
+
+    private void onDragDropped(final DragEvent event) {
+        logger.debug("Drag dropped");
+        final Point point = Point.of(event.getX(), event.getY());
+        final Optional<ConstructionSlot> loc = findConstructionSlot(point);
+        if (loc.isPresent() && loc.get().isEmpty()) {
+            final ConstructionSlot slot = loc.get();
+            ClipboardEval.make(model, event.getDragboard()).tryReadUnit((unit, transferFrom) -> {
+                unit.placeToColonyStructureSlot(slot);
+                event.setDropCompleted(true);
+            });
+        } else {
+            final Optional<ConstructionSlot> oSlot = construction.getFirstEmptySlot();
+            if (oSlot.isPresent()) {
+                ClipboardEval.make(model, event.getDragboard())
+                        .tryReadUnit((unit, transferFrom) -> {
+                            unit.placeToColonyStructureSlot(oSlot.get());
+                            event.setDropCompleted(true);
+                        });
+            }
+        }
+        event.consume();
+    }
+
+    private void onDragDetected(final MouseEvent event) {
+        logger.debug("Drag detected");
+        final Point point = Point.of(event.getX(), event.getY());
+        final Optional<ConstructionSlot> loc = findConstructionSlot(point);
+        if (loc.isPresent() && !loc.get().isEmpty()) {
+            final Unit unit = loc.get().getUnit();
+            final Image image = imageProvider.getUnitImage(unit);
+            final Dragboard db = canvas.startDragAndDrop(TransferMode.MOVE);
+            ClipboardWritter.make(db).addImage(image).addTransferFromConstructionSlot()
+                    .addUnit(unit).build();
+        }
+        event.consume();
     }
 
     @Override
