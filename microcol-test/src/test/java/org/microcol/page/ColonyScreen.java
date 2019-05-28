@@ -1,6 +1,7 @@
 package org.microcol.page;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.microcol.gui.Tile.TILE_CENTER;
 import static org.microcol.gui.Tile.TILE_WIDTH_IN_PX;
 
@@ -9,9 +10,9 @@ import java.util.List;
 import java.util.Set;
 
 import org.microcol.gui.screen.colony.ColonyButtonsPanel;
-import org.microcol.gui.screen.colony.ColonyPanel;
 import org.microcol.gui.screen.colony.PanelColonyFields;
 import org.microcol.gui.screen.colony.PanelColonyGood;
+import org.microcol.gui.screen.colony.PanelColonyName;
 import org.microcol.gui.screen.colony.PanelOutsideColonyUnit;
 import org.microcol.model.Colony;
 import org.microcol.model.ColonyField;
@@ -53,7 +54,7 @@ public class ColonyScreen extends AbstractScreen {
     }
 
     private void verifyColonyName(final String expectedNamePart) {
-	final Labeled labeled = getLabeledById(ColonyPanel.COLONY_NAME_ID);
+	final Labeled labeled = getLabeledById(PanelColonyName.COLONY_NAME_ID);
 	logger.info("Colony name: " + labeled.getText());
 	assertTrue(labeled.getText().contains(expectedNamePart),
 		String.format("Text '%s' should appear in colony name '%s'", expectedNamePart, labeled.getText()));

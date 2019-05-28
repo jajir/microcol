@@ -21,8 +21,4 @@ class PanelConstructionProvider {
         return out;
     }
 
-    String getCssId() {
-        return cssId;
-    }
-
 }

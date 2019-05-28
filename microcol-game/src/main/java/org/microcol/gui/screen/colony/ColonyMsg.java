@@ -8,7 +8,10 @@ import org.microcol.i18n.ResourceBundleFormat;
 
 enum ColonyMsg implements MessageKeyResource {
 
-    goods, colony, buttonClose,;
+    goods,
+    buttonClose,
+    colonyName,
+    ;
 
     @Override
     public ResourceBundle.Control getResourceBundleControl() {

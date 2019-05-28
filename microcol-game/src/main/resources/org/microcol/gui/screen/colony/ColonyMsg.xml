@@ -12,7 +12,7 @@
 	<comment>Define keys for Europe dialog</comment>
 
 	<entry key="goods"> in warehouse</entry>
-	<entry key="colony">Colony: </entry>
+	<entry key="colonyName">This is colony name.</entry>
 	<entry key="buttonClose">Close colony. Return back to main world view.</entry>
 
 </properties>

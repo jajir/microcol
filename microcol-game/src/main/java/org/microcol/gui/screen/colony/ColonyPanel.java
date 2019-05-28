@@ -13,7 +13,6 @@ import com.google.common.base.Preconditions;
 import com.google.common.eventbus.Subscribe;
 import com.google.inject.Inject;
 
-import javafx.scene.control.Label;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 
@@ -23,11 +22,9 @@ import javafx.scene.layout.StackPane;
 @Listener
 public final class ColonyPanel implements JavaFxComponent, UpdatableLanguage {
 
-    public static final String COLONY_NAME_ID = "colonyName";
-
     private final StackPane mainPanel;
 
-    private final Label colonyName;
+    private final PanelColonyName panelColonyName;
 
     private final PanelColonyFields colonyFields;
 
@@ -48,19 +45,17 @@ public final class ColonyPanel implements JavaFxComponent, UpdatableLanguage {
             final PanelColonyStructures panelColonyStructures,
             final PanelOutsideColony panelOutsideColony, final PanelColonyGoods panelColonyGoods,
             final PanelBuildingQueue panelBuildingQueue,
-            final ColonyButtonsPanel colonyButtonsPanel, final PanelDockColony panelDockColony) {
+            final ColonyButtonsPanel colonyButtonsPanel, final PanelDockColony panelDockColony, final PanelColonyName panelColonyName) {
         this.colonyFields = Preconditions.checkNotNull(panelColonyFields);
         this.colonyStructures = Preconditions.checkNotNull(panelColonyStructures);
         this.panelBuildingQueue = Preconditions.checkNotNull(panelBuildingQueue);
         this.panelDock = Preconditions.checkNotNull(panelDockColony);
         this.goods = Preconditions.checkNotNull(panelColonyGoods);
         this.panelOutsideColony = Preconditions.checkNotNull(panelOutsideColony);
-        colonyName = new Label();
-        colonyName.setId(COLONY_NAME_ID);
-        colonyName.getStyleClass().add("label-title");
+        this.panelColonyName = Preconditions.checkNotNull(panelColonyName);
 
         mainPanel = new StackPane();
-        mainPanel.getChildren().add(colonyName);
+        mainPanel.getChildren().add(panelColonyName.getContent());
         mainPanel.getChildren().add(panelDock.getContent());
         mainPanel.getChildren().add(panelOutsideColony.getContent());
         mainPanel.getChildren().add(colonyFields.getContent());
@@ -103,7 +98,7 @@ public final class ColonyPanel implements JavaFxComponent, UpdatableLanguage {
      */
     void showColony(final Colony colony) {
         this.colony = Preconditions.checkNotNull(colony);
-        colonyName.setText(colony.getName());
+        panelColonyName.setColonyName(colony.getName());
         goods.setColony(colony);
         repaint();
     }

@@ -4,9 +4,8 @@
  */
 .label-title {
   -fx-font-size: 32;
-  -fx-min-width: 600;
-  -fx-translate-x: -90;
-  -fx-translate-y: -300;
+  -fx-translate-x: -350;
+  -fx-translate-y: -320;
 }
 
 .panel-dock {
@@ -14,8 +13,8 @@
   -fx-max-width: 200;
   -fx-pref-height: 200;
   -fx-max-height: 200;
-  -fx-translate-x: -85;
-  -fx-translate-y: -89;
+  -fx-translate-x: -80;
+  -fx-translate-y: -110;
 }
 
 .panel-dock .ships {
