@@ -41,8 +41,6 @@ public final class ColonyPanel implements JavaFxComponent, UpdatableLanguage {
 
     private final PanelBuildingQueue panelBuildingQueue;
 
-    private final I18n i18n;
-
     private Colony colony;
 
     @Inject
@@ -50,15 +48,13 @@ public final class ColonyPanel implements JavaFxComponent, UpdatableLanguage {
             final PanelColonyStructures panelColonyStructures,
             final PanelOutsideColony panelOutsideColony, final PanelColonyGoods panelColonyGoods,
             final PanelBuildingQueue panelBuildingQueue,
-            final ColonyButtonsPanel colonyButtonsPanel, final I18n i18n,
-            final PanelDockColony panelDockColony) {
+            final ColonyButtonsPanel colonyButtonsPanel, final PanelDockColony panelDockColony) {
         this.colonyFields = Preconditions.checkNotNull(panelColonyFields);
         this.colonyStructures = Preconditions.checkNotNull(panelColonyStructures);
         this.panelBuildingQueue = Preconditions.checkNotNull(panelBuildingQueue);
         this.panelDock = Preconditions.checkNotNull(panelDockColony);
         this.goods = Preconditions.checkNotNull(panelColonyGoods);
         this.panelOutsideColony = Preconditions.checkNotNull(panelOutsideColony);
-        this.i18n = Preconditions.checkNotNull(i18n);
         colonyName = new Label();
         colonyName.setId(COLONY_NAME_ID);
         colonyName.getStyleClass().add("label-title");
@@ -107,7 +103,7 @@ public final class ColonyPanel implements JavaFxComponent, UpdatableLanguage {
      */
     void showColony(final Colony colony) {
         this.colony = Preconditions.checkNotNull(colony);
-        colonyName.setText(i18n.get(ColonyMsg.colony) + colony.getName());
+        colonyName.setText(colony.getName());
         goods.setColony(colony);
         repaint();
     }

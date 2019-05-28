@@ -89,6 +89,19 @@
   -fx-background-repeat: no-repeat;
 }
 
+.constructionPane .diffPositive {
+  -fx-padding: 3;
+}
+
+.constructionPane .diffNegative {
+  -fx-padding: 3;
+}
+
+.constructionPane .production {
+  -fx-translate-x: 28;
+  -fx-translate-y: 103;
+}
+
 #id_warehouse {
   -fx-translate-x: -150;
   -fx-translate-y: -145;

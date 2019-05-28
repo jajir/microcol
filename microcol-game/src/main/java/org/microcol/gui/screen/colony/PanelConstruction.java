@@ -28,19 +28,19 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
-import com.google.common.base.Strings;
 import com.google.common.eventbus.EventBus;
 
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
-import javafx.scene.text.Text;
 
 /**
  * Panel with construction.
@@ -61,12 +61,10 @@ class PanelConstruction implements JavaFxComponent {
     private final static int CONSTRUCTION_Y = 0;
 
     /*
-     * Production text position.
+     * Goods icon.
      */
-    private final static int PRODUCTION_TEXT_X = 50;
-    private final static int PRODUCTION_TEXT_Y = 120;
-    private final static Point PRODUCTION_TEXT = Point.of(PRODUCTION_TEXT_X, PRODUCTION_TEXT_Y);
-    private final static int GOODS_ICON_SHIFT_Y = -20;
+    private final static int GOODS_ICON_X = 0;
+    private final static int GOODS_ICON_Y = 100;
 
     /*
      * Slot size and position definition.
@@ -113,16 +111,6 @@ class PanelConstruction implements JavaFxComponent {
         mainPane.setId(id);
     }
 
-    private void onMouseEntered(@SuppressWarnings("unused") final MouseEvent event) {
-        eventBus.post(new StatusBarMessageEvent(
-                i18n.get(ConstructionTypeName.getNameForType(construction.getType())),
-                Source.COLONY));
-    }
-
-    private void onMouseExited(@SuppressWarnings("unused") final MouseEvent event) {
-        eventBus.post(new StatusBarMessageEvent(Source.COLONY));
-    }
-
     private Optional<ConstructionSlot> findConstructionSlot(final Point point) {
         return slots.entrySet().stream().filter(entry -> entry.getKey().isIn(point))
                 .map(entry -> entry.getValue()).findAny();
@@ -161,39 +149,49 @@ class PanelConstruction implements JavaFxComponent {
             final GoodsProductionStats goodsStats = colonyStats
                     .getStatsByType(construction.getProducedGoodsType().get());
 
-            String toWrite = "";
+            if (isThereTextToPaint(goodsStats)) {
+                paintProductionIcon(gc);
+            }
+
+            final HBox box = new HBox();
+            box.getStyleClass().add("production");
+            // TODO make box separate component
+            // TODO add mouse over status bar description
 
             if (goodsStats.getNetProduction() != 0) {
-                toWrite += "x " + goodsStats.getNetProduction() + " ";
+                final Label label = new Label("+" + goodsStats.getNetProduction());
+                label.getStyleClass().add("diffPositive");
+                box.getChildren().add(label);
             }
+
             if (goodsStats.getBlockedProduction() != 0) {
-                toWrite += "lost " + goodsStats.getBlockedProduction();
+                final Label label = new Label("-" + goodsStats.getBlockedProduction());
+                label.getStyleClass().add("diffNegative");
+                box.getChildren().add(label);
             }
-            if (!Strings.isNullOrEmpty(toWrite)) {
-                final Goods produced = construction.getType().getProductionPerTurn().get();
-                gc.fillText(toWrite, PRODUCTION_TEXT.getX(), PRODUCTION_TEXT.getY());
-                final double width = getTextWidth(gc, toWrite);
-                gc.drawImage(imageProvider.getGoodsTypeImage(produced.getType()),
-                        PRODUCTION_TEXT.getX() - width / 2 - GOOD_ICON_WIDTH,
-                        PRODUCTION_TEXT.getY() + GOODS_ICON_SHIFT_Y, GOOD_ICON_WIDTH,
-                        GOOD_ICON_WIDTH);
-            }
+
+            mainPane.getChildren().add(box);
         }
     }
 
-    /**
-     * Get length of given text. Use default text font.
-     * 
-     * @param gc
-     *            required graphics context
-     * @param text
-     *            required text which size is looking for
-     * @return text length
-     */
-    private double getTextWidth(final GraphicsContext gc, final String text) {
-        final Text theText = new Text(text);
-        theText.setFont(gc.getFont());
-        return theText.getBoundsInLocal().getWidth();
+    private void paintProductionIcon(final GraphicsContext gc) {
+        final Goods produced = construction.getType().getProductionPerTurn().get();
+        gc.drawImage(imageProvider.getGoodsTypeImage(produced.getType()), GOODS_ICON_X,
+                GOODS_ICON_Y, GOOD_ICON_WIDTH, GOOD_ICON_WIDTH);
+    }
+
+    private boolean isThereTextToPaint(final GoodsProductionStats goodsStats) {
+        return goodsStats.getNetProduction() != 0 || goodsStats.getBlockedProduction() != 0;
+    }
+
+    private void onMouseEntered(@SuppressWarnings("unused") final MouseEvent event) {
+        eventBus.post(new StatusBarMessageEvent(
+                i18n.get(ConstructionTypeName.getNameForType(construction.getType())),
+                Source.COLONY));
+    }
+
+    private void onMouseExited(@SuppressWarnings("unused") final MouseEvent event) {
+        eventBus.post(new StatusBarMessageEvent(Source.COLONY));
     }
 
     private void onDragOver(final DragEvent event) {
