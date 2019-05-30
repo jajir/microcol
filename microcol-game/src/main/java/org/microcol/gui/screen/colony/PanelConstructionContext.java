@@ -2,6 +2,7 @@ package org.microcol.gui.screen.colony;
 
 import org.microcol.gui.image.ImageProvider;
 import org.microcol.i18n.I18n;
+import org.microcol.model.Colony;
 import org.microcol.model.ColonyProductionStats;
 import org.microcol.model.Construction;
 import org.microcol.model.Model;
@@ -21,6 +22,8 @@ class PanelConstructionContext {
     private final Construction construction;
     private final ColonyProductionStats colonyStats;
     private final Model model;
+    
+    private Colony colony;
 
     PanelConstructionContext(final ImageProvider imageProvider, final EventBus eventBus,
             final I18n i18n, final Construction construction,
@@ -56,6 +59,14 @@ class PanelConstructionContext {
 
     Model getModel() {
         return model;
+    }
+
+    protected Colony getColony() {
+        return colony;
+    }
+
+    protected void setColony(Colony colony) {
+        this.colony = colony;
     }
 
 }

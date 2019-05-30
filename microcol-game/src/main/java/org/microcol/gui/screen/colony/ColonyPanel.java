@@ -36,19 +36,15 @@ public final class ColonyPanel implements JavaFxComponent, UpdatableLanguage {
 
     private final PanelOutsideColony panelOutsideColony;
 
-    private final PanelBuildingQueue panelBuildingQueue;
-
     private Colony colony;
 
     @Inject
     public ColonyPanel(final PanelColonyFields panelColonyFields,
             final PanelColonyStructures panelColonyStructures,
             final PanelOutsideColony panelOutsideColony, final PanelColonyGoods panelColonyGoods,
-            final PanelBuildingQueue panelBuildingQueue,
             final ColonyButtonsPanel colonyButtonsPanel, final PanelDockColony panelDockColony, final PanelColonyName panelColonyName) {
         this.colonyFields = Preconditions.checkNotNull(panelColonyFields);
         this.colonyStructures = Preconditions.checkNotNull(panelColonyStructures);
-        this.panelBuildingQueue = Preconditions.checkNotNull(panelBuildingQueue);
         this.panelDock = Preconditions.checkNotNull(panelDockColony);
         this.goods = Preconditions.checkNotNull(panelColonyGoods);
         this.panelOutsideColony = Preconditions.checkNotNull(panelOutsideColony);
@@ -59,7 +55,6 @@ public final class ColonyPanel implements JavaFxComponent, UpdatableLanguage {
         mainPanel.getChildren().add(panelDock.getContent());
         mainPanel.getChildren().add(panelOutsideColony.getContent());
         mainPanel.getChildren().add(colonyFields.getContent());
-        mainPanel.getChildren().add(panelBuildingQueue.getContent());
         mainPanel.getChildren().add(colonyStructures.getContent());
         mainPanel.getChildren().add(goods.getContent());
         mainPanel.getChildren().add(colonyButtonsPanel.getContent());
@@ -111,7 +106,6 @@ public final class ColonyPanel implements JavaFxComponent, UpdatableLanguage {
             colonyStructures.repaint(colony);
             panelOutsideColony.setColony(colony);
             panelOutsideColony.repaint();
-            panelBuildingQueue.repaint();
         }
     }
 

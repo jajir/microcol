@@ -11,9 +11,11 @@ public final class ImageLoaderBuilding extends AbstractTiledImageLoader {
 
     public final static String IMAGE_PREFIX = "building_";
 
+    public final static int CONSTRUCTION_WIDTH = 70;
+
     ImageLoaderBuilding() {
         super(TileImageParams.makeBuilder().setTileWidthCount(8).setTileHeightCount(7)
-                .setTileWidth(70).build(), IMAGE_NAME, IMAGE_PREFIX);
+                .setTileWidth(CONSTRUCTION_WIDTH).build(), IMAGE_NAME, IMAGE_PREFIX);
     }
 
     @Override

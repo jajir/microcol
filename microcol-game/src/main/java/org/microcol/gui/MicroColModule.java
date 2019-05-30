@@ -28,12 +28,12 @@ import org.microcol.gui.screen.campaign.ScreenCampaignPresenter;
 import org.microcol.gui.screen.colonizopedia.ColonizopediaDialog;
 import org.microcol.gui.screen.colony.ColonyDialogCallback;
 import org.microcol.gui.screen.colony.ColonyPanel;
-import org.microcol.gui.screen.colony.PanelBuildingQueue;
 import org.microcol.gui.screen.colony.PanelColonyDockBehaviour;
 import org.microcol.gui.screen.colony.PanelColonyGoods;
 import org.microcol.gui.screen.colony.ScreenColonyPresenter;
 import org.microcol.gui.screen.colony.buildingqueue.QueueController;
 import org.microcol.gui.screen.colony.buildingqueue.QueueDialog;
+import org.microcol.gui.screen.colony.buildingqueue.ShowQueueDialogListener;
 import org.microcol.gui.screen.editor.EditorMouseListener;
 import org.microcol.gui.screen.editor.ScreenEditorPresenter;
 import org.microcol.gui.screen.europe.BuyUnitsDialog;
@@ -208,9 +208,9 @@ public final class MicroColModule extends AbstractModule {
         bind(ColonyDialogCallback.class).to(ScreenColonyPresenter.class).in(Singleton.class);
         bind(PanelColonyGoods.class).in(Singleton.class);
         bind(PanelColonyDockBehaviour.class).in(Singleton.class);
-        bind(PanelBuildingQueue.class).in(Singleton.class);
         bind(QueueDialog.class).in(Singleton.class);
         bind(QueueController.class).in(Singleton.class);
+        bind(ShowQueueDialogListener.class).asEagerSingleton();
 
         /**
          * Europe dialog

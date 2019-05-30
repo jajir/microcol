@@ -60,7 +60,7 @@ public class QueueDialog extends AbstractMessageWindow {
         panelQueueUnits.repaint();
     }
 
-    public void showColony() {
+    void showColony() {
         repaint();
         showAndWait();
     }

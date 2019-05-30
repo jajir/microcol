@@ -46,18 +46,8 @@
 	-fx-padding: 4 0 0 4;
 	-fx-background-image: url("../images/colony-fields.png");
 	-fx-background-repeat: no-repeat;
-	-fx-translate-x: 180;
-	-fx-translate-y: -65;
-}
-
-.building-queue {
-	-fx-max-width: 240;
-	-fx-max-height: 160;
-	-fx-padding: 4 0 0 4;
-	-fx-background-image: url("../images/colony-building-queue.png");
-	-fx-background-repeat: no-repeat;
-	-fx-translate-x: 222;
-	-fx-translate-y: 225;
+	-fx-translate-x: 250;
+	-fx-translate-y: -80;
 }
 
 .panel-colony-goods {
@@ -87,6 +77,36 @@
 	-fx-background-image: url("../images/colony-frame.png");
 	-fx-background-repeat: no-repeat;
 }
+
+.constructionPaneSimple {
+	-fx-pref-width: 70;
+	-fx-max-width: 70;
+	-fx-pref-height: 70;
+	-fx-max-height: 70;
+}
+
+.constructionPaneCarpenter {
+	-fx-pref-width: 264;
+	-fx-max-width: 264;
+	-fx-pref-height: 137;
+	-fx-max-height: 137;
+	-fx-background-image: url("../images/colony-building-queue.png");
+	-fx-background-repeat: no-repeat;
+}
+
+.constructionPaneCarpenter .canvas {
+	-fx-translate-x: -82;
+	-fx-translate-y: 0;
+}
+
+.constructionPaneCarpenter .description {
+	-fx-pref-width: 180;
+	-fx-min-width: 180;
+	-fx-max-width: 180;
+	-fx-translate-x: 37;
+	-fx-translate-y: 0;
+}
+
 
 .constructionPane .diffPositive {
 	-fx-padding: 3;
@@ -124,22 +144,22 @@ $row-3: $row-2 + $row-height + $row-gap;
 
 #id_town_hall {
 	-fx-translate-x: $column-2;
-	-fx-translate-y: $row-1;	
+	-fx-translate-y: $row-1;
 }
 
 #id_church {
 	-fx-translate-x: $column-3;
-	-fx-translate-y: $row-1;		
+	-fx-translate-y: $row-1;
 }
 
 #id_weaver {
 	-fx-translate-x: $column-1;
-	-fx-translate-y: $row-2;	
+	-fx-translate-y: $row-2;
 }
 
 #id_tobacco {
 	-fx-translate-x: $column-2;
-	-fx-translate-y: $row-2;	
+	-fx-translate-y: $row-2;
 }
 
 #id_rum {
@@ -149,26 +169,26 @@ $row-3: $row-2 + $row-height + $row-gap;
 
 #id_school {
 	-fx-translate-x: $column-4;
-	-fx-translate-y: $row-2;	
+	-fx-translate-y: $row-2;
 }
 
 #id_armory {
 	-fx-translate-x: $column-1;
-	-fx-translate-y: $row-3;	
+	-fx-translate-y: $row-3;
 }
 
 #id_blacksmith {
 	-fx-translate-x: $column-2;
-	-fx-translate-y: $row-3;	
+	-fx-translate-y: $row-3;
 }
 
 #id_fur {
 	-fx-translate-x: $column-3;
-	-fx-translate-y: $row-3;	
+	-fx-translate-y: $row-3;
 }
 
 #id_carpenter {
-	-fx-translate-x: $column-4;
-	-fx-translate-y: $row-3;	
+	-fx-translate-x: $column-4 + 70;
+	-fx-translate-y: $row-3;
 }
 

@@ -46,18 +46,8 @@
   -fx-padding: 4 0 0 4;
   -fx-background-image: url("../images/colony-fields.png");
   -fx-background-repeat: no-repeat;
-  -fx-translate-x: 180;
-  -fx-translate-y: -65;
-}
-
-.building-queue {
-  -fx-max-width: 240;
-  -fx-max-height: 160;
-  -fx-padding: 4 0 0 4;
-  -fx-background-image: url("../images/colony-building-queue.png");
-  -fx-background-repeat: no-repeat;
-  -fx-translate-x: 222;
-  -fx-translate-y: 225;
+  -fx-translate-x: 250;
+  -fx-translate-y: -80;
 }
 
 .panel-colony-goods {
@@ -86,6 +76,35 @@
   -fx-max-height: 135;
   -fx-background-image: url("../images/colony-frame.png");
   -fx-background-repeat: no-repeat;
+}
+
+.constructionPaneSimple {
+  -fx-pref-width: 70;
+  -fx-max-width: 70;
+  -fx-pref-height: 70;
+  -fx-max-height: 70;
+}
+
+.constructionPaneCarpenter {
+  -fx-pref-width: 264;
+  -fx-max-width: 264;
+  -fx-pref-height: 137;
+  -fx-max-height: 137;
+  -fx-background-image: url("../images/colony-building-queue.png");
+  -fx-background-repeat: no-repeat;
+}
+
+.constructionPaneCarpenter .canvas {
+  -fx-translate-x: -82;
+  -fx-translate-y: 0;
+}
+
+.constructionPaneCarpenter .description {
+  -fx-pref-width: 180;
+  -fx-min-width: 180;
+  -fx-max-width: 180;
+  -fx-translate-x: 37;
+  -fx-translate-y: 0;
 }
 
 .constructionPane .diffPositive {
@@ -152,7 +171,7 @@
 }
 
 #id_carpenter {
-  -fx-translate-x: 240;
+  -fx-translate-x: 310;
   -fx-translate-y: 147;
 }
 
