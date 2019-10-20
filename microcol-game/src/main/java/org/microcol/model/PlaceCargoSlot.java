@@ -25,7 +25,6 @@ public class PlaceCargoSlot extends AbstractPlace {
     PlaceCargoSlot(final Unit unitToCargo, final CargoSlot cargoSlot) {
         super(unitToCargo);
         this.cargoSlot = Preconditions.checkNotNull(cargoSlot);
-        cargoSlot.unsafeStore(this);
     }
 
     /**

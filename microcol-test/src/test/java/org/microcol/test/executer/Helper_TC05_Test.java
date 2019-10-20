@@ -15,7 +15,7 @@ import org.microcol.test.TC_05_moving_goods_test;
 public class Helper_TC05_Test {
 
     @Test
-    @Tag("local")
+    @Tag("wrapper")
     void start_TC05_test() throws Exception {
 	SummaryGeneratingListener listener = new SummaryGeneratingListener();
 	LauncherDiscoveryRequest request = LauncherDiscoveryRequestBuilder.request()

@@ -17,11 +17,7 @@
 		<jacoco.version>0.7.9</jacoco.version>
 		<github.global.server>github</github.global.server>
 		<github.global.oauth2Token>${env.GITHUB_OAUTH_TOKEN}</github.global.oauth2Token>
-		<!-- default values for exec plugin properties -->
-		<development>false</development>
-		<clean>false</clean>
-
-		<testfx.version>4.0.15-alpha</testfx.version>
+		<testfx.version>4.0.16-alpha</testfx.version>
 	</properties>
 
 	<dependencies>
@@ -29,6 +25,14 @@
 			<groupId>org.microcol</groupId>
 			<artifactId>microcol-game</artifactId>
 			<version>${project.parent.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.openjfx</groupId>
+			<artifactId>javafx-controls</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.openjfx</groupId>
+			<artifactId>javafx-swing</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.testfx</groupId>
@@ -56,7 +60,7 @@
 		<dependency>
 			<groupId>org.testfx</groupId>
 			<artifactId>openjfx-monocle</artifactId>
-			<version>8u76-b04</version>
+			<version>jdk-11+26</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
@@ -74,7 +78,8 @@
 				<activeByDefault>false</activeByDefault>
 			</activation>
 			<properties>
-				<testedTags>ci</testedTags>
+				<!-- disable all tests -->
+				<testedTags>ci-save</testedTags>
 			</properties>
 		</profile>
 		<profile>
@@ -119,14 +124,6 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>2.0.2</version>
-				<configuration>
-					<verbose>false</verbose>
-					<fork>false</fork>
-					<source>1.8</source>
-					<target>1.8</target>
-					<encoding>UTF-8</encoding>
-				</configuration>
 			</plugin>
 			<!-- Create executable jar including all dependencies -->
 			<plugin>
@@ -136,11 +133,9 @@
 					<forkCount>1</forkCount>
 					<reuseForks>false</reuseForks>
 					<useFile>true</useFile>
-					<trimStackTrace>true</trimStackTrace>
+					<trimStackTrace>false</trimStackTrace>
 					<printSummary>true</printSummary>
-					<properties>
-						<includeTags>${testedTags}</includeTags>
-					</properties>
+					<groups>${testedTags}</groups>
 				</configuration>
 			</plugin>
 			<!-- disable maven site default generating -->
@@ -167,7 +162,6 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-report-plugin</artifactId>
-				<version>2.4.2</version>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -183,11 +177,6 @@
 						</reports>
 					</reportSet>
 				</reportSets>
-			</plugin>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>findbugs-maven-plugin</artifactId>
-				<version>3.0.2</version>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>

@@ -102,9 +102,15 @@ public class UnitTest extends AbstractUnitFreeColonistTest {
     public void test_placeToCargoSlot_is_already_in_cargoSlot() throws Exception {
         final PlaceCargoSlot placeSlot1 = mock(PlaceCargoSlot.class);
         final PlaceCargoSlot placeSlot2 = mock(PlaceCargoSlot.class);
+        when(placeSlot1.getCargoSlotOwner()).thenReturn(owner);
+        when(placeSlot2.getCargoSlotOwner()).thenReturn(owner);
         makeColonist(model, 4, placeSlot1, owner, 10);
+        
+        unit.placeToCargoSlot(placeSlot2);
 
-        assertThrows(IllegalArgumentException.class, () -> unit.placeToCargoSlot(placeSlot2));
+        assertTrue(unit.isAtCargoSlot());
+        assertEquals(0, unit.getActionPoints());
+        verify(placeSlot1, times(1)).destroy();
     }
 
     @Test

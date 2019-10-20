@@ -16,7 +16,7 @@ public class Helper_TC02_Test {
 
 
     @Test
-    @Tag("local")
+    @Tag("wrapper")
     void start_TC02_test() throws Exception {
 	SummaryGeneratingListener listener = new SummaryGeneratingListener();
 	LauncherDiscoveryRequest request = LauncherDiscoveryRequestBuilder.request()
@@ -26,6 +26,7 @@ public class Helper_TC02_Test {
 	launcher.execute(request);
 
 	listener.getSummary().getFailures().forEach(fail -> {
+	    fail.getException().printStackTrace();
 	    System.err.println(fail.getTestIdentifier());
 	});
 	if (listener.getSummary().getTotalFailureCount() > 0) {

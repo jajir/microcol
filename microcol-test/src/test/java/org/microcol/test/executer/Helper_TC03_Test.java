@@ -16,7 +16,7 @@ public class Helper_TC03_Test {
 
 
     @Test
-    @Tag("local")
+    @Tag("wrapper")
     void start_TC03_test() throws Exception {
 	SummaryGeneratingListener listener = new SummaryGeneratingListener();
 	LauncherDiscoveryRequest request = LauncherDiscoveryRequestBuilder.request()

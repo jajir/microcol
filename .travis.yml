@@ -1,6 +1,6 @@
 language: java
 jdk:
-  - oraclejdk8
+  - openjdk11
 services:
   - xvfb
 sudo: false
@@ -11,10 +11,6 @@ install:
   - mvn initialize -B -V -e
 script:
   - mvn clean site -Dtravis-ci=true -Djava.awt.headless=true -Dtestfx.robot=glass -Dtestfx.headless=true -Dprism.order=sw -Dprism.text=t2k -Dtestfx.setup.timeout=2500 -DsoundEnabled=false -B -V -e -P ci
-addons:
-  apt:
-    packages:
-      - oracle-java8-installer
 env:
   global:
     secure: ZMJTFDV3GC6N1wZBQOmGQ3Z7Z/rMpXlkeDzSYUPeNYJ8x/kvaG6CNc06dUtu6FY/F/oju5hhbjI9eT4FVn6skBASI3fx/LHTJd1tlsgV8btaIO44x2QsYb6fC3OvL5GjSSElwpPVGnAUzhL4y+v0s4mSrj4KhkNtMTJecw/lC+JiBY1IOr8kyEKWIzu2NASCb7zxCAPLoemNtjKvATC17e4jL58Iy2mLBRPZk5tKfRF4TgInhSa0Kd8ROoLBG1didllL8/zayg18xiK55ec8/AXsl5h5TLOzBdi19IBKZMomljEb0DKf5MpSSE5pl03mujdxJYLpxGHLYtC2DOnuRuSbi4ND/9LTN6fPp1wXPUiAUn745SiBcn9WXs98dJhPb20V3126w0Ldb/DI3MHfD8FLkAekd8AFaewHQrmTT1esuIb70oaBXrppOukdjw6Al0UXDnD6zygiKIWlQbxH+KgPHriV2XxQrRUXFTvjxiCOjUJP33gLsOIcXBkJ/XiSMPzFx/AkZEsZ4hdUzjOktJnWBaVvN99e1Cmf3r0yoGPFr7ZraVaPYAvPMV7EpuSUJjy39lNy7ASNnsbLwgl0sM4KAjlN8pYtv+3evLGqb5t767wIXOiIOhSwU5L1x3cbi1r31KBUNVjKJgmvCh+K70nJuyyUgjS92EueXbMIzP8=

@@ -96,30 +96,33 @@ public final class PlaceBuilderPo implements Function<Unit, Place> {
                             unitPo));
                 }
                 return null;
-            }, (context) -> {
-                /**
-                 * Unit's cargo
-                 */
-                final UnitPo unitPo = context.getUnitPo();
-                final Unit unit = context.getUnit();
-                final ModelPo modelPo = context.getModelPo();
-                if (unitPo.getPlaceCargoSlot() != null) {
-                    // find unit in which cargo should be unit placed
-                    // place it to correct slot
-                    final Integer idUnitInCargo = unitPo.getId();
-                    final Integer slotIndex = getSlotId(idUnitInCargo);
-                    final UnitPo holdingUnitPo = modelPo.getUnitWithUnitInCargo(idUnitInCargo);
-                    final UnitWithCargo holdingUnit = getHoldingUnit(holdingUnitPo);
-                    final PlaceCargoSlot placeCargoSlot = new PlaceCargoSlot(unit,
-                            holdingUnit.getCargo().getSlotByIndex(slotIndex));
-                    return placeCargoSlot;
-                }
-                return null;
-            }));
+            }, this::tryToBuildPlaceCargoSlot));
 
     private final UnitPo unitPo;
     private final ModelPo modelPo;
     private final Model model;
+
+    private Place tryToBuildPlaceCargoSlot(final PlaceBuilderContext context) {
+        /**
+         * Unit's cargo
+         */
+        final UnitPo unitPo = context.getUnitPo();
+        final Unit unit = context.getUnit();
+        final ModelPo modelPo = context.getModelPo();
+        if (unitPo.getPlaceCargoSlot() != null) {
+            // find unit in which cargo should be unit placed
+            // place it to correct slot
+            final Integer idUnitInCargo = unitPo.getId();
+            final Integer slotIndex = getSlotId(idUnitInCargo);
+            final UnitPo holdingUnitPo = modelPo.getUnitWithUnitInCargo(idUnitInCargo);
+            final UnitWithCargo holdingUnit = getHoldingUnit(holdingUnitPo);
+            final CargoSlot cargoSlot = holdingUnit.getCargo().getSlotByIndex(slotIndex);
+            final PlaceCargoSlot placeCargoSlot = new PlaceCargoSlot(unit, cargoSlot);
+            cargoSlot.unsafeStore(placeCargoSlot);
+            return placeCargoSlot;
+        }
+        return null;
+    }
 
     public PlaceBuilderPo(final UnitPo unitPo, final ModelPo modelPo, final Model model) {
         this.unitPo = Preconditions.checkNotNull(unitPo);

@@ -256,10 +256,13 @@ public class Model {
         Preconditions.checkArgument(loadUnitToShip.getCargo().getEmptyCargoSlot().isPresent(),
                 "Ship (%s) for cargo doesn't have any free slot for expedition force unit.",
                 loadUnitToShip);
-        CargoSlot cargoSlot = loadUnitToShip.getCargo().getEmptyCargoSlot().get();
-        return unitStorage.createUnit(unit -> new Cargo(unit, UnitType.COLONIST.getCargoCapacity()),
-                this, unit -> new PlaceCargoSlot(unit, cargoSlot), UnitType.COLONIST, king,
+        final CargoSlot cargoSlot = loadUnitToShip.getCargo().getEmptyCargoSlot().get();
+        final Unit out = unitStorage.createUnit(
+                unit -> new Cargo(unit, UnitType.COLONIST.getCargoCapacity()), this,
+                unit -> new PlaceCargoSlot(unit, cargoSlot), UnitType.COLONIST, king,
                 UnitType.COLONIST.getSpeed(), new UnitActionNoAction());
+        cargoSlot.unsafeStore(out.getPlaceCargoSlot());
+        return out;
     }
 
     /**

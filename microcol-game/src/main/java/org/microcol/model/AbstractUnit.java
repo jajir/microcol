@@ -621,7 +621,6 @@ public abstract class AbstractUnit implements Unit {
     @Override
     public void placeToCargoSlot(final PlaceCargoSlot placeCargoSlot) {
         Preconditions.checkNotNull(placeCargoSlot, "Place cargo slot is null");
-        Preconditions.checkArgument(!isAtCargoSlot(), "Unit %s is already in cargo slot", this);
         Preconditions.checkArgument(owner.equals(placeCargoSlot.getCargoSlotOwner()),
                 "Cargo slot belongs to different player %s than unit %s",
                 placeCargoSlot.getCargoSlotOwner(), owner);

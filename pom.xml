@@ -23,7 +23,9 @@
 	<modules>
 		<module>microcol-game</module>
 		<module>microcol-test</module>
+		<!-- 
 		<module>microcol-dist</module>
+		 -->
 		<module>microcol-site</module>
 	</modules>
 
@@ -58,6 +60,16 @@
 				<version>${junit.jupiter.version}</version>
 				<scope>test</scope>
 			</dependency>
+			<dependency>
+				<groupId>org.openjfx</groupId>
+				<artifactId>javafx-controls</artifactId>
+				<version>13</version>
+			</dependency>
+			<dependency>
+				<groupId>org.openjfx</groupId>
+				<artifactId>javafx-swing</artifactId>
+				<version>13</version>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 
@@ -72,6 +84,16 @@
 					<configuration>
 						<skipDeploy>true</skipDeploy>
 						<generateReports>false</generateReports>
+					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>3.7.0</version>
+					<configuration>
+						<release>11</release>
+						<encoding>UTF-8</encoding>
+						<fork>false</fork>
 					</configuration>
 				</plugin>
 				<plugin>

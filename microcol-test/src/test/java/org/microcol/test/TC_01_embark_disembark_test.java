@@ -1,6 +1,6 @@
 package org.microcol.test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.File;
 
@@ -23,8 +23,11 @@ import javafx.stage.Stage;
 @ExtendWith(ApplicationExtension.class)
 public class TC_01_embark_disembark_test extends AbstractMicroColTest {
 
-    private final static File testFileName = new File(
-	    "src/test/scenarios/T01-embark-disembark.microcol");
+    private final static Location COLONY_LOCATION = Location.of(22, 12);
+    private final static Location SHORE_LAND_LOCATION = Location.of(24, 12);
+    private final static Location SHORE_SEE_LOCATION = Location.of(24, 11);
+
+    private final static File testFileName = new File("src/test/scenarios/T01-embark-disembark.microcol");
 
     @Start
     private void start(final Stage primaryStage) throws Exception {
@@ -41,11 +44,14 @@ public class TC_01_embark_disembark_test extends AbstractMicroColTest {
     @Test
     @Tag("local")
     void TC_01_embark_disembark() throws Exception {
-	//open MicroCol and load defined game 
+	// open MicroCol and load defined game
 	GamePage gamePage = WelcomePage.of(getContext()).loadGame();
 
+	// verify that there in colony are 3 units
+	assertEquals(3, getModel().getUnitsAt(COLONY_LOCATION).size());
+
 	// go at main game panel
-	ColonyScreen colonyScreen = gamePage.openColonyAt(Location.of(22, 12), "Delft");
+	ColonyScreen colonyScreen = gamePage.openColonyAt(COLONY_LOCATION, "Delft");
 
 	// Verify that there is just one ship in port
 	colonyScreen.verifyNumberOfShipsInPort(1);
@@ -59,34 +65,37 @@ public class TC_01_embark_disembark_test extends AbstractMicroColTest {
 	// return back to main game screen.
 	gamePage = colonyScreen.close();
 
+	// verify that just on unit is in colony
+	assertEquals(1, getModel().getUnitsAt(COLONY_LOCATION).size());
+
 	// move ship few tiles to the right
-	gamePage.moveMouseAtLocation(Location.of(22, 12));
-	gamePage.dragMouseAtLocation(Location.of(24, 11));
+	gamePage.moveMouseAtLocation(COLONY_LOCATION);
+	gamePage.dragMouseAtLocation(SHORE_SEE_LOCATION);
 
 	// press next turn.
 	gamePage.nextTurnAndCloseDialogs();
 
 	// verify that there are no ship
-	assertEquals(0, getModel().getUnitsAt(Location.of(24, 12)).size());
-	
+	assertEquals(0, getModel().getUnitsAt(SHORE_LAND_LOCATION).size());
+
 	// disembark units
-	gamePage.moveMouseAtLocation(Location.of(24, 11));
-	gamePage.dragMouseAtLocation(Location.of(24, 12));
-	
+	gamePage.moveMouseAtLocation(SHORE_SEE_LOCATION);
+	gamePage.dragMouseAtLocation(SHORE_LAND_LOCATION);
+
 	// verify that units are at expected location.
-	assertEquals(2, getModel().getUnitsAt(Location.of(24, 12)).size());
+	assertEquals(2, getModel().getUnitsAt(SHORE_LAND_LOCATION).size());
 
 	// press next turn.
 	gamePage.nextTurnAndCloseDialogs();
-	
-	//embark units
-	gamePage.moveMouseAtLocation(Location.of(24, 12));
-	gamePage.dragMouseAtLocation(Location.of(24, 11));
-	gamePage.moveMouseAtLocation(Location.of(24, 12));
-	gamePage.dragMouseAtLocation(Location.of(24, 11));
-	
+
+	// embark units
+	gamePage.moveMouseAtLocation(SHORE_LAND_LOCATION);
+	gamePage.dragMouseAtLocation(SHORE_SEE_LOCATION);
+	gamePage.moveMouseAtLocation(SHORE_LAND_LOCATION);
+	gamePage.dragMouseAtLocation(SHORE_SEE_LOCATION);
+
 	// verify that there are no units at map.
-	assertEquals(0, getModel().getUnitsAt(Location.of(24, 12)).size());
+	assertEquals(0, getModel().getUnitsAt(SHORE_LAND_LOCATION).size());
     }
 
 }

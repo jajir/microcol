@@ -123,6 +123,7 @@ public class CargoSlot {
      * 
      * @param unit
      */
+    @Deprecated
     void unsafeStore(final PlaceCargoSlot unit) {
         cargoUnit = unit;
     }
@@ -143,6 +144,8 @@ public class CargoSlot {
         Preconditions.checkArgument(unit.isAtPlaceLocation(), "Unit have to be placed at map.");
         cargoUnit = new PlaceCargoSlot(unit, this);
         unit.embark(cargoUnit);
+        //FIXME method is same as store.
+        //FIXME it's not atomic, unit.embark(cargoUnit) throws exception and state will be inconsistent.
     }
 
     /**
@@ -158,8 +161,9 @@ public class CargoSlot {
         Preconditions.checkState(getOwnerUnit().getOwner().equals(unit.getOwner()),
                 "Owners must be same (%s - %s).", getOwnerUnit().getOwner(), unit.getOwner());
 
-        cargoUnit = new PlaceCargoSlot(unit, this);
-        unit.placeToCargoSlot(cargoUnit);
+        final PlaceCargoSlot tmp = new PlaceCargoSlot(unit, this);
+        unit.placeToCargoSlot(tmp);
+        cargoUnit = tmp;
     }
 
     /**
