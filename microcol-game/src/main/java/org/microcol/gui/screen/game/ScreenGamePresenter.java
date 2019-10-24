@@ -45,13 +45,14 @@ public class ScreenGamePresenter {
     private final GamePanelPresenter gamePanelPresenter;
 
     private final GameModelController gameModelController;
-    
+
     private final WasdController wasdController;
-    
+
     @Inject
-    ScreenGamePresenter(final ScreenGame screenGame, final EventBus eventBus, final MouseOverTileManager mouseOverTileManager, final ModeController modeController,
-            final SelectedUnitManager selectedUnitManager, final PersistingService persistingService,
-            final GamePanelPresenter gamePanelPresenter,
+    ScreenGamePresenter(final ScreenGame screenGame, final EventBus eventBus,
+            final MouseOverTileManager mouseOverTileManager, final ModeController modeController,
+            final SelectedUnitManager selectedUnitManager,
+            final PersistingService persistingService, final GamePanelPresenter gamePanelPresenter,
             final GameModelController gameModelController, final WasdController wasdController) {
         this.eventBus = Preconditions.checkNotNull(eventBus);
         this.mouseOverTileManager = Preconditions.checkNotNull(mouseOverTileManager);
@@ -63,6 +64,7 @@ public class ScreenGamePresenter {
         this.wasdController = Preconditions.checkNotNull(wasdController);
         screenGame.setOnKeyPressed(this::onKeyPressed);
         screenGame.setOnKeyReleased(this::onKeyReleased);
+        screenGame.setOnTabPressed(event -> eventBus.post(new SelectNextUnitEvent()));
     }
 
     private void onKeyPressed(final KeyEvent event) {
@@ -110,10 +112,6 @@ public class ScreenGamePresenter {
             persistingService.saveModel(gameModelController.getModel());
         }
 
-        if (KeyCode.TAB == event.getCode()) {
-            eventBus.post(new SelectNextUnitEvent());
-        }
-        
         wasdController.onKeyPressed(event);
 
         logger.debug("Pressed key: '" + event.getCode().getName() + "' has code '"
@@ -138,5 +136,5 @@ public class ScreenGamePresenter {
             gamePanelPresenter.switchToNormalMode(mouseOverTileManager.getMouseOverTile().get());
         }
     }
-    
+
 }

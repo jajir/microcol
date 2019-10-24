@@ -160,6 +160,28 @@ public class GamePage extends AbstractScreen {
 			expectedUnitsInRightPanel, set.size()));
     }
 
+    public void pressTab() {
+	getRobot().push(KeyCode.TAB);
+    }
+
+    /**
+     * Assert that just unit at specific index is selected and other units are
+     * unselected.
+     * 
+     * @param unitIndex required unit index
+     */
+    public void assertThatUnitIsSelected(final int unitIndex) {
+	final int numberOfUnitsInRightPanel = getListOfUnitsInRightPanel().size();
+	for (int i = 0; i < numberOfUnitsInRightPanel; i++) {
+	    final RightPanelUnit rightPanelUnit = getRightPanelUnit(i);
+	    if (i == unitIndex) {
+		assertTrue(rightPanelUnit.isSelected());
+	    } else {
+		assertFalse(rightPanelUnit.isSelected());
+	    }
+	}
+    }
+
     public RightPanelUnit getRightPanelUnit(final int unitIndexInRightPanel) {
 	final VBox unitBox = getListOfUnitsInRightPanel().get(unitIndexInRightPanel);
 	return RightPanelUnit.of(getContext(), unitBox);

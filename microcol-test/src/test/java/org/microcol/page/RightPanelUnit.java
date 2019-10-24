@@ -32,4 +32,8 @@ public class RightPanelUnit extends AbstractPageComponent {
 	return this;
     }
 
+    public boolean isSelected() {
+	return getNodeFinder().from(unitBox).lookup(".selected").tryQuery().isPresent();
+    }
+
 }

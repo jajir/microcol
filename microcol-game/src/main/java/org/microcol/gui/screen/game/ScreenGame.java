@@ -1,5 +1,7 @@
 package org.microcol.gui.screen.game;
 
+import java.util.function.Consumer;
+
 import org.microcol.gui.screen.GameScreen;
 import org.microcol.gui.screen.game.components.ButtonsGamePanel;
 import org.microcol.gui.screen.game.components.RightPanel;
@@ -15,6 +17,7 @@ import com.google.inject.name.Named;
 
 import javafx.event.EventHandler;
 import javafx.scene.control.Label;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -68,23 +71,41 @@ public class ScreenGame implements GameScreen {
     }
 
     /**
+     * Consumer is called when player press tabulator.
+     * <p>
+     * There is problem to catch pressed tabulator with usual event. It's
+     * because components handle tabulator to move focus.
+     * </p>
+     * 
+     * @param tabEventHandler
+     *            required tabulator event handler
+     */
+    void setOnTabPressed(final Consumer<KeyEvent> tabEventHandler) {
+        mainPanel.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+            if (KeyCode.TAB == event.getCode()) {
+                tabEventHandler.accept(event);
+            }
+        });
+    }
+
+    /**
      * it's called when key is pressed on game screen.
      *
-     * @param event
-     *            required key event
+     * @param eventHandler
+     *            required key event handler
      */
-    void setOnKeyPressed(EventHandler<? super KeyEvent> event) {
-        mainPanel.setOnKeyPressed(event);
+    void setOnKeyPressed(EventHandler<? super KeyEvent> eventHandler) {
+        mainPanel.setOnKeyPressed(eventHandler);
     }
 
     /**
      * it's called when key is release on game screen.
      *
-     * @param event
-     *            required key event
+     * @param eventHandler
+     *            required key event handler
      */
-    void setOnKeyReleased(EventHandler<? super KeyEvent> event) {
-        mainPanel.setOnKeyReleased(event);
+    void setOnKeyReleased(EventHandler<? super KeyEvent> eventHandler) {
+        mainPanel.setOnKeyReleased(eventHandler);
     }
 
     @Override
