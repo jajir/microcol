@@ -33,6 +33,7 @@ public class GamePage extends AbstractScreen {
     private final Logger logger = LoggerFactory.getLogger(GamePage.class);
 
     public static GamePage of(final TestContext context) {
+	//TODO add validation that it's expected page.
 	return new GamePage(context);
     }
 
