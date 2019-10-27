@@ -9,7 +9,6 @@ import java.util.stream.Collectors;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.microcol.gui.FileSelectingService;
 import org.microcol.model.Goods;
 import org.microcol.model.GoodsType;
 import org.microcol.model.Location;
@@ -20,12 +19,9 @@ import org.microcol.page.ColonyScreen;
 import org.microcol.page.DialogChooseGoodsAmount;
 import org.microcol.page.GamePage;
 import org.microcol.page.WelcomePage;
-import org.mockito.Mockito;
 import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
 import org.testfx.util.WaitForAsyncUtils;
-
-import com.google.inject.Binder;
 
 import javafx.stage.Stage;
 
@@ -36,14 +32,7 @@ public class TC_05_moving_goods_test extends AbstractMicroColTest {
 
     @Start
     private void start(final Stage primaryStage) throws Exception {
-	initialize(primaryStage, getClass());
-    }
-
-    @Override
-    protected void bind(final Binder binder) {
-	FileSelectingService fileSelectingService = Mockito.mock(FileSelectingService.class);
-	Mockito.when(fileSelectingService.loadFile(Mockito.any(File.class))).thenReturn(testFileName);
-	binder.bind(FileSelectingService.class).toInstance(fileSelectingService);
+	initialize(primaryStage, getClass(), testFileName);
     }
 
     @Test

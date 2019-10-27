@@ -74,9 +74,6 @@ final class PanelColonyStructures implements JavaFxComponent {
             .put(ConstructionType.LUMBER_MILL, new PanelConstructionProviderCarpenter("id_carpenter"))
             .put(ConstructionType.CARPENTERS_SHOP, new PanelConstructionProviderCarpenter("id_carpenter"))
             .put(ConstructionType.CARPENTERS_STAND, new PanelConstructionProviderCarpenter("id_carpenter"))
-            /*
-             * TODO following construction should be visible in colony
-             */
             // Dock
             .put(ConstructionType.SHIPYARD, new PanelConstructionProviderEmpty())
             .put(ConstructionType.DRYDOCK, new PanelConstructionProviderEmpty())

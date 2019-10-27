@@ -9,20 +9,16 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.microcol.gui.FileSelectingService;
 import org.microcol.gui.screen.setting.SettingLanguageView;
 import org.microcol.model.Location;
 import org.microcol.page.GamePage;
 import org.microcol.page.SettingPage;
 import org.microcol.page.WelcomePage;
-import org.mockito.Mockito;
 import org.testfx.api.FxAssert;
 import org.testfx.api.FxRobot;
 import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
 import org.testfx.service.query.EmptyNodeQueryException;
-
-import com.google.inject.Binder;
 
 import javafx.stage.Stage;
 
@@ -32,18 +28,11 @@ public class SimpleOperationsTest extends AbstractMicroColTest {
     private final static String BUTTON_SETTING_ID_NOT_EXISTING = "#buttonSetting-notExisting";
 
     private final static File verifyLoadingUnloading = new File(
-	    "src/test/scenarios/test-verify-loading-unloading.microcol");
+	    "src/test/scenarios/simple_operation_test.microcol");
 
     @Start
     void start(final Stage primaryStage) throws Exception {
-	initialize(primaryStage, getClass());
-    }
-
-    @Override
-    protected void bind(Binder binder) {
-	FileSelectingService fileSelectingService = Mockito.mock(FileSelectingService.class);
-	Mockito.when(fileSelectingService.loadFile(Mockito.any(File.class))).thenReturn(verifyLoadingUnloading);
-	binder.bind(FileSelectingService.class).toInstance(fileSelectingService);
+	initialize(primaryStage, getClass(),verifyLoadingUnloading);
     }
 
     @Tag("ci")

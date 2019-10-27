@@ -85,7 +85,7 @@
 		<profile>
 			<id>local</id>
 			<activation>
-				<activeByDefault>false</activeByDefault>
+				<activeByDefault>true</activeByDefault>
 			</activation>
 			<properties>
 				<testedTags>ci, local</testedTags>
@@ -136,6 +136,13 @@
 					<trimStackTrace>false</trimStackTrace>
 					<printSummary>true</printSummary>
 					<groups>${testedTags}</groups>
+					<includes>
+						<include>**/*_test.java</include>
+						<include>**/Test*.java</include>
+						<include>**/*Test.java</include>
+						<include>**/*Tests.java</include>
+						<include>**/*TestCase.java</include>
+					</includes>
 				</configuration>
 			</plugin>
 			<!-- disable maven site default generating -->

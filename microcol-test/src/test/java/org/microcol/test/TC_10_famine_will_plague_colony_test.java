@@ -8,17 +8,13 @@ import java.util.Optional;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.microcol.gui.FileSelectingService;
 import org.microcol.model.Location;
 import org.microcol.page.ColonyScreen;
-import org.microcol.page.ScreenTurnReport;
 import org.microcol.page.GamePage;
+import org.microcol.page.ScreenTurnReport;
 import org.microcol.page.WelcomePage;
-import org.mockito.Mockito;
 import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
-
-import com.google.inject.Binder;
 
 import javafx.stage.Stage;
 
@@ -29,14 +25,7 @@ public class TC_10_famine_will_plague_colony_test extends AbstractMicroColTest {
 
     @Start
     private void start(final Stage primaryStage) throws Exception {
-	initialize(primaryStage, this.getClass());
-    }
-
-    @Override
-    protected void bind(Binder binder) {
-	FileSelectingService fileSelectingService = Mockito.mock(FileSelectingService.class);
-	Mockito.when(fileSelectingService.loadFile(Mockito.any(File.class))).thenReturn(testFileName);
-	binder.bind(FileSelectingService.class).toInstance(fileSelectingService);
+	initialize(primaryStage, this.getClass(), testFileName);
     }
 
     @Test

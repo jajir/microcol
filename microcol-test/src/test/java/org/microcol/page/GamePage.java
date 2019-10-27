@@ -28,18 +28,22 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.VBox;
 
+/**
+ * Represents main game page with world map.
+ */
 public class GamePage extends AbstractScreen {
 
     private final Logger logger = LoggerFactory.getLogger(GamePage.class);
 
     public static GamePage of(final TestContext context) {
-	//TODO add validation that it's expected page.
 	return new GamePage(context);
     }
 
     private GamePage(final TestContext context) {
 	super(context);
 	WaitForAsyncUtils.waitForFxEvents();
+	// FIXME why it can't be called.
+	verifyThatStatusBarIsVisible();
     }
 
     public void moveMouseAtLocation(final Location location) {
@@ -66,6 +70,12 @@ public class GamePage extends AbstractScreen {
 	logger.info("Status bar: " + label.getText());
 	assertTrue(label.getText().contains(string), String.format(
 		"Text '%s' should appear in status bar. But status bar contains text '%s'.", string, label.getText()));
+    }
+
+    private void verifyThatStatusBarIsVisible() {
+	assertTrue(isCssIdVisible(StatusBarView.STATUS_BAR_LABEL_ID), String.format("Status bar is not visible."));
+	assertTrue(isCssIdVisible(ButtonsGamePanel.BUTTON_NEXT_TURN_ID),
+		String.format("Next turn button is not visible."));
     }
 
     public void verifyThatTileIsVisible(final Location location) {
