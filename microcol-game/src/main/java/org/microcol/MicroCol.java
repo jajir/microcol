@@ -1,13 +1,7 @@
 package org.microcol;
 
-import java.awt.Image;
-import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
-
-import javax.imageio.ImageIO;
 
 import org.microcol.gui.preferences.GamePreferences;
 import org.microcol.model.campaign.CampaignManager;
@@ -41,7 +35,6 @@ public final class MicroCol {
                 System.setProperty("com.apple.mrj.application.apple.menu.about.name", "MicroCol");
                 // set application name for openJDK
                 System.setProperty("apple.awt.application.name", "MicroCol");
-                setAppleDockIcon();
             }
             Application.launch(MicroColApplication.class, args);
         }
@@ -101,31 +94,6 @@ public final class MicroCol {
             campaignPref.removeNode();
             campaignPref.flush();
         });
-    }
-
-    /**
-     * Method try to set application icon. It use apple native classes. Because
-     * it should be compiled at windows platform apple specific classes are
-     * access by java reflection. For this reason is also exception sunk.
-     */
-    private static void setAppleDockIcon() {
-        try {
-            final Class<?> clazz = Class.forName("com.apple.eawt.Application", false, null);
-            if (clazz != null) {
-                Method m = clazz.getMethod("getApplication");
-                Object o = m.invoke(null);
-                Method m2 = clazz.getMethod("setDockIconImage", Image.class);
-                final ClassLoader cl = MicroCol.class.getClassLoader();
-                final Image i = ImageIO.read(cl.getResourceAsStream("images/splash-screen.png"));
-                m2.invoke(o, i);
-            }
-        } catch (IOException | ClassNotFoundException | NoSuchMethodException | SecurityException
-                | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-            /**
-             * intentionally do nothing.
-             */
-            e.printStackTrace();
-        }
     }
 
     /**

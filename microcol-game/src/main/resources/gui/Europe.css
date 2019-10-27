@@ -58,3 +58,8 @@
 	-fx-translate-y: 310;
 }
 
+.panelGoods{
+	-fx-max-width:50px;
+	-fx-min-width:50px;
+}
+

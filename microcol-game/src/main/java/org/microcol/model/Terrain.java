@@ -34,8 +34,8 @@ public class Terrain {
     private boolean hasField;
 
     /**
-     * List of function that based on terrain properties like trees and field modify
-     * particular good production.
+     * List of function that based on terrain properties like trees and field
+     * modify particular good production.
      */
     private final static List<Function<TerrainProduction, TerrainProduction>> PRODUCTION_MODIFIERS = Lists
             .newArrayList(prod -> {
@@ -81,8 +81,8 @@ public class Terrain {
     }
 
     /**
-     * Provide terrain type. Terrain type is basic type without production modifiers
-     * like trees or field.
+     * Provide terrain type. Terrain type is basic type without production
+     * modifiers like trees or field.
      *
      * @return Return terrain type.
      */
@@ -90,11 +90,19 @@ public class Terrain {
         return terrainType;
     }
 
+    public int getMoveCost() {
+        if (hasTrees) {
+            return terrainType.getMoveCostWithTree();
+        } else {
+            return terrainType.getMoveCost();
+        }
+    }
+
     /**
      * Provide information if there are trees.
      *
-     * @return If there are trees return <code>true</code> if there are not trees
-     *         than return <code>false</code>
+     * @return If there are trees return <code>true</code> if there are not
+     *         trees than return <code>false</code>
      */
     public boolean isHasTrees() {
         return hasTrees;
@@ -145,7 +153,8 @@ public class Terrain {
     /**
      * Get list of production for goods where total production is above 0.
      *
-     * @return Return list of produces goods and number of produced goods per turn.
+     * @return Return list of produces goods and number of produced goods per
+     *         turn.
      */
     public List<TerrainProduction> getProduction() {
         // NOTE Just good types produced on field could be filtered.
@@ -171,8 +180,8 @@ public class Terrain {
     /**
      * Provide information if there is field.
      *
-     * @return If there is field return <code>true</code> if there is not field than
-     *         return <code>false</code>
+     * @return If there is field return <code>true</code> if there is not field
+     *         than return <code>false</code>
      */
     public boolean isHasField() {
         return hasField;

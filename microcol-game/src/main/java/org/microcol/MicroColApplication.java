@@ -5,7 +5,10 @@ import org.microcol.gui.MainStageBuilder;
 import org.microcol.gui.MicroColModule;
 import org.microcol.gui.dialog.ApplicationController;
 import org.microcol.gui.image.ModuleImages;
+import org.microcol.gui.preferences.GamePreferences;
 import org.microcol.model.campaign.CampaignModule;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.Guice;
@@ -20,6 +23,8 @@ import javafx.stage.Stage;
  * JavaFX application is started by this class.
  */
 public final class MicroColApplication extends Application {
+
+    private final Logger logger = LoggerFactory.getLogger(getClass());
 
     private final Module overridenModule;
 
@@ -42,6 +47,16 @@ public final class MicroColApplication extends Application {
         Platform.runLater(() -> initializeMicrocol(primaryStage));
     }
 
+    private void setDevelopmentMode() {
+        final GamePreferences gamePreferences = injector.getInstance(GamePreferences.class);
+        if (gamePreferences.isDevelopment()) {
+            logger.info("Appliaction started in development mode.");
+            CSSFX.start();
+        } else {
+            logger.info("Appliaction started in production mode.");
+        }
+    }
+
     /**
      * Initialize guice, connect guice to primary stage and show first
      * application screen.
@@ -51,10 +66,11 @@ public final class MicroColApplication extends Application {
      */
     private void initializeMicrocol(final Stage primaryStage) {
         try {
-            CSSFX.start();
             injector = Guice.createInjector(com.google.inject.Stage.PRODUCTION,
                     new MicroColModule(), new ModuleImages(), new ExternalModule(primaryStage),
                     new CampaignModule(), overridenModule);
+            setDevelopmentMode();
+            
             final MainStageBuilder mainStageBuilder = injector.getInstance(MainStageBuilder.class);
             mainStageBuilder.buildPrimaryStage(primaryStage);
             final ApplicationController applicationController = injector

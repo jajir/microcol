@@ -50,5 +50,6 @@
 	<entry key="and">a</entry>
 	<entry key="withColony">kolonií</entry>
 	<entry key="adjustAmountOfGoods">Pro bližší úpravu množství přenášeného zboží podrž klávesu Control (nebo Ctrl) ⌃.</entry>
+	<entry key="moveCost">Pohyb: </entry>
 
 </properties>

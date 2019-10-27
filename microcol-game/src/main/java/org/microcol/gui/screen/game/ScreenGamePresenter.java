@@ -79,6 +79,7 @@ public class ScreenGamePresenter {
          */
         if (KeyCode.ENTER == event.getCode()) {
             onKeyPressed_enter();
+            return;
         }
 
         if (KeyCode.R == event.getCode()) {
@@ -101,6 +102,7 @@ public class ScreenGamePresenter {
         }
         if (KeyCode.M == event.getCode()) {
             eventBus.post(new StartMoveEvent());
+            return;
         }
         if (KeyCode.P == event.getCode()) {
             eventBus.post(new PlowFieldEvent());
@@ -113,6 +115,8 @@ public class ScreenGamePresenter {
         }
 
         wasdController.onKeyPressed(event);
+
+        gamePanelPresenter.quitFromMoveMode();
 
         logger.debug("Pressed key: '" + event.getCode().getName() + "' has code '"
                 + event.getCharacter() + "', modifiers '" + event.getCode().isModifierKey() + "'");

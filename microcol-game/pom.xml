@@ -68,7 +68,7 @@
 		<dependency>
 			<groupId>org.fxmisc.cssfx</groupId>
 			<artifactId>cssfx</artifactId>
-			<version>1.0.0</version>
+			<version>11.1.0</version>
 		</dependency>
 
 		<!-- Test scope -->

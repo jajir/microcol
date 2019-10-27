@@ -73,8 +73,9 @@ public final class GamePanelPresenter {
             final SelectedTileManager selectedTileManager, final ViewUtil viewUtil,
             final EventBus eventBus, final ModeController modeController,
             final SelectedUnitManager selectedUnitManager, final I18n i18n,
-            final @Named("game") VisibleAreaService visibleArea, final OneTurnMoveHighlighter oneTurnMoveHighlighter,
-            final UnitUtil unitUtil, final MoveModeController moveModeController) {
+            final @Named("game") VisibleAreaService visibleArea,
+            final OneTurnMoveHighlighter oneTurnMoveHighlighter, final UnitUtil unitUtil,
+            final MoveModeController moveModeController) {
         this.gameModelController = Preconditions.checkNotNull(gameModelController);
         this.gamePreferences = gamePreferences;
         this.gamePanelView = Preconditions.checkNotNull(gamePanelPainter);
@@ -143,6 +144,16 @@ public final class GamePanelPresenter {
         oneTurnMoveHighlighter.setLocations(unit.getAvailableLocations());
         logger.debug("Switching '" + unit + "' to go mode.");
         moveModeController.setMoveModeOn();
+    }
+
+    /**
+     * When move mode is enabled than it cancel it.
+     */
+    public void quitFromMoveMode() {
+        if (modeController.isMoveMode()) {
+            final Unit movingUnit = selectedUnitManager.getSelectedUnit().get();
+            disableMoveMode(movingUnit);
+        }
     }
 
     /**

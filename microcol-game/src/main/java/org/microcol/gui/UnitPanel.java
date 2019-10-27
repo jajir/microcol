@@ -93,7 +93,7 @@ class UnitPanel {
 
     private HBox makeGoodsPanel(final UnitWithCargo unit) {
         HBox box = new HBox();
-        box.getStylesheets().add(MainStageBuilder.STYLE_SHEET_RIGHT_PANEL_VIEW);
+        box.getStylesheets().add(MainStageBuilder.STYLE_SHEET_RIGHT_PANEL);
         if (unit.getCargo().isEmpty()) {
             box.getChildren().add(new Label(i18n.get(Loc.unitsPanel_empty)));
         } else {

@@ -66,7 +66,7 @@ public final class UnitsPanel {
             });
         }
         box.getChildren().add(new Label(""));
-        box.getStylesheets().add(MainStageBuilder.STYLE_SHEET_RIGHT_PANEL_VIEW);
+        box.getStylesheets().add(MainStageBuilder.STYLE_SHEET_RIGHT_PANEL);
     }
 
     public Node getNode() {

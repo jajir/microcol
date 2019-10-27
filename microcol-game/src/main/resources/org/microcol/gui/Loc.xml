@@ -50,5 +50,6 @@
 	<entry key="and">and</entry>
 	<entry key="withColony">with colony</entry>
 	<entry key="adjustAmountOfGoods">For adjusting amount of transfered goods press and hold key Control (or Ctrl) ⌃.</entry>
+	<entry key="moveCost">Move cost: </entry>
 
 </properties>

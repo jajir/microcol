@@ -27,7 +27,7 @@
   -fx-max-width: 280;
   -fx-pref-height: 50;
   -fx-max-height: 50;
-  -fx-translate-x: 250;
+  -fx-translate-x: 300;
   -fx-translate-y: -192;
   /* -fx-background-color: yellow; */
 }
@@ -46,8 +46,8 @@
   -fx-padding: 4 0 0 4;
   -fx-background-image: url("../images/colony-fields.png");
   -fx-background-repeat: no-repeat;
-  -fx-translate-x: 250;
-  -fx-translate-y: -80;
+  -fx-translate-x: 330;
+  -fx-translate-y: -70;
 }
 
 .panel-colony-goods {
@@ -120,12 +120,12 @@
   -fx-translate-y: 103;
 }
 
-#id_warehouse {
+#id_town_hall {
   -fx-translate-x: -150;
   -fx-translate-y: -145;
 }
 
-#id_town_hall {
+#id_warehouse {
   -fx-translate-x: -20;
   -fx-translate-y: -145;
 }

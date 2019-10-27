@@ -42,7 +42,6 @@ public class GamePage extends AbstractScreen {
     private GamePage(final TestContext context) {
 	super(context);
 	WaitForAsyncUtils.waitForFxEvents();
-	// FIXME why it can't be called.
 	verifyThatStatusBarIsVisible();
     }
 

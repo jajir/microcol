@@ -104,8 +104,6 @@ abstract class AbstractPanelConstructionWithSlots extends AbstractPanelConstruct
 
             final HBox box = new HBox();
             box.getStyleClass().add("production");
-            // TODO make box separate component
-            // TODO add mouse over status bar description
 
             if (goodsStats.getNetProduction() != 0) {
                 final Label label = new Label("+" + goodsStats.getNetProduction());

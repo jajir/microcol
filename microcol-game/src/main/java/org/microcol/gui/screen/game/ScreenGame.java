@@ -16,11 +16,9 @@ import com.google.inject.Singleton;
 import com.google.inject.name.Named;
 
 import javafx.event.EventHandler;
-import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -48,11 +46,6 @@ public class ScreenGame implements GameScreen {
         this.rightPanel = Preconditions.checkNotNull(rightPanel);
         this.gamePanelComponents = Preconditions.checkNotNull(gamePanelComponents);
         this.statusBar.setShowEventsFromSource(Source.GAME);
-
-        final Pane rightPane = new Pane();
-        rightPane.setId("rightPanel");
-        final Label l2 = new Label("blue right panel");
-        rightPane.getChildren().add(l2);
 
         final HBox hBox = new HBox();
         hBox.setId("mainBox");
