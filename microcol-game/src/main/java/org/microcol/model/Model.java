@@ -261,7 +261,7 @@ public class Model {
                 unit -> new Cargo(unit, UnitType.COLONIST.getCargoCapacity()), this,
                 unit -> new PlaceCargoSlot(unit, cargoSlot), UnitType.COLONIST, king,
                 UnitType.COLONIST.getSpeed(), new UnitActionNoAction());
-        cargoSlot.unsafeStore(out.getPlaceCargoSlot());
+        cargoSlot.store(out.getPlaceCargoSlot());
         return out;
     }
 

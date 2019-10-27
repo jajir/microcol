@@ -118,7 +118,7 @@ public final class PlaceBuilderPo implements Function<Unit, Place> {
             final UnitWithCargo holdingUnit = getHoldingUnit(holdingUnitPo);
             final CargoSlot cargoSlot = holdingUnit.getCargo().getSlotByIndex(slotIndex);
             final PlaceCargoSlot placeCargoSlot = new PlaceCargoSlot(unit, cargoSlot);
-            cargoSlot.unsafeStore(placeCargoSlot);
+            cargoSlot.store(placeCargoSlot);
             return placeCargoSlot;
         }
         return null;

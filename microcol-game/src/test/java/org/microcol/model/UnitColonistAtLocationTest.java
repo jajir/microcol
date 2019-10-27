@@ -29,12 +29,7 @@ public class UnitColonistAtLocationTest extends AbstractUnitFreeColonistTest {
     public void testPlaceAtMap() throws Exception {
         makeColonist(model, 23, placeLocation, owner, 1);
         
-        final IllegalStateException exception = assertThrows(IllegalStateException.class, ()->{
-            unit.disembark(Location.of(12, 12));
-        });
-        
-        assertTrue(exception.getMessage().contains("can't be unload, it's not stored."),
-                String.format("Invalid exception message '%s'.", exception.getMessage()));
+        assertTrue(unit.isAtPlaceLocation());
     }
 
     @Test

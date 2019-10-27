@@ -119,36 +119,6 @@ public class CargoSlot {
     }
 
     /**
-     * This method doesn's store store unit and
-     * 
-     * @param unit
-     */
-    @Deprecated
-    void unsafeStore(final PlaceCargoSlot unit) {
-        cargoUnit = unit;
-    }
-
-    /**
-     * Allows to embark unit from place location to cargo store. It command move
-     * animation and than embark unit.
-     *
-     * @param unit
-     *            required unit
-     */
-    public void embark(final Unit unit) {
-        Preconditions.checkNotNull(unit);
-        Preconditions.checkState(isEmpty(), "Cargo slot (%s) is already loaded.", this);
-        Preconditions.checkState(getOwnerUnit().getOwner().equals(unit.getOwner()),
-                "Owners must be same (%s - %s).", getOwnerUnit().getOwner(), unit.getOwner());
-
-        Preconditions.checkArgument(unit.isAtPlaceLocation(), "Unit have to be placed at map.");
-        cargoUnit = new PlaceCargoSlot(unit, this);
-        unit.embark(cargoUnit);
-        //FIXME method is same as store.
-        //FIXME it's not atomic, unit.embark(cargoUnit) throws exception and state will be inconsistent.
-    }
-
-    /**
      * This simply put some other unit to cargo store. It should not be used for
      * unit at map.
      *
@@ -164,6 +134,23 @@ public class CargoSlot {
         final PlaceCargoSlot tmp = new PlaceCargoSlot(unit, this);
         unit.placeToCargoSlot(tmp);
         cargoUnit = tmp;
+    }
+
+    /**
+     * This simply put some other unit to cargo store. It should not be used for
+     * unit at map.
+     *
+     * @param placeCargoSlot
+     *            required place describing relation to unit
+     */
+    public void store(final PlaceCargoSlot placeCargoSlot) {
+        Preconditions.checkNotNull(placeCargoSlot);
+        Preconditions.checkState(isEmpty(), "Cargo slot (%s) is already loaded.", this);
+        final Unit unit = placeCargoSlot.getUnit();
+        Preconditions.checkState(getOwnerUnit().getOwner().equals(unit.getOwner()),
+                "Owners must be same (%s - %s).", getOwnerUnit().getOwner(), unit.getOwner());
+
+        cargoUnit = placeCargoSlot;
     }
 
     /**
@@ -348,21 +335,6 @@ public class CargoSlot {
         } else {
             cargoGoods = cargoGoods.add(goods);
         }
-    }
-
-    public Unit disembark(final Location targetLocation) {
-        Preconditions.checkNotNull(targetLocation);
-        Preconditions.checkState(!isEmpty(), "Cargo slot (%s) is empty.", this);
-        Preconditions.checkState(isLoadedUnit(), "Cargo slot (%s) doesn't contains unit.", this);
-        Preconditions.checkArgument(cargo.getOwner().getLocation().isNeighbor(targetLocation),
-                "Unit (%s) can't unload at location (%s), it's too far", cargo.getOwner(),
-                targetLocation);
-
-        final Unit unit = cargoUnit.getUnit();
-        unit.disembark(targetLocation);
-        cargoUnit = null;
-
-        return unit;
     }
 
     @Override

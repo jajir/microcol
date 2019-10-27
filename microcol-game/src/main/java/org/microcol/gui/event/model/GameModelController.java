@@ -153,15 +153,16 @@ public class GameModelController {
     public void disembark(final UnitWithCargo movingUnit, final Location targetLocation) {
         new Thread(() -> {
             movingUnit.getCargo().getSlots().stream()
-                    .filter(cargoSlot -> cargoSlot.isLoadedUnit()
-                            && cargoSlot.getUnit().get().getActionPoints() > 0)
-                    .forEach(cargoSlot -> cargoSlot.disembark(targetLocation));
+                    .filter(cargoSlot -> cargoSlot.isLoadedUnit())
+                    .map(cargoSlot -> cargoSlot.getUnit().get())
+                    .filter(unit -> unit.getActionPoints() > 0)
+                    .forEach(unit -> unit.disembarkToLocation(targetLocation));
         }).start();
     }
 
     public void embark(final CargoSlot cargoSlot, final Unit unit) {
         new Thread(() -> {
-            cargoSlot.embark(unit);
+            unit.embarkFromLocation(cargoSlot);
         }).start();
     }
 

@@ -648,11 +648,6 @@ public class CargoSlotTest {
         assertEquals("Attempt to move cargo to slot occupied with unit.", ret.getMessage());
     }
 
-    @Test
-    public void test_embark_unit_is_null() throws Exception {
-        assertThrows(NullPointerException.class, () -> slot.embark(null));
-    }
-
     private void loadUnit(final Unit unit) {
         when(cargo.getOwner()).thenReturn(ownerUnit);
         when(ownerUnit.getOwner()).thenReturn(player);
