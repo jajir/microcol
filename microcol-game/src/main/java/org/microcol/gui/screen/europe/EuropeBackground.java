@@ -1,5 +1,6 @@
 package org.microcol.gui.screen.europe;
 
+import org.microcol.gui.ColorScheme;
 import org.microcol.gui.GuiColors;
 import org.microcol.gui.Point;
 import org.microcol.gui.background.AbstractBackground;
@@ -35,14 +36,15 @@ public class EuropeBackground extends AbstractBackground {
     private final ImageStripePainter rightImageStripePainter;
 
     @Inject
-    public EuropeBackground(final ImageProvider imageProvider) {
+    public EuropeBackground(final ImageProvider imageProvider, final ColorScheme colorScheme) {
         imageLeft = Preconditions.checkNotNull(imageProvider.getImage(IMG_LEFT));
         imageRight = Preconditions.checkNotNull(imageProvider.getImage(IMG_RIGHT));
         imageCenter = Preconditions.checkNotNull(imageProvider.getImage(IMG_CENTER));
         final ThreeStripesPref pref = ThreeStripesPref.build()
-                .setTopStripe(StripeDef.of(-280, GuiColors.SKY))
-                .setCenterStripe(StripeDef.of(30, GuiColors.OCEAN))
-                .setBottomStripe(StripeDef.of(290, GuiColors.GROUND)).setCenterStripeHeight(460)
+                .setTopStripe(StripeDef.of(-280, colorScheme.getColor(GuiColors.SKY_1)))
+                .setCenterStripe(StripeDef.of(30, colorScheme.getColor(GuiColors.SEA_1)))
+                .setBottomStripe(StripeDef.of(290, colorScheme.getColor(GuiColors.DIRT_1)))
+                .setCenterStripeHeight(460)
                 .make();
         this.threeStripesPainter = new ThreeStripesPainter(pref);
 

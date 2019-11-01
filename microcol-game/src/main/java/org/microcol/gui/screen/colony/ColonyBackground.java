@@ -1,5 +1,6 @@
 package org.microcol.gui.screen.colony;
 
+import org.microcol.gui.ColorScheme;
 import org.microcol.gui.GuiColors;
 import org.microcol.gui.Point;
 import org.microcol.gui.background.AbstractBackground;
@@ -38,15 +39,16 @@ class ColonyBackground extends AbstractBackground {
     private final ImageStripePainter bottomImageStripePainter;
 
     @Inject
-    public ColonyBackground(final ImageProvider imageProvider) {
+    public ColonyBackground(final ImageProvider imageProvider, final ColorScheme colorScheme) {
         imageTop1 = Preconditions.checkNotNull(imageProvider.getImage(IMG_TOP1));
         imageTop2 = Preconditions.checkNotNull(imageProvider.getImage(IMG_TOP2));
         imageBottom = Preconditions.checkNotNull(imageProvider.getImage(IMG_BOTTOM));
         imageCenter = Preconditions.checkNotNull(imageProvider.getImage(IMG_CENTER));
         final ThreeStripesPref pref = ThreeStripesPref.build()
-                .setTopStripe(StripeDef.of(-290, GuiColors.SKY))
-                .setCenterStripe(StripeDef.of(80, GuiColors.GRASS))
-                .setBottomStripe(StripeDef.of(300, GuiColors.GROUND)).setCenterStripeHeight(420)
+                .setTopStripe(StripeDef.of(-290, colorScheme.getColor(GuiColors.SKY_1)))
+                .setCenterStripe(StripeDef.of(80, colorScheme.getColor(GuiColors.GRASS_1)))
+                .setBottomStripe(StripeDef.of(300, colorScheme.getColor(GuiColors.DIRT_1)))
+                .setCenterStripeHeight(420)
                 .make();
         this.threeStripesPainter = new ThreeStripesPainter(pref);
 

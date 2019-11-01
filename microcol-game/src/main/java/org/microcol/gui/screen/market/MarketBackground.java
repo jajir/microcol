@@ -1,5 +1,6 @@
 package org.microcol.gui.screen.market;
 
+import org.microcol.gui.ColorScheme;
 import org.microcol.gui.GuiColors;
 import org.microcol.gui.Point;
 import org.microcol.gui.background.AbstractAnimatedBackground;
@@ -32,32 +33,36 @@ class MarketBackground extends AbstractAnimatedBackground {
 
     private final ThreeStripesPainter threeStripesPainter;
 
-    private final ImageStripePainter topImageStripePainter;
+    private final ImageStripePainter leftImageStripePainter;
 
-    private final ImageStripePainter bottomImageStripePainter;
+    private final ImageStripePainter rightImageStripePainter;
 
     @Inject
-    MarketBackground(final ImageProvider imageProvider) {
+    MarketBackground(final ImageProvider imageProvider, final ColorScheme colorScheme) {
         imageTop = Preconditions.checkNotNull(imageProvider.getImage(IMG_TOP));
         imageBottom = Preconditions.checkNotNull(imageProvider.getImage(IMG_BOTTOM));
         imageCenter = Preconditions.checkNotNull(imageProvider.getImage(ImageLoaderExtra.IMG_MARKET));
         final ThreeStripesPref pref = ThreeStripesPref.build()
-                .setTopStripe(StripeDef.of(-215, GuiColors.SKY))
-                .setCenterStripe(StripeDef.of(-130, GuiColors.OCEAN))
-                .setBottomStripe(StripeDef.of(-50, GuiColors.GRASS))
+                .setTopStripe(StripeDef.of(-215, colorScheme.getColor(GuiColors.SKY_1)))
+                .setCenterStripe(StripeDef.of(-130, colorScheme.getColor(GuiColors.SEA_1)))
+                .setBottomStripe(StripeDef.of(-50, colorScheme.getColor(GuiColors.GRASS_1)))
                 .setCenterStripeHeight(150)
                 .make();
         this.threeStripesPainter = new ThreeStripesPainter(pref);
 
         final Point centerImageSize = Point.of(imageCenter.getWidth(), imageCenter.getHeight());
-        topImageStripePainter = new ImageStripePainter(ImageStripePref.build().setImage(imageTop)
-                .setCenterGap(centerImageSize.getX() - 10).setVerticalShift(-265).make());
-        bottomImageStripePainter = new ImageStripePainter(
+        leftImageStripePainter = new ImageStripePainter(
+                ImageStripePref.build()
+                    .setImage(imageTop)
+                    .setCenterGap(centerImageSize.getX() - 10)
+                    .setVerticalShift(-299)
+                    .make());
+        rightImageStripePainter = new ImageStripePainter(
                 ImageStripePref
                         .build()
                         .setImage(imageBottom)
                         .setCenterGap(centerImageSize.getX() - 10)
-                        .setVerticalShift(-90)
+                        .setVerticalShift(-299)
                         .make());
     }
 
@@ -70,8 +75,8 @@ class MarketBackground extends AbstractAnimatedBackground {
         final Point centerImageSize = Point.of(imageCenter.getWidth(), imageCenter.getHeight());
         paintBackground(gc, canvasSize, Color.WHITE);
         threeStripesPainter.paint(gc, canvasSize);
-        topImageStripePainter.paint(gc, canvasSize);
-        bottomImageStripePainter.paint(gc, canvasSize);
+        leftImageStripePainter.paintLeft(gc, canvasSize);
+        rightImageStripePainter.paintRight(gc, canvasSize);
         final Point diff = canvasSize.substract(centerImageSize).divide(2);
         gc.drawImage(imageCenter, diff.getX(), diff.getY());
     }
