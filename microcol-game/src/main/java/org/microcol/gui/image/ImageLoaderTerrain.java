@@ -11,7 +11,7 @@ public final class ImageLoaderTerrain extends AbstractTiledImageLoader {
     /**
      * Name of real png file where are terrain file stored.
      */
-    public final static String BACKGROUND_IMAGE_NAME = "backgroud.png";
+    public final static String BACKGROUND_IMAGE_NAME = "background.png";
 
     public static final String IMG_TILE_OCEAN_1 = "tile-ocean-1.png";
 
