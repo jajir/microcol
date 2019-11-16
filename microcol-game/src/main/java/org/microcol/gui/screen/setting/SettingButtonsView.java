@@ -19,7 +19,7 @@ import javafx.scene.layout.VBox;
 public class SettingButtonsView implements JavaFxComponent, UpdatableLanguage {
 
     public static final String BUTTON_BACK_ID = "buttonBack";
-    
+
     private final Logger logger = LoggerFactory.getLogger(SettingButtonsView.class);
 
     private final Button buttonBack;
@@ -31,18 +31,21 @@ public class SettingButtonsView implements JavaFxComponent, UpdatableLanguage {
     private final SettingShowFightAdvisorView settingShowFightAdvisorView;
     private final SettingVolumeView settingVolumeView;
     private final SettingAnimationSpeedView settingAnimationSpeedView;
+    private final SettingVersionView settingVersionView;
 
     @Inject
     SettingButtonsView(final SettingLanguageView settingLanguageView,
             final SettingShowGridView settingShowGridView,
             final SettingShowFightAdvisorView settingShowFightAdvisorView,
             final SettingVolumeView settingVolumeView,
-            final SettingAnimationSpeedView settingAnimationSpeedView, final I18n i18n) {
+            final SettingAnimationSpeedView settingAnimationSpeedView,
+            final SettingVersionView settingVersionView, final I18n i18n) {
         this.settingLanguageView = Preconditions.checkNotNull(settingLanguageView);
         this.settingShowGridView = Preconditions.checkNotNull(settingShowGridView);
         this.settingShowFightAdvisorView = Preconditions.checkNotNull(settingShowFightAdvisorView);
         this.settingVolumeView = Preconditions.checkNotNull(settingVolumeView);
         this.settingAnimationSpeedView = Preconditions.checkNotNull(settingAnimationSpeedView);
+        this.settingVersionView = Preconditions.checkNotNull(settingVersionView);
 
         buttonBack = new Button();
         buttonBack.setId(BUTTON_BACK_ID);
@@ -54,6 +57,7 @@ public class SettingButtonsView implements JavaFxComponent, UpdatableLanguage {
         buttonsBox.getChildren().add(settingShowFightAdvisorView.getContent());
         buttonsBox.getChildren().add(settingVolumeView.getContent());
         buttonsBox.getChildren().add(settingAnimationSpeedView.getContent());
+        buttonsBox.getChildren().add(settingVersionView.getContent());
         buttonsBox.getChildren().add(buttonBack);
 
         updateLanguage(i18n);
@@ -73,6 +77,7 @@ public class SettingButtonsView implements JavaFxComponent, UpdatableLanguage {
         this.settingShowFightAdvisorView.updateLanguage(i18n);
         this.settingVolumeView.updateLanguage(i18n);
         this.settingAnimationSpeedView.updateLanguage(i18n);
+        this.settingVersionView.updateLanguage(i18n);
     }
 
     /**

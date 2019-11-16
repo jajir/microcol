@@ -26,6 +26,7 @@
 	<entry key="settingLanguageEn">English</entry>
 	<entry key="settingShowGrid">Show Grid</entry>
 	<entry key="settingShowFightAdvisor">Use Fight Advisor</entry>
+	<entry key="settingVersion">Version: </entry>
 	
 	<entry key="campaignPanelButtonBack">Back</entry>
 	<entry key="campaignPanel_default_findNewWorld">New World</entry>

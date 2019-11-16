@@ -120,6 +120,22 @@
 	</profiles>
 
 	<build>
+		<resources>
+			<!-- Enable filtering just for one file. Filtering corrupt files like 
+				fonts. It allows to use maven constants. It have to be enabled just for specific 
+				file. -->
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>false</filtering>
+			</resource>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+				<includes>
+					<include>version.properties</include>
+				</includes>
+			</resource>
+		</resources>
 		<pluginManagement>
 			<plugins>
 				<plugin>

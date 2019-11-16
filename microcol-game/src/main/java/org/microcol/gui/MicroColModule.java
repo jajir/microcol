@@ -1,14 +1,12 @@
 package org.microcol.gui;
 
 import org.microcol.gui.buttonpanel.NextTurnListener;
-import org.microcol.gui.dialog.AboutDialog;
 import org.microcol.gui.dialog.ApplicationController;
 import org.microcol.gui.dialog.ChooseGoodsDialog;
 import org.microcol.gui.dialog.DialogDestroyColony;
 import org.microcol.gui.dialog.DialogFight;
 import org.microcol.gui.dialog.DialogMessage;
 import org.microcol.gui.dialog.PersistingService;
-import org.microcol.gui.event.AboutGameListenerImpl;
 import org.microcol.gui.event.BuildColonyListener;
 import org.microcol.gui.event.ChangeLanguageListenerFileChooser;
 import org.microcol.gui.event.ChangeLanguageListenerPreferences;
@@ -29,7 +27,6 @@ import org.microcol.gui.screen.colonizopedia.ColonizopediaDialog;
 import org.microcol.gui.screen.colony.ColonyDialogCallback;
 import org.microcol.gui.screen.colony.ColonyPanel;
 import org.microcol.gui.screen.colony.PanelColonyDockBehaviour;
-import org.microcol.gui.screen.colony.PanelColonyGoods;
 import org.microcol.gui.screen.colony.ScreenColonyPresenter;
 import org.microcol.gui.screen.colony.buildingqueue.QueueController;
 import org.microcol.gui.screen.colony.buildingqueue.QueueDialog;
@@ -86,7 +83,6 @@ import org.microcol.gui.screen.setting.SettingVolumePresenter;
 import org.microcol.gui.screen.statistics.ScreenStatisticsPresenter;
 import org.microcol.gui.screen.turnreport.ScreenTurnReportPresenter;
 import org.microcol.gui.screen.turnreport.ShowTurnEvensOnTurnStartedEvent;
-import org.microcol.gui.util.ApplicationInfo;
 import org.microcol.gui.util.FontService;
 import org.microcol.gui.util.Listener;
 import org.microcol.gui.util.PaintService;
@@ -131,7 +127,6 @@ public final class MicroColModule extends AbstractModule {
         bind(AnimationManager.class).in(Singleton.class);
         bind(ScrollingManager.class).in(Singleton.class);
         bind(FontService.class).asEagerSingleton();
-        bind(ApplicationInfo.class).in(Singleton.class);
 
         /**
          * PanelButtons
@@ -143,7 +138,6 @@ public final class MicroColModule extends AbstractModule {
         /**
          * Dialogs
          */
-        bind(AboutDialog.class).in(Singleton.class);
         bind(DialogDestroyColony.class).in(Singleton.class);
         bind(ChooseGoodsDialog.class).in(Singleton.class);
         bind(DialogMessage.class).in(Singleton.class);
@@ -268,7 +262,6 @@ public final class MicroColModule extends AbstractModule {
         /**
          * Load events manually
          */
-        bind(AboutGameListenerImpl.class).asEagerSingleton();
         bind(ChangeLanguageListenerPreferences.class).asEagerSingleton();
         bind(ChangeLanguageListenerFileChooser.class).asEagerSingleton();
         bind(ShowGridListenerPreferences.class).asEagerSingleton();
