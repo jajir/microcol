@@ -2,7 +2,6 @@ package org.microcol.gui.screen.turnreport;
 
 import org.microcol.gui.screen.AbstractScreenMenu;
 import org.microcol.gui.screen.GameScreen;
-import org.microcol.gui.screen.menu.ScreenMenu;
 import org.microcol.i18n.I18n;
 
 import com.google.common.base.Preconditions;
@@ -21,7 +20,7 @@ public class ScreenTurnReport extends AbstractScreenMenu implements GameScreen {
 
     private final TurnReportView turnReportView;
 
-    public static final String STYLE_SHEET_TURN_REPORT = ScreenMenu.class
+    public static final String STYLE_SHEET_TURN_REPORT = ScreenTurnReport.class
             .getResource("/gui/TurnReport.css").toExternalForm();
 
     @Inject

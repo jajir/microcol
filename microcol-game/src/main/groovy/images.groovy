@@ -26,7 +26,8 @@ def colors = readColors(conf.baseDir + "main/resources/colors.properties")
 //europe(conf, colors)
 //market(conf, colors)
 //background(conf, colors)
-cursors(conf, colors)
+//cursors(conf, colors)
+bullet(conf, colors)
 
 //Sunset
 def sunset(conf, colors) {
@@ -127,6 +128,18 @@ def cursors(conf, colors) {
         cut(conf.destiny + "cursors.png", conf.destiny + "icon-steps-turn-25x25.png", 25, 25, 2, 32 )
         cut(conf.destiny + "cursors.png", conf.destiny + "icon-steps-anchor-25x25.png", 25, 25, 2, 62 )
         cut(conf.destiny + "cursors.png", conf.destiny + "icon-steps-anchor-turn-25x25.png", 25, 25, 2, 62 )
+}
+
+//Bulet
+def bullet(conf, colors) {
+        copyFile(conf.filePath("bullet.svg"),conf.tmp + "bullet.svg")
+        colorReplacer(conf.tmp + "bullet.svg", colors)
+        export(conf, new Request(
+                sourceFileName:conf.tmp + "bullet.svg",
+                exportFileName:conf.destiny + "bullet.png",
+                exportArea:"0:0:50:50",
+                exportWidth:15,
+                exportHeight:15))
 }
 
 

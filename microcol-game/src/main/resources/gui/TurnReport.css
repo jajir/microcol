@@ -18,9 +18,22 @@
 	-fx-padding: 10;
 }
 
-.turnEventPanel .label{
+.turnEventPanel .label {
 	-fx-max-width: 420;
 	-fx-wrap-text: true;
+}
+
+.turn-event {
+	-fx-translate-x: 15;
+	-fx-padding: 5 0 5 0;
+}
+
+.turn-event .bullet{
+	-fx-min-width: 20;
+	-fx-min-height: 20;
+	-fx-translate-y: 5;
+	-fx-background-image: url('../images/bullet.png');
+	-fx-background-repeat: no-repeat;
 }
 
 #buttonPane {
