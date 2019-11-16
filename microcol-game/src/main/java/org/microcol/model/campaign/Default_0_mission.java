@@ -68,7 +68,7 @@ final class Default_0_mission extends AbstractMission<Default_0_goals> {
 
     public void onUnitMoveFinished(final UnitMoveFinishedEvent event) {
         if (isFirstTurn(event.getModel()) && event.getUnit().getActionPoints() == 0) {
-            fireEvent(new EventShowMessages(Missions.default_m0_pressNextTurn));
+            fireEvent(new EventShowDialogWithMan(Missions.default_m0_pressNextTurn));
         } else {
             if (!getGoals().getGoalFindNewWorld().isFinished()) {
                 final ContinentTool ct = new ContinentTool();
@@ -78,7 +78,7 @@ final class Default_0_mission extends AbstractMission<Default_0_goals> {
                         () -> new MicroColException("Continent is not at expected location"));
                 if (event.getUnit().isAtPlaceLocation()
                         && c.getDistance(event.getUnit().getLocation()) < 4) {
-                    fireEvent(new EventShowMessages(Missions.default_m0_continentInSight));
+                    fireEvent(new EventShowDialogWithMan(Missions.default_m0_continentInSight));
                     getGoals().getGoalFindNewWorld().setFinished(true);
                 }
             }
@@ -90,7 +90,7 @@ final class Default_0_mission extends AbstractMission<Default_0_goals> {
             final Player human = getHumanPlayer(getModel());
             final Unit ship = findFirstShip(getModel(), human);
             if (ship.getActionPoints() == ship.getSpeed()) {
-                fireEvent(new EventShowMessages(Missions.default_m0_moveUnitBeforeEndTurn));
+                fireEvent(new EventShowDialogWithMan(Missions.default_m0_moveUnitBeforeEndTurn));
             }
         }
     }
@@ -103,7 +103,7 @@ final class Default_0_mission extends AbstractMission<Default_0_goals> {
                 final Player human = getHumanPlayer(getModel());
                 if (human.getPlayerStatistics().getGoodsStatistics()
                         .getGoods(GoodsType.CIGARS) >= TRAGET_AMOUNT_OF_CIGARS) {
-                    fireEvent(new EventShowMessages(Missions.default_m0_sellCigarsInEuropePort));
+                    fireEvent(new EventShowDialogWithMan(Missions.default_m0_sellCigarsInEuropePort));
                     getGoals().getGoalProduceCigars().setFinished(true);
                 }
 
@@ -118,14 +118,14 @@ final class Default_0_mission extends AbstractMission<Default_0_goals> {
         }
         if (getGoals().getGoalSellCigars().getWasSold() >= TRAGET_AMOUNT_OF_CIGARS) {
             getGoals().getGoalSellCigars().setFinished(true);
-            fireEvent(new EventShowMessages(Missions.default_m0_cigarsWasSold));
+            fireEvent(new EventShowDialogWithMan(Missions.default_m0_cigarsWasSold));
         }
     }
 
     public void onColonyWasFounded(final ColonyWasFoundEvent event) {
         if (isPlayerHaveAnyColony(event.getModel())) {
             getGoals().getGoalFoundColony().setFinished(true);
-            fireEvent(new EventShowMessages(Missions.default_m0_firstColonyWasFounded,
+            fireEvent(new EventShowDialogWithMan(Missions.default_m0_firstColonyWasFounded,
                     Missions.default_m0_produce100cigars));
         }
     }

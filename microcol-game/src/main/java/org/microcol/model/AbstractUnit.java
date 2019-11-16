@@ -438,7 +438,7 @@ public abstract class AbstractUnit implements Unit {
                 moveTo);
         Preconditions.checkArgument(isPossibleToMoveAt(moveTo),
                 "It's not possible to move at (%s).", moveTo);
-        Preconditions.checkState(actionPoints > 0, "There is not enough avilable moves (%s)", this);
+        Preconditions.checkState(actionPoints > 0, "There is not enough available action points (%s)", this);
 
         actionPoints--;
         final TerrainType targetTerrain = model.getMap().getTerrainTypeAt(moveTo);

@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 
 import org.microcol.gui.Point;
 import org.microcol.gui.StepCounter;
+import org.microcol.gui.Tile;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.image.ImageLoaderTerrain;
 import org.microcol.gui.image.ImageProvider;
@@ -36,6 +37,11 @@ import javafx.scene.paint.Color;
  */
 @Singleton
 final class GamePaintService {
+
+    private final static Point STEP_ICON_SIXE = Point.of(25, 25);
+
+    private final static Point STEP_ICON_POSITION = Tile.TILE_SIZE.substract(STEP_ICON_SIXE)
+            .divide(2);
 
     private final ImageProvider imageProvider;
 
@@ -216,7 +222,8 @@ final class GamePaintService {
             final StepCounter stepCounter, final MoveMode moveMode) {
         final Image image = imageProvider
                 .getImage(moveMode.getImageForStep(stepCounter.canMakeMoveInSameTurn(1)));
-        graphics.drawImage(image, point.getX(), point.getY());
+        graphics.drawImage(image, point.getX() + STEP_ICON_POSITION.getX(),
+                point.getY() + STEP_ICON_POSITION.getY());
     }
 
 }

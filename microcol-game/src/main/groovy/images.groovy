@@ -22,10 +22,11 @@ def conf = new Conf(
 def colors = readColors(conf.baseDir + "main/resources/colors.properties")
 
 //sunset(conf, colors)
-colony(conf, colors)
+//colony(conf, colors)
 //europe(conf, colors)
 //market(conf, colors)
 //background(conf, colors)
+cursors(conf, colors)
 
 //Sunset
 def sunset(conf, colors) {
@@ -44,17 +45,17 @@ def sunset(conf, colors) {
 
 //Colony
 def colony(conf, colors) {
-	copyFile(conf.filePath("colony-background.svg"),conf.tmp + "colony-background.svg")
-	colorReplacer(conf.tmp + "colony-background.svg", colors)
-	export(conf, new Request(
-		sourceFileName:conf.tmp + "colony-background.svg",
-		exportFileName:conf.destiny + "colony.png",
-		exportArea:"-635:-292:1327:1611",
-		exportWidth:780,
-		exportHeight:758))
-	cut(conf.destiny + "colony.png", conf.destiny + "colony-top1.png", 65, 203, 20, 74 )
-	cut(conf.destiny + "colony.png", conf.destiny + "colony-top2.png", 85, 190, 685, 82 )
-	cut(conf.destiny + "colony.png", conf.destiny + "colony-bottom.png", 71, 62, 2, 645 )
+        copyFile(conf.filePath("colony-background.svg"),conf.tmp + "colony-background.svg")
+        colorReplacer(conf.tmp + "colony-background.svg", colors)
+        export(conf, new Request(
+                sourceFileName:conf.tmp + "colony-background.svg",
+                exportFileName:conf.destiny + "colony.png",
+                exportArea:"-635:-292:1327:1611",
+                exportWidth:780,
+                exportHeight:758))
+        cut(conf.destiny + "colony.png", conf.destiny + "colony-top1.png", 65, 203, 20, 74 )
+        cut(conf.destiny + "colony.png", conf.destiny + "colony-top2.png", 85, 190, 685, 82 )
+        cut(conf.destiny + "colony.png", conf.destiny + "colony-bottom.png", 71, 62, 2, 645 )
 }
 
 //Europe
@@ -95,6 +96,37 @@ def background(conf, colors) {
 		exportArea:"0:0:720:480",
 		exportWidth:648,
 		exportHeight:432))
+}
+
+//Crates
+def crates(conf, colors) {
+        copyFile(conf.filePath("crates.svg"),conf.tmp + "crates.svg")
+        colorReplacer(conf.tmp + "crates.svg", colors)
+        export(conf, new Request(
+                sourceFileName:conf.tmp + "crates.svg",
+                exportFileName:conf.destiny + "crates.png",
+                exportArea:"0:0:125:250",
+                exportWidth:200,
+                exportHeight:400))
+        cut(conf.destiny + "crates.png", conf.destiny + "crate-closed.png", 200, 200, 0, 0 )
+        cut(conf.destiny + "crates.png", conf.destiny + "crate-open.png", 200, 200, 0, 200 )
+}
+
+//Cursors
+def cursors(conf, colors) {
+        copyFile(conf.filePath("cursors.svg"),conf.tmp + "cursors.svg")
+        colorReplacer(conf.tmp + "cursors.svg", colors)
+        export(conf, new Request(
+                sourceFileName:conf.tmp + "cursors.svg",
+                exportFileName:conf.destiny + "cursors.png",
+                exportArea:"0:0:100:300",
+                exportWidth:30,
+                exportHeight:90))
+        cut(conf.destiny + "cursors.png", conf.destiny + "cursor-goto.png", 30, 30, 0, 0 )
+        cut(conf.destiny + "cursors.png", conf.destiny + "icon-steps-25x25.png", 25, 25, 2, 32 )
+        cut(conf.destiny + "cursors.png", conf.destiny + "icon-steps-turn-25x25.png", 25, 25, 2, 32 )
+        cut(conf.destiny + "cursors.png", conf.destiny + "icon-steps-anchor-25x25.png", 25, 25, 2, 62 )
+        cut(conf.destiny + "cursors.png", conf.destiny + "icon-steps-anchor-turn-25x25.png", 25, 25, 2, 62 )
 }
 
 

@@ -12,11 +12,11 @@
 	<comment>Define messages for missions.</comment>
 
 
-	<entry key="default_m0_g1">Find Now World to found new colony. Try to look at left part of map.</entry>
+	<entry key="default_m0_g1">Find New World to found a colony. Try to look at left part of map.</entry>
 	<entry key="default_m0_g2">Disembark at New World and found new colony.</entry>
 	<entry key="default_m0_g3">Produce 30 cigars.</entry>
 	<entry key="default_m0_g4">Sell cigars in Europe.</entry>
-	<entry key="default_m0_start">Find Now World to found new colony. Try to drag ship to the right part of map.</entry>
+	<entry key="default_m0_start">Find New World to found a colony. Try to drag ship to the left.</entry>
 	<entry key="default_m0_cantMoveToHighSeas">You should not go back Europe. You come from there to find new world. New world should on the West.</entry>
 	<entry key="default_m0_pressNextTurn">Ship can't move in this turn more. Ship don't have any action points. You can check it in right panel where are ship's details. Now press 'Next Turn' button.</entry>
 	<entry key="default_m0_moveUnitBeforeEndTurn">First turn with ship Try to find New World.</entry>
