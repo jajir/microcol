@@ -22,10 +22,10 @@ def conf = new Conf(
 def colors = readColors(conf.baseDir + "main/resources/colors.properties")
 
 //sunset(conf, colors)
-//colony(conf, colors)
+colony(conf, colors)
 //europe(conf, colors)
 //market(conf, colors)
-background(conf, colors)
+//background(conf, colors)
 
 //Sunset
 def sunset(conf, colors) {

@@ -5,11 +5,11 @@ import com.google.common.base.Preconditions;
 /**
  * Based on context it allows to create new PanelConstruction.
  */
-class PanelConstructionProviderSimple implements ConstructionProvider {
+class PanelConstructionSimpleFactory implements PanelConstructionFactory {
 
     private final String cssId;
 
-    PanelConstructionProviderSimple(final String cssId) {
+    PanelConstructionSimpleFactory(final String cssId) {
         this.cssId = Preconditions.checkNotNull(cssId);
     }
 

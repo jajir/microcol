@@ -206,7 +206,6 @@ public final class MicroColModule extends AbstractModule {
          */
         bind(ColonyPanel.class).in(Singleton.class);
         bind(ColonyDialogCallback.class).to(ScreenColonyPresenter.class).in(Singleton.class);
-        bind(PanelColonyGoods.class).in(Singleton.class);
         bind(PanelColonyDockBehaviour.class).in(Singleton.class);
         bind(QueueDialog.class).in(Singleton.class);
         bind(QueueController.class).in(Singleton.class);

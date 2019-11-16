@@ -47,7 +47,7 @@ class ColonyBackground extends AbstractBackground {
         final ThreeStripesPref pref = ThreeStripesPref.build()
                 .setTopStripe(StripeDef.of(-290, colorScheme.getColor(GuiColors.SKY_1)))
                 .setCenterStripe(StripeDef.of(80, colorScheme.getColor(GuiColors.GRASS_1)))
-                .setBottomStripe(StripeDef.of(300, colorScheme.getColor(GuiColors.DIRT_1)))
+                .setBottomStripe(StripeDef.of(300, colorScheme.getColor(GuiColors.GRASS_1)))
                 .setCenterStripeHeight(420)
                 .make();
         this.threeStripesPainter = new ThreeStripesPainter(pref);

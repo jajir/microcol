@@ -213,7 +213,7 @@ public class CargoSlotTest {
      * When exception is throws by unit.placeToCargoSlot than verify that slot
      * is still empty.
      * 
-     * @throws Exception
+     * @throws Exception generic exception
      */
     @Test()
     public void test_store_exception_consistency() throws Exception {

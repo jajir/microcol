@@ -20,6 +20,7 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.google.common.eventbus.EventBus;
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
 
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
@@ -30,6 +31,7 @@ import javafx.scene.layout.Region;
 /**
  * Show list of all available goods.
  */
+@Singleton
 public final class PanelColonyGoods implements JavaFxComponent {
 
     private final GameModelController gameModelController;

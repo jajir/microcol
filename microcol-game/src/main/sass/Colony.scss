@@ -51,12 +51,10 @@
 }
 
 .panel-colony-goods {
-	-fx-pref-width: 750;
-	-fx-max-width: 750;
-	-fx-pref-height: 80;
-	-fx-max-height: 80;
-	-fx-translate-x: 20;
-	-fx-translate-y: 350;
+	-fx-translate-x: 60;
+	-fx-translate-y: -13;
+	-fx-max-height: 70;
+	-fx-max-width: 720;
 }
 
 .diffPositive {
@@ -107,7 +105,6 @@
 	-fx-translate-y: 0;
 }
 
-
 .constructionPane .diffPositive {
 	-fx-padding: 3;
 }
@@ -135,6 +132,7 @@ $row-gap: 12;
 $row-1: -145;
 $row-2: $row-1 + $row-height + $row-gap;
 $row-3: $row-2 + $row-height + $row-gap;
+$row-4: $row-3 + $row-height + $row-gap;
 
 
 #id_town_hall {
@@ -143,9 +141,22 @@ $row-3: $row-2 + $row-height + $row-gap;
 }
 
 #id_warehouse {
-	-fx-translate-x: $column-2;
-	-fx-translate-y: $row-1;
+	-fx-translate-x: $column-1 + 370;
+	-fx-translate-y: $row-4;
+	-fx-pref-width: 847;
+	-fx-min-width: 847;
+	-fx-pref-height: 137;
+	-fx-min-height: 137;
+	-fx-max-height: 137;
+	-fx-background-image: url("../images/colony-warehouse.png");
+	-fx-background-repeat: no-repeat;
 }
+
+#id_warehouse .canvas {
+	-fx-translate-x: 10;
+	-fx-translate-y: -20;
+}
+
 
 #id_church {
 	-fx-translate-x: $column-3;

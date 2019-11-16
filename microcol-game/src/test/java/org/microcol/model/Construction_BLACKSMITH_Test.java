@@ -80,7 +80,7 @@ public class Construction_BLACKSMITH_Test extends AbstractConstructionTest {
      * slot could produce 10 tools from 10 ore. But there are just 7 ore so just
      * 7 tools are produced and production of 3 tools is blocked by missing ore.
      * 
-     * @throws Exception
+     * @throws Exception generic exception in test
      */
     @Test
     public void test_getProduction_2_worker_limitedSource() throws Exception {

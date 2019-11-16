@@ -22,17 +22,17 @@ class PanelConstructionContext {
     private final Construction construction;
     private final ColonyProductionStats colonyStats;
     private final Model model;
-    
-    private Colony colony;
+    private final Colony colony;
 
     PanelConstructionContext(final ImageProvider imageProvider, final EventBus eventBus,
             final I18n i18n, final Construction construction,
-            final ColonyProductionStats colonyStats, final Model model) {
+            final Colony colony, final Model model) {
         this.imageProvider = Preconditions.checkNotNull(imageProvider);
         this.eventBus = Preconditions.checkNotNull(eventBus);
         this.i18n = Preconditions.checkNotNull(i18n);
         this.construction = Preconditions.checkNotNull(construction);
-        this.colonyStats = Preconditions.checkNotNull(colonyStats);
+        this.colony = Preconditions.checkNotNull(colony);
+        this.colonyStats = this.colony.getGoodsStats();
         this.model = Preconditions.checkNotNull(model);
 
     }
@@ -63,10 +63,6 @@ class PanelConstructionContext {
 
     protected Colony getColony() {
         return colony;
-    }
-
-    protected void setColony(Colony colony) {
-        this.colony = colony;
     }
 
 }

@@ -3,7 +3,7 @@ package org.microcol.gui.screen.colony;
 /**
  * Based on context it allows to create new PanelConstruction.
  */
-class PanelConstructionProviderEmpty implements ConstructionProvider {
+class PanelConstructionEmptyFactory implements PanelConstructionFactory {
 
     @Override
     public PanelConstructionEmpty make(final PanelConstructionContext context) {
