@@ -35,4 +35,9 @@ public class WelcomePage extends AbstractMenuScreen {
 	return GamePage.of(getContext());
     }
 
+    public GamePage startFreeGame() {
+	clickOnButtonWithId(ButtonsPanelView.BUTTON_START_FREE_GAME_ID);
+	return GamePage.of(getContext());
+    }
+
 }

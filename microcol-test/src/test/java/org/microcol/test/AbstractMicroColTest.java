@@ -25,6 +25,7 @@ import org.testfx.api.FxAssert;
 import org.testfx.api.FxRobot;
 import org.testfx.service.finder.NodeFinder;
 
+import com.google.common.base.Preconditions;
 import com.google.inject.Binder;
 import com.google.inject.Module;
 
@@ -32,17 +33,23 @@ import javafx.stage.Stage;
 
 public abstract class AbstractMicroColTest {
 
+    private final static String DEFAULT_DIRECTORY_WITH_TEST_SCENARIOS = "src/test/scenarios/";
+
     private final Logger logger = LoggerFactory.getLogger(AbstractMicroColTest.class);
 
     private TestContext context;
 
-    AbstractMicroColTest() {
+    AbstractMicroColTest(final String directoryWithTestScenarios) {
 	/*
 	 * Following code rewrite user home directory where is stored MicroCol game
 	 * saves and configuration file. It allows to set special configuration for
 	 * tests.
 	 */
-	System.setProperty("user.home", "src/test/scenarios/");
+	System.setProperty("user.home", Preconditions.checkNotNull(directoryWithTestScenarios));
+    }
+
+    AbstractMicroColTest() {
+	this(DEFAULT_DIRECTORY_WITH_TEST_SCENARIOS);
     }
 
     @BeforeEach

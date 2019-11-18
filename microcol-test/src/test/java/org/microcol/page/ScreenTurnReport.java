@@ -52,7 +52,7 @@ public class ScreenTurnReport extends AbstractScreen {
     public void verifyThatAtLeastOneEventMessageContains(final String expectedMessagePart) {
 	final List<String> messages = new ArrayList<>();
 	for (final TurnEventPanel eventPane : getEventPanels()) {
-	    final Label label = (Label) eventPane.getChildren().get(0);
+	    final Label label = (Label) eventPane.getChildren().get(1);
 	    final String strLabel = label.getText();
 	    messages.add(strLabel);
 	    if (strLabel.contains(expectedMessagePart)) {

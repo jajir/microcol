@@ -83,8 +83,15 @@ public class TC_01_embark_disembark_test extends AbstractMicroColTest {
 	gamePage.moveMouseAtLocation(SHORE_LAND_LOCATION);
 	gamePage.dragMouseAtLocation(SHORE_SEE_LOCATION);
 
-	// verify that there are no units at map.
+	// Verify that there are no units at continent. Units was embarked.
 	assertEquals(0, getModel().getUnitsAt(SHORE_LAND_LOCATION).size());
+
+	// Go back to town with ship.
+	gamePage.moveMouseAtLocation(SHORE_SEE_LOCATION);
+	gamePage.dragMouseAtLocation(COLONY_LOCATION);
+
+	// Verify that just one unit is in colony.
+	assertEquals(1, getModel().getUnitsAt(COLONY_LOCATION).size());
     }
 
 }

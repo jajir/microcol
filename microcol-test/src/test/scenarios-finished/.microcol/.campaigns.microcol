@@ -1,0 +1,30 @@
+{
+  "campaigns": [
+    {
+      "name": "default",
+      "missions": [
+        {
+          "name": "findNewWorld",
+          "wasFinished": true
+        },
+        {
+          "name": "buildArmy",
+          "wasFinished": true
+        },
+        {
+          "name": "thrive",
+          "wasFinished": true
+        }
+      ]
+    },
+    {
+      "name": "freePlay",
+      "missions": [
+        {
+          "name": "freePlay",
+          "wasFinished": false
+        }
+      ]
+    }
+  ]
+}
