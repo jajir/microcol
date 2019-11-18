@@ -15,9 +15,9 @@ import org.testfx.framework.junit5.Start;
 import javafx.stage.Stage;
 
 @ExtendWith(ApplicationExtension.class)
-public class TC_09_famine_destroy_colony_test extends AbstractMicroColTest {
+public class TC_08_F08_new_unit_in_colony_test extends AbstractMicroColTest {
 
-    private final static File testFileName = new File("src/test/scenarios/T09-famine-destroy-colony.microcol");
+    private final static File testFileName = new File("src/test/scenarios/F08-new-unit-in-colony.microcol");
 
     @Start
     private void start(final Stage primaryStage) throws Exception {
@@ -26,44 +26,39 @@ public class TC_09_famine_destroy_colony_test extends AbstractMicroColTest {
 
     @Test
     @Tag("local")
-    void TC_09_famine_destroy_colony() throws Exception {
+    void TC_08_new_unit_in_colony() throws Exception {
 	// open MicroCol and load defined game
 	GamePage gamePage = WelcomePage.of(getContext()).loadGame();
+
+	// Verify that in colony is 167 food.
+	verifyCornInColony(gamePage, 167);
+
+	// Perform next turn and ignore turn events dialog.
+	gamePage.nextTurnAndCloseDialogs();
+
+	// Verify that in colony is 176 food.
+	verifyCornInColony(gamePage, 176);
+
+	// Perform next turn and ignore turn events dialog.
+	gamePage.nextTurnAndCloseDialogs();
+
+	// Verify that in colony is 185 food.
+	verifyCornInColony(gamePage, 185);
+
+	// Perform next turn and ignore turn events dialog.
+	gamePage.nextTurnAndCloseDialogs();
+
+	// Verify that in colony is 194 food.
+	verifyCornInColony(gamePage, 194);
+
+	// Perform next turn and ignore turn events dialog.
+	gamePage.nextTurnAndCloseDialogs();
 
 	// Verify that in colony is 3 food.
 	verifyCornInColony(gamePage, 3);
 
-	// Perform next turn and ignore turn events dialog.
-	gamePage.nextTurnAndCloseDialogs();
-
-	/*
-	 * From now on, can't verify number of corn in colony. Unit whom die because of
-	 * famine is random. It could be unit from field and even from factory.
-	 */
-	
-	// Perform next turn and ignore turn events dialog.
-	gamePage.nextTurnAndCloseDialogs();
-
-	// Perform next turn and ignore turn events dialog.
-	gamePage.nextTurnAndCloseDialogs();
-
-	// Perform next turn and ignore turn events dialog.
-	gamePage.nextTurnAndCloseDialogs();
-
-	// Perform next turn and ignore turn events dialog.
-	gamePage.nextTurnAndCloseDialogs();
-
-	// Perform next turn and ignore turn events dialog.
-	gamePage.nextTurnAndCloseDialogs();
-
-	// Perform next turn and ignore turn events dialog.
-	gamePage.nextTurnAndCloseDialogs();
-
-	// Perform next turn and ignore turn events dialog.
-	gamePage.nextTurnAndCloseDialogs();
-	
-	// Verify colony doesn't exists anymore.
-	gamePage.verifyThatItsNotPossibleToOpenColonyAt(Location.of(22, 12));
+	// Verify that new unit was born and placed outside colony.
+	verifyNumberOfUnitsOutsideColony(gamePage, 3);
 
     }
 
@@ -74,6 +69,18 @@ public class TC_09_famine_destroy_colony_test extends AbstractMicroColTest {
 
 	// Verify number of corn is 185.
 	colonyScreen.verifyNumberOfGoodsInWrehouse(0, expectedFood);
+
+	// Close colony screen.
+	return colonyScreen.close();
+    }
+
+    private GamePage verifyNumberOfUnitsOutsideColony(final GamePage gamePage, final int expectedNumberOfUnits) {
+
+	// Open colony Delft at [22,12].
+	final ColonyScreen colonyScreen = gamePage.openColonyAt(Location.of(22, 12), "Delft");
+
+	// Verify number of corn is 'expectedNumberOfUnits'.
+	colonyScreen.verifyNumberOfUnitsAtPier(expectedNumberOfUnits);
 
 	// Close colony screen.
 	return colonyScreen.close();

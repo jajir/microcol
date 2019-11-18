@@ -21,9 +21,9 @@ import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 
 @ExtendWith(ApplicationExtension.class)
-public class TC_02_founding_colony_test extends AbstractMicroColTest {
+public class TC_02_F02_founding_colony_test extends AbstractMicroColTest {
 
-    private final static File testFileName = new File("src/test/scenarios/T02-founding-colony.microcol");
+    private final static File testFileName = new File("src/test/scenarios/F02-founding-colony.microcol");
 
     @Start
     private void start(final Stage primaryStage) throws Exception {

@@ -17,11 +17,11 @@ import javafx.stage.Stage;
  * verify that it's possible.
  */
 @ExtendWith(ApplicationExtension.class)
-public class TC_12_start_free_game extends AbstractMicroColTest {
+public class TC_12_F11_start_free_game extends AbstractMicroColTest {
 
-    private final static File testFileName = new File("src/test/scenarios/T11-ship_to_next_unit.microcol");
+    private final static File testFileName = new File("src/test/scenarios/F11-ship_to_next_unit.microcol");
 
-    TC_12_start_free_game() {
+    TC_12_F11_start_free_game() {
 	super("src/test/scenarios-finished/");
     }
 

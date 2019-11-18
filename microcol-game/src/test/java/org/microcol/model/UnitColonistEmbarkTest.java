@@ -3,6 +3,8 @@ package org.microcol.model;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+import java.util.Optional;
+
 import org.junit.jupiter.api.Test;
 
 /**
@@ -35,6 +37,8 @@ public class UnitColonistEmbarkTest extends AbstractUnitFreeColonistTest {
     private PlaceConstructionSlot placeConstructionSlot = mock(PlaceConstructionSlot.class);
 
     private PlaceCargoSlot placeCargoSlot = mock(PlaceCargoSlot.class);
+
+    private Colony colony = mock(Colony.class);
 
     /**
      * To this unit will be tested unit embarked.
@@ -213,6 +217,23 @@ public class UnitColonistEmbarkTest extends AbstractUnitFreeColonistTest {
 
         assertTrue(ex.getMessage().contains("have to neighbour of target location"));
     }
+
+    @Test
+    public void test_disembarkToLocation_target_location_is_colony() throws Exception {
+        makeColonist(model, 23, placeCargoSlot, owner, 1);
+        when(model.getMap()).thenReturn(worldMap);
+        when(worldMap.getTerrainTypeAt(TARGET_LOCATION)).thenReturn(TerrainType.GRASSLAND);
+        when(placeCargoSlot.getOwnerUnit()).thenReturn(sourceUnit);
+        when(sourceUnit.getLocation()).thenReturn(START_LOCATION);
+        when(model.getColonyAt(TARGET_LOCATION)).thenReturn(Optional.of(colony));
+
+        final IllegalArgumentException ex = assertThrows(IllegalArgumentException.class,
+                () -> unit.disembarkToLocation(TARGET_LOCATION));
+
+        assertTrue(ex.getMessage().contains("can't be colony"));
+    }
+    
+    
     
     @Test
     public void test_disembarkToLocation_move_was_stoped_by_ui() throws Exception {
@@ -221,6 +242,7 @@ public class UnitColonistEmbarkTest extends AbstractUnitFreeColonistTest {
         when(worldMap.getTerrainTypeAt(TARGET_LOCATION)).thenReturn(TerrainType.GRASSLAND);
         when(placeCargoSlot.getOwnerUnit()).thenReturn(sourceUnit);
         when(sourceUnit.getLocation()).thenReturn(START_LOCATION);
+        when(model.getColonyAt(TARGET_LOCATION)).thenReturn(Optional.empty());
         when(model.fireUnitMoveStarted(eq(unit), any())).thenReturn(false);
 
         unit.disembarkToLocation(TARGET_LOCATION);
@@ -237,6 +259,7 @@ public class UnitColonistEmbarkTest extends AbstractUnitFreeColonistTest {
         when(worldMap.getTerrainTypeAt(TARGET_LOCATION)).thenReturn(TerrainType.GRASSLAND);
         when(placeCargoSlot.getOwnerUnit()).thenReturn(sourceUnit);
         when(sourceUnit.getLocation()).thenReturn(START_LOCATION);
+        when(model.getColonyAt(TARGET_LOCATION)).thenReturn(Optional.empty());
         when(model.fireUnitMoveStarted(eq(unit), any())).thenReturn(true);
 
         unit.disembarkToLocation(TARGET_LOCATION);

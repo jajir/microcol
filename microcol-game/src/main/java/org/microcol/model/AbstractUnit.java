@@ -49,7 +49,7 @@ public abstract class AbstractUnit implements Unit {
     /**
      * Immutable model.
      */
-    private final Model model;
+    protected final Model model;
 
     private Player owner;
     private Place place;
@@ -806,6 +806,8 @@ public abstract class AbstractUnit implements Unit {
         Preconditions.checkState(startLocation.isNeighbor(targetLocation),
                 "Start location '%s' have to neighbour of target location '%s'", startLocation,
                 targetLocation);
+        Preconditions.checkArgument(model.getColonyAt(targetLocation).isEmpty(),
+                "Target location %s can't be colony.", targetLocation);
 
         final Direction orientation = findOrintationForMove(targetLocation);
         final Path path = Path.of(Lists.newArrayList(startLocation, targetLocation));

@@ -26,9 +26,9 @@ import org.testfx.util.WaitForAsyncUtils;
 import javafx.stage.Stage;
 
 @ExtendWith(ApplicationExtension.class)
-public class TC_05_moving_goods_test extends AbstractMicroColTest {
+public class TC_05_F05_moving_goods_test extends AbstractMicroColTest {
 
-    private final static File testFileName = new File("src/test/scenarios/T05-moving-goods.microcol");
+    private final static File testFileName = new File("src/test/scenarios/F05-moving-goods.microcol");
 
     @Start
     private void start(final Stage primaryStage) throws Exception {

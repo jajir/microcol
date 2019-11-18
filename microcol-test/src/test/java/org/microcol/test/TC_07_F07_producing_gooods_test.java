@@ -15,9 +15,9 @@ import org.testfx.framework.junit5.Start;
 import javafx.stage.Stage;
 
 @ExtendWith(ApplicationExtension.class)
-public class TC_07_producing_gooods_test extends AbstractMicroColTest {
+public class TC_07_F07_producing_gooods_test extends AbstractMicroColTest {
 
-    private final static File testFileName = new File("src/test/scenarios/T07-producing-goods.microcol");
+    private final static File testFileName = new File("src/test/scenarios/F07-producing-goods.microcol");
 
     @Start
     private void start(final Stage primaryStage) throws Exception {

@@ -17,13 +17,13 @@ import org.testfx.framework.junit5.Start;
 import javafx.stage.Stage;
 
 @ExtendWith(ApplicationExtension.class)
-public class TC_01_embark_disembark_test extends AbstractMicroColTest {
+public class TC_01_F01_embark_disembark_test extends AbstractMicroColTest {
 
     private final static Location COLONY_LOCATION = Location.of(22, 12);
     private final static Location SHORE_LAND_LOCATION = Location.of(24, 12);
     private final static Location SHORE_SEE_LOCATION = Location.of(24, 11);
 
-    private final static File testFileName = new File("src/test/scenarios/T01-embark-disembark.microcol");
+    private final static File testFileName = new File("src/test/scenarios/F01-embark-disembark.microcol");
 
     @Start
     private void start(final Stage primaryStage) throws Exception {

@@ -25,9 +25,9 @@ import com.google.common.collect.Lists;
 import javafx.stage.Stage;
 
 @ExtendWith(ApplicationExtension.class)
-public class TC_04_loosing_battle_test extends AbstractMicroColTest {
+public class TC_04_F04_loosing_battle_test extends AbstractMicroColTest {
 
-    private final static File testFileName = new File("src/test/scenarios/T04-loosing-battles.microcol");
+    private final static File testFileName = new File("src/test/scenarios/F04-loosing-battles.microcol");
 
     @Start
     private void start(final Stage primaryStage) throws Exception {
