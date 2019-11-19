@@ -180,7 +180,7 @@ public class GamePage extends AbstractScreen {
      * 
      * @param unitIndex required unit index
      */
-    public void assertThatUnitIsSelected(final int unitIndex) {
+    public void verifyThatUnitIsSelected(final int unitIndex) {
 	final int numberOfUnitsInRightPanel = getListOfUnitsInRightPanel().size();
 	for (int i = 0; i < numberOfUnitsInRightPanel; i++) {
 	    final RightPanelUnit rightPanelUnit = getRightPanelUnit(i);
@@ -190,6 +190,11 @@ public class GamePage extends AbstractScreen {
 		assertFalse(rightPanelUnit.isSelected());
 	    }
 	}
+    }
+
+    public void verifyThatThereIsNoColonyAt(final Location colonyLocation) {
+	assertTrue(getModel().getColonyAt(colonyLocation).isEmpty(),
+		String.format("At %s should not be any colony.", colonyLocation));
     }
 
     public RightPanelUnit getRightPanelUnit(final int unitIndexInRightPanel) {

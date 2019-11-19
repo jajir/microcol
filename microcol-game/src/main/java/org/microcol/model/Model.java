@@ -194,6 +194,8 @@ public class Model {
         final Optional<Colony> oColony = getColonyAt(location);
         Preconditions.checkArgument(!oColony.isPresent(), "There is already colony '%s' at '%s'",
                 oColony, location);
+        Preconditions.checkArgument(!isColonyInNeighbourhood(location),
+                "There is another colony in neighbourhood os %s.", location);
 
         final Colony col = new Colony(this, colonyNames.getNewColonyName(player), player, location,
                 colony -> {
@@ -207,6 +209,31 @@ public class Model {
         colonies.add(col);
         col.placeUnitToProduceFood(unit);
         listenerManager.fireColonyWasFounded(this, col);
+    }
+
+    public boolean isColonyInNeighbourhood(final Location location) {
+        return colonies.stream().filter(col -> col.getLocation().isNeighbor(location)).findAny()
+                .isPresent();
+    }
+
+    public boolean canUnitBuildColony(final Unit unit) {
+        if (unit == null) {
+            return false;
+        }
+        if (!unit.getType().canBuildColony()) {
+            return false;
+        }
+        if (!unit.isAtPlaceLocation()) {
+            return false;
+        }
+        final Optional<Colony> oColony = getColonyAt(unit.getLocation());
+        if (oColony.isPresent()) {
+            return false;
+        }
+        if (isColonyInNeighbourhood(unit.getLocation())) {
+            return false;
+        }
+        return unit.getActionPoints() > 0;
     }
 
     public int getKingsTaxForPlayer(final Player subduedPlayer) {

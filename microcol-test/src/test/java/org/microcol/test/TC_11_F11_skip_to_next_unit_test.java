@@ -37,22 +37,22 @@ public class TC_11_F11_skip_to_next_unit_test extends AbstractMicroColTest {
 	assertEquals(3, getModel().getUnitsAt(COLONY_LOCATION).size());
 
 	//verify that first unit is selected
-	gamePage.assertThatUnitIsSelected(0);
+	gamePage.verifyThatUnitIsSelected(0);
 	
 	gamePage.pressTab();
 	
 	//verify that second unit is selected
-	gamePage.assertThatUnitIsSelected(1);
+	gamePage.verifyThatUnitIsSelected(1);
 
 	gamePage.pressTab();
 	
 	//verify that third unit is selected
-	gamePage.assertThatUnitIsSelected(2);
+	gamePage.verifyThatUnitIsSelected(2);
 
 	gamePage.pressTab();
 	
 	//verify that first unit is selected
-	gamePage.assertThatUnitIsSelected(0);
+	gamePage.verifyThatUnitIsSelected(0);
     }
 
 }

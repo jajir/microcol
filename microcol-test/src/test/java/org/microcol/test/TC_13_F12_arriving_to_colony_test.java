@@ -16,8 +16,8 @@ import org.testfx.framework.junit5.Start;
 import javafx.stage.Stage;
 
 /**
- * Verify that arriving to colony. When user drag ship to colony unit should not
- * disembark before colony.
+ * Verify that ship arriving to colony. When user drag ship to colony unit
+ * should not disembark before colony.
  */
 @ExtendWith(ApplicationExtension.class)
 public class TC_13_F12_arriving_to_colony_test extends AbstractMicroColTest {
