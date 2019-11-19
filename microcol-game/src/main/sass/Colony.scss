@@ -161,6 +161,7 @@ $row-4: $row-3 + $row-height + $row-gap;
 #id_church {
 	-fx-translate-x: $column-3;
 	-fx-translate-y: $row-1;
+	visibility: hidden;
 }
 
 #id_weaver {
@@ -181,6 +182,7 @@ $row-4: $row-3 + $row-height + $row-gap;
 #id_school {
 	-fx-translate-x: $column-4;
 	-fx-translate-y: $row-2;
+	visibility: hidden;
 }
 
 #id_armory {
@@ -201,5 +203,6 @@ $row-4: $row-3 + $row-height + $row-gap;
 #id_carpenter {
 	-fx-translate-x: $column-4 + 70;
 	-fx-translate-y: $row-3;
+	visibility: hidden;
 }
 

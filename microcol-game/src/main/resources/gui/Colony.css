@@ -143,6 +143,7 @@
 #id_church {
   -fx-translate-x: 110;
   -fx-translate-y: -145;
+  visibility: hidden;
 }
 
 #id_weaver {
@@ -163,6 +164,7 @@
 #id_school {
   -fx-translate-x: 240;
   -fx-translate-y: 1;
+  visibility: hidden;
 }
 
 #id_armory {
@@ -183,6 +185,7 @@
 #id_carpenter {
   -fx-translate-x: 310;
   -fx-translate-y: 147;
+  visibility: hidden;
 }
 
 /*# sourceMappingURL=Colony.css.map */
