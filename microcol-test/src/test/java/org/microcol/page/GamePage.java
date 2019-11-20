@@ -20,6 +20,7 @@ import org.slf4j.LoggerFactory;
 import org.testfx.robot.Motion;
 import org.testfx.util.WaitForAsyncUtils;
 
+import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 
 import javafx.scene.control.Button;
@@ -79,6 +80,12 @@ public class GamePage extends AbstractScreen {
 
     public void verifyThatTileIsVisible(final Location location) {
 	assertTrue(getContext().getArea().isLocationVisible(location));
+    }
+    
+    public void selectTile(final Location location) {
+	Preconditions.checkNotNull(location);
+	moveMouseAtLocation(location);
+	getRobot().clickOn(MouseButton.PRIMARY);
     }
 
     public Optional<ScreenTurnReport> nextTurn() throws Exception {
@@ -172,6 +179,10 @@ public class GamePage extends AbstractScreen {
 
     public void pressTab() {
 	getRobot().push(KeyCode.TAB);
+    }
+    
+    public void pressP() {
+	getRobot().push(KeyCode.P);
     }
 
     /**
