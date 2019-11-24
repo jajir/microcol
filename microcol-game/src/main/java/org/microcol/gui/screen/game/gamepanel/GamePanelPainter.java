@@ -137,7 +137,8 @@ public final class GamePanelPainter {
         gamePaintService.paintGrid(g, area, canvasInMapCoordinates);
         gamePaintService.paintSelectedTile(g, area, selectedTileManager.getSelectedTile());
         gamePaintService.paintColonies(g, gameModelController.getModel(), area);
-        gamePaintService.paintUnits(g, gameModelController.getModel(), area, excludePainting);
+        gamePaintService.paintUnits(g, gameModelController.getModel(), area, excludePainting,
+                selectedUnitManager.getSelectedUnit());
         paintSteps(g, area);
         paintAnimation(g, area);
         animationClouds.paint(g);

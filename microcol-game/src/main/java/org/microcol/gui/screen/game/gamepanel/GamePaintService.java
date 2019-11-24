@@ -2,6 +2,8 @@ package org.microcol.gui.screen.game.gamepanel;
 
 import static org.microcol.gui.Tile.TILE_WIDTH_IN_PX;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -117,24 +119,77 @@ final class GamePaintService {
      * @param excludePainting
      *            required service that will provide list of excluded locations
      *            and units
+     * @param oSelectedUnit
+     *            required object with {@link Optional} selected unit
      */
     public void paintUnits(final GraphicsContext graphics, final Model model, final Area area,
-            final ExcludePainting excludePainting) {
+            final ExcludePainting excludePainting, final Optional<Unit> oSelectedUnit) {
         final Map<Location, List<Unit>> ships = model.getUnitsAt();
         final Player player = gameModelController.getHumanPlayer();
 
-        final Map<Location, List<Unit>> ships2 = ships.entrySet().stream()
+        final Map<Location, List<Unit>> units = ships.entrySet().stream()
                 .filter(entry -> area.isLocationVisible(entry.getKey()))
                 .filter(entry -> player.isVisible(entry.getKey()))
                 .collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue()));
 
-        ships2.forEach((location, list) -> {
-            final Unit unit = list.stream().findFirst().get();
-            final Point point = area.convertToCanvasPoint(location);
-            if (excludePainting.isUnitIncluded(unit)) {
-                paintService.paintUnit(graphics, point, unit);
+        units.forEach((location, list) -> paintUnits(graphics, area.convertToCanvasPoint(location),
+                sortBySelecedUnit(list, oSelectedUnit), excludePainting));
+    }
+
+    /**
+     * Paint list of units at specific point at canvas. Method count with:
+     * <ul>
+     * <li>Selected unit should be painted at the to of all units.</li>
+     * <li>Moving unit should be in excluded units. So not will be drawn at
+     * all.</li>
+     * </ul>
+     * 
+     * @param graphics
+     *            required graphics object
+     * @param point
+     *            required point where will be unit painted on canvas
+     * @param units
+     *            required list of units to paint
+     * @param excludePainting
+     *            required object containing units that will be skipped in
+     *            drawing.
+     */
+    private void paintUnits(final GraphicsContext graphics, final Point point,
+            final List<Unit> units, final ExcludePainting excludePainting) {
+        final Unit unitToPaint = units.stream().findFirst().get();
+        if (excludePainting.isUnitIncluded(unitToPaint)) {
+            paintService.paintUnit(graphics, point, unitToPaint);
+        } else {
+            if (units.size() > 1) {
+                paintService.paintUnit(graphics, point, units.get(1));
             }
-        });
+        }
+    }
+
+    /**
+     * Sort given list of unit. When selected unit is present and selected unit
+     * is in list than will be listed as first element. In other cases rest of
+     * list stay unmodified.
+     * 
+     * @param units
+     *            required list of units
+     * @param oSelectedUnit
+     *            required {@link Optional} object with selected unit
+     * @return unmodifiable list of units.
+     */
+    private List<Unit> sortBySelecedUnit(final List<Unit> units,
+            final Optional<Unit> oSelectedUnit) {
+        if (oSelectedUnit.isPresent()) {
+            final Unit selectedUnit = oSelectedUnit.get();
+            final int pos = units.indexOf(selectedUnit);
+            if (pos > 0) {
+                final List<Unit> out = new ArrayList<Unit>(units);
+                out.remove(pos);
+                out.add(0, selectedUnit);
+                return Collections.unmodifiableList(out);
+            }
+        }
+        return units;
     }
 
     public void paintColonies(final GraphicsContext graphics, final Model model, final Area area) {
