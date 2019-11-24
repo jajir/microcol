@@ -4,10 +4,11 @@ import javax.inject.Singleton;
 
 import org.microcol.gui.screen.GameScreen;
 import org.microcol.gui.screen.ScreenLifeCycle;
-import org.microcol.gui.screen.menu.TitledPage;
 import org.microcol.gui.screen.turnreport.TurnReportBackground;
+import org.microcol.gui.util.ButtonedPage;
 import org.microcol.gui.util.CenteredPage;
 import org.microcol.gui.util.JavaFxComponent;
+import org.microcol.gui.util.TitledPage;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
@@ -30,13 +31,16 @@ public final class GoalsView implements JavaFxComponent, ScreenLifeCycle {
 
     @Inject
     GoalsView(final TurnReportBackground background, final TitledPage titledPage,
-            final CenteredPage centeredPages) {
+            final CenteredPage centeredPages, final GoalsButtonsPanel goalsButtonsPanel) {
         this.background = Preconditions.checkNotNull(background);
         this.centeredPage = Preconditions.checkNotNull(centeredPages);
         this.titledPage = Preconditions.checkNotNull(titledPage);
 
+        final ButtonedPage buttonedPage = new ButtonedPage(goalsButtonsPanel);
+        buttonedPage.setContent(titledPage);
+        
         centeredPages.setBackground(background);
-        centeredPages.setMainPanel(titledPage);
+        centeredPages.setMainPanel(buttonedPage);
     }
 
     public void setMenuPanel(final GameScreen menuPanel) {

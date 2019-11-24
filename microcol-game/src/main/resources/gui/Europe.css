@@ -9,17 +9,11 @@
 	-fx-translate-y: -250;
 }
 
-.buttons{
-	-fx-alignment: top-right;
-	-fx-translate-x: 10;
-	-fx-translate-y: -130;	
-}
-
 .unit-icon{
 	-fx-max-width: 30;
 }
 
-.ships-container{
+.ships-container {
 	-fx-min-width: 80;
 }
 

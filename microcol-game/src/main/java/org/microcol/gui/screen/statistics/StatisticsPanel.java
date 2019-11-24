@@ -8,7 +8,6 @@ import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.screen.GameScreen;
 import org.microcol.gui.screen.Screen;
 import org.microcol.gui.screen.ShowScreenEvent;
-import org.microcol.gui.util.ButtonBarOk;
 import org.microcol.i18n.I18n;
 import org.microcol.model.Calendar;
 import org.microcol.model.TurnPlayerStatistics;
@@ -46,11 +45,10 @@ final class StatisticsPanel implements GameScreen {
 
     private final EventBus eventBus;
 
-    private final HBox mainPanel = new HBox();
+    private final StackPane mainPanel = new StackPane();
 
     private final VBox leftPanel = new VBox();
 
-    private final ButtonBarOk buttonsBar = new ButtonBarOk();
     private final Label labelIndexTitle = new Label();
 
     private final ToggleGroup toggleGroup = new ToggleGroup();
@@ -98,13 +96,14 @@ final class StatisticsPanel implements GameScreen {
         leftPanel.getChildren().add(tb3);
         leftPanel.getChildren().add(tb4);
 
-        buttonsBar.getButtonOk().setOnAction(this::onClose);
-
         final VBox rightPanel = new VBox();
         rightPanel.getStyleClass().add("right");
-        rightPanel.getChildren().addAll(chartPanel, buttonsBar.getContent());
+        rightPanel.getChildren().addAll(chartPanel);
 
-        mainPanel.getChildren().addAll(leftPanel, rightPanel);
+        final HBox statsPanel = new HBox(leftPanel, rightPanel);
+        statsPanel.getStyleClass().add("statsPanel");
+
+        mainPanel.getChildren().addAll(statsPanel);
     }
 
     @SuppressWarnings("unused")
@@ -184,7 +183,7 @@ final class StatisticsPanel implements GameScreen {
 
         final LineChart<Number, Number> out = new LineChart<Number, Number>(xAxis, yAxis);
         out.setLegendVisible(false);
-        
+
         return out;
     }
 
@@ -210,7 +209,6 @@ final class StatisticsPanel implements GameScreen {
         tb2.setText(i18n.get(Stats.titleMilitary));
         tb3.setText(i18n.get(Stats.titleWealth));
         tb4.setText(i18n.get(Stats.titleScore));
-        buttonsBar.setButtonText(i18n.get(Stats.buttonCancel));
     }
 
     @Override

@@ -1,6 +1,5 @@
 package org.microcol.gui.screen.turnreport;
 
-import org.microcol.gui.screen.AbstractScreenMenu;
 import org.microcol.gui.screen.GameScreen;
 import org.microcol.i18n.I18n;
 
@@ -14,7 +13,7 @@ import javafx.scene.layout.Region;
  * Screen with market in Europe. It allows to buy various goods.
  */
 @Singleton
-public class ScreenTurnReport extends AbstractScreenMenu implements GameScreen {
+public class ScreenTurnReport implements GameScreen {
 
     private final TurnReportPanel turnReportPanel;
 

@@ -1,6 +1,5 @@
 package org.microcol.gui.screen.goals;
 
-import org.microcol.gui.screen.AbstractScreenMenu;
 import org.microcol.gui.screen.GameScreen;
 import org.microcol.gui.screen.menu.ScreenMenu;
 import org.microcol.i18n.I18n;
@@ -15,7 +14,7 @@ import javafx.scene.layout.Region;
  * Screen with market in Europe. It allows to buy various goods.
  */
 @Singleton
-public class ScreenGoals extends AbstractScreenMenu implements GameScreen {
+public class ScreenGoals implements GameScreen {
 
     private final GoalsPanel goalsPanel;
 

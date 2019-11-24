@@ -11,11 +11,8 @@
 }
 
 .titled-content {
-	-fx-translate-x: -25;
-	-fx-translate-y: -10;
-	-fx-min-height: 310;
-	-fx-min-width: 420;
-	-fx-padding: 10;
+	-fx-max-width: 520;
+	-fx-max-height: 700;
 }
 
 .row {
@@ -29,4 +26,9 @@
 
 #buttonPane {
 	-fx-padding: 80 0 0 0;
+}
+
+.goals-main-panel {
+	-fx-translate-x: 30;
+	-fx-translate-y: 160;
 }

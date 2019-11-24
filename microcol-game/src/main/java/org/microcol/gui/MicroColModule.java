@@ -66,6 +66,7 @@ import org.microcol.gui.screen.game.gamepanel.UnitAttackedEventListener;
 import org.microcol.gui.screen.game.gamepanel.UnitMoveFinishedListener;
 import org.microcol.gui.screen.game.gamepanel.UnitMovedListener;
 import org.microcol.gui.screen.game.gamepanel.VisibleAreaService;
+import org.microcol.gui.screen.goals.GoalsButtonsPanelController;
 import org.microcol.gui.screen.goals.ScreenGoalsPresenter;
 import org.microcol.gui.screen.market.ScreenMarketPresenter;
 import org.microcol.gui.screen.menu.ButtonsPanelPresenter;
@@ -81,8 +82,10 @@ import org.microcol.gui.screen.setting.SettingLanguagePresenter;
 import org.microcol.gui.screen.setting.SettingShowGridPresenter;
 import org.microcol.gui.screen.setting.SettingVolumePresenter;
 import org.microcol.gui.screen.statistics.ScreenStatisticsPresenter;
+import org.microcol.gui.screen.statistics.StatisticsButtonsPanelController;
 import org.microcol.gui.screen.turnreport.ScreenTurnReportPresenter;
 import org.microcol.gui.screen.turnreport.ShowTurnEvensOnTurnStartedEvent;
+import org.microcol.gui.screen.turnreport.TurnReportButtonsPanelController;
 import org.microcol.gui.util.FontService;
 import org.microcol.gui.util.Listener;
 import org.microcol.gui.util.PaintService;
@@ -219,9 +222,18 @@ public final class MicroColModule extends AbstractModule {
         bind(PanelEuropeDockBehavior.class).in(Singleton.class);
         bind(ScreenMarketPresenter.class).asEagerSingleton();
 
+        /**
+         * Turn report.
+         */
         bind(ScreenStatisticsPresenter.class).asEagerSingleton();
         bind(ScreenTurnReportPresenter.class).asEagerSingleton();
+        bind(TurnReportButtonsPanelController.class).asEagerSingleton();
+
+        /**
+         * Goals.
+         */
         bind(ScreenGoalsPresenter.class).asEagerSingleton();
+        bind(GoalsButtonsPanelController.class).asEagerSingleton();
 
         /**
          * Game screen.
@@ -253,6 +265,11 @@ public final class MicroColModule extends AbstractModule {
         bind(VisibleAreaService.class).annotatedWith(Names.named("editor"))
                 .toInstance(new VisibleAreaService());
         bind(EditorMouseListener.class).asEagerSingleton();
+
+        /**
+         * Statistics.
+         */
+        bind(StatisticsButtonsPanelController.class).asEagerSingleton();
 
         /**
          * Rest of UI

@@ -1,9 +1,9 @@
 package org.microcol.gui.screen.market;
 
 import org.microcol.gui.screen.ScreenLifeCycle;
-import org.microcol.gui.screen.menu.TitledPage;
 import org.microcol.gui.util.CenteredPage;
 import org.microcol.gui.util.JavaFxComponent;
+import org.microcol.gui.util.TitledPage;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;

@@ -1,6 +1,4 @@
-package org.microcol.gui.screen.menu;
-
-import org.microcol.gui.util.JavaFxComponent;
+package org.microcol.gui.util;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
@@ -17,7 +15,7 @@ import javafx.scene.layout.StackPane;
  */
 public final class TitledPage implements JavaFxComponent {
 
-    public static final String MAIN_TITLE_ID = "main-title";
+    public static final String MAIN_TITLE_STYLE_CLASS = "main-title";
 
     private final StackPane mainPanel;
 
@@ -28,7 +26,7 @@ public final class TitledPage implements JavaFxComponent {
     @Inject
     TitledPage() {
         title = new Label("[not defined]");
-        title.getStyleClass().add(MAIN_TITLE_ID);
+        title.getStyleClass().add(MAIN_TITLE_STYLE_CLASS);
 
         box = new HBox();
         box.getStyleClass().add("titled-content");

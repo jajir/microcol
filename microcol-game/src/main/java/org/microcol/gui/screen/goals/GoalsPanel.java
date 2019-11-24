@@ -5,7 +5,6 @@ import org.microcol.gui.image.ImageProvider;
 import org.microcol.gui.screen.GameScreen;
 import org.microcol.gui.screen.Screen;
 import org.microcol.gui.screen.ShowScreenEvent;
-import org.microcol.gui.util.ButtonBarOk;
 import org.microcol.i18n.I18n;
 import org.microcol.model.campaign.MissionGoal;
 import org.microcol.model.campaign.MissionGoals;
@@ -38,8 +37,6 @@ public final class GoalsPanel implements GameScreen {
 
     private final VBox mainPanel = new VBox();
 
-    private final ButtonBarOk buttonsBar = new ButtonBarOk();
-
     private final Image imageKingsSeal;
 
     private final Image imageKingsSealShadow;
@@ -53,8 +50,8 @@ public final class GoalsPanel implements GameScreen {
         this.imageKingsSeal = imageProvider.getImage(KING_SEAL_IMAGE_NAME);
         this.imageKingsSealShadow = imageProvider.getImage(KING_SEAL_SHADOW_IMAGE_NAME);
 
-        buttonsBar.getButtonOk().setOnAction(this::onClose);
-        mainPanel.getChildren().addAll(goalsPanel, buttonsBar.getContent());
+        mainPanel.getStyleClass().add("goals-main-panel");
+        mainPanel.getChildren().addAll(goalsPanel);
     }
 
     public void repaint() {
@@ -71,7 +68,7 @@ public final class GoalsPanel implements GameScreen {
         row.getChildren().add(caption);
         if (goal.isFinished()) {
             row.getChildren().add(new ImageView(imageKingsSeal));
-        }else {
+        } else {
             row.getChildren().add(new ImageView(imageKingsSealShadow));
         }
         goalsPanel.getChildren().add(row);
@@ -99,6 +96,5 @@ public final class GoalsPanel implements GameScreen {
 
     @Override
     public void updateLanguage(final I18n i18n) {
-        buttonsBar.setButtonText(i18n.get(Goals.buttonBack));
     }
 }

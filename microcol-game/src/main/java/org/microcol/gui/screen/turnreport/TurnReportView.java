@@ -4,9 +4,10 @@ import javax.inject.Singleton;
 
 import org.microcol.gui.screen.GameScreen;
 import org.microcol.gui.screen.ScreenLifeCycle;
-import org.microcol.gui.screen.menu.TitledPage;
+import org.microcol.gui.util.ButtonedPage;
 import org.microcol.gui.util.CenteredPage;
 import org.microcol.gui.util.JavaFxComponent;
+import org.microcol.gui.util.TitledPage;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
@@ -29,13 +30,16 @@ public final class TurnReportView implements JavaFxComponent, ScreenLifeCycle {
 
     @Inject
     TurnReportView(final TurnReportBackground background, final TitledPage titledPage,
-            final CenteredPage centeredPages) {
+            final CenteredPage centeredPage, final TurnReportButtonsPanel turnReportButtonsPanel) {
         this.background = Preconditions.checkNotNull(background);
-        this.centeredPage = Preconditions.checkNotNull(centeredPages);
+        this.centeredPage = Preconditions.checkNotNull(centeredPage);
         this.titledPage = Preconditions.checkNotNull(titledPage);
 
-        centeredPages.setBackground(background);
-        centeredPages.setMainPanel(titledPage);
+        final ButtonedPage buttonedPage = new ButtonedPage(turnReportButtonsPanel);
+        buttonedPage.setContent(titledPage);
+        
+        centeredPage.setBackground(background);
+        centeredPage.setMainPanel(buttonedPage);
     }
 
     public void setMenuPanel(final GameScreen menuPanel) {
