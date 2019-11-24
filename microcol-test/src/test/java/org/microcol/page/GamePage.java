@@ -93,7 +93,7 @@ public class GamePage extends AbstractScreen {
 	getRobot().clickOn(buttonNextTurn);
 	waitWhileMoving();
 	WaitForAsyncUtils.waitForFxEvents();
-	if (isButtonOkVisible()) {
+	if (isButtonBackVisible()) {
 	    return Optional.of(ScreenTurnReport.of(getContext()));
 	} else {
 	    return Optional.empty();

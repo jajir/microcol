@@ -34,7 +34,7 @@ public class ScreenTurnReport extends AbstractScreen {
     }
 
     public Button getButtonOk() {
-	return getNodeFinder().lookup("#buttonOk").queryAs(Button.class);
+	return getNodeFinder().lookup("#closeButtonId").queryAs(Button.class);
     }
 
     public void verifyNumberOfEvents(final int expectedNumberOfEvents) {

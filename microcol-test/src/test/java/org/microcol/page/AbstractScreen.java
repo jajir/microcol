@@ -72,8 +72,8 @@ public abstract class AbstractScreen {
 	return label;
     }
 
-    protected boolean isButtonOkVisible() {
-	return isCssIdVisible("buttonOk");
+    protected boolean isButtonBackVisible() {
+	return isCssIdVisible("closeButtonId");
     }
 
     protected boolean isCssIdVisible(final String cssId) {
