@@ -1,15 +1,12 @@
 package org.microcol.gui.screen.game;
 
 import org.microcol.gui.WasdController;
-import org.microcol.gui.dialog.PersistingDialog;
-import org.microcol.gui.event.AboutGameEvent;
+import org.microcol.gui.dialog.PersistingService;
+import org.microcol.gui.event.ShowHelpEvent;
 import org.microcol.gui.event.BuildColonyEvent;
 import org.microcol.gui.event.CenterViewEvent;
 import org.microcol.gui.event.PlowFieldEvent;
 import org.microcol.gui.event.SelectNextUnitEvent;
-import org.microcol.gui.event.ShowGoalsEvent;
-import org.microcol.gui.event.ShowStatisticsEvent;
-import org.microcol.gui.event.ShowTurnReportEvent;
 import org.microcol.gui.event.StartMoveEvent;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.screen.Screen;
@@ -43,29 +40,31 @@ public class ScreenGamePresenter {
 
     private final ModeController modeController;
 
-    private final PersistingDialog persistingDialog;
+    private final PersistingService persistingService;
 
     private final GamePanelPresenter gamePanelPresenter;
 
     private final GameModelController gameModelController;
-    
+
     private final WasdController wasdController;
-    
+
     @Inject
-    ScreenGamePresenter(final ScreenGame screenGame, final EventBus eventBus, final MouseOverTileManager mouseOverTileManager, final ModeController modeController,
-            final SelectedUnitManager selectedUnitManager, final PersistingDialog persistingDialog,
-            final GamePanelPresenter gamePanelPresenter,
+    ScreenGamePresenter(final ScreenGame screenGame, final EventBus eventBus,
+            final MouseOverTileManager mouseOverTileManager, final ModeController modeController,
+            final SelectedUnitManager selectedUnitManager,
+            final PersistingService persistingService, final GamePanelPresenter gamePanelPresenter,
             final GameModelController gameModelController, final WasdController wasdController) {
         this.eventBus = Preconditions.checkNotNull(eventBus);
         this.mouseOverTileManager = Preconditions.checkNotNull(mouseOverTileManager);
         this.modeController = Preconditions.checkNotNull(modeController);
         this.selectedUnitManager = Preconditions.checkNotNull(selectedUnitManager);
         this.gamePanelPresenter = Preconditions.checkNotNull(gamePanelPresenter);
-        this.persistingDialog = Preconditions.checkNotNull(persistingDialog);
+        this.persistingService = Preconditions.checkNotNull(persistingService);
         this.gameModelController = Preconditions.checkNotNull(gameModelController);
         this.wasdController = Preconditions.checkNotNull(wasdController);
         screenGame.setOnKeyPressed(this::onKeyPressed);
         screenGame.setOnKeyReleased(this::onKeyReleased);
+        screenGame.setOnTabPressed(event -> eventBus.post(new SelectNextUnitEvent()));
     }
 
     private void onKeyPressed(final KeyEvent event) {
@@ -80,28 +79,30 @@ public class ScreenGamePresenter {
          */
         if (KeyCode.ENTER == event.getCode()) {
             onKeyPressed_enter();
+            return;
         }
 
         if (KeyCode.R == event.getCode()) {
-            eventBus.post(new ShowStatisticsEvent());
+            eventBus.post(new ShowScreenEvent(Screen.STATISTICS));
         }
         if (KeyCode.C == event.getCode()) {
             eventBus.post(new CenterViewEvent());
         }
         if (KeyCode.T == event.getCode()) {
-            eventBus.post(new ShowTurnReportEvent());
+            eventBus.post(new ShowScreenEvent(Screen.TURN_REPORT));
         }
         if (KeyCode.G == event.getCode()) {
-            eventBus.post(new ShowGoalsEvent());
+            eventBus.post(new ShowScreenEvent(Screen.GOALS));
         }
         if (KeyCode.H == event.getCode()) {
-            eventBus.post(new AboutGameEvent());
+            eventBus.post(new ShowHelpEvent());
         }
         if (KeyCode.E == event.getCode()) {
             eventBus.post(new ShowScreenEvent(Screen.EUROPE));
         }
         if (KeyCode.M == event.getCode()) {
             eventBus.post(new StartMoveEvent());
+            return;
         }
         if (KeyCode.P == event.getCode()) {
             eventBus.post(new PlowFieldEvent());
@@ -110,14 +111,12 @@ public class ScreenGamePresenter {
             eventBus.post(new BuildColonyEvent());
         }
         if (KeyCode.S == event.getCode() & event.isControlDown()) {
-            persistingDialog.saveModel(gameModelController.getModel());
+            persistingService.saveModel(gameModelController.getModel());
         }
 
-        if (KeyCode.TAB == event.getCode()) {
-            eventBus.post(new SelectNextUnitEvent());
-        }
-        
         wasdController.onKeyPressed(event);
+
+        gamePanelPresenter.quitFromMoveMode();
 
         logger.debug("Pressed key: '" + event.getCode().getName() + "' has code '"
                 + event.getCharacter() + "', modifiers '" + event.getCode().isModifierKey() + "'");
@@ -141,5 +140,5 @@ public class ScreenGamePresenter {
             gamePanelPresenter.switchToNormalMode(mouseOverTileManager.getMouseOverTile().get());
         }
     }
-    
+
 }

@@ -15,7 +15,7 @@ import javafx.scene.canvas.GraphicsContext;
 /**
  * Class animate fight between two adjacent units.
  */
-public final class AnimationFight implements Animation {
+final class AnimationFight implements Animation {
 
     /**
      * Contains mapping of speed to step size.
@@ -45,7 +45,7 @@ public final class AnimationFight implements Animation {
      * @param animationSpeed
      *            require animation speed from preferences
      */
-    public AnimationFight(final Location attackerLocation, final Location defenderLocation,
+    AnimationFight(final Location attackerLocation, final Location defenderLocation,
             final ImageProvider imageProvider, final int animationSpeed) {
         this.attackerLocation = Preconditions.checkNotNull(attackerLocation);
         this.defenderLocation = Preconditions.checkNotNull(defenderLocation);
@@ -65,10 +65,10 @@ public final class AnimationFight implements Animation {
 
     @Override
     public void paint(final GraphicsContext graphics, final Area area) {
-        final Point aPoint = area.convertToPoint(attackerLocation);
-        final Point dPoint = area.convertToPoint(defenderLocation);
+        final Point aPoint = area.convertToCanvasPoint(attackerLocation);
+        final Point dPoint = area.convertToCanvasPoint(defenderLocation);
         final Point middle = aPoint.add(dPoint.substract(aPoint).divide(2));
-        if (area.isVisibleScreenPoint(aPoint) || area.isVisibleScreenPoint(dPoint)) {
+        if (area.isVisibleCanvasPoint(aPoint) || area.isVisibleCanvasPoint(dPoint)) {
             graphics.drawImage(imageProvider.getImage(ImageProvider.IMG_CROSSED_SWORDS),
                     middle.getX(), middle.getY());
         }
@@ -83,9 +83,9 @@ public final class AnimationFight implements Animation {
     @Override
     public boolean canBePainted(final Area area) {
         if (hasNextStep()) {
-            final Point aPoint = area.convertToPoint(attackerLocation);
-            final Point dPoint = area.convertToPoint(defenderLocation);
-            return area.isVisibleScreenPoint(aPoint) || area.isVisibleScreenPoint(dPoint);
+            final Point aPoint = area.convertToCanvasPoint(attackerLocation);
+            final Point dPoint = area.convertToCanvasPoint(defenderLocation);
+            return area.isVisibleCanvasPoint(aPoint) || area.isVisibleCanvasPoint(dPoint);
         }
         return false;
     }

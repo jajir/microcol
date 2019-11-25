@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import com.google.common.base.Preconditions;
 
 import javafx.scene.control.Label;
+import javafx.scene.input.MouseButton;
 import javafx.scene.layout.VBox;
 
 /**
@@ -22,6 +23,10 @@ public class RightPanelUnit extends AbstractPageComponent {
 	super(context);
 	this.unitBox = Preconditions.checkNotNull(unitBox);
     }
+    
+    public void selectUnit() {
+	getRobot().clickOn(unitBox, MouseButton.PRIMARY);
+    }
 
     public RightPanelUnit assertFreeActionPoints(final Integer expectedNUmberOfActionPoints) {
 	Preconditions.checkNotNull(expectedNUmberOfActionPoints);
@@ -30,6 +35,10 @@ public class RightPanelUnit extends AbstractPageComponent {
 	final Integer numberOfActionPoints = Integer.valueOf(txt);
 	assertEquals(expectedNUmberOfActionPoints, numberOfActionPoints);
 	return this;
+    }
+
+    public boolean isSelected() {
+	return getNodeFinder().from(unitBox).lookup(".selected").tryQuery().isPresent();
     }
 
 }

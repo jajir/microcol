@@ -3,10 +3,16 @@ package org.microcol.gui.screen;
 import org.microcol.gui.event.ChangeLanguageEvent;
 import org.microcol.gui.screen.campaign.ScreenCampaign;
 import org.microcol.gui.screen.colony.ScreenColony;
+import org.microcol.gui.screen.editor.ScreenEditor;
 import org.microcol.gui.screen.europe.ScreenEurope;
 import org.microcol.gui.screen.game.ScreenGame;
+import org.microcol.gui.screen.goals.ScreenGoals;
+import org.microcol.gui.screen.market.ScreenMarketBuy;
+import org.microcol.gui.screen.market.ScreenMarketSell;
 import org.microcol.gui.screen.menu.ScreenMenu;
 import org.microcol.gui.screen.setting.ScreenSetting;
+import org.microcol.gui.screen.statistics.ScreenStatistics;
+import org.microcol.gui.screen.turnreport.ScreenTurnReport;
 import org.microcol.gui.util.Listener;
 import org.microcol.i18n.I18n;
 import org.microcol.model.ChainOfCommandStrategy;
@@ -41,7 +47,10 @@ public final class MainPanelPresenter {
     public MainPanelPresenter(final MainPanelView view, final I18n i18n,
             final ScreenGame screenGame, final ScreenMenu screenMenu,
             final ScreenCampaign screenCampaign, final ScreenEurope screenEurope,
-            final ScreenSetting screenSetting, final ScreenColony screenColony) {
+            final ScreenSetting screenSetting, final ScreenColony screenColony,
+            final ScreenMarketBuy screenMarketBuy, final ScreenMarketSell screenMarketSell,
+            final ScreenStatistics screenStatistics, final ScreenTurnReport screenTurnReport,
+            final ScreenEditor screenEditor, final ScreenGoals screenGoals) {
         this.view = Preconditions.checkNotNull(view);
         this.i18n = Preconditions.checkNotNull(i18n);
 
@@ -79,6 +88,39 @@ public final class MainPanelPresenter {
                 }, event -> {
                     if (Screen.GAME == event.getScreen()) {
                         return screenGame;
+                    }
+                    return null;
+                }, event -> {
+                    if (Screen.MARKET_BUY == event.getScreen()) {
+                        screenMarketBuy.init(event.getContext());
+                        return screenMarketBuy;
+                    }
+                    return null;
+                }, event -> {
+                    if (Screen.MARKET_SELL == event.getScreen()) {
+                        screenMarketSell.init(event.getContext());
+                        return screenMarketSell;
+                    }
+                    return null;
+                }, event -> {
+                    if (Screen.STATISTICS == event.getScreen()) {
+                        return screenStatistics;
+                    }
+                    return null;
+                }, event -> {
+                    if (Screen.TURN_REPORT == event.getScreen()) {
+                        return screenTurnReport;
+                    }
+                    return null;
+                }, event -> {
+                    if (Screen.GOALS == event.getScreen()) {
+                        return screenGoals;
+                    }
+                    return null;
+                }, event -> {
+                    if (Screen.EDITOR == event.getScreen()) {
+                        screenEditor.loadFile(event.getContext());
+                        return screenEditor;
                     }
                     return null;
                 }));

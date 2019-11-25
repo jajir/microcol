@@ -194,6 +194,8 @@ public class Model {
         final Optional<Colony> oColony = getColonyAt(location);
         Preconditions.checkArgument(!oColony.isPresent(), "There is already colony '%s' at '%s'",
                 oColony, location);
+        Preconditions.checkArgument(!isColonyInNeighbourhood(location),
+                "There is another colony in neighbourhood os %s.", location);
 
         final Colony col = new Colony(this, colonyNames.getNewColonyName(player), player, location,
                 colony -> {
@@ -207,6 +209,35 @@ public class Model {
         colonies.add(col);
         col.placeUnitToProduceFood(unit);
         listenerManager.fireColonyWasFounded(this, col);
+    }
+
+    public boolean isColonyInNeighbourhood(final Location location) {
+        return colonies.stream().filter(col -> col.getLocation().isNeighbor(location)).findAny()
+                .isPresent();
+    }
+
+    public boolean canUnitBuildColony(final Unit unit) {
+        if (unit == null) {
+            return false;
+        }
+        if (!unit.getType().canBuildColony()) {
+            return false;
+        }
+        if (!unit.isAtPlaceLocation()) {
+            return false;
+        }
+        final Optional<Colony> oColony = getColonyAt(unit.getLocation());
+        if (oColony.isPresent()) {
+            return false;
+        }
+        if (isColonyInNeighbourhood(unit.getLocation())) {
+            return false;
+        }
+        return unit.getActionPoints() > 0;
+    }
+
+    public int getKingsTaxForPlayer(final Player subduedPlayer) {
+        return playerStore.getKingsTaxForPlayer(subduedPlayer);
     }
 
     Unit createUnit(final ModelPo modelPo, final UnitPo unitPo) {
@@ -232,14 +263,6 @@ public class Model {
                 UnitType.GALLEON.getSpeed(), new UnitActionNoAction());
     }
 
-    public List<TurnEvent> getLocalizedMessages(final Player player) {
-        return turnEventStore.getLocalizedMessages(player);
-    }
-
-    public boolean isValid(final Path path) {
-        return map.isValid(path);
-    }
-
     public boolean isValid(final Location location) {
         return map.isValid(location);
     }
@@ -260,10 +283,13 @@ public class Model {
         Preconditions.checkArgument(loadUnitToShip.getCargo().getEmptyCargoSlot().isPresent(),
                 "Ship (%s) for cargo doesn't have any free slot for expedition force unit.",
                 loadUnitToShip);
-        CargoSlot cargoSlot = loadUnitToShip.getCargo().getEmptyCargoSlot().get();
-        return unitStorage.createUnit(unit -> new Cargo(unit, UnitType.COLONIST.getCargoCapacity()),
-                this, unit -> new PlaceCargoSlot(unit, cargoSlot), UnitType.COLONIST, king,
+        final CargoSlot cargoSlot = loadUnitToShip.getCargo().getEmptyCargoSlot().get();
+        final Unit out = unitStorage.createUnit(
+                unit -> new Cargo(unit, UnitType.COLONIST.getCargoCapacity()), this,
+                unit -> new PlaceCargoSlot(unit, cargoSlot), UnitType.COLONIST, king,
                 UnitType.COLONIST.getSpeed(), new UnitActionNoAction());
+        cargoSlot.store(out.getPlaceCargoSlot());
+        return out;
     }
 
     /**
@@ -722,18 +748,6 @@ public class Model {
      */
     public Statistics getStatistics() {
         return statistics;
-    }
-
-    /**
-     * Allows to add game over evaluator. When evaluator based on model
-     * condition find out that game is over than return new GameoverResult
-     * object instance otherwise return <code>null</code>.
-     *
-     * @param evaluator
-     *            required evaluator function
-     */
-    public void addGameOverEvaluator(final Function<Model, GameOverResult> evaluator) {
-        gameManager.addEvaluator(evaluator);
     }
 
     /**

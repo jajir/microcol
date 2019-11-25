@@ -3,12 +3,15 @@ package org.microcol.gui.dialog;
 import org.microcol.gui.MusicController;
 import org.microcol.gui.event.model.GameController;
 import org.microcol.gui.preferences.GamePreferences;
+import org.microcol.gui.screen.Screen;
+import org.microcol.gui.screen.ShowScreenEvent;
 import org.microcol.model.campaign.CampaignNames;
 import org.microcol.model.campaign.FreePlay_missionNames;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
+import com.google.common.eventbus.EventBus;
 import com.google.inject.Inject;
 
 /**
@@ -25,12 +28,15 @@ public final class ApplicationController {
 
     private final GamePreferences gamePreferences;
 
+    private final EventBus eventBus;
+
     @Inject
     public ApplicationController(final GameController gameController,
-            final MusicController musicController, final GamePreferences gamePreferences) {
+            final MusicController musicController, final GamePreferences gamePreferences, final EventBus eventBus) {
         this.gameController = Preconditions.checkNotNull(gameController);
         this.musicController = Preconditions.checkNotNull(musicController);
         this.gamePreferences = Preconditions.checkNotNull(gamePreferences);
+        this.eventBus = Preconditions.checkNotNull(eventBus);
     }
 
     /**
@@ -47,6 +53,9 @@ public final class ApplicationController {
     public void startNewFreeGame() {
         logger.debug("Start new default game.");
         gameController.startCampaignMission(CampaignNames.freePlay, FreePlay_missionNames.freePlay);
+        eventBus.post(new ShowScreenEvent(Screen.GAME));
     }
+    
+    
 
 }

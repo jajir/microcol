@@ -109,6 +109,10 @@ public class Construction {
         return ImmutableList.copyOf(workingSlots);
     }
 
+    public Optional<ConstructionSlot> getFirstEmptySlot() {
+        return workingSlots.stream().filter(slot -> slot.isEmpty()).findAny();
+    }
+
     ConstructionSlot getSlotAt(final int index) {
         return workingSlots.get(index);
     }
@@ -156,7 +160,7 @@ public class Construction {
         Goods remaining = sourceGoods;
         ConstructionTurnProduction out = ConstructionTurnProduction.EMPTY;
         for (final ConstructionSlot slot : getConstructionSlots()) {
-            final ConstructionTurnProduction tmp = slot.getProduction(sourceGoods);
+            final ConstructionTurnProduction tmp = slot.getProduction(remaining);
             out = out.add(tmp);
             remaining = remaining.substract(tmp.getConsumedGoods().get());
         }

@@ -1,0 +1,36 @@
+/*
+ * JavaFx setting for GameMenu.
+ * 
+ */
+.main-title {
+	-fx-font-size: 32;
+	-fx-min-width: 420;
+	-fx-min-height: 80;
+	-fx-translate-x: 120;
+	-fx-translate-y: -260;
+}
+
+.titled-content {
+	-fx-max-width: 800;
+	-fx-max-height: 700;
+}
+
+.statsPanel {
+	-fx-max-width: 800;
+	-fx-max-height: 600;
+}
+
+.left {
+	-fx-translate-x: 80;
+	-fx-translate-y: -10;
+}
+
+.right {
+	-fx-translate-x: 190;
+	-fx-translate-y: 100;
+}
+
+.indexTitle {
+	-fx-font-size: 32;
+	-fx-padding: 0 0 50 0;
+}

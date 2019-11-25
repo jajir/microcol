@@ -18,7 +18,7 @@ import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.VBox;
 
-public class PanelQueueUnits extends TitledPanel {
+class PanelQueueUnits extends TitledPanel {
 
     private final ColonyDialogCallback colonyDialogCallback;
 

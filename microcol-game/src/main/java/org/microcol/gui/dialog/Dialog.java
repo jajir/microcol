@@ -35,8 +35,6 @@ public enum Dialog implements MessageKeyResource {
     about_version,
     saveGame_title,
     loadGame_title,
-    missionGoals_title,
-    missionGoals_caption,
     buildingQueueDialog_caption;
 
     @Override

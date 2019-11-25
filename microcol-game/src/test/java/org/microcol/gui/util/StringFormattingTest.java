@@ -13,7 +13,7 @@ public class StringFormattingTest {
     /**
      * Verify that basic localization is working.
      * 
-     * @throws Exception
+     * @throws Exception generic test exception
      */
     @Test
     public void test_simple() throws Exception {

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE properties [
+<!ELEMENT properties ( comment?, entry* ) >
+<!ATTLIST properties version CDATA #FIXED "1.0">
+<!ELEMENT comment (#PCDATA) >
+<!ELEMENT entry (#PCDATA) >
+<!ATTLIST entry key CDATA #REQUIRED>
+]>
+
+<properties>
+	<comment>Define keys for Market</comment>
+
+	<entry key="titleBuy">Buy on market with </entry>
+	<entry key="titleSell">Sell on market with </entry>
+	<entry key="howMuch">How many pieces do you want to buy?</entry>
+	<entry key="howMuchSell">How many pieces do you want to sell?</entry>
+	<entry key="pricePerPiece">Price per piece is ...</entry>
+	<entry key="selected">You are buying %s pieces for ...</entry>
+	<entry key="selectedSell">You are selling %s pieces for ...</entry>
+	<entry key="tax">King tax is %s%%. It's totally ...</entry>
+	<entry key="total">Total is ...</entry>
+	<entry key="totalSell">Total is ...</entry>
+	<entry key="price">%s gold</entry>
+	<entry key="buttonBuy">Buy</entry>
+	<entry key="buttonSell">Sell</entry>
+	<entry key="buttonCancel">Back</entry>
+
+</properties>

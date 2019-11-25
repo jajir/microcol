@@ -14,8 +14,7 @@ import javafx.scene.layout.VBox;
 
 /**
  * Component paint background and one centered panel. Panel is centered
- * horizontally and vertically MainPanel will be centered and have css class
- * 'game-menu-holder'.
+ * horizontally and vertically.
  * <p>
  * Centered page should be set:
  * </p>
@@ -46,7 +45,6 @@ public class CenteredPage implements JavaFxComponent, UpdatableLanguage {
 
     CenteredPage() {
         centeredContent = new HBox();
-        centeredContent.getStyleClass().add("game-menu-holder");
 
         final HBox inner = new HBox();
         inner.setAlignment(Pos.CENTER);

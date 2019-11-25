@@ -1,11 +1,13 @@
 package org.microcol.gui.event.model;
 
 import org.microcol.gui.dialog.DialogMessage;
+import org.microcol.gui.dialog.DialogWithMan;
 import org.microcol.gui.screen.Screen;
 import org.microcol.gui.screen.ShowScreenEvent;
 import org.microcol.gui.util.Listener;
 import org.microcol.i18n.I18n;
 import org.microcol.model.campaign.EventFinishMission;
+import org.microcol.model.campaign.EventShowDialogWithMan;
 import org.microcol.model.campaign.EventShowMessages;
 
 import com.google.common.base.Preconditions;
@@ -26,13 +28,16 @@ public final class MissionEventListener {
 
     private final DialogMessage dialogMessage;
 
+    private final DialogWithMan dialogWithMan;
+
     private final EventBus eventBus;
 
     @Inject
     MissionEventListener(final I18n i18n, final DialogMessage dialogMessage,
-            final EventBus eventBus) {
+            final DialogWithMan dialogWithMan, final EventBus eventBus) {
         this.i18n = Preconditions.checkNotNull(i18n);
         this.dialogMessage = Preconditions.checkNotNull(dialogMessage);
+        this.dialogWithMan = Preconditions.checkNotNull(dialogWithMan);
         this.eventBus = Preconditions.checkNotNull(eventBus);
     }
 
@@ -41,6 +46,14 @@ public final class MissionEventListener {
         Platform.runLater(() -> event.getMessages().forEach(messageKey -> {
             dialogMessage.setText(i18n.get(messageKey));
             dialogMessage.showAndWait();
+        }));
+    }
+
+    @Subscribe
+    private void onShowDialogWithMan(final EventShowDialogWithMan event) {
+        Platform.runLater(() -> event.getMessages().forEach(messageKey -> {
+            dialogWithMan.setText(i18n.get(messageKey));
+            dialogWithMan.showAndWait();
         }));
     }
 

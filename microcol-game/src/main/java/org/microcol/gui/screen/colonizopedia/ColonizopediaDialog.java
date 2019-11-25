@@ -1,7 +1,7 @@
 package org.microcol.gui.screen.colonizopedia;
 
 import org.microcol.gui.util.AbstractMessageWindow;
-import org.microcol.gui.util.ButtonsBar;
+import org.microcol.gui.util.ButtonBarOk;
 import org.microcol.gui.util.ViewUtil;
 import org.microcol.i18n.I18n;
 
@@ -17,14 +17,14 @@ public final class ColonizopediaDialog extends AbstractMessageWindow {
         super(viewUtil, i18n);
         final VBox root = new VBox();
 
-        final ButtonsBar buttonBar = new ButtonsBar(i18n);
+        final ButtonBarOk buttonBar = new ButtonBarOk(i18n);
         buttonBar.getButtonOk().setOnAction(e -> {
             close();
         });
 
         final HBox main = new HBox();
 
-        root.getChildren().addAll(main, buttonBar);
+        root.getChildren().addAll(main, buttonBar.getContent());
         init(root);
     }
 

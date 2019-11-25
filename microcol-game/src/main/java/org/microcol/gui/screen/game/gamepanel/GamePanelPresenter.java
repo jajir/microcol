@@ -31,6 +31,7 @@ import com.google.common.base.Preconditions;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import com.google.inject.Inject;
+import com.google.inject.name.Named;
 
 @Listener
 public final class GamePanelPresenter {
@@ -57,7 +58,7 @@ public final class GamePanelPresenter {
 
     private final ModeController modeController;
 
-    private final VisibleArea visibleArea;
+    private final VisibleAreaService visibleArea;
 
     private final UnitUtil unitUtil;
 
@@ -72,8 +73,9 @@ public final class GamePanelPresenter {
             final SelectedTileManager selectedTileManager, final ViewUtil viewUtil,
             final EventBus eventBus, final ModeController modeController,
             final SelectedUnitManager selectedUnitManager, final I18n i18n,
-            final VisibleArea visibleArea, final OneTurnMoveHighlighter oneTurnMoveHighlighter,
-            final UnitUtil unitUtil, final MoveModeController moveModeController) {
+            final @Named("game") VisibleAreaService visibleArea,
+            final OneTurnMoveHighlighter oneTurnMoveHighlighter, final UnitUtil unitUtil,
+            final MoveModeController moveModeController) {
         this.gameModelController = Preconditions.checkNotNull(gameModelController);
         this.gamePreferences = gamePreferences;
         this.gamePanelView = Preconditions.checkNotNull(gamePanelPainter);
@@ -102,7 +104,7 @@ public final class GamePanelPresenter {
 
     @Subscribe
     private void onGameStarted(final GameStartedEvent event) {
-        visibleArea.setMaxMapSize(event.getModel().getMap());
+        visibleArea.setMapSize(event.getModel().getMap().getMapSize());
     }
 
     @Subscribe
@@ -121,9 +123,9 @@ public final class GamePanelPresenter {
         });
     }
 
-    public void tryToOpenColonyDetail(final Location currentLocation) {
+    void tryToOpenColonyDetail(final Location currentLocation) {
         Preconditions.checkNotNull(currentLocation);
-        final Optional<Colony> oColony = gameModelController.getCurrentPlayer()
+        final Optional<Colony> oColony = gameModelController.getHumanPlayer()
                 .getColoniesAt(currentLocation);
         if (oColony.isPresent()) {
             // show colony details
@@ -134,7 +136,7 @@ public final class GamePanelPresenter {
     private void swithToMoveMode() {
         Preconditions.checkArgument(selectedTileManager.getSelectedTile().isPresent(),
                 "to move mode could be switched just when some tile is selected.");
-        final List<Unit> units = gameModelController.getCurrentPlayer()
+        final List<Unit> units = gameModelController.getHumanPlayer()
                 .getUnitsAt(selectedTileManager.getSelectedTile().get());
         Preconditions.checkState(!units.isEmpty(),
                 "There is no moveable unit or other entity to interact with.");
@@ -142,6 +144,16 @@ public final class GamePanelPresenter {
         oneTurnMoveHighlighter.setLocations(unit.getAvailableLocations());
         logger.debug("Switching '" + unit + "' to go mode.");
         moveModeController.setMoveModeOn();
+    }
+
+    /**
+     * When move mode is enabled than it cancel it.
+     */
+    public void quitFromMoveMode() {
+        if (modeController.isMoveMode()) {
+            final Unit movingUnit = selectedUnitManager.getSelectedUnit().get();
+            disableMoveMode(movingUnit);
+        }
     }
 
     /**

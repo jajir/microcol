@@ -14,10 +14,10 @@
 
 	<properties>
 		<splash-creen-image>images/splash-screen.png</splash-creen-image>
-		<jacoco.version>0.7.9</jacoco.version>
 		<github.global.server>github</github.global.server>
 		<github.global.oauth2Token>${env.GITHUB_OAUTH_TOKEN}</github.global.oauth2Token>
-
+		<jacoco.version>0.8.2</jacoco.version>
+		<javadoc.plugin.version>3.1.1</javadoc.plugin.version>
 		<!-- default values for exec plugin properties -->
 		<development>false</development>
 		<clean>false</clean>
@@ -25,6 +25,14 @@
 
 	<dependencies>
 		<!-- compile scope -->
+		<dependency>
+			<groupId>org.openjfx</groupId>
+			<artifactId>javafx-controls</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.openjfx</groupId>
+			<artifactId>javafx-swing</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
@@ -56,6 +64,12 @@
 			<artifactId>gson</artifactId>
 			<version>2.8.2</version>
 		</dependency>
+		<!-- css files live reloading -->
+		<dependency>
+			<groupId>org.fxmisc.cssfx</groupId>
+			<artifactId>cssfx</artifactId>
+			<version>11.1.0</version>
+		</dependency>
 
 		<!-- Test scope -->
 		<dependency>
@@ -77,22 +91,51 @@
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-engine</artifactId>
 		</dependency>
-		<!-- 
-		<dependency>
-			<groupId>org.junit.vintage</groupId>
-			<artifactId>junit-vintage-engine</artifactId>
-		</dependency>
-		 -->
-		
-		<dependency>
-			<groupId>org.junit.platform</groupId>
-			<artifactId>junit-platform-launcher</artifactId>
-			<version>1.1.0</version>
-			<scope>test</scope>
-		</dependency>
+		<!-- <dependency> <groupId>org.junit.platform</groupId> <artifactId>junit-platform-launcher</artifactId> 
+			<version>1.1.0</version> <scope>test</scope> </dependency> -->
 	</dependencies>
 
+	<profiles>
+		<profile>
+			<!-- This profile is just for running sass maven plugin on local. -->
+			<!-- Plugin should not be executed in regular build because it change -->
+			<!-- source files in src/main/resources. -->
+			<!-- Plugin should not be executed on CI, because of node.js dependency. -->
+			<!-- Start it: mvn sass:watch -Psass -->
+			<id>sass</id>
+			<build>
+				<plugins>
+					<!-- sass:update-stylesheets & sass:watch -->
+					<plugin>
+						<groupId>nl.geodienstencentrum.maven</groupId>
+						<artifactId>sass-maven-plugin</artifactId>
+						<version>3.7.2</version>
+						<configuration>
+							<destination>src/main/resources/gui/</destination>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+
 	<build>
+		<resources>
+			<!-- Enable filtering just for one file. Filtering corrupt files like 
+				fonts. It allows to use maven constants. It have to be enabled just for specific 
+				file. -->
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>false</filtering>
+			</resource>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+				<includes>
+					<include>version.properties</include>
+				</includes>
+			</resource>
+		</resources>
 		<pluginManagement>
 			<plugins>
 				<plugin>
@@ -113,6 +156,14 @@
 		</pluginManagement>
 		<plugins>
 			<plugin>
+				<groupId>org.openjfx</groupId>
+				<artifactId>javafx-maven-plugin</artifactId>
+				<version>0.0.3</version>
+				<configuration>
+					<mainClass>org.microcol.MicroCol</mainClass>
+				</configuration>
+			</plugin>
+			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
 				<version>2.4</version>
@@ -120,14 +171,6 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>2.0.2</version>
-				<configuration>
-					<verbose>false</verbose>
-					<fork>false</fork>
-					<source>1.8</source>
-					<target>1.8</target>
-					<encoding>UTF-8</encoding>
-				</configuration>
 			</plugin>
 			<!-- Create executable jar including all dependencies -->
 			<plugin>
@@ -187,6 +230,13 @@
 						<exclude>org/microcol/integration/**.java</exclude>
 					</excludes>
 				</configuration>
+				<dependencies>
+					<dependency>
+						<groupId>org.junit.platform</groupId>
+						<artifactId>junit-platform-surefire-provider</artifactId>
+						<version>1.2.0</version>
+					</dependency>
+				</dependencies>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -204,7 +254,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>2.9.1</version>
+				<version>${javadoc.plugin.version}</version>
 				<executions>
 					<execution>
 						<id>attach-javadocs</id>
@@ -238,6 +288,7 @@
 					</execution>
 				</executions>
 			</plugin>
+			<!-- -->
 			<!-- disable maven site default generating -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -270,7 +321,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-report-plugin</artifactId>
-				<version>2.4.2</version>
+				<version>2.20</version>
 			</plugin>
 			<!-- Configure project informations generating -->
 			<plugin>
@@ -283,7 +334,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>2.10.3</version>
+				<version>${javadoc.plugin.version}</version>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -297,9 +348,9 @@
 				</reportSets>
 			</plugin>
 			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>findbugs-maven-plugin</artifactId>
-				<version>3.0.2</version>
+				<groupId>com.github.spotbugs</groupId>
+				<artifactId>spotbugs-maven-plugin</artifactId>
+				<version>3.1.12.2</version>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>

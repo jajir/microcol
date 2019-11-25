@@ -3,15 +3,12 @@ package org.microcol.gui.screen.game.components;
 import org.microcol.gui.buttonpanel.AbstractButtonsPanel;
 import org.microcol.gui.buttonpanel.Buttons;
 import org.microcol.gui.buttonpanel.NextTurnEvent;
-import org.microcol.gui.event.AboutGameEvent;
+import org.microcol.gui.event.ShowHelpEvent;
 import org.microcol.gui.event.BuildColonyEvent;
 import org.microcol.gui.event.CenterViewEvent;
 import org.microcol.gui.event.DeclareIndependenceEvent;
 import org.microcol.gui.event.ExitGameEvent;
 import org.microcol.gui.event.PlowFieldEvent;
-import org.microcol.gui.event.ShowGoalsEvent;
-import org.microcol.gui.event.ShowStatisticsEvent;
-import org.microcol.gui.event.ShowTurnReportEvent;
 import org.microcol.gui.event.StartMoveEvent;
 import org.microcol.gui.image.ImageLoaderButtons;
 import org.microcol.gui.image.ImageProvider;
@@ -37,25 +34,25 @@ public class ButtonsGamePanel extends AbstractButtonsPanel {
 
     public final static String BUTTON_NEXT_TURN_ID = "nextTurn";
 
-    public final static String BUTTON_HELP_ID = "help";
+    private final static String BUTTON_HELP_ID = "help";
 
-    public final static String BUTTON_CENTER_ID = "center";
+    private final static String BUTTON_CENTER_ID = "center";
 
-    public final static String BUTTON_STATISTICS_ID = "statistics";
+    private final static String BUTTON_STATISTICS_ID = "statistics";
 
-    public final static String BUTTON_EXIT_ID = "exit";
+    private final static String BUTTON_EXIT_ID = "exit";
 
-    public final static String BUTTON_GOALS_ID = "goals";
+    private final static String BUTTON_GOALS_ID = "goals";
 
     public final static String BUTTON_TURN_REPORT_ID = "turnReport";
 
     public final static String BUTTON_EUROPE_ID = "europe";
 
-    public final static String BUTTON_MOVE_ID = "move";
+    private final static String BUTTON_MOVE_ID = "move";
 
-    public final static String BUTTON_PLOW_FIELD_ID = "plowField";
+    private final static String BUTTON_PLOW_FIELD_ID = "plowField";
 
-    public final static String BUTTON_BUILD_COLONY_ID = "buildColony";
+    private final static String BUTTON_BUILD_COLONY_ID = "buildColony";
 
     public final static String BUTTON_DECLARE_INDEPENDENCE_ID = "declareIndependence";
 
@@ -85,21 +82,23 @@ public class ButtonsGamePanel extends AbstractButtonsPanel {
         buttonCenter.setOnAction(event -> eventBus.post(new CenterViewEvent()));
         buttonCenter.setId(BUTTON_CENTER_ID);
         buttonHelp = makeButon(ImageLoaderButtons.BUTTON_HELP, Buttons.buttonHelp);
-        buttonHelp.setOnAction(event -> eventBus.post(new AboutGameEvent()));
+        buttonHelp.setOnAction(event -> eventBus.post(new ShowHelpEvent()));
         buttonHelp.setId(BUTTON_HELP_ID);
         buttonStatistics = makeButon(ImageLoaderButtons.BUTTON_STATISTICS,
                 Buttons.buttonStatistics);
-        buttonStatistics.setOnAction(event -> eventBus.post(new ShowStatisticsEvent()));
+        buttonStatistics
+                .setOnAction(event -> eventBus.post(new ShowScreenEvent(Screen.STATISTICS)));
         buttonStatistics.setId(BUTTON_STATISTICS_ID);
         buttonExit = makeButon(ImageLoaderButtons.BUTTON_EXIT, Buttons.buttonExit);
         buttonExit.setOnAction(event -> eventBus.post(new ExitGameEvent()));
         buttonExit.setId(BUTTON_EXIT_ID);
         buttonGoals = makeButon(ImageLoaderButtons.BUTTON_GOALS, Buttons.buttonGoals);
-        buttonGoals.setOnAction(event -> eventBus.post(new ShowGoalsEvent()));
+        buttonGoals.setOnAction(event -> eventBus.post(new ShowScreenEvent(Screen.GOALS)));
         buttonGoals.setId(BUTTON_GOALS_ID);
         buttonTurnReport = makeButon(ImageLoaderButtons.BUTTON_TURN_REPORT,
                 Buttons.buttonTurnReport);
-        buttonTurnReport.setOnAction(event -> eventBus.post(new ShowTurnReportEvent()));
+        buttonTurnReport
+                .setOnAction(event -> eventBus.post(new ShowScreenEvent(Screen.TURN_REPORT)));
         buttonTurnReport.setId(BUTTON_TURN_REPORT_ID);
         buttonEurope = makeButon(ImageLoaderButtons.BUTTON_EUROPE, Buttons.buttonEurope);
         buttonEurope.setOnAction(event -> eventBus.post(new ShowScreenEvent(Screen.EUROPE)));
@@ -134,18 +133,18 @@ public class ButtonsGamePanel extends AbstractButtonsPanel {
         getButtonPanel().getChildren().add(buttonStatistics);
         getButtonPanel().getChildren().add(buttonTurnReport);
         getButtonPanel().getChildren().add(buttonGoals);
-        getButtonPanel().getChildren().add(buttonHelp);
+        // getButtonPanel().getChildren().add(buttonHelp);
         getButtonPanel().getChildren().add(buttonEurope);
         getButtonPanel().getChildren().add(buttonExit);
         getButtonPanel().getChildren().add(buttonNextTurn);
     }
 
-    public void disableAllButtons() {
+    void disableAllButtons() {
         LOGGER.debug("Disabling buttons bar");
         setDisable(true);
     }
 
-    public void enableAllButtons() {
+    void enableAllButtons() {
         LOGGER.debug("Enabling buttons bar");
         setDisable(false);
     }
@@ -183,7 +182,7 @@ public class ButtonsGamePanel extends AbstractButtonsPanel {
         setVisibleNode(buttonDeclareIndependence, isVisible);
     }
 
-    protected void setVisibleNode(final Node node, final boolean isVisible) {
+    private void setVisibleNode(final Node node, final boolean isVisible) {
         Platform.runLater(() -> {
             if (isContaining(node)) {
                 if (!isVisible) {

@@ -1,8 +1,6 @@
 package org.microcol.gui;
 
-import org.microcol.gui.dialog.ConstructionTypes;
 import org.microcol.i18n.I18n;
-import org.microcol.model.ConstructionType;
 import org.microcol.model.TerrainType;
 import org.microcol.model.UnitType;
 
@@ -30,10 +28,6 @@ public final class LocalizationHelper {
 
     public String getUnitName(final UnitType unitType) {
         return i18n.get(UnitTypes.getUnitName(unitType));
-    }
-
-    public String getConstructionTypeName(final ConstructionType constructionType) {
-        return i18n.get(ConstructionTypes.getConstructionName(constructionType));
     }
 
 }

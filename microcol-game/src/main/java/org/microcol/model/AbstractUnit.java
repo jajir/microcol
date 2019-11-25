@@ -49,7 +49,7 @@ public abstract class AbstractUnit implements Unit {
     /**
      * Immutable model.
      */
-    private final Model model;
+    protected final Model model;
 
     private Player owner;
     private Place place;
@@ -438,7 +438,7 @@ public abstract class AbstractUnit implements Unit {
                 moveTo);
         Preconditions.checkArgument(isPossibleToMoveAt(moveTo),
                 "It's not possible to move at (%s).", moveTo);
-        Preconditions.checkState(actionPoints > 0, "There is not enough avilable moves (%s)", this);
+        Preconditions.checkState(actionPoints > 0, "There is not enough available action points (%s)", this);
 
         actionPoints--;
         final TerrainType targetTerrain = model.getMap().getTerrainTypeAt(moveTo);
@@ -621,7 +621,6 @@ public abstract class AbstractUnit implements Unit {
     @Override
     public void placeToCargoSlot(final PlaceCargoSlot placeCargoSlot) {
         Preconditions.checkNotNull(placeCargoSlot, "Place cargo slot is null");
-        Preconditions.checkArgument(!isAtCargoSlot(), "Unit %s is already in cargo slot", this);
         Preconditions.checkArgument(owner.equals(placeCargoSlot.getCargoSlotOwner()),
                 "Cargo slot belongs to different player %s than unit %s",
                 placeCargoSlot.getCargoSlotOwner(), owner);
@@ -691,7 +690,7 @@ public abstract class AbstractUnit implements Unit {
     private int countRequiredTurnsToSail(final boolean isTravelToEurope) {
         if (isTravelToEurope) {
             int x = getLocation().getX();
-            if (x < getModel().getMap().getMaxX() / 2) {
+            if (x < getModel().getMap().getMaxLocationX() / 2) {
                 return TRAVEL_TO_EUROPE_FROM_WEST;
             } else {
                 return TRAVEL_TO_EUROPE;
@@ -794,26 +793,27 @@ public abstract class AbstractUnit implements Unit {
     }
 
     @Override
-    public void disembark(final Location targetLocation) {
+    public void disembarkToLocation(final Location targetLocation) {
         Preconditions.checkNotNull(targetLocation);
         Preconditions.checkState(actionPoints > 0,
-                "Unit (%s) need for unload at least on action point", this);
+                "Unit (%s) need for unload at least one action point", this);
         Preconditions.checkState(isAtCargoSlot(),
-                "This unit (%s) can't be unload, it's not stored.", this);
+                "This unit (%s) can't be unload, it's not in cargo slot.", this);
         final TerrainType terrainType = model.getMap().getTerrainTypeAt(targetLocation);
         Preconditions.checkState(getType().getMoveableTerrains().contains(terrainType),
                 "This unit (%s) can't move at target terrain %s.", this, terrainType);
         final Location startLocation = getPlaceCargoSlot().getOwnerUnit().getLocation();
         Preconditions.checkState(startLocation.isNeighbor(targetLocation),
-                "Start location '%s' have to neighbobor of target location '%s'", startLocation,
+                "Start location '%s' have to neighbour of target location '%s'", startLocation,
                 targetLocation);
-
-        this.actionPoints = 0;
+        Preconditions.checkArgument(model.getColonyAt(targetLocation).isEmpty(),
+                "Target location %s can't be colony.", targetLocation);
 
         final Direction orientation = findOrintationForMove(targetLocation);
         final Path path = Path.of(Lists.newArrayList(startLocation, targetLocation));
         if (model.fireUnitMoveStarted(this, path)) {
             model.fireUnitMovedStepStarted(this, startLocation, targetLocation, orientation);
+            this.actionPoints = 0;
             placeToLocation(targetLocation, orientation);
             owner.revealMapForUnit(this);
             model.fireUnitMovedStepFinished(this, startLocation, targetLocation);
@@ -821,21 +821,26 @@ public abstract class AbstractUnit implements Unit {
         }
     }
 
-    /**
-     * This put unit to cargo slot from map and paint nice animation of
-     * movement.
-     *
-     * @param placeCargoSlot
-     *            required placeCargoSlot
-     */
     @Override
-    public void embark(final PlaceCargoSlot placeCargoSlot) {
+    public void embarkFromLocation(final CargoSlot cargoSlot) {
+        Preconditions.checkNotNull(cargoSlot);
+        Preconditions.checkArgument(cargoSlot.isEmpty(), "Cargo slot (%s) is already loaded.",
+                cargoSlot);
         Preconditions.checkState(isAtPlaceLocation(), "Unit have to be at map, it's at '%s'",
                 place);
-        Preconditions.checkState(placeCargoSlot.getCargoSlot().getOwnerUnit().isAtPlaceLocation(),
-                "Unit '%s' have to be at map", placeCargoSlot.getCargoSlot().getOwnerUnit());
+        Preconditions.checkState(cargoSlot.getOwnerUnit().isAtPlaceLocation(),
+                "Unit '%s' where other unit would like to embark have to be at map",
+                cargoSlot.getOwnerUnit());
+        Preconditions.checkArgument(owner.equals(cargoSlot.getOwnerPlayer()),
+                "Cargo slot belongs to different player %s than unit %s",
+                cargoSlot.getOwnerPlayer(), owner);
+        final PlaceCargoSlot placeCargoSlot = new PlaceCargoSlot(this, cargoSlot);
         final Location startLocation = getLocation();
         final Location targetLocation = placeCargoSlot.getCargoSlot().getOwnerUnit().getLocation();
+        Preconditions.checkArgument(startLocation.isNeighbor(targetLocation),
+                "Start location %s and target locations %s have to be neighbours",
+                cargoSlot.getOwnerPlayer(), owner);
+        
         final Direction orientation = findOrintationForMove(targetLocation);
         final Path path = Path.of(Lists.newArrayList(startLocation, targetLocation));
 

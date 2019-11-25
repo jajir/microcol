@@ -13,6 +13,10 @@ import com.google.common.collect.ImmutableMap;
 /**
  * For each map location holds pseudo random number. See
  * {@link WorldMap#getSeed()}.
+ * <p>
+ * it's nice and easy way how to show random elements always on a same place for
+ * one map.
+ * </p>
  */
 public final class WorldMapRandoms {
 
@@ -31,8 +35,8 @@ public final class WorldMapRandoms {
         Preconditions.checkNotNull(map);
         final Map<Location, Integer> tmp = new HashMap<>();
         final Random random = new Random(map.getSeed());
-        for (int x = 1; x <= map.getMaxX(); x++) {
-            for (int y = 1; y <= map.getMaxY(); y++) {
+        for (int x = 1; x <= map.getMaxLocationX(); x++) {
+            for (int y = 1; y <= map.getMaxLocationY(); y++) {
                 tmp.put(Location.of(x, y), random.nextInt());
             }
         }

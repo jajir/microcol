@@ -56,13 +56,15 @@ public abstract class UnitWithCargo extends AbstractUnit {
 
     public boolean isPossibleToDisembarkAt(final Location targetLocation, boolean inCurrentTurn) {
         Preconditions.checkNotNull(targetLocation);
-        if (getLocation().isNeighbor(targetLocation) && getType().getCargoCapacity() > 0) {
-            return getCargo().getSlots().stream().filter(
-                    cargoSlot -> canCargoDisembark(cargoSlot, targetLocation, inCurrentTurn))
-                    .findAny().isPresent();
-        } else {
-            return false;
-        }
+        return isPossibleToDisembarkAt(targetLocation) && getCargo().getSlots().stream()
+                .filter(cargoSlot -> canCargoDisembark(cargoSlot, targetLocation, inCurrentTurn))
+                .findAny().isPresent();
+    }
+
+    private boolean isPossibleToDisembarkAt(final Location targetLocation) {
+        Preconditions.checkNotNull(targetLocation);
+        return getLocation().isNeighbor(targetLocation) && getType().getCargoCapacity() > 0
+                && model.getColonyAt(targetLocation).isEmpty();
     }
 
     private boolean canCargoDisembark(final CargoSlot slot, final Location moveToLocation,
@@ -75,8 +77,8 @@ public abstract class UnitWithCargo extends AbstractUnit {
                     && holdedUnit.canUnitDisembarkAt(moveToLocation);
         }
     }
-    
-    protected List<UnitActionType> getSupportedActions(){
+
+    protected List<UnitActionType> getSupportedActions() {
         return ImmutableList.of(UnitActionType.noAction);
     }
 

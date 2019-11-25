@@ -25,6 +25,7 @@ public enum GameMenu implements MessageKeyResource {
     settingLanguageEn,
     settingShowGrid,
     settingShowFightAdvisor,
+    settingVersion,
     campaignPanelButtonBack,
     campaignPanel_default_findNewWorld,
     campaignPanel_default_buildArmy,

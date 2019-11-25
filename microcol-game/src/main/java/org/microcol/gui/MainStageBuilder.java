@@ -26,8 +26,8 @@ public final class MainStageBuilder {
     public static final String STYLE_SHEET_DIALOGS = MainStageBuilder.class
             .getResource("/gui/dialogs.css").toExternalForm();
 
-    public static final String STYLE_SHEET_RIGHT_PANEL_VIEW = MainStageBuilder.class
-            .getResource("/gui/rightPanelView.css").toExternalForm();
+    public static final String STYLE_SHEET_RIGHT_PANEL = MainStageBuilder.class
+            .getResource("/gui/rightPanel.css").toExternalForm();
 
     private final EventBus eventBus;
 
@@ -92,9 +92,9 @@ public final class MainStageBuilder {
         final Scene scene = new Scene(mainBox);
         scene.getStylesheets().add(STYLE_SHEET_MICROCOL);
         mainBox.getChildren().add(mainPanelView.getContent());
-        
-        eventBus.post( new ShowScreenEvent(org.microcol.gui.screen.Screen.MENU));
-        
+
+        eventBus.post(new ShowScreenEvent(org.microcol.gui.screen.Screen.MENU));
+
         primaryStage.setScene(scene);
     }
 

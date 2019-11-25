@@ -1,7 +1,5 @@
 package org.microcol.gui.screen.game.components;
 
-import java.util.Optional;
-
 import org.microcol.gui.buttonpanel.NextTurnEvent;
 import org.microcol.gui.event.DeclareIndependenceEvent;
 import org.microcol.gui.event.EndMoveEvent;
@@ -9,7 +7,6 @@ import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.screen.game.gamepanel.SelectedUnitManager;
 import org.microcol.gui.screen.game.gamepanel.SelectedUnitWasChangedEvent;
 import org.microcol.gui.util.Listener;
-import org.microcol.model.Colony;
 import org.microcol.model.Model;
 import org.microcol.model.Terrain;
 import org.microcol.model.Unit;
@@ -64,7 +61,6 @@ public class ButtonsGamePanelController {
                 view.setVisibleButtonMove(false);
                 view.setVisibleButtonBuildColony(false);
                 view.setVisibleButtonPlowField(false);
-
             }
         }
     }
@@ -100,6 +96,7 @@ public class ButtonsGamePanelController {
             view.setVisibleButtonBuildColony(false);
             view.setVisibleButtonPlowField(false);
         }
+        evaluateDeclareIndependenceButton();
     }
 
     @Subscribe
@@ -121,7 +118,7 @@ public class ButtonsGamePanelController {
 
     private void evaluateDeclareIndependenceButton() {
         view.setVisibleButtonDeclareIndependence(
-                gameModelController.getCurrentPlayer().isPossibleToDecalareIndependence());
+                gameModelController.getHumanPlayer().isPossibleToDecalareIndependence());
     }
 
     private void evaluatePlowField(final Unit unit) {
@@ -138,16 +135,7 @@ public class ButtonsGamePanelController {
     }
 
     private void evaluateBuildColony(final Unit unit) {
-        if (!unit.getType().canBuildColony()) {
-            view.setVisibleButtonBuildColony(false);
-            return;
-        }
-        final Optional<Colony> oColony = getModel().getColonyAt(unit.getLocation());
-        if (oColony.isPresent()) {
-            view.setVisibleButtonBuildColony(false);
-        } else {
-            view.setVisibleButtonBuildColony(unit.getActionPoints() > 0);
-        }
+        view.setVisibleButtonBuildColony(gameModelController.getModel().canUnitBuildColony(unit));
     }
 
     private Model getModel() {

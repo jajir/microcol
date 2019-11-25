@@ -3,6 +3,7 @@ package org.microcol.model;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import org.microcol.gui.MicroColException;
@@ -14,6 +15,11 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 
 public final class PlayerStore {
+
+    /**
+     * When player doesn't have king. than this tax percentage is used.
+     */
+    private final static int DEFAULT_KINGS_TAX_PERCENTAGE = 3;
 
     private final List<Player> players;
 
@@ -60,6 +66,16 @@ public final class PlayerStore {
         return players.stream().filter(player -> player.getName().equals(playerName)).findAny()
                 .orElseThrow(() -> new MicroColException(
                         String.format("There is no such player (%s)", playerName)));
+    }
+
+    public Optional<PlayerKing> getKingForPlayer(final Player subduedPlayer) {
+        return players.stream().filter(player -> player.isKing()).map(player -> (PlayerKing) player)
+                .filter(king -> king.getWhosKingThisPlayerIs().equals(subduedPlayer)).findAny();
+    }
+
+    int getKingsTaxForPlayer(final Player subduedPlayer) {
+        return getKingForPlayer(subduedPlayer).map(PlayerKing::getKingsTaxPercentage)
+                .orElse(DEFAULT_KINGS_TAX_PERCENTAGE);
     }
 
     @Override

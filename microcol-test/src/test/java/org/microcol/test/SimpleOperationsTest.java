@@ -9,20 +9,16 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.microcol.gui.FileSelectingService;
 import org.microcol.gui.screen.setting.SettingLanguageView;
 import org.microcol.model.Location;
 import org.microcol.page.GamePage;
 import org.microcol.page.SettingPage;
 import org.microcol.page.WelcomePage;
-import org.mockito.Mockito;
 import org.testfx.api.FxAssert;
 import org.testfx.api.FxRobot;
 import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
 import org.testfx.service.query.EmptyNodeQueryException;
-
-import com.google.inject.Binder;
 
 import javafx.stage.Stage;
 
@@ -32,23 +28,16 @@ public class SimpleOperationsTest extends AbstractMicroColTest {
     private final static String BUTTON_SETTING_ID_NOT_EXISTING = "#buttonSetting-notExisting";
 
     private final static File verifyLoadingUnloading = new File(
-	    "src/test/scenarios/test-verify-loading-unloading.microcol");
+	    "src/test/scenarios/simple_operation_test.microcol");
 
     @Start
     void start(final Stage primaryStage) throws Exception {
-	initialize(primaryStage, getClass());
+	initialize(primaryStage, getClass(),verifyLoadingUnloading);
     }
 
-    @Override
-    protected void bind(Binder binder) {
-	FileSelectingService fileSelectingService = Mockito.mock(FileSelectingService.class);
-	Mockito.when(fileSelectingService.loadFile(Mockito.any(File.class))).thenReturn(verifyLoadingUnloading);
-	binder.bind(FileSelectingService.class).toInstance(fileSelectingService);
-    }
-
-    @Test
     @Tag("ci")
-    void verify_that_test_files_exists() {
+    @Test
+    public void verify_that_test_files_exists() {
 	assertTrue(verifyLoadingUnloading.exists(),
 		String.format("File '%s' doesn't exists", verifyLoadingUnloading.getAbsoluteFile()));
 	assertTrue(verifyLoadingUnloading.isFile(),
@@ -57,7 +46,7 @@ public class SimpleOperationsTest extends AbstractMicroColTest {
 
     @Test
     @Tag("ci")
-    void verify_exception_is_throws_when_object_isnt_exists() throws Exception {
+    public void verify_exception_is_throws_when_object_isnt_exists() throws Exception {
 	Assertions.assertThrows(EmptyNodeQueryException.class, () -> {
 	    FxAssert.verifyThat(BUTTON_SETTING_ID_NOT_EXISTING, obj -> {
 		return true;
@@ -67,7 +56,7 @@ public class SimpleOperationsTest extends AbstractMicroColTest {
 
     @Test
     @Tag("ci")
-    void verify_setting_page_is_available() throws Exception {
+    public void verify_setting_page_is_available() throws Exception {
 	SettingPage settingPage = WelcomePage.of(getContext()).openSetting();
 
 	settingPage.goBack().verifyMainScreen();
@@ -75,7 +64,7 @@ public class SimpleOperationsTest extends AbstractMicroColTest {
 
     @Test
     @Tag("ci")
-    void verify_language_is_changed_immediatelly(final FxRobot robot) throws Exception {
+    public void verify_language_is_changed_immediatelly(final FxRobot robot) throws Exception {
 	assertNotNull(robot);
 	SettingPage settingPage = WelcomePage.of(getContext()).openSetting();
 
@@ -110,7 +99,7 @@ public class SimpleOperationsTest extends AbstractMicroColTest {
      */
     @Test
     @Tag("ci")
-    void verify_moving_with_unit() throws Exception {
+    public void verify_moving_with_unit() throws Exception {
 	final GamePage gamePage = WelcomePage.of(getContext()).loadGame();
 
 	gamePage.moveMouseAtLocation(Location.of(22, 12));

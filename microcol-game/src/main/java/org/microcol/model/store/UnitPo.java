@@ -40,16 +40,6 @@ public class UnitPo {
 
     private boolean mounted;
 
-    public static UnitPo make(final Integer id, final UnitType type, final String ownerId,
-            final CargoPo cargo) {
-        final UnitPo out = new UnitPo();
-        out.setId(id);
-        out.setType(type);
-        out.setOwnerId(ownerId);
-        out.setCargo(cargo);
-        return out;
-    }
-
     @Override
     public String toString() {
         return MoreObjects.toStringHelper(UnitPo.class).add("id", id).add("type", type)

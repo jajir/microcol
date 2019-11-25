@@ -14,8 +14,6 @@ import javafx.stage.FileChooser;
 
 public class FileSelectingService extends AbstractMessageWindow {
 
-    public static final String SAVE_FILE_EXTENSION = "microcol";
-
     private final I18n i18n;
 
     @Inject

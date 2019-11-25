@@ -21,8 +21,6 @@ import javafx.scene.layout.Region;
  */
 public final class PanelCratePresenter implements JavaFxComponent {
 
-    public final static String CRATE_CLASS = "cratePanel";
-
     private final I18n i18n;
 
     private final EventBus eventBus;
@@ -71,13 +69,13 @@ public final class PanelCratePresenter implements JavaFxComponent {
 
     private void onDragEntered(final DragEvent event) {
         if (isCorrectObject(event.getDragboard())) {
-            view.setBackgroudHighlighted();
+            view.setBackgroundHighlighted();
         }
     }
 
     @SuppressWarnings("unused")
     private void onDragExited(final DragEvent event) {
-        view.setBackgroudNormal();
+        view.setBackgroundNormal();
     }
 
     private void onDragOver(final DragEvent event) {

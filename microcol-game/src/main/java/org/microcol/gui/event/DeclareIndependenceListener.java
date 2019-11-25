@@ -20,8 +20,9 @@ public final class DeclareIndependenceListener {
     }
 
     @Subscribe
+    @SuppressWarnings("ucd")
     public void onEvent(@SuppressWarnings("unused") final DeclareIndependenceEvent event) {
-        final Player currentPlayer = gameModelController.getCurrentPlayer();
+        final Player currentPlayer = gameModelController.getHumanPlayer();
         currentPlayer.declareIndependence();
     }
 

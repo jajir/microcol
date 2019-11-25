@@ -4,6 +4,7 @@ import com.google.inject.Inject;
 
 import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 
@@ -51,6 +52,10 @@ public final class CanvasComponent implements JavaFxComponent {
      */
     public Canvas getCanvas() {
         return canvas;
+    }
+
+    public GraphicsContext getGraphicsContext2D() {
+        return canvas.getGraphicsContext2D();
     }
 
     @Override

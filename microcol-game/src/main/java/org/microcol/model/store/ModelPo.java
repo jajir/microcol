@@ -27,24 +27,11 @@ public class ModelPo {
     
     private GameManagerPo gameManager = new GameManagerPo();
 
-    public PlayerPo getPlayerByName(final String name) {
-        return gameManager.getPlayerByName(name);
-    }
-
     public UnitPo getUnitWithUnitInCargo(final Integer idUnitInCargo) {
         Preconditions.checkState(idUnitInCargo != null, "IdUnitInCargo is null");
         return units.stream().filter(unit -> unit.getCargo().containsUnitInCargo(idUnitInCargo))
                 .findAny().orElseThrow(() -> new IllegalStateException(String.format(
                         "Unable to find unit containing unit '%s' in cargo", idUnitInCargo)));
-    }
-
-    public void addUnit(final UnitPo add) {
-        units.stream().filter(unit -> unit.getId().equals(add.getId())).findFirst()
-                .ifPresent(unit -> {
-                    throw new IllegalArgumentException(
-                            "unit " + unit + " is same asss added " + add);
-                });
-        units.add(add);
     }
 
     public List<UnitPo> getUnits() {

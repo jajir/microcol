@@ -35,21 +35,21 @@ public class Continent {
         this.model = Preconditions.checkNotNull(model);
     }
 
-    public void add(final Location location) {
+    void add(final Location location) {
         locations.add(location);
     }
 
-    public boolean contains(final Location location) {
+    boolean contains(final Location location) {
         Preconditions.checkNotNull(location);
         return locations.contains(location);
     }
 
-    public boolean contains(final Unit unit) {
+    boolean contains(final Unit unit) {
         Preconditions.checkNotNull(unit);
         return contains(unit.getLocation());
     }
 
-    public Optional<Location> getClosesEnemyCityToAttack(final Location unitLocation,
+    Optional<Location> getClosesEnemyCityToAttack(final Location unitLocation,
             final Player enemyPlayer) {
         return locations.stream().filter(loc -> model.getColoniesAt(loc, enemyPlayer).isPresent())
                 .sorted(Comparator.comparingInt(loc -> unitLocation.getDistance(loc))).findFirst();
@@ -72,7 +72,7 @@ public class Continent {
      *            required player to attack
      * @return score
      */
-    public int getMilitaryImportance(final Player enemyPlayer) {
+    int getMilitaryImportance(final Player enemyPlayer) {
         return locations
                 .stream().map(loc -> model.getColoniesAt(loc, enemyPlayer)
                         .map(col -> col.getMilitaryForce()).orElse(0))
@@ -91,7 +91,7 @@ public class Continent {
     }
 
     private boolean isLocationBorder(final Location location) {
-        return location.getY() == 1 || location.getY() == model.getMap().getMaxY() - 1;
+        return location.getY() == 1 || location.getY() == model.getMap().getMaxLocationY() - 1;
     }
 
     @Override

@@ -1,10 +1,9 @@
 package org.microcol.gui.dialog;
 
-import java.util.function.Function;
-
 import org.microcol.gui.screen.europe.ChooseGoods;
+import org.microcol.gui.screen.market.SimpleStringConverter;
 import org.microcol.gui.util.AbstractMessageWindow;
-import org.microcol.gui.util.ButtonsBar;
+import org.microcol.gui.util.ButtonBarOk;
 import org.microcol.gui.util.ViewUtil;
 import org.microcol.i18n.I18n;
 import org.microcol.model.Goods;
@@ -16,7 +15,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.util.StringConverter;
 
 /**
  * Allows user to choose how many goods wants to transfer.
@@ -53,7 +51,7 @@ public final class ChooseGoodsDialog extends AbstractMessageWindow {
         boxActualValue.getChildren().addAll(labelActualValue, labelValue);
 
         slider = new Slider();
-        slider.setLabelFormatter(new MyStringConverted(this::converToString));
+        slider.setLabelFormatter(new SimpleStringConverter(this::converToString));
         slider.setMin(MIN_VALUE);
         slider.setSnapToTicks(false);
         slider.setMajorTickUnit(10);
@@ -66,13 +64,13 @@ public final class ChooseGoodsDialog extends AbstractMessageWindow {
             actualValue = Goods.of(actualValue.getType(), newValue.intValue());
         });
 
-        final ButtonsBar buttonsBar = new ButtonsBar(i18n);
+        final ButtonBarOk buttonsBar = new ButtonBarOk(i18n);
         buttonsBar.getButtonOk().setOnAction(e -> {
             close();
         });
         buttonsBar.getButtonOk().requestFocus();
 
-        root.getChildren().addAll(labelCaption, boxActualValue, slider, buttonsBar);
+        root.getChildren().addAll(labelCaption, boxActualValue, slider, buttonsBar.getContent());
     }
 
     public void init(final Goods maximalGoodsToTransfer) {
@@ -110,25 +108,6 @@ public final class ChooseGoodsDialog extends AbstractMessageWindow {
             return String.valueOf(v);
         }
         return null;
-    }
-
-    private class MyStringConverted extends StringConverter<Double> {
-
-        private final Function<Double, String> convertorToString;
-
-        MyStringConverted(final Function<Double, String> convertorToString) {
-            this.convertorToString = Preconditions.checkNotNull(convertorToString);
-        }
-
-        @Override
-        public String toString(final Double value) {
-            return convertorToString.apply(value);
-        }
-
-        @Override
-        public Double fromString(final String string) {
-            return null;
-        }
     }
 
 }

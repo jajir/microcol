@@ -15,7 +15,7 @@ public final class HighSea {
 
     private final Model model;
 
-    public HighSea(final Model model) {
+    HighSea(final Model model) {
         this.model = Preconditions.checkNotNull(model);
     }
 
@@ -35,7 +35,7 @@ public final class HighSea {
     List<Location> getSuitablePlaceForShipCommingFromEurope(final Player player,
             final boolean countFromEast) {
         final WorldMap map = model.getMap();
-        final int range = map.getMaxY() / 4;
+        final int range = map.getMaxLocationY() / 4;
         final int start = range;
         final int stop = start + range * 2;
         final List<Location> out = new ArrayList<>();
@@ -48,7 +48,7 @@ public final class HighSea {
     private Location findFirstSuitableLocation(final Player player, final boolean countFromEast,
             final int indexY) {
         if (countFromEast) {
-            for (int indexX = model.getMap().getMaxX(); indexX >= 0; indexX--) {
+            for (int indexX = model.getMap().getMaxLocationX(); indexX >= 0; indexX--) {
                 final Location location = Location.of(indexX, indexY);
                 if (player.isPossibleToSailAt(location)) {
                     return location;

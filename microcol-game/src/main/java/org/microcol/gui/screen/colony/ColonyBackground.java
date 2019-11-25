@@ -1,5 +1,6 @@
 package org.microcol.gui.screen.colony;
 
+import org.microcol.gui.ColorScheme;
 import org.microcol.gui.GuiColors;
 import org.microcol.gui.Point;
 import org.microcol.gui.background.AbstractBackground;
@@ -19,7 +20,7 @@ import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 
 @Singleton
-public class ColonyBackground extends AbstractBackground {
+class ColonyBackground extends AbstractBackground {
 
     private final static String IMG_TOP1 = "colony-top1.png";
     private final static String IMG_TOP2 = "colony-top2.png";
@@ -32,33 +33,33 @@ public class ColonyBackground extends AbstractBackground {
     private final Image imageCenter;
 
     private final ThreeStripesPainter threeStripesPainter;
-    
+
     private final ImageStripePainter top1ImageStripePainter;
     private final ImageStripePainter top2ImageStripePainter;
     private final ImageStripePainter bottomImageStripePainter;
-    
+
     @Inject
-    public ColonyBackground(final ImageProvider imageProvider) {
-        super(imageProvider);
+    public ColonyBackground(final ImageProvider imageProvider, final ColorScheme colorScheme) {
         imageTop1 = Preconditions.checkNotNull(imageProvider.getImage(IMG_TOP1));
         imageTop2 = Preconditions.checkNotNull(imageProvider.getImage(IMG_TOP2));
         imageBottom = Preconditions.checkNotNull(imageProvider.getImage(IMG_BOTTOM));
         imageCenter = Preconditions.checkNotNull(imageProvider.getImage(IMG_CENTER));
         final ThreeStripesPref pref = ThreeStripesPref.build()
-                .setTopStripe(StripeDef.of(-280, GuiColors.SKY))
-                .setCenterStripe(StripeDef.of(30, GuiColors.GRASS))
-                .setBottomStripe(StripeDef.of(290, GuiColors.GROUND)).setCenterStripeHeight(460)
+                .setTopStripe(StripeDef.of(-290, colorScheme.getColor(GuiColors.SKY_1)))
+                .setCenterStripe(StripeDef.of(80, colorScheme.getColor(GuiColors.GRASS_1)))
+                .setBottomStripe(StripeDef.of(300, colorScheme.getColor(GuiColors.GRASS_1)))
+                .setCenterStripeHeight(420)
                 .make();
         this.threeStripesPainter = new ThreeStripesPainter(pref);
 
         final Point centerImageSize = Point.of(imageCenter.getWidth(), imageCenter.getHeight());
         top1ImageStripePainter = new ImageStripePainter(ImageStripePref.build().setImage(imageTop1)
-                .setCenterGap(centerImageSize.getX() - 10).setVerticalShift(-287).make());
+                .setCenterGap(centerImageSize.getX() - 10).setVerticalShift(-305).make());
         top2ImageStripePainter = new ImageStripePainter(ImageStripePref.build().setImage(imageTop2)
-                .setCenterGap(centerImageSize.getX() - 10).setVerticalShift(-280).make());
+                .setCenterGap(centerImageSize.getX() - 10).setVerticalShift(-298).make());
         bottomImageStripePainter = new ImageStripePainter(
                 ImageStripePref.build().setImage(imageBottom)
-                        .setCenterGap(centerImageSize.getX() - 10).setVerticalShift(246).make());
+                        .setCenterGap(centerImageSize.getX() - 10).setVerticalShift(265).make());
     }
 
     @Override

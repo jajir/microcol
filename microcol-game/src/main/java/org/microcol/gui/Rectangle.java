@@ -18,10 +18,6 @@ public final class Rectangle {
         this.bottomRightCorner = Preconditions.checkNotNull(bottomRightCorner);
     }
 
-    public static Rectangle of(final Point topLeftCorner, final Point bottomRightCorner) {
-        return new Rectangle(topLeftCorner, bottomRightCorner);
-    }
-
     public static Rectangle ofPointAndSize(final Point topLeftCorner, final Point size) {
         return new Rectangle(topLeftCorner, topLeftCorner.add(size));
     }
@@ -35,6 +31,14 @@ public final class Rectangle {
     public String toString() {
         return MoreObjects.toStringHelper(Rectangle.class).add("topLeftCorner", topLeftCorner)
                 .add("bottomRightCorner", bottomRightCorner).toString();
+    }
+
+    public Point getTopLeftCorner() {
+        return topLeftCorner;
+    }
+
+    public Point getSize() {
+        return bottomRightCorner.substract(topLeftCorner);
     }
 
 }

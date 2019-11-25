@@ -10,11 +10,12 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
 @Singleton
-public class PanelDockProviderColony extends AbstractPanelDockProvider {
+class PanelDockProviderColony extends AbstractPanelDockProvider {
 
     @Inject
     PanelDockProviderColony(final ImageProvider imageProvider,
-            final PanelColonyDockBehaviour panelDockBehavior, final I18n i18n, final EventBus eventBus) {
+            final PanelColonyDockBehaviour panelDockBehavior, final I18n i18n,
+            final EventBus eventBus) {
         super(imageProvider, panelDockBehavior, i18n, eventBus, Source.COLONY);
     }
 

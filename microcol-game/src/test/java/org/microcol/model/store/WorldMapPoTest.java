@@ -1,16 +1,20 @@
 package org.microcol.model.store;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.util.Set;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.microcol.model.Location;
 
-import java.util.Set;
-
 import com.google.common.collect.Sets;
 
+/**
+ * Tests loading and storing map layers into persistent object.
+ */
 public class WorldMapPoTest {
 
     private final static String LINE_C = "column  :1,2,3,4,5";

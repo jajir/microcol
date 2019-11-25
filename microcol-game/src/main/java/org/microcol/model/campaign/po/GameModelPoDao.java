@@ -33,10 +33,12 @@ import org.slf4j.LoggerFactory;
 import com.google.common.base.Preconditions;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.inject.Singleton;
 
 /**
  * Read whole game model from file.
  */
+@Singleton
 public final class GameModelPoDao {
 
     private Logger logger = LoggerFactory.getLogger(GameModelPoDao.class);

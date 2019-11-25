@@ -6,9 +6,9 @@ import java.util.Optional;
 import org.microcol.gui.Loc;
 import org.microcol.gui.LocalizationHelper;
 import org.microcol.gui.MainStageBuilder;
-import org.microcol.gui.TilePainter;
 import org.microcol.gui.UnitsPanel;
 import org.microcol.gui.event.model.GameModelController;
+import org.microcol.gui.image.ImageLoaderTerrain;
 import org.microcol.gui.image.ImageProvider;
 import org.microcol.gui.screen.game.gamepanel.TileWasSelectedEvent;
 import org.microcol.gui.util.JavaFxComponent;
@@ -18,7 +18,6 @@ import org.microcol.model.Location;
 import org.microcol.model.Model;
 import org.microcol.model.Player;
 import org.microcol.model.Terrain;
-import org.microcol.model.TerrainType;
 import org.microcol.model.Unit;
 
 import com.google.common.base.Preconditions;
@@ -28,6 +27,7 @@ import javafx.application.Platform;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.RowConstraints;
 
@@ -37,13 +37,11 @@ import javafx.scene.layout.RowConstraints;
  */
 public final class RightPanelView implements JavaFxComponent {
 
-    private static final int RIGHT_PANEL_WIDTH = 170;
-
     private final ImageProvider imageProvider;
 
     private final I18n i18n;
 
-    private final TilePainter tileImage;
+    private final TilePainter tilePainter;
 
     private final Label labelOnMove;
 
@@ -62,26 +60,26 @@ public final class RightPanelView implements JavaFxComponent {
     @Inject
     public RightPanelView(final ImageProvider imageProvider, final I18n i18n,
             final UnitsPanel unitsPanel, final LocalizationHelper localizationHelper,
-            final GameModelController gameModelController, final TilePainter tileImage) {
+            final GameModelController gameModelController, final TilePainter tilePainter) {
         this.imageProvider = Preconditions.checkNotNull(imageProvider);
         this.i18n = Preconditions.checkNotNull(i18n);
         this.unitsPanel = Preconditions.checkNotNull(unitsPanel);
         this.localizationHelper = Preconditions.checkNotNull(localizationHelper);
         this.gameModelController = Preconditions.checkNotNull(gameModelController);
-        this.tileImage = Preconditions.checkNotNull(tileImage);
+        this.tilePainter = Preconditions.checkNotNull(tilePainter);
 
         gridPane = new GridPane();
         gridPane.setId("rightPanel");
-        gridPane.setPrefWidth(RIGHT_PANEL_WIDTH);
-        gridPane.setMinWidth(RIGHT_PANEL_WIDTH);
-        gridPane.getStylesheets().add(MainStageBuilder.STYLE_SHEET_RIGHT_PANEL_VIEW);
+        gridPane.getStylesheets().add(MainStageBuilder.STYLE_SHEET_RIGHT_PANEL);
 
         // Y=0
         labelOnMove = new Label();
         gridPane.add(labelOnMove, 0, 0, 2, 1);
 
         // Y=1
-        gridPane.add(tileImage.getCanvas(), 0, 1);
+        final Pane tileImagePane = new Pane(tilePainter.getCanvas());
+        tileImagePane.setId("tileImage");
+        gridPane.add(tileImagePane, 0, 1);
 
         tileName = new Label();
         gridPane.add(tileName, 1, 1);
@@ -108,7 +106,7 @@ public final class RightPanelView implements JavaFxComponent {
             unitsPanel.clear();
             tileName.setText("");
         });
-        tileImage.clear();
+        tilePainter.clear();
     }
 
     public void refreshView(final TileWasSelectedEvent event) {
@@ -123,20 +121,21 @@ public final class RightPanelView implements JavaFxComponent {
             final StringBuilder sb = new StringBuilder(200);
             unitsPanel.clear();
             if (isDiscovered(location)) {
-                tileImage.setTerrain(getTerrainAt(location), location);
-                sb.append(localizationHelper.getTerrainName(getTerrainTypeAt(location)));
+                final Terrain terrain = getTerrainAt(location);
+                tilePainter.setTerrain(terrain, location);
+                sb.append(localizationHelper.getTerrainName(terrain.getTerrainType()));
                 sb.append("");
                 sb.append("\n");
-                sb.append("Move cost: 1");
+                sb.append(i18n.get(Loc.moveCost) + terrain.getMoveCost());
                 final Optional<Colony> oColony = getModel().getColonyAt(location);
                 if (oColony.isPresent()) {
-                    tileImage.paintColony(oColony.get());
+                    tilePainter.paintColony(oColony.get());
                 }
                 final List<Unit> units = getModel().getUnitsAt(location);
                 if (units.isEmpty()) {
                     unitsLabel.setText("");
                 } else {
-                    tileImage.paintUnit(units);
+                    tilePainter.paintUnit(units);
                     /**
                      * Current player is not same as human player. For purposes
                      * of this method it will be sufficient.
@@ -145,7 +144,7 @@ public final class RightPanelView implements JavaFxComponent {
                             getModel().getUnitsAt(location));
                 }
             } else {
-                tileImage.setImage(imageProvider.getImage(ImageProvider.IMG_TILE_HIDDEN));
+                tilePainter.setImage(imageProvider.getImage(ImageLoaderTerrain.IMG_TILE_HIDDEN));
                 sb.append(i18n.get(Loc.unitsPanel_unexplored));
             }
             tileName.setText(sb.toString());
@@ -164,10 +163,6 @@ public final class RightPanelView implements JavaFxComponent {
 
     private Model getModel() {
         return gameModelController.getModel();
-    }
-
-    private TerrainType getTerrainTypeAt(final Location location) {
-        return getModel().getMap().getTerrainAt(location).getTerrainType();
     }
 
     private Terrain getTerrainAt(final Location location) {

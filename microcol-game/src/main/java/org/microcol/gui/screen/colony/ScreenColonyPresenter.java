@@ -3,7 +3,6 @@ package org.microcol.gui.screen.colony;
 import org.microcol.gui.screen.Screen;
 import org.microcol.gui.screen.ShowScreenEvent;
 import org.microcol.model.Colony;
-import org.microcol.model.Unit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -11,7 +10,6 @@ import com.google.common.base.Preconditions;
 import com.google.common.eventbus.EventBus;
 import com.google.inject.Inject;
 
-import javafx.scene.canvas.Canvas;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 
@@ -38,11 +36,6 @@ public class ScreenColonyPresenter implements ColonyDialogCallback {
     }
 
     @Override
-    public void repaint() {
-        colonyPanel.repaint();
-    }
-
-    @Override
     public void close() {
         eventBus.post(new ShowScreenEvent(Screen.GAME));
     }
@@ -50,11 +43,6 @@ public class ScreenColonyPresenter implements ColonyDialogCallback {
     @Override
     public Colony getColony() {
         return colonyPanel.getColony();
-    }
-
-    @Override
-    public void paintUnit(Canvas canvas, Unit unit) {
-        colonyPanel.paintUnit(canvas, unit);
     }
 
 }

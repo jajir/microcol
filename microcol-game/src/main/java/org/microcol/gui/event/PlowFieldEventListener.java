@@ -1,12 +1,12 @@
 package org.microcol.gui.event;
 
-import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.screen.game.gamepanel.SelectedUnitManager;
 import org.microcol.gui.util.Listener;
 import org.microcol.model.Unit;
 import org.microcol.model.unit.UnitActionType;
 
 import com.google.common.base.Preconditions;
+import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import com.google.inject.Inject;
 
@@ -16,14 +16,14 @@ import com.google.inject.Inject;
 @Listener
 public final class PlowFieldEventListener {
 
-    final GameModelController gameModelController;
-    final SelectedUnitManager selectedUnitManager;
+    private final SelectedUnitManager selectedUnitManager;
+    
+    private final EventBus eventBus;
 
     @Inject
-    PlowFieldEventListener(final GameModelController gameModelController,
-            final SelectedUnitManager selectedUnitManager) {
-        this.gameModelController = Preconditions.checkNotNull(gameModelController);
+    PlowFieldEventListener(final SelectedUnitManager selectedUnitManager, final EventBus eventBus) {
         this.selectedUnitManager = Preconditions.checkNotNull(selectedUnitManager);
+        this.eventBus = Preconditions.checkNotNull(eventBus);
     }
 
     @Subscribe
@@ -33,6 +33,7 @@ public final class PlowFieldEventListener {
                         "Plow field event can't be invoked when no unit is selected."));
         Preconditions.checkArgument(unit.canPlowFiled(), "Unit can't plow field.");
         unit.setActionType(UnitActionType.plowField);
+        eventBus.post(new RefreshRightPanelEvent());
     }
 
 }

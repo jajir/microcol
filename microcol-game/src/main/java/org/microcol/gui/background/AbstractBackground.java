@@ -1,12 +1,10 @@
 package org.microcol.gui.background;
 
 import org.microcol.gui.Point;
-import org.microcol.gui.image.ImageProvider;
 import org.microcol.gui.util.CanvasComponent;
 import org.microcol.gui.util.JavaFxComponent;
 import org.microcol.gui.util.Repaintable;
 
-import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
 
 import javafx.scene.canvas.Canvas;
@@ -21,11 +19,8 @@ public abstract class AbstractBackground implements JavaFxComponent, Repaintable
 
     private final CanvasComponent canvasComponent;
 
-    private final ImageProvider imageProvider;
-
     @Inject
-    public AbstractBackground(final ImageProvider imageProvider) {
-        this.imageProvider = Preconditions.checkNotNull(imageProvider);
+    public AbstractBackground() {
         canvasComponent = new CanvasComponent();
         canvasComponent.getContent().widthProperty().addListener((old, v1, v2) -> repaint());
         canvasComponent.getContent().heightProperty().addListener((old, v1, v2) -> repaint());
@@ -33,7 +28,7 @@ public abstract class AbstractBackground implements JavaFxComponent, Repaintable
 
     @Override
     public void repaint() {
-        final GraphicsContext gc = canvasComponent.getCanvas().getGraphicsContext2D();
+        final GraphicsContext gc = canvasComponent.getGraphicsContext2D();
         paint(gc);
     }
 
@@ -45,8 +40,7 @@ public abstract class AbstractBackground implements JavaFxComponent, Repaintable
      */
     public void paint(final GraphicsContext gc) {
         final Point canvas = Point.of(getCanvas().getWidth(), getCanvas().getHeight());
-        gc.setFill(Color.WHITE);
-        gc.fillRect(0, 0, canvas.getX(), canvas.getY());
+        paintBackground(gc, canvas, Color.WHITE);
     }
 
     @Override
@@ -59,13 +53,6 @@ public abstract class AbstractBackground implements JavaFxComponent, Repaintable
      */
     protected Canvas getCanvas() {
         return canvasComponent.getCanvas();
-    }
-
-    /**
-     * @return the imageProvider
-     */
-    protected ImageProvider getImageProvider() {
-        return imageProvider;
     }
 
     /**

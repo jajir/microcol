@@ -5,12 +5,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.microcol.gui.MicroColException;
-import org.microcol.model.ConstructionType;
 import org.microcol.model.Direction;
 import org.microcol.model.Location;
 
-import com.google.common.base.Preconditions;
 
 public final class ColonyPo {
 
@@ -34,22 +31,6 @@ public final class ColonyPo {
             colonyFieldPo.setDirection(direction);
             colonyFields.add(colonyFieldPo);
         });
-    }
-
-    public ConstructionPo getConstructionByType(final ConstructionType constructionType) {
-        Preconditions.checkNotNull(constructionType);
-        return constructions.stream()
-                .filter(constructionPo -> constructionType.equals(constructionPo.getType()))
-                .findFirst().orElseThrow(() -> new MicroColException(
-                        String.format("There is not defined construction (%s)", constructionType)));
-    }
-
-    public ColonyFieldPo getFieldByDirection(final Location direction) {
-        Preconditions.checkNotNull(direction);
-        return colonyFields.stream()
-                .filter(colonyField -> direction.equals(colonyField.getDirection())).findFirst()
-                .orElseThrow(() -> new MicroColException(
-                        String.format("There is not defined field for direction (%s)", direction)));
     }
 
     /**

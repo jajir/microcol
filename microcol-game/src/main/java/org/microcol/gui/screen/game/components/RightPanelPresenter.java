@@ -1,6 +1,7 @@
 package org.microcol.gui.screen.game.components;
 
 import org.microcol.gui.Loc;
+import org.microcol.gui.event.RefreshRightPanelEvent;
 import org.microcol.gui.event.model.GameModelController;
 import org.microcol.gui.screen.game.components.StatusBarMessageEvent.Source;
 import org.microcol.gui.screen.game.gamepanel.SelectedUnitWasChangedEvent;
@@ -38,6 +39,12 @@ public final class RightPanelPresenter {
                     new StatusBarMessageEvent(i18n.get(Loc.rightPanel_description), Source.GAME));
         });
 
+    }
+    
+    @SuppressWarnings("unused")
+    @Subscribe
+    private void onRefreshRightPanelEvent(final RefreshRightPanelEvent event) {
+        display.refreshView(lastFocusedTileEvent.getLocation());        
     }
 
     @Subscribe

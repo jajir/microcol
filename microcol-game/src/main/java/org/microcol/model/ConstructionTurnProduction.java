@@ -13,9 +13,9 @@ import com.google.common.base.Preconditions;
  * something and not all constructions consume goods during producing.
  * </p>
  */
-public final class ConstructionTurnProduction {
+final class ConstructionTurnProduction {
 
-    public static final ConstructionTurnProduction EMPTY = new ConstructionTurnProduction(null,
+    static final ConstructionTurnProduction EMPTY = new ConstructionTurnProduction(null,
             null, null);
 
     private final Goods consumedGoods;

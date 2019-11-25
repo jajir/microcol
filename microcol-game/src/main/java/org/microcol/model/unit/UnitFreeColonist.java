@@ -35,14 +35,10 @@ public final class UnitFreeColonist extends CanMount {
 
     private boolean mounted;
 
-    public UnitFreeColonist(Model model, Integer id, Function<Unit, Place> placeBuilder,
-            Player owner, int availableMoves, final UnitAction unitAction) {
-        this(model, id, placeBuilder, owner, availableMoves, unitAction, 0, false, false);
-    }
-
-    public UnitFreeColonist(Model model, Integer id, Function<Unit, Place> placeBuilder,
-            Player owner, int availableMoves, final UnitAction unitAction, final int tools,
-            final boolean holdingGuns, final boolean mounted) {
+    public UnitFreeColonist(final Model model, final Integer id,
+            final Function<Unit, Place> placeBuilder, final Player owner, final int availableMoves,
+            final UnitAction unitAction, final int tools, final boolean holdingGuns,
+            final boolean mounted) {
         super(model, id, placeBuilder, owner, availableMoves, unitAction);
         this.tools = tools;
         this.holdingGuns = holdingGuns;
@@ -129,8 +125,7 @@ public final class UnitFreeColonist extends CanMount {
 
     public void unequipWithHorses() {
         final Colony colony = verifyThatUnitIsOutsideColony();
-        colony.getWarehouse()
-                .addGoods(Goods.of(GoodsType.HORSE, REQUIRED_HORSES_FOR_MOUNTED_UNIT));
+        colony.getWarehouse().addGoods(Goods.of(GoodsType.HORSE, REQUIRED_HORSES_FOR_MOUNTED_UNIT));
         mounted = false;
     }
 
@@ -149,8 +144,7 @@ public final class UnitFreeColonist extends CanMount {
 
     public void unequipWithMuskets() {
         final Colony colony = verifyThatUnitIsOutsideColony();
-        colony.getWarehouse()
-                .addGoods(Goods.of(GoodsType.MUSKET, REQUIRED_MUSKETS_FOR_ARMED_UNIT));
+        colony.getWarehouse().addGoods(Goods.of(GoodsType.MUSKET, REQUIRED_MUSKETS_FOR_ARMED_UNIT));
         holdingGuns = false;
     }
 

@@ -10,7 +10,7 @@ import com.google.gson.stream.JsonWriter;
 /**
  * Allows to read and write construction type from json.
  */
-public final class GsonLocaleTypeAdapter extends TypeAdapter<Locale> {
+final class GsonLocaleTypeAdapter extends TypeAdapter<Locale> {
 
     private static final String LOCALE_LANGUAGE = "language";
     private static final String LOCALE_COUNTRY = "country";

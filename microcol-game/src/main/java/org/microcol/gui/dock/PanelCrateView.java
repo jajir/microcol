@@ -73,13 +73,13 @@ public class PanelCrateView implements JavaFxComponent {
         }
     }
 
-    public void setBackgroudHighlighted() {
+    public void setBackgroundHighlighted() {
         background = mainPane.getBackground();
         mainPane.setBackground(
                 new Background(new BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY)));
     }
 
-    public void setBackgroudNormal() {
+    public void setBackgroundNormal() {
         mainPane.setBackground(background);
         background = null;
     }

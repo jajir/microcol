@@ -8,7 +8,7 @@ import java.util.ResourceBundle;
 /**
  * Class helps to load XML resource bundle to java SE {@link ResourceBundle}.
  */
-public class JsonResourceBundleControl extends AbstractResourceBundleControl {
+class JsonResourceBundleControl extends AbstractResourceBundleControl {
 
     JsonResourceBundleControl() {
         super(ResourceBundleFormat.json);

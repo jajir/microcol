@@ -2,7 +2,7 @@ package org.microcol.i18n;
 
 import java.util.ResourceBundle.Control;
 
-public class JsonResourceBundleType extends AbstractResourceBundleType {
+class JsonResourceBundleType extends AbstractResourceBundleType {
 
     JsonResourceBundleType() {
         super(ResourceBundleFormat.json.name());

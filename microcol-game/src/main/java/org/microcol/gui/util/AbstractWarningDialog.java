@@ -7,8 +7,7 @@ import org.microcol.i18n.MessageKeyResource;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 
-public abstract class AbstractWarningDialog
-        extends AbstractMessageWindow {
+public abstract class AbstractWarningDialog extends AbstractMessageWindow {
 
     /**
      * Vertical box where user can place it's context.
@@ -21,14 +20,14 @@ public abstract class AbstractWarningDialog
         /**
          * Buttons
          */
-        final ButtonsBar buttonsBar = new ButtonsBar(i18n.get(Loc.ok));
+        final ButtonBarOk buttonsBar = new ButtonBarOk(i18n.get(Loc.ok));
         buttonsBar.getButtonOk().setOnAction(e -> {
             close();
         });
         buttonsBar.getButtonOk().requestFocus();
 
         final VBox root = new VBox();
-        root.getChildren().addAll(context, buttonsBar);
+        root.getChildren().addAll(context, buttonsBar.getContent());
         init(root);
     }
 

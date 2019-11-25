@@ -14,14 +14,14 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 
 @Singleton
-public class SettingShowGridView implements JavaFxComponent, UpdatableLanguage {
+class SettingShowGridView implements JavaFxComponent, UpdatableLanguage {
 
     private final HBox mainPanel;
 
     private final CheckBox checkBox;
 
     @Inject
-    public SettingShowGridView(final GamePreferences gamePreferences, final I18n i18n) {
+    SettingShowGridView(final GamePreferences gamePreferences, final I18n i18n) {
 
         checkBox = new CheckBox();
         checkBox.setSelected(gamePreferences.isGridShown());

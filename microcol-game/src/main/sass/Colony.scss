@@ -1,0 +1,208 @@
+/*
+ * JavaFx setting for Colony.
+ * 
+ */
+.label-title {
+	-fx-font-size: 32;
+	-fx-translate-x: -350;
+	-fx-translate-y: -320;
+}
+
+.panel-dock {
+	-fx-min-width: 250;
+	-fx-max-width: 200;
+	-fx-pref-height: 200;
+	-fx-max-height: 200;
+	-fx-translate-x: -80;
+	-fx-translate-y: -110;
+}
+
+.panel-dock .ships {
+	-fx-pref-height: 50;
+	-fx-padding: 0 0 30 0;
+}
+
+.outside {
+	-fx-pref-width: 280;
+	-fx-max-width: 280;
+	-fx-pref-height: 50;
+	-fx-max-height: 50;
+	-fx-translate-x: 300;
+	-fx-translate-y: -192;
+	/* -fx-background-color: yellow; */
+}
+
+.colony-structures {
+	-fx-pref-width: 800;
+	-fx-max-width: 800;
+	-fx-max-height: 500;
+	-fx-translate-x: -200;
+	-fx-translate-y: 70;
+}
+
+.colony-fields {
+	-fx-max-width: 150;
+	-fx-max-height: 150;
+	-fx-padding: 4 0 0 4;
+	-fx-background-image: url("../images/colony-fields.png");
+	-fx-background-repeat: no-repeat;
+	-fx-translate-x: 330;
+	-fx-translate-y: -70;
+}
+
+.panel-colony-goods {
+	-fx-translate-x: 60;
+	-fx-translate-y: -13;
+	-fx-max-height: 70;
+	-fx-max-width: 720;
+}
+
+.diffPositive {
+	-fx-text-fill: green;
+	-fx-padding: 0 0 0 0px;
+}
+
+.diffNegative {
+	-fx-text-fill: red;
+	-fx-padding: 0 0 0 0px;
+}
+
+.constructionPane {
+	-fx-pref-width: 100;
+	-fx-max-width: 100;
+	-fx-pref-height: 135;
+	-fx-max-height: 135;
+	-fx-background-image: url("../images/colony-frame.png");
+	-fx-background-repeat: no-repeat;
+}
+
+.constructionPaneSimple {
+	-fx-pref-width: 70;
+	-fx-max-width: 70;
+	-fx-pref-height: 70;
+	-fx-max-height: 70;
+}
+
+.constructionPaneCarpenter {
+	-fx-pref-width: 264;
+	-fx-max-width: 264;
+	-fx-pref-height: 137;
+	-fx-max-height: 137;
+	-fx-background-image: url("../images/colony-building-queue.png");
+	-fx-background-repeat: no-repeat;
+}
+
+.constructionPaneCarpenter .canvas {
+	-fx-translate-x: -82;
+	-fx-translate-y: 0;
+}
+
+.constructionPaneCarpenter .description {
+	-fx-pref-width: 180;
+	-fx-min-width: 180;
+	-fx-max-width: 180;
+	-fx-translate-x: 37;
+	-fx-translate-y: 0;
+}
+
+.constructionPane .diffPositive {
+	-fx-padding: 3;
+}
+
+.constructionPane .diffNegative {
+	-fx-padding: 3;
+}
+
+.constructionPane .production {
+	-fx-translate-x: 28;
+	-fx-translate-y: 103;
+}
+
+
+$column-width:100;
+$column-gap: 30;
+$column-1: -150;
+$column-2: $column-1 + $column-width + $column-gap;
+$column-3: $column-2 + $column-width + $column-gap;
+$column-4: $column-3 + $column-width + $column-gap;
+$column-5: $column-4 + $column-width + $column-gap;
+
+$row-height: 134;
+$row-gap: 12;
+$row-1: -145;
+$row-2: $row-1 + $row-height + $row-gap;
+$row-3: $row-2 + $row-height + $row-gap;
+$row-4: $row-3 + $row-height + $row-gap;
+
+
+#id_town_hall {
+	-fx-translate-x: $column-1;
+	-fx-translate-y: $row-1;
+}
+
+#id_warehouse {
+	-fx-translate-x: $column-1 + 370;
+	-fx-translate-y: $row-4;
+	-fx-pref-width: 847;
+	-fx-min-width: 847;
+	-fx-pref-height: 137;
+	-fx-min-height: 137;
+	-fx-max-height: 137;
+	-fx-background-image: url("../images/colony-warehouse.png");
+	-fx-background-repeat: no-repeat;
+}
+
+#id_warehouse .canvas {
+	-fx-translate-x: 10;
+	-fx-translate-y: -20;
+}
+
+
+#id_church {
+	-fx-translate-x: $column-3;
+	-fx-translate-y: $row-1;
+	visibility: hidden;
+}
+
+#id_weaver {
+	-fx-translate-x: $column-1;
+	-fx-translate-y: $row-2;
+}
+
+#id_tobacco {
+	-fx-translate-x: $column-2;
+	-fx-translate-y: $row-2;
+}
+
+#id_rum {
+	-fx-translate-x: $column-3;
+	-fx-translate-y: $row-2;
+}
+
+#id_school {
+	-fx-translate-x: $column-4;
+	-fx-translate-y: $row-2;
+	visibility: hidden;
+}
+
+#id_armory {
+	-fx-translate-x: $column-1;
+	-fx-translate-y: $row-3;
+}
+
+#id_blacksmith {
+	-fx-translate-x: $column-2;
+	-fx-translate-y: $row-3;
+}
+
+#id_fur {
+	-fx-translate-x: $column-3;
+	-fx-translate-y: $row-3;
+}
+
+#id_carpenter {
+	-fx-translate-x: $column-4 + 70;
+	-fx-translate-y: $row-3;
+	visibility: hidden;
+}
+

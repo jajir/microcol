@@ -12,6 +12,8 @@ buildNumber.properties
 .classpath
 .checkstyle
 microcol-test/src/test/scenarios/.microcol/autosave.microcol
+.openjfx/
 *~
 .idea
 *.iml
+*.css.map

@@ -12,10 +12,9 @@ import org.microcol.model.CargoSlot;
 import org.microcol.model.Goods;
 import org.microcol.model.Unit;
 import org.microcol.model.unit.UnitWithCargo;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
+import com.google.common.eventbus.EventBus;
 import com.google.inject.Inject;
 
 /**
@@ -23,16 +22,17 @@ import com.google.inject.Inject;
  */
 public final class PanelColonyDockBehaviour extends AbstractPanelDockBehavior {
 
-    final Logger logger = LoggerFactory.getLogger(PanelColonyDockBehaviour.class);
-
+    private final EventBus eventBus;
     private final ColonyDialogCallback colonyDialogCallback;
     private final ChooseGoodsDialog chooseGoods;
 
     @Inject
-    PanelColonyDockBehaviour(final ColonyDialogCallback colonyDialogCallback,
+    PanelColonyDockBehaviour(final EventBus eventBus,
+            final ColonyDialogCallback colonyDialogCallback,
             final GameModelController gameModelController, final ImageProvider imageProvider,
             final ChooseGoodsDialog chooseGoods) {
         super(gameModelController, imageProvider);
+        this.eventBus = Preconditions.checkNotNull(eventBus);
         this.colonyDialogCallback = Preconditions.checkNotNull(colonyDialogCallback);
         this.chooseGoods = Preconditions.checkNotNull(chooseGoods);
     }
@@ -40,7 +40,7 @@ public final class PanelColonyDockBehaviour extends AbstractPanelDockBehavior {
     @SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
     public List<UnitWithCargo> getUnitsInPort() {
-        return (List)colonyDialogCallback.getColony().getUnitsInPort();
+        return (List) colonyDialogCallback.getColony().getUnitsInPort();
     }
 
     @Override
@@ -61,19 +61,20 @@ public final class PanelColonyDockBehaviour extends AbstractPanelDockBehavior {
             throw new IllegalArgumentException(
                     "Unsupported source transfer '" + transferFrom + "'");
         }
-        colonyDialogCallback.repaint();
+        eventBus.post(new RepaintColonyEvent());
     }
 
     private Goods chooseGoods(final Goods goods, final boolean specialOperatonWasSelected,
             final CargoSlot targetCargoSlot) {
-        return chooseGoods(chooseGoods, goods, specialOperatonWasSelected, targetCargoSlot.maxPossibleGoodsToMoveHere(goods));
+        return chooseGoods(chooseGoods, specialOperatonWasSelected,
+                targetCargoSlot.maxPossibleGoodsToMoveHere(goods));
     }
 
     @Override
     public void consumeUnit(final CargoSlot targetCargoSlot, final Unit unit,
             final From transferFrom) {
         targetCargoSlot.store(unit);
-        colonyDialogCallback.repaint();
+        eventBus.post(new RepaintColonyEvent());
     }
 
 }

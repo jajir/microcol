@@ -9,7 +9,7 @@ import javafx.scene.paint.Color;
  * Paint color stripe.
  *
  */
-public class StripePainter {
+class StripePainter {
 
     private final GraphicsContext gc;
 
@@ -27,7 +27,7 @@ public class StripePainter {
         this.color = Preconditions.checkNotNull(color);
     }
 
-    public void paintStripe() {
+    void paintStripe() {
         gc.setFill(color);
         gc.fillRect(0, startAtY, canvasWidth, height);
     }
@@ -36,7 +36,7 @@ public class StripePainter {
      * @param startAtY
      *            the startAtY to set
      */
-    public void setStartAtY(int startAtY) {
+    void setStartAtY(int startAtY) {
         this.startAtY = startAtY;
     }
 
@@ -44,7 +44,7 @@ public class StripePainter {
      * @param height
      *            the height to set
      */
-    public void setHeight(int height) {
+    void setHeight(int height) {
         this.height = height;
     }
 

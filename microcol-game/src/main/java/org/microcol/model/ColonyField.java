@@ -93,6 +93,10 @@ public final class ColonyField {
         return placeColonyField == null;
     }
 
+    public boolean isNotEmpty() {
+        return placeColonyField != null;
+    }
+
     /**
      * Get turn production. It's empty when no unit is assigned here.
      * 

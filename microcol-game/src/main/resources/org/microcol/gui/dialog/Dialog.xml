@@ -46,9 +46,6 @@
 	<entry key="saveGame_title">Save game</entry>
 	<entry key="loadGame_title">Load game</entry>
 	
-	<entry key="missionGoals_title">Mission Goals</entry>
-	<entry key="missionGoals_caption">Mission Goals</entry>
-	
 	<entry key="buildingQueueDialog_caption">Building queue</entry>
 
 </properties>

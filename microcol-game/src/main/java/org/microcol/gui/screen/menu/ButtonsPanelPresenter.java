@@ -1,7 +1,7 @@
 package org.microcol.gui.screen.menu;
 
 import org.microcol.gui.dialog.ApplicationController;
-import org.microcol.gui.dialog.PersistingDialog;
+import org.microcol.gui.dialog.PersistingService;
 import org.microcol.gui.event.QuitGameEvent;
 import org.microcol.gui.event.model.GameController;
 import org.microcol.gui.preferences.GamePreferences;
@@ -27,7 +27,11 @@ public final class ButtonsPanelPresenter {
 
     private final ButtonsPanelView view;
 
+    private final SecretOption secretOption;
+
     private final GamePreferences gamePreferences;
+
+    private final PersistingService persistingService;
 
     private final PersistingTool persistingTool;
 
@@ -40,23 +44,31 @@ public final class ButtonsPanelPresenter {
     @Inject
     public ButtonsPanelPresenter(final ButtonsPanelView view,
             final ApplicationController applicationController,
-            final PersistingDialog persistingDialog, final GamePreferences gamePreferences,
+            final PersistingService persistingService, final GamePreferences gamePreferences,
             final PersistingTool persistingTool, final GameController gameController,
-            final CampaignManager campaignManager, final EventBus eventBus) {
+            final CampaignManager campaignManager, final SecretOption secretOption,
+            final EventBus eventBus) {
         this.view = Preconditions.checkNotNull(view);
         this.gamePreferences = Preconditions.checkNotNull(gamePreferences);
+        this.persistingService = Preconditions.checkNotNull(persistingService);
         this.persistingTool = Preconditions.checkNotNull(persistingTool);
         this.gameController = Preconditions.checkNotNull(gameController);
         this.campaignManager = Preconditions.checkNotNull(campaignManager);
+        this.secretOption = Preconditions.checkNotNull(secretOption);
         this.eventBus = Preconditions.checkNotNull(eventBus);
         view.getButtonContinue().setOnAction(this::onGameContinue);
-        view.getButtonLoadSave().setOnAction(event -> persistingDialog.loadModel());
+        view.getButtonLoad().setOnAction(this::onLoadWasPressed);
         view.getButtonPlayCampaign()
                 .setOnAction(event -> eventBus.post(new ShowScreenEvent(Screen.CAMPAIGN)));
         view.getButtonExitMicroCol().setOnAction(event -> eventBus.post(new QuitGameEvent()));
         view.getButtonSetting().setOnAction(this::onSetting);
         view.getButtonStartFreeGame().setOnAction(e -> applicationController.startNewFreeGame());
         refresh();
+    }
+
+    @SuppressWarnings("unused")
+    private void onLoadWasPressed(final ActionEvent event) {
+        persistingService.loadFromSavedGames(secretOption.isEnabled());
     }
 
     @SuppressWarnings("unused")
@@ -67,6 +79,7 @@ public final class ButtonsPanelPresenter {
     @SuppressWarnings("unused")
     private void onGameContinue(final ActionEvent actionEvent) {
         gameController.loadModelFromFile(persistingTool.getAutoSaveFile());
+        eventBus.post(new ShowScreenEvent(Screen.GAME));
     }
 
     public void refresh() {

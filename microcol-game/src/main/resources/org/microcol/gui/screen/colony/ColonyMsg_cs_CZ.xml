@@ -12,7 +12,7 @@
 	<comment>Define keys for Europe dialog</comment>
 
 	<entry key="goods"> ve skladu</entry>
-	<entry key="colony">Kolonie: </entry>
+	<entry key="colonyName">Toto je jméno kolonie.</entry>
 	<entry key="buttonClose">Zavřít detail kolonie a vrátit se zpět na hlavní mapu.</entry>
 
 </properties>

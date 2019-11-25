@@ -1,70 +1,31 @@
 package org.microcol.gui.screen.game.gamepanel;
 
-import static org.microcol.gui.Tile.*;
-
 import org.microcol.gui.Point;
+import org.microcol.gui.Tile;
 import org.microcol.model.Location;
-import org.microcol.model.WorldMap;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 
 /**
  * Define top left corner and bottom right corner in location coordinates. Class
- * provide access to {@link VisibleArea} class. Class works with point and
- * location.
+ * provide access to {@link VisibleAreaService} class. Class works with point
+ * and location.
  */
 public class Area {
 
-    /**
-     * Locations in world of top left corner of visible area.
-     */
-    private final Location topLeft;
+    private final VisibleAreaService visibleArea;
+
+    static Area of(final VisibleAreaService visibleArea) {
+        return new Area(visibleArea);
+    }
 
     /**
-     * Locations in world of bottom right corner of visible area.
-     */
-    private final Location bottomRight;
-
-    private final VisibleArea visibleArea;
-
-    /**
-     * 
      * @param visibleArea
      *            required visible area on screen
-     * @param worldMap
-     *            required world map
      */
-    public Area(final VisibleArea visibleArea, final WorldMap worldMap) {
+    public Area(final VisibleAreaService visibleArea) {
         this.visibleArea = Preconditions.checkNotNull(visibleArea);
-
-        /**
-         * Top left corner of visible area in on-screen coordinates. It define
-         * visible area.
-         */
-        final Point pointTopLeft = visibleArea.getTopLeft();
-
-        /**
-         * Bottom right corner of visible area in on-screen coordinates. It
-         * define visible area.
-         */
-        final Point pointBottomRight = visibleArea.getBottomRight();
-
-        final Location p1 = pointTopLeft.toLocation();
-        final Location p2 = pointBottomRight.toLocationCeilUp();
-
-        topLeft = Location.of(Math.max(Location.MAP_MIN_X, p1.getX()),
-                Math.max(Location.MAP_MIN_Y, p1.getY()));
-        bottomRight = Location.of(Math.min(p2.getX(), worldMap.getMaxX()),
-                Math.min(p2.getY(), worldMap.getMaxY()));
-    }
-
-    public Location getTopLeft() {
-        return topLeft;
-    }
-
-    public Location getBottomRight() {
-        return bottomRight;
     }
 
     /**
@@ -77,20 +38,23 @@ public class Area {
      *         <code>false</code>
      */
     public boolean isLocationVisible(final Location location) {
-        final Point point1 = Point.of(location);
-        final Point point2 = Point.of(location.add(Location.of(-1, -1)));
-        return isVisibleCanvasPoint(point1) || isVisibleCanvasPoint(point2);
+        final Tile tile = Tile.ofLocation(location);
+        return visibleArea.isVisibleMapPoint(tile.getBottomRightCorner())
+                || visibleArea.isVisibleMapPoint(tile.getTopLeftCorner());
     }
 
     /**
      * Convert given location to canvas coordinates.
+     * <p>
+     * Method doesn't validate if point is on screen or outside of screen.
+     * </p>
      * 
      * @param location
      *            required on map location
      * @return point coordinates that could be directly used to draw on canvas
      */
-    public Point convertToPoint(final Location location) {
-        return Point.of(location).substract(visibleArea.getTopLeft()).substract(TILE_SIZE);
+    public Point convertToCanvasPoint(final Location location) {
+        return Tile.ofLocation(location).getTopLeftCorner().substract(visibleArea.getTopLeft());
     }
 
     /**
@@ -101,41 +65,17 @@ public class Area {
      * @return return map location
      */
     public Location convertToLocation(final Point point) {
-        return point.add(visibleArea.getTopLeft()).toLocation();
+        return Tile.of(point.add(visibleArea.getTopLeft())).toLocation();
     }
 
-    /**
-     * Verify that given point is in area.
-     * 
-     * @param point
-     *            required point in canvas coordinates
-     * @return return <code>true</code> when point is inside area otherwise
-     *         return <code>false</code>
-     */
-    public boolean isVisibleCanvasPoint(final Point point) {
-        final Point p1 = visibleArea.getTopLeft();
-        final Point p2 = visibleArea.getBottomRight();
-        return p1.getX() <= point.getX() && p2.getX() >= point.getX() && p1.getY() <= point.getY()
-                && p2.getY() >= point.getY();
-    }
-
-    /**
-     * Verify that given point is in area.
-     * 
-     * @param point
-     *            required point in on screen coordinates
-     * @return return <code>true</code> when point is inside area otherwise
-     *         return <code>false</code>
-     */
-    public boolean isVisibleScreenPoint(final Point point) {
-        return 0 <= point.getX() && visibleArea.getCanvasWidth() >= point.getX()
-                && 0 <= point.getY() && visibleArea.getCanvasHeight() >= point.getY();
+    // Could be removed
+    boolean isVisibleCanvasPoint(final Point point) {
+        return visibleArea.isVisibleCanvasPoint(point);
     }
 
     @Override
     public String toString() {
-        return MoreObjects.toStringHelper(Area.class).add("topLeft", topLeft)
-                .add("bottomRight", bottomRight).add("visibleArea", visibleArea).toString();
+        return MoreObjects.toStringHelper(Area.class).add("visibleArea", visibleArea).toString();
     }
 
     /**
@@ -146,28 +86,20 @@ public class Area {
      *            required location that will in center of view
      * @return position of top left corner of view
      */
-    public Point getCenterToLocation(final Location location) {
-        final Point newScreenCenterPoint = Point.of(location);
-        /**
-         * Put new point in the center of screen.
-         */
-        final Point screenCenter = Point
-                .of(visibleArea.getCanvasWidth(), visibleArea.getCanvasHeight()).divide(2);
+    Point getCenterToLocation(final Location location) {
         /**
          * Adjust new point that visible are is still on map.
          */
-        return visibleArea.scrollToPoint(newScreenCenterPoint.substract(screenCenter));
+        return visibleArea.computeNewTopLeftConnerOfCanvas(getCanvasTopLeftForLocation(location));
     }
 
-    /**
-     * Allows to jump with view at selected point at map.
-     *
-     * @param point
-     *            required point in map coordinates.
-     */
-    public void jumpToPoint(final Point point) {
-        visibleArea.setX(point.getX());
-        visibleArea.setY(point.getY());
+    Point getCanvasTopLeftForLocation(final Location location) {
+        final Point newScreenCenterPoint = Tile.ofLocation(location).getTopLeftCorner();
+        /**
+         * Put new point in the center of screen.
+         */
+        final Point screenCenter = visibleArea.getCanvasSize().divide(2);
+        return newScreenCenterPoint.substract(screenCenter);
     }
 
 }

@@ -39,7 +39,7 @@ public final class MouseOverTileListener {
         if (gameModelController.getModel().getMap().isValid(event.getMouseOverTileLocaton())) {
             final TerrainType terrain = gameModelController.getModel().getMap()
                     .getTerrainTypeAt(event.getMouseOverTileLocaton());
-            final Player player = gameModelController.getCurrentPlayer();
+            final Player player = gameModelController.getHumanPlayer();
             setStatusMessageForTile(player, terrain, event.getMouseOverTileLocaton());
         } else {
             eventBus.post(new StatusBarMessageEvent(Source.GAME));

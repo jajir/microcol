@@ -96,6 +96,17 @@ public final class Goods {
         return amount;
     }
 
+    /**
+     * Create copy of goods goods with given amount of goods.
+     *
+     * @param amount
+     *            required new amount of goods
+     * @return copy with new amounts of goods
+     */
+    public Goods setAmount(final int amount) {
+        return of(goodsType, amount);
+    }
+
     public GoodsType getType() {
         return goodsType;
     }

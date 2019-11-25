@@ -11,13 +11,13 @@ import com.google.common.base.Preconditions;
 /**
  * Encapsulate moving unit, move target location and path to it.
  */
-public final class UnitMove {
+final class UnitMove {
 
     private final Unit unit;
 
     private final List<Location> path;
 
-    public UnitMove(final Unit unit, final Location targetLocation) {
+     UnitMove(final Unit unit, final Location targetLocation) {
         this.unit = Preconditions.checkNotNull(unit);
         Preconditions.checkNotNull(targetLocation);
         if (unit.isPossibleToMoveAt(targetLocation)) {

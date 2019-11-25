@@ -6,7 +6,7 @@ import org.microcol.gui.util.JavaFxComponent;
 
 import javafx.scene.layout.HBox;
 
-public final class PanelDockCratesView implements JavaFxComponent {
+final class PanelDockCratesView implements JavaFxComponent {
 
     private final HBox mainBox;
 

@@ -2,7 +2,6 @@ package org.microcol.gui.buttonpanel;
 
 import org.microcol.gui.image.ImageProvider;
 import org.microcol.gui.screen.colony.ScreenColony;
-import org.microcol.gui.screen.game.components.StatusBarMessageEvent;
 import org.microcol.gui.screen.game.components.StatusBarMessageEvent.Source;
 import org.microcol.gui.util.JavaFxComponent;
 import org.microcol.i18n.I18n;
@@ -11,14 +10,8 @@ import org.microcol.i18n.MessageKeyResource;
 import com.google.common.base.Preconditions;
 import com.google.common.eventbus.EventBus;
 
-import javafx.geometry.Side;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundImage;
-import javafx.scene.layout.BackgroundPosition;
-import javafx.scene.layout.BackgroundRepeat;
-import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
@@ -29,11 +22,10 @@ import javafx.scene.layout.VBox;
  */
 public class AbstractButtonsPanel implements JavaFxComponent {
 
-    public static final String STYLE_SHEET_BUTTONS_PANEL = ScreenColony.class
+    private static final String STYLE_SHEET_BUTTONS_PANEL = ScreenColony.class
             .getResource("/gui/ButtonsPanel.css").toExternalForm();
 
     private final Source source;
-
     private final ImageProvider imageProvider;
     private final EventBus eventBus;
     private final I18n i18n;
@@ -61,15 +53,9 @@ public class AbstractButtonsPanel implements JavaFxComponent {
 
     protected <T extends Enum<T> & MessageKeyResource> Button makeButon(final String imgName,
             final T buttonsKey) {
-        final BackgroundImage nextButtonImage = new BackgroundImage(imageProvider.getImage(imgName),
-                BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT,
-                new BackgroundPosition(Side.RIGHT, 0.5, true, Side.TOP, 0.5, true),
-                BackgroundSize.DEFAULT);
-        final Button button = new Button();
-        button.setOnMouseEntered(
-                event -> eventBus.post(new StatusBarMessageEvent(i18n.get(buttonsKey), source)));
-        button.setBackground(new Background(nextButtonImage));
-        return button;
+        final ButtonImage<T> buttonImage = new ButtonImage<T>(eventBus, source, i18n, buttonsKey,
+                imageProvider.getImage(imgName));
+        return buttonImage.getContent();
     }
 
     @Override

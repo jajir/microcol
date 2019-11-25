@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE properties [
+<!ELEMENT properties ( comment?, entry* ) >
+<!ATTLIST properties version CDATA #FIXED "1.0">
+<!ELEMENT comment (#PCDATA) >
+<!ELEMENT entry (#PCDATA) >
+<!ATTLIST entry key CDATA #REQUIRED>
+]>
+
+<properties>
+	<comment>Define keys for Statistics</comment>
+
+	<entry key="titleGold">Zlato</entry>
+	<entry key="titleMilitary">Vojenská síla</entry>
+	<entry key="titleWealth">Bohatství</entry>
+	<entry key="titleScore">Score</entry>
+	<entry key="titleIndex">Seznam</entry>
+	<entry key="buttonCancel">Zpět</entry>
+
+	<entry key="statistics_year">Rok</entry>
+
+</properties>

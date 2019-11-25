@@ -17,7 +17,7 @@ import javafx.scene.layout.Region;
 import javafx.util.StringConverter;
 
 @Singleton
-public class SettingAnimationSpeedView implements JavaFxComponent, UpdatableLanguage {
+class SettingAnimationSpeedView implements JavaFxComponent, UpdatableLanguage {
 
     private final HBox mainPanel;
 
@@ -26,7 +26,7 @@ public class SettingAnimationSpeedView implements JavaFxComponent, UpdatableLang
     private final Slider slider;
 
     @Inject
-    public SettingAnimationSpeedView(final I18n i18n) {
+    SettingAnimationSpeedView(final I18n i18n) {
         label = new Label();
         label.getStyleClass().add("label-slider");
 

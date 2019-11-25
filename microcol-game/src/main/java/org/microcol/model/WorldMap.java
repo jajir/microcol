@@ -37,8 +37,8 @@ public class WorldMap {
     }
 
     private void verifyThatMapIsComplete() {
-        for (int x = 1; x <= getMaxX(); x++) {
-            for (int y = 1; y <= getMaxY(); y++) {
+        for (int x = 1; x <= getMaxLocationX(); x++) {
+            for (int y = 1; y <= getMaxLocationY(); y++) {
                 Terrain terrain = getTerrainAt(Location.of(x, y));
                 Preconditions.checkNotNull(terrain);
             }
@@ -50,7 +50,7 @@ public class WorldMap {
      * 
      * @return max X location
      */
-    public int getMaxX() {
+    public int getMaxLocationX() {
         return maxX;
     }
 
@@ -59,8 +59,18 @@ public class WorldMap {
      * 
      * @return max Y location
      */
-    public int getMaxY() {
+    public int getMaxLocationY() {
         return maxY;
+    }
+
+    /**
+     * Return map size. Valid map location will be from 1 up to getMapSize()
+     * Including x and y values of {@link #getMapSize()}
+     * 
+     * @return return map size
+     */
+    public Location getMapSize() {
+        return Location.of(maxX, maxY);
     }
 
     public TerrainType getTerrainTypeAt(final Location location) {
@@ -84,8 +94,8 @@ public class WorldMap {
     public boolean isValid(final Location location) {
         Preconditions.checkNotNull(location);
 
-        return location.getX() >= 1 && location.getX() <= getMaxX() && location.getY() >= 1
-                && location.getY() <= getMaxY();
+        return location.getX() >= 1 && location.getX() <= getMaxLocationX() && location.getY() >= 1
+                && location.getY() <= getMaxLocationY();
     }
 
     public boolean isValid(final Path path) {
@@ -109,11 +119,11 @@ public class WorldMap {
         gamePo.getMap().setSeed(seed);
         gamePo.getMap().setVisibility(new VisibilityPo());
     }
-    
+
     public void plowFiled(final Location at) {
-	Preconditions.checkArgument(getTerrainTypeAt(at).isCanHaveField(), "Terrain '%s' at '%s' can have field.",
-		getTerrainTypeAt(at), at);
-	fields.add(at);
+        Preconditions.checkArgument(getTerrainTypeAt(at).isCanHaveField(),
+                "Terrain '%s' at '%s' can have field.", getTerrainTypeAt(at), at);
+        fields.add(at);
     }
 
     /**

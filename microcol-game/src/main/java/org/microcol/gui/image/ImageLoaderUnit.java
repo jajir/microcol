@@ -5,48 +5,59 @@ package org.microcol.gui.image;
  */
 public final class ImageLoaderUnit implements ImageLoader {
 
+    public static final String IMG_UNIT_SHIP_GALEON_EAST = "galeon_east";
+
+    public static final String IMG_UNIT_SHIP_GALEON_WEST = "galeon_west";
+
+    public static final String IMG_UNIT_SHIP_FRIGATE = "tile-ship-frigate.png";
+
+    public static final String IMG_UNIT_SHIP_FRIGATE_LEFT = "frigate_left";
+
+    public static final String IMG_UNIT_FREE_COLONIST = "free-colonist";
+
+    public static final String IMG_UNIT_FREE_COLONIST_MOUNTED = "free-colonist-mounted";
+
+    public static final String IMG_UNIT_FREE_COLONIST_TOOLS = "free-colonist-tools";
+
+    public static final String IMG_UNIT_FREE_COLONIST_MUSKETS = "free-colonist-muskets";
+
+    public static final String IMG_UNIT_FREE_COLONIST_MOUNTED_MUSKETS = "free-colonist-mounted-muskets";
+
+    public static final String IMG_UNIT_WAGON = "wagon";
+
     @Override
-    public void preload(final ImageProvider imageProvider) {
-        imageProvider.registerImage(ImageProvider.IMG_UNIT_SHIP_GALEON_EAST,
-                imageProvider.getImage("type_4_5"));
-        registerLeftVariant(imageProvider, ImageProvider.IMG_UNIT_SHIP_GALEON_EAST,
-                ImageProvider.IMG_UNIT_SHIP_GALEON_WEST);
+    public void preload(final ImageCache imageCache) {
+        imageCache.registerImage(IMG_UNIT_SHIP_GALEON_EAST, imageCache.getImage("type_4_5"));
+        registerLeftVariant(imageCache, IMG_UNIT_SHIP_GALEON_EAST, IMG_UNIT_SHIP_GALEON_WEST);
 
-        imageProvider.registerImage(ImageProvider.IMG_UNIT_SHIP_FRIGATE,
-                imageProvider.getImage("type_5_5"));
-        registerLeftVariant(imageProvider, ImageProvider.IMG_UNIT_SHIP_FRIGATE,
-                ImageProvider.IMG_UNIT_SHIP_FRIGATE_LEFT);
+        imageCache.registerImage(IMG_UNIT_SHIP_FRIGATE, imageCache.getImage("type_5_5"));
+        registerLeftVariant(imageCache, IMG_UNIT_SHIP_FRIGATE, IMG_UNIT_SHIP_FRIGATE_LEFT);
 
-        imageProvider.registerImage(ImageProvider.IMG_UNIT_FREE_COLONIST,
-                imageProvider.getImage("type_2_4"));
-        imageProvider.registerImage(ImageProvider.IMG_UNIT_FREE_COLONIST_MOUNTED,
-                imageProvider.getImage("type_0_6"));
-        imageProvider.registerImage(ImageProvider.IMG_UNIT_FREE_COLONIST_TOOLS,
-                imageProvider.getImage("type_2_6"));
-        imageProvider.registerImage(ImageProvider.IMG_UNIT_FREE_COLONIST_MUSKETS,
-                imageProvider.getImage("type_6_6"));
-        imageProvider.registerImage(ImageProvider.IMG_UNIT_FREE_COLONIST_MOUNTED_MUSKETS,
-                imageProvider.getImage("type_5_6"));
+        imageCache.registerImage(IMG_UNIT_FREE_COLONIST, imageCache.getImage("type_2_4"));
+        imageCache.registerImage(IMG_UNIT_FREE_COLONIST_MOUNTED, imageCache.getImage("type_0_6"));
+        imageCache.registerImage(IMG_UNIT_FREE_COLONIST_TOOLS, imageCache.getImage("type_2_6"));
+        imageCache.registerImage(IMG_UNIT_FREE_COLONIST_MUSKETS, imageCache.getImage("type_6_6"));
+        imageCache.registerImage(IMG_UNIT_FREE_COLONIST_MOUNTED_MUSKETS,
+                imageCache.getImage("type_5_6"));
 
-        imageProvider.registerImage(ImageProvider.IMG_UNIT_WAGON,
-                imageProvider.getImage("type_1_6"));
+        imageCache.registerImage(IMG_UNIT_WAGON, imageCache.getImage("type_1_6"));
 
     }
 
     /**
      * For given image register flip variant. Flip is done by vertical axe.
      *
-     * @param imageProvider
+     * @param imageCache
      *            required image provider
      * @param originalKey
      *            required original image
      * @param newKey
      *            flip image will be stored under this key
      */
-    private void registerLeftVariant(final ImageProvider imageProvider, final String originalKey,
+    private void registerLeftVariant(final ImageCache imageCache, final String originalKey,
             final String newKey) {
-        final ImageWrapper imageWrapper = ImageWrapper.of(imageProvider.getImage(originalKey));
-        imageProvider.registerImage(newKey,
+        final ImageWrapper imageWrapper = ImageWrapper.of(imageCache.getImage(originalKey));
+        imageCache.registerImage(newKey,
                 imageWrapper.getImageTranspose().getImageRotareRight().get());
     }
 

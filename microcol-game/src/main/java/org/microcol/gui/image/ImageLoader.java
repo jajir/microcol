@@ -7,12 +7,12 @@ package org.microcol.gui.image;
 public interface ImageLoader {
 
     /**
-     * Method load and register images into cache. Registered images will accessible
-     * later via it's key.
+     * Method load and register images into cache. Registered images will
+     * accessible later via it's key.
      *
-     * @param imageProvider
+     * @param imageCache
      *            required image provide (image cache)
      */
-    void preload(final ImageProvider imageProvider);
+    void preload(final ImageCache imageCache);
 
 }

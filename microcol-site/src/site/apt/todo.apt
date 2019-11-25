@@ -75,6 +75,16 @@ Planned releases
   * \uD83D\uDC1B When focus is transfered by tab then screen don't center at focused unit.
  
  * <<Backlog>> - feature and improvement backlog
+      
+  * \uD83D\uDC1B When unit is selected from right menu than correct unit is not highlighted in main game area. It could be verify with ship & free colonist. 
+      
+  * \uD83D\uDC1B When key 'e' as Europe view is triggered during ship movement than after closing Europe screen unit is still moving.   
+      
+  * \uD83D\uDC1B Europe goods panel - wrong formating and invalid status bar messages.
+      
+  * \uD83D\uDC1B Selected unit in Right panel is not at top. Width is not correct. Add left margin.  
+      
+  * \uD83D\uDC1B   
     
   * \u2717 Build simple Civilizopedia. Ideally some HTML page with generated content. 
   
@@ -98,8 +108,6 @@ Planned releases
      
   * \u2717 colonist unit equipped with (20) tool can plow field.
   Depending on unit expertise in a few turns field will be created and 20 tools will be destroyed.
-  
-  * \uD83D\uDC1B When unit is selected from right menu than correct unit is not highlighted in main game area. Or it's not possible to verify, because just one unit type is there. 
   
   * \u2717 Documentation update
   	

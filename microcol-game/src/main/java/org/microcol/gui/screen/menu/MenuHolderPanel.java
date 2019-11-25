@@ -3,6 +3,7 @@ package org.microcol.gui.screen.menu;
 import org.microcol.gui.screen.ScreenLifeCycle;
 import org.microcol.gui.util.CenteredPage;
 import org.microcol.gui.util.JavaFxComponent;
+import org.microcol.gui.util.TitledPage;
 
 import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
@@ -13,8 +14,6 @@ import javafx.scene.layout.Region;
  * In main area shows game welcome page.
  */
 public final class MenuHolderPanel implements JavaFxComponent, ScreenLifeCycle {
-
-    public static final String MAIN_TITLE_ID = "main-title";
 
     private final TitledPage titledPage;
 

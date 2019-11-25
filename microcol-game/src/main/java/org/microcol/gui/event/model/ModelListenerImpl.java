@@ -37,13 +37,13 @@ import com.google.common.eventbus.EventBus;
 /**
  * Translate model events to GUI events.
  */
-public final class ModelListenerImpl implements ModelListener {
+final class ModelListenerImpl implements ModelListener {
 
     private final GameModelController gameModelController;
 
     private final EventBus eventBus;
 
-    public ModelListenerImpl(final GameModelController gameModelController,
+    ModelListenerImpl(final GameModelController gameModelController,
             final EventBus eventBus) {
         this.gameModelController = Preconditions.checkNotNull(gameModelController);
         this.eventBus = Preconditions.checkNotNull(eventBus);
@@ -62,21 +62,21 @@ public final class ModelListenerImpl implements ModelListener {
 
     @Override
     public void onUnitMovedStepStarted(final UnitMovedStepStartedEvent event) {
-        if (event.canPlayerSeeMove(gameModelController.getCurrentPlayer())) {
+        if (event.canPlayerSeeMove(gameModelController.getHumanPlayer())) {
             eventBus.post(event);
         }
     }
 
     @Override
     public void onUnitMovedStepFinished(final UnitMovedStepFinishedEvent event) {
-        if (event.canPlayerSeeMove(gameModelController.getCurrentPlayer())) {
+        if (event.canPlayerSeeMove(gameModelController.getHumanPlayer())) {
             eventBus.post(event);
         }
     }
 
     @Override
     public void onUnitMovedToHighSeas(final UnitMovedToHighSeasEvent event) {
-        if (event.getUnit().getOwner().equals(gameModelController.getCurrentPlayer())) {
+        if (event.getUnit().getOwner().equals(gameModelController.getHumanPlayer())) {
             eventBus.post(event);
         }
     }

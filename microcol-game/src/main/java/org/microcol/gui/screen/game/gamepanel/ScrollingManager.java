@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import com.google.common.base.Preconditions;
 import com.google.common.eventbus.EventBus;
 import com.google.inject.Inject;
+import com.google.inject.name.Named;
 
 /**
  * Hold and manage planned animation steps.
@@ -19,22 +20,22 @@ public final class ScrollingManager {
 
     private AnimatonScreenScroll runningAnimation;
 
-    private final VisibleArea visibleArea;
-    
+    private final VisibleAreaService visibleArea;
+
     private final EventBus eventBus;
 
     private final AnimationLatch latch = new AnimationLatch();
 
     @Inject
-    public ScrollingManager(final EventBus eventBus,
-            final WasdController wasdController, final VisibleArea visibleArea) {
+    public ScrollingManager(final EventBus eventBus, final WasdController wasdController,
+            final @Named("game") VisibleAreaService visibleArea) {
         this.eventBus = Preconditions.checkNotNull(eventBus);
         this.wasdController = Preconditions.checkNotNull(wasdController);
         this.visibleArea = Preconditions.checkNotNull(visibleArea);
         runningAnimation = null;
     }
 
-    public void paint() {
+    void paint() {
         if (runningAnimation == null) {
             if (wasdController.isScrolling()) {
                 visibleArea.addDeltaToTopLeftPoint(wasdController.getDiff());
@@ -48,7 +49,7 @@ public final class ScrollingManager {
         }
     }
 
-    public void addAnimation(final AnimatonScreenScroll animation) {
+    void addAnimation(final AnimatonScreenScroll animation) {
         logger.debug("Adding animation {}", animation);
         eventBus.post(new AnimationStartedEvent());
         latch.lock();

@@ -1,14 +1,12 @@
 package org.microcol.gui.screen.colony;
 
-import static org.microcol.gui.Tile.TILE_SIZE;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
 import org.microcol.gui.Point;
-import org.microcol.gui.Rectangle;
+import org.microcol.model.Direction;
 import org.microcol.model.Location;
 
 import com.google.common.base.MoreObjects;
@@ -16,25 +14,28 @@ import com.google.common.collect.Lists;
 
 /**
  * Holds rectangular areas (fields) in on-screen coordinates. It convert
- * on-screen coordinates to direction of field. Direction is {@link Location}.
+ * on-screen canvas coordinates to direction of field. Direction is
+ * {@link Location}.
  */
-public final class ClickableArea {
+final class ClickableArea {
 
-    private final Map<Rectangle, Location> areas;
+    private final Map<ColonyFieldTile, Location> areas;
 
-    public ClickableArea() {
+    ClickableArea() {
         areas = new HashMap<>();
         final List<Location> locs = Lists.newArrayList(Location.CENTER.getNeighbors());
-        locs.forEach(loc -> {
-            final Point p = Point.of(loc).add(TILE_SIZE);
-            Rectangle rect = Rectangle.ofPointAndSize(p, TILE_SIZE);
-            areas.put(rect, loc);
-        });
+        locs.forEach(this::addDirection);
     }
 
-    public Optional<Location> getDirection(final Point point) {
+    private void addDirection(final Location loc) {
+        final ColonyFieldTile colonyFieldTile = ColonyFieldTile.ofLocation(loc);
+        areas.put(colonyFieldTile, loc);
+    }
+
+    Optional<Direction> getDirection(final Point point) {
         return areas.entrySet().stream().filter(entry -> entry.getKey().isIn(point))
-                .map(entry -> entry.getValue()).findAny();
+                .map(entry -> entry.getValue()).map(location -> Direction.valueOf(location))
+                .findAny();
     }
 
     @Override

@@ -10,7 +10,7 @@ import com.google.inject.Singleton;
  * Just extends abstract dock panel and define it's source.
  */
 @Singleton
-public class PanelDockEurope extends AbstractPanelDock {
+class PanelDockEurope extends AbstractPanelDock {
 
     @Inject
     public PanelDockEurope(final ImageProvider imageProvider,
@@ -19,7 +19,7 @@ public class PanelDockEurope extends AbstractPanelDock {
         super(imageProvider, panelEuropeDockBehavior, panelDockProviderEurope);
     }
 
-    public void repaintCurrectShipsCrates() {
+    void repaintCurrectShipsCrates() {
         getSelectedShip().ifPresent(unit -> getPanelDockCratesPresenter().setCratesForShip(unit));
     }
 

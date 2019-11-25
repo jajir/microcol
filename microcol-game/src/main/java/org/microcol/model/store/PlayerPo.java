@@ -19,6 +19,8 @@ public final class PlayerPo {
 
     private VisibilityPo visible;
 
+    private int kingsTaxPercentage;
+    
     /**
      * @return the name
      */
@@ -122,6 +124,14 @@ public final class PlayerPo {
      */
     public void setVisible(VisibilityPo visibility) {
         this.visible = visibility;
+    }
+
+    public int getKingsTaxPercentage() {
+        return kingsTaxPercentage;
+    }
+
+    public void setKingsTaxPercentage(int kingsTaxPercentage) {
+        this.kingsTaxPercentage = kingsTaxPercentage;
     }
 
 }

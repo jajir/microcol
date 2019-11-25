@@ -10,7 +10,7 @@ import org.microcol.model.TerrainType;
 /**
  * Define keys for terrain names.
  */
-public enum TerrainTypes implements MessageKeyResource {
+enum TerrainTypes implements MessageKeyResource {
 
     OCEAN_name,
     OCEAN_description,
@@ -32,12 +32,12 @@ public enum TerrainTypes implements MessageKeyResource {
     private static final String TERRAIN_SUFFIX_NAME = "_name";
     private static final String TERRAIN_SUFFIX_DESCRIPTION = "_description";
 
-    public static TerrainTypes getTerrainName(final TerrainType terrainType) {
+    static TerrainTypes getTerrainName(final TerrainType terrainType) {
         final String key = terrainType.name() + TERRAIN_SUFFIX_NAME;
         return valueOf(key);
     }
 
-    public static TerrainTypes getTerrainDescription(final TerrainType terrainType) {
+    static TerrainTypes getTerrainDescription(final TerrainType terrainType) {
         final String key = terrainType.name() + TERRAIN_SUFFIX_DESCRIPTION;
         return valueOf(key);
     }

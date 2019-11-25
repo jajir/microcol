@@ -24,13 +24,13 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.HBox;
 
-public class QueueListCell extends ListCell<ColonyBuildingItemProgress<?>> {
+class QueueListCell extends ListCell<ColonyBuildingItemProgress<?>> {
 
     private final ImageProvider imageProvider;
 
     private final QueueController queueController;
 
-    public QueueListCell(final QueueController queueController, final ImageProvider imageProvider) {
+    QueueListCell(final QueueController queueController, final ImageProvider imageProvider) {
         this.queueController = Preconditions.checkNotNull(queueController);
         this.imageProvider = Preconditions.checkNotNull(imageProvider);
     }
@@ -86,8 +86,8 @@ public class QueueListCell extends ListCell<ColonyBuildingItemProgress<?>> {
             event.setDropCompleted(true);
             event.consume();
         } else if (from == From.VALUE_FROM_BUILDING_QUEUE_UNIT) {
-            queueController.addBeforeItem(UnitType.valueOf(parser.get(ClipboardConst.KEY_UNIT_TYPE)),
-                    item.getId());
+            queueController.addBeforeItem(
+                    UnitType.valueOf(parser.get(ClipboardConst.KEY_UNIT_TYPE)), item.getId());
             event.acceptTransferModes(TransferMode.MOVE);
             event.setDropCompleted(true);
             event.consume();

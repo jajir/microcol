@@ -1,0 +1,41 @@
+/*
+ * 
+ * 
+ */
+
+.scroll-pane {
+	-fx-fit-to-width: true;
+	-fx-background-insets: 0;
+	-fx-padding: 0;
+}
+
+.scroll-pane:focused {
+}
+
+.scroll-pane .selected {
+	 -fx-background-color: #DADADA;
+}
+
+#rightPanel{
+	-fx-pref-width: 170;
+	-fx-min-width: 170;
+	-fx-padding: 0 0 0 10;
+}
+
+#tileImage {
+	-fx-pref-width: 55px;
+}
+
+/*
+ * I can's set automatically width of button to maximum size. 
+ */
+#nextTurnButton{
+	-fx-min-width: 168px;
+}
+
+.unitPanel{
+ 	-fx-padding: 15px 10 10px 0;
+ 	-fx-min-width: 150;
+ 	-fx-max-width: 150;
+}
+

@@ -43,14 +43,6 @@
 	<entry key="turnReport_caption">Turn Report</entry>
 	<entry key="turnReport_noEvents">There are no events.</entry>
 
-	<entry key="statistics_title">Statistics</entry>
-	<entry key="statistics_caption">Statistics</entry>
-	<entry key="statistics_year">Year</entry>
-	<entry key="statistics_gold">Gold</entry>
-	<entry key="statistics_militaryPower">Military power</entry>
-	<entry key="statistics_wealth">Wealth</entry>
-	<entry key="statistics_score">Score</entry>
-
 	<entry key="no_2_7p">two</entry>
 	<entry key="no_3_7p">three</entry>
 	<entry key="no_4_7p">four</entry>
@@ -58,5 +50,6 @@
 	<entry key="and">and</entry>
 	<entry key="withColony">with colony</entry>
 	<entry key="adjustAmountOfGoods">For adjusting amount of transfered goods press and hold key Control (or Ctrl) ⌃.</entry>
+	<entry key="moveCost">Move cost: </entry>
 
 </properties>

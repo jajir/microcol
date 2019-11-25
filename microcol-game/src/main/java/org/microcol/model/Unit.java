@@ -67,9 +67,9 @@ public interface Unit {
 
     boolean canPlowFiled();
 
-    void disembark(Location targetLocation);
+    void disembarkToLocation(Location targetLocation);
 
-    void embark(PlaceCargoSlot placeCargoSlot);
+    void embarkFromLocation(CargoSlot cargoSlot);
 
     int getId();
 

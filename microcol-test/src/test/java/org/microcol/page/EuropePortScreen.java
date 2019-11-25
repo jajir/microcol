@@ -69,13 +69,13 @@ public class EuropePortScreen extends AbstractScreen {
 	pageComponentPanelDock.verifyNumberOfShipsInPort(expectedNumberOfShipsInPort);
     }
 
-    public DialogChooseNumberOfGoods buyGoodsAndMoveItToCargoSlotWithPressedControl(final int indexOfGoods,
+    public ScreenMarketBuy buyGoodsAndMoveItToCargoSlotWithPressedControl(final int indexOfGoods,
 	    final int indexOfCargoSlot) {
 	getRobot().press(KeyCode.CONTROL);
 	buyGoodsAndMoveItToCargoSlot(indexOfGoods, indexOfCargoSlot);
 	getRobot().release(KeyCode.CONTROL);
 	WaitForAsyncUtils.waitForFxEvents();
-	return DialogChooseNumberOfGoods.of(getContext());
+	return ScreenMarketBuy.of(getContext());
     }
 
     public void buyGoodsAndMoveItToCargoSlot(final int indexOfGoods, final int indexOfCargoSlot) {
@@ -83,12 +83,12 @@ public class EuropePortScreen extends AbstractScreen {
 		.dropTo(pageComponentPanelDock.getListOfCrates().get(indexOfCargoSlot)).release(MouseButton.PRIMARY);
     }
 
-    public DialogChooseNumberOfGoods sellGoodsWithPressedControl(final int indexOfCargoSlot, final int indexOfGoods) {
+    public ScreenMarketSell sellGoodsWithPressedControl(final int indexOfCargoSlot, final int indexOfGoods) {
 	getRobot().press(KeyCode.CONTROL);
 	sellGoods(indexOfCargoSlot, indexOfGoods);
 	getRobot().release(KeyCode.CONTROL);
 	WaitForAsyncUtils.waitForFxEvents();
-	return DialogChooseNumberOfGoods.of(getContext());
+	return ScreenMarketSell.of(getContext());
     }
 
     public void sellGoods(final int indexOfCargoSlot, final int indexOfGoods) {

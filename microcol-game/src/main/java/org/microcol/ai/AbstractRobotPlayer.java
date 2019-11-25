@@ -34,7 +34,7 @@ public abstract class AbstractRobotPlayer {
 
     private boolean running;
 
-    public AbstractRobotPlayer(final Model model, final Player player,
+    AbstractRobotPlayer(final Model model, final Player player,
             final AnimationLock animationLock) {
         this.model = Preconditions.checkNotNull(model);
         this.player = Preconditions.checkNotNull(player);
@@ -62,17 +62,6 @@ public abstract class AbstractRobotPlayer {
 
     public void stop() {
         model.removeListener(modelAdapter);
-    }
-
-    public void suspend() {
-        running = false;
-    }
-
-    public void resume() {
-        running = true;
-        if (model.isGameRunning() && model.getCurrentPlayer().isComputer()) {
-            turn(model.getCurrentPlayer());
-        }
     }
 
     private void turn(final Player player) {

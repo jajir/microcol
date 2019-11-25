@@ -3,8 +3,6 @@ package org.microcol.model.store;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.common.base.Preconditions;
-
 public final class GameManagerPo {
 
     // In model players are stored in class 'playerStore's
@@ -13,12 +11,6 @@ public final class GameManagerPo {
     private boolean gameStarted;
 
     private String currentPlayer;
-
-    public PlayerPo getPlayerByName(final String name) {
-        Preconditions.checkState(players != null, "Players are null");
-        return players.stream().filter(player -> player.getName().equals(name)).findAny()
-                .orElseThrow(() -> new IllegalStateException("Invalid owner name '" + name + "'"));
-    }
 
     /**
      * @return the players

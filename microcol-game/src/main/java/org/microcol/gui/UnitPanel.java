@@ -20,7 +20,7 @@ import javafx.scene.layout.VBox;
 /**
  * Display one unit from selected tile.
  */
-public class UnitPanel {
+class UnitPanel {
 
     private final ImageProvider imageProvider;
 
@@ -30,7 +30,7 @@ public class UnitPanel {
 
     private final VBox box = new VBox();
 
-    public UnitPanel(final ImageProvider imageProvider, final I18n i18n,
+    UnitPanel(final ImageProvider imageProvider, final I18n i18n,
             final LocalizationHelper localizationHelper, final Player humanPlayer, final Unit unit,
             final boolean selected) {
         this.imageProvider = Preconditions.checkNotNull(imageProvider);
@@ -93,7 +93,7 @@ public class UnitPanel {
 
     private HBox makeGoodsPanel(final UnitWithCargo unit) {
         HBox box = new HBox();
-        box.getStylesheets().add(MainStageBuilder.STYLE_SHEET_RIGHT_PANEL_VIEW);
+        box.getStylesheets().add(MainStageBuilder.STYLE_SHEET_RIGHT_PANEL);
         if (unit.getCargo().isEmpty()) {
             box.getChildren().add(new Label(i18n.get(Loc.unitsPanel_empty)));
         } else {

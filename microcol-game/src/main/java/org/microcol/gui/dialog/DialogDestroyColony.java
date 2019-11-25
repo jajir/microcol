@@ -20,8 +20,4 @@ public final class DialogDestroyColony extends AbstractYesNoDialog {
         getContext().getChildren().add(new Label(i18n.get(Dialog.destroyColony_question)));
     }
 
-    boolean isSelectedContinue() {
-        return showWaitAndReturnIfYesWasSelected();
-    }
-
 }

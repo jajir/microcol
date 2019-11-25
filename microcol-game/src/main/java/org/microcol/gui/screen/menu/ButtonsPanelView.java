@@ -29,7 +29,7 @@ public final class ButtonsPanelView implements JavaFxComponent, UpdatableLanguag
 
     private final Button buttonContinue;
 
-    private final Button buttonLoadSave;
+    private final Button buttonLoad;
 
     private final Button buttonPlayCampaign;
 
@@ -45,8 +45,8 @@ public final class ButtonsPanelView implements JavaFxComponent, UpdatableLanguag
     ButtonsPanelView() {
         buttonContinue = new Button();
         buttonContinue.setId(BUTTON_CONTINUE_ID);
-        buttonLoadSave = new Button();
-        buttonLoadSave.setId(BUTTON_LOAD_ID);
+        buttonLoad = new Button();
+        buttonLoad.setId(BUTTON_LOAD_ID);
         buttonPlayCampaign = new Button();
         buttonPlayCampaign.setId(BUTTON_PLAY_CAMPAIGN_ID);
         buttonStartFreeGame = new Button();
@@ -58,7 +58,7 @@ public final class ButtonsPanelView implements JavaFxComponent, UpdatableLanguag
         buttonsBox = new VBox();
         buttonsBox.getStyleClass().add("game-menu-inner");
         buttonsBox.getChildren().add(buttonContinue);
-        buttonsBox.getChildren().add(buttonLoadSave);
+        buttonsBox.getChildren().add(buttonLoad);
         buttonsBox.getChildren().add(buttonPlayCampaign);
         buttonsBox.getChildren().add(buttonStartFreeGame);
         buttonsBox.getChildren().add(buttonSetting);
@@ -76,7 +76,7 @@ public final class ButtonsPanelView implements JavaFxComponent, UpdatableLanguag
     @Override
     public void updateLanguage(final I18n i18n) {
         buttonContinue.setText(i18n.get(GameMenu.buttonContinue));
-        buttonLoadSave.setText(i18n.get(GameMenu.buttonLoadSave));
+        buttonLoad.setText(i18n.get(GameMenu.buttonLoadSave));
         buttonPlayCampaign.setText(i18n.get(GameMenu.buttonPlayCampaign));
         buttonStartFreeGame.setText(i18n.get(GameMenu.buttonFreeGame));
         buttonSetting.setText(i18n.get(GameMenu.buttonSetting));
@@ -102,8 +102,8 @@ public final class ButtonsPanelView implements JavaFxComponent, UpdatableLanguag
     /**
      * @return the buttonLoadSave
      */
-    public Button getButtonLoadSave() {
-        return buttonLoadSave;
+    public Button getButtonLoad() {
+        return buttonLoad;
     }
 
     /**

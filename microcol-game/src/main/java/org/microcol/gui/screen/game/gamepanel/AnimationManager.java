@@ -51,7 +51,7 @@ public final class AnimationManager implements AnimationLock {
         }
     }
 
-    public void paint(final GraphicsContext graphics, final Area area) {
+    void paint(final GraphicsContext graphics, final Area area) {
         Preconditions.checkState(runningPart != null, "Actually running animation was lost.");
         runningPart.getAnimation().paint(graphics, area);
         performStep();

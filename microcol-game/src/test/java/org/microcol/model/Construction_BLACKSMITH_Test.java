@@ -44,11 +44,11 @@ public class Construction_BLACKSMITH_Test extends AbstractConstructionTest {
 
     @Test
     public void test_getProduction_1_worker() throws Exception {
-        final Goods source = Goods.of(GoodsType.ORE, 73);
-        when(slot1.getProduction(source)).thenReturn(empty());
-        when(slot2.getProduction(source)).thenReturn(full());
-        when(slot3.getProduction(source)).thenReturn(empty());
+        when(slot1.getProduction(Goods.of(GoodsType.ORE, 73))).thenReturn(empty());
+        when(slot2.getProduction(Goods.of(GoodsType.ORE, 73))).thenReturn(full());
+        when(slot3.getProduction(Goods.of(GoodsType.ORE, 68))).thenReturn(empty());
 
+        final Goods source = Goods.of(GoodsType.ORE, 73);
         final ConstructionTurnProduction ret = construction.getProduction(source);
 
         assertTrue(ret.getConsumedGoods().isPresent());
@@ -75,13 +75,20 @@ public class Construction_BLACKSMITH_Test extends AbstractConstructionTest {
         assertEquals(Goods.of(GoodsType.TOOLS, 3), ret.getBlockedGoods().get());
     }
 
+    /**
+     * Each slot produce 5 tools from 5 ore. Two slots are occupied. Workers in
+     * slot could produce 10 tools from 10 ore. But there are just 7 ore so just
+     * 7 tools are produced and production of 3 tools is blocked by missing ore.
+     * 
+     * @throws Exception generic exception in test
+     */
     @Test
     public void test_getProduction_2_worker_limitedSource() throws Exception {
-        final Goods source = Goods.of(GoodsType.ORE, 7);
-        when(slot1.getProduction(source)).thenReturn(empty());
-        when(slot2.getProduction(source)).thenReturn(full());
-        when(slot3.getProduction(source)).thenReturn(part());
+        when(slot1.getProduction(Goods.of(GoodsType.ORE, 7))).thenReturn(empty());
+        when(slot2.getProduction(Goods.of(GoodsType.ORE, 7))).thenReturn(full());
+        when(slot3.getProduction(Goods.of(GoodsType.ORE, 2))).thenReturn(part());
 
+        final Goods source = Goods.of(GoodsType.ORE, 7);
         final ConstructionTurnProduction ret = construction.getProduction(source);
 
         assertTrue(ret.getConsumedGoods().isPresent());

@@ -85,10 +85,6 @@ public abstract class AbstractMessageWindow implements UpdatableLanguage {
         });
     }
 
-    public void addStyleSheet(final String styleSheet) {
-        scene.getStylesheets().add(styleSheet);
-    }
-
     protected void onCancelDialog() {
         stageDialog.close();
     }

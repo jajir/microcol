@@ -48,7 +48,7 @@ public final class MoveModeSupport {
      * Define what mode of move.
      *
      */
-    public enum MoveMode {
+    enum MoveMode {
 
         MOVE(ImageProvider.IMG_ICON_STEPS_25x25, ImageProvider.IMG_ICON_STEPS_TURN_25x25),
 
@@ -73,7 +73,7 @@ public final class MoveModeSupport {
             this.turnImage = Preconditions.checkNotNull(turnImage);
         }
 
-        public String getImageForStep(final boolean normalStep) {
+        String getImageForStep(final boolean normalStep) {
             if (normalStep) {
                 return image;
             } else {
@@ -92,8 +92,7 @@ public final class MoveModeSupport {
     }
 
     @Inject
-    public MoveModeSupport(
-            final SelectedTileManager selectedTileManager,
+    public MoveModeSupport(final SelectedTileManager selectedTileManager,
             final MouseOverTileManager mouseOverTileManager,
             final SelectedUnitManager selectedUnitManager, final ModeController modeController,
             final UnitUtil unitUtil) {

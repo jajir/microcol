@@ -15,8 +15,8 @@
 	<entry key="default_m0_g2">Vyloď se a zolož kolonii.</entry>
 	<entry key="default_m0_g3">Vyprodukuj 30 doutníků.</entry>
 	<entry key="default_m0_g4">Prodej doutníky v Evropě.</entry>
-	<entry key="default_m0_start">Najděte nový svět, kde založíte kolonii. Jeď lodí doleva, tam asi bude země.</entry>
-	<entry key="default_m0_cantMoveToHighSeas">Nemůžeš se vrátit do Evropy odkuď jsi přijel. Zkus najít nový svět, pravděpodobně bude ležet na západě.</entry>
+	<entry key="default_m0_start">Buď zdráv, určitě si na mě moc nepamatuješ, ale jsem tvůj strýc jmenuju se Petr. S tvým otcem jsme prošli mnoha boji. Teď jsem tu, aby ti pomohl na tvojí cestě. První, co tě čeká je najít novou zemi, kde by jis mohl založit kolonie. To na co se koukáš je mapa, kde je tvoje loď. Protože plujem do Ameriky, tak Evropa a tvůj domovský přístav je v pravo a Amerika v levo. Tak se vydej do leva.</entry>
+	<entry key="default_m0_cantMoveToHighSeas">Nemůžeš se vrátit do Evropy odkuď jsi přijel. Přijeli jsme se. abychom založili nevé kolonie a něco vydělali. Zkus najít vhodné míst pro kolonii, pravděpodobně bude ležet na západě.</entry>
 	<entry key="default_m0_pressNextTurn">Tento tah už neni monžné s lodí dál hýbat. Loď nemá dost bodů na pohyb. Stav bodů je vidět v panelu naprvo, kde jsou detaily lodě. Pro další tah stiskni 'Další tah'</entry>
 	<entry key="default_m0_moveUnitBeforeEndTurn">Nejprve táhni lodí, zkus najít nový svět.</entry>
 	<entry key="default_m0_continentInSight">Nový Svět už je na dohled. Priraž s loďí a vyloď jednotky. Založ novou kolonii.</entry>

@@ -29,9 +29,9 @@ public final class TileDef {
         return prefix + start.get() + end.get();
     }
 
-    public TileDef storeTo(final ImageProvider imageProvider) {
-        Preconditions.checkNotNull(imageProvider);
-        imageProvider.registerImage(getCode(), image.get());
+    public TileDef storeTo(final ImageCache imageCache) {
+        Preconditions.checkNotNull(imageCache);
+        imageCache.registerImage(getCode(), image.get());
         return this;
     }
 

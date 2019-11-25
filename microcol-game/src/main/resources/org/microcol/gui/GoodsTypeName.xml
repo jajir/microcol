@@ -52,4 +52,25 @@
 	<entry key="cross_dc2_pl">Crosses</entry>
 	<entry key="bell_dc2_pl">Bells of liberty</entry>
 
+	<!-- Declension - 7 case - instrumental - plurar, it's -->
+	<entry key="corn_dc7_pl">Corn</entry>
+	<entry key="sugar_dc7_pl">Sugar cane</entry>
+	<entry key="tobacco_dc7_pl">Tobacco</entry>
+	<entry key="cotton_dc7_pl">Cottons</entry>
+	<entry key="fur_dc7_pl">Furs</entry>
+	<entry key="lumber_dc7_pl">Lumber</entry>
+	<entry key="ore_dc7_pl">Ore</entry>
+	<entry key="silver_dc7_pl">Silvers</entry>
+	<entry key="horse_dc7_pl">Horses</entry>
+	<entry key="rum_dc7_pl">Rum</entry>
+	<entry key="cigars_dc7_pl">Cigars</entry>
+	<entry key="silk_dc7_pl">Silk</entry>
+	<entry key="coat_dc7_pl">Coats</entry>
+	<entry key="goods_dc7_pl">Goods</entry>
+	<entry key="tools_dc7_pl">Tools</entry>
+	<entry key="musket_dc7_pl">Muskets</entry>
+	<entry key="hammers_dc7_pl">Hammers</entry>
+	<entry key="cross_dc7_pl">Crosses</entry>
+	<entry key="bell_dc7_pl">Bells of liberty</entry>
+
 </properties>

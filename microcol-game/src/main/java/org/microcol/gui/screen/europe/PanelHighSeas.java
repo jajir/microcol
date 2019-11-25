@@ -134,7 +134,7 @@ public final class PanelHighSeas<T extends Enum<T> & MessageKeyResource>
 
     private void showShips() {
         gameModelController.getModel().getHighSea()
-                .getUnitsTravelingTo(gameModelController.getCurrentPlayer(),
+                .getUnitsTravelingTo(gameModelController.getHumanPlayer(),
                         isShownShipsTravelingToEurope)
                 .forEach(unit -> {
                     shipsContainer.getChildren()

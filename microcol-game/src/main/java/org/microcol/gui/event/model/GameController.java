@@ -2,13 +2,11 @@ package org.microcol.gui.event.model;
 
 import java.io.File;
 
-import org.microcol.gui.screen.Screen;
-import org.microcol.gui.screen.ShowScreenEvent;
 import org.microcol.model.campaign.Campaign;
 import org.microcol.model.campaign.CampaignManager;
+import org.microcol.model.campaign.CampaignMission;
 import org.microcol.model.campaign.CampaignName;
 import org.microcol.model.campaign.CampaignNames;
-import org.microcol.model.campaign.CampaignMission;
 import org.microcol.model.campaign.GameModel;
 import org.microcol.model.campaign.GameModelDao;
 import org.microcol.model.campaign.MissionName;
@@ -40,27 +38,12 @@ public final class GameController {
         this.eventBus = Preconditions.checkNotNull(eventBus);
     }
 
-    /**
-     * Allows to start testing scenario. In production mode it's blocked.
-     *
-     * @param fileName
-     *            required class path related file name
-     */
-    public void startTestScenario(final String fileName) {
-        startMission(gameModelDao.loadFromClassPath(fileName, eventBus));
-    }
-
     public void writeModelToFile(final File targetFile) {
         gameModelDao.saveToFile(targetFile.getAbsolutePath(), gameModelController.getGameModel());
     }
 
     public void loadModelFromFile(final File sourceFile) {
         startMission(gameModelDao.loadFromFile(sourceFile, eventBus));
-    }
-
-    public void startCampaignMission(final CampaignName campaignName, final String missionName) {
-        final Campaign campaign = campaignManager.getCampaignByName(campaignName);
-        startCampaignMission(campaign.getMisssionByName(missionName));
     }
 
     public void startCampaignMission(final CampaignName campaignName,
@@ -75,7 +58,6 @@ public final class GameController {
 
     private void startMission(final GameModel gameMode) {
         gameModelController.setAndStartModel(gameMode);
-        eventBus.post(new ShowScreenEvent(Screen.GAME));
     }
 
     public boolean isDefaultCampaignFinished() {

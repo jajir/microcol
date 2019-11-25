@@ -28,13 +28,6 @@ final class AnimationHolder {
         }
     }
 
-    /**
-     * @return the onAnimationIsDone
-     */
-    Consumer<Animation> getOnAnimationIsDone() {
-        return onAnimationIsDone;
-    }
-
     @Override
     public String toString() {
         return MoreObjects.toStringHelper(getClass()).add("animation", animation)

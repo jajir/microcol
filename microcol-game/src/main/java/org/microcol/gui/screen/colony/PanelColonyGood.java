@@ -54,7 +54,7 @@ public final class PanelColonyGood implements JavaFxComponent {
 
     private final VBox mainPanel;
 
-    public PanelColonyGood(final Image image, final GoodsType goodsType, final EventBus eventBus,
+    PanelColonyGood(final Image image, final GoodsType goodsType, final EventBus eventBus,
             final I18n i18n) {
         this.goodsType = Preconditions.checkNotNull(goodsType);
         this.image = Preconditions.checkNotNull(image);
@@ -105,7 +105,7 @@ public final class PanelColonyGood implements JavaFxComponent {
         this.colony = colony;
     }
 
-    public void repaint() {
+    void repaint() {
         final ColonyProductionStats stats = colony.getGoodsStats();
         final GoodsProductionStats goodsStats = stats.getStatsByType(goodsType);
 

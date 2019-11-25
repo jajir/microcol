@@ -8,11 +8,14 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 
 /**
  * Show No/Yes buttons at the bottom of dialog window.
  */
-public final class ButtonsBarYesNo extends HBox {
+public final class ButtonsBarYesNo implements JavaFxComponent {
+
+    private final HBox mainBox = new HBox();
 
     private final Button buttonYes;
 
@@ -33,8 +36,8 @@ public final class ButtonsBarYesNo extends HBox {
 
         final Pane spacer = new Pane();
         HBox.setHgrow(spacer, Priority.ALWAYS);
-        setId("buttonPane");
-        getChildren().addAll(buttonNo, spacer, buttonYes);
+        mainBox.setId("buttonPane");
+        mainBox.getChildren().addAll(buttonNo, spacer, buttonYes);
     }
 
     public Button getButtonYes() {
@@ -43,6 +46,11 @@ public final class ButtonsBarYesNo extends HBox {
 
     public Button getButtonNo() {
         return buttonNo;
+    }
+
+    @Override
+    public Region getContent() {
+        return mainBox;
     }
 
 }

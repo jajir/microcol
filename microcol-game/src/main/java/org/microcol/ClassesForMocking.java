@@ -15,7 +15,7 @@ import com.google.inject.Singleton;
  * game features have to be disabled.
  * </p>
  */
-public class ClassesForMocking extends AbstractModule {
+class ClassesForMocking extends AbstractModule {
 
     @Override
     protected void configure() {

@@ -38,6 +38,6 @@ public final class HiddenCoastMapGenerator extends AbstractCoastMapGenerator {
     }
 
     private Player getPlayer() {
-        return gameModelController.getCurrentPlayer();
+        return gameModelController.getHumanPlayer();
     }
 }

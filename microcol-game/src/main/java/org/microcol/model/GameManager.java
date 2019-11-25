@@ -47,10 +47,6 @@ final class GameManager {
         }
     }
 
-    void addEvaluator(final Function<Model, GameOverResult> evaluator) {
-        gameOverEvaluator.addEvaluator(evaluator);
-    }
-
     boolean isStarted() {
         return started;
     }

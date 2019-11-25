@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import org.microcol.MicroCol;
+import org.microcol.MicroColApplication;
 import org.microcol.model.Model;
 import org.testfx.api.FxAssert;
 import org.testfx.api.FxRobot;
@@ -32,7 +32,7 @@ public abstract class AbstractScreen {
 	return context;
     }
 
-    protected MicroCol getMicroCol() {
+    protected MicroColApplication getMicroCol() {
 	return context.getMicroCol();
     }
 
@@ -72,8 +72,13 @@ public abstract class AbstractScreen {
 	return label;
     }
 
-    protected boolean isButtonOkVisible() {
-	return getNodeFinder().lookup("#buttonOk").tryQuery().isPresent();
+    protected boolean isButtonBackVisible() {
+	return isCssIdVisible("closeButtonId");
+    }
+
+    protected boolean isCssIdVisible(final String cssId) {
+	final String id = "#" + cssId;
+	return getNodeFinder().lookup(id).tryQuery().isPresent();
     }
 
     protected <T extends Node> List<T> getListOfNodes(final String cssClass) {

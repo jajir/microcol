@@ -18,6 +18,7 @@ public final class ChangeLanguageListenerPreferences {
     }
 
     @Subscribe
+    @SuppressWarnings("ucd")
     public void onEvent(final ChangeLanguageEvent event) {
         gamePreferences.setLanguage(event.getLanguage().getLocale());
     }

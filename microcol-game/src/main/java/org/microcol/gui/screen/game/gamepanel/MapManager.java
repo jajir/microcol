@@ -15,6 +15,7 @@ import org.microcol.model.event.UnitMovedStepFinishedEvent;
 import com.google.common.base.Preconditions;
 import com.google.common.eventbus.Subscribe;
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
 
 import javafx.scene.image.Image;
 
@@ -23,6 +24,7 @@ import javafx.scene.image.Image;
  *
  */
 @Listener
+@Singleton
 public final class MapManager {
 
     private final GrassCoastMapGenerator grassCoastMapGenerator;
@@ -75,13 +77,25 @@ public final class MapManager {
         }
     }
 
-    public Image getTerrainImage(final TerrainType terrainType, final Location location) {
-        final Image image = imageRandomProvider.getTerrainImage(terrainType, location);
+    public Image getTerrainImage(final TerrainType terrainType, final Location location,
+            final long gameTick) {
+        final Image image = imageRandomProvider.getTerrainImage(terrainType, location, gameTick);
         if (image == null) {
             return imageProvider.getTerrainImage(terrainType);
         } else {
             return image;
         }
+    }
+
+    /**
+     * When game perform tick this should be called. It update tile animation
+     * event on non visible part of map.
+     * 
+     * @param currentGameTick
+     *            required current game tick
+     */
+    public void gameTickUpdate(final long currentGameTick) {
+        imageRandomProvider.updateRipples(gameModelController.getMap(), currentGameTick);
     }
 
     public Image getTreeImage(final Location location) {

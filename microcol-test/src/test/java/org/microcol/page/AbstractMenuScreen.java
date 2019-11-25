@@ -1,11 +1,13 @@
 package org.microcol.page;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.fail;
 
+import java.util.List;
 import java.util.function.Consumer;
 
-import org.microcol.gui.screen.menu.MenuHolderPanel;
+import org.microcol.gui.util.TitledPage;
 
 import javafx.scene.control.Labeled;
 
@@ -34,9 +36,11 @@ public abstract class AbstractMenuScreen extends AbstractScreen {
      * @param validation required validation consumer
      */
     protected void verifyMainTitle(final Consumer<String> validation) {
-	final String id = "#" + MenuHolderPanel.MAIN_TITLE_ID;
-	final Labeled labeled = getNodeFinder().lookup(id).queryLabeled();
-	assertNotNull(labeled, String.format("There is no element with id '%s'", MenuHolderPanel.MAIN_TITLE_ID));
+	final String cssClass = "." + TitledPage.MAIN_TITLE_STYLE_CLASS;
+	final List<Labeled> list = getListOfNodes(cssClass);
+	assertEquals(1, list.size());
+	final Labeled labeled = list.get(0);
+	assertNotNull(labeled, String.format("There is no element with id '%s'", TitledPage.MAIN_TITLE_STYLE_CLASS));
 	validation.accept(labeled.getText());
     }
 }

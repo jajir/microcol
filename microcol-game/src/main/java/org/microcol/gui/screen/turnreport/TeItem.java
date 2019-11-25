@@ -9,7 +9,7 @@ public interface TeItem {
     /**
      * return localized turn event message.
      *
-     * @return return final localized mesasge.
+     * @return return final localized message.
      */
     String getMessage();
 

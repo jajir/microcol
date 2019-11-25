@@ -56,7 +56,7 @@ public final class GameModel {
      *
      * @return Return model persistent object
      */
-    public GameModelPo getModelPo() {
+    GameModelPo getModelPo() {
         final GameModelPo out = new GameModelPo();
         out.setModel(model.save());
         out.setCampaignName(campaign.getName().toString());

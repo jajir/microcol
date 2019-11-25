@@ -152,7 +152,7 @@ public class UnitColonistOnMapTest extends AbstractUnitFreeColonistTest {
             unit.moveOneStep(moveAt);
         });
 
-        assertTrue(exception.getMessage().contains("There is not enough avilable moves"),
+        assertTrue(exception.getMessage().contains("There is not enough available action points"),
                 String.format("Invalid exception message '%s'.", exception.getMessage()));
     }
 
@@ -167,7 +167,7 @@ public class UnitColonistOnMapTest extends AbstractUnitFreeColonistTest {
         when(worldMap.getTerrainTypeAt(moveAt)).thenReturn(TerrainType.GRASSLAND);
         when(owner.getEnemyUnitsAt(moveAt)).thenReturn(new ArrayList<>());
 
-        //Tested action
+        // Tested action
         unit.moveOneStep(moveAt);
 
         assertEquals(9, unit.getActionPoints());
@@ -176,8 +176,8 @@ public class UnitColonistOnMapTest extends AbstractUnitFreeColonistTest {
         verify(placeLocation, times(1)).destroy();
 
         // Verify that events was fired.
-        verify(model,times(1)).fireUnitMovedStepStarted(unit, unitLoc, moveAt, null);
-        verify(model,times(1)).fireUnitMovedStepFinished(unit, unitLoc, moveAt);
+        verify(model, times(1)).fireUnitMovedStepStarted(unit, unitLoc, moveAt, null);
+        verify(model, times(1)).fireUnitMovedStepFinished(unit, unitLoc, moveAt);
     }
 
 }

@@ -1,7 +1,7 @@
 package org.microcol.page;
 
-
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.microcol.gui.Tile.TILE_CENTER;
 import static org.microcol.gui.Tile.TILE_WIDTH_IN_PX;
 
@@ -10,10 +10,10 @@ import java.util.List;
 import java.util.Set;
 
 import org.microcol.gui.screen.colony.ColonyButtonsPanel;
-import org.microcol.gui.screen.colony.ColonyPanel;
 import org.microcol.gui.screen.colony.PanelColonyFields;
 import org.microcol.gui.screen.colony.PanelColonyGood;
-import org.microcol.gui.screen.colony.PanelUnitWithContextMenu;
+import org.microcol.gui.screen.colony.PanelColonyName;
+import org.microcol.gui.screen.colony.PanelOutsideColonyUnit;
 import org.microcol.model.Colony;
 import org.microcol.model.ColonyField;
 import org.microcol.model.GoodsProductionStats;
@@ -54,7 +54,7 @@ public class ColonyScreen extends AbstractScreen {
     }
 
     private void verifyColonyName(final String expectedNamePart) {
-	final Labeled labeled = getLabeledById(ColonyPanel.COLONY_NAME_ID);
+	final Labeled labeled = getLabeledById(PanelColonyName.COLONY_NAME_ID);
 	logger.info("Colony name: " + labeled.getText());
 	assertTrue(labeled.getText().contains(expectedNamePart),
 		String.format("Text '%s' should appear in colony name '%s'", expectedNamePart, labeled.getText()));
@@ -86,12 +86,12 @@ public class ColonyScreen extends AbstractScreen {
 		.dropTo(getListOfCrates().get(cargoSlotIndex)).release(MouseButton.PRIMARY);
     }
 
-    public DialogChooseNumberOfGoods dragGoodsFromWarehouseToShipCargoSlotWithPressedControll(
+    public DialogChooseGoodsAmount dragGoodsFromWarehouseToShipCargoSlotWithPressedControll(
 	    final int goodsIndexInWarehouse, final int cargoSlotIndex) {
 	getRobot().press(KeyCode.CONTROL);
 	dragGoodsFromWarehouseToShipCargoSlot(goodsIndexInWarehouse, cargoSlotIndex);
 	getRobot().release(KeyCode.CONTROL);
-	return DialogChooseNumberOfGoods.of(getContext());
+	return DialogChooseGoodsAmount.of(getContext());
     }
 
     public void dragGoodsFromWarehouseToShipCargoSlot(final int goodsIndexInWarehouse, final int cargoSlotIndex) {
@@ -99,12 +99,12 @@ public class ColonyScreen extends AbstractScreen {
 		.dropTo(getListOfCrates().get(cargoSlotIndex)).release(MouseButton.PRIMARY);
     }
 
-    public DialogChooseNumberOfGoods dragGoodsFromShipCargoSlotToWarehouseWithPressedControll(final int cargoSlotIndex,
+    public DialogChooseGoodsAmount dragGoodsFromShipCargoSlotToWarehouseWithPressedControll(final int cargoSlotIndex,
 	    final int goodsIndexInWarehouse) {
 	getRobot().press(KeyCode.CONTROL);
 	dragGoodsFromShipCargoSlotToWarehouse(goodsIndexInWarehouse, cargoSlotIndex);
 	getRobot().release(KeyCode.CONTROL);
-	return DialogChooseNumberOfGoods.of(getContext());
+	return DialogChooseGoodsAmount.of(getContext());
     }
 
     public void dragGoodsFromShipCargoSlotToWarehouse(final int cargoSlotIndex, final int goodsIndexInWarehouse) {
@@ -126,7 +126,7 @@ public class ColonyScreen extends AbstractScreen {
      */
     private List<Pane> getUnitsAtPier() {
 	final NodeFinder nodeFinder = getNodeFinder();
-	final Set<Pane> unitsSet = nodeFinder.lookup("." + PanelUnitWithContextMenu.UNIT_AT_PIER_STYLE).queryAll();
+	final Set<Pane> unitsSet = nodeFinder.lookup("." + PanelOutsideColonyUnit.UNIT_AT_PIER_STYLE).queryAll();
 	return new ArrayList<Pane>(unitsSet);
     }
 
@@ -166,10 +166,8 @@ public class ColonyScreen extends AbstractScreen {
 		.localToScreen(panelColonyFields.getContent().getBoundsInLocal());
 
 	final Location loc = colonyField.getDirection().getVector();
-	final double x = boundsInScreen.getMinX() + (loc.getX() + 1) * TILE_WIDTH_IN_PX
-		+ TILE_CENTER.getX();
-	final double y = boundsInScreen.getMinY() + (loc.getY() + 1) * TILE_WIDTH_IN_PX
-		+ TILE_CENTER.getY();
+	final double x = boundsInScreen.getMinX() + (loc.getX() + 1) * TILE_WIDTH_IN_PX + TILE_CENTER.getX();
+	final double y = boundsInScreen.getMinY() + (loc.getY() + 1) * TILE_WIDTH_IN_PX + TILE_CENTER.getY();
 	return new Point2D(x, y);
     }
 

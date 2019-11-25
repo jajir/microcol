@@ -6,11 +6,11 @@ import org.microcol.i18n.MessageKeyResource;
 import org.microcol.i18n.ResourceBundleControlBuilder;
 import org.microcol.i18n.ResourceBundleFormat;
 
-public enum ColonyMsg implements MessageKeyResource {
+enum ColonyMsg implements MessageKeyResource {
 
     goods,
-    colony,
     buttonClose,
+    colonyName,
     ;
 
     @Override

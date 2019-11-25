@@ -25,8 +25,6 @@ import javafx.scene.layout.Region;
  */
 public abstract class AbstractPanelDock implements JavaFxComponent, UpdatableLanguage, Repaintable {
 
-    public static final String SHIP_IN_PORT_STYLE = "paneShip";
-
     private final PanelDockCratesPresenter panelDockCratesPresenter;
 
     private final PanelDockView view;

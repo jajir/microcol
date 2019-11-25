@@ -22,8 +22,8 @@ public final class ContinentTool {
     public Continents findContinents(final Model model, final Player enemyPlayer) {
         final WorldMap map = model.getMap();
         final Continents continents = new Continents();
-        for (int x = 1; x <= model.getMap().getMaxX(); x++) {
-            for (int y = 1; y <= model.getMap().getMaxY(); y++) {
+        for (int x = 1; x <= model.getMap().getMaxLocationX(); x++) {
+            for (int y = 1; y <= model.getMap().getMaxLocationY(); y++) {
                 final Location loc = Location.of(x, y);
                 final TerrainType terrainType = map.getTerrainTypeAt(loc);
                 if (!terrainType.isSea() && !continents.getForLocation(loc).isPresent()) {

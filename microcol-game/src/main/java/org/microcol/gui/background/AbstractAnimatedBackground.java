@@ -1,6 +1,5 @@
 package org.microcol.gui.background;
 
-import org.microcol.gui.image.ImageProvider;
 import org.microcol.gui.screen.ScreenLifeCycle;
 import org.microcol.gui.util.AnimationScheduler;
 
@@ -16,10 +15,9 @@ public abstract class AbstractAnimatedBackground extends AbstractBackground
 
     private final AnimationScheduler animationScheduler;
 
-    public AbstractAnimatedBackground(final ImageProvider imageProvider) {
-        super(imageProvider);
-        final GraphicsContext gc = getCanvas().getGraphicsContext2D();
-        animationScheduler = new AnimationScheduler(gc, gcontex -> paint(gcontex));
+    public AbstractAnimatedBackground() {
+        super();
+        animationScheduler = new AnimationScheduler(gcontex -> repaint());
     }
 
     /**

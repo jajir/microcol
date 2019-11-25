@@ -21,7 +21,7 @@ import javafx.application.Platform;
 import javafx.scene.control.Label;
 
 @Listener
-public final class StatusBarPresenter implements UpdatableLanguage {
+final class StatusBarPresenter implements UpdatableLanguage {
 
     private final Logger logger = LoggerFactory.getLogger(StatusBarPresenter.class);
 

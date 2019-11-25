@@ -39,14 +39,14 @@ public class QueueController {
         return observableList;
     }
 
-    public void removeItemById(final int itemId) {
+    void removeItemById(final int itemId) {
         final ColonyBuildingItemProgress<?> itemToRemove = getColonyQueue().getItemById(itemId)
                 .get();
         getColonyQueue().removeItem(itemToRemove);
         observableList.remove(itemToRemove);
     }
 
-    public void addBeforeItem(final ConstructionType constructionType, final int beforeId) {
+    void addBeforeItem(final ConstructionType constructionType, final int beforeId) {
         final ColonyBuildingItemProgressConstruction item = getColonyQueue()
                 .addBeforeItem(constructionType, beforeId);
         if (item != null) {
@@ -58,7 +58,7 @@ public class QueueController {
         }
     }
 
-    public void addBeforeItem(final UnitType unitType, final int beforeId) {
+    void addBeforeItem(final UnitType unitType, final int beforeId) {
         final ColonyBuildingItemProgressUnit item = getColonyQueue().addBeforeItem(unitType,
                 beforeId);
         final ColonyBuildingItemProgress<?> beforeItem = getColonyQueue().getItemById(beforeId)
@@ -68,7 +68,7 @@ public class QueueController {
         observableList.add(index, item);
     }
 
-    public void moveItem(final int movingItemId, final int beforeItemId) {
+    void moveItem(final int movingItemId, final int beforeItemId) {
         final ColonyBuildingItemProgress<?> movingItem = getColonyQueue().getItemById(movingItemId)
                 .get();
         final ColonyBuildingItemProgress<?> beforeItem = getColonyQueue().getItemById(beforeItemId)
@@ -79,7 +79,7 @@ public class QueueController {
         getColonyQueue().moveItemBefore(movingItem, beforeItem);
     }
 
-    public void moveItemAtTheEnd(final int movingItemId) {
+    void moveItemAtTheEnd(final int movingItemId) {
         final ColonyBuildingItemProgress<?> movingItem = getColonyQueue().getItemById(movingItemId)
                 .get();
         observableList.remove(movingItem);
@@ -87,7 +87,7 @@ public class QueueController {
         getColonyQueue().moveItemAtTheEnd(movingItem);
     }
 
-    public void addAtEnd(final ConstructionType constructionType) {
+    void addAtEnd(final ConstructionType constructionType) {
         final ColonyBuildingItemProgressConstruction item = getColonyQueue()
                 .addAtEnd(constructionType);
         if (item != null) {
@@ -95,7 +95,7 @@ public class QueueController {
         }
     }
 
-    public void addAtEnd(final UnitType unitType) {
+    void addAtEnd(final UnitType unitType) {
         observableList.add(getColonyQueue().addAtEnd(unitType));
     }
 

@@ -13,13 +13,14 @@ import org.microcol.i18n.I18n;
 import org.microcol.model.CargoSlot;
 import org.microcol.model.Colony;
 import org.microcol.model.ColonyWarehouse;
-import org.microcol.model.GoodsType;
 import org.microcol.model.Goods;
+import org.microcol.model.GoodsType;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.google.common.eventbus.EventBus;
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
 
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
@@ -30,17 +31,16 @@ import javafx.scene.layout.Region;
 /**
  * Show list of all available goods.
  */
+@Singleton
 public final class PanelColonyGoods implements JavaFxComponent {
-
-    private final HBox hBox;
 
     private final GameModelController gameModelController;
 
-    private final ColonyDialogCallback colonyDialog;
+    private final EventBus eventBus;
 
     private final List<PanelColonyGood> panelColonyGoods;
 
-    private final TitledPanel mainPanel;
+    private final HBox mainPanel = new HBox();
 
     private final ChooseGoodsDialog chooseGoods;
 
@@ -48,24 +48,22 @@ public final class PanelColonyGoods implements JavaFxComponent {
 
     @Inject
     public PanelColonyGoods(final GameModelController gameModelController,
-            final ImageProvider imageProvider, final ColonyDialogCallback colonyDialog,
-            final ChooseGoodsDialog chooseGoods, final EventBus eventBus, final I18n i18n) {
+            final ImageProvider imageProvider, final ChooseGoodsDialog chooseGoods,
+            final EventBus eventBus, final I18n i18n) {
         this.gameModelController = Preconditions.checkNotNull(gameModelController);
-        this.colonyDialog = Preconditions.checkNotNull(colonyDialog);
+        this.eventBus = Preconditions.checkNotNull(eventBus);
         this.chooseGoods = Preconditions.checkNotNull(chooseGoods);
-        hBox = new HBox();
-        mainPanel = new TitledPanel();
-        mainPanel.getContentPane().getChildren().add(hBox);
         panelColonyGoods = GoodsType.BUYABLE_GOOD_TYPES.stream().map(goodsType -> {
             final PanelColonyGood out = new PanelColonyGood(
                     imageProvider.getGoodsTypeImage(goodsType), goodsType, eventBus, i18n);
-            hBox.getChildren().add(out.getContent());
+            mainPanel.getChildren().add(out.getContent());
             return out;
         }).collect(ImmutableList.toImmutableList());
-        mainPanel.getStyleClass().add("panel-colony-goods");
 
         final BackgroundHighlighter backgroundHighlighter = new BackgroundHighlighter(mainPanel,
                 this::isItGoods);
+
+        mainPanel.getStyleClass().add("panel-colony-goods");
         mainPanel.setOnDragEntered(backgroundHighlighter::onDragEntered);
         mainPanel.setOnDragExited(backgroundHighlighter::onDragExited);
 
@@ -78,7 +76,7 @@ public final class PanelColonyGoods implements JavaFxComponent {
         panelColonyGoods.forEach(panelColonyGood -> panelColonyGood.setColony(colony));
     }
 
-    public void repaint() {
+    void repaint() {
         panelColonyGoods.forEach(panelColonyGood -> panelColonyGood.repaint());
     };
 
@@ -102,7 +100,7 @@ public final class PanelColonyGoods implements JavaFxComponent {
 
             colonyWarehouse.moveToWarehouse(goods, fromCargoSlot);
             event.setDropCompleted(true);
-            colonyDialog.repaint();
+            eventBus.post(new RepaintColonyEvent());
         }
         event.consume();
     }
