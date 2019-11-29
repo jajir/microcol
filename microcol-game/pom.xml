@@ -16,7 +16,7 @@
 		<splash-creen-image>images/splash-screen.png</splash-creen-image>
 		<github.global.server>github</github.global.server>
 		<github.global.oauth2Token>${env.GITHUB_OAUTH_TOKEN}</github.global.oauth2Token>
-		<jacoco.version>0.8.2</jacoco.version>
+		<jacoco.version>0.8.5</jacoco.version>
 		<javadoc.plugin.version>3.1.1</javadoc.plugin.version>
 		<!-- default values for exec plugin properties -->
 		<development>false</development>
@@ -175,7 +175,6 @@
 			<!-- Create executable jar including all dependencies -->
 			<plugin>
 				<artifactId>maven-assembly-plugin</artifactId>
-				<version>2.2-beta-5</version>
 				<executions>
 					<execution>
 						<id>create-one-jar</id>

@@ -17,7 +17,7 @@
 		<maven.site.version>3.7</maven.site.version>
 		<github.global.server>github</github.global.server>
 		<github.global.oauth2Token>${env.GITHUB_OAUTH_TOKEN}</github.global.oauth2Token>
-		<junit.jupiter.version>5.5.0-M1</junit.jupiter.version>
+		<junit.jupiter.version>5.5.2</junit.jupiter.version>
 	</properties>
 
 	<modules>
