@@ -848,6 +848,7 @@ public abstract class AbstractUnit implements Unit {
             model.fireUnitMovedStepStarted(this, startLocation, targetLocation, orientation);
 
             placeToCargoSlot(placeCargoSlot);
+            cargoSlot.store(placeCargoSlot);
 
             model.fireUnitMovedStepFinished(this, startLocation, targetLocation);
             model.fireUnitMovedFinished(this, path);

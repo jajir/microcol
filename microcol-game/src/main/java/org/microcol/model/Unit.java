@@ -69,6 +69,12 @@ public interface Unit {
 
     void disembarkToLocation(Location targetLocation);
 
+    /**
+     * Embark from location to given cargo slot.
+     *
+     * @param cargoSlot
+     *            required cargo slot where will be this unit placed
+     */
     void embarkFromLocation(CargoSlot cargoSlot);
 
     int getId();

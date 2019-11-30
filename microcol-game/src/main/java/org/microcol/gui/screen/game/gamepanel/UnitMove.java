@@ -17,7 +17,7 @@ final class UnitMove {
 
     private final List<Location> path;
 
-     UnitMove(final Unit unit, final Location targetLocation) {
+    UnitMove(final Unit unit, final Location targetLocation) {
         this.unit = Preconditions.checkNotNull(unit);
         Preconditions.checkNotNull(targetLocation);
         if (unit.isPossibleToMoveAt(targetLocation)) {
@@ -25,6 +25,10 @@ final class UnitMove {
         } else {
             path = null;
         }
+    }
+
+    public int requiredActionPoints() {
+        return path.size();
     }
 
     public boolean isOneTurnMove() {

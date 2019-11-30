@@ -169,20 +169,15 @@ public final class GamePanelPresenter {
         logger.debug(
                 "Switching to normal mode, from " + moveFromLocation + " to " + moveToLocation);
         final Unit movingUnit = selectedUnitManager.getSelectedUnit().get();
+
         if (moveFromLocation.equals(moveToLocation)) {
             disableMoveMode(movingUnit);
             // it's a click? is there a colony?
             tryToOpenColonyDetail(moveToLocation);
             return;
         }
-        final UnitMove unitMove = new UnitMove(movingUnit, moveToLocation);
-        if (movingUnit.isPossibleToCaptureColonyAt(moveToLocation)) {
-            // use can capture target colony
-            gameModelController.performMove(movingUnit, unitMove.getPath());
-        } else if (movingUnit.isPossibleToAttackAt(moveToLocation)) {
-            // fight
-            fight(movingUnit, moveToLocation);
-        } else if (movingUnit.isPossibleToEmbarkAt(moveToLocation)) {
+
+        if (movingUnit.isPossibleToEmbarkAt(moveToLocation)) {
             // embark
             final Optional<UnitWithCargo> oEmbartAtUnit = movingUnit
                     .getFirstUnitToEmbarkAt(moveToLocation);
@@ -191,9 +186,27 @@ public final class GamePanelPresenter {
             if (oCargoSlot.isPresent()) {
                 gameModelController.embark(oCargoSlot.get(), movingUnit);
             }
-        } else if (unitUtil.isPossibleToDisembarkAt(movingUnit, moveToLocation)) {
+            disableMoveMode(movingUnit);
+            return;
+        }
+
+        if (unitUtil.isPossibleToDisembarkAt(movingUnit, moveToLocation)) {
             // try to disembark
             gameModelController.disembark((UnitWithCargo) movingUnit, moveToLocation);
+            disableMoveMode(movingUnit);
+            return;
+        }
+
+        final UnitMove unitMove = new UnitMove(movingUnit, moveToLocation);
+        if (unitMove.requiredActionPoints() > movingUnit.getActionPoints()) {
+            new DialogUnitCantMoveHere(viewUtil, i18n);
+        } else if (movingUnit.isPossibleToCaptureColonyAt(moveToLocation)) {
+            // use can capture target colony
+            gameModelController.performMove(movingUnit, unitMove.getPath());
+        } else if (movingUnit.isPossibleToAttackAt(moveToLocation)) {
+            // fight
+            fight(movingUnit, moveToLocation);
+            // } else if (movingUnit.isPossibleToEmbarkAt(moveToLocation)) {
         } else if (unitMove.isOneTurnMove()) {
             // user will move
             if (!unitMove.getPath().isEmpty()) {
@@ -216,6 +229,7 @@ public final class GamePanelPresenter {
             }
         } else {
             logger.error("It's not possible to determine correct operation");
+            disableMoveMode(movingUnit);
             new DialogUnitCantMoveHere(viewUtil, i18n);
         }
         disableMoveMode(movingUnit);

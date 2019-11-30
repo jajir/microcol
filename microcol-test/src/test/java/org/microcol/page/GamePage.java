@@ -15,6 +15,7 @@ import org.microcol.gui.Point;
 import org.microcol.gui.screen.game.components.ButtonsGamePanel;
 import org.microcol.gui.screen.game.components.StatusBarView;
 import org.microcol.model.Location;
+import org.microcol.model.unit.Ship;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testfx.robot.Motion;
@@ -65,6 +66,13 @@ public class GamePage extends AbstractScreen {
 	verifyThatStatusBarContains(String.valueOf(location.getY()));
     }
 
+    public void dragMouseAtLocationAndClosePossibleDialog(final Location location) throws Exception {
+	dragMouseAtLocation(location);
+	if (isCssIdVisible("buttonOk")) {
+	    clickOnButtonWithId("buttonOk");
+	}
+    }
+
     private void verifyThatStatusBarContains(final String string) {
 	final Labeled label = getLabeledById(StatusBarView.STATUS_BAR_LABEL_ID);
 	logger.info("Status bar: " + label.getText());
@@ -81,7 +89,7 @@ public class GamePage extends AbstractScreen {
     public void verifyThatTileIsVisible(final Location location) {
 	assertTrue(getContext().getArea().isLocationVisible(location));
     }
-    
+
     public void selectTile(final Location location) {
 	Preconditions.checkNotNull(location);
 	moveMouseAtLocation(location);
@@ -180,7 +188,7 @@ public class GamePage extends AbstractScreen {
     public void pressTab() {
 	getRobot().push(KeyCode.TAB);
     }
-    
+
     public void pressP() {
 	getRobot().push(KeyCode.P);
     }
@@ -219,6 +227,12 @@ public class GamePage extends AbstractScreen {
 
     public void verifyThatBuildColonyButtonInHidden() {
 	assertFalse(getNodeFinder().lookup("#buildColony").tryQuery().isPresent());
+    }
+
+    public ShipWrapper getShipAt(final Location location) {
+	assertFalse(getModel().getUnitsAt(location).isEmpty(),
+		String.format("There should be at leat on ship at %s.", location));
+	return new ShipWrapper((Ship) getModel().getUnitsAt(location).get(0));
     }
 
 }

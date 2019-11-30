@@ -67,6 +67,9 @@ public class TC_01_F01_embark_disembark_test extends AbstractMicroColTest {
 	// verify that there are no ship
 	assertEquals(0, getModel().getUnitsAt(SHORE_LAND_LOCATION).size());
 
+	// Verify that ship have occupied two cargo slots.
+	gamePage.getShipAt(SHORE_SEE_LOCATION).verifyNumberOfOccupiedCargoSlots(2);
+
 	// disembark units
 	gamePage.moveMouseAtLocation(SHORE_SEE_LOCATION);
 	gamePage.dragMouseAtLocation(SHORE_LAND_LOCATION);
@@ -77,13 +80,19 @@ public class TC_01_F01_embark_disembark_test extends AbstractMicroColTest {
 	// press next turn.
 	gamePage.nextTurnAndCloseDialogs();
 
+	// Verify that ship have all cargo slots empty.
+	gamePage.getShipAt(SHORE_SEE_LOCATION).verifyNumberOfOccupiedCargoSlots(0);
+
 	// embark units
 	gamePage.moveMouseAtLocation(SHORE_LAND_LOCATION);
 	gamePage.dragMouseAtLocation(SHORE_SEE_LOCATION);
 	gamePage.moveMouseAtLocation(SHORE_LAND_LOCATION);
 	gamePage.dragMouseAtLocation(SHORE_SEE_LOCATION);
 
-	// Verify that there are no units at continent. Units was embarked.
+	// Verify that ship have occupied two cargo slots.
+	gamePage.getShipAt(SHORE_SEE_LOCATION).verifyNumberOfOccupiedCargoSlots(2);
+	
+	// Verify that there are no units at continent.
 	assertEquals(0, getModel().getUnitsAt(SHORE_LAND_LOCATION).size());
 
 	// Go back to town with ship.

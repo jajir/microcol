@@ -56,7 +56,6 @@ import org.microcol.gui.screen.game.gamepanel.ModeController;
 import org.microcol.gui.screen.game.gamepanel.MouseOverTileListener;
 import org.microcol.gui.screen.game.gamepanel.MouseOverTileManager;
 import org.microcol.gui.screen.game.gamepanel.MoveModeSupport;
-import org.microcol.gui.screen.game.gamepanel.OneTurnMoveHighlighter;
 import org.microcol.gui.screen.game.gamepanel.ScrollToSelectedUnit;
 import org.microcol.gui.screen.game.gamepanel.ScrollingManager;
 import org.microcol.gui.screen.game.gamepanel.SelectedTileManager;
@@ -243,7 +242,6 @@ public final class MicroColModule extends AbstractModule {
                 .toInstance(new VisibleAreaService());
         bind(GamePanelPresenter.class).asEagerSingleton();
         bind(GamePanelMouseListener.class).asEagerSingleton();
-        bind(OneTurnMoveHighlighter.class).in(Singleton.class);
         bind(SelectedTileManager.class).in(Singleton.class);
         bind(MoveModeSupport.class).in(Singleton.class);
         bind(MouseOverTileListener.class).asEagerSingleton();

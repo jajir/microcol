@@ -50,10 +50,11 @@
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-engine</artifactId>
 		</dependency>
+		<!-- Following dependency is here just because of eclipse bug https://bugs.eclipse.org/bugs/show_bug.cgi?id=545765. -->
 		<dependency>
 			<groupId>org.junit.platform</groupId>
 			<artifactId>junit-platform-launcher</artifactId>
-			<version>1.1.0</version>
+			<version>1.4.0</version>
 			<scope>test</scope>
 		</dependency>
 		<!-- Monocle is required for headless tests. -->

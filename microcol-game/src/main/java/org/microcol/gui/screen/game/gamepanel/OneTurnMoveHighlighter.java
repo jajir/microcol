@@ -5,10 +5,12 @@ import java.util.List;
 import org.microcol.model.Location;
 
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
 
 /**
  * Helps to highlight area where use could move in first turn.
  */
+@Singleton
 public final class OneTurnMoveHighlighter {
 
     private List<Location> locations;

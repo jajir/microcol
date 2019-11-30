@@ -124,7 +124,6 @@ public class UnitColonistEmbarkTest extends AbstractUnitFreeColonistTest {
 
         assertTrue(ex.getMessage().contains("have to be neighbours"));
 
-        
         verify(model, times(0)).fireUnitMovedStepStarted(unit, START_LOCATION, TOO_FAR_LOCATION,
                 Direction.southWest);
     }
@@ -161,8 +160,10 @@ public class UnitColonistEmbarkTest extends AbstractUnitFreeColonistTest {
 
         unit.embarkFromLocation(cargoSlot);
 
+        verify(cargoSlot, times(1)).store((PlaceCargoSlot) any());
         verify(model, times(1)).fireUnitMovedStepStarted(unit, START_LOCATION, TARGET_LOCATION,
                 Direction.southWest);
+        verify(model, times(1)).fireUnitMovedFinished(eq(unit), any());
     }
 
     @Test
@@ -232,9 +233,7 @@ public class UnitColonistEmbarkTest extends AbstractUnitFreeColonistTest {
 
         assertTrue(ex.getMessage().contains("can't be colony"));
     }
-    
-    
-    
+
     @Test
     public void test_disembarkToLocation_move_was_stoped_by_ui() throws Exception {
         makeColonist(model, 23, placeCargoSlot, owner, 1);
@@ -246,12 +245,12 @@ public class UnitColonistEmbarkTest extends AbstractUnitFreeColonistTest {
         when(model.fireUnitMoveStarted(eq(unit), any())).thenReturn(false);
 
         unit.disembarkToLocation(TARGET_LOCATION);
-        
+
         assertEquals(1, unit.getActionPoints());
         verify(model, times(0)).fireUnitMovedStepStarted(unit, START_LOCATION, TARGET_LOCATION,
                 Direction.east);
     }
-    
+
     @Test
     public void test_disembarkToLocation() throws Exception {
         makeColonist(model, 23, placeCargoSlot, owner, 1);
@@ -263,7 +262,7 @@ public class UnitColonistEmbarkTest extends AbstractUnitFreeColonistTest {
         when(model.fireUnitMoveStarted(eq(unit), any())).thenReturn(true);
 
         unit.disembarkToLocation(TARGET_LOCATION);
-        
+
         assertEquals(0, unit.getActionPoints());
         verify(model, times(1)).fireUnitMovedStepStarted(unit, START_LOCATION, TARGET_LOCATION,
                 Direction.east);
