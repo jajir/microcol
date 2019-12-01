@@ -101,7 +101,7 @@ public class ScreenGamePresenter {
             eventBus.post(new ShowScreenEvent(Screen.EUROPE));
         }
         if (KeyCode.M == event.getCode()) {
-            eventBus.post(new StartMoveEvent());
+            onKeyMWasPressed();
             return;
         }
         if (KeyCode.P == event.getCode()) {
@@ -120,6 +120,15 @@ public class ScreenGamePresenter {
 
         logger.debug("Pressed key: '" + event.getCode().getName() + "' has code '"
                 + event.getCharacter() + "', modifiers '" + event.getCode().isModifierKey() + "'");
+    }
+
+    private void onKeyMWasPressed() {
+        if (selectedUnitManager.getSelectedUnit().isPresent()) {
+            final Unit unit = selectedUnitManager.getSelectedUnit().get();
+            if (unit.getActionPoints() > 0) {
+                eventBus.post(new StartMoveEvent());
+            }
+        }
     }
 
     private void onKeyReleased(final KeyEvent event) {

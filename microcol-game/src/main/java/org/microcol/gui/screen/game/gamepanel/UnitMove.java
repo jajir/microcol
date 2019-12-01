@@ -28,7 +28,11 @@ final class UnitMove {
     }
 
     public int requiredActionPoints() {
-        return path.size();
+        if (path == null) {
+            return Integer.MAX_VALUE;
+        } else {
+            return path.size();
+        }
     }
 
     public boolean isOneTurnMove() {

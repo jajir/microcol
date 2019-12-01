@@ -1,7 +1,7 @@
 package org.microcol.model.unit;
 
+import org.microcol.model.AbstractUnit;
 import org.microcol.model.Model;
-import org.microcol.model.Unit;
 import org.microcol.model.store.UnitActionNoActionPo;
 import org.microcol.model.store.UnitActionPo;
 
@@ -55,7 +55,7 @@ public interface UnitAction {
      * @param unit
      *            required unit
      */
-    default void startTurn(final Model model, final Unit unit) {
+    default void startTurn(final Model model, final AbstractUnit unit) {
         // by default it do nothing.
     }
 

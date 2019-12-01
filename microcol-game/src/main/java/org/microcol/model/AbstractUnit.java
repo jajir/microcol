@@ -1,6 +1,7 @@
 package org.microcol.model;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -9,6 +10,7 @@ import java.util.Optional;
 import java.util.Random;
 import java.util.Set;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import org.microcol.model.store.UnitPo;
 import org.microcol.model.turnevent.TurnEventProvider;
@@ -124,6 +126,19 @@ public abstract class AbstractUnit implements Unit {
         return actionPoints;
     }
 
+    /**
+     * Allows to set action points. It could be called just at this class. It's
+     * not exposed.
+     *
+     * @param newActionPoints
+     *            required new amount of action points
+     */
+    public void setActionPoints(final int newActionPoints) {
+        Preconditions.checkArgument(newActionPoints <= getSpeed(),
+                "Unit %s can't have more action point than is it's speed.", this);
+        this.actionPoints = newActionPoints;
+    }
+
     private void verifyThatUnitIsAtMap() {
         Preconditions.checkState(isAtPlaceLocation(),
                 "Unit have to be at map. Unit (%s) is at (%s)", this, place);
@@ -144,7 +159,6 @@ public abstract class AbstractUnit implements Unit {
      * It's called before turn starts.
      */
     public void startTurn() {
-        actionPoints = getSpeed();
         if (isAtHighSea()) {
             PlaceHighSea placeHighSea = (PlaceHighSea) place;
             placeHighSea.decreaseRemainingTurns();
@@ -164,6 +178,7 @@ public abstract class AbstractUnit implements Unit {
                 }
             }
         }
+        actionPoints = getSpeed();
         unitAction.startTurn(model, this);
     }
 
@@ -211,68 +226,84 @@ public abstract class AbstractUnit implements Unit {
         return ignoreEnemies || owner.getEnemyUnitsAt(location).isEmpty();
     }
 
-    @Override
-    public List<Location> getAvailableLocations() {
-        Preconditions.checkArgument(isAtPlaceLocation(), "Unit have to at map");
-        final List<Location> locations = new ArrayList<>();
-        findLocations(locations, null);
-        return ImmutableList.copyOf(locations);
-    }
-
     /**
      * Find all reachable locations. It implements Dijkstra's algorithm.
      *
-     * @param availableLocations
-     *            optional list that will contains list of reachable locations
-     * @param attackableTargets
-     *            optional list that will contain all reachable enemies.
+     * @return Return list of location where unit could move.
      */
-    private void findLocations(final List<Location> availableLocations,
-            final List<Unit> attackableTargets) {
+    @Override
+    public List<Location> getAvailableLocations() {
+        Preconditions.checkArgument(isAtPlaceLocation(), "Unit have to at map");
         model.checkGameRunning();
         model.checkCurrentPlayer(owner);
 
         if (actionPoints == 0) {
-            return;
+            return Collections.emptyList();
         }
 
-        Set<Location> openSet = new HashSet<>();
+        /*
+         * Set will contains locations which should be inspected if could be
+         * visited.
+         */
+        final Set<Location> openSet = new HashSet<>();
         openSet.add(getLocation());
-        Set<Location> closedSet = new HashSet<>();
-        Set<Unit> enemies = new HashSet<>();
-        for (int i = 0; i < actionPoints + 1; i++) {
-            Set<Location> currentSet = new HashSet<>();
-            for (Location location : openSet) {
-                for (Location neighbor : location.getNeighbors()) {
-                    if (model.getMap().isValid(neighbor)) {
-                        if (isPossibleToMoveAt(neighbor, true)) {
-                            final List<Unit> eee = owner.getEnemyUnitsAt(location);
-                            if (eee.isEmpty()) {
-                                currentSet.add(neighbor);
-                            } else {
-                                enemies.addAll(eee);
-                            }
-                        } else if (canHoldCargo()
-                                && ((UnitWithCargo) this).isPossibleToDisembarkAt(neighbor, true)) {
-                            currentSet.add(neighbor);
-                        } else if (isPossibleToEmbarkAt(neighbor)) {
-                            currentSet.add(neighbor);
-                        }
-                    }
-                }
-                closedSet.add(location);
-            }
-            openSet.clear();
-            openSet.addAll(currentSet);
-        }
-        closedSet.remove(getLocation());
 
-        if (availableLocations != null) {
-            availableLocations.addAll(closedSet);
+        /*
+         * This set will be returned.
+         */
+        final Set<Location> returnSet = new HashSet<>();
+
+        /*
+         * Location that should be highlighted, but should not be counted as
+         * movement.
+         */
+        final Set<Location> finalSet = new HashSet<>();
+
+        for (int i = 0; i < actionPoints + 1; i++) {
+            /*
+             * Set of all locations that should be inspected.
+             */
+            final Set<Location> candidateSet = openSet.stream()
+                    .flatMap(location -> location.getNeighbors().stream())
+                    .filter(location -> !returnSet.contains(location))
+                    .filter(location -> model.getMap().isValid(location))
+                    .collect(Collectors.toSet());
+
+            finalSet.addAll(candidateSet.stream()
+                    .filter(location -> isPossibleToMakeFinalActionAt(location))
+                    .collect(Collectors.toSet()));
+
+            returnSet.addAll(openSet);
+
+            /*
+             * Prepare new set of border location for next iteration.
+             */
+            openSet.clear();
+            openSet.addAll(candidateSet.stream().filter(location -> isPossibleToMoveAt(location))
+                    .collect(Collectors.toSet()));
         }
-        if (attackableTargets != null) {
-            attackableTargets.addAll(enemies);
-        }
+
+        // Returned set should not contain location where unit actually is.
+        returnSet.remove(getLocation());
+
+        // Returned set should contain all final location.
+        returnSet.addAll(finalSet);
+
+        return ImmutableList.copyOf(new ArrayList<Location>(returnSet));
+    }
+
+    /**
+     * Provide information if unit could move at give location. It's final
+     * action because no further move in given turn not will be possible. For
+     * example when ship disembark units that ship could move in next turn.
+     *
+     * @param location
+     *            required location
+     * @return Return if it's possible make final action at given location.
+     */
+    private boolean isPossibleToMakeFinalActionAt(final Location location) {
+        return (canHoldCargo() && ((UnitWithCargo) this).isPossibleToDisembarkAt(location, true))
+                || isPossibleToEmbarkAt(location);
     }
 
     @Override
@@ -438,7 +469,10 @@ public abstract class AbstractUnit implements Unit {
                 moveTo);
         Preconditions.checkArgument(isPossibleToMoveAt(moveTo),
                 "It's not possible to move at (%s).", moveTo);
-        Preconditions.checkState(actionPoints > 0, "There is not enough available action points (%s)", this);
+        Preconditions.checkState(actionPoints > 0,
+                "There is not enough available action points (%s)", this);
+        Preconditions.checkState(UnitActionType.noAction.equals(getAction().getType()),
+                "Unit can't move because already doing something else. Unit %s", this);
 
         actionPoints--;
         final TerrainType targetTerrain = model.getMap().getTerrainTypeAt(moveTo);
@@ -840,7 +874,7 @@ public abstract class AbstractUnit implements Unit {
         Preconditions.checkArgument(startLocation.isNeighbor(targetLocation),
                 "Start location %s and target locations %s have to be neighbours",
                 cargoSlot.getOwnerPlayer(), owner);
-        
+
         final Direction orientation = findOrintationForMove(targetLocation);
         final Path path = Path.of(Lists.newArrayList(startLocation, targetLocation));
 

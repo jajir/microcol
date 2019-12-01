@@ -54,17 +54,32 @@ public abstract class UnitWithCargo extends AbstractUnit {
                 .filter(cargoSlot -> cargoSlot.isEmpty()).findAny().isPresent();
     }
 
+    /**
+     * Unit can disembark unit from cargo slot to location. Location should be:
+     * <ul>
+     * <li>No enemy units should be at location.</li>
+     * <li>Location should be at neighbor of location of this unit.</li>
+     * <li>There should be at least one cargo that could disembark.</li>
+     * <li>There should not be colony at location.</li>
+     * </ul>
+     * 
+     * @param targetLocation
+     *            required target location
+     * @param inCurrentTurn
+     *            required if it should be done in current turn
+     * @return Return <code>true</code> when unit could disembark at given
+     *         location otherwise return <code>false</code>.
+     */
     public boolean isPossibleToDisembarkAt(final Location targetLocation, boolean inCurrentTurn) {
         Preconditions.checkNotNull(targetLocation);
-        return isPossibleToDisembarkAt(targetLocation) && getCargo().getSlots().stream()
-                .filter(cargoSlot -> canCargoDisembark(cargoSlot, targetLocation, inCurrentTurn))
-                .findAny().isPresent();
-    }
-
-    private boolean isPossibleToDisembarkAt(final Location targetLocation) {
-        Preconditions.checkNotNull(targetLocation);
-        return getLocation().isNeighbor(targetLocation) && getType().getCargoCapacity() > 0
-                && model.getColonyAt(targetLocation).isEmpty();
+        Preconditions.checkState(isAtPlaceLocation(), "Unit %s should by at map.", this);
+        return getLocation().isNeighbor(targetLocation)
+                && getType().getCargoCapacity() > 0
+                && model.getColonyAt(targetLocation).isEmpty()
+                && model.getColonyAt(getLocation()).isEmpty()
+                && getCargo().getSlots().stream().filter(
+                        cargoSlot -> canCargoDisembark(cargoSlot, targetLocation, inCurrentTurn))
+                        .findAny().isPresent();
     }
 
     private boolean canCargoDisembark(final CargoSlot slot, final Location moveToLocation,

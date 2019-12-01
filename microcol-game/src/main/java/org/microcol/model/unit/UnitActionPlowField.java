@@ -1,7 +1,7 @@
 package org.microcol.model.unit;
 
+import org.microcol.model.AbstractUnit;
 import org.microcol.model.Model;
-import org.microcol.model.Unit;
 import org.microcol.model.store.UnitActionPlowFieldPo;
 import org.microcol.model.store.UnitActionPo;
 
@@ -55,7 +55,8 @@ public final class UnitActionPlowField implements UnitAction {
     }
 
     @Override
-    public void startTurn(final Model model, final Unit unit) {
+    public void startTurn(final Model model, final AbstractUnit unit) {
+        unit.setActionPoints(0);
         remainingTurns--;
         if (remainingTurns == 0) {
             model.getMap().plowFiled(unit.getLocation());
