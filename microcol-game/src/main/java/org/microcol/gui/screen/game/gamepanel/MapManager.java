@@ -10,6 +10,7 @@ import org.microcol.gui.util.Listener;
 import org.microcol.model.Location;
 import org.microcol.model.TerrainType;
 import org.microcol.model.event.GameStartedEvent;
+import org.microcol.model.event.UnitArrivedToColoniesEvent;
 import org.microcol.model.event.UnitMovedStepFinishedEvent;
 
 import com.google.common.base.Preconditions;
@@ -54,6 +55,14 @@ public final class MapManager {
     @Subscribe
     private void onUnitMovedStepFinished(final UnitMovedStepFinishedEvent event) {
         if (event.getUnit().getOwner().isHuman()) {
+            hiddenCoastMapGenerator.setMap(gameModelController.getModel().getMap());
+        }
+    }
+    
+    
+    @Subscribe
+    private void onShipArriveToColonies(final UnitArrivedToColoniesEvent event) {
+        if (event.getShip().getOwner().isHuman()) {
             hiddenCoastMapGenerator.setMap(gameModelController.getModel().getMap());
         }
     }

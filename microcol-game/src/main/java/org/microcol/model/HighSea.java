@@ -32,7 +32,17 @@ public final class HighSea {
                 .collect(Collectors.toList());
     }
 
-    List<Location> getSuitablePlaceForShipCommingFromEurope(final Player player,
+    /**
+     * Compute list of locations where ship could arrive from Europe.
+     * 
+     * @param player
+     *            required ship's owner
+     * @param countFromEast
+     *            When it's <code>true</code> than ship will appears at east
+     *            part of map otherwise appears at west.
+     * @return list of suitable locations
+     */
+    public List<Location> getSuitablePlaceForShipCommingFromEurope(final Player player,
             final boolean countFromEast) {
         final WorldMap map = model.getMap();
         final int range = map.getMaxLocationY() / 4;
@@ -48,10 +58,10 @@ public final class HighSea {
     private Location findFirstSuitableLocation(final Player player, final boolean countFromEast,
             final int indexY) {
         if (countFromEast) {
-            for (int indexX = model.getMap().getMaxLocationX(); indexX >= 0; indexX--) {
+            for (int indexX = model.getMap().getMaxLocationX() - 1; indexX >= 0; indexX--) {
                 final Location location = Location.of(indexX, indexY);
                 if (player.isPossibleToSailAt(location)) {
-                    return location;
+                    return Location.of(indexX + 1, indexY);
                 }
             }
         } else {

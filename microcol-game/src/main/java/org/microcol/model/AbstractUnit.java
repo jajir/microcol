@@ -13,7 +13,6 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.microcol.model.store.UnitPo;
-import org.microcol.model.turnevent.TurnEventProvider;
 import org.microcol.model.unit.UnitAction;
 import org.microcol.model.unit.UnitActionType;
 import org.microcol.model.unit.UnitFreeColonist;
@@ -159,25 +158,6 @@ public abstract class AbstractUnit implements Unit {
      * It's called before turn starts.
      */
     public void startTurn() {
-        if (isAtHighSea()) {
-            PlaceHighSea placeHighSea = (PlaceHighSea) place;
-            placeHighSea.decreaseRemainingTurns();
-            if (placeHighSea.getRemainigTurns() <= 0) {
-                if (placeHighSea.isTravelToEurope()) {
-                    model.getEurope().getPort().placeShipToPort(this);
-                    model.getTurnEventStore().add(TurnEventProvider.getShipComeEuropePort(owner));
-                } else {
-                    /*
-                     * Ships always come from east side of map.
-                     */
-                    final List<Location> locations = model.getHighSea()
-                            .getSuitablePlaceForShipCommingFromEurope(getOwner(), true);
-                    placeToLocation(locations.get(random.nextInt(locations.size())),
-                            Direction.west);
-                    model.getTurnEventStore().add(TurnEventProvider.getShipComeToHighSeas(owner));
-                }
-            }
-        }
         actionPoints = getSpeed();
         unitAction.startTurn(model, this);
     }

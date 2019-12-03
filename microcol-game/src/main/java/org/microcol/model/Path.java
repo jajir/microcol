@@ -7,6 +7,9 @@ import com.google.common.base.MoreObjects;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 
+/**
+ * Class hold list of location representing path.
+ */
 public class Path {
     private final List<Location> locations;
 
@@ -26,6 +29,10 @@ public class Path {
             Preconditions.checkArgument(prevLocation.isNeighbor(nextLocation),
                     "Locations are not neighbors: (%s - %s)", prevLocation, nextLocation);
         }
+    }
+
+    public int getSteps() {
+        return locations.size();
     }
 
     public List<Location> getLocations() {

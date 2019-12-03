@@ -27,35 +27,28 @@ public final class ButtonsPanelView implements JavaFxComponent, UpdatableLanguag
     
     public static final String BUTTON_EXIT_ID = "buttonExit";
 
-    private final Button buttonContinue;
+    private final Button buttonContinue = new Button();
 
-    private final Button buttonLoad;
+    private final Button buttonLoad = new Button();
 
-    private final Button buttonPlayCampaign;
+    private final Button buttonPlayCampaign = new Button();
 
-    private final Button buttonStartFreeGame;
+    private final Button buttonStartFreeGame = new Button();
 
-    private final Button buttonSetting;
+    private final Button buttonSetting = new Button();
 
-    private final Button buttonExitMicroCol;
+    private final Button buttonExitMicroCol = new Button();
 
-    private final VBox buttonsBox;
+    private final VBox buttonsBox = new VBox();
 
     @Inject
     ButtonsPanelView() {
-        buttonContinue = new Button();
         buttonContinue.setId(BUTTON_CONTINUE_ID);
-        buttonLoad = new Button();
         buttonLoad.setId(BUTTON_LOAD_ID);
-        buttonPlayCampaign = new Button();
         buttonPlayCampaign.setId(BUTTON_PLAY_CAMPAIGN_ID);
-        buttonStartFreeGame = new Button();
         buttonStartFreeGame.setId(BUTTON_START_FREE_GAME_ID);
-        buttonSetting = new Button();
         buttonSetting.setId(BUTTON_SETTING_ID);
-        buttonExitMicroCol = new Button();
         buttonExitMicroCol.setId(BUTTON_EXIT_ID);
-        buttonsBox = new VBox();
         buttonsBox.getStyleClass().add("game-menu-inner");
         buttonsBox.getChildren().add(buttonContinue);
         buttonsBox.getChildren().add(buttonLoad);

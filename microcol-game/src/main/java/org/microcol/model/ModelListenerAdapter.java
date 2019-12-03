@@ -15,6 +15,7 @@ import org.microcol.model.event.IndependenceWasDeclaredEvent;
 import org.microcol.model.event.RoundStartedEvent;
 import org.microcol.model.event.TurnFinishedEvent;
 import org.microcol.model.event.TurnStartedEvent;
+import org.microcol.model.event.UnitArrivedToColoniesEvent;
 import org.microcol.model.event.UnitAttackedEvent;
 import org.microcol.model.event.UnitEmbarkedEvent;
 import org.microcol.model.event.UnitMoveFinishedEvent;
@@ -150,6 +151,11 @@ public class ModelListenerAdapter implements ModelListener {
 
     @Override
     public void onTurnFinished(final TurnFinishedEvent event) {
+        // Do nothing.
+    }
+
+    @Override
+    public void onUnitArraviedToColonies(UnitArrivedToColoniesEvent event) {
         // Do nothing.
     }
 }

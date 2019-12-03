@@ -15,6 +15,7 @@ import org.microcol.model.event.IndependenceWasDeclaredEvent;
 import org.microcol.model.event.RoundStartedEvent;
 import org.microcol.model.event.TurnFinishedEvent;
 import org.microcol.model.event.TurnStartedEvent;
+import org.microcol.model.event.UnitArrivedToColoniesEvent;
 import org.microcol.model.event.UnitAttackedEvent;
 import org.microcol.model.event.UnitEmbarkedEvent;
 import org.microcol.model.event.UnitMoveFinishedEvent;
@@ -66,6 +67,14 @@ public interface ModelListener {
      *            required event
      */
     void onUnitMovedToHighSeas(UnitMovedToHighSeasEvent event);
+
+    /**
+     * It's called when ship arrive to colonies from Europe.
+     * 
+     * @param event
+     *            required event object
+     */
+    void onUnitArraviedToColonies(UnitArrivedToColoniesEvent event);
 
     /**
      * It's called when unit move to colony field.

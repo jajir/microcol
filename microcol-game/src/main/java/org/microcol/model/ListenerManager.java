@@ -21,6 +21,7 @@ import org.microcol.model.event.IndependenceWasDeclaredEvent;
 import org.microcol.model.event.RoundStartedEvent;
 import org.microcol.model.event.TurnFinishedEvent;
 import org.microcol.model.event.TurnStartedEvent;
+import org.microcol.model.event.UnitArrivedToColoniesEvent;
 import org.microcol.model.event.UnitAttackedEvent;
 import org.microcol.model.event.UnitEmbarkedEvent;
 import org.microcol.model.event.UnitMoveFinishedEvent;
@@ -31,6 +32,7 @@ import org.microcol.model.event.UnitMovedToColonyFieldEvent;
 import org.microcol.model.event.UnitMovedToConstructionEvent;
 import org.microcol.model.event.UnitMovedToHighSeasEvent;
 import org.microcol.model.event.UnitMovedToLocationEvent;
+import org.microcol.model.unit.Ship;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -163,6 +165,14 @@ final class ListenerManager {
         logger.info("Unit moved to high seas: {}.", event);
 
         executeInSameThread(listener -> listener.onUnitMovedToHighSeas(event));
+    }
+
+    void fireUnitArrivedToColonies(final Model model, final Ship ship) {
+        final UnitArrivedToColoniesEvent event = new UnitArrivedToColoniesEvent(model, ship);
+
+        logger.info("Unit arrived to colonies: {}.", event);
+
+        executeInSameThread(listener -> listener.onUnitArraviedToColonies(event));
     }
 
     void fireUnitMovedToConstruction(final Model model, final Unit unit) {

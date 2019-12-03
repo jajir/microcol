@@ -76,7 +76,7 @@ public abstract class Player {
      * @param unit
      *            required unit. Unit have to be on map.
      */
-    void revealMapForUnit(final Unit unit) {
+    public void revealMapForUnit(final Unit unit) {
         Preconditions.checkNotNull(unit, "Unit is null");
         Preconditions.checkState(unit.getOwner().equals(this),
                 "Unit's owher '%s' is to same as '%s'", unit.getOwner(), this);

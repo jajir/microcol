@@ -25,7 +25,9 @@ public class EditorRightPanel implements JavaFxComponent {
 
     private final Button buttonOcean = new Button("Ocean");
 
-    private final Button buttonMountain = new Button("mountain");
+    private final Button buttonMountain = new Button("Mountain");
+
+    private final Button buttonHighSeas = new Button("High Seas");
 
     @Inject
     EditorRightPanel(final MouseOperationManager mouseOperationManager) {
@@ -37,6 +39,8 @@ public class EditorRightPanel implements JavaFxComponent {
         buttonOcean.setOnAction(e -> mouseOperationManager.setterrainOperation(TerrainType.OCEAN));
         buttonMountain
                 .setOnAction(e -> mouseOperationManager.setterrainOperation(TerrainType.MOUNTAIN));
+        buttonHighSeas
+                .setOnAction(e -> mouseOperationManager.setterrainOperation(TerrainType.HIGH_SEA));
 
         mainPanel.getStyleClass().add("right");
         mainPanel.getChildren().add(buttonTree);
@@ -45,6 +49,7 @@ public class EditorRightPanel implements JavaFxComponent {
         mainPanel.getChildren().add(buttonGrass);
         mainPanel.getChildren().add(buttonOcean);
         mainPanel.getChildren().add(buttonMountain);
+        mainPanel.getChildren().add(buttonHighSeas);
     }
 
     @Override

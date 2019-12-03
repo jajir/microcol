@@ -141,6 +141,7 @@ public final class KingRobotPlayer extends AbstractRobotPlayer {
 
     private List<Location> canDisembarkAt(final UnitWithCargo ship) {
         return ship.getLocation().getNeighbors().stream()
+                .filter(loc -> getModel().isValid(loc))
                 .filter(loc -> ship.isPossibleToDisembarkAt(loc, true))
                 .collect(Collectors.toList());
     }

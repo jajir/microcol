@@ -182,8 +182,11 @@ public final class SelectedUnitManager {
         if (selectedUnit == null) {
             selectedUnit(gameModelController.getModel().getFirstSelectableUnit().orElse(null));
         } else {
-            selectedUnit(gameModelController.getModel().getNextUnitForCurrentPlayer(selectedUnit)
-                    .orElse(null));
+            if (gameModelController.getModel().getNextUnitForCurrentPlayer(selectedUnit)
+                    .isPresent()) {
+                selectedUnit(gameModelController.getModel()
+                        .getNextUnitForCurrentPlayer(selectedUnit).orElse(null));
+            }
         }
         if (selectedUnit != null) {
             selectedTileManager.setSelectedTile(selectedUnit.getLocation(),

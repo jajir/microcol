@@ -15,6 +15,7 @@ import org.microcol.model.store.UnitPo;
 import org.microcol.model.turnevent.TurnEvent;
 import org.microcol.model.turnevent.TurnEventProvider;
 import org.microcol.model.turnevent.TurnEventStore;
+import org.microcol.model.unit.Ship;
 import org.microcol.model.unit.UnitActionNoAction;
 import org.microcol.model.unit.UnitFactory;
 import org.microcol.model.unit.UnitWithCargo;
@@ -518,7 +519,12 @@ public class Model {
         listenerManager.fireActionStarted(this);
         if (fireUnitMoveStarted(unit, path)) {
             path.getLocations().forEach(loc -> {
-                unit.moveOneStep(loc);
+                /*
+                 * Unit could move to high seas. So could be out of map.
+                 */
+                if (unit.isAtPlaceLocation()) {
+                    unit.moveOneStep(loc);
+                }
             });
             fireUnitMovedFinished(unit, path);
         }
@@ -632,6 +638,10 @@ public class Model {
         listenerManager.fireUnitMovedToHighSeas(this, unit);
     }
 
+    public void fireUnitArrivedToColonies(final Ship ship) {
+        listenerManager.fireUnitArrivedToColonies(this, ship);
+    }
+
     void fireUnitMovedToColonyField(final Unit unit) {
         listenerManager.fireUnitMovedToColonyField(this, unit);
     }
@@ -727,7 +737,7 @@ public class Model {
     /**
      * @return the turnEventStore
      */
-    TurnEventStore getTurnEventStore() {
+    public TurnEventStore getTurnEventStore() {
         return turnEventStore;
     }
 
