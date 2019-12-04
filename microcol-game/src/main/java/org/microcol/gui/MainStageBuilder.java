@@ -85,8 +85,8 @@ public final class MainStageBuilder {
             primaryStage.setHeight(rectangle.getHeight());
         } else {
             // use default game size
-            primaryStage.setWidth(800);
-            primaryStage.setHeight(600);
+            primaryStage.setWidth(GamePreferences.DEFAULT_WINDOW_WIDTH);
+            primaryStage.setHeight(GamePreferences.DEFAULT_WINDOW_HEIGHT);
         }
         final VBox mainBox = new VBox();
         final Scene scene = new Scene(mainBox);

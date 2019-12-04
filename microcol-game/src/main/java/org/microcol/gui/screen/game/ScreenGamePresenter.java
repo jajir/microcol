@@ -105,7 +105,8 @@ public class ScreenGamePresenter {
             return;
         }
         if (KeyCode.P == event.getCode()) {
-            eventBus.post(new PlowFieldEvent());
+            onKeyPWasPressed();
+            return;
         }
         if (KeyCode.B == event.getCode()) {
             eventBus.post(new BuildColonyEvent());
@@ -127,6 +128,15 @@ public class ScreenGamePresenter {
             final Unit unit = selectedUnitManager.getSelectedUnit().get();
             if (unit.getActionPoints() > 0) {
                 eventBus.post(new StartMoveEvent());
+            }
+        }
+    }
+
+    private void onKeyPWasPressed() {
+        if (selectedUnitManager.getSelectedUnit().isPresent()) {
+            final Unit unit = selectedUnitManager.getSelectedUnit().get();
+            if (unit.canPlowFiled()) {
+                eventBus.post(new PlowFieldEvent());
             }
         }
     }

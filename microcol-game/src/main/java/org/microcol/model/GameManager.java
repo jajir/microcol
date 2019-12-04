@@ -127,7 +127,9 @@ final class GameManager {
             final Optional<GameOverResult> oGameOverResult = gameOverEvaluator.evaluate(model);
             if (oGameOverResult.isPresent()) {
                 model.fireGameFinished(oGameOverResult.get());
-                started = false;
+                // TODO here should be following code, but IU can't live with
+                // that.
+                // started = false;
             } else {
                 currentPlayer = model.getPlayers().get(0);
                 model.getStatistics().countNextTurn(model);

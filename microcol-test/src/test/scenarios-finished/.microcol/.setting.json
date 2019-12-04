@@ -14,5 +14,6 @@
   "animationSpeed": 1,
   "showGrid": false,
   "showFightAdvisor": true,
+  "version": "1.0",
   "gameInProgressSaveFile": "true"
 }

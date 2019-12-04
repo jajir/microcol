@@ -19,10 +19,13 @@ import com.google.inject.Singleton;
 import com.google.inject.name.Named;
 
 import javafx.scene.input.MouseEvent;
+import javafx.scene.input.ScrollEvent;
 
 @Singleton
 @Listener
 public final class GamePanelMouseListener {
+
+    private final static double DEFAULT_SCROLL_SPEED_DIVIDER = 2.25;
 
     private final Logger logger = LoggerFactory.getLogger(GamePanelMouseListener.class);
 
@@ -51,7 +54,8 @@ public final class GamePanelMouseListener {
             final GameModelController gameModelController,
             final SelectedTileManager selectedTileManager, final EventBus eventBus,
             final MouseOverTileManager mouseOverTileManager, final ModeController modeController,
-            final GamePanelController gamePanelController, final @Named("game") VisibleAreaService visibleArea,
+            final GamePanelController gamePanelController,
+            final @Named("game") VisibleAreaService visibleArea,
             final GamePanelComponent gamePanelComponent,
             final GamePanelPresenter gamePanelPresenter) {
         this.gameModelController = Preconditions.checkNotNull(gameModelController);
@@ -86,6 +90,12 @@ public final class GamePanelMouseListener {
                 lastMousePosition = Optional.of(Point.of(e.getX(), e.getY()));
             }
         });
+        gamePanelComponent.getCanvas().setOnScroll(this::onScroll);
+    }
+
+    private void onScroll(final ScrollEvent event) {
+        visibleArea.addDeltaToTopLeftPoint(Point.of(-event.getDeltaX(), -event.getDeltaY())
+                .divide(DEFAULT_SCROLL_SPEED_DIVIDER));
     }
 
     private boolean tryToSwitchToMoveMode(final Location currentLocation) {
@@ -153,5 +163,5 @@ public final class GamePanelMouseListener {
         final Location loc = gamePanelView.getArea().convertToLocation(currentPosition);
         mouseOverTileManager.setMouseOverTile(loc);
     }
-    
+
 }

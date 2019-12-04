@@ -135,8 +135,8 @@ public class ButtonsGamePanel extends AbstractButtonsPanel {
         getButtonPanel().getChildren().add(buttonGoals);
         // getButtonPanel().getChildren().add(buttonHelp);
         getButtonPanel().getChildren().add(buttonEurope);
-        getButtonPanel().getChildren().add(buttonExit);
         getButtonPanel().getChildren().add(buttonNextTurn);
+        getButtonPanel().getChildren().add(buttonExit);
     }
 
     void disableAllButtons() {

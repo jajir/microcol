@@ -11,6 +11,11 @@ import com.google.common.base.Objects;
  */
 public class Setting {
 
+    /**
+     * Current setting file version.
+     */
+    final static String CURRENT_VERSION = "1.0";
+
     private Rectangle mainFramePosition;
 
     private int mainFrameState;
@@ -24,13 +29,15 @@ public class Setting {
     private boolean showGrid;
 
     private boolean showFightAdvisor;
+    
+    private String version;
 
     private String gameInProgressSaveFile;
 
     @Override
     public int hashCode() {
         return Objects.hashCode(mainFramePosition, mainFrameState, locale, volume, animationSpeed,
-                showGrid, showFightAdvisor, gameInProgressSaveFile);
+                showGrid, showFightAdvisor, version, gameInProgressSaveFile);
     }
 
     @Override
@@ -49,6 +56,7 @@ public class Setting {
                 && Objects.equal(this.animationSpeed, other.animationSpeed)
                 && Objects.equal(this.showGrid, other.showGrid)
                 && Objects.equal(this.showFightAdvisor, other.showFightAdvisor)
+                && Objects.equal(this.version, other.version)
                 && Objects.equal(this.gameInProgressSaveFile, other.gameInProgressSaveFile);
 
     }
@@ -58,7 +66,7 @@ public class Setting {
         return MoreObjects.toStringHelper(Setting.class).add("mainFramePosition", mainFramePosition)
                 .add("mainFrameState", mainFrameState).add("locale", locale).add("volume", volume)
                 .add("animationSpeed", animationSpeed).add("showGrid", showGrid)
-                .add("showFightAdvisor", showFightAdvisor)
+                .add("showFightAdvisor", showFightAdvisor).add("version", version)
                 .add("gameInProgressSaveFile", gameInProgressSaveFile).toString();
     }
 
@@ -124,6 +132,14 @@ public class Setting {
 
     public void setGameInProgressSaveFile(String gameInProgressSaveFile) {
         this.gameInProgressSaveFile = gameInProgressSaveFile;
+    }
+
+    public String getVersion() {
+        return version;
+    }
+
+    public void setVersion(String version) {
+        this.version = version;
     }
 
 }

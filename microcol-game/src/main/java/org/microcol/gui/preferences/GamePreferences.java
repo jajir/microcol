@@ -28,7 +28,7 @@ public class GamePreferences {
     /**
      * When there are no value in preferences than this value is used.
      */
-    public static final Integer DEFAULT_ANIMATION_SPEED = 3;
+    public static final Integer DEFAULT_ANIMATION_SPEED = 1;
 
     /**
      * When there are no value in preferences than this value is used.
@@ -49,6 +49,16 @@ public class GamePreferences {
     private static final String SYSTEM_PROPERTY_SOUND_ENABLED = "soundEnabled";
 
     public static final String SYSTEM_PROPERTY_CLEAN_SETTINGS = "clean";
+
+    /**
+     * When MicroCol starts for first time it use this windows width.
+     */
+    public static final int DEFAULT_WINDOW_WIDTH = 1000;
+
+    /**
+     * When MicroCol starts for first time it use this windows height.
+     */
+    public static final int DEFAULT_WINDOW_HEIGHT = 925;
 
     private final SettingService settingService;
 
