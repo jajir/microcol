@@ -8,9 +8,9 @@
 	</parent>
 	<artifactId>microcol-site</artifactId>
 	<packaging>pom</packaging>
-	<name>MicroCol development and user documentation.</name>
+	<name>MicroCol (site) documentation.</name>
 	<description>
-		This submodule contains and generate full site. 
+		This submodule contains and generate full maven site. 
 	</description>
 	<url>https://github.com/jajir/microcol</url>
 	<properties>

@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
@@ -8,24 +9,22 @@
 	</parent>
 	<artifactId>microcol-dist</artifactId>
 	<packaging>jar</packaging>
-	<name>Modul create distribution packages</name>
+	<name>MicroCol distribution packages</name>
 	<description>
 		Module for generating distribution
 	</description>
 
+	<!-- mvn clean javafx:jlink -->
+
 	<properties>
 		<keystore.path>${basedir}/src/keystore/keystore_vs.jks</keystore.path>
-		<keystore.store.password>12monkeys</keystore.store.password>
-		<keystore.key.password>12monkeys</keystore.key.password>
-		<keystore.key.alias>spacewar</keystore.key.alias>
 	</properties>
 
 	<dependencies>
 		<dependency>
 			<groupId>org.microcol</groupId>
-			<artifactId>microcol-game</artifactId>
+			<artifactId>microcol-module</artifactId>
 			<version>${project.version}</version>
-			<classifier>jar-with-dependencies</classifier>
 			<type>jar</type>
 		</dependency>
 	</dependencies>
@@ -43,47 +42,36 @@
 			<build>
 				<plugins>
 					<plugin>
-						<groupId>com.akathist.maven.plugins.launch4j</groupId>
-						<artifactId>launch4j-maven-plugin</artifactId>
-						<version>1.7.15</version>
+						<groupId>org.openjfx</groupId>
+						<artifactId>javafx-maven-plugin</artifactId>
+						<version>0.0.3</version>
 						<executions>
 							<execution>
-								<id>launch4j</id>
-								<phase>package</phase>
+								<id>jink</id>
+								<phase>prepare-package</phase>
 								<goals>
-									<goal>launch4j</goal>
+									<goal>jlink</goal>
 								</goals>
-								<configuration>
-									<headerType>gui</headerType>
-									<outfile>target/microcol.exe</outfile>
-									<jar>target/microcol.jar</jar>
-									<errTitle>MicroCol</errTitle>
-									<icon>src/icon_square_64x64.ico</icon>
-									<classPath>
-										<mainClass>org.microcol.MicroCol</mainClass>
-										<addDependencies>true</addDependencies>
-									</classPath>
-									<jre>
-										<minVersion>1.6.0</minVersion>
-										<jdkPreference>preferJre</jdkPreference>
-									</jre>
-									<!-- <splash> <file>src/icon_square.bmp</file> <timeout>60</timeout> 
-										</splash> -->
-									<versionInfo>
-										<fileVersion>1.0.0.0</fileVersion>
-										<txtFileVersion>1.0</txtFileVersion>
-										<fileDescription>Colonisation remake</fileDescription>
-										<copyright>Apache license</copyright>
-										<productVersion>1.0.0.0</productVersion>
-										<txtProductVersion>${project.version}</txtProductVersion>
-										<productName>MicroCol</productName>
-										<internalName>MicroCol</internalName>
-										<originalFilename>MicroCol.exe</originalFilename>
-									</versionInfo>
-								</configuration>
 							</execution>
 						</executions>
+						<configuration>
+							<release>${maven.compiler.release}</release>
+							<jlinkImageName>dist</jlinkImageName>
+							<launcher>launcher</launcher>
+							<mainClass>microcol.game/org.microcol.MicroCol</mainClass>
+						</configuration>
 					</plugin>
+					<!-- mvn appbundle:bundle -->
+					<!-- <plugin> <groupId>sh.tak.appbundler</groupId> <artifactId>appbundle-maven-plugin</artifactId> 
+						<version>1.2.0</version> <dependencies> <dependency> <groupId>org.codehaus.plexus</groupId> 
+						<artifactId>plexus-archiver</artifactId> <version>RELEASE</version> </dependency> 
+						<dependency> <groupId>org.apache.velocity</groupId> <artifactId>velocity-tools</artifactId> 
+						<version>2.0</version> </dependency> </dependencies> <executions> <execution> 
+						<phase>package</phase> <goals> <goal>bundle</goal> </goals> </execution> 
+						</executions> <configuration> <mainClass>org.microcol.start.Start</mainClass> 
+						<bundleName>MicroCol</bundleName> <embeddJre>true</embeddJre> <iconFile>src/icon.icns</iconFile> 
+						<buildDirectory>${project.build.directory}</buildDirectory> </configuration> 
+						</plugin> -->
 				</plugins>
 			</build>
 		</profile>
@@ -91,6 +79,17 @@
 
 	<build>
 		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<dependencies>
+					<dependency>
+						<groupId>org.ow2.asm</groupId>
+						<artifactId>asm</artifactId>
+						<version>6.2</version> <!-- Use newer version of ASM -->
+					</dependency>
+				</dependencies>
+			</plugin>
 			<!-- skip installing artifacts -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -99,62 +98,6 @@
 				<configuration>
 					<skip>true</skip>
 				</configuration>
-			</plugin>
-			<!-- Skip tests -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<configuration>
-					<skipTests>true</skipTests>
-				</configuration>
-			</plugin>
-			<!-- Copy distribution jar file to target. -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-dependency-plugin</artifactId>
-				<version>3.0.0</version>
-				<executions>
-					<execution>
-						<id>copy</id>
-						<phase>package</phase>
-						<goals>
-							<goal>copy</goal>
-						</goals>
-						<configuration>
-							<artifactItems>
-								<artifactItem>
-									<groupId>org.microcol</groupId>
-									<artifactId>microcol-game</artifactId>
-									<version>${project.version}</version>
-									<classifier>jar-with-dependencies</classifier>
-									<type>jar</type>
-									<overWrite>false</overWrite>
-									<outputDirectory>${project.build.directory}</outputDirectory>
-									<destFileName>microcol.jar</destFileName>
-								</artifactItem>
-							</artifactItems>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<groupId>sh.tak.appbundler</groupId>
-				<artifactId>appbundle-maven-plugin</artifactId>
-				<version>1.2.0</version>
-				<executions>
-					<execution>
-						<phase>package</phase>
-						<goals>
-							<goal>bundle</goal>
-						</goals>
-						<configuration>
-							<mainClass>org.microcol.MicroCol</mainClass>
-							<bundleName>MicroCol</bundleName>
-							<iconFile>src/icon.icns</iconFile>
-							<buildDirectory>${project.build.directory}</buildDirectory>
-						</configuration>
-					</execution>
-				</executions>
 			</plugin>
 		</plugins>
 	</build>

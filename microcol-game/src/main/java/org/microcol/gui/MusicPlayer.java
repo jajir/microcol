@@ -11,15 +11,21 @@ import javax.sound.sampled.DataLine;
 import javax.sound.sampled.FloatControl;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.SourceDataLine;
+import javax.sound.sampled.UnsupportedAudioFileException;
 
-import org.microcol.gui.image.ImageProvider;
+import org.microcol.gui.util.StreamReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.google.common.base.Preconditions;
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 
 /**
  * Responsible for playing music.
  * 
  */
+@Singleton
 public final class MusicPlayer {
 
     private final Logger logger = LoggerFactory.getLogger(MusicPlayer.class);
@@ -36,9 +42,16 @@ public final class MusicPlayer {
 
     private final static int BUFFER_SIZE = 128000;
 
+    private final StreamReader streamReader;
+
     private SourceDataLine sourceLine;
 
     private boolean run = true;
+
+    @Inject
+    MusicPlayer(final StreamReader streamReader) {
+        this.streamReader = Preconditions.checkNotNull(streamReader);
+    }
 
     /**
      * Start play background music.
@@ -88,10 +101,9 @@ public final class MusicPlayer {
 
     private AudioInputStream getAudioInputStream(final String filename) {
         try {
-            final ClassLoader cl = ImageProvider.class.getClassLoader();
-            final InputStream in = cl.getResourceAsStream(filename);
+            final InputStream in = streamReader.openStream(filename);
             return AudioSystem.getAudioInputStream(new BufferedInputStream(in));
-        } catch (Exception e) {
+        } catch (IOException | UnsupportedAudioFileException e) {
             throw new MicroColException(e.getMessage(), e);
         }
     }

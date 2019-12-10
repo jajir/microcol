@@ -1,6 +1,10 @@
 package org.microcol.gui.image;
 
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.UncheckedIOException;
+import java.security.AccessController;
+import java.security.PrivilegedAction;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -67,12 +71,25 @@ public class ImageCache {
      */
     public static Image getRawImage(final String rawPath) {
         final String path = BASE_PACKAGE + "/" + rawPath;
-        ClassLoader cl = ImageCache.class.getClassLoader();
-        final InputStream in = cl.getResourceAsStream(path);
-        if (in == null) {
-            throw new MicroColException("Unable to load file '" + path + "'.");
-        } else {
-            return new Image(cl.getResourceAsStream(path));
+        //FIXME use StreamReader
+        Module module = ImageCache.class.getModule();
+        PrivilegedAction<InputStream> pa = () -> {
+            try {
+                return module.getResourceAsStream(path);
+            } catch (IOException e) {
+                throw new UncheckedIOException(e);
+            }
+        };
+        
+        
+        try (InputStream stream = AccessController.doPrivileged(pa)) {
+            if (stream != null) {
+                return new Image(stream);
+            } else {
+                throw new MicroColException("Unable to load file '" + path + "'.");
+            }
+        } catch (UncheckedIOException | IOException e) {
+            throw new MicroColException(e.getMessage(),e);
         }
     }
 

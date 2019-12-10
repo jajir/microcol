@@ -17,7 +17,12 @@ class ResourceBundlesManager {
 
     ResourceBundle init(final String baseName, final Locale locale,
             final ResourceBundle.Control resourceBundleControl) {
-        final ResourceBundle out = forceLoad(baseName, locale, resourceBundleControl);
+        ResourceBundleProviderXmlImpl impl = new ResourceBundleProviderXmlImpl();
+        final ResourceBundle out = impl.getBundle(baseName, locale);
+        /*
+         * final ResourceBundle out = forceLoad(baseName, locale,
+         * resourceBundleControl);
+         */
         if (out == null) {
             throw new NullPointerException(String.format(
                     "Resource bundle for base name '%s' and locale '%s' can't be found.", baseName,

@@ -36,6 +36,16 @@ import com.google.common.base.MoreObjects;
  *
  */
 public class I18n {
+    
+    //TODO make it singleton.
+    
+    //TODO move initialization from module here.
+    
+    // TODO Use StremReader in ResourceBundleProviderXmlImpl.
+    
+    // TODO remove unused functionality.
+
+    private final static Locale cs_CZ = new Locale("cs", "CZ");
 
     private final ResourceBundlesManager resourceBundlesManager;
 
@@ -109,7 +119,11 @@ public class I18n {
 
     private void init(final Locale locale) {
         Objects.requireNonNull(locale, "Locale can't be null.");
-        currentLocale = locale;
+        if (locale.equals(cs_CZ)) {
+            currentLocale = locale;
+        } else {
+            currentLocale = Locale.ROOT;
+        }
     }
 
     public <T extends Enum<T> & MessageKeyResource> String getRawMessage(final T messageKeyEnum) {

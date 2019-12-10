@@ -9,7 +9,7 @@
 	</parent>
 	<artifactId>microcol-game</artifactId>
 	<packaging>jar</packaging>
-	<name>MicroCol game classes</name>
+	<name>MicroCol game</name>
 	<url>https://github.com/jajir/microcol</url>
 
 	<properties>
@@ -193,6 +193,7 @@
 								<manifestEntries>
 									<Manifest-Version>1.0</Manifest-Version>
 									<SplashScreen-Image>${splash-creen-image}</SplashScreen-Image>
+									<Automatic-Module-Name>microcol.game</Automatic-Module-Name>
 								</manifestEntries>
 							</archive>
 							<descriptorRefs>
