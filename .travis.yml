@@ -8,7 +8,7 @@ before_install:
   # We need GraphViz to draw diagrams:
   - "sudo apt-get install graphviz"
 install:
-  - mvn initialize -B -V -e
+  - mvn install -B -V -e
 script:
   - mvn clean site -Dtravis-ci=true -Djava.awt.headless=true -Dtestfx.robot=glass -Dtestfx.headless=true -Dprism.order=sw -Dprism.text=t2k -Dtestfx.setup.timeout=2500 -DsoundEnabled=false -B -V -e -P ci
 env:
