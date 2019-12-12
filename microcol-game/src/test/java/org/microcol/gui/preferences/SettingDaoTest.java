@@ -1,9 +1,11 @@
 package org.microcol.gui.preferences;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.util.Optional;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -26,9 +28,10 @@ public class SettingDaoTest extends AbstractPreferencesTest {
 
         printOutStoredSetting();
 
-        final Setting settingLoaded = settingDao.loadFromFile(SETTING_FILE);
+        final Optional<Setting> oSettingLoaded = settingDao.loadFromFile(SETTING_FILE);
 
-        assertEquals(settingOriginal, settingLoaded);
+        assertTrue(oSettingLoaded.isPresent());
+        assertEquals(settingOriginal, oSettingLoaded.get());
     }
 
     @Test
@@ -38,9 +41,10 @@ public class SettingDaoTest extends AbstractPreferencesTest {
 
         printOutStoredSetting();
 
-        final Setting settingLoaded = settingDao.loadFromFile(SETTING_FILE);
+        final Optional<Setting> oSettingLoaded = settingDao.loadFromFile(SETTING_FILE);
 
-        assertEquals(settingOriginal, settingLoaded);
+        assertTrue(oSettingLoaded.isPresent());
+        assertEquals(settingOriginal, oSettingLoaded.get());
     }
 
     private void printOutStoredSetting() throws IOException {

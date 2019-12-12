@@ -6,6 +6,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
@@ -69,7 +70,20 @@ public class SettingService {
         if (!settingFile.exists()) {
             save(getDefaultSetting());
         }
-        return settingDao.loadFromFile(getSettingFile());
+        
+        Optional<Setting> oSetting = settingDao.loadFromFile(getSettingFile());
+        if (oSetting.isEmpty()) {
+            save(getDefaultSetting());
+            oSetting = settingDao.loadFromFile(getSettingFile());
+            if (oSetting.isEmpty()) {
+                throw new MicroColException(String.format("Unable to load setting from '%s'",
+                        settingFile.getAbsolutePath()));
+            } else {
+                return oSetting.get();
+            }
+        } else {
+            return oSetting.get();
+        }
     }
 
     private void moveDataTobackupDir(final File homeDir, final File backupDir) {
