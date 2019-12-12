@@ -9,6 +9,7 @@ import org.microcol.model.Location;
 import org.microcol.model.Unit;
 import org.microcol.model.event.ColonyWasFoundEvent;
 import org.microcol.model.event.GameStoppedEvent;
+import org.microcol.model.event.NewUnitWasBornEvent;
 import org.microcol.model.event.UnitEmbarkedEvent;
 import org.microcol.model.event.UnitMovedStepStartedEvent;
 import org.microcol.model.event.UnitMovedToColonyFieldEvent;
@@ -122,6 +123,17 @@ public final class SelectedUnitManager {
     @Subscribe
     private void onGameStopped(@SuppressWarnings("unused") final GameStoppedEvent event) {
         selectedUnit = null;
+    }
+
+    @Subscribe
+    private void onNewUnitWasBorn(final NewUnitWasBornEvent event) {
+        if (selectedTileManager.getSelectedTile().isPresent()) {
+            if (event.getLocation().equals(selectedTileManager.getSelectedTile().get())) {
+                if (selectedUnit == null) {
+                    forcelySetSelectedUnit(event.getUnit());
+                }
+            }
+        }
     }
 
     public void setSelectedUnit(final Unit unit) {

@@ -14,6 +14,7 @@ import java.util.concurrent.TimeoutException;
 import org.microcol.gui.Point;
 import org.microcol.gui.screen.game.components.ButtonsGamePanel;
 import org.microcol.gui.screen.game.components.StatusBarView;
+import org.microcol.gui.screen.game.gamepanel.SelectedTileManager;
 import org.microcol.model.Location;
 import org.microcol.model.unit.Ship;
 import org.slf4j.Logger;
@@ -209,6 +210,16 @@ public class GamePage extends AbstractScreen {
 		assertFalse(rightPanelUnit.isSelected());
 	    }
 	}
+    }
+
+    public void verifyThatSelectedTileIs(final Location expectedSelectedTile) {
+	final SelectedTileManager selectedTileManager = getContext().getClassFromGuice(SelectedTileManager.class);
+	Preconditions.checkNotNull(selectedTileManager);
+
+	assertTrue(selectedTileManager.getSelectedTile().isPresent(), "No tile is selected");
+	assertEquals(expectedSelectedTile, selectedTileManager.getSelectedTile().get(),
+		String.format("Tile at %s should be selected but tile %s is really selected.", expectedSelectedTile,
+			selectedTileManager.getSelectedTile().get()));
     }
 
     public void verifyThatThereIsNoColonyAt(final Location colonyLocation) {

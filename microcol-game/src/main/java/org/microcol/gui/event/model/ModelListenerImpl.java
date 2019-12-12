@@ -16,6 +16,7 @@ import org.microcol.model.event.GameStoppedEvent;
 import org.microcol.model.event.GoldWasChangedEvent;
 import org.microcol.model.event.GoodsWasSoldInEuropeEvent;
 import org.microcol.model.event.IndependenceWasDeclaredEvent;
+import org.microcol.model.event.NewUnitWasBornEvent;
 import org.microcol.model.event.RoundStartedEvent;
 import org.microcol.model.event.TurnFinishedEvent;
 import org.microcol.model.event.TurnStartedEvent;
@@ -203,7 +204,12 @@ final class ModelListenerImpl implements ModelListener {
     }
 
     @Override
-    public void onUnitArraviedToColonies(UnitArrivedToColoniesEvent event) {
+    public void onUnitArraviedToColonies(final UnitArrivedToColoniesEvent event) {
+        eventBus.post(event);
+    }
+
+    @Override
+    public void onNewUnitWasBorn(final NewUnitWasBornEvent event) {
         eventBus.post(event);
     }
 

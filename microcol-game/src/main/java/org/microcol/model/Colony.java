@@ -274,8 +274,9 @@ public class Colony {
      * New colonist will appears outside of colony.
      */
     private void produceNewColonist() {
-        model.addUnitOutSideColony(this);
+        final Unit newUnit = model.addUnitOutSideColony(this);
         model.getTurnEventStore().add(TurnEventProvider.getNewUnitInColony(getOwner(), this));
+        model.fireNewUnitWasBorn(newUnit);
     }
 
     private void killOneRandomUnit() {

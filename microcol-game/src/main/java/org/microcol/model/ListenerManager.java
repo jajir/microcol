@@ -18,6 +18,7 @@ import org.microcol.model.event.GameStoppedEvent;
 import org.microcol.model.event.GoldWasChangedEvent;
 import org.microcol.model.event.GoodsWasSoldInEuropeEvent;
 import org.microcol.model.event.IndependenceWasDeclaredEvent;
+import org.microcol.model.event.NewUnitWasBornEvent;
 import org.microcol.model.event.RoundStartedEvent;
 import org.microcol.model.event.TurnFinishedEvent;
 import org.microcol.model.event.TurnStartedEvent;
@@ -313,6 +314,14 @@ final class ListenerManager {
         logger.info("Game finished: {}.", event);
 
         listeners.forEach(listener -> listener.onGameFinished(event));
+    }
+
+    void fireNewUnitWasBorn(final Model model, final Unit unit) {
+        final NewUnitWasBornEvent event = new NewUnitWasBornEvent(model, unit);
+
+        logger.info("New unit was born: {}.", event);
+
+        listeners.forEach(listener -> listener.onNewUnitWasBorn(event));
     }
 
     private void executeInSeparateThread(Consumer<ModelListener> action) {

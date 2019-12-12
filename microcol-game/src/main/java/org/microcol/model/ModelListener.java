@@ -12,6 +12,7 @@ import org.microcol.model.event.GameStoppedEvent;
 import org.microcol.model.event.GoldWasChangedEvent;
 import org.microcol.model.event.GoodsWasSoldInEuropeEvent;
 import org.microcol.model.event.IndependenceWasDeclaredEvent;
+import org.microcol.model.event.NewUnitWasBornEvent;
 import org.microcol.model.event.RoundStartedEvent;
 import org.microcol.model.event.TurnFinishedEvent;
 import org.microcol.model.event.TurnStartedEvent;
@@ -155,4 +156,12 @@ public interface ModelListener {
     void onBeforeDeclaringIndependence(BeforeDeclaringIndependenceEvent event);
 
     void onIndependenceWasDeclared(IndependenceWasDeclaredEvent event);
+
+    /**
+     * Event is raised when new unit is born in colony.
+     *
+     * @param event
+     *            required event
+     */
+    void onNewUnitWasBorn(NewUnitWasBornEvent event);
 }

@@ -311,9 +311,9 @@ public class Model {
         }, unitType, owner, unitType.getSpeed(), new UnitActionNoAction());
     }
 
-    void addUnitOutSideColony(final Colony colony) {
-        unitStorage.createUnit(unit -> new Cargo(unit, UnitType.COLONIST.getCargoCapacity()), this,
-                unit -> {
+    Unit addUnitOutSideColony(final Colony colony) {
+        return unitStorage.createUnit(unit -> new Cargo(unit, UnitType.COLONIST.getCargoCapacity()),
+                this, unit -> {
                     return new PlaceLocation(unit, colony.getLocation(),
                             unit.getDefaultOrintation());
                 }, UnitType.COLONIST, colony.getOwner(), UnitType.COLONIST.getSpeed(),
@@ -537,6 +537,10 @@ public class Model {
 
     void fireUnitMovedFinished(final Unit unit, final Path path) {
         listenerManager.fireUnitMovedFinished(this, unit, path);
+    }
+
+    void fireNewUnitWasBorn(final Unit unit) {
+        listenerManager.fireNewUnitWasBorn(this, unit);
     }
 
     /**
