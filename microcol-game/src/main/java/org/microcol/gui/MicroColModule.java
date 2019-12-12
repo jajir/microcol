@@ -90,6 +90,7 @@ import org.microcol.gui.util.Listener;
 import org.microcol.gui.util.PaintService;
 import org.microcol.gui.util.PathPlanning;
 import org.microcol.gui.util.PersistingTool;
+import org.microcol.gui.util.StreamReader;
 import org.microcol.gui.util.TurnStartedListener;
 import org.microcol.gui.util.UnitUtil;
 import org.microcol.gui.util.ViewUtil;
@@ -306,9 +307,10 @@ public final class MicroColModule extends AbstractModule {
     @Provides
     @Singleton
     @SuppressWarnings("ucd")
-    I18n makeI18n(final GamePreferences gamePreferences) {
+    I18n makeI18n(final GamePreferences gamePreferences, final StreamReader streamReader) {
         return I18n.builder().setVerifyThatAllEnumKeysAreDefined(true)
                 .setVerifyThatAllKeysInResourceBundleHaveConstant(true)
+                .setStreamReader(streamReader)
                 .setDefaultLocale(gamePreferences.getLocale()).build();
     }
 

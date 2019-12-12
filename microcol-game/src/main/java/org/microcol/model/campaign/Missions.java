@@ -1,10 +1,6 @@
 package org.microcol.model.campaign;
 
-import java.util.ResourceBundle;
-
 import org.microcol.i18n.MessageKeyResource;
-import org.microcol.i18n.ResourceBundleControlBuilder;
-import org.microcol.i18n.ResourceBundleFormat;
 
 enum Missions implements MessageKeyResource {
 
@@ -43,9 +39,4 @@ enum Missions implements MessageKeyResource {
     default_m2_done1,
     default_m2_done2,;
 
-    @Override
-    public ResourceBundle.Control getResourceBundleControl() {
-        return new ResourceBundleControlBuilder().setPredefinedFormat(ResourceBundleFormat.xml)
-                .build();
-    }
 }

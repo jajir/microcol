@@ -1,10 +1,6 @@
 package org.microcol.gui.dialog;
 
-import java.util.ResourceBundle;
-
 import org.microcol.i18n.MessageKeyResource;
-import org.microcol.i18n.ResourceBundleControlBuilder;
-import org.microcol.i18n.ResourceBundleFormat;
 
 /**
  * Here will be text constants for dialogs.
@@ -36,11 +32,5 @@ public enum Dialog implements MessageKeyResource {
     saveGame_title,
     loadGame_title,
     buildingQueueDialog_caption;
-
-    @Override
-    public ResourceBundle.Control getResourceBundleControl() {
-        return new ResourceBundleControlBuilder().setPredefinedFormat(ResourceBundleFormat.xml)
-                .build();
-    }
 
 }

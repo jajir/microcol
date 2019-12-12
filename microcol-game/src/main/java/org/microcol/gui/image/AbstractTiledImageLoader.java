@@ -41,7 +41,7 @@ abstract class AbstractTiledImageLoader implements ImageLoader {
      */
     @Override
     public void preload(final ImageCache imageCache) {
-        final Image img = ImageCache.getRawImage(imageName);
+        final Image img = imageCache.getRawImage(imageName);
         Preconditions.checkState(img.getWidth() == params.getExpectedImageWidth(),
                 "Image width is %s but expected is %s.", String.valueOf(img.getWidth()),
                 params.getExpectedImageWidth());

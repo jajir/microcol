@@ -1,10 +1,6 @@
 package org.microcol.gui;
 
-import java.util.ResourceBundle;
-
 import org.microcol.i18n.MessageKeyResource;
-import org.microcol.i18n.ResourceBundleControlBuilder;
-import org.microcol.i18n.ResourceBundleFormat;
 import org.microcol.model.Calendar.Season;
 
 /**
@@ -55,12 +51,6 @@ public enum Loc implements MessageKeyResource {
     public static Loc getTerrainDescription(final Season season) {
         final String key = SEASON_PREFIX+season.getKey();
         return valueOf(key);
-    }
-
-    @Override
-    public ResourceBundle.Control getResourceBundleControl() {
-        return new ResourceBundleControlBuilder().setPredefinedFormat(ResourceBundleFormat.xml)
-                .build();
     }
     
 }

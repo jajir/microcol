@@ -6,9 +6,13 @@ import java.util.Locale;
 import java.util.Objects;
 import java.util.ResourceBundle;
 import java.util.Set;
+import java.util.spi.ResourceBundleProvider;
 import java.util.stream.Collectors;
 
+import org.microcol.gui.util.StreamReader;
+
 import com.google.common.base.MoreObjects;
+import com.google.common.base.Preconditions;
 
 /**
  * Internationalization service. Class should be initialized via builder:
@@ -36,14 +40,6 @@ import com.google.common.base.MoreObjects;
  *
  */
 public class I18n {
-    
-    //TODO make it singleton.
-    
-    //TODO move initialization from module here.
-    
-    // TODO Use StremReader in ResourceBundleProviderXmlImpl.
-    
-    // TODO remove unused functionality.
 
     private final static Locale cs_CZ = new Locale("cs", "CZ");
 
@@ -60,6 +56,8 @@ public class I18n {
         private boolean verifyThatAllEnumKeysAreDefined = false;
 
         private boolean verifyThatAllKeysInResourceBundleHaveConstant = false;
+
+        private StreamReader streamReader;
 
         private Locale defaultLocale;
 
@@ -80,16 +78,25 @@ public class I18n {
             return this;
         }
 
+        public Builder setStreamReader(final StreamReader streamReader) {
+            Objects.requireNonNull(streamReader, "Stream reader can't be null");
+            this.streamReader = streamReader;
+            return this;
+        }
+
         public I18n build() {
             return new I18n(verifyThatAllEnumKeysAreDefined,
-                    verifyThatAllKeysInResourceBundleHaveConstant, defaultLocale);
+                    verifyThatAllKeysInResourceBundleHaveConstant, streamReader, defaultLocale);
         }
 
     }
 
     private I18n(final boolean verifyThatAllEnumKeysAreDefined,
-            final boolean verifyThatAllKeyDefinitionsHaveConstant, final Locale defaultLocale) {
-        resourceBundlesManager = new ResourceBundlesManager();
+            final boolean verifyThatAllKeyDefinitionsHaveConstant, final StreamReader streamReader,
+            final Locale defaultLocale) {
+        Preconditions.checkNotNull(streamReader,"Stream reader is null.");
+        final ResourceBundleProvider impl = new ResourceBundleProviderXmlImpl(streamReader);
+        resourceBundlesManager = new ResourceBundlesManager(impl);
         this.verifyThatAllEnumKeysAreDefined = verifyThatAllEnumKeysAreDefined;
         this.verifyThatAllKeysInResourceBundleHaveConstant = verifyThatAllKeyDefinitionsHaveConstant;
         init(defaultLocale);
@@ -126,7 +133,7 @@ public class I18n {
         }
     }
 
-    public <T extends Enum<T> & MessageKeyResource> String getRawMessage(final T messageKeyEnum) {
+    private <T extends Enum<T> & MessageKeyResource> String getRawMessage(final T messageKeyEnum) {
         Objects.requireNonNull(messageKeyEnum, "Message key enum can't be null");
         final String messageKey = messageKeyEnum.toString();
         return getRourceBundle(messageKeyEnum).getString(messageKey);
@@ -142,8 +149,7 @@ public class I18n {
     private <T extends Enum<T> & MessageKeyResource> ResourceBundle initResourceBundle(
             final T messageKeyResource) {
         final String baseName = messageKeyResource.getClass().getCanonicalName();
-        final ResourceBundle resourceBundle = resourceBundlesManager.init(baseName, currentLocale,
-                messageKeyResource.getResourceBundleControl());
+        final ResourceBundle resourceBundle = resourceBundlesManager.init(baseName, currentLocale);
         if (verifyThatAllEnumKeysAreDefined) {
             verifyThatAllEnumKeysAreDefined(messageKeyResource, resourceBundle);
         }
@@ -153,7 +159,7 @@ public class I18n {
         return resourceBundle;
     }
 
-    public <T extends Enum<T> & MessageKeyResource> String getMessage(final T messageKeyEnum,
+    private <T extends Enum<T> & MessageKeyResource> String getMessage(final T messageKeyEnum,
             final Object... arguments) {
         return String.format(getRawMessage(messageKeyEnum), arguments);
     }

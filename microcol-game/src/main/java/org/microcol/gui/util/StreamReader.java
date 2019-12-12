@@ -16,6 +16,13 @@ import com.google.inject.Singleton;
 @Singleton
 public class StreamReader {
 
+    /**
+     * Open stream from class path. It's compatible with java module.
+     * 
+     * @param fileName
+     *            required file name relative to class path.
+     * @return return input stream
+     */
     public InputStream openStream(final String fileName) {
         Preconditions.checkNotNull(fileName, "File name can't be null.");
         final Module module = this.getClass().getModule();

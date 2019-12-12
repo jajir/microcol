@@ -1,18 +1,14 @@
 package org.microcol.gui.image;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.UncheckedIOException;
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.microcol.gui.MicroColException;
+import org.microcol.gui.util.StreamReader;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
+import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
 import javafx.scene.image.Image;
@@ -30,6 +26,13 @@ public class ImageCache {
     private static final String BASE_PACKAGE = "images";
 
     private final Map<String, Image> images = new HashMap<>();
+
+    private final StreamReader streamReader;
+
+    @Inject
+    public ImageCache(final StreamReader streamReader) {
+        this.streamReader = Preconditions.checkNotNull(streamReader);
+    }
 
     /**
      * Return list of all registered image names.
@@ -51,7 +54,7 @@ public class ImageCache {
     public Image getImage(final String name) {
         Image img = images.get(name);
         if (img == null) {
-            img = ImageCache.getRawImage(name);
+            img = getRawImage(name);
             if (img == null) {
                 throw new IllegalStateException(String.format("cant't lod image %s", name));
             }
@@ -69,28 +72,9 @@ public class ImageCache {
      *            path at classpath where is stored image
      * @return return {@link javafx.scene.image.Image} object
      */
-    public static Image getRawImage(final String rawPath) {
+    public Image getRawImage(final String rawPath) {
         final String path = BASE_PACKAGE + "/" + rawPath;
-        //FIXME use StreamReader
-        Module module = ImageCache.class.getModule();
-        PrivilegedAction<InputStream> pa = () -> {
-            try {
-                return module.getResourceAsStream(path);
-            } catch (IOException e) {
-                throw new UncheckedIOException(e);
-            }
-        };
-        
-        
-        try (InputStream stream = AccessController.doPrivileged(pa)) {
-            if (stream != null) {
-                return new Image(stream);
-            } else {
-                throw new MicroColException("Unable to load file '" + path + "'.");
-            }
-        } catch (UncheckedIOException | IOException e) {
-            throw new MicroColException(e.getMessage(),e);
-        }
+        return new Image(streamReader.openStream(path));
     }
 
     /**

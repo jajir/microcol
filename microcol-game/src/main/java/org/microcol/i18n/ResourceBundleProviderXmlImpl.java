@@ -1,16 +1,21 @@
 package org.microcol.i18n;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.UncheckedIOException;
-import java.security.AccessController;
-import java.security.PrivilegedAction;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
 import org.microcol.gui.MicroColException;
+import org.microcol.gui.util.StreamReader;
 
-public class ResourceBundleProviderXmlImpl implements ResourceBundleProviderXml {
+import com.google.common.base.Preconditions;
+
+class ResourceBundleProviderXmlImpl implements ResourceBundleProviderXml {
+
+    private final StreamReader streamReader;
+
+    ResourceBundleProviderXmlImpl(final StreamReader streamReader) {
+        this.streamReader = Preconditions.checkNotNull(streamReader);
+    }
 
     @Override
     public ResourceBundle getBundle(final String baseName, final Locale locale) {
@@ -23,47 +28,21 @@ public class ResourceBundleProviderXmlImpl implements ResourceBundleProviderXml 
         }
     }
 
-    protected String toBundleName(String baseName, Locale locale) {
+    private String toBundleName(String baseName, Locale locale) {
         return ResourceBundle.Control.getControl(ResourceBundle.Control.FORMAT_DEFAULT)
                 .toBundleName(baseName, locale);
     }
 
-    private static ResourceBundle loadPropertyResourceBundle(Module module, String bundleName)
+    private ResourceBundle loadPropertyResourceBundle(Module module, String bundleName)
             throws IOException {
-        String resourceName = toResourceName(bundleName, "xml");
+        final String resourceName = streamReader.toResourceName(bundleName, "xml");
         if (resourceName == null) {
             throw new MicroColException(
                     String.format("Unabble to load xml resource bundle %s in module %s",
                             resourceName, module.getName()));
         }
 
-        PrivilegedAction<InputStream> pa = () -> {
-            try {
-                return module.getResourceAsStream(resourceName);
-            } catch (IOException e) {
-                throw new UncheckedIOException(e);
-            }
-        };
-        try (InputStream stream = AccessController.doPrivileged(pa)) {
-            if (stream != null) {
-                return new XmlResourceBundle(stream);
-            } else {
-                throw new MicroColException(
-                        String.format("Unabble to load xml resource bundle %s in module %s",
-                                resourceName, module.getName()));
-            }
-        } catch (UncheckedIOException e) {
-            throw e.getCause();
-        }
-    }
-
-    private static String toResourceName(String bundleName, String suffix) {
-        if (bundleName.contains("://")) {
-            return null;
-        }
-        StringBuilder sb = new StringBuilder(bundleName.length() + 1 + suffix.length());
-        sb.append(bundleName.replace('.', '/')).append('.').append(suffix);
-        return sb.toString();
+        return new XmlResourceBundle(streamReader.openStream(resourceName));
     }
 
 }

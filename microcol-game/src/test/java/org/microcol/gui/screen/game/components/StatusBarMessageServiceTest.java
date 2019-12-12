@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Test;
 import org.microcol.gui.Loc;
 import org.microcol.gui.LocalizationHelper;
 import org.microcol.gui.preferences.GamePreferences;
+import org.microcol.gui.util.StreamReader;
 import org.microcol.i18n.I18n;
 import org.microcol.model.Colony;
 import org.microcol.model.Location;
@@ -29,6 +30,7 @@ public class StatusBarMessageServiceTest {
     private StatusBarMessageService service;
 
     private final I18n i18n = I18n.builder().setVerifyThatAllEnumKeysAreDefined(true)
+            .setStreamReader(new StreamReader())
             .setVerifyThatAllKeysInResourceBundleHaveConstant(true)
             .setDefaultLocale(new Locale("cs", "CZ")).build();
 

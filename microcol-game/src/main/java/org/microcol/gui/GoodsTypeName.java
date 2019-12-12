@@ -1,10 +1,6 @@
 package org.microcol.gui;
 
-import java.util.ResourceBundle;
-
 import org.microcol.i18n.MessageKeyResource;
-import org.microcol.i18n.ResourceBundleControlBuilder;
-import org.microcol.i18n.ResourceBundleFormat;
 import org.microcol.model.GoodsType;
 
 /**
@@ -97,12 +93,6 @@ public enum GoodsTypeName implements MessageKeyResource {
 
     public static GoodsTypeName getNameForGoodsType(final GoodsType goodsType) {
         return valueOf(goodsType.name().toLowerCase());
-    }
-
-    @Override
-    public ResourceBundle.Control getResourceBundleControl() {
-        return new ResourceBundleControlBuilder().setPredefinedFormat(ResourceBundleFormat.xml)
-                .build();
     }
 
 }

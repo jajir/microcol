@@ -1,10 +1,6 @@
 package org.microcol.gui.screen.menu;
 
-import java.util.ResourceBundle;
-
 import org.microcol.i18n.MessageKeyResource;
-import org.microcol.i18n.ResourceBundleControlBuilder;
-import org.microcol.i18n.ResourceBundleFormat;
 import org.microcol.model.campaign.CampaignName;
 import org.microcol.model.campaign.CampaignNames;
 
@@ -30,12 +26,6 @@ public enum GameMenu implements MessageKeyResource {
     campaignPanel_default_findNewWorld,
     campaignPanel_default_buildArmy,
     campaignPanel_default_thrive;
-
-    @Override
-    public ResourceBundle.Control getResourceBundleControl() {
-        return new ResourceBundleControlBuilder().setPredefinedFormat(ResourceBundleFormat.xml)
-                .build();
-    }
 
     public static GameMenu get(final CampaignName campaignName, final String missionName) {
         if (CampaignNames.defaultCampaign.equals(campaignName)) {
