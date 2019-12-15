@@ -6,6 +6,7 @@ import org.microcol.model.ModelListener;
 import org.microcol.model.Player;
 import org.microcol.model.event.ActionEndedEvent;
 import org.microcol.model.event.ActionStartedEvent;
+import org.microcol.model.event.ActionWasStartedEvent;
 import org.microcol.model.event.BeforeDeclaringIndependenceEvent;
 import org.microcol.model.event.BeforeEndTurnEvent;
 import org.microcol.model.event.ColonyWasCapturedEvent;
@@ -210,6 +211,11 @@ final class ModelListenerImpl implements ModelListener {
 
     @Override
     public void onNewUnitWasBorn(final NewUnitWasBornEvent event) {
+        eventBus.post(event);
+    }
+
+    @Override
+    public void onActionWasStarted(final ActionWasStartedEvent event) {
         eventBus.post(event);
     }
 

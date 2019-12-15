@@ -2,6 +2,7 @@ package org.microcol.model;
 
 import org.microcol.model.event.ActionEndedEvent;
 import org.microcol.model.event.ActionStartedEvent;
+import org.microcol.model.event.ActionWasStartedEvent;
 import org.microcol.model.event.BeforeDeclaringIndependenceEvent;
 import org.microcol.model.event.BeforeEndTurnEvent;
 import org.microcol.model.event.ColonyWasCapturedEvent;
@@ -164,4 +165,12 @@ public interface ModelListener {
      *            required event
      */
     void onNewUnitWasBorn(NewUnitWasBornEvent event);
+
+    /**
+     * Event is raised when unit starts same action like plow field.
+     * 
+     * @param event
+     *            required event
+     */
+    void onActionWasStarted(ActionWasStartedEvent event);
 }

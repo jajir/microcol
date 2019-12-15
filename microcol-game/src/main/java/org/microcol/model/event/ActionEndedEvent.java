@@ -6,6 +6,9 @@ import com.google.common.base.MoreObjects;
 
 /**
  * Event that some action was ended.
+ *
+ * TODO consider renaming. Action is special operation and this is about unit movement.
+ *
  */
 public class ActionEndedEvent extends AbstractModelEvent {
 

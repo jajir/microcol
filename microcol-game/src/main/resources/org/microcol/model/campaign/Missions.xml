@@ -12,22 +12,21 @@
 	<comment>Define messages for missions.</comment>
 
 
-	<entry key="default_m0_g1">Find New World to found a colony. Try to look at left part of map.</entry>
-	<entry key="default_m0_g2">Disembark at New World and found new colony.</entry>
+	<entry key="default_m0_g1">Find New World. Try to look at left part of the map.</entry>
+	<entry key="default_m0_g2">Found new colony.</entry>
 	<entry key="default_m0_g3">Produce 30 cigars.</entry>
 	<entry key="default_m0_g4">Sell cigars in Europe.</entry>
-	<entry key="default_m0_start">Find New World to found a colony. Try to drag ship to the left.</entry>
+	<entry key="default_m0_start">Find New World and found there a colony. Try to drag ship to the left.</entry>
 	<entry key="default_m0_cantMoveToHighSeas">You should not go back Europe. You come from there to find new world. New world should on the West.</entry>
-	<entry key="default_m0_pressNextTurn">Ship can't move in this turn more. Ship don't have any action points. You can check it in right panel where are ship's details. Now press 'Next Turn' button.</entry>
+	<entry key="default_m0_pressNextTurn">Ship can't move more in this turn more. Ship don't have any action points. You can check it in right panel where are ship's details. Now press 'Next Turn' button.</entry>
 	<entry key="default_m0_moveUnitBeforeEndTurn">First turn with ship Try to find New World.</entry>
 	<entry key="default_m0_continentInSight">You found New World. Now lets sail close at try to disembark. Your next task is to found new colony.</entry>
 	<entry key="default_m0_firstColonyWasFounded">Great. You found new colony. Now it's on you how it will thrive.</entry>
-	<entry key="default_m0_produce100cigars">Otevři kliknutím detail kolonie a začni pěstovat tabák a vyrábět z něj cigarety.
-Jednoho osadníka myší rozmísti na pole aby pěstoval tabák.
-Dalšiho pošlí do města vyrábět z tabáku cigarety. Pozor na množství jídla ve městě,
-jestli klesne na nulu, osadnicí začnou umírat hlady. Vyrob 30 doutníků.</entry>
-	<entry key="default_m0_sellCigarsInEuropePort">Konečně. Už máš potřebné množství doutníků. Vezmi je na loď, odvez do Evropy a prodej.</entry>
-	<entry key="default_m0_cigarsWasSold">Výborně. Podařilo se ti prodat těžce získané doutníky.</entry>
+	<entry key="default_m0_produce100cigars">Click at colony a and open colony detail. place unit at field to start producing tobacco. Place another unit to cigar house and start producing cigars from tobacco. 
+Carefully watch amount of food at colony. When food is depleted colonist will die. 
+Your next task is to produce 30 cigars.</entry>
+	<entry key="default_m0_sellCigarsInEuropePort">Finally. You have enough cigars. Now place all cigars to ship a take them to Europe. Sell all cigars in Europe.</entry>
+	<entry key="default_m0_cigarsWasSold">Heureka!. This is the way how to make some gold..</entry>
 	<entry key="default_m0_gameOver">Congratulations. Your first mission is successfully finished.</entry>
 	<entry key="default_m0_cantDeclareIndependence">You can't declare independence. Declaring of independence upset your King. King will try to conquer colonies back by force. You are not strong enough to fight with king.</entry>
 	<entry key="default_m1_g1">Found three colonies.</entry>

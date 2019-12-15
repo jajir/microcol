@@ -951,6 +951,7 @@ public abstract class AbstractUnit implements Unit {
                 "Unsupported type '%s' for this unit '%s", unitAction.getType(), this);
         setAction(actionType.make());
         actionPoints = 0;
+        model.fireActionWasStarted(this);
     }
 
     @Override

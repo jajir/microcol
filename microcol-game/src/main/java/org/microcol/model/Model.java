@@ -543,6 +543,10 @@ public class Model {
         listenerManager.fireNewUnitWasBorn(this, unit);
     }
 
+    void fireActionWasStarted(final Unit unit) {
+        listenerManager.fireActionWasStarted(this, unit);
+    }
+
     /**
      * Move selected unit on defined path. Unit will walk along path as far as
      * it will be possible. How far unit move depends on terrain and number of

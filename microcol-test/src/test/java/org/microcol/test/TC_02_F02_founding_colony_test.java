@@ -52,7 +52,7 @@ public class TC_02_F02_founding_colony_test extends AbstractMicroColTest {
 	WaitForAsyncUtils.waitForFxEvents();
 
 	// verify that option build colony is not here
-	gamePage.verifyThatBuildColonyButtonInHidden();
+	gamePage.verifyThatBuildColonyButtonIsHidden();
 
 	// verify that one unit was moved into city
 	gamePage.verifyNumberOfUnitInRightPanel(1);

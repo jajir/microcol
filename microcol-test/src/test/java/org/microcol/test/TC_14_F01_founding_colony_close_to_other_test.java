@@ -57,7 +57,7 @@ public class TC_14_F01_founding_colony_close_to_other_test extends AbstractMicro
 	assertEquals(1, getModel().getUnitsAt(CLOSE_TO_COLOY_LOCATION).size());
 
 	// Verify that build colony button is hidden.
-	gamePage.verifyThatBuildColonyButtonInHidden();
+	gamePage.verifyThatBuildColonyButtonIsHidden();
 	
 	// Press 'b' to build colony. And verify that there is no new colony.
 	robot.press(KeyCode.B).sleep(10).release(KeyCode.B);
@@ -67,7 +67,7 @@ public class TC_14_F01_founding_colony_close_to_other_test extends AbstractMicro
 	gamePage.nextTurnAndCloseDialogs();
 
 	// Verify that build colony button is hidden.
-	gamePage.verifyThatBuildColonyButtonInHidden();
+	gamePage.verifyThatBuildColonyButtonIsHidden();
 	
 	// Press 'b' to build colony. And verify that there is no new colony.
 	robot.press(KeyCode.B).sleep(10).release(KeyCode.B);

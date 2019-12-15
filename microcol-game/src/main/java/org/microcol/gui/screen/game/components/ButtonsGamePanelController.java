@@ -10,9 +10,11 @@ import org.microcol.gui.util.Listener;
 import org.microcol.model.Model;
 import org.microcol.model.Terrain;
 import org.microcol.model.Unit;
+import org.microcol.model.event.ActionWasStartedEvent;
 import org.microcol.model.event.TurnStartedEvent;
 import org.microcol.model.event.UnitMoveFinishedEvent;
 import org.microcol.model.event.UnitMoveStartedEvent;
+import org.microcol.model.unit.UnitActionType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -100,6 +102,12 @@ public class ButtonsGamePanelController {
     }
 
     @Subscribe
+    private void onActionWasStarted(@SuppressWarnings("unused") final ActionWasStartedEvent event) {
+        selectedUnitManager.getSelectedUnit()
+                .ifPresent(selectedUnit -> evaluatePlowField(selectedUnit));
+    }
+
+    @Subscribe
     private void onIndependenceWasDeclared(
             @SuppressWarnings("unused") final DeclareIndependenceEvent event) {
         view.setVisibleButtonDeclareIndependence(false);
@@ -127,6 +135,10 @@ public class ButtonsGamePanelController {
             return;
         }
         if (!unit.canPlowFiled()) {
+            view.setVisibleButtonPlowField(false);
+            return;
+        }
+        if (!unit.getAction().getType().equals(UnitActionType.noAction)) {
             view.setVisibleButtonPlowField(false);
             return;
         }

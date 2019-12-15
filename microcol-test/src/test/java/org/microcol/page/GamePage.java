@@ -188,10 +188,12 @@ public class GamePage extends AbstractScreen {
 
     public void pressTab() {
 	getRobot().push(KeyCode.TAB);
+	WaitForAsyncUtils.waitForFxEvents();
     }
 
     public void pressP() {
 	getRobot().push(KeyCode.P);
+	WaitForAsyncUtils.waitForFxEvents();
     }
 
     /**
@@ -236,10 +238,18 @@ public class GamePage extends AbstractScreen {
 	return Lists.newArrayList(getNodeFinder().lookup(".unitPanel").queryAllAs(VBox.class));
     }
 
-    public void verifyThatBuildColonyButtonInHidden() {
+    public void verifyThatBuildColonyButtonIsHidden() {
 	assertFalse(getNodeFinder().lookup("#buildColony").tryQuery().isPresent());
     }
 
+    public void verifyThatPlowFieldButtonIsHidden() {
+	assertFalse(getNodeFinder().lookup("#plowField").tryQuery().isPresent());
+    }
+
+    public void verifyThatPlowFieldButtonIsVisible() {
+	assertFalse(getNodeFinder().lookup("#plowField").tryQuery().isEmpty());
+    }
+    
     public ShipWrapper getShipAt(final Location location) {
 	assertFalse(getModel().getUnitsAt(location).isEmpty(),
 		String.format("There should be at leat on ship at %s.", location));

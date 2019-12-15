@@ -17,7 +17,7 @@ import org.testfx.framework.junit5.Start;
 import javafx.stage.Stage;
 
 /**
- * Test verify plow field action. Also verify that action points are correctli
+ * Test verify plow field action. Also verify that action points are correctly
  * shown in right panel.
  */
 @ExtendWith(ApplicationExtension.class)

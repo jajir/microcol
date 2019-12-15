@@ -2,6 +2,7 @@ package org.microcol.model;
 
 import org.microcol.model.event.ActionEndedEvent;
 import org.microcol.model.event.ActionStartedEvent;
+import org.microcol.model.event.ActionWasStartedEvent;
 import org.microcol.model.event.BeforeDeclaringIndependenceEvent;
 import org.microcol.model.event.BeforeEndTurnEvent;
 import org.microcol.model.event.ColonyWasCapturedEvent;
@@ -162,6 +163,11 @@ public class ModelListenerAdapter implements ModelListener {
 
     @Override
     public void onNewUnitWasBorn(final NewUnitWasBornEvent event) {
+        // Do nothing.
+    }
+
+    @Override
+    public void onActionWasStarted(final ActionWasStartedEvent event) {
         // Do nothing.
     }
 

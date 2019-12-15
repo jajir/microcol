@@ -8,6 +8,7 @@ import java.util.function.Function;
 
 import org.microcol.model.event.ActionEndedEvent;
 import org.microcol.model.event.ActionStartedEvent;
+import org.microcol.model.event.ActionWasStartedEvent;
 import org.microcol.model.event.BeforeDeclaringIndependenceEvent;
 import org.microcol.model.event.BeforeEndTurnEvent;
 import org.microcol.model.event.ColonyWasCapturedEvent;
@@ -322,6 +323,14 @@ final class ListenerManager {
         logger.info("New unit was born: {}.", event);
 
         listeners.forEach(listener -> listener.onNewUnitWasBorn(event));
+    }
+
+    void fireActionWasStarted(final Model model, final Unit unit) {
+        final ActionWasStartedEvent event = new ActionWasStartedEvent(model, unit);
+
+        logger.info("Action was started: {}.", event);
+
+        listeners.forEach(listener -> listener.onActionWasStarted(event));
     }
 
     private void executeInSeparateThread(Consumer<ModelListener> action) {
