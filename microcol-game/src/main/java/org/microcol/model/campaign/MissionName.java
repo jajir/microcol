@@ -7,7 +7,7 @@ public interface MissionName {
 
     String PATH_PREFIX = "/maps/";
 
-    String PATH_SUFFIX = ".json";
+    String PATH_SUFFIX = ".microcol";
 
     /**
      * Name used for identification of mission. Name is also used and key to
@@ -19,7 +19,7 @@ public interface MissionName {
 
     /**
      * Mission model file name at class path. It's something like
-     * <i>/maps/03-before-game-over.json</i>.
+     * <i>/maps/03-before-game-over.microcol</i>.
      *
      * @return misson definition file name at class path
      */
