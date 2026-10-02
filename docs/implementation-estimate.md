@@ -6,6 +6,8 @@ Completing the gameplay scope remains estimated at **about 2,400 hours**. Develo
 
 This supersedes the earlier 3,000-hour gameplay-only and 5,000-hour generic desktop-release budgets. Linux and macOS are confirmed Steam targets. For comparison, the existing generic Windows/macOS/Linux packaging allowance is retained; Windows was a previous working assumption, and a Windows Steam release is not added here. Explicitly removing Windows would require revising the shared platform packages, rather than subtracting a complete independent port. The estimate still assumes polish of the existing visual style and one architecture per OS; Intel versus Apple Silicon, or both, remains a Mac scope decision. Post-release maintenance is separate.
 
+The [open points chapter](#open-points-content-quality-and-real-user-testing) records unresolved graphics, sound, music and player-testing choices. Its provisional additions are not included in the 5,400-hour budget. Known scope additions should receive their own estimates rather than silently consuming contingency.
+
 ## Calibration and assumptions
 
 - The reference is the developer's estimate that implementing a small, understood behavior like **COL-006 would take four hours**. COL-006 already matches the stated rule, so it receives no new implementation hours.
@@ -146,6 +148,75 @@ Auto-Cloud can avoid an in-game API integration, but cross-platform sync needs e
 Deck compatibility review is separate from ordinary Steam release eligibility; a Linux build alone does not establish controller usability or Deck verification. The optional estimate is provisional until a prototype is tested. [Deck compatibility review](https://partner.steamgames.com/doc/steamhardware/compat)
 
 A demo, festival participation, Workshop, leaderboards and broader marketing remain separate choices without an allowance here. Before implementation, settle Mac architecture coverage, whether Windows remains a release target, and which optional Steam features are actually promised on the store page.
+
+## Open points: content quality and real-user testing
+
+Status: open, 2026-10-02. The project owner should select the release scope and name an acceptance owner for each selected package. These are bounded planning allowances, not artist/composer quotations or automatically approved scope. Hours include the relevant design, implementation and focused checks; fees and participant time are treated separately. The four-hour programming reference does not establish art, composition or research productivity.
+
+### Existing allowances and unresolved decisions
+
+- **Graphics:** 160 likely hours already covers polishing 10–12 screen families and 16–24 small assets. Steam artwork and trailer production have separate 48-hour allowances each. None establishes that every new profession, equipment state, ship, building, terrain improvement, native settlement or Congress view has suitable game art. Create a coverage inventory with reuse/new/replace decisions, required variants, dimensions, owner and acceptance criteria. [ImageLoaderUnit](../microcol-game/src/main/java/org/microcol/gui/image/ImageLoaderUnit.java) uses cells from a shared atlas, so counting PNG/SVG files is not a count of usable assets. Distinct portraits and elaborate animations are separate choices, not assumed prerequisites for every rule.
+- **Sound and music:** [MusicController](../microcol-game/src/main/java/org/microcol/gui/MusicController.java) already starts one bundled WAV, and [MusicPlayer](../microcol-game/src/main/java/org/microcol/gui/MusicPlayer.java) provides streaming, volume and stop behavior. The inspected path plays a hardcoded track to its end; it does not provide a playlist or event-driven effects system. Decide whether to retain the current track, how many effects/variants are needed, desired music duration and whether music is sourced or composed. Existing playback and settings receive credit.
+- **Real users:** 160 likely UX hours already funds two rounds of about five participants, including 72 hours of usability improvements. The separate 240-hour integration allowance includes balancing and complete playthroughs; accessibility has 100 hours. Decide whether two observed rounds are enough and whether an organized external beta is required. Short usability sessions, long-game pacing/balance tests and automated UI tests answer different questions.
+
+### Provisional additional work
+
+All figures below are extra person-hours before reserve, except mutually exclusive music choices as noted. Add only work beyond the existing allocations.
+
+| ID | Open work package | Low | Likely | High | Bounded scope and decision needed |
+| --- | --- | ---: | ---: | ---: | --- |
+| OP-01 | Additional graphics batch | 64 | 120 | 240 | An illustrative batch of 25 simple icons or unit/state variants in the existing style, beyond the funded 16–24 adjustments; includes creation, export, integration and review. Confirm the actual inventory first. Excludes a new art direction, complex portraits and animation sets. |
+| OP-02 | Shared audio functionality | 24 | 48 | 80 | Reuse existing playback/settings; add simultaneous music/effects, category volume/mute and cue lifecycle. Count this foundation once for the combined audio scope. |
+| OP-03 | Sound-effect content and hooks | 48 | 80 | 136 | About 25 short cues sourced from suitable libraries, edited/level-matched, connected to events and checked. Decide cue list, variants and repetition limits. |
+| OP-04A | Curated existing soundtrack | 24 | 48 | 88 | About four tracks totaling 15–20 minutes; selection, editing, looping/playlist transitions and listening checks. Decide track selection and approval criteria. |
+| OP-04B | Original soundtrack, replacing OP-04A | 144 | 248 | 424 | Compose/arrange 15–20 finished minutes, with two review rounds, production/editing and the same playlist integration. No recorded ensemble or voice acting. |
+| OP-05 | One additional moderated UX round | 40 | 64 | 104 | Five completed one-hour sessions plus two reserve recruits; preparation, recruitment, analysis, 24 likely hours of additional usability improvements and rechecking. Select only if a third round is wanted. |
+| OP-06 | Organized external beta | 64 | 112 | 192 | Twelve active players recruited from 16–20 candidates, two build waves over approximately four weeks, onboarding/support, report collection, reproduction/triage and rechecking. Excludes participant play time and production fixes already funded elsewhere. |
+| OP-07 | Additional guided learning module | 48 | 80 | 128 | One module with 8–12 guided steps, reusing the existing campaign framework; design, text, triggers and integrated checks. Excludes new mechanics, artwork/voice and usability fixes allocated elsewhere. |
+
+OP-01 is a sizing example, not a claim that 25 assets complete the game. A full visual redesign needs a new inventory and estimate; it replaces relevant polish work instead of adding every old and new art budget together. A first representative asset should establish the actual time per type and variant.
+
+Audio totals are **96 / 176 / 304 hours** for shared functionality, effects and curated music, or **216 / 376 / 640 hours** with original music instead. Do not add both soundtrack rows. General Linux/macOS audio compatibility remains in the existing platform allowance, while final release-content rights/credits inventory remains in Steam publishing; the new packages cover only the new content's sourcing records and functionality. Voice acting, elaborate ambience, adaptive musical layers and extensive custom sound recording remain unsized alternatives.
+
+### Real-player test plan and completion evidence
+
+Before recruitment, choose critical journeys, player experience levels, platform/display coverage and what evidence will constitute completion. Include genre newcomers as well as experienced strategy players and independent evidence from Linux and the chosen Mac architecture(s). The existing accessibility allocation is a practical implementation pass; testing with particular accessibility needs or assistive technologies requires an explicit participant and device plan.
+
+For OP-05, the likely 64 team hours comprise 12 for planning/recruitment, 10 for sessions/preparation, 10 for analysis, 24 for usability improvements and eight for rechecking. This is additional to the two existing rounds. Participant sessions and selected follow-ups contribute roughly 6.5–9 external hours, tracked separately.
+
+For OP-06, the likely 112 team hours comprise 24 for planning/recruitment/onboarding, 32 for participant support/build coordination, 40 for finding review/triage and 16 for rechecking. Twelve players at 8–12 hours each provide **96–144 external player-hours**. Those hours are not included in the staff total; if hired QA staff perform them, add their labor explicitly. Four calendar weeks do not guarantee twelve completed campaigns. Measure campaign duration, use prepared saves for late-game coverage and agree how many fresh-start campaigns must also finish before fixing the player-hours budget.
+
+Provisional exit criteria to agree before testing:
+
+1. Every selected core task has observed evidence and a chosen success threshold, for example four of five participants completing it without moderator intervention. Such a small sample does not statistically validate the whole audience.
+2. Midgame and independence receive play evidence on the supported platforms, with the agreed fresh-start campaign sample completed.
+3. Every accepted finding has a reproduction attempt, severity, owner, budget allocation and disposition.
+4. No known release-blocking crash, progression blocker or save-loss issue remains unresolved; important usability changes have been rechecked.
+
+Ordinary functional, balancing and platform fixes remain in their existing budgets. OP-05 includes its stated extra usability-fix allowance; OP-06 primarily funds organizing and processing external evidence. Neither is an unlimited fix budget. If findings exceed those allowances or criteria remain unmet, decide explicitly whether to revise scope, extend testing or increase remediation effort.
+
+### Other estimate gaps to resolve
+
+| Open point | What may be missing | How to close it without duplicate budgeting |
+| --- | --- | --- |
+| Complete art coverage | The polish allowance may leave required new game elements represented inadequately. | Map each planned feature to assets/states, identify reuse and price only missing production. Approve samples before bulk work. |
+| Teaching and authored content | A quickstart does not necessarily teach the full economy, diplomacy or revolution. [Default_0_mission](../microcol-game/src/main/java/org/microcol/model/campaign/Default_0_mission.java) already teaches movement, founding and trade; [ColonizopediaDialog](../microcol-game/src/main/java/org/microcol/gui/screen/colonizopedia/ColonizopediaDialog.java) currently has an empty main panel. | Credit the existing tutorial and 120-hour documentation allowance. Decide whether to add OP-07 and whether the reference is a short overview or a complete encyclopedia. Estimate an encyclopedia from article/word count plus navigation, review and maintenance; no defensible total is set yet. |
+| Enjoyment and difficulty | Correct rules do not establish satisfying choices, AI behavior, pacing or replayability throughout a long game. | Assign explicit scenarios and success measures inside the 240-hour integration/balance allocation; use OP-06 for outside evidence. Re-estimate additional balancing iterations only when their scope is known. |
+| Launch languages | Working [i18n infrastructure](../microcol-game/src/main/java/org/microcol/i18n/I18n.java) and English/Czech resources do not establish completeness of newly added text. | Decide English-only, maintained Czech or further languages. Inventory new/changed words across game, tutorial, reference, store and help; quote translation/editing and in-game linguistic/layout QA. Reuse the existing infrastructure. |
+| Platform and save promises | Windows inclusion, Mac CPUs, minimum hardware/display coverage and how many released save versions must load are not fully specified. | Fix the support/migration matrix and acceptance cases, then adjust existing packages. Steam features and the second Mac architecture already have separate estimates; do not add them again here. |
+| Maintenance beyond the assumed horizon | Twelve quarterly dependency reviews cover 36 months, while the 30-hour/week plan is about 42 months. Twenty-four delivery increments and six months of post-release support are also bounded. | Recalculate from actual schedule and change frequency. A 42-month quarterly-review scenario needs about two extra reviews, or eight likely hours before reserve. Major migrations and support after month six need separate estimates. |
+| Audience building | A completed Steam page and trailer do not fund an ongoing wishlist campaign, demos/festivals or sustained community work. | Select concrete deliverables and cadence before estimating. Credit already funded store media and initial support setup. |
+| Cash, specialists and availability | License fees, participant rewards, hardware, contractors and lead times are not developer coding hours. | Keep a cash budget alongside effort. Record who supplies each hour, obtain quotes and schedule review/approval time. A contractor's effort can replace internal effort; do not cost the same labor twice. |
+
+Participant cash costs can be planned as completed sessions multiplied by an agreed reward, plus recruitment/service expenses. Audio/art license fees and outsourcing prices require actual selections or quotes; no market rates are assumed here. Original music includes composer effort in person-hours. An external composer's quote is how that effort is purchased, not an additional set of developer hours.
+
+### Illustrative selection, not a revised commitment
+
+If the project chooses shared audio, 25 effects, curated music, one extra UX round and the external beta, the likely addition is **48 + 80 + 48 + 64 + 112 = 352 hours**. The first-release plan would become **(4,344 + 352) × 1.25 = 5,870 hours**, approximately **5,900 hours**, before post-release support. This example keeps the current graphics allocation and does not resolve any asset shortfall.
+
+Choosing original music instead adds a further 200 likely hours before reserve, making the example **6,120 hours** with reserve. Selecting the illustrative extra graphics batch adds 120 hours before reserve, or 150 to the reserve-inclusive total. These are alternatives and selections, not a reason to sum every open point automatically.
+
+To close this chapter, approve the content inventory, soundtrack approach, player-study scope, launch-language/platform matrix and responsible reviewers. Calibrate a representative asset, audio cue and research round alongside implementation work, then revise the main budget with only the selected, non-overlapping additions.
 
 ## Expanded budget
 
