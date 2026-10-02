@@ -2,9 +2,9 @@
 
 Estimate date: 2026-10-02. Based on the [rules gap analysis](gap-analysis.md) at documentation commit [`f619e71c`](https://github.com/jajir/microcol/commit/f619e71cba9c7e7380c098e9b9cad20b59af01ed).
 
-Completing the gameplay scope remains estimated at **about 2,400 hours**. Adding development-process setup and upkeep, UI automation, graphics polish, human UX testing and desktop release work adds **about 1,600 hours**. The expanded first-release estimate is therefore **about 4,000 person-hours before reserve**, or **5,000 hours for planning with a 25% reserve**.
+Completing the gameplay scope remains estimated at **about 2,400 hours**. Development-process setup and upkeep, UI automation, graphics polish, human UX testing and desktop release work add **about 1,600 hours**. Publishing the Linux and macOS versions on Steam adds a further **360 likely hours**. The first-release estimate is now **4,344 person-hours before reserve**, or **about 5,400 hours for planning with a 25% reserve**.
 
-This expanded budget supersedes the earlier 3,000-hour gameplay-only planning budget. It assumes reuse and polish of the existing visual style, plus Windows, macOS and Linux support with one architecture per OS. These are working scope assumptions, not confirmed platform or art-direction decisions. Post-release maintenance is estimated separately below.
+This supersedes the earlier 3,000-hour gameplay-only and 5,000-hour generic desktop-release budgets. Linux and macOS are confirmed Steam targets. For comparison, the existing generic Windows/macOS/Linux packaging allowance is retained; Windows was a previous working assumption, and a Windows Steam release is not added here. Explicitly removing Windows would require revising the shared platform packages, rather than subtracting a complete independent port. The estimate still assumes polish of the existing visual style and one architecture per OS; Intel versus Apple Silicon, or both, remains a Mac scope decision. Post-release maintenance is separate.
 
 ## Calibration and assumptions
 
@@ -80,6 +80,73 @@ Human UX tests examine whether players understand and can use the game. Automate
 
 Twelve quarterly dependency reviews cover three years. Each additional review adds about four likely hours; a major migration requires its own revised estimate. Certificate/account fees, test hardware and services are expenses, not included person-hours.
 
+## Steam release readiness: Linux and macOS
+
+Research date: 2026-10-02. This section compares the repository with current public Valve/Apple documentation. No Steamworks account, private app checklist or existing publisher configuration was inspected, so account-side work is unverified rather than established absent. No account was created, payment made, build uploaded or release published.
+
+### Missing publishing and delivery work
+
+The previous estimate explicitly excluded storefront integration. The following increments reuse the already funded native packages, CI, runtime refresh, player documentation and game graphics. These are our engineering estimates, not Valve estimates; calendar waiting periods are not billed as work hours.
+
+| Steam-specific work | Low | Likely | High | Scope and completion evidence |
+| --- | ---: | ---: | ---: | --- |
+| Publisher onboarding and account permissions | 12 | 24 | 40 | Publisher identity, agreements, bank/tax information, app registration and access permissions; reduce if already completed. |
+| Store setup and commercial configuration | 12 | 24 | 40 | One English listing: copy, supported platforms/languages, tags, system requirements, pricing and regional settings. |
+| Store/library artwork and screenshots | 24 | 48 | 80 | Adapt approved art into required capsules, library graphics and icons; capture at least five actual gameplay screenshots. This is separate from in-game graphics polish. |
+| Gameplay trailer | 24 | 48 | 80 | Capture, edit, sound/captions, export and upload one straightforward trailer using existing game content. |
+| Content survey, ratings and release-content inventory | 16 | 32 | 56 | Complete required disclosures, check intended regional availability, identify shipped asset/font/runtime rights and notices, and define the product file list. |
+| Store/build reviews and launch procedure | 12 | 24 | 48 | Submit checklists, handle one modest feedback cycle, rehearse launch and set the approved build live. General release documentation is already budgeted. |
+| Steam support/community setup | 8 | 16 | 24 | Configure support links, initial FAQ and discussion guidance, reusing existing player documentation. |
+| SteamPipe depots and upload/promotion scripts | 28 | 56 | 96 | Platform-filtered content depots, package access, repeatable uploads, protected build credentials, private test branch and promotion/rollback procedure. Reuse CI. |
+| Steam launcher integration | 12 | 24 | 40 | Configure executable paths, working directories and permissions; diagnose Steam-specific environment behavior and check the overlay where applicable. |
+| Testing Steam-installed builds | 32 | 64 | 112 | Fresh install, launch, offline play, updates with existing saves, verify/reinstall and branch rollback on Linux and macOS. Excludes broad gameplay/platform regression already funded. |
+| **Steam increment** | **180** | **360** | **616** | **216 likely publishing hours plus 144 technical hours.** |
+
+The increment assumes native packages already work, one shared product with Linux/macOS depots, one English store page, existing art available for adaptation and a straightforward publishing entity. It excludes company formation, legal disputes, translations, paid promotion, an extensive wishlist campaign and optional Steam product features.
+
+### Platform requirements and project findings
+
+- **macOS distribution:** Valve requires new Mac submissions to be 64-bit and Apple-notarized. Produce a signed, notarized application bundle with its bundled JVM/JavaFX libraries and tested entitlements. The current DMG script is not that completed workflow. This belongs primarily to the existing 200-hour packaging and 96-hour runtime-refresh allocations, not a second full port estimate. Steam-specific launch configuration is in the increment. The older minimum-OS statements elsewhere on Valve's page are not adopted as this game's support matrix. [Steam platform requirements](https://partner.steamgames.com/doc/store/application/platforms)
+- **Mac CPU support:** choose Intel, Apple Silicon or both and test architecture-matched JVM/JavaFX payloads. Java bytecode alone does not make the native runtime universal. A second Mac architecture has a provisional 40-hour increment under the existing architecture allowance, with platform QA adjusted if necessary. [Apple universal-binary guidance](https://developer.apple.com/documentation/apple-silicon/building-a-universal-macos-binary)
+- **Native Linux distribution:** select an appropriate Steam Linux Runtime target and verify the bundled native dependencies, graphics/audio and launcher inside that environment. A working development-machine build is insufficient evidence. Runtime/platform fixes use the existing allowances; Steam install/update scenarios are additional. [Valve Linux development guidance](https://partner.steamgames.com/doc/store/application/platforms/linux)
+- **Steam installation:** upload runnable application contents through SteamPipe, configure OS-filtered depots and launch options, and test customer package access. Shipping a DMG alone is not the finished Steam launch experience. No SteamPipe/VDF/depot configuration or Steam client integration was found in the repository. [Steam uploading documentation](https://partner.steamgames.com/doc/sdk/uploading)
+- **Save preservation:** [PersistingTool](../microcol-game/src/main/java/org/microcol/gui/util/PersistingTool.java) already stores saves outside the install directory in ~/.microcol. However, [SettingService](../microcol-game/src/main/java/org/microcol/gui/preferences/SettingService.java) moves all non-backup files there into backup folders when the settings schema version differs. This can relocate saves and campaign progress; it is not triggered automatically by every application version. Define migration/recovery behavior and test updates with existing saves. Fixes belong to existing persistence/compatibility work; Steam update tests are in the new allowance.
+- **Release-content inventory:** use explicit depot file lists for shipped binaries, assets and notices. Keep the reference manual PDF and development files out of product depots. The project still needs evidence of distribution rights for the actual shipped content; this assessment does not determine legal ownership. Valve's onboarding rules require adequate rights. [Onboarding](https://partner.steamgames.com/doc/gettingstarted/onboarding)
+
+### Store requirements, fees and calendar dependencies
+
+Required store work includes capsule/library images and icons, at least five gameplay screenshots, and a trailer. The current screenshot specification is at least 1920×1080 in 16:9; use the current templates when producing assets. A trailer is explicitly required in the official release guidance, not merely an optional promotion item. [Asset overview](https://partner.steamgames.com/doc/store/assets), [screenshots](https://partner.steamgames.com/doc/store/assets/standard), [trailers](https://partner.steamgames.com/doc/store/trailer)
+
+Complete the content survey before submitting for review, including applicable mature-content and player-facing AI-content disclosures. Its answers also feed regional ratings. Describe the actual shipped content rather than assuming every AI-assisted development activity has the same disclosure treatment. [Content survey](https://partner.steamgames.com/doc/gettingstarted/contentsurvey)
+
+| Dependency or expense | Planning treatment |
+| --- | --- |
+| Steam Direct fee | US$100 per product, plus applicable taxes; Linux and macOS can be builds of the same product. The fee is recoupable after US$1,000 Adjusted Gross Revenue under Valve's terms. [Fee documentation](https://partner.steamgames.com/doc/gettingstarted/appfee) |
+| Apple Developer membership | Budget US$99 per year or local equivalent if membership is not already available for the signing/notarization workflow. [Apple enrollment](https://developer.apple.com/programs/enroll/) |
+| Identity/bank/tax verification | Owner-supplied information is needed; detailed onboarding currently allows 10–15 business days for tax verification. This is external elapsed time. [Onboarding](https://partner.steamgames.com/doc/gettingstarted/onboarding) |
+| Fee-to-release wait | Official pages currently disagree: detailed onboarding says 21 days, while Steam Direct says 30. Plan 30 days conservatively and confirm the app checklist's actual eligibility before setting a date. [Onboarding](https://partner.steamgames.com/doc/gettingstarted/onboarding), [Steam Direct](https://partner.steamgames.com/steamdirect/) |
+| Public Coming Soon page | Keep it visible for at least two weeks before release. Start it well before the intended launch. [Release process](https://partner.steamgames.com/doc/store/releasing) |
+| Store and build reviews | Both must pass. Valve quotes typical 3–5 business-day reviews and asks for at least seven business days of lead time; allow feedback/rework. [Review process](https://partner.steamgames.com/doc/store/review_process) |
+
+Waiting periods may overlap; do not automatically add them as a sequential 30+14-day delay. Submit the store page for review before submitting the build; both must be approved before release. An intended release date alone does not publish the game. The release procedure must include the final publisher action. [Release process](https://partner.steamgames.com/doc/store/releasing)
+
+### Optional Steam scope
+
+Steamworks API integration is not required to ship. SteamPipe upload tooling and integration of native Steam APIs into the game are different tasks. Basic distribution can proceed without an achievements/DRM/native-API project. [Steamworks API overview](https://partner.steamgames.com/doc/sdk/api)
+
+| Optional addition | Low | Likely | High | Boundary |
+| --- | ---: | ---: | ---: | --- |
+| Steam Auto-Cloud | 24 | 48 | 88 | Save selection, quotas, cross-OS paths and Linux↔Mac device/conflict tests, plus targeted persistence changes. |
+| Achievements with a Java/native API bridge | 40 | 72 | 128 | A small achievement set, native library packaging, initialization/callbacks and verification. Share bridge costs with later API features. |
+| Steam Deck/controller adaptation | 120 | 200 | 280 | Dedicated prototype and work on controller navigation, text entry, readability, performance and suspend/resume. |
+| Second native Mac CPU architecture | 24 | 40 | 72 | Additional build/package verification; revisit the compatibility matrix and native-dependency constraints. |
+
+Auto-Cloud can avoid an in-game API integration, but cross-platform sync needs explicit root overrides. Current saves, campaign progress and machine-specific settings need different treatment; arbitrary external save locations also need a defined policy. Account switching, offline changes and conflict handling must be exercised. [Steam Cloud](https://partner.steamgames.com/doc/features/cloud)
+
+Deck compatibility review is separate from ordinary Steam release eligibility; a Linux build alone does not establish controller usability or Deck verification. The optional estimate is provisional until a prototype is tested. [Deck compatibility review](https://partner.steamgames.com/doc/steamhardware/compat)
+
+A demo, festival participation, Workshop, leaderboards and broader marketing remain separate choices without an allowance here. Before implementation, settle Mac architecture coverage, whether Windows remains a release target, and which optional Steam features are actually promised on the store page.
+
 ## Expanded budget
 
 | Component | Likely hours |
@@ -88,13 +155,14 @@ Twelve quarterly dependency reviews cover three years. Each additional review ad
 | SDLC and UI automation additions | 484 |
 | Graphics, UX and accessibility additions | 420 |
 | Release engineering and upkeep additions | 672 |
-| **First-release effort before reserve** | **3,984** |
-| 25% reserve applied once to the combined effort | 996 |
-| **First-release planning budget** | **4,980 ≈ 5,000** |
+| Steam publishing and technical delivery additions | 360 |
+| **First-release effort before reserve** | **4,344** |
+| 25% reserve applied once to the combined effort | 1,086 |
+| **First-release planning budget** | **5,430 ≈ 5,400** |
 
-The additional work totals **848 / 1,576 / 2,748 hours** across the low/likely/high scenarios. The earlier gameplay-only scenario range of roughly 1,500–4,000 hours remains a separate source of uncertainty. Combining those endpoints produces a broad expanded envelope of approximately 2,300–6,700 hours before an explicit reserve; it is not a forecast confidence interval or a guaranteed ceiling.
+The additional work, including Steam, totals **1,028 / 1,936 / 3,364 hours** across the low/likely/high scenarios. The earlier gameplay-only scenario range of roughly 1,500–4,000 hours remains a separate source of uncertainty. Combining those endpoints produces a broad expanded envelope of approximately 2,500–7,400 hours before an explicit reserve; it is not a forecast confidence interval or a guaranteed ceiling. Optional Steam features are excluded from this total.
 
-Do not add the new work to the previous 3,000-hour reserve-inclusive budget and then apply 25% again. Rebuild the budget from the 2,408-hour baseline plus incremental work, as above. Known recurring work is part of the estimate; contingency is for uncertainty, not a substitute for maintenance.
+Do not add new work to the previous 3,000-hour or 5,000-hour reserve-inclusive budgets and then apply 25% again. Rebuild from the 2,408-hour baseline plus incremental work, as above. Known recurring work is part of the estimate; contingency is for uncertainty, not a substitute for maintenance.
 
 ## Scope boundaries and existing investment
 
@@ -112,7 +180,7 @@ Existing repository investment is credited:
 
 No application tests, builds or package installations were run for this expanded estimate. It combines repository inspection with engineering judgment and bounded work assumptions.
 
-Excluded scope still includes a replacement art style or large new asset set, custom music/audio, extensive animations, full screen-reader support/certification, a substantial interactive tutorial, storefront integration, automatic updates, cloud services, new translations, strong compatibility with every historical save, and research to reproduce undocumented original-game behavior. Where the manual leaves formulas unspecified, the estimate assumes the project can make and document reasonable decisions promptly.
+Excluded scope still includes a replacement art style or large new in-game asset set, custom music/audio, extensive animations, full screen-reader support/certification, a substantial interactive tutorial, other storefronts, an independent automatic updater, optional Steam features listed above, other cloud services, new translations, strong compatibility with every historical save, and research to reproduce undocumented original-game behavior. Steam store media and Steam-managed build updates are now included. Where the manual leaves formulas unspecified, the estimate assumes the project can make and document reasonable decisions promptly.
 
 Scope changes should adjust the affected package rather than multiply the entire project. One desktop would reduce the likely packaging row from 200 to approximately 112 hours, with additional compatibility savings to be assessed. An extra CPU architecture adds approximately 40 likely packaging/verification hours. A major visual refresh could make the graphics row 2–4 times larger and may also change UX scope; it needs a separate asset inventory.
 
@@ -132,20 +200,20 @@ This is separate from the first-release budget. Assume a small initial audience,
 | **Monthly effort** | **22** | **44** | **88** |
 | **First six months, before reserve** | **132** | **264** | **528** |
 
-At the likely level, reserve **330 hours for the first six months including 25% contingency**. First release plus that support period therefore has a combined planning budget of approximately **5,300 person-hours**. This is a staffing allowance, not a promise to resolve unlimited incoming issues. It ends after six months and does not include feature development.
+At the likely level, reserve **330 hours for the first six months including 25% contingency**. First release plus that support period now has a combined planning budget of approximately **5,800 person-hours** (5,430 + 330 = 5,760). Existing patch/triage allowances cover Steam patch administration and small-audience support; initial hub setup is in the Steam increment. Sustained community promotion or support growth needs a separate allowance. This is a staffing allowance, not a promise to resolve unlimited incoming issues. It ends after six months and does not include feature development.
 
 ## Calendar translation
 
-For one person supplying all disciplines in the **5,000-hour first-release planning budget**:
+For one person supplying all disciplines in the rounded **5,400-hour first-release planning budget**:
 
 | Productive development time | Approximate duration |
 | --- | --- |
-| 30 hours/week | About 167 weeks — 38 months |
-| 20 hours/week | 250 weeks — 58 months |
-| 10 hours/week | 500 weeks — 9.6 years |
+| 30 hours/week | 180 weeks — about 42 months |
+| 20 hours/week | 270 weeks — about 62 months |
+| 10 hours/week | 540 weeks — about 10.4 years |
 
 These are total productive project hours, including testing, design and process work, not coding-only hours. Do not deduct that process time again when translating effort into duration. Holidays and interruptions that reduce the average extend the schedule. Specialists may perform some work in parallel, but dependencies and coordination prevent simply dividing elapsed time by team size. The separate six-month post-release period is not included in this pre-release duration.
 
 ## Recalibration
 
-Re-estimate after completing 5–10 representative tasks. Include a small rule correction, a persistent order, a feature connected to player controls, part of a new subsystem, one automated UI journey and one tested release package. Record implementation, verification, test repair and integration time separately. Compare programming work with the four-hour reference; recalibrate UX/art/release work from their measured work units. Update overlapping allocations, milestone counts, platform/art assumptions and reserve before treating the estimate as a delivery commitment.
+Re-estimate after completing 5–10 representative tasks. Include a small rule correction, a persistent order, a feature connected to player controls, part of a new subsystem, one automated UI journey and one native package installed through a private Steam branch. Record implementation, verification, test repair and integration time separately. Compare programming work with the four-hour reference; recalibrate UX/art/release work from measured work units. Update overlapping allocations, milestone counts, platform/art assumptions and reserve. Recheck Steam/Apple requirements and the actual app checklist before setting the release date.
