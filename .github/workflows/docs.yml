@@ -2,15 +2,15 @@ name: Publish documentation
 
 on:
   push:
-    branches: [develop]
+    branches: [develop, main]
   pull_request:
-    branches: [develop]
+    branches: [develop, main]
   workflow_dispatch:
 
 permissions:
   contents: read
 
-# Publish the newest develop state; never interrupt an active deployment.
+# Check both branches; publish main without interrupting an active deployment.
 concurrency:
   group: docs-${{ github.ref }}
   cancel-in-progress: false
@@ -44,7 +44,7 @@ jobs:
           path: target/docs-site
 
   deploy:
-    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/develop'
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
     needs: build
     runs-on: ubuntu-latest
     permissions:

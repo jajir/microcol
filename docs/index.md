@@ -2,7 +2,8 @@
 
 MicroCol is a colonization strategy game implemented in Java and JavaFX. This
 website publishes the documentation maintained in the repository's `docs/`
-directory. Development and documentation changes are integrated on `develop`.
+directory on `main`. Development and documentation changes are integrated on
+`develop` and promoted to `main` for publication.
 
 | Page | Purpose |
 | --- | --- |

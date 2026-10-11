@@ -4,6 +4,9 @@ Use `develop` for ongoing development and integration unless the user requests
 another branch. Base isolated local-worker worktrees on the agreed `develop`
 revision and bring their accepted changes back to `develop`.
 
+Use `main` for the published project state. Promote accepted `develop` changes
+to `main` when publishing; pushes to `main` deploy the documentation.
+
 # Documentation
 
 Maintain project documentation in `docs/` alongside relevant code and configuration
@@ -15,7 +18,7 @@ results, with dates for environment observations and test evidence.
 Follow [the documentation workflow](docs/publishing.md) for new pages, relative
 links, local preview, and validation. Run the documented strict MkDocs build after
 documentation changes. Commit sources and assets, not generated HTML. The Pages
-workflow publishes pushed `develop` changes; do not duplicate new pages in the
+workflow publishes pushed `main` changes; do not duplicate new pages in the
 legacy Maven site or use its old publishing commands.
 
 Preserve `microcol-site` in place as a useful design and development reference,
