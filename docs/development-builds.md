@@ -151,7 +151,7 @@ workflow results for the pushed commit before reporting a task as published.
 
 Local checks on **11 October 2026** used macOS 27 ARM64, JDK 17.0.18 and Maven
 3.9.12. The integrated Mac distribution build passed **601 game tests**. The
-publication contract passed **11 tests**, the launcher passed its download/cache/
+publication contract passed **13 tests**, the launcher passed **12** download/cache/
 rollback fixture tests, and the documentation passed six link tests plus a strict
 MkDocs build. The actual Mac app archive passed the launcher's checksum,
 extraction and executable checks. A disposable Ubuntu x86-64 container opened

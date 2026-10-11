@@ -130,7 +130,18 @@ class GitHub:
             raise
 
     def release(self, tag):
-        return self.api("releases/tags/" + tag, missing_ok=True)
+        result = self.api("releases/tags/" + tag, missing_ok=True)
+        if result is not None:
+            return result
+        # REST's tag lookup only finds published releases. The CLI can resolve
+        # drafts; fetch that release by ID so interrupted uploads can be repaired.
+        try:
+            metadata = json.loads(self.command("view", tag, "--json", "databaseId"))
+        except RuntimeError as error:
+            if str(error) == "release not found":
+                return None
+            raise
+        return self.api("releases/" + str(metadata["databaseId"]))
 
     def command(self, *arguments):
         return self.run("release", *arguments, "--repo", self.repository)
@@ -147,6 +158,8 @@ class GitHub:
         return output.read_text(encoding="ascii")
 
     def verify_uploads(self, release, checksums, directory):
+        if release is None:
+            raise ValueError("Uploaded draft release could not be found for verification")
         assets = {asset["name"]: asset for asset in release["assets"]}
         if set(assets) != set(checksums):
             raise ValueError("Remote release asset set is incomplete or unexpected")

@@ -2,10 +2,12 @@
 
 import copy
 import hashlib
+import json
 from pathlib import Path
 import tempfile
 import tarfile
 import unittest
+from unittest.mock import patch
 import xml.etree.ElementTree as ET
 import zipfile
 
@@ -109,6 +111,28 @@ class ReleaseTests(unittest.TestCase):
         uploads = [event for event in github.events if event[0] == "upload"]
         self.assertEqual(uploads[-1][1], "dev")
         self.assertEqual(Path(uploads[-1][2][0]).name, release.MANIFEST)
+
+    def test_draft_invisible_by_tag_is_resolved_by_id_and_verified(self):
+        checksums = release.prepare_assets(self.directory, BUILD, SHA)
+        github = release.GitHub("jajir/microcol")
+        draft = {"id": 42, "tag_name": BUILD, "draft": True, "assets": [
+            {"name": name, "digest": "sha256:" + checksum} for name, checksum in checksums.items()]}
+        with patch.object(github, "run", side_effect=[
+                RuntimeError("gh: Not Found (HTTP 404)"), json.dumps({"databaseId": 42}), json.dumps(draft)]) as run:
+            found = github.release(BUILD)
+            github.verify_uploads(found, checksums, self.directory)
+        self.assertTrue(found["draft"])
+        self.assertEqual(run.call_args_list[-1].args, ("api", "repos/jajir/microcol/releases/42"))
+
+    def test_missing_draft_is_distinct_from_failed_lookup(self):
+        github = release.GitHub("jajir/microcol")
+        with patch.object(github, "run", side_effect=[
+                RuntimeError("gh: Not Found (HTTP 404)"), RuntimeError("release not found")]):
+            self.assertIsNone(github.release(BUILD))
+        with patch.object(github, "run", side_effect=[
+                RuntimeError("gh: Not Found (HTTP 404)"), RuntimeError("authentication failed")]):
+            with self.assertRaisesRegex(RuntimeError, "authentication failed"):
+                github.release(BUILD)
 
     def test_failed_upload_never_creates_channel_manifest(self):
         github = FakeGitHub()
