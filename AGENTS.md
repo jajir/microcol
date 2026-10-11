@@ -1,11 +1,21 @@
 # Branch workflow
 
-Use `develop` for ongoing development and integration unless the user requests
-another branch. Base isolated local-worker worktrees on the agreed `develop`
-revision and bring their accepted changes back to `develop`.
+Use `main` for ongoing development, integration and publication unless the user
+requests another branch. Base isolated local-worker worktrees on the agreed
+`main` revision and bring their accepted changes back to `main`.
 
-Use `main` for the published project state. Promote accepted `develop` changes
-to `main` when publishing; pushes to `main` deploy the documentation.
+The user has authorized the normal completion workflow: run the relevant checks,
+commit the completed task's changes, and push `main` to `origin` without a separate
+request each time. Preserve unrelated working-tree changes. Follow an explicit
+request to leave changes uncommitted or unpublished. Never force-push to complete
+this workflow. Check the resulting GitHub Actions runs and report the published
+build/commit and download link; a push alone does not prove publication. If checks
+or publication fail, fix issues within the task and report any remaining blocker.
+
+Pushes to `main` publish documentation and verified development distributions.
+See [development delivery](docs/development-builds.md) for the release channel,
+launcher behavior and acceptance checks. Do not maintain a separate `develop`
+promotion step for routine tasks.
 
 # Documentation
 

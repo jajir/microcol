@@ -1,30 +1,28 @@
-import java.util.zip.*
+// Compile the descriptor with the same JDK as Maven. Argument lists preserve
+// spaces in checkout paths, and a failed compiler must stop packaging.
+def targetDir = new File(project.build.directory)
+def artifactFile = new File(targetDir,
+        "microcol-game-${project.version}-jar-with-dependencies.jar")
+def moduleFile = new File(basedir, 'src/main/java/module-info.java')
+def compiler = new File(System.getProperty('java.home'), 'bin/javac')
+def release = project.properties.getProperty('maven.compiler.release', '11')
 
-def version = project.version
-def artifact = "microcol-game-" + version + "-jar-with-dependencies.jar"
-def artifactFile = basedir.absolutePath + "/target/" + artifact
-def moduleFile = basedir.absolutePath + "/src/main/java/module-info.java"
-def targetDir = basedir.absolutePath + "/target/"
+if (!artifactFile.isFile()) {
+    throw new IllegalStateException("Missing game artifact: ${artifactFile}")
+}
+if (!targetDir.isDirectory() && !targetDir.mkdirs()) {
+    throw new IllegalStateException("Cannot create module output: ${targetDir}")
+}
 
-println "Base Dir: " + basedir
-println "Version : " + version
-println "Artifact: " + artifact
-println "Artifact file: " + artifactFile
-println "Module file  : " + moduleFile
-println "Target dir   : " + targetDir
+def command = [compiler.absolutePath, '--release', release,
+        '-d', targetDir.absolutePath, '--patch-module',
+        "microcol.game=${artifactFile.absolutePath}".toString(),
+        moduleFile.absolutePath]
 
-def command = "javac -verbose -d " + targetDir + " --patch-module" +
-        " microcol.game=" + artifactFile + 
-        " " + moduleFile
-        
-println command
-
-Process process = command.execute()
-def out = new StringBuffer()
-def err = new StringBuffer()
-process.consumeProcessOutput( out, err )
-process.waitFor()
-if( out.size() > 0 ) println out
-if( err.size() > 0 ) println err
-
+println "Compiling MicroCol module descriptor with ${compiler} (release ${release})"
+def process = new ProcessBuilder(command).directory(basedir).inheritIO().start()
+def exitCode = process.waitFor()
+if (exitCode != 0) {
+    throw new IllegalStateException("Module descriptor compilation failed (exit ${exitCode})")
+}
 

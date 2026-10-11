@@ -2,12 +2,13 @@
 
 MicroCol is a colonization strategy game implemented in Java and JavaFX. This
 website publishes the documentation maintained in the repository's `docs/`
-directory on `main`. Development and documentation changes are integrated on
-`develop` and promoted to `main` for publication.
+directory on `main`. Development, integration and publication all use `main`.
 
 | Page | Purpose |
 | --- | --- |
 | [Modules and build outputs](modules.md) | Responsibilities of the Maven modules, generated products, and current distribution limitations. |
+| [macOS and Linux distributions](distribution.md) | Maven commands, bundled runtimes, DMG/DEB/archive outputs, and verified build and launch results. |
+| [MicroCol Dev and automatic updates](development-builds.md) | Install the development launcher once and receive each successful build from `main`. |
 | [Graphics sources and usage](graphics.md) | SVG and raster inventory, atlas coordinates, export paths, and the current visual brief. |
 | [Rules gap analysis](gap-analysis.md) | Comparison with the reference game's rules, implementation evidence, and outstanding work. |
 | [Development estimate](implementation-estimate.md) | Scope, assumptions, and estimated effort for the first release. |

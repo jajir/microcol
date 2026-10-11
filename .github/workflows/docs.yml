@@ -2,15 +2,15 @@ name: Publish documentation
 
 on:
   push:
-    branches: [develop, main]
+    branches: [main]
   pull_request:
-    branches: [develop, main]
+    branches: [main]
   workflow_dispatch:
 
 permissions:
   contents: read
 
-# Check both branches; publish main without interrupting an active deployment.
+# Check main and its pull requests; do not interrupt an active deployment.
 concurrency:
   group: docs-${{ github.ref }}
   cancel-in-progress: false

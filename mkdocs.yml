@@ -2,7 +2,7 @@ site_name: MicroCol
 site_description: Project documentation for the MicroCol colonization game.
 site_url: https://jajir.github.io/microcol/
 repo_url: https://github.com/jajir/microcol
-edit_uri: blob/develop/docs/
+edit_uri: blob/main/docs/
 docs_dir: docs
 site_dir: target/docs-site
 use_directory_urls: false
@@ -20,7 +20,7 @@ hooks:
   - scripts/docs/hooks.py
 
 extra:
-  source_revision: !ENV [DOCS_REVISION, develop]
+  source_revision: !ENV [DOCS_REVISION, main]
 
 validation:
   links:

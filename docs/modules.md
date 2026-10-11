@@ -1,14 +1,15 @@
 # Maven modules and build outputs
 
-MicroCol has one parent POM and five child modules. The distribution pipeline
-assembles the game, makes it a Java module, and uses `jlink` to bundle it with a
-Java runtime. It does not yet provide an automated release of ready-to-install
-packages for both macOS and Linux.
+MicroCol has one parent POM and seven child modules. Five are shared modules;
+the macOS or Linux profile selects the matching native distribution module on
+that host. The distribution pipeline assembles the game, makes it a Java module,
+links a Java runtime, and packages the result with `jpackage` and Maven Assembly.
 
-This overview describes the configuration inspected on 11 October 2026. No fresh
-distribution build or launch of a packaged application was performed for this
-audit. Output paths below describe configured products, not confirmed successful
-builds. The linked POMs and scripts remain the source of truth.
+This overview describes the configuration as of 11 October 2026. Output paths
+below describe configured products; [distribution verification](distribution.md#verification-evidence)
+records actual build and launch evidence. The linked POMs remain the source of
+truth, and [Building macOS and Linux distributions](distribution.md) owns the
+build commands and release limitations.
 
 ## Module overview
 
@@ -21,7 +22,9 @@ builds. The linked POMs and scripts remain the source of truth.
 | [microcol-game](../microcol-game/pom.xml) | Game logic, JavaFX UI, resources, and unit tests. | `microcol-game/target/microcol-game-<version>.jar`; `microcol-game-<version>-jar-with-dependencies.jar`, `-sources.jar`, and `-javadoc.jar` in the same directory. |
 | [microcol-test](../microcol-test/pom.xml) | GUI and integration tests using TestFX and Monocle, plus shared test support. | `microcol-test/target/microcol-test-<version>.jar` for main-source support code; test results in `microcol-test/target/surefire-reports/`. This is not another game distribution. |
 | [microcol-module](../microcol-module/pom.xml) | Converts the game JAR with dependencies into the explicit Java module `microcol.game`. | `microcol-module/target/microcol-module-<version>.jar`, containing the game, dependencies, and `module-info.class`. |
-| [microcol-dist](../microcol-dist/pom.xml) | Uses the modular game to create an application image with its own Java runtime. | `microcol-dist/target/dist/`, including `bin/launcher` on Unix; also a helper `microcol-dist-<version>.jar` in `target/`. A separate manual script targets a macOS DMG. |
+| [microcol-dist](../microcol-dist/pom.xml) | Uses the modular game to create a linked image with its own Java runtime. | `microcol-dist/target/dist/`, including `bin/launcher` on Unix; also a helper `microcol-dist-<version>.jar` in `target/`. |
+| [microcol-dist-macos](../microcol-dist-macos/pom.xml) | Packages the linked runtime as a macOS application and disk image. Selected on macOS; packaging is `pom`. | `microcol-dist-macos/target/app-image/MicroCol.app` and `target/packages/MicroCol-<numeric-version>.dmg` within that module. |
+| [microcol-dist-linux](../microcol-dist-linux/pom.xml) | Packages the linked runtime as a Linux application, Debian installer, and portable archive. Selected on Linux; packaging is `pom`. | `microcol-dist-linux/target/app-image/MicroCol/`, a DEB in `target/packages/`, and `target/MicroCol-<version>-linux-<os.arch>.tar.gz` within that module. |
 | [microcol-site](../microcol-site/pom.xml) | Legacy Maven website built from APT pages, static resources, and PlantUML diagrams. Packaging is `pom`. | `microcol-site/target/site/` during the Maven `site` lifecycle. No game binary. |
 
 ## From game code to a distribution
@@ -30,7 +33,8 @@ builds. The linked POMs and scripts remain the source of truth.
 microcol-game: JAR with dependencies
     -> microcol-module: modular JAR
         -> microcol-dist: application + Java runtime + launcher
-            -> manual create-dmg.sh: macOS DMG
+            -> microcol-dist-macos: MicroCol.app + DMG
+            -> microcol-dist-linux: application directory + DEB + tar.gz
 
 microcol-game -> microcol-test: GUI and integration tests
 microcol-site: separate legacy website lifecycle
@@ -63,31 +67,45 @@ The module project copies the game JAR with dependencies during
 `generate-resources`. During `process-resources`,
 [compile.groovy](../microcol-module/src/main/groovy/compile.groovy) compiles
 [module-info.java](../microcol-module/src/main/java/module-info.java) against
-that JAR. The Shade Plugin inserts the compiled descriptor into the final JAR
-during `package`.
+that JAR using Maven's JDK and the shared Java release setting, currently 11.
+The script passes arguments without shell splitting and stops on compiler errors.
+The Shade Plugin inserts the compiled descriptor into the final JAR during
+`package`, replacing dependency descriptors.
 
-The `original-microcol-module-<version>.jar` backup and generated
-`dependency-reduced-pom.xml` are intermediate Shade Plugin products, not separate
-game distributions or source modules.
+The JAR plugin recreates the input before each shading run, so repeated packaging
+does not reuse the previous shaded output. The
+`original-microcol-module-<version>.jar` backup is an intermediate product, not
+another distribution. Generating `dependency-reduced-pom.xml` is disabled.
 
-### Runtime image and macOS packaging
+### Runtime image and native packaging
 
-The distribution module runs `javafx:jlink` in `prepare-package`, with image name
-`dist`, launcher name `launcher`, and main class
-`microcol.game/org.microcol.MicroCol`. The result is a directory containing the
-application and Java runtime. No ZIP or installer is configured in that Maven
-execution. Installation of the distribution module's Maven artifact into the
-local Maven repository is explicitly skipped.
+The distribution module copies the modular game into `target/modules/` and runs
+Maven's JDK `jlink` through the Exec Plugin in `prepare-package`. It deletes the
+old output first and waits for a successful link. The image is `target/dist/`,
+with launcher name `launcher` and main class
+`microcol.game/org.microcol.MicroCol`. The linked roots are `microcol.game` and
+`java.naming`; the runtime includes their required Java modules. Debug data,
+headers, and man pages are omitted.
 
-The execution belongs to a profile named `travis-ci`, activated by the
-**absence** of the `travis-ci` property. A normal package build therefore attempts
-to create the image; adding `-Dtravis-ci=true` disables that automatic profile
-activation. The profile is not an operating-system selector.
+This step is part of the normal build; the old `travis-ci` profile no longer
+controls it. `microcol-dist` also produces its helper JAR, and installing this
+artifact is no longer skipped.
 
-[create-dmg.sh](../microcol-dist/src/main/sh/create-dmg.sh) separately invokes
-`jpackage --type dmg`, reads `target/dist/`, and writes into
-`microcol-dist/target/`. It is not connected to the Maven lifecycle. The older
-AppBundle plugin configuration in the POM is commented out and does not run.
+Each native module depends on `microcol-dist`, which orders the reactor when
+building with `-am`. During `package`, it invokes `jpackage` first for the
+application image and then for the DMG or DEB, reusing the linked runtime.
+The Linux module also assembles its application directory into `tar.gz`, retaining
+executable launchers and runtime helpers. The modules check the host OS, require
+JDK 17, and clear previous application/installer output before creating it again.
+
+Linux installer versions use the numeric Maven version without the snapshot
+qualifier. macOS adds one to the major version because `jpackage` rejects a zero
+major; the game version stays unchanged. See the exact mapping and paths in
+[distribution outputs](distribution.md#outputs-and-player-launch). The Linux
+archive retains the full Maven version and CPU architecture in its name.
+Maven packaging remains local to `target/`; no release upload is part of this
+lifecycle. The separate [development delivery workflow](development-builds.md)
+builds and publishes these outputs after each push to `main`.
 
 ## Website versus application builds
 
@@ -108,23 +126,16 @@ Markdown documentation in `docs/`, whose current publishing workflow is describe
 in [Writing and publishing documentation](publishing.md). Publishing documentation
 does not create or validate game distributions.
 
-## Current distribution limitations
+## Distribution boundaries
 
-- There is no configured matrix of macOS/Linux and CPU architectures, nor a
-  Linux archive, DEB, or RPM packaging step. JavaFX native libraries and the
-  bundled runtime need to match the intended platform; a JAR containing them is
-  not automatically universal.
-- The root compiler configuration targets Java 11, but the module descriptor
-  script calls `javac` from `PATH` without `--release`. It also does not check the
-  compiler's exit code. The module descriptor can therefore differ from the
-  game's bytecode target, and a fresh distribution needs explicit verification.
-- The DMG script hardcodes a local JDK 14 installation path and application
-  version `0.7.0`. It is a starting point for packaging, not a portable release
-  command. Signing and notarization are not configured there.
-- The legacy [release guide](../microcol-site/src/site/apt/release.apt) describes
-  Java 8 and outputs such as `microcol.jar`, `microcol.exe`, and `MicroCol.app`.
-  Those names are not the outputs of the current active Maven configuration.
+Application sources and the module descriptor target Java 11, while native
+packaging uses JDK 17 and JavaFX 17.0.20. Packages are specific to the build OS and
+CPU architecture. A configured package format is not proof of compatibility with
+all machines running that OS; see the
+[distribution scope and remaining release work](distribution.md#distribution-scope-and-remaining-release-work)
+for signing, Linux system libraries and platform validation, and
+[development delivery](development-builds.md) for automatic publication.
 
-The target CPU architectures, final macOS/Linux package formats, and release
-verification remain decisions for the distribution work. This document records
-the existing structure without selecting or implementing that future workflow.
+The legacy [release guide](../microcol-site/src/site/apt/release.apt) describes
+Java 8 and historical outputs. Keep it as a development reference; use the
+current distribution page for the Maven packaging commands and outputs.

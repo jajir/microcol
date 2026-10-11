@@ -85,6 +85,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-dependency-plugin</artifactId>
+				<version>3.8.1</version>
 				<executions>
 					<execution>
 						<id>copy-dependencies</id>
@@ -118,17 +119,38 @@
 					<source>${project.basedir}/src/main/groovy/compile.groovy</source>
 				</configuration>
 			</plugin>
-			<!-- skip installing artifacts -->
+			<!-- Shade replaces the main artifact; always recreate its clean input
+				so a second package run cannot reuse the previous shaded output. -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>3.4.2</version>
+				<configuration>
+					<forceCreation>true</forceCreation>
+				</configuration>
+			</plugin>
+			<!-- Replace dependency descriptors with the game module descriptor. -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-shade-plugin</artifactId>
-				<version>3.2.1</version>
+				<version>3.6.2</version>
 				<configuration>
+					<!-- Keep the published POM and repeated reactor builds stable. -->
+					<createDependencyReducedPom>false</createDependencyReducedPom>
+					<filters>
+						<filter>
+							<artifact>*:*</artifact>
+							<excludes>
+								<exclude>module-info.class</exclude>
+								<exclude>META-INF/versions/**/module-info.class</exclude>
+							</excludes>
+						</filter>
+					</filters>
 					<transformers>
 						<transformer
 							implementation="org.apache.maven.plugins.shade.resource.IncludeResourceTransformer">
 							<resource>module-info.class</resource>
-							<file>target/module-info.class</file>
+							<file>${project.build.directory}/module-info.class</file>
 						</transformer>
 					</transformers>
 				</configuration>

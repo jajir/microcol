@@ -1,0 +1,341 @@
+#!/bin/bash
+# Bash 3.2 compatible: users need curl and the platform's archive/hash tools,
+# never Python, Maven, or an installed Java runtime.
+set -u
+set -o pipefail
+export LC_ALL=C
+umask 077
+
+RELEASE_BASE=https://github.com/jajir/microcol/releases/download
+MANIFEST_URL=$RELEASE_BASE/dev/manifest.tsv
+BUILD_PATTERN='^dev-[1-9][0-9]*-[0-9a-f]{12}$'
+SHA_PATTERN='^[0-9a-f]{40}$'
+HASH_PATTERN='^[0-9a-f]{64}$'
+MODE=launch
+WORK=
+LOCK_HELD=0
+CURRENT=-
+PREVIOUS=-
+BLOCKED=-
+
+say() { printf '%s\n' "MicroCol Dev: $*" >&2; }
+fail() { say "$*"; return 1; }
+valid_build() { [[ $1 =~ $BUILD_PATTERN ]]; }
+
+usage() {
+    cat <<'EOF'
+MicroCol Dev launcher 1.0
+Usage: microcol-dev [--check | --update-only | --rollback | --status | --version]
+       microcol-dev [-- game arguments...]
+
+With no option, check for an update and launch the current game. A cached game
+remains available offline. --rollback selects the previous version and holds
+back the rejected build until a newer release appears; it does not launch.
+--check reports the available build without installing it.
+EOF
+}
+
+case ${1-} in
+    --help|-h) usage; exit 0 ;;
+    --version) printf 'MicroCol Dev launcher 1.0\n'; exit 0 ;;
+    --check|--update-only|--rollback|--status) MODE=${1#--}; shift
+        [ "$#" -eq 0 ] || { usage >&2; exit 2; } ;;
+    --) shift ;;
+    '') ;;
+    -psn_*) shift ;; # Older Finder versions can supply a process serial number.
+    *) usage >&2; exit 2 ;;
+esac
+
+SYSTEM=$(uname -s) || exit 1
+ARCH=$(uname -m) || exit 1
+case "$SYSTEM:$ARCH" in
+    Darwin:arm64|Darwin:aarch64) PLATFORM=macos-arm64 ;;
+    Darwin:x86_64) PLATFORM=macos-x86_64 ;;
+    Linux:x86_64|Linux:amd64) PLATFORM=linux-x86_64 ;;
+    *) fail "Unsupported platform: $SYSTEM $ARCH"; exit 1 ;;
+esac
+if [ "$SYSTEM" = Darwin ]; then
+    DEFAULT_ROOT="$HOME/Library/Application Support/MicroCol Dev"
+else
+    DEFAULT_ROOT="${XDG_DATA_HOME:-$HOME/.local/share}/microcol-dev"
+fi
+# This optional cache location also makes isolated launcher verification possible.
+ROOT=${MICROCOL_DEV_ROOT:-$DEFAULT_ROOT}
+case "$ROOT" in /*) ;; *) fail 'The launcher data directory must be an absolute path.'; exit 1 ;; esac
+[ "$ROOT" != / ] || { fail 'The filesystem root cannot be the launcher data directory.'; exit 1; }
+VERSIONS=$ROOT/versions
+LOCK=$ROOT/update.lock
+STATE=$ROOT/state.tsv
+mkdir -p "$VERSIONS" || exit 1
+
+cleanup() {
+    if [ -n "$WORK" ] && [ -d "$WORK" ]; then rm -rf -- "$WORK"; fi
+    if [ "$LOCK_HELD" = 1 ]; then rm -rf -- "$LOCK"; LOCK_HELD=0; fi
+}
+trap cleanup EXIT
+trap 'exit 130' INT
+trap 'exit 143' TERM HUP
+
+load_state() {
+    CURRENT=-; PREVIOUS=-; BLOCKED=-
+    [ -f "$STATE" ] || return 0
+    local row tabs extra
+    IFS= read -r row < "$STATE" || { fail "Invalid state file: $STATE"; return 1; }
+    tabs=${row//[!$'\t']/}
+    [ "${#tabs}" -eq 2 ] || { fail "Invalid state file: $STATE"; return 1; }
+    IFS=$'\t' read -r CURRENT PREVIOUS BLOCKED extra <<< "$row"
+    for row in "$CURRENT" "$PREVIOUS" "$BLOCKED"; do
+        [ "$row" = - ] || valid_build "$row" || { fail 'Invalid cached build identifier.'; return 1; }
+    done
+}
+
+write_state() {
+    # Both pointers move together; readers never see a half-written rollback.
+    printf '%s\t%s\t%s\n' "$1" "$2" "$3" > "$WORK/state.tsv" || return 1
+    mv -f -- "$WORK/state.tsv" "$STATE" || return 1
+    CURRENT=$1; PREVIOUS=$2; BLOCKED=$3
+}
+
+valid_payload() {
+    local directory=$1
+    if [ "$SYSTEM" = Darwin ]; then
+        [ -x "$directory/MicroCol.app/Contents/MacOS/MicroCol" ] &&
+            [ -f "$directory/MicroCol.app/Contents/runtime/Contents/Home/lib/modules" ]
+    else
+        [ -x "$directory/app/bin/MicroCol" ] && [ -f "$directory/app/lib/runtime/lib/modules" ]
+    fi
+}
+
+usable_version() {
+    local build=$1 stored commit checksum platform extra
+    [ "$build" != - ] && valid_build "$build" &&
+        [ -f "$VERSIONS/$build/release.tsv" ] && valid_payload "$VERSIONS/$build" || return 1
+    IFS=$'\t' read -r stored commit checksum platform extra < "$VERSIONS/$build/release.tsv" || return 1
+    [ "$stored" = "$build" ] && [[ $commit =~ $SHA_PATTERN ]] &&
+        [[ $checksum =~ $HASH_PATTERN ]] && [ "$platform" = "$PLATFORM" ] && [ -z "$extra" ]
+}
+
+acquire_lock() {
+    local attempts=0 owner
+    while ! mkdir "$LOCK" 2>/dev/null; do
+        # A separate reaper directory serializes recovery of a dead owner.
+        # Never reclaim a lock before its owner has written a PID.
+        if [ -f "$LOCK/pid" ]; then
+            IFS= read -r owner < "$LOCK/pid" || owner=
+            if [[ $owner =~ ^[0-9]+$ ]] && ! kill -0 "$owner" 2>/dev/null; then
+                if mkdir "$LOCK/reaper" 2>/dev/null; then
+                    IFS= read -r owner < "$LOCK/pid" || owner=
+                    if [[ $owner =~ ^[0-9]+$ ]] && ! kill -0 "$owner" 2>/dev/null; then
+                        rm -rf -- "$LOCK" || return 1
+                        continue
+                    fi
+                    rmdir "$LOCK/reaper" 2>/dev/null || true
+                fi
+            fi
+        fi
+        attempts=$((attempts + 1))
+        [ "$attempts" -lt 10 ] || return 1
+        sleep 1
+    done
+    LOCK_HELD=1
+    printf '%s\n' "$$" > "$LOCK/pid" || return 1
+    WORK=$(mktemp -d "$ROOT/work.XXXXXXXX") || return 1
+}
+
+fetch_manifest() {
+    curl --fail --location --silent --show-error --proto '=https' --proto-redir '=https' \
+        --tlsv1.2 --connect-timeout 5 --max-time 15 --max-filesize 65536 \
+        --output "$WORK/manifest.tsv" "$MANIFEST_URL" || return 1
+    [ -s "$WORK/manifest.tsv" ] || return 1
+    [ "$(wc -c < "$WORK/manifest.tsv")" -le 65536 ] || return 1
+}
+
+parse_manifest() {
+    local line number=0 kind a b c extra tabs expected
+    local seen_mac_arm=0 seen_mac_intel=0 seen_linux=0
+    BUILD=; COMMIT=; ASSET=; CHECKSUM=
+    while IFS= read -r line || [ -n "$line" ]; do
+        number=$((number + 1))
+        case "$line" in *$'\r'*) return 1 ;; esac
+        if [ "$number" -eq 1 ]; then [ "$line" = microcol-dev-v1 ] || return 1; continue; fi
+        tabs=${line//[!$'\t']/}
+        IFS=$'\t' read -r kind a b c extra <<< "$line"
+        if [ "$number" -eq 2 ]; then
+            [ "${#tabs}" -eq 2 ] && [ "$kind" = build ] || return 1
+            valid_build "$a" && [[ $b =~ $SHA_PATTERN ]] || return 1
+            [ "${a##*-}" = "${b:0:12}" ] || return 1
+            BUILD=$a; COMMIT=$b
+            continue
+        fi
+        [ "${#tabs}" -eq 3 ] && [ "$kind" = asset ] && [[ $c =~ $HASH_PATTERN ]] || return 1
+        case "$a" in
+            macos-arm64) [ "$seen_mac_arm" -eq 0 ] || return 1; seen_mac_arm=1; expected=zip ;;
+            macos-x86_64) [ "$seen_mac_intel" -eq 0 ] || return 1; seen_mac_intel=1; expected=zip ;;
+            linux-x86_64) [ "$seen_linux" -eq 0 ] || return 1; seen_linux=1; expected=tar.gz ;;
+            *) return 1 ;;
+        esac
+        [ "$b" = "MicroCol-$a-$BUILD.$expected" ] || return 1
+        if [ "$a" = "$PLATFORM" ]; then ASSET=$b; CHECKSUM=$c; fi
+    done < "$WORK/manifest.tsv"
+    [ "$number" -eq 5 ] && [ -n "$ASSET" ] &&
+        [ "$seen_mac_arm$seen_mac_intel$seen_linux" = 111 ]
+}
+
+safe_member() {
+    local name=$1
+    # Reject absolute paths, Windows paths, traversal and control characters.
+    case "$name" in ''|/*|[A-Za-z]:*|*\\*|*$'\r'*|*$'\t'*) return 1 ;; esac
+    case "/$name/" in */../*|*/./*) return 1 ;; esac
+    case "$name" in *//*) return 1 ;; esac
+    [ "$name" != .. ] || return 1
+}
+
+verify_archive() {
+    local archive=$1 name row count=0 typed=0 permissions
+    if [ "$SYSTEM" = Darwin ]; then
+        unzip -Z -1 "$archive" > "$WORK/names" || return 1
+        unzip -Z -l "$archive" > "$WORK/types" || return 1
+    else
+        tar -tzf "$archive" > "$WORK/names" || return 1
+        tar -tvzf "$archive" > "$WORK/types" || return 1
+    fi
+    while IFS= read -r name || [ -n "$name" ]; do
+        safe_member "$name" || return 1
+        count=$((count + 1))
+    done < "$WORK/names"
+    [ "$count" -gt 0 ] || return 1
+    # Duplicate members could overwrite earlier files or make unzip ask for
+    # interactive confirmation. CI emits one canonical path for each member.
+    sed 's:/$::' "$WORK/names" | sort | uniq -d > "$WORK/duplicates" || return 1
+    [ ! -s "$WORK/duplicates" ] || return 1
+    while IFS= read -r row || [ -n "$row" ]; do
+        if [ "$SYSTEM" = Darwin ]; then
+            # zipinfo includes a header and summary; every file must still have
+            # a recognized Unix type line. Reject links and special files.
+            case "$row" in [-dlbcps?]*' '*) ;; *) continue ;; esac
+        fi
+        permissions=${row%% *}
+        case "$permissions" in -?????????|d?????????) ;; *) return 1 ;; esac
+        typed=$((typed + 1))
+    done < "$WORK/types"
+    [ "$typed" -eq "$count" ]
+}
+
+install_build() {
+    local archive="$WORK/$ASSET" actual entry top= count=0 quarantine
+    say "Downloading $BUILD for $PLATFORM..."
+    curl --fail --location --silent --show-error --proto '=https' --proto-redir '=https' \
+        --tlsv1.2 --connect-timeout 10 --max-time 180 --max-filesize 1073741824 \
+        --output "$archive.part" "$RELEASE_BASE/$BUILD/$ASSET" || return 1
+    if [ "$SYSTEM" = Darwin ]; then
+        actual=$(shasum -a 256 "$archive.part") || return 1
+    else
+        actual=$(sha256sum "$archive.part") || return 1
+    fi
+    actual=${actual%% *}
+    [ "$actual" = "$CHECKSUM" ] || { fail 'Downloaded archive checksum does not match.'; return 1; }
+    mv -- "$archive.part" "$archive" || return 1
+    verify_archive "$archive" || { fail 'Unsafe or damaged release archive.'; return 1; }
+    mkdir "$WORK/extract" "$WORK/version" || return 1
+    if [ "$SYSTEM" = Darwin ]; then
+        # Never clear quarantine or invoke the app's executable to evade Gatekeeper.
+        unzip -q "$archive" -d "$WORK/extract" || return 1
+    else
+        tar -xzf "$archive" -C "$WORK/extract" --no-same-owner --no-same-permissions || return 1
+    fi
+    shopt -s nullglob dotglob
+    for entry in "$WORK/extract"/*; do top=$entry; count=$((count + 1)); done
+    shopt -u nullglob dotglob
+    [ "$count" -eq 1 ] && [ -d "$top" ] || { fail 'Unexpected archive layout.'; return 1; }
+    if [ "$SYSTEM" = Darwin ]; then
+        [ "${top##*/}" = MicroCol.app ] || return 1
+        mv -- "$top" "$WORK/version/MicroCol.app" || return 1
+        quarantine="0083;$(printf '%x' "$(date +%s)");MicroCol Dev;"
+        xattr -w com.apple.quarantine "$quarantine" "$WORK/version/MicroCol.app" || return 1
+    else
+        mv -- "$top" "$WORK/version/app" || return 1
+    fi
+    valid_payload "$WORK/version" || { fail 'The archive has no usable bundled application.'; return 1; }
+    printf '%s\t%s\t%s\t%s\n' "$BUILD" "$COMMIT" "$CHECKSUM" "$PLATFORM" > "$WORK/version/release.tsv" || return 1
+    if [ -e "$VERSIONS/$BUILD" ]; then
+        # Never modify a version that another game process may be using.
+        cmp -s "$WORK/version/release.tsv" "$VERSIONS/$BUILD/release.tsv" &&
+            valid_payload "$VERSIONS/$BUILD" || { fail 'A conflicting cached build already exists.'; return 1; }
+    else
+        mv -- "$WORK/version" "$VERSIONS/$BUILD" || return 1
+    fi
+    write_state "$BUILD" "$CURRENT" - || return 1
+    say "Installed $BUILD ($COMMIT)."
+}
+
+update_current() {
+    local available_run current_run
+    fetch_manifest || { fail 'Update check unavailable; the network request failed.'; return 1; }
+    parse_manifest || { fail 'Invalid development release manifest.'; return 1; }
+    if [ "$MODE" = check ]; then
+        printf 'Current: %s\nAvailable: %s\nCommit: %s\n' "$CURRENT" "$BUILD" "$COMMIT"
+        [ "$BUILD" != "$BLOCKED" ] || printf 'Held after rollback: %s\n' "$BLOCKED"
+        return 0
+    fi
+    if [ "$BUILD" = "$CURRENT" ] && usable_version "$CURRENT"; then
+        say "Already current: $CURRENT"; return 0
+    fi
+    if [ "$BUILD" = "$BLOCKED" ]; then
+        say "Keeping $CURRENT after rollback; $BLOCKED is held back."
+        return 0
+    fi
+    if [ "$CURRENT" != - ] && [ "$BUILD" != "$CURRENT" ]; then
+        available_run=${BUILD#dev-}; available_run=${available_run%%-*}
+        current_run=${CURRENT#dev-}; current_run=${current_run%%-*}
+        # Decimal string comparison avoids overflow and disallows automatic
+        # downgrades from stale CDN manifests or delayed release publication.
+        if [ "${#available_run}" -lt "${#current_run}" ] ||
+            { [ "${#available_run}" -eq "${#current_run}" ] &&
+              [[ $available_run < $current_run || $available_run = $current_run ]]; }; then
+            say "Ignoring stale release $BUILD; keeping $CURRENT. Use --rollback for an intentional downgrade."
+            return 0
+        fi
+    fi
+    install_build
+}
+
+launch_current() {
+    usable_version "$CURRENT" || { fail "No usable cached game. Connect to the internet and retry. Data: $ROOT"; return 1; }
+    say "Launching $CURRENT."
+    local application=$VERSIONS/$CURRENT
+    cleanup
+    WORK=
+    if [ "$SYSTEM" = Darwin ]; then
+        open "$application/MicroCol.app" --args "$@"
+    else
+        exec "$application/app/bin/MicroCol" "$@"
+    fi
+}
+
+load_state || exit 1
+if [ "$MODE" = status ]; then
+    printf 'Platform: %s\nCurrent: %s\nPrevious: %s\nHeld: %s\nData: %s\n' \
+        "$PLATFORM" "$CURRENT" "$PREVIOUS" "$BLOCKED" "$ROOT"
+    if usable_version "$CURRENT"; then cat "$VERSIONS/$CURRENT/release.tsv"; fi
+    exit 0
+fi
+if ! acquire_lock; then
+    say "Another updater holds $LOCK."
+    if [ "$MODE" = launch ]; then load_state && launch_current "$@"; exit $?; fi
+    exit 75
+fi
+# A preceding updater may have promoted a build while this process waited.
+load_state || exit 1
+if [ "$MODE" = rollback ]; then
+    usable_version "$PREVIOUS" || { fail 'No usable previous version is available.'; exit 1; }
+    old_current=$CURRENT
+    write_state "$PREVIOUS" "$CURRENT" "$old_current" || exit 1
+    say "Rolled back to $CURRENT. Run the launcher to play; $BLOCKED stays held back."
+    exit 0
+fi
+if ! update_current; then
+    [ "$MODE" = launch ] || exit 1
+    say 'Using the cached game if available.'
+fi
+[ "$MODE" = launch ] || exit 0
+launch_current "$@"

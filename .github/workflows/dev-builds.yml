@@ -1,0 +1,116 @@
+name: Build and publish development game
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  checks:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Test updater and release contract
+        run: |
+          python3 -m unittest discover -s scripts/distribution -p 'test_*.py'
+          python3 -m unittest discover -s scripts/launcher/tests -p 'test_*.py'
+      - name: Package the one-time launchers
+        run: python3 scripts/launcher/package.py --output-dir target/dev-launchers
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: dev-launchers
+          path: target/dev-launchers/*
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 14
+
+  native:
+    name: Package ${{ matrix.platform }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - platform: macos-arm64
+            runner: macos-15
+            module: microcol-dist-macos
+            architecture: aarch64
+          - platform: macos-x86_64
+            runner: macos-15-intel
+            module: microcol-dist-macos
+            architecture: x64
+          - platform: linux-x86_64
+            runner: ubuntu-24.04
+            module: microcol-dist-linux
+            architecture: x64
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-java@de7274f081f381c8f8158605e0321c36c376e2e6 # v6.0.1
+        with:
+          distribution: temurin
+          java-version: '17'
+          architecture: ${{ matrix.architecture }}
+          cache: maven
+      - name: Install Linux packaging dependencies
+        if: runner.os == 'Linux'
+        run: sudo apt-get update && sudo apt-get install -y fakeroot dpkg-dev libgtk-3-0 libasound2t64 xvfb xauth x11-utils
+      - name: Build runtime, run unit tests and create native packages
+        # -am selects the game tests; the unrelated TestFX module is not in this reactor.
+        run: mvn -B -ntp -pl ${{ matrix.module }} -am clean package -Dmicrocol.build.id="dev-${GITHUB_RUN_NUMBER}-${GITHUB_SHA:0:12}"
+      - name: Stage platform assets and verify test reports
+        env:
+          PLATFORM: ${{ matrix.platform }}
+        run: python3 scripts/distribution/stage.py "$PLATFORM" "dev-${GITHUB_RUN_NUMBER}-${GITHUB_SHA:0:12}" "$GITHUB_SHA" target/dev-assets
+      - name: Open the packaged Linux game in a virtual display
+        if: runner.os == 'Linux'
+        run: python3 scripts/distribution/smoke_linux.py target/dev-assets/*.tar.gz target/dev-smoke
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: dev-${{ matrix.platform }}
+          path: target/dev-assets/*
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 14
+      - name: Keep actual test evidence even on failure
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: tests-${{ matrix.platform }}
+          path: |
+            microcol-game/target/surefire-reports/
+            target/dev-smoke/
+          if-no-files-found: warn
+          retention-days: 14
+
+  publish:
+    if: github.ref == 'refs/heads/main'
+    needs: [checks, native]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    permissions:
+      contents: write
+    # Never interrupt an upload; the publisher also rejects an older promotion.
+    concurrency:
+      group: microcol-dev-publication
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          pattern: dev-*
+          path: target/dev-assets
+          merge-multiple: true
+      - name: Publish complete release, then update the development channel
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python3 scripts/distribution/release.py target/dev-assets "dev-${GITHUB_RUN_NUMBER}-${GITHUB_SHA:0:12}" "$GITHUB_SHA" --repository "$GITHUB_REPOSITORY"

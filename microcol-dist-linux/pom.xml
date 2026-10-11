@@ -1,0 +1,140 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.microcol</groupId>
+        <artifactId>microcol-root</artifactId>
+        <version>0.7.0-SNAPSHOT</version>
+    </parent>
+    <artifactId>microcol-dist-linux</artifactId>
+    <packaging>pom</packaging>
+    <name>MicroCol linux distribution</name>
+
+    <!-- The dependency orders the reactor; package with -am to rebuild its runtime. -->
+    <dependencies>
+        <dependency>
+            <groupId>org.microcol</groupId>
+            <artifactId>microcol-dist</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
+
+    <properties>
+        <runtime.image>${project.parent.basedir}/microcol-dist/target/dist</runtime.image>
+        <app.image>${project.build.directory}/app-image/MicroCol</app.image>
+    </properties>
+
+    <build>
+        <finalName>MicroCol-${project.version}-linux-${os.arch}</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-enforcer-plugin</artifactId>
+                <version>3.5.0</version>
+                <executions>
+                    <execution>
+                        <id>native-build-host</id><phase>validate</phase>
+                        <goals><goal>enforce</goal></goals>
+                        <configuration><rules>
+                            <requireOS><name>Linux</name></requireOS>
+                            <requireJavaVersion>
+                                <version>[17,18)</version>
+                                <message>Use JDK 17 (set JAVA_HOME) for native distribution builds.</message>
+                            </requireJavaVersion>
+                        </rules></configuration>
+                    </execution>
+                    <execution>
+                        <id>linked-runtime-exists</id><phase>prepare-package</phase>
+                        <goals><goal>enforce</goal></goals>
+                        <configuration><rules><requireFilesExist>
+                            <files><file>${runtime.image}/bin/java</file></files>
+                            <message>Build microcol-dist first: use -am and do not disable its jlink execution.</message>
+                        </requireFilesExist></rules></configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <version>3.6.0</version>
+                <executions><execution>
+                    <!-- Native installers require a numeric version, without -SNAPSHOT. -->
+                    <id>native-version</id><phase>initialize</phase>
+                    <goals><goal>parse-version</goal></goals>
+                </execution></executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>3.1.0</version>
+                <executions><execution>
+                    <id>clear-generated-packages</id><phase>prepare-package</phase>
+                    <goals><goal>run</goal></goals>
+                    <configuration><target>
+                        <!-- Repeated package runs must not reuse a stale application image. -->
+                        <delete dir="${project.build.directory}/app-image"/>
+                        <delete dir="${project.build.directory}/packages"/>
+                        <mkdir dir="${project.build.directory}/packages"/>
+                    </target></configuration>
+                </execution></executions>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>3.6.4</version>
+                <configuration><executable>${java.home}/bin/jpackage</executable></configuration>
+                <executions>
+                    <execution>
+                        <id>application-image</id><phase>package</phase>
+                        <goals><goal>exec</goal></goals>
+                        <configuration><arguments>
+                            <argument>--type</argument><argument>app-image</argument>
+                            <argument>--name</argument><argument>MicroCol</argument>
+                            <argument>--app-version</argument>
+                            <argument>${parsedVersion.majorVersion}.${parsedVersion.minorVersion}.${parsedVersion.incrementalVersion}</argument>
+                            <argument>--vendor</argument><argument>MicroCol</argument>
+                            <argument>--icon</argument><argument>${project.parent.basedir}/microcol-dist/src/icon.png</argument>
+                            <argument>--runtime-image</argument><argument>${runtime.image}</argument>
+                            <argument>--module</argument><argument>microcol.game/org.microcol.MicroCol</argument>
+                            <argument>--dest</argument><argument>${project.build.directory}/app-image</argument>
+                        </arguments></configuration>
+                    </execution>
+                    <execution>
+                        <id>native-installer</id><phase>package</phase>
+                        <goals><goal>exec</goal></goals>
+                        <configuration><arguments>
+                            <argument>--type</argument><argument>deb</argument>
+                            <argument>--name</argument><argument>MicroCol</argument>
+                            <!-- jpackage does not inherit installer version/vendor from the application image. -->
+                            <argument>--app-version</argument>
+                            <argument>${parsedVersion.majorVersion}.${parsedVersion.minorVersion}.${parsedVersion.incrementalVersion}</argument>
+                            <argument>--vendor</argument><argument>MicroCol</argument>
+                            <argument>--app-image</argument><argument>${app.image}</argument>
+                            <argument>--dest</argument><argument>${project.build.directory}/packages</argument>
+                            <argument>--linux-package-name</argument><argument>microcol</argument>
+                            <argument>--linux-shortcut</argument>
+                            <argument>--linux-app-category</argument><argument>games</argument>
+                            <!-- JavaFX loads GTK dynamically from native libraries inside the runtime module. -->
+                            <argument>--linux-package-deps</argument><argument>libgtk-3-0</argument>
+                        </arguments></configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>3.7.1</version>
+                <configuration>
+                    <descriptors><descriptor>src/assembly/distribution.xml</descriptor></descriptors>
+                    <appendAssemblyId>false</appendAssemblyId>
+                    <tarLongFileMode>posix</tarLongFileMode>
+                </configuration>
+                <executions><execution>
+                    <id>portable-archive</id><phase>package</phase>
+                    <goals><goal>single</goal></goals>
+                </execution></executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>

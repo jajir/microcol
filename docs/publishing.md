@@ -5,6 +5,8 @@ It publishes only the Markdown documentation and assets from `docs/` on `main`,
 directly at that address. MkDocs renders the pages and builds navigation and
 search; GitHub Actions deploys the result. Publishing documentation does not
 build `microcol-site`, compile the game, run Maven tests, or create game distributions.
+The separate [development delivery workflow](development-builds.md) builds and
+publishes the game from the same pushed `main` revision.
 
 ## Editing workflow
 
@@ -19,20 +21,21 @@ build `microcol-site`, compile the game, run Maven tests, or create game distrib
 4. Record whether a statement is configured, proposed, or actually verified.
    Date environment observations and test evidence; do not imply that historical
    checks were rerun. Use the existing page's language consistently.
-5. Build with `--strict`, review the rendered page, then commit the sources and
-   push to `develop` through the agreed project workflow. Promote accepted changes
-   to `main` and push that branch when ready to publish. Generated HTML belongs
-   in ignored `target/`, never in a source commit.
+5. Build with `--strict`, review the rendered page, then commit the completed
+   task's sources and push `main` through the agreed project workflow. This is
+   the normal task completion step, without a separate publication request.
+   Preserve unrelated working-tree changes. Generated HTML belongs in ignored
+   `target/`, never in a source commit.
 
 Only committed and pushed files are published by CI. Local previews can include
 uncommitted files, so check `git status` before interpreting a preview as the
 next deployed version.
 
-`develop` remains the development and integration branch; `main` holds the
-published project state. Updating `develop` alone checks the documentation but
-does not change the public website. Merge the accepted `develop` revision into
-`main` and push `main` to publish the corresponding documentation. Keep the
-branches' shared history; do not force-push to perform this promotion.
+`main` is the single development, integration and publication branch. This
+replaces the earlier `develop` → `main` promotion workflow. Existing historical
+branches need not be deleted; they are not required for ordinary development.
+Never force-push to publish. After pushing, check the documentation deployment
+and the separate development distribution run rather than assuming both passed.
 
 ## Local preview and validation
 
@@ -65,8 +68,7 @@ Do not suppress a link failure merely to make publication pass.
 - On **every push to `main`**, with no path filter, including code-only
   changes. A local commit without a push cannot trigger GitHub Actions. Several
   commits in one push produce one build of the resulting branch state.
-- On pushes to `develop` and pull requests targeting `develop` or `main`, as a
-  build check without deployment.
+- On pull requests targeting `main`, as a build check without deployment.
 - Manually through **Actions → Publish documentation → Run workflow**, selecting
   `main` when deployment is intended.
 
@@ -75,8 +77,8 @@ the repository-link checks followed by `python -m mkdocs build --strict`. It
 uploads `target/docs-site/` as the Pages artifact. The dependent deployment job
 publishes only successful builds from `main` at `/microcol/`. Source-code links in
 a published page point to that build's commit rather than a moving branch. The
-page's source/edit shortcut continues to point to `develop`, where changes are
-prepared; local previews also use `develop` for source links unless `DOCS_REVISION`
+page's source/edit shortcut points to `main`, where changes are prepared;
+local previews also use `main` for source links unless `DOCS_REVISION`
 is set explicitly.
 
 The workflow uses GitHub's built-in token and Pages OIDC permissions; no personal

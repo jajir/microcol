@@ -18,6 +18,11 @@
 		<github.global.server>github</github.global.server>
 		<github.global.oauth2Token>${env.GITHUB_OAUTH_TOKEN}</github.global.oauth2Token>
 		<junit.jupiter.version>5.5.2</junit.jupiter.version>
+		<maven.compiler.release>11</maven.compiler.release>
+		<!-- JavaFX 17 supplies native Apple Silicon libraries while retaining Java 11 compatibility. -->
+		<javafx.version>17.0.20</javafx.version>
+		<!-- CI supplies its immutable build tag; local builds keep the plain game version. -->
+		<microcol.build.id>local</microcol.build.id>
 	</properties>
 
 	<modules>
@@ -27,6 +32,20 @@
 		<module>microcol-dist</module>
 		<module>microcol-site</module>
 	</modules>
+
+	<!-- Native installers must be built on their target operating system. -->
+	<profiles>
+		<profile>
+			<id>macos-distribution</id>
+			<activation><os><family>mac</family></os></activation>
+			<modules><module>microcol-dist-macos</module></modules>
+		</profile>
+		<profile>
+			<id>linux-distribution</id>
+			<activation><os><name>Linux</name></os></activation>
+			<modules><module>microcol-dist-linux</module></modules>
+		</profile>
+	</profiles>
 
 	<issueManagement>
 		<system>Github issue tracker</system>
@@ -62,12 +81,12 @@
 			<dependency>
 				<groupId>org.openjfx</groupId>
 				<artifactId>javafx-controls</artifactId>
-				<version>13</version>
+				<version>${javafx.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.openjfx</groupId>
 				<artifactId>javafx-swing</artifactId>
-				<version>13</version>
+				<version>${javafx.version}</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
@@ -88,9 +107,9 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-compiler-plugin</artifactId>
-					<version>3.7.0</version>
+					<version>3.14.1</version>
 					<configuration>
-						<release>11</release>
+						<release>${maven.compiler.release}</release>
 						<encoding>UTF-8</encoding>
 						<fork>false</fork>
 					</configuration>

@@ -16,7 +16,8 @@
 		<splash-creen-image>images/splash-screen.png</splash-creen-image>
 		<github.global.server>github</github.global.server>
 		<github.global.oauth2Token>${env.GITHUB_OAUTH_TOKEN}</github.global.oauth2Token>
-		<jacoco.version>0.8.5</jacoco.version>
+		<!-- Instrument tests on the JDK 17 used for native distribution builds. -->
+		<jacoco.version>0.8.15</jacoco.version>
 		<javadoc.plugin.version>3.1.1</javadoc.plugin.version>
 		<!-- default values for exec plugin properties -->
 		<development>false</development>

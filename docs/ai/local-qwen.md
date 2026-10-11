@@ -4,7 +4,9 @@ Status as of **2026-10-10: direct `codex exec` ready for bounded tasks; first
 Microcol pilot accepted**. Astra supervises a separate Codex CLI process using
 local Qwen, runs tests and reviews the changes. No custom runner or MCP server
 was developed. The accepted pilot test changes have now been incorporated into
-`develop`, the branch selected for ongoing development. The isolated worktree and
+`develop`, the branch selected for ongoing development at that time. Development
+now uses `main`; follow the current [branch workflow](../../AGENTS.md) when
+selecting a baseline and accepting new worker changes. The isolated worktree and
 artifacts retain the original evidence. One successful task is evidence of a
 working path, not broad reliability or measured savings.
 
@@ -287,6 +289,17 @@ This describes one 69-second accepted attempt after the aborted 145.73-second
 attempt; neither this retry nor the combined setup is a throughput or
 savings benchmark. The earlier installation checks still show that significant
 swap growth is possible under a different desktop workload.
+
+### Build identity task — 2026-10-11
+
+The same local alias completed the bounded `ApplicationInfo` build-ID task in
+180.48 seconds (exit 0, verified digest and 8192 context). Main-agent review fixed
+helper visibility, resource closing and whitespace/placeholder handling before
+acceptance. The caller then ran all five new cases on JDK 11 successfully; the
+integrated JDK 17 distribution build passed 601 game tests. The accepted files
+were brought into `main`. Evidence, the worker's original output and the recorded
+repairs are in `~/Library/Logs/Microcol/local-qwen/jobs/2026-10-11-build-identity/`.
+This task required main-agent corrections and establishes no savings percentage.
 
 ### Earlier native feasibility evidence — 2026-10-10
 
